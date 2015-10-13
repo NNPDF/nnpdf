@@ -1,0 +1,13 @@
+nnpdfbuild/
+*~
+*.o
+.deps
+.dirstamp
+theory_*
+stamp-*
+*.cache
+nnpdfsrc/autoconfig/config.h
+nnpdfsrc/common/inc/svn.h
+config.log
+config.status
+libtool
