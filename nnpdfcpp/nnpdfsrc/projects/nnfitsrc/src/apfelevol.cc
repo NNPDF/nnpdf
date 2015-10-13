@@ -48,7 +48,7 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
   getInstance()->fPDF = pdf;
   getInstance()->fMZ = set.Get("theory","qref").as<double>();
   getInstance()->fQ0 = getInstance()->fQtmp = sqrt(set.Get("theory","q20").as<double>());
-  getInstance()->fAlphas = set.Get("theory","alphas").as<double>()*1e-3;
+  getInstance()->fAlphas = set.Get("theory","alphas").as<double>();
   getInstance()->fNF = set.Get("theory","nf").as<int>();
   getInstance()->mth.push_back(set.Get("theory","mc").as<double>());
   getInstance()->mth.push_back(set.Get("theory","mb").as<double>());

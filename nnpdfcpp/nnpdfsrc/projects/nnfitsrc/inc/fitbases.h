@@ -166,7 +166,7 @@ public:
 
   // γ, Σ, g, V, V3, V8, V15, V24, V35, T3, T8, T15, T24, T35
 
-  enum fitBasis {FIT_SNG, FIT_GLU, FIT_VAL, FIT_V3, FIT_V8, FIT_V15, FIT_T3, FIT_T8, FIT_T15, FIT_GAM };
+  enum fitBasis {FIT_SNG, FIT_GLU, FIT_VAL, FIT_V3, FIT_V8, FIT_T3, FIT_T8, FIT_T15, FIT_GAM };
 
   void BASIS2EVLN(real const* basis, real* evln) const;
   void EVLN2BASIS(real const* evln, real* basis) const;

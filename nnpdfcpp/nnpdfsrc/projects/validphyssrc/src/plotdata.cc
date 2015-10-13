@@ -318,7 +318,7 @@ void PlotData::SavePDFReplicas(LHAPDFSet *pdfset, LHAPDFSet *pdf68cl)
       const double Q = sqrt(fSettings.GetPlotting("q2").as<real>());
 
       int nf = 3;
-      if (fSettings.Get("fitting","basis").size() >=  9) nf = 4;
+      if (fSettings.Get("fitting","basis").size() >=  9 || fSettings.IsIC()) nf = 4;
       if (fSettings.Get("fitting","basis").size() >= 11) nf = 5;
       if (fSettings.Get("fitting","basis").size() >= 13) nf = 6;
 
@@ -335,7 +335,10 @@ void PlotData::SavePDFReplicas(LHAPDFSet *pdfset, LHAPDFSet *pdf68cl)
       // Plotting std. evol pdfs
       int index = 0;
       if (pdfset->hasFlavor(22) == true)  index++;
-      const int *iflmap = GetIflmap(fSettings.Get("fitting","basis").size());
+      int nfl = fSettings.Get("fitting","basis").size();
+      if (fSettings.IsIC()) nfl = 9;
+      nfl += index;
+      const int *iflmap = GetIflmap(nfl);
 
       // avoid gluon case 1 and case 2
 
@@ -380,7 +383,7 @@ void PlotData::NNPDFComparison(int i, LHAPDFSet *pdf, LHAPDFSet *pdf68cl)
   const double Q = sqrt(fSettings.GetPlotting("q2").as<real>());
 
   int nf = 3;
-  if (fSettings.Get("fitting","basis").size() >=  9) nf = 4;
+  if (fSettings.Get("fitting","basis").size() >= 9 || fSettings.IsIC()) nf = 4; // activate IC nf = 4
   if (fSettings.Get("fitting","basis").size() >= 11) nf = 5;
   if (fSettings.Get("fitting","basis").size() >= 13) nf = 6;
 
@@ -409,7 +412,12 @@ void PlotData::NNPDFComparison(int i, LHAPDFSet *pdf, LHAPDFSet *pdf68cl)
   if (pdf->hasFlavor(22) == true) index++;
 
   int nfl = fSettings.Get("fitting","basis").size();
-  if (i == 1) nfl = fSettingsRef.Get("fitting","basis").size();
+  if (fSettings.IsIC()) nfl = 9;
+  if (i == 1) {
+      nfl = fSettingsRef.Get("fitting","basis").size();
+      if(fSettings.IsIC()) nfl = 9;
+    }
+  nfl += index;
   const int *iflmap = GetIflmap(nfl);
 
   int l = 0;
@@ -514,7 +522,7 @@ void PlotData::OtherComparison(int i, LHAPDFSet *pdf)
   const double Q = sqrt(fSettings.GetPlotting("q2").as<real>());
 
   int nf = 3;
-  if (fSettings.Get("fitting","basis").size() >=  9) nf = 4;
+  if (fSettings.Get("fitting","basis").size() >= 9 || fSettings.IsIC()) nf = 4;
   if (fSettings.Get("fitting","basis").size() >= 11) nf = 5;
   if (fSettings.Get("fitting","basis").size() >= 13) nf = 6;
 
@@ -540,7 +548,9 @@ void PlotData::OtherComparison(int i, LHAPDFSet *pdf)
 
   int index = 0;
   int nfl = fSettings.Get("fitting","basis").size();
+  if (fSettings.IsIC()) nfl = 9;
   if (fSettings.IsQED()) index++;
+  nfl += index;
   const int *iflmap = GetIflmap(nfl);
 
   int l = 0;
@@ -3012,6 +3022,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
   f << "\\begin{figure}[H]" << endl;  
 
   int nfl = fSettings.Get("fitting","basis").size();
+  if (fSettings.IsIC()) nfl = 9;
   int nflmax = 0;
   if (nfl == 7) nflmax = 7 + 3;
   if (nfl == 8) nflmax = 7 + 3;

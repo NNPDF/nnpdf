@@ -990,7 +990,7 @@ void FLVRFitBasis::NetTransform(int const& fl, int const& nfl, int* transform)
  *  Evolution Fit Basis
  **/
 EvolICFitBasis::EvolICFitBasis(NNPDFSettings const& nnset):
-FitBasis(nnset, "EvolICFitBasis", 9+nnset.IsQED()),
+FitBasis(nnset, "EvolICFitBasis", 8+nnset.IsQED()),
 fQED(nnset.IsQED())
 {
   // PDF Names for plotting
@@ -999,7 +999,6 @@ fQED(nnset.IsQED())
   fPDFNames[FIT_VAL] = "V";
   fPDFNames[FIT_V3] = "V3";
   fPDFNames[FIT_V8] = "V8";
-  fPDFNames[FIT_V15]= "V15";
   fPDFNames[FIT_T3] = "T3";
   fPDFNames[FIT_T8] = "T8";
   fPDFNames[FIT_T15]= "T15";
@@ -1012,7 +1011,6 @@ fQED(nnset.IsQED())
   fArcDampFactor[FIT_VAL] = 0;
   fArcDampFactor[FIT_V3] = 0;
   fArcDampFactor[FIT_V8] = 0;
-  fArcDampFactor[FIT_V15] = 0;
   fArcDampFactor[FIT_T3] = 1;
   fArcDampFactor[FIT_T8] = 1;
   fArcDampFactor[FIT_T15] = 1;
@@ -1039,7 +1037,6 @@ void EvolICFitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, boo
   norm[FIT_VAL] = 3.0f/pdf->IntegratePDF(mem,FIT_VAL, fQ2,PDFSet::FX,status,fGSLWork); // Total valence
   norm[FIT_V3] = 1.0f/pdf->IntegratePDF(mem,FIT_V3, fQ2,PDFSet::FX,status,fGSLWork); // V3
   norm[FIT_V8] = 3.0f/pdf->IntegratePDF(mem,FIT_V8, fQ2,PDFSet::FX,status,fGSLWork); // V8
-  norm[FIT_V15]= 3.0f/pdf->IntegratePDF(mem,FIT_V15, fQ2,PDFSet::FX,status,fGSLWork); // V15
 
   // ************ QED dependent normalisations **************
   if (fQED)
@@ -1099,7 +1096,6 @@ void EvolICFitBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
   FIT[FIT_VAL]  = EVLN[EVLN_VAL]; //valence
   FIT[FIT_V3]   = EVLN[EVLN_V3];  // V3
   FIT[FIT_V8]   = EVLN[EVLN_V8];  // V8
-  FIT[FIT_V15]  = EVLN[EVLN_V15]; // V15
   FIT[FIT_T3]   = EVLN[EVLN_T3];  // T3
   FIT[FIT_T8]   = EVLN[EVLN_T8];  // T8
   FIT[FIT_T15]  = EVLN[EVLN_T15];  // T15
@@ -1135,7 +1131,7 @@ real EvolICFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &s
          real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
          real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
          real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = pdf->IntegratePDF(mem,FIT_V15,fQ2,PDFSet::FX,status,fGSLWork);
+         real v15 = val;
          return ( 3.0*val + 6.0*v3 + 2.0*v8 + v15 )/12.0;
        }
        break;
@@ -1144,23 +1140,23 @@ real EvolICFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &s
          real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
          real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
          real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = pdf->IntegratePDF(mem,FIT_V15,fQ2,PDFSet::FX,status,fGSLWork);
-         return ( 3.0*val - 6.0*v3 + 2.0*v8 + v15)/12.0;
+         real v15 = val;
+         return ( 3.0*val - 6.0*v3 + 2.0*v8 + v15 )/12.0;
        }
        break;
      case SUM_SVL:
        {
          real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
          real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = pdf->IntegratePDF(mem,FIT_V15,fQ2,PDFSet::FX,status,fGSLWork);
+         real v15 = val;
          return ( 3.0*val - 4.0*v8 + v15 )/12.0;
        }
         break;
      case SUM_CVL:
        {
-        real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-        real v15 = pdf->IntegratePDF(mem,FIT_V15,fQ2,PDFSet::FX,status,fGSLWork);
-        return ( val - v15 )/4.0;
+         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+         real v15 = val;
+         return ( val - v15 )/4.0;
        }
         break;
 
@@ -1235,7 +1231,6 @@ void NN30ICFitBasis::Preprocess(real const& x, real* pdf, PreprocParam const& pa
    tmppdf[FIT_VAL] = pdf[NET_VAL];
    tmppdf[FIT_V3] = pdf[NET_T3]+2*pdf[NET_DS];
    tmppdf[FIT_V8] = pdf[NET_VAL]-3*pdf[NET_SM]-pdf[NET_CM];
-   tmppdf[FIT_V15] = pdf[NET_VAL]-4*pdf[NET_CM];
    tmppdf[FIT_T3] = pdf[NET_T3];
    tmppdf[FIT_T8] = pdf[NET_SNG]-3*pdf[NET_SP]-pdf[NET_CP];
    tmppdf[FIT_T15] = pdf[NET_SNG]-4*pdf[NET_CP];
@@ -1286,13 +1281,7 @@ void NN30ICFitBasis::NetTransform(int const& fl, int const& nfl, int* transform)
       transform[NET_SM] = -3;
       transform[NET_CM] = -1;
       break;
-    }
-    case FIT_V15:
-    {
-      transform[NET_VAL] = 1;
-      transform[NET_CM] = -4;
-      break;
-    }
+    } 
     case FIT_T3:
     {
       transform[NET_T3] = 1;
