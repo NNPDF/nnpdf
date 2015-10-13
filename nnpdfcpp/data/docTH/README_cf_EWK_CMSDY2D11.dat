@@ -1,9 +1,0 @@
-*******************************************************************************************
-SetName: CMSDY2D11
-Author: Maria Ubiali ubiali@hep.phy.cam.ac.uk
-Date: 2014
-CodesUsed: FEWZ 
-TheoryInput: NNPDF2.3 NLO, alphas(MZ)=0.119
-PDFset: NNPDF23_nlo_as_0119
-Warnings: Only pure EWK, no photon-initiated effects
-********************************************************************************************

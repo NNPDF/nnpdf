@@ -1,9 +1,0 @@
-*******************************************************************************************
-SetName: ATLASWZRAP36PB
-Author: Maria Ubiali ubiali@hep.phy.cam.ac.uk
-Date: Early 2012
-CodesUsed: FEWZ
-TheoryInput: NNPDF2.1 NLO, alphas(MZ)=0.119
-PDFset: NNPDF21_nlo_as_0119
-Warnings: Applied smearing, redo with more updated PDF set
-********************************************************************************************

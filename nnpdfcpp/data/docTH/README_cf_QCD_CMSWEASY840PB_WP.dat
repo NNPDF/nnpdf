@@ -1,9 +1,0 @@
-*******************************************************************************************
-SetName: CMSWEASY840PB_WP
-Author: Maria Ubiali ubiali@hep.phy.cam.ac.uk
-Date: Early 2012
-CodesUsed: FEWZ
-TheoryInput: NNPDF2.1 NNLO alphas(MZ)=0.119
-PDFset: NNPDF21_nnlo_as_0119
-Warnings: C-factors smeared to reduce stat fluctuations
-********************************************************************************************

@@ -1,9 +1,0 @@
-*******************************************************************************************
-SetName: LHCBW36PB
-Author: Maria Ubiali ubiali@hep.phy.cam.ac.uk
-Date: Early 2012
-CodesUsed: FEWZ (version?)
-TheoryInput: NNPDF2.1 NNLO alphas(MZ)=0.119
-PDFset: NNPDF21_nnlo
-Warnings: 
-********************************************************************************************
