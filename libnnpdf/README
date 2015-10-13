@@ -1,0 +1,17 @@
+libnnpdf 1.0.1b
+----------------------------
+
+Libary for core NNPDF utilities.
+
+Possible configurations:
+
+./configure -> [simd=on, openmp=off]
+./configure --enable-openmp -> [simd=on, openmp=on]
+./configure --enable-safemode -> [simd=off, openmp=off]
+./configure --enable-safemode --enable-openmp -> [simd=off, openmp=on]
+
+If you have troubles with automake tools, please run
+
+	autoreconf -i
+
+and configure the again.
