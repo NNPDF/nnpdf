@@ -1,0 +1,14 @@
+== Installation ==
+
+- First install libnnpdf
+- compile the code with make
+- ./buildmaster
+
+== OUTPUT ==
+
+- DATA_<exp>.dat are generated and placed in the results folder
+- SYSTYPE_<exp>_NULL.dat are generated and placed in results/systypes
+
+Maintainers:
+	Stefano Carrazza
+	Nathan Hartland

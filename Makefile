@@ -1,0 +1,123 @@
+#############################################
+# Makefile to generate BUILDMASTER Program
+# make release => for release version
+# make debug   => for debug version
+# make doc     => for doxygen documentation
+# make clean   => for clean project
+#############################################
+
+SOURCEDIR=./src
+INCLUDEDIR=inc
+OBJECTDIR=obj
+DESTDIR=.
+
+VPATH=$(SOURCEDIR)
+vpath %.h $(COREINC)
+vpath %.cc $(CORESRC)
+
+# refers to bin folder
+RESULTDIR = results
+RESULTSDIR= -D  RESULTS_PATH="results"
+DATADIR=    -D  DATA_PATH="../data/"
+
+# Compiler options
+##################
+
+CC=g++
+CFLAGS=-Wall -O2 -Wno-unknown-pragmas
+LDFLAGS=-c -Wall -O2 -Wno-unknown-pragmas
+debug: CFLAGS=-Wall -O0 -g -Wno-unknown-pragmas
+debug: LDFLAGS=-c -Wall -O0 -g -Wno-unknown-pragmas
+
+GSLINCLUDE= $(shell gsl-config --cflags)
+GSLLIBS= $(shell gsl-config --libs)
+
+NNPDFINCLUDE = $(shell nnpdf-config --cppflags) -I$(INCLUDEDIR) -std=c++11
+NNPDFLIBS = $(shell nnpdf-config --ldflags)
+NNPDFMACROS = $(DATADIR)
+
+#####################################
+
+all: release
+
+release: svn $(DESTDIR)/buildmaster
+debug: svn $(DESTDIR)/buildmaster
+
+
+svn:
+	rm -rf $(INCLUDEDIR)/svn.h; \
+	echo "#define SVN_REV \"$(shell svnversion -n)\"" > $(INCLUDEDIR)/svn.h
+
+uninstall: clean
+
+clean:
+	rm -rf $(DESTDIR)/buildmaster
+	rm -rf $(OBJECTDIR)/*.*
+	rm -rf $(RESULTDIR)/*
+
+######### Programs BUILDMASTER #########
+########################################
+
+buildmaster_obj = buildmaster.o \
+                  buildmaster_utils.o \
+		  						common.o \
+		  						NMC.o \
+		  						SLAC.o  \
+      						BCDMS.o \
+                  ATLAS.o \
+                  ATLAS2011JETS.o \
+                  ATLASLOMASSDY11.o \
+                  CMS.o   \
+                  CDF.o   \
+                  LHCb.o  \
+                  D0.o    \
+                  FTDY.o  \
+		  						H1HERA2.o \
+		  						HERACOMB.o \
+                  CHORUS.o \
+                  NUTEV.o \
+                  HERA1-C.o \
+                  HERA2-C.o \
+                  ZEUS2.o \
+                  TOP.o \
+                  CMSwc.o
+
+buildmaster_inc = buildmaster.h \
+                  buildmaster_utils.h \
+		  						common.h \
+                  NMC.h \
+                  H1F2C.h \
+                  SLAC.h \
+                  BCDMS.h \
+                  ATLAS.h \
+                  ATLAS2011JETS.h \
+                  ATLASLOMASSDY11.h \
+		  						CMS.h \
+                  CDF.h \
+                  LHCb.h  \
+                  D0.h  \
+                  FTDY.h  \
+                  ZEUSF2C.h \
+                  CHORUS.h  \
+                  NUTEV.h \
+                  HERA1-C.h \
+                  HERA2-C.h \
+		  						H1HERA2.h \
+		  						HERACOMB.h\
+                  FLH1.h  \
+                  ZEUS2.h \
+                  TOP.h \
+		  						CMSwc.h
+
+buildmaster_src = $(addprefix $(OBJECTDIR)/, $(buildmaster_obj))
+buildmaster_hea = $(addprefix $(INCLUDEDIR)/, $(buildmaster_inc))
+
+$(DESTDIR)/buildmaster: $(buildmaster_src)
+	$(CC) $(CFLAGS) $(NNPDFMACROS) $(NNPDFINCLUDE) $^ $(NNPDFLIBS) \
+	-o $@
+	@echo "==> $@ done!"
+
+## o libraries
+
+$(OBJECTDIR)/%.o: %.cc
+	$(CC) $(NNPDFMACROS) $(LDFLAGS) $(NNPDFINCLUDE) $< -o $@
