@@ -39,7 +39,7 @@ try:
     print tabulate(rows, headers=col_names)
 
     theoryID = int(raw_input("Please select a table ID: "))
-    if 0 <= theoryID <= len(rows)-1:
+    if 0 <= theoryID <= len(rows):
         os.system("wget http://pcteserver.mi.infn.it/~apfelcomb/commondatatheory/theory_%d.tgz" % theoryID)
         os.system("tar -xvzf theory_%d.tgz" % theoryID)
         os.system("rm theory_%d.tgz" % theoryID)
