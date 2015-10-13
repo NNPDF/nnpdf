@@ -1,9 +1,0 @@
-*******************************************************************************************
-SetName: LHCBZ940PB
-Author: Maria Ubiali ubiali@hep.phy.cam.ac.uk
-Date: 2014
-CodesUsed: FEWZ  
-TheoryInput: NNPDF2.3 NLO, alphas(MZ)=0.119
-PDFset: NNPDF23_nlo_as_0119
-Warnings: Smearing applied? Which version of FEWZ?
-********************************************************************************************
