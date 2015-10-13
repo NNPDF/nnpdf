@@ -4,6 +4,10 @@
 - compile the code with make
 - ./buildmaster
 
+== INPUT ==
+
+Input files should be located in /rawdata/<exp>/
+
 == OUTPUT ==
 
 - DATA_<exp>.dat are generated and placed in the results folder
