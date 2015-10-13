@@ -18,7 +18,7 @@ vpath %.cc $(CORESRC)
 # refers to bin folder
 RESULTDIR = results
 RESULTSDIR= -D  RESULTS_PATH="results"
-DATADIR=    -D  DATA_PATH="../data/"
+DATADIR=    -D  DATA_PATH="./"
 
 # Compiler options
 ##################
@@ -60,10 +60,10 @@ clean:
 
 buildmaster_obj = buildmaster.o \
                   buildmaster_utils.o \
-		  						common.o \
-		  						NMC.o \
-		  						SLAC.o  \
-      						BCDMS.o \
+	   	  common.o \
+		  NMC.o \
+		  SLAC.o  \
+	    	  BCDMS.o \
                   ATLAS.o \
                   ATLAS2011JETS.o \
                   ATLASLOMASSDY11.o \
@@ -72,8 +72,8 @@ buildmaster_obj = buildmaster.o \
                   LHCb.o  \
                   D0.o    \
                   FTDY.o  \
-		  						H1HERA2.o \
-		  						HERACOMB.o \
+		  H1HERA2.o \
+		  HERACOMB.o \
                   CHORUS.o \
                   NUTEV.o \
                   HERA1-C.o \

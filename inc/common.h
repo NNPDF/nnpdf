@@ -32,7 +32,7 @@ using std::stringstream;
 #endif
 
 #ifndef DATA_PATH
-#define DATA_PATH ../data/
+#define DATA_PATH ./
 #endif
 
 #define STR_EXPAND(tok) #tok

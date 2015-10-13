@@ -1,0 +1,119 @@
+=============================================
+'CMS collision energy (GeV)    = ' 8000d0
+=============================================
+'Factorization scale  (GeV)    = ' 91.1876d0
+'Renormalization scale  (GeV)  = ' 91.1876d0
+=============================================
+'Z production (pp=1,ppbar=2)   = ' 1
+=============================================
+Alpha QED (0) is for photon-induced channels (which use photon PDFs); set to zero to turn off these channels
+'Alpha QED (0)                 = ' 0.007297352568d0
+'Alpha QED (Mz)                = ' 0.00755625d0
+'Fermi constant (1/Gev^2)      = ' 1.16637d-5
+=============================================
+'Lepton mass (GeV)             = ' 1.05d-1
+'W mass (GeV)                  = ' 80.398d0
+'W width (GeV)                 = ' 2.141d0
+'Z mass (GeV)                  = ' 91.1876d0
+'Z width (GeV)                 = ' 2.4952d0
+'Top mass (GeV)                = ' 172.5d0
+'Higgs mass (GeV)              = ' 125d0
+=============================================
+Only QED corrections is on if the input scheme is manual
+Input scheme: 0. Manual input; 1. Gmu scheme; 2. AlphaMz scheme
+'Which input scheme:           = ' 1
+'sin^2(theta_w)                = ' 0.222646
+'up quark charge               = ' 0.6666667d0
+'down quark charge             = ' -0.3333333d0
+'lepton charge                 = ' -1d0
+'up quark vector coupling      = ' 0.4091d0
+'down quark vector coupling    = ' -0.7045d0
+'lepton vector coupling        = ' -0.11360d0
+'up quark axial coupling       = ' -1d0
+'down quark axial coupling     = ' 1d0
+'lepton axial coupling         = ' 1d0
+=============================================
+Vegas Parameters
+'Relative accuracy (in %)           = ' 1d-4
+'Absolute accuracy                  = ' 1d-4
+'Number of calls per iteration      = ' 100000
+'Number of increase calls per iter. = ' 500000
+'Maximum number of evaluations      = ' 100000000
+'Random number seed for Vegas       = ' 11
+=============================================
+'QCD Perturb. Order (0=LO, 1=NLO, 2=NNLO) = ' 1
+'EW Perturb. Order (0=LO, 1=NLO)    = ' 0
+'Z pole focus (1=Yes, 0=No)	= ' 0
+'EW control (leave 0 to keep all on) = ' 0 
+'Turn off photon (1=Yes, 0=No, disabled if weak corr. is on) = ' 0
+=============================================
+'Lepton-pair invariant mass minimum = ' 60d0
+'Lepton-pair invariant mass maximum = ' 120d0
+'Transverse mass minimum           = ' 0d0
+'Transverse mass maximum           = ' 100000d0
+'Z pT minimum                       = ' 0d0
+'Z pT maximum                       = ' 100000d0
+'Z rapidity minimum                 = ' -10000d0
+'Z rapidity maximum                 = ' 10000d0
+'Lepton pT minimum                  = ' 20d0
+'Lepton pT maximum                  = ' 1000000d0
+'Anti-lepton pT minimum             = ' 20d0
+'Anti-lepton pT maximum             = ' 1000000d0
+'pT min for softer lepton           = ' 20d0
+'pT max for softer lepton           = ' 1000000d0
+'pT min for harder lepton           = ' 20d0
+'pT max for harder lepton           = ' 1000000d0
+Taking absolute value of lepton pseudorapidity?
+'(yes = 1, no = 0) 		    = ' 0
+'Lepton pseudorapidity minimum      = ' 2d0
+'Lepton pseudorapidity maximum      = ' 4.5d0
+Taking absolute value of anti-lepton pseudorapidity?
+'(yes = 1, no = 0) 		    = ' 0
+'Anti-lepton pseudorapidity minimum = ' 2d0
+'Anti-lepton pseudorapidity maximum = ' 4.5d0
+Taking absolute value of soft lepton pseudorapidity?
+'(yes = 1, no = 0)                  = ' 0
+'Softer lepton pseudorapidity min   = ' 2d0 
+'Softer Lepton pseudorapidity max   = ' 4.5d0
+Taking absolute value of hard lepton pseudorapidity?
+'(yes = 1, no = 0)                  = ' 0
+'Harder lepton pseudorapidity min   = ' 2d0
+'Harder Lepton pseudorapidity max   = ' 4.5d0
+PHOTON RECOMBINATION-----------------------------
+'DeltaR sep. for photon recomb.     = ' 0.1d0
+'Minimum pT for observable photon   = ' 10d0
+'Maximum eta for observable photon  = ' 2.5d0
+PHOTON CUTS--------------------------------------
+'Minimum Number of Photon           = ' 0
+'Maximum Number of Photon           = ' 1
+JET DEFINITION-------------------------------
+Jet Algorithm & Cone Size ('ktal'=kT algorithm, 'aktal'=anti-kT algorithm, 'cone'=cone)
+'ktal, aktal or cone		    = ' ktal
+'Jet algorithm cone size (deltaR)   = ' 0.4d0
+'DeltaR separation for cone algo    = ' 1.3
+'Minimum pT for observable jets     = ' 20d0
+'Maximum eta for observable jets    = ' 4.5d0
+JET CUTS--------------------------------------
+'Minimum Number of Jets		    = ' 0
+'Maximum Number of Jets		    = ' 2
+'Min. leading jet pT                = ' 0d0
+ISOLATION CUTS-------------------------------
+'Lep-Anti-lep deltaR minimum        = ' 0.0d0
+'Lep-Anti-lep deltaPhi min	    = ' 0.0d0
+'Lep-Anti-lep deltaPhi max	    = ' 4.0d0
+'Lep-Jet deltaR minimum             = ' 0.0d0
+'Lep-Photon deltaR minimum          = ' 0.0d0
+=============================================
+Cut on Z rapidity for well-defined Collins-Soper Angles at pp Collider
+'Z rapidity cutoff for CS frame     = ' 0.0d0
+=============================================
+(See manual for complete listing)
+'PDF set =                        ' 'NNPDF30_nnlo_as_0118.LHgrid'
+'Turn off PDF error (1=Yes, 0=No)    = ' 1
+(Active for MSTW2008 only, if PDF error is on:)
+(Compute PDF+as errors: 1; just PDF errors: 0)
+'Which alphaS                       = ' 0
+(Active for MSTW2008 only; 0: 90 CL for PDFs+alphas, 1: 68 CL)
+'PDF+alphas confidence level        = ' 1
+=============================================
+
