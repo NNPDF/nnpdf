@@ -1,0 +1,9 @@
+*******************************************************************************************
+SetName: DYE605
+Author: Juan Rojo juan.rojo@physics.ox.ac.uk
+Date: Early 2011
+CodesUsed: VRAP v0.9 
+TheoryInput: Fixed muR and muF settings
+PDFset: Preliminary version of NNPDF2.1 NNLO
+Warnings: To update with recent C-factors (NNPDFres paper) with dynamical central scale
+********************************************************************************************

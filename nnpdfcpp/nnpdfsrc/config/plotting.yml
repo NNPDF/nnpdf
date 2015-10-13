@@ -1,0 +1,18 @@
+#
+# Configuration file for plotting options
+#
+
+############################################################
+uset0         : off   # use t0 in chi2check, validphys
+pdfcteq       : CT10nlo
+pdfmstw       : MMHT2014nlo68cl
+plotformat    : eps   # root file format
+errorband     : on     # 1 for 1sigma, 0 for 68% c.l.
+nxpoints      : 100   # points in x
+q2            : 2.0   # Q2 for plots
+ymaxdistances : 20.0  # maximum y for distances plot
+preproc       : on    # yes/no preprocessing analysis
+plotreplicas  : on    # yes/no plot pdf replicas
+plotratios    : off   # yes/no plot pdf ratios
+plotarclengths: on    # yes/no plot pdf arclengths
+verbose       : on    # yes/no show prediction details in report

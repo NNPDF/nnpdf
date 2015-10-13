@@ -1,0 +1,43 @@
+
+\section{Buildmaster}
+
+The buildmaster project reads experimental data sets from articles format,
+performs cross-checks on errors and creates the following files for
+each experiment: 
+\begin{itemize}
+\item \texttt{\textbf{DATA\_<setname>.dat}} $\Rightarrow$ Contains the
+experimental points + uncertainty information
+\end{itemize}
+This operation must be done once for all experiments and repeated
+only in case new data is introduced or modified. Then, the generated
+files should be located in \texttt{data/setname} folders respectively.
+
+\subsection{Adding a new experiment}
+\begin{itemize}
+  \item go to data/ and create a folder with the experiment (dataset) name, you should put the data files inside a rawdata folder (look at data/CMSWEASY840PB)
+  \item open include/commondata.h and add a void filter<experiment name>() method
+  \item open src/commondata.cc, update the void CommonData::CreateCommonFormat()
+  \item open src/commondata.cc and implement the filter<experiment name> method.
+  \item to activate/deactivate the experiment you should use the configuration file.
+\end{itemize}
+
+\subsection{Running buildmaster}
+
+Buildmaster takes as input the configuration file location. For example you can
+run buildmaster as
+
+\begin{lstlisting}
+./buildmaster example.ini
+\end{lstlisting}
+No interaction with the filter code is needed.
+
+\subsection{Interpreting results}
+
+After running filter, you will find a: 
+\begin{itemize}
+\item \texttt{\textbf{buildmaster.log}} file in \texttt{RESULTSDIR}, which contains
+the configuration used to generated filter. 
+\item \texttt{\textbf{RESULTSDIR/<config name>/buildmaster}} folder containing all the generated
+{*}.dat files, for each experiment set. \end{itemize}
+Then you should copy the generated DATA\_<experiment>.dat file into data/<experiment> folder and upload to svn. Users should never run buildmaster.
+

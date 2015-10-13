@@ -1,0 +1,7 @@
+Sigma: combined reduced cross section   
+stat:  statistical uncertainty  
+uncor: uncorrelated systematic uncertainty  
+sys1 - sys162: correlated systematic uncertainties 
+tot_noproc: total uncertainty excluding procedural uncertainties
+delta_rel, delta_gp, delta_had, delta_1 - delta_4: procedural uncertainties
+all uncertainties in %, relative to the cross section

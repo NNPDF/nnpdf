@@ -1,0 +1,8 @@
+# SYSTYPES.info : SysType options description.
+# Please fill this in when you add a new SysType Option
+
+1: NNPDF2.3 Standard (Default)
+2: All systematic uncertainties assumed to be multiplicative
+3: All systematics additive
+4: Baseline Standard (Jet data: All systematics multiplicative)
+5: All systematics random

@@ -1,0 +1,46 @@
+==============================================
+=    libevolqed.a a QED EVOLUTION LIBRARY    =
+=    Author: Stefano Carrazz, June 2012      =
+==============================================
+
+Package structure:
+	doc/ -> documentation physics + code
+	testevolqed/ -> C++ example
+	testfortran/ -> Fortran example
+
+1. Introduction
+
+This is a C++ library composed by a single class
+which computes the QED evolution factors in the
+Mellin space N. For the physics documentation
+see the folder doc/. For the doxygen documentation
+take a look in doc/doxygen
+
+2. How it works
+
+The idea is very simple you initialize the class
+    EvolQED *evol = new EvolQED(nf, run);
+
+Then you get the solution by calling the method:
+    evol->EvolFactNQED(N, Q2I, Q2F, EGNNS, EGNSG);
+
+3. Installation
+
+Just type:
+     make -j2
+EvolQED depends on the following external libs:
+     gsl -> for special functions like digamma
+     lapack -> for zgeev diagonalization algorithm 
+
+4. Testing
+
+Just do:
+     cd testevolqed
+     make
+     ./testevolqed
+
+5. Using with fortran code
+
+There is a fortran module available which is
+compiled inside the libevolqed.a
+For an example take a look on testfortran folder

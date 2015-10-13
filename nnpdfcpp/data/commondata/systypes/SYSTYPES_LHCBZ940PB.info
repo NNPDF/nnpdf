@@ -1,0 +1,7 @@
+# SYSTYPES.info : SysType options description.
+# Please fill this in when you add a new SysType Option
+
+1: NNPDF2.3 Standard (Default)
+2: All systematic uncertainties assumed to be multiplicative
+3: All systematic uncertainties assumed to be additive
+4: Baseline Standard (Collider data: All systematics random, except those from covariance matrix)

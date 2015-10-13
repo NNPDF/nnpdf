@@ -1,0 +1,9 @@
+************************************************************************************************************
+SetName: ATLASR04JETS2P76TEV
+Author: Stefano Carrazza and Joao Pires, stefano.carrazza@mi.infn.it and Joao.Pires@mib.infn.it
+Date: Early 2014
+CodesUsed: Private gg->jj code from JP, validated with threshold approximation code from Vogelsang
+TheoryInput: NNPDF2.3 NNLO, alphas(MZ)=0.110
+PDFset: NNPDF23_nnlo_as_0119
+Warnings: Uses pt_jet as central scale rather than pt_leading, to update once final pp -> jj code available
+*************************************************************************************************************

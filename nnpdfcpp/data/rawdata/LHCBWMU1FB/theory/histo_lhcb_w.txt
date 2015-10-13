@@ -1,0 +1,32 @@
+HISTOGRAMS------(Order of Histograms Can Not Be Changed)----------------------
+Name (DO NOT CHANGE)    Num Bins (<30)	Lower Bound	Upper Bound	Write Out (1=hist, 2=cuml, 3=both, 0=neither)
+'1.  Z pT             ' 20		0d0		100d0		0
+'2.  Z eta            ' 10		2.0d0		4.5d0		0
+'3.  q_ll inv mass    ' 20		66d0		116d0		0
+'4.  l-/chrg. lep. pT ' 20		0d0		100d0		0
+'5.  l-/chrg. lep. eta' '../bins_lhcb.txt'		2d0		4.5d0		1
+'6.  l+/missing pT    ' 20		0d0		100d0		0
+'7.  l+/neutrino eta  ' '../bins_lhcb.txt'		2d0		4.5d0		1
+'8.  jet 1 pT         ' 20		0d0		100d0		0
+'9.  jet 1 eta        ' 20		-5d0		5d0		0
+'10. jet 2 pT         ' 20		0d0		100d0		0
+'11. jet 2 eta        ' 20		-5d0		5d0		0
+'12. beam thrust      ' 20              0d0             100d0           0
+'13. dR_l-l+          ' 20		0d0		5d0		0
+'14. dR_j1,l-	      '	20		0d0		5d0		0
+'15. dR_j1,l+	      '	20		0d0		5d0		0
+'16. dR_j2,l-	      '	20		0d0		5d0		0
+'17. dR_j2,l+	      '	20		0d0		5d0		0
+'19. dR_j1j2          ' 20		0d0		5d0		0
+'19. H_T	      ' 20		0d0		200d0		0
+'20. Mass_T           ' 20		0d0		1000d0		0
+====================================================================================
+Moments (A_0, A_1, A_2) related to Collins-Soper Angles
+'21. A_i vs Z pT      ' 10		0d0		100d0		0
+'22. phi (CS Frame)   '	10		-3.14159265d0	3.14159265d0	0
+'23. cos(theta) (CS)  '	10		-1d0		1d0		0
+'24. dPhi_l-l+        ' 10		0d0		3.1415927d0	0
+====================================================================================
+Smoothing parameters
+'Level (0 = none)     '  2
+'Bin fraction (< 0.5) ' 1d-1

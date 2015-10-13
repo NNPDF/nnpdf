@@ -1,0 +1,291 @@
+%\newpage{}
+
+
+\section{Validphys}
+
+Validphys produces the theoretical predictions of observables by using
+the APPLgrid+NNPDF tables and the PDF set. For each experimental set,
+observables are first computed and then the $\chi^{2}$ is computed
+for each PDF set. Validphys is designed to work with PDFs provided
+by NNPDF, CTEQ and MSTW collaborations. 
+
+
+\subsection{Available FK tables}
+
+\begin{table}[H]
+\begin{centering}
+{\scriptsize }%
+\begin{tabular}{|c|c|l|c|c|c|c|}
+\hline 
+\textbf{\scriptsize Experiment} & \textbf{\scriptsize Set Type} & \textbf{\scriptsize Data Set} & \textbf{\scriptsize Filter} & \textbf{\scriptsize NLO} & \textbf{\scriptsize NNLO} & \textbf{\scriptsize Val. Status}\tabularnewline
+\hline 
+\hline 
+\textbf{\scriptsize NMC} & {\scriptsize DIS} & \texttt{\scriptsize NMCPD} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize DIS} & \texttt{\scriptsize NMC} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\hline 
+\textbf{\scriptsize SLAC} & {\scriptsize DIS} & \texttt{\scriptsize SLACP} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize DIS} & \texttt{\scriptsize SLACD} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\hline 
+\textbf{\scriptsize BCDM} & {\scriptsize DIS} & \texttt{\scriptsize BCDMSP} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize DIS} & \texttt{\scriptsize BCDMSD} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\hline 
+\textbf{\scriptsize HERA} & {\scriptsize DIS} & \texttt{\scriptsize HERA1NCEP} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize DIS} & \texttt{\scriptsize HERA1NCEM} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize DIS} & \texttt{\scriptsize HERA1CCEP} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize DIS} & \texttt{\scriptsize HERA1CCEM} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\hline 
+\textbf{\scriptsize CHORUS} & {\scriptsize DIS} & \texttt{\scriptsize CHORUSNU} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize DIS} & \texttt{\scriptsize CHORUSNB} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\hline 
+\textbf{\scriptsize ZEUS-H1} & {\scriptsize DIS} & \texttt{\scriptsize FLH108} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\hline 
+\textbf{\scriptsize NuTeV} & {\scriptsize DIS} & \texttt{\scriptsize NTVNUDMN} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize DIS} & \texttt{\scriptsize NTVNBDMN} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\hline 
+\textbf{\scriptsize ZEUS-H2} & {\scriptsize DIS} & \texttt{\scriptsize Z06NC} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize DIS} & \texttt{\scriptsize Z06CC} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\hline 
+\textbf{\scriptsize ZEUS-F2} & {\scriptsize DIS} & \texttt{\scriptsize ZEUSF2C99} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize DIS} & \texttt{\scriptsize ZEUSF2C03} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize DIS} & \texttt{\scriptsize ZEUSF2C08} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize DIS} & \texttt{\scriptsize ZEUSF2C09} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\hline 
+\textbf{\scriptsize H1} & {\scriptsize DIS} & \texttt{\scriptsize H1F2C01} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize DIS} & \texttt{\scriptsize H1F2C09} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize DIS} & \texttt{\scriptsize H1F2C10} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\hline 
+\textbf{\scriptsize E605} & {\scriptsize DY} & \texttt{\scriptsize DYE605} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\hline 
+\textbf{\scriptsize E886} & {\scriptsize DY} & \texttt{\scriptsize DYE886P} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{3-7} 
+ & {\scriptsize DY} & \texttt{\scriptsize DYE886D} & {\scriptsize ok} & {\scriptsize -} & {\scriptsize -} & {\scriptsize -}\tabularnewline
+\cline{3-7} 
+ & {\scriptsize DY} & \texttt{\scriptsize DYE886R} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\hline 
+\textbf{\scriptsize CDF} & {\scriptsize WASY} & \texttt{\scriptsize CDFWASYM} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{3-7} 
+ & {\scriptsize ZRAP} & \texttt{\scriptsize CDFZRAP} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{3-7} 
+ & {\scriptsize JETS} & \texttt{\scriptsize CDFR2KT} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\hline 
+\textbf{\scriptsize D0 } & {\scriptsize JETS} & \texttt{\scriptsize D0R2CON} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{3-7} 
+ & {\scriptsize ZRAP} & \texttt{\scriptsize D0ZRAP} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\hline 
+\textbf{\scriptsize ATLAS } & {\scriptsize WZRAP} & \texttt{\scriptsize ATLASWZRAP36PB} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{3-7} 
+ & {\scriptsize JETS} & \texttt{\scriptsize ATLASR04JETS36PB} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{3-7} 
+ & {\scriptsize JETS} & \texttt{\scriptsize ATLASR06JETS36PB} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\hline 
+\textbf{\scriptsize CMS } & {\scriptsize WEASY} & \texttt{\scriptsize CMSWEASY840PB} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize ZRAP} & \texttt{\scriptsize CMSZRAP} & {\scriptsize ok} & {\scriptsize -} & {\scriptsize -} & {\scriptsize -}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize JETS} & \texttt{\scriptsize CMSINCLJETS10} & {\scriptsize ok} & {\scriptsize -} & {\scriptsize -} & {\scriptsize -}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize JETS} & \texttt{\scriptsize CMSDIJETS10} & {\scriptsize ok} & {\scriptsize -} & {\scriptsize -} & {\scriptsize -}\tabularnewline
+\hline 
+\textbf{\scriptsize LHCb} & {\scriptsize ZRAP} & \texttt{\scriptsize LHCBZRAP} & {\scriptsize ok} & {\scriptsize -} & {\scriptsize -} & {\scriptsize -}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize ZPT} & \texttt{\scriptsize LHCBZPT} & {\scriptsize ok} & {\scriptsize -} & {\scriptsize -} & {\scriptsize -}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize MUASY} & \texttt{\scriptsize LHCBMUASY} & {\scriptsize ok} & {\scriptsize -} & {\scriptsize -} & {\scriptsize -}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize MUCH} & \texttt{\scriptsize LHCBMUCH} & {\scriptsize ok} & {\scriptsize -} & {\scriptsize -} & {\scriptsize -}\tabularnewline
+\cline{2-7} 
+ & {\scriptsize WZRAP} & \texttt{\scriptsize LHCBWZ36PB} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize ok} & {\scriptsize working}\tabularnewline
+\hline 
+\end{tabular}
+\par\end{centering}{\scriptsize \par}
+
+\caption{\label{tab:FK-tables-status.}FK tables status. {*} Need to implement
+K-factors and NP corrections. {*}{*} Asymmetries, should be tested.
+{*}{*}{*} DY correction at NNLO not implemented.}
+\end{table}
+
+
+
+\subsection{Running validphys}
+
+Validphys takes as input the configuration file address, which is
+located by default in config/config.ini. For example you can run validphys
+as
+
+\begin{lstlisting}
+./filter example.ini
+./validphys example.ini
+\end{lstlisting}
+
+
+No interaction with the validphys code is needed, you just modify
+the variables in the configuration file presented in Table (\ref{tab:Configuration-information.}).
+
+\begin{table}[H]
+\begin{centering}
+\begin{tabular}{|c|c|c|}
+\hline 
+\multicolumn{1}{|c}{\texttt{\textbf{{[}data{]}}}} & \multicolumn{1}{c}{Type} & Description\tabularnewline
+\hline 
+\hline 
+\texttt{\textbf{DATADIR}} & \texttt{string} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+The directory where data is located.%
+\end{minipage}\tabularnewline
+\hline 
+\texttt{\textbf{RESULSTDIR}} & \texttt{string} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+The directory where output will be located.%
+\end{minipage}\tabularnewline
+\hline 
+\hline 
+\multicolumn{1}{|c}{\texttt{\textbf{{[}report{]}}}} & \multicolumn{1}{c}{} & \tabularnewline
+\hline 
+\hline 
+\texttt{\textbf{PLOTFORMAT}} & \texttt{string} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+The plot image format, all ROOT formats are supported.%
+\end{minipage}\tabularnewline
+\hline 
+\texttt{\textbf{ERRORBAND}} & \texttt{int (0,1)} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+PDF error band type: 1 for $1\sigma$; 0 for 68\% CL.%
+\end{minipage}\tabularnewline
+\hline 
+\texttt{\textbf{PARFILEDIR}} & \texttt{string} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+The directory containing the configuration {*}.par files of the current
+NNPDF PDF set.%
+\end{minipage}\tabularnewline
+\hline 
+\texttt{\textbf{PARFILESREFDIR}} & \texttt{string} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+The directory containing the configuration {*}.par files of the reference
+NNPDF set.%
+\end{minipage}\tabularnewline
+\hline 
+\hline 
+\multicolumn{1}{|c}{\texttt{\textbf{{[}validphys{]}}}} & \multicolumn{1}{c}{} & \tabularnewline
+\hline 
+\hline 
+\texttt{\textbf{FULLREPORT}} & \texttt{int (0,1)} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+1 for full report containing the PDFs replicas in the LH and evolution
+basis; 0 for light version without those plots.%
+\end{minipage}\tabularnewline
+\hline 
+\texttt{\textbf{PDFSET}} & \texttt{string} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+The current NNPDF set {*}.LHgrid filename.%
+\end{minipage}\tabularnewline
+\hline 
+\texttt{\textbf{PDFVERSION}} & \texttt{string} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+The current pdf version number (for plots legends).%
+\end{minipage}\tabularnewline
+\hline 
+\texttt{\textbf{PDFREFSET}} & \texttt{string} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+The reference NNPDF set {*}.LHgrid filename.%
+\end{minipage}\tabularnewline
+\hline 
+\texttt{\textbf{PDFREFVERSION}} & \texttt{string} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+The reference pdf version number.%
+\end{minipage}\tabularnewline
+\hline 
+\texttt{\textbf{PDFCTEQ}} & \texttt{string} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+the CTEQ set {*}.LHgrid filename for comparison.%
+\end{minipage}\tabularnewline
+\hline 
+\texttt{\textbf{PDFMSTW}} & \texttt{string} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+The MSTW set {*}.LHgrid filename for comparison.%
+\end{minipage}\tabularnewline
+\hline 
+\texttt{\textbf{NXPOINTS}} & \texttt{int} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+Total number of $x$ points to plot.%
+\end{minipage}\tabularnewline
+\hline 
+\texttt{\textbf{Q2}} & \texttt{double} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+The energy scale for plots.%
+\end{minipage}\tabularnewline
+\hline 
+\hline 
+\texttt{\textbf{{[}PDFs{]}}} &  & \tabularnewline
+\hline 
+\hline 
+\texttt{\textbf{NFL}} & \texttt{int} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+Total number of parton flavors, supported values 7 and 13.%
+\end{minipage}\tabularnewline
+\hline 
+\hline 
+\texttt{\textbf{{[}evolution{]}}} &  & \tabularnewline
+\hline 
+\hline 
+\texttt{\textbf{PTORD}} & \texttt{int} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+The calculation pertubartive order: 0 for LO, 1 for NLO and 2 for
+NNLO (used when searching for FK tables).%
+\end{minipage}\tabularnewline
+\hline 
+\texttt{\textbf{Q20}} & \texttt{double} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+The initial energy scale for observables.%
+\end{minipage}\tabularnewline
+\hline 
+\hline 
+\texttt{\textbf{{[}datasets{]}}} &  & \tabularnewline
+\hline 
+\hline 
+\texttt{\textbf{DATASET}} & \texttt{string} & %
+\begin{minipage}[t]{0.5\columnwidth}%
+you just write line per line the name of data sets which you want
+to include in the validphys computation, from Table (\ref{tab:FK-tables-status.}).%
+\end{minipage}\tabularnewline
+\hline 
+\end{tabular}
+\par\end{centering}
+
+\caption{\label{tab:Configuration-information.}Configuration information.}
+\end{table}
+
+
+
+\subsection{Interpreting results}
+
+After running validphys, you will find a: 
+\begin{itemize}
+\item \texttt{\textbf{validphys.log}} file in \texttt{REPORTDIR/<config name>}, which
+contains the configuration used to generated results. 
+\item \texttt{\textbf{REPORTDIR/<config name>/validphys}} folder containing
+
+\begin{itemize}
+\item \texttt{\textbf{/plots}} directory containing all the plots required
+by the report in PLOTFORMAT and in {*}.root formats
+\item \texttt{\textbf{/report.tex}}\textbf{ }the report generated automatically 
+\item \texttt{\textbf{/Makefile}}\textbf{ }the makefile to compile and clean
+report.tex, generating report.pdf 
+\end{itemize}
+\end{itemize}
+In order to generate a pdf report, run validphys and then go to \texttt{REPORTDIR/<config name>/validphys}
+folder and type make.
+

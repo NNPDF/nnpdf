@@ -1,0 +1,9 @@
+*******************************************************************************************
+SetName: CMSWMASY47FB
+Author: Maria Ubiali ubiali@hep.phy.cam.ac.uk
+Date: 2014
+CodesUsed: FEWZ  
+TheoryInput: NNPDF2.3 NLO, alphas(MZ)=0.119
+PDFset: NNPDF23_nlo_as_0119
+Warnings: 
+********************************************************************************************

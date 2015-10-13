@@ -1,0 +1,68 @@
+************************************************************************************************************
+SetName: ATLASR04JETS2P76TEV
+Author: Stefano Carrazza and Joao Pires, stefano.carrazza@mi.infn.it and Joao.Pires@mib.infn.it
+Date: Early 2014
+CodesUsed: Private gg->jj code from JP, validated with threshold approximation code from Vogelsang
+TheoryInput: NNPDF2.3 NNLO, alphas(MZ)=0.110
+PDFset: NNPDF23_nnlo_as_0119
+Warnings: Uses pt_jet as central scale rather than pt_leading, to update once final pp -> jj code available
+*************************************************************************************************************
+1.9772
+1.6992
+1.5179
+1.4124
+1.3262
+1.2497
+1.1929
+1.1635
+1.1415
+1.1284
+1.1222
+2.0411
+1.7594
+1.5675
+1.4572
+1.3699
+1.2933
+1.2317
+1.2024
+1.1871
+1.1783
+1.1706
+2.1871
+1.8944
+1.6906
+1.57
+1.4742
+1.3923
+1.3402
+1.3203
+1.3147
+1.3119
+2.5353
+2.2084
+1.9788
+1.8438
+1.7509
+1.6861
+1.6521
+1.6371
+1.6295
+1.6362
+3.1308
+2.7929
+2.5984
+2.5477
+2.5872
+2.7237
+3.0981
+3.9726
+3.9357
+3.8226
+3.9743
+4.3093
+5.1219
+8.1394
+6.0433
+7.201
+11.74
