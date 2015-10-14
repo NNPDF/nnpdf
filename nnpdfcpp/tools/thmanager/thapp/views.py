@@ -17,7 +17,9 @@ def addtheory(request):
         if form.is_valid():
             mform = form.save(commit=False)
             mform.save(using='theory')
-            os.system('svn ci -m "[thmanager] add new theory to theory.db" theory.db')
+            os.system('git add ../../data/theory.db')
+            os.system('git commit -m "[apfelcomb] updating theory.db"')
+            os.system('git push origin master')
             return redirect(index)
     else:
         form = TheoryForm(instance=theory)
