@@ -4,7 +4,7 @@
 
 ############################################################
 uset0         : off   # use t0 in chi2check, validphys
-pdfcteq       : CT10nlo
+pdfcteq       : CT14nlo
 pdfmstw       : MMHT2014nlo68cl
 plotformat    : eps   # root file format
 errorband     : on     # 1 for 1sigma, 0 for 68% c.l.
