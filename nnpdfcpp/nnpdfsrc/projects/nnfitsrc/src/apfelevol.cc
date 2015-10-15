@@ -63,9 +63,9 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
   // initialize apfel  
   APFEL::SetQLimits(getInstance()->fQ0, getInstance()->fQmax + 1E-5); // Epsilon for limits
   APFEL::SetNumberOfGrids(3);
-  APFEL::SetGridParameters(1,150,3,getInstance()->fXmin);
-  APFEL::SetGridParameters(2,100,5,getInstance()->fXmed);
-  APFEL::SetGridParameters(3,100,5,0.65);
+  APFEL::SetGridParameters(1,100,3,getInstance()->fXmin);
+  APFEL::SetGridParameters(2,70,5,getInstance()->fXmed);
+  APFEL::SetGridParameters(3,50,5,0.65);
   APFEL::LockGrids(true);
 
   // hq masses
@@ -110,7 +110,7 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
     }
 
   APFEL::SetPDFSet("external");
-  APFEL::EnableFastEvolution(false);
+  APFEL::SetFastEvolution(false);
   APFEL::InitializeAPFEL();
 
   // allocate grid in x
