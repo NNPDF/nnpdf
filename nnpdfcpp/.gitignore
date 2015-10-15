@@ -11,3 +11,4 @@ nnpdfsrc/common/inc/svn.h
 config.log
 config.status
 libtool
+*.pyc

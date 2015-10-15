@@ -110,7 +110,7 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
     }
 
   APFEL::SetPDFSet("external");
-
+  APFEL::EnableFastEvolution(false);
   APFEL::InitializeAPFEL();
 
   // allocate grid in x
