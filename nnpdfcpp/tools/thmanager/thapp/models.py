@@ -58,7 +58,7 @@ class Theory(models.Model):
     maxnfas = models.IntegerField(db_column='MaxNfAs', choices=NFFFS, default='5') 
     maxnfpdf = models.IntegerField(db_column='MaxNfPdf', choices=NFFFS, default='5')  
     q0 = models.DecimalField(db_column='Q0', default=1.0, max_digits=5, decimal_places=3, validators=[MinValueValidator(0)] )
-    alphas = models.DecimalField(default=0.118, max_digits=5, decimal_places=3, validators=[MinValueValidator(0)])
+    alphas = models.DecimalField(default=0.118, max_digits=5, decimal_places=4, validators=[MinValueValidator(0)])
     qref = models.DecimalField(db_column='Qref', default=91.2, max_digits=5, decimal_places=3, validators=[MinValueValidator(0)] )
     qed = models.BooleanField(db_column='QED', default=False) 
     alphaqed = models.DecimalField(default=0.007496252,max_digits=15, decimal_places=9, validators=[MinValueValidator(0)])
@@ -73,7 +73,7 @@ class Theory(models.Model):
     qmb = models.DecimalField(db_column='Qmb',default=4.18, max_digits=10, decimal_places=3, validators=[MinValueValidator(0)])  
     mt = models.DecimalField(default=173.07, max_digits=10, decimal_places=3, validators=[MinValueValidator(0)])
     qmt = models.DecimalField(db_column='Qmt',default=173.07, max_digits=10, decimal_places=3, validators=[MinValueValidator(0)]) 
-    ckm = models.TextField(db_column='CKM', default='0.97428, 0.22530, 0.003470, 0.22520, 0.97345, 0.041000, 0.00862, 0.04030, 0.999152')  
+    ckm = models.TextField(db_column='CKM', default='0.97428 0.22530 0.003470 0.22520 0.97345 0.041000 0.00862 0.04030 0.999152')  
     mz = models.DecimalField(db_column='MZ',default=91.1876, max_digits=10, decimal_places=4, validators=[MinValueValidator(0)]) 
     mw = models.DecimalField(db_column='MW',default=80.398, max_digits=10, decimal_places=4, validators=[MinValueValidator(0)])
     gf = models.DecimalField(db_column='GF', default=1.1663787e-05, max_digits=15, decimal_places=15, validators=[MinValueValidator(0)])  # Field name made lowercase.
