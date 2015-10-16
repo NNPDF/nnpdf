@@ -223,6 +223,19 @@ const int* GetIflmap(const int nFL)
   }
 }
 
+int Getnf(NNPDFSettings const&a, NNPDFSettings const&b)
+{
+  int nf = 3;
+
+  if (a.Get("fitting","basis").size() >=  9 || a.IsIC()) nf = 4;
+  if (b.Get("fitting","basis").size() >=  9 || b.IsIC()) nf = 4;
+
+  if (a.Get("fitting","basis").size() >= 11) nf = 5;
+  if (a.Get("fitting","basis").size() >= 13) nf = 6;
+
+  return nf;
+}
+
 /**
   * The constructor
   */
@@ -382,10 +395,7 @@ void PlotData::NNPDFComparison(int i, LHAPDFSet *pdf, LHAPDFSet *pdf68cl)
 
   const double Q = sqrt(fSettings.GetPlotting("q2").as<real>());
 
-  int nf = 3;
-  if (fSettings.Get("fitting","basis").size() >= 9 || fSettings.IsIC()) nf = 4; // activate IC nf = 4
-  if (fSettings.Get("fitting","basis").size() >= 11) nf = 5;
-  if (fSettings.Get("fitting","basis").size() >= 13) nf = 6;
+  int nf = Getnf(fSettings, fSettingsRef);
 
   // Plotting std. lha pdfs, [-3,3], [-4,4], [-5,5], [-6,6]
   for (int t = -nf; t <= nf; t++)
@@ -411,12 +421,9 @@ void PlotData::NNPDFComparison(int i, LHAPDFSet *pdf, LHAPDFSet *pdf68cl)
   int index = 0;
   if (pdf->hasFlavor(22) == true) index++;
 
-  int nfl = fSettings.Get("fitting","basis").size();
-  if (fSettings.IsIC()) nfl = 9;
-  if (i == 1) {
-      nfl = fSettingsRef.Get("fitting","basis").size();
-      if(fSettings.IsIC()) nfl = 9;
-    }
+  int nfl = max(fSettings.Get("fitting","basis").size(),
+                fSettingsRef.Get("fitting","basis").size());
+  if (fSettings.IsIC() || fSettingsRef.IsIC()) nfl = 9;
   nfl += index;
   const int *iflmap = GetIflmap(nfl);
 
@@ -521,10 +528,7 @@ void PlotData::OtherComparison(int i, LHAPDFSet *pdf)
 
   const double Q = sqrt(fSettings.GetPlotting("q2").as<real>());
 
-  int nf = 3;
-  if (fSettings.Get("fitting","basis").size() >= 9 || fSettings.IsIC()) nf = 4;
-  if (fSettings.Get("fitting","basis").size() >= 11) nf = 5;
-  if (fSettings.Get("fitting","basis").size() >= 13) nf = 6;
+  int nf = Getnf(fSettings, fSettingsRef);
 
   // Plotting std. lha pdfs, [-3,3], [-4,4], [-5,5], [-6,6]
   for (int t = -nf; t <= nf; t++)
@@ -547,8 +551,8 @@ void PlotData::OtherComparison(int i, LHAPDFSet *pdf)
   cout << " ***** Printing comparison in EVL Basis *****" << endl;
 
   int index = 0;
-  int nfl = fSettings.Get("fitting","basis").size();
-  if (fSettings.IsIC()) nfl = 9;
+  int nfl = max(fSettings.Get("fitting","basis").size(),fSettingsRef.Get("fitting","basis").size());
+  if (fSettings.IsIC() || fSettingsRef.IsIC()) nfl = 9;
   if (fSettings.IsQED()) index++;
   nfl += index;
   const int *iflmap = GetIflmap(nfl);
@@ -659,10 +663,12 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
   cout << " *****    Adding Preprocessing Plots    *****\n" << endl;
 
   int nfl = fSettings.Get("fitting","basis").size();
-  if (fSettings.Get("fitting","basis").size() != fSettingsRef.Get("fitting","basis").size())
+  // skip reference if basis are different
+  if (fSettings.Get("fitting","basis").size() != fSettingsRef.Get("fitting","basis").size() && i == 1)
     {
-      if (fSettings.Get("fitting","basis").size() > fSettingsRef.Get("fitting","basis").size())
-        nfl = fSettings.Get("fitting","basis").size();
+      return;
+      //if (fSettings.Get("fitting","basis").size() > fSettingsRef.Get("fitting","basis").size())
+      //  nfl = fSettings.Get("fitting","basis").size();
     }
 
   real alphabnd[nfl][2];
@@ -1400,7 +1406,7 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
                 }
 
               leg2->AddEntry(h, TString(dat->GetPDFSet()->GetSetName()), "f");
-              h->Draw();
+              h->Draw("HIST");
 
               if (j2 != -1)
                 {
@@ -1447,7 +1453,7 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
 
                           leg2->AddEntry(h2, TString(dat2->GetPDFSet()->GetSetName()), "f");
 
-                          h2->Draw("same");
+                          h2->Draw("HIST same");
                         }
                     }
                 }
@@ -1605,8 +1611,8 @@ void PlotData::AddChi2Histo(vector<ExperimentResult*> res, vector<ExperimentResu
                               " central #chi^{2}", "fl");
   leg->AddEntry(mean2, TString(res2[0]->GetPDFSet()->GetSetName()) +
                               " central #chi^{2}", "fl");
-  h->Draw("bar,l");
-  h2->Draw("bar,l,same");
+  h->Draw("bar,hist");
+  h2->Draw("bar,hist,same");
   mean->Draw("same");
   uperr->Draw("same");
   dnerr->Draw("same");
@@ -1742,8 +1748,8 @@ void PlotData::AddPhiHisto(vector<ExperimentResult*> res, vector<ExperimentResul
                               " total #phi", "fl");
   leg->AddEntry(mean2, TString(res2[0]->GetPDFSet()->GetSetName()) +
                               " total #phi", "fl");
-  h->Draw("bar,l");
-  h2->Draw("bar,l,same");
+  h->Draw("bar,hist");
+  h2->Draw("bar,hist,same");
   mean->Draw("same");
   mean2->Draw("same");
 
@@ -1876,7 +1882,7 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
   }
 
   chi2rep->cd();
-  chi2repHisto->Draw();
+  chi2repHisto->Draw("HIST");
 
   // Save to file
   stringstream f1rep("");
@@ -2109,14 +2115,14 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
   tl->cd();
   tl->cd()->SetTickx();
   tl->cd()->SetTicky();
-  tlhisto->Draw();
+  tlhisto->Draw("HIST");
 
   gStyle->SetOptStat(0);
   cchi2histo1->cd();
   cchi2histo1->cd()->SetTickx();
   cchi2histo1->cd()->SetTicky();
-  chi2histo1->Draw();
-  chi2histo2->Draw("same");
+  chi2histo1->Draw("HIST");
+  chi2histo2->Draw("HIST same");
   leg->Draw("same");
 
   // Save plots to file
@@ -2668,7 +2674,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
   f << setprecision(5) << "$s_{v}$(fit) & " << ComputeAVG(fSUMRULES[indexsr]) << "$\\pm$" << ComputeStdDev(fSUMRULES[indexsr])
     << " & " << ComputeAVG(fSUMRULESRef[indexsr]) << "$\\pm$" << ComputeStdDev(fSUMRULESRef[indexsr]) << " \\tabularnewline" << endl;
 
-  if (fSettings.IsIC())
+  if (fSettings.IsIC() || fSettingsRef.IsIC())
     {
       indexsr++;
       f << setprecision(5) << "$c_{v}$(fit) & " << ComputeAVG(fSUMRULES[indexsr]) << "$\\pm$" << ComputeStdDev(fSUMRULES[indexsr])
@@ -2687,7 +2693,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
   f << setprecision(5) << "$xs^{+}$(fit) & " << ComputeAVG(fSUMRULES[indexsr]) << "$\\pm$" << ComputeStdDev(fSUMRULES[indexsr])
     << " & " << ComputeAVG(fSUMRULESRef[indexsr]) << "$\\pm$" << ComputeStdDev(fSUMRULESRef[indexsr]) << " \\tabularnewline" << endl;
 
-  if (fSettings.IsIC())
+  if (fSettings.IsIC() || fSettingsRef.IsIC())
     {
       indexsr++;
       f << setprecision(5) << "$xc^{+}$(fit) & " << ComputeAVG(fSUMRULES[indexsr]) << "$\\pm$" << ComputeStdDev(fSUMRULES[indexsr])
@@ -3021,8 +3027,9 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
   f << endl;
   f << "\\begin{figure}[H]" << endl;  
 
-  int nfl = fSettings.Get("fitting","basis").size();
-  if (fSettings.IsIC()) nfl = 9;
+  int nfl = max(fSettings.Get("fitting","basis").size(), fSettingsRef.Get("fitting","basis").size());
+  if (fSettings.IsIC() || fSettingsRef.IsIC()) nfl = 9;
+
   int nflmax = 0;
   if (nfl == 7) nflmax = 7 + 3;
   if (nfl == 8) nflmax = 7 + 3;
@@ -3175,6 +3182,15 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
       f << endl;
       f << "\\begin{figure}[H]" << endl;
       index = 0;
+
+      nfl = fSettings.Get("fitting","basis").size();
+      if (fSettings.IsIC()) nfl = 9;
+
+      if (nfl == 7) nflmax = 7 + 3;
+      if (nfl == 8) nflmax = 7 + 3;
+      if (nfl == 9) nflmax = 7 + 3 + 4;
+      if (nfl ==10) nflmax = 9 + 3 + 4;
+
       for (int i = 0; i < nflmax; i++)
         {
           f << "\\begin{centering}" << endl;
