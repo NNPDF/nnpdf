@@ -13,18 +13,18 @@
 
 // ********** ATLAS ***************
 
-static const dataInfoRaw ATLASR06JETS2011info = {
+static const dataInfoRaw ATLAS1JET11info = {
   140,                  //nData  //count the data
   68,                  //nSys   
-  "ATLASR06JETS2011",  //SetName
+  "ATLAS1JET11",  //SetName
   "JET_ATLASIJ11"      //ProcType
 };
 
 // ********* Filters **************
 
-class ATLASR06JETS2011Filter: public CommonData
-{ public: ATLASR06JETS2011Filter():
-  CommonData(ATLASR06JETS2011info) { ReadData(); }
+class ATLAS1JET11Filter: public CommonData
+{ public: ATLAS1JET11Filter():
+  CommonData(ATLAS1JET11info) { ReadData(); }
 
 private:
   void ReadData();

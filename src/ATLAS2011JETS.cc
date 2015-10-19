@@ -7,7 +7,7 @@
 
 #include "ATLAS2011JETS.h"
 
-void ATLASR06JETS2011Filter::Loop(fstream & file, double rap, int nDataMin, int nDataMax)
+void ATLAS1JET11Filter::Loop(fstream & file, double rap, int nDataMin, int nDataMax)
 {
 
   // Reading files
@@ -61,7 +61,7 @@ void ATLASR06JETS2011Filter::Loop(fstream & file, double rap, int nDataMin, int 
 
 }
 
-void ATLASR06JETS2011Filter::ReadData()
+void ATLAS1JET11Filter::ReadData()
 {
  
   // Open and read rawdata here
