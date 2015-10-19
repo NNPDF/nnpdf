@@ -4,6 +4,7 @@ COMMON = ../common/src/common.cc \
 	 ../common/src/nnpdfsettings.cc \
 	 ../common/src/loadutils.cc \
          ../common/src/datautils.cc \
+      ../common/src/md5.cc \
          ../common/src/theorydb.cc
 
 filter_SOURCES = filtersrc/src/filter.cc \

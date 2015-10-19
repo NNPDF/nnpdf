@@ -17,6 +17,15 @@
 #include <vector>
 #include <cmath>
 #include <map>
+
+#include <NNPDF/randomgenerator.h>
+#include <NNPDF/fastkernel.h>
+#include <NNPDF/utils.h>
+#include <NNPDF/commondata.h>
+
+#include <md5.h>
+#include <yaml-cpp/yaml.h>
+
 #include <gsl/gsl_integration.h>
 #include <gsl/gsl_deriv.h>
 #include <gsl/gsl_errno.h>
@@ -27,12 +36,6 @@ using std::vector;
 using std::map;
 using std::make_pair;
 
-#include <NNPDF/randomgenerator.h>
-#include <NNPDF/fastkernel.h>
-#include <NNPDF/utils.h>
-#include <NNPDF/commondata.h>
-#include <NNPDF/md5.h>
-#include <yaml-cpp/yaml.h>
 using namespace NNPDF;
 
 class PDFBasis;

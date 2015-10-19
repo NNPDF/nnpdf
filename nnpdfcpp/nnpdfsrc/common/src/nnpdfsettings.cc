@@ -307,7 +307,10 @@ vector<int> NNPDFSettings::GetDataMask(const string &setname, filterType useFilt
  */
 DataSetInfo const& NNPDFSettings::GetSetInfo(string const& setname) const
 {  
-  map<int,DataSetInfo>::const_iterator iMap = fDataSetInfo.find(HashNNPDF::IntHash(setname.c_str()));
+  std::hash<std::string> str_hash;
+  const size_t hashval = str_hash(setname);
+
+  map<int,DataSetInfo>::const_iterator iMap = fDataSetInfo.find(hashval);
   if (iMap != fDataSetInfo.end())
     return (*iMap).second;
   else
@@ -324,7 +327,10 @@ DataSetInfo const& NNPDFSettings::GetSetInfo(string const& setname) const
  */
 PosSetInfo const& NNPDFSettings::GetPosInfo(string const& posname) const
 {
-  map<int,PosSetInfo>::const_iterator iMap = fPosSetInfo.find(HashNNPDF::IntHash(posname.c_str()));
+  std::hash<std::string> str_hash;
+  const size_t hashval = str_hash(posname);
+
+  map<int,PosSetInfo>::const_iterator iMap = fPosSetInfo.find(hashval);
   if (iMap != fPosSetInfo.end())
     return (*iMap).second;
   else
@@ -364,7 +370,7 @@ void NNPDFSettings::VerifyConfiguration(const string &filename)
     exit(-1);
   }
   
-  HashNNPDF::MD5 targetHash, filterHash;
+  MD5 targetHash, filterHash;
   
   targetHash.update(targetConfig);
   filterHash.update(filterConfig);
@@ -508,11 +514,14 @@ void NNPDFSettings::LoadExperiments()
             cfactors.push_back(cfs.str());
           }
 
-          DataSetInfo info = {setname, setsys, setfrac, cfactors};
+          // Generate hash of setname
+          std::hash<std::string> str_hash;
+          const size_t hashval = str_hash(setname);
 
-          map<int,DataSetInfo>::const_iterator iMap = fDataSetInfo.find(HashNNPDF::IntHash(setname.c_str()));
+          DataSetInfo info = {setname, setsys, setfrac, cfactors};
+          map<int,DataSetInfo>::const_iterator iMap = fDataSetInfo.find(hashval);
           if (iMap != fDataSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadExperiments error: hash collision for set: " << setname << endl; exit(-1); }
-          else { fDataSetInfo.insert(make_pair(HashNNPDF::IntHash(setname.c_str()), info)); }
+          else { fDataSetInfo.insert(make_pair(hashval, info)); }
           nsetname.push_back(setname);
           fSetName.push_back(setname);
         }
@@ -537,9 +546,13 @@ void NNPDFSettings::LoadPositivities()
       fPosName.push_back(posname);
       PosSetInfo info = {posname, poslambda};
 
-      map<int,PosSetInfo>::const_iterator iMap = fPosSetInfo.find(HashNNPDF::IntHash(posname.c_str()));
+      // Generate hash of setname
+      std::hash<std::string> str_hash;
+      const size_t hashval = str_hash(posname);
+
+      map<int,PosSetInfo>::const_iterator iMap = fPosSetInfo.find(hashval);
       if (iMap != fPosSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadPositivity error: hash collision for set: " << posname << endl; exit(-1); }
-      else { fPosSetInfo.insert(make_pair(HashNNPDF::IntHash(posname.c_str()), info)); }
+      else { fPosSetInfo.insert(make_pair(hashval, info)); }
     }
 }
 
