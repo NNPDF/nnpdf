@@ -6,6 +6,7 @@ import os
 
 # Create your views here.
 def index(request):
+    os.system('git pull')
     theories = Theory.objects.using('theory').all()
     context = {'theories': theories}
     return render(request, 'thapp/index.html', context)

@@ -38,6 +38,7 @@ $(document).ready(function() {
               <thead>
                 <tr>
                   <th class="thfull">ID</th>
+		  <th class="thfull">Comments</th>
                   <th class="thfull">PTO</th>
                   <th class="thfull">FNS</th>
                   <th class="thfull">DAMP</th>
@@ -70,7 +71,6 @@ $(document).ready(function() {
                   <th class="thfull">$\sin^2(\theta_W)$</th>
                   <th class="thfull">TMC</th>
                   <th class="thfull">$M_{p}$</th>
-                  <th class="thfull">Comments</th>
                 </tr>
               </thead>
 
@@ -78,6 +78,7 @@ $(document).ready(function() {
                 {% for theory in theories %}
                 <tr>
                   <td align="center"><a href="http://pcteserver.mi.infn.it/~apfelcomb/commondatatheory/theory_{{theory.id}}.tgz">{{theory.id}}</a></td>
+                  <td style="white-space: nowrap;" align="center">{{theory.comments}}</td>
                   <td align="center">{{theory.pto}}</td>
                   <td style="white-space: nowrap" align="center">{{theory.fns}}</td>
                   <td align="center">{{theory.damp}}</td>
@@ -110,7 +111,6 @@ $(document).ready(function() {
                   <td align="center">{{theory.sin2tw}}</td>
                   <td align="center">{{theory.tmc}}</td>
                   <td align="center">{{theory.mp}}</td>
-                  <td style="white-space: nowrap;" align="center">{{theory.comments}}</td>
                 </tr>
                 {% endfor %}
               </tbody>
