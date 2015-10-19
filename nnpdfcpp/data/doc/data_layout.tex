@@ -81,9 +81,11 @@
 \hline
 Date & Version & Major/Minor & Author & Comments\\
 \hline\hline
-9/9/15 & 1.0.0 & - & nh & First version\\
+9/9/15 & 1.0.0 & - & nh & First version.\\
 \hline
 16/9/15 & 1.1.0 & Major & vb/sc/nh & Implementing many \newline new theory parameters. \newline Adding header to {\tt CFACTOR} files.\\
+\hline
+19/10/15 & 1.1.1 & Minor & nh & Updating paths after move to git repository. \\
 \hline
 \end{tabular}
 \end{center}
@@ -434,12 +436,12 @@ OP: RATIO
 The {\tt nnpdf++} code needs to be able to handle a great deal of different options with regard to the treatment of both experimental data
 and theoretical choices. In the code, every effort has been made to keep experimental and theoretical parameters strictly separate.
 
-In this section we shall specify the layout of the {\tt nnpdf++} data directory. It is in this directory that all of the read-only data to be used in
-the fit are accessed. The data directory path is typically supplied to the core code by way of the compile time macro {\tt DATA\_PATH} which is by default set to {\tt data} in the trunk root directory. However the user may change this to specify a custom data directory location.
+In this section we shall specify the layout of the various {\tt nnpdf++} data directory. It is in this directory that all of the read-only data to be used in
+the fit are accessed. The data directory is located in the {\tt nnpdfcpp} git repository, under the path {\tt /nnpdfcpp/data/}. This path is typically supplied to the different projects by way of the compile time macro {\tt DATA\_PATH} which is by default set to {\tt ../nnpdfcpp/data} therefore assuming that the different {\tt nnpdf++} project repositories have been checked out in the same directory. However the user may change this to specify a custom data directory location.
 \subsection{Experimental data storage}
-The central repository for {\tt CommonData} in use by {\tt nnpdf++} projects is located in the {\tt nnpdf++} svn at
+The central repository for {\tt CommonData} in use by {\tt nnpdf++} projects is located in the {\tt nnpdfcpp} git repository at
 \begin{quotation}
-    {\tt /nnpdfcpp/trunk/data/commondata/}
+    {\tt /nnpdfcpp/data/commondata/}
 \end{quotation}
 Where a separate {\tt CommonData} file is stored for each {\it Dataset} with the filename format
 \begin{quotation}
@@ -447,7 +449,7 @@ Where a separate {\tt CommonData} file is stored for each {\it Dataset} with the
 \end{quotation}
 Information on the treatment of systematic uncertainties, provided in {\tt SYSTYPE} files, are located in the subdirectory
 \begin{quotation}
-    {\tt /nnpdfcpp/trunk/data/commondata/systypes}
+    {\tt /nnpdfcpp/data/commondata/systypes}
 \end{quotation}
 Here several {\tt SYSTYPE} files may be supplied for each {\it Dataset}. The various options are enumerated by an integer suffix to the filename. The filename format for {\tt SYSTYPE} files is therefore
 \begin{quotation}
@@ -474,13 +476,13 @@ and have no particular layout, but must enumerate and give a brief explanation f
 
 \subsection{Theory lookup table}
 In order to organise the various different theoretical treatments available, a lookup table
-is provided in {\tt sqlite3} format. This lookup table can be found in the {\tt nnpdf++} main data directory in the svn:
+is provided in {\tt sqlite3} format. This lookup table can be found in the {\tt nnpdfcpp} repository data directory at:
 \begin{quotation}
-    {\tt /nnpdfcpp/trunk/data/theory.db}
+    {\tt /nnpdfcpp/data/theory.db}
 \end{quotation}
 This file should only be edited in order to add new theory options. It may be edited with any appropriate sqlite3-supported software. A script is provided to give a brief overview of the various theory options available. It can be found at
 \begin{quotation}
-    {\tt /nnpdfcpp/trunk/data/disp\_theory.py}
+    {\tt /nnpdfcpp/data/disp\_theory.py}
 \end{quotation}
 and should be run without any arguments.
 \\\\
@@ -501,7 +503,7 @@ For easy access, they can be downloaded through the {\tt disp\_theory.py} script
 \begin{quotation}
     \url{http://pcteserver.mi.infn.it/~apfelcomb/fkviewer/}
 \end{quotation}
-
+The uploading of a new theory archive can be performed through the {\tt upload\_theory.sh} script which generates and uploads the archive.
 Each archive contains the following directory structure
 \begin{quotation}\noindent
 {\tt
