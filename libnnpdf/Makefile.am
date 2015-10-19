@@ -11,7 +11,6 @@ libnnpdf_la_SOURCES = 	src/common.cc \
 			src/thpredictions.cc \
 			src/parametrisation.cc \
 			src/lhapdfset.cc \
-			src/md5.cc \
 			src/positivity.cc \
 			src/randomgenerator.cc \
 			src/utils.cc \
@@ -19,7 +18,6 @@ libnnpdf_la_SOURCES = 	src/common.cc \
 
 otherincludedir = $(includedir)/NNPDF
 otherinclude_HEADERS =  src/NNPDF/common.h \
-		        src/NNPDF/md5.h \
 		        src/NNPDF/timer.h \
 		        src/NNPDF/commondata.h \
 		        src/NNPDF/experiments.h \
