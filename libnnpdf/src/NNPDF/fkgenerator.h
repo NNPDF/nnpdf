@@ -18,7 +18,7 @@
 namespace NNPDF
 {
     /**
-    * \class FKGenerator Class
+    * \class FKGenerator
     * \brief Class for filling FastKernel tables
     */
     class FKGenerator : public FKTable

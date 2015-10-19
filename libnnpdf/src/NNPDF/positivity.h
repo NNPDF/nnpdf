@@ -20,7 +20,7 @@ namespace NNPDF
   class PDFSet;
 
   /**
-   * \class PositivitySet Constraint Class
+   * \class PositivitySet
    * \brief Positivity observables class manager
    */
 

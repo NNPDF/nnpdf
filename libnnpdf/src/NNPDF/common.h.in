@@ -17,6 +17,7 @@
 
 namespace NNPDF
 {
+  	/*! Returns the version string for libnnpdf */
 	std::string getVersion();
 
 	// ***** Convolution alignment targets ****

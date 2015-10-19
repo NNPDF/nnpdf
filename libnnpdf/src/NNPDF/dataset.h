@@ -6,11 +6,6 @@
 //          Stefano Carrazza, stefano.carrazza@mi.infn.it
 //          Luigi Del Debbio, luigi.del.debbio@ed.ac.uk
 
-/**
- *  \class DataSet
- *  \brief Class for datasets loading and computing of observables
- */
-
 #pragma once
 
 #include "common.h"
@@ -26,6 +21,11 @@ namespace NNPDF
 
   class ThPredictions;
 
+
+  /**
+   *  \class DataSet
+   *  \brief Class for datasets loading and computing of observables
+   */
   class DataSet : public CommonData, public FKSet
   {
    private:    
@@ -68,9 +68,9 @@ namespace NNPDF
 
     void   MakeArtificial(); //!< Make an artificial data replica
     
-    void   UpdateData(double* newdat);                // Update data
-    void   UpdateData(double* newdat, double* norm);  // Update with a rescaling - also rescales additive uncertainties
-    void   UpdateData(double* newdat, sysType* type); // Update data and systypes
+    void   UpdateData(double* newdat);                //!< Update data
+    void   UpdateData(double* newdat, double* norm);  //!< Update with a rescaling - also rescales additive uncertainties
+    void   UpdateData(double* newdat, sysType* type); //!< Update data and systypes
 
     void SetArtificial( bool const& artificial) {fIsArtificial = artificial;};
     

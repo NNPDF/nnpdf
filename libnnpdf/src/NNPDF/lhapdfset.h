@@ -6,11 +6,6 @@
 //          Stefano Carrazza, stefano.carrazza@mi.infn.it
 //          Luigi Del Debbio, luigi.del.debbio@ed.ac.uk
 
-/**
- *  \class LHAPDFSet
- *  \brief Class for handle LHAPDF methods
- */
-
 #pragma once
 #include "pdfset.h"
 #include "LHAPDF/LHAPDF.h"
@@ -19,6 +14,11 @@
 
 namespace NNPDF
 {
+
+  /**
+   *  \class LHAPDFSet
+   *  \brief Class for handle LHAPDF methods
+   */
   class LHAPDFSet : private LHAPDF::PDFSet, public NNPDF::PDFSet
   {
   public:

@@ -22,7 +22,7 @@ namespace NNPDF
     typedef void (*SigmaOp) (int const&, std::vector<real*> const&, real* );
 
     /**
-    * \class FKSet Class
+    * \class FKSet
     * \brief Class for holding sets of FK tables, alongside information on compound observable computation
     */
     class FKSet

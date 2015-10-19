@@ -8,12 +8,12 @@
 
 #include "NNPDF/common.h"
 #include "NNPDF/logger.h"
-#include "NNPDF/md5.h"
 
 #include <iostream>
 #include <fstream>
 #include <sys/stat.h>
 #include <cstdlib>
+#include <functional>
 
 using std::cout;
 using std::cerr;
@@ -56,7 +56,9 @@ namespace NNPDF
   void LogManager::AddLogger(string const& logname, string const& filename)
   {
     LogManager* LM = GetLM();
-    size_t hashval = HashNNPDF::IntHash(logname.c_str());
+
+    std::hash<std::string> str_hash;
+    const size_t hashval = str_hash(logname);
     
     // Collision
     if (LM->fMap.find(hashval)!=LM->fMap.end())
@@ -79,7 +81,8 @@ namespace NNPDF
   Logger& LogManager::GetLogger(string const& logname)
   {
     LogManager* LM = GetLM();
-    size_t hashval = HashNNPDF::IntHash(logname.c_str());
+    std::hash<std::string> str_hash;
+    const size_t hashval = str_hash(logname);
     
     // Collision
     LogMap::iterator iLog = LM->fMap.find(hashval);

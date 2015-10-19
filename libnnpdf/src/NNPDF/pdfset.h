@@ -16,7 +16,7 @@
 namespace NNPDF
 {
     /**
-     * \class PDFSet base class for PDF Access
+     * \class PDFSet
      * \brief An abstract class that provides the basic interface to PDF sets
      */
 

@@ -6,11 +6,6 @@
 //          Stefano Carrazza, stefano.carrazza@mi.infn.it
 //          Luigi Del Debbio, luigi.del.debbio@ed.ac.uk
 
-/**
- * \class Timer
- * \brief Computes the calculation time.
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
@@ -18,6 +13,10 @@
 namespace NNPDF
 {
 
+  /**
+   * \class Timer
+   * \brief Computes the calculation time.
+   */
   class Timer {
    private:
 

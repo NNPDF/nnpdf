@@ -37,7 +37,6 @@
 #include <stdio.h>
 
 using namespace std;
-using namespace HashNNPDF;
 
 // Constants for MD5Transform routine.
 #define S11 7
@@ -57,17 +56,6 @@ using namespace HashNNPDF;
 #define S43 15
 #define S44 21
 
-
-// General string hasher
-int HashNNPDF::IntHash(const char* s)
-{
-  unsigned h = 31;
-  while (*s) {
-    h = (h * 54059) ^ (s[0] * 76963);
-    s++;
-  }
-  return h % 86969;
-};
 
 ///////////////////////////////////////////////
 

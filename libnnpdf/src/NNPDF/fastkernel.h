@@ -32,8 +32,8 @@ namespace NNPDF
         return stream.str();
     }
 
-/**
-    * \class FKHeader class
+   /**
+    * \class FKHeader 
     * \brief Class for parsing the header of FK tables
     */
     class FKHeader
@@ -95,7 +95,7 @@ namespace NNPDF
     };
 
     /**
-    * \class FastKernel Table Class
+    * \class FKTable
     * \brief Class for holding FastKernel tables
     */
     class FKTable : public FKHeader 

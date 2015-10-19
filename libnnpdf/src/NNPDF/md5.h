@@ -38,19 +38,6 @@
 #include <cstdlib>
 #include <cstring>
 
-namespace HashNNPDF
-{
-  // Basic hashing function - nh
-  int IntHash(const char* s);
-  // Basic hashing for stl maps - nh
-  class HashFunctor
-  {
-    public: size_t operator()(const char* s) {
-      return IntHash(s);
-    }
-  };
-
-
 // a small class for calculating MD5 hashes of strings or byte arrays
 // it is not meant to be fast or secure
 //
@@ -105,5 +92,4 @@ private:
 
 std::string md5(const std::string str);
 
-}
 #endif

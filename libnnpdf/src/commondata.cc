@@ -28,9 +28,7 @@ namespace NNPDF
   // Default verbosity
   bool CommonData::Verbose = true;
 
-  /**
-   * Generate a dataInfo struct given a target filename
-   */
+  // Generate a dataInfo struct given a target filename
   dataInfo genInfoStruct(std::string const& targetfile, std::string const& sysfile)
   {
     // Open commondata file
@@ -73,9 +71,7 @@ namespace NNPDF
     return sysid;
   }
 
-  /**
-   * Helper function to parse strings into SYSTYPES
-   */
+  // Helper function to parse strings into SYSTYPES
   sysType parseSYS(std::string const& str)
   {
     if (str.compare("ADD") == 0) return ADD;
@@ -89,9 +85,7 @@ namespace NNPDF
     return MULT;
   }
 
-  /**
-   * CommonData base class constructor
-   */
+  // CommonData base class constructor
   CommonData::CommonData(dataInfo const& info):
   fSetName(info.SetName),
   fNData(info.nData),
@@ -132,9 +126,7 @@ namespace NNPDF
     ReadData(info.targetFile, info.systypeFile);
   }
 
-  /**
-   * CommonData base class constructor
-   */
+  // CommonData base class constructor
   CommonData::CommonData(dataInfoRaw const& info):
   fSetName(info.SetName),
   fNData(info.nData),
@@ -167,9 +159,7 @@ namespace NNPDF
     }
   }
 
-    /**
-   * CommonData copy constructor
-   */
+  // CommonData copy constructor
   CommonData::CommonData(const CommonData& set):
   fSetName(set.fSetName),
   fNData(set.fNData),
@@ -203,9 +193,7 @@ namespace NNPDF
 
   }
 
-  /**
-   * CommonData masked copy constructor
-   */
+  // CommonData masked copy constructor
   CommonData::CommonData(const CommonData& set, std::vector<int> const& mask):
   fSetName(set.fSetName),
   fNData(mask.size()),
@@ -239,10 +227,7 @@ namespace NNPDF
 
   }
 
-
-  /**
-   * The destructors
-   */
+  // Destructor
   CommonData::~CommonData()
   {
     for (int i=0; i<fNData; i++)
@@ -377,9 +362,7 @@ namespace NNPDF
   }
 
 
-  /**
-   * Write data to file in CommonData format
-   */
+  // Write data to file in CommonData format
   void CommonData::Export(std::string const& targetdir, const double& minQ2) const
   {
     std::fstream g1;

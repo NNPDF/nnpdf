@@ -10,19 +10,17 @@
 
 #include "common.h"
 
-/**
- * \class ThPredictions Container for theory predictions.
- * \brief Computes the predictions and statistics for a PDFSet and DataSet
- */
-
 namespace NNPDF
 {
-
     class Experiment;
     class PDFSet;
     class FKTable;
     class FKSet;
 
+    /**
+     * \class ThPredictions
+     * \brief Computes the predictions and statistics for a PDFSet and DataSet
+     */
     class ThPredictions {
 
       private:
