@@ -2,3 +2,6 @@
 # Please fill this in when you add a new SysType Option
 
 0: Test case (all systematics uncorrelated and multiplicative)
+1: Test case (all systematics uncorrelated and multiplicative)
+2: Test case (all systematics correlated and multiplicative)
+
