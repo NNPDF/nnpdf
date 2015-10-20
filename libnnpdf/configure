@@ -17320,9 +17320,9 @@ if ${ax_cv_have_mmx_ext+:} false; then :
 else
 
         ax_cv_have_mmx_ext=no
-        if test "$((0x$edx>>23&0x01))" = 1; then
-          ax_cv_have_mmx_ext=yes
-        fi
+#        if test "$((0x$edx>>23&0x01))" = 1; then
+#          ax_cv_have_mmx_ext=yes
+#        fi
 
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_have_mmx_ext" >&5
@@ -17380,9 +17380,9 @@ if ${ax_cv_have_ssse3_ext+:} false; then :
 else
 
         ax_cv_have_ssse3_ext=no
-        if test "$((0x$ecx>>9&0x01))" = 1; then
-          ax_cv_have_ssse3_ext=yes
-        fi
+#        if test "$((0x$ecx>>9&0x01))" = 1; then
+#          ax_cv_have_ssse3_ext=yes
+#        fi
 
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_have_ssse3_ext" >&5
@@ -17395,9 +17395,9 @@ if ${ax_cv_have_sse41_ext+:} false; then :
 else
 
         ax_cv_have_sse41_ext=no
-        if test "$((0x$ecx>>19&0x01))" = 1; then
-          ax_cv_have_sse41_ext=yes
-        fi
+#        if test "$((0x$ecx>>19&0x01))" = 1; then
+#          ax_cv_have_sse41_ext=yes
+#        fi
 
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_have_sse41_ext" >&5
@@ -17410,9 +17410,9 @@ if ${ax_cv_have_sse42_ext+:} false; then :
 else
 
         ax_cv_have_sse42_ext=no
-        if test "$((0x$ecx>>20&0x01))" = 1; then
-          ax_cv_have_sse42_ext=yes
-        fi
+#        if test "$((0x$ecx>>20&0x01))" = 1; then
+#          ax_cv_have_sse42_ext=yes
+#        fi
 
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_have_sse42_ext" >&5
@@ -17425,9 +17425,9 @@ if ${ax_cv_have_avx_cpu_ext+:} false; then :
 else
 
         ax_cv_have_avx_cpu_ext=no
-        if test "$((0x$ecx>>28&0x01))" = 1; then
-          ax_cv_have_avx_cpu_ext=yes
-        fi
+#        if test "$((0x$ecx>>28&0x01))" = 1; then
+#          ax_cv_have_avx_cpu_ext=yes
+#        fi
 
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_have_avx_cpu_ext" >&5
@@ -18133,9 +18133,9 @@ if ${ax_cv_have_mmx_ext+:} false; then :
 else
 
         ax_cv_have_mmx_ext=no
-        if test "$((0x$edx>>23&0x01))" = 1; then
-          ax_cv_have_mmx_ext=yes
-        fi
+#        if test "$((0x$edx>>23&0x01))" = 1; then
+#          ax_cv_have_mmx_ext=yes
+#        fi
 
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_have_mmx_ext" >&5
@@ -18193,9 +18193,9 @@ if ${ax_cv_have_ssse3_ext+:} false; then :
 else
 
         ax_cv_have_ssse3_ext=no
-        if test "$((0x$ecx>>9&0x01))" = 1; then
-          ax_cv_have_ssse3_ext=yes
-        fi
+#        if test "$((0x$ecx>>9&0x01))" = 1; then
+#          ax_cv_have_ssse3_ext=yes
+#        fi
 
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_have_ssse3_ext" >&5
@@ -18208,9 +18208,9 @@ if ${ax_cv_have_sse41_ext+:} false; then :
 else
 
         ax_cv_have_sse41_ext=no
-        if test "$((0x$ecx>>19&0x01))" = 1; then
-          ax_cv_have_sse41_ext=yes
-        fi
+#        if test "$((0x$ecx>>19&0x01))" = 1; then
+#          ax_cv_have_sse41_ext=yes
+#        fi
 
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_have_sse41_ext" >&5
@@ -18223,9 +18223,9 @@ if ${ax_cv_have_sse42_ext+:} false; then :
 else
 
         ax_cv_have_sse42_ext=no
-        if test "$((0x$ecx>>20&0x01))" = 1; then
-          ax_cv_have_sse42_ext=yes
-        fi
+#        if test "$((0x$ecx>>20&0x01))" = 1; then
+#          ax_cv_have_sse42_ext=yes
+#        fi
 
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_have_sse42_ext" >&5
@@ -18238,9 +18238,9 @@ if ${ax_cv_have_avx_cpu_ext+:} false; then :
 else
 
         ax_cv_have_avx_cpu_ext=no
-        if test "$((0x$ecx>>28&0x01))" = 1; then
-          ax_cv_have_avx_cpu_ext=yes
-        fi
+#        if test "$((0x$ecx>>28&0x01))" = 1; then
+#          ax_cv_have_avx_cpu_ext=yes
+#        fi
 
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_have_avx_cpu_ext" >&5
