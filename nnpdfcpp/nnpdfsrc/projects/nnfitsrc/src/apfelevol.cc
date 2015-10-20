@@ -139,15 +139,15 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
   const double lambda2 = 0.0625e0;
   const double q2min = pow(getInstance()->fQ0,2.0);
   const double q2max = pow(getInstance()->fQmax,2.0);
-  const double nfpdf = getInstance()->fNFpdf;
+  const int nf = std::max(APFELSingleton::getNFpdf(),APFELSingleton::getNFas());
   int nfin;
   if (q2min > getInstance()->mth[2]*getInstance()->mth[2]) nfin = 6;
   else if (q2min > getInstance()->mth[1]*getInstance()->mth[1]) nfin = 5;
   else if (q2min > getInstance()->mth[0]*getInstance()->mth[0]) nfin = 4;
   else nfin = 3;
-  if (nfin > nfpdf) nfin = nfpdf;
+  if (nfin > nf) nfin = nf;
 
-  std::vector< std::vector<double> > q2n(nfpdf-nfin+1);
+  std::vector< std::vector<double> > q2n(nf-nfin+1);
 
   // first loop to check the number of grids
   for (int iq2 = 1; iq2 <= nq2; iq2++)

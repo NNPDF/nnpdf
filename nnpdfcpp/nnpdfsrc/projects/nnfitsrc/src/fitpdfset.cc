@@ -450,7 +450,7 @@ void FitPDFSet::ExportPDF( int const& rep, real const& erf_val, real const& erf_
   cout << Colour::FG_BLUE <<"- Writing out LHAPDF grid: "<< fSettings.GetPDFName() << Colour::FG_DEFAULT << endl;
 
   // if replica 1 print the header
-  const int nf = APFELSingleton::getNFpdf();
+  const int nf = std::max(APFELSingleton::getNFpdf(),APFELSingleton::getNFas());
   vector<double> xgrid = APFELSingleton::getX();
   vector<vector<double> > q2grid = APFELSingleton::getQ2nodes();
 
@@ -579,7 +579,7 @@ void FitPDFSet::ExportPDF( int const& rep, real const& erf_val, real const& erf_
 string FitPDFSet::ExportPDF(int const& rep)
 {
   // Settings
-  const int nf = APFELSingleton::getNFpdf();
+  const int nf = std::max(APFELSingleton::getNFpdf(),APFELSingleton::getNFas());
   vector<double> xgrid = APFELSingleton::getX();
 
   if (fSettings.Get("debug").as<bool>())
