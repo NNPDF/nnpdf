@@ -15,7 +15,7 @@
 
 static const dataInfoRaw ATLAS1JET11info = {
   140,                  //nData  //count the data
-  68,                  //nSys   
+  69,                  //nSys   
   "ATLAS1JET11",  //SetName
   "JET_ATLASIJ11"      //ProcType
 };
@@ -28,5 +28,5 @@ class ATLAS1JET11Filter: public CommonData
 
 private:
   void ReadData();
-  void Loop(fstream &, double, int, int);
+  void Loop(fstream &, fstream &, double, int, int);
 };
