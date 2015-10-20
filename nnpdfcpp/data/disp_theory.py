@@ -31,12 +31,15 @@ try:
 
     cur.execute('SELECT * FROM TheoryIndex')
     col_names = [cn[0] for cn in cur.description]
+    col_sub = [col_names[0], col_names[33]]
+
 
     table = []
-
     rows = cur.fetchall()
+    for row in rows:
+        table.append([row[0], row[33]])
 
-    print tabulate(rows, headers=col_names)
+    print tabulate(table, headers=col_sub)
 
     theoryID = int(raw_input("Please select a table ID: "))
     if 0 <= theoryID <= len(rows):
