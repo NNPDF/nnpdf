@@ -30,7 +30,8 @@ APFELSingleton::APFELSingleton():
   fXmax(1.0),
   fNX(100),
   fMem(0),
-  fNF(5)
+  fNFpdf(5),
+  fNFas(5)
 {
 }
 
@@ -49,7 +50,8 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
   getInstance()->fMZ = set.Get("theory","qref").as<double>();
   getInstance()->fQ0 = getInstance()->fQtmp = sqrt(set.Get("theory","q20").as<double>());
   getInstance()->fAlphas = set.Get("theory","alphas").as<double>();
-  getInstance()->fNF = set.Get("theory","nf").as<int>();
+  getInstance()->fNFpdf = set.Get("theory","nf_pdf").as<int>();
+  getInstance()->fNFas = set.Get("theory","nf_as").as<int>();
   getInstance()->mth.push_back(set.Get("theory","mc").as<double>());
   getInstance()->mth.push_back(set.Get("theory","mb").as<double>());
   getInstance()->mth.push_back(set.Get("theory","mt").as<double>());
@@ -75,8 +77,8 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
   else
     APFEL::SetPoleMasses(getInstance()->mth[0],getInstance()->mth[1],getInstance()->mth[2]);
 
-  APFEL::SetMaxFlavourPDFs(getInstance()->fNF);
-  APFEL::SetMaxFlavourAlpha(getInstance()->fNF);
+  APFEL::SetMaxFlavourPDFs(getInstance()->fNFpdf);
+  APFEL::SetMaxFlavourAlpha(getInstance()->fNFas);
 
   APFEL::SetTheory("QCD");
   APFEL::SetPerturbativeOrder(set.Get("theory","ptord").as<int>());
@@ -137,15 +139,15 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
   const double lambda2 = 0.0625e0;
   const double q2min = pow(getInstance()->fQ0,2.0);
   const double q2max = pow(getInstance()->fQmax,2.0);
-
+  const double nfpdf = getInstance()->fNFpdf;
   int nfin;
   if (q2min > getInstance()->mth[2]*getInstance()->mth[2]) nfin = 6;
   else if (q2min > getInstance()->mth[1]*getInstance()->mth[1]) nfin = 5;
   else if (q2min > getInstance()->mth[0]*getInstance()->mth[0]) nfin = 4;
   else nfin = 3;
-  if (nfin > getInstance()->fNF) nfin = getInstance()->fNF;
+  if (nfin > nfpdf) nfin = nfpdf;
 
-  std::vector< std::vector<double> > q2n(getInstance()->fNF-nfin+1);
+  std::vector< std::vector<double> > q2n(nfpdf-nfin+1);
 
   // first loop to check the number of grids
   for (int iq2 = 1; iq2 <= nq2; iq2++)
