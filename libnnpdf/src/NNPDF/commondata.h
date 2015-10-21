@@ -162,7 +162,7 @@ namespace NNPDF
 
     sysError const& GetSys(int i, int l) const { return fSys[i][l];} //!< Return lth systematic for point i
 
-    double* const GetData() const { return fData; }; //!< Return whole data array
+    double* GetData() const { return fData; }; //!< Return whole data array
 
     // Process/Kinematics
     std::string const& GetProc(int i)     const { return fProc[i]; }; //!< Return the process type for point i

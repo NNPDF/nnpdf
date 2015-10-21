@@ -44,8 +44,8 @@ namespace NNPDF
     bool IsClosure() const { return fIsClosure; }       //!< Return the artificial flag
     bool IsT0() const { return fIsT0; }                       //!< Return t0 covmat flag
 
-    double** const GetCovMat()         const { return fCovMat;   } //!< Return fCovMat
-    double** const GetInvCovMat()      const { return fInvCovMat;} //!< Return the inverse of CovMat
+    double** GetCovMat()         const { return fCovMat;   } //!< Return fCovMat
+    double** GetInvCovMat()      const { return fInvCovMat;} //!< Return the inverse of CovMat
     
     void ExportCovMat(std::string);      //!< Export covariance matrix
     void ExportInvCovMat(std::string);  //!< Export covariance matrix

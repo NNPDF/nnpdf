@@ -78,7 +78,7 @@ namespace NNPDF
         void ReadBlob(std::istream& is, std::string blobname);
 
         // Map fetchers helper functions
-        const section GetSection(std::string const&) const; //!< Fetch the appropriate section for a title
+        section GetSection(std::string const&) const; //!< Fetch the appropriate section for a title
         const keyMap* GetMap(section const& sec) const; //!< Fetch the appropriate map for a section
         keyMap* GetMap(section const& sec)              //!< Fetch the appropriate map for a section
         { return const_cast<keyMap*>(const_cast<const FKHeader*>(this)->GetMap(sec)); };
@@ -131,10 +131,10 @@ namespace NNPDF
         int const&   GetDSz()     const { return fDSz;  }  //!< Return fDSz
         int const&   GetPad()     const { return fPad;  }  //!< Return fPad
 
-        double *const  GetXGrid() const { return fXgrid;   }  //!< Return fXGrid
-        real   *const  GetSigma() const { return fSigma;   }  //!< Return fSigma
+        double *  GetXGrid() const { return fXgrid;   }  //!< Return fXGrid
+        real   *  GetSigma() const { return fSigma;   }  //!< Return fSigma
 
-        int *const   GetFlmap()   const { return fFlmap;   }  //!< Return fFlmap
+        int *   GetFlmap()   const { return fFlmap;   }  //!< Return fFlmap
         int const&   GetNonZero() const { return fNonZero; }  //!< Return fNonZero
 
         bool const& IsHadronic()  const { return fHadronic;}  //!< Return fHadronic
