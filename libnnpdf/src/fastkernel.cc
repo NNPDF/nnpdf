@@ -158,8 +158,7 @@ namespace NNPDF
 
     if (iMap != (*tMap).end())
       return true;
-    else
-      return false;
+    return false;
   }
 
   std::string FKHeader::GetTag( section sec, std::string const& key) const
@@ -170,10 +169,9 @@ namespace NNPDF
       if (iMap != (*tMap).end())
           return (*iMap).second;
       else
-      {
           std::cerr << "FKHeader::GetTag Error - key " <<key << " not found in header!"<<std::endl;
-          exit(-1); return std::string();
-      }
+
+      exit(-1); return std::string();
   }
 
   const FKHeader::section FKHeader::GetSection(std::string const& title) const
@@ -194,6 +192,8 @@ namespace NNPDF
       case THEORYINFO:    return &fTheoryInfo;
       case BLOB:          return &fBlobString;
     }
+
+    return NULL;
   }
 
   void FKHeader::RemTag( section sec, std::string const& key )
