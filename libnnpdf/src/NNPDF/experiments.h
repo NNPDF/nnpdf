@@ -32,7 +32,7 @@ namespace NNPDF
     void MakeReplica();                                       //!< Shift the exp data and produces art. data
     void MakeClosure(PDFSet* pdf, bool const& noise);         //!< Make fake exp data using theory predictions
     
-    const int GetNSet() const {return (int) fSets.size();}    //!< Return the number of sets in the experiment
+    int GetNSet() const {return (int) fSets.size();}    //!< Return the number of sets in the experiment
     DataSet const&  GetSet(int i)   const {return fSets[i];}        //!< Return the ith DataSet  
     std::string const& GetExpName() const {return fExpName;}        //!< Return the experiment name
     std::string const& GetSetName(int i) const;

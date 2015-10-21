@@ -174,7 +174,7 @@ namespace NNPDF
       exit(-1); return std::string();
   }
 
-  const FKHeader::section FKHeader::GetSection(std::string const& title) const
+  FKHeader::section FKHeader::GetSection(std::string const& title) const
   {
     if (title.compare("VersionInfo") == 0) return VERSIONS;
     if (title.compare("GridInfo") == 0) return GRIDINFO;
