@@ -291,10 +291,6 @@ def main(nrep, fit_filename):
     print ("\n- Copying %s to LHAPDF path" % fitname)
     lhapath = Popen(["lhapdf-config","--datadir"],stdout=PIPE).communicate()[0]
 
-    pdfs = ["xg","xd","xu","xs"]
-    X = [1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 0.2, 0.3, 0.4, 0.5, .6, 0.7, 0.8, 0.9]
-    Q = math.sqrt(1.0)
-
     if hasattr(lhapdf,"mkPDFs"):
         print ("- LHAPATH: %s" % lhapath)
 
@@ -312,6 +308,10 @@ def main(nrep, fit_filename):
     
         # Test LHAGRID
         pdf = lhapdf.mkPDFs(fitname)
+
+        pdfs = ["xg","xd","xu","xs"]
+        X = [1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 0.2, 0.3, 0.4, 0.5, .6, 0.7, 0.8, 0.9]
+        Q = math.sqrt(pdf[0].q2Min)
 
         print ("- Total number of members: %d" % len(pdf))
         # test replica 0
