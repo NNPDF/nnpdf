@@ -24,7 +24,8 @@ public:
   static bool isInstance();
   static std::vector<double> getX() { return getInstance()->fX; }
   static std::vector<std::vector<double> > getQ2nodes() { return getInstance()->fQ2nodes; }
-  static int getNF() { return getInstance()->fNF; }
+  static int getNFpdf() { return getInstance()->fNFpdf; }
+  static int getNFas() { return getInstance()->fNFas; }
   static double getXmin() { return getInstance()->fXmin; }
   static double getXmax() { return getInstance()->fXmax; }
   static double getQmin() { return getInstance()->fQ0; }
@@ -59,7 +60,8 @@ private:
   double fXmax;
   int    fNX;
   int    fMem;
-  int    fNF;
+  int    fNFpdf;
+  int    fNFas;
   std::vector<double> fX;
   std::vector<double> mth;
   std::vector<std::vector<double> > fQ2nodes;

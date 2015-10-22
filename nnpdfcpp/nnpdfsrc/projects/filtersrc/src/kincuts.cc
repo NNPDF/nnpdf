@@ -119,7 +119,8 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
 
     if (set.GetProc(idat).compare(string("JET_ATLASIJ2P76TEV")) == 0 ||
         set.GetProc(idat).compare(string("JET_ATLASIJ10")) == 0 ||
-        set.GetProc(idat).compare(string("JET_CMSJ11")) == 0 )
+        set.GetProc(idat).compare(string("JET_CMSJ11")) == 0 ||
+        set.GetProc(idat).compare(string("JET_ATLASIJ11")) == 0 )
       return ( pT > settings.Get("datacuts","jetptcut_lhc").as<double>() && y < settings.Get("datacuts","jetycut_lhc").as<double>());
 
     cerr << Colour::FG_RED << "filter passKinCuts Error: Jet experiment "<<set.GetSetName()<<" does not have it's pT/y cuts specified in passKinCuts."<<endl;
