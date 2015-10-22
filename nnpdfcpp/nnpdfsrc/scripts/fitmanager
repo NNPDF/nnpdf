@@ -88,7 +88,7 @@ class tui_download(npyscreen.NPSApp):
     def main(self):
         sshProcess = Popen(['ssh', '-T', 'nnpdf@pcteserver.mi.infn.it'],
                             stdin=PIPE, stdout=PIPE)
-        out, err = sshProcess.communicate("ls /home/nnpdf/WEB/fits\n")
+        out, err = sshProcess.communicate("ls -t /home/nnpdf/WEB/fits\n")
         out = out.rstrip().split('\n')
         fits = []
         for i in out:
