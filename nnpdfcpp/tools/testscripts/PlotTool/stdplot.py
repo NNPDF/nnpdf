@@ -6,6 +6,9 @@ from matplotlib import gridspec
 from matplotlib.ticker import MaxNLocator
 from operator import add, sub
 
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+
 # Standard Data/Theory comparison
 class stdplot:
   def __init__(self,x,y, yerr, name, logx = False, logy = False, xlab = "x", leg = True):
@@ -21,7 +24,9 @@ class stdplot:
     gs = gridspec.GridSpec(2, 1, height_ratios=[3, 1])
     gs.update(wspace=0.00, hspace=0.00)
     
-    self.fig = plt.figure()
+    self.fig = Figure()
+    self.canvas = FigureCanvas(self.fig)
+
     self.ax1 = self.fig.add_subplot(gs[0])
     self.ax2 = self.fig.add_subplot(gs[1])
     
@@ -98,3 +103,6 @@ class stdplot:
     self.fig.savefig(plotname+'.pdf')
     self.fig.savefig(plotname+'.png', dpi=80)
 
+
+  def close(self):
+    self.fig.close()

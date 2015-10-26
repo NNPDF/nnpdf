@@ -13,9 +13,7 @@ if (len(sys.argv) < 2):
   print " usage: ", sys.argv[0], " [CommonData file] "
   exit(-1)
 
-#os.mkdir("plots")
-
 for ifile in sys.argv[1:]:
   cData = CommonData(ifile, debug=True)
   dataPlot = dataplot_nokin(cData)
-  dataPlot.export("plots")
+  dataPlot.export("./plots/")

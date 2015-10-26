@@ -21,8 +21,8 @@ class ThPredictions:
 
     for line in datafile:
       linesplit = line.split()
-      self.CV.append(float(linesplit[0]))
-      self.error.append(float(linesplit[1]))
+      self.CV.append(float(linesplit[1]))
+      self.error.append(float(linesplit[2]))
 
     datafile.close()
 
