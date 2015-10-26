@@ -91,9 +91,9 @@ class stdplot:
       axes2=self.ax2.axis()
       self.ax2.axis([self.xaxis[0] - xdiff, self.xaxis[-1] +xdiff, axes2[2], axes2[3]])
 
-    if self.leg == True:
-      self.legend = self.ax1.legend(loc='best')
-      self.legend.get_frame().set_alpha(0.8)
+    #if self.leg == True:
+    #  self.legend = self.ax1.legend(loc='best')
+    #  self.legend.get_frame().set_alpha(0.8)
 
     self.fig.savefig(plotname+'.pdf')
     self.fig.savefig(plotname+'.png', dpi=80)

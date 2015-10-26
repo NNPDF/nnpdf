@@ -1,22 +1,29 @@
-# Commondata in Python
-# nh 07/2014
+"""
+CommonData in Python - nh 07/2014
+Classes to perform reading/writing of
+CommonData files
+"""
+
 import os, sys
 from math import sqrt
 
-
-# Sort CoM energy into a valid HERA energy
 def HERASort( ECoM ):
+  """ Sort CoM energy into a valid HERA energy """
   # Correspond to Ep = [460,575,820,920]
   HERACoMEnergies = [225, 252, 301, 319]
   return min(HERACoMEnergies, key=lambda x:abs(x-ECoM))
 
 class CommonData:
-  def __init__(self, source):
-    
+  """ Python CommonData class """
+  def __init__(self, source, debug = False):
+    """ CommonData constructor - takes as argument the filename of a CommonData record """
     # Verify path
     if os.path.exists(source) == False:
-      print "Error: source file" + source + " not found!"
+      print "CommonData Error: source file \'" + source + "\' not found!"
       sys.exit()
+
+    if (debug == True):
+      print "Reading from file: \'"+source+"\'"
 
     # Open commondata
     datafile = open(source, 'rb')
@@ -25,10 +32,7 @@ class CommonData:
     self.setname = metadata[0]
     self.nsys = int(metadata[1])
     self.ndata = int(metadata[2])
-        
-    # Nuclear
-    self.nsig = int(metadata[3])
-    
+            
     self.data = []
     self.kin1 = []
     self.kin2 = []
@@ -39,6 +43,7 @@ class CommonData:
     self.error = []
     
     for line in datafile:
+
       linesplit = line.split()
       idat = int(linesplit[0])
       self.proc = linesplit[1]
@@ -64,9 +69,10 @@ class CommonData:
             self.kin3[-1] = round(self.kin3[-1],0)
       
       # Need to do proper treatment of correlated errors/systypes etc
-      for isys in range(7,self.nsys*2):
-        if (isys % 2) != 0:
-          self.sys[len(self.sys)-1].append(float(linesplit[isys]))
+      if self.nsys > 0:
+        for isys in range(7,self.nsys*2):
+          if (isys % 2) != 0:
+            self.sys[len(self.sys)-1].append(float(linesplit[isys]))
 
     # Total Error
     for idat in range(0,self.ndata):
@@ -79,12 +85,14 @@ class CommonData:
 
 
   def printMetadata(self):
+    """ Prints the metadata of a CommonData file """
     print "************COMMONDATA************"
     print "Setname:", self.setname, "PROC:", self.proc
-    print "NDAT:", self.ndata,"NSYS:",self.nsys, "NSIG:",self.nsig
+    print "NDAT:", self.ndata,"NSYS:",self.nsys
 
 
   def printData(self):
+    """ Prints the datapoints present in a CommonData file """
     print "IDAT","x","Q^2","CV", "VAR"
     for idat in range(0,self.ndata):
       print idat,self.kin1[idat],self.kin2[idat],self.data[idat], self.error[idat]
