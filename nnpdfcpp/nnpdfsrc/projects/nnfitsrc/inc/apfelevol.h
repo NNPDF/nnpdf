@@ -35,7 +35,9 @@ public:
   static double getMCharm() { return getInstance()->mth[0]; }
   static double getMBottom() { return getInstance()->mth[1]; }
   static double getMTop()    { return getInstance()->mth[2]; }
-
+  static double getQCharm() { return getInstance()->mthref[0]; }
+  static double getQBottom() { return getInstance()->mthref[1]; }
+  static double getQTop()    { return getInstance()->mthref[2]; }
 private:
   APFELSingleton();
   ~APFELSingleton();
@@ -63,7 +65,8 @@ private:
   int    fNFpdf;
   int    fNFas;
   std::vector<double> fX;
-  std::vector<double> mth;
+  std::vector<double> mth;    //!< HQ Masses
+  std::vector<double> mthref; //!< HQ Mass Reference scales 
   std::vector<std::vector<double> > fQ2nodes;
 
   static APFELSingleton* apfelInstance;

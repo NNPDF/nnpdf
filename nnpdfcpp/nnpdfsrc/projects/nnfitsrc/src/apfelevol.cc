@@ -55,6 +55,9 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
   getInstance()->mth.push_back(set.Get("theory","mc").as<double>());
   getInstance()->mth.push_back(set.Get("theory","mb").as<double>());
   getInstance()->mth.push_back(set.Get("theory","mt").as<double>());
+  getInstance()->mthref.push_back(set.Get("theory","Qc").as<double>());
+  getInstance()->mthref.push_back(set.Get("theory","Qb").as<double>());
+  getInstance()->mthref.push_back(set.Get("theory","Qt").as<double>());
   getInstance()->fNX = set.Get("lhagrid","nx").as<int>();
   getInstance()->fNQ = set.Get("lhagrid","nq").as<int>();
   getInstance()->fXmin = set.Get("lhagrid","xmin").as<double>();
@@ -73,9 +76,15 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
   // hq masses
   APFEL::SetAlphaQCDRef(getInstance()->getAlphas(), getInstance()->fMZ);
   if (set.Get("theory","msbar").as<bool>())
+  {
     APFEL::SetMSbarMasses(getInstance()->mth[0],getInstance()->mth[1],getInstance()->mth[2]);
+    APFEL::SetMassScaleReference(getInstance()->mthref[0],getInstance()->mthref[1],getInstance()->mthref[2]);
+
+  }
   else
+  {
     APFEL::SetPoleMasses(getInstance()->mth[0],getInstance()->mth[1],getInstance()->mth[2]);
+  }
 
   APFEL::SetMaxFlavourPDFs(getInstance()->fNFpdf);
   APFEL::SetMaxFlavourAlpha(getInstance()->fNFas);

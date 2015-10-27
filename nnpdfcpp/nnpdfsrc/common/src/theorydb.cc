@@ -113,6 +113,27 @@ bool parseTheory(const NNPDFSettings &settings)
       exit(-1);
     }
 
+    result = db->query("SELECT Qmc FROM TheoryIndex WHERE ID=" + thid);
+  if (fabs(settings.Get("theory","Qc").as<double>() - atof(result.c_str())) > 1e-3)
+    {
+      cerr << Colour::FG_RED << "parseTheory error: mismatch theory.db and config file for Qc" << endl;
+      exit(-1);
+    }
+
+  result = db->query("SELECT Qmb FROM TheoryIndex WHERE ID=" + thid);
+  if (fabs(settings.Get("theory","Qb").as<double>() - atof(result.c_str())) > 1e-3)
+    {
+      cerr << Colour::FG_RED << "parseTheory error: mismatch theory.db and config file for Qb" << endl;
+      exit(-1);
+    }
+
+  result = db->query("SELECT Qmt FROM TheoryIndex WHERE ID=" + thid);
+  if (fabs(settings.Get("theory","Qt").as<double>() - atof(result.c_str())) > 1e-3)
+    {
+      cerr << Colour::FG_RED << "parseTheory error: mismatch theory.db and config file for Qt" << endl;
+      exit(-1);
+    }
+
   result = db->query("SELECT MaxNfPDF FROM TheoryIndex WHERE ID=" + thid);
   if ( settings.Get("theory","nf_pdf").as<int>() != atoi(result.c_str()))
     {
