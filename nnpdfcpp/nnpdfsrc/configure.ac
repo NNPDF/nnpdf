@@ -1,8 +1,9 @@
 AC_PREREQ([2.69])
 
-#define([svnversion], [esyscmd([sh -c "svnversion|tr -d '\n'"])])
+define([gitversion], [esyscmd([sh -c "git rev-parse --short HEAD | tr -d '\n'
+"])])
 
-AC_INIT([nnpdfsrc],3.0.x,[stefano.carrazza@mi.infn.it])
+AC_INIT([nnpdfsrc],[gitversion],[stefano.carrazza@mi.infn.it])
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_CONFIG_AUX_DIR([autoconfig])
