@@ -39,9 +39,16 @@ otherinclude_HEADERS =  src/NNPDF/common.h \
 libnnpdf_la_LDFLAGS = -version-info 0:0:0 $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDFLAGS)
 libnnpdf_la_CPPFLAGS= $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC -std=c++11 $(LHAPDF_CPPFLAGS)
 
+
+# Utility programs
+bin_PROGRAMS = FKconvolute
+FKconvolute_SOURCES = src/fkconvolute.cc
+FKconvolute_CPPFLAGS = $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC -std=c++11 $(LHAPDF_CPPFLAGS)
+FKconvolute_LDFLAGS = $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDFLAGS) -lnnpdf
+
+# Scripts to install
+dist_bin_SCRIPTS=scripts/FKmerge
+
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = bin
-dist_bin_SCRIPTS=scripts/mergeFK
 
-#pkgconfigdir = $(libdir)/pkgconfig
-#pkgconfig_DATA = nnpdf.pc

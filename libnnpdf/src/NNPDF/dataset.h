@@ -59,8 +59,8 @@ namespace NNPDF
     
     double const&  GetT0Pred(int i)    const { return fT0Pred[i];} //!< Return t0 prediction
     
-    double** const GetCovMat()         const { return fCovMat;   } //!< Return fCovMat
-    double** const GetInvCovMat()      const { return fInvCovMat;} //!< Return the inverse of CovMat
+    double** GetCovMat()         const { return fCovMat;   } //!< Return fCovMat
+    double** GetInvCovMat()      const { return fInvCovMat;} //!< Return the inverse of CovMat
 
     bool const& IsArtificial()         const { return fIsArtificial;} //!< Returns the artificial flag
     

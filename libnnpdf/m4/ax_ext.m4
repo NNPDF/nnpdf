@@ -72,9 +72,9 @@ AC_DEFUN([AX_EXT],
       AC_CACHE_CHECK([whether mmx is supported], [ax_cv_have_mmx_ext],
       [
         ax_cv_have_mmx_ext=no
-        if test "$((0x$edx>>23&0x01))" = 1; then
-          ax_cv_have_mmx_ext=yes
-        fi
+#        if test "$((0x$edx>>23&0x01))" = 1; then
+#          ax_cv_have_mmx_ext=yes
+#        fi
       ])
 
       AC_CACHE_CHECK([whether sse is supported], [ax_cv_have_sse_ext],
@@ -104,33 +104,33 @@ AC_DEFUN([AX_EXT],
       AC_CACHE_CHECK([whether ssse3 is supported], [ax_cv_have_ssse3_ext],
       [
         ax_cv_have_ssse3_ext=no
-        if test "$((0x$ecx>>9&0x01))" = 1; then
-          ax_cv_have_ssse3_ext=yes
-        fi
+#        if test "$((0x$ecx>>9&0x01))" = 1; then
+#          ax_cv_have_ssse3_ext=yes
+#        fi
       ])
 
       AC_CACHE_CHECK([whether sse4.1 is supported], [ax_cv_have_sse41_ext],
       [
         ax_cv_have_sse41_ext=no
-        if test "$((0x$ecx>>19&0x01))" = 1; then
-          ax_cv_have_sse41_ext=yes
-        fi
+#        if test "$((0x$ecx>>19&0x01))" = 1; then
+#          ax_cv_have_sse41_ext=yes
+#        fi
       ])
 
       AC_CACHE_CHECK([whether sse4.2 is supported], [ax_cv_have_sse42_ext],
       [
         ax_cv_have_sse42_ext=no
-        if test "$((0x$ecx>>20&0x01))" = 1; then
-          ax_cv_have_sse42_ext=yes
-        fi
+#        if test "$((0x$ecx>>20&0x01))" = 1; then
+#          ax_cv_have_sse42_ext=yes
+#        fi
       ])
 
       AC_CACHE_CHECK([whether avx is supported by processor], [ax_cv_have_avx_cpu_ext],
       [
         ax_cv_have_avx_cpu_ext=no
-        if test "$((0x$ecx>>28&0x01))" = 1; then
-          ax_cv_have_avx_cpu_ext=yes
-        fi
+#        if test "$((0x$ecx>>28&0x01))" = 1; then
+#          ax_cv_have_avx_cpu_ext=yes
+#        fi
       ])
 
       if test x"$ax_cv_have_avx_cpu_ext" = x"yes"; then
