@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 
   if (argc != 3)
   {
-     std::cout << "Usage: fkconvolute [PDF Name] [Path to FK table]"<<std::endl;
+     std::cout << "Usage: FKconvolute [PDF Name] [Path to FK table]"<<std::endl;
      exit(1);
   }
 

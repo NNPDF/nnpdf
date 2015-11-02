@@ -41,12 +41,14 @@ libnnpdf_la_CPPFLAGS= $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC -std=
 
 
 # Utility programs
-bin_PROGRAMS = fkconvolute
-fkconvolute_SOURCES = src/fkconvolute.cc
-fkconvolute_CFLAGS = -Wall $(LHAPDF_CPPFLAGS)
-fkconvolute_LDFLAGS = $(LHAPDF_LDFLAGS) -lnnpdf
+bin_PROGRAMS = FKconvolute
+FKconvolute_SOURCES = src/fkconvolute.cc
+FKconvolute_CFLAGS = -Wall $(LHAPDF_CPPFLAGS)
+FKconvolute_LDFLAGS = $(LHAPDF_LDFLAGS) -lnnpdf
+
+# Scripts to install
+dist_bin_SCRIPTS=scripts/FKmerge
 
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = bin
-dist_bin_SCRIPTS=scripts/mergeFK
 
