@@ -10,6 +10,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <vector>
 
 #include "common.h"
 

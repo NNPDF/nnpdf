@@ -6,7 +6,6 @@
 //          Stefano Carrazza, stefano.carrazza@mi.infn.it
 //          Luigi Del Debbio, luigi.del.debbio@ed.ac.uk
 
-#include <vector>
 #include <cstdlib>
 #include <cmath>
 #include <iostream>

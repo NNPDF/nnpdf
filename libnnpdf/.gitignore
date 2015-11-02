@@ -1,2 +1,41 @@
 *~
 autom4te.cache
+Makefile
+config.*
+nnpdfcpp.*
+src/.deps
+src/.dirstamp*
+*/Makefile
+bin/nnpdf-config
+libtool
+src/NNPDF/common.h
+src/NNPDF/stamp-h1
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
