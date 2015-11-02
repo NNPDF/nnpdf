@@ -43,7 +43,7 @@ libnnpdf_la_CPPFLAGS= $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC -std=
 # Utility programs
 bin_PROGRAMS = FKconvolute
 FKconvolute_SOURCES = src/fkconvolute.cc
-FKconvolute_CFLAGS = $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC -std=c++11 $(LHAPDF_CPPFLAGS)
+FKconvolute_CPPFLAGS = $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC -std=c++11 $(LHAPDF_CPPFLAGS)
 FKconvolute_LDFLAGS = $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDFLAGS) -lnnpdf
 
 # Scripts to install
