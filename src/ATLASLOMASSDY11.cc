@@ -41,12 +41,12 @@ void ATLASLOMASSDY11Filter::ReadData()
   //Skip two description lines
   getline(f1, line);
   getline(f1, line);
-  
+
   // Filter data
   for (int idat = 0; idat < fNData; idat++) {
 
     getline(f1, line);
-    
+
     double fStatP, fStatM;
     double fUncorrP, fUncorrM;
     double fCorr[fNSys-2];
@@ -56,10 +56,18 @@ void ATLASLOMASSDY11Filter::ReadData()
     lstream >> mbin[idat] >> mbin[idat+1] >> fData[idat]
 	    >> fStatP >> fStatM
 	    >> fUncorrP >> fUncorrM
-            >> fCorr[1] >> fCorr[2] >> fCorr[3] >> fCorr[4] >> fCorr[5]
+      >> fCorr[1] >> fCorr[2] >> fCorr[3] >> fCorr[4] >> fCorr[5]
 	    >> fCorr[6] >> fCorr[7] >> fCorr[8] >> fCorr[9] >> fCorr[10]
 	    >> fCorr[11] >> fCorr[12] >> fCorr[13]
  	    >> fATLAS2011Luminosity;
+
+    // Convert from pb (paper) to fb (APPLrid)
+
+    fData[idat] *= 1000.;
+    fStatP      *= 1000.;
+    fStatM      *= 1000.;
+    fUncorrP    *= 1000.;
+    fUncorrM    *= 1000.;
 
     // Statisltical Uncenrtainty (absolute value in the data file)
     fStat[idat] = 0.5 * (fStatP - fStatM);
@@ -73,10 +81,10 @@ void ATLASLOMASSDY11Filter::ReadData()
     // Correlated systematics (given in % in the data file)
     for ( int k = 1; k < fNSys-1; k++ )
       {
-	fSys[idat][k].mult = fCorr[k];
-	fSys[idat][k].add  = fSys[idat][k].mult*fData[idat]*1e-2;
-	fSys[idat][k].type = ADD;
-	fSys[idat][k].name = "CORR";
+	      fSys[idat][k].mult = fCorr[k];
+	      fSys[idat][k].add  = fSys[idat][k].mult*fData[idat]*1e-2;
+	      fSys[idat][k].type = ADD;
+	      fSys[idat][k].name = "CORR";
       }
 
     // ATLAS 2011 Luminosity (given in % in the data file)
