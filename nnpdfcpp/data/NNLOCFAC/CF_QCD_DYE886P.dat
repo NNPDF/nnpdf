@@ -3,7 +3,7 @@ SetName: DYE886P
 Author: Juan Rojo juan.rojo@physics.ox.ac.uk
 Date: May 2015
 CodesUsed: VRAP v0.9 
-TheoryInput:  muR and muF equal to M_ll
+TheoryInput:  muR and muF equal to M_ll as(MZ) = 0.118
 PDFset: NNPDF3.0 NNLO
 Warnings: To validate with DYNNLO/FEWZ/DYRAP
 ********************************************************************************************
