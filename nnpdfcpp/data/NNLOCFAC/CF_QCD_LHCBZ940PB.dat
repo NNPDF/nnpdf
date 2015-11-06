@@ -3,16 +3,16 @@ SetName: LHCBZ940PB
 Author: Maria Ubiali ubiali@hep.phy.cam.ac.uk
 Date: 2014
 CodesUsed: FEWZ  
-TheoryInput: NNPDF2.3 NLO, alphas(MZ)=0.119
+TheoryInput: NNPDF2.3 NLO, alphas(MZ)=0.119 -> CONVERTED TO 0.118
 PDFset: NNPDF23_nlo_as_0119
 Warnings: Smearing applied? Which version of FEWZ?
 ********************************************************************************************
-1.01205299745
-1.00782920359
-1.0017871254
-0.994648434235
-0.987825235422
-0.981062962982
-0.974107205125
-0.969530625122
-0.959893693805
+1.01185
+1.0077
+1.00176
+0.994738
+0.988029
+0.98138
+0.974541
+0.970041
+0.960565

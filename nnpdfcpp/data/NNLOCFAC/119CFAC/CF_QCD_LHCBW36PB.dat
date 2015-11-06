@@ -1,20 +1,19 @@
 *******************************************************************************************
-SetName: CMSWMASY47FB
+SetName: LHCBW36PB
 Author: Maria Ubiali ubiali@hep.phy.cam.ac.uk
-Date: 2014
-CodesUsed: FEWZ 
-TheoryInput: NNPDF2.3 NLO, alphas(MZ)=0.119 -> CONVERTED TO 0.118
-PDFset: NNPDF23_nlo_as_0119
+Date: Early 2012
+CodesUsed: FEWZ (version?)
+TheoryInput: NNPDF2.1 NNLO alphas(MZ)=0.119
+PDFset: NNPDF21_nnlo
 Warnings: 
 ********************************************************************************************
-1.02067
-1.00308
-0.995859
-0.99492
-0.997026
-0.999747
-1.00147
-1.00139
-0.999015
-0.994874
-0.991955
+1.00978
+1.00185
+1.00472
+1.00543
+1.02676
+1.00440
+0.99798
+0.99600
+0.99854
+0.96613

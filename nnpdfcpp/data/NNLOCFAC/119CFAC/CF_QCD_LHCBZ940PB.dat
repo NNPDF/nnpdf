@@ -1,20 +1,18 @@
 *******************************************************************************************
-SetName: CMSWMASY47FB
+SetName: LHCBZ940PB
 Author: Maria Ubiali ubiali@hep.phy.cam.ac.uk
 Date: 2014
-CodesUsed: FEWZ 
-TheoryInput: NNPDF2.3 NLO, alphas(MZ)=0.119 -> CONVERTED TO 0.118
+CodesUsed: FEWZ  
+TheoryInput: NNPDF2.3 NLO, alphas(MZ)=0.119
 PDFset: NNPDF23_nlo_as_0119
-Warnings: 
+Warnings: Smearing applied? Which version of FEWZ?
 ********************************************************************************************
-1.02067
-1.00308
-0.995859
-0.99492
-0.997026
-0.999747
-1.00147
-1.00139
-0.999015
-0.994874
-0.991955
+1.01205299745
+1.00782920359
+1.0017871254
+0.994648434235
+0.987825235422
+0.981062962982
+0.974107205125
+0.969530625122
+0.959893693805
