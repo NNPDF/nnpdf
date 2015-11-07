@@ -126,5 +126,11 @@ int main(int argc, char** argv)
   f.close();
   g.close();
 
+  delete[] in;
+  delete[] out;
+  delete[] x;
+  delete[] lha;
+  delete[] evln;
+
   return 0;
 }
