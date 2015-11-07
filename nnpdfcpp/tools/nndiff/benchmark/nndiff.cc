@@ -1,7 +1,8 @@
 #include "nndiff.h"
 #include <cmath>
 
-real nnval(real x_00, std::vector<real> const& params)
+real NNPDFval(real const& x_00, std::vector<real> const& params,
+	      real const& a, real const& b, real const& n)
 {
     real w_00__10 = params[0];
     real w_01__10 = params[1];
@@ -41,8 +42,7 @@ real nnval(real x_00, std::vector<real> const& params)
     real w_22__30 = params[35];
     real theta_30 = params[36];
     
-    return -theta_30 + w_20__30/(exp(theta_20 - w_10__20/(exp(theta_10 - w_00__10*x_00 - w_01__10*log(x_00)) + 1) - w_11__20/(exp(theta_11 - w_00__11*x_00 - w_01__11*log(x_00)) + 1) - w_12__20/(exp(theta_12 - w_00__12*x_00 - w_01__12*log(x_00)) + 1) - w_13__20/(exp(theta_13 - w_00__13*x_00 - w_01__13*log(x_00)) + 1) - w_14__20/(exp(theta_14 - w_00__14*x_00 - w_01__14*log(x_00)) + 1)) + 1) + w_21__30/(exp(theta_21 - w_10__21/(exp(theta_10 - w_00__10*x_00 - w_01__10*log(x_00)) + 1) - w_11__21/(exp(theta_11 - w_00__11*x_00 - w_01__11*log(x_00)) + 1) - w_12__21/(exp(theta_12 - w_00__12*x_00 - w_01__12*log(x_00)) + 1) - w_13__21/(exp(theta_13 - w_00__13*x_00 - w_01__13*log(x_00)) + 1) - w_14__21/(exp(theta_14 - w_00__14*x_00 - w_01__14*log(x_00)) + 1)) + 1) + w_22__30/(exp(theta_22 - w_10__22/(exp(theta_10 - w_00__10*x_00 - w_01__10*log(x_00)) + 1) - w_11__22/(exp(theta_11 - w_00__11*x_00 - w_01__11*log(x_00)) + 1) - w_12__22/(exp(theta_12 - w_00__12*x_00 - w_01__12*log(x_00)) + 1) - w_13__22/(exp(theta_13 - w_00__13*x_00 - w_01__13*log(x_00)) + 1) - w_14__22/(exp(theta_14 - w_00__14*x_00 - w_01__14*log(x_00)) + 1)) + 1);
-
+    return n*pow(x_00, -a + 1)*pow(-x_00 + 1, b)*(-theta_30 + w_20__30/(exp(theta_20 - w_10__20/(exp(theta_10 - w_00__10*x_00 - w_01__10*log(x_00)) + 1) - w_11__20/(exp(theta_11 - w_00__11*x_00 - w_01__11*log(x_00)) + 1) - w_12__20/(exp(theta_12 - w_00__12*x_00 - w_01__12*log(x_00)) + 1) - w_13__20/(exp(theta_13 - w_00__13*x_00 - w_01__13*log(x_00)) + 1) - w_14__20/(exp(theta_14 - w_00__14*x_00 - w_01__14*log(x_00)) + 1)) + 1) + w_21__30/(exp(theta_21 - w_10__21/(exp(theta_10 - w_00__10*x_00 - w_01__10*log(x_00)) + 1) - w_11__21/(exp(theta_11 - w_00__11*x_00 - w_01__11*log(x_00)) + 1) - w_12__21/(exp(theta_12 - w_00__12*x_00 - w_01__12*log(x_00)) + 1) - w_13__21/(exp(theta_13 - w_00__13*x_00 - w_01__13*log(x_00)) + 1) - w_14__21/(exp(theta_14 - w_00__14*x_00 - w_01__14*log(x_00)) + 1)) + 1) + w_22__30/(exp(theta_22 - w_10__22/(exp(theta_10 - w_00__10*x_00 - w_01__10*log(x_00)) + 1) - w_11__22/(exp(theta_11 - w_00__11*x_00 - w_01__11*log(x_00)) + 1) - w_12__22/(exp(theta_12 - w_00__12*x_00 - w_01__12*log(x_00)) + 1) - w_13__22/(exp(theta_13 - w_00__13*x_00 - w_01__13*log(x_00)) + 1) - w_14__22/(exp(theta_14 - w_00__14*x_00 - w_01__14*log(x_00)) + 1)) + 1));
 }
 
 real NNPDFdev(real const& x_00, vector<real> const& params, 

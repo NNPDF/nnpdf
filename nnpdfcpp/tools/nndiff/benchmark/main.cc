@@ -113,7 +113,7 @@ int main(int argc, char** argv)
           mlp->Compute(in,out);
           o << in[0] << "\t"
                << n*pow(in[0],-a+1)*pow(1-in[0],b)*out[0] << "\t"
-               << n*pow(in[0],-a+1)*pow(1-in[0],b)*nnval(in[0], param) << "\t"
+	       << NNPDFval(in[0], param, a, b, n) << "\t"
                << evln[fl[i]] << "\t"
                << NNPDFdev(in[0], param, a, b, n)
                << endl;
