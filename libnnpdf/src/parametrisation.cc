@@ -94,6 +94,16 @@ void Parametrisation::WritePars(std::ofstream& outstream)
     outstream <<" "<< fParameters[i];
 }
 
+/**
+ * @brief Parametrisation::SetPars
+ * @param param - input for parameters
+ */
+void Parametrisation::SetPars(std::vector<real> const& param)
+{
+  for (int i=0; i<fNParameters; i++)
+    fParameters[i] = param[i];
+}
+
 // ******************** MLP *********************************
 /**
  * @brief MultiLayerPerceptron::MultiLayerPerceptron

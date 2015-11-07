@@ -35,6 +35,7 @@ namespace NNPDF
 
     void ReadPars(std::ifstream&);
     void WritePars(std::ofstream&);
+    void SetPars(std::vector<real> const& param);
     
     real* GetParameters() {return fParameters;}
     int const& GetNParameters() const {return fNParameters;}
@@ -70,7 +71,7 @@ namespace NNPDF
     void Compute(real*,real*) const;  //!< Returns a fArch[fNLayers-1] long array of output for a given input array
     Parametrisation* Duplicate();     //!< Returns a parametrisation based on an MLP
     
-    const int*  GetArch() const {return fArch;};
+    const int*  GetArch() const {return fArch;}
     int   GetNumNodeParams(int const& layer) const;                   //!< Returns the number of parameters that belong to a specific node (including biases).
     real*       GetNodeParams   (int const& layer, int const& node);  //!< Returns a pointer to the fParameters coordinate representing the parameters for a specific node
     
