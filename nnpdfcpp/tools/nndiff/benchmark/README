@@ -1,0 +1,15 @@
+Installation:
+
+	make
+
+Running:
+	
+	./benchmark NNPDF30_nlo_as_0118 <replica number>
+
+Output:
+
+	results/*.dat
+	files with x points, NNPDF, NNPDFval, LHAPDF, NNPDFdev
+	use results/analysis.ipynb to plot results
+
+  
