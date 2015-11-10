@@ -477,7 +477,7 @@ void NNPDFSettings::Splash() const
   cout << "  ██║╚██╗██║██║╚██╗██║██╔═══╝ ██║  ██║██╔══╝ " << endl;
   cout << "  ██║ ╚████║██║ ╚████║██║     ██████╔╝██║ " << endl;
   cout << "  ╚═╝  ╚═══╝╚═╝  ╚═══╝╚═╝     ╚═════╝ ╚═╝ 2012-2015" << Colour::FG_DEFAULT <<endl;
-  cout << "  ____svn____ : " << SVN_REV << ", __coredevs__ : N.H., S.C.\n" << endl;
+  cout << "  ____git____ : " << SVN_REV << ", __coredevs__ : N.H., S.C.\n" << endl;
   cout << "  Convolution Alignment Target: "<< convoluteAlign << endl;
   cout << endl;
 }
