@@ -20,7 +20,9 @@ TSTLDFLAGS=$(ALDFLAGS) $(LHALDFLAGS)
 all:	test
 
 test:
-	g++ -Wall $(TSTFLAGS) $(TSTLDFLAGS) applgrid-test.cpp -o applgrid-test
-	
+	g++ -Wall $(TSTFLAGS) $(TSTLDFLAGS) applgrid-test-pp.cpp -o applgrid-test-pp
+	g++ -Wall $(TSTFLAGS) $(TSTLDFLAGS) applgrid-test-ppbar.cpp -o applgrid-test-ppbar
+
 clean:
-	rm -f applgrid-test
+	rm -f applgrid-test-pp
+	rm -f applgrid-test-ppbar
