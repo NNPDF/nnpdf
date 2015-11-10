@@ -116,6 +116,8 @@ static inline real fcminus(real* pdf) {
   return (pdf[C]-pdf[CBAR]);
 }
 
+
+/* OLD PREPROCESSING DEFINITION
 // High x effective exponent
 static inline real beta(real pdf, real x) {
   return log(fabs(pdf/x))/log(1-x);
@@ -125,3 +127,4 @@ static inline real beta(real pdf, real x) {
 static inline real alpha(real pdf, real x) {
   return -log(fabs(pdf/x))/log(x);
 }
+*/

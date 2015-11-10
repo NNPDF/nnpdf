@@ -24,6 +24,8 @@ public:
   ~NNdiff();
 
   real nnval(real const& x, int const& fl, int const& n);
+  real nnder(real const& x, int const& fl, int const& n);
+
   real alphaeff(real const& x, int const& fl, int const& n);
   real betaeff(real const& x, int const& fl, int const& n);
 

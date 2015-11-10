@@ -30,6 +30,7 @@ nnfit_LDFLAGS = $(NNPDF_LDFLAGS) $(SQLITE3_LDFLAGS) $(YAML_LDFLAGS) $(APFEL_LDFL
 
 validphys_SOURCES = validphyssrc/src/validphys.cc \
 		    validphyssrc/src/plotdata.cc \
+                    validphyssrc/src/nndiff.cc \
 		    validphyssrc/src/plotutils.cc $(COMMON)
 validphys_CPPFLAGS = -Ivalidphyssrc/inc $(NNPDF_CPPFLAGS) -I$(top_builddir)/common/inc $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS) $(YAML_CPPFLAGS) -std=c++11 $(ROOT_CPPFLAGS)
 validphys_LDFLAGS = $(NNPDF_LDFLAGS) $(ROOT_LDFLAGS) $(SQLITE3_LDFLAGS) $(YAML_LDFLAGS)

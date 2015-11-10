@@ -24,6 +24,7 @@ using std::endl;
 #include "plotdata.h"
 #include "pdffuns.h"
 #include "nnpdfsettings.h"
+#include "nndiff.h"
 #include "svn.h"
 
 #include "plotutils.h"
@@ -705,33 +706,11 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
         }
   }
 
+  NNdiff *pdfdiff = new NNdiff( (i == 0) ? fSettings : fSettingsRef,
+                              fSettings.GetResultsDirectory(), nfl, pdf->GetMembers());
+
   // Calculate effective exponents - here the parametrization should be more flexible
-  real (*nn23f[])(real*) = {&fsinglet,&fgluon,&fV,&fT3,&fDelta,&fsplus,&fsminus,&fphoton};
-  string nn23[] = {"Singlet","Gluon","Valence","Triplet","#Delta_{s}","s^{+}","s^{-}","Photon"};
-
-  real (*evolf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fT3,&fT8,&fphoton};
-  string evol[] = {"Singlet","Gluon","Valence","V3","V8","T3","T8","Photon"};
-
-  real (*evolsf[])(real*) = {&fsinglet,&fgluon,&fV,&fV8,&fT3,&fT8,&fDelta,&fphoton};
-  string evols[] = {"Singlet","Gluon","Valence","V8","T3","T8","#Delta_{s}","Photon"};
-
-  real (*evolicf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fV15,&fT3,&fT8,&fT15,&fphoton};
-  string evolic[] = {"Singlet","Gluon","Valence","V3","V8","V15","T3","T8","T15","Photon"};
-
-  real (*functions[nfl])(real*);
-  const basisType setbasis = NNPDFSettings::getFitBasisType(fSettings.Get("fitting","fitbasis").as<string>());
-  if (setbasis == BASIS_NN23 || setbasis == BASIS_NN23QED)
-    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(nn23[t]); functions[t] = nn23f[t]; }
-  else if (setbasis == BASIS_EVOL || setbasis == BASIS_EVOLQED)
-    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
-  else if (setbasis == BASIS_EVOLS || setbasis == BASIS_EVOLSQED)
-    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evols[t]); functions[t] = evolsf[t]; }
-  else if (setbasis == BASIS_NN30 || setbasis == BASIS_NN30QED)
-    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
-  else if (setbasis == BASIS_FLVR || setbasis == BASIS_FLVRQED)
-    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
-  else if (setbasis == BASIS_EVOLIC || setbasis == BASIS_NN30IC)
-    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evolic[t]); functions[t] = evolicf[t]; }
+  fPDFNames = pdfdiff->getname();
 
   size_t NPOINTS = 100;
   real xa[NPOINTS+1], xb[NPOINTS+1], axlim[2], bxlim[2];
@@ -751,8 +730,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
   bxlim[0] = 0.6;
   bxlim[1] = 0.95;
 
-  double delta  = (log(1E-1)-log(1E-6)) / NPOINTS;
-  real Q0 = sqrt(fSettings.Get("theory","q20").as<real>());
+  double delta  = (log(axlim[1])-log(axlim[0])) / NPOINTS;
 
   for (int j=0; j<nfl; j++)
   {
@@ -761,8 +739,8 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
       if(ix == NPOINTS) {xa[ix]=1E-3; xb[ix]=0.65;}
       else
       {
-        xa[ix] = exp (log(1E-6) + ix*delta);
-        xb[ix] = 0.6f + ix*(0.95f - 0.6f) / (real) NPOINTS;
+        xa[ix] = exp (log(axlim[0]) + ix*delta);
+        xb[ix] = bxlim[0] + ix*(bxlim[1] - bxlim[0]) / (real) NPOINTS;
       }
       
       vector<real> alphas;
@@ -770,13 +748,17 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
 
       for (int n=0; n<pdf->GetMembers(); n++)
       {
-        double pdfa = GetGpdf(pdf,xa[ix],Q0,n,functions[j]);
-        double pdfb = GetGpdf(pdf,xb[ix],Q0,n,functions[j]);
+        const real a = pdfdiff->alphaeff(xa[ix],j,n);
+        const real b = pdfdiff->betaeff(xb[ix],j,n);
 
-        if (pdfa != 0.0)
-          alphas.push_back( alpha(pdfa,xa[ix]) );
-        if (pdfb != 0.0)
-          betas.push_back( beta(pdfb,xb[ix]) );
+        if (!isnan(a) &&
+            a < (alphabnd[j][1]+alphabnd[j][0])/2.0 + 5*(alphabnd[j][1]-(alphabnd[j][1]+alphabnd[j][0])/2.0) &&
+            a > (alphabnd[j][1]+alphabnd[j][0])/2.0 - 5*(alphabnd[j][1]-(alphabnd[j][1]+alphabnd[j][0])/2.0))
+          alphas.push_back(a);
+        if (!isnan(b) && pdfdiff->nnval(xb[ix],j,n) != 0.0 &&
+            b < (betabnd[j][1]+betabnd[j][0])/2.0 + 5*(betabnd[j][1]-(betabnd[j][1]+betabnd[j][0])/2.0) &&
+            b > (betabnd[j][1]+betabnd[j][0])/2.0 - 5*(betabnd[j][1]-(betabnd[j][1]+betabnd[j][0])/2.0))
+          betas.push_back(b);
       }
 
       alphaCV[j][ix] = ComputeAVG(alphas);
@@ -922,16 +904,19 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
     aplot -> SetLineColor(histoLineColor[i]);
     aplotd -> SetLineColor(histoLineColor[i]);
     aplotd -> SetLineWidth(2);
+    aplotd -> SetLineStyle(2);
     aplotu -> SetLineColor(histoLineColor[i]);
     aplotu -> SetLineWidth(2);
+    aplotu -> SetLineStyle(2);
     aplotc -> SetLineColor(histoLineColor[i]);
     aplotc -> SetLineWidth(2);
+    aplotc -> SetLineStyle(9);
     aplot95d -> SetLineColor(histoLineColor[i]);
     aplot95d -> SetLineWidth(2);
-    aplot95d -> SetLineStyle(2);
+    aplot95d -> SetLineStyle(3);
     aplot95u -> SetLineColor(histoLineColor[i]);
     aplot95u -> SetLineWidth(2);
-    aplot95u -> SetLineStyle(2);
+    aplot95u -> SetLineStyle(3);
 
     aplotulim -> SetLineColor(histoLineColor[i]);
     aplotulim -> SetLineWidth(2);
@@ -979,16 +964,19 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
     bplot -> SetLineColor(histoLineColor[i]);
     bplotd -> SetLineColor(histoLineColor[i]);
     bplotd -> SetLineWidth(2);
+    bplotd -> SetLineStyle(2);
     bplotu -> SetLineColor(histoLineColor[i]);
     bplotu -> SetLineWidth(2);
+    bplotu -> SetLineStyle(2);
     bplotc -> SetLineColor(histoLineColor[i]);
     bplotc -> SetLineWidth(2);
+    bplotc -> SetLineStyle(9);
     bplot95d -> SetLineColor(histoLineColor[i]);
     bplot95d -> SetLineWidth(2);
-    bplot95d -> SetLineStyle(2);
+    bplot95d -> SetLineStyle(3);
     bplot95u -> SetLineColor(histoLineColor[i]);
     bplot95u -> SetLineWidth(2);
-    bplot95u -> SetLineStyle(2);
+    bplot95u -> SetLineStyle(3);
 
     bplotulim -> SetLineColor(histoLineColor[i]);
     bplotulim -> SetLineWidth(2);
@@ -1037,7 +1025,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
 
   fEffAlpha.push_back(alpha);
   fEffBeta.push_back(beta);
-  
+
   //* Preproc/Chi2 Scatter plots
   const double chi2max = 1.01*max(*max_element(fChi2Rep.begin(), fChi2Rep.end()),
                                  *max_element(fChi2RepRef.begin(), fChi2RepRef.end()));
@@ -1064,7 +1052,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
     betamax[j] =1.01*max(*max_element(fBetaExp[j].begin(), fBetaExp[j].end()),
                           *max_element(fBetaExpRef[j].begin(), fBetaExpRef[j].end()));
   }
-  
+    
   // Setup Graph - Alpha Exponents
   for (int j=0; j<nfl; j++)
   {
@@ -1158,7 +1146,6 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
     splot->Draw( (i == 0 ) ? "ap":"p");
     
   }
-
 
   return;
 }
@@ -1812,7 +1799,7 @@ void PlotData::SaveAll()
     fileout2b<< fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << "betapreproc_"<<i << ".root";
     fBetaCanvas[i]->SaveAs(fileout2.str().c_str());
     fBetaCanvas[i]->SaveAs(fileout2b.str().c_str());
-    
+        
     stringstream fileout3(""), fileoutb3("");
     fileout3 << fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << "alphascatter_"<<i <<".eps";
     fileoutb3<< fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << "alphascatter_"<<i <<".root";
@@ -1823,7 +1810,7 @@ void PlotData::SaveAll()
     fileout4 << fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << "betascatter_"<<i << ".eps";
     fileout4b<< fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << "betascatter_"<<i << ".root";
     fBetaScatterCanvas[i]->SaveAs(fileout4.str().c_str());
-    fBetaScatterCanvas[i]->SaveAs(fileout4b.str().c_str());
+    fBetaScatterCanvas[i]->SaveAs(fileout4b.str().c_str());    
   }
 }
 
