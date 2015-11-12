@@ -707,7 +707,8 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
   }
 
   NNdiff *pdfdiff = new NNdiff( (i == 0) ? fSettings : fSettingsRef,
-                              fSettings.GetResultsDirectory(), nfl, pdf->GetMembers());
+                                (i == 0) ? fSettings.GetResultsDirectory() : fSettingsRef.GetResultsDirectory(),
+                                nfl, pdf->GetMembers());
 
   // Calculate effective exponents - here the parametrization should be more flexible
   fPDFNames = pdfdiff->getname();
