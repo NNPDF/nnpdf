@@ -17,12 +17,28 @@ static const dataInfoRaw ATLASLOMASSDY11info = {
   "DYP_ZLL_LHC7"         //ProcType
 };
 
+static const dataInfoRaw ATLASLOMASSDY11EXTinfo = {
+  6,                     //nData
+  8,                    //nSys (5 corr. + 2 uncorr. + lumi)
+  "ATLASLOMASSDY11EXT",  //SetName
+  "DYP_ZLL_LHC7"         //ProcType
+};
+
 // ********* Filters ************
 
 class ATLASLOMASSDY11Filter: public CommonData
 { public: ATLASLOMASSDY11Filter():
   CommonData(ATLASLOMASSDY11info) { ReadData(); }
 
-private:
-  void ReadData();
+  private:
+    void ReadData();
+};
+
+
+class ATLASLOMASSDY11EXTFilter: public CommonData
+{ public: ATLASLOMASSDY11EXTFilter():
+  CommonData(ATLASLOMASSDY11EXTinfo) { ReadData(); }
+
+  private:
+    void ReadData();
 };

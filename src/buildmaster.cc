@@ -78,6 +78,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASZPT47FBFilter());
   target.push_back(new ATLAS1JET11Filter());
   target.push_back(new ATLASLOMASSDY11Filter());
+  target.push_back(new ATLASLOMASSDY11EXTFilter());
 /*
   target.push_back(new ATLASPHT11ETGCTRFilter());
   target.push_back(new ATLASPHT11ETGFWDFilter());
