@@ -25,6 +25,7 @@ AC_SEARCH_PYTHON
 AC_SEARCH_SSE
 AC_SEARCH_OPENMP
 AC_SEARCH_MPI
+AX_CXX_COMPILE_STDCXX_11([noext])
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdlib.h sys/time.h])

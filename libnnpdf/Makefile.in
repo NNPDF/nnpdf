@@ -92,6 +92,7 @@ DIST_COMMON = INSTALL NEWS README AUTHORS ChangeLog \
 	config.sub install-sh missing ltmain.sh
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_check_compile_flag.m4 \
+	$(top_srcdir)/m4/ax_cxx_compile_stdcxx_11.m4 \
 	$(top_srcdir)/m4/ax_ext.m4 \
 	$(top_srcdir)/m4/ax_gcc_x86_avx_xgetbv.m4 \
 	$(top_srcdir)/m4/ax_gcc_x86_cpuid.m4 $(top_srcdir)/m4/gsl.m4 \
@@ -324,6 +325,7 @@ GSLPATH = @GSLPATH@
 GSL_CPPFLAGS = @GSL_CPPFLAGS@
 GSL_CXXFLAGS = @GSL_CXXFLAGS@
 GSL_LDFLAGS = @GSL_LDFLAGS@
+HAVE_CXX11 = @HAVE_CXX11@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -467,9 +469,9 @@ otherinclude_HEADERS = src/NNPDF/common.h \
 			src/NNPDF/nnmpi.h
 
 libnnpdf_la_LDFLAGS = -version-info 0:0:0 $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDFLAGS)
-libnnpdf_la_CPPFLAGS = $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC -std=c++11 $(LHAPDF_CPPFLAGS)
+libnnpdf_la_CPPFLAGS = $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC $(LHAPDF_CPPFLAGS)
 FKconvolute_SOURCES = src/fkconvolute.cc
-FKconvolute_CPPFLAGS = $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC -std=c++11 $(LHAPDF_CPPFLAGS)
+FKconvolute_CPPFLAGS = $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC $(LHAPDF_CPPFLAGS)
 FKconvolute_LDFLAGS = $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDFLAGS) -lnnpdf
 
 # Scripts to install

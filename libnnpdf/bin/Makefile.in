@@ -83,6 +83,7 @@ DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(srcdir)/nnpdf-config.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_check_compile_flag.m4 \
+	$(top_srcdir)/m4/ax_cxx_compile_stdcxx_11.m4 \
 	$(top_srcdir)/m4/ax_ext.m4 \
 	$(top_srcdir)/m4/ax_gcc_x86_avx_xgetbv.m4 \
 	$(top_srcdir)/m4/ax_gcc_x86_cpuid.m4 $(top_srcdir)/m4/gsl.m4 \
@@ -184,6 +185,7 @@ GSLPATH = @GSLPATH@
 GSL_CPPFLAGS = @GSL_CPPFLAGS@
 GSL_CXXFLAGS = @GSL_CXXFLAGS@
 GSL_LDFLAGS = @GSL_LDFLAGS@
+HAVE_CXX11 = @HAVE_CXX11@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@

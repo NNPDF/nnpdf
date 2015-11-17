@@ -1148,6 +1148,7 @@ AC_SUBST([am__untar])
 ]) # _AM_PROG_TAR
 
 m4_include([m4/ax_check_compile_flag.m4])
+m4_include([m4/ax_cxx_compile_stdcxx_11.m4])
 m4_include([m4/ax_ext.m4])
 m4_include([m4/ax_gcc_x86_avx_xgetbv.m4])
 m4_include([m4/ax_gcc_x86_cpuid.m4])
