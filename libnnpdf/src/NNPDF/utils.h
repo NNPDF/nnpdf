@@ -30,10 +30,11 @@ namespace NNPDF
 
 	// ******************* Basic Stat Functions *********************
 	real ComputeAVG(int const& n, const real *x);             //!< Compute average from x points
-	real ComputeAVG(std::vector<real> const& x);                   //!< Compute average from std::vector<double> x
+	real ComputeAVG(std::vector<real> const& x);              //!< Compute average from std::vector<double> x
 	real ComputeStdDev(int const& n, const real *x);          //!< Compute the std deviation
-	real ComputeStdDev(std::vector<real> const& x);                //!< Compute the std deviation
+	real ComputeStdDev(std::vector<real> const& x);           //!< Compute the std deviation
 	real ComputeEigErr(int const& p, const real *x);          //!< Compute error in the Hessian method for PDFs
+	real ComputeSymEigErr(int const& p, const real *x);       //!< Compute error in the symmetric Hessian method for PDFs
 	real ComputeMom(int const& n, const real *x, int const& m);//!< Compute mth moment of distribution
 	void Compute68cl(std::vector<real> const& x, real &up, real &dn);//!< Compute the 68% c.l.
 	void Compute95cl(std::vector<real> const& x, real &up, real &dn);//!< Compute the 95% c.l.

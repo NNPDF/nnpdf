@@ -30,7 +30,8 @@ namespace NNPDF
           ER_MC68,  //!< 68cl error for NNPDF
           ER_MCT0,  //!< NNPDF set use only replica 0 for T0
           ER_EIG,   //!< 1sigma error for CTEQ & MSTW
-          ER_EIG90  //!< 90cl error for CTEQ & MSTW
+          ER_EIG90, //!< 90cl error for CTEQ & MSTW
+          ER_SYMEIG //!< Symmetric eigenvectors for PDF4LHC
         };
 
         // LHA-style flavour basis
@@ -86,6 +87,8 @@ namespace NNPDF
                     return "Eigenvector 68pc";
                 case ER_EIG90:
                     return "Eigenvector 90pc";
+                case ER_SYMEIG:
+                    return "Symmetric eigenvector";
             }
 
             return "Unrecognised Error Type";

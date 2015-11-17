@@ -510,7 +510,7 @@ real ThPredictions::GetObsError(int const& idat) const
   else
     {
       real *iObs = fObs + idat*fNpdf;
-      err = ComputeEigErr(fNpdf, iObs);
+      err = (fEtype == PDFSet::ER_SYMEIG) ? ComputeSymEigErr(fNpdf, iObs) : ComputeEigErr(fNpdf, iObs);
       if (fEtype == PDFSet::ER_EIG90)
         err /= 1.64485;
     }

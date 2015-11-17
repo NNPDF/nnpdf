@@ -49,6 +49,13 @@ fLHA(new real[14])
         {
           std::cerr << "LHAPDFSet::LHAPDFSet Warning: ErrorSet Types do not match: ER_EIG(90) and "<<LHError<<std::endl;
         }
+
+     case ER_SYMEIG:
+       if (LHError.compare("symmhessian") != 0 )
+        {
+          std::cerr << "LHAPDFSet::LHAPDFSet Warning: ErrorSet Types do not match: ER_SYMEIG and "<<LHError<<std::endl;
+        }
+
      break;
   }
 

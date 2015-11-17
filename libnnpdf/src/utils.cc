@@ -231,6 +231,21 @@ namespace NNPDF
     return sqrt(err)/2.0;
   }
 
+  /**
+    * Compute the errors for the symmetric Hessian method
+    * \param p number of pdfs
+    * \param x array with values
+    * \return the error for the Hessian method as real
+    */
+  real ComputeSymEigErr(int const& p, const real *x)
+  {
+    real err = 0;
+    for (int i = 0; i < p; i++)
+      err += pow(x[i+1]-x[0], 2); // Eigenstd::vector
+
+    return sqrt(err);
+  }
+
 
   /**
    * Compute the mth moment of the distribution
