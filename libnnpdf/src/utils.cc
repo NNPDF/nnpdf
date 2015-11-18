@@ -240,8 +240,8 @@ namespace NNPDF
   real ComputeSymEigErr(int const& p, const real *x)
   {
     real err = 0;
-    for (int i = 0; i < p; i++)
-      err += pow(x[i+1]-x[0], 2); // Eigenstd::vector
+    for (int i = 1; i < p; i++)
+      err += pow(x[i]-x[0], 2); // Eigenstd::vector
 
     return sqrt(err);
   }
