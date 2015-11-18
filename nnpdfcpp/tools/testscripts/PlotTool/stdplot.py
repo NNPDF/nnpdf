@@ -58,7 +58,7 @@ class stdplot:
     self.ax2.yaxis.grid(True)
       
     # Plot title
-    self.fig.text(0.13,0.92,name, fontsize=12)
+    self.fig.text(0.13,0.94,name, fontsize=12)
 
   def addTheory(self,CV, ER, name):
     # Higher and Lower boundaries

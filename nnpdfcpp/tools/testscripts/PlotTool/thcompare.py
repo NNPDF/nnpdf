@@ -30,7 +30,7 @@ def genPlots(prefix, dataset, cData, tPred):
     dataPlots.append(dataplot_dis(cData,2,1,3, logx = True, logy= True, sqrtx = False, xlab="$Q^2$", ylab="x", zlab="$E_{CM}$"))
     dataPlots.append(dataplot_rat(cData,2,1,3, logx = True, logy= False, sqrtx = False, xlab="$Q^2$", ylab="x", zlab="$E_{CM}$"))
   elif cData.proc.startswith("DYP") and cData.setname.startswith("DYE886R") == False and cData.setname.startswith("ATLASZHIGHMASS49FB") == False:
-    dataPlots.append(dataplot_dis(cData,1,2,3, logx = False, logy= True, sqrtx = False, xlab="rapidity", ylab="M^2", zlab="$E_{CM}$"))
+    dataPlots.append(dataplot_dis(cData,1,2,3, logx = False, logy= False, sqrtx = False, xlab="rapidity", ylab="M^2", zlab="$E_{CM}$"))
     dataPlots.append(dataplot_rat(cData,1,2,3, logx = False, logy= False, sqrtx = False, xlab="rapidity", ylab="M^2", zlab="$E_{CM}$"))
   
   
