@@ -25,6 +25,7 @@ class ThPredictions:
       self.error.append(float(linesplit[2]))
 
     datafile.close()
+    self.printMetadata()
 
   def printMetadata(self):
     print "************THPREDICTIONS************"
