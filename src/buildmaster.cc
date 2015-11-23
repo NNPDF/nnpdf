@@ -22,6 +22,7 @@
 #include "ATLASLOMASSDY11.h"
 //#include "ATLASPHT11.h"
 #include "CMS.h"
+#include "CMSDY2D12.h"
 #include "LHCb.h"
 #include "CDF.h"
 #include "D0.h"
@@ -84,7 +85,6 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASPHT11ETGFWDFilter());
   target.push_back(new ATLASPHT11ETAGFilter());
   target.push_back(new ATLASTTBARRAP11Filter());
-  target.push_back(new ATLASLOMASSDY11Filter());
 */
   // ************************* BCDMS ******************************
 
@@ -107,6 +107,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSWEASY840PBFilter());
   target.push_back(new CMSWMASY47FBFilter());
   target.push_back(new CMSDY2D11Filter());
+  target.push_back(new CMSDY2D12Filter());
   target.push_back(new CMSJETS11Filter());
 
  // ************************* CMSwc ******************************

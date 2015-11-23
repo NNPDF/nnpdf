@@ -80,7 +80,8 @@ buildmaster_obj = buildmaster.o \
                   HERA2-C.o \
                   ZEUS2.o \
                   TOP.o \
-                  CMSwc.o
+                  CMSwc.o \
+                  CMSDY2D12.o
 
 buildmaster_inc = buildmaster.h \
                   buildmaster_utils.h \
