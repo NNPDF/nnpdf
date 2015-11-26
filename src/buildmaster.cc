@@ -36,6 +36,8 @@
 #include "TOP.h"
 #include "CMSwc.h"
 #include "HERACOMB.h"
+#include "ATLASTOPDIFF.h"
+//#include "CMSTOPDIFF.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -187,7 +189,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ZEUSHERA2CCPFilter());
   target.push_back(new ZEUSHERA2NCPFilter());
 
-  // ************************ HERACOMB - nh ****************************
+  // ************************ HERACOMB  ****************************
 
   target.push_back(new HERACOMBCCEMFilter());
   target.push_back(new HERACOMBCCEPFilter());
@@ -196,5 +198,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new HERACOMBNCEP575Filter());
   target.push_back(new HERACOMBNCEP820Filter());
   target.push_back(new HERACOMBNCEP920Filter());
+
+  // ************************ ATLAS TTBAR DIFF 8 TeV  ***************
+  target.push_back(new ATLASTOPDIFF8TEVTPTFilter());
 
 }

@@ -17,14 +17,18 @@ distributions
 
 #include "TOPDIFF.h"
 
-void TTBARTOTFilter::ReadData()
-{
+// Raw data available here
+// https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2015-06/#auxstuff
 
-  // PDG average of the top quark pole mass
-  double const mt = 173.3;
-  
+// ATLAS top quark differential distributions
+// 8 TeV, top quark pt distribution
+void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
+{
   // Opening files
   fstream f1;
+
+  // The raw data for (1/sigma) dsigma/dpt is taken from
+  // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2015-06/tabaux_025.pdf
   
   stringstream datafile("");
   datafile << dataPath() << "rawdata/"
