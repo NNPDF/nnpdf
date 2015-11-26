@@ -10,17 +10,24 @@
 
 #include "buildmaster_utils.h"
 
-// ********** TOPDIFF ***************
 
 // ********** CMSTOPDIFF8TEV ***************
 // One set for each of the differential distributions
 
 // Differential distribution for the transverse momentum of the top quark
 static const dataInfoRaw CMSTOPDIFF8TEVTPTinfo = {
-  5,      //nData
+  8,      //nData
   0,       //nSys
   "CMSTOPDIFF8TEVTPT",    //SetName
   "DIFF_TTBAR8_TPT" //ProcType
+};
+
+// Differential distribution for the rapidity of the top quark
+static const dataInfoRaw CMSTOPDIFF8TEVTRAPinfo = {
+  10,      //nData
+  0,       //nSys
+  "CMSTOPDIFF8TEVTRAP",    //SetName
+  "DIFF_TTBAR8_TRAP" //ProcType
 };
 
 
@@ -32,6 +39,15 @@ class CMSTOPDIFF8TEVTPTFilter: public CommonData
 {
 public: CMSTOPDIFF8TEVTPTFilter():
   CommonData(CMSTOPDIFF8TEVTPTinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CMSTOPDIFF8TEVTRAPFilter: public CommonData
+{
+public: CMSTOPDIFF8TEVTRAPFilter():
+  CommonData(CMSTOPDIFF8TEVTRAPinfo) { ReadData(); }
 
 private:
   void ReadData();

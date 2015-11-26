@@ -37,7 +37,7 @@
 #include "CMSwc.h"
 #include "HERACOMB.h"
 #include "ATLASTOPDIFF.h"
-//#include "CMSTOPDIFF.h"
+#include "CMSTOPDIFF.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -201,5 +201,9 @@ void InitCommonData(vector<CommonData*>& target)
 
   // ************************ ATLAS TTBAR DIFF 8 TeV  ***************
   target.push_back(new ATLASTOPDIFF8TEVTPTFilter());
+
+  // ************************ CMS TTBAR DIFF 8 TeV  ***************
+  target.push_back(new CMSTOPDIFF8TEVTPTFilter());
+  target.push_back(new CMSTOPDIFF8TEVTRAPFilter());
 
 }

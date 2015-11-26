@@ -82,7 +82,8 @@ buildmaster_obj = buildmaster.o \
                   TOP.o \
                   CMSwc.o \
                   CMSDY2D12.o \
-                  ATLASTOPDIFF.o
+                  ATLASTOPDIFF.o \
+		CMSTOPDIFF.o
 
 buildmaster_inc = buildmaster.h \
                   buildmaster_utils.h \
@@ -110,7 +111,8 @@ buildmaster_inc = buildmaster.h \
                   ZEUS2.h \
                   TOP.h \
 		  						CMSwc.h \
-		ATLASTOPDIFF.h
+		ATLASTOPDIFF.h \
+	       CMSTOPDIFF.h \
 
 buildmaster_src = $(addprefix $(OBJECTDIR)/, $(buildmaster_obj))
 buildmaster_hea = $(addprefix $(INCLUDEDIR)/, $(buildmaster_inc))

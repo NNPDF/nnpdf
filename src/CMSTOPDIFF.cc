@@ -15,66 +15,142 @@ distributions
 
 */
 
-#include "TOPDIFF.h"
+#include "CMSTOPDIFF.h"
 
-// Raw data available here
-// https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2015-06/#auxstuff
+// Raw data available from HepData
+// Data is available separately for the lepton+jets and
+// for the dilepton channel
+// http://hepdata.cedar.ac.uk/view/ins1370682
 
-// ATLAS top quark differential distributions
+//-------------------------------------------------------------------------------
+
+// CMS top quark differential distributions
 // 8 TeV, top quark pt distribution
-void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
+void  CMSTOPDIFF8TEVTPTFilter::ReadData()
 {
   // Opening files
   fstream f1;
 
+  //
   // The raw data for (1/sigma) dsigma/dpt is taken from
-  // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2015-06/tabaux_025.pdf
+  // Table 15 ( Page 41 of preprint, table A.6, 1st variable in table, pt(top).
+  //
+  //   A	A	A	pt_top	pt_top	pttop  	y	dy+	dy-	dy+	dy-	
+  //
   
   stringstream datafile("");
   datafile << dataPath() << "rawdata/"
-	   << fSetName << "/ttbar_totxsec.data";
+	   << fSetName << "/CMSTOPDIFF8TEVTPT.dat";
   f1.open(datafile.str().c_str(), ios::in);
   if (f1.fail()) {
     cerr << "Error opening data file " << datafile.str() << endl;
       exit(-1);
   }
   string line;
+  for(int i=0;i<10;i++) getline(f1,line);
   for (int i = 0; i < fNData; i++)
     {
       getline(f1,line);
       istringstream lstream(line);
-      
-      fKin1[i] = 0.0;
-      fKin2[i] = mt;
-      fKin3[i] = 0.0;
-      
+            
       int idum=0;
       lstream >> idum; 
       if(idum!=(i+1)){
-	cout<<"Error in TOP.cc"<<endl;
+	cout<<"Error in CMSTOPDIFF.cc"<<endl;
 	cout<<"idum = "<<idum<<endl;
 	exit(-10);
       }
+
+      double adum=0;
+      for(int j=0;j<5;j++)lstream >> adum;
+      double pt_top=0.0;
+      lstream >> pt_top;
+
+      fKin1[i] = 0.0;
+      fKin2[i] = pt_top; // <pt_top> as characteristic kin variable
+      fKin3[i] = 0.0;
       
       lstream >> fData[i]; // Central values
-      lstream >> fStat[i]; // Statistical error
-      lstream >> fSys[i][0].add; // Total systematic uncertainties      
-      lstream >> fSys[i][1].add;  // Lumi
-      lstream >> fSys[i][2].add; // Beam energy uncertainty 
+      double stat=0;
+      double sys=0;
+      lstream>> stat >>adum; // Statistical error
+      lstream >> sys >>adum; // Systematic error (absolute value)
 
-      fSys[i][0].mult = fSys[i][0].add*100/fData[i];
-      fSys[i][0].type = MULT;
-      fSys[i][0].name = "UNCORR";  // for time being treat as uncorrelated
+      fStat[i]=pow(pow(stat,2.0) + pow(sys,2.0), 0.5); // 
+      // For the time being add in quadrature statistical and systematic uncertainties
       
-      fSys[i][1].mult = fSys[i][1].add*100/fData[i];
-      fSys[i][1].type = MULT;
-      fSys[i][1].name = "UNCORR";  // for time being treat as uncorrelated 
+      //cout<<i<<" "<<fKin2[i]<<" "<<fData[i]<<" "<<1e2*fStat[i]/fData[i]<<endl;
       
-      fSys[i][2].mult = fSys[i][2].add*100/fData[i];
-      fSys[i][2].type = MULT;
-      fSys[i][2].name = "UNCORR";  // for time being treat as uncorrelated   
     }
   
   f1.close();
 }
+
+///////////////////////////////////////////////////////////
+
+//-------------------------------------------------------------------------------
+
+// CMS top quark differential distributions
+// 8 TeV, top quark rapidity distribution
+void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
+{
+  // Opening files
+  fstream f1;
+
+  //
+  // The raw data for (1/sigma) dsigma/dy(top) is taken from
+  // Table 17 ( Page 42 of preprint, table A.7, 1st variable in table, y(top).
+  //
+  //   A	A	A	y_top	y_top	y_top  	y	dy+	dy-	dy+	dy-	
+  //
+  
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/"
+	   << fSetName << "/CMSTOPDIFF8TEVTRAP.dat";
+  f1.open(datafile.str().c_str(), ios::in);
+  if (f1.fail()) {
+    cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+  }
+  string line;
+  for(int i=0;i<10;i++) getline(f1,line);
+  for (int i = 0; i < fNData; i++)
+    {
+      getline(f1,line);
+      istringstream lstream(line);
+            
+      int idum=0;
+      lstream >> idum; 
+      if(idum!=(i+1)){
+	cout<<"Error in CMSTOPDIFF.cc"<<endl;
+	cout<<"idum = "<<idum<<endl;
+	exit(-10);
+      }
+
+      double adum=0;
+      for(int j=0;j<5;j++)lstream >> adum;
+      double y_top=0.0;
+      lstream >> y_top;
+
+      fKin1[i] = 0.0;
+      fKin2[i] = y_top; // <y_top> as characteristic kin variable
+      fKin3[i] = 0.0;
+      
+      lstream >> fData[i]; // Central values
+      double stat=0;
+      double sys=0;
+      lstream>> stat >>adum; // Statistical error
+      lstream >> sys >>adum; // Systematic error (absolute value)
+
+      fStat[i]=pow(pow(stat,2.0) + pow(sys,2.0), 0.5); // 
+      // For the time being add in quadrature statistical and systematic uncertainties
+      
+      // cout<<i<<" "<<fKin2[i]<<" "<<fData[i]<<" "<<1e2*fStat[i]/fData[i]<<endl;
+      
+    }
+  
+  f1.close();
+}
+
+///////////////////////////////////////////////////////////
 
