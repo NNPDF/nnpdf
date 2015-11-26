@@ -1,0 +1,16 @@
+# Path: /HepData/8846/d21-x1-y1
+# Normalized differential tt cross section (from l+jets channel) as a function of the transverse momentum ptt of the top quark pair. 
+# Location: Page 44 of preprint, table A.9, 1st variable in table, pt(ttbar)
+# Cross section : $1/\sigma d\sigma/dpt(ttbar)$
+# RE : P P --> TOP TOPBAR X
+# SQRT(S) : 8000.0 GeV
+# x : pt(ttbar) (range)
+# x2: pt(ttbar) (bin-center)
+# y : 1/sigma dsigma/dpt(ttbar)
+# xdesc	x	xlow	xhigh	x2desc	x2	x2low	x2high	y	dy+	dy-	dy+	dy-	
+1	10.0	0.0	20.0		4.5	4.5	4.5	0.0132	+3.08E-4	-3.08E-4	+0.00104	-0.00104
+2	32.5	20.0	45.0		32.5	32.5	32.5	0.0118	+2.44E-4	-2.44E-4	+3.97E-4	-3.97E-4
+3	60.0	45.0	75.0		58.5	58.5	58.5	0.0064	+1.15E-4	-1.15E-4	+3.51E-4	-3.51E-4
+4	97.5	75.0	120.0		95.5	95.5	95.5	0.00284	+6.46E-5	-6.46E-5	+1.88E-4	-1.88E-4
+5	155.0	120.0	190.0		152.5	152.5	152.5	0.00107	+2.72E-5	-2.72E-5	+6.05E-5	-6.05E-5
+6	245.0	190.0	300.0		237.5	237.5	237.5	3.06E-4	+1.17E-5	-1.17E-5	+3.75E-5	-3.75E-5
