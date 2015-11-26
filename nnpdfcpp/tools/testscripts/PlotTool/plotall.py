@@ -12,7 +12,7 @@ from datplot import *
 
 #############################################################################################################################
 
-def genPlotPage(prefix, dataset, cData):
+def genPlotPage(prefix, dataset, cData, theory):
 
   print "Generating plots for: " + dataset
 
@@ -52,25 +52,14 @@ def genPlotPage(prefix, dataset, cData):
   elif cData.proc.startswith("DYP") and cData.setname.startswith("DYE886R") == False and cData.setname.startswith("ATLASZHIGHMASS49FB") == False:
     dataPlots.append(dataplot_kin(cData,1,2,xlab="rapidity",ylab="$M^2$"))
   
-  # Find and add theory predictions
-  i=0
-  for arg in sys.argv:
-    if i > 0:
-      root = arg + "thpredictions/"
-      theory = ThPredictions(root+dataset+".dat")
-      
-      # Add theory predictions
-      for plot in dataPlots:
-        if len(plot.data) == len(theory.CV):
-          plot.addTheory(theory)
-    
-    i=i+1
+  # Add theory predictions
+  if theory != 0:
+    for plot in dataPlots:
+      if len(plot.data) == len(theory.CV):
+        plot.addTheory(theory)
   
   for plot in dataPlots:
     plot.export(prefix)
-
-  # Export markdown
-
 
 #################################################################################################################################
 
@@ -81,20 +70,42 @@ if os.path.exists(plotDir):
 os.mkdir(plotDir)
 
 # Fetch datasets
-root = sys.argv[1] + "filter/"
+root = "../../../data/commondata/"
 datasets = os.listdir(root)
+
 
 # Load datasets
 cData = []
 for dataset in datasets:
-  cData.append(CommonData(root+dataset+"/DATA_"+dataset+".dat"))
+  if dataset[0:4] == "DATA":
+    cData.append(CommonData(root+dataset))
+
+# Make thpredictions if not already present
+thDir = "./th/"
+thRoot = "../../../data/theory_6/fastkernel/"
+if os.path.exists(thDir) != True:
+  os.mkdir(thDir)
+  for cDat in cData:
+    FKPath = thRoot + "FK_"+cDat.setname+".dat"
+    if os.path.exists(FKPath) == True:
+      print "Making predictions for: ", FKPath
+      os.system("FKconvolute NNPDF30_nlo_as_0118 "+FKPath + " > " + thDir + "th_"+cDat.setname+".dat")
+
+    
 
 # Setup thread pool
 pool = multiprocessing.Pool()
 
 for cDat in cData:
   prefix = plotDir + cDat.setname + "/"
-  pool.apply_async(genPlotPage, [prefix, cDat.setname, cDat])
+
+  # Load ThPredictions (if present)
+  thpath = thDir + "th_"+cDat.setname+".dat"
+  theory = 0
+  if os.path.exists(thpath):
+    theory = ThPredictions(thpath)
+
+  pool.apply_async(genPlotPage, [prefix, cDat.setname, cDat, theory])
 
 pool.close()
 pool.join()
@@ -104,7 +115,6 @@ pool = multiprocessing.Pool()
 
 #Export markdown
 for cDat in cData:
-  print "Exporting Markdown for: " + cDat.setname
   prefix = plotDir + cDat.setname + "/"
   dat_md.markdown_data(cDat,prefix)
 
