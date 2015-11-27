@@ -8,7 +8,6 @@
 
 #pragma once
 
-const double Q2MIN = 1.0;
 const double MW = 80.398;
 const double MZ = 91.1876;
 
