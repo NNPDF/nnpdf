@@ -13,6 +13,10 @@
 #include "buildmaster.h"
 #include "svn.h"
 
+// ************** Positivity *******
+
+#include "POS.h"
+
 // ************* DATA **************
 #include "NMC.h"
 #include "SLAC.h"
@@ -68,6 +72,10 @@ int main(int argc, char **argv)
 
 void InitCommonData(vector<CommonData*>& target)
 {
+
+  // ************************* POS ******************************
+
+  registerDYPos(target);
 
   // ************************* ATLAS ******************************
 

@@ -72,8 +72,8 @@ buildmaster_obj = buildmaster.o \
                   LHCb.o  \
                   D0.o    \
                   FTDY.o  \
-		  H1HERA2.o \
-		  HERACOMB.o \
+		  		  H1HERA2.o \
+		  		  HERACOMB.o \
                   CHORUS.o \
                   NUTEV.o \
                   HERA1-C.o \
@@ -83,7 +83,8 @@ buildmaster_obj = buildmaster.o \
                   CMSwc.o \
                   CMSDY2D12.o \
                   ATLASTOPDIFF.o \
-		CMSTOPDIFF.o
+				  CMSTOPDIFF.o \
+                    POS.o \
 
 buildmaster_inc = buildmaster.h \
                   buildmaster_utils.h \
@@ -113,6 +114,7 @@ buildmaster_inc = buildmaster.h \
 		  						CMSwc.h \
 		ATLASTOPDIFF.h \
 	       CMSTOPDIFF.h \
+	       POS.h
 
 buildmaster_src = $(addprefix $(OBJECTDIR)/, $(buildmaster_obj))
 buildmaster_hea = $(addprefix $(INCLUDEDIR)/, $(buildmaster_inc))
