@@ -156,16 +156,18 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
 
 // CMS top quark differential distributions
 // 8 TeV, top quark pair invariant mass distribution
+// These are differential distributions for the lepton+jets channel
+// Both absolute distributions and dilepton final state distributions also available
 void  CMSTOPDIFF8TEVTTMFilter::ReadData()
 {
   // Opening files
   fstream f1;
 
   //
-  // The raw data for (1/sigma) dsigma/dy(top) is taken from
-  // Table 17 ( Page 42 of preprint, table A.7, 1st variable in table, y(top).
+  // The raw data for (1/sigma) dsigma/dm(tt) is taken from
+  // Table 23 ( Page 44 of preprint, table A.9, 3rd variable in table, m(ttbar)
   //
-  //   A	A	A	y_top	y_top	y_top  	y	dy+	dy-	dy+	dy-	
+  //   A	A	A	m_tt	m_tt	m_tt  	y	dy+	dy-	dy+	dy-	
   //
   
   stringstream datafile("");

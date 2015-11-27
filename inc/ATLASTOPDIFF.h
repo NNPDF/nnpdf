@@ -21,6 +21,38 @@ static const dataInfoRaw ATLASTOPDIFF8TEVTPTinfo = {
   "DIFF_TTBAR8_TPT" //ProcType
 };
 
+// Differential distribution for the rapidity of the top quark
+static const dataInfoRaw ATLASTOPDIFF8TEVTRAPinfo = {
+  5,      //nData
+  0,       //nSys
+  "ATLASTOPDIFF8TEVTRAP",    //SetName
+  "DIFF_TTBAR8_TRAP" //ProcType
+};
+
+// Differential distribution for the rapidity of the top quark pair
+static const dataInfoRaw ATLASTOPDIFF8TEVTTRAPinfo = {
+  5,      //nData
+  0,       //nSys
+  "ATLASTOPDIFF8TEVTTRAP",    //SetName
+  "DIFF_TTBAR8_TTRAP" //ProcType
+};
+
+// Differential distribution for the transverse of the top quark pair
+static const dataInfoRaw ATLASTOPDIFF8TEVTTPTinfo = {
+  6,      //nData
+  0,       //nSys
+  "ATLASTOPDIFF8TEVTTPT",    //SetName
+  "DIFF_TTBAR8_TTPT" //ProcType
+};
+
+// Differential distribution for the invariant mass of the top quark pair
+static const dataInfoRaw ATLASTOPDIFF8TEVTTMinfo = {
+  7,      //nData
+  0,       //nSys
+  "ATLASTOPDIFF8TEVTTM",    //SetName
+  "DIFF_TTBAR8_TTM" //ProcType
+};
+
 // ******************************************************
 // ******************************************************
 
@@ -32,5 +64,44 @@ public: ATLASTOPDIFF8TEVTPTFilter():
 private:
   void ReadData();
 };
+
+class ATLASTOPDIFF8TEVTRAPFilter: public CommonData
+{
+public: ATLASTOPDIFF8TEVTRAPFilter():
+  CommonData(ATLASTOPDIFF8TEVTRAPinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class ATLASTOPDIFF8TEVTTRAPFilter: public CommonData
+{
+public: ATLASTOPDIFF8TEVTTRAPFilter():
+  CommonData(ATLASTOPDIFF8TEVTTRAPinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class ATLASTOPDIFF8TEVTTPTFilter: public CommonData
+{
+public: ATLASTOPDIFF8TEVTTPTFilter():
+  CommonData(ATLASTOPDIFF8TEVTTPTinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class ATLASTOPDIFF8TEVTTMFilter: public CommonData
+{
+public: ATLASTOPDIFF8TEVTTMFilter():
+  CommonData(ATLASTOPDIFF8TEVTTMinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+// ******************************************************
+// ******************************************************
 
 
