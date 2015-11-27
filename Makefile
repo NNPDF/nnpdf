@@ -1,16 +1,10 @@
 #############################################
 # Makefile to generate BUILDMASTER Program
-# make release => for release version
-# make debug   => for debug version
-# make doc     => for doxygen documentation
-# make clean   => for clean project
+# make => for main version
+# make clean   => to clean project
 #############################################
 
-SOURCEDIR=./src
-INCLUDEDIR=inc
-OBJECTDIR=obj
-
-# refers to bin folder
+# Macros for results folders
 RESULTDIR = results
 RESULTSDIR= -D  RESULTS_PATH="results"
 DATADIR=    -D  DATA_PATH="./"
@@ -46,9 +40,9 @@ clean:
 ######### Programs BUILDMASTER #########
 ########################################
 
-buildmaster_src = $(SOURCEDIR)/buildmaster.o \
-                  $(SOURCEDIR)/buildmaster_utils.o \
-	   	  		  $(SOURCEDIR)/common.o 
+buildmaster_src = src/buildmaster.o \
+                  src/buildmaster_utils.o \
+	   	  		  src/common.o 
 
 filter_src = $(wildcard filters/*.cc)
 filter_obj = $(filter_src:.cc=.o)
