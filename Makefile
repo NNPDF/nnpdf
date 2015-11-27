@@ -29,7 +29,7 @@ NNPDFLD = $(shell nnpdf-config --ldflags)
 GSLCXX = $(shell gsl-config --cflags)
 GSLLD = $(shell gsl-config --libs)
 
-CXXFLAGS=-Wall -I ./inc -std=c++11 $(NNPDFCXX) $(GSLCXX) $(MACROS)
+CXXFLAGS=-Wall -I ./inc -I ./src -std=c++11 $(NNPDFCXX) $(GSLCXX) $(MACROS)
 LDFLAGS= $(NNPDFLD) $(GSLLD)
 
 #####################################

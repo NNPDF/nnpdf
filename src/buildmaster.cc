@@ -11,7 +11,6 @@
  */
 
 #include "buildmaster.h"
-#include "svn.h"
 
 // ************** Positivity *******
 
@@ -51,7 +50,6 @@ int main(int argc, char **argv)
   cout << "\n ***********************************\n";
   cout <<   " *  Welcome to NNPDF++ BuildMaster *\n";
   cout <<   " ***********************************\n";
-  cout <<   "    SVN Revision: " << SVN_REV << endl;
   cout << "\n Build master record for experiment sets:\n" << endl;
 
   // Read and filter raw data into commondata format
