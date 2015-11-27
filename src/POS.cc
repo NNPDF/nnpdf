@@ -73,7 +73,6 @@ void registerDYPos(vector<CommonData*>& list)
 
 void DYPosFilter::ReadData()
 {
-
   const double xmin = 1E-2;
   const double xmax = 0.9;
   const double xch = 0.1;
@@ -81,7 +80,7 @@ void DYPosFilter::ReadData()
   const int nxposlog = fNData/2.0;
   const double step   = ( xmax - xch ) / ( fNData - nxposlog );
 
-  const double qpos = sqrt(5);       // DY positivity invariant mass
+  const double qpos = 10;       // DY positivity invariant mass
   const double tau = xmin * xmax;
   const double sqrts = sqrt(qpos*qpos/tau);
 
