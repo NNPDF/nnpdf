@@ -367,21 +367,6 @@ namespace NNPDF
   {
     std::fstream g1;
 
-    // Minimum Q^2 value for DIS data
-    int nPassData = fNData;
-    bool DIS = false;
-    if (fProc[0].compare(0, 3, std::string("DIS")) == 0)
-    {
-      DIS = true;
-      nPassData = 0;
-      for (int i=0; i<fNData; i++)
-        if (fKin2[i] > minQ2) nPassData++;
-
-      if (nPassData != fNData)
-        std::cout << "DIS Data min Q^2 > "<< minQ2
-                  <<" Cut - "<<nPassData<<"/"<<fNData<<" data points remain"<< std::endl;
-    }
-
     // output datafile
     std::string datafileout = targetdir + "/DATA_" + fSetName + ".dat";
     g1.open(datafileout.c_str(), std::ios::out);
@@ -392,13 +377,11 @@ namespace NNPDF
 
     g1 << fSetName << "\t"
     << fNSys  << "\t"
-    << nPassData <<std::endl;
+    << fNData <<std::endl;
 
     int idat = 1;
     for (int i=0; i<fNData; i++)
     {
-      if (DIS && fKin2[i] <= minQ2) continue;
-
       g1.precision(15);
       g1 << std::scientific << std::setw(4) << idat
       << "\t" << fProc[i]
