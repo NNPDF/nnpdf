@@ -37,7 +37,7 @@ int main(int argc, char** argv)
 
   fstream f, g, o;
   string name;
-  const int nf = 7, N = 100;
+  const int nf = 7, N = 400;
   vector<int> arch = {2,5,3,1};
   vector<real> param;
   RandomGenerator::InitRNG(0,0);
@@ -56,10 +56,11 @@ int main(int argc, char** argv)
   real *out= new real[1];
   real *x = new real[N];
 
-  for (int i = 0; i < 50; i++)
-    x[i] = exp( log(1e-5) + i*(log(0.1)-log(1e-5))/50 );
-  for (int i = 0; i < 50; i++)
-    x[i+50] = 0.1 + i*(1.0-0.1)/50;
+  const real xmin = 1e-9;
+  for (int i = 0; i < N/2; i++)
+    x[i] = exp( log(xmin) + i*(log(0.1)-log(xmin))/(N/2) );
+  for (int i = 0; i < N/2; i++)
+    x[i+N/2] = 0.1 + i*(1.0-0.1)/(N/2);
 
   LHAPDF::PDF *pdf = LHAPDF::mkPDF(set, rep);
   real *evln = new real[14];
@@ -115,7 +116,8 @@ int main(int argc, char** argv)
                << n*pow(in[0],-a+1)*pow(1-in[0],b)*out[0] << "\t"
 	       << NNPDFval(in[0], param, a, b, n) << "\t"
                << evln[fl[i]] << "\t"
-               << NNPDFdev(in[0], param, a, b, n)
+   	       << NNPDFdev(in[0], param, a, b, n) << "\t"
+  	       << NNPDFdev2(in[0],param,a,b,n)
                << endl;
         }
 

@@ -725,7 +725,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
   real betaCV[nfl][NPOINTS];
   real betaErr[nfl][NPOINTS];
 
-  axlim[0] = 1E-6;
+  axlim[0] = 1E-5;
   axlim[1] = 1E-1;
 
   bxlim[0] = 0.6;
@@ -737,7 +737,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
   {
     for (size_t ix=0; ix<NPOINTS+1; ix++)
     {
-      if(ix == NPOINTS) {xa[ix]=1E-3; xb[ix]=0.65;}
+      if(ix == NPOINTS) {xa[ix]=1E-3; xb[ix]=0.75;}
       else
       {
         xa[ix] = exp (log(axlim[0]) + ix*delta);
@@ -778,21 +778,21 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
     }
     
     // Calculate new preprocessing range
-    if (j < 2) //Gluon, Singlet
-    {
-      fNewAlphaUp.push_back(min(real(2.0),alphaErr268Up[j][0]));
-      fNewAlphaDn.push_back(alphaErr268Dn[j][0]);
-    } 
-    else
-    {
-      fNewAlphaUp.push_back(min(real(2.0),max(alphaErr268Up[j][0],alphaErr268Up[j][NPOINTS])));
-      fNewAlphaDn.push_back(min(alphaErr268Dn[j][0],alphaErr268Dn[j][NPOINTS]));
-    }
+    //if (j < 2) //Gluon, Singlet
+    //{
+    fNewAlphaUp.push_back(min(real(2.0),alphaErr268Up[j][0]));
+    fNewAlphaDn.push_back(alphaErr268Dn[j][0]);
+    //}
+    //else
+    //{
+    //  fNewAlphaUp.push_back(min(real(2.0),max(alphaErr268Up[j][0],alphaErr268Up[j][NPOINTS])));
+    //  fNewAlphaDn.push_back(min(alphaErr268Dn[j][0],alphaErr268Dn[j][NPOINTS]));
+    //}
     
-    fNewBetaUp.push_back(max(betaErr268Up[j][NPOINTS-1],betaErr268Up[j][NPOINTS]));
-    fNewBetaDn.push_back(max(real(0.0),min(betaErr268Dn[j][NPOINTS-1],betaErr268Dn[j][NPOINTS])));
+    fNewBetaUp.push_back(betaErr268Up[j][NPOINTS]);
+    fNewBetaDn.push_back(max(real(0.0),betaErr268Dn[j][NPOINTS]));
   }
-  
+
   // New plot containers
   EffExpPlot* alpha = new EffExpPlot;
   EffExpPlot* beta = new EffExpPlot;
@@ -1800,7 +1800,7 @@ void PlotData::SaveAll()
     fileout2b<< fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << "betapreproc_"<<i << ".root";
     fBetaCanvas[i]->SaveAs(fileout2.str().c_str());
     fBetaCanvas[i]->SaveAs(fileout2b.str().c_str());
-        
+            
     stringstream fileout3(""), fileoutb3("");
     fileout3 << fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << "alphascatter_"<<i <<".eps";
     fileoutb3<< fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << "alphascatter_"<<i <<".root";
