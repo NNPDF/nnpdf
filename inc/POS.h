@@ -13,6 +13,7 @@
 // ********* Register *************
 
 void registerDYPos(vector<CommonData*>& list);
+void registerDISPos(vector<CommonData*>& list);
 
 // ********* Filters **************
 
@@ -20,6 +21,16 @@ class DYPosFilter: public CommonData
 {
 public: 
 	DYPosFilter(dataInfoRaw const& datInfo):
+  	CommonData(datInfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class DISPosFilter: public CommonData
+{
+public: 
+	DISPosFilter(dataInfoRaw const& datInfo):
   	CommonData(datInfo) { ReadData(); }
 
 private:

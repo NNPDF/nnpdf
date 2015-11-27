@@ -53,6 +53,21 @@ static const std::string DYProc[nDYsets] = {
   "DYP_CPS_CON_USB"
 };
 
+const int nDISsets = 4;
+static const std::string DISSets[nDISsets] = {
+  "POSF2DW",
+  "POSF2S",
+  "POSF2U",
+  "POSFLL"
+};
+
+static const std::string DISProc[nDISsets] = {
+  "DIS_F2d",
+  "DIS_F2S",
+  "DIS_F2U",
+  "DIS_FLL"
+};
+
 void registerDYPos(vector<CommonData*>& list)
 {
   const int nDYpoints = 20; // Number of points in a dataset
@@ -68,8 +83,25 @@ void registerDYPos(vector<CommonData*>& list)
 
     list.push_back(new DYPosFilter(posInfo));
   }
-
 }
+
+void registerDISPos(vector<CommonData*>& list)
+{
+  const int nDISpoints = 20; // Number of points in a dataset
+
+  for (int i=0; i<nDISsets; i++)
+  {
+    const dataInfoRaw posInfo = {
+      nDISpoints,  
+      0,       
+      DISSets[i],   
+      DISProc[i] 
+    };
+
+    list.push_back(new DISPosFilter(posInfo));
+  }
+}
+
 
 void DYPosFilter::ReadData()
 {
@@ -101,6 +133,32 @@ void DYPosFilter::ReadData()
     fData[i] = 0;
     fKin2[i] = qpos*qpos;
     fKin3[i] = sqrts;
+  }
+
+}
+
+void DISPosFilter::ReadData()
+{
+  const double xmin = 5E-7;
+  const double xmax = 0.9;
+  const double xch = 0.1;
+  
+  const int nxposlog = fNData/2.0;
+  const double step   = ( xmax - xch ) / ( fNData - nxposlog );
+
+  const double q2pos = 5;       // DIS positivity scale
+
+
+  for (int i=0; i< fNData; i++)
+  {
+    if (i < nxposlog)
+      fKin1[i] = xmin*pow( xch / xmin ,(double)i/(double)(nxposlog-1));
+    else 
+      fKin1[i] = xch + step * ( 1 + i - nxposlog);
+
+    fData[i] = 0;
+    fKin2[i] = q2pos;
+    fKin3[i] = 0;
   }
 
 }
