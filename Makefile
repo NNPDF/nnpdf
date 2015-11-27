@@ -86,38 +86,7 @@ buildmaster_obj = buildmaster.o \
 				  CMSTOPDIFF.o \
                     POS.o \
 
-buildmaster_inc = buildmaster.h \
-                  buildmaster_utils.h \
-		  						common.h \
-                  NMC.h \
-                  H1F2C.h \
-                  SLAC.h \
-                  BCDMS.h \
-                  ATLAS.h \
-                  ATLAS2011JETS.h \
-                  ATLASLOMASSDY11.h \
-		  						CMS.h \
-                  CDF.h \
-                  LHCb.h  \
-                  D0.h  \
-                  FTDY.h  \
-                  ZEUSF2C.h \
-                  CHORUS.h  \
-                  NUTEV.h \
-                  HERA1-C.h \
-                  HERA2-C.h \
-		  						H1HERA2.h \
-		  						HERACOMB.h\
-                  FLH1.h  \
-                  ZEUS2.h \
-                  TOP.h \
-		  						CMSwc.h \
-		ATLASTOPDIFF.h \
-	       CMSTOPDIFF.h \
-	       POS.h
-
 buildmaster_src = $(addprefix $(OBJECTDIR)/, $(buildmaster_obj))
-buildmaster_hea = $(addprefix $(INCLUDEDIR)/, $(buildmaster_inc))
 
 $(DESTDIR)/buildmaster: $(buildmaster_src)
 	$(CC) $(CFLAGS) $(NNPDFMACROS) $(NNPDFINCLUDE) $^ $(NNPDFLIBS) \
