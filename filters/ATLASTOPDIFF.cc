@@ -63,10 +63,10 @@ void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
       double pt_max=0.0;
       lstream >> pt_max;
 
-      fKin1[i] = 0.0;
-      fKin2[i] = 0.5*(pt_min + pt_max); // <pt_top> as characteristic kin variable
-      fKin3[i] = 0.0;
-      
+      fKin1[i] = 0.5*(pt_min + pt_max); // <pt_top> as characteristic kin variable
+      fKin2[i] = Mt;
+      fKin3[i] = 8000;
+
       lstream >> fData[i]; // Central values
       lstream >> fStat[i]; // Total statistical+systematic error (in percent)
       
@@ -124,10 +124,10 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
       double yt_max=0.0;
       lstream >> yt_max;
 
-      fKin1[i] = 0.0;
-      fKin2[i] = 0.5*(yt_min + yt_max); // <y_top> as characteristic kin variable
-      fKin3[i] = 0.0;
-      
+      fKin1[i] = 0.5*(yt_min + yt_max); // <y_top> as characteristic kin variable
+      fKin2[i] = Mt;
+      fKin3[i] = 8000;
+
       lstream >> fData[i]; // Central values
       lstream >> fStat[i]; // Total statistical+systematic error (in percent)
       
@@ -182,10 +182,10 @@ void  ATLASTOPDIFF8TEVTTPTFilter::ReadData()
       double ptt_max=0.0;
       lstream >> ptt_max;
 
-      fKin1[i] = 0.0;
-      fKin2[i] = 0.5*(ptt_min + ptt_max); // <ptt_top> as characteristic kin variable
-      fKin3[i] = 0.0;
-      
+      fKin1[i] = 0.5*(ptt_min + ptt_max); // <ptt_top> as characteristic kin variable
+      fKin2[i] = Mt;
+      fKin3[i] = 8000;
+
       lstream >> fData[i]; // Central values
       lstream >> fStat[i]; // Total statistical+systematic error (in percent)
       
@@ -240,10 +240,10 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
       double y_tt_max=0.0;
       lstream >> y_tt_max;
 
-      fKin1[i] = 0.0;
-      fKin2[i] = 0.5*(y_tt_min + y_tt_max); // <y_tt> as characteristic kin variable
-      fKin3[i] = 0.0;
-      
+      fKin1[i] = 0.5*(y_tt_min + y_tt_max); // <y_tt> as characteristic kin variable
+      fKin2[i] = Mt;
+      fKin3[i] = 8000;
+
       lstream >> fData[i]; // Central values
       lstream >> fStat[i]; // Total statistical+systematic error (in percent)
       
@@ -299,10 +299,10 @@ void  ATLASTOPDIFF8TEVTTMFilter::ReadData()
       double mtt_max=0.0;
       lstream >> mtt_max;
 
-      fKin1[i] = 0.0;
-      fKin2[i] = 0.5*(mtt_min + mtt_max); // <mtt_top> as characteristic kin variable
-      fKin3[i] = 0.0;
-      
+      fKin1[i] = 0.5*(mtt_min + mtt_max); // <mtt_top> as characteristic kin variable
+      fKin2[i] = Mt;
+      fKin3[i] = 8000;
+
       lstream >> fData[i]; // Central values
       lstream >> fStat[i]; // Total statistical+systematic error (in percent)
       

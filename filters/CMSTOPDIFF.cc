@@ -66,9 +66,9 @@ void  CMSTOPDIFF8TEVTPTFilter::ReadData()
       double pt_top=0.0;
       lstream >> pt_top;
 
-      fKin1[i] = 0.0;
-      fKin2[i] = pt_top; // <pt_top> as characteristic kin variable
-      fKin3[i] = 0.0;
+      fKin1[i] = pt_top; // <pt_top> as characteristic kin variable
+      fKin2[i] = Mt;
+      fKin3[i] = 8000;
       
       lstream >> fData[i]; // Central values
       double stat=0;
@@ -132,10 +132,10 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
       double y_top=0.0;
       lstream >> y_top;
 
-      fKin1[i] = 0.0;
-      fKin2[i] = y_top; // <y_top> as characteristic kin variable
-      fKin3[i] = 0.0;
-      
+      fKin1[i] = y_top; // <y_top> as characteristic kin variable
+      fKin2[i] = Mt;
+      fKin3[i] = 8000;   
+
       lstream >> fData[i]; // Central values
       double stat=0;
       double sys=0;
@@ -198,10 +198,10 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
       double m_tt=0.0;
       lstream >> m_tt;
 
-      fKin1[i] = 0.0;
-      fKin2[i] = m_tt; // <m_tt> as characteristic kin variable
-      fKin3[i] = 0.0;
-      
+      fKin1[i] = m_tt; // <m_tt> as characteristic kin variable
+      fKin2[i] = Mt;
+      fKin3[i] = 8000;
+
       lstream >> fData[i]; // Central values
       double stat=0;
       double sys=0;
@@ -262,10 +262,10 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
       double y_tt=0.0;
       lstream >> y_tt;
 
-      fKin1[i] = 0.0;
-      fKin2[i] = y_tt; // <y_tt> as characteristic kin variable
-      fKin3[i] = 0.0;
-      
+      fKin1[i] = y_tt; // <y_tt> as characteristic kin variable
+      fKin2[i] = Mt;
+      fKin3[i] = 8000;   
+
       lstream >> fData[i]; // Central values
       double stat=0;
       double sys=0;
@@ -326,10 +326,10 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
       double pt_tt=0.0;
       lstream >> pt_tt;
 
-      fKin1[i] = 0.0;
-      fKin2[i] = pt_tt; // <pt_tt> as characteristic kin variable
-      fKin3[i] = 0.0;
-      
+      fKin1[i] = pt_tt; // <pt_tt> as characteristic kin variable
+      fKin2[i] = Mt;
+      fKin3[i] = 8000;    
+
       lstream >> fData[i]; // Central values
       double stat=0;
       double sys=0;
