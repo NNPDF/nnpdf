@@ -112,9 +112,9 @@ void DYPosFilter::ReadData()
   const int nxposlog = fNData/2.0;
   const double step   = ( xmax - xch ) / ( fNData - nxposlog );
 
-  const double qpos = 10;       // DY positivity invariant mass
+  const double q2pos = 100;  // DY positivity imposed at 100GeV 
   const double tau = xmin * xmax;
-  const double sqrts = sqrt(qpos*qpos/tau);
+  const double sqrts = sqrt(q2pos/tau);
 
 
   for (int i=0; i< fNData; i++)
@@ -131,7 +131,7 @@ void DYPosFilter::ReadData()
     }
 
     fData[i] = 0;
-    fKin2[i] = qpos*qpos;
+    fKin2[i] = q2pos;
     fKin3[i] = sqrts;
   }
 
@@ -139,15 +139,14 @@ void DYPosFilter::ReadData()
 
 void DISPosFilter::ReadData()
 {
+  const double q2pos = 5;
+
   const double xmin = 5E-7;
   const double xmax = 0.9;
   const double xch = 0.1;
   
   const int nxposlog = fNData/2.0;
-  const double step   = ( xmax - xch ) / ( fNData - nxposlog );
-
-  const double q2pos = 5;       // DIS positivity scale
-
+  const double step  = ( xmax - xch ) / ( fNData - nxposlog );
 
   for (int i=0; i< fNData; i++)
   {
