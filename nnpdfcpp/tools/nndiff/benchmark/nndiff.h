@@ -8,3 +8,6 @@ real NNPDFval(real const& x_00, vector<real> const& params,
 
 real NNPDFdev(real const& x_00, vector<real> const& params, 
 	      real const& a, real const& b, real const& n);
+
+real NNPDFdev2(real const& x_00, vector<real> const& params,
+	       real const& a, real const& b, real const& n);
