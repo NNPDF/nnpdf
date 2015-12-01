@@ -123,8 +123,8 @@ int main(int argc, char** argv)
 	    << evln[fl[i]] << "\t"
 	    << NNPDFdev(in[0], param, a, b, n) << "\t"
 	    << NNPDFdev2(in[0],param,a,b,n) << "\t"
-	    << alphaeff(in[0],param,a,b,n) << "\t"
-	    << betaeff(in[0],param,a,b,n)
+	    << alphaeff(in[0],param,a) << "\t"
+	    << betaeff(in[0],param,b)
 	    << endl;
         }
 
