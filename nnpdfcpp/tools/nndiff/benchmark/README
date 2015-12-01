@@ -3,13 +3,17 @@ Installation:
 	make
 
 Running:
-	
+
+1. place the results/<fitname>/nnfit folder of your fit here (download from fitmanager)
+2. rename this folder with the fit name
+3. run this command:
+
 	./benchmark NNPDF30_nlo_as_0118 <replica number>
 
 Output:
 
 	results/*.dat
-	files with x points, NNPDF, NNPDFval, LHAPDF, NNPDFdev
+	files with x points, NNPDF, NNPDFval, LHAPDF, NNPDFdev, NNPDFdev2, alphaeff, betaeff
 	use results/analysis.ipynb to plot results
 
   
