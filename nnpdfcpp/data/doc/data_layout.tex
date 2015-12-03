@@ -90,6 +90,8 @@ Date & Version & Major/Minor & Author & Comments\\
 \hline
 19/10/15 & 1.2.0 & Major & nh & New FK Header format. \\
 \hline
+3/12/15 & 1.2.1 & Minor & nh & Commondata systematics format emphasis. \\
+\hline
 \end{tabular}
 \end{center}
 \label{tab:revsum}
@@ -172,7 +174,7 @@ For example, in the case of a DIS datapoint from the BCDMSD \emph{Dataset}:
 \begin{quotation}\noindent
 1    DIS\_F2D 7.0e-02   8.75e+00   5.666e-01   3.6575e-01   6.43e-03 $[..$ systematics $..]$ 
 \end{quotation}
-In these lines the systematic uncertainties are laid out as so. For each uncertainty, additive and multiplicative versions are given. The additive uncertainty is given by absolute value, and the multiplicative as a percentage of the data value. The systematics string is formed by the sequence of $N_{\text{sys}}$ pairs of systematic uncertainties:
+In these lines the systematic uncertainties are laid out as so. For each uncertainty, additive and multiplicative versions are given. The additive uncertainty is given by absolute value, and the multiplicative as a percentage of the data value (that is, relative error multiplied by 100). The systematics string is formed by the sequence of $N_{\text{sys}}$ pairs of systematic uncertainties:
 %%
 \begin{quotation}\noindent
 $[..$ systematics $..] =  \sigma^{\mathrm{add}}_0 \quad  \sigma^{\mathrm{mul}}_0\quad \sigma^{\mathrm{add}}_1 \quad \sigma^{\mathrm{mul}}_1 \quad....\quad \sigma^{\mathrm{add}}_n  \quad\sigma^{\mathrm{mul}}_n$
