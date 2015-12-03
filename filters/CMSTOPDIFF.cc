@@ -78,9 +78,7 @@ void  CMSTOPDIFF8TEVTPTFilter::ReadData()
 
       fStat[i]=pow(pow(stat,2.0) + pow(sys,2.0), 0.5); // 
       // For the time being add in quadrature statistical and systematic uncertainties
-      
-      //cout<<i<<" "<<fKin2[i]<<" "<<fData[i]<<" "<<1e2*fStat[i]/fData[i]<<endl;
-      
+          
     }
   
   f1.close();
@@ -145,8 +143,6 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
       fStat[i]=pow(pow(stat,2.0) + pow(sys,2.0), 0.5); // 
       // For the time being add in quadrature statistical and systematic uncertainties
       
-      // cout<<i<<" "<<fKin2[i]<<" "<<fData[i]<<" "<<1e2*fStat[i]/fData[i]<<endl;
-      
     }
   
   f1.close();
@@ -210,9 +206,7 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
 
       fStat[i]=pow(pow(stat,2.0) + pow(sys,2.0), 0.5); // 
       // For the time being add in quadrature statistical and systematic uncertainties
-      
-      // cout<<i<<" "<<fKin2[i]<<" "<<fData[i]<<" "<<1e2*fStat[i]/fData[i]<<endl;
-      
+            
     }
   
   f1.close();
@@ -274,9 +268,6 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
 
       fStat[i]=pow(pow(stat,2.0) + pow(sys,2.0), 0.5); // 
       // For the time being add in quadrature statistical and systematic uncertainties
-      
-      // cout<<i<<" "<<fKin2[i]<<" "<<fData[i]<<" "<<1e2*fStat[i]/fData[i]<<endl;
-      
     }
   
   f1.close();
@@ -338,8 +329,6 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
 
       fStat[i]=pow(pow(stat,2.0) + pow(sys,2.0), 0.5); // 
       // For the time being add in quadrature statistical and systematic uncertainties
-      
-      // cout<<i<<" "<<fKin2[i]<<" "<<fData[i]<<" "<<1e2*fStat[i]/fData[i]<<endl;
       
     }
   

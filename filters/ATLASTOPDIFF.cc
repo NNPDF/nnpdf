@@ -69,6 +69,9 @@ void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
 
       lstream >> fData[i]; // Central values
       lstream >> fStat[i]; // Total statistical+systematic error (in percent)
+      // Convert from absolute to percentage, as required by CommonData
+      fStat[i] = fData[i]*fStat[i]/1e2;
+
       
     }
   
@@ -128,9 +131,13 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
       fKin2[i] = Mt;
       fKin3[i] = 8000;
 
+      cout<<fKin1[i]<<endl;
+
       lstream >> fData[i]; // Central values
       lstream >> fStat[i]; // Total statistical+systematic error (in percent)
-      
+      // Convert from absolute to percentage, as required by CommonData
+      fStat[i] = fData[i]*fStat[i]/1e2;
+            
     }
   
   f1.close();
@@ -188,6 +195,8 @@ void  ATLASTOPDIFF8TEVTTPTFilter::ReadData()
 
       lstream >> fData[i]; // Central values
       lstream >> fStat[i]; // Total statistical+systematic error (in percent)
+      // Convert from absolute to percentage, as required by CommonData
+      fStat[i] = fData[i]*fStat[i]/1e2;
       
     }
   
@@ -246,6 +255,8 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
 
       lstream >> fData[i]; // Central values
       lstream >> fStat[i]; // Total statistical+systematic error (in percent)
+      // Convert from absolute to percentage, as required by CommonData
+      fStat[i] = fData[i]*fStat[i]/1e2;
       
     }
   
@@ -305,6 +316,8 @@ void  ATLASTOPDIFF8TEVTTMFilter::ReadData()
 
       lstream >> fData[i]; // Central values
       lstream >> fStat[i]; // Total statistical+systematic error (in percent)
+      // Convert from absolute to percentage, as required by CommonData
+      fStat[i] = fData[i]*fStat[i]/1e2;
       
     }
     
