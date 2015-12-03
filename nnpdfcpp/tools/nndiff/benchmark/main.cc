@@ -35,9 +35,14 @@ int main(int argc, char** argv)
       exit(-1);
     }
 
+  ////// Modify these entries
+  const int nf = 7, N = 100;
+  const real xmin = 1e-5;
+  const real xmid = 0.1;
+  const real xmax = 1.0;
+
   fstream f, g, o;
   string name;
-  const int nf = 7, N = 100;
   vector<int> arch = {2,5,3,1};
   vector<real> param;
   RandomGenerator::InitRNG(0,0);
@@ -56,10 +61,11 @@ int main(int argc, char** argv)
   real *out= new real[1];
   real *x = new real[N];
 
-  for (int i = 0; i < 50; i++)
-    x[i] = exp( log(1e-5) + i*(log(0.1)-log(1e-5))/50 );
-  for (int i = 0; i < 50; i++)
-    x[i+50] = 0.1 + i*(1.0-0.1)/50;
+  for (int i = 0; i < N/2; i++) 
+    {
+      x[i] = exp( log(xmin) + i*(log(xmid)-log(xmin))/(N/2) );
+      x[i+N/2] = 0.1 + i*(xmax-xmid)/(N/2);
+    }
 
   LHAPDF::PDF *pdf = LHAPDF::mkPDF(set, rep);
   real *evln = new real[14];
@@ -112,11 +118,14 @@ int main(int argc, char** argv)
 
           mlp->Compute(in,out);
           o << in[0] << "\t"
-               << n*pow(in[0],-a+1)*pow(1-in[0],b)*out[0] << "\t"
-	       << NNPDFval(in[0], param, a, b, n) << "\t"
-               << evln[fl[i]] << "\t"
-               << NNPDFdev(in[0], param, a, b, n)
-               << endl;
+	    << n*pow(in[0],-a+1)*pow(1-in[0],b)*out[0] << "\t"
+	    << NNPDFval(in[0], param, a, b, n) << "\t"
+	    << evln[fl[i]] << "\t"
+	    << NNPDFdev(in[0], param, a, b, n) << "\t"
+	    << NNPDFdev2(in[0],param,a,b,n) << "\t"
+	    << alphaeff(in[0],param,a) << "\t"
+	    << betaeff(in[0],param,b)
+	    << endl;
         }
 
       o.close();
