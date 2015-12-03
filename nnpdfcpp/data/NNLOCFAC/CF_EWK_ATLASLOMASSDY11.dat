@@ -1,17 +1,17 @@
 *******************************************************************************************
 SetName:     ATLASLOMASSDY11
 Author:      Alberto Guffanti <alberto.guffanti@unito.it>
-Date:        4/11/2015
+Date:        24/11/2015
 CodesUsed:   FEWZ 3.1b2 
-TheoryInput: NLO QCD, EW corrections flag = 7: ISR, ISRxFSR, EW
-PDFset:      NNPDF30_nlo_as_0118 (MSTW2008nlo68cl)
+TheoryInput: NLO QCD, EW corrections flag = 1: ISR, ISRxFSR, EW
+PDFset:      NNPDF30_nlo_as_0118
 Warnings:    No photon initiated processes, no FSR - data are corrected
 ********************************************************************************************
-1.007   (1.014)
-1.019   (1.036)
-1.028   (1.040)
-1.033   (1.048)
-1.038   (1.050)
-1.039   (1.046)
-1.031   (1.044)   
-1.028   (1.037)
+1.0138
+1.0289
+1.0358
+1.0394
+1.0368
+1.0424
+1.0395   
+1.0319
