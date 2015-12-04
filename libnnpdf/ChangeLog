@@ -2,6 +2,8 @@ libnnpdf 1.0.0 - 08/09/15
 --------------------
 * First release of NNPDF core utilities.
 
-libnnpdf 1.0.1
+libnnpdf 1.1.0
 Fixed bug in closure test fake data generation
 Moved to more flexible header format for FKtables
+Removed min Q^2 cut in CommonData
+Added FKconvolute test program for FK tables
