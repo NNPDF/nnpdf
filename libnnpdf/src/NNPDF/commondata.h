@@ -17,6 +17,7 @@
 #include <cmath>
 #include <vector>
 #include <cstdlib>
+#include <stdexcept>
 
 
 /** @defgroup commondata CommonData
@@ -183,9 +184,7 @@ namespace NNPDF
           break;
 
         default:
-          std::cerr << "CommonData::GetKinematics Error: No such kinematical variable: "<<ikin<<std::endl;
-          exit(-1);
-          break;
+          throw std::out_of_range("CommonData::GetKinematics: Kinematical variable out of range");
       }
     };
 

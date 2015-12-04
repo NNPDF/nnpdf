@@ -36,10 +36,7 @@ namespace NNPDF
     datafile.open(targetfile.c_str());
 
     if (!datafile.good())
-    {
-      std::cerr << "genInfoStruct Error: Cannot read commondata file from: "<<std::endl<<targetfile<<std::endl;
-      exit(-1);
-    }
+      throw std::invalid_argument("genInfoStruct: Cannot read commondata file from: " + targetfile);
 
     // Read metadata
     std::string SetName;
@@ -77,10 +74,7 @@ namespace NNPDF
     if (str.compare("ADD") == 0) return ADD;
     else if (str.compare("MULT") == 0) return MULT;
     else
-    {
-      std::cerr << "parseSYS Error: Unrecognised systematic:" << str << std::endl;
-      exit(-1);
-    }
+      throw std::invalid_argument("parseSYS: Unrecognised systematic: " + str);
 
     return MULT;
   }
@@ -260,10 +254,7 @@ namespace NNPDF
     datafile.open(targetfile.c_str());
 
     if (!datafile.good())
-    {
-      std::cerr << "CommonData::ReadData Error - file "<<targetfile<<" is bad! "<<std::endl;
-      exit(-1);
-    }
+      throw std::invalid_argument("CommonData::ReadData: file " + targetfile + " is bad!");
 
     std::string setname, proc;
     int nsys, ndata;
@@ -275,22 +266,13 @@ namespace NNPDF
 
     // Verification
     if (setname != fSetName)
-    {
-      std::cerr << "CommonData::ReadData Error: Setname Mismatch."<<std::endl;
-      exit(-1);
-    }
+      throw std::runtime_error("CommonData::ReadData: Setname Mismatch.");
 
     if (nsys != fNSys)
-    {
-      std::cerr << "CommonData::ReadData Error: N_Uncertainty Mismatch"<<std::endl;
-      exit(-1);
-    }
-
+      throw std::runtime_error("CommonData::ReadData: N_Uncertainty Mismatch.");
+ 
     if (ndata != fNData)
-    {
-      std::cerr << "CommonData::ReadData Error: NData Mismatch"<<std::endl;
-      exit(-1);
-    }
+      throw std::runtime_error("CommonData::ReadData: NData Mismatch.");
 
     // Read data
     for (int i=0; i<fNData; i++)
@@ -306,10 +288,7 @@ namespace NNPDF
       >> fStat[i];
 
       if (idat != i+1)
-      {
-        std::cerr << "CommonData::ReadData Error: Datapoint Mismatch: "<<idat<<" vs "<< i<<std::endl;
-        exit(-1);
-      }
+        throw std::runtime_error("CommonData::ReadData: Datapoint Mismatch.");
 
       // Read systematics
       for (int l = 0; l < fNSys; l++)
@@ -324,18 +303,13 @@ namespace NNPDF
     std::ifstream h;
     h.open(systypefilename.c_str());
 
-    if (h.fail()) {
-      std::cerr << "Error opening systype file " << systypefilename << std::endl;
-      exit(-1);
-    }
+    if (h.fail())
+      throw std::runtime_error("CommonData::ReadData: Error opening systype file "+systypefilename);
 
     // Verify number of systematics in SYSTYPE file adds up
     h >> nsys;
     if (nsys != fNSys)
-    {
-      std::cerr << "DataSet::ReadData Error: Number of systematics for " << fSetName << " doesn't match" << std::endl;
-      exit(-1);
-    }
+      throw std::runtime_error("CommonData::ReadData: Number of systematics for " + fSetName + " doesn't match");
 
     // Read types and names for systematics
     for (int l = 0; l < fNSys; l++)
@@ -413,10 +387,8 @@ namespace NNPDF
     std::ofstream h;
     h.open(sysfileout.str().c_str());
 
-    if (h.fail()) {
-      std::cerr << "Error writing systype file " << sysfileout.str() << std::endl;
-      exit(-1);
-    }
+    if (h.fail())
+      throw std::runtime_error("CommonData::ReadData: Error writing systype file "+sysfileout.str());
 
     if (Verbose)
       std::cout << "-- Exporting "<<fSetName<<" SYS to "<< sysfileout.str()<<std::endl;
