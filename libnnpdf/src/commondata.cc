@@ -252,6 +252,7 @@ namespace NNPDF
       "DIS",
       "DYP",
       "JET",
+      "PHT",
       "EWK_RAP",
       "EWK_PT",
       "EWK_MLL",
