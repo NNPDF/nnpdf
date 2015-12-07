@@ -114,6 +114,8 @@ namespace NNPDF
     CommonData();                             //!< Disable default constructor
     CommonData& operator=(const CommonData&); //!< Disable copy-assignment
 
+    static void VerifyProc(std::string const& proc); //!< Verify process types
+
   protected:
     CommonData(dataInfo const&);         //!< Constructor from file 
     CommonData(dataInfoRaw const&);      //!< Constructor for empty CommonData

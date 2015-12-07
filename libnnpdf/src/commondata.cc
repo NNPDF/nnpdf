@@ -140,6 +140,8 @@ namespace NNPDF
               <<" nSys: "<<fNSys
               <<std::endl;
 
+    VerifyProc(info.ProcType);
+
     // Initialise arrays
     for (int i=0; i<fNData; i++)
     {
@@ -180,6 +182,7 @@ namespace NNPDF
       fKin3[i] = set.fKin3[i];
 
       fProc[i] = set.fProc[i];
+      VerifyProc(fProc[i]);
 
       for (int l = 0; l < fNSys; l++)
         fSys[i][l] = set.fSys[i][l];
@@ -214,6 +217,7 @@ namespace NNPDF
       fKin3[i] = set.fKin3[mask[i]];
 
       fProc[i] = set.fProc[mask[i]];
+      VerifyProc(fProc[i]);
 
       for (int l = 0; l < fNSys; l++)
         fSys[i][l] = set.fSys[mask[i]][l];
@@ -237,6 +241,33 @@ namespace NNPDF
     delete[] fKin2;
     delete[] fKin3;
     delete[] fProc;
+
+  }
+
+  // Verify that the process type is one of allowed processes
+  void CommonData::VerifyProc(std::string const& proc)
+  {
+    const int nProc = 11;
+    const std::string validProc[nProc] = {
+      "DIS",
+      "DYP",
+      "JET",
+      "EWK_RAP",
+      "EWK_PT",
+      "EWK_MLL",
+      "HQP_YQQ",
+      "HQP_MQQ",
+      "HQP_PQQ",
+      "HQP_YQ",
+      "HQP_PQ"
+    }; 
+
+    bool foundString = false;
+    for (int i=0; i<nProc; i++)
+      foundString = foundString || (proc.find(validProc[i]) == 0);
+
+    if (!foundString)
+      throw std::invalid_argument("CommonData::VerifyProc: process " + proc + " is unsupported.");
 
   }
 
@@ -286,6 +317,8 @@ namespace NNPDF
       >> fKin3[i]
       >> fData[i]
       >> fStat[i];
+
+      VerifyProc(fProc[i]);
 
       if (idat != i+1)
         throw std::runtime_error("CommonData::ReadData: Datapoint Mismatch.");
