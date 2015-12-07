@@ -92,7 +92,7 @@ Date & Version & Major/Minor & Author & Comments\\
 \hline
 3/12/15 & 1.2.1 & Minor & nh & Commondata systematics format emphasis. \\
 \hline
-4/12/15 & 1.2.2 & Minor & nh & Commondata process types modified \\
+7/12/15 & 1.2.2 & Minor & nh/ag & Commondata process types modified \\
 \hline
 \end{tabular}
 \end{center}
@@ -143,10 +143,14 @@ Each datapoint has an associated \emph{process type} string. This can be specifi
 \item \textbf{DIS} - Deep inelastic scattering measurements: $(x,Q^2,y)$
 \item \textbf{DYP} - Fixed-target Drell-Yan measurements: $(y,M^2,\sqrt{s})$
 \item \textbf{JET} - Jet production: $(\eta,p_T^2,\sqrt{s})$
+\item \textbf{PHT} - Photon production: $(\eta_\gamma,E_{T,\gamma}^2,\sqrt{s})$
 \item \textbf{INC} - A total inclusive cross-section: $(0,\mu^2,\sqrt{s})$
 \item \textbf{EWK\_RAP} - Collider electroweak rapidity distribution: $(\eta/y,M^2,\sqrt{s})$
 \item \textbf{EWK\_PT} - Collider electroweak $p_T$ distribution: $(p_T,M^2,\sqrt{s})$
 \item \textbf{EWK\_MLL} - Collider electroweak lepton-pair mass distribution: $(M_{ll},M_{ll}^2,\sqrt{s})$
+\item \textbf{EWJ\_(J)RAP} - Collider electroweak +jet boson(jet) rapidity distribution: $(\eta/y,M^2,\sqrt{s})$
+\item \textbf{EWJ\_(J)PT} - Collider electroweak + jet boson(jet) $p_T$ distribution: $(p_T,M^2,\sqrt{s})$
+\item \textbf{EWJ\_MLL} - Collider electroweak+jet lepton-pair mass distribution: $(M_{ll},M_{ll}^2,\sqrt{s})$
 \item \textbf{HQP\_YQQ} - Heavy diquark system rapidity $(y^{QQ},\mu^2,\sqrt{s})$
 \item \textbf{HQP\_MQQ} - Heavy diquark system mass $(M^{QQ},\mu^2,\sqrt{s})$
 \item \textbf{HQP\_PTQQ} - Heavy diquark system $p_T$ $(p_T^{QQ},\mu^2,\sqrt{s})$
@@ -154,7 +158,7 @@ Each datapoint has an associated \emph{process type} string. This can be specifi
 \item \textbf{HQP\_PTQ} - Heavy quark $p_T$ $(p_T^Q,\mu^2,\sqrt{s})$
 \end{itemize}
 
-As examples of \emph{process type} strings, consider \textbf{EWK\_RAP\_WASYM} for a collider $W$ boson asymmetry measurement, and \textbf{DIS\_F2P} for the $F_2^p$ structure function in DIS. The user is free to choose something identifying for the second segment of the process type, the important feature being the basic process type. However, users are encouraged to only use this freedom when absolutely necessary (such as when used in combination with APFEL).
+As examples of \emph{process type} strings, consider \textbf{EWK\_RAP} for a collider $W$ boson asymmetry measurement binned in rapidity, and \textbf{DIS\_F2P} for the $F_2^p$ structure function in DIS. The user is free to choose something identifying for the second segment of the process type, the important feature being the basic process type. However, users are encouraged to only use this freedom when absolutely necessary (such as when used in combination with APFEL).
 
 \subsubsection*{Notes for the future}
 In the future it would be nice to have a more flexible treatment of the kinematic variables, both in their number and labelling.
