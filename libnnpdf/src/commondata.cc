@@ -247,20 +247,24 @@ namespace NNPDF
   // Verify that the process type is one of allowed processes
   void CommonData::VerifyProc(std::string const& proc)
   {
-    const int nProc = 11;
+    const int nProc = 16;
     const std::string validProc[nProc] = {
       "DIS",
       "DYP",
       "JET",
       "PHT",
+      "INC",
       "EWK_RAP",
       "EWK_PT",
       "EWK_MLL",
+      "EWJ_RAP",
+      "EWJ_PT",
+      "EWJ_MLL",
       "HQP_YQQ",
       "HQP_MQQ",
-      "HQP_PQQ",
+      "HQP_PTQQ",
       "HQP_YQ",
-      "HQP_PQ"
+      "HQP_PTQ"
     }; 
 
     bool foundString = false;
