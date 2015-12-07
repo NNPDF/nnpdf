@@ -14,14 +14,14 @@ static const dataInfoRaw ATLASLOMASSDY11info = {
   8,                     //nData
   15,                    //nSys (13 corr. + 1 uncorr. + lumi)
   "ATLASLOMASSDY11",     //SetName
-  "DYP_ZLL_LHC7"         //ProcType
+  "EWK_MLL_LHC7"         //ProcType
 };
 
 static const dataInfoRaw ATLASLOMASSDY11EXTinfo = {
   6,                     //nData
   8,                    //nSys (5 corr. + 2 uncorr. + lumi)
   "ATLASLOMASSDY11EXT",  //SetName
-  "DYP_ZLL_LHC7"         //ProcType
+  "EWK_MLL_LHC7"         //ProcType
 };
 
 // ********* Filters ************

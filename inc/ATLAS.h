@@ -51,12 +51,12 @@ static const dataInfoRaw ATLASZHIGHMASS49FBinfo = {
   13,                   //nData
   11,                  //nSys (8 corr + 2 uncorr + lumi)
   "ATLASZHIGHMASS49FB", //SetName
-  "DYP_ZLL_LHC7"        //ProcType
+  "EWK_MLL_LHC7"        //ProcType
 };
 
 static const dataInfoRaw ATLASZPT47FBinfo = {
   26,                   //nData
-  27,                    //nSys (26 sys + 26 stat) 
+  27,                    //nSys (26 sys + 26 stat)
   "ATLASZPT47FB",       //SetName
   "EWK_ZPT_LHC7"        //ProcType
 };

@@ -30,7 +30,7 @@ static const dataInfoRaw CMSDY2D11info = {
   132,      //nData
   132,        //nSys
   "CMSDY2D11",    //SetName
-  "DYP_DY2DABS_CMS11" //ProcType
+  "EWK_DY2DABS_CMS11" //ProcType
 };
 
 static const dataInfoRaw CMSJETS11info = {
