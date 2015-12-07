@@ -13,31 +13,31 @@
 // ********** D0 ***************
 
 static const dataInfoRaw D0ZRAPinfo = {
-  28,                 //nData
-  1,                  //nSys
-  "D0ZRAP",           //SetName
-  "EWK_ZRAP"          //ProcType
+  28,               //nData
+  1,                //nSys
+  "D0ZRAP",         //SetName
+  "EWK_RAP"         //ProcType
 };
 
 static const dataInfoRaw D0R2CONinfo = {
-  110,                 //nData
-  24,                  //nSys
-  "D0R2CON",           //SetName
-  "JET_D0R2CON"        //ProcType
+  110,          //nData
+  24,           //nSys
+  "D0R2CON",    //SetName
+  "JET"         //ProcType
 };
 
 static const dataInfoRaw D0WMASYinfo = {
-  10,                 //nData
-  7,                  //nSys
-  "D0WMASY",           //SetName
-  "EWK_WASYM_M"        //ProcType
+  10,           //nData
+  7,            //nSys
+  "D0WMASY",    //SetName
+  "EWK_RAP"     //ProcType
 };
 
 static const dataInfoRaw D0WEASYinfo = {
-  13,                 //nData
-  9,                  //nSys
-  "D0WEASY",           //SetName
-  "EWK_WASYM_E"        //ProcType
+  13,           //nData
+  9,            //nSys
+  "D0WEASY",    //SetName
+  "EWK_RAP"     //ProcType
 };
 
 // ********* Filters **************
@@ -74,4 +74,3 @@ class D0WEASYFilter: public CommonData
 private:
   void ReadData();
 };
-

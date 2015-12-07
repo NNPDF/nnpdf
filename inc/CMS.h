@@ -13,31 +13,31 @@
 // ********** CMS ***************
 
 static const dataInfoRaw CMSWEASY840PBinfo = {
-  11,      //nData
-  11,        //nSys
-  "CMSWEASY840PB",    //SetName
-  "EWK_WASYM_E" //ProcType
+  11,               //nData
+  11,               //nSys
+  "CMSWEASY840PB",  //SetName
+  "EWK_RAP"         //ProcType
 };
 
 static const dataInfoRaw CMSWMASY47FBinfo = {
-  11,      //nData
-  11,        //nSys
-  "CMSWMASY47FB",    //SetName
-  "EWK_WASYM_M" //ProcType
+  11,              //nData
+  11,              //nSys
+  "CMSWMASY47FB",  //SetName
+  "EWK_RAP"        //ProcType
 };
 
 static const dataInfoRaw CMSDY2D11info = {
-  132,      //nData
-  132,        //nSys
-  "CMSDY2D11",    //SetName
-  "EWK_DY2DABS_CMS11" //ProcType
+  132,         //nData
+  132,         //nSys
+  "CMSDY2D11", //SetName
+  "EWK_RAP"    //ProcType
 };
 
 static const dataInfoRaw CMSJETS11info = {
-  133,  //nData
-  24,   //nSys
+  133,         //nData
+  24,          //nSys
   "CMSJETS11", //SetName
-  "JET_CMSJ11" //ProcType
+  "JET"        //ProcType
 };
 // ********* Filters **************
 

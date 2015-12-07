@@ -13,24 +13,24 @@
 // ********** CDF ***************
 
 static const dataInfoRaw CDFWASYMinfo = {
-  13,                 //nData
-  7,                  //nSys
-  "CDFWASYM",   //SetName
-  "EWK_WASYM"   //ProcType
+  13,          //nData
+  7,           //nSys
+  "CDFWASYM",  //SetName
+  "EWK_RAP"    //ProcType
 };
 
 static const dataInfoRaw CDFZRAPinfo = {
-  29,                  //nData
-  11,                  //nSys
+  29,         //nData
+  11,         //nSys
   "CDFZRAP",  //SetName
-  "EWK_ZRAP"      //ProcType
+  "EWK_RAP"   //ProcType
 };
 
 static const dataInfoRaw CDFR2KTinfo = {
-  76,                   //nData
-  25,                  //nSys
-  "CDFR2KT",   //SetName
-  "JET_CDFR2KT"       //ProcType
+  76,        //nData
+  25,        //nSys
+  "CDFR2KT", //SetName
+  "JET"      //ProcType
 };
 
 // ********* Filters **************

@@ -14,10 +14,10 @@
 // ********** ATLAS ***************
 
 static const dataInfoRaw ATLAS1JET11info = {
-  140,                  //nData  //count the data
-  69,                  //nSys   
-  "ATLAS1JET11",  //SetName
-  "JET_ATLASIJ11"      //ProcType
+  140,              //nData  //count the data
+  69,               //nSys
+  "ATLAS1JET11",    //SetName
+  "JET"             //ProcType
 };
 
 // ********* Filters **************

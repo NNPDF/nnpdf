@@ -16,10 +16,10 @@
 #include "buildmaster_utils.h"
 
 static const dataInfoRaw TTBARTOTinfo = {
-  6,      //nData
-  3,       //nSys
-  "TTBARTOT",    //SetName
-  "INC_TTBAR" //ProcType
+  6,          //nData
+  3,          //nSys
+  "TTBARTOT", //SetName
+  "INC"       //ProcType
 };
 
 

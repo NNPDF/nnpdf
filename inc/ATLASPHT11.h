@@ -14,21 +14,21 @@ static const dataInfoRaw ATLASPHT11ETGCTRinfo = {
   13,                    //nData
   9,                     //nSys (7 corr. 2 uncorr.)
   "ATLASPHT11ETGCTR",    //SetName
-  "PHT_ETGCTR_LHC7"      //ProcType
+  "PHT"                  //ProcType
 };
 
 static const dataInfoRaw ATLASPHT11ETGFWDinfo = {
   10,                    //nData
   9,                     //nSys (7 corr. 2 uncorr.)
   "ATLASPHT11ETGFWD",    //SetName
-  "PHT_ETGFWD_LHC7"      //ProcType
+  "PHT"                  //ProcType
 };
 
 static const dataInfoRaw ATLASPHT11ETAGinfo = {
   11,                    //nData
   9,                     //nSys (7 corr. 2 uncorr.)
   "ATLASPHT11ETAG",      //SetName
-  "PHT_ETAG_LHC7"        //ProcType
+  "PHT"                  //ProcType
 };
 
 // ********* Filters ************
@@ -40,7 +40,7 @@ class ATLASPHT11ETGCTRFilter: public CommonData
 private:
   void ReadData();
 };
-  
+
 class ATLASPHT11ETGFWDFilter: public CommonData
 { public: ATLASPHT11ETGFWDFilter():
   CommonData(ATLASPHT11ETGFWDinfo) { ReadData(); }

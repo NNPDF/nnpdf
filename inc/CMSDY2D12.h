@@ -14,7 +14,7 @@ static const dataInfoRaw CMSDY2D12info = {
   132,          // nData
   133,          // Correlated uncertainties given as cov. mat. nSys=nData+Lumi
   "CMSDY2D12",  // SetName
-  "EWK_DY2D"    // ProcType
+  "EWK_RAP"     // ProcType
 };
 
 class CMSDY2D12Filter: public CommonData

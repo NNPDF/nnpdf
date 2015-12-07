@@ -13,10 +13,10 @@
 // ********** CMS W+charm absolute xsecs ******
 
 static const dataInfoRaw CMSWCHARMTOTinfo = {
-  5,      //nData
-  5,        //nSys
-  "CMSWCHARMTOT",    //SetName
-  "EWK_WCTOT_CMS" //ProcType
+  5,              //nData
+  5,              //nSys
+  "CMSWCHARMTOT", //SetName
+  "EWJ_RAP"       //ProcType
 };
 
 // ********* Filters **************
@@ -33,10 +33,10 @@ private:
 // ********** CMS W+charm xsec ratios ******
 
 static const dataInfoRaw CMSWCHARMRATinfo = {
-  5,      //nData
-  0,        //nSys
-  "CMSWCHARMRAT",    //SetName
-  "EWK_WCRAT_CMS" //ProcType
+  5,              //nData
+  0,              //nSys
+  "CMSWCHARMRAT", //SetName
+  "EWJ_RAP"       //ProcType
 };
 
 // ********* Filters **************
