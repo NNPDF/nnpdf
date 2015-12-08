@@ -40,6 +40,17 @@ namespace NNPDF
    */
   struct dataInfo
   {
+    /*! 
+     *  dataInfo constructor (required by SWIG)
+     */
+    dataInfo(int nD, int nS, std::string sN, std::string tF, std::string sF):
+    nData(nD),
+    nSys(nS),
+    SetName(sN),
+    targetFile(tF),
+    systypeFile(sF)
+    {};
+
     const int nData;                //!< Number of datapoints in prototype CommonData
     const int nSys;                 //!< Number of systematic uncertainties in prototype CommonData
 
@@ -58,6 +69,16 @@ namespace NNPDF
    */
   struct dataInfoRaw
   {
+    /*! 
+     *  dataInfoRaw constructor (required by SWIG)
+     */
+    dataInfoRaw(int nD, int nS, std::string sN, std::string pT):
+    nData(nD),
+    nSys(nS),
+    SetName(sN),
+    ProcType(pT)
+    {};
+
     const int nData;            //!< Number of datapoints in prototype CommonData
     const int nSys;             //!< Number of systematic uncertainties in prototype CommonData
     const std::string SetName;  //!< Prototype CommonData set name
