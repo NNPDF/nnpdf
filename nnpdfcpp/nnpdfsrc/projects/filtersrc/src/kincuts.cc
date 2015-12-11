@@ -21,7 +21,7 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
   if (settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF30")) == 0)
     {
           if (set.GetProc(idat).compare(0,3, string("JET")) == 0 ||
-              set.GetProc(idat).compare(0,3,string("DYP")) == 0 )
+              set.GetProc(idat).compare(0,3,string("EWK")) == 0 )
             {
               // building rapidity and pT or Mll
               const real y  = set.GetKinematics(idat,0);
@@ -36,54 +36,53 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
               const real maxCMSDY2Dminv = 200.0;
               const real minCMSDY2Dminv = 30.0;
 
-              if (set.GetProc(idat).compare(string("JET_CDFR2KT")) == 0)
+              // NNLO Jets first
+              if (settings.Get("theory","ptord").as<int>() == 2)
+                if (set.GetProc(idat).compare(0,3, string("JET")) == 0)
                 {
-                  if (settings.Get("theory","ptord").as<int>() == 2)
+
+                  if (set.GetSetName().compare(string("CDFR2KT")) == 0)
+                  {
                     if ( (idat > 49 && idat < 60) || idat > 61 || y > maxCDFy)
                       return false;
+                    return true;
+                  }
 
-                  return true;
-                }
-
-              if (set.GetProc(idat).compare(string("JET_ATLASIJ2P76TEV")) == 0)
-                {
-                  if (settings.Get("theory","ptord").as<int>() == 2)
+                  if (set.GetSetName().compare(string("ATLASR04JETS2P76TEV")) == 0)
+                  {
                     if (idat < 8 || idat > 10 || y > maxATLAS2y)
                       return false;
+                    return true;
+                  }
 
-                  return true;
-                }
-
-              if (set.GetProc(idat).compare(string("JET_ATLASIJ10")) == 0) {
-                if (set.GetSetName().compare(string("ATLASR04JETS36PB")) == 0)
+                  if (set.GetSetName().compare(string("ATLASR04JETS36PB")) == 0)
                   {
-                    if (settings.Get("theory","ptord").as<int>() == 2)
-                      if (idat < 10 || (idat > 15 && idat < 29) || y > maxATLAS7y)
-                        return false;
-
+                    if (idat < 10 || (idat > 15 && idat < 29) || y > maxATLAS7y)
+                      return false;
                     return true; // avoid other cuts
                   }
-                else if(set.GetSetName().compare(string("ATLASR06JETS36PB")) == 0)
-                  {
-                    if (settings.Get("theory","ptord").as<int>() == 2)
-                      if (idat < 5 || (idat > 15 && idat < 21) ||
-                          (idat > 31 && idat < 39) || idat > 47)
-                        return false;
 
+                  if(set.GetSetName().compare(string("ATLASR06JETS36PB")) == 0)
+                  {
+                    if (idat < 5 || (idat > 15 && idat < 21) ||
+                    (idat > 31 && idat < 39) || idat > 47)
+                      return false;
                     return true; // avoid other cuts
                   }
-              }
 
-              if (set.GetProc(idat).compare(string("JET_CMSJ11")) == 0)
-                {
-                  if (settings.Get("theory","ptord").as<int>() == 2)
+                  if (set.GetSetName().compare(string("CMSJETS11")) == 0)
+                  {
                     if ((idat > 62 && idat < 70) || y > maxCMSy)
                       return false;
+                    return true; // avoid other cuts
+                  }
 
-                  return true; // avoid other cuts
+                  std:cerr << "Error: NNPDF3.0 NNLO combocuts for set " << set.GetSetName() <<" are not coded"<<std::endl;
+                  exit(-1);
+
                 }
 
-              if (set.GetProc(idat).compare(string("DYP_DY2DABS_CMS11")) == 0)
+              if (set.GetSetName().compare(string("CMSDY2D11")) == 0)
                 {
                   if (settings.Get("theory","ptord").as<int>() == 0 || settings.Get("theory","ptord").as<int>() == 1)
                     if (pTmv > maxCMSDY2Dminv || pTmv < minCMSDY2Dminv || y > maxCMSDY2Dy)
@@ -96,7 +95,9 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
                   return true; // avoid other cuts
                 }
 
-              if (set.GetProc(idat).compare(string("DYP_ZLL_LHC7")) == 0)
+              if (set.GetSetName().compare(string("ATLASZHIGHMASS49FB")) == 0 ||
+                  set.GetSetName().compare(string("ATLASLOMASSDY11")) == 0 || 
+                  set.GetSetName().compare(string("LHCBLOWMASS37PB")) == 0 )
                 {
                   if (pTmv > maxCMSDY2Dminv)
                     return false;
@@ -113,14 +114,16 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
     const real y  = set.GetKinematics(idat,0);
     const real pT = sqrt(set.GetKinematics(idat,1));
 
-    if (set.GetProc(idat).compare(string("JET_CDFR2KT")) == 0 ||
-        set.GetProc(idat).compare(string("JET_D0R2CON")) == 0 )
+    if (set.GetSetName().compare(string("CDFR2KT")) == 0 ||
+        set.GetSetName().compare(string("D0R2CON")) == 0 )
       return ( pT > settings.Get("datacuts","jetptcut_tev").as<double>() && y < settings.Get("datacuts","jetycut_tev").as<double>());
 
-    if (set.GetProc(idat).compare(string("JET_ATLASIJ2P76TEV")) == 0 ||
-        set.GetProc(idat).compare(string("JET_ATLASIJ10")) == 0 ||
-        set.GetProc(idat).compare(string("JET_CMSJ11")) == 0 ||
-        set.GetProc(idat).compare(string("JET_ATLASIJ11")) == 0 )
+    if (set.GetSetName().compare(string("ATLASR04JETS2P76TEV")) == 0 ||
+        set.GetSetName().compare(string("ATLASR06JETS2P76TEV")) == 0 ||
+        set.GetSetName().compare(string("ATLASR04JETS36PB")) == 0 ||
+        set.GetSetName().compare(string("ATLASR06JETS36PB")) == 0 ||
+        set.GetSetName().compare(string("CMSJETS11")) == 0 ||
+        set.GetSetName().compare(string("ATLAS1JET11")) == 0 )
       return ( pT > settings.Get("datacuts","jetptcut_lhc").as<double>() && y < settings.Get("datacuts","jetycut_lhc").as<double>());
 
     cerr << Colour::FG_RED << "filter passKinCuts Error: Jet experiment "<<set.GetSetName()<<" does not have it's pT/y cuts specified in passKinCuts."<<endl;
