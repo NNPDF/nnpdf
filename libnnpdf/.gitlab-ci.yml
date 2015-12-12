@@ -1,7 +1,7 @@
 image: ubuntu
 
 before_script:
-  - sudo apt-get install g++ libgsl-dev
+  - sudo apt-get install g++ libgsl0-dev
 
 job1:
   script: ./configure
