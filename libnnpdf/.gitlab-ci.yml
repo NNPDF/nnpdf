@@ -2,7 +2,7 @@ image: ubuntu
 
 before_script:
   - sudo apt-get update
-  - sudo apt-get --assume-yes install g++ libgsl0-dev build-essential
+  - sudo apt-get --assume-yes install g++ libgsl0-dev build-essential autoconf
 
 job1:
   script: 
