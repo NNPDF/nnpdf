@@ -5,4 +5,6 @@ before_script:
   - sudo apt-get --assume-yes install g++ libgsl0-dev build-essential
 
 job1:
-  script: ./configure && make
+  script: 
+    - autoreconf -i
+    - ./configure && make
