@@ -1,10 +1,6 @@
-image: ubuntu
+## Load image with software requirements for libnnpdf
+image: scarrazza/ubuntuci
 
-before_script:
-  - sudo apt-get update
-  - sudo apt-get --assume-yes install g++ libgsl0-dev build-essential autoconf libtool
-
-job1:
-  script: 
-    - autoreconf -i
-    - ./configure && make
+## Run the configure and make tests
+job:
+  script: ./configure && make
