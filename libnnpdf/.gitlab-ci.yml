@@ -1,2 +1,7 @@
+image: ubuntu
+
+before:
+  - sudo apt-get install g++ libgsl-dev
+
 job1:
   script: ./configure
