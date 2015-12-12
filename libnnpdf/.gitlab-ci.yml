@@ -5,4 +5,4 @@ before_script:
   - sudo apt-get --assume-yes install g++ libgsl0-dev
 
 job1:
-  script: ./configure
+  script: ./configure && make
