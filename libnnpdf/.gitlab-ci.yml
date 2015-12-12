@@ -1,6 +1,6 @@
 image: ubuntu
 
-before:
+before_script:
   - sudo apt-get install g++ libgsl-dev
 
 job1:
