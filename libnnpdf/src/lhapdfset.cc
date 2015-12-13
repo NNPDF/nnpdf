@@ -69,6 +69,14 @@ fLHA(new real[14])
     std::cout << pdfname<< " Initialised with " << fMembers<<" members and errorType "<<LHError<<std::endl; 
 }
 
+/**
+ * The explicit declaration of error types in integers
+ */
+LHAPDFSet::LHAPDFSet(std::string const& pdfname, int etype):
+  LHAPDFSet::LHAPDFSet(pdfname, (PDFSet::erType) etype)
+{
+}
+
 LHAPDFSet::~LHAPDFSet()
 {
   delete[] fLHA;
