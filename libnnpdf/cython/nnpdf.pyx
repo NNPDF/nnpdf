@@ -1,4 +1,5 @@
 #cython embedsignature
+# -*- coding: utf-8 -*-
 
 __author__ = 'Stefano Carrazza'
 __license__ = 'GPL'
@@ -18,8 +19,8 @@ cdef class LHAPDFSet:
     The PDF set from LHAPDF
     """
     cdef _LHAPDFSet *_ptr
-    def __cinit__(self, const string& pdfname, int etype):
-        self._ptr = new _LHAPDFSet(pdfname, etype)
+    def __cinit__(self, pdfname, int etype):
+        self._ptr = new _LHAPDFSet(pdfname.encode('UTF-8'), etype)
     def __dealloc__(self):
         del self._ptr
 
@@ -48,7 +49,7 @@ cdef class CommonData:
         self._ptr = ptr
 
     @staticmethod
-    def ReadFile(const string& filename, const string& systype):
+    def ReadFile(filename, systype):
         cdef _CommonData* ptr = new _CommonData(_CommonData.ReadFile(filename,systype))
         cdef CommonData obj
         obj = CommonData.__new__(CommonData)
@@ -66,8 +67,8 @@ cdef class FKTable:
     The FKTable class
     """
     cdef _FKTable *_ptr
-    def __cinit__(self, const string& filename, const vector[string]& cfactors):
-        self._ptr = new _FKTable(filename, cfactors)
+    def __cinit__(self, filename, cfactors):
+        self._ptr = new _FKTable(filename.encode('UTF-8'), cfactors)
     def __dealloc__(self):
         del self._ptr
     @property
@@ -102,7 +103,7 @@ cdef class ThPredictions:
         return self._ptr.GetNData()
     @property
     def GetSetName(self):
-        return self._ptr.GetSetName()
+        return self._ptr.GetSetName().decode('UTF-8')
     @property
     def GetPDFName(self):
-        return self._ptr.GetPDFName()
+        return self._ptr.GetPDFName().decode('UTF-8')

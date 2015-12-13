@@ -19,7 +19,7 @@ from nnpdf import *
 pdf = LHAPDFSet('NNPDF30_nlo_as_0118', PDFSet.ER_MC)
 
 ## Loading FKTable
-filename = "../../nnpdfcpp/data/theory_2/fastkernel/FK_ATLASR04JETS36PB.dat"
+filename = '../../nnpdfcpp/data/theory_2/fastkernel/FK_ATLASR04JETS36PB.dat'
 fk  = FKTable(filename,[])
 
 ## Build Theoretical Predictions
@@ -30,6 +30,9 @@ import numpy as np
 cvs = np.array([ thp.GetObsCV(el) for el in range(thp.GetNData) ])
 ers = np.array([ thp.GetObsError(el) for el in range(thp.GetNData) ])
 
+for i in range(len(cvs)):
+    print('N=%.2i CV=%.2e ERROR=%.2e' %(i, cvs[i], ers[i]))
+
 ## Plot results and save to file
 import matplotlib.pyplot as plt
 plt.figure()
@@ -37,6 +40,6 @@ plt.errorbar(range(len(cvs)), cvs/cvs, yerr=ers/cvs,
              fmt='o', label=thp.GetSetName)
 plt.legend(loc='best')
 plt.title('NNPDF::ThPredictions with ' + thp.GetPDFName)
-plt.ylabel('Prediction [pb/bin] / CV')
+plt.ylabel('Prediction / CV')
 plt.xlabel('Data Point')
-plt.savefig(thp.GetSetName + '_' + thp.GetPDFName + '.pdf')
+plt.savefig('%s_%s.pdf' % (thp.GetSetName,thp.GetPDFName))
