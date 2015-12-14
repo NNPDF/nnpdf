@@ -24,7 +24,6 @@ namespace NNPDF
   public:
     //!< Constructor
     LHAPDFSet(std::string const&, erType);
-    LHAPDFSet(std::string const&, int);
     virtual ~LHAPDFSet();   //!< Destructor
 
     //!< Get PDF array in evolution basis
