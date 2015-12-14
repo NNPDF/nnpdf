@@ -12,7 +12,9 @@
 
 #include <string>
 #include <vector>
+
 #include "common.h"
+#include "fastkernel.h"
 
 namespace NNPDF
 {

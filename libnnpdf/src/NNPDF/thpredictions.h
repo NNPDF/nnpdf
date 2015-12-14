@@ -9,14 +9,13 @@
 #pragma once
 
 #include "common.h"
+#include "experiments.h"
+#include "pdfset.h"
+#include "fastkernel.h"
+#include "fkset.h"
 
 namespace NNPDF
 {
-    class Experiment;
-    class PDFSet;
-    class FKTable;
-    class FKSet;
-
     /**
      * \class ThPredictions
      * \brief Computes the predictions and statistics for a PDFSet and DataSet
