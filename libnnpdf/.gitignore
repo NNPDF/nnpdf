@@ -39,3 +39,8 @@ src/NNPDF/stamp-h1
 *.exe
 *.out
 *.app
+
+Python install
+*.egg-info
+build/
+dist/
