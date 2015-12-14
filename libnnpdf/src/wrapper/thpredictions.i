@@ -19,5 +19,10 @@
 %include "std_string.i" 
 %include "std_vector.i" 
 
+%include "fkgenerator.i"
+%import "pdfset.i"
+
+%import "experiments.i"
+
 /* Parse the header file to generate wrappers */
 %include "../NNPDF/thpredictions.h"

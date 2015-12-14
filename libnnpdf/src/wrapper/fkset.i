@@ -22,5 +22,5 @@
 /* Parse the header file to generate wrappers */
 
 %import "fastkernel.i"
-%import "fkgenerator.i"
+%include "fkgenerator.i"
 %include "../NNPDF/fkset.h"
