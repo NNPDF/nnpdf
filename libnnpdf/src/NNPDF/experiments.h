@@ -11,12 +11,12 @@
 #include <vector>
 #include <string>
 
+#include "commondata.h"
+#include "dataset.h"
+#include "pdfset.h"
+
 namespace NNPDF
 {
-  class DataSet;
-  class PDFSet;
-  struct sysError;
-
   /**
     * \class Experiment
     * \brief Class for handling experiments
