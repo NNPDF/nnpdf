@@ -53,8 +53,8 @@ setup (name = 'NNPDF',
        long_description = "See README",
        ext_modules = ext_modules,
        #http://stackoverflow.com/questions/24799146/use-multiprocessing-process-inside-a-script-installed-by-setuptools
-       package_dir = {'': '.'},
-       packages = find_packages('.'),
+       package_dir = {'': 'pylibs'},
+       packages = find_packages('pylibs'),
        zip_safe = False,
        classifiers=[
             'License :: OSI Approved :: BSD License',
