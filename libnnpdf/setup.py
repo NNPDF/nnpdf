@@ -32,8 +32,8 @@ if platform.system() == 'Darwin':
     extra_link_args += ['-mmacosx-version-min=%s' % mac_ver]
 
 interfaces = glob.glob1("src/wrapper/", "*.i")
-names = (i[:-2] for i in interfaces)
-sources = ("src/wrapper/_sources/%s_wrap.cxx"%n for n  in names )
+names = [i[:-2] for i in interfaces]
+sources = ["src/wrapper/_sources/%s_wrap.cxx"%n for n  in names]
 
 ext_modules = [Extension('NNPDF._' + name,
                     extra_compile_args = extra_compile_args ,
