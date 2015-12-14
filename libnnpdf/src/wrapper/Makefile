@@ -1,0 +1,9 @@
+default:
+	mkdir -p NNPDF
+	find . -name "*.i" -print0 | xargs -0 -I {} swig -c++ -outdir NNPDF -python {}
+	mkdir -p _sources
+	mv *.cxx _sources
+
+clean:
+	rm *.cxx
+	rm -r NNPDF/*
