@@ -23,7 +23,7 @@ from NNPDF.thpredictions import ThPredictions
 pdf = LHAPDFSet('NNPDF30_nlo_as_0118', PDFSet.ER_MC)
 
 ## Loading FKTable
-filename = '/home/zah/nncarlo/nnpdfcppcarlo/data/theory_2/fastkernel/FK_ATLASR04JETS2P76TEV.dat'
+filename = '../../nnpdfcpp/data/theory_2/fastkernel/FK_ATLASR04JETS2P76TEV.dat'
 fk  = FKTable(filename, [])
 
 ## Build Theoretical Predictions

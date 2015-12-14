@@ -52,3 +52,7 @@ dist_bin_SCRIPTS=scripts/FKmerge
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = bin
 
+wrapper:
+	cd wrapper && $(MAKE) $(AM_MAKEFLAGS)
+
+.PHONY: wrapper

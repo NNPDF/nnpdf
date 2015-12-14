@@ -4,7 +4,8 @@ default:
 	find src -name "*.i" -print0 | xargs -0 -I {} swig -c++ -outdir pylibs/NNPDF -python {}
 	mkdir -p _sources
 	mv src/*.cxx _sources
+	python setup.py install
 
 clean:
-	rm _sources/*.cxx
-	rm -r NNPDF/*
+	rm -rf _sources/
+	rm -rf NNPDF/ build dist pylibs

@@ -1343,6 +1343,11 @@ uninstall-am: uninstall-binPROGRAMS uninstall-dist_binSCRIPTS \
 	uninstall-libLTLIBRARIES uninstall-otherincludeHEADERS
 
 
+wrapper:
+	cd wrapper && $(MAKE) $(AM_MAKEFLAGS)
+
+.PHONY: wrapper
+
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
