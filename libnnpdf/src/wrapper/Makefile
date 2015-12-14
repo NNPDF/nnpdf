@@ -5,5 +5,5 @@ default:
 	mv *.cxx _sources
 
 clean:
-	rm *.cxx
+	rm _sources/*.cxx
 	rm -r NNPDF/*
