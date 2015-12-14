@@ -34,6 +34,8 @@ src/NNPDF/stamp-h1
 *.la
 *.a
 *.lib
+.libs
+FKconvolute
 
 # Executables
 *.exe
@@ -44,3 +46,5 @@ Python install
 *.egg-info
 build/
 dist/
+.libs
+FKconvolute
