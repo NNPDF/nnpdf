@@ -1,4 +1,4 @@
-%module(package="NNPDF") pdfset
+%module(package="NNPDF") fastkernel
  %{
 #include <iostream>
 #include <fstream>
@@ -13,7 +13,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_eigen.h>
 
-#include "NNPDF/pdfset.h"
+#include "../../src/NNPDF/fastkernel.h"
  %}
 
 %include "std_string.i" 
@@ -21,4 +21,5 @@
 %include "common.i"
 
 /* Parse the header file to generate wrappers */
-%include "../NNPDF/pdfset.h"
+%template(_string_list) std::vector< std::string >;
+%include "../../src/NNPDF/fastkernel.h"

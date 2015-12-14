@@ -1,4 +1,4 @@
-%module(package="NNPDF") dataset
+%module(package="NNPDF") experiments
  %{
 #include <iostream>
 #include <fstream>
@@ -13,13 +13,13 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_eigen.h>
 
-#include "NNPDF/dataset.h"
+#include "../../src/NNPDF/experiments.h"
  %}
 
 %include "std_string.i" 
 %include "std_vector.i" 
+%import "dataset.i"
+%import "pdfset.i"
 
-%import "commondata.i"
-%import "fkset.i"
 /* Parse the header file to generate wrappers */
-%include "../NNPDF/dataset.h"
+%include "../../src/NNPDF/experiments.h"

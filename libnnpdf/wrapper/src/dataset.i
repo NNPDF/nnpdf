@@ -1,4 +1,4 @@
-%module(package="NNPDF") randomgenerator
+%module(package="NNPDF") dataset
  %{
 #include <iostream>
 #include <fstream>
@@ -13,11 +13,13 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_eigen.h>
 
-#include "NNPDF/randomgenerator.h"
+#include "../../src/NNPDF/dataset.h"
  %}
 
 %include "std_string.i" 
 %include "std_vector.i" 
 
+%import "commondata.i"
+%import "fkset.i"
 /* Parse the header file to generate wrappers */
-%include "../NNPDF/randomgenerator.h"
+%include "../../src/NNPDF/dataset.h"

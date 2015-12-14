@@ -1,4 +1,4 @@
-%module(package="NNPDF") fastkernel
+%module(package="NNPDF") nnmpi
  %{
 #include <iostream>
 #include <fstream>
@@ -13,13 +13,11 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_eigen.h>
 
-#include "NNPDF/fastkernel.h"
+#include "../../src/NNPDF/nnmpi.h"
  %}
 
 %include "std_string.i" 
 %include "std_vector.i" 
 %include "common.i"
-
 /* Parse the header file to generate wrappers */
-%template(_string_list) std::vector< std::string >;
-%include "../NNPDF/fastkernel.h"
+%include "../../src/NNPDF/nnmpi.h"

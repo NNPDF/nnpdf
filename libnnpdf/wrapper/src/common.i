@@ -1,4 +1,4 @@
-%module(package="NNPDF") positivity
+%module(package="NNPDF") common
  %{
 #include <iostream>
 #include <fstream>
@@ -13,15 +13,11 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_eigen.h>
 
-#include "NNPDF/positivity.h"
+#include "../../src/NNPDF/common.h"
  %}
 
 %include "std_string.i" 
 %include "std_vector.i" 
 
-%include "commondata.i"
-%include "fastkernel.i"
-%include "common.i"
-
 /* Parse the header file to generate wrappers */
-%include "../NNPDF/positivity.h"
+%include "../../src/NNPDF/common.h"

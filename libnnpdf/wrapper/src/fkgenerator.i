@@ -13,7 +13,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_eigen.h>
 
-#include "NNPDF/fkgenerator.h"
+#include "../../src/NNPDF/fkgenerator.h"
  %}
 
 %include "std_string.i" 
@@ -22,4 +22,4 @@
 %import "fastkernel.i"
 %import "common.i"
 /* Parse the header file to generate wrappers */
-%include "../NNPDF/fkgenerator.h"
+%include "../../src/NNPDF/fkgenerator.h"

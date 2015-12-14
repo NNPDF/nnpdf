@@ -1,4 +1,4 @@
-%module(package="NNPDF") parametrisation
+%module(package="NNPDF") timer
  %{
 #include <iostream>
 #include <fstream>
@@ -13,12 +13,11 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_eigen.h>
 
-#include "NNPDF/parametrisation.h"
+#include "../../src/NNPDF/timer.h"
  %}
 
 %include "std_string.i" 
 %include "std_vector.i" 
 
 /* Parse the header file to generate wrappers */
-%import "common.i"
-%include "../NNPDF/parametrisation.h"
+%include "../../src/NNPDF/timer.h"

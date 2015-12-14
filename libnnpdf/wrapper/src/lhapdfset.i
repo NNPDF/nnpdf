@@ -1,4 +1,4 @@
-%module(package="NNPDF") timer
+%module(package="NNPDF") lhapdfset
  %{
 #include <iostream>
 #include <fstream>
@@ -13,11 +13,14 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_eigen.h>
 
-#include "NNPDF/timer.h"
+#include "../../src/NNPDF/lhapdfset.h"
  %}
 
 %include "std_string.i" 
 %include "std_vector.i" 
 
+%import "pdfset.i"
+%include "common.i"
+
 /* Parse the header file to generate wrappers */
-%include "../NNPDF/timer.h"
+%include "../../src/NNPDF/lhapdfset.h"

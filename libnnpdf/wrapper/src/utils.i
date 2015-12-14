@@ -13,7 +13,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_eigen.h>
 
-#include "NNPDF/utils.h"
+#include "../../src/NNPDF/utils.h"
  %}
 
 %include "std_string.i" 
@@ -22,4 +22,4 @@
 %include "common.i"
 
 /* Parse the header file to generate wrappers */
-%include "../NNPDF/utils.h"
+%include "../../src/NNPDF/utils.h"

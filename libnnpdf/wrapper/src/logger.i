@@ -1,4 +1,4 @@
-%module(package="NNPDF") thpredictions
+%module(package="NNPDF") logger
  %{
 #include <iostream>
 #include <fstream>
@@ -13,16 +13,11 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_eigen.h>
 
-#include "NNPDF/thpredictions.h"
+#include "../../src/NNPDF/logger.h"
  %}
 
 %include "std_string.i" 
 %include "std_vector.i" 
 
-%include "fkgenerator.i"
-%import "pdfset.i"
-
-%import "experiments.i"
-
 /* Parse the header file to generate wrappers */
-%include "../NNPDF/thpredictions.h"
+%include "../../src/NNPDF/logger.h"

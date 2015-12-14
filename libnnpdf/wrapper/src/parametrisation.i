@@ -1,4 +1,4 @@
-%module(package="NNPDF") nnmpi
+%module(package="NNPDF") parametrisation
  %{
 #include <iostream>
 #include <fstream>
@@ -13,11 +13,12 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_eigen.h>
 
-#include "NNPDF/nnmpi.h"
+#include "../../src/NNPDF/parametrisation.h"
  %}
 
 %include "std_string.i" 
 %include "std_vector.i" 
-%include "common.i"
+
 /* Parse the header file to generate wrappers */
-%include "../NNPDF/nnmpi.h"
+%import "common.i"
+%include "../../src/NNPDF/parametrisation.h"

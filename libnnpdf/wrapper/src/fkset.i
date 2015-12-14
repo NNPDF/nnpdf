@@ -13,7 +13,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_eigen.h>
 
-#include "NNPDF/fkset.h"
+#include "../../src/NNPDF/fkset.h"
  %}
 
 %include "std_string.i" 
@@ -23,4 +23,4 @@
 
 %import "fastkernel.i"
 %include "fkgenerator.i"
-%include "../NNPDF/fkset.h"
+%include "../../src/NNPDF/fkset.h"
