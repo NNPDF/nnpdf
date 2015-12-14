@@ -21,4 +21,5 @@
 %include "common.i"
 
 /* Parse the header file to generate wrappers */
+%template(_string_list) std::vector< std::string >;
 %include "../NNPDF/fastkernel.h"
