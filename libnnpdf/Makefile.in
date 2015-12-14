@@ -1346,7 +1346,10 @@ uninstall-am: uninstall-binPROGRAMS uninstall-dist_binSCRIPTS \
 wrapper:
 	cd wrapper && $(MAKE) $(AM_MAKEFLAGS)
 
-.PHONY: wrapper
+wrapperinstall: wrapper
+	cd wrapper && $(MAKE) $(AM_MAKEFLAGS) install
+
+.PHONY: wrapper wrapperinstall
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

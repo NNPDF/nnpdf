@@ -55,4 +55,7 @@ SUBDIRS = bin
 wrapper:
 	cd wrapper && $(MAKE) $(AM_MAKEFLAGS)
 
-.PHONY: wrapper
+wrapperinstall: wrapper
+	cd wrapper && $(MAKE) $(AM_MAKEFLAGS) install
+
+.PHONY: wrapper wrapperinstall
