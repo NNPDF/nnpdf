@@ -14,10 +14,10 @@ __license__ = 'GPL'
 __version__ = '1.0.0'
 __email__ = 'stefano.carrazza@cern.ch'
 
-from NNPDF.lhapdfset import LHAPDFSet
-from NNPDF.pdfset import PDFSet
-from NNPDF.fastkernel import FKTable
-from NNPDF.thpredictions import ThPredictions
+from NNPDF import (LHAPDFSet,
+                   PDFSet,
+                   FKTable,
+                   ThPredictions,)
 
 ## Loading NNPDF from NNPDF::LHAPDFSet
 pdf = LHAPDFSet('NNPDF30_nlo_as_0118', PDFSet.ER_MC)
