@@ -1,4 +1,4 @@
-%module commondata
+%module(package="NNPDF") timer
  %{
 #include <iostream>
 #include <fstream>

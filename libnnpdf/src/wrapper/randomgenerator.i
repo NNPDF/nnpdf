@@ -1,4 +1,4 @@
-%module commondata
+%module(package="NNPDF") randomgenerator
  %{
 #include <iostream>
 #include <fstream>

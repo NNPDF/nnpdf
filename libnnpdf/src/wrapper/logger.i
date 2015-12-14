@@ -1,4 +1,4 @@
-%module commondata
+%module(package="NNPDF") logger
  %{
 #include <iostream>
 #include <fstream>

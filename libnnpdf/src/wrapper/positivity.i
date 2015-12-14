@@ -1,4 +1,4 @@
-%module commondata
+%module(package="NNPDF") positivity
  %{
 #include <iostream>
 #include <fstream>

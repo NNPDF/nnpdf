@@ -1,4 +1,4 @@
-%module commondata
+%module(package="NNPDF") lhapdfset
  %{
 #include <iostream>
 #include <fstream>

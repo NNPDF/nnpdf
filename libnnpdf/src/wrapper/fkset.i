@@ -1,4 +1,4 @@
-%module commondata
+%module(package="NNPDF") fkset
  %{
 #include <iostream>
 #include <fstream>
@@ -20,4 +20,7 @@
 %include "std_vector.i" 
 
 /* Parse the header file to generate wrappers */
+
+%import "fastkernel.i"
+%import "fkgenerator.i"
 %include "../NNPDF/fkset.h"

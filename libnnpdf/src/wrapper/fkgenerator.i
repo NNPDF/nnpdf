@@ -1,4 +1,4 @@
-%module commondata
+%module(package="NNPDF") fkgenerator
  %{
 #include <iostream>
 #include <fstream>

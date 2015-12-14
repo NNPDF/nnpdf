@@ -1,4 +1,4 @@
-%module commondata
+%module(package="NNPDF") experiments
  %{
 #include <iostream>
 #include <fstream>
@@ -18,6 +18,8 @@
 
 %include "std_string.i" 
 %include "std_vector.i" 
+%import "dataset.i"
+%import "pdfset.i"
 
 /* Parse the header file to generate wrappers */
 %include "../NNPDF/experiments.h"

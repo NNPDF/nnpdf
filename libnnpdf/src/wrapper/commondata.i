@@ -1,4 +1,4 @@
-%module commondata
+%module(package="NNPDF") commondata
  %{
 #include <iostream>
 #include <fstream>

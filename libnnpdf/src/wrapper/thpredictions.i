@@ -1,4 +1,4 @@
-%module commondata
+%module(package="NNPDF") thpredictions
  %{
 #include <iostream>
 #include <fstream>

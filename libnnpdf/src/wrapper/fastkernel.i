@@ -1,4 +1,4 @@
-%module commondata
+%module(package="NNPDF") fastkernel
  %{
 #include <iostream>
 #include <fstream>
