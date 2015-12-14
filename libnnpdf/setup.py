@@ -23,8 +23,11 @@ def call_command(command):
 nnpdf_includes = call_command('nnpdf-config --cppflags').split()
 nnpdf_libs = call_command('nnpdf-config --ldflags').split()
 
-extra_compile_args = nnpdf_includes
-extra_link_args = nnpdf_libs
+lhapdf_includes = call_command('lhapdf-config --cflags').split()
+lhapdf_libs = call_command('lhapdf-config --libs').split()
+
+extra_compile_args = nnpdf_includes + lhapdf_includes
+extra_link_args = nnpdf_libs + lhapdf_libs
 
 if platform.system() == 'Darwin':
     mac_ver = platform.mac_ver()[0]
