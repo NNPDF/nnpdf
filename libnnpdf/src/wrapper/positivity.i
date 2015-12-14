@@ -21,6 +21,7 @@
 
 %include "commondata.i"
 %include "fastkernel.i"
+%include "common.i"
 
 /* Parse the header file to generate wrappers */
 %include "../NNPDF/positivity.h"
