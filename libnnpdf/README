@@ -10,6 +10,10 @@ Possible configurations:
 ./configure --enable-safemode -> [simd=off, openmp=off]
 ./configure --enable-safemode --enable-openmp -> [simd=off, openmp=on]
 
+Activate python wrapper:
+
+./configure --enable-pywrap
+
 If you have troubles with automake tools, please run
 
 	autoreconf -i

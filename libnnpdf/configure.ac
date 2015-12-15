@@ -12,6 +12,7 @@ AC_CONFIG_HEADERS([src/NNPDF/config.h])
 
 AC_CONFIG_FILES([Makefile src/NNPDF/common.h])
 AC_CONFIG_FILES([bin/Makefile bin/nnpdf-config])
+AC_CONFIG_FILES([wrapper/Makefile])
 AM_INIT_AUTOMAKE([subdir-objects])
 
 # Checks for programs.
@@ -25,7 +26,10 @@ AC_SEARCH_PYTHON
 AC_SEARCH_SSE
 AC_SEARCH_OPENMP
 AC_SEARCH_MPI
+AC_SEARCH_PYWRAP
 AX_CXX_COMPILE_STDCXX_11([noext])
+
+AM_CONDITIONAL(WITH_PYWRAP, [test x$SWIG_FOUND = xyes])
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdlib.h sys/time.h])

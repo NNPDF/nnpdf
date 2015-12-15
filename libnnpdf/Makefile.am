@@ -51,12 +51,4 @@ FKconvolute_LDFLAGS = $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDF
 dist_bin_SCRIPTS=scripts/FKmerge
 
 ACLOCAL_AMFLAGS = -I m4
-SUBDIRS = bin
-
-wrapper:
-	cd wrapper && $(MAKE) $(AM_MAKEFLAGS)
-
-wrapperinstall: wrapper
-	cd wrapper && $(MAKE) $(AM_MAKEFLAGS) install
-
-.PHONY: wrapper wrapperinstall
+SUBDIRS = bin wrapper
