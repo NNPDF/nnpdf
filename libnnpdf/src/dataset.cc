@@ -23,6 +23,7 @@
 #include "NNPDF/fastkernel.h"
 #include "NNPDF/thpredictions.h"
 #include "NNPDF/randomgenerator.h"
+#include "NNPDF/exceptions.h"
 
 using namespace NNPDF;
 
@@ -186,10 +187,7 @@ void DataSet::SetT0(ThPredictions const& t0pred)
   fIsT0 = true;
 
   if (fNData != t0pred.GetNData())
-  {
-    std::cerr << "DataSet::SetT0 error: number of datapoints in set and predictions do not match!"<<std::endl;
-    exit(-1);
-  }
+    throw RangeError("DataSet::SetT0","number of datapoints in set and predictions do not match!");
 
   for (int i=0; i<fNData; i++)
     fT0Pred[i] = t0pred.GetObsCV(i);
@@ -273,10 +271,7 @@ void DataSet::MakeArtificial()
   }
 
   if (!genRep)
-  {
-    std::cerr << "DataSet::MakeArtificial Error: Cannot generate positive datasets!" << std::endl;
-    exit(-1);
-  }
+    throw EvaluationError("DataSet::MakeArtificial", "Cannot generate positive datasets!");
 
   // Update data in set
   UpdateData(artdata);

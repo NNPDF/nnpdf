@@ -22,7 +22,6 @@ using namespace std;
  */
 int main(int argc, char **argv)
 {  
-
   if (argc != 3)
   {
      std::cout << "Usage: FKconvolute [PDF Name] [Path to FK table]"<<std::endl;

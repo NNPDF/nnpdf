@@ -15,6 +15,7 @@
 #include <algorithm>
 
 #include "NNPDF/utils.h"
+#include "NNPDF/exceptions.h"
 
 namespace NNPDF
 {
@@ -404,10 +405,8 @@ namespace NNPDF
           }
         else
           {
-            std::cerr << "DecomposeLUCrout matrix is singular" << std::endl;
             delete[] scale;
-            exit(-1);
-            return false;
+            throw EvaluationError("DecomposeLUCrout","matrix is singular");
           }
       }
 
@@ -442,11 +441,7 @@ namespace NNPDF
     int nrZeros = 0;
     double tol = std::numeric_limits<double>::epsilon();
     if (!DecomposeLUCrout(n, covmat, invcovmat, index, sign, tol, nrZeros) || nrZeros > 0)
-      {
-        std::cerr << "Error inversion: Matrix is singular" << std::endl;
-        exit(-1);
-        return false;
-      }
+      throw EvaluationError("InvertLU","Error inversion: Matrix is singular");
 
     double *pLU = GetMatrixArray(n,invcovmat);
 

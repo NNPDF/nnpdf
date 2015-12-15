@@ -21,6 +21,7 @@
 #include "NNPDF/thpredictions.h"
 #include "NNPDF/utils.h"
 #include "NNPDF/randomgenerator.h"
+#include "NNPDF/exceptions.h"
 
 using namespace std;
 using namespace NNPDF;
@@ -45,10 +46,7 @@ fIsT0(false)
 {
   // Check
   if (sets.size() == 0)
-  {
-    std::cerr << "Experiment::Experiment Error: No DataSets in constructor!"<<std::endl;
-    exit(-1);
-  }
+    throw LengthError("Experiment::Experiment","No DataSets in constructor!");
 
   fIsT0 = sets[0].IsT0();
 
@@ -57,10 +55,7 @@ fIsT0(false)
   {
     fSets.push_back(sets[i]);
     if (sets[i].IsT0() != fIsT0)
-    {
-      std::cerr << "Experiment::Experiment Error: Supplied datasets must all be either T0 or EXP"<<std::endl;
-      exit(-1);
-    }
+      throw UserError("Experiment::Experiment", "Supplied datasets must all be either T0 or EXP");
   }
   
   // Pull data from datasets
@@ -190,10 +185,7 @@ void Experiment::MakeReplica()
   cout << "-- Generating replica data for " << fExpName << endl;
 
   if (fNData == 0)
-    {
-      cerr << "Experiment::MakeReplica Error: you must run ReadData before making a replica." << endl;
-      exit(-1);
-    }
+    throw RangeError("Experiment::MakeReplica","you must run ReadData before making a replica.");
 
   double *rand  = new double[fNSys];  
   double *xnor  = new double[fNData];
@@ -358,8 +350,7 @@ void Experiment::PullData()
   int SysIndex = 0;
   vector<sysError> sysdef;
   vector<int> sysnumber;
-  vector<sysType> systypes;
-  
+
   for (int s = 0; s < GetNSet(); s++)
   {
     for (int l = 0; l < fSets[s].GetNSys(); l++)
@@ -373,10 +364,7 @@ void Experiment::PullData()
               {
                 sysplace = sysnumber[j];
                 if (testsys.type != sysdef[j].type || testsys.isRAND != sysdef[j].isRAND)
-                {
-                   cerr << "Experiment::PullData Error: Systematic " << testsys.name << " definition not consistant between datasets" << endl;
-                   exit(-1); 
-                }
+                  throw RangeError("Experiment::PullData","Systematic " + testsys.name + " definition not consistant between datasets");
               }
                 
           if (sysplace == l+SysIndex)

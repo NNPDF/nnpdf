@@ -24,6 +24,7 @@
 #include "NNPDF/utils.h"
 #include "NNPDF/timer.h"
 #include "NNPDF/nnmpi.h"
+#include "NNPDF/exceptions.h"
 using namespace NNPDF;
 
 // Default verbosity level
@@ -151,16 +152,10 @@ fEtype(pdf1->GetEtype())
 {
 
   if (pdf1->GetMembers() != pdf2->GetMembers())
-  {
-    std::cerr << "ThPredictions::ThPredictions Error - PDFs for different beams must have the same number of members!" <<std::endl;
-    exit(-1);
-  }
+    throw RangeError("ThPredictions::ThPredictions","PDFs for different beams must have the same number of members!");
 
   if (pdf1->GetEtype() != pdf2->GetEtype())
-  {
-    std::cerr << "ThPredictions::ThPredictions Error - PDFs for different beams must have the same error type!" <<std::endl;
-    exit(-1);
-  }
+    throw RangeError("ThPredictions::ThPredictions","PDFs for different beams must have the same error type!");
 
   // New theory array
   fObs = new real[fNData*fNpdf];
@@ -204,16 +199,10 @@ ThPredictions::~ThPredictions()
 ThPredictions& ThPredictions::operator+=(const ThPredictions& o)
 {
   if (o.fEtype != fEtype)
-  {
-    std::cerr << "ThPredictions::operator+= Error: Cannot sum predictions with different error values" <<std::endl; 
-    exit(-1);
-  }
+    throw EvaluationError("ThPredictions::operator+=","Cannot sum predictions with different error values");
 
   if (o.fNpdf != fNpdf || o.fNData != fNData)
-  {
-    std::cerr << "ThPredictions::operator+= Error: Cannot sum predictions with different numbers of datapoints/PDF members" <<std::endl; 
-    exit(-1);
-  }
+    throw EvaluationError("ThPredictions::operator+=","Cannot sum predictions with different numbers of datapoints/PDF members");
 
   if (fEtype != PDFSet::ER_MC && fEtype != PDFSet::ER_MC68 && fEtype != PDFSet::ER_MCT0 && ThPredictions::Verbose == true)
     std::cerr << "ThPredictions::operator+= Warning: Observable summation undefined for ErrorTypes other than Monte-Carlo" <<std::endl; 
@@ -234,16 +223,10 @@ ThPredictions& ThPredictions::operator+=(const ThPredictions& o)
 ThPredictions& ThPredictions::operator-=(const ThPredictions& o)
 {
   if (o.fEtype != fEtype)
-  {
-    std::cerr << "ThPredictions::operator-= Error: Cannot subtract predictions with different error values" <<std::endl; 
-    exit(-1);
-  }
+    throw EvaluationError("ThPredictions::operator-=","Cannot subtract predictions with different error values");
 
   if (o.fNpdf != fNpdf || o.fNData != fNData)
-  {
-    std::cerr << "ThPredictions::operator-= Error: Cannot subtract predictions with different numbers of datapoints/PDF members" <<std::endl; 
-    exit(-1);
-  }
+    throw EvaluationError("ThPredictions::operator-=","Cannot subtract predictions with different numbers of datapoints/PDF members");
 
   if ( ( fEtype != PDFSet::ER_MC && fEtype != PDFSet::ER_MC68 && fEtype != PDFSet::ER_MCT0 ) && ThPredictions::Verbose == true)
     std::cerr << "ThPredictions::operator-= Warning: Observable subtraction undefined for ErrorTypes other than Monte-Carlo" <<std::endl; 
@@ -264,16 +247,10 @@ ThPredictions& ThPredictions::operator-=(const ThPredictions& o)
 ThPredictions& ThPredictions::operator/=(const ThPredictions& o)
 {
   if (o.fEtype != fEtype)
-  {
-    std::cerr << "ThPredictions::operator/= Error: Cannot divide predictions with different error values" <<std::endl; 
-    exit(-1);
-  }
+    throw EvaluationError("ThPredictions::operator/=","Cannot divide predictions with different error values");
 
   if (o.fNpdf != fNpdf || o.fNData != fNData)
-  {
-    std::cerr << "ThPredictions::operator/= Error: Cannot divide predictions with different numbers of datapoints/PDF members" <<std::endl; 
-    exit(-1);
-  }
+    throw EvaluationError("ThPredictions::operator/=","Cannot divide predictions with different numbers of datapoints/PDF members");
 
   if ( (fEtype != PDFSet::ER_MC && fEtype != PDFSet::ER_MC68 && fEtype != PDFSet::ER_MCT0 ) && ThPredictions::Verbose == true)
     std::cerr << "ThPredictions::operator/= Warning: Observable division undefined for ErrorTypes other than Monte-Carlo" <<std::endl; 
@@ -294,16 +271,10 @@ ThPredictions& ThPredictions::operator/=(const ThPredictions& o)
 ThPredictions& ThPredictions::operator*=(const ThPredictions& o)
 {
   if (o.fEtype != fEtype)
-  {
-    std::cerr << "ThPredictions::operator/= Error: Cannot multiply predictions with different error values" <<std::endl; 
-    exit(-1);
-  }
+    throw EvaluationError("ThPredictions::operator/=","Cannot multiply predictions with different error values");
 
   if (o.fNpdf != fNpdf || o.fNData != fNData)
-  {
-    std::cerr << "ThPredictions::operator/= Error: Cannot multiply predictions with different numbers of datapoints/PDF members" <<std::endl; 
-    exit(-1);
-  }
+    throw EvaluationError("ThPredictions::operator/=","Cannot multiply predictions with different numbers of datapoints/PDF members");
 
   if ( (fEtype != PDFSet::ER_MC && fEtype != PDFSet::ER_MC68 && fEtype != PDFSet::ER_MCT0 ) && ThPredictions::Verbose == true)
     std::cerr << "ThPredictions::operator/= Warning: Observable multiplication undefined for ErrorTypes other than Monte-Carlo" <<std::endl; 
@@ -348,11 +319,8 @@ void ThPredictions::Convolute(const PDFSet *pdfset, const FKTable *fk, real* the
   int err = posix_memalign(reinterpret_cast<void **>(&pdf), 16, sizeof(real)*Dsz*Npdf);
 
   if (err != 0)
-    {
-      std::cout << "Error in ThPredictions posix_memalign " << err << std::endl;
-      exit(-1);
-    }
-  
+    throw RangeError("ThPredictions::Convolute","ThPredictions posix_memalign " + std::to_string(err));
+
   // Fetch PDF array
   GetNZPDF(pdfset, fk, pdf);
 
@@ -399,10 +367,7 @@ void ThPredictions::Convolute(const PDFSet *pdf1, const PDFSet *pdf2, const FKTa
   int err = posix_memalign(reinterpret_cast<void **>(&pdf), 16, sizeof(real)*Dsz*Npdf);
 
   if (err != 0)
-    {
-      std::cout << "Error in ThPredictions posix_memalign " << err << std::endl;
-      exit(-1);
-    }
+    throw RangeError("ThPredictions::Convolute","ThPredictions posix_memalign " + std::to_string(err));
   
   // Fetch PDF array
   GetNZPDF(pdf1, pdf2, fk, pdf);
@@ -568,16 +533,10 @@ void ThPredictions::Print(std::ostream& out, bool latex) const
 void ThPredictions::GetNZPDF(const PDFSet* pdfset, const FKTable *fk, real* pdf)
 {
   if (!fk)
-    {
-      std::cerr << "ThPredictions::GetNZPDF: FKTable null"<<std::endl;
-      exit(-1);
-    }
+    throw RangeError("ThPredictions::GetNZPDF","FKTable null");
 
   if (!pdfset)
-    {
-      std::cerr << "ThPredictions::GetNZPDF: PDFSet null"<<std::endl;
-      exit(-1);
-    }
+    throw RangeError("ThPredictions::GetNZPDF","PDFSet null");
 
   // Get PDF set data
   const int NPDF     = pdfset->GetMembers();
@@ -649,22 +608,13 @@ void ThPredictions::GetNZPDF(const PDFSet* pdfset, const FKTable *fk, real* pdf)
 void ThPredictions::GetNZPDF(const PDFSet* pdf1, const PDFSet* pdf2, const FKTable *fk, real* pdf)
 {
   if (!fk)
-    {
-      std::cerr << "ThPredictions::GetNZPDF: FKTable null"<<std::endl;
-      exit(-1);
-    }
+    throw RangeError("ThPredictions::GetNZPDF","FKTable null");
 
   if (!pdf1 || !pdf2)
-    {
-      std::cerr << "ThPredictions::GetNZPDF: PDFSet null"<<std::endl;
-      exit(-1);
-    }
+    throw RangeError("ThPredictions::GetNZPDF","PDFSet null");
 
   if (!fk->IsHadronic())
-    {
-      std::cerr << "ThPredictions::GetNZPDF Error: Dual-beam convolution requires an hadronic FK table!"<<std::endl;
-      exit(-1);
-    }
+    throw EvaluationError("ThPredictions::GetNZPDF","Dual-beam convolution requires an hadronic FK table!");
 
   // Get PDF set data
   const int NPDF     = pdf1->GetMembers();

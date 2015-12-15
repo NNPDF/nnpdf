@@ -33,7 +33,8 @@ otherinclude_HEADERS =  src/NNPDF/common.h \
 			src/NNPDF/logger.h \
 			src/NNPDF/positivity.h \
 			src/NNPDF/thpredictions.h \
-			src/NNPDF/nnmpi.h
+                        src/NNPDF/nnmpi.h \
+                        src/NNPDF/exceptions.h
 
 
 libnnpdf_la_LDFLAGS = -version-info 0:0:0 $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDFLAGS)

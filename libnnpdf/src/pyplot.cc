@@ -9,6 +9,7 @@
 #include <sstream>
 
 #include "NNPDF/pyplot.h"
+#include "NNPDF/exceptions.h"
 
 using namespace NNPDF;
 
@@ -28,10 +29,7 @@ PyPlot::~PyPlot()
 void PyPlot::InitInterpreter()
 {
   if (Py_IsInitialized())
-  {
-    std::cerr << "PyPlot::InitInterpreter::Error - Interpreter is already initialised!"<<std::endl;
-    exit(-1);
-  }
+    throw InitError("PyPlot::InitInterpreter", "Interpreter is already initialised!");
   
   // Init interpreter
   Py_Initialize();
@@ -50,10 +48,7 @@ void PyPlot::InitInterpreter()
 void PyPlot::CloseInterpreter()
 {
   if (!Py_IsInitialized())
-  {
-    std::cerr << "PyPlot::CloseInterpreter::Error - Interpreter is not initialised!"<<std::endl;
-    exit(-1);
-  }
+    throw InitError("PyPlot::CloseInterpreter","Interpreter is not initialised!");
   
   Py_Finalize();
 }
@@ -88,10 +83,7 @@ void PyPlot::ExecPlot(std::string pltName, std::string srcPath, std::string trgP
   PyObject *pMod = PyImport_Import(pPath);
   
   if (!pMod)
-  {
-    std::cerr << "PyPlot::ExecPlot Fails: Cannot import plot "<<pltName<<std::endl;
-    exit(-1);
-  }
+    throw FileError("PyPlot::ExecPlot", "Cannot import plot " + pltName);
   
   // Fetch dictionary reference
   PyObject *pDict = PyModule_GetDict(pMod);
@@ -101,10 +93,8 @@ void PyPlot::ExecPlot(std::string pltName, std::string srcPath, std::string trgP
   PyObject *pSource = PyString_FromString(srcPath.c_str());
   PyObject *pTarget = PyString_FromString(trgPath.c_str());
 
-  if (!pSource || !pTarget ) {
-    std::cerr << "PyPlot::ExecPlot::Cannot convert argument "<<std::endl;
-    exit(-1);
-  }
+  if (!pSource || !pTarget )
+    throw EvaluationError("PyPlot::ExecPlot","Cannot convert argument");
   
   // Set args
   PyTuple_SetItem(pArgs, 0, pSource);
@@ -119,7 +109,7 @@ void PyPlot::ExecPlot(std::string pltName, std::string srcPath, std::string trgP
   } else
   {
     PyErr_Print();
-    exit(-1);
+    throw EvaluationError("PyPlot::ExecPlot","pycallable_check");
   }
   
   //CloseInterpreter();

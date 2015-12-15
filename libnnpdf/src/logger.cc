@@ -8,6 +8,7 @@
 
 #include "NNPDF/common.h"
 #include "NNPDF/logger.h"
+#include "NNPDF/exceptions.h"
 
 #include <iostream>
 #include <fstream>
@@ -64,8 +65,7 @@ namespace NNPDF
     if (LM->fMap.find(hashval)!=LM->fMap.end())
     {
       cerr << "LogManager::AddLogger Error - hash collision for new log: \'" <<logname<<"\' with hash: "<< hashval<<". ";
-      cerr << "Log already exists!"<<endl;
-      exit(-1);
+      throw LogError("LogManager::AddLogger","Log already exists!");
     }
     
     // Insert new logger
@@ -89,7 +89,7 @@ namespace NNPDF
     if ( iLog == LM->fMap.end())
     {
       cerr << "LogManager::GetLogger Error - log: \'" <<logname<<"\' does not exist!"<<endl;
-      exit(-1);
+      throw LogError("LogManager::AddLogger","Log does not exists!");
     }
     
     return (*iLog).second;

@@ -14,6 +14,7 @@
 #include "NNPDF/lhapdfset.h"
 #include "NNPDF/pdfset.h"
 #include "NNPDF/utils.h"
+#include "NNPDF/exceptions.h"
 
 using namespace NNPDF;
 
@@ -89,10 +90,7 @@ void LHAPDFSet::GetPDF(real const& x, real const& Q2, int const& n, real* pdf)  
   const int iMem = (fEtype == ER_MC || fEtype == ER_MC68) ? n+1:n;
   
   if (!fMemberPDFs[iMem]->inPhysicalRangeXQ2(x, Q2))
-  {
-    std::cerr << "LHAPDFSet::GetPDF Error: kinematics out of set range: x="<<x<<" Q2="<<Q2<<std::endl;
-    exit(-1);
-  }
+    throw RangeError("LHAPDFSet::GetPDF","kinematics out of set range: x="+ std::to_string(x) +" Q2="+ std::to_string(Q2));
 
   // Clear LHA (probably unneeded)
   for (int i=0; i<14; i++)
@@ -128,10 +126,7 @@ real LHAPDFSet::xfxQ(real const& x, real const& Q, int const& n, int const& fl) 
   const int iMem = (fEtype == ER_MC || fEtype == ER_MC68) ? n+1:n;
   
   if (!fMemberPDFs[iMem]->inPhysicalRangeXQ(x, Q))
-  {
-    std::cerr << "LHAPDFSet::GetPDF Error: kinematics out of set range: x="<<x<<" Q="<<Q<<std::endl;
-    exit(-1);
-  }
+    throw RangeError("LHAPDFSet::GetPDF", "kinematics out of set range: x=" + std::to_string(x) + " Q=" + std::to_string(Q));
 
   return fMemberPDFs[iMem]->xfxQ(fl, x, Q);
 };

@@ -14,6 +14,7 @@
 
 #include "NNPDF/parametrisation.h"
 #include "NNPDF/randomgenerator.h"
+#include "NNPDF/exceptions.h"
 
 using namespace NNPDF;
 
@@ -59,10 +60,7 @@ Parametrisation::~Parametrisation()
 void Parametrisation::CopyPars(Parametrisation* t)
 {
   if (fNParameters != t->GetNParameters())
-  {
-    std::cerr << "Parametrisation::CopyPars Error: number of parameters does not match: "<< fNParameters<<" vs "<<t->GetNParameters()<<std::endl;
-    exit(-1);
-  }
+    throw EvaluationError("Parametrisation::CopyPars", "number of parameters does not match: " + std::to_string(fNParameters) + " vs " + std::to_string(t->GetNParameters()));
   
   for (int i=0; i<fNParameters; i++)
     fParameters[i] = t->fParameters[i];
@@ -294,27 +292,18 @@ void MultiLayerPerceptron::Compute(real* in,real* out) const
 int MultiLayerPerceptron::GetNumNodeParams(int const& layer) const
 {
   if (layer <=0 || layer >= fNLayers)
-  {
-    std::cerr<< "MultiLayerPerceptron::GetNumNodeParams Error: layer requested ("<<layer<<") is out of bounds!"<<std::endl;
-    exit(-1);
-  }
-  
+    throw RangeError("MultiLayerPerceptron::GetNumNodeParams", "layer requested (" + std::to_string(layer) + ") is out of bounds!");
+
   return fArch[layer-1] + 1;
 }
 
 real* MultiLayerPerceptron::GetNodeParams(int const& layer, int const& node)
 {
   if (layer <=0 || layer >= fNLayers)
-  {
-    std::cerr<< "MultiLayerPerceptron::GetNodeParams Error: layer requested ("<<layer<<") is out of bounds!"<<std::endl;
-    exit(-1);
-  }
+    throw RangeError("MultiLayerPerceptron::GetNodeParams","layer requested (" + std::to_string(layer) + ") is out of bounds!");
   
   if (node < 0 || node >= fArch[layer] )
-  {
-    std::cerr<< "MultiLayerPerceptron::GetNodeParams Error: node requested ("<<node<<") is out of bounds!"<<std::endl;
-    exit(-1);
-  }
+    throw RangeError("MultiLayerPerceptron::GetNodeParams","node requested (" + std::to_string(node) + ") is out of bounds!");
   
   return &fWeightMatrix[layer-1][node];
 }
@@ -335,10 +324,7 @@ fPolynomials(new real[fNOrder])
   fParameters = new real[fNOrder];
   
   if (fNOrder<2)
-  {
-    std::cerr << "ChebyshevPolynomial()::Error -> Must have at least 2 orders"<<std::endl;
-    exit(-1);
-  }
+    throw InitError("ChebyshevPolynomial()", "Must have at least 2 orders");
   
   // init
   fPolynomials[0] = 1;
@@ -359,10 +345,7 @@ fNOrder(o.fNOrder),
 fPolynomials(new real[fNOrder])
 {
   if (fNOrder<2)
-  {
-    std::cerr << "ChebyshevPolynomial()::Error -> Must have at least 2 orders"<<std::endl;
-    exit(-1);
-  }
+    throw InitError("ChebyshevPolynomial()", "Must have at least 2 orders");
   
   // init
   fPolynomials[0] = 1;
@@ -620,10 +603,7 @@ void QuadMultiLayerPerceptron::Compute(real* in,real* out) const
 int QuadMultiLayerPerceptron::GetNumNodeParams(int const& layer) const
 {
   if (layer <=0 || layer >= fNLayers)
-  {
-    std::cerr<< "QuadMultiLayerPerceptron::GetNumNodeParams Error: layer requested ("<<layer<<") is out of bounds!"<<std::endl;
-    exit(-1);
-  }
+    throw RangeError("QuadMultiLayerPerceptron::GetNumNodeParams","layer requested (" + std::to_string(layer) + ") is out of bounds!");
 
   return fArch[layer-1]*fArch[layer-1]+fArch[layer-1] + 1;
 }

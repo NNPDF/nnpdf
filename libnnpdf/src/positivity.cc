@@ -12,6 +12,7 @@
 #include "NNPDF/fastkernel.h"
 #include "NNPDF/pdfset.h"
 #include "NNPDF/thpredictions.h"
+#include "NNPDF/exceptions.h"
 
 #include <fstream>
 #include <iostream>
@@ -62,7 +63,8 @@ PositivitySet::~PositivitySet()
   */
 void PositivitySet::SetBounds(const NNPDF::PDFSet* pdf)
 {
-  if (pdf->GetMembers() > 1) { std::cerr << "Positivity::SetBounds error, bound PDF contains more than 1 replica" << std::endl; exit(-1); }
+  if (pdf->GetMembers() > 1)
+    throw LengthError("Positivity::SetBounds","bound PDF contains more than 1 replica");
 
   const int Ndat = CommonData::GetNData();
   real *tmp = new real[Ndat];

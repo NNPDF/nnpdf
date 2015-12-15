@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include "NNPDF/randomgenerator.h"
+#include "NNPDF/exceptions.h"
 
 namespace NNPDF
 {
@@ -50,10 +51,7 @@ namespace NNPDF
   RandomGenerator* RandomGenerator::GetRNG()
   {
     if (rngInstance == 0)
-    {
-      std::cerr << "GetRNG() Error: RNG has not been initialised!" << std::endl;     
-      exit(-1);
-    }
+      throw InitError("GetRNG()","RNG has not been initialised!");
 
     return rngInstance;
   }

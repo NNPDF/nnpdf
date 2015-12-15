@@ -17,6 +17,7 @@
 #include "NNPDF/fkset.h"
 #include "NNPDF/fastkernel.h"
 #include "NNPDF/utils.h"
+#include "NNPDF/exceptions.h"
 
 namespace NNPDF
 {
@@ -44,10 +45,7 @@ namespace NNPDF
   static void OpRatio(int const& Nvals, std::vector<real*> const& obs, real*out)
   {
     if (obs.size()!=2)
-    {
-      std::cerr << "OpRatio Error: number of FK grids is incorrect"<<std::endl;
-      exit(-1);
-    }
+      throw LengthError("OpRatio","number of FK grids is incorrect");
     
     for (int i=0; i<Nvals; i++)
       out[i] = obs[0][i]/obs[1][i];
@@ -58,10 +56,7 @@ namespace NNPDF
   static void OpAsy(int const& Nvals, std::vector<real*> const& obs, real*out)
   {
     if (obs.size()!=2)
-    {
-      std::cerr << "OpAsy Error: number of FK grids is incorrect"<<std::endl;
-      exit(-1);
-    }
+      throw LengthError("OpAsy","number of FK grids is incorrect");
     
     for (int i=0; i<Nvals; i++)
       out[i] = (obs[0][i]-obs[1][i])/(obs[0][i]+obs[1][i]);
@@ -74,11 +69,8 @@ namespace NNPDF
   static void OpSmn(int const& Nvals, std::vector<real*> const& obs, real*out)
   {
     if (obs.size()!=4)
-    {
-      std::cerr << "OpSmn Error: number of FK grids is incorrect"<<std::endl;
-      exit(-1);
-    }
-    
+     throw LengthError("OpSmn","number of FK grids is incorrect");
+
     for (int i=0; i<Nvals; i++)
       out[i] = (obs[0][i]+obs[1][i])/(obs[2][i]+obs[3][i]);
     
@@ -100,31 +92,18 @@ namespace NNPDF
       fFK[i] = fktabs[i];
 
     if (fNSigma == 0)
-    {
-      std::cerr << "FKSet::FKSet Error: No FK tables added to set"<<std::endl;
-      exit(-1);
-    }
+      throw UserError("FKSet::FKSet","No FK tables added to set");
 
     for (size_t i=0; i<fNSigma; i++)
     {
       if (fFK[i]->IsHadronic() != fHadronic)
-      {
-        std::cerr << "FKSet::FKSet Error: Hadronic status mismatch!"<<std::endl;
-        exit(-1);
-      }
+        throw EvaluationError("FKSet::FKSet", "Hadronic status mismatch!");
 
       if (fFK[i]->GetNData() != fNDataFK)
-      {
-        std::cerr << "FKSet::FKSet Error: NData mismatch!"<<std::endl;
-        exit(-1);
-      }
+        throw EvaluationError("FKSet::FKSet", "NData mismatch!");
 
       if (fFK[i]->GetDataName().compare(fDataName) != 0)
-      {
-        std::cerr << "FKSet::FKSet Error: Setname mismatch: "<<fFK[i]->GetDataName()<<"  "<<fDataName<<std::endl;
-        exit(-1);
-      }
-
+        throw EvaluationError("FKSet::FKSet", "Setname mismatch: " + fFK[i]->GetDataName() + "  " + fDataName);
     }
   };
 
@@ -145,10 +124,7 @@ namespace NNPDF
     // Verify masking (uneccesary after one go)
     for (size_t i=0; i<fNSigma; i++)
       if (fFK[i]->GetNData() != fNDataFK)
-      {
-        std::cerr << "FKSet::FKSet Error: NData mismatch!"<<std::endl;
-        exit(-1);
-      }
+        throw RangeError("FKSet::FKSet", "NData mismatch!");
   };
 
 
@@ -168,10 +144,7 @@ namespace NNPDF
     // Verify masking (uneccesary after one go)
     for (size_t i=0; i<fNSigma; i++)
       if (fFK[i]->GetNData() != fNDataFK)
-      {
-        std::cerr << "FKSet::FKSet Error: NData mismatch!"<<std::endl;
-        exit(-1);
-      }
+        throw RangeError("FKSet::FKSet","NData mismatch!");
   };
 
   FKSet::~FKSet()
@@ -202,8 +175,7 @@ namespace NNPDF
 
       // Add other operations here if required
 
-    std::cerr << "parseOperator Error: Operator "<<op<<" unknown!"<<std::endl;
-    exit(-1);
+    throw EvaluationError("FKSet::parseOperator","Unknown operator!");
 
     return OpNull;
   }

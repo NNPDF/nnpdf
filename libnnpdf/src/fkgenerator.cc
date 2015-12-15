@@ -12,6 +12,7 @@
 
 #include "NNPDF/fkgenerator.h"
 #include "NNPDF/utils.h"
+#include "NNPDF/exceptions.h"
 
 namespace NNPDF
 {
@@ -41,34 +42,19 @@ namespace NNPDF
       return;
 
     if (d >= fNData)
-    {
-      std::cerr << "FKGenerator::Fill Error: datapoint "<<d <<" out of bounds."<<std::endl;
-      exit(-1);
-    }
+      throw RangeError("FKGenerator::Fill","datapoint " + std::to_string(d) + "out of bounds.");
 
     if (ix1 >= fNx)
-    {
-      std::cerr << "FKGenerator::Fill Error: xpoint "<<ix1 <<" out of bounds."<<std::endl;
-      exit(-1);
-    }
+      throw RangeError("FKGenerator::Fill","xpoint " + std::to_string(ix1) + " out of bounds.");
 
     if (ix2 >= fNx)
-    {
-      std::cerr << "FKGenerator::Fill Error: xpoint "<<ix2 <<" out of bounds."<<std::endl;
-      exit(-1);
-    }
+      throw RangeError("FKGenerator::Fill","xpoint " + std::to_string(ix2) + " out of bounds.");
 
     if (ifl1 >= 14)
-    {
-      std::cerr << "FKGenerator::Fill Error: flavour "<<ifl1 <<" out of bounds."<<std::endl;
-      exit(-1);
-    }
+      throw RangeError("FKGenerator::Fill","flavour " + std::to_string(ifl1) + " out of bounds.");
 
     if (ifl2 >= 14)
-    {
-      std::cerr << "FKGenerator::Fill Error: flavour "<<ifl2 <<" out of bounds."<<std::endl;
-      exit(-1);
-    }
+      throw RangeError("FKGenerator::Fill","flavour " + std::to_string(ifl2) + " out of bounds.");
 
     // pointer to FKTable segment
     const size_t jFL = 14*ifl1 + ifl2;
@@ -92,22 +78,13 @@ namespace NNPDF
       return;
 
     if (d >= fNData)
-    {
-      std::cerr << "FKGenerator::Fill Error: datapoint "<<d <<" out of bounds."<<std::endl;
-      exit(-1);
-    }
+      throw RangeError("FKGenerator::Fill","datapoint " + std::to_string(d) + " out of bounds.");
 
     if (ix >= fNx)
-    {
-      std::cerr << "FKGenerator::Fill Error: xpoint "<<ix <<" out of bounds."<<std::endl;
-      exit(-1);
-    }
+      throw RangeError("FKGenerator::Fill","xpoint " + std::to_string(ix) + " out of bounds.");
 
     if (ifl >= 14)
-    {
-      std::cerr << "FKGenerator::Fill Error: flavour "<<ifl <<" out of bounds."<<std::endl;
-      exit(-1);
-    }
+      throw RangeError("FKGenerator::Fill","flavour " + std::to_string(ifl) + " out of bounds.");
 
     // pointer to FKTable segment
     const size_t iSig = d*fDSz+ifl*fNx+ix;
