@@ -87,8 +87,8 @@ class tui_download(npyscreen.NPSApp):
     def main(self):
         sshProcess = Popen(['ssh', '-T', 'nnpdf@pcteserver.mi.infn.it'],
                             stdin=PIPE, stdout=PIPE)
-        out, err = sshProcess.communicate("ls -t /home/nnpdf/WEB/fits\n")
-        out = out.rstrip().split('\n')
+        out, err = sshProcess.communicate('ls -t /home/nnpdf/WEB/fits\n'.encode('utf-8'))
+        out = out.decode('utf-8').split('\n')
         fits = []
         for i in out:
             if '.tgz' in i: fits.append(i.replace('.tgz',''))
