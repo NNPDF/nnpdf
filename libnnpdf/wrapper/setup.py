@@ -20,8 +20,8 @@ def call_command(command):
         sys.exit(1)
     return result.decode().rstrip()
 
-nnpdf_includes = call_command('nnpdf-config --cppflags').split()
-nnpdf_libs = call_command('nnpdf-config --ldflags').split()
+nnpdf_includes = ['-I../src/NNPDF']
+nnpdf_libs = ['-L.libs/ -lnnpdf -lgsl']
 
 lhapdf_includes = call_command('lhapdf-config --cflags').split()
 lhapdf_libs = call_command('lhapdf-config --libs').split()
