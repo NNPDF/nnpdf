@@ -10,4 +10,7 @@
 %import "commondata.i"
 %import "fkset.i"
 /* Parse the header file to generate wrappers */
+
+%include "include/excepthandler.i"
+
 %include "../../src/NNPDF/dataset.h"

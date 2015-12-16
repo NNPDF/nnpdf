@@ -10,4 +10,7 @@
 %import "fastkernel.i"
 %import "common.i"
 /* Parse the header file to generate wrappers */
+
+%include "include/excepthandler.i"
+
 %include "../../src/NNPDF/fkgenerator.h"
