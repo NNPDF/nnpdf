@@ -10,7 +10,6 @@ __email__ = 'stefano.carrazza@mi.infn.it'
 import os
 import sys
 import argparse
-import lhapdf
 import shutil
 from subprocess import PIPE, Popen
 sys.path.append('../../tools/')
