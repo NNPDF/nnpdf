@@ -1,6 +1,7 @@
 nnpdfbuild/
 *~
 *.o
+*.so
 .deps
 .dirstamp
 theory_*
@@ -12,3 +13,7 @@ config.log
 config.status
 libtool
 *.pyc
+Makefile
+
+.ipynb_checkpoints/
+*.swp
