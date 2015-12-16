@@ -354,7 +354,7 @@ check: check-am
 @WITH_PYWRAP_FALSE@all-local:
 all-am: Makefile all-local
 installdirs:
-@WITH_PYWRAP_FALSE@install: install-am
+install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -385,6 +385,7 @@ maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
 @WITH_PYWRAP_FALSE@clean-local:
+@WITH_PYWRAP_FALSE@install-exec-local:
 @WITH_PYWRAP_FALSE@distclean-local:
 clean: clean-am
 
@@ -412,7 +413,7 @@ install-dvi: install-dvi-am
 
 install-dvi-am:
 
-install-exec-am:
+install-exec-am: install-exec-local
 
 install-html: install-html-am
 
@@ -459,13 +460,13 @@ uninstall-am:
 	distclean-generic distclean-libtool distclean-local distdir \
 	dvi dvi-am html html-am info info-am install install-am \
 	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags-am uninstall \
-	uninstall-am
+	install-exec install-exec-am install-exec-local install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags-am uninstall uninstall-am
 
 
 @WITH_PYWRAP_TRUE@all-local:
@@ -476,7 +477,7 @@ uninstall-am:
 @WITH_PYWRAP_TRUE@	mv src/*.cxx _sources
 @WITH_PYWRAP_TRUE@	$(PYEXT_ENV) $(PYTHON) setup.py install
 
-@WITH_PYWRAP_TRUE@install:
+@WITH_PYWRAP_TRUE@install-exec-local:
 
 @WITH_PYWRAP_TRUE@clean-local:
 @WITH_PYWRAP_TRUE@	-rm -rf $(builddir)/_sources/

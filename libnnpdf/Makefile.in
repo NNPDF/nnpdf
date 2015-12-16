@@ -490,7 +490,7 @@ FKconvolute_LDFLAGS = $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDF
 # Scripts to install
 dist_bin_SCRIPTS = scripts/FKmerge
 ACLOCAL_AMFLAGS = -I m4
-SUBDIRS = bin wrapper
+SUBDIRS = bin
 all: all-recursive
 
 .SUFFIXES:
@@ -1355,6 +1355,14 @@ uninstall-am: uninstall-binPROGRAMS uninstall-dist_binSCRIPTS \
 	uninstall-am uninstall-binPROGRAMS uninstall-dist_binSCRIPTS \
 	uninstall-libLTLIBRARIES uninstall-otherincludeHEADERS
 
+
+wrapper:
+	cd wrapper && $(MAKE) $(AM_MAKEFLAGS)
+
+wrapperclean:
+	cd wrapper && $(MAKE) $(AM_MAKEFLAGS) clean
+
+.PHONY: wrapper wrapperclean
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

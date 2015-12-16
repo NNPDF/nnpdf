@@ -11,7 +11,7 @@ all-local:
 	mv src/*.cxx _sources
 	$(PYEXT_ENV) $(PYTHON) setup.py install
 
-install:
+install-exec-local:
 
 clean-local:
 	-rm -rf $(builddir)/_sources/
