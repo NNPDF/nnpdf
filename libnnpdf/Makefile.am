@@ -54,7 +54,7 @@ ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = bin
 
 wrapper:
-	cd wrapper && $(MAKE) $(AM_MAKEFLAGS)
+	cd wrapper && $(MAKE) $(AM_MAKEFLAGS) install
 
 wrapperclean:
 	cd wrapper && $(MAKE) $(AM_MAKEFLAGS) clean

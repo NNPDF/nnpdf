@@ -12,7 +12,7 @@ AC_CONFIG_HEADERS([src/NNPDF/config.h])
 
 AC_CONFIG_FILES([Makefile src/NNPDF/common.h])
 AC_CONFIG_FILES([bin/Makefile bin/nnpdf-config])
-AC_CONFIG_FILES([wrapper/Makefile])
+AC_CONFIG_FILES([wrapper/Makefile wrapper/setup.py])
 AM_INIT_AUTOMAKE([subdir-objects])
 
 # Checks for programs.

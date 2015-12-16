@@ -3,15 +3,15 @@ if WITH_PYWRAP
 
 PYEXT_ENV = CC=$(CC) CXX=$(CXX)
 
-all-local:
+all:
 	mkdir -p pylibs/NNPDF
 	cp src/*.py pylibs/NNPDF/
 	find src -name "*.i" -print0 | xargs -0 -I {} $(SWIG) -c++ -outdir pylibs/NNPDF -python -py3 {}
 	mkdir -p _sources
 	mv src/*.cxx _sources
-	$(PYEXT_ENV) $(PYTHON) setup.py install
 
-install-exec-local:
+install: all
+	$(PYEXT_ENV) $(PYTHON) setup.py install
 
 clean-local:
 	-rm -rf $(builddir)/_sources/

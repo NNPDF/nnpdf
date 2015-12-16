@@ -45,7 +45,7 @@ ext_modules = [Extension('NNPDF._' + name,
                     for name,source in zip(names, sources) ]
 
 setup (name = 'NNPDF',
-       version = '0.1',
+       version = '@PACKAGE_VERSION@',
        description = "PDFs for phenomenology",
        author = 'NNPDF Collaboration',
        author_email = 'kassabov@to.infn.it',

@@ -11010,7 +11010,7 @@ ac_config_files="$ac_config_files Makefile src/NNPDF/common.h"
 
 ac_config_files="$ac_config_files bin/Makefile bin/nnpdf-config"
 
-ac_config_files="$ac_config_files wrapper/Makefile"
+ac_config_files="$ac_config_files wrapper/Makefile wrapper/setup.py"
 
 am__api_version='1.14'
 
@@ -20172,6 +20172,7 @@ do
     "bin/Makefile") CONFIG_FILES="$CONFIG_FILES bin/Makefile" ;;
     "bin/nnpdf-config") CONFIG_FILES="$CONFIG_FILES bin/nnpdf-config" ;;
     "wrapper/Makefile") CONFIG_FILES="$CONFIG_FILES wrapper/Makefile" ;;
+    "wrapper/setup.py") CONFIG_FILES="$CONFIG_FILES wrapper/setup.py" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;

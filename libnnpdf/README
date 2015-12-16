@@ -14,6 +14,8 @@ Activate python wrapper:
 
 ./configure --enable-pywrap
 
+install the libnnpdf and then make wrapper
+
 If you have troubles with automake tools, please run
 
 	autoreconf -i

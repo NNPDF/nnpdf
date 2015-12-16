@@ -1357,7 +1357,7 @@ uninstall-am: uninstall-binPROGRAMS uninstall-dist_binSCRIPTS \
 
 
 wrapper:
-	cd wrapper && $(MAKE) $(AM_MAKEFLAGS)
+	cd wrapper && $(MAKE) $(AM_MAKEFLAGS) install
 
 wrapperclean:
 	cd wrapper && $(MAKE) $(AM_MAKEFLAGS) clean
