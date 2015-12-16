@@ -1,5 +1,7 @@
 %module(package="NNPDF") experiments
  %{
+
+#include "../../src/NNPDF/exceptions.h"
 #include "../../src/NNPDF/experiments.h"
  %}
 

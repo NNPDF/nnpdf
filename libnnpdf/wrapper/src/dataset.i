@@ -1,5 +1,6 @@
 %module(package="NNPDF") dataset
  %{
+#include "../../src/NNPDF/exceptions.h"
 #include "../../src/NNPDF/dataset.h"
  %}
 
