@@ -290,7 +290,6 @@ def main(nrep, fit_filename):
     print ("\n- Copying %s to LHAPDF path" % fitname)
     lhapath = Popen(["lhapdf-config","--datadir"],stdout=PIPE).communicate()[0]
 
-    """
     import lhapdf    
     if hasattr(lhapdf,"mkPDFs"):
         print ("- LHAPATH: %s" % lhapath)
@@ -338,8 +337,7 @@ def main(nrep, fit_filename):
     if status == True:
         print("\n- Congratulations! The grid was created and tested. Now you can run validphys!\n")
     else:
-        print("\n- Unfortunately there is a problem in the grid.\n")
-    """
+        print("\n- Unfortunately there is a problem in the grid.\n")    
 
 def splash():
     print ("                                                        ")
