@@ -1,5 +1,6 @@
 %module(package="NNPDF") thpredictions
  %{
+#include "../../src/NNPDF/exceptions.h"
 #include "../../src/NNPDF/thpredictions.h"
  %}
 
@@ -12,4 +13,7 @@
 %import "experiments.i"
 
 /* Parse the header file to generate wrappers */
+
+%include "include/excepthandler.i"
+
 %include "../../src/NNPDF/thpredictions.h"

@@ -1,5 +1,6 @@
 %module(package="NNPDF") logger
  %{
+#include "../../src/NNPDF/exceptions.h"
 #include "../../src/NNPDF/logger.h"
  %}
 
@@ -7,4 +8,7 @@
 %include "std_vector.i" 
 
 /* Parse the header file to generate wrappers */
+
+%include "include/excepthandler.i"
+
 %include "../../src/NNPDF/logger.h"

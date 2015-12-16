@@ -1,5 +1,6 @@
 %module(package="NNPDF") fastkernel
  %{
+#include "../../src/NNPDF/exceptions.h"
 #include "../../src/NNPDF/fastkernel.h"
  %}
 
@@ -9,4 +10,8 @@
 
 /* Parse the header file to generate wrappers */
 %template(_string_list) std::vector< std::string >;
+%include "../../src/NNPDF/exceptions.h"
+
+%include "include/excepthandler.i"
+
 %include "../../src/NNPDF/fastkernel.h"
