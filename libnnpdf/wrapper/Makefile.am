@@ -6,7 +6,7 @@ PYEXT_ENV = CC=$(CC) CXX=$(CXX)
 all:
 	mkdir -p pylibs/NNPDF
 	cp src/*.py pylibs/NNPDF/
-	find src -name "*.i" -maxdepth 1 -print0 | xargs -0 -I {} $(SWIG) -c++ -outdir pylibs/NNPDF -python -py3 {}
+	find src -maxdepth 1 -name "*.i" -print0 | xargs -0 -I {} $(SWIG) -c++ -outdir pylibs/NNPDF -python -py3 {}
 	mkdir -p _sources
 	mv src/*.cxx _sources
 
