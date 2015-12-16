@@ -1,0 +1,3 @@
+= INSTALL
+
+first compile and install libnnpdf then type make from this folder or make wrapper from the libnnpdf/ root folder.
