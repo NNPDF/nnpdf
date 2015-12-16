@@ -9,7 +9,6 @@ __email__ = 'stefano.carrazza@mi.infn.it'
 
 import os
 import shutil
-import lhapdf
 import argparse
 import math
 from subprocess import PIPE, Popen
@@ -112,8 +111,8 @@ def main(nrep, fit_filename):
                 print ("Replacing replica %d" % int(irep+1))
                 print >>l, ("Replacing replica %d" % int(irep+1))
                 badreplica = True                
-                print "Replacing folder",mask[irep]
-                print >>l, "Replacing folder",mask[irep]
+                print ("Replacing folder %i" % mask[irep])
+                print >>l, "Replacing folder %i" % mask[irep]
                 fol = mask[irep]
                 mask.remove(fol)
                 nb = (fol.replace(dir + "replica_","")).replace("/","")
@@ -164,36 +163,36 @@ def main(nrep, fit_filename):
     
     for i in range(len(mask)): 
         if i < nrep:
-            print mask[i].replace(dir + "replica_",""),
-            print >> l, mask[i].replace(dir + "replica_",""),
+            print ("%s" % mask[i].replace(dir + "replica_","")),
+            print >> l, ("%s" % mask[i].replace(dir + "replica_","")),
 
-    print "\n\n- Removing bad replicas from folders:"
-    print >>l, "\n\n- Removing bad replicas from folders:"
+    print("\n\n- Removing bad replicas from folders:")
+    print >>l, ("\n\n- Removing bad replicas from folders:")
 
     for i in range(len(umask)):
-        print umask[i].replace(dir + "replica_",""),
-        print >>l, umask[i].replace(dir + "replica_",""),
+        print ("%s" % umask[i].replace(dir + "replica_","")),
+        print >>l, ("%s" % umask[i].replace(dir + "replica_","")),
 
-    print "\n\n- Discarted replicas from folders:"
-    print >>l,"\n\n- Discarted replicas from folders:"
+    print ("\n\n- Discarted replicas from folders:")
+    print >>l,("\n\n- Discarted replicas from folders:")
 
     for i in range(len(discart)):
-        print discart[i].replace(dir + "replica_",""),
-        print >>l, discart[i].replace(dir + "replica_",""),    
+        print ("%s" % discart[i].replace(dir + "replica_","")),
+        print >>l, ("%s" % discart[i].replace(dir + "replica_","")),    
 
     # moving bad folders to .postfitveto
     for i in range(len(umask)):
-        print "\n- Moving:\n",umask[i],"to\n",umask[i][:-1]+".postfitveto"
+        print ("\n- Moving:\n%sto\n%s.postfitveto" % (umask[i],umask[i][:-1]))
         print >>l, "\n- Moving:\n",umask[i],"to\n",umask[i][:-1]+".postfitveto"
         
         shutil.move(umask[i],umask[i][:-1]+".postfitveto")
 
-        print "- Copying:\n",mask[nrep-len(umask)+i],"in\n",umask[i]
+        print ("- Copying:\n%sin\n%s" % (mask[nrep-len(umask)+i],umask[i]))
         print >>l, "- Copying:\n",mask[nrep-len(umask)+i],"in\n",umask[i]
 
         shutil.copytree(mask[nrep-len(umask)+i],umask[i])
         
-        print "- Moving\n",mask[nrep-len(umask)+i],"to\n",mask[nrep-len(umask)+i][:-1] + ".postfitused"        
+        print ("- Moving\n%sto\n%s.postfitused" % (mask[nrep-len(umask)+i],mask[nrep-len(umask)+i][:-1]))
         print >>l, "- Moving\n",mask[nrep-len(umask)+i],"to\n",mask[nrep-len(umask)+i][:-1] + ".postfitused"   
 
         shutil.move(mask[nrep-len(umask)+i],mask[nrep-len(umask)+i][:-1]+".postfitused")
@@ -228,7 +227,7 @@ def main(nrep, fit_filename):
         replica = dir + 'replica_' + str(i) + "/" + fitname + ".dat"
         shutil.copyfile(replica, dir + "/" + fitname + "/" + fitname + '_{:04n}.dat'.format(i))
         
-        print "- Reading: ", replica
+        print ("- Reading: %i" % replica)
         f = open(replica, 'rb')
         xpdf.append([])
         for j in range(0,2): f.readline()
@@ -291,6 +290,8 @@ def main(nrep, fit_filename):
     print ("\n- Copying %s to LHAPDF path" % fitname)
     lhapath = Popen(["lhapdf-config","--datadir"],stdout=PIPE).communicate()[0]
 
+    """
+    import lhapdf    
     if hasattr(lhapdf,"mkPDFs"):
         print ("- LHAPATH: %s" % lhapath)
 
@@ -318,36 +319,37 @@ def main(nrep, fit_filename):
     
         status = True
         for i in range(0,len(pdfs)):
-            print "\n         x\t        Q2          " + pdfs[i] + " rep0          " + pdfs[i] + " avg          Diff(%)"
+            print ("\n         x\t        Q2          %s rep0          %s avg          Diff(%)" % (pdfs[i], pdfs[i]))
             for j in range(0,len(X)):            
-                print " %14.7e\t" % X[j],
-                print " %14.7e\t" % float(Q*Q),
+                print (" %14.7e\t" % X[j]),
+                print (" %14.7e\t" % float(Q*Q)),
                 rep0 = pdf[0].xfxQ(i,X[j],Q)
-                print " %14.7e\t" % rep0,
+                print (" %14.7e\t" % rep0),
                 sum = 0
                 for irep in range(1,len(pdf)):                
                     sum += pdf[irep].xfxQ(i,X[j],Q)            
                 sum /= nrep
-                print " %14.7e\t" % sum,
+                print (" %14.7e\t" % sum),
                 diff = (sum-rep0)/rep0*100
                 if diff > 1e-4:
                     status = False
-                print " %14.7e" % diff
-
+                print (" %14.7e" % diff)
+                
     if status == True:
         print("\n- Congratulations! The grid was created and tested. Now you can run validphys!\n")
     else:
         print("\n- Unfortunately there is a problem in the grid.\n")
+    """
 
 def splash():
-    print "                                                        "
-    print "  ██████╗  ██████╗ ███████╗████████╗███████╗██╗████████╗"
-    print "  ██╔══██╗██╔═══██╗██╔════╝╚══██╔══╝██╔════╝██║╚══██╔══╝"
-    print "  ██████╔╝██║   ██║███████╗   ██║   █████╗  ██║   ██║   "
-    print "  ██╔═══╝ ██║   ██║╚════██║   ██║   ██╔══╝  ██║   ██║   "
-    print "  ██║     ╚██████╔╝███████║   ██║   ██║     ██║   ██║   "
-    print "  ╚═╝      ╚═════╝ ╚══════╝   ╚═╝   ╚═╝     ╚═╝   ╚═╝   "
-    print "  __v" + __version__ + "__, __coredevs__: N.H. and S.C.\n"
+    print ("                                                        ")
+    print ("  ██████╗  ██████╗ ███████╗████████╗███████╗██╗████████╗")
+    print ("  ██╔══██╗██╔═══██╗██╔════╝╚══██╔══╝██╔════╝██║╚══██╔══╝")
+    print ("  ██████╔╝██║   ██║███████╗   ██║   █████╗  ██║   ██║   ")
+    print ("  ██╔═══╝ ██║   ██║╚════██║   ██║   ██╔══╝  ██║   ██║   ")
+    print ("  ██║     ╚██████╔╝███████║   ██║   ██║     ██║   ██║   ")
+    print ("  ╚═╝      ╚═════╝ ╚══════╝   ╚═╝   ╚═╝     ╚═╝   ╚═╝   ")
+    print ("  __v" + __version__ + "__, __coredevs__: N.H. and S.C.\n")
 
 
 if __name__ == "__main__":
