@@ -12,7 +12,7 @@ all-local:
 	$(PYEXT_ENV) $(PYTHON) setup.py install
 
 install-exec-local:
-	$(PYEXT_ENV) $(PYTHON) setup.py install --prefix=$(DESTDIR)$(prefix) --force
+	$(PYEXT_ENV) $(PYTHON) setup.py install --force
 
 clean-local:
 	-rm -rf $(builddir)/_sources/
