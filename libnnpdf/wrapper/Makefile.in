@@ -354,7 +354,7 @@ check: check-am
 @WITH_PYWRAP_FALSE@all-local:
 all-am: Makefile all-local
 installdirs:
-install: install-am
+@WITH_PYWRAP_FALSE@install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -384,7 +384,6 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-@WITH_PYWRAP_FALSE@install-exec-local:
 @WITH_PYWRAP_FALSE@clean-local:
 @WITH_PYWRAP_FALSE@distclean-local:
 clean: clean-am
@@ -413,7 +412,7 @@ install-dvi: install-dvi-am
 
 install-dvi-am:
 
-install-exec-am: install-exec-local
+install-exec-am:
 
 install-html: install-html-am
 
@@ -460,25 +459,24 @@ uninstall-am:
 	distclean-generic distclean-libtool distclean-local distdir \
 	dvi dvi-am html html-am info info-am install install-am \
 	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-exec-local install-html \
-	install-html-am install-info install-info-am install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags-am uninstall uninstall-am
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-man install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic \
+	mostlyclean-libtool pdf pdf-am ps ps-am tags-am uninstall \
+	uninstall-am
 
 
 @WITH_PYWRAP_TRUE@all-local:
 @WITH_PYWRAP_TRUE@	mkdir -p pylibs/NNPDF
 @WITH_PYWRAP_TRUE@	cp src/*.py pylibs/NNPDF/
-@WITH_PYWRAP_TRUE@	find src -name "*.i" -print0 | xargs -0 -I {} $(SWIG) -c++ -outdir pylibs/NNPDF -python {}
+@WITH_PYWRAP_TRUE@	find src -name "*.i" -print0 | xargs -0 -I {} $(SWIG) -c++ -outdir pylibs/NNPDF -python -py3 {}
 @WITH_PYWRAP_TRUE@	mkdir -p _sources
 @WITH_PYWRAP_TRUE@	mv src/*.cxx _sources
 @WITH_PYWRAP_TRUE@	$(PYEXT_ENV) $(PYTHON) setup.py install
 
-@WITH_PYWRAP_TRUE@install-exec-local:
-@WITH_PYWRAP_TRUE@	$(PYEXT_ENV) $(PYTHON) setup.py install --prefix=$(DESTDIR)$(prefix) --force
+@WITH_PYWRAP_TRUE@install:
 
 @WITH_PYWRAP_TRUE@clean-local:
 @WITH_PYWRAP_TRUE@	-rm -rf $(builddir)/_sources/
