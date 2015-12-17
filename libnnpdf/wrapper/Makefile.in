@@ -386,8 +386,8 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-@WITH_PYWRAP_FALSE@clean-local:
 @WITH_PYWRAP_FALSE@distclean-local:
+@WITH_PYWRAP_FALSE@clean-local:
 clean: clean-am
 
 clean-am: clean-generic clean-libtool clean-local mostlyclean-am
@@ -473,7 +473,7 @@ uninstall-am:
 @WITH_PYWRAP_TRUE@all:
 @WITH_PYWRAP_TRUE@	mkdir -p pylibs/NNPDF
 @WITH_PYWRAP_TRUE@	cp src/*.py pylibs/NNPDF/
-@WITH_PYWRAP_TRUE@	find src -name "*.i" -print0 | xargs -0 -I {} $(SWIG) -c++ -outdir pylibs/NNPDF -python -py3 {}
+@WITH_PYWRAP_TRUE@	find src -maxdepth 1 -name "*.i" -print0 | xargs -0 -I {} $(SWIG) -c++ -outdir pylibs/NNPDF -python -py3 {}
 @WITH_PYWRAP_TRUE@	mkdir -p _sources
 @WITH_PYWRAP_TRUE@	mv src/*.cxx _sources
 
