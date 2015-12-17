@@ -21,4 +21,14 @@ conda install swig
 
 = INSTALL
 
-first compile and install libnnpdf then type make from this folder or make wrapper from the libnnpdf/ root folder.
+Set the --enable-pywrap flag for configure (in the top level linnpdf
+folder). 
+
+./configure --enable-pywrap
+
+And after having the library installed, type
+
+make wrapper
+
+This should install the wrapper in your current Python 3 environment.
+
