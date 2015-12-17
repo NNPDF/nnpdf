@@ -60,6 +60,10 @@ namespace NNPDF
   {
     std::ifstream instream;
     instream.open(filename);
+
+    if (!instream.good())
+        throw FileError("FKHeader::FKHeader","cannot open FK grid file: " + filename);
+
     Read(instream);
   }
 

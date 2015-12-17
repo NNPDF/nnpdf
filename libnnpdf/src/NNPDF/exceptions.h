@@ -9,6 +9,7 @@
 
 #include <exception>
 #include <stdexcept>
+#include <string>
 
 namespace NNPDF
 {
@@ -23,14 +24,14 @@ namespace NNPDF
   class RuntimeException: public std::runtime_error
   {
   public:
-    RuntimeException(const std::string& tag, const std::string& what) : std::runtime_error("[" + tag + "] error: " + what) {}
+    RuntimeException(const std::string& tag, const std::string& what) : std::runtime_error(std::string("[") + std::string(tag) + std::string("] error: ") + std::string(what)) {}
   };
 
   /// Error to be thrown when logic error is detected
   class LogicException: public std::logic_error
   {
   public:
-    LogicException(const std::string& tag, const std::string& what) : std::logic_error("[" + tag + "] error: " + what) {}
+    LogicException(const std::string& tag, const std::string& what) : std::logic_error(std::string("[") + std::string(tag) + std::string("] error: ") + std::string(what)) {}
   };
 
   //_______________________________________________________________________
