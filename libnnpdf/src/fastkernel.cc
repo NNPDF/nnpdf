@@ -78,6 +78,9 @@ namespace NNPDF
 
   void FKHeader::Read(std::istream& is) 
   {
+    if (!is.good())
+        throw FileError("FKHeader::FKHeader","cannot open FK grid file ");
+
     int peekval = (is >> std::ws).peek();
     while  ( peekval == FK_DELIN_SEC ||
              peekval == FK_DELIN_BLB )
@@ -306,9 +309,6 @@ namespace NNPDF
   fDSz( fTx*fNonZero + fPad ),
   fSigma( new real[fDSz*fNData])
   {
-
-    if (!is.good())
-        throw FileError("FKTable::FKTable","opening FK grid file ");
 
     if (Verbose)
     {
