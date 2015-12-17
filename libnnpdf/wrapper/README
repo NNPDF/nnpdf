@@ -8,7 +8,7 @@ http://conda.pydata.org/miniconda.html
 Either download a python 3 version of conda, or else if you have
 a python 2 one, create a python 3 installation ("environment") doing:
 
-conda create -name py3 python=3
+conda create --name py3 python=3
 
 and then every time you want to use (or install something in that) do:
 
