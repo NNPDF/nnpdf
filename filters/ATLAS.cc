@@ -1126,6 +1126,7 @@ void ATLASWPT31PBFilter::ReadData()
  * and from paper: http://arxiv.org/abs/ARXIV:1110.4973
  *
  */
+/*
 void ATLASZPT47FBFilter::ReadData()
 {
   // Opening files
@@ -1218,3 +1219,4 @@ void ATLASZPT47FBFilter::ReadData()
   f1.close();
   f2.close();
 }
+*/

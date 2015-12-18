@@ -393,7 +393,7 @@ void LHCBLOWMASS37PBFilter::ReadData()
 * all data points and is quoted separately from other sources
 * of systematic uncertainty
 */
-
+/*
 void LHCBWMU1FBFilter::ReadData()
 {
   // Opening files
@@ -553,7 +553,7 @@ void LHCBWMU1FBFilter::ReadData()
   f2.close();
   f3.close();
 }
-
+*/
 
 /****************
  * LHCb 2fb^{-1}
@@ -564,7 +564,7 @@ void LHCBWMU1FBFilter::ReadData()
  * Luminosity uncertainty is a 1.2% in all data points and is quoted separately
  * from other sources of systematic uncertainty
  */
-
+/*
 void LHCBZEE2FBFilter::ReadData()
 {
   // Opening files
@@ -655,7 +655,7 @@ void LHCBZEE2FBFilter::ReadData()
     covmat[i] = new double[fNData];
     for(int j = 0; j < fNData; j++)
       // Not sure whether is tot correlated  or total systematics
-      covmat[i][j]=inmat[i][j]*sys_corr[i]*sys_corr[j]; 
+      covmat[i][j]=inmat[i][j]*sys_corr[i]*sys_corr[j];
 //      covmat[i][j]=inmat[i][j]*tot_unc[i]*tot_unc[j];
   }
 
@@ -681,3 +681,4 @@ void LHCBZEE2FBFilter::ReadData()
   f1.close();
   f2.close();
 }
+*/

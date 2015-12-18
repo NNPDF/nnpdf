@@ -89,7 +89,7 @@ void ATLASLOMASSDY11Filter::ReadData()
       }
 
     // ATLAS 2011 Luminosity (given in % in the data file)
-    fSys[idat][fNSys-1].mult = fATLAS2011Luminosity;
+    fSys[idat][fNSys-1].mult = fATLAS2011Luminosity*100;
     fSys[idat][fNSys-1].add  = fSys[idat][fNSys-1].mult*fData[idat]*1e-2;
     fSys[idat][fNSys-1].type = MULT;
     fSys[idat][fNSys-1].name   = "ATLASLUMI11";
