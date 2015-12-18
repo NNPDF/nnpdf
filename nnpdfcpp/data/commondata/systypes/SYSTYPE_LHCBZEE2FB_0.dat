@@ -1,6 +1,6 @@
 18
 1    ADD    UNCORR
-2    MULT    CORR
+2    MULT    LUMILHCB
 3    ADD    CORR
 4    ADD    CORR
 5    ADD    CORR

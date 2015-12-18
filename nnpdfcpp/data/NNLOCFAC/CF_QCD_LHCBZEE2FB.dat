@@ -1,0 +1,9 @@
+*******************************************************************************************
+SetName: LHCBZEE2FB
+Author:  Alberto Guffanti <alberto.guffanti@unito.it>
+Date:    25/11/2015
+CodesUsed: FEWZ 3.1b2
+TheoryInput: Input Cards in external/FEWZ31b2/bin/InputCards
+PDFset: NNPDF30_nnlo_as_0118
+Warnings:
+********************************************************************************************
