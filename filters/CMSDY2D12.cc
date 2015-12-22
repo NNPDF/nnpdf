@@ -41,7 +41,11 @@ void CMSDY2D12Filter::ReadData()
     lstream >> fKin2[idat];
 
     lstream >> fData[idat];
+    // As given in HepData, there is no separation between
+    // statistical and systematic uncertainties. Only the
+    // TOTAL convariance matrix (excluding lumi) is given.
     //    lstream >> fStat[idat];
+
 
     // Convert from pb (datafiles) to fb (APPLgrid)
     fData[idat] *= 1000.;
@@ -86,7 +90,11 @@ void CMSDY2D12Filter::ReadData()
       fSys[i][l].name = "CORR";
     }
 
-    fSys[i][fNSys-1].mult = 2.8;
+    // Add Luminosity uncertainty of 2.6%
+    // NOT included in covariance matrix, as explained in
+    // HepData file (cov_combi_preFSR_inAcc_absolute_2D.out).
+
+    fSys[i][fNSys-1].mult = 2.6;
     fSys[i][fNSys-1].add  = fSys[i][fNSys-1].mult*fData[i]*1e-2;
     fSys[i][fNSys-1].type = MULT;
     fSys[i][fNSys-1].name = "CMSLUMI12";
