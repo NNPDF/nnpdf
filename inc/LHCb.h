@@ -42,7 +42,7 @@ static const dataInfoRaw LHCBWMU1FBinfo = {
 
 static const dataInfoRaw LHCBZEE2FBinfo = {
   17,           //nData
-  18,           //nSys
+  19,           //nSys
   "LHCBZEE2FB", //SetName
   "EWK_RAP"     //ProcType
 };

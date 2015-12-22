@@ -41,11 +41,11 @@ void CMSDY2D12Filter::ReadData()
     lstream >> fKin2[idat];
 
     lstream >> fData[idat];
-    lstream >> fStat[idat];
+    //    lstream >> fStat[idat];
 
     // Convert from pb (datafiles) to fb (APPLgrid)
     fData[idat] *= 1000.;
-    fStat[idat] *= 1000.;
+    //    fStat[idat] *= 1000.;
 
     fKin3[idat] = 8E3;    // LHC 8 TeV
   }

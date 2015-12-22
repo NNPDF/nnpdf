@@ -42,15 +42,15 @@ def main(filename, sysfile):
 #      print (data.GetSys(el,isys) for isys in range(data.GetNSys()))
 
   ## print the results
-  print (" Id   Cental Value      Stat. Unc.        Corr. Syst.         Uncorr. Syst.        Lumi Unc.")
+  print (" Id   Central         Stat.           Corr.           Uncorr.          Lumi")
   print ("-----------------------------------------------------------------------------------------------")
   for i in range(data.GetNData()):
-    print ("%3i   %5.2f       %.2e (%.2f%%)   %.2e (%.2f%%)   %.2e (%.2f%%)   %.2e (%.2f%%)"
-            % (i, cvs[i],
-            stserr[i], stserr[i]/cvs[i]*100,
-            syscor[i], syscor[i]/cvs[i]*100,
-            sysunc[i], sysunc[i]/cvs[i]*100,
-            syslum[i], syslum[i]/cvs[i]*100)
+    print ("%3i    %5.2f     %5.2f (%5.2f%%)   %5.2f (%4.2f%%)   %5.2f (%4.2f%%)   %5.2f (%4.2f%%)"
+            % (i, cvs[i]/1e3,
+            stserr[i]/1e3, stserr[i]/cvs[i]*100,
+            syscor[i]/1e3, syscor[i]/cvs[i]*100,
+            sysunc[i]/1e3, sysunc[i]/cvs[i]*100,
+            syslum[i]/1e3, syslum[i]/cvs[i]*100)
             )
 
   ## produce a plot
