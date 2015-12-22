@@ -90,16 +90,13 @@ void LHCBZEE2FBFilter::ReadData()
     for (int j = 0; j < i+1; j++) {             // read only lower triangle
       f2 >> inmat[j][i];
     }
-    cout << endl;
   }
-  cout << endl;
   for (int i = 0; i < fNData; i++) {
     for (int j = i+1; j < fNData; j++) {
       inmat[j][i] = inmat[i][j];               // symmetrize
     }
-    cout << endl; 
   }
-  cout << endl;
+
   //  Multiply by total systematic uncertainty
   double** covmat = new double*[fNData];
   for(int i = 0; i < fNData; i++)
@@ -108,7 +105,6 @@ void LHCBZEE2FBFilter::ReadData()
     for(int j = 0; j < fNData; j++) {
       covmat[i][j]=inmat[i][j]*sys_corr[i]*sys_corr[j];
       }
-    cout << endl;
   }
 
   // Generate artificial systematics
