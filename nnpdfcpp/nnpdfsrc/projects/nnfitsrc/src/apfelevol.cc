@@ -36,14 +36,14 @@ APFELSingleton::APFELSingleton():
 }
 
 void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
-{  
+{    
   // Check APFEL
   bool check = APFEL::CheckAPFEL();
   if (check == false)
     {
       std::cout << Colour::FG_RED << "[CheckAPFEL] ERROR, test not succeeded!" << std::endl;
       std::exit(-1);
-    }
+    }    
 
   // initialize attributes
   getInstance()->fPDF = pdf;
@@ -122,7 +122,7 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
 
   APFEL::SetPDFSet("external");
   APFEL::SetFastEvolution(false);
-  APFEL::InitializeAPFEL();
+  APFEL::InitializeAPFEL();  
 
   // allocate grid in x
   std::vector<double> xgrid;
@@ -150,9 +150,9 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
   const double q2max = pow(getInstance()->fQmax,2.0);
   const int nf = std::max(APFELSingleton::getNFpdf(),APFELSingleton::getNFas());
   int nfin;
-  if (q2min > getInstance()->mth[2]*getInstance()->mth[2]) nfin = 6;
-  else if (q2min > getInstance()->mth[1]*getInstance()->mth[1]) nfin = 5;
-  else if (q2min > getInstance()->mth[0]*getInstance()->mth[0]) nfin = 4;
+  if (q2min >= getInstance()->mth[2]*getInstance()->mth[2]) nfin = 6;
+  else if (q2min >= getInstance()->mth[1]*getInstance()->mth[1]) nfin = 5;
+  else if (q2min >= getInstance()->mth[0]*getInstance()->mth[0]) nfin = 4;
   else nfin = 3;
   if (nfin > nf) nfin = nf;
 

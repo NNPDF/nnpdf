@@ -227,7 +227,7 @@ def main(nrep, fit_filename):
         replica = dir + 'replica_' + str(i) + "/" + fitname + ".dat"
         shutil.copyfile(replica, dir + "/" + fitname + "/" + fitname + '_{:04n}.dat'.format(i))
         
-        print ("- Reading: %i" % replica)
+        print ("- Reading: %s" % replica)
         f = open(replica, 'rb')
         xpdf.append([])
         for j in range(0,2): f.readline()
@@ -318,7 +318,7 @@ def main(nrep, fit_filename):
     
         status = True
         for i in range(0,len(pdfs)):
-            print ("\n         x\t        Q2          %s rep0          %s avg          Diff(%)" % (pdfs[i], pdfs[i]))
+            print ("\n         x\t        Q2          %s rep0          %s avg          Diff" % (pdfs[i], pdfs[i]))
             for j in range(0,len(X)):            
                 print (" %14.7e\t" % X[j]),
                 print (" %14.7e\t" % float(Q*Q)),
