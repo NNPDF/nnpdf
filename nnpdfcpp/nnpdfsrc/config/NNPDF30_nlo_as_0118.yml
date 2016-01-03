@@ -117,9 +117,9 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 2       # database id
+  theoryid: 2        # database id
   ptord   : 1        # 0 for LO, 1 for NLO, 2 for NNLO
-  alphas  : 0.118      # Aphas(MZ)
+  alphas  : 0.118    # Aphas(MZ)
   qref    : 91.2     # Qref of Alphas
   q20     : 1.0      # initial scale
   vfns    : FONLL-B  # Theory
@@ -133,6 +133,8 @@ theory:
   nf_as   : 5        # max. nf for Alpha_S
   modev   : TRN      # evol. mode TRN, PHT
   msbar   : off      # msbar = on, pole = off
+  sxres   : off      # enable small-x resumm.
+  sxord   : NLL      # set small-x resumm. order
 
 ############################################################
 fitting:

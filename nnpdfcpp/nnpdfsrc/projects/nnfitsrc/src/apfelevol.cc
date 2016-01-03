@@ -79,7 +79,6 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
   {
     APFEL::SetMSbarMasses(getInstance()->mth[0],getInstance()->mth[1],getInstance()->mth[2]);
     APFEL::SetMassScaleReference(getInstance()->mthref[0],getInstance()->mthref[1],getInstance()->mthref[2]);
-
   }
   else
   {
@@ -119,6 +118,10 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
       exit(-1);
       break;
     }
+
+  // Small-x resummation
+  if (set.Get("theory","sxres").as<bool>())
+    APFEL::SetSmallxResummation(true, set.Get("theory","sxord").as<string>());
 
   APFEL::SetPDFSet("external");
   APFEL::SetFastEvolution(false);
