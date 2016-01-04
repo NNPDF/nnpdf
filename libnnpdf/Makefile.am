@@ -14,7 +14,8 @@ libnnpdf_la_SOURCES = 	src/common.cc \
 			src/positivity.cc \
 			src/randomgenerator.cc \
 			src/utils.cc \
-			src/nnmpi.cc
+			src/nnmpi.cc \
+			src/nnpdfdb.cc
 
 otherincludedir = $(includedir)/NNPDF
 otherinclude_HEADERS =  src/NNPDF/common.h \
@@ -26,15 +27,16 @@ otherinclude_HEADERS =  src/NNPDF/common.h \
 		        src/NNPDF/randomgenerator.h \
 		        src/NNPDF/parametrisation.h \
 		        src/NNPDF/utils.h \
-		 	src/NNPDF/dataset.h \
-			src/NNPDF/fkgenerator.h \
-			src/NNPDF/fastkernel.h \
-			src/NNPDF/fkset.h \
-			src/NNPDF/logger.h \
-			src/NNPDF/positivity.h \
-			src/NNPDF/thpredictions.h \
-                        src/NNPDF/nnmpi.h \
-                        src/NNPDF/exceptions.h
+		 		src/NNPDF/dataset.h \
+				src/NNPDF/fkgenerator.h \
+				src/NNPDF/fastkernel.h \
+				src/NNPDF/fkset.h \
+				src/NNPDF/logger.h \
+				src/NNPDF/positivity.h \
+				src/NNPDF/thpredictions.h \
+                src/NNPDF/nnmpi.h \
+                src/NNPDF/exceptions.h \
+                src/NNPDF/nnpdfdb.h
 
 
 libnnpdf_la_LDFLAGS = -version-info 0:0:0 $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDFLAGS)
