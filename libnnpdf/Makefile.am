@@ -39,15 +39,15 @@ otherinclude_HEADERS =  src/NNPDF/common.h \
                 src/NNPDF/nnpdfdb.h
 
 
-libnnpdf_la_LDFLAGS = -version-info 0:0:0 $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDFLAGS)
-libnnpdf_la_CPPFLAGS= $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC $(LHAPDF_CPPFLAGS)
+libnnpdf_la_LDFLAGS = -version-info 0:0:0 $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDFLAGS) $(SQLITE3_LDFLAGS)
+libnnpdf_la_CPPFLAGS= $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS)
 
 
 # Utility programs
 bin_PROGRAMS = FKconvolute
 FKconvolute_SOURCES = src/fkconvolute.cc
-FKconvolute_CPPFLAGS = $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC $(LHAPDF_CPPFLAGS)
-FKconvolute_LDFLAGS = $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDFLAGS) -lnnpdf
+FKconvolute_CPPFLAGS = $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS)
+FKconvolute_LDFLAGS = $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDFLAGS) -lnnpdf $(SQLITE3_LDFLAGS)
 
 # Scripts to install
 dist_bin_SCRIPTS=scripts/FKmerge
