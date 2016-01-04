@@ -5,11 +5,12 @@
  * *  nathan.hartland@physics.ox.ac.uk 02/15
  */
 
-
 #include <sqlite3.h> 
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
+
+#include "exceptions.h"
 
 namespace NNPDF
 {
@@ -37,6 +38,7 @@ namespace NNPDF
 
     template<class T>
     friend T dbquery(IndexDB const& db, int const& id, std::string const& field);
+    static void HandleRetCode(const int retcode);
 
   };
 
@@ -52,8 +54,8 @@ namespace NNPDF
           
       if ( retcode != SQLITE_OK ) 
       {
-        std::cerr << "IndexDB::dbQuery Error - " << sqlite3_errmsg(db.fDB)<<std::endl;
-        exit(-1);
+        std::stringstream err; err << "SQLITE Error: " << sqlite3_errmsg(db.fDB);
+        throw RuntimeException("dbquery", err.str());
       }
 
       int res = sqlite3_step(statement);
@@ -69,8 +71,8 @@ namespace NNPDF
         return retval; 
       } else
       {
-          std::cerr << "IndexDB::dbQuery Error - " << sqlite3_errmsg(db.fDB)<<std::endl;
-          exit(1);
+        std::stringstream err; err << "SQLITE Error: " << sqlite3_errmsg(db.fDB);
+        throw RuntimeException("dbquery", err.str());
       }    
     }
 
