@@ -120,8 +120,7 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
     }
 
   // Small-x resummation
-  if (set.Get("theory","sxres").as<bool>())
-    APFEL::SetSmallxResummation(true, set.Get("theory","sxord").as<string>());
+  APFEL::SetSmallxResummation(set.Get("theory","sxres").as<bool>(), set.Get("theory","sxord").as<string>());
 
   APFEL::SetPDFSet("external");
   APFEL::SetFastEvolution(false);
