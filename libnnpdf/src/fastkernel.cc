@@ -361,13 +361,13 @@ namespace NNPDF
 
     // Sanity checks
     if ( fNData <= 0 )
-      throw RangeError("FKTable::FKTable","Number of datapoints is set to: " + fNData);
+      throw RangeError("FKTable::FKTable","Number of datapoints is set to: " + std::to_string(fNData) );
     
     if ( fNx <= 0 )
-      throw RangeError("FKTable::FKTable","Number of x-points is set to: " + fNx);
+      throw RangeError("FKTable::FKTable","Number of x-points is set to: " + std::to_string(fNx) );
     
     if ( fNonZero <= 0 )
-      throw RangeError("FKTable::FKTable","Number of nonzero flavours is set to: " + fNonZero);
+      throw RangeError("FKTable::FKTable","Number of nonzero flavours is set to: " + std::to_string(fNonZero) );
 
     if (Verbose)
       std::cout << fNData << " Data Points "
