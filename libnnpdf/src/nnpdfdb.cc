@@ -43,6 +43,12 @@ namespace NNPDF
 	  sqlite3_close(fDB);
 	}
 
+    void IndexDB::ExtractMap( const int& id, std::vector<std::string> const& keys, std::map<std::string, std::string>& map)
+    {
+    	for (size_t i=0; i<keys.size(); i++)
+    		map.emplace(keys[i], dbquery<std::string>(*this, id, keys[i]));
+    }
+
 
 	// Needs to be specialised to avoid splitting the string
 	template<>

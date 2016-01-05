@@ -9,6 +9,8 @@
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
+#include <vector>
+#include <map>
 
 #include "exceptions.h"
 
@@ -27,6 +29,7 @@ namespace NNPDF
     ~IndexDB();
 
     const int& GetNEntries() const {return fNEntries;};
+    void ExtractMap( const int& id, std::vector<std::string> const& keys, std::map<std::string, std::string>& map);
 
   private:
     sqlite3* fDB;
@@ -38,8 +41,6 @@ namespace NNPDF
 
     template<class T>
     friend T dbquery(IndexDB const& db, int const& id, std::string const& field);
-    static void HandleRetCode(const int retcode);
-
   };
 
     // Return a queried value
