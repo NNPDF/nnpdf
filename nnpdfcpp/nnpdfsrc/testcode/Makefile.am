@@ -1,4 +1,4 @@
-EXTRA_PROGRAMS = gencovmat fkcheck mkthpredictions apfelevol tconvcheck
+EXTRA_PROGRAMS = gencovmat fkcheck mkthpredictions apfelevol tconvcheck revolve
 
 COMMON = ../common/src/nnpdfsettings.cc \
 	 ../common/src/common.cc \
@@ -27,13 +27,19 @@ tconvcheck_SOURCES = src/tconvcheck.cc $(COMMON)
 tconvcheck_CPPFLAGS = -Iinc $(NNPDF_CPPFLAGS) -I$(top_builddir)/common/inc $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS) $(YAML_CPPFLAGS) -std=c++11
 tconvcheck_LDFLAGS = $(NNPDF_LDFLAGS) $(SQLITE3_LDFLAGS) $(YAML_LDFLAGS)
 
-test: gencovmat fkcheck mkthpredictions apfelevol tconvcheck
+revolve_SOURCES = src/revolve.cc $(COMMON)
+revolve_CPPFLAGS = -Iinc $(NNPDF_CPPFLAGS) -I$(top_builddir)/common/inc $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS) $(APFEL_CPPFLAGS) $(YAML_CPPFLAGS) -std=c++11
+revolve_LDFLAGS = $(NNPDF_LDFLAGS) $(SQLITE3_LDFLAGS) $(APFEL_LDFLAGS) $(YAML_LDFLAGS)
+
+test: gencovmat fkcheck mkthpredictions apfelevol tconvcheck revolve
 	cp gencovmat $(prefix)/bin
 	cp fkcheck $(prefix)/bin
 	cp mkthpredictions $(prefix)/bin
 	cp apfelevol $(prefix)/bin
 	cp tconvcheck $(prefix)/bin
+	cp revolve $(prefix)/bin
+
 testclean:
-	rm -rf gencovmat fkcheck mkthpredictions apfelevol tconvcheck
+	rm -rf gencovmat fkcheck mkthpredictions apfelevol tconvcheck revolve
 
 .PHONY: test testclean

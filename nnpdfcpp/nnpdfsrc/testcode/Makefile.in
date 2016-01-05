@@ -79,7 +79,7 @@ build_triplet = @build@
 host_triplet = @host@
 EXTRA_PROGRAMS = gencovmat$(EXEEXT) fkcheck$(EXEEXT) \
 	mkthpredictions$(EXEEXT) apfelevol$(EXEEXT) \
-	tconvcheck$(EXEEXT)
+	tconvcheck$(EXEEXT) revolve$(EXEEXT)
 subdir = testcode
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/autoconfig/depcomp
@@ -155,14 +155,26 @@ mkthpredictions_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(AM_CXXFLAGS) $(CXXFLAGS) $(mkthpredictions_LDFLAGS) \
 	$(LDFLAGS) -o $@
-am__objects_5 = ../common/src/tconvcheck-nnpdfsettings.$(OBJEXT) \
+am__objects_5 = ../common/src/revolve-nnpdfsettings.$(OBJEXT) \
+	../common/src/revolve-common.$(OBJEXT) \
+	../common/src/revolve-loadutils.$(OBJEXT) \
+	../common/src/revolve-datautils.$(OBJEXT) \
+	../common/src/revolve-md5.$(OBJEXT) \
+	../common/src/revolve-theorydb.$(OBJEXT)
+am_revolve_OBJECTS = src/revolve-revolve.$(OBJEXT) $(am__objects_5)
+revolve_OBJECTS = $(am_revolve_OBJECTS)
+revolve_LDADD = $(LDADD)
+revolve_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+	$(CXXFLAGS) $(revolve_LDFLAGS) $(LDFLAGS) -o $@
+am__objects_6 = ../common/src/tconvcheck-nnpdfsettings.$(OBJEXT) \
 	../common/src/tconvcheck-common.$(OBJEXT) \
 	../common/src/tconvcheck-loadutils.$(OBJEXT) \
 	../common/src/tconvcheck-datautils.$(OBJEXT) \
 	../common/src/tconvcheck-md5.$(OBJEXT) \
 	../common/src/tconvcheck-theorydb.$(OBJEXT)
 am_tconvcheck_OBJECTS = src/tconvcheck-tconvcheck.$(OBJEXT) \
-	$(am__objects_5)
+	$(am__objects_6)
 tconvcheck_OBJECTS = $(am_tconvcheck_OBJECTS)
 tconvcheck_LDADD = $(LDADD)
 tconvcheck_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
@@ -203,10 +215,11 @@ am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
 SOURCES = $(apfelevol_SOURCES) $(fkcheck_SOURCES) $(gencovmat_SOURCES) \
-	$(mkthpredictions_SOURCES) $(tconvcheck_SOURCES)
+	$(mkthpredictions_SOURCES) $(revolve_SOURCES) \
+	$(tconvcheck_SOURCES)
 DIST_SOURCES = $(apfelevol_SOURCES) $(fkcheck_SOURCES) \
 	$(gencovmat_SOURCES) $(mkthpredictions_SOURCES) \
-	$(tconvcheck_SOURCES)
+	$(revolve_SOURCES) $(tconvcheck_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -427,6 +440,9 @@ apfelevol_LDFLAGS = $(NNPDF_LDFLAGS) $(SQLITE3_LDFLAGS) $(APFEL_LDFLAGS) $(YAML_
 tconvcheck_SOURCES = src/tconvcheck.cc $(COMMON)
 tconvcheck_CPPFLAGS = -Iinc $(NNPDF_CPPFLAGS) -I$(top_builddir)/common/inc $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS) $(YAML_CPPFLAGS) -std=c++11
 tconvcheck_LDFLAGS = $(NNPDF_LDFLAGS) $(SQLITE3_LDFLAGS) $(YAML_LDFLAGS)
+revolve_SOURCES = src/revolve.cc $(COMMON)
+revolve_CPPFLAGS = -Iinc $(NNPDF_CPPFLAGS) -I$(top_builddir)/common/inc $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS) $(APFEL_CPPFLAGS) $(YAML_CPPFLAGS) -std=c++11
+revolve_LDFLAGS = $(NNPDF_LDFLAGS) $(SQLITE3_LDFLAGS) $(APFEL_LDFLAGS) $(YAML_LDFLAGS)
 all: all-am
 
 .SUFFIXES:
@@ -565,6 +581,28 @@ src/mkthpredictions-mkthpredictions.$(OBJEXT): src/$(am__dirstamp) \
 mkthpredictions$(EXEEXT): $(mkthpredictions_OBJECTS) $(mkthpredictions_DEPENDENCIES) $(EXTRA_mkthpredictions_DEPENDENCIES) 
 	@rm -f mkthpredictions$(EXEEXT)
 	$(AM_V_CXXLD)$(mkthpredictions_LINK) $(mkthpredictions_OBJECTS) $(mkthpredictions_LDADD) $(LIBS)
+src/revolve-revolve.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+../common/src/revolve-nnpdfsettings.$(OBJEXT):  \
+	../common/src/$(am__dirstamp) \
+	../common/src/$(DEPDIR)/$(am__dirstamp)
+../common/src/revolve-common.$(OBJEXT): ../common/src/$(am__dirstamp) \
+	../common/src/$(DEPDIR)/$(am__dirstamp)
+../common/src/revolve-loadutils.$(OBJEXT):  \
+	../common/src/$(am__dirstamp) \
+	../common/src/$(DEPDIR)/$(am__dirstamp)
+../common/src/revolve-datautils.$(OBJEXT):  \
+	../common/src/$(am__dirstamp) \
+	../common/src/$(DEPDIR)/$(am__dirstamp)
+../common/src/revolve-md5.$(OBJEXT): ../common/src/$(am__dirstamp) \
+	../common/src/$(DEPDIR)/$(am__dirstamp)
+../common/src/revolve-theorydb.$(OBJEXT):  \
+	../common/src/$(am__dirstamp) \
+	../common/src/$(DEPDIR)/$(am__dirstamp)
+
+revolve$(EXEEXT): $(revolve_OBJECTS) $(revolve_DEPENDENCIES) $(EXTRA_revolve_DEPENDENCIES) 
+	@rm -f revolve$(EXEEXT)
+	$(AM_V_CXXLD)$(revolve_LINK) $(revolve_OBJECTS) $(revolve_LDADD) $(LIBS)
 src/tconvcheck-tconvcheck.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
 ../common/src/tconvcheck-nnpdfsettings.$(OBJEXT):  \
@@ -621,6 +659,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/mkthpredictions-md5.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/mkthpredictions-nnpdfsettings.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/mkthpredictions-theorydb.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/revolve-common.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/revolve-datautils.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/revolve-loadutils.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/revolve-md5.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/revolve-nnpdfsettings.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/revolve-theorydb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/tconvcheck-common.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/tconvcheck-datautils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/tconvcheck-loadutils.Po@am__quote@
@@ -631,6 +675,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/fkcheck-fkcheck.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/gencovmat-gencovmat.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/mkthpredictions-mkthpredictions.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/revolve-revolve.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/tconvcheck-tconvcheck.Po@am__quote@
 
 .cc.o:
@@ -1049,6 +1094,104 @@ src/mkthpredictions-mkthpredictions.obj: src/mkthpredictions.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(mkthpredictions_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/mkthpredictions-theorydb.obj `if test -f '../common/src/theorydb.cc'; then $(CYGPATH_W) '../common/src/theorydb.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/theorydb.cc'; fi`
 
+src/revolve-revolve.o: src/revolve.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/revolve-revolve.o -MD -MP -MF src/$(DEPDIR)/revolve-revolve.Tpo -c -o src/revolve-revolve.o `test -f 'src/revolve.cc' || echo '$(srcdir)/'`src/revolve.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/revolve-revolve.Tpo src/$(DEPDIR)/revolve-revolve.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/revolve.cc' object='src/revolve-revolve.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/revolve-revolve.o `test -f 'src/revolve.cc' || echo '$(srcdir)/'`src/revolve.cc
+
+src/revolve-revolve.obj: src/revolve.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/revolve-revolve.obj -MD -MP -MF src/$(DEPDIR)/revolve-revolve.Tpo -c -o src/revolve-revolve.obj `if test -f 'src/revolve.cc'; then $(CYGPATH_W) 'src/revolve.cc'; else $(CYGPATH_W) '$(srcdir)/src/revolve.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/revolve-revolve.Tpo src/$(DEPDIR)/revolve-revolve.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/revolve.cc' object='src/revolve-revolve.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/revolve-revolve.obj `if test -f 'src/revolve.cc'; then $(CYGPATH_W) 'src/revolve.cc'; else $(CYGPATH_W) '$(srcdir)/src/revolve.cc'; fi`
+
+../common/src/revolve-nnpdfsettings.o: ../common/src/nnpdfsettings.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/revolve-nnpdfsettings.o -MD -MP -MF ../common/src/$(DEPDIR)/revolve-nnpdfsettings.Tpo -c -o ../common/src/revolve-nnpdfsettings.o `test -f '../common/src/nnpdfsettings.cc' || echo '$(srcdir)/'`../common/src/nnpdfsettings.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/revolve-nnpdfsettings.Tpo ../common/src/$(DEPDIR)/revolve-nnpdfsettings.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/nnpdfsettings.cc' object='../common/src/revolve-nnpdfsettings.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/revolve-nnpdfsettings.o `test -f '../common/src/nnpdfsettings.cc' || echo '$(srcdir)/'`../common/src/nnpdfsettings.cc
+
+../common/src/revolve-nnpdfsettings.obj: ../common/src/nnpdfsettings.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/revolve-nnpdfsettings.obj -MD -MP -MF ../common/src/$(DEPDIR)/revolve-nnpdfsettings.Tpo -c -o ../common/src/revolve-nnpdfsettings.obj `if test -f '../common/src/nnpdfsettings.cc'; then $(CYGPATH_W) '../common/src/nnpdfsettings.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/nnpdfsettings.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/revolve-nnpdfsettings.Tpo ../common/src/$(DEPDIR)/revolve-nnpdfsettings.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/nnpdfsettings.cc' object='../common/src/revolve-nnpdfsettings.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/revolve-nnpdfsettings.obj `if test -f '../common/src/nnpdfsettings.cc'; then $(CYGPATH_W) '../common/src/nnpdfsettings.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/nnpdfsettings.cc'; fi`
+
+../common/src/revolve-common.o: ../common/src/common.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/revolve-common.o -MD -MP -MF ../common/src/$(DEPDIR)/revolve-common.Tpo -c -o ../common/src/revolve-common.o `test -f '../common/src/common.cc' || echo '$(srcdir)/'`../common/src/common.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/revolve-common.Tpo ../common/src/$(DEPDIR)/revolve-common.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/common.cc' object='../common/src/revolve-common.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/revolve-common.o `test -f '../common/src/common.cc' || echo '$(srcdir)/'`../common/src/common.cc
+
+../common/src/revolve-common.obj: ../common/src/common.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/revolve-common.obj -MD -MP -MF ../common/src/$(DEPDIR)/revolve-common.Tpo -c -o ../common/src/revolve-common.obj `if test -f '../common/src/common.cc'; then $(CYGPATH_W) '../common/src/common.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/common.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/revolve-common.Tpo ../common/src/$(DEPDIR)/revolve-common.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/common.cc' object='../common/src/revolve-common.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/revolve-common.obj `if test -f '../common/src/common.cc'; then $(CYGPATH_W) '../common/src/common.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/common.cc'; fi`
+
+../common/src/revolve-loadutils.o: ../common/src/loadutils.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/revolve-loadutils.o -MD -MP -MF ../common/src/$(DEPDIR)/revolve-loadutils.Tpo -c -o ../common/src/revolve-loadutils.o `test -f '../common/src/loadutils.cc' || echo '$(srcdir)/'`../common/src/loadutils.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/revolve-loadutils.Tpo ../common/src/$(DEPDIR)/revolve-loadutils.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/loadutils.cc' object='../common/src/revolve-loadutils.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/revolve-loadutils.o `test -f '../common/src/loadutils.cc' || echo '$(srcdir)/'`../common/src/loadutils.cc
+
+../common/src/revolve-loadutils.obj: ../common/src/loadutils.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/revolve-loadutils.obj -MD -MP -MF ../common/src/$(DEPDIR)/revolve-loadutils.Tpo -c -o ../common/src/revolve-loadutils.obj `if test -f '../common/src/loadutils.cc'; then $(CYGPATH_W) '../common/src/loadutils.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/loadutils.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/revolve-loadutils.Tpo ../common/src/$(DEPDIR)/revolve-loadutils.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/loadutils.cc' object='../common/src/revolve-loadutils.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/revolve-loadutils.obj `if test -f '../common/src/loadutils.cc'; then $(CYGPATH_W) '../common/src/loadutils.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/loadutils.cc'; fi`
+
+../common/src/revolve-datautils.o: ../common/src/datautils.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/revolve-datautils.o -MD -MP -MF ../common/src/$(DEPDIR)/revolve-datautils.Tpo -c -o ../common/src/revolve-datautils.o `test -f '../common/src/datautils.cc' || echo '$(srcdir)/'`../common/src/datautils.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/revolve-datautils.Tpo ../common/src/$(DEPDIR)/revolve-datautils.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/datautils.cc' object='../common/src/revolve-datautils.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/revolve-datautils.o `test -f '../common/src/datautils.cc' || echo '$(srcdir)/'`../common/src/datautils.cc
+
+../common/src/revolve-datautils.obj: ../common/src/datautils.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/revolve-datautils.obj -MD -MP -MF ../common/src/$(DEPDIR)/revolve-datautils.Tpo -c -o ../common/src/revolve-datautils.obj `if test -f '../common/src/datautils.cc'; then $(CYGPATH_W) '../common/src/datautils.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/datautils.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/revolve-datautils.Tpo ../common/src/$(DEPDIR)/revolve-datautils.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/datautils.cc' object='../common/src/revolve-datautils.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/revolve-datautils.obj `if test -f '../common/src/datautils.cc'; then $(CYGPATH_W) '../common/src/datautils.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/datautils.cc'; fi`
+
+../common/src/revolve-md5.o: ../common/src/md5.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/revolve-md5.o -MD -MP -MF ../common/src/$(DEPDIR)/revolve-md5.Tpo -c -o ../common/src/revolve-md5.o `test -f '../common/src/md5.cc' || echo '$(srcdir)/'`../common/src/md5.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/revolve-md5.Tpo ../common/src/$(DEPDIR)/revolve-md5.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/md5.cc' object='../common/src/revolve-md5.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/revolve-md5.o `test -f '../common/src/md5.cc' || echo '$(srcdir)/'`../common/src/md5.cc
+
+../common/src/revolve-md5.obj: ../common/src/md5.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/revolve-md5.obj -MD -MP -MF ../common/src/$(DEPDIR)/revolve-md5.Tpo -c -o ../common/src/revolve-md5.obj `if test -f '../common/src/md5.cc'; then $(CYGPATH_W) '../common/src/md5.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/md5.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/revolve-md5.Tpo ../common/src/$(DEPDIR)/revolve-md5.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/md5.cc' object='../common/src/revolve-md5.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/revolve-md5.obj `if test -f '../common/src/md5.cc'; then $(CYGPATH_W) '../common/src/md5.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/md5.cc'; fi`
+
+../common/src/revolve-theorydb.o: ../common/src/theorydb.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/revolve-theorydb.o -MD -MP -MF ../common/src/$(DEPDIR)/revolve-theorydb.Tpo -c -o ../common/src/revolve-theorydb.o `test -f '../common/src/theorydb.cc' || echo '$(srcdir)/'`../common/src/theorydb.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/revolve-theorydb.Tpo ../common/src/$(DEPDIR)/revolve-theorydb.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/theorydb.cc' object='../common/src/revolve-theorydb.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/revolve-theorydb.o `test -f '../common/src/theorydb.cc' || echo '$(srcdir)/'`../common/src/theorydb.cc
+
+../common/src/revolve-theorydb.obj: ../common/src/theorydb.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/revolve-theorydb.obj -MD -MP -MF ../common/src/$(DEPDIR)/revolve-theorydb.Tpo -c -o ../common/src/revolve-theorydb.obj `if test -f '../common/src/theorydb.cc'; then $(CYGPATH_W) '../common/src/theorydb.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/theorydb.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/revolve-theorydb.Tpo ../common/src/$(DEPDIR)/revolve-theorydb.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/theorydb.cc' object='../common/src/revolve-theorydb.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(revolve_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/revolve-theorydb.obj `if test -f '../common/src/theorydb.cc'; then $(CYGPATH_W) '../common/src/theorydb.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/theorydb.cc'; fi`
+
 src/tconvcheck-tconvcheck.o: src/tconvcheck.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tconvcheck_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/tconvcheck-tconvcheck.o -MD -MP -MF src/$(DEPDIR)/tconvcheck-tconvcheck.Tpo -c -o src/tconvcheck-tconvcheck.o `test -f 'src/tconvcheck.cc' || echo '$(srcdir)/'`src/tconvcheck.cc
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tconvcheck-tconvcheck.Tpo src/$(DEPDIR)/tconvcheck-tconvcheck.Po
@@ -1359,14 +1502,16 @@ uninstall-am:
 	pdf pdf-am ps ps-am tags tags-am uninstall uninstall-am
 
 
-test: gencovmat fkcheck mkthpredictions apfelevol tconvcheck
+test: gencovmat fkcheck mkthpredictions apfelevol tconvcheck revolve
 	cp gencovmat $(prefix)/bin
 	cp fkcheck $(prefix)/bin
 	cp mkthpredictions $(prefix)/bin
 	cp apfelevol $(prefix)/bin
 	cp tconvcheck $(prefix)/bin
+	cp revolve $(prefix)/bin
+
 testclean:
-	rm -rf gencovmat fkcheck mkthpredictions apfelevol tconvcheck
+	rm -rf gencovmat fkcheck mkthpredictions apfelevol tconvcheck revolve
 
 .PHONY: test testclean
 
