@@ -111,8 +111,8 @@ def main(nrep, fit_filename):
                 print ("Replacing replica %d" % int(irep+1))
                 print >>l, ("Replacing replica %d" % int(irep+1))
                 badreplica = True                
-                print ("Replacing folder %i" % mask[irep])
-                print >>l, "Replacing folder %i" % mask[irep]
+                print ("Replacing folder %s" % mask[irep])
+                print >>l, "Replacing folder %s" % mask[irep]
                 fol = mask[irep]
                 mask.remove(fol)
                 nb = (fol.replace(dir + "replica_","")).replace("/","")
