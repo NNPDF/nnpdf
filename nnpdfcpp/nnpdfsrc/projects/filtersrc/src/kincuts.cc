@@ -37,7 +37,7 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
               const real minCMSDY2Dminv = 30.0;
 
               // NNLO Jets first
-              if (settings.Get("theory","ptord").as<int>() == 2)
+              if (stoi(settings.GetTheory(APFEL::kPTO)) == 2)
                 if (set.GetProc(idat).compare(0,3, string("JET")) == 0)
                 {
 
@@ -84,11 +84,11 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
 
               if (set.GetSetName().compare(string("CMSDY2D11")) == 0)
                 {
-                  if (settings.Get("theory","ptord").as<int>() == 0 || settings.Get("theory","ptord").as<int>() == 1)
+                  if (stoi(settings.GetTheory(APFEL::kPTO)) == 0 || stoi(settings.GetTheory(APFEL::kPTO)) == 1)
                     if (pTmv > maxCMSDY2Dminv || pTmv < minCMSDY2Dminv || y > maxCMSDY2Dy)
                       return false;
 
-                  if (settings.Get("theory","ptord").as<int>() == 2)
+                  if (stoi(settings.GetTheory(APFEL::kPTO)) == 2)
                     if (pTmv > maxCMSDY2Dminv || y > maxCMSDY2Dy)
                       return false;
 
@@ -156,7 +156,7 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
 
     const real Q2cut     = settings.Get("datacuts","q2min").as<double>();
     const real W2cut     = settings.Get("datacuts","w2min").as<double>();
-    const string VFNS    = settings.Get("theory","vfns").as<string>();
+    const string VFNS    = settings.GetTheory(APFEL::kFNS);
 
     // Basic cuts
     if (W2 <= W2cut) return false;

@@ -92,7 +92,7 @@ fArcDampFactor(new double[fNPDF]),
 fPDFSqrPos(new bool[fNPDF]),
 fAlpha(new real[fNPDF]),
 fBeta(new real[fNPDF]),
-fQ2(nnset.Get("theory","q20").as<real>()),
+fQ2( static_cast<real>(pow(stod(nnset.GetTheory(APFEL::kQ0)),2))),
 fGSLWork(nnset.GetGSLWorkspace())
 {
   // Squared Positivity

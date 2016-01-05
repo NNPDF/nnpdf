@@ -117,23 +117,6 @@ datacuts:
 ############################################################
 theory:
   theoryid: 3       # database id
-  ptord   : 2        # 0 for LO, 1 for NLO, 2 for NNLO
-  alphas  : 0.118      # Aphas(MZ)
-  qref    : 91.2     # Qref of Alphas
-  q20     : 1.0      # initial scale
-  vfns    : FONLL-C  # Theory
-  mc      : 1.275    # charm mass
-  mb      : 4.18     # bottom mass
-  mt      : 173.07   # top mass
-  Qc      : 1.275    # charm mass reference scale
-  Qb      : 4.18     # bottom mass reference scale
-  Qt      : 173.07   # top mass reference scale
-  nf_pdf  : 5        # max. nf for PDFs
-  nf_as   : 5        # max. nf for Alpha_S
-  modev   : TRN      # evol. mode TRN, PHT
-  msbar   : off      # msbar = on, pole = off
-  sxres   : off      # enable small-x resumm.
-  sxord   : NLL      # set small-x resumm. order
 
 ############################################################
 fitting:

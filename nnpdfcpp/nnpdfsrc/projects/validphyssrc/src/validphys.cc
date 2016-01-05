@@ -54,6 +54,7 @@ int main(int argc, char **argv)
   // Printing a copy of the configuration file
   settings.PrintConfiguration("validphys.yml");
   settings.VerifyConfiguration("validphys.yml");
+  settings.PrintTheory("theory.log");
 
   PDFSet* T0Set = new LHAPDFSet(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::ER_MCT0);
   PDFSet* T0SetRef = NULL;
