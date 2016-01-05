@@ -94,6 +94,8 @@ Date & Version & Major/Minor & Author & Comments\\
 \hline
 7/12/15 & 1.2.2 & Minor & nh/ag & Commondata process types modified \\
 \hline
+10/12/15 & 1.2.3 & Minor & nh & Higgs process types added \\
+\hline
 \end{tabular}
 \end{center}
 \label{tab:revsum}
@@ -156,6 +158,7 @@ Each datapoint has an associated \emph{process type} string. This can be specifi
 \item \textbf{HQP\_PTQQ} - Heavy diquark system $p_T$ $(p_T^{QQ},\mu^2,\sqrt{s})$
 \item \textbf{HQP\_YQ} - Heavy quark rapidity $(y^Q,\mu^2,\sqrt{s})$
 \item \textbf{HQP\_PTQ} - Heavy quark $p_T$ $(p_T^Q,\mu^2,\sqrt{s})$
+\item \textbf{HIG\_RAP} - Higgs boson rapidity distribution $(y,M_H^2,\sqrt{s})$
 \end{itemize}
 
 As examples of \emph{process type} strings, consider \textbf{EWK\_RAP} for a collider $W$ boson asymmetry measurement binned in rapidity, and \textbf{DIS\_F2P} for the $F_2^p$ structure function in DIS. The user is free to choose something identifying for the second segment of the process type, the important feature being the basic process type. However, users are encouraged to only use this freedom when absolutely necessary (such as when used in combination with APFEL).
@@ -582,7 +585,7 @@ Field/Key       & Type    & Description                    & Comments \\
   Qmb     & Real    & $Q_{\mathrm{mb}}$ & $b$ reference scale (GeV)\\
   mt        & Real    & $t$ quark mass $M_t/m_t(Q_{\mathrm{mt}})$   & Units: GeV \\
   Qmt     & Real    & $Q_{\mathrm{mt}}$ & $t$ reference scale (GeV)\\
-  CKM       & Text    & CKM matrix elements & 3X3 matrix \\ \pagebreak
+  CKM       & Text    & CKM matrix elements & unpacked 3X3 matrix \\ \pagebreak
   MZ        & Real    & $M_Z$                          & $Z$ mass (GeV) \\
   MW        & Real    & $M_W$                          & $W$ mass (GeV) \\
   GF        & Real    & $G_F$                          & Fermi coupling constant \\
