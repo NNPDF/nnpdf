@@ -92,7 +92,8 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/ax_check_compile_flag.m4 \
 	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
 	$(top_srcdir)/m4/mpi.m4 $(top_srcdir)/m4/openmp.m4 \
 	$(top_srcdir)/m4/python.m4 $(top_srcdir)/m4/pywrap.m4 \
-	$(top_srcdir)/m4/sseconv.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/sqlite3.m4 $(top_srcdir)/m4/sseconv.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -196,6 +197,9 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 PYTHON = @PYTHON@
 PYTHONCONFIG = @PYTHONCONFIG@
 PYTHONINCPATH = @PYTHONINCPATH@
@@ -212,6 +216,13 @@ SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 SIMD_FLAGS = @SIMD_FLAGS@
+SQLITE3INCPATH = @SQLITE3INCPATH@
+SQLITE3PATH = @SQLITE3PATH@
+SQLITE3_CFLAGS = @SQLITE3_CFLAGS@
+SQLITE3_CPPFLAGS = @SQLITE3_CPPFLAGS@
+SQLITE3_CXXFLAGS = @SQLITE3_CXXFLAGS@
+SQLITE3_LDFLAGS = @SQLITE3_LDFLAGS@
+SQLITE3_LIBS = @SQLITE3_LIBS@
 STRIP = @STRIP@
 SWIG = @SWIG@
 SWIG_LIB = @SWIG_LIB@
@@ -386,8 +397,8 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-@WITH_PYWRAP_FALSE@distclean-local:
 @WITH_PYWRAP_FALSE@clean-local:
+@WITH_PYWRAP_FALSE@distclean-local:
 clean: clean-am
 
 clean-am: clean-generic clean-libtool clean-local mostlyclean-am

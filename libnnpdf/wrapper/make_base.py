@@ -19,6 +19,7 @@ modules =[
  'positivity',
  'thpredictions',
  'timer',
+ 'nnpdfdb'
  ]
 
 stub_path = pathlib.Path('./stubs')

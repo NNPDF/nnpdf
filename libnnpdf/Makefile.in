@@ -102,7 +102,8 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/ax_check_compile_flag.m4 \
 	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
 	$(top_srcdir)/m4/mpi.m4 $(top_srcdir)/m4/openmp.m4 \
 	$(top_srcdir)/m4/python.m4 $(top_srcdir)/m4/pywrap.m4 \
-	$(top_srcdir)/m4/sseconv.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/sqlite3.m4 $(top_srcdir)/m4/sseconv.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
@@ -152,7 +153,7 @@ am_libnnpdf_la_OBJECTS = src/libnnpdf_la-common.lo \
 	src/libnnpdf_la-parametrisation.lo \
 	src/libnnpdf_la-lhapdfset.lo src/libnnpdf_la-positivity.lo \
 	src/libnnpdf_la-randomgenerator.lo src/libnnpdf_la-utils.lo \
-	src/libnnpdf_la-nnmpi.lo
+	src/libnnpdf_la-nnmpi.lo src/libnnpdf_la-nnpdfdb.lo
 libnnpdf_la_OBJECTS = $(am_libnnpdf_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -366,6 +367,9 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 PYTHON = @PYTHON@
 PYTHONCONFIG = @PYTHONCONFIG@
 PYTHONINCPATH = @PYTHONINCPATH@
@@ -382,6 +386,13 @@ SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 SIMD_FLAGS = @SIMD_FLAGS@
+SQLITE3INCPATH = @SQLITE3INCPATH@
+SQLITE3PATH = @SQLITE3PATH@
+SQLITE3_CFLAGS = @SQLITE3_CFLAGS@
+SQLITE3_CPPFLAGS = @SQLITE3_CPPFLAGS@
+SQLITE3_CXXFLAGS = @SQLITE3_CXXFLAGS@
+SQLITE3_LDFLAGS = @SQLITE3_LDFLAGS@
+SQLITE3_LIBS = @SQLITE3_LIBS@
 STRIP = @STRIP@
 SWIG = @SWIG@
 SWIG_LIB = @SWIG_LIB@
@@ -459,7 +470,8 @@ libnnpdf_la_SOURCES = src/common.cc \
 			src/positivity.cc \
 			src/randomgenerator.cc \
 			src/utils.cc \
-			src/nnmpi.cc
+			src/nnmpi.cc \
+			src/nnpdfdb.cc
 
 otherincludedir = $(includedir)/NNPDF
 otherinclude_HEADERS = src/NNPDF/common.h \
@@ -471,21 +483,22 @@ otherinclude_HEADERS = src/NNPDF/common.h \
 		        src/NNPDF/randomgenerator.h \
 		        src/NNPDF/parametrisation.h \
 		        src/NNPDF/utils.h \
-		 	src/NNPDF/dataset.h \
-			src/NNPDF/fkgenerator.h \
-			src/NNPDF/fastkernel.h \
-			src/NNPDF/fkset.h \
-			src/NNPDF/logger.h \
-			src/NNPDF/positivity.h \
-			src/NNPDF/thpredictions.h \
-                        src/NNPDF/nnmpi.h \
-                        src/NNPDF/exceptions.h
+		 		src/NNPDF/dataset.h \
+				src/NNPDF/fkgenerator.h \
+				src/NNPDF/fastkernel.h \
+				src/NNPDF/fkset.h \
+				src/NNPDF/logger.h \
+				src/NNPDF/positivity.h \
+				src/NNPDF/thpredictions.h \
+                src/NNPDF/nnmpi.h \
+                src/NNPDF/exceptions.h \
+                src/NNPDF/nnpdfdb.h
 
-libnnpdf_la_LDFLAGS = -version-info 0:0:0 $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDFLAGS)
-libnnpdf_la_CPPFLAGS = $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC $(LHAPDF_CPPFLAGS)
+libnnpdf_la_LDFLAGS = -version-info 0:0:0 $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDFLAGS) $(SQLITE3_LDFLAGS)
+libnnpdf_la_CPPFLAGS = $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS)
 FKconvolute_SOURCES = src/fkconvolute.cc
-FKconvolute_CPPFLAGS = $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC $(LHAPDF_CPPFLAGS)
-FKconvolute_LDFLAGS = $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDFLAGS) -lnnpdf
+FKconvolute_CPPFLAGS = $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS)
+FKconvolute_LDFLAGS = $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDFLAGS) -lnnpdf $(SQLITE3_LDFLAGS)
 
 # Scripts to install
 dist_bin_SCRIPTS = scripts/FKmerge
@@ -619,6 +632,8 @@ src/libnnpdf_la-utils.lo: src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
 src/libnnpdf_la-nnmpi.lo: src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
+src/libnnpdf_la-nnpdfdb.lo: src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
 
 libnnpdf.la: $(libnnpdf_la_OBJECTS) $(libnnpdf_la_DEPENDENCIES) $(EXTRA_libnnpdf_la_DEPENDENCIES) 
 	$(AM_V_CXXLD)$(libnnpdf_la_LINK) -rpath $(libdir) $(libnnpdf_la_OBJECTS) $(libnnpdf_la_LIBADD) $(LIBS)
@@ -732,6 +747,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/libnnpdf_la-lhapdfset.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/libnnpdf_la-logger.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/libnnpdf_la-nnmpi.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/libnnpdf_la-nnpdfdb.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/libnnpdf_la-parametrisation.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/libnnpdf_la-pdfset.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/libnnpdf_la-positivity.Plo@am__quote@
@@ -874,6 +890,13 @@ src/libnnpdf_la-nnmpi.lo: src/nnmpi.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/nnmpi.cc' object='src/libnnpdf_la-nnmpi.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libnnpdf_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/libnnpdf_la-nnmpi.lo `test -f 'src/nnmpi.cc' || echo '$(srcdir)/'`src/nnmpi.cc
+
+src/libnnpdf_la-nnpdfdb.lo: src/nnpdfdb.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libnnpdf_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/libnnpdf_la-nnpdfdb.lo -MD -MP -MF src/$(DEPDIR)/libnnpdf_la-nnpdfdb.Tpo -c -o src/libnnpdf_la-nnpdfdb.lo `test -f 'src/nnpdfdb.cc' || echo '$(srcdir)/'`src/nnpdfdb.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/libnnpdf_la-nnpdfdb.Tpo src/$(DEPDIR)/libnnpdf_la-nnpdfdb.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/nnpdfdb.cc' object='src/libnnpdf_la-nnpdfdb.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libnnpdf_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/libnnpdf_la-nnpdfdb.lo `test -f 'src/nnpdfdb.cc' || echo '$(srcdir)/'`src/nnpdfdb.cc
 
 src/FKconvolute-fkconvolute.o: src/fkconvolute.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(FKconvolute_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/FKconvolute-fkconvolute.o -MD -MP -MF src/$(DEPDIR)/FKconvolute-fkconvolute.Tpo -c -o src/FKconvolute-fkconvolute.o `test -f 'src/fkconvolute.cc' || echo '$(srcdir)/'`src/fkconvolute.cc
