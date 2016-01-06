@@ -440,7 +440,7 @@ void NNPDFSettings::VerifyFK(FKTable * const &table) const
   const NNPDF::FKHeader::section TI = NNPDF::FKHeader::THEORYINFO;
 
   bool pV = true;
-  for (size_t i = 1; i < APFEL::kValues.size(); i++)
+  for (size_t i = 0; i < APFEL::kValues.size(); i++)
     pV = !( !pV || !CheckParam(APFEL::kValues[i], GetTheory(APFEL::kValues[i]), table->GetTag(TI, APFEL::kValues[i]) )  );
 
   if (!pV) throw RuntimeException("NNPDFSettings::VerifyFK","mismatch between db and FKTable");
