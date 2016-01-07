@@ -6,6 +6,7 @@
 
 %include "std_string.i" 
 %include "std_vector.i" 
+%include "std_map.i"
 %include "common.i"
 
 /* Parse the header file to generate wrappers */
@@ -13,3 +14,5 @@
 %include "include/excepthandler.i"
 
 %include "../../src/NNPDF/nnpdfdb.h"
+
+%template(map_string_string) std::map<std::string,std::string>;
