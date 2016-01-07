@@ -5,13 +5,14 @@
  %}
 
 %include "std_string.i" 
+%include "std_vector.i" 
 %include "std_map.i"
-%include "std_vector.i"
 %include "common.i"
-%include "include/excepthandler.i"
 
 /* Parse the header file to generate wrappers */
- //%template(map_string_string) std::map<std::string, std::string>;
 
-%template(vectorString) std::vector<std::string>;
+%include "include/excepthandler.i"
+%template(map_string_string) std::map<std::string,std::string>;
+%template(vector_string) std::vector<std::string>;
+
 %include "../../src/NNPDF/nnpdfdb.h"
