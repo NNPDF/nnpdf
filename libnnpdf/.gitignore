@@ -48,3 +48,4 @@ build/
 dist/
 .libs
 FKconvolute
+__pycache__
