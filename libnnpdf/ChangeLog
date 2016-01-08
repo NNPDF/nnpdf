@@ -8,5 +8,7 @@ libnnpdf 1.1.0 - XX/XX/XX
 * Moved to more flexible header format for FKtables
 * Removed min Q^2 cut in CommonData
 * Added FKconvolute test program for FK tables
-* Converted CommonData errors to exceptions
+* Converted old exit errors to exceptions
 * CommonData process type convention now enforced
+* Moved IndexDB class from APFELcomb to libnnpdf
+* Introduced SWIG based python wrapper - several small modifications required for ease of SWIG use

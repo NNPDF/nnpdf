@@ -11,9 +11,51 @@
 #include "common.h"
 #include <vector>
 #include <string>
+#include <fstream>
+
+
+/** @defgroup utils Utils
+ * \brief libnnpdf utility functions
+ */
+
+/*! \addtogroup utils
+ *  @{
+ */
 
 namespace NNPDF
 {
+
+	// *******************  SWIG helpers *****************************
+
+  /*! 
+   *  \class ifstream_proxy
+   *  \brief Wrapper converting a filename to an std::ifstream for use with the SWIG
+   */
+	class ifstream_proxy
+	{
+		private:
+			std::ifstream fStream; //!< Internal ifstream object
+		public:
+			ifstream_proxy(std::string const& filename): //!< Constructor takes a filename and initialises the internal ifstream
+			fStream(filename) {};
+
+			std::ifstream& stream() {return fStream;}; //!< Returns the internal ifstream
+	};
+
+  /*! 
+   *  \class ofstream_proxy
+   *  \brief Wrapper converting a filename to an std::ofstream for use with the SWIG
+   */
+	class ofstream_proxy
+	{
+		private:
+			std::ofstream fStream; //!< Internal ofstream object
+		public:
+			ofstream_proxy(std::string const& filename): //!< Constructor takes a filename and initialises the internal ofstream
+			fStream(filename) {};
+
+			std::ofstream& stream() {return fStream;}; //!< Returns the internal stream
+	};
 
 	// *******************  Numerical *****************************
 	double integrate(double data[], size_t npoints, double h); //!< Basic simpson rule integrator
@@ -44,3 +86,5 @@ namespace NNPDF
 	bool InvertLU(int n, double **covmat, double **invcovmat);
 
 }
+
+ /*! @} */
