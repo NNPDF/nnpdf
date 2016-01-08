@@ -28,33 +28,33 @@ namespace NNPDF
 	// *******************  SWIG helpers *****************************
 
   /*! 
-   *  \class ifstream_proxy
+   *  \class istream_proxy
    *  \brief Wrapper converting a filename to an std::ifstream for use with the SWIG
    */
-	class ifstream_proxy
+	class istream_proxy
 	{
 		private:
 			std::ifstream fStream; //!< Internal ifstream object
 		public:
-			ifstream_proxy(std::string const& filename): //!< Constructor takes a filename and initialises the internal ifstream
+			istream_proxy(std::string const& filename): //!< Constructor takes a filename and initialises the internal ifstream
 			fStream(filename) {};
 
-			std::ifstream& stream() {return fStream;}; //!< Returns the internal ifstream
+			std::istream& stream() {return fStream;}; //!< Returns the internal ifstream
 	};
 
   /*! 
-   *  \class ofstream_proxy
+   *  \class ostream_proxy
    *  \brief Wrapper converting a filename to an std::ofstream for use with the SWIG
    */
-	class ofstream_proxy
+	class ostream_proxy
 	{
 		private:
 			std::ofstream fStream; //!< Internal ofstream object
 		public:
-			ofstream_proxy(std::string const& filename): //!< Constructor takes a filename and initialises the internal ofstream
+			ostream_proxy(std::string const& filename): //!< Constructor takes a filename and initialises the internal ofstream
 			fStream(filename) {};
 
-			std::ofstream& stream() {return fStream;}; //!< Returns the internal stream
+			std::ostream& stream() {return fStream;}; //!< Returns the internal stream
 	};
 
 	// *******************  Numerical *****************************
