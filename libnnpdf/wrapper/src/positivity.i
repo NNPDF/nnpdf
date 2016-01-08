@@ -13,6 +13,8 @@
 
 /* Parse the header file to generate wrappers */
 
+%feature("autodoc", "3");
+
 %include "include/excepthandler.i"
 
 %include "../../src/NNPDF/positivity.h"

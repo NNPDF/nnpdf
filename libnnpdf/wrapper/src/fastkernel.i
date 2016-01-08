@@ -12,6 +12,8 @@
 %template(_string_list) std::vector< std::string >;
 %include "../../src/NNPDF/exceptions.h"
 
+%feature("autodoc", "3");
+
 %include "include/excepthandler.i"
 
 %include "../../src/NNPDF/fastkernel.h"

@@ -6,10 +6,12 @@
 
 %include "std_string.i" 
 %include "std_vector.i" 
-
+%include "common.i"
 
 /* Parse the header file to generate wrappers */
-%import "common.i"
+
+%feature("autodoc", "3");
+
 %include "include/excepthandler.i"
 
 %include "../../src/NNPDF/parametrisation.h"
