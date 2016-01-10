@@ -23,12 +23,13 @@ modules =[
  ]
 
 stub_path = pathlib.Path('./stubs')
+stub_path.mkdir(exist_ok=True)
 
-interface_path = pathlib.Path('./src')
+this_path = pathlib.Path(__file__).parent
 
 def gen_stubs():
     pattern = r'\[\[module\]\]'
-    with open('swig.template') as f:
+    with (this_path/'swig.template').open() as f:
         template = f.read()
     for module in modules:
         stub = re.sub(pattern,module,template)
