@@ -103,7 +103,7 @@ experiments:
 ############################################################
 datacuts:
   t0pdfset     : NNPDF30_nlo_as_0118 # PDF set to generate t0 covmat
-  q2min        : 3.0                 # Q2 minimum
+  q2min        : 3.49                # Q2 minimum
   w2min        : 12.5                # W2 minimum
   combocuts    : NNPDF30             # NNPDF3.0 final kin. cuts
   jetptcut_tev : 0                   # jet pt cut for tevatron
