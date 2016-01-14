@@ -37,7 +37,7 @@ namespace NNPDF
 			std::ifstream fStream; //!< Internal ifstream object
 		public:
 			istream_proxy(std::string const& filename): //!< Constructor takes a filename and initialises the internal ifstream
-			fStream(filename) {};
+			fStream(filename.c_str()) {};
 
 			std::istream& stream() {return fStream;}; //!< Returns the internal ifstream
 	};
@@ -52,7 +52,7 @@ namespace NNPDF
 			std::ofstream fStream; //!< Internal ofstream object
 		public:
 			ostream_proxy(std::string const& filename): //!< Constructor takes a filename and initialises the internal ofstream
-			fStream(filename) {};
+			fStream(filename.c_str()) {};
 
 			std::ostream& stream() {return fStream;}; //!< Returns the internal stream
 	};
