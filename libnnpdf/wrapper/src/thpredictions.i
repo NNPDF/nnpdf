@@ -19,3 +19,18 @@
 %include "include/excepthandler.i"
 
 %include "../../src/NNPDF/thpredictions.h"
+
+%extend NNPDF::ThPredictions{
+
+%pythoncode{
+
+def __len__(self):
+    return self.GetNData()
+
+
+def __iter__(self):
+    for i in range(len(self)):
+        yield self.GetObsCV(i), self.GetObsError(i)
+
+}
+}
