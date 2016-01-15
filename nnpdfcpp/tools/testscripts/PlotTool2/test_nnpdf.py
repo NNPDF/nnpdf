@@ -1,17 +1,14 @@
 import sys
 
-import NNPDF
-from NNPDF.lhapdfset import *
-from NNPDF.fastkernel import *
-from NNPDF.thpredictions import *
-from NNPDF.utils import *
+from NNPDF import LHAPDFSet, FKTable, ThPredictions
+from NNPDF.utils import ostream_proxy
 
-a = LHAPDFSet("CT10", LHAPDFSet.ER_EIG)
-b = FKTable("FK_NMC.dat")
-c = ThPredictions(a,b)
+pdf = LHAPDFSet("CT10", LHAPDFSet.ER_EIG)
+theory = FKTable("FK_NMC.dat")
+predictions = ThPredictions(pdf, theory)
 
-d = ostream_proxy("test.out")
-c.Print(d.stream())
+f = ostream_proxy("test.out")
+predictions.Print(f.stream())
 
-for i in range(0,c.GetNData()):
-	print(c.GetObsCV(i), c.GetObsError(i))
+for cv, error in predictions:
+    print(cv, error)
