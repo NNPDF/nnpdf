@@ -21,7 +21,8 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
   if (settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF30")) == 0)
     {
           if (set.GetProc(idat).compare(0,3, string("JET")) == 0 ||
-              set.GetProc(idat).compare(0,3,string("EWK")) == 0 )
+              set.GetProc(idat).compare(0,3, string("EWK")) == 0 ||
+              set.GetProc(idat).compare(0,3, string("DYP")) == 0 )
             {
               // building rapidity and pT or Mll
               const real y  = set.GetKinematics(idat,0);
@@ -35,6 +36,8 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
               const real maxCMSDY2Dy = 2.2;
               const real maxCMSDY2Dminv = 200.0;
               const real minCMSDY2Dminv = 30.0;
+              const real maxTau = 0.080;
+              const real maxY = 0.663;
 
               // NNLO Jets first
               if (settings.Get("theory","ptord").as<int>() == 2)
@@ -103,7 +106,25 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
                     return false;
                   return true;
                 }
-            }
+
+	      //***********************************************************
+	      // New cuts to the fixed target Drell-Yan data
+	      if ( (set.GetSetName().compare(string("DYP_E886P")) == 0) ||
+		   (set.GetSetName().compare(string("DYP_E605"))  == 0) )
+		{
+		  const real rapidity = set.GetKinematics(idat,0);
+		  const real invM2 = set.GetKinematics(idat,1);
+		  const real sqrts = set.GetKinematics(idat,2);
+		  const real tau = invM2 / ( sqrts * sqrts );
+		  const real ymax = -0.5 * log(tau);
+
+		  if(tau > maxTau) return false;
+
+		  if( fabs(rapidity/ymax) > maxY) return false;
+
+		  return true;
+		}
+            }                    
         }
 
   // End of special combo cut NNPDF30
