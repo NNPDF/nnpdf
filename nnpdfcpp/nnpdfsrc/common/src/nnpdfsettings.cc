@@ -14,7 +14,6 @@
 #include <sys/stat.h>
 
 #include "nnpdfsettings.h"
-#include "theorydb.h"
 #include "svn.h"
 
 // Strings for config file output
@@ -164,10 +163,20 @@ NNPDFSettings::NNPDFSettings(const string &filename, const string &plotfile):
   fConfig = YAML::LoadFile(fFileName);
 
   // Check for theory ID
-  if ( Get("theory","theoryid").as<int>() < 0) { cerr << Colour::FG_RED << "\nInvalid Theory ID" << endl; exit(-1); }
+  const int theoryID = Get("theory","theoryid").as<int>();
+  if ( theoryID < 0) throw RangeError("NNPDFSettings::NNPDFSettings", "Invalid Theory ID");
+
   stringstream td;
-  td << "theory_" << Get("theory","theoryid").as<int>();
+  td << "theory_" << theoryID;
   fTheoryDir = td.str();
+
+  // load theory map
+  IndexDB db(dataPath() + "theory.db", "theoryIndex");
+  db.ExtractMap(theoryID, APFEL::kValues, fTheory);
+
+  cout << "==== Theory summary" << endl;
+  for (size_t i = 0; i < APFEL::kValues.size(); i++)
+    cout << "- " << APFEL::kValues[i] << " : " << fTheory.at(APFEL::kValues[i]) << endl;
 
   // check basis in yaml file
   CheckBasis();
@@ -210,8 +219,6 @@ NNPDFSettings::NNPDFSettings(const string &filename, const string &plotfile):
   // Setup results directory
   fResultsDir += fPDFName;
   mkdir(fResultsDir.c_str(), 0777);
-
-  parseTheory(*this);
 }
 
 /**
@@ -405,7 +412,7 @@ bool NNPDFSettings::CheckParam(std::string const& param, double const& p1, doubl
     if ( fabs( p1 - p2 ) > 1e-8  )
     {
       cerr << Colour::FG_RED << "NNPDFSettings::VerifyFK Error: FastKernel Table "
-           <<" does not satisfy global " <<param <<": " << p1<< " vs  "<< p2 <<endl;
+           <<" does not satisfy global " <<param <<": " << p1<< " vs  "<< p2 << Colour::FG_DEFAULT << endl;
       return false;
     }
 
@@ -417,7 +424,7 @@ bool NNPDFSettings::CheckParam(std::string const& param, std::string const& p1, 
     if ( p1 != p2 )
     {
       cerr << Colour::FG_RED << "NNPDFSettings::VerifyFK Error: FastKernel Table "
-           <<" does not satisfy global " <<param <<": " << p1<< " vs  "<< p2 <<endl;
+           <<" does not satisfy global " <<param <<": " << p1<< " vs  "<< p2 << Colour::FG_DEFAULT << endl;
       return false;
     }
 
@@ -430,25 +437,13 @@ bool NNPDFSettings::CheckParam(std::string const& param, std::string const& p1, 
  */
 void NNPDFSettings::VerifyFK(FKTable * const &table) const
 {  
-
   const NNPDF::FKHeader::section TI = NNPDF::FKHeader::THEORYINFO;
 
   bool pV = true;
-  pV = !( !pV || !CheckParam("ptord", Get("theory","ptord").as<int>(), table->GetTag<int>(TI, "PTO") )  );
+  for (size_t i = 0; i < APFEL::kValues.size(); i++)
+    pV = !( !pV || !CheckParam(APFEL::kValues[i], GetTheory(APFEL::kValues[i]), table->GetTag(TI, APFEL::kValues[i]) )  );
 
-  pV = !( !pV || !CheckParam("ptord", Get("theory","alphas").as<double>(), table->GetTag<double>(TI, "alphas") )  );
-  pV = !( !pV || !CheckParam("ptord", Get("theory","q20").as<double>(), pow(table->GetTag<double>(TI, "Q0"),2.0) )  );
-  pV = !( !pV || !CheckParam("ptord", Get("theory","qref").as<double>(), table->GetTag<double>(TI, "Qref") )  );
-
-  // String->Bool
-  //pV = !( !pV || !CheckParam("ptord", Get("theory","msbar").as<bool>(), table->GetTag<bool>(TI, "HQ") )  );
-  pV = !( !pV || !CheckParam("ptord", Get("theory","mc").as<double>(), table->GetTag<double>(TI, "mc") )  );
-  pV = !( !pV || !CheckParam("ptord", Get("theory","mb").as<double>(), table->GetTag<double>(TI, "mb") )  );
-  pV = !( !pV || !CheckParam("ptord", Get("theory","mt").as<double>(), table->GetTag<double>(TI, "mt") )  );
-
-  if (!pV)
-    exit(-1);
-
+  if (!pV) throw RuntimeException("NNPDFSettings::VerifyFK","mismatch between db and FKTable");
 }
 
 /**
@@ -459,10 +454,23 @@ void NNPDFSettings::PrintConfiguration(const string& filename) const
 {
   fstream i( fFileName.c_str(), ios::in | ios::binary);
   fstream f( (fResultsDir + "/" + filename).c_str(), ios::out | ios::binary);
-  if (i.fail() || f.fail()) { cerr << "fail" << endl; }
+  if (i.fail() || f.fail()) { throw FileError("NNPDFSettings::PrintConfiguration","file failed."); }
   f << i.rdbuf();
   f.close();
   i.close();
+}
+
+/**
+ * @brief NNPDFSettings::PrintConfiguration
+ * @param filename
+ */
+void NNPDFSettings::PrintTheory(const string& filename) const
+{
+  fstream f( (fResultsDir + "/" + filename).c_str(), ios::out | ios::binary);
+  if (f.fail()) { throw FileError("NNPDFSettings::PrintConfiguration","file failed."); }
+  for (size_t i = 0; i < APFEL::kValues.size(); i++)
+    f << APFEL::kValues[i] << "\t: " << fTheory.at(APFEL::kValues[i]) << endl;
+  f.close();
 }
 
 /**

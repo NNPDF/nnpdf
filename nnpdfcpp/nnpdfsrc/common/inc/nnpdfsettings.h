@@ -22,6 +22,8 @@
 #include <NNPDF/fastkernel.h>
 #include <NNPDF/utils.h>
 #include <NNPDF/commondata.h>
+#include <NNPDF/nnpdfdb.h>
+#include <APFEL/APFELdev.h>
 
 #include <md5.h>
 #include <yaml-cpp/yaml.h>
@@ -94,6 +96,8 @@ private:
   YAML::Node fConfig;   //!< main config file
   YAML::Node fPlotting; //!< plotting config file
 
+  map<string,string> fTheory;
+
 public:
 
   NNPDFSettings(const string& filename,const string& plotfile = ""); //!< The constructor
@@ -101,10 +105,10 @@ public:
 
   // Get methods
   YAML::Node Get(const string& item) const;
-  YAML::Node Get(const string& node, const string& item) const;
+  YAML::Node Get(const string& node, const string& item) const;  
   YAML::Node GetPlotting(const string& item) const;
   YAML::Node GetFile() const { return fConfig; }
-
+  string const& GetTheory(const string& item) const { return fTheory.at(item); }
   string const& GetResultsDirectory() const { return fResultsDir; }
   string const& GetTheoryDirectory()  const { return fTheoryDir;  }
 
@@ -119,6 +123,7 @@ public:
   vector<string> const& GetExpSets(int i) const { return fExpSetName[i]; }
   FlMutProperty  const& GetFlMutProp(int i) const { return fFlMutProperty[i]; }
   vector<int> const& GetArch() const { return fArch; }
+  map<string,string> const& GetTheoryMap() const { return fTheory; }
   bool IsQED() const;
   bool IsIC()  const;
 
@@ -132,6 +137,7 @@ public:
 
   // Print configuration
   void PrintConfiguration(const string& filename) const;
+  void PrintTheory(const string& filename) const;
 
   vector<string>  GetDataInfo(string const& setname, filterType useFiltered) const;
   vector<int>     GetDataMask(string const& setname, filterType useFiltered) const;

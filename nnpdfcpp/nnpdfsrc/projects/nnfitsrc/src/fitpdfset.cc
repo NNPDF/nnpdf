@@ -38,7 +38,7 @@ PDFSet(string("NNPDF_Fit"),1,ER_NONE),
 fSettings(nnset),
 fFitBasis(basis),
 fNfl(nnset.GetNFL()),
-fQ20(nnset.Get("theory","q20").as<real>()),
+fQ20((real)pow(stod(nnset.GetTheory(APFEL::kQ0)),2.0)),
 fPreprocParam(),
 fBestFit(0),
 fEbf(std::numeric_limits<real>::infinity()),
@@ -474,7 +474,7 @@ void FitPDFSet::ExportPDF( int const& rep, real const& erf_val, real const& erf_
     lhaoutheader6 << "Flavors: [";
     for (int i = -nf; i <= nf; i++)
       lhaoutheader6 << ((i == 0) ? 21 : i) << ((i == nf && !fSettings.IsQED()) ? "]\n" : ( (i == nf && fSettings.IsQED()) ? "22]\n" : ", "));
-    lhaoutheader6 << "OrderQCD: " << fSettings.Get("theory","ptord").as<string>() << endl;
+    lhaoutheader6 << "OrderQCD: " << fSettings.GetTheory(APFEL::kPTO) << endl;
 
     lhaoutheader6 << "FlavorScheme: variable" << endl;
     lhaoutheader6 << "NumFlavors: " << nf << endl;
@@ -493,7 +493,7 @@ void FitPDFSet::ExportPDF( int const& rep, real const& erf_val, real const& erf_
     lhaoutheader6 << "MTop: "    << APFELSingleton::getMTop() << endl;
     lhaoutheader6 << fixed << "AlphaS_MZ: " << APFELSingleton::getAlphas() << endl;
     lhaoutheader6 << scientific;
-    lhaoutheader6 << "AlphaS_OrderQCD: " << fSettings.Get("theory","ptord").as<string>() << endl;
+    lhaoutheader6 << "AlphaS_OrderQCD: " << fSettings.GetTheory(APFEL::kPTO) << endl;
     lhaoutheader6 << "AlphaS_Type: ipol" << endl;
 
     lhaoutheader6 << "AlphaS_Qs: [";

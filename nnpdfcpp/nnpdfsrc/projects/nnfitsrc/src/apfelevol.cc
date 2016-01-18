@@ -47,17 +47,17 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
 
   // initialize attributes
   getInstance()->fPDF = pdf;
-  getInstance()->fMZ = set.Get("theory","qref").as<double>();
-  getInstance()->fQ0 = getInstance()->fQtmp = sqrt(set.Get("theory","q20").as<double>());
-  getInstance()->fAlphas = set.Get("theory","alphas").as<double>();
-  getInstance()->fNFpdf = set.Get("theory","nf_pdf").as<int>();
-  getInstance()->fNFas = set.Get("theory","nf_as").as<int>();
-  getInstance()->mth.push_back(set.Get("theory","mc").as<double>());
-  getInstance()->mth.push_back(set.Get("theory","mb").as<double>());
-  getInstance()->mth.push_back(set.Get("theory","mt").as<double>());
-  getInstance()->mthref.push_back(set.Get("theory","Qc").as<double>());
-  getInstance()->mthref.push_back(set.Get("theory","Qb").as<double>());
-  getInstance()->mthref.push_back(set.Get("theory","Qt").as<double>());
+  getInstance()->fMZ = stod(set.GetTheory(APFEL::kQref));
+  getInstance()->fQ0 = getInstance()->fQtmp = stod(set.GetTheory(APFEL::kQ0));
+  getInstance()->fAlphas = stod(set.GetTheory(APFEL::kalphas));
+  getInstance()->fNFpdf = stoi(set.GetTheory(APFEL::kMaxNfPdf));
+  getInstance()->fNFas = stoi(set.GetTheory(APFEL::kMaxNfAs));
+  getInstance()->mth.push_back(stod(set.GetTheory(APFEL::kmc)));
+  getInstance()->mth.push_back(stod(set.GetTheory(APFEL::kmb)));
+  getInstance()->mth.push_back(stod(set.GetTheory(APFEL::kmt)));
+  getInstance()->mthref.push_back(stod(set.GetTheory(APFEL::kQmc)));
+  getInstance()->mthref.push_back(stod(set.GetTheory(APFEL::kQmb)));
+  getInstance()->mthref.push_back(stod(set.GetTheory(APFEL::kQmt)));
   getInstance()->fNX = set.Get("lhagrid","nx").as<int>();
   getInstance()->fNQ = set.Get("lhagrid","nq").as<int>();
   getInstance()->fXmin = set.Get("lhagrid","xmin").as<double>();
@@ -66,62 +66,13 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
   getInstance()->fQmax = set.Get("lhagrid","qmax").as<double>();
 
   // initialize apfel  
+  APFEL::SetParam(set.GetTheoryMap());
   APFEL::SetQLimits(getInstance()->fQ0, getInstance()->fQmax + 1E-5); // Epsilon for limits
   APFEL::SetNumberOfGrids(3);
   APFEL::SetGridParameters(1,100,3,getInstance()->fXmin);
   APFEL::SetGridParameters(2,70,5,getInstance()->fXmed);
   APFEL::SetGridParameters(3,50,5,0.65);
   APFEL::LockGrids(true);
-
-  // hq masses
-  APFEL::SetAlphaQCDRef(getInstance()->getAlphas(), getInstance()->fMZ);
-  if (set.Get("theory","msbar").as<bool>())
-  {
-    APFEL::SetMSbarMasses(getInstance()->mth[0],getInstance()->mth[1],getInstance()->mth[2]);
-    APFEL::SetMassScaleReference(getInstance()->mthref[0],getInstance()->mthref[1],getInstance()->mthref[2]);
-  }
-  else
-  {
-    APFEL::SetPoleMasses(getInstance()->mth[0],getInstance()->mth[1],getInstance()->mth[2]);
-  }
-
-  APFEL::SetMaxFlavourPDFs(getInstance()->fNFpdf);
-  APFEL::SetMaxFlavourAlpha(getInstance()->fNFas);
-
-  APFEL::SetTheory("QCD");
-  APFEL::SetPerturbativeOrder(set.Get("theory","ptord").as<int>());
-
-  if (set.IsQED())
-    {
-      APFEL::SetTheory("QUniD");
-      APFEL::SetAlphaQEDRef(set.Get("theory","alpha").as<double>(),set.Get("theory","qedref").as<double>());
-    }
-
-  switch (NNPDFSettings::getMODEV(set.Get("theory","modev").as<string>())) {
-    case TRN:
-      APFEL::SetPDFEvolution("truncated");
-      APFEL::SetAlphaEvolution("expanded");
-      break;
-
-    case EXA:
-      APFEL::SetPDFEvolution("exactalpha");
-      APFEL::SetAlphaEvolution("exact");
-      break;
-
-    case EXP:
-      APFEL::SetPDFEvolution("expandalpha");
-      APFEL::SetAlphaEvolution("expanded");
-      break;
-
-    default:
-      cerr << Colour::FG_RED << "APFELSingleton::Initialization: unrecognised modev" << Colour::FG_DEFAULT << endl;
-      exit(-1);
-      break;
-    }
-
-  // Small-x resummation
-  APFEL::SetSmallxResummation(set.Get("theory","sxres").as<bool>(), set.Get("theory","sxord").as<string>());
-
   APFEL::SetPDFSet("external");
   APFEL::SetFastEvolution(false);
   APFEL::InitializeAPFEL();  
