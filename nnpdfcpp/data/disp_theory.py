@@ -37,7 +37,7 @@ try:
     table = []
     rows = cur.fetchall()
     for row in rows:
-        table.append([row[0], row[33]])
+        table.append([row[0], row[36]])
 
     print(tabulate(table, headers=col_sub))
 
