@@ -28,7 +28,7 @@ static const dataInfoRaw CMSWMASY47FBinfo = {
 
 static const dataInfoRaw CMSDY2D11info = {
   132,         //nData
-  132,         //nSys
+  133,         //nSys (Covariance matrix: nData fake syst. unc. + Lumi)
   "CMSDY2D11", //SetName
   "EWK_RAP"    //ProcType
 };

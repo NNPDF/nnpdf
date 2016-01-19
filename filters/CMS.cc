@@ -267,9 +267,6 @@ void CMSDY2D11Filter::ReadData()
   int idum,jdum;
   double Mll,dum;
   double s = 7000;
-  //double systot[fNData];
-  //double inmat[fNData][fNData];
-  double lumi_unc = 0.022;
 
   // Reading data
   for (int i = 0; i < fNData; i++)
@@ -297,7 +294,6 @@ void CMSDY2D11Filter::ReadData()
       getline(f2,line);
       istringstream lstream(line);
       lstream >> idum >> jdum >> covmat[i][j];
-      covmat[i][j] += lumi_unc * lumi_unc * fData[i] * fData[j];
       //cout << i << " " << j << " " << covmat[i][j] << endl;
     }
   }
@@ -314,14 +310,23 @@ void CMSDY2D11Filter::ReadData()
    }
 
   for (int i = 0; i < fNData; i++)
-    for (int l = 0; l < fNSys; l++)
     {
-      fSys[i][l].add = syscor[i][l];
-      fSys[i][l].mult = fSys[i][l].add*100/fData[i];
-      fSys[i][l].type = ADD;
-      fSys[i][l].name = "CORR";
-    }
+      for (int l = 0; l < fNSys-1; l++)
+      {
+        fSys[i][l].add  = syscor[i][l];
+        fSys[i][l].mult = fSys[i][l].add*100/fData[i];
+        fSys[i][l].type = ADD;
+        fSys[i][l].name = "CORR";
+      }
 
+      // Luminosity Uncertainty
+      // CMS Luminosity Uncertainty, 2011 data set: 2.2%
+      // http://cds.cern.ch/record/1434360?ln=en
+      fSys[i][fNSys-1].mult = 2.2;
+      fSys[i][fNSys-1].add  = fData[i]*fSys[i][fNSys-1].mult/100;
+      fSys[i][fNSys-1].type = MULT;
+      fSys[i][fNSys-1].name = "CMSLUMI11";
+    }
   f1.close();
   f2.close();
 }

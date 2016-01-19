@@ -29,6 +29,7 @@ void CMSDY2D12Filter::ReadData()
 
   string line;
   int idum;
+  double Mll;
 
   // Filter data file
   for (int idat = 0; idat < fNData; idat++)
@@ -36,22 +37,11 @@ void CMSDY2D12Filter::ReadData()
     getline(f1,line);
     istringstream lstream(line);
 
-    lstream >> idum;
-    lstream >> fKin1[idat];
-    lstream >> fKin2[idat];
+    lstream >> idum >> fKin1[idat] >> Mll >> fData[idat];
+    fKin2[idat] = pow(Mll,2);
+    fKin3[idat] = 8e3;         // LHC ( TeV)
+    fData[idat] *= 1000.;      // Convert from pb (datafiles) to fb (APPLgrid)
 
-    lstream >> fData[idat];
-    // As given in HepData, there is no separation between
-    // statistical and systematic uncertainties. Only the
-    // TOTAL convariance matrix (excluding lumi) is given.
-    //    lstream >> fStat[idat];
-
-
-    // Convert from pb (datafiles) to fb (APPLgrid)
-    fData[idat] *= 1000.;
-    //    fStat[idat] *= 1000.;
-
-    fKin3[idat] = 8E3;    // LHC 8 TeV
   }
 
   // Filter Covariance Matrix
@@ -89,10 +79,9 @@ void CMSDY2D12Filter::ReadData()
       fSys[i][l].type = ADD;
       fSys[i][l].name = "CORR";
     }
-
-    // Add Luminosity uncertainty of 2.6%
-    // NOT included in covariance matrix, as explained in
-    // HepData file (cov_combi_preFSR_inAcc_absolute_2D.out).
+    // Luminosity Uncertainty
+    // CMS Luminosity Uncertainty, 2012 data set: 2.6%
+    // http://cds.cern.ch/record/1598864?ln=en
 
     fSys[i][fNSys-1].mult = 2.6;
     fSys[i][fNSys-1].add  = fSys[i][fNSys-1].mult*fData[i]*1e-2;
