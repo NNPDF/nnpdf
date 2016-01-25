@@ -287,19 +287,19 @@ namespace NNPDF
   fDataName(    GetTag        (GRIDINFO,       "SETNAME")),
   fDescription( GetTag        (BLOB,   "GridDesc")),
   fNData(       GetTag<int>   (GRIDINFO,   "NDATA")),
-  fNx(          GetTag<int>   (GRIDINFO,   "NX")),
-  fHadronic(    GetTag<bool>  (GRIDINFO,   "HADRONIC")),
   fQ20(     pow(GetTag<double>(THEORYINFO, "Q0"),2)),
+  fHadronic(    GetTag<bool>  (GRIDINFO,   "HADRONIC")),
   fNonZero(parseNonZero()),  // All flavours
   fFlmap(fHadronic ? new int[2*fNonZero]:new int[fNonZero]),
-  fHasCFactors(cFactors.size()),
-  fcFactors(new double[fNData]),
-  fXgrid(new double[fNx]),
+  fNx(          GetTag<int>   (GRIDINFO,   "NX")),
   fTx(fHadronic ? fNx*fNx:fNx),
   fRmr(fTx*fNonZero % convoluteAlign),
   fPad((fRmr == 0) ? 0:convoluteAlign - fRmr ),
   fDSz( fTx*fNonZero + fPad ),
-  fSigma( new real[fDSz*fNData])
+  fXgrid(new double[fNx]),
+  fSigma( new real[fDSz*fNData]),
+  fHasCFactors(cFactors.size()),
+  fcFactors(new double[fNData])
   {
     std::ifstream is(filename);
     NNPDF::FKHeader headSkip(is);
@@ -316,19 +316,19 @@ namespace NNPDF
   fDataName(    GetTag        (GRIDINFO,       "SETNAME")),
   fDescription( GetTag        (BLOB,   "GridDesc")),
   fNData(       GetTag<int>   (GRIDINFO,   "NDATA")),
-  fNx(          GetTag<int>   (GRIDINFO,   "NX")),
-  fHadronic(    GetTag<bool>  (GRIDINFO,   "HADRONIC")),
   fQ20(     pow(GetTag<double>(THEORYINFO, "Q0"),2)),
+  fHadronic(    GetTag<bool>  (GRIDINFO,   "HADRONIC")),
   fNonZero(parseNonZero()),  // All flavours
   fFlmap(fHadronic ? new int[2*fNonZero]:new int[fNonZero]),
-  fHasCFactors(cFactors.size()),
-  fcFactors(new double[fNData]),
-  fXgrid(new double[fNx]),
+  fNx(          GetTag<int>   (GRIDINFO,   "NX")),
   fTx(fHadronic ? fNx*fNx:fNx),
   fRmr(fTx*fNonZero % convoluteAlign),
   fPad((fRmr == 0) ? 0:convoluteAlign - fRmr ),
   fDSz( fTx*fNonZero + fPad ),
-  fSigma( new real[fDSz*fNData])
+  fXgrid(new double[fNx]),
+  fSigma( new real[fDSz*fNData]),
+  fHasCFactors(cFactors.size()),
+  fcFactors(new double[fNData])
   {
     InitialiseFromStream(is, cFactors);
   };
@@ -452,17 +452,17 @@ namespace NNPDF
   FKHeader(set),
   fDataName(set.fDataName),
   fNData(set.fNData),
-  fNx(set.fNx),
-  fTx(set.fTx),
-  fRmr(set.fRmr),
-  fDSz(set.fDSz),
-  fPad(set.fPad),
-  fXgrid(new double[fNx]),
+  fQ20(set.fQ20),
   fHadronic(set.fHadronic),
   fNonZero(set.fNonZero),
   fFlmap(fHadronic ? (new int[2*fNonZero]):(new int[fNonZero])),
+  fNx(set.fNx),
+  fTx(set.fTx),
+  fRmr(set.fRmr),
+  fPad(set.fPad),
+  fDSz(set.fDSz),
+  fXgrid(new double[fNx]),
   fSigma(new real[fDSz*fNData]),
-  fQ20(set.fQ20),
   fHasCFactors(set.fHasCFactors),
   fcFactors(new double[fNData])
   {
@@ -503,17 +503,17 @@ namespace NNPDF
   FKHeader(set),
   fDataName(set.fDataName),
   fNData(mask.size()),
-  fNx(set.fNx),
-  fTx(set.fTx),
-  fRmr(set.fRmr),
-  fDSz(set.fDSz),
-  fPad(set.fPad),
-  fXgrid(new double[fNx]),
+  fQ20(set.fQ20),
   fHadronic(set.fHadronic),
   fNonZero(set.fNonZero),
   fFlmap(fHadronic ? (new int[2*fNonZero]):(new int[fNonZero])),
+  fNx(set.fNx),
+  fTx(set.fTx),
+  fRmr(set.fRmr),
+  fPad(set.fPad),
+  fDSz(set.fDSz),
+  fXgrid(new double[fNx]),
   fSigma(new real[fDSz*fNData]),
-  fQ20(set.fQ20),
   fHasCFactors(set.fHasCFactors),
   fcFactors(new double[fNData])
   {
