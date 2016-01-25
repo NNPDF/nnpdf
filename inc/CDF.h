@@ -13,10 +13,10 @@
 // ********** CDF ***************
 
 static const dataInfoRaw CDFWASYMinfo = {
-  13,          //nData
-  7,           //nSys
-  "CDFWASYM",  //SetName
-  "EWK_RAP"    //ProcType
+  13,             //nData
+  7,              //nSys
+  "CDFWASYM",     //SetName
+  "EWK_RAP_ASY"   //ProcType
 };
 
 static const dataInfoRaw CDFZRAPinfo = {

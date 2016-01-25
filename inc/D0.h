@@ -30,14 +30,14 @@ static const dataInfoRaw D0WMASYinfo = {
   10,           //nData
   7,            //nSys
   "D0WMASY",    //SetName
-  "EWK_RAP"     //ProcType
+  "EWK_RAP_ASY"     //ProcType
 };
 
 static const dataInfoRaw D0WEASYinfo = {
   13,           //nData
   9,            //nSys
   "D0WEASY",    //SetName
-  "EWK_RAP"     //ProcType
+  "EWK_RAP_ASY"     //ProcType
 };
 
 // ********* Filters **************

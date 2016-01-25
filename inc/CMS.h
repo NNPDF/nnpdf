@@ -16,14 +16,14 @@ static const dataInfoRaw CMSWEASY840PBinfo = {
   11,               //nData
   11,               //nSys
   "CMSWEASY840PB",  //SetName
-  "EWK_RAP"         //ProcType
+  "EWK_RAP_ASY"     //ProcType
 };
 
 static const dataInfoRaw CMSWMASY47FBinfo = {
   11,              //nData
   11,              //nSys
   "CMSWMASY47FB",  //SetName
-  "EWK_RAP"        //ProcType
+  "EWK_RAP_ASY"    //ProcType
 };
 
 static const dataInfoRaw CMSDY2D11info = {
