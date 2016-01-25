@@ -244,7 +244,7 @@ void Experiment::MakeReplica()
       artdata[i] = xnor[i] * ( fData[i] + xadd + xstat );
       
       // Only generates positive artificial data (except for closure tests and asymmetry data)
-      if (artdata[i] < 0 && !fIsClosure && proctype[i].find("ASY") != std::string::npos )
+      if (artdata[i] < 0 && !fIsClosure && proctype[i].find("ASY") == std::string::npos )
       {
         isArtNegative = true;
         break;
