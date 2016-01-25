@@ -191,14 +191,21 @@ void Experiment::MakeReplica()
   double *xnor  = new double[fNData];
   double *artdata = new double[fNData];
   sysType rST[2] = {ADD,MULT};
-  
+
+  // generate procType array for ease of checking
+  std::string *proctype = new std::string[fNData];
+  int counter = 0;
+  for (int s = 0; s < GetNSet(); s++)
+    for (int i=0; i< GetSet(s).GetNData(); i++)
+      proctype[counter++] = GetSet(s).GetProc(i);
+
   RandomGenerator* rng = RandomGenerator::GetRNG();
 
   // Generate positive defined replicas
-  for(;;)
+  bool isArtNegative = true;
+  while (isArtNegative)
   {
-    bool isArtNegative = false;
-    
+    isArtNegative = false;
     for (int l = 0; l < fNSys; l++)
     {
       rand[l] = rng->GetRandomGausDev(1.0);
@@ -236,17 +243,13 @@ void Experiment::MakeReplica()
       }
       artdata[i] = xnor[i] * ( fData[i] + xadd + xstat );
       
-      // Only generates positive artificial data (except for closure tests)
-      if (artdata[i] < 0 && !fIsClosure)
+      // Only generates positive artificial data (except for closure tests and asymmetry data)
+      if (artdata[i] < 0 && !fIsClosure && proctype[i].find("ASY") != std::string::npos )
       {
         isArtNegative = true;
         break;
       }
     }
-    
-    // Stop when all the datapoints are positive
-    if (isArtNegative == false)
-      break;
   }
 
   // Update data in set
@@ -269,6 +272,7 @@ void Experiment::MakeReplica()
   delete[] rand;
   delete[] xnor;
   delete[] artdata;
+  delete[] proctype;
   
   // Now the fData is artificial
   fIsArtificial = true;

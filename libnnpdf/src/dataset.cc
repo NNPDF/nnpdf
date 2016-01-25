@@ -260,7 +260,7 @@ void DataSet::MakeArtificial()
       artdata[i] = xnor[i] * ( fData[i] + xadd + xstat );
       
       // Only generates positive artificial data (except for closure tests)
-      if ( artdata[i] < 0 )
+      if ( artdata[i] < 0 and fProc[i].find("ASY") != std::string::npos )
         break;
 
     }

@@ -12,3 +12,4 @@ libnnpdf 1.1.0 - XX/XX/XX
 * CommonData process type convention now enforced
 * Moved IndexDB class from APFELcomb to libnnpdf
 * Introduced SWIG based python wrapper - several small modifications required for ease of SWIG use
+* Introduced ASY flag in procType such that these sets are not required to be positive in replica generation
