@@ -96,6 +96,8 @@ Date & Version & Major/Minor & Author & Comments\\
 \hline
 10/12/15 & 1.2.3 & Minor & nh & Higgs process types added \\
 \hline
+25/01/16 & 1.2.4 & Minor & nh & Added asymmetry comment and quark production thresholds. \\
+\hline
 \end{tabular}
 \end{center}
 \label{tab:revsum}
@@ -162,6 +164,8 @@ Each datapoint has an associated \emph{process type} string. This can be specifi
 \end{itemize}
 
 As examples of \emph{process type} strings, consider \textbf{EWK\_RAP} for a collider $W$ boson asymmetry measurement binned in rapidity, and \textbf{DIS\_F2P} for the $F_2^p$ structure function in DIS. The user is free to choose something identifying for the second segment of the process type, the important feature being the basic process type. However, users are encouraged to only use this freedom when absolutely necessary (such as when used in combination with APFEL).
+
+One special case is that of W boson lepton asymmetry measurements, which being cross-section asymmetries may occasionally have negative datapoints. Therefore asymmetry measurements must have the final tag \textbf{ASY} to ensure that artificial data generation permits negative data values. An example \emph{process type} string would be \textbf{EWK\_RAP\_ASY}.
 
 \subsubsection*{Notes for the future}
 In the future it would be nice to have a more flexible treatment of the kinematic variables, both in their number and labelling.
@@ -581,10 +585,13 @@ Field/Key       & Type    & Description                    & Comments \\
   HQ        & Text    & HQ mass treatment              & POLE/MSBAR \\
   mc        & Real    & $c$ quark mass $M_c/m_c(Q_{\mathrm{mc}})$   & Units: GeV \\
   Qmc     & Real    & $Q_{\mathrm{mc}}$ & $c$ reference scale (GeV)\\
+  kcThr   & Real    & c production threshold ratio & Ratio to mc\\
   mb        & Real    & $b$ quark mass $M_b/m_b(Q_{\mathrm{mb}})$   & Units: GeV \\
   Qmb     & Real    & $Q_{\mathrm{mb}}$ & $b$ reference scale (GeV)\\
+ kbThr   & Real    & b production threshold ratio & Ratio to mb\\
   mt        & Real    & $t$ quark mass $M_t/m_t(Q_{\mathrm{mt}})$   & Units: GeV \\
   Qmt     & Real    & $Q_{\mathrm{mt}}$ & $t$ reference scale (GeV)\\
+   ktThr   & Real    & t production threshold ratio & Ratio to mt\\
   CKM       & Text    & CKM matrix elements & unpacked 3X3 matrix \\ \pagebreak
   MZ        & Real    & $M_Z$                          & $Z$ mass (GeV) \\
   MW        & Real    & $M_W$                          & $W$ mass (GeV) \\
