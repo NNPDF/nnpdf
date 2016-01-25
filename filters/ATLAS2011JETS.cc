@@ -46,6 +46,7 @@ void ATLAS1JET11Filter::Loop(fstream & file, fstream & fileew, double rap, int n
     fileew >> dummy;
     fileew >> dummy;
     symmetriseErrors(NPerr1,NPerr2,&NPerr[i-nDataMin],&delta);
+    
   }
 
   //Raw data
@@ -75,6 +76,7 @@ void ATLAS1JET11Filter::Loop(fstream & file, fstream & fileew, double rap, int n
 
     fData[i] = sigma;// fill datapoints
     fData[i] *= NPcorr;// apply corrections (i.e. non-perturbative)
+    fData[i] *= EWcorr[i-nDataMin];// apply corrections (i.e. EW)
 
     fStat[i] = sqrt(pow(stat1,2)+pow(stat2,2));//statistical uncertainty (symmetric)
     fStat[i] = fStat[i]*fData[i]*1e-2;
@@ -87,7 +89,9 @@ void ATLAS1JET11Filter::Loop(fstream & file, fstream & fileew, double rap, int n
       fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;
     }
 
-    fSys[i][fNSys-1].mult = NPerr[i];
+    fSys[i][fNSys-2].name = "ATL_LUMI_2011_7TeV";
+
+    fSys[i][fNSys-1].mult = NPerr[i-nDataMin];
     fSys[i][fNSys-1].type = MULT;
     fSys[i][fNSys-1].name = "ATLAS1JET11_NP_err";
     fSys[i][fNSys-1].add = fSys[i][fNSys-1].mult*fData[i]*1e-2;
