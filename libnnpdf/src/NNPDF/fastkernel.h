@@ -190,6 +190,8 @@ namespace NNPDF
         FKTable();                          //!< Disable default constructor
         FKTable& operator=(const FKTable&); //!< Disable copy-assignment
 
+        void InitialiseFromStream(std::istream&, std::vector<std::string> const& cFactors); //!< Initialise the FK table from an input stream
+
         int parseNonZero(); // Parse flavourmap information into fNonZero
     };
 

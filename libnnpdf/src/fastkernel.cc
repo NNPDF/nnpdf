@@ -283,15 +283,32 @@ namespace NNPDF
    */
   FKTable::FKTable( std::string const& filename, 
                     std::vector<std::string> const& cFactors):
-  FKTable((*new std::ifstream(filename)), cFactors) // Oh my god, the horror
+  FKHeader(filename),
+  fDataName(    GetTag        (GRIDINFO,       "SETNAME")),
+  fDescription( GetTag        (BLOB,   "GridDesc")),
+  fNData(       GetTag<int>   (GRIDINFO,   "NDATA")),
+  fNx(          GetTag<int>   (GRIDINFO,   "NX")),
+  fHadronic(    GetTag<bool>  (GRIDINFO,   "HADRONIC")),
+  fQ20(     pow(GetTag<double>(THEORYINFO, "Q0"),2)),
+  fNonZero(parseNonZero()),  // All flavours
+  fFlmap(fHadronic ? new int[2*fNonZero]:new int[fNonZero]),
+  fHasCFactors(cFactors.size()),
+  fcFactors(new double[fNData]),
+  fXgrid(new double[fNx]),
+  fTx(fHadronic ? fNx*fNx:fNx),
+  fRmr(fTx*fNonZero % convoluteAlign),
+  fPad((fRmr == 0) ? 0:convoluteAlign - fRmr ),
+  fDSz( fTx*fNonZero + fPad ),
+  fSigma( new real[fDSz*fNData])
   {
-
-
+    std::ifstream is(filename);
+    NNPDF::FKHeader headSkip(is);
+    InitialiseFromStream(is, cFactors);
   };
 
-    /**
+  /**
    * @brief Constructor for FK Table
-   * @param filename The FK table filename
+   * @param is An input stream for reading from
    * @param cFactors A vector of filenames for potential C-factors
    */
   FKTable::FKTable( std::istream& is, std::vector<std::string> const& cFactors ):
@@ -313,8 +330,16 @@ namespace NNPDF
   fDSz( fTx*fNonZero + fPad ),
   fSigma( new real[fDSz*fNData])
   {
+    InitialiseFromStream(is, cFactors);
+  };
 
-    if (Verbose)
+  /**
+   * @brief Method for initialisation from stream
+   * @param is the input stream after reading the FK header
+   */
+  void FKTable::InitialiseFromStream( std::istream& is, std::vector<std::string> const& cFactors )
+  {
+   if (Verbose)
     {
      std::cout <<SectionHeader(fDataName.c_str(),GRIDINFO)<<std::endl;
      std::cout << fDescription << std::endl;
@@ -414,9 +439,8 @@ namespace NNPDF
           fSigma[ d*fDSz+j*fNx+a ] = fcFactors[d]*datasplit[fFlmap[j]+2];
 
       }
-    }    
-
-  };
+    }  
+  }
 
 
 
