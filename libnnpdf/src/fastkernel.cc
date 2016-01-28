@@ -665,6 +665,9 @@ namespace NNPDF
     if (g.fail())
       throw FileError("FKTable::FKTable","cannot open cfactor file: " + cfilename);
 
+    if (Verbose)
+     std::cout << "Reading C-factors from: " << cfilename<<std::endl;
+
     // Read through header
     std::string line;
     int nDelin = 0;
