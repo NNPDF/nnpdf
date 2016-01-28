@@ -69,10 +69,13 @@ class Theory(models.Model):
 
     mc = models.DecimalField(default=1.275, max_digits=10, decimal_places=3, validators=[MinValueValidator(0)])
     qmc = models.DecimalField(db_column='Qmc', default=1.275, max_digits=10, decimal_places=3, validators=[MinValueValidator(0)]) 
+    kcthr = models.DecimalField(db_column='kcThr',default=1, max_digits=10, decimal_places=3, validators=[MinValueValidator(0)])  
     mb = models.DecimalField(default=4.18, max_digits=10, decimal_places=3, validators=[MinValueValidator(0)])
     qmb = models.DecimalField(db_column='Qmb',default=4.18, max_digits=10, decimal_places=3, validators=[MinValueValidator(0)])  
+    kbthr = models.DecimalField(db_column='kbThr',default=1, max_digits=10, decimal_places=3, validators=[MinValueValidator(0)])  
     mt = models.DecimalField(default=173.07, max_digits=10, decimal_places=3, validators=[MinValueValidator(0)])
     qmt = models.DecimalField(db_column='Qmt',default=173.07, max_digits=10, decimal_places=3, validators=[MinValueValidator(0)]) 
+    ktthr = models.DecimalField(db_column='ktThr',default=1, max_digits=10, decimal_places=3, validators=[MinValueValidator(0)])  
     ckm = models.TextField(db_column='CKM', default='0.97428 0.22530 0.003470 0.22520 0.97345 0.041000 0.00862 0.04030 0.999152')  
     mz = models.DecimalField(db_column='MZ',default=91.1876, max_digits=10, decimal_places=4, validators=[MinValueValidator(0)]) 
     mw = models.DecimalField(db_column='MW',default=80.398, max_digits=10, decimal_places=4, validators=[MinValueValidator(0)])
