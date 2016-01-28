@@ -67,7 +67,7 @@ def main(nrep, fit_filename):
             file += fitname + ".fitinfo"
 
             # Loop over files
-            replicafile = open(file, 'rb')    
+            replicafile = open(file, 'r')
             myline = replicafile.readline().split()
             chi2.append(float(myline[3]))
             posstat.append(myline[4])
@@ -185,10 +185,10 @@ def main(nrep, fit_filename):
     ####################################
     # building LHAPDF6 grids
     ####################################
-    headerfile6 = open(dir + fitname + ".info",'rb')
+    headerfile6 = open(dir + fitname + ".info",'r')
     shutil.rmtree(dir + fitname,  ignore_errors=True)
     os.makedirs(dir + fitname)
-    output6    = open(dir + fitname + "/" + fitname + ".info",'wb')
+    output6    = open(dir + fitname + "/" + fitname + ".info",'w')
 
     print ("\n\n- Building header LHAPDF6 ...\n")
     line = headerfile6.readline()
@@ -212,8 +212,8 @@ def main(nrep, fit_filename):
         replica = dir + 'replica_' + str(i) + "/" + fitname + ".dat"
         shutil.copyfile(replica, dir + "/" + fitname + "/" + fitname + '_{:04n}.dat'.format(i))
         
-        print ("- Reading: %i" % replica)
-        f = open(replica, 'rb')
+        log.info("Reading: %s" % replica)
+        f = open(replica, 'r')
         xpdf.append([])
         for j in range(0,2): f.readline()
 
@@ -247,8 +247,8 @@ def main(nrep, fit_filename):
             s+=1
         f.close()          
 
-    print ("- Computing and priting replica 0")
-    f = open(dir + "/" + fitname + "/" + fitname + "_0000.dat", 'wb')
+    log.info("Computing and priting replica 0")
+    f = open(dir + "/" + fitname + "/" + fitname + "_0000.dat", 'w')
     f.write("PdfType: central\n")
     f.write("Format: lhagrid1\n---\n")
 
