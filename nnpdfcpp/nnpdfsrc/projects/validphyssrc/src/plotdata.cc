@@ -3255,7 +3255,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
          "& \\multicolumn{2}{|c|}{\\textbf{New}}\\tabularnewline" << endl;
     f << "\\hline" << endl;
     f << fixed << setprecision(5);
-    for (int i = 0; i < nfl; i++)
+    for (int i = 0; i < fPDFNames.size(); i++)
     {
       f << fPDFNames[i] << " & Alpha ($x^{\\alpha}$) & "
         << fSettings.Get("fitting","basis")[i]["smallx"][0] << " & " << fSettings.Get("fitting","basis")[i]["smallx"][1] << " & "
