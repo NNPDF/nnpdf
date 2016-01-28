@@ -36,7 +36,7 @@ def main(nrep, fit_filename):
     while True:
         folder = dir + "replica_" + str(im) + "/"    
         if os.path.exists(folder) == False and im <= nrep:
-            print("Please check the total number of replicas!")
+            log.error("Please check the total number of replicas!")
             exit(-1)        
         if os.path.exists(folder) == True:
             mask.append(dir + "replica_" + str(im) + "/")
@@ -53,8 +53,8 @@ def main(nrep, fit_filename):
     while badreplica == True:
 
         # check mask status
-        if len(mask) < nrep:
-            log.info ("\n Unfortunately you need more than %d replicas." % totalrep)
+        if totalrep  < nrep:
+            log.error("Unfortunately you need more than %d replicas." % totalrep)
             exit(-1)
 
         chi2 = []
@@ -190,7 +190,7 @@ def main(nrep, fit_filename):
     os.makedirs(dir + fitname)
     output6    = open(dir + fitname + "/" + fitname + ".info",'w')
 
-    print ("\n\n- Building header LHAPDF6 ...\n")
+    log.info ("\n\n- Building header LHAPDF6 ...\n")
     line = headerfile6.readline()
     while line:    
         line = line.replace("REPLACE_NREP",str(nrep+1))    
@@ -269,28 +269,28 @@ def main(nrep, fit_filename):
         f.write("---\n")
     f.close()
 
-    print ("\n- Finished see: \n%s" % output6)
+    log.info("\n- Finished see: \n%s" % output6)
 
     # Copy grid to LHAPATH
-    print ("\n- Copying %s to LHAPDF path" % fitname)
+    log.info("\n- Copying %s to LHAPDF path" % fitname)
     lhapath = Popen(["lhapdf-config","--datadir"],stdout=PIPE).communicate()[0]
 
 
     import lhapdf    
     if hasattr(lhapdf,"mkPDFs"):
-        print ("- LHAPATH: %s" % lhapath)
+        log.info("LHAPATH: %s" % lhapath)
 
         src = dir + fitname 
         lhapath = lhapath.replace("\n","/")
         dst = lhapath + fitname 
-        print ("- cp -r %s\n\t %s" % (src,dst))
+        log.info ("- cp -r %s\n\t %s" % (src,dst))
         try:
             shutil.copytree(src,dst)
         except:
-            print("\n Error: this grid already exists, please delete and run the script again")
+            log.error("Error: this grid already exists, please delete and run the script again")
             exit(-1)
 
-        print ("\n - Testing LHgrid:")
+        log.info("Testing LHgrid:")
     
         # Test LHAGRID
         pdf = lhapdf.mkPDFs(fitname)
@@ -299,7 +299,7 @@ def main(nrep, fit_filename):
         X = [1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 0.2, 0.3, 0.4, 0.5, .6, 0.7, 0.8, 0.9]
         Q = math.sqrt(pdf[0].q2Min)
 
-        print ("- Total number of members: %d" % len(pdf))
+        log.info("Total number of members: %d" % len(pdf))
         # test replica 0
     
         status = True
