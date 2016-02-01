@@ -1,6 +1,6 @@
 ## Load image with software requirements for libnnpdf
-image: scarrazza/ubuntuhep
+image: zaharid/debian-7-dev
 
 ## Run the configure and make tests
 job:
-  script: ./configure && make
+    script: bash -ic "conda build conda-recipe"
