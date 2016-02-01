@@ -1,6 +1,18 @@
 ## Load image with software requirements for libnnpdf
 image: zaharid/debian-7-dev
 
+stages:
+    - build
+    - deploy
+
 ## Run the configure and make tests
-job:
+job1:
+    stage: build
     script: bash -ic "conda build conda-recipe"
+
+job2:
+    stage: deploy
+    only:
+        - master
+        - condaci
+    script: bash -ic ".ciscripts/upload_package.sh"
