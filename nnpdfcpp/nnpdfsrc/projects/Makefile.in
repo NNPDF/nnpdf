@@ -286,6 +286,7 @@ LIBTOOL = @LIBTOOL@
 LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
+MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
@@ -408,10 +409,10 @@ filter_SOURCES = filtersrc/src/filter.cc \
 	         filtersrc/src/kincuts.cc $(COMMON)
 
 filter_CPPFLAGS = -Ifiltersrc/inc $(NNPDF_CPPFLAGS) -I$(top_builddir)/common/inc $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS) $(YAML_CPPFLAGS) -std=c++11 $(APFEL_CPPFLAGS)
-filter_LDFLAGS = $(NNPDF_LDFLAGS) $(SQLITE3_LDFLAGS) $(YAML_LDFLAGS) $(APFEL_LDFLAGS)
+filter_LDFLAGS = $(NNPDF_LDFLAGS) $(SQLITE3_LDFLAGS) $(YAML_LDFLAGS) 
 chi2check_SOURCES = chi2checksrc/src/chi2check.cc $(COMMON)
 chi2check_CPPFLAGS = -Ichi2checksrc/inc $(NNPDF_CPPFLAGS) -I$(top_builddir)/common/inc $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS) $(YAML_CPPFLAGS) -std=c++11 $(APFEL_CPPFLAGS)
-chi2check_LDFLAGS = $(NNPDF_LDFLAGS) $(SQLITE3_LDFLAGS) $(YAML_LDFLAGS) $(APFEL_LDFLAGS)
+chi2check_LDFLAGS = $(NNPDF_LDFLAGS) $(SQLITE3_LDFLAGS) $(YAML_LDFLAGS)
 nnfit_SOURCES = nnfitsrc/src/nnfit.cc \
 		nnfitsrc/src/fitbases.cc \
 		nnfitsrc/src/pdfbasis.cc \
@@ -430,12 +431,12 @@ validphys_SOURCES = validphyssrc/src/validphys.cc \
 		    validphyssrc/src/plotutils.cc $(COMMON)
 
 validphys_CPPFLAGS = -Ivalidphyssrc/inc $(NNPDF_CPPFLAGS) -I$(top_builddir)/common/inc $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS) $(YAML_CPPFLAGS) -std=c++11 $(ROOT_CPPFLAGS) $(APFEL_CPPFLAGS)
-validphys_LDFLAGS = $(NNPDF_LDFLAGS) $(ROOT_LDFLAGS) $(SQLITE3_LDFLAGS) $(YAML_LDFLAGS) $(APFEL_LDFLAGS)
+validphys_LDFLAGS = $(NNPDF_LDFLAGS) $(ROOT_LDFLAGS) $(SQLITE3_LDFLAGS) $(YAML_LDFLAGS) 
 all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .cc .lo .o .obj
-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -460,9 +461,9 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 
-$(top_srcdir)/configure:  $(am__configure_deps)
+$(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-$(ACLOCAL_M4):  $(am__aclocal_m4_deps)
+$(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
 install-binPROGRAMS: $(bin_PROGRAMS)

@@ -5,6 +5,7 @@ define([gitversion], [esyscmd([sh -c "git rev-parse --short HEAD | tr -d '\n'
 
 AC_INIT([nnpdfsrc],[gitversion],[stefano.carrazza@mi.infn.it])
 AC_CONFIG_MACRO_DIR([m4])
+AM_MAINTAINER_MODE
 
 AC_CONFIG_AUX_DIR([autoconfig])
 AC_CONFIG_HEADERS([autoconfig/config.h])
