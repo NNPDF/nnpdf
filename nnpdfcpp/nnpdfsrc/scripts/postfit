@@ -264,7 +264,7 @@ def main(nrep, fit_filename):
                     for irep in range(nrep):
                         sum += xpdf[irep][s][ix][iq][ifl]
                     sum /= nrep
-                    print("%14.7E" % sum, file=f)
+                    f.write("%14.7E " % sum)
                 f.write("\n")
         f.write("---\n")
     f.close()
@@ -306,15 +306,15 @@ def main(nrep, fit_filename):
         for i in range(0,len(pdfs)):
             print ("\n         x\t        Q2          %s rep0          %s avg          Diff" % (pdfs[i], pdfs[i]))
             for j in range(0,len(X)):            
-                print (" %14.7e\t" % X[j]),
-                print (" %14.7e\t" % float(Q*Q)),
+                print (" %14.7e" % X[j], end='\t')
+                print (" %14.7e" % float(Q*Q), end='\t')
                 rep0 = pdf[0].xfxQ(i,X[j],Q)
-                print (" %14.7e\t" % rep0),
+                print (" %14.7e" % rep0, end='\t')
                 sum = 0
                 for irep in range(1,len(pdf)):                
                     sum += pdf[irep].xfxQ(i,X[j],Q)            
                 sum /= nrep
-                print (" %14.7e\t" % sum),
+                print (" %14.7e" % sum, end='\t')
                 diff = (sum-rep0)/rep0*100
                 if diff > 1e-4:
                     status = False
