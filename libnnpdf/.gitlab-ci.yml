@@ -8,11 +8,26 @@ stages:
 ## Run the configure and make tests
 job1:
     stage: build
-    script: bash -ic "conda build conda-recipe"
+    script: ".ciscripts/build-deploy.sh"
+    cache:
+        untracked: True
+    artifacts:
+        untracked: True
 
 job2:
     stage: deploy
-    only:
-        - master
-        - condaci
-    script: bash -ic ".ciscripts/upload_package.sh"
+    script: ls
+
+    #TODO: Do two separate stages when we have a newer version with this
+    # implemented (and there are proper docs on how to do it):
+    # https://gitlab.com/gitlab-org/gitlab-ce/merge_requests/2437
+    #
+    #
+    #No idea why this doesn't work
+    #cache:
+    #    paths:
+    #        - /yes/conda-bld/linux-64/
+    #artifacts:
+    #    paths:
+    #        - /yes/conda-bld/linux-64/
+
