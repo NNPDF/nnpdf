@@ -5,15 +5,17 @@ stages:
     - build-deploy
 
 
-#Set to true to generate builds for non-default branches
+#Set to "true" to generate builds for non-default branches
 variables:
-    UPLOAD_NON_MASTER: False
+    UPLOAD_NON_MASTER: "false"
 
 ## Run the configure and make tests
 job1:
     stage: build-deploy
     script: ".ciscripts/build-deploy.sh"
 
+    #We copy the conda package to the git path to be untracked and
+    #then catch it as an "artifact"
     artifacts:
         untracked: True
 
