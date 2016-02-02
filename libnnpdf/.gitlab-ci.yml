@@ -2,21 +2,17 @@
 image: zaharid/debian-7-dev
 
 stages:
-    - build
-    - deploy
+    - build-deploy
 
 ## Run the configure and make tests
 job1:
-    stage: build
+    stage: build-deploy
     script: ".ciscripts/build-deploy.sh"
-    cache:
-        untracked: True
+    variables:
+        UPLOAD_NON_MASTER: False
+
     artifacts:
         untracked: True
-
-job2:
-    stage: deploy
-    script: ls
 
     #TODO: Do two separate stages when we have a newer version with this
     # implemented (and there are proper docs on how to do it):
@@ -24,9 +20,6 @@ job2:
     #
     #
     #No idea why this doesn't work
-    #cache:
-    #    paths:
-    #        - /yes/conda-bld/linux-64/
     #artifacts:
     #    paths:
     #        - /yes/conda-bld/linux-64/
