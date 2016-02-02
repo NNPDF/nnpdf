@@ -99,13 +99,28 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
                 }
 
               if (set.GetSetName().compare(string("ATLASZHIGHMASS49FB")) == 0 ||
-                  set.GetSetName().compare(string("ATLASLOMASSDY11")) == 0 || 
                   set.GetSetName().compare(string("LHCBLOWMASS37PB")) == 0 )
                 {
                   if (pTmv > maxCMSDY2Dminv)
                     return false;
                   return true;
                 }
+
+              if (set.GetSetName().compare(string("ATLASLOMASSDY11")) == 0 )
+                {
+                  if (stoi(settings.GetTheory(APFEL::kPTO)) == 0 || stoi(settings.GetTheory(APFEL::kPTO)) == 1)
+                    if (idat < 6 )
+                      return false;
+                }
+
+                if (set.GetSetName().compare(string("ATLASLOMASSDY11EXT")) == 0 )
+                  {
+                    if (stoi(settings.GetTheory(APFEL::kPTO)) == 0 || stoi(settings.GetTheory(APFEL::kPTO)) == 1)
+                      if (idat < 2 )
+                        return false;
+                  }
+
+
 
 	      //***********************************************************
 	      // New cuts to the fixed target Drell-Yan data
@@ -124,7 +139,7 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
 
 		  return true;
 		}
-            }                    
+            }
         }
 
   // End of special combo cut NNPDF30
@@ -166,7 +181,7 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
       const real pT = set.GetKinematics(idat,0);
       return ( pT > settings.Get("datacuts","wptcut_lhc").as<double>());
     }
-  
+
   // DIS cuts
   if (set.GetProc(idat).compare(0,3,string("DIS")) == 0)
   {
@@ -201,6 +216,5 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
   } // /DIS
 
   // Passes kinematical cuts
-  return true;  
+  return true;
 }
-
