@@ -274,6 +274,7 @@ def main(nrep, fit_filename):
     # Copy grid to LHAPATH
     log.info("\n- Copying %s to LHAPDF path" % fitname)
     lhapath = Popen(["lhapdf-config","--datadir"],stdout=PIPE).communicate()[0]
+    lhapath = lhapath.decode()
 
 
     import lhapdf    
