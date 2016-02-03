@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 """ A postfit script which collects good replicas in a LHAPDF grid"""
 
 __authors__ = 'Stefano Carrazza, et at.'
@@ -9,16 +10,22 @@ __email__ = 'stefano.carrazza@mi.infn.it'
 
 import os
 import shutil
+import sys
 import argparse
 import math
 from subprocess import PIPE, Popen
+import logging
+
+log = logging.Logger('__name__', logging.INFO)
 
 def main(nrep, fit_filename):
 
     fitname = fit_filename.replace(".yml","")
     dir     = "../results/" + fitname + "/nnfit/"
-    logger  = dir + "postfit.log"
-    l = open(logger,'wb')
+    logpath  = dir + "postfit.log"
+
+    log.addHandler(logging.FileHandler(logpath))
+    log.addHandler(logging.StreamHandler(stream=sys.stdout))
 
     mask = []
     umask = []
@@ -29,7 +36,7 @@ def main(nrep, fit_filename):
     while True:
         folder = dir + "replica_" + str(im) + "/"    
         if os.path.exists(folder) == False and im <= nrep:
-            print("Please check the total number of replicas!")
+            log.error("Please check the total number of replicas!")
             exit(-1)        
         if os.path.exists(folder) == True:
             mask.append(dir + "replica_" + str(im) + "/")
@@ -38,19 +45,16 @@ def main(nrep, fit_filename):
         im += 1
 
     totalrep = len(mask)
-    print (" - There are %d replicas." % totalrep)
-    print >> l, (" - There are %d replicas." % totalrep)
+    log.info (" - There are %d replicas." % totalrep)
 
     # check replica's chi2
-    print(" - Removing Bad Replicas:")
-    print >>l, (" - Removing Bad Replicas:")
+    log.info(" - Removing Bad Replicas:")
     badreplica = True
     while badreplica == True:
 
         # check mask status
-        if len(mask) < nrep:
-            print ("\n Unfortunately you need more than %d replicas." % totalrep)
-            print (" Please run more replicas and try again.\n")
+        if totalrep  < nrep:
+            log.error("Unfortunately you need more than %d replicas." % totalrep)
             exit(-1)
 
         chi2 = []
@@ -63,7 +67,7 @@ def main(nrep, fit_filename):
             file += fitname + ".fitinfo"
 
             # Loop over files
-            replicafile = open(file, 'rb')    
+            replicafile = open(file, 'r')
             myline = replicafile.readline().split()
             chi2.append(float(myline[3]))
             posstat.append(myline[4])
@@ -100,19 +104,15 @@ def main(nrep, fit_filename):
                 arcerr[i] += (arcl[irep][i]-arcavg[i])**2
             arcerr[i] = (arcerr[i]/(nrep-1))**0.5
 
-        print ("Global average: %f STD: %f" % (chi2avg,chi2err))
-        print >> l,("Global average: %f STD: %f" % (chi2avg,chi2err))
+        log.info ("Global average: %f STD: %f" % (chi2avg,chi2err))
 
         badreplica = False
         for irep in range(0,nrep):
             if chi2[irep] > chi2avg + 4*chi2err:
-                print ("Replica %d chi2 is too large: %f " % (int(irep+1), chi2[irep]))
-                print >>l, ("Replica %d chi2 is too large: %f " % (int(irep+1), chi2[irep]))
-                print ("Replacing replica %d" % int(irep+1))
-                print >>l, ("Replacing replica %d" % int(irep+1))
+                log.info ("Replica %d chi2 is too large: %f " % (int(irep+1), chi2[irep]))
+                log.info ("Replacing replica %d" % int(irep+1))
                 badreplica = True                
-                print ("Replacing folder %s" % mask[irep])
-                print >>l, "Replacing folder %s" % mask[irep]
+                log.info ("Replacing folder %s" % mask[irep])
                 fol = mask[irep]
                 mask.remove(fol)
                 nb = (fol.replace(dir + "replica_","")).replace("/","")
@@ -122,13 +122,10 @@ def main(nrep, fit_filename):
                     discart.append(fol)
                 break
             elif posstat[irep] != "POS_PASS":
-                print ("Replica %d violates positivity!" % int(irep+1))
-                print >>l,("Replica %d violates positivity!" % int(irep+1))
-                print ("Replacing replica %d" % int(irep+1))
-                print >>l,("Replacing replica %d" % int(irep+1))
+                log.info ("Replica %d violates positivity!" % int(irep+1))
+                log.info ("Replacing replica %d" % int(irep+1))
                 badreplica = True                
-                print ("Replacing folder %s" % mask[irep])
-                print >>l, ("Replacing folder %s" % mask[irep])
+                log.info ("Replacing folder %s" % mask[irep])
                 fol = mask[irep]
                 mask.remove(fol)
                 nb = (fol.replace(dir + "replica_","")).replace("/","")
@@ -140,15 +137,12 @@ def main(nrep, fit_filename):
             else:
                 for i in range(narc):
                     if arcl[irep][i] > arcavg[i] + 4*arcerr[i]:
-                        print ("Replica %d arc length %d is too large: %f" % (int(irep+1),i+1,arcl[irep][i]))
-                        print >>l, ("Replica %d arc length %d is too large: %f" % (int(irep+1),i+1,arcl[irep][i]))
+                        log.info ("Replica %d arc length %d is too large: %f" % (int(irep+1),i+1,arcl[irep][i]))
                         badreplica = True
                         break
                 if badreplica:
-                    print ("Replacing replica %d" % int(irep+1))
-                    print >>l, ("Replacing replica %d" % int(irep+1))
-                    print ("Replacing folder %s" % mask[irep])
-                    print >>l, ("Replacing folder %s" % mask[irep])
+                    log.info ("Replacing replica %d" % int(irep+1))
+                    log.info ("Replacing folder %s" % mask[irep])
                     fol = mask[irep]
                     mask.remove(fol)
                     nb = (fol.replace(dir + "replica_","")).replace("/","")
@@ -158,54 +152,45 @@ def main(nrep, fit_filename):
                         discart.append(fol)
                     break                    
 
-    print ("\n- All replicas tested and verified, building LHgrid with replicas from folders:")
-    print >> l, ("\n- All replicas tested and verified, building LHgrid with replicas from folders:")
+    log.info ("\n- All replicas tested and verified, building LHgrid with replicas from folders:")
     
     for i in range(len(mask)): 
         if i < nrep:
-            print ("%s" % mask[i].replace(dir + "replica_","")),
-            print >> l, ("%s" % mask[i].replace(dir + "replica_","")),
+            log.info ("%s" % mask[i].replace(dir + "replica_","")),
 
-    print("\n\n- Removing bad replicas from folders:")
-    print >>l, ("\n\n- Removing bad replicas from folders:")
+    log.info("\n\n- Removing bad replicas from folders:")
 
     for i in range(len(umask)):
-        print ("%s" % umask[i].replace(dir + "replica_","")),
-        print >>l, ("%s" % umask[i].replace(dir + "replica_","")),
+        log.info ("%s" % umask[i].replace(dir + "replica_","")),
 
-    print ("\n\n- Discarted replicas from folders:")
-    print >>l,("\n\n- Discarted replicas from folders:")
+    log.info ("\n\n- Discarted replicas from folders:")
 
     for i in range(len(discart)):
-        print ("%s" % discart[i].replace(dir + "replica_","")),
-        print >>l, ("%s" % discart[i].replace(dir + "replica_","")),    
+        log.info ("%s" % discart[i].replace(dir + "replica_","")),
 
     # moving bad folders to .postfitveto
     for i in range(len(umask)):
-        print ("\n- Moving:\n%sto\n%s.postfitveto" % (umask[i],umask[i][:-1]))
-        print >>l, "\n- Moving:\n",umask[i],"to\n",umask[i][:-1]+".postfitveto"
+        log.info ("\n- Moving:\n%sto\n%s.postfitveto" % (umask[i],umask[i][:-1]))
         
         shutil.move(umask[i],umask[i][:-1]+".postfitveto")
 
-        print ("- Copying:\n%sin\n%s" % (mask[nrep-len(umask)+i],umask[i]))
-        print >>l, "- Copying:\n",mask[nrep-len(umask)+i],"in\n",umask[i]
+        log.info ("- Copying:\n%sin\n%s" % (mask[nrep-len(umask)+i],umask[i]))
 
         shutil.copytree(mask[nrep-len(umask)+i],umask[i])
         
-        print ("- Moving\n%sto\n%s.postfitused" % (mask[nrep-len(umask)+i],mask[nrep-len(umask)+i][:-1]))
-        print >>l, "- Moving\n",mask[nrep-len(umask)+i],"to\n",mask[nrep-len(umask)+i][:-1] + ".postfitused"   
+        log.info ("- Moving\n%sto\n%s.postfitused" % (mask[nrep-len(umask)+i],mask[nrep-len(umask)+i][:-1]))
 
         shutil.move(mask[nrep-len(umask)+i],mask[nrep-len(umask)+i][:-1]+".postfitused")
     
     ####################################
     # building LHAPDF6 grids
     ####################################
-    headerfile6 = open(dir + fitname + ".info",'rb')
+    headerfile6 = open(dir + fitname + ".info",'r')
     shutil.rmtree(dir + fitname,  ignore_errors=True)
     os.makedirs(dir + fitname)
-    output6    = open(dir + fitname + "/" + fitname + ".info",'wb')
+    output6    = open(dir + fitname + "/" + fitname + ".info",'w')
 
-    print ("\n\n- Building header LHAPDF6 ...\n")
+    log.info ("\n\n- Building header LHAPDF6 ...\n")
     line = headerfile6.readline()
     while line:    
         line = line.replace("REPLACE_NREP",str(nrep+1))    
@@ -227,8 +212,8 @@ def main(nrep, fit_filename):
         replica = dir + 'replica_' + str(i) + "/" + fitname + ".dat"
         shutil.copyfile(replica, dir + "/" + fitname + "/" + fitname + '_{:04n}.dat'.format(i))
         
-        print ("- Reading: %s" % replica)
-        f = open(replica, 'rb')
+        log.info("Reading: %s" % replica)
+        f = open(replica, 'r')
         xpdf.append([])
         for j in range(0,2): f.readline()
 
@@ -262,8 +247,8 @@ def main(nrep, fit_filename):
             s+=1
         f.close()          
 
-    print ("- Computing and priting replica 0")
-    f = open(dir + "/" + fitname + "/" + fitname + "_0000.dat", 'wb')
+    log.info("Computing and priting replica 0")
+    f = open(dir + "/" + fitname + "/" + fitname + "_0000.dat", 'w')
     f.write("PdfType: central\n")
     f.write("Format: lhagrid1\n---\n")
 
@@ -279,32 +264,34 @@ def main(nrep, fit_filename):
                     for irep in range(nrep):
                         sum += xpdf[irep][s][ix][iq][ifl]
                     sum /= nrep
-                    print >> f, "%14.7E" % sum,
+                    f.write("%14.7E " % sum)
                 f.write("\n")
         f.write("---\n")
     f.close()
 
-    print ("\n- Finished see: \n%s" % output6)
+    log.info("\n- Finished see: \n%s" % output6)
 
     # Copy grid to LHAPATH
-    print ("\n- Copying %s to LHAPDF path" % fitname)
+    log.info("\n- Copying %s to LHAPDF path" % fitname)
     lhapath = Popen(["lhapdf-config","--datadir"],stdout=PIPE).communicate()[0]
+    lhapath = lhapath.decode()
+
 
     import lhapdf    
     if hasattr(lhapdf,"mkPDFs"):
-        print ("- LHAPATH: %s" % lhapath)
+        log.info("LHAPATH: %s" % lhapath)
 
         src = dir + fitname 
         lhapath = lhapath.replace("\n","/")
         dst = lhapath + fitname 
-        print ("- cp -r %s\n\t %s" % (src,dst))
+        log.info ("- cp -r %s\n\t %s" % (src,dst))
         try:
             shutil.copytree(src,dst)
         except:
-            print("\n Error: this grid already exists, please delete and run the script again")
+            log.error("Error: this grid already exists, please delete and run the script again")
             exit(-1)
 
-        print ("\n - Testing LHgrid:")
+        log.info("Testing LHgrid:")
     
         # Test LHAGRID
         pdf = lhapdf.mkPDFs(fitname)
@@ -313,22 +300,22 @@ def main(nrep, fit_filename):
         X = [1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 0.2, 0.3, 0.4, 0.5, .6, 0.7, 0.8, 0.9]
         Q = math.sqrt(pdf[0].q2Min)
 
-        print ("- Total number of members: %d" % len(pdf))
+        log.info("Total number of members: %d" % len(pdf))
         # test replica 0
     
         status = True
         for i in range(0,len(pdfs)):
             print ("\n         x\t        Q2          %s rep0          %s avg          Diff" % (pdfs[i], pdfs[i]))
             for j in range(0,len(X)):            
-                print (" %14.7e\t" % X[j]),
-                print (" %14.7e\t" % float(Q*Q)),
+                print (" %14.7e" % X[j], end='\t')
+                print (" %14.7e" % float(Q*Q), end='\t')
                 rep0 = pdf[0].xfxQ(i,X[j],Q)
-                print (" %14.7e\t" % rep0),
+                print (" %14.7e" % rep0, end='\t')
                 sum = 0
                 for irep in range(1,len(pdf)):                
                     sum += pdf[irep].xfxQ(i,X[j],Q)            
                 sum /= nrep
-                print (" %14.7e\t" % sum),
+                print (" %14.7e" % sum, end='\t')
                 diff = (sum-rep0)/rep0*100
                 if diff > 1e-4:
                     status = False
@@ -337,7 +324,7 @@ def main(nrep, fit_filename):
     if status == True:
         print("\n- Congratulations! The grid was created and tested. Now you can run validphys!\n")
     else:
-        print("\n- Unfortunately there is a problem in the grid.\n")    
+        print("\n- Unfortunately there is a problem in the grid.\n")
 
 def splash():
     print ("                                                        ")
