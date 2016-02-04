@@ -12,16 +12,20 @@ import math
 from NNPDF import CommonData
 
 #_____________________________________________________
-def main(filename, sysfile):
+def main(setname):
+
+  sysfile = "systypes/SYSTYPE_"+setname+"_0.dat"
+  setfile = "commondata/DATA_"+setname+".dat"
 
   ## load data from commondata and sysfile
-  data = CommonData.ReadFile(filename,sysfile)
+  data = CommonData.ReadFile(setfile,sysfile)
 
   ## read and allocate lists with central value and stat. uncer.
   cvs    = [ data.GetData(el) for el in range(data.GetNData()) ]
   stserr = [ data.GetStat(el) for el in range(data.GetNData()) ]
   syscor = []
   sysunc = []
+  systot = []
   syslum = [ 0 for el in range(data.GetNData())]
 
   syscor2 = [ 0 for el in range(data.GetNData()) ]
@@ -30,27 +34,35 @@ def main(filename, sysfile):
   for el in range(data.GetNData()):
     for isys in range(data.GetNSys()):
         if (data.GetSys(el,isys).name == "UNCORR"):
-          sysunc2[el] += (pow(data.GetSys(el,isys).add,2))
-        elif (data.GetSys(el,isys).name == "CORR"):
-          syscor2[el] += (pow(data.GetSys(el,isys).add,2))
+            sysunc2[el] += (pow(data.GetSys(el,isys).add,2))
         elif ("LUMI" in data.GetSys(el,isys).name ):
-          syslum[el] = (data.GetSys(el,isys).add)
+            syslum[el] = (data.GetSys(el,isys).add)
+        else:
+            syscor2[el] += (pow(data.GetSys(el,isys).add,2))
+
     sysunc.append(math.sqrt(sysunc2[el]))
     syscor.append(math.sqrt(syscor2[el]))
 
-#      syserr.append(data.GetNSys())
-#      print (data.GetSys(el,isys) for isys in range(data.GetNSys()))
+    systot.append(math.sqrt(sysunc2[el]+syscor2[el]+pow(syslum[el],2)))
 
   ## print the results
-  print (" Id   Central         Stat.           Corr.           Uncorr.          Lumi")
-  print ("-----------------------------------------------------------------------------------------------")
+  print (" Id    Central     Stat.    Corr.   Uncorr.   Lumi      Tot. Syst.")
+  print ("----------------------------------------------------------------------")
   for i in range(data.GetNData()):
-    print ("%3i    %5.2f     %5.2f (%5.2f%%)   %5.2f (%4.2f%%)   %5.2f (%4.2f%%)   %5.2f (%4.2f%%)"
-            % (i, cvs[i]/1e3,
-            stserr[i]/1e3, stserr[i]/cvs[i]*100,
-            syscor[i]/1e3, syscor[i]/cvs[i]*100,
-            sysunc[i]/1e3, sysunc[i]/cvs[i]*100,
-            syslum[i]/1e3, syslum[i]/cvs[i]*100)
+#    print ("%3i    %6.2f     %6.2f (%6.2f%%)   %6.2f (%6.2f%%)   %6.2f (%6.2f%%)   %6.2f (%6.2f%%)"
+#            % (i, cvs[i]*100,
+#            stserr[i]*100, stserr[i]/cvs[i]*100,
+#            syscor[i]*100, syscor[i]/cvs[i]*100,
+#            sysunc[i]*100, sysunc[i]/cvs[i]*100,
+#            syslum[i]*100, syslum[i]/cvs[i]*100)
+#            )
+    print ("%3i    %7.2f    %6.2f   %6.2f   %6.2f   %6.2f   %6.2f (%4.2f%%)"
+            % (i, cvs[i]*100,
+            stserr[i]*100, #stserr[i]/cvs[i]*100,
+            syscor[i]*100, #syscor[i]/cvs[i]*100,
+            sysunc[i]*100, #sysunc[i]/cvs[i]*100,
+            syslum[i]*100, #syslum[i]/cvs[i]*100)
+            systot[i]*100, abs(systot[i]/cvs[i]*100))
             )
 
   ## produce a plot
@@ -65,12 +77,12 @@ def main(filename, sysfile):
 #_____________________________________________________
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
-  parser.add_argument('filename',nargs='?',
-                      help='CommonData filename')
-  parser.add_argument('sysfile',nargs='?',
-                      help='Sys. type filename')
+  parser.add_argument('setname',nargs='?',
+                      help='CommonData setname')
+#  parser.add_argument('sysfile',nargs='?',
+#                      help='Sys. type filename')
   args = parser.parse_args()
-  if not all((args.filename, args.sysfile)):
-    parser.error('Too few arguments: filename, sysfile')
+  if not all((args.setname)):
+    parser.error('Too few arguments: setname')
   mainargs = vars(args)
   main(**mainargs)
