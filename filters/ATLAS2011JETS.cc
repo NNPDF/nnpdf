@@ -7,7 +7,7 @@
 
 #include "ATLAS2011JETS.h"
 
-void ATLAS1JET11Filter::Loop(fstream & file, fstream & fileew, double rap, int nDataMin, int nDataMax)
+void ATLAS1JET11Filter::Loop(fstream & file, fstream & fileew, double rap, int nDataMin, int nDataMax, int rap_bin)
 {
 
   // Reading files
@@ -46,6 +46,7 @@ void ATLAS1JET11Filter::Loop(fstream & file, fstream & fileew, double rap, int n
     fileew >> dummy;
     fileew >> dummy;
     symmetriseErrors(NPerr1,NPerr2,&NPerr[i-nDataMin],&delta);
+    
   }
 
   //Raw data
@@ -59,7 +60,7 @@ void ATLAS1JET11Filter::Loop(fstream & file, fstream & fileew, double rap, int n
 
   for (int i = nDataMin; i < nDataMax; i++)  // Loop over datapoints
   {
-   // Jets usually y, pT^2, s - midpoints of bins
+    // Jets usually y, pT^2, s - midpoints of bins
     fKin1[i] = rap;
     file >> dummy;
     file >> ptmin;
@@ -75,19 +76,35 @@ void ATLAS1JET11Filter::Loop(fstream & file, fstream & fileew, double rap, int n
 
     fData[i] = sigma;// fill datapoints
     fData[i] *= NPcorr;// apply corrections (i.e. non-perturbative)
+    fData[i] *= EWcorr[i-nDataMin];// apply corrections (i.e. EW)
 
     fStat[i] = sqrt(pow(stat1,2)+pow(stat2,2));//statistical uncertainty (symmetric)
     fStat[i] = fStat[i]*fData[i]*1e-2;
 
-    for (int l = 0; l < fNSys-1; ++l)
+    int Nsysprime = 67; //number of systematics in each rapidity bin (excluding lumi)
+    //fSys is equal to 0 for the other rapidities
+    
+    for (int l = 0 ; l < fNSys-1; ++l)
+    {
+      fSys[i][l].mult = 0;
+      fSys[i][l].add = 0;
+      fSys[i][l].type = MULT;
+      fSys[i][l].name = "CORR";
+    }
+    
+    for (int l = rap_bin*Nsysprime; l < (rap_bin+1)*Nsysprime; ++l)
     {
       file >> fSys[i][l].mult;
-      fSys[i][l].type = MULT;
-      fSys[i][l].name = "UNCORR";
       fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;
     }
 
-    fSys[i][fNSys-1].mult = NPerr[i];
+    //now fill the lumi 
+    file >> fSys[i][fNSys-2].mult;
+    fSys[i][fNSys-2].type = MULT;
+    fSys[i][fNSys-2].add = fSys[i][fNSys-2].mult*fData[i]*1e-2;
+    fSys[i][fNSys-2].name = "ATL_LUMI_2011_7TeV";
+
+    fSys[i][fNSys-1].mult = NPerr[i-nDataMin];
     fSys[i][fNSys-1].type = MULT;
     fSys[i][fNSys-1].name = "ATLAS1JET11_NP_err";
     fSys[i][fNSys-1].add = fSys[i][fNSys-1].mult*fData[i]*1e-2;
@@ -224,11 +241,11 @@ void ATLAS1JET11Filter::ReadData()
   }
 
   //now read the data
-  Loop(f1, few1, 0.25, 0, 31);
-  Loop(f2, few2, 0.75, 31, 29+31);
-  Loop(f3, few3, 1.25, 31+29, 29+31+26);
-  Loop(f4, few4, 1.75, 31+29+26, 29+31+26+23);
-  Loop(f5, few5, 2.25, 31+29+26+23, 29+31+26+23+19);
-  Loop(f6, few6, 2.75, 31+29+26+23+19, 29+31+26+23+19+12);
+  Loop(f1, few1, 0.25, 0, 31, 0);
+  Loop(f2, few2, 0.75, 31, 29+31, 1);
+  Loop(f3, few3, 1.25, 31+29, 29+31+26, 2);
+  Loop(f4, few4, 1.75, 31+29+26, 29+31+26+23, 3);
+  Loop(f5, few5, 2.25, 31+29+26+23, 29+31+26+23+19, 4);
+  Loop(f6, few6, 2.75, 31+29+26+23+19, 29+31+26+23+19+12, 5);
   
 }

@@ -313,7 +313,7 @@ void D0ZRAPFilter::ReadData()
     symmetriseErrors(up,down,&sys,&shift);
 
     fSys[i][0].add = sys;
-    fSys[i][0].mult = (fSys[i][1].add*100.0)/fData[i];
+    fSys[i][0].mult = (sys*100.0)/fData[i];
 
     fSys[i][0].type = ADD;
     fSys[i][0].name = "UNCORR";     //treat sys as uncorrelated
