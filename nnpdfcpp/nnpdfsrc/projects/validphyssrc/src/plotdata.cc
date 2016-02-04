@@ -1225,7 +1225,7 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
               for (int i = 0; i < ndata; i++)
                 {
                   obsgraph->SetPoint(i, i, 1);
-                  obsgraph->SetPointError(i, 0, sqrt(expDataCovMat[i][i])/dat->GetDataSet().GetData(i));
+                  obsgraph->SetPointError(i, 0, abs(sqrt(expDataCovMat[i][i])/dat->GetDataSet().GetData(i)));
                 }
 
               obsgraph->GetXaxis()->SetTitle("Data points");
