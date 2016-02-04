@@ -1204,7 +1204,8 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
               c->SetTicky();
 
               TLegend *leg = new TLegend(0.5, 0.77, 0.88, 0.88);
-              leg->SetFillColor(kWhite);
+              leg->SetFillColor(0);
+              leg->SetFillStyle(0);
               leg->SetLineStyle(1);
               leg->SetBorderSize(1);
 
@@ -1215,8 +1216,10 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
               string expSetName = dat->GetDataSet().GetSetName();
 
               // Building the real data plot
+              TMultiGraph *mg = new TMultiGraph();
+              mg->SetTitle(expSetName.c_str() + TString(" Observables"));
+
               TGraphErrors *obsgraph = new TGraphErrors(ndata);
-              obsgraph->SetTitle(expSetName.c_str() + TString(" Observables"));
               obsgraph->SetMarkerColor(kBlack);
               obsgraph->SetMarkerStyle(20);
 
@@ -1225,22 +1228,10 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
               for (int i = 0; i < ndata; i++)
                 {
                   obsgraph->SetPoint(i, i, 1);
-                  obsgraph->SetPointError(i, 0, abs(sqrt(expDataCovMat[i][i])/dat->GetDataSet().GetData(i)));
+                  obsgraph->SetPointError(i, 0, fabs(sqrt(expDataCovMat[i][i])/dat->GetDataSet().GetData(i)));
                 }
 
-              obsgraph->GetXaxis()->SetTitle("Data points");
-              obsgraph->GetXaxis()->CenterTitle(kTRUE);
-              obsgraph->GetXaxis()->SetLabelSize(0.05);
-              obsgraph->GetXaxis()->SetTitleSize(0.05);
-
-              obsgraph->GetYaxis()->SetTitle("Observable / " +
-                                                 TString(expSetName.c_str()) + " data");
-              obsgraph->GetYaxis()->CenterTitle(kTRUE);
-              obsgraph->GetYaxis()->SetLabelSize(0.05);
-              obsgraph->GetYaxis()->SetTitleSize(0.05);
-
-              c->cd();
-              obsgraph->Draw("AP");
+              mg->Add(obsgraph, "AP");
 
               leg->AddEntry(obsgraph, TString(expSetName)+" data", "pl");
 
@@ -1256,7 +1247,7 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
                   g->SetPointError(i, 0, dat->GetTheory()->GetObsError(i)/dat->GetDataSet().GetData(i));
                 }
 
-              g->Draw("P,same");
+              mg->Add(g, "P");
 
               leg->AddEntry(g, TString(dat->GetPDFSet()->GetSetName()) +
                                          " prediction", "pl");
@@ -1323,14 +1314,25 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
                           }
                       }                                     
 
-                      g2->Draw("P,same");
+                      mg->Add(g2, "P");
 
-                      leg->AddEntry(g2, TString(dat2->GetPDFSet()->GetSetName()) +
-                                                     " prediction", "pl");
+                      leg->AddEntry(g2, TString(dat2->GetPDFSet()->GetSetName()) + " prediction", "pl");
                       break;
                       }
                     }
                 }
+
+              mg->Draw("AP");
+
+              mg->GetXaxis()->SetTitle("Data points");
+              mg->GetXaxis()->CenterTitle(kTRUE);
+              mg->GetXaxis()->SetLabelSize(0.05);
+              mg->GetXaxis()->SetTitleSize(0.05);
+
+              mg->GetYaxis()->SetTitle("Observable / " + TString(expSetName.c_str()) + " data");
+              mg->GetYaxis()->CenterTitle(kTRUE);
+              mg->GetYaxis()->SetLabelSize(0.05);
+              mg->GetYaxis()->SetTitleSize(0.05);
 
               leg->Draw("same");
 
