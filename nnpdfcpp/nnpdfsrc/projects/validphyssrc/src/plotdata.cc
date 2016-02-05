@@ -2848,7 +2848,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
               stringstream dofset("");
 
               DataSetResult *di = b[i2]->GetSetResult(j);
-              std::vector<std::string> const& setCF = fSettings.GetSetInfo(di->GetDataSet().GetSetName()).tCFactors;
+              std::vector<std::string> const& setCF = fSettingsRef.GetSetInfo(di->GetDataSet().GetSetName()).tCFactors;
               dofset << fixed << di->GetDOF();
 
               f << fixed << setprecision(2)
