@@ -29,4 +29,7 @@
   catch(NNPDF::LogicException &_e) {
     SWIG_exception(SWIG_ValueError, const_cast<char*>(_e.what()));
   }
+  catch (const std::exception& e) {
+    SWIG_exception(SWIG_RuntimeError, e.what());
+  }
 }
