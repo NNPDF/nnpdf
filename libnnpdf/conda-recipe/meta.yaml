@@ -15,12 +15,14 @@ requirements:
         - gcc
         - libgcc
         - atlas
+        - gsl
     run:
         - lhapdf
         - python 
         - sqlite
         - libgcc
         - atlas
+        - gsl
 
 build:
     number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
