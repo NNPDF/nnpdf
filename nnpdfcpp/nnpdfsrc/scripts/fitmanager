@@ -34,8 +34,9 @@ def download(set):
     try:
         # Copy grid to LHAPATH
         lhapath = Popen(["lhapdf-config","--datadir"],stdout=PIPE).communicate()[0]
-        src     = "../results/" + set + "/nnfit/" + set
+        lhapath = lhapath.decode()
         lhapath = lhapath.replace("\n","/")
+        src     = "../results/" + set + "/nnfit/" + set
         dst = lhapath + set
         shutil.copytree(src,dst)
     except:
