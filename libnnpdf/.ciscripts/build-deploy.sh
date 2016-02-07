@@ -2,7 +2,7 @@
 
 #Find conda
 source ~/.bashrc
-conda build conda-recipe
+conda build -q conda-recipe
 if [ $? != 0 ]; then
 	echo failed to build
 	exit 1
