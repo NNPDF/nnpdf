@@ -5,6 +5,8 @@ from setuptools import setup, Extension, find_packages
 import subprocess
 import platform
 
+import numpy
+
 if sys.version_info < (3,4):
     print("Wrapper requires Python 3.4 or later", file=sys.stderr)
     sys.exit(1)
@@ -19,6 +21,8 @@ def call_command(command):
               % (l[0], e.strerror), file=sys.stderr)
         sys.exit(1)
     return result.decode().rstrip()
+
+numpy_include_dir = numpy.get_include()
 
 nnpdf_includes = call_command('nnpdf-config --cppflags').split()
 nnpdf_libs = call_command('nnpdf-config --ldflags').split()
@@ -41,6 +45,7 @@ sources = ["_sources/%s_wrap.cxx"%n for n  in names]
 ext_modules = [Extension('NNPDF._' + name,
                     extra_compile_args = extra_compile_args ,
                     extra_link_args = extra_link_args,
+                    include_dirs = [numpy_include_dir],
                     sources = [source], language="c++") 
                     for name,source in zip(names, sources) ]
 
