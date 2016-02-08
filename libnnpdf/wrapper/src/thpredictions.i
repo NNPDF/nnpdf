@@ -1,16 +1,24 @@
 %module(package="NNPDF") thpredictions
  %{
+#define SWIG_FILE_WITH_INIT
 #include "../../src/NNPDF/exceptions.h"
 #include "../../src/NNPDF/thpredictions.h"
  %}
 
+/*This must be included BEFORE anyrhing from the lib*/
+%include "include/numpy.i"
+%init %{
+  import_array();
+%}
 %include "std_string.i" 
 %include "std_vector.i" 
+%include "common.i"
+
 
 %include "fkgenerator.i"
-%import "pdfset.i"
+%include "pdfset.i"
 
-%import "experiments.i"
+%include "experiments.i"
 
 /* Parse the header file to generate wrappers */
 
@@ -18,9 +26,39 @@
 
 %include "include/excepthandler.i"
 
+
+
+#ifdef SSE_CONV
+%numpy_typemaps(NNPDF::real, NPY_FLOAT , int)
+#else
+%numpy_typemaps(NNPDF::real, NPY_DOUBLE , int)
+#endif
+
+%apply (NNPDF::real** ARGOUTVIEWM_ARRAY1, int* DIM1) {(NNPDF::real** data, int* n)}
 %include "../../src/NNPDF/thpredictions.h"
 
 %extend NNPDF::ThPredictions{
+
+
+void get_cv (NNPDF::real  **data, int* n){
+    int len = $self->GetNData();
+    NNPDF::real * result = new NNPDF::real[len];
+    for (int i = 0; i < len; i++){
+        result[i] = self->GetObsCV(i);
+    }
+    *data = result;
+    *n = len;
+}
+
+void get_error (NNPDF::real  **data, int* n){
+    int len = $self->GetNData();
+    NNPDF::real * result = new NNPDF::real[len];
+    for (int i = 0; i < len; i++){
+        result[i] = self->GetObsError(i);
+    }
+    *data = result;
+    *n = len;
+}
 
 %pythoncode{
 
