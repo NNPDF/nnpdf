@@ -16,6 +16,7 @@ requirements:
         - libgcc
         - atlas
         - gsl
+        - numpy
     run:
         - lhapdf
         - python 
@@ -23,6 +24,7 @@ requirements:
         - libgcc
         - atlas
         - gsl
+        - numpy
 
 build:
     number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
