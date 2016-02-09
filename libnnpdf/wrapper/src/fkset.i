@@ -10,6 +10,7 @@
 
 /* Parse the header file to generate wrappers */
 
+%template (vector_fktable_p) std::vector<NNPDF::FKTable*>;
 %feature("autodoc", "3");
 
 %include "include/excepthandler.i"
