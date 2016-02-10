@@ -7,6 +7,7 @@
 
 #include "apfelevol.h"
 #include "APFEL/APFEL.h"
+#include "NNPDF/exceptions.h"
 
 APFELSingleton *APFELSingleton::apfelInstance = NULL;
 
@@ -97,15 +98,15 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
 
   // Compute Q2 grid
   const int nq2 = getInstance()->fNQ;
-  const double eps = 1e-4, epshq = 5e-3;
+  const double eps = 1e-4;
   const double lambda2 = 0.0625e0;
   const double q2min = pow(getInstance()->fQ0,2.0);
   const double q2max = pow(getInstance()->fQmax,2.0);
   const int nf = std::max(APFELSingleton::getNFpdf(),APFELSingleton::getNFas());
   int nfin;
-  if ( fabs(q2min - getInstance()->mth[2]*getInstance()->mth[2]) <= epshq) nfin = 6;
-  else if ( fabs(q2min - getInstance()->mth[1]*getInstance()->mth[1]) <= epshq ) nfin = 5;
-  else if ( fabs(q2min - getInstance()->mth[0]*getInstance()->mth[0]) <= epshq ) nfin = 4;
+  if ( q2min >= getInstance()->mth[2]*getInstance()->mth[2] ) nfin = 6;
+  else if ( q2min >= getInstance()->mth[1]*getInstance()->mth[1] ) nfin = 5;
+  else if ( q2min >= getInstance()->mth[0]*getInstance()->mth[0] ) nfin = 4;
   else nfin = 3;
   if (nfin > nf) nfin = nf;
 
@@ -118,15 +119,25 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
       for (int s = 0; s < (int) q2n.size(); s++)
         {
           double low = (s == 0) ? q2min : pow(getInstance()->mth[s-1 +nfin-3], 2);
-          double high= (s == (int) q2n.size()-1) ? q2max : pow(getInstance()->mth[s + +nfin-3], 2);
+          double high= (s == (int) q2n.size()-1) ? q2max : pow(getInstance()->mth[s +nfin-3], 2);
 
           if ( q2node >= low-eps && q2node <= high+eps)
             {
               q2n[s].push_back(q2node);
               break;
-            }
+            }          
         }
     }
+
+  // Check size of subgrids if size == 1 add extra note at the top threshold
+  for (int s = 0; s < (int) q2n.size(); s++)
+    if (q2n[s].size() == 1 && s == 0)
+      {
+        q2n[s].push_back(pow(getInstance()->mth[nfin-3],2));
+        getInstance()->fNQ++;
+      }
+    else if (q2n[s].size() == 1)
+      throw NNPDF::RangeError("APFELSingleton::Initialized","error subgrids with just one node");
 
   // adjusting subgrid q nodes
   for (int s = 0; s < (int) q2n.size(); s++)
