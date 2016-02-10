@@ -97,15 +97,15 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
 
   // Compute Q2 grid
   const int nq2 = getInstance()->fNQ;
-  const double eps = 1e-4;
+  const double eps = 1e-4, epshq = 5e-3;
   const double lambda2 = 0.0625e0;
   const double q2min = pow(getInstance()->fQ0,2.0);
   const double q2max = pow(getInstance()->fQmax,2.0);
   const int nf = std::max(APFELSingleton::getNFpdf(),APFELSingleton::getNFas());
   int nfin;
-  if (q2min >= getInstance()->mth[2]*getInstance()->mth[2]) nfin = 6;
-  else if (q2min >= getInstance()->mth[1]*getInstance()->mth[1]) nfin = 5;
-  else if (q2min >= getInstance()->mth[0]*getInstance()->mth[0]) nfin = 4;
+  if ( fabs(q2min - getInstance()->mth[2]*getInstance()->mth[2]) <= epshq) nfin = 6;
+  else if ( fabs(q2min - getInstance()->mth[1]*getInstance()->mth[1]) <= epshq ) nfin = 5;
+  else if ( fabs(q2min - getInstance()->mth[0]*getInstance()->mth[0]) <= epshq ) nfin = 4;
   else nfin = 3;
   if (nfin > nf) nfin = nf;
 
@@ -135,7 +135,7 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
       const double lnQmax = log( ( (s == (int) q2n.size()-1) ? q2max : pow(getInstance()->mth[s +nfin-3], 2) ) /lambda2);
 
       for (int iq2 = 1; iq2 <= (int) q2n[s].size(); iq2++)
-        q2n[s][iq2-1] = lambda2*exp(lnQmin*exp( (iq2-1)/(q2n[s].size()-1.0) * log(lnQmax/lnQmin) ));
+        q2n[s][iq2-1] = lambda2*exp(lnQmin*exp( (iq2-1)/(q2n[s].size()-1.0) * log(lnQmax/lnQmin) ));      
     }
 
   getInstance()->fQ2nodes = q2n;
