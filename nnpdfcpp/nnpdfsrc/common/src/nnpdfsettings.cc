@@ -34,7 +34,8 @@ static const vector< vector<string> > basiselem = { {},
                                      {"sng","g","v","v8","t3","t8","ds","pht"},
                                      {"g","u","ubar","d","dbar","s","sbar"},
                                      {"g","u","ubar","d","dbar","s","sbar","pht"},
-                                     {"sng","g","v","t3","ds","sp","sm","cp","cm"},
+                                     //{"sng","g","v","t3","ds","sp","sm","cp","cm"},
+                                     {"sng","g","v","t3","ds","sp","sm","cp"},
                                      {"sng","g","v","v3","v8","t3","t8","t15"}
                                      };
 

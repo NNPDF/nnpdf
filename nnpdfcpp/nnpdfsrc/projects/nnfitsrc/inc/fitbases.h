@@ -189,7 +189,8 @@ class NN30ICFitBasis: public EvolICFitBasis
 public:
    NN30ICFitBasis(NNPDFSettings const&);
 
-   enum netBasis {NET_SNG, NET_GLU, NET_VAL, NET_T3, NET_DS, NET_SP, NET_SM, NET_CP, NET_CM, NET_GAM };
+   //enum netBasis {NET_SNG, NET_GLU, NET_VAL, NET_T3, NET_DS, NET_SP, NET_SM, NET_CP, NET_CM, NET_GAM };
+   enum netBasis {NET_SNG, NET_GLU, NET_VAL, NET_T3, NET_DS, NET_SP, NET_SM, NET_CP, NET_GAM }; // c- = 0
 
    void NetTransform(int const& fl, int const& nfl, int*);
    void Preprocess(real const& x, real* pdf, PreprocParam const&);

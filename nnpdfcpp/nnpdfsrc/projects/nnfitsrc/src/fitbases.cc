@@ -1212,7 +1212,7 @@ EvolICFitBasis(nnset)
   fPDFNames[NET_SP] = "Strange Sea";
   fPDFNames[NET_SM] = "Strange Valence";
   fPDFNames[NET_CP] = "Charm Sea";
-  fPDFNames[NET_CM] = "Charm Valence";
+  //fPDFNames[NET_CM] = "Charm Valence";
   if (fQED)
     fPDFNames[NET_GAM] = "Photon";
 }
@@ -1230,7 +1230,7 @@ void NN30ICFitBasis::Preprocess(real const& x, real* pdf, PreprocParam const& pa
    tmppdf[FIT_GLU] = pdf[NET_GLU];
    tmppdf[FIT_VAL] = pdf[NET_VAL];
    tmppdf[FIT_V3] = pdf[NET_T3]+2*pdf[NET_DS];
-   tmppdf[FIT_V8] = pdf[NET_VAL]-3*pdf[NET_SM]-pdf[NET_CM];
+   tmppdf[FIT_V8] = pdf[NET_VAL]-3*pdf[NET_SM]; //-pdf[NET_CM];
    tmppdf[FIT_T3] = pdf[NET_T3];
    tmppdf[FIT_T8] = pdf[NET_SNG]-3*pdf[NET_SP]-pdf[NET_CP];
    tmppdf[FIT_T15] = pdf[NET_SNG]-4*pdf[NET_CP];
@@ -1279,7 +1279,7 @@ void NN30ICFitBasis::NetTransform(int const& fl, int const& nfl, int* transform)
     {
       transform[NET_VAL] = 1;
       transform[NET_SM] = -3;
-      transform[NET_CM] = -1;
+      //transform[NET_CM] = -1;
       break;
     } 
     case FIT_T3:
