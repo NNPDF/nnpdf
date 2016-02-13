@@ -20,8 +20,8 @@
 static const string minString[6]   = {"UNDEFINED", "GA", "NGA"};
 static const string stopString[6]  = {"UNDEFINED", "FIXEDLENGTH", "TR", "GRAD", "VAR", "LOOKBACK"};
 static const string paramString[4] = {"UNDEFINED", "NN", "CHEBYSHEV", "QUADNN"};
-static const string basisString[13]= {"UNDEFINED", "NN23", "NN23QED","EVOL", "EVOLQED","EVOLS",
-                                      "EVOLSQED","NN30", "NN30QED","FLVR", "FLVRQED","NN30IC","EVOLIC"};
+static const string basisString[14]= {"UNDEFINED", "NN23", "NN23QED","EVOL", "EVOLQED","EVOLS",
+                                      "EVOLSQED","NN30", "NN30QED","FLVR", "FLVRQED","NN30IC","EVOLIC","NN31IC"};
 
 static const vector< vector<string> > basiselem = { {},
                                      {"sng","g","v","t3","ds","sp","sm"},
@@ -36,7 +36,8 @@ static const vector< vector<string> > basiselem = { {},
                                      {"g","u","ubar","d","dbar","s","sbar","pht"},
                                      //{"sng","g","v","t3","ds","sp","sm","cp","cm"},
                                      {"sng","g","v","t3","ds","sp","sm","cp"},
-                                     {"sng","g","v","v3","v8","t3","t8","t15"}
+                                     {"sng","g","v","v3","v8","t3","t8","t15"},
+                                     {"sng","g","v","v3","v8","t3","t8","cp"}
                                      };
 
 /* Convert string to enum */
@@ -94,6 +95,7 @@ basisType NNPDFSettings::getFitBasisType(string const& method)
   if (method.compare("FLVRQED") == 0) return BASIS_FLVRQED;
   if (method.compare("NN30IC") == 0)  return BASIS_NN30IC;
   if (method.compare("EVOLIC") == 0)  return BASIS_EVOLIC;
+  if (method.compare("NN31IC") == 0)  return BASIS_NN31IC;
 
   cerr << "getFitBasisType Error: Invalid parametrization type: "<<method;
   exit(-1);
