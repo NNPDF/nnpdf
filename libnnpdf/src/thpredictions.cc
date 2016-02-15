@@ -53,6 +53,26 @@ bool ThPredictions::Verbose = true;
     _mm_empty();
 
     return;
+
+    /*
+    __m256 acc = _mm256_setzero_ps();
+
+    const __m256* a = (const __m256*) x;
+    const __m256* b = (const __m256*) y;
+
+    for (int i=0; i<n/8; i++)
+      acc = _mm256_add_ps(acc, _mm256_mul_ps(*(a+i),*(b+i)));
+
+    __m256 t1 = _mm256_hadd_ps(acc,acc);
+    __m256 t2 = _mm256_hadd_ps(t1,t1);
+    __m128 t3 = _mm256_extractf128_ps(t2,1);
+    __m128 t4 = _mm_add_ss(_mm256_castps256_ps128(t2),t3);
+    retval = _mm_cvtss_f32(t4);        
+
+    _mm_empty();
+    */
+
+
   }
 
 #else
