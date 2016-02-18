@@ -281,6 +281,9 @@ void Experiment::MakeReplica()
 void Experiment::MakeClosure(PDFSet* pdf, bool const& noise)
 {
   cout << "-- Generating closure data for " << fExpName << endl;
+
+  // Set closure flag
+  fIsClosure = true;
   
   for (int s=0; s<GetNSet(); s++)
   {
@@ -305,9 +308,6 @@ void Experiment::MakeClosure(PDFSet* pdf, bool const& noise)
     
   // Rebuild covariance matrix
   GenCovMat();
-
-  // Set closure flag
-  fIsClosure = true;
 }
 
 /**
