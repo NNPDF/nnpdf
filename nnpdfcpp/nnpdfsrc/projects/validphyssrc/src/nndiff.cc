@@ -64,10 +64,13 @@ NNdiff::NNdiff(NNPDFSettings const& set, std::string const& path,
         {
           fp[n][fl] = new real[fnparam];
           f >> falpha[n][fl] >> fbeta[n][fl] >> fnorm[n][fl];
-          g >> tmp;
+          getline(g, tmp);
           if (n == 0) fnames.push_back(tmp);
           for (int pr = 0; pr < fnparam; pr++)
-            g >> fp[n][fl][pr];
+            {
+              getline(g, tmp);
+              fp[n][fl][pr] = stod(tmp);
+            }
         }
 
       f.close();
