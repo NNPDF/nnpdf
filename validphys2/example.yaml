@@ -1,0 +1,8 @@
+pdf: NNPDF30_nlo_as_0118
+theoryid: 6
+
+datasets:
+ - dataset: ATLASWZRAP36PB  
+   sys: 2
+   cfac: [EWK]
+

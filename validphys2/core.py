@@ -9,6 +9,7 @@ import pathlib
 import functools
 import logging
 import argparse
+import itertools
 #We can't use this for type checking yet
 #import typing
 
@@ -19,6 +20,7 @@ import matplotlib.pyplot as plt
 
 from reportengine.configparser import ConfigError
 from reportengine import configparser
+#from reportengine.broadcast import broadcast
 
 from NNPDF import CommonData, FKTable, ThPredictions, LHAPDFSet
 from NNPDF.fkset import FKSet
@@ -38,9 +40,13 @@ class Environment:
 
 
 class Config(configparser.Config):
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
 
     @property
-    def loadder(self):
+    def loader(self):
         return self.environment.loader
 
     def check_pdf(self, name:str):
@@ -53,29 +59,46 @@ class Config(configparser.Config):
         raise ConfigError("Bad PDF: {} not installed".format(name), name,
                           lhaindex.expand_local_names('*'))
 
-    def check_theoryID(self, theoryID: (str, int)):
+    def check_theoryid(self, theoryID: (str, int)):
         try:
-            return (str(theoryID), self.loadder.check_theoryID(theoryID))
+            return (str(theoryID), self.loader.check_theoryID(theoryID))
         except FileNotFoundError as e:
             raise ConfigError(str(e), theoryID,
-                              self.loadder.available_theories,
+                              self.loader.available_theories,
                               display_alternatives='all')
 
-    #TODO:enable this
-    #def check_dataset(self, * , name:str, sysnum:(str, int):
-    def check_dataset(self, dataset:dict):
+    @configparser.element_of('datasets')
+    def check_dataset(self, dataset:dict, * ,theoryid):
+        """We check data related things here, and theory related things when
+        making the FKSet"""
+        theoryid, theopath = theoryid
         try:
-            name, sysnum = dataset['name'], dataset['sysnum']
+            name, sysnum = dataset['dataset'], dataset['sys']
         except KeyError:
             raise ConfigError("'dataset' must be a mapping with "
                               "'name' and 'sysnum'")
 
         try:
-            return name, self.loadder.check_commondata(name, sysnum)
+            commondata = self.loader.check_commondata(name, sysnum)
         except DataNotFoundError as e:
-            raise ConfigError(str(e), name, self.loadder.available_datasets)
+            raise ConfigError(str(e), name, self.loader.available_datasets)
         except SysNotFoundError as e:
             raise ConfigError(str(e))
+            
+        try:
+            if 'cfac' in dataset:
+                cfac = dataset['cfac']
+                cfac = self.loader.check_cfactor(theoryid, name, cfac)
+            else:
+                cfac = []
+    
+            fkpath = self.loader.check_fktable(theoryid, name)
+        
+        except FileNotFoundError as e:
+            raise ConfigError(e)
+        
+        return {'setname': name, 'commondata': commondata, 'cfac': cfac, 
+                'fk': fkpath}
 
 
 class DataNotFoundError(FileNotFoundError): pass
@@ -126,6 +149,7 @@ class Loader():
 
         return datafile, sysfile
 
+    @functools.lru_cache()
     def check_theoryID(self, theoryID):
         theoryID = str(theoryID)
         theopath = self.datapath / ('theory_%s' % theoryID)
@@ -139,6 +163,7 @@ class Loader():
         datafile, sysfile = self.check_commondata(setname, sysnum)
         return CommonData.ReadFile(str(datafile), str(sysfile))
 
+    @functools.lru_cache()
     def check_fktable(self, theoryID, setname):
         theopath = self.check_theoryID(theoryID)
         fkpath = theopath/ 'fastkernel' / ('FK_%s.dat' % setname)
@@ -152,6 +177,20 @@ class Loader():
         fkpath = self.check_fktable(theoryID, setname)
         return FKTable(str(fkpath), [])
 
+    def check_cfactor(self, theoryID, setname, cfactors):
+        theopath = self.check_theoryID(theoryID)
+        cf = []
+        for cfactor in cfactors:
+            cfactorpath = (theopath / 'cfactor' /
+                           'CF_{cfactor}_{setname}.dat'.format(**locals()))
+            if not cfactorpath.exists():
+                msg = ("Could not find cfactor '{cfactor}' for set {setname} "
+                       "in theory {theoryID}. File {cfactorpath} does not "
+                       "exist.").format(**locals())
+                raise FileNotFoundError(msg)
+            cf.append(cfactorpath)
+
+        return cf
 
 def get_error_type(pdfname):
     info = lhaindex.parse_info(pdfname)
@@ -211,12 +250,12 @@ def load_pdf(name):
 #     fktable = loader.get_fktable(theoryid, setname)
 #==============================================================================
 
-def make_results(dataset, theoryID, pdf):
-    setname, (cdpath, syspth) = dataset
+def results(setname, commondata, cfac, fk ,theoryid, pdf):
+    cdpath,syspth = commondata
     cd = CommonData.ReadFile(str(cdpath), str(syspth))
-    thlabel, thpath = theoryID
-    fkpath = thpath / 'fastkernel' / ('FK_%s.dat' % setname)
-    fktable = FKTable(str(fkpath), [])
+    thlabel, thpath = theoryid
+    
+    fktable = FKTable(str(fk), [str(factor) for factor in cfac])
     #IMPORTANT: We need to tell the python garbage collector to NOT free the
     #memory owned by the FKTable on garbage collection.
     #TODO: Do this automatically
@@ -259,7 +298,7 @@ def plot_results(results, setlabel, normalize_to = None):
                          label=result.label, elinewidth = 2,
                          capsize=10)
 
-    ax.set_xticks(range(1,len(result.central_value) + 1))
+    ax.set_xticks(range(1,len(result) + 1), len(result) // 15 + 1)
 
     ax.grid(axis='x')
 
@@ -370,16 +409,23 @@ if __name__ == '__main__':
             print(e)
             print(e.alternatives_text())
             sys.exit(1)
-    results = (dataresult, theoresult)= make_results(**c.params)
-
+    
+    environment.output_path.mkdir(exist_ok = True)
     plt.style.use(str(environment.this_folder / 'small.mplstyle'))
-    fig = plot_results(results, setlabel=c['dataset'][0],
+
+    #TODO; Use resourcebuilder instead of this horrible code
+    n = itertools.count()
+    for dataset in c['datasets']:
+        inp = {**dataset, 'theoryid': c['theoryid'], 'pdf': c['pdf']}
+        results = (dataresult, theoresult)= results(**inp)
+
+    
+        fig = plot_results(results, setlabel=dataset['setname'],
                        normalize_to=dataresult)
 
-    environment.output_path.mkdir(exist_ok = True)
 
 
 
 
-    fig.savefig(str(environment.output_path / "result.pdf"),
+        fig.savefig(str(environment.output_path / ("result_%2d.pdf"%next(n))),
                 bbox_inches='tight')
