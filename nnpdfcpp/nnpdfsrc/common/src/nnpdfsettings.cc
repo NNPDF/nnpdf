@@ -578,7 +578,7 @@ bool NNPDFSettings::IsQED() const
 bool NNPDFSettings::IsIC() const
 {
   const basisType isic = NNPDFSettings::getFitBasisType(Get("fitting","fitbasis").as<string>());
-  if (isic == BASIS_EVOLIC || isic == BASIS_NN30IC)
+  if (isic == BASIS_EVOLIC || isic == BASIS_NN30IC || isic == BASIS_NN31IC)
     return true;
   return false;
 }
