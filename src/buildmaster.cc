@@ -226,4 +226,10 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSTOPDIFF8TEVTTPTFilter());
   target.push_back(new CMSTOPDIFF8TEVTTMFilter());
 
+  target.push_back(new CMSTOPDIFF8TEVTPTUNNORMFilter());
+  target.push_back(new CMSTOPDIFF8TEVTRAPUNNORMFilter());
+  target.push_back(new CMSTOPDIFF8TEVTTRAPUNNORMFilter());
+  target.push_back(new CMSTOPDIFF8TEVTTPTUNNORMFilter());
+  target.push_back(new CMSTOPDIFF8TEVTTMUNNORMFilter());
+
 }
