@@ -57,10 +57,9 @@ int main(int argc, char **argv)
   InitCommonData(dataSets);
 
   // Export results
-  double q2min = 1.0;
   cout << "***** Exporting ******"<<endl;
   for (size_t i=0; i<dataSets.size(); i++)
-    dataSets[i]->Export( resultsPath(),  q2min);
+    dataSets[i]->Export( resultsPath() );
   cout << "***** Finished ******"<<endl;
 
   return 0;
