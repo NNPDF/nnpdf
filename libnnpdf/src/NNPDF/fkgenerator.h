@@ -33,18 +33,18 @@ namespace NNPDF
         virtual ~FKGenerator(); //!< Destructor
 
          // Fill the FKTable
-        void Fill(  size_t const& d,     // Datapoint index
-                    size_t const& ix1,   // First x-index
-                    size_t const& ix2,   // Second x-index
-                    size_t const& ifl1,  // First flavour index
-                    size_t const& ifl2,  // Second flavour index
+        void Fill(  int const& d,     // Datapoint index
+                    int const& ix1,   // First x-index
+                    int const& ix2,   // Second x-index
+                    int const& ifl1,  // First flavour index
+                    int const& ifl2,  // Second flavour index
                     real const& isig  // FK Value
                   );
 
         // DIS version of Fill
-        void Fill(  size_t const& d,     // Datapoint index
-                    size_t const& ix,    // x-index
-                    size_t const& ifl,   // flavour index
+        void Fill(  int const& d,     // Datapoint index
+                    int const& ix,    // x-index
+                    int const& ifl,   // flavour index
                     real const& isig  // FK Value
                   );
     };

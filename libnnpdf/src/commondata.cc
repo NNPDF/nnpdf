@@ -42,8 +42,6 @@ namespace NNPDF
     std::string SetName;
     int nSys, nData;
 
-    int dummy;
-
     datafile >> SetName
     >> nSys
     >> nData;
@@ -375,7 +373,7 @@ namespace NNPDF
 
 
   // Write data to file in CommonData format
-  void CommonData::Export(std::string const& targetdir, const double& minQ2) const
+  void CommonData::Export(std::string const& targetdir) const
   {
     std::fstream g1;
 

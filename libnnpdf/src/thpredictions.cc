@@ -91,10 +91,10 @@ bool ThPredictions::Verbose = true;
  */
 ThPredictions::ThPredictions(const PDFSet *pdfset, const Experiment *exp):
 fObs(NULL),
-fPDFName(pdfset->GetSetName()),
-fSetName(exp->GetExpName()),
 fNpdf(pdfset->GetMembers()),
 fNData(exp->GetNData()),
+fPDFName(pdfset->GetSetName()),
+fSetName(exp->GetExpName()),
 fEtype(pdfset->GetEtype())
 {
   // New theory array
@@ -118,10 +118,10 @@ fEtype(pdfset->GetEtype())
  */
 ThPredictions::ThPredictions(const PDFSet *pdfset, const FKTable *fktab):
 fObs(NULL),
-fPDFName(pdfset->GetSetName()),
-fSetName(fktab->GetDataName()),
 fNpdf(pdfset->GetMembers()),
 fNData(fktab->GetNData()),
+fPDFName(pdfset->GetSetName()),
+fSetName(fktab->GetDataName()),
 fEtype(pdfset->GetEtype())
 {
   // New theory array
@@ -141,10 +141,10 @@ fEtype(pdfset->GetEtype())
  */
 ThPredictions::ThPredictions(const PDFSet *pdfset, const FKSet *fkset):
 fObs(NULL),
-fPDFName(pdfset->GetSetName()),
-fSetName(fkset->GetDataName()),
 fNpdf(pdfset->GetMembers()),
 fNData(fkset->GetNDataFK()),
+fPDFName(pdfset->GetSetName()),
+fSetName(fkset->GetDataName()),
 fEtype(pdfset->GetEtype())
 {
   // New theory array
@@ -164,10 +164,10 @@ fEtype(pdfset->GetEtype())
  */
 ThPredictions::ThPredictions(const PDFSet *pdf1, const PDFSet *pdf2, const FKTable* fktab):
 fObs(NULL),
-fPDFName(pdf1->GetSetName()+"_"+pdf2->GetSetName()),
-fSetName(fktab->GetDataName()),
 fNpdf(pdf1->GetMembers()),
 fNData(fktab->GetNData()),
+fPDFName(pdf1->GetSetName()+"_"+pdf2->GetSetName()),
+fSetName(fktab->GetDataName()),
 fEtype(pdf1->GetEtype())
 {
 
@@ -196,10 +196,10 @@ fEtype(pdf1->GetEtype())
 ThPredictions::ThPredictions(const ThPredictions& o):
 fObs(new real[o.fNData*o.fNpdf]),
 fTconv(o.fTconv),
-fPDFName(o.fPDFName),
-fSetName(o.fSetName),
 fNpdf(o.fNpdf),
 fNData(o.fNData),
+fPDFName(o.fPDFName),
+fSetName(o.fSetName),
 fEtype(o.fEtype)
 {
 // Copy predictions

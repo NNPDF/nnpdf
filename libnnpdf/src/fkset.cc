@@ -94,7 +94,7 @@ namespace NNPDF
     if (fNSigma == 0)
       throw UserError("FKSet::FKSet","No FK tables added to set");
 
-    for (size_t i=0; i<fNSigma; i++)
+    for (int i=0; i<fNSigma; i++)
     {
       if (fFK[i]->IsHadronic() != fHadronic)
         throw EvaluationError("FKSet::FKSet", "Hadronic status mismatch!");
@@ -118,11 +118,11 @@ namespace NNPDF
   fFK(new FKTable*[fNSigma])
   {
     // Copy FKTables
-    for (size_t i=0; i<set.fNSigma; i++)
+    for (int i=0; i<set.fNSigma; i++)
       fFK[i] = new FKTable(*set.fFK[i]);
 
     // Verify masking (uneccesary after one go)
-    for (size_t i=0; i<fNSigma; i++)
+    for (int i=0; i<fNSigma; i++)
       if (fFK[i]->GetNData() != fNDataFK)
         throw RangeError("FKSet::FKSet", "NData mismatch!");
   };
@@ -138,11 +138,11 @@ namespace NNPDF
   fFK(new FKTable*[fNSigma])
   {
     // Copy FKTables
-    for (size_t i=0; i<set.fNSigma; i++)
+    for (int i=0; i<set.fNSigma; i++)
       fFK[i] = new FKTable(*set.fFK[i], mask);
 
     // Verify masking (uneccesary after one go)
-    for (size_t i=0; i<fNSigma; i++)
+    for (int i=0; i<fNSigma; i++)
       if (fFK[i]->GetNData() != fNDataFK)
         throw RangeError("FKSet::FKSet","NData mismatch!");
   };

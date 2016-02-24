@@ -214,7 +214,7 @@ namespace NNPDF
     // ********************************* CommonData File IO *****************************************
 
     static CommonData ReadFile(std::string const& filename, std::string const& sysfile); //!< Returns a new CommonData read from file
-    void Export(std::string const& targetdir, double const& minQ2 = 0.0 ) const;  //!< Writes the current CommonData instance to file
+    void Export(std::string const& targetdir) const;  //!< Writes the current CommonData instance to file
   };
 }
  /*! @} */
