@@ -27,7 +27,7 @@ try:
     
     data = cur.fetchone()
     
-    print "SQLite version: %s" % data    
+    print("SQLite version: %s" % data)
 
     cur.execute('SELECT * FROM TheoryIndex')
     col_names = [cn[0] for cn in cur.description]
@@ -37,22 +37,24 @@ try:
     table = []
     rows = cur.fetchall()
     for row in rows:
-        table.append([row[0], row[33]])
+        table.append([row[0], row[36]])
 
-    print tabulate(table, headers=col_sub)
+    print(tabulate(table, headers=col_sub))
 
-    theoryID = int(raw_input("Please select a table ID: "))
+    try: input = raw_input
+    except NameError: pass
+    theoryID = int(input("Please select a table ID: "))
     if 0 <= theoryID <= len(rows):
         os.system("wget http://pcteserver.mi.infn.it/~apfelcomb/commondatatheory/theory_%d.tgz" % theoryID)
         os.system("tar -xvzf theory_%d.tgz" % theoryID)
         os.system("rm theory_%d.tgz" % theoryID)
     else:
-        print "Invalid theory ID: " + str(theoryID)
+        print("Invalid theory ID: %s" % str(theoryID))
         sys.exit(1)
     
-except lite.Error, e:
+except lite.Error as e:
     
-    print "Error %s:" % e.args[0]
+    print("Error %s:" % e.args[0])
     sys.exit(1)
     
 finally:

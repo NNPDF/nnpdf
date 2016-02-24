@@ -223,6 +223,6 @@ real alphaeff(real const& x_00, vector<real> const& params, real const& a)
 
 real betaeff(real const& x_00, vector<real> const& params, real const& b)
 {
-  return b - (x_00-1.0)/nnval(x_00,params)*nnder(x_00,params);
+  return b + (x_00-1.0)/nnval(x_00,params)*nnder(x_00,params);
 }
 

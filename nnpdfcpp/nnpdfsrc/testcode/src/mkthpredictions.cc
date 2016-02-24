@@ -40,13 +40,13 @@ int main(int argc, char **argv)
 
       if (filename.find("help") != string::npos)
         {
-          cout << Colour::FG_RED << "\nusage: mkthpredictions [configuration filename] <optional LHgrid [no .LHgrid]> [optional plotting filename]\n" << endl;
+          cout << Colour::FG_RED << "\nusage: mkthpredictions [configuration filename] <optional LHgrid [no .LHgrid]> [optional plotting filename]\n" << Colour::FG_DEFAULT << endl;
           exit(-1);
         }
      }
   else
     {
-      cerr << Colour::FG_RED << "\nusage: mkthpredictions [configuration filename] <optional LHgrid [no .LHgrid]> [optional plotting filename]\n" << endl;
+      cerr << Colour::FG_RED << "\nusage: mkthpredictions [configuration filename] <optional LHgrid [no .LHgrid]> [optional plotting filename]\n" << Colour::FG_DEFAULT << endl;
       exit(-1);
     }
 

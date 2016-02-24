@@ -105,8 +105,7 @@ am__objects_1 = ../common/src/chi2check-common.$(OBJEXT) \
 	../common/src/chi2check-nnpdfsettings.$(OBJEXT) \
 	../common/src/chi2check-loadutils.$(OBJEXT) \
 	../common/src/chi2check-datautils.$(OBJEXT) \
-	../common/src/chi2check-md5.$(OBJEXT) \
-	../common/src/chi2check-theorydb.$(OBJEXT)
+	../common/src/chi2check-md5.$(OBJEXT)
 am_chi2check_OBJECTS = chi2checksrc/src/chi2check-chi2check.$(OBJEXT) \
 	$(am__objects_1)
 chi2check_OBJECTS = $(am_chi2check_OBJECTS)
@@ -122,8 +121,7 @@ am__objects_2 = ../common/src/filter-common.$(OBJEXT) \
 	../common/src/filter-nnpdfsettings.$(OBJEXT) \
 	../common/src/filter-loadutils.$(OBJEXT) \
 	../common/src/filter-datautils.$(OBJEXT) \
-	../common/src/filter-md5.$(OBJEXT) \
-	../common/src/filter-theorydb.$(OBJEXT)
+	../common/src/filter-md5.$(OBJEXT)
 am_filter_OBJECTS = filtersrc/src/filter-filter.$(OBJEXT) \
 	filtersrc/src/filter-kincuts.$(OBJEXT) $(am__objects_2)
 filter_OBJECTS = $(am_filter_OBJECTS)
@@ -135,8 +133,7 @@ am__objects_3 = ../common/src/nnfit-common.$(OBJEXT) \
 	../common/src/nnfit-nnpdfsettings.$(OBJEXT) \
 	../common/src/nnfit-loadutils.$(OBJEXT) \
 	../common/src/nnfit-datautils.$(OBJEXT) \
-	../common/src/nnfit-md5.$(OBJEXT) \
-	../common/src/nnfit-theorydb.$(OBJEXT)
+	../common/src/nnfit-md5.$(OBJEXT)
 am_nnfit_OBJECTS = nnfitsrc/src/nnfit-nnfit.$(OBJEXT) \
 	nnfitsrc/src/nnfit-fitbases.$(OBJEXT) \
 	nnfitsrc/src/nnfit-pdfbasis.$(OBJEXT) \
@@ -154,8 +151,7 @@ am__objects_4 = ../common/src/validphys-common.$(OBJEXT) \
 	../common/src/validphys-nnpdfsettings.$(OBJEXT) \
 	../common/src/validphys-loadutils.$(OBJEXT) \
 	../common/src/validphys-datautils.$(OBJEXT) \
-	../common/src/validphys-md5.$(OBJEXT) \
-	../common/src/validphys-theorydb.$(OBJEXT)
+	../common/src/validphys-md5.$(OBJEXT)
 am_validphys_OBJECTS = validphyssrc/src/validphys-validphys.$(OBJEXT) \
 	validphyssrc/src/validphys-plotdata.$(OBJEXT) \
 	validphyssrc/src/validphys-nndiff.$(OBJEXT) \
@@ -290,6 +286,7 @@ LIBTOOL = @LIBTOOL@
 LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
+MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
@@ -406,16 +403,15 @@ COMMON = ../common/src/common.cc \
 	 ../common/src/nnpdfsettings.cc \
 	 ../common/src/loadutils.cc \
          ../common/src/datautils.cc \
-         ../common/src/md5.cc \
-         ../common/src/theorydb.cc
+         ../common/src/md5.cc
 
 filter_SOURCES = filtersrc/src/filter.cc \
 	         filtersrc/src/kincuts.cc $(COMMON)
 
-filter_CPPFLAGS = -Ifiltersrc/inc $(NNPDF_CPPFLAGS) -I$(top_builddir)/common/inc $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS) $(YAML_CPPFLAGS) -std=c++11
-filter_LDFLAGS = $(NNPDF_LDFLAGS) $(SQLITE3_LDFLAGS) $(YAML_LDFLAGS)
+filter_CPPFLAGS = -Ifiltersrc/inc $(NNPDF_CPPFLAGS) -I$(top_builddir)/common/inc $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS) $(YAML_CPPFLAGS) -std=c++11 $(APFEL_CPPFLAGS)
+filter_LDFLAGS = $(NNPDF_LDFLAGS) $(SQLITE3_LDFLAGS) $(YAML_LDFLAGS) 
 chi2check_SOURCES = chi2checksrc/src/chi2check.cc $(COMMON)
-chi2check_CPPFLAGS = -Ichi2checksrc/inc $(NNPDF_CPPFLAGS) -I$(top_builddir)/common/inc $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS) $(YAML_CPPFLAGS) -std=c++11
+chi2check_CPPFLAGS = -Ichi2checksrc/inc $(NNPDF_CPPFLAGS) -I$(top_builddir)/common/inc $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS) $(YAML_CPPFLAGS) -std=c++11 $(APFEL_CPPFLAGS)
 chi2check_LDFLAGS = $(NNPDF_LDFLAGS) $(SQLITE3_LDFLAGS) $(YAML_LDFLAGS)
 nnfit_SOURCES = nnfitsrc/src/nnfit.cc \
 		nnfitsrc/src/fitbases.cc \
@@ -434,13 +430,13 @@ validphys_SOURCES = validphyssrc/src/validphys.cc \
                     validphyssrc/src/nndiff.cc \
 		    validphyssrc/src/plotutils.cc $(COMMON)
 
-validphys_CPPFLAGS = -Ivalidphyssrc/inc $(NNPDF_CPPFLAGS) -I$(top_builddir)/common/inc $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS) $(YAML_CPPFLAGS) -std=c++11 $(ROOT_CPPFLAGS)
-validphys_LDFLAGS = $(NNPDF_LDFLAGS) $(ROOT_LDFLAGS) $(SQLITE3_LDFLAGS) $(YAML_LDFLAGS)
+validphys_CPPFLAGS = -Ivalidphyssrc/inc $(NNPDF_CPPFLAGS) -I$(top_builddir)/common/inc $(LHAPDF_CPPFLAGS) $(SQLITE3_CPPFLAGS) $(YAML_CPPFLAGS) -std=c++11 $(ROOT_CPPFLAGS) $(APFEL_CPPFLAGS)
+validphys_LDFLAGS = $(NNPDF_LDFLAGS) $(ROOT_LDFLAGS) $(SQLITE3_LDFLAGS) $(YAML_LDFLAGS) 
 all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .cc .lo .o .obj
-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -465,9 +461,9 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 
-$(top_srcdir)/configure:  $(am__configure_deps)
+$(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-$(ACLOCAL_M4):  $(am__aclocal_m4_deps)
+$(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
 install-binPROGRAMS: $(bin_PROGRAMS)
@@ -548,9 +544,6 @@ chi2checksrc/src/chi2check-chi2check.$(OBJEXT):  \
 	../common/src/$(DEPDIR)/$(am__dirstamp)
 ../common/src/chi2check-md5.$(OBJEXT): ../common/src/$(am__dirstamp) \
 	../common/src/$(DEPDIR)/$(am__dirstamp)
-../common/src/chi2check-theorydb.$(OBJEXT):  \
-	../common/src/$(am__dirstamp) \
-	../common/src/$(DEPDIR)/$(am__dirstamp)
 
 chi2check$(EXEEXT): $(chi2check_OBJECTS) $(chi2check_DEPENDENCIES) $(EXTRA_chi2check_DEPENDENCIES) 
 	@rm -f chi2check$(EXEEXT)
@@ -577,9 +570,6 @@ filtersrc/src/filter-kincuts.$(OBJEXT): filtersrc/src/$(am__dirstamp) \
 	../common/src/$(am__dirstamp) \
 	../common/src/$(DEPDIR)/$(am__dirstamp)
 ../common/src/filter-md5.$(OBJEXT): ../common/src/$(am__dirstamp) \
-	../common/src/$(DEPDIR)/$(am__dirstamp)
-../common/src/filter-theorydb.$(OBJEXT):  \
-	../common/src/$(am__dirstamp) \
 	../common/src/$(DEPDIR)/$(am__dirstamp)
 
 filter$(EXEEXT): $(filter_OBJECTS) $(filter_DEPENDENCIES) $(EXTRA_filter_DEPENDENCIES) 
@@ -621,8 +611,6 @@ nnfitsrc/src/nnfit-apfelevol.$(OBJEXT): nnfitsrc/src/$(am__dirstamp) \
 	../common/src/$(DEPDIR)/$(am__dirstamp)
 ../common/src/nnfit-md5.$(OBJEXT): ../common/src/$(am__dirstamp) \
 	../common/src/$(DEPDIR)/$(am__dirstamp)
-../common/src/nnfit-theorydb.$(OBJEXT): ../common/src/$(am__dirstamp) \
-	../common/src/$(DEPDIR)/$(am__dirstamp)
 
 nnfit$(EXEEXT): $(nnfit_OBJECTS) $(nnfit_DEPENDENCIES) $(EXTRA_nnfit_DEPENDENCIES) 
 	@rm -f nnfit$(EXEEXT)
@@ -659,9 +647,6 @@ validphyssrc/src/validphys-plotutils.$(OBJEXT):  \
 	../common/src/$(DEPDIR)/$(am__dirstamp)
 ../common/src/validphys-md5.$(OBJEXT): ../common/src/$(am__dirstamp) \
 	../common/src/$(DEPDIR)/$(am__dirstamp)
-../common/src/validphys-theorydb.$(OBJEXT):  \
-	../common/src/$(am__dirstamp) \
-	../common/src/$(DEPDIR)/$(am__dirstamp)
 
 validphys$(EXEEXT): $(validphys_OBJECTS) $(validphys_DEPENDENCIES) $(EXTRA_validphys_DEPENDENCIES) 
 	@rm -f validphys$(EXEEXT)
@@ -683,25 +668,21 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/chi2check-loadutils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/chi2check-md5.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/chi2check-nnpdfsettings.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/chi2check-theorydb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/filter-common.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/filter-datautils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/filter-loadutils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/filter-md5.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/filter-nnpdfsettings.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/filter-theorydb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/nnfit-common.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/nnfit-datautils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/nnfit-loadutils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/nnfit-md5.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/nnfit-nnpdfsettings.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/nnfit-theorydb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/validphys-common.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/validphys-datautils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/validphys-loadutils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/validphys-md5.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/validphys-nnpdfsettings.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@../common/src/$(DEPDIR)/validphys-theorydb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@chi2checksrc/src/$(DEPDIR)/chi2check-chi2check.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@filtersrc/src/$(DEPDIR)/filter-filter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@filtersrc/src/$(DEPDIR)/filter-kincuts.Po@am__quote@
@@ -826,20 +807,6 @@ chi2checksrc/src/chi2check-chi2check.obj: chi2checksrc/src/chi2check.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(chi2check_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/chi2check-md5.obj `if test -f '../common/src/md5.cc'; then $(CYGPATH_W) '../common/src/md5.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/md5.cc'; fi`
 
-../common/src/chi2check-theorydb.o: ../common/src/theorydb.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(chi2check_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/chi2check-theorydb.o -MD -MP -MF ../common/src/$(DEPDIR)/chi2check-theorydb.Tpo -c -o ../common/src/chi2check-theorydb.o `test -f '../common/src/theorydb.cc' || echo '$(srcdir)/'`../common/src/theorydb.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/chi2check-theorydb.Tpo ../common/src/$(DEPDIR)/chi2check-theorydb.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/theorydb.cc' object='../common/src/chi2check-theorydb.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(chi2check_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/chi2check-theorydb.o `test -f '../common/src/theorydb.cc' || echo '$(srcdir)/'`../common/src/theorydb.cc
-
-../common/src/chi2check-theorydb.obj: ../common/src/theorydb.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(chi2check_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/chi2check-theorydb.obj -MD -MP -MF ../common/src/$(DEPDIR)/chi2check-theorydb.Tpo -c -o ../common/src/chi2check-theorydb.obj `if test -f '../common/src/theorydb.cc'; then $(CYGPATH_W) '../common/src/theorydb.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/theorydb.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/chi2check-theorydb.Tpo ../common/src/$(DEPDIR)/chi2check-theorydb.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/theorydb.cc' object='../common/src/chi2check-theorydb.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(chi2check_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/chi2check-theorydb.obj `if test -f '../common/src/theorydb.cc'; then $(CYGPATH_W) '../common/src/theorydb.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/theorydb.cc'; fi`
-
 filtersrc/src/filter-filter.o: filtersrc/src/filter.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(filter_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT filtersrc/src/filter-filter.o -MD -MP -MF filtersrc/src/$(DEPDIR)/filter-filter.Tpo -c -o filtersrc/src/filter-filter.o `test -f 'filtersrc/src/filter.cc' || echo '$(srcdir)/'`filtersrc/src/filter.cc
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) filtersrc/src/$(DEPDIR)/filter-filter.Tpo filtersrc/src/$(DEPDIR)/filter-filter.Po
@@ -937,20 +904,6 @@ filtersrc/src/filter-kincuts.obj: filtersrc/src/kincuts.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/md5.cc' object='../common/src/filter-md5.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(filter_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/filter-md5.obj `if test -f '../common/src/md5.cc'; then $(CYGPATH_W) '../common/src/md5.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/md5.cc'; fi`
-
-../common/src/filter-theorydb.o: ../common/src/theorydb.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(filter_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/filter-theorydb.o -MD -MP -MF ../common/src/$(DEPDIR)/filter-theorydb.Tpo -c -o ../common/src/filter-theorydb.o `test -f '../common/src/theorydb.cc' || echo '$(srcdir)/'`../common/src/theorydb.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/filter-theorydb.Tpo ../common/src/$(DEPDIR)/filter-theorydb.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/theorydb.cc' object='../common/src/filter-theorydb.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(filter_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/filter-theorydb.o `test -f '../common/src/theorydb.cc' || echo '$(srcdir)/'`../common/src/theorydb.cc
-
-../common/src/filter-theorydb.obj: ../common/src/theorydb.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(filter_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/filter-theorydb.obj -MD -MP -MF ../common/src/$(DEPDIR)/filter-theorydb.Tpo -c -o ../common/src/filter-theorydb.obj `if test -f '../common/src/theorydb.cc'; then $(CYGPATH_W) '../common/src/theorydb.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/theorydb.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/filter-theorydb.Tpo ../common/src/$(DEPDIR)/filter-theorydb.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/theorydb.cc' object='../common/src/filter-theorydb.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(filter_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/filter-theorydb.obj `if test -f '../common/src/theorydb.cc'; then $(CYGPATH_W) '../common/src/theorydb.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/theorydb.cc'; fi`
 
 nnfitsrc/src/nnfit-nnfit.o: nnfitsrc/src/nnfit.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(nnfit_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT nnfitsrc/src/nnfit-nnfit.o -MD -MP -MF nnfitsrc/src/$(DEPDIR)/nnfit-nnfit.Tpo -c -o nnfitsrc/src/nnfit-nnfit.o `test -f 'nnfitsrc/src/nnfit.cc' || echo '$(srcdir)/'`nnfitsrc/src/nnfit.cc
@@ -1134,20 +1087,6 @@ nnfitsrc/src/nnfit-apfelevol.obj: nnfitsrc/src/apfelevol.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(nnfit_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/nnfit-md5.obj `if test -f '../common/src/md5.cc'; then $(CYGPATH_W) '../common/src/md5.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/md5.cc'; fi`
 
-../common/src/nnfit-theorydb.o: ../common/src/theorydb.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(nnfit_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/nnfit-theorydb.o -MD -MP -MF ../common/src/$(DEPDIR)/nnfit-theorydb.Tpo -c -o ../common/src/nnfit-theorydb.o `test -f '../common/src/theorydb.cc' || echo '$(srcdir)/'`../common/src/theorydb.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/nnfit-theorydb.Tpo ../common/src/$(DEPDIR)/nnfit-theorydb.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/theorydb.cc' object='../common/src/nnfit-theorydb.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(nnfit_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/nnfit-theorydb.o `test -f '../common/src/theorydb.cc' || echo '$(srcdir)/'`../common/src/theorydb.cc
-
-../common/src/nnfit-theorydb.obj: ../common/src/theorydb.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(nnfit_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/nnfit-theorydb.obj -MD -MP -MF ../common/src/$(DEPDIR)/nnfit-theorydb.Tpo -c -o ../common/src/nnfit-theorydb.obj `if test -f '../common/src/theorydb.cc'; then $(CYGPATH_W) '../common/src/theorydb.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/theorydb.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/nnfit-theorydb.Tpo ../common/src/$(DEPDIR)/nnfit-theorydb.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/theorydb.cc' object='../common/src/nnfit-theorydb.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(nnfit_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/nnfit-theorydb.obj `if test -f '../common/src/theorydb.cc'; then $(CYGPATH_W) '../common/src/theorydb.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/theorydb.cc'; fi`
-
 validphyssrc/src/validphys-validphys.o: validphyssrc/src/validphys.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(validphys_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT validphyssrc/src/validphys-validphys.o -MD -MP -MF validphyssrc/src/$(DEPDIR)/validphys-validphys.Tpo -c -o validphyssrc/src/validphys-validphys.o `test -f 'validphyssrc/src/validphys.cc' || echo '$(srcdir)/'`validphyssrc/src/validphys.cc
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) validphyssrc/src/$(DEPDIR)/validphys-validphys.Tpo validphyssrc/src/$(DEPDIR)/validphys-validphys.Po
@@ -1273,20 +1212,6 @@ validphyssrc/src/validphys-plotutils.obj: validphyssrc/src/plotutils.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/md5.cc' object='../common/src/validphys-md5.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(validphys_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/validphys-md5.obj `if test -f '../common/src/md5.cc'; then $(CYGPATH_W) '../common/src/md5.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/md5.cc'; fi`
-
-../common/src/validphys-theorydb.o: ../common/src/theorydb.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(validphys_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/validphys-theorydb.o -MD -MP -MF ../common/src/$(DEPDIR)/validphys-theorydb.Tpo -c -o ../common/src/validphys-theorydb.o `test -f '../common/src/theorydb.cc' || echo '$(srcdir)/'`../common/src/theorydb.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/validphys-theorydb.Tpo ../common/src/$(DEPDIR)/validphys-theorydb.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/theorydb.cc' object='../common/src/validphys-theorydb.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(validphys_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/validphys-theorydb.o `test -f '../common/src/theorydb.cc' || echo '$(srcdir)/'`../common/src/theorydb.cc
-
-../common/src/validphys-theorydb.obj: ../common/src/theorydb.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(validphys_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT ../common/src/validphys-theorydb.obj -MD -MP -MF ../common/src/$(DEPDIR)/validphys-theorydb.Tpo -c -o ../common/src/validphys-theorydb.obj `if test -f '../common/src/theorydb.cc'; then $(CYGPATH_W) '../common/src/theorydb.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/theorydb.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../common/src/$(DEPDIR)/validphys-theorydb.Tpo ../common/src/$(DEPDIR)/validphys-theorydb.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../common/src/theorydb.cc' object='../common/src/validphys-theorydb.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(validphys_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o ../common/src/validphys-theorydb.obj `if test -f '../common/src/theorydb.cc'; then $(CYGPATH_W) '../common/src/theorydb.cc'; else $(CYGPATH_W) '$(srcdir)/../common/src/theorydb.cc'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

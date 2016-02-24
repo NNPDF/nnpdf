@@ -1204,7 +1204,8 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
               c->SetTicky();
 
               TLegend *leg = new TLegend(0.5, 0.77, 0.88, 0.88);
-              leg->SetFillColor(kWhite);
+              leg->SetFillColor(0);
+              leg->SetFillStyle(0);
               leg->SetLineStyle(1);
               leg->SetBorderSize(1);
 
@@ -1215,8 +1216,10 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
               string expSetName = dat->GetDataSet().GetSetName();
 
               // Building the real data plot
+              TMultiGraph *mg = new TMultiGraph();
+              mg->SetTitle(expSetName.c_str() + TString(" Observables"));
+
               TGraphErrors *obsgraph = new TGraphErrors(ndata);
-              obsgraph->SetTitle(expSetName.c_str() + TString(" Observables"));
               obsgraph->SetMarkerColor(kBlack);
               obsgraph->SetMarkerStyle(20);
 
@@ -1225,22 +1228,10 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
               for (int i = 0; i < ndata; i++)
                 {
                   obsgraph->SetPoint(i, i, 1);
-                  obsgraph->SetPointError(i, 0, sqrt(expDataCovMat[i][i])/dat->GetDataSet().GetData(i));
+                  obsgraph->SetPointError(i, 0, fabs(sqrt(expDataCovMat[i][i])/dat->GetDataSet().GetData(i)));
                 }
 
-              obsgraph->GetXaxis()->SetTitle("Data points");
-              obsgraph->GetXaxis()->CenterTitle(kTRUE);
-              obsgraph->GetXaxis()->SetLabelSize(0.05);
-              obsgraph->GetXaxis()->SetTitleSize(0.05);
-
-              obsgraph->GetYaxis()->SetTitle("Observable / " +
-                                                 TString(expSetName.c_str()) + " data");
-              obsgraph->GetYaxis()->CenterTitle(kTRUE);
-              obsgraph->GetYaxis()->SetLabelSize(0.05);
-              obsgraph->GetYaxis()->SetTitleSize(0.05);
-
-              c->cd();
-              obsgraph->Draw("AP");
+              mg->Add(obsgraph, "AP");
 
               leg->AddEntry(obsgraph, TString(expSetName)+" data", "pl");
 
@@ -1256,7 +1247,7 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
                   g->SetPointError(i, 0, dat->GetTheory()->GetObsError(i)/dat->GetDataSet().GetData(i));
                 }
 
-              g->Draw("P,same");
+              mg->Add(g, "P");
 
               leg->AddEntry(g, TString(dat->GetPDFSet()->GetSetName()) +
                                          " prediction", "pl");
@@ -1323,14 +1314,25 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
                           }
                       }                                     
 
-                      g2->Draw("P,same");
+                      mg->Add(g2, "P");
 
-                      leg->AddEntry(g2, TString(dat2->GetPDFSet()->GetSetName()) +
-                                                     " prediction", "pl");
+                      leg->AddEntry(g2, TString(dat2->GetPDFSet()->GetSetName()) + " prediction", "pl");
                       break;
                       }
                     }
                 }
+
+              mg->Draw("AP");
+
+              mg->GetXaxis()->SetTitle("Data points");
+              mg->GetXaxis()->CenterTitle(kTRUE);
+              mg->GetXaxis()->SetLabelSize(0.05);
+              mg->GetXaxis()->SetTitleSize(0.05);
+
+              mg->GetYaxis()->SetTitle("Observable / " + TString(expSetName.c_str()) + " data");
+              mg->GetYaxis()->CenterTitle(kTRUE);
+              mg->GetYaxis()->SetLabelSize(0.05);
+              mg->GetYaxis()->SetTitleSize(0.05);
 
               leg->Draw("same");
 
@@ -2185,7 +2187,7 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
   fSF[1] = (chi2centref-chi2theory)/chi2theory;
   
   //1-sigma inclusion fraction and averaged distances
-  const double Q2 = sqrt(fSettings.Get("theory","q20").as<real>());
+  const double Q = stod(fSettings.GetTheory(APFEL::kQ0));
   int nx = 9;
   real xgrid [9] = {1e-4,1e-3,1e-2,0.1,0.2,0.3,0.4,0.5,0.7};
   int nfl = fSettings.Get("fitting","basis").size();
@@ -2218,7 +2220,7 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
   {
     theoryval[ix] = new real[nfl];
     for (int j = 0; j < nfl; j++)
-      theoryval[ix][j] = GetGpdf(pdf[2],xgrid[ix],Q2,0,functions[j]);
+      theoryval[ix][j] = GetGpdf(pdf[2],xgrid[ix],Q,0,functions[j]);
   }
   
   int pass = 0;
@@ -2231,7 +2233,7 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
       {
         vector<real> pdfval;
         for (int mem = 0; mem < pdf[0]->GetMembers(); mem++)
-          pdfval.push_back(GetGpdf(pdf[0],xgrid[ix],Q2,mem,functions[j]));
+          pdfval.push_back(GetGpdf(pdf[0],xgrid[ix],Q,mem,functions[j]));
         real sd = ComputeStdDev(pdfval);
         for (int mem = 0; mem < pdf[0]->GetMembers(); mem++)
         {
@@ -2239,7 +2241,7 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
           if (fabs(theoryval[ix][j]-pdfval[mem]) < sd)
             pass++;
         }
-        real dist = theoryval[ix][j] - GetGpdfCV(pdf[0],xgrid[ix],Q2,functions[j]);
+        real dist = theoryval[ix][j] - GetGpdfCV(pdf[0],xgrid[ix],Q,functions[j]);
         fAvgDist[0]+= dist*dist/(sd*sd);
         fAvgAbsDist[0]+= dist*dist;
         
@@ -2266,7 +2268,7 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
       {
         vector<real> pdfval;
         for (int mem = 0; mem < pdf[1]->GetMembers(); mem++)
-          pdfval.push_back(GetGpdf(pdf[1],xgrid[ix],Q2,mem,functions[j]));
+          pdfval.push_back(GetGpdf(pdf[1],xgrid[ix],Q,mem,functions[j]));
         real sd = ComputeStdDev(pdfval);
         for (int mem = 0; mem < pdf[1]->GetMembers(); mem++)
         {
@@ -2274,7 +2276,7 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
           if (fabs(theoryval[ix][j]-pdfval[mem]) < sd)
             pass++;
         }
-        real dist = theoryval[ix][j] - GetGpdfCV(pdf[1],xgrid[ix],Q2,functions[j]);
+        real dist = theoryval[ix][j] - GetGpdfCV(pdf[1],xgrid[ix],Q,functions[j]);
         fAvgDist[1]+= dist*dist/(sd*sd);
         fAvgAbsDist[1]+= dist*dist;
         
@@ -2846,7 +2848,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
               stringstream dofset("");
 
               DataSetResult *di = b[i2]->GetSetResult(j);
-              std::vector<std::string> const& setCF = fSettings.GetSetInfo(di->GetDataSet().GetSetName()).tCFactors;
+              std::vector<std::string> const& setCF = fSettingsRef.GetSetInfo(di->GetDataSet().GetSetName()).tCFactors;
               dofset << fixed << di->GetDOF();
 
               f << fixed << setprecision(2)
@@ -2952,7 +2954,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
     f << "\\includegraphics[scale=0.80]{plots/ct_distances_evol.eps}" << endl;
     f << "\\par\\end{centering}" << endl;
     f << setprecision(1) << "\\caption{Closure test distances in the fitting basis. $Q^{2}="
-      << fSettings.Get("theory","q20").as<real>() << "\\,\\text{GeV}^{2}$.}" << endl;
+      << pow(stod(fSettings.GetTheory(APFEL::kQ0)),2.0) << "\\,\\text{GeV}^{2}$.}" << endl;
     f << "\\end{figure}" << endl;
 
     f << "\\begin{figure}[H]" << endl;
@@ -2960,7 +2962,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
     f << "\\includegraphics[scale=0.80]{plots/ct_distances_lha.eps}" << endl;
     f << "\\par\\end{centering}"<< endl;
     f << "\\caption{Closure test distances in the flavour basis. $Q^{2}="
-      << fSettings.Get("theory","q20").as<real>() << "\\,\\text{GeV}^{2}$.}"<<endl;
+      << pow(stod(fSettings.GetTheory(APFEL::kQ0)),2.0) << "\\,\\text{GeV}^{2}$.}"<<endl;
     f << "\\end{figure}"<<endl;
     f << endl;
 
@@ -3002,7 +3004,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
     f << setprecision(1);
     f << "\\caption{PDF arc-length and 68\\% CI (green=current, red=reference";
     if(fSettings.Get("closuretest","fakedata").as<bool>()) f << ", black=fakeset";
-    f << ") $Q^{2}=" << fSettings.Get("theory","q20").as<real>() << "\\,\\text{GeV}^{2}$.";
+    f << ") $Q^{2}=" << pow(stod(fSettings.GetTheory(APFEL::kQ0)),2.0) << "\\,\\text{GeV}^{2}$.";
     if(!fSettings.Get("closuretest","fakedata").as<bool>()) f << " The second plot is normalised to MSTW.";
     f << "}" << endl << "\\end{figure}" << endl;
     f << endl;
@@ -3255,7 +3257,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
          "& \\multicolumn{2}{|c|}{\\textbf{New}}\\tabularnewline" << endl;
     f << "\\hline" << endl;
     f << fixed << setprecision(5);
-    for (int i = 0; i < nfl; i++)
+    for (int i = 0; i < fPDFNames.size(); i++)
     {
       f << fPDFNames[i] << " & Alpha ($x^{\\alpha}$) & "
         << fSettings.Get("fitting","basis")[i]["smallx"][0] << " & " << fSettings.Get("fitting","basis")[i]["smallx"][1] << " & "
@@ -3741,6 +3743,16 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
   f << "}" << endl;
 
   f << endl;  
+
+  f << "\\newpage{}" << endl;
+  f << "\\section{Theory Summary}" << endl;
+
+  f << "{\\tiny\\tt " << endl;
+  f << "\\lstinputlisting{../theory.log"<< endl;
+  f << "}" << endl;
+
+  f << endl;
+
   f << "\\end{document}" << endl;
 
   f.close();
@@ -4078,7 +4090,7 @@ fUseTheory(useTheory)
   
   if(fUseTheory) 
   {
-    Q0 = sqrt(settings.Get("theory","q20").as<real>());
+    Q0 = stod(settings.GetTheory(APFEL::kQ0));
     ymax = 5;
   }
 
@@ -4621,7 +4633,7 @@ SortDataSets::SortDataSets(ExperimentResult *a, ExperimentResult *b)
 ArcLenght::ArcLenght(NNPDFSettings const& settings,vector<LHAPDFSet *> pdfset, string const& outfile)
 {
   // Scale where arc-lenght is computed
-  const double Q = sqrt(settings.Get("theory","q20").as<real>());
+  const double Q = stod(settings.GetTheory(APFEL::kQ0));
 
   // Range for  integration
   const double xintmin=1e-7;

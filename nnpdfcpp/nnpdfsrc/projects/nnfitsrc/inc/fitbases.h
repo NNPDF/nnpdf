@@ -189,9 +189,36 @@ class NN30ICFitBasis: public EvolICFitBasis
 public:
    NN30ICFitBasis(NNPDFSettings const&);
 
-   enum netBasis {NET_SNG, NET_GLU, NET_VAL, NET_T3, NET_DS, NET_SP, NET_SM, NET_CP, NET_CM, NET_GAM };
+   //enum netBasis {NET_SNG, NET_GLU, NET_VAL, NET_T3, NET_DS, NET_SP, NET_SM, NET_CP, NET_CM, NET_GAM };
+   enum netBasis {NET_SNG, NET_GLU, NET_VAL, NET_T3, NET_DS, NET_SP, NET_SM, NET_CP, NET_GAM }; // c- = 0
 
    void NetTransform(int const& fl, int const& nfl, int*);
    void Preprocess(real const& x, real* pdf, PreprocParam const&);
+};
+
+/**
+ *  \class NN31ICFitBasis
+ *  \brief Evol basis for fitting intrinsic charm
+ */
+class NN31ICFitBasis: public FitBasis
+{
+public:
+  NN31ICFitBasis(NNPDFSettings const&);
+
+  // Σ, g, V, V3, V8, T3, T8, c+, (γ)
+
+  enum fitBasis {FIT_SNG, FIT_GLU, FIT_VAL, FIT_V3, FIT_V8, FIT_T3, FIT_T8, FIT_CP, FIT_GAM };
+
+  void BASIS2EVLN(real const* basis, real* evln) const;
+  void EVLN2BASIS(real const* evln, real* basis) const;
+
+  real ComputeSumRules(sumRule, int mem, PDFSet*, bool&) const;
+
+  // Preprocessing
+  void ComputeParam(PDFSet*, int mem, PreprocParam&, bool&) const;
+
+protected:
+  const bool fQED;
+
 };
    
