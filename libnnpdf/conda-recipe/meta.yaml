@@ -1,6 +1,6 @@
 package:
     name: libnnpdf
-    version: "{{ environ.get('GIT_DESCRIBE_TAG', '')[1:] }}"
+    version: "{{ environ.get('GIT_DESCRIBE_TAG', '')[1:] }}.{{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}"
 
 source:
     git_url: ../
@@ -27,7 +27,7 @@ requirements:
         - numpy
 
 build:
-    number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
+    number: 0
     detect_binary_files_with_prefix: True
 
 test:
