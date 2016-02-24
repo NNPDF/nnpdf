@@ -61,6 +61,7 @@ namespace NNPDF
     
     double** GetCovMat()         const { return fCovMat;   } //!< Return fCovMat
     double** GetInvCovMat()      const { return fInvCovMat;} //!< Return the inverse of CovMat
+    double const& GetInvCovMat( int const& i, int const& j) const {return fInvCovMat[i][j];}; //!< Returns a iCov element
 
     bool const& IsArtificial()         const { return fIsArtificial;} //!< Returns the artificial flag
     
