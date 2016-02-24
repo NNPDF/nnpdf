@@ -680,10 +680,11 @@ namespace NNPDF
     }
 
     // Read C-factors
-    getline(g,line); real tmp;
     for (int i = 0; i < fNData; i++)
     {
-      g >> tmp;
+      real tmp;
+      if (! (g >> tmp ) )
+        throw FileError("FKTable::FKTable","Error reading cfactor file: " + cfilename);
       fcFactors[i] *= tmp;
     }
 
