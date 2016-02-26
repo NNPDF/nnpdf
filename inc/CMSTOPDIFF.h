@@ -15,91 +15,137 @@
 // One set for each of the differential distributions (NORMALISED)
 
 // Differential distribution for the transverse momentum of the top quark
-static const dataInfoRaw CMSTOPDIFF8TEVTPTinfo = {
-  8,                   //nData
-  11,                  //nSys
-  "CMSTOPDIFF8TEVTPT", //SetName
-  "HQP_PTQ"            //ProcType
+static const dataInfoRaw CMSTOPDIFF8TEVTPTNORMinfo = {
+  8,                         //nData
+  11,                        //nSys
+  "CMSTOPDIFF8TEVTPTNORM",   //SetName
+  "HQP_PTQ"                  //ProcType
 };
 
 // Differential distribution for the rapidity of the top quark
-static const dataInfoRaw CMSTOPDIFF8TEVTRAPinfo = {
-  10,                   //nData
-  11,                   //nSys
-  "CMSTOPDIFF8TEVTRAP", //SetName
-  "HQP_YQ"              //ProcType
+static const dataInfoRaw CMSTOPDIFF8TEVTRAPNORMinfo = {
+  10,                        //nData
+  11,                        //nSys
+  "CMSTOPDIFF8TEVTRAPNORM",  //SetName
+  "HQP_YQ"                   //ProcType
 };
 
 // Differential distribution for the rapidity of the top quark pair
-static const dataInfoRaw CMSTOPDIFF8TEVTTRAPinfo = {
-  10,                    //nData
-  11,                    //nSys
-  "CMSTOPDIFF8TEVTTRAP", //SetName
-  "HQP_YQQ"              //ProcType
+static const dataInfoRaw CMSTOPDIFF8TEVTTRAPNORMinfo = {
+  10,                        //nData
+  11,                        //nSys
+  "CMSTOPDIFF8TEVTTRAPNORM", //SetName
+  "HQP_YQQ"                  //ProcType
 };
 
 // Differential distribution for the transverse of the top quark pair
-static const dataInfoRaw CMSTOPDIFF8TEVTTPTinfo = {
-  6,                    //nData
-  11,                   //nSys
-  "CMSTOPDIFF8TEVTTPT", //SetName
-  "HQP_PTQQ"            //ProcType
+static const dataInfoRaw CMSTOPDIFF8TEVTTPTNORMinfo = {
+  6,                         //nData
+  11,                        //nSys
+  "CMSTOPDIFF8TEVTTPTNORM",  //SetName
+  "HQP_PTQQ"                 //ProcType
 };
 
 // Differential distribution for the invariant mass of the top quark pair
-static const dataInfoRaw CMSTOPDIFF8TEVTTMinfo = {
-  7,                   //nData
-  11,                  //nSys
-  "CMSTOPDIFF8TEVTTM", //SetName
-  "HQP_MQQ"            //ProcType
+static const dataInfoRaw CMSTOPDIFF8TEVTTMNORMinfo = {
+  7,                         //nData
+  11,                        //nSys
+  "CMSTOPDIFF8TEVTTMNORM",   //SetName
+  "HQP_MQQ"                  //ProcType
 };
 
 // One set for each of the differential distributions (UNNORMALISED)
 
 // Differential distribution for the transverse momentum of the top quark
-static const dataInfoRaw CMSTOPDIFF8TEVTPTUNNORMinfo = {
+static const dataInfoRaw CMSTOPDIFF8TEVTPTinfo = {
   8,                         //nData
   13,                        //nSys
-  "CMSTOPDIFF8TEVTPTUNNORM", //SetName
+  "CMSTOPDIFF8TEVTPT",       //SetName
   "HQP_PTQ"                  //ProcType
 };
 
 // Differential distribution for the rapidity of the top quark
-static const dataInfoRaw CMSTOPDIFF8TEVTRAPUNNORMinfo = {
-  10,                         //nData
-  13,                         //nSys
-  "CMSTOPDIFF8TEVTRAPUNNORM", //SetName
-  "HQP_YQ"                    //ProcType
+static const dataInfoRaw CMSTOPDIFF8TEVTRAPinfo = {
+  10,                        //nData
+  13,                        //nSys
+  "CMSTOPDIFF8TEVTRAP",      //SetName
+  "HQP_YQ"                   //ProcType
 };
 
 // Differential distribution for the rapidity of the top quark pair
-static const dataInfoRaw CMSTOPDIFF8TEVTTRAPUNNORMinfo = {
-  10,                          //nData
-  13,                          //nSys
-  "CMSTOPDIFF8TEVTTRAPUNNORM", //SetName
-  "HQP_YQQ"                    //ProcType
+static const dataInfoRaw CMSTOPDIFF8TEVTTRAPinfo = {
+  10,                         //nData
+  13,                         //nSys
+  "CMSTOPDIFF8TEVTTRAP",      //SetName
+  "HQP_YQQ"                   //ProcType
 };
 
 // Differential distribution for the transverse of the top quark pair
-static const dataInfoRaw CMSTOPDIFF8TEVTTPTUNNORMinfo = {
+static const dataInfoRaw CMSTOPDIFF8TEVTTPTinfo = {
   6,                          //nData
   13,                         //nSys
-  "CMSTOPDIFF8TEVTTPTUNNORM", //SetName
+  "CMSTOPDIFF8TEVTTPT",       //SetName
   "HQP_PTQQ"                  //ProcType
 };
 
 // Differential distribution for the invariant mass of the top quark pair
-static const dataInfoRaw CMSTOPDIFF8TEVTTMUNNORMinfo = {
-  7,                         //nData
-  13,                        //nSys
-  "CMSTOPDIFF8TEVTTMUNNORM", //SetName
-  "HQP_MQQ"                  //ProcType
+static const dataInfoRaw CMSTOPDIFF8TEVTTMinfo = {
+  7,                          //nData
+  13,                         //nSys
+  "CMSTOPDIFF8TEVTTM",        //SetName
+  "HQP_MQQ"                   //ProcType
 };
 
 // ******************************************************
 // ******************************************************
 
 //Normalised distributions
+class CMSTOPDIFF8TEVTPTNORMFilter: public CommonData
+{
+public: CMSTOPDIFF8TEVTPTNORMFilter():
+  CommonData(CMSTOPDIFF8TEVTPTNORMinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CMSTOPDIFF8TEVTRAPNORMFilter: public CommonData
+{
+public: CMSTOPDIFF8TEVTRAPNORMFilter():
+  CommonData(CMSTOPDIFF8TEVTRAPNORMinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CMSTOPDIFF8TEVTTRAPNORMFilter: public CommonData
+{
+public: CMSTOPDIFF8TEVTTRAPNORMFilter():
+  CommonData(CMSTOPDIFF8TEVTTRAPNORMinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CMSTOPDIFF8TEVTTPTNORMFilter: public CommonData
+{
+public: CMSTOPDIFF8TEVTTPTNORMFilter():
+  CommonData(CMSTOPDIFF8TEVTTPTNORMinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class CMSTOPDIFF8TEVTTMNORMFilter: public CommonData
+{
+public: CMSTOPDIFF8TEVTTMNORMFilter():
+  CommonData(CMSTOPDIFF8TEVTTMNORMinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+//Unnormalised distributions
 class CMSTOPDIFF8TEVTPTFilter: public CommonData
 {
 public: CMSTOPDIFF8TEVTPTFilter():
@@ -140,52 +186,6 @@ class CMSTOPDIFF8TEVTTMFilter: public CommonData
 {
 public: CMSTOPDIFF8TEVTTMFilter():
   CommonData(CMSTOPDIFF8TEVTTMinfo) { ReadData(); }
-
-private:
-  void ReadData();
-};
-
-//Unnormalised distributions
-class CMSTOPDIFF8TEVTPTUNNORMFilter: public CommonData
-{
-public: CMSTOPDIFF8TEVTPTUNNORMFilter():
-  CommonData(CMSTOPDIFF8TEVTPTUNNORMinfo) { ReadData(); }
-
-private:
-  void ReadData();
-};
-
-class CMSTOPDIFF8TEVTRAPUNNORMFilter: public CommonData
-{
-public: CMSTOPDIFF8TEVTRAPUNNORMFilter():
-  CommonData(CMSTOPDIFF8TEVTRAPUNNORMinfo) { ReadData(); }
-
-private:
-  void ReadData();
-};
-
-class CMSTOPDIFF8TEVTTRAPUNNORMFilter: public CommonData
-{
-public: CMSTOPDIFF8TEVTTRAPUNNORMFilter():
-  CommonData(CMSTOPDIFF8TEVTTRAPUNNORMinfo) { ReadData(); }
-
-private:
-  void ReadData();
-};
-
-class CMSTOPDIFF8TEVTTPTUNNORMFilter: public CommonData
-{
-public: CMSTOPDIFF8TEVTTPTUNNORMFilter():
-  CommonData(CMSTOPDIFF8TEVTTPTUNNORMinfo) { ReadData(); }
-
-private:
-  void ReadData();
-};
-
-class CMSTOPDIFF8TEVTTMUNNORMFilter: public CommonData
-{
-public: CMSTOPDIFF8TEVTTMUNNORMFilter():
-  CommonData(CMSTOPDIFF8TEVTTMUNNORMinfo) { ReadData(); }
 
 private:
   void ReadData();

@@ -61,15 +61,15 @@ Notes:
 //A - NORMALISED distributions
 
 //1) Distribution differential in top quark transverse momentum
-void  CMSTOPDIFF8TEVTPTFilter::ReadData()
+void  CMSTOPDIFF8TEVTPTNORMFilter::ReadData()
 {
   // Opening files
   fstream f1, f2;
 
   //Central values and statistical uncertainties
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-	   << fSetName << "/" << fSetName <<".data";
+  datafile << dataPath() 
+	   << "rawdata/CMSTOPDIFF8TEVTPT/CMSTOPDIFF8TEVTPT.data";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail()) 
@@ -80,8 +80,8 @@ void  CMSTOPDIFF8TEVTPTFilter::ReadData()
   
   //Full breakdown of systematic uncertainties
   stringstream sysfile("");
-  sysfile << dataPath() << "rawdata/"
-	    << fSetName << "/" << fSetName << ".sys";
+  sysfile << dataPath()  
+	  << "rawdata/CMSTOPDIFF8TEVTPT/CMSTOPDIFF8TEVTPT.sys";
   f2.open(sysfile.str().c_str(), ios::in);
 
   if (f2.fail()) 
@@ -166,15 +166,15 @@ void  CMSTOPDIFF8TEVTPTFilter::ReadData()
 //==================================================================
 
 //2) Distribution differential in top quark pair transverse momentum
-void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
+void  CMSTOPDIFF8TEVTTPTNORMFilter::ReadData()
 {
   // Opening files
   fstream f1, f2;
 
   //Central values and statistical uncertainties
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-	   << fSetName << "/" << fSetName <<".data";
+  datafile << dataPath() 
+	   << "rawdata/CMSTOPDIFF8TEVTTPT/CMSTOPDIFF8TEVTTPT.data";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail()) 
@@ -185,8 +185,8 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
   
   //Full breakdown of systematic uncertainties
   stringstream sysfile("");
-  sysfile << dataPath() << "rawdata/"
-	    << fSetName << "/" << fSetName << ".sys";
+  sysfile << dataPath() 
+	  <<  "rawdata/CMSTOPDIFF8TEVTTPT/CMSTOPDIFF8TEVTTPT.sys";
   f2.open(sysfile.str().c_str(), ios::in);
 
   if (f2.fail()) 
@@ -271,15 +271,15 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
 //==============================================================
 
 //3) Distribution differential in top quark rapidity
-void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
+void  CMSTOPDIFF8TEVTRAPNORMFilter::ReadData()
 {
   // Opening files
   fstream f1, f2;
 
   //Central values and statistical uncertainties
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-	   << fSetName << "/" << fSetName <<".data";
+  datafile << dataPath() 
+	   << "rawdata/CMSTOPDIFF8TEVTRAP/CMSTOPDIFF8TEVTRAP.data";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail()) 
@@ -290,8 +290,8 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
   
   //Full breakdown of systematic uncertainties
   stringstream sysfile("");
-  sysfile << dataPath() << "rawdata/"
-	    << fSetName << "/" << fSetName << ".sys";
+  sysfile << dataPath() 
+	  << "rawdata/CMSTOPDIFF8TEVTRAP/CMSTOPDIFF8TEVTRAP.sys";
   f2.open(sysfile.str().c_str(), ios::in);
 
   if (f2.fail()) 
@@ -376,15 +376,15 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
 //=================================================================
 
 //4) Distribution differential in top quark pair rapidity
-void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
+void  CMSTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 {
   // Opening files
   fstream f1, f2;
 
   //Central values and statistical uncertainties
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-	   << fSetName << "/" << fSetName <<".data";
+  datafile << dataPath() 
+	   << "rawdata/CMSTOPDIFF8TEVTTRAP/CMSTOPDIFF8TEVTTRAP.data";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail()) 
@@ -395,8 +395,8 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
   
   //Full breakdown of systematic uncertainties
   stringstream sysfile("");
-  sysfile << dataPath() << "rawdata/"
-	    << fSetName << "/" << fSetName << ".sys";
+  sysfile << dataPath() 
+	  << "rawdata/CMSTOPDIFF8TEVTRAP/CMSTOPDIFF8TEVTRAP.sys";
   f2.open(sysfile.str().c_str(), ios::in);
 
   if (f2.fail()) 
@@ -481,15 +481,15 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
 //=================================================================
 
 //5) Distribution differential in top quark pair invariant mass
-void  CMSTOPDIFF8TEVTTMFilter::ReadData()
+void  CMSTOPDIFF8TEVTTMNORMFilter::ReadData()
 {
   // Opening files
   fstream f1, f2;
 
   //Central values and statistical uncertainties
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-	   << fSetName << "/" << fSetName <<".data";
+  datafile << dataPath() 
+	   << "rawdata/CMSTOPDIFF8TEVTTM/CMSTOPDIFF8TEVTTM.data";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail()) 
@@ -500,8 +500,8 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
   
   //Full breakdown of systematic uncertainties
   stringstream sysfile("");
-  sysfile << dataPath() << "rawdata/"
-	    << fSetName << "/" << fSetName << ".sys";
+  sysfile << dataPath() 
+	  << "rawdata/CMSTOPDIFF8TEVTTM/CMSTOPDIFF8TEVTTM.sys";
   f2.open(sysfile.str().c_str(), ios::in);
 
   if (f2.fail()) 
@@ -590,7 +590,7 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
 //B - UNNORMALISED distributions
 
 //1) Distribution differential in top quark transverse momentum
-void  CMSTOPDIFF8TEVTPTUNNORMFilter::ReadData()
+void  CMSTOPDIFF8TEVTPTFilter::ReadData()
 {
   // Opening files
   fstream f1, f2, f3;
@@ -743,7 +743,7 @@ void  CMSTOPDIFF8TEVTPTUNNORMFilter::ReadData()
 //========================================================================
 
 //2) Distribution differential in top quark pair transverse momentum
-void  CMSTOPDIFF8TEVTTPTUNNORMFilter::ReadData()
+void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
 {
   // Opening files
   fstream f1, f2, f3;
@@ -896,7 +896,7 @@ void  CMSTOPDIFF8TEVTTPTUNNORMFilter::ReadData()
 //===================================================================
 
 //3) Distribution differential in top quark rapidity
-void  CMSTOPDIFF8TEVTRAPUNNORMFilter::ReadData()
+void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
 {
   // Opening files
   fstream f1, f2, f3;
@@ -1049,7 +1049,7 @@ void  CMSTOPDIFF8TEVTRAPUNNORMFilter::ReadData()
 //==================================================================
 
 //4) Distribution differential in top quark pairrapidity
-void  CMSTOPDIFF8TEVTTRAPUNNORMFilter::ReadData()
+void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
 {
   // Opening files
   fstream f1, f2, f3;
@@ -1202,7 +1202,7 @@ void  CMSTOPDIFF8TEVTTRAPUNNORMFilter::ReadData()
 //====================================================================
 
 //5) Distribution differential in top quark pair invariant mass
-void  CMSTOPDIFF8TEVTTMUNNORMFilter::ReadData()
+void  CMSTOPDIFF8TEVTTMFilter::ReadData()
 {
   // Opening files
   fstream f1, f2, f3;
