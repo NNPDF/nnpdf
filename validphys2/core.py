@@ -267,6 +267,28 @@ def results(setname, commondata, cfac, fk ,theoryid, pdf):
 
     return DataResult(data), ThPredictionsResult(thlabel, th_predictions)
 
+def chi2_data(results):
+    data_result, th_result = results
+    diffs = th_result.rawdata.T - data_result.central_value
+    #chi²_i = diff_ij @ invcov_jk @ diff_ki
+    return np.einsum('ij, jk, ik -> i',
+                     diffs, data_result.invcovmat, diffs)/len(data_result)
+
+#TODO; Implement for hessian
+def chi2_stats(chi2_data):
+    return {
+            r'$\left \chi^2 \right>$': chi2_data.mean(),
+            r'std(\chi²)'            : chi2_data.std(),
+           }
+
+
+def plot_chi2dist(results, setlabel, chi2_data, chi2_stats):
+    fig, ax = plt.subplots()
+    ax.set_title("$\chi^2$ distribution for %s" % setlabel)
+    ax.hist(chi2_data)
+    return fig
+
+
 def plot_results(results, setlabel, normalize_to = None):
 
     cvs = [r.central_value for r in results]
@@ -354,6 +376,10 @@ class ThPredictionsResult(DataResult):
         return self.dataobj.get_error()
 
     @property
+    @functools.lru_cache()
+    def rawdata(self):
+        return self.dataobj.get_data()
+
     def label(self):
         return "<Theory %s>: %s" % (self.thlabel, self.dataobj.GetPDFName())
 
@@ -419,13 +445,16 @@ if __name__ == '__main__':
         inp = {**dataset, 'theoryid': c['theoryid'], 'pdf': c['pdf']}
         results = (dataresult, theoresult)= results(**inp)
 
-    
+
         fig = plot_results(results, setlabel=dataset['setname'],
-                       normalize_to=dataresult)
-
-
-
-
+                       normalize_to=None)
 
         fig.savefig(str(environment.output_path / ("result_%2d.pdf"%next(n))),
+                bbox_inches='tight')
+
+        chi2dt = chi2_data(results)
+        chi2st = chi2_stats(chi2dt)
+        fig = plot_chi2dist(results, dataset['setname'],
+                            chi2dt, chi2st)
+        fig.savefig(str(environment.output_path / ("chi2_%2d.pdf"%next(n))),
                 bbox_inches='tight')
