@@ -35,10 +35,20 @@
 #endif
 
 %apply (NNPDF::real** ARGOUTVIEWM_ARRAY1, int* DIM1) {(NNPDF::real** data, int* n)}
+%apply (NNPDF::real** ARGOUTVIEWM_ARRAY2, int* DIM1, int* DIM2){(NNPDF::real** data, int*m, int* n)}
 %include "../../src/NNPDF/thpredictions.h"
 
 %extend NNPDF::ThPredictions{
 
+void get_data(NNPDF::real **data, int* m, int* n){
+    *m = $self->GetNData();
+    *n = $self->GetNPdf();
+    int len = (*m) * (*n);
+    NNPDF::real * result = new NNPDF::real[len];
+    NNPDF::real* obs = $self->GetObs();
+    std::copy(obs, obs+len ,result);
+    *data = result;
+}
 
 void get_cv (NNPDF::real  **data, int* n){
     int len = $self->GetNData();
