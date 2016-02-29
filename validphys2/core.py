@@ -337,25 +337,19 @@ def plot_results(results, setlabel, normalize_to = None):
     return figure
 
 
-
-class DataResult:
-
+class Result:
     def __init__(self, dataobj):
         self.dataobj = dataobj
 
     @property
-    def label(self):
-        return "CommonData"
+    @functools.lru_cache()
+    def std_error(self):
+        return np.sqrt(np.diag(self.covmat))
 
     @property
     @functools.lru_cache()
     def central_value(self):
         return self.dataobj.get_cv()
-
-    @property
-    @functools.lru_cache()
-    def std_error(self):
-        return np.sqrt(np.diag(self.dataobj.get_covmat()))
 
     def __len__(self):
         return len(self.dataobj)
@@ -364,7 +358,24 @@ class DataResult:
         return getattr(self.dataobj, attr)
 
 
-class ThPredictionsResult(DataResult):
+class DataResult(Result):
+
+    @property
+    def label(self):
+        return "CommonData"
+
+    @property
+    @functools.lru_cache()
+    def covmat(self):
+        return self.dataobj.get_covmat()
+
+    @property
+    @functools.lru_cache()
+    def invcovmat(self):
+        return self.dataobj.get_invcovmat()
+
+
+class ThPredictionsResult(Result):
 
     def __init__(self, thlabel, dataobj):
         self.thlabel = thlabel
@@ -380,6 +391,7 @@ class ThPredictionsResult(DataResult):
     def rawdata(self):
         return self.dataobj.get_data()
 
+    @property
     def label(self):
         return "<Theory %s>: %s" % (self.thlabel, self.dataobj.GetPDFName())
 
