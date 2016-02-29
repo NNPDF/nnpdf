@@ -40,7 +40,7 @@ class Environment:
 
 
 class Config(configparser.Config):
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -84,20 +84,20 @@ class Config(configparser.Config):
             raise ConfigError(str(e), name, self.loader.available_datasets)
         except SysNotFoundError as e:
             raise ConfigError(str(e))
-            
+
         try:
             if 'cfac' in dataset:
                 cfac = dataset['cfac']
                 cfac = self.loader.check_cfactor(theoryid, name, cfac)
             else:
                 cfac = []
-    
+
             fkpath = self.loader.check_fktable(theoryid, name)
-        
+
         except FileNotFoundError as e:
             raise ConfigError(e)
-        
-        return {'setname': name, 'commondata': commondata, 'cfac': cfac, 
+
+        return {'setname': name, 'commondata': commondata, 'cfac': cfac,
                 'fk': fkpath}
 
 
@@ -254,7 +254,7 @@ def results(setname, commondata, cfac, fk ,theoryid, pdf):
     cdpath,syspth = commondata
     cd = CommonData.ReadFile(str(cdpath), str(syspth))
     thlabel, thpath = theoryid
-    
+
     fktable = FKTable(str(fk), [str(factor) for factor in cfac])
     #IMPORTANT: We need to tell the python garbage collector to NOT free the
     #memory owned by the FKTable on garbage collection.
@@ -435,7 +435,7 @@ if __name__ == '__main__':
             print(e)
             print(e.alternatives_text())
             sys.exit(1)
-    
+
     environment.output_path.mkdir(exist_ok = True)
     plt.style.use(str(environment.this_folder / 'small.mplstyle'))
 
