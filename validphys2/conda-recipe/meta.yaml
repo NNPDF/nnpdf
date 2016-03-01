@@ -1,0 +1,24 @@
+package:
+  name: validphys
+  version: "2.0a1"
+
+source:
+    git_url: ../
+
+requirements:
+  build:
+    - python
+    - setuptools
+
+  run:
+    - python
+    - libnnpdf
+    - matplotlib
+    - blessings
+
+
+about:
+  home: https://github.com/erikrose/blessings
+  license: SECRET
+  summary: 'NNPDF analysis framework'
+
