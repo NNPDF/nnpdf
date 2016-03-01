@@ -1,6 +1,6 @@
 package:
   name: validphys
-  version: "2.0a1"
+  version: "{{ environ.get('GIT_DESCRIBE_TAG', '')[1:] }}.{{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}"
 
 source:
     git_url: ../
@@ -13,12 +13,14 @@ requirements:
   run:
     - python
     - libnnpdf
+    - reportengine
     - matplotlib
     - blessings
+    - scipy
 
 
 about:
-  home: https://github.com/erikrose/blessings
+  home: https://gitlab.cern.ch/NNPDF/validphys2
   license: SECRET
   summary: 'NNPDF analysis framework'
 

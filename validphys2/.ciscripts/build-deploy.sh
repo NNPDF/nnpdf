@@ -1,5 +1,7 @@
 #/usr/bin/bash
 
+MINICONDA_PATH="/root/miniconda3"
+
 conda build -q conda-recipe
 if [ $? != 0 ]; then
 	echo failed to build
@@ -7,7 +9,7 @@ if [ $? != 0 ]; then
 fi
 
 #This seems to be needed for "artifacts" to work.
-cp /root/miniconda/conda-bld/linux-64/*.tar.bz2 .
+cp "$MINICONDA_PATH"/conda-bld/linux-64/*.tar.bz2 .
 if [ "$CI_BUILD_REF_NAME" != 'master'  ] && [ "$UPLOAD_NON_MASTER" == false ]; 
 then
   	echo "
@@ -22,7 +24,7 @@ KEY=$( mktemp )
 echo "$ZIGZAH_SSH_KEY" > "$KEY"
 
 scp -i "$KEY" -o StrictHostKeyChecking=no\
-    /root/miniconda/conda-bld/linux-64/*.tar.bz2 \
+    "$MINICONDA_PATH"/conda-bld/linux-64/*.tar.bz2 \
     dummy@zigzah.com:~/conda-pkgs-private/linux-64 
 
 if [ $? == 0 ]; then
