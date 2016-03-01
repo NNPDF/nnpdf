@@ -1,4 +1,7 @@
 axes.grid               : True
+grid.color              : cccccc
+grid.linestyle          : -
+grid.linewidth          : 0.05
 #text.usetex             : True
 text.latex.unicode      : True
 font.size               : 23
