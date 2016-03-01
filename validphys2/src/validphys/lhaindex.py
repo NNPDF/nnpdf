@@ -11,9 +11,9 @@ import os.path as osp
 import re
 import glob
 import fnmatch
+from functools import lru_cache
 
 import yaml
-import fastcache
 import lhapdf
 
 
@@ -107,7 +107,7 @@ def infofilename(name):
             return info
     raise FileNotFoundError(name + ".info")
 
-@fastcache.lru_cache()
+@lru_cache()
 def parse_info(name):
     with open(infofilename(name)) as infofile:
         result = yaml.load(infofile)
