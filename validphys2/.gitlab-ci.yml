@@ -7,7 +7,7 @@ stages:
 
 #Set to "true" to generate builds for non-default branches
 variables:
-    UPLOAD_NON_MASTER: "false"
+    UPLOAD_NON_MASTER: "tru"
 
 ## Run the configure and make tests
 job1:
