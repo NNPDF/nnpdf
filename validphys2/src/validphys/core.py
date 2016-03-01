@@ -10,6 +10,7 @@ import functools
 import logging
 import argparse
 import itertools
+from collections import OrderedDict
 #We can't use this for type checking yet
 #import typing
 
@@ -17,6 +18,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import scipy.stats
 
 from reportengine.configparser import ConfigError
 from reportengine import configparser
@@ -26,7 +28,185 @@ from NNPDF import CommonData, FKTable, ThPredictions, LHAPDFSet
 from NNPDF.fkset import FKSet
 from NNPDF.dataset import DataSet
 
-import lhaindex
+from validphys import lhaindex
+
+log = logging.getLogger(__name__)
+
+class PDFDoesNotExist(Exception): pass
+
+class _PDFSETS():
+    """Convenient way to access installed PDFS, by e.g. tab completing
+       in ipython."""
+    def __getattr__(self, attr):
+        if lhaindex.isinstalled(attr):
+            return PDF(attr)
+        raise AttributeError()
+
+    def __dir__(self):
+        return lhaindex.expand_local_names('*')
+
+
+PDFSETS = _PDFSETS()
+
+class PDF:
+
+    def __init__(self, name):
+        self.name = name
+
+    def __getattr__(self, attr):
+        try:
+            return lhaindex.parse_info(self.name)[attr]
+        except KeyError:
+            raise AttributeError("'%r' has no attribute '%s'" % (type(self),
+                                                                 attr))
+        except IOError:
+            raise PDFDoesNotExist(self.name)
+
+    @property
+    def stats_class(self):
+        """Return the stats calculator for this error type"""
+        error = self.ErrorType
+        klass = STAT_TYPES[error]
+        if hasattr(self, 'ErrorConfLevel'):
+            klass = functools.partial(klass, rescale_factor=self.rescale_factor)
+        return klass
+
+    @property
+    def infopath(self):
+        return lhaindex.infofilename(self.name)
+
+    @property
+    def rescale_factor(self):
+        if hasattr(self, "ErrorConfLevel"):
+            if self.ErrorType == 'replicas':
+                raise ValueError("Attribute at %s 'ErrorConfLevel' doesn't "
+                "make sense with 'replicas' error type" % self.infopath)
+            val = scipy.stats.norm.isf((1 - 0.01*self.ErrorConfLevel)/2)
+            if np.isnan(val):
+                raise ValueError("Invalid 'ErrorConfLevel' of PDF %s: %s" %
+                                 (self, val))
+            return val
+        else:
+            return 1
+
+    def load(self):
+        return LHAPDFSet(self.name, self.nnpdf_error)
+
+
+
+    @property
+    def nnpdf_error(self):
+        """Return the NNPDF error tag, used to build the `LHAPDFSet` objeect"""
+        error = self.ErrorType
+        if error == "replicas":
+            return LHAPDFSet.ER_MC
+        if error == "hessian":
+            if hasattr(self, 'ErrorConfLevel'):
+                cl = self.ErrorConfLevel
+                if cl == 90:
+                    return LHAPDFSet.ER_EIG90
+                elif cl == 68:
+                    return LHAPDFSet.ER_EIG
+                else:
+                    raise NotImplementedError("No hessian errors with confidence"
+                                              " interval %s" % (cl,) )
+            else:
+                return LHAPDFSet.ER_EIG
+
+        if error == "symmhessian":
+            if hasattr(self, 'ErrorConfLevel'):
+                cl = self.ErrorConfLevel
+                if cl == 68:
+                    return LHAPDFSet.ER_SYMEIG
+                else:
+                    raise NotImplementedError("No symmetric hessian errors "
+                                              "with confidence"
+                                              " interval %s" % (cl,) )
+            else:
+                return LHAPDFSet.ER_EIG
+
+        raise NotImplementedError("Error type for %s: '%s' is not implemented" %
+                                  (self.name, error))
+
+
+
+
+
+
+class Stats:
+
+    def __init__(self, data):
+        """`data `should be N_pdf*N_bins"""
+        self.data = np.atleast_2d(data)
+
+    def central_value(self):
+        raise NotImplementedError()
+
+    def std(self):
+        raise NotImplementedError()
+
+    def sample_values(self, size):
+        raise NotImplementedError()
+
+    def std_interval(self, nsigma):
+        raise NotImplementedError()
+
+    def errorbar68(self):
+        raise NotImplementedError()
+
+    #TODO...
+    ...
+
+class MCStats(Stats):
+    """Result obtained from a Monte Carlo sample"""
+
+    def central_value(self):
+        return np.mean(self.data, axis=0)
+
+    def std_error(self):
+        return np.std(self.data, axis=0)
+
+    def sample_values(self, size):
+        return np.random.choice(self, size=size)
+
+
+class SymmHessianStats(Stats):
+    """Compute stats in the 'assymetric' hessian format: The first index (0)
+    is the
+    central value. The rest of the indexes are results for each eigenvector.
+    A 'rescale_factor is allowed in case the eigenvector confidence interval
+    is not 68%'."""
+    def __init__(self, data, rescale_factor=1):
+        super().__init__(data)
+        self.rescale_factor = rescale_factor
+
+    def central_value(self):
+        return self.data[0]
+
+    def std_error(self):
+        data = self.data
+        diffsq = (data[0] - data[1:])**2
+        return np.sqrt(diffsq.sum(axis=0))/self.rescale_factor
+
+class HessianStats(SymmHessianStats):
+    """Compute stats in the 'assymetric' hessian format: The first index (0)
+    is the
+    central value. The odd indexes are the
+    results for lower eigenvectors and the
+    even are the upper eigenvectors.A 'rescale_factor is allowed in
+    case the eigenvector confidence interval
+    is not 68%'."""
+    def std_error(self):
+        data = self.data
+        diffsq = (data[1::2] - data[2::2])**2
+        return np.sqrt(diffsq.sum(axis=0))/self.rescale_factor
+
+
+STAT_TYPES = dict(
+                    symmhessian = SymmHessianStats,
+                    hessian = HessianStats,
+                    replicas   = MCStats,
+                   )
 
 
 class Environment:
@@ -51,11 +231,12 @@ class Config(configparser.Config):
 
     def check_pdf(self, name:str):
         if lhaindex.isinstalled(name):
+            pdf = PDF(name)
             try:
-                get_error_type(name)
-            except NotImplementedError:
+                pdf.nnpdf_error
+            except NotImplementedError as e:
                 raise ConfigError(str(e))
-            return name
+            return pdf
         raise ConfigError("Bad PDF: {} not installed".format(name), name,
                           lhaindex.expand_local_names('*'))
 
@@ -226,13 +407,6 @@ def get_error_type(pdfname):
                               (pdfname, error))
 
 
-
-def load_pdf(name):
-    """Return a LHAPDFSet with the correct errro type"""
-    err_type = get_error_type(name)
-    return LHAPDFSet(name, err_type)
-
-
 #==============================================================================
 #
 # def load_fkset(dataset, theoryID):
@@ -262,30 +436,42 @@ def results(setname, commondata, cfac, fk ,theoryid, pdf):
     fktable.thisown = 0
     fkset = FKSet(FKSet.parseOperator("NULL"), [fktable])
     data = DataSet(cd, fkset)
-    pdf = load_pdf(pdf)
-    th_predictions = ThPredictions(pdf, data)
+    nnpdf_pdf = pdf.load()
+    th_predictions = ThPredictions(nnpdf_pdf, data)
 
-    return DataResult(data), ThPredictionsResult(thlabel, th_predictions)
+    stats = pdf.stats_class
+
+
+    return DataResult(data), ThPredictionsResult(thlabel, th_predictions,
+                                                 stats)
 
 def chi2_data(results):
     data_result, th_result = results
-    diffs = th_result.rawdata.T - data_result.central_value
+    diffs = th_result._rawdata.T - data_result.central_value
     #chi²_i = diff_ij @ invcov_jk @ diff_ki
-    return np.einsum('ij, jk, ik -> i',
+    result =  np.einsum('ij, jk, ik -> i',
                      diffs, data_result.invcovmat, diffs)/len(data_result)
 
-#TODO; Implement for hessian
+    return th_result.stats_class(result[:, np.newaxis])
+
 def chi2_stats(chi2_data):
-    return {
-            r'$\left \chi^2 \right>$': chi2_data.mean(),
-            r'std(\chi²)'            : chi2_data.std(),
-           }
+    return OrderedDict([
+            (r'$\left< \chi^2 \right>$'  , chi2_data.central_value().mean() ),
+            (r'std($\chi^2$)'            , chi2_data.std_error().mean()     ),
+           ])
 
 
-def plot_chi2dist(results, setlabel, chi2_data, chi2_stats):
+def plot_chi2dist(results, setlabel, chi2_data, chi2_stats, pdf):
     fig, ax = plt.subplots()
+    label = pdf.name
+    if not isinstance(chi2_data, MCStats):
+        ax.set_axis_bgcolor("#ffcccc")
+        log.warn("Chi² distribution plots have a different meaning for non MC sets.")
+        label += " (%s!)" % pdf.ErrorType
+    label += '\n'+ ', '.join(str(k)+(' %.2f' % v) for (k,v) in chi2_stats.items())
     ax.set_title("$\chi^2$ distribution for %s" % setlabel)
-    ax.hist(chi2_data)
+    ax.hist(chi2_data.data, label=label, zorder=10000)
+    ax.legend()
     return fig
 
 
@@ -377,8 +563,9 @@ class DataResult(Result):
 
 class ThPredictionsResult(Result):
 
-    def __init__(self, thlabel, dataobj):
+    def __init__(self, thlabel, dataobj, stats_class):
         self.thlabel = thlabel
+        self.stats_class = stats_class
         super().__init__(dataobj)
 
     @property
@@ -388,15 +575,19 @@ class ThPredictionsResult(Result):
 
     @property
     @functools.lru_cache()
-    def rawdata(self):
+    def _rawdata(self):
         return self.dataobj.get_data()
+
+    @property
+    def data(self):
+        return self.stats_class(self._rawdata)
 
     @property
     def label(self):
         return "<Theory %s>: %s" % (self.thlabel, self.dataobj.GetPDFName())
 
 
-if __name__ == '__main__':
+def main():
     #TODO: Oberhaul this to use reportengine properly
 
     parser = argparse.ArgumentParser(
@@ -439,14 +630,19 @@ if __name__ == '__main__':
                               output_path = args.output,
                               this_folder = pathlib.Path(__file__).parent
                               )
-    with open(args.config_yml) as f:
-        try:
-            c = Config.from_yaml(f, environment=environment)
-        except ConfigError as e:
-            print("Bad configuration encountered:")
-            print(e)
-            print(e.alternatives_text())
-            sys.exit(1)
+
+    try:
+        with open(args.config_yml) as f:
+            try:
+                c = Config.from_yaml(f, environment=environment)
+            except ConfigError as e:
+                print("Bad configuration encountered:")
+                print(e)
+                print(e.alternatives_text())
+                sys.exit(1)
+    except OSError as e:
+        print("Could not open configuration file: %s" % e)
+        sys.exit(1)
 
     environment.output_path.mkdir(exist_ok = True)
     plt.style.use(str(environment.this_folder / 'small.mplstyle'))
@@ -455,18 +651,18 @@ if __name__ == '__main__':
     n = itertools.count()
     for dataset in c['datasets']:
         inp = {**dataset, 'theoryid': c['theoryid'], 'pdf': c['pdf']}
-        results = (dataresult, theoresult)= results(**inp)
+        results_ = (dataresult, theoresult)= results(**inp)
 
 
-        fig = plot_results(results, setlabel=dataset['setname'],
+        fig = plot_results(results_, setlabel=dataset['setname'],
                        normalize_to=None)
 
         fig.savefig(str(environment.output_path / ("result_%2d.pdf"%next(n))),
                 bbox_inches='tight')
 
-        chi2dt = chi2_data(results)
+        chi2dt = chi2_data(results_)
         chi2st = chi2_stats(chi2dt)
-        fig = plot_chi2dist(results, dataset['setname'],
-                            chi2dt, chi2st)
+        fig = plot_chi2dist(results_, dataset['setname'],
+                            chi2dt, chi2st, c['pdf'])
         fig.savefig(str(environment.output_path / ("chi2_%2d.pdf"%next(n))),
                 bbox_inches='tight')
