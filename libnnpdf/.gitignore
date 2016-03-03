@@ -49,3 +49,6 @@ dist/
 .libs
 FKconvolute
 __pycache__
+
+#Editor temp files
+*.swp
