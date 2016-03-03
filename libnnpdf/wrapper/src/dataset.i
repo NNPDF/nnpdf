@@ -22,6 +22,7 @@
 
 %include "include/excepthandler.i"
 
+%template(vector_int) std::vector<int>;
 
 /* We copy the arrays for every reason. It's too dangerous to pass by
  * reference with too little benefict. */
