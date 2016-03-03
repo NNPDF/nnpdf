@@ -128,9 +128,15 @@ class PDF:
         raise NotImplementedError("Error type for %s: '%s' is not implemented" %
                                   (self.name, error))
 
+class DataSetSpec:
 
-
-
+    def __init__(self, *, name, commondata, cfac, fkpath, thspec, cuts):
+        self.name = name
+        self.commondata = commondata
+        self.cfac = cfac
+        self.fkpath = fkpath
+        self.thspec = thspec
+        self.cuts = cuts
 
 
 class Stats:
@@ -211,11 +217,14 @@ STAT_TYPES = dict(
 
 class Environment:
     """Container for information to be filled at run time"""
-    def __init__(self,*, data_path, output_path, this_folder):
+    def __init__(self,*, data_path, results_path ,output_path, this_folder):
         self.deta_path = pathlib.Path(data_path)
+        self.results_path = pathlib.Path(results_path)
+
         self.output_path = pathlib.Path(output_path)
         self.this_folder = pathlib.Path(this_folder)
-        self.loader = Loader(data_path)
+
+        self.loader = Loader(data_path, resultspath=self.results_path)
 
 
 
@@ -248,11 +257,28 @@ class Config(configparser.Config):
                               self.loader.available_theories,
                               display_alternatives='all')
 
+    def check_use_cuts(self, use_cuts:bool, *, fit=None):
+        if use_cuts and not fit:
+            raise ConfigError("Setting 'use_cuts' true requires "
+            "specifying a fit, e.g. 'fit' on which filter "
+            "has been executed, e.g.\nfit:NNPDF30_nlo_as_0118")
+        return use_cuts
+
+
+
+    #TODO: load fit config from here
+    def check_fit(self, fit:str):
+        try:
+            return fit, self.loader.check_fit(fit)
+        except Exception as e:
+            raise ConfigError(str(e), self.loader.available_fits)
+
+
     @configparser.element_of('datasets')
-    def check_dataset(self, dataset:dict, * ,theoryid):
+    def check_dataset(self, dataset:dict, * ,theoryid, use_cuts, fit=None):
         """We check data related things here, and theory related things when
         making the FKSet"""
-        theoryid, theopath = theoryid
+        theoryno, theopath = theoryid
         try:
             name, sysnum = dataset['dataset'], dataset['sys']
         except KeyError:
@@ -269,17 +295,23 @@ class Config(configparser.Config):
         try:
             if 'cfac' in dataset:
                 cfac = dataset['cfac']
-                cfac = self.loader.check_cfactor(theoryid, name, cfac)
+                cfac = self.loader.check_cfactor(theoryno, name, cfac)
             else:
                 cfac = []
 
-            fkpath = self.loader.check_fktable(theoryid, name)
+            fkpath = self.loader.check_fktable(theoryno, name)
 
         except FileNotFoundError as e:
             raise ConfigError(e)
 
-        return {'setname': name, 'commondata': commondata, 'cfac': cfac,
-                'fk': fkpath}
+
+        if use_cuts:
+            cuts = self.loader.get_cuts(name, fit)
+        else:
+            cuts = None
+
+        return DataSetSpec(name=name, commondata=commondata, cfac=cfac,
+                           fkpath=fkpath, thspec=theoryid, cuts=cuts)
 
 
 class DataNotFoundError(FileNotFoundError): pass
@@ -287,12 +319,13 @@ class DataNotFoundError(FileNotFoundError): pass
 class SysNotFoundError(FileNotFoundError): pass
 
 class Loader():
-    """Load various resources from the NNPDF dapa path."""
+    """Load various resources from the NNPDF data path."""
 
-    def __init__(self, datapath):
-        if isinstance(datapath, str):
-            datapath = pathlib.Path(datapath)
+    def __init__(self, datapath, resultspath):
+        datapath = pathlib.Path(datapath)
+        resultspath = pathlib.Path(resultspath)
         self.datapath = datapath
+        self.resultspath = resultspath
 
     @property
     @functools.lru_cache()
@@ -373,6 +406,35 @@ class Loader():
 
         return cf
 
+    def check_fit(self, fitname):
+        resultspath = self.resultspath
+        p = resultspath / fitname
+        if p.is_dir():
+            return p
+        if not p.exists():
+            msg = ("Could not find fit '{firname}' in '{resultspath}. "
+                   "Folder '{p}' not found").format(**locals())
+            raise FileNotFoundError(msg)
+        msg = ("Could not load fit '{firname}' from '{resultspath}. "
+                   "'{p}' must be a folder").format(**locals())
+        raise IOError(msg)
+
+    @property
+    def available_fits(self):
+        return [p for p in self.resultspath.iterdir() if p.is_dir()]
+
+    def get_cuts(self, setname, fit):
+        fitname, fitpath = fit
+        p = (fitpath/'filter')/setname/('FKMASK_' + setname+ '.dat')
+        if not p.parent.exists():
+            raise FileNotFoundError("Bad filter configuration. "
+            "Could not find: %s" % p.parent)
+        if not p.exists():
+            return None
+        cuts = np.loadtxt(str(p), dtype=int)
+        log.debug("Loading cuts for %s" % setname)
+        return cuts
+
 def get_error_type(pdfname):
     info = lhaindex.parse_info(pdfname)
     error = info["ErrorType"]
@@ -424,18 +486,28 @@ def get_error_type(pdfname):
 #     fktable = loader.get_fktable(theoryid, setname)
 #==============================================================================
 
-def results(setname, commondata, cfac, fk ,theoryid, pdf):
-    cdpath,syspth = commondata
+def results(dataset:DataSetSpec, pdf:PDF):
+    cdpath,syspth = dataset.commondata
     cd = CommonData.ReadFile(str(cdpath), str(syspth))
-    thlabel, thpath = theoryid
+    thlabel, thpath = dataset.thspec
 
-    fktable = FKTable(str(fk), [str(factor) for factor in cfac])
+    fktable = FKTable(str(dataset.fkpath), [str(factor) for factor in dataset.cfac])
     #IMPORTANT: We need to tell the python garbage collector to NOT free the
     #memory owned by the FKTable on garbage collection.
     #TODO: Do this automatically
     fktable.thisown = 0
     fkset = FKSet(FKSet.parseOperator("NULL"), [fktable])
+
     data = DataSet(cd, fkset)
+
+    if dataset.cuts is not None:
+        #ugly need to convert from numpy.int64 to int, so we can pass
+        #it happily to the vector to the SWIG wrapper.
+        #Do not do this (or find how to enable in SWIG):
+        #data = DataSet(data, list(dataset.cuts))
+        intmask = [int(ele) for ele in dataset.cuts]
+        data = DataSet(data, intmask)
+
     nnpdf_pdf = pdf.load()
     th_predictions = ThPredictions(nnpdf_pdf, data)
 
@@ -584,7 +656,7 @@ class ThPredictionsResult(Result):
 
     @property
     def label(self):
-        return "<Theory %s>: %s" % (self.thlabel, self.dataobj.GetPDFName())
+        return "<Theory %s>@%s" % (self.thlabel, self.dataobj.GetPDFName())
 
 
 def main():
@@ -603,15 +675,19 @@ def main():
 
     loglevel = parser.add_mutually_exclusive_group()
 
-    loglevel.add_argument('-q','--quiet', help="Supress INFO messages",
+    loglevel.add_argument('-q','--quiet', help="supress INFO messages and C output",
                         action='store_true')
 
-    loglevel.add_argument('-d', '--debug', help = "Show debug info",
+    loglevel.add_argument('-d', '--debug', help = "show debug info",
                           action='store_true')
 
-    parser.add_argument('-p','--datapath', help="Path where the NNPDF "
+    parser.add_argument('-p','--datapath', help="path where the NNPDF "
                         "data is located",
                         default='../nnpdfcpp/data')
+
+    parser.add_argument('--resultspath', help="path where the fit results "
+                          "are located. Calculated from 'datapath' by default",
+                         )
 
     args = parser.parse_args()
 
@@ -624,9 +700,11 @@ def main():
 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=level)
 
-
+    if not args.resultspath:
+        args.resultspath = pathlib.Path(args.datapath).parent / 'nnpdfbuild' / 'results'
 
     environment = Environment(data_path = args.datapath,
+                              results_path = args.resultspath,
                               output_path = args.output,
                               this_folder = pathlib.Path(__file__).parent
                               )
@@ -650,19 +728,18 @@ def main():
     #TODO; Use resourcebuilder instead of this horrible code
     n = itertools.count()
     for dataset in c['datasets']:
-        inp = {**dataset, 'theoryid': c['theoryid'], 'pdf': c['pdf']}
-        results_ = (dataresult, theoresult)= results(**inp)
+        results_ = (dataresult, theoresult)= results(dataset, c['pdf'])
 
 
-        fig = plot_results(results_, setlabel=dataset['setname'],
-                       normalize_to=None)
+        fig = plot_results(results_, setlabel=dataset.name,
+                       normalize_to=dataresult)
 
         fig.savefig(str(environment.output_path / ("result_%2d.pdf"%next(n))),
                 bbox_inches='tight')
 
         chi2dt = chi2_data(results_)
         chi2st = chi2_stats(chi2dt)
-        fig = plot_chi2dist(results_, dataset['setname'],
+        fig = plot_chi2dist(results_, dataset.name,
                             chi2dt, chi2st, c['pdf'])
         fig.savefig(str(environment.output_path / ("chi2_%2d.pdf"%next(n))),
                 bbox_inches='tight')
