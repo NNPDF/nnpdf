@@ -1,5 +1,6 @@
 pdf: NNPDF30_nlo_as_0118
 theoryid: 6
+use_cuts : False
 
 datasets:
  - dataset: ATLASWZRAP36PB  

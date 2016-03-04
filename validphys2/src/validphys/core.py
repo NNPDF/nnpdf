@@ -238,7 +238,7 @@ class Config(configparser.Config):
     def loader(self):
         return self.environment.loader
 
-    def check_pdf(self, name:str):
+    def parse_pdf(self, name:str):
         if lhaindex.isinstalled(name):
             pdf = PDF(name)
             try:
@@ -249,7 +249,7 @@ class Config(configparser.Config):
         raise ConfigError("Bad PDF: {} not installed".format(name), name,
                           lhaindex.expand_local_names('*'))
 
-    def check_theoryid(self, theoryID: (str, int)):
+    def parse_theoryid(self, theoryID: (str, int)):
         try:
             return (str(theoryID), self.loader.check_theoryID(theoryID))
         except FileNotFoundError as e:
@@ -257,7 +257,7 @@ class Config(configparser.Config):
                               self.loader.available_theories,
                               display_alternatives='all')
 
-    def check_use_cuts(self, use_cuts:bool, *, fit=None):
+    def parse_use_cuts(self, use_cuts:bool, *, fit=None):
         if use_cuts and not fit:
             raise ConfigError("Setting 'use_cuts' true requires "
             "specifying a fit, e.g. 'fit' on which filter "
@@ -267,7 +267,7 @@ class Config(configparser.Config):
 
 
     #TODO: load fit config from here
-    def check_fit(self, fit:str):
+    def parse_fit(self, fit:str):
         try:
             return fit, self.loader.check_fit(fit)
         except Exception as e:
@@ -275,7 +275,7 @@ class Config(configparser.Config):
 
 
     @configparser.element_of('datasets')
-    def check_dataset(self, dataset:dict, * ,theoryid, use_cuts, fit=None):
+    def parse_dataset(self, dataset:dict, * ,theoryid, use_cuts, fit=None):
         """We check data related things here, and theory related things when
         making the FKSet"""
         theoryno, theopath = theoryid
