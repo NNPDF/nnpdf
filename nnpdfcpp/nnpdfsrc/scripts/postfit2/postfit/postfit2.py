@@ -351,20 +351,18 @@ def run(nrep, result_path):
     else:
         log.info("All replicas pass the positivity veto")
 
-    currbad = []
     i = 1
     while True:
         log.info("Discarding chi² and arclength. Iteration %d" % i)
         i += 1
         good, bad_alen = filter_arclength(good)
         bad += bad_alen
-        currbad += bad_alen
 
         good, bad_chi = filter_chi2(good)
         bad += bad_chi
-        currbad += bad_chi
-        if not currbad:
+        if not bad_chi and bad_alen:
             break
+
         if len(good) < nrep:
             log.error("Discarded too many replicas. Please run more.")
             sys.exit()
