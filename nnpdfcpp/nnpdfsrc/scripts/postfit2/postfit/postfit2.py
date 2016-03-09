@@ -315,7 +315,7 @@ def export_to_lhapdf(nrep, fitfolder, prefix):
 
 
 def run(nrep, result_path):
-    result_path = pathlib.Path(result_path)
+    result_path = pathlib.Path(result_path).absolute()
     prefix = result_path.name
     try:
         check_results_path(result_path)
