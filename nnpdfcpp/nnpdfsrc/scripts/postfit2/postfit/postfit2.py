@@ -360,7 +360,7 @@ def run(nrep, result_path):
 
         good, bad_chi = filter_chi2(good)
         bad += bad_chi
-        if not bad_chi and bad_alen:
+        if not bad_chi and not bad_alen:
             break
 
         if len(good) < nrep:
