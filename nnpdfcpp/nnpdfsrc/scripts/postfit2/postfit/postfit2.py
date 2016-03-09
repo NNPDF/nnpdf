@@ -364,8 +364,10 @@ def run(nrep, result_path):
             break
 
         if len(good) < nrep:
-            log.error("Discarded too many replicas. Please run more.")
-            sys.exit()
+            log.error("Discarded too many replicas. Requested %d "
+                      "but obtained only %d Please run more." % (nrep,
+                                                                 len(good)))
+            sys.exit(1)
 
 
     move_bad(bad)
