@@ -22,7 +22,7 @@ import numpy as np
 import lhapdf
 
 #t = blessings.Terminal()
-log = logging.Logger(__name__, logging.INFO)
+log = logging.getLogger(__name__)
 
 NSIGMA_DISCARD = 4
 
@@ -382,7 +382,16 @@ def main():
     parser.add_argument('result_path', help="Folder containig the "
                                             "results of the fit")
 
+    parser.add_argument('-d', '--debug', action='store_true', help='show debug messages')
+
     args = parser.parse_args()
+
+    if args.debug:
+        log.setLevel(logging.DEBUG)
+    else:
+        log.setLevel(logging.INFO)
+
+
     run(args.nrep, args.result_path)
 
 
