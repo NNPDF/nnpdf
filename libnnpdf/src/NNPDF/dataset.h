@@ -40,8 +40,8 @@ namespace NNPDF
     // private methods for constructor
     void GenCovMat();                       //!< Generate covariance matrix
 
-    DataSet();                          //disable default constructor
-    DataSet& operator=(const DataSet&); //disable copy-assignment
+    DataSet();                          //!< Disable default constructor
+    DataSet& operator=(const DataSet&); //!< Disable copy-assignment
 
    public:
     DataSet(CommonData const&, FKSet const&); //!< Constructor
@@ -77,7 +77,7 @@ namespace NNPDF
     
     // ****************   Rescale Uncertainties   ****************************
     
-    void RescaleErrors(const double mult);
+    void RescaleErrors(const double mult); //!< Rescale uncertainties by a multiplicative factor
     
     // **************************************************************************
   
