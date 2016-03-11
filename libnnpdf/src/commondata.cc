@@ -24,9 +24,31 @@
 
 namespace NNPDF
 {
-
   // Default verbosity
   bool CommonData::Verbose = true;
+
+  // Kinematics type labels
+  CommonData::kinMap CommonData::kinLabel_latex = { 
+    { "DIS",        {"$x$","$Q^2$","$y$"}},
+    { "DYP",        {"$y$","$M^2$","$\\sqrt{s}$"}},
+    { "JET",        {"$\\eta$","$p_T^2$","$\\sqrt{s}$"}},
+    { "PHT",        {"$\\eta_\\gamma$","$E_{T,\\gamma}^2$","$\\sqrt{s}$"}},
+    { "INC",        {"$0$","$\\mu^2$","$\\sqrt{s}$"}},
+    { "EWK_RAP",    {"$\\eta/y$","$M^2$","$\\sqrt{s}$"}},
+    { "EWK_PT",     {"$p_T$","$M^2$","$\\sqrt{s}$"}},
+    { "EWK_MLL",    {"$M_{ll}$","$M_{ll}^2$","$\\sqrt{s}$"}},
+    { "EWJ_RAP",    {"$\\eta/y$","$M^2$","$\\sqrt{s}$"}},
+    { "EWJ_PT",     {"$p_T$","$M^2$","$\\sqrt{s}$"}},
+    { "EWJ_JRAP",   {"$\\eta/y$","$M^2$","$\\sqrt{s}$"}},
+    { "EWJ_JPT",    {"$p_T$","$M^2$","$\\sqrt{s}$"}},
+    { "EWJ_MLL",    {"$M_{ll}$","$M_{ll}^2$","$\\sqrt{s}$"}},
+    { "HQP_YQQ",    {"$y^{QQ}$","$\\mu^2$","$\\sqrt{s}$"}},
+    { "HQP_MQQ",    {"$M^{QQ}$","$\\mu^2$","$\\sqrt{s}$"}},
+    { "HQP_PTQQ",   {"$p_T^{QQ}$","$\\mu^2$","$\\sqrt{s}$"}},
+    { "HQP_YQ",     {"$y^Q$","$\\mu^2$","$\\sqrt{s}$"}},
+    { "HQP_PTQ",    {"$p_T^Q$","$\\mu^2$","$\\sqrt{s}$"}},
+    { "HIG_RAP",    {"$y$","$M_H^2$","$\\sqrt{s}$"}}
+  };
 
   // Generate a dataInfo struct given a target filename
   dataInfo genInfoStruct(std::string const& targetfile, std::string const& sysfile)

@@ -18,6 +18,7 @@
 #include <vector>
 #include <cstdlib>
 #include <stdexcept>
+#include <map>
 
 
 /** @defgroup commondata CommonData
@@ -170,10 +171,13 @@ namespace NNPDF
 
     virtual ~CommonData();	                         //!< The destructor.
 
+    // ******************************* Process types ********************************************
+
+    typedef std::map<std::string, std::vector<std::string>> kinMap;
+    static kinMap kinLabel_latex;
+
     // ******************************* CommonData Verbosity *************************************
-
     static bool Verbose;
-
     // ******************************* CommonData Get Methods *************************************
 
     std::string const& GetSetName() const {return fSetName; }; //!< Returns set name
