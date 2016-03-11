@@ -9,7 +9,6 @@
 %include "common.i"
 
 /* Parse the header file to generate wrappers */
-%template(_string_list) std::vector< std::string >;
 %include "../../src/NNPDF/exceptions.h"
 
 %feature("autodoc", "3");
