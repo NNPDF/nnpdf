@@ -174,7 +174,7 @@ namespace NNPDF
     // ******************************* Process types ********************************************
 
     typedef std::map<std::string, std::vector<std::string>> kinMap;
-    static kinMap kinLabel_latex;
+    static const kinMap kinLabel_latex;
 
     // ******************************* CommonData Verbosity *************************************
     static bool Verbose;

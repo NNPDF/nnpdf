@@ -28,7 +28,7 @@ namespace NNPDF
   bool CommonData::Verbose = true;
 
   // Kinematics type labels
-  CommonData::kinMap CommonData::kinLabel_latex = { 
+  const CommonData::kinMap CommonData::kinLabel_latex = { 
     { "DIS",        {"$x$","$Q^2$","$y$"}},
     { "DYP",        {"$y$","$M^2$","$\\sqrt{s}$"}},
     { "JET",        {"$\\eta$","$p_T^2$","$\\sqrt{s}$"}},
