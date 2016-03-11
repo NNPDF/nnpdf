@@ -7,7 +7,7 @@ Created on Tue Mar  1 10:29:41 2016
 
 #TODO: Move logic here
 
-import validphys.core as vp
+import validphys.app as vp
 
 def main():
     vp.main()
