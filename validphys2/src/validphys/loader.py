@@ -114,16 +114,16 @@ class Loader():
         if p.is_dir():
             return p
         if not p.exists():
-            msg = ("Could not find fit '{firname}' in '{resultspath}. "
+            msg = ("Could not find fit '{fitname}' in '{resultspath}'. "
                    "Folder '{p}' not found").format(**locals())
             raise FileNotFoundError(msg)
-        msg = ("Could not load fit '{firname}' from '{resultspath}. "
+        msg = ("Could not load fit '{fitname}' from '{resultspath}. "
                    "'{p}' must be a folder").format(**locals())
         raise IOError(msg)
 
     @property
     def available_fits(self):
-        return [p for p in self.resultspath.iterdir() if p.is_dir()]
+        return [p.name for p in self.resultspath.iterdir() if p.is_dir()]
 
     def get_cuts(self, setname, fit):
         fitname, fitpath = fit
