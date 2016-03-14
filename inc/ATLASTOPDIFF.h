@@ -11,51 +11,140 @@
 #include "buildmaster_utils.h"
 
 // ********** ATLASTOPDIFF8TEV ***************
-// One set for each of the differential distributions
+// One set for each of the differential distributions (NORMALISED)
 
-// Differential distribution of the pt of the top quark
+// Differential distribution for the transverse momentum of the top quark
+static const dataInfoRaw ATLASTOPDIFF8TEVTPTNORMinfo = {
+  8,                           //nData
+  56,                          //nSys
+  "ATLASTOPDIFF8TEVTPTNORM",   //SetName
+  "HQP_PTQ"                    //ProcType
+};
+
+// Differential distribution for the rapidity of the top quark
+static const dataInfoRaw ATLASTOPDIFF8TEVTRAPNORMinfo = {
+  5,                           //nData
+  56,                          //nSys
+  "ATLASTOPDIFF8TEVTRAPNORM",  //SetName
+  "HQP_YQ"                     //ProcType
+};
+
+// Differential distribution for the rapidity of the top quark pair
+static const dataInfoRaw ATLASTOPDIFF8TEVTTRAPNORMinfo = {
+  5,                           //nData
+  56,                          //nSys
+  "ATLASTOPDIFF8TEVTTRAPNORM", //SetName
+  "HQP_YQQ"                    //ProcType
+};
+
+// Differential distribution for the transverse of the top quark pair
+static const dataInfoRaw ATLASTOPDIFF8TEVTTPTNORMinfo = {
+  6,                           //nData
+  56,                          //nSys
+  "ATLASTOPDIFF8TEVTTPTNORM",  //SetName
+  "HQP_PTQQ"                   //ProcType
+};
+
+// Differential distribution for the invariant mass of the top quark pair
+static const dataInfoRaw ATLASTOPDIFF8TEVTTMNORMinfo = {
+  7,                           //nData
+  56,                          //nSys
+  "ATLASTOPDIFF8TEVTTMNORM",   //SetName
+  "HQP_MQQ"                    //ProcType
+};
+
+// One set for each of the differential distributions (UNNORMALISED)
+
+// Differential distribution for the transverse momentum of the top quark
 static const dataInfoRaw ATLASTOPDIFF8TEVTPTinfo = {
-  8,      //nData
-  0,       //nSys
-  "ATLASTOPDIFF8TEVTPT",    //SetName
-  "HQP_PTQ" //ProcType
+  8,                           //nData
+  56,                          //nSys
+  "ATLASTOPDIFF8TEVTPT",       //SetName
+  "HQP_PTQ"                    //ProcType
 };
 
 // Differential distribution for the rapidity of the top quark
 static const dataInfoRaw ATLASTOPDIFF8TEVTRAPinfo = {
-  5,      //nData
-  0,       //nSys
-  "ATLASTOPDIFF8TEVTRAP",    //SetName
-  "HQP_YQ" //ProcType
+  5,                           //nData
+  56,                          //nSys
+  "ATLASTOPDIFF8TEVTRAP",      //SetName
+  "HQP_YQ"                     //ProcType
 };
 
 // Differential distribution for the rapidity of the top quark pair
 static const dataInfoRaw ATLASTOPDIFF8TEVTTRAPinfo = {
-  5,      //nData
-  0,       //nSys
-  "ATLASTOPDIFF8TEVTTRAP",    //SetName
-  "HQP_YQQ" //ProcType
+  5,                           //nData
+  56,                          //nSys
+  "ATLASTOPDIFF8TEVTTRAP",     //SetName
+  "HQP_YQQ"                    //ProcType
 };
 
 // Differential distribution for the transverse of the top quark pair
 static const dataInfoRaw ATLASTOPDIFF8TEVTTPTinfo = {
-  6,      //nData
-  0,       //nSys
-  "ATLASTOPDIFF8TEVTTPT",    //SetName
-  "HQP_PTQQ" //ProcType
+  6,                           //nData
+  56,                          //nSys
+  "ATLASTOPDIFF8TEVTTPT",      //SetName
+  "HQP_PTQQ"                   //ProcType
 };
 
 // Differential distribution for the invariant mass of the top quark pair
 static const dataInfoRaw ATLASTOPDIFF8TEVTTMinfo = {
-  7,      //nData
-  0,       //nSys
-  "ATLASTOPDIFF8TEVTTM",    //SetName
-  "HQP_MQQ" //ProcType
+  7,                           //nData
+  56,                          //nSys
+  "ATLASTOPDIFF8TEVTTM",       //SetName
+  "HQP_MQQ"                    //ProcType
 };
 
 // ******************************************************
 // ******************************************************
 
+//Normalised distributions
+class ATLASTOPDIFF8TEVTPTNORMFilter: public CommonData
+{
+public: ATLASTOPDIFF8TEVTPTNORMFilter():
+  CommonData(ATLASTOPDIFF8TEVTPTNORMinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class ATLASTOPDIFF8TEVTRAPNORMFilter: public CommonData
+{
+public: ATLASTOPDIFF8TEVTRAPNORMFilter():
+  CommonData(ATLASTOPDIFF8TEVTRAPNORMinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class ATLASTOPDIFF8TEVTTRAPNORMFilter: public CommonData
+{
+public: ATLASTOPDIFF8TEVTTRAPNORMFilter():
+  CommonData(ATLASTOPDIFF8TEVTTRAPNORMinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class ATLASTOPDIFF8TEVTTPTNORMFilter: public CommonData
+{
+public: ATLASTOPDIFF8TEVTTPTNORMFilter():
+  CommonData(ATLASTOPDIFF8TEVTTPTNORMinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class ATLASTOPDIFF8TEVTTMNORMFilter: public CommonData
+{
+public: ATLASTOPDIFF8TEVTTMNORMFilter():
+  CommonData(ATLASTOPDIFF8TEVTTMNORMinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+//Unnormalised distributions
 class ATLASTOPDIFF8TEVTPTFilter: public CommonData
 {
 public: ATLASTOPDIFF8TEVTPTFilter():
@@ -103,3 +192,4 @@ private:
 
 // ******************************************************
 // ******************************************************
+
