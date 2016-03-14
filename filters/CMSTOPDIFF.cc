@@ -119,19 +119,19 @@ void  CMSTOPDIFF8TEVTPTNORMFilter::ReadData()
       lstream >> idum;
       double adum;
       for(int j=0; j<5; j++)
-	{
+      	{
 	  lstream >> adum;
 	}
       double pt_top;
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt*Mt;    //mu^2
+      fKin2[i] = Mt;       
       fKin3[i] = 8000;     //sqrt(s)
-
+      
       lstream >> fData[i]; //normalized differential distribution
       lstream >> fStat[i]; //assume stat errors uncorrelated so far
-
+      
       for(int j=0; j<3; j++)
 	{
 	  lstream >> adum;
@@ -231,7 +231,7 @@ void  CMSTOPDIFF8TEVTTPTNORMFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt*Mt;    //mu^2
+      fKin2[i] = Mt;    
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
@@ -336,7 +336,7 @@ void  CMSTOPDIFF8TEVTRAPNORMFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt*Mt;    //mu^2
+      fKin2[i] = Mt;    
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
@@ -441,7 +441,7 @@ void  CMSTOPDIFF8TEVTTRAPNORMFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt*Mt;    //mu^2
+      fKin2[i] = Mt;   
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
@@ -546,7 +546,7 @@ void  CMSTOPDIFF8TEVTTMNORMFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt*Mt;    //mu^2
+      fKin2[i] = Mt;    
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
@@ -590,7 +590,7 @@ void  CMSTOPDIFF8TEVTTMNORMFilter::ReadData()
 //B - UNNORMALISED distributions
 
 //1) Distribution differential in top quark transverse momentum
-void  CMSTOPDIFF8TEVTPTFilter::ReadData()
+void CMSTOPDIFF8TEVTPTFilter::ReadData()
 {
   // Opening files
   fstream f1, f2, f3;
@@ -675,13 +675,13 @@ void  CMSTOPDIFF8TEVTPTFilter::ReadData()
       double adum;
       for(int j=0; j<5; j++)
 	{
-	  lstream >> adum;
-	}
+      	  lstream >> adum;
+      	}
       double pt_top;
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt*Mt;    //mu^2
+      fKin2[i] = Mt;    
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
@@ -690,7 +690,7 @@ void  CMSTOPDIFF8TEVTPTFilter::ReadData()
       //differential distributions are unnormalized
       fData[i] = fData[i]*xscv;
       //statistical uncertainties are added in quadrature
-      fStat[i] = fData[i]*pow(pow(fStat[i]/(fData[i]/xscv),2)+pow(xsstat/xscv,2),0.5); 
+      fStat[i] = fData[i]*pow(pow(fStat[i]/(fData[i]/(xscv)),2)+pow(xsstat/(xscv),2),0.5); 
 
       for(int j=0; j<3; j++)
 	{
@@ -834,7 +834,7 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt*Mt;    //mu^2
+      fKin2[i] = Mt;    
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
@@ -987,7 +987,7 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt*Mt;    //mu^2
+      fKin2[i] = Mt;    
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
@@ -1140,7 +1140,7 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt*Mt;    //mu^2
+      fKin2[i] = Mt;    
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
@@ -1293,7 +1293,7 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt*Mt;    //mu^2
+      fKin2[i] = Mt;       
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
