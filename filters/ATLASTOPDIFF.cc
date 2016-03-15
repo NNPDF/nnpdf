@@ -1,328 +1,869 @@
-/**
+/*
+Experiment: CERN-LHC-ATLAS (ATLAS)
+Preprinted as CERN-PH-EP-2015-239
+Archived as: ARXIV:1511.04716
+Auxiliary Material: https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2015-06/
+
+Record in: INSPIRE
+Record in: CERN Document Server
+Record in: HEPData (new site in development)
+
+
+Description of the measurement
+Measurements of normalized differential cross-sections of top-quark 
+pair production are presented as a function of the top-quark, 
+ttbar system and event-level kinematic observables in proton-proton 
+collisions at a centre-of-mass energy of sqrt(s)=8 TeV. 
+The observables have been chosen to emphasize the ttbar production process 
+and to be sensitive to effects of initial- and final-state radiation, 
+to the different parton distribution functions, and to non-resonant 
+processes and higher-order corrections. 
+The dataset corresponds to an integrated luminosity of 20.3 fb^-1, 
+recorded in 2012 with the ATLAS detector at the CERN Large Hadron Collider. 
+Events are selected in the lepton+jets channel, requiring exactly 
+one charged lepton and at least four jets with at least two of the jets 
+tagged as originating from a b-quark. The measured spectra are corrected 
+for detector effects and are compared to several Monte Carlo simulations. 
  
-This file describes the buildmaster implementation of the
-differential distributions for top quark pair production at 8 TeV
-from ATLAS and CMS
+Description of the buildmaster implementation
+Absolute and normalised cross sections for the distributions (lepton+jets 
+channel) differential in the following variables are implemented:
+1) top quark transverse momentum;       
+2) top quark pair transverse momentum;  
+3) top quark absolute rapidity;                  
+4) top quark absolute pair rapidity;             
+5) top quark pair invariant mass.       
 
-ATLAS => http://arxiv.org/abs/1511.04716
-CMS => http://arxiv.org/abs/1505.04480
+Raw data and full breakdown of systematic uncertainties are from HepData:
+http://hepdata.cedar.ac.uk/h8test/view/ins1404878
+1) TABS 29-30 HepData; TABS 26-25 auxiliary material
+2) TABS 25-26 HepData; TABS 32-31 auxiliary material
+3) TABS 31-32 HepData; TABS 28-27 auxiliary material
+4) TABS 27-28 HepData; TABS 34-33 auxiliary material
+5) TABS 23-24 HepData; TABS 30-29 auxiliary material
 
-There are two different ways to include this data, with
-normalized or with absolute distributions
-
-By modifying this file, one can select the normalized or the absolute
-distributions
-
+Notes:
+1) The data are provided for both absolute and normalised differential 
+   distributions with 56 sources of systematic uncertainty.
+2) All systematic uncertainties are assumed to be multiplicative.
+3) Custom uncertainty descriptions are assumed to allow for cross-correlations
+   among the five differential distributions. 
+4) There is an additional multiplicative systematic (luminosity) uncertainty
+   +-2.8% which is not listed in the rawdata files.
+5) The 57 sources of systematics are:
+   1   single top cross section
+   2   W+jets scale factors
+   3   fake lept. alternate real CR mu+jets
+   4   eta intercalibration model (JES)
+   5   effective stat. NP set 3 (JES)
+   6   fake lept. alternate real CR e+jets
+   7   pile-up offset mu (JES)
+   8   fake lept. MC stat e+jets
+   9   fake lept. MC stat mu+jets
+   10  ETmiss soft jet scale
+   11  alternate hard scattering model
+   12  effective stat. NP set 2 (JES)
+   13  electron energy scale
+   14  punch-through (JES)
+   15  pile-up offset NPV (JES)
+   16  lepton reconstruction efficiency
+   17  pile-up offset pT (JES)
+   18  jet energy resolution
+   19  light-jet tagging efficiency
+   20  fake lept. alternate fake CR e+jets
+   21  fake lept. alternate parametrization mu+jets
+   22  jet reconstruction efficiency
+   23  c-quark tagging efficiency
+   24  diboson cross section
+   25  electron energy resolution
+   26  luminosity
+   27  flavour composition (JES)
+   28  effective detector NP set 2 (JES)
+   29  effective detector NP set 3 (JES)
+   30  jet vertex fraction
+   31  lepton trigger efficiency
+   32  b-tagged jet energy scale (JES)
+   33  muon momentum scale
+   34  single-particle  high pT (JES)
+   35  ETmiss soft jet resolution
+   36  effective detector NP set 1 (JES)
+   37  fake lepton alternate parametrization e+jets
+   38  effective stat. NP set 1 (JES)
+   39  muon (ID) momentum resolution
+   40  parton distribution function
+   41  ISR/FSR + scale
+   42  Z+jets cross section
+   43  alternate parton shower model
+   44  flavour response
+   45  fake lept. alternate fake CR mu+jets
+   46  muon momentum resolution
+   47  effective model NP set 3 (JES)
+   48  lepton identification efficiency
+   49  effective mixed NP set 2 (JES)
+   50  effective mixed NP set 1 (JES)
+   51  b-quark tagging efficiency
+   52  pile-up offset rho topology (JES)
+   53  effective model NP set 4 (JES)
+   54  Monte Carlo sample statistics
+   55  effective model NP set 4 (JES) 
+   56  effective model NP set 1 (JES)
+   57  additional luminosity
 */
 
 #include "ATLASTOPDIFF.h"
 
-// Raw data available here
-// https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2015-06/#auxstuff
+//A - NORMALISED distributions
 
-//-------------------------------------------------------------------------------
+//1) Distribution differential in top quark transverse momentum
+void  ATLASTOPDIFF8TEVTPTNORMFilter::ReadData()
+{
+  // Opening files
+  fstream f1;
 
-// ATLAS top quark differential distributions
-// 8 TeV, top quark pt distribution
+  //Central values, statistical and systematic uncertainties  
+  stringstream datafile("");
+  datafile << dataPath() 
+	   << "rawdata/" << fSetName << "/" << fSetName << ".data";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Starting filter
+  string line;
+  for(int i=0; i<5; i++)
+    {
+      getline(f1,line);
+    }
+  
+  for(int i=0; i<fNData;i++)
+    {
+      double pt_top, ddum;
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> pt_top >> ddum >> ddum; 
+
+      fKin1[i] = pt_top;       //P_T^(top)
+      fKin2[i] = Mt;       
+      fKin3[i] = 8000;         //sqrt(s)
+
+      lstream >> fData[i];     //differential distribution
+      lstream >> fStat[i];     //its statistical uncertainty
+      lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
+      
+      for(int j=0; j<fNSys-1; j++)
+	{
+	  double syst[2][fNSys];
+	  double stmp, dtmp;
+	  string sysdescr;
+	  
+	  ostringstream id;
+	  id << j;
+	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  
+	  lstream >> syst[0][j] >> syst[1][j];
+	  //convert to relative percentage values
+	  syst[0][j] = syst[0][j]/fData[i]*100;  
+	  syst[1][j] = syst[1][j]/fData[i]*100;
+	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  
+	  if(stmp<0) stmp=-1.0*stmp;
+	  fSys[i][j].type = MULT;
+	  fSys[i][j].name = sysdescr;
+	  fSys[i][j].mult = stmp;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+
+	}
+
+      //overall luminosity uncertainty
+      fSys[i][56].mult=2.8;
+      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
+          
+    }  
+  
+  f1.close();
+}
+
+//==================================================================
+
+//2) Distribution differential in top quark pair transverse momentum
+void  ATLASTOPDIFF8TEVTTPTNORMFilter::ReadData()
+{
+  // Opening files
+  fstream f1;
+
+  //Central values, statistical and systematic uncertainties  
+  stringstream datafile("");
+  datafile << dataPath() 
+	   << "rawdata/" << fSetName << "/" << fSetName << ".data";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Starting filter
+  string line;
+  for(int i=0; i<5; i++)
+    {
+      getline(f1,line);
+    }
+  
+  for(int i=0; i<fNData;i++)
+    {
+      double pt_top, ddum;
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> pt_top >> ddum >> ddum; 
+
+      fKin1[i] = pt_top;       //P_T^(top)
+      fKin2[i] = Mt;       
+      fKin3[i] = 8000;         //sqrt(s)
+
+      lstream >> fData[i];     //differential distribution
+      lstream >> fStat[i];     //its statistical uncertainty
+      lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
+      
+      for(int j=0; j<fNSys-1; j++)
+	{
+	  double syst[2][fNSys];
+	  double stmp, dtmp;
+	  string sysdescr;
+	  
+	  ostringstream id;
+	  id << j;
+	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  
+	  lstream >> syst[0][j] >> syst[1][j];
+	  //convert to relative percentage values
+	  syst[0][j] = syst[0][j]/fData[i]*100;  
+	  syst[1][j] = syst[1][j]/fData[i]*100;
+	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  
+	  if(stmp<0) stmp=-1.0*stmp;
+	  fSys[i][j].type = MULT;
+	  fSys[i][j].name = sysdescr;
+	  fSys[i][j].mult = stmp;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+
+	}
+
+      //overall luminosity uncertainty
+      fSys[i][56].mult=2.8;
+      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
+          
+    }  
+  
+  f1.close();
+}
+
+//==============================================================
+
+//3) Distribution differential in top quark rapidity
+void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
+{
+  // Opening files
+  fstream f1;
+
+  //Central values, statistical and systematic uncertainties  
+  stringstream datafile("");
+  datafile << dataPath() 
+	   << "rawdata/" << fSetName << "/" << fSetName << ".data";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Starting filter
+  string line;
+  for(int i=0; i<5; i++)
+    {
+      getline(f1,line);
+    }
+  
+  for(int i=0; i<fNData;i++)
+    {
+      double pt_top, ddum;
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> pt_top >> ddum >> ddum; 
+
+      fKin1[i] = pt_top;       //P_T^(top)
+      fKin2[i] = Mt;       
+      fKin3[i] = 8000;         //sqrt(s)
+
+      lstream >> fData[i];     //differential distribution
+      lstream >> fStat[i];     //its statistical uncertainty
+      lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
+      
+      for(int j=0; j<fNSys-1; j++)
+	{
+	  double syst[2][fNSys];
+	  double stmp, dtmp;
+	  string sysdescr;
+	  
+	  ostringstream id;
+	  id << j;
+	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  
+	  lstream >> syst[0][j] >> syst[1][j];
+	  //convert to relative percentage values
+	  syst[0][j] = syst[0][j]/fData[i]*100;  
+	  syst[1][j] = syst[1][j]/fData[i]*100;
+	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  
+	  if(stmp<0) stmp=-1.0*stmp;
+	  fSys[i][j].type = MULT;
+	  fSys[i][j].name = sysdescr;
+	  fSys[i][j].mult = stmp;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+
+	}
+
+      //overall luminosity uncertainty
+      fSys[i][56].mult=2.8;
+      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
+          
+    }  
+  
+  f1.close();
+}
+
+
+//=================================================================
+
+//4) Distribution differential in top quark pair rapidity
+void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
+{
+  // Opening files
+  fstream f1;
+
+  //Central values, statistical and systematic uncertainties  
+  stringstream datafile("");
+  datafile << dataPath() 
+	   << "rawdata/" << fSetName << "/" << fSetName << ".data";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Starting filter
+  string line;
+  for(int i=0; i<5; i++)
+    {
+      getline(f1,line);
+    }
+  
+  for(int i=0; i<fNData;i++)
+    {
+      double pt_top, ddum;
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> pt_top >> ddum >> ddum; 
+
+      fKin1[i] = pt_top;       //P_T^(top)
+      fKin2[i] = Mt;       
+      fKin3[i] = 8000;         //sqrt(s)
+
+      lstream >> fData[i];     //differential distribution
+      lstream >> fStat[i];     //its statistical uncertainty
+      lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
+      
+      for(int j=0; j<fNSys-1; j++)
+	{
+	  double syst[2][fNSys];
+	  double stmp, dtmp;
+	  string sysdescr;
+	  
+	  ostringstream id;
+	  id << j;
+	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  
+	  lstream >> syst[0][j] >> syst[1][j];
+	  //convert to relative percentage values
+	  syst[0][j] = syst[0][j]/fData[i]*100;  
+	  syst[1][j] = syst[1][j]/fData[i]*100;
+	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  
+	  if(stmp<0) stmp=-1.0*stmp;
+	  fSys[i][j].type = MULT;
+	  fSys[i][j].name = sysdescr;
+	  fSys[i][j].mult = stmp;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+
+	}
+
+      //overall luminosity uncertainty
+      fSys[i][56].mult=2.8;
+      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
+          
+    }  
+  
+  f1.close();
+}
+
+//=================================================================
+
+//5) Distribution differential in top quark pair invariant mass
+void  ATLASTOPDIFF8TEVTTMNORMFilter::ReadData()
+{
+  // Opening files
+  fstream f1;
+
+  //Central values, statistical and systematic uncertainties  
+  stringstream datafile("");
+  datafile << dataPath() 
+	   << "rawdata/" << fSetName << "/" << fSetName << ".data";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Starting filter
+  string line;
+  for(int i=0; i<5; i++)
+    {
+      getline(f1,line);
+    }
+  
+  for(int i=0; i<fNData;i++)
+    {
+      double pt_top, ddum;
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> pt_top >> ddum >> ddum; 
+
+      fKin1[i] = pt_top;       //P_T^(top)
+      fKin2[i] = Mt;       
+      fKin3[i] = 8000;         //sqrt(s)
+
+      lstream >> fData[i];     //differential distribution
+      lstream >> fStat[i];     //its statistical uncertainty
+      lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
+      
+      for(int j=0; j<fNSys-1; j++)
+	{
+	  double syst[2][fNSys];
+	  double stmp, dtmp;
+	  string sysdescr;
+	  
+	  ostringstream id;
+	  id << j;
+	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  
+	  lstream >> syst[0][j] >> syst[1][j];
+	  //convert to relative percentage values
+	  syst[0][j] = syst[0][j]/fData[i]*100;  
+	  syst[1][j] = syst[1][j]/fData[i]*100;
+	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  
+	  if(stmp<0) stmp=-1.0*stmp;
+	  fSys[i][j].type = MULT;
+	  fSys[i][j].name = sysdescr;
+	  fSys[i][j].mult = stmp;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+
+	}
+
+      //overall luminosity uncertainty
+      fSys[i][56].mult=2.8;
+      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
+          
+    }  
+  
+  f1.close();
+}
+
+/*
+========================================================================
+*/
+
+//B - UNNORMALISED distributions
+
+//1) Distribution differential in top quark transverse momentum
 void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
 {
   // Opening files
   fstream f1;
 
-  //
-  // The raw data for (1/sigma) dsigma/dpt is taken from
-  // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2015-06/tabaux_025.pdf
-  // Format
-  // pt_min  pt_max   (1/sigma)dsigma/dpt   Total_Unc(%)
-  //
-  
+  //Central values, statistical and systematic uncertainties  
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-	   << fSetName << "/ATLASTOPDIFF8TEVTPT.dat";
+  datafile << dataPath() 
+	   << "rawdata/" << fSetName << "/" << fSetName << ".data";
   f1.open(datafile.str().c_str(), ios::in);
-  if (f1.fail()) {
-    cerr << "Error opening data file " << datafile.str() << endl;
+
+  if (f1.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
       exit(-1);
-  }
+    }
+
+  //Starting filter
   string line;
-  for (int i = 0; i < fNData; i++)
+  for(int i=0; i<5; i++)
     {
       getline(f1,line);
-      istringstream lstream(line);
-            
-      int idum=0;
-      lstream >> idum; 
-      if(idum!=(i+1)){
-	cout<<"Error in ATLASTOPDIFF.cc"<<endl;
-	cout<<"idum = "<<idum<<endl;
-	exit(-10);
-      }
-
-      double pt_min=0.0;
-      lstream >> pt_min;
-      double pt_max=0.0;
-      lstream >> pt_max;
-
-      fKin1[i] = 0.5*(pt_min + pt_max); // <pt_top> as characteristic kin variable
-      fKin2[i] = Mt;
-      fKin3[i] = 8000;
-
-      lstream >> fData[i]; // Central values
-      lstream >> fStat[i]; // Total statistical+systematic error (in percent)
-      // Convert from absolute to percentage, as required by CommonData
-      fStat[i] = fData[i]*fStat[i]/1e2;
-
-      
     }
+  
+  for(int i=0; i<fNData;i++)
+    {
+      double pt_top, ddum;
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> pt_top >> ddum >> ddum; 
+
+      fKin1[i] = pt_top;       //P_T^(top)
+      fKin2[i] = Mt;       
+      fKin3[i] = 8000;         //sqrt(s)
+
+      lstream >> fData[i];     //differential distribution
+      lstream >> fStat[i];     //its statistical uncertainty
+      lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
+      
+      for(int j=0; j<fNSys-1; j++)
+	{
+	  double syst[2][fNSys];
+	  double stmp, dtmp;
+	  string sysdescr;
+	  
+	  ostringstream id;
+	  id << j;
+	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  
+	  lstream >> syst[0][j] >> syst[1][j];
+	  //convert to relative percentage values
+	  syst[0][j] = syst[0][j]/fData[i]*100;  
+	  syst[1][j] = syst[1][j]/fData[i]*100;
+	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  
+	  if(stmp<0) stmp=-1.0*stmp;
+	  fSys[i][j].type = MULT;
+	  fSys[i][j].name = sysdescr;
+	  fSys[i][j].mult = stmp;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+
+	}
+
+      //overall luminosity uncertainty
+      fSys[i][56].mult=2.8;
+      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
+          
+    }  
   
   f1.close();
 }
 
-///////////////////////////////////////////////////////////
+//==================================================================
 
-
-//-------------------------------------------------------------------------------
-
-// ATLAS top quark differential distributions
-// 8 TeV, top quark rapidity distribution
-// Using here normalized ditributions, absolute distributions also available
-void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
-{
-  // Opening files
-  fstream f1;
-
-  //
-  // The raw data for (1/sigma) dsigma/dpt is taken from
-  // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2015-06/tabaux_027.pdf
-  // Format
-  // i  yt_min  yt_max   (1/sigma)dsigma/dyt   Total_Unc(%)
-  //
-  
-  stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-	   << fSetName << "/ATLASTOPDIFF8TEVTRAP.dat";
-  f1.open(datafile.str().c_str(), ios::in);
-  if (f1.fail()) {
-    cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-  }
-  cout<<datafile.str()<<endl;
-  string line;
-  for (int i = 0; i < fNData; i++)
-    {
-      getline(f1,line);
-      istringstream lstream(line);
-      cout<<line<<endl;
-      
-      int idum=0;
-      lstream >> idum;
-      if(idum!=(i+1)){
-	cout<<"Error in ATLASTOPDIFF.cc TRAP"<<endl;
-	cout<<"idum = "<<idum<<endl;
-	exit(-10);
-      }
-
-      double yt_min=0.0;
-      lstream >> yt_min;
-      double yt_max=0.0;
-      lstream >> yt_max;
-
-      fKin1[i] = 0.5*(yt_min + yt_max); // <y_top> as characteristic kin variable
-      fKin2[i] = Mt;
-      fKin3[i] = 8000;
-
-      cout<<fKin1[i]<<endl;
-
-      lstream >> fData[i]; // Central values
-      lstream >> fStat[i]; // Total statistical+systematic error (in percent)
-      // Convert from absolute to percentage, as required by CommonData
-      fStat[i] = fData[i]*fStat[i]/1e2;
-            
-    }
-  
-  f1.close();
-}
-
-///////////////////////////////////////////////////////////
-
-//-------------------------------------------------------------------------------
-
-// ATLAS top quark differential distributions
-// 8 TeV, top quark pair pt distribution
-// Normalized to the total cross-section - absolute distributions also available
+//2) Distribution differential in top quark pair transverse momentum
 void  ATLASTOPDIFF8TEVTTPTFilter::ReadData()
 {
   // Opening files
   fstream f1;
 
-  //
-  // The raw data for (1/sigma) dsigma/dp_tt is taken from
-  // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2015-06/tabaux_031.pdf
-  // Format
-  // i  p_tt_min  p_tt_max   (1/sigma)dsigma/dp_tt   Total_Unc(%)
-  //
-  
+  //Central values, statistical and systematic uncertainties  
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-	   << fSetName << "/ATLASTOPDIFF8TEVTTPT.dat";
+  datafile << dataPath() 
+	   << "rawdata/" << fSetName << "/" << fSetName << ".data";
   f1.open(datafile.str().c_str(), ios::in);
-  if (f1.fail()) {
-    cerr << "Error opening data file " << datafile.str() << endl;
+
+  if (f1.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
       exit(-1);
-  }
+    }
+
+  //Starting filter
   string line;
-  for (int i = 0; i < fNData; i++)
+  for(int i=0; i<5; i++)
     {
       getline(f1,line);
-      istringstream lstream(line);
-            
-      int idum=0;
-      lstream >> idum; 
-      if(idum!=(i+1)){
-	cout<<"Error in ATLASTOPDIFF.cc TTPT"<<endl;
-	cout<<"idum = "<<idum<<endl;
-	exit(-10);
-      }
-
-      double ptt_min=0.0;
-      lstream >> ptt_min;
-      double ptt_max=0.0;
-      lstream >> ptt_max;
-
-      fKin1[i] = 0.5*(ptt_min + ptt_max); // <ptt_top> as characteristic kin variable
-      fKin2[i] = Mt;
-      fKin3[i] = 8000;
-
-      lstream >> fData[i]; // Central values
-      lstream >> fStat[i]; // Total statistical+systematic error (in percent)
-      // Convert from absolute to percentage, as required by CommonData
-      fStat[i] = fData[i]*fStat[i]/1e2;
-      
     }
+  
+  for(int i=0; i<fNData;i++)
+    {
+      double pt_top, ddum;
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> pt_top >> ddum >> ddum; 
+
+      fKin1[i] = pt_top;       //P_T^(top)
+      fKin2[i] = Mt;       
+      fKin3[i] = 8000;         //sqrt(s)
+
+      lstream >> fData[i];     //differential distribution
+      lstream >> fStat[i];     //its statistical uncertainty
+      lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
+      
+      for(int j=0; j<fNSys-1; j++)
+	{
+	  double syst[2][fNSys];
+	  double stmp, dtmp;
+	  string sysdescr;
+	  
+	  ostringstream id;
+	  id << j;
+	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  
+	  lstream >> syst[0][j] >> syst[1][j];
+	  //convert to relative percentage values
+	  syst[0][j] = syst[0][j]/fData[i]*100;  
+	  syst[1][j] = syst[1][j]/fData[i]*100;
+	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  
+	  if(stmp<0) stmp=-1.0*stmp;
+	  fSys[i][j].type = MULT;
+	  fSys[i][j].name = sysdescr;
+	  fSys[i][j].mult = stmp;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+
+	}
+
+      //overall luminosity uncertainty
+      fSys[i][56].mult=2.8;
+      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
+          
+    }  
   
   f1.close();
 }
 
-///////////////////////////////////////////////////////////
+//==============================================================
 
-//-------------------------------------------------------------------------------
+//3) Distribution differential in top quark rapidity
+void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
+{
+  // Opening files
+  fstream f1;
 
-// ATLAS top quark differential distributions
-// 8 TeV, top quark pair  rapidity distribution
-// Using normalized cross-sections, absolute distributions also available
+  //Central values, statistical and systematic uncertainties  
+  stringstream datafile("");
+  datafile << dataPath() 
+	   << "rawdata/" << fSetName << "/" << fSetName << ".data";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Starting filter
+  string line;
+  for(int i=0; i<5; i++)
+    {
+      getline(f1,line);
+    }
+  
+  for(int i=0; i<fNData;i++)
+    {
+      double pt_top, ddum;
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> pt_top >> ddum >> ddum; 
+
+      fKin1[i] = pt_top;       //P_T^(top)
+      fKin2[i] = Mt;       
+      fKin3[i] = 8000;         //sqrt(s)
+
+      lstream >> fData[i];     //differential distribution
+      lstream >> fStat[i];     //its statistical uncertainty
+      lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
+      
+      for(int j=0; j<fNSys-1; j++)
+	{
+	  double syst[2][fNSys];
+	  double stmp, dtmp;
+	  string sysdescr;
+	  
+	  ostringstream id;
+	  id << j;
+	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  
+	  lstream >> syst[0][j] >> syst[1][j];
+	  //convert to relative percentage values
+	  syst[0][j] = syst[0][j]/fData[i]*100;  
+	  syst[1][j] = syst[1][j]/fData[i]*100;
+	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  
+	  if(stmp<0) stmp=-1.0*stmp;
+	  fSys[i][j].type = MULT;
+	  fSys[i][j].name = sysdescr;
+	  fSys[i][j].mult = stmp;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+
+	}
+
+      //overall luminosity uncertainty
+      fSys[i][56].mult=2.8;
+      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
+          
+    }  
+  
+  f1.close();
+}
+
+
+//=================================================================
+
+//4) Distribution differential in top quark pair rapidity
 void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
 {
   // Opening files
   fstream f1;
 
-  //
-  // The raw data for (1/sigma) dsigma/dpt is taken from
-  // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2015-06/tabaux_033.pdf
-  // Format
-  // i  y_tt_min  y_tt_max   (1/sigma)dsigma/dy_tt   Total_Unc(%)
-  //
-  
+  //Central values, statistical and systematic uncertainties  
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-	   << fSetName << "/ATLASTOPDIFF8TEVTTRAP.dat";
+  datafile << dataPath() 
+	   << "rawdata/" << fSetName << "/" << fSetName << ".data";
   f1.open(datafile.str().c_str(), ios::in);
-  if (f1.fail()) {
-    cerr << "Error opening data file " << datafile.str() << endl;
+
+  if (f1.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
       exit(-1);
-  }
+    }
+
+  //Starting filter
   string line;
-  for (int i = 0; i < fNData; i++)
+  for(int i=0; i<5; i++)
     {
       getline(f1,line);
-      istringstream lstream(line);
-            
-      int idum=0;
-      lstream >> idum; 
-      if(idum!=(i+1)){
-	cout<<"Error in ATLASTOPDIFF.cc TTRAP"<<endl;
-	cout<<"idum = "<<idum<<endl;
-	exit(-10);
-      }
-
-      double y_tt_min=0.0;
-      lstream >> y_tt_min;
-      double y_tt_max=0.0;
-      lstream >> y_tt_max;
-
-      fKin1[i] = 0.5*(y_tt_min + y_tt_max); // <y_tt> as characteristic kin variable
-      fKin2[i] = Mt;
-      fKin3[i] = 8000;
-
-      lstream >> fData[i]; // Central values
-      lstream >> fStat[i]; // Total statistical+systematic error (in percent)
-      // Convert from absolute to percentage, as required by CommonData
-      fStat[i] = fData[i]*fStat[i]/1e2;
-      
     }
+  
+  for(int i=0; i<fNData;i++)
+    {
+      double pt_top, ddum;
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> pt_top >> ddum >> ddum; 
+
+      fKin1[i] = pt_top;       //P_T^(top)
+      fKin2[i] = Mt;       
+      fKin3[i] = 8000;         //sqrt(s)
+
+      lstream >> fData[i];     //differential distribution
+      lstream >> fStat[i];     //its statistical uncertainty
+      lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
+      
+      for(int j=0; j<fNSys-1; j++)
+	{
+	  double syst[2][fNSys];
+	  double stmp, dtmp;
+	  string sysdescr;
+	  
+	  ostringstream id;
+	  id << j;
+	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  
+	  lstream >> syst[0][j] >> syst[1][j];
+	  //convert to relative percentage values
+	  syst[0][j] = syst[0][j]/fData[i]*100;  
+	  syst[1][j] = syst[1][j]/fData[i]*100;
+	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  
+	  if(stmp<0) stmp=-1.0*stmp;
+	  fSys[i][j].type = MULT;
+	  fSys[i][j].name = sysdescr;
+	  fSys[i][j].mult = stmp;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+
+	}
+
+      //overall luminosity uncertainty
+      fSys[i][56].mult=2.8;
+      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
+          
+    }  
   
   f1.close();
 }
 
-///////////////////////////////////////////////////////////
+//=================================================================
 
-//-------------------------------------------------------------------------------
-
-// ATLAS top quark differential distributions
-// 8 TeV, top quark pair invariant mass distribution
-// Normalized to the total cross-section - absolute distributions also available
+//5) Distribution differential in top quark pair invariant mass
 void  ATLASTOPDIFF8TEVTTMFilter::ReadData()
 {
   // Opening files
   fstream f1;
 
-  //
-  // The raw data for (1/sigma) dsigma/dmtt is taken from
-  // https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2015-06/tabaux_029.pdf
-  // Format
-  // i   mtt_min  mtt_max   (1/sigma)dsigma/dmtt   Total_Unc(%)
-  //
-  
+  //Central values, statistical and systematic uncertainties  
   stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-	   << fSetName << "/ATLASTOPDIFF8TEVTTM.dat";
+  datafile << dataPath() 
+	   << "rawdata/" << fSetName << "/" << fSetName << ".data";
   f1.open(datafile.str().c_str(), ios::in);
-  if (f1.fail()) {
-    cerr << "Error opening data file " << datafile.str() << endl;
+
+  if (f1.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
       exit(-1);
-  }
+    }
+
+  //Starting filter
   string line;
-  cout<<fNData<<endl;
-  for (int i = 0; i < fNData; i++)
+  for(int i=0; i<5; i++)
     {
       getline(f1,line);
-      istringstream lstream(line);
-      
-      int idum=0;
-      lstream >> idum; 
-      if(idum!=(i+1)){
-	cout<<"Error in ATLASTOPDIFF.cc TTM"<<endl;
-	cout<<"idum = "<<idum<<endl;
-	exit(-10);
-      }
-
-      double mtt_min=0.0;
-      lstream >> mtt_min;
-      double mtt_max=0.0;
-      lstream >> mtt_max;
-
-      fKin1[i] = 0.5*(mtt_min + mtt_max); // <mtt_top> as characteristic kin variable
-      fKin2[i] = Mt;
-      fKin3[i] = 8000;
-
-      lstream >> fData[i]; // Central values
-      lstream >> fStat[i]; // Total statistical+systematic error (in percent)
-      // Convert from absolute to percentage, as required by CommonData
-      fStat[i] = fData[i]*fStat[i]/1e2;
-      
     }
-    
+  
+  for(int i=0; i<fNData;i++)
+    {
+      double pt_top, ddum;
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> pt_top >> ddum >> ddum; 
+
+      fKin1[i] = pt_top;       //P_T^(top)
+      fKin2[i] = Mt;       
+      fKin3[i] = 8000;         //sqrt(s)
+
+      lstream >> fData[i];     //differential distribution
+      lstream >> fStat[i];     //its statistical uncertainty
+      lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
+      
+      for(int j=0; j<fNSys-1; j++)
+	{
+	  double syst[2][fNSys];
+	  double stmp, dtmp;
+	  string sysdescr;
+	  
+	  ostringstream id;
+	  id << j;
+	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  
+	  lstream >> syst[0][j] >> syst[1][j];
+	  //convert to relative percentage values
+	  syst[0][j] = syst[0][j]/fData[i]*100;  
+	  syst[1][j] = syst[1][j]/fData[i]*100;
+	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  
+	  if(stmp<0) stmp=-1.0*stmp;
+	  fSys[i][j].type = MULT;
+	  fSys[i][j].name = sysdescr;
+	  fSys[i][j].mult = stmp;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+
+	}
+
+      //overall luminosity uncertainty
+      fSys[i][56].mult=2.8;
+      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
+          
+    }  
+  
   f1.close();
 }
-
-///////////////////////////////////////////////////////////
-

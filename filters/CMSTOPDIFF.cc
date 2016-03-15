@@ -63,7 +63,7 @@ Notes:
 //1) Distribution differential in top quark transverse momentum
 void  CMSTOPDIFF8TEVTPTNORMFilter::ReadData()
 {
-  // Opening files
+  //Opening files
   fstream f1, f2;
 
   //Central values and statistical uncertainties
