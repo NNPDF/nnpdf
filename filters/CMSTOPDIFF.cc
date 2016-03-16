@@ -58,6 +58,23 @@ Notes:
  
 #include "CMSTOPDIFF.h"
 
+//Define custom uncertainty descriptions to allow for cross-correlations
+const std::vector<std::string> sysdescr = {
+  "CMSTOPDIFFLEP",
+  "CMSTOPDIFFJES",
+  "CMSTOPDIFFJER",
+  "CMSTOPDIFFBG",
+  "CMSTOPDIFFBtag",
+  "CMSTOPDIFFPU",
+  "CMSTOPDIFFTopScale",
+  "CMSTOPDIFFTopMatch",
+  "CMSTOPDIFFHadronization",
+  "CMSTOPDIFFTopMass",
+  "CMSTOPDIFFPDF",
+  "CMSTOPDIFFTotXSec",
+  "CMSTOPDIFFLumi",
+};
+
 //A - NORMALISED distributions
 
 //1) Distribution differential in top quark transverse momentum
@@ -89,20 +106,6 @@ void  CMSTOPDIFF8TEVTPTNORMFilter::ReadData()
       cerr << "Error opening data file " << sysfile.str() << endl;
       exit(-1);
     }
-
-  //Define custom uncertainty descriptions to allow for cross-correlated 
-  string sysdescr[fNSys];
-  sysdescr[0]="CMSTOPDIFFLEP";
-  sysdescr[1]="CMSTOPDIFFJES";
-  sysdescr[2]="CMSTOPDIFFJER";
-  sysdescr[3]="CMSTOPDIFFBG";
-  sysdescr[4]="CMSTOPDIFFBtag";
-  sysdescr[5]="CMSTOPDIFFPU";
-  sysdescr[6]="CMSTOPDIFFTopScale";
-  sysdescr[7]="CMSTOPDIFFTopMatch";
-  sysdescr[8]="CMSTOPDIFFHadronization";
-  sysdescr[9]="CMSTOPDIFFTopMass";
-  sysdescr[10]="CMSTOPDIFFPDF";
 
   //Starting filter
   string line;
@@ -195,20 +198,6 @@ void  CMSTOPDIFF8TEVTTPTNORMFilter::ReadData()
       exit(-1);
     }
 
-  //Define custom uncertainty descriptions to allow for cross-correlated 
-  string sysdescr[fNSys];
-  sysdescr[0]="CMSTOPDIFFLEP";
-  sysdescr[1]="CMSTOPDIFFJES";
-  sysdescr[2]="CMSTOPDIFFJER";
-  sysdescr[3]="CMSTOPDIFFBG";
-  sysdescr[4]="CMSTOPDIFFBtag";
-  sysdescr[5]="CMSTOPDIFFPU";
-  sysdescr[6]="CMSTOPDIFFTopScale";
-  sysdescr[7]="CMSTOPDIFFTopMatch";
-  sysdescr[8]="CMSTOPDIFFHadronization";
-  sysdescr[9]="CMSTOPDIFFTopMass";
-  sysdescr[10]="CMSTOPDIFFPDF";
-
   //Starting filter
   string line;
   for(int i=0; i<10; i++)
@@ -299,20 +288,6 @@ void  CMSTOPDIFF8TEVTRAPNORMFilter::ReadData()
       cerr << "Error opening data file " << sysfile.str() << endl;
       exit(-1);
     }
-
-  //Define custom uncertainty descriptions to allow for cross-correlated 
-  string sysdescr[fNSys];
-  sysdescr[0]="CMSTOPDIFFLEP";
-  sysdescr[1]="CMSTOPDIFFJES";
-  sysdescr[2]="CMSTOPDIFFJER";
-  sysdescr[3]="CMSTOPDIFFBG";
-  sysdescr[4]="CMSTOPDIFFBtag";
-  sysdescr[5]="CMSTOPDIFFPU";
-  sysdescr[6]="CMSTOPDIFFTopScale";
-  sysdescr[7]="CMSTOPDIFFTopMatch";
-  sysdescr[8]="CMSTOPDIFFHadronization";
-  sysdescr[9]="CMSTOPDIFFTopMass";
-  sysdescr[10]="CMSTOPDIFFPDF";
 
   //Starting filter
   string line;
@@ -405,20 +380,6 @@ void  CMSTOPDIFF8TEVTTRAPNORMFilter::ReadData()
       exit(-1);
     }
 
-  //Define custom uncertainty descriptions to allow for cross-correlated 
-  string sysdescr[fNSys];
-  sysdescr[0]="CMSTOPDIFFLEP";
-  sysdescr[1]="CMSTOPDIFFJES";
-  sysdescr[2]="CMSTOPDIFFJER";
-  sysdescr[3]="CMSTOPDIFFBG";
-  sysdescr[4]="CMSTOPDIFFBtag";
-  sysdescr[5]="CMSTOPDIFFPU";
-  sysdescr[6]="CMSTOPDIFFTopScale";
-  sysdescr[7]="CMSTOPDIFFTopMatch";
-  sysdescr[8]="CMSTOPDIFFHadronization";
-  sysdescr[9]="CMSTOPDIFFTopMass";
-  sysdescr[10]="CMSTOPDIFFPDF";
-
   //Starting filter
   string line;
   for(int i=0; i<10; i++)
@@ -509,20 +470,6 @@ void  CMSTOPDIFF8TEVTTMNORMFilter::ReadData()
       cerr << "Error opening data file " << sysfile.str() << endl;
       exit(-1);
     }
-
-  //Define custom uncertainty descriptions to allow for cross-correlated 
-  string sysdescr[fNSys];
-  sysdescr[0]="CMSTOPDIFFLEP";
-  sysdescr[1]="CMSTOPDIFFJES";
-  sysdescr[2]="CMSTOPDIFFJER";
-  sysdescr[3]="CMSTOPDIFFBG";
-  sysdescr[4]="CMSTOPDIFFBtag";
-  sysdescr[5]="CMSTOPDIFFPU";
-  sysdescr[6]="CMSTOPDIFFTopScale";
-  sysdescr[7]="CMSTOPDIFFTopMatch";
-  sysdescr[8]="CMSTOPDIFFHadronization";
-  sysdescr[9]="CMSTOPDIFFTopMass";
-  sysdescr[10]="CMSTOPDIFFPDF";
 
   //Starting filter
   string line;
@@ -630,22 +577,6 @@ void CMSTOPDIFF8TEVTPTFilter::ReadData()
       cerr << "Error opening data file " << sysfile.str() << endl;
       exit(-1);
     }
-
-  //Define custom uncertainty descriptions to allow for cross-correlated 
-  string sysdescr[fNSys];
-  sysdescr[0]="CMSTOPDIFFLEP";
-  sysdescr[1]="CMSTOPDIFFJES";
-  sysdescr[2]="CMSTOPDIFFJER";
-  sysdescr[3]="CMSTOPDIFFBG";
-  sysdescr[4]="CMSTOPDIFFBtag";
-  sysdescr[5]="CMSTOPDIFFPU";
-  sysdescr[6]="CMSTOPDIFFTopScale";
-  sysdescr[7]="CMSTOPDIFFTopMatch";
-  sysdescr[8]="CMSTOPDIFFHadronization";
-  sysdescr[9]="CMSTOPDIFFTopMass";
-  sysdescr[10]="CMSTOPDIFFPDF";
-  sysdescr[11]="CMSTOPDIFFTotXSec";
-  sysdescr[12]="CMSTOPDIFFLumi";
 
   //Starting filter
   string line;
@@ -784,22 +715,6 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
       exit(-1);
     }
 
-  //Define custom uncertainty descriptions to allow for cross-correlated 
-  string sysdescr[fNSys];
-  sysdescr[0]="CMSTOPDIFFLEP";
-  sysdescr[1]="CMSTOPDIFFJES";
-  sysdescr[2]="CMSTOPDIFFJER";
-  sysdescr[3]="CMSTOPDIFFBG";
-  sysdescr[4]="CMSTOPDIFFBtag";
-  sysdescr[5]="CMSTOPDIFFPU";
-  sysdescr[6]="CMSTOPDIFFTopScale";
-  sysdescr[7]="CMSTOPDIFFTopMatch";
-  sysdescr[8]="CMSTOPDIFFHadronization";
-  sysdescr[9]="CMSTOPDIFFTopMass";
-  sysdescr[10]="CMSTOPDIFFPDF";
-  sysdescr[11]="CMSTOPDIFFTotXSec";
-  sysdescr[12]="CMSTOPDIFFLumi";
-
   //Starting filter
   string line;
 
@@ -936,22 +851,6 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
       cerr << "Error opening data file " << sysfile.str() << endl;
       exit(-1);
     }
-
-  //Define custom uncertainty descriptions to allow for cross-correlated 
-  string sysdescr[fNSys];
-  sysdescr[0]="CMSTOPDIFFLEP";
-  sysdescr[1]="CMSTOPDIFFJES";
-  sysdescr[2]="CMSTOPDIFFJER";
-  sysdescr[3]="CMSTOPDIFFBG";
-  sysdescr[4]="CMSTOPDIFFBtag";
-  sysdescr[5]="CMSTOPDIFFPU";
-  sysdescr[6]="CMSTOPDIFFTopScale";
-  sysdescr[7]="CMSTOPDIFFTopMatch";
-  sysdescr[8]="CMSTOPDIFFHadronization";
-  sysdescr[9]="CMSTOPDIFFTopMass";
-  sysdescr[10]="CMSTOPDIFFPDF";
-  sysdescr[11]="CMSTOPDIFFTotXSec";
-  sysdescr[12]="CMSTOPDIFFLumi";
 
   //Starting filter
   string line;
@@ -1090,23 +989,7 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
       exit(-1);
     }
 
-  //Define custom uncertainty descriptions to allow for cross-correlated 
-  string sysdescr[fNSys];
-  sysdescr[0]="CMSTOPDIFFLEP";
-  sysdescr[1]="CMSTOPDIFFJES";
-  sysdescr[2]="CMSTOPDIFFJER";
-  sysdescr[3]="CMSTOPDIFFBG";
-  sysdescr[4]="CMSTOPDIFFBtag";
-  sysdescr[5]="CMSTOPDIFFPU";
-  sysdescr[6]="CMSTOPDIFFTopScale";
-  sysdescr[7]="CMSTOPDIFFTopMatch";
-  sysdescr[8]="CMSTOPDIFFHadronization";
-  sysdescr[9]="CMSTOPDIFFTopMass";
-  sysdescr[10]="CMSTOPDIFFPDF";
-  sysdescr[11]="CMSTOPDIFFTotXSec";
-  sysdescr[12]="CMSTOPDIFFLumi";
-
-  //Starting filter
+   //Starting filter
   string line;
 
   for(int i=0; i<3; i++)
@@ -1242,22 +1125,6 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
       cerr << "Error opening data file " << sysfile.str() << endl;
       exit(-1);
     }
-
-  //Define custom uncertainty descriptions to allow for cross-correlated 
-  string sysdescr[fNSys];
-  sysdescr[0]="CMSTOPDIFFLEP";
-  sysdescr[1]="CMSTOPDIFFJES";
-  sysdescr[2]="CMSTOPDIFFJER";
-  sysdescr[3]="CMSTOPDIFFBG";
-  sysdescr[4]="CMSTOPDIFFBtag";
-  sysdescr[5]="CMSTOPDIFFPU";
-  sysdescr[6]="CMSTOPDIFFTopScale";
-  sysdescr[7]="CMSTOPDIFFTopMatch";
-  sysdescr[8]="CMSTOPDIFFHadronization";
-  sysdescr[9]="CMSTOPDIFFTopMass";
-  sysdescr[10]="CMSTOPDIFFPDF";
-  sysdescr[11]="CMSTOPDIFFTotXSec";
-  sysdescr[12]="CMSTOPDIFFLumi";
 
   //Starting filter
   string line;
