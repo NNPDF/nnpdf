@@ -173,7 +173,7 @@ namespace NNPDF
 
     // ******************************* Process types ********************************************
 
-    typedef std::map<std::string, std::vector<std::string>> kinMap;
+    typedef std::map<std::string, std::vector<std::string> > kinMap;
     static const kinMap kinLabel_latex;
 
     // ******************************* CommonData Verbosity *************************************
@@ -196,6 +196,11 @@ namespace NNPDF
     std::string const& GetProc(int i)     const { return fProc[i]; }; //!< Return the process type for point i
     double const& GetKinematics(int const& idat, int const& ikin) const //!< Return the ikinth kinematic value for point idat
     {
+	  if (idat < 0 || idat >= fNData)
+	  {
+		throw std::out_of_range("CommonData::GetKinematics: Data point out of range");
+	  }
+
       switch (ikin)
       {
         case 0:

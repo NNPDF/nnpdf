@@ -15,6 +15,5 @@
 
 %include "include/excepthandler.i"
 %template(map_string_string) std::map<std::string,std::string>;
-%template(vector_string) std::vector<std::string>;
 
 %include "../../src/NNPDF/nnpdfdb.h"

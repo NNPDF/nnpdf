@@ -14,3 +14,7 @@
 %include "include/excepthandler.i"
 
 %include "../../src/NNPDF/common.h"
+
+/* We define often used templates here to avoid name conflicts */
+%template(vector_str) std::vector<std::string>;
+
