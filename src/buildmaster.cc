@@ -26,6 +26,7 @@
 //#include "ATLASPHT11.h"
 #include "CMS.h"
 #include "CMSDY2D12.h"
+#include "CMSZDIFF12.h"
 #include "LHCb.h"
 #include "CDF.h"
 #include "D0.h"
@@ -119,6 +120,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSDY2D11Filter());
   target.push_back(new CMSDY2D12Filter());
   target.push_back(new CMSJETS11Filter());
+  target.push_back(new CMSZDIFF12Filter());
 
  // ************************* CMSwc ******************************
 
