@@ -85,7 +85,6 @@ void CMSZDIFF12Filter::ReadData()
       //fStat[idat] *= 1000.;                   // Make pb -> fb 
     }
   }
-  cout << "something is happening" << endl;
   // Reading covmat
   double** covmat = new double*[fNData];
   for(int i = 0; i < fNData; i++)
@@ -99,7 +98,7 @@ void CMSZDIFF12Filter::ReadData()
     for(int j = 0; j < fNData; j++)
     {
       lstream >> covmat[i][j];
-      cout << i << " " << j << " " << covmat[i][j] << endl;
+      //cout << i << " " << j << " " << covmat[i][j] << endl;
     }
   }
 
@@ -116,7 +115,7 @@ void CMSZDIFF12Filter::ReadData()
 
   for (int i = 0; i < fNData; i++)
     {
-      for (int l = 0; l < fNSys; l++)
+      for (int l = 0; l < fNSys - 1; l++)
       {
         fSys[i][l].add  = syscor[i][l];
         fSys[i][l].mult = fSys[i][l].add*100/fData[i];
@@ -127,10 +126,10 @@ void CMSZDIFF12Filter::ReadData()
       // Luminosity Uncertainty
       // CMS Luminosity Uncertainty, 2012 data set: 2.6%
       // arXiv:1504.03511v2
-      //fSys[i][fNSys-1].mult = 2.6;
-     // fSys[i][fNSys-1].add  = fData[i]*fSys[i][fNSys-1].mult/100;
-     // fSys[i][fNSys-1].type = MULT;
-     // fSys[i][fNSys-1].name = "CMSLUMI12";
+        fSys[i][fNSys-1].mult = 2.6;
+        fSys[i][fNSys-1].add  = fData[i]*fSys[i][fNSys-1].mult/100;
+        fSys[i][fNSys-1].type = MULT;
+        fSys[i][fNSys-1].name = "CMSLUMI12";
     }
   f1.close();
   f2.close();

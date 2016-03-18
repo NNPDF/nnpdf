@@ -14,7 +14,7 @@
 
 static const dataInfoRaw CMSZDIFF12info = {
   50,               //nData
-  50,               //nSys
+  51,               //nSys
   "CMSZDIFF12",     //SetName
   "EWK_PTRAP"       //ProcType
 };
