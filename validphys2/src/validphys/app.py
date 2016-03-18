@@ -9,7 +9,11 @@ import logging
 import pathlib
 import sys
 
+import matplotlib
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+
 
 from reportengine.resourcebuilder import ResourceBuilder, ResourceError
 
