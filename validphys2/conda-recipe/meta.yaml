@@ -17,6 +17,7 @@ requirements:
     - matplotlib
     - blessings
     - scipy
+    - pandas
 
 
 about:
