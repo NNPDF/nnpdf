@@ -3,6 +3,9 @@
 Created on Wed Mar  9 15:40:38 2016
 
 @author: Zahari Kassabov
+
+Resolve paths to useful objects, and query the existence of different resources
+within the specified paths.
 """
 import pathlib
 import functools
@@ -10,9 +13,9 @@ import logging
 
 import numpy as np
 
-from NNPDF import CommonData, FKTable, LHAPDFSet
+from NNPDF import CommonData, FKTable
 
-from validphys import lhaindex
+from validphys.core import CommonDataSpec
 
 log = logging.getLogger(__name__)
 
@@ -55,15 +58,18 @@ class Loader():
             raise DataNotFoundError(("Could not find Commondata set: '%s'. "
                   "File '%s' does not exist.")
                  % (setname, datafile))
-        sysfile = (self.datapath / 'commondata' / 'systypes' /
+        sysfile = (self.commondata_folder / 'systypes' /
                    ('SYSTYPE_%s_%d.dat' % (setname, sysnum)))
+
+        plotfiles = list(self.commondata_folder.glob('PLOTTING_' + setname +
+                                                         '*' + '.y[a]ml'))
 
         if not sysfile.exists():
             raise SysNotFoundError(("Could not find systype %d for "
                  "dataset '%s'. File %s does not exist.") % (sysnum, setname,
                   sysfile))
 
-        return datafile, sysfile
+        return CommonDataSpec(datafile, sysfile, plotfiles)
 
     @functools.lru_cache()
     def check_theoryID(self, theoryID):
@@ -74,8 +80,11 @@ class Loader():
                   "Folder '%s' not found") % (theoryID, theopath) )
         return theopath
 
-    def get_commondata(self, setname, sysnum):
-        """Get a Commondata from the set name and number"""
+    def get_commondata(self, setname, sysnum, plotfiles=None):
+        """Get a Commondata from the set name and number.
+           The plotfiles argument is accepted to keep symmetry with
+           the commondataSpec,
+           returned by check_commondata, but it doesn't do anything."""
         datafile, sysfile = self.check_commondata(setname, sysnum)
         return CommonData.ReadFile(str(datafile), str(sysfile))
 
