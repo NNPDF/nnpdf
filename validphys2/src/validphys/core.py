@@ -4,12 +4,17 @@ Created on Wed Mar  9 15:19:52 2016
 
 @author: Zahari Kassabov
 """
+from collections import namedtuple
 import functools
 
 import numpy as np
 import scipy.stats
 
 from NNPDF import LHAPDFSet
+from NNPDF import CommonData, FKTable
+from NNPDF.fkset import FKSet
+from NNPDF.dataset import DataSet
+
 
 from validphys import lhaindex
 
@@ -111,6 +116,9 @@ class PDF:
         raise NotImplementedError("Error type for %s: '%s' is not implemented" %
                                   (self.name, error))
 
+
+CommonDataSpec = namedtuple('CommonDataSpec', ['datafile', 'sysfile', 'plotfiles'])
+
 class DataSetSpec:
 
     def __init__(self, *, name, commondata, cfac, fkpath, thspec, cuts):
@@ -119,7 +127,30 @@ class DataSetSpec:
         self.cfac = cfac
         self.fkpath = fkpath
         self.thspec = thspec
+
         self.cuts = cuts
+
+    def load(self):
+        cdpath,syspth, _ = self.commondata
+        cd = CommonData.ReadFile(str(cdpath), str(syspth))
+
+        fktable = FKTable(str(self.fkpath), [str(factor) for factor in self.cfac])
+        #IMPORTANT: We need to tell the python garbage collector to NOT free the
+        #memory owned by the FKTable on garbage collection.
+        #TODO: Do this automatically
+        fktable.thisown = 0
+        fkset = FKSet(FKSet.parseOperator("NULL"), [fktable])
+
+        data = DataSet(cd, fkset)
+
+        if self.cuts is not None:
+            #ugly need to convert from numpy.int64 to int, so we can pass
+            #it happily to the vector to the SWIG wrapper.
+            #Do not do this (or find how to enable in SWIG):
+            #data = DataSet(data, list(dataset.cuts))
+            intmask = [int(ele) for ele in self.cuts]
+            data = DataSet(data, intmask)
+        return data
 
 
 class Stats:

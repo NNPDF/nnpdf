@@ -9,9 +9,7 @@ import functools
 
 import numpy as np
 
-from NNPDF import CommonData, FKTable, ThPredictions
-from NNPDF.fkset import FKSet
-from NNPDF.dataset import DataSet
+from NNPDF import ThPredictions
 
 from validphys.core import DataSetSpec, PDF
 
@@ -79,33 +77,14 @@ class ThPredictionsResult(Result):
         return "<Theory %s>@%s" % (self.thlabel, self.dataobj.GetPDFName())
 
 def results(dataset:DataSetSpec, pdf:PDF):
-    cdpath,syspth = dataset.commondata
-    cd = CommonData.ReadFile(str(cdpath), str(syspth))
-    thlabel, thpath = dataset.thspec
-
-    fktable = FKTable(str(dataset.fkpath), [str(factor) for factor in dataset.cfac])
-    #IMPORTANT: We need to tell the python garbage collector to NOT free the
-    #memory owned by the FKTable on garbage collection.
-    #TODO: Do this automatically
-    fktable.thisown = 0
-    fkset = FKSet(FKSet.parseOperator("NULL"), [fktable])
-
-    data = DataSet(cd, fkset)
-
-    if dataset.cuts is not None:
-        #ugly need to convert from numpy.int64 to int, so we can pass
-        #it happily to the vector to the SWIG wrapper.
-        #Do not do this (or find how to enable in SWIG):
-        #data = DataSet(data, list(dataset.cuts))
-        intmask = [int(ele) for ele in dataset.cuts]
-        data = DataSet(data, intmask)
 
     nnpdf_pdf = pdf.load()
+    data = dataset.load()
     th_predictions = ThPredictions(nnpdf_pdf, data)
 
     stats = pdf.stats_class
 
-
+    thlabel, thpath = dataset.thspec
     return DataResult(data), ThPredictionsResult(thlabel, th_predictions,
                                                  stats)
 
