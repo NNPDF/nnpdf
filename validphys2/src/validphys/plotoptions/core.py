@@ -45,6 +45,28 @@ class PlotInfo:
         self.line_by = line_by
         self.kinematics_override = kinematics_override
 
+    def name_to_label(self, name):
+        try:
+            ix = ('k1', 'k2', 'k3').index(name)
+        except ValueError:
+            return name
+        return self.kinlabels[ix]
+
+    @property
+    def xlabel(self):
+        return self.name_to_label(self.x)
+
+    def group_label(self, same_vals, groupby):
+        if not groupby:
+            return ''
+        pieces = []
+        for column, val in zip(groupby, same_vals):
+            label = self.name_to_label(column)
+            pieces.append('%s = %s' % (label, val))
+        return '(%s)' % ' '.join(pieces)
+
+
+
     @classmethod
     def from_commondata(cls, commondata, file=None):
 

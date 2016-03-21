@@ -9,9 +9,10 @@ import logging
 import numpy as np
 import matplotlib.pyplot as plt
 
-from reportengine.figure import figure
+from reportengine.figure import figure, figuregen
 
 from validphys.core import MCStats
+from validphys.plotoptions import get_info, kitable
 
 log = logging.getLogger(__name__)
 
@@ -79,3 +80,56 @@ def plot_results(results, dataset, normalize_to = None):
     ax.legend()
 
     return fig
+
+
+@figuregen
+def plot_fancy(results, dataset, normailze_to = None):
+
+    nnpdf_dt = dataset.load()
+    if not dataset.commondata.plotfiles:
+        infos = [get_info(nnpdf_dt)]
+    else:
+        infos = []
+        for p in dataset.commondata.plotfiles:
+            with p.open() as f:
+                infos.append(get_info(nnpdf_dt, f))
+    thres,dtres = results
+    for info in infos:
+        table = kitable(nnpdf_dt, info)
+        for i,result in enumerate(results):
+            #By doing tuple keys we avoid all possible name collisions
+            table[('cv', i)] = result.central_value
+            table[('err', i)] = result.std_error
+        if info.figure_by:
+            figby = table.groupby(info.figure_by)
+        else:
+            figby = [('', table)]
+        for samefig_vals, fig_data in figby:
+            #Have consistent output for one or more groupby columns
+            if not isinstance(samefig_vals, tuple):
+                samefig_vals = (samefig_vals, )
+            fig, ax = plt.subplots()
+            ax.set_title("%s %s"%(dataset.name, info.group_label(samefig_vals, info.figure_by)))
+            if info.line_by:
+                lineby = fig_data.groupby(info.line_by)
+            else:
+                lineby = [('', fig_data)]
+            for sameline_vals, line_data in lineby:
+                if not isinstance(sameline_vals, tuple):
+                    sameline_vals = (sameline_vals, )
+                if info.x == 'idat':
+                    x = np.array(line_data.index)
+                else:
+                    x = line_data[info.x].as_matrix()
+                for i, res in enumerate(results):
+                    label = "%s %s" % (res.label, info.group_label(sameline_vals, info.line_by))
+                    cv = line_data[('cv', i)].as_matrix()
+                    err = line_data[('err', i)].as_matrix()
+                    ax.errorbar(x, cv, yerr=err,
+                         #linestyle='none',
+                         label= label, elinewidth = 2,
+                         capsize=10)
+            ax.legend()
+            ax.set_xlabel(info.xlabel)
+
+            yield fig
