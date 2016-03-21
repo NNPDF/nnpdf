@@ -71,6 +71,8 @@ class Config(configparser.Config):
         try:
             return fit, self.loader.check_fit(fit)
         except Exception as e:
+            #TODO: maybe drop pathlib because it's too annoying to use
+
             raise ConfigError(str(e), fit ,self.loader.available_fits)
 
 
