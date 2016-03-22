@@ -55,7 +55,7 @@ def valid_replica(path, prefix):
 
 def check_results_path(path):
     path = pathlib.Path(path)
-    assert path.is_dir(), 'Path is not a directory'
+    assert path.is_dir(), 'Path is not a directory %s' % path
     assert (path / 'nnfit').is_dir(), 'Path "nnfit" is not a folder not in path'
 
 ReplicaSpec = namedtuple('ReplicaSpec', ('index', 'path', 'info'))
