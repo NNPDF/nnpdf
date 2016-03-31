@@ -45,12 +45,16 @@ http://hepdata.cedar.ac.uk/h8test/view/ins1404878
 Notes:
 1) The data are provided for both absolute and normalised differential 
    distributions with 56 sources of systematic uncertainty.
-2) All systematic uncertainties are assumed to be multiplicative.
-3) Custom uncertainty descriptions are assumed to allow for cross-correlations
+2) Absolute rapidity distributions are turned into rapidity distributions:
+   the central value is divided by a factor of 2 and the uncertainty is
+   divided by a factor sqrt(2). This way both ATLAS rapidity distributions 
+   are CMS-like. 
+3) All systematic uncertainties are assumed to be multiplicative.
+4) Custom uncertainty descriptions are assumed to allow for cross-correlations
    among the five differential distributions. 
-4) There is an additional multiplicative systematic (luminosity) uncertainty
-   +-2.8% which is not listed in the rawdata files.
-5) The 57 sources of systematics are:
+5) There is an additional multiplicative systematic (luminosity) uncertainty
+   +-2.8% on the unnormalized data set which is not listed in the rawdata files.
+6) The 57 sources of systematics are:
    1   single top cross section
    2   W+jets scale factors
    3   fake lept. alternate real CR mu+jets
@@ -154,7 +158,7 @@ void  ATLASTOPDIFF8TEVTPTNORMFilter::ReadData()
       lstream >> fStat[i];     //its statistical uncertainty
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
-      for(int j=0; j<fNSys-1; j++)
+      for(int j=0; j<fNSys; j++)
 	{
 	  double syst[2][fNSys];
 	  double stmp, dtmp;
@@ -177,10 +181,6 @@ void  ATLASTOPDIFF8TEVTPTNORMFilter::ReadData()
 	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
 
 	}
-
-      //overall luminosity uncertainty
-      fSys[i][56].mult=2.8;
-      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
           
     }  
   
@@ -229,7 +229,7 @@ void  ATLASTOPDIFF8TEVTTPTNORMFilter::ReadData()
       lstream >> fStat[i];     //its statistical uncertainty
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
-      for(int j=0; j<fNSys-1; j++)
+      for(int j=0; j<fNSys; j++)
 	{
 	  double syst[2][fNSys];
 	  double stmp, dtmp;
@@ -253,10 +253,6 @@ void  ATLASTOPDIFF8TEVTTPTNORMFilter::ReadData()
 
 	}
 
-      //overall luminosity uncertainty
-      fSys[i][56].mult=2.8;
-      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
-          
     }  
   
   f1.close();
@@ -289,22 +285,31 @@ void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
       getline(f1,line);
     }
   
-  for(int i=0; i<fNData;i++)
+  for(int i=0; i<fNData/2;i++)
     {
-      double pt_top, ddum;
+      double pt_top, ddum, datum, stat;
       getline(f1,line);
       istringstream lstream(line);
       lstream >> pt_top >> ddum >> ddum; 
 
-      fKin1[i] = pt_top;       //P_T^(top)
-      fKin2[i] = Mt;       
-      fKin3[i] = 8000;         //sqrt(s)
+      fKin1[i+fNData/2]   = pt_top;          //P_T^(top)
+      fKin1[fNData/2-1-i] = -1.0*pt_top;
+      fKin2[i+fNData/2]   = Mt;       
+      fKin2[fNData/2-1-i] = Mt;
+      fKin3[i+fNData/2]   = 8000;            //sqrt(s)
+      fKin3[fNData/2-1-i] = 8000;        
 
-      lstream >> fData[i];     //differential distribution
-      lstream >> fStat[i];     //its statistical uncertainty
+      lstream >> datum;
+      fData[i+fNData/2]   = datum/2.0;       //differential distribution 
+      fData[fNData/2-1-i] = datum/2.0;
+
+      lstream >> stat;
+      fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
+      fStat[fNData/2-1-i] = stat/sqrt(2.0);
+
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
-      for(int j=0; j<fNSys-1; j++)
+      for(int j=0; j<fNSys; j++)
 	{
 	  double syst[2][fNSys];
 	  double stmp, dtmp;
@@ -316,21 +321,22 @@ void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
 	  
 	  lstream >> syst[0][j] >> syst[1][j];
 	  //convert to relative percentage values
-	  syst[0][j] = syst[0][j]/fData[i]*100;  
-	  syst[1][j] = syst[1][j]/fData[i]*100;
+	  syst[0][j] = syst[0][j]/datum*100;  
+	  syst[1][j] = syst[1][j]/datum*100;
 	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
 	  
 	  if(stmp<0) stmp=-1.0*stmp;
-	  fSys[i][j].type = MULT;
-	  fSys[i][j].name = sysdescr;
-	  fSys[i][j].mult = stmp;
-	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+	  fSys[i+fNData/2][j].type = MULT;
+	  fSys[i+fNData/2][j].name = sysdescr;
+	  fSys[i+fNData/2][j].mult = stmp;
+	  fSys[i+fNData/2][j].add  = fSys[i][j].mult*fData[i+fNData/2]*(1.0+dtmp/100)/100;
+
+	  fSys[fNData/2-1-i][j].type = MULT;
+	  fSys[fNData/2-1-i][j].name = sysdescr;
+	  fSys[fNData/2-1-i][j].mult = stmp;
+	  fSys[fNData/2-1-i][j].add  = fSys[i][j].mult*fData[fNData/2-1-i]*(1.0+dtmp/100)/100;
 
 	}
-
-      //overall luminosity uncertainty
-      fSys[i][56].mult=2.8;
-      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
           
     }  
   
@@ -365,22 +371,31 @@ void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
       getline(f1,line);
     }
   
-  for(int i=0; i<fNData;i++)
+  for(int i=0; i<fNData/2;i++)
     {
-      double pt_top, ddum;
+      double pt_top, ddum, datum, stat;
       getline(f1,line);
       istringstream lstream(line);
       lstream >> pt_top >> ddum >> ddum; 
 
-      fKin1[i] = pt_top;       //P_T^(top)
-      fKin2[i] = Mt;       
-      fKin3[i] = 8000;         //sqrt(s)
+      fKin1[i+fNData/2]   = pt_top;          //P_T^(top)
+      fKin1[fNData/2-1-i] = -1.0*pt_top;
+      fKin2[i+fNData/2]   = Mt;       
+      fKin2[fNData/2-1-i] = Mt;
+      fKin3[i+fNData/2]   = 8000;            //sqrt(s)
+      fKin3[fNData/2-1-i] = 8000;        
 
-      lstream >> fData[i];     //differential distribution
-      lstream >> fStat[i];     //its statistical uncertainty
+      lstream >> datum;
+      fData[i+fNData/2]   = datum/2.0;       //differential distribution 
+      fData[fNData/2-1-i] = datum/2.0;
+
+      lstream >> stat;
+      fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
+      fStat[fNData/2-1-i] = stat/sqrt(2.0);
+
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
-      for(int j=0; j<fNSys-1; j++)
+      for(int j=0; j<fNSys; j++)
 	{
 	  double syst[2][fNSys];
 	  double stmp, dtmp;
@@ -392,21 +407,22 @@ void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 	  
 	  lstream >> syst[0][j] >> syst[1][j];
 	  //convert to relative percentage values
-	  syst[0][j] = syst[0][j]/fData[i]*100;  
-	  syst[1][j] = syst[1][j]/fData[i]*100;
+	  syst[0][j] = syst[0][j]/datum*100;  
+	  syst[1][j] = syst[1][j]/datum*100;
 	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
 	  
 	  if(stmp<0) stmp=-1.0*stmp;
-	  fSys[i][j].type = MULT;
-	  fSys[i][j].name = sysdescr;
-	  fSys[i][j].mult = stmp;
-	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+	  fSys[i+fNData/2][j].type = MULT;
+	  fSys[i+fNData/2][j].name = sysdescr;
+	  fSys[i+fNData/2][j].mult = stmp;
+	  fSys[i+fNData/2][j].add  = fSys[i][j].mult*fData[i+fNData/2]*(1.0+dtmp/100)/100;
+
+	  fSys[fNData/2-1-i][j].type = MULT;
+	  fSys[fNData/2-1-i][j].name = sysdescr;
+	  fSys[fNData/2-1-i][j].mult = stmp;
+	  fSys[fNData/2-1-i][j].add  = fSys[i][j].mult*fData[fNData/2-1-i]*(1.0+dtmp/100)/100;
 
 	}
-
-      //overall luminosity uncertainty
-      fSys[i][56].mult=2.8;
-      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
           
     }  
   
@@ -455,7 +471,7 @@ void  ATLASTOPDIFF8TEVTTMNORMFilter::ReadData()
       lstream >> fStat[i];     //its statistical uncertainty
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
-      for(int j=0; j<fNSys-1; j++)
+      for(int j=0; j<fNSys; j++)
 	{
 	  double syst[2][fNSys];
 	  double stmp, dtmp;
@@ -478,10 +494,6 @@ void  ATLASTOPDIFF8TEVTTMNORMFilter::ReadData()
 	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
 
 	}
-
-      //overall luminosity uncertainty
-      fSys[i][56].mult=2.8;
-      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
           
     }  
   
@@ -559,6 +571,8 @@ void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
 	}
 
       //overall luminosity uncertainty
+      fSys[i][56].type = MULT;
+      fSys[i][56].name = "ATLASTOPDIFFLUMI";
       fSys[i][56].mult=2.8;
       fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
           
@@ -634,6 +648,8 @@ void  ATLASTOPDIFF8TEVTTPTFilter::ReadData()
 	}
 
       //overall luminosity uncertainty
+      fSys[i][56].type = MULT;
+      fSys[i][56].name = "ATLASTOPDIFFLUMI";
       fSys[i][56].mult=2.8;
       fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
           
@@ -669,19 +685,28 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
       getline(f1,line);
     }
   
-  for(int i=0; i<fNData;i++)
+  for(int i=0; i<fNData/2;i++)
     {
-      double pt_top, ddum;
+      double pt_top, ddum, datum, stat;
       getline(f1,line);
       istringstream lstream(line);
       lstream >> pt_top >> ddum >> ddum; 
 
-      fKin1[i] = pt_top;       //P_T^(top)
-      fKin2[i] = Mt;       
-      fKin3[i] = 8000;         //sqrt(s)
+      fKin1[i+fNData/2]   = pt_top;          //P_T^(top)
+      fKin1[fNData/2-1-i] = -1.0*pt_top;
+      fKin2[i+fNData/2]   = Mt;       
+      fKin2[fNData/2-1-i] = Mt;
+      fKin3[i+fNData/2]   = 8000;            //sqrt(s)
+      fKin3[fNData/2-1-i] = 8000;        
 
-      lstream >> fData[i];     //differential distribution
-      lstream >> fStat[i];     //its statistical uncertainty
+      lstream >> datum;
+      fData[i+fNData/2]   = datum/2.0;       //differential distribution 
+      fData[fNData/2-1-i] = datum/2.0;
+
+      lstream >> stat;
+      fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
+      fStat[fNData/2-1-i] = stat/sqrt(2.0);
+
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
       for(int j=0; j<fNSys-1; j++)
@@ -696,21 +721,32 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 	  
 	  lstream >> syst[0][j] >> syst[1][j];
 	  //convert to relative percentage values
-	  syst[0][j] = syst[0][j]/fData[i]*100;  
-	  syst[1][j] = syst[1][j]/fData[i]*100;
+	  syst[0][j] = syst[0][j]/datum*100;  
+	  syst[1][j] = syst[1][j]/datum*100;
 	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
 	  
 	  if(stmp<0) stmp=-1.0*stmp;
-	  fSys[i][j].type = MULT;
-	  fSys[i][j].name = sysdescr;
-	  fSys[i][j].mult = stmp;
-	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+	  fSys[i+fNData/2][j].type = MULT;
+	  fSys[i+fNData/2][j].name = sysdescr;
+	  fSys[i+fNData/2][j].mult = stmp;
+	  fSys[i+fNData/2][j].add  = fSys[i][j].mult*fData[i+fNData/2]*(1.0+dtmp/100)/100;
+
+	  fSys[fNData/2-1-i][j].type = MULT;
+	  fSys[fNData/2-1-i][j].name = sysdescr;
+	  fSys[fNData/2-1-i][j].mult = stmp;
+	  fSys[fNData/2-1-i][j].add  = fSys[i][j].mult*fData[fNData/2-1-i]*(1.0+dtmp/100)/100;
 
 	}
 
       //overall luminosity uncertainty
-      fSys[i][56].mult=2.8;
-      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
+      fSys[i+fNData/2][56].type = MULT;
+      fSys[i+fNData/2][56].name = "ATLASTOPDIFFLUMI";
+      fSys[i+fNData/2][56].mult=2.8;
+      fSys[i+fNData/2][56].add=fSys[i][56].mult*fData[i]/100;
+      fSys[fNData/2-1-i][56].type = MULT;
+      fSys[fNData/2-1-i][56].name = "ATLASTOPDIFFLUMI";
+      fSys[fNData/2-1-i][56].mult=2.8;
+      fSys[fNData/2-1-i][56].add=fSys[i][56].mult*fData[i]/100;
           
     }  
   
@@ -745,19 +781,28 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
       getline(f1,line);
     }
   
-  for(int i=0; i<fNData;i++)
+  for(int i=0; i<fNData/2;i++)
     {
-      double pt_top, ddum;
+      double pt_top, ddum, datum, stat;
       getline(f1,line);
       istringstream lstream(line);
       lstream >> pt_top >> ddum >> ddum; 
 
-      fKin1[i] = pt_top;       //P_T^(top)
-      fKin2[i] = Mt;       
-      fKin3[i] = 8000;         //sqrt(s)
+      fKin1[i+fNData/2]   = pt_top;          //P_T^(top)
+      fKin1[fNData/2-1-i] = -1.0*pt_top;
+      fKin2[i+fNData/2]   = Mt;       
+      fKin2[fNData/2-1-i] = Mt;
+      fKin3[i+fNData/2]   = 8000;            //sqrt(s)
+      fKin3[fNData/2-1-i] = 8000;        
 
-      lstream >> fData[i];     //differential distribution
-      lstream >> fStat[i];     //its statistical uncertainty
+      lstream >> datum;
+      fData[i+fNData/2]   = datum/2.0;       //differential distribution 
+      fData[fNData/2-1-i] = datum/2.0;
+
+      lstream >> stat;
+      fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
+      fStat[fNData/2-1-i] = stat/sqrt(2.0);
+
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
       for(int j=0; j<fNSys-1; j++)
@@ -772,21 +817,32 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
 	  
 	  lstream >> syst[0][j] >> syst[1][j];
 	  //convert to relative percentage values
-	  syst[0][j] = syst[0][j]/fData[i]*100;  
-	  syst[1][j] = syst[1][j]/fData[i]*100;
+	  syst[0][j] = syst[0][j]/datum*100;  
+	  syst[1][j] = syst[1][j]/datum*100;
 	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
 	  
 	  if(stmp<0) stmp=-1.0*stmp;
-	  fSys[i][j].type = MULT;
-	  fSys[i][j].name = sysdescr;
-	  fSys[i][j].mult = stmp;
-	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+	  fSys[i+fNData/2][j].type = MULT;
+	  fSys[i+fNData/2][j].name = sysdescr;
+	  fSys[i+fNData/2][j].mult = stmp;
+	  fSys[i+fNData/2][j].add  = fSys[i][j].mult*fData[i+fNData/2]*(1.0+dtmp/100)/100;
+
+	  fSys[fNData/2-1-i][j].type = MULT;
+	  fSys[fNData/2-1-i][j].name = sysdescr;
+	  fSys[fNData/2-1-i][j].mult = stmp;
+	  fSys[fNData/2-1-i][j].add  = fSys[i][j].mult*fData[fNData/2-1-i]*(1.0+dtmp/100)/100;
 
 	}
 
       //overall luminosity uncertainty
-      fSys[i][56].mult=2.8;
-      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
+      fSys[i+fNData/2][56].type = MULT;
+      fSys[i+fNData/2][56].name = "ATLASTOPDIFFLUMI";
+      fSys[i+fNData/2][56].mult=2.8;
+      fSys[i+fNData/2][56].add=fSys[i][56].mult*fData[i]/100;
+      fSys[fNData/2-1-i][56].type = MULT;
+      fSys[fNData/2-1-i][56].name = "ATLASTOPDIFFLUMI";
+      fSys[fNData/2-1-i][56].mult=2.8;
+      fSys[fNData/2-1-i][56].add=fSys[i][56].mult*fData[i]/100;
           
     }  
   
@@ -860,6 +916,8 @@ void  ATLASTOPDIFF8TEVTTMFilter::ReadData()
 	}
 
       //overall luminosity uncertainty
+      fSys[i][56].type = MULT;
+      fSys[i][56].name = "ATLASTOPDIFFLUMI";
       fSys[i][56].mult=2.8;
       fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
           
