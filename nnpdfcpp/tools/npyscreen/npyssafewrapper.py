@@ -79,7 +79,6 @@ def wrapper_no_fork(call_function, reset=False):
     return_code = None
     if _NEVER_RUN_INITSCR:
         _NEVER_RUN_INITSCR = False
-        locale.setlocale(locale.LC_ALL, '')
         _SCREEN = curses.initscr()
         try:
             curses.start_color()
