@@ -27,26 +27,54 @@ void CMSZDIFF12Filter::ReadData()
   // Opening files
   fstream f1, f2;
 
-  stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/CMS_Z_DIFF_TABLE1.data";
-  f1.open(datafile.str().c_str(), ios::in);
+  bool Table1 = false; //Set to true or false (Table1 or Table 2 respectively)
+  
+  if (Table1)
+  {
+    stringstream datafile("");
+    datafile << dataPath() << "rawdata/"
+    << fSetName << "/CMS_Z_DIFF_TABLE1.data";
+    f1.open(datafile.str().c_str(), ios::in);
 
-  if (f1.fail()) {
-    cerr << "Error opening data file " << datafile.str() << endl;
-    exit(-1);
+    if (f1.fail()) {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+    stringstream covfile("");
+    covfile << dataPath() << "rawdata/"
+    	    << fSetName << "/CMS_Z_DIFF_covmat.data"; 
+    f2.open(covfile.str().c_str(), ios::in);
+
+    if (f2.fail()) {
+      cerr << "Error opening data file " << covfile.str() << endl;
+      exit(-1);
+    }
+    cout << "We are using Table 1 for CMSZDIFF12.h" << endl;
   }
+  else
+  {
+    stringstream datafile("");
+    datafile << dataPath() << "rawdata/"
+    << fSetName << "/CMS_Z_DIFF_TABLE2.data";
+    f1.open(datafile.str().c_str(), ios::in);
 
-  stringstream covfile("");
-  covfile << dataPath() << "rawdata/"
-    	  << fSetName << "/CMS_Z_DIFF_covmat.data"; 
-  f2.open(covfile.str().c_str(), ios::in);
+    if (f1.fail()) {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
 
-  if (f2.fail()) {
-    cerr << "Error opening data file " << covfile.str() << endl;
-    exit(-1);
+    stringstream covfile("");
+    covfile << dataPath() << "rawdata/"
+    	    << fSetName << "/CMS_Z_DIFF_covmat2.data"; 
+    f2.open(covfile.str().c_str(), ios::in);
+
+    if (f2.fail()) {
+      cerr << "Error opening data file " << covfile.str() << endl;
+      exit(-1);
+    }
+    cout << "We are using Table 2 for CMSZDIFF12.h" << endl;
   }
-
   string line;
   
   int idat;
