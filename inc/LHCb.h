@@ -40,6 +40,20 @@ static const dataInfoRaw LHCBWMU1FBinfo = {
   "EWK_RAP"     //ProcType
 };
 
+static const dataInfoRaw LHCBWZ7TEVinfo = {
+  34,             //nData
+  36,             //nSys: covariance matrix + beam + lumi
+  "LHCBWZMU7TEV", //SetName
+  "EWK_RAP"       //ProcType
+};
+
+static const dataInfoRaw LHCBWZ8TEVinfo = {
+  34,             //nData
+  36,             //nSys: covariance matrix + beam + lumi
+  "LHCBWZMU8TEV", //SetName
+  "EWK_RAP"       //ProcType
+};
+
 static const dataInfoRaw LHCBZEE2FBinfo = {
   17,           //nData
   19,           //nSys
@@ -80,6 +94,24 @@ class LHCBWMU1FBFilter: public CommonData
 {
 public: LHCBWMU1FBFilter():
   CommonData(LHCBWMU1FBinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class LHCBWZMU7TEVFilter: public CommonData
+{
+public: LHCBWZMU7TEVFilter():
+  CommonData(LHCBWZMU7TEVinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class LHCBWZMU8TEVFilter: public CommonData
+{
+public: LHCBWZMU8TEVFilter():
+  CommonData(LHCBWZMU8TEVinfo) { ReadData(); }
 
 private:
   void ReadData();

@@ -7,13 +7,13 @@ Archived as: ARXIV:1504.03511
 Auxiliary Material: https://twiki.cern.ch/twiki/bin/view/CMSPublic/PhysicsResultsSMP13013
 Record in: INSPIRE
 Record in: CERN Document Server
-Record in: HEPData (new site in development) 
+Record in: HEPData (new site in development)
 
-Description of the measurement 
+Description of the measurement
 CERN-LHC. Measurements of the double-differential Drell-Yan cross sections are presented using an integrated luminosity of 19.7 inverse femtobarns in the dimuon channel of proton-proton collision data recorded in 2012 with the CMS detector at the LHC at sqrt(s) = 8 TeV. Covariance matrices are provided in addition to the tables given in the paper.
 
 Description of the buildmaster implementation
-Measured double differential fiducial cross section normalised to the inclusive fiducial cross section. The uncertainty indicates the total experimental uncertainties (statistical and systematic added in quadrature).   
+Measured double differential fiducial cross section normalised to the inclusive fiducial cross section. The uncertainty indicates the total experimental uncertainties (statistical and systematic added in quadrature).
 
 Raw data and covariance matrix are from HepData:
 http://hepdata.cedar.ac.uk/view/ins1359450
@@ -28,7 +28,7 @@ void CMSZDIFF12Filter::ReadData()
   fstream f1, f2;
 
   bool Table1 = false; //Set to true or false (Table1 or Table 2 respectively)
-  
+
   if (Table1)
   {
     stringstream datafile("");
@@ -43,7 +43,7 @@ void CMSZDIFF12Filter::ReadData()
 
     stringstream covfile("");
     covfile << dataPath() << "rawdata/"
-    	    << fSetName << "/CMS_Z_DIFF_covmat.data"; 
+    	    << fSetName << "/CMS_Z_DIFF_covmat.data";
     f2.open(covfile.str().c_str(), ios::in);
 
     if (f2.fail()) {
@@ -66,7 +66,7 @@ void CMSZDIFF12Filter::ReadData()
 
     stringstream covfile("");
     covfile << dataPath() << "rawdata/"
-    	    << fSetName << "/CMS_Z_DIFF_covmat2.data"; 
+    	    << fSetName << "/CMS_Z_DIFF_covmat2.data";
     f2.open(covfile.str().c_str(), ios::in);
 
     if (f2.fail()) {
@@ -76,14 +76,14 @@ void CMSZDIFF12Filter::ReadData()
     cout << "We are using Table 2 for CMSZDIFF12.h" << endl;
   }
   string line;
-  
+
   int idat;
   double idum, jdum, kdum;
   double ptmax, ptmin;
   double etamax, etamin;
-  //double MZ2 = pow(MZ,2.0);
+
   int fNDataRap = 5;                  // Number of rapidity bins
-  int fNDataPT = 10;		      // Number of pt bins
+  int fNDataPT = 10;		              // Number of pt bins
   double s = 8000;
 
   // Reading data
@@ -91,7 +91,7 @@ void CMSZDIFF12Filter::ReadData()
   {
     getline(f1,line);
     istringstream lstream(line);
-   
+
     lstream >> ptmin >> ptmax;
 
     for (int j = 0; j < fNDataRap; j++)
@@ -99,7 +99,7 @@ void CMSZDIFF12Filter::ReadData()
       idat = i + j*fNDataPT;		       // Structure for Covariance matrix
 
       etamin = 0.0 + j * 0.4;
-      etamax = 0.4 + j * 0.4; 
+      etamax = 0.4 + j * 0.4;
 
       fKin1[idat] = (etamin + etamax) / 2.0;   // average rapidity
       fKin2[idat] = (ptmin + ptmax) / 2.0;     // average pt
@@ -108,9 +108,10 @@ void CMSZDIFF12Filter::ReadData()
 
       lstream >> fData[idat];
       //fData[idat] *= 1000.;                    // Make pb -> fb
-      
-      lstream >> fStat[idat];
-      //fStat[idat] *= 1000.;                   // Make pb -> fb 
+
+      lstream >> idum;
+      fStat[idat] = 0.0;
+      //fStat[idat] *= 1000.;                   // Make pb -> fb
     }
   }
   // Reading covmat
@@ -118,11 +119,11 @@ void CMSZDIFF12Filter::ReadData()
   for(int i = 0; i < fNData; i++)
   {
     covmat[i] = new double[fNData];
-    
+
     getline(f2,line);
     istringstream lstream(line);
     lstream >> idum >> jdum >> kdum;
-    
+
     for(int j = 0; j < fNData; j++)
     {
       lstream >> covmat[i][j];
