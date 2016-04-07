@@ -18,11 +18,11 @@ void LHCBWZMU7TEVFilter::ReadData()
   fstream f1, f2, f3, f4;
 
   stringstream datafile1("");
-  datafile << dataPath() << "rawdata/" << fSetName << "/LHCBWZMU7TEV_wplrap.data";
-  f1.open(datafile.str().c_str(), ios::in);
+  datafile1 << dataPath() << "rawdata/" << fSetName << "/LHCBWZMU7TEV_wplrap.data";
+  f1.open(datafile1.str().c_str(), ios::in);
 
   if (f1.fail()) {
-    cerr << "Error opening data file " << datafile.str() << endl;
+    cerr << "Error opening data file " << datafile1.str() << endl;
     exit(-1);
   }
 
@@ -106,7 +106,7 @@ void LHCBWZMU7TEVFilter::ReadData()
   idat+=ndata_z;
 
   // W+
-  getline(f2,line)
+  getline(f2,line);
   for (int i = 0; i < ndata_wp; i++)
   {
     getline(f1,line);
@@ -141,7 +141,7 @@ void LHCBWZMU7TEVFilter::ReadData()
   idat+=ndata_wp;
 
   // W-
-  getline(f3,line)
+  getline(f3,line);
   for (int i = 0; i < ndata_wp; i++)
   {
     getline(f3,line);

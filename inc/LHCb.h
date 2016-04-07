@@ -40,14 +40,14 @@ static const dataInfoRaw LHCBWMU1FBinfo = {
   "EWK_RAP"     //ProcType
 };
 
-static const dataInfoRaw LHCBWZ7TEVinfo = {
+static const dataInfoRaw LHCBWZMU7TEVinfo = {
   34,             //nData
   36,             //nSys: covariance matrix + beam + lumi
   "LHCBWZMU7TEV", //SetName
   "EWK_RAP"       //ProcType
 };
 
-static const dataInfoRaw LHCBWZ8TEVinfo = {
+static const dataInfoRaw LHCBWZMU8TEVinfo = {
   34,             //nData
   36,             //nSys: covariance matrix + beam + lumi
   "LHCBWZMU8TEV", //SetName
