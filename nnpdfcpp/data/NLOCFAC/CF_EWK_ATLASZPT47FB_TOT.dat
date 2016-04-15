@@ -1,4 +1,12 @@
-CF_EWK
+*******************************************************************************************
+SetName: ATLASZPT47PB
+Author: Maria Ubiali ubiali@hep.phy.cam.ac.uk
+Date: 08/2015
+CodesUsed: FEWZ 
+TheoryInput: NLO QCD, EW corrections flag = 7: EW
+PDFset: NNPDF30_nlo_as_0118
+Warnings: 
+********************************************************************************************
 1.0     
 1.0     
 1.0     
