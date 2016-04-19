@@ -72,7 +72,7 @@ class PlotInfo:
         for column, val in zip(groupby, same_vals):
             label = self.name_to_label(column)
             pieces.append('%s = %s' % (label, val))
-        return '(%s)' % ' '.join(pieces)
+        return '%s' % ' '.join(pieces)
 
 
 
