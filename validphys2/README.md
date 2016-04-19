@@ -193,10 +193,11 @@ formats. The SVG version can then be fine tuned.
 
 ### Bug in Inkscape
 
-Due to a bug in the latest version of inkscape (0.9.1), matplotlib figures
-cause a memory leak. To avoid it, open the svg file with a text
-editor, and remove the `stroke-miterlimit` property in one of the
-first lines of the file.
+Due to a [bug](https://bugs.launchpad.net/inkscape/+bug/1534376) in
+the latest version of inkscape (0.9.1), matplotlib figures cause
+a memory leak. To avoid it, open the svg file with a text editor, and
+remove the `stroke-miterlimit` property in one of the first lines of
+the file.
 
 You should leave the line
 
@@ -204,7 +205,7 @@ You should leave the line
 *{stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:100000;}
 ````
 
-Like this
+like this
 
 ````
 *{stroke-linecap:butt;stroke-linejoin:round;}
