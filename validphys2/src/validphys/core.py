@@ -152,6 +152,8 @@ class DataSetSpec:
             data = DataSet(data, intmask)
         return data
 
+FitSpec = namedtuple('FitSpec', ('name', 'path'))
+
 
 class Stats:
 

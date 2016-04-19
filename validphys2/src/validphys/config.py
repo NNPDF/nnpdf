@@ -69,7 +69,7 @@ class Config(configparser.Config):
     #TODO: load fit config from here
     def parse_fit(self, fit:str):
         try:
-            return fit, self.loader.check_fit(fit)
+            return self.loader.check_fit(fit)
         except Exception as e:
             #TODO: maybe drop pathlib because it's too annoying to use
 

@@ -15,7 +15,7 @@ import numpy as np
 
 from NNPDF import CommonData, FKTable
 
-from validphys.core import CommonDataSpec
+from validphys.core import CommonDataSpec, FitSpec
 
 log = logging.getLogger(__name__)
 
@@ -121,7 +121,7 @@ class Loader():
         resultspath = self.resultspath
         p = resultspath / fitname
         if p.is_dir():
-            return p
+            return FitSpec(fitname, p)
         if not p.exists():
             msg = ("Could not find fit '{fitname}' in '{resultspath}'. "
                    "Folder '{p}' not found").format(**locals())
