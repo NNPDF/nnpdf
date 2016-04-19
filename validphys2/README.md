@@ -54,6 +54,7 @@ dependencies that will not come in a standard python installation are:
 
  - libnnpdf
  - reportengine: <https://github.com/NNPDF/reportengine>
+ - lhapdf
 	 
 Reportengine
 should be fairly straight forward; simply clone the repository and
@@ -75,6 +76,18 @@ make
 make install
 
 make wrapper
+````
+Similarly, for LHAPDF, download the latest release, ensure that your
+python executable points to the same python 3.5 that you want to use,
+and do:
+
+````
+./configure
+make
+make install
+
+cd wrappers
+make install
 ````
 
 Refer to the specific instructions on those packages for more details.
