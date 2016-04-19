@@ -99,9 +99,10 @@ def plot_fancy(results, dataset, normailze_to = None):
         table = kitable(nnpdf_dt, info)
         nkinlabels = len(table.columns)
         for i,result in enumerate(results):
-            #By doing tuple keys we avoid all possible name collisions
+            #We modify the table, so we pass only the label columns            
             cv, err = transform_result(result.central_value, result.std_error,
                                        table.iloc[:,:nkinlabels], info)
+            #By doing tuple keys we avoid all possible name collisions
             table[('cv', i)] = cv
             table[('err', i)] = err
         if info.figure_by:
