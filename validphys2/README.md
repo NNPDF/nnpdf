@@ -46,7 +46,7 @@ First clone the repository:
 git clone ssh://git@gitlab.cern.ch:7999/NNPDF/validphys2.git
 ````
 
-###Setting up the dependencies
+### Setting up the dependencies
 
 The dependencies for validphys are listed on the file
 `conda-recipe/meta.yaml` (where they should be always up to date). Two
@@ -77,7 +77,7 @@ make wrapper
 
 Refer to the specific instructions on those packages for more details.
 
-###Installing
+### Installing
 
 Once the dependencies are set up, cd in the repository directory and
  execute: 
@@ -92,7 +92,7 @@ immediately on the functionality.
 
 
 Running
--------
+=======
 
 The specification of the configuration files is rather volatile at
 this point. The best for the moment is to have a look at the
@@ -117,7 +117,7 @@ Otherwise it is possible to specify them passing the apprpriate flags
 (see `validphys --help`).
 
 Customizing figure style
-------------------------
+========================
 
 In case the display logic of a specific plot can be improved in general
 (e.g. legends are too crowded, elements overlap constantly),
@@ -165,7 +165,7 @@ validphys <configuration_file> --formats pdf svg jpg
 which will save a version of these figures in each of the specified
 formats. The SVG version can then be fine tuned.
 
-###Bug in Inkscape
+### Bug in Inkscape
 
 Due to a bug in the latest version of inkscape (0.9.1), matplotlib figures
 cause a memory leak. To avoid it, open the svg file with a text
