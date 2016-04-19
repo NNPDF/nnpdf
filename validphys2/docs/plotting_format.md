@@ -76,7 +76,7 @@ in the plot files. For example, for DIS processes, 'k1' refers to 'x',
 a **kinematics_override** key. The value must be a function defined
 in:
 
-`validphys2/src/validphys/plotoptions/transforms.py`
+`validphys2/src/validphys/plotoptions/kintransforms.py`
 
 The function must take three parameters: `(k1, k2 k3)` as defined in the
 dataset implementation, and return three new values `(k1', k2', k3')`
@@ -162,6 +162,19 @@ figure_by:
   - idat2bin
   - high_xq
 ````
+
+#Transforming the result
+
+By default the y axis represents the central value and error. However
+it is possible to define a results_transform 
+
+#Plotting options
+
+Several plotting options can be specified.
+These include
+
+ - x/y_scale: 'linear' or 'log'.
+ - y_label: Any possibly latex formated string
 
 Example
 ------
