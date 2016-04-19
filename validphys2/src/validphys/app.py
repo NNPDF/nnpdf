@@ -8,6 +8,7 @@ import argparse
 import logging
 import pathlib
 import sys
+import contextlib
 
 import matplotlib
 
@@ -107,15 +108,18 @@ def main():
     rb.rootns['environment'] = environment
 
     #environment.output_path.mkdir(exist_ok = True)
-    plt.style.use(str(environment.this_folder / 'small.mplstyle'))
+
     try:
         rb.resolve_targets()
     except ConfigError as e:
-        print("Bad configuration encountered:")
-        print(str(e.args[0]))
-        print(e.alternatives_text())
+        with contextlib.redirect_stdout(sys.stderr):
+            print("Bad configuration encountered:")
+            print(str(e.args[0]))
+            print(e.alternatives_text())
         sys.exit(1)
     except ResourceError as e:
-        print("Cannot process a resource:")
-        print(e)
+        with contextlib.redirect_stdout(sys.stderr):
+            print("Cannot process a resource:")
+            print(e)
+        sys.exit(1)
     rb.execute_sequential()
