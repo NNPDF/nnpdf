@@ -128,8 +128,19 @@ validphys <configuration_file>
 
 Currently the paths of the various NNPDF resources are inferred so as
 they work if the validphys folder is alongside the nnpdfcpp one.
-Otherwise it is possible to specify them passing the apprpriate flags
-(see `validphys --help`).
+It is therefore simpler run validphys from
+a folder at the same level as `nnpdfcpp`. So the structure would be:
+
+````
+ nnnpdf
+    |
+    |___nnpdfsrc
+    |___validphys (run validphys from here).
+````
+
+Otherwise it is possible to specify them passing the appropriate flags
+(see `validphys --help`). In particular, with the `--datapath` flag
+one would specify the path to the `nnpdfcpp/data` folder. 
 
 Customizing figure style
 ========================
