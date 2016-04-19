@@ -59,7 +59,9 @@ Reportengine
 should be fairly straight forward; simply clone the repository and
 install with `pip install -e .` as per the instructions. It requires
 `jinja2`, `pyyaml` and `matplotlib` which are all available on standard
-python distributions.
+python distributions (note than in conda the C library `yaml` and the
+python wrapper `pyyaml` live in separated packages, and both are
+needed).
 
 `libnnpdf` requires properly
 building and setting up the Python wrappers. This is done with the
