@@ -85,7 +85,7 @@ class Loader():
            The plotfiles argument is accepted to keep symmetry with
            the commondataSpec,
            returned by check_commondata, but it doesn't do anything."""
-        datafile, sysfile = self.check_commondata(setname, sysnum)
+        datafile, sysfile, *_ = self.check_commondata(setname, sysnum)
         return CommonData.ReadFile(str(datafile), str(sysfile))
 
     @functools.lru_cache()
