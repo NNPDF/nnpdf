@@ -1,0 +1,17 @@
+pdfs:
+    - NNPDF3_IC_nlo_as_0118_mcpole_1470
+
+fit: NNPDF3_IC_nlo_as_0118_mcpole_1470
+theoryids:
+    - 45
+use_cuts : true
+
+datasets:
+
+ - { dataset: EMCF2C, frac: 1.0, sys: 3 }
+
+actions_:
+  pdfs:
+    theoryids:
+      datasets:
+        - plot_fancy
