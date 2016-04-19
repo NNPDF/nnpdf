@@ -4,6 +4,7 @@ Created on Wed Mar  9 15:57:38 2016
 
 @author: Zahari Kassabov
 """
+#TODO: Move most of this to reportengine
 import argparse
 import logging
 import pathlib
@@ -20,6 +21,14 @@ from reportengine.resourcebuilder import ResourceBuilder, ResourceError
 
 from validphys import providers
 from validphys.config import Config, ConfigError, Environment
+
+log = logging.getLogger(__name__)
+
+def format_rich_error(e):
+    with contextlib.redirect_stderr(sys.stderr):
+        log.error("Bad configuration encountered:")
+        print(e)
+        print(e.alternatives_text())
 
 
 def main():
@@ -53,8 +62,12 @@ def main():
                          )
 
     parser.add_argument('--style',
-                        help='Matplotlib style file to override the built-in one.',
+                        help='matplotlib style file to override the built-in one.',
                         default=None)
+
+
+    parser.add_argument('--formats', nargs='+', help="formats of the output figures",
+                        default=('pdf',))
 
     args = parser.parse_args()
 
@@ -73,7 +86,8 @@ def main():
     environment = Environment(data_path = args.datapath,
                               results_path = args.resultspath,
                               output_path = args.output,
-                              this_folder = pathlib.Path(__file__).parent
+                              this_folder = pathlib.Path(__file__).parent,
+                              figure_formats=args.formats
                               )
     environment.init_output()
 
@@ -82,27 +96,32 @@ def main():
             try:
                 c = Config.from_yaml(f, environment=environment)
             except ConfigError as e:
-                with contextlib.redirect_stdout(sys.stderr):
-                    print("Bad configuration encountered:")
-                    print(e)
-                    print(e.alternatives_text())
+                format_rich_error(e)
                 sys.exit(1)
 
     except OSError as e:
-        print("Could not open configuration file: %s" % e, file=sys.stderr)
+        log.error("Could not open configuration file: %s" % e)
         sys.exit(1)
 
     if args.style:
         try:
             plt.style.use(args.style)
         except Exception as e:
-            print("There was a problem reading the supplied style: %s" %e,
+            log.error("There was a problem reading the supplied style: %s" %e,
                   file=sys.stderr)
             sys.exit(1)
     else:
         plt.style.use(str(environment.this_folder / 'small.mplstyle'))
 
-    actions = c.parse_actions_(c['actions_'])
+
+    try:
+        actions = c.parse_actions_(c['actions_'])
+    except ConfigError as e:
+        format_rich_error(e)
+        sys.exit(1)
+    except KeyError as e:
+        log.error("A key 'actions_' is needed in the top level of the config file.")
+        sys.exit(1)
 
     rb = ResourceBuilder(c, providers, actions)
     rb.rootns['environment'] = environment
@@ -112,14 +131,11 @@ def main():
     try:
         rb.resolve_targets()
     except ConfigError as e:
-        with contextlib.redirect_stdout(sys.stderr):
-            print("Bad configuration encountered:")
-            print(str(e.args[0]))
-            print(e.alternatives_text())
+        format_rich_error(e)
         sys.exit(1)
     except ResourceError as e:
         with contextlib.redirect_stdout(sys.stderr):
-            print("Cannot process a resource:")
+            log.error("Cannot process a resource:")
             print(e)
         sys.exit(1)
     rb.execute_sequential()
