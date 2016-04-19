@@ -77,10 +77,10 @@ class PlotInfo:
 
 
     @classmethod
-    def from_commondata(cls, commondata, file=None):
+    def from_commondata(cls, commondata, file=None, cuts=None):
 
         if file:
-            config = PlotConfigParser.from_yaml(file, commondata)
+            config = PlotConfigParser.from_yaml(file, commondata, cuts=cuts)
             plot_params = config.process_all_params()
         else:
             plot_params = {}
@@ -94,15 +94,19 @@ class PlotInfo:
 
 class PlotConfigParser(Config):
 
-    def __init__(self, input_params ,commondata, **kwargs):
+    def __init__(self, input_params ,commondata, cuts=None, **kwargs):
         self.commondata = commondata
+        self.cuts = cuts
         super().__init__(input_params, **kwargs)
 
     @named_element_of('extra_labels')
     def parse_label(self, elems:list):
+        if self.cuts is not None:
+            elems = [elems[c] for c in self.cuts]
         if len(elems) != len(self.commondata):
-            raise ConfigError("The number of elements in %s must be the same as "
-                              "the number of points in the CommonData" % elems)
+            raise ConfigError("The number of elements in %s (%d) must be the same as "
+                              "the number of points in the CommonData (%d)" %
+                              (elems, len(elems), len(self.commondata)))
         return elems
 
     @staticmethod
@@ -198,4 +202,3 @@ def transform_result(cv, error, kintable, info):
         newcv.append(nc)
         newerror.append(ne)
     return newcv, newerror
-
