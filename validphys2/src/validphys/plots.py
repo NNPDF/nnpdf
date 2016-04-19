@@ -160,8 +160,11 @@ def plot_fancy(results, dataset, normailze_to = None):
                     offset_transform = ax.transData + offset
                     ax.errorbar(x, cv, yerr=err,
                          #linestyle='none',
-                         label= label, elinewidth = 2,
-                         capsize=10, zorder=1000, transform=offset_transform)
+                         label= label,
+                         #elinewidth = 2,
+                         #capsize=10,
+                         zorder=1000,
+                         transform=offset_transform)
 
                 glabel = info.group_label(sameline_vals, info.line_by)
                 middle = np.mean(x), np.mean(cv)
@@ -180,7 +183,10 @@ def plot_fancy(results, dataset, normailze_to = None):
             if info.y_label:
                 ax.set_ylabel(info.y_label)
 
-            ax.legend()
+            ax.legend().set_zorder(100000)
             ax.set_xlabel(info.xlabel)
+
+            fig.tight_layout()
+
 
             yield fig
