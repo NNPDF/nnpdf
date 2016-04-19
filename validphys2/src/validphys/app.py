@@ -51,6 +51,10 @@ def main():
                           "are located. Calculated from 'datapath' by default",
                          )
 
+    parser.add_argument('--style',
+                        help='Matplotlib style file to override the built-in one.',
+                        default=None)
+
     args = parser.parse_args()
 
     if args.quiet:
@@ -77,15 +81,25 @@ def main():
             try:
                 c = Config.from_yaml(f, environment=environment)
             except ConfigError as e:
-                print("Bad configuration encountered:")
-                print(e)
-                print(e.alternatives_text())
+                with contextlib.redirect_stdout(sys.stderr):
+                    print("Bad configuration encountered:")
+                    print(e)
+                    print(e.alternatives_text())
                 sys.exit(1)
 
     except OSError as e:
-        print("Could not open configuration file: %s" % e)
+        print("Could not open configuration file: %s" % e, file=sys.stderr)
         sys.exit(1)
 
+    if args.style:
+        try:
+            plt.style.use(args.style)
+        except Exception as e:
+            print("There was a problem reading the supplied style: %s" %e,
+                  file=sys.stderr)
+            sys.exit(1)
+    else:
+        plt.style.use(str(environment.this_folder / 'small.mplstyle'))
 
     actions = c.parse_actions_(c['actions_'])
 
