@@ -10,6 +10,7 @@ import functools
 import numpy as np
 
 from NNPDF import ThPredictions
+from reportengine.checks import require_one
 
 from validphys.core import DataSetSpec, PDF
 
@@ -77,6 +78,9 @@ class ThPredictionsResult(Result):
         return "<Theory %s>@%s" % (self.thlabel, self.dataobj.GetPDFName())
 
 def results(dataset:DataSetSpec, pdf:PDF):
+    """Tuple of data and theory results for a single pdf.
+    The theory is specified as part of the dataset
+    (as a result of the C++ code layout)."""
 
     nnpdf_pdf = pdf.load()
     data = dataset.load()
@@ -87,6 +91,37 @@ def results(dataset:DataSetSpec, pdf:PDF):
     thlabel, thpath = dataset.thspec
     return DataResult(data), ThPredictionsResult(thlabel, th_predictions,
                                                  stats)
+
+#It's better to duplicate a few lines than to complicate the logic of
+#``results`` to support this
+def pdf_results(dataset:DataSetSpec, pdfs:list):
+    """Return a list of results, the first for the data and the rest for
+    each of the PDFs."""
+
+    data = dataset.load()
+    thlabel, thpath = dataset.thspec
+
+    th_results = []
+    for pdf in pdfs:
+        nnpdf_pdf = pdf.load()
+        th_predictions = ThPredictions(nnpdf_pdf, data)
+        stats = pdf.stats_class
+        th_result = ThPredictionsResult(thlabel, th_predictions,
+                                                 stats)
+        th_results.append(th_result)
+
+
+    return (DataResult(data), *th_results)
+
+@require_one('pdfs', 'pdf')
+def one_or_more_results(dataset:DataSetSpec, pdfs:list=None, pdf:PDF=None):
+    if pdf:
+        return results(dataset, pdf)
+    else:
+        return pdf_results(dataset, pdfs)
+    raise ValueError("Either 'pdf' or 'pdfs' is required")
+
+
 
 def chi2_data(results):
     data_result, th_result = results

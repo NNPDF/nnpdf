@@ -82,9 +82,10 @@ def plot_results(results, dataset, normalize_to = None):
 
     return fig
 
-
 @figuregen
-def plot_fancy(results, dataset, normailze_to = None):
+def plot_fancy(one_or_more_results, dataset, normailze_to = None):
+
+    results = one_or_more_results
 
     nnpdf_dt = dataset.load()
     if not dataset.commondata.plotfiles:
@@ -94,12 +95,11 @@ def plot_fancy(results, dataset, normailze_to = None):
         for p in dataset.commondata.plotfiles:
             with p.open() as f:
                 infos.append(get_info(nnpdf_dt, f, cuts=dataset.cuts))
-    thres,dtres = results
     for info in infos:
         table = kitable(nnpdf_dt, info)
         nkinlabels = len(table.columns)
         for i,result in enumerate(results):
-            #We modify the table, so we pass only the label columns            
+            #We modify the table, so we pass only the label columns
             cv, err = transform_result(result.central_value, result.std_error,
                                        table.iloc[:,:nkinlabels], info)
             #By doing tuple keys we avoid all possible name collisions

@@ -1,5 +1,6 @@
 pdfs:
     - NNPDF3_IC_nlo_as_0118_mcpole_1470
+    - CT14nlo
 
 fit: NNPDF3_IC_nlo_as_0118_mcpole_1470
 theoryids:
@@ -11,7 +12,6 @@ datasets:
  - { dataset: EMCF2C, frac: 1.0, sys: 3 }
 
 actions_:
-  pdfs:
-    theoryids:
-      datasets:
-        - plot_fancy
+  theoryids:
+    datasets:
+      - plot_fancy
