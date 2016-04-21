@@ -104,6 +104,8 @@ void symmetriseErrors(double right, double left, double* sigma, double* delta)
  */
 bool genArtSys(int ndata, const double* const* cov, double** artsys)
 {
+  const double epsilon=-0.0000000001; //tolerance needed for CMS data
+
   //Need to convert two dimentional array to one dimentional for gsl routines
   double* mat = new double[ndata*ndata];
 
@@ -132,16 +134,24 @@ bool genArtSys(int ndata, const double* const* cov, double** artsys)
 
   //Check positive-semidefinite-ness
   for(int i = 0; i < ndata; i++)
-    if(gsl_vector_get(eval,i)<0)
+    if(gsl_vector_get(eval,i)<epsilon)
       {
         cerr << "Error in getArtSys: Covariance matrix is not positive-semidefinite";
         return false;
       }
-
+  
   //Generate aritificial systematics
   for(int i = 0; i < ndata; i++)
-    for(int j = 0; j < ndata; j++)
-      artsys[i][j] = gsl_matrix_get(evec,i,j)*sqrt(gsl_vector_get(eval,j));
+    {
+      for(int j = 0; j < ndata; j++)
+	{
+	  artsys[i][j] = gsl_matrix_get(evec,i,j)*sqrt(gsl_vector_get(eval,j));
+	  if(gsl_vector_get(eval,j)<0)
+	    {
+	      artsys[i][j] = 0;
+	    }
+	}
+    }
 
   gsl_vector_free(eval);
   gsl_matrix_free(evec);
