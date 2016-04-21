@@ -14,6 +14,7 @@ from reportengine.figure import figure, figuregen
 
 from validphys.core import MCStats
 from validphys.plotoptions import get_info, kitable, transform_result
+from validphys import plotutils
 
 log = logging.getLogger(__name__)
 
@@ -114,7 +115,9 @@ def plot_fancy(one_or_more_results, dataset, normailze_to = None):
             if not isinstance(samefig_vals, tuple):
                 samefig_vals = (samefig_vals, )
             fig, ax = plt.subplots()
-            ax.set_title("%s %s"%(dataset.name, info.group_label(samefig_vals, info.figure_by)))
+            plotutils.setup_ax(ax)
+            ax.set_title("%s %s"%(dataset.name,
+                         info.group_label(samefig_vals, info.figure_by)))
             if info.line_by:
                 lineby = fig_data.groupby(info.line_by)
             else:
@@ -145,7 +148,12 @@ def plot_fancy(one_or_more_results, dataset, normailze_to = None):
                 else:
                     x = line_data[info.x].as_matrix()
 
+                #Use black for the first iteration (data),
+                #and follow the cycle for
+                #the rest.
+                color = '#262626'
                 for i, res in enumerate(results):
+
                     if labels:
                         #label = "%s %s" % (res.label, info.group_label(sameline_vals, info.line_by))
                         label = res.label
@@ -160,16 +168,22 @@ def plot_fancy(one_or_more_results, dataset, normailze_to = None):
                                                           fig.dpi_scale_trans)
                     offset_transform = ax.transData + offset
                     ax.errorbar(x, cv, yerr=err,
-                         #linestyle='none',
+                         linestyle='--',
+                         lw=0.25,
                          label= label,
                          #elinewidth = 2,
                          #capsize=10,
+                         marker = 's',
+                         #markeredgewidth=0.25,
+                         c=color,
                          zorder=1000,
                          transform=offset_transform)
 
+                    color = None
+
                 glabel = info.group_label(sameline_vals, info.line_by)
-                middle = np.mean(x), np.mean(cv)
-                ax.annotate(glabel, middle, xytext=(0 ,0),
+                annotate_point = x[-1], line_data[('cv', 0)].as_matrix()[-1]
+                ax.annotate(glabel, annotate_point, xytext=(15 ,-10),
                                      size='xx-small',
                                      textcoords='offset points', zorder=10000)
 
