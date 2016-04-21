@@ -57,7 +57,7 @@ void LHCBWZMU7TEVFilter::ReadData()
   const int ndata_wp =  8;
   const int ndata_wm =  8;
   double binsize;  // Must multiply by binsize to match inclusive bin-by-bin data
-  const double convfac = 1.; // Must multiply from pb to fb
+  const double pb2fb = 1000.; // Must multiply from pb to fb
   double MW2 = pow(MW,2.0);
   double MZ2 = pow(MZ,2.0);
   double s = 7000;
@@ -84,22 +84,24 @@ void LHCBWZMU7TEVFilter::ReadData()
     fKin3[idat+i] = s;          // sqrt(s)
 
     lstream >> fData[idat+i];
-    fData[idat+i] *= convfac;
+    fData[idat+i] *= pb2fb;
     //    fData[idat+i] *= binsize;
     lstream >> fStat[idat+i];
-    fStat[idat+i] *= convfac;
+    fStat[idat+i] *= pb2fb;
     //    fStat[idat+i] *= binsize;
     lstream >> totsys[idat+i];
-    totsys[idat+i] *= convfac;
+    totsys[idat+i] *= pb2fb;
     //    totsys[idat+i] *= binsize;
 
     lstream >> fSys[idat+i][fNData].add;  // Beam uncertainty
-    fSys[idat+i][fNData].mult = fSys[idat+i][0].add/fData[i]*1e2;
+    fSys[idat+i][fNData].add *= pb2fb;
+    fSys[idat+i][fNData].mult = fSys[idat+i][fNData].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData].type = MULT;
     fSys[idat+i][fNData].name = "LHCBBEAM11";
 
     lstream >> fSys[idat+i][fNData+1].add;  // Lumi uncertainty
-    fSys[idat+i][fNData+1].mult = fSys[idat+i][0].add/fData[i]*1e2;
+    fSys[idat+i][fNData+1].add *= pb2fb;
+    fSys[idat+i][fNData+1].mult = fSys[idat+i][fNData+1].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData+1].type = MULT;
     fSys[idat+i][fNData+1].name = "LHCBLUMI11";
   }
@@ -119,22 +121,24 @@ void LHCBWZMU7TEVFilter::ReadData()
     fKin3[idat+i] = s;          // sqrt(s)
 
     lstream >> fData[idat+i];
-    fData[idat+i] *= convfac;
+    fData[idat+i] *= pb2fb;
     //    fData[idat+i] *= binsize;
     lstream >> fStat[idat+i];
-    fStat[idat+i] *= convfac;
+    fStat[idat+i] *= pb2fb;
     //    fStat[idat+i] *= binsize;
     lstream >> totsys[idat+i];
-    totsys[idat+i] *= convfac;
+    totsys[idat+i] *= pb2fb;
     //    totsys[idat+i] *= binsize;
 
     lstream >> fSys[idat+i][fNData].add;  // Beam uncertainty
-    fSys[idat+i][fNData].mult = fSys[idat+i][fNData].add/fData[i]*1e2;
+    fSys[idat+i][fNData].add *= pb2fb;
+    fSys[idat+i][fNData].mult = fSys[idat+i][fNData].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData].type = MULT;
     fSys[idat+i][fNData].name = "LHCBBEAM11";
 
     lstream >> fSys[idat+i][fNData+1].add;  // Lumi uncertainty
-    fSys[idat+i][fNData+1].mult = fSys[idat+i][fNData+1].add/fData[i]*1e2;
+    fSys[idat+i][fNData+1].add *= pb2fb;
+    fSys[idat+i][fNData+1].mult = fSys[idat+i][fNData+1].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData+1].type = MULT;
     fSys[idat+i][fNData+1].name = "LHCBLUMI11";
   }
@@ -154,22 +158,24 @@ void LHCBWZMU7TEVFilter::ReadData()
     fKin3[idat+i] = s;          // sqrt(s)
 
     lstream >> fData[idat+i];
-    fData[idat+i] *= convfac;
+    fData[idat+i] *= pb2fb;
     //    fData[idat+i] *= binsize;
     lstream >> fStat[idat+i];
-    fStat[idat+i] *= convfac;
+    fStat[idat+i] *= pb2fb;
     //    fStat[idat+i] *= binsize;
     lstream >> totsys[idat+i];
-    totsys[idat+i] *= convfac;
+    totsys[idat+i] *= pb2fb;
     //    totsys[idat+i] *= binsize;
 
     lstream >> fSys[idat+i][fNData].add;  // Beam uncertainty
-    fSys[idat+i][fNData].mult = fSys[idat+i][fNData].add/fData[i]*1e2;
+    fSys[idat+i][fNData].add *= pb2fb;
+    fSys[idat+i][fNData].mult = fSys[idat+i][fNData].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData].type = MULT;
     fSys[idat+i][fNData].name = "LHCBBEAM11";
 
     lstream >> fSys[idat+i][fNData+1].add;  // Lumi uncertainty
-    fSys[idat+i][fNData+1].mult = fSys[idat+i][fNData+1].add/fData[i]*1e2;
+    fSys[idat+i][fNData+1].add *= pb2fb;
+    fSys[idat+i][fNData+1].mult = fSys[idat+i][fNData+1].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData+1].type = MULT;
     fSys[idat+i][fNData+1].name = "LHCBLUMI11";
   }
@@ -209,11 +215,11 @@ void LHCBWZMU7TEVFilter::ReadData()
    }
 
   for (int i = 0; i < fNData; i++)
-    for (int l = 1; l < fNSys-2; l++)
+    for (int l = 0; l < fNSys-2; l++)
     {
-      fSys[i][l].add  = syscor[i][l-1];
-      fSys[i][l].mult = fSys[i][l-1].add/fData[i]*1e2;
-      fSys[i][l].type = ADD;
+      fSys[i][l].add  = syscor[i][l];
+      fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
+      fSys[i][l].type = MULT;
       fSys[i][l].name = "CORR";
     }
 

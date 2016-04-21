@@ -18,7 +18,7 @@ void LHCBWZMU8TEVFilter::ReadData()
   fstream fZ, fWp, fWm, fCorr;
 
   stringstream DataFileZ("");
-  DataFileZ << dataPath() << "rawdata/" << fSetName << "/LHCBWZMU7TEV_zrap.data";
+  DataFileZ << dataPath() << "rawdata/" << fSetName << "/LHCBWZMU8TEV_zrap.data";
   fZ.open(DataFileZ.str().c_str(), ios::in);
 
   if (fZ.fail()) {
@@ -27,7 +27,7 @@ void LHCBWZMU8TEVFilter::ReadData()
   }
 
   stringstream DataFileWp("");
-  DataFileWp << dataPath() << "rawdata/" << fSetName << "/LHCBWZMU7TEV_wplrap.data";
+  DataFileWp << dataPath() << "rawdata/" << fSetName << "/LHCBWZMU8TEV_wplrap.data";
   fWp.open(DataFileWp.str().c_str(), ios::in);
 
   if (fWp.fail()) {
@@ -36,7 +36,7 @@ void LHCBWZMU8TEVFilter::ReadData()
   }
 
   stringstream DataFileWm("");
-  DataFileWm << dataPath() << "rawdata/" << fSetName << "/LHCBWZMU7TEV_zrap.data";
+  DataFileWm << dataPath() << "rawdata/" << fSetName << "/LHCBWZMU8TEV_wmlrap.data";
   fWm.open(DataFileWm.str().c_str(), ios::in);
 
   if (fWm.fail()) {
@@ -44,7 +44,7 @@ void LHCBWZMU8TEVFilter::ReadData()
   }
 
   stringstream DataFileCorr("");
-  DataFileCorr << dataPath() << "rawdata/" << fSetName << "/LHCBWZMU7TEV_corrmat.data";
+  DataFileCorr << dataPath() << "rawdata/" << fSetName << "/LHCBWZMU8TEV_corrmat.data";
   fCorr.open(DataFileCorr.str().c_str(), ios::in);
 
   if (fCorr.fail()) {
@@ -53,14 +53,14 @@ void LHCBWZMU8TEVFilter::ReadData()
   }
 
   // Starting filter
-  const int ndata_z  = 17;
+  const int ndata_z  = 18;
   const int ndata_wp =  8;
   const int ndata_wm =  8;
   double binsize;  // Must multiply by binsize to match inclusive bin-by-bin data
-  const double convfac = 1000.; // Must multiply from pb to fb
+  const double pb2fb = 1000.; // Must multiply from pb to fb
   double MW2 = pow(MW,2.0);
   double MZ2 = pow(MZ,2.0);
-  double s = 7000;
+  double s = 8000;
   string line;
 
   double totsys[fNData];
@@ -84,22 +84,24 @@ void LHCBWZMU8TEVFilter::ReadData()
     fKin3[idat+i] = s;          // sqrt(s)
 
     lstream >> fData[idat+i];
-    fData[idat+i] *= convfac;
+    fData[idat+i] *= pb2fb;
     //    fData[idat+i] *= binsize;
     lstream >> fStat[idat+i];
-    fStat[idat+i] *= convfac;
+    fStat[idat+i] *= pb2fb;
     //    fStat[idat+i] *= binsize;
     lstream >> totsys[idat+i];
-    totsys[idat+i] *= convfac;
+    totsys[idat+i] *= pb2fb;
     //    totsys[idat+i] *= binsize;
 
     lstream >> fSys[idat+i][fNData].add;  // Beam uncertainty
-    fSys[idat+i][fNData].mult = fSys[idat+i][0].add/fData[i]*1e2;
+    fSys[idat+i][fNData].add *= pb2fb;
+    fSys[idat+i][fNData].mult = fSys[idat+i][fNData].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData].type = MULT;
     fSys[idat+i][fNData].name = "LHCBBEAM11";
 
     lstream >> fSys[idat+i][fNData+1].add;  // Lumi uncertainty
-    fSys[idat+i][fNData+1].mult = fSys[idat+i][0].add/fData[i]*1e2;
+    fSys[idat+i][fNData+1].add *= pb2fb;
+    fSys[idat+i][fNData+1].mult = fSys[idat+i][fNData+1].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData+1].type = MULT;
     fSys[idat+i][fNData+1].name = "LHCBLUMI11";
   }
@@ -119,22 +121,24 @@ void LHCBWZMU8TEVFilter::ReadData()
     fKin3[idat+i] = s;          // sqrt(s)
 
     lstream >> fData[idat+i];
-    fData[idat+i] *= convfac;
+    fData[idat+i] *= pb2fb;
     //    fData[idat+i] *= binsize;
     lstream >> fStat[idat+i];
-    fStat[idat+i] *= convfac;
+    fStat[idat+i] *= pb2fb;
     //    fStat[idat+i] *= binsize;
     lstream >> totsys[idat+i];
-    totsys[idat+i] *= convfac;
+    totsys[idat+i] *= pb2fb;
     //    totsys[idat+i] *= binsize;
 
     lstream >> fSys[idat+i][fNData].add;  // Beam uncertainty
-    fSys[idat+i][fNData].mult = fSys[idat+i][fNData].add/fData[i]*1e2;
+    fSys[idat+i][fNData].add *= pb2fb;
+    fSys[idat+i][fNData].mult = fSys[idat+i][fNData].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData].type = MULT;
     fSys[idat+i][fNData].name = "LHCBBEAM11";
 
     lstream >> fSys[idat+i][fNData+1].add;  // Lumi uncertainty
-    fSys[idat+i][fNData+1].mult = fSys[idat+i][fNData+1].add/fData[i]*1e2;
+    fSys[idat+i][fNData+1].add *= pb2fb;
+    fSys[idat+i][fNData+1].mult = fSys[idat+i][fNData+1].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData+1].type = MULT;
     fSys[idat+i][fNData+1].name = "LHCBLUMI11";
   }
@@ -154,22 +158,24 @@ void LHCBWZMU8TEVFilter::ReadData()
     fKin3[idat+i] = s;          // sqrt(s)
 
     lstream >> fData[idat+i];
-    fData[idat+i] *= convfac;
+    fData[idat+i] *= pb2fb;
     //    fData[idat+i] *= binsize;
     lstream >> fStat[idat+i];
-    fStat[idat+i] *= convfac;
+    fStat[idat+i] *= pb2fb;
     //    fStat[idat+i] *= binsize;
     lstream >> totsys[idat+i];
-    totsys[idat+i] *= convfac;
+    totsys[idat+i] *= pb2fb;
     //    totsys[idat+i] *= binsize;
 
     lstream >> fSys[idat+i][fNData].add;  // Beam uncertainty
-    fSys[idat+i][fNData].mult = fSys[idat+i][fNData].add/fData[i]*1e2;
+    fSys[idat+i][fNData].add *= pb2fb;
+    fSys[idat+i][fNData].mult = fSys[idat+i][fNData].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData].type = MULT;
     fSys[idat+i][fNData].name = "LHCBBEAM11";
 
     lstream >> fSys[idat+i][fNData+1].add;  // Lumi uncertainty
-    fSys[idat+i][fNData+1].mult = fSys[idat+i][fNData+1].add/fData[i]*1e2;
+    fSys[idat+i][fNData+1].add *= pb2fb;
+    fSys[idat+i][fNData+1].mult = fSys[idat+i][fNData+1].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData+1].type = MULT;
     fSys[idat+i][fNData+1].name = "LHCBLUMI11";
   }
@@ -209,11 +215,11 @@ void LHCBWZMU8TEVFilter::ReadData()
    }
 
   for (int i = 0; i < fNData; i++)
-    for (int l = 1; l < fNSys-1; l++)
+    for (int l = 0; l < fNSys-2; l++)
     {
-      fSys[i][l].add  = syscor[i][l-1];
-      fSys[i][l].mult = fSys[i][l-1].add/fData[i]*1e2;
-      fSys[i][l].type = ADD;
+      fSys[i][l].add  = syscor[i][l];
+      fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
+      fSys[i][l].type = MULT;
       fSys[i][l].name = "CORR";
     }
 
