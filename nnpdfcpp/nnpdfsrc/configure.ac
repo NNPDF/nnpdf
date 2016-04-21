@@ -1,4 +1,4 @@
-AC_PREREQ([2.69])
+AC_PREREQ([2.59])
 
 define([gitversion], [esyscmd([sh -c "git rev-parse --short HEAD | tr -d '\n'
 "])])

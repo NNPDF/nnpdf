@@ -5,7 +5,6 @@
 #PBS -e err.err
 #PBS -V
 #PBS -m ae
-#PBS -M stefano.carrazza@mi.infn.it
 #PBS -l nodes=1:ppn=1
 #PBS -l walltime=240:00:00
 #PBS -t 1-120

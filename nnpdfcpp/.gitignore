@@ -17,3 +17,11 @@ Makefile
 
 .ipynb_checkpoints/
 *.swp
+
+
+Python install
+*.egg-info
+build/
+dist/
+.libs
+__pycache__

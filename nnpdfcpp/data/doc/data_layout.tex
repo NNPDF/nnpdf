@@ -98,6 +98,8 @@ Date & Version & Major/Minor & Author & Comments\\
 \hline
 25/01/16 & 1.2.4 & Minor & nh & Added asymmetry comment and quark production thresholds. \\
 \hline
+16/03/16 & 1.2.5 & Minor & nh & Added EWK double-differential process types. \\
+\hline
 \end{tabular}
 \end{center}
 \label{tab:revsum}
@@ -151,9 +153,11 @@ Each datapoint has an associated \emph{process type} string. This can be specifi
 \item \textbf{INC} - A total inclusive cross-section: $(0,\mu^2,\sqrt{s})$
 \item \textbf{EWK\_RAP} - Collider electroweak rapidity distribution: $(\eta/y,M^2,\sqrt{s})$
 \item \textbf{EWK\_PT} - Collider electroweak $p_T$ distribution: $(p_T,M^2,\sqrt{s})$
+\item \textbf{EWK\_PTRAP} - Collider electroweak $p_T, y$ distribution: $(\eta/y, p_T^2,\sqrt{s})$
 \item \textbf{EWK\_MLL} - Collider electroweak lepton-pair mass distribution: $(M_{ll},M_{ll}^2,\sqrt{s})$
-\item \textbf{EWJ\_(J)RAP} - Collider electroweak +jet boson(jet) rapidity distribution: $(\eta/y,M^2,\sqrt{s})$
+\item \textbf{EWJ\_(J)RAP} - Collider electroweak + jet boson(jet) rapidity distribution: $(\eta/y,M^2,\sqrt{s})$
 \item \textbf{EWJ\_(J)PT} - Collider electroweak + jet boson(jet) $p_T$ distribution: $(p_T,M^2,\sqrt{s})$
+\item \textbf{EWJ\_(J)PTRAP} - Collider electroweak + jet boson(jet) $p_T, y$ distribution: $(\eta/y, p_T^2,\sqrt{s})$
 \item \textbf{EWJ\_MLL} - Collider electroweak+jet lepton-pair mass distribution: $(M_{ll},M_{ll}^2,\sqrt{s})$
 \item \textbf{HQP\_YQQ} - Heavy diquark system rapidity $(y^{QQ},\mu^2,\sqrt{s})$
 \item \textbf{HQP\_MQQ} - Heavy diquark system mass $(M^{QQ},\mu^2,\sqrt{s})$

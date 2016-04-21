@@ -1,5 +1,5 @@
 ********************************************************************************
-SetName: ATLASTOPDIFF8TEVTRAP
+SetName: CMSTOPDIFF8TEVTRAP
 Author: Emanuele Nocera emanuele.nocera@physics.ox.ac.uk
 Date: 02/2016
 CodesUsed: Predictions provided by Alex Mitov
@@ -7,6 +7,11 @@ TheoryInput: Fixed muR=muF=HT/4 [HT = sqrt(mt^2+pTt^2)+sqrt(mt^2+pTT^2), mt=173.
 PDFset: NNPDF30_nnlo_as_0118
 Warnings: 
 ********************************************************************************
+1.08566
+1.07024
+1.06401
+1.06056
+1.05897
 1.05897
 1.06056
 1.06401

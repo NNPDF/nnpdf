@@ -1,0 +1,30 @@
+package:
+    name: nnpdf
+    version: "{{ environ.get('GIT_DESCRIBE_TAG', '')[1:] }}.{{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}"
+
+source:
+    git_url: ../
+
+requirements:
+    build: 
+        - libnnpdf
+        - patchelf
+        - gcc
+        - libgcc
+        - yaml-cpp
+    run:
+        - libnnpdf
+        - libgcc
+        - yaml-cpp
+
+build:
+    number: 0
+    detect_binary_files_with_prefix: True
+
+test:
+    commands:
+        - echo 
+
+about:
+    home: https://nnpdf.hepforge.org/
+    license: SECRET
