@@ -81,7 +81,7 @@ const std::vector<std::string> sysdescr = {
 void  CMSTOPDIFF8TEVTPTNORMFilter::ReadData()
 {
   //Opening files
-  fstream f1, f2;
+  fstream f1, f2, f3;
 
   //Central values and statistical uncertainties
   stringstream datafile("");
@@ -90,6 +90,18 @@ void  CMSTOPDIFF8TEVTPTNORMFilter::ReadData()
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/CMSTOPDIFF8TEVTPT/CMSTOPDIFF8TEVTPT.cov";
+  f3.open(covfile.str().c_str(), ios::in);
+
+  if (f3.fail()) 
     {
       cerr << "Error opening data file " << datafile.str() << endl;
       exit(-1);
@@ -107,7 +119,7 @@ void  CMSTOPDIFF8TEVTPTNORMFilter::ReadData()
       exit(-1);
     }
 
-  //Starting filter
+  //Read central values and statistical uncertainty
   string line;
   for(int i=0; i<10; i++)
     {
@@ -141,6 +153,27 @@ void  CMSTOPDIFF8TEVTPTNORMFilter::ReadData()
 	}
     }
 
+  //Read statistical covariance matrix
+  for(int i=0; i<8; i++)
+    {
+      getline(f3,line);
+    }
+
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f3,line);
+    istringstream lstream(line);
+    double adum;
+    lstream >> adum >> adum >> adum;
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+  //Read full breakdown of systematics
   for(int i=0; i<8; i++)
     {
       getline(f2,line);
@@ -163,6 +196,7 @@ void  CMSTOPDIFF8TEVTPTNORMFilter::ReadData()
   
   f1.close();
   f2.close();
+  f3.close();
 
 }
 
@@ -172,7 +206,7 @@ void  CMSTOPDIFF8TEVTPTNORMFilter::ReadData()
 void  CMSTOPDIFF8TEVTTPTNORMFilter::ReadData()
 {
   // Opening files
-  fstream f1, f2;
+  fstream f1, f2, f3;
 
   //Central values and statistical uncertainties
   stringstream datafile("");
@@ -186,6 +220,18 @@ void  CMSTOPDIFF8TEVTTPTNORMFilter::ReadData()
       exit(-1);
     }
   
+  //Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/CMSTOPDIFF8TEVTTPT/CMSTOPDIFF8TEVTTPT.cov";
+  f3.open(covfile.str().c_str(), ios::in);
+
+  if (f3.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
   //Full breakdown of systematic uncertainties
   stringstream sysfile("");
   sysfile << dataPath() 
@@ -198,7 +244,7 @@ void  CMSTOPDIFF8TEVTTPTNORMFilter::ReadData()
       exit(-1);
     }
 
-  //Starting filter
+  //Read central values and statistical uncertainties
   string line;
   for(int i=0; i<10; i++)
     {
@@ -232,12 +278,55 @@ void  CMSTOPDIFF8TEVTTPTNORMFilter::ReadData()
 	}
     }
 
+  //Read statistical covariance matrix
+  for(int i=0; i<8; i++)
+    {
+      getline(f3,line);
+    }
+
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f3,line);
+    istringstream lstream(line);
+    double adum;
+    lstream >> adum >> adum >> adum;
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+   {
+     cerr << " in " << fSetName << endl;
+     exit(-1);
+   }
+
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = abs(syscor[i][j]);
+	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+  //Read full breakdown of systematics
   for(int i=0; i<8; i++)
     {
       getline(f2,line);
     }
 
-  for(int j=0; j<fNSys; j++)
+  for(int j=fNData; j<fNSys; j++)
     {
       string sdum;
       getline(f2,line);
@@ -248,12 +337,13 @@ void  CMSTOPDIFF8TEVTTPTNORMFilter::ReadData()
 	  lstream >> fSys[i][j].mult;
 	  fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
 	  fSys[i][j].type = MULT;
-	  fSys[i][j].name = sysdescr[j];
+	  fSys[i][j].name = sysdescr[j-fNData];
 	}
     }
   
   f1.close();
   f2.close();
+  f3.close();
 
 }
 
@@ -263,7 +353,7 @@ void  CMSTOPDIFF8TEVTTPTNORMFilter::ReadData()
 void  CMSTOPDIFF8TEVTRAPNORMFilter::ReadData()
 {
   // Opening files
-  fstream f1, f2;
+  fstream f1, f2, f3;
 
   //Central values and statistical uncertainties
   stringstream datafile("");
@@ -277,6 +367,18 @@ void  CMSTOPDIFF8TEVTRAPNORMFilter::ReadData()
       exit(-1);
     }
   
+  //Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/CMSTOPDIFF8TEVTRAP/CMSTOPDIFF8TEVTRAP.cov";
+  f3.open(covfile.str().c_str(), ios::in);
+
+  if (f3.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
   //Full breakdown of systematic uncertainties
   stringstream sysfile("");
   sysfile << dataPath() 
@@ -289,7 +391,7 @@ void  CMSTOPDIFF8TEVTRAPNORMFilter::ReadData()
       exit(-1);
     }
 
-  //Starting filter
+  //Read central values and statistical uncertainties
   string line;
   for(int i=0; i<10; i++)
     {
@@ -323,28 +425,75 @@ void  CMSTOPDIFF8TEVTRAPNORMFilter::ReadData()
 	}
     }
 
+  //Read statistical covariance matrix
+  for(int i=0; i<8; i++)
+    {
+      getline(f3,line);
+    }
+
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f3,line);
+    istringstream lstream(line);
+    double adum;
+    lstream >> adum >> adum >> adum;
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+   {
+     cerr << " in " << fSetName << endl;
+     exit(-1);
+   }
+
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = abs(syscor[i][j]);
+	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+  //Read full breakdown of systematic uncertainties
   for(int i=0; i<8; i++)
     {
       getline(f2,line);
     }
 
-  for(int j=0; j<fNSys; j++)
+  for(int j=fNData; j<fNSys; j++)
     {
       string sdum;
       getline(f2,line);
       istringstream lstream(line);
       lstream >> sdum;
+      
       for(int i=0; i<fNData; i++)
 	{
-	  lstream >> fSys[i][j].mult;
+	  lstream >> fSys[i][j].mult;	  
 	  fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
 	  fSys[i][j].type = MULT;
-	  fSys[i][j].name = sysdescr[j];
+	  fSys[i][j].name = sysdescr[j-fNData];
+	  
 	}
+      
     }
   
   f1.close();
   f2.close();
+  f3.close();
 
 }
 
@@ -354,7 +503,7 @@ void  CMSTOPDIFF8TEVTRAPNORMFilter::ReadData()
 void  CMSTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 {
   // Opening files
-  fstream f1, f2;
+  fstream f1, f2, f3;
 
   //Central values and statistical uncertainties
   stringstream datafile("");
@@ -368,6 +517,18 @@ void  CMSTOPDIFF8TEVTTRAPNORMFilter::ReadData()
       exit(-1);
     }
   
+  //Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/CMSTOPDIFF8TEVTTRAP/CMSTOPDIFF8TEVTTRAP.cov";
+  f3.open(covfile.str().c_str(), ios::in);
+
+  if (f3.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
   //Full breakdown of systematic uncertainties
   stringstream sysfile("");
   sysfile << dataPath() 
@@ -380,7 +541,7 @@ void  CMSTOPDIFF8TEVTTRAPNORMFilter::ReadData()
       exit(-1);
     }
 
-  //Starting filter
+  //Read central values and statistical uncertainties
   string line;
   for(int i=0; i<10; i++)
     {
@@ -414,12 +575,55 @@ void  CMSTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 	}
     }
 
+  //Read statistical covariance matrix
+  for(int i=0; i<8; i++)
+    {
+      getline(f3,line);
+    }
+
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f3,line);
+    istringstream lstream(line);
+    double adum;
+    lstream >> adum >> adum >> adum;
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+   {
+     cerr << " in " << fSetName << endl;
+     exit(-1);
+   }
+
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = abs(syscor[i][j]);
+	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+  //Read full breakdown of systematic uncertainties
   for(int i=0; i<8; i++)
     {
       getline(f2,line);
     }
 
-  for(int j=0; j<fNSys; j++)
+  for(int j=fNData; j<fNSys; j++)
     {
       string sdum;
       getline(f2,line);
@@ -430,12 +634,13 @@ void  CMSTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 	  lstream >> fSys[i][j].mult;
 	  fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
 	  fSys[i][j].type = MULT;
-	  fSys[i][j].name = sysdescr[j];
+	  fSys[i][j].name = sysdescr[j-fNData];
 	}
     }
   
   f1.close();
   f2.close();
+  f3.close();
 
 }
 
@@ -445,7 +650,7 @@ void  CMSTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 void  CMSTOPDIFF8TEVTTMNORMFilter::ReadData()
 {
   // Opening files
-  fstream f1, f2;
+  fstream f1, f2, f3;
 
   //Central values and statistical uncertainties
   stringstream datafile("");
@@ -459,6 +664,18 @@ void  CMSTOPDIFF8TEVTTMNORMFilter::ReadData()
       exit(-1);
     }
   
+  //Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/CMSTOPDIFF8TEVTTM/CMSTOPDIFF8TEVTTM.cov";
+  f3.open(covfile.str().c_str(), ios::in);
+
+  if (f3.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
   //Full breakdown of systematic uncertainties
   stringstream sysfile("");
   sysfile << dataPath() 
@@ -471,7 +688,7 @@ void  CMSTOPDIFF8TEVTTMNORMFilter::ReadData()
       exit(-1);
     }
 
-  //Starting filter
+  //Read central values and statistical uncertainties
   string line;
   for(int i=0; i<10; i++)
     {
@@ -505,12 +722,55 @@ void  CMSTOPDIFF8TEVTTMNORMFilter::ReadData()
 	}
     }
 
+  //Read statistical covariance matrix
+  for(int i=0; i<8; i++)
+    {
+      getline(f3,line);
+    }
+
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f3,line);
+    istringstream lstream(line);
+    double adum;
+    lstream >> adum >> adum >> adum;
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+ //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+   {
+     cerr << " in " << fSetName << endl;
+     exit(-1);
+   }
+
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = abs(syscor[i][j]);
+	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+  //Read full breakdown of systematic uncertainties
   for(int i=0; i<8; i++)
     {
       getline(f2,line);
     }
 
-  for(int j=0; j<fNSys; j++)
+  for(int j=fNData; j<fNSys; j++)
     {
       string sdum;
       getline(f2,line);
@@ -521,12 +781,13 @@ void  CMSTOPDIFF8TEVTTMNORMFilter::ReadData()
 	  lstream >> fSys[i][j].mult;
 	  fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
 	  fSys[i][j].type = MULT;
-	  fSys[i][j].name = sysdescr[j];
+	  fSys[i][j].name = sysdescr[j-fNData];
 	}
     }
   
   f1.close();
   f2.close();
+  f3.close();
 
 }
 
@@ -677,7 +938,7 @@ void CMSTOPDIFF8TEVTPTFilter::ReadData()
 void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
 {
   // Opening files
-  fstream f1, f2, f3;
+  fstream f1, f2, f3, f4;
 
   //Central values and statistical uncertainties
   stringstream datafile("");
@@ -691,6 +952,18 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
       exit(-1);
     }
   
+  //Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/CMSTOPDIFF8TEVTTPT/CMSTOPDIFF8TEVTTPT.cov";
+  f4.open(covfile.str().c_str(), ios::in);
+
+  if (f4.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
   //Full breakdown of systematic uncertainties
   stringstream sysfile("");
   sysfile << dataPath() 
@@ -715,7 +988,7 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
       exit(-1);
     }
 
-  //Starting filter
+  //Read central values and statistical uncertainties
   string line;
 
   for(int i=0; i<3; i++)
@@ -766,12 +1039,55 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
 	}
     }
 
+  //Read statistical covariance matrix
+  for(int i=0; i<8; i++)
+    {
+      getline(f4,line);
+    }
+
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f4,line);
+    istringstream lstream(line);
+    double adum;
+    lstream >> adum >> adum >> adum;
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+   {
+     cerr << " in " << fSetName << endl;
+     exit(-1);
+   }
+
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = abs(syscor[i][j])*xscv;
+	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+  //Read full breakdown of systematic uncertainties
   for(int i=0; i<8; i++)
     {
       getline(f2,line);
     }
 
-  for(int j=0; j<fNSys-2; j++)
+  for(int j=fNData; j<fNSys-2; j++)
     {
       string sdum;
       getline(f2,line);
@@ -783,7 +1099,7 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
 	  lstream >> fSys[i][j].mult; 
 	  fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
 	  fSys[i][j].type = MULT;
-	  fSys[i][j].name = sysdescr[j];
+	  fSys[i][j].name = sysdescr[j-fNData];
 	}
     }
  
@@ -791,20 +1107,21 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
   for(int i=0; i<fNData; i++)
     {
       symmetriseErrors(xssystpl, xssystmi, &stmp, &dtmp); //symmetrise systematics
-      fSys[i][11].add  = fData[i]/xscv*stmp;
-      fSys[i][11].mult = fSys[i][11].add/fData[i]*100; 
-      fSys[i][11].type = MULT;
-      fSys[i][11].name = sysdescr[11];
+      fSys[i][17].add  = fData[i]/xscv*stmp;
+      fSys[i][17].mult = fSys[i][17].add/fData[i]*100; 
+      fSys[i][17].type = MULT;
+      fSys[i][17].name = sysdescr[17-fNData];
 
-      fSys[i][12].add  = fData[i]/xscv*xslumi;
-      fSys[i][12].mult = fSys[i][12].add/fData[i]*100;
-      fSys[i][12].type = MULT;
-      fSys[i][12].name = sysdescr[12];
+      fSys[i][18].add  = fData[i]/xscv*xslumi;
+      fSys[i][18].mult = fSys[i][18].add/fData[i]*100;
+      fSys[i][18].type = MULT;
+      fSys[i][18].name = sysdescr[18-fNData];
     }
   
   f1.close();
   f2.close();
   f3.close();
+  f4.close();
 
 }
 
@@ -814,7 +1131,7 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
 void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
 {
   // Opening files
-  fstream f1, f2, f3;
+  fstream f1, f2, f3, f4;
 
   //Central values and statistical uncertainties
   stringstream datafile("");
@@ -828,6 +1145,18 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
       exit(-1);
     }
   
+  //Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/CMSTOPDIFF8TEVTRAP/CMSTOPDIFF8TEVTRAP.cov";
+  f4.open(covfile.str().c_str(), ios::in);
+
+  if (f4.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
   //Full breakdown of systematic uncertainties
   stringstream sysfile("");
   sysfile << dataPath() 
@@ -852,7 +1181,7 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
       exit(-1);
     }
 
-  //Starting filter
+  //Read central values and statistical uncertainties
   string line;
 
   for(int i=0; i<3; i++)
@@ -903,12 +1232,55 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
 	}
     }
 
+  //Read statistical covariance matrix
+  for(int i=0; i<8; i++)
+    {
+      getline(f4,line);
+    }
+
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f4,line);
+    istringstream lstream(line);
+    double adum;
+    lstream >> adum >> adum >> adum;
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+   {
+     cerr << " in " << fSetName << endl;
+     exit(-1);
+   }
+
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = abs(syscor[i][j])*xscv;
+	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+  //Read full breakdown of systematic uncertainties
   for(int i=0; i<8; i++)
     {
       getline(f2,line);
     }
 
-  for(int j=0; j<fNSys-2; j++)
+  for(int j=fNData; j<fNSys-2; j++)
     {
       string sdum;
       getline(f2,line);
@@ -920,28 +1292,29 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
 	  lstream >> fSys[i][j].mult; 
 	  fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
 	  fSys[i][j].type = MULT;
-	  fSys[i][j].name = sysdescr[j];
+	  fSys[i][j].name = sysdescr[j-fNData];
 	}
     }
- 
+
   //Two additional sources of systematic uncertainties affect the unnormalised distributions
   for(int i=0; i<fNData; i++)
     {
       symmetriseErrors(xssystpl, xssystmi, &stmp, &dtmp); //symmetrise systematics
-      fSys[i][11].add  = fData[i]/xscv*stmp;
-      fSys[i][11].mult = fSys[i][11].add/fData[i]*100; 
-      fSys[i][11].type = MULT;
-      fSys[i][11].name = sysdescr[11];
+      fSys[i][21].add  = fData[i]/xscv*stmp;
+      fSys[i][21].mult = fSys[i][21].add/fData[i]*100; 
+      fSys[i][21].type = MULT;
+      fSys[i][21].name = sysdescr[21-fNData];
 
-      fSys[i][12].add  = fData[i]/xscv*xslumi;
-      fSys[i][12].mult = fSys[i][12].add/fData[i]*100;
-      fSys[i][12].type = MULT;
-      fSys[i][12].name = sysdescr[12];
+      fSys[i][22].add  = fData[i]/xscv*xslumi;
+      fSys[i][22].mult = fSys[i][22].add/fData[i]*100;
+      fSys[i][22].type = MULT;
+      fSys[i][22].name = sysdescr[22-fNData];
     }
   
   f1.close();
   f2.close();
   f3.close();
+  f4.close();
 
 }
 
@@ -951,7 +1324,7 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
 void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
 {
   // Opening files
-  fstream f1, f2, f3;
+  fstream f1, f2, f3, f4;
 
   //Central values and statistical uncertainties
   stringstream datafile("");
@@ -965,6 +1338,18 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
       exit(-1);
     }
   
+  //Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/CMSTOPDIFF8TEVTTRAP/CMSTOPDIFF8TEVTTRAP.cov";
+  f4.open(covfile.str().c_str(), ios::in);
+
+  if (f4.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
   //Full breakdown of systematic uncertainties
   stringstream sysfile("");
   sysfile << dataPath() 
@@ -989,7 +1374,7 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
       exit(-1);
     }
 
-   //Starting filter
+  //Read central values and statistical uncertainties
   string line;
 
   for(int i=0; i<3; i++)
@@ -1040,12 +1425,55 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
 	}
     }
 
+ //Read statistical covariance matrix
+  for(int i=0; i<8; i++)
+    {
+      getline(f4,line);
+    }
+
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f4,line);
+    istringstream lstream(line);
+    double adum;
+    lstream >> adum >> adum >> adum;
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+   {
+     cerr << " in " << fSetName << endl;
+     exit(-1);
+   }
+
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = abs(syscor[i][j])*xscv;
+	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+  //Read full breakdown of systematic uncertainties
   for(int i=0; i<8; i++)
     {
       getline(f2,line);
     }
 
-  for(int j=0; j<fNSys-2; j++)
+  for(int j=fNData; j<fNSys-2; j++)
     {
       string sdum;
       getline(f2,line);
@@ -1057,7 +1485,7 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
 	  lstream >> fSys[i][j].mult; 
 	  fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
 	  fSys[i][j].type = MULT;
-	  fSys[i][j].name = sysdescr[j];
+	  fSys[i][j].name = sysdescr[j-fNData];
 	}
     }
  
@@ -1065,20 +1493,21 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
   for(int i=0; i<fNData; i++)
     {
       symmetriseErrors(xssystpl, xssystmi, &stmp, &dtmp); //symmetrise systematics
-      fSys[i][11].add  = fData[i]/xscv*stmp;
-      fSys[i][11].mult = fSys[i][11].add/fData[i]*100; 
-      fSys[i][11].type = MULT;
-      fSys[i][11].name = sysdescr[11];
+      fSys[i][21].add  = fData[i]/xscv*stmp;
+      fSys[i][21].mult = fSys[i][21].add/fData[i]*100; 
+      fSys[i][21].type = MULT;
+      fSys[i][21].name = sysdescr[21-fNData];
 
-      fSys[i][12].add  = fData[i]/xscv*xslumi;
-      fSys[i][12].mult = fSys[i][12].add/fData[i]*100;
-      fSys[i][12].type = MULT;
-      fSys[i][12].name = sysdescr[12];
+      fSys[i][22].add  = fData[i]/xscv*xslumi;
+      fSys[i][22].mult = fSys[i][22].add/fData[i]*100;
+      fSys[i][22].type = MULT;
+      fSys[i][22].name = sysdescr[22-fNData];
     }
   
   f1.close();
   f2.close();
   f3.close();
+  f4.close();
 
 }
 
@@ -1088,7 +1517,7 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
 void  CMSTOPDIFF8TEVTTMFilter::ReadData()
 {
   // Opening files
-  fstream f1, f2, f3;
+  fstream f1, f2, f3, f4;
 
   //Central values and statistical uncertainties
   stringstream datafile("");
@@ -1102,6 +1531,18 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
       exit(-1);
     }
   
+  //Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/CMSTOPDIFF8TEVTTM/CMSTOPDIFF8TEVTTM.cov";
+  f4.open(covfile.str().c_str(), ios::in);
+
+  if (f4.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
   //Full breakdown of systematic uncertainties
   stringstream sysfile("");
   sysfile << dataPath() 
@@ -1126,7 +1567,7 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
       exit(-1);
     }
 
-  //Starting filter
+  //Read central values and statistical uncertainties
   string line;
 
   for(int i=0; i<3; i++)
@@ -1177,12 +1618,55 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
 	}
     }
 
+ //Read statistical covariance matrix
+  for(int i=0; i<8; i++)
+    {
+      getline(f4,line);
+    }
+
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f4,line);
+    istringstream lstream(line);
+    double adum;
+    lstream >> adum >> adum >> adum;
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+   {
+     cerr << " in " << fSetName << endl;
+     exit(-1);
+   }
+
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = abs(syscor[i][j])*xscv;
+	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+  //Read full breakdown of systematic uncertainties
   for(int i=0; i<8; i++)
     {
       getline(f2,line);
     }
 
-  for(int j=0; j<fNSys-2; j++)
+  for(int j=fNData; j<fNSys-2; j++)
     {
       string sdum;
       getline(f2,line);
@@ -1194,7 +1678,7 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
 	  lstream >> fSys[i][j].mult; 
 	  fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
 	  fSys[i][j].type = MULT;
-	  fSys[i][j].name = sysdescr[j];
+	  fSys[i][j].name = sysdescr[j-fNData];
 	}
     }
  
@@ -1202,19 +1686,20 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
   for(int i=0; i<fNData; i++)
     {
       symmetriseErrors(xssystpl, xssystmi, &stmp, &dtmp); //symmetrise systematics
-      fSys[i][11].add  = fData[i]/xscv*stmp;
-      fSys[i][11].mult = fSys[i][11].add/fData[i]*100; 
-      fSys[i][11].type = MULT;
-      fSys[i][11].name = sysdescr[11];
+      fSys[i][18].add  = fData[i]/xscv*stmp;
+      fSys[i][18].mult = fSys[i][18].add/fData[i]*100; 
+      fSys[i][18].type = MULT;
+      fSys[i][18].name = sysdescr[18-fNData];
 
-      fSys[i][12].add  = fData[i]/xscv*xslumi;
-      fSys[i][12].mult = fSys[i][12].add/fData[i]*100;
-      fSys[i][12].type = MULT;
-      fSys[i][12].name = sysdescr[12];
+      fSys[i][19].add  = fData[i]/xscv*xslumi;
+      fSys[i][19].mult = fSys[i][19].add/fData[i]*100;
+      fSys[i][19].type = MULT;
+      fSys[i][19].name = sysdescr[19-fNData];
     }
-  
+
   f1.close();
   f2.close();
   f3.close();
+  f4.close();
 
 }
