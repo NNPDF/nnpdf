@@ -11,7 +11,6 @@ import pathlib
 import functools
 import logging
 import re
-import os.path as osp
 
 import numpy as np
 import yaml
