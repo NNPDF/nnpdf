@@ -124,7 +124,7 @@ class Loader():
         return FKTable(str(fkpath), [])
 
     def check_cfactor(self, theoryID, setname, cfactors):
-        theopath = self.check_theoryID(theoryID)
+        _, theopath = self.check_theoryID(theoryID)
         cf = []
         for cfactor in cfactors:
             cfactorpath = (theopath / 'cfactor' /
