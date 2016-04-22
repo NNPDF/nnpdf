@@ -1,6 +1,6 @@
 pdfs:
-    - NNPDF3_IC_nlo_as_0118_mcpole_1470
-    - CT14nlo
+    - {id: NNPDF3_IC_nlo_as_0118_mcpole_1470, label: "Fitted Charm"}
+    - {id: CT14nlo, label: 'CT'}
 
 fit: NNPDF3_IC_nlo_as_0118_mcpole_1470
 theoryids:
