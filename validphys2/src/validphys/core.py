@@ -81,6 +81,10 @@ class PDF:
         return LHAPDFSet(self.name, self.nnpdf_error)
 
 
+    def __str__(self):
+        return self.name
+
+
 
     @property
     def nnpdf_error(self):
@@ -153,6 +157,15 @@ class DataSetSpec:
         return data
 
 FitSpec = namedtuple('FitSpec', ('name', 'path'))
+
+class TheoryIDSpec:
+    def __init__(self, id, path):
+        self.id = id
+        self.path = path
+
+    def __iter__(self):
+        yield self.id
+        yield self.path
 
 
 class Stats:

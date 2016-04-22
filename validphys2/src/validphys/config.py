@@ -6,10 +6,12 @@ Created on Wed Mar  9 15:43:10 2016
 """
 import logging
 import pathlib
+import functools
+import inspect
 
 from  reportengine import configparser
 from reportengine.environment import Environment
-from reportengine.configparser import ConfigError, element_of
+from reportengine.configparser import ConfigError, element_of, _parse_func
 
 from validphys import lhaindex
 from validphys.core import PDF, DataSetSpec
@@ -30,6 +32,32 @@ class Environment(Environment):
         super().__init__(**kwargs)
 
 
+def _id_with_label(f):
+    f = _parse_func(f)
+    def parse_func(self, item, **kwargs):
+        if not isinstance(item, dict):
+            return f(self, item, **kwargs)
+        keydiff =  {'id', 'label'} - item.keys()
+
+        if  keydiff and 'id' in keydiff:
+            raise ConfigError("'%s' must be a single id, or a mapping with keys 'id', 'label'"%(item,))
+        id = item['id']
+        val = f(self, id, **kwargs)
+        if 'label' in item:
+            val.label = str(item['label'])
+        return val
+
+    currsig = inspect.signature(parse_func)
+    origsig = inspect.signature(f)
+    parse_func = functools.wraps(f)(parse_func)
+
+    params = [*list(currsig.parameters.values())[:2], *list(origsig.parameters.values())[2:]]
+
+    parse_func.__signature__ = inspect.Signature(
+                 parameters=params)
+
+
+    return parse_func
 
 class Config(configparser.Config):
 
@@ -39,6 +67,7 @@ class Config(configparser.Config):
         return self.environment.loader
 
     @element_of('pdfs')
+    @_id_with_label
     def parse_pdf(self, name:str):
         if lhaindex.isinstalled(name):
             pdf = PDF(name)
@@ -51,9 +80,10 @@ class Config(configparser.Config):
                           lhaindex.expand_local_names('*'))
 
     @element_of('theoryids')
+    @_id_with_label
     def parse_theoryid(self, theoryID: (str, int)):
         try:
-            return (str(theoryID), self.loader.check_theoryID(theoryID))
+            return self.loader.check_theoryID(theoryID)
         except FileNotFoundError as e:
             raise ConfigError(str(e), theoryID,
                               self.loader.available_theories,

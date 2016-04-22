@@ -15,7 +15,7 @@ import numpy as np
 
 from NNPDF import CommonData, FKTable
 
-from validphys.core import CommonDataSpec, FitSpec
+from validphys.core import CommonDataSpec, FitSpec, TheoryIDSpec
 
 log = logging.getLogger(__name__)
 
@@ -78,7 +78,7 @@ class Loader():
         if not theopath.exists():
             raise FileNotFoundError(("Could not find theory %s. "
                   "Folder '%s' not found") % (theoryID, theopath) )
-        return theopath
+        return TheoryIDSpec(theoryID, theopath)
 
     def get_commondata(self, setname, sysnum, plotfiles=None):
         """Get a Commondata from the set name and number.
@@ -90,7 +90,7 @@ class Loader():
 
     @functools.lru_cache()
     def check_fktable(self, theoryID, setname):
-        theopath = self.check_theoryID(theoryID)
+        _, theopath = self.check_theoryID(theoryID)
         fkpath = theopath/ 'fastkernel' / ('FK_%s.dat' % setname)
         if not fkpath.exists():
           raise FileNotFoundError(("Could not find FKTable for set '%s'. "

@@ -54,9 +54,9 @@ class DataResult(Result):
 
 class ThPredictionsResult(Result):
 
-    def __init__(self, thlabel, dataobj, stats_class):
-        self.thlabel = thlabel
+    def __init__(self, dataobj, stats_class, label):
         self.stats_class = stats_class
+        self.label = label
         super().__init__(dataobj)
 
     @property
@@ -73,24 +73,44 @@ class ThPredictionsResult(Result):
     def data(self):
         return self.stats_class(self._rawdata)
 
-    @property
-    def label(self):
-        return "<Theory %s>@%s" % (self.thlabel, self.dataobj.GetPDFName())
+    @classmethod
+    def from_convolution(cls, pdf, dataset, loaded_pdf=None, loaded_data=None):
+        #TODO: figue out what to do with the cache in general
+        if loaded_pdf  is None:
+            loaded_pdf = pdf.load()
+        if loaded_data is None:
+            loaded_data = dataset.load()
+        th_predictions = ThPredictions(loaded_pdf, loaded_data)
+
+        th = dataset.thspec
+
+        if hasattr(pdf,'label'):
+            if hasattr(th, 'label'):
+                label = ' '.join((pdf.label, dataset.label))
+            else:
+                label = pdf.label
+        elif hasattr(th, 'label'):
+            label = th.label
+        else:
+            label = ('%s@<Theory %s>' % (pdf, th.id))
+
+        return cls(th_predictions, pdf.stats_class, label)
+
+
+
+
 
 def results(dataset:DataSetSpec, pdf:PDF):
     """Tuple of data and theory results for a single pdf.
     The theory is specified as part of the dataset
     (as a result of the C++ code layout)."""
 
-    nnpdf_pdf = pdf.load()
     data = dataset.load()
-    th_predictions = ThPredictions(nnpdf_pdf, data)
 
-    stats = pdf.stats_class
 
     thlabel, thpath = dataset.thspec
-    return DataResult(data), ThPredictionsResult(thlabel, th_predictions,
-                                                 stats)
+    return DataResult(data), ThPredictionsResult.from_convolution(pdf, dataset,
+                                                 loaded_data=data)
 
 #It's better to duplicate a few lines than to complicate the logic of
 #``results`` to support this
@@ -103,11 +123,8 @@ def pdf_results(dataset:DataSetSpec, pdfs:list):
 
     th_results = []
     for pdf in pdfs:
-        nnpdf_pdf = pdf.load()
-        th_predictions = ThPredictions(nnpdf_pdf, data)
-        stats = pdf.stats_class
-        th_result = ThPredictionsResult(thlabel, th_predictions,
-                                                 stats)
+        th_result = ThPredictionsResult.from_convolution(pdf, dataset,
+                                                         loaded_data=data)
         th_results.append(th_result)
 
 
