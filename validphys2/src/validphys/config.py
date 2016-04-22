@@ -110,6 +110,7 @@ class Config(configparser.Config):
     def parse_dataset(self, dataset:dict, * ,theoryid, use_cuts, fit=None):
         """Load a dataset specification from the corrsponding theory.
         Use the cuts from the fit, if provided."""
+        #TODO: Move this logic to Loader?
         theoryno, theopath = theoryid
         try:
             name, sysnum = dataset['dataset'], dataset['sys']
@@ -117,6 +118,7 @@ class Config(configparser.Config):
             raise ConfigError("'dataset' must be a mapping with "
                               "'name' and 'sysnum'")
 
+        op = None
         try:
             commondata = self.loader.check_commondata(name, sysnum)
         except DataNotFoundError as e:
@@ -131,7 +133,15 @@ class Config(configparser.Config):
             else:
                 cfac = []
 
-            fkpath = self.loader.check_fktable(theoryno, name)
+            try:
+                fkpath = self.loader.check_fktable(theoryno, name)
+            except FileNotFoundError as e:
+                try:
+                    fkpath, op = self.loader.check_compound(theoryno, name)
+                except FileNotFoundError:
+                    raise
+                    #Raise the first error for clarity
+                    raise e
 
         except FileNotFoundError as e:
             raise ConfigError(e)
@@ -143,4 +153,4 @@ class Config(configparser.Config):
             cuts = None
 
         return DataSetSpec(name=name, commondata=commondata, cfac=cfac,
-                           fkpath=fkpath, thspec=theoryid, cuts=cuts)
+                           fkpaths=fkpath, thspec=theoryid, cuts=cuts, op=op)

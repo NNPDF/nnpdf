@@ -125,25 +125,38 @@ CommonDataSpec = namedtuple('CommonDataSpec', ['datafile', 'sysfile', 'plotfiles
 
 class DataSetSpec:
 
-    def __init__(self, *, name, commondata, cfac, fkpath, thspec, cuts):
+    def __init__(self, *, name, commondata, cfac, fkpaths, thspec, cuts, op=None):
         self.name = name
         self.commondata = commondata
         self.cfac = cfac
-        self.fkpath = fkpath
+
+        if not isinstance(fkpaths, list):
+            fkpaths = [fkpaths]
+        self.fkpaths = fkpaths
         self.thspec = thspec
 
         self.cuts = cuts
+
+        #Do this way (instead of setting op='NULL' in the signature)
+        #so we don't have to know the default everywhere
+        if op is None:
+            op = 'NULL'
+        self.op = op
 
     def load(self):
         cdpath,syspth, _ = self.commondata
         cd = CommonData.ReadFile(str(cdpath), str(syspth))
 
-        fktable = FKTable(str(self.fkpath), [str(factor) for factor in self.cfac])
-        #IMPORTANT: We need to tell the python garbage collector to NOT free the
-        #memory owned by the FKTable on garbage collection.
-        #TODO: Do this automatically
-        fktable.thisown = 0
-        fkset = FKSet(FKSet.parseOperator("NULL"), [fktable])
+        fktables = []
+        for p in self.fkpaths:
+            fktable = FKTable(str(p), [str(factor) for factor in self.cfac])
+            #IMPORTANT: We need to tell the python garbage collector to NOT free the
+            #memory owned by the FKTable on garbage collection.
+            #TODO: Do this automatically
+            fktable.thisown = 0
+            fktables.append(fktable)
+
+        fkset = FKSet(FKSet.parseOperator(self.op), fktables)
 
         data = DataSet(cd, fkset)
 

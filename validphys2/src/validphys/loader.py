@@ -10,8 +10,11 @@ within the specified paths.
 import pathlib
 import functools
 import logging
+import re
+import os.path as osp
 
 import numpy as np
+import yaml
 
 from NNPDF import CommonData, FKTable
 
@@ -96,6 +99,24 @@ class Loader():
           raise FileNotFoundError(("Could not find FKTable for set '%s'. "
           "File '%s' not found") % (setname, fkpath) )
         return fkpath
+
+    def check_compound(self, theoryID, setname):
+        _, theopath = self.check_theoryID(theoryID)
+        compound_spec_path = theopath / 'compound' / ('FK_%s-COMPOUND.dat' % setname)
+        with compound_spec_path.open() as f:
+            #Drop first line with comment
+            next(f)
+            txt = f.read()
+        #This is a little bit stupid, but is the least amount of thinking...
+        yaml_format = 'FK:\n' + re.sub('FK:', ' - ', txt)
+        data = yaml.load(yaml_format)
+        #we have to split out 'FK_' the extension to get a name consistent
+        #with everything else
+        tables = [self.check_fktable(theoryID, name[3:-4])
+                  for name in data['FK']]
+        op = data['OP']
+        return tables, op
+
 
     def get_fktable(self, theoryID, setname):
 
