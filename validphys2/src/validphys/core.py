@@ -5,7 +5,9 @@ Created on Wed Mar  9 15:19:52 2016
 @author: Zahari Kassabov
 """
 from collections import namedtuple
+from collections.abc import Sequence
 import functools
+import inspect
 
 import numpy as np
 import scipy.stats
@@ -19,6 +21,25 @@ from NNPDF.dataset import DataSet
 from validphys import lhaindex
 
 
+class TupleComp:
+
+    @classmethod
+    def argnames(cls):
+        return list(inspect.signature(cls.__init__).parameters.keys())[1:]
+
+    def __init__(self, *args, **kwargs):
+        self.comp_tuple = (*args, *kwargs.values())
+
+    def __eq__(self, other):
+        return self.comp_tuple == other.comp_tuple
+
+    def __hash__(self):
+        return hash(self.comp_tuple)
+
+    def __repr__(self):
+        argvals = ', '.join('%s=%r'%vals for vals in zip(self.argnames(),
+                                                         self.comp_tuple))
+        return '%s(%s)'%(self.__class__.__qualname__, argvals)
 
 class PDFDoesNotExist(Exception): pass
 
@@ -36,10 +57,11 @@ class _PDFSETS():
 
 PDFSETS = _PDFSETS()
 
-class PDF:
+class PDF(TupleComp):
 
     def __init__(self, name):
         self.name = name
+        super().__init__(name)
 
     def __getattr__(self, attr):
         try:
@@ -76,6 +98,9 @@ class PDF:
             return val
         else:
             return 1
+
+    def __eq__(self, other):
+        return self.name == other.name
 
     def load(self):
         return LHAPDFSet(self.name, self.nnpdf_error)
@@ -123,16 +148,17 @@ class PDF:
 
 CommonDataSpec = namedtuple('CommonDataSpec', ['datafile', 'sysfile', 'plotfiles'])
 
-class DataSetSpec:
+class DataSetSpec(TupleComp):
 
-    def __init__(self, *, name, commondata, cfac, fkpaths, thspec, cuts, op=None):
+    def __init__(self, *, name, commondata, cfac, fkpaths, thspec, cuts,
+                 op=None):
         self.name = name
         self.commondata = commondata
         self.cfac = cfac
 
-        if not isinstance(fkpaths, list):
-            fkpaths = [fkpaths]
-        self.fkpaths = fkpaths
+        if not isinstance(fkpaths, Sequence) or isinstance(fkpaths, str):
+            fkpaths = (fkpaths,)
+        self.fkpaths = tuple(fkpaths)
         self.thspec = thspec
 
         self.cuts = cuts
@@ -142,6 +168,12 @@ class DataSetSpec:
         if op is None:
             op = 'NULL'
         self.op = op
+
+        #TODO: Does it make sense to have a less verbose (but more obscure)
+        #way to do this?
+        #Note that we need to convert to tuple for hashing purposes
+        super().__init__(name, commondata, fkpaths, thspec, tuple(cuts),
+                         op)
 
     def load(self):
         cdpath,syspth, _ = self.commondata

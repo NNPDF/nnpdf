@@ -131,7 +131,7 @@ class Config(configparser.Config):
                 cfac = dataset['cfac']
                 cfac = self.loader.check_cfactor(theoryno, name, cfac)
             else:
-                cfac = []
+                cfac = ()
 
             try:
                 fkpath = self.loader.check_fktable(theoryno, name)

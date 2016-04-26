@@ -63,7 +63,7 @@ class Loader():
         sysfile = (self.commondata_folder / 'systypes' /
                    ('SYSTYPE_%s_%d.dat' % (setname, sysnum)))
 
-        plotfiles = list(self.commondata_folder.glob('PLOTTING_' + setname +
+        plotfiles = tuple(self.commondata_folder.glob('PLOTTING_' + setname +
                                                          '*' + '.y[a]ml'))
 
         if not sysfile.exists():
@@ -114,7 +114,7 @@ class Loader():
         tables = [self.check_fktable(theoryID, name[3:-4])
                   for name in data['FK']]
         op = data['OP']
-        return tables, op
+        return tuple(tables), op
 
 
     def get_fktable(self, theoryID, setname):
@@ -135,7 +135,7 @@ class Loader():
                 raise FileNotFoundError(msg)
             cf.append(cfactorpath)
 
-        return cf
+        return tuple(cf)
 
     def check_fit(self, fitname):
         resultspath = self.resultspath
