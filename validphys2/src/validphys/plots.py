@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
 
 from reportengine.figure import figure, figuregen
+from reportengine.checks import make_check, CheckError
 
 from validphys.core import MCStats
 from validphys.plotoptions import get_info, kitable, transform_result
@@ -83,8 +84,43 @@ def plot_results(results, dataset, normalize_to = None):
 
     return fig
 
+#TODO: This should be simplified if at all possible. For now some more examples
+#are needed for a spec to emerge.
+@make_check
+def check_normalize_to(callspec, ns, graph):
+    """Transforn normalize_to into an index."""
+
+    msg = ("normalize_to should be either 'data', a pdf id or an index of the "
+           "result (0 for the data, and i for the ith pdf)")
+
+    val = ns.get('normalize_to', None)
+    if val is None:
+        return
+
+    if ns.get('pdf', False):
+        names = ['data', ns['pdf'].name]
+    else:
+        names = ['data', *(pdf.name for pdf in ns['pdfs'])]
+    if isinstance(val, int):
+        if not val < len(names):
+            raise CheckError(msg)
+        return
+
+    if isinstance(val, str):
+        try:
+            val = names.index(val)
+        except ValueError:
+            raise CheckError(msg, val, alternatives=names)
+        ns['normalize_to'] = val
+        return
+
+    raise RuntimeError("Should not be here")
+
+
+@check_normalize_to
 @figuregen
-def plot_fancy(one_or_more_results, dataset, normailze_to = None):
+def plot_fancy(one_or_more_results, dataset, normalize_to = None):
+
 
     results = one_or_more_results
 
@@ -99,13 +135,25 @@ def plot_fancy(one_or_more_results, dataset, normailze_to = None):
     for info in infos:
         table = kitable(nnpdf_dt, info)
         nkinlabels = len(table.columns)
+
+        if normalize_to is not None:
+            norm_result = results[normalize_to]
+            #We modify the table, so we pass only the label columns
+            norm_cv, _ = transform_result(norm_result.central_value,
+                                       norm_result.std_error,
+                                       table.iloc[:,:nkinlabels], info)
+
         for i,result in enumerate(results):
             #We modify the table, so we pass only the label columns
             cv, err = transform_result(result.central_value, result.std_error,
                                        table.iloc[:,:nkinlabels], info)
             #By doing tuple keys we avoid all possible name collisions
-            table[('cv', i)] = cv
-            table[('err', i)] = err
+            if normalize_to is None:
+                table[('cv', i)] = cv
+                table[('err', i)] = err
+            else:
+                table[('cv', i)] = cv/norm_cv
+                table[('err', i)] = err/norm_cv
         if info.figure_by:
             figby = table.groupby(info.figure_by)
         else:
@@ -124,9 +172,6 @@ def plot_fancy(one_or_more_results, dataset, normailze_to = None):
                 lineby = [('', fig_data)]
 
             first = True
-            #props = ax._get_lines.prop_cycler['color']
-
-            #Need to get xmin and xmax
 
 
             #http://matplotlib.org/users/transforms_tutorial.html
@@ -155,13 +200,11 @@ def plot_fancy(one_or_more_results, dataset, normailze_to = None):
                 for i, res in enumerate(results):
 
                     if labels:
-                        #label = "%s %s" % (res.label, info.group_label(sameline_vals, info.line_by))
                         label = res.label
                     else:
                         label = None
                     cv = line_data[('cv', i)].as_matrix()
                     err = line_data[('err', i)].as_matrix()
-                    #shift*(i-first_offset)
 
                     dx, dy = 0.05*(i-first_offset), 0.
                     offset = transforms.ScaledTranslation(dx, dy,
@@ -195,8 +238,11 @@ def plot_fancy(one_or_more_results, dataset, normailze_to = None):
             if info.y_scale:
                 ax.set_yscale(info.y_scale)
 
-            if info.y_label:
-                ax.set_ylabel(info.y_label)
+            if normalize_to is None:
+                if info.y_label:
+                    ax.set_ylabel(info.y_label)
+            else:
+                ax.set_ylabel("Ratio to %s" % norm_result.label)
 
             ax.legend().set_zorder(100000)
             ax.set_xlabel(info.xlabel)
