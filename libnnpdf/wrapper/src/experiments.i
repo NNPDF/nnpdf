@@ -11,6 +11,7 @@
 
 /* Parse the header file to generate wrappers */
 
+%template (vector_dataset) std::vector<NNPDF::DataSet>;
 %feature("autodoc", "3");
 
 %include "include/excepthandler.i"
