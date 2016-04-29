@@ -17,6 +17,7 @@ from validphys.core import DataSetSpec, PDF
 class Result:
     def __init__(self, dataobj):
         self.dataobj = dataobj
+        self.metadata = {}
 
     @property
     @functools.lru_cache()
@@ -54,7 +55,7 @@ class DataResult(Result):
 
 class ThPredictionsResult(Result):
 
-    def __init__(self, dataobj, stats_class, label):
+    def __init__(self, dataobj, stats_class, label=None):
         self.stats_class = stats_class
         self.label = label
         super().__init__(dataobj)
@@ -107,8 +108,6 @@ def results(dataset:DataSetSpec, pdf:PDF):
 
     data = dataset.load()
 
-
-    thlabel, thpath = dataset.thspec
     return DataResult(data), ThPredictionsResult.from_convolution(pdf, dataset,
                                                  loaded_data=data)
 
@@ -119,7 +118,6 @@ def pdf_results(dataset:DataSetSpec, pdfs:list):
     each of the PDFs."""
 
     data = dataset.load()
-    thlabel, thpath = dataset.thspec
 
     th_results = []
     for pdf in pdfs:
