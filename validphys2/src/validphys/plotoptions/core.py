@@ -4,7 +4,9 @@ Created on Fri Mar 11 19:27:44 2016
 
 @author: Zahari Kassabov
 """
+import numpy as np
 import pandas as pd
+
 
 from reportengine.configparser import Config, ConfigError, named_element_of
 from reportengine.utils import get_functions
@@ -201,4 +203,4 @@ def transform_result(cv, error, kintable, info):
         nc,ne = f(c,e,**labels)
         newcv.append(nc)
         newerror.append(ne)
-    return newcv, newerror
+    return np.array(newcv), np.array(newerror)
