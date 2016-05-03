@@ -172,7 +172,11 @@ class DataSetSpec(TupleComp):
         #TODO: Does it make sense to have a less verbose (but more obscure)
         #way to do this?
         #Note that we need to convert to tuple for hashing purposes
-        super().__init__(name, commondata, fkpaths, thspec, tuple(cuts),
+        if cuts is not None:
+            frozencuts = cuts.data.tobytes()
+        else:
+            frozencuts = None
+        super().__init__(name, commondata, fkpaths, thspec, frozencuts,
                          op)
 
     def load(self):
