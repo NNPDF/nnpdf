@@ -1,3 +1,20 @@
+/**
+ * EMC.cc
+ *
+ * F2P
+ * A Detailed Study of the Proton Structure Functions in Deep Inelastic Muon - Proton Scattering
+ * Nucl.Phys. B259 (1985) 189, 1985
+ * http://dx.doi.org/10.17182/hepdata.13916
+ * From Table 237 onwards
+ *
+ * F2D
+ * Measurements of the Nucleon Structure Functions F(2)N in Deep Inelastic
+ * Muon Scattering from Deuterium and Comparison with Those from Hydrogen and Iron
+ * Nucl.Phys. B293 (1987) 740, 1987
+ * http://dx.doi.org/10.17182/hepdata.33821
+ * 
+ */
+
 #include "EMC.h"
 
 void EMCF2PFilter::ReadData()
