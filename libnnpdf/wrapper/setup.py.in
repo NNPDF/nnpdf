@@ -30,7 +30,7 @@ nnpdf_libs = call_command('nnpdf-config --ldflags').split()
 lhapdf_includes = call_command('lhapdf-config --cflags').split()
 lhapdf_libs = call_command('lhapdf-config --libs').split()
 
-extra_compile_args = nnpdf_includes + lhapdf_includes
+extra_compile_args = nnpdf_includes + lhapdf_includes + ['-std=c++11']
 extra_link_args = nnpdf_libs + lhapdf_libs
 
 if platform.system() == 'Darwin':
