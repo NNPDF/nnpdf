@@ -145,10 +145,29 @@ def chi2_data(results):
     result =  np.einsum('ij, jk, ik -> i',
                      diffs, data_result.invcovmat, diffs)/len(data_result)
 
-    return th_result.stats_class(result[:, np.newaxis])
+    print(result)
+
+    central_diff = th_result.central_value - data_result.central_value
+
+    central_result = (central_diff@data_result.invcovmat@central_diff)/len(data_result)
+
+
+    return (th_result.stats_class(result[:, np.newaxis]), central_result)
+
+
+chi2_stat_labels = {
+    'central_mean': r'$<\chi^2_{0}>_{data}$',
+    'central_std' : r'$std_{data}(chi^2_{0})$',
+    'perreplica_mean': r'$\left< \chi^2 \right>_{rep,data}$',
+    'perreplica_std': r'$\left<std_{rep}(\chi^2)\right>_{data}$',
+}
 
 def chi2_stats(chi2_data):
+    rep_data, central_result = chi2_data
+
     return OrderedDict([
-            (r'$\left< \chi^2 \right>$'  , chi2_data.central_value().mean() ),
-            (r'std($\chi^2$)'            , chi2_data.std_error().mean()     ),
+            ('central_mean'        ,  central_result.mean()),
+            ('central_std'        ,  central_result.std()),
+            ('perreplica_mean', rep_data.central_value().mean()),
+            ('perreplica_std',  rep_data.std_error().mean()),
            ])
