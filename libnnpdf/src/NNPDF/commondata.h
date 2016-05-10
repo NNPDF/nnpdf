@@ -134,7 +134,6 @@ namespace NNPDF
 
   private:
     CommonData();                             //!< Disable default constructor
-    CommonData& operator=(const CommonData&); //!< Disable copy-assignment
 
     static void VerifyProc(std::string const& proc); //!< Verify process types
 
@@ -142,8 +141,8 @@ namespace NNPDF
     CommonData(dataInfo const&);         //!< Constructor from file 
     CommonData(dataInfoRaw const&);      //!< Constructor for empty CommonData
 
-    const std::string fSetName; //!< Dataset name
-    const int fNData; //!< Number of datapoints
+    std::string fSetName; //!< Dataset name
+    int fNData; //!< Number of datapoints
     double *fData;    //!< Data value array
 
     // Kinematical variables
@@ -153,8 +152,8 @@ namespace NNPDF
     double *fKin3;      //!< Third kinematic variable array (inelasticity)
 
     // Uncertainties
-    const int fNSys;    //!< Number of systematic errors
-    const int fSysId;   //!< SYSTYPE ID
+    int fNSys;    //!< Number of systematic errors
+    int fSysId;   //!< SYSTYPE ID
     double *fStat;      //!< Statistical error array
     sysError **fSys;    //!< Systematic errors
 
@@ -167,7 +166,11 @@ namespace NNPDF
     // ******************************* CommonData Public Constructors *************************************
 
     CommonData(const CommonData& set);  //!< copy constructor
+    CommonData(CommonData&& set);  //!< Move constructor
+    CommonData& operator=(CommonData); //!< Copy-assignment
+    CommonData& operator=(CommonData&&); //!< Move-assignment
     CommonData(const CommonData& set, std::vector<int> const& mask); //!< Masked copy constructor
+    friend void swap(CommonData&, CommonData& );
 
     virtual ~CommonData();	                         //!< The destructor.
 
@@ -225,5 +228,6 @@ namespace NNPDF
     static CommonData ReadFile(std::string const& filename, std::string const& sysfile); //!< Returns a new CommonData read from file
     void Export(std::string const& targetdir) const;  //!< Writes the current CommonData instance to file
   };
+
 }
  /*! @} */

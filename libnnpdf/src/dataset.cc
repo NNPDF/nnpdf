@@ -17,6 +17,7 @@
 #include <sys/stat.h>
 #include <iomanip>
 #include <cstdlib>
+#include <memory>
 
 #include "NNPDF/dataset.h"
 #include "NNPDF/utils.h"
@@ -85,6 +86,49 @@ DataSet::DataSet(const DataSet& set):
   GenCovMat();
 }
 
+void NNPDF::swap(DataSet& lhs, DataSet& rhs)
+{
+  using std::swap;
+  swap(lhs.fIsArtificial, rhs.fIsArtificial);
+  swap(lhs.fIsT0, rhs.fIsT0);
+  swap(lhs.fT0Pred, rhs.fT0Pred);
+  swap(lhs.fCovMat, rhs.fCovMat);
+  swap(lhs.fInvCovMat, rhs.fInvCovMat);
+  //Cast as subclass objects and call the swap of those.
+  CommonData & lhs_cd = lhs;
+  CommonData & rhs_cd = rhs;
+  swap(lhs_cd, rhs_cd);
+
+  FKSet & lhs_fk = lhs;
+  FKSet & rhs_fk = rhs;
+  swap(lhs_fk, rhs_fk);
+}
+
+DataSet& DataSet::operator=(DataSet other)
+{
+  using std::swap;
+  swap(*this, other);
+  return *this;
+}
+
+DataSet::DataSet(DataSet && other):
+  CommonData(std::move(other)),
+  FKSet(std::move(other))
+{
+  fIsArtificial = other.fIsArtificial;
+  fIsT0 = other.fIsT0;
+
+  fT0Pred = other.fT0Pred;
+  other.fT0Pred = nullptr;
+
+  fCovMat = other.fCovMat;
+  other.fCovMat = nullptr;
+
+  fInvCovMat = other.fInvCovMat;
+  other.fInvCovMat = nullptr;
+
+}
+
 DataSet::DataSet(const DataSet& set, std::vector<int> const& mask):
   CommonData(set, mask),
   FKSet(set, mask),
@@ -144,6 +188,9 @@ DataSet::~DataSet()
  */
 void DataSet::GenCovMat()
 {  
+  if (fNData <= 0){
+    return;
+  }
   for (int i = 0; i < fNData; i++)
     for (int j = 0; j < fNData; j++)
     {

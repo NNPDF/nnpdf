@@ -25,14 +25,7 @@
 %feature("autodoc", "3");
 
 %include "include/excepthandler.i"
-
-
-
-#ifdef SSE_CONV
-%numpy_typemaps(NNPDF::real, NPY_FLOAT , int)
-#else
-%numpy_typemaps(NNPDF::real, NPY_DOUBLE , int)
-#endif
+%include "include/real_typemap.i"
 
 %apply (NNPDF::real** ARGOUTVIEWM_ARRAY1, int* DIM1) {(NNPDF::real** data, int* n)}
 %apply (NNPDF::real** ARGOUTVIEWM_ARRAY2, int* DIM1, int* DIM2){(NNPDF::real** data, int*m, int* n)}

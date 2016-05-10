@@ -127,6 +127,36 @@ namespace NNPDF
         throw RangeError("FKSet::FKSet", "NData mismatch!");
   };
 
+  void swap(FKSet & lhs, FKSet & rhs)
+  {
+    using std::swap;
+    swap(lhs.fOperator, rhs.fOperator);
+    swap(lhs.fNSigma, rhs.fNSigma);
+    swap(lhs.fNDataFK, rhs.fNDataFK);
+    swap(lhs.fHadronic, rhs.fHadronic);
+    swap(lhs.fDataName, rhs.fDataName);
+    swap(lhs.fFK, rhs.fFK);
+  }
+
+  FKSet & FKSet::operator =(FKSet other){
+    using std::swap;
+    swap(*this, other);
+    return *this;
+  }
+
+
+  FKSet::FKSet(FKSet && other):
+  fOperator(OpNull),
+  fNSigma(0),
+  fNDataFK(0),
+  fHadronic(false),
+  fDataName(std::string()),
+  fFK(nullptr)
+  {
+    using std::swap;
+    swap(*this, other);
+  }
+
 
   // FKSet masked copy-constructor
   FKSet::FKSet(FKSet const& set, std::vector<int> const& mask):
