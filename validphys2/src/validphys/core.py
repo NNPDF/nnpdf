@@ -12,11 +12,13 @@ import inspect
 import numpy as np
 import scipy.stats
 
+from reportengine import namespaces
+
 from NNPDF import LHAPDFSet
 from NNPDF import CommonData, FKTable
 from NNPDF.fkset import FKSet
 from NNPDF.dataset import DataSet
-
+from NNPDF.experiments import Experiment
 
 from validphys import lhaindex
 
@@ -204,6 +206,23 @@ class DataSetSpec(TupleComp):
             intmask = [int(ele) for ele in self.cuts]
             data = DataSet(data, intmask)
         return data
+
+#We allow to expand the experiment as a list of datasets
+class ExperimentSpec(namespaces.NSList):
+
+    def __init__(self, name, datasets):
+        self.name = name
+        self.datasets = datasets
+
+        super().__init__(datasets, nskey='datasets')
+
+    def load(self):
+        sets = []
+        for dataset in self.datasets:
+            loaded_data = dataset.load()
+            sets.append(loaded_data)
+        return Experiment(sets, self.name)
+
 
 FitSpec = namedtuple('FitSpec', ('name', 'path'))
 
