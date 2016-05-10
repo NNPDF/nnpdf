@@ -34,6 +34,7 @@ namespace NNPDF
         virtual ~FKSet();                             //!< Destructor
 
         FKSet(FKSet const&); //!< Copy-constructor
+        FKSet(FKSet &&); //Move constructor
         FKSet(FKSet const&, std::vector<int> const&); //!< Masked copy-constructor
 
         SigmaOp GetOperator()        const { return *fOperator;};
@@ -48,16 +49,18 @@ namespace NNPDF
         // parse operator string
         static SigmaOp parseOperator(std::string const& op);
 
+        friend void swap(FKSet &, FKSet &);
+        FKSet& operator=(FKSet);   //copy-assignment
+
       private:
         FKSet();                          //disable default constructor
-        FKSet& operator=(const FKSet&);   //disable copy-assignment
 
-        const SigmaOp fOperator;  //!< Operator acting on combination observables
-        const int     fNSigma;    //!< Number of FastKernel Grids for this dataset
-        const int     fNDataFK;   //!< Number of datapoints
-        const bool    fHadronic;  //!< Hadronic Observables
+        SigmaOp fOperator;  //!< Operator acting on combination observables
+        int     fNSigma;    //!< Number of FastKernel Grids for this dataset
+        int     fNDataFK;   //!< Number of datapoints
+        bool    fHadronic;  //!< Hadronic Observables
 
-        const std::string fDataName;    //!< Name of dataset
+        std::string fDataName;    //!< Name of dataset
         FKTable **fFK;            //!< FastKernel tables
     };
 

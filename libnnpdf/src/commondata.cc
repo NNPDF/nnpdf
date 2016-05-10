@@ -16,6 +16,7 @@
 #include <cmath>
 #include <sys/stat.h>
 #include <stdio.h>
+#include <utility>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_eigen.h>
 
@@ -207,6 +208,47 @@ namespace NNPDF
       for (int l = 0; l < fNSys; l++)
         fSys[i][l] = set.fSys[i][l];
     }
+
+  }
+
+
+  void swap(CommonData & lhs, CommonData & rhs) {
+    using std::swap;
+    swap(lhs.fSetName, rhs.fSetName);
+    swap(lhs.fNData, rhs.fNData);
+    swap(lhs.fData, rhs.fData);
+    swap(lhs.fProc, rhs.fProc);
+    swap(lhs.fKin1, rhs.fKin1);
+    swap(lhs.fKin2, rhs.fKin2);
+    swap(lhs.fKin3, rhs.fKin3);
+    swap(lhs.fNSys, rhs.fNSys);
+    swap(lhs.fSysId, rhs.fSysId);
+    swap(lhs.fStat, rhs.fStat);
+    swap(lhs.fSys, rhs.fSys);
+  }
+
+  CommonData & CommonData::operator =(CommonData other){
+    using std::swap;
+    swap(*this, other);
+    return *this;
+  }
+
+
+  CommonData::CommonData(CommonData&& other):
+  fSetName(std::string()),
+  fNData(0), //Set this to maintain the class invariant
+  fData(nullptr),
+  fProc(nullptr),
+  fKin1(nullptr),
+  fKin2(nullptr),
+  fKin3(nullptr),
+  fNSys(0),
+  fSysId(-1),
+  fStat(nullptr),
+  fSys(nullptr)
+  {
+      using std::swap;
+      swap(*this, other);
 
   }
 

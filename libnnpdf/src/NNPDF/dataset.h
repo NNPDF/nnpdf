@@ -41,13 +41,15 @@ namespace NNPDF
     void GenCovMat();                       //!< Generate covariance matrix
 
     DataSet();                          //!< Disable default constructor
-    DataSet& operator=(const DataSet&); //!< Disable copy-assignment
 
    public:
     DataSet(CommonData const&, FKSet const&); //!< Constructor
     virtual ~DataSet();                       //!< The destructor.    
 
-    DataSet(const DataSet&);     //!< Copy constructor
+    DataSet(const DataSet&);            //!< Copy constructor
+    friend void swap(DataSet&, DataSet&);
+    DataSet& operator=(DataSet); //!< Copy-assignment
+    DataSet(DataSet&&);                //!< Move constructor
     DataSet(const DataSet&, std::vector<int> const& );     //!< Masked Copy constructor
 
     // ****************   DataSet T0 Methods  **********************
