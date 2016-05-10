@@ -40,7 +40,8 @@ def _id_with_label(f):
         keydiff =  {'id', 'label'} - item.keys()
 
         if  keydiff and 'id' in keydiff:
-            raise ConfigError("'%s' must be a single id, or a mapping with keys 'id', 'label'"%(item,))
+            raise ConfigError("'%s' must be a single id, or a mapping "
+                              "with keys 'id', 'label'"%(item,))
         id = item['id']
         val = f(self, id, **kwargs)
         if 'label' in item:
@@ -51,7 +52,8 @@ def _id_with_label(f):
     origsig = inspect.signature(f)
     parse_func = functools.wraps(f)(parse_func)
 
-    params = [*list(currsig.parameters.values())[:2], *list(origsig.parameters.values())[2:]]
+    params = [*list(currsig.parameters.values())[:2],
+              *list(origsig.parameters.values())[2:]]
 
     parse_func.__signature__ = inspect.Signature(
                  parameters=params)
