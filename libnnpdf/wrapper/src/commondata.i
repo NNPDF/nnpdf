@@ -24,6 +24,9 @@
 
 %apply (double** ARGOUTVIEWM_ARRAY2, int* DIM1, int* DIM2) {(double** datamat, int* n, int* m)}
 
+%ignore NNPDF::swap;
+%ignore NNPDF::CommonData::operator=;
+%ignore NNPDF::CommonData::CommonData(CommonData &&);
 %include "../../src/NNPDF/commondata.h"
 
 %extend NNPDF::CommonData{

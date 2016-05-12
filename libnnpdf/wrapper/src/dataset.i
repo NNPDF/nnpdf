@@ -29,6 +29,9 @@
 %apply (double** ARGOUTVIEWM_ARRAY2, int* DIM1, int* DIM2) {(double** datamat, int* n, int* m)}
 %apply (double** ARGOUTVIEWM_ARRAY1, int* DIM1) {(double** cv, int* n)}
 
+%ignore NNPDF::swap;
+%ignore NNPDF::DataSet::operator=;
+%ignore NNPDF::DataSet::DataSet(DataSet &&);
 %include "../../src/NNPDF/dataset.h"
 
 %feature("docstring") NNPDF::DataSet::get_covmat
