@@ -43,6 +43,7 @@
 #include "ATLASTOPDIFF.h"
 #include "CMSTOPDIFF.h"
 #include "EMCF2C.h"
+#include "EMC.h"
 
 
 /**
@@ -137,6 +138,13 @@ void InitCommonData(vector<CommonData*>& target)
   // ************************ EMCF2C *****************************
 
   target.push_back(new EMCF2CFilter());
+
+  // ************************ EMC *****************************
+
+  target.push_back(new EMCF2PFilter());
+  target.push_back(new EMCF2DFilter());
+  target.push_back(new EMCFilter());
+
 
   // ************************* FTDY ******************************
 
