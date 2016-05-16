@@ -207,6 +207,9 @@ class DataSetSpec(TupleComp):
             data = DataSet(data, intmask)
         return data
 
+    def __str__(self):
+        return self.name
+
 #We allow to expand the experiment as a list of datasets
 class ExperimentSpec(namespaces.NSList):
 
@@ -234,6 +237,9 @@ class TheoryIDSpec:
     def __iter__(self):
         yield self.id
         yield self.path
+
+    def __str__(self):
+        return "theory %s" % self.id
 
 
 class Stats:
