@@ -227,6 +227,13 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
         return false;
     }
 
+    // Additional F2C cut in case of FONLLC + IC
+    if (set.GetProc(idat) == "DIS_NCP_CH" && VFNS == "FONLL-C" && settings.IsIC())
+      {
+        const real Q2cut1_f2c = 8;
+        if (Q2 <= Q2cut1_f2c) return false;
+      }
+
   } // /DIS
 
   // Passes kinematical cuts
