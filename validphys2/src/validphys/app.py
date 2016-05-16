@@ -123,8 +123,7 @@ def main():
         log.error("A key 'actions_' is needed in the top level of the config file.")
         sys.exit(1)
 
-    rb = ResourceBuilder(c, providers, actions)
-    rb.rootns['environment'] = environment
+    rb = ResourceBuilder(c, providers, actions, environment=environment)
 
     #environment.output_path.mkdir(exist_ok = True)
 
