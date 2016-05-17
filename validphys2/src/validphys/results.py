@@ -5,13 +5,18 @@ Created on Wed Mar  9 15:19:52 2016
 @author: Zahari Kassabov
 """
 from collections import OrderedDict
+import logging
 
 import numpy as np
+import pandas as pd
 
 from NNPDF import ThPredictions
 from reportengine.checks import require_one
+from reportengine.table import table
 
 from validphys.core import DataSetSpec, PDF
+
+log = logging.getLogger(__name__)
 
 #TODO: Is this abstraction any useful?
 class Result:
@@ -90,6 +95,107 @@ class ThPredictionsResult(Result):
 
         return cls(th_predictions, pdf.stats_class, label)
 
+
+def experiments_index(experiments):
+    """Return an empy dataframe with index
+       per experiment per dataset per point"""
+    records = []
+    for exp_index, experiment in enumerate(experiments):
+        loaded_exp = experiment.load()
+        set_lens = [len(loaded_exp.GetSet(i)) for i in
+                    range(len(experiment.datasets))]
+        #TODO: This code is very ugly and slow...
+        cum_sum = [sum(set_lens[:i+1]) for i in range(len(set_lens))]
+        curr_ds_domain = iter(enumerate(cum_sum))
+        index_offset = 0
+        ds_id, curr_ds_len = next(curr_ds_domain)
+        for index in range(cum_sum[-1]):
+            if index >= curr_ds_len:
+                index_offset = curr_ds_len
+                ds_id, curr_ds_len = next(curr_ds_domain)
+            dataset = experiment.datasets[ds_id]
+            if index >= curr_ds_len:
+                index_offset = curr_ds_len
+                ds_id, curr_ds_len = next(curr_ds_domain)
+            dataset = experiment.datasets[ds_id]
+
+
+
+            records.append(OrderedDict([
+                                 ('experiment', str(experiment.name)),
+                                 ('dataset', str(dataset.name)),
+                                 ('id', index - index_offset),
+                                  ]))
+
+    columns = ['experiment', 'dataset', 'id']
+    df = pd.DataFrame(records, columns=columns)
+    df.set_index(columns, inplace=True)
+    return df.index
+
+
+
+@table
+def experiment_result_table(experiments, pdf, experiments_index):
+    """Generate a table containing the data central value, the central prediction,
+    and the prediction for each PDF member."""
+
+    result_records = []
+    for exp_index, experiment in enumerate(experiments):
+        loaded_exp = experiment.load()
+
+
+
+        data_result = DataResult(loaded_exp)
+        th_result = ThPredictionsResult.from_convolution(pdf, experiment,
+                                                         loaded_data=loaded_exp)
+
+
+        for index in range(len(data_result.central_value)):
+            replicas = (('rep_%05d'%(i+1), th_result._rawdata[index,i]) for
+                        i in range(th_result._rawdata.shape[1]))
+
+            result_records.append(OrderedDict([
+                                 ('data_central', data_result.central_value[index]),
+                                 ('theory_central', th_result.central_value[index]),
+                                  *replicas
+                                 ]))
+
+    if not result_records:
+        log.warn("Empty records for experiment results")
+        return pd.DataFrame()
+    df =  pd.DataFrame(result_records, columns=result_records[0].keys(),
+                       index=experiments_index)
+    return df
+
+@table
+def experiments_covmat(experiments, experiments_index):
+    """Export the covariance matrix for the experiments. It exports the full
+    (symmetric) matrix, with the 3 first rows and columns being:
+
+        - experiment name
+        - dataset name
+        - index of the point within the dataset.
+    """
+    data = np.zeros((len(experiments_index),len(experiments_index)))
+    df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
+    for experiment in experiments:
+        name = experiment.name
+        loaded_exp = experiment.load()
+        covmat = loaded_exp.get_covmat()
+        df.ix[name][name] = covmat
+    return df
+
+@table
+def experiments_invcovmat(experiments, experiments_index):
+    """Export the inverse covariance matrix. See ``experiments_covmat``."""
+    data = np.zeros((len(experiments_index),len(experiments_index)))
+    df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
+    for experiment in experiments:
+        name = experiment.name
+        loaded_exp = experiment.load()
+        covmat = loaded_exp.get_invcovmat()
+        df.ix[name][name] = covmat
+    return df
 
 
 
