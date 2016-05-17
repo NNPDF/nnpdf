@@ -65,7 +65,11 @@ class PDF(TupleComp):
         self.name = name
         super().__init__(name)
 
+
     def __getattr__(self, attr):
+        #We don't even try to get reserved attributes from the info file
+        if attr.startswith('__'):
+            raise AttributeError(attr)
         try:
             return lhaindex.parse_info(self.name)[attr]
         except KeyError:
@@ -101,9 +105,7 @@ class PDF(TupleComp):
         else:
             return 1
 
-    def __eq__(self, other):
-        return self.name == other.name
-
+    @functools.lru_cache()
     def load(self):
         return LHAPDFSet(self.name, self.nnpdf_error)
 
@@ -181,6 +183,7 @@ class DataSetSpec(TupleComp):
         super().__init__(name, commondata, fkpaths, thspec, frozencuts,
                          op)
 
+    @functools.lru_cache()
     def load(self):
         cdpath,syspth, _ = self.commondata
         cd = CommonData.ReadFile(str(cdpath), str(syspth))
@@ -211,14 +214,21 @@ class DataSetSpec(TupleComp):
         return self.name
 
 #We allow to expand the experiment as a list of datasets
-class ExperimentSpec(namespaces.NSList):
+class ExperimentSpec(TupleComp, namespaces.NSList):
 
     def __init__(self, name, datasets):
+        #This needs to be hashable
+        datasets = tuple(datasets)
         self.name = name
         self.datasets = datasets
 
-        super().__init__(datasets, nskey='datasets')
 
+        super().__init__(name, datasets)
+
+        #TODO: Can we do  better cooperative inherece trick than this?
+        namespaces.NSList.__init__(self, datasets, nskey='dataset')
+
+    @functools.lru_cache()
     def load(self):
         sets = []
         for dataset in self.datasets:
