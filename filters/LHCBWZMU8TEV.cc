@@ -56,7 +56,7 @@ void LHCBWZMU8TEVFilter::ReadData()
   const int ndata_z  = 18;
   const int ndata_wp =  8;
   const int ndata_wm =  8;
-  double binsize;  // Must multiply by binsize to match inclusive bin-by-bin data
+  //double binsize;  // Must multiply by binsize to match inclusive bin-by-bin data
   const double pb2fb = 1000.; // Must multiply from pb to fb
   double MW2 = pow(MW,2.0);
   double MZ2 = pow(MZ,2.0);
@@ -78,7 +78,7 @@ void LHCBWZMU8TEVFilter::ReadData()
     istringstream lstream(line);
 
     lstream >> etaavg >> etamin >> etamax;
-    binsize=1./(etamax-etamin);
+    //binsize=1./(etamax-etamin);
     fKin1[idat+i] = etaavg;     // eta
     fKin2[idat+i] = MZ2;        // Z mass squared
     fKin3[idat+i] = s;          // sqrt(s)
@@ -115,7 +115,7 @@ void LHCBWZMU8TEVFilter::ReadData()
     istringstream lstream(line);
 
     lstream >> etaavg >> etamin >> etamax;
-    binsize=1./(etamax-etamin);
+    //binsize=1./(etamax-etamin);
     fKin1[idat+i] = etaavg;     // eta
     fKin2[idat+i] = MW2;        // W mass squared
     fKin3[idat+i] = s;          // sqrt(s)
@@ -152,7 +152,7 @@ void LHCBWZMU8TEVFilter::ReadData()
     istringstream lstream(line);
 
     lstream >> etaavg >> etamin >> etamax;
-    binsize=1./(etamax-etamin);
+    //binsize=1./(etamax-etamin);
     fKin1[idat+i] = etaavg;     // eta
     fKin2[idat+i] = MW2;        // W mass squared
     fKin3[idat+i] = s;          // sqrt(s)

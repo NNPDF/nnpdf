@@ -42,7 +42,7 @@ void LHCBZEE2FBFilter::ReadData()
   double s = 8000.;
 
   double etamin,etamax;
-  double sys_corr[fNData],lumi[fNData],tot_unc[fNData];
+  double sys_corr[fNData],lumi[fNData];//,tot_unc[fNData];
   double inmat[fNData][fNData];
   string line;
 
@@ -75,7 +75,7 @@ void LHCBZEE2FBFilter::ReadData()
       lumi[i] *= convfac;
 
       // Total uncertainty
-      tot_unc[i] = pow(sys_corr[i]*sys_corr[i]+fSys[i][0].add*fSys[i][0].add+fStat[i]*fStat[i],0.5);
+      //tot_unc[i] = pow(sys_corr[i]*sys_corr[i]+fSys[i][0].add*fSys[i][0].add+fStat[i]*fStat[i],0.5);
 
       // Normalization uncertainty is defined both MULT (in %) and ADD (in abs value)
       fSys[i][fNSys-1].add   = lumi[i];
