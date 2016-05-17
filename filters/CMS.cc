@@ -573,9 +573,7 @@ void CMS1JET276TEVFilter::ReadData()
           f2 >> fKin2[index] >> tmp >> tmp
              >> fData[index] >> fStat[index]; getline(f2, line);
 
-          f1 >> tmp;
-          cout << tmp << endl;
-          f1 >> tmp >> rescalenp >> npm >> npp
+          f1 >> tmp >> tmp >> rescalenp >> npm >> npp
              >> fSys[index][0].mult >> fSys[index][1].mult;
 
           // Symmetrise np error
@@ -608,6 +606,7 @@ void CMS1JET276TEVFilter::ReadData()
               f1 >> fSys[index][isys].mult;
               fSys[index][isys].type = ADD;
               fSys[index][isys].name = "CORR";
+	      cout << fSys[index][isys].mult << endl;
             }
 
           // Correlated systematics in percent
