@@ -236,6 +236,11 @@ class ExperimentSpec(TupleComp, namespaces.NSList):
             sets.append(loaded_data)
         return Experiment(sets, self.name)
 
+    @property
+    def thspec(self):
+        #TODO: Is this good enough? Should we explicitly pass the theory
+        return self.datasets[0].thspec
+
 
 FitSpec = namedtuple('FitSpec', ('name', 'path'))
 
