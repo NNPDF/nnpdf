@@ -30,7 +30,12 @@ def get_plot_kinlabels(commondata):
     #we match the first key such that the proc label starts with it.
 
     l = commondata.GetProc(0)
-    key = next(k for k in kinlabels_latex if l.startswith(k))
+    try:
+        key = next(k for k in kinlabels_latex if l.startswith(k))
+    except StopIteration:
+        raise ValueError("Could not find a set of kinematic "
+                         "variables matching  the process %s Check the "
+                         "labels defined in commondata.cc. " % (l))
     return kinlabels_latex[key]
 
 def get_info(commondata, file=None, cuts=None):

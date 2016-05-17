@@ -4,6 +4,8 @@ Created on Wed Mar  9 15:19:52 2016
 
 @author: Zahari Kassabov
 """
+from __future__ import generator_stop
+
 from collections import namedtuple
 from collections.abc import Sequence
 import functools

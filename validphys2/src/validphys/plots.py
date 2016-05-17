@@ -4,6 +4,8 @@ Created on Wed Mar  9 15:58:14 2016
 
 @author: Zahari Kassabov
 """
+from __future__ import generator_stop
+
 import logging
 
 import numpy as np
