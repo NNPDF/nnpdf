@@ -278,36 +278,47 @@ void Experiment::MakeReplica()
   fIsArtificial = true;
 }
 
-void Experiment::MakeClosure(PDFSet* pdf, bool const& noise)
+
+void Experiment::MakeClosure(const vector<ThPredictions>& predictions, bool const& noise)
 {
   cout << "-- Generating closure data for " << fExpName << endl;
 
   // Set closure flag
   fIsClosure = true;
-  
-  for (int s=0; s<GetNSet(); s++)
-  {
-    double *newdata  = new double[GetSet(s).GetNData()];
-    ThPredictions *theory =  new ThPredictions(pdf,&GetSet(s));
-    
-    for (int i = 0; i < GetSet(s).GetNData(); i++)
-      newdata[i] = theory->GetObsCV(i);
 
-    fSets[s].UpdateData(newdata); // MakeClosure treated as shifts rather than normalisations
-    
-    delete theory;
-    delete[] newdata;
+  for (size_t s = 0; s < predictions.size(); s++)
+  {
+    auto & theory = predictions[s];
+    auto & set = fSets[s];
+    auto newdata  =  vector<double>(set.GetNData());
+
+    for (int i = 0; i < set.GetNData(); i++)
+      newdata[i] = theory.GetObsCV(i);
+
+    set.UpdateData(newdata.data()); // MakeClosure treated as shifts rather than normalisations
+
   }
 
   // Rebuild uncertainty breakdowns
   PullData();
-  
+
   // Add fluctations in data according to uncertainties.
   if (noise)
     MakeReplica();
-    
+
   // Rebuild covariance matrix
   GenCovMat();
+}
+
+void Experiment::MakeClosure(PDFSet* pdf, bool const& noise)
+{
+  vector<ThPredictions> predictions;
+  for (auto& set: fSets)
+  {
+    predictions.emplace_back(pdf,&set);
+
+  }
+  MakeClosure(predictions, noise);
 }
 
 /**
