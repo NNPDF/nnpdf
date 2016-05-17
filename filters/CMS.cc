@@ -516,3 +516,29 @@ ptlo (GeV)  pthi (GeV)  xs (pb/GeV)  xs_stat_unc[-,+]  npcor  npcor_lo  npcor_hi
   f1.close();
   //f2.close();
 }
+
+/** CMS Inclusive jets 2.76 TeV 5.43 1/fb
+ *
+ * %\cite{Khachatryan:2015luy}
+ * \bibitem{Khachatryan:2015luy}
+ * V.~Khachatryan {\it et al.} [CMS Collaboration],
+ * %``Measurement of the inclusive jet cross section in pp collisions at sqrt(s) = 2.76 TeV,''
+ * arXiv:1512.06212 [hep-ex]. 
+ * 
+ * Data from HEPDATA: http://hepdata.cedar.ac.uk/view/ins1410826
+ * extracted the 15/05/2016
+ */
+void CMS1JET276TEVFilter::ReadData()
+{
+
+  fstream f1, f2;
+  stringstream data_prefix(""), sysfile("");
+  data_prefix << dataPath() << "rawdata/" << fSetName;
+  sysfile << dataPath() << "rawdata/" << fSetName << "/systematics_276TeV.txt";
+
+  f1.open(sysfile.str().c_str(), ios::in);
+
+  f1.close();
+
+}
+

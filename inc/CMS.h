@@ -39,6 +39,14 @@ static const dataInfoRaw CMSJETS11info = {
   "CMSJETS11", //SetName
   "JET"        //ProcType
 };
+
+static const dataInfoRaw CMS1JET276TEVinfo = {
+  81,          //nData
+  25,          //nSys
+  "CMS1JET276TEV", //SetName
+  "JET"        //ProcType
+};
+
 // ********* Filters **************
 
 class CMSWEASY840PBFilter: public CommonData
@@ -72,3 +80,12 @@ class CMSJETS11Filter: public CommonData
 private:
   void ReadData();
 };
+
+class CMS1JET276TEVFilter: public CommonData
+{ public: CMS1JET276TEVFilter():
+  CommonData(CMS1JET276TEVinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+

@@ -1,2 +1,3 @@
 buildmaster
 inc/svn.h
+*.o
