@@ -5,7 +5,6 @@ Created on Wed Mar  9 15:19:52 2016
 @author: Zahari Kassabov
 """
 from collections import OrderedDict
-import functools
 
 import numpy as np
 
@@ -14,43 +13,41 @@ from reportengine.checks import require_one
 
 from validphys.core import DataSetSpec, PDF
 
+#TODO: Is this abstraction any useful?
 class Result:
     def __init__(self, dataobj):
-        self.dataobj = dataobj
-        self.metadata = {}
+        self._central_value = dataobj.get_cv()
 
     @property
-    @functools.lru_cache()
     def std_error(self):
         return np.sqrt(np.diag(self.covmat))
 
     @property
-    @functools.lru_cache()
     def central_value(self):
-        return self.dataobj.get_cv()
+        return self._central_value
 
     def __len__(self):
-        return len(self.dataobj)
-
-    def __getattr__(self, attr):
-        return getattr(self.dataobj, attr)
+        return len(self.central_value)
 
 
 class DataResult(Result):
+
+    def __init__(self, dataobj):
+        super().__init__(dataobj)
+        self._covmat = dataobj.get_covmat()
+        self._invcovmat = dataobj.get_invcovmat()
 
     @property
     def label(self):
         return "CommonData"
 
     @property
-    @functools.lru_cache()
     def covmat(self):
-        return self.dataobj.get_covmat()
+        return self._covmat
 
     @property
-    @functools.lru_cache()
     def invcovmat(self):
-        return self.dataobj.get_invcovmat()
+        return self._invcovmat
 
 
 class ThPredictionsResult(Result):
@@ -58,17 +55,13 @@ class ThPredictionsResult(Result):
     def __init__(self, dataobj, stats_class, label=None):
         self.stats_class = stats_class
         self.label = label
+        self._std_error = dataobj.get_error()
+        self._rawdata = dataobj.get_data()
         super().__init__(dataobj)
 
     @property
-    @functools.lru_cache()
     def std_error(self):
-        return self.dataobj.get_error()
-
-    @property
-    @functools.lru_cache()
-    def _rawdata(self):
-        return self.dataobj.get_data()
+        return self._std_error
 
     @property
     def data(self):
