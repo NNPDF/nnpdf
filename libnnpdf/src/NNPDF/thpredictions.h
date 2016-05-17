@@ -24,18 +24,17 @@ namespace NNPDF
 
       private:
         ThPredictions();                                //!< Disable default constructor
-        ThPredictions& operator=(const ThPredictions&); //!< Disable copy-assignment
 
         real *fObs;          //!< Theory predictions for Observables
         real fTconv;         //!< time required for the convolution in msecs
 
-        const int fNpdf;     //!< Number of PDFs used in the computation
-        const int fNData;    //!< Number of data points
+        int fNpdf;     //!< Number of PDFs used in the computation
+        int fNData;    //!< Number of data points
 
         std::string fPDFName; //!< Name of PDF used to do the calculation
         std::string fSetName; //!< Name of dataset in the calculation
 
-        const int  fEtype;   //!< Uncertainty type
+        int  fEtype;   //!< Uncertainty type
 
         static void GetNZPDF(const PDFSet*, const FKTable*, real* pdf); //!< Form up PDF array
         static void GetNZPDF(const PDFSet*, const PDFSet*, const FKTable*, real* pdf); //!< Form up PDF array (differing beams)
@@ -48,6 +47,9 @@ namespace NNPDF
         ThPredictions(const PDFSet*, const PDFSet*, const FKTable*);    //!< Different-beam constructor
 
         ThPredictions(const ThPredictions&);  //!< Copy-constructor
+        friend void swap(ThPredictions&, ThPredictions&);
+        ThPredictions& operator=(ThPredictions); //!< copy-assignment
+        ThPredictions(ThPredictions &&) = default;
         ~ThPredictions();  //!< Destructor
 
         // Operators

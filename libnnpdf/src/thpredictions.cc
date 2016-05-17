@@ -207,6 +207,25 @@ fEtype(o.fEtype)
   fObs[i] = o.fObs[i];
 }
 
+
+void NNPDF::swap(ThPredictions& lhs, ThPredictions& rhs)
+{
+  using std::swap;
+  swap(lhs.fObs, rhs.fObs);
+  swap(lhs.fTconv, rhs.fTconv);
+  swap(lhs.fNpdf, rhs.fNpdf);
+  swap(lhs.fNData, rhs.fNData);
+  swap(lhs.fPDFName, rhs.fPDFName);
+  swap(lhs.fSetName, rhs.fSetName);
+  swap(lhs.fEtype, rhs.fEtype);
+}
+
+ThPredictions& ThPredictions::operator=(ThPredictions other){
+  using std::swap;
+  swap(*this, other);
+  return *this;
+}
+
 /**
  * The destructor
  */
