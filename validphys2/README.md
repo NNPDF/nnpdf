@@ -38,7 +38,8 @@ Source install
 
 Use this method when conda is not available on your platform or you
 want to contribute to the code (in the later case, you can also manage
-the depndencies with conda).
+the depndencies with conda, and accumulated experience clearly points
+that this is the best way).
 
 First clone the repository:
 
@@ -56,13 +57,16 @@ dependencies that will not come in a standard python installation are:
  - reportengine: <https://github.com/NNPDF/reportengine>
  - lhapdf
 	 
-Reportengine
-should be fairly straight forward; simply clone the repository and
+#### Reportengine
+
+Should be fairly straight forward; simply clone the repository and
 install with `pip install -e .` as per the instructions. It requires
 `jinja2`, `pyyaml` and `matplotlib` which are all available on standard
 python distributions (note than in conda the C library `yaml` and the
 python wrapper `pyyaml` live in separated packages, and both are
 needed).
+
+#### libnnpdf
 
 `libnnpdf` requires properly
 building and setting up the Python wrappers. This is done with the
@@ -77,6 +81,9 @@ make install
 
 make wrapper
 ````
+
+#### LHAPDF
+
 Similarly, for LHAPDF, download the latest release, ensure that your
 python executable points to the same python 3.5 that you want to use,
 and do:
