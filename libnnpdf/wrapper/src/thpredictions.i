@@ -18,7 +18,7 @@
 %include "fkgenerator.i"
 %include "pdfset.i"
 
-%include "experiments.i"
+%import "experiments.i"
 
 /* Parse the header file to generate wrappers */
 
@@ -29,6 +29,9 @@
 
 %apply (NNPDF::real** ARGOUTVIEWM_ARRAY1, int* DIM1) {(NNPDF::real** data, int* n)}
 %apply (NNPDF::real** ARGOUTVIEWM_ARRAY2, int* DIM1, int* DIM2){(NNPDF::real** data, int*m, int* n)}
+%ignore NNPDF::swap;
+%ignore NNPDF::ThPredictions::operator=;
+%ignore NNPDF::ThPredictions::ThPredictions(ThPredictions &&);
 %include "../../src/NNPDF/thpredictions.h"
 
 %extend NNPDF::ThPredictions{

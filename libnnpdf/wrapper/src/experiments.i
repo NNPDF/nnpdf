@@ -3,6 +3,11 @@
 #define SWIG_FILE_WITH_INIT
 #include "../../src/NNPDF/exceptions.h"
 #include "../../src/NNPDF/experiments.h"
+/*This needs to be here because we need to
+ * be able to access the full definition of ThPredictions at compile
+ * time. For some reason, an %import doesn't do the trick.
+ */
+#include "../../src/NNPDF/thpredictions.h"
  %}
 
 %include "std_string.i" 
@@ -14,6 +19,8 @@
     import_array();
 %}
 
+%import "thpredictions.i"
+
 %import "dataset.i"
 %import "pdfset.i"
 
@@ -22,6 +29,10 @@
 %ignore std::vector<NNPDF::DataSet>::vector(size_type);
 %ignore std::vector<NNPDF::DataSet>::resize;
 %template (vector_dataset) std::vector<NNPDF::DataSet>;
+
+%ignore std::vector<NNPDF::ThPredictions>::vector(size_type);
+%ignore std::vector<NNPDF::ThPredictions>::resize;
+%template (vector_thpredictions) std::vector<NNPDF::ThPredictions>;
 
 %apply (double** ARGOUTVIEWM_ARRAY2, int* DIM1, int* DIM2) {(double** datamat, int* n, int* m)}
 %apply (double** ARGOUTVIEWM_ARRAY1, int* DIM1) {(double** cv, int* n)}
