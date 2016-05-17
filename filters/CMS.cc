@@ -527,18 +527,100 @@ ptlo (GeV)  pthi (GeV)  xs (pb/GeV)  xs_stat_unc[-,+]  npcor  npcor_lo  npcor_hi
  * 
  * Data from HEPDATA: http://hepdata.cedar.ac.uk/view/ins1410826
  * extracted the 15/05/2016
+ *
+ * Current data uncertainties is symmetric!
+ *
+ * systematics order:
+ * NPCorr nplo nphi Lumi UnfoldingUnc  JEC0    JEC1    JEC2    JEC3    JEC4    JEC5    JEC6    JEC7    JEC8    JEC9    JEC10   JEC11   JEC12   JEC13   JEC14   JEC15   JEC16   JEC17   JEC18   JEC19   JEC20   JEC21
+ *
  */
 void CMS1JET276TEVFilter::ReadData()
 {
 
   fstream f1, f2;
-  stringstream data_prefix(""), sysfile("");
-  data_prefix << dataPath() << "rawdata/" << fSetName;
+  stringstream sysfile("");
   sysfile << dataPath() << "rawdata/" << fSetName << "/systematics_276TeV.txt";
 
   f1.open(sysfile.str().c_str(), ios::in);
+  if (f1.fail()) { cerr << "Error opening data file " << sysfile.str() << endl;  exit(-1); }
 
+  // variables
+  string line;
+  int index = 0;
+  const int nbins = 6;
+  const int bins[] = {19, 18, 16, 13, 9, 6};
+  const double etas[] = {0.5/2., (1+0.5)/2., (1+1.5)/2., (1.5+2)/2., (2+2.5)/2., (2.5+3)/2.};
+  const double S = 2760;
+  double tmp, rescalenp, npm, npp, nperr, npshift;
+
+  // remove f1 header
+  for (int s = 0; s < 6; s++) getline(f1, line);
+
+  // load kinematics, data cv and statistical uncertainties
+  for (int iy = 0; iy < nbins; iy++)
+    {
+      stringstream data("");
+      data << dataPath() << "rawdata/" << fSetName <<"/bin" << iy+1 << "-plain.txt";
+      f2.open(data.str().c_str(), ios::in);
+      if (f2.fail()) { cerr << "Error opening data file " << data.str() << endl;  exit(-1); }
+
+      // skip headers
+      for (int s = 0; s < 9; s++) getline(f1, line);
+      for (int s = 0; s < 9; s++) getline(f2, line);
+
+      for (int ipt = 0; ipt < bins[iy]; ipt++)
+        {
+          f2 >> fKin2[index] >> tmp >> tmp
+             >> fData[index] >> fStat[index]; getline(f2, line);
+
+          f1 >> tmp;
+          cout << tmp << endl;
+          f1 >> tmp >> rescalenp >> npm >> npp
+             >> fSys[index][0].mult >> fSys[index][1].mult;
+
+          // Symmetrise np error
+          symmetriseErrors(npp-rescalenp, npm-rescalenp, &nperr, &npshift);
+          rescalenp+=npshift;
+
+          fData[index] /= rescalenp;
+          fStat[index] /= rescalenp;
+
+          fKin1[index] = etas[iy]; // jet rapidity
+          fKin2[index] *= fKin2[index]; // jet pt2
+          fKin3[index] = S; // sqrt{s}
+
+          // luminosity 1st entry
+          fSys[index][0].type = MULT;
+          fSys[index][0].name = "CORR";
+
+          // uncorr uncertainties 2nd entry
+          fSys[index][1].type = ADD;
+          fSys[index][1].name = "UNCORR";
+
+          // add np error
+          fSys[index][2].mult = nperr/rescalenp;
+          fSys[index][2].type = ADD;
+          fSys[index][2].name = "CORR";
+
+          // filling corr uncertainties
+          for (int isys = 3; isys < fNSys; isys++)
+            {
+              f1 >> fSys[index][isys].mult;
+              fSys[index][isys].type = ADD;
+              fSys[index][isys].name = "CORR";
+            }
+
+          // Correlated systematics in percent
+          for (int l = 0; l < fNSys; l++)
+            {
+              fSys[index][l].mult *= 1e2;
+              fSys[index][l].add = fSys[index][l].mult*fData[index]*1e-2;
+            }
+
+          index++;
+        }
+      f2.close();
+    }
   f1.close();
-
 }
 
