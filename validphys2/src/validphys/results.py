@@ -114,12 +114,6 @@ def experiments_index(experiments):
                 index_offset = curr_ds_len
                 ds_id, curr_ds_len = next(curr_ds_domain)
             dataset = experiment.datasets[ds_id]
-            if index >= curr_ds_len:
-                index_offset = curr_ds_len
-                ds_id, curr_ds_len = next(curr_ds_domain)
-            dataset = experiment.datasets[ds_id]
-
-
 
             records.append(OrderedDict([
                                  ('experiment', str(experiment.name)),
