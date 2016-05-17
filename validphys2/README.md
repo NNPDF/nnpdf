@@ -86,9 +86,13 @@ and do:
 make
 make install
 
-cd wrappers
-make install
+cd wrappers/python
+pip install .
 ````
+
+**IMPORTANT NOTE**: Do not use the `Makefile` in the wrappers
+directory, as it is likely to point to the wrong path. Use the
+standard Python tool `pip` instead.
 
 Refer to the specific instructions on those packages for more details.
 
