@@ -9,7 +9,7 @@
     SWIG_exception(SWIG_ValueError, const_cast<char*>(_e.what()));
   }
   catch(NNPDF::InitError &_e) {
-    SWIG_exception(SWIG_TypeError, const_cast<char*>(_e.what()));
+    SWIG_exception(SWIG_RuntimeError, const_cast<char*>(_e.what()));
   }
   catch(NNPDF::RangeError &_e) {
     SWIG_exception(SWIG_ValueError, const_cast<char*>(_e.what()));
