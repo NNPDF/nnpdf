@@ -187,6 +187,8 @@ void Experiment::MakeReplica()
   if (fNData == 0)
     throw RangeError("Experiment::MakeReplica","you must run ReadData before making a replica.");
 
+  RandomGenerator* rng = RandomGenerator::GetRNG();
+
   double *rand  = new double[fNSys];  
   double *xnor  = new double[fNData];
   double *artdata = new double[fNData];
@@ -199,7 +201,6 @@ void Experiment::MakeReplica()
     for (int i=0; i< GetSet(s).GetNData(); i++)
       proctype[counter++] = GetSet(s).GetProc(i);
 
-  RandomGenerator* rng = RandomGenerator::GetRNG();
 
   // Generate positive defined replicas
   bool isArtNegative = true;
