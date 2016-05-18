@@ -50,7 +50,8 @@ namespace NNPDF
     { "HQP_PTQQ",   {"$p_T^{QQ}$","$\\mu^2$","$\\sqrt{s}$"}},
     { "HQP_YQ",     {"$y^Q$","$\\mu^2$","$\\sqrt{s}$"}},
     { "HQP_PTQ",    {"$p_T^Q$","$\\mu^2$","$\\sqrt{s}$"}},
-    { "HIG_RAP",    {"$y$","$M_H^2$","$\\sqrt{s}$"}}
+    { "HIG_RAP",    {"$y$","$M_H^2$","$\\sqrt{s}$"}},
+    { "SIA" ,       {"$z$", "$Q^2$", "$y$"}}
   };
 
   // Generate a dataInfo struct given a target filename
