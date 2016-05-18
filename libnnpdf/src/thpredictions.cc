@@ -226,6 +226,18 @@ ThPredictions& ThPredictions::operator=(ThPredictions other){
   return *this;
 }
 
+ThPredictions::ThPredictions(ThPredictions && other):
+fObs(nullptr),
+fTconv(0),
+fNpdf(0),
+fNData(0),
+fPDFName(""),
+fSetName(""),
+fEtype(-1)
+{
+  swap(*this, other);
+}
+
 /**
  * The destructor
  */

@@ -48,8 +48,8 @@ namespace NNPDF
 
         ThPredictions(const ThPredictions&);  //!< Copy-constructor
         friend void swap(ThPredictions&, ThPredictions&);
-        ThPredictions& operator=(ThPredictions); //!< copy-assignment
-        ThPredictions(ThPredictions &&) = default;
+        ThPredictions& operator=(ThPredictions); //!< Copy-assignment
+        ThPredictions(ThPredictions &&);         //!< Move constructor
         ~ThPredictions();  //!< Destructor
 
         // Operators
