@@ -205,12 +205,15 @@ void EMCFilter::ReadData()
 
     double Yp = (1.+pow(1.-y,2));
     double Jac = Q2/(2*pow(x,2)*Mp);
-    double as = 1./137.035999074;
-    double resc = (pow(Q2,2)*x)/(2.*pow(as,2)*M_PI*Yp);
+    double alpha = 1./137.035999074;
+    double resc = (pow(Q2,2)*x)/(2.*pow(alpha,2)*M_PI*Yp);
     double convfact = 1e-6*(1./0.3894); //nb to GeV^-2 conv 
 
-    fData[i] = resc*Jac*convfact*data/deltanu/deltaQ2;
-    fStat[i] = resc*Jac*convfact*stat/deltanu/deltaQ2;
+    double eps = pow(1.+(Q2+nu*nu)/(2.*Ein*(Ein-nu)-Q2/2.),-1);
+    double Gamma = alpha*(nu-Q2/(2.*Mp))/(2.*M_PI*Q2*Ein*Ein*(1-eps));
+
+    fData[i] = Gamma*resc*Jac*convfact*data;
+    fStat[i] = Gamma*resc*Jac*convfact*stat;
    
     /*
     fSys[i][0].add = sist;
