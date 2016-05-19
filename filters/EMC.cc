@@ -174,7 +174,11 @@ void EMCFilter::ReadData()
     f1 >> Q2l;
     f1 >> Q2h;
 
+
     Q2 = (Q2l+Q2h)/2.;
+    //data are integrated over each bin
+    double deltaQ2 = Q2h-Q2l;
+    double deltanu = 20.; //20 GeV
     fKin2[i] = Q2; //Q2 
 
     f1 >> nu;
@@ -200,12 +204,13 @@ void EMCFilter::ReadData()
     f1 >> dummy;
 
     double Yp = (1.+pow(1.-y,2));
-    double Jac = nu/x;
-    double as = 1/137.035999074;
+    double Jac = Q2/(2*pow(x,2)*Mp);
+    double as = 1./137.035999074;
     double resc = (pow(Q2,2)*x)/(2.*pow(as,2)*M_PI*Yp);
+    double convfact = 1e-6*(1./0.3894); //nb to GeV^-2 conv 
 
-    fData[i] = resc*Jac*data;
-    fStat[i] = resc*Jac*stat;
+    fData[i] = resc*Jac*convfact*data/deltanu/deltaQ2;
+    fStat[i] = resc*Jac*convfact*stat/deltanu/deltaQ2;
    
     /*
     fSys[i][0].add = sist;
