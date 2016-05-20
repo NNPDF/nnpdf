@@ -135,14 +135,13 @@ class Config(configparser.Config):
             else:
                 cfac = ()
 
+
             try:
-                fkpath = self.loader.check_fktable(theoryno, name)
-            except FileNotFoundError as e:
+                fkpath, op = self.loader.check_compound(theoryno, name)
+            except FileNotFoundError:
                 try:
-                    fkpath, op = self.loader.check_compound(theoryno, name)
-                except FileNotFoundError:
-                    raise
-                    #Raise the first error for clarity
+                    fkpath = self.loader.check_fktable(theoryno, name)
+                except FileNotFoundError as e:
                     raise e
 
         except FileNotFoundError as e:
