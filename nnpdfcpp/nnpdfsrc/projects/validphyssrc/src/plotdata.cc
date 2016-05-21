@@ -1465,7 +1465,7 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
   */
 void PlotData::AddChi2Histo(vector<ExperimentResult*> res, vector<ExperimentResult*> res2)
 {
-  // Total chi2 distribution
+  // Total chi2 distribution  
   SortExperiments *s = new SortExperiments(res,res2);
   int size = s->GetNExps();
 
@@ -1616,6 +1616,135 @@ void PlotData::AddChi2Histo(vector<ExperimentResult*> res, vector<ExperimentResu
   c->SaveAs(TString(fSettings.GetResultsDirectory() +"/"+fPlotFolderPrefix + "/chi2_histo.root"));
 
   delete s;    
+}
+
+/**
+ * @brief AddChi2HistoDataSets
+ */
+void PlotData::AddChi2HistoDataSets(vector<ExperimentResult*> res,vector<ExperimentResult*> res2)
+{
+  // Total chi2 distribution
+  int size = 0;
+  SortExperiments *s = new SortExperiments(res,res2);
+  for (int i = 0; i < (int) s->GetNExps(); i++)
+    {
+      int i1 = s->GetIndexA(i);
+      int i2 = s->GetIndexB(i);
+      if (i1 >= 0 && i2 >= 0)
+        size += max(res[i1]->GetExperiment()->GetNSet(),res2[i2]->GetExperiment()->GetNSet());
+      else if (i1 >= 0 && i2 < 0)
+        size += res[i1]->GetExperiment()->GetNSet();
+      else if (i2 >= 0 && i1 < 0)
+        size += res2[i2]->GetExperiment()->GetNSet();
+    }
+
+  TCanvas *c = new TCanvas("cChi2Hist", "Chi2AVGdatasets", 500, 700);
+  c->SetFillColor(kWhite);
+  c->SetBorderSize(0);
+  c->SetBorderMode(0);
+  c->SetFrameFillColor(0);
+  c->SetFrameBorderMode(0);
+  c->SetLeftMargin(0.35);
+  c->SetTickx();
+  c->SetTicky();
+
+  TLegend *leg = new TLegend(0.5, 0.83, 0.88, 0.88);
+  leg->SetFillColor(kWhite);
+  leg->SetLineStyle(1);
+  leg->SetBorderSize(1);
+
+  TH1F *h = new TH1F(Form("#chi^{2} avg dataset %d", 0), "Distribution of #chi^{2} for datasets",size, 0, size);
+  h->SetFillColor(histoFillColor[0]);
+  h->SetLineColor(histoLineColor[0]);
+  h->SetFillStyle(histoFillStyle[0]);
+  h->SetMarkerColor(histoFillColor[0]);
+  h->GetXaxis()->CenterTitle(kTRUE);
+  h->GetXaxis()->SetTitleOffset(1.3);
+  h->GetYaxis()->SetTitle("#chi^{2}");
+  h->GetYaxis()->CenterTitle(kTRUE);
+  h->SetBarWidth();
+  h->SetBarOffset();
+
+  TH1F *h2 = new TH1F(Form("#chi^{2} avg dataset %d", 1), "Distribution of #chi^{2} for datasets",size, 0, size);
+  h2->SetFillColor(histoFillColor[1]);
+  h2->SetLineColor(histoLineColor[1]);
+  h2->SetFillStyle(histoFillStyle[1]);
+  h2->SetMarkerColor(histoFillColor[1]);
+  h2->GetXaxis()->CenterTitle(kTRUE);
+  h2->GetXaxis()->SetTitle("Datasets");
+  h2->GetYaxis()->SetTitle("#chi^{2}");
+  h2->GetYaxis()->CenterTitle(kTRUE);
+  h2->SetBarWidth();
+  h2->SetBarOffset();
+
+  for (int i = 0; i < (int) s->GetNExps(); i++)
+    {
+      const int i1 = s->GetIndexA(i);
+      const int i2 = s->GetIndexB(i);
+      if (i1 >= 0 && i2 >= 0)
+        {
+          SortDataSets s(res[i1],res2[i2]);
+          for (int j = 0; j < s.GetNSets(); j++)
+            {
+              const int j1 = s.GetIndexA(j);
+              const int j2 = s.GetIndexB(j);
+              if (j1 >= 0 && j2 >= 0)
+                {
+                  h->Fill(s.GetSetName()[j].c_str(), s.GetChi2A(j));
+                  h2->Fill(s.GetSetName()[j].c_str(), s.GetChi2B(j));
+                }
+              else if (j1 >= 0 && j2 < 0)
+                {
+                  h->Fill(s.GetSetName()[j].c_str(), s.GetChi2A(j));
+                  h2->Fill(s.GetSetName()[j].c_str(), 0);
+                }
+              else if (j2 >= 0 && j1 < 0)
+                {
+                  h->Fill(s.GetSetName()[j].c_str(), 0);
+                  h2->Fill(s.GetSetName()[j].c_str(), s.GetChi2B(j));
+                }
+            }
+        }
+      else if (i1 >= 0 && i2 < 0)
+        {
+          for (int j = 0; j < res[i1]->GetExperiment()->GetNSet(); j++)
+            {
+              h->Fill(res[i1]->GetExperiment()->GetSetName(j).c_str(),
+                      res[i1]->GetSetResult(j)->GetChi2Cent()/res[i1]->GetSetResult(j)->GetDOF());
+              h2->Fill(res[i1]->GetExperiment()->GetSetName(j).c_str(), 0);
+            }
+        }
+      else if (i2 >= 0 && i1 < 0)
+        {
+          for (int j = 0; j < res2[i2]->GetExperiment()->GetNSet(); j++)
+            {
+              h2->Fill(res2[i2]->GetExperiment()->GetSetName(j).c_str(),
+                      res2[i2]->GetSetResult(j)->GetChi2Cent()/res2[i2]->GetSetResult(j)->GetDOF());
+              h->Fill(res2[i2]->GetExperiment()->GetSetName(j).c_str(), 0);
+            }
+        }
+    }
+
+  double max = h->GetMaximum() + 0.5;
+  if (max < h2->GetMaximum() + 0.5) max = h2->GetMaximum() + 0.5;
+
+  h->GetYaxis()->SetRangeUser(0, max);
+  h2->GetYaxis()->SetRangeUser(0, max);
+
+  leg->AddEntry(h, TString(res[0]->GetPDFSet()->GetSetName()) + " #chi^{2}", "fl");
+  leg->AddEntry(h2, TString(res2[0]->GetPDFSet()->GetSetName()) + " #chi^{2}", "fl");
+
+  c->cd();
+  gStyle->SetOptStat(0);
+
+  h->Draw("hbar,hist");
+  h2->Draw("hbar,hist,same");
+  leg->Draw("same");
+
+  c->SaveAs(TString(fSettings.GetResultsDirectory() +"/"+fPlotFolderPrefix + "/chi2_histo_datasets.eps"));
+  c->SaveAs(TString(fSettings.GetResultsDirectory() +"/"+fPlotFolderPrefix + "/chi2_histo_datasets.root"));
+
+  delete s;
 }
 
 /**
@@ -3371,6 +3500,15 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
   f << "\\includegraphics[scale=0.32]{plots/chi2rep}\\includegraphics[scale=0.32]{plots/chi2rep_ref}" << endl;
   f << "\\par\\end{centering}" << endl;
   f << "\\caption{Current and reference fit.}" << endl;
+  f << "\\end{figure}" << endl;
+
+  f << endl;
+  f << "\\newpage{}" << endl;
+  f << "\\begin{figure}[H]" << endl;
+  f << "\\begin{centering}" << endl;
+  f << "\\includegraphics[scale=0.70]{plots/chi2_histo_datasets}" << endl;
+  f << "\\par\\end{centering}" << endl;
+  f << "\\caption{Total $\\chi^{2}$ for each dataset.}" << endl;
   f << "\\end{figure}" << endl;
 
   f << endl;

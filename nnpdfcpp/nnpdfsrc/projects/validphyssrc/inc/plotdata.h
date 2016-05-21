@@ -194,6 +194,7 @@ class PlotData {
     void PlotDistances(LHAPDFSet*, LHAPDFSet*, bool useTheory = false); //!< Create distance plots
     void PlotArcLenght(vector<LHAPDFSet*>); //!< Create arclenght plot
     void AddChi2Histo(vector<ExperimentResult*>,vector<ExperimentResult*>); //!< Plot Chi2 avg
+    void AddChi2HistoDataSets(vector<ExperimentResult*>,vector<ExperimentResult*>); //!< Plot Chi2 avg
     void AddPhiHisto(vector<ExperimentResult*>,vector<ExperimentResult*>); //!< Plot phi histogram
     void AddFitProperties(int, LHAPDFSet*,vector<ExperimentResult*>); //!< Create Fit histograms for current PDFSet
     /*
