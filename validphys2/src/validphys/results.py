@@ -194,7 +194,61 @@ def experiments_invcovmat(experiments, experiments_index):
         df.loc[[name],[name]] = mat
     return df
 
+@table
+def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
+                                experiments_index):
 
+    #TODO: Do this somewhere else
+    from NNPDF import randomgenerator
+    randomgenerator.RandomGenerator.InitRNG(0,0)
+    data = np.zeros((len(experiments_index), nclosure))
+
+    loaded_pdf = pdf.load()
+    for experiment in experiments:
+
+        #TODO: This is probably computed somewhere else....
+        predictions = [ThPredictions(loaded_pdf, d.load()) for d in experiment]
+
+
+        loaded_experiment = experiment.load()
+
+        exp_location = experiments_index.get_loc(experiment.name)
+
+        for i in range(nclosure):
+            loaded_experiment.MakeClosure(predictions, True)
+            data[exp_location, i] = loaded_experiment.get_cv()
+            #print("CV")
+            #print(loaded_experiment.get_cv())
+            #print("Predictions")
+
+            #print(predictions[0].get_cv())
+
+    df = pd.DataFrame(data, index=experiments_index,
+                      columns=np.arange(1, nclosure+1))
+
+    return df
+
+#TODO: don't do computations here
+@table
+def experiment_chi2_table(experiments, pdf):
+
+    records = []
+    for experiment in experiments:
+
+        #TODO: This is probably computed somewhere else....
+        r = data, theory = results(experiment, pdf)
+        data = chi2_data(r)
+        stats = chi2_stats(data)
+        stats['experiment'] = experiment.name
+        records.append(stats)
+
+        for dataset in experiment:
+            r = data, theory = results(dataset, pdf)
+            data = chi2_data(r)
+            stats = chi2_stats(data)
+            stats['experiment'] = dataset.name
+            records.append(stats)
+    return pd.DataFrame(records)
 
 
 def results(dataset:DataSetSpec, pdf:PDF):
