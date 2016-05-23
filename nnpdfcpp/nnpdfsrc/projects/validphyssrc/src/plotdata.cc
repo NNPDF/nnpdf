@@ -1683,25 +1683,25 @@ void PlotData::AddChi2HistoDataSets(vector<ExperimentResult*> res,vector<Experim
       const int i2 = s->GetIndexB(i);
       if (i1 >= 0 && i2 >= 0)
         {
-          SortDataSets s(res[i1],res2[i2]);
-          for (int j = 0; j < s.GetNSets(); j++)
+          SortDataSets ss(res[i1],res2[i2]);
+          for (int j = 0; j < ss.GetNSets(); j++)
             {
-              const int j1 = s.GetIndexA(j);
-              const int j2 = s.GetIndexB(j);
+              const int j1 = ss.GetIndexA(j);
+              const int j2 = ss.GetIndexB(j);
               if (j1 >= 0 && j2 >= 0)
                 {
-                  h->Fill(s.GetSetName()[j].c_str(), s.GetChi2A(j));
-                  h2->Fill(s.GetSetName()[j].c_str(), s.GetChi2B(j));
+                  h->Fill(ss.GetSetName()[j].c_str(), ss.GetChi2A(j));
+                  h2->Fill(ss.GetSetName()[j].c_str(), ss.GetChi2B(j));
                 }
               else if (j1 >= 0 && j2 < 0)
                 {
-                  h->Fill(s.GetSetName()[j].c_str(), s.GetChi2A(j));
-                  h2->Fill(s.GetSetName()[j].c_str(), 0);
+                  h->Fill(ss.GetSetName()[j].c_str(), ss.GetChi2A(j));
+                  h2->Fill(ss.GetSetName()[j].c_str(), 0);
                 }
               else if (j2 >= 0 && j1 < 0)
                 {
-                  h->Fill(s.GetSetName()[j].c_str(), 0);
-                  h2->Fill(s.GetSetName()[j].c_str(), s.GetChi2B(j));
+                  h->Fill(ss.GetSetName()[j].c_str(), 0);
+                  h2->Fill(ss.GetSetName()[j].c_str(), ss.GetChi2B(j));
                 }
             }
         }
@@ -1879,6 +1879,137 @@ void PlotData::AddPhiHisto(vector<ExperimentResult*> res, vector<ExperimentResul
 
   delete s;    
 }
+
+
+/**
+  * Method for generating phi histogram
+  */
+void PlotData::AddPhiHistoDataSets(vector<ExperimentResult*> res, vector<ExperimentResult*> res2)
+{
+  // Total chi2 distribution
+  int size = 0;
+  SortExperiments *s = new SortExperiments(res,res2);
+  for (int i = 0; i < (int) s->GetNExps(); i++)
+    {
+      int i1 = s->GetIndexA(i);
+      int i2 = s->GetIndexB(i);
+      if (i1 >= 0 && i2 >= 0)
+        size += max(res[i1]->GetExperiment()->GetNSet(),res2[i2]->GetExperiment()->GetNSet());
+      else if (i1 >= 0 && i2 < 0)
+        size += res[i1]->GetExperiment()->GetNSet();
+      else if (i2 >= 0 && i1 < 0)
+        size += res2[i2]->GetExperiment()->GetNSet();
+    }
+
+  TCanvas *c = new TCanvas("cPhiTot", "PhiSetsdatasets", 500,700);
+  c->SetFillColor(kWhite);
+  c->SetBorderSize(0);
+  c->SetBorderMode(0);
+  c->SetFrameFillColor(0);
+  c->SetFrameBorderMode(0);
+  c->SetLeftMargin(0.35);
+  c->SetTickx();
+  c->SetTicky();
+
+  TLegend *leg = new TLegend(0.5, 0.83, 0.88, 0.88);
+  leg->SetFillColor(kWhite);
+  leg->SetLineStyle(1);
+  leg->SetBorderSize(1);
+
+  TH1F *h = new TH1F(Form("#phi^{2} avg dataset %d", 0), "Distribution of #phi for datasets",size, 0, size);
+  h->SetFillColor(histoFillColor[0]);
+  h->SetLineColor(histoLineColor[0]);
+  h->SetFillStyle(histoFillStyle[0]);
+  h->SetMarkerColor(histoFillColor[0]);
+  h->GetXaxis()->CenterTitle(kTRUE);
+  h->GetXaxis()->SetTitleOffset(1.3);
+  h->GetYaxis()->SetTitle("#phi");
+  h->GetYaxis()->CenterTitle(kTRUE);
+  h->SetBarWidth();
+  h->SetBarOffset();
+
+  TH1F *h2 = new TH1F(Form("#phi^{2} avg dataset %d", 1), "Distribution of #phi for datasets",size, 0, size);
+  h2->SetFillColor(histoFillColor[1]);
+  h2->SetLineColor(histoLineColor[1]);
+  h2->SetFillStyle(histoFillStyle[1]);
+  h2->SetMarkerColor(histoFillColor[1]);
+  h2->GetXaxis()->CenterTitle(kTRUE);
+  h2->GetXaxis()->SetTitle("Datasets");
+  h2->GetYaxis()->SetTitle("#phi");
+  h2->GetYaxis()->CenterTitle(kTRUE);
+  h2->SetBarWidth();
+  h2->SetBarOffset();
+
+  for (int i = 0; i < (int) s->GetNExps(); i++)
+    {
+      const int i1 = s->GetIndexA(i);
+      const int i2 = s->GetIndexB(i);
+      if (i1 >= 0 && i2 >= 0)
+        {
+          SortDataSets ss(res[i1],res2[i2]);
+          for (int j = 0; j < ss.GetNSets(); j++)
+            {
+              const int j1 = ss.GetIndexA(j);
+              const int j2 = ss.GetIndexB(j);
+              if (j1 >= 0 && j2 >= 0)
+                {
+                  h->Fill(ss.GetSetName()[j].c_str(), ss.GetPhiA(j));
+                  h2->Fill(ss.GetSetName()[j].c_str(), ss.GetPhiB(j));
+                }
+              else if (j1 >= 0 && j2 < 0)
+                {
+                  h->Fill(ss.GetSetName()[j].c_str(), ss.GetPhiA(j));
+                  h2->Fill(ss.GetSetName()[j].c_str(), 0);
+                }
+              else if (j2 >= 0 && j1 < 0)
+                {
+                  h->Fill(ss.GetSetName()[j].c_str(), 0);
+                  h2->Fill(ss.GetSetName()[j].c_str(), ss.GetPhiB(j));
+                }
+            }
+        }
+      else if (i1 >= 0 && i2 < 0)
+        {
+          for (int j = 0; j < res[i1]->GetExperiment()->GetNSet(); j++)
+            {
+              h->Fill(res[i1]->GetExperiment()->GetSetName(j).c_str(),
+                      res[i1]->GetSetResult(j)->GetPhi());
+              h2->Fill(res[i1]->GetExperiment()->GetSetName(j).c_str(), 0);
+            }
+        }
+      else if (i2 >= 0 && i1 < 0)
+        {
+          for (int j = 0; j < res2[i2]->GetExperiment()->GetNSet(); j++)
+            {
+              h2->Fill(res2[i2]->GetExperiment()->GetSetName(j).c_str(),
+                      res2[i2]->GetSetResult(j)->GetPhi());
+              h->Fill(res2[i2]->GetExperiment()->GetSetName(j).c_str(), 0);
+            }
+        }
+    }
+
+  double max = h->GetMaximum() + 0.5;
+  if (max < h2->GetMaximum() + 0.5) max = h2->GetMaximum() + 0.5;
+
+  h->GetYaxis()->SetRangeUser(0, max);
+  h2->GetYaxis()->SetRangeUser(0, max);
+
+  leg->AddEntry(h, TString(res[0]->GetPDFSet()->GetSetName()) + " #phi", "fl");
+  leg->AddEntry(h2, TString(res2[0]->GetPDFSet()->GetSetName()) + " #phi", "fl");
+
+  c->cd();
+  gStyle->SetOptStat(0);
+
+  h->Draw("hbar,hist");
+  h2->Draw("hbar,hist,same");
+  leg->Draw("same");
+
+  c->SaveAs(TString(fSettings.GetResultsDirectory() +"/"+fPlotFolderPrefix + "/phi_histo_datasets.eps"));
+  c->SaveAs(TString(fSettings.GetResultsDirectory() +"/"+fPlotFolderPrefix + "/phi_histo_datasets.root"));
+
+  delete s;
+}
+
 
 /**
   * Save all Canvas loaded in memory
@@ -3731,6 +3862,13 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
       f << "\\caption{Total $\\phi$ for each experiment.}" << endl;
       f << "\\end{figure}" << endl;
 
+      f << "\\begin{figure}[H]" << endl;
+      f << "\\begin{centering}" << endl;
+      f << "\\includegraphics[scale=0.70]{plots/phi_histo_datasets}" << endl;
+      f << "\\par\\end{centering}" << endl;
+      f << "\\caption{Total $\\phi$ for each datasets.}" << endl;
+      f << "\\end{figure}" << endl;
+
       f << "\\begin{table}[H]" << endl;
       f << "\\small" << endl;
       f << "\\begin{centering}" << endl;
@@ -4753,14 +4891,26 @@ SortDataSets::SortDataSets(ExperimentResult *a, ExperimentResult *b)
 
       // save central chi2
       if(i1 >= 0)
-        fChi2A.push_back(a->GetSetResult(i1)->GetChi2Cent()/a->GetSetResult(i1)->GetDOF());
+        {
+          fChi2A.push_back(a->GetSetResult(i1)->GetChi2Cent()/a->GetSetResult(i1)->GetDOF());
+          fPhiA.push_back(a->GetSetResult(i1)->GetPhi());
+        }
       else
-        fChi2A.push_back(-1);
+        {
+          fChi2A.push_back(-1);
+          fPhiA.push_back(-1);
+        }
 
       if (i2 >= 0)
-        fChi2B.push_back(b->GetSetResult(i2)->GetChi2Cent()/b->GetSetResult(i2)->GetDOF());
+        {
+          fChi2B.push_back(b->GetSetResult(i2)->GetChi2Cent()/b->GetSetResult(i2)->GetDOF());
+          fPhiB.push_back(b->GetSetResult(i2)->GetPhi());
+        }
       else
-        fChi2B.push_back(-1);
+        {
+          fChi2B.push_back(-1);
+          fPhiB.push_back(-1);
+        }
     }
 }
 

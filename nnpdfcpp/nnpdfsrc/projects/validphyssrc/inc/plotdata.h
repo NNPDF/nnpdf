@@ -61,7 +61,9 @@ private:
   vector<int>    fIndexA;
   vector<int>    fIndexB;
   vector<double> fChi2A;
-  vector<double> fChi2B;  
+  vector<double> fChi2B;
+  vector<double> fPhiA;
+  vector<double> fPhiB;
 public:
   SortDataSets(ExperimentResult*, ExperimentResult*);
 
@@ -71,6 +73,8 @@ public:
   int GetIndexB(int i) { return fIndexB[i]; }
   double GetChi2A(int i){ return fChi2A[i]; }
   double GetChi2B(int i){ return fChi2B[i]; }
+  double GetPhiA(int i){ return fPhiA[i]; }
+  double GetPhiB(int i){ return fPhiB[i]; }
 };
 
 class Distances
@@ -196,6 +200,7 @@ class PlotData {
     void AddChi2Histo(vector<ExperimentResult*>,vector<ExperimentResult*>); //!< Plot Chi2 avg
     void AddChi2HistoDataSets(vector<ExperimentResult*>,vector<ExperimentResult*>); //!< Plot Chi2 avg
     void AddPhiHisto(vector<ExperimentResult*>,vector<ExperimentResult*>); //!< Plot phi histogram
+    void AddPhiHistoDataSets(vector<ExperimentResult*>,vector<ExperimentResult*>); //!< Plot phi histogram
     void AddFitProperties(int, LHAPDFSet*,vector<ExperimentResult*>); //!< Create Fit histograms for current PDFSet
     /*
      * 0 - current nnpdf fit
