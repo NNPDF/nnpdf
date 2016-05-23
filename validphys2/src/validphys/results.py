@@ -178,8 +178,8 @@ def experiments_covmat(experiments, experiments_index):
     for experiment in experiments:
         name = experiment.name
         loaded_exp = experiment.load()
-        covmat = loaded_exp.get_covmat()
-        df.ix[name][name] = covmat
+        mat = loaded_exp.get_covmat()
+        df.loc[[name],[name]] = mat
     return df
 
 @table
@@ -190,8 +190,8 @@ def experiments_invcovmat(experiments, experiments_index):
     for experiment in experiments:
         name = experiment.name
         loaded_exp = experiment.load()
-        covmat = loaded_exp.get_invcovmat()
-        df.ix[name][name] = covmat
+        mat = loaded_exp.get_invcovmat()
+        df.loc[[name],[name]] = mat
     return df
 
 
