@@ -23,6 +23,7 @@ void ZEUSF2BFilter::ReadData()
   
   // Reading data
   string line;
+  getline(f1,line);
 
   //Filtering data
   for (int i = 0; i < fNData; i++)
@@ -66,8 +67,8 @@ void ZEUSF2BFilter::ReadData()
       string str = ss.str();
       sysNames[l] = str;
 
-      fSys[i][0].add = sist;
-      fSys[i][0].type = MULT;
+      fSys[i][l].add = sist;
+      fSys[i][l].type = MULT;
       fSys[i][l].name = "CORR_"+sysNames[l];
 
     }
