@@ -14,7 +14,7 @@
 
 static const dataInfoRaw EMCF2Cinfo = {
   21,                //nData
-  0,                 //nSys
+  1,                 //nSys
   "EMCF2C",          //SetName
   "DIS_F2C"          //ProcType
 };

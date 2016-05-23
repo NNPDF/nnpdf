@@ -102,15 +102,14 @@ void EMCF2CFilter::ReadData()
     fKin1[i] = x[i];
     fKin2[i] = q2[i];
     fKin3[i] = y[i];
-    for (int l = 2; l < fNSys; l++)
-    {
-      fSys[i][l].mult = syscor[i][l];
-      fSys[i][l].type = ADD;
-      fSys[i][l].name = "CORR";
-    }
 
-    for (int l = 0; l < fNSys; l++)
-      fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;
+    //rescaling for BR - check
+    fData[i] = fData[i]/0.8;
+    sist = fData[i]*0.15;
+    fSys[i][0].add = sist;
+    fSys[i][0].type = MULT;
+    fSys[i][0].name = "CORR_EMC";
+    fSys[i][0].mult = fSys[i][0].add/(fData[i]*1e-2);
   }
 
   f1.close();

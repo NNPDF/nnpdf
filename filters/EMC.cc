@@ -215,13 +215,13 @@ void EMCFilter::ReadData()
     fData[i] = Gamma*resc*Jac*convfact*data;
     fStat[i] = Gamma*resc*Jac*convfact*stat;
    
-    /*
+   //rescaling for BR - check
+    fData[i] = fData[i]/0.8;
+    sist = fData[i]*0.15;
     fSys[i][0].add = sist;
     fSys[i][0].type = MULT;
-    fSys[i][0].name = "CORR";
-
+    fSys[i][0].name = "CORR_EMC";
     fSys[i][0].mult = fSys[i][0].add/(fData[i]*1e-2);
-    */
   
   }
 
