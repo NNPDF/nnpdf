@@ -105,7 +105,7 @@ void EMCF2CFilter::ReadData()
 
     //rescaling for BR - check
     fData[i] = fData[i]/0.8;
-    sist = fData[i]*0.15;
+    double sist = fData[i]*0.15;
     fSys[i][0].add = sist;
     fSys[i][0].type = MULT;
     fSys[i][0].name = "CORR_EMC";

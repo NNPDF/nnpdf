@@ -176,9 +176,6 @@ void EMCFilter::ReadData()
 
 
     Q2 = (Q2l+Q2h)/2.;
-    //data are integrated over each bin
-    double deltaQ2 = Q2h-Q2l;
-    double deltanu = 20.; //20 GeV
     fKin2[i] = Q2; //Q2 
 
     f1 >> nu;
@@ -217,7 +214,7 @@ void EMCFilter::ReadData()
    
    //rescaling for BR - check
     fData[i] = fData[i]/0.8;
-    sist = fData[i]*0.15;
+    double sist = fData[i]*0.15;
     fSys[i][0].add = sist;
     fSys[i][0].type = MULT;
     fSys[i][0].name = "CORR_EMC";
