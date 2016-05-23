@@ -68,21 +68,10 @@ class ThPredictionsResult(Result):
     def std_error(self):
         return self._std_error
 
-    @property
-    def data(self):
-        return self.stats_class(self._rawdata)
-
-    @classmethod
-    def from_convolution(cls, pdf, dataset, loaded_pdf=None, loaded_data=None):
-        #TODO: figue out what to do with the cache in general
-        if loaded_pdf  is None:
-            loaded_pdf = pdf.load()
-        if loaded_data is None:
-            loaded_data = dataset.load()
-        th_predictions = ThPredictions(loaded_pdf, loaded_data)
-
+    @staticmethod
+    def make_label(pdf, dataset):
+        """Deduce a reasonsble label for the result based on pdf and dataspec"""
         th = dataset.thspec
-
         if hasattr(pdf,'label'):
             if hasattr(th, 'label'):
                 label = ' '.join((pdf.label, dataset.label))
@@ -92,6 +81,20 @@ class ThPredictionsResult(Result):
             label = th.label
         else:
             label = ('%s@<Theory %s>' % (pdf, th.id))
+        return label
+
+
+    @classmethod
+    def from_convolution(cls, pdf, dataset, loaded_pdf=None, loaded_data=None):
+        if loaded_pdf  is None:
+            loaded_pdf = pdf.load()
+        if loaded_data is None:
+            loaded_data = dataset.load()
+        th_predictions = ThPredictions(loaded_pdf, loaded_data)
+
+
+        label = cls.make_label(pdf, dataset)
+
 
         return cls(th_predictions, pdf.stats_class, label)
 
