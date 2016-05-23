@@ -145,7 +145,6 @@ int main(int argc, char **argv)
     }
   cout << endl;
 
-
   // Plot replica
   plotreport->AddFitProperties(CUR,Pdf[CUR],res1);
   plotreport->SavePDFReplicas(Pdf[CUR], Pdf68cl[CUR]);
@@ -177,7 +176,12 @@ int main(int argc, char **argv)
   plotreport->AddPreprocPlots(REF,Pdf[REF]);
 
   plotreport->AddChi2Histo(res1, res2);
-  if (settings.GetPlotting("verbose")) plotreport->AddPhiHisto(res1,res2);
+  plotreport->AddChi2HistoDataSets(res1, res2);
+  if (settings.GetPlotting("verbose"))
+    {
+      plotreport->AddPhiHisto(res1,res2);
+      plotreport->AddPhiHistoDataSets(res1,res2);
+    }
   plotreport->AddChi2HistoComparison(res1,res2);
 
   if (!settings.Get("closuretest","fakedata").as<bool>())
