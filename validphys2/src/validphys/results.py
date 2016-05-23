@@ -5,12 +5,14 @@ Created on Wed Mar  9 15:19:52 2016
 @author: Zahari Kassabov
 """
 from collections import OrderedDict
+import itertools
 import logging
 
 import numpy as np
 import pandas as pd
 
 from NNPDF import ThPredictions
+from NNPDF.experiments import Experiment
 from reportengine.checks import require_one
 from reportengine.table import table
 
@@ -196,27 +198,52 @@ def experiments_invcovmat(experiments, experiments_index):
 
 @table
 def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
-                                experiments_index):
+                                experiments_index, nnoisy:int=0):
+    """Generate closure pseudodata replicas from the given pdf.
+
+    nclosure: Number of Level 1 pseudodata replicas.
+    nnoisy:   Number of Level 2 replicas generated out of each pseudodata replica.
+
+    The columns of the table are of the form (clos_0, noise_0_n0 ... ,clos_1, ...)
+    """
 
     #TODO: Do this somewhere else
     from NNPDF import randomgenerator
     randomgenerator.RandomGenerator.InitRNG(0,0)
-    data = np.zeros((len(experiments_index), nclosure))
+    data = np.zeros((len(experiments_index), nclosure*(1+nnoisy)))
+
+    cols = []
+    for i in range(nclosure):
+        cols += ['clos_%04d'%i, *['noise_%04d_%04d'%(i,j) for j in range(nnoisy)]]
+
 
     loaded_pdf = pdf.load()
-    for experiment in experiments:
+    for exp in experiments:
 
-        #TODO: This is probably computed somewhere else....
-        predictions = [ThPredictions(loaded_pdf, d.load()) for d in experiment]
+        #Since we are going to modify the experiments, we copy them
+        #(and work on the copies) to avoid all
+        #sorts of weirdness with other providers. We don't want this to interact
+        #with ExperimentSpec at all, because it could do funny things with the
+        #cache when calling load().
+        copied_exp = Experiment(exp.load())
+
+        #TODO: This is probably computed somewhere else... All this code is
+        #very error prone.
+        #The predictions are for the unmodified experiment.
+        predictions = [ThPredictions(loaded_pdf, d.load()) for d in exp]
 
 
-        loaded_experiment = experiment.load()
+        exp_location = experiments_index.get_loc(copied_exp.GetExpName())
 
-        exp_location = experiments_index.get_loc(experiment.name)
-
+        index = itertools.count()
         for i in range(nclosure):
-            loaded_experiment.MakeClosure(predictions, True)
-            data[exp_location, i] = loaded_experiment.get_cv()
+            copied_exp.MakeClosure(predictions, True)
+            data[exp_location, next(index)] = copied_exp.get_cv()
+            for j in range(nnoisy):
+                copied_exp.MakeReplica()
+                data[exp_location, next(index)] = copied_exp.get_cv()
+
+
             #print("CV")
             #print(loaded_experiment.get_cv())
             #print("Predictions")
@@ -224,7 +251,7 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
             #print(predictions[0].get_cv())
 
     df = pd.DataFrame(data, index=experiments_index,
-                      columns=np.arange(1, nclosure+1))
+                      columns=cols)
 
     return df
 
