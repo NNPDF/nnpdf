@@ -44,6 +44,7 @@
 #include "CMSTOPDIFF.h"
 #include "EMCF2C.h"
 #include "EMC.h"
+#include "ZEUSB.h"
 
 
 /**
@@ -213,6 +214,8 @@ void InitCommonData(vector<CommonData*>& target)
 
   target.push_back(new ZEUSHERA2CCPFilter());
   target.push_back(new ZEUSHERA2NCPFilter());
+
+  target.push_back(new ZEUSBFilter());
 
   // ************************ HERACOMB  ****************************
 
