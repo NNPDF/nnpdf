@@ -172,8 +172,6 @@ void Experiment::ClearLocalCovMat()
 
   delete[] fCovMat;
   delete[] fInvCovMat;
-
-  fNData = 0;
 }
 
 /**
