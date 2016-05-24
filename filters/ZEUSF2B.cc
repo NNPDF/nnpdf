@@ -70,6 +70,7 @@ void ZEUSF2BFilter::ReadData()
       fSys[i][l].add = sist;
       fSys[i][l].type = MULT;
       fSys[i][l].name = "CORR_"+sysNames[l];
+      //check whether the extr uncertainty is correlated - unclear in the paper
 
     }
 

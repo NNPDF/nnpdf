@@ -44,7 +44,8 @@
 #include "CMSTOPDIFF.h"
 #include "EMCF2C.h"
 #include "EMC.h"
-#include "ZEUSB.h"
+#include "ZEUSF2B.h"
+#include "H1F2B.h"
 
 
 /**
@@ -169,6 +170,10 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new H1HERA2CCEPFilter());
   target.push_back(new H1HERA2CCEMFilter());
 
+  // ************************* H1 HERA BOTTOM *****************************
+
+  target.push_back(new H1F2BFilter());
+
   // ************************* H1 HERA-II low Q2 and high-y ****************
 
   target.push_back(new H1HERA2LOWQ2Filter());
@@ -215,7 +220,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ZEUSHERA2CCPFilter());
   target.push_back(new ZEUSHERA2NCPFilter());
 
-  target.push_back(new ZEUSBFilter());
+  target.push_back(new ZEUSF2BFilter());
 
   // ************************ HERACOMB  ****************************
 

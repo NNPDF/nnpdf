@@ -11,21 +11,21 @@
 
 #include "buildmaster_utils.h"
 
-// ********** ZEUS F2B ***************
+// ********** H1 reduced bb xsec ***************
 
-static const dataInfoRaw ZEUSF2Binfo = {
-  17,                //nData
-  2,                 //nSys
-  "ZEUSHERAF2B",          //SetName
+static const dataInfoRaw H1F2Binfo = {
+  12,                //nData
+  25,                 //nSys
+  "H1HERAF2B",          //SetName
   "DIS_NCE_BT"          //ProcType
 };
 
 // ********* Filters **************
 
-class ZEUSF2BFilter: public CommonData
+class H1F2BFilter: public CommonData
 {
-public: ZEUSF2BFilter():
-  CommonData(ZEUSF2Binfo) { ReadData(); }
+public: H1F2BFilter():
+  CommonData(H1F2Binfo) { ReadData(); }
 
 private:
   void ReadData();
