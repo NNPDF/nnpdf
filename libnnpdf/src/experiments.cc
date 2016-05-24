@@ -151,7 +151,6 @@ void Experiment::ClearLocalData()
     delete[] fSys[i];
   delete[] fSys;
   
-  fNData = 0;
   fNSys = 0; 
 }
 
@@ -173,6 +172,8 @@ void Experiment::ClearLocalCovMat()
 
   delete[] fCovMat;
   delete[] fInvCovMat;
+
+  fNData = 0;
 }
 
 /**
