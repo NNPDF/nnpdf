@@ -1,11 +1,11 @@
 #!/bin/bash
 # Increments the FK table in the argument by the value in the second argument
-if [ -z "$1"] ; then
+if [ -z "$1" ] ; then
     echo "No first argument supplied"
     exit 1
 fi
 
-if [ -z "$2"] ; then
+if [ -z "$2" ] ; then
     echo "No second argument supplied"
     exit 1
 fi
