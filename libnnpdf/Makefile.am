@@ -50,7 +50,7 @@ FKconvolute_CPPFLAGS = $(GSL_CPPFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) -fPIC -Wal
 FKconvolute_LDFLAGS = $(GSL_LDFLAGS) $(SIMD_FLAGS) $(OPENMP_CFLAGS) $(LHAPDF_LDFLAGS) -lnnpdf $(SQLITE3_LDFLAGS)
 
 # Scripts to install
-dist_bin_SCRIPTS=scripts/FKmerge
+dist_bin_SCRIPTS=scripts/*
 
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = bin
