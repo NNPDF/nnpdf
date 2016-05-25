@@ -46,6 +46,7 @@
 #include "EMC.h"
 #include "ZEUSF2B.h"
 #include "H1F2B.h"
+#include "ATLASWZTOT13TEV81PB.h"
 
 
 /**
@@ -94,6 +95,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLAS1JET11Filter());
   target.push_back(new ATLASLOMASSDY11Filter());
   target.push_back(new ATLASLOMASSDY11EXTFilter());
+  target.push_back(new ATLASWZTOT13TEV81PBFilter());
 /*
   target.push_back(new ATLASPHT11ETGCTRFilter());
   target.push_back(new ATLASPHT11ETGFWDFilter());
@@ -169,10 +171,6 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new H1HERA2NCEMFilter());
   target.push_back(new H1HERA2CCEPFilter());
   target.push_back(new H1HERA2CCEMFilter());
-
-  // ************************* H1 HERA BOTTOM *****************************
-
-  target.push_back(new H1F2BFilter());
 
   // ************************* H1 HERA-II low Q2 and high-y ****************
 
