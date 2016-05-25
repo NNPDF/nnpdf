@@ -100,7 +100,7 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
 
 	      if (set.GetSetName().compare(string("CMSDY2D12")) == 0)
                 {
-		  
+
                   if (stoi(settings.GetTheory(APFEL::kPTO)) == 0 || stoi(settings.GetTheory(APFEL::kPTO)) == 1)
 		    if (pTmv > maxCMSDY2Dminv || pTmv < minCMSDY2Dminv || y > maxCMSDY2Dy)
 		      return false;
@@ -111,7 +111,7 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
 
                   return true; // avoid other cuts
                 }
-	      
+
               if (set.GetSetName().compare(string("ATLASZHIGHMASS49FB")) == 0 ||
                   set.GetSetName().compare(string("LHCBLOWMASS37PB")) == 0 )
                 {
@@ -173,7 +173,8 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
         set.GetSetName().compare(string("ATLASR04JETS36PB")) == 0 ||
         set.GetSetName().compare(string("ATLASR06JETS36PB")) == 0 ||
         set.GetSetName().compare(string("CMSJETS11")) == 0 ||
-        set.GetSetName().compare(string("ATLAS1JET11")) == 0 )
+        set.GetSetName().compare(string("ATLAS1JET11")) == 0 ||
+        set.GetSetName().compare(string("CMS1JET276TEV")) == 0)
       return ( pT > settings.Get("datacuts","jetptcut_lhc").as<double>() && y < settings.Get("datacuts","jetycut_lhc").as<double>());
 
     cerr << Colour::FG_RED << "filter passKinCuts Error: Jet experiment "<<set.GetSetName()<<" does not have it's pT/y cuts specified in passKinCuts."<<endl;
