@@ -218,14 +218,15 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
 
 
     loaded_pdf = pdf.load()
-    for exp in experiments:
 
+    for exp in experiments:
         #Since we are going to modify the experiments, we copy them
         #(and work on the copies) to avoid all
         #sorts of weirdness with other providers. We don't want this to interact
         #with ExperimentSpec at all, because it could do funny things with the
-        #cache when calling load().
-        copied_exp = Experiment(exp.load())
+        #cache when calling load(). We need to copy this yet again, for each
+        # of the noisy replicas.
+        closure_exp = Experiment(exp.load())
 
         #TODO: This is probably computed somewhere else... All this code is
         #very error prone.
@@ -233,22 +234,22 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
         predictions = [ThPredictions(loaded_pdf, d.load()) for d in exp]
 
 
-        exp_location = experiments_index.get_loc(copied_exp.GetExpName())
+        exp_location = experiments_index.get_loc(closure_exp.GetExpName())
 
         index = itertools.count()
         for i in range(nclosure):
-            copied_exp.MakeClosure(predictions, True)
-            data[exp_location, next(index)] = copied_exp.get_cv()
+            #Generate predictions with experimental noise, a different for
+            #each closure set.
+            closure_exp.MakeClosure(predictions, True)
+            data[exp_location, next(index)] = closure_exp.get_cv()
             for j in range(nnoisy):
-                copied_exp.MakeReplica()
-                data[exp_location, next(index)] = copied_exp.get_cv()
+                #If we don't copy, we generate noise on top of the noise,
+                #which is not what we want.
+                replica_exp = Experiment(closure_exp)
+                replica_exp.MakeReplica()
 
+                data[exp_location, next(index)] = replica_exp.get_cv()
 
-            #print("CV")
-            #print(loaded_experiment.get_cv())
-            #print("Predictions")
-
-            #print(predictions[0].get_cv())
 
     df = pd.DataFrame(data, index=experiments_index,
                       columns=cols)
