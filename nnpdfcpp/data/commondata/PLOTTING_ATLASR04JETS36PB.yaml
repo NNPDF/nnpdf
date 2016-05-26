@@ -1,0 +1,9 @@
+x: k2
+
+y_label: '$10^{qbin}\sigma(p_T^2)$' 
+y_scale: log
+x_scale: linear
+result_transform: qbinjets
+
+line_by:
+    - k1
