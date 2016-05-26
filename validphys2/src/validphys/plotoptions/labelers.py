@@ -10,3 +10,6 @@ def high_xq(k1, k2, k3, **kwargs):
 
 def pt_ratio(k1, k2, k3 , **kwargs):
     return k1/k2
+
+def jet_eta(k1,k2,k3,**kwargs):
+    return k1
