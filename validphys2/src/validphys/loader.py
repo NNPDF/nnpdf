@@ -152,7 +152,10 @@ class Loader():
 
     @property
     def available_fits(self):
-        return [p.name for p in self.resultspath.iterdir() if p.is_dir()]
+        try:
+            return [p.name for p in self.resultspath.iterdir() if p.is_dir()]
+        except IOError:
+            return []
 
     def get_cuts(self, setname, fit):
         fitname, fitpath = fit
