@@ -9,12 +9,10 @@ requirements:
     build: 
         - python 
         - lhapdf
-        - patchelf
         - swig
         - sqlite
         - gcc
         - libgcc
-        - atlas
         - gsl
         - numpy
     run:
@@ -22,7 +20,6 @@ requirements:
         - python 
         - sqlite
         - libgcc
-        - atlas
         - gsl
         - numpy
 
