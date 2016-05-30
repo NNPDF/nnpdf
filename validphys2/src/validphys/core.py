@@ -190,7 +190,6 @@ class DataSetSpec(TupleComp):
 
         fktables = []
         for p in self.fkspecs:
-            print(p)
             fktable = FKTable(str(p.fkpath), [str(factor) for factor in p.cfactors])
             #IMPORTANT: We need to tell the python garbage collector to NOT free the
             #memory owned by the FKTable on garbage collection.
