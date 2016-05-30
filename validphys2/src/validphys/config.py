@@ -149,7 +149,10 @@ class Config(configparser.Config):
 
 
         if use_cuts:
-            cuts = self.loader.get_cuts(name, fit)
+            try:
+                cuts = self.loader.get_cuts(name, fit)
+            except FileNotFoundError as e:
+                raise ConfigError(e)
         else:
             cuts = None
 
