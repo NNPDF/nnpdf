@@ -15,7 +15,8 @@ from reportengine.configparser import ConfigError, element_of, _parse_func
 
 from validphys import lhaindex
 from validphys.core import PDF, DataSetSpec, ExperimentSpec
-from validphys.loader import Loader, DataNotFoundError, SysNotFoundError
+from validphys.loader import (Loader, DataNotFoundError, SysNotFoundError,
+                              CompoundNotFound)
 
 log = logging.getLogger(__name__)
 
@@ -128,22 +129,16 @@ class Config(configparser.Config):
         except SysNotFoundError as e:
             raise ConfigError(str(e))
 
+        if 'cfac' in dataset:
+            cfac = dataset['cfac']
+        else:
+            cfac = ()
+
         try:
-            if 'cfac' in dataset:
-                cfac = dataset['cfac']
-                cfac = self.loader.check_cfactor(theoryno, name, cfac)
-            else:
-                cfac = ()
-
-
             try:
-                fkpath, op = self.loader.check_compound(theoryno, name)
-            except FileNotFoundError:
-                try:
-                    fkpath = self.loader.check_fktable(theoryno, name)
-                except FileNotFoundError as e:
-                    raise e
-
+                fkspec, op = self.loader.check_compound(theoryno, name, cfac)
+            except CompoundNotFound:
+                fkspec = self.loader.check_fktable(theoryno, name, cfac)
         except FileNotFoundError as e:
             raise ConfigError(e)
 
@@ -156,8 +151,8 @@ class Config(configparser.Config):
         else:
             cuts = None
 
-        return DataSetSpec(name=name, commondata=commondata, cfac=cfac,
-                           fkpaths=fkpath, thspec=theoryid, cuts=cuts, op=op)
+        return DataSetSpec(name=name, commondata=commondata,
+                           fkspecs=fkspec, thspec=theoryid, cuts=cuts, op=op)
 
 
     @configparser.element_of('experiments')

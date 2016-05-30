@@ -7,7 +7,6 @@ Created on Wed Mar  9 15:19:52 2016
 from __future__ import generator_stop
 
 from collections import namedtuple
-from collections.abc import Sequence
 import functools
 import inspect
 
@@ -156,15 +155,14 @@ CommonDataSpec = namedtuple('CommonDataSpec', ['datafile', 'sysfile', 'plotfiles
 
 class DataSetSpec(TupleComp):
 
-    def __init__(self, *, name, commondata, cfac, fkpaths, thspec, cuts,
+    def __init__(self, *, name, commondata, fkspecs, thspec, cuts,
                  op=None):
         self.name = name
         self.commondata = commondata
-        self.cfac = cfac
 
-        if not isinstance(fkpaths, Sequence) or isinstance(fkpaths, str):
-            fkpaths = (fkpaths,)
-        self.fkpaths = tuple(fkpaths)
+        if isinstance(fkspecs, FKTableSpec):
+            fkspecs = (fkspecs,)
+        self.fkspecs = tuple(fkspecs)
         self.thspec = thspec
 
         self.cuts = cuts
@@ -182,7 +180,7 @@ class DataSetSpec(TupleComp):
             frozencuts = cuts.data.tobytes()
         else:
             frozencuts = None
-        super().__init__(name, commondata, fkpaths, thspec, frozencuts,
+        super().__init__(name, commondata, fkspecs, thspec, frozencuts,
                          op)
 
     @functools.lru_cache()
@@ -191,8 +189,9 @@ class DataSetSpec(TupleComp):
         cd = CommonData.ReadFile(str(cdpath), str(syspth))
 
         fktables = []
-        for p in self.fkpaths:
-            fktable = FKTable(str(p), [str(factor) for factor in self.cfac])
+        for p in self.fkspecs:
+            print(p)
+            fktable = FKTable(str(p.fkpath), [str(factor) for factor in p.cfactors])
             #IMPORTANT: We need to tell the python garbage collector to NOT free the
             #memory owned by the FKTable on garbage collection.
             #TODO: Do this automatically
@@ -214,6 +213,12 @@ class DataSetSpec(TupleComp):
 
     def __str__(self):
         return self.name
+
+class FKTableSpec(TupleComp):
+    def __init__(self, fkpath, cfactors):
+        self.fkpath = fkpath
+        self.cfactors = cfactors
+        super().__init__(fkpath, cfactors)
 
 #We allow to expand the experiment as a list of datasets
 class ExperimentSpec(TupleComp, namespaces.NSList):

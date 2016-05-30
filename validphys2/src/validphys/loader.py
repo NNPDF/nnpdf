@@ -17,13 +17,20 @@ import yaml
 
 from NNPDF import CommonData, FKTable
 
-from validphys.core import CommonDataSpec, FitSpec, TheoryIDSpec
+from validphys.core import CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec
 
 log = logging.getLogger(__name__)
 
 class DataNotFoundError(FileNotFoundError): pass
 
 class SysNotFoundError(FileNotFoundError): pass
+
+class FKTableNotFound(FileNotFoundError): pass
+
+class CfactorNotFound(FileNotFoundError): pass
+
+class CompoundNotFound(FileNotFoundError): pass
+
 
 class Loader():
     """Load various resources from the NNPDF data path."""
@@ -90,28 +97,35 @@ class Loader():
         datafile, sysfile, *_ = self.check_commondata(setname, sysnum)
         return CommonData.ReadFile(str(datafile), str(sysfile))
 
-    @functools.lru_cache()
-    def check_fktable(self, theoryID, setname):
+    #   @functools.lru_cache()
+    def check_fktable(self, theoryID, setname, cfac):
         _, theopath = self.check_theoryID(theoryID)
         fkpath = theopath/ 'fastkernel' / ('FK_%s.dat' % setname)
         if not fkpath.exists():
-          raise FileNotFoundError(("Could not find FKTable for set '%s'. "
+          raise FKTableNotFound(("Could not find FKTable for set '%s'. "
           "File '%s' not found") % (setname, fkpath) )
-        return fkpath
 
-    def check_compound(self, theoryID, setname):
-        _, theopath = self.check_theoryID(theoryID)
+        cfactors = self.check_cfactor(theoryID, setname, cfac)
+        return FKTableSpec(fkpath, cfactors)
+
+    def check_compound(self, theoryID, setname, cfac):
+        thid, theopath = self.check_theoryID(theoryID)
         compound_spec_path = theopath / 'compound' / ('FK_%s-COMPOUND.dat' % setname)
-        with compound_spec_path.open() as f:
-            #Drop first line with comment
-            next(f)
-            txt = f.read()
+        try:
+            with compound_spec_path.open() as f:
+                #Drop first line with comment
+                next(f)
+                txt = f.read()
+        except FileNotFoundError as e:
+            msg = ("Could not find COMPOUND set '%s' for theory %d: %s" %
+                   (setname, int(thid), e))
+            raise CompoundNotFound(msg)
         #This is a little bit stupid, but is the least amount of thinking...
         yaml_format = 'FK:\n' + re.sub('FK:', ' - ', txt)
         data = yaml.load(yaml_format)
         #we have to split out 'FK_' the extension to get a name consistent
         #with everything else
-        tables = [self.check_fktable(theoryID, name[3:-4])
+        tables = [self.check_fktable(theoryID, name[3:-4], cfac)
                   for name in data['FK']]
         op = data['OP']
         return tuple(tables), op
@@ -129,10 +143,10 @@ class Loader():
             cfactorpath = (theopath / 'cfactor' /
                            'CF_{cfactor}_{setname}.dat'.format(**locals()))
             if not cfactorpath.exists():
-                msg = ("Could not find cfactor '{cfactor}' for set {setname} "
+                msg = ("Could not find cfactor '{cfactor}' for FKTable {setname} "
                        "in theory {theoryID}. File {cfactorpath} does not "
                        "exist.").format(**locals())
-                raise FileNotFoundError(msg)
+                raise CfactorNotFound(msg)
             cf.append(cfactorpath)
 
         return tuple(cf)
