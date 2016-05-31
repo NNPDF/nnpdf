@@ -37,7 +37,7 @@ def qbindis(cv, error, **labels):
         qbin = labels['k1']
     except KeyError:
         raise KeyError()
-    return 10**qbin*cv, 10**qbin*error
+    return cv+10*qbin, error
 
 def qbinjets(cv, error, **labels):
     try:
