@@ -361,7 +361,6 @@ def chi2_data(results):
 
 chi2_stat_labels = {
     'central_mean': r'$<\chi^2_{0}>_{data}$',
-    'central_std' : r'$std_{data}(chi^2_{0})$',
     'perreplica_mean': r'$\left< \chi^2 \right>_{rep,data}$',
     'perreplica_std': r'$\left<std_{rep}(\chi^2)\right>_{data}$',
 }
@@ -371,7 +370,6 @@ def chi2_stats(chi2_data):
 
     return OrderedDict([
             ('central_mean'        ,  central_result.mean()),
-            ('central_std'        ,  central_result.std()),
             ('perreplica_mean', rep_data.central_value().mean()),
             ('perreplica_std',  rep_data.std_error().mean()),
            ])

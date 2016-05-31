@@ -10,5 +10,5 @@ dataset:
     cfac: [EWK]
 
 actions_:
-    - plot_results
+    - plot_fancy
     - plot_chi2dist
