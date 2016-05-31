@@ -25,6 +25,7 @@
  */
 
 #include "CMS.h"
+#include "buildmaster_utils.h"
 
 void CMSWEASY840PBFilter::ReadData()
 {
@@ -523,8 +524,8 @@ ptlo (GeV)  pthi (GeV)  xs (pb/GeV)  xs_stat_unc[-,+]  npcor  npcor_lo  npcor_hi
  * \bibitem{Khachatryan:2015luy}
  * V.~Khachatryan {\it et al.} [CMS Collaboration],
  * %``Measurement of the inclusive jet cross section in pp collisions at sqrt(s) = 2.76 TeV,''
- * arXiv:1512.06212 [hep-ex]. 
- * 
+ * arXiv:1512.06212 [hep-ex].
+ *
  * Data from HEPDATA: http://hepdata.cedar.ac.uk/view/ins1410826
  * extracted the 15/05/2016
  *
@@ -537,16 +538,22 @@ ptlo (GeV)  pthi (GeV)  xs (pb/GeV)  xs_stat_unc[-,+]  npcor  npcor_lo  npcor_hi
 void CMS1JET276TEVFilter::ReadData()
 {
 
-  fstream f1, f2;
+  fstream f1, f2, f3;
   stringstream sysfile("");
   sysfile << dataPath() << "rawdata/" << fSetName << "/systematics_276TeV.txt";
 
   f1.open(sysfile.str().c_str(), ios::in);
   if (f1.fail()) { cerr << "Error opening data file " << sysfile.str() << endl;  exit(-1); }
 
+  stringstream corrfile("");
+  corrfile << dataPath() << "rawdata/" << fSetName << "/correlationMatrix_276TeV.txt";
+
+  f3.open(corrfile.str().c_str(), ios::in);
+  if (f3.fail()) { cerr << "Error opening data file " << corrfile.str() << endl;  exit(-1); }
+
   // variables
   string line;
-  int index = 0;
+  int index = 0, nsys = 25, index_bis = 0;
   const int nbins = 6;
   const int bins[] = {19, 18, 16, 13, 9, 6};
   const double etas[] = {0.5/2., (1+0.5)/2., (1+1.5)/2., (1.5+2)/2., (2+2.5)/2., (2.5+3)/2.};
@@ -554,7 +561,7 @@ void CMS1JET276TEVFilter::ReadData()
   double tmp, rescalenp, npm, npp, nperr, npshift;
 
   // remove f1 header
-  for (int s = 0; s < 6; s++) getline(f1, line);
+  for (int s = 0; s < 6; s++) { getline(f1, line); getline(f3, line); }
 
   // load kinematics, data cv and statistical uncertainties
   for (int iy = 0; iy < nbins; iy++)
@@ -565,8 +572,16 @@ void CMS1JET276TEVFilter::ReadData()
       if (f2.fail()) { cerr << "Error opening data file " << data.str() << endl;  exit(-1); }
 
       // skip headers
-      for (int s = 0; s < 9; s++) getline(f1, line);
-      for (int s = 0; s < 9; s++) getline(f2, line);
+      for (int s = 0; s < 9; s++) { getline(f1, line); getline(f2, line); }
+      for (int s = 0; s < 4; s++) getline(f3, line);
+
+      double** statmat = new double*[bins[iy]];
+      double** syscor  = new double*[bins[iy]];
+      for (int ipt = 0; ipt < bins[iy]; ipt++)
+        {
+          statmat[ipt] = new double[bins[iy]];
+          syscor[ipt] = new double[bins[iy]];
+        }
 
       for (int ipt = 0; ipt < bins[iy]; ipt++)
         {
@@ -576,12 +591,18 @@ void CMS1JET276TEVFilter::ReadData()
           f1 >> tmp >> tmp >> rescalenp >> npm >> npp
              >> fSys[index][0].mult >> fSys[index][1].mult;
 
+          f3 >> tmp >> tmp;
+          // build stat. correlation matrix
+          for (int ipty = 0; ipty < bins[iy]; ipty++)
+            f3 >> statmat[ipt][ipty];
+
           // Symmetrise np error
           symmetriseErrors(npp-rescalenp, npm-rescalenp, &nperr, &npshift);
           rescalenp+=npshift;
 
           fData[index] /= rescalenp;
           fStat[index] /= rescalenp;
+
 
           fKin1[index] = etas[iy]; // jet rapidity
           fKin2[index] *= fKin2[index]; // jet pt2
@@ -601,25 +622,62 @@ void CMS1JET276TEVFilter::ReadData()
           fSys[index][2].name = "CORR";
 
           // filling corr uncertainties
-          for (int isys = 3; isys < fNSys; isys++)
+          for (int isys = 3; isys < 25; isys++)
             {
               f1 >> fSys[index][isys].mult;
               fSys[index][isys].type = ADD;
               fSys[index][isys].name = "CORR";
-	      cout << fSys[index][isys].mult << endl;
             }
 
           // Correlated systematics in percent
-          for (int l = 0; l < fNSys; l++)
+          for (int l = 0; l < nsys; l++)
             {
               fSys[index][l].mult *= 1e2;
               fSys[index][l].add = fSys[index][l].mult*fData[index]*1e-2;
             }
-
           index++;
         }
+
+      // fill stat. covmat
+      for (int ipt = 0; ipt < bins[iy]; ipt++)
+        for (int jpt = ipt; jpt < bins[iy]; jpt++)
+          {
+            statmat[ipt][jpt] *= fStat[index-bins[iy]+ipt]*fStat[index-bins[iy]+jpt];
+            statmat[jpt][ipt] = statmat[ipt][jpt];
+          }
+
+      if(!genArtSys(bins[iy], statmat, syscor))
+        {
+          cerr << "Error when generating artsys for " << fSetName << endl;
+          exit(-1);
+        }
+
+      for (int ipt = 0; ipt < bins[iy]; ipt++)
+        {
+          for (int l = nsys+index-bins[iy]; l < nsys+index; l++)
+            {
+              fSys[index_bis][l].add = abs(syscor[ipt][l-nsys-index+bins[iy]]);
+              fSys[index_bis][l].mult = fSys[index_bis][l].add*1e2/fData[index_bis];
+              fSys[index_bis][l].type = ADD;
+              fSys[index_bis][l].name = "CORR";
+            }
+          // resettings stat errors.
+          fStat[index_bis] = 0.0;
+          index_bis++;
+        }
+
+
+      for (int ipt = 0; ipt < bins[iy]; ipt++)
+        {
+          delete[] statmat[ipt];
+          delete[] syscor[ipt];
+        }
+      delete[] statmat;
+      delete[] syscor;
+
       f2.close();
     }
-  f1.close();
-}
 
+  f1.close();
+  f3.close();
+}

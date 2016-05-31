@@ -42,7 +42,7 @@ static const dataInfoRaw CMSJETS11info = {
 
 static const dataInfoRaw CMS1JET276TEVinfo = {
   81,          //nData
-  25,          //nSys
+  25+81,     //nSys
   "CMS1JET276TEV", //SetName
   "JET"        //ProcType
 };
