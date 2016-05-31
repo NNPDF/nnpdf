@@ -168,3 +168,9 @@ class Config(configparser.Config):
                                        use_cuts=use_cuts, fit=fit) #analysis:ignore
 
         return ExperimentSpec(name=name, datasets=datasets)
+
+    def parse_reweighting_experiments(self, experiments:list, *, theoryid,
+                                      use_cuts, fit=None):
+        return self.parse_experiments(experiments,
+                                     theoryid=theoryid,
+                                     use_cuts=use_cuts, fit=fit)
