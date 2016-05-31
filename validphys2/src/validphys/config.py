@@ -85,6 +85,7 @@ class Config(configparser.Config):
     @element_of('theoryids')
     @_id_with_label
     def parse_theoryid(self, theoryID: (str, int)):
+        """A number corresponding to the database theory ID"""
         try:
             return self.loader.check_theoryID(theoryID)
         except FileNotFoundError as e:
@@ -158,6 +159,9 @@ class Config(configparser.Config):
     @configparser.element_of('experiments')
     def parse_experiment(self, experiment:dict, *, theoryid, use_cuts,
                          fit=None):
+        """A set of datasets where correlated systematics are taken
+        into account. It is a mapping where the keys are the experiment
+        name 'experiment' and a list of datasets"""
         try:
             name, datasets = experiment['experiment'], experiment['datasets']
         except KeyError as e:
@@ -171,6 +175,7 @@ class Config(configparser.Config):
 
     def parse_reweighting_experiments(self, experiments:list, *, theoryid,
                                       use_cuts, fit=None):
+        """A list of experiments to be used for reweighting"""
         return self.parse_experiments(experiments,
                                      theoryid=theoryid,
                                      use_cuts=use_cuts, fit=fit)
