@@ -7,6 +7,7 @@
 //          Luigi Del Debbio, luigi.del.debbio@ed.ac.uk
 
 #include <cmath>
+#include <cstring>
 #include <cstdlib>
 #include <sstream>
 #include <iterator>
