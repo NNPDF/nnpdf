@@ -38,4 +38,4 @@ def qbinjets(cv, error, **labels):
         qbin = labels['k1']
     except KeyError:
         raise KeyError()
-    return 1000**(10-qbin)*cv, 1000**(10-qbin)*error
+    return 1000**(5-qbin)*cv, 1000**(5-qbin)*error
