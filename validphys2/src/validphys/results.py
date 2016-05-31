@@ -131,6 +131,15 @@ def experiments_index(experiments):
     df.set_index(columns, inplace=True)
     return df.index
 
+#TODO: Find a good name for this
+def t0set(use_t0=False, t0pdfset=None):
+    """A conveninece provider to not have to drag the two
+    related parameters everywhere"""
+    if use_t0:
+        return t0pdfset
+    else:
+        return None
+
 
 
 @table
@@ -279,23 +288,39 @@ def experiment_chi2_table(experiments, pdf):
     return pd.DataFrame(records)
 
 
-def results(dataset:DataSetSpec, pdf:PDF):
+
+
+def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))):
     """Tuple of data and theory results for a single pdf.
     The theory is specified as part of the dataset
     (as a result of the C++ code layout)."""
 
     data = dataset.load()
 
+    if t0set:
+        #Copy data to avoid chaos
+        data = type(data)(data)
+        t0_preds = ThPredictions(t0set.load(), data)
+        log.debug("Setting T0 predictions for %s" % dataset)
+        data.SetT0(t0_preds)
+
     return DataResult(data), ThPredictionsResult.from_convolution(pdf, dataset,
                                                  loaded_data=data)
 
 #It's better to duplicate a few lines than to complicate the logic of
-#``results`` to support this
+#``results`` to support this.
 def pdf_results(dataset:DataSetSpec, pdfs:list):
     """Return a list of results, the first for the data and the rest for
     each of the PDFs."""
 
     data = dataset.load()
+
+    if t0set:
+        #Copy data to avoid chaos
+        data = type(data)(data)
+        t0_preds = ThPredictions(t0set.load(), data)
+        log.debug("Setting T0 predictions for %s" % dataset)
+        data.SetT0(t0_preds)
 
     th_results = []
     for pdf in pdfs:
@@ -307,11 +332,12 @@ def pdf_results(dataset:DataSetSpec, pdfs:list):
     return (DataResult(data), *th_results)
 
 @require_one('pdfs', 'pdf')
-def one_or_more_results(dataset:DataSetSpec, pdfs:list=None, pdf:PDF=None):
+def one_or_more_results(dataset:DataSetSpec, pdfs:list=None, pdf:PDF=None,
+                        t0set:(PDF, type(None))=None):
     if pdf:
-        return results(dataset, pdf)
+        return results(dataset, pdf, t0set)
     else:
-        return pdf_results(dataset, pdfs)
+        return pdf_results(dataset, pdfs, t0set)
     raise ValueError("Either 'pdf' or 'pdfs' is required")
 
 

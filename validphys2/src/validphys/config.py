@@ -173,9 +173,20 @@ class Config(configparser.Config):
 
         return ExperimentSpec(name=name, datasets=datasets)
 
-    def parse_reweighting_experiments(self, experiments:list, *, theoryid,
+    #TODO: Worth it to do some black magic to not pass params explicitly?
+    def parse_reweighting_experiments(self, experiments, *, theoryid,
                                       use_cuts, fit=None):
         """A list of experiments to be used for reweighting"""
         return self.parse_experiments(experiments,
                                      theoryid=theoryid,
                                      use_cuts=use_cuts, fit=fit)
+    def parse_t0pdfset(self, name):
+        """PDF set used to generate the t0 covmat"""
+        return self.parse_pdf(name)
+
+    def parse_use_t0(self, do_use_t0:bool, t0pdfset=None):
+        """Whether to use the t0 PDF set to generate covariance matrices."""
+        if do_use_t0 and not t0pdfset:
+            raise ConfigError("Setting use_t0 requires specifying a valid t0pdfset")
+
+        return do_use_t0
