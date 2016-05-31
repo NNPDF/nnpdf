@@ -25,13 +25,6 @@ static const dataInfoRaw EMCF2Dinfo = {
   "DIS_F2D" //ProcType
 };
 
-static const dataInfoRaw EMCinfo = {
-  35,      //nData
-  1,        //nSys
-  "EMC",    //SetName
-  "DIS_NCE_CH" //ProcType
-};
-
 class EMCF2PFilter: public CommonData
 {
 public: EMCF2PFilter():
@@ -44,14 +37,6 @@ private:
 class EMCF2DFilter: public CommonData
 { public: EMCF2DFilter():
   CommonData(EMCF2Dinfo) { ReadData(); }
-
-private:
-  void ReadData();
-};
-
-class EMCFilter: public CommonData
-{ public: EMCFilter():
-  CommonData(EMCinfo) { ReadData(); }
 
 private:
   void ReadData();

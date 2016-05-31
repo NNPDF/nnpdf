@@ -44,6 +44,7 @@
 #include "CMSTOPDIFF.h"
 #include "EMCF2C.h"
 #include "EMC.h"
+#include "EMCF2c1987.h"
 #include "ZEUSF2B.h"
 #include "H1F2B.h"
 
@@ -141,12 +142,12 @@ void InitCommonData(vector<CommonData*>& target)
   // ************************ EMCF2C *****************************
 
   target.push_back(new EMCF2CFilter());
+  target.push_back(new EMCF2c1987Filter());
 
   // ************************ EMC *****************************
 
   target.push_back(new EMCF2PFilter());
   target.push_back(new EMCF2DFilter());
-  target.push_back(new EMCFilter());
 
 
   // ************************* FTDY ******************************
