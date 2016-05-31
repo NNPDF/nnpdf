@@ -63,20 +63,31 @@ namespace NNPDF
    */
   std::vector<real> rsplit(std::string const& input)
   {
-  	std::stringstream strstr(input);
-  	std::istream_iterator<real> it(strstr);
-  	std::istream_iterator<real> end;
-  	std::vector<real> results(it, end);
+  	std::vector<real> results;
+    char *buffer = new char[input.size() + 1];
+    sprintf(buffer, input.c_str());
+    char *token = strtok(buffer, " \t");
+    while (token)
+      {
+        results.push_back(atof(token));
+        token = strtok(NULL, " \t");
+      }  
+    delete[] buffer;
   	return results;
   }
 
   void rsplit(std::vector<real>& results, std::string const& input)
   {
-  	std::stringstream strstr(input);
-  	std::istream_iterator<real> it(strstr);
-  	std::istream_iterator<real> end;
-    
-  	results.assign(it, end);
+    results.clear();
+    char *buffer = new char[input.size() + 1];
+    sprintf(buffer, input.c_str());
+    char *token = strtok(buffer, " \t");
+    while (token)
+      {
+        results.push_back(atof(token));
+        token = strtok(NULL, " \t");
+      }  
+    delete[] buffer;
   	return;
   }
 

@@ -411,11 +411,10 @@ namespace NNPDF
 
     // Read FastKernel Table
     std::string line;
-    std::vector<real> datasplit;
-
     if (fHadronic) {
       while (getline(is,line))
       {
+        std::vector<real> datasplit;
         rsplit(datasplit,line);
         const int d = datasplit[0]; // datapoint
         const int a = datasplit[1]; // x1 index
@@ -430,6 +429,7 @@ namespace NNPDF
     } else { // DIS
       while (getline(is,line))
       {
+        std::vector<real> datasplit;
         rsplit(datasplit,line);
         
         const int d = datasplit[0];
