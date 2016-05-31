@@ -121,7 +121,8 @@ def check_normalize_to(callspec, ns, graph):
 
 @check_normalize_to
 @figuregen
-def plot_fancy(one_or_more_results, dataset, normalize_to = None):
+def plot_fancy(one_or_more_results, dataset,
+               normalize_to:(int,str,type(None)) = None):
 
 
     results = one_or_more_results
