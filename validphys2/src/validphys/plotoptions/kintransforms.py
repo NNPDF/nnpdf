@@ -12,6 +12,6 @@ from math import sqrt
 def dummy_transform(k1,k2,k3):
     return k1*2, k2*3, k3*4
 
-@utils.new_labels('$k_1$', '$\sqrt(k_2)$', '$k_3$')
+@utils.new_labels('$k_1$', '$\sqrt{k_2}$', '$k_3$')
 def sqrt_scale(k1,k2,k3):
     return k1, sqrt(k2), k3
