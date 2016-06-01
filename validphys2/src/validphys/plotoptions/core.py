@@ -11,7 +11,7 @@ import pandas as pd
 
 
 from reportengine.configparser import Config, ConfigError, named_element_of
-from reportengine.utils import get_functions, ChainMap
+from reportengine.utils import get_functions
 from NNPDF import CommonData
 
 from validphys.utils import split_by
@@ -118,11 +118,7 @@ class PlotConfigParser(Config):
     def __init__(self, input_params ,commondata, cuts=None, **kwargs):
         self.commondata = commondata
         self.cuts = cuts
-        self._parsed_extra = False
-        self.output_params = ChainMap()
-        self._other_labels = {}
         super().__init__(input_params, **kwargs)
-
 
     @named_element_of('extra_labels')
     def parse_label(self, elems:list):
@@ -134,38 +130,21 @@ class PlotConfigParser(Config):
                               (elems, len(elems), len(self.commondata)))
         return elems
 
-    def _get_labels(self, extra_labels):
-        if extra_labels is None:
-            extra_labels = {}
-        return {**self.othher_labels, **extra_labels}
-
-    def resolve_name(self, val, extra_labels):
+    @staticmethod
+    def resolve_name(val, extra_labels):
         if extra_labels is None:
             all_labels = list(default_labels)
-            #TODO: This is absolutely horrible hack.
-            lbl = self._other_labels
         else:
             all_labels = list(extra_labels.keys()) + list(default_labels)
-            lbl = extra_labels
         if val in all_labels:
             return val
         if val in labeler_functions:
-            lbl[val] = labeler_functions[val]
+            extra_labels[val] = labeler_functions[val]
             return val
 
         raise ConfigError("Unknown label %s" % val, val, all_labels +
                           list(labeler_functions),
                               display_alternatives='all')
-
-    def process_all_params(self, input_params=None):
-        result = super().process_all_params(input_params=input_params, ns=self.output_params)
-
-        result['extra_labels'] = {**self._other_labels,
-                                              **self.output_params.get('extra_labels', {})}
-        return result
-
-
-
 
     def parse_x(self, x:str, extra_labels=None):
         return self.resolve_name(x, extra_labels)
