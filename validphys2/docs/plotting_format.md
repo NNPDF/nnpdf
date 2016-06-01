@@ -14,7 +14,7 @@ Given a dataset  labeled `<DATASET>`, every file found in the
 pattern
 
 ````
-PLOTTING_<DATASET>*.y[a]ml
+PLOTTING_<DATASET>[_*].y[a]ml
 ````
 
 is to be considering a plotting file for that dataset. In case there
