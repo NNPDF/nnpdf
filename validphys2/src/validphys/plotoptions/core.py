@@ -69,6 +69,9 @@ class PlotInfo:
         self.y_scale = y_scale
 
     def name_to_label(self, name):
+        if name in labeler_functions:
+            func = labeler_functions[name]
+            return getattr(func, 'label', name)
         try:
             ix = ('k1', 'k2', 'k3').index(name)
         except ValueError:
