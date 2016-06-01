@@ -4,6 +4,8 @@ Created on Fri Mar 11 19:27:44 2016
 
 @author: Zahari Kassabov
 """
+import logging
+
 import numpy as np
 import pandas as pd
 
@@ -14,6 +16,8 @@ from NNPDF import CommonData
 
 from validphys.utils import split_by
 from validphys.plotoptions import labelers, kintransforms, resulttransforms
+
+log = logging.getLogger(__name__)
 
 default_labels = ('idat', 'k1', 'k2', 'k3')
 
@@ -39,7 +43,11 @@ def get_plot_kinlabels(commondata):
     return kinlabels_latex[key]
 
 def get_info(commondata, file=None, cuts=None):
-    return PlotInfo.from_commondata(commondata, file=file, cuts=cuts)
+    try:
+        return PlotInfo.from_commondata(commondata, file=file, cuts=cuts)
+    except ConfigError:
+        log.error("Problem processing file %s" % getattr(file, 'name', file))
+        raise
 
 class PlotInfo:
     def __init__(self, kinlabels, x=None ,extra_labels=None,
