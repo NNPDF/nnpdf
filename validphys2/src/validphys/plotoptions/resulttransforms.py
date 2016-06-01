@@ -25,31 +25,26 @@ Note that these functions will be called point by point
 
 """
 
+class MissingLabelError(KeyError):
+    def __init__(self, key_error):
+        msg = "A label is required to perform the operation: %s" % key_error.args[0]
+        super.__init__(msg)
+
 def qbinexp(cv, error, **labels):
     try:
         qbin = labels['qbin']
-    except KeyError:
-        raise KeyError()
+    except KeyError as e:
+        raise MissingLabelError(e)
     return 10**qbin*cv, 10**qbin*error
 
 def qbindis(cv, error, **labels):
-    try:
-        qbin = labels['k2']
-    except KeyError:
-        raise KeyError()
+    qbin = labels['k2']
     return (10**qbin)*cv, (10**qbin)*error
 
 def qbinjets(cv, error, **labels):
-    try:
-        qbin = labels['k1']
-    except KeyError:
-        raise KeyError()
+    qbin = labels['k1']
     return 1000**(5-qbin)*cv, 1000**(5-qbin)*error
 
 def qbindyp(cv, error, **labels):
-    try:
-        qbin = labels['k1']
-    except KeyError:
-        raise KeyError()
+    qbin = labels['k1']
     return 10000**(qbin)*cv, 10000**(qbin)*error
-    print (qbin)
