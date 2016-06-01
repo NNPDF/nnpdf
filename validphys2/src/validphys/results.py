@@ -300,16 +300,16 @@ def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))):
     if t0set:
         #Copy data to avoid chaos
         data = type(data)(data)
-        t0_preds = ThPredictions(t0set.load(), data)
         log.debug("Setting T0 predictions for %s" % dataset)
-        data.SetT0(t0_preds)
+        data.SetT0(t0set.load())
 
     return DataResult(data), ThPredictionsResult.from_convolution(pdf, dataset,
                                                  loaded_data=data)
 
 #It's better to duplicate a few lines than to complicate the logic of
 #``results`` to support this.
-def pdf_results(dataset:DataSetSpec, pdfs:list):
+#TODO: The above comment doesn't make sense after adding T0
+def pdf_results(dataset:DataSetSpec, pdfs:list, t0set:(PDF, type(None))):
     """Return a list of results, the first for the data and the rest for
     each of the PDFs."""
 
@@ -318,9 +318,8 @@ def pdf_results(dataset:DataSetSpec, pdfs:list):
     if t0set:
         #Copy data to avoid chaos
         data = type(data)(data)
-        t0_preds = ThPredictions(t0set.load(), data)
         log.debug("Setting T0 predictions for %s" % dataset)
-        data.SetT0(t0_preds)
+        data.SetT0(t0set.load())
 
     th_results = []
     for pdf in pdfs:
