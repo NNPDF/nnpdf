@@ -1,0 +1,8 @@
+x: k2
+
+y_label: '$10^{4*y_{bin}} d\sigma_{pp}/dM$' 
+y_scale: log
+result_transform: qbindyp
+kinematics_override: dyp_sqrt_scale
+line_by:
+    - k1
