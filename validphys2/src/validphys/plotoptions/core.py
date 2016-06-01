@@ -11,7 +11,7 @@ import pandas as pd
 
 
 from reportengine.configparser import Config, ConfigError, named_element_of
-from reportengine.utils import get_functions
+from reportengine.utils import get_functions, ChainMap
 from NNPDF import CommonData
 
 from validphys.utils import split_by
@@ -50,7 +50,7 @@ def get_info(commondata, file=None, cuts=None):
         raise
 
 class PlotInfo:
-    def __init__(self, kinlabels, x=None ,extra_labels=None,
+    def __init__(self, kinlabels, x=None ,extra_labels=None, func_labels=None,
                  figure_by=None, line_by=None, kinematics_override=None,
                  result_transform=None, y_label=None, x_label=None,
                  x_scale=None, y_scale=None):
@@ -59,6 +59,7 @@ class PlotInfo:
             x = 'idat'
         self.x = x
         self.extra_labels = extra_labels
+        self.func_labels = func_labels
         self.figure_by = figure_by
         self.line_by = line_by
         self.kinematics_override = kinematics_override
@@ -120,6 +121,12 @@ class PlotConfigParser(Config):
         self.cuts = cuts
         super().__init__(input_params, **kwargs)
 
+    def process_all_params(self, input_params=None):
+        self._output_params = ChainMap({'func_labels':{}})
+        return super().process_all_params(input_params=input_params,
+                                              ns=self._output_params)
+
+
     @named_element_of('extra_labels')
     def parse_label(self, elems:list):
         if self.cuts is not None:
@@ -130,8 +137,7 @@ class PlotConfigParser(Config):
                               (elems, len(elems), len(self.commondata)))
         return elems
 
-    @staticmethod
-    def resolve_name(val, extra_labels):
+    def resolve_name(self, val, extra_labels):
         if extra_labels is None:
             all_labels = list(default_labels)
         else:
@@ -139,7 +145,7 @@ class PlotConfigParser(Config):
         if val in all_labels:
             return val
         if val in labeler_functions:
-            extra_labels[val] = labeler_functions[val]
+            self._output_params['func_labels'][val] = labeler_functions[val]
             return val
 
         raise ConfigError("Unknown label %s" % val, val, all_labels +
@@ -191,18 +197,20 @@ def kitable(commondata, info):
     table = pd.DataFrame(commondata.get_kintable(), columns=default_labels[1:])
     table.index.name = default_labels[0]
     if info.kinematics_override:
-        table = table.apply(lambda x: _expand(info.kinematics_override, x),
-                            broadcast=True,
-                            axis=1)
+        apply_to_all_columns(table, info.kinematics_override)
+
     #TODO: This is a little bit ugly. We want to call the functions
     #with all the
     #extra labels
     if info.extra_labels:
-        funcs, vals = split_by(info.extra_labels.items(),
-                               lambda x: callable(x[1]))
+        vals = tuple(info.extra_labels.items())
     else:
-        funcs, vals = (), ()
+        vals = ()
 
+    if info.func_labels:
+        funcs = tuple(info.func_labels.items())
+    else:
+        funcs = ()
 
     for label, value in vals:
         table[label] = value
