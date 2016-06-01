@@ -70,8 +70,9 @@ class Loader():
         sysfile = (self.commondata_folder / 'systypes' /
                    ('SYSTYPE_%s_%d.dat' % (setname, sysnum)))
 
-        plotfiles = tuple(self.commondata_folder.glob('PLOTTING_' + setname +
-                                                         '[_*]' + '.y[a]ml'))
+        #Good luck debugging this!
+        plotfiles = tuple(p for p in self.commondata_folder.iterdir()
+                        if re.match('PLOTTING_%s(_.*)?.ya?ml'%setname, p.name))
 
         if not sysfile.exists():
             raise SysNotFoundError(("Could not find systype %d for "
