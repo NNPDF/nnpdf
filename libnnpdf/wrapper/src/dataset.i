@@ -16,6 +16,7 @@
 
 %import "commondata.i"
 %import "fkset.i"
+%import "pdfset.i"
 /* Parse the header file to generate wrappers */
 
 %feature("autodoc", "3");
