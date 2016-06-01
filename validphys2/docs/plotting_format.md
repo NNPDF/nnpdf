@@ -10,15 +10,18 @@ Naming convention
 -----------------
 
 Given a dataset  labeled `<DATASET>`, every file found in the
-`commondata` folder (`nnpdfcpp/data/commondata`) that matches the glob
-pattern
+`commondata` folder (`nnpdfcpp/data/commondata`) that matches the
+regular expression
 
 ````
-PLOTTING_<DATASET>[_*].y[a]ml
+PLOTTING_<DATASET>(_.*)?\.ya?ml
 ````
 
-is to be considering a plotting file for that dataset. In case there
-is more than one such file, plots will be generated for both.
+(that is, the string `"PLOTTING_"` followed by the name of the
+dataset, possibly followed by an underscore and an arbitrary string
+and ending in `.yaml` or `.yml`) is to be considering a plotting file
+for that dataset. In case there is more than one such file, plots will
+be generated for both.
 
 For example, given the dataset "HERA1CCEP", the following are valid
 plotting file names:
@@ -27,6 +30,13 @@ plotting file names:
 PLOTTING_HERA1CCEP.yml
 PLOTTING_HERA1CCEP_TEST.yaml
 PLOTTING_HERA1CCEP_OTHER.yaml
+````
+
+And the following are invalid and will be ignored:
+
+````
+PLOTTING_HERA1CCEP.txt
+PLOTTING_HERA1CCEPTEST.yaml
 ````
 
 Format
