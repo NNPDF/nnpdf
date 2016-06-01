@@ -10,8 +10,3 @@ def new_labels(k1label, k2lebel, k3label):
         f.new_labels = k1label, k2lebel, k3label
         return f
     return closure
-
-def label(label):
-    def closure(f):
-        f.label = label
-        return f

@@ -7,4 +7,3 @@ Created on Wed Mar  9 15:00:35 2016
 
 from validphys.results import * #analysis:ignore
 from validphys.plots import *   #analysis:ignore
-from validphys.reweighting import *   #analysis:ignore

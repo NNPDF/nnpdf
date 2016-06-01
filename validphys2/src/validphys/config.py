@@ -174,7 +174,6 @@ class Config(configparser.Config):
         return ExperimentSpec(name=name, datasets=datasets)
 
     #TODO: Worth it to do some black magic to not pass params explicitly?
-    #Note that `parse_experiments` doesn't exist yet.
     def parse_reweighting_experiments(self, experiments, *, theoryid,
                                       use_cuts, fit=None):
         """A list of experiments to be used for reweighting"""

@@ -300,9 +300,9 @@ def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))):
     if t0set:
         #Copy data to avoid chaos
         data = type(data)(data)
-        #t0_preds = ThPredictions(t0set.load(), data)
+        t0_preds = ThPredictions(t0set.load(), data)
         log.debug("Setting T0 predictions for %s" % dataset)
-        data.SetT0(t0set.load())
+        data.SetT0(t0_preds)
 
     return DataResult(data), ThPredictionsResult.from_convolution(pdf, dataset,
                                                  loaded_data=data)
@@ -354,8 +354,6 @@ def chi2_data(results):
     central_diff = th_result.central_value - data_result.central_value
 
     central_result = (central_diff@data_result.invcovmat@central_diff)/len(data_result)
-
-    print(central_result)
 
 
     return (th_result.stats_class(result[:, np.newaxis]), central_result)
