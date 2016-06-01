@@ -8,7 +8,7 @@ from validphys.plotoptions.utils import label
 
 @label(r"$I(x>10^{-2})\times I(Q > 1000 GeV)$")
 def high_xq(k1, k2, k3, **kwargs):
-    return k1 > 1e-2 and k2 > 1000
+    return (k1 > 1e-2) & (k2 > 1000)
 
 def pt_ratio(k1, k2, k3 , **kwargs):
     return k1/k2

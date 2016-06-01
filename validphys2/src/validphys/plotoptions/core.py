@@ -14,7 +14,7 @@ from reportengine.configparser import Config, ConfigError, named_element_of
 from reportengine.utils import get_functions, ChainMap
 from NNPDF import CommonData
 
-from validphys.utils import split_by
+from validphys.plotoptions.utils import apply_to_all_columns
 from validphys.plotoptions import labelers, kintransforms, resulttransforms
 
 log = logging.getLogger(__name__)
@@ -219,7 +219,7 @@ def kitable(commondata, info):
 
     for label, func in funcs:
         #Pass only the "real" labels and not the derived functions
-        table[label] = table.iloc[:,:nreal_labels].apply(lambda x: _expand(func,x), axis=1)
+        table[label] = apply_to_all_columns(table.iloc[:,:nreal_labels], func)
 
     return table
 
@@ -227,10 +227,8 @@ def transform_result(cv, error, kintable, info):
     if not info.result_transform:
         return cv, error
     f = info.result_transform
-    newcv = []
-    newerror = []
-    for c, e, (_, labels) in zip(cv, error, kintable.iterrows()):
-        nc,ne = f(c,e,**labels)
-        newcv.append(nc)
-        newerror.append(ne)
+
+    df = pd.DataFrame({'cv':cv, 'error':error})
+    newcv, newerror = apply_to_all_columns(pd.concat([df,kintable], axis=1),f)
+
     return np.array(newcv), np.array(newerror)
