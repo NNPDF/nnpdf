@@ -28,7 +28,7 @@ Note that these functions will be called point by point
 class MissingLabelError(KeyError):
     def __init__(self, key_error):
         msg = "A label is required to perform the operation: %s" % key_error.args[0]
-        super.__init__(msg)
+        super().__init__(msg)
 
 def qbinexp(cv, error, **labels):
     try:
