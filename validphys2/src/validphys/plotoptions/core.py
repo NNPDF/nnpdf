@@ -52,8 +52,8 @@ def get_info(commondata, file=None, cuts=None):
 class PlotInfo:
     def __init__(self, kinlabels, x=None ,extra_labels=None,
                  figure_by=None, line_by=None, kinematics_override=None,
-                 result_transform=None, y_label=None, x_scale=None,
-                 y_scale=None):
+                 result_transform=None, y_label=None, x_label=None,
+                 x_scale=None, y_scale=None):
         self.kinlabels = kinlabels
         if x is None:
             x = 'idat'
@@ -63,6 +63,7 @@ class PlotInfo:
         self.line_by = line_by
         self.kinematics_override = kinematics_override
         self.result_transform = result_transform
+        self._x_label = x_label
         self.y_label = y_label
         self.x_scale = x_scale
         self.y_scale = y_scale
@@ -76,6 +77,8 @@ class PlotInfo:
 
     @property
     def xlabel(self):
+        if self._x_label is not None:
+            return self._x_label
         return self.name_to_label(self.x)
 
 
@@ -183,6 +186,9 @@ class PlotConfigParser(Config):
         return result_functions[tr]
 
     def parse_y_label(self, label:str):
+        return label
+
+    def parse_x_label(self, label:str):
         return label
 
     def _parse_scale(self, scale:str):
