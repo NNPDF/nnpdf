@@ -243,6 +243,11 @@ void DataSet::SetT0(ThPredictions const& t0pred)
   GenCovMat();
 }
 
+void DataSet::SetT0(const PDFSet& pdf){
+  auto t0pred = ThPredictions{&pdf, &(*this)};
+  SetT0(t0pred);
+}
+
 
 /**
  * @brief Dataset::MakeArtificial

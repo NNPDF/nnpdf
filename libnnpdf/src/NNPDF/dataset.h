@@ -14,6 +14,7 @@
 #include <algorithm>
 
 #include "fkset.h"
+#include "pdfset.h"
 #include "commondata.h"
 
 namespace NNPDF
@@ -55,6 +56,7 @@ namespace NNPDF
     // ****************   DataSet T0 Methods  **********************
 
     void   SetT0( ThPredictions  const&);               //!< Set T0 predictions
+    void   SetT0(PDFSet const&);               //!< Set T0 predictions
     bool   const& IsT0 ()  const { return fIsT0; }      //!< Return t0 covmat flag
     
     // ************************ Data Get Methods ******************************

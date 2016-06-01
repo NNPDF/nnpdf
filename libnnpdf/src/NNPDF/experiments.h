@@ -77,6 +77,8 @@ namespace NNPDF
     bool fIsArtificial; //!< The artificial flag
     bool fIsClosure;    //!< If data is closure data 
     bool fIsT0;         //!< Flag to determine if covmat is T0
+
+    void SetT0(const PDFSet&); //!<Set T0 Predictions for each dataset in place and update internal structures
         
     void ClearLocalData();            //!< Clear data pulled from datasets
     void ClearLocalCovMat();          //!< Clear covariance matrices

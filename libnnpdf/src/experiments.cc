@@ -278,6 +278,14 @@ void Experiment::MakeReplica()
   fIsArtificial = true;
 }
 
+void Experiment::SetT0(const PDFSet& pdf){
+  for (auto & set : fSets){
+    set.SetT0(pdf);
+  }
+  fIsT0 = true;
+  PullData();
+  GenCovMat();
+}
 
 void Experiment::MakeClosure(const vector<ThPredictions>& predictions, bool const& noise)
 {
