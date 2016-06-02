@@ -6,7 +6,7 @@ Created on Tue Mar 15 12:48:55 2016
 """
 
 from validphys.plotoptions import utils
-from math import sqrt
+from numpy import sqrt
 
 @utils.new_labels('$2k_1$', '$3k_1$', '$4k_3$')
 def dummy_transform(k1,k2,k3):

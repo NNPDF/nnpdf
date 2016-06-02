@@ -18,7 +18,7 @@ PLOTTING_<DATASET>(_.*)?\.ya?ml
 ````
 
 (that is, the string `"PLOTTING_"` followed by the name of the
-dataset, possibly followed by an underscore and an arbitrary string
+dataset, possibly followed by an underscore and an arbitrary string,
 and ending in `.yaml` or `.yml`) is to be considering a plotting file
 for that dataset. In case there is more than one such file, plots will
 be generated for both.
@@ -45,15 +45,18 @@ Format
 The plot file specifies the variable as a function of which the data
 is to be plotted (in the  *x* axis) as well as the variables as
 a function of which the data will be split in different lines in the
-same figure or in different figures. Finally, it allows to define new
-variables which could also constructed from functions defined in the
-Python code.
+same figure or in different figures. The possible variables
+('*labels*') are described below.
 
-#Labels
+The format also allows to control several plotting properties, such
+that whether to use log scale, or the axes labels.
+
+# Labels
 
 The kinematic variables  are in principle deduced from the type of
-process declared for the data. As a function of the starting substring
-of the process type, these are:
+process declared for the data. They are deduced from the starting
+substring of the process type.  Currently they are:
+
 
 ````
 'DIS': ('$x$', '$Q^2$', '$y$'),
@@ -134,9 +137,18 @@ def high_xq(k1, k2, k3, **kwargs):
 
 Note that it is convenient to always declare the '\*\*kwargs'
 parameter so that the code doesn't crash when the function is called
-with extra arguments.
+with extra arguments. Similarly to the kinematics transforms, it is
+possible to decorate them with a `@label` describing a nicer latex
+label than the function name. For example:
 
-#Plotting and grouping
+````
+@label(r"$I(x>10^{-2})\times I(Q > 1000 GeV)$")
+def high_xq(k1, k2, k3, **kwargs):
+    return (k1 > 1e-2) & (k2 > 1000)
+
+````
+
+# Plotting and grouping
 
 The variable as function of which the data is plotted, is simply
 declared as 
@@ -173,18 +185,37 @@ figure_by:
   - high_xq
 ````
 
-#Transforming the result
+# Transforming the result
 
 By default the y axis represents the central value and error. However
-it is possible to define a results_transform 
+it is possible to define a results_transform in the plotting file:
 
-#Plotting options
+````
+result_transform: qbinexp
+````
+
+The value must be a function declared in
+
+`validphys2/src/validphys/plotoptions/results_transform.py`
+
+taking the error, the central value as well as all the labels, and
+returning a new error and central value. For example:
+
+````
+def qbinexp(cv, error, **labels):
+    q = labels['k2']
+    qbin = bins(q)
+    return 10**qbin*cv, 10**qbin*error
+````
+
+# Plotting options
 
 Several plotting options can be specified.
 These include
 
  - x/y_scale: 'linear' or 'log'.
- - y_label: Any possibly latex formated string
+ - x/y_label: Any string, possibly latex formatted. Note that the
+	 x_label will be deduced automatically.
 
 Example
 ------
