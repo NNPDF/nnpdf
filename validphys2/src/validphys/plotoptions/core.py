@@ -192,8 +192,6 @@ class PlotConfigParser(Config):
 
 
 def kitable(commondata, info):
-    def _expand(f,x):
-        return f(**x)
     table = pd.DataFrame(commondata.get_kintable(), columns=default_labels[1:])
     table.index.name = default_labels[0]
     if info.kinematics_override:
