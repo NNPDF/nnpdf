@@ -49,7 +49,7 @@ def qbindis(cv, error, **labels):
     return (10**qbin)*cv, (10**qbin)*error
 
 def qbinNMC(cv, error, **labels):
-    qbin = labels['k1']
+    qbin = numpy.sqrt(1.0/labels['k1'])
     return 10**(qbin)*cv, 10**(qbin)*error
 
 def qbinjets(cv, error, **labels):
