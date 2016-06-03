@@ -11,14 +11,18 @@ import os
 import os.path as osp
 import sys
 import shutil
+import logging
+import pathlib
 
 import numpy as np
 import pandas as pd
 import yaml
 
-import applwrap
+import lhapdf
 
-from smpdflib import lhaindex
+from validphys import lhaindex
+
+log = logging.getLogger(__name__)
 
 def split_sep(f):
     for line in f:
@@ -136,7 +140,7 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder = None, db=None,
     # preparing output folder
     neig = V.shape[1]
 
-    base = applwrap.getlhapdfpath()[-1] + "/" + str(pdf) + "/" + str(pdf)
+    base = lhapdf.paths()[-1] + "/" + str(pdf) + "/" + str(pdf)
     if set_name is None:
         set_name = str(pdf) + "_hessian_" + str(neig)
     if folder is None:
