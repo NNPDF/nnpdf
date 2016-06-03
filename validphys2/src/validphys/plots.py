@@ -43,7 +43,7 @@ def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
 #TODO: This should be simplified if at all possible. For now some more examples
 #are needed for a spec to emerge.
 @make_check
-def check_normalize_to(callspec, ns, graph):
+def check_normalize_to(callspec, ns, graph, **kwargs):
     """Transforn normalize_to into an index."""
 
     msg = ("normalize_to should be either 'data', a pdf id or an index of the "
