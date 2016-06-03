@@ -23,16 +23,16 @@ from validphys import plotutils
 log = logging.getLogger(__name__)
 
 @figure
-def plot_chi2dist(results, dataset, chi2_data, chi2_stats, pdf):
+def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
     setlabel = dataset.name
     fig, ax = plt.subplots()
     label = pdf.name
-    alldata, central = chi2_data
+    alldata, central, npoints = abs_chi2_data
     if not isinstance(alldata, MCStats):
         ax.set_axis_bgcolor("#ffcccc")
         log.warn("Chi² distribution plots have a different meaning for non MC sets.")
         label += " (%s!)" % pdf.ErrorType
-    label += '\n'+ ', '.join(str(chi2_stat_labels[k])+(' %.2f' % v) for (k,v) in chi2_stats.items())
+    label += '\n'+ '\n'.join(str(chi2_stat_labels[k])+(' %.2f' % v) for (k,v) in chi2_stats.items())
     ax.set_title("$\chi^2$ distribution for %s" % setlabel)
 
     ax.hist(alldata.data, label=label, zorder=100)

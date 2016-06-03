@@ -274,14 +274,14 @@ def experiment_chi2_table(experiments, pdf):
 
         #TODO: This is probably computed somewhere else....
         r = data, theory = results(experiment, pdf)
-        data = chi2_data(r)
+        data = abs_chi2_data(r)
         stats = chi2_stats(data)
         stats['experiment'] = experiment.name
         records.append(stats)
 
         for dataset in experiment:
             r = data, theory = results(dataset, pdf)
-            data = chi2_data(r)
+            data = abs_chi2_data(r)
             stats = chi2_stats(data)
             stats['experiment'] = dataset.name
             records.append(stats)
@@ -341,34 +341,41 @@ def one_or_more_results(dataset:DataSetSpec, pdfs:list=None, pdf:PDF=None,
 
 
 
-def chi2_data(results):
+def abs_chi2_data(results):
     data_result, th_result = results
     diffs = th_result._rawdata.T - data_result.central_value
     #chi²_i = diff_ij @ invcov_jk @ diff_ki
     result =  np.einsum('ij, jk, ik -> i',
-                     diffs, data_result.invcovmat, diffs)/len(data_result)
+                     diffs, data_result.invcovmat, diffs)
 
     print(result)
 
     central_diff = th_result.central_value - data_result.central_value
 
-    central_result = (central_diff@data_result.invcovmat@central_diff)/len(data_result)
+    central_result = (central_diff@data_result.invcovmat@central_diff)
 
+    print(central_result)
 
-    return (th_result.stats_class(result[:, np.newaxis]), central_result)
+    return (th_result.stats_class(result[:, np.newaxis]), central_result, len(data_result))
+
 
 
 chi2_stat_labels = {
     'central_mean': r'$<\chi^2_{0}>_{data}$',
+    'npoints': r'$N_{data}$',
     'perreplica_mean': r'$\left< \chi^2 \right>_{rep,data}$',
     'perreplica_std': r'$\left<std_{rep}(\chi^2)\right>_{data}$',
+    'chi2_per_data': r'$\frac{\chi^2}{N_{data}}$'
 }
 
-def chi2_stats(chi2_data):
-    rep_data, central_result = chi2_data
-
+def chi2_stats(abs_chi2_data):
+    rep_data, central_result, npoints = abs_chi2_data
+    m = central_result.mean()
+    rep_mean = rep_data.central_value().mean()
     return OrderedDict([
-            ('central_mean'        ,  central_result.mean()),
-            ('perreplica_mean', rep_data.central_value().mean()),
+            ('central_mean'        ,  m),
+            ('npoints'             , npoints),
+            ('chi2_per_data', m/npoints),
+            ('perreplica_mean', rep_mean),
             ('perreplica_std',  rep_data.std_error().mean()),
            ])
