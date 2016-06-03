@@ -197,7 +197,7 @@ def kitable(commondata, info):
     table = pd.DataFrame(commondata.get_kintable(), columns=default_labels[1:])
     table.index.name = default_labels[0]
     if info.kinematics_override:
-        apply_to_all_columns(table, info.kinematics_override)
+        table = apply_to_all_columns(table, info.kinematics_override)
 
     #TODO: This is a little bit ugly. We want to call the functions
     #with all the
