@@ -48,6 +48,10 @@ def qbindis(cv, error, **labels):
     qbin = labels['k2']
     return (10**qbin)*cv, (10**qbin)*error
 
+def qbinNMC(cv, error, **labels):
+    qbin = labels['k1']
+    return 10**(qbin)*cv, 10**(qbin)*error
+
 def qbinjets(cv, error, **labels):
     qbin = labels['k1']
     return 1000**(5-qbin)*cv, 1000**(5-qbin)*error
