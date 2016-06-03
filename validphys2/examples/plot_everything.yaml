@@ -43,7 +43,7 @@ experiments:
   # EMC F2C data
   - experiment: EMCF2C
     datasets:
-      - { dataset: EMCF2C, frac: 1.0, sys: 3 }
+      - { dataset: EMCF2C, frac: 1.0, sys: 0 }
   # HERA data
   - experiment: HERACOMB
     datasets:
