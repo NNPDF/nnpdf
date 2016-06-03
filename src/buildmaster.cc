@@ -48,6 +48,8 @@
 #include "ZEUSF2B.h"
 #include "H1F2B.h"
 #include "ATLASWZTOT13TEV81PB.h"
+#include "ATLASZPT47FB.h"
+#include "ATLASZPT8TEV20FB.h"
 
 
 /**
@@ -92,17 +94,21 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASR06JETS2P76TEVFilter());
   target.push_back(new ATLASZHIGHMASS49PBFilter());
   target.push_back(new ATLASWPT31PBFilter());
-  target.push_back(new ATLASZPT47FBFilter());
   target.push_back(new ATLAS1JET11Filter());
   target.push_back(new ATLASLOMASSDY11Filter());
   target.push_back(new ATLASLOMASSDY11EXTFilter());
   target.push_back(new ATLASWZTOT13TEV81PBFilter());
-/*
-  target.push_back(new ATLASPHT11ETGCTRFilter());
-  target.push_back(new ATLASPHT11ETGFWDFilter());
-  target.push_back(new ATLASPHT11ETAGFilter());
-  target.push_back(new ATLASTTBARRAP11Filter());
-*/
+  //
+  target.push_back(new ATLASZPT47FBFilter());
+  target.push_back(new ATLASZPT8TEV20FBYDISTFilter());
+  target.push_back(new ATLASZPT8TEV20FBMDISTFilter()); 
+ 
+  /*
+    target.push_back(new ATLASPHT11ETGCTRFilter());
+    target.push_back(new ATLASPHT11ETGFWDFilter());
+    target.push_back(new ATLASPHT11ETAGFilter());
+    target.push_back(new ATLASTTBARRAP11Filter());
+  */
   // ************************* BCDMS ******************************
 
   target.push_back(new BCDMSPFilter());
@@ -256,5 +262,4 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSTOPDIFF8TEVTTRAPNORMFilter());
   target.push_back(new CMSTOPDIFF8TEVTTPTNORMFilter());
   target.push_back(new CMSTOPDIFF8TEVTTMNORMFilter());
-
 }
