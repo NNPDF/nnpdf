@@ -656,7 +656,7 @@ void CMS1JET276TEVFilter::ReadData()
         {
           for (int l = nsys+index-bins[iy]; l < nsys+index; l++)
             {
-              fSys[index_bis][l].add = abs(syscor[ipt][l-nsys-index+bins[iy]]);
+              fSys[index_bis][l].add = syscor[ipt][l-nsys-index+bins[iy]];
               fSys[index_bis][l].mult = fSys[index_bis][l].add*1e2/fData[index_bis];
               fSys[index_bis][l].type = ADD;
               fSys[index_bis][l].name = "CORR";
