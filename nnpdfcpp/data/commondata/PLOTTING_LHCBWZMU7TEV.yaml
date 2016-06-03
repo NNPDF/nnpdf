@@ -2,7 +2,7 @@ x: k1
 
 y_label: '$d\sigma/dy$ (fb)' 
 
-line_by:
+figure_by:
   - Boson
 
 extra_labels:
