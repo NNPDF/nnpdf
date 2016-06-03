@@ -51,7 +51,7 @@ def qbindis(cv, error, **labels):
 def qbinNMC(cv, error, **labels):
     q = labels['k1']
     qbin = bins(q)
-    return 10**qbin*cv, 10**qbin*error
+    return 10**qbin+cv, 10**qbin+error
 
 def qbinjets(cv, error, **labels):
     qbin = labels['k1']
