@@ -136,7 +136,5 @@ def main():
         with contextlib.redirect_stdout(sys.stderr):
             log.error("Cannot process a resource:")
             print(e)
-        if level >=logging.DEBUG:
-            raise
         sys.exit(1)
     rb.execute_sequential()
