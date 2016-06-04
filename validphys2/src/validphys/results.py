@@ -13,7 +13,7 @@ import pandas as pd
 
 from NNPDF import ThPredictions
 from NNPDF.experiments import Experiment
-from reportengine.checks import require_one
+from reportengine.checks import require_one, remove_outer
 from reportengine.table import table
 
 from validphys.core import DataSetSpec, PDF
@@ -331,6 +331,7 @@ def pdf_results(dataset:DataSetSpec, pdfs:list, t0set:(PDF, type(None))):
     return (DataResult(data), *th_results)
 
 @require_one('pdfs', 'pdf')
+@remove_outer('pdfs', 'pdf')
 def one_or_more_results(dataset:DataSetSpec, pdfs:list=None, pdf:PDF=None,
                         t0set:(PDF, type(None))=None):
     if pdf:
