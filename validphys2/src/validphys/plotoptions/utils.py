@@ -16,12 +16,8 @@ def bins(arr):
         array([0, 3, 0, 0, 1, 2, 2, 1])
 
     """
-    if not len(arr):
-        return np.array()
     arr = np.atleast_1d(arr)
-    s = np.argsort(arr)
-    sarr = arr[s]
-    return np.r_[0, np.diff(sarr).astype(bool).cumsum()][np.argsort(s)]
+    return np.unique(arr, return_inverse=True)[1]
 
 def new_labels(k1label, k2lebel, k3label):
     def closure(f):
