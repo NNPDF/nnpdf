@@ -4,7 +4,7 @@
 
 use_cuts: False
 actions_:
-    theory:
+  - theory:
       - experiment_result_table
       - experiments_covmat
       - experiments_invcovmat

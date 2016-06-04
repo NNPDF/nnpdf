@@ -13,11 +13,11 @@ ours:
     pdf: 160329-r71b6e7d-001-zk
 
 actions_:
-    theory:
-        #ours:
-        #  - experiment_result_table
-        #  - experiments_covmat
-        #  - experiments_invcovmat
+ - theory:
+        ours:
+          - experiment_result_table
+          - experiments_covmat
+          - experiments_invcovmat
         closureset:
           - closure_pseudodata_replicas: 
                 nclosure: 10
