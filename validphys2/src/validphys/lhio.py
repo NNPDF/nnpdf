@@ -135,6 +135,67 @@ def big_matrix(gridlist):
         raise ValueError("Incompatible grid specifications")
     return X
 
+def rep_matrix(gridlist):
+    """Return a properly indexes matrix of all the members"""
+    X = pd.concat(gridlist, axis=1,
+                 keys=range(1,len(gridlist)+1), #avoid confusion with rep0
+                 )
+    if np.ravel(pd.isnull(X)).any():
+        raise ValueError("Found null values in grid")
+    return X
+
+def _index_to_path(set_folder, set_name,  index):
+    return set_folder/('%s_%04d.dat' % (set_name, index))
+
+
+def new_pdf_from_indexes(pdf, indexes, set_name=None, folder=None,
+                         extra_fields=None):
+
+    if extra_fields is not None:
+        raise NotImplementedError()
+
+    set_root = folder/set_name
+    if set_root.exists():
+        log.warning("Target directory for new PDF already exists %s. "
+                    "Deleting contents.", set_root)
+        if set_root.is_dir():
+            shutil.rmtree(str(set_root))
+        else:
+            set_root.unlink()
+
+    set_root.mkdir()
+
+    original_info = pathlib.Path(pdf.infopath)
+    original_folder = original_info.parent
+
+    loaded_grids = {}
+    grids = []
+
+    old_header = None
+    for newindex,oldindex in enumerate(indexes, 1):
+        original_path = _index_to_path(original_folder, pdf, oldindex)
+        new_path = _index_to_path(set_root, set_name, newindex)
+        #Need these explicit casts :(
+        shutil.copy(str(original_path), str(new_path))
+        if oldindex in loaded_grids:
+            grid = loaded_grids[oldindex]
+        else:
+            header, grid = load_replica(pdf,oldindex)
+            if old_header is not None and not (header == old_header):
+                raise NotImplementedError("Cannot process grids with "
+                                          "different headers at this time")
+            else:
+                old_header = header
+            loaded_grids[oldindex] = grid
+        grids.append(grid)
+    M = rep_matrix(grids)
+    write_replica(0, set_name, header, M.mean(axis=1))
+
+
+
+
+
+
 def hessian_from_lincomb(pdf, V, set_name=None, folder = None, db=None,
                          extra_fields=None):
     """Construct a new LHAPDF grid from a linear combination of members"""
