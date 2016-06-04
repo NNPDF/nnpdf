@@ -168,6 +168,20 @@ def new_pdf_from_indexes(pdf, indexes, set_name=None, folder=None,
     original_info = pathlib.Path(pdf.infopath)
     original_folder = original_info.parent
 
+    new_info = set_root/(set_name + '.info')
+
+    new_len = len(indexes)+1
+
+    with original_info.open() as orig_file, new_info.open('w') as new_file:
+        for line in orig_file:
+            if line.find('SetDesc') >= 0:
+                new_file.write('SetDesc: "Reweighted set from %s"\n' % pdf)
+            elif line.find('NumMembers') >=0:
+                new_file.write('NumMembers: %d\n' % new_len)
+            else:
+                new_file.write(line)
+
+
     loaded_grids = {}
     grids = []
 
