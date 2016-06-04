@@ -9,7 +9,6 @@ A module that reads and writes LHAPDF grids.
 
 import os
 import os.path as osp
-import sys
 import shutil
 import logging
 import pathlib
@@ -48,6 +47,7 @@ def read_xqf_from_lhapdf(pdf, replica, rep0grids):
     indexes = tuple(rep0grids.index)
     vals = []
     for x in indexes:
+        #TODO: Change this for a faster grid_values call
         vals += [pdf.xfxQ(replica,x[3],x[1],x[2])]
     return pd.Series(vals, index = rep0grids.index)
 
@@ -58,10 +58,7 @@ def read_all_xqf(f):
             return
         yield result
 
-def load_replica( pdf, rep, rep0grids=None):
-
-    sys.stdout.write("-> Reading replica from LHAPDF %d \r" % rep)
-    sys.stdout.flush()
+def load_replica(pdf, rep, rep0grids=None):
 
     suffix = str(rep).zfill(4)
 
@@ -69,6 +66,9 @@ def load_replica( pdf, rep, rep0grids=None):
 
     path = osp.join(lhaindex.finddir(pdf_name),
                     pdf_name + "_" + suffix + ".dat")
+
+    log.debug("Loading replica {rep} at {path}".format(rep=rep,
+                                                       path=path))
 
     with open(path, 'rb') as inn:
         header = b"".join(split_sep(inn))
@@ -125,6 +125,8 @@ def load_all_replicas(pdf, db=None):
     return result
 
 def big_matrix(gridlist):
+    """Return a properly indexes matrix of the differences between each member
+    and the central value"""
     central_value = gridlist[0]
     X = pd.concat(gridlist[1:], axis=1,
                  keys=range(1,len(gridlist)+1), #avoid confusion with rep0
