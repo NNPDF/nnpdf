@@ -20,8 +20,6 @@ the signature is:
         ...
         return newcv, newerror
 
-Note that these functions will be called point by point
-(rather than on lists of values).
 
 """
 
