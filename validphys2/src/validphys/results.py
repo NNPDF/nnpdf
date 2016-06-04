@@ -349,13 +349,11 @@ def abs_chi2_data(results):
     result =  np.einsum('ij, jk, ik -> i',
                      diffs, data_result.invcovmat, diffs)
 
-    print(result)
 
     central_diff = th_result.central_value - data_result.central_value
 
     central_result = (central_diff@data_result.invcovmat@central_diff)
 
-    print(central_result)
 
     return (th_result.stats_class(result[:, np.newaxis]), central_result, len(data_result))
 
