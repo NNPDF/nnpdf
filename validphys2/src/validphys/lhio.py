@@ -149,7 +149,7 @@ def _index_to_path(set_folder, set_name,  index):
 
 
 def new_pdf_from_indexes(pdf, indexes, set_name=None, folder=None,
-                         extra_fields=None):
+                         extra_fields=None, installgrid=False):
 
     if extra_fields is not None:
         raise NotImplementedError()
@@ -205,9 +205,10 @@ def new_pdf_from_indexes(pdf, indexes, set_name=None, folder=None,
     M = rep_matrix(grids)
     write_replica(0, set_name, header, M.mean(axis=1))
 
-
-
-
+    if installgrid:
+        newpath = lhaindex.get_lha_datapath()+ '/' + set_name
+        log.info("Installing new PDF set at %s" % newpath)
+        shutil.copytree(str(set_root), newpath)
 
 
 def hessian_from_lincomb(pdf, V, set_name=None, folder = None, db=None,
