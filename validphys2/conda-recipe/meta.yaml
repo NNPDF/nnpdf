@@ -19,6 +19,9 @@ requirements:
     - scipy
     - pandas
 
+test:
+    imports:
+        - validphys
 
 about:
   home: https://gitlab.cern.ch/NNPDF/validphys2
