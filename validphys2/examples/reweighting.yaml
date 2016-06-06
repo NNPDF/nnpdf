@@ -8,7 +8,12 @@ actions_:
  - theory:
       datacuts:
           - make_unweighted_pdf:
-              set_name: XXX
+              set_name: reweighted_set_SLAC
+              installgrid: False
+          - plot_p_alpha
+          - reweighting_stats
+
+#TODO: Enable this someday
 # - theory:
 #     compare:
 #         reweighting_experiments:
@@ -16,15 +21,15 @@ actions_:
 #               pdfs:
 #                  - plot_fancy
 #
-
-pdf: &prior 160427-r82cacd2-jr-001
-
 #compare:
 #    use_t0: False
 #    pdfs:
 #        - *prior
-#        - XXX
+#        - reweighted_set_SLAC
 #
+
+pdf: &prior 160427-r82cacd2-jr-001
+
 fit: 160427-r82cacd2-jr-001
 
 

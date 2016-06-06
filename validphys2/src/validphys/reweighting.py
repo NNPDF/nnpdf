@@ -10,13 +10,16 @@ Created on Mon May 30 12:50:16 2016
 @author: Zahari Kassabov
 """
 import logging
+from collections import OrderedDict
 
 
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 import lhapdf
 from reportengine.table import table
+from reportengine.figure import figure
 from reportengine.checks import make_check
 from reportengine.formattingtools import spec_to_nice_name
 
@@ -31,17 +34,16 @@ log = logging.getLogger(__name__)
 #TODO: implement this using reportengine expand when available
 #use_t0 is to request that parameter to be set explicitly
 @checks.check_pdf_is_montecarlo
-def chi2_data_for_reweighting_experiments(reweighting_experiments, pdf, use_t0, t0set=None):
-    return [abs_chi2_data(results(exp,pdf,t0set)) for exp in reweighting_experiments]
+def chi2_data_for_reweighting_experiments(reweighting_experiments, pdf, use_t0,
+                                          t0set=None):
+    return [abs_chi2_data(results(exp,pdf,t0set,)) for exp in reweighting_experiments]
 
-@table
-#will call list[0]
-@checks.check_not_empty('reweighting_experiments')
-def nnpdf_weights(chi2_data_for_reweighting_experiments):
+
+def nnpdf_weights_numerator(chi2_data_for_reweighting_experiments):
     total_ndata = 0
     chi2s = np.zeros_like(chi2_data_for_reweighting_experiments[0][0].data)
     for data in chi2_data_for_reweighting_experiments:
-        res, central, ndata = data
+        res, _, ndata = data
         total_ndata += ndata
         chi2s += res.data
 
@@ -50,10 +52,61 @@ def nnpdf_weights(chi2_data_for_reweighting_experiments):
     logw = ((total_ndata - 1)/2)*np.log(chi2s) - 0.5*chi2s
     logw -= np.max(logw)
     w = np.exp(logw)
-    w /= sum(w)
-    return pd.DataFrame(w, index=np.arange(1, len(w) + 1))
+    return w
 
-def reweighting_stats():...
+@table
+#will call list[0]
+@checks.check_not_empty('reweighting_experiments')
+def nnpdf_weights(chi2_data_for_reweighting_experiments):
+    numerator = nnpdf_weights_numerator(chi2_data_for_reweighting_experiments)
+    return pd.DataFrame(numerator/np.sum(numerator),
+                        index=np.arange(1, len(numerator) + 1))
+
+def effective_number_of_replicas(w):
+    N = len(w)
+    w = w*N/np.sum(w)
+    return np.exp(np.nansum(w*np.log(N/w))/N)
+
+@table
+def reweighting_stats(pdf, nnpdf_weights, p_alpha_study):
+    er = effective_number_of_replicas(nnpdf_weights)
+    initial_replicas = len(pdf) - 1
+    median = np.median(nnpdf_weights)
+    max_alpha = p_alpha_study.argmax()
+
+    result = OrderedDict([
+                          (r'N_{initial}', initial_replicas),
+                          (r'$N_{eff}$', er),
+                          (r'median($w$)', median),
+                          (r'$max_{[0.5,2]}P(\alpha)$', max_alpha)
+                         ])
+
+    return pd.Series(result, index=result.keys())
+
+def p_alpha_study(chi2_data_for_reweighting_experiments):
+    alphas = np.exp(np.linspace(np.log(0.5), np.log(2),31))
+    vals = []
+    for alpha in alphas:
+        new_chi2 = [((type(res)(res.data/alpha)), central, ndata)
+                    for (res,central,ndata) in
+                    chi2_data_for_reweighting_experiments]
+        new_ws = nnpdf_weights_numerator(new_chi2)
+        val = np.sum(new_ws / alpha)
+        vals.append(val)
+    print(vals)
+    return pd.Series(np.array(vals), index=alphas)
+
+@figure
+def plot_p_alpha(p_alpha_study):
+    fig, ax = plt.subplots()
+    ax.set_title(r"$P(\alpha)$")
+
+    ax.set_yticklabels([])
+    ax.set_xlabel(r'$\alpha$')
+
+
+    ax.plot(p_alpha_study)
+    return fig
 
 @table
 def unweighted_index(nnpdf_weights, nreplicas:int=100):
