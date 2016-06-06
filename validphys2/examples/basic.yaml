@@ -9,6 +9,7 @@ dataset:
     sys: 2
     cfac: [EWK]
 
-actions_:
-    - plot_fancy
-    - plot_chi2dist
+actions_: 
+  -   - plot_fancy
+      - plot_chi2dist
+

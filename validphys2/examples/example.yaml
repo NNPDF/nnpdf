@@ -16,7 +16,7 @@ datasets:
    sys: 2
 
 actions_:
-  pdfs:
+- pdfs:
     theoryids:
       datasets:
         - plot_fancy

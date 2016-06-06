@@ -2,107 +2,137 @@
 # Configuration file for NNPDF++
 #
 
-use_cuts: False
+use_cuts: True
+use_t0: True
 actions_:
  - theory:
-        experiments:
-            experiment:
-              - plot_fancy
+      datacuts:
+          - make_unweighted_pdf:
+              set_name: reweighted_set_SLAC
+              installgrid: False
+          - plot_p_alpha
+          - reweighting_stats
 
-pdf: NNPDF30_nlo_as_0118
+#TODO: Enable this someday
+# - theory:
+#     compare:
+#         reweighting_experiments:
+#             experiment:
+#               pdfs:
+#                  - plot_fancy
+#
+#compare:
+#    use_t0: False
+#    pdfs:
+#        - *prior
+#        - reweighted_set_SLAC
+#
+
+pdf: &prior 160427-r82cacd2-jr-001
+
+fit: 160427-r82cacd2-jr-001
+
+
 
 ############################################################
-description: NLO fit with IC, Pole masses, mc=1.47 GeV, TheoryID=45, second ite of t0 and preproc
+description: New NNPDF3.1 baseline candidate fit at NLO, adding tevatron legacy data, updated theory settings
 
 ############################################################
 # frac: training fraction
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
-experiments:
+reweighting_experiments:
   # Fixed target DIS
-  - experiment: NMC
-    datasets:
-      - { dataset: NMCPD, frac: 0.5, sys: 3 }
-      - { dataset: NMC,   frac: 0.5, sys: 3 }
+  #  - experiment: NMC
+  #    datasets:
+  #      - { dataset: NMCPD, frac: 0.5, sys: 3 }
+  #      - { dataset: NMC,   frac: 0.5, sys: 3 }
   - experiment: SLAC
     datasets:
       - { dataset: SLACP, frac: 0.5, sys: 3 }
       - { dataset: SLACD, frac: 0.5, sys: 3 }
-  - experiment: BCDMS
-    datasets:
-      - { dataset: BCDMSP, frac: 0.5, sys: 3 }
-      - { dataset: BCDMSD, frac: 0.5, sys: 3 }
-  - experiment: CHORUS
-    datasets:
-      - { dataset: CHORUSNU, frac: 0.5, sys: 3 }
-      - { dataset: CHORUSNB, frac: 0.5, sys: 3 }
-  - experiment: NTVDMN
-    datasets:
-      - { dataset: NTVNUDMN, frac: 0.5, sys: 3 }
-      - { dataset: NTVNBDMN, frac: 0.5, sys: 3 }
-  # EMC F2C data
-  - experiment: EMCF2C
-    datasets:
-      - { dataset: EMCF2C, frac: 1.0, sys: 0 }
-  # HERA data
-  - experiment: HERACOMB
-    datasets:
-      - { dataset: HERACOMBNCEM , frac: 0.5, sys: 0 }
-      - { dataset: HERACOMBNCEP460, frac: 0.5, sys: 0 }
-      - { dataset: HERACOMBNCEP575, frac: 0.5, sys: 0 }
-      - { dataset: HERACOMBNCEP820, frac: 0.5, sys: 0 }
-      - { dataset: HERACOMBNCEP920, frac: 0.5, sys: 0 }
-      - { dataset: HERACOMBCCEM , frac: 0.5, sys: 0 }
-      - { dataset: HERACOMBCCEP , frac: 0.5, sys: 0 }
-  # Combined HERA charm production cross-sections
-  - experiment: HERAF2CHARM
-    datasets:
-      - { dataset: HERAF2CHARM, frac: 0.5, sys: 2 }
-      # Fixed target Drell-Yan
-  - experiment: DYE886
-    datasets:
-      - { dataset: DYE886R, frac: 1.0, sys: 2 }
-      - { dataset: DYE886P, frac: 0.5, sys: 2 }
-  - experiment: DYE605
-    datasets:
-      - { dataset: DYE605, frac: 0.5, sys: 2 }
-      # Tevatron jets and W,Z production
-  - experiment: CDF
-    datasets:
-      - { dataset: CDFZRAP, frac: 1.0, sys: 2 }
-      - { dataset: CDFR2KT, frac: 0.5, sys: 2 }
-  - experiment: D0
-    datasets:
-      - { dataset: D0ZRAP, frac: 1.0, sys: 2 }
-      # ATLAS
-  - experiment: ATLAS
-    datasets:
-      - { dataset: ATLASWZRAP36PB,   frac: 1.0, sys: 2, cfac: [EWK] }
-      - { dataset: ATLASR04JETS36PB, frac: 1.0, sys: 2 }
-      - { dataset: ATLASR04JETS2P76TEV, frac: 1.0, sys: 2 }
-      - { dataset: ATLASZHIGHMASS49FB, frac: 1.0, sys: 2, cfac: [EWK] }
-  # CMS
-  - experiment: CMS
-    datasets:
-      - { dataset: CMSWEASY840PB, frac: 1.0, sys: 2 }
-      - { dataset: CMSWMASY47FB,  frac: 1.0, sys: 2 }
-      - { dataset: CMSJETS11,     frac: 0.5, sys: 2 }
-      - { dataset: CMSWCHARMTOT,  frac: 1.0, sys: 2 }
-      - { dataset: CMSWCHARMRAT,  frac: 1.0, sys: 2 }
-      - { dataset: CMSDY2D11,     frac: 0.5, sys: 2, cfac: [EWK] }
-  # LHCb
-  - experiment: LHCb
-    datasets:
-      - { dataset: LHCBW36PB, frac: 1.0, sys: 2 }
-      - { dataset: LHCBZ940PB, frac: 1.0, sys: 2, cfac: [EWK] }
-  # Top
-  - experiment: TOP
-    datasets:
-      - { dataset: TTBARTOT, frac: 1.0, sys: 2 }
-
+#  - experiment: BCDMS
+#    datasets:
+#      - { dataset: BCDMSP, frac: 0.5, sys: 3 }
+#      - { dataset: BCDMSD, frac: 0.5, sys: 3 }
+#  - experiment: CHORUS
+#    datasets:
+#      - { dataset: CHORUSNU, frac: 0.5, sys: 3 }
+#      - { dataset: CHORUSNB, frac: 0.5, sys: 3 }
+#  - experiment: NTVDMN
+#    datasets:
+#      - { dataset: NTVNUDMN, frac: 0.5, sys: 3 }
+#      - { dataset: NTVNBDMN, frac: 0.5, sys: 3 }
+#  # EMC F2C data
+#  - experiment: EMCF2C
+#    datasets:
+#      - { dataset: EMCF2C, frac: 1.0, sys: 0 }
+#  # HERA data
+#  - experiment: HERACOMB
+#    datasets:
+#      - { dataset: HERACOMBNCEM , frac: 0.5, sys: 0 }
+#      - { dataset: HERACOMBNCEP460, frac: 0.5, sys: 0 }
+#      - { dataset: HERACOMBNCEP575, frac: 0.5, sys: 0 }
+#      - { dataset: HERACOMBNCEP820, frac: 0.5, sys: 0 }
+#      - { dataset: HERACOMBNCEP920, frac: 0.5, sys: 0 }
+#      - { dataset: HERACOMBCCEM , frac: 0.5, sys: 0 }
+#      - { dataset: HERACOMBCCEP , frac: 0.5, sys: 0 }
+#  # Combined HERA charm production cross-sections
+#  - experiment: HERAF2CHARM
+#    datasets:
+#      - { dataset: HERAF2CHARM, frac: 0.5, sys: 2 }
+#      # Fixed target Drell-Yan
+#  - experiment: DYE886
+#    datasets:
+#      - { dataset: DYE886R, frac: 1.0, sys: 2 }
+#      - { dataset: DYE886P, frac: 0.5, sys: 2 }
+#  - experiment: DYE605
+#    datasets:
+#      - { dataset: DYE605, frac: 0.5, sys: 2 }
+#      # Tevatron jets and W,Z production
+#  - experiment: CDF
+#    datasets:
+#      - { dataset: CDFZRAP, frac: 1.0, sys: 2 }
+#      - { dataset: CDFR2KT, frac: 0.5, sys: 2 }
+#  - experiment: D0
+#    datasets:
+#      - { dataset: D0ZRAP, frac: 1.0, sys: 2 }
+#      - { dataset: D0WEASY, frac: 1.0, sys: 2 }
+#      - { dataset: D0WMASY, frac: 1.0, sys: 2 }
+#      # ATLAS
+#  - experiment: ATLAS
+#    datasets:
+#      - { dataset: ATLASWZRAP36PB,   frac: 1.0, sys: 2, cfac: [EWK] }
+#      - { dataset: ATLASR04JETS36PB, frac: 1.0, sys: 2 }
+#      - { dataset: ATLASR04JETS2P76TEV, frac: 1.0, sys: 2 }
+#    # - { dataset: ATLASWPT31PB,     frac: 1.0, sys: 2, cfac: [QCD] }
+#      - { dataset: ATLASZHIGHMASS49FB, frac: 1.0, sys: 2, cfac: [EWK] }
+#      - { dataset: ATLASLOMASSDY11EXT, frac: 1.0, sys: 2, cfac: [EWK] }
+#    # - { dataset: ATLAS1JET11, frac: 0.5, sys: 2 }
+#  # CMS
+#  - experiment: CMS
+#    datasets:
+#      - { dataset: CMSWEASY840PB, frac: 1.0, sys: 2 }
+#      - { dataset: CMSWMASY47FB,  frac: 1.0, sys: 2 }
+#      - { dataset: CMSJETS11,     frac: 0.5, sys: 2 }
+#      - { dataset: CMSWCHARMTOT,  frac: 1.0, sys: 2 }
+#      - { dataset: CMSWCHARMRAT,  frac: 1.0, sys: 2 }
+#      - { dataset: CMSDY2D11,     frac: 0.5, sys: 2, cfac: [EWK] }
+#  # LHCb
+#  - experiment: LHCb
+#    datasets:
+#      - { dataset: LHCBW36PB, frac: 1.0, sys: 2 }
+#      - { dataset: LHCBZ940PB, frac: 1.0, sys: 2, cfac: [EWK] }
+#      - { dataset: LHCBWMU1FB, frac: 1.0, sys: 2 }
+#      - { dataset: LHCBZEE2FB, frac: 1.0, sys: 2 }
+#  # Top
+#  - experiment: TOP
+#    datasets:
+#      - { dataset: TTBARTOT, frac: 1.0, sys: 2 }
+#
 ############################################################
 datacuts:
-  t0pdfset     : 160302-r7c33a66-007-jr # PDF set to generate t0 covmat
+  t0pdfset     : 160419-r0ca70fe-jr-002 # PDF set to generate t0 covmat
   q2min        : 3.49                 # Q2 minimum
   w2min        : 12.5                # W2 minimum
   combocuts    : NNPDF30             # NNPDF3.0 final kin. cuts
@@ -117,11 +147,11 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 45       # database id
+  theoryid: 52       # database id
   
 ############################################################
 fitting:
-  seed     : 23489389      # set the seed for the random generator
+  seed     : 53489389      # set the seed for the random generator
   genrep   : on     # on = generate MC replicas, off = use real data
   rngalgo  : 0      # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
   fitmethod: NGA    # Minimization algorithm
@@ -156,7 +186,7 @@ stopping:
   lbdelta   : 0         # Delta for look-back stopping
   mingen    : 0         # Minimum number of generations
   window    : 500       # Window for moving average
-  minchi2   : 3.5 #  Minimum chi2 
+  minchi2   : 3.5 # Minimum chi2 
   minchi2exp: 6.0       # Minimum chi2 for experiments
   nsmear    : 200 # Smear for stopping
   deltasm   : 200 # Delta smear for stopping

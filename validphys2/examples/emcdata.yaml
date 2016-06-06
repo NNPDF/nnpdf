@@ -12,6 +12,6 @@ datasets:
  - { dataset: EMCF2C, frac: 1.0, sys: 0 }
 
 actions_:
-  theoryids:
+ - theoryids:
     datasets:
       - plot_fancy

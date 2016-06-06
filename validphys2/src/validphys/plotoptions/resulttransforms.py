@@ -20,8 +20,6 @@ the signature is:
         ...
         return newcv, newerror
 
-Note that these functions will be called point by point
-(rather than on lists of values).
 
 """
 
@@ -46,6 +44,11 @@ def qbinexp(cv, error, **labels):
 def qbindis(cv, error, **labels):
     qbin = labels['k2']
     return (10**qbin)*cv, (10**qbin)*error
+
+def qbinNMC(cv, error, **labels):
+    q = labels['k1']
+    qbin = bins(q)
+    return 2**qbin*cv, 2**qbin*error
 
 def qbinjets(cv, error, **labels):
     qbin = labels['k1']

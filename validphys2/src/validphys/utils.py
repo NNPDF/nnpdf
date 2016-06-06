@@ -6,6 +6,10 @@ Created on Sun Mar 13 21:12:41 2016
 """
 
 def split_by(it, crit):
+    """Split ``it`` in two lists, the first is such that ``crit`` evaluates to
+    True and the second such it doesn't. Crit can be either a function or an
+    iterable (in this case the original ``it`` will be sliced if the length of
+    ``crit`` is smaller)."""
 
     true, false = [], []
     if callable(crit):
