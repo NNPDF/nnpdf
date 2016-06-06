@@ -93,7 +93,6 @@ def p_alpha_study(chi2_data_for_reweighting_experiments):
         new_ws = nnpdf_weights_numerator(new_chi2)
         val = np.sum(new_ws / alpha)
         vals.append(val)
-    print(vals)
     return pd.Series(np.array(vals), index=alphas)
 
 @figure
