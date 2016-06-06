@@ -104,9 +104,10 @@ def _rep_to_buffer(out, header, subgrids):
         np.savetxt(out, reshaped, delimiter=" ", newline="\n ", fmt='%14.7E')
         out.write(sep)
 
-def write_replica(rep, pdf_name, header, subgrids):
+#TODO: Change root_name into something not stupid
+def write_replica(rep, root_name, header, subgrids):
     suffix = str(rep).zfill(4)
-    with open(pdf_name + "_" + suffix + ".dat", 'wb') as out:
+    with open(root_name + "_" + suffix + ".dat", 'wb') as out:
         _rep_to_buffer(out, header, subgrids)
 
 def load_all_replicas(pdf, db=None):
@@ -203,7 +204,9 @@ def new_pdf_from_indexes(pdf, indexes, set_name=None, folder=None,
             loaded_grids[oldindex] = grid
         grids.append(grid)
     M = rep_matrix(grids)
-    write_replica(0, set_name, header, M.mean(axis=1))
+    #TODO:Fix  this interface
+    dumb_path_root = str(set_root) + '/' + str(set_name)
+    write_replica(0, dumb_path_root, header, M.mean(axis=1))
 
     if installgrid:
         newpath = lhaindex.get_lha_datapath()+ '/' + set_name
