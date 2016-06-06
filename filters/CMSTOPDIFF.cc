@@ -145,8 +145,9 @@ void  CMSTOPDIFF8TEVTPTNORMFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
       
       lstream >> fData[i]; //normalized differential distribution
-      lstream >> fStat[i]; //assume stat errors uncorrelated so far
-      
+      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      fStat[i]=0.;
+
       for(int j=0; j<3; j++)
 	{
 	  lstream >> adum;
@@ -270,7 +271,8 @@ void  CMSTOPDIFF8TEVTTPTNORMFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      fStat[i] =0.;
 
       for(int j=0; j<3; j++)
 	{
@@ -313,7 +315,7 @@ void  CMSTOPDIFF8TEVTTPTNORMFilter::ReadData()
     {
       for(int j=0; j<fNData; j++)
 	{
-	  fSys[i][j].add  = abs(syscor[i][j]);
+	  fSys[i][j].add  = syscor[i][j];
 	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
 	  fSys[i][j].type = ADD;
 	  fSys[i][j].name = "CORR";
@@ -417,7 +419,8 @@ void  CMSTOPDIFF8TEVTRAPNORMFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      fStat[i] = 0.;
 
       for(int j=0; j<3; j++)
 	{
@@ -460,7 +463,7 @@ void  CMSTOPDIFF8TEVTRAPNORMFilter::ReadData()
     {
       for(int j=0; j<fNData; j++)
 	{
-	  fSys[i][j].add  = abs(syscor[i][j]);
+	  fSys[i][j].add  = syscor[i][j];
 	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
 	  fSys[i][j].type = ADD;
 	  fSys[i][j].name = "CORR";
@@ -567,7 +570,8 @@ void  CMSTOPDIFF8TEVTTRAPNORMFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      fStat[i] = 0.;
 
       for(int j=0; j<3; j++)
 	{
@@ -610,7 +614,7 @@ void  CMSTOPDIFF8TEVTTRAPNORMFilter::ReadData()
     {
       for(int j=0; j<fNData; j++)
 	{
-	  fSys[i][j].add  = abs(syscor[i][j]);
+	  fSys[i][j].add  = syscor[i][j];
 	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
 	  fSys[i][j].type = ADD;
 	  fSys[i][j].name = "CORR";
@@ -714,7 +718,8 @@ void  CMSTOPDIFF8TEVTTMNORMFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      fStat[i] = 0.;
 
       for(int j=0; j<3; j++)
 	{
@@ -757,7 +762,7 @@ void  CMSTOPDIFF8TEVTTMNORMFilter::ReadData()
     {
       for(int j=0; j<fNData; j++)
 	{
-	  fSys[i][j].add  = abs(syscor[i][j]);
+	  fSys[i][j].add  = syscor[i][j];
 	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
 	  fSys[i][j].type = ADD;
 	  fSys[i][j].name = "CORR";
@@ -877,7 +882,8 @@ void CMSTOPDIFF8TEVTPTFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      fStat[i] = 0.;
 
       //differential distributions are unnormalized
       fData[i] = fData[i]*xscv;
@@ -1026,7 +1032,8 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      fStat[i] = 0.;
 
       //differential distributions are unnormalized
       fData[i] = fData[i]*xscv;
@@ -1074,7 +1081,7 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
     {
       for(int j=0; j<fNData; j++)
 	{
-	  fSys[i][j].add  = abs(syscor[i][j])*xscv;
+	  fSys[i][j].add  = syscor[i][j]*xscv;
 	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
 	  fSys[i][j].type = ADD;
 	  fSys[i][j].name = "CORR";
@@ -1219,7 +1226,8 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      fStat[i] =0.;
 
       //differential distributions are unnormalized
       fData[i] = fData[i]*xscv;
@@ -1267,7 +1275,7 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
     {
       for(int j=0; j<fNData; j++)
 	{
-	  fSys[i][j].add  = abs(syscor[i][j])*xscv;
+	  fSys[i][j].add  = syscor[i][j]*xscv;
 	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
 	  fSys[i][j].type = ADD;
 	  fSys[i][j].name = "CORR";
@@ -1412,7 +1420,8 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      fStat[i] = 0.;
 
       //differential distributions are unnormalized
       fData[i] = fData[i]*xscv;
@@ -1460,7 +1469,7 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
     {
       for(int j=0; j<fNData; j++)
 	{
-	  fSys[i][j].add  = abs(syscor[i][j])*xscv;
+	  fSys[i][j].add  = syscor[i][j]*xscv;
 	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
 	  fSys[i][j].type = ADD;
 	  fSys[i][j].name = "CORR";
@@ -1605,7 +1614,8 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      fStat[i] = 0.;
 
       //differential distributions are unnormalized
       fData[i] = fData[i]*xscv;
@@ -1653,7 +1663,7 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
     {
       for(int j=0; j<fNData; j++)
 	{
-	  fSys[i][j].add  = abs(syscor[i][j])*xscv;
+	  fSys[i][j].add  = syscor[i][j]*xscv;
 	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
 	  fSys[i][j].type = ADD;
 	  fSys[i][j].name = "CORR";
