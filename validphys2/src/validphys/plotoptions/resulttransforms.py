@@ -33,7 +33,6 @@ class MissingLabelError(KeyError):
         msg = "A label is required to perform the operation: %s" % key_error.args[0]
         super().__init__(msg)
 
-
 def qbinEMC(cv, error, **labels):
     q = labels['k2']
     qbin = numpy.sqrt(q)
