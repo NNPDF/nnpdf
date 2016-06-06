@@ -158,6 +158,8 @@ void  ATLASTOPDIFF8TEVTPTNORMFilter::ReadData()
       lstream >> fStat[i];     //its statistical uncertainty
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
+      int shift = 0.;
+
       for(int j=0; j<fNSys; j++)
 	{
 	  double syst[2][fNSys];
@@ -172,16 +174,20 @@ void  ATLASTOPDIFF8TEVTPTNORMFilter::ReadData()
 	  //convert to relative percentage values
 	  syst[0][j] = syst[0][j]/fData[i]*100;  
 	  syst[1][j] = syst[1][j]/fData[i]*100;
-	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  symmetriseErrors(syst[0][j],-syst[1][j],&stmp,&dtmp);
 	  
-	  if(stmp<0) stmp=-1.0*stmp;
+	  //if(stmp<0) stmp=-1.0*stmp;
 	  fSys[i][j].type = MULT;
 	  fSys[i][j].name = sysdescr;
 	  fSys[i][j].mult = stmp;
-	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]/100;
+
+	  shift += dtmp;
 
 	}
           
+      fData[i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+
     }  
   
   f1.close();
