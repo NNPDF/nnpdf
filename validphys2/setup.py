@@ -10,7 +10,7 @@ with open('README.md') as f:
     long_desc = f.read()
 
 setup(name= "validphys",
-      version = '2.0a1',
+      version = '2.0a3',
       description = "Semantic difference for YAML files",
       author = "Zahari Kassabov",
       author_email = "kassabov@to.infn.it",
