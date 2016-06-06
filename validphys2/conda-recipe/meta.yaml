@@ -12,8 +12,8 @@ requirements:
 
   run:
     - python
-    - libnnpdf
-    - reportengine
+    - libnnpdf >=1.1.0b2
+    - reportengine >=1.3
     - matplotlib
     - blessings
     - scipy
