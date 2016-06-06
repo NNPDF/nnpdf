@@ -19,3 +19,7 @@ def dyp_sqrt_scale(k1,k2,k3):
 @utils.new_labels('$|y|$', '$p_T$ (GeV)', '$\sqrt(s)$')
 def jet_sqrt_scale(k1,k2,k3):
     return k1, sqrt(k2), k3
+
+@utils.new_labels('$x$', '$Q$ (GeV)', '$y$')
+def dis_sqrt_scale(k1,k2,k3):
+    return k1, sqrt(k2), k3
