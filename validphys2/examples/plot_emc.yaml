@@ -1,0 +1,138 @@
+#
+# Configuration file for NNPDF++
+#
+
+use_cuts: False
+actions_:
+    theory:
+        experiments:
+            experiment:
+              - plot_fancy
+
+pdf: NNPDF3_IC_nlo_as_0118_mcpole_1470
+
+############################################################
+description: NLO fit with IC, Pole masses, mc=1.47 GeV, TheoryID=45, second ite of t0 and preproc
+
+############################################################
+# frac: training fraction
+# ewk: apply ewk k-factors
+# sys: systematics treatment (see systypes)
+experiments:
+  # Fixed target DIS
+  # EMC F2C data
+  - experiment: EMCF2C
+    datasets:
+      - { dataset: EMCF2C, frac: 1.0, sys: 0 }
+  - experiment: EMCF2c1987
+    datasets:
+      - { dataset: EMCF2c1987, frac: 1.0, sys: 0 }
+  - experiment: EMCF2P
+    datasets:
+      - { dataset: EMCF2P, frac: 1.0, sys: 0 }
+  - experiment: EMCF2D
+    datasets:
+      - { dataset: EMCF2D, frac: 1.0, sys: 0 }
+
+############################################################
+datacuts:
+  t0pdfset     : 160302-r7c33a66-007-jr # PDF set to generate t0 covmat
+  q2min        : 3.49                 # Q2 minimum
+  w2min        : 12.5                # W2 minimum
+  combocuts    : NNPDF30             # NNPDF3.0 final kin. cuts
+  jetptcut_tev : 0                   # jet pt cut for tevatron
+  jetptcut_lhc : 0                   # jet pt cut for lhc
+  wptcut_lhc   : 25.0                # Minimum pT for W pT diff distributions
+  jetycut_tev  : 1e30                # jet rap. cut for tevatron
+  jetycut_lhc  : 1e30                # jet rap. cut for lhc
+  dymasscut_min: 0                   # dy inv.mass. min cut
+  dymasscut_max: 1e30                # dy inv.mass. max cut
+  jetcfactcut  : 1e30                # jet cfact. cut
+
+############################################################
+theory:
+  theoryid: 45       # database id
+  
+############################################################
+fitting:
+  seed     : 23489389      # set the seed for the random generator
+  genrep   : on     # on = generate MC replicas, off = use real data
+  rngalgo  : 0      # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
+  fitmethod: NGA    # Minimization algorithm
+  ngen     : 40000  # Maximum number of generations
+  nmutants : 120     # Number of mutants for replica
+  paramtype: NN
+  nnodes   : [2,5,3,1]
+
+  # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
+  # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
+  # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
+  # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
+  fitbasis: NN31IC # EVOL (7), EVOLQED (8), etc.
+  basis:
+      # remeber to change the name of PDF accordingly with fitbasis
+      # pos: on for NN squared
+      # mutsize: mutation size
+      # mutprob: mutation probability
+      # smallx, largex: preprocessing ranges
+      - { fl: sng, pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.78,1.55], largex: [2.05,3.33] }
+      - { fl: g,   pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.44,1.90], largex: [0.16,9.00] }
+      - { fl: v,   pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.44,0.91], largex: [2.18,6.20] }
+      - { fl: v3,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.20,0.86], largex: [1.92,5.96] }
+      - { fl: v8,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.39,0.87], largex: [0.58,8.49] }
+      - { fl: t3,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [-0.80,1.85], largex: [2.61,5.85] }
+      - { fl: t8,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.04,1.69], largex: [2.10,4.95] }
+      - { fl: cp,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [-0.60,1.96], largex: [0.1,6.9] }
+
+############################################################
+stopping:
+  stopmethod: LOOKBACK  # Stopping method
+  lbdelta   : 0         # Delta for look-back stopping
+  mingen    : 0         # Minimum number of generations
+  window    : 500       # Window for moving average
+  minchi2   : 3.5 #  Minimum chi2 
+  minchi2exp: 6.0       # Minimum chi2 for experiments
+  nsmear    : 200 # Smear for stopping
+  deltasm   : 200 # Delta smear for stopping
+  rv        : 2         # Ratio for validation stopping
+  rt        : 0.5 # Ratio for training stopping
+  epsilon   : 1e-6      # Gradient epsilon
+
+############################################################
+positivity:
+  posdatasets:
+    - { dataset: POSF2U,   poslambda: 1e6 }  # Positivity Lagrange Multiplier
+    - { dataset: POSF2DW,  poslambda: 1e6 }
+    - { dataset: POSF2S,   poslambda: 1e6 }
+    - { dataset: POSFLL,   poslambda: 1e6 }
+    - { dataset: POSDYU,   poslambda: 1e10 }
+    - { dataset: POSDYD,   poslambda: 1e10 }
+    - { dataset: POSDYS,   poslambda: 1e10 }
+    - { dataset: POSDYUBD,   poslambda: 1e5 }  
+    - { dataset: POSDYUD,   poslambda: 1e5 }
+    - { dataset: POSDYUDB,   poslambda: 1e5 }
+    - { dataset: POSDYUBDB,   poslambda: 1e5 }
+
+############################################################
+closuretest:
+  filterseed  : 0   # Random seed to be used in filtering data partitions
+  fakedata    : off # on = to use FAKEPDF to generate pseudo-data
+  fakepdf     : MSTW2008nlo68cl # Theory input for pseudo-data
+  errorsize   : 1.0 # uncertainties rescaling
+  fakenoise   : off # on = to add random fluctuations to pseudo-data
+  rancutprob  : 1.0 # Fraction of data to be included in the fit
+  rancutmethod: 0   # Method to select rancutprob data fraction
+  rancuttrnval: off # 0(1) to output training(valiation) chi2 in report
+  printpdf4gen: off # To print info on PDFs during minimization
+
+############################################################
+lhagrid:
+  nx  : 100
+  xmin: 1e-9
+  xmed: 0.1
+  xmax: 1.0
+  nq  : 50
+  qmax: 1e5
+
+############################################################
+debug: off
