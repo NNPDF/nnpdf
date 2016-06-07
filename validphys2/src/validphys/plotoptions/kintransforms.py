@@ -6,7 +6,7 @@ Created on Tue Mar 15 12:48:55 2016
 """
 
 from validphys.plotoptions import utils
-from numpy import sqrt
+from numpy import sqrt, ceil, nditer
 
 @utils.new_labels('$2k_1$', '$3k_1$', '$4k_3$')
 def dummy_transform(k1,k2,k3):
@@ -20,6 +20,17 @@ def dyp_sqrt_scale(k1,k2,k3):
 def jet_sqrt_scale(k1,k2,k3):
     return k1, sqrt(k2), k3
 
-@utils.new_labels('$x$', '$Q$ (GeV)', '$y$')
+@utils.new_labels('$x$', '$Q$ (GeV)', '$\sqrt{(s)}$')
 def dis_sqrt_scale(k1,k2,k3):
-    return k1, sqrt(k2), k3
+    ecm = sqrt(k2/(k1*k3))
+    return k1, sqrt(k2), ceil(ecm)
+
+@utils.new_labels('$x$', '$Q$ (GeV)', '$\sqrt{(s)}$')
+def nmc_process(k1,k2,k3):
+    xBins = [0.0045, 0.008, 0.0125, 0.0175,
+    0.025, 0.035, 0.05, 0.07, 0.09, 0.11,
+    0.14, 0.18, 0.225, 0.275, 0.35, 0.5]
+    for x in nditer(k1, op_flags=['readwrite']):
+        x[...] = min(xBins, key=lambda y:abs(x-y))
+    ecm = sqrt(k2/(k1*k3))
+    return k1, sqrt(k2), ceil(ecm)

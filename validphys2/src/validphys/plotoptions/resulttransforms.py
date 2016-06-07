@@ -41,9 +41,15 @@ def qbinexp(cv, error, **labels):
     qbin = bins(q)
     return 10**qbin*cv, 10**qbin*error
 
+def qbinexp(cv, error, **labels):
+    q = labels['k2']
+    qbin = bins(q)
+    return 10**qbin*cv, 10**qbin*error
+
 def qbindis(cv, error, **labels):
-    qbin = labels['k2']
-    return (10**qbin)*cv, (10**qbin)*error
+    q = labels['k1']
+    qbin = bins(q)
+    return 10**(10-qbin)*cv, 10**(10-qbin)*error
 
 def qbinjets(cv, error, **labels):
     qbin = labels['k1']

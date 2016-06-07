@@ -180,8 +180,8 @@ class PlotConfigParser(Config):
         return label
 
     def _parse_scale(self, scale:str):
-        if not (scale == 'linear' or scale=='log'):
-            raise ConfigError("Scale must be 'linear' or 'log'")
+        if not (scale == 'linear' or scale=='log' or scale == 'symlog'):
+            raise ConfigError("Scale must be 'linear', 'log' or 'symlog'")
         return scale
 
     def parse_x_scale(self, scale:str):
