@@ -1,8 +1,5 @@
 # SYSTYPES.info : SysType options description.
 # Please fill this in when you add a new SysType Option
 
-1: NNPDF2.3 Standard (Default)
-2: All systematic uncertainties assumed to be multiplicative
-3: All systematic uncertainties assumed to be additive (except luminosity)
-4: Baseline Standard (Jet data: All systematics multiplicative)
+0: Systematics MULT, Systematics from Statistical Covariance ADD, Lumi CMS2P72LUMI Mult (default)
 
