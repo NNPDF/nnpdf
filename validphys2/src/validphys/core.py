@@ -261,7 +261,19 @@ class ExperimentSpec(TupleComp, namespaces.NSList):
         return self.datasets[0].thspec
 
 
-FitSpec = namedtuple('FitSpec', ('name', 'path'))
+class FitSpec(TupleComp):
+    def __init__(self, name, path):
+        self.name = name
+        self.path = path
+        super().__init__(name, path)
+
+    def __iter__(self):
+        yield self.name
+        yield self.path
+
+    __slots__ = ('label','name', 'path')
+
+
 
 class TheoryIDSpec:
     def __init__(self, id, path):

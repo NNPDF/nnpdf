@@ -101,6 +101,7 @@ class Config(configparser.Config):
         return use_cuts
 
     #TODO: load fit config from here
+    @_id_with_label
     def parse_fit(self, fit:str):
         try:
             return self.loader.check_fit(fit)
