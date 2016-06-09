@@ -1,0 +1,7 @@
+fits:
+    - fit: 160427-r82cacd2-jr-001
+    - fit: 140807-nnpdf30final-sc-001
+actions_:
+  - fits:
+     - plot_training_validation
+

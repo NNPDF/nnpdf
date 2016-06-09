@@ -208,3 +208,19 @@ def plot_fancy(one_or_more_results, dataset,
 
 
             yield fig
+
+@figure
+def plot_training_validation(fit, replica_data):
+    training, valid = zip(*((dt.training, dt.validation) for dt in replica_data))
+    fig, ax = plt.subplots()
+    s=ax.plot(training,valid,linestyle='', marker='o', markersize=10, zorder=100)
+
+    ax.set_title(fit.name)
+
+    ax.set_xlabel(r'$\chi^2$ train')
+    ax.set_ylabel(r'$\chi^2$ valid')
+
+    ax.plot(np.mean(training), np.mean(valid),
+         marker='s', color='red', markersize=15, zorder=1000)
+
+    return fig
