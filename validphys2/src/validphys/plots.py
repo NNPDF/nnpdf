@@ -11,6 +11,7 @@ import logging
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
+import scipy.stats as stats
 
 from reportengine.figure import figure, figuregen
 from reportengine.checks import make_check, CheckError
@@ -235,5 +236,28 @@ def plot_training_validation(fit, replica_data):
     return fig
 
 
+@figure
+def plot_trainvaliddist(fit, replica_data):
+    training, valid = zip(*((dt.training, dt.validation) for dt in replica_data))
+    fig, ax = plt.subplots()
 
+    kde_train = stats.gaussian_kde(training, bw_method='silverman')
+    kde_valid = stats.gaussian_kde(valid, bw_method='silverman')
+    mean = (np.array(training) + np.array(valid))*0.5
+    kde_mean = stats.gaussian_kde(mean, bw_method='silverman')
+
+    x = np.linspace(np.min([training,valid]),
+                    np.max([training, valid]), 150)
+    ax.plot(x, kde_train(x), label="Training")
+    ax.plot(x, kde_valid(x), label="Validation")
+    ax.plot(x, kde_mean(x), label="Mean")
+
+    ax.set_xlabel(r"$\chi^2/N_{dat}$")
+    ax.set_title("KDE of the fit distributions for %s" % getattr(fit,
+                                                                 'label', fit.name))
+
+    plt.legend()
     return fig
+
+
+

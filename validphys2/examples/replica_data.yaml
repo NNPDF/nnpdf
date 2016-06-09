@@ -1,7 +1,10 @@
 fits:
-    - fit: 160427-r82cacd2-jr-001
-    - fit: 140807-nnpdf30final-sc-001
+    - fit: {id: "140816-nnpdf30final-vb-001", label: "NNPDF 3.0 NLO"}
+    - fit: {id: "140808-nnpdf30final-vb-001", label: "NNPDF 3.0 NNLO"}
+    - fit: {id: "160427-r82cacd2-jr-001", label: "NNPDF 3.1 NLO"}
+    - fit: {id: "160520-r654e559-jr-001"}
 actions_:
   - fits:
      - plot_training_validation
+     - plot_trainvaliddist
 
