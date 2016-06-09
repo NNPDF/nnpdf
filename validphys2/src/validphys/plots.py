@@ -150,6 +150,18 @@ def plot_fancy(one_or_more_results, dataset,
                 else:
                     x = line_data[info.x].as_matrix()
 
+                try:
+                    x = np.asanyarray(x, np.float)
+                except ValueError:
+                    xticklabels = x
+                    x = np.arange(len(x))
+                else:
+                    xticklabels = None
+
+                if xticklabels is not None:
+                    ax.set_xticks(x)
+                    ax.set_xticklabels(xticklabels)
+
                 #Use black for the first iteration (data),
                 #and follow the cycle for
                 #the rest.
