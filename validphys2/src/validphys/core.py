@@ -93,6 +93,16 @@ class PDF(TupleComp):
         return lhaindex.infofilename(self.name)
 
     @property
+    def isinstalled(self):
+        try:
+            self.infopath
+        except FileNotFoundError:
+            return False
+        else:
+            return True
+
+
+    @property
     def rescale_factor(self):
         if hasattr(self, "ErrorConfLevel"):
             if self.ErrorType == 'replicas':
