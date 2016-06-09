@@ -36,10 +36,10 @@ def get_plot_kinlabels(commondata):
     l = commondata.GetProc(0)
     try:
         key = next(k for k in kinlabels_latex if l.startswith(k))
-    except StopIteration:
+    except StopIteration as e:
         raise ValueError("Could not find a set of kinematic "
                          "variables matching  the process %s Check the "
-                         "labels defined in commondata.cc. " % (l))
+                         "labels defined in commondata.cc. " % (l)) from e
     return kinlabels_latex[key]
 
 def get_info(commondata, file=None, cuts=None):

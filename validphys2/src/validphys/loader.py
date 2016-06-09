@@ -163,13 +163,13 @@ class Loader():
             raise FileNotFoundError(msg)
         msg = ("Could not load fit '{fitname}' from '{resultspath}. "
                    "'{p}' must be a folder").format(**locals())
-        raise IOError(msg)
+        raise FileExistsError(msg)
 
     @property
     def available_fits(self):
         try:
             return [p.name for p in self.resultspath.iterdir() if p.is_dir()]
-        except IOError:
+        except OSError:
             return []
 
     def get_cuts(self, setname, fit):

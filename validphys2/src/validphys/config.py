@@ -105,9 +105,7 @@ class Config(configparser.Config):
     def parse_fit(self, fit:str):
         try:
             return self.loader.check_fit(fit)
-        except Exception as e:
-            #TODO: maybe drop pathlib because it's too annoying to use
-
+        except OSError as e:
             raise ConfigError(str(e), fit ,self.loader.available_fits)
 
 
