@@ -89,3 +89,15 @@ public:
 protected:
    void Mutation(FitPDFSet*, int const& nmut);
 }; 
+
+/*!
+ * \brief The NGAPMinimizer class with preprocessing mutation
+ */
+class NGAPMinimizer : public NGAMinimizer
+{
+public:
+  NGAPMinimizer(NNPDFSettings const&);
+
+protected:
+   void Mutation(FitPDFSet*, int const& nmut);
+};

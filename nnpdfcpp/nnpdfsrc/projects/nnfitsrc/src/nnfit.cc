@@ -198,6 +198,11 @@ int main(int argc, char **argv)
           cout << Colour::FG_BLUE << "Parametrisation: Quadratic Neural Network" << Colour::FG_DEFAULT << endl;
           break;
 
+        case PARAM_NNP:
+          fitset = FitPDFSet::Generate<MultiLayerPerceptronPreproc,GAMinimizer>(settings, fitbasis); // need to rewrite generate
+          cout << Colour::FG_BLUE << "Parametrisation: Neural Network Preprocessing" << Colour::FG_DEFAULT << endl;
+          break;
+
         default:
           cout << Colour::FG_RED << "ERROR: Invalid Parametrisation" << Colour::FG_DEFAULT << endl;
           exit(-1);

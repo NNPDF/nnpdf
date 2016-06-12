@@ -60,6 +60,7 @@ paramType NNPDFSettings::getParamType(string const& method)
   if (method.compare("NN") == 0)        return PARAM_NN;
   if (method.compare("CHEBYSHEV") == 0) return PARAM_CHEBYSHEV;
   if (method.compare("QUADNN") == 0)    return PARAM_QUADNN;
+  if (method.compare("NNP") == 0)       return PARAM_NNP;
   
   cerr << "getParamType Error: Invalid parametrization type: "<<method;
   exit(-1);
