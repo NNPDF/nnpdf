@@ -14,6 +14,9 @@ job1:
     stage: build-deploy
     script: ".ciscripts/build-deploy.sh"
 
+    variables:
+        NNPDF_USE_DOUBLE: ""
+
     #We copy the conda package to the git path to be untracked and
     #then catch it as an "artifact"
     artifacts:

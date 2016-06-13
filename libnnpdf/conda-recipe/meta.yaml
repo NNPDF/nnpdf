@@ -28,7 +28,7 @@ build:
     detect_binary_files_with_prefix: True
     {% if environ.get("NNPDF_USE_DOUBLE", False) %}
     features:
-        - nnpdf-use-double
+        - nnpdf_use_double
     {% endif  %}
     script_env:
         - NNPDF_USE_DOUBLE
