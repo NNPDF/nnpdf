@@ -24,11 +24,12 @@ KEY=$( mktemp )
 echo "$ZIGZAH_SSH_KEY" > "$KEY"
 
 scp -i "$KEY" -o StrictHostKeyChecking=no\
-    /yes/conda-bld/linux-64/*.tar.bz2 \
+    /root/miniconda3/conda-bld/linux-64/*.tar.bz2 \
     dummy@zigzah.com:~/conda-pkgs-private/linux-64 
 
 if [ $? == 0 ]; then
 	echo "Upload suceeded"
 else
 	echo "Upload failed"
+	exit 1
 fi
