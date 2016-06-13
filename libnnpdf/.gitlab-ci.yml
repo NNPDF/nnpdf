@@ -33,7 +33,7 @@ job1:
 job2:
     stage: build-deploy
     variables:
-        NNPDF_USE_DOUBLE: 1
+        NNPDF_USE_DOUBLE: "1"
     script: ".ciscripts/build-deploy.sh"
     only:
         - tags
