@@ -76,7 +76,7 @@ namespace NNPDF
     
     void InitParameters();   //!< Initialize (or reinitialize) parameters
     
-  private:
+  protected:
     const int fNLayers;   //!< Number of layers
     int* fArch;           //!< Network architecture
     
@@ -87,28 +87,14 @@ namespace NNPDF
   /*!
    * \brief The MultiLayerPerceptronPreproc class
    */
-  class MultiLayerPerceptronPreproc : public Parametrisation
+  class MultiLayerPerceptronPreproc : public MultiLayerPerceptron
   {
   public:
     MultiLayerPerceptronPreproc(std::vector<int> const& arch);         //!< Network constructor
     MultiLayerPerceptronPreproc(MultiLayerPerceptronPreproc const&);  //!< Network copy constructor
-    ~MultiLayerPerceptronPreproc();                            //!< Network destructor
 
     void Compute(real*,real*) const;  //!< Returns a fArch[fNLayers-1] long array of output for a given input array
-    Parametrisation* Duplicate();     //!< Returns a parametrisation based on an MLP
-
-    const int*  GetArch() const {return fArch;}
-    int   GetNumNodeParams(int const& layer) const;                   //!< Returns the number of parameters that belong to a specific node (including biases).
-    real*       GetNodeParams   (int const& layer, int const& node);  //!< Returns a pointer to the fParameters coordinate representing the parameters for a specific node
-
     void InitParameters();   //!< Initialize (or reinitialize) parameters
-
-  private:
-    const int fNLayers;   //!< Number of layers
-    int* fArch;           //!< Network architecture
-
-    real** fWeightMatrix;         //!< Weights/Thresholds
-    mutable real** fOutputMatrix; //!< Neuron Activation
   };
 
   /**
