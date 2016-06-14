@@ -60,6 +60,7 @@ Notes:
 
 //Define custom uncertainty descriptions to allow for cross-correlations
 const std::vector<std::string> sysdescr = {
+  /*
   "CMSTOPDIFFLEP",
   "CMSTOPDIFFJES",
   "CMSTOPDIFFJER",
@@ -73,6 +74,20 @@ const std::vector<std::string> sysdescr = {
   "CMSTOPDIFFPDF",
   "CMSTOPDIFFTotXSec",
   "CMSTOPDIFFLumi",
+  */  
+  "CORR",
+  "CORR",
+  "CORR",
+  "CORR",
+  "CORR",
+  "CORR",
+  "CORR",
+  "CORR",
+  "CORR",
+  "CORR",
+  "CORR",
+  "CORR",
+  "CORR",
 };
 
 //A - NORMALISED distributions
@@ -145,7 +160,7 @@ void  CMSTOPDIFF8TEVTPTNORMFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
       
       lstream >> fData[i]; //normalized differential distribution
-      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      lstream >> fStat[i]; 
       fStat[i]=0.;
 
       for(int j=0; j<3; j++)
@@ -174,13 +189,35 @@ void  CMSTOPDIFF8TEVTPTNORMFilter::ReadData()
     }
   }
 
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+   {
+     cerr << " in " << fSetName << endl;
+     exit(-1);
+   }
+
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = syscor[i][j];
+	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
   //Read full breakdown of systematics
   for(int i=0; i<8; i++)
     {
       getline(f2,line);
     }
 
-  for(int j=0; j<fNSys; j++)
+  for(int j=fNData; j<fNSys; j++)
     {
       string sdum;
       getline(f2,line);
@@ -191,7 +228,7 @@ void  CMSTOPDIFF8TEVTPTNORMFilter::ReadData()
 	  lstream >> fSys[i][j].mult;
 	  fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
 	  fSys[i][j].type = MULT;
-	  fSys[i][j].name = sysdescr[j];
+	  fSys[i][j].name = sysdescr[j-fNData];
 	}
     }
   
@@ -271,7 +308,7 @@ void  CMSTOPDIFF8TEVTTPTNORMFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      lstream >> fStat[i]; //assume stat errors uncorrelated so far
       fStat[i] =0.;
 
       for(int j=0; j<3; j++)
@@ -419,7 +456,7 @@ void  CMSTOPDIFF8TEVTRAPNORMFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      lstream >> fStat[i]; //assume stat errors uncorrelated so far
       fStat[i] = 0.;
 
       for(int j=0; j<3; j++)
@@ -570,7 +607,7 @@ void  CMSTOPDIFF8TEVTTRAPNORMFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      lstream >> fStat[i]; //assume stat errors uncorrelated so far
       fStat[i] = 0.;
 
       for(int j=0; j<3; j++)
@@ -718,7 +755,7 @@ void  CMSTOPDIFF8TEVTTMNORMFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      lstream >> fStat[i]; //assume stat errors uncorrelated so far
       fStat[i] = 0.;
 
       for(int j=0; j<3; j++)
@@ -806,7 +843,7 @@ void  CMSTOPDIFF8TEVTTMNORMFilter::ReadData()
 void CMSTOPDIFF8TEVTPTFilter::ReadData()
 {
   // Opening files
-  fstream f1, f2, f3;
+  fstream f1, f2, f3, f4;
 
   //Central values and statistical uncertainties
   stringstream datafile("");
@@ -820,6 +857,19 @@ void CMSTOPDIFF8TEVTPTFilter::ReadData()
       exit(-1);
     }
   
+  //Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/CMSTOPDIFF8TEVTPT/CMSTOPDIFF8TEVTPT.cov";
+  f4.open(covfile.str().c_str(), ios::in);
+  
+  if (f4.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+
   //Full breakdown of systematic uncertainties
   stringstream sysfile("");
   sysfile << dataPath() 
@@ -882,7 +932,7 @@ void CMSTOPDIFF8TEVTPTFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      lstream >> fStat[i]; //assume stat errors uncorrelated so far
       fStat[i] = 0.;
 
       //differential distributions are unnormalized
@@ -896,12 +946,55 @@ void CMSTOPDIFF8TEVTPTFilter::ReadData()
 	}
     }
 
+  //Read statistical covariance matrix
+  for(int i=0; i<8; i++)
+    {
+      getline(f4,line);
+    }
+
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f4,line);
+    istringstream lstream(line);
+    double adum;
+    lstream >> adum >> adum >> adum;
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+  
+  if(!genArtSys(fNData,covmat,syscor))
+   {
+     cerr << " in " << fSetName << endl;
+     exit(-1);
+   }
+
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = syscor[i][j]*xscv;
+	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+  
+  //Read full breakdown of systematic uncertainties
   for(int i=0; i<8; i++)
     {
       getline(f2,line);
     }
 
-  for(int j=0; j<fNSys-2; j++)
+  for(int j=fNData; j<fNSys-2; j++)
     {
       string sdum;
       getline(f2,line);
@@ -913,23 +1006,27 @@ void CMSTOPDIFF8TEVTPTFilter::ReadData()
 	  lstream >> fSys[i][j].mult; 
 	  fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
 	  fSys[i][j].type = MULT;
-	  fSys[i][j].name = sysdescr[j];
+	  fSys[i][j].name = sysdescr[j-fNData];
 	}
     }
  
   //Two additional sources of systematic uncertainties affect the unnormalised distributions
   for(int i=0; i<fNData; i++)
     {
+      xssystpl = xssystpl/xscv*100;
+      xssystmi = xssystmi/xscv*100;
+
       symmetriseErrors(xssystpl, xssystmi, &stmp, &dtmp); //symmetrise systematics
-      fSys[i][11].add  = fData[i]/xscv*stmp;
-      fSys[i][11].mult = fSys[i][11].add/fData[i]*100; 
+      fSys[i][11].add  = stmp*fData[i]/100;
+      fSys[i][11].mult = stmp; 
       fSys[i][11].type = MULT;
-      fSys[i][11].name = sysdescr[11];
+      fSys[i][11].name = sysdescr[19-fNData];
 
       fSys[i][12].add  = fData[i]/xscv*xslumi;
-      fSys[i][12].mult = fSys[i][12].add/fData[i]*100;
+      fSys[i][12].mult = fSys[i][20].add/fData[i]*100;
       fSys[i][12].type = MULT;
-      fSys[i][12].name = sysdescr[12];
+      fSys[i][12].name = sysdescr[20-fNData];
+
     }
   
   f1.close();
@@ -1032,7 +1129,7 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      lstream >> fStat[i]; //assume stat errors uncorrelated so far
       fStat[i] = 0.;
 
       //differential distributions are unnormalized
@@ -1112,10 +1209,13 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
  
   //Two additional sources of systematic uncertainties affect the unnormalised distributions
   for(int i=0; i<fNData; i++)
-    {
+    { 
+      xssystpl = xssystpl/xscv*100;
+      xssystmi = xssystmi/xscv*100;
+
       symmetriseErrors(xssystpl, xssystmi, &stmp, &dtmp); //symmetrise systematics
-      fSys[i][17].add  = fData[i]/xscv*stmp;
-      fSys[i][17].mult = fSys[i][17].add/fData[i]*100; 
+      fSys[i][17].add  = fData[i]/100*stmp;
+      fSys[i][17].mult = stmp; 
       fSys[i][17].type = MULT;
       fSys[i][17].name = sysdescr[17-fNData];
 
@@ -1226,7 +1326,7 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      lstream >> fStat[i]; //assume stat errors uncorrelated so far
       fStat[i] =0.;
 
       //differential distributions are unnormalized
@@ -1306,10 +1406,13 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
 
   //Two additional sources of systematic uncertainties affect the unnormalised distributions
   for(int i=0; i<fNData; i++)
-    {
+    { 
+      xssystpl = xssystpl/xscv*100;
+      xssystmi = xssystmi/xscv*100;
+
       symmetriseErrors(xssystpl, xssystmi, &stmp, &dtmp); //symmetrise systematics
-      fSys[i][21].add  = fData[i]/xscv*stmp;
-      fSys[i][21].mult = fSys[i][21].add/fData[i]*100; 
+      fSys[i][21].add  = fData[i]/100*stmp;
+      fSys[i][21].mult = stmp; 
       fSys[i][21].type = MULT;
       fSys[i][21].name = sysdescr[21-fNData];
 
@@ -1420,7 +1523,7 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      lstream >> fStat[i]; //assume stat errors uncorrelated so far
       fStat[i] = 0.;
 
       //differential distributions are unnormalized
@@ -1501,9 +1604,13 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
   //Two additional sources of systematic uncertainties affect the unnormalised distributions
   for(int i=0; i<fNData; i++)
     {
+
+      xssystpl = xssystpl/xscv*100;
+      xssystmi = xssystmi/xscv*100;
       symmetriseErrors(xssystpl, xssystmi, &stmp, &dtmp); //symmetrise systematics
-      fSys[i][21].add  = fData[i]/xscv*stmp;
-      fSys[i][21].mult = fSys[i][21].add/fData[i]*100; 
+
+      fSys[i][21].add  = fData[i]/100*stmp;
+      fSys[i][21].mult = stmp; 
       fSys[i][21].type = MULT;
       fSys[i][21].name = sysdescr[21-fNData];
 
@@ -1614,7 +1721,7 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
-      //lstream >> fStat[i]; //assume stat errors uncorrelated so far
+      lstream >> fStat[i]; //assume stat errors uncorrelated so far
       fStat[i] = 0.;
 
       //differential distributions are unnormalized
@@ -1695,9 +1802,13 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
   //Two additional sources of systematic uncertainties affect the unnormalised distributions
   for(int i=0; i<fNData; i++)
     {
+      
+      xssystpl = xssystpl/xscv*100;
+      xssystmi = xssystmi/xscv*100;
       symmetriseErrors(xssystpl, xssystmi, &stmp, &dtmp); //symmetrise systematics
-      fSys[i][18].add  = fData[i]/xscv*stmp;
-      fSys[i][18].mult = fSys[i][18].add/fData[i]*100; 
+      
+      fSys[i][18].add  = fData[i]/100*stmp;
+      fSys[i][18].mult = stmp; 
       fSys[i][18].type = MULT;
       fSys[i][18].name = sysdescr[18-fNData];
 

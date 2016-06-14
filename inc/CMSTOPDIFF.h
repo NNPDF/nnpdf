@@ -17,7 +17,7 @@
 // Differential distribution for the transverse momentum of the top quark
 static const dataInfoRaw CMSTOPDIFF8TEVTPTNORMinfo = {
   8,                         //nData
-  11,                        //nSys
+  19,                        //nSys
   "CMSTOPDIFF8TEVTPTNORM",   //SetName
   "HQP_PTQ"                  //ProcType
 };
@@ -80,7 +80,7 @@ static const dataInfoRaw CMSTOPDIFF8TEVTTRAPinfo = {
   "HQP_YQQ"                   //ProcType
 };
 
-// Differential distribution for the transverse of the top quark pair
+// Differential distribution for the transverse momentum of the top quark pair
 static const dataInfoRaw CMSTOPDIFF8TEVTTPTinfo = {
   6,                          //nData
   19,                         //nSys

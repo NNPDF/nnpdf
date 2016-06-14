@@ -50,7 +50,8 @@
 #include "ATLASWZTOT13TEV81PB.h"
 #include "ATLASZPT47FB.h"
 #include "ATLASZPT8TEV20FB.h"
-
+#include "ATLASTTBARTOT.h"
+#include "CMSTTBARTOT.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -216,6 +217,8 @@ void InitCommonData(vector<CommonData*>& target)
   // ************************* TOP *******************************
 
   target.push_back(new TTBARTOTFilter());
+  target.push_back(new ATLASTTBARTOTFilter());
+  target.push_back(new CMSTTBARTOTFilter());
 
   // ************************* ZEUS ******************************
 
