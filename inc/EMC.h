@@ -13,14 +13,14 @@
 
 static const dataInfoRaw EMCF2Pinfo = {
   237,      //nData
-  1,        //nSys
+  2,        //nSys
   "EMCF2P", //SetName
   "DIS_F2P" //ProcType
 };
 
 static const dataInfoRaw EMCF2Dinfo = {
   66,      //nData
-  1,        //nSys
+  2,        //nSys
   "EMCF2D",    //SetName
   "DIS_F2D" //ProcType
 };

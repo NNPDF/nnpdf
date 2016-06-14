@@ -65,9 +65,15 @@ void EMCF2PFilter::ReadData()
     //check here
     fSys[i][0].add = sist;
     fSys[i][0].type = MULT;
-    fSys[i][0].name = "CORR";
+    fSys[i][0].name = "CORR_P";
 
     fSys[i][0].mult = fSys[i][0].add/(fData[i]*1e-2);
+
+    fSys[i][1].add = fData[i]*0.05;
+    fSys[i][1].type = MULT;
+    fSys[i][1].name = "CORR_NORM";
+
+    fSys[i][1].mult = 5;
 
   }
 
@@ -124,9 +130,15 @@ void EMCF2DFilter::ReadData()
     //check here
     fSys[i][0].add = sist;
     fSys[i][0].type = MULT;
-    fSys[i][0].name = "CORR";
+    fSys[i][0].name = "CORR_D";
 
     fSys[i][0].mult = fSys[i][0].add/(fData[i]*1e-2);
+
+    fSys[i][1].add = fData[i]*0.05;
+    fSys[i][1].type = MULT;
+    fSys[i][1].name = "CORR_NORM";
+
+    fSys[i][1].mult = 5;
 
   }
 

@@ -109,7 +109,7 @@ void EMCF2CFilter::ReadData()
     fSys[i][0].add = sist;
     fSys[i][0].type = MULT;
     fSys[i][0].name = "CORR_EMC";
-    fSys[i][0].mult = fSys[i][0].add/(fData[i]*1e-2);
+    fSys[i][0].mult = 15;
   }
 
   f1.close();
