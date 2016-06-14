@@ -129,13 +129,12 @@ void ATLASWZTOT13TEV81PBFilter::ReadData()
 		  }else {
 			  throw runtime_error("Unrecognized systematic type: " + type);
 		  }
-		  auto & sysvalue = result[k][data_id];
+		  auto & sysvalue = result.at(k)[data_id];
 		  auto & datavalue = fData[data_id];
 		  sys.add = sysvalue;
 		  sys.mult = sysvalue/datavalue*100;
-		  //I Have no idea why this segfaults...
-		  //result.erase(k);
 	  }
+	  result.erase(k);
 	  sys_id++;
   }
 
@@ -143,9 +142,9 @@ void ATLASWZTOT13TEV81PBFilter::ReadData()
 	  throw runtime_error("Wrong number of systematics");
   }
 
- //if (result.size()){
-//	 throw runtime_error("Unused values in data file");
- //} 
+ if (result.size()){
+	 throw runtime_error("Unused values in data file");
+ } 
 
 }
 
