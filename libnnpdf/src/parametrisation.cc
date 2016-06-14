@@ -395,7 +395,7 @@ void MultiLayerPerceptronPreproc::InitParameters()
 {
   MultiLayerPerceptron::InitParameters();
   fParameters[fNParameters-2] = RandomGenerator::GetRNG()->GetRandomUniform(-10,2);
-  fParameters[fNParameters-1] = RandomGenerator::GetRNG()->GetRandomUniform(-10,10);
+  fParameters[fNParameters-1] = RandomGenerator::GetRNG()->GetRandomUniform(0,10);
 }
 
 /**
