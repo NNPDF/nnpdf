@@ -157,31 +157,38 @@ void  ATLASTOPDIFF8TEVTPTNORMFilter::ReadData()
       lstream >> fData[i];     //differential distribution
       lstream >> fStat[i];     //its statistical uncertainty
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
-      
+
+      double shift = 0.;
+
       for(int j=0; j<fNSys; j++)
 	{
-	  double syst[2][fNSys];
+	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
 	  string sysdescr;
 	  
 	  ostringstream id;
 	  id << j;
-	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  sysdescr = "CORR";
 	  
-	  lstream >> syst[0][j] >> syst[1][j];
+	  lstream >> sys1 >> sys2;
+	  if(sys1<0) {right=sys2; left=sys1;}
+	  else {right=sys1; left=sys2;}
+
 	  //convert to relative percentage values
-	  syst[0][j] = syst[0][j]/fData[i]*100;  
-	  syst[1][j] = syst[1][j]/fData[i]*100;
-	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  right = right/fData[i]*100;  
+	  left = left/fData[i]*100;
+	  symmetriseErrors(right,left,&stmp,&dtmp);
 	  
-	  if(stmp<0) stmp=-1.0*stmp;
 	  fSys[i][j].type = MULT;
 	  fSys[i][j].name = sysdescr;
 	  fSys[i][j].mult = stmp;
-	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]/100;
 
+	  shift += dtmp;
 	}
-          
+
+      fData[i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+
     }  
   
   f1.close();
@@ -229,30 +236,38 @@ void  ATLASTOPDIFF8TEVTTPTNORMFilter::ReadData()
       lstream >> fStat[i];     //its statistical uncertainty
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
+      double shift = 0.;
+
       for(int j=0; j<fNSys; j++)
 	{
-	  double syst[2][fNSys];
+	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
 	  string sysdescr;
 	  
 	  ostringstream id;
 	  id << j;
-	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  sysdescr = "CORR";
 	  
-	  lstream >> syst[0][j] >> syst[1][j];
+	  lstream >> sys1 >> sys2;
+	  if(sys1<0) {right=sys2; left=sys1;}
+	  else {right=sys1; left=sys2;}
+
 	  //convert to relative percentage values
-	  syst[0][j] = syst[0][j]/fData[i]*100;  
-	  syst[1][j] = syst[1][j]/fData[i]*100;
-	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  right = right/fData[i]*100;  
+	  left = left/fData[i]*100;
+	  symmetriseErrors(right,left,&stmp,&dtmp);
 	  
-	  if(stmp<0) stmp=-1.0*stmp;
 	  fSys[i][j].type = MULT;
 	  fSys[i][j].name = sysdescr;
 	  fSys[i][j].mult = stmp;
-	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]/100;
+
+	  shift += dtmp;
 
 	}
 
+       fData[i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+      
     }  
   
   f1.close();
@@ -309,35 +324,44 @@ void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
 
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
+      double shift = 0.;
+
       for(int j=0; j<fNSys; j++)
 	{
-	  double syst[2][fNSys];
+	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
 	  string sysdescr;
 	  
 	  ostringstream id;
 	  id << j;
-	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  sysdescr = "CORR";
 	  
-	  lstream >> syst[0][j] >> syst[1][j];
+	  lstream >> sys1 >> sys2; 
+	  if(sys1<0) {right=sys2; left=sys1;}
+	  else {right=sys1; left=sys2;}
+
 	  //convert to relative percentage values
-	  syst[0][j] = syst[0][j]/datum*100;  
-	  syst[1][j] = syst[1][j]/datum*100;
-	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  right = right/datum*100;  
+	  left = left/datum*100;
+	  symmetriseErrors(right,left,&stmp,&dtmp);
 	  
-	  if(stmp<0) stmp=-1.0*stmp;
 	  fSys[i+fNData/2][j].type = MULT;
 	  fSys[i+fNData/2][j].name = sysdescr;
 	  fSys[i+fNData/2][j].mult = stmp;
-	  fSys[i+fNData/2][j].add  = fSys[i][j].mult*fData[i+fNData/2]*(1.0+dtmp/100)/100;
+	  fSys[i+fNData/2][j].add  = fSys[i][j].mult*fData[i+fNData/2]/100;
 
 	  fSys[fNData/2-1-i][j].type = MULT;
 	  fSys[fNData/2-1-i][j].name = sysdescr;
 	  fSys[fNData/2-1-i][j].mult = stmp;
-	  fSys[fNData/2-1-i][j].add  = fSys[i][j].mult*fData[fNData/2-1-i]*(1.0+dtmp/100)/100;
+	  fSys[fNData/2-1-i][j].add  = fSys[i][j].mult*fData[fNData/2-1-i]/100;
+
+	  shift += dtmp;
 
 	}
           
+       fData[i+fNData/2]*=(1.0 + shift*0.01);   //Shift from asymmetric errors
+       fData[fNData/2-1-i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+
     }  
   
   f1.close();
@@ -395,35 +419,43 @@ void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
+      double shift = 0.;
+
       for(int j=0; j<fNSys; j++)
 	{
-	  double syst[2][fNSys];
+	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
 	  string sysdescr;
 	  
 	  ostringstream id;
 	  id << j;
-	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  sysdescr = "CORR";
 	  
-	  lstream >> syst[0][j] >> syst[1][j];
+	  lstream >> sys1 >> sys2;
+	  if(sys1<0) {right=sys2; left=sys1;}
+	  else {right=sys1; left=sys2;}
 	  //convert to relative percentage values
-	  syst[0][j] = syst[0][j]/datum*100;  
-	  syst[1][j] = syst[1][j]/datum*100;
-	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  right = right/datum*100;  
+	  left = left/datum*100;
+	  symmetriseErrors(right,left,&stmp,&dtmp);
 	  
-	  if(stmp<0) stmp=-1.0*stmp;
 	  fSys[i+fNData/2][j].type = MULT;
 	  fSys[i+fNData/2][j].name = sysdescr;
 	  fSys[i+fNData/2][j].mult = stmp;
-	  fSys[i+fNData/2][j].add  = fSys[i][j].mult*fData[i+fNData/2]*(1.0+dtmp/100)/100;
+	  fSys[i+fNData/2][j].add  = fSys[i][j].mult*fData[i+fNData/2]/100;
 
 	  fSys[fNData/2-1-i][j].type = MULT;
 	  fSys[fNData/2-1-i][j].name = sysdescr;
 	  fSys[fNData/2-1-i][j].mult = stmp;
-	  fSys[fNData/2-1-i][j].add  = fSys[i][j].mult*fData[fNData/2-1-i]*(1.0+dtmp/100)/100;
+	  fSys[fNData/2-1-i][j].add  = fSys[i][j].mult*fData[fNData/2-1-i]/100;
+
+	  shift += dtmp;
 
 	}
           
+      fData[i+fNData/2]*=(1.0 + shift*0.01);   //Shift from asymmetric errors
+      fData[fNData/2-1-i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+
     }  
   
   f1.close();
@@ -471,30 +503,37 @@ void  ATLASTOPDIFF8TEVTTMNORMFilter::ReadData()
       lstream >> fStat[i];     //its statistical uncertainty
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
+      double shift = 0.;
+
       for(int j=0; j<fNSys; j++)
 	{
-	  double syst[2][fNSys];
+	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
 	  string sysdescr;
 	  
 	  ostringstream id;
 	  id << j;
-	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  sysdescr = "CORR";
 	  
-	  lstream >> syst[0][j] >> syst[1][j];
+	  lstream >> sys1 >> sys2;
+	  if(sys1<0) {right=sys2; left=sys1;}
+	  else {right=sys1; left=sys2;}
 	  //convert to relative percentage values
-	  syst[0][j] = syst[0][j]/fData[i]*100;  
-	  syst[1][j] = syst[1][j]/fData[i]*100;
-	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  right = right/fData[i]*100;  
+	  left = left/fData[i]*100;
+	  symmetriseErrors(right,left,&stmp,&dtmp);
 	  
-	  if(stmp<0) stmp=-1.0*stmp;
 	  fSys[i][j].type = MULT;
 	  fSys[i][j].name = sysdescr;
 	  fSys[i][j].mult = stmp;
-	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]/100;
+
+	  shift =+ dtmp;
 
 	}
           
+      fData[i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+
     }  
   
   f1.close();
@@ -546,36 +585,43 @@ void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
       lstream >> fStat[i];     //its statistical uncertainty
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
+      double shift = 0.;
+
       for(int j=0; j<fNSys-1; j++)
 	{
-	  double syst[2][fNSys];
+	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
 	  string sysdescr;
 	  
 	  ostringstream id;
 	  id << j;
-	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  sysdescr = "CORR";
 	  
-	  lstream >> syst[0][j] >> syst[1][j];
+	  lstream >> sys1 >> sys2;
+	  if(sys1<0) {right=sys2; left=sys1;}
+	  else {right=sys1; left=sys2;}
 	  //convert to relative percentage values
-	  syst[0][j] = syst[0][j]/fData[i]*100;  
-	  syst[1][j] = syst[1][j]/fData[i]*100;
-	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  right = right/fData[i]*100;  
+	  left = left/fData[i]*100;
+	  symmetriseErrors(right,left,&stmp,&dtmp);
 	  
-	  if(stmp<0) stmp=-1.0*stmp;
 	  fSys[i][j].type = MULT;
 	  fSys[i][j].name = sysdescr;
 	  fSys[i][j].mult = stmp;
-	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]/100;
+
+	  shift += dtmp;
 
 	}
 
       //overall luminosity uncertainty
       fSys[i][56].type = MULT;
-      fSys[i][56].name = "ATLASTOPDIFFLUMI";
+      fSys[i][56].name = "CORR";
       fSys[i][56].mult=2.8;
       fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
-          
+
+      fData[i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+   
     }  
   
   f1.close();
@@ -623,36 +669,44 @@ void  ATLASTOPDIFF8TEVTTPTFilter::ReadData()
       lstream >> fStat[i];     //its statistical uncertainty
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
+      double shift = 0.;
+
       for(int j=0; j<fNSys-1; j++)
 	{
-	  double syst[2][fNSys];
+	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
 	  string sysdescr;
 	  
 	  ostringstream id;
 	  id << j;
-	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  sysdescr = "CORR";
 	  
-	  lstream >> syst[0][j] >> syst[1][j];
+	  lstream >> sys1 >> sys2;
+	  if(sys1<0) {right=sys2; left=sys1;}
+	  else {right=sys1; left=sys2;}
+
 	  //convert to relative percentage values
-	  syst[0][j] = syst[0][j]/fData[i]*100;  
-	  syst[1][j] = syst[1][j]/fData[i]*100;
-	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  right = right/fData[i]*100;  
+	  left  = left/fData[i]*100;
+	  symmetriseErrors(right,left,&stmp,&dtmp);
 	  
-	  if(stmp<0) stmp=-1.0*stmp;
 	  fSys[i][j].type = MULT;
 	  fSys[i][j].name = sysdescr;
 	  fSys[i][j].mult = stmp;
-	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]/100;
+
+	  shift += dtmp;
 
 	}
 
       //overall luminosity uncertainty
       fSys[i][56].type = MULT;
-      fSys[i][56].name = "ATLASTOPDIFFLUMI";
+      fSys[i][56].name = "CORR";
       fSys[i][56].mult=2.8;
       fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
-          
+         
+      fData[i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+ 
     }  
   
   f1.close();
@@ -709,45 +763,54 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
+      double shift = 0.;
+
       for(int j=0; j<fNSys-1; j++)
 	{
-	  double syst[2][fNSys];
+	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
 	  string sysdescr;
 	  
 	  ostringstream id;
 	  id << j;
-	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  sysdescr = "CORR";
 	  
-	  lstream >> syst[0][j] >> syst[1][j];
+	  lstream >> sys1 >> sys2;
+	  if(sys1<0) {right=sys2; left=sys1;}
+	  else {right=sys1; left=sys2;}
+
 	  //convert to relative percentage values
-	  syst[0][j] = syst[0][j]/datum*100;  
-	  syst[1][j] = syst[1][j]/datum*100;
-	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  right = right/datum*100;  
+	  left = left/datum*100;
+	  symmetriseErrors(right,left,&stmp,&dtmp);
 	  
-	  if(stmp<0) stmp=-1.0*stmp;
 	  fSys[i+fNData/2][j].type = MULT;
 	  fSys[i+fNData/2][j].name = sysdescr;
 	  fSys[i+fNData/2][j].mult = stmp;
-	  fSys[i+fNData/2][j].add  = fSys[i][j].mult*fData[i+fNData/2]*(1.0+dtmp/100)/100;
+	  fSys[i+fNData/2][j].add  = fSys[i][j].mult*fData[i+fNData/2]/100;
 
 	  fSys[fNData/2-1-i][j].type = MULT;
 	  fSys[fNData/2-1-i][j].name = sysdescr;
 	  fSys[fNData/2-1-i][j].mult = stmp;
-	  fSys[fNData/2-1-i][j].add  = fSys[i][j].mult*fData[fNData/2-1-i]*(1.0+dtmp/100)/100;
+	  fSys[fNData/2-1-i][j].add  = fSys[i][j].mult*fData[fNData/2-1-i]/100;
+
+	  shift += dtmp;
 
 	}
 
       //overall luminosity uncertainty
       fSys[i+fNData/2][56].type = MULT;
-      fSys[i+fNData/2][56].name = "ATLASTOPDIFFLUMI";
+      fSys[i+fNData/2][56].name ="CORR";
       fSys[i+fNData/2][56].mult=2.8;
       fSys[i+fNData/2][56].add=fSys[i][56].mult*fData[i]/100;
       fSys[fNData/2-1-i][56].type = MULT;
-      fSys[fNData/2-1-i][56].name = "ATLASTOPDIFFLUMI";
+      fSys[fNData/2-1-i][56].name = "CORR";
       fSys[fNData/2-1-i][56].mult=2.8;
       fSys[fNData/2-1-i][56].add=fSys[i][56].mult*fData[i]/100;
-          
+      
+      fData[i+fNData/2]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+      fData[fNData/2-1-i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+
     }  
   
   f1.close();
@@ -805,45 +868,54 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
 
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
+      double shift = 0.;
+
       for(int j=0; j<fNSys-1; j++)
 	{
-	  double syst[2][fNSys];
+	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
 	  string sysdescr;
 	  
 	  ostringstream id;
 	  id << j;
-	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  sysdescr = "CORR";
 	  
-	  lstream >> syst[0][j] >> syst[1][j];
+	  lstream >> sys1 >> sys2;
+	  if(sys1<0) {right=sys2; left=sys1;}
+	  else {right=sys1; left=sys2;}
+
 	  //convert to relative percentage values
-	  syst[0][j] = syst[0][j]/datum*100;  
-	  syst[1][j] = syst[1][j]/datum*100;
-	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  right = right/datum*100;  
+	  left  = left/datum*100;
+	  symmetriseErrors(right,left,&stmp,&dtmp);
 	  
-	  if(stmp<0) stmp=-1.0*stmp;
 	  fSys[i+fNData/2][j].type = MULT;
 	  fSys[i+fNData/2][j].name = sysdescr;
 	  fSys[i+fNData/2][j].mult = stmp;
-	  fSys[i+fNData/2][j].add  = fSys[i][j].mult*fData[i+fNData/2]*(1.0+dtmp/100)/100;
+	  fSys[i+fNData/2][j].add  = fSys[i][j].mult*fData[i+fNData/2]/100;
 
 	  fSys[fNData/2-1-i][j].type = MULT;
 	  fSys[fNData/2-1-i][j].name = sysdescr;
 	  fSys[fNData/2-1-i][j].mult = stmp;
-	  fSys[fNData/2-1-i][j].add  = fSys[i][j].mult*fData[fNData/2-1-i]*(1.0+dtmp/100)/100;
+	  fSys[fNData/2-1-i][j].add  = fSys[i][j].mult*fData[fNData/2-1-i]/100;
 
-	}
+	  shift += dtmp;
 
+	}   
+      
       //overall luminosity uncertainty
       fSys[i+fNData/2][56].type = MULT;
-      fSys[i+fNData/2][56].name = "ATLASTOPDIFFLUMI";
+      fSys[i+fNData/2][56].name = "CORR";
       fSys[i+fNData/2][56].mult=2.8;
       fSys[i+fNData/2][56].add=fSys[i][56].mult*fData[i]/100;
       fSys[fNData/2-1-i][56].type = MULT;
-      fSys[fNData/2-1-i][56].name = "ATLASTOPDIFFLUMI";
+      fSys[fNData/2-1-i][56].name = "CORR";
       fSys[fNData/2-1-i][56].mult=2.8;
       fSys[fNData/2-1-i][56].add=fSys[i][56].mult*fData[i]/100;
-          
+
+      fData[i+fNData/2]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+      fData[fNData/2-1-i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+    
     }  
   
   f1.close();
@@ -891,36 +963,44 @@ void  ATLASTOPDIFF8TEVTTMFilter::ReadData()
       lstream >> fStat[i];     //its statistical uncertainty
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
+      double shift = 0.;
+
       for(int j=0; j<fNSys-1; j++)
 	{
-	  double syst[2][fNSys];
+	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
 	  string sysdescr;
 	  
 	  ostringstream id;
 	  id << j;
-	  sysdescr = "ATLASTOPDIFF"+id.str();
+	  sysdescr = "CORR";
 	  
-	  lstream >> syst[0][j] >> syst[1][j];
+	  lstream >> sys1 >> sys2;
+	  if(sys1<0) {right=sys2; left=sys1;}
+	  else {right=sys1; left=sys2;}
+
 	  //convert to relative percentage values
-	  syst[0][j] = syst[0][j]/fData[i]*100;  
-	  syst[1][j] = syst[1][j]/fData[i]*100;
-	  symmetriseErrors(syst[0][j],syst[1][j],&stmp,&dtmp);
+	  right = right/fData[i]*100;  
+	  left  = left/fData[i]*100;
+	  symmetriseErrors(right,left,&stmp,&dtmp);
 	  
-	  if(stmp<0) stmp=-1.0*stmp;
 	  fSys[i][j].type = MULT;
 	  fSys[i][j].name = sysdescr;
 	  fSys[i][j].mult = stmp;
-	  fSys[i][j].add  = fSys[i][j].mult*fData[i]*(1.0+dtmp/100)/100;
+	  fSys[i][j].add  = fSys[i][j].mult*fData[i]/100;
+
+	  shift += dtmp;
 
 	}
 
       //overall luminosity uncertainty
       fSys[i][56].type = MULT;
-      fSys[i][56].name = "ATLASTOPDIFFLUMI";
+      fSys[i][56].name = "CORR";
       fSys[i][56].mult=2.8;
       fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
-          
+         
+      fData[i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+ 
     }  
   
   f1.close();

@@ -852,7 +852,7 @@ void ATLASWZRAP36PBFilter::ReadData()
     for (int i = 0; i < ndataWZ[iWZ]; i++)
     {
       lstream >> etamin >> etamax;
-      fKin1[idat+i] = (etamax-etamin)*0.5;
+      fKin1[idat+i] = etamin + (etamax-etamin)*0.5;
     }
 
     // M_W,Z

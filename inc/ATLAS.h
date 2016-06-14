@@ -54,13 +54,6 @@ static const dataInfoRaw ATLASZHIGHMASS49FBinfo = {
   "EWK_MLL"             //ProcType
 };
 
-static const dataInfoRaw ATLASZPT47FBinfo = {
-  26,                   //nData
-  27,                   //nSys (26 sys + 26 stat)
-  "ATLASZPT47FB",       //SetName
-  "EWK_PT"              //ProcType
-};
-
 static const dataInfoRaw ATLASWPT31PBinfo = {
   11,                   //nData
   11,                   //nSys (11 sys + 11 stat) - at the moment do not include statistics
@@ -123,14 +116,6 @@ private:
 class ATLASWPT31PBFilter: public CommonData
 { public: ATLASWPT31PBFilter():
   CommonData(ATLASWPT31PBinfo) { ReadData(); }
-
-private:
-  void ReadData();
-};
-
-class ATLASZPT47FBFilter: public CommonData
-{ public: ATLASZPT47FBFilter():
-  CommonData(ATLASZPT47FBinfo) { ReadData(); }
 
 private:
   void ReadData();
