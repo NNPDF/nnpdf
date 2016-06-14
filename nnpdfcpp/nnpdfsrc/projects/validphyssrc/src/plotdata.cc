@@ -2458,7 +2458,8 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
   real (*flvrf[])(real*) = {&fgluon,&fup,&fubar,&fdown,&fdbar,&fstrange,&fsbar};
   real (*nn30icf[])(real*) = {&fsinglet,&fgluon,&fV,&fT3,&fDelta,&fsplus,&fsminus,&fcplus,&fcminus,&fphoton};
   real (*evolicf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fV15,&fT3,&fT8,&fT15,&fphoton};
-
+  real (*nn31icf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fT3,&fT8,&fcplus,&fphoton};
+  
   real (*functions[nfl])(real*);
   const basisType setbasis = NNPDFSettings::getFitBasisType(fSettings.Get("fitting","fitbasis").as<string>());
   if (setbasis == BASIS_NN23 || setbasis == BASIS_NN23QED ||
@@ -2473,7 +2474,9 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
   else if (setbasis == BASIS_EVOLIC)
     for (int t = 0; t < nfl; t++) functions[t] = evolicf[t];
   else if (setbasis == BASIS_NN30IC)
-    for (int t = 0; t < nfl; t++) functions[t] = nn30icf[t];   
+    for (int t = 0; t < nfl; t++) functions[t] = nn30icf[t];
+  else if (setbasis == BASIS_NN31IC)
+    for (int t = 0; t < nfl; t++) functions[t] = nn31icf[t];
     
   real** theoryval = new real*[nx];
   for (int ix = 0; ix < nx; ix++)
