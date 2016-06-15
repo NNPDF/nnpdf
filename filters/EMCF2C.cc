@@ -104,7 +104,7 @@ void EMCF2CFilter::ReadData()
     fKin3[i] = y[i];
 
     //rescaling for BR - check
-    fData[i] = fData[i]/0.8;
+    fData[i] = fData[i]/0.82;
     double sist = fData[i]*0.15;
     fSys[i][0].add = sist;
     fSys[i][0].type = MULT;
