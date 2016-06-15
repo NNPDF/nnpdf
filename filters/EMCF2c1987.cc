@@ -82,7 +82,7 @@ void EMCF2c1987Filter::ReadData()
     fStat[i] = Gamma*resc*Jac*convfact*stat;
    
    //rescaling for BR - check
-    fData[i] = fData[i]/0.82;
+    fData[i] = fData[i]*0.82;
     double sist = fData[i]*0.15;
     fSys[i][0].add = sist;
     fSys[i][0].type = MULT;
