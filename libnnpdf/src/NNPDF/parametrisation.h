@@ -60,7 +60,6 @@ namespace NNPDF
    *  \class MultiLayerPerceptron
    *  \brief General MLP class
    */
-
   class MultiLayerPerceptron : public Parametrisation
   {
   public:
@@ -77,12 +76,25 @@ namespace NNPDF
     
     void InitParameters();   //!< Initialize (or reinitialize) parameters
     
-  private:
+  protected:
     const int fNLayers;   //!< Number of layers
     int* fArch;           //!< Network architecture
     
     real** fWeightMatrix;         //!< Weights/Thresholds
     mutable real** fOutputMatrix; //!< Neuron Activation
+  };
+
+  /*!
+   * \brief The MultiLayerPerceptronPreproc class
+   */
+  class MultiLayerPerceptronPreproc : public MultiLayerPerceptron
+  {
+  public:
+    MultiLayerPerceptronPreproc(std::vector<int> const& arch);         //!< Network constructor
+    MultiLayerPerceptronPreproc(MultiLayerPerceptronPreproc const&);  //!< Network copy constructor
+
+    void Compute(real*,real*) const;  //!< Returns a fArch[fNLayers-1] long array of output for a given input array
+    void InitParameters();   //!< Initialize (or reinitialize) parameters
   };
 
   /**

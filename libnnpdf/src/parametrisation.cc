@@ -309,6 +309,109 @@ real* MultiLayerPerceptron::GetNodeParams(int const& layer, int const& node)
 }
 
 
+// ******************** MLP with PREPROC **************************
+/**
+ * @brief MultiLayerPerceptronPreproc::MultiLayerPerceptronPreproc
+ * @param settings
+ * @param rg
+ */
+MultiLayerPerceptronPreproc::MultiLayerPerceptronPreproc(std::vector<int> const& arch):
+MultiLayerPerceptron(arch)
+{  
+  // clenup constructor
+  delete[] fOutputMatrix[0];
+  for (int i=1; i<fNLayers; i++)
+    delete[] fOutputMatrix[i];
+
+  delete[] fOutputMatrix;
+
+  delete[] fArch;
+  delete[] fWeightMatrix;
+  delete[] fParameters;
+
+  // reallocated objects
+  int  pSize = 0; // size of parameter array
+  int* pMap = new int[fNLayers-1]; // map for weight matrix
+
+  // Architecture information
+  fArch = new int[fNLayers];
+  for (int i=0; i<fNLayers; i++)
+  {
+    fArch[i] = arch[i];
+
+    if (i > 0)
+    {
+      pMap[i-1] = pSize; // startpoint of this layer
+      pSize+=fArch[i]*(1+fArch[i-1]); // size of this layer
+    }
+  }
+
+  // Alloc parameter array
+  fParameters = new real[pSize];
+  fNParameters = pSize;
+
+  // Alloc WeightMatrix (map for parameters)
+  fWeightMatrix = new real*[fNLayers - 1];
+
+  // Alloc activation function (output) matrix
+  fOutputMatrix = new real*[fNLayers];
+  fOutputMatrix[0] = new real[fArch[0]+1];
+
+  for (int i=1; i<fNLayers; i++)
+  {
+    // point to correct part of parameter array
+    fWeightMatrix[i-1] = &fParameters[pMap[i-1]];
+    // Alloc each activation function in the layer
+    fOutputMatrix[i]   = new real[fArch[i]+1];
+  }
+
+  //Init
+  fOutputMatrix[0][fArch[0]] =-1.0f;
+  for (int i=1; i<fNLayers; i++)
+  {
+    for (int j=0; j<fArch[i]; j++)
+      fOutputMatrix[i][j] = 1;
+
+    // Threshold term
+    fOutputMatrix[i][fArch[i]] = -1.0f;
+  }
+
+  InitParameters();
+}
+
+/**
+ * @brief MultiLayerPerceptronPreproc::MultiLayerPerceptronPreproc
+ * @param o
+ */
+MultiLayerPerceptronPreproc::MultiLayerPerceptronPreproc(MultiLayerPerceptronPreproc const& o):
+MultiLayerPerceptron(o)
+{
+}
+
+/**
+ * @brief MultiLayerPerceptronPreproc::InitParameters
+ */
+void MultiLayerPerceptronPreproc::InitParameters()
+{
+  MultiLayerPerceptron::InitParameters();
+  fParameters[fNParameters-2] = RandomGenerator::GetRNG()->GetRandomUniform(-10,2);
+  fParameters[fNParameters-1] = RandomGenerator::GetRNG()->GetRandomUniform(0,10);
+}
+
+/**
+ * @brief MultiLayerPerceptronPreproc::Compute
+ * @param in
+ * @param out
+ */
+void MultiLayerPerceptronPreproc::Compute(real* in,real* out) const
+{
+  MultiLayerPerceptron::Compute(in,out);
+
+  // apply preprocessing alpha = fNParameters-2 and beta = fNParameters-1.
+  for (int i=0; i< fArch[fNLayers-1]; i++)
+    out[i] *= pow(in[i],-fParameters[fNParameters-2])*pow(1-in[i],fParameters[fNParameters-1]);
+}
+
 // ******************** Chebyshev *********************************
 /**
  * @brief ChebyshevPolynomial::ChebyshevPolynomial
