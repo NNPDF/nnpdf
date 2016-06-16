@@ -164,8 +164,8 @@ const string filename_13_evln[] = { "pdf_xSigma", "pdf_xg", "pdf_xV",
                                "pdf_xsplus", "pdf_xDs", "pdf_xsminus",
                                "pdf_xcplus", "pdf_xcminus" };
 
-const string filename_fitlog[] = { "tl", "ertot", "chi2rep"};
-const string filename_fitlog_ref[] = { "tl_ref", "ertot_ref","chi2rep_ref"};
+const string filename_fitlog[] = { "tl", "ertot", "chi2rep", "scatter"};
+const string filename_fitlog_ref[] = { "tl_ref", "ertot_ref","chi2rep_ref", "scatter_ref"};
 
 const string order[] = {"LO", "NLO", "NNLO"};
 
@@ -2345,6 +2345,13 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
   leg->AddEntry(chi2histo1,"E_{tr}","f");
   leg->AddEntry(chi2histo2,"E_{val}","f");
 
+  TGraph *scatter = new TGraph(nrep);
+  TGraph *scatteravg = new TGraph(1);
+  scatter->SetMarkerStyle(20);
+  scatter->SetTitle(TString("Scatter plot for " + title[i]));
+  scatteravg->SetMarkerStyle(21);
+  scatteravg->SetMarkerColor(kRed);
+
   for (int n = 0; n < nrep; n++)
   {
     if (i == 0)
@@ -2352,14 +2359,21 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
       tlhisto->Fill(fTL[n], 1.0/nrep);
       chi2histo1->Fill(fERTR[n], 1.0/nrep);
       chi2histo2->Fill(fERVAL[n], 1.0/nrep);
+      scatter->SetPoint(n, fERTR[n],fERVAL[n]);
     }
     else
     {
       tlhisto->Fill(fTLRef[n], 1.0/nrep);
       chi2histo1->Fill(fERTRRef[n], 1.0/nrep);
       chi2histo2->Fill(fERVALRef[n], 1.0/nrep);
+      scatter->SetPoint(n, fERTRRef[n],fERVALRef[n]);
     }      
   }
+
+  if (i == 0)
+    scatteravg->SetPoint(0, ComputeAVG(fERTR), ComputeAVG(fERVAL));
+  else
+    scatteravg->SetPoint(0, ComputeAVG(fERTRRef), ComputeAVG(fERVALRef));
   
   // Draw tl histogram
   tl->cd();
@@ -2374,6 +2388,14 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
   chi2histo1->Draw("HIST");
   chi2histo2->Draw("HIST same");
   leg->Draw("same");
+
+  TCanvas *cscatter = new TCanvas("scatter", "scatter");
+  scatter->Draw("ap");
+  scatteravg->Draw("p,same");
+  scatter->GetXaxis()->SetTitle("E_{tr}");
+  scatter->GetXaxis()->CenterTitle(true);
+  scatter->GetYaxis()->SetTitle("E_{val}");
+  scatter->GetYaxis()->CenterTitle(true);
 
   // Save plots to file
   stringstream tlfileout("");
@@ -2405,12 +2427,28 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
     chi2histo1fileout2 << fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << filename_fitlog_ref[1] << ".root";
   cchi2histo1->SaveAs(chi2histo1fileout2.str().c_str());
 
+  stringstream scatterfileout("");
+  if (i == 0)
+    scatterfileout << fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << filename_fitlog[3] << ".eps";
+  else
+    scatterfileout << fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << filename_fitlog_ref[3] << ".eps";
+  cscatter->SaveAs(scatterfileout.str().c_str());
+
+  stringstream scatterfileout2("");
+  if (i == 0)
+    scatterfileout2 << fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << filename_fitlog[3] << ".root";
+  else
+    scatterfileout2 << fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << filename_fitlog_ref[3] << ".root";
+  cscatter->SaveAs(scatterfileout2.str().c_str());
+
   delete tlhisto;
   delete tl;
 
   delete chi2histo1;
   delete chi2histo2;
   delete cchi2histo1;
+  delete scatter;
+  delete cscatter;
 }
 
 /**
@@ -2458,7 +2496,8 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
   real (*flvrf[])(real*) = {&fgluon,&fup,&fubar,&fdown,&fdbar,&fstrange,&fsbar};
   real (*nn30icf[])(real*) = {&fsinglet,&fgluon,&fV,&fT3,&fDelta,&fsplus,&fsminus,&fcplus,&fcminus,&fphoton};
   real (*evolicf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fV15,&fT3,&fT8,&fT15,&fphoton};
-
+  real (*nn31icf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fT3,&fT8,&fcplus,&fphoton};
+  
   real (*functions[nfl])(real*);
   const basisType setbasis = NNPDFSettings::getFitBasisType(fSettings.Get("fitting","fitbasis").as<string>());
   if (setbasis == BASIS_NN23 || setbasis == BASIS_NN23QED ||
@@ -2473,7 +2512,9 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
   else if (setbasis == BASIS_EVOLIC)
     for (int t = 0; t < nfl; t++) functions[t] = evolicf[t];
   else if (setbasis == BASIS_NN30IC)
-    for (int t = 0; t < nfl; t++) functions[t] = nn30icf[t];   
+    for (int t = 0; t < nfl; t++) functions[t] = nn30icf[t];
+  else if (setbasis == BASIS_NN31IC)
+    for (int t = 0; t < nfl; t++) functions[t] = nn31icf[t];
     
   real** theoryval = new real*[nx];
   for (int ix = 0; ix < nx; ix++)
@@ -3638,6 +3679,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
   f << "\\begin{figure}[H]" << endl;
   f << "\\begin{centering}" << endl;
   f << "\\includegraphics[scale=0.70]{plots/chi2_histo_datasets}" << endl;
+  f << "\\includegraphics[scale=0.32]{plots/scatter}\\includegraphics[scale=0.32]{plots/scatter_ref}" << endl;
   f << "\\par\\end{centering}" << endl;
   f << "\\caption{Total $\\chi^{2}$ for each dataset.}" << endl;
   f << "\\end{figure}" << endl;
