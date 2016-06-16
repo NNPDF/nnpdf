@@ -27,8 +27,7 @@ log = logging.getLogger(__name__)
 def format_rich_error(e):
     with contextlib.redirect_stdout(sys.stderr):
         log.error("Bad configuration encountered:")
-        print(str(e.args[0]))
-        print(e.alternatives_text())
+        print(e)
 
 
 def main():
