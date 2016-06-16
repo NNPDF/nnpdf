@@ -78,13 +78,13 @@ def reweighting_stats(pdf, nnpdf_weights, p_alpha_study):
                           (r'N_{initial}', initial_replicas),
                           (r'$N_{eff}$', er),
                           (r'median($w$)', median),
-                          (r'$max_{[0.5,2]}P(\alpha)$', max_alpha)
+                          (r'$max_{[0.5,4]}P(\alpha)$', max_alpha)
                          ])
 
     return pd.Series(result, index=result.keys())
 
 def p_alpha_study(chi2_data_for_reweighting_experiments):
-    alphas = np.exp(np.linspace(np.log(0.5), np.log(2),31))
+    alphas = np.exp(np.linspace(np.log(0.5), np.log(4),31))
     vals = []
     for alpha in alphas:
         new_chi2 = [((type(res)(res.data/alpha)), central, ndata)
