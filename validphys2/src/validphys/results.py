@@ -290,7 +290,7 @@ def experiment_chi2_table(experiments, pdf):
 
 
 
-def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))):
+def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None):
     """Tuple of data and theory results for a single pdf.
     The theory is specified as part of the dataset
     (as a result of the C++ code layout)."""
@@ -341,22 +341,64 @@ def one_or_more_results(dataset:DataSetSpec, pdfs:list=None, pdf:PDF=None,
     raise ValueError("Either 'pdf' or 'pdfs' is required")
 
 
-
-def abs_chi2_data(results):
+def all_chi2(results):
     data_result, th_result = results
     diffs = th_result._rawdata.T - data_result.central_value
     #chi²_i = diff_ij @ invcov_jk @ diff_ki
-    result =  np.einsum('ij, jk, ik -> i',
+    chi2s =  np.einsum('ij, jk, ik -> i',
                      diffs, data_result.invcovmat, diffs)
+    return chi2s
 
+
+def abs_chi2_data(results):
+    data_result, th_result = results
+    chi2s = all_chi2(results)
 
     central_diff = th_result.central_value - data_result.central_value
-
     central_result = (central_diff@data_result.invcovmat@central_diff)
 
+    return (th_result.stats_class(chi2s[:, np.newaxis]), central_result, len(data_result))
 
-    return (th_result.stats_class(result[:, np.newaxis]), central_result, len(data_result))
+def chs_per_replica(chs):
+    th, _, l = chs
+    return th.data.ravel()/l
 
+
+@table
+def correlate_bad_experiments(experiments, replica_data, pdf):
+    datasets = [ds for exp in experiments for ds in exp.datasets]
+    mchi2 = [0.5*(val.training + val.validation) for val in replica_data]
+
+    chs = [chs_per_replica(abs_chi2_data(results(ds, pdf))) for ds in datasets]
+    worst_indexes = np.argmax(chs, axis=0)
+    mchi2 = np.mean(chs, axis=0)
+    print(worst_indexes)
+    worst_values = np.max(chs, axis=0)
+    worst_ds = [datasets[i].name for i in worst_indexes]
+    v = np.array([mchi2, worst_ds, worst_values])
+    print(v)
+    df = pd.DataFrame(v.T,
+                      index=np.arange(1, len(pdf)),
+                      columns=["Replica_mean_chi2", "Worst_dataset",
+                      "Worst_dataset_chi2"])
+    df.sort_values(df.columns[0], inplace=True, ascending=False)
+    return df
+
+#TODO: Compute results
+@table
+def perreplica_chi2_table(experiments, pdf):
+
+    chs = [abs_chi2_data(results(exp, pdf)) for exp in experiments]
+
+    total_chis = np.zeros(len(pdf))
+    total_l = 0
+    for ch in chs:
+        th, central, l = ch
+        total_chis += [central, *th.data]
+        total_l += l
+    total_chis/=total_l
+
+    return pd.DataFrame(total_chis)
 
 
 chi2_stat_labels = {
