@@ -44,28 +44,28 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
                 if (set.GetProc(idat).compare(0,3, string("JET")) == 0)
                 {
 
-                  if (set.GetSetName().compare(string("CDFR2KT")) == 0)
+                  if (set.GetSetName().compare(string("CDFR2KT")) <= 0)
                   {
                     if ( (idat > 49 && idat < 60) || idat > 61 || y > maxCDFy)
                       return false;
                     return true;
                   }
 
-                  if (set.GetSetName().compare(string("ATLASR04JETS2P76TEV")) == 0)
+                  if (set.GetSetName().compare(string("ATLASR04JETS2P76TEV")) <= 0)
                   {
                     if (idat < 8 || idat > 10 || y > maxATLAS2y)
                       return false;
                     return true;
                   }
 
-                  if (set.GetSetName().compare(string("ATLASR04JETS36PB")) == 0)
+                  if (set.GetSetName().compare(string("ATLASR04JETS36PB")) <= 0)
                   {
                     if (idat < 10 || (idat > 15 && idat < 29) || y > maxATLAS7y)
                       return false;
                     return true; // avoid other cuts
                   }
 
-                  if(set.GetSetName().compare(string("ATLASR06JETS36PB")) == 0)
+                  if(set.GetSetName().compare(string("ATLASR06JETS36PB")) <= 0)
                   {
                     if (idat < 5 || (idat > 15 && idat < 21) ||
                     (idat > 31 && idat < 39) || idat > 47)
@@ -73,7 +73,7 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
                     return true; // avoid other cuts
                   }
 
-                  if (set.GetSetName().compare(string("CMSJETS11")) == 0)
+                  if (set.GetSetName().compare(string("CMSJETS11")) <= 0)
                   {
                     if ((idat > 62 && idat < 70) || y > maxCMSy)
                       return false;
@@ -168,13 +168,13 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
         set.GetSetName().compare(string("D0R2CON")) == 0 )
       return ( pT > settings.Get("datacuts","jetptcut_tev").as<double>() && y < settings.Get("datacuts","jetycut_tev").as<double>());
 
-    if (set.GetSetName().compare(string("ATLASR04JETS2P76TEV")) == 0 ||
-        set.GetSetName().compare(string("ATLASR06JETS2P76TEV")) == 0 ||
-        set.GetSetName().compare(string("ATLASR04JETS36PB")) == 0 ||
-        set.GetSetName().compare(string("ATLASR06JETS36PB")) == 0 ||
-        set.GetSetName().compare(string("CMSJETS11")) == 0 ||
-        set.GetSetName().compare(string("ATLAS1JET11")) == 0 ||
-        set.GetSetName().compare(string("CMS1JET276TEV")) == 0)
+    if (set.GetSetName().compare(string("ATLASR04JETS2P76TEV")) <= 0 ||
+        set.GetSetName().compare(string("ATLASR06JETS2P76TEV")) <= 0 ||
+        set.GetSetName().compare(string("ATLASR04JETS36PB")) <= 0 ||
+        set.GetSetName().compare(string("ATLASR06JETS36PB")) <= 0 ||
+        set.GetSetName().compare(string("CMSJETS11")) <= 0 ||
+        set.GetSetName().compare(string("ATLAS1JET11")) <= 0 ||
+        set.GetSetName().compare(string("CMS1JET276TEV")) <= 0)
       return ( pT > settings.Get("datacuts","jetptcut_lhc").as<double>() && y < settings.Get("datacuts","jetycut_lhc").as<double>());
 
     cerr << Colour::FG_RED << "filter passKinCuts Error: Jet experiment "<<set.GetSetName()<<" does not have it's pT/y cuts specified in passKinCuts."<<endl;
