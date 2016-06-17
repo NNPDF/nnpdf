@@ -93,6 +93,8 @@ namespace NNPDF
     MultiLayerPerceptronPreproc(std::vector<int> const& arch);         //!< Network constructor
     MultiLayerPerceptronPreproc(MultiLayerPerceptronPreproc const&);  //!< Network copy constructor
 
+    Parametrisation *Duplicate();
+
     void Compute(real*,real*) const;  //!< Returns a fArch[fNLayers-1] long array of output for a given input array
     void InitParameters();   //!< Initialize (or reinitialize) parameters
   };

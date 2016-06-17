@@ -114,7 +114,7 @@ fNLayers(arch.size()),
 fArch(0),
 fWeightMatrix(0),
 fOutputMatrix(0)
-{  
+{
   int  pSize = 0; // size of parameter array
   int* pMap = new int[fNLayers-1]; // map for weight matrix
   
@@ -317,7 +317,7 @@ real* MultiLayerPerceptron::GetNodeParams(int const& layer, int const& node)
  */
 MultiLayerPerceptronPreproc::MultiLayerPerceptronPreproc(std::vector<int> const& arch):
 MultiLayerPerceptron(arch)
-{  
+{
   // clenup constructor
   delete[] fOutputMatrix[0];
   for (int i=1; i<fNLayers; i++)
@@ -345,6 +345,7 @@ MultiLayerPerceptron(arch)
       pSize+=fArch[i]*(1+fArch[i-1]); // size of this layer
     }
   }
+  pSize += 2; // alpha+beta
 
   // Alloc parameter array
   fParameters = new real[pSize];
@@ -399,6 +400,16 @@ void MultiLayerPerceptronPreproc::InitParameters()
 }
 
 /**
+ * @brief MultiLayerPerceptron::Duplicate
+ * @return
+ */
+Parametrisation* MultiLayerPerceptronPreproc::Duplicate()
+{
+  return new MultiLayerPerceptronPreproc(*this);
+}
+
+
+/**
  * @brief MultiLayerPerceptronPreproc::Compute
  * @param in
  * @param out
@@ -406,7 +417,7 @@ void MultiLayerPerceptronPreproc::InitParameters()
 void MultiLayerPerceptronPreproc::Compute(real* in,real* out) const
 {
   MultiLayerPerceptron::Compute(in,out);
-
+  
   // apply preprocessing alpha = fNParameters-2 and beta = fNParameters-1.
   for (int i=0; i< fArch[fNLayers-1]; i++)
     out[i] *= pow(in[i],-fParameters[fNParameters-2])*pow(1-in[i],fParameters[fNParameters-1]);
