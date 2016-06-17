@@ -87,7 +87,7 @@ public:
   virtual ~NGAMinimizer();
   
 protected:
-   void Mutation(FitPDFSet*, int const& nmut);
+   virtual void Mutation(FitPDFSet*, int const& nmut);
 }; 
 
 /*!
@@ -100,4 +100,10 @@ public:
 
 protected:
    void Mutation(FitPDFSet*, int const& nmut);
+
+private:
+   vector<real> falphamin;
+   vector<real> falphamax;
+   vector<real> fbetamin;
+   vector<real> fbetamax;
 };

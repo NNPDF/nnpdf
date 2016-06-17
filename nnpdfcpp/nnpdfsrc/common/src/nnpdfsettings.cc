@@ -17,7 +17,7 @@
 #include "svn.h"
 
 // Strings for config file output
-static const string minString[6]   = {"UNDEFINED", "GA", "NGA"};
+static const string minString[6]   = {"UNDEFINED", "GA", "NGA","NGAP"};
 static const string stopString[6]  = {"UNDEFINED", "FIXEDLENGTH", "TR", "GRAD", "VAR", "LOOKBACK"};
 static const string paramString[4] = {"UNDEFINED", "NN", "CHEBYSHEV", "QUADNN"};
 static const string basisString[14]= {"UNDEFINED", "NN23", "NN23QED","EVOL", "EVOLQED","EVOLS",
@@ -45,11 +45,13 @@ minType NNPDFSettings::getFitMethod(string const& method)
 {
   if (method.compare("GA") == 0)      return MIN_GA;
   if (method.compare("NGA") == 0)     return MIN_NGA;
-  
+  if (method.compare("NGAP") == 0)     return MIN_NGAP;
+
   cerr << "getFitMethod Error: Invalid fit method: "<<method<<endl;
   cerr << "choices are: "<<endl;
   cerr <<" - GA (Basic GA)"<<endl;
   cerr <<" - NGA"<<endl;
+  cerr <<" - NGAP"<<endl;
   exit(-1);
   
   return MIN_UNDEF;
