@@ -303,3 +303,90 @@ void NGAMinimizer::Mutation(FitPDFSet* pdf, int const& nmut)
 
   return;
 }
+
+
+/*!
+ * \brief NGAMinimizer::NGAMinimizer
+ * \param settings
+ */
+NGAPMinimizer::NGAPMinimizer(NNPDFSettings const& settings):
+  NGAMinimizer(settings),
+  falphamin(0),
+  falphamax(0),
+  fbetamin(0),
+  fbetamax(0)
+{
+  for (int i = 0; i < settings.GetNFL(); i++)
+    {
+      falphamin.push_back(settings.Get("fitting","basis")[i]["smallx"][0].as<real>());
+      falphamax.push_back(settings.Get("fitting","basis")[i]["smallx"][1].as<real>());
+      fbetamin.push_back(settings.Get("fitting","basis")[i]["largex"][0].as<real>());
+      fbetamax.push_back(settings.Get("fitting","basis")[i]["largex"][1].as<real>());
+    }
+}
+
+/**
+ * @brief The mutation algorithm implementation
+ * @param pdf the input PDF
+ */
+void NGAPMinimizer::Mutation(FitPDFSet* pdf, int const& nmut)
+{
+  vector<Parametrisation**>& pdfs = pdf->GetPDFs();
+  RandomGenerator* rg = RandomGenerator::GetRNG();
+  // Set number of members
+  pdf->SetNMembers(nmut);
+
+  // Copy best fit parameters
+  for (int i=0; i<nmut; i++)
+    for (int j=0; j<fSettings.GetNFL(); j++)
+      pdfs[i][j]->CopyPars(pdf->GetBestFit()[j]);
+
+  // Mutate copies
+  const int Nlayers = (int) fSettings.GetArch().size();
+  vector<int> Nnodes = fSettings.GetArch();
+
+  const int NIte = pdf->GetNIte() + 1; // +1 to avoid on iteration 0 div by 0 error
+  for (int i=0; i<nmut; i++)
+    for (int j=0; j<fSettings.GetNFL(); j++)
+    {
+      const real ex    =  rg->GetRandomUniform();
+      for (int n=0; n< (int) fSettings.GetFlMutProp(j).mutsize.size(); n++)
+      {
+        int index = 0;
+        for (int m=1; m<Nlayers; m++)
+          for (int l=0; l< Nnodes[m]; l++)
+          {
+            const real sz    = fSettings.GetFlMutProp(j).mutsize[n];
+            if (rg->GetRandomUniform() < fSettings.GetFlMutProp(j).mutprob[n]) // mutation probability
+              for (int k=0; k< pdfs[i][j]->GetNumNodeParams(m); k++)
+                pdfs[i][j]->GetParameters()[index+k]+=sz*rg->GetRandomUniform(-1,1)/pow(NIte,ex);
+            index+= pdfs[i][j]->GetNumNodeParams(m);
+
+            // mutate alpha
+            if (rg->GetRandomUniform() < fSettings.GetFlMutProp(j).mutprob[n])
+              {
+                real alpha = pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-2] + sz*rg->GetRandomUniform(-1,1)/pow(NIte,ex);
+                if (alpha < falphamin[j] || alpha > falphamax[j])
+                  pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-2] = rg->GetRandomUniform(falphamin[j],falphamax[j]);
+                else
+                  pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-2] = alpha;
+              }
+
+            // mutate beta
+            if (rg->GetRandomUniform() < fSettings.GetFlMutProp(j).mutprob[n])
+              {
+                real beta = pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-1] + sz*rg->GetRandomUniform(-1,1)/pow(NIte,ex);
+                if (beta < fbetamin[j] || beta > fbetamax[j])
+                  pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-1] = rg->GetRandomUniform(fbetamin[j],fbetamax[j]);
+                else
+                  pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-1] = beta;
+              }
+          }
+      }
+    }
+
+  // Compute Preprocessing
+  pdf->ComputeSumRules();
+
+  return;
+}
