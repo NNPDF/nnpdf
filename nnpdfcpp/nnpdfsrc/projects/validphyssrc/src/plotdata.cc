@@ -2288,6 +2288,59 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
         }
         
       }
+
+
+      // if NNP extract alpha and beta from params file
+      if (NNPDFSettings::getParamType( (i==0) ? fSettings.Get("fitting","paramtype").as<string>() :
+                                       fSettingsRef.Get("fitting","paramtype").as<string>() ) == PARAM_NNP)
+        {
+          fstream pp;
+          stringstream paramtmp("");
+          if (i == 0)
+            paramtmp << pathchi2 << "replica_" << n << "/" << fSettings.GetPDFName() << ".params";
+          else
+            paramtmp << pathchi2 << "replica_" << n << "/" << fSettingsRef.GetPDFName() << ".params";
+          pp.open(sumruletmp.str().c_str(), ios::in);
+
+
+          int fnparam = 0;
+          if (i == 0)
+            for (int l = 1; l < fSettings.GetArch().size(); l++)
+              fnparam += fSettings.GetArch()[l]*(1+fSettings.GetArch()[l-1]);
+          else
+            for (int l = 1; l < fSettingsRef.GetArch().size(); l++)
+              fnparam += fSettingsRef.GetArch()[l]*(1+fSettingsRef.GetArch()[l-1]);
+
+          double alpha, beta;
+          string tmp;
+          for (int fl = 0; fl < nfl; fl++)
+            {
+              getline(g, tmp);
+              for (int pr = 0; pr < fnparam; pr++)
+                {
+                  getline(g, tmp);
+                  if (pr == fnparam-2) alpha = std::stod(tmp);
+                  if (pr == fnparam-1) beta = std::stod(tmp);
+                }
+
+              if (i == 0)
+                {
+                  fAlphaExp[fl][n-1] = alpha;
+                  fAlphaExp[fl][n-1] = alpha;
+                  fBetaExp[fl][n-1] = beta;
+                  fBetaExp[fl][n-1] = beta;
+                }
+              else
+                {
+                  fAlphaExpRef[fl][n-1] = alpha;
+                  fAlphaExpRef[fl][n-1] = alpha;
+                  fBetaExpRef[fl][n-1] = beta;
+                  fBetaExpRef[fl][n-1] = beta;
+                }
+            }
+
+          pp.close();
+        }
       
       
       p.close();
