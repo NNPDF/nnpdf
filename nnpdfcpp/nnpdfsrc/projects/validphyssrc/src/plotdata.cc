@@ -2300,7 +2300,7 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
             paramtmp << pathchi2 << "replica_" << n << "/" << fSettings.GetPDFName() << ".params";
           else
             paramtmp << pathchi2 << "replica_" << n << "/" << fSettingsRef.GetPDFName() << ".params";
-          pp.open(sumruletmp.str().c_str(), ios::in);
+          pp.open(paramtmp.str().c_str(), ios::in);
 
 
           int fnparam = 0;
