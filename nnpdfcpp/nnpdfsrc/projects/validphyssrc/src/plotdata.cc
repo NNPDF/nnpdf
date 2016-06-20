@@ -2317,10 +2317,10 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
           string tmp;
           for (int fl = 0; fl < nfl; fl++)
             {
-              getline(g, tmp);
+              getline(pp, tmp);
               for (int pr = 0; pr < fnparam; pr++)
                 {
-                  getline(g, tmp);
+                  getline(pp, tmp);
                   if (pr == fnparam-2) alpha = std::stod(tmp);
                   if (pr == fnparam-1) beta = std::stod(tmp);
                 }
