@@ -2311,6 +2311,8 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
             for (int l = 1; l < fSettingsRef.GetArch().size(); l++)
               fnparam += fSettingsRef.GetArch()[l]*(1+fSettingsRef.GetArch()[l-1]);
 
+          fnparam+=2;
+
           double alpha, beta;
           string tmp;
           for (int fl = 0; fl < nfl; fl++)
