@@ -30,6 +30,9 @@ NNdiff::NNdiff(NNPDFSettings const& set, std::string const& path,
   for (int l = 1; l < arch.size(); l++)
     fnparam += arch[l]*(1+arch[l-1]);
 
+  if (NNPDFSettings::getParamType(set.Get("fitting","paramtype").as<string>()) == PARAM_NNP)
+    fnparam+=2;
+
   // preparing objects
   fstream f, g;
   string tmp;
@@ -69,7 +72,12 @@ NNdiff::NNdiff(NNPDFSettings const& set, std::string const& path,
           for (int pr = 0; pr < fnparam; pr++)
             {
               getline(g, tmp);
-              fp[n][fl][pr] = stod(tmp);
+              fp[n][fl][pr] = stod(tmp);	      
+	      if (NNPDFSettings::getParamType(set.Get("fitting","paramtype").as<string>()) == PARAM_NNP)
+		{
+		  if (pr == fnparam-2) falpha[n][fl] = fp[n][fl][pr];
+		  if (pr == fnparam-1) fbeta[n][fl] = fp[n][fl][pr];
+		}	     
             }
         }
 
