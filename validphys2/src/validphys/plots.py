@@ -144,7 +144,7 @@ def plot_fancy(one_or_more_results, dataset,
                     sameline_vals = (sameline_vals, )
 
                 nres = len(results)
-                first_offset = -nres//2
+                first_offset = +(nres//2)
 
                 if info.x == 'idat':
                     x = np.array(line_data.index)
@@ -155,9 +155,13 @@ def plot_fancy(one_or_more_results, dataset,
                     x = np.asanyarray(x, np.float)
                 except ValueError:
                     xticklabels = x
-                    x = np.arange(len(x))
+                    npoints = len(x)
+                    x = np.arange(npoints)
                     ax.set_xticks(x)
                     ax.set_xticklabels(xticklabels)
+                    #TODO: Remove this when mpl stops doing the idiotic thing
+                    #(in v2?)
+                    ax.set_xlim(-npoints/20, npoints - 1+ npoints/20)
 
 
                 #Use black for the first iteration (data),
