@@ -15,6 +15,7 @@ src/NNPDF/stamp-h1
 Makefile.in
 aclocal.m4
 bin/Makefile.in
+configure
 wrapper/Makefile.in
 
 # Compiled Object files

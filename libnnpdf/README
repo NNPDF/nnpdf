@@ -3,6 +3,10 @@ libnnpdf 1.0.1b
 
 Libary for core NNPDF utilities.
 
+To generate the configure files, run
+
+./autogen.sh
+
 Possible configurations:
 
 ./configure -> [simd=on, openmp=off]
@@ -15,9 +19,3 @@ Activate python wrapper:
 ./configure --enable-pywrap
 
 install the libnnpdf and then make wrapper
-
-If you have troubles with automake tools, please run
-
-	autoreconf -i
-
-and configure the again.
