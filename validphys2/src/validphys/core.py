@@ -297,6 +297,9 @@ class Stats:
     def central_value(self):
         raise NotImplementedError()
 
+    def error_members(self):
+        raise NotImplementedError()
+
     def std(self):
         raise NotImplementedError()
 
@@ -324,6 +327,9 @@ class MCStats(Stats):
     def sample_values(self, size):
         return np.random.choice(self, size=size)
 
+    def error_members(self):
+        return self.data
+
 
 class SymmHessianStats(Stats):
     """Compute stats in the 'assymetric' hessian format: The first index (0)
@@ -337,6 +343,9 @@ class SymmHessianStats(Stats):
 
     def central_value(self):
         return self.data[0]
+
+    def error_members(self):
+        return self.data[1:]
 
     def std_error(self):
         data = self.data

@@ -394,7 +394,7 @@ def perreplica_chi2_table(experiments, pdf):
     total_l = 0
     for ch in chs:
         th, central, l = ch
-        total_chis += [central, *th.data]
+        total_chis += [central, *th.error_members()]
         total_l += l
     total_chis/=total_l
 
