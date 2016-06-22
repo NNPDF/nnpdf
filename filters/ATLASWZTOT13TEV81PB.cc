@@ -12,6 +12,9 @@
 
 using namespace std;
 
+//Convert from nb to fb
+const auto unit_conversion_factor = 1e6;
+
 const char comment = '#';
 const char delimiter = '\t';
 
@@ -59,7 +62,7 @@ void ATLASWZTOT13TEV81PBFilter::ReadData()
      for (auto & key : keys){
        auto & values = result.at(key);
        getline(iss, token, delimiter);
-       values.push_back(stod(token));
+       values.push_back(stod(token)*unit_conversion_factor);
 
      }
   }

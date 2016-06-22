@@ -5,5 +5,7 @@ reference_url: http://arxiv.org/pdf/1603.09222v1.pdf
 
 description: W and Z Total cross sections at 13 TeV measured by ATLAS with 81pb.
 
+output_units: fb
+
 implementation_details: ...
 
