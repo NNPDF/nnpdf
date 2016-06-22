@@ -76,7 +76,7 @@ class ThPredictionsResult(Result):
         th = dataset.thspec
         if hasattr(pdf,'label'):
             if hasattr(th, 'label'):
-                label = ' '.join((pdf.label, dataset.label))
+                label = ' '.join((pdf.label, th.label))
             else:
                 label = pdf.label
         elif hasattr(th, 'label'):
