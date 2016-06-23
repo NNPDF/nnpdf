@@ -107,7 +107,7 @@ def main():
             plt.style.use(args.style)
         except Exception as e:
             log.error("There was a problem reading the supplied style: %s" %e,
-                  file=sys.stderr)
+                 )
             sys.exit(1)
     else:
         plt.style.use(str(environment.this_folder / 'small.mplstyle'))
