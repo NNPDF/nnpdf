@@ -4,12 +4,18 @@
 
 use_cuts: False
 actions_:
-    theory:
+ - theory:
+     normalization:
         experiments:
             experiment:
               - plot_fancy
 
 pdf: NNPDF3_IC_nlo_as_0118_mcpole_1470
+
+normalization:
+    - normalize_to: data
+    - normalize_to: NNPDF3_IC_nlo_as_0118_mcpole_1470
+    - normalize_to: Null
 
 ############################################################
 description: NLO fit with IC, Pole masses, mc=1.47 GeV, TheoryID=45, second ite of t0 and preproc
