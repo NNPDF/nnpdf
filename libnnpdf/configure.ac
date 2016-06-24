@@ -4,6 +4,7 @@
 AC_PREREQ([2.63])
 AC_INIT(libnnpdf, 1.1.0b, nathan.hartland@physics.ox.ac.uk)
 AC_CONFIG_MACRO_DIR([m4])
+AM_MAINTAINER_MODE
 
 LT_INIT()
 
