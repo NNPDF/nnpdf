@@ -421,20 +421,30 @@ void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
 	{
 	  for(int j=0; j<fNData/2; j++)
 	    {
-	      fSys[i+fNData/2][j].add  = syscor[i][j]/sqrt(2.0);
-	      fSys[i+fNData/2][j].mult = fSys[i][j].add*100/fData[i+fNData/2];
-	      fSys[i+fNData/2][j].type = ADD;
-	      fSys[i+fNData/2][j].name = "CORR";
+	      fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[i+fNData/2][fNData/2-1-j].mult = fSys[i+fNData/2][fNData/2-1-j].add*100/fData[i+fNData/2];
+	      fSys[i+fNData/2][fNData/2-1-j].type = ADD;
+	      fSys[i+fNData/2][fNData/2-1-j].name = "CORR";
+
+	      fSys[i+fNData/2][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[i+fNData/2][j+fNData/2].mult = fSys[i+fNData/2][j+fNData/2].add*100/fData[i+fNData/2];
+	      fSys[i+fNData/2][j+fNData/2].type = ADD;
+	      fSys[i+fNData/2][j+fNData/2].name = "CORR";
 	      
-	      fSys[fNData/2-1-i][j].add  = syscor[i][j]/sqrt(2.0);
-	      fSys[fNData/2-1-i][j].mult = fSys[i][j].add*100/fData[fNData/2-1-i];
-	      fSys[fNData/2-1-i][j].type = ADD;
-	      fSys[fNData/2-1-i][j].name = "CORR";
+	      fSys[fNData/2-1-i][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[fNData/2-1-i][fNData/2-1-j].mult = fSys[fNData/2-1-i][fNData/2-1-j].add*100/fData[fNData/2-1-i];
+	      fSys[fNData/2-1-i][fNData/2-1-j].type = ADD;
+	      fSys[fNData/2-1-i][fNData/2-1-j].name = "CORR";
+
+	      fSys[fNData/2-1-i][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[fNData/2-1-i][j+fNData/2].mult = fSys[fNData/2-1-i][j+fNData/2].add*100/fData[fNData/2-1-i];
+	      fSys[fNData/2-1-i][j+fNData/2].type = ADD;
+	      fSys[fNData/2-1-i][j+fNData/2].name = "CORR";
 	    }
 	}  
 
       //Real systematics
-      for(int j=fNData/2; j<fNSys; j++)
+      for(int j=fNData; j<fNSys; j++)
 	{
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
@@ -568,24 +578,35 @@ void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
       
       double shift = 0.;
 
-      //Artificial systematics
+     //Artificial systematics
       for(int i=0; i<fNData/2; i++)
 	{
 	  for(int j=0; j<fNData/2; j++)
 	    {
-	      fSys[i+fNData/2][j].add  = syscor[i][j]/sqrt(2.0);
-	      fSys[i+fNData/2][j].mult = fSys[i][j].add*100/fData[i+fNData/2];
-	      fSys[i+fNData/2][j].type = ADD;
-	      fSys[i+fNData/2][j].name = "CORR";	      
-	      fSys[fNData/2-1-i][j].add  = syscor[i][j]/sqrt(2.0);
-	      fSys[fNData/2-1-i][j].mult = fSys[i][j].add*100/fData[fNData/2-1-j];
-	      fSys[fNData/2-1-i][j].type = ADD;
-	      fSys[fNData/2-1-i][j].name = "CORR";	     
+	      fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[i+fNData/2][fNData/2-1-j].mult = fSys[i+fNData/2][fNData/2-1-j].add*100/fData[i+fNData/2];
+	      fSys[i+fNData/2][fNData/2-1-j].type = ADD;
+	      fSys[i+fNData/2][fNData/2-1-j].name = "CORR";
+
+	      fSys[i+fNData/2][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[i+fNData/2][j+fNData/2].mult = fSys[i+fNData/2][j+fNData/2].add*100/fData[i+fNData/2];
+	      fSys[i+fNData/2][j+fNData/2].type = ADD;
+	      fSys[i+fNData/2][j+fNData/2].name = "CORR";
+	      
+	      fSys[fNData/2-1-i][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[fNData/2-1-i][fNData/2-1-j].mult = fSys[fNData/2-1-i][fNData/2-1-j].add*100/fData[fNData/2-1-i];
+	      fSys[fNData/2-1-i][fNData/2-1-j].type = ADD;
+	      fSys[fNData/2-1-i][fNData/2-1-j].name = "CORR";
+
+	      fSys[fNData/2-1-i][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[fNData/2-1-i][j+fNData/2].mult = fSys[fNData/2-1-i][j+fNData/2].add*100/fData[fNData/2-1-i];
+	      fSys[fNData/2-1-i][j+fNData/2].type = ADD;
+	      fSys[fNData/2-1-i][j+fNData/2].name = "CORR";
 	    }
-	}
-      
+	}  
+
       //Real systematics
-      for(int j=fNData/2; j<fNSys; j++)
+      for(int j=fNData; j<fNSys; j++)
 	{
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
@@ -595,9 +616,10 @@ void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 	  id << j;
 	  sysdescr = "CORR";
 	  
-	  lstream >> sys1 >> sys2;
+	  lstream >> sys1 >> sys2; 
 	  if(sys1<0) {right=sys2; left=sys1;}
 	  else {right=sys1; left=sys2;}
+
 	  //convert to relative percentage values
 	  right = right/datum*100;  
 	  left = left/datum*100;
@@ -617,8 +639,8 @@ void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 
 	}
           
-      fData[i+fNData/2]*=(1.0 + shift*0.01);   //Shift from asymmetric errors
-      fData[fNData/2-1-i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+       fData[i+fNData/2]*=(1.0 + shift*0.01);   //Shift from asymmetric errors
+       fData[fNData/2-1-i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
 
     }  
   
@@ -720,7 +742,7 @@ void  ATLASTOPDIFF8TEVTTMNORMFilter::ReadData()
 	}  
 
       //Real systematics
-      for(int j=0; j<fNSys; j++)
+      for(int j=fNData; j<fNSys; j++)
 	{
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
@@ -854,7 +876,7 @@ void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
 	}  
       
       //Real systematics
-      for(int j=0; j<fNSys-1; j++)
+      for(int j=fNData; j<fNSys-1; j++)
 	{
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
@@ -882,10 +904,10 @@ void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
 	}
 
       //Overall luminosity uncertainty
-      fSys[i][63].type = MULT;
-      fSys[i][63].name = "CORR";
-      fSys[i][63].mult=2.8;
-      fSys[i][63].add=fSys[i][56].mult*fData[i]/100;
+      fSys[i][64].type = MULT;
+      fSys[i][64].name = "CORR";
+      fSys[i][64].mult=2.8;
+      fSys[i][64].add=fSys[i][64].mult*fData[i]/100;
 
       fData[i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
    
@@ -1076,20 +1098,30 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 	{
 	  for(int j=0; j<fNData/2; j++)
 	    {
-	      fSys[i+fNData/2][j].add  = syscor[i][j]/sqrt(2.0);
-	      fSys[i+fNData/2][j].mult = fSys[i][j].add*100/fData[i+fNData/2];
-	      fSys[i+fNData/2][j].type = ADD;
-	      fSys[i+fNData/2][j].name = "CORR";
+	      fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[i+fNData/2][fNData/2-1-j].mult = fSys[i+fNData/2][fNData/2-1-j].add*100/fData[i+fNData/2];
+	      fSys[i+fNData/2][fNData/2-1-j].type = ADD;
+	      fSys[i+fNData/2][fNData/2-1-j].name = "CORR";
+
+	      fSys[i+fNData/2][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[i+fNData/2][j+fNData/2].mult = fSys[i+fNData/2][j+fNData/2].add*100/fData[i+fNData/2];
+	      fSys[i+fNData/2][j+fNData/2].type = ADD;
+	      fSys[i+fNData/2][j+fNData/2].name = "CORR";
 	      
-	      fSys[fNData/2-1-i][j].add  = syscor[i][j]/sqrt(2.0);
-	      fSys[fNData/2-1-i][j].mult = fSys[i][j].add*100/fData[fNData/2-1-i];
-	      fSys[fNData/2-1-i][j].type = ADD;
-	      fSys[fNData/2-1-i][j].name = "CORR";
+	      fSys[fNData/2-1-i][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[fNData/2-1-i][fNData/2-1-j].mult = fSys[fNData/2-1-i][fNData/2-1-j].add*100/fData[fNData/2-1-i];
+	      fSys[fNData/2-1-i][fNData/2-1-j].type = ADD;
+	      fSys[fNData/2-1-i][fNData/2-1-j].name = "CORR";
+
+	      fSys[fNData/2-1-i][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[fNData/2-1-i][j+fNData/2].mult = fSys[fNData/2-1-i][j+fNData/2].add*100/fData[fNData/2-1-i];
+	      fSys[fNData/2-1-i][j+fNData/2].type = ADD;
+	      fSys[fNData/2-1-i][j+fNData/2].name = "CORR";
 	    }
 	}  
-      
+
       //Real systematics
-      for(int j=0; j<fNSys-1; j++)
+      for(int j=fNData; j<fNSys; j++)
 	{
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
@@ -1099,7 +1131,7 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 	  id << j;
 	  sysdescr = "CORR";
 	  
-	  lstream >> sys1 >> sys2;
+	  lstream >> sys1 >> sys2; 
 	  if(sys1<0) {right=sys2; left=sys1;}
 	  else {right=sys1; left=sys2;}
 
@@ -1126,11 +1158,11 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
       fSys[i+fNData/2][66].type = MULT;
       fSys[i+fNData/2][66].name ="CORR";
       fSys[i+fNData/2][66].mult=2.8;
-      fSys[i+fNData/2][66].add=fSys[i][56].mult*fData[i]/100;
+      fSys[i+fNData/2][66].add=fSys[i][66].mult*fData[i]/100;
       fSys[fNData/2-1-i][66].type = MULT;
       fSys[fNData/2-1-i][66].name = "CORR";
-      fSys[fNData/2-1-i][6].mult=2.8;
-      fSys[fNData/2-1-i][66].add=fSys[i][56].mult*fData[i]/100;
+      fSys[fNData/2-1-i][66].mult=2.8;
+      fSys[fNData/2-1-i][66].add=fSys[i][66].mult*fData[i]/100;
       
       fData[i+fNData/2]*=(1.0 + shift*0.01); //Shift from asymmetric errors
       fData[fNData/2-1-i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
@@ -1239,19 +1271,30 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
 	{
 	  for(int j=0; j<fNData/2; j++)
 	    {
-	      fSys[i+fNData/2][j].add  = syscor[i][j]/sqrt(2.0);
-	      fSys[i+fNData/2][j].mult = fSys[i][j].add*100/fData[i+fNData/2];
-	      fSys[i+fNData/2][j].type = ADD;
-	      fSys[i+fNData/2][j].name = "CORR";	      
-	      fSys[fNData/2-1-i][j].add  = syscor[i][j]/sqrt(2.0);
-	      fSys[fNData/2-1-i][j].mult = fSys[i][j].add*100/fData[fNData/2-1-j];
-	      fSys[fNData/2-1-i][j].type = ADD;
-	      fSys[fNData/2-1-i][j].name = "CORR";	     
+	      fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[i+fNData/2][fNData/2-1-j].mult = fSys[i+fNData/2][fNData/2-1-j].add*100/fData[i+fNData/2];
+	      fSys[i+fNData/2][fNData/2-1-j].type = ADD;
+	      fSys[i+fNData/2][fNData/2-1-j].name = "CORR";
+
+	      fSys[i+fNData/2][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[i+fNData/2][j+fNData/2].mult = fSys[i+fNData/2][j+fNData/2].add*100/fData[i+fNData/2];
+	      fSys[i+fNData/2][j+fNData/2].type = ADD;
+	      fSys[i+fNData/2][j+fNData/2].name = "CORR";
+	      
+	      fSys[fNData/2-1-i][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[fNData/2-1-i][fNData/2-1-j].mult = fSys[fNData/2-1-i][fNData/2-1-j].add*100/fData[fNData/2-1-i];
+	      fSys[fNData/2-1-i][fNData/2-1-j].type = ADD;
+	      fSys[fNData/2-1-i][fNData/2-1-j].name = "CORR";
+
+	      fSys[fNData/2-1-i][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[fNData/2-1-i][j+fNData/2].mult = fSys[fNData/2-1-i][j+fNData/2].add*100/fData[fNData/2-1-i];
+	      fSys[fNData/2-1-i][j+fNData/2].type = ADD;
+	      fSys[fNData/2-1-i][j+fNData/2].name = "CORR";
 	    }
-	}
-      
+	}  
+
       //Real systematics
-      for(int j=0; j<fNSys-1; j++)
+      for(int j=fNData; j<fNSys; j++)
 	{
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
@@ -1261,13 +1304,13 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
 	  id << j;
 	  sysdescr = "CORR";
 	  
-	  lstream >> sys1 >> sys2;
+	  lstream >> sys1 >> sys2; 
 	  if(sys1<0) {right=sys2; left=sys1;}
 	  else {right=sys1; left=sys2;}
 
 	  //convert to relative percentage values
 	  right = right/datum*100;  
-	  left  = left/datum*100;
+	  left = left/datum*100;
 	  symmetriseErrors(right,left,&stmp,&dtmp);
 	  
 	  fSys[i+fNData/2][j].type = MULT;
@@ -1282,8 +1325,8 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
 
 	  shift += dtmp;
 
-	}   
-      
+	}
+          
       //overall luminosity uncertainty
       fSys[i+fNData/2][66].type = MULT;
       fSys[i+fNData/2][66].name = "CORR";
@@ -1397,7 +1440,7 @@ void  ATLASTOPDIFF8TEVTTMFilter::ReadData()
 	}  
       
       //Real systematics
-      for(int j=0; j<fNSys-1; j++)
+      for(int j=fNData; j<fNSys-1; j++)
 	{
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
@@ -1426,10 +1469,10 @@ void  ATLASTOPDIFF8TEVTTMFilter::ReadData()
 	}
 
       //overall luminosity uncertainty
-      fSys[i][56].type = MULT;
-      fSys[i][56].name = "CORR";
-      fSys[i][56].mult=2.8;
-      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
+      fSys[i][63].type = MULT;
+      fSys[i][63].name = "CORR";
+      fSys[i][63].mult=2.8;
+      fSys[i][63].add=fSys[i][63].mult*fData[i]/100;
          
       fData[i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
  
