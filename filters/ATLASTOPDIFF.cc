@@ -8,6 +8,7 @@ Record in: INSPIRE
 Record in: CERN Document Server
 Record in: HEPData (new site in development)
 
+Statistical covariance matrix provided by M.A.Owen June 2016
 
 Description of the measurement
 Measurements of normalized differential cross-sections of top-quark 
@@ -122,7 +123,7 @@ Notes:
 void  ATLASTOPDIFF8TEVTPTNORMFilter::ReadData()
 {
   // Opening files
-  fstream f1;
+  fstream f1, f2;
 
   //Central values, statistical and systematic uncertainties  
   stringstream datafile("");
@@ -136,8 +137,44 @@ void  ATLASTOPDIFF8TEVTPTNORMFilter::ReadData()
       exit(-1);
     }
 
-  //Starting filter
+  //Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/" << fSetName << "/top_pt_covariance_rel.dat";
+  f2.open(covfile.str().c_str(), ios::in);
+
+  if (f2.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Read statistical covariance matrix
   string line;
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f2,line);
+    istringstream lstream(line);
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+    {
+      cerr << " in " << fSetName << endl;
+      exit(-1);
+    }
+  
+  //Starting filter
   for(int i=0; i<5; i++)
     {
       getline(f1,line);
@@ -156,11 +193,25 @@ void  ATLASTOPDIFF8TEVTPTNORMFilter::ReadData()
 
       lstream >> fData[i];     //differential distribution
       lstream >> fStat[i];     //its statistical uncertainty
+      fStat[i] = 0.;
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
 
       double shift = 0.;
-
-      for(int j=0; j<fNSys; j++)
+      
+      //Artificial systematics
+      for(int i=0; i<fNData; i++)
+	{
+	  for(int j=0; j<fNData; j++)
+	    {
+	      fSys[i][j].add  = syscor[i][j];
+	      fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+	      fSys[i][j].type = ADD;
+	      fSys[i][j].name = "CORR";
+	    }
+	}  
+      
+      //Real systematics
+      for(int j=fNData; j<fNSys; j++)
 	{
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
@@ -192,6 +243,7 @@ void  ATLASTOPDIFF8TEVTPTNORMFilter::ReadData()
     }  
   
   f1.close();
+  f2.close();
 }
 
 //==================================================================
@@ -279,7 +331,7 @@ void  ATLASTOPDIFF8TEVTTPTNORMFilter::ReadData()
 void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
 {
   // Opening files
-  fstream f1;
+  fstream f1, f2;
 
   //Central values, statistical and systematic uncertainties  
   stringstream datafile("");
@@ -292,9 +344,45 @@ void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
       cerr << "Error opening data file " << datafile.str() << endl;
       exit(-1);
     }
+  
+  //Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/" << fSetName << "/top_absy_covariance_rel.dat";
+  f2.open(covfile.str().c_str(), ios::in);
+  
+  if (f2.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Read statistical covariance matrix
+  string line;
+  double** covmat = new double*[fNData/2];
+  for(int i=0; i<fNData/2; i++)
+    {
+      covmat[i] = new double[fNData/2];
+      getline(f2,line);
+      istringstream lstream(line);
+      for(int j=0; j<fNData/2; j++)
+	{
+	  lstream >> covmat[i][j];
+	}
+    }
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData/2];
+  for(int i = 0; i < fNData/2; i++)
+    syscor[i] = new double[fNData/2];
+  
+  if(!genArtSys(fNData/2,covmat,syscor))
+    {
+      cerr << " in " << fSetName << endl;
+      exit(-1);
+    }  
 
   //Starting filter
-  string line;
   for(int i=0; i<5; i++)
     {
       getline(f1,line);
@@ -307,7 +395,7 @@ void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
       istringstream lstream(line);
       lstream >> pt_top >> ddum >> ddum; 
 
-      fKin1[i+fNData/2]   = pt_top;          //P_T^(top)
+      fKin1[i+fNData/2]   = pt_top;          //yt
       fKin1[fNData/2-1-i] = -1.0*pt_top;
       fKin2[i+fNData/2]   = Mt;       
       fKin2[fNData/2-1-i] = Mt;
@@ -319,14 +407,34 @@ void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
       fData[fNData/2-1-i] = datum/2.0;
 
       lstream >> stat;
-      fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
-      fStat[fNData/2-1-i] = stat/sqrt(2.0);
+      //fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
+      //fStat[fNData/2-1-i] = stat/sqrt(2.0);
+      fStat[i+fNData/2] = 0.;
+      fStat[fNData/2-1-i] = 0.;
 
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
       double shift = 0.;
 
-      for(int j=0; j<fNSys; j++)
+      //Artificial systematics
+      for(int i=0; i<fNData/2; i++)
+	{
+	  for(int j=0; j<fNData/2; j++)
+	    {
+	      fSys[i+fNData/2][j].add  = syscor[i][j]/sqrt(2.0);
+	      fSys[i+fNData/2][j].mult = fSys[i][j].add*100/fData[i+fNData/2];
+	      fSys[i+fNData/2][j].type = ADD;
+	      fSys[i+fNData/2][j].name = "CORR";
+	      
+	      fSys[fNData/2-1-i][j].add  = syscor[i][j]/sqrt(2.0);
+	      fSys[fNData/2-1-i][j].mult = fSys[i][j].add*100/fData[fNData/2-1-i];
+	      fSys[fNData/2-1-i][j].type = ADD;
+	      fSys[fNData/2-1-i][j].name = "CORR";
+	    }
+	}  
+
+      //Real systematics
+      for(int j=fNData/2; j<fNSys; j++)
 	{
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
@@ -365,6 +473,7 @@ void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
     }  
   
   f1.close();
+  f2.close();
 }
 
 
@@ -374,7 +483,7 @@ void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
 void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 {
   // Opening files
-  fstream f1;
+  fstream f1, f2;
 
   //Central values, statistical and systematic uncertainties  
   stringstream datafile("");
@@ -388,8 +497,44 @@ void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
       exit(-1);
     }
 
-  //Starting filter
+  //Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/" << fSetName << "/ttbar_absy_covariance_rel.dat";
+  f2.open(covfile.str().c_str(), ios::in);
+  
+  if (f2.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+  
+  //Read statistical covariance matrix
   string line;
+  double** covmat = new double*[fNData/2];
+  for(int i=0; i<fNData/2; i++)
+    {
+      covmat[i] = new double[fNData/2];
+      getline(f2,line);
+      istringstream lstream(line);
+      for(int j=0; j<fNData/2; j++)
+	{
+	  lstream >> covmat[i][j];
+	}
+    }
+  
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData/2; i++)
+    syscor[i] = new double[fNData/2];
+  
+  if(!genArtSys(fNData/2,covmat,syscor))
+    {
+      cerr << " in " << fSetName << endl;
+      exit(-1);
+    }  
+  
+  //Starting filter
   for(int i=0; i<5; i++)
     {
       getline(f1,line);
@@ -414,14 +559,33 @@ void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
       fData[fNData/2-1-i] = datum/2.0;
 
       lstream >> stat;
-      fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
-      fStat[fNData/2-1-i] = stat/sqrt(2.0);
+      //fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
+      //fStat[fNData/2-1-i] = stat/sqrt(2.0);
+      fStat[i+fNData/2] = 0.;
+      fStat[fNData/2-1-i] = 0.;
 
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
       double shift = 0.;
 
-      for(int j=0; j<fNSys; j++)
+      //Artificial systematics
+      for(int i=0; i<fNData/2; i++)
+	{
+	  for(int j=0; j<fNData/2; j++)
+	    {
+	      fSys[i+fNData/2][j].add  = syscor[i][j]/sqrt(2.0);
+	      fSys[i+fNData/2][j].mult = fSys[i][j].add*100/fData[i+fNData/2];
+	      fSys[i+fNData/2][j].type = ADD;
+	      fSys[i+fNData/2][j].name = "CORR";	      
+	      fSys[fNData/2-1-i][j].add  = syscor[i][j]/sqrt(2.0);
+	      fSys[fNData/2-1-i][j].mult = fSys[i][j].add*100/fData[fNData/2-1-j];
+	      fSys[fNData/2-1-i][j].type = ADD;
+	      fSys[fNData/2-1-i][j].name = "CORR";	     
+	    }
+	}
+      
+      //Real systematics
+      for(int j=fNData/2; j<fNSys; j++)
 	{
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
@@ -459,6 +623,7 @@ void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
     }  
   
   f1.close();
+  f2.close();
 }
 
 //=================================================================
@@ -467,7 +632,7 @@ void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 void  ATLASTOPDIFF8TEVTTMNORMFilter::ReadData()
 {
   // Opening files
-  fstream f1;
+  fstream f1, f2;
 
   //Central values, statistical and systematic uncertainties  
   stringstream datafile("");
@@ -481,8 +646,44 @@ void  ATLASTOPDIFF8TEVTTMNORMFilter::ReadData()
       exit(-1);
     }
 
-  //Starting filter
+//Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/" << fSetName << "/ttbar_mass_covariance_rel.dat";
+  f2.open(covfile.str().c_str(), ios::in);
+
+  if (f2.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Read statistical covariance matrix
   string line;
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f2,line);
+    istringstream lstream(line);
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+    {
+      cerr << " in " << fSetName << endl;
+      exit(-1);
+    }
+
+  //Starting filter
   for(int i=0; i<5; i++)
     {
       getline(f1,line);
@@ -501,10 +702,24 @@ void  ATLASTOPDIFF8TEVTTMNORMFilter::ReadData()
 
       lstream >> fData[i];     //differential distribution
       lstream >> fStat[i];     //its statistical uncertainty
+      fStat[i]=0.;
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
       double shift = 0.;
 
+      //Artificial systematics
+      for(int i=0; i<fNData; i++)
+	{
+	  for(int j=0; j<fNData; j++)
+	    {
+	      fSys[i][j].add  = syscor[i][j];
+	      fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+	      fSys[i][j].type = ADD;
+	      fSys[i][j].name = "CORR";
+	    }
+	}  
+
+      //Real systematics
       for(int j=0; j<fNSys; j++)
 	{
 	  double sys1, sys2, right, left;
@@ -537,6 +752,8 @@ void  ATLASTOPDIFF8TEVTTMNORMFilter::ReadData()
     }  
   
   f1.close();
+  f2.close();
+
 }
 
 /*
@@ -549,7 +766,7 @@ void  ATLASTOPDIFF8TEVTTMNORMFilter::ReadData()
 void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
 {
   // Opening files
-  fstream f1;
+  fstream f1, f2;
 
   //Central values, statistical and systematic uncertainties  
   stringstream datafile("");
@@ -563,8 +780,44 @@ void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
       exit(-1);
     }
 
-  //Starting filter
+  //Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/" << fSetName << "/top_pt_covariance_abs.dat";
+  f2.open(covfile.str().c_str(), ios::in);
+
+  if (f2.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Read statistical covariance matrix
   string line;
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f2,line);
+    istringstream lstream(line);
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+    {
+      cerr << " in " << fSetName << endl;
+      exit(-1);
+    }
+
+  //Starting filter
   for(int i=0; i<5; i++)
     {
       getline(f1,line);
@@ -583,10 +836,24 @@ void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
 
       lstream >> fData[i];     //differential distribution
       lstream >> fStat[i];     //its statistical uncertainty
+      fStat[i] = 0.;
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
       double shift = 0.;
 
+      //Artificial systematics
+      for(int i=0; i<fNData; i++)
+	{
+	  for(int j=0; j<fNData; j++)
+	    {
+	      fSys[i][j].add  = syscor[i][j];
+	      fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+	      fSys[i][j].type = ADD;
+	      fSys[i][j].name = "CORR";
+	    }
+	}  
+      
+      //Real systematics
       for(int j=0; j<fNSys-1; j++)
 	{
 	  double sys1, sys2, right, left;
@@ -614,17 +881,18 @@ void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
 
 	}
 
-      //overall luminosity uncertainty
-      fSys[i][56].type = MULT;
-      fSys[i][56].name = "CORR";
-      fSys[i][56].mult=2.8;
-      fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
+      //Overall luminosity uncertainty
+      fSys[i][63].type = MULT;
+      fSys[i][63].name = "CORR";
+      fSys[i][63].mult=2.8;
+      fSys[i][63].add=fSys[i][56].mult*fData[i]/100;
 
       fData[i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
    
     }  
   
   f1.close();
+  f2.close();
 }
 
 //==================================================================
@@ -718,7 +986,7 @@ void  ATLASTOPDIFF8TEVTTPTFilter::ReadData()
 void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 {
   // Opening files
-  fstream f1;
+  fstream f1, f2;
 
   //Central values, statistical and systematic uncertainties  
   stringstream datafile("");
@@ -732,8 +1000,44 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
       exit(-1);
     }
 
-  //Starting filter
+  //Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/" << fSetName << "/top_absy_covariance_abs.dat";
+  f2.open(covfile.str().c_str(), ios::in);
+  
+  if (f2.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Read statistical covariance matrix
   string line;
+  double** covmat = new double*[fNData/2];
+  for(int i=0; i<fNData/2; i++)
+    {
+      covmat[i] = new double[fNData/2];
+      getline(f2,line);
+      istringstream lstream(line);
+      for(int j=0; j<fNData/2; j++)
+	{
+	  lstream >> covmat[i][j];
+	}
+    }
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData/2];
+  for(int i = 0; i < fNData/2; i++)
+    syscor[i] = new double[fNData/2];
+  
+  if(!genArtSys(fNData/2,covmat,syscor))
+    {
+      cerr << " in " << fSetName << endl;
+      exit(-1);
+    } 
+
+  //Starting filter
   for(int i=0; i<5; i++)
     {
       getline(f1,line);
@@ -760,11 +1064,31 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
       lstream >> stat;
       fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
       fStat[fNData/2-1-i] = stat/sqrt(2.0);
+      fStat[i+fNData/2]   = 0.;  //statistical uncertainty
+      fStat[fNData/2-1-i] = 0.;
 
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
       double shift = 0.;
 
+      //Artificial systematics
+      for(int i=0; i<fNData/2; i++)
+	{
+	  for(int j=0; j<fNData/2; j++)
+	    {
+	      fSys[i+fNData/2][j].add  = syscor[i][j]/sqrt(2.0);
+	      fSys[i+fNData/2][j].mult = fSys[i][j].add*100/fData[i+fNData/2];
+	      fSys[i+fNData/2][j].type = ADD;
+	      fSys[i+fNData/2][j].name = "CORR";
+	      
+	      fSys[fNData/2-1-i][j].add  = syscor[i][j]/sqrt(2.0);
+	      fSys[fNData/2-1-i][j].mult = fSys[i][j].add*100/fData[fNData/2-1-i];
+	      fSys[fNData/2-1-i][j].type = ADD;
+	      fSys[fNData/2-1-i][j].name = "CORR";
+	    }
+	}  
+      
+      //Real systematics
       for(int j=0; j<fNSys-1; j++)
 	{
 	  double sys1, sys2, right, left;
@@ -799,14 +1123,14 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 	}
 
       //overall luminosity uncertainty
-      fSys[i+fNData/2][56].type = MULT;
-      fSys[i+fNData/2][56].name ="CORR";
-      fSys[i+fNData/2][56].mult=2.8;
-      fSys[i+fNData/2][56].add=fSys[i][56].mult*fData[i]/100;
-      fSys[fNData/2-1-i][56].type = MULT;
-      fSys[fNData/2-1-i][56].name = "CORR";
-      fSys[fNData/2-1-i][56].mult=2.8;
-      fSys[fNData/2-1-i][56].add=fSys[i][56].mult*fData[i]/100;
+      fSys[i+fNData/2][66].type = MULT;
+      fSys[i+fNData/2][66].name ="CORR";
+      fSys[i+fNData/2][66].mult=2.8;
+      fSys[i+fNData/2][66].add=fSys[i][56].mult*fData[i]/100;
+      fSys[fNData/2-1-i][66].type = MULT;
+      fSys[fNData/2-1-i][66].name = "CORR";
+      fSys[fNData/2-1-i][6].mult=2.8;
+      fSys[fNData/2-1-i][66].add=fSys[i][56].mult*fData[i]/100;
       
       fData[i+fNData/2]*=(1.0 + shift*0.01); //Shift from asymmetric errors
       fData[fNData/2-1-i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
@@ -814,6 +1138,8 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
     }  
   
   f1.close();
+  f2.close();
+
 }
 
 
@@ -823,7 +1149,7 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
 {
   // Opening files
-  fstream f1;
+  fstream f1, f2;
 
   //Central values, statistical and systematic uncertainties  
   stringstream datafile("");
@@ -837,8 +1163,44 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
       exit(-1);
     }
 
-  //Starting filter
+  //Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/" << fSetName << "/ttbar_absy_covariance_abs.dat";
+  f2.open(covfile.str().c_str(), ios::in);
+  
+  if (f2.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+  
+  //Read statistical covariance matrix
   string line;
+  double** covmat = new double*[fNData/2];
+  for(int i=0; i<fNData/2; i++)
+    {
+      covmat[i] = new double[fNData/2];
+      getline(f2,line);
+      istringstream lstream(line);
+      for(int j=0; j<fNData/2; j++)
+	{
+	  lstream >> covmat[i][j];
+	}
+    }
+  
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData/2; i++)
+    syscor[i] = new double[fNData/2];
+  
+  if(!genArtSys(fNData/2,covmat,syscor))
+    {
+      cerr << " in " << fSetName << endl;
+      exit(-1);
+    }  
+
+  //Starting filter
   for(int i=0; i<5; i++)
     {
       getline(f1,line);
@@ -863,13 +1225,32 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
       fData[fNData/2-1-i] = datum/2.0;
 
       lstream >> stat;
-      fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
-      fStat[fNData/2-1-i] = stat/sqrt(2.0);
+      //fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
+      //fStat[fNData/2-1-i] = stat/sqrt(2.0);
+      fStat[i+fNData/2] = 0.;
+      fStat[fNData/2-1-i] = 0.;
 
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
       double shift = 0.;
 
+      //Artificial systematics
+      for(int i=0; i<fNData/2; i++)
+	{
+	  for(int j=0; j<fNData/2; j++)
+	    {
+	      fSys[i+fNData/2][j].add  = syscor[i][j]/sqrt(2.0);
+	      fSys[i+fNData/2][j].mult = fSys[i][j].add*100/fData[i+fNData/2];
+	      fSys[i+fNData/2][j].type = ADD;
+	      fSys[i+fNData/2][j].name = "CORR";	      
+	      fSys[fNData/2-1-i][j].add  = syscor[i][j]/sqrt(2.0);
+	      fSys[fNData/2-1-i][j].mult = fSys[i][j].add*100/fData[fNData/2-1-j];
+	      fSys[fNData/2-1-i][j].type = ADD;
+	      fSys[fNData/2-1-i][j].name = "CORR";	     
+	    }
+	}
+      
+      //Real systematics
       for(int j=0; j<fNSys-1; j++)
 	{
 	  double sys1, sys2, right, left;
@@ -904,14 +1285,14 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
 	}   
       
       //overall luminosity uncertainty
-      fSys[i+fNData/2][56].type = MULT;
-      fSys[i+fNData/2][56].name = "CORR";
-      fSys[i+fNData/2][56].mult=2.8;
-      fSys[i+fNData/2][56].add=fSys[i][56].mult*fData[i]/100;
-      fSys[fNData/2-1-i][56].type = MULT;
-      fSys[fNData/2-1-i][56].name = "CORR";
-      fSys[fNData/2-1-i][56].mult=2.8;
-      fSys[fNData/2-1-i][56].add=fSys[i][56].mult*fData[i]/100;
+      fSys[i+fNData/2][66].type = MULT;
+      fSys[i+fNData/2][66].name = "CORR";
+      fSys[i+fNData/2][66].mult=2.8;
+      fSys[i+fNData/2][66].add=fSys[i][56].mult*fData[i]/100;
+      fSys[fNData/2-1-i][66].type = MULT;
+      fSys[fNData/2-1-i][66].name = "CORR";
+      fSys[fNData/2-1-i][66].mult=2.8;
+      fSys[fNData/2-1-i][66].add=fSys[i][56].mult*fData[i]/100;
 
       fData[i+fNData/2]*=(1.0 + shift*0.01); //Shift from asymmetric errors
       fData[fNData/2-1-i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
@@ -919,6 +1300,7 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
     }  
   
   f1.close();
+  f2.close();
 }
 
 //=================================================================
@@ -927,7 +1309,7 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
 void  ATLASTOPDIFF8TEVTTMFilter::ReadData()
 {
   // Opening files
-  fstream f1;
+  fstream f1, f2;
 
   //Central values, statistical and systematic uncertainties  
   stringstream datafile("");
@@ -941,8 +1323,44 @@ void  ATLASTOPDIFF8TEVTTMFilter::ReadData()
       exit(-1);
     }
 
-  //Starting filter
+//Statistical covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/" << fSetName << "/ttbar_mass_covariance_abs.dat";
+  f2.open(covfile.str().c_str(), ios::in);
+
+  if (f2.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Read statistical covariance matrix
   string line;
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f2,line);
+    istringstream lstream(line);
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+    {
+      cerr << " in " << fSetName << endl;
+      exit(-1);
+    }
+
+  //Starting filter
   for(int i=0; i<5; i++)
     {
       getline(f1,line);
@@ -961,10 +1379,24 @@ void  ATLASTOPDIFF8TEVTTMFilter::ReadData()
 
       lstream >> fData[i];     //differential distribution
       lstream >> fStat[i];     //its statistical uncertainty
+      fStat[i] = 0.;
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
       double shift = 0.;
 
+      //Artificial systematics
+      for(int i=0; i<fNData; i++)
+	{
+	  for(int j=0; j<fNData; j++)
+	    {
+	      fSys[i][j].add  = syscor[i][j];
+	      fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+	      fSys[i][j].type = ADD;
+	      fSys[i][j].name = "CORR";
+	    }
+	}  
+      
+      //Real systematics
       for(int j=0; j<fNSys-1; j++)
 	{
 	  double sys1, sys2, right, left;
@@ -1004,4 +1436,5 @@ void  ATLASTOPDIFF8TEVTTMFilter::ReadData()
     }  
   
   f1.close();
+  f2.close();
 }
