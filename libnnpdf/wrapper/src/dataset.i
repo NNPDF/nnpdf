@@ -28,7 +28,6 @@
 /* We copy the arrays for every reason. It's too dangerous to pass by
  * reference with too little benefict. */
 %apply (double** ARGOUTVIEWM_ARRAY2, int* DIM1, int* DIM2) {(double** datamat, int* n, int* m)}
-%apply (double** ARGOUTVIEWM_ARRAY1, int* DIM1) {(double** cv, int* n)}
 
 %ignore NNPDF::swap;
 %ignore NNPDF::DataSet::operator=;
@@ -69,16 +68,6 @@ void get_invcovmat(double ** datamat, int* n, int* m){
     *m = *n = len;
 }
 
-void get_cv (double **cv, int* n){
-    int len = $self->GetNData();
-    double * result = new double[len];
-    double *data = self->GetData();
-    for (int i = 0; i < len; i++){
-        result[i] = data[i];
-    }
-    *cv = result;
-    *n = len;
-}
 
 %pythoncode{
 

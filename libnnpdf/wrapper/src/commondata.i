@@ -23,6 +23,7 @@
 %include "include/excepthandler.i"
 
 %apply (double** ARGOUTVIEWM_ARRAY2, int* DIM1, int* DIM2) {(double** datamat, int* n, int* m)}
+%apply (double** ARGOUTVIEWM_ARRAY1, int* DIM1) {(double** cv, int* n)}
 
 %ignore NNPDF::swap;
 %ignore NNPDF::CommonData::operator=;
@@ -43,6 +44,17 @@ void get_kintable(double** datamat, int* n, int* m){
     *n = len;
     *m = 3;
     *datamat = result;
+}
+
+void get_cv (double **cv, int* n){
+    auto len = $self->GetNData();
+    auto * result = new double[len];
+    auto *data = self->GetData();
+    for (int i = 0; i < len; i++){
+        result[i] = data[i];
+    }
+    *cv = result;
+    *n = len;
 }
 
 %pythoncode{
