@@ -11,11 +11,12 @@ import logging
 import numpy as np
 import pandas as pd
 
-from NNPDF import ThPredictions
+from NNPDF import ThPredictions, CommonData
 from NNPDF.experiments import Experiment
 from reportengine.checks import require_one, remove_outer
 from reportengine.table import table
 
+from validphys.checks import make_check, CheckError
 from validphys.core import DataSetSpec, PDF
 
 log = logging.getLogger(__name__)
@@ -399,6 +400,42 @@ def perreplica_chi2_table(experiments, pdf):
     total_chis/=total_l
 
     return pd.DataFrame(total_chis)
+
+@make_check
+def assert_use_cuts_true(ns, **kwargs):
+    if not ns['use_cuts']:
+        raise CheckError("use_cuts needs to be True for this action.")
+
+@assert_use_cuts_true
+@table
+def closure_shifts(experiments_index, fit, use_cuts, experiments):
+    """Save the differenve between the fitted data and the real commondata
+    values.
+
+    Actually shifts is what should be saved in the first place, rather than
+    thi confusing fiddling with Commondata, but until we can implement this at
+    the C++ level, we just dave it here.
+    """
+    name, fitpath = fit
+    result = np.zeros(len(experiments_index))
+    for experiment in experiments:
+        for dataset in experiment:
+            dspath = fitpath/'filter'/dataset.name
+            cdpath = dspath/("DATA_" + dataset.name + ".dat")
+            try:
+                syspath = next( (dspath/'systypes').glob('*.dat'))
+            except StopIteration as e:
+                raise FileNotFoundError("No systype "
+                "file found in filter folder %s" % (dspath/'systypes')) from e
+            cd = CommonData.ReadFile(str(cdpath), str(syspath))
+            loc = experiments_index.get_loc((experiment.name, dataset.name))
+            result[loc] = cd.get_cv() - dataset.load().get_cv()
+    return pd.DataFrame(result, index=experiments_index)
+
+
+
+
+
 
 
 chi2_stat_labels = {
