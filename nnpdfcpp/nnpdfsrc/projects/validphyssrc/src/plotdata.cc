@@ -24,7 +24,7 @@ using std::endl;
 #include "plotdata.h"
 #include "pdffuns.h"
 #include "nnpdfsettings.h"
-#include "nndiff.h"
+//#include "nndiff.h"
 #include "svn.h"
 
 #include "plotutils.h"
@@ -706,12 +706,47 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
         }
   }
 
+  /* New derivative preprocessing which deteriorated the quality of the fits.
   NNdiff *pdfdiff = new NNdiff( (i == 0) ? fSettings : fSettingsRef,
                                 (i == 0) ? fSettings.GetResultsDirectory() : fSettingsRef.GetResultsDirectory(),
-                                nfl, pdf->GetMembers());
+                                nfl, pdf->GetMembers());                                
 
   // Calculate effective exponents - here the parametrization should be more flexible
   fPDFNames = pdfdiff->getname();
+  */
+
+  // Calculate effective exponents - here the parametrization should be more flexible
+  real (*nn23f[])(real*) = {&fsinglet,&fgluon,&fV,&fT3,&fDelta,&fsplus,&fsminus,&fphoton};
+  string nn23[] = {"Singlet","Gluon","Valence","Triplet","#Delta_{s}","s^{+}","s^{-}","Photon"};
+
+  real (*evolf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fT3,&fT8,&fphoton};
+  string evol[] = {"Singlet","Gluon","Valence","V3","V8","T3","T8","Photon"};
+
+  real (*evolsf[])(real*) = {&fsinglet,&fgluon,&fV,&fV8,&fT3,&fT8,&fDelta,&fphoton};
+  string evols[] = {"Singlet","Gluon","Valence","V8","T3","T8","#Delta_{s}","Photon"};
+
+  real (*evolicf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fV15,&fT3,&fT8,&fT15,&fphoton};
+  string evolic[] = {"Singlet","Gluon","Valence","V3","V8","V15","T3","T8","T15","Photon"};
+
+  real (*nn31icf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fT3,&fT8,&fcplus,&fphoton};
+  string nn31ic[] = {"Singlet","Gluon","Valence","V3","V8","T3","T8","c^{+}","Photon"};
+
+  real (*functions[nfl])(real*);
+  const basisType setbasis = NNPDFSettings::getFitBasisType(fSettings.Get("fitting","fitbasis").as<string>());
+  if (setbasis == BASIS_NN23 || setbasis == BASIS_NN23QED)
+    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(nn23[t]); functions[t] = nn23f[t]; }
+  else if (setbasis == BASIS_EVOL || setbasis == BASIS_EVOLQED)
+    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
+  else if (setbasis == BASIS_EVOLS || setbasis == BASIS_EVOLSQED)
+    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evols[t]); functions[t] = evolsf[t]; }
+  else if (setbasis == BASIS_NN30 || setbasis == BASIS_NN30QED)
+    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
+  else if (setbasis == BASIS_FLVR || setbasis == BASIS_FLVRQED)
+    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
+  else if (setbasis == BASIS_EVOLIC || setbasis == BASIS_NN30IC)
+    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evolic[t]); functions[t] = evolicf[t]; }
+  else if (setbasis == BASIS_NN31IC)
+    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(nn31ic[t]); functions[t] = nn31icf[t]; }
 
   size_t NPOINTS = 100;
   real xa[NPOINTS+1], xb[NPOINTS+1], axlim[2], bxlim[2];
@@ -725,19 +760,20 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
   real betaCV[nfl][NPOINTS];
   real betaErr[nfl][NPOINTS];
 
-  axlim[0] = 1E-5;
+  axlim[0] = 1E-6;
   axlim[1] = 1E-1;
 
   bxlim[0] = 0.6;
   bxlim[1] = 0.95;
 
   double delta  = (log(axlim[1])-log(axlim[0])) / NPOINTS;
+  real Q0 = sqrt(fSettings.Get("theory","q20").as<real>());
 
   for (int j=0; j<nfl; j++)
   {
     for (size_t ix=0; ix<NPOINTS+1; ix++)
     {
-      if(ix == NPOINTS) {xa[ix]=1E-3; xb[ix]=0.75;}
+      if(ix == NPOINTS) {xa[ix]=1E-3; xb[ix]=0.65;}
       else
       {
         xa[ix] = exp (log(axlim[0]) + ix*delta);
@@ -749,17 +785,13 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
 
       for (int n=0; n<pdf->GetMembers(); n++)
       {
-        const real a = pdfdiff->alphaeff(xa[ix],j,n);
-        const real b = pdfdiff->betaeff(xb[ix],j,n);
+        double pdfa = GetGpdf(pdf,xa[ix],Q0,n,functions[j]);
+        double pdfb = GetGpdf(pdf,xb[ix],Q0,n,functions[j]);
 
-        if (!isnan(a) &&
-            a < (alphabnd[j][1]+alphabnd[j][0])/2.0 + 5*(alphabnd[j][1]-(alphabnd[j][1]+alphabnd[j][0])/2.0) &&
-            a > (alphabnd[j][1]+alphabnd[j][0])/2.0 - 5*(alphabnd[j][1]-(alphabnd[j][1]+alphabnd[j][0])/2.0))
-          alphas.push_back(a);
-        if (!isnan(b) && pdfdiff->nnval(xb[ix],j,n) != 0.0 &&
-            b < (betabnd[j][1]+betabnd[j][0])/2.0 + 5*(betabnd[j][1]-(betabnd[j][1]+betabnd[j][0])/2.0) &&
-            b > (betabnd[j][1]+betabnd[j][0])/2.0 - 5*(betabnd[j][1]-(betabnd[j][1]+betabnd[j][0])/2.0))
-          betas.push_back(b);
+        if (pdfa != 0.0)
+          alphas.push_back( alpha(pdfa,xa[ix]) );
+        if (pdfb != 0.0)
+          betas.push_back( beta(pdfb,xb[ix]) );
       }
 
       alphaCV[j][ix] = ComputeAVG(alphas);
@@ -778,19 +810,19 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
     }
     
     // Calculate new preprocessing range
-    //if (j < 2) //Gluon, Singlet
-    //{
-    fNewAlphaUp.push_back(min(real(2.0),alphaErr268Up[j][0]));
-    fNewAlphaDn.push_back(alphaErr268Dn[j][0]);
-    //}
-    //else
-    //{
-    //  fNewAlphaUp.push_back(min(real(2.0),max(alphaErr268Up[j][0],alphaErr268Up[j][NPOINTS])));
-    //  fNewAlphaDn.push_back(min(alphaErr268Dn[j][0],alphaErr268Dn[j][NPOINTS]));
-    //}
+    if (j < 2) //Gluon, Singlet
+    {
+      fNewAlphaUp.push_back(min(real(2.0),alphaErr268Up[j][0]));
+      fNewAlphaDn.push_back(alphaErr268Dn[j][0]);
+    }
+    else
+    {
+      fNewAlphaUp.push_back(min(real(2.0),max(alphaErr268Up[j][0],alphaErr268Up[j][NPOINTS])));
+      fNewAlphaDn.push_back(min(alphaErr268Dn[j][0],alphaErr268Dn[j][NPOINTS]));
+    }
     
-    fNewBetaUp.push_back(betaErr268Up[j][NPOINTS]);
-    fNewBetaDn.push_back(max(real(0.0),betaErr268Dn[j][NPOINTS]));
+    fNewBetaUp.push_back(max(betaErr268Up[j][NPOINTS-1],betaErr268Up[j][NPOINTS]));
+    fNewBetaDn.push_back(max(real(0.0),min(betaErr268Dn[j][NPOINTS-1],betaErr268Dn[j][NPOINTS])));
   }
 
   // New plot containers
