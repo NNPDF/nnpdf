@@ -24,12 +24,12 @@ log = logging.getLogger(__name__)
 
 class Environment(Environment):
     """Container for information to be filled at run time"""
-    def __init__(self,*, data_path, results_path, this_folder, **kwargs):
-        self.deta_path = pathlib.Path(data_path)
-        self.results_path = pathlib.Path(results_path)
+    def __init__(self,*, datapath, resultspath, this_folder, **kwargs):
+        self.deta_path = pathlib.Path(datapath)
+        self.results_path = pathlib.Path(resultspath)
         self.this_folder = pathlib.Path(this_folder)
 
-        self.loader = Loader(data_path, resultspath=self.results_path)
+        self.loader = Loader(self.deta_path, resultspath=self.results_path)
         super().__init__(**kwargs)
 
 
