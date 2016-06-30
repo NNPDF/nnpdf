@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 """
+Core datastructures used in the validphys data model. Some of these are inmutable
+specifications representing C++ objects.
 Created on Wed Mar  9 15:19:52 2016
 
 @author: Zahari Kassabov
@@ -271,6 +273,10 @@ class FitSpec(TupleComp):
         yield self.name
         yield self.path
 
+    def as_input(self):
+        import yaml
+        return yaml.load((self.path/'filter.yml').open())
+
     __slots__ = ('label','name', 'path')
 
 
@@ -288,6 +294,8 @@ class TheoryIDSpec:
         return "theory %s" % self.id
 
 
+
+#TODO: Decide if we want methods or properties
 class Stats:
 
     def __init__(self, data):
