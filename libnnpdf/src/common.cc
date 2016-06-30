@@ -17,8 +17,12 @@ public:
   int overflow(int c) { return c; }
 };
 
-NullBuffer nullbuffer;
-std::ostream nullstream(&nullbuffer);
+std::ostream& get_null_stream()
+{
+ static NullBuffer nullbuffer;
+ static std::ostream nullstream(&nullbuffer);
+ return nullstream;
+}
 
 int Verbosity = 1;
 
@@ -31,20 +35,21 @@ namespace NNPDF
 		return std::string(VERSION);
 	}
 
-
-
-   void SetVerbosity(int level){
+   void SetVerbosity(int level)
+   {
      Verbosity = level;
    }
 
-   int GetVerbosity(){
+   int GetVerbosity()
+   {
      return Verbosity;
    }
 
-   std::ostream& get_logger(){
+   std::ostream& get_logger()
+   {
       if (Verbosity){
         return std::cout;
       }
-      return nullstream;
+      return get_null_stream();
     }
 }
