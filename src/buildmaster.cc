@@ -48,8 +48,8 @@
 #include "ZEUSF2B.h"
 #include "H1F2B.h"
 #include "ATLASWZTOT13TEV81PB.h"
-#include "ATLASZPT47FB.h"
-#include "ATLASZPT8TEV20FB.h"
+#include "ATLASZPT7TEV.h"
+#include "ATLASZPT8TEV.h"
 #include "ATLASTTBARTOT.h"
 #include "CMSTTBARTOT.h"
 
@@ -100,9 +100,9 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASLOMASSDY11EXTFilter());
   target.push_back(new ATLASWZTOT13TEV81PBFilter());
   //
-  target.push_back(new ATLASZPT47FBFilter());
-  target.push_back(new ATLASZPT8TEV20FBYDISTFilter());
-  target.push_back(new ATLASZPT8TEV20FBMDISTFilter()); 
+  target.push_back(new ATLASZPT7TEVFilter());
+  target.push_back(new ATLASZPT8TEVYDISTFilter());
+  target.push_back(new ATLASZPT8TEVMDISTFilter()); 
  
   /*
     target.push_back(new ATLASPHT11ETGCTRFilter());
