@@ -1,14 +1,14 @@
 /*
- * ATLASZPT47FB - ATLAS Z pt distribution, 7 TeV, 4.7 fb^-1
+ * ATLASZPT7TEV - ATLAS Z pt distribution, 7 TeV, 4.7 fb^-1
  * This is the implementation of a three separate bins in rapidity
  * Reference: https://arxiv.org/abs/1406.3660
  * HepData: http://hepdata.cedar.ac.uk/view/ins1300647
  *
  */
 
-#include "ATLASZPT47FB.h"
+#include "ATLASZPT7TEV.h"
 
-void ATLASZPT47FBFilter::ReadData()
+void ATLASZPT7TEVFilter::ReadData()
 {
   // Opening data file
   fstream f1, c1, c2, c3;

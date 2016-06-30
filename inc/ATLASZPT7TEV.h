@@ -18,16 +18,16 @@
 #include "buildmaster_utils.h"
 #include <map>
 
-static const dataInfoRaw ATLASZPT47FBinfo = {
+static const dataInfoRaw ATLASZPT7TEVinfo = {
   78,          //nData  --> for inclusive rapidity bin 26
   79,          //nSys   --> for inclusive rapidity bin 27
-  "ATLASZPT47FB", //SetName
+  "ATLASZPT7TEV", //SetName
   "EWK_PT"       //ProcType
 };
 
-class ATLASZPT47FBFilter: public CommonData
-{ public: ATLASZPT47FBFilter():
-  CommonData(ATLASZPT47FBinfo) { ReadData(); }
+class ATLASZPT7TEVFilter: public CommonData
+{ public: ATLASZPT7TEVFilter():
+  CommonData(ATLASZPT7TEVinfo) { ReadData(); }
 
 private:
   void ReadData();

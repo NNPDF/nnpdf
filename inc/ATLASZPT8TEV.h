@@ -26,32 +26,32 @@
 #include "buildmaster_utils.h"
 #include <map>
 
-static const dataInfoRaw ATLASZPT8TEV20FBYDISTinfo = {
+static const dataInfoRaw ATLASZPT8TEVYDISTinfo = {
   120,          //nData  
   101,          //nSys: 1 total uncorrelated + 99 correlated + 2.8% luminosity   
-  "ATLASZPT8TEV20FBYDIST", //SetName
+  "ATLASZPT8TEVYDIST", //SetName
   "EWK_PTRAP"       //ProcType
 };
 
-static const dataInfoRaw ATLASZPT8TEV20FBMDISTinfo = {
+static const dataInfoRaw ATLASZPT8TEVMDISTinfo = {
   40,          //nData  
   101,          //nSys: 1 total uncorrelated + 99 correlated + 2.8% luminosity   
-  "ATLASZPT8TEV20FBMDIST", //SetName
+  "ATLASZPT8TEVMDIST", //SetName
   "EWK_PTMLL"       //ProcType
 };
 
 
-class ATLASZPT8TEV20FBYDISTFilter: public CommonData
-{ public: ATLASZPT8TEV20FBYDISTFilter():
-  CommonData(ATLASZPT8TEV20FBYDISTinfo) { ReadData(); }
+class ATLASZPT8TEVYDISTFilter: public CommonData
+{ public: ATLASZPT8TEVYDISTFilter():
+  CommonData(ATLASZPT8TEVYDISTinfo) { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class ATLASZPT8TEV20FBMDISTFilter: public CommonData
-{ public: ATLASZPT8TEV20FBMDISTFilter():
-  CommonData(ATLASZPT8TEV20FBMDISTinfo) { ReadData(); }
+class ATLASZPT8TEVMDISTFilter: public CommonData
+{ public: ATLASZPT8TEVMDISTFilter():
+  CommonData(ATLASZPT8TEVMDISTinfo) { ReadData(); }
 
 private:
   void ReadData();

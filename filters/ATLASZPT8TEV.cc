@@ -25,12 +25,12 @@ among the five differential distributions.
 - There are 99 sources of correlated systematics
 */
 
-#include "ATLASZPT8TEV20FB.h"
+#include "ATLASZPT8TEV.h"
 
 /****************************************************/
 /* Central M_{ll} region, Z peak, 6 bins in rapidity*/
 
-void  ATLASZPT8TEV20FBYDISTFilter::ReadData()
+void  ATLASZPT8TEVYDISTFilter::ReadData()
 {
 
   bool norm = false; //Set to true for normalised data, false for unnormalised
@@ -228,7 +228,7 @@ void  ATLASZPT8TEV20FBYDISTFilter::ReadData()
 	getline(y6,linec);
       }
       else{
-	cout << "Wrong indices in ATLASZPT8TEV20FB.cc !!! " << endl;
+	cout << "Wrong indices in ATLASZPT8TEV.cc !!! " << endl;
 	exit(-1);
       }
       istringstream lstream(line);
@@ -271,7 +271,7 @@ void  ATLASZPT8TEV20FBYDISTFilter::ReadData()
 /* Higs mass region, inclusive in rapidity, 1 bin in lepton invariant mass above Z peak */
 /****************************************************************************************/
 
-void  ATLASZPT8TEV20FBMDISTFilter::ReadData()
+void  ATLASZPT8TEVMDISTFilter::ReadData()
 {
   // Opening files
   fstream m1,m2,m3,m4,m5;
@@ -436,7 +436,7 @@ void  ATLASZPT8TEV20FBMDISTFilter::ReadData()
 	getline(m5,linec);
       }
       else{
-	cout << "Wrong indices in ATLASZPT8TEV20FB.cc !!! " << endl;
+	cout << "Wrong indices in ATLASZPT8TEV.cc !!! " << endl;
 	exit(-1);
       }
 
