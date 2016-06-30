@@ -3,6 +3,7 @@
 #define SWIG_FILE_WITH_INIT
 #include "../../src/NNPDF/exceptions.h"
 #include "../../src/NNPDF/lhapdfset.h"
+#include "LHAPDF/LHAPDF.h"
  %}
 
 %include "std_string.i" 
@@ -34,6 +35,11 @@
 %include "include/real_typemap.i"
 
 %include "../../src/NNPDF/lhapdfset.h"
+
+namespace LHAPDF{
+    int verbosity();
+    void setVerbosity(int v);
+}
 
 %extend NNPDF::LHAPDFSet{
 

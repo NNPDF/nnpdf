@@ -9,10 +9,42 @@
 #include "NNPDF/common.h"
 #include "config.h"
 
+namespace{
+
+class NullBuffer : public std::streambuf
+{
+public:
+  int overflow(int c) { return c; }
+};
+
+NullBuffer nullbuffer;
+std::ostream nullstream(&nullbuffer);
+
+int Verbosity = 1;
+
+}
+
 namespace NNPDF
 {
 	std::string getVersion()
 	{
 		return std::string(VERSION);
 	}
+
+
+
+   void SetVerbosity(int level){
+     Verbosity = level;
+   }
+
+   int GetVerbosity(){
+     return Verbosity;
+   }
+
+   std::ostream& get_logger(){
+      if (Verbosity){
+        return std::cout;
+      }
+      return nullstream;
+    }
 }

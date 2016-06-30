@@ -28,5 +28,9 @@ namespace NNPDF
 		typedef double real;
 		const int convoluteAlign = 1;
 	#endif
+    //Make extern to avoid multiple declaration
+    void SetVerbosity(int);
+    int GetVerbosity();
+    std::ostream& get_logger();
 }
 

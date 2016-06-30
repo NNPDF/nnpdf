@@ -66,8 +66,7 @@ fLHA(new real[14])
   else
     mkPDFs( fMemberPDFs );
 
-  if (NNPDF::PDFSet::Verbose)
-    std::cout << pdfname<< " Initialised with " << fMembers<<" members and errorType "<<LHError<<std::endl; 
+    get_logger() << pdfname<< " Initialised with " << fMembers<<" members and errorType "<<LHError<<std::endl;
 }
 
 LHAPDFSet::~LHAPDFSet()

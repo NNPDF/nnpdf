@@ -20,6 +20,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_eigen.h>
 
+#include "NNPDF/common.h"
 #include "NNPDF/commondata.h"
 #include "NNPDF/randomgenerator.h"
 
@@ -117,14 +118,11 @@ namespace NNPDF
   fStat(new double[fNData]),
   fSys(new sysError*[fNData])
   {
-    if (Verbose)
-    {
-      std::cout << std::endl << "-- Reading COMMONDATA for Dataset: " << fSetName<<std::endl;
+    get_logger() << std::endl << "-- Reading COMMONDATA for Dataset: " << fSetName<<std::endl;
 
-      std::cout << "nData: "<<fNData
+    get_logger() << "nData: "<<fNData
            <<" nSys: "<<fNSys
            <<std::endl;
-    }
 
     // Initialise arrays
     for (int i=0; i<fNData; i++)
@@ -158,9 +156,9 @@ namespace NNPDF
   fStat(new double[fNData]),
   fSys(new sysError*[fNData])
   {
-    std::cout << std::endl << "-- Reading COMMONDATA for Dataset: " << fSetName<<std::endl;
+    get_logger() << std::endl << "-- Reading COMMONDATA for Dataset: " << fSetName<<std::endl;
 
-    std::cout << "nData: "<<fNData
+    get_logger() << "nData: "<<fNData
               <<" nSys: "<<fNSys
               <<std::endl;
 
@@ -434,8 +432,7 @@ namespace NNPDF
 
     h.close();
 
-    if (Verbose)
-      std::cout << "-- COMMONDATA Files for "<<fSetName<<" successfully read."<<std::endl<<std::endl;
+    get_logger() << "-- COMMONDATA Files for "<<fSetName<<" successfully read."<<std::endl<<std::endl;
 
   }
 
@@ -449,8 +446,7 @@ namespace NNPDF
     std::string datafileout = targetdir + "/DATA_" + fSetName + ".dat";
     g1.open(datafileout.c_str(), std::ios::out);
 
-    if (Verbose)
-      std::cout << "-- Exporting "<<fSetName<<" to "<< datafileout<<std::endl;
+    get_logger() << "-- Exporting "<<fSetName<<" to "<< datafileout<<std::endl;
 
 
     g1 << fSetName << "\t"
@@ -494,8 +490,7 @@ namespace NNPDF
     if (h.fail())
       throw std::runtime_error("CommonData::ReadData: Error writing systype file "+sysfileout.str());
 
-    if (Verbose)
-      std::cout << "-- Exporting "<<fSetName<<" SYS to "<< sysfileout.str()<<std::endl;
+    get_logger() << "-- Exporting "<<fSetName<<" SYS to "<< sysfileout.str()<<std::endl;
 
     // Total number of systematics
     h << fNSys << std::endl;

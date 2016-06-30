@@ -26,8 +26,7 @@ namespace NNPDF
   fMembers(members),
   fEtype(etype)
   {
-    if (PDFSet::Verbose)
-      std::cout << "PDF: " << pdfname<<"  ErrorType: "<< errString(etype) << " booked"<<std::endl;    
+      get_logger() << "PDF: " << pdfname<<"  ErrorType: "<< errString(etype) << " booked"<<std::endl;
   }
 
   /**

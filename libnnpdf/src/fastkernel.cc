@@ -339,11 +339,10 @@ namespace NNPDF
    */
   void FKTable::InitialiseFromStream( std::istream& is, std::vector<std::string> const& cFactors )
   {
-   if (Verbose)
-    {
-     std::cout <<SectionHeader(fDataName.c_str(),GRIDINFO)<<std::endl;
-     std::cout << fDescription << std::endl;
-    }
+
+    get_logger() <<SectionHeader(fDataName.c_str(),GRIDINFO)<<std::endl;
+    get_logger() << fDescription << std::endl;
+
 
     // Read FlavourMap from header
     const int nFL = 14;
@@ -394,8 +393,7 @@ namespace NNPDF
     if ( fNonZero <= 0 )
       throw RangeError("FKTable::FKTable","Number of nonzero flavours is set to: " + std::to_string(fNonZero) );
 
-    if (Verbose)
-      std::cout << fNData << " Data Points "
+      get_logger() << fNData << " Data Points "
       << fNx << " X points "
       << fNonZero << " active flavours"<<std::endl;
 
@@ -564,8 +562,7 @@ namespace NNPDF
    */
   void FKTable::Print(std::ostream& os)
   {
-    if (Verbose)
-      std::cout << "****** Exporting FKTable: "<<fDataName << " ******"<< std::endl;
+     get_logger() << "****** Exporting FKTable: "<<fDataName << " ******"<< std::endl;
 
     // Verify current flavourmap
     std::string nflmap;
@@ -665,8 +662,7 @@ namespace NNPDF
     if (g.fail())
       throw FileError("FKTable::FKTable","cannot open cfactor file: " + cfilename);
 
-    if (Verbose)
-     std::cout << "Reading C-factors from: " << cfilename<<std::endl;
+     get_logger() << "Reading C-factors from: " << cfilename<<std::endl;
 
     // Read through header
     std::string line;
