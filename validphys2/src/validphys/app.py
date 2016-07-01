@@ -10,7 +10,15 @@ import logging
 from reportengine import app
 
 from validphys.config import Config, Environment
-from validphys import providers
+#from validphys import providers
+
+
+providers = [
+             'validphys.results',
+             'validphys.plots',
+             'validphys.reweighting',
+             'validphys.fitdata'
+            ]
 
 class App(app.App):
 
