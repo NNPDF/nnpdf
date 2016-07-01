@@ -12,6 +12,7 @@ import inspect
 from  reportengine import configparser
 from reportengine.environment import Environment
 from reportengine.configparser import ConfigError, element_of, _parse_func
+from reportengine.helputils import get_parser_type
 
 from validphys import lhaindex
 from validphys.core import PDF, DataSetSpec, ExperimentSpec
@@ -59,6 +60,13 @@ def _id_with_label(f):
     parse_func.__signature__ = inspect.Signature(
                  parameters=params)
 
+    labeldoc =  ((" Either just an id %s, or a mapping "
+                          "with 'id' and 'label'.") %
+                          (get_parser_type(f),))
+    if parse_func.__doc__ is None:
+        parse_func.__doc__ = labeldoc
+    else:
+        parse_func.__doc__ += labeldoc
 
     return parse_func
 
@@ -72,6 +80,7 @@ class Config(configparser.Config):
     @element_of('pdfs')
     @_id_with_label
     def parse_pdf(self, name:str):
+        """A PDF set installed in LHAPDF."""
         if lhaindex.isinstalled(name):
             pdf = PDF(name)
             try:
@@ -85,7 +94,8 @@ class Config(configparser.Config):
     @element_of('theoryids')
     @_id_with_label
     def parse_theoryid(self, theoryID: (str, int)):
-        """A number corresponding to the database theory ID"""
+        """A number corresponding to the database theory ID where the
+        corresponding theory folder is installed in te data directory."""
         try:
             return self.loader.check_theoryID(theoryID)
         except FileNotFoundError as e:
@@ -94,6 +104,8 @@ class Config(configparser.Config):
                               display_alternatives='all')
 
     def parse_use_cuts(self, use_cuts:bool, *, fit=None):
+        """Whether to use the filtered points in the fit, or the whole
+        data in the dataset."""
         if use_cuts and not fit:
             raise ConfigError("Setting 'use_cuts' true requires "
             "specifying a fit on which filter "
@@ -103,6 +115,7 @@ class Config(configparser.Config):
     #TODO: load fit config from here
     @_id_with_label
     def parse_fit(self, fit:str):
+        """A fit in the results folder, containing at least a valid filter result"""
         try:
             return self.loader.check_fit(fit)
         except OSError as e:
@@ -112,7 +125,7 @@ class Config(configparser.Config):
     @configparser.element_of('datasets')
     def parse_dataset(self, dataset:dict, * ,theoryid, use_cuts, fit=None):
         """Load a dataset specification from the corrsponding theory.
-        Use the cuts from the fit, if provided."""
+           Use the cuts from the fit, if provided."""
         #TODO: Move this logic to Loader?
         theoryno, theopath = theoryid
         try:
@@ -159,8 +172,8 @@ class Config(configparser.Config):
     def parse_experiment(self, experiment:dict, *, theoryid, use_cuts,
                          fit=None):
         """A set of datasets where correlated systematics are taken
-        into account. It is a mapping where the keys are the experiment
-        name 'experiment' and a list of datasets"""
+           into account. It is a mapping where the keys are the experiment
+           name 'experiment' and a list of datasets."""
         try:
             name, datasets = experiment['experiment'], experiment['datasets']
         except KeyError as e:
@@ -176,12 +189,12 @@ class Config(configparser.Config):
     #Note that `parse_experiments` doesn't exist yet.
     def parse_reweighting_experiments(self, experiments, *, theoryid,
                                       use_cuts, fit=None):
-        """A list of experiments to be used for reweighting"""
+        """A list of experiments to be used for reweighting."""
         return self.parse_experiments(experiments,
                                      theoryid=theoryid,
                                      use_cuts=use_cuts, fit=fit)
     def parse_t0pdfset(self, name):
-        """PDF set used to generate the t0 covmat"""
+        """PDF set used to generate the t0 covmat."""
         return self.parse_pdf(name)
 
     def parse_use_t0(self, do_use_t0:bool, t0pdfset=None):
