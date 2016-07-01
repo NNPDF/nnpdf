@@ -178,6 +178,11 @@ int main(int argc, char **argv)
           cout  << Colour::FG_BLUE << "Minimiser: Genetic Algorithm w/ nodal mutations for alpha/beta preprocessing" << Colour::FG_DEFAULT << endl;
           break;
 
+        case MIN_NGAFT:
+          minim = new NGAFTMinimizer(settings);
+          cout  << Colour::FG_BLUE << "Minimiser: Genetic Algorithm w/ fixed threshold term NN(x)-NN(1)" << Colour::FG_DEFAULT << endl;
+          break;
+
         default:
           cout << Colour::FG_RED << "ERROR: Invalid Minimiser" << Colour::FG_DEFAULT <<endl;
           exit(-1);

@@ -213,6 +213,9 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
     if (W2 <= W2cut) return false;
     if (Q2 <= Q2cut) return false;
 
+    if( set.GetSetName().compare(string("EMCF2P")) == 0 || set.GetSetName().compare(string("EMCF2D")) == 0  )
+      return (x>0.1);
+
     // Additional F2C cuts in case of FONNLA
     if (set.GetProc(idat) == "DIS_NCP_CH" && VFNS == "FONLL-A")
     {

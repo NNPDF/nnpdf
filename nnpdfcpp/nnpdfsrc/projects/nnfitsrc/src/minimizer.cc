@@ -238,12 +238,12 @@ int GAMinimizer::Selection(FitPDFSet *pdf)
 
   return 0;
 }
+
 // ************************* GA MINIMIZER *****************************
 /**
  * @brief NGAMinimizer is a version of GAMinimizer with nodal mutations
  * @param settings the global NNPDFSettings
  */
-
 NGAMinimizer::NGAMinimizer(NNPDFSettings const& settings):
 GAMinimizer(settings)
 {
@@ -304,9 +304,8 @@ void NGAMinimizer::Mutation(FitPDFSet* pdf, int const& nmut)
   return;
 }
 
-
 /*!
- * \brief NGAMinimizer::NGAMinimizer
+ * \brief NGAPMinimizer::NGAPMinimizer
  * \param settings
  */
 NGAPMinimizer::NGAPMinimizer(NNPDFSettings const& settings):
@@ -364,24 +363,27 @@ void NGAPMinimizer::Mutation(FitPDFSet* pdf, int const& nmut)
           }
       }
 
-      // mutate alpha
-      if (rg->GetRandomUniform() < 0.1)
+      if (NIte < fSettings.Get("fitting","ngen").as<int>()/4)
         {
-          real alpha = pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-2] + fabs(falphamax[j]-falphamin[j])*rg->GetRandomUniform(-1,1)/pow(NIte,ex);
-          if (alpha < falphamin[j] || alpha > falphamax[j])
-            pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-2] = rg->GetRandomUniform(falphamin[j],falphamax[j]);
-          else
-            pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-2] = alpha;
-        }
+          // mutate alpha
+          if (rg->GetRandomUniform() < 0.1)
+            {
+              real alpha = pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-2] + fabs(falphamax[j]-falphamin[j])*rg->GetRandomUniform(-1,1)/pow(NIte,ex);
+              if (alpha < falphamin[j] || alpha > falphamax[j])
+                pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-2] = rg->GetRandomUniform(falphamin[j],falphamax[j]);
+              else
+                pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-2] = alpha;
+            }
 
-      // mutate beta
-      if (rg->GetRandomUniform() < 0.1)
-        {
-          real beta = pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-1] + fabs(fbetamax[j]-fbetamin[j])*rg->GetRandomUniform(-1,1)/pow(NIte,ex);
-          if (beta < fbetamin[j] || beta > fbetamax[j])
-            pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-1] = rg->GetRandomUniform(fbetamin[j],fbetamax[j]);
-          else
-            pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-1] = beta;
+          // mutate beta
+          if (rg->GetRandomUniform() < 0.1)
+            {
+              real beta = pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-1] + fabs(fbetamax[j]-fbetamin[j])*rg->GetRandomUniform(-1,1)/pow(NIte,ex);
+              if (beta < fbetamin[j] || beta > fbetamax[j])
+                pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-1] = rg->GetRandomUniform(fbetamin[j],fbetamax[j]);
+              else
+                pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-1] = beta;
+            }
         }
     }
 
@@ -390,3 +392,73 @@ void NGAPMinimizer::Mutation(FitPDFSet* pdf, int const& nmut)
 
   return;
 }
+
+// ************************* NGAFT MINIMIZER *****************************
+/*!
+ * \brief NGAFTMinimizer::NGAFTMinimizer
+ * \param settings
+ */
+NGAFTMinimizer::NGAFTMinimizer(NNPDFSettings const& settings):
+GAMinimizer(settings)
+{
+
+}
+
+NGAFTMinimizer::~NGAFTMinimizer()
+{
+  if (fChi2Mem)
+    delete[] fChi2Mem;
+}
+
+/**
+ * @brief The mutation algorithm implementation
+ * @param pdf the input PDF
+ */
+void NGAFTMinimizer::Mutation(FitPDFSet* pdf, int const& nmut)
+{
+  vector<Parametrisation**>& pdfs = pdf->GetPDFs();
+  RandomGenerator* rg = RandomGenerator::GetRNG();
+  // Set number of members
+  pdf->SetNMembers(nmut);
+
+  // Copy best fit parameters
+  for (int i=0; i<nmut; i++)
+    for (int j=0; j<fSettings.GetNFL(); j++)
+        pdfs[i][j]->CopyPars(pdf->GetBestFit()[j]);
+
+  // Mutate copies
+  const int Nlayers = (int) fSettings.GetArch().size();
+  vector<int> Nnodes = fSettings.GetArch();
+
+  real xvals[2] = {1, 0}, fitpdfs;
+
+  const int NIte = pdf->GetNIte() + 1; // +1 to avoid on iteration 0 div by 0 error
+  for (int i=0; i<nmut; i++)
+    for (int j=0; j<fSettings.GetNFL(); j++)
+    {
+      const real ex    =  rg->GetRandomUniform();
+      for (int n=0; n< (int) fSettings.GetFlMutProp(j).mutsize.size(); n++)
+      {
+        int index = 0;
+        for (int m=1; m<Nlayers; m++)
+          for (int l=0; l< Nnodes[m]; l++)
+          {
+            if (rg->GetRandomUniform() < fSettings.GetFlMutProp(j).mutprob[n]) // mutation probability
+              for (int k=0; k< pdfs[i][j]->GetNumNodeParams(m); k++)
+              {
+                const real sz    = fSettings.GetFlMutProp(j).mutsize[n];
+                pdfs[i][j]->GetParameters()[index+k]+=sz*rg->GetRandomUniform(-1,1)/pow(NIte,ex);
+              }
+            index+= pdfs[i][j]->GetNumNodeParams(m);
+          }
+      }
+      pdfs[i][j]->Compute(xvals, &fitpdfs);
+      pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-1] += fitpdfs;
+    }
+
+  // Compute Preprocessing
+  pdf->ComputeSumRules();
+
+  return;
+}
+

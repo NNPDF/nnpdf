@@ -107,3 +107,18 @@ private:
    vector<real> fbetamin;
    vector<real> fbetamax;
 };
+
+
+/*!
+ * \brief The NGAFTMinimizer class
+ * A NGA which fixes the threshold term so NN(x) = NN(x)-NN(1).
+ */
+class NGAFTMinimizer : public GAMinimizer
+{
+public:
+  NGAFTMinimizer(NNPDFSettings const&);
+  virtual ~NGAFTMinimizer();
+
+protected:
+   virtual void Mutation(FitPDFSet*, int const& nmut);
+};
