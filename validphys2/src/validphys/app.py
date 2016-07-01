@@ -55,7 +55,8 @@ file in attachment:
         cout = parser.add_mutually_exclusive_group()
         #We want True False or None, so that none defaults to debug or quiet.
         #That's why we use store_const
-        cout.add_argument('--cout', action='store_const', const=True)
+        cout.add_argument('--cout', action='store_const', const=True,
+                          help = "display C output. Default depends on log level")
         cout.add_argument('--no-cout', dest='cout',
                               action='store_const', const=False)
 
