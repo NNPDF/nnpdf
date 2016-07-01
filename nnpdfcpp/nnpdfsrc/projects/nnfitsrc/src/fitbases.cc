@@ -108,16 +108,21 @@ fGSLWork(nnset.GetGSLWorkspace())
   
   // Preprocessing constants
   RandomGenerator* rg = RandomGenerator::GetRNG();
-  for (int i = 0; i < fNPDF; i++)
-  {
-    // Small x exponents
-    fAlpha[i] = -rg->GetRandomUniform(nnset.Get("fitting","basis")[i]["smallx"][0].as<real>(),
-                                      nnset.Get("fitting","basis")[i]["smallx"][1].as<real>());
-    
-    // Large x exponents
-    fBeta[i]  =  rg->GetRandomUniform(nnset.Get("fitting","basis")[i]["largex"][0].as<real>(),
-                                      nnset.Get("fitting","basis")[i]["largex"][1].as<real>());
-  }
+
+  if (NNPDFSettings::getParamType(nnset.Get("fitting","paramtype").as<string>()) == PARAM_NNP ||
+      NNPDFSettings::getFitMethod(nnset.Get("fitting","fitmethod").as<string>()) == MIN_NGAFT)
+    for (int i = 0; i < fNPDF; i++) fAlpha[i] = fBeta[i] = 0;
+  else
+    for (int i = 0; i < fNPDF; i++)
+      {
+        // Small x exponents
+        fAlpha[i] = -rg->GetRandomUniform(nnset.Get("fitting","basis")[i]["smallx"][0].as<real>(),
+                                          nnset.Get("fitting","basis")[i]["smallx"][1].as<real>());
+
+        // Large x exponents
+        fBeta[i]  =  rg->GetRandomUniform(nnset.Get("fitting","basis")[i]["largex"][0].as<real>(),
+                                          nnset.Get("fitting","basis")[i]["largex"][1].as<real>());
+      }
 
   return;
 }

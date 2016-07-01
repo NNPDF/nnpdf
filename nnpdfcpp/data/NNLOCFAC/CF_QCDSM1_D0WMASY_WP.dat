@@ -1,0 +1,20 @@
+********************************************************************************
+SetName:     D0WMASY-WP
+Author:      Alberto Guffanti <alberto.guffanti@unito.it>
+Date:        2016-02-02
+CodesUsed:   FEWZ 3.1b2
+TheoryInput: NNLO QCD (Input cards in external/FEWZ_3.1b2/bin/InputCards)
+PDFset:      NNPDF30_nnlo_as_0118
+Warnings:    Smoothed by Juan Rojo <juan.rojo@physics.ox.ac.uk>
+********************************************************************************
+1.0277218718963284
+1.0209163937613865
+1.016609957338117
+1.0141015155998538
+1.0128432991411531
+1.0124408161777962
+1.0126528525467882
+1.0133914717063566
+1.014722014735954
+1.0168631003362563
+

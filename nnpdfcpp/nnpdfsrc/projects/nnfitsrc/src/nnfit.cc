@@ -173,6 +173,16 @@ int main(int argc, char **argv)
           cout  << Colour::FG_BLUE << "Minimiser: Genetic Algorithm w/ nodal mutations" << Colour::FG_DEFAULT << endl;
           break;
 
+        case MIN_NGAP:
+          minim = new NGAPMinimizer(settings);
+          cout  << Colour::FG_BLUE << "Minimiser: Genetic Algorithm w/ nodal mutations for alpha/beta preprocessing" << Colour::FG_DEFAULT << endl;
+          break;
+
+        case MIN_NGAFT:
+          minim = new NGAFTMinimizer(settings);
+          cout  << Colour::FG_BLUE << "Minimiser: Genetic Algorithm w/ fixed threshold term NN(x)-NN(1)" << Colour::FG_DEFAULT << endl;
+          break;
+
         default:
           cout << Colour::FG_RED << "ERROR: Invalid Minimiser" << Colour::FG_DEFAULT <<endl;
           exit(-1);
@@ -196,6 +206,11 @@ int main(int argc, char **argv)
         case PARAM_QUADNN:
           fitset = FitPDFSet::Generate<QuadMultiLayerPerceptron,GAMinimizer>(settings, fitbasis);
           cout << Colour::FG_BLUE << "Parametrisation: Quadratic Neural Network" << Colour::FG_DEFAULT << endl;
+          break;
+
+        case PARAM_NNP:
+          fitset = FitPDFSet::Generate<MultiLayerPerceptronPreproc,GAMinimizer>(settings, fitbasis); // need to rewrite generate
+          cout << Colour::FG_BLUE << "Parametrisation: Neural Network Preprocessing" << Colour::FG_DEFAULT << endl;
           break;
 
         default:

@@ -24,7 +24,7 @@ using std::endl;
 #include "plotdata.h"
 #include "pdffuns.h"
 #include "nnpdfsettings.h"
-#include "nndiff.h"
+//#include "nndiff.h"
 #include "svn.h"
 
 #include "plotutils.h"
@@ -164,8 +164,8 @@ const string filename_13_evln[] = { "pdf_xSigma", "pdf_xg", "pdf_xV",
                                "pdf_xsplus", "pdf_xDs", "pdf_xsminus",
                                "pdf_xcplus", "pdf_xcminus" };
 
-const string filename_fitlog[] = { "tl", "ertot", "chi2rep"};
-const string filename_fitlog_ref[] = { "tl_ref", "ertot_ref","chi2rep_ref"};
+const string filename_fitlog[] = { "tl", "ertot", "chi2rep", "scatter"};
+const string filename_fitlog_ref[] = { "tl_ref", "ertot_ref","chi2rep_ref", "scatter_ref"};
 
 const string order[] = {"LO", "NLO", "NNLO"};
 
@@ -706,12 +706,47 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
         }
   }
 
+  /* New derivative preprocessing which deteriorated the quality of the fits.
   NNdiff *pdfdiff = new NNdiff( (i == 0) ? fSettings : fSettingsRef,
                                 (i == 0) ? fSettings.GetResultsDirectory() : fSettingsRef.GetResultsDirectory(),
-                                nfl, pdf->GetMembers());
+                                nfl, pdf->GetMembers());                                
 
   // Calculate effective exponents - here the parametrization should be more flexible
   fPDFNames = pdfdiff->getname();
+  */
+
+  // Calculate effective exponents - here the parametrization should be more flexible
+  real (*nn23f[])(real*) = {&fsinglet,&fgluon,&fV,&fT3,&fDelta,&fsplus,&fsminus,&fphoton};
+  string nn23[] = {"Singlet","Gluon","Valence","Triplet","#Delta_{s}","s^{+}","s^{-}","Photon"};
+
+  real (*evolf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fT3,&fT8,&fphoton};
+  string evol[] = {"Singlet","Gluon","Valence","V3","V8","T3","T8","Photon"};
+
+  real (*evolsf[])(real*) = {&fsinglet,&fgluon,&fV,&fV8,&fT3,&fT8,&fDelta,&fphoton};
+  string evols[] = {"Singlet","Gluon","Valence","V8","T3","T8","#Delta_{s}","Photon"};
+
+  real (*evolicf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fV15,&fT3,&fT8,&fT15,&fphoton};
+  string evolic[] = {"Singlet","Gluon","Valence","V3","V8","V15","T3","T8","T15","Photon"};
+
+  real (*nn31icf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fT3,&fT8,&fcplus,&fphoton};
+  string nn31ic[] = {"Singlet","Gluon","Valence","V3","V8","T3","T8","c^{+}","Photon"};
+
+  real (*functions[nfl])(real*);
+  const basisType setbasis = NNPDFSettings::getFitBasisType(fSettings.Get("fitting","fitbasis").as<string>());
+  if (setbasis == BASIS_NN23 || setbasis == BASIS_NN23QED)
+    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(nn23[t]); functions[t] = nn23f[t]; }
+  else if (setbasis == BASIS_EVOL || setbasis == BASIS_EVOLQED)
+    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
+  else if (setbasis == BASIS_EVOLS || setbasis == BASIS_EVOLSQED)
+    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evols[t]); functions[t] = evolsf[t]; }
+  else if (setbasis == BASIS_NN30 || setbasis == BASIS_NN30QED)
+    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
+  else if (setbasis == BASIS_FLVR || setbasis == BASIS_FLVRQED)
+    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
+  else if (setbasis == BASIS_EVOLIC || setbasis == BASIS_NN30IC)
+    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evolic[t]); functions[t] = evolicf[t]; }
+  else if (setbasis == BASIS_NN31IC)
+    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(nn31ic[t]); functions[t] = nn31icf[t]; }
 
   size_t NPOINTS = 100;
   real xa[NPOINTS+1], xb[NPOINTS+1], axlim[2], bxlim[2];
@@ -725,19 +760,20 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
   real betaCV[nfl][NPOINTS];
   real betaErr[nfl][NPOINTS];
 
-  axlim[0] = 1E-5;
+  axlim[0] = 1E-6;
   axlim[1] = 1E-1;
 
   bxlim[0] = 0.6;
   bxlim[1] = 0.95;
 
   double delta  = (log(axlim[1])-log(axlim[0])) / NPOINTS;
+  real Q0 = sqrt(fSettings.Get("theory","q20").as<real>());
 
   for (int j=0; j<nfl; j++)
   {
     for (size_t ix=0; ix<NPOINTS+1; ix++)
     {
-      if(ix == NPOINTS) {xa[ix]=1E-3; xb[ix]=0.75;}
+      if(ix == NPOINTS) {xa[ix]=1E-3; xb[ix]=0.65;}
       else
       {
         xa[ix] = exp (log(axlim[0]) + ix*delta);
@@ -749,17 +785,13 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
 
       for (int n=0; n<pdf->GetMembers(); n++)
       {
-        const real a = pdfdiff->alphaeff(xa[ix],j,n);
-        const real b = pdfdiff->betaeff(xb[ix],j,n);
+        double pdfa = GetGpdf(pdf,xa[ix],Q0,n,functions[j]);
+        double pdfb = GetGpdf(pdf,xb[ix],Q0,n,functions[j]);
 
-        if (!isnan(a) &&
-            a < (alphabnd[j][1]+alphabnd[j][0])/2.0 + 5*(alphabnd[j][1]-(alphabnd[j][1]+alphabnd[j][0])/2.0) &&
-            a > (alphabnd[j][1]+alphabnd[j][0])/2.0 - 5*(alphabnd[j][1]-(alphabnd[j][1]+alphabnd[j][0])/2.0))
-          alphas.push_back(a);
-        if (!isnan(b) && pdfdiff->nnval(xb[ix],j,n) != 0.0 &&
-            b < (betabnd[j][1]+betabnd[j][0])/2.0 + 5*(betabnd[j][1]-(betabnd[j][1]+betabnd[j][0])/2.0) &&
-            b > (betabnd[j][1]+betabnd[j][0])/2.0 - 5*(betabnd[j][1]-(betabnd[j][1]+betabnd[j][0])/2.0))
-          betas.push_back(b);
+        if (pdfa != 0.0)
+          alphas.push_back( alpha(pdfa,xa[ix]) );
+        if (pdfb != 0.0)
+          betas.push_back( beta(pdfb,xb[ix]) );
       }
 
       alphaCV[j][ix] = ComputeAVG(alphas);
@@ -778,19 +810,19 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
     }
     
     // Calculate new preprocessing range
-    //if (j < 2) //Gluon, Singlet
-    //{
-    fNewAlphaUp.push_back(min(real(2.0),alphaErr268Up[j][0]));
-    fNewAlphaDn.push_back(alphaErr268Dn[j][0]);
-    //}
-    //else
-    //{
-    //  fNewAlphaUp.push_back(min(real(2.0),max(alphaErr268Up[j][0],alphaErr268Up[j][NPOINTS])));
-    //  fNewAlphaDn.push_back(min(alphaErr268Dn[j][0],alphaErr268Dn[j][NPOINTS]));
-    //}
+    if (j < 2) //Gluon, Singlet
+    {
+      fNewAlphaUp.push_back(min(real(2.0),alphaErr268Up[j][0]));
+      fNewAlphaDn.push_back(alphaErr268Dn[j][0]);
+    }
+    else
+    {
+      fNewAlphaUp.push_back(min(real(2.0),max(alphaErr268Up[j][0],alphaErr268Up[j][NPOINTS])));
+      fNewAlphaDn.push_back(min(alphaErr268Dn[j][0],alphaErr268Dn[j][NPOINTS]));
+    }
     
-    fNewBetaUp.push_back(betaErr268Up[j][NPOINTS]);
-    fNewBetaDn.push_back(max(real(0.0),betaErr268Dn[j][NPOINTS]));
+    fNewBetaUp.push_back(max(betaErr268Up[j][NPOINTS-1],betaErr268Up[j][NPOINTS]));
+    fNewBetaDn.push_back(max(real(0.0),min(betaErr268Dn[j][NPOINTS-1],betaErr268Dn[j][NPOINTS])));
   }
 
   // New plot containers
@@ -2288,6 +2320,61 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
         }
         
       }
+
+
+      // if NNP extract alpha and beta from params file
+      if (NNPDFSettings::getParamType( (i==0) ? fSettings.Get("fitting","paramtype").as<string>() :
+                                       fSettingsRef.Get("fitting","paramtype").as<string>() ) == PARAM_NNP)
+        {
+          fstream pp;
+          stringstream paramtmp("");
+          if (i == 0)
+            paramtmp << pathchi2 << "replica_" << n << "/" << fSettings.GetPDFName() << ".params";
+          else
+            paramtmp << pathchi2 << "replica_" << n << "/" << fSettingsRef.GetPDFName() << ".params";
+          pp.open(paramtmp.str().c_str(), ios::in);
+
+
+          int fnparam = 0;
+          if (i == 0)
+            for (int l = 1; l < fSettings.GetArch().size(); l++)
+              fnparam += fSettings.GetArch()[l]*(1+fSettings.GetArch()[l-1]);
+          else
+            for (int l = 1; l < fSettingsRef.GetArch().size(); l++)
+              fnparam += fSettingsRef.GetArch()[l]*(1+fSettingsRef.GetArch()[l-1]);
+
+          fnparam+=2;
+
+          double alpha, beta;
+          string tmp;
+          for (int fl = 0; fl < nfl; fl++)
+            {
+              getline(pp, tmp);
+              for (int pr = 0; pr < fnparam; pr++)
+                {
+                  getline(pp, tmp);
+                  if (pr == fnparam-2) alpha = std::stod(tmp);
+                  if (pr == fnparam-1) beta = std::stod(tmp);
+                }
+
+              if (i == 0)
+                {
+                  fAlphaExp[fl][n-1] = alpha;
+                  fAlphaExp[fl][n-1] = alpha;
+                  fBetaExp[fl][n-1] = beta;
+                  fBetaExp[fl][n-1] = beta;
+                }
+              else
+                {
+                  fAlphaExpRef[fl][n-1] = alpha;
+                  fAlphaExpRef[fl][n-1] = alpha;
+                  fBetaExpRef[fl][n-1] = beta;
+                  fBetaExpRef[fl][n-1] = beta;
+                }
+            }
+
+          pp.close();
+        }
       
       
       p.close();
@@ -2345,6 +2432,13 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
   leg->AddEntry(chi2histo1,"E_{tr}","f");
   leg->AddEntry(chi2histo2,"E_{val}","f");
 
+  TGraph *scatter = new TGraph(nrep);
+  TGraph *scatteravg = new TGraph(1);
+  scatter->SetMarkerStyle(20);
+  scatter->SetTitle(TString("Scatter plot for " + title[i]));
+  scatteravg->SetMarkerStyle(21);
+  scatteravg->SetMarkerColor(kRed);
+
   for (int n = 0; n < nrep; n++)
   {
     if (i == 0)
@@ -2352,14 +2446,21 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
       tlhisto->Fill(fTL[n], 1.0/nrep);
       chi2histo1->Fill(fERTR[n], 1.0/nrep);
       chi2histo2->Fill(fERVAL[n], 1.0/nrep);
+      scatter->SetPoint(n, fERTR[n],fERVAL[n]);
     }
     else
     {
       tlhisto->Fill(fTLRef[n], 1.0/nrep);
       chi2histo1->Fill(fERTRRef[n], 1.0/nrep);
       chi2histo2->Fill(fERVALRef[n], 1.0/nrep);
+      scatter->SetPoint(n, fERTRRef[n],fERVALRef[n]);
     }      
   }
+
+  if (i == 0)
+    scatteravg->SetPoint(0, ComputeAVG(fERTR), ComputeAVG(fERVAL));
+  else
+    scatteravg->SetPoint(0, ComputeAVG(fERTRRef), ComputeAVG(fERVALRef));
   
   // Draw tl histogram
   tl->cd();
@@ -2374,6 +2475,14 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
   chi2histo1->Draw("HIST");
   chi2histo2->Draw("HIST same");
   leg->Draw("same");
+
+  TCanvas *cscatter = new TCanvas("scatter", "scatter");
+  scatter->Draw("ap");
+  scatteravg->Draw("p,same");
+  scatter->GetXaxis()->SetTitle("E_{tr}");
+  scatter->GetXaxis()->CenterTitle(true);
+  scatter->GetYaxis()->SetTitle("E_{val}");
+  scatter->GetYaxis()->CenterTitle(true);
 
   // Save plots to file
   stringstream tlfileout("");
@@ -2405,12 +2514,28 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
     chi2histo1fileout2 << fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << filename_fitlog_ref[1] << ".root";
   cchi2histo1->SaveAs(chi2histo1fileout2.str().c_str());
 
+  stringstream scatterfileout("");
+  if (i == 0)
+    scatterfileout << fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << filename_fitlog[3] << ".eps";
+  else
+    scatterfileout << fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << filename_fitlog_ref[3] << ".eps";
+  cscatter->SaveAs(scatterfileout.str().c_str());
+
+  stringstream scatterfileout2("");
+  if (i == 0)
+    scatterfileout2 << fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << filename_fitlog[3] << ".root";
+  else
+    scatterfileout2 << fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << filename_fitlog_ref[3] << ".root";
+  cscatter->SaveAs(scatterfileout2.str().c_str());
+
   delete tlhisto;
   delete tl;
 
   delete chi2histo1;
   delete chi2histo2;
   delete cchi2histo1;
+  delete scatter;
+  delete cscatter;
 }
 
 /**
@@ -3641,6 +3766,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
   f << "\\begin{figure}[H]" << endl;
   f << "\\begin{centering}" << endl;
   f << "\\includegraphics[scale=0.70]{plots/chi2_histo_datasets}" << endl;
+  f << "\\includegraphics[scale=0.32]{plots/scatter}\\includegraphics[scale=0.32]{plots/scatter_ref}" << endl;
   f << "\\par\\end{centering}" << endl;
   f << "\\caption{Total $\\chi^{2}$ for each dataset.}" << endl;
   f << "\\end{figure}" << endl;

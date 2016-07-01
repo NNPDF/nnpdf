@@ -17,7 +17,7 @@
 #include "svn.h"
 
 // Strings for config file output
-static const string minString[6]   = {"UNDEFINED", "GA", "NGA"};
+static const string minString[5]   = {"UNDEFINED", "GA", "NGA","NGAP","NGAFT"};
 static const string stopString[6]  = {"UNDEFINED", "FIXEDLENGTH", "TR", "GRAD", "VAR", "LOOKBACK"};
 static const string paramString[4] = {"UNDEFINED", "NN", "CHEBYSHEV", "QUADNN"};
 static const string basisString[14]= {"UNDEFINED", "NN23", "NN23QED","EVOL", "EVOLQED","EVOLS",
@@ -45,11 +45,15 @@ minType NNPDFSettings::getFitMethod(string const& method)
 {
   if (method.compare("GA") == 0)      return MIN_GA;
   if (method.compare("NGA") == 0)     return MIN_NGA;
-  
+  if (method.compare("NGAP") == 0)     return MIN_NGAP;
+  if (method.compare("NGAFT") == 0)     return MIN_NGAFT;
+
   cerr << "getFitMethod Error: Invalid fit method: "<<method<<endl;
   cerr << "choices are: "<<endl;
   cerr <<" - GA (Basic GA)"<<endl;
   cerr <<" - NGA"<<endl;
+  cerr <<" - NGAP"<<endl;
+  cerr <<" - NGAFT"<<endl;
   exit(-1);
   
   return MIN_UNDEF;
@@ -60,6 +64,7 @@ paramType NNPDFSettings::getParamType(string const& method)
   if (method.compare("NN") == 0)        return PARAM_NN;
   if (method.compare("CHEBYSHEV") == 0) return PARAM_CHEBYSHEV;
   if (method.compare("QUADNN") == 0)    return PARAM_QUADNN;
+  if (method.compare("NNP") == 0)       return PARAM_NNP;
   
   cerr << "getParamType Error: Invalid parametrization type: "<<method;
   exit(-1);

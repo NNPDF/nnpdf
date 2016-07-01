@@ -1,5 +1,7 @@
 x: k1
 
+x_label: '$\left\|\eta/y\right|$'
+
 y_label: '$d\sigma/dy$ (fb)' 
 
 line_by:
