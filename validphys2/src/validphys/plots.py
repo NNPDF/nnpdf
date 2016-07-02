@@ -78,6 +78,22 @@ def check_normalize_to(ns, **kwargs):
 @figuregen
 def plot_fancy(one_or_more_results, dataset,
                normalize_to:(int,str,type(None)) = None):
+    """
+    Read the PLOTTING configuration for the dataset and generate the
+    corrspondig data theory plot.
+
+    The input results are assumed to be such that the first one is the data,
+    and the subsequent ones are the predictions for the PDFfs. See
+    ``one_or_more_results``. The labelling of the predictions can be
+    influenced by setting ``label`` attribute of theories and pdfs.
+
+    normalize_to: should be either 'data', a pdf id or an index of the
+    result (0 for the data, and i for the ith pdf). None means plotting
+    absolute values.
+
+    See docs/plotting_format.md for details on the format of the PLOTTING
+    files.
+    """
 
 
     results = one_or_more_results

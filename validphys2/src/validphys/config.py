@@ -124,7 +124,7 @@ class Config(configparser.Config):
 
     @configparser.element_of('datasets')
     def parse_dataset(self, dataset:dict, * ,theoryid, use_cuts, fit=None):
-        """Load a dataset specification from the corrsponding theory.
+        """Dataset specification from the theory and CommonData.
            Use the cuts from the fit, if provided."""
         #TODO: Move this logic to Loader?
         theoryno, theopath = theoryid
