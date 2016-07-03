@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Mar  9 15:58:14 2016
-
-@author: Zahari Kassabov
+Figures for visualizing results
 """
 from __future__ import generator_stop
 
@@ -25,6 +23,7 @@ log = logging.getLogger(__name__)
 
 @figure
 def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
+    """Plot the distribution of chi²s of the members of the pdfset."""
     setlabel = dataset.name
     fig, ax = plt.subplots()
     label = pdf.name
@@ -44,7 +43,7 @@ def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
 #TODO: This should be simplified if at all possible. For now some more examples
 #are needed for a spec to emerge.
 @make_check
-def check_normalize_to(ns, **kwargs):
+def _check_normalize_to(ns, **kwargs):
     """Transforn normalize_to into an index."""
 
     msg = ("normalize_to should be either 'data', a pdf id or an index of the "
@@ -74,7 +73,7 @@ def check_normalize_to(ns, **kwargs):
     raise RuntimeError("Should not be here")
 
 
-@check_normalize_to
+@_check_normalize_to
 @figuregen
 def plot_fancy(one_or_more_results, dataset,
                normalize_to:(int,str,type(None)) = None):
@@ -241,6 +240,8 @@ def plot_fancy(one_or_more_results, dataset,
 
 @figure
 def plot_training_validation(fit, replica_data):
+    """Scatter plot with the training and validation chi² for each replica
+    in the fit. The mean is also displayed"""
     training, valid = zip(*((dt.training, dt.validation) for dt in replica_data))
     fig, ax = plt.subplots()
     s=ax.plot(training,valid,linestyle='', marker='o', markersize=5, zorder=100)
@@ -258,6 +259,8 @@ def plot_training_validation(fit, replica_data):
 
 @figure
 def plot_trainvaliddist(fit, replica_data):
+    """KDEs for the trainning and validation distributions for
+    each replica in the fit."""
     training, valid = zip(*((dt.training, dt.validation) for dt in replica_data))
     fig, ax = plt.subplots()
 
