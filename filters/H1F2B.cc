@@ -36,8 +36,11 @@ void H1F2BFilter::ReadData()
     f1 >> fData[i];
     
     f1 >> dummy;
-    f1 >> fStat[i];
 
+    // Statistical errors - percentage with respect the observable
+    f1 >> fStat[i];
+    fStat[i] = fStat[i]*fData[i]*1e-2;
+    
     double sist;
     f1 >> sist;
     f1 >> dummy;
@@ -63,8 +66,6 @@ void H1F2BFilter::ReadData()
     {
       tempsis += fSys[i][l].mult*fSys[i][l].mult;
     }
-
-    cout << sqrt(tempsis)/sist << endl;
 
     // Additive errors   
     for (int l = 0; l < fNSys; l++)

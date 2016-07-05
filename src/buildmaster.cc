@@ -228,7 +228,10 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ZEUSHERA2CCPFilter());
   target.push_back(new ZEUSHERA2NCPFilter());
 
+  //***************************F2B******************************
+
   target.push_back(new ZEUSF2BFilter());
+  target.push_back(new H1F2BFilter());
 
   // ************************ HERACOMB  ****************************
 
