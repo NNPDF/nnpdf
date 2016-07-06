@@ -767,7 +767,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
   bxlim[1] = 0.95;
 
   double delta  = (log(axlim[1])-log(axlim[0])) / NPOINTS;
-  real Q0 = sqrt(fSettings.Get("theory","q20").as<real>());
+  real Q0 = stod(fSettings.GetTheory(APFEL::kQ0));
 
   for (int j=0; j<nfl; j++)
   {
