@@ -59,7 +59,7 @@ void H1F2BFilter::ReadData()
       f1 >> temp; 
       fSys[i][l].mult = abs(temp);
       fSys[i][l].type = MULT;
-      fSys[i][l].name = "CORR_"+sysNames[l];
+      fSys[i][l].name = "CORR_H1B_"+sysNames[l];
     }
 
     for (int l = 0; l < fNSys; ++l)
