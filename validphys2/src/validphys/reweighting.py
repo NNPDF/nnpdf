@@ -1,13 +1,9 @@
     # -*- coding: utf-8 -*-
 """
-Utilities for reweighting studies
+Utilities for reweighting studies.
 
 Implements utilities for calculating the NNPDF weights and unweighted PDF sets.
 It also allows for some basic statistics.
-
-Created on Mon May 30 12:50:16 2016
-
-@author: Zahari Kassabov
 """
 import logging
 from collections import OrderedDict
@@ -31,15 +27,22 @@ from validphys.lhio import new_pdf_from_indexes
 
 log = logging.getLogger(__name__)
 
+__all__ = ('chi2_data_for_reweighting_experiments', 'make_unweighted_pdf',
+           'nnpdf_weights', 'nnpdf_weights_numerator', 'p_alpha_study',
+           'plot_p_alpha', 'reweighting_stats', 'unweighted_index')
+
 #TODO: implement this using reportengine expand when available
 #use_t0 is to request that parameter to be set explicitly
 @checks.check_pdf_is_montecarlo
 def chi2_data_for_reweighting_experiments(reweighting_experiments, pdf, use_t0,
                                           t0set=None):
+    """Like chi2data, but for reweighting experiments."""
     return [abs_chi2_data(results(exp,pdf,t0set,)) for exp in reweighting_experiments]
 
 
 def nnpdf_weights_numerator(chi2_data_for_reweighting_experiments):
+    """Compute the numerator of the NNPDF weights. This is useful for P(α),
+    which uses a different normalization."""
     total_ndata = 0
     chi2s = np.zeros_like(chi2_data_for_reweighting_experiments[0][0].data)
     for data in chi2_data_for_reweighting_experiments:
@@ -58,6 +61,7 @@ def nnpdf_weights_numerator(chi2_data_for_reweighting_experiments):
 #will call list[0]
 @checks.check_not_empty('reweighting_experiments')
 def nnpdf_weights(chi2_data_for_reweighting_experiments):
+    """Compute the replica weights according to the NNPDF formula."""
     numerator = nnpdf_weights_numerator(chi2_data_for_reweighting_experiments)
     return pd.DataFrame(numerator/np.sum(numerator),
                         index=np.arange(1, len(numerator) + 1))
@@ -69,6 +73,14 @@ def effective_number_of_replicas(w):
 
 @table
 def reweighting_stats(pdf, nnpdf_weights, p_alpha_study):
+    """Compute varios statistics related to reweighting.
+
+    Those are:
+     - Number of initial replicas.
+     - Effective number of replicas.
+     - Median of the weightd.
+     - The maximum value of P(alpha) in some sensible range.
+    """
     er = effective_number_of_replicas(nnpdf_weights)
     initial_replicas = len(pdf) - 1
     median = np.median(nnpdf_weights)
@@ -84,6 +96,7 @@ def reweighting_stats(pdf, nnpdf_weights, p_alpha_study):
     return pd.Series(result, index=result.keys())
 
 def p_alpha_study(chi2_data_for_reweighting_experiments):
+    """Compute P(α) in the range (0.5, 4)"""
     alphas = np.exp(np.linspace(np.log(0.5), np.log(4),31))
     vals = []
     for alpha in alphas:
@@ -97,6 +110,7 @@ def p_alpha_study(chi2_data_for_reweighting_experiments):
 
 @figure
 def plot_p_alpha(p_alpha_study):
+    """Plot the results of ``p_alpha_study``."""
     fig, ax = plt.subplots()
     ax.set_title(r"$P(\alpha)$")
 
@@ -109,6 +123,8 @@ def plot_p_alpha(p_alpha_study):
 
 @table
 def unweighted_index(nnpdf_weights, nreplicas:int=100):
+    """The index of the input replicas that corresponds to an unweighted set,
+    for the given weights. This can be saved for testing purposes."""
     nnpdf_weights = np.ravel(nnpdf_weights)
     res = 1 + np.random.choice(len(nnpdf_weights), size=nreplicas, p=nnpdf_weights)
     return pd.DataFrame(res, index=np.arange(1,nreplicas+1))
@@ -116,7 +132,7 @@ def unweighted_index(nnpdf_weights, nreplicas:int=100):
 
 
 @make_check
-def prepare_pdf_name(*, callspec, ns, environment, **kwargs):
+def _prepare_pdf_name(*, callspec, ns, environment, **kwargs):
     #TODO: Does this make any sense?
     if ns['output_path'] is not None:
         raise checks.CheckError("Output folder is not meant to be overwritten")
@@ -136,6 +152,8 @@ def prepare_pdf_name(*, callspec, ns, environment, **kwargs):
         raise checks.CheckError("The PDF set that would be "
                          "generated already exists in the LHAPDF path:\n%s"
                          % lhaindex.finddir(set_name))
+
+    #Ugly hack to allow analyzing the generated pdf some day (as in smpdf)
     if '_future_pdfs' not in rootns:
         rootns['_future_pdfs'] = {}
 
@@ -152,15 +170,21 @@ def prepare_pdf_name(*, callspec, ns, environment, **kwargs):
     future_pdfs[set_name] = callspec
 
 
-
-@prepare_pdf_name
+#TODO: This should return a PDF and nothing else. The environment should
+#take care of saving the PDFs like we do for everything else.
+@_prepare_pdf_name
 @checks.check_can_save_grid
 def make_unweighted_pdf(pdf, unweighted_index,
                         set_name:(str, type(None))=None, output_path=None,
-                        installgrid=True):
+                        installgrid:bool=True):
+    """Generate an unweighted PDF set, from the prior ``pdf`` and the
+    reweighting_experiments."""
     new_pdf_from_indexes(pdf=pdf, indexes=np.ravel(unweighted_index),
                          set_name=set_name, folder=output_path,
                          installgrid=installgrid)
 
     return PDF(set_name)
+
+#Display this in the help
+make_unweighted_pdf.highlight = 'pdfset'
 

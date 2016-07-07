@@ -1,0 +1,12 @@
+fit: 160609-rce7f669-001-zk
+pdf: MMHT2014nlo68cl
+use_cuts: True
+actions_:
+   - theory:
+       - perreplica_chi2_table
+
+theory:
+    from_: fit
+
+experiments:
+    from_: fit

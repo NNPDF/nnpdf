@@ -182,7 +182,9 @@ def experiments_covmat(experiments, experiments_index):
     (symmetric) matrix, with the 3 first rows and columns being:
 
         - experiment name
+
         - dataset name
+
         - index of the point within the dataset.
     """
     data = np.zeros((len(experiments_index),len(experiments_index)))
@@ -212,9 +214,10 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
     """Generate closure pseudodata replicas from the given pdf.
 
     nclosure: Number of Level 1 pseudodata replicas.
+
     nnoisy:   Number of Level 2 replicas generated out of each pseudodata replica.
 
-    The columns of the table are of the form (clos_0, noise_0_n0 ... ,clos_1, ...)
+    The columns of the table are of the form (clos_0, noise_0_n0 ..., clos_1, ...)
     """
 
     #TODO: Do this somewhere else
@@ -269,6 +272,7 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
 #TODO: don't do computations here
 @table
 def experiment_chi2_table(experiments, pdf):
+    """Export the chi² for experiments and datasets. This is experimnetal."""
 
     records = []
     for experiment in experiments:
@@ -293,7 +297,8 @@ def experiment_chi2_table(experiments, pdf):
 
 def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None):
     """Tuple of data and theory results for a single pdf.
-    The theory is specified as part of the dataset
+    The theory is specified as part of the dataset.
+    An experiment is also allowed.
     (as a result of the C++ code layout)."""
 
     data = dataset.load()
@@ -335,6 +340,10 @@ def pdf_results(dataset:DataSetSpec, pdfs:list, t0set:(PDF, type(None))):
 @remove_outer('pdfs', 'pdf')
 def one_or_more_results(dataset:DataSetSpec, pdfs:list=None, pdf:PDF=None,
                         t0set:(PDF, type(None))=None):
+    """Generate a list of results, where the first element is the data values,
+    and the next is either the prediction for pdf or for each of the pdfs.
+    Which of the two is selected intelligently depending on the namespace,
+    when executing as an action."""
     if pdf:
         return results(dataset, pdf, t0set)
     else:
@@ -342,7 +351,7 @@ def one_or_more_results(dataset:DataSetSpec, pdfs:list=None, pdf:PDF=None,
     raise ValueError("Either 'pdf' or 'pdfs' is required")
 
 
-def all_chi2(results):
+def _all_chi2(results):
     data_result, th_result = results
     diffs = th_result._rawdata.T - data_result.central_value
     #chi²_i = diff_ij @ invcov_jk @ diff_ki
@@ -352,25 +361,28 @@ def all_chi2(results):
 
 
 def abs_chi2_data(results):
+    """Return a tuple (member_chi², central_chi², numpoints)"""
     data_result, th_result = results
-    chi2s = all_chi2(results)
+    chi2s = _all_chi2(results)
 
     central_diff = th_result.central_value - data_result.central_value
     central_result = (central_diff@data_result.invcovmat@central_diff)
 
     return (th_result.stats_class(chi2s[:, np.newaxis]), central_result, len(data_result))
 
-def chs_per_replica(chs):
+def _chs_per_replica(chs):
     th, _, l = chs
     return th.data.ravel()/l
 
 
 @table
 def correlate_bad_experiments(experiments, replica_data, pdf):
+    """Generate a table for each replica with entries
+    ("Replica_mean_chi2", "Worst_dataset","Worst_dataset_chi2")."""
     datasets = [ds for exp in experiments for ds in exp.datasets]
     mchi2 = [0.5*(val.training + val.validation) for val in replica_data]
 
-    chs = [chs_per_replica(abs_chi2_data(results(ds, pdf))) for ds in datasets]
+    chs = [_chs_per_replica(abs_chi2_data(results(ds, pdf))) for ds in datasets]
     worst_indexes = np.argmax(chs, axis=0)
     mchi2 = np.mean(chs, axis=0)
     print(worst_indexes)
@@ -388,6 +400,7 @@ def correlate_bad_experiments(experiments, replica_data, pdf):
 #TODO: Compute results
 @table
 def perreplica_chi2_table(experiments, pdf):
+    """Chi² per point for each replica for each experiment."""
 
     chs = [abs_chi2_data(results(exp, pdf)) for exp in experiments]
 
@@ -402,11 +415,11 @@ def perreplica_chi2_table(experiments, pdf):
     return pd.DataFrame(total_chis)
 
 @make_check
-def assert_use_cuts_true(ns, **kwargs):
+def _assert_use_cuts_true(ns, **kwargs):
     if not ns['use_cuts']:
         raise CheckError("use_cuts needs to be True for this action.")
 
-@assert_use_cuts_true
+@_assert_use_cuts_true
 @table
 def closure_shifts(experiments_index, fit, use_cuts, experiments):
     """Save the differenve between the fitted data and the real commondata
@@ -447,6 +460,18 @@ chi2_stat_labels = {
 }
 
 def chi2_stats(abs_chi2_data):
+    """Compute severa estimators from the chi²:
+
+     - central_mean
+
+     - npoints
+
+     - perreplica_mean
+
+     - perreplica_std
+
+     - chi2_per_data
+    """
     rep_data, central_result, npoints = abs_chi2_data
     m = central_result.mean()
     rep_mean = rep_data.central_value().mean()
