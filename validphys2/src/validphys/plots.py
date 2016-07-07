@@ -223,6 +223,156 @@ def plot_fancy(one_or_more_results, dataset,
 
             yield fig
 
+
+@check_normalize_to
+@figuregen
+def plot_bands(one_or_more_results, dataset,
+               normalize_to:(int,str,type(None)) = None):
+
+
+    results = one_or_more_results
+
+    nnpdf_dt = dataset.load()
+    if not dataset.commondata.plotfiles:
+        infos = [get_info(nnpdf_dt)]
+    else:
+        infos = []
+        for p in dataset.commondata.plotfiles:
+            with p.open() as f:
+                infos.append(get_info(nnpdf_dt, f, cuts=dataset.cuts))
+    for info in infos:
+        table = kitable(nnpdf_dt, info)
+        nkinlabels = len(table.columns)
+
+        if normalize_to is not None:
+            norm_result = results[normalize_to]
+            #We modify the table, so we pass only the label columns
+            norm_cv, _ = transform_result(norm_result.central_value,
+                                       norm_result.std_error,
+                                       table.iloc[:,:nkinlabels], info)
+
+        for i,result in enumerate(results):
+            #We modify the table, so we pass only the label columns
+            cv, err = transform_result(result.central_value, result.std_error,
+                                       table.iloc[:,:nkinlabels], info)
+            #By doing tuple keys we avoid all possible name collisions
+            if normalize_to is None:
+                table[('cv', i)] = cv
+                table[('err', i)] = err
+            else:
+                table[('cv', i)] = cv/norm_cv
+                table[('err', i)] = err/norm_cv
+        if info.figure_by:
+            figby = table.groupby(info.figure_by)
+        else:
+            figby = [('', table)]
+        for samefig_vals, fig_data in figby:
+            #Have consistent output for one or more groupby columns
+            if not isinstance(samefig_vals, tuple):
+                samefig_vals = (samefig_vals, )
+            fig, ax = plt.subplots()
+            plotutils.setup_ax(ax)
+            ax.set_title("%s %s"%(dataset.name,
+                         info.group_label(samefig_vals, info.figure_by)))
+            if info.line_by:
+                lineby = fig_data.groupby(info.line_by)
+            else:
+                lineby = [('', fig_data)]
+
+            first = True
+
+
+            #http://matplotlib.org/users/transforms_tutorial.html
+            for (sameline_vals, line_data) in lineby:
+                ax.set_prop_cycle(None)
+                if first:
+                    labels = True
+                else:
+                    labels = False
+                first = False
+                if not isinstance(sameline_vals, tuple):
+                    sameline_vals = (sameline_vals, )
+
+                nres = len(results)
+                first_offset = -nres//2
+
+                if info.x == 'idat':
+                    x = np.array(line_data.index)
+                else:
+                    x = line_data[info.x].as_matrix()
+
+                #Use black for the first iteration (data),
+                #and follow the cycle for
+                #the rest.
+                color = '#262626'
+                elw = None
+                mark = 3
+                markw = 0.5
+                ls = '--'
+                al = 1
+
+                for i, res in enumerate(results):
+
+                    if labels:
+                        label = res.label
+                    else:
+                        label = None
+                    cv = line_data[('cv', i)].as_matrix()
+                    err = line_data[('err', i)].as_matrix()
+
+                    dx, dy = 0.05*(i-first_offset), 0.
+                    offset = transforms.ScaledTranslation(dx, dy,
+                                                          fig.dpi_scale_trans)
+                    offset_transform = ax.transData + offset
+                    ax.errorbar(x, cv, yerr=err,
+                         linestyle=ls,
+                         lw=.25,
+                         label= label,
+                         elinewidth = elw,
+                         capsize=2,
+                         markersize = mark,
+                         marker = 's',
+                         markeredgewidth=markw,
+                         c=color,
+                         alpha = al,
+                         zorder=1000,
+                         transform=offset_transform)
+
+                    markw = None
+                    color = None
+                    elw = 20
+                    mark = 0.
+                    ls = ''
+                    al = 0.6
+
+                glabel = info.group_label(sameline_vals, info.line_by)
+                annotate_point = x[-1], line_data[('cv', 0)].as_matrix()[-1]
+                ax.annotate(glabel, annotate_point, xytext=(15 ,-10),
+                                     size='xx-small',
+                                     textcoords='offset points', zorder=10000)
+
+
+
+            if info.x_scale:
+                ax.set_xscale(info.x_scale)
+
+            if info.y_scale:
+                ax.set_yscale(info.y_scale)
+
+            if normalize_to is None:
+                if info.y_label:
+                    ax.set_ylabel(info.y_label)
+            else:
+                ax.set_ylabel("Ratio to %s" % norm_result.label)
+
+            ax.legend().set_zorder(100000)
+            ax.set_xlabel(info.xlabel)
+
+            fig.tight_layout()
+
+
+            yield fig
+
 @figure
 def plot_training_validation(fit, replica_data):
     training, valid = zip(*((dt.training, dt.validation) for dt in replica_data))
