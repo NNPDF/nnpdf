@@ -239,7 +239,7 @@ def plot_fancy(one_or_more_results, dataset,
             yield fig
 
 
-@check_normalize_to
+@_check_normalize_to
 @figuregen
 def plot_bands(one_or_more_results, dataset,
                normalize_to:(int,str,type(None)) = None):
