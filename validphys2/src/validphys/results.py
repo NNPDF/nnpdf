@@ -400,19 +400,24 @@ def correlate_bad_experiments(experiments, replica_data, pdf):
 #TODO: Compute results
 @table
 def perreplica_chi2_table(experiments, pdf):
-    """Chi² per point for each replica for each experiment."""
+    """Chi² per point for each replica for each experiment.
+    Also outputs the total chi² per replica."""
 
     chs = [abs_chi2_data(results(exp, pdf)) for exp in experiments]
 
-    total_chis = np.zeros((len(experiments), len(pdf)))
-    #total_l = 0
-    for i,ch in enumerate(chs):
+    total_chis = np.zeros((len(experiments) + 1, len(pdf)))
+    ls = []
+    for i,ch in enumerate(chs, 1):
         th, central, l = ch
         total_chis[i]= [central, *th.error_members()]
-        total_chis[i] /= l
-    #total_chis/=total_l
+        ls.append(l)
 
-    return pd.DataFrame(total_chis.T, columns = [exp.name for exp in experiments])
+    #total_chis/=total_l
+    total_chis[0] = np.sum(total_chis[1:,:], axis=0)
+    total_chis[0]/= np.sum(ls)
+    total_chis[1:,:]/= np.array(ls)[:, np.newaxis]
+
+    return pd.DataFrame(total_chis.T, columns = ['Total', *[exp.name for exp in experiments]])
 
 @make_check
 def _assert_use_cuts_true(ns, **kwargs):
