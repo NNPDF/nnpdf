@@ -404,15 +404,15 @@ def perreplica_chi2_table(experiments, pdf):
 
     chs = [abs_chi2_data(results(exp, pdf)) for exp in experiments]
 
-    total_chis = np.zeros(len(pdf))
-    total_l = 0
-    for ch in chs:
+    total_chis = np.zeros((len(experiments), len(pdf)))
+    #total_l = 0
+    for i,ch in enumerate(chs):
         th, central, l = ch
-        total_chis += [central, *th.error_members()]
-        total_l += l
-    total_chis/=total_l
+        total_chis[i]= [central, *th.error_members()]
+        total_chis[i] /= l
+    #total_chis/=total_l
 
-    return pd.DataFrame(total_chis)
+    return pd.DataFrame(total_chis.T, columns = [exp.name for exp in experiments])
 
 @make_check
 def _assert_use_cuts_true(ns, **kwargs):
