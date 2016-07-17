@@ -734,19 +734,19 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
   real (*functions[nfl])(real*);
   const basisType setbasis = NNPDFSettings::getFitBasisType(fSettings.Get("fitting","fitbasis").as<string>());
   if (setbasis == BASIS_NN23 || setbasis == BASIS_NN23QED)
-    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(nn23[t]); functions[t] = nn23f[t]; }
+    for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(nn23[t]); functions[t] = nn23f[t]; }
   else if (setbasis == BASIS_EVOL || setbasis == BASIS_EVOLQED)
-    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
+    for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
   else if (setbasis == BASIS_EVOLS || setbasis == BASIS_EVOLSQED)
-    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evols[t]); functions[t] = evolsf[t]; }
+    for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(evols[t]); functions[t] = evolsf[t]; }
   else if (setbasis == BASIS_NN30 || setbasis == BASIS_NN30QED)
-    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
+    for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
   else if (setbasis == BASIS_FLVR || setbasis == BASIS_FLVRQED)
-    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
+    for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
   else if (setbasis == BASIS_EVOLIC || setbasis == BASIS_NN30IC)
-    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(evolic[t]); functions[t] = evolicf[t]; }
+    for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(evolic[t]); functions[t] = evolicf[t]; }
   else if (setbasis == BASIS_NN31IC)
-    for (int t = 0; t < nfl; t++) { fPDFNames.push_back(nn31ic[t]); functions[t] = nn31icf[t]; }
+    for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(nn31ic[t]); functions[t] = nn31icf[t]; }
 
   size_t NPOINTS = 100;
   real xa[NPOINTS+1], xb[NPOINTS+1], axlim[2], bxlim[2];
