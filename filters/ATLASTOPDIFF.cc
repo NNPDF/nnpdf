@@ -116,6 +116,7 @@ Notes:
 */
 
 #include "ATLASTOPDIFF.h"
+#include <math.h>
 
 //A - NORMALISED distributions
 
@@ -407,20 +408,23 @@ void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
       fData[fNData/2-1-i] = datum/2.0;
 
       lstream >> stat;
-      //fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
-      //fStat[fNData/2-1-i] = stat/sqrt(2.0);
-      fStat[i+fNData/2] = 0.;
-      fStat[fNData/2-1-i] = 0.;
+      fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
+      fStat[fNData/2-1-i] = stat/sqrt(2.0);
+      //fStat[i+fNData/2] = 0.;
+      //fStat[fNData/2-1-i] = 0.;
 
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
       double shift = 0.;
 
+      /*
       //Artificial systematics
       for(int i=0; i<fNData/2; i++)
 	{
 	  for(int j=0; j<fNData/2; j++)
-	    {
+	    { 
+	      //const double eps=0.0000001;
+
 	      fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
 	      fSys[i+fNData/2][fNData/2-1-j].mult = fSys[i+fNData/2][fNData/2-1-j].add*100/fData[i+fNData/2];
 	      fSys[i+fNData/2][fNData/2-1-j].type = ADD;
@@ -442,14 +446,15 @@ void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
 	      fSys[fNData/2-1-i][j+fNData/2].name = "CORR";
 	    }
 	}  
+      */
 
       //Real systematics
-      for(int j=fNData; j<fNSys; j++)
+      for(int j=0; j<fNSys; j++)
 	{
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
 	  string sysdescr;
-	  
+
 	  ostringstream id;
 	  id << j;
 	  sysdescr = "CORR";
@@ -569,20 +574,23 @@ void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
       fData[fNData/2-1-i] = datum/2.0;
 
       lstream >> stat;
-      //fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
-      //fStat[fNData/2-1-i] = stat/sqrt(2.0);
-      fStat[i+fNData/2] = 0.;
-      fStat[fNData/2-1-i] = 0.;
+      fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
+      fStat[fNData/2-1-i] = stat/sqrt(2.0);
+      //fStat[i+fNData/2] = 0.;
+      //fStat[fNData/2-1-i] = 0.;
 
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
       double shift = 0.;
 
+      /*
      //Artificial systematics
       for(int i=0; i<fNData/2; i++)
 	{
 	  for(int j=0; j<fNData/2; j++)
 	    {
+	      //const double eps=0.0000001;
+
 	      fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
 	      fSys[i+fNData/2][fNData/2-1-j].mult = fSys[i+fNData/2][fNData/2-1-j].add*100/fData[i+fNData/2];
 	      fSys[i+fNData/2][fNData/2-1-j].type = ADD;
@@ -604,9 +612,10 @@ void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 	      fSys[fNData/2-1-i][j+fNData/2].name = "CORR";
 	    }
 	}  
+      */
 
       //Real systematics
-      for(int j=fNData; j<fNSys; j++)
+      for(int j=0; j<fNSys; j++)
 	{
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
@@ -851,30 +860,30 @@ void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
       getline(f1,line);
       istringstream lstream(line);
       lstream >> pt_top >> ddum >> ddum; 
-
+      
       fKin1[i] = pt_top;       //P_T^(top)
       fKin2[i] = Mt;       
       fKin3[i] = 8000;         //sqrt(s)
-
+      
       lstream >> fData[i];     //differential distribution
       lstream >> fStat[i];     //its statistical uncertainty
       fStat[i] = 0.;
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
       double shift = 0.;
-
+      
       //Artificial systematics
-      for(int i=0; i<fNData; i++)
+      for(int l=0; l<fNData; l++)
 	{
 	  for(int j=0; j<fNData; j++)
 	    {
-	      fSys[i][j].add  = syscor[i][j];
-	      fSys[i][j].mult = fSys[i][j].add*100/fData[i];
-	      fSys[i][j].type = ADD;
-	      fSys[i][j].name = "CORR";
+	      fSys[l][j].add  = syscor[l][j];
+	      fSys[l][j].mult = fSys[l][j].add*100/fData[l];
+	      fSys[l][j].type = ADD;
+	      fSys[l][j].name = "CORR";
 	    }
-	}  
-      
+	}        
+
       //Real systematics
       for(int j=fNData; j<fNSys-1; j++)
 	{
@@ -898,9 +907,9 @@ void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
 	  fSys[i][j].name = sysdescr;
 	  fSys[i][j].mult = stmp;
 	  fSys[i][j].add  = fSys[i][j].mult*fData[i]/100;
-
+	  
 	  shift += dtmp;
-
+	  
 	}
 
       //Overall luminosity uncertainty
@@ -908,11 +917,11 @@ void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
       fSys[i][64].name = "CORR";
       fSys[i][64].mult=2.8;
       fSys[i][64].add=fSys[i][64].mult*fData[i]/100;
-
+      
       fData[i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
-   
+      
     }  
-  
+
   f1.close();
   f2.close();
 }
@@ -1086,24 +1095,39 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
       lstream >> stat;
       fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
       fStat[fNData/2-1-i] = stat/sqrt(2.0);
-      fStat[i+fNData/2]   = 0.;  //statistical uncertainty
-      fStat[fNData/2-1-i] = 0.;
+      //fStat[i+fNData/2]   = 0.;            //statistical uncertainty
+      //fStat[fNData/2-1-i] = 0.;
 
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
       double shift = 0.;
 
+      /*
       //Artificial systematics
-      for(int i=0; i<fNData/2; i++)
+      for(int l=0; l<fNData/2; l++)
 	{
 	  for(int j=0; j<fNData/2; j++)
 	    {
-	      fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
+	     
+	      fSys[l+fNData/2][j].add  = syscor[l][j]/sqrt(2.0);
+	      fSys[l+fNData/2][j].mult = fSys[l+fNData/2][j].add*100/fData[l+fNData/2];
+	      fSys[l+fNData/2][j].type = ADD;
+	      fSys[l+fNData/2][j].name = "CORR";
+
+	      fSys[fNData/2-1-l][j].add  = syscor[l][j]/sqrt(2.0)/2.;
+	      fSys[fNData/2-1-l][j].mult = fSys[fNData/2-1-l][j].add*100/fData[fNData/2-1-l];
+	      fSys[fNData/2-1-l][j].type = ADD;
+	      fSys[fNData/2-1-l][j].name = "CORR";
+
+	      
+	      const double eps=0.0000001;
+
+	      fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/(2.+eps);
 	      fSys[i+fNData/2][fNData/2-1-j].mult = fSys[i+fNData/2][fNData/2-1-j].add*100/fData[i+fNData/2];
 	      fSys[i+fNData/2][fNData/2-1-j].type = ADD;
 	      fSys[i+fNData/2][fNData/2-1-j].name = "CORR";
 
-	      fSys[i+fNData/2][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[i+fNData/2][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/(2.+eps);
 	      fSys[i+fNData/2][j+fNData/2].mult = fSys[i+fNData/2][j+fNData/2].add*100/fData[i+fNData/2];
 	      fSys[i+fNData/2][j+fNData/2].type = ADD;
 	      fSys[i+fNData/2][j+fNData/2].name = "CORR";
@@ -1117,11 +1141,14 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 	      fSys[fNData/2-1-i][j+fNData/2].mult = fSys[fNData/2-1-i][j+fNData/2].add*100/fData[fNData/2-1-i];
 	      fSys[fNData/2-1-i][j+fNData/2].type = ADD;
 	      fSys[fNData/2-1-i][j+fNData/2].name = "CORR";
+	      	      
+
 	    }
 	}  
+      */
 
       //Real systematics
-      for(int j=fNData; j<fNSys; j++)
+      for(int j=0; j<fNSys-1-fNData/2; j++)
 	{
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
@@ -1155,19 +1182,64 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 	}
 
       //overall luminosity uncertainty
-      fSys[i+fNData/2][66].type = MULT;
-      fSys[i+fNData/2][66].name ="CORR";
-      fSys[i+fNData/2][66].mult=2.8;
-      fSys[i+fNData/2][66].add=fSys[i][66].mult*fData[i]/100;
-      fSys[fNData/2-1-i][66].type = MULT;
-      fSys[fNData/2-1-i][66].name = "CORR";
-      fSys[fNData/2-1-i][66].mult=2.8;
-      fSys[fNData/2-1-i][66].add=fSys[i][66].mult*fData[i]/100;
+      fSys[i+fNData/2][56].type = MULT;
+      fSys[i+fNData/2][56].name ="CORR";
+      fSys[i+fNData/2][56].mult=2.8;
+      fSys[i+fNData/2][56].add=fSys[i+fNData/2][56].mult*fData[i+fNData/2]/100;
+      fSys[fNData/2-1-i][56].type = MULT;
+      fSys[fNData/2-1-i][56].name = "CORR";
+      fSys[fNData/2-1-i][56].mult=2.8;
+      fSys[fNData/2-1-i][56].add=fSys[fNData/2-1-i][56].mult*fData[fNData/2-1-i]/100;
       
       fData[i+fNData/2]*=(1.0 + shift*0.01); //Shift from asymmetric errors
       fData[fNData/2-1-i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
 
     }  
+
+  //Artificial systematics
+  for(int i=0; i<fNData/2; i++)
+    {
+      for(int j=0; j<fNData/2; j++)
+	{
+	  
+	  double eps = 0.0000001;
+	  
+	  fSys[i+fNData/2][fNSys-fNData/2+j].add  = syscor[i][j]/sqrt(2.0);
+	  fSys[i+fNData/2][fNSys-fNData/2+j].mult = fSys[i+fNData/2][fNSys-fNData/2+j].add*100/fData[i+fNData/2];
+	  fSys[i+fNData/2][fNSys-fNData/2+j].type = ADD;
+	  fSys[i+fNData/2][fNSys-fNData/2+j].name = "CORR";
+	  
+	  fSys[fNData/2-1-i][fNSys-fNData/2+j].add  = syscor[i][j]/sqrt(2.0);
+	  fSys[fNData/2-1-i][fNSys-fNData/2+j].mult = fSys[fNData/2-1-i][fNSys-fNData/2+j].add*100/fData[fNData/2-1-i];
+	  fSys[fNData/2-1-i][fNSys-fNData/2+j].type = ADD;
+	  fSys[fNData/2-1-i][fNSys-fNData/2+j].name = "CORR";
+	  
+	  /*
+	    const double eps=0.0000001;
+	    
+	    fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/(2.+eps);
+	    fSys[i+fNData/2][fNData/2-1-j].mult = fSys[i+fNData/2][fNData/2-1-j].add*100/fData[i+fNData/2];
+	    fSys[i+fNData/2][fNData/2-1-j].type = ADD;
+	    fSys[i+fNData/2][fNData/2-1-j].name = "CORR";
+	    
+	    fSys[i+fNData/2][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/(2.+eps);
+	    fSys[i+fNData/2][j+fNData/2].mult = fSys[i+fNData/2][j+fNData/2].add*100/fData[i+fNData/2];
+	    fSys[i+fNData/2][j+fNData/2].type = ADD;
+	    fSys[i+fNData/2][j+fNData/2].name = "CORR";
+	    
+	    fSys[fNData/2-1-i][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
+	    fSys[fNData/2-1-i][fNData/2-1-j].mult = fSys[fNData/2-1-i][fNData/2-1-j].add*100/fData[fNData/2-1-i];
+	    fSys[fNData/2-1-i][fNData/2-1-j].type = ADD;
+	    fSys[fNData/2-1-i][fNData/2-1-j].name = "CORR";
+	    
+	    fSys[fNData/2-1-i][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
+	    fSys[fNData/2-1-i][j+fNData/2].mult = fSys[fNData/2-1-i][j+fNData/2].add*100/fData[fNData/2-1-i];
+	    fSys[fNData/2-1-i][j+fNData/2].type = ADD;
+	    fSys[fNData/2-1-i][j+fNData/2].name = "CORR";
+	  */      
+	  
+	}
+    } 
   
   f1.close();
   f2.close();
@@ -1257,26 +1329,29 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
       fData[fNData/2-1-i] = datum/2.0;
 
       lstream >> stat;
-      //fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
-      //fStat[fNData/2-1-i] = stat/sqrt(2.0);
-      fStat[i+fNData/2] = 0.;
-      fStat[fNData/2-1-i] = 0.;
+      fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
+      fStat[fNData/2-1-i] = stat/sqrt(2.0);
+      //fStat[i+fNData/2] = 0.;
+      //fStat[fNData/2-1-i] = 0.;
 
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
       
       double shift = 0.;
 
+      /*
       //Artificial systematics
       for(int i=0; i<fNData/2; i++)
 	{
 	  for(int j=0; j<fNData/2; j++)
 	    {
-	      fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      const double eps=0.0000001;
+
+	      fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/(2.+eps);
 	      fSys[i+fNData/2][fNData/2-1-j].mult = fSys[i+fNData/2][fNData/2-1-j].add*100/fData[i+fNData/2];
 	      fSys[i+fNData/2][fNData/2-1-j].type = ADD;
 	      fSys[i+fNData/2][fNData/2-1-j].name = "CORR";
 
-	      fSys[i+fNData/2][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
+	      fSys[i+fNData/2][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/(2.+eps);
 	      fSys[i+fNData/2][j+fNData/2].mult = fSys[i+fNData/2][j+fNData/2].add*100/fData[i+fNData/2];
 	      fSys[i+fNData/2][j+fNData/2].type = ADD;
 	      fSys[i+fNData/2][j+fNData/2].name = "CORR";
@@ -1292,9 +1367,10 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
 	      fSys[fNData/2-1-i][j+fNData/2].name = "CORR";
 	    }
 	}  
+      */
 
       //Real systematics
-      for(int j=fNData; j<fNSys; j++)
+      for(int j=0; j<fNSys; j++)
 	{
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
@@ -1328,14 +1404,14 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
 	}
           
       //overall luminosity uncertainty
-      fSys[i+fNData/2][66].type = MULT;
-      fSys[i+fNData/2][66].name = "CORR";
-      fSys[i+fNData/2][66].mult=2.8;
-      fSys[i+fNData/2][66].add=fSys[i][56].mult*fData[i]/100;
-      fSys[fNData/2-1-i][66].type = MULT;
-      fSys[fNData/2-1-i][66].name = "CORR";
-      fSys[fNData/2-1-i][66].mult=2.8;
-      fSys[fNData/2-1-i][66].add=fSys[i][56].mult*fData[i]/100;
+      fSys[i+fNData/2][56].type = MULT;
+      fSys[i+fNData/2][56].name = "CORR";
+      fSys[i+fNData/2][56].mult=2.8;
+      fSys[i+fNData/2][56].add=fSys[i][56].mult*fData[i]/100;
+      fSys[fNData/2-1-i][56].type = MULT;
+      fSys[fNData/2-1-i][56].name = "CORR";
+      fSys[fNData/2-1-i][56].mult=2.8;
+      fSys[fNData/2-1-i][56].add=fSys[i][56].mult*fData[i]/100;
 
       fData[i+fNData/2]*=(1.0 + shift*0.01); //Shift from asymmetric errors
       fData[fNData/2-1-i]*=(1.0 + shift*0.01); //Shift from asymmetric errors

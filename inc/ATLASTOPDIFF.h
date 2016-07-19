@@ -24,7 +24,7 @@ static const dataInfoRaw ATLASTOPDIFF8TEVTPTNORMinfo = {
 // Differential distribution for the rapidity of the top quark
 static const dataInfoRaw ATLASTOPDIFF8TEVTRAPNORMinfo = {
   10,                          //nData
-  66,                          //nSys
+  56,                          //nSys
   "ATLASTOPDIFF8TEVTRAPNORM",  //SetName
   "HQP_YQ"                     //ProcType
 };
@@ -32,7 +32,7 @@ static const dataInfoRaw ATLASTOPDIFF8TEVTRAPNORMinfo = {
 // Differential distribution for the rapidity of the top quark pair
 static const dataInfoRaw ATLASTOPDIFF8TEVTTRAPNORMinfo = {
   10,                          //nData
-  66,                          //nSys
+  56,                          //nSys
   "ATLASTOPDIFF8TEVTTRAPNORM", //SetName
   "HQP_YQQ"                    //ProcType
 };
@@ -66,7 +66,7 @@ static const dataInfoRaw ATLASTOPDIFF8TEVTPTinfo = {
 // Differential distribution for the rapidity of the top quark
 static const dataInfoRaw ATLASTOPDIFF8TEVTRAPinfo = {
   10,                          //nData
-  67,                          //nSys
+  57,                          //nSys
   "ATLASTOPDIFF8TEVTRAP",      //SetName
   "HQP_YQ"                     //ProcType
 };
@@ -74,7 +74,7 @@ static const dataInfoRaw ATLASTOPDIFF8TEVTRAPinfo = {
 // Differential distribution for the rapidity of the top quark pair
 static const dataInfoRaw ATLASTOPDIFF8TEVTTRAPinfo = {
   10,                          //nData
-  67,                          //nSys
+  57,                          //nSys
   "ATLASTOPDIFF8TEVTTRAP",     //SetName
   "HQP_YQQ"                    //ProcType
 };
