@@ -50,9 +50,9 @@
 49    MULT    CORR
 50    MULT    CORR
 51    MULT    CORR
-52    MULT    CORR
-53    MULT    CORR
-54    MULT    CORR
-55    MULT    CORR
-56    MULT    CORR
-57    MULT    CORR
+52    ADD    CORR
+53    ADD    CORR
+54    ADD    CORR
+55    ADD    CORR
+56    ADD    CORR
+57    ADD    CORR
