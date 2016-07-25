@@ -66,8 +66,7 @@ class GAMinimizer : public Minimizer
 {
 public:
   GAMinimizer(NNPDFSettings const&);
-  virtual ~GAMinimizer();
-  
+ 
   virtual void Iterate(FitPDFSet*, vector<Experiment*> const&, vector<PositivitySet> const&);
   
 protected:
@@ -84,7 +83,6 @@ class NGAMinimizer : public GAMinimizer
 {
 public:
   NGAMinimizer(NNPDFSettings const&);
-  virtual ~NGAMinimizer();
   
 protected:
    virtual void Mutation(FitPDFSet*, int const& nmut);
@@ -117,7 +115,6 @@ class NGAFTMinimizer : public GAMinimizer
 {
 public:
   NGAFTMinimizer(NNPDFSettings const&);
-  virtual ~NGAFTMinimizer();
 
 protected:
    virtual void Mutation(FitPDFSet*, int const& nmut);
