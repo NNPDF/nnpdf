@@ -19,8 +19,8 @@
  * Table 23/35 - 12 GeV <  M_{ll} < 20  GeV  - 0.0 < y_{ll} < 2.4  - 8 datapoints
  * Table 24/36 - 20 GeV <  M_{ll} < 30  GeV  - 0.0 < y_{ll} < 2.4  - 8 datapoints
  * Table 25/37 - 30 GeV <  M_{ll} < 46  GeV  - 0.0 < y_{ll} < 2.4  - 8 datapoints
- * Table 26/38 - 46 GeV <  M_{ll} < 66  GeV  - 0.0 < y_{ll} < 2.4  - 8 datapoints
- * Table 28/40 - 116GeV <  M_{ll} < 150 GeV  - 0.0 < y_{ll} < 2.4  - 8 datapoints
+ * Table 26/38 - 46 GeV <  M_{ll} < 66  GeV  - 0.0 < y_{ll} < 2.4  - 20 datapoints
+ * Table 28/40 - 116GeV <  M_{ll} < 150 GeV  - 0.0 < y_{ll} < 2.4  - 20 datapoints
 */
 
 #include "buildmaster_utils.h"
@@ -34,7 +34,7 @@ static const dataInfoRaw ATLASZPT8TEVYDISTinfo = {
 };
 
 static const dataInfoRaw ATLASZPT8TEVMDISTinfo = {
-  40,          //nData  
+  64,          //nData  
   101,          //nSys: 1 total uncorrelated + 99 correlated + 2.8% luminosity   
   "ATLASZPT8TEVMDIST", //SetName
   "EWK_PTMLL"       //ProcType

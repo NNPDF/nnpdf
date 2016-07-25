@@ -16,8 +16,9 @@ http://hepdata.cedar.ac.uk/view/ins1408516
  * Table 23/35 - 12 GeV <  M_{ll} < 20  GeV  - 0.0 < y_{ll} < 2.4  - 8 datapoints
  * Table 24/36 - 20 GeV <  M_{ll} < 30  GeV  - 0.0 < y_{ll} < 2.4  - 8 datapoints
  * Table 25/37 - 30 GeV <  M_{ll} < 46  GeV  - 0.0 < y_{ll} < 2.4  - 8 datapoints
- * Table 26/38 - 46 GeV <  M_{ll} < 66  GeV  - 0.0 < y_{ll} < 2.4  - 8 datapoints
- * Table 28/40 - 116GeV <  M_{ll} < 150 GeV  - 0.0 < y_{ll} < 2.4  - 8 datapoints
+ * Table 26/38 - 46 GeV <  M_{ll} < 66  GeV  - 0.0 < y_{ll} < 2.4  - 20 datapoints
+ * Table 27/39 - 66 GeV <  M_{ll} < 116 GeV  - 0.0 < y_{ll} < 2.4  - 43 datapoints (discarded if YDIST data included)
+ * Table 28/40 - 116GeV <  M_{ll} < 150 GeV  - 0.0 < y_{ll} < 2.4  - 20 datapoints
 
 - All systematic uncertainties are assumed to be multiplicative.
 - Custom uncertainty descriptions are assumed to allow for cross-correlations
@@ -313,7 +314,7 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
 	  exit(-1);
 	}
       
-      /* Table 26 - 46 GeV <  M_{ll} < 66 GeV  - 0.0 < y_{ll} < 2.4  - 8 datapoints*/  
+      /* Table 26 - 46 GeV <  M_{ll} < 66 GeV  - 0.0 < y_{ll} < 2.4  - 20 datapoints*/  
       stringstream mfile4("");
       mfile4 << dataPath() 
 	     << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m4666_y0024/tab.dat";
@@ -324,7 +325,7 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
 	  exit(-1);
 	}
       
-      /* Table 28 - 116 GeV <  M_{ll} < 150 GeV  - 0.0 < y_{ll} < 2.4  - 8 datapoints*/  
+      /* Table 28 - 116 GeV <  M_{ll} < 150 GeV  - 0.0 < y_{ll} < 2.4  - 20 datapoints*/  
       stringstream mfile5("");
       mfile5 << dataPath() 
 	     << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m116150_y0024/tab.dat";
@@ -370,7 +371,7 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
 	  exit(-1);
 	}
       
-      /* Table 38 - 46 GeV <  M_{ll} < 66 GeV  - 0.0 < y_{ll} < 2.4  - 8 datapoints*/  
+      /* Table 38 - 46 GeV <  M_{ll} < 66 GeV  - 0.0 < y_{ll} < 2.4  - 20 datapoints*/  
       stringstream mfile4("");
       mfile4 << dataPath() 
 	     << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m4666_y0024/tab.dat";
@@ -381,7 +382,7 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
 	  exit(-1);
 	}
       
-      /* Table 40 - 116 GeV <  M_{ll} < 150 GeV  - 0.0 < y_{ll} < 2.4  - 8 datapoints*/  
+      /* Table 40 - 116 GeV <  M_{ll} < 150 GeV  - 0.0 < y_{ll} < 2.4  - 20 datapoints*/  
       stringstream mfile5("");
       mfile5 << dataPath() 
 	     << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m116150_y0024/tab.dat";
@@ -394,7 +395,12 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
     }
   
   //Starting filter
-  int mdata = 8;
+  int mdatabin1 = 8;
+  int mdatabin2 = 8;
+  int mdatabin3 = 8;
+  int mdatabin4 = 20;
+  //  int mdatabin5 = 8;
+  int mdatabin6 = 20;
 
   //Skip thre description lines in each file
   string head,line,linec;
@@ -410,27 +416,27 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
     {
       double ptZ,mLL,ddum,fTot;
       
-      if(i<mdata){
+      if(i<mdatabin1){
 	mLL = 16.;
 	getline(m1,line);
  	getline(m1,linec);
       }
-      else if(i>mdata-1 && i < 2*mdata){
+      else if(i>mdatabin1-1 && i < mdatabin1 + mdatabin2){
 	mLL = 25.;
 	getline(m2,line);
 	getline(m2,linec);
       }
-      else if(i>2*mdata-1 && i < 3*mdata){
+      else if(i> mdatabin1 + mdatabin2-1 && i < mdatabin1 + mdatabin2 + mdatabin3){
 	mLL = 38.;
 	getline(m3,line);
 	getline(m3,linec);
       }
-      else if(i>3*mdata-1 && i < 4*mdata){
+      else if(i>mdatabin1 + mdatabin2 + mdatabin3 - 1 && i < mdatabin1+mdatabin2+mdatabin3+mdatabin4){
 	mLL = 56.;
 	getline(m4,line);
 	getline(m4,linec);
       }
-      else if(i>4*mdata-1 && i < 5*mdata){
+      else if(i>mdatabin1+mdatabin2+mdatabin3+mdatabin4-1 && i < mdatabin1+mdatabin2+mdatabin3+mdatabin4+mdatabin6){
 	mLL = 138.;
 	getline(m5,line);
 	getline(m5,linec);
