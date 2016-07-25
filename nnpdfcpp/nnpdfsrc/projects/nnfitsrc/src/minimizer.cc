@@ -121,15 +121,6 @@ Minimizer(settings)
 }
 
 /**
- * @brief The GAMinimizer destructor
- */
-GAMinimizer::~GAMinimizer()
-{
-  if (fChi2Mem)
-    delete[] fChi2Mem;
-}
-
-/**
  * @brief GA implementation of the iterate function.
  * @param pdf the input pdf for the minimization
  * @param exps the experiments to be used when minimizing
@@ -245,16 +236,7 @@ int GAMinimizer::Selection(FitPDFSet *pdf)
  * @param settings the global NNPDFSettings
  */
 NGAMinimizer::NGAMinimizer(NNPDFSettings const& settings):
-GAMinimizer(settings)
-{
-
-}
-
-NGAMinimizer::~NGAMinimizer()
-{
-  if (fChi2Mem)
-    delete[] fChi2Mem;
-}
+GAMinimizer(settings){}
 
 /**
  * @brief The mutation algorithm implementation
@@ -399,16 +381,7 @@ void NGAPMinimizer::Mutation(FitPDFSet* pdf, int const& nmut)
  * \param settings
  */
 NGAFTMinimizer::NGAFTMinimizer(NNPDFSettings const& settings):
-GAMinimizer(settings)
-{
-
-}
-
-NGAFTMinimizer::~NGAFTMinimizer()
-{
-  if (fChi2Mem)
-    delete[] fChi2Mem;
-}
+GAMinimizer(settings){}
 
 /**
  * @brief The mutation algorithm implementation
