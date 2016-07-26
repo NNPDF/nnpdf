@@ -143,9 +143,13 @@ def _prepare_pdf_name(*, callspec, ns, environment, **kwargs):
     set_name = ns['set_name']
     rootns = ns.maps[-1]
     if set_name is None:
-
-        nreplicas = ns['nreplicas']
-        set_name = spec_to_nice_name(rootns, callspec, str(nreplicas))
+        if 'nreplicas' in ns:
+            suffix = ns['nreplicas']
+        elif 'fit' in ns:
+            suffix = ns['fit'].name
+        else:
+            raise RuntimeError("Bad namespace")
+        set_name = spec_to_nice_name(rootns, callspec, str(suffix))
         ns['set_name'] = set_name
 
     if lhaindex.isinstalled(set_name):
@@ -188,3 +192,34 @@ def make_unweighted_pdf(pdf, unweighted_index,
 #Display this in the help
 make_unweighted_pdf.highlight = 'pdfset'
 
+
+@checks.make_check
+def _check_cut(ns, *args, **kwargs):
+    cut = ns['nsigma_cut']
+    msg = "'nsigma_cut' must be a float greater than zero."
+    try:
+        if cut>0:
+            return
+    #TODO: Check types for parameters automatically
+    except TypeError as e:
+        raise checks.CheckError(msg) from e
+    raise checks.CheckError(msg)
+
+@checks.check_has_fitted_replicas
+@_check_cut
+@_prepare_pdf_name
+def make_pdf_from_filtered_outliers(fit, replica_data, nsigma_cut:float,
+                                    set_name:(str, type(None))=None,
+                                    output_path=None,
+                                    installgrid:bool=True):
+    chis = np.array([dt.chi2 for dt in replica_data])
+    mean = np.mean(chis)
+    std = np.std(chis)
+    limit = mean + std*nsigma_cut
+    #Replica indexes start at 1
+    indexes = np.where(chis < limit)[0] + 1
+    log.info("Mean ̉χ² is %.2f, and the threshold is %.2f. Discarded %d "
+    "replicas out of %d.", mean, limit, len(chis) - len(indexes), len(chis))
+    new_pdf_from_indexes(pdf=PDF(fit.name), indexes=indexes,
+                         set_name=set_name, folder=output_path,
+                         installgrid=installgrid)

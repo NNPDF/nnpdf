@@ -60,23 +60,7 @@ def load_fitinfo(replica_path, prefix):
 
     return FitInfo(nite, training, validation, chi2, pos_status, arclenghts)
 
-
-#TODO: Make postfit know about which replicas it has selected
-@checks.make_check
-def _check_has_fitted_replicas(ns, **kwargs):
-    name, path = ns['fit']
-    postfit_path = path/'nnfit'/'postfit.log'
-    if not postfit_path.exists():
-        raise checks.CheckError("Fit {name} does not appear to be completed. "
-        "Expected to find file {postfit_path}".format(**locals()))
-    pdf = PDF(name)
-    if not pdf.isinstalled:
-        raise checks.CheckError("The PDF corresponding to the fit, '%s', "
-        "needs to be "
-        "installed in LHAPDF (i.e. copied to %s)."%
-        (name, lhaindex.get_lha_datapath()))
-
-@_check_has_fitted_replicas
+@checks.check_has_fitted_replicas
 def replica_data(fit):
     """Load the data from the fitinfo file of each of the replicas.
     The corresponding PDF set must be installed in the LHAPDF path.
