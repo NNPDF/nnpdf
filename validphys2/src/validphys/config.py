@@ -115,7 +115,7 @@ class Config(configparser.Config):
     #TODO: load fit config from here
     @_id_with_label
     def parse_fit(self, fit:str):
-        """A fit in the results folder, containing at least a valid filter result"""
+        """A fit in the results folder, containing at least a valid filter result."""
         try:
             return self.loader.check_fit(fit)
         except OSError as e:
