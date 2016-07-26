@@ -154,7 +154,9 @@ def _prepare_pdf_name(*, callspec, ns, environment, **kwargs):
 
     if lhaindex.isinstalled(set_name):
         raise checks.CheckError("The PDF set that would be "
-                         "generated already exists in the LHAPDF path:\n%s"
+                         "generated already exists in the LHAPDF path:\n%s\n"
+                         "Either delete it or explicitly assign a set_name for "
+                         "the new PDF."
                          % lhaindex.finddir(set_name))
 
     #Ugly hack to allow analyzing the generated pdf some day (as in smpdf)
@@ -212,6 +214,8 @@ def make_pdf_from_filtered_outliers(fit, replica_data, nsigma_cut:float,
                                     set_name:(str, type(None))=None,
                                     output_path=None,
                                     installgrid:bool=True):
+    """Discard outliers with χ² to fitted data bigger than nsigma_cut and
+    produce a new grid with the result."""
     chis = np.array([dt.chi2 for dt in replica_data])
     mean = np.mean(chis)
     std = np.std(chis)
@@ -223,3 +227,5 @@ def make_pdf_from_filtered_outliers(fit, replica_data, nsigma_cut:float,
     new_pdf_from_indexes(pdf=PDF(fit.name), indexes=indexes,
                          set_name=set_name, folder=output_path,
                          installgrid=installgrid)
+
+make_pdf_from_filtered_outliers.highlight = 'pdfset'
