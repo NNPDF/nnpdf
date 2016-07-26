@@ -29,7 +29,8 @@ log = logging.getLogger(__name__)
 
 __all__ = ('chi2_data_for_reweighting_experiments', 'make_unweighted_pdf',
            'nnpdf_weights', 'nnpdf_weights_numerator', 'p_alpha_study',
-           'plot_p_alpha', 'reweighting_stats', 'unweighted_index')
+           'plot_p_alpha', 'reweighting_stats', 'unweighted_index',
+           'make_pdf_from_filtered_outliers')
 
 #TODO: implement this using reportengine expand when available
 #use_t0 is to request that parameter to be set explicitly
