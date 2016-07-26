@@ -11,16 +11,16 @@ requirements:
         - lhapdf
         - swig
         - sqlite
-        - gcc
-        - libgcc
-        - gsl
+        - gcc <5
+        - libgcc <5
+        - gsl <2
         - numpy
     run:
         - lhapdf
         - python 
         - sqlite
-        - libgcc
-        - gsl
+        - libgcc <5
+        - gsl    <2
         - numpy
 
 build:
