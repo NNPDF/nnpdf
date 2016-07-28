@@ -15,13 +15,14 @@
 #include "fitpdfset.h"
 using std::vector;
 
+#include <gsl/gsl_vector.h>
+
 #include <NNPDF/experiments.h>
 #include <NNPDF/positivity.h>
 using NNPDF::Experiment;
 using NNPDF::PositivitySet;
 
 class NNPDFSettings;
-
 /**
  *  \class Minimizer
  *  \brief Virtual minimisation base class
@@ -119,3 +120,31 @@ public:
 protected:
    virtual void Mutation(FitPDFSet*, int const& nmut);
 };
+
+/**
+ *  \class CMAESMinimizer
+ *  \brief CMA-ES minimiser
+ */
+ 
+class CMAESMinimizer : public Minimizer
+{
+public:
+  CMAESMinimizer(NNPDFSettings const&);
+  virtual void Init(FitPDFSet*, vector<Experiment*> const&, vector<PositivitySet> const&);
+  virtual void Iterate(FitPDFSet*, vector<Experiment*> const&, vector<PositivitySet> const&) {};
+
+private:
+  void GetParam(Parametrisation** const, gsl_vector*);
+  void SetParam(gsl_vector* const, Parametrisation**);
+
+protected:
+  size_t fNTparam;
+
+  // const double lambda;
+  // const double csigma;
+  // const double dsigma;
+  // const double cc;
+  // const double c1;
+  // const double cmu;
+  
+}; 

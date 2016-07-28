@@ -12,6 +12,7 @@
 #include "minimizer.h"
 #include "nnpdfsettings.h"
 #include "fastaddchi2.h"
+
 #include <NNPDF/parametrisation.h>
 #include <NNPDF/thpredictions.h>
 #include <NNPDF/experiments.h>
@@ -435,3 +436,35 @@ void NGAFTMinimizer::Mutation(FitPDFSet* pdf, int const& nmut)
   return;
 }
 
+// ************************* CMA-ES MINIMIZER *****************************
+/**
+ * @brief CMAESMinimizer is the CMA-ES minimizer
+ * @param settings the global NNPDFSettings
+ */
+CMAESMinimizer::CMAESMinimizer(NNPDFSettings const& settings):
+Minimizer(settings),
+fNTparam(0)
+{
+  // Init logger
+  LogManager::AddLogger("CMAESMinimizer", "CMA-ES.log");
+}
+
+void CMAESMinimizer::Init(FitPDFSet* pdf, vector<Experiment*> const&, vector<PositivitySet> const&)
+{
+  fNTparam = 0;
+  for (size_t i=0; i<fSettings.GetNFL(); i++)
+    fNTparam += pdf->GetBestFit()[i]->GetNParameters();
+
+  std::stringstream initstr; initstr << "CMA-ES minimiser initialised with " <<fNTparam << " total parameters " <<std::endl;
+  LogManager::AddLogEntry("CMAESMinimizer",initstr.str());
+}
+
+// void CMAESMinimizer::GetParam(Parametrization** const pdfs, gsl_vector* params)
+// {
+
+// }
+
+// void CMAESMinimizer::SetParam(gsl_vector* const, Parametrization**)
+// {
+
+// }
