@@ -269,12 +269,14 @@ int main(int argc, char **argv)
       cout << "Training upon "<<nData<<" datapoints"<<endl;
 
       Timer time;
-
       if (settings.Get("debug").as<bool>())
       {
         time.start();
         state = FIT_ITER;
       }
+
+      // Initialise minimiser
+      minim->Init(fitset,training, pos);
 
       for (int i = 0; i < settings.Get("fitting","ngen").as<int>(); i++)
       {
