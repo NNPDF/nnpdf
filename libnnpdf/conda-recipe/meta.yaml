@@ -15,6 +15,9 @@ requirements:
         - libgcc <5
         - gsl <2
         - numpy
+        {% if environ.get("NNPDF_USE_DOUBLE", False) %}
+        - nnpdf_use_double
+        {% endif  %}
     run:
         - lhapdf
         - python 
@@ -22,6 +25,9 @@ requirements:
         - libgcc <5
         - gsl    <2
         - numpy
+        {% if environ.get("NNPDF_USE_DOUBLE", False) %}
+        - nnpdf_use_double
+        {% endif  %}
 
 build:
     number: 0
