@@ -100,7 +100,7 @@ void  ATLASZPT8TEVYDISTFilter::ReadData()
      /* Table 22 - 66 GeV <  M_{ll} < 116 GeV  - 2.0 < y_{ll} < 2.4  - 20 datapoints*/
      stringstream yfile6("");
      yfile6 << dataPath() 
-	    << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m66116_y0004/tab.dat";
+	    << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m66116_y2024/tab.dat";
      y6.open(yfile6.str().c_str(), ios::in);
      if (y6.fail()) 
        {
@@ -115,7 +115,7 @@ void  ATLASZPT8TEVYDISTFilter::ReadData()
      /* Table 29 - 66 GeV <  M_{ll} < 116 GeV  - 0.0 < y_{ll} < 0.4  - 20 datapoints*/
      stringstream yfile1("");
      yfile1 << dataPath() 
-	    << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m66116_y0004/tab.dat";
+	    << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m66116_y0004/tab.dat";
      y1.open(yfile1.str().c_str(), ios::in);
      if (y1.fail()) 
        {
@@ -170,7 +170,7 @@ void  ATLASZPT8TEVYDISTFilter::ReadData()
      /* Table 34 - 66 GeV <  M_{ll} < 116 GeV  - 2.0 < y_{ll} < 2.4  - 20 datapoints*/
      stringstream yfile6("");
      yfile6 << dataPath() 
-	    << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m66116_y0004/tab.dat";
+	    << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m66116_y2024/tab.dat";
      y6.open(yfile6.str().c_str(), ios::in);
      if (y6.fail()) 
        {
@@ -251,27 +251,32 @@ void  ATLASZPT8TEVYDISTFilter::ReadData()
 	fData[i] *= pb2fb;
 	fStat[i] *= pb2fb;
 	fSys[i][0].add *= pb2fb;
+	fTot *= pb2fb;
       }
 
       fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
-      fSys[i][0].type = ADD;
+      fSys[i][0].type = MULT;
       fSys[i][0].name = "UNCORR";
       // Read Correlated systematics (given in absolute value in the data file)
       istringstream lstreamcorr(linec);	
       for ( int k = 1; k < fNSys-1; k++ )
 	{
 	  lstreamcorr >> fSys[i][k].add;
-	  if(!norm)
+	  if(norm)
 	    {
-	      fSys[i][k].add*= pb2fb;
+	      cout << "No need to convert to fb!" << endl;
 	    }
-	  fSys[i][k].mult  = fSys[i][k].add*1e2/fData[i];
+	  else
+	    {
+	      fSys[i][k].add *= pb2fb;
+	    }
+	  fSys[i][k].mult  = fSys[i][k].add/fData[i]*1e2;
 	  fSys[i][k].type  = MULT;
 	  fSys[i][k].name = "CORR";
 	}
       // Luminosity Uncertainty: 2.8%
       fSys[i][fNSys-1].mult = 2.8;
-      fSys[i][fNSys-1].add  = fData[i]*fSys[i][fNSys-1].mult/100;
+      fSys[i][fNSys-1].add  = fData[i]*fSys[i][fNSys-1].mult/1e2;
       fSys[i][fNSys-1].type = MULT;
       fSys[i][fNSys-1].name = "ATLASLUMI12";
     }
@@ -411,12 +416,12 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
     }
   
   //Starting filter
-  int mdatabin1 = 8;
-  int mdatabin2 = 8;
-  int mdatabin3 = 8;
-  int mdatabin4 = 20;
-  //  int mdatabin5 = 8;
-  int mdatabin6 = 20;
+  int nbin1 = 8;
+  int nbin2 = 8;
+  int nbin3 = 8;
+  int nbin4 = 20;
+  //  int nbin5 = 43;
+  int nin6 = 20;
 
   //Skip thre description lines in each file
   string head,line,linec;
@@ -432,27 +437,27 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
     {
       double ptZ,mLL,ddum,fTot;
       
-      if(i<mdatabin1){
+      if(i<nbin1){
 	mLL = 16.;
 	getline(m1,line);
  	getline(m1,linec);
       }
-      else if(i>mdatabin1-1 && i < mdatabin1 + mdatabin2){
+      else if(i>nbin1-1 && i < nbin1 + nbin2){
 	mLL = 25.;
 	getline(m2,line);
 	getline(m2,linec);
       }
-      else if(i> mdatabin1 + mdatabin2-1 && i < mdatabin1 + mdatabin2 + mdatabin3){
+      else if(i> nbin1 + nbin2-1 && i < nbin1 + nbin2 + nbin3){
 	mLL = 38.;
 	getline(m3,line);
 	getline(m3,linec);
       }
-      else if(i>mdatabin1 + mdatabin2 + mdatabin3 - 1 && i < mdatabin1+mdatabin2+mdatabin3+mdatabin4){
+      else if(i>nbin1 + nbin2 + nbin3 - 1 && i < nbin1+nbin2+nbin3+nbin4){
 	mLL = 56.;
 	getline(m4,line);
 	getline(m4,linec);
       }
-      else if(i>mdatabin1+mdatabin2+mdatabin3+mdatabin4-1 && i < mdatabin1+mdatabin2+mdatabin3+mdatabin4+mdatabin6){
+      else if(i>nbin1+nbin2+nbin3+nbin4-1 && i < nbin1+nbin2+nbin3+nbin4+nbin6){
 	mLL = 138.;
 	getline(m5,line);
 	getline(m5,linec);
@@ -472,7 +477,7 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
       lstream >> fStat[i];    //statistical uncertainty
       lstream >> fSys[i][0].add >> fTot;
       fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
-      fSys[i][0].type = ADD;
+      fSys[i][0].type = MULT;
       fSys[i][0].name = "UNCORR";
       
       if(norm)
@@ -483,6 +488,7 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
 	fData[i] *= pb2fb;
 	fStat[i] *= pb2fb;
 	fSys[i][0].add *= pb2fb;
+	fTot[i][0].add *= pb2fb;
       }
       
       // Read Correlated systematics (given in absolute value in the data file)
@@ -490,9 +496,13 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
       for ( int k = 1; k < fNSys-1; k++ )
 	{
 	  lstreamcorr >> fSys[i][k].add;
-	  if(!norm)
+	  if(norm)
 	    {
-	      fSys[i][k].add*= pb2fb;
+	      cout << "No need to normalise" <<endl;
+	    }
+	  else
+	    {
+	      fSys[i][k].add *= pb2fb;
 	    }
 	  fSys[i][k].mult  = fSys[i][k].add*1e2/fData[i];
 	  fSys[i][k].type  = MULT;
@@ -500,7 +510,7 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
 	}      
       // Luminosity Uncertainty: 2.8%
       fSys[i][fNSys-1].mult = 2.8;
-      fSys[i][fNSys-1].add  = fData[i]*fSys[i][fNSys-1].mult/100;
+      fSys[i][fNSys-1].add  = fData[i]*fSys[i][fNSys-1].mult/1e2;
       fSys[i][fNSys-1].type = MULT;
       fSys[i][fNSys-1].name = "ATLASLUMI12";
     }  
