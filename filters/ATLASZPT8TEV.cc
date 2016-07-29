@@ -233,6 +233,8 @@ void  ATLASZPT8TEVYDISTFilter::ReadData()
 	exit(-1);
       }
       istringstream lstream(line);
+      const double pb2fb = 1000.; // Must multiply from pb to fb
+
       lstream >> ptZ >> ddum >> ddum; 
       fKin1[i] = yZ;         // P_T^(Z)
       fKin2[i] = ptZ;          // Y_Z
@@ -240,7 +242,17 @@ void  ATLASZPT8TEVYDISTFilter::ReadData()
       lstream >> fData[i];     //differential distribution
       lstream >> fStat[i];     //statistical uncertainty
       lstream >> fSys[i][0].add >> fTot;
-      
+
+      if(norm)
+	{ 
+	  cout << "No need to normalise normalised xsec!" << endl;
+	}
+      else{
+	fData[i] *= pb2fb;
+	fStat[i] *= pb2fb;
+	fSys[i][0].add *= pb2fb;
+      }
+
       fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
       fSys[i][0].type = ADD;
       fSys[i][0].name = "UNCORR";
@@ -249,6 +261,10 @@ void  ATLASZPT8TEVYDISTFilter::ReadData()
       for ( int k = 1; k < fNSys-1; k++ )
 	{
 	  lstreamcorr >> fSys[i][k].add;
+	  if(!norm)
+	    {
+	      fSys[i][k].add*= pb2fb;
+	    }
 	  fSys[i][k].mult  = fSys[i][k].add*1e2/fData[i];
 	  fSys[i][k].type  = MULT;
 	  fSys[i][k].name = "CORR";
@@ -446,6 +462,7 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
 	exit(-1);
       }
 
+      const double pb2fb = 1000.; // Must multiply from pb to fb
       istringstream lstream(line);
       lstream >> ptZ >> ddum >> ddum; 
       fKin1[i] = mLL;         // P_T^(Z)
@@ -458,11 +475,25 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
       fSys[i][0].type = ADD;
       fSys[i][0].name = "UNCORR";
       
+      if(norm)
+	{ 
+	  cout << "No need to normalise normalised xsec!" << endl;
+	}
+      else{
+	fData[i] *= pb2fb;
+	fStat[i] *= pb2fb;
+	fSys[i][0].add *= pb2fb;
+      }
+      
       // Read Correlated systematics (given in absolute value in the data file)
       istringstream lstreamcorr(linec);	
       for ( int k = 1; k < fNSys-1; k++ )
 	{
 	  lstreamcorr >> fSys[i][k].add;
+	  if(!norm)
+	    {
+	      fSys[i][k].add*= pb2fb;
+	    }
 	  fSys[i][k].mult  = fSys[i][k].add*1e2/fData[i];
 	  fSys[i][k].type  = MULT;
 	  fSys[i][k].name = "CORR";
