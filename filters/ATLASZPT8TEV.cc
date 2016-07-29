@@ -421,7 +421,7 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
   int nbin3 = 8;
   int nbin4 = 20;
   //  int nbin5 = 43;
-  int nin6 = 20;
+  int nbin6 = 20;
 
   //Skip thre description lines in each file
   string head,line,linec;
@@ -488,7 +488,7 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
 	fData[i] *= pb2fb;
 	fStat[i] *= pb2fb;
 	fSys[i][0].add *= pb2fb;
-	fTot[i][0].add *= pb2fb;
+	fTot *= pb2fb;
       }
       
       // Read Correlated systematics (given in absolute value in the data file)
