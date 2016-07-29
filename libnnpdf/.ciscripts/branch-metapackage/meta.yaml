@@ -1,0 +1,7 @@
+package:
+    name: "{{ environ.get('CI_BUILD_REF_NAME') }}"
+    version: 1.0
+
+build:
+    track_features:
+        - {{ environ.get('CI_BUILD_REF_NAME') }}

@@ -2,6 +2,14 @@
 
 #Find conda
 source ~/.bashrc
+if [ "$CI_BUILD_REF_NAME" != 'master'  ]; then
+	conda build -q .ciscripts/branch-metapackage
+    if [ $? != 0 ]; then
+	    echo failed to build metapackage
+	    exit 1
+    fi
+fi
+
 conda build -q conda-recipe
 if [ $? != 0 ]; then
 	echo failed to build
@@ -9,14 +17,7 @@ if [ $? != 0 ]; then
 fi
 
 #This seems to be needed for "artifacts" to work.
-cp /yes/conda-bld/linux-64/*.tar.bz2 .
-if [ "$CI_BUILD_REF_NAME" != 'master'  ] && [ "$UPLOAD_NON_MASTER" == false ]; 
-then
-  	echo "
-Skiping upload because this is not master and you have not
-set the UPLOAD_NON_MASTER variable."
-	exit 0
-fi
+cp /root/miniconda3/conda-bld/linux-64/*.tar.bz2 .
 
 echo "Uploading package to zigzah"
 KEY=$( mktemp )
