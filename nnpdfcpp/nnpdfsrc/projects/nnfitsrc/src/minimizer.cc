@@ -751,7 +751,6 @@ void CMAESMinimizer::CMA( FitPDFSet* pdf, vector<size_t> const& irank_map, std::
     }
     gsl_blas_dger (fCMAES->cmu*wo, yval, yval, fC); 
   }
-  std::cout << "CMA" <<std::endl;
 }
 
 
