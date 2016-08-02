@@ -623,9 +623,9 @@ void CMAESMinimizer::Init(FitPDFSet* pdf, vector<Experiment*> const&, vector<Pos
   gsl_matrix_set_identity(fC);
 
   // Set start best-fit
-  gsl_vector *m  = gsl_vector_calloc( fNTparam );
-  SetParam(m, pdf->GetBestFit());
-  gsl_vector_free(m);
+  // gsl_vector *m  = gsl_vector_calloc( fNTparam );
+  // SetParam(m, pdf->GetBestFit());
+  // gsl_vector_free(m);
 
   fCMAES = new CMAESParam(fNTparam, fSettings.Get("fitting","nmutants").as<int>());
 
