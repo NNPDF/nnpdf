@@ -406,6 +406,7 @@ int main(int argc, char **argv)
       fitset->ExportPDF(replica, erf_val/dofval, erf_trn/doftrn, chi2/dof, posVeto);
 
       // Export Logs
+      delete minim;
       LogManager::ExportLogs();
 
       // Delete t0set

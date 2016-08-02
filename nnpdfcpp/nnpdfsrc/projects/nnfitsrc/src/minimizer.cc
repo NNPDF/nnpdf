@@ -533,7 +533,7 @@ Minimizer(settings),
 fAdaptStep(fSettings.Get("fitting","CSA").as<bool>()),
 fAdaptCovMat(fSettings.Get("fitting","CMA").as<bool>()),
 fNTparam(0),
-fSigma(0.1),
+fSigma(fSettings.Get("fitting","sigma").as<double>()),
 fCMAES(0),
 fpsigma(0),
 fpc(0),
@@ -541,10 +541,21 @@ fC(0)
 {
   // Init logger
   LogManager::AddLogger("CMAESMinimizer", "CMA-ES.log");
+  LogManager::AddLogger("CMAESMatrix", "CMA-ES_Matrix.dat");
 }
 
 CMAESMinimizer::~CMAESMinimizer()
 {
+  std::stringstream outcov;
+  for (int i=0; i<fNTparam; i++)
+  {
+    for (int j=0; j<fNTparam; j++)
+      outcov << gsl_matrix_get(fC,i,j) <<" ";
+    outcov << std::endl;
+  }
+
+  LogManager::AddLogEntry("CMAESMatrix", outcov.str());
+
   if (fpsigma)  gsl_vector_free(fpsigma);
   if (fpc)      gsl_vector_free(fpc);
   if (fC)       gsl_matrix_free(fC);
@@ -569,6 +580,11 @@ void CMAESMinimizer::ComputeEigensystem()
     gsl_vector* E = gsl_vector_calloc( fNTparam );
     gsl_matrix_memcpy (C, fC);
     gsl_eigen_symmv (C, E, B, fwrkspc);
+
+    // Compute condition number
+    double min, max;
+    gsl_vector_minmax (E, &min, &max);
+    const double K = max/min;
 
     // Initialise D, invD
     for (size_t i=0; i<fNTparam; i++)

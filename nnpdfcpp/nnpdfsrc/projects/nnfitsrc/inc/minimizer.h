@@ -10,6 +10,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
+#include <iomanip>  
 
 #include "common.h"
 #include "fitpdfset.h"
