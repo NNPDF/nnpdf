@@ -191,7 +191,8 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
 
   // ATLAS W&Z pT, minimum pT cut
   if( set.GetSetName().compare(string("ATLASWPT31PB")) == 0 ||
-      set.GetSetName().compare(string("ATLASZPT47FB")) == 0  )
+      set.GetSetName().compare(string("ATLASZPT7TEV")) == 0 ||
+      set.GetSetName().compare(string("ATLASZPT8TEV")) == 0  )
     {
       const real pT = set.GetKinematics(idat,0);
       return ( pT > settings.Get("datacuts","wptcut_lhc").as<double>());
