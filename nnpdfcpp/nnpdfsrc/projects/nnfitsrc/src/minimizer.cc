@@ -438,15 +438,6 @@ void NGAFTMinimizer::Mutation(FitPDFSet* pdf, int const& nmut)
 }
 
 // ************************* CMA-ES MINIMIZER *****************************
-// Utils, square functor
-template<typename T>
-struct square
-{
-    T operator()(const T& Left, const T& Right) const
-    {   
-        return (Left + Right*Right);
-    }
-};
 
 // Initialises parameters for CMA-ES minimiser
 CMAESParam::CMAESParam(size_t const& _n, size_t const& _lambda):
@@ -622,11 +613,7 @@ void CMAESMinimizer::Init(FitPDFSet* pdf, vector<Experiment*> const&, vector<Pos
   fwrkspc = gsl_eigen_symmv_alloc( fNTparam );
   gsl_matrix_set_identity(fC);
 
-  // Set start best-fit
-  // gsl_vector *m  = gsl_vector_calloc( fNTparam );
-  // SetParam(m, pdf->GetBestFit());
-  // gsl_vector_free(m);
-
+  // Initialise CMA-ES constants
   fCMAES = new CMAESParam(fNTparam, fSettings.Get("fitting","nmutants").as<int>());
 
   std::stringstream initstr; initstr << "CMA-ES minimiser initialised with " <<fNTparam << " total parameters " <<std::endl;
