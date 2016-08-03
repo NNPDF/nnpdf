@@ -70,7 +70,7 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
   APFEL::SetParam(set.GetTheoryMap());
   APFEL::SetQLimits(getInstance()->fQ0, getInstance()->fQmax + 1E-5); // Epsilon for limits
   APFEL::SetNumberOfGrids(3);
-  APFEL::SetGridParameters(1,100,3,getInstance()->fXmin);
+  APFEL::SetGridParameters(1,95,3,getInstance()->fXmin);
   APFEL::SetGridParameters(2,70,5,getInstance()->fXmed);
   APFEL::SetGridParameters(3,50,5,0.65);
   APFEL::LockGrids(true);
