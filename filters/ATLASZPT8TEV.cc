@@ -236,8 +236,8 @@ void  ATLASZPT8TEVYDISTFilter::ReadData()
       const double pb2fb = 1000.; // Must multiply from pb to fb
 
       lstream >> ptZ >> ddum >> ddum; 
-      fKin1[i] = yZ;         // P_T^(Z)
-      fKin2[i] = ptZ;          // Y_Z
+      fKin1[i] = ptZ;         // P_T^(Z)
+      fKin2[i] = yZ;          // Y_Z
       fKin3[i] = 8000;        // sqrt(S)
       lstream >> fData[i];     //differential distribution
       lstream >> fStat[i];     //statistical uncertainty
@@ -257,20 +257,12 @@ void  ATLASZPT8TEVYDISTFilter::ReadData()
       fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
       fSys[i][0].type = MULT;
       fSys[i][0].name = "UNCORR";
-      // Read Correlated systematics (given in absolute value in the data file)
+      // Read Correlated systematics (given in percentage value!!!)
       istringstream lstreamcorr(linec);	
       for ( int k = 1; k < fNSys-1; k++ )
 	{
-	  lstreamcorr >> fSys[i][k].add;
-	  if(norm)
-	    {
-	      cout << "No need to convert to fb!" << endl;
-	    }
-	  else
-	    {
-	      fSys[i][k].add *= pb2fb;
-	    }
-	  fSys[i][k].mult  = fSys[i][k].add/fData[i]*1e2;
+	  lstreamcorr >> fSys[i][k].mult;
+	  fSys[i][k].add  = fSys[i][k].mult*fData[i]/1e2;
 	  fSys[i][k].type  = MULT;
 	  fSys[i][k].name = "CORR";
 	}
@@ -470,8 +462,8 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
       const double pb2fb = 1000.; // Must multiply from pb to fb
       istringstream lstream(line);
       lstream >> ptZ >> ddum >> ddum; 
-      fKin1[i] = mLL;         // P_T^(Z)
-      fKin2[i] = ptZ;         // Y_Z
+      fKin1[i] = ptZ;         // P_T^(Z)
+      fKin2[i] = mLL;         // Y_Z
       fKin3[i] = 8000;        // sqrt(S)
       lstream >> fData[i];    //differential distribution
       lstream >> fStat[i];    //statistical uncertainty
@@ -491,20 +483,12 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
 	fTot *= pb2fb;
       }
       
-      // Read Correlated systematics (given in absolute value in the data file)
+      // Read Correlated systematics (given in percentage in the data file - wrong README in ATLAS!)
       istringstream lstreamcorr(linec);	
       for ( int k = 1; k < fNSys-1; k++ )
 	{
-	  lstreamcorr >> fSys[i][k].add;
-	  if(norm)
-	    {
-	      cout << "No need to normalise" <<endl;
-	    }
-	  else
-	    {
-	      fSys[i][k].add *= pb2fb;
-	    }
-	  fSys[i][k].mult  = fSys[i][k].add*1e2/fData[i];
+	  lstreamcorr >> fSys[i][k].mult;
+	  fSys[i][k].add  = fSys[i][k].mult*fData[i]/1e2;
 	  fSys[i][k].type  = MULT;
 	  fSys[i][k].name = "CORR";
 	}      
