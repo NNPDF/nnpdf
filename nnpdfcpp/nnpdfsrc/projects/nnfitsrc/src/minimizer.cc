@@ -8,10 +8,12 @@
 #include <cstdlib>
 #include <cmath>
 #include <iostream>
+#include <numeric>
 
 #include "minimizer.h"
 #include "nnpdfsettings.h"
 #include "fastaddchi2.h"
+
 #include <NNPDF/parametrisation.h>
 #include <NNPDF/thpredictions.h>
 #include <NNPDF/experiments.h>
@@ -435,3 +437,348 @@ void NGAFTMinimizer::Mutation(FitPDFSet* pdf, int const& nmut)
   return;
 }
 
+// ************************* CMA-ES MINIMIZER *****************************
+
+// Initialises parameters for CMA-ES minimiser
+CMAESParam::CMAESParam(size_t const& _n, size_t const& _lambda):
+  lambda(_lambda),
+  mu(floor(lambda/2.0)),
+  n(_n),
+  eigenInterval(0.0),
+  expN(0),
+  mu_eff(0),
+  csigma(0),
+  dsigma(0),
+  cc(0),
+  c1(0),
+  cmu(0),
+  wgts(lambda,0)
+{
+  // Set expN
+  expN = sqrt(n)*(1.0-1.0/(4.0*n) + 1.0/(21.0*n*n) );
+
+  // Initialise w prime vector
+  vector<double> wpr(lambda, 0);
+  for (int i=0; i<lambda; i++)
+    wpr[i] = log( (lambda + 1.0) / 2.0) - log(i+1);
+
+  // Calculate weight sums
+  double psumwgt = 0.0;   double nsumwgt = 0.0;
+  double psumwgtsqr = 0.0;   double nsumwgtsqr = 0.0;
+  for (int i=0; i<lambda; i++)
+    if (i < mu) {psumwgt += wpr[i]; psumwgtsqr += wpr[i]*wpr[i]; }
+    else        {nsumwgt += wpr[i]; nsumwgtsqr += wpr[i]*wpr[i]; }
+
+  mu_eff = psumwgt*psumwgt/psumwgtsqr;
+  const double mu_eff_minus = nsumwgt*nsumwgt/nsumwgtsqr;
+
+  const double alpha_cov = 2.0;
+  const double cmupr = alpha_cov*(mu_eff - 2.0 + 1.0/mu_eff)/(pow(n+2.0,2) + alpha_cov*mu_eff/2.0);
+
+  // Set constants
+  csigma = (mu_eff + 2.0) / (n + mu_eff + 5.0);
+  dsigma = 1.0 + 2.0*fmax(0,(sqrt((mu_eff - 1.0)/(n + 1.0)))-1.0) + csigma;
+  cc = (4.0 + mu_eff/n) / (n + 4.0 + 2.0*mu_eff/n );
+  c1 = alpha_cov / ( pow(n + 1.3, 2.0) + mu_eff );
+  cmu = std::min(1.0 - c1, cmupr);
+
+  double sumwgtpos = 0.0;
+  double sumwgtneg = 0.0;
+  for (int i=0; i<lambda; i++)
+    if (wpr[i] > 0) sumwgtpos += wpr[i];
+    else sumwgtneg += fabs(wpr[i]);
+
+  const double alpha_mu_minus = 1.0 + c1/cmu;
+  const double alpha_mueff_minus = 1.0 + (2*mu_eff_minus)/(mu_eff + 2.0);
+  const double alpha_posdef_minus = (1.0-c1-cmu)/(n*cmu);
+  const double alpha_min = fmin(alpha_mu_minus, fmin(alpha_mueff_minus, alpha_posdef_minus));
+
+  // Eigensystem solution interval
+  eigenInterval = (lambda/(c1+cmu)/n)/10.0;
+  
+  // ********************************** Normalising weights  ****************************************
+
+  for (int i=0; i<lambda; i++)
+    wgts[i] = wpr[i]*( wpr[i] > 0 ? 1.0/sumwgtpos:alpha_min/sumwgtneg);
+
+
+  // Test weight sum normalisation
+  const double sumtestpos = std::accumulate(wgts.begin(), wgts.begin()+mu, 0.0);
+  const double sumtestneg = std::accumulate(wgts.begin()+mu, wgts.end(), 0.0);
+
+  std::stringstream teststream;
+  teststream << "CMA-ES Minimiser parameters initialised:" <<std::endl;
+  teststream << "n: "<< n <<" lambda: " <<lambda <<" mu: "<<mu<<" e_int: " << eigenInterval<<std::endl;
+  teststream << "csigma: " <<csigma <<" dsigma: " <<dsigma <<" E|N|: " << expN <<std::endl;
+  teststream << "cc: " << cc << " c1: " <<c1 << " cmu: " <<cmu <<std::endl;
+  teststream << "sumWpos: "<< sumtestpos <<" sumWneg == -alpha_min: "<<sumtestneg<<" == "<<-alpha_min<<std::endl;
+  teststream << "-c1/cmu == sumW: "<<-c1/cmu<<"  ==  "<<sumtestpos + sumtestneg <<std::endl;
+  teststream << std::endl;
+  LogManager::AddLogEntry("CMAESMinimizer",teststream.str());
+  std::cout << teststream.str()<<std::endl;
+}
+
+/**
+ * @brief CMAESMinimizer is the CMA-ES minimizer
+ * @param settings the global NNPDFSettings
+ */
+CMAESMinimizer::CMAESMinimizer(NNPDFSettings const& settings):
+Minimizer(settings),
+fAdaptStep(fSettings.Get("fitting","CSA").as<bool>()),
+fAdaptCovMat(fSettings.Get("fitting","CMA").as<bool>()),
+fNTparam(0),
+fSigma(fSettings.Get("fitting","sigma").as<double>()),
+fCMAES(0),
+fpsigma(0),
+fpc(0),
+fC(0)
+{
+  // Init logger
+  LogManager::AddLogger("CMAESMinimizer", "CMA-ES.log");
+  LogManager::AddLogger("CMAESMatrix", "CMA-ES_Matrix.dat");
+}
+
+CMAESMinimizer::~CMAESMinimizer()
+{
+  std::stringstream outcov;
+  for (int i=0; i<fNTparam; i++)
+  {
+    for (int j=0; j<fNTparam; j++)
+      outcov << gsl_matrix_get(fC,i,j) <<" ";
+    outcov << std::endl;
+  }
+
+  LogManager::AddLogEntry("CMAESMatrix", outcov.str());
+
+  if (fpsigma)  gsl_vector_free(fpsigma);
+  if (fpc)      gsl_vector_free(fpc);
+  if (fC)       gsl_matrix_free(fC);
+  if (fBD)      gsl_matrix_free(fBD);
+  if (finvC)    gsl_matrix_free(finvC);
+  if (fwrkspc)  gsl_eigen_symmv_free(fwrkspc);
+  if (fCMAES) delete fCMAES;
+}
+
+void CMAESMinimizer::ComputeEigensystem()
+{
+    // Initialise matrices
+    gsl_matrix *B = gsl_matrix_calloc( fNTparam, fNTparam );
+    gsl_matrix *D = gsl_matrix_calloc( fNTparam, fNTparam );
+    gsl_matrix *invD = gsl_matrix_calloc( fNTparam, fNTparam );
+
+    gsl_matrix_set_zero (fBD);
+    gsl_matrix_set_zero (finvC);
+
+    // Calculate the eigensystem
+    gsl_matrix* C = gsl_matrix_calloc( fNTparam, fNTparam );
+    gsl_vector* E = gsl_vector_calloc( fNTparam );
+    gsl_matrix_memcpy (C, fC);
+    gsl_eigen_symmv (C, E, B, fwrkspc);
+
+    // Compute condition number
+    double min, max;
+    gsl_vector_minmax (E, &min, &max);
+    const double K = max/min;
+
+    // Initialise D, invD
+    for (size_t i=0; i<fNTparam; i++)
+    {
+      gsl_matrix_set(D,i,i, sqrt(gsl_vector_get(E,i)));
+      gsl_matrix_set(invD,i,i, 1.0/sqrt(gsl_vector_get(E,i)));
+    }
+
+    // Compute BD, Cinv, use C as a temporary
+    gsl_matrix_set_zero (C);
+    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, B, D, 0.0, fBD); // BD
+    gsl_blas_dgemm (CblasNoTrans, CblasTrans, 1.0, invD, B, 0.0, C ); // D^-1 * B^T
+    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, B, C, 0.0, finvC ); // B * D^-1 * B^T
+
+    gsl_matrix_free(C);
+    gsl_matrix_free(B);
+    gsl_matrix_free(D);
+    gsl_matrix_free(invD);
+    gsl_vector_free(E);
+}
+
+
+void CMAESMinimizer::Init(FitPDFSet* pdf, vector<Experiment*> const&, vector<PositivitySet> const&)
+{
+  fNTparam = 0;
+  for (size_t i=0; i<fSettings.GetNFL(); i++)
+    fNTparam += pdf->GetBestFit()[i]->GetNParameters();
+
+  // GSL vectors/matrices
+  fpsigma = gsl_vector_calloc( fNTparam );
+  fpc     = gsl_vector_calloc( fNTparam );
+  fC      = gsl_matrix_calloc( fNTparam, fNTparam );
+  fBD     = gsl_matrix_calloc( fNTparam, fNTparam );
+  finvC   = gsl_matrix_calloc( fNTparam, fNTparam );
+  fwrkspc = gsl_eigen_symmv_alloc( fNTparam );
+  gsl_matrix_set_identity(fC);
+
+  // Initialise CMA-ES constants
+  fCMAES = new CMAESParam(fNTparam, fSettings.Get("fitting","nmutants").as<int>());
+
+  std::stringstream initstr; initstr << "CMA-ES minimiser initialised with " <<fNTparam << " total parameters " <<std::endl;
+  initstr << "CSA: " << fAdaptStep <<"  "<<"CMA: " << fAdaptCovMat <<std::endl; 
+
+  LogManager::AddLogEntry("CMAESMinimizer",initstr.str());
+}
+
+void CMAESMinimizer::Iterate(FitPDFSet* pdf, vector<Experiment*> const& exps, vector<PositivitySet> const& pos)
+{
+  // First setup the required matrices
+  if (pdf->GetNIte() % fCMAES->eigenInterval == 0 )
+    ComputeEigensystem();
+
+  // Setup and mutate PDF members
+  pdf->SetNMembers(fCMAES->lambda);
+  const vector<gsl_vector*> yvals = Mutation(pdf);
+
+  // Compute ERF and rank members
+  ComputeErf(pdf, exps, pos, Minimizer::ExpMode, Minimizer::PDF_NOSORT);
+  vector<double> erf_srt(fChi2Mem, fChi2Mem + fCMAES->lambda);
+  vector<size_t> irank_map(fCMAES->lambda,0); // Weight-ordered map to members (index is i)
+  std::sort(erf_srt.begin(), erf_srt.end());
+  for (int i=0; i<fCMAES->lambda; i++)
+    irank_map[std::distance(erf_srt.begin(), std::find(erf_srt.begin(), erf_srt.end(), fChi2Mem[i]))] = i;
+
+  // Compute weighted shift and set new mean
+  gsl_vector* yavg = Recombination(pdf, irank_map, yvals);
+
+ // ********************************** Adaptation  ****************************************
+  if (fAdaptStep)   CSA(yavg); 
+  if (fAdaptCovMat) CMA(pdf, irank_map, yvals, yavg );
+
+  for (auto i : yvals ) gsl_vector_free(i);
+  gsl_vector_free(yavg);
+
+  pdf->Iterate();
+};
+
+std::vector<gsl_vector*> CMAESMinimizer::Mutation(FitPDFSet* pdf)
+{
+  std::vector<gsl_vector*> yvals;
+  gsl_vector *m  = gsl_vector_calloc( fNTparam );
+  GetParam(pdf->GetBestFit(), m);
+  for (size_t i=0; i<fCMAES->lambda; i++)
+  {
+    gsl_vector* z = gsl_vector_calloc(fCMAES->n); NormVect(z);
+    gsl_vector* y = gsl_vector_calloc(fCMAES->n); gsl_blas_dgemv (CblasNoTrans, 1.0, fBD, z, 1.0, y);
+    gsl_vector* x = gsl_vector_calloc(fCMAES->n); gsl_vector_memcpy (x, m); gsl_blas_daxpy (fSigma, y, x);
+
+    SetParam(x, pdf->GetPDFs()[i]);
+
+    gsl_vector_free(z);
+    gsl_vector_free(x);
+    yvals.push_back(y);
+  }
+
+  // Compute Preprocessing and free mean
+  pdf->ComputeSumRules();
+  gsl_vector_free(m);
+  return yvals;
+}
+
+gsl_vector* CMAESMinimizer::Recombination(FitPDFSet* pdf, vector<size_t> const& irank_map, std::vector<gsl_vector*> const& yvals)
+{
+  // Old average
+  gsl_vector *m  = gsl_vector_calloc( fNTparam );
+  GetParam(pdf->GetBestFit(), m);
+
+  // Compute average step
+  gsl_vector* yavg = gsl_vector_calloc(fCMAES->n);
+  for (int i=0; i<fCMAES->mu; i++)
+    gsl_blas_daxpy (fCMAES->wgts[i], yvals[irank_map[i]], yavg);
+
+  // Compute new average
+  gsl_vector *newm  = gsl_vector_calloc( fNTparam );
+  gsl_vector_memcpy(newm, m); 
+  gsl_blas_daxpy (fSigma, yavg, newm);
+
+    // Set new mean
+  SetParam(newm, pdf->GetBestFit());
+  SetParam(newm, pdf->GetPDFs()[0]);
+  pdf->SetNMembers(1);
+  pdf->ComputeSumRules();
+
+  gsl_vector_free(m);
+  gsl_vector_free(newm);
+  return yavg;
+}
+
+// Cumulative step-size adaptation
+void CMAESMinimizer::CSA( gsl_vector const* yavg )
+{
+  const double alpha = sqrt(fCMAES->csigma*(2.0 - fCMAES->csigma)*fCMAES->mu_eff ); // Coeff of matrix multiply
+  const double beta = (1.0-fCMAES->csigma); // Coeff of sum
+  gsl_blas_dgemv (CblasNoTrans, alpha, finvC, yavg, beta, fpsigma);
+  double pnorm = 0; gsl_blas_ddot (fpsigma, fpsigma, &pnorm);
+
+  const double sigrat = fCMAES->csigma/fCMAES->dsigma;
+  fSigma = fSigma*exp(sigrat*(sqrt(pnorm)/fCMAES->expN - 1.0));
+
+  std::stringstream csastring; csastring << "CSA - StepSize: "<<fSigma <<" expFac: "<<sqrt(pnorm)/fCMAES->expN;
+  LogManager::AddLogEntry("CMAESMinimizer",csastring.str());
+}
+
+// Covariance matrix adaptation
+void CMAESMinimizer::CMA( FitPDFSet* pdf, vector<size_t> const& irank_map, std::vector<gsl_vector*> const& yvals, gsl_vector const* yavg )
+{
+  // Compute norm of p-sigma
+  const double pnorm = gsl_blas_dnrm2 (fpsigma);
+  const int g = pdf->GetNIte() + 1;
+  const double hl = pnorm / (sqrt(1.0 - pow(1.0 - fCMAES->csigma,2*(g+1))));
+  const double hr = (1.4 + 2.0/(fNTparam + 1))*fCMAES->expN;
+  const double hsig = (hl < hr) ? 1:0;
+  const double dhsig = (1 - hsig)*fCMAES->cc*(2-fCMAES->cc);
+  
+  const double alpha = hsig*sqrt(fCMAES->cc*(2.0-fCMAES->cc)*fCMAES->mu_eff);
+  gsl_vector_scale( fpc, (1.0-fCMAES->cc));
+  gsl_blas_daxpy (alpha, yavg, fpc);
+
+  const double weightsum = std::accumulate(fCMAES->wgts.begin(),fCMAES->wgts.end(), 0.0 );
+  const double Cscale = (1.0 + fCMAES->c1*dhsig - fCMAES->c1 - fCMAES->cmu*weightsum );
+
+  if ( Cscale != 1.0 ) gsl_matrix_scale(fC, Cscale);
+  gsl_blas_dger (fCMAES->c1, fpc, fpc, fC); // Rank-1 update
+
+  // Rank-mu update
+  for (int i=0; i<fCMAES->lambda; i++)
+  {
+    const gsl_vector* yval = yvals[irank_map[i]];
+    double wo = fCMAES->wgts[i];
+    if (fCMAES->wgts[i] < 0)
+    {
+      gsl_vector *cy  = gsl_vector_calloc( fNTparam );
+      gsl_blas_dgemv (CblasNoTrans, 1.0, finvC, yval, 1.0, cy);
+      const double norm = gsl_blas_dnrm2 (cy);
+      wo *= fNTparam / (norm*norm);
+      gsl_vector_free(cy);
+    }
+    gsl_blas_dger (fCMAES->cmu*wo, yval, yval, fC); 
+  }
+}
+
+
+void CMAESMinimizer::NormVect(gsl_vector* vec)
+{
+    for (size_t i=0; i<vec->size; i++)
+      gsl_vector_set(vec, i, RandomGenerator::GetRNG()->GetRandomGausDev(1));
+}
+
+void CMAESMinimizer::GetParam(Parametrisation** const pdfs, gsl_vector* params)
+{
+  int icount = 0;
+  for (int i=0; i<fSettings.GetNFL(); i++)
+      for (int j=0; j<pdfs[i]->GetNParameters(); j++)
+        gsl_vector_set(params, icount++, pdfs[i]->GetParameters()[j]);
+}
+
+void CMAESMinimizer::SetParam(gsl_vector* const params, Parametrisation** pdfs)
+{
+  int icount = 0;
+  for (int i=0; i<fSettings.GetNFL(); i++)
+      for (int j=0; j<pdfs[i]->GetNParameters(); j++)
+        pdfs[i]->GetParameters()[j] = gsl_vector_get(params,icount++);
+}

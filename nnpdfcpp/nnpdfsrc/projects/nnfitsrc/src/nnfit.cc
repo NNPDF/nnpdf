@@ -183,6 +183,11 @@ int main(int argc, char **argv)
           cout  << Colour::FG_BLUE << "Minimiser: Genetic Algorithm w/ fixed threshold term NN(x)-NN(1)" << Colour::FG_DEFAULT << endl;
           break;
 
+        case MIN_CMAES:
+          minim = new CMAESMinimizer(settings);
+          cout  << Colour::FG_BLUE << "Minimiser: CMA-ES" << Colour::FG_DEFAULT << endl;
+          break;  
+
         default:
           cout << Colour::FG_RED << "ERROR: Invalid Minimiser" << Colour::FG_DEFAULT <<endl;
           exit(-1);
@@ -264,12 +269,14 @@ int main(int argc, char **argv)
       cout << "Training upon "<<nData<<" datapoints"<<endl;
 
       Timer time;
-
       if (settings.Get("debug").as<bool>())
       {
         time.start();
         state = FIT_ITER;
       }
+
+      // Initialise minimiser
+      minim->Init(fitset,training, pos);
 
       for (int i = 0; i < settings.Get("fitting","ngen").as<int>(); i++)
       {
@@ -399,6 +406,7 @@ int main(int argc, char **argv)
       fitset->ExportPDF(replica, erf_val/dofval, erf_trn/doftrn, chi2/dof, posVeto);
 
       // Export Logs
+      delete minim;
       LogManager::ExportLogs();
 
       // Delete t0set

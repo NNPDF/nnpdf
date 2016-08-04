@@ -10,10 +10,17 @@
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
+#include <iomanip>  
 
 #include "common.h"
 #include "fitpdfset.h"
 using std::vector;
+
+#include <gsl/gsl_vector.h>
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_eigen.h>
+#include <gsl/gsl_cblas.h>
+#include <gsl/gsl_blas.h>
 
 #include <NNPDF/experiments.h>
 #include <NNPDF/positivity.h>
@@ -21,7 +28,6 @@ using NNPDF::Experiment;
 using NNPDF::PositivitySet;
 
 class NNPDFSettings;
-
 /**
  *  \class Minimizer
  *  \brief Virtual minimisation base class
@@ -119,3 +125,63 @@ public:
 protected:
    virtual void Mutation(FitPDFSet*, int const& nmut);
 };
+
+
+// *************************************************************************************
+
+class CMAESParam
+{
+public:
+  CMAESParam(size_t const& _n, size_t const& _lambda);
+  const size_t lambda;
+  const size_t mu;
+  const size_t n;
+  size_t eigenInterval;
+  double expN;
+  double mu_eff;
+  double csigma;
+  double dsigma;
+  double cc;
+  double c1;
+  double cmu;
+  std::vector<double> wgts;
+};
+
+/**
+ *  \class CMAESMinimizer
+ *  \brief CMA-ES minimiser
+ */
+ 
+class CMAESMinimizer : public Minimizer
+{
+public:
+  CMAESMinimizer(NNPDFSettings const&);
+  ~CMAESMinimizer();
+
+  virtual void Init(FitPDFSet*, vector<Experiment*> const&, vector<PositivitySet> const&);
+  virtual void Iterate(FitPDFSet*, vector<Experiment*> const&, vector<PositivitySet> const&);
+
+private:
+  std::vector<gsl_vector*> Mutation(FitPDFSet* pdf);
+  gsl_vector* Recombination(FitPDFSet* pdf, vector<size_t> const& rank, std::vector<gsl_vector*> const& yvals);
+
+  void CSA(gsl_vector const* yavg);
+  void CMA(FitPDFSet*, vector<size_t> const& rank, std::vector<gsl_vector*> const& yvals, gsl_vector const* yavg);
+
+  void GetParam(Parametrisation** const, gsl_vector*);
+  void SetParam(gsl_vector* const, Parametrisation**);
+
+  void NormVect(gsl_vector*); //!< Normally distributed random vector
+  void ComputeEigensystem();
+
+  const bool fAdaptStep;
+  const bool fAdaptCovMat;
+
+protected:
+  size_t fNTparam;
+  double fSigma;
+  CMAESParam* fCMAES;
+  gsl_vector *fpsigma, *fpc;
+  gsl_matrix *fC, *fBD, *finvC;  
+  gsl_eigen_symmv_workspace *fwrkspc;
+}; 
