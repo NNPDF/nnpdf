@@ -136,6 +136,7 @@ public:
   const size_t lambda;
   const size_t mu;
   const size_t n;
+  size_t eigenInterval;
   double expN;
   double mu_eff;
   double csigma;

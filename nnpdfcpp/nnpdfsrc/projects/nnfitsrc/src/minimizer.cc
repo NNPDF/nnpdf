@@ -444,6 +444,7 @@ CMAESParam::CMAESParam(size_t const& _n, size_t const& _lambda):
   lambda(_lambda),
   mu(floor(lambda/2.0)),
   n(_n),
+  eigenInterval(0.0),
   expN(0),
   mu_eff(0),
   csigma(0),
@@ -453,7 +454,6 @@ CMAESParam::CMAESParam(size_t const& _n, size_t const& _lambda):
   cmu(0),
   wgts(lambda,0)
 {
-
   // Set expN
   expN = sqrt(n)*(1.0-1.0/(4.0*n) + 1.0/(21.0*n*n) );
 
@@ -492,6 +492,9 @@ CMAESParam::CMAESParam(size_t const& _n, size_t const& _lambda):
   const double alpha_mueff_minus = 1.0 + (2*mu_eff_minus)/(mu_eff + 2.0);
   const double alpha_posdef_minus = (1.0-c1-cmu)/(n*cmu);
   const double alpha_min = fmin(alpha_mu_minus, fmin(alpha_mueff_minus, alpha_posdef_minus));
+
+  // Eigensystem solution interval
+  eigenInterval = (lambda/(c1+cmu)/n)/10.0;
   
   // ********************************** Normalising weights  ****************************************
 
@@ -505,7 +508,7 @@ CMAESParam::CMAESParam(size_t const& _n, size_t const& _lambda):
 
   std::stringstream teststream;
   teststream << "CMA-ES Minimiser parameters initialised:" <<std::endl;
-  teststream << "n: "<< n <<" lambda: " <<lambda <<" mu: "<<mu<<std::endl;
+  teststream << "n: "<< n <<" lambda: " <<lambda <<" mu: "<<mu<<" e_int: " << eigenInterval<<std::endl;
   teststream << "csigma: " <<csigma <<" dsigma: " <<dsigma <<" E|N|: " << expN <<std::endl;
   teststream << "cc: " << cc << " c1: " <<c1 << " cmu: " <<cmu <<std::endl;
   teststream << "sumWpos: "<< sumtestpos <<" sumWneg == -alpha_min: "<<sumtestneg<<" == "<<-alpha_min<<std::endl;
@@ -625,7 +628,8 @@ void CMAESMinimizer::Init(FitPDFSet* pdf, vector<Experiment*> const&, vector<Pos
 void CMAESMinimizer::Iterate(FitPDFSet* pdf, vector<Experiment*> const& exps, vector<PositivitySet> const& pos)
 {
   // First setup the required matrices
-  ComputeEigensystem();
+  if (pdf->GetNIte() % fCMAES->eigenInterval == 0 )
+    ComputeEigensystem();
 
   // Setup and mutate PDF members
   pdf->SetNMembers(fCMAES->lambda);
