@@ -71,14 +71,7 @@ public:
   int  GetNIte()        const { return fNIte; }
   void SetNIte( int const& newIte) { fNIte = newIte; }
   void Iterate()        { fNIte++; }
-  
-  // Cross-validation chi2 values
-  void AddValidationChi2(real const& v) {fChi2ValGenTot.push_back(pair<real,real>(fNIte,v));}
-  void AddTrainingChi2(real const& v)   {fChi2TrnGenTot.push_back(pair<real,real>(fNIte,v));}
-  
-  vector< pair<real,real> > const& GetValidationChi2() {return fChi2ValGenTot;}
-  vector< pair<real,real> > const& GetTrainingChi2()   {return fChi2TrnGenTot;}
-  
+    
   void GetPDF (real const& x, real const& Q2, int const& n, real* pdf) const; //!< Get evolution basis PDF  
   real GetPDF  (real const& x, real const& Q2, int const& n, int const& fl) const; //!< Get preprocessed Fit basis PDF
 
@@ -98,13 +91,9 @@ private:
   
   Parametrisation**         fBestFit;
   vector<Parametrisation**> fPDFs;
-  
   real  fEbf; //!< Figure of merit for best fit PDF
-  vector< pair<real,real> > fChi2ValGenTot;  //!< Validation chi2 history for cross-validation
-  vector< pair<real,real> > fChi2TrnGenTot;  //!< Training   chi2 history for cross-validation
 
   int fNIte;    //!< Counts the number of fit iterations
-    
   real* fXin; //!< Parametrisation input
 
   NNPDFSettings const& fSettings;

@@ -42,8 +42,6 @@ fQ20((real)pow(stod(nnset.GetTheory(APFEL::kQ0)),2.0)),
 fPreprocParam(),
 fBestFit(0),
 fEbf(std::numeric_limits<real>::infinity()),
-fChi2ValGenTot(),
-fChi2TrnGenTot(),
 fNIte(0)
 {
   fMembers = 0; // copies
