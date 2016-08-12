@@ -53,9 +53,10 @@ public:
   void ExportPDF(int const& rep, real const& erf_val, real const& erf_trn, real const& chi2, bool posVeto);
   string ExportPDF(int const& rep);
   
-  void ComputeSumRules(); //!< Compute preprocessing sum rule constraints
-  void ValidateStartingPDFs(); //!< Validate initial PDFs 
-  
+  bool ComputeIntegrals( int const& mem ); //!< Compute all associated integrals and sum rules
+  void ComputeSumRules();                  //!< Compute preprocessing sum rule constraints over all members
+  void ValidateStartingPDFs();             //!< Validate initial PDFs 
+
   void SetNMembers(int const& mem) {fMembers = mem; ExpandMembers();}
   
   vector<Parametrisation**>& GetPDFs() {return fPDFs;}
@@ -80,21 +81,19 @@ public:
 private:
   FitPDFSet(NNPDFSettings const&, FitBasis*);
   
-  void ExpandMembers(); //!< Expand internal vectors to fMembers
-  void DisableMember(int mem);  //!< Disable a member PDF by moving it to the end of the vector and decrementing fMembers
+  void ExpandMembers();                      //!< Expand internal vectors to fMembers
+  void DisableMember(int mem);               //!< Disable a member PDF by moving it to the end of the vector and decrementing fMembers
   
-  FitBasis* fFitBasis; //!< Fitting basis for PDF
+  FitBasis* fFitBasis;                      //!< Fitting basis for PDF
 
   const int fNfl;
   const real fQ20;
   vector<PreprocParam*>     fPreprocParam; //!< PDF preprocessing parameters by member
   
-  Parametrisation**         fBestFit;
-  vector<Parametrisation**> fPDFs;
-  real  fEbf; //!< Figure of merit for best fit PDF
-
-  int fNIte;    //!< Counts the number of fit iterations
-  real* fXin; //!< Parametrisation input
+  Parametrisation**         fBestFit;     //!< Best fit PDF
+  vector<Parametrisation**> fPDFs;        //!< Vector of PDF members
+  real  fEbf;                             //!< Figure of merit for best fit PDF
+  int fNIte;                              //!< Counts the number of fit iterations
 
   NNPDFSettings const& fSettings;
   
