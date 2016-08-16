@@ -25,8 +25,6 @@ using std::setprecision;
 using std::scientific;
 using std::fixed;
 using std::ofstream;
-using std::isnan;
-using std::isinf;
 
 #define EPSILON 1e-5
 
@@ -154,7 +152,7 @@ void FitPDFSet::DisableMember(int i)
 void FitPDFSet::SortMembers(real* chi2)
 {
   for (int i=0; i<fMembers; i++)
-    if (chi2[i] > fEbf || isnan(chi2[i]) || isinf(chi2[i]))
+    if (chi2[i] > fEbf || std::isnan(chi2[i]) || std::isinf(chi2[i]))
     {
      // Disable member and swap chi2
       DisableMember(i);
