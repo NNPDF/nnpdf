@@ -25,6 +25,8 @@ using std::setprecision;
 using std::scientific;
 using std::fixed;
 using std::ofstream;
+using std::isnan;
+using std::isinf;
 
 #define EPSILON 1e-5
 

@@ -23,6 +23,8 @@
 
 using NNPDF::Parametrisation;
 using NNPDF::ThPredictions;
+using std::isnan;
+using std::isinf;
 
 /**
  * @brief Minimizer baseline class
