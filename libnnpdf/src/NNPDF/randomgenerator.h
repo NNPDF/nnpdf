@@ -12,6 +12,7 @@
 #include "gsl/gsl_rng.h"
 #include "gsl/gsl_randist.h"
 
+#include <vector>
 
 namespace NNPDF
 {
@@ -42,6 +43,10 @@ namespace NNPDF
     double GetRandomUniform(double, double);
     double GetRandomUniformPos();
     double GetRandomGausDev(const double);
+
+    template<typename T> 
+    void ShuffleVector( std::vector<T>& vec )
+    {return gsl_ran_shuffle (fR, &vec[0], vec.size(), sizeof(T));}
 
     // Set Methods
     void SetSeed(unsigned long int);

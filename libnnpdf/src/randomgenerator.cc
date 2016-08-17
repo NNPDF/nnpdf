@@ -146,4 +146,5 @@ namespace NNPDF
   {
     return gsl_ran_gaussian(fR, sigma);
   }
+
 }
