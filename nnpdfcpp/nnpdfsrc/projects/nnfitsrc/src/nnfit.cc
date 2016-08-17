@@ -553,27 +553,14 @@ void TrainValidSplit(NNPDFSettings const& settings,
       // Fraction of data in training and validation sets
       const double trFrac = settings.GetSetInfo(set.GetSetName()).tTrainingFraction;
       const int trMax =(trFrac*set.GetNData());
-      const int valMax = set.GetNData() - trMax;
-
-      vector<int> trMaskset;
-      vector<int> valMaskset;
 
       // Creating Masks
-      for (int i = 0; i < set.GetNData(); i++)
-        {
-          if ((int)trMaskset.size() < trMax && (int)valMaskset.size() < valMax)
-            {
-              int rn = rng->GetRandomUniform(set.GetNData()) + 1;
-              if (rn <= trMax)
-                trMaskset.push_back(i);
-              else
-                valMaskset.push_back(i);
-            }
-          else if ((int)trMaskset.size() >= trMax)
-            valMaskset.push_back(i);
-          else if ((int)valMaskset.size() >= valMax)
-            trMaskset.push_back(i);
-        }
+      vector<int> mask;
+      for (int i = 0; i < set.GetNData(); i++) mask.push_back(i);
+      RandomGenerator::GetRNG()->ShuffleVector(mask);
+
+      const vector<int> trMaskset(mask.begin(), mask.begin() + trMax);
+      const vector<int> valMaskset(mask.begin() + trMax, mask.end());
 
       // Initializing new datasets
       trainingSets.push_back(DataSet(exp->GetSet(s), trMaskset));
