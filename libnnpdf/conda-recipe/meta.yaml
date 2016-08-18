@@ -1,5 +1,4 @@
-{% set branch = environ.get('CI_BUILD_REF_NAME', None) %}
-{% set non_master = branch if branch and branch != 'master'  else False %}
+{% set branch = 'nnpdf-' + environ.get('CI_BUILD_REF_NAME', 'LOCAL') %}
 package:
     name: libnnpdf
     version: "{{ environ.get('GIT_DESCRIBE_TAG', '')[1:] }}.{{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}"
@@ -8,8 +7,8 @@ source:
     git_url: ../
 
 requirements:
-    build: 
-        - python 
+    build:
+        - python
         - lhapdf
         - swig
         - sqlite
@@ -19,7 +18,7 @@ requirements:
         - numpy
     run:
         - lhapdf
-        - python 
+        - python
         - sqlite
         - libgcc <5
         - gsl    <2
@@ -27,9 +26,7 @@ requirements:
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
         - nnpdf_use_double
         {% endif  %}
-        {% if non_master %}
         - {{ branch }}
-        {% endif %}
 
 build:
     number: 0
@@ -38,9 +35,7 @@ build:
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
         - nnpdf_use_double
         {% endif  %}
-        {% if non_master %}
         - {{ branch }}
-        {% endif  %}
     script_env:
         - NNPDF_USE_DOUBLE
 
