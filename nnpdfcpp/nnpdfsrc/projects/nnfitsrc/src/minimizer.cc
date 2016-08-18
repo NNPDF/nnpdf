@@ -616,6 +616,7 @@ void CMAESMinimizer::Init(FitPDFSet* pdf, vector<Experiment*> const&, vector<Pos
 
   // Initialise CMA-ES constants
   fCMAES = new CMAESParam(fNTparam, fSettings.Get("fitting","nmutants").as<int>());
+  ComputeEigensystem();
 
   std::stringstream initstr; initstr << "CMA-ES minimiser initialised with " <<fNTparam << " total parameters " <<std::endl;
   LogManager::AddLogEntry("CMAESMinimizer",initstr.str());
@@ -651,7 +652,7 @@ void CMAESMinimizer::Iterate(FitPDFSet* pdf, vector<Experiment*> const& exps, ve
   pdf->Iterate();
 };
 
-std::vector<gsl_vector*> CMAESMinimizer::Mutation(FitPDFSet* pdf)
+std::vector<gsl_vector*> CMAESMinimizer::Mutation(FitPDFSet* pdf) const
 {
   gsl_vector* m  = gsl_vector_calloc( fNTparam );
   gsl_vector* z = gsl_vector_calloc(fCMAES->n); 
@@ -680,7 +681,7 @@ std::vector<gsl_vector*> CMAESMinimizer::Mutation(FitPDFSet* pdf)
   return yvals;
 }
 
-gsl_vector* CMAESMinimizer::Recombination(FitPDFSet* pdf, vector<size_t> const& irank_map, std::vector<gsl_vector*> const& yvals)
+gsl_vector* CMAESMinimizer::Recombination(FitPDFSet* pdf, vector<size_t> const& irank_map, std::vector<gsl_vector*> const& yvals) const
 {
   // Old average
   gsl_vector *m  = gsl_vector_calloc( fNTparam );
@@ -761,13 +762,13 @@ void CMAESMinimizer::CMA( FitPDFSet* pdf, vector<size_t> const& irank_map, std::
 }
 
 
-void CMAESMinimizer::NormVect(gsl_vector* vec)
+void CMAESMinimizer::NormVect(gsl_vector* vec) const
 {
     for (size_t i=0; i<vec->size; i++)
       gsl_vector_set(vec, i, RandomGenerator::GetRNG()->GetRandomGausDev(1));
 }
 
-void CMAESMinimizer::GetParam(Parametrisation** const pdfs, gsl_vector* params)
+void CMAESMinimizer::GetParam(Parametrisation** const pdfs, gsl_vector* params) const
 {
   int icount = 0;
   for (int i=0; i<fSettings.GetNFL(); i++)
@@ -775,7 +776,7 @@ void CMAESMinimizer::GetParam(Parametrisation** const pdfs, gsl_vector* params)
         gsl_vector_set(params, icount++, pdfs[i]->GetParameters()[j]);
 }
 
-void CMAESMinimizer::SetParam(gsl_vector* const params, Parametrisation** pdfs)
+void CMAESMinimizer::SetParam(gsl_vector* const params, Parametrisation** pdfs) const
 {
   int icount = 0;
   for (int i=0; i<fSettings.GetNFL(); i++)

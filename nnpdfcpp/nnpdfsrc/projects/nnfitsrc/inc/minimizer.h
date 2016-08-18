@@ -162,16 +162,16 @@ public:
   virtual void Iterate(FitPDFSet*, vector<Experiment*> const&, vector<PositivitySet> const&);
 
 private:
-  std::vector<gsl_vector*> Mutation(FitPDFSet* pdf);
-  gsl_vector* Recombination(FitPDFSet* pdf, vector<size_t> const& rank, std::vector<gsl_vector*> const& yvals);
+  std::vector<gsl_vector*> Mutation(FitPDFSet* pdf) const;
+  gsl_vector* Recombination(FitPDFSet* pdf, vector<size_t> const& rank, std::vector<gsl_vector*> const& yvals) const;
 
   void CSA(gsl_vector const* yavg);
   void CMA(FitPDFSet*, vector<size_t> const& rank, std::vector<gsl_vector*> const& yvals, gsl_vector const* yavg);
 
-  void GetParam(Parametrisation** const, gsl_vector*);
-  void SetParam(gsl_vector* const, Parametrisation**);
+  void GetParam(Parametrisation** const, gsl_vector*) const;
+  void SetParam(gsl_vector* const, Parametrisation**) const;
 
-  void NormVect(gsl_vector*); //!< Normally distributed random vector
+  void NormVect(gsl_vector*) const; //!< Normally distributed random vector
   void ComputeEigensystem();
 
 protected:
