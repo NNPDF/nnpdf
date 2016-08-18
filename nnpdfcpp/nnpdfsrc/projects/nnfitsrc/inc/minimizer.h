@@ -174,9 +174,6 @@ private:
   void NormVect(gsl_vector*); //!< Normally distributed random vector
   void ComputeEigensystem();
 
-  const bool fAdaptStep;
-  const bool fAdaptCovMat;
-
 protected:
   size_t fNTparam;
   double fSigma;

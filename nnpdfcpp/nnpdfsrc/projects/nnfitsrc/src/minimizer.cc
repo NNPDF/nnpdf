@@ -524,8 +524,6 @@ CMAESParam::CMAESParam(size_t const& _n, size_t const& _lambda):
  */
 CMAESMinimizer::CMAESMinimizer(NNPDFSettings const& settings):
 Minimizer(settings),
-fAdaptStep(fSettings.Get("fitting","CSA").as<bool>()),
-fAdaptCovMat(fSettings.Get("fitting","CMA").as<bool>()),
 fNTparam(0),
 fSigma(fSettings.Get("fitting","sigma").as<double>()),
 fCMAES(0),
@@ -620,8 +618,6 @@ void CMAESMinimizer::Init(FitPDFSet* pdf, vector<Experiment*> const&, vector<Pos
   fCMAES = new CMAESParam(fNTparam, fSettings.Get("fitting","nmutants").as<int>());
 
   std::stringstream initstr; initstr << "CMA-ES minimiser initialised with " <<fNTparam << " total parameters " <<std::endl;
-  initstr << "CSA: " << fAdaptStep <<"  "<<"CMA: " << fAdaptCovMat <<std::endl; 
-
   LogManager::AddLogEntry("CMAESMinimizer",initstr.str());
 }
 
@@ -646,9 +642,8 @@ void CMAESMinimizer::Iterate(FitPDFSet* pdf, vector<Experiment*> const& exps, ve
   // Compute weighted shift and set new mean
   gsl_vector* yavg = Recombination(pdf, irank_map, yvals);
 
- // ********************************** Adaptation  ****************************************
-  if (fAdaptStep)   CSA(yavg); 
-  if (fAdaptCovMat) CMA(pdf, irank_map, yvals, yavg );
+  // ********************************** Adaptation  ****************************************
+  CSA(yavg); CMA(pdf, irank_map, yvals, yavg );
 
   for (auto i : yvals ) gsl_vector_free(i);
   gsl_vector_free(yavg);
