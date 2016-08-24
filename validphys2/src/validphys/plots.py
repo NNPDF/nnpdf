@@ -388,13 +388,27 @@ def plot_bands(one_or_more_results, dataset,
 
             yield fig
 
+
+def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
+    kwargs['s'] = kwargs.get('s', 30) + 10
+    x = np.array(x, copy=False)
+    y = np.array(y, copy=False)
+    for label, indexes in marked_dict.items():
+        ax.scatter(x[indexes],y[indexes], *args, **kwargs, label=label,
+                   facecolors='none', linewidth=0.5, edgecolor='red')
+        kwargs['s'] += 10
+
+
 @figure
-def plot_training_validation(fit, replica_data):
+def plot_training_validation(fit, replica_data, replica_filters=None):
     """Scatter plot with the training and validation chi² for each replica
     in the fit. The mean is also displayed"""
     training, valid = zip(*((dt.training, dt.validation) for dt in replica_data))
     fig, ax = plt.subplots()
-    s=ax.plot(training,valid,linestyle='', marker='o', markersize=5, zorder=100)
+    ax.plot(training, valid, marker='o', linestyle='none', markersize=5, zorder=100)
+    if replica_filters:
+        _scatter_marked(ax, training,valid, replica_filters, zorder=90)
+        ax.legend().set_zorder(10000)
 
     ax.set_title(getattr(fit, 'label', fit.name))
 

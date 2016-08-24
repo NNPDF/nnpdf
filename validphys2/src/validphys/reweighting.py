@@ -24,6 +24,7 @@ from validphys.results import abs_chi2_data, results
 from validphys import checks
 from validphys import lhaindex
 from validphys.lhio import new_pdf_from_indexes
+from validphys.plots import plot_training_validation
 
 log = logging.getLogger(__name__)
 
@@ -210,23 +211,53 @@ def _check_cut(ns, *args, **kwargs):
 
 @checks.check_has_fitted_replicas
 @_check_cut
+def chi2filtered_index(fit, replica_data, nsigma_cut:float):
+    """Discard outliers until the χ² to fitted data of all replicas has
+       a smaller deviation than `nsigma_cut`
+       (in units of the standard deviation of the final ensemble)
+    """
+
+    chis = np.array([dt.chi2 for dt in replica_data])
+    newchis = chis
+    oldmean = np.mean(newchis)
+    while True:
+        mean = np.mean(newchis)
+        std = np.std(newchis)
+        limit = mean + std*nsigma_cut
+        #Replica indexes start at 1
+        indexes = np.where(chis < limit)[0]
+
+
+        if len(newchis) == len(indexes):
+            break
+
+
+        newchis = chis[indexes]
+
+    log.info("%s: Mean ̉χ² was %.2f, and the threshold is %.2f. Discarded %d "
+    "replicas out of %d. Now the mean is %.2f.", fit.name, oldmean, limit,
+    len(chis) - len(indexes), len(chis), np.mean(newchis))
+
+    return indexes
+
 @_prepare_pdf_name
-def make_pdf_from_filtered_outliers(fit, replica_data, nsigma_cut:float,
+@checks.check_can_save_grid
+def make_pdf_from_filtered_outliers(fit, chi2filtered_index,
                                     set_name:(str, type(None))=None,
                                     output_path=None,
                                     installgrid:bool=True):
-    """Discard outliers with χ² to fitted data bigger than nsigma_cut and
-    produce a new grid with the result."""
-    chis = np.array([dt.chi2 for dt in replica_data])
-    mean = np.mean(chis)
-    std = np.std(chis)
-    limit = mean + std*nsigma_cut
-    #Replica indexes start at 1
-    indexes = np.where(chis < limit)[0] + 1
-    log.info("Mean ̉χ² is %.2f, and the threshold is %.2f. Discarded %d "
-    "replicas out of %d.", mean, limit, len(chis) - len(indexes), len(chis))
+    """Produce a new grid with the result of chi2filtered_index"""
+
+
+    indexes = chi2filtered_index + 1 #libnnpdf nonsense
     new_pdf_from_indexes(pdf=PDF(fit.name), indexes=indexes,
                          set_name=set_name, folder=output_path,
                          installgrid=installgrid)
 
 make_pdf_from_filtered_outliers.highlight = 'pdfset'
+
+#TODO: Use the filter framework here when it exists
+@figure
+def plot_chi2filtered_training_validation(fit, nsigma_cut, replica_data, chi2filtered_index):
+    """Like `plot_training_validation`, but apply `chi2filtered_index` mask."""
+    return plot_training_validation(fit, replica_data, {'$\chi^2$ Filter: %.2f'%nsigma_cut:chi2filtered_index})
