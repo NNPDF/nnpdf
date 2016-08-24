@@ -16,6 +16,7 @@ import numpy as np
 import scipy.stats
 
 from reportengine import namespaces
+from reportengine.baseexceptions import AsInputError
 
 from NNPDF import LHAPDFSet
 from NNPDF import CommonData, FKTable
@@ -275,7 +276,10 @@ class FitSpec(TupleComp):
 
     def as_input(self):
         import yaml
-        return yaml.load((self.path/'filter.yml').open())
+        try:
+            return yaml.load((self.path/'filter.yml').open())
+        except yaml.YAMLError as e:
+            raise AsInputError(str(e)) from e
 
     __slots__ = ('label','name', 'path')
 
