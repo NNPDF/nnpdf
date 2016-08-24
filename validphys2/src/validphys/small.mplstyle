@@ -19,6 +19,7 @@ grid.linewidth          : 0.05
 
 legend.fontsize         : xx-small
 legend.numpoints        : 1
+legend.scatterpoints    : 1
 legend.loc              : best
 legend.fancybox         : True
 legend.framealpha       : 0.8
