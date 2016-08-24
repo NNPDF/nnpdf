@@ -206,7 +206,7 @@ class DataSetSpec(TupleComp):
 
         fktables = []
         for p in self.fkspecs:
-            fktable = FKTable(str(p.fkpath), [str(factor) for factor in p.cfactors])
+            fktable = p.load()
             #IMPORTANT: We need to tell the python garbage collector to NOT free the
             #memory owned by the FKTable on garbage collection.
             #TODO: Do this automatically
@@ -234,6 +234,10 @@ class FKTableSpec(TupleComp):
         self.fkpath = fkpath
         self.cfactors = cfactors
         super().__init__(fkpath, cfactors)
+
+    @functools.lru_cache()
+    def load(self):
+        return FKTable(str(self.fkpath), [str(factor) for factor in self.cfactors])
 
 #We allow to expand the experiment as a list of datasets
 class ExperimentSpec(TupleComp, namespaces.NSList):
