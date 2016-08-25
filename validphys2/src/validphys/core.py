@@ -169,8 +169,21 @@ class PDF(TupleComp):
         raise NotImplementedError("Error type for %s: '%s' is not implemented" %
                                   (self.name, error))
 
+class CommonDataSpec(TupleComp):
+    def __init__(self, datafile, sysfile, plotfiles):
+        self.datafile = datafile
+        self.sysfile = sysfile
+        self.plotfiles = plotfiles
+        super().__init__(datafile, sysfile, plotfiles)
 
-CommonDataSpec = namedtuple('CommonDataSpec', ['datafile', 'sysfile', 'plotfiles'])
+    def __iter__(self):
+        return self.datafile, self.sysfile, self.plotfiles
+
+    @functools.lru_cache()
+    def load(self):
+        #TODO: Use better path handling in python 3.6
+        return CommonData.ReadFile(str(self.datafile), str(self.sysfile))
+
 
 class DataSetSpec(TupleComp):
 
@@ -204,8 +217,7 @@ class DataSetSpec(TupleComp):
 
     @functools.lru_cache()
     def load(self):
-        cdpath,syspth, _ = self.commondata
-        cd = CommonData.ReadFile(str(cdpath), str(syspth))
+        cd = self.commondata.load()
 
         fktables = []
         for p in self.fkspecs:
