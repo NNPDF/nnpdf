@@ -431,3 +431,15 @@ STAT_TYPES = dict(
                     hessian = HessianStats,
                     replicas   = MCStats,
                    )
+
+class Filter:
+    def __init__(self, indexes, label, **kwargs):
+        self.indexes  = indexes
+        self.label = label
+        self.kwargs = kwargs
+
+    def as_pair(self):
+        return self.label, self.indexes
+
+    def __str__(self):
+        return '%s: %s' % (self.label, self.indexes)

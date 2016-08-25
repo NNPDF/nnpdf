@@ -19,7 +19,7 @@ from reportengine.figure import figure
 from reportengine.checks import make_check
 from reportengine.formattingtools import spec_to_nice_name
 
-from validphys.core import PDF
+from validphys.core import PDF, Filter
 from validphys.results import abs_chi2_data, results
 from validphys import checks
 from validphys import lhaindex
@@ -238,7 +238,17 @@ def chi2filtered_index(fit, replica_data, nsigma_cut:float):
     "replicas out of %d. Now the mean is %.2f.", fit.name, oldmean, limit,
     len(chis) - len(indexes), len(chis), np.mean(newchis))
 
-    return indexes
+    label = '$\chi^2$ Filter: %.2f'%nsigma_cut
+
+
+    return Filter(indexes, label, nsigma_cut=nsigma_cut)
+
+def negative_filtered_index(count_negative_points, filter_Q=75):
+    cut = np.percentile(count_negative_points, filter_Q)
+    indexes =  np.where(count_negative_points <= cut)[0]
+    label = 'Positivity Selection Q=%.2f' % filter_Q
+    log.info("Positivity cut for Q=%.2f is at %.0f negative points" % (filter_Q, cut))
+    return Filter(indexes, label, filter_Q=filter_Q)
 
 @_prepare_pdf_name
 @checks.check_can_save_grid
@@ -248,8 +258,7 @@ def make_pdf_from_filtered_outliers(fit, chi2filtered_index,
                                     installgrid:bool=True):
     """Produce a new grid with the result of chi2filtered_index"""
 
-
-    indexes = chi2filtered_index + 1 #libnnpdf nonsense
+    indexes = chi2filtered_index.indexes + 1 #libnnpdf nonsense
     new_pdf_from_indexes(pdf=PDF(fit.name), indexes=indexes,
                          set_name=set_name, folder=output_path,
                          installgrid=installgrid)
@@ -260,4 +269,10 @@ make_pdf_from_filtered_outliers.highlight = 'pdfset'
 @figure
 def plot_chi2filtered_training_validation(fit, nsigma_cut, replica_data, chi2filtered_index):
     """Like `plot_training_validation`, but apply `chi2filtered_index` mask."""
-    return plot_training_validation(fit, replica_data, {'$\chi^2$ Filter: %.2f'%nsigma_cut:chi2filtered_index})
+    return plot_training_validation(fit, replica_data, dict([chi2filtered_index.as_pair()]))
+
+#TODO: Use the filter framework here when it exists
+@figure
+def plot_posfiltered_training_validation(fit, replica_data, negative_filtered_index):
+    """Like `plot_training_validation`, but apply `chi2filtered_index` mask."""
+    return plot_training_validation(fit, replica_data, dict([negative_filtered_index.as_pair()]))
