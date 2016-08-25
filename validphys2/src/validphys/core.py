@@ -11,6 +11,7 @@ from __future__ import generator_stop
 from collections import namedtuple
 import functools
 import inspect
+import logging
 
 import numpy as np
 import scipy.stats
@@ -25,6 +26,8 @@ from NNPDF.dataset import DataSet
 from NNPDF.experiments import Experiment
 
 from validphys import lhaindex
+
+log = logging.getLogger(__name__)
 
 
 class TupleComp:
@@ -278,11 +281,15 @@ class FitSpec(TupleComp):
         yield self.name
         yield self.path
 
+    @functools.lru_cache()
     def as_input(self):
         import yaml
+        p = self.path/'filter.yml'
+        log.debug('Reading input from fit configuration %s' % (p,))
         try:
-            return yaml.load((self.path/'filter.yml').open())
-        except yaml.YAMLError as e:
+            with p.open() as f:
+                return yaml.load(f)
+        except (yaml.YAMLError, FileNotFoundError) as e:
             raise AsInputError(str(e)) from e
 
     __slots__ = ('label','name', 'path')
