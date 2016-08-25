@@ -15,9 +15,10 @@ import re
 import numpy as np
 import yaml
 
-from NNPDF import CommonData, FKTable
+from NNPDF import CommonData
 
-from validphys.core import CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec
+from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
+                            PositivitySetSpec)
 
 log = logging.getLogger(__name__)
 
@@ -132,10 +133,10 @@ class Loader():
         return tuple(tables), op
 
 
-    def get_fktable(self, theoryID, setname):
+    def get_fktable(self, theoryID, setname, cfac):
 
-        fkpath = self.check_fktable(theoryID, setname)
-        return FKTable(str(fkpath), [])
+        fkspec= self.check_fktable(theoryID, setname, cfac)
+        return fkspec.load()
 
     def check_cfactor(self, theoryID, setname, cfactors):
         _, theopath = self.check_theoryID(theoryID)
@@ -151,6 +152,15 @@ class Loader():
             cf.append(cfactorpath)
 
         return tuple(cf)
+
+    def check_posset(self, theiryID, setname, postlambda):
+        cd = self.check_commondata(setname, 0)
+        fk = self.check_fktable(theiryID, setname, [])
+        th =  self.check_theoryID(theiryID)
+        return PositivitySetSpec(cd, fk, postlambda, th)
+
+    def get_posset(self, theiryID, setname, postlambda):
+        return self.check_posset(theiryID, setname, postlambda).load()
 
     def check_fit(self, fitname):
         resultspath = self.resultspath

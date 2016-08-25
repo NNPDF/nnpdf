@@ -24,6 +24,7 @@ from NNPDF import CommonData, FKTable
 from NNPDF.fkset import FKSet
 from NNPDF.dataset import DataSet
 from NNPDF.experiments import Experiment
+from NNPDF.positivity import PositivitySet
 
 from validphys import lhaindex
 
@@ -253,6 +254,30 @@ class FKTableSpec(TupleComp):
     @functools.lru_cache()
     def load(self):
         return FKTable(str(self.fkpath), [str(factor) for factor in self.cfactors])
+
+class PositivitySetSpec(TupleComp):
+    def __init__(self, commondataspec, fkspec, poslambda, thspec):
+        self.commondataspec = commondataspec
+        self.fkspec = fkspec
+        self.poslambda = poslambda
+        self.thspec = thspec
+        super().__init__(commondataspec, fkspec, poslambda, thspec)
+
+    @property
+    def name(self):
+        return self.commondataspec.name
+
+    def __str__(self):
+        return self.name
+
+    @functools.lru_cache()
+    def load(self):
+        cd = self.commondataspec.load()
+        fk = self.fkspec.load()
+        return PositivitySet(cd, fk, self.poslambda)
+
+    #__slots__ = ('__weakref__', 'commondataspec', 'fkspec', 'poslambda')
+
 
 #We allow to expand the experiment as a list of datasets
 class ExperimentSpec(TupleComp, namespaces.NSList):

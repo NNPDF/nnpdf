@@ -203,3 +203,24 @@ class Config(configparser.Config):
             raise ConfigError("Setting use_t0 requires specifying a valid t0pdfset")
 
         return do_use_t0
+
+    @element_of('posdatasets')
+    def parse_posdataset(self, posset:dict, * ,theoryid):
+        """An observable used as positivity constrain in the fit.
+        It is a mapping containing 'dataset' and 'poslambda'."""
+        bad_msg = ("posset must be a mapping with a name ('dataset') and "
+                   "a float multiplier(poslambda)")
+
+        theoryno, theopath = theoryid
+        try:
+            name = posset['dataset']
+            poslambda = float(posset['poslambda'])
+        except KeyError as e:
+            raise ConfigError(bad_msg, e.args[0], posset.keys()) from e
+        except ValueError as e:
+            raise ConfigError(bad_msg) from e
+
+        try:
+            return self.loader.check_posset(theoryno, name, poslambda)
+        except FileNotFoundError as e:
+            raise ConfigError(e) from e
