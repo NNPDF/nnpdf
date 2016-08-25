@@ -37,6 +37,8 @@ namespace NNPDF
     void ComputeNUnacceptable(const PDFSet*, int* res) const; //!< Number of unacceptable points (less than bounds)
 
     void SetBounds(const PDFSet*); //!< Set bounds
+
+    void GetPredictions(const PDFSet&, real **result, int* ndata, int* npdf);
      
   private:
 

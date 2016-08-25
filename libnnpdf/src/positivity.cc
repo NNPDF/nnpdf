@@ -33,7 +33,7 @@ CommonData(data),
 FKTable(table),
 fLambda(lambda)
 {
-  std::cout << "Positivity Lagrange Multiplier: "<<fLambda<<std::endl;
+  get_logger() << "Positivity Lagrange Multiplier: "<<fLambda<<std::endl;
 }
 
 /**
@@ -114,6 +114,15 @@ void PositivitySet::ComputePoints(const PDFSet* pdf, real* res) const
   ThPredictions::Convolute(pdf,this,res);
 }
 
+void PositivitySet::GetPredictions(const PDFSet &pdf, real **result, int *ndata, int *npdf)
+{
+
+  *npdf = pdf.GetMembers();
+  *ndata = CommonData::GetNData();
+  auto space = new real[(*npdf)*(*ndata)];
+  ComputePoints(&pdf,space);
+  *result = space;
+}
 
 /**
  * @brief Computes the total number of violated data points (negative observables)
@@ -140,6 +149,7 @@ void PositivitySet::ComputeNViolated( const PDFSet* pdf, int* res) const
 
   delete[] tmp;
 }
+
 
 
 /**
