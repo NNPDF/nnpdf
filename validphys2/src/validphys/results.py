@@ -21,14 +21,16 @@ from validphys.core import DataSetSpec, PDF
 
 log = logging.getLogger(__name__)
 
-#TODO: Is this abstraction any useful?
-class Result:
+
+
+class Result: pass
+
+
+#TODO: Eventually,only one of (NNPDFDataResult, StatsResult) should survive
+class NNPDFDataResult(Result):
+    """A result fills its values from a libnnpf data object"""
     def __init__(self, dataobj):
         self._central_value = dataobj.get_cv()
-
-    @property
-    def std_error(self):
-        return np.sqrt(np.diag(self.covmat))
 
     @property
     def central_value(self):
@@ -37,8 +39,22 @@ class Result:
     def __len__(self):
         return len(self.central_value)
 
+class StatsResult(Result):
+    def __init__(self, stats):
+        self.stats = stats
 
-class DataResult(Result):
+    @property
+    def central_value(self):
+        return self.stats.central_value()
+
+    @property
+    def std_error(self):
+        return self.stats.std_error()
+
+
+
+
+class DataResult(NNPDFDataResult):
 
     def __init__(self, dataobj):
         super().__init__(dataobj)
@@ -50,6 +66,10 @@ class DataResult(Result):
         return "CommonData"
 
     @property
+    def std_error(self):
+        return np.sqrt(np.diag(self.covmat))
+
+    @property
     def covmat(self):
         return self._covmat
 
@@ -58,7 +78,7 @@ class DataResult(Result):
         return self._invcovmat
 
 
-class ThPredictionsResult(Result):
+class ThPredictionsResult(NNPDFDataResult):
 
     def __init__(self, dataobj, stats_class, label=None):
         self.stats_class = stats_class
@@ -100,6 +120,20 @@ class ThPredictionsResult(Result):
 
 
         return cls(th_predictions, pdf.stats_class, label)
+
+class PositivityResult(StatsResult):
+    @classmethod
+    def from_convolution(cls, pdf, posset):
+        loaded_pdf = pdf.load()
+        loaded_pos = posset.load()
+        data = loaded_pos.GetPredictions(loaded_pdf)
+        stats = pdf.stats_class(data.T)
+        return cls(stats)
+
+    @property
+    def rawdata(self):
+        return self.stats.data
+
 
 
 def experiments_index(experiments):
@@ -452,6 +486,16 @@ def closure_shifts(experiments_index, fit, use_cuts, experiments):
 
 
 
+
+def positivity_predictions(pdf, positivityset):
+    return PositivityResult.from_convolution(pdf, positivityset)
+
+#TODO: Replace this with reportengine.collect
+def possets_predictions(pdf, posdatasets):
+    return [positivity_predictions(pdf, pos) for pos in posdatasets]
+
+def count_negative_points(possets_predictions):
+    return np.sum([(r.rawdata < 0).sum(axis=1) for r in possets_predictions], axis=0)
 
 
 

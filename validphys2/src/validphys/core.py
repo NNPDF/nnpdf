@@ -360,7 +360,7 @@ class Stats:
     def error_members(self):
         raise NotImplementedError()
 
-    def std(self):
+    def std_error(self):
         raise NotImplementedError()
 
     def sample_values(self, size):
