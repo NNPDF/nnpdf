@@ -2,10 +2,12 @@
 
 #Find conda
 source ~/.bashrc
-conda build -q .ciscripts/branch-metapackage
-if [ $? != 0 ]; then
-	echo failed to build metapackage
-	exit 1
+if [ "$CI_BUILD_REF_NAME" != 'master'  ]; then
+	conda build -q .ciscripts/branch-metapackage
+    if [ $? != 0 ]; then
+	    echo failed to build metapackage
+	    exit 1
+    fi
 fi
 
 conda build -q conda-recipe
