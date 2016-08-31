@@ -9,7 +9,7 @@ if [ $? != 0 ]; then
 fi
 
 #This seems to be needed for "artifacts" to work.
-cp /yes/conda-bld/linux-64/*.tar.bz2 .
+cp /root/miniconda3/conda-bld/linux-64/*.tar.bz2 .
 if [ "$CI_BUILD_REF_NAME" != 'master'  ] && [ "$UPLOAD_NON_MASTER" == false ]; 
 then
   	echo "
