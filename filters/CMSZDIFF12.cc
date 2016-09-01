@@ -7,7 +7,7 @@ Archived as: ARXIV:1504.03511
 Auxiliary Material: https://twiki.cern.ch/twiki/bin/view/CMSPublic/PhysicsResultsSMP13013
 Record in: INSPIRE
 Record in: CERN Document Server
-Record in: HEPData (new site in development)
+Record in: HEPData http://hepdata.cedar.ac.uk/view/ins1359450
 
 Description of the measurement
 CERN-LHC. Measurements of the double-differential Drell-Yan cross sections are presented using an integrated luminosity of 19.7 inverse femtobarns in the dimuon channel of proton-proton collision data recorded in 2012 with the CMS detector at the LHC at sqrt(s) = 8 TeV. Covariance matrices are provided in addition to the tables given in the paper.
@@ -27,8 +27,8 @@ void CMSZDIFF12Filter::ReadData()
   // Opening files
   fstream f1, f2;
 
-  bool Table1 = false; //Set to true or false (Table1 or Table 2 respectively)
-
+  bool Table1 = false; // Set to true or false (Table1 or Table 2 respectively)
+                       // false -> unnormalised, true -> normalised
   if (Table1)
   {
     stringstream datafile("");
@@ -101,9 +101,9 @@ void CMSZDIFF12Filter::ReadData()
       etamin = 0.0 + j * 0.4;
       etamax = 0.4 + j * 0.4;
 
-      fKin1[idat] = (etamin + etamax) / 2.0;   // average rapidity
-      fKin2[idat] = (ptmin + ptmax) / 2.0;     // average pt
-      fKin2[idat] *= fKin2[idat];
+      fKin2[idat] = (etamin + etamax) / 2.0;   // average rapidity
+      fKin1[idat] = (ptmin + ptmax) / 2.0;     // average pt
+      //      fKin1[idat] *= fKin1[idat];
       fKin3[idat] = s;                         // only eta and pt relevant
 
       lstream >> fData[idat];

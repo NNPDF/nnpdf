@@ -37,6 +37,7 @@ Output files
 The output of each combination is contained within a directory with the same naming structure as for the input files above. Within these directories are four files, "*.out , chi2map.dat, tab.dat and xsec1". Again more detailed information is given in F2AV_README.
 
 The most important file is tab.dat which contains a series of rows, one corresponding to each bin (after three header rows). The first column is the bin centre. The next two columns can be ignored. The following columns are then: the cross section value, the statistical uncertainty (absolute), the systematic uncertainty uncorrelated between bins (absolute) and the total uncertainty (absolute) (quadratic sum of statistical + uncorrelated systematics + correlated systematics) . The following columns detail the orthogonal sources of correlated systematic uncertainties (also absolute)
+MARIA: That's not true! Those are the percentage uncertainties!!!
 
 Note
 ------------
