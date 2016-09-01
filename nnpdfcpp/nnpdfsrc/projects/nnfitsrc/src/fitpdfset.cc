@@ -152,7 +152,7 @@ void FitPDFSet::DisableMember(int i)
 void FitPDFSet::SortMembers(real* chi2)
 {
   for (int i=0; i<fMembers; i++)
-    if (chi2[i] > fEbf || isnan(chi2[i]) || isinf(chi2[i]))
+    if (chi2[i] > fEbf || std::isnan(chi2[i]) || std::isinf(chi2[i]))
     {
      // Disable member and swap chi2
       DisableMember(i);

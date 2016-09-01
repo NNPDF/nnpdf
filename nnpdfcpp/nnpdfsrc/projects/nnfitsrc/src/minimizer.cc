@@ -101,7 +101,7 @@ void Minimizer::ComputeErf(FitPDFSet* pdf,
 
     // Check for anomalous chi^2 values
     for (int j=0; j< pdf->GetMembers(); j++)
-      if (fChi2Mem[j] >= 1E20 || isnan(fChi2Mem[j]) || isinf(fChi2Mem[j]))
+      if (fChi2Mem[j] >= 1E20 || std::isnan(fChi2Mem[j]) || std::isinf(fChi2Mem[j]))
 	cerr << "Anomalous chi^2: "<< fChi2Mem[j] <<endl;
 
     // Re-sort PDF members after experiment is finished

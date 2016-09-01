@@ -5,7 +5,8 @@ Date:    June 2016
 CodesUsed: None 
 TheoryInput: None
 PDFset: None
-Warnings: Normalisation corrections for APPLgrids not needed if we use UNNORMALISED DISTS
+Warnings: Normalisation corrections for APPLgrids: (pT bin width)/ (total pT bin width = 855 bin1,2,3 or 900) / (total Y bin width = 4.8)
+Where does the Mll width go?
 ********************************************************************************************
 1.
 1.
