@@ -101,7 +101,7 @@ void Minimizer::ComputeErf(FitPDFSet* pdf,
 
     // Check for anomalous chi^2 values
     for (int j=0; j< pdf->GetMembers(); j++)
-      if (fChi2Mem[j] >= 1E20 || isnan(fChi2Mem[j]) || isinf(fChi2Mem[j]))
+      if (fChi2Mem[j] >= 1E20 || std::isnan(fChi2Mem[j]) || std::isinf(fChi2Mem[j]))
 	cerr << "Anomalous chi^2: "<< fChi2Mem[j] <<endl;
 
     // Re-sort PDF members after experiment is finished
@@ -658,25 +658,30 @@ void CMAESMinimizer::Iterate(FitPDFSet* pdf, vector<Experiment*> const& exps, ve
 
 std::vector<gsl_vector*> CMAESMinimizer::Mutation(FitPDFSet* pdf)
 {
-  std::vector<gsl_vector*> yvals;
-  gsl_vector *m  = gsl_vector_calloc( fNTparam );
+  gsl_vector* m  = gsl_vector_calloc( fNTparam );
+  gsl_vector* z = gsl_vector_calloc(fCMAES->n); 
+  gsl_vector* x = gsl_vector_calloc(fCMAES->n); 
+
   GetParam(pdf->GetBestFit(), m);
+  std::vector<gsl_vector*> yvals;
   for (size_t i=0; i<fCMAES->lambda; i++)
   {
-    gsl_vector* z = gsl_vector_calloc(fCMAES->n); NormVect(z);
-    gsl_vector* y = gsl_vector_calloc(fCMAES->n); gsl_blas_dgemv (CblasNoTrans, 1.0, fBD, z, 1.0, y);
-    gsl_vector* x = gsl_vector_calloc(fCMAES->n); gsl_vector_memcpy (x, m); gsl_blas_daxpy (fSigma, y, x);
+    gsl_vector* y = gsl_vector_calloc(fCMAES->n); 
+    do
+    {
+      gsl_vector_set_zero (z); NormVect(z);
+      gsl_vector_set_zero (y); gsl_blas_dgemv (CblasNoTrans, 1.0, fBD, z, 1.0, y);
+      gsl_vector_set_zero (x); gsl_vector_memcpy (x, m); gsl_blas_daxpy (fSigma, y, x);
+      SetParam(x, pdf->GetPDFs()[i]);
+    } while(!pdf->ComputeIntegrals(i)); // Ensures integrability of generated solutions
 
-    SetParam(x, pdf->GetPDFs()[i]);
-
-    gsl_vector_free(z);
-    gsl_vector_free(x);
     yvals.push_back(y);
   }
 
-  // Compute Preprocessing and free mean
-  pdf->ComputeSumRules();
   gsl_vector_free(m);
+  gsl_vector_free(z);
+  gsl_vector_free(x);
+
   return yvals;
 }
 

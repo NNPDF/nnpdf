@@ -53,9 +53,10 @@ public:
   void ExportPDF(int const& rep, real const& erf_val, real const& erf_trn, real const& chi2, bool posVeto);
   string ExportPDF(int const& rep);
   
-  void ComputeSumRules(); //!< Compute preprocessing sum rule constraints
-  void ValidateStartingPDFs(); //!< Validate initial PDFs 
-  
+  bool ComputeIntegrals( int const& mem ); //!< Compute all associated integrals and sum rules
+  void ComputeSumRules();                  //!< Compute preprocessing sum rule constraints over all members
+  void ValidateStartingPDFs();             //!< Validate initial PDFs 
+
   void SetNMembers(int const& mem) {fMembers = mem; ExpandMembers();}
   
   vector<Parametrisation**>& GetPDFs() {return fPDFs;}
@@ -71,14 +72,7 @@ public:
   int  GetNIte()        const { return fNIte; }
   void SetNIte( int const& newIte) { fNIte = newIte; }
   void Iterate()        { fNIte++; }
-  
-  // Cross-validation chi2 values
-  void AddValidationChi2(real const& v) {fChi2ValGenTot.push_back(pair<real,real>(fNIte,v));}
-  void AddTrainingChi2(real const& v)   {fChi2TrnGenTot.push_back(pair<real,real>(fNIte,v));}
-  
-  vector< pair<real,real> > const& GetValidationChi2() {return fChi2ValGenTot;}
-  vector< pair<real,real> > const& GetTrainingChi2()   {return fChi2TrnGenTot;}
-  
+    
   void GetPDF (real const& x, real const& Q2, int const& n, real* pdf) const; //!< Get evolution basis PDF  
   real GetPDF  (real const& x, real const& Q2, int const& n, int const& fl) const; //!< Get preprocessed Fit basis PDF
 
@@ -87,25 +81,19 @@ public:
 private:
   FitPDFSet(NNPDFSettings const&, FitBasis*);
   
-  void ExpandMembers(); //!< Expand internal vectors to fMembers
-  void DisableMember(int mem);  //!< Disable a member PDF by moving it to the end of the vector and decrementing fMembers
+  void ExpandMembers();                      //!< Expand internal vectors to fMembers
+  void DisableMember(int mem);               //!< Disable a member PDF by moving it to the end of the vector and decrementing fMembers
   
-  FitBasis* fFitBasis; //!< Fitting basis for PDF
+  FitBasis* fFitBasis;                      //!< Fitting basis for PDF
 
   const int fNfl;
   const real fQ20;
   vector<PreprocParam*>     fPreprocParam; //!< PDF preprocessing parameters by member
   
-  Parametrisation**         fBestFit;
-  vector<Parametrisation**> fPDFs;
-  
-  real  fEbf; //!< Figure of merit for best fit PDF
-  vector< pair<real,real> > fChi2ValGenTot;  //!< Validation chi2 history for cross-validation
-  vector< pair<real,real> > fChi2TrnGenTot;  //!< Training   chi2 history for cross-validation
-
-  int fNIte;    //!< Counts the number of fit iterations
-    
-  real* fXin; //!< Parametrisation input
+  Parametrisation**         fBestFit;     //!< Best fit PDF
+  vector<Parametrisation**> fPDFs;        //!< Vector of PDF members
+  real  fEbf;                             //!< Figure of merit for best fit PDF
+  int fNIte;                              //!< Counts the number of fit iterations
 
   NNPDFSettings const& fSettings;
   

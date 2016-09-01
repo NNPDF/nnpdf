@@ -42,8 +42,6 @@ fQ20((real)pow(stod(nnset.GetTheory(APFEL::kQ0)),2.0)),
 fPreprocParam(),
 fBestFit(0),
 fEbf(std::numeric_limits<real>::infinity()),
-fChi2ValGenTot(),
-fChi2TrnGenTot(),
 fNIte(0)
 {
   fMembers = 0; // copies
@@ -154,7 +152,7 @@ void FitPDFSet::DisableMember(int i)
 void FitPDFSet::SortMembers(real* chi2)
 {
   for (int i=0; i<fMembers; i++)
-    if (chi2[i] > fEbf || isnan(chi2[i]) || isinf(chi2[i]))
+    if (chi2[i] > fEbf || std::isnan(chi2[i]) || std::isinf(chi2[i]))
     {
      // Disable member and swap chi2
       DisableMember(i);
@@ -189,6 +187,41 @@ void FitPDFSet::ClearPDFs(int const& indx)
 }
 
 /**
+ * @brief Compute integrals and preprocessing for an individual member
+ */
+bool FitPDFSet::ComputeIntegrals( int const& i )
+{
+  bool err=false;
+  fFitBasis->ComputeParam(this, i, *(fPreprocParam[i]), err);              if (err) return false;
+  fFitBasis->ComputeSumRules(SUM_USM, i, this, err);                       if (err) return false;
+  fFitBasis->ComputeSumRules(SUM_DSM, i, this, err);                       if (err) return false;
+  fFitBasis->ComputeSumRules(SUM_SSM, i, this, err);                       if (err) return false;
+  if (fSettings.IsIC()) fFitBasis->ComputeSumRules(SUM_CSM, i, this, err); 
+  return !err;
+} 
+
+/**
+ * @brief Compute the sum rules.
+ */
+void FitPDFSet::ComputeSumRules()
+{
+  for (int i=0; i<fMembers; i++)
+    if (!ComputeIntegrals(i))
+    {
+      if (fMembers != 1) 
+      {
+        DisableMember(i); 
+        i--; 
+      }
+      else
+      { 
+        for (int j=0; j<fNfl; j++) 
+          fPDFs[0][j]->CopyPars(fBestFit[j]);
+      }
+    }
+}
+
+/**
  * @brief Verify that starting pdfs are satisfactory
  */
 void FitPDFSet::ValidateStartingPDFs()
@@ -200,19 +233,11 @@ void FitPDFSet::ValidateStartingPDFs()
       exit(-1);
     }
 
-  // Add a mutants
+  // Add a mutant
   SetNMembers(1);
  
   for (int i=0; i<50000; i++)  
-  {  
-    // Check for integration errors
-    bool integral_error=false, err1=false, err2=false, err3=false, err4=false;
-    fFitBasis->ComputeParam(this, 0, *(fPreprocParam[0]), integral_error);
-    fFitBasis->ComputeSumRules(SUM_USM, 0, this, err1);
-    fFitBasis->ComputeSumRules(SUM_DSM, 0, this, err2);
-    fFitBasis->ComputeSumRules(SUM_SSM, 0, this, err3);
-    if (fSettings.IsIC()) fFitBasis->ComputeSumRules(SUM_CSM, 0, this, err4);
-    if (integral_error || err1 || err2 || err3 || err4)
+    if (!ComputeIntegrals(0))
     {
       cout << "FitPDFSet::ValidateStartingFit:: Rerolling initial PDF attempt "<<i+1 << endl;
       // Reinitialize starting PDF
@@ -229,7 +254,6 @@ void FitPDFSet::ValidateStartingPDFs()
       SetNMembers(0);
       return;
     }
-  }
   
   cerr << "FitPDFSet::ValidateStartingPDF error: Difficulty finding valid starting PDF." << endl;
   cout << "Preprocessing exponents:" << endl;
@@ -237,31 +261,6 @@ void FitPDFSet::ValidateStartingPDFs()
     cout << " " << fFitBasis->GetAlpha(i) << "  " << fFitBasis->GetBeta(i) << endl;
   exit(-1);
 }   
-
-/**
- * @brief Compute the sum rules.
- */
-void FitPDFSet::ComputeSumRules()
-{
-  for (int i=0; i<fMembers; i++)
-    {
-      bool integral_error=false, err1=false, err2=false, err3=false, err4=false;
-      fFitBasis->ComputeParam(this, i, *(fPreprocParam[i]), integral_error);
-      fFitBasis->ComputeSumRules(SUM_USM, i, this, err1);
-      fFitBasis->ComputeSumRules(SUM_DSM, i, this, err2);
-      fFitBasis->ComputeSumRules(SUM_SSM, i, this, err3);
-      if (fSettings.IsIC()) fFitBasis->ComputeSumRules(SUM_CSM, i, this, err4);
-      if (integral_error || err1 || err2 || err3 || err4)
-      {
-          if (fMembers != 1) { DisableMember(i); i--; }
-          else if (fMembers == 1)
-          { 
-            for (int j=0; j<fNfl; j++) 
-              fPDFs[0][j]->CopyPars(fBestFit[j]);
-          }
-      }
-    }
-}
 
 /**
  * @brief Returns the Inital scale evolution basis PDF vector at fixed x, for a fixed member

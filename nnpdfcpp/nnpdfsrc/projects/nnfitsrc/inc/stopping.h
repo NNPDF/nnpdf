@@ -98,26 +98,6 @@ private:
 };
 
 /**
- *  \class CrossValidation
- *  \brief The basic class used when splitting data into training and validation.
- */
-
-class CrossValidation : public StoppingCriterion
-{
-public:
-  CrossValidation(NNPDFSettings const&);
-  ~CrossValidation();
-  
-  bool Stop(FitPDFSet*,vector<Experiment*>&);
-  bool Stop(FitPDFSet*,vector<Experiment*>&,vector<Experiment*>&,vector<PositivitySet>const&);
-    
-private:
-  bool ComputeChi2Ratio(FitPDFSet*, real&, real&);
-
-};
-
-
-/**
  *  \class LookBackCV
  *  \brief Look back cross validation stopping
  */

@@ -18,7 +18,7 @@
 
 // Strings for config file output
 static const string minString[6]   = {"UNDEFINED", "GA", "NGA","NGAP","NGAFT","CMAES"};
-static const string stopString[6]  = {"UNDEFINED", "FIXEDLENGTH", "TR", "GRAD", "VAR", "LOOKBACK"};
+static const string stopString[6]  = {"UNDEFINED", "FIXEDLENGTH", "GRAD", "VAR", "LOOKBACK"};
 static const string paramString[4] = {"UNDEFINED", "NN", "CHEBYSHEV", "QUADNN"};
 static const string basisString[14]= {"UNDEFINED", "NN23", "NN23QED","EVOL", "EVOLQED","EVOLS",
                                       "EVOLSQED","NN30", "NN30QED","FLVR", "FLVRQED","NN30IC","EVOLIC","NN31IC"};
@@ -75,7 +75,6 @@ paramType NNPDFSettings::getParamType(string const& method)
 
 stopType NNPDFSettings::getStopType(string const& method)
 {
-  if (method.compare("TRVAL") == 0)       return STOP_TR;
   if (method.compare("GRAD") == 0)        return STOP_GRAD;
   if (method.compare("VAR") == 0)         return STOP_VAR;
   if (method.compare("LOOKBACK") == 0)    return STOP_LB;
