@@ -2,28 +2,29 @@
 # Configuration file for NNPDF++
 #
 
-use_cuts: False
+use_cuts: True
 actions_:
  - theory:
+    normalization:
         experiments:
             experiment:
               - plot_fancy
 
-pdfs: 
-      - NNPDF30_nlo_as_0118
-      - CT14nlo 
-      - 160107-rc9e471d-sc-001
+normalization:
+ - normalize_to: data
+
+pdf: 160826-r241b3bf-jr-004
+fit: 160826-r241b3bf-jr-004
 
 ############################################################
 # frac: training fraction
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 experiments:
-      # ATLAS
-  - experiment: ATLAS
+      # DYE886
+  - experiment: DYE886
     datasets:
-      - { dataset: ATLASWZTOT13TEV81PB, frac: 1.0, sys: 0 }
-      - { dataset: ATLASR04JETS2P76TEV, frac: 1.0, sys: 2 }
+      - { dataset: DYE886P, frac: 1.0, sys: 2, cfac: [] }
 ############################################################
 datacuts:
   t0pdfset     : 160302-r7c33a66-007-jr # PDF set to generate t0 covmat
@@ -41,5 +42,5 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 6       # database id
+  theoryid: 65       # database id
   
