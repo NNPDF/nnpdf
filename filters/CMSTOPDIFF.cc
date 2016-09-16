@@ -1017,15 +1017,15 @@ void CMSTOPDIFF8TEVTPTFilter::ReadData()
       xssystmi = xssystmi/xscv*100;
 
       symmetriseErrors(xssystpl, xssystmi, &stmp, &dtmp); //symmetrise systematics
-      fSys[i][11].add  = stmp*fData[i]/100;
-      fSys[i][11].mult = stmp; 
-      fSys[i][11].type = MULT;
-      fSys[i][11].name = sysdescr[19-fNData];
+      fSys[i][19].add  = stmp*fData[i]/100;
+      fSys[i][19].mult = stmp; 
+      fSys[i][19].type = MULT;
+      fSys[i][19].name = sysdescr[19-fNData];
 
-      fSys[i][12].add  = fData[i]/xscv*xslumi;
-      fSys[i][12].mult = fSys[i][20].add/fData[i]*100;
-      fSys[i][12].type = MULT;
-      fSys[i][12].name = sysdescr[20-fNData];
+      fSys[i][20].add  = fData[i]/xscv*xslumi;
+      fSys[i][20].mult = fSys[i][20].add/fData[i]*100;
+      fSys[i][20].type = MULT;
+      fSys[i][20].name = sysdescr[20-fNData];
 
     }
   

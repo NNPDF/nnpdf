@@ -59,7 +59,7 @@ static const dataInfoRaw CMSTOPDIFF8TEVTTMNORMinfo = {
 // Differential distribution for the transverse momentum of the top quark
 static const dataInfoRaw CMSTOPDIFF8TEVTPTinfo = {
   8,                         //nData
-  13,                        //nSys
+  21,                        //nSys
   "CMSTOPDIFF8TEVTPT",       //SetName
   "HQP_PTQ"                  //ProcType
 };
