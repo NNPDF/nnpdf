@@ -572,7 +572,7 @@ void  CMSTOPDIFF8TEVTTRAPNORMFilter::ReadData()
   //Full breakdown of systematic uncertainties
   stringstream sysfile("");
   sysfile << dataPath() 
-	  << "rawdata/CMSTOPDIFF8TEVTRAP/CMSTOPDIFF8TEVTRAP.sys";
+	  << "rawdata/CMSTOPDIFF8TEVTTRAP/CMSTOPDIFF8TEVTTRAP.sys";
   f2.open(sysfile.str().c_str(), ios::in);
 
   if (f2.fail()) 
