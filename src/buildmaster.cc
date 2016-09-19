@@ -52,6 +52,11 @@
 #include "ATLASZPT8TEV.h"
 #include "ATLASTTBARTOT.h"
 #include "CMSTTBARTOT.h"
+#include "ATLASTTBARTOT7TEV.h"
+#include "ATLASTTBARTOT8TEV.h"
+#include "ATLASTTBARTOT13TEV.h"
+#include "CMSTTBARTOT7TEV.h"
+#include "CMSTTBARTOT8TEV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -217,7 +222,12 @@ void InitCommonData(vector<CommonData*>& target)
   // ************************* TOP *******************************
 
   target.push_back(new TTBARTOTFilter());
+  target.push_back(new ATLASTTBARTOT7TEVFilter());
+  target.push_back(new ATLASTTBARTOT8TEVFilter());
+  target.push_back(new ATLASTTBARTOT13TEVFilter());
   target.push_back(new ATLASTTBARTOTFilter());
+  target.push_back(new CMSTTBARTOT7TEVFilter());
+  target.push_back(new CMSTTBARTOT8TEVFilter());
   target.push_back(new CMSTTBARTOTFilter());
 
   // ************************* ZEUS ******************************
