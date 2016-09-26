@@ -46,10 +46,10 @@ def main(setname):
     sysunc.append(math.sqrt(sysunc2[el]))
     syscor.append(math.sqrt(syscor2[el]))
 
-    systot.append(math.sqrt(sysunc2[el]+syscor2[el]+pow(syslum[el],2)+pow(syslum[el],2)))
+    systot.append(math.sqrt(sysunc2[el]+syscor2[el]+pow(syslum[el],2)))
 
 ## print results
-  print (" Id      CV     Stat.   CorSys  UncSys  Beam       Lumi        Tot. Syst.")
+  print (" Id      CV     Stat.   CorSys  UncSys  Beam       Lumi        Tot. Unc.")
   print ("--------------------------------------------------------------------------")
   for i in range(data.GetNData()):
 #    print ("%3i    %6.2f     %6.2f (%6.2f%%)   %6.2f (%6.2f%%)   %6.2f (%6.2f%%)   %6.2f (%6.2f%%)"

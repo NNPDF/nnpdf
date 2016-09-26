@@ -23,7 +23,6 @@
 #include "ATLAS.h"
 #include "ATLAS2011JETS.h"
 #include "ATLASLOMASSDY11.h"
-//#include "ATLASPHT11.h"
 #include "CMS.h"
 #include "CMSDY2D12.h"
 #include "CMSZDIFF12.h"
@@ -57,6 +56,7 @@
 #include "ATLASTTBARTOT13TEV.h"
 #include "CMSTTBARTOT7TEV.h"
 #include "CMSTTBARTOT8TEV.h"
+#include "CMSWMU8TEV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -108,13 +108,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASZPT7TEVFilter());
   target.push_back(new ATLASZPT8TEVYDISTFilter());
   target.push_back(new ATLASZPT8TEVMDISTFilter()); 
- 
-  /*
-    target.push_back(new ATLASPHT11ETGCTRFilter());
-    target.push_back(new ATLASPHT11ETGFWDFilter());
-    target.push_back(new ATLASPHT11ETAGFilter());
-    target.push_back(new ATLASTTBARRAP11Filter());
-  */
+
   // ************************* BCDMS ******************************
 
   target.push_back(new BCDMSPFilter());
@@ -140,6 +134,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSJETS11Filter());
   target.push_back(new CMSZDIFF12Filter());
   target.push_back(new CMS1JET276TEVFilter());
+  target.push_back(new CMSWMU8TEVFilter());
 
  // ************************* CMSwc ******************************
 
