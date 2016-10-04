@@ -107,11 +107,11 @@ void CMSZDIFF12Filter::ReadData()
       fKin3[idat] = s;                         // only eta and pt relevant
 
       lstream >> fData[idat];
-      //fData[idat] *= 1000.;                    // Make pb -> fb
+      fData[idat] *= 1000.;                    // Make pb -> fb
 
       lstream >> idum;
       fStat[idat] = 0.0;
-      //fStat[idat] *= 1000.;                   // Make pb -> fb
+      fStat[idat] *= 1000.;                   // Make pb -> fb
     }
   }
   // Reading covmat
@@ -127,6 +127,7 @@ void CMSZDIFF12Filter::ReadData()
     for(int j = 0; j < fNData; j++)
     {
       lstream >> covmat[i][j];
+      covmat[i][j] *= 1000000.;
       //cout << i << " " << j << " " << covmat[i][j] << endl;
     }
   }
