@@ -127,7 +127,7 @@ void CMSZDIFF12Filter::ReadData()
     for(int j = 0; j < fNData; j++)
     {
       lstream >> covmat[i][j];
-      covmat[i][j] *= 1000000.;
+      covmat[i][j] *= 1e6.;
       //cout << i << " " << j << " " << covmat[i][j] << endl;
     }
   }
