@@ -164,6 +164,21 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
     // NNPDF3.1 cut, allowing only first rapidity bin of ATLAS1JET11
     if (set.GetSetName().compare(string("ATLAS1JET11")) <= 0)
       return set.GetKinematics(idat,0) < 0.3;
+
+    if (set.GetSetName().compare(string("LHCBWZMU8TEV")) == 0)
+      {
+        // cut at NNLO if rapidity is < 2.25
+        if (stoi(settings.GetTheory(APFEL::kPTO)) == 2)
+          return set.GetKinematics(idat,0) >= 2.25;
+      }
+
+    if (set.GetSetName().compare(string("D0WMASY")) == 0 ||
+        set.GetSetName().compare(string("D0WEASY")) == 0)
+      {
+        // cut at NNLO is central value is < 0.03
+        if (stoi(settings.GetTheory(APFEL::kPTO)) == 2)
+          return set.GetData(idat) >= 0.03;
+      }
   }
 
 
