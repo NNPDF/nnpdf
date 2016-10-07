@@ -224,7 +224,8 @@ void Experiment::MakeReplica()
       
       for (int l = 0; l < fNSys; l++)
       {
-        if (fSys[i][l].name.compare("THEORY")==0) continue; // Skip theoretical uncertainties
+        if (fSys[i][l].name.compare("THEORYCORR")==0) continue; // Skip theoretical uncertainties
+        if (fSys[i][l].name.compare("THEORYUNCORR")==0) continue; // Skip theoretical uncertainties
         if (fSys[i][l].name.compare("UNCORR")==0)           //Noise from uncorrelated systematics
         {
           switch (fSys[i][l].type)
@@ -381,7 +382,10 @@ void Experiment::PullData()
       {
         int sysplace = l+SysIndex;
         sysError testsys = fSets[s].GetSys(0,l);
-        if (testsys.name.compare("UNCORR")!=0 && testsys.name.compare("CORR")!=0 && testsys.name.compare("THEORY")!=0)        // Check for specially named systematics
+        if (testsys.name.compare("UNCORR")      !=0 
+         && testsys.name.compare("CORR")        !=0 
+         && testsys.name.compare("THEORYUNCORR")!=0
+         && testsys.name.compare("THEORYCORR")  !=0 )        // Check for specially named systematics
         {
           for (size_t j = 0; j < sysdef.size(); j++)
             if (sysdef[j].name.compare(testsys.name)==0)              // Check whether a systematic of that name has been seen yet
@@ -467,7 +471,7 @@ void Experiment::GenCovMat()
         sig += fStat[i]*fStat[i]; // stat error
 
       for (int l = 0; l < fNSys; l++)
-        if (i == j || ( fSys[i][l].name.compare("UNCORR")!=0 && fSys[i][l].name.compare("THEORY")!=0) )
+        if (i == j || ( fSys[i][l].name.compare("UNCORR")!=0 && fSys[i][l].name.compare("THEORYUNCORR")!=0) )
           switch (fSys[i][l].type)
           {
             case ADD: sig += fSys[i][l].add*fSys[j][l].add; break; // additive systematics
