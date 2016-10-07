@@ -18,7 +18,8 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
     * Special set of cuts, for full documentation and explanation look at:
     * trunk/nnpdfcpp/doc/cuts/NNPDF30
     */
-  if (settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF30")) == 0)
+  if (settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF30")) == 0 ||
+      settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF31")) == 0 )
     {
           if (set.GetProc(idat).compare(0,3, string("JET")) == 0 ||
               set.GetProc(idat).compare(0,3, string("EWK")) == 0 ||
@@ -164,7 +165,31 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
             }
         }
 
-  // End of special combo cut NNPDF30
+
+  // NNPDF3.1 combo cuts (apply on top of NNPDF3.0)
+  if ( settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF31")) == 0 )
+  {
+    // NNPDF3.1 cut, allowing only first rapidity bin of ATLAS1JET11
+    if (set.GetSetName().compare(string("ATLAS1JET11")) <= 0)
+      return set.GetKinematics(idat,0) < 0.3;
+
+    if (set.GetSetName().compare(string("LHCBWZMU8TEV")) == 0)
+      {
+        // cut at NNLO if rapidity is < 2.25
+        if (stoi(settings.GetTheory(APFEL::kPTO)) == 2)
+          return set.GetKinematics(idat,0) >= 2.25;
+      }
+
+    if (set.GetSetName().compare(string("D0WMASY")) == 0 ||
+        set.GetSetName().compare(string("D0WEASY")) == 0)
+      {
+        // cut at NNLO is central value is < 0.03
+        if (stoi(settings.GetTheory(APFEL::kPTO)) == 2)
+          return set.GetData(idat) >= 0.03;
+      }
+  }
+
+
 
   // Jet min pT, max y cuts
   if (set.GetProc(idat).compare(0,3,string("JET")) == 0)
