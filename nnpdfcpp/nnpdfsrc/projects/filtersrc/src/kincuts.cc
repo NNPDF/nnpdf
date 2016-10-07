@@ -80,6 +80,14 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
                     return true; // avoid other cuts
                   }
 
+                  if (set.GetSetName().compare(string("CMSJETS11thsys")) <= 0)
+		    {
+		      if ((idat > 62 && idat < 70) || y > maxCMSy)
+			return false;
+		      return true; // avoid other cuts
+		    }
+
+
                   std:cerr << "Error: NNPDF3.0 NNLO combocuts for set " << set.GetSetName() <<" are not coded"<<std::endl;
                   exit(-1);
 
