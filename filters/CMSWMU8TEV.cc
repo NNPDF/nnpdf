@@ -6,7 +6,7 @@
 void CMSWMU8TEVFilter::ReadData()
 {
   // Opening files
-  fstream f1, f2, f3, f4;
+  fstream f1, f2;
 
   stringstream datafileWp("");
   datafileWp << dataPath() << "rawdata/"<< fSetName << "/CMSWMU8TEV-WP.data";
@@ -26,27 +26,9 @@ void CMSWMU8TEVFilter::ReadData()
     exit(-1);
   }
 
-  stringstream syscorfile("");
-  syscorfile << dataPath() << "rawdata/"<< fSetName << "/CMSWMU8TEV.syscorr";
-  f3.open(syscorfile.str().c_str(), ios::in);
-
-  if (f3.fail()) {
-    cerr << "Error opening data file " << syscorfile.str() << endl;
-    exit(-1);
-  }
-
-  stringstream statcorfile("");
-  statcorfile << dataPath() << "rawdata/"<< fSetName << "/CMSWMU8TEV.statcorr";
-  f4.open(statcorfile.str().c_str(), ios::in);
-
-  if (f4.fail()) {
-    cerr << "Error opening data file " << statcorfile.str() << endl;
-    exit(-1);
-  }
-
   // Total systematic uncertainty
-  float systot[fNData];
-  
+  double systot[fNData];
+
   // Filter data file
   for (int idat = 0; idat < fNData/2; idat++)
   {
@@ -76,30 +58,13 @@ void CMSWMU8TEVFilter::ReadData()
     systot[idat] *= 1000.;
   }
 
-  // Filter Correlation Matrix
-  double** covmat = new double*[fNData];
-  for(int i = 0; i < fNData; i++)
-  {
-    covmat[i] = new double[fNData];
-    string line; getline(f3,line);
-    istringstream lstream(line);
-    for(int j = 0; j < fNData; j++)
-    {
-      double entry = 0.0; lstream >> entry;             // Read correlation
-      covmat[i][j] = (entry/100.)*systot[i]*systot[j];  // Compute covariance mat. from correlation mat.
-    }
-  }
+  f1.close();
+  f2.close();
 
   // Generate artificial systematics
   double** syscor = new double*[fNData];
-  for(int i = 0; i < fNData; i++)
-    syscor[i] = new double[fNData];
-
-  if(!genArtSys(fNData,covmat,syscor))
-   {
-     cerr << " in " << fSetName << endl;
-     exit(-1);
-   }
+  for(int i = 0; i < fNData; i++) syscor[i] = new double[fNData];  
+  GenArtSys("sys", systot, syscor);
 
   for (int i = 0; i < fNData; i++)
   {
@@ -119,9 +84,45 @@ void CMSWMU8TEVFilter::ReadData()
     fSys[i][fNSys-1].type = MULT;
     fSys[i][fNSys-1].name = "CMSLUMI12";
   }
-
-  f1.close();
-  f2.close();
-  f3.close();
-  f4.close();
 }
+
+// Process artificial systematics
+void CMSWMU8TEVFilter::GenArtSys(std::string const& type, double* std, double** artsys)
+{
+  // Read Matrix
+  stringstream matfile; fstream ms;
+  matfile << dataPath() << "rawdata/"<< fSetName << "/CMSWMU8TEV."<<type<<"corr";
+  ms.open(matfile.str().c_str(), ios::in);
+
+  if (ms.fail()) {
+    cerr << "Error opening data file " << matfile.str() << endl;
+    exit(-1);
+  }
+
+  // Filter Correlation Matrix
+  double** covmat = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    string line; getline(ms,line);
+    istringstream lstream(line);
+    for(int j = 0; j < fNData; j++)
+    {
+      double entry = 0.0; lstream >> entry;             // Read correlation
+      covmat[i][j] = (entry/100.)*std[i]*std[j];  // Compute covariance mat. from correlation mat.
+    }
+  }
+
+  // Generate artificial systematics
+  if(!genArtSys(fNData,covmat,artsys))
+   {
+     cerr << " in " << fSetName << endl;
+     exit(-1);
+   }
+
+  // Free covmat
+  for(int i = 0; i < fNData; i++)
+    delete[] covmat[i];
+  delete[] covmat;
+}
+

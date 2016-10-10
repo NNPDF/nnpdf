@@ -24,4 +24,5 @@ public: CMSWMU8TEVFilter():
 
 private:
   void ReadData();
+  void GenArtSys(std::string const&, double* std, double** artsys);
 };
