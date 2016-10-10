@@ -717,7 +717,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
 
   // Calculate effective exponents - here the parametrization should be more flexible
   real (*nn23f[])(real*) = {&fsinglet,&fgluon,&fV,&fT3,&fDelta,&fsplus,&fsminus,&fphoton};
-  string nn23[] = {"Singlet","Gluon","Valence","Triplet","#Delta_{s}","s^{+}","s^{-}","Photon"};
+  string nn23[] = {"Singlet","Gluon","Valence","Triplet","#Delta_{s}","s+","s-","Photon"};
 
   real (*evolf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fT3,&fT8,&fphoton};
   string evol[] = {"Singlet","Gluon","Valence","V3","V8","T3","T8","Photon"};
@@ -729,7 +729,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
   string evolic[] = {"Singlet","Gluon","Valence","V3","V8","V15","T3","T8","T15","Photon"};
 
   real (*nn31icf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fT3,&fT8,&fcplus,&fphoton};
-  string nn31ic[] = {"Singlet","Gluon","Valence","V3","V8","T3","T8","c^{+}","Photon"};
+  string nn31ic[] = {"Singlet","Gluon","Valence","V3","V8","T3","T8","c+","Photon"};
 
   real (*functions[nfl])(real*);
   const basisType setbasis = NNPDFSettings::getFitBasisType(fSettings.Get("fitting","fitbasis").as<string>());
