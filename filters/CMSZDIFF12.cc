@@ -82,9 +82,9 @@ void CMSZDIFF12Filter::ReadData()
   double ptmax, ptmin;
   double etamax, etamin;
 
-  int fNDataRap = 5;                  // Number of rapidity bins
-  int fNDataPT = 10;		              // Number of pt bins
-  double s = 8000;
+  const int fNDataRap = 5;                  // Number of rapidity bins
+  const int fNDataPT = 10;		              // Number of pt bins
+  const double s = 8000;
 
   // Reading data
   for (int i = 0; i < fNDataPT; i++)
@@ -127,7 +127,7 @@ void CMSZDIFF12Filter::ReadData()
     for(int j = 0; j < fNData; j++)
     {
       lstream >> covmat[i][j];
-      covmat[i][j] *= 1e6.;
+      covmat[i][j] *= 1.0e6;
       //cout << i << " " << j << " " << covmat[i][j] << endl;
     }
   }

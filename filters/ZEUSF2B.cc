@@ -48,11 +48,9 @@ void ZEUSF2BFilter::ReadData()
     f1 >> statl;
     symmetriseErrors(statr,statl,&stat,&delta);
 
-    fStat[i] = stat;
-    
+    fStat[i] = stat;    
     data += delta;
 
-    std::string *sysNames = new std::string[fNSys];
     for (int l = 0; l < fNSys; ++l)
     {
       f1 >> sistr;

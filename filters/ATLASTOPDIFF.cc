@@ -774,7 +774,7 @@ void  ATLASTOPDIFF8TEVTTMNORMFilter::ReadData()
 	  fSys[i][j].mult = stmp;
 	  fSys[i][j].add  = fSys[i][j].mult*fData[i]/100;
 
-	  shift =+ dtmp;
+	  shift += dtmp;
 
 	}
           
@@ -1201,9 +1201,7 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
     {
       for(int j=0; j<fNData/2; j++)
 	{
-	  
-	  double eps = 0.0000001;
-	  
+	  	  
 	  fSys[i+fNData/2][fNSys-fNData/2+j].add  = syscor[i][j]/sqrt(2.0);
 	  fSys[i+fNData/2][fNSys-fNData/2+j].mult = fSys[i+fNData/2][fNSys-fNData/2+j].add*100/fData[i+fNData/2];
 	  fSys[i+fNData/2][fNSys-fNData/2+j].type = ADD;

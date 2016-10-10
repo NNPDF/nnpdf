@@ -155,7 +155,7 @@ bool genArtSys(int ndata, const double* const* cov, double** artsys)
 
   gsl_vector_free(eval);
   gsl_matrix_free(evec);
-  delete mat;
+  delete[] mat;
 
   return true;
 }

@@ -45,14 +45,11 @@ void H1F2BFilter::ReadData()
     f1 >> sist;
     f1 >> dummy;
 
-    double tempsis = 0;
-
     //uncorrelated systematic
     f1 >> fSys[i][0].mult;
     fSys[i][0].type = MULT;
     fSys[i][0].name = "UNCORR";
 
-    std::string *sysNames = new std::string[fNSys];
     for (int l = 1; l < fNSys; ++l)
     {
       double temp;
@@ -61,11 +58,6 @@ void H1F2BFilter::ReadData()
       fSys[i][l].mult = abs(temp);
       fSys[i][l].type = MULT;
       fSys[i][l].name = "CORR";
-    }
-
-    for (int l = 0; l < fNSys; ++l)
-    {
-      tempsis += fSys[i][l].mult*fSys[i][l].mult;
     }
 
     // Additive errors   
