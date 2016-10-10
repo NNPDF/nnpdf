@@ -44,16 +44,16 @@ void CMSWMU8TEVFilter::ReadData()
     exit(-1);
   }
 
-  string line;
-  float fdum;
+  // Total systematic uncertainty
   float systot[fNData];
-
+  
   // Filter data file
   for (int idat = 0; idat < fNData/2; idat++)
   {
-    getline(f1,line);
+    string line; getline(f1,line);
     istringstream lstream(line);
 
+    double fdum;
     lstream >> fKin1[idat] >> fdum >> fdum >> fData[idat] >> fStat[idat] >> fdum >> systot[idat];
     fKin2[idat] = pow(MW,2);
     fKin3[idat] = 8e3;         // LHC ( TeV)
@@ -64,9 +64,10 @@ void CMSWMU8TEVFilter::ReadData()
 
   for (int idat = fNData/2; idat < fNData; idat++)
   {
-    getline(f2,line);
+    string line; getline(f2,line);
     istringstream lstream(line);
 
+    double fdum;
     lstream >> fKin1[idat] >> fdum >> fdum >> fData[idat] >> fStat[idat] >> fdum >> systot[idat];
     fKin2[idat] = pow(MW,2);
     fKin3[idat] = 8e3;         // LHC ( TeV)
@@ -76,20 +77,16 @@ void CMSWMU8TEVFilter::ReadData()
   }
 
   // Filter Correlation Matrix
-
-  double** corrmat = new double*[fNData];
   double** covmat = new double*[fNData];
   for(int i = 0; i < fNData; i++)
   {
-    corrmat[i] = new double[fNData];
     covmat[i] = new double[fNData];
-    getline(f3,line);
+    string line; getline(f3,line);
     istringstream lstream(line);
     for(int j = 0; j < fNData; j++)
     {
-      lstream >> corrmat[i][j];
-      corrmat[i][j] /=100.;                              // Correlation matrix entries given percentage
-      covmat[i][j] = corrmat[i][j]*systot[i]*systot[j];  // Compute covariance mat. from correlation mat.
+      double entry = 0.0; lstream >> entry;             // Read correlation
+      covmat[i][j] = (entry/100.)*systot[i]*systot[j];  // Compute covariance mat. from correlation mat.
     }
   }
 
