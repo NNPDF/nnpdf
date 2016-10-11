@@ -665,11 +665,9 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
 
   int nfl = fSettings.Get("fitting","basis").size();
   // skip reference if basis are different
-  if (fSettings.Get("fitting","basis").size() != fSettingsRef.Get("fitting","basis").size() && i == 1)
+  if (fSettings.Get("fitting","fitbasis").as<string>().compare(fSettingsRef.Get("fitting","fitbasis").as<string>()) != 0 && i == 1)
     {
-      return;
-      //if (fSettings.Get("fitting","basis").size() > fSettingsRef.Get("fitting","basis").size())
-      //  nfl = fSettings.Get("fitting","basis").size();
+      throw RuntimeException("PlotData::AddPreprocPlots", "Comparing fits performed in different basis");
     }
 
   real alphabnd[nfl][2];
