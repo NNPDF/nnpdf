@@ -32,32 +32,26 @@ fLHA(new real[14])
   {
      case ER_NONE:
      case ER_MCT0:
-       fMembers = 1;
-     break;
+      fMembers = 1;
+      break;
 
      case ER_MC:
      case ER_MC68: 
-        if (LHError.compare("replicas") != 0 )
-        {
-          std::cerr << "LHAPDFSet::LHAPDFSet Warning: ErrorSet Types do not match: ER_MC(68) and "<<LHError<<std::endl;
-        }
-        fMembers-=1; // Remove replica zero
-     break;
+      if (LHError.compare("replicas") != 0 )
+        throw RuntimeException("LHAPDFSet::LHAPDFSet", "Error: ErrorSet Types do not match: ER_MC(68) and " + LHError);
+      fMembers-=1; // Remove replica zero
+      break;
 
      case ER_EIG:
      case ER_EIG90:
-       if (LHError.compare("hessian") != 0 )
-        {
-          std::cerr << "LHAPDFSet::LHAPDFSet Warning: ErrorSet Types do not match: ER_EIG(90) and "<<LHError<<std::endl;
-        }
+      if (LHError.compare("hessian") != 0 )
+        throw RuntimeException("LHAPDFSet::LHAPDFSet", "Error: ErrorSet Types do not match: ER_EIG(90) and " + LHError);
+      break;
 
      case ER_SYMEIG:
-       if (LHError.compare("symmhessian") != 0 )
-        {
-          std::cerr << "LHAPDFSet::LHAPDFSet Warning: ErrorSet Types do not match: ER_SYMEIG and "<<LHError<<std::endl;
-        }
-
-     break;
+      if (LHError.compare("symmhessian") != 0 )
+        throw RuntimeException("LHAPDFSet::LHAPDFSet", "Error: ErrorSet Types do not match: ER_SYMEIG and " + LHError);
+      break;
   }
 
   // Load member PDFs
