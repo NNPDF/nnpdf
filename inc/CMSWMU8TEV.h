@@ -12,7 +12,7 @@
 
 static const dataInfoRaw CMSWMU8TEVinfo = {
   22,           // nData
-  23,           // Correlated uncertainties given as cov. mat. nSys=nData+Lumi
+  45,           // Correlated uncertainties given as cov. mat., systematic and statistical nSys=nData+nData+Lumi
   "CMSWMU8TEV", // SetName
   "EWK_RAP"     // ProcType
 };

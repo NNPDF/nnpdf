@@ -61,29 +61,53 @@ void CMSWMU8TEVFilter::ReadData()
   f1.close();
   f2.close();
 
-  // Generate artificial systematics
+  // Generate artificial systematics for systematic covmat
   double** syscor = new double*[fNData];
   for(int i = 0; i < fNData; i++) syscor[i] = new double[fNData];  
   GenArtSys("sys", systot, syscor);
 
+  // Generate artificial systematics for statistical covmat
+  double** statcor = new double*[fNData];
+  for(int i = 0; i < fNData; i++) statcor[i] = new double[fNData];  
+  GenArtSys("sys", fStat, statcor);
+
   for (int i = 0; i < fNData; i++)
   {
-    for (int l = 0; l < fNSys-1; l++)
+    for (int l = 0; l < fNData; l++)
     {
+      // Systematic covariance matrix
       fSys[i][l].add = syscor[i][l];
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = MULT;
       fSys[i][l].name = "CORR";
+      // Statistical covariance matrix
+      fSys[i][l+fNData].add = statcor[i][l];
+      fSys[i][l+fNData].mult = fSys[i][l+fNData].add*100/fData[i];
+      fSys[i][l+fNData].type = ADD;
+      fSys[i][l+fNData].name = "CORR";
     }
+
+    // Clear stat
+    fStat[i] = 0.0;
+
     // Luminosity Uncertainty
     // CMS Luminosity Uncertainty, 2012 data set: 2.6%
     // http://cds.cern.ch/record/1598864?ln=en
-
     fSys[i][fNSys-1].mult = 2.6;
     fSys[i][fNSys-1].add  = fSys[i][fNSys-1].mult*fData[i]*1e-2;
     fSys[i][fNSys-1].type = MULT;
     fSys[i][fNSys-1].name = "CMSLUMI12";
   }
+
+  // Cleanup
+  for(int i = 0; i < fNData; i++)
+  {
+    delete[] syscor[i];
+    delete[] statcor[i];
+  }
+
+  delete[] syscor;
+  delete[] statcor;
 }
 
 // Process artificial systematics
