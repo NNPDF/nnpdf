@@ -3974,6 +3974,172 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
   f << "\\caption{Fit quality for datasets.}" << endl;
   f << "\\end{table}" << endl;
 
+  // Chi2 specifications central vs diagonal
+  f << endl;
+  f << "\\newpage{}" << endl;
+
+  // Fit quality
+  if (fSettings.GetPlotting("uset0").as<bool>())
+    f << "\\subsection{$\\chi^{2}$ diagonal - T0 covariance matrix}" << endl;
+  else
+    f << "\\subsection{$\\chi^{2}$ diagonal - experimental covariance matrix}" << endl;
+  f << endl;
+
+  f << "\\begin{table}[H]" << endl;
+  f << "\\small" << endl;
+  f << "\\begin{centering}" << endl;
+  f << "\\begin{tabular}{|c|c|c|c|c|c|c|}" << endl;
+  f << "\\hline" << endl;
+  f << "\\textbf{Experiment} & \\textbf{Dataset} & \\textbf{DOF} & "
+       "\\textbf{Cur. $\\chi^{2}$ (central)} & "
+       "\\textbf{Cur. $\\chi^{2}$ (diag.)} &"
+       "\\textbf{Ref. $\\chi^{2}$ (central)} & "
+       "\\textbf{Ref. $\\chi^{2}$ (diag.)}\\tabularnewline" << endl;
+  f << "\\hline" << endl;
+
+  //================= Computing chi2 ==================
+  for (int i = 0; i < (int) s->GetNExps(); i++)
+    {
+      int i1 = s->GetIndexA(i);
+      int i2 = s->GetIndexB(i);
+
+      stringstream chi2a("");
+      stringstream chi2b("");
+      stringstream chi2c("");
+      stringstream chi2d("");
+
+      stringstream dofa("");
+      stringstream dofb("");
+
+      bool oneset1 = true, oneset2 = true;
+      if (i1 >= 0)
+        {
+          if (a[i1]->GetExperiment()->GetNSet() != 1) oneset1 = false;
+
+          dofa  << fixed << a[i1]->GetDOF();
+          chi2a << fixed << setprecision(5) << a[i1]->GetChi2Cent()/a[i1]->GetDOF();
+          chi2b << fixed << setprecision(5) << a[i1]->GetChi2Diag()/a[i1]->GetDOF();
+        }
+
+      if (i2 >= 0)
+        {
+          if (b[i2]->GetExperiment()->GetNSet() != 1) oneset2 = false;
+
+          dofb  << fixed << b[i2]->GetDOF();
+          chi2c << fixed << setprecision(5) << b[i2]->GetChi2Cent()/b[i2]->GetDOF();
+          chi2d << fixed << setprecision(5) << b[i2]->GetChi2Diag()/b[i2]->GetDOF();
+        }
+
+      f << "\\hline" << endl;
+      f << fixed << setprecision(5)
+        << "\\tt " << s->GetExpName()[i] << " & & ";
+      if(dofa.str() == "") f << dofb.str() << " & ";
+      else f << dofa.str() << " & ";
+      f << chi2a.str() << " & "
+        << chi2b.str() << " & "
+        << chi2c.str() << " & "
+        << chi2d.str();
+      f << "\\tabularnewline" << endl;
+
+      bool sameset = true;
+      if (oneset1 == true && i1 >= 0 && oneset2 == true && i2 >= 0)
+        if (a[i1]->GetExperiment()->GetSetName(0) != b[i2]->GetExperiment()->GetSetName(0))
+          sameset = false;
+
+      if (oneset1 == false || oneset2 == false || sameset == false)
+      {
+        if(i1 >= 0 && i2 < 0)
+        {
+          int nsets = a[i1]->GetExperiment()->GetNSet();
+          for (int j = 0; j < nsets; j++)
+            {
+              stringstream dofset("");
+              stringstream chi2aSet("");
+              stringstream chi2bSet("");
+
+              DataSetResult *di = a[i1]->GetSetResult(j);
+              dofset << fixed << di->GetDOF();
+              chi2aSet << fixed << setprecision(5) << di->GetChi2Cent()/di->GetDOF();
+              chi2bSet << fixed << setprecision(5) << di->GetChi2Diag()/di->GetDOF();
+
+              f << fixed << setprecision(5)
+                << " & " << "\\tt " << di->GetDataSet().GetSetName() << " & "
+                << dofset.str() << " & "
+                << chi2aSet.str() << " & "
+                << chi2bSet.str() << " & "
+                << " & "
+                << " \\tabularnewline" << endl;
+            }
+        }
+        else if(i1 < 0 && i2 >= 0)
+        {
+          int nsets = b[i2]->GetExperiment()->GetNSet();
+          for (int j = 0; j < nsets; j++)
+            {
+              stringstream dofset("");
+              stringstream chi2cSet("");
+              stringstream chi2dSet("");
+
+              DataSetResult *di = b[i2]->GetSetResult(j);
+              dofset << fixed << di->GetDOF();
+              chi2cSet << fixed << setprecision(5) << di->GetChi2Cent()/di->GetDOF();
+              chi2dSet << fixed << setprecision(5) << di->GetChi2Diag()/di->GetDOF();
+
+              f << fixed << setprecision(5)
+                << " & " << "\\tt " << di->GetDataSet().GetSetName() << " & "
+                << dofset.str() << " & "
+                << " & "
+                << " & "
+                << chi2cSet.str() << " & "
+                << chi2dSet.str() << " \\tabularnewline" << endl;
+            }
+        }
+        else if(i1 >= 0 && i2 >=0)
+        {
+          SortDataSets *z = new SortDataSets(a[i1],b[i2]);
+          for (int j = 0; j < z->GetNSets(); j++)
+            {
+              stringstream dofset("");
+              stringstream chi2aSet("");
+              stringstream chi2bSet("");
+              stringstream chi2cSet("");
+              stringstream chi2dSet("");
+
+              int j1 = z->GetIndexA(j);
+              int j2 = z->GetIndexB(j);
+
+              if (j1 >= 0)
+              {
+                dofset << fixed << a[i1]->GetSetResult(j1)->GetDOF();
+                chi2aSet << fixed << setprecision(5) << a[i1]->GetSetResult(j1)->GetChi2Cent()/a[i1]->GetSetResult(j1)->GetDOF();
+                chi2bSet << fixed << setprecision(5) << a[i1]->GetSetResult(j1)->GetChi2Diag()/a[i1]->GetSetResult(j1)->GetDOF();
+              }
+              if (j2 >= 0)
+              {
+                if (j1 < 0) dofset << fixed << b[i2]->GetSetResult(j2)->GetDOF();
+                chi2cSet << fixed << setprecision(5) << b[i2]->GetSetResult(j2)->GetChi2Cent()/b[i2]->GetSetResult(j2)->GetDOF();
+                chi2dSet << fixed << setprecision(5) << b[i2]->GetSetResult(j2)->GetChi2Diag()/b[i2]->GetSetResult(j2)->GetDOF();
+              }
+
+              f << fixed << setprecision(5)
+                << " & " << "\\tt " << z->GetSetName()[j] << " & "
+                << dofset.str() << " & "
+                << chi2aSet.str() << " & "
+                << chi2bSet.str() << " & "
+                << chi2cSet.str() << " & "
+                << chi2dSet.str() << "\\tabularnewline" << endl;
+            }
+        }
+      }
+    }
+
+  f << "\\hline" << endl;
+  f << "\\end{tabular}" << endl;
+  f << "\\par\\end{centering}" << endl;
+
+  f << "\\caption{Central vs Diagonal quality for datasets.}" << endl;
+  f << "\\end{table}" << endl;
+
   if (fSettings.GetPlotting("verbose").as<bool>())
     {
       f << endl;
