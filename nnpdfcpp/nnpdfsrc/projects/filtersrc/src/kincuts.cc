@@ -173,7 +173,8 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
     if (set.GetSetName().compare(string("ATLAS1JET11")) <= 0)
       return set.GetKinematics(idat,0) < 0.3;
 
-    if (set.GetSetName().compare(string("LHCBWZMU8TEV")) == 0)
+    if (set.GetSetName().compare(string("LHCBWZMU8TEV")) == 0 ||
+        set.GetSetName().compare(string("LHCBWZMU7TEV")) == 0)
       {
         // cut at NNLO if rapidity is < 2.25
         if (stoi(settings.GetTheory(APFEL::kPTO)) == 2)
