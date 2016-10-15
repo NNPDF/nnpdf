@@ -28,6 +28,7 @@ struct Chi2Results
 {
   real fChi2Avg;
   real fChi2Cent;
+  real fChi2Diag;
 
   int fDOF;
   int fMembers;
@@ -84,6 +85,7 @@ public:
   Chi2Results const& GetChi2Results() const {return fChi2;}         //!< Returns the associated Chi2 object
   real GetChi2Cent() const { return fChi2.fChi2Cent; }       //!< Returns the chi2cent
   real GetChi2Avg()  const { return fChi2.fChi2Avg;  }       //!< Returns the chi2avg
+  real GetChi2Diag() const { return fChi2.fChi2Diag; }       //!< Returns the chi2diag
   real GetSigmaExp() const { return fEstimators.fSigmaExp; }            //!< Returns the sigma exp estimator
   real GetSigmaNet() const { return fEstimators.fSigmaNet; }            //!< Returns the sigma art estimator
   real GetEstCovExp()const { return fEstimators.fCovExp; }              //!< Return the cov exp estimator
@@ -120,6 +122,7 @@ public:
   Chi2Results const& GetChi2Results() {return fChi2;}                   //!< Returns the chi^2 results object
   real GetChi2Cent() const { return fChi2.fChi2Cent; }                  //!< Returns the chi2cent
   real GetChi2Avg()  const { return fChi2.fChi2Avg;  }                  //!< Returns the chi2avg
+  real GetChi2Diag() const { return fChi2.fChi2Diag; }                  //!< Returns the chi2diag
   real GetSigmaExp() const { return fEstimators.fSigmaExp; }            //!< Returns the sigma exp estimator
   real GetSigmaNet() const { return fEstimators.fSigmaNet; }            //!< Returns the sigma art estimator
   real GetEstCovExp()const { return fEstimators.fCovExp; }              //!< Return the cov exp estimator

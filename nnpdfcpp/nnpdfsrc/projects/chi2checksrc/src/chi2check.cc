@@ -18,6 +18,8 @@ using std::cout;
 using std::endl;
 using std::flush;
 using std::setw;
+using std::setprecision;
+using std::fixed;
 
 #include "nnpdfsettings.h"
 #include "loadutils.h"
@@ -119,10 +121,11 @@ int main(int argc, char **argv)
              << "Experiment: " << Colour::FG_DEFAULT
              << setw(16) << exps[i]->GetExpName()
              << "\t"
-             << "Npts:    " << eDOF
+             << "Npts:    " << (int) eDOF
              << "\t"
-             << "chi2:    " << setw(8) << res[i]->GetChi2Cent()/eDOF
-            << endl;
+             << "chi2(cent|diag):    " << setw(8) << fixed << setprecision(5) << res[i]->GetChi2Cent()/eDOF
+             << "  |  " << res[i]->GetChi2Diag()/eDOF
+             << endl;
 
         for (int j = 0; j < exps[i]->GetNSet(); j++)
         {
@@ -135,10 +138,11 @@ int main(int argc, char **argv)
                << "Dataset: " << Colour::FG_DEFAULT
                << setw(16) << tt->GetSetName()
                << "\t"
-               << "Npts:    " << dDOF
+               << "Npts:    " << (int) dDOF
                << "\t"
-               << "chi2:    " << dr->GetChi2Results().fChi2Cent/dDOF
-         << endl;
+               << "chi2(cent|diag):    " << setw(8) << fixed << setprecision(5) << dr->GetChi2Results().fChi2Cent/dDOF
+               << "  |  " << dr->GetChi2Results().fChi2Diag/dDOF
+               << endl;
         }
       }
 
