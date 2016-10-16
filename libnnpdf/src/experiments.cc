@@ -471,7 +471,7 @@ void Experiment::GenCovMat()
         sig += fStat[i]*fStat[i]; // stat error
 
       for (int l = 0; l < fNSys; l++)
-        if (i == j || ( fSys[i][l].name.compare("UNCORR")!=0 && fSys[i][l].name.compare("THEORYUNCORR")!=0) )
+        if (i == j || ( fSys[i][l].name.compare("UNCORR")!=0 && fSys[i][l].name.compare("THEORYUNCORR")!=0 && fSys[i][l].name.compare("SKIP")!=0) )
           switch (fSys[i][l].type)
           {
             case ADD: sig += fSys[i][l].add*fSys[j][l].add; break; // additive systematics
