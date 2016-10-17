@@ -3780,7 +3780,10 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
   f << endl;
 
   f << "\\begin{table}[H]" << endl;
-  f << "\\small" << endl;
+  if (fSettings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF31")) == 0)
+    f << "\\footnotesize" << endl;
+  else
+    f << "\\small" << endl;
   f << "\\begin{centering}" << endl;
   if (fSettings.Get("closuretest","fakedata").as<bool>()) f << "\\begin{tabular}{|c|c|c|c|c|c|}" << endl;
   else f << "\\begin{tabular}{|c|c|c|c|c|c|c|}" << endl;
@@ -3986,7 +3989,10 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
   f << endl;
 
   f << "\\begin{table}[H]" << endl;
-  f << "\\small" << endl;
+  if (fSettings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF31")) == 0)
+    f << "\\footnotesize" << endl;
+  else
+    f << "\\small" << endl;
   f << "\\begin{centering}" << endl;
   f << "\\begin{tabular}{|c|c|c|c|c|c|c|}" << endl;
   f << "\\hline" << endl;
@@ -4163,7 +4169,10 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
       f << "\\end{figure}" << endl;
 
       f << "\\begin{table}[H]" << endl;
-      f << "\\small" << endl;
+      if (fSettings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF31")) == 0)
+        f << "\\footnotesize" << endl;
+      else
+        f << "\\small" << endl;
       f << "\\begin{centering}" << endl;
       f << "\\begin{tabular}{|c|c|c|c|c|c|c|c|c|}" << endl;
       f << "\\hline" << endl;
