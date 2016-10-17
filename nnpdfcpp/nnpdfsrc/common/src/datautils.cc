@@ -57,7 +57,7 @@ void ComputeChi2(DataSet const& set, ThPredictions* const& th, Chi2Results & chi
   // Compute diagonal chi2
   chi2res.fChi2Diag = 0.0;
   for (int i = 0; i < nData; i++)
-    chi2res.fChi2Diag += pow(set.GetData(i) - th->GetObsCV(i), 2.0) * set.GetInvCovMat()[i][i];
+    chi2res.fChi2Diag += pow(set.GetData(i) - th->GetObsCV(i), 2.0) / set.GetCovMat()[i][i];
 
   //Degrees of freedom
   chi2res.fDOF = nData;
@@ -102,7 +102,7 @@ void ComputeChi2(Experiment* const& exp, const vector<ThPredictions *> & th, Chi
   // Compute the diagonal chi2
   chi2res.fChi2Diag = 0.0;
   for (int i = 0; i < nData; i++)
-    chi2res.fChi2Diag += pow(exp->GetData()[i] - obsCV[i], 2.0) * exp->GetInvCovMat()[i][i];
+    chi2res.fChi2Diag += pow(exp->GetData()[i] - obsCV[i], 2.0) / exp->GetCovMat()[i][i];
 
   // Computing the average
   chi2res.fChi2Avg = ComputeAVG(nMem, chi2res.fChi2Mem);
