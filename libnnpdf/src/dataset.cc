@@ -292,6 +292,7 @@ void DataSet::MakeArtificial()
       {
         if (fSys[i][l].name.compare("THEORYCORR")==0) continue; // Skip theoretical uncertainties
         if (fSys[i][l].name.compare("THEORYUNCORR")==0) continue; // Skip theoretical uncertainties
+        if (fSys[i][l].name.compare("SKIP")==0) continue; // Skip uncertainties	
         if (fSys[i][l].name.compare("UNCORR")==0)           // Noise from uncorrelated systematics
         {
           switch (fSys[i][l].type)

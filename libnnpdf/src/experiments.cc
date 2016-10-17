@@ -226,6 +226,7 @@ void Experiment::MakeReplica()
       {
         if (fSys[i][l].name.compare("THEORYCORR")==0) continue; // Skip theoretical uncertainties
         if (fSys[i][l].name.compare("THEORYUNCORR")==0) continue; // Skip theoretical uncertainties
+        if (fSys[i][l].name.compare("SKIP")==0) continue; // Skip uncertainties	
         if (fSys[i][l].name.compare("UNCORR")==0)           //Noise from uncorrelated systematics
         {
           switch (fSys[i][l].type)
@@ -385,7 +386,8 @@ void Experiment::PullData()
         if (testsys.name.compare("UNCORR")      !=0 
          && testsys.name.compare("CORR")        !=0 
          && testsys.name.compare("THEORYUNCORR")!=0
-         && testsys.name.compare("THEORYCORR")  !=0 )        // Check for specially named systematics
+         && testsys.name.compare("THEORYCORR")  !=0
+	 && testsys.name.compare("SKIP") !=0 )        // Check for specially named systematics
         {
           for (size_t j = 0; j < sysdef.size(); j++)
             if (sysdef[j].name.compare(testsys.name)==0)              // Check whether a systematic of that name has been seen yet
