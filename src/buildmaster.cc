@@ -107,6 +107,7 @@ void InitCommonData(vector<CommonData*>& target)
   //
   target.push_back(new ATLASZPT7TEVFilter());
   target.push_back(new ATLASZPT8TEVYDISTFilter());
+  //  target.push_back(new ATLASZPT8TEVYDISTNORMFilter());
   target.push_back(new ATLASZPT8TEVMDISTFilter()); 
 
   // ************************* BCDMS ******************************

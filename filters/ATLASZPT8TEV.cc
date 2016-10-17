@@ -30,158 +30,246 @@ among the five differential distributions.
 
 /****************************************************/
 /* Central M_{ll} region, Z peak, 6 bins in rapidity*/
+/* Normalised distributions                         */
 
-void  ATLASZPT8TEVYDISTFilter::ReadData()
+void  ATLASZPT8TEVYDISTNORMFilter::ReadData()
 {
-
-  bool norm = false; //Set to true for normalised data, false for unnormalised
-
   // Opening files
   fstream y1,y2,y3,y4,y5,y6;
   
-  // Normalised distributions
- if (norm)
-   {
-     /* Table 17 - 66 GeV <  M_{ll} < 116 GeV  - 0.0 < y_{ll} < 0.4  - 20 datapoints*/
-     stringstream yfile1("");
-     yfile1 << dataPath() 
-	    << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m66116_y0004/tab.dat";
-     y1.open(yfile1.str().c_str(), ios::in);
-     if (y1.fail()) 
-       {
-	 cerr << "Error opening data file " << yfile1.str() << endl;
-	 exit(-1);
-       }
-     
-     /* Table 18 - 66 GeV <  M_{ll} < 116 GeV  - 0.4 < y_{ll} < 0.8  - 20 datapoints*/
-     stringstream yfile2("");
-     yfile2 << dataPath() 
-	    << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m66116_y0408/tab.dat";
-     y2.open(yfile2.str().c_str(), ios::in);
-     if (y2.fail()) 
-       {
-	 cerr << "Error opening data file " << yfile2.str() << endl;
-	 exit(-1);
-       }
-     
+  /* Table 17 - 66 GeV <  M_{ll} < 116 GeV  - 0.0 < y_{ll} < 0.4  - 20 datapoints*/
+  stringstream yfile1("");
+  yfile1 << dataPath() 
+	 << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m66116_y0004/tab.dat";
+  y1.open(yfile1.str().c_str(), ios::in);
+  if (y1.fail()) 
+    {
+      cerr << "Error opening data file " << yfile1.str() << endl;
+      exit(-1);
+    }
+  
+  /* Table 18 - 66 GeV <  M_{ll} < 116 GeV  - 0.4 < y_{ll} < 0.8  - 20 datapoints*/
+  stringstream yfile2("");
+  yfile2 << dataPath() 
+	 << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m66116_y0408/tab.dat";
+  y2.open(yfile2.str().c_str(), ios::in);
+  if (y2.fail()) 
+    {
+      cerr << "Error opening data file " << yfile2.str() << endl;
+      exit(-1);
+    }
+  
   /* Table 19 - 66 GeV <  M_{ll} < 116 GeV  - 0.8 < y_{ll} < 1.2  - 20 datapoints*/
-     stringstream yfile3("");
-     yfile3 << dataPath() 
-	    << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m66116_y0812/tab.dat";
-     y3.open(yfile3.str().c_str(), ios::in);
-     if (y3.fail()) 
-       {
-	 cerr << "Error opening data file " << yfile3.str() << endl;
-	 exit(-1);
-       }
-     
-     /* Table 20 - 66 GeV <  M_{ll} < 116 GeV  - 1.2 < y_{ll} < 1.6  - 20 datapoints*/
-     stringstream yfile4("");
-     yfile4 << dataPath() 
-	    << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m66116_y1216/tab.dat";
-     y4.open(yfile4.str().c_str(), ios::in);
-     if (y4.fail()) 
-       {
-	 cerr << "Error opening data file " << yfile4.str() << endl;
-	 exit(-1);
-       }
-     
-     /* Table 21 - 66 GeV <  M_{ll} < 116 GeV  - 1.6 < y_{ll} < 2.0  - 20 datapoints*/
-     stringstream yfile5("");
-     yfile5 << dataPath() 
-	    << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m66116_y1620/tab.dat";
-     y5.open(yfile5.str().c_str(), ios::in);
-     if (y5.fail()) 
-       {
-	 cerr << "Error opening data file " << yfile5.str() << endl;
-	 exit(-1);
-       }
-     
-     /* Table 22 - 66 GeV <  M_{ll} < 116 GeV  - 2.0 < y_{ll} < 2.4  - 20 datapoints*/
-     stringstream yfile6("");
-     yfile6 << dataPath() 
-	    << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m66116_y2024/tab.dat";
-     y6.open(yfile6.str().c_str(), ios::in);
-     if (y6.fail()) 
-       {
-	 cerr << "Error opening data file " << yfile6.str() << endl;
-	 exit(-1);
-       }
-   }
-
- else
-   // Unnormalised distributions
-   {
-     /* Table 29 - 66 GeV <  M_{ll} < 116 GeV  - 0.0 < y_{ll} < 0.4  - 20 datapoints*/
-     stringstream yfile1("");
-     yfile1 << dataPath() 
-	    << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m66116_y0004/tab.dat";
-     y1.open(yfile1.str().c_str(), ios::in);
-     if (y1.fail()) 
-       {
-	 cerr << "Error opening data file " << yfile1.str() << endl;
-	 exit(-1);
-       }
-     
-     /* Table 30 - 66 GeV <  M_{ll} < 116 GeV  - 0.4 < y_{ll} < 0.8  - 20 datapoints*/
-     stringstream yfile2("");
-     yfile2 << dataPath() 
-	    << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m66116_y0408/tab.dat";
-     y2.open(yfile2.str().c_str(), ios::in);
-     if (y2.fail()) 
-       {
-	 cerr << "Error opening data file " << yfile2.str() << endl;
-	 exit(-1);
-       }
-     
-  /* Table 31 - 66 GeV <  M_{ll} < 116 GeV  - 0.8 < y_{ll} < 1.2  - 20 datapoints*/
-     stringstream yfile3("");
-     yfile3 << dataPath() 
-	    << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m66116_y0812/tab.dat";
-     y3.open(yfile3.str().c_str(), ios::in);
-     if (y3.fail()) 
-       {
-	 cerr << "Error opening data file " << yfile3.str() << endl;
-	 exit(-1);
-       }
-     
-     /* Table 32 - 66 GeV <  M_{ll} < 116 GeV  - 1.2 < y_{ll} < 1.6  - 20 datapoints*/
-     stringstream yfile4("");
-     yfile4 << dataPath() 
-	    << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m66116_y1216/tab.dat";
-     y4.open(yfile4.str().c_str(), ios::in);
-     if (y4.fail()) 
-       {
-	 cerr << "Error opening data file " << yfile4.str() << endl;
-	 exit(-1);
-       }
-     
-     /* Table 33 - 66 GeV <  M_{ll} < 116 GeV  - 1.6 < y_{ll} < 2.0  - 20 datapoints*/
-     stringstream yfile5("");
-     yfile5 << dataPath() 
-	    << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m66116_y1620/tab.dat";
-     y5.open(yfile5.str().c_str(), ios::in);
-     if (y5.fail()) 
-       {
-	 cerr << "Error opening data file " << yfile5.str() << endl;
-	 exit(-1);
-       }
-     
-     /* Table 34 - 66 GeV <  M_{ll} < 116 GeV  - 2.0 < y_{ll} < 2.4  - 20 datapoints*/
-     stringstream yfile6("");
-     yfile6 << dataPath() 
-	    << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m66116_y2024/tab.dat";
-     y6.open(yfile6.str().c_str(), ios::in);
-     if (y6.fail()) 
-       {
-	 cerr << "Error opening data file " << yfile6.str() << endl;
-	 exit(-1);
-       }
-   }
+  stringstream yfile3("");
+  yfile3 << dataPath() 
+	 << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m66116_y0812/tab.dat";
+  y3.open(yfile3.str().c_str(), ios::in);
+  if (y3.fail()) 
+    {
+      cerr << "Error opening data file " << yfile3.str() << endl;
+      exit(-1);
+    }
+  
+  /* Table 20 - 66 GeV <  M_{ll} < 116 GeV  - 1.2 < y_{ll} < 1.6  - 20 datapoints*/
+  stringstream yfile4("");
+  yfile4 << dataPath() 
+	 << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m66116_y1216/tab.dat";
+  y4.open(yfile4.str().c_str(), ios::in);
+  if (y4.fail()) 
+    {
+      cerr << "Error opening data file " << yfile4.str() << endl;
+      exit(-1);
+    }
+  
+  /* Table 21 - 66 GeV <  M_{ll} < 116 GeV  - 1.6 < y_{ll} < 2.0  - 20 datapoints*/
+  stringstream yfile5("");
+  yfile5 << dataPath() 
+	 << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m66116_y1620/tab.dat";
+  y5.open(yfile5.str().c_str(), ios::in);
+  if (y5.fail()) 
+    {
+      cerr << "Error opening data file " << yfile5.str() << endl;
+      exit(-1);
+    }
+  
+  /* Table 22 - 66 GeV <  M_{ll} < 116 GeV  - 2.0 < y_{ll} < 2.4  - 20 datapoints*/
+  stringstream yfile6("");
+  yfile6 << dataPath() 
+	 << "rawdata/" << fSetName << "/normalized/output/ZcombPt_born_m66116_y2024/tab.dat";
+  y6.open(yfile6.str().c_str(), ios::in);
+  if (y6.fail()) 
+    {
+      cerr << "Error opening data file " << yfile6.str() << endl;
+      exit(-1);
+    }
+  
   //Starting filter
   // Data per distribution
   int ydata = 20;
+  
+  //Skip thre description lines in each file
+  string head,line,linec;
+  for(int i=0; i<3; i++)
+    {
+      getline(y1,head);
+      getline(y2,head);
+      getline(y3,head);
+      getline(y4,head);
+      getline(y5,head);
+      getline(y6,head);
+    }
+  
+  for(int i=0; i<fNData;i++)
+    {
+      double ptZ,yZ,ddum,fTot;
 
+      if(i<ydata){
+	yZ = 0.2;
+ 	getline(y1,line);
+	getline(y1,linec);
+      }
+      else if(i>ydata-1 && i < 2*ydata){
+	yZ = 0.6;
+	getline(y2,line);
+	getline(y2,linec);
+      }
+      else if(i>2*ydata-1 && i < 3*ydata){
+	yZ = 1.0;
+	getline(y3,line);
+	getline(y3,linec);
+      }
+      else if(i>3*ydata-1 && i < 4*ydata){
+	yZ = 1.4;
+	getline(y4,line);
+	getline(y4,linec);
+      }
+      else if(i>4*ydata-1 && i < 5*ydata){
+	yZ = 1.8;
+	getline(y5,line);
+	getline(y5,linec);
+      }
+      else if(i>5*ydata-1 && i < 6*ydata){
+	yZ = 2.2;
+	getline(y6,line);
+	getline(y6,linec);
+      }
+      else{
+	cout << "Wrong indices in ATLASZPT8TEV.cc !!! " << endl;
+	exit(-1);
+      }
+
+      istringstream lstream(line);
+      //      const double pb2fb = 1e3; // Must multiply from pb to fb
+
+      lstream >> ptZ >> ddum >> ddum; 
+      fKin1[i] = ptZ;         // P_T^(Z)
+      fKin2[i] = yZ;          // Y_Z
+      fKin3[i] = 8000;        // sqrt(S)
+      lstream >> fData[i];     //differential distribution
+      lstream >> fStat[i];     //statistical uncertainty
+      lstream >> fSys[i][0].add >> fTot;
+      
+      fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
+      fSys[i][0].type = MULT;
+      fSys[i][0].name = "UNCORR";
+      // Read Correlated systematics (given in percentage value!!!)
+      istringstream lstreamcorr(linec);	
+      for ( int k = 1; k < fNSys; k++ )
+	{
+	  lstreamcorr >> fSys[i][k].mult; 
+	  fSys[i][k].add  = fSys[i][k].mult*fData[i]/1e2; 
+	  fSys[i][k].type  = MULT;
+	  fSys[i][k].name = "CORR";
+	}
+    }
+  y1.close();
+  y2.close();
+  y3.close();
+  y4.close();
+  y5.close();
+  y6.close();
+}
+
+/********************************/
+/* Un-normailsed distributions  */
+/********************************/
+
+void  ATLASZPT8TEVYDISTFilter::ReadData()
+{
+  
+  // Opening files
+  fstream y1,y2,y3,y4,y5,y6;
+  
+  /* Table 29 - 66 GeV <  M_{ll} < 116 GeV  - 0.0 < y_{ll} < 0.4  - 20 datapoints*/
+  stringstream yfile1("");
+  yfile1 << dataPath() 
+	 << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m66116_y0004/tab.dat";
+  y1.open(yfile1.str().c_str(), ios::in);
+  if (y1.fail()) 
+    {
+      cerr << "Error opening data file " << yfile1.str() << endl;
+      exit(-1);
+    }
+  
+  /* Table 30 - 66 GeV <  M_{ll} < 116 GeV  - 0.4 < y_{ll} < 0.8  - 20 datapoints*/
+  stringstream yfile2("");
+  yfile2 << dataPath() 
+	 << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m66116_y0408/tab.dat";
+  y2.open(yfile2.str().c_str(), ios::in);
+  if (y2.fail()) 
+    {
+      cerr << "Error opening data file " << yfile2.str() << endl;
+      exit(-1);
+    }
+  
+  /* Table 31 - 66 GeV <  M_{ll} < 116 GeV  - 0.8 < y_{ll} < 1.2  - 20 datapoints*/
+  stringstream yfile3("");
+  yfile3 << dataPath() 
+	 << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m66116_y0812/tab.dat";
+  y3.open(yfile3.str().c_str(), ios::in);
+  if (y3.fail()) 
+    {
+      cerr << "Error opening data file " << yfile3.str() << endl;
+      exit(-1);
+    }
+  
+  /* Table 32 - 66 GeV <  M_{ll} < 116 GeV  - 1.2 < y_{ll} < 1.6  - 20 datapoints*/
+  stringstream yfile4("");
+  yfile4 << dataPath() 
+	 << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m66116_y1216/tab.dat";
+  y4.open(yfile4.str().c_str(), ios::in);
+  if (y4.fail()) 
+    {
+      cerr << "Error opening data file " << yfile4.str() << endl;
+      exit(-1);
+    }
+  
+  /* Table 33 - 66 GeV <  M_{ll} < 116 GeV  - 1.6 < y_{ll} < 2.0  - 20 datapoints*/
+  stringstream yfile5("");
+  yfile5 << dataPath() 
+	 << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m66116_y1620/tab.dat";
+  y5.open(yfile5.str().c_str(), ios::in);
+  if (y5.fail()) 
+    {
+      cerr << "Error opening data file " << yfile5.str() << endl;
+      exit(-1);
+    }
+  
+  /* Table 34 - 66 GeV <  M_{ll} < 116 GeV  - 2.0 < y_{ll} < 2.4  - 20 datapoints*/
+  stringstream yfile6("");
+  yfile6 << dataPath() 
+	 << "rawdata/" << fSetName << "/unnormalized/output/ZcombPt_born_m66116_y2024/tab.dat";
+  y6.open(yfile6.str().c_str(), ios::in);
+  if (y6.fail()) 
+    {
+      cerr << "Error opening data file " << yfile6.str() << endl;
+      exit(-1);
+    }
+  
+  //Starting filter
+  // Data per distribution
+  int ydata = 20;
+  
   //Skip thre description lines in each file
   string head,line,linec;
   for(int i=0; i<3; i++)
@@ -233,7 +321,7 @@ void  ATLASZPT8TEVYDISTFilter::ReadData()
 	exit(-1);
       }
       istringstream lstream(line);
-      const double pb2fb = 1000.; // Must multiply from pb to fb
+      const double pb2fb = 1e3; // Must multiply from pb to fb
 
       lstream >> ptZ >> ddum >> ddum; 
       fKin1[i] = ptZ;         // P_T^(Z)
@@ -243,16 +331,10 @@ void  ATLASZPT8TEVYDISTFilter::ReadData()
       lstream >> fStat[i];     //statistical uncertainty
       lstream >> fSys[i][0].add >> fTot;
 
-      if(norm)
-	{ 
-	  cout << "No need to normalise normalised xsec!" << endl;
-	}
-      else{
-	fData[i] *= pb2fb;
-	fStat[i] *= pb2fb;
-	fSys[i][0].add *= pb2fb;
-	fTot *= pb2fb;
-      }
+      fData[i] *= pb2fb;
+      fStat[i] *= pb2fb;
+      fSys[i][0].add *= pb2fb;
+      fTot *= pb2fb;
 
       fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
       fSys[i][0].type = MULT;
@@ -261,14 +343,16 @@ void  ATLASZPT8TEVYDISTFilter::ReadData()
       istringstream lstreamcorr(linec);	
       for ( int k = 1; k < fNSys-1; k++ )
 	{
-	  lstreamcorr >> fSys[i][k].mult;
-	  fSys[i][k].add  = fSys[i][k].mult*fData[i]/1e2;
+	  lstreamcorr >> fSys[i][k].mult; //what if the errors in these files are given as relative errors and not percentage relative?
+	  //	  fSys[i][k].mult *= 1e2 ; ADDED - was that the bug?? --- No, I do not think so, they are given in %, not as relative
+	  //	  fSys[i][k].mult *= pb2fb; ADDED - was that the bug?? --- No, I do not think so, they are given in %, not as absolute
+	  fSys[i][k].add  = fSys[i][k].mult*fData[i]/1e2; 
 	  fSys[i][k].type  = MULT;
 	  fSys[i][k].name = "CORR";
 	}
       // Luminosity Uncertainty: 2.8%
       fSys[i][fNSys-1].mult = 2.8;
-      fSys[i][fNSys-1].add  = fData[i]*fSys[i][fNSys-1].mult/1e2;
+      fSys[i][fNSys-1].add  = fSys[i][fNSys-1].mult*fData[i]/1e2;
       fSys[i][fNSys-1].type = MULT;
       fSys[i][fNSys-1].name = "ATLASLUMI12";
     }
