@@ -387,7 +387,7 @@ void Experiment::PullData()
          && testsys.name.compare("CORR")        !=0 
          && testsys.name.compare("THEORYUNCORR")!=0
          && testsys.name.compare("THEORYCORR")  !=0
-	 && testsys.name.compare("SKIP") !=0 )        // Check for specially named systematics
+         && testsys.name.compare("SKIP") !=0 )        // Check for specially named systematics
         {
           for (size_t j = 0; j < sysdef.size(); j++)
             if (sysdef[j].name.compare(testsys.name)==0)              // Check whether a systematic of that name has been seen yet
@@ -473,12 +473,13 @@ void Experiment::GenCovMat()
         sig += fStat[i]*fStat[i]; // stat error
 
       for (int l = 0; l < fNSys; l++)
-        if (i == j || ( fSys[i][l].name.compare("UNCORR")!=0 && fSys[i][l].name.compare("THEORYUNCORR")!=0 && fSys[i][l].name.compare("SKIP")!=0) )
-          switch (fSys[i][l].type)
-          {
-            case ADD: sig += fSys[i][l].add*fSys[j][l].add; break; // additive systematics
-            case MULT: signor += fSys[i][l].mult*fSys[j][l].mult; break; // multiplicative systematics
-          }
+        if (fSys[i][l].name.compare("SKIP")!=0)
+          if (i == j || ( fSys[i][l].name.compare("UNCORR")!=0 && fSys[i][l].name.compare("THEORYUNCORR")!=0))
+            switch (fSys[i][l].type)
+            {
+              case ADD: sig += fSys[i][l].add*fSys[j][l].add; break; // additive systematics
+              case MULT: signor += fSys[i][l].mult*fSys[j][l].mult; break; // multiplicative systematics
+            }
           
       fCovMat[i][j] = sig + signor*fT0Pred[i]*fT0Pred[j]*1e-4;
     }
