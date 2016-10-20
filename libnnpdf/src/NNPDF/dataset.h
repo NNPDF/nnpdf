@@ -36,10 +36,10 @@ namespace NNPDF
     // Data information
     double *fT0Pred;      //!< The t0 predictions - defaults to data in case of no t0-std::vector
     double **fCovMat;     //!< The covariance matrix
-    double **fInvCovMat;  //!< The inverse cov matrix
+    double **fSqrtCov;    //!< The Cholesky decomposition of the covariance matrix
     
     // private methods for constructor
-    void GenCovMat();                       //!< Generate covariance matrix
+    void GenCovMat();     //!< Generate covariance matrix
 
     DataSet();                          //!< Disable default constructor
 
@@ -49,23 +49,23 @@ namespace NNPDF
 
     DataSet(const DataSet&);            //!< Copy constructor
     friend void swap(DataSet&, DataSet&);
-    DataSet& operator=(DataSet); //!< Copy-assignment
-    DataSet(DataSet&&);                //!< Move constructor
+    DataSet& operator=(DataSet);        //!< Copy-assignment
+    DataSet(DataSet&&);                 //!< Move constructor
     DataSet(const DataSet&, std::vector<int> const& );     //!< Masked Copy constructor
 
     // ****************   DataSet T0 Methods  **********************
 
     void   SetT0( ThPredictions  const&);               //!< Set T0 predictions
-    void   SetT0(PDFSet const&);               //!< Set T0 predictions
+    void   SetT0(PDFSet const&);                        //!< Set T0 predictions
     bool   const& IsT0 ()  const { return fIsT0; }      //!< Return t0 covmat flag
     
     // ************************ Data Get Methods ******************************
     
-    double const&  GetT0Pred(int i)    const { return fT0Pred[i];} //!< Return t0 prediction
+    double const&  GetT0Pred(int i)    const { return fT0Pred[i];}  //!< Return t0 prediction
     
-    double** GetCovMat()         const { return fCovMat;   } //!< Return fCovMat
-    double** GetInvCovMat()      const { return fInvCovMat;} //!< Return the inverse of CovMat
-    double const& GetInvCovMat( int const& i, int const& j) const {return fInvCovMat[i][j];}; //!< Returns a iCov element
+    double** GetCovMat()         const { return fCovMat;   }        //!< Return fCovMat
+    double** GetSqrtCov()      const { return fSqrtCov;}            //!< Return the Cholesky decomposition of the covariance matrix
+    double const& GetSqrtCov( int const& i, int const& j) const {return fSqrtCov[i][j];}; //!< Returns an element of the Cholesky decomposition
 
     bool const& IsArtificial()         const { return fIsArtificial;} //!< Returns the artificial flag
     

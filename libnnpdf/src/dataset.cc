@@ -29,9 +29,9 @@
 using namespace NNPDF;
 
 /**
- * Initialization of variables.
- * \param setName std::string with the experimental set name
- * \param ptord perturbative order
+ * Principal dataset constructor
+ * \param data NNPDF::CommonData containing the experimental data
+ * \param set  NNPDF::FKSet containing the corresponding theory calculation
  */
 DataSet::DataSet(CommonData const& data, FKSet const& set):
   CommonData(data),
@@ -40,7 +40,7 @@ DataSet::DataSet(CommonData const& data, FKSet const& set):
   fIsT0(false),
   fT0Pred(new double[fNData]),
   fCovMat(new double*[fNData]),
-  fInvCovMat(new double*[fNData])
+  fSqrtCov(new double*[fNData])
 {
   // Init covariance matrix and T0 Vector
   for (int i = 0; i < fNData; i++)
@@ -48,7 +48,7 @@ DataSet::DataSet(CommonData const& data, FKSet const& set):
     fT0Pred[i] = fData[i]; // Default T0 to data
 
     fCovMat[i] = new double[fNData];
-    fInvCovMat[i] = new double[fNData];
+    fSqrtCov[i] = new double[fNData];
     for (int j = 0; j < fNData; j++)
       fCovMat[i][j] = 0.0;
   }
@@ -65,7 +65,7 @@ DataSet::DataSet(const DataSet& set):
   fIsT0(set.fIsT0),
   fT0Pred(new double[fNData]),
   fCovMat(new double*[fNData]),
-  fInvCovMat(new double*[fNData])
+  fSqrtCov(new double*[fNData])
 {
   // Building Obs array
   for (int i = 0; i < fNData; i++)
@@ -73,12 +73,12 @@ DataSet::DataSet(const DataSet& set):
       fT0Pred[i] = set.fT0Pred[i];
       
       fCovMat[i] = new double[fNData];
-      fInvCovMat[i] = new double[fNData];
+      fSqrtCov[i] = new double[fNData];
       
       for (int j=0; j<fNData; j++)
       {
         fCovMat[i][j] = 0.0;
-        fInvCovMat[i][j] = 0.0;
+        fSqrtCov[i][j] = 0.0;
       }
     }
 
@@ -93,7 +93,7 @@ void NNPDF::swap(DataSet& lhs, DataSet& rhs)
   swap(lhs.fIsT0, rhs.fIsT0);
   swap(lhs.fT0Pred, rhs.fT0Pred);
   swap(lhs.fCovMat, rhs.fCovMat);
-  swap(lhs.fInvCovMat, rhs.fInvCovMat);
+  swap(lhs.fSqrtCov, rhs.fSqrtCov);
   //Cast as subclass objects and call the swap of those.
   CommonData & lhs_cd = lhs;
   CommonData & rhs_cd = rhs;
@@ -124,8 +124,8 @@ DataSet::DataSet(DataSet && other):
   fCovMat = other.fCovMat;
   other.fCovMat = nullptr;
 
-  fInvCovMat = other.fInvCovMat;
-  other.fInvCovMat = nullptr;
+  fSqrtCov = other.fSqrtCov;
+  other.fSqrtCov = nullptr;
 
 }
 
@@ -136,7 +136,7 @@ DataSet::DataSet(const DataSet& set, std::vector<int> const& mask):
   fIsT0(set.fIsT0),
   fT0Pred(new double[fNData]),
   fCovMat(new double*[fNData]),
-  fInvCovMat(new double*[fNData])
+  fSqrtCov(new double*[fNData])
 {
   // Building Obs array
   for (int i = 0; i < fNData; i++)
@@ -144,12 +144,12 @@ DataSet::DataSet(const DataSet& set, std::vector<int> const& mask):
       fT0Pred[i] = set.fT0Pred[mask[i]];
       
       fCovMat[i] = new double[fNData];
-      fInvCovMat[i] = new double[fNData];
+      fSqrtCov[i] = new double[fNData];
       
       for (int j=0; j<fNData; j++)
       {
         fCovMat[i][j] = 0.0;
-        fInvCovMat[i][j] = 0.0;
+        fSqrtCov[i][j] = 0.0;
       }
     }
 
@@ -158,7 +158,7 @@ DataSet::DataSet(const DataSet& set, std::vector<int> const& mask):
 }
 
 /**
- * Destroys variables
+ * Cleanup memory
  */
 DataSet::~DataSet()
 {
@@ -173,12 +173,12 @@ DataSet::~DataSet()
     delete[] fCovMat;
   }
 
-  if (fInvCovMat) {
+  if (fSqrtCov) {
     for (int i = 0; i < fNData; i++) {
-      if (fInvCovMat[i])
-        delete[] fInvCovMat[i];
+      if (fSqrtCov[i])
+        delete[] fSqrtCov[i];
     }
-    delete[] fInvCovMat;
+    delete[] fSqrtCov;
   }
   
 }
@@ -188,9 +188,9 @@ DataSet::~DataSet()
  */
 void DataSet::GenCovMat()
 {  
-  if (fNData <= 0){
-    return;
-  }
+  if (fNData <= 0)
+    throw LengthError("DataSet::GenCovMat","invalid number of datapoints!");
+
   for (int i = 0; i < fNData; i++)
     for (int j = 0; j < fNData; j++)
     {
@@ -212,7 +212,8 @@ void DataSet::GenCovMat()
       fCovMat[i][j] = sig + signor*fT0Pred[i]*fT0Pred[j]*1e-4;
     }
   
-  InvertLU(fNData, fCovMat, fInvCovMat);
+  // Compute sqrt of covmat
+  CholeskyDecomposition(fNData, fCovMat, fSqrtCov);
 }
 
 void DataSet::RescaleErrors(const double mult)
