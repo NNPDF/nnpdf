@@ -97,12 +97,13 @@ void ComputeChi2(Experiment* const& exp, const vector<ThPredictions *> & th, Chi
   NNPDF::ComputeChi2(exp, nMem, theory, chi2res.fChi2Mem);
 
   // Compute central chi2 to data
-  // chi2res.fChi2Cent = 0.0;
-  // real* centTheory = new real[nData];
-  // for (int i = 0; i < nData; i++)
-  //   centTheory[i] = th->GetObsCV(i);
-  // NNPDF::ComputeChi2(exp, 1, centTheory, chi2res.fChi2Cent);
-  // delete[] centTheory
+  chi2res.fChi2Cent = 0.0; int index = 0;
+  real* centTheory = new real[nData];
+  for (int s = 0; s < exp->GetNSet(); s++)
+    for (int p = 0; p < exp->GetSet(s).GetNData(); p++)
+      centTheory[index++] = th[s]->GetObsCV(p);
+  NNPDF::ComputeChi2(exp, 1, centTheory, &chi2res.fChi2Cent);
+  delete[] centTheory
 
   // Compute the diagonal chi2
   chi2res.fChi2Diag = 0.0;
