@@ -9,6 +9,7 @@
 #include "nnpdfsettings.h"
 #include <NNPDF/utils.h>
 #include <NNPDF/lhapdfset.h>
+#include <NNPDF/chisquared.h>
 using namespace NNPDF;
 
 /// Auxiliary function which loads computes T0 predictions
@@ -43,7 +44,7 @@ void ComputeChi2(DataSet const& set, ThPredictions* const& th, Chi2Results & chi
   for (int n = 0; n < nMem; n++)
     chi2res.fChi2Mem[n] = 0.0;
 
-  ComputeChi2(&set, nMem, theory, chi2res.fChi2Mem);
+  NNPDF::ComputeChi2(&set, nMem, theory, chi2res.fChi2Mem);
 
   // Compute central chi2 to data
   chi2res.fChi2Cent = 0.0;
@@ -91,7 +92,7 @@ void ComputeChi2(Experiment* const& exp, const vector<ThPredictions *> & th, Chi
   for (int i = 0; i < nMem; i++)
     chi2res.fChi2Mem[i] = 0;
 
-  ComputeChi2(exp, nMem, theory, chi2res.fChi2Mem);
+  NNPDF::ComputeChi2(exp, nMem, theory, chi2res.fChi2Mem);
 
   // Compute central chi2 to data
   chi2res.fChi2Cent = 0.0;
@@ -111,26 +112,6 @@ void ComputeChi2(Experiment* const& exp, const vector<ThPredictions *> & th, Chi
   delete[] theory;
   delete[] obsCV;
 
-  return;
-}
-
-void ComputeChi2(const Experiment* exp, int const& nMem, real *const& theory, real *chi2)
-{
-  // Compute chi2
-  for (int i = 0; i < exp->GetNData(); i++)
-    for (int j = i; j < exp->GetNData(); j++)
-      for (int n = 0; n < nMem; n++)
-        chi2[n] += (i == j ? 1.0 : 2.0) * (exp->GetData()[i] - theory[n+nMem*i])*(exp->GetData()[j] - theory[n+nMem*j]) * exp->GetInvCovMat()[i][j];
-  return;
-}
-
-void ComputeChi2(const DataSet* set, int const& nMem, real *const& theory, real *chi2)
-{
-  // Compute chi2
-  for (int i = 0; i < set->GetNData(); i++)
-    for (int j = i; j < set->GetNData(); j++)
-      for (int n = 0; n < nMem; n++)
-        chi2[n] += (i == j ? 1.0 : 2.0) * (set->GetData()[i] - theory[n+nMem*i])*(set->GetData()[j] - theory[n+nMem*j]) * set->GetInvCovMat()[i][j];
   return;
 }
 

@@ -53,12 +53,10 @@ struct StatEstimators
 };
 
 /**
- * @brief ComputeChi2 for dataset and experiments
+ * @brief ComputeChi2 for dataset and experiments - supplements chi2 routines in libnnpdf
  */
 void ComputeChi2(DataSet const&, ThPredictions* const&, Chi2Results &);
 void ComputeChi2(Experiment* const&, vector<ThPredictions*> const&, Chi2Results &);
-void ComputeChi2(const Experiment*, int const&, real *const&, real *);
-void ComputeChi2(const DataSet*, int const&, real *const&, real *);
 
 void ComputeEstimators(DataSet const&, ThPredictions* const&, StatEstimators &est);
 void ComputeEstimators(Experiment* const&, vector<ThPredictions*> const&, StatEstimators &est);
