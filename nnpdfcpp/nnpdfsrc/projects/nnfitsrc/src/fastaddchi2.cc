@@ -8,6 +8,8 @@
 #include "fastaddchi2.h"
 #include "datautils.h"
 #include <NNPDF/thpredictions.h>
+#include <NNPDF/chisquared.h>
+
 using NNPDF::ThPredictions;
 
 void Convolute(const PDFSet* pdf, const Experiment* exp, real * theory)
@@ -30,7 +32,7 @@ void FastAddChi2(const PDFSet* pdf, const DataSet* set, real* chi2)
   ThPredictions::Convolute(pdf,set,theory);
 
   // Compute chi2
-  ComputeChi2(set,nMem,theory,chi2);
+  NNPDF::ComputeChi2(set,nMem,theory,chi2);
 
   delete[] theory;
 }
@@ -43,7 +45,7 @@ void FastAddChi2(const PDFSet* pdf, const Experiment* exp, real* chi2)
 
   // Perform convolution and chi^2 calculation
   Convolute(pdf,exp,theory);
-  ComputeChi2(exp,nMem,theory,chi2);
+  NNPDF::ComputeChi2(exp,nMem,theory,chi2);
 
   delete[] theory;
 }
