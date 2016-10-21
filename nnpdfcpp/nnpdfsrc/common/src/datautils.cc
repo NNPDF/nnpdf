@@ -52,7 +52,7 @@ void ComputeChi2(DataSet const& set, ThPredictions* const& th, Chi2Results & chi
   for (int i = 0; i < nData; i++)
     centTheory[i] = th->GetObsCV(i);
   NNPDF::ComputeChi2(&set, 1, centTheory, &chi2res.fChi2Cent);
-  delete[] centTheory
+  delete[] centTheory;
 
   // Computing the average
   chi2res.fChi2Avg = ComputeAVG(nMem, chi2res.fChi2Mem);
