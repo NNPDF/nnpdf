@@ -292,10 +292,10 @@ namespace NNPDF
       for (int j = 0; j < n; j++)
         gsl_matrix_set(mat, i, j, inmatrix[i][j]);
 
-    const int decomp = gsl_linalg_cholesky_decomp1 (mat);
+    const int decomp = gsl_linalg_cholesky_decomp(mat);
     for (int i = 0; i < n; i++)
       for (int j = 0; j <= i; j++)
-        sqrtmat[i][j] =  gsl_matrix_get (mat, i, j);
+        sqrtmat[i][j] =  gsl_matrix_get(mat, i, j);
     gsl_matrix_free (mat);
   }
 
