@@ -33,6 +33,9 @@ void ExportCovMat(DataSet const& d, const string file);
 // Export invcovmat to file
 void ExportInvCovMat(DataSet const& d, const string file);
 
+// Export correlation matrix to file
+void ExportCorrMat(DataSet const& d, const string file);
+
 /**
  * \param argv the filename containing the configuration
  */
@@ -86,12 +89,18 @@ int main(int argc, char **argv)
         // output directory for filter data
         const string targetPath2= settings.GetResultsDirectory() + "/gencovmat/"
         +"INVCOVMAT_"+ set.GetSetName()+".dat";
+        // output directory for filter data
+        const string targetPath3 = settings.GetResultsDirectory() + "/gencovmat/"
+        +"CORRMAT_"+ set.GetSetName()+".dat";
 
         // Export cut covmat
         ExportCovMat(set,targetPath);
 
         // Export cut invcovmat
         ExportInvCovMat(set,targetPath2);
+
+        // Export cut corrmat
+        ExportCorrMat(set, targetPath3);
       }
 
   if (T0Set) delete T0Set;
@@ -136,6 +145,24 @@ void ExportInvCovMat(const DataSet &d, const string file)
     {
       for (int j = 0; j < d.GetNData(); j++)
         f << d.GetInvCovMat()[i][j] << "  ";
+      f << endl;
+    }
+
+  f.close();
+}
+
+// Export CovMat to file
+void ExportCorrMat(const DataSet &d, const string file)
+{
+  fstream f;
+  f.open(file.c_str(),ios::out);
+  f.precision(17);
+  f << scientific;
+
+  for(int i = 0; i < d.GetNData(); i++)
+    {
+      for (int j = 0; j < d.GetNData(); j++)
+        f << d.GetCovMat()[i][j] / sqrt(d.GetCovMat()[i][i]) / sqrt(d.GetCovMat()[j][j]) << "  ";
       f << endl;
     }
 
