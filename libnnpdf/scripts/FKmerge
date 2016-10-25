@@ -40,14 +40,14 @@ do
 	fi
 done	
 
-IDX=-1
+IDX=0
 for var in "$@"
 do
-    if [ $IDX -eq -1 ]
+    if [ $IDX -eq 0 ]
     then
 	cat $var | awk -v ndat="${TDAT}" '{if ($1=="*NDATA:") print $1, ndat; else print;}'
     else
-	cat $var | awk -v dat="${cDat[$IDX]}" -v nhead="${cHead[$IDX]}" 'NR > nhead {$1=$1+dat;print;}'
+	cat $var | awk -v dat="${cDat[$(( $IDX-1 ))]}" -v nhead="${cHead[$IDX]}" 'NR > nhead {$1=$1+dat;print;}'
     fi
     IDX=$(( $IDX+1 ))
 done

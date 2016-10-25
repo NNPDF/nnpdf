@@ -1,0 +1,17 @@
+#!/bin/bash
+# This script takes three arguments, a base FK table, a number of repetitions and a target file
+# It then generates the target file as the base FK table merged with itself up to the specified
+# number of repetitions
+ 
+TAB=$1
+REP=$2
+
+if ! [ "$TAB" ] || ! [ "$REP" ] ; then
+  exit -1;
+else
+	TABLIST=""
+	for ((i=1;i<=REP;i++)); do
+	 	TABLIST=$TABLIST" "$TAB
+	done 
+	FKmerge $TABLIST
+fi
