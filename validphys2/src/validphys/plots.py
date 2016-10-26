@@ -7,6 +7,7 @@ from __future__ import generator_stop
 import logging
 
 import numpy as np
+import numpy.linalg as la
 import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
 import scipy.stats as stats
@@ -446,5 +447,21 @@ def plot_trainvaliddist(fit, replica_data):
     plt.legend()
     return fig
 
-
-
+@figure
+def plot_covmat_eigs(experiment):
+    eigs = la.eigvalsh(experiment.load().get_covmat())
+    fig,ax = plt.subplots()
+    ax.plot(eigs, 'o')
+    ax.set_yscale('log')
+    return fig
+    
+@figure
+def plot_corrmat_eigs(experiment):
+    covmat = experiment.load().get_covmat()
+    stds = np.sqrt(np.diag(covmat))
+    corrmat = covmat/np.outer(stds,stds)
+    eigs = la.eigvalsh(corrmat)
+    fig,ax = plt.subplots()
+    ax.plot(eigs, 'o')
+    ax.set_yscale('log')
+    return fig
