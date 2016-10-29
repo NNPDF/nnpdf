@@ -103,6 +103,13 @@ void Parametrisation::SetPars(std::vector<real> const& param)
 }
 
 // ******************** MLP *********************************
+
+// The sigmoid actiation function
+double sigmoid(double const& h)
+{
+  return 1.0f/(1.0f+exp(h));
+}
+
 /**
  * @brief MultiLayerPerceptron::MultiLayerPerceptron
  * @param settings
@@ -113,7 +120,8 @@ Parametrisation(std::string("MultiLayerPerceptron")),
 fNLayers(arch.size()),
 fArch(0),
 fWeightMatrix(0),
-fOutputMatrix(0)
+fOutputMatrix(0),
+fActFunction(sigmoid)
 {
   int  pSize = 0; // size of parameter array
   int* pMap = new int[fNLayers-1]; // map for weight matrix
@@ -175,7 +183,8 @@ Parametrisation(o),
 fNLayers(o.fNLayers),
 fArch(0),
 fWeightMatrix(0),
-fOutputMatrix(0)
+fOutputMatrix(0),
+fActFunction(o.fActFunction)
 {
   int  pSize = 0; // size of parameter array
   int* pMap = new int[fNLayers-1]; // map for weight matrix
@@ -272,7 +281,7 @@ void MultiLayerPerceptron::Compute(real* in,real* out) const
       for (int k=0; k<=fArch[i-1]; k++) // <= due to threshold term
         h-= (*(p+k))*fOutputMatrix[i-1][k];
       
-      fOutputMatrix[i][j]=1.0f/(1.0f+exp(h));
+      fOutputMatrix[i][j] = fActFunction(h);
     }
   
   // Linear in final layer - get 10% speedup by unrolling this from previous loop
@@ -526,7 +535,8 @@ Parametrisation(std::string("QuadMultiLayerPerceptron")),
 fNLayers(arch.size()),
 fArch(0),
 fWeightMatrix(0),
-fOutputMatrix(0)
+fOutputMatrix(0),
+fActFunction(sigmoid)
 {
   int  pSize = 0; // size of parameter array
   int* pMap = new int[fNLayers-1]; // map for weight matrix
@@ -588,7 +598,8 @@ Parametrisation(o),
 fNLayers(o.fNLayers),
 fArch(0),
 fWeightMatrix(0),
-fOutputMatrix(0)
+fOutputMatrix(0),
+fActFunction(o.fActFunction)
 {
   int  pSize = 0; // size of parameter array
   int* pMap = new int[fNLayers-1]; // map for weight matrix
@@ -691,7 +702,7 @@ void QuadMultiLayerPerceptron::Compute(real* in,real* out) const
         for (int l = 0; l < fArch[i-1]; l++)
           h -= (*(p+fArch[i-1]+1+k*fArch[i-1]+l))*fOutputMatrix[i-1][k]*fOutputMatrix[i-1][l];
 
-      fOutputMatrix[i][j]=1.0f/(1.0f+exp(h));
+      fOutputMatrix[i][j]=fActFunction(h);
     }
 
   // Linear in final layer - get 10% speedup by unrolling this from previous loop

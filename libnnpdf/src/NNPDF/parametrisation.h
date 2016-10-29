@@ -11,6 +11,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
+#include <functional>
+using actfunction = std::function<double(double const&)>;
 
 #include "common.h"
 
@@ -76,12 +78,16 @@ namespace NNPDF
     
     void InitParameters();   //!< Initialize (or reinitialize) parameters
     
+    void SetActivationFunction(actfunction const& f) { fActFunction = f; } //!< set the activation function
+
   protected:
     const int fNLayers;   //!< Number of layers
     int* fArch;           //!< Network architecture
     
     real** fWeightMatrix;         //!< Weights/Thresholds
     mutable real** fOutputMatrix; //!< Neuron Activation
+
+    actfunction fActFunction; //!< Activation function
   };
 
   /*!
@@ -144,12 +150,16 @@ namespace NNPDF
 
     void InitParameters();   //!< Initialize (or reinitialize) parameters
 
+    void SetActivationFunction(actfunction const& f) { fActFunction = f; } //!< set the activation function
+
   private:
     const int fNLayers;   //!< Number of layers
     int* fArch;           //!< Network architecture
 
     real** fWeightMatrix;         //!< Weights/Thresholds
     mutable real** fOutputMatrix; //!< Neuron Activation
+
+    actfunction fActFunction; //!< Activation function
   };
 
 }
