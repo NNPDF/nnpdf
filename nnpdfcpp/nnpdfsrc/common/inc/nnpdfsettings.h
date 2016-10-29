@@ -49,7 +49,7 @@ class PDFBasis;
 struct DataSetInfo
 { 
   const string tSetName;
-  const int  tSysOpt;  
+  const string tSysOpt;
   const real tTrainingFraction;
   const std::vector<string> tCFactors;
 };

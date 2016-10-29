@@ -285,7 +285,7 @@ vector<string> NNPDFSettings::GetDataInfo(const string &setname, filterType useF
   vector<string> basepath(2);
   basepath[0] = targetpath + "/DATA_"+ setname + ".dat";
   basepath[1] = targetpath + "/systypes/SYSTYPE_"+ setname + "_" +
-                std::to_string(GetSetInfo(setname).tSysOpt) + ".dat";
+                GetSetInfo(setname).tSysOpt + ".dat";
 
   return basepath;
 }
@@ -519,7 +519,9 @@ void NNPDFSettings::LoadExperiments()
         {
           const string setname = dsets[j]["dataset"].as<string>();
           const real setfrac = dsets[j]["frac"].as<real>();
-          const int setsys   = dsets[j]["sys"].as<int>();
+          string setsys;
+          try { setsys = dsets[j]["sys"].as<string>(); }
+          catch (...) { setsys = "DEFAULT";}
 
           // Read C-factor sources
           std::vector<string> cfactors;
