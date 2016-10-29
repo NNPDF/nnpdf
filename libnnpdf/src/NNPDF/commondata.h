@@ -124,7 +124,7 @@ namespace NNPDF
    *
    *  This function returns the systematic ID present in the filename provided.
    */
-  int extractSysID(std::string const& sysfile);
+  std::string extractSysID(std::string const& sysfile);
     
   /**
    *  \class CommonData
@@ -152,8 +152,8 @@ namespace NNPDF
     double *fKin3;      //!< Third kinematic variable array (inelasticity)
 
     // Uncertainties
-    int fNSys;    //!< Number of systematic errors
-    int fSysId;   //!< SYSTYPE ID
+    int fNSys;          //!< Number of systematic errors
+    std::string fSysId; //!< SYSTYPE ID
     double *fStat;      //!< Statistical error array
     sysError **fSys;    //!< Systematic errors
 

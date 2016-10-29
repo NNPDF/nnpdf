@@ -87,9 +87,9 @@ namespace NNPDF
     return infoStruct;
   }
 
-  int extractSysID(std::string const& sysfile)
+  std::string extractSysID(std::string const& sysfile)
   {
-    const int sysid = atoi(sysfile.substr(sysfile.find_last_of("_")+1, sysfile.length()-4-sysfile.find_last_of("_")-1).c_str());
+    const std::string sysid = sysfile.substr(sysfile.find_last_of("_")+1, sysfile.length()-4-sysfile.find_last_of("_")-1).c_str();
     return sysid;
   }
 
@@ -152,7 +152,7 @@ namespace NNPDF
   fKin2(new double[fNData]),
   fKin3(new double[fNData]),
   fNSys(info.nSys),
-  fSysId(0),
+  fSysId("DEFAULT"),
   fStat(new double[fNData]),
   fSys(new sysError*[fNData])
   {
@@ -244,7 +244,7 @@ namespace NNPDF
   fKin2(nullptr),
   fKin3(nullptr),
   fNSys(0),
-  fSysId(-1),
+  fSysId("-1"),
   fStat(nullptr),
   fSys(nullptr)
   {
