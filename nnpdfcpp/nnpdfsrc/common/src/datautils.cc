@@ -9,6 +9,7 @@
 #include "nnpdfsettings.h"
 #include <NNPDF/utils.h>
 #include <NNPDF/lhapdfset.h>
+#include <NNPDF/chisquared.h>
 using namespace NNPDF;
 
 /// Auxiliary function which loads computes T0 predictions
@@ -27,7 +28,7 @@ void MakeT0Predictions(PDFSet* const& T0Set, DataSet& set)
 
 void ComputeChi2(DataSet const& set, ThPredictions* const& th, Chi2Results & chi2res)
 {
-  if (!set.GetData() || !set.GetInvCovMat())
+  if (!set.GetData() || !set.GetSqrtCov())
   {
     cerr << "ComputeChi2 Error: Missing required data"<<endl;
     exit(-1);
@@ -43,13 +44,15 @@ void ComputeChi2(DataSet const& set, ThPredictions* const& th, Chi2Results & chi
   for (int n = 0; n < nMem; n++)
     chi2res.fChi2Mem[n] = 0.0;
 
-  ComputeChi2(&set, nMem, theory, chi2res.fChi2Mem);
+  NNPDF::ComputeChi2(&set, nMem, theory, chi2res.fChi2Mem);
 
   // Compute central chi2 to data
   chi2res.fChi2Cent = 0.0;
+  real* centTheory = new real[nData];
   for (int i = 0; i < nData; i++)
-    for (int j = i; j < nData; j++)
-      chi2res.fChi2Cent += (i == j ? 1.0 : 2.0)*(set.GetData(i) - th->GetObsCV(i))*(set.GetData(j) - th->GetObsCV(j)) * set.GetInvCovMat()[i][j];
+    centTheory[i] = th->GetObsCV(i);
+  NNPDF::ComputeChi2(&set, 1, centTheory, &chi2res.fChi2Cent);
+  delete[] centTheory;
 
   // Computing the average
   chi2res.fChi2Avg = ComputeAVG(nMem, chi2res.fChi2Mem);
@@ -91,13 +94,16 @@ void ComputeChi2(Experiment* const& exp, const vector<ThPredictions *> & th, Chi
   for (int i = 0; i < nMem; i++)
     chi2res.fChi2Mem[i] = 0;
 
-  ComputeChi2(exp, nMem, theory, chi2res.fChi2Mem);
+  NNPDF::ComputeChi2(exp, nMem, theory, chi2res.fChi2Mem);
 
   // Compute central chi2 to data
-  chi2res.fChi2Cent = 0.0;
-  for (int i = 0; i < nData; i++)
-    for (int j = i; j < nData; j++)
-      chi2res.fChi2Cent += (i == j ? 1.0 : 2.0)*(exp->GetData()[i] - obsCV[i])*(exp->GetData()[j] - obsCV[j]) * exp->GetInvCovMat()[i][j];
+  chi2res.fChi2Cent = 0.0; index = 0;
+  real* centTheory = new real[nData];
+  for (int s = 0; s < exp->GetNSet(); s++)
+    for (int p = 0; p < exp->GetSet(s).GetNData(); p++)
+      centTheory[index++] = th[s]->GetObsCV(p);
+  NNPDF::ComputeChi2(exp, 1, centTheory, &chi2res.fChi2Cent);
+  delete[] centTheory;
 
   // Compute the diagonal chi2
   chi2res.fChi2Diag = 0.0;
@@ -111,26 +117,6 @@ void ComputeChi2(Experiment* const& exp, const vector<ThPredictions *> & th, Chi
   delete[] theory;
   delete[] obsCV;
 
-  return;
-}
-
-void ComputeChi2(const Experiment* exp, int const& nMem, real *const& theory, real *chi2)
-{
-  // Compute chi2
-  for (int i = 0; i < exp->GetNData(); i++)
-    for (int j = i; j < exp->GetNData(); j++)
-      for (int n = 0; n < nMem; n++)
-        chi2[n] += (i == j ? 1.0 : 2.0) * (exp->GetData()[i] - theory[n+nMem*i])*(exp->GetData()[j] - theory[n+nMem*j]) * exp->GetInvCovMat()[i][j];
-  return;
-}
-
-void ComputeChi2(const DataSet* set, int const& nMem, real *const& theory, real *chi2)
-{
-  // Compute chi2
-  for (int i = 0; i < set->GetNData(); i++)
-    for (int j = i; j < set->GetNData(); j++)
-      for (int n = 0; n < nMem; n++)
-        chi2[n] += (i == j ? 1.0 : 2.0) * (set->GetData()[i] - theory[n+nMem*i])*(set->GetData()[j] - theory[n+nMem*j]) * set->GetInvCovMat()[i][j];
   return;
 }
 
