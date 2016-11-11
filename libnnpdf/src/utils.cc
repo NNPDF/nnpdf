@@ -18,6 +18,9 @@
 #include "NNPDF/utils.h"
 #include "NNPDF/exceptions.h"
 
+#include "gsl/gsl_matrix.h"
+#include "gsl/gsl_linalg.h"
+
 namespace NNPDF
 {
 
@@ -278,275 +281,23 @@ namespace NNPDF
     return sum;
   }
 
+  // *********** Cholesky decomposition of a matrix ***************
 
-  // *************************** INVERSION METHODS *******************************
-
-  /**
-   * @brief GetMatrixArray
-   * @param n
-   * @param covmat
-   * @return
-   */
-  static double *GetMatrixArray(int const& n, double **covmat)
+  void CholeskyDecomposition(int const& n, double** const inmatrix, double** sqrtmat)
   {
-    double *array = new double[n*n];
-
-    int index = 0;
+    if (n <= 0)
+      throw LengthError("CholeskyDecomposition","attempting a decomposition of an empty matrix!");
+    gsl_matrix* mat = gsl_matrix_calloc(n, n);
     for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++)
-        {
-          array[index] = covmat[i][j];
-          index++;
-        }
+        gsl_matrix_set(mat, i, j, inmatrix[i][j]);
 
-    return array;
-  }
-
-  /**
-   * @brief SetMatrixArray
-   * @param n
-   * @param array
-   * @param invcovmat
-   */
-  static void SetMatrixArray(int n, double *array, double **invcovmat)
-  {
-    int index = 0;
+    const int decomp = gsl_linalg_cholesky_decomp(mat);
     for (int i = 0; i < n; i++)
-      for (int j = 0; j < n; j++)
-        {
-          invcovmat[i][j] = array[index];
-          index++;
-        }
+      for (int j = 0; j <= i; j++)
+        sqrtmat[i][j] =  gsl_matrix_get(mat, i, j);
+    gsl_matrix_free (mat);
   }
 
-  static bool DecomposeLUCrout(int n, double **lu, double **out, int *index, double &sign, double tol, int &nrZeros)
-  {
-    // Crout/Doolittle algorithm of LU decomposing a square matrix, with implicit partial
-    // pivoting.  The decomposition is stored in fLU: U is explicit in the upper triag
-    // and L is in multiplier form in the subdiagionals .
-    // Row permutations are mapped out in fIndex. fSign, used for calculating the
-    // determinant, is +/- 1 for even/odd row permutations. .
-
-    double *pLU = GetMatrixArray(n, lu);
-    double *scale = new double[n];
-
-    sign = 1.0;
-    nrZeros = 0;
-
-    // Find implicit scaling factors for each row
-    for (int i = 0; i < n; i++)
-      {
-        const int off_i = i*n;
-        double max = 0.0;
-        for (int j = 0; j < n; j++)
-          {
-            const double tmp = fabs(pLU[off_i + j]);
-            if (tmp > max) max = tmp;
-          }
-        scale[i] = (max == 0.0 ? 0.0 : 1.0/max);
-      }
-
-    for (int j = 0; j < n; j++)
-      {
-        const int off_j = j*n;
-        for (int i = 0; i < j; i++)
-          {
-            const int off_i = i*n;
-            double r = pLU[off_i + j];
-            for (int k = 0; k < i; k++)
-              {
-                const int off_k = k*n;
-                r -= pLU[off_i + k]*pLU[off_k + j];
-              }
-            pLU[off_i + j] = r;
-          }
-        // Run down jth subdiag to form the residuals after the elimination of
-        // the first j-1 subdiags.  These residuals divided by the appropriate
-        // diagonal term will become the multipliers in the elimination of the jth.
-        // subdiag. Find fIndex of largest scaled term in imax.
-
-        double max = 0.0;
-        int imax = 0;
-        for (int i = j; i < n; i++)
-          {
-            const int off_i = i*n;
-            double r = pLU[off_i + j];
-            for (int k = 0; k < j; k++)
-              {
-                const int off_k = k*n;
-                r -= pLU[off_i + k]*pLU[off_k + j];
-              }
-            pLU[off_i + j] = r;
-            const double tmp = scale[i]*fabs(r);
-            if (tmp >= max)
-              {
-                max = tmp;
-                imax = i;
-              }
-          }
-
-        // Permute current row with imax
-        if (j != imax)
-          {
-            const int off_imax = imax*n;
-            for (int k = 0; k < n; k++)
-              {
-                const double tmp = pLU[off_imax + k];
-                pLU[off_imax + k] = pLU[off_j + k];
-                pLU[off_j + k] = tmp;
-              }
-            sign = -sign;
-            scale[imax] = scale[j];
-          }
-        index[j] = imax;
-
-        // If diag term is not zero divide subdiag to form multipliers.
-        if (pLU[off_j + j] != 0.0)
-          {
-            if (fabs(pLU[off_j + j]) < tol)
-              nrZeros++;
-            if (j != n-1)
-              {
-                const double tmp = 1.0/pLU[off_j + j];
-                for (int i = j+1; i < n; i++)
-                  {
-                    const int off_i = i*n;
-                    pLU[off_i+j] *= tmp;
-                  }
-              }
-          }
-        else
-          {
-            delete[] scale;
-            throw EvaluationError("DecomposeLUCrout","matrix is singular");
-          }
-      }
-
-    delete[] scale;
-
-    SetMatrixArray(n, pLU, out);
-
-    delete[] pLU;
-
-    return true;
-  }
-
-  /**
-   * @brief Invert
-   * @param n
-   * @param covmat
-   * @param invcovmat
-   */
-  bool InvertLU(int n, double **covmat, double **invcovmat)
-  {
-    // Check for existence
-    if (n == 0)
-      {
-        std::cerr << "Error inversion: Matrix dim should be > 0" << std::endl;
-        return false;
-      }
-
-    int *index = new int[n];
-    
-    // Check for singular matrix
-    double sign = 1.0;
-    int nrZeros = 0;
-    double tol = std::numeric_limits<double>::epsilon();
-    if (!DecomposeLUCrout(n, covmat, invcovmat, index, sign, tol, nrZeros) || nrZeros > 0)
-      throw EvaluationError("InvertLU","Error inversion: Matrix is singular");
-
-    double *pLU = GetMatrixArray(n,invcovmat);
-
-    // Form inv(U)
-    for (int j = 0; j < n; j++)
-      {
-        const int off_j = j*n;
-
-        pLU[off_j + j] = 1./pLU[off_j + j];
-        const double mLU_jj = -pLU[off_j + j];
-
-        // Compute elements 0:j-1 of j-th column
-        double *pX = pLU + j;
-
-        for (int k = 0; k < j; k++)
-          {
-            const int off_k = k*n;
-            if ( pX[off_k] != 0.0)
-              {
-                const double tmp = pX[off_k];
-                for (int i = 0; i < k; i++)
-                  {
-                    const int off_i = i*n;
-                    pX[off_i] += tmp*pLU[off_i + k];
-                  }
-                pX[off_k] *= pLU[off_k + k];
-              }
-          }
-        for (int k = 0; k < j; k++)
-          {
-            const int off_k = k*n;
-            pX[off_k] *= mLU_jj;
-          }
-      }
-
-    // Solve the equation inv(A)*L = inv(U) for inv(A)
-    double *pWorkd = new double[n];
-    for (int j = n-1; j >= 0; j--)
-      {
-        // copy current column j of L to work and replace with zeros
-        for (int i = j+1; i < n; i++)
-          {
-            const int off_i = i*n;
-            pWorkd[i] = pLU[off_i + j];
-            pLU[off_i + j] = 0.0;
-          }
-
-        // Compute current column of inv(A)
-
-        if (j  < n-1)
-          {
-            const double *mp = pLU + j + 1; // Matrix row ptr
-            double *tp = pLU + j;           // Target std::vector ptr
-
-            for (int irow = 0; irow < n; irow++)
-              {
-                double sum = 0.0;
-                const double *sp = pWorkd + j + 1; // Source std::vector ptr
-                for (int icol = 0; icol < n-1-j; icol++)
-                  sum += *mp++ * *sp++;
-                *tp = -sum + *tp;
-                mp += j+1;
-                tp += n;
-              }
-          }
-      }
-
-    delete[] pWorkd;
-
-    // Apply column interchanges
-    for (int j = n-1; j >= 0; j--)
-      {
-        const int jperm = index[j];
-        if (jperm != j)
-          {
-            for (int i = 0; i < n; i++)
-              {
-                const int off_i = i*n;
-                const double tmp = pLU[off_i + jperm];
-                pLU[off_i + jperm] = pLU[off_i + j];
-                pLU[off_i + j] = tmp;
-              }
-          }
-      }
-
-    delete[] index;
-
-    // Recombine in invcovmat
-    SetMatrixArray(n, pLU, invcovmat);
-
-    delete[] pLU;
-
-    return true;
-  }
 
 }

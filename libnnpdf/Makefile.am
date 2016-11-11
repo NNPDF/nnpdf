@@ -1,5 +1,6 @@
 lib_LTLIBRARIES = libnnpdf.la
 libnnpdf_la_SOURCES = 	src/common.cc \
+			src/chisquared.cc \
 			src/commondata.cc \
 			src/fkgenerator.cc \
 			src/fastkernel.cc \
@@ -19,6 +20,7 @@ libnnpdf_la_SOURCES = 	src/common.cc \
 
 otherincludedir = $(includedir)/NNPDF
 otherinclude_HEADERS =  src/NNPDF/common.h \
+				src/NNPDF/chisquared.h \
 		        src/NNPDF/timer.h \
 		        src/NNPDF/commondata.h \
 		        src/NNPDF/experiments.h \

@@ -42,14 +42,14 @@ namespace NNPDF
     const double* GetData() const { return fData; }
     
     bool IsArtificial() const { return fIsArtificial; }       //!< Return the artificial flag
-    bool IsClosure() const { return fIsClosure; }       //!< Return the artificial flag
+    bool IsClosure() const { return fIsClosure; }             //!< Return the artificial flag
     bool IsT0() const { return fIsT0; }                       //!< Return t0 covmat flag
 
-    double** GetCovMat()         const { return fCovMat;   } //!< Return fCovMat
-    double** GetInvCovMat()      const { return fInvCovMat;} //!< Return the inverse of CovMat
+    double** GetCovMat()         const { return fCovMat;    } //!< Return fCovMat
+    double** GetSqrtCov()        const { return fSqrtCov;   } //!< Return the Cholesky decomposition of the covariance matrix
     
-    void ExportCovMat(std::string);      //!< Export covariance matrix
-    void ExportInvCovMat(std::string);  //!< Export covariance matrix
+    void ExportCovMat(std::string);         //!< Export covariance matrix
+    void ExportSqrtCov(std::string);        //!< Export Cholesky decomposition
 
     void SetT0(const PDFSet&); //!<Set T0 Predictions for each dataset in place and update internal structures
 
@@ -69,7 +69,7 @@ namespace NNPDF
     double *fT0Pred;     //!< The t0 predictions
 
     double **fCovMat;    //!< The covariance matrix
-    double **fInvCovMat; //!< The inverse cov matrix
+    double **fSqrtCov;   //!< The Cholesky decomposition of the covariance matrix
     
     double *fStat;       //!< The statistical errors
     sysError **fSys;    //!< The syscor

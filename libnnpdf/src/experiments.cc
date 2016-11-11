@@ -36,7 +36,7 @@ fNSys(0),
 fData(NULL),
 fT0Pred(NULL),
 fCovMat(NULL),
-fInvCovMat(NULL),
+fSqrtCov(NULL),
 fStat(NULL),
 fSys(NULL),
 fSetSysMap(NULL),
@@ -73,7 +73,7 @@ fNSys(exp.fNSys),
 fData(NULL),
 fT0Pred(NULL),
 fCovMat(NULL),
-fInvCovMat(NULL),
+fSqrtCov(NULL),
 fStat(NULL),
 fSys(NULL),
 fSetSysMap(NULL),
@@ -100,7 +100,7 @@ fNSys(exp.fNSys),
 fData(NULL),
 fT0Pred(NULL),
 fCovMat(NULL),
-fInvCovMat(NULL),
+fSqrtCov(NULL),
 fStat(NULL),
 fSys(NULL),
 fSetSysMap(NULL),
@@ -167,11 +167,11 @@ void Experiment::ClearLocalCovMat()
   for (int i = 0; i < fNData; i++)
   {
     delete[] fCovMat[i];
-    delete[] fInvCovMat[i];
+    delete[] fSqrtCov[i];
   }
 
   delete[] fCovMat;
-  delete[] fInvCovMat;
+  delete[] fSqrtCov;
 }
 
 /**
@@ -224,10 +224,10 @@ void Experiment::MakeReplica()
       
       for (int l = 0; l < fNSys; l++)
       {
-        if (fSys[i][l].name.compare("THEORYCORR")==0) continue; // Skip theoretical uncertainties
+        if (fSys[i][l].name.compare("THEORYCORR")==0) continue;   // Skip theoretical uncertainties
         if (fSys[i][l].name.compare("THEORYUNCORR")==0) continue; // Skip theoretical uncertainties
-        if (fSys[i][l].name.compare("SKIP")==0) continue; // Skip uncertainties	
-        if (fSys[i][l].name.compare("UNCORR")==0)           //Noise from uncorrelated systematics
+        if (fSys[i][l].name.compare("SKIP")==0) continue;         // Skip uncertainties	
+        if (fSys[i][l].name.compare("UNCORR")==0)                 // Noise from uncorrelated systematics
         {
           switch (fSys[i][l].type)
           {
@@ -235,7 +235,7 @@ void Experiment::MakeReplica()
             case MULT: xnor[i] *= (1.0 + rng->GetRandomGausDev(1.0)*fSys[i][l].mult*1e-2); break;
           }
         }
-        else                                              //Noise from correlated systematics
+        else                                                      // Noise from correlated systematics
         {
           switch (fSys[i][l].type)
           {
@@ -448,20 +448,19 @@ void Experiment::GenCovMat()
   
   // Allocate arrays 
   fCovMat = new double*[fNData];
-  fInvCovMat = new double*[fNData];
+  fSqrtCov = new double*[fNData];
   
   for (int i=0; i<fNData; i++)
   {
     fCovMat[i] = new double[fNData];
-    fInvCovMat[i] = new double[fNData];
+    fSqrtCov[i] = new double[fNData];
     
     for (int j=0; j<fNData; j++)
     {
       fCovMat[i][j] = 0;
-      fInvCovMat[i][j] = 0;
+      fSqrtCov[i][j] = 0;
     }
   }
-
 
   for (int i = 0; i < fNData; i++)
     for (int j = 0; j < fNData; j++)
@@ -484,7 +483,7 @@ void Experiment::GenCovMat()
       fCovMat[i][j] = sig + signor*fT0Pred[i]*fT0Pred[j]*1e-4;
     }
     
-  InvertLU(fNData, fCovMat, fInvCovMat);
+  CholeskyDecomposition(fNData, fCovMat, fSqrtCov);
 }
 
 void Experiment::ExportCovMat(string filename)
@@ -502,7 +501,7 @@ void Experiment::ExportCovMat(string filename)
   return;
 }
 
-void Experiment::ExportInvCovMat(string filename)
+void Experiment::ExportSqrtCov(string filename)
 {
   ofstream outCovMat(filename.c_str());
   outCovMat << setprecision(5);
@@ -510,7 +509,7 @@ void Experiment::ExportInvCovMat(string filename)
   for (int i=0; i<fNData; i++)
   {
     for (int j=0; j<fNData; j++)
-      outCovMat << fInvCovMat[i][j] << "\t";
+      outCovMat << fSqrtCov[i][j] << "\t";
     outCovMat <<endl;
   }
   outCovMat.close();
