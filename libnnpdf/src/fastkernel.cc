@@ -678,8 +678,8 @@ namespace NNPDF
     // Read C-factors
     for (int i = 0; i < fNData; i++)
     {
-      real tmp;
-      if (! (g >> tmp ) )
+      real tmp, tmp_error;
+      if (! (g >> tmp >> tmp_error ) )
         throw FileError("FKTable::FKTable","Error reading cfactor file: " + cfilename);
       fcFactors[i] *= tmp;
     }
