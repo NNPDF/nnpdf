@@ -6,7 +6,7 @@ CodesUsed: VRAP v0.9
 TheoryInput: Fixed muR and muF settings, as(MZ) = 0.119
 PDFset: Preliminary version of NNPDF2.1 NNLO
 Warnings: To update with recent C-factors (NNPDFres paper) with dynamical central scale
-******************************************************************************************** 0.00000
+********************************************************************************************
    1.0235212000000000      0.00000
    1.0235512000000000      0.00000
    1.0236103999999999      0.00000

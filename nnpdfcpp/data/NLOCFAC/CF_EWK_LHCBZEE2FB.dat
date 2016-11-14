@@ -6,7 +6,7 @@ CodesUsed: FEWZ 3.1b2
 TheoryInput: input cards in external/FEWZ_3.1.b2/InputCards
 PDFset: NNPDF30_nlo_as_0118
 Warnings: No photon initiated processes, NLO QCD, ISR, ISRxFSR, EW (EW flag 1)
-******************************************************************************************** 0.00000
+********************************************************************************************
 1.0198 0.00000
 1.0112 0.00000
 0.9982 0.00000

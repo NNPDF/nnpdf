@@ -6,7 +6,7 @@ CodesUsed: Private gg->jj code from JP, validated with threshold approximation c
 TheoryInput: NNPDF2.3 NNLO, alphas(MZ)=0.119
 PDFset: NNPDF23_nnlo_as_0119
 Warnings: Uses pt_jet as central scale rather than pt_leading, to update once final pp -> jj code available
-******************************************************************************************** 0.00000
+********************************************************************************************
 2.3578 0.00000
 2.0056 0.00000
 1.7647 0.00000

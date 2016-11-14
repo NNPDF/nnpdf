@@ -6,7 +6,7 @@ CodesUsed: top++ v2.0
 TheoryInput: NNPDF2.3 with alphas(MZ)=0.118
 PDFset: NNPDF23_nnlo_as_0118
 Warnings: NNLO theory (no NNLL effects), this dataset needs to be updated with the more recent measurements
-******************************************************************************************** 0.00000
+********************************************************************************************
 1.1228 0.00000
 1.1228 0.00000
 1.1228 0.00000

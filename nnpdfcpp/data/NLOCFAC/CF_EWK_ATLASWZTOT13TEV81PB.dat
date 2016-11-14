@@ -6,7 +6,7 @@ CodesUsed:   FEWZ 3.1b2
 TheoryInput: NLO QCD, EW corrections flag = 1: ISR, ISRxFSR, EW
 PDFset:      CT14nlo
 Warnings:    No photon initiated processes, no FSR - data are corrected
-******************************************************************************************** 0.00000
+********************************************************************************************
 1. 0.00000
 1. 0.00000
 0.996324 0.00000
