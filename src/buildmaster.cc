@@ -56,6 +56,7 @@
 #include "ATLASTTBARTOT13TEV.h"
 #include "CMSTTBARTOT7TEV.h"
 #include "CMSTTBARTOT8TEV.h"
+#include "CMSTTBARTOT13TEV.h"
 #include "CMSWMU8TEV.h"
 
 /**
@@ -224,6 +225,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASTTBARTOTFilter());
   target.push_back(new CMSTTBARTOT7TEVFilter());
   target.push_back(new CMSTTBARTOT8TEVFilter());
+  target.push_back(new CMSTTBARTOT13TEVFilter());
   target.push_back(new CMSTTBARTOTFilter());
 
   // ************************* ZEUS ******************************

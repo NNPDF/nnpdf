@@ -1,21 +1,7 @@
 /*
-Inclusive total cross section for ttbar production @LHC CMS
-There are three points
-
-LHC-CMS 7 TeV
----------------
-
-emu events with b-tagged jets (L=5.0 1/fb)
-[1603.02303]
-sigma ttbar = 173.6 ± 2.1 (stat) +4.5 - 4.0 (syst) ± 3.8 (lumi) pb
+Inclusive total cross section for ttbar production @LHC CMS 8 TeV
+There is a single point
  
-LHC-CMS 8 TeV
----------------
-
-emu events with b-tagged jets (L=19.7 1/fb)
-[1603.02303]
-sigma ttbar = 244.9 ± 1.4 (stat) +6.3 -5.5 (syst) ± 6.4 (lumi) pb
-
 LHC-CMS 13 TeV
 ---------------
 
@@ -24,9 +10,9 @@ emu events with b-tagged jets (L=2.2 1/fb)
 sigma ttbar = 792 ± 8 (stat) ± 37 (syst) ± 21 (lumi) pb
  */
 
-#include "CMSTTBARTOT.h"
+#include "CMSTTBARTOT13TEV.h"
 
-void CMSTTBARTOTFilter::ReadData()
+void CMSTTBARTOT13TEVFilter::ReadData()
 {
   // Opening file
   fstream f1;

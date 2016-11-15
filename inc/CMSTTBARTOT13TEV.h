@@ -7,26 +7,26 @@
 //          Luigi Del Debbio, luigi.del.debbio@ed.ac.uk
 
 /**
- *  \class CMSTTBARTOT
- *  \brief CMSTTBARTOT CommonData processor
+ *  \class CMSTTBARTOT13TEV
+ *  \brief CMSTTBARTOT13TEV CommonData processor
  */
 
 #pragma once
 
 #include "buildmaster_utils.h"
 
-static const dataInfoRaw CMSTTBARTOTinfo = {
-  3,               //nData
+static const dataInfoRaw CMSTTBARTOT13TEVinfo = {
+  1,               //nData
   2,               //nSys
-  "CMSTTBARTOT",   //SetName
+  "CMSTTBARTOT13TEV",   //SetName
   "INC"            //ProcType
 };
 
 
-class CMSTTBARTOTFilter: public CommonData
+class CMSTTBARTOT13TEVFilter: public CommonData
 {
-public: CMSTTBARTOTFilter():
-  CommonData(CMSTTBARTOTinfo) { ReadData(); }
+public: CMSTTBARTOT13TEVFilter():
+  CommonData(CMSTTBARTOT13TEVinfo) { ReadData(); }
 
 private:
   void ReadData();
