@@ -64,19 +64,6 @@ void get_covmat(double ** datamat, int* n, int* m){
 }
 
 
-void get_invcovmat(double ** datamat, int* n, int* m){
-    int len = $self->GetNData();
-    double** invcov = $self->GetInvCovMat();
-    double * result = new double[len*len];
-    for (int i = 0; i < len; i++){
-        for (int j = 0; j < len; j++){
-            result[len*i + j] = invcov[i][j];
-        }
-    }
-    *datamat = result;
-    *m = *n = len;
-}
-
 void get_cv (double **cv, int* n){
     int len = $self->GetNData();
     double * result = new double[len];
