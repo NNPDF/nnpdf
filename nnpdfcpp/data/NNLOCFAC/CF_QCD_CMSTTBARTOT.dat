@@ -7,5 +7,6 @@ TheoryInput: NNPDF3.0 with alphas(MZ)=0.118
 PDFset: NNPDF30_nnlo_as_0118
 Warnings: NNLO theory (no NNLL effects)
 ********************************************************************************
-1.0306
-1.0291
+1.0660
+1.0671
+1.0703
