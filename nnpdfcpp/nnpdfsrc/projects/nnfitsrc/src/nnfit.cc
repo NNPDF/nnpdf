@@ -18,6 +18,8 @@
 #include <NNPDF/lhapdfset.h>
 #include <NNPDF/parametrisation.h>
 #include <NNPDF/timer.h>
+#include <NNPDF/chisquared.h>
+
 #include "loadutils.h"
 #include "datautils.h"
 #include "fitbases.h"
@@ -310,7 +312,7 @@ int main(int argc, char **argv)
         real* theory = new real[training[i]->GetNData()];
 
         Convolute(fitset,training[i],theory);
-        ComputeChi2(training[i],1,theory,&erf_trn);
+        NNPDF::ComputeChi2(training[i],1,theory,&erf_trn);
 
         doftrn += training[i]->GetNData();
 
@@ -325,7 +327,7 @@ int main(int argc, char **argv)
           real* theory = new real[validation[i]->GetNData()];
 
           Convolute(fitset,validation[i],theory);
-          ComputeChi2(validation[i],1,theory,&erf_val);
+          NNPDF::ComputeChi2(validation[i],1,theory,&erf_val);
 
           dofval += validation[i]->GetNData();
 
@@ -369,7 +371,7 @@ int main(int argc, char **argv)
         real* theory = new real[exp->GetNData()];
 
         Convolute(fitset,exp,theory);
-        ComputeChi2(exp,1,theory,&chi2);
+        NNPDF::ComputeChi2(exp,1,theory,&chi2);
 
         dof += exp->GetNData();
 

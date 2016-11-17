@@ -7,9 +7,9 @@ TheoryInput: NLO QCD, EW corrections flag = 1: ISR, ISRxFSR, EW
 PDFset:      NNPDF30_nlo_as_0118
 Warnings:    No photon initiated processes, no FSR - data are corrected
 ********************************************************************************************
-1.0032
-1.0127
-1.0238
-1.0291
-1.0360
-1.0376
+1.0032 0.00000
+1.0127 0.00000
+1.0238 0.00000
+1.0291 0.00000
+1.0360 0.00000
+1.0376 0.00000

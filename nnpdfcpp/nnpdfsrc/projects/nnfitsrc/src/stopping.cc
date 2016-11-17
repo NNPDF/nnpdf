@@ -15,9 +15,11 @@
 #include "stopping.h"
 #include "fastaddchi2.h"
 #include "datautils.h"
+
 #include <NNPDF/thpredictions.h>
 #include <NNPDF/dataset.h>
 #include <NNPDF/logger.h>
+#include <NNPDF/chisquared.h>
 
 // **************** StoppingCriterion base class ******************
 StoppingCriterion::StoppingCriterion(NNPDFSettings const& settings):
@@ -100,7 +102,7 @@ bool StandardStopConditions::Stop(FitPDFSet *pdf, vector<Experiment*>& exps, vec
 
           // Compute chi2
           real TmpExpChi2 = 0;
-          ComputeChi2(exps[i],1,theory,&TmpExpChi2);
+          NNPDF::ComputeChi2(exps[i],1,theory,&TmpExpChi2);
           Chi2Tot+=TmpExpChi2;
           ExpChi2.push_back(TmpExpChi2);
           
