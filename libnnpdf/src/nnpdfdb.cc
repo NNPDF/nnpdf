@@ -60,7 +60,7 @@ namespace NNPDF
     
     return v;
   }
-  
+
   // Needs to be specialised to avoid splitting the string
   template<>
   std::string dbquery(IndexDB const& db, int const& id, std::string const& field)
@@ -71,21 +71,47 @@ namespace NNPDF
     sqlite3_stmt *statement;  
     const int retcode = sqlite3_prepare_v2(db.fDB, query.str().c_str(), -1, &statement, 0 );
     if ( retcode != SQLITE_OK ) 
-      {
-	std::stringstream err; err << "SQLITE Error: " << sqlite3_errmsg(db.fDB);
-	throw RuntimeException("dbquery", err.str());
-      }
+    {
+    	std::stringstream err; err << "SQLITE Error: " << sqlite3_errmsg(db.fDB);
+    	throw RuntimeException("dbquery", err.str());
+    }
     
     int res = sqlite3_step(statement);
     if ( res == SQLITE_ROW ) 
-      {
-	std::string retval = (char*)sqlite3_column_text(statement, 0);
-	return retval; 
-      } else
-      {
-	std::stringstream err; err << "SQLITE Error: " << sqlite3_errmsg(db.fDB);
-	throw RuntimeException("dbquery", err.str());
-      }    
+    {
+    	std::string retval = (char*)sqlite3_column_text(statement, 0);
+    	return retval; 
+    } 
+    else
+    {
+    	std::stringstream err; err << "SQLITE Error: " << sqlite3_errmsg(db.fDB);
+    	throw RuntimeException("dbquery", err.str());
+    }    
+  }
+
+  std::vector<int> dbmatch(IndexDB const& db, std::string const& field, std::string const& value)
+  {
+    std::stringstream query;
+    query << "select id from "<<db.fTable<<" where "<<field<<"='"<<value<<"'";
+
+    sqlite3_stmt *statement;  
+    const int retcode = sqlite3_prepare_v2(db.fDB, query.str().c_str(), -1, &statement, 0 );
+    if ( retcode != SQLITE_OK ) 
+    {
+      std::stringstream err; err << "SQLITE Error: " << sqlite3_errmsg(db.fDB);
+      throw RuntimeException("dbquery", err.str());
+    }
+
+    std::vector<int> indices;
+    while ( sqlite3_step(statement) == SQLITE_ROW ) 
+    {
+        std::stringstream s;
+        s <<(char*)sqlite3_column_text(statement, 0);
+        
+        int ID; s >> ID;
+        indices.push_back(ID); 
+    }
+    return indices;
   }
   
 }
