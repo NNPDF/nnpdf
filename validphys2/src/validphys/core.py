@@ -251,7 +251,9 @@ class FKTableSpec(TupleComp):
         self.cfactors = cfactors
         super().__init__(fkpath, cfactors)
 
-    @functools.lru_cache()
+    #NOTE: We cannot do this because Fkset owns the fktable, and trying
+    #to reuse the loaded one fails after it gets deleted.
+    #@functools.lru_cache()
     def load(self):
         return FKTable(str(self.fkpath), [str(factor) for factor in self.cfactors])
 
