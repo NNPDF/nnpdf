@@ -62,14 +62,16 @@ class Loader():
     def commondata_folder(self):
         return self.datapath / 'commondata'
 
-    def check_commondata(self, setname, sysnum):
+    def check_commondata(self, setname, sysnum=None):
         datafile = self.commondata_folder / ('DATA_' + setname + '.dat')
         if not datafile.exists():
             raise DataNotFoundError(("Could not find Commondata set: '%s'. "
                   "File '%s' does not exist.")
                  % (setname, datafile))
+        if sysnum is None:
+            sysnum = 'DEFAULT'
         sysfile = (self.commondata_folder / 'systypes' /
-                   ('SYSTYPE_%s_%d.dat' % (setname, sysnum)))
+                   ('SYSTYPE_%s_%s.dat' % (setname, sysnum)))
 
         #Good luck debugging this!
         plotfiles = tuple(p for p in self.commondata_folder.iterdir()
