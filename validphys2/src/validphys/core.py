@@ -178,7 +178,7 @@ class CommonDataSpec(TupleComp):
         super().__init__(datafile, sysfile, plotfiles)
 
     def __iter__(self):
-        return self.datafile, self.sysfile, self.plotfiles
+        return iter((self.datafile, self.sysfile, self.plotfiles))
 
     @functools.lru_cache()
     def load(self):
