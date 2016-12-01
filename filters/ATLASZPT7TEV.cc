@@ -134,16 +134,19 @@ void ATLASZPT7TEVFilter::ReadData()
   // The uncorrelated systematics is assigned to fSys[i][0]
   for (int i = 0; i < fNData; i++)
     {
-      for (int l = 1; l < fNSys; l++)
+      for (int l = 0; l < fNSys; l++)
 	{
 	  fSys[i][l].add  = syscor[i][l-1];
 	  fSys[i][l].mult = fSys[i][l].add*100/fData[i];
-	  fSys[i][l].type = ADD ;
-	  fSys[i][l].name = "CORR";
+	  fSys[i][l].type = ADD;
+	  fSys[i][l].name = (l == 0 ? "UNCORR" : "CORR");
 	}
+      /*
       fSys[i][0].mult = fSys[i][0].add*100/fData[i];
       fSys[i][0].type = ADD;
       fSys[i][0].name = "UNCORR";
+      */
+      fStat[i] = 0.0;
     }
 
   f1.close();
