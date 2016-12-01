@@ -96,6 +96,25 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
         if (stoi(settings.GetTheory(APFEL::kPTO)) == 2)
           return set.GetData(idat) >= 0.03;
       }
+
+    if (set.GetSetName().compare(string("ATLASZPT7TEV")) == 0 )
+      {
+        const double pt = set.GetKinematics(idat, 0);
+        if (pt < 30 || pt > 500)
+          return false;
+        return true;
+      }
+
+    if (set.GetSetName().compare(string("ATLASZPT8TEVMDIST")) == 0 )
+      return set.GetKinematics(idat, 0) >= 30;
+
+    if (set.GetSetName().compare(string("ATLASZPT8TEVYDIST")) == 0 )
+      {
+        const double pt = set.GetKinematics(idat, 0);
+        if (pt < 30 || pt > 150)
+          return false;
+        return true;
+      }
   }
 
   /**
@@ -222,9 +241,6 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
 
   // ATLAS W&Z pT, minimum pT cut
   if( set.GetSetName().compare(string("ATLASWPT31PB")) == 0 ||
-      set.GetSetName().compare(string("ATLASZPT7TEV")) == 0 ||
-      set.GetSetName().compare(string("ATLASZPT8TEVMDIST")) == 0 ||
-      set.GetSetName().compare(string("ATLASZPT8TEVYDIST")) == 0 ||
       set.GetSetName().compare(string("CMSZDIFF12")) == 0  )
     {
       const real pT = set.GetKinematics(idat,0);
