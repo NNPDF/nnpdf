@@ -42,11 +42,7 @@ int main(int argc, char **argv)
   cout << "\n- Data cuts:" << endl;
   cout << Colour::FG_YELLOW << " ----------------- Selected Cuts -----------------" << Colour::FG_DEFAULT << endl;
   cout << "  DIS: Q2Min="<<settings.Get("datacuts","q2min")<<" GeV^2, W2Min="<<settings.Get("datacuts","w2min")<<" GeV^2 \n";
-  cout << "  Jet pT Min: TeV="<<settings.Get("datacuts","jetptcut_tev")<<" GeV, LHC="<<settings.Get("datacuts","jetptcut_lhc")<<" GeV \n";
-  cout << "  Jet y Max: TeV="<<settings.Get("datacuts","jetycut_tev")<<", LHC="<<settings.Get("datacuts","jetycut_lhc") <<"\n";
-  cout << "  DY InvMass Cuts: Min="<<settings.Get("datacuts","dymasscut_min")<<" GeV, Max="<<settings.Get("datacuts","dymasscut_max")<<" GeV \n";
   cout << "  W pT Min: Min="<<settings.Get("datacuts","wptcut_lhc")<<" GeV \n";
-  cout << "  Jet CFactor Max ="<<settings.Get("datacuts","jetcfactcut") <<"\n";
   cout << Colour::FG_YELLOW << " -------------------------------------------------\n" << Colour::FG_DEFAULT << endl;
 
   // Create target directory if not present

@@ -208,37 +208,6 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
           }
       }
 
-  // Jet min pT, max y cuts
-  if (set.GetProc(idat).compare(0,3,string("JET")) == 0)
-  {
-    const real y  = set.GetKinematics(idat,0);
-    const real pT = sqrt(set.GetKinematics(idat,1));
-
-    if (set.GetSetName().compare(string("CDFR2KT")) == 0 ||
-        set.GetSetName().compare(string("D0R2CON")) == 0 )
-      return ( pT > settings.Get("datacuts","jetptcut_tev").as<double>() && y < settings.Get("datacuts","jetycut_tev").as<double>());
-
-    if (set.GetSetName().compare(0, 19, string("ATLASR04JETS2P76TEV")) == 0 ||
-        set.GetSetName().compare(0, 19, string("ATLASR06JETS2P76TEV")) == 0 ||
-        set.GetSetName().compare(0, 16, string("ATLASR04JETS36PB")) == 0 ||
-        set.GetSetName().compare(0, 16, string("ATLASR06JETS36PB"))== 0 ||
-        set.GetSetName().compare(0, 9, string("CMSJETS11")) == 0 ||
-        set.GetSetName().compare(0, 11, string("ATLAS1JET11")) == 0 ||
-        set.GetSetName().compare(0, 13, string("CMS1JET276TEV")) == 0)
-      return ( pT > settings.Get("datacuts","jetptcut_lhc").as<double>() && y < settings.Get("datacuts","jetycut_lhc").as<double>());
-
-    cerr << Colour::FG_RED << "filter passKinCuts Error: Jet experiment "<<set.GetSetName()<<" does not have it's pT/y cuts specified in passKinCuts."<<endl;
-    cerr << "please add cut handling for this Jet experiment."<<endl;
-    exit(-1);
-  }
-
-  // DY Invariant mass cuts
-  if (set.GetProc(idat).compare(0,3,string("DYP")) == 0)
-  {
-    const real invM  = sqrt(set.GetKinematics(idat,1));
-    return ( invM > settings.Get("datacuts","dymasscut_min").as<double>() && invM < settings.Get("datacuts","dymasscut_max").as<double>());
-  }
-
   // ATLAS W&Z pT, minimum pT cut
   if( set.GetSetName().compare(string("ATLASWPT31PB")) == 0 ||
       set.GetSetName().compare(string("CMSZDIFF12")) == 0  )
