@@ -106,7 +106,6 @@ datacuts:
   q2min        : 3.49                # Q2 minimum
   w2min        : 12.5                # W2 minimum
   combocuts    : NNPDF30             # NNPDF3.0 final kin. cuts
-  wptcut_lhc   : 25.0                # Minimum pT for W pT diff distributions
 
 ############################################################
 theory:

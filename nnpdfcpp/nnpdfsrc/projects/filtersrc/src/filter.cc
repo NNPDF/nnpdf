@@ -42,7 +42,6 @@ int main(int argc, char **argv)
   cout << "\n- Data cuts:" << endl;
   cout << Colour::FG_YELLOW << " ----------------- Selected Cuts -----------------" << Colour::FG_DEFAULT << endl;
   cout << "  DIS: Q2Min="<<settings.Get("datacuts","q2min")<<" GeV^2, W2Min="<<settings.Get("datacuts","w2min")<<" GeV^2 \n";
-  cout << "  W pT Min: Min="<<settings.Get("datacuts","wptcut_lhc")<<" GeV \n";
   cout << Colour::FG_YELLOW << " -------------------------------------------------\n" << Colour::FG_DEFAULT << endl;
 
   // Create target directory if not present

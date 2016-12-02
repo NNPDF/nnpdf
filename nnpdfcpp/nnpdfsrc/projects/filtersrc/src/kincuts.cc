@@ -69,6 +69,10 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
           return true; // avoid other cuts
         }
 
+        // ATLAS W&Z pT, minimum pT cut
+        if( set.GetSetName().compare(string("ATLASWPT31PB")) == 0)
+          return set.GetKinematics(idat,0) > 25;
+
         throw RuntimeException("passKinCuts", "NNPDF3.0 NNLO combocuts for set " + set.GetSetName() + " are not coded");
       }
 
@@ -115,6 +119,11 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
           return false;
         return true;
       }
+
+    // ATLAS W&Z pT, minimum pT cut
+    if( set.GetSetName().compare(string("ATLASWPT31PB")) == 0 ||
+        set.GetSetName().compare(string("CMSZDIFF12")) == 0  )
+      return set.GetKinematics(idat,0) > 50;
   }
 
   /**
@@ -207,14 +216,6 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
             return true;
           }
       }
-
-  // ATLAS W&Z pT, minimum pT cut
-  if( set.GetSetName().compare(string("ATLASWPT31PB")) == 0 ||
-      set.GetSetName().compare(string("CMSZDIFF12")) == 0  )
-    {
-      const real pT = set.GetKinematics(idat,0);
-      return ( pT > settings.Get("datacuts","wptcut_lhc").as<double>());
-    }
 
   // DIS cuts
   if (set.GetProc(idat).compare(0,3,string("DIS")) == 0)
