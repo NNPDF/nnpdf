@@ -4,11 +4,12 @@ Created on Wed Mar  9 15:19:52 2016
 
 @author: Zahari Kassabov
 """
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
 import itertools
 import logging
 
 import numpy as np
+import scipy.linalg as la
 import pandas as pd
 
 from NNPDF import ThPredictions, CommonData
@@ -59,7 +60,7 @@ class DataResult(NNPDFDataResult):
     def __init__(self, dataobj):
         super().__init__(dataobj)
         self._covmat = dataobj.get_covmat()
-        self._invcovmat = dataobj.get_invcovmat()
+        self._sqrtcovmat = dataobj.get_sqrtcovmat()
 
     @property
     def label(self):
@@ -74,8 +75,9 @@ class DataResult(NNPDFDataResult):
         return self._covmat
 
     @property
-    def invcovmat(self):
-        return self._invcovmat
+    def sqrtcovmat(self):
+        """Lower part of the Cholesky decomposition"""
+        return self._sqrtcovmat
 
 
 class ThPredictionsResult(NNPDFDataResult):
@@ -232,13 +234,16 @@ def experiments_covmat(experiments, experiments_index):
 
 @table
 def experiments_invcovmat(experiments, experiments_index):
-    """Export the inverse covariance matrix. See ``experiments_covmat``."""
+    """Compute and export the inverse covariance matrix.
+    Note that this inverts the matrices with the LU method which is
+    suboptimal."""
     data = np.zeros((len(experiments_index),len(experiments_index)))
     df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
     for experiment in experiments:
         name = experiment.name
         loaded_exp = experiment.load()
-        mat = loaded_exp.get_invcovmat()
+        #Improve this inversion if this method tuns out to be important
+        mat = la.inv(loaded_exp.get_covmat())
         df.loc[[name],[name]] = mat
     return df
 
@@ -385,24 +390,36 @@ def one_or_more_results(dataset:DataSetSpec, pdfs:list=None, pdf:PDF=None,
     raise ValueError("Either 'pdf' or 'pdfs' is required")
 
 
-def _all_chi2(results):
-    data_result, th_result = results
-    diffs = th_result._rawdata.T - data_result.central_value
-    #chi²_i = diff_ij @ invcov_jk @ diff_ki
-    chi2s =  np.einsum('ij, jk, ik -> i',
-                     diffs, data_result.invcovmat, diffs)
-    return chi2s
+def _calc_chi2(sqrtcov, diffs):
+    """Elementary function to compute the chi², given a Cholesky decomposed
+    lower triangular part and a vector of differences"""
+    #Note la.cho_solve doesn't really improve things here
+    vec = la.solve_triangular(sqrtcov, diffs, lower=True)
+    #This sums up the result for the chi² for any input shape.
+    #Sum the squares over the first dimension and leave the others alone
+    return np.einsum('i...,i...->...', vec,vec)
 
+def _all_chi2(results):
+    """Return the chi² for all elements in the result"""
+    data_result, th_result = results
+    diffs = th_result._rawdata - data_result.central_value[:,np.newaxis]
+    print(diffs.shape)
+    return _calc_chi2(sqrtcov=data_result.sqrtcovmat, diffs=diffs)
+
+
+Chi2Data = namedtuple('Chi2data', ('replica_result', 'central_result', 'ndata'))
 
 def abs_chi2_data(results):
     """Return a tuple (member_chi², central_chi², numpoints)"""
     data_result, th_result = results
+
     chi2s = _all_chi2(results)
 
     central_diff = th_result.central_value - data_result.central_value
-    central_result = (central_diff@data_result.invcovmat@central_diff)
+    central_result = _calc_chi2(data_result.sqrtcovmat, central_diff)
 
-    return (th_result.stats_class(chi2s[:, np.newaxis]), central_result, len(data_result))
+    return Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]),
+                    central_result, len(data_result))
 
 def _chs_per_replica(chs):
     th, _, l = chs
