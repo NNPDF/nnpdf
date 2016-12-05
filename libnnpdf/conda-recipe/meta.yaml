@@ -23,7 +23,7 @@ requirements:
         - python 
         - sqlite
         - libgcc <5
-        - gsl    <2
+        - gsl
         - numpy
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
         - nnpdf_use_double
