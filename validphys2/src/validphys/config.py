@@ -16,7 +16,8 @@ from reportengine.helputils import get_parser_type
 
 from validphys import lhaindex
 from validphys.core import PDF, DataSetSpec, ExperimentSpec
-from validphys.loader import (Loader, DataNotFoundError, SysNotFoundError,
+from validphys.loader import (Loader, LoadFailedError ,DataNotFoundError,
+                              SysNotFoundError,
                               CompoundNotFound)
 
 log = logging.getLogger(__name__)
@@ -118,7 +119,7 @@ class Config(configparser.Config):
         """A fit in the results folder, containing at least a valid filter result."""
         try:
             return self.loader.check_fit(fit)
-        except OSError as e:
+        except LoadFailedError as e:
             raise ConfigError(str(e), fit ,self.loader.available_fits)
 
 
@@ -126,46 +127,29 @@ class Config(configparser.Config):
     def parse_dataset(self, dataset:dict, * ,theoryid, use_cuts, fit=None):
         """Dataset specification from the theory and CommonData.
            Use the cuts from the fit, if provided."""
-        #TODO: Move this logic to Loader?
-        theoryno, theopath = theoryid
+
+
         try:
-            name, sysnum = dataset['dataset'], dataset['sys']
+            name = dataset['dataset']
         except KeyError:
             raise ConfigError("'dataset' must be a mapping with "
                               "'name' and 'sysnum'")
 
-        op = None
+
+        sysnum = dataset.get('sys')
+        cfac = dataset.get('cfac', tuple())
+
+
+
         try:
-            commondata = self.loader.check_commondata(name, sysnum)
+            return self.loader.check_dataset(name=name, sysnum=sysnum,
+                                             theoryid=theoryid, cfac=cfac,
+                                             use_cuts=use_cuts, fit=fit)
         except DataNotFoundError as e:
             raise ConfigError(str(e), name, self.loader.available_datasets)
-        except SysNotFoundError as e:
-            raise ConfigError(str(e))
 
-        if 'cfac' in dataset:
-            cfac = dataset['cfac']
-        else:
-            cfac = ()
-
-        try:
-            try:
-                fkspec, op = self.loader.check_compound(theoryno, name, cfac)
-            except CompoundNotFound:
-                fkspec = self.loader.check_fktable(theoryno, name, cfac)
-        except FileNotFoundError as e:
+        except LoadFailedError as e:
             raise ConfigError(e)
-
-
-        if use_cuts:
-            try:
-                cuts = self.loader.get_cuts(name, fit)
-            except FileNotFoundError as e:
-                raise ConfigError(e)
-        else:
-            cuts = None
-
-        return DataSetSpec(name=name, commondata=commondata,
-                           fkspecs=fkspec, thspec=theoryid, cuts=cuts, op=op)
 
 
     @configparser.element_of('experiments')

@@ -18,19 +18,27 @@ import yaml
 from NNPDF import CommonData
 
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
-                            PositivitySetSpec)
+                            PositivitySetSpec, DataSetSpec)
 
 log = logging.getLogger(__name__)
 
-class DataNotFoundError(FileNotFoundError): pass
+class LoadFailedError(FileNotFoundError): pass
 
-class SysNotFoundError(FileNotFoundError): pass
+class DataNotFoundError(LoadFailedError): pass
 
-class FKTableNotFound(FileNotFoundError): pass
+class SysNotFoundError(LoadFailedError): pass
 
-class CfactorNotFound(FileNotFoundError): pass
+class FKTableNotFound(LoadFailedError): pass
 
-class CompoundNotFound(FileNotFoundError): pass
+class CfactorNotFound(LoadFailedError): pass
+
+class CompoundNotFound(LoadFailedError): pass
+
+class TheoryNotFound(LoadFailedError): pass
+
+class FitNotFound(LoadFailedError): pass
+
+class CutsNotFound(LoadFailedError): pass
 
 
 class Loader():
@@ -89,7 +97,7 @@ class Loader():
         theoryID = str(theoryID)
         theopath = self.datapath / ('theory_%s' % theoryID)
         if not theopath.exists():
-            raise FileNotFoundError(("Could not find theory %s. "
+            raise TheoryNotFound(("Could not find theory %s. "
                   "Folder '%s' not found") % (theoryID, theopath) )
         return TheoryIDSpec(theoryID, theopath)
 
@@ -172,10 +180,36 @@ class Loader():
         if not p.exists():
             msg = ("Could not find fit '{fitname}' in '{resultspath}'. "
                    "Folder '{p}' not found").format(**locals())
-            raise FileNotFoundError(msg)
+            raise FitNotFound(msg)
         msg = ("Could not load fit '{fitname}' from '{resultspath}. "
                    "'{p}' must be a folder").format(**locals())
-        raise FileExistsError(msg)
+        raise FitNotFound(msg)
+
+    def check_dataset(self, *, name, sysnum=None,
+                     theoryid, cfac=(),
+                     use_cuts, fit=None):
+
+        if not isinstance(theoryid, TheoryIDSpec):
+            theoryid = self.check_theoryID(theoryid)
+
+        theoryno, _ = theoryid
+
+        op = None
+
+        commondata = self.check_commondata(name, sysnum)
+
+        try:
+            fkspec, op = self.check_compound(theoryno, name, cfac)
+        except CompoundNotFound:
+            fkspec = self.check_fktable(theoryno, name, cfac)
+
+        if use_cuts:
+            cuts = self.get_cuts(name, fit)
+        else:
+            cuts = None
+
+        return DataSetSpec(name=name, commondata=commondata,
+                           fkspecs=fkspec, thspec=theoryid, cuts=cuts, op=op)
 
     @property
     def available_fits(self):
@@ -188,7 +222,7 @@ class Loader():
         fitname, fitpath = fit
         p = (fitpath/'filter')/setname/('FKMASK_' + setname+ '.dat')
         if not p.parent.exists():
-            raise FileNotFoundError("Bad filter configuration. "
+            raise CutsNotFound("Bad filter configuration. "
             "Could not find: %s" % p.parent)
         if not p.exists():
             return None
