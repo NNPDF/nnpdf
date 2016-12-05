@@ -451,10 +451,14 @@ def plot_trainvaliddist(fit, replica_data):
 def plot_covmat_eigs(experiment):
     eigs = la.eigvalsh(experiment.load().get_covmat())
     fig,ax = plt.subplots()
-    ax.plot(eigs, 'o')
+    x = np.arange(1,len(eigs) + 1)
+    ax.plot(x, eigs, 'o', markersize=10)
     ax.set_yscale('log')
+    ax.yaxis.grid(False)
+    plt.title("Covmat eigenvalues for %s" % experiment.name)
+    plt.xlabel("# Eigenvector")
     return fig
-    
+
 @figure
 def plot_corrmat_eigs(experiment):
     covmat = experiment.load().get_covmat()
