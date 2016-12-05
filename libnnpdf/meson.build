@@ -15,6 +15,7 @@ dependencies = [
 headers = [
     'src/NNPDF/commondata.h',
     'src/NNPDF/common.h',
+    'src/NNPDF/chisquared.h',
     'src/NNPDF/dataset.h',
     'src/NNPDF/exceptions.h',
     'src/NNPDF/experiments.h',
@@ -50,6 +51,7 @@ configure_file(
 sources = [
     'src/common.cc',
     'src/commondata.cc',
+    'src/chisquared.cc',
     'src/dataset.cc',
     'src/experiments.cc',
     'src/fastkernel.cc',
