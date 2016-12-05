@@ -57,11 +57,11 @@ void get_covmat(double ** datamat, int* n, int* m){
 
 void get_sqrtcovmat(double ** datamat, int* n, int* m){
     int len = $self->GetNData();
-    double** invcov = $self->GetSqrtCov();
+    double** pointermat = $self->GetSqrtCov();
     double * result = new double[len*len];
     for (int i = 0; i < len; i++){
-        for (int j = 0; j < len; j++){
-            result[len*i + j] = invcov[i][j];
+        for (int j = 0; j <= i; j++){
+            result[len*i + j] = pointermat[i][j];
         }
     }
     *datamat = result;
