@@ -12,7 +12,7 @@ requirements:
         - swig
         - sqlite
         - gcc <5
-        - libgcc <5
+        - libgcc
         - gsl
         - numpy
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
@@ -22,7 +22,7 @@ requirements:
         - lhapdf
         - python 
         - sqlite
-        - libgcc <5
+        - libgcc
         - gsl
         - numpy
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
