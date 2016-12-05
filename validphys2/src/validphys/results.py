@@ -403,7 +403,6 @@ def _all_chi2(results):
     """Return the chi² for all elements in the result"""
     data_result, th_result = results
     diffs = th_result._rawdata - data_result.central_value[:,np.newaxis]
-    print(diffs.shape)
     return _calc_chi2(sqrtcov=data_result.sqrtcovmat, diffs=diffs)
 
 
