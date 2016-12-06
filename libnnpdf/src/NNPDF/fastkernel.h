@@ -124,6 +124,7 @@ namespace NNPDF
 
         double const&  GetQ20()      const { return fQ20;   }
         double const*  GetCFactors() const { return fcFactors; }
+        double const*  GetCUncerts() const { return fcUncerts; }
 
         int const&   GetNData()   const { return fNData;}  //!< Return fNData
         int const&   GetNx()      const { return fNx;   }  //!< Return fNx
@@ -182,9 +183,10 @@ namespace NNPDF
         // FK table
         real *const fSigma;
 
-        // Cfactor information
+        // Cfactor information and uncertainties
         const bool fHasCFactors;
         double *const fcFactors;
+        double *const fcUncerts; // the *squared* uncorrelated uncertainty of the C-factors
 
       private:
         FKTable();                          //!< Disable default constructor

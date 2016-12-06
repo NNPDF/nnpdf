@@ -299,7 +299,8 @@ namespace NNPDF
   fXgrid(new double[fNx]),
   fSigma( new real[fDSz*fNData]),
   fHasCFactors(cFactors.size()),
-  fcFactors(new double[fNData])
+  fcFactors(new double[fNData]),
+  fcUncerts(new double[fNData])
   {
     std::ifstream is(filename);
     NNPDF::FKHeader headSkip(is);
@@ -328,7 +329,8 @@ namespace NNPDF
   fXgrid(new double[fNx]),
   fSigma( new real[fDSz*fNData]),
   fHasCFactors(cFactors.size()),
-  fcFactors(new double[fNData])
+  fcFactors(new double[fNData]),
+  fcUncerts(new double[fNData])
   {
     InitialiseFromStream(is, cFactors);
   };
@@ -403,9 +405,13 @@ namespace NNPDF
       fSigma[i]=0;
 
     // Read Cfactors
-    for (int i = 0; i < fNData; i++) fcFactors[i] = 1.0;
-      for (size_t i=0; i<cFactors.size(); i++)
-       ReadCFactors(cFactors[i]);
+    for (int i = 0; i < fNData; i++) 
+    {
+        fcFactors[i] = 1.0;
+        fcUncerts[i] = 0.0;
+    }
+    for (size_t i=0; i<cFactors.size(); i++)
+      ReadCFactors(cFactors[i]);
 
     // Read FastKernel Table
     std::string line;
@@ -462,7 +468,8 @@ namespace NNPDF
   fXgrid(new double[fNx]),
   fSigma(new real[fDSz*fNData]),
   fHasCFactors(set.fHasCFactors),
-  fcFactors(new double[fNData])
+  fcFactors(new double[fNData]),
+  fcUncerts(new double[fNData])
   {
      // Copy X grid
     for (int i = 0; i < fNx; i++)
@@ -489,6 +496,7 @@ namespace NNPDF
         for (int j = 0; j < fDSz; j++)
           fSigma[i*fDSz + j] = set.fSigma[i*fDSz + j];
         fcFactors[i] = set.GetCFactors()[i];
+        fcUncerts[i] = set.GetCUncerts()[i];
       }
   }
 
@@ -513,7 +521,8 @@ namespace NNPDF
   fXgrid(new double[fNx]),
   fSigma(new real[fDSz*fNData]),
   fHasCFactors(set.fHasCFactors),
-  fcFactors(new double[fNData])
+  fcFactors(new double[fNData]),
+  fcUncerts(new double[fNData])
   {
      if (fNData == 0)
        throw RangeError("FKTable::FKTable", "datapoints cut to 0!");
@@ -542,6 +551,7 @@ namespace NNPDF
         for (int j = 0; j < fDSz; j++)
           fSigma[i*fDSz + j] = set.fSigma[mask[i]*fDSz + j];
         fcFactors[i] = set.GetCFactors()[mask[i]];
+        fcUncerts[i] = set.GetCUncerts()[mask[i]];
       }
   }
 
@@ -682,6 +692,7 @@ namespace NNPDF
       if (! (g >> tmp >> tmp_error ) )
         throw FileError("FKTable::FKTable","Error reading cfactor file: " + cfilename);
       fcFactors[i] *= tmp;
+      fcUncerts[i] += tmp_error*tmp_error;
     }
 
     g.close();
