@@ -20,11 +20,14 @@
 
 %include "include/real_typemap.i"
 
-%apply (NNPDF::real** ARGOUTVIEWM_ARRAY3, int* DIM1, int* DIM2, int* DIM3)\
-{(NNPDF::real** datamat, int* nrep_out, int* nf_out, int* nx_out)}
+%apply (NNPDF::real** ARGOUTVIEWM_ARRAY4, int* DIM1, int* DIM2, int* DIM3,\
+        int* DIM4)\
+{(NNPDF::real** datamat, int* nrep_out, int* nf_out, int* nx_out,\
+int* nq_out)}
 
-%apply (NNPDF::real* IN_ARRAY1, int DIM1) {(NNPDF::real* xmat, int nx_in)}
-%apply (int* IN_ARRAY1, int DIM1) {(int* flmat, int nf_in)}
+%apply (NNPDF::real* IN_ARRAY1, int DIM1) {(NNPDF::real* xmat,  int nx_in)}
+%apply (int*         IN_ARRAY1, int DIM1) {(int*         flmat, int nf_in)}
+%apply (NNPDF::real* IN_ARRAY1, int DIM1) {(NNPDF::real* qmat,  int nq_in)}
 
 
 /* Parse the header file to generate wrappers */
@@ -46,20 +49,25 @@ namespace LHAPDF{
 void grid_values(
                  int* flmat, int nf_in,
                  NNPDF::real* xmat, int nx_in,
-                 NNPDF::real** datamat, int* nrep_out, int* nf_out, int* nx_out,
-                 NNPDF::real Q
+                 NNPDF::real* qmat, int nq_in,
+                 NNPDF::real** datamat,
+                 int* nrep_out, int* nf_out,
+                 int* nx_out, int* nq_out
                 )
 {
     int nrep = self->GetMembers();
     *nrep_out = nrep;
     *nx_out = nx_in;
     *nf_out = nf_in;
-    NNPDF::real* result = new NNPDF::real[nrep*nx_in*nf_in];
+    *nq_out = nq_in;
+    NNPDF::real* result = new NNPDF::real[nrep*nx_in*nf_in*nq_in];
     for (int irep=0; irep<nrep; irep++){
         for (int ifl=0; ifl<nf_in; ifl++){
             for (int ix=0; ix<nx_in; ix++){
-                int index = irep*nf_in*nx_in + ifl*nx_in + ix;
-                result[index] =self->xfxQ(xmat[ix], Q, irep, flmat[ifl]);
+                for(int iq=0; iq<nq_in; iq++){
+                    int index = ((irep*nf_in + ifl)*nx_in + ix)*nq_in + iq;
+                    result[index] = self->xfxQ(xmat[ix], qmat[iq], irep, flmat[ifl]);
+                }
             }
         }
     }
