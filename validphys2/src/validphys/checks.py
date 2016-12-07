@@ -22,6 +22,15 @@ def check_pdf_is_montecarlo(ns, **kwargs):
                           % (pdf, etype))
 
 @make_check
+def check_know_errors(ns, **kwargs):
+    pdf = ns['pdf']
+    try:
+        pdf.nnpdf_error
+    except NotImplementedError as e:
+        raise CheckError(e) from e
+
+
+@make_check
 def check_can_save_grid(ns, **kwags):
     if not ns['installgrid']:
         return

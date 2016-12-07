@@ -17,7 +17,8 @@ providers = [
              'validphys.results',
              'validphys.plots',
              'validphys.reweighting',
-             'validphys.fitdata'
+             'validphys.fitdata',
+             'validphys.pdfgrids',
             ]
 
 class App(app.App):
