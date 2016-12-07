@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Tools for sampling, analyzing and plotting PDFs and luminosities.
+Tools for sampling, PDFs.
 
 @author: Zahari Kassabov
 """
@@ -147,6 +147,17 @@ XPlottingGrid = namedtuple("XPlottingGrid", ("Q", "flavours", "xgrid",
 @_check_xgrid
 @_check_flavours
 def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None ,flavours:list=DEFAULT_FLARR):
+    """Return an object containing the value of the PDF at the specified values
+    of x and flavour.
+
+    Q: The PDF scale in GeV.
+
+    The x grid can be specified as follows:
+        log: Sample log-spaced points (default).
+        linear: Sample linearly-spaced points.
+        [xmin,xmax]: linearly sample between xmin and xmax.
+        [xmin,xmax,num]: linearly sample num points between xmin and xmax.
+    """
     gv = grid_values(pdf, flavours, xgrid, Q)
     #Eliminante Q axis
     gv = gv.reshape(gv.shape[:-1])
