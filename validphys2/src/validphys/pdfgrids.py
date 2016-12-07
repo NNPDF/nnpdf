@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Tools for sampling, analyzing and plotting PDFs and luminosities
+Tools for sampling, analyzing and plotting PDFs and luminosities.
 
 @author: Zahari Kassabov
 """
@@ -12,7 +12,6 @@ from reportengine.checks import make_check, CheckError
 from NNPDF import _lhapdfset
 
 from validphys.core import PDF
-from validphys.checks import check_know_errors
 
 PDG_PARTONS = dict((
                 (-5 , r"\bar{b}"),
@@ -103,20 +102,6 @@ def grid_values(pdf:PDF, flmat, xmat, qmat):
     lpdf = pdf.load()
     return lpdf.grid_values(flmat, xmat, qmat)
 
-@check_know_errors
-def central_and_error_grid_values(pdf:PDF, flmat, xmat, qmat):
-    """Return a tuple (central_grid_values, error_set_grid_values). This is to
-    have a consistent interface with MC and Hessian sets.
-
-    See `grid_values`.
-    """
-    gv = grid_values(pdf, flmat, xmat, qmat)
-    if pdf.ErrorType == 'replicas':
-        return (np.mean(gv, axis=0), gv)
-    elif pdf.ErrorType in ('hessian', 'symmhessian'):
-        return (gv[0], gv[1:])
-    raise NotImplementedError("Unknown ErrorType: '%s'" % pdf.ErrorType)
-
 @make_check
 def _check_xgrid(ns, **kwargs):
     #Checking code is always ugly...
@@ -157,15 +142,14 @@ def _check_flavours(ns, **kwargs):
         raise CheckError(e) from e
 
 XPlottingGrid = namedtuple("XPlottingGrid", ("Q", "flavours", "xgrid",
-                                             "central_value", "error_values"))
+                                             "grid_values"))
 
 @_check_xgrid
 @_check_flavours
 def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None ,flavours:list=DEFAULT_FLARR):
-    cv, ev = central_and_error_grid_values(pdf, flavours, xgrid, Q)
+    gv = grid_values(pdf, flavours, xgrid, Q)
     #Eliminante Q axis
-    cv = cv.reshape(cv.shape[:-1])
-    ev = ev.reshape(ev.shape[:-1])
+    gv = gv.reshape(gv.shape[:-1])
 
-    res = XPlottingGrid(Q, flavours, xgrid, cv, ev)
+    res = XPlottingGrid(Q, flavours, xgrid, gv)
     return res
