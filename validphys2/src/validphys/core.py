@@ -71,6 +71,7 @@ class PDF(TupleComp):
 
     def __init__(self, name):
         self.name = name
+        self._plotname = name
         super().__init__(name)
 
 
@@ -85,6 +86,14 @@ class PDF(TupleComp):
                                                                  attr))
         except IOError:
             raise PDFDoesNotExist(self.name)
+
+    @property
+    def label(self):
+        return self._plotname
+
+    @label.setter
+    def label(self, label):
+        self._plotname = label
 
     @property
     def stats_class(self):

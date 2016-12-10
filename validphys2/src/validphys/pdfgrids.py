@@ -8,6 +8,7 @@ from collections import namedtuple
 
 import numpy as np
 
+from reportengine import collect
 from reportengine.checks import make_check, CheckError
 from NNPDF import _lhapdfset
 
@@ -102,16 +103,20 @@ def grid_values(pdf:PDF, flmat, xmat, qmat):
     lpdf = pdf.load()
     return lpdf.grid_values(flmat, xmat, qmat)
 
+
+
+ScaleSpec = namedtuple('ScaleSpec', ('scale', 'values'))
+
 @make_check
 def _check_xgrid(ns, **kwargs):
     #Checking code is always ugly...
     xgrid = ns['xgrid']
     msg = "Incorrect xgrid specification"
     if xgrid in ('log', None):
-        ns['xgrid'] = np.logspace(-5,0,200)
+        ns['xgrid'] = ('log', np.logspace(-5,0,200))
         return
     elif xgrid == 'linear':
-        ns['xgrid'] = np.linspace(1e-6, 1, 200)
+        ns['xgrid'] = ('linear', np.linspace(1e-6, 1, 200))
         return
     elif isinstance(xgrid, list):
         if len(xgrid) in (2,3):
@@ -124,10 +129,11 @@ def _check_xgrid(ns, **kwargs):
         try:
             if len(xgrid) == 2:
 
-                ns['xgrid'] = np.linspace(*xgrid, 200)
+                ns['xgrid'] = ('linear', np.linspace(*xgrid, 200))
                 return
             if len(xgrid) == 3:
-                ns['xgrid'] = np.linspace(*xgrid)
+                ns['xgrid'] = ('linear', np.linspace(*xgrid))
+                return
             else:
                 raise CheckError(msg)
         except Exception as e:
@@ -141,12 +147,13 @@ def _check_flavours(ns, **kwargs):
     except ValueError as e:
         raise CheckError(e) from e
 
-XPlottingGrid = namedtuple("XPlottingGrid", ("Q", "flavours", "xgrid",
-                                             "grid_values"))
+XPlottingGrid = namedtuple('XPlottingGrid', ('Q', 'flavours', 'xgrid',
+                                             'grid_values', 'scale'))
 
 @_check_xgrid
 @_check_flavours
-def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None ,flavours:list=DEFAULT_FLARR):
+def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None,
+                   flavours:(list, tuple)=DEFAULT_FLARR):
     """Return an object containing the value of the PDF at the specified values
     of x and flavour.
 
@@ -158,9 +165,15 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None ,flavours:list=DEFAULT_FLA
         [xmin,xmax]: linearly sample between xmin and xmax.
         [xmin,xmax,num]: linearly sample num points between xmin and xmax.
     """
+    if isinstance(xgrid, tuple) and len(xgrid)==2:
+        scale, xgrid = xgrid
+    else:
+        scale = 'unknown'
     gv = grid_values(pdf, flavours, xgrid, Q)
     #Eliminante Q axis
     gv = gv.reshape(gv.shape[:-1])
 
-    res = XPlottingGrid(Q, flavours, xgrid, gv)
+    res = XPlottingGrid(Q, flavours, xgrid, gv, scale)
     return res
+
+xplotting_grids = collect(xplotting_grid, ('pdfs',))

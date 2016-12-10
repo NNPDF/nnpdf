@@ -5,6 +5,7 @@ Figures for visualizing results
 from __future__ import generator_stop
 
 import logging
+import functools
 
 import numpy as np
 import numpy.linalg as la
@@ -13,11 +14,13 @@ import matplotlib.transforms as transforms
 import scipy.stats as stats
 
 from reportengine.figure import figure, figuregen
-from reportengine.checks import make_check, CheckError
+from reportengine.checks import make_check, CheckError, make_argcheck
 
 from validphys.core import MCStats
 from validphys.results import chi2_stat_labels
+from validphys.pdfgrids import PDG_PARTONS
 from validphys.plotoptions import get_info, kitable, transform_result
+from validphys.checks import check_scale
 from validphys import plotutils
 
 log = logging.getLogger(__name__)
@@ -54,7 +57,7 @@ def _check_normalize_to(ns, **kwargs):
     if val is None:
         return
 
-    if ns.get('pdf', False):
+    if 'pdf' in ns:
         names = ['data', ns['pdf'].name]
     else:
         names = ['data', *(pdf.name for pdf in ns['pdfs'])]
@@ -469,3 +472,129 @@ def plot_corrmat_eigs(experiment):
     ax.plot(eigs, 'o')
     ax.set_yscale('log')
     return fig
+
+
+#The indexing to one instead of zero is so that we can be consistent with
+#how plot_fancy works, so normalize_to: 1 would normalize to the first pdf
+#for both.
+@make_argcheck
+def _check_pdf_normalize_to(pdfs, normalize_to):
+    """Transforn normalize_to into an index."""
+
+    msg = ("normalize_to should be, a pdf id or an index of the "
+           "pdf (starting from one)")
+
+    if normalize_to is None:
+        return
+
+    names = [pdf.name for pdf in pdfs]
+    if isinstance(normalize_to, int):
+        normalize_to -= 1
+        if not normalize_to < len(names) or normalize_to<0:
+            raise CheckError(msg)
+        return {'normalize_to': normalize_to}
+
+    if isinstance(normalize_to, str):
+        try:
+            normalize_to = names.index(normalize_to)
+        except ValueError:
+            raise CheckError(msg, normalize_to, alternatives=names)
+        return {'normalize_to': normalize_to}
+
+
+    raise RuntimeError("Should not be here")
+
+
+def _plot_pdframe(f):
+    """f does the actual plotting, and returns data used to compute the axis
+    limits. It is called like f(ax, pdf, flindex ,grid)"""
+    @figuregen
+    @check_scale('xscale', allow_none=True)
+    @_check_pdf_normalize_to
+    def f_(pdfs, xplotting_grids, xscale:(str,type(None))=None,
+           normalize_to:(int,str,type(None))=None):
+        if not xplotting_grids:
+            return
+
+        if normalize_to is not None:
+            normalize_pdf = pdfs[normalize_to]
+            normalize_grid = xplotting_grids[normalize_to]
+            normvals = normalize_pdf.stats_class(
+                            normalize_grid.grid_values).central_value()
+            def fp_error(tp, flag):
+                log.warn("Invalid values found computing normalization to %s: "
+                 "Floating point error (%s).", normalize_pdf, tp)
+                #Show warning only once
+                np.seterr(all='ignore')
+            newgrids = []
+            with np.errstate(all='call'):
+                np.seterrcall(fp_error)
+                for grid in xplotting_grids:
+                    newvalues = grid.grid_values/normvals
+                    #newgrid is like the old grid but with updated values
+                    newgrid = type(grid)(**{**grid._asdict(),
+                                             'grid_values':newvalues})
+                    newgrids.append(newgrid)
+            xplotting_grids = newgrids
+            ylabel = "Ratio to {}".format(normalize_pdf.label)
+        else:
+            ylabel = None
+
+        firstgrid = xplotting_grids[0]
+        if xscale is None:
+            xscale = 'linear' if firstgrid.scale == 'linear' else 'log'
+        Q = firstgrid.Q
+        for flindex, fl in enumerate(firstgrid.flavours):
+            fig, ax = plt.subplots()
+            ax.set_title("$%s$ at %.1f GeV" % (PDG_PARTONS[fl], Q))
+
+            all_vals = []
+            for pdf, grid in zip(pdfs, xplotting_grids):
+                all_vals.append(f(ax, pdf, flindex ,grid))
+
+
+            #Note these two lines do not conmute!
+            ax.set_xscale(xscale)
+            plotutils.frame_center(ax, firstgrid.xgrid, np.concatenate(all_vals))
+
+            ax.set_xlabel('x')
+            parton_name = PDG_PARTONS[fl]
+            if ylabel:
+                ax.set_ylabel(ylabel)
+            else:
+                ax.set_ylabel('$x{}(x)$'.format(parton_name))
+
+            ax.set_axisbelow(True)
+
+            ax.legend()
+            yield fig, parton_name
+
+    #Keep the signature of f_ instead of that of f, and also keep annotations
+    #for type checking
+    functools.update_wrapper(f_, f,
+            assigned=[a for a in
+                      functools.WRAPPER_ASSIGNMENTS if a!='__annotations__'])
+    del f_.__wrapped__
+
+    return f_
+
+@_plot_pdframe
+def plot_pdfreplicas(ax, pdf, flindex ,grid):
+    """Plot the replicas of the specifid PDFs.
+    - xscale sets the scale of the plot. E.g. 'linear' or 'log'. Default is
+    deduced from the xplotting_grid, which in turn is 'log' by default.
+    - normalize_to should be, a pdf id or an index of the pdf (starting from one).
+    """
+    next_prop = next(ax._get_lines.prop_cycler)
+    color = next_prop['color']
+    gv = grid.grid_values[:,flindex,:]
+
+
+    ax.plot(grid.xgrid, gv.T, alpha=0.2, linewidth=0.5,
+            color=color, zorder=1)
+    stats = pdf.stats_class(gv)
+    ax.plot(grid.xgrid, stats.central_value(), color=color,
+            linewidth=2,
+            label=pdf.label)
+    return gv
+
