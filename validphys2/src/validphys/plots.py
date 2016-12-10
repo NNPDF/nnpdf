@@ -14,6 +14,7 @@ import matplotlib.transforms as transforms
 import scipy.stats as stats
 
 from reportengine.figure import figure, figuregen
+from reportengine.utils import saturate
 from reportengine.checks import make_check, CheckError, make_argcheck
 
 from validphys.core import MCStats
@@ -504,8 +505,7 @@ def _check_pdf_normalize_to(pdfs, normalize_to):
 
     raise RuntimeError("Should not be here")
 
-
-def _plot_pdframe(f):
+def _plot_pdf_factory(draw_function, setup_function=None, legend_function=None):
     """f does the actual plotting, and returns data used to compute the axis
     limits. It is called like f(ax, pdf, flindex ,grid)"""
     @figuregen
@@ -544,14 +544,16 @@ def _plot_pdframe(f):
         if xscale is None:
             xscale = 'linear' if firstgrid.scale == 'linear' else 'log'
         Q = firstgrid.Q
+
         for flindex, fl in enumerate(firstgrid.flavours):
             fig, ax = plt.subplots()
+            if setup_function:
+                setupres =  saturate(setup_function, locals())
             ax.set_title("$%s$ at %.1f GeV" % (PDG_PARTONS[fl], Q))
 
             all_vals = []
             for pdf, grid in zip(pdfs, xplotting_grids):
-                all_vals.append(f(ax, pdf, flindex ,grid))
-
+                all_vals.append(saturate(draw_function, locals()))
 
             #Note these two lines do not conmute!
             ax.set_xscale(xscale)
@@ -566,19 +568,22 @@ def _plot_pdframe(f):
 
             ax.set_axisbelow(True)
 
-            ax.legend()
+            if legend_function:
+                saturate(legend_function, locals())
+            else:
+                ax.legend()
             yield fig, parton_name
 
     #Keep the signature of f_ instead of that of f, and also keep annotations
     #for type checking
-    functools.update_wrapper(f_, f,
+    functools.update_wrapper(f_, draw_function,
             assigned=[a for a in
                       functools.WRAPPER_ASSIGNMENTS if a!='__annotations__'])
     del f_.__wrapped__
 
     return f_
 
-@_plot_pdframe
+@_plot_pdf_factory
 def plot_pdfreplicas(ax, pdf, flindex ,grid):
     """Plot the replicas of the specifid PDFs.
     - xscale sets the scale of the plot. E.g. 'linear' or 'log'. Default is
@@ -598,3 +603,53 @@ def plot_pdfreplicas(ax, pdf, flindex ,grid):
             label=pdf.label)
     return gv
 
+#Because of how pickle works, this has to have this name, and then be redefined
+#Otherwise will complain about not veing able to pickle the inner f_ in the
+#decorator.
+def plot_pdfs(ax, pdf, flindex, grid, setupres):
+    hatchit, labels, handles = (setupres['hatchit'], setupres['labels'],
+                                setupres['handles'])
+    stats = pdf.stats_class(grid.grid_values[:,flindex,:])
+    pcycler = ax._get_lines.prop_cycler
+    #This is ugly but can't think of anything better
+
+    next_prop = next(pcycler)
+    cv = stats.central_value()
+    xgrid = grid.xgrid
+    err68down, err68up = stats.errorbar68()
+
+    color = next_prop['color']
+    ax.plot(xgrid, cv, color=color)
+    alpha = 0.5
+    ax.fill_between(xgrid, err68up, err68down, color=color, alpha=alpha,
+                    zorder=1)
+    #http://stackoverflow.com/questions/5195466/matplotlib-does-not-display-hatching-when-rendering-to-pdf
+    hatch = next(hatchit)
+    ax.fill_between(xgrid, err68up, err68down, color='None', alpha=alpha,
+                    edgecolor=color, hatch=hatch, zorder=1)
+    if isinstance(stats, MCStats):
+        errorstdup, errorstddown = stats.errorbarstd()
+        ax.plot(xgrid, errorstdup, linestyle='--', color=color)
+        ax.plot(xgrid, errorstddown, linestyle='--', color=color)
+        label  = "%s ($68\%%$ c.l.+$1\sigma$)" % pdf.label
+        outer = True
+    else:
+        outer = False
+        label = "%s ($68\%%$ c.l.)" % pdf.label
+    handle = plotutils.HandlerSpec(color=color, alpha=alpha,
+                                           hatch=hatch, outer=outer)
+    handles.append(handle)
+    labels.append(label)
+
+    return [err68down, err68up]
+
+def _plot_pdfs_setup():
+    return dict(handles=[], labels=[],
+                           hatchit=plotutils.hatch_iter())
+
+def _plot_pdfs_legend(ax, setupres):
+    labels, handles = (setupres['labels'], setupres['handles'])
+    return ax.legend(handles, labels, handler_map={plotutils.HandlerSpec:
+                                             plotutils.ComposedHandler()})
+
+plot_pdfs = _plot_pdf_factory(plot_pdfs, _plot_pdfs_setup, _plot_pdfs_legend)

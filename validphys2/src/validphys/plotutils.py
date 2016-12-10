@@ -6,10 +6,12 @@ Created on Thu Apr 21 18:41:43 2016
 @author: Zahari Kassabov
 """
 import functools
+from collections import namedtuple
 
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.scale as mscale
+import matplotlib.patches as mpatches
 
 
 def setup_ax(ax):
@@ -85,3 +87,46 @@ def expand_margin(a,b,proportion):
     expansion = halfdiff*proportion
     return center - expansion, center+expansion
 
+def hatch_iter():
+    hatches = "/ \\ - + o 0".split()
+    i = 1
+    while True:
+        for hatch in hatches:
+            yield hatch*i
+        i+=1
+
+HandlerSpec = namedtuple('HandelrSpec', ["color", "alpha", "hatch", "outer"])
+
+class ComposedHandler:
+    """Legend artist for PDF plots."""
+    def legend_artist(self, legend, orig_handle, fontsize, handlebox):
+        x0, y0 = handlebox.xdescent, handlebox.ydescent
+        width, height = handlebox.width, handlebox.height
+
+        patches = []
+        if orig_handle.outer:
+            wpad = width*0.1
+            hpad = height*0.1
+            edges = 'none'
+            outer = mpatches.Rectangle([x0, y0], width, height,
+                                   facecolor='none',
+                                   linestyle= 'dashed',
+                                   edgecolor = orig_handle.color,
+                                   transform=handlebox.get_transform())
+            handlebox.add_artist(outer)
+            patches.append(outer)
+        else:
+            wpad = hpad = 0
+            edges = 'black'
+
+        patch = mpatches.Rectangle([x0+wpad, y0+hpad],
+                                   width-2*wpad, height-2*hpad,
+                                   facecolor=orig_handle.color,
+                                   alpha = orig_handle.alpha,
+                                   hatch=orig_handle.hatch,
+                                   edgecolor=edges,
+                                   transform=handlebox.get_transform())
+
+        handlebox.add_artist(patch)
+        patches.append(patch)
+        return patches
