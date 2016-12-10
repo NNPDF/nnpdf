@@ -171,6 +171,7 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None,
         scale = 'unknown'
     gv = grid_values(pdf, flavours, xgrid, Q)
     #Eliminante Q axis
+    #TODO: wrap this in pdf.stats_class?
     gv = gv.reshape(gv.shape[:-1])
 
     res = XPlottingGrid(Q, flavours, xgrid, gv, scale)
