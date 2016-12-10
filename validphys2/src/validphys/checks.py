@@ -6,10 +6,12 @@ Created on Thu Jun  2 19:35:40 2016
 """
 import tempfile
 
+from matplotlib import scale as mscale
+
 import lhapdf
 
 from reportengine.checks import (make_check, CheckError, require_one,
-                                 check_not_empty)
+                                 check_not_empty, make_argcheck)
 
 from validphys import lhaindex
 
@@ -58,3 +60,23 @@ def check_has_fitted_replicas(ns, **kwargs):
         "needs to be "
         "installed in LHAPDF (i.e. copied to %s)."%
         (name, lhaindex.get_lha_datapath()))
+
+
+def check_scale(scalename, allow_none=False):
+    """Check that we have a valid matplotlib scale. With allow_none=True,
+    also None is valid."""
+    @make_check
+    def check(ns, *args, **kwargs):
+        val = ns[scalename]
+        if val is None and allow_none:
+            return
+        valid_scales = mscale.get_scale_names()
+        if not val in valid_scales:
+            e = CheckError("Invalid plotting scale: %s" % scalename,
+                             bad_item=val,
+                             alternatives=valid_scales,
+                             display_alternatives='all')
+            e.alternatives_header = "No such scale '%s'. The allowed values are:"
+            raise e
+    return check
+
