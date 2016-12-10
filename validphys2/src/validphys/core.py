@@ -383,6 +383,10 @@ class Stats:
     def errorbar68(self):
         raise NotImplementedError()
 
+    def errorbarstd(self):
+        return (self.central_value() - self.std_error(),
+                self.central_value() + self.std_error())
+
     #TODO...
     ...
 
@@ -394,6 +398,11 @@ class MCStats(Stats):
 
     def std_error(self):
         return np.std(self.data, axis=0)
+
+    def errorbar68(self):
+        down = np.percentile(self.error_members(), 15.87, axis=0)
+        up =   np.percentile(self.error_members(), 84.13, axis=0)
+        return down, up
 
     def sample_values(self, size):
         return np.random.choice(self, size=size)
@@ -414,6 +423,9 @@ class SymmHessianStats(Stats):
 
     def central_value(self):
         return self.data[0]
+
+    def errorbar68(self):
+        return self.errorbarstd()
 
     def error_members(self):
         return self.data[1:]
