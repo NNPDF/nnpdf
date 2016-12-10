@@ -583,6 +583,16 @@ def _plot_pdf_factory(draw_function, setup_function=None, legend_function=None):
 
     return f_
 
+@make_argcheck
+def _warn_any_pdf_not_montecarlo(pdfs):
+    for pdf in pdfs:
+        et = pdf.ErrorType
+        if et != 'replicas':
+            log.warn("Plotting members of a non-Monte Carlo PDF set:"
+            " %s with error type '%s'.", pdf.name, et)
+
+
+@_warn_any_pdf_not_montecarlo
 @_plot_pdf_factory
 def plot_pdfreplicas(ax, pdf, flindex ,grid):
     """Plot the replicas of the specifid PDFs.
