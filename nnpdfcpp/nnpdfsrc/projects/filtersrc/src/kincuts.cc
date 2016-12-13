@@ -18,7 +18,7 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
     * Special set of cuts, for full documentation and explanation look at:
     * trunk/nnpdfcpp/doc/cuts/NNPDF30
     * Cuts only available in the NNPDF30 combo.
-    */  
+    */
   if (settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF30")) == 0)
     if (set.GetProc(idat).compare(0,3, string("JET")) == 0 &&
         stoi(settings.GetTheory(APFEL::kPTO)) == 2)
@@ -103,7 +103,7 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
 
     if (set.GetSetName().compare(string("ATLASZPT7TEV")) == 0 )
       {
-        const double pt = set.GetKinematics(idat, 0);
+        const double pt = set.GetKinematics(idat, 1);
         if (pt < 30 || pt > 500)
           return false;
         return true;
