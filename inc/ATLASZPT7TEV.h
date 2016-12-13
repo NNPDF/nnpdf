@@ -9,9 +9,9 @@
 /*
  * ATLAS Z pT measurement 47 fb^{-1}.
  * There are two options, one is to include the inclusive rapidity bin, one to include the
- * three separated rapidity bins. The commented lines are kept if we want to switch back to the 
+ * three separated rapidity bins. The commented lines are kept if we want to switch back to the
  * inclusive rapidity bin. Data are read from HEPDATA files http://hepdata.cedar.ac.uk/view/ins1300647
- * Table 3 (three exclusive rapidity bins) 
+ * Table 3 (three exclusive rapidity bins)
  * Table 2 (one inclusive rapidity bin)
 */
 
@@ -22,7 +22,7 @@ static const dataInfoRaw ATLASZPT7TEVinfo = {
   78,          //nData  --> for inclusive rapidity bin 26
   79,          //nSys   --> for inclusive rapidity bin 27
   "ATLASZPT7TEV", //SetName
-  "EWK_PT"       //ProcType
+  "EWK_PTRAP"     //ProcType
 };
 
 class ATLASZPT7TEVFilter: public CommonData
