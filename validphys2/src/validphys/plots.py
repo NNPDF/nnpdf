@@ -136,6 +136,9 @@ def plot_fancy(one_or_more_results, dataset,
             figby = table.groupby(info.figure_by)
         else:
             figby = [('', table)]
+        #For some reason matplotlib doesn't set the axis right
+        min_vals = []
+        max_vals = []
         for samefig_vals, fig_data in figby:
             #Have consistent output for one or more groupby columns
             if not isinstance(samefig_vals, tuple):
@@ -150,6 +153,7 @@ def plot_fancy(one_or_more_results, dataset,
                 lineby = [('', fig_data)]
 
             first = True
+
 
 
             #http://matplotlib.org/users/transforms_tutorial.html
@@ -197,10 +201,16 @@ def plot_fancy(one_or_more_results, dataset,
                     cv = line_data[('cv', i)].as_matrix()
                     err = line_data[('err', i)].as_matrix()
 
+
                     dx, dy = 0.05*(i-first_offset), 0.
                     offset = transforms.ScaledTranslation(dx, dy,
                                                           fig.dpi_scale_trans)
                     offset_transform = ax.transData + offset
+
+                    max_vals.append(np.nanmax(cv+err))
+                    min_vals.append(np.nanmin(cv-err))
+
+
                     ax.errorbar(x, cv, yerr=err,
                          linestyle='--',
                          lw=0.25,
@@ -215,11 +225,16 @@ def plot_fancy(one_or_more_results, dataset,
 
                     color = None
 
-                glabel = info.group_label(sameline_vals, info.line_by)
-                annotate_point = x[-1], line_data[('cv', 0)].as_matrix()[-1]
-                ax.annotate(glabel, annotate_point, xytext=(15 ,-10),
-                                     size='xx-small',
-                                     textcoords='offset points', zorder=10000)
+            total_extremes = min(min_vals), max(max_vals)
+            small_lim, big_lim = plotutils.expand_margin(*total_extremes, 1.2)
+            ax.set_ylim(small_lim, big_lim)
+
+
+            glabel = info.group_label(sameline_vals, info.line_by)
+            annotate_point = x[-1], line_data[('cv', 0)].as_matrix()[-1]
+            ax.annotate(glabel, annotate_point, xytext=(15 ,-10),
+                                 size='xx-small',
+                                 textcoords='offset points', zorder=10000)
 
 
 
@@ -237,6 +252,9 @@ def plot_fancy(one_or_more_results, dataset,
 
             ax.legend().set_zorder(100000)
             ax.set_xlabel(info.xlabel)
+
+
+
 
             fig.tight_layout()
 
