@@ -4,7 +4,7 @@ Created on Wed Mar  9 15:19:52 2016
 
 @author: Zahari Kassabov
 """
-from collections import OrderedDict, namedtuple
+from collections import OrderedDict, namedtuple, Sequence
 import itertools
 import logging
 
@@ -18,7 +18,7 @@ from reportengine.checks import require_one, remove_outer
 from reportengine.table import table
 
 from validphys.checks import make_check, CheckError
-from validphys.core import DataSetSpec, PDF
+from validphys.core import DataSetSpec, PDF, ExperimentSpec
 
 log = logging.getLogger(__name__)
 
@@ -354,7 +354,7 @@ def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None):
 #It's better to duplicate a few lines than to complicate the logic of
 #``results`` to support this.
 #TODO: The above comment doesn't make sense after adding T0
-def pdf_results(dataset:DataSetSpec, pdfs:list, t0set:(PDF, type(None))):
+def pdf_results(dataset:(DataSetSpec,  ExperimentSpec), pdfs:Sequence, t0set:(PDF, type(None))):
     """Return a list of results, the first for the data and the rest for
     each of the PDFs."""
 
@@ -377,7 +377,9 @@ def pdf_results(dataset:DataSetSpec, pdfs:list, t0set:(PDF, type(None))):
 
 @require_one('pdfs', 'pdf')
 @remove_outer('pdfs', 'pdf')
-def one_or_more_results(dataset:DataSetSpec, pdfs:list=None, pdf:PDF=None,
+def one_or_more_results(dataset:(DataSetSpec, ExperimentSpec),
+                        pdfs:(type(None), Sequence)=None,
+                        pdf:(type(None), PDF)=None,
                         t0set:(PDF, type(None))=None):
     """Generate a list of results, where the first element is the data values,
     and the next is either the prediction for pdf or for each of the pdfs.
