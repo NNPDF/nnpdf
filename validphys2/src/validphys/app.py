@@ -19,6 +19,7 @@ providers = [
              'validphys.reweighting',
              'validphys.fitdata',
              'validphys.pdfgrids',
+             'reportengine.report'
             ]
 
 class App(app.App):

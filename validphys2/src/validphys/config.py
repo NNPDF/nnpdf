@@ -13,6 +13,7 @@ from  reportengine import configparser
 from reportengine.environment import Environment
 from reportengine.configparser import ConfigError, element_of, _parse_func
 from reportengine.helputils import get_parser_type
+from reportengine import report
 
 from validphys import lhaindex
 from validphys.core import PDF, DataSetSpec, ExperimentSpec
@@ -71,7 +72,7 @@ def _id_with_label(f):
 
     return parse_func
 
-class Config(configparser.Config):
+class Config(report.Config):
 
 
     @property
