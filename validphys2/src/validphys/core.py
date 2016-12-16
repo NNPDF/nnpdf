@@ -336,9 +336,11 @@ class FitSpec(TupleComp):
         log.debug('Reading input from fit configuration %s' % (p,))
         try:
             with p.open() as f:
-                return yaml.load(f)
+                d = yaml.load(f)
         except (yaml.YAMLError, FileNotFoundError) as e:
             raise AsInputError(str(e)) from e
+        d['pdf'] = self.name
+        return d
 
     __slots__ = ('label','name', 'path')
 
