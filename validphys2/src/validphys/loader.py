@@ -86,7 +86,7 @@ class Loader():
                         if re.match('PLOTTING_%s(_.*)?\.ya?ml'%setname, p.name))
 
         if not sysfile.exists():
-            raise SysNotFoundError(("Could not find systype %d for "
+            raise SysNotFoundError(("Could not find systype %s for "
                  "dataset '%s'. File %s does not exist.") % (sysnum, setname,
                   sysfile))
 
