@@ -1,0 +1,30 @@
+fit: 161017-83d2125-001
+
+use_cuts: True
+
+theory:
+    from_: fit
+
+
+Q: 10
+
+description:
+    from_: fit
+template: examples/report.md
+
+normalize:
+    normalize_to: 1
+
+datanorm:
+    normalize_to: data
+
+pdfs:
+    - from_: fit
+    - NNPDF30_nlo_as_0118
+experiments:
+ - experiment: LHCb
+   datasets:
+      - { dataset: LHCBWZMU8TEV, frac: 1.0, sys: 2, cfac: [NRM] }
+
+actions_:
+    - - report
