@@ -14,7 +14,7 @@
 #include <sys/stat.h>
 
 #include "nnpdfsettings.h"
-#include "svn.h"
+#include "version.h"
 
 // Strings for config file output
 static const string minString[6]   = {"UNDEFINED", "GA", "NGA","NGAP","NGAFT","CMAES"};
@@ -56,7 +56,7 @@ minType NNPDFSettings::getFitMethod(string const& method)
   cerr <<" - NGAP"<<endl;
   cerr <<" - NGAFT"<<endl;
   exit(-1);
-  
+
   return MIN_UNDEF;
 }
 
@@ -66,10 +66,10 @@ paramType NNPDFSettings::getParamType(string const& method)
   if (method.compare("CHEBYSHEV") == 0) return PARAM_CHEBYSHEV;
   if (method.compare("QUADNN") == 0)    return PARAM_QUADNN;
   if (method.compare("NNP") == 0)       return PARAM_NNP;
-  
+
   cerr << "getParamType Error: Invalid parametrization type: "<<method;
   exit(-1);
-  
+
   return PARAM_UNDEF;
 }
 
@@ -79,10 +79,10 @@ stopType NNPDFSettings::getStopType(string const& method)
   if (method.compare("VAR") == 0)         return STOP_VAR;
   if (method.compare("LOOKBACK") == 0)    return STOP_LB;
   if (method.compare("FIXEDLENGTH") == 0) return STOP_NONE;
-  
+
   cerr << "getStopType Error: Invalid stopping type: "<<method;
   exit(-1);
-  
+
   return STOP_UNDEF;
 }
 
@@ -110,7 +110,7 @@ basisType NNPDFSettings::getFitBasisType(string const& method)
 
 FNS NNPDFSettings::getVFNS(string const& vfns)
 {
- 
+
   if (vfns.compare("FFNS") == 0) return FFNS;
   if (vfns.compare("ZM-VFNS") == 0) return ZMVFNS;
   if (vfns.compare("FONLL-A") == 0) return FONLLA;
@@ -158,10 +158,10 @@ NNPDFSettings::NNPDFSettings(const string &filename, const string &plotfile):
   fResultsDir(""),
   fTheoryDir(""),
   fGSLWork(NULL)
-{  
+{
   // Read current PDF grid name from file.
   Splash();
-    
+
   // Get raw name
   const int firstindex  = (int) fFileName.find_last_of("/") + 1;
   const int lastindex   = (int) fFileName.find_last_of(".") - firstindex;
@@ -216,7 +216,7 @@ NNPDFSettings::NNPDFSettings(const string &filename, const string &plotfile):
 
   // Results directory stuff
   fResultsDir = resultsPath();
-  
+
   struct stat st;
   if(stat(fResultsDir.c_str(),&st) != 0)
   {
@@ -321,7 +321,7 @@ vector<int> NNPDFSettings::GetDataMask(const string &setname, filterType useFilt
  * \param setname the name of the dataset under search
  */
 DataSetInfo const& NNPDFSettings::GetSetInfo(string const& setname) const
-{  
+{
   std::hash<std::string> str_hash;
   const size_t hashval = str_hash(setname);
 
@@ -333,7 +333,7 @@ DataSetInfo const& NNPDFSettings::GetSetInfo(string const& setname) const
     cerr << Colour::FG_RED << "NNPDFSettings::GetSetInfo error: Cannot find Set info under: "<<setname<<endl;
     exit(-1);
   }
-  
+
   return (*iMap).second;
 }
 
@@ -353,46 +353,46 @@ PosSetInfo const& NNPDFSettings::GetPosInfo(string const& posname) const
     cerr << Colour::FG_RED << "NNPDFSettings::GetPosInfo error: Cannot find PosSet info under: "<<posname<<endl;
     exit(-1);
   }
-  
+
   return (*iMap).second;
 }
 
 // Verify configuration file is unchanged w.r.t filter.log
 void NNPDFSettings::VerifyConfiguration(const string &filename)
-{  
+{
   cout <<endl;
   cout << Colour::FG_YELLOW << " ----------------- Veriying Configuration against Filter ----------------- "<<endl << Colour::FG_DEFAULT <<endl;;
   string target = fResultsDir + "/"+filename;
   string filter = fResultsDir + "/filter.yml";
-  
+
   ifstream targetConfig;
   targetConfig.open(target.c_str());
-  
+
   ifstream filterConfig;
   filterConfig.open(filter.c_str());
-  
+
   if (!targetConfig.good())
   {
     cerr << Colour::FG_RED << "NNPDFSettings::VerifyConfiguration Error - Cannot find current config file log."<<endl;
     cerr << "Search path: "<<target<<endl;
     exit(-1);
   }
-  
+
   if (!filterConfig.good())
   {
     cerr << Colour::FG_RED << "NNPDFSettings::VerifyConfiguration Error - Cannot find filter config file log."<<endl;
     cerr << "Search path: "<<filter<<endl;
     exit(-1);
   }
-  
+
   MD5 targetHash, filterHash;
-  
+
   targetHash.update(targetConfig);
   filterHash.update(filterConfig);
-  
+
   targetHash.finalize();
   filterHash.finalize();
-  
+
   cout << "  Current Log MD5: "<<targetHash.hexdigest()<<endl;
   cout << "  Filter  Log MD5: "<<filterHash.hexdigest()<<endl;
 
@@ -444,7 +444,7 @@ bool NNPDFSettings::CheckParam(std::string const& param, std::string const& p1, 
  * @param table
  */
 void NNPDFSettings::VerifyFK(FKTable * const &table) const
-{  
+{
   const NNPDF::FKHeader::section TI = NNPDF::FKHeader::THEORYINFO;
 
   bool pV = true;

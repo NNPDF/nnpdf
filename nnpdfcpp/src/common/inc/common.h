@@ -37,7 +37,7 @@ typedef real (*gpdf)(real*);
 #endif
 
 #ifndef DATA_PATH
-#define DATA_PATH ../../data/
+#define DATA_PATH ../data/
 #endif
 
 #define STR_EXPAND(tok) #tok

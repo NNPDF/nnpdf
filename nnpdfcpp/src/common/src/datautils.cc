@@ -8,7 +8,6 @@
 #include "datautils.h"
 #include "nnpdfsettings.h"
 #include <NNPDF/utils.h>
-#include <NNPDF/lhapdfset.h>
 #include <NNPDF/chisquared.h>
 using namespace NNPDF;
 
@@ -295,7 +294,7 @@ void ComputeEstimators(Experiment * const& exp, const vector<ThPredictions *> & 
 
               index++;
             }
-        }        
+        }
 
       index = 0;
       for (int i = 0; i < nData; i++)

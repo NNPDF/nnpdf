@@ -52,7 +52,7 @@ int main(int argc, char **argv)
   LHAPDFSet* FakeSet = NULL;
   if (settings.Get("closuretest","fakedata").as<bool>())
     FakeSet = new LHAPDFSet(settings.Get("closuretest","fakepdf").as<string>(), LHAPDFSet::ER_MCT0);
-  
+
   // RNG Seed for Fake Data
   RandomGenerator::GetRNG()->SetSeed(settings.Get("closuretest","filterseed").as<int>());
 
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
       uncutExp->MakeClosure(FakeSet, settings.Get("closuretest","fakenoise").as<bool>());
       cout << Colour::FG_YELLOW << " -------------------------------------------------\n" << Colour::FG_DEFAULT << endl;
     }
-        
+
     vector<DataSet> cutsets;
     vector< vector<int> > cutmasks;
 
@@ -85,23 +85,23 @@ int main(int argc, char **argv)
     for (int j=0; j< uncutExp->GetNSet(); j++)
     {
       const DataSet& uncut = uncutExp->GetSet(j);
-     
+
       // Calculating data mask
       vector<int> datamask;
       for (int i=0; i<uncut.GetNData(); i++)
         if (passKinCuts(settings, uncut, i) == true)
           datamask.push_back(i);
-      
+
       if (settings.Get("closuretest","rancutmethod").as<int>() != 0)
       {
         if (settings.Get("closuretest","fakedata").as<bool>()) RandomCut(settings,datamask);
-        else 
+        else
         {
           cerr << Colour::FG_RED << "Filter::main error: Random cuts disabled in real data fits to prevent accidental use." <<endl;
           exit(-1);
         }
       }
-      
+
       // Cut dataset
       DataSet cut(uncut, datamask);
       if (cut.GetNData() == uncut.GetNData())
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
         cout << Colour::FG_YELLOW << "- "<<cut.GetNData()<<"/"<<uncut.GetNData()<<" datapoints in "<<uncut.GetSetName() <<" pass kinematical cuts "<< Colour::FG_DEFAULT << endl;
 
       cutsets.push_back(cut);
-      cutmasks.push_back(datamask);      
+      cutmasks.push_back(datamask);
     }
 
     // Rescale uncertainties
@@ -123,42 +123,42 @@ int main(int argc, char **argv)
 
     // cut experiment
     Experiment* cutExp = new Experiment(cutsets, settings.GetExpName(i));
-    filtered.push_back(cutExp);    
-        
+    filtered.push_back(cutExp);
+
     // Write filtered data to file
     cout << "\n- Exporting filtered data\n" << endl;
     for (int j=0; j< cutExp->GetNSet(); j++)
       {
         const DataSet &cut = cutExp->GetSet(j);
         const DataSet &uncut = uncutExp->GetSet(j);
-        
+
         // output directory for filter data
         const string targetPath = settings.GetResultsDirectory() + "/filter/"+cut.GetSetName();
         const string maskPath = targetPath +"/FKMASK_"+ cut.GetSetName()+".dat";
-        
+
         mkdir(targetPath.c_str(),0777);
-        
+
         // Export cut dataset
         cut.Export(targetPath);
-        
+
         // Export FK table mask
         if (cut.GetNData() != uncut.GetNData())
         {
           cout << Colour::FG_YELLOW << "-- Exporting FK table mask to "<< maskPath << Colour::FG_DEFAULT << endl;
           ExportMask(maskPath, cutmasks[j]);
-        }        
+        }
       }
 
     cutsets.clear();
     cutmasks.clear();
-    
-    delete uncutExp;    
+
+    delete uncutExp;
 
   } // End experiment loop
 
   // Positivity sets
   if(settings.Get("positivity","posdatasets").size() > 0)
-  {      
+  {
     cout << "\n- Verifying Positivity tables:" << endl;
     // Load Positivity sets
     for (int i = 0; i < settings.GetNPos(); i++)
@@ -166,7 +166,7 @@ int main(int argc, char **argv)
         cout << Colour::FG_BLUE << "\n- Loading: " << Colour::FG_DEFAULT << settings.GetPosName(i) << endl;
         LoadPositivitySet(settings,settings.GetPosName(i),settings.GetPosInfo(settings.GetPosName(i)).tLambda);
       }
-  }  
+  }
 
   // Check T0 set availability
   cout << Colour::FG_BLUE << "\n- Testing T0 PDF set:" << Colour::FG_DEFAULT << endl;
@@ -191,7 +191,7 @@ void ExportMask(string path, vector<int> mask)
   fstream g(path.c_str(),ios::out);
   for (size_t i=0; i<mask.size(); i++)
     g << mask[i]<<endl;
-  
+
   g.close();
 }
 
@@ -199,15 +199,15 @@ void RandomCut(NNPDFSettings const& settings, vector<int>& datamask)
 {
   double p = settings.Get("closuretest","rancutprob").as<double>();
   vector<int> valdatamask;
-  
+
   cout << "- Applying random cuts to data using method " << settings.Get("closuretest", "rancutmethod")  << endl;
   cout << "- Cutting to " << settings.Get("closuretest", "rancutprob").as<double>()*100 << "%" << endl;
-  
+
   if (settings.Get("closuretest","rancutmethod").as<int>() == 1) // Option 1: Pure random
   {
     for (size_t i=0; i<datamask.size(); i++)
       if(RandomGenerator::GetRNG()->GetRandomUniform()>p && datamask.size()>2)
-      {   
+      {
         valdatamask.push_back(datamask[i]);
         datamask.erase(datamask.begin()+i);
         i--;
@@ -238,8 +238,8 @@ void RandomCut(NNPDFSettings const& settings, vector<int>& datamask)
       datamask.erase(datamask.begin()+position);
     }
   }
- 
+
   if (settings.Get("closuretest","rancuttrnval").as<bool>() == true) datamask = valdatamask;
 
-  valdatamask.clear();  
+  valdatamask.clear();
 }

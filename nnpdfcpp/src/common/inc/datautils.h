@@ -138,4 +138,3 @@ private:
   Chi2Results fChi2;                                                    //!< Chi2 results struct
   StatEstimators fEstimators;                                           //!< Statistical estimators
 };
-
