@@ -31,6 +31,7 @@ find_package(PkgConfig)
 find_package(PkgConfig REQUIRED)
 pkg_search_module(YAML REQUIRED yaml-cpp)
 
+# NNPDF
 find_program(NNPDF_CONFIG nnpdf-config REQUIRED)
 if (NNPDF_CONFIG)
   exec_program(${NNPDF_CONFIG}
@@ -45,6 +46,7 @@ if (NNPDF_CONFIG)
   set(NNPDF_LIBRARIES ${NNPDF_LIBRARIES} CACHE STRING INTERNAL)
 endif(NNPDF_CONFIG)
 
+# LHAPDF
 find_program(LHAPDF_CONFIG lhapdf-config REQUIRED)
 if (LHAPDF_CONFIG)
   exec_program(${LHAPDF_CONFIG}
@@ -59,7 +61,37 @@ if (LHAPDF_CONFIG)
   set(LHAPDF_LIBRARIES ${LHAPDF_LIBRARIES} CACHE STRING INTERNAL)
 endif(LHAPDF_CONFIG)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NNPDF_CXX_FLAGS} ${LHAPDF_CXX_FLAGS}")
+# APFEL
+find_program(APFEL_CONFIG apfel-config REQUIRED)
+if (APFEL_CONFIG)
+  exec_program(${APFEL_CONFIG}
+    ARGS --cppflags
+    OUTPUT_VARIABLE APFEL_CXX_FLAGS
+  )
+  set(APFEL_CXX_FLAGS ${APFEL_CXX_FLAGS} CACHE STRING INTERNAL)
+  exec_program(${APFEL_CONFIG}
+    ARGS --ldflags
+    OUTPUT_VARIABLE APFEL_LIBRARIES
+  )
+  set(APFEL_LIBRARIES ${APFEL_LIBRARIES} CACHE STRING INTERNAL)
+endif(APFEL_CONFIG)
+
+# ROOT (not required, just for validphys)
+find_program(ROOT_CONFIG root-config)
+if (ROOT_CONFIG)
+  exec_program(${ROOT_CONFIG}
+    ARGS --cflags
+    OUTPUT_VARIABLE ROOT_CXX_FLAGS
+  )
+  set(ROOT_CXX_FLAGS ${ROOT_CXX_FLAGS} CACHE STRING INTERNAL)
+  exec_program(${ROOT_CONFIG}
+    ARGS --libs
+    OUTPUT_VARIABLE ROOT_LIBRARIES
+  )
+  set(ROOT_LIBRARIES ${ROOT_LIBRARIES} CACHE STRING INTERNAL)
+endif(ROOT_CONFIG)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NNPDF_CXX_FLAGS} ${LHAPDF_CXX_FLAGS} ${APFEL_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
 
 # execute project specific targets
 add_subdirectory(src)

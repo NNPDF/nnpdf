@@ -10,7 +10,6 @@
  */
 
 #include "nnfit.h"
-#include "svn.h"
 
 #include <signal.h>
 #include <NNPDF/thpredictions.h>
@@ -188,7 +187,7 @@ int main(int argc, char **argv)
         case MIN_CMAES:
           minim = new CMAESMinimizer(settings);
           cout  << Colour::FG_BLUE << "Minimiser: CMA-ES" << Colour::FG_DEFAULT << endl;
-          break;  
+          break;
 
         default:
           cout << Colour::FG_RED << "ERROR: Invalid Minimiser" << Colour::FG_DEFAULT <<endl;
@@ -432,33 +431,33 @@ void LogChi2(NNPDFSettings const& settings,
              vector<Experiment*> const& valid,
              vector<Experiment*> const& exp)
 {
-  
+
   if (pdf->GetMembers() != 1)
   {
     cerr << Colour::FG_RED << "LogChi2 Error: number of PDFs in FitPDFSet is not = 1" << Colour::FG_DEFAULT << endl;
     exit(-1);
   }
-  
+
   // Total chi^2 values
   real TrnChi2Tot = 0;
   real ValChi2Tot = 0;
   real PosChi2Tot = 0;
-  
+
   // Data points
   int nDataTrn = 0;
   int nDataVal = 0;
-  
+
   const int Nexp = train.size();
-  
+
   stringstream logString;
   logString << "Generation "<<pdf->GetNIte()<<"  NExp: "<<Nexp<<endl;
-  
+
   for (int i=0; i<Nexp; i++)
   {
     string ExpName;
     real   ExpVal = 0;
     real   ExpTrn = 0;
-    
+
     // Training chi^2
     if (train[i] != NULL)
     {
@@ -468,7 +467,7 @@ void LogChi2(NNPDFSettings const& settings,
       ExpTrn /= train[i]->GetNData();
       nDataTrn += train[i]->GetNData();
     }
-    
+
     // Validation chi^2
     if (valid[i] != NULL)
     {
@@ -478,17 +477,17 @@ void LogChi2(NNPDFSettings const& settings,
       ExpVal /= valid[i]->GetNData();
       nDataVal += valid[i]->GetNData();
     }
-    
+
     // Write to log string
     logString << "\t"<<ExpName<<"  "<<ExpTrn<<"  "<<ExpVal <<endl;
   }
-  
+
   // Positivity info
   for (size_t i=0; i<pos.size(); i++)
     pos[i].ComputeErf(pdf,&PosChi2Tot);
-  
+
   logString << "Total Trn: " << TrnChi2Tot/nDataTrn<<" Val: "<< ValChi2Tot/nDataVal<<" Positivity:"<<PosChi2Tot<<endl;
-  
+
   // Push log into logger class
   LogManager::AddLogEntry("Chi2Breakdown",logString.str());
 
@@ -527,7 +526,7 @@ void LogChi2(NNPDFSettings const& settings,
 
       LogManager::AddLogEntry("Chi2RealData",logStringrd.str());
     }
-  
+
   return;
 }
 

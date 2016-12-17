@@ -12,6 +12,19 @@ config.status
 libtool
 *.pyc
 Makefile
+CMakeCache.txt
+CMakeFiles/
+bin/chi2check
+bin/filter
+bin/fkcheck
+bin/gencovmat
+bin/kinplot
+bin/nnfit
+bin/revolve
+bin/tconvcheck
+bin/validphys
+cmake_install.cmake
+src/libcommon.a
 
 .ipynb_checkpoints/
 *.swp

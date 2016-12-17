@@ -25,7 +25,7 @@ using std::endl;
 #include "pdffuns.h"
 #include "nnpdfsettings.h"
 //#include "nndiff.h"
-#include "svn.h"
+#include "version.h"
 
 #include "plotutils.h"
 
@@ -204,19 +204,19 @@ const int* GetIflmap(const int nFL)
     case 7:
       return iflmap_7;
       break;
-      
+
     case 8:
       return iflmap_8;
       break;
-      
+
     case 9:
       return iflmap_9;
       break;
-      
+
     case 13:
       return iflmap_13;
       break;
-      
+
     default:
       cerr << "GetIflmap Error: nfl "<<nFL<<" does not define a suitable fitting basis"<<endl;
       exit(-1);
@@ -261,7 +261,7 @@ PlotData::PlotData(NNPDFSettings const& settings,
   fPreprocComparison = (settings.Get("fitting","fitbasis").as<string>() == settingsref.Get("fitting","fitbasis").as<string>());
   if (!fPreprocComparison)
     cout << "*** Fits are using different bases -> Preprocessing exponent comparison disabled ***"<<endl;
-  
+
   //Some general ROOT configuration
   if (fIsValidphys)
     {
@@ -299,7 +299,7 @@ PlotData::~PlotData()
     if (fAlphaCanvas[i]) delete fAlphaCanvas[i];
     if (fBetaCanvas[i])  delete fBetaCanvas[i];
   }
-  
+
   for (size_t i = 0; i < fEffAlpha.size(); i++ )
   {
     for (size_t j = 0; j < fEffAlpha[i]->tBandPreproc.size(); j++ )
@@ -311,12 +311,12 @@ PlotData::~PlotData()
       if (fEffAlpha[i]->tExpUp[j]) delete fEffAlpha[i]->tExpUp[j];
       if (fEffAlpha[i]->tExpDown[j]) delete fEffAlpha[i]->tExpDown[j];
     }
-    delete fEffAlpha[i]; 
+    delete fEffAlpha[i];
   }
-  
+
   for (size_t i=0; i<fEffExpLegend.size(); i++)
     if (fEffExpLegend[i]) delete fEffExpLegend[i];
-  
+
 }
 
 /**
@@ -377,7 +377,7 @@ void PlotData::SavePDFReplicas(LHAPDFSet *pdfset, LHAPDFSet *pdf68cl)
   * Transforms PDFSet into plots
   */
 void PlotData::AddPDF4Comparison(int i, LHAPDFSet *pdf, LHAPDFSet *pdf68cl)
-{  
+{
   if (i < 2)
     NNPDFComparison(i,pdf,pdf68cl);
 
@@ -707,7 +707,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
   /* New derivative preprocessing which deteriorated the quality of the fits.
   NNdiff *pdfdiff = new NNdiff( (i == 0) ? fSettings : fSettingsRef,
                                 (i == 0) ? fSettings.GetResultsDirectory() : fSettingsRef.GetResultsDirectory(),
-                                nfl, pdf->GetMembers());                                
+                                nfl, pdf->GetMembers());
 
   // Calculate effective exponents - here the parametrization should be more flexible
   fPDFNames = pdfdiff->getname();
@@ -777,7 +777,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
         xa[ix] = exp (log(axlim[0]) + ix*delta);
         xb[ix] = bxlim[0] + ix*(bxlim[1] - bxlim[0]) / (real) NPOINTS;
       }
-      
+
       vector<real> alphas;
       vector<real> betas;
 
@@ -800,13 +800,13 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
 
       Compute68cl(alphas, alphaErr68Up[j][ix], alphaErr68Dn[j][ix]);
       Compute68cl(betas, betaErr68Up[j][ix], betaErr68Dn[j][ix]);
-      
+
       alphaErr268Up[j][ix] = 2.0*alphaErr68Up[j][ix] - alphaCV[j][ix];
       alphaErr268Dn[j][ix] = 2.0*alphaErr68Dn[j][ix] - alphaCV[j][ix];
       betaErr268Up[j][ix] = 2.0*betaErr68Up[j][ix] - betaCV[j][ix];
       betaErr268Dn[j][ix] = 2.0*betaErr68Dn[j][ix] - betaCV[j][ix];
     }
-    
+
     // Calculate new preprocessing range
     if (j < 2) //Gluon, Singlet
     {
@@ -818,7 +818,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
       fNewAlphaUp.push_back(min(real(2.0),max(alphaErr268Up[j][0],alphaErr268Up[j][NPOINTS])));
       fNewAlphaDn.push_back(min(alphaErr268Dn[j][0],alphaErr268Dn[j][NPOINTS]));
     }
-    
+
     fNewBetaUp.push_back(max(betaErr268Up[j][NPOINTS-1],betaErr268Up[j][NPOINTS]));
     fNewBetaDn.push_back(max(real(0.0),min(betaErr268Dn[j][NPOINTS-1],betaErr268Dn[j][NPOINTS])));
   }
@@ -883,7 +883,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
 
     for (size_t ix=0; ix<NPOINTS; ix++)
     {
-      aplot->SetPoint(ix, xa[ix], alphaCV[j][ix]); 
+      aplot->SetPoint(ix, xa[ix], alphaCV[j][ix]);
       aplot->SetPointError(ix, 0.0, alphaErr[j][ix]);
       aplotc->SetPoint(ix, xa[ix], alphaCV[j][ix]);
       aplotu->SetPoint(ix, xa[ix], alphaErr68Up[j][ix]);
@@ -891,7 +891,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
       aplot95u->SetPoint(ix, xa[ix], alphaErr268Up[j][ix]);
       aplot95d->SetPoint(ix, xa[ix], alphaErr268Dn[j][ix]);
 
-      bplot->SetPoint(ix, xb[ix], betaCV[j][ix]); 
+      bplot->SetPoint(ix, xb[ix], betaCV[j][ix]);
       bplot->SetPointError(ix, 0.0, betaErr[j][ix]);
       bplotc->SetPoint(ix, xb[ix], betaCV[j][ix]);
       bplotu->SetPoint(ix, xb[ix], betaErr68Up[j][ix]);
@@ -906,9 +906,9 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
 
     TGraph *aplotulim = new TGraph(nlim,axlim,abndhi);
     TGraph *aplotdlim = new TGraph(nlim,axlim,abndlo);
-    
+
     cout << abndlo[0] << "  " << abndhi[0] << endl;
-    
+
     aplot->SetMaximum(abndhi[0] + 1.0);
     aplot->SetMinimum(abndlo[0] - 1.0);
     aplot->GetXaxis()->SetTitle("x");
@@ -1062,28 +1062,28 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
                                  *max_element(fChi2RepRef.begin(), fChi2RepRef.end()));
   const double chi2min = 0.99*min(*min_element(fChi2Rep.begin(), fChi2Rep.end()),
                                  *min_element(fChi2RepRef.begin(), fChi2RepRef.end()));
-  
+
   double* alphamin = new double[nfl];
   double* alphamax = new double[nfl];
 
   double* betamin = new double[nfl];
   double* betamax = new double[nfl];
-  
+
   for (int j=0; j<nfl; j++)
   {
     alphamin[j] =0.99*min(*min_element(fAlphaExp[j].begin(), fAlphaExp[j].end()),
                           *min_element(fAlphaExpRef[j].begin(), fAlphaExpRef[j].end()));
-    
+
     alphamax[j] =1.01*max(*max_element(fAlphaExp[j].begin(), fAlphaExp[j].end()),
                           *max_element(fAlphaExpRef[j].begin(), fAlphaExpRef[j].end()));
-    
+
     betamin[j] =0.99*min(*min_element(fBetaExp[j].begin(), fBetaExp[j].end()),
                           *min_element(fBetaExpRef[j].begin(), fBetaExpRef[j].end()));
-    
+
     betamax[j] =1.01*max(*max_element(fBetaExp[j].begin(), fBetaExp[j].end()),
                           *max_element(fBetaExpRef[j].begin(), fBetaExpRef[j].end()));
   }
-    
+
   // Setup Graph - Alpha Exponents
   for (int j=0; j<nfl; j++)
   {
@@ -1092,7 +1092,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
     {
       stringstream plotname;
       plotname << "alphascatter_"<<j;
-      
+
       TCanvas *scatter = new TCanvas(plotname.str().c_str(), plotname.str().c_str());
       scatter->SetBorderSize(0);
       scatter->SetBorderMode(0);
@@ -1104,7 +1104,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
     }
     else if (!fPreprocComparison)
       break;
-    
+
     // Select canvas
     fAlphaScatterCanvas[j]->cd();
 
@@ -1123,14 +1123,14 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
     splot->GetYaxis()->CenterTitle(true);
     splot->SetMarkerColor( (i == 0 ) ? kGreen:kRed);
     splot->SetMarkerStyle((i == 0 ) ? 10:20);
-    
+
     splot->GetXaxis()->SetLimits(alphamin[j],alphamax[j]);
     splot->GetHistogram()->SetMaximum(chi2max);
     splot->GetHistogram()->SetMinimum(chi2min);
-    
+
     splot->Draw( (i == 0 ) ? "ap":"p");
   }
-  
+
   // Setup Graphs - Beta Exponents
   for (int j=0; j<nfl; j++)
   {
@@ -1138,7 +1138,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
     {
       stringstream plotname;
       plotname << "betascatter_"<<j;
-      
+
       TCanvas *scatter = new TCanvas(plotname.str().c_str(), plotname.str().c_str());
       scatter->SetBorderSize(0);
       scatter->SetBorderMode(0);
@@ -1146,36 +1146,36 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
       scatter->SetFrameBorderMode(0);
       scatter->SetFillColor(0);
       scatter->SetGrid();
-      
+
       fBetaScatterCanvas.push_back(scatter);
     }   else if (!fPreprocComparison)
       break;
-    
+
     fBetaScatterCanvas[j]->cd();
-    
-    
+
+
     TGraph *splot = NULL;
     if (i == 0)
       splot= new TGraph(fChi2Rep.size(), fBetaExp[j].data(), fChi2Rep.data());
     else
       splot = new TGraph(fChi2RepRef.size(),fBetaExpRef[j].data(),fChi2RepRef.data());
-    
+
     splot->SetTitle(fPDFNames[j].c_str());
-    
+
     splot->GetXaxis()->SetTitle("Beta Exponent");
     splot->GetYaxis()->SetTitle("#chi^{2}");
-    
+
     splot->GetXaxis()->CenterTitle(true);
     splot->GetYaxis()->CenterTitle(true);
     splot->SetMarkerColor( (i == 0 ) ? kGreen:kRed);
     splot->SetMarkerStyle((i == 0 ) ? 10:20);
-    
+
     splot->GetXaxis()->SetLimits(betamin[j],betamax[j]);
     splot->GetHistogram()->SetMaximum(chi2max);
     splot->GetHistogram()->SetMinimum(chi2min);
-    
+
     splot->Draw( (i == 0 ) ? "ap":"p");
-    
+
   }
 
   return;
@@ -1289,14 +1289,14 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
                     if(res2[j2]->GetExperiment()->GetSetName(s2) == res[j1]->GetExperiment()->GetSetName(s))
                       {
                       DataSetResult *dat2 = res2[j2]->GetSetResult(s2);
-                      
+
 
                       TGraphErrors *g2 = new TGraphErrors(min(ndata, dat2->GetDataSet().GetNData()));
                       g2->SetTitle("PDF average");
                       g2->SetMarkerColor(fillColor[1]);
                       g2->SetLineColor(fillColor[1]);
                       g2->SetMarkerStyle(graphMarkerStyle[1]);
-                          
+
                       if (dat2->GetDataSet().GetNData() == ndata)
                       {
                         for (int i = 0; i < ndata; i++)
@@ -1342,7 +1342,7 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
                               break;
                             }
                           }
-                      }                                     
+                      }
 
                       mg->Add(g2, "P");
 
@@ -1438,7 +1438,7 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
                       if (dat2->GetDataSet().GetNData() == ndata)
                         {
                           nrep = dat2->GetTheory()->GetNPdf();
-                          
+
                           double max2 = 0, min2=500;
                           for (int n = 0; n < nrep; n++)
                           {
@@ -1447,7 +1447,7 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
                             if (chi2 < min2) min2 = chi2;
                           }
                           int nbin2 = ceil(2.0*5.0/(max2-min2)*pow(nrep,0.33));
-                          
+
                           // Creating a single TH1F for each dataset for each PDF
                           TH1F *h2 = new TH1F(Form("#chi^{2} %s %d", expSetName.c_str(), 1),"", nbin2, 0, 5);
 
@@ -1484,7 +1484,7 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
               c2->SaveAs(TString(fSettings.GetResultsDirectory() +"/"+fPlotFolderPrefix + "/" + expSetName + "_histogram.root"));
 
             }
-        }        
+        }
     }
 
   delete sort;
@@ -1495,7 +1495,7 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
   */
 void PlotData::AddChi2Histo(vector<ExperimentResult*> res, vector<ExperimentResult*> res2)
 {
-  // Total chi2 distribution  
+  // Total chi2 distribution
   SortExperiments *s = new SortExperiments(res,res2);
   int size = s->GetNExps();
 
@@ -1645,7 +1645,7 @@ void PlotData::AddChi2Histo(vector<ExperimentResult*> res, vector<ExperimentResu
   c->SaveAs(TString(fSettings.GetResultsDirectory() +"/"+fPlotFolderPrefix + "/chi2_histo.eps"));
   c->SaveAs(TString(fSettings.GetResultsDirectory() +"/"+fPlotFolderPrefix + "/chi2_histo.root"));
 
-  delete s;    
+  delete s;
 }
 
 /**
@@ -1862,7 +1862,7 @@ void PlotData::AddPhiHisto(vector<ExperimentResult*> res, vector<ExperimentResul
     }
 
   real avg = sqrt(ComputeAVG(res.size(), x)*res.size()/dof1);
-  
+
   real avg2 = sqrt(ComputeAVG(res2.size(), x2)*res2.size()/dof2);
 
   double max = h->GetMaximum() + 0.5;
@@ -1907,7 +1907,7 @@ void PlotData::AddPhiHisto(vector<ExperimentResult*> res, vector<ExperimentResul
   c->SaveAs(TString(fSettings.GetResultsDirectory() +"/"+fPlotFolderPrefix + "/phi_histo.eps"));
   c->SaveAs(TString(fSettings.GetResultsDirectory() +"/"+fPlotFolderPrefix + "/phi_histo.root"));
 
-  delete s;    
+  delete s;
 }
 
 
@@ -2092,18 +2092,18 @@ void PlotData::SaveAll()
     fileout2b<< fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << "betapreproc_"<<i << ".root";
     fBetaCanvas[i]->SaveAs(fileout2.str().c_str());
     fBetaCanvas[i]->SaveAs(fileout2b.str().c_str());
-            
+
     stringstream fileout3(""), fileoutb3("");
     fileout3 << fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << "alphascatter_"<<i <<".eps";
     fileoutb3<< fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << "alphascatter_"<<i <<".root";
     fAlphaScatterCanvas[i]->SaveAs(fileout3.str().c_str());
     fAlphaScatterCanvas[i]->SaveAs(fileoutb3.str().c_str());
-    
+
     stringstream fileout4(""), fileout4b("");
     fileout4 << fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << "betascatter_"<<i << ".eps";
     fileout4b<< fSettings.GetResultsDirectory() << "/"<< fPlotFolderPrefix << "/" << "betascatter_"<<i << ".root";
     fBetaScatterCanvas[i]->SaveAs(fileout4.str().c_str());
-    fBetaScatterCanvas[i]->SaveAs(fileout4b.str().c_str());    
+    fBetaScatterCanvas[i]->SaveAs(fileout4b.str().c_str());
   }
 }
 
@@ -2124,19 +2124,19 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
         repchi2avg+=res[j]->GetChi2Results().fChi2Mem[n];
         dof+=res[j]->GetDOF();
       }
-      
+
       repchi2avg/=dof;
       if (repchi2avg > repchi2max) repchi2max=repchi2avg;
       if (repchi2avg < repchi2min) repchi2min=repchi2avg;
-      
+
       if (i == 0) fSetAVGChi2.push_back(repchi2avg);
       else fSetRefAVGChi2.push_back(repchi2avg);
     }
-    
+
   // Calculate number of bins (Rice rule)
   double binfactor = 2.8/(repchi2max-repchi2min);
   int nbins = ceil(binfactor*2.0*pow(pdf->GetMembers(),0.333));
-  
+
   // Print replica PDF chi2(k)
   TCanvas *chi2rep = new TCanvas("chi2rep", "chi2rep");
   chi2rep->SetTickx();
@@ -2192,7 +2192,7 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
 
   // Reading folder
   stringstream filechi2("");
-  
+
   int maxtl;
   if (i == 0)
     {
@@ -2229,7 +2229,7 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
 
       if (ertr > trmax) trmax = ertr;
       if (ertr < trmin) trmin = ertr;
-      
+
       if (i == 0)
         {
           fTL.push_back(tlvalue);
@@ -2248,7 +2248,7 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
         }
 
       f.close();
-      
+
       //* Read sum rules per replica
       fstream g;
       stringstream sumruletmp("");
@@ -2265,16 +2265,16 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
         }
       double srvalue;
       for (int j = 0; j < fSettings.Get("fitting","basis").size(); j++)
-      { 
+      {
         g >> srvalue;
         if (i == 0)
           fSUMRULES[j].push_back(srvalue);
         else
           fSUMRULESRef[j].push_back(srvalue);
       }
-      
+
       g.close();
-      
+
       // Read Preprocessing exponents per replica
       fstream p;
       stringstream preproctmp("");
@@ -2283,14 +2283,14 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
       else
         preproctmp << pathchi2 << "replica_" << n << "/" << fSettingsRef.GetPDFName() << ".preproc";
       p.open(preproctmp.str().c_str(), ios::in);
-      
+
       bool preprocfail = false;
       if (p.fail())
       {
         cerr << "Error opening data file " << preproctmp.str() << endl;
         preprocfail=true;
       }
-      
+
       // Number of parametrised flavours depends on which fit
       int nfl = (i==0) ? fSettings.Get("fitting","basis").size():fSettingsRef.Get("fitting","basis").size();
       for (int j = 0; j<nfl; j++)
@@ -2304,7 +2304,7 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
           alpha = 0;
           beta = 0;
         }
-        
+
         // Push array back into storage
         if (i == 0)
         {
@@ -2316,7 +2316,7 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
           fAlphaExpRef[j].push_back(alpha);
           fBetaExpRef[j].push_back(beta);
         }
-        
+
       }
 
 
@@ -2373,11 +2373,11 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
 
           pp.close();
         }
-      
-      
+
+
       p.close();
     }
-  
+
   string title[] = {" Current Fit", "Reference Fit"};
 
   // Preparing ROOT object for training lenght
@@ -2452,14 +2452,14 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
       chi2histo1->Fill(fERTRRef[n], 1.0/nrep);
       chi2histo2->Fill(fERVALRef[n], 1.0/nrep);
       scatter->SetPoint(n, fERTRRef[n],fERVALRef[n]);
-    }      
+    }
   }
 
   if (i == 0)
     scatteravg->SetPoint(0, ComputeAVG(fERTR), ComputeAVG(fERVAL));
   else
     scatteravg->SetPoint(0, ComputeAVG(fERTRRef), ComputeAVG(fERVALRef));
-  
+
   // Draw tl histogram
   tl->cd();
   tl->cd()->SetTickx();
@@ -2542,7 +2542,7 @@ void PlotData::AddFitProperties(int i, LHAPDFSet *pdf, vector<ExperimentResult*>
 void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *> cur,vector<ExperimentResult *> ref,vector<ExperimentResult *> theory)
 {
   cout << endl << "Generating closure test estimators" << endl;
-  
+
   //Calculate central chi2s
   real chi2cent = 0, chi2centref = 0, chi2theory = 0;
   int dof = 0, dofref = 0;
@@ -2568,13 +2568,13 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
   //f_sf
   fSF[0] = (chi2cent-chi2theory)/chi2theory;
   fSF[1] = (chi2centref-chi2theory)/chi2theory;
-  
+
   //1-sigma inclusion fraction and averaged distances
   const double Q = stod(fSettings.GetTheory(APFEL::kQ0));
   int nx = 9;
   real xgrid [9] = {1e-4,1e-3,1e-2,0.1,0.2,0.3,0.4,0.5,0.7};
   int nfl = fSettings.Get("fitting","basis").size();
-  
+
   real (*nn23f[])(real*) = {&fsinglet,&fgluon,&fV,&fT3,&fDelta,&fsplus,&fsminus,&fphoton};
   real (*evolf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fT3,&fT8,&fphoton};
   real (*evolsf[])(real*) = {&fsinglet,&fgluon,&fV,&fV8,&fT3,&fT8,&fDelta,&fphoton};
@@ -2582,7 +2582,7 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
   real (*nn30icf[])(real*) = {&fsinglet,&fgluon,&fV,&fT3,&fDelta,&fsplus,&fsminus,&fcplus,&fcminus,&fphoton};
   real (*evolicf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fV15,&fT3,&fT8,&fT15,&fphoton};
   real (*nn31icf[])(real*) = {&fsinglet,&fgluon,&fV,&fV3,&fV8,&fT3,&fT8,&fcplus,&fphoton};
-  
+
   real (*functions[nfl])(real*);
   const basisType setbasis = NNPDFSettings::getFitBasisType(fSettings.Get("fitting","fitbasis").as<string>());
   if (setbasis == BASIS_NN23 || setbasis == BASIS_NN23QED ||
@@ -2600,7 +2600,7 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
     for (int t = 0; t < nfl; t++) functions[t] = nn30icf[t];
   else if (setbasis == BASIS_NN31IC)
     for (int t = 0; t < nfl; t++) functions[t] = nn31icf[t];
-    
+
   real** theoryval = new real*[nx];
   for (int ix = 0; ix < nx; ix++)
   {
@@ -2608,7 +2608,7 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
     for (int j = 0; j < nfl; j++)
       theoryval[ix][j] = GetGpdf(pdf[2],xgrid[ix],Q,0,functions[j]);
   }
-  
+
   int pass = 0;
   int total = 0;
   fAvgDist[0] = 0;
@@ -2630,10 +2630,10 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
         real dist = theoryval[ix][j] - GetGpdfCV(pdf[0],xgrid[ix],Q,functions[j]);
         fAvgDist[0]+= dist*dist/(sd*sd);
         fAvgAbsDist[0]+= dist*dist;
-        
+
         pdfval.clear();
       }
-    
+
   fAvgDist[0] /= (nx-2)*nfl+4;
   fAvgAbsDist[0] /= (nx-2)*nfl+4;
   fSigInt[0] = 1.0*pass/total;
@@ -2643,7 +2643,7 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
   cout << "  Averaged absolute distance:" << "\t" << fAvgAbsDist[0] << endl;
   cout << "  One-sigma interval fractions:" << "\t" << fSigInt[0] << endl;
   cout << endl;
-  
+
   pass = 0;
   total = 0;
   fAvgDist[1] = 0;
@@ -2665,10 +2665,10 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
         real dist = theoryval[ix][j] - GetGpdfCV(pdf[1],xgrid[ix],Q,functions[j]);
         fAvgDist[1]+= dist*dist/(sd*sd);
         fAvgAbsDist[1]+= dist*dist;
-        
+
         pdfval.clear();
       }
-  
+
   fAvgDist[1] /= (nx-2)*nfl+4;
   fAvgAbsDist[1] /= (nx-2)*nfl+4;
   fSigInt[1] = 1.0*pass/total;
@@ -2678,13 +2678,13 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
   cout << "  Averaged absolute distance:" << "\t" << fAvgAbsDist[1] << endl;
   cout << "  One-sigma interval fractions:" << "\t" << fSigInt[1] << endl;
   cout << endl;
-  
+
   for (int ix = 0; ix < nx; ix++)
   {
     delete[] theoryval[ix];
-  } 
+  }
   delete[] theoryval;
-  
+
 }
 
 /**
@@ -2692,7 +2692,7 @@ void PlotData::AddCTEstimators(vector<LHAPDFSet*> pdf,vector<ExperimentResult *>
   *
 void PlotData::AddWPAnalysis(LHAPDFSet *pdf)
 {
-  
+
   // Get network dimensions
   int nlayers = fSettings.GetNNArch().size();
   int* nnarch = new int[nlayers];
@@ -2703,60 +2703,60 @@ void PlotData::AddWPAnalysis(LHAPDFSet *pdf)
     if (j > 0) nweights += nnarch[j]*(1+nnarch[j-1]);
   }
   fNWPStr = nnarch[0] + nnarch[nlayers-1]+1;
-  
+
   // Define weight map
   int* wmap = new int[nweights];
-  
+
   for (int i = 0; i < nweights; i++)
     wmap[i] = nnarch[0];  // set all weights to hidden
-  
+
   for (int j = 0; j < nnarch[1]; j++)
     for (int i = 0; i < nnarch[0]; i++)
       wmap[j*(1+nnarch[0])+i] = i; // allocate input weights
-  
+
   for (int i = 0; i < nnarch[nlayers-1]; i++)
     for (int j = 0; j <= nnarch[nlayers-2]; j++)
-      wmap[nweights-1-j-i*(1+nnarch[nlayers-2])] = fNWPStr-i-1;  // allocate output weights   
-  
+      wmap[nweights-1-j-i*(1+nnarch[nlayers-2])] = fNWPStr-i-1;  // allocate output weights
+
   // Initialize strength vector
   fWPStrEst = new real*[fsettings.Get("fitting","basis").size()];
   for (int i = 0; i < fsettings.Get("fitting","basis").size(); i++)
-    {    
+    {
       fWPStrEst[i] = new real[fNWPStr];
       for(int j = 0; j < fNWPStr; j++)
         fWPStrEst[i][j] = 0.0;
     }
-      
+
   fWPStrSig = new real*[fsettings.Get("fitting","basis").size()];
   for (int i = 0; i < fsettings.Get("fitting","basis").size(); i++)
-    {    
+    {
       fWPStrSig[i] = new real[fNWPStr];
       for(int j = 0; j < fNWPStr; j++)
         fWPStrSig[i][j] = 0.0;
     }
-  
+
   // Read parameter files
   string tmp;
   real wtmp;
   int nrep = pdf->GetMembers();
-  real* sdtmp = new real[fNWPStr];  
+  real* sdtmp = new real[fNWPStr];
   for (int i = 0; i < nrep; i++)
   {
     stringstream targetfile;
     targetfile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << i+1 << "/" << fSettings.GetPDFName() << ".params";
     ifstream datafile;
     datafile.open(targetfile.str().c_str());
-      
+
     if (!datafile.good())
     {
       cerr << "PlotData::AddWPAnalysis Error: Cannot read params file from: "<<endl<<targetfile.str()<<endl;
       exit(-1);
     }
-    
+
     for (int j = 0; j < fsettings.Get("fitting","basis").size(); j++)
     {
       datafile >> tmp;
-      for (int l = 0; l < fNWPStr; l++) sdtmp[l] = 0; 
+      for (int l = 0; l < fNWPStr; l++) sdtmp[l] = 0;
       for (int k = 0; k < nweights; k++)
       {
         datafile >> wtmp;
@@ -2770,7 +2770,7 @@ void PlotData::AddWPAnalysis(LHAPDFSet *pdf)
     datafile.close();
   }
   delete[] sdtmp;
-  
+
   // Calculate strengths
   for (int i = 0; i < fsettings.Get("fitting","basis").size(); i++)
     {
@@ -2785,7 +2785,7 @@ void PlotData::AddWPAnalysis(LHAPDFSet *pdf)
         fWPStrEst[i][j] = 1.0/fWPStrEst[i][j];
         fWPStrSig[i][j] *= fWPStrEst[i][j]*fWPStrEst[i][j];
       }
-        
+
       // Hidden
       nw = nweights-nnarch[1]*nnarch[0]-(nnarch[nlayers-2]+1)*nnarch[nlayers-1];
       fWPStrEst[i][nnarch[0]] /= nrep*nw;
@@ -2793,7 +2793,7 @@ void PlotData::AddWPAnalysis(LHAPDFSet *pdf)
       fWPStrSig[i][nnarch[0]] -= fWPStrEst[i][nnarch[0]]*fWPStrEst[i][nnarch[0]];
       fWPStrSig[i][nnarch[0]] = sqrt(fWPStrSig[i][nnarch[0]]/nrep);
       fWPStrEst[i][nnarch[0]] = 1.0/fWPStrEst[i][nnarch[0]];
-      fWPStrSig[i][nnarch[0]] *= fWPStrEst[i][nnarch[0]]*fWPStrEst[i][nnarch[0]];      
+      fWPStrSig[i][nnarch[0]] *= fWPStrEst[i][nnarch[0]]*fWPStrEst[i][nnarch[0]];
 
       // Output
       nw = nnarch[nlayers-2]+1;
@@ -2807,7 +2807,7 @@ void PlotData::AddWPAnalysis(LHAPDFSet *pdf)
         fWPStrSig[i][j] *= fWPStrEst[i][j]*fWPStrEst[i][j];
       }
     }
-  
+
   // Clear memory
   delete[] nnarch;
   delete[] wmap;
@@ -2958,7 +2958,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
   real sigmanet = 0, sigmanetref = 0;
   real covnet = 0, covnetref = 0;
   real rhonet = 0, rhonetref = 0;
-  real chi2exps = 0, chi2expsref = 0;  
+  real chi2exps = 0, chi2expsref = 0;
   real chi2expscteq = 0, chi2expsmstw = 0;
   int dofexps = 0, dofexpsref = 0;
 
@@ -3019,9 +3019,9 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
   f << "\\hline" << endl;
   f << setprecision(5) << "$\\langle\\chi^{2(k)}\\rangle\\pm\\sigma_{\\chi^{2(k)}}$ & " << ComputeAVG(fSetAVGChi2) << "$\\pm$" << ComputeStdDev(fSetAVGChi2) << " & "
     << ComputeAVG(fSetRefAVGChi2) << "$\\pm$" << ComputeStdDev(fSetRefAVGChi2) << " \\tabularnewline" << endl;
-  f << "$\\phi \\pm \\sigma_{\\phi}$ & " << sqrt(ComputeAVG(fSetAVGChi2)-chi2exps) << "$\\pm$" 
+  f << "$\\phi \\pm \\sigma_{\\phi}$ & " << sqrt(ComputeAVG(fSetAVGChi2)-chi2exps) << "$\\pm$"
     << 2.0*sqrt(ComputeAVG(fSetAVGChi2)-chi2exps)*ComputeStdDev(fSetAVGChi2)/ComputeAVG(fSetAVGChi2)/sqrt(1.0*fSetAVGChi2.size()) << " & "
-    << sqrt(ComputeAVG(fSetRefAVGChi2)-chi2expsref) << "$\\pm$" 
+    << sqrt(ComputeAVG(fSetRefAVGChi2)-chi2expsref) << "$\\pm$"
     << 2.0*sqrt(ComputeAVG(fSetRefAVGChi2)-chi2expsref)*ComputeStdDev(fSetRefAVGChi2)/ComputeAVG(fSetRefAVGChi2)/sqrt(1.0*fSetRefAVGChi2.size()) << " \\tabularnewline" << endl;
   f << "\\hline" << endl;
   f << fixed << setprecision(2) << "$\\langle\\sigma^{\\text{(exp)}}\\rangle_{\\text{dat}}$ & " << sigmaexp << "\\% & " << sigmaexpref << "\\% \\tabularnewline" << endl;
@@ -3129,7 +3129,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
 
   cout << " - CV rule integral:" << endl;
   SumRules cv_ref(pdf2, fcminus, true);
-  
+
   cout << " - U+ momentum integral:" << endl;
   SumRules us_ref(pdf2, fusea, false);
 
@@ -3241,7 +3241,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
                 << "\\tt " << di->GetDataSet().GetSetName() << " & "
                 << " & "
                 << " & "
-                << " & " 
+                << " & "
                 << " & "
                 << dofset.str() << " & "
                 << fSettingsRef.GetSetInfo(di->GetDataSet().GetSetName()).tTrainingFraction << " & "
@@ -3328,7 +3328,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
   f << "\\end{figure}"<<endl;
 
   f << endl;
-  
+
   if(fSettings.Get("closuretest","fakedata").as<bool>())
   {
     f << "\\newpage{}" << endl;
@@ -3367,7 +3367,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
     f << fixed << setprecision(5) << "$(\\chi^{2}_{\\text{nnpdf,tot}} - \\chi^{2}_{\\text{fakeset,tot}})/\\chi^{2}_{\\text{fakeset,tot}} $ & "
       << fSF[0] << " & " <<  fSF[1] <<" \\tabularnewline" << endl;
     f << "Distance to theory & " << fAvgDist[0] << " & " << fAvgDist[1] << " \\tabularnewline" << endl;
-    f << "Absolute Distance to theory & " << fAvgAbsDist[0] << " & " << fAvgAbsDist[1] << " \\tabularnewline" << endl; 
+    f << "Absolute Distance to theory & " << fAvgAbsDist[0] << " & " << fAvgAbsDist[1] << " \\tabularnewline" << endl;
     f << "Fraction of replicas with 1$\\sigma$ of theory & "
       << fSigInt[0] << " & " << fSigInt[1] << " \\tabularnewline" <<  endl;
     f << "\\hline" << endl;
@@ -3379,7 +3379,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
     f << "\\vspace{3cm}" << endl;
     f << endl;
   }
-  
+
   if (fSettings.GetPlotting("plotarclengths").as<bool>())
   {
     f << "\\subsection{PDF Arc-Length}" << endl;
@@ -3394,14 +3394,14 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
     if(!fSettings.Get("closuretest","fakedata").as<bool>()) f << " The second plot is normalised to MSTW.";
     f << "}" << endl << "\\end{figure}" << endl;
     f << endl;
-  }    
+  }
 
   // PDF PLOTS SECTION
   f << "\\newpage{}" << endl;
   f << endl;
   f << "\\subsection{Comparing PDFs in evolution basis}" << endl;
   f << endl;
-  f << "\\begin{figure}[H]" << endl;  
+  f << "\\begin{figure}[H]" << endl;
 
   int nfl = max(fSettings.Get("fitting","basis").size(), fSettingsRef.Get("fitting","basis").size());
   if (fSettings.IsIC() || fSettingsRef.IsIC()) nfl = 9;
@@ -3616,7 +3616,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
           }
         }
     }
-  
+
   // Preprocessing comparison section
   if (fSettings.GetPlotting("preproc").as<bool>())
   {
@@ -3624,7 +3624,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
     f << endl;
     f << "\\section{Effective preprocessing exponents}" << endl;
     f << endl;
-    
+
     for (int a = 0; a < (int) fAlphaCanvas.size(); a++)
     {
       f << "\\begin{centering}" << endl;
@@ -3634,7 +3634,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
       << a <<"}"<< endl;
         f << "\\par\\end{centering}" << endl;
     }
-    
+
     f << "\\begin{table}[H]" << endl;
     f << "\\begin{centering}" << endl;
     f << "\\begin{tabular}{|c|c|c|c|c|c|}" << endl;
@@ -3648,21 +3648,21 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
       f << fPDFNames[i] << " & Alpha ($x^{\\alpha}$) & "
         << fSettings.Get("fitting","basis")[i]["smallx"][0] << " & " << fSettings.Get("fitting","basis")[i]["smallx"][1] << " & "
         << fNewAlphaDn[i]<< " & " << fNewAlphaUp[i] << "\\tabularnewline" << endl;
-      f << "\\cline{2-6}" << endl;   
+      f << "\\cline{2-6}" << endl;
       f << " & Beta ($(1-x)^{\\beta}$)& "
         << fSettings.Get("fitting","basis")[i]["largex"][0] << " & " << fSettings.Get("fitting","basis")[i]["largex"][1] << " & "
         << fNewBetaDn[i]<< " & " << fNewBetaUp[i] << "\\tabularnewline" << endl;
       f << "\\hline" << endl;
-    }     
+    }
     f << "\\end{tabular}" << endl;
     f << "\\par\\end{centering}" << endl;
 
     f << "\\caption{Current and new preprocessing exponents}" << endl;
     f << "\\end{table}" << endl;
-    
-    
+
+
     // Exponent scatter plots
-    
+
     f << "\\newpage{}" << endl;
     f << endl;
     f << "\\section{Fit exponent scatter plots}" << endl;
@@ -3681,13 +3681,13 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
       f << "\\par\\end{centering}" << endl;
     }
   }
-  
+
   /*
   if (fSettings.GetFitMethod() == MIN_WP)
   {
     f << "\\section{Weight Penalty}" << endl;
     f << endl;
-    
+
     f << "\\begin{table}[H]" << endl;
     f << "\\begin{centering}" << endl;
     f << "\\begin{tabular}{|c|c||c|c|c|c|}" << endl;
@@ -3705,32 +3705,32 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
         for (int j = 0; j < fNWPStr; j++)
           f << " & " << fSettingsRef.GetWPStrength(i,j);
         f << "\\tabularnewline" << endl;
-        f << "\\cline{2-6}" << endl;        
+        f << "\\cline{2-6}" << endl;
       }
       f << " & Current";
       for (int j = 0; j < fNWPStr; j++)
         f << " & " << fSettings.GetWPStrength(i,j);
       f << "\\tabularnewline" << endl;
       f << "\\cline{2-6}" << endl;
-      
+
       f << " & New";
       for (int j = 0; j < fNWPStr; j++)
         f << " & " << fWPStrEst[i][j];
-      f << "\\tabularnewline" << endl;         
+      f << "\\tabularnewline" << endl;
       f << "\\cline{2-6}" << endl;
-      
+
       f << " & Error";
       for (int j = 0; j < fNWPStr; j++)
         f << " & " << fWPStrSig[i][j];
-      f << "\\tabularnewline" << endl;         
-      f << "\\cline{2-6}" << endl; 
-           
-      f << " & Ratio"; 
+      f << "\\tabularnewline" << endl;
+      f << "\\cline{2-6}" << endl;
+
+      f << " & Ratio";
       for (int j = 0; j < fNWPStr; j++)
         f << " & \\textbf{" << fWPStrEst[i][j]/fSettings.GetWPStrength(i,j) << "}";
-      f << "\\tabularnewline" << endl;      
+      f << "\\tabularnewline" << endl;
       f << "\\hline" << endl;
-    }     
+    }
     f << "\\end{tabular}" << endl;
     f << "\\par\\end{centering}" << endl;
 
@@ -3828,7 +3828,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
 
           dofc  << fixed << c[i1]->GetDOF();
           chi2c << fixed << setprecision(5) << c[i1]->GetChi2Cent()/c[i1]->GetDOF();
-              
+
           if(!fSettings.Get("closuretest","fakedata").as<bool>())
           {
             dofd  << fixed << d[i1]->GetDOF();
@@ -3854,7 +3854,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
         << chi2c.str();
       if(!fSettings.Get("closuretest","fakedata").as<bool>()) f << " & " << chi2d.str();
       f << "\\tabularnewline" << endl;
-        
+
       bool sameset = true;
       if (oneset1 == true && i1 >= 0 && oneset2 == true && i2 >= 0)
         if (a[i1]->GetExperiment()->GetSetName(0) != b[i2]->GetExperiment()->GetSetName(0))
@@ -3870,15 +3870,15 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
               stringstream dofset("");
               stringstream chi2aSet("");
               stringstream chi2cSet("");
-              stringstream chi2dSet("");  
-                  
+              stringstream chi2dSet("");
+
               DataSetResult *di = a[i1]->GetSetResult(j);
               dofset << fixed << di->GetDOF();
               chi2aSet << fixed << setprecision(5) << di->GetChi2Cent()/di->GetDOF();
               chi2cSet << fixed << setprecision(5) << c[i1]->GetSetResult(j)->GetChi2Cent()/c[i1]->GetSetResult(j)->GetDOF();
               if(!fSettings.Get("closuretest","fakedata").as<bool>()) chi2dSet << fixed << setprecision(5) << d[i1]->GetSetResult(j)->GetChi2Cent()/d[i1]->GetSetResult(j)->GetDOF();
-                  
-              f << fixed << setprecision(5) 
+
+              f << fixed << setprecision(5)
                 << " & " << "\\tt " << di->GetDataSet().GetSetName() << " & "
                 << dofset.str() << " & "
                 << chi2aSet.str() << " & "
@@ -3895,11 +3895,11 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
             {
               stringstream dofset("");
               stringstream chi2bSet("");
-                
+
               DataSetResult *di = b[i2]->GetSetResult(j);
               dofset << fixed << di->GetDOF();
               chi2bSet << fixed << setprecision(5) << di->GetChi2Cent()/di->GetDOF();
-                  
+
               f << fixed << setprecision(5)
                 << " & " << "\\tt " << di->GetDataSet().GetSetName() << " & "
                 << dofset.str() << " & "
@@ -3922,7 +3922,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
 
               int j1 = z->GetIndexA(j);
               int j2 = z->GetIndexB(j);
-                
+
               if (j1 >= 0)
               {
                 dofset << fixed << a[i1]->GetSetResult(j1)->GetDOF();
@@ -3935,7 +3935,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
                 if (j1 < 0) dofset << fixed << b[i2]->GetSetResult(j2)->GetDOF();
                 chi2bSet << fixed << setprecision(5) << b[i2]->GetSetResult(j2)->GetChi2Cent()/b[i2]->GetSetResult(j2)->GetDOF();
               }
-               
+
               f << fixed << setprecision(5)
                 << " & " << "\\tt " << z->GetSetName()[j] << " & "
                 << dofset.str() << " & "
@@ -4267,12 +4267,12 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
       /*
       f << "\\multicolumn{2}{|c|}{\\textbf{Total (sets)}} & \\textbf{"
         << fixed << sigmadat << "\\%} & \\textbf{" << scientific << rhoexpdat << "} & \\textbf{" << covexpdat << "} & \\textbf{"
-        << fixed << sigmanetdat << "\\%} & \\textbf{" << scientific << rhonetdat << "} & \\textbf{" << covnetdat << "} \\tabularnewline" << endl;        
+        << fixed << sigmanetdat << "\\%} & \\textbf{" << scientific << rhonetdat << "} & \\textbf{" << covnetdat << "} \\tabularnewline" << endl;
       f << "\\hline" << endl;
       */
 
       f << "\\multicolumn{2}{|c|}{\\textbf{Total (exp)}} & "
-        << "\\textbf{" << fixed << setprecision(3) << sqrt(ComputeAVG(fSetAVGChi2)-chi2exps) << "} & \\textbf{" 
+        << "\\textbf{" << fixed << setprecision(3) << sqrt(ComputeAVG(fSetAVGChi2)-chi2exps) << "} & \\textbf{"
         << fixed << setprecision(2) << sigmaexp << "\\%} & \\textbf{" << scientific << rhoexp << "} & \\textbf{" << covexp << "} & \\textbf{"
         << fixed << sigmanet << "\\%} & \\textbf{" << scientific << rhonet << "} & \\textbf{" << covnet << "} \\tabularnewline" << endl;
 
@@ -4313,14 +4313,14 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
 
     }
 
-  f << "\\newpage{}" << endl;  
+  f << "\\newpage{}" << endl;
   f << "\\section{Configuration file of the training}" << endl;
 
   f << "{\\tiny\\tt " << endl;
   f << "\\lstinputlisting{../validphys.yml"<< endl;
   f << "}" << endl;
 
-  f << endl;  
+  f << endl;
 
   f << "\\newpage{}" << endl;
   f << "\\section{Theory Summary}" << endl;
@@ -4665,8 +4665,8 @@ fUseTheory(useTheory)
   real Q0 = sqrt(settings.GetPlotting("q2").as<real>());
   const real N1 = o->GetMembers();
   const real N2 = t->GetMembers();
-  
-  if(fUseTheory) 
+
+  if(fUseTheory)
   {
     Q0 = stod(settings.GetTheory(APFEL::kQ0));
     ymax = 5;
@@ -4725,7 +4725,7 @@ fUseTheory(useTheory)
       ofMom[i][j] = GetGpdfMoment(o, fXgrid[j],Q0,dPDFs[i],4);
     }
   }
-   
+
   // Second PDF
   real** tCV = new real*[PDFs];
   real** tVar = new real*[PDFs];
@@ -4758,11 +4758,11 @@ fUseTheory(useTheory)
         fVarDistance[i][j] = 0;
       }
       else
-      {        
+      {
         fDistance[i][j] = sqrt(pow(oCV[i][j] - tCV[i][j],2) / ( oVar[i][j]/N1 + tVar[i][j]/N2));
         fVarDistance[i][j] = sqrt(pow(oVar[i][j] - tVar[i][j],2) / ( sig1 + sig2 ));
       }
-      
+
       /*
       // partitioning
        const float PI = atan(1.0f) * 4.0f;
@@ -5016,7 +5016,7 @@ void Distances::PrintPlots(string const& outputfile)
 
   if(fUseTheory) c->SaveAs(TString(outputfile + "ct_distances_lha.eps"));
   else c->SaveAs(TString(outputfile + "distances_lha.eps"));
-  
+
   for (size_t i=0; i<graphs.size(); i++)
     delete graphs[i];
 
@@ -5228,7 +5228,7 @@ ArcLenght::ArcLenght(NNPDFSettings const& settings,vector<LHAPDFSet *> pdfset, s
   // Range for  integration
   const double xintmin=1e-7;
   const double xintmax=1.0;
-  
+
   // Set number of pdfs to use
   int nsets = 2; // for real data only plot current and reference
   if (settings.Get("closuretest","fakedata").as<bool>()) nsets = 3;
@@ -5287,15 +5287,15 @@ ArcLenght::ArcLenght(NNPDFSettings const& settings,vector<LHAPDFSet *> pdfset, s
           }
 
           cout << "PDF set = "<<pdfset[ipdfset]->GetSetName() << endl;
-          
+
           // if set is MSTW
           if(ipdfset == 3)
             {
               cout << "arclength_0 = " << mean << endl;
               mean_ref = mean;
-              cout <<"arclength_0 (norm) = "<<mean / mean_ref<< endl;          
+              cout <<"arclength_0 (norm) = "<<mean / mean_ref<< endl;
             }
-            
+
           // if set is fakeset
           if(ipdfset == 2 && settings.Get("closuretest","fakedata").as<bool>())
             {
@@ -5325,7 +5325,7 @@ ArcLenght::ArcLenght(NNPDFSettings const& settings,vector<LHAPDFSet *> pdfset, s
               g[ipdfset]->SetPointError(i,mean-lower,upper-mean,0,0);
 
               mean_nor = mean/mean_ref;
-              sigma_nor = sigma/mean_ref;              
+              sigma_nor = sigma/mean_ref;
               cout <<"<arclength> (norm) = "<<mean_nor<<" +- "<<sigma_nor<<" (1-sigma)"<< endl;
               upper /= mean_ref;
               lower /= mean_ref;
@@ -5412,7 +5412,7 @@ ArcLenght::ArcLenght(NNPDFSettings const& settings,vector<LHAPDFSet *> pdfset, s
   gnor[2]->SetMarkerColor(kBlack);
   gnor[2]->SetMarkerStyle(20);
   }
-  
+
   TMultiGraph *mgnor = new TMultiGraph();
   mgnor->SetTitle("PDF Normalized Arc-Length");
   if(settings.Get("closuretest","fakedata").as<bool>()) mgnor->Add(gnor[2],"p");
