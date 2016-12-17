@@ -46,7 +46,7 @@ if (COMPILE_validphys)
                            validphys/src/plotdata.cc
                            validphys/src/plotutils.cc)
   include_directories(validphys/inc)
-  target_link_libraries(validphys common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${ROOT_LIBRARIES})
+  target_link_libraries(validphys common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${ROOT_LIBRARIES} ${YAMLCPP_LIBRARIES})
 endif(COMPILE_validphys)
 
 # fkcheck
