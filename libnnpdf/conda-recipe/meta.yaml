@@ -9,10 +9,11 @@ requirements:
     build: 
         - python 
         - lhapdf
+        - toolchain # [osx] 
         - swig
         - sqlite
-        - gcc <5
-        - libgcc
+        - gcc <5 # [linux]
+        - libgcc # [linux]
         - gsl
         - numpy
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
@@ -22,7 +23,7 @@ requirements:
         - lhapdf
         - python 
         - sqlite
-        - libgcc
+        - libgcc # [linux]
         - gsl
         - numpy
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
