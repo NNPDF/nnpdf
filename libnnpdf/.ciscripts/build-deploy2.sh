@@ -1,9 +1,7 @@
 #/usr/bin/bash
 set -u
-set -o xtrace
 
 #Find conda
-source ~/.bashrc
 conda build -q $1
 if [ $? != 0 ]; then
 	echo failed to build

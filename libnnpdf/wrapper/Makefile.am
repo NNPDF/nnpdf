@@ -11,7 +11,7 @@ all:
 	mv src/*.cxx _sources
 
 install: all
-	$(PYEXT_ENV) $(PYTHON) setup.py install
+	$(PYEXT_ENV) $(PYTHON) setup.py install --single-version-externally-managed --record record.txt
 
 clean-local:
 	-rm -rf $(builddir)/_sources/
