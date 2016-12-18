@@ -1,5 +1,6 @@
 #/usr/bin/bash
 set -u
+set -v
 
 #Find conda
 conda build -q $1

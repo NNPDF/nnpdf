@@ -35,7 +35,6 @@ install:
       conda install --yes conda-build
 
 script:
-    - conda-build conda-recipe
-    #- ./.ciscripts/build-deploy2.sh conda-recipe
+    - ./.ciscripts/build-deploy2.sh conda-recipe
 
 
