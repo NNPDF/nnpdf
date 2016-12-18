@@ -12,7 +12,7 @@ import sys
 import argparse
 import shutil
 from subprocess import PIPE, Popen
-sys.path.append('../../tools/')
+sys.path.append('../tools/')
 import npyscreen
 
 modes = ['download','upload']
@@ -49,12 +49,10 @@ def upload(set):
     """
     try:
         os.system("tar -zcf " + set + ".tgz" + " --exclude=" + set +
-                  ".dat " + "../results/" + set + "/nnfit ../config/" + set + ".yml")
+                  ".dat " + "../results/" + set + "/nnfit ../config/" + set + ".yml" +
+                  " ../results/" + set + "/filter")
         os.system("scp " + set + ".tgz " + webpath)
         os.system("rm %s" % set + ".tgz")
-
-        # copy yaml to server
-        #os.system("scp ../config/" + set + ".yml " + webpath)
     except:
         raise
 
