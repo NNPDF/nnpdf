@@ -18,6 +18,7 @@ requirements:
         - numpy
         - automake
         - libtool
+        - pkg-config
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
         - nnpdf_use_double
         {% endif  %}
