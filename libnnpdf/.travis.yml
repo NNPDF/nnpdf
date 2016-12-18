@@ -7,8 +7,11 @@ os: osx
 osx_image: beta-xcode6.1
 
 env:
-  matrix:
+  global:
     - CONDA_PY=35
+    - CONDAPATH="/Users/travis/miniconda3"
+    - OUTPUT_ARCH=osx-64
+    - OUTPUT_CHANNEL=conda-pkgs-private
 
 
 before_install:
@@ -27,9 +30,9 @@ install:
       source /Users/travis/miniconda3/bin/activate root
       conda config --add channels conda-forge
       conda config --set show_channel_urls true
-      conda install --yes --quiet conda-forge-build-setup
-      source run_conda_forge_build_setup
+      conda install --yes conda-build
 
 script:
-  - conda build ./conda-recipe
+  - ./.ciscripts/build-deploy2.sh conda-recipe
+
 
