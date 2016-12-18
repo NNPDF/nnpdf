@@ -3,7 +3,7 @@ set -u
 set -v
 
 #Find conda
-conda build -q $1
+conda build $1
 if [ $? != 0 ]; then
 	echo failed to build
 	exit 1
