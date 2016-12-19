@@ -89,6 +89,10 @@ add_library(nnpdf SHARED src/common.cc
                          src/utils.cc
             )
 
-install(FILES scripts/nnpdf-config scripts/FKmerge scripts/FKselfmerge scripts/FKincrement DESTINATION bin PERMISSIONS WORLD_READ WORLD_EXECUTE)
+install(FILES ${PROJECT_BINARY_DIR}/scripts/nnpdf-config
+	${PROJECT_SOURCE_DIR}/scripts/FKmerge
+	${PROJECT_SOURCE_DIR}/scripts/FKselfmerge
+	${PROJECT_SOURCE_DIR}/scripts/FKincrement
+	DESTINATION bin PERMISSIONS WORLD_READ WORLD_EXECUTE)
 install(DIRECTORY src/NNPDF DESTINATION include)
 install(TARGETS nnpdf DESTINATION lib)
