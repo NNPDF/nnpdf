@@ -18,7 +18,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # export version to file
-set(VERSION "\"3.1\"")
+set(VERSION "\"1.1.1\"")
 configure_file(
   "${PROJECT_SOURCE_DIR}/src/NNPDF/config.h.in"
   "${PROJECT_BINARY_DIR}/src/NNPDF/config.h"
@@ -34,6 +34,9 @@ endif(NOT ENABLE_SAFEMODE)
 
 if(ENABLE_OPENMP)
   set(LIBNNPDF_HAVE_MPI "#define OPENMPI")
+  find_package(OpenMP REQUIRED)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif(ENABLE_OPENMP)
 
 configure_file(
@@ -43,6 +46,8 @@ configure_file(
 
 set(prefix ${CMAKE_INSTALL_PREFIX})
 set(exec_prefix "${prefix}")
+set(includedir "${prefix}/include")
+set(libdir "${prefix}/lib")
 configure_file(
   "${PROJECT_SOURCE_DIR}/scripts/nnpdf-config.in"
   "${PROJECT_BINARY_DIR}/scripts/nnpdf-config"
@@ -63,9 +68,11 @@ if (LHAPDF_CONFIG)
   set(LHAPDF_LIBRARIES ${LHAPDF_LIBRARIES} CACHE STRING INTERNAL)
 endif(LHAPDF_CONFIG)
 
-find_package(GSL)
+find_package(GSL REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_search_module(SQLITE3 REQUIRED sqlite3)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LHAPDF_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LHAPDF_CXX_FLAGS} ${SQLITE3_CFLAGS}")
 include_directories(src/NNPDF ${GSL_INCLUDE_DIRS})
 add_library(nnpdf SHARED src/common.cc
                          src/commondata.cc
@@ -86,8 +93,8 @@ add_library(nnpdf SHARED src/common.cc
                          src/positivity.cc
                          src/randomgenerator.cc
                          src/thpredictions.cc
-                         src/utils.cc
-            )
+                         src/utils.cc)
+target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LIBRARIES} ${SQLITE3_LDFLAGS})
 
 install(FILES ${PROJECT_BINARY_DIR}/scripts/nnpdf-config
 	${PROJECT_SOURCE_DIR}/scripts/FKmerge

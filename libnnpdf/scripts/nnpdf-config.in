@@ -35,7 +35,7 @@ tmp=$( echo "$*" | egrep -- '--\<libdir\>')
 test -n "$tmp" && OUT="$OUT @libdir@"
 
 tmp=$( echo "$*" | egrep -- '--\<ldflags\>')
-test -n "$tmp" && OUT="$OUT -L@libdir@ -lnnpdf -lgsl"
+test -n "$tmp" && OUT="$OUT -L@libdir@ -lnnpdf"
 
 tmp=$( echo "$*" | egrep -- '--\<safemode\>')
 
@@ -47,6 +47,6 @@ test -n "$tmp" && OUT="$OUT $a"
 
 ## Version
 tmp=$( echo "$*" | egrep -- '--\<version\>')
-test -n "$tmp" && OUT="$OUT @PACKAGE_VERSION@"
+test -n "$tmp" && OUT="$OUT @VERSION@"
 
 echo $OUT
