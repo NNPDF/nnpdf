@@ -22,7 +22,7 @@ set(VERSION "\"1.1.1\"")
 configure_file(
   "${PROJECT_SOURCE_DIR}/src/NNPDF/config.h.in"
   "${PROJECT_SOURCE_DIR}/src/NNPDF/config.h"
-)
+  )
 
 option(ENABLE_SAFEMODE "Enable double precision for apfelcomb." OFF)
 option(ENABLE_OPENMP "Enable openmp parallelism." OFF)
@@ -218,7 +218,7 @@ configure_file(
 set(wrappersrc "${PROJECT_SOURCE_DIR}/wrapper/src")
 configure_file(
   "${PROJECT_SOURCE_DIR}/wrapper/setup.py.in"
-  "${PROJECT_SOURCE_DIR}/wrapper/setup.py"
+  "${PROJECT_BINARY_DIR}/wrapper/setup.py"
 )
 
 set(prefix ${CMAKE_INSTALL_PREFIX})
@@ -227,7 +227,11 @@ set(includedir "${prefix}/include")
 set(libdir "${prefix}/lib")
 configure_file(
   "${PROJECT_SOURCE_DIR}/scripts/nnpdf-config.in"
-  "${PROJECT_BINARY_DIR}/scripts/nnpdf-config"
+  "${PROJECT_SOURCE_DIR}/scripts/nnpdf-config"
+)
+configure_file(
+  "${PROJECT_SOURCE_DIR}/scripts/nnpdf.pc.in"
+  "${PROJECT_SOURCE_DIR}/scripts/nnpdf.pc"
 )
 
 # LHAPDF
@@ -273,11 +277,12 @@ add_library(nnpdf SHARED src/common.cc
                          src/utils.cc)
 target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${SQLITE3_LDFLAGS})
 
-install(FILES ${PROJECT_BINARY_DIR}/scripts/nnpdf-config
+install(FILES ${PROJECT_SOURCE_DIR}/scripts/nnpdf-config
 	${PROJECT_SOURCE_DIR}/scripts/FKmerge
 	${PROJECT_SOURCE_DIR}/scripts/FKselfmerge
 	${PROJECT_SOURCE_DIR}/scripts/FKincrement
 	DESTINATION bin PERMISSIONS WORLD_READ WORLD_EXECUTE)
+install(FILES ${PROJECT_SOURCE_DIR}/scripts/nnpdf.pc DESTINATION lib/pkgconfig)
 install(DIRECTORY src/NNPDF DESTINATION include)
 install(TARGETS nnpdf DESTINATION lib)
 

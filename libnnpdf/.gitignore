@@ -3,8 +3,6 @@
 Makefile
 nnpdfcpp.*
 */Makefile
-src/NNPDF/common.h
-src/NNPDF/config.h
 scripts/nnpdf-config
 
 # Compiled Object files
