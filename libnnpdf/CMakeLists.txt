@@ -206,6 +206,11 @@ if(ENABLE_OPENMP)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif(ENABLE_OPENMP)
 
+configure_file(
+  "${PROJECT_SOURCE_DIR}/src/NNPDF/common.h.in"
+  "${PROJECT_BINARY_DIR}/src/NNPDF/common.h"
+)
+
 set(wrappersrc "${PROJECT_SOURCE_DIR}/wrapper/src")
 configure_file(
   "${PROJECT_SOURCE_DIR}/wrapper/setup.py.in"
