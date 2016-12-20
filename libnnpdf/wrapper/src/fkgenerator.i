@@ -1,7 +1,7 @@
 %module(package="NNPDF") fkgenerator
  %{
-#include "../../src/NNPDF/exceptions.h"
-#include "../../src/NNPDF/fkgenerator.h"
+#include "NNPDF/exceptions.h"
+#include "NNPDF/fkgenerator.h"
  %}
 
 %include "std_string.i" 
@@ -15,4 +15,4 @@
 
 %include "include/excepthandler.i"
 
-%include "../../src/NNPDF/fkgenerator.h"
+%include "NNPDF/fkgenerator.h"

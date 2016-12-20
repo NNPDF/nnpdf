@@ -1,8 +1,8 @@
 %module(package="NNPDF") lhapdfset
  %{
 #define SWIG_FILE_WITH_INIT
-#include "../../src/NNPDF/exceptions.h"
-#include "../../src/NNPDF/lhapdfset.h"
+#include "NNPDF/exceptions.h"
+#include "NNPDF/lhapdfset.h"
 #include "LHAPDF/LHAPDF.h"
  %}
 
@@ -37,7 +37,7 @@ int* nq_out)}
 %include "include/excepthandler.i"
 %include "include/real_typemap.i"
 
-%include "../../src/NNPDF/lhapdfset.h"
+%include "NNPDF/lhapdfset.h"
 
 namespace LHAPDF{
     int verbosity();

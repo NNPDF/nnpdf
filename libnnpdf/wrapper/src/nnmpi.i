@@ -1,7 +1,7 @@
 %module(package="NNPDF") nnmpi
  %{
-#include "../../src/NNPDF/exceptions.h"
-#include "../../src/NNPDF/nnmpi.h"
+#include "NNPDF/exceptions.h"
+#include "NNPDF/nnmpi.h"
  %}
 
 %include "std_string.i" 
@@ -13,4 +13,4 @@
 
 %include "include/excepthandler.i"
 
-%include "../../src/NNPDF/nnmpi.h"
+%include "NNPDF/nnmpi.h"

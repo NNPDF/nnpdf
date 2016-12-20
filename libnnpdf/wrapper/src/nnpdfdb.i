@@ -1,7 +1,7 @@
 %module(package="NNPDF") nnpdfdb
  %{
-#include "../../src/NNPDF/exceptions.h"
-#include "../../src/NNPDF/nnpdfdb.h"
+#include "NNPDF/exceptions.h"
+#include "NNPDF/nnpdfdb.h"
  %}
 
 %include "std_string.i" 
@@ -16,4 +16,4 @@
 %include "include/excepthandler.i"
 %template(map_string_string) std::map<std::string,std::string>;
 
-%include "../../src/NNPDF/nnpdfdb.h"
+%include "NNPDF/nnpdfdb.h"

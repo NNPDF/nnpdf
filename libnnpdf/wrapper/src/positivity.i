@@ -1,8 +1,8 @@
 %module(package="NNPDF") positivity
  %{
 #define SWIG_FILE_WITH_INIT
-#include "../../src/NNPDF/exceptions.h"
-#include "../../src/NNPDF/positivity.h"
+#include "NNPDF/exceptions.h"
+#include "NNPDF/positivity.h"
  %}
 %include typemaps.i
 %include "std_string.i" 
@@ -33,4 +33,4 @@
 %apply (NNPDF::real** ARGOUTVIEWM_ARRAY2, int* DIM1, int* DIM2)\
 {(NNPDF::real** result, int* npdf, int* ndata)}
 
-%include "../../src/NNPDF/positivity.h"
+%include "NNPDF/positivity.h"

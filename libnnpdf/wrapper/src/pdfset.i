@@ -1,7 +1,7 @@
 %module(package="NNPDF") pdfset
  %{
-#include "../../src/NNPDF/exceptions.h"
-#include "../../src/NNPDF/pdfset.h"
+#include "NNPDF/exceptions.h"
+#include "NNPDF/pdfset.h"
  %}
 
 %include "std_string.i" 
@@ -14,4 +14,4 @@
 
 %include "include/excepthandler.i"
 
-%include "../../src/NNPDF/pdfset.h"
+%include "NNPDF/pdfset.h"

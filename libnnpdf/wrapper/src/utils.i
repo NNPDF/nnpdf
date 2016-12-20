@@ -1,7 +1,7 @@
 %module(package="NNPDF") utils
  %{
-#include "../../src/NNPDF/exceptions.h"
-#include "../../src/NNPDF/utils.h"
+#include "NNPDF/exceptions.h"
+#include "NNPDF/utils.h"
  %}
 
 %include "std_string.i" 
@@ -15,4 +15,4 @@
 
 %include "include/excepthandler.i"
 
-%include "../../src/NNPDF/utils.h"
+%include "NNPDF/utils.h"
