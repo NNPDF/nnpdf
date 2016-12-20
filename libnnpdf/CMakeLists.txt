@@ -21,7 +21,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(VERSION "\"1.1.1\"")
 configure_file(
   "${PROJECT_SOURCE_DIR}/src/NNPDF/config.h.in"
-  "${PROJECT_BINARY_DIR}/src/NNPDF/config.h"
+  "${PROJECT_SOURCE_DIR}/src/NNPDF/config.h"
 )
 
 option(ENABLE_SAFEMODE "Enable double precision for apfelcomb." OFF)
@@ -212,13 +212,13 @@ endif(ENABLE_OPENMP)
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/src/NNPDF/common.h.in"
-  "${PROJECT_BINARY_DIR}/src/NNPDF/common.h"
+  "${PROJECT_SOURCE_DIR}/src/NNPDF/common.h"
 )
 
 set(wrappersrc "${PROJECT_SOURCE_DIR}/wrapper/src")
 configure_file(
   "${PROJECT_SOURCE_DIR}/wrapper/setup.py.in"
-  "${PROJECT_BINARY_DIR}/wrapper/setup.py"
+  "${PROJECT_SOURCE_DIR}/wrapper/setup.py"
 )
 
 set(prefix ${CMAKE_INSTALL_PREFIX})
@@ -245,11 +245,11 @@ if (LHAPDF_CONFIG)
   set(LHAPDF_LIBRARIES ${LHAPDF_LIBRARIES} CACHE STRING INTERNAL)
 endif(LHAPDF_CONFIG)
 
-find_package(GSL REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_search_module(SQLITE3 REQUIRED sqlite3)
+pkg_search_module(GSL REQUIRED gsl)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LHAPDF_CXX_FLAGS} ${SQLITE3_CFLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LHAPDF_CXX_FLAGS} ${SQLITE3_CFLAGS} ${GSL_CFLAGS} -std=c++11")
 include_directories(src/NNPDF ${GSL_INCLUDE_DIRS})
 add_library(nnpdf SHARED src/common.cc
                          src/commondata.cc
@@ -271,7 +271,7 @@ add_library(nnpdf SHARED src/common.cc
                          src/randomgenerator.cc
                          src/thpredictions.cc
                          src/utils.cc)
-target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LIBRARIES} ${SQLITE3_LDFLAGS})
+target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${SQLITE3_LDFLAGS})
 
 install(FILES ${PROJECT_BINARY_DIR}/scripts/nnpdf-config
 	${PROJECT_SOURCE_DIR}/scripts/FKmerge
