@@ -26,7 +26,7 @@ configure_file(
 
 option(ENABLE_SAFEMODE "Enable double precision for apfelcomb." OFF)
 option(ENABLE_OPENMP "Enable openmp parallelism." OFF)
-option(ENABLE_PYWRAP "Enable python wrapper building" ON)
+option(ENABLE_PYWRAP "Enable python wrapper building" OFF)
 
 if(NOT ENABLE_SAFEMODE)
   set(LIBNNPDF_HAVE_SSE "#define SSE_CONV")
