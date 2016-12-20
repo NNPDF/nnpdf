@@ -26,7 +26,12 @@ configure_file(
 
 option(ENABLE_SAFEMODE "Enable double precision for apfelcomb." OFF)
 option(ENABLE_OPENMP "Enable openmp parallelism." OFF)
+option(ENABLE_OPENMPI "Enable openMPI parallelism." OFF)
 option(ENABLE_PYWRAP "Enable python wrapper building" OFF)
+
+if (ENABLE_OPENMPI)
+  set(LIBNNPDF_HAVE_MPI "#define OPENMPI")
+endif()
 
 if(NOT ENABLE_SAFEMODE)
   set(LIBNNPDF_HAVE_SSE "#define SSE_CONV")
@@ -200,7 +205,6 @@ if(NOT ENABLE_SAFEMODE)
 endif(NOT ENABLE_SAFEMODE)
 
 if(ENABLE_OPENMP)
-  set(LIBNNPDF_HAVE_MPI "#define OPENMPI")
   find_package(OpenMP REQUIRED)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
@@ -245,7 +249,7 @@ find_package(GSL REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_search_module(SQLITE3 REQUIRED sqlite3)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LHAPDF_CXX_FLAGS} ${SQLITE3_CFLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LHAPDF_CXX_FLAGS} ${SQLITE3_CFLAGS} -std=c++11")
 include_directories(src/NNPDF ${GSL_INCLUDE_DIRS})
 add_library(nnpdf SHARED src/common.cc
                          src/commondata.cc
