@@ -180,16 +180,16 @@ if(NOT ENABLE_SAFEMODE)
 
   if(AVX2_FOUND)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx2")
-  endif()    
+  endif()
   if(AVX_FOUND)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx")
-  endif()   
+  endif()
   if(SSE4_1_FOUND)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse4.1")
-  endif()    
+  endif()
   if(SSSE3_FOUND)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mssse3")
-  endif()    
+  endif()
   if(SSE3_FOUND)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse3")
   endif()
@@ -206,6 +206,7 @@ if(ENABLE_OPENMP)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif(ENABLE_OPENMP)
 
+set(wrappersrc "${PROJECT_SOURCE_DIR}/wrapper/src")
 configure_file(
   "${PROJECT_SOURCE_DIR}/wrapper/setup.py.in"
   "${PROJECT_BINARY_DIR}/wrapper/setup.py"
@@ -270,3 +271,7 @@ install(FILES ${PROJECT_BINARY_DIR}/scripts/nnpdf-config
 	DESTINATION bin PERMISSIONS WORLD_READ WORLD_EXECUTE)
 install(DIRECTORY src/NNPDF DESTINATION include)
 install(TARGETS nnpdf DESTINATION lib)
+
+if(ENABLE_PYWRAP)
+  add_subdirectory(wrapper)
+endif()

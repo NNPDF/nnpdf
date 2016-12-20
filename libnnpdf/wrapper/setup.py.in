@@ -38,7 +38,7 @@ if platform.system() == 'Darwin':
     extra_compile_args += ['-mmacosx-version-min=%s' % mac_ver]
     extra_link_args += ['-mmacosx-version-min=%s' % mac_ver]
 
-interfaces = glob.glob1("src/", "*.i")
+interfaces = glob.glob1("@wrappersrc@", "*.i")
 names = [i[:-2] for i in interfaces]
 sources = ["_sources/%s_wrap.cxx"%n for n  in names]
 
@@ -46,11 +46,11 @@ ext_modules = [Extension('NNPDF._' + name,
                     extra_compile_args = extra_compile_args ,
                     extra_link_args = extra_link_args,
                     include_dirs = [numpy_include_dir],
-                    sources = [source], language="c++") 
+                    sources = [source], language="c++")
                     for name,source in zip(names, sources) ]
 
 setup (name = 'NNPDF',
-       version = '@VERSION@',
+       version = @VERSION@,
        description = "PDFs for phenomenology",
        author = 'NNPDF Collaboration',
        author_email = 'kassabov@to.infn.it',
