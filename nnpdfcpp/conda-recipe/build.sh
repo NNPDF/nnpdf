@@ -1,3 +1,3 @@
 #!/bin/bash
-cmake .
+cmake . -DCOMPILE_validphys=OFF
 make -j${CPU_COUNT}

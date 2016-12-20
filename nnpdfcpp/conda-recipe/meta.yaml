@@ -8,13 +8,16 @@ source:
 requirements:
     build: 
         - libnnpdf
-        - patchelf
-        - gcc
-        - libgcc
+        - gcc # [linux]
+        - isl # [linux]
         - yaml-cpp
+        - cmake
+        - apfel
+        - pkg-config
     run:
         - libnnpdf
-        - libgcc
+        - apfel
+        - libgcc # [linux]
         - yaml-cpp
 
 build:
