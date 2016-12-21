@@ -9,12 +9,14 @@ requirements:
     build: 
         - python 
         - lhapdf
+        - toolchain # [osx] 
         - swig
         - sqlite
-        - gcc <5
-        - libgcc
+        - gcc <5 # [linux]
+        - libgcc # [linux]
         - gsl
         - numpy
+        - pkg-config
         - cmake
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
         - nnpdf_use_double
@@ -23,7 +25,7 @@ requirements:
         - lhapdf
         - python 
         - sqlite
-        - libgcc
+        - libgcc # [linux]
         - gsl
         - numpy
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
@@ -33,12 +35,6 @@ requirements:
 build:
     number: 0
     detect_binary_files_with_prefix: True
-    {% if environ.get("NNPDF_USE_DOUBLE", False) %}
-    features:
-        - nnpdf_use_double
-    {% endif  %}
-    script_env:
-        - NNPDF_USE_DOUBLE
 
 test:
     commands:
