@@ -1,7 +1,8 @@
 #!/bin/bash
 mkdir build
 cd build
-cmake ../
+cmake ../ -DENABLE_PYWRAP=on
 make
 make install
+
 make wrapper
