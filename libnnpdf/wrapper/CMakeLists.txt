@@ -1,10 +1,13 @@
 
-find_package(SWIG REQUIRED)
+find_program(SWIG swig)
 find_package(PythonInterp 3 REQUIRED)
-
+if(NOT SWIG)
+	message(FATAL_ERROR "swig not found!")
+endif()
+message("-- Found swig: ${SWIG}")
 add_custom_target(wrapper COMMAND mkdir -p ${PROJECT_BINARY_DIR}/wrapper/pylibs/NNPDF
   COMMAND cp ${PROJECT_SOURCE_DIR}/wrapper/src/*.py ${PROJECT_BINARY_DIR}/wrapper/pylibs/NNPDF/
-  COMMAND find ${PROJECT_SOURCE_DIR}/wrapper/src -maxdepth 1 -name "*.i" -print0 | xargs -0 -I {} ${SWIG_EXECUTABLE} -c++ -outdir ${PROJECT_BINARY_DIR}/wrapper/pylibs/NNPDF -python -py3 -I${PROJECT_SOURCE_DIR}/src {}
+  COMMAND find ${PROJECT_SOURCE_DIR}/wrapper/src -maxdepth 1 -name "*.i" -print0 | xargs -0 -I {} ${SWIG} -c++ -outdir ${PROJECT_BINARY_DIR}/wrapper/pylibs/NNPDF -python -py3 -I${PROJECT_SOURCE_DIR}/src {}
   COMMAND mkdir -p ${PROJECT_BINARY_DIR}/wrapper/_sources
   COMMAND mv ${PROJECT_SOURCE_DIR}/wrapper/src/*.cxx ${PROJECT_BINARY_DIR}/wrapper/_sources
   COMMAND ${PYTHON_EXECUTABLE} ${PROJECT_BINARY_DIR}/wrapper/setup.py install
