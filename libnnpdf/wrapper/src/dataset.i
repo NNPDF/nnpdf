@@ -1,8 +1,8 @@
 %module(package="NNPDF") dataset
  %{
 #define SWIG_FILE_WITH_INIT
-#include "../../src/NNPDF/exceptions.h"
-#include "../../src/NNPDF/dataset.h"
+#include "NNPDF/exceptions.h"
+#include "NNPDF/dataset.h"
  %}
 
 %include "std_string.i" 
@@ -32,7 +32,7 @@
 %ignore NNPDF::swap;
 %ignore NNPDF::DataSet::operator=;
 %ignore NNPDF::DataSet::DataSet(DataSet &&);
-%include "../../src/NNPDF/dataset.h"
+%include "NNPDF/dataset.h"
 
 %feature("docstring") NNPDF::DataSet::get_covmat
 "Return a copy of the experiment covariance matrix."

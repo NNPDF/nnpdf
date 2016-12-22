@@ -1,7 +1,7 @@
 %module(package="NNPDF") common
  %{
-#include "../../src/NNPDF/exceptions.h"
-#include "../../src/NNPDF/common.h"
+#include "NNPDF/exceptions.h"
+#include "NNPDF/common.h"
  %}
 
 %include "std_string.i" 
@@ -13,7 +13,7 @@
 
 %include "include/excepthandler.i"
 
-%include "../../src/NNPDF/common.h"
+%include "NNPDF/common.h"
 
 /* We define often used templates here to avoid name conflicts */
 %template(vector_str) std::vector<std::string>;

@@ -1,7 +1,7 @@
 %module(package="NNPDF") randomgenerator
  %{
-#include "../../src/NNPDF/exceptions.h"
-#include "../../src/NNPDF/randomgenerator.h"
+#include "NNPDF/exceptions.h"
+#include "NNPDF/randomgenerator.h"
  %}
 
 %include "std_string.i" 
@@ -13,4 +13,4 @@
 
 %include "include/excepthandler.i"
 
-%include "../../src/NNPDF/randomgenerator.h"
+%include "NNPDF/randomgenerator.h"

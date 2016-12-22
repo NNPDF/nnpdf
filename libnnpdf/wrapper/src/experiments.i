@@ -1,13 +1,13 @@
 %module(package="NNPDF") experiments
  %{
 #define SWIG_FILE_WITH_INIT
-#include "../../src/NNPDF/exceptions.h"
-#include "../../src/NNPDF/experiments.h"
+#include "NNPDF/exceptions.h"
+#include "NNPDF/experiments.h"
 /*This needs to be here because we need to
  * be able to access the full definition of ThPredictions at compile
  * time. For some reason, an %import doesn't do the trick.
  */
-#include "../../src/NNPDF/thpredictions.h"
+#include "NNPDF/thpredictions.h"
  %}
 
 %include "std_string.i" 
@@ -41,7 +41,7 @@
 
 %include "include/excepthandler.i"
 
-%include "../../src/NNPDF/experiments.h"
+%include "NNPDF/experiments.h"
 
 %feature("docstring") NNPDF::Experiment::get_covmat
 "Return a copy of the experiment covariance matrix."

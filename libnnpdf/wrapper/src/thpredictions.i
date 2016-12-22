@@ -1,8 +1,8 @@
 %module(package="NNPDF") thpredictions
  %{
 #define SWIG_FILE_WITH_INIT
-#include "../../src/NNPDF/exceptions.h"
-#include "../../src/NNPDF/thpredictions.h"
+#include "NNPDF/exceptions.h"
+#include "NNPDF/thpredictions.h"
  %}
 
 /*This must be included BEFORE anyrhing from the lib*/
@@ -32,7 +32,7 @@
 %ignore NNPDF::swap;
 %ignore NNPDF::ThPredictions::operator=;
 %ignore NNPDF::ThPredictions::ThPredictions(ThPredictions &&);
-%include "../../src/NNPDF/thpredictions.h"
+%include "NNPDF/thpredictions.h"
 
 %extend NNPDF::ThPredictions{
 

@@ -16,9 +16,8 @@ requirements:
         - libgcc # [linux]
         - gsl
         - numpy
-        - automake
-        - libtool
         - pkg-config
+        - cmake
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
         - nnpdf_use_double
         {% endif  %}

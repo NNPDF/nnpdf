@@ -1,8 +1,8 @@
 %module(package="NNPDF") commondata
  %{
 #define SWIG_FILE_WITH_INIT
-#include "../../src/NNPDF/exceptions.h"
-#include "../../src/NNPDF/commondata.h"
+#include "NNPDF/exceptions.h"
+#include "NNPDF/commondata.h"
  %}
 
 %include "std_string.i" 
@@ -28,7 +28,7 @@
 %ignore NNPDF::swap;
 %ignore NNPDF::CommonData::operator=;
 %ignore NNPDF::CommonData::CommonData(CommonData &&);
-%include "../../src/NNPDF/commondata.h"
+%include "NNPDF/commondata.h"
 
 %extend NNPDF::CommonData{
 

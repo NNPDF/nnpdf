@@ -1,7 +1,7 @@
 %module(package="NNPDF") logger
  %{
-#include "../../src/NNPDF/exceptions.h"
-#include "../../src/NNPDF/logger.h"
+#include "NNPDF/exceptions.h"
+#include "NNPDF/logger.h"
  %}
 
 %include "std_string.i" 
@@ -13,4 +13,4 @@
 
 %include "include/excepthandler.i"
 
-%include "../../src/NNPDF/logger.h"
+%include "NNPDF/logger.h"

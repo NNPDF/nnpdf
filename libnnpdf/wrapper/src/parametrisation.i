@@ -1,7 +1,7 @@
 %module(package="NNPDF") parametrisation
  %{
-#include "../../src/NNPDF/exceptions.h"
-#include "../../src/NNPDF/parametrisation.h"
+#include "NNPDF/exceptions.h"
+#include "NNPDF/parametrisation.h"
  %}
 
 %include "std_string.i" 
@@ -14,4 +14,4 @@
 
 %include "include/excepthandler.i"
 
-%include "../../src/NNPDF/parametrisation.h"
+%include "NNPDF/parametrisation.h"
