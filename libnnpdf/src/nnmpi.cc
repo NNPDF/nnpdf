@@ -19,6 +19,8 @@ using namespace NNPDF;
 #endif
 #endif
 
+#define UNUSED(expr) (void)(expr)
+
 namespace NNPDF {
 
 #ifdef SSE_CONV
@@ -79,7 +81,7 @@ namespace NNPDF {
       }
     MPI_Finalize();
 #endif
-  }  
+  }
 
   void MPI::Init()
   {
@@ -103,6 +105,11 @@ namespace NNPDF {
     *subdomain_size = domain_size / getInstance()->fnumbertasks;
     if (taskid == getInstance()->fnumbertasks - 1)
       *subdomain_size += domain_size % getInstance()->fnumbertasks;
+#else
+  UNUSED(domain_size);
+  UNUSED(taskid);
+  UNUSED(subdomain_start);
+  UNUSED(subdomain_size);
 #endif
   }
 
@@ -172,6 +179,13 @@ namespace NNPDF {
 
         //printf("Sent %d elements to task %d offset= %d\n",chunksize,d,offset);
       }
+#else
+  UNUSED(NData);
+  UNUSED(Npdf);
+  UNUSED(Dsz);
+  UNUSED(theory);
+  UNUSED(pdf);
+  UNUSED(sigma);
 #endif
   }
 
@@ -185,6 +199,10 @@ namespace NNPDF {
         MPI::DecomposeDomain(NData, d, &offset, &chunksize);
         MPI_Recv(&theory[offset*Npdf], chunksize*Npdf, NNMPI_REAL, d, 0, MPI_COMM_WORLD, &status);
       }
+#else
+  UNUSED(NData);
+  UNUSED(Npdf);
+  UNUSED(theory);
 #endif
   }
 
