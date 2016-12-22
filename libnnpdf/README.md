@@ -5,7 +5,9 @@ Libary for core NNPDF utilities.
 
 Possible configurations:
 ```Shell
-cmake .
+mkdir build
+cd build
+cmake ..
 ```
 or
 ```Shell
@@ -21,9 +23,17 @@ ENABLE_OPENMPI
 ENABLE_PYWRAP
 ENABLE_SAFEMODE
 ```
+
+On the command line, options are controlled appending a `-D` flag. For
+example:
+
+```
+cmake .. -DENABLE_PYWRAP=on
+```
+
 Activate python wrapper set ENABLE_PYWRAP=ON, then compile with:
 ```Shell
 make wrapper
 make wrapper-clean
 ```
-install the libnnpdf and then make wrapper
+install the libnnpdf and then make wrapper.
