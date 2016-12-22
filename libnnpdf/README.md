@@ -5,11 +5,9 @@ Libary for core NNPDF utilities.
 
 Possible configurations:
 ```Shell
-mkdir build
-cd build
-cmake ..
+cmake .
 ```
-or
+or (recommended):
 ```Shell
 mkdir build
 cd build
