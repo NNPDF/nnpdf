@@ -30,7 +30,7 @@ cmake .. -DENABLE_PYWRAP=on
 ```
 
 To compile the Python wrappers, set ENABLE_PYWRAP=ON as above, and
-then compile with, after linnnpdf is installed:
+after libnnpdf is installed, then compile with:
 ```Shell
 make wrapper
 make wrapper-clean
