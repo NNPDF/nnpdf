@@ -392,7 +392,7 @@ def _all_chi2(results):
     return _calc_chi2(sqrtcov=data_result.sqrtcovmat, diffs=diffs)
 
 
-Chi2Data = namedtuple('Chi2data', ('replica_result', 'central_result', 'ndata'))
+Chi2Data = namedtuple('Chi2Data', ('replica_result', 'central_result', 'ndata'))
 
 def abs_chi2_data(results):
     """Return a tuple (member_chi², central_chi², numpoints)"""
