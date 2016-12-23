@@ -19,6 +19,11 @@ Train-valid split
 
 {@ plot_training_validation @}
 
+$Chi2$
+-------
+
+{@ theory::pdfs experiments_chi2_table @}
+
 Experiment plots
 ---------------
 

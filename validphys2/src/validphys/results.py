@@ -4,6 +4,8 @@ Created on Wed Mar  9 15:19:52 2016
 
 @author: Zahari Kassabov
 """
+from __future__ import generator_stop
+
 from collections import OrderedDict, namedtuple, Sequence
 import itertools
 import logging
@@ -16,6 +18,7 @@ from NNPDF import ThPredictions, CommonData
 from NNPDF.experiments import Experiment
 from reportengine.checks import require_one, remove_outer
 from reportengine.table import table
+from reportengine import collect
 
 from validphys.checks import make_check, CheckError
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
@@ -308,31 +311,6 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
 
     return df
 
-#TODO: don't do computations here
-@table
-def experiment_chi2_table(experiments, pdf):
-    """Export the chi² for experiments and datasets. This is experimnetal."""
-
-    records = []
-    for experiment in experiments:
-
-        #TODO: This is probably computed somewhere else....
-        r = data, theory = results(experiment, pdf)
-        data = abs_chi2_data(r)
-        stats = chi2_stats(data)
-        stats['experiment'] = experiment.name
-        records.append(stats)
-
-        for dataset in experiment:
-            r = data, theory = results(dataset, pdf)
-            data = abs_chi2_data(r)
-            stats = chi2_stats(data)
-            stats['experiment'] = dataset.name
-            records.append(stats)
-    return pd.DataFrame(records)
-
-
-
 
 def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None):
     """Tuple of data and theory results for a single pdf.
@@ -350,6 +328,9 @@ def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None):
 
     return DataResult(data), ThPredictionsResult.from_convolution(pdf, dataset,
                                                  loaded_data=data)
+
+def experiment_results(experiment, pdf:PDF, t0set:(PDF, type(None))=None):
+    return results(experiment, pdf, t0set)
 
 #It's better to duplicate a few lines than to complicate the logic of
 #``results`` to support this.
@@ -422,10 +403,28 @@ def abs_chi2_data(results):
     return Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]),
                     central_result, len(data_result))
 
+def abs_chi2_data_experiment(experiment_results):
+    return abs_chi2_data(experiment_results)
+
 def _chs_per_replica(chs):
     th, _, l = chs
     return th.data.ravel()/l
 
+
+@table
+def experiments_chi2_table(experiments, pdf, experiments_chi2,
+                           each_dataset_chi2):
+    dschi2 = iter(each_dataset_chi2)
+    records = []
+    for experiment, expres in zip(experiments, experiments_chi2):
+        stats = chi2_stats(expres)
+        stats['experiment'] = experiment.name
+        records.append(stats)
+        for dataset, dsres in zip(experiment, dschi2):
+            stats = chi2_stats(dsres)
+            stats['experiment'] = dataset.name
+            records.append(stats)
+    return pd.DataFrame(records)
 
 @table
 def correlate_bad_experiments(experiments, replica_data, pdf):
@@ -549,3 +548,9 @@ def chi2_stats(abs_chi2_data):
             ('perreplica_mean', rep_mean),
             ('perreplica_std',  rep_data.std_error().mean()),
            ])
+
+experiments_results = collect(experiment_results, ('experiments',))
+each_dataset_results = collect(results, ('experiments', 'experiment'))
+
+experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
+each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
