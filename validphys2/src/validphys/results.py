@@ -377,7 +377,10 @@ def _calc_chi2(sqrtcov, diffs):
     """Elementary function to compute the chi², given a Cholesky decomposed
     lower triangular part and a vector of differences"""
     #Note la.cho_solve doesn't really improve things here
-    vec = la.solve_triangular(sqrtcov, diffs, lower=True)
+    #NOTE: Do not enable check_finite. The upper triangular part is not
+    #guaranteed to make any sense. If this causes a problem, it is a bug in
+    #ibnnpdf.
+    vec = la.solve_triangular(sqrtcov, diffs, lower=True, check_finite=False)
     #This sums up the result for the chi² for any input shape.
     #Sum the squares over the first dimension and leave the others alone
     return np.einsum('i...,i...->...', vec,vec)
