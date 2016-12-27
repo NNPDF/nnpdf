@@ -83,3 +83,25 @@ if (COMPILE_tconvcheck)
   add_executable(tconvcheck tconvcheck/src/tconvcheck.cc)
   target_link_libraries(tconvcheck common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
 endif(COMPILE_tconvcheck)
+
+# filter
+option(COMPILE_fiatlux "Compile fiatlux program." OFF)
+if (COMPILE_fiatlux)
+
+  # libfiatlux
+  find_program(FIATLUX_CONFIG fiatlux-config REQUIRED)
+  if (FIATLUX_CONFIG)
+    exec_program(${FIATLUX_CONFIG}
+      ARGS --cppflags
+      OUTPUT_VARIABLE FIATLUX_CXX_FLAGS
+    )
+    exec_program(${FIATLUX_CONFIG}
+      ARGS --ldflags
+      OUTPUT_VARIABLE FIATLUX_LIBRARIES
+    )
+  endif(FIATLUX_CONFIG)
+
+  add_executable(fiatlux fiatlux/src/fiatlux.cc)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FIATLUX_CXX_FLAGS}")
+  target_link_libraries(fiatlux common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${GSL_LDFLAGS} ${FIATLUX_LIBRARIES} ${APFEL_LIBRARIES})
+endif(COMPILE_fiatlux)
