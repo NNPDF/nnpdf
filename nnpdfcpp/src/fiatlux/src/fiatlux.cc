@@ -126,21 +126,22 @@ int main(int argc, char **argv)
     luxInstance().getLux().InsertInelasticSplitQ({mb,mt});
 
   // APFEL setup
-  APFEL::SetParam(settings.GetTheoryMap());  
+  APFEL::SetParam(settings.GetTheoryMap());
   APFEL::SetTheory("QUniD");
   APFEL::EnableNLOQEDCorrections(true);
+  APFEL::EnableTargetMassCorrections(false);
   APFEL::SetAlphaQEDRef(input().get<double>("alpha_ref"), input().get<double>("alphaq0_ref"));
   APFEL::SetPDFSet(settings.GetPDFName() + ".LHgrid");
   APFEL::SetReplica(replica);
-  APFEL::SetQLimits(1, 1e6);
-  APFEL::SetQGridParameters(50, 3);
+  APFEL::SetQLimits(1,1.5e6);
+  APFEL::SetQGridParameters(50, 3);  
   APFEL::SetNumberOfGrids(3);
-  APFEL::SetGridParameters(1,10,3,settings.Get("lhagrid", "xmin").as<double>());
-  APFEL::SetGridParameters(2,5,5,settings.Get("lhagrid", "xmed").as<double>());
-  APFEL::SetGridParameters(3,5,5,0.65);
+  APFEL::SetGridParameters(1,95,3,settings.Get("lhagrid", "xmin").as<double>());
+  APFEL::SetGridParameters(2,70,5,settings.Get("lhagrid", "xmed").as<double>());
+  APFEL::SetGridParameters(3,50,5,0.65);
   APFEL::LockGrids(true);
   APFEL::InitializeAPFEL_DIS();
-  APFEL::CacheStructureFunctionsAPFEL(1); 
+  APFEL::CacheStructureFunctionsAPFEL(-1);
 
   cout << "Computing photon..." << endl;
   const double q0 = 100.0, q = stod(settings.GetTheory(APFEL::kQ0));
