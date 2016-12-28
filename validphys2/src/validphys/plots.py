@@ -136,10 +136,11 @@ def plot_fancy(one_or_more_results, dataset,
             figby = table.groupby(info.figure_by)
         else:
             figby = [('', table)]
-        #For some reason matplotlib doesn't set the axis right
-        min_vals = []
-        max_vals = []
+
         for samefig_vals, fig_data in figby:
+            #For some reason matplotlib doesn't set the axis right
+            min_vals = []
+            max_vals = []
             #Have consistent output for one or more groupby columns
             if not isinstance(samefig_vals, tuple):
                 samefig_vals = (samefig_vals, )
