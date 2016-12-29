@@ -7,13 +7,18 @@ Created on Wed Mar  9 15:40:38 2016
 Resolve paths to useful objects, and query the existence of different resources
 within the specified paths.
 """
+import sys
 import pathlib
 import functools
 import logging
 import re
+import tempfile
+import shutil
+import os.path as osp
 
 import numpy as np
 import yaml
+import requests
 
 from NNPDF import CommonData
 
@@ -23,7 +28,9 @@ from validphys import lhaindex
 
 log = logging.getLogger(__name__)
 
-class LoadFailedError(FileNotFoundError): pass
+class LoaderError(Exception): pass
+
+class LoadFailedError(FileNotFoundError, LoaderError): pass
 
 class DataNotFoundError(LoadFailedError): pass
 
@@ -43,15 +50,20 @@ class CutsNotFound(LoadFailedError): pass
 
 class PDFNotFound(LoadFailedError): pass
 
-#TODO: Deprecate get methods?
-class Loader():
-    """Load various resources from the NNPDF data path."""
+class RemoteLoaderError(LoaderError): pass
+
+class LoaderBase:
 
     def __init__(self, datapath, resultspath):
         datapath = pathlib.Path(datapath)
         resultspath = pathlib.Path(resultspath)
         self.datapath = datapath
         self.resultspath = resultspath
+
+
+#TODO: Deprecate get methods?
+class Loader(LoaderBase):
+    """Load various resources from the NNPDF data path."""
 
     @property
     def available_fits(self):
@@ -245,3 +257,196 @@ class Loader():
         cuts = np.loadtxt(str(p), dtype=int)
         log.debug("Loading cuts for %s" % setname)
         return cuts
+
+
+
+#http://stackoverflow.com/a/15645088/1007990
+def _download_file(url, stream):
+    response = requests.get(url, stream=True)
+    total_length = response.headers.get('content-length')
+
+    if total_length is None or not log.isEnabledFor(logging.INFO):
+        stream.write(response.content)
+    else:
+        dl = 0
+        total_length = int(total_length)
+        for data in response.iter_content(chunk_size=4096):
+            dl += len(data)
+            stream.write(data)
+            done = int(50 * dl / total_length)
+            sys.stdout.write("\r[%s%s] (%d%%)" % ('=' * done, ' ' * (50-done),
+                             done*2))
+            sys.stdout.flush()
+        sys.stdout.write('\n')
+
+def download_file(url, stream_or_path):
+    #TODO: change to os.fspath
+    if isinstance(stream_or_path, (str,bytes)):
+        log.info("Downloading %s to %s." , url,stream_or_path)
+        with open(stream_or_path, 'wb') as f:
+            return _download_file(url, f)
+    else:
+        log.info("Downloading %s." , url,)
+        return _download_file(url, stream_or_path)
+
+
+def download_and_extract(url, local_path):
+    name = url.split('/')[-1]
+    with tempfile.NamedTemporaryFile(delete=False, suffix=name) as t:
+        log.info("Saving data to %s" , t.name)
+        download_file(url, t)
+    log.info("Extracting archive to %s" , local_path)
+    shutil.unpack_archive(t.name, extract_dir=str(local_path))
+
+
+
+#TODO: Make this async someday
+class RemoteLoader(LoaderBase):
+
+    #TODO: Move these to nnprofile
+    fit_url = 'http://pcteserver.mi.infn.it/~nnpdf/fits/'
+    fit_index = 'fitdata.json'
+
+    theory_url = 'http://pcteserver.mi.infn.it/~apfelcomb/commondatatheory/'
+    theory_index = 'theorydata.json'
+
+    lhapdf_url = 'http://www.hepforge.org/archive/lhapdf/pdfsets/6.1/'
+
+    @property
+    @functools.lru_cache()
+    def remote_theories(self):
+        index_url = self.theory_url + self.theory_index
+        token = 'theory_'
+        try:
+            resp = requests.get(index_url)
+        except Exception as e:
+            raise RemoteLoaderError("Failed to fetch remote fits index %s: %s" % (index_url,e)) from e
+
+        try:
+            info = resp.json()['files']
+        except Exception as e:
+            raise RemoteLoaderError("Malformed index %s. Expecting json with a key 'files': %s" % (index_url, e)) from e
+
+        return {th[len(token):].split('.')[0] : self.theory_url+th for th in info}
+
+    @property
+    @functools.lru_cache()
+    def remote_fits(self):
+        index_url = self.fit_url+self.fit_index
+        try:
+            resp = requests.get(index_url)
+        except Exception as e:
+            raise RemoteLoaderError("Failed to fetch remote fits index %s: %s" % (index_url,e)) from e
+
+        try:
+            info = resp.json()['files']
+        except Exception as e:
+            raise RemoteLoaderError("Malformed index %s. Expecting json with a key 'files': %s" % (index_url, e)) from e
+
+        return {fit.split('.')[0] : self.fit_url+fit for fit in info}
+
+    @property
+    def downloadable_fits(self):
+        return list(self.remote_fits)
+
+    @property
+    def downloadable_theories(self):
+        return list(self.remote_theories)
+
+    @property
+    def lhapdf_pdfs(self):
+        return lhaindex.expand_index_names('*')
+
+    @property
+    def downloadable_pdfs(self):
+        return set((*self.lhapdf_pdfs, *self.downloadable_fits))
+
+
+    def download_fit(self, fitname):
+        if not fitname in self.remote_fits:
+            raise FitNotFound("Could not find fit '{}' in remote index {}".format(fitname, self.fit_index))
+
+        #TODO: Change the crazy paths in fitmanager. Why depend on results??
+        download_and_extract(self.remote_fits[fitname], self.resultspath.parent)
+
+        fitpath = self.resultspath / fitname
+        if lhaindex.isinstalled(fitname):
+            log.warn("The PDF corresponding to the downloaded fit '%s'"
+             "exists in the LHAPDF path."
+             " Will be erased and replaced with the new one", fitname)
+            p = pathlib.Path(lhaindex.finddir(fitname))
+            if p.is_symlink():
+                p.unlink()
+            else:
+                shutil.rmtree(str(p))
+        else:
+            p = osp.join(lhaindex.get_lha_datapath(), fitname)
+        gridpath = fitpath / 'nnfit' / fitname
+        shutil.copytree(str(gridpath), str(p))
+
+
+    def download_pdf(self, name):
+        #It would be good to use the LHAPDF command line, except that it does
+        #stupid things like returning 0 exit status when it fails to download
+        if name in self.lhapdf_pdfs:
+            url = self.lhapdf_url + name + '.tar.gz'
+            download_and_extract(url, lhaindex.get_lha_datapath())
+        elif name in self.downloadable_fits:
+            self.download_fit(name)
+        else:
+            raise PDFNotFound("PDF %s is neither an uploaded fit nor a LHAPDF set.")
+
+    def download_theoryID(self, thid):
+        thid = str(thid)
+        remote = self.remote_theories
+        if thid not in remote:
+            raise TheoryNotFound("Theory %s not available." % thid)
+        download_and_extract(remote[thid], self.datapath)
+
+
+class FallbackLoader(Loader, RemoteLoader):
+    """A loader that first tries to find resources locally
+    (calling Loader.check_*) and if it fails, it tries to download them
+    (calling RemoteLoader.download_*)."""
+
+    def make_checker(self, resource):
+        #We are intercepting the check_
+        orig = super().__getattribute__('check_' + resource)
+        download = getattr(self, 'download_' + resource)
+
+        @functools.wraps(orig)
+        def f(*args, **kwargs):
+            try:
+                return orig(*args, **kwargs)
+            except LoadFailedError as e:
+                saved_exception = e
+                log.info("Could not find a resource (%s): %s. "
+                "Attempting to download it.", resource, saved_exception)
+                try:
+                    download(*args, **kwargs)
+                except RemoteLoaderError as e:
+                    log.error("Failed to download resource: %s",  e)
+                    raise e
+                except LoadFailedError as e:
+                    log.error("Resource not in the remote repository: %s", e)
+                    raise saved_exception
+                except requests.RequestException as e:
+                    log.error("There was a problem with the connection: %s", e)
+                    raise saved_exception from e
+
+                except Exception as e:
+                    #Simply raise these for now so we can find and fix them
+                    raise e
+                else:
+                    return orig(*args, **kwargs)
+        return f
+
+
+
+    def __getattribute__(self, attr):
+        token = 'check_'
+        if attr.startswith(token):
+            resname = attr[len(token):]
+            if hasattr(RemoteLoader, 'download_' + resname):
+                return super().__getattribute__('make_checker')(resname)
+        return super().__getattribute__(attr)

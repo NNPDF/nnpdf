@@ -70,6 +70,13 @@ file in attachment:
         cout.add_argument('--no-cout', dest='cout',
                               action='store_const', const=False)
 
+        net = parser.add_mutually_exclusive_group()
+        net.add_argument('--net', action='store_true', default=True,
+                         help="Enable remote loader."
+                         "Try to download missing resources. This is the default")
+        net.add_argument('--no-net', dest='net', action='store_false',
+                         help="Disable remote loader. Use only local resources.")
+
         return parser
 
 

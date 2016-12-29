@@ -18,6 +18,7 @@ requirements:
     - blessings
     - scipy
     - pandas
+    - requests
 
 test:
     imports:
