@@ -6,6 +6,7 @@ from __future__ import generator_stop
 
 import logging
 import functools
+import warnings
 
 import numpy as np
 import numpy.linalg as la
@@ -645,7 +646,10 @@ def plot_pdfs(ax, pdf, flindex, grid, setupres):
     next_prop = next(pcycler)
     cv = stats.central_value()
     xgrid = grid.xgrid
-    err68down, err68up = stats.errorbar68()
+    #Ignore spurious normalization warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', RuntimeWarning)
+        err68down, err68up = stats.errorbar68()
 
     color = next_prop['color']
     ax.plot(xgrid, cv, color=color)

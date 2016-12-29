@@ -402,8 +402,10 @@ class MCStats(Stats):
         return np.std(self.data, axis=0)
 
     def errorbar68(self):
-        down = np.percentile(self.error_members(), 15.87, axis=0)
-        up =   np.percentile(self.error_members(), 84.13, axis=0)
+        #Use nanpercentile here because we can have e.g. 0/0==nan normalization
+        #somewhere.
+        down = np.nanpercentile(self.error_members(), 15.87, axis=0)
+        up =   np.nanpercentile(self.error_members(), 84.13, axis=0)
         return down, up
 
     def sample_values(self, size):
