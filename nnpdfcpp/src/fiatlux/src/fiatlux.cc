@@ -233,7 +233,8 @@ int main(int argc, char **argv)
     lhaout << xgrid[ix] << " ";
   lhaout << endl;
 
-  lhaout << q << endl;
+  // 2 nodes to make LHAPDF happy
+  lhaout << q << " " << q+1e-5 << endl;
 
   for (int i = -nf; i <= nf+1; i++)
     if (i == 0) lhaout << 21 << " ";
@@ -243,17 +244,20 @@ int main(int argc, char **argv)
 
   for (int ix = 0; ix < nx; ix++)
     {
-      lhaout << " ";
-      for (int fl = -nf; fl <= nf; fl++)
+      for (int j = 0; j < 2; j++)
         {
-          if (fl == 0)
-            lhaout << setw(14) << Ng*luxInstance().xfxQ(fl, xgrid[ix], q) << " ";
-          else
-            lhaout << setw(14) << luxInstance().xfxQ(fl, xgrid[ix], q) << " ";
-        }
+          lhaout << " ";
+          for (int fl = -nf; fl <= nf; fl++)
+            {
+              if (fl == 0)
+                lhaout << setw(14) << Ng*luxInstance().xfxQ(fl, xgrid[ix], q) << " ";
+              else
+                lhaout << setw(14) << luxInstance().xfxQ(fl, xgrid[ix], q) << " ";
+            }
 
-      lhaout << setw(14) << APFEL::xgamma(xgrid[ix]) << " ";
-      lhaout << endl;
+          lhaout << setw(14) << APFEL::xgamma(xgrid[ix]) << " ";
+          lhaout << endl;
+        }
     }
   lhaout << "---" << endl;
 
