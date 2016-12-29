@@ -81,11 +81,11 @@ class PDF(TupleComp):
             raise AttributeError(attr)
         try:
             return lhaindex.parse_info(self.name)[attr]
-        except KeyError:
+        except KeyError as e:
             raise AttributeError("'%r' has no attribute '%s'" % (type(self),
-                                                                 attr))
-        except IOError:
-            raise PDFDoesNotExist(self.name)
+                                                                 attr)) from e
+        except IOError as e:
+            raise PDFDoesNotExist(self.name) from e
 
     @property
     def label(self):
