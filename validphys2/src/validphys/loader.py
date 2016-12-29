@@ -209,14 +209,13 @@ class Loader():
 
         theoryno, _ = theoryid
 
-        op = None
-
         commondata = self.check_commondata(name, sysnum)
 
         try:
             fkspec, op = self.check_compound(theoryno, name, cfac)
         except CompoundNotFound:
             fkspec = self.check_fktable(theoryno, name, cfac)
+            op = None
 
         if use_cuts:
             cuts = self.get_cuts(name, fit)
