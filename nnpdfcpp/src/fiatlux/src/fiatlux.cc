@@ -13,6 +13,8 @@
 #include <fiatlux/settings.h>
 #include <APFEL/APFEL.h>
 #include <LHAPDF/GridPDF.h>
+#include <sstream>
+#include <fstream>
 using namespace fiatlux;
 using namespace std;
 
@@ -91,6 +93,49 @@ extern "C" void externalsetapfel_(const double& x, const double& Q, double *xf)
   xf[13] = luxInstance().xfxQ(22, x, Q);
 }
 
+struct param {double Q;};
+
+double xphoton(double x, void *p)
+{
+  return APFEL::xgamma(x);
+}
+
+double xgluon(double x, void *p)
+{
+  struct param * par = (struct param *) p;
+  return luxInstance().xfxQ(21, x, par->Q);
+}
+
+double xsinglet(double x, void *p)
+{
+  struct param * par = (struct param *) p;
+  double sum = 0;
+  for (int i = 1; i < 7; i++)
+    sum += luxInstance().xfxQ(i, x, par->Q)+luxInstance().xfxQ(-i, x, par->Q);
+  return sum;
+}
+
+double SR(double (*f)(double,void*), double const& q)
+{
+  //size_t neval;
+  gsl_function F;
+  F.function = f;
+  struct param o = {q};
+  F.params = &o;
+
+  gsl_integration_workspace * w = gsl_integration_workspace_alloc (10000);
+
+  double int_res, int_err;
+  int status = gsl_integration_qags (&F, 1e-9, 1, 0, 1E-4, 10000, w, &int_res, &int_err);
+  if (status == GSL_EDIVERGE || status == GSL_ESING || status == GSL_EROUND)
+    cout << "integration error" << endl;
+
+  gsl_integration_workspace_free (w);
+  cout << "Final integral: " << int_res << " +/- " << int_err << endl;
+
+  return int_res;
+}
+
 int main(int argc, char **argv)
 {
   // Read configuration filename from arguments
@@ -116,6 +161,10 @@ int main(int argc, char **argv)
   NNPDFSettings settings(configPath() + filename);
   settings.PrintConfiguration("fiatlux.yml");
   luxInstance().loadPDF(settings.GetPDFName(), replica);
+
+  // write grid to disk
+  mkdir(settings.GetResultsDirectory().c_str(),0777);
+  mkdir((settings.GetResultsDirectory() + "/fiatlux").c_str(),0777);
 
   const int nfmax = stoi(settings.GetTheory(APFEL::kMaxNfPdf));
   const double mb = stod(settings.GetTheory(APFEL::kmb));
@@ -148,8 +197,67 @@ int main(int argc, char **argv)
   APFEL::SetPDFSet("external");
   APFEL::EvolveAPFEL(q0, q);
 
+  cout << "\nPhoton at input scale:" << endl;
   for (auto const& x: luxInstance().getXgrid())
     cout << "x=" << x << " Q=" << q << " xpht=" << APFEL::xgamma(x) << endl;
+
+  cout << "\nComputing MSR correction for gluon:" << endl;
+  cout << "xphoton:"<< endl;
+  const double xpht = SR(xphoton, q);
+  cout << "xgluon:"<< endl;
+  const double xglu = SR(xgluon, q);
+  cout << "xsinglet:"<< endl;
+  const double xsin = SR(xsinglet, q);
+  cout << "Total: " << xpht+xglu+xsin << endl;
+  const double Ng = (1-xsin-xpht)/xglu;
+  cout << "New gluon normalization: " << Ng << endl;
+  cout << "Final sum rule: " << xpht + xsin + Ng*xglu << endl;
+
+  // Settings
+  cout << "- Printing grid to grid file..." << endl;
+  const int nf = std::max(stoi(settings.GetTheory(APFEL::kMaxNfPdf)),
+                          stoi(settings.GetTheory(APFEL::kMaxNfAs)));
+  const auto& xgrid = luxInstance().getXgrid();
+  const int nx = xgrid.size();
+
+  // print the replica
+  stringstream ofilename;
+  ofilename << settings.GetResultsDirectory()
+            << "/fiatlux/replica_" << replica << ".dat";
+  fstream lhaout;
+  lhaout.open(ofilename.str().c_str(), ios::out);
+  lhaout << scientific << setprecision(7);
+  lhaout << "PdfType: replica\nFormat: lhagrid1\n---" << std::endl;
+
+  for (int ix = 0; ix < nx; ix++)
+    lhaout << xgrid[ix] << " ";
+  lhaout << endl;
+
+  lhaout << q << endl;
+
+  for (int i = -nf; i <= nf+1; i++)
+    if (i == 0) lhaout << 21 << " ";
+    else if (i == nf+1) lhaout << 22 << " ";
+    else lhaout << i << " ";
+  lhaout << endl;
+
+  for (int ix = 0; ix < nx; ix++)
+    {
+      lhaout << " ";
+      for (int fl = -nf; fl <= nf; fl++)
+        {
+          if (fl == 0)
+            lhaout << setw(14) << Ng*luxInstance().xfxQ(fl, xgrid[ix], q) << " ";
+          else
+            lhaout << setw(14) << luxInstance().xfxQ(fl, xgrid[ix], q) << " ";
+        }
+
+      lhaout << setw(14) << APFEL::xgamma(xgrid[ix]) << " ";
+      lhaout << endl;
+    }
+  lhaout << "---" << endl;
+
+  lhaout.close();
 
   return 0;
 }
