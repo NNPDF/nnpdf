@@ -15,11 +15,10 @@ from reportengine.configparser import ConfigError, element_of, _parse_func
 from reportengine.helputils import get_parser_type
 from reportengine import report
 
-from validphys import lhaindex
 from validphys.core import PDF, DataSetSpec, ExperimentSpec
 from validphys.loader import (Loader, LoadFailedError ,DataNotFoundError,
                               SysNotFoundError,
-                              CompoundNotFound)
+                              CompoundNotFound, PDFNotFound)
 
 log = logging.getLogger(__name__)
 
@@ -83,15 +82,19 @@ class Config(report.Config):
     @_id_with_label
     def parse_pdf(self, name:str):
         """A PDF set installed in LHAPDF."""
-        if lhaindex.isinstalled(name):
-            pdf = PDF(name)
-            try:
-                pdf.nnpdf_error
-            except NotImplementedError as e:
-                raise ConfigError(str(e))
-            return pdf
-        raise ConfigError("Bad PDF: {} not installed".format(name), name,
-                          lhaindex.expand_local_names('*'))
+        try:
+            pdf = self.loader.check_pdf(name)
+        except PDFNotFound as e:
+            raise ConfigError("Bad PDF: {} not installed".format(name), name,
+                          self.loader.available_pdfs) from e
+
+        #Check that we know how to compute errors
+        try:
+            pdf.nnpdf_error
+        except NotImplementedError as e:
+            raise ConfigError(str(e))
+        return pdf
+
 
     @element_of('theoryids')
     @_id_with_label

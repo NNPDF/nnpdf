@@ -18,7 +18,8 @@ import yaml
 from NNPDF import CommonData
 
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
-                            PositivitySetSpec, DataSetSpec)
+                            PositivitySetSpec, DataSetSpec, PDF)
+from validphys import lhaindex
 
 log = logging.getLogger(__name__)
 
@@ -40,7 +41,9 @@ class FitNotFound(LoadFailedError): pass
 
 class CutsNotFound(LoadFailedError): pass
 
+class PDFNotFound(LoadFailedError): pass
 
+#TODO: Deprecate get methods?
 class Loader():
     """Load various resources from the NNPDF data path."""
 
@@ -49,6 +52,13 @@ class Loader():
         resultspath = pathlib.Path(resultspath)
         self.datapath = datapath
         self.resultspath = resultspath
+
+    @property
+    def available_fits(self):
+        try:
+            return [p.name for p in self.resultspath.iterdir() if p.is_dir()]
+        except OSError:
+            return []
 
     @property
     @functools.lru_cache()
@@ -65,6 +75,11 @@ class Loader():
         data_str = "DATA_"
         return {file.stem[len(data_str):] for
                 file in self.commondata_folder.glob(data_str+"*.dat")}
+
+    @property
+    @functools.lru_cache()
+    def available_pdfs(self):
+        return lhaindex.expand_local_names('*')
 
     @property
     def commondata_folder(self):
@@ -211,12 +226,14 @@ class Loader():
         return DataSetSpec(name=name, commondata=commondata,
                            fkspecs=fkspec, thspec=theoryid, cuts=cuts, op=op)
 
-    @property
-    def available_fits(self):
-        try:
-            return [p.name for p in self.resultspath.iterdir() if p.is_dir()]
-        except OSError:
-            return []
+    def check_pdf(self, name):
+        if lhaindex.isinstalled(name):
+            return PDF(name)
+        raise PDFNotFound(name)
+
+    def get_pdf(self, name):
+        return self.check_pdf(name).load()
+
 
     def get_cuts(self, setname, fit):
         fitname, fitpath = fit
