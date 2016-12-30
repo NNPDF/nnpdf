@@ -4,8 +4,19 @@
 // Authors: Nathan Hartland,  n.p.hartland@ed.ac.uk
 //          Stefano Carrazza, stefano.carrazza@mi.infn.it
 
-/*
- * Interface with luxqed code
+/**
+ * @brief Interface with luxqed code.
+ *
+ * This code performs the following operations:
+ * - read input runcard and extract the name of input LHAPDF replica and theory id.
+ * - setup APFEL DIS module using theory id and caching
+ * - load APFEL evolution module with QCDxQED evolution
+ * - compute/cache structure functions using input LHAPDF partons with its DGLAP
+ * - generate photon PDF using libfiatlux at Q = 100 GeV and APFEL
+ * - back-evolve all partons to Q0 (see db) using QCDxQED evolution
+ * - override gluon and quarks with LHAPDF output at Q0
+ * - compute MSR at Q0 and rescale gluon in order to reduce violation
+ * - dump replica with photon at Q0 using the original LHAPDF grid in x.
  */
 
 #include "nnpdfsettings.h"
