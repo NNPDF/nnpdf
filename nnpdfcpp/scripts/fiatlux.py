@@ -27,6 +27,7 @@ def main(nrep, fit_filename):
 
     # header
     lhapath = Popen(["lhapdf-config","--datadir"],stdout=PIPE).communicate()[0]
+    lhapath = lhapath.decode()
     lhapath = lhapath.replace('\n','/')
     with open(lhapath + fitname + '/' + fitname + '.info', 'r') as header:
         oheader = open(dir + '/' + fitname_lux + '/' + fitname_lux + '.info', 'w')
@@ -110,6 +111,15 @@ def main(nrep, fit_filename):
     f.close()
 
     print("\n- Finished see: \n%s" % dir + fitname_lux)
+
+    print("\n- Copying grid to LHAPDF path.")
+    src = dir + fitname_lux
+    dst = lhapath + fitname_lux
+    try:
+        shutil.copytree(src,dst)
+    except:
+        print("Error: this grid already exists, please delete and run the script again")
+        exit(-1)
 
 
 if __name__ == "__main__":
