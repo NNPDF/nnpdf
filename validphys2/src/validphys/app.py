@@ -127,8 +127,7 @@ file in attachment:
 
 def main():
     a = App()
-    a.init()
-    a.run()
+    a.main()
 
 if __name__ == '__main__':
     main()
