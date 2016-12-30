@@ -386,6 +386,25 @@ class RemoteLoader(LoaderBase):
 
 
     def download_pdf(self, name):
+        #Check if the pdf is an existing fit first
+        try:
+            #We don't want to download the fit here
+            fit = Loader.check_fit(self, name)
+        except FitNotFound:
+            pass
+        else:
+            if (fit.path/'nnfit').exists():
+                p = osp.join(lhaindex.get_lha_datapath(), fit.name)
+                log.info("Found existing fit with the same name as the "
+                "requested PDF (%s). Copying the grid to the LHAPDF path (%s).",
+                name, p)
+
+                gridpath = fit.path / 'nnfit' / fit.name
+                shutil.copytree(str(gridpath), str(p))
+                return
+
+
+
         #It would be good to use the LHAPDF command line, except that it does
         #stupid things like returning 0 exit status when it fails to download
         if name in self.lhapdf_pdfs:
