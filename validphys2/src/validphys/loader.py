@@ -371,9 +371,9 @@ class RemoteLoader(LoaderBase):
 
         fitpath = self.resultspath / fitname
         if lhaindex.isinstalled(fitname):
-            log.warn("The PDF corresponding to the downloaded fit '%s'"
+            log.warn("The PDF corresponding to the downloaded fit '%s' "
              "exists in the LHAPDF path."
-             " Will be erased and replaced with the new one", fitname)
+             " Will be erased and replaced with the new one.", fitname)
             p = pathlib.Path(lhaindex.finddir(fitname))
             if p.is_symlink():
                 p.unlink()
