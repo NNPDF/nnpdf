@@ -27,7 +27,8 @@ log = logging.getLogger(__name__)
 class Environment(Environment):
     """Container for information to be filled at run time"""
 
-    def __init__(self,*, datapath, resultspath, this_folder, net=True, **kwargs):
+    def __init__(self,*, datapath, resultspath, this_folder, net=True,
+                 upload=False, **kwargs):
         self.deta_path = pathlib.Path(datapath)
         self.results_path = pathlib.Path(resultspath)
         self.this_folder = pathlib.Path(this_folder)
@@ -38,6 +39,8 @@ class Environment(Environment):
             loader_class = Loader
 
         self.loader = loader_class(self.deta_path, resultspath=self.results_path)
+
+        self.upload = upload
         super().__init__(**kwargs)
 
 

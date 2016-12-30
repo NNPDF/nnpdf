@@ -4,12 +4,15 @@ Created on Thu Jun 30 10:19:35 2016
 
 @author: Zahari Kassabov
 """
+import sys
 import pathlib
 import logging
+
 
 from reportengine import app
 
 from validphys.config import Config, Environment
+from validphys import uploadutils
 #from validphys import providers
 
 
@@ -21,6 +24,8 @@ providers = [
              'validphys.pdfgrids',
              'reportengine.report'
             ]
+
+log = logging.getLogger(__name__)
 
 class App(app.App):
 
@@ -72,10 +77,13 @@ file in attachment:
 
         net = parser.add_mutually_exclusive_group()
         net.add_argument('--net', action='store_true', default=True,
-                         help="Enable remote loader."
+                         help="Enable remote loader. "
                          "Try to download missing resources. This is the default")
         net.add_argument('--no-net', dest='net', action='store_false',
                          help="Disable remote loader. Use only local resources.")
+
+        parser.add_argument('--upload', action='store_true',
+                            help="Upload the resulting output folder to the Milan server.")
 
         return parser
 
@@ -100,6 +108,22 @@ file in attachment:
             #No idea why this doesn't work
             #import lhapdf
             setVerbosity(0)
+
+    def run(self):
+        upload = self.args['upload']
+        if upload:
+            try:
+                uploadutils.check_upload()
+            except uploadutils.BadSSH as e:
+                log.error(e)
+                sys.exit(1)
+        super().run()
+        if upload:
+            try:
+                uploadutils.upload_output(self.args['output'])
+            except uploadutils.BadSSH as e:
+                log.error(e)
+                sys.exit(1)
 
 def main():
     a = App()
