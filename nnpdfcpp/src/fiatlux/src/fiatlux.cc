@@ -182,7 +182,7 @@ int main(int argc, char **argv)
   APFEL::SetAlphaQEDRef(input().get<double>("alpha_ref"), input().get<double>("alphaq0_ref"));
   APFEL::SetPDFSet(settings.GetPDFName() + ".LHgrid");
   APFEL::SetReplica(replica);
-  APFEL::SetQLimits(1,1.5e6);
+  APFEL::SetQLimits(1,1e7);
   APFEL::SetQGridParameters(50, 3);  
   APFEL::SetNumberOfGrids(3);
   APFEL::SetGridParameters(1,95,3,settings.Get("lhagrid", "xmin").as<double>());
