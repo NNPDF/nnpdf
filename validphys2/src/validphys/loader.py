@@ -293,7 +293,7 @@ def download_file(url, stream_or_path):
 def download_and_extract(url, local_path):
     name = url.split('/')[-1]
     with tempfile.NamedTemporaryFile(delete=False, suffix=name) as t:
-        log.info("Saving data to %s" , t.name)
+        log.debug("Saving data to %s" , t.name)
         download_file(url, t)
     log.info("Extracting archive to %s" , local_path)
     shutil.unpack_archive(t.name, extract_dir=str(local_path))
