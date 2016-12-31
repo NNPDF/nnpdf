@@ -10,7 +10,7 @@ Q: 10
 
 description:
     from_: fit
-template: examples/report.md
+template: report.md
 
 normalize:
     normalize_to: 1
@@ -27,4 +27,5 @@ experiments:
       - { dataset: LHCBWZMU8TEV, frac: 1.0, sys: 2, cfac: [NRM] }
 
 actions_:
-    - - report
+    - - report:
+            out_filename: index.md
