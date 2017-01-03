@@ -20,24 +20,25 @@
 static const string minString[6]   = {"UNDEFINED", "GA", "NGA","NGAP","NGAFT","CMAES"};
 static const string stopString[6]  = {"UNDEFINED", "FIXEDLENGTH", "GRAD", "VAR", "LOOKBACK"};
 static const string paramString[4] = {"UNDEFINED", "NN", "CHEBYSHEV", "QUADNN"};
-static const string basisString[14]= {"UNDEFINED", "NN23", "NN23QED","EVOL", "EVOLQED","EVOLS",
-                                      "EVOLSQED","NN30", "NN30QED","FLVR", "FLVRQED","NN30IC","EVOLIC","NN31IC"};
+static const string basisString[15]= {"UNDEFINED", "NN23", "NN23QED","EVOL", "EVOLQED","EVOLS",
+                                      "EVOLSQED","NN30", "NN30QED","FLVR", "FLVRQED","NN30IC",
+                                      "EVOLIC","NN31IC","LUX"};
 
 static const vector< vector<string> > basiselem = { {},
-                                     {"sng","g","v","t3","ds","sp","sm"},
-                                     {"sng","g","v","t3","ds","sp","sm","pht"},
-                                     {"sng","g","v","v3","v8","t3","t8"},
-                                     {"sng","g","v","v3","v8","t3","t8","pht"},
-                                     {"sng","g","v","v8","t3","t8","ds"},
-                                     {"sng","g","v","v8","t3","t8","ds","pht"},
-                                     {"sng","g","v","v8","t3","t8","ds"},
-                                     {"sng","g","v","v8","t3","t8","ds","pht"},
-                                     {"g","u","ubar","d","dbar","s","sbar"},
-                                     {"g","u","ubar","d","dbar","s","sbar","pht"},
-                                     //{"sng","g","v","t3","ds","sp","sm","cp","cm"},
-                                     {"sng","g","v","t3","ds","sp","sm","cp"},
-                                     {"sng","g","v","v3","v8","t3","t8","t15"},
-                                     {"sng","g","v","v3","v8","t3","t8","cp"}
+                                     {"sng","g","v","t3","ds","sp","sm"},          //NN23
+                                     {"sng","g","v","t3","ds","sp","sm","pht"},    //NN23QED
+                                     {"sng","g","v","v3","v8","t3","t8"},          //EVOL
+                                     {"sng","g","v","v3","v8","t3","t8","pht"},    //EVOLQED
+                                     {"sng","g","v","v8","t3","t8","ds"},          //EVOLS
+                                     {"sng","g","v","v8","t3","t8","ds","pht"},    //EVOLSQED
+                                     {"sng","g","v","v8","t3","t8","ds"},          //NN30
+                                     {"sng","g","v","v8","t3","t8","ds","pht"},    //NN30QED
+                                     {"g","u","ubar","d","dbar","s","sbar"},       //FLVR
+                                     {"g","u","ubar","d","dbar","s","sbar","pht"}, //FLVRQED
+                                     {"sng","g","v","t3","ds","sp","sm","cp"},     //NN30IC
+                                     {"sng","g","v","v3","v8","t3","t8","t15"},    //EVOLIC
+                                     {"sng","g","v","v3","v8","t3","t8","cp"},     //NN31IC
+                                     {"sng","g","v","v3","v8","t3","t8"}           //LUX
                                      };
 
 /* Convert string to enum */
@@ -101,6 +102,7 @@ basisType NNPDFSettings::getFitBasisType(string const& method)
   if (method.compare("NN30IC") == 0)  return BASIS_NN30IC;
   if (method.compare("EVOLIC") == 0)  return BASIS_EVOLIC;
   if (method.compare("NN31IC") == 0)  return BASIS_NN31IC;
+  if (method.compare("LUX") == 0)     return BASIS_LUX;
 
   cerr << "getFitBasisType Error: Invalid parametrization type: "<<method;
   exit(-1);
@@ -577,7 +579,9 @@ void NNPDFSettings::LoadPositivities()
 bool NNPDFSettings::IsQED() const
 {
   const basisType isqed = NNPDFSettings::getFitBasisType(Get("fitting","fitbasis").as<string>());
-  if (isqed == BASIS_EVOLQED || isqed == BASIS_EVOLSQED || isqed == BASIS_FLVRQED || isqed == BASIS_NN23QED)
+  if (isqed == BASIS_EVOLQED || isqed == BASIS_EVOLSQED ||
+      isqed == BASIS_FLVRQED || isqed == BASIS_NN23QED ||
+      isqed == BASIS_LUX)
     return true;
   return false;
 }

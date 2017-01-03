@@ -158,7 +158,7 @@ int main(int argc, char **argv)
       cout <<endl;
 
       // Fit Basis
-      FitBasis* fitbasis = getFitBasis(settings, NNPDFSettings::getFitBasisType(settings.Get("fitting","fitbasis").as<string>()));
+      FitBasis* fitbasis = getFitBasis(settings, NNPDFSettings::getFitBasisType(settings.Get("fitting","fitbasis").as<string>()), replica);
 
       // Minimiser control
       Minimizer* minim = NULL;

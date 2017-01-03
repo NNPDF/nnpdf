@@ -108,7 +108,7 @@ struct param {double Q;};
 
 double xphoton(double x, void *p)
 {
-  return APFEL::xgamma(x);
+  return APFEL::xgammaj(x);
 }
 
 double xgluon(double x, void *p)
@@ -210,7 +210,7 @@ int main(int argc, char **argv)
 
   cout << "\nPhoton at input scale:" << endl;
   for (auto const& x: luxInstance().getXgrid())
-    cout << "x=" << x << " Q=" << q << " xpht=" << APFEL::xgamma(x) << endl;
+    cout << "x=" << x << " Q=" << q << " xpht=" << APFEL::xgammaj(x) << endl;
 
   cout << "\nComputing MSR correction for gluon:" << endl;
   cout << "xphoton:"<< endl;
@@ -266,7 +266,7 @@ int main(int argc, char **argv)
                 lhaout << setw(14) << luxInstance().xfxQ(fl, xgrid[ix], q) << " ";
             }
 
-          lhaout << setw(14) << APFEL::xgamma(xgrid[ix]) << " ";
+          lhaout << setw(14) << APFEL::xgammaj(xgrid[ix]) << " ";
           lhaout << endl;
         }
     }

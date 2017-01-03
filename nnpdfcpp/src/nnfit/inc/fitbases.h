@@ -10,11 +10,15 @@
 #include "common.h"
 #include "pdfbasis.h"
 
+namespace NNPDF {
+  class LHAPDFSet;
+}
+
 /** 
  * Return an initialised fitting basis
  */
 class FitBasis;
-FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype);
+FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, int const& rep = 0);
 
 /**
  *  \class FitBasis
@@ -91,7 +95,7 @@ class EvolFitBasis: public FitBasis
 public:
   EvolFitBasis(NNPDFSettings const&);
   
-  // γ, Σ, g, V, V3, V8, V15, V24, V35, T3, T8, T15, T24, T35
+  // Σ, g, V, V3, V8, V15, V24, V35, T3, T8, T15, T24, T35, γ
 
   enum fitBasis {FIT_SNG, FIT_GLU, FIT_VAL, FIT_V3, FIT_V8, FIT_T3, FIT_T8, FIT_GAM };
   
@@ -104,8 +108,34 @@ public:
   void ComputeParam(PDFSet*, int mem, PreprocParam&, bool&) const;
   
 protected:
-  const bool fQED;
-  
+  bool fQED;
+};
+
+/**
+ * @brief The LuxBasis class
+ */
+class LuxBasis: public FitBasis
+{
+public:
+  LuxBasis(NNPDFSettings const&set, int const& replica);
+  ~LuxBasis();
+
+  enum fitBasis {FIT_SNG, FIT_GLU, FIT_VAL, FIT_V3, FIT_V8, FIT_T3, FIT_T8, FIT_GAM };
+
+  void BASIS2EVLN(real const* basis, real* evln) const;
+  void EVLN2BASIS(real const* evln, real* basis) const;
+
+  real ComputeSumRules(sumRule, int mem, PDFSet*, bool&) const;
+
+  // Preprocessing
+  void ComputeParam(PDFSet*, int mem, PreprocParam&, bool&) const;
+
+  void Preprocess(real const& x, int const& fl, real& pdf, PreprocParam const&);
+  void Preprocess(real const& x, real* pdf, PreprocParam const& par);
+
+private:
+  double fQ0;
+  NNPDF::LHAPDFSet* fPhotonSet;
 };
 
 
@@ -137,7 +167,7 @@ class NN30FitBasis: public EvolFitBasis
 {
 public:
    NN30FitBasis(NNPDFSettings const&);
-   
+
    enum netBasis {NET_SNG, NET_GLU, NET_VAL, NET_T3, NET_DS, NET_SP, NET_SM, NET_GAM };
    
    void NetTransform(int const& fl, int const& nfl, int*);

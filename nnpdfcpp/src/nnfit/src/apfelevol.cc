@@ -13,9 +13,8 @@ APFELSingleton *APFELSingleton::apfelInstance = NULL;
 
 extern "C" void externalsetapfel_(const double& x, const double& Q, double *xf)
 {
-  for (int i = 0; i < 13; i++)
+  for (int i = 0; i <= 13; i++)
     xf[i] = (double) APFELSingleton::xfx( x, i-6);
-  xf[13] = 0.0;
 }
 
 APFELSingleton::APFELSingleton():
@@ -44,7 +43,7 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
     {
       std::cout << Colour::FG_RED << "[CheckAPFEL] ERROR, test not succeeded!" << std::endl;
       std::exit(-1);
-    }    
+    }
 
   // initialize attributes
   getInstance()->fPDF = pdf;
@@ -181,7 +180,7 @@ void APFELSingleton::xfxQ(const double &x, const double &Q, const int& n, NNPDF:
 
   for (int i = 0; i < 13; i++)
     xf[i] = APFEL::xPDFj(i-6, x);
-  xf[13] = 0.0;
+  xf[13] = APFEL::xgammaj(x);
 
   return;
 }

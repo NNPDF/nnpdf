@@ -472,7 +472,7 @@ void FitPDFSet::ExportPDF( int const& rep, real const& erf_val, real const& erf_
     lhaoutheader6 << "Particle: 2212" << endl;
     lhaoutheader6 << "Flavors: [";
     for (int i = -nf; i <= nf; i++)
-      lhaoutheader6 << ((i == 0) ? 21 : i) << ((i == nf && !fSettings.IsQED()) ? "]\n" : ( (i == nf && fSettings.IsQED()) ? "22]\n" : ", "));
+      lhaoutheader6 << ((i == 0) ? 21 : i) << ((i == nf && !fSettings.IsQED()) ? "]\n" : ( (i == nf && fSettings.IsQED()) ? ", 22]\n" : ", "));
     lhaoutheader6 << "OrderQCD: " << fSettings.GetTheory(APFEL::kPTO) << endl;
 
     lhaoutheader6 << "FlavorScheme: variable" << endl;
@@ -551,6 +551,7 @@ void FitPDFSet::ExportPDF( int const& rep, real const& erf_val, real const& erf_
        for (int i = -nf; i <= nf; i++)
          if (i == 0) lhaout << 21 << " ";
          else lhaout << i << " ";
+       if (fSettings.IsQED()) lhaout << 22 << " ";
        lhaout << std::endl;
 
        for (int ix = 0; ix < nx; ix++)
@@ -559,6 +560,7 @@ void FitPDFSet::ExportPDF( int const& rep, real const& erf_val, real const& erf_
              lhaout << " ";
              for (int fl = 6-nf; fl <= 2*nf+1; fl++)
                lhaout << setw(14) << res[s][ix + iq*nx][fl] << " ";
+             if (fSettings.IsQED()) lhaout << setw(14) << res[s][ix + iq*nx][PDFSet::PHT] << " ";
              lhaout << std::endl;
            }
        lhaout << "---" << std::endl;
