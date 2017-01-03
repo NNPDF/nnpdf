@@ -63,6 +63,16 @@ fLHA(new real[14])
     get_logger() << pdfname<< " Initialised with " << fMembers<<" members and errorType "<<LHError<<std::endl;
 }
 
+LHAPDFSet::LHAPDFSet(const std::string & pdfname, const int &replica):
+  LHAPDF::PDFSet(pdfname),
+  NNPDF::PDFSet(pdfname, 1, NNPDF::PDFSet::ER_NONE),
+  fLHA(new real[14])
+{
+  fMemberPDFs.push_back(mkPDF(replica));
+  mkPDFs(fMemberPDFs);
+  get_logger() << pdfname << " Initialised with " << fMembers <<" members and no errorType." << std::endl;
+}
+
 LHAPDFSet::~LHAPDFSet()
 {
   delete[] fLHA;
@@ -111,7 +121,7 @@ void LHAPDFSet::GetPDF(real const& x, real const& Q2, int const& n, real* pdf)  
 
   // Transform
   LHA2EVLN(fLHA, pdf);
-};
+}
 
 real LHAPDFSet::xfxQ(real const& x, real const& Q, int const& n, int const& fl) const
 {
@@ -122,7 +132,7 @@ real LHAPDFSet::xfxQ(real const& x, real const& Q, int const& n, int const& fl) 
     throw RangeError("LHAPDFSet::GetPDF", "kinematics out of set range: x=" + std::to_string(x) + " Q=" + std::to_string(Q));
 
   return fMemberPDFs[iMem]->xfxQ(fl, x, Q);
-};
+}
 
 
 
