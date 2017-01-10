@@ -14,6 +14,7 @@ from reportengine.configparser import Config, ConfigError, named_element_of
 from reportengine.utils import get_functions, ChainMap
 from NNPDF import CommonData
 
+from validphys.core import CommonDataSpec, DataSetSpec
 from validphys.plotoptions.utils import apply_to_all_columns
 from validphys.plotoptions import labelers, kintransforms, resulttransforms
 
@@ -42,7 +43,18 @@ def get_plot_kinlabels(commondata):
                          "labels defined in commondata.cc. " % (l)) from e
     return kinlabels_latex[key]
 
-def get_info(commondata, file=None, cuts=None):
+def get_infos(dataset):
+    nnpdf_dt = dataset.load()
+    if not dataset.commondata.plotfiles:
+        infos = [_get_info(nnpdf_dt)]
+    else:
+        infos = []
+        for p in dataset.commondata.plotfiles:
+            with p.open() as f:
+                infos.append(_get_info(nnpdf_dt, f, cuts=dataset.cuts))
+    return infos
+
+def _get_info(commondata, file=None, cuts=None):
     try:
         return PlotInfo.from_commondata(commondata, file=file, cuts=cuts)
     except ConfigError:
@@ -192,6 +204,8 @@ class PlotConfigParser(Config):
 
 
 def kitable(commondata, info):
+    if isinstance(commondata, (DataSetSpec, CommonDataSpec)):
+        commondata = commondata.load()
     table = pd.DataFrame(commondata.get_kintable(), columns=default_labels[1:])
     table.index.name = default_labels[0]
     if info.kinematics_override:

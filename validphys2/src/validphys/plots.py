@@ -21,7 +21,7 @@ from reportengine.checks import make_check, CheckError, make_argcheck
 from validphys.core import MCStats
 from validphys.results import chi2_stat_labels
 from validphys.pdfgrids import PDG_PARTONS
-from validphys.plotoptions import get_info, kitable, transform_result
+from validphys.plotoptions import get_infos, kitable, transform_result
 from validphys.checks import check_scale
 from validphys import plotutils
 
@@ -103,16 +103,9 @@ def plot_fancy(one_or_more_results, dataset,
 
     results = one_or_more_results
 
-    nnpdf_dt = dataset.load()
-    if not dataset.commondata.plotfiles:
-        infos = [get_info(nnpdf_dt)]
-    else:
-        infos = []
-        for p in dataset.commondata.plotfiles:
-            with p.open() as f:
-                infos.append(get_info(nnpdf_dt, f, cuts=dataset.cuts))
+    infos = get_infos(dataset)
     for info in infos:
-        table = kitable(nnpdf_dt, info)
+        table = kitable(dataset, info)
         nkinlabels = len(table.columns)
 
         if normalize_to is not None:
@@ -616,8 +609,10 @@ def _warn_any_pdf_not_montecarlo(pdfs):
 @_plot_pdf_factory
 def plot_pdfreplicas(ax, pdf, flindex ,grid):
     """Plot the replicas of the specifid PDFs.
+
     - xscale sets the scale of the plot. E.g. 'linear' or 'log'. Default is
     deduced from the xplotting_grid, which in turn is 'log' by default.
+
     - normalize_to should be, a pdf id or an index of the pdf (starting from one).
     """
     next_prop = next(ax._get_lines.prop_cycler)
