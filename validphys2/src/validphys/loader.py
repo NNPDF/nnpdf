@@ -413,7 +413,7 @@ class RemoteLoader(LoaderBase):
         elif name in self.downloadable_fits:
             self.download_fit(name)
         else:
-            raise PDFNotFound("PDF %s is neither an uploaded fit nor a LHAPDF set.")
+            raise PDFNotFound("PDF '%s' is neither an uploaded fit nor a LHAPDF set." % name)
 
     def download_theoryID(self, thid):
         thid = str(thid)
