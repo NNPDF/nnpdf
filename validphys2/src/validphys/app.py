@@ -92,7 +92,7 @@ file in attachment:
     def get_commandline_arguments(self):
         args = super().get_commandline_arguments()
         if not args['resultspath']:
-            args['resultspath'] = pathlib.Path(args['datapath']).parent / 'nnpdfbuild' / 'results'
+            args['resultspath'] = pathlib.Path(args['datapath']).parent / 'results'
         return args
 
     def init(self):
