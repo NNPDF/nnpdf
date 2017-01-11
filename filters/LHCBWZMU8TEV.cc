@@ -2,12 +2,9 @@
 *
 * LHCb 2fb^{-1}
 *
-* W production > mu nu_mu data from the LHCb experiment
+* W production > mu nu_mu, Z production > mu mu data from the LHCb experiment
 *
-* Final data from the LHCb preprint: 1408.4354
-* Luminosity uncertainty is a 1.71% in
-* all data points and is quoted separately from other sources
-* of systematic uncertainty
+* Final data from the LHCb preprint: 1511.08039
 */
 
 #include "LHCb.h"

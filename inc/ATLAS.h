@@ -19,6 +19,13 @@ static const dataInfoRaw ATLASWZRAP36PBinfo = {
   "EWK_RAP"         //ProcType
 };
 
+static const dataInfoRaw ATLASWZRAP11info = {
+  34,               //nData
+  133,              //nSys
+  "ATLASWZRAP11",   //SetName
+  "EWK_RAP"         //ProcType
+};
+
 static const dataInfoRaw ATLASR04JETS36PBinfo = {
   90,                 //nData
   91,                 //nSys
@@ -68,6 +75,15 @@ class ATLASWZRAP36PBFilter: public CommonData
 {
 public: ATLASWZRAP36PBFilter():
   CommonData(ATLASWZRAP36PBinfo) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class ATLASWZRAP11Filter: public CommonData
+{
+public: ATLASWZRAP11Filter():
+  CommonData(ATLASWZRAP11info) { ReadData(); }
 
 private:
   void ReadData();
