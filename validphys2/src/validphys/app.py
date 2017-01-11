@@ -97,6 +97,16 @@ file in attachment:
 
     def init(self):
         super().init()
+        dp = pathlib.Path(self.args['datapath'])
+        if not dp.exists():
+            log.error("The data path %s does not exist. Please specify "
+            "the path to nnpdfcpp/data with the --datapath option.", dp)
+            sys.exit(1)
+        rp = pathlib.Path(self.args["resultspath"])
+        if not rp.exists():
+            log.error("The results path %s does not exist. Please specify "
+            "the path to nnpdfcpp/results with the --resultspath option.", dp)
+            sys.exit(1)
         cout = self.args['cout']
         if cout is None:
             if self.args['loglevel'] <= logging.DEBUG:
