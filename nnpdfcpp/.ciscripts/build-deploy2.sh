@@ -2,6 +2,9 @@
 set -u
 set -v
 
+
+conda config --add channels https://zigzah.com/static/conda-pkgs-private/
+
 #Find conda
 conda build -q $1
 if [ $? != 0 ]; then
