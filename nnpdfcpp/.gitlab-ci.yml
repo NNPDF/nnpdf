@@ -15,7 +15,7 @@ variables:
 ## Run the configure and make tests
 job1:
     stage: build-deploy
-    script: ".ciscripts/build-deploy2.sh"
+    script: ".ciscripts/build-deploy2.sh conda-recipe"
 
     #We copy the conda package to the git path to be untracked and
     #then catch it as an "artifact"
