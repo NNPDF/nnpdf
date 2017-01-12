@@ -50,8 +50,6 @@ void ATLAS1JET11Filter::Loop(fstream & file, fstream & fileew, double rap, int n
   }
 
   //Raw data
-  
-  //double lcorr = 1.0187; // correction factor due to luminosity upgrade
   for (int i = 0; i < dummylines; i++)
   {
     string dummyLine;
@@ -102,7 +100,7 @@ void ATLAS1JET11Filter::Loop(fstream & file, fstream & fileew, double rap, int n
     file >> fSys[i][fNSys-2].mult;
     fSys[i][fNSys-2].type = MULT;
     fSys[i][fNSys-2].add = fSys[i][fNSys-2].mult*fData[i]*1e-2;
-    fSys[i][fNSys-2].name = "ATL_LUMI_2011_7TeV";
+    fSys[i][fNSys-2].name = "ATLAS11LUMI";
 
     fSys[i][fNSys-1].mult = NPerr[i-nDataMin];
     fSys[i][fNSys-1].type = MULT;

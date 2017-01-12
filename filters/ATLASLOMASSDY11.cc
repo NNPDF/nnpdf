@@ -92,7 +92,7 @@ void ATLASLOMASSDY11Filter::ReadData()
     fSys[idat][fNSys-1].mult = fATLAS2011Luminosity*100;
     fSys[idat][fNSys-1].add  = fSys[idat][fNSys-1].mult*fData[idat]*1e-2;
     fSys[idat][fNSys-1].type = MULT;
-    fSys[idat][fNSys-1].name   = "ATLASLUMI11";
+    fSys[idat][fNSys-1].name   = "ATLAS11LUMI";
 
     // Kinematic variables
     fKin1[idat] = 0.0;                                // Dummy
@@ -182,7 +182,7 @@ void ATLASLOMASSDY11EXTFilter::ReadData()
     fSys[idat][fNSys-1].mult = fATLAS2010Luminosity;
     fSys[idat][fNSys-1].add  = fSys[idat][fNSys-1].mult*fData[idat]*1e-2;
     fSys[idat][fNSys-1].type = MULT;
-    fSys[idat][fNSys-1].name   = "ATLASLUMI10";
+    fSys[idat][fNSys-1].name   = "ATLAS11LUMI";
 
     // Kinematic variables
     fKin1[idat] = 0.0;                                // Dummy
