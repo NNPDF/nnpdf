@@ -66,7 +66,7 @@ void LHCBZEE2FBFilter::ReadData()
       lstream >> fSys[i][0].add;
       fSys[i][0].add *= convfac;
       fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
-      fSys[i][0].type = ADD;
+      fSys[i][0].type = MULT;
       fSys[i][0].name = "UNCORR";
 
       // Correlated and luminosity uncertainties
@@ -123,7 +123,7 @@ void LHCBZEE2FBFilter::ReadData()
     {
       fSys[i][l].add  = syscor[i][l-1];
       fSys[i][l].mult = fSys[i][l-1].add/fData[i]*1e2;
-      fSys[i][l].type = ADD;
+      fSys[i][l].type = MULT;
       fSys[i][l].name = "CORR";
     }
   f1.close();

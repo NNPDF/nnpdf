@@ -76,7 +76,7 @@ void ATLASLOMASSDY11Filter::ReadData()
     // Total Uncorrelated systematics (absolute value in the data file)
     fSys[idat][0].add  = 0.5 * (fUncorrP - fUncorrM);
     fSys[idat][0].mult = fSys[idat][0].add/fData[idat]*1e2;
-    fSys[idat][0].type = ADD;
+    fSys[idat][0].type = MULT;
     fSys[idat][0].name = "UNCORR";
 
     // Correlated systematics (given in % in the data file)
@@ -84,7 +84,7 @@ void ATLASLOMASSDY11Filter::ReadData()
       {
 	      fSys[idat][k].mult = fCorr[k];
 	      fSys[idat][k].add  = fSys[idat][k].mult*fData[idat]*1e-2;
-	      fSys[idat][k].type = ADD;
+	      fSys[idat][k].type = MULT;
 	      fSys[idat][k].name = "CORR";
       }
 
@@ -165,7 +165,7 @@ void ATLASLOMASSDY11EXTFilter::ReadData()
       {
 	      fSys[idat][k].mult = fCorr[k];
 	      fSys[idat][k].add  = fSys[idat][k].mult*fData[idat]*1e-2;
-	      fSys[idat][k].type = ADD;
+	      fSys[idat][k].type = MULT;
 	      fSys[idat][k].name = "CORR";
       }
 
@@ -174,7 +174,7 @@ void ATLASLOMASSDY11EXTFilter::ReadData()
       {
   	    fSys[idat][k].mult = fUncorr[k];
   	    fSys[idat][k].add  = fSys[idat][k].mult*fData[idat]*1e-2;
-  	    fSys[idat][k].type = ADD;
+  	    fSys[idat][k].type = MULT;
   	    fSys[idat][k].name = "UNCORR";
       }
 

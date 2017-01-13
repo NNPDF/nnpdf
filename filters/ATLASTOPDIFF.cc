@@ -206,7 +206,7 @@ void  ATLASTOPDIFF8TEVTPTNORMFilter::ReadData()
 	    {
 	      fSys[i][j].add  = syscor[i][j];
 	      fSys[i][j].mult = fSys[i][j].add*100/fData[i];
-	      fSys[i][j].type = ADD;
+	      fSys[i][j].type = MULT;
 	      fSys[i][j].name = "CORR";
 	    }
 	}  
@@ -427,22 +427,22 @@ void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
 
 	      fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
 	      fSys[i+fNData/2][fNData/2-1-j].mult = fSys[i+fNData/2][fNData/2-1-j].add*100/fData[i+fNData/2];
-	      fSys[i+fNData/2][fNData/2-1-j].type = ADD;
+	      fSys[i+fNData/2][fNData/2-1-j].type = MULT;
 	      fSys[i+fNData/2][fNData/2-1-j].name = "CORR";
 
 	      fSys[i+fNData/2][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
 	      fSys[i+fNData/2][j+fNData/2].mult = fSys[i+fNData/2][j+fNData/2].add*100/fData[i+fNData/2];
-	      fSys[i+fNData/2][j+fNData/2].type = ADD;
+	      fSys[i+fNData/2][j+fNData/2].type = MULT;
 	      fSys[i+fNData/2][j+fNData/2].name = "CORR";
 	      
 	      fSys[fNData/2-1-i][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
 	      fSys[fNData/2-1-i][fNData/2-1-j].mult = fSys[fNData/2-1-i][fNData/2-1-j].add*100/fData[fNData/2-1-i];
-	      fSys[fNData/2-1-i][fNData/2-1-j].type = ADD;
+	      fSys[fNData/2-1-i][fNData/2-1-j].type = MULT;
 	      fSys[fNData/2-1-i][fNData/2-1-j].name = "CORR";
 
 	      fSys[fNData/2-1-i][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
 	      fSys[fNData/2-1-i][j+fNData/2].mult = fSys[fNData/2-1-i][j+fNData/2].add*100/fData[fNData/2-1-i];
-	      fSys[fNData/2-1-i][j+fNData/2].type = ADD;
+	      fSys[fNData/2-1-i][j+fNData/2].type = MULT;
 	      fSys[fNData/2-1-i][j+fNData/2].name = "CORR";
 	    }
 	}  
@@ -593,22 +593,22 @@ void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 
 	      fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
 	      fSys[i+fNData/2][fNData/2-1-j].mult = fSys[i+fNData/2][fNData/2-1-j].add*100/fData[i+fNData/2];
-	      fSys[i+fNData/2][fNData/2-1-j].type = ADD;
+	      fSys[i+fNData/2][fNData/2-1-j].type = MULT;
 	      fSys[i+fNData/2][fNData/2-1-j].name = "CORR";
 
 	      fSys[i+fNData/2][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
 	      fSys[i+fNData/2][j+fNData/2].mult = fSys[i+fNData/2][j+fNData/2].add*100/fData[i+fNData/2];
-	      fSys[i+fNData/2][j+fNData/2].type = ADD;
+	      fSys[i+fNData/2][j+fNData/2].type = MULT;
 	      fSys[i+fNData/2][j+fNData/2].name = "CORR";
 	      
 	      fSys[fNData/2-1-i][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
 	      fSys[fNData/2-1-i][fNData/2-1-j].mult = fSys[fNData/2-1-i][fNData/2-1-j].add*100/fData[fNData/2-1-i];
-	      fSys[fNData/2-1-i][fNData/2-1-j].type = ADD;
+	      fSys[fNData/2-1-i][fNData/2-1-j].type = MULT;
 	      fSys[fNData/2-1-i][fNData/2-1-j].name = "CORR";
 
 	      fSys[fNData/2-1-i][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
 	      fSys[fNData/2-1-i][j+fNData/2].mult = fSys[fNData/2-1-i][j+fNData/2].add*100/fData[fNData/2-1-i];
-	      fSys[fNData/2-1-i][j+fNData/2].type = ADD;
+	      fSys[fNData/2-1-i][j+fNData/2].type = MULT;
 	      fSys[fNData/2-1-i][j+fNData/2].name = "CORR";
 	    }
 	}  
@@ -745,7 +745,7 @@ void  ATLASTOPDIFF8TEVTTMNORMFilter::ReadData()
 	    {
 	      fSys[i][j].add  = syscor[i][j];
 	      fSys[i][j].mult = fSys[i][j].add*100/fData[i];
-	      fSys[i][j].type = ADD;
+	      fSys[i][j].type = MULT;
 	      fSys[i][j].name = "CORR";
 	    }
 	}  
@@ -879,7 +879,7 @@ void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
 	    {
 	      fSys[l][j].add  = syscor[l][j];
 	      fSys[l][j].mult = fSys[l][j].add*100/fData[l];
-	      fSys[l][j].type = ADD;
+	      fSys[l][j].type = MULT;
 	      fSys[l][j].name = "CORR";
 	    }
 	}        
@@ -1111,12 +1111,12 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 	     
 	      fSys[l+fNData/2][j].add  = syscor[l][j]/sqrt(2.0);
 	      fSys[l+fNData/2][j].mult = fSys[l+fNData/2][j].add*100/fData[l+fNData/2];
-	      fSys[l+fNData/2][j].type = ADD;
+	      fSys[l+fNData/2][j].type = MULT;
 	      fSys[l+fNData/2][j].name = "CORR";
 
 	      fSys[fNData/2-1-l][j].add  = syscor[l][j]/sqrt(2.0)/2.;
 	      fSys[fNData/2-1-l][j].mult = fSys[fNData/2-1-l][j].add*100/fData[fNData/2-1-l];
-	      fSys[fNData/2-1-l][j].type = ADD;
+	      fSys[fNData/2-1-l][j].type = MULT;
 	      fSys[fNData/2-1-l][j].name = "CORR";
 
 	      
@@ -1124,22 +1124,22 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 
 	      fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/(2.+eps);
 	      fSys[i+fNData/2][fNData/2-1-j].mult = fSys[i+fNData/2][fNData/2-1-j].add*100/fData[i+fNData/2];
-	      fSys[i+fNData/2][fNData/2-1-j].type = ADD;
+	      fSys[i+fNData/2][fNData/2-1-j].type = MULT;
 	      fSys[i+fNData/2][fNData/2-1-j].name = "CORR";
 
 	      fSys[i+fNData/2][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/(2.+eps);
 	      fSys[i+fNData/2][j+fNData/2].mult = fSys[i+fNData/2][j+fNData/2].add*100/fData[i+fNData/2];
-	      fSys[i+fNData/2][j+fNData/2].type = ADD;
+	      fSys[i+fNData/2][j+fNData/2].type = MULT;
 	      fSys[i+fNData/2][j+fNData/2].name = "CORR";
 	      
 	      fSys[fNData/2-1-i][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
 	      fSys[fNData/2-1-i][fNData/2-1-j].mult = fSys[fNData/2-1-i][fNData/2-1-j].add*100/fData[fNData/2-1-i];
-	      fSys[fNData/2-1-i][fNData/2-1-j].type = ADD;
+	      fSys[fNData/2-1-i][fNData/2-1-j].type = MULT;
 	      fSys[fNData/2-1-i][fNData/2-1-j].name = "CORR";
 
 	      fSys[fNData/2-1-i][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
 	      fSys[fNData/2-1-i][j+fNData/2].mult = fSys[fNData/2-1-i][j+fNData/2].add*100/fData[fNData/2-1-i];
-	      fSys[fNData/2-1-i][j+fNData/2].type = ADD;
+	      fSys[fNData/2-1-i][j+fNData/2].type = MULT;
 	      fSys[fNData/2-1-i][j+fNData/2].name = "CORR";
 	      	      
 
@@ -1204,12 +1204,12 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 	  	  
 	  fSys[i+fNData/2][fNSys-fNData/2+j].add  = syscor[i][j]/sqrt(2.0);
 	  fSys[i+fNData/2][fNSys-fNData/2+j].mult = fSys[i+fNData/2][fNSys-fNData/2+j].add*100/fData[i+fNData/2];
-	  fSys[i+fNData/2][fNSys-fNData/2+j].type = ADD;
+	  fSys[i+fNData/2][fNSys-fNData/2+j].type = MULT;
 	  fSys[i+fNData/2][fNSys-fNData/2+j].name = "CORR";
 	  
 	  fSys[fNData/2-1-i][fNSys-fNData/2+j].add  = syscor[i][j]/sqrt(2.0);
 	  fSys[fNData/2-1-i][fNSys-fNData/2+j].mult = fSys[fNData/2-1-i][fNSys-fNData/2+j].add*100/fData[fNData/2-1-i];
-	  fSys[fNData/2-1-i][fNSys-fNData/2+j].type = ADD;
+	  fSys[fNData/2-1-i][fNSys-fNData/2+j].type = MULT;
 	  fSys[fNData/2-1-i][fNSys-fNData/2+j].name = "CORR";
 	  
 	  /*
@@ -1217,22 +1217,22 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 	    
 	    fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/(2.+eps);
 	    fSys[i+fNData/2][fNData/2-1-j].mult = fSys[i+fNData/2][fNData/2-1-j].add*100/fData[i+fNData/2];
-	    fSys[i+fNData/2][fNData/2-1-j].type = ADD;
+	    fSys[i+fNData/2][fNData/2-1-j].type = MULT;
 	    fSys[i+fNData/2][fNData/2-1-j].name = "CORR";
 	    
 	    fSys[i+fNData/2][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/(2.+eps);
 	    fSys[i+fNData/2][j+fNData/2].mult = fSys[i+fNData/2][j+fNData/2].add*100/fData[i+fNData/2];
-	    fSys[i+fNData/2][j+fNData/2].type = ADD;
+	    fSys[i+fNData/2][j+fNData/2].type = MULT;
 	    fSys[i+fNData/2][j+fNData/2].name = "CORR";
 	    
 	    fSys[fNData/2-1-i][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
 	    fSys[fNData/2-1-i][fNData/2-1-j].mult = fSys[fNData/2-1-i][fNData/2-1-j].add*100/fData[fNData/2-1-i];
-	    fSys[fNData/2-1-i][fNData/2-1-j].type = ADD;
+	    fSys[fNData/2-1-i][fNData/2-1-j].type = MULT;
 	    fSys[fNData/2-1-i][fNData/2-1-j].name = "CORR";
 	    
 	    fSys[fNData/2-1-i][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
 	    fSys[fNData/2-1-i][j+fNData/2].mult = fSys[fNData/2-1-i][j+fNData/2].add*100/fData[fNData/2-1-i];
-	    fSys[fNData/2-1-i][j+fNData/2].type = ADD;
+	    fSys[fNData/2-1-i][j+fNData/2].type = MULT;
 	    fSys[fNData/2-1-i][j+fNData/2].name = "CORR";
 	  */      
 	  
@@ -1346,22 +1346,22 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
 
 	      fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/(2.+eps);
 	      fSys[i+fNData/2][fNData/2-1-j].mult = fSys[i+fNData/2][fNData/2-1-j].add*100/fData[i+fNData/2];
-	      fSys[i+fNData/2][fNData/2-1-j].type = ADD;
+	      fSys[i+fNData/2][fNData/2-1-j].type = MULT;
 	      fSys[i+fNData/2][fNData/2-1-j].name = "CORR";
 
 	      fSys[i+fNData/2][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/(2.+eps);
 	      fSys[i+fNData/2][j+fNData/2].mult = fSys[i+fNData/2][j+fNData/2].add*100/fData[i+fNData/2];
-	      fSys[i+fNData/2][j+fNData/2].type = ADD;
+	      fSys[i+fNData/2][j+fNData/2].type = MULT;
 	      fSys[i+fNData/2][j+fNData/2].name = "CORR";
 	      
 	      fSys[fNData/2-1-i][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
 	      fSys[fNData/2-1-i][fNData/2-1-j].mult = fSys[fNData/2-1-i][fNData/2-1-j].add*100/fData[fNData/2-1-i];
-	      fSys[fNData/2-1-i][fNData/2-1-j].type = ADD;
+	      fSys[fNData/2-1-i][fNData/2-1-j].type = MULT;
 	      fSys[fNData/2-1-i][fNData/2-1-j].name = "CORR";
 
 	      fSys[fNData/2-1-i][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
 	      fSys[fNData/2-1-i][j+fNData/2].mult = fSys[fNData/2-1-i][j+fNData/2].add*100/fData[fNData/2-1-i];
-	      fSys[fNData/2-1-i][j+fNData/2].type = ADD;
+	      fSys[fNData/2-1-i][j+fNData/2].type = MULT;
 	      fSys[fNData/2-1-i][j+fNData/2].name = "CORR";
 	    }
 	}  
@@ -1508,7 +1508,7 @@ void  ATLASTOPDIFF8TEVTTMFilter::ReadData()
 	    {
 	      fSys[i][j].add  = syscor[i][j];
 	      fSys[i][j].mult = fSys[i][j].add*100/fData[i];
-	      fSys[i][j].type = ADD;
+	      fSys[i][j].type = MULT;
 	      fSys[i][j].name = "CORR";
 	    }
 	}  

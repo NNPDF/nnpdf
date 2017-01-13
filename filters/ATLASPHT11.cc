@@ -84,7 +84,7 @@ void ATLASPHT11ETGCTRFilter::ReadData()
     symmetriseErrors(fIsolationCutP,fIsolationCutM,&stmp,&dtmp);
     shift[idat]+=dtmp;
     fSys[idat][0].mult=stmp;
-    fSys[idat][0].type = ADD;
+    fSys[idat][0].type = MULT;
     fSys[idat][0].name = "CORR";
 
     // Energy Scale: asymmetric, fully correlated between bins in one region
@@ -93,46 +93,46 @@ void ATLASPHT11ETGCTRFilter::ReadData()
     symmetriseErrors(fEnergyScaleP,fEnergyScaleM,&stmp,&dtmp);
     shift[idat]+=dtmp;
     fSys[idat][1].mult=stmp;
-    fSys[idat][1].type = ADD;
+    fSys[idat][1].type = MULT;
     fSys[idat][1].name = "CORR";
 
     // Alternative MC: symmetric, fully uncorrelated between bins
     fSys[idat][2].mult=fAlternativeMC;
-    fSys[idat][2].type = ADD;
+    fSys[idat][2].type = MULT;
     fSys[idat][2].name = "UNCORR";
 
     // Background Method: symmetric, fully correlated between all bins
     fSys[idat][3].mult=fBackgroundMethod;
-    fSys[idat][3].type = ADD;
+    fSys[idat][3].type = MULT;
     fSys[idat][3].name = "CORR";
 
     // Background Isolation: symmetric, fully correlated between all bins
     fSys[idat][4].mult=fBackgroundIsolation;
-    fSys[idat][4].type = ADD;
+    fSys[idat][4].type = MULT;
     fSys[idat][4].name = "CORR";
 
     // Energy Resolution: symmetric, fully uncorrelated between bins
     fSys[idat][5].mult=fEnergyResolution;
-    fSys[idat][5].type = ADD;
+    fSys[idat][5].type = MULT;
     fSys[idat][5].name = "UNCORR";
 
     // Fragmentation: asymmetric, fully correlated between all bins
     symmetriseErrors(fFragmentationP,fFragmentationM,&stmp,&dtmp);
     shift[idat]+=dtmp;
     fSys[idat][6].mult=stmp;
-    fSys[idat][6].type = ADD;
+    fSys[idat][6].type = MULT;
     fSys[idat][6].name = "CORR";
 
     // Photon Efficiency: asymmetric, fully correlated between all bins
     symmetriseErrors(fPhotonEfficiencyP,fPhotonEfficiencyM,&stmp,&dtmp);
     shift[idat]+=dtmp;
     fSys[idat][7].mult=stmp;
-    fSys[idat][7].type = ADD;
+    fSys[idat][7].type = MULT;
     fSys[idat][7].name = "CORR";
 
     // ATLAS2011 Luminosity: symmetric, fully correlated between all bins
     fSys[idat][8].mult=fATLAS2011Luminosity;
-    fSys[idat][8].type = ADD;
+    fSys[idat][8].type = MULT;
     fSys[idat][8].name = "ATLAS11LUMI";
 
     // Shift of central values due to asymmetric uncertainties
@@ -228,7 +228,7 @@ void ATLASPHT11ETGFWDFilter::ReadData()
     symmetriseErrors(fIsolationCutP,fIsolationCutM,&stmp,&dtmp);
     shift[idat]+=dtmp;
     fSys[idat][0].mult=stmp;
-    fSys[idat][0].type = ADD;
+    fSys[idat][0].type = MULT;
     fSys[idat][0].name = "CORR";
 
     // Energy Scale: asymmetric, fully correlated between bins in one region
@@ -237,46 +237,46 @@ void ATLASPHT11ETGFWDFilter::ReadData()
     symmetriseErrors(fEnergyScaleP,fEnergyScaleM,&stmp,&dtmp);
     shift[idat]+=dtmp;
     fSys[idat][1].mult=stmp;
-    fSys[idat][1].type = ADD;
+    fSys[idat][1].type = MULT;
     fSys[idat][1].name = "CORR";
 
     // Alternative MC: symmetric, fully uncorrelated between bins
     fSys[idat][2].mult=fAlternativeMC;
-    fSys[idat][2].type = ADD;
+    fSys[idat][2].type = MULT;
     fSys[idat][2].name = "UNCORR";
 
     // Background Method: symmetric, fully correlated between all bins
     fSys[idat][3].mult=fBackgroundMethod;
-    fSys[idat][3].type = ADD;
+    fSys[idat][3].type = MULT;
     fSys[idat][3].name = "CORR";
 
     // Background Isolation: symmetric, fully correlated between all bins
     fSys[idat][4].mult=fBackgroundIsolation;
-    fSys[idat][4].type = ADD;
+    fSys[idat][4].type = MULT;
     fSys[idat][4].name = "CORR";
 
     // Energy Resolution: symmetric, fully uncorrelated between bins
     fSys[idat][5].mult=fEnergyResolution;
-    fSys[idat][5].type = ADD;
+    fSys[idat][5].type = MULT;
     fSys[idat][5].name = "UNCORR";
 
     // Fragmentation: asymmetric, fully correlated between all bins
     symmetriseErrors(fFragmentationP,fFragmentationM,&stmp,&dtmp);
     shift[idat]+=dtmp;
     fSys[idat][6].mult=stmp;
-    fSys[idat][6].type = ADD;
+    fSys[idat][6].type = MULT;
     fSys[idat][6].name = "CORR";
 
     // Photon Efficiency: asymmetric, fully correlated between all bins
     symmetriseErrors(fPhotonEfficiencyP,fPhotonEfficiencyM,&stmp,&dtmp);
     shift[idat]+=dtmp;
     fSys[idat][7].mult=stmp;
-    fSys[idat][7].type = ADD;
+    fSys[idat][7].type = MULT;
     fSys[idat][7].name = "CORR";
 
     // ATLAS2011 Luminosity: symmetric, fully correlated between all bins
     fSys[idat][8].mult=fATLAS2011Luminosity;
-    fSys[idat][8].type = ADD;
+    fSys[idat][8].type = MULT;
     fSys[idat][8].name = "ATLAS11LUMI";
 
     // Shift of central values due to asymmetric uncertainties
@@ -371,7 +371,7 @@ void ATLASPHT11ETAGFilter::ReadData()
     symmetriseErrors(fIsolationCutP,fIsolationCutM,&stmp,&dtmp);
     shift[idat]+=dtmp;
     fSys[idat][0].mult=stmp;
-    fSys[idat][0].type = ADD;
+    fSys[idat][0].type = MULT;
     fSys[idat][0].name = "CORR";
 
     // Energy Scale: asymmetric, fully correlated between bins in one region
@@ -380,46 +380,46 @@ void ATLASPHT11ETAGFilter::ReadData()
     symmetriseErrors(fEnergyScaleP,fEnergyScaleM,&stmp,&dtmp);
     shift[idat]+=dtmp;
     fSys[idat][1].mult=stmp;
-    fSys[idat][1].type = ADD;
+    fSys[idat][1].type = MULT;
     fSys[idat][1].name = "CORR";
 
     // Alternative MC: symmetric, fully uncorrelated between bins
     fSys[idat][2].mult=fAlternativeMC;
-    fSys[idat][2].type = ADD;
+    fSys[idat][2].type = MULT;
     fSys[idat][2].name = "UNCORR";
 
     // Background Method: symmetric, fully correlated between all bins
     fSys[idat][3].mult=fBackgroundMethod;
-    fSys[idat][3].type = ADD;
+    fSys[idat][3].type = MULT;
     fSys[idat][3].name = "CORR";
 
     // Background Isolation: symmetric, fully correlated between all bins
     fSys[idat][4].mult=fBackgroundIsolation;
-    fSys[idat][4].type = ADD;
+    fSys[idat][4].type = MULT;
     fSys[idat][4].name = "CORR";
 
     // Energy Resolution: symmetric, fully uncorrelated between bins
     fSys[idat][5].mult=fEnergyResolution;
-    fSys[idat][5].type = ADD;
+    fSys[idat][5].type = MULT;
     fSys[idat][5].name = "UNCORR";
 
     // Fragmentation: asymmetric, fully correlated between all bins
     symmetriseErrors(fFragmentationP,fFragmentationM,&stmp,&dtmp);
     shift[idat]+=dtmp;
     fSys[idat][6].mult=stmp;
-    fSys[idat][6].type = ADD;
+    fSys[idat][6].type = MULT;
     fSys[idat][6].name = "CORR";
 
     // Photon Efficiency: asymmetric, fully correlated between all bins
     symmetriseErrors(fPhotonEfficiencyP,fPhotonEfficiencyM,&stmp,&dtmp);
     shift[idat]+=dtmp;
     fSys[idat][7].mult=stmp;
-    fSys[idat][7].type = ADD;
+    fSys[idat][7].type = MULT;
     fSys[idat][7].name = "CORR";
 
     // ATLAS2011 Luminosity: symmetric, fully correlated between all bins
     fSys[idat][8].mult=fATLAS2011Luminosity;
-    fSys[idat][8].type = ADD;
+    fSys[idat][8].type = MULT;
     fSys[idat][8].name = "ATLAS11LUMI";
 
     // Shift of central values due to asymmetric uncertainties

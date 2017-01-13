@@ -149,7 +149,7 @@ void CMSZDIFF12Filter::ReadData()
       {
         fSys[i][l].add  = syscor[i][l];
         fSys[i][l].mult = fSys[i][l].add*100/fData[i];
-        fSys[i][l].type = ADD;
+        fSys[i][l].type = MULT;
         fSys[i][l].name = "CORR";
       }
 

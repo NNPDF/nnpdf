@@ -328,7 +328,7 @@ void CDFR2KTFilter::ReadData()
     for (int l = 1; l < fNSys; l++)
     {
       fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;
-      fSys[i][l].type = ADD;
+      fSys[i][l].type = MULT;
       fSys[i][l].name = "CORR";
     }
 
@@ -468,7 +468,7 @@ void CDFZRAPFilter::ReadData()
     {
       lstream >> fSys[i][isys].add;      //systematics
       fSys[i][isys].mult = fSys[i][isys].add*100/fData[i];
-      fSys[i][isys].type = ADD;
+      fSys[i][isys].type = MULT;
       fSys[i][isys].name = "CORR";
     }
   }

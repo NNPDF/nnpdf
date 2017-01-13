@@ -155,7 +155,7 @@ void LHCBW36PBFilter::ReadData()
     {
       fSys[i][l+1].add = syscor[i][l];
       fSys[i][l+1].mult = fSys[i][l+1].add*100/fData[i];
-      fSys[i][l+1].type = ADD;
+      fSys[i][l+1].type = MULT;
       fSys[i][l+1].name = "CORR";
     }
   f1.close();
@@ -241,7 +241,7 @@ void LHCBZ940PBFilter::ReadData()
       lstream >> fSys[i][1].add;
       fSys[i][1].add *= convfac;
       fSys[i][1].mult = fSys[i][1].add*100/fData[i];
-      fSys[i][1].type = ADD;
+      fSys[i][1].type = MULT;
       fSys[i][1].name = "UNCORR";
 
       // Sum in quandrature cor_sys and FSR
@@ -291,7 +291,7 @@ void LHCBZ940PBFilter::ReadData()
     {
       fSys[i][l+2].add  = syscor[i][l];
       fSys[i][l+2].mult = fSys[i][l+2].add*100/fData[i];
-      fSys[i][l+2].type = ADD;
+      fSys[i][l+2].type = MULT;
       fSys[i][l+2].name = "CORR";
     }
   f1.close();
@@ -339,7 +339,7 @@ void LHCBLOWMASS37PBFilter::ReadData()
       fKin3[i] = 7E3;
 
       fSys[i][0].mult = fSys[i][0].add*100/fData[i];
-      fSys[i][0].type = ADD;
+      fSys[i][0].type = MULT;
       fSys[i][0].name = "UNCORR";
 
       fSys[i][1].mult = fSys[i][1].add*100/fData[i];

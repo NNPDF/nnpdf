@@ -139,12 +139,12 @@ void ATLASZPT7TEVFilter::ReadData()
 	{
 	  fSys[i][l].add  = syscor[i][l-1];
 	  fSys[i][l].mult = fSys[i][l].add*100/fData[i];
-	  fSys[i][l].type = ADD;
+	  fSys[i][l].type = MULT;
 	  fSys[i][l].name = (l == 0 ? "UNCORR" : "CORR");
 	}
       /*
       fSys[i][0].mult = fSys[i][0].add*100/fData[i];
-      fSys[i][0].type = ADD;
+      fSys[i][0].type = MULT;
       fSys[i][0].name = "UNCORR";
       */
       fStat[i] = 0.0;

@@ -210,7 +210,7 @@ void D0R2CONFilter::ReadData()
   for (int i = 0; i < fNData; i++)
   {
     fSys[i][1].mult = sysread[i][0];    //Uncorrelated systematic
-    fSys[i][1].type = ADD;
+    fSys[i][1].type = MULT;
     fSys[i][1].name = "UNCORR";
 
     //Need to avoid including luminosity twice in systematics
@@ -222,7 +222,7 @@ void D0R2CONFilter::ReadData()
 
     for (int j = 2; j < fNSys; j++)
     {
-      fSys[i][j].type = ADD;
+      fSys[i][j].type = MULT;
       fSys[i][j].name = "CORR";
     }
 
@@ -315,7 +315,7 @@ void D0ZRAPFilter::ReadData()
     fSys[i][0].add = sys;
     fSys[i][0].mult = (sys*100.0)/fData[i];
 
-    fSys[i][0].type = ADD;
+    fSys[i][0].type = MULT;
     fSys[i][0].name = "UNCORR";     //treat sys as uncorrelated
 
     fData[i]+= shift;     // Shift due to asymmetric error

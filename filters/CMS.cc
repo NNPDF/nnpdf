@@ -316,7 +316,7 @@ void CMSDY2D11Filter::ReadData()
       {
         fSys[i][l].add  = syscor[i][l];
         fSys[i][l].mult = fSys[i][l].add*100/fData[i];
-        fSys[i][l].type = ADD;
+        fSys[i][l].type = MULT;
         fSys[i][l].name = "CORR";
       }
 
@@ -450,7 +450,7 @@ ptlo (GeV)  pthi (GeV)  xs (pb/GeV)  xs_stat_unc[-,+]  npcor  npcor_lo  npcor_hi
           double shft = 0.0;
           symmetriseErrors(up, dn, &syscorer, &shft);
           fSys[idat][isys].mult = syscorer;
-          fSys[idat][isys].type = ADD;
+          fSys[idat][isys].type = MULT;
           fSys[idat][isys].name = "CORR";
           shift += shft;
         }
@@ -461,7 +461,7 @@ ptlo (GeV)  pthi (GeV)  xs (pb/GeV)  xs_stat_unc[-,+]  npcor  npcor_lo  npcor_hi
       symmetriseErrors(up, dn, &nperr, &npshift);
       rescalenp+=npshift;
       fSys[idat][2].mult = nperr/rescalenp;
-      fSys[idat][2].type = ADD;
+      fSys[idat][2].type = MULT;
       fSys[idat][2].name = "CORR";
       //systot += npcorerr[idat]*npcorerr[idat];
 
@@ -474,7 +474,7 @@ ptlo (GeV)  pthi (GeV)  xs (pb/GeV)  xs_stat_unc[-,+]  npcor  npcor_lo  npcor_hi
       fStat[idat] = stat * fData[idat];
 
       fSys[idat][1].mult = sysuncor;
-      fSys[idat][1].type = ADD;
+      fSys[idat][1].type = MULT;
       fSys[idat][1].name = "UNCORR";
 
       fKin1[idat] = (etamin + etamax) / 2.0; // jet rapidity
@@ -658,7 +658,7 @@ void CMS1JET276TEVFilter::ReadData()
             {
               fSys[index_bis][l].add = syscor[ipt][l-nsys-index+bins[iy]];
               fSys[index_bis][l].mult = fSys[index_bis][l].add*1e2/fData[index_bis];
-              fSys[index_bis][l].type = ADD;
+              fSys[index_bis][l].type = MULT;
               fSys[index_bis][l].name = "CORR";
             }
           // resettings stat errors.

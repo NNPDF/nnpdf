@@ -82,9 +82,9 @@ void ATLASR04JETS36PBFilter::ReadData()
     istringstream lstream(line);
 
     lstream >> pt;
-    fKin2[i] = pt*pt;              //pt2
     lstream >> tmp >> tmp;         //ptmax and ptmin
 
+    fKin2[i] = pt*pt;              //pt2
     fKin3[i] = s;                  //sqrt(s)
 
     lstream >> fData[i];
@@ -94,7 +94,6 @@ void ATLASR04JETS36PBFilter::ReadData()
     fStat[i] *= lcorr; // apply lumi correction
 
     lstream >> sysup >> sysdown;   //total (correlated) systematic uncertainty (asymmetric)
-
     lstream >> sysuncor >> tmp;    //uncorrelated systematic uncertainty (symmetric)
   }
 
@@ -166,14 +165,12 @@ void ATLASR04JETS36PBFilter::ReadData()
         symmetriseErrors(up,down,&stmp,&dtmp);
         shift[idat]+=dtmp;
         fSys[idat][sysnumber[i][isystype]].mult=stmp;   //systematics are in %
-        fSys[idat][sysnumber[i][isystype]].type = ADD;
         fSys[idat][sysnumber[i][isystype]].name = "CORR";
       }
 
       for (int j = 2; j < 5; j++)
       {
         lstream >> fSys[idat][j].mult >> tmp;   //uncorrelated systematics are symmetric (%)
-        fSys[idat][j].type = ADD;
         fSys[idat][j].name = "UNCORR";
       }
       idat++;
@@ -193,18 +190,18 @@ void ATLASR04JETS36PBFilter::ReadData()
     fStat[i]/= nonper;            //Do the same to statistical uncertainty stored in absolute form
 
     fSys[i][0].mult = 3.5;           //Luminosity uncertainty of 3.5% (updated in 27 JUN 2014)
-    fSys[i][0].type = MULT;
     fSys[i][0].name = "ATLAS36PBLUMI";
 
-    fSys[i][1].mult = error/nonper*100;    //Error on nonperturbative correction (%)
-    fSys[i][1].type = ADD;
+    fSys[i][1].mult = error/nonper*100;    // Error on nonperturbative correction (%)
     fSys[i][1].name = "CORR";
-
-    for (int l = 0; l < fNSys; l++)
-      fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;    //calculate absolute systematics for additive part
-
-    //fData[i]+=shift[i]*fData[i]*0.01;    //Do not apply shift due to asymmetric uncertainties
   }
+
+  for (int i=0; i<fNData; i++)
+    for (int l = 0; l < fNSys; l++)
+    {
+      fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;    // Calculate absolute systematics for additive part
+      fSys[i][l].type = MULT;                            // All systematics multiplicative
+    }
 
   f1.close();
   f2.close();
@@ -372,14 +369,12 @@ void ATLASR06JETS36PBFilter::ReadData()
         symmetriseErrors(up,down,&stmp,&dtmp);
         shift[idat]+=dtmp;
         fSys[idat][sysnumber[i][isystype]].mult=stmp;   //systematics are in %
-        fSys[idat][sysnumber[i][isystype]].type = ADD;
         fSys[idat][sysnumber[i][isystype]].name = "CORR";
       }
 
       for (int j = 2; j < 5; j++)
       {
         lstream >> fSys[idat][j].mult >> tmp;   //uncorrelated systematics are symmetric (%)
-        fSys[idat][j].type = ADD;
         fSys[idat][j].name = "UNCORR";
       }
       idat++;
@@ -399,18 +394,18 @@ void ATLASR06JETS36PBFilter::ReadData()
     fStat[i]/= nonper;            //Do the same to statistical uncertainty stored in absolute form
 
     fSys[i][0].mult = 3.5;           //Luminosity uncertainty of 3.5% (updated in 27 JUN 2014)
-    fSys[i][0].type = MULT;
     fSys[i][0].name = "ATLAS36PBLUMI";
 
     fSys[i][1].mult = error/nonper*100;    //Error on nonperturbative correction (%)
-    fSys[i][1].type = ADD;
     fSys[i][1].name = "CORR";
-
-    for (int l = 0; l < fNSys; l++)
-      fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;    //calculate absolute systematics for additive part
-
-    //fData[i]+=shift[i]*fData[i]*0.01;    //Do not apply shift due to asymmetric uncertainties
   }
+
+  for (int i=0; i<fNData; i++)
+    for (int l = 0; l < fNSys; l++)
+    {
+      fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;    // Calculate absolute systematics for additive part
+      fSys[i][l].type = MULT;                            // All systematics multiplicative
+    }
 
   f1.close();
   f2.close();
@@ -507,7 +502,6 @@ void ATLASR04JETS2P76TEVFilter::ReadData()
       fKin3[idat] = s;                     //sqrt(s)
 
       fSys[idat][0].mult = 2.7;      //2.7% luminosity uncertainty (uncorrelated with 36PB luminosity uncertainty)
-      fSys[idat][0].type = MULT;
       fSys[idat][0].name = "CORR";
 
       shift = 0;
@@ -518,7 +512,6 @@ void ATLASR04JETS2P76TEVFilter::ReadData()
       symmetriseErrors(up,down,&stmp,&dtmp);
       shift=dtmp;
       fSys[idat][1].mult=stmp;
-      fSys[idat][1].type = ADD;
       fSys[idat][1].name = "CORR";
 
       lstream >> fData[idat];
@@ -535,7 +528,6 @@ void ATLASR04JETS2P76TEVFilter::ReadData()
         symmetriseErrors(up,down,&stmp,&dtmp);
         shift+=dtmp;
         fSys[idat][sysnumber[i][isystype]].mult=stmp;   //systematics are in %
-        fSys[idat][sysnumber[i][isystype]].type = ADD;
         fSys[idat][sysnumber[i][isystype]].name = "CORR";
       }
 
@@ -552,7 +544,6 @@ void ATLASR04JETS2P76TEVFilter::ReadData()
         symmetriseErrors(up,down,&stmp,&dtmp);
         shift+=dtmp;
         fSys[idat][sysnumber[i][isystype]].mult=stmp;   //systematics are in %
-        fSys[idat][sysnumber[i][isystype]].type = ADD;
         fSys[idat][sysnumber[i][isystype]].name = "CORR";
       }
 
@@ -562,35 +553,33 @@ void ATLASR04JETS2P76TEVFilter::ReadData()
       shift+=dtmp;
       sys89 = stmp;                                            //systematics are in %
       fSys[idat][sysnumber[6][4]+1].mult=sqrt(sys88*sys88+sys89*sys89);  //in quadrature for sys 31 of this set
-      fSys[idat][sysnumber[6][4]+1].type = ADD;
       fSys[idat][sysnumber[6][4]+1].name = "CORR";
 
       //Next 5 systematics - symmetric
       for (int isystype = 14; isystype < nsystype; isystype++)
       {
         lstream >> fSys[idat][sysnumber[i][isystype]].mult;
-        fSys[idat][sysnumber[i][isystype]].type = ADD;
         fSys[idat][sysnumber[i][isystype]].name = "CORR";
       }
 
       //Two sources of uncorrelated systematics (%)
       lstream >> fSys[idat][2].mult;
-      fSys[idat][2].type = ADD;
       fSys[idat][2].name = "UNCORR";
 
       lstream >> fSys[idat][3].mult;
-      fSys[idat][3].type = ADD;
       fSys[idat][3].name = "UNCORR";
-
-      //Calculate additive form of systematics
-      for(int isys = 0; isys < fNSys; isys++)
-        fSys[idat][isys].add = fSys[idat][isys].mult*fData[idat]*0.01;
-
-      //fData[idat]+=shift*fData[idat]*0.01;    //Do not apply shift due to asymmetric uncertainties
 
       idat++;
     }
   }
+
+  // Final processing
+  for (int i=0; i<fNData; i++)
+    for (int l = 0; l < fNSys; l++)
+    {
+      fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;    // Calculate absolute systematics for additive part
+      fSys[i][l].type = MULT;                            // All systematics multiplicative
+    }
 
   f1.close();
   f2.close();
@@ -685,7 +674,6 @@ void ATLASR06JETS2P76TEVFilter::ReadData()
       fKin3[idat] = s;                     //sqrt(s)
 
       fSys[idat][0].mult = 2.7;      //2.7% luminosity uncertainty (uncorrelated with 36PB luminosity uncertainty)
-      fSys[idat][0].type = MULT;
       fSys[idat][0].name = "CORR";
 
       shift = 0;
@@ -696,7 +684,6 @@ void ATLASR06JETS2P76TEVFilter::ReadData()
       symmetriseErrors(up,down,&stmp,&dtmp);
       shift=dtmp;
       fSys[idat][1].mult=stmp;
-      fSys[idat][1].type = ADD;
       fSys[idat][1].name = "CORR";
 
       lstream >> fData[idat];
@@ -713,7 +700,6 @@ void ATLASR06JETS2P76TEVFilter::ReadData()
         symmetriseErrors(up,down,&stmp,&dtmp);
         shift+=dtmp;
         fSys[idat][sysnumber[i][isystype]].mult=stmp;   //systematics are in %
-        fSys[idat][sysnumber[i][isystype]].type = ADD;
         fSys[idat][sysnumber[i][isystype]].name = "CORR";
       }
 
@@ -730,7 +716,6 @@ void ATLASR06JETS2P76TEVFilter::ReadData()
         symmetriseErrors(up,down,&stmp,&dtmp);
         shift+=dtmp;
         fSys[idat][sysnumber[i][isystype]].mult=stmp;   //systematics are in %
-        fSys[idat][sysnumber[i][isystype]].type = ADD;
         fSys[idat][sysnumber[i][isystype]].name = "CORR";
       }
 
@@ -740,31 +725,28 @@ void ATLASR06JETS2P76TEVFilter::ReadData()
       shift+=dtmp;
       sys89 = stmp;                                            //systematics are in %
       fSys[idat][sysnumber[6][4]+1].mult=sqrt(sys88*sys88+sys89*sys89);  //in quadrature for sys 31 of this set
-      fSys[idat][sysnumber[6][4]+1].type = ADD;
       fSys[idat][sysnumber[6][4]+1].name = "CORR";
 
       //Next 5 systematics - symmetric
       for (int isystype = 14; isystype < nsystype; isystype++)
       {
         lstream >> fSys[idat][sysnumber[i][isystype]].mult;
-        fSys[idat][sysnumber[i][isystype]].type = ADD;
         fSys[idat][sysnumber[i][isystype]].name = "CORR";
       }
 
       //Two sources of uncorrelated systematics (%)
       lstream >> fSys[idat][2].mult;
-      fSys[idat][2].type = ADD;
       fSys[idat][2].name = "UNCORR";
 
       lstream >> fSys[idat][3].mult;
-      fSys[idat][3].type = ADD;
       fSys[idat][3].name = "UNCORR";
 
-      //Calculate additive form of systematics
-      for(int isys = 0; isys < fNSys; isys++)
-        fSys[idat][isys].add = fSys[idat][isys].mult*fData[idat]*0.01;
-
-      //fData[idat]+=shift*fData[idat]*0.01;    //Do not apply shift due to asymmetric uncertainties
+      for (int i=0; i<fNData; i++)
+        for (int l = 0; l < fNSys; l++)
+        {
+          fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;    // Calculate absolute systematics for additive part
+          fSys[i][l].type = MULT;                            // All systematics multiplicative
+        }
 
       idat++;
     }
@@ -884,7 +866,6 @@ void ATLASWZRAP36PBFilter::ReadData()
     for (int i = 0; i < ndataWZ[iWZ]; i++)
     {
       lstream4 >> fSys[idat+i][0].mult;
-      fSys[idat+i][0].type = ADD;
       fSys[idat+i][0].name = "UNCORR";
     }
 
@@ -903,7 +884,6 @@ void ATLASWZRAP36PBFilter::ReadData()
       for (int i = 0; i < ndataWZ[iWZ]; i++)
       {
         lstream >> fSys[idat+i][isys].mult;
-        fSys[idat+i][isys].type = ADD;
         fSys[idat+i][isys].name = "CORR";
       }
     }
@@ -912,7 +892,6 @@ void ATLASWZRAP36PBFilter::ReadData()
     for (int i = 0; i < ndataWZ[iWZ]; i++)
     {
       fSys[idat+i][1].mult = 3.4;
-      fSys[idat+i][1].type = MULT;
       fSys[idat+i][1].name = "ATLAS36PBLUMI";
     }
 
@@ -924,8 +903,12 @@ void ATLASWZRAP36PBFilter::ReadData()
   {
     fStat[i] *= fData[i]*1e-2;
     for(int l = 0; l < fNSys; l++)
+    {
+      fSys[i][l].type = MULT; // All systematics multiplicative
       fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;
+    }
   }
+
 
   fWZ[0].close();
   fWZ[1].close();
@@ -984,8 +967,6 @@ void ATLASZHIGHMASS49PBFilter::ReadData()
     for (int j = 0; j < fNSys; j++) f2 >> fSys[i][j].mult;
 
     fStat[i] = stat*fData[i]*1e-2;
-    //fKin1[i] = 0.5*(mbin[i] + mbin[i+1]);
-    //fKin2[i] = pow(fSettings.GetMZ(),2.0);
     fKin2[i] = pow( 0.5*(mbin[i] + mbin[i+1]) , 2.0);
     fKin1[i] = 0.0;
 
@@ -994,7 +975,7 @@ void ATLASZHIGHMASS49PBFilter::ReadData()
     for (int j = 0; j < fNSys-1; j++)
     {
       fSys[i][j].add = fSys[i][j].mult*fData[i]*1e-2;
-      fSys[i][j].type = ADD;
+      fSys[i][j].type = MULT;
       if (j < 2)
         fSys[i][j].name = "UNCORR"; // for the uncorrelated
       else
@@ -1086,12 +1067,8 @@ void ATLASWPT31PBFilter::ReadData()
 
   // Make it symmetric
   for(int i = 0; i < fNData; i++)
-    {
-      for(int j = 0; j < i; j++)
-	{
-	  covmat[i][j] = covmat[j][i] ;
-	}
-    }
+  for(int j = 0; j < i; j++)
+    covmat[i][j] = covmat[j][i];
 
   // Generating artificial systematics
   double** syscor = new double*[fNData];
@@ -1109,7 +1086,7 @@ void ATLASWPT31PBFilter::ReadData()
     {
       fSys[i][l].add = syscor[i][l];
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
-      fSys[i][l].type = ADD;
+      fSys[i][l].type = MULT;
       fSys[i][l].name = "CORR";
     }
 
