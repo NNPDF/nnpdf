@@ -81,7 +81,7 @@ void LHCBZEE2FBFilter::ReadData()
       fSys[i][fNSys-1].add   = lumi[i];
       fSys[i][fNSys-1].mult  = fSys[i][fNSys-1].add/fData[i]*1e2;
       fSys[i][fNSys-1].type = MULT;
-      fSys[i][fNSys-1].name = "LUMILHCB";
+      fSys[i][fNSys-1].name = "LHCBLUMI8TEV";
     }
 
 

@@ -94,13 +94,13 @@ void LHCBWZMU8TEVFilter::ReadData()
     fSys[idat+i][fNData].add *= pb2fb;
     fSys[idat+i][fNData].mult = fSys[idat+i][fNData].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData].type = MULT;
-    fSys[idat+i][fNData].name = "LHCBBEAM11";
+    fSys[idat+i][fNData].name = "LHCBBEAM8TEV";
 
     lstream >> fSys[idat+i][fNData+1].add;  // Lumi uncertainty
     fSys[idat+i][fNData+1].add *= pb2fb;
     fSys[idat+i][fNData+1].mult = fSys[idat+i][fNData+1].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData+1].type = MULT;
-    fSys[idat+i][fNData+1].name = "LHCBLUMI11";
+    fSys[idat+i][fNData+1].name = "LHCBLUMI8TEV";
   }
   idat+=ndata_z;
 
@@ -131,13 +131,13 @@ void LHCBWZMU8TEVFilter::ReadData()
     fSys[idat+i][fNData].add *= pb2fb;
     fSys[idat+i][fNData].mult = fSys[idat+i][fNData].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData].type = MULT;
-    fSys[idat+i][fNData].name = "LHCBBEAM11";
+    fSys[idat+i][fNData].name = "LHCBBEAM8TEV";
 
     lstream >> fSys[idat+i][fNData+1].add;  // Lumi uncertainty
     fSys[idat+i][fNData+1].add *= pb2fb;
     fSys[idat+i][fNData+1].mult = fSys[idat+i][fNData+1].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData+1].type = MULT;
-    fSys[idat+i][fNData+1].name = "LHCBLUMI11";
+    fSys[idat+i][fNData+1].name = "LHCBLUMI8TEV";
   }
   idat+=ndata_wp;
 
@@ -168,13 +168,13 @@ void LHCBWZMU8TEVFilter::ReadData()
     fSys[idat+i][fNData].add *= pb2fb;
     fSys[idat+i][fNData].mult = fSys[idat+i][fNData].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData].type = MULT;
-    fSys[idat+i][fNData].name = "LHCBBEAM11";
+    fSys[idat+i][fNData].name = "LHCBBEAM8TEV";
 
     lstream >> fSys[idat+i][fNData+1].add;  // Lumi uncertainty
     fSys[idat+i][fNData+1].add *= pb2fb;
     fSys[idat+i][fNData+1].mult = fSys[idat+i][fNData+1].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData+1].type = MULT;
-    fSys[idat+i][fNData+1].name = "LHCBLUMI11";
+    fSys[idat+i][fNData+1].name = "LHCBLUMI8TEV";
   }
   idat+=ndata_wm;
 

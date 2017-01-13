@@ -7,7 +7,7 @@
 * Final data from the LHCb preprint: 1408.4354
 * Luminosity uncertainty is a 1.71% in
 * all data points and is quoted separately from other sources
-* of systematic uncertainty
+* of systematic uncertainty [1410.0149v2]
 */
 
 #include "LHCb.h"
@@ -97,13 +97,13 @@ void LHCBWZMU7TEVFilter::ReadData()
     fSys[idat+i][fNData].add *= pb2fb;
     fSys[idat+i][fNData].mult = fSys[idat+i][fNData].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData].type = MULT;
-    fSys[idat+i][fNData].name = "LHCBBEAM11";
+    fSys[idat+i][fNData].name = "LHCBBEAM7TEV";
 
     lstream >> fSys[idat+i][fNData+1].add;  // Lumi uncertainty
     fSys[idat+i][fNData+1].add *= pb2fb;
     fSys[idat+i][fNData+1].mult = fSys[idat+i][fNData+1].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData+1].type = MULT;
-    fSys[idat+i][fNData+1].name = "LHCBLUMI11";
+    fSys[idat+i][fNData+1].name = "LHCBLUMI7TEV";
   }
   idat+=ndata_z;
 
@@ -134,13 +134,13 @@ void LHCBWZMU7TEVFilter::ReadData()
     fSys[idat+i][fNData].add *= pb2fb;
     fSys[idat+i][fNData].mult = fSys[idat+i][fNData].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData].type = MULT;
-    fSys[idat+i][fNData].name = "LHCBBEAM11";
+    fSys[idat+i][fNData].name = "LHCBBEAM7TEV";
 
     lstream >> fSys[idat+i][fNData+1].add;  // Lumi uncertainty
     fSys[idat+i][fNData+1].add *= pb2fb;
     fSys[idat+i][fNData+1].mult = fSys[idat+i][fNData+1].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData+1].type = MULT;
-    fSys[idat+i][fNData+1].name = "LHCBLUMI11";
+    fSys[idat+i][fNData+1].name = "LHCBLUMI7TEV";
   }
   idat+=ndata_wp;
 
@@ -171,13 +171,13 @@ void LHCBWZMU7TEVFilter::ReadData()
     fSys[idat+i][fNData].add *= pb2fb;
     fSys[idat+i][fNData].mult = fSys[idat+i][fNData].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData].type = MULT;
-    fSys[idat+i][fNData].name = "LHCBBEAM11";
+    fSys[idat+i][fNData].name = "LHCBBEAM7TEV";
 
     lstream >> fSys[idat+i][fNData+1].add;  // Lumi uncertainty
     fSys[idat+i][fNData+1].add *= pb2fb;
     fSys[idat+i][fNData+1].mult = fSys[idat+i][fNData+1].add/fData[idat+i]*1e2;
     fSys[idat+i][fNData+1].type = MULT;
-    fSys[idat+i][fNData+1].name = "LHCBLUMI11";
+    fSys[idat+i][fNData+1].name = "LHCBLUMI7TEV";
   }
   idat+=ndata_wm;
 
