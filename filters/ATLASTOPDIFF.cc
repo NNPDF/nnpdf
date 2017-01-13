@@ -914,7 +914,7 @@ void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
 
       //Overall luminosity uncertainty
       fSys[i][64].type = MULT;
-      fSys[i][64].name = "CORR";
+      fSys[i][64].name = "ATLASLUMI12";
       fSys[i][64].mult=2.8;
       fSys[i][64].add=fSys[i][64].mult*fData[i]/100;
       
@@ -1000,7 +1000,7 @@ void  ATLASTOPDIFF8TEVTTPTFilter::ReadData()
 
       //overall luminosity uncertainty
       fSys[i][56].type = MULT;
-      fSys[i][56].name = "CORR";
+      fSys[i][56].name = "ATLASLUMI12";
       fSys[i][56].mult=2.8;
       fSys[i][56].add=fSys[i][56].mult*fData[i]/100;
          
@@ -1183,11 +1183,11 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 
       //overall luminosity uncertainty
       fSys[i+fNData/2][56].type = MULT;
-      fSys[i+fNData/2][56].name ="CORR";
+      fSys[i+fNData/2][56].name ="ATLASLUMI12";
       fSys[i+fNData/2][56].mult=2.8;
       fSys[i+fNData/2][56].add=fSys[i+fNData/2][56].mult*fData[i+fNData/2]/100;
       fSys[fNData/2-1-i][56].type = MULT;
-      fSys[fNData/2-1-i][56].name = "CORR";
+      fSys[fNData/2-1-i][56].name = "ATLASLUMI12";
       fSys[fNData/2-1-i][56].mult=2.8;
       fSys[fNData/2-1-i][56].add=fSys[fNData/2-1-i][56].mult*fData[fNData/2-1-i]/100;
       
@@ -1403,11 +1403,11 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
           
       //overall luminosity uncertainty
       fSys[i+fNData/2][56].type = MULT;
-      fSys[i+fNData/2][56].name = "CORR";
+      fSys[i+fNData/2][56].name = "ATLASLUMI12";
       fSys[i+fNData/2][56].mult=2.8;
       fSys[i+fNData/2][56].add=fSys[i][56].mult*fData[i]/100;
       fSys[fNData/2-1-i][56].type = MULT;
-      fSys[fNData/2-1-i][56].name = "CORR";
+      fSys[fNData/2-1-i][56].name = "ATLASLUMI12";
       fSys[fNData/2-1-i][56].mult=2.8;
       fSys[fNData/2-1-i][56].add=fSys[i][56].mult*fData[i]/100;
 
@@ -1544,7 +1544,7 @@ void  ATLASTOPDIFF8TEVTTMFilter::ReadData()
 
       //overall luminosity uncertainty
       fSys[i][63].type = MULT;
-      fSys[i][63].name = "CORR";
+      fSys[i][63].name = "ATLASLUMI12";
       fSys[i][63].mult=2.8;
       fSys[i][63].add=fSys[i][63].mult*fData[i]/100;
          
