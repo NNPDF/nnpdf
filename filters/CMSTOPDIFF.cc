@@ -87,7 +87,7 @@ const std::vector<std::string> sysdescr = {
   "CORR",
   "CORR",
   "CORR",
-  "CORR",
+  "CMSLUMI12",
 };
 
 //A - NORMALISED distributions

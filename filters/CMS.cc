@@ -493,7 +493,7 @@ ptlo (GeV)  pthi (GeV)  xs (pb/GeV)  xs_stat_unc[-,+]  npcor  npcor_lo  npcor_hi
 
       fSys[idat][0].mult = lumiabs;
       fSys[idat][0].type = MULT;
-      fSys[idat][0].name = "CORR";
+      fSys[idat][0].name = "CMSLUMI11";
 
       // Correlated systematics in percent
       for (int l = 0; l < fNSys; l++)

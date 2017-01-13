@@ -60,7 +60,7 @@ void CMSTTBARTOT13TEVFilter::ReadData()
 
       fSys[i][1].mult = fSys[i][1].add/fData[i]*100;
       fSys[i][1].type = MULT;
-      fSys[i][1].name = "UNCORR";
+      fSys[i][1].name = "CMSLUMI13";
       
       fData[i]*=(1.0 + dtmp*0.01); //Shift from asymmetric errors
 
