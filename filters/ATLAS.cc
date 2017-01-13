@@ -816,11 +816,12 @@ void ATLASWZRAP36PBFilter::ReadData()
   }
 
   // Starting filter
-  int ndataWZ[3] = {11,11,8};  //Number of data for W+, W- and Z respectively
-  const double convfac = 1000.; // Must multiply from pb to fb
-  double MWZ2[3]= {pow(MW,2.0), pow(MW,2.0), pow(MZ,2.0)};   //Mass squared of W (+ and -) and Z
-  string line;
+  const double lcorr = 1.0187; // correction factor due to luminosity upgrade
+  const int ndataWZ[3] = {11,11,8};  //Number of data for W+, W- and Z respectively
+  const double convfac = lcorr*1000.; // Must multiply from pb to fb
+  const double MWZ2[3] = {pow(MW,2.0), pow(MW,2.0), pow(MZ,2.0)};   //Mass squared of W (+ and -) and Z
 
+  string line;
   int idat = 0;
   double etamin,etamax,tmp;
 
@@ -891,7 +892,7 @@ void ATLASWZRAP36PBFilter::ReadData()
     // luminosity: 3.4%
     for (int i = 0; i < ndataWZ[iWZ]; i++)
     {
-      fSys[idat+i][1].mult = 3.4;
+      fSys[idat+i][1].mult = 3.5;
       fSys[idat+i][1].name = "ATLAS36PBLUMI";
     }
 
