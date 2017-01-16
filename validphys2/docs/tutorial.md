@@ -1,7 +1,26 @@
+% Validphys 2 Guide
+% Zahari Kassabov
+
 Introduction
 ============
 
 The immediate aim of validphys2 is , but the goal extends beyond that.
+
+What is working
+---------------
+
+Right now the following features are implemented:
+
+ - Processing of libnnpdf resources.
+ - Data-Theory plotting specification.
+ - PDF comparisons.
+ - Statistic estimator plots and tables.
+ - Generation of reweighted sets.
+ - Report generation from templates.
+ - Automatic downloading of PDFs, fits and theories.
+ - Automatic uploading of reports.
+
+These features are documented in more detail in [Usage].
 
 Design considerations
 =====================
@@ -66,8 +85,9 @@ The fancy term for this style of coding is *Contract Programming*.
 Declarative input
 -----------------
 
-It is extremely convenient to be able to specify the what the program
-should only without any regard of knowledge of the underlying
+It is extremely convenient to be able to specify the *what* the program
+should only without any regard of knowledge of *how* that is achieved
+by the underlying
 implementation. The current nnfit input files are a good example of
 this. The primary input of validphys are YAML run cards. A very simple
 one looks like this:
