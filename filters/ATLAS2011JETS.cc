@@ -100,7 +100,7 @@ void ATLAS1JET11Filter::Loop(fstream & file, fstream & fileew, double rap, int n
     file >> fSys[i][fNSys-2].mult;
     fSys[i][fNSys-2].type = MULT;
     fSys[i][fNSys-2].add = fSys[i][fNSys-2].mult*fData[i]*1e-2;
-    fSys[i][fNSys-2].name = "ATLAS11LUMI";
+    fSys[i][fNSys-2].name = "ATLASLUMI11";
 
     fSys[i][fNSys-1].mult = NPerr[i-nDataMin];
     fSys[i][fNSys-1].type = MULT;

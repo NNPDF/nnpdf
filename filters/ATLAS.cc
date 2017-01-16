@@ -190,7 +190,7 @@ void ATLASR04JETS36PBFilter::ReadData()
     fStat[i]/= nonper;            //Do the same to statistical uncertainty stored in absolute form
 
     fSys[i][0].mult = 3.5;           //Luminosity uncertainty of 3.5% (updated in 27 JUN 2014)
-    fSys[i][0].name = "ATLAS36PBLUMI";
+    fSys[i][0].name = "ATLASLUMI10";
 
     fSys[i][1].mult = error/nonper*100;    // Error on nonperturbative correction (%)
     fSys[i][1].name = "CORR";
@@ -394,7 +394,7 @@ void ATLASR06JETS36PBFilter::ReadData()
     fStat[i]/= nonper;            //Do the same to statistical uncertainty stored in absolute form
 
     fSys[i][0].mult = 3.5;           //Luminosity uncertainty of 3.5% (updated in 27 JUN 2014)
-    fSys[i][0].name = "ATLAS36PBLUMI";
+    fSys[i][0].name = "ATLASLUMI10";
 
     fSys[i][1].mult = error/nonper*100;    //Error on nonperturbative correction (%)
     fSys[i][1].name = "CORR";
@@ -893,7 +893,7 @@ void ATLASWZRAP36PBFilter::ReadData()
     for (int i = 0; i < ndataWZ[iWZ]; i++)
     {
       fSys[idat+i][1].mult = 3.5;
-      fSys[idat+i][1].name = "ATLAS36PBLUMI";
+      fSys[idat+i][1].name = "ATLASLUMI10";
     }
 
     idat+=ndataWZ[iWZ];
@@ -985,7 +985,7 @@ void ATLASZHIGHMASS49PBFilter::ReadData()
 
     fSys[i][fNSys-1].add = fSys[i][fNSys-1].mult*fData[i]*1e-2;
     fSys[i][fNSys-1].type = MULT;
-    fSys[i][fNSys-1].name = "ATLAS11LUMI";
+    fSys[i][fNSys-1].name = "ATLASLUMI11";
 
   }
 

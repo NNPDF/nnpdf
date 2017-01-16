@@ -32,10 +32,7 @@ void ATLASWZRAP11Filter::ReadData()
   sysNames[0] = "UNCORR";
   for (int i=0; i<5; i++) f1 >> dummy;
   for (int i=0; i<fNSys; i++) 
-  {
     f1 >> sysNames[i];
-    if (sysNames[i].compare("uncor") == 0) sysNames[i] = "UNCORR";
-  }
  
   int ndataWZ[3] = {11,22,fNData};  // Data thresholds for W+, W- and Z respectively
   double MWZ2[3]= {pow(MW,2.0), pow(MW,2.0), pow(MZ,2.0)};   //Mass squared of W (+ and -) and Z

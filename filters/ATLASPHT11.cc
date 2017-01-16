@@ -133,7 +133,7 @@ void ATLASPHT11ETGCTRFilter::ReadData()
     // ATLAS2011 Luminosity: symmetric, fully correlated between all bins
     fSys[idat][8].mult=fATLAS2011Luminosity;
     fSys[idat][8].type = MULT;
-    fSys[idat][8].name = "ATLAS11LUMI";
+    fSys[idat][8].name = "ATLASLUMI11";
 
     // Shift of central values due to asymmetric uncertainties
     //fData[idat]+=shift*fData[idat]*0.01;
@@ -277,7 +277,7 @@ void ATLASPHT11ETGFWDFilter::ReadData()
     // ATLAS2011 Luminosity: symmetric, fully correlated between all bins
     fSys[idat][8].mult=fATLAS2011Luminosity;
     fSys[idat][8].type = MULT;
-    fSys[idat][8].name = "ATLAS11LUMI";
+    fSys[idat][8].name = "ATLASLUMI11";
 
     // Shift of central values due to asymmetric uncertainties
     //fData[idat]+=shift*fData[idat]*0.01;
@@ -420,7 +420,7 @@ void ATLASPHT11ETAGFilter::ReadData()
     // ATLAS2011 Luminosity: symmetric, fully correlated between all bins
     fSys[idat][8].mult=fATLAS2011Luminosity;
     fSys[idat][8].type = MULT;
-    fSys[idat][8].name = "ATLAS11LUMI";
+    fSys[idat][8].name = "ATLASLUMI11";
 
     // Shift of central values due to asymmetric uncertainties
     //fData[idat]+=shift*fData[idat]*0.01;
