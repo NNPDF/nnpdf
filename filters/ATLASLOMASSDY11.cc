@@ -160,29 +160,30 @@ void ATLASLOMASSDY11EXTFilter::ReadData()
     // Statisltical Uncenrtainty (absolute value in the data file)
     fStat[idat] = 0.5 * (fStatP - fStatM);
 
-    // Correlated systematics (given in % in the data file)
-    for ( int k = 0; k < fNSys-3; k++ )
-      {
-	      fSys[idat][k].mult = fCorr[k];
-	      fSys[idat][k].add  = fSys[idat][k].mult*fData[idat]*1e-2;
-	      fSys[idat][k].type = MULT;
-	      fSys[idat][k].name = "CORR";
-      }
-
     // Uncorrelated systematics (given in % in the data file)
     for ( int k = 0; k < 2; k++ )
       {
   	    fSys[idat][k].mult = fUncorr[k];
-  	    fSys[idat][k].add  = fSys[idat][k].mult*fData[idat]*1e-2;
   	    fSys[idat][k].type = MULT;
   	    fSys[idat][k].name = "UNCORR";
       }
 
+    // Correlated systematics (given in % in the data file)
+    for ( int k = 2; k < fNSys-1; k++ )
+      {
+        fSys[idat][k].mult = fCorr[k-2];
+        fSys[idat][k].type = MULT;
+        fSys[idat][k].name = "CORR";
+      }
+
     // ATLAS 2010 Luminosity (given in % in the data file)
     fSys[idat][fNSys-1].mult = fATLAS2010Luminosity;
-    fSys[idat][fNSys-1].add  = fSys[idat][fNSys-1].mult*fData[idat]*1e-2;
     fSys[idat][fNSys-1].type = MULT;
     fSys[idat][fNSys-1].name   = "ATLASLUMI11";
+
+    // Compute additive
+    for (int k=0; k < fNSys; k++)
+      fSys[idat][k].add  = fSys[idat][k].mult*fData[idat]*1e-2;
 
     // Kinematic variables
     fKin1[idat] = 0.0;                                // Dummy
