@@ -15,7 +15,7 @@ void ATLASZPT7TEVFilter::ReadData()
 
   stringstream datafile("");
   datafile << dataPath() << "rawdata/"
-  << fSetName << "/ATLASZPT47FB.data";
+  << fSetName << "/ATLASZPT47FB_yoda.dat";
   f1.open(datafile.str().c_str(), ios::in);
   if (f1.fail()) {
     cerr << "Error opening data file " << datafile.str() << endl;
@@ -48,45 +48,32 @@ void ATLASZPT7TEVFilter::ReadData()
     exit(-1);
   }
 
-  // Reading data
-  string tmp;
-  getline(f1,tmp);
-
-  // Filtering data
-  int DataBin = fNData/3;
-  double corr[fNData],toter[fNData],binmin, binmax,dummy;
-  double DataDressed[fNData],StatDressed[fNData],SysUncDressed[fNData],SysCorDressed[fNData];
-
-  for (int i = 0; i < DataBin; i++)
-  {
-    // Data are normalized to the total cross section, units are GeV-1, read only data
-    // Errors are already given as absolute numbers in the HEPDATA table format
-    f1 >> fKin2[i] >> binmin >> binmax >> fData[i] >> fStat[i] >> dummy >> fSys[i][0].add >> dummy >> corr[i] >> dummy >> DataDressed[i] >> StatDressed[i] >> dummy >> SysUncDressed[i] >> dummy >> SysCorDressed[i] >> dummy >> fData[i+DataBin] >> fStat[i+DataBin] >> dummy >> fSys[i+DataBin][0].add >> dummy >> corr[i+DataBin] >> dummy >> DataDressed[i+DataBin] >> StatDressed[i+DataBin] >> dummy >> SysUncDressed[i+DataBin] >> dummy >> SysCorDressed[i+DataBin] >> dummy >> fData[i+2 * DataBin] >> fStat[i+ 2* DataBin] >> dummy >> fSys[i+ 2*DataBin][0].add >> dummy >> corr[i+2*DataBin] >> dummy >> DataDressed[i+2*DataBin] >> StatDressed[i+2*DataBin] >> dummy >> SysUncDressed[i+2*DataBin] >> dummy >> SysCorDressed[i+2*DataBin] >> dummy;
-    fKin2[i] *= fKin2[i];
-    fKin2[i+DataBin] = fKin2[i];
-    fKin2[i+2*DataBin] = fKin2[i];
-  }
-
+  // Data are normalized to the total cross section, units are GeV-1, read only data
+  // Errors are already given as absolute numbers in the HEPDATA table format
+  double toter[fNData], dummy;
   for (int i = 0; i < fNData; i++)
-    {
-      fKin1[i] = i < 26 ? 0.5 : (i < 52 ? 1.5 : 2.25);
-      fKin3[i] = 7E3;
-      toter[i]  = pow(fStat[i]*fStat[i]+fSys[i][0].add*fSys[i][0].add+corr[i]*corr[i],0.5);
-    }
+  {
+    f1 >> fKin2[i] >> dummy >> dummy >> fData[i] >> dummy >> toter[i];
+
+    fKin1[i] = i < 26 ? 0.5 : (i < 52 ? 1.5 : 2.25);
+    fKin2[i] *= fKin2[i];
+    fKin3[i] = 7E3;
+
+    fStat[i] = 0;
+  }
 
   // Initialize covariance matrix
   double** covmat = new double*[fNData];
   for(int i = 0; i < fNData; i++)
-    {
-      covmat[i] = new double[fNData];
-      for(int j = 0; j < fNData; j++)
-	{
-	  covmat[i][j] = 0.;
-	}
-    }
+  {
+    covmat[i] = new double[fNData];
+    for(int j = 0; j < fNData; j++)
+      covmat[i][j] = 0.;
+  }
 
   // Reading covariance matrix of the first bin (top left 26 x 26 elements)
   string line1,line2,line3;
+  const int DataBin = fNData/3;
   double corrmat1[DataBin][DataBin];
   double corrmat2[DataBin][DataBin];
   double corrmat3[DataBin][DataBin];
@@ -100,55 +87,36 @@ void ATLASZPT7TEVFilter::ReadData()
       istringstream lstream2(line2);
       istringstream lstream3(line3);
       for(int j = 0; j < DataBin; j++)
-	{
-	  lstream1 >> corrmat1[i][j];
-	  lstream2 >> corrmat2[i][j];
-	  lstream3 >> corrmat3[i][j];
-	  covmat[i][j] = corrmat1[i][j] * toter[i] * toter[j];   // convert from corr. to cov. multiplying by total error
-	  covmat[i+DataBin][j+DataBin] = corrmat2[i][j] * toter[i+DataBin] * toter[j+DataBin];
-	  covmat[i+2*DataBin][j+2*DataBin] = corrmat3[i][j] * toter[i+2*DataBin] * toter[j+2*DataBin];
-	}
+    	{
+    	  lstream1 >> corrmat1[i][j];
+    	  lstream2 >> corrmat2[i][j];
+    	  lstream3 >> corrmat3[i][j];
+    	  covmat[i][j] = corrmat1[i][j] * toter[i] * toter[j];   // convert from corr. to cov. multiplying by total error
+    	  covmat[i+DataBin][j+DataBin] = corrmat2[i][j] * toter[i+DataBin] * toter[j+DataBin];
+    	  covmat[i+2*DataBin][j+2*DataBin] = corrmat3[i][j] * toter[i+2*DataBin] * toter[j+2*DataBin];
+    	}
     }
-
-  /* CHECK
-     for(int i = 0; i < DataBin; i++)
-     {
-     for(int j = 0; j < DataBin; j++)
-     {
-     cout << i << "  " << j << "  " << covmat[i][j] << " " << toter[i]*toter[j] << endl;
-     }
-     }
-     exit(-1);
-  */
 
   // Generating artificial systematics
   double** syscor = new double*[fNData];
   for(int i = 0; i < fNData; i++)
     syscor[i] = new double[fNData];
-
   if(!genArtSys(fNData,covmat,syscor))
-   {
-     cerr << " in " << fSetName << endl;
-     exit(-1);
-   }
+  {
+    cerr << " in " << fSetName << endl;
+    exit(-1);
+  }
 
-  // The uncorrelated systematics is assigned to fSys[i][0]
+  // Assign artificial systematics
   for (int i = 0; i < fNData; i++)
-    {
-      for (int l = 0; l < fNSys; l++)
-	{
-	  fSys[i][l].add  = syscor[i][l-1];
-	  fSys[i][l].mult = fSys[i][l].add*100/fData[i];
-	  fSys[i][l].type = MULT;
-	  fSys[i][l].name = (l == 0 ? "UNCORR" : "CORR");
-	}
-      /*
-      fSys[i][0].mult = fSys[i][0].add*100/fData[i];
-      fSys[i][0].type = MULT;
-      fSys[i][0].name = "UNCORR";
-      */
-      fStat[i] = 0.0;
-    }
+    for (int l = 0; l < fNSys; l++)
+  	{
+  	  fSys[i][l].add  = syscor[i][l];
+  	  fSys[i][l].mult = fSys[i][l].add*100/fData[i];
+  	  fSys[i][l].type = MULT;
+  	  fSys[i][l].name = "CORR";
+  	}
+
 
   f1.close();
   c1.close();

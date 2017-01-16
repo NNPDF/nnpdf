@@ -20,7 +20,7 @@
 
 static const dataInfoRaw ATLASZPT7TEVinfo = {
   78,          //nData  --> for inclusive rapidity bin 26
-  79,          //nSys   --> for inclusive rapidity bin 27
+  78,          //nSys   --> for inclusive rapidity bin 27
   "ATLASZPT7TEV", //SetName
   "EWK_PTRAP"     //ProcType
 };
