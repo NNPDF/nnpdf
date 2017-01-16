@@ -136,6 +136,7 @@ void ATLASWZTOT13TEV81PBFilter::ReadData()
 		  auto & datavalue = fData[data_id];
 		  sys.add = sysvalue;
 		  sys.mult = sysvalue/datavalue*100;
+      sys.name = name;
 	  }
 	  result.erase(k);
 	  sys_id++;
