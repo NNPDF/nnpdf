@@ -4,7 +4,36 @@
 Introduction
 ============
 
-The immediate aim of validphys2 is , but the goal extends beyond that.
+The immediate aim of validphys2 is to serve as a both very agile and
+highly reliable analysis framework for NNPDF, but the goal extends
+beyond. When the time codes, this framework should become the common
+gateway that all the NNPDF code uses, providing features ranging from
+path handling to automated report generation to automatic detection
+of problems with the fits.
+
+The project is defined in two codes with well defined and separated
+scopes:
+
+reportengine
+ ~ It is a compiler of user-entered configuration (in the YAML format)
+ into directed acyclic graphs of Python executable functions, to be
+ defined by client applications based on reportengine. One such
+ function that comes with reportengine is **report**, which extracts
+ the requirements from a template  with a special syntax (See
+ [Producing reports]) in the Markdown format and uses the `pandoc`
+ program to generante a HTML report.
+ Apart from the *compiler* functionality, `reportengine` also provides
+ general application utilities such as crash handlers and a help
+ system.
+
+validphys2
+ ~ It is a set of higher level tools operating on the NNPDF resources,
+ which can be used either within a `reportengine` application or
+ standalone. It is based on the libnnpdf Python wrappers, and extends
+ them with extra functionality (related to error checking, loading and
+ downloading among others). The NNPDF objects are then used in
+ functions producing plots, tables and other outputs (such as
+ reweighted PDF sets)
 
 What is working
 ---------------
@@ -18,7 +47,7 @@ Right now the following features are implemented:
  - Generation of reweighted sets.
  - Report generation from templates.
  - Automatic downloading of PDFs, fits and theories.
- - Automatic uploading of reports.
+ - Automatic uploading of reports and other outputs.
 
 These features are documented in more detail in [Usage].
 
@@ -37,13 +66,15 @@ early as possible, which is not necessarily at the point of the
 program where the function is to be called. For example, something
 like this:
 
-    def check_parameter_is_correct(parameter):
-        ...
+```python
+def check_parameter_is_correct(parameter):
+    ...
 
-    def plot(complex_calculation, parameter):
-        check_parameter_is_correct(parameter)
-        #make plot
-        ...
+def plot(complex_calculation, parameter):
+    check_parameter_is_correct(parameter)
+    #make plot
+    ...
+```
 
 has the disadvantage that in order to get to the check, we presumably
 need to compute “complex\_calculation” first, and that could be
@@ -66,14 +97,16 @@ fail completely.
 There is an API for early checks in reportengine. We would write
 something like:
 
-    @make_argcheck
-    def check_parameter_is_correct(parameter):
-        ...
+```python
+@make_argcheck
+def check_parameter_is_correct(parameter):
+    ...
 
-    @check_parameter_is_correct
-    def plot(complex_calculation, parameter):
-        #make plot
-        ...
+@check_parameter_is_correct
+def plot(complex_calculation, parameter):
+    #make plot
+    ...
+```
 
 The checking function will now be called as soon as the program
 realizes that the plot function will be required eventually (at
@@ -91,34 +124,35 @@ by the underlying
 implementation. The current nnfit input files are a good example of
 this. The primary input of validphys are YAML run cards. A very simple
 one looks like this:
+```yaml
+pdfs:
+    - NNPDF30_nlo_as_0118
+    - NNPDF30_nnlo_as_0118
+    - CT14nlo
 
+first:
+    Q: 1
+    flavours: [up, down, gluon]
 
-    pdfs:
-        - NNPDF30_nlo_as_0118
-        - NNPDF30_nnlo_as_0118
-        - CT14nlo
+second:
+    Q: 100
+    xgrid: linear
 
-    first:
-        Q: 1
-        flavours: [up, down, gluon]
+actions_:
+    - first:
+        - plot_pdfreplicas:
+            normalize_to: NNPDF30_nlo_as_0118
 
-    second:
-        Q: 100
-        xgrid: linear
-
-    actions_:
-        - first:
-            - plot_pdfreplicas:
-                normalize_to: NNPDF30_nlo_as_0118
-
-            - plot_pdfs
-        - second:
-            - plot_pdfreplicas
+        - plot_pdfs
+    - second:
+        - plot_pdfreplicas
+```
 
 [Correct by definition]{}
 
 :   A declarative input specifies what you want. It is up to the
-underlying code to try to provide it.
+underlying code to try to provide it (or fail with an informative
+message).
 
 [Obvious meaning]{}
 
@@ -130,10 +164,10 @@ guess what the runcard above does.
 
 :   The input is very loosely coupled with the underlying
 implementation, and therefore it is likely to remain valid even after
-big changes in the code. Fir example, in the runcard above, we didn't
-have to concern ourselves with how LHAPDF grids are loaded, and how
-the values of the PDFs are reused to produce the different plots.
-Therefore the underlying mechanism could change easily without
+big changes in the code are made. For example, in the runcard above,
+we didn't have to concern ourselves with how LHAPDF grids are loaded,
+and how the values of the PDFs are reused to produce the different
+plots.  Therefore the underlying mechanism could change easily without
 breaking the runcard.
 
 Therefore:
@@ -153,7 +187,7 @@ without needing to reinvent the wheel or to alter functions so that
 for example they don’t to some preconfigured path. Therefore:
 
 -   The various computing and plotting tools should work well when
-	included in a normal script that doesn’t use the reportengine
+	included in a normal script that doesn't use the reportengine
 	graph compiler.
 
 This is implemented by making sure that as much as possible all the
@@ -163,11 +197,11 @@ global state of the program is altered, nothing is written to disk).
 There are some exceptions to this though. For example the function
 that produces a reweighted PDF set needs to write the result to disk.
 The paths and side effects for other more common results like figures
-are managed by reportengine. For example, the `@figure` decorator
-applied to a function that returns a Python (matplotlib) figure will
+are managed by `reportengine`. For example, the `@figure` decorator
+applied to a function that returns a Python (`matplotlib`) figure will
 make sure that the figure is saved in the output path, with a nice
-filename, while having no effect at all outside the reportengine loop.
-The same goes for the check functions described above.
+filename, while having no effect at all outside the `reportengine`
+loop.  The same goes for the check functions described above.
 
 Easy to loop
 ------------
@@ -179,7 +213,7 @@ easy to make trivial mistakes). Therefore reportengine allows
 configurations to easily loop over different sets of inputs. For
 example the following runcard:
 
-```
+```yaml
 pdfs:
     - id:  160502-r82cacd2-jr-001
       label: Baseline
@@ -272,7 +306,7 @@ configure conda correctly and ask it to install the validphys2 package
 with all its dependencies. This results in an environment that
 contains not only an usable version of validphys, but also of the
 nnpdf code and all its dependencies (including for example LHAPDF and
-APFEL). Therefore an user who doesn’t need to modify the code should
+APFEL). Therefore an user who doesn't need to modify the code should
 not need to compile anything to work with the NNPDF related programs.
 This should be useful in clusters where we don’t completely control
 the environment and frequently need to deal with outdated compilers.
@@ -298,13 +332,27 @@ simply running:
 
     conda install validphys nnpdf
 
+There is only one thing left to do. Because the `nnpdf` binaries
+expect to be be located in a given relative path structure, we need to
+symlink them inside `nnpdfcpp/bin`:
+````
+ln -s `which filter` .
+ln -s `which nnfit` .
+ln -s `which postfit` .
+ln -s `which fitmanager` .
+ln -s `which chi2check` .
+````
+This requirement will disappear in the future. See also [Dealing with
+paths] below.
+
+
 ### Troubleshooting
 
 After several iterations on the install system most issues have been
-resolved. There could be problems derived from interactions derived
-from hacks targeted at solving manually. In particular, see that you
-don’t have any `PYHTONPATH` environment variable (for example pointing
-at some version of LHAPDF) since that will overwrite the default conda
+resolved. There could be problems derived from interactions with hacks
+targeted at solving manually. In particular, see that you don’t have
+any `PYHTONPATH` environment variable (for example pointing at some
+version of LHAPDF) since that will overwrite the default conda
 configuration. This is easily solved by removing said hacks from
 `.bashrc` or similar files.
 
@@ -320,20 +368,20 @@ Seeing what actions are available
 ---------------------------------
 
 A help command is generated automatically by reportengine. The command
-```
+```bash
 validphys --help
 ```
 will show you the modules that contain the actions (as well as the
 usual description of the command line flags). For example,
 
-```
+```bash
 validphys --help validphys.plots
 ```
 
 will list all the actions defined in the plots module together with
 a brief description of each of them. Asking for the
 help of one of the actions, like for example:
-```
+```bash
 validphys --help plot_fancy
 ```
 will list all the inputs that are required for this action. For
@@ -406,7 +454,7 @@ behaviour. They are set by default to sensible values:
 We can see which keys have a special meaning in the configuration file
 with:
 
-```
+```bash
 validphys --help config
 ```
 
@@ -428,6 +476,8 @@ at the same level as "nnpdfcpp". Otherwise, the `--datapath` should
 be set to point to `nnpdfcpp/data` and `--resultspath` should point to
 a folder containing the fits.
 
+This is extremely annoying and will be changed in the near future.
+
 
 Writing input cards
 --------------------
@@ -436,7 +486,7 @@ Input cards are YAML files that describe the input resources, together
 with the actions we want to perform on them.
 
 Let's begin with a simple example:
-```
+```yaml
 pdf: NNPDF30_nlo_as_0118
 
 theoryid: 52
@@ -466,7 +516,7 @@ plot the distribution of the chi² for each replica (plot_chi2dist). If we
 save the above runcard to a file called `runcard.yaml`
 we
 can produce the plots with:
-```
+```bash
 validphys runcard.yaml
 ```
 
@@ -480,12 +530,12 @@ a list of mappings.
 
 For example, we can modify the example as follows:
 
-```
+```yaml
 pdf: NNPDF30_nlo_as_0118
 
 theoryid: 52
 
-fit: 160603-r654e559-jr-003
+fit: 161222-jr-004
 
 with_cuts:
   use_cuts: True
@@ -508,22 +558,21 @@ actions_:
 ```
 
 Here `with_cuts` and `without_cuts` are *arbitrary* strings that
-specify *namespaces*. Now we are asking for one action (`plot_fancy`) to
-be executed taking into account the cuts (note that we have also
+specify *namespaces*. Now we are asking for one action (`plot_fancy`)
+to be executed taking into account the cuts (note that we have also
 specified the fit where we read them from) and another
 (`plot_chi2dist`) to be executed without the cuts.  And similar to
-a programming language like C,
-the inner namespaces has priority with respect to the outer. For
-example if we add a PDF specification to the "with_cuts" namespace
-like this:
+a programming language like C, the inner namespaces has priority with
+respect to the outer. For example if we add a PDF specification to the
+"with_cuts" namespace like this:
 
 
-```
+```yaml
 pdf: NNPDF30_nlo_as_0118
 
 theoryid: 52
 
-fit: 160603-r654e559-jr-003
+fit: 161222-jr-004
 
 with_cuts:
   use_cuts: True
@@ -547,7 +596,7 @@ actions_:
 ```
 
 The `plot_fancy` action will ignore the outer pdf
-(NNPDF30_nlo_as_0118) and use the one defined in the innermost
+(NNPDF30\_nlo\_as\_0118) and use the one defined in the innermost
 namespace (CT14nlo). Because we have not specified `plot_chi2dist` to
 be executed within the `with_cuts` namespace, it will continue to use
 NNPDF.
@@ -556,7 +605,461 @@ NNPDF.
 #### Lists of namespaces
 
 We can also have lists of mapping acting as namespaces. The action
-will then be repeated for each of 
+will then be repeated inside each of the namespaces generating one
+result for each. For example:
+
+```yaml
+pdf: NNPDF30_nlo_as_0118
+
+theoryid: 52
+
+fit: 161222-jr-004
+
+specifications:
+- use_cuts: True
+  pdf: CT14nlo
+
+- use_cuts: False
+
+dataset:
+    dataset: ATLASWZRAP36PB
+    sys: 2
+    cfac: [EWK]
+
+actions_:
+  - specifications:
+      - plot_fancy
+
+```
+
+Now a different `plot_fancy` action will be executed for each of the
+two mappings of the list "*specifications*": One will use the CT PDF
+and use the cuts, and the other will plot all points in the dataset.
+
+Some keys are appropriately interpreted either as lists of objects or
+list or namespaces depending on the context. They are documented in
+`validphys --help config`. For example, the `pdfs` key is entered as
+a list of LHAPDF ids:
+
+```yaml
+pdfs:
+  - NNPDF30_nlo_as_0118
+  - CT14nlo
+```
+
+Because the `plot_fancy` action takes a list of pdfs as input,
+something like this:
+
+```yaml
+pdfs:
+  - NNPDF30_nlo_as_0118
+  - CT14nlo
+
+theoryid: 52
+
+use_cuts: False
+
+dataset:
+    dataset: ATLASWZRAP36PB
+    sys: 2
+    cfac: [EWK]
+
+actions_:
+  - - plot_fancy
+
+```
+
+will produce plots where the two pdfs appear together. However
+we can also produce individual plots for each pdf, by simply
+specifying that we want to loop over the pdfs:
+
+```yaml
+pdfs:
+  - NNPDF30_nlo_as_0118
+  - CT14nlo
+
+theoryid: 52
+
+use_cuts: False
+
+dataset:
+    dataset: ATLASWZRAP36PB
+    sys: 2
+    cfac: [EWK]
+
+actions_:
+  - pdfs:
+      - plot_fancy
+
+```
+
+In this case the value of the `pdfs` key is seen as equivalent to:
+
+```yaml
+pdfs:
+  - {pdf: NNPDF30_nlo_as_0118}
+  - {pdf: CT14nlo}
+```
+
+However the special treatment allows us to simplify both the input
+file and the programmatic interface of the functions (see
+[Automatic Lists]).
+
+### Nesting namespaces
+
+Namespace specifications like those described above can be arbitrarily
+nested. Values will be searched from inner to outer namespace. When
+the namespace specifications represent lists of mappings, all possible
+combinations will be produced.
+
+Consider the example:
+```yaml
+pdfs:
+    - 160502-r82cacd2-jr-001
+
+    - 160502-r82cacd2-jr-008
+
+    - 160603-r654e559-jr-003
+
+fit: 160603-r654e559-jr-003
+theoryids:
+    - 52
+    - 53
+
+with_cuts:
+    use_cuts : False
+
+experiments:
+  - experiment: LHCb
+    datasets:
+      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
+
+  - experiment: ATLAS
+    datasets:
+      - { dataset: ATLASWZRAP36PB}
+
+actions_:
+    - with_cuts:
+        theoryids:
+          pdfs:
+            experiments:
+                experiment:
+                  - plot_fancy
+
+```
+
+This will first enter the "*with_cuts*" namespace (thus setting
+`use_cuts=False` for the action), and then loop over all the theories,
+pdfs, experiments and datasets inside each experiment (note that when
+used as a namespace specification, `experiment` refers to the list of
+datasets it contains).
+
+The order over which the looping is done is significative: For one the
+outer specifications must set all the variables required for the inner
+to be fully resolved (so `with_cuts` must go before `experiment`).
+
+For
+other, the caching mechanism works by grouping together the namespace
+specifications from the beginning. For example, suppose  we where to
+add another action to the example above:
+```yaml
+    - with_cuts:
+        theoryids:
+          pdfs:
+            experiments:
+                experiment:
+                  - plot_chi2dist
+```
+both of these require to compute the same convolutions. Validphys will
+realize this as long as both actions are iterated in the same way.
+However permuting "pdfs" and "theotyids" would result in the
+convolutions computed twice, since the code cannot prove that they
+would be identical.
+
+
+ - Always loop from more general to more specific.
+
+ - Always loop in the same way.
+
+### Action arguments
+
+Action arguments are syntactic sugar for specifying arguments visible
+to a single actions. They are subject to being verified by the action
+defined checks. For example, in the PDF plotting example above:
+
+```yaml
+pdfs:
+    - NNPDF30_nlo_as_0118
+    - NNPDF30_nnlo_as_0118
+    - CT14nlo
+
+first:
+    Q: 1
+    flavours: [up, down, gluon]
+
+second:
+    Q: 100
+    xgrid: linear
+
+actions_:
+    - first:
+        - plot_pdfreplicas:
+            normalize_to: NNPDF30_nlo_as_0118
+
+        - plot_pdfs
+    - second:
+        - plot_pdfreplicas
+```
+
+The `normalize_to` key only affects the `plot_pdfreplicas` action.
+Note that defining it inside the `first` mapping would have had the
+same effect in this case.
+
+
+### The `from_` special key
+
+The `from_` specifies that the value of a resource is to be taken from
+a container. This is useful for working with fits (but not limited to
+that). For example:
+
+```yaml
+fit: 161208-jr-003
+
+use_cuts: False
+
+description:
+    from_: fit
+
+theory:
+    from_: fit
+
+theoryid:
+    from_: theory
+
+
+Q: 10
+
+template: report.md
+
+normalize:
+    normalize_to: 1
+
+datanorm:
+    normalize_to: data
+
+pdfs:
+    - from_: fit
+    - NNPDF30_nlo_as_0118
+experiments:
+    from_: fit
+
+actions_:
+   -   - report:
+            out_filename: index.md
+
+```
+
+Here the `from_` key is used multiple times:
+
+ - To obtain the description string from the report input card. 
+
+ - To obtain the theory mapping from the fit input card.
+
+ - To obtain the theoryid key from the theory mapping.
+
+ - To obtain a single PDF produced in the fit (as an element of the
+	 list/namespaces of pdfs). Note that the keyword is also allowed
+	 inside nested elements.
+
+ - To obtain a set of all the experiments of the fit.
+
+The `from_` key respects lazy processing, and therefore something like
+this will do what you expect:
+
+```yaml
+fits:
+    - fit: 161208-jr-003
+    - fit: 161222-jr-004
+
+
+use_cuts: False
+
+theory:
+    from_: fit
+
+theoryid:
+    from_: theory
+
+
+Q: 10
+
+description:
+    from_: fit
+template: report.md
+
+normalize:
+    normalize_to: 1
+
+datanorm:
+    normalize_to: data
+
+pdfs:
+    - from_: fit
+    - NNPDF30_nlo_as_0118
+experiments:
+    from_: fit
+
+actions_:
+    - fits:
+        - report
+```
+This will work exactly as the example above, except that a new action
+(with its corresponding different set of resources) will be generated
+for each of the two fits.
+
+Reports
+-------
+
+Reports are implemented as an action of `reportengine` (admittedly
+a little hacky at the moment). The `report` action takes a `template`
+argument, corresponding to the filename of a template in the [Pandoc
+Markdown format](http://pandoc.org/MANUAL.html#pandocs-markdown), with
+the actions defined with a special syntax discussed below. The actions
+will be resolve as if they where directly specified in the
+configuration file
+file, and when all of them are completed, their value will be
+substituted in the template (the `jinja2` library is used for the
+intermediate rendering).
+
+### Report template specification
+
+`reportengine` will interpret strings between `{@` and `@}` inside the
+templates. There are currently **target** and **with**/**endwith**
+tags:
+
+Target tags
+~ Specify an action to be executed. The possible syntax is:
+```
+{@[spec] action_name[(arg1=value, arg2=value)]@}
+```
+where `[]` stands for optional syntax. A few conforming examples are:
+```
+{@ plot_fancy @}
+```
+```
+{@theory::pdfs plot_fancy@}
+```
+```
+{@plot_fancy(normalize_to=data)@}
+```
+The optional namespace specification works as described in [Multiple
+inputs and namespaces]. The different parts of the specification,
+naming mapping, lists of mappings (or special tags implementing that
+behaviour) are separated with the `::` operator (resembling the C++
+scope resolution operator). Actions will be repeated if the
+specification results in multiple namespaces (e.g. one plot per pdf in
+the second example above). The optional argument specification works
+as described in [Action arguments].
+
+With/endwith tags
+~ Repeat the content between the tags for each namespace in the
+specifications. Targets inside the block are repeated and searched
+within each namespace. The syntax of the `with` tag is:
+```
+{@with spec@}
+```
+and it must be closed by an `endwith` tag
+```
+{@endwith@}
+```
+Like in the **target** tag, the spec is separated by `::`.
+
+
+###Example report template
+
+A template that could correspond to the example above is:
+```
+NNPDF Report
+============
+
+{@ description  @}
+
+
+PDF plots
+---------
+
+{@ plot_pdfs @}
+
+**Normalized**
+
+{@normalize plot_pdfs  @}
+
+
+Train-valid split
+------------------
+
+{@ plot_training_validation @}
+
+$\chi^2$
+-------
+{@ with pdfs  @}
+
+### {@ pdf @}
+
+{@ experiments_chi2_table @}
+
+{@ endwith@}
+
+Experiment plots
+---------------
+{@ with pdfs @}
+###Experiment results for {@pdf@}
+{@with datanorm::experiments@}
+
+#### {@experiment@}
+{@experiment plot_fancy @}
+{@ endwith @}
+{@ endwith @}
+```
+
+First we are writing a verbatim Markdown title. Next we are asking for
+a variable named "`description`" to be computed and later substituted
+right below (it is obtained from the fit config file, as seen in the
+template). Then we are computing absolute and normalized PDF plots
+(`normalize` is an arbitrary string that is defined in the config file
+to normalize to the first PDF). We then plot the training and
+validation $\chi^2$ of each replica in the fit. Next we compute the
+$\chi^2$ for each experiment, and produce a separate table and heading
+for each PDF in `pdfs` (note that LaTeX math syntax is allowed).
+Finally we produce, for each pdf and for each experiment, a set of
+data-theory comparison plots (which in turn are repeated for each
+dataset in the experiment).
+
+Information on selected tools
+-----------------------------
+
+There are too many tools that are still evolving too rapidly to
+completely document in here. Refer to the automatically generated
+command line help ([Seeing what actions are available]) for more
+up to date documentation. Here we only cover the complex tools that
+require more specific documentation.
+
+### Data theory comparison
+
+The name of the data-theory comparison tool is `plot_fancy`. You can
+see what parameters in the runcard influence it by typing:
+```
+validphys --help plot_fancy
+```
+The basic inputs are a dataset and one or more PDFs. The way a dataset
+is to be plotted is controlled by one or more PLOTTING files in the
+`commondata` format. These are simple YAML files and ideally each
+dataset should have them. It is possible to specify how to transform
+the kinematics stored in the commondata, what to use as `x` axis or
+how to group the plots. The format is described in detail in [Plotting
+format specification](plotting_format.html).
+
 
 Parallel mode
 -------------
@@ -594,5 +1097,16 @@ should definitively read. In case something is not working correctly,
 debug messages can be enabled with the `-d` (or `--debug`) flag. More
 messages can be suppressed using the `-q` (or `--quiet`) flags.
 Additionally the messages from libnnpdf can be controlled with the
-`--cout`/`--no-cout` flags (by default the ouyput is displayed only
+`--cout`/`--no-cout` flags (by default the output is displayed only
 when the debug flag is enabled).
+
+
+Developer documentation
+=======================
+
+
+
+Configuration
+-------------
+
+### Automatic lists
