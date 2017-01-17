@@ -319,7 +319,8 @@ is:
     #Execute the script
     ./binary-bootstrap/bootstrap.sh
 
-The script will ask for the password of the NNPDF private repositories. You can find it here:
+The script will ask for the password of the NNPDF private
+repositories. You can find it here:
 
 <https://www.wiki.ed.ac.uk/pages/viewpage.action?spaceKey=nnpdfwiki&title=Git+repository+instructions>
 
@@ -561,7 +562,7 @@ Here `with_cuts` and `without_cuts` are *arbitrary* strings that
 specify *namespaces*. Now we are asking for one action (`plot_fancy`)
 to be executed taking into account the cuts (note that we have also
 specified the fit where we read them from) and another
-(`plot_chi2dist`) to be executed without the cuts.  And similar to
+(`plot_chi2dist`) to be executed without the cuts.  Similar to
 a programming language like C, the inner namespaces has priority with
 respect to the outer. For example if we add a PDF specification to the
 "with_cuts" namespace like this:
@@ -918,6 +919,27 @@ This will work exactly as the example above, except that a new action
 (with its corresponding different set of resources) will be generated
 for each of the two fits.
 
+### Plotting labels
+
+Several resources (PDFs, theories, fits) support a short form where
+one specifies the ID required to recover the resource (e.g. LHAPDF ID,
+theory ID and fit folder respectively) and also form where a plotting
+layer is specified together with the ID. For example:
+```yaml
+pdfs:
+    - id:  160502-r82cacd2-jr-001
+      label: Baseline
+
+    - id: 160502-r82cacd2-jr-008
+      label: HERA+LHCb
+
+    - id: 160603-r654e559-jr-003
+      label: baseline+LHCb and Tev legacy
+```
+
+In all plots the label will be used everywhere the PDF name needs to
+be displayed (like in legends and axes).
+
 Reports
 -------
 
@@ -1058,7 +1080,10 @@ is to be plotted is controlled by one or more PLOTTING files in the
 dataset should have them. It is possible to specify how to transform
 the kinematics stored in the commondata, what to use as `x` axis or
 how to group the plots. The format is described in detail in [Plotting
-format specification](plotting_format.html).
+format specification](plotting_format.html). The plotting
+specifications are supported by small amounts of Python (defining the
+varios transformations), which are declared in the
+`validphys.plotoptions` package.
 
 
 Parallel mode
@@ -1089,6 +1114,43 @@ key and the `rsync` program are required in order to use this feature.
 A URL will be displayed from which the contents are publicly
 accessible.
 
+Figure formats
+--------------
+
+The output figure formats can be controlled with the `--formats`
+option. The available formas depend on the underlying implementation.
+On Linux with Anaconda, they are:
+```
+png: Portable Network Graphics
+pdf: Portable Document Format
+ps: Postscript
+jpg: Joint Photographic Experts Group
+rgba: Raw RGBA bitmap
+eps: Encapsulated Postscript
+tiff: Tagged Image File Format
+raw: Raw RGBA bitmap
+svg: Scalable Vector Graphics
+pgf: PGF code for LaTeX
+tif: Tagged Image File Format
+svgz: Scalable Vector Graphics
+jpeg: Joint Photographic Experts Group
+```
+
+The `--formats` option accepts more than one format. However if an
+HTML report is desired, one should make sure that the *first* format
+is browser friendly and can be displayed nicely without plugins (from
+the formats above, the browser friendly ones would be png, jpg, and
+svg).
+
+Plotting style
+--------------
+
+Many of the options of matplotlib (the library we for plotting) can be
+controlled with a plotting style file. To customize (or "*improve*")
+the looks of the plots, you can edit the validphys style
+`src/validphys/small.mplstlye` or pass your own style file with the
+`--style` option.
+
 Controlling displayed messages
 ------------------------------
 
@@ -1104,9 +1166,581 @@ when the debug flag is enabled).
 Developer documentation
 =======================
 
+Validphys2 aims to be a simple and easy to extend framework, which is
+mostly elemental Python, with a couple of magic decorators that make
+`reportengine` work as expected. It should be relatively
+straightforward to understand and extend. How to do so is described in
+the [Defining custom pipelines] section.
+
+Unfortunately this means that the complexity of getting things to just
+work is translated into `reportengine`, which instead uses many
+advanced python features, and results in a codebase that is not
+particularly simple.
+
+Reportengine namespaces specifications
+----------------------
+
+A central concept to how reportengine works is namespaces and
+namespace specifications.
+A namespace is
+a [stack](https://en.wikipedia.org/wiki/Stack_(abstract_data_type)) of
+python dictionaries indexed by a tuple called *namespace specification
+(nsspec)*. Nsspecs are generated from user input given in terms of
+*fuzzyspecs*. This is mostly an advanced internal implementation
+detail, but it is important in order to understand how several
+features work. Also the abstraction leaks into user facing features
+such as [The collect function].
 
 
-Configuration
--------------
+### Namespace specifications
 
-### Automatic lists
+An nsspec is a tuple of an arbitrary number of elements.  Each element
+in the tuple corresponds to one extra stack layer in depth (*"stack
+frame"*). The elements of the tuple can be either:
+
+ - Names of mappings.
+
+ - Names of objects that have an [`as_namespace`
+	 method](#the-as_namespace-method).
+
+ - Tuples of the form (name of list of mappings, index).
+
+The scope rules are similar to those of C: The lookup of a value is
+done first looking at the inner frame and then at the outer ones,
+until a match is found.
+
+Consider the example:
+
+```yaml
+
+first:
+   pdf: NNPDF30_nlo_as_0118
+   normalize_to: None
+   use_cuts: False
+
+second:
+   pdf: CT14nlo
+   normalize_to: CT14nlo
+
+cutspecs:
+ - {use_cuts: False}
+ - {use_cuts: True}
+
+```
+
+Given the input above, we could form the following `nsspec`.
+```python
+('second', ('cutspecs', 0))
+```
+This would correspond to a namespace where we have the following
+symbols available:
+
+- `use_cuts` (set to `False`) from `cutspecs`.
+
+- `pdf` and `normalize_to` (set to CT) from `second`.
+
+- `first`, `second` and `cutspecs` from the root namespace.
+
+We could also form the specification:
+
+```python
+(('cutspecs', 1), 'first')
+```
+Because the innermost specification is last, the value of `use_cuts`
+is `False`.
+
+
+The function `reportengine.namespaces.resolve(ns, nsspec)` returns
+a mapping (in particular it is a modified version of
+`collections.ChainMap`) that  implements exactly this behaviour. It is
+used extensively thorough `reportengine`.
+
+### Fuzzyspecs
+
+The namespace specifications as described above is not what
+the user typically enters. Instead the typical user input is what in
+the code is labeled *fuzzyspec*. A fuzzyspec is like a nsspec except
+that the lists of mappings are entered by name and not by a tuple
+(name, index). A fuzzyspec resolves to one or more nsspecs. For
+example, given the fuzzyspec:
+```python
+('second', 'cutspecs')
+```
+and the input above, it gets expanded into two nsspecs:
+```python
+('second', ('cutspecs', 0))
+('second', ('cutspecs', 1))
+```
+corresponding to each of the two mappings in cutspecs.
+
+### The `as_namespace` method
+
+An object can customize how to be viewed as a reportengine namespace.
+This is done by defining a method called `as_namespace`, that takes no
+arguments and should return either a mapping or a list of mappings.
+This is used to implement [Automatic lists].
+
+Resolving dependencies
+-----------------------
+
+Dependencies are resolved automatically by `reportengine` when the
+client applications follow a certain convention.
+
+A few things that Validphys needs to do (see [Design considerations])
+are:
+
+ - Provide a declarative interface where the user specifies only the
+   amount of information needed to specify the requirements.
+
+ - Be usable as a normal Python library.
+
+ - Reuse the computations that are common to several actions.
+
+In order to do all that, one declares "provider modules" (which is
+done in `validphys.app`), which are nothing but normal Python files
+containing functions (and thus can be used as a library). The
+convention in `reportengine` is that a parameter with the same name as
+a provider function specifies that that function is a dependency.
+
+Imagine we want to have two plotting tools `plot1` and `plot2`, each
+of which takes as an argument the result of the same computation,
+`results`, which in turn need a PDF set entered by the user to be
+computed. One would declare the functions as follows:
+```python
+def results(pdf):
+    #Compute the results
+	...
+
+def plot1(results):
+    #Take the result and produce a plot of type 1.
+    ...
+
+def plot2(results):
+    #Take the result and produce a plot of type 2.
+    ...
+```
+
+Then, an input card like the following:
+```yaml
+pdf: NNPDF30_nlo_as_0118
+
+actions_:
+ - - plot1
+   - plot2
+```
+Would result in the following DAG:
+
+![Simple dependency resolution](simplegraph.png)
+
+The important point to note is that parameter names determine the
+dependencies by default.
+
+To address the inflexibility that results from the way we choose to
+automatically assign dependency, each action is assigned a unique
+[Namespace specification](#namespace-specifications). This allows to
+specify actions with several different parameters. Let's make the
+example above more complicated:
+```python
+def results(pdf):
+    #Compute the results
+	...
+
+def plot1(results, parameter):
+    #Take the result and produce a plot of type 1.
+    ...
+
+def plot2(results, parameter):
+    #Take the result and produce a plot of type 2.
+    ...
+```
+
+We can request a parameter scan like this:
+
+```yaml
+pdf: NNPDF30_nlo_as_0118
+
+scan_params:
+  - parameter: 5
+  - parameter: 10
+  - parameter: 20
+
+
+actions_:
+ - scan_params:
+   - plot1
+   - plot2
+```
+which would result in the following computation:
+
+![Parameter scan](params.png)
+
+We have requested the two plots to be computed once in each of the
+three namespaces spanned by `scan_params`. The actions are in general
+**not** computed in the requested namespace, but rather in the
+*outermost one that satisfies all the dependencies* (there is also
+a unique private stack frame per action not shown in the figures
+above). That's why, in the graph above, `results` appears only once:
+Since it doesn't depend on the value of `parameter` (it doesn't appear
+in its signature), it is computed in the root namespace, rather than
+once in each of the `scan_params` namespaces. If we instead had this:
+```yaml
+pdfs:
+ - NNPDF30_nlo_as_0118
+ - CT14nlo
+
+scan_params:
+  - parameter: 5
+  - parameter: 10
+
+
+actions_:
+ - pdfs:
+	scan_params:
+     - plot1
+```
+
+The corresponding graph would be:
+
+![Dependency levels](twoparams.png)
+
+since `results` does depend on the pdf.
+
+
+Defining custom pipelines
+-------------------------
+
+Here we discuss what needs to go from user entered strings in the YAML
+file plots and reports.
+
+### Configuration
+
+A configuration class derived from `reportengine.ConfigParser` is used to parse the
+user input. In validphys, it is defined in `validphys.Config`.
+
+The parsing in reportengine is *context dependent*. Because we want to
+specify resources as much as possible before computing anything (at
+"*compile time*"), we need to have some information about other
+resources (e.g. theory folders) in order to do any meaningful
+processing.
+
+The `Config` class takes the user input and the dependencies and:
+
+ - Returns a valid resource if the user input is valid.
+
+ - Raises a `ConfigError` if the user input is invalid.
+
+To parse a given user entered key (e.g. `posdataset`), simply define
+a `parse_posdataset` function. The first argument (i.e. second after
+`self`) will be the raw value in the configuration file. Any other
+arguments correspond to dependencies that are already resolved at the
+point where they are passed to the function (`reportengine` takes care
+of that).
+
+For example, we might have:
+```python
+def parse_posdataset(self, posset:dict, * ,theoryid):
+    ...
+```
+
+
+The type specification (`:dict` above) makes sure that the user input
+is of that type before it is seen by the function (which avoids
+a bunch of repetitive error checking). A positivity dataset requires
+a theory ID in order to be meaningfully processed (i.e. to find the
+folder where the fktables are) and therefore the theoryid will be
+looked for and processed first.
+
+We need to document what the
+resource we are providing does. The docstring will be seen in
+`validphys --help config`:
+```python
+def parse_posdataset(self, posset:dict, * ,theoryid):
+    """An observable used as positivity constrain in the fit.
+    It is a mapping containing 'dataset' and 'poslambda'."""
+    ...
+```
+
+#### Validphys loaders
+
+In validphys, we use a `Loader` class to load resources from various
+folders. It is good to have a common interface, since it is used to
+list the available resources of a given type or even download
+a missing resource. The functions of type `check_<resource>` should
+take the information processed by the Config class anf verify that
+a given resources is correct. If so they should return a "Resouce
+specification" (something typically containing metadata information
+such as paths, and a `load()` method to get the C++ object from
+`libnnpdf`). We also define a `get` method that returns the C++ object
+directly (although I am not sure it's very useful anymore).
+
+In the case of the positivity set, this is entirely given in terms of
+existing check functions:
+
+```python
+def check_posset(self, theiryID, setname, postlambda):
+    cd = self.check_commondata(setname, 0)
+    fk = self.check_fktable(theiryID, setname, [])
+    th =  self.check_theoryID(theiryID)
+    return PositivitySetSpec(cd, fk, postlambda, th)
+
+def get_posset(self, theiryID, setname, postlambda):
+    return self.check_posset(theiryID, setname, postlambda).load()
+```
+
+A more complicated example should raise the appropriate loader
+errors (see the other examples in the class).
+
+The `PositivytySetSpec` could be defined roughly like:
+```python
+ class PositivitySetSpec():
+     def __init__(self, commondataspec, fkspec, poslambda, thspec):
+         self.commondataspec = commondataspec
+         self.fkspec = fkspec
+         self.poslambda = poslambda
+         self.thspec = thspec
+
+     @property
+     def name(self):
+         return self.commondataspec.name
+
+     def __str__(self):
+         return self.name
+
+     @functools.lru_cache()
+     def load(self):
+         cd = self.commondataspec.load()
+         fk = self.fkspec.load()
+         return PositivitySet(cd, fk, self.poslambda)
+```
+Here `PositivitySet` is the `libnnpdf` object. It is generally better
+to pass around the spec objects because they are lighter and have more
+information (e.g. the theory in the above example).
+
+With this, our parser method could look like this:
+```python
+
+def parse_posdataset(self, posset:dict, * ,theoryid):
+    """An observable used as positivity constrain in the fit.
+    It is a mapping containing 'dataset' and 'poslambda'."""
+    bad_msg = ("posset must be a mapping with a name ('dataset') and "
+               "a float multiplier(poslambda)")
+
+    theoryno, theopath = theoryid
+    try:
+        name = posset['dataset']
+        poslambda = float(posset['poslambda'])
+    except KeyError as e:
+        raise ConfigError(bad_msg, e.args[0], posset.keys()) from e
+    except ValueError as e:
+        raise ConfigError(bad_msg) from e
+
+    try:
+        return self.loader.check_posset(theoryno, name, poslambda)
+    except FileNotFoundError as e:
+        raise ConfigError(e) from e
+```
+
+The first part makes sure that the user input is of the expected form
+(a mapping with a string and a number). The `ConfigError` has support
+for suggesting that something could be mistyped. The syntax is
+`ConfigError(message, bad_key, available_keys)`. For example, if the
+user enters "poslanda" instead of "postlambda", the error message
+would suggest the correct key.
+
+Note that all possible error paths must end by raising
+a `ConfigError`.
+
+
+#### Automatic lists
+
+It is possible to easily process list of elements once the parsing for
+a single element has been defined. Simply add an `eleement_of`
+decorator to the parsing function:
+```python
+@element_of('posdatasets')
+def parse_posdataset(self, posset:dict, * ,theoryid):
+```
+
+Now `posdatasets` is parsed as a list of positivity datasets, and can
+be used to loop over in namespace specifications.
+
+### Computing results
+
+Now that we can receive positivity sets as input, let's do something
+with them. The SWIG wrappers allow us to call the C++ methods of
+`libnnpdf` from Python. These things go in the `validphys.results`
+module. We can start by defining a class to produce and hold the
+results:
+```python
+class PositivityResult(StatsResult):
+    @classmethod
+    def from_convolution(cls, pdf, posset):
+        loaded_pdf = pdf.load()
+        loaded_pos = posset.load()
+        data = loaded_pos.GetPredictions(loaded_pdf)
+        stats = pdf.stats_class(data.T)
+        return cls(stats)
+
+    @property
+    def rawdata(self):
+        return self.stats.data
+```
+
+`pdf.stats_class` allows to interpret the results of the convolution
+as a function of the PDF error type (e.g. to use the different
+formulas for the uncertainty of Hessian and Monte Carlo sets).
+
+And then define a simple provider function:
+```python
+def positivity_predictions(pdf, positivityset):
+     return PositivityResult.from_convolution(pdf, positivityset)
+```
+
+### The collect function
+
+In the user interface we have the possibility to perform a computation
+looping over a list of namespaces. In the code, we can define
+providers that collect the results of such computations with the
+`collect` function.
+
+The signature is:
+```python
+collect(function, fuzzyspec)
+```
+
+This will expand the `fuzzyspec` relative to the current namespace and
+compute the function once for each frame. Then it will put all the
+results in a list (to be iterated in the same order as the fuzzyspec)
+and set that as the result of the provider.
+
+For example
+```python
+possets_predictionsa = collect(positivity_predictions, ('posdatasets',))
+```
+
+Compared to a simple `for` loop, the collect function has the
+advantages that the computations are appropriately reused and several
+results could be computed simultaneously in the parallel mode.
+
+We can use the output of `collect` as input to other providers. For
+example:
+```python
+def count_negative_points(possets_predictions):
+    return np.sum([(r.rawdata < 0).sum(axis=1) for r in
+	possets_predictions], axis=0)
+```
+
+### Checking providers
+
+Providers can checks that verify that all the required preconditions
+are met. Checks are executed at the time at which the call node is
+just created and all its required dependencies are either in the
+namespace or scheduled to be produced. Checking functions take the
+current state of the namespace, as well as an unspecified set of other
+parameters (because I haven't decided on the interface yet!).
+Therefore check functions should accept `**kwargs` arguments. Checks
+are decorated with the `reportengine.checks.make_argcheck` function.
+If checks don't pass, they must raise
+a `reportengine.checks.CheckError` exception.
+
+For example, given a reweighting function, we may want to check that
+the current PDF (the value that will be passed to the function) has
+a Monte Carlo error type, we might define a check like:
+```python
+@make_check
+def check_pdf_is_montecarlo(ns, **kwargs):
+    pdf = ns['pdf']
+    etype = pdf.ErrorType
+    if etype != 'replicas':
+        raise CheckError("Error type of PDF %s must be 'replicas' and not %s"
+                          % (pdf, etype))
+
+```
+
+Checks can be used (abused) to modify the namespace before the action
+function sees it. This can be used for some advanced context dependent
+argument default setting (for example setting default file names based
+on the nsspec).
+
+The check is associated to the provider function by simply applying it
+as a decorator:
+
+```python
+@check_pdf_is_montecarlo
+def chi2_data_for_reweighting_experiments(pdf, args):
+    ...
+```
+
+A slightly higher level interface to checks is implemented by the
+`make_argcheck` decorator. Instead of receiving a namespace and other
+unspecified arguments, like the functions decorated with `make_check`,
+it simply takes the arguments we want to test. The function can return
+a dictionary that will be used to update the namespace (but that is
+not required, it can also not return anything).
+
+For example the `check_pdf_is_montecarlo` above could be more easily
+implemented like:
+```python
+@make_argcheck
+def check_pdf_is_montecarlo(pdf):
+    etype = pdf.ErrorType
+    if etype != 'replicas':
+        raise CheckError("Error type of PDF %s must be 'replicas' and not %s"
+                          % (pdf, etype))
+```
+`make_argcheck` should be preferred, since it is more explicit, and
+could be extended with more functionality later on. However it is
+newer and not very used currently in the code.
+
+Checks have no effect outside of reportengine (unless you call them
+explicitly).
+
+Ideally, the checks should be sufficient to guarantee that the
+actions will not fail at runtime.
+
+### Producing figures
+
+In order to produce figures, just decorate your functions returning
+`matplotlib` `Figure` objects  with the `reportengine.figure.figure`
+function, e.g.:
+
+```python
+@figure
+def plot_p_alpha(p_alpha_study):
+   fig, ax = plt.subplots()
+   #Plot something
+   ...
+   return fig
+```
+
+This will take care of the following:
+
+ - Saving the figures with a nice, unique name to the output folder,
+   in the formats specified by the user.
+
+ - Closing the figures to save memory.
+
+ - Making sure figures are properly displayed in reports.
+
+There is also the `figuregen` decorator for providers that are
+implemented as generators that yield several figures (see e.g. the
+implementation of `plot_fancy`). Apart from just the figure, yield
+a tuple (prefix, figure) where the prefix will be used in the
+filename.
+
+### Producing tables
+
+These work similarly to [figures](#producing-figures), as described
+above. Instead use the `@table` and `@tablegen` decorators.
+
+Tables will be saved in the CSV formats.
+
+### Customizing how things look in the report
+
+By default, the `str()` method will be applied to objects that appear
+in the report. If you want a custom behaviour, declare a declare
+a custom `as_markdown` property for your objects. It should return
+a string in Pandoc Markdown describing your object. Raw HTML is
+also allowed (although that decreases the compatibility, e.g. if we
+decide to output LaTeX instead of HTML in the future).
+
