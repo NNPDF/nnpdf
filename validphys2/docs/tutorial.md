@@ -360,10 +360,47 @@ configuration. This is easily solved by removing said hacks from
 If you include conda in your default PATH, the default Python version
 will be the conda Python 3. This could cause problems if you use code
 that expects `/usr/bin/env python` to point to Python 2. In such cases
-you will need to conditionally enable or disable conda. In any case
-this tends to not be a problem for newer software as Python 3 gains
-support.
+you will need to conditionally enable or disable conda. You can saved
+a helper executable script (called for example `use-conda`) to some
+location in your PATH containing:
 
+```bash
+#!/bin/bash
+unset PYTHONPATH
+export PATH= /your/conda/folder/bin:$PATH
+```
+
+Remember to `chmod +x use-conda`. Now typing:
+```
+source use-conda
+```
+will set your PATH environment variable to point to the conda
+binaries.
+
+In any case this tends to not be a problem for newer software as
+Python 3 gains support.
+
+### Development installs
+
+You can `conda install` a package and then `conda remove --force` it
+to obtain an environment with all the dependencies but without the
+package. Then for Python projects you can use `pip install -e .` in
+the root folder where the `setup.py` folder is located to have the
+environment automatically reflect the changes you make to the files.
+For example, if you wanted to develop the validphys code you would do:
+
+```bash
+#Quickest way to get all the dependencies in place
+conda install validphys
+conda remove validphys --force
+
+git clone ssh://git@gitlab.cern.ch:7999/NNPDF/validphys2.git
+cd validphys2
+pip install -e .
+```
+
+For C++ projects use the usual build systems, setting the prefix to
+the conda folder.
 
 Seeing what actions are available
 ---------------------------------
