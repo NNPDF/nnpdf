@@ -333,19 +333,31 @@ simply running:
 
     conda install validphys nnpdf
 
-There is only one thing left to do. Because the `nnpdf` binaries
-expect to be be located in a given relative path structure, we need to
-symlink them inside `nnpdfcpp/bin`:
-````
-ln -s `which filter` .
+
+#### Setting the nnpdfcpp paths
+
+
+There is only one thing left to do. We don't package the nnpdfcpp data
+in the conda packages (that would make them too big) and furthermore
+the binaries expect to be operated from specific relative paths with
+respect to the data. To work around these limitations we can symlink
+the nnpdfcpp binaries to the correct path, which is a `bin/` folder
+inside the root of the `nnpdfcpp` git repository.
+
+```
+#The nnpdfcpp git repository
+cd nnpdfcpp
+mkdir -p bin && cd bin
+#inside nnpdfcpp/bin
 ln -s `which nnfit` .
 ln -s `which postfit` .
 ln -s `which fitmanager` .
 ln -s `which chi2check` .
-````
+```
 This requirement will disappear in the future. See also [Dealing with
 paths] below.
 
+Note this is not required for validphys to work.
 
 ### Troubleshooting
 
