@@ -328,6 +328,10 @@ The conda installer will ask to add the conda bin path to the default
 `$PATH` environment variable (by editing your `.bashrc` file). Confirm
 this unless you know that you have a specific reason not to.
 
+Not that the script may ask you to perform some actions manually (e.g.
+it will not overwrite your existing conda configuration). Please be
+pay attention to the output text of the script.
+
 Once everything is configured, you can install validphys and nnpdf by
 simply running:
 
@@ -344,7 +348,7 @@ respect to the data. To work around these limitations we can symlink
 the nnpdfcpp binaries to the correct path, which is a `bin/` folder
 inside the root of the `nnpdfcpp` git repository.
 
-```
+	```
 #The nnpdfcpp git repository
 cd nnpdfcpp
 mkdir -p bin && cd bin
