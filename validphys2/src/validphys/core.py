@@ -342,6 +342,9 @@ class FitSpec(TupleComp):
         d['pdf'] = self.name
         return d
 
+    def __str__(self):
+        return self.name
+
     __slots__ = ('label','name', 'path')
 
 
