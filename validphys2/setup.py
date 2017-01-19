@@ -10,8 +10,8 @@ with open('README.md') as f:
     long_desc = f.read()
 
 setup(name= "validphys",
-      version = '2.0a3',
-      description = "Semantic difference for YAML files",
+      version = '2.0b2',
+      description = "NNPDF analysis framework",
       author = "Zahari Kassabov",
       author_email = "kassabov@to.infn.it",
       url="https://gitlab.cern.ch/NNPDF/validphys2",
