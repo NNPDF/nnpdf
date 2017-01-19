@@ -1167,6 +1167,29 @@ key and the `rsync` program are required in order to use this feature.
 A URL will be displayed from which the contents are publicly
 accessible.
 
+All the uploaded results are automatically indexed in the server. Some
+metadata (e.g. author, and title) will be obtained from an
+`index.html` file in the uploaded output folder. To configure the
+report action to produce such metadata, set the  `out_filename` option
+to `index.html` and use the pandoc-maarkdown syntax to set the
+metadata at the top of the file. In the runcard you would write
+something like:
+```yaml
+template: mytemplate.md
+actions_:
+  -   - report:
+          out_filename: index.html
+```
+and you would begin `mytemplate.md` like:
+
+```
+%My title: Testing fit {@ fit @}
+% Zahari Kassabov
+```
+
+Note that you can use the report syntax to get the parameters from the
+runcard.
+
 Figure formats
 --------------
 
