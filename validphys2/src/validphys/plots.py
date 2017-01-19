@@ -220,11 +220,6 @@ def plot_fancy(one_or_more_results, dataset,
 
                     color = None
 
-            total_extremes = min(min_vals), max(max_vals)
-            small_lim, big_lim = plotutils.expand_margin(*total_extremes, 1.2)
-            ax.set_ylim(small_lim, big_lim)
-
-
             glabel = info.group_label(sameline_vals, info.line_by)
             annotate_point = x[-1], line_data[('cv', 0)].as_matrix()[-1]
             ax.annotate(glabel, annotate_point, xytext=(15 ,-10),
@@ -244,6 +239,12 @@ def plot_fancy(one_or_more_results, dataset,
                     ax.set_ylabel(info.y_label)
             else:
                 ax.set_ylabel("Ratio to %s" % norm_result.label)
+
+            #TODO: Does it makes sense to keep doing this with mpl2?
+            if ax.get_yscale == 'linear':
+                total_extremes = min(min_vals), max(max_vals)
+                small_lim, big_lim = plotutils.expand_margin(*total_extremes, 1.2)
+                ax.set_ylim(small_lim, big_lim)
 
             ax.legend().set_zorder(100000)
             ax.set_xlabel(info.xlabel)
