@@ -45,7 +45,7 @@ PositivitySet LoadPositivitySet(NNPDFSettings const& settings, std::string const
 {
   // allocate commondata
   CommonData cd = CommonData::ReadFile(dataPath() + "commondata/DATA_" + posname + ".dat",
-                                       dataPath() + "commondata/systypes/SYSTYPE_" + posname + "_0.dat");
+                                       dataPath() + "commondata/systypes/SYSTYPE_" + posname + "_DEFAULT.dat");
   // Load fkset of tables
   FKTable fk(dataPath() + settings.GetTheoryDirectory() + "/fastkernel/FK_" + posname + ".dat");
 
