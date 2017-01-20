@@ -318,6 +318,9 @@ class ExperimentSpec(TupleComp, namespaces.NSList):
         #TODO: Is this good enough? Should we explicitly pass the theory
         return self.datasets[0].thspec
 
+    def __str__(self):
+        return self.name
+
 
 class FitSpec(TupleComp):
     def __init__(self, name, path):
