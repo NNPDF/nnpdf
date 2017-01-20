@@ -9,7 +9,7 @@ for s in "${SETS[@]}"; do
 	for i in $DIRECTORY/THSYS-$s*.dat; do
 	    # Process $i
 	    echo "Processing " $i
-	    cat $i | awk ' NR > 9 {print $2 + sqrt($3*$3)}' >> $DIRECTORY/THSYS-$s-MERGED.dat
+	    cat $i | awk ' NR > 9 {print ($2 + sqrt($3*$3))/2.0}' >> $DIRECTORY/THSYS-$s-MERGED.dat
 	done
 	# Extract data c.v and multiply by % error
 	cat ../DATA_$s.dat | awk 'NR > 1 {print $6}' > $DIRECTORY/DAT-$s.dat
