@@ -1,6 +1,6 @@
 #!/bin/bash
 # This script appends an additional 1 percent systematic error to LHC Z pT datasets.
-SETS=(ATLASZPT7TEV ATLASZPT8TEVMDIST ATLASZPT8TEVYDIST)
+SETS=(ATLASZPT7TEV ATLASZPT8TEVMDIST ATLASZPT8TEVYDIST CMSZDIFF12)
 
 for s in "${SETS[@]}"; do
 	echo "Processing "$s
@@ -15,4 +15,4 @@ for s in "${SETS[@]}"; do
 	echo ${NSYS}"    MULT    SKIP" >> SYSTYPE_${s}_DEFAULT.dat
 done
 
-echo "Processing complete, please now edit systype and NSys"
+echo "Processing complete"
