@@ -120,10 +120,18 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
         return true;
       }
 
+    if(set.GetSetName().compare(string("CMSZDIFF12")) == 0)
+      {
+        const double pt = set.GetKinematics(idat, 0);
+        const double y = set.GetKinematics(idat, 1);
+        if (pt < 30 || pt > 170 || y > 1.6)
+          return false;
+        return true;
+      }
+
     // ATLAS W&Z pT, minimum pT cut
-    if( set.GetSetName().compare(string("ATLASWPT31PB")) == 0 ||
-        set.GetSetName().compare(string("CMSZDIFF12")) == 0  )
-      return set.GetKinematics(idat,0) > 50;
+    if(set.GetSetName().compare(string("ATLASWPT31PB")) == 0)
+      return set.GetKinematics(idat,0) > 30;
   }
 
   /**
