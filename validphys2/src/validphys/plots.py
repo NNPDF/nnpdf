@@ -220,9 +220,9 @@ def plot_fancy(one_or_more_results, dataset,
 
                     color = None
 
-            glabel = info.group_label(sameline_vals, info.line_by)
-            annotate_point = x[-1], line_data[('cv', 0)].as_matrix()[-1]
-            ax.annotate(glabel, annotate_point, xytext=(15 ,-10),
+                glabel = info.group_label(sameline_vals, info.line_by)
+                annotate_point = x[-1], line_data[('cv', 0)].as_matrix()[-1]
+                ax.annotate(glabel, annotate_point, xytext=(15 ,-10),
                                  size='xx-small',
                                  textcoords='offset points', zorder=10000)
 
