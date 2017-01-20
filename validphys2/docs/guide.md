@@ -348,8 +348,8 @@ respect to the data. To work around these limitations we can symlink
 the nnpdfcpp binaries to the correct path, which is a `bin/` folder
 inside the root of the `nnpdfcpp` git repository.
 
-	```
-#The nnpdfcpp git repository
+```
+# The nnpdfcpp git repository
 cd nnpdfcpp
 mkdir -p bin && cd bin
 #inside nnpdfcpp/bin
