@@ -32,7 +32,7 @@ install:
       conda config --add channels https://zigzah.com/static/conda-pkgs/
       conda config --add channels https://zigzah.com/static/conda-pkgs-private/
       conda config --set show_channel_urls true
-      conda install --yes conda-build=2.0
+      conda install --yes conda-build
 
 script:
     - ./.ciscripts/build-deploy2.sh conda-recipe
