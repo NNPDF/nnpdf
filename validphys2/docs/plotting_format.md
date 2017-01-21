@@ -1,5 +1,5 @@
-NNPDF plottng format
-====================
+%NNPDF plottng format
+%Zahari Kassabov
 
 A "plotting file" determines how the predictions for given dataset
 should be represented on a plot. The plotting files should be
@@ -85,8 +85,11 @@ code.
 
 The three kinematic variables are referred to as 'k1', 'k2' and 'k3'
 in the plot files. For example, for DIS processes, 'k1' refers to 'x',
-'k2' to 'Q', and 'k3 to 'y'. It is possible to define
-a **kinematics_override** key. The value must be a function defined
+'k2' to 'Q', and 'k3 to 'y'. 
+
+These kinematic values can be overridden by some transformation of
+them. For that purpose, it is possible to define
+a **kinematics_override** key.  The value must be a function defined
 in:
 
 `validphys2/src/validphys/plotoptions/kintransforms.py`
@@ -118,7 +121,9 @@ extra_labels:
 ````
 
 defines one label where the values for each of the datapoints are
-given in the list.
+given in the list. Note that the name of the extra_label (in this case
+`idat2bin` is completely arbitrary, and will be used for plotting
+purposes (LaTeX math syntax is allowed as well).
 
 Finally, every function defined in:
 
@@ -177,7 +182,7 @@ same line.
 
 Similarly, it is possible to define an `figure_by` key: Points
 with different values for the listed keys will be split across
-separated figure. For example:
+separated figures. For example:
 
 ````
 figure_by:
