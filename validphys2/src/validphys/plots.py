@@ -35,7 +35,7 @@ def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
     label = pdf.name
     alldata, central, npoints = abs_chi2_data
     if not isinstance(alldata, MCStats):
-        ax.set_axis_bgcolor("#ffcccc")
+        ax.set_facecolor("#ffcccc")
         log.warn("Chi² distribution plots have a different meaning for non MC sets.")
         label += " (%s!)" % pdf.ErrorType
     label += '\n'+ '\n'.join(str(chi2_stat_labels[k])+(' %.2f' % v) for (k,v) in chi2_stats.items())
@@ -150,8 +150,6 @@ def plot_fancy(one_or_more_results, dataset,
             first = True
 
 
-
-            #http://matplotlib.org/users/transforms_tutorial.html
             for (sameline_vals, line_data) in lineby:
                 ax.set_prop_cycle(None)
                 if first:
@@ -197,6 +195,7 @@ def plot_fancy(one_or_more_results, dataset,
                     err = line_data[('err', i)].as_matrix()
 
 
+                    #http://matplotlib.org/users/transforms_tutorial.html
                     dx, dy = 0.05*(i-first_offset), 0.
                     offset = transforms.ScaledTranslation(dx, dy,
                                                           fig.dpi_scale_trans)
@@ -218,7 +217,7 @@ def plot_fancy(one_or_more_results, dataset,
                          zorder=1000,
                          transform=offset_transform)
 
-                    color = None
+                    color = 'C'+str(i)
 
                 glabel = info.group_label(sameline_vals, info.line_by)
                 annotate_point = x[-1], line_data[('cv', 0)].as_matrix()[-1]
