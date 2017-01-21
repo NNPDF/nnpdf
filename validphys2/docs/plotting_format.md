@@ -217,13 +217,46 @@ These include
  - x/y_label: Any string, possibly latex formatted. Note that the
 	 x_label will be deduced automatically.
 
+# Overriding configuration for normalized plots
+
+When the results are to be plotted as a ratio, it may be convenient to
+alter the configuration of the plots, for example by changing the
+`line_by` labels into `figure_by` (because otherwise the points would
+overlap), or by changing the scale from log to linear. To do so, we
+specify the options we want to override in a `normalize` key.
+Everything defined inside will take precedence when we produce a ratio
+plot and will be ignored for absolute value plots. For example:
+```yaml
+x: k1
+
+x_label: '$\left\|\eta/y\right|$'
+
+y_label: '$d\sigma/dy$ (fb)'
+
+line_by:
+  - Boson
+
+normalize:
+    figure_by:
+        - Boson
+
+extra_labels:
+   Boson:  ["$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$"]
+
+```
+Here, we would split the data by different figure files for each
+unique value of the key `Boson` (which is defined explicitly as an
+`extra_label`), but only one plots with the three bosons split across
+different lines will be produced in absolute value plots.
+
 Example
 ------
 
 A complete example (all keys are optional) looks like this:
 
-``` 
+```yaml
 x: k3
+x_scale: log
 kinematics_override: dummy_transform #defined in transforms.py
 line_by:
   - k2
@@ -231,6 +264,9 @@ line_by:
 figure_by:
   - idat2bin #defined below
   - high_xq  #defined in labelers.py
+
+normalize: # Change the scale for ratio plots
+    x_scale: linear
 
 extra_labels:
     idat2bin:  [0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 200, 200, 200, 300, 300, 300, 400, 400, 400, 500, 500, 600, 600, 700, 700, 800, 800, 900, 1000, 1000, 1100]

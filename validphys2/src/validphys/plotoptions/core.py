@@ -5,6 +5,7 @@ Created on Fri Mar 11 19:27:44 2016
 @author: Zahari Kassabov
 """
 import logging
+from collections import Mapping
 
 import numpy as np
 import pandas as pd
@@ -43,20 +44,23 @@ def get_plot_kinlabels(commondata):
                          "labels defined in commondata.cc. " % (l)) from e
     return kinlabels_latex[key]
 
-def get_infos(dataset):
+def get_infos(dataset, normalize=False):
     nnpdf_dt = dataset.load()
     if not dataset.commondata.plotfiles:
         infos = [_get_info(nnpdf_dt)]
     else:
         infos = []
         for p in dataset.commondata.plotfiles:
+            log.debug("Processing PLOTTING file: %s.", p)
             with p.open() as f:
-                infos.append(_get_info(nnpdf_dt, f, cuts=dataset.cuts))
+                infos.append(_get_info(nnpdf_dt, f, cuts=dataset.cuts,
+                                       normalize=normalize))
     return infos
 
-def _get_info(commondata, file=None, cuts=None):
+def _get_info(commondata, file=None, cuts=None, normalize=False):
     try:
-        return PlotInfo.from_commondata(commondata, file=file, cuts=cuts)
+        return PlotInfo.from_commondata(commondata, file=file, cuts=cuts,
+                                        normalize=normalize)
     except ConfigError:
         log.error("Problem processing file %s" % getattr(file, 'name', file))
         raise
@@ -65,7 +69,7 @@ class PlotInfo:
     def __init__(self, kinlabels, x=None ,extra_labels=None, func_labels=None,
                  figure_by=None, line_by=None, kinematics_override=None,
                  result_transform=None, y_label=None, x_label=None,
-                 x_scale=None, y_scale=None):
+                 x_scale=None, y_scale=None, **kwargs):
         self.kinlabels = kinlabels
         if x is None:
             x = 'idat'
@@ -111,11 +115,17 @@ class PlotInfo:
 
 
     @classmethod
-    def from_commondata(cls, commondata, file=None, cuts=None):
+    def from_commondata(cls, commondata, file=None, cuts=None, normalize=False):
 
         if file:
             config = PlotConfigParser.from_yaml(file, commondata, cuts=cuts)
             plot_params = config.process_all_params()
+            if normalize and 'normalize' in plot_params:
+                if not isinstance(plot_params['normalize'], Mapping):
+                    raise TypeError("Bad format of the config file. `normalize` must be a mapping.")
+                #We might need to use reportengine.namespaces.resolve here
+                plot_params = plot_params.new_child(plot_params['normalize'])
+
         else:
             plot_params = {}
 

@@ -103,7 +103,7 @@ def plot_fancy(one_or_more_results, dataset,
 
     results = one_or_more_results
 
-    infos = get_infos(dataset)
+    infos = get_infos(dataset, normalize=(normalize_to is not None))
     for info in infos:
         table = kitable(dataset, info)
         nkinlabels = len(table.columns)
