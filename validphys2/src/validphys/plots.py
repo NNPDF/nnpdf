@@ -105,156 +105,159 @@ def plot_fancy(one_or_more_results, dataset,
 
     infos = get_infos(dataset, normalize=(normalize_to is not None))
     for info in infos:
-        table = kitable(dataset, info)
-        nkinlabels = len(table.columns)
+        yield from _plot_info(info=info,
+                              results=results,
+                              dataset=dataset,
+                              normalize_to=normalize_to)
 
-        if normalize_to is not None:
-            norm_result = results[normalize_to]
-            #We modify the table, so we pass only the label columns
-            norm_cv, _ = transform_result(norm_result.central_value,
-                                       norm_result.std_error,
-                                       table.iloc[:,:nkinlabels], info)
 
-        for i,result in enumerate(results):
-            #We modify the table, so we pass only the label columns
-            cv, err = transform_result(result.central_value, result.std_error,
-                                       table.iloc[:,:nkinlabels], info)
-            #By doing tuple keys we avoid all possible name collisions
-            if normalize_to is None:
-                table[('cv', i)] = cv
-                table[('err', i)] = err
-            else:
-                table[('cv', i)] = cv/norm_cv
-                table[('err', i)] = err/norm_cv
-        if info.figure_by:
-            figby = table.groupby(info.figure_by)
+def _plot_info(info, results, dataset, normalize_to):
+    table = kitable(dataset, info)
+    nkinlabels = len(table.columns)
+
+    if normalize_to is not None:
+        norm_result = results[normalize_to]
+        #We modify the table, so we pass only the label columns
+        norm_cv, _ = transform_result(norm_result.central_value,
+                                   norm_result.std_error,
+                                   table.iloc[:,:nkinlabels], info)
+
+    for i,result in enumerate(results):
+        #We modify the table, so we pass only the label columns
+        cv, err = transform_result(result.central_value, result.std_error,
+                                   table.iloc[:,:nkinlabels], info)
+        #By doing tuple keys we avoid all possible name collisions
+        if normalize_to is None:
+            table[('cv', i)] = cv
+            table[('err', i)] = err
         else:
-            figby = [('', table)]
+            table[('cv', i)] = cv/norm_cv
+            table[('err', i)] = err/norm_cv
+    if info.figure_by:
+        figby = table.groupby(info.figure_by)
+    else:
+        figby = [('', table)]
 
-        for samefig_vals, fig_data in figby:
-            #For some reason matplotlib doesn't set the axis right
-            min_vals = []
-            max_vals = []
-            #Have consistent output for one or more groupby columns
-            if not isinstance(samefig_vals, tuple):
-                samefig_vals = (samefig_vals, )
-            fig, ax = plt.subplots()
-            plotutils.setup_ax(ax)
-            ax.set_title("%s %s"%(dataset.name,
-                         info.group_label(samefig_vals, info.figure_by)))
-            if info.line_by:
-                lineby = fig_data.groupby(info.line_by)
+    for samefig_vals, fig_data in figby:
+        #For some reason matplotlib doesn't set the axis right
+        min_vals = []
+        max_vals = []
+        #Have consistent output for one or more groupby columns
+        if not isinstance(samefig_vals, tuple):
+            samefig_vals = (samefig_vals, )
+        fig, ax = plt.subplots()
+        plotutils.setup_ax(ax)
+        ax.set_title("%s %s"%(dataset.name,
+                     info.group_label(samefig_vals, info.figure_by)))
+        if info.line_by:
+            lineby = fig_data.groupby(info.line_by)
+        else:
+            lineby = [('', fig_data)]
+
+        first = True
+
+
+        for (sameline_vals, line_data) in lineby:
+            ax.set_prop_cycle(None)
+            if first:
+                labels = True
             else:
-                lineby = [('', fig_data)]
+                labels = False
+            first = False
+            if not isinstance(sameline_vals, tuple):
+                sameline_vals = (sameline_vals, )
 
-            first = True
+            nres = len(results)
+            first_offset = +(nres//2)
 
-
-            for (sameline_vals, line_data) in lineby:
-                ax.set_prop_cycle(None)
-                if first:
-                    labels = True
-                else:
-                    labels = False
-                first = False
-                if not isinstance(sameline_vals, tuple):
-                    sameline_vals = (sameline_vals, )
-
-                nres = len(results)
-                first_offset = +(nres//2)
-
-                if info.x == 'idat':
-                    x = np.array(line_data.index)
-                else:
-                    x = line_data[info.x].as_matrix()
-
-                try:
-                    x = np.asanyarray(x, np.float)
-                except ValueError:
-                    xticklabels = x
-                    npoints = len(x)
-                    x = np.arange(npoints)
-                    ax.set_xticks(x)
-                    ax.set_xticklabels(xticklabels)
-                    #TODO: Remove this when mpl stops doing the idiotic thing
-                    #(in v2?)
-                    ax.set_xlim(-npoints/20, npoints - 1+ npoints/20)
-
-
-                #Use black for the first iteration (data),
-                #and follow the cycle for
-                #the rest.
-                color = '#262626'
-                for i, res in enumerate(results):
-
-                    if labels:
-                        label = res.label
-                    else:
-                        label = None
-                    cv = line_data[('cv', i)].as_matrix()
-                    err = line_data[('err', i)].as_matrix()
-
-
-                    #http://matplotlib.org/users/transforms_tutorial.html
-                    dx, dy = 0.05*(i-first_offset), 0.
-                    offset = transforms.ScaledTranslation(dx, dy,
-                                                          fig.dpi_scale_trans)
-                    offset_transform = ax.transData + offset
-
-                    max_vals.append(np.nanmax(cv+err))
-                    min_vals.append(np.nanmin(cv-err))
-
-
-                    ax.errorbar(x, cv, yerr=err,
-                         linestyle='--',
-                         lw=0.25,
-                         label= label,
-                         #elinewidth = 2,
-                         #capsize=10,
-                         marker = 's',
-                         #markeredgewidth=0.25,
-                         c=color,
-                         zorder=1000,
-                         transform=offset_transform)
-
-                    color = 'C'+str(i)
-
-                glabel = info.group_label(sameline_vals, info.line_by)
-                annotate_point = x[-1], line_data[('cv', 0)].as_matrix()[-1]
-                ax.annotate(glabel, annotate_point, xytext=(15 ,-10),
-                                 size='xx-small',
-                                 textcoords='offset points', zorder=10000)
-
-
-
-            if info.x_scale:
-                ax.set_xscale(info.x_scale)
-
-            if info.y_scale:
-                ax.set_yscale(info.y_scale)
-
-            if normalize_to is None:
-                if info.y_label:
-                    ax.set_ylabel(info.y_label)
+            if info.x == 'idat':
+                x = np.array(line_data.index)
             else:
-                ax.set_ylabel("Ratio to %s" % norm_result.label)
+                x = line_data[info.x].as_matrix()
 
-            #TODO: Does it makes sense to keep doing this with mpl2?
-            if ax.get_yscale == 'linear':
-                total_extremes = min(min_vals), max(max_vals)
-                small_lim, big_lim = plotutils.expand_margin(*total_extremes, 1.2)
-                ax.set_ylim(small_lim, big_lim)
-
-            ax.legend().set_zorder(100000)
-            ax.set_xlabel(info.xlabel)
-
-
-
-
-            fig.tight_layout()
+            try:
+                x = np.asanyarray(x, np.float)
+            except ValueError:
+                xticklabels = x
+                npoints = len(x)
+                x = np.arange(npoints)
+                ax.set_xticks(x)
+                ax.set_xticklabels(xticklabels)
+                #TODO: Remove this when mpl stops doing the idiotic thing
+                #(in v2?)
+                ax.set_xlim(-npoints/20, npoints - 1+ npoints/20)
 
 
-            yield fig
+            #Use black for the first iteration (data),
+            #and follow the cycle for
+            #the rest.
+            color = '#262626'
+            for i, res in enumerate(results):
+
+                if labels:
+                    label = res.label
+                else:
+                    label = None
+                cv = line_data[('cv', i)].as_matrix()
+                err = line_data[('err', i)].as_matrix()
+
+
+                #http://matplotlib.org/users/transforms_tutorial.html
+                dx, dy = 0.05*(i-first_offset), 0.
+                offset = transforms.ScaledTranslation(dx, dy,
+                                                      fig.dpi_scale_trans)
+                offset_transform = ax.transData + offset
+
+                max_vals.append(np.nanmax(cv+err))
+                min_vals.append(np.nanmin(cv-err))
+
+
+                ax.errorbar(x, cv, yerr=err,
+                     linestyle='--',
+                     lw=0.25,
+                     label= label,
+                     #elinewidth = 2,
+                     #capsize=10,
+                     marker = 's',
+                     #markeredgewidth=0.25,
+                     c=color,
+                     zorder=1000,
+                     transform=offset_transform)
+
+                color = 'C'+str(i)
+
+            glabel = info.group_label(sameline_vals, info.line_by)
+            annotate_point = x[-1], line_data[('cv', 0)].as_matrix()[-1]
+            ax.annotate(glabel, annotate_point, xytext=(15 ,-10),
+                             size='xx-small',
+                             textcoords='offset points', zorder=10000)
+
+
+
+        if info.x_scale:
+            ax.set_xscale(info.x_scale)
+
+        if info.y_scale:
+            ax.set_yscale(info.y_scale)
+
+        if normalize_to is None:
+            if info.y_label:
+                ax.set_ylabel(info.y_label)
+        else:
+            ax.set_ylabel("Ratio to %s" % norm_result.label)
+
+        """#TODO: Does it makes sense to keep doing this with mpl2?
+        if ax.get_yscale == 'linear':
+            total_extremes = min(min_vals), max(max_vals)
+            small_lim, big_lim = plotutils.expand_margin(*total_extremes, 1.2)
+            ax.set_ylim(small_lim, big_lim)"""
+
+        ax.legend().set_zorder(100000)
+        ax.set_xlabel(info.xlabel)
+        fig.tight_layout()
+
+
+        yield fig
 
 
 @_check_normalize_to
