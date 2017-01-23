@@ -555,6 +555,11 @@ def chi2_stats(abs_chi2_data):
 
 
 @table
+def dataset_chi2_table(chi2_stats, dataset):
+    return pd.DataFrame(chi2_stats, index=[dataset.name])
+
+
+@table
 def theory_description(theoryid):
     """A table with the theory settings."""
     return pd.DataFrame(pd.Series(theoryid.get_description()), columns=[theoryid])
