@@ -656,8 +656,11 @@ def plot_pdfs(ax, pdf, flindex, grid, setupres):
                     zorder=1)
     #http://stackoverflow.com/questions/5195466/matplotlib-does-not-display-hatching-when-rendering-to-pdf
     hatch = next(hatchit)
+    hatch = ''
     ax.fill_between(xgrid, err68up, err68down, facecolor='None', alpha=alpha,
-                    edgecolor=color, hatch=hatch, zorder=1)
+                    edgecolor=color,
+                    hatch=hatch,
+                    zorder=1)
     if isinstance(stats, MCStats):
         errorstdup, errorstddown = stats.errorbarstd()
         ax.plot(xgrid, errorstdup, linestyle='--', color=color)
@@ -668,7 +671,8 @@ def plot_pdfs(ax, pdf, flindex, grid, setupres):
         outer = False
         label = "%s ($68\%%$ c.l.)" % pdf.label
     handle = plotutils.HandlerSpec(color=color, alpha=alpha,
-                                           hatch=hatch, outer=outer)
+                                           hatch=hatch,
+                                           outer=outer)
     handles.append(handle)
     labels.append(label)
 
