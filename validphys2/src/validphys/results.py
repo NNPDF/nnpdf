@@ -552,6 +552,13 @@ def chi2_stats(abs_chi2_data):
             ('perreplica_std',  rep_data.std_error().mean()),
            ])
 
+
+
+@table
+def theory_description(theoryid):
+    """A table with the theory settings."""
+    return pd.DataFrame(pd.Series(theoryid.get_description()), columns=[theoryid])
+
 experiments_results = collect(experiment_results, ('experiments',))
 each_dataset_results = collect(results, ('experiments', 'experiment'))
 

@@ -8,7 +8,7 @@ Created on Wed Mar  9 15:19:52 2016
 """
 from __future__ import generator_stop
 
-from collections import namedtuple
+from collections import namedtuple, OrderedDict
 import functools
 import inspect
 import logging
@@ -360,6 +360,26 @@ class TheoryIDSpec:
     def __iter__(self):
         yield self.id
         yield self.path
+
+    def get_description(self):
+        #I'd be happier if we consider sqlite3 an implementation detail
+        #to be changed eventually. Depend on it as little as possible.
+        import sqlite3
+        dbpath = self.path.parent/'theory.db'
+        #TODO: remove str in PY36
+        conn = sqlite3.connect(str(dbpath))
+        with conn:
+            cursor = conn.cursor()
+            #int casting is intentional to avoid malformed querys.
+            query = "SELECT * FROM TheoryIndex WHERE ID=%d;"%int(self.id)
+            res = cursor.execute(query)
+            return OrderedDict(((k[0],v) for k,v in zip(res.description, res.fetchone())))
+
+
+    __slots__ = ('id', 'path')
+
+
+
 
     def __str__(self):
         return "theory %s" % self.id
