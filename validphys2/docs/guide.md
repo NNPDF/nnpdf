@@ -1169,16 +1169,18 @@ accessible.
 
 All the uploaded results are automatically indexed in the server. Some
 metadata (e.g. author, and title) will be obtained from an
-`index.html` file in the uploaded output folder. To configure the
-report action to produce such metadata, set the  `out_filename` option
-to `index.html` and use the pandoc-maarkdown syntax to set the
+`index.html` file in the uploaded output folder. To automatically
+generate an `index.html` file from a `report` action, one may set the
+option `main:True` (alternatively there is the `out_filename` option,
+which may be used to specify the HTML filename).
+In the template, use the pandoc-maarkdown syntax to set the
 metadata at the top of the file. In the runcard you would write
 something like:
 ```yaml
 template: mytemplate.md
 actions_:
   -   - report:
-          out_filename: index.html
+          main: True
 ```
 and you would begin `mytemplate.md` like:
 
