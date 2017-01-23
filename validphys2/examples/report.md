@@ -1,5 +1,4 @@
-NNPDF Report
-============
+%NNPDF Report for fit {@ fit @}
 
 {@ description  @}
 
@@ -19,14 +18,27 @@ Train-valid split
 
 {@ plot_training_validation @}
 
-$Chi2$
+$\chi^2$
 -------
+{@ with pdfs  @}
 
-{@ theory::pdfs experiments_chi2_table @}
+### {@ pdf @}
+
+
+{@ experiments_chi2_table @}
+
+{@ endwith@}
 
 Experiment plots
 ---------------
+{@ with experiments @}
+###{@ experiment @}
+{@with experiment@}
+[Detailed plots for dataset ' {@dataset@} ']({@dataset_report report @})
+{@ endwith @}
+{@ endwith @}
 
-{@ with datanorm::theory::experiments::experiment  @}
-{@ plot_fancy @}
+Theory description
+------------------
 
+{@ theory_description @}

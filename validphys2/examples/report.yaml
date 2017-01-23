@@ -1,9 +1,13 @@
-fit: 161017-83d2125-001
+fit: 170112-jr-002
+
 
 use_cuts: True
 
 theory:
     from_: fit
+
+theoryid:
+    from_: theory
 
 
 Q: 10
@@ -11,6 +15,9 @@ Q: 10
 description:
     from_: fit
 template: report.md
+
+dataset_report:
+    template: dataset.md
 
 normalize:
     normalize_to: 1
@@ -22,10 +29,8 @@ pdfs:
     - from_: fit
     - NNPDF30_nlo_as_0118
 experiments:
- - experiment: LHCb
-   datasets:
-      - { dataset: LHCBWZMU8TEV, frac: 1.0, sys: 2, cfac: [NRM] }
+    from_: fit
 
 actions_:
     - - report:
-            out_filename: index.md
+          main: True
