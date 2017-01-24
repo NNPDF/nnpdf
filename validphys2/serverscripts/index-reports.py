@@ -1,6 +1,7 @@
 import pathlib
 import datetime
 import json
+import re
 
 from bs4 import BeautifulSoup
 
@@ -15,29 +16,36 @@ def meta_from_html(f):
     try:
         title = soup.title.string
     except Exception:
-        title = EMPTY
-    if not title:
-        title = EMPTY
+        title = None
     try:
         author = soup.find('meta', {'name':'author'})['content']
     except Exception:
         author = EMPTY
-    return title, author
+
+    try:
+        tagtext = soup.find('meta', {'name':'keywords'})['content']
+    except Exception:
+        tags = []
+    else:
+        tags = re.split(r"\s*,\s*", tagtext)
+    return title, author, tags
 
 def register(p):
     index = p/'index.html'
     if index.exists():
-        title, author = meta_from_html(index.open())
+        title, author, tags = meta_from_html(index.open())
     else:
-        title = author = EMPTY
+        title = None
+        author = EMPTY
+        tags = []
     url = ROOT_URL + p.name
 
-    urllink = '<a href="%s">%s</a>' % (url, p.name)
-    titlelink = '<a href="%s">%s</a>' % (url, title)
-
     date = datetime.date.fromtimestamp(p.stat().st_mtime).isoformat()
+    if not title:
+        title = "Validphys output (untitled)"
 
-    return (titlelink, author, date, urllink)
+    titlelink = '<a href="%s">%s</a>' % (url, title)
+    return (titlelink, author, date, tags)
 
 def make_index(root_path, out):
     root_path = pathlib.Path(root_path)
