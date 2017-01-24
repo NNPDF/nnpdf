@@ -227,7 +227,13 @@ def _plot_info(info, results, dataset, normalize_to):
                 color = 'C'+str(i)
 
             glabel = info.group_label(sameline_vals, info.line_by)
-            annotate_point = x[-1], line_data[('cv', 0)].as_matrix()[-1]
+
+            #Use some anchor that is not in y=1 for ratio plots
+            if normalize_to is not None:
+                next_after_normalize = (normalize_to + 1) % len(results)
+                annotate_point = x[-1], line_data[('cv', next_after_normalize)].as_matrix()[-1]
+            else:
+                annotate_point = x[-1], line_data[('cv', 0)].as_matrix()[-1]
             ax.annotate(glabel, annotate_point, xytext=(15 ,-10),
                              size='xx-small',
                              textcoords='offset points', zorder=10000)
