@@ -121,8 +121,6 @@ class PlotInfo:
             config = PlotConfigParser.from_yaml(file, commondata, cuts=cuts)
             plot_params = config.process_all_params()
             if normalize and 'normalize' in plot_params:
-                if not isinstance(plot_params['normalize'], Mapping):
-                    raise TypeError("Bad format of the config file. `normalize` must be a mapping.")
                 #We might need to use reportengine.namespaces.resolve here
                 plot_params = plot_params.new_child(plot_params['normalize'])
 
@@ -137,6 +135,8 @@ class PlotInfo:
 
 
 class PlotConfigParser(Config):
+
+    allowed_keys = {'normalize':dict}
 
     def __init__(self, input_params ,commondata, cuts=None, **kwargs):
         self.commondata = commondata
