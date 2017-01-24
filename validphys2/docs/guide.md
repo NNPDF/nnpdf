@@ -1135,8 +1135,19 @@ the kinematics stored in the commondata, what to use as `x` axis or
 how to group the plots. The format is described in detail in [Plotting
 format specification](plotting_format.html). The plotting
 specifications are supported by small amounts of Python (defining the
-varios transformations), which are declared in the
+various transformations), which are declared in the
 `validphys.plotoptions` package.
+
+Note that PLOTTING files are considered part of `nnpdfcpp`, and as
+such they are assumed to be correct, so in principle they have not
+guarantee of failing early with a good error message. However, you can
+set `check_plotting: True` in the input configurations to cause the
+PLOTTING files to be processed as soon as the dataset is loaded. This
+can be useful while debugging the plotting files, but will cause
+a noticeable delay to the startup (because the C++ DataSet objects
+need to be loaded in memory). This will warn of missing plotting files
+and produce early nice error messages if the configuration is not
+processed correctly.
 
 
 Parallel mode
@@ -1172,8 +1183,9 @@ metadata (e.g. author, and title) will be obtained from an
 `index.html` file in the uploaded output folder. To automatically
 generate an `index.html` file from a `report` action, one may set the
 option `main:True` (alternatively there is the `out_filename` option,
-which may be used to specify the HTML filename).
-In the template, use the pandoc-maarkdown syntax to set the
+which may be used to specify the HTML filename).  In the template, use
+the [pandoc-maarkdown
+syntax](http://pandoc.org/MANUAL.html#metadata-blocks) to set the
 metadata at the top of the file. In the runcard you would write
 something like:
 ```yaml
@@ -1182,15 +1194,30 @@ actions_:
   -   - report:
           main: True
 ```
-and you would begin `mytemplate.md` like:
+and you would begin `mytemplate.md`, using YAML syntax,  like:
 
 ```
-%My title: Testing fit {@ fit @}
-% Zahari Kassabov
+---
+title: Testing the fit {@fit@}
+author: Zahari Kassabov
+keywords: [nnpdf31, nolhc]
+...
 ```
 
 Note that you can use the report syntax to get the parameters from the
 runcard.
+
+The keywords are used for indexing, and some tags may be used to
+display the report in a promiment place in the index page. The source
+of the report index page is
+```
+serverscripts/WEB/validphys-reports/index.html
+```
+inside the validphys2 repository. This page can be edited to reflect
+the current interests (the Makefile directly uploads to the
+server). See [Web Scripts] in the [Developer Documentation] for more
+details.
+
 
 Figure formats
 --------------
@@ -1822,3 +1849,44 @@ a string in Pandoc Markdown describing your object. Raw HTML is
 also allowed (although that decreases the compatibility, e.g. if we
 decide to output LaTeX instead of HTML in the future).
 
+Web Scripts
+-----------
+
+Validphys2 interacts with the NNPDF server by [Downloading Resources]
+and [Uploading the result].
+
+The server scripts live in the validphys2
+repository under the `serverscripts` folder.
+
+The server side
+infrastructure that makes this possible currently aims to be
+minimalistic. The only thing that is done is maintaining some index
+files (currently one for theories, one for fits and one for reports)
+which essentially list the files in a given directory. The indexes are
+regenerated automatically when their correspondent folders are
+modified. This is achieved by waiting for changes using the Linux
+`inotify` API and my
+[`asynwatch`](https://github.com/Zaharid/asyncwatch) module.
+
+The report index is used to display a webpage indexing the reports. It
+retrieves extra information from an `index.html` page contained in the
+report folder. Properties title, author and tags are retrieved from
+the HTML header of this file. To produce it, the most convenient way
+is setting the `main` flag of a report, as described in [Uploading the
+result].
+
+
+The report index uses the
+[DataTables](https://datatables.net/) JS library. It provides
+filtering and sorting capabilities to the indexes tables. The source
+file is:
+```
+serverscripts/WEB/validphys-reports/index.html
+```
+in the validphys2 directory. It should be updated from time to time to
+highlight the most interesting reports at a given moment. This can be
+done by for example displaying in a separate table at the beginning
+the reports marked with some keyword (for example 'nnpdf31').
+
+The Makefile inside will synchronize them with
+the server.
