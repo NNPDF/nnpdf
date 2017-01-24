@@ -368,7 +368,7 @@ Note this is not required for validphys to work.
 After several iterations on the install system most issues have been
 resolved. There could be problems derived from interactions with hacks
 targeted at solving manually. In particular, see that you don’t have
-any `PYHTONPATH` environment variable (for example pointing at some
+any `PYTHONPATH` environment variable (for example pointing at some
 version of LHAPDF) since that will overwrite the default conda
 configuration. This is easily solved by removing said hacks from
 `.bashrc` or similar files.
@@ -559,7 +559,7 @@ actions_:
 ```
 
 We are specifying one PDF (by the LHAPDF id), one dataset and one
-theory. Npte that the dataset specification is identical to that of
+theory. Note that the dataset specification is identical to that of
 the nnfit configuration files.
 We are saying that we do not want to use the cuts of the data
 (so we don't have to specify a fit containing the cut data).
@@ -827,7 +827,7 @@ add another action to the example above:
 ```
 both of these require to compute the same convolutions. Validphys will
 realize this as long as both actions are iterated in the same way.
-However permuting "pdfs" and "theotyids" would result in the
+However permuting "pdfs" and "theoryids" would result in the
 convolutions computed twice, since the code cannot prove that they
 would be identical.
 
@@ -916,7 +916,7 @@ actions_:
 
 Here the `from_` key is used multiple times:
 
- - To obtain the description string from the report input card. 
+ - To obtain the description string from the report input card.
 
  - To obtain the theory mapping from the fit input card.
 
@@ -996,16 +996,15 @@ be displayed (like in legends and axes).
 Reports
 -------
 
-Reports are implemented as an action of `reportengine` (admittedly
-a little hacky at the moment). The `report` action takes a `template`
+Reports are implemented as an action of `reportengine` (admittedly a
+little hacky at the moment). The `report` action takes a `template`
 argument, corresponding to the filename of a template in the [Pandoc
 Markdown format](http://pandoc.org/MANUAL.html#pandocs-markdown), with
 the actions defined with a special syntax discussed below. The actions
 will be resolve as if they where directly specified in the
-configuration file
-file, and when all of them are completed, their value will be
-substituted in the template (the `jinja2` library is used for the
-intermediate rendering).
+configuration file and when all of them are completed, their value
+will be substituted in the template (the `jinja2` library is used for
+the intermediate rendering).
 
 ### Report template specification
 
