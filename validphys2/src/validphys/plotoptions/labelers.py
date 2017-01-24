@@ -4,6 +4,8 @@ Created on Fri Mar 11 20:44:21 2016
 
 @author: Zahari Kassabov
 """
+import numpy as np
+
 from validphys.plotoptions.utils import label
 from validphys.plotoptions.utils import bins
 
@@ -31,3 +33,14 @@ def k2bins10(k1,k2,k3,**kwargs):
     qbin = bins(k2)
     qbin[:] = [int(x / 10) for x in qbin]
     return qbin
+
+@label("$Q^2$ (GeV²)")
+def two_Q2_bins(k1,k2,k3,**kwargs):
+    min_, median, max_ = np.percentile(k2, (0,50,100))
+    firstlabel = '[%.2f, %.2f)'%(min_, median)
+    #Use dtype=object to avoid longer strings in secondlabel getting trimmed
+    res = np.array([firstlabel] * len(k2), dtype=object)
+
+    secondlabel = '[%.2f, %.2f]'%(median, max_)
+    res[k2>=median] = secondlabel
+    return res
