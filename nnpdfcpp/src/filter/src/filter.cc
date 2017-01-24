@@ -48,6 +48,11 @@ int main(int argc, char **argv)
   mkdir(settings.GetResultsDirectory().c_str(),0777);
   mkdir((settings.GetResultsDirectory() + "/filter").c_str(),0777);
 
+  // Check T0 set availability
+  cout << Colour::FG_BLUE << "\n- Testing T0 PDF set:" << Colour::FG_DEFAULT << endl;
+  PDFSet* T0Set = new LHAPDFSet(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::ER_MCT0);
+  delete T0Set;
+
   // Load FakeData PDF Set for closure test
   LHAPDFSet* FakeSet = NULL;
   if (settings.Get("closuretest","fakedata").as<bool>())
@@ -168,12 +173,7 @@ int main(int argc, char **argv)
       }
   }
 
-  // Check T0 set availability
-  cout << Colour::FG_BLUE << "\n- Testing T0 PDF set:" << Colour::FG_DEFAULT << endl;
-  PDFSet* T0Set = new LHAPDFSet(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::ER_MCT0);
-
   if (FakeSet) delete FakeSet;
-  if (T0Set) delete T0Set;
 
   cout << Colour::FG_GREEN << endl;
   cout << " -------------------------------------------------\n";
