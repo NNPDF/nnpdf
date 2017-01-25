@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "theoryman.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "thmanager.settings")
 
 application = get_wsgi_application()
