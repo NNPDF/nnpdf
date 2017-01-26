@@ -1,5 +1,5 @@
-% Validphys 2 Guide
-% Zahari Kassabov
+% Guide for validphys2
+% Zahari Kassabov & SC
 
 Introduction
 ============
