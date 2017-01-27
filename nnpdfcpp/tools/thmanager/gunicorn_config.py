@@ -1,4 +1,4 @@
 command = 'gunicorn'
 pythonpath = '/home/apfelcomb/thmanager'
 bind = '127.0.0.1:8001'
-workers = 4
+workers = 1
