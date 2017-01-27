@@ -17,36 +17,23 @@
   border-bottom: 1px solid #eee
 }
 
-/*
-.menu a:first-child::before {
-    border-top-left-radius: 2px
-}
-
-.menu a:last-child {
-    border-bottom: 0;
-    border-bottom-right-radius: 2px;
-    border-bottom-left-radius: 2px
-}
-
-.menu a:last-child::before {
-    border-bottom-left-radius: 2px
-}
-*/
-
 .menu a:hover {
     text-decoration: none;
     background-color: #f9f9f9
 }
 
+.menu ul a {
+  font-weight: bold;
+}
+
 .menu ul ul li a {
   padding-left: 20px;
   font-weight: normal;
-  color: #4078c0
 }
 
-.menu ul a {
-  font-weight: bold;
-  color: black;
+.menu ul ul ul li a {
+  padding-left: 40px;
+  font-weight: normal;
 }
 
 .menu ul a::before {
@@ -56,7 +43,7 @@
   left: 0;
   width: 2px;
   content: "";
-  background-color: #d26911
+  background-color: #4078c0
 }
 
 .menu ul ul li a::before {
