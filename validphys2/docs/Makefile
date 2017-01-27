@@ -14,4 +14,4 @@ all: $(patsubst %.md, %.html, $(MDS)) $(patsubst %.dot, %.png, $(DOTS))
 
 .PHONY: rsync
 rsync:
-	rsync -avz ./ nnpdf:WEB/validphys-docs/
+	rsync -avz ./ nnpdf@pcteserver.mi.infn.it:WEB/validphys-docs/
