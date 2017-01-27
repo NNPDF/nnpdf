@@ -1,5 +1,6 @@
 % Guide for validphys2
-% Zahari Kassabov & SC
+% Zahari Kassabov, SC
+% January 2017
 
 Introduction
 ============
