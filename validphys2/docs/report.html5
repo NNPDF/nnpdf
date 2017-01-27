@@ -67,7 +67,6 @@ $endif$
 
 $if(toc)$
 <nav class="menu docs-menu">
-<span class="menu-heading">Table of Contents</span>
 $toc$
 </nav>
 $endif$
