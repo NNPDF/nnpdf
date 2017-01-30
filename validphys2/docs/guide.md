@@ -283,7 +283,7 @@ both Linux and Mac. Currently the installation for both platforms
 boils down to executing a script.
 
 Producing installers is a difficult (and boring) problem since a lot
-of dependencies needs to be set up to work properly together. In
+of dependencies need to be set up to work properly together. In
 practice, it is hard to produce a set of instructions that work
 reliably on all platforms and with all compilers. This is further
 complicated by the fact that the Python deployment tools are
