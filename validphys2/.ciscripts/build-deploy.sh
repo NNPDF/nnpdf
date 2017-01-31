@@ -1,7 +1,6 @@
 #/usr/bin/bash
 
 MINICONDA_PATH="/root/miniconda3"
-echo "$CONDARCCONTENT" > ~/.condarc
 echo "$NETRCCONTENT" > ~/.netrc
 
 conda build -q conda-recipe
