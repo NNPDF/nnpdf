@@ -1,15 +1,19 @@
-pdf: NNPDF30_nlo_as_0118
+pdfs:
+    - NNPDF30_nlo_as_0118
 
-theoryid: 6 
+theoryid: 53
+
+datanorm:
+    normalize_to: True
+
+template: dataset.md
 
 use_cuts: false
 
-dataset: 
-    dataset: ATLASWZRAP36PB  
-    sys: 2
-    cfac: [EWK]
+dataset_input:
+    dataset: CMSDY2D12
+    cfac: [EWK, QCD]
 
-actions_: 
-  -   - plot_fancy
-      - plot_chi2dist
-
+actions_:
+  -   - report:
+          main: True
