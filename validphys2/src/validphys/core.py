@@ -195,6 +195,16 @@ class CommonDataSpec(TupleComp):
         return CommonData.ReadFile(str(self.datafile), str(self.sysfile))
 
 
+class DataSetInput(TupleComp):
+    """Represents whatever the user enters in the YAML to specidy a
+    dataset."""
+    def __init__(self, *, name, sys, cfac):
+        self.name=name
+        self.sys=sys
+        self.cfac = cfac
+        super().__init__(name, sys, cfac)
+
+
 class DataSetSpec(TupleComp):
 
     def __init__(self, *, name, commondata, fkspecs, thspec, cuts,
@@ -293,17 +303,21 @@ class PositivitySetSpec(TupleComp):
 #We allow to expand the experiment as a list of datasets
 class ExperimentSpec(TupleComp, namespaces.NSList):
 
-    def __init__(self, name, datasets):
+    def __init__(self, name, datasets, dsinputs=None):
         #This needs to be hashable
         datasets = tuple(datasets)
+
+        dsinputs = tuple(dsinputs)
+
         self.name = name
         self.datasets = datasets
+        self.dsinputs = dsinputs
 
-
+        #TODO: Add dsinputs to comp tuple?
         super().__init__(name, datasets)
 
         #TODO: Can we do  better cooperative inherece trick than this?
-        namespaces.NSList.__init__(self, datasets, nskey='dataset')
+        namespaces.NSList.__init__(self, dsinputs, nskey='dataset_input')
 
     @functools.lru_cache()
     def load(self):
