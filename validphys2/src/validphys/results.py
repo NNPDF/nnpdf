@@ -171,17 +171,6 @@ def experiments_index(experiments):
     df.set_index(columns, inplace=True)
     return df.index
 
-#TODO: Find a good name for this
-def t0set(use_t0=False, t0pdfset=None):
-    """A conveninece provider to not have to drag the two
-    related parameters everywhere"""
-    if use_t0:
-        return t0pdfset
-    else:
-        return None
-
-
-
 @table
 def experiment_result_table(experiments, pdf, experiments_index):
     """Generate a table containing the data central value, the central prediction,

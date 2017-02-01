@@ -219,6 +219,14 @@ class Config(report.Config):
 
         return do_use_t0
 
+    #TODO: Find a good name for this
+    def produce_t0set(use_t0=False, t0pdfset=None):
+        """Return the t0set if use_t0 is True and None otherwise."""
+        if use_t0:
+            return t0pdfset
+        else:
+            return None
+
     @element_of('posdatasets')
     def parse_posdataset(self, posset:dict, * ,theoryid):
         """An observable used as positivity constrain in the fit.
