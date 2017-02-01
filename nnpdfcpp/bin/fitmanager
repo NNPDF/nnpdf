@@ -47,10 +47,11 @@ def upload(set):
     """
     Uploads the desired set of PDFs
     """
+    tartemp = 'tar -zcf {0}.tgz --exclude={0}.dat ../results/{0}/nnfit ../config/{0}.yml ../results/{0}/filter ../results/{0}/filter.yml'
+    tarcommand = tartemp.format(set)
+
     try:
-        os.system("tar -zcf " + set + ".tgz" + " --exclude=" + set +
-                  ".dat " + "../results/" + set + "/nnfit ../config/" + set + ".yml" +
-                  " ../results/" + set + "/filter")
+        os.system(tarcommand)
         os.system("scp " + set + ".tgz " + webpath)
         os.system("rm %s" % set + ".tgz")
     except:
