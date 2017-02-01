@@ -1516,6 +1516,23 @@ Defining custom pipelines
 Here we discuss what needs to go from user entered strings in the YAML
 file plots and reports.
 
+The basic code flow is as follows:
+
+ 1. The `actions_` key is parsed to obtain a list of requirements with
+	their associated [fuzzyspec](#fuzzyspecs).
+
+ 2. Each requirement spans other requirements. These can be:
+    - Providers: Other functions with requirements on their own.
+	- User input processed by the [Configuration], which is
+	  immediately tested for correctness.
+	- Production rules, also derived from the configuration.
+
+ 3. Once the requirements are satisfied for a given provider, the
+	[checks](#checking-providers) of the provider are executed.
+
+ 4. If all the checks pass, all the runtime requirements are executed
+	in such an order that the dependencies are resolved.
+
 ### Configuration
 
 A configuration class derived from `reportengine.ConfigParser` is used to parse the
@@ -1563,6 +1580,39 @@ def parse_posdataset(self, posset:dict, * ,theoryid):
     It is a mapping containing 'dataset' and 'poslambda'."""
     ...
 ```
+
+#### Production rules
+
+Apart from `parse_` functions, which take an explicit user input from
+the corresponding key (and optionally a set of dependencies), there
+are the `produce_` functions, which take only the dependencies. Other
+than not taking the user input, the `produce_` functions work in
+a very similar way to the `parse_` functions: They are resolved at
+*"compile time"*, before any procider function is executed, and  they
+should raise a `ConfigError` if they fail.
+
+In general production rules should be preferred to parse functions
+that bundle together various dependencies (e.g. data, cuts and
+theory), because by having more granular elements, we can iterate over
+them in different ways: For examples we might want to generate
+a separate report page for each of the positivity datasets, where they
+are compared for multiple theories. We could break the parse function
+above into:
+
+```python
+def parse_posdataset_input(self, posset:dict):
+    ...
+
+def produce_posdataset(posdataset_input, *, theoryid):
+   ...
+```
+
+Now the user has to enter a key called "posdataset_input", from which
+some Python object will be obtained as the return value of
+`parse_posdataset_inout`. Then, `produce_posdataset` is used to an
+object representing the positivity set and the corresponding FKTables
+in a given theory is obtained from the output of
+`parse_posdataser_input` and a theory ID.
 
 #### Validphys loaders
 
