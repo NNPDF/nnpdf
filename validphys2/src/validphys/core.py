@@ -204,6 +204,21 @@ class DataSetInput(TupleComp):
         self.cfac = cfac
         super().__init__(name, sys, cfac)
 
+    def __str__(self):
+        return self.name
+
+
+class Cuts(TupleComp):
+    def __init__(self, name, path):
+        """Represents a file containing cuts for a given dataset"""
+        self.name = name
+        self.path = path
+        super().__init__(name, path)
+
+    def load(self):
+        log.debug("Loading cuts for %s", self.name)
+        #TODO: py36
+        return np.loadtxt(str(self.path), dtype=int)
 
 class DataSetSpec(TupleComp):
 
@@ -225,14 +240,8 @@ class DataSetSpec(TupleComp):
             op = 'NULL'
         self.op = op
 
-        #TODO: Does it make sense to have a less verbose (but more obscure)
-        #way to do this?
-        #Note that we need to convert to tuple for hashing purposes
-        if cuts is not None:
-            frozencuts = cuts.data.tobytes()
-        else:
-            frozencuts = None
-        super().__init__(name, commondata, fkspecs, thspec, frozencuts,
+
+        super().__init__(name, commondata, fkspecs, thspec, cuts,
                          op)
 
     @functools.lru_cache()
@@ -252,12 +261,13 @@ class DataSetSpec(TupleComp):
 
         data = DataSet(cd, fkset)
 
+
         if self.cuts is not None:
             #ugly need to convert from numpy.int64 to int, so we can pass
             #it happily to the vector to the SWIG wrapper.
             #Do not do this (or find how to enable in SWIG):
             #data = DataSet(data, list(dataset.cuts))
-            intmask = [int(ele) for ele in self.cuts]
+            intmask = [int(ele) for ele in self.cuts.load()]
             data = DataSet(data, intmask)
         return data
 

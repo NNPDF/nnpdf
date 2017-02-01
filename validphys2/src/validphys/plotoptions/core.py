@@ -45,15 +45,24 @@ def get_plot_kinlabels(commondata):
     return kinlabels_latex[key]
 
 def get_infos(dataset, normalize=False):
+    if isinstance(dataset, DataSetSpec):
+        plotfiles = dataset.commondata.plotfiles
+        cuts = dataset.cuts.load() if dataset.cuts else None
+    elif isinstance(dataset, CommonDataSpec):
+        plotfiles = dataset.plotfiles
+        #TODO: Take cuts as a parameter
+        cuts = None
+    else:
+        raise TypeError("Unrecognized data type")
     nnpdf_dt = dataset.load()
-    if not dataset.commondata.plotfiles:
+    if not plotfiles:
         infos = [_get_info(nnpdf_dt)]
     else:
         infos = []
-        for p in dataset.commondata.plotfiles:
+        for p in plotfiles:
             log.debug("Processing PLOTTING file: %s.", p)
             with p.open() as f:
-                infos.append(_get_info(nnpdf_dt, f, cuts=dataset.cuts,
+                infos.append(_get_info(nnpdf_dt, f, cuts=cuts,
                                        normalize=normalize))
     return infos
 

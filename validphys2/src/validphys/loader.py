@@ -16,14 +16,13 @@ import tempfile
 import shutil
 import os.path as osp
 
-import numpy as np
 import yaml
 import requests
 
 from NNPDF import CommonData
 
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
-                            PositivitySetSpec, DataSetSpec, PDF)
+                            PositivitySetSpec, DataSetSpec, PDF, Cuts)
 from validphys import lhaindex
 
 log = logging.getLogger(__name__)
@@ -230,7 +229,7 @@ class Loader(LoaderBase):
             op = None
 
         if use_cuts:
-            cuts = self.get_cuts(name, fit)
+            cuts = self.check_cuts(name, fit)
         else:
             cuts = None
 
@@ -245,8 +244,7 @@ class Loader(LoaderBase):
     def get_pdf(self, name):
         return self.check_pdf(name).load()
 
-
-    def get_cuts(self, setname, fit):
+    def check_cuts(self, setname, fit):
         fitname, fitpath = fit
         p = (fitpath/'filter')/setname/('FKMASK_' + setname+ '.dat')
         if not p.parent.exists():
@@ -254,9 +252,14 @@ class Loader(LoaderBase):
             "Could not find: %s" % p.parent)
         if not p.exists():
             return None
-        cuts = np.loadtxt(str(p), dtype=int)
-        log.debug("Loading cuts for %s" % setname)
-        return cuts
+        return Cuts(setname, p)
+
+
+    def get_cuts(self, setname, fit):
+        cuts = self.check_cuts(setname, fit)
+        if cuts:
+            return cuts.load()
+        return None
 
 
 
