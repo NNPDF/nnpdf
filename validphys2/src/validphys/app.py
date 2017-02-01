@@ -22,6 +22,7 @@ providers = [
              'validphys.reweighting',
              'validphys.fitdata',
              'validphys.pdfgrids',
+             'validphys.kinematics',
              'reportengine.report'
             ]
 
