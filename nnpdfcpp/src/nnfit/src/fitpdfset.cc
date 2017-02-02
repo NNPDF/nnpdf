@@ -42,7 +42,8 @@ fQ20((real)pow(stod(nnset.GetTheory(APFEL::kQ0)),2.0)),
 fPreprocParam(),
 fBestFit(0),
 fEbf(std::numeric_limits<real>::infinity()),
-fNIte(0)
+fNIte(0),
+fbtype(NNPDFSettings::getFitBasisType(nnset.Get("fitting","fitbasis").as<string>()))
 {
   fMembers = 0; // copies
   APFELSingleton::Initialize(nnset,this);
@@ -276,7 +277,13 @@ void FitPDFSet::GetPDF(real const& x, real const& Q2, int const& n, real* pdf) c
       real* xvals = new real[2];
       xvals[0] = x;
       xvals[1] = log(x);
-      real* fitpdfs = new real[fNfl];
+      real* fitpdfs = nullptr;
+
+      if (fbtype == BASIS_LUX)
+	fitpdfs = new real[fNfl+1];
+      else
+	fitpdfs = new real[fNfl];
+
       for (int i=0; i<fNfl; i++)
         fPDFs[n][i]->Compute(xvals,&fitpdfs[i]);
 

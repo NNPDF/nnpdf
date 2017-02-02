@@ -84,6 +84,8 @@ private:
   void ExpandMembers();                      //!< Expand internal vectors to fMembers
   void DisableMember(int mem);               //!< Disable a member PDF by moving it to the end of the vector and decrementing fMembers
   
+  NNPDFSettings const& fSettings;
+
   FitBasis* fFitBasis;                      //!< Fitting basis for PDF
 
   const int fNfl;
@@ -94,8 +96,7 @@ private:
   vector<Parametrisation**> fPDFs;        //!< Vector of PDF members
   real  fEbf;                             //!< Figure of merit for best fit PDF
   int fNIte;                              //!< Counts the number of fit iterations
-
-  NNPDFSettings const& fSettings;
+  basisType fbtype;                       //!< store the basis type
   
   friend class Minimizer;
 };
