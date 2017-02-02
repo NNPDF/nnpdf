@@ -10,7 +10,7 @@ requirements:
         - python 
         - lhapdf
         - toolchain # [osx] 
-        - pcre
+        - swig ==3.0.10
         - sqlite
         - gcc <5 # [linux]
         - libgcc # [linux]
