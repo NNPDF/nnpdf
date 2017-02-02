@@ -69,7 +69,6 @@ LHAPDFSet::LHAPDFSet(const std::string & pdfname, const int &replica):
   fLHA(new real[14])
 {
   fMemberPDFs.push_back(mkPDF(replica));
-  mkPDFs(fMemberPDFs);
   get_logger() << pdfname << " Initialised with " << fMembers <<" members and no errorType." << std::endl;
 }
 
