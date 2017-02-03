@@ -123,9 +123,11 @@ extra_labels:
 defines one label where the values for each of the datapoints are
 given in the list. Note that the name of the extra_label (in this case
 `idat2bin` is completely arbitrary, and will be used for plotting
-purposes (LaTeX math syntax is allowed as well).
-
-Finally, every function defined in:
+purposes (LaTeX math syntax is allowed as well). However adding labels
+manually for each point can be tedious. This should only be reserved
+for information that cannot be recovered from the kinematics as
+defined in the CommonData file. Instead, new labels can be generated
+programmatically: Every function defined in:
 
 
 `validphys2/src/validphys/plotoptions/labelers.py`
@@ -180,7 +182,7 @@ line_by:
 for DIS would mean that the data in the same Q bin is plotted in the
 same line.
 
-Similarly, it is possible to define an `figure_by` key: Points
+Similarly, it is possible to define a `figure_by` key: Points
 with different values for the listed keys will be split across
 separated figures. For example:
 
@@ -254,8 +256,7 @@ unique value of the key `Boson` (which is defined explicitly as an
 `extra_label`), but only one plots with the three bosons split across
 different lines will be produced in absolute value plots.
 
-Example
-------
+# Example
 
 A complete example (all keys are optional) looks like this:
 
