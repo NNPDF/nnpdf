@@ -134,6 +134,20 @@ class Config(report.Config):
         except LoadFailedError as e:
             raise ConfigError(str(e), fit ,self.loader.available_fits)
 
+    def produce_fitcontext(self, fit):
+        """Set PDF, theory ID and experiments from the fit config"""
+
+
+        _, pdf         = self.parse_from_('fit', 'pdf', write=False)
+        _, theory      = self.parse_from_('fit', 'theory', write=False)
+        _, experiments = self.parse_from_('fit', 'experiments', write=False)
+
+        #TODO: parse we need multilevel from to do theoruid nicely
+        thid = theory['theoryid']
+
+        return {'pdf': pdf, 'theoryid':thid, 'experiments': experiments}
+
+
 
     def parse_dataset_input(self, dataset):
         try:
