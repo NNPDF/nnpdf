@@ -106,7 +106,7 @@ file in attachment:
         rp = pathlib.Path(self.args["resultspath"])
         if not rp.exists():
             log.error("The results path %s does not exist. Please specify "
-            "the path to nnpdfcpp/results with the --resultspath option.", dp)
+            "the path to nnpdfcpp/results with the --resultspath option.", rp)
             sys.exit(1)
         cout = self.args['cout']
         if cout is None:
