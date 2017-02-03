@@ -7,6 +7,7 @@ Created on Thu Jun 30 10:19:35 2016
 import sys
 import pathlib
 import logging
+import contextlib
 
 
 from reportengine import app
@@ -120,21 +121,30 @@ file in attachment:
             #import lhapdf
             setVerbosity(0)
 
-    def run(self):
-        upload = self.args['upload']
-        if upload:
+    @staticmethod
+    @contextlib.contextmanager
+    def upload_context(do_upload, output):
+        """If do_upload is False, do notihing. Otherwise, on enter, check the
+        requiements for uploading and on exit,
+        upload the output path if do_upload is True. Otherwise do nothing.
+        Raise SystemExit on error."""
+        if do_upload:
             try:
                 uploadutils.check_upload()
             except uploadutils.BadSSH as e:
                 log.error(e)
                 sys.exit(1)
-        super().run()
-        if upload:
+        yield
+        if do_upload:
             try:
-                uploadutils.upload_output(self.args['output'])
+                uploadutils.upload_output(output)
             except uploadutils.BadSSH as e:
                 log.error(e)
                 sys.exit(1)
+
+    def run(self):
+        with self.upload_context(self.args['upload'], self.args['output']):
+            super().run()
 
 def main():
     a = App()

@@ -17,7 +17,10 @@ setup(name= "validphys",
       url="https://gitlab.cern.ch/NNPDF/validphys2",
       long_description = long_desc,
       entry_points = {'console_scripts':
-                    ['validphys = validphys.scripts.main:main']},
+                    [
+                        'validphys = validphys.scripts.main:main',
+                        'vp-upload = validphys.scripts.vp_upload:main',
+                    ]},
       package_dir = {'': 'src'},
       packages = find_packages('src'),
        package_data = {

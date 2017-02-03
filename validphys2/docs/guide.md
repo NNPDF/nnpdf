@@ -1171,18 +1171,22 @@ calling validphys specify this behaviour explicitly.
 Uploading the result
 --------------------
 
-Using the `--upload` flag, the contents of the output folder will be
+When the `--upload` flag is set, the contents of the output folder will be
 uploaded to the pcteserver, after validphys is done. An authorized ssh
 key and the `rsync` program are required in order to use this feature.
 A URL will be displayed from which the contents are publicly
 accessible.
+
+Alternatively, there is the command `vp-upload <output-folder>`, which
+comes installed with validphys2. This works exactly the same as
+`--upload`, but you run it on an existing output.
 
 All the uploaded results are automatically indexed in the server. Some
 metadata (e.g. author, and title) will be obtained from an
 `index.html` file in the uploaded output folder. To automatically
 generate an `index.html` file from a `report` action, one may set the
 option `main:True` (alternatively there is the `out_filename` option,
-which may be used to specify the HTML filename).  In the template, use
+which may be used to specify the filename). In the template, use
 the [pandoc-maarkdown
 syntax](http://pandoc.org/MANUAL.html#metadata-blocks) to set the
 metadata at the top of the file. In the runcard you would write
