@@ -1,0 +1,21 @@
+description:
+    from_: fit
+
+fitxx:
+    - fit: 170131-004
+    - fit: 170131-001
+
+fits:
+    - 170131-004
+    - 170131-001
+pdfs:
+    - 170131-004
+    - 170131-001
+
+Q: 10
+use_cuts: True
+template: templates/compare_fits.md
+
+actions_:
+    - - report:
+          main: True

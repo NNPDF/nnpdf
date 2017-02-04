@@ -126,6 +126,7 @@ class Config(report.Config):
         return use_cuts
 
     #TODO: load fit config from here
+    @element_of('fits')
     @_id_with_label
     def parse_fit(self, fit:str):
         """A fit in the results folder, containing at least a valid filter result."""

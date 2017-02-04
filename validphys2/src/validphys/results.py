@@ -548,6 +548,34 @@ def dataset_chi2_table(chi2_stats, dataset):
     return pd.DataFrame(chi2_stats, index=[dataset.name])
 
 
+
+
+@table
+def fits_chi2_table(fits, fits_experiments, fits_chi2_data):
+    chi2_it = iter(fits_chi2_data)
+    dfs = []
+    for fit, experiments in zip(fits, fits_experiments):
+        records = []
+        for experiment in experiments:
+            for dataset, chi2 in zip(experiment.datasets, chi2_it):
+                records.append(dict(
+                    experiment=str(experiment),
+                    dataset=str(dataset),
+                    npoints=chi2.ndata,
+                    mean_chi2 = chi2.central_result.mean()/chi2.ndata
+                ))
+
+        df = pd.DataFrame.from_records(records,
+                 columns=('experiment', 'dataset', 'npoints', 'mean_chi2'),
+                 index = ('experiment', 'dataset')
+             )
+        df.columns = pd.MultiIndex.from_product(([str(fit)], ['ndata', '$\chi^2/ndata$']))
+        dfs.append(df)
+    return pd.concat(dfs, axis=1).fillna("Not Fitted")
+
+
+
+
 @table
 def theory_description(theoryid):
     """A table with the theory settings."""
@@ -558,3 +586,6 @@ each_dataset_results = collect(results, ('experiments', 'experiment'))
 
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
+
+fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))
+fits_experiments = collect('experiments', ('fits', 'fitcontext'))

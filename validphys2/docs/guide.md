@@ -933,8 +933,8 @@ this will do what you expect:
 
 ```yaml
 fits:
-    - fit: 161208-jr-003
-    - fit: 161222-jr-004
+    - 161208-jr-003
+    - 161222-jr-004
 
 
 use_cuts: False
