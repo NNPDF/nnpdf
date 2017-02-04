@@ -507,8 +507,6 @@ def count_negative_points(possets_predictions):
     return np.sum([(r.rawdata < 0).sum(axis=1) for r in possets_predictions], axis=0)
 
 
-
-
 chi2_stat_labels = {
     'central_mean': r'$<\chi^2_{0}>_{data}$',
     'npoints': r'$N_{data}$',
@@ -542,12 +540,9 @@ def chi2_stats(abs_chi2_data):
            ])
 
 
-
 @table
 def dataset_chi2_table(chi2_stats, dataset):
     return pd.DataFrame(chi2_stats, index=[dataset.name])
-
-
 
 
 @table
@@ -572,8 +567,6 @@ def fits_chi2_table(fits, fits_experiments, fits_chi2_data):
         df.columns = pd.MultiIndex.from_product(([str(fit)], ['ndata', '$\chi^2/ndata$']))
         dfs.append(df)
     return pd.concat(dfs, axis=1).fillna("Not Fitted")
-
-
 
 
 @table
