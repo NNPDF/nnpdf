@@ -4,7 +4,7 @@ pdfs:
 theoryid: 53
 
 datanorm:
-    normalize_to: True
+    normalize_to: 1
 
 template: dataset.md
 
