@@ -43,7 +43,7 @@ conf.set_quoted('VERSION', meson.project_version())
 
 #conf.set('VERSION', version_string)
 configure_file(
-    input: 'src/NNPDF/config.h.meson',
+    input: 'src/NNPDF/config.h.in',
     output: 'config.h',
 	configuration: conf
 )
