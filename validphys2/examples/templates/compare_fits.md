@@ -1,5 +1,5 @@
 ---
-title: "Comaprison of fits: {@fits@}"
+title: "Comparison of fits: {@fits@}"
 author: Zahari Kassabov
 keywords: [nnpdf31]
 ...
