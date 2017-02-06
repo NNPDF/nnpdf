@@ -174,7 +174,7 @@ class PDF(TupleComp):
                                               "with confidence"
                                               " interval %s" % (cl,) )
             else:
-                return LHAPDFSet.ER_EIG
+                return LHAPDFSet.ER_SYMEIG
 
         raise NotImplementedError("Error type for %s: '%s' is not implemented" %
                                   (self.name, error))
