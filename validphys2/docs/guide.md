@@ -1832,7 +1832,7 @@ argument. The resource will then be resolved using the standard
 `reportengine` machinery. For example, this is how to get the
 experiments in all fits:
 
-```
+```python
 fits_experiments = collect('experiments', ('fits', 'fitcontext'))
 ```
 
