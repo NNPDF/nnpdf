@@ -1,46 +1,37 @@
-theoryids:
-    - 53
-    - 64
-
 datanorm:
-    normalize_to: True
+    normalize_to: data
 
 dsmod:
     template: dataset_mod.md
 
-with_cuts:
-    use_cuts: True
+use_cuts: True
 
-without_cuts:
-    use_cuts: False
 
-template: index.md
-
-fit: yy
+template: dataset_mod.md
 
 PTO:
  - ptoname: NLO
-   theoryid: 52
+   theoryid: 64
+   fit: 170131-r520032e-001-zk
    dataset_input:
        dataset: CMSDY2D12
-       cfac: [EWK]
    pdfs:
     - NNPDF30_nlo_as_0118
-    - 170105-jr-002
+    - from_: fit
+    - id: 170120-006
+      label: Before fit (170120-006)
 
  - ptoname: NNLO
-   theoryid: 53
+   theoryid: 65
+   fit: 170131-r520032e-002-zk
    dataset_input:
        dataset: CMSDY2D12
-       cfac: [EWK, QCD]
+       cfac: [MMHT]
    pdfs:
     - NNPDF30_nnlo_as_0118
-    - 170105-jr-001
-
-title:
-   dataset_input:
-       dataset: CMSDY2D12
-       cfac: [EWK, QCD]
+    - from_: fit
+    - id: 170131-001
+      label: Before fit (170131-001)
 
 actions_:
   -   - report:

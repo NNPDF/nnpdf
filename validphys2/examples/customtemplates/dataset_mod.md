@@ -1,34 +1,32 @@
 ---
-title: Data theory comparison for {@title dataset_input@} (cuts={@use_cuts@})
+title: Comparison CMSDY12 before and after fit
 author: Zahari Kassabov
-keywords: cms2ddy
+keywords: cms2ddy, nnpdf31
 ...
 
 {@with PTO@}
-#{@ptoname@}({@theoryid@})
-Absolute
----------
+{@ptoname@}
+===========
 
-{@ plot_fancy @}
+Data Theory
+-----------
 
+### Absolute
+{@plot_fancy@}
 
-Normalized
-----------
-
-{@ datanorm plot_fancy@}
+### Normalized
+{@datanorm plot_fancy@}
 
 $\chi^2$
-----
+---------
+### Values
 
-###Tables
+{@with pdfs@}
+####{@pdf@}
+{@dataset_chi2_table@}
+{@endwith@}
 
-{@ with pdfs @}
-#### {@pdf@}
-{@dataset_chi2_table @}
-{@ endwith @}
-
-### Replica distributions
-
+### Distributions
 {@pdfs plot_chi2dist @}
 
 {@ endwith @}
