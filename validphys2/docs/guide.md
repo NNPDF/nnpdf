@@ -311,6 +311,8 @@ not need to compile anything to work with the NNPDF related programs.
 This should be useful in clusters where we don’t completely control
 the environment and frequently need to deal with outdated compilers.
 
+### Installation steps
+
 A helper script exists to aid the configuration. All you need to do
 is:
 
@@ -971,6 +973,43 @@ actions_:
 This will work exactly as the example above, except that a new action
 (with its corresponding different set of resources) will be generated
 for each of the two fits.
+
+For fits, there is a shortcut to set `experiments`, `pdf` and
+`theoryid` to the values obtained from the fit. This can be done with
+the `fitcontext` rule. The above example can be simplified like this:
+
+```yaml
+fits:
+    - 161208-jr-003
+    - 161222-jr-004
+
+
+use_cuts: False
+
+
+Q: 10
+
+description:
+    from_: fit
+template: report.md
+
+normalize:
+    normalize_to: 1
+
+datanorm:
+    normalize_to: data
+
+pdfs:
+    - from_: fit
+    - NNPDF30_nlo_as_0118
+
+actions_:
+    - fits:
+		fitcontext:
+          - report
+```
+
+Note that one still needs to set manually other keys like `description` and `pdfs`.
 
 ### Plotting labels
 
@@ -1787,6 +1826,16 @@ def count_negative_points(possets_predictions):
     return np.sum([(r.rawdata < 0).sum(axis=1) for r in
 	possets_predictions], axis=0)
 ```
+
+Apart from functions, `collect` can also take strings as first
+argument. The resource will then be resolved using the standard
+`reportengine` machinery. For example, this is how to get the
+experiments in all fits:
+
+```
+fits_experiments = collect('experiments', ('fits', 'fitcontext'))
+```
+
 
 ### Checking providers
 
