@@ -339,6 +339,23 @@ simply running:
 
     conda install validphys nnpdf
 
+#### Linking existing LHAPDF grids
+
+The installer will set up it's own version of the LHAPDF code, with
+its own path for storing PDFS, which can be seen running `lhapdf
+--help`. If you have an exiting folder with LHAPDF grids, you may want
+to either move, symlink or copy them to the new path (depending on
+whether you want to keep around the older installation). The command
+for symlinking would be something like:
+
+```
+ln -s <old path>/share/LHAPDF/* <new path>/miniconda3/share/LHAPDF
+```
+
+This will avoid symlinking the existing LHAPDF configuration, which
+may be corrupted or incompatible. You should make sure only the grid
+folders are transferred if you copy or move instead.
+
 
 #### Setting the nnpdfcpp paths
 
