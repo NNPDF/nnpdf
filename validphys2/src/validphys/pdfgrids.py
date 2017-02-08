@@ -9,7 +9,7 @@ from collections import namedtuple
 import numpy as np
 
 from reportengine import collect
-from reportengine.checks import make_check, CheckError
+from reportengine.checks import make_argcheck, CheckError
 from NNPDF import _lhapdfset
 
 from validphys.core import PDF
@@ -107,17 +107,14 @@ def grid_values(pdf:PDF, flmat, xmat, qmat):
 
 ScaleSpec = namedtuple('ScaleSpec', ('scale', 'values'))
 
-@make_check
-def _check_xgrid(ns, **kwargs):
+def _check_xgrid(xgrid):
     #Checking code is always ugly...
-    xgrid = ns['xgrid']
     msg = "Incorrect xgrid specification"
     if xgrid in ('log', None):
-        ns['xgrid'] = ('log', np.logspace(-5,0,200))
-        return
+        xgrid = ('log', np.logspace(-5,0,200))
+
     elif xgrid == 'linear':
-        ns['xgrid'] = ('linear', np.linspace(1e-6, 1, 200))
-        return
+        xgrid = ('linear', np.linspace(1e-6, 1, 200))
     elif isinstance(xgrid, list):
         if len(xgrid) in (2,3):
             try:
@@ -129,29 +126,28 @@ def _check_xgrid(ns, **kwargs):
         try:
             if len(xgrid) == 2:
 
-                ns['xgrid'] = ('linear', np.linspace(*xgrid, 200))
-                return
-            if len(xgrid) == 3:
-                ns['xgrid'] = ('linear', np.linspace(*xgrid))
-                return
+                xgrid = ('linear', np.linspace(*xgrid, 200))
+            elif len(xgrid) == 3:
+                xgrid = ('linear', np.linspace(*xgrid))
             else:
                 raise CheckError(msg)
         except Exception as e:
             raise CheckError(msg) from e
-    raise CheckError(msg)
+    else:
+        raise CheckError(msg)
+    return {'xgrid':xgrid}
 
-@make_check
-def _check_flavours(ns, **kwargs):
+def _check_flavours(flavours):
     try:
-        ns['flavours'] = _parse_flarr(ns['flavours'])
+        return {'flavours': _parse_flarr(flavours)}
     except ValueError as e:
         raise CheckError(e) from e
 
 XPlottingGrid = namedtuple('XPlottingGrid', ('Q', 'flavours', 'xgrid',
                                              'grid_values', 'scale'))
 
-@_check_xgrid
-@_check_flavours
+@make_argcheck(_check_xgrid)
+@make_argcheck(_check_flavours)
 def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None,
                    flavours:(list, tuple)=DEFAULT_FLARR):
     """Return an object containing the value of the PDF at the specified values
@@ -165,10 +161,13 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None,
         [xmin,xmax]: linearly sample between xmin and xmax.
         [xmin,xmax,num]: linearly sample num points between xmin and xmax.
     """
+    #Make usable outside reportengine
     if isinstance(xgrid, tuple) and len(xgrid)==2:
         scale, xgrid = xgrid
-    else:
+    elif isinstance(xgrid, np.ndarray):
         scale = 'unknown'
+    else:
+        scale, xgrid = _check_xgrid(xgrid)['xgrid']
     gv = grid_values(pdf, flavours, xgrid, Q)
     #Eliminante Q axis
     #TODO: wrap this in pdf.stats_class?

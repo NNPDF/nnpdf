@@ -605,13 +605,18 @@ def _plot_pdf_factory(draw_function, setup_function=None, legend_function=None):
 
     return f_
 
+@functools.lru_cache()
+def _warn_pdf_not_montecarlo(pdf):
+    et = pdf.ErrorType
+    if et != 'replicas':
+        log.warn("Plotting members of a non-Monte Carlo PDF set:"
+        " %s with error type '%s'.", pdf.name, et)
+
+#Cant't add the lru_cache here because pdfs is not hashable at the moment
 @make_argcheck
 def _warn_any_pdf_not_montecarlo(pdfs):
     for pdf in pdfs:
-        et = pdf.ErrorType
-        if et != 'replicas':
-            log.warn("Plotting members of a non-Monte Carlo PDF set:"
-            " %s with error type '%s'.", pdf.name, et)
+        _warn_pdf_not_montecarlo(pdf)
 
 
 @_warn_any_pdf_not_montecarlo
