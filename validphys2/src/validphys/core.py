@@ -345,6 +345,11 @@ class ExperimentSpec(TupleComp, namespaces.NSList):
     def __str__(self):
         return self.name
 
+    #Need this so that it doesn't try to iterte over itself.
+    @property
+    def as_markdown(self):
+        return str(self)
+
 
 class FitSpec(TupleComp):
     def __init__(self, name, path):
