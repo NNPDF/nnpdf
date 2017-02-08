@@ -111,10 +111,10 @@ def _check_xgrid(xgrid):
     #Checking code is always ugly...
     msg = "Incorrect xgrid specification"
     if xgrid in ('log', None):
-        xgrid = ('log', np.logspace(-5,0,200))
+        xgrid = ('log', np.logspace(-5,0,200, endpoint=False))
 
     elif xgrid == 'linear':
-        xgrid = ('linear', np.linspace(1e-6, 1, 200))
+        xgrid = ('linear', np.linspace(1e-6, 1, 200, endpoint=False))
     elif isinstance(xgrid, list):
         if len(xgrid) in (2,3):
             try:
@@ -126,9 +126,9 @@ def _check_xgrid(xgrid):
         try:
             if len(xgrid) == 2:
 
-                xgrid = ('linear', np.linspace(*xgrid, 200))
+                xgrid = ('linear', np.linspace(*xgrid, 200, endpoint=False))
             elif len(xgrid) == 3:
-                xgrid = ('linear', np.linspace(*xgrid))
+                xgrid = ('linear', np.linspace(*xgrid, endpoint=False))
             else:
                 raise CheckError(msg)
         except Exception as e:
