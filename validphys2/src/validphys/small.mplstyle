@@ -33,6 +33,7 @@ text.latex.unicode      : True
 
 xtick.labelsize         : small
 ytick.labelsize         : small
-#Enable these when they work with matplotlib
-#xtick.top               : False
-#ytick.right             : False
+xtick.top               : False
+ytick.right             : False
+
+svg.fonttype            : none
