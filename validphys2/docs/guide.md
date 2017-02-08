@@ -437,6 +437,21 @@ pip install -e .
 For C++ projects use the usual build systems, setting the prefix to
 the conda folder.
 
+### Updating
+
+In most cases running `conda update <package>` will do the right
+thing, and update the package with the requested dependencies.
+
+If you are interested in a specific version (not necessarily the
+latest one), you can run `conda install <package>=<version>`.
+
+Note that, in case you are doing [Development installs], the process
+is somewhat more manual, and you might need to update each dependency
+of the package you are developing. A convenient shortcut might be to
+install the desired version of the development package with conda, so
+it takes care of the dependencies, and the conda version and setting
+up the development version again.
+
 Seeing what actions are available
 ---------------------------------
 
