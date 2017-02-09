@@ -1,0 +1,42 @@
+Q: 10
+
+pdf:
+   from_: fit
+PTO:
+ - ptoname: NLO
+   fit: 170131-r520032e-001-zk
+   inputs:
+       - dataset_input: { dataset: ATLASZPT7TEV,   frac: 0.5, cfac: [NRM] }
+       - dataset_input: { dataset: CMSDY2D12,     frac: 0.5 }
+
+
+ - ptoname: NNLO
+   fit: 170131-r520032e-002-zk
+   inputs:
+       - dataset_input: { dataset: ATLASZPT7TEV,   frac: 0.5, cfac: [QCD, NRM] }
+       - dataset_input: { dataset: CMSDY2D12,     frac: 0.5, cfac:[MMHT]}
+
+use_cuts: True
+
+template_text: |
+    ---
+    title: SMPDF plots for Zpt 7 Tev and CMSDY 12
+    author: Zahari Kassabov
+    keywords: [nnpdf31]
+    ---
+    
+    {@with PTO::fitcontext@}
+    {@ptoname@}
+    ==========
+    {@with inputs@}
+    {@dataset@}
+    -----------
+    {@plot_smpdf@}
+    {@endwith@}
+    {@endwith@}
+
+
+
+actions_:
+  -   - report:
+          main: True
