@@ -26,8 +26,13 @@ plot.
 SMPDF plots
 ----------
 
-Adapt the logic from the SMPDF code. Should work similarly, maybe with
-some fancier features.
+Done. Needs to be compared to the SMPDF. Some minor improvements could
+be:
+
+ - Put the colorbar at the bottom.
+ - Reduce the space between the title and the axis.
+ - In HTML, why is it so narrow? The width of the file is the same as
+   for the rest.
 
 Obs-Obs correlations
 --------------------
