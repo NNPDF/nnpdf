@@ -460,7 +460,8 @@ def plot_trainvaliddist(fit, replica_data):
     ax.set_title("KDE of the fit distributions for %s" % getattr(fit,
                                                                  'label', fit.name))
 
-    plt.legend()
+    ax.set_ylim(0, None)
+    ax.legend()
     return fig
 
 @figure
