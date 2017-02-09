@@ -110,6 +110,13 @@ class PlotInfo:
             return self._x_label
         return self.name_to_label(self.x)
 
+    def get_xcol(self, table):
+        """Return a numpy array with the x column or the index as appropriate"""
+        if self.x == 'idat':
+            return np.array(table.index)
+        else:
+            return np.asarray(table[self.x])
+
 
 
     def group_label(self, same_vals, groupby):

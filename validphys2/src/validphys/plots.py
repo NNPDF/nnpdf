@@ -11,7 +11,7 @@ import warnings
 import numpy as np
 import numpy.linalg as la
 import matplotlib.pyplot as plt
-import matplotlib.transforms as transforms
+from matplotlib import transforms, cm, colors as mcolors
 import scipy.stats as stats
 
 from reportengine.figure import figure, figuregen
@@ -24,6 +24,7 @@ from validphys.pdfgrids import PDG_PARTONS
 from validphys.plotoptions import get_infos, kitable, transform_result
 from validphys.checks import check_scale
 from validphys import plotutils
+from validphys.utils import sane_groupby_iter, split_ranges
 
 log = logging.getLogger(__name__)
 
@@ -133,26 +134,20 @@ def _plot_info(info, results, dataset, normalize_to):
         else:
             table[('cv', i)] = cv/norm_cv
             table[('err', i)] = err/norm_cv
-    if info.figure_by:
-        figby = table.groupby(info.figure_by)
-    else:
-        figby = [('', table)]
+
+    figby = sane_groupby_iter(table, info.figure_by)
+
 
     for samefig_vals, fig_data in figby:
         #For some reason matplotlib doesn't set the axis right
         min_vals = []
         max_vals = []
-        #Have consistent output for one or more groupby columns
-        if not isinstance(samefig_vals, tuple):
-            samefig_vals = (samefig_vals, )
         fig, ax = plt.subplots()
         plotutils.setup_ax(ax)
         ax.set_title("%s %s"%(dataset.name,
                      info.group_label(samefig_vals, info.figure_by)))
-        if info.line_by:
-            lineby = fig_data.groupby(info.line_by)
-        else:
-            lineby = [('', fig_data)]
+
+        lineby = sane_groupby_iter(fig_data, info.line_by)
 
         first = True
 
@@ -164,16 +159,11 @@ def _plot_info(info, results, dataset, normalize_to):
             else:
                 labels = False
             first = False
-            if not isinstance(sameline_vals, tuple):
-                sameline_vals = (sameline_vals, )
 
             nres = len(results)
             first_offset = +(nres//2)
 
-            if info.x == 'idat':
-                x = np.array(line_data.index)
-            else:
-                x = line_data[info.x].as_matrix()
+            x = info.get_xcol(line_data)
 
             try:
                 x = np.asanyarray(x, np.float)
@@ -564,7 +554,7 @@ def _plot_pdf_factory(draw_function, setup_function=None, legend_function=None):
 
         firstgrid = xplotting_grids[0]
         if xscale is None:
-            xscale = 'linear' if firstgrid.scale == 'linear' else 'log'
+            xscale = _scale_from_grid(firstgrid)
         Q = firstgrid.Q
 
         for flindex, fl in enumerate(firstgrid.flavours):
@@ -604,6 +594,9 @@ def _plot_pdf_factory(draw_function, setup_function=None, legend_function=None):
     del f_.__wrapped__
 
     return f_
+
+def _scale_from_grid(grid):
+    return 'linear' if grid.scale == 'linear' else 'log'
 
 @functools.lru_cache()
 def _warn_pdf_not_montecarlo(pdf):
@@ -699,3 +692,83 @@ def _plot_pdfs_legend(ax, setupres):
                                              plotutils.ComposedHandler()})
 
 plot_pdfs = _plot_pdf_factory(plot_pdfs, _plot_pdfs_setup, _plot_pdfs_legend)
+
+@figuregen
+def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
+    """
+    Plot the correlations between the change in the observable and the change
+    in the PDF in (x,fl) space.
+
+    mark_threshold is the proportion of the maximum absolute correlation
+    that will be used to mark the corresponding area in x in the
+    background of the plot. The maximum absolute values are used for
+    the comparison."""
+    infos = get_infos(dataset)
+    for info in infos:
+        yield from _plot_smpdf_info(pdf, dataset ,obs_pdf_correlations, info,
+                                    mark_threshold=mark_threshold)
+
+
+def _plot_smpdf_info(pdf, dataset, obs_pdf_correlations, info, mark_threshold):
+    table = kitable(dataset, info)
+    figby = sane_groupby_iter(table, info.figure_by)
+
+    fullgrid = obs_pdf_correlations.grid_values
+
+    fls = obs_pdf_correlations.flavours
+    x = obs_pdf_correlations.xgrid
+    nf = len(fls)
+
+    plotting_var = info.get_xcol(table)
+
+    #TODO: vmin vmax should be global or by figure?
+    vmin,vmax = min(plotting_var), max(plotting_var)
+    if info.x_scale == 'log':
+        norm = mcolors.LogNorm(vmin, vmax)
+    else:
+        norm = mcolors.Normalize(vmin, vmax)
+    #http://stackoverflow.com/a/11558629/1007990
+    sm = cm.ScalarMappable(cmap=cm.viridis, norm=norm)
+    sm._A = []
+
+    for same_vals, fb in figby:
+        grid = fullgrid[ np.asarray(fb.index),...]
+
+
+        #Use the maximum absolute correlation for plotting purposes
+        absgrid = np.max(np.abs(grid), axis=0)
+        mark_mask = absgrid > np.max(absgrid)*mark_threshold
+
+        label = info.group_label(same_vals, info.figure_by)
+        #TODO: PY36ScalarMappable
+        #TODO Improve title?
+        title = "%s %s\n[%s]" % (dataset, '(%s)'%label if label else '' ,pdf.label)
+
+        #Start plotting
+        w,h = plt.rcParams["figure.figsize"]
+        h*=2.5
+        fig,axes = plt.subplots(nrows=nf ,sharex=True, figsize=(w,h), sharey=True)
+        fig.suptitle(title)
+        colors = sm.to_rgba(info.get_xcol(fb))
+        for ax, fl in zip(axes, fls):
+            for i,color in enumerate(colors):
+                ax.plot(x, grid[i,fl,:].T, color=color)
+
+
+            flmask = mark_mask[fl,:]
+            ranges = split_ranges(x, flmask, filter_falses=True)
+            for r in ranges:
+                ax.axvspan(r[0], r[-1], color='#eeeeff')
+
+            ax.set_ylabel("$%s$"%PDG_PARTONS[fl])
+            ax.set_xscale(_scale_from_grid(obs_pdf_correlations))
+            ax.set_ylim(-1,1)
+            ax.set_xlim(x[0], x[-1])
+        ax.set_xlabel('$x$')
+        #fig.subplots_adjust(hspace=0)
+
+        fig.colorbar(sm, ax=axes.ravel().tolist(), label=info.xlabel,
+                     aspect=100)
+        #TODO: Fix title for this
+        #fig.tight_layout()
+        yield fig
