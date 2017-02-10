@@ -1,0 +1,20 @@
+sqrts: 14000
+fit: 170207-001
+
+pdf:
+   from_: fit
+
+template_text: |
+    ---
+    title: Luminosity integral
+    author: Stefano Carrazza
+    keywords: [nnpdf31]
+    ---
+
+    PDF luminosities
+    -----------
+    {@ plot_luminosities @}
+
+actions_:
+  -   - report:
+          main: True

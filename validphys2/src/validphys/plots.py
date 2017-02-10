@@ -13,6 +13,7 @@ import numpy.linalg as la
 import matplotlib.pyplot as plt
 from matplotlib import transforms, cm, colors as mcolors
 import scipy.stats as stats
+import scipy.integrate as integrate
 
 from reportengine.figure import figure, figuregen
 from reportengine.utils import saturate
@@ -773,3 +774,32 @@ def _plot_smpdf_info(pdf, dataset, obs_pdf_correlations, info, mark_threshold):
         #TODO: Fix title for this
         #fig.tight_layout()
         yield fig
+
+
+def gg(x1, x2, q, n, pdf):
+    """The gluon-gluon luminosity"""
+    return (1.0/x1)*pdf.xfxQ(x1,q,n,21)/x1*pdf.xfxQ(x2,q,n,21)/x2
+
+
+@figuregen
+def plot_luminosities(pdf, sqrts:(float,int)=14000):
+    """
+    Plot PDF luminosities at a given center of mass energy.
+
+    sqrts is the center of mass energy (GeV).
+    """
+
+    set = pdf.load()
+    x = np.logspace(1, np.log10(sqrts/10.0), 30)
+    tau = (x/sqrts)**2
+
+    fig = plt.figure()
+    for n in range(len(pdf)-1):
+        ggluminosity = [integrate.quad(lambda x1: gg(x1, itau/x1, x[i], n, set), itau, 1)[0] for i, itau in enumerate(tau)]
+        plt.plot(x, ggluminosity, color='c', alpha=0.5)
+
+    plt.title('$gg$ luminosity %s' % pdf.label)
+    plt.legend(loc='best')
+    plt.yscale('log')
+    plt.xscale('log')
+    yield fig
