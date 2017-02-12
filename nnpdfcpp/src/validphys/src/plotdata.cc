@@ -733,7 +733,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
   const basisType setbasis = NNPDFSettings::getFitBasisType(fSettings.Get("fitting","fitbasis").as<string>());
   if (setbasis == BASIS_NN23 || setbasis == BASIS_NN23QED)
     for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(nn23[t]); functions[t] = nn23f[t]; }
-  else if (setbasis == BASIS_EVOL || setbasis == BASIS_EVOLQED)
+  else if (setbasis == BASIS_EVOL || setbasis == BASIS_EVOLQED || setbasis == BASIS_LUX)
     for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
   else if (setbasis == BASIS_EVOLS || setbasis == BASIS_EVOLSQED)
     for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(evols[t]); functions[t] = evolsf[t]; }
