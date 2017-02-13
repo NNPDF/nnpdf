@@ -1,5 +1,5 @@
 x: k1
-y_label: '$d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)'
+y_label: '$d\sigma_{Z/\gamma^{*}}/d\eta$ (fb)'
 figure_by:
   - k2 
 
