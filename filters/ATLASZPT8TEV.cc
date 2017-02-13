@@ -162,8 +162,8 @@ void  ATLASZPT8TEVYDISTNORMFilter::ReadData()
       //      const double pb2fb = 1e3; // Must multiply from pb to fb
 
       lstream >> ptZ >> ddum >> ddum; 
-      fKin1[i] = ptZ;         // P_T^(Z)
-      fKin2[i] = yZ;          // Y_Z
+      fKin1[i] = yZ;         // y_Z
+      fKin2[i] = ptZ*ptZ;     // pT_Z^2
       fKin3[i] = 8000;        // sqrt(S)
       lstream >> fData[i];     //differential distribution
       lstream >> fStat[i];     //statistical uncertainty
@@ -324,8 +324,8 @@ void  ATLASZPT8TEVYDISTFilter::ReadData()
       const double pb2fb = 1e3; // Must multiply from pb to fb
 
       lstream >> ptZ >> ddum >> ddum; 
-      fKin1[i] = ptZ;         // P_T^(Z)
-      fKin2[i] = yZ;          // Y_Z
+      fKin1[i] = yZ;         // y_Z
+      fKin2[i] = ptZ*ptZ;     // pT_Z^2
       fKin3[i] = 8000;        // sqrt(S)
       lstream >> fData[i];     //differential distribution
       lstream >> fStat[i];     //statistical uncertainty
@@ -547,7 +547,7 @@ void  ATLASZPT8TEVMDISTFilter::ReadData()
       istringstream lstream(line);
       lstream >> ptZ >> ddum >> ddum; 
       fKin1[i] = ptZ;         // P_T^(Z)
-      fKin2[i] = mLL;         // Y_Z
+      fKin2[i] = mLL*mLL;     // M_Z^2
       fKin3[i] = 8000;        // sqrt(S)
       lstream >> fData[i];    //differential distribution
       lstream >> fStat[i];    //statistical uncertainty

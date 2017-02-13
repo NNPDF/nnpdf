@@ -44,14 +44,7 @@ static const dataInfoRaw ATLASZPT8TEVMDISTinfo = {
   64,          //nData  
   101,          //nSys: 1 total uncorrelated + 99 correlated + 2.8% luminosity   
   "ATLASZPT8TEVMDIST", //SetName
-  "EWK_PTMLL"       //ProcType
-};
-
-static const dataInfoRaw ATLASZPT8TEVMDISTNORMinfo = {
-  64,          //nData  
-  100,          //nSys: 1 total uncorrelated + 99 correlated
-  "ATLASZPT8TEVMDISTNORM", //SetName
-  "EWK_PTMLL"       //ProcType
+  "EWK_PT"       //ProcType
 };
 
 class ATLASZPT8TEVYDISTFilter: public CommonData
@@ -73,14 +66,6 @@ private:
 class ATLASZPT8TEVMDISTFilter: public CommonData
 { public: ATLASZPT8TEVMDISTFilter():
   CommonData(ATLASZPT8TEVMDISTinfo) { ReadData(); }
-
-private:
-  void ReadData();
-};
-
-class ATLASZPT8TEVMDISTNORMFilter: public CommonData
-{ public: ATLASZPT8TEVMDISTNORMFilter():
-  CommonData(ATLASZPT8TEVMDISTNORMinfo) { ReadData(); }
 
 private:
   void ReadData();
