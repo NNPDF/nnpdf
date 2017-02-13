@@ -21,20 +21,21 @@ def _basic_obs_pdf_correlation(pdfarr, obsarr):
     obsarr: (nbins x nreplicas), as returned from thresult.
     pdfarr: (nreplicas x nf x nx), as returned from xplotting_grid.grid_values
 
-    The returned array has dimensions and contains the PDF correlation between
+    The returned array contains the PDF correlation between
     the value of the obsevable and the PDF at the corresponding point in (fl,x)
-    space:
+    space. The dimensions are:
     (nbins x nf x nx), compatible with grid_values, upon
     changing replicas->bins.
     """
 
     #Remove mean
+    #TODO: This should be done at the Result level
     x = pdfarr  - np.mean(pdfarr, axis=0)
     y = obsarr.T - np.mean(obsarr, axis=1)
 
     #We want to compute:
     #sum(x*y)/(norm(x)*norm(y))
-    #broatcast to the appropriate dimensions
+    #broadcast to the appropriate dimensions
 
     num = np.einsum('ij,ikm->jkm',y,x)
 
