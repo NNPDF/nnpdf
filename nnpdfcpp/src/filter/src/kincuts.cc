@@ -114,7 +114,7 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
 
     if (set.GetSetName().compare(string("ATLASZPT8TEVYDIST")) == 0 )
       {
-        const double pt = set.GetKinematics(idat, 0);
+        const double pt = sqrt(set.GetKinematics(idat, 1));
         if (pt < 30 || pt > 150)
           return false;
         return true;
