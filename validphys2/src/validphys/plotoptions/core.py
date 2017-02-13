@@ -29,15 +29,18 @@ result_functions = get_functions(resulttransforms)
 
 
 kinlabels_latex = CommonData.kinLabel_latex.asdict()
+_kinlabels_keys = sorted(kinlabels_latex, key=len, reverse=True)
+
+
 
 def get_plot_kinlabels(commondata):
     """Return the LaTex kinematic labels for a given Commondata"""
     #Since there is no 1:1 correspondence between latex keys and GetProc,
-    #we match the first key such that the proc label starts with it.
+    #we match the longest key such that the proc label starts with it.
 
     l = commondata.GetProc(0)
     try:
-        key = next(k for k in kinlabels_latex if l.startswith(k))
+        key = next(k for k in _kinlabels_keys if l.startswith(k))
     except StopIteration as e:
         raise ValueError("Could not find a set of kinematic "
                          "variables matching  the process %s Check the "
