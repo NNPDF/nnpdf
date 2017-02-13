@@ -775,6 +775,20 @@ def _plot_smpdf_info(pdf, dataset, obs_pdf_correlations, info, mark_threshold):
         #fig.tight_layout()
         yield fig
 
+@figure
+def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
+    fig, ax = plt.subplots()
+
+    ds1, ds2 = corrpair_datasets
+    in1,in2 = get_infos(ds1)[0], get_infos(ds2)[0]
+
+    im = ax.imshow(obs_obs_correlations, cmap=cm.Spectral_r, vmin=-1, vmax=1)
+
+    ax.set_ylabel(str(ds1))
+    ax.set_xlabel(str(ds2))
+    fig.colorbar(im, [ax])
+    return fig
+
 
 def gg(x1, x2, q, n, pdf):
     """The gluon-gluon luminosity"""

@@ -150,6 +150,7 @@ class Config(report.Config):
 
 
 
+    @element_of('dataset_inputs')
     def parse_dataset_input(self, dataset):
         try:
             name = dataset['dataset']
@@ -262,3 +263,11 @@ class Config(report.Config):
             return self.loader.check_posset(theoryno, name, poslambda)
         except FileNotFoundError as e:
             raise ConfigError(e) from e
+
+    #TODO: Right name? Right interface?
+    def parse_corrpair(self, pair:list):
+        """A list of two dataset inputs."""
+        msg = "A list of two dataset inputs is required."
+        if len(pair) != 2:
+            raise ConfigError(msg)
+        return self.parse_dataset_inputs(pair)
