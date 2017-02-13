@@ -39,8 +39,9 @@ def split_ranges(a,cond=None,*, filter_falses=False):
     if cond is None:
         cond = a
     cond = cond.astype(bool)
-    d = np.r_[False, np.diff(cond)]
+    d = np.r_[False, cond[1:]^cond[:-1]]
     split_at = np.argwhere(d)
+    print(d)
     splits = np.split(a, split_at)
     if filter_falses:
         #Evaluate condition at split points
