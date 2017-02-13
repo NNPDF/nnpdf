@@ -24,7 +24,7 @@ def jet_sqrt_scale(k1,k2,k3):
 def new_eta_labels(k1,k2,k3):
     return k1, k2, k3
 
-@utils.new_labels('$p_T$ (GeV)', '$M$', '$\sqrt(s)$')
+@utils.new_labels('$p_T$ (GeV)', '$M_{ll}$ (GeV)', '$\sqrt(s)$')
 def new_mass_labels(k1,k2,k3):
     return k1, k2, k3
 
