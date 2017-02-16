@@ -2,7 +2,9 @@ import pathlib
 import datetime
 import json
 import re
+from collections import ChainMap
 
+import ruamel_yaml as yaml
 from bs4 import BeautifulSoup
 
 ROOT = '/home/nnpdf/WEB/validphys-reports'
@@ -10,6 +12,8 @@ ROOT_URL = 'http://pcteserver.mi.infn.it/~nnpdf/validphys-reports/'
 OUT = '/home/nnpdf/WEB/validphys-reports/index.json'
 
 EMPTY = '-'
+
+DEFAULTS = dict(author=EMPTY, title=EMPTY, keywords=[])
 
 def meta_from_html(f):
     soup = BeautifulSoup(f, 'html.parser')
@@ -28,16 +32,24 @@ def meta_from_html(f):
         tags = []
     else:
         tags = re.split(r"\s*,\s*", tagtext)
-    return title, author, tags
+    return dict(title=title, author=author, keywords=tags)
 
-def register(p):
+def meta_from_path(p):
+    meta = ChainMap(DEFAULTS)
     index = p/'index.html'
     if index.exists():
-        title, author, tags = meta_from_html(index.open())
-    else:
-        title = None
-        author = EMPTY
-        tags = []
+        with index.open() as f:
+           meta = meta.new_child(meta_from_html(f))
+    yaml_meta = p/'meta.yaml'
+    if yaml_meta.exists():
+        with yaml_meta.open() as f:
+            meta = meta.new_child(yaml.safe_load(f))
+    return meta
+
+
+def register(p):
+    path_meta = meta_from_path(p)
+    title, author, tags = path_meta['title'], path_meta['author'], path_meta['keywords']
     url = ROOT_URL + p.name
 
     date = datetime.date.fromtimestamp(p.stat().st_mtime).isoformat()
