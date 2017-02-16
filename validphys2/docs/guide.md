@@ -1281,6 +1281,10 @@ keywords: [nnpdf31, nolhc]
 Note that you can use the report syntax to get the parameters from the
 runcard.
 
+Finally, a `meta.yaml` file at the top level of the output, and with
+the same format as above will alsp be used to recover the metadata
+(with the highest priority for overlapping keys).
+
 The keywords are used for indexing, and some tags may be used to
 display the report in a promiment place in the index page. The source
 of the report index page is
@@ -2003,11 +2007,14 @@ modified. This is achieved by waiting for changes using the Linux
 [`asynwatch`](https://github.com/Zaharid/asyncwatch) module.
 
 The report index is used to display a webpage indexing the reports. It
-retrieves extra information from an `index.html` page contained in the
-report folder. Properties title, author and tags are retrieved from
-the HTML header of this file. To produce it, the most convenient way
-is setting the `main` flag of a report, as described in [Uploading the
-result].
+retrieves extra information from a `meta.yaml` file in the top level
+output directory, and (with lower priority) by parsing an `index.html`
+page contained in the report folder. Properties title, author and tags
+are retrieved from the HTML header of this file, and are expected to
+be in the same format that Pandoc would have used to write them when
+`meta.yaml` is passed as a input. To produce it, the most convenient
+way is setting the `main` flag of a report, as described in [Uploading
+the result].
 
 
 The report index uses the
