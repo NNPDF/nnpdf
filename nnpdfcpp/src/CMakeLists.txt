@@ -89,7 +89,7 @@ option(COMPILE_mkthpredictions "Compile mkthpredictions program." OFF)
 if (COMPILE_mkthpredictions)
   add_executable(mkthpredictions mkthpredictions/src/mkthpredictions.cc)
   include_directories(mkthpredictions/inc)
-  target_link_libraries(mkthpredictions common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
+  target_link_libraries(mkthpredictions common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
 endif(COMPILE_mkthpredictions)
 
 
