@@ -6,6 +6,7 @@ Created on Mon Mar  7 23:36:42 2016
 @author: Zahari Kassabov
 """
 
+import os
 import shutil
 import sys
 import argparse
@@ -155,16 +156,23 @@ def normalize_names(nrep, good_paths, fitfolder):
     assert(len(available) >= len(needed))
     for need, subs in zip(needed, available):
         log.debug('Moving %s to %s' % (subs, need))
-        shutil.move(str(subs), str(need))
+        os.rename(str(subs), str(need))
 
 
 
 def move_bad(bad):
     if bad:
-        log.info("Moving bad replicas to (rep + postfitveto).")
+        log.info("Moving bad replicas to (rep + .postfitveto).")
     for b in bad:
         p = str(b.path)
         shutil.move(p, p + '.postfitveto')
+
+def move_invalid(invalid):
+    if invalid:
+        log.info("Moving invalid replicas to (re + .invalid)")
+    for i in invalid:
+        p = str(i)
+        shutil.move(p,p+'.invalid')
 
 def export_to_lhapdf(nrep, fitfolder, prefix):
     ####################################
@@ -328,6 +336,7 @@ def run(nrep, result_path):
     log.addHandler(logging.StreamHandler(stream=sys.stdout))
     replicas = sorted(p for p in fitdir.glob('replica_*[0123456789]'))
     replicas, invalid = split_by(replicas, partial(valid_replica, prefix=prefix))
+    move_invalid(invalid)
     replicas = np.array(replicas)
     nvalid = len(replicas)
     index = np.arange(nvalid)
