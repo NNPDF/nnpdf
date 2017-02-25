@@ -35,7 +35,7 @@ double APFELF2(double const& x, double const& Q)
 }
 
 double APFELFL(double const& x, double const& Q)
-{    
+{
   return APFEL::StructureFunctionxQ("EM", "FL", "total", x, Q);
 }
 
@@ -189,12 +189,15 @@ int main(int argc, char **argv)
   APFEL::SetParam(settings.GetTheoryMap());
   APFEL::SetTheory("QUniD");
   APFEL::EnableNLOQEDCorrections(true);
+  // if the input set comes from pure QCD fit disable NLO QED corrections to SF.
+  if (!stoi(settings.GetTheory(APFEL::kQED))) APFEL::EnableSFNLOQEDCorrections(false);
+
   APFEL::EnableTargetMassCorrections(false);
   APFEL::SetAlphaQEDRef(input().get<double>("alpha_ref"), input().get<double>("alphaq0_ref"));
   APFEL::SetPDFSet(settings.GetPDFName() + ".LHgrid");
   APFEL::SetReplica(replica);
   APFEL::SetQLimits(1,1e7);
-  APFEL::SetQGridParameters(50, 3);  
+  APFEL::SetQGridParameters(50, 3);
   APFEL::SetNumberOfGrids(3);
   APFEL::SetGridParameters(1,95,3,settings.Get("lhagrid", "xmin").as<double>());
   APFEL::SetGridParameters(2,70,5,settings.Get("lhagrid", "xmed").as<double>());
