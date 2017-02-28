@@ -154,9 +154,11 @@ class Config(report.Config):
     def parse_dataset_input(self, dataset):
         try:
             name = dataset['dataset']
+            if not isinstance(name, str):
+                raise Config("'name' must be a string, not %s" % type(name))
         except KeyError:
             raise ConfigError("'dataset' must be a mapping with "
-                              "'name' and 'sysnum'")
+                              "'dataset' and 'sysnum'")
 
 
         sysnum = dataset.get('sys')
