@@ -8,8 +8,9 @@ from asyncwatch import watch, EVENTS
 
 async def main(folder, exe_args):
     watch_events = (EVENTS.CREATE | EVENTS.DELETE | EVENTS.MODIFY)
-    async for _ in watch(folder, watch_events):
-        await subprocess.run(exe_args)
+    while True:
+        async with watch(folder, watch_events):
+            await subprocess.run(exe_args)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
