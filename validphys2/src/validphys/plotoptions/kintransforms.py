@@ -20,14 +20,6 @@ def dyp_sqrt_scale(k1,k2,k3):
 def jet_sqrt_scale(k1,k2,k3):
     return k1, sqrt(k2), k3
 
-@utils.new_labels ('$\eta$', '$p_T^2$', '$\sqrt{s}$')
-def new_eta_labels(k1,k2,k3):
-    return k1, k2, k3
-
-@utils.new_labels('$p_T$ (GeV)', '$M_{ll}$ (GeV)', '$\sqrt(s)$')
-def new_mass_labels(k1,k2,k3):
-    return k1, k2, k3
-
 @utils.new_labels('$x$', '$Q$ (GeV)', '$\sqrt{(s)}$')
 def dis_sqrt_scale(k1,k2,k3):
     ecm = sqrt(k2/(k1*k3))
