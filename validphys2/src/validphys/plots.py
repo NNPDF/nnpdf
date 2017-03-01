@@ -11,7 +11,7 @@ import warnings
 import numpy as np
 import numpy.linalg as la
 import matplotlib.pyplot as plt
-from matplotlib import transforms, cm, colors as mcolors
+from matplotlib import cm, colors as mcolors, ticker as mticker
 import scipy.stats as stats
 import scipy.integrate as integrate
 
@@ -161,8 +161,7 @@ def _plot_info(info, results, dataset, normalize_to):
                 labels = False
             first = False
 
-            nres = len(results)
-            first_offset = +(nres//2)
+            offset_iter = plotutils.offset_xcentered(len(results), ax)
 
             x = info.get_xcol(line_data)
 
@@ -193,11 +192,6 @@ def _plot_info(info, results, dataset, normalize_to):
                 err = line_data[('err', i)].as_matrix()
 
 
-                #http://matplotlib.org/users/transforms_tutorial.html
-                dx, dy = 0.05*(i-first_offset), 0.
-                offset = transforms.ScaledTranslation(dx, dy,
-                                                      fig.dpi_scale_trans)
-                offset_transform = ax.transData + offset
 
                 max_vals.append(np.nanmax(cv+err))
                 min_vals.append(np.nanmin(cv-err))
@@ -213,7 +207,7 @@ def _plot_info(info, results, dataset, normalize_to):
                      #markeredgewidth=0.25,
                      c=color,
                      zorder=1000,
-                     transform=offset_transform)
+                     transform=next(offset_iter))
 
                 color = 'C'+str(i)
 

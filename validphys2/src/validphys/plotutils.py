@@ -12,6 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.scale as mscale
 import matplotlib.patches as mpatches
+from matplotlib  import transforms
 
 
 def setup_ax(ax):
@@ -130,3 +131,18 @@ class ComposedHandler:
         handlebox.add_artist(patch)
         patches.append(patch)
         return patches
+
+def offset_xcentered(n, ax,*, offset_prop=0.05):
+    """Yield ``n`` matplotlib transforms in such a way that the corresponding
+    ``n`` transofrmed x values are centeres around the middle. The offset
+    between to consecutive points is ``offset_prop`` in units of the figure
+    dpi scale."""
+    first_offset = +(n//2)
+    #http://matplotlib.org/users/transforms_tutorial.html
+    for i in range(n):
+
+            dx = offset_prop*(i-first_offset)
+            offset = transforms.ScaledTranslation(dx, 0,
+                                                  ax.figure.dpi_scale_trans)
+            offset_transform = ax.transData + offset
+            yield offset_transform
