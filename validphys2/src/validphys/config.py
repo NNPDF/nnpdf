@@ -266,6 +266,12 @@ class Config(report.Config):
         except FileNotFoundError as e:
             raise ConfigError(e) from e
 
+    def produce_posdatasets(self, positivity):
+        if 'posdatasets' not in positivity:
+            raise ConfigError("Failed to get 'posdatasets' from positivity. "
+                              "Expected that key to be present.")
+        return positivity['posdatasets']
+
     #TODO: Right name? Right interface?
     def parse_corrpair(self, pair:list):
         """A list of two dataset inputs."""

@@ -287,16 +287,15 @@ class FKTableSpec(TupleComp):
         return FKTable(str(self.fkpath), [str(factor) for factor in self.cfactors])
 
 class PositivitySetSpec(TupleComp):
-    def __init__(self, commondataspec, fkspec, poslambda, thspec):
+    def __init__(self, name ,commondataspec, fkspec, poslambda, thspec):
+        self.name = name
         self.commondataspec = commondataspec
         self.fkspec = fkspec
         self.poslambda = poslambda
         self.thspec = thspec
-        super().__init__(commondataspec, fkspec, poslambda, thspec)
+        super().__init__(name, commondataspec, fkspec, poslambda, thspec)
 
-    @property
-    def name(self):
-        return self.commondataspec.name
+
 
     def __str__(self):
         return self.name

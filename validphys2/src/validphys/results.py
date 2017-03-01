@@ -496,12 +496,10 @@ def closure_shifts(experiments_index, fit, use_cuts, experiments):
 
 
 
-def positivity_predictions(pdf, positivityset):
-    return PositivityResult.from_convolution(pdf, positivityset)
+def positivity_predictions(pdf, posdataset):
+    return PositivityResult.from_convolution(pdf, posdataset)
 
-#TODO: Replace this with reportengine.collect
-def possets_predictions(pdf, posdatasets):
-    return [positivity_predictions(pdf, pos) for pos in posdatasets]
+positivity_predictions_for_pdfs = collect(positivity_predictions, ('pdfs',))
 
 def count_negative_points(possets_predictions):
     return np.sum([(r.rawdata < 0).sum(axis=1) for r in possets_predictions], axis=0)
