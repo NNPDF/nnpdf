@@ -627,6 +627,28 @@ def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
     fig.colorbar(im, [ax])
     return fig
 
+@figure
+def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset):
+    fig,ax = plt.subplots()
+    ax.axhline(0, color='red')
+    offsets = plotutils.offset_xcentered(len(pdfs), ax)
+    minscale = np.inf
+    for i,(pdf, pred) in enumerate(zip(pdfs, positivity_predictions_for_pdfs)):
+        cv = pred.central_value
+        ax.errorbar(np.arange(len(cv)), cv, yerr=pred.std_error,
+                    linestyle='--',
+                    marker='s',
+                    label=pdf.label, lw=0.5,transform=next(offsets))
+        minscale = min(minscale, np.min(cv))
+    ax.legend()
+    ax.set_title(str(posdataset))
+    ax.set_xlabel('idat')
+    ax.set_ylabel('Observable Value')
+    ax.set_yscale('symlog', linthreshy=minscale)
+    ax.xaxis.set_major_locator(mticker.MaxNLocator(integer=True))
+
+    return fig
+
 
 def gg(x1, x2, q, n, pdf):
     """The gluon-gluon luminosity"""
