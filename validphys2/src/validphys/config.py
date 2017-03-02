@@ -272,6 +272,12 @@ class Config(report.Config):
                               "Expected that key to be present.")
         return positivity['posdatasets']
 
+    def produce_theoryid(self, theory):
+        if 'theoryid' not in theory:
+            raise ConfigError("Failed to get 'theoryid' from 'theory'."
+                              "Expected that key to be present.")
+        return theory['theoryid']
+
     #TODO: Right name? Right interface?
     def parse_corrpair(self, pair:list):
         """A list of two dataset inputs."""
