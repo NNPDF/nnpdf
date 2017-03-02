@@ -15,6 +15,7 @@ job1:
     script: ".ciscripts/build-deploy.sh"
 
     variables:
+        CONDA_PY: "35"
         NNPDF_USE_DOUBLE: ""
 
     #We copy the conda package to the git path to be untracked and
@@ -22,6 +23,18 @@ job1:
     artifacts:
         untracked: True
 
+job2:
+    stage: build-deploy
+    script: ".ciscripts/build-deploy.sh"
+
+    variables:
+        CONDA_PY: "36"
+        NNPDF_USE_DOUBLE: ""
+
+    #We copy the conda package to the git path to be untracked and
+    #then catch it as an "artifact"
+    artifacts:
+        untracked: True
     #TODO: Do two separate stages when we have a newer version with this
     # implemented (and there are proper docs on how to do it):
     # https://gitlab.com/gitlab-org/gitlab-ce/merge_requests/2437
@@ -33,7 +46,7 @@ job1:
     #        - /yes/conda-bld/linux-64/
 
 
-job2:
+job3:
     stage: build-deploy
     variables:
         NNPDF_USE_DOUBLE: "1"

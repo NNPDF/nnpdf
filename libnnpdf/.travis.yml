@@ -8,10 +8,14 @@ osx_image: xcode6.4
 
 env:
   global:
-    - CONDA_PY=35
     - CONDAPATH="/Users/travis/miniconda3"
     - OUTPUT_ARCH=osx-64
     - OUTPUT_CHANNEL=conda-pkgs-private
+
+  matrix:
+    - CONDA_PY=35
+    - CONDA_PY=36
+
 
 
 before_install:
