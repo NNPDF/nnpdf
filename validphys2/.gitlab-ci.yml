@@ -11,21 +11,23 @@ variables:
 
 ## Run the configure and make tests
 job1:
+    varaibles:
+        CONDA_PY: "35"
     stage: build-deploy
     script: ".ciscripts/build-deploy.sh"
 
-    #We copy the conda package to the git path to be untracked and
-    #then catch it as an "artifact"
     artifacts:
         untracked: True
 
-    #TODO: Do two separate stages when we have a newer version with this
-    # implemented (and there are proper docs on how to do it):
-    # https://gitlab.com/gitlab-org/gitlab-ce/merge_requests/2437
-    #
-    #
-    #No idea why this doesn't work
-    #artifacts:
-    #    paths:
-    #        - /yes/conda-bld/linux-64/
+job2:
+    variables:
+        CONDA_PY: "36"
+    stage: build-deploy
+    script: ".ciscripts/build-deploy.sh"
 
+    artifacts:
+        untracked: True
+    script: ".ciscripts/build-deploy.sh"
+
+    artifacts:
+        untracked: True
