@@ -267,14 +267,14 @@ class Config(report.Config):
             raise ConfigError(e) from e
 
     def produce_posdatasets(self, positivity):
-        if 'posdatasets' not in positivity:
+        if not isinstance(positivity, dict) or 'posdatasets' not in positivity:
             raise ConfigError("Failed to get 'posdatasets' from positivity. "
                               "Expected that key to be present.")
         return positivity['posdatasets']
 
     def produce_theoryid(self, theory):
-        if 'theoryid' not in theory:
-            raise ConfigError("Failed to get 'theoryid' from 'theory'."
+        if not isinstance(theory, dict) or 'theoryid' not in theory:
+            raise ConfigError("Failed to get 'theoryid' from 'theory'. "
                               "Expected that key to be present.")
         return theory['theoryid']
 

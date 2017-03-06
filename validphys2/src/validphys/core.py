@@ -401,7 +401,10 @@ class TheoryIDSpec:
             #int casting is intentional to avoid malformed querys.
             query = "SELECT * FROM TheoryIndex WHERE ID=%d;"%int(self.id)
             res = cursor.execute(query)
-            return OrderedDict(((k[0],v) for k,v in zip(res.description, res.fetchone())))
+            val = res.fetchone()
+            if not val:
+                raise KeyError("ID %s not in the database."%self.id)
+            return OrderedDict(((k[0],v) for k,v in zip(res.description, val)))
 
 
     __slots__ = ('id', 'path')
