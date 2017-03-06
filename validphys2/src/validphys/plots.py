@@ -639,7 +639,7 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset):
                     linestyle='--',
                     marker='s',
                     label=pdf.label, lw=0.5,transform=next(offsets))
-        minscale = min(minscale, np.min(cv))
+        minscale = min(minscale, np.abs(np.min(cv)))
     ax.legend()
     ax.set_title(str(posdataset))
     ax.set_xlabel('idat')
