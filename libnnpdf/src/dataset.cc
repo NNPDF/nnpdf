@@ -257,8 +257,7 @@ void DataSet::SetT0(const PDFSet& pdf){
  */
 void DataSet::MakeArtificial()
 {
-  if (DataSet::Verbose)
-    std::cout << "-- Generating replica data for " << fSetName << std::endl;
+  std::cout << "-- Generating replica data for " << fSetName << std::endl;
 
   double *rand  = new double[fNSys];  
   double *xnor  = new double[fNData];

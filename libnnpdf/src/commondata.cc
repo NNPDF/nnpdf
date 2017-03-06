@@ -26,8 +26,6 @@
 
 namespace NNPDF
 {
-  // Default verbosity
-  bool CommonData::Verbose = true;
 
   // Kinematics type labels
   const CommonData::kinMap CommonData::kinLabel_latex = { 

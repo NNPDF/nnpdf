@@ -179,8 +179,6 @@ namespace NNPDF
     typedef std::map<std::string, std::vector<std::string> > kinMap;
     static const kinMap kinLabel_latex;
 
-    // ******************************* CommonData Verbosity *************************************
-    static bool Verbose;
     // ******************************* CommonData Get Methods *************************************
 
     std::string const& GetSetName() const {return fSetName; }; //!< Returns set name
