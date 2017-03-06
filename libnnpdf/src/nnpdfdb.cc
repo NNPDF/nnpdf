@@ -61,7 +61,7 @@ namespace NNPDF
     return v;
   }
 
-  // Needs to be specialised to avoid splitting the string
+  // Needs to be specialised to avoid splitting the string and returning NULL strings
   template<>
   std::string dbquery(IndexDB const& db, int const& id, std::string const& field)
   {
@@ -77,7 +77,11 @@ namespace NNPDF
     }
     
     int res = sqlite3_step(statement);
-    if ( res == SQLITE_ROW ) 
+    if (sqlite3_column_type(statement, 0) == SQLITE_NULL) // result is NULL
+    {
+        return std::string("");
+    }
+    else if ( res == SQLITE_ROW ) 
     {
     	std::string retval = (char*)sqlite3_column_text(statement, 0);
     	return retval; 
