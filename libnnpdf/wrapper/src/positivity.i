@@ -31,6 +31,6 @@
 
 %apply int *OUTPUT {int *res};
 %apply (NNPDF::real** ARGOUTVIEWM_ARRAY2, int* DIM1, int* DIM2)\
-{(NNPDF::real** result, int* npdf, int* ndata)}
+{(NNPDF::real** result, int* ndata, int* npdf)}
 
 %include "NNPDF/positivity.h"
