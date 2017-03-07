@@ -11,7 +11,7 @@ variables:
 
 ## Run the configure and make tests
 job1:
-    varaibles:
+    variables:
         CONDA_PY: "35"
     stage: build-deploy
     script: ".ciscripts/build-deploy.sh"
