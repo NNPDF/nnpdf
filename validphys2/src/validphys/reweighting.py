@@ -97,9 +97,7 @@ def reweighting_stats(pdf, nnpdf_weights, p_alpha_study):
 
     return pd.Series(result, index=result.keys())
 
-def p_alpha_study(chi2_data_for_reweighting_experiments):
-    """Compute P(α) in the range (0.5, 4)"""
-    alphas = np.exp(np.linspace(np.log(0.5), np.log(4),31))
+def _get_p_alpha_vals(alphas, chi2_data_for_reweighting_experiments):
     vals = []
     for alpha in alphas:
         new_chi2 = [((type(res)(res.data/alpha)), central, ndata)
@@ -108,6 +106,27 @@ def p_alpha_study(chi2_data_for_reweighting_experiments):
         new_ws = nnpdf_weights_numerator(new_chi2)
         val = np.sum(new_ws / alpha)
         vals.append(val)
+
+    return vals
+
+
+def p_alpha_study(chi2_data_for_reweighting_experiments):
+    """Compute P(α) in an automatic range"""
+
+    #First find the maximum
+    small = 0.5
+    #No, 100 is not a crazy big value
+    big = 100
+    alphas = np.zeros(80)
+    alphas[:40] = np.linspace(small, 2,40)
+    alphas[40:] = np.linspace(2,big,40)
+    vals = _get_p_alpha_vals(alphas, chi2_data_for_reweighting_experiments)
+    big = 1.2*alphas[np.argmax(vals)]
+
+    #Compute more points around the maximum
+    alphas = np.linspace(big,small, 50)
+    vals = _get_p_alpha_vals(alphas, chi2_data_for_reweighting_experiments)
+
     return pd.Series(np.array(vals), index=alphas)
 
 @figure
@@ -115,6 +134,11 @@ def plot_p_alpha(p_alpha_study):
     """Plot the results of ``p_alpha_study``."""
     fig, ax = plt.subplots()
     ax.set_title(r"$P(\alpha)$")
+
+    xmax = p_alpha_study.argmax()
+    ymax = p_alpha_study[xmax]
+    ax.axvline(xmax, color='red', linestyle='--')
+    ax.annotate(r'$\alpha=%.2f$'%xmax, (xmax,ymax/2), )
 
     ax.set_yticklabels([])
     ax.set_xlabel(r'$\alpha$')
