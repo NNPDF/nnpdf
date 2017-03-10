@@ -96,7 +96,7 @@ namespace NNPDF
   std::vector<int> dbmatch(IndexDB const& db, std::string const& field, std::string const& value)
   {
     std::stringstream query;
-    query << "select id from "<<db.fTable<<" where "<<field<<"='"<<value<<"'";
+    query << "select id from "<<db.fTable<<" where "<<field<<"='"<<value<<"' order by id";
 
     sqlite3_stmt *statement;  
     const int retcode = sqlite3_prepare_v2(db.fDB, query.str().c_str(), -1, &statement, 0 );

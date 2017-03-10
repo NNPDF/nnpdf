@@ -503,6 +503,25 @@ namespace NNPDF
     }
 
     h.close();
+  }
 
+  // Get uncorrelated error for datapoint i
+  double CommonData::GetUncE( int i ) const
+  {
+    double uncorrErr = pow(GetStat(i),2);
+    for (int l=0; l<GetNSys(); l++)
+      if (GetSys(i,l).name == "UNCORR")
+        uncorrErr += pow(GetSys(i,l).add,2);
+    return sqrt(uncorrErr);
+  }
+
+  // Get total correlated error for datapoint i
+  double CommonData::GetCorE( int i ) const
+  {
+    double sysErr = 0.0;
+    for (int l=0; l<GetNSys(); l++)
+      if (GetSys(i,l).name != "UNCORR")
+        sysErr += pow(GetSys(i,l).add,2);
+    return sqrt(sysErr);
   }
 }

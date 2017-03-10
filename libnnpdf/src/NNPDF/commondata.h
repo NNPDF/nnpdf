@@ -188,6 +188,8 @@ namespace NNPDF
 
     double const& GetData(int i) const { return fData[i];} //!< Return data value for point i
     double const& GetStat(int i) const { return fStat[i];} //!< Return statistical uncertanty for point i
+    double        GetUncE(int i) const; //!< Return total uncorrelated error for point i
+    double        GetCorE(int i) const; //!< Return total correlated error for point i
 
     sysError const& GetSys(int i, int l) const { return fSys[i][l];} //!< Return lth systematic for point i
 
