@@ -43,6 +43,8 @@ public:
   
   real const& GetAlpha(int const& fl) const { return fAlpha[fl]; }
   real const& GetBeta(int const& fl) const { return fBeta[fl]; }  
+  void SetAlpha(int const& fl, real const& v) { fAlpha[fl] = v; }
+  void SetBeta(int const& fl, real const& v)  { fBeta[fl] = v; }
     
   bool const& GetPDFSqrPos(int const& fl) const { return fPDFSqrPos[fl]; }
   
