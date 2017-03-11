@@ -283,6 +283,7 @@ target_link_libraries(FKconvolute nnpdf)
 
 install(FILES ${PROJECT_SOURCE_DIR}/scripts/nnpdf-config
 	${PROJECT_SOURCE_DIR}/scripts/FKmerge
+  ${PROJECT_SOURCE_DIR}/scripts/FKmerge2
 	${PROJECT_SOURCE_DIR}/scripts/FKselfmerge
 	${PROJECT_SOURCE_DIR}/scripts/FKincrement
 	${CMAKE_BINARY_DIR}/FKconvolute
