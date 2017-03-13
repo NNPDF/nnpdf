@@ -272,11 +272,24 @@ class Config(report.Config):
                               "Expected that key to be present.")
         return positivity['posdatasets']
 
+    def produce_reweight_all_datasets(self, experiments):
+        ret = []
+        for experiment in experiments:
+            for dsinput, dataset in zip(experiment, experiment.datasets):
+                single_exp = ExperimentSpec(experiment.name,
+                                            datasets=[dataset],
+                                            dsinputs=[dsinput])
+                ret.append({'reweighting_experiments': [single_exp],
+                            'dataset_input':dsinput})
+        return ret
+
     def produce_theoryid(self, theory):
         if not isinstance(theory, dict) or 'theoryid' not in theory:
             raise ConfigError("Failed to get 'theoryid' from 'theory'. "
                               "Expected that key to be present.")
         return theory['theoryid']
+
+
 
     #TODO: Right name? Right interface?
     def parse_corrpair(self, pair:list):
