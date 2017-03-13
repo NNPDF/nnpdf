@@ -97,14 +97,20 @@ def reweighting_stats(pdf, nnpdf_weights, p_alpha_study):
 
     return pd.Series(result, index=result.keys())
 
+def _get_p_alpha_val(alpha, chi2_data_for_reweighting_experiments):
+     new_chi2 = [((type(res)(res.data/alpha**2)), central, ndata)
+                    for (res,central,ndata) in
+                    chi2_data_for_reweighting_experiments]
+
+     new_ws = nnpdf_weights_numerator(new_chi2)
+     val = np.sum(new_ws / alpha)
+     return val
+
+
 def _get_p_alpha_vals(alphas, chi2_data_for_reweighting_experiments):
     vals = []
     for alpha in alphas:
-        new_chi2 = [((type(res)(res.data/alpha)), central, ndata)
-                    for (res,central,ndata) in
-                    chi2_data_for_reweighting_experiments]
-        new_ws = nnpdf_weights_numerator(new_chi2)
-        val = np.sum(new_ws / alpha)
+        val = _get_p_alpha_val(alpha, chi2_data_for_reweighting_experiments)
         vals.append(val)
 
     return vals
