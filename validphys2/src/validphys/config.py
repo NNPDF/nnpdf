@@ -283,11 +283,13 @@ class Config(report.Config):
                             'dataset_input':dsinput})
         return ret
 
+    """
     def produce_theoryid(self, theory):
         if not isinstance(theory, dict) or 'theoryid' not in theory:
             raise ConfigError("Failed to get 'theoryid' from 'theory'. "
                               "Expected that key to be present.")
         return theory['theoryid']
+    """
 
 
 
