@@ -12,8 +12,9 @@ from collections import OrderedDict
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
 import lhapdf
+from scipy import optimize
+
 from reportengine.table import table
 from reportengine.figure import figure
 from reportengine.checks import make_check
@@ -119,19 +120,43 @@ def _get_p_alpha_vals(alphas, chi2_data_for_reweighting_experiments):
 def p_alpha_study(chi2_data_for_reweighting_experiments):
     """Compute P(α) in an automatic range"""
 
+
+
+    small = 0.5
+    limfar = 100
+
+    f = lambda alpha: -_get_p_alpha_val(alpha, chi2_data_for_reweighting_experiments)
+
+    alphamax=  optimize.fmin(f, 10,
+                                      disp=False)[0]
+
+    """
     #First find the maximum
     small = 0.5
+
+    limclose=4
     #No, 100 is not a crazy big value
-    big = 100
-    alphas = np.zeros(80)
-    alphas[:40] = np.linspace(small, 2,40)
-    alphas[40:] = np.linspace(2,big,40)
+    limfar = 100
+
+    nclose = 80
+    nfar = 40
+
+    alphas = np.zeros(nclose+nfar)
+    alphas[:nclose] = np.linspace(small, limclose, nclose, endpoint=False)
+    alphas[nclose:] = np.linspace(limclose,limfar,nfar)
     vals = _get_p_alpha_vals(alphas, chi2_data_for_reweighting_experiments)
     big = 1.2*alphas[np.argmax(vals)]
 
     #Compute more points around the maximum
-    alphas = np.linspace(big,small, 50)
+    alphas = np.linspace(small, big, 100)
+    """
+
+    big = 1.4*alphamax
+
+
+    alphas = np.linspace(small, big, 1000)
     vals = _get_p_alpha_vals(alphas, chi2_data_for_reweighting_experiments)
+
 
     return pd.Series(np.array(vals), index=alphas)
 
@@ -144,7 +169,7 @@ def plot_p_alpha(p_alpha_study):
     xmax = p_alpha_study.argmax()
     ymax = p_alpha_study[xmax]
     ax.axvline(xmax, color='red', linestyle='--')
-    ax.annotate(r'$\alpha=%.2f$'%xmax, (xmax,ymax/2), )
+    ax.annotate(r'$\alpha=%.2f$'%xmax, (xmax,(ymax-ax.get_ylim()[0])/2), )
 
     ax.set_yticklabels([])
     ax.set_xlabel(r'$\alpha$')
