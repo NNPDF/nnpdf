@@ -475,8 +475,24 @@ def plot_pdfreplicas(ax, pdf, flindex ,grid):
             label=pdf.label)
     return gv
 
+@_plot_pdf_factory
+def plot_pdf_uncertainties(ax, pdf, flindex, grid):
+    """Plot the PDF standard deviations as a function of x.
+    If normalize_to is set, the ratio to that
+    PDF's central value is plotted. Otherwise it is the absolute values."""
+    gv = grid.grid_values[:,flindex,:]
+    stats = pdf.stats_class(gv)
+
+    res = stats.std_error()
+
+    ax.plot(grid.xgrid, res, label=pdf.label)
+
+    return res
+
+
+
 #Because of how pickle works, this has to have this name, and then be redefined
-#Otherwise will complain about not veing able to pickle the inner f_ in the
+#Otherwise will complain about not being able to pickle the inner f_ in the
 #decorator.
 def plot_pdfs(ax, pdf, flindex, grid, setupres):
     hatchit, labels, handles = (setupres['hatchit'], setupres['labels'],
