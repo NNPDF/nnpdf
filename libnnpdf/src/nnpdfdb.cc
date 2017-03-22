@@ -84,6 +84,7 @@ namespace NNPDF
     else if ( res == SQLITE_ROW ) 
     {
     	std::string retval = (char*)sqlite3_column_text(statement, 0);
+      retval.erase(retval.find_last_not_of(" \n\r\t")+1);
     	return retval; 
     } 
     else
