@@ -145,7 +145,7 @@ void ATLASPHT11ETGCTRFilter::ReadData()
     // Kinematic variables
     
     fKin1[idat] = 1.37/2.;                            // Avg. eta_gamma (|eta_g|<1.37)
-    fKin2[idat] = (mbin[idat] + mbin[idat+1]) * 0.5;  // Avg. Et of each bin
+    fKin2[idat] = pow((mbin[idat] + mbin[idat+1]) * 0.5,2);  // Avg. Et of each bin
     fKin3[idat] = 7000.;                              // LHC 7 TeV
     
   }
@@ -289,7 +289,7 @@ void ATLASPHT11ETGFWDFilter::ReadData()
     // Kinematic variables
     
     fKin1[idat] = (2.37-1.52)/2.;                     // Avg. eta_gamma (1.52<|eta_g|<2.37)
-    fKin2[idat] = (mbin[idat] + mbin[idat+1]) * 0.5;  // Avg. Et of each bin
+    fKin2[idat] = pow((mbin[idat] + mbin[idat+1]) * 0.5,2);  // Avg. Et of each bin
     fKin3[idat] = 7000.;                              // LHC 7 TeV
     
   }
@@ -432,7 +432,7 @@ void ATLASPHT11ETAGFilter::ReadData()
     // Kinematic variables
     
     fKin1[idat] = (mbin[idat] + mbin[idat+1]) * 0.5;  // Avg. eta of each bin
-    fKin2[idat] = 100.;                               // Min Et_gamma
+    fKin2[idat] = 100.*100.;                               // Min Et_gamma
     fKin3[idat] = 7000.;                              // LHC 7 TeV
     
   }

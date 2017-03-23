@@ -55,7 +55,7 @@ void CMSTTBARTOTFilter::ReadData()
       lstream >> idum >> cme;
       
       fKin1[i] = 0.;
-      fKin2[i] = Mt;             //top mass
+      fKin2[i] = Mt*Mt;             //top mass
       fKin3[i] = cme*1000;       //sqrt(s)
 
       lstream >> fData[i];       //central value

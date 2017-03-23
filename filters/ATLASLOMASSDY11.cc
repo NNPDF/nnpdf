@@ -96,7 +96,7 @@ void ATLASLOMASSDY11Filter::ReadData()
 
     // Kinematic variables
     fKin1[idat] = 0.0;                                // Dummy
-    fKin2[idat] = (mbin[idat] + mbin[idat+1]) * 0.5;  // Avg. M_ll of each bin
+    fKin2[idat] = pow(mbin[idat] + mbin[idat+1]) * 0.5,2.0);  // Avg. M_ll of each bin
     fKin3[idat] = 7E3;                                // LHC 7 TeV
 
   }
@@ -187,7 +187,7 @@ void ATLASLOMASSDY11EXTFilter::ReadData()
 
     // Kinematic variables
     fKin1[idat] = 0.0;                                // Dummy
-    fKin2[idat] = (mbin[idat] + mbin[idat+1]) * 0.5;  // Avg. M_ll of each bin
+    fKin2[idat] = pow((mbin[idat] + mbin[idat+1]) * 0.5,2);  // Avg. M_ll of each bin
     fKin3[idat] = 7E3;                                // LHC 7 TeV
 
   }

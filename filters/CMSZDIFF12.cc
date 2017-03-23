@@ -101,9 +101,9 @@ void CMSZDIFF12Filter::ReadData()
       etamin = 0.0 + j * 0.4;
       etamax = 0.4 + j * 0.4;
 
-      fKin2[idat] = (etamin + etamax) / 2.0;   // average rapidity
-      fKin1[idat] = (ptmin + ptmax) / 2.0;     // average pt
-      //      fKin1[idat] *= fKin1[idat];
+      fKin1[idat] = (etamin + etamax) / 2.0;   // average rapidity
+      fKin2[idat] = (ptmin + ptmax) / 2.0;     // average pt
+      fKin2[idat] *= fKin2[idat];
       fKin3[idat] = s;                         // only eta and pt relevant
 
       lstream >> fData[idat];

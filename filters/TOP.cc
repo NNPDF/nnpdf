@@ -82,7 +82,7 @@ void TTBARTOTFilter::ReadData()
       istringstream lstream(line);
       
       fKin1[i] = 0.0;
-      fKin2[i] = mt;
+      fKin2[i] = mt*mt;
       fKin3[i] = 0.0;
       
       int idum=0;

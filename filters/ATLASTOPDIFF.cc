@@ -189,7 +189,7 @@ void  ATLASTOPDIFF8TEVTPTNORMFilter::ReadData()
       lstream >> pt_top >> ddum >> ddum; 
 
       fKin1[i] = pt_top;       //P_T^(top)
-      fKin2[i] = Mt;       
+      fKin2[i] = Mt*Mt;       
       fKin3[i] = 8000;         //sqrt(s)
 
       lstream >> fData[i];     //differential distribution
@@ -282,7 +282,7 @@ void  ATLASTOPDIFF8TEVTTPTNORMFilter::ReadData()
       lstream >> pt_top >> ddum >> ddum; 
 
       fKin1[i] = pt_top;       //P_T^(top)
-      fKin2[i] = Mt;       
+      fKin2[i] = Mt*Mt;       
       fKin3[i] = 8000;         //sqrt(s)
 
       lstream >> fData[i];     //differential distribution
@@ -398,8 +398,8 @@ void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
 
       fKin1[i+fNData/2]   = pt_top;          //yt
       fKin1[fNData/2-1-i] = -1.0*pt_top;
-      fKin2[i+fNData/2]   = Mt;       
-      fKin2[fNData/2-1-i] = Mt;
+      fKin2[i+fNData/2]   = Mt*Mt;       
+      fKin2[fNData/2-1-i] = Mt*Mt;
       fKin3[i+fNData/2]   = 8000;            //sqrt(s)
       fKin3[fNData/2-1-i] = 8000;        
 
@@ -564,8 +564,8 @@ void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 
       fKin1[i+fNData/2]   = pt_top;          //P_T^(top)
       fKin1[fNData/2-1-i] = -1.0*pt_top;
-      fKin2[i+fNData/2]   = Mt;       
-      fKin2[fNData/2-1-i] = Mt;
+      fKin2[i+fNData/2]   = Mt*Mt;       
+      fKin2[fNData/2-1-i] = Mt*Mt;
       fKin3[i+fNData/2]   = 8000;            //sqrt(s)
       fKin3[fNData/2-1-i] = 8000;        
 
@@ -728,7 +728,7 @@ void  ATLASTOPDIFF8TEVTTMNORMFilter::ReadData()
       lstream >> pt_top >> ddum >> ddum; 
 
       fKin1[i] = pt_top;       //P_T^(top)
-      fKin2[i] = Mt;       
+      fKin2[i] = Mt*Mt;       
       fKin3[i] = 8000;         //sqrt(s)
 
       lstream >> fData[i];     //differential distribution
@@ -862,7 +862,7 @@ void  ATLASTOPDIFF8TEVTPTFilter::ReadData()
       lstream >> pt_top >> ddum >> ddum; 
       
       fKin1[i] = pt_top;       //P_T^(top)
-      fKin2[i] = Mt;       
+      fKin2[i] = Mt*Mt;       
       fKin3[i] = 8000;         //sqrt(s)
       
       lstream >> fData[i];     //differential distribution
@@ -961,7 +961,7 @@ void  ATLASTOPDIFF8TEVTTPTFilter::ReadData()
       lstream >> pt_top >> ddum >> ddum; 
 
       fKin1[i] = pt_top;       //P_T^(top)
-      fKin2[i] = Mt;       
+      fKin2[i] = Mt*Mt;       
       fKin3[i] = 8000;         //sqrt(s)
 
       lstream >> fData[i];     //differential distribution
@@ -1083,8 +1083,8 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 
       fKin1[i+fNData/2]   = pt_top;          //P_T^(top)
       fKin1[fNData/2-1-i] = -1.0*pt_top;
-      fKin2[i+fNData/2]   = Mt;       
-      fKin2[fNData/2-1-i] = Mt;
+      fKin2[i+fNData/2]   = Mt*Mt;       
+      fKin2[fNData/2-1-i] = Mt*Mt;
       fKin3[i+fNData/2]   = 8000;            //sqrt(s)
       fKin3[fNData/2-1-i] = 8000;        
 
@@ -1317,8 +1317,8 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
 
       fKin1[i+fNData/2]   = pt_top;          //P_T^(top)
       fKin1[fNData/2-1-i] = -1.0*pt_top;
-      fKin2[i+fNData/2]   = Mt;       
-      fKin2[fNData/2-1-i] = Mt;
+      fKin2[i+fNData/2]   = Mt*Mt;       
+      fKin2[fNData/2-1-i] = Mt*Mt;
       fKin3[i+fNData/2]   = 8000;            //sqrt(s)
       fKin3[fNData/2-1-i] = 8000;        
 
@@ -1491,7 +1491,7 @@ void  ATLASTOPDIFF8TEVTTMFilter::ReadData()
       lstream >> pt_top >> ddum >> ddum; 
 
       fKin1[i] = pt_top;       //P_T^(top)
-      fKin2[i] = Mt;       
+      fKin2[i] = Mt*Mt;       
       fKin3[i] = 8000;         //sqrt(s)
 
       lstream >> fData[i];     //differential distribution

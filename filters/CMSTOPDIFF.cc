@@ -156,7 +156,7 @@ void  CMSTOPDIFF8TEVTPTNORMFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt;       
+      fKin2[i] = Mt*Mt;       
       fKin3[i] = 8000;     //sqrt(s)
       
       lstream >> fData[i]; //normalized differential distribution
@@ -304,7 +304,7 @@ void  CMSTOPDIFF8TEVTTPTNORMFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt;    
+      fKin2[i] = Mt*Mt;    
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
@@ -452,7 +452,7 @@ void  CMSTOPDIFF8TEVTRAPNORMFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt;    
+      fKin2[i] = Mt*Mt;    
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
@@ -603,7 +603,7 @@ void  CMSTOPDIFF8TEVTTRAPNORMFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt;   
+      fKin2[i] = Mt*Mt;   
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
@@ -751,7 +751,7 @@ void  CMSTOPDIFF8TEVTTMNORMFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt;    
+      fKin2[i] = Mt*Mt;    
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
@@ -928,7 +928,7 @@ void CMSTOPDIFF8TEVTPTFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt;    
+      fKin2[i] = Mt*Mt;    
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
@@ -1125,7 +1125,7 @@ void  CMSTOPDIFF8TEVTTPTFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt;    
+      fKin2[i] = Mt*Mt;    
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
@@ -1322,7 +1322,7 @@ void  CMSTOPDIFF8TEVTRAPFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt;    
+      fKin2[i] = Mt*Mt;    
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
@@ -1519,7 +1519,7 @@ void  CMSTOPDIFF8TEVTTRAPFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt;    
+      fKin2[i] = Mt*Mt;    
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
@@ -1717,7 +1717,7 @@ void  CMSTOPDIFF8TEVTTMFilter::ReadData()
       lstream >> pt_top;
       
       fKin1[i] = pt_top;   //P_T^(top)
-      fKin2[i] = Mt;       
+      fKin2[i] = Mt*Mt;       
       fKin3[i] = 8000;     //sqrt(s)
 
       lstream >> fData[i]; //normalized differential distribution
