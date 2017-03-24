@@ -83,7 +83,7 @@ if (COMPILE_revolvenet)
   add_executable(revolvenet revolvenet/src/revolvenet.cc
     nnfit/src/apfelevol.cc revolvenet/src/nnpdf.cc
     nnfit/src/fitbases.cc)
-  include_directories(revolvenet/inc)
+  include_directories(revolvenet/inc nnfit/inc)
   target_link_libraries(revolvenet common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
 endif(COMPILE_revolvenet)
 
