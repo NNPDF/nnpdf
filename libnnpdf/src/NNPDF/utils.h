@@ -30,7 +30,7 @@ namespace NNPDF
    * @param filename the input filename
    * @return the istream object
    */
-  std::unique_ptr<std::istream> untargz(std::string const& filename);
+  std::vector<char> untargz(std::string const& filename);
 
   // *******************  SWIG helpers *****************************
 

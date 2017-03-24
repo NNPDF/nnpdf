@@ -27,7 +27,7 @@
 namespace NNPDF
 {
   //__________________________________________________________________
-  std::unique_ptr<std::istream> untargz(std::string const& filename)
+  std::vector<char> untargz(std::string const& filename)
   {
     struct archive *a = archive_read_new();
     struct archive_entry *entry = nullptr;
@@ -46,10 +46,18 @@ namespace NNPDF
     if (r != ARCHIVE_OK)
       {
         archive_read_free(a);
-        auto is = std::unique_ptr<std::istream>(new std::ifstream(filename.c_str()));
-        if (is->fail())
+        std::ifstream is(filename.c_str());
+        if (is.fail())
           throw RuntimeException("untargz", "File not found " + filename);
-        return is;
+
+        is.seekg(0, std::ios_base::end);
+        std::streampos fileSize = is.tellg();
+        auto buf = std::vector<char>(fileSize);
+
+        is.seekg(0, std::ios_base::beg);
+        is.read(&buf[0], fileSize);
+
+        return buf;
       }
 
     // get the entry size
@@ -67,7 +75,7 @@ namespace NNPDF
 
     archive_read_free(a);
 
-    return std::unique_ptr<std::istream>(new std::istringstream(buf.data()));
+    return buf;
   }
 
   // /very/ basic integrator

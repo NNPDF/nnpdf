@@ -93,8 +93,6 @@ namespace NNPDF
         keyMap fGridInfo;
         keyMap fTheoryInfo;
         keyMap fBlobString;
-
-        std::unique_ptr<std::istream> fStream;
     };
 
     /**
