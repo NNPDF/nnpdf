@@ -27,10 +27,24 @@
 namespace NNPDF
 {
   //__________________________________________________________________
+  class archive_wrapper
+  {
+  private:
+    struct archive * a;
+  public:
+    archive_wrapper(): a(archive_read_new()) {}
+    operator struct archive*() {return a;}
+    ~archive_wrapper()
+    {
+      archive_read_free(a);
+    }
+  };
+
+  //__________________________________________________________________
   std::vector<char> untargz(std::string const& filename)
   {
-    struct archive *a = archive_read_new();
-    struct archive_entry *entry = nullptr;
+    auto a = archive_wrapper{};
+    struct archive_entry *entry;
 
     // allocate tar.gz decompressor
     archive_read_support_filter_all(a);
@@ -72,8 +86,6 @@ namespace NNPDF
 
     if (zero != 0 || size != entry_size)
         throw RuntimeException("untargz", "Bug in decompression code");
-
-    archive_read_free(a);
 
     return buf;
   }
