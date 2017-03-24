@@ -270,35 +270,18 @@ namespace NNPDF
 
 
   // *********************************************************
-
-  /**
-   * @brief Constructor for FK Table
-   * @param filename The FK table filename
-   * @param cFactors A vector of filenames for potential C-factors
-   */
-  FKTable::FKTable( std::string const& filename, 
-                    std::vector<std::string> const& cFactors):
-  FKHeader(filename),
-  fDataName(    GetTag        (GRIDINFO,       "SETNAME")),
-  fDescription( GetTag        (BLOB,   "GridDesc")),
-  fNData(       GetTag<int>   (GRIDINFO,   "NDATA")),
-  fQ20(     pow(GetTag<double>(THEORYINFO, "Q0"),2)),
-  fHadronic(    GetTag<bool>  (GRIDINFO,   "HADRONIC")),
-  fNonZero(parseNonZero()),  // All flavours
-  fFlmap(fHadronic ? new int[2*fNonZero]:new int[fNonZero]),
-  fNx(          GetTag<int>   (GRIDINFO,   "NX")),
-  fTx(fHadronic ? fNx*fNx:fNx),
-  fRmr(fTx*fNonZero % convoluteAlign),
-  fPad((fRmr == 0) ? 0:convoluteAlign - fRmr ),
-  fDSz( fTx*fNonZero + fPad ),
-  fXgrid(new double[fNx]),
-  fSigma( new real[fDSz*fNData]),
-  fHasCFactors(cFactors.size()),
-  fcFactors(new double[fNData]),
-  fcUncerts(new double[fNData])
+  FKTable* FKTable::mkFKTable(std::string const& filename,
+                              std::vector<std::string> const& cFactors)
   {
     std::istringstream is(untargz(filename).data());
-    InitialiseFromStream(is, cFactors);
+    return new FKTable(is, cFactors);
+  }
+
+  FKTable FKTable::mkFKTableStack(std::string const& filename,
+                                  std::vector<std::string> const& cFactors)
+  {
+    std::istringstream is(untargz(filename).data());
+    return FKTable(is, cFactors);
   }
 
   /**

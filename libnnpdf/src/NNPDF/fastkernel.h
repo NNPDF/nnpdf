@@ -105,15 +105,19 @@ namespace NNPDF
         FKTable(    std::istream& , 
                     std::vector<std::string> const& cFactors = std::vector<std::string>()
                 ); // Stream constructor
-        FKTable(    std::string const& filename,
-                    std::vector<std::string> const& cfactors = std::vector<std::string>()
-                ); //!< FK table reader
-
         FKTable(FKTable const&); //!< Copy constructor
         FKTable(FKTable const&, std::vector<int> const&); //!< Masked copy constructor
 
         virtual ~FKTable(); //!< Destructor
         void Print(std::ostream&); //!< Print FKTable header to ostream
+
+        // Helper function
+        static FKTable* mkFKTable(std::string const& filename,
+                                  std::vector<std::string> const& cfactors = std::vector<std::string>());
+
+        // Helper function
+        static FKTable mkFKTableStack(std::string const& filename,
+                                      std::vector<std::string> const& cfactors = std::vector<std::string>());
 
         // ********************* FK Verbosity ****************************
 
