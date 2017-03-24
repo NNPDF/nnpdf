@@ -56,15 +56,13 @@ namespace NNPDF
   * @brief Constructor for FK header parsing class
   * @param filename The FK table filename
   */
-  FKHeader::FKHeader(std::string const& filename)
+  FKHeader::FKHeader(std::string const& filename):
+    fStream(std::move(untargz(filename)))
   {
-    std::ifstream instream;
-    instream.open(filename);
-
-    if (!instream.good())
+    if (!fStream->good())
         throw FileError("FKHeader::FKHeader","cannot open FK grid file: " + filename);
 
-    Read(instream);
+    Read(*fStream);
   }
 
   FKHeader::FKHeader(FKHeader const& ref):
@@ -302,10 +300,8 @@ namespace NNPDF
   fcFactors(new double[fNData]),
   fcUncerts(new double[fNData])
   {
-    std::ifstream is(filename);
-    NNPDF::FKHeader headSkip(is);
-    InitialiseFromStream(is, cFactors);
-  };
+    InitialiseFromStream(*fStream, cFactors);
+  }
 
   /**
    * @brief Constructor for FK Table

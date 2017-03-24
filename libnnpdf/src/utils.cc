@@ -1,4 +1,4 @@
-// $Id: utils.cc 2825 2015-05-03 09:14:46Z stefano.carrazza@mi.infn.it $
+﻿// $Id: utils.cc 2825 2015-05-03 09:14:46Z stefano.carrazza@mi.infn.it $
 //
 // NNPDF++ 2012
 //
@@ -21,8 +21,54 @@
 #include "gsl/gsl_matrix.h"
 #include "gsl/gsl_linalg.h"
 
+#include <archive.h>
+#include <archive_entry.h>
+
 namespace NNPDF
 {
+  //__________________________________________________________________
+  std::unique_ptr<std::istream> untargz(std::string const& filename)
+  {
+    struct archive *a = archive_read_new();
+    struct archive_entry *entry = nullptr;
+
+    // allocate tar.gz decompressor
+    archive_read_support_filter_all(a);
+    archive_read_support_format_all(a);
+
+    // open file
+    auto r = archive_read_open_filename(a, filename.c_str(), 10240);
+
+    // open header
+    r = archive_read_next_header(a, &entry);
+
+    // if this operation fails, most likely you have a plain txt file.
+    if (r != ARCHIVE_OK)
+      {
+        archive_read_free(a);
+        auto is = std::unique_ptr<std::istream>(new std::ifstream(filename.c_str()));
+        if (is->fail())
+          throw RuntimeException("untargz", "File not found " + filename);
+        return is;
+      }
+
+    // get the entry size
+    auto entry_size = archive_entry_size(entry);
+    if (entry_size == 0)
+      throw RuntimeException("untargz", "Compression algorithm not enabled.");
+
+    // read buffer
+    auto buf = std::vector<char>(entry_size+1);
+    auto size = archive_read_data(a, buf.data(), entry_size);
+    auto zero = archive_read_data(a, buf.data(), 1);
+
+    if (zero != 0 || size != entry_size)
+        throw RuntimeException("untargz", "Bug in decompression code");
+
+    archive_read_free(a);
+
+    return std::unique_ptr<std::istream>(new std::istringstream(buf.data()));
+  }
 
   // /very/ basic integrator
   double integrate(double data[], size_t npoints, double h)

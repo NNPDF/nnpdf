@@ -15,6 +15,7 @@
 #include <istream>
 #include <fstream>
 #include <sstream>
+#include <memory>
 
 #include <map>
 
@@ -92,6 +93,8 @@ namespace NNPDF
         keyMap fGridInfo;
         keyMap fTheoryInfo;
         keyMap fBlobString;
+
+        std::unique_ptr<std::istream> fStream;
     };
 
     /**
@@ -120,7 +123,7 @@ namespace NNPDF
 
         // ******************** FK Get Methods ***************************
 
-        std::string const& GetDataName()  const {return fDataName;};
+        std::string const& GetDataName()  const {return fDataName;}
 
         double const&  GetQ20()      const { return fQ20;   }
         double const*  GetCFactors() const { return fcFactors; }

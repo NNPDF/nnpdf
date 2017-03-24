@@ -251,6 +251,7 @@ if (LHAPDF_CONFIG)
 endif(LHAPDF_CONFIG)
 
 find_package(PkgConfig REQUIRED)
+find_package(LibArchive REQUIRED)
 pkg_search_module(SQLITE3 REQUIRED sqlite3)
 pkg_search_module(GSL REQUIRED gsl)
 
@@ -279,7 +280,7 @@ add_library(nnpdf SHARED src/common.cc
 target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${SQLITE3_LDFLAGS})
 
 add_executable(FKconvolute src/fkconvolute.cc)
-target_link_libraries(FKconvolute nnpdf)
+target_link_libraries(FKconvolute nnpdf ${LibArchive_LIBRARIES})
 
 install(FILES ${PROJECT_SOURCE_DIR}/scripts/nnpdf-config
 	${PROJECT_SOURCE_DIR}/scripts/FKmerge
