@@ -270,18 +270,36 @@ namespace NNPDF
 
 
   // *********************************************************
-  FKTable* FKTable::mkFKTable(std::string const& filename,
-                              std::vector<std::string> const& cFactors)
-  {
-    std::istringstream is(untargz(filename).data());
-    return new FKTable(is, cFactors);
-  }
 
-  FKTable FKTable::mkFKTableStack(std::string const& filename,
-                                  std::vector<std::string> const& cFactors)
+  /**
+   * @brief FKTable::FKTable
+   * @param filename
+   * @param cFactors
+   */
+  FKTable::FKTable(std::string const& filename,
+                   std::vector<std::string> const& cFactors)
   {
     std::istringstream is(untargz(filename).data());
-    return FKTable(is, cFactors);
+    fFKHeader = FKHeader(is);
+    fDataName = fFKHeader.GetTag(fFKHeader.GRIDINFO, "SETNAME");
+    fDescription = fFKHeader.GetTag(fFKHeader.BLOB, "GridDesc");
+    fNData = fFKHeader.GetTag<int>(fFKHeader.GRIDINFO, "NDATA");
+    fQ20 = pow(fFKHeader.GetTag<double>(fFKHeader.THEORYINFO, "Q0"), 2);
+    fHadronic = fFKHeader.GetTag<bool>(fFKHeader.GRIDINFO, "HADRONIC");
+    fNonZero = parseNonZero();
+    fFlmap = fHadronic ? new int[2*fNonZero]:new int[fNonZero];
+    fNx = fFKHeader.GetTag<int>(fFKHeader.GRIDINFO, "NX");
+    fTx = fHadronic ? fNx*fNx:fNx;
+    fRmr = fTx*fNonZero % convoluteAlign;
+    fPad = (fRmr == 0) ? 0:convoluteAlign - fRmr ;
+    fDSz =  fTx*fNonZero + fPad ;
+    fXgrid = new double[fNx];
+    fSigma = new real[fDSz*fNData];
+    fHasCFactors = cFactors.size();
+    fcFactors = new double[fNData];
+    fcUncerts = new double[fNData];
+
+    InitialiseFromStream(is, cFactors);
   }
 
   /**
@@ -290,27 +308,27 @@ namespace NNPDF
    * @param cFactors A vector of filenames for potential C-factors
    */
   FKTable::FKTable( std::istream& is, std::vector<std::string> const& cFactors ):
-  FKHeader(is),
-  fDataName(    GetTag        (GRIDINFO,       "SETNAME")),
-  fDescription( GetTag        (BLOB,   "GridDesc")),
-  fNData(       GetTag<int>   (GRIDINFO,   "NDATA")),
-  fQ20(     pow(GetTag<double>(THEORYINFO, "Q0"),2)),
-  fHadronic(    GetTag<bool>  (GRIDINFO,   "HADRONIC")),
-  fNonZero(parseNonZero()),  // All flavours
-  fFlmap(fHadronic ? new int[2*fNonZero]:new int[fNonZero]),
-  fNx(          GetTag<int>   (GRIDINFO,   "NX")),
-  fTx(fHadronic ? fNx*fNx:fNx),
-  fRmr(fTx*fNonZero % convoluteAlign),
-  fPad((fRmr == 0) ? 0:convoluteAlign - fRmr ),
-  fDSz( fTx*fNonZero + fPad ),
-  fXgrid(new double[fNx]),
-  fSigma( new real[fDSz*fNData]),
-  fHasCFactors(cFactors.size()),
-  fcFactors(new double[fNData]),
-  fcUncerts(new double[fNData])
+    fFKHeader(is),
+    fDataName(    fFKHeader.GetTag        (fFKHeader.GRIDINFO,       "SETNAME")),
+    fDescription( fFKHeader.GetTag        (fFKHeader.BLOB,   "GridDesc")),
+    fNData(       fFKHeader.GetTag<int>   (fFKHeader.GRIDINFO,   "NDATA")),
+    fQ20(     pow(fFKHeader.GetTag<double>(fFKHeader.THEORYINFO, "Q0"),2)),
+    fHadronic(    fFKHeader.GetTag<bool>  (fFKHeader.GRIDINFO,   "HADRONIC")),
+    fNonZero(parseNonZero()),  // All flavours
+    fFlmap(fHadronic ? new int[2*fNonZero]:new int[fNonZero]),
+    fNx(          fFKHeader.GetTag<int>   (fFKHeader.GRIDINFO,   "NX")),
+    fTx(fHadronic ? fNx*fNx:fNx),
+    fRmr(fTx*fNonZero % convoluteAlign),
+    fPad((fRmr == 0) ? 0:convoluteAlign - fRmr ),
+    fDSz( fTx*fNonZero + fPad ),
+    fXgrid(new double[fNx]),
+    fSigma( new real[fDSz*fNData]),
+    fHasCFactors(cFactors.size()),
+    fcFactors(new double[fNData]),
+    fcUncerts(new double[fNData])
   {
     InitialiseFromStream(is, cFactors);
-  };
+  }
 
   /**
    * @brief Method for initialisation from stream
@@ -319,13 +337,13 @@ namespace NNPDF
   void FKTable::InitialiseFromStream( std::istream& is, std::vector<std::string> const& cFactors )
   {
 
-    get_logger() <<SectionHeader(fDataName.c_str(),GRIDINFO)<<std::endl;
+    get_logger() << fFKHeader.SectionHeader(fDataName.c_str(),fFKHeader.GRIDINFO)<<std::endl;
     get_logger() << fDescription << std::endl;
 
 
     // Read FlavourMap from header
     const int nFL = 14;
-    std::stringstream fmBlob(GetTag(BLOB,"FlavourMap"));
+    std::stringstream fmBlob(fFKHeader.GetTag(fFKHeader.BLOB,"FlavourMap"));
 
     if (!fHadronic) // DIS flavourmap
     {
@@ -358,7 +376,7 @@ namespace NNPDF
     }
 
     // Read x grid - need more detailed checks
-    std::stringstream xBlob(GetTag(BLOB,"xGrid"));
+    std::stringstream xBlob(fFKHeader.GetTag(fFKHeader.BLOB,"xGrid"));
     for (int i=0; i<fNx; i++)
       xBlob >> fXgrid[i];
 
@@ -430,7 +448,7 @@ namespace NNPDF
    * @param set  The FK table to be copied
    */
   FKTable::FKTable(FKTable const& set):
-  FKHeader(set),
+  fFKHeader(set.fFKHeader),
   fDataName(set.fDataName),
   fNData(set.fNData),
   fQ20(set.fQ20),
@@ -483,7 +501,7 @@ namespace NNPDF
    * @param mask The mask from filter
    */
   FKTable::FKTable(FKTable const& set, std::vector<int> const& mask):
-  FKHeader(set),
+  fFKHeader(set.fFKHeader),
   fDataName(set.fDataName),
   fNData(mask.size()),
   fQ20(set.fQ20),
@@ -553,16 +571,16 @@ namespace NNPDF
 
     // Verify current flavourmap
     std::string nflmap;
-    std::string cflmap = GetTag(BLOB, "FlavourMap");
+    std::string cflmap = fFKHeader.GetTag(fFKHeader.BLOB, "FlavourMap");
     const bool optmap = OptimalFlavourmap(nflmap);
     if (!optmap)
     {
-      RemTag(BLOB, "FlavourMap");
-      AddTag(BLOB, "FlavourMap", nflmap);
+      fFKHeader.RemTag(fFKHeader.BLOB, "FlavourMap");
+      fFKHeader.AddTag(fFKHeader.BLOB, "FlavourMap", nflmap);
     }
 
     // Print header
-    FKHeader::Print(os);
+    fFKHeader.Print(os);
 
     // Check that stream is still good
     if (!os.good())
@@ -634,8 +652,8 @@ namespace NNPDF
     // Restore current map
     if (!optmap)
     {
-      RemTag(BLOB, "FlavourMap");
-      AddTag(BLOB, "FlavourMap", cflmap);
+      fFKHeader.RemTag(fFKHeader.BLOB, "FlavourMap");
+      fFKHeader.AddTag(fFKHeader.BLOB, "FlavourMap", cflmap);
     }
   
     return;    
@@ -812,7 +830,7 @@ namespace NNPDF
   int FKTable::parseNonZero()
   {
     // Fetch the flavourmap blob
-    std::stringstream fmBlob(GetTag(BLOB,"FlavourMap"));
+    std::stringstream fmBlob(fFKHeader.GetTag(fFKHeader.BLOB,"FlavourMap"));
     int nNonZero = 0;
 
     for (int i=0; i<14; i++)

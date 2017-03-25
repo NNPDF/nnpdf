@@ -37,7 +37,7 @@ int main(int argc, char **argv)
   NNPDF::LHAPDFSet f(argv[1],  NNPDF::LHAPDFSet::ER_MC);
 
   // Init FKTable
-  auto sig1 = NNPDF::FKTable::mkFKTableStack(argv[2]);
+  NNPDF::FKTable sig1(argv[2]);
 
   // Make predictions
   NNPDF::ThPredictions pred = NNPDF::ThPredictions(&f, &sig1);
