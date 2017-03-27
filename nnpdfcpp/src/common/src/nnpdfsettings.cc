@@ -431,6 +431,10 @@ bool NNPDFSettings::CheckParam(std::string const& param, double const& p1, doubl
 
 bool NNPDFSettings::CheckParam(std::string const& param, std::string const& p1, std::string const& p2) const
 {
+    // Exempt comments from parameter check
+    if (param == "Comments")
+      return true;
+
     if ( p1 != p2 )
     {
       cerr << Colour::FG_RED << "NNPDFSettings::VerifyFK Error: FastKernel Table "
