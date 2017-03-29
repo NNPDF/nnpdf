@@ -60,7 +60,6 @@ namespace NNPDF
     // if this operation fails, most likely you have a plain txt file.
     if (r != ARCHIVE_OK)
       {
-        archive_read_free(a);
         std::ifstream is(filename.c_str());
         if (is.fail())
           throw RuntimeException("untargz", "File not found " + filename);
