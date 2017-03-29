@@ -28,9 +28,13 @@ namespace NNPDF
         FKGenerator( const FKGenerator& );      //!< Disable default copy-constructor
         FKGenerator& operator=(const FKGenerator&); //!< Disable copy-assignment
 
+        double* fAccumulator;
+
       public:
         FKGenerator( std::istream& ); // Constructor
         virtual ~FKGenerator(); //!< Destructor
+
+        void Finalise();    //!< Copy Accumulator to fSigma
 
          // Fill the FKTable
         void Fill(  int const& d,     // Datapoint index
