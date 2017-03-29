@@ -30,6 +30,13 @@ namespace NNPDF
    */
   std::vector<char> untargz(std::string const& filename);
 
+  /**
+   * @brief targz Store to disk the compressed data
+   * @param filename the output file
+   * @param data the stream buffer
+   */
+  void targz(std::string const& filename, std::stringstream const& data);
+
   // *******************  SWIG helpers *****************************
 
   /*!

@@ -114,6 +114,7 @@ namespace NNPDF
 
         virtual ~FKTable(); //!< Destructor
         void Print(std::ostream&); //!< Print FKTable header to ostream
+        void Print(std::string const&, bool const& compress = true);
 
         // ********************* FK Verbosity ****************************
 

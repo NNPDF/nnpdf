@@ -29,21 +29,49 @@ namespace NNPDF
   //__________________________________________________________________
   class archive_wrapper
   {
-  private:
-    struct archive * a;
   public:
-    archive_wrapper(): a(archive_read_new()) {}
+    enum mode {read, write};
+
+    archive_wrapper(mode const& m):
+      fmode(m),
+      a(fmode == read ? archive_read_new() : archive_write_new()) {}
+
     operator struct archive*() {return a;}
     ~archive_wrapper()
     {
-      archive_read_free(a);
+      if (fmode == read)
+        archive_read_free(a);
+      else
+        {
+          archive_write_finish_entry(a);
+          archive_write_free(a);
+        }
     }
+
+  private:
+    mode fmode;
+    struct archive * a;
+  };
+
+  //__________________________________________________________________
+  class archive_entry_wrapper
+  {
+  public:
+    archive_entry_wrapper(): entry(archive_entry_new()) {}
+    operator struct archive_entry*() {return entry;}
+    ~archive_entry_wrapper()
+    {
+      archive_entry_free(entry);
+    }
+
+  private:
+    struct archive_entry * entry;
   };
 
   //__________________________________________________________________
   std::vector<char> untargz(std::string const& filename)
   {
-    auto a = archive_wrapper{};
+    auto a = archive_wrapper{archive_wrapper::read};
     struct archive_entry *entry;
 
     // allocate tar.gz decompressor
@@ -91,6 +119,27 @@ namespace NNPDF
       }
 
     return buf;
+  }
+
+  //____________________________________________________________________
+  void targz(std::string const& filename, std::stringstream const& data)
+  {
+    auto a = archive_wrapper{archive_wrapper::write};
+    auto entry = archive_entry_wrapper{};
+
+    archive_entry_set_pathname(entry, filename.c_str());
+    archive_entry_set_filetype(entry, AE_IFREG);
+    archive_entry_set_size(entry, data.str().size());
+    // TODO: should we add more options?
+
+    // TODO: is that fine?
+    archive_write_add_filter_gzip(a);
+
+    // TODO: check write is successful
+    archive_write_header(a, entry);
+    archive_write_data(a, data.str().c_str(), data.str().size()); // Note 3
+
+    // TODO: check if the destructors of entry and a are working fine (ordering)
   }
 
   // /very/ basic integrator

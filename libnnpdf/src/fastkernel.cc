@@ -659,6 +659,22 @@ namespace NNPDF
     return;    
   }
 
+  //__________________________________________________________________
+  void FKTable::Print(std::string const& filename, bool const& compress)
+  {
+    if (compress)
+      {
+        std::stringstream stream;
+        Print(stream);
+        targz(filename, stream);
+      }
+    else
+      {
+        std::ofstream f(filename);
+        Print(f);
+        f.close();
+      }
+  }
   
   void FKTable::ReadCFactors(std::string const& cfilename)
   {
