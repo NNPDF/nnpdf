@@ -251,11 +251,11 @@ if (LHAPDF_CONFIG)
 endif(LHAPDF_CONFIG)
 
 find_package(PkgConfig REQUIRED)
-find_package(LibArchive REQUIRED)
+pkg_search_module(LIBARCHIVE REQUIRED libarchive)
 pkg_search_module(SQLITE3 REQUIRED sqlite3)
 pkg_search_module(GSL REQUIRED gsl)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LHAPDF_CXX_FLAGS} ${SQLITE3_CFLAGS} ${GSL_CFLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LHAPDF_CXX_FLAGS} ${SQLITE3_CFLAGS} ${GSL_CFLAGS} ${LIBARCHIVE_CFLAGS} -std=c++11")
 include_directories(src/NNPDF ${GSL_INCLUDE_DIRS})
 add_library(nnpdf SHARED src/common.cc
                          src/commondata.cc
@@ -277,7 +277,7 @@ add_library(nnpdf SHARED src/common.cc
                          src/randomgenerator.cc
                          src/thpredictions.cc
                          src/utils.cc)
-target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${SQLITE3_LDFLAGS})
+target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${SQLITE3_LDFLAGS} ${LIBARCHIVE_LDFLAGS})
 
 add_executable(FKconvolute src/fkconvolute.cc)
 target_link_libraries(FKconvolute nnpdf ${LibArchive_LIBRARIES})
