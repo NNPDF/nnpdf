@@ -56,7 +56,7 @@ namespace NNPDF
     // open header
     r = archive_read_next_header(a, &entry);
 
-    std::vector<char> buf;
+    std::vector<char> buf{};
     // if this operation fails, most likely you have a plain txt file.
     if (r != ARCHIVE_OK)
       {
@@ -65,8 +65,8 @@ namespace NNPDF
           throw RuntimeException("untargz", "File not found " + filename);
 
         is.seekg(0, std::ios_base::end);
-        std::streampos fileSize = is.tellg();
-        buf.resize(static_cast<size_t>(fileSize)+1);
+        const auto fileSize = size_t{is.tellg()};
+        buf.resize(fileSize);
 
         is.seekg(0, std::ios_base::beg);
         is.read(&buf[0], fileSize);
@@ -79,12 +79,15 @@ namespace NNPDF
           throw RuntimeException("untargz", "Compression algorithm not enabled.");
 
         // read buffer
-        buf.resize(entry_size+1);
-        auto size = archive_read_data(a, buf.data(), entry_size);
-        auto zero = archive_read_data(a, buf.data(), 1);
-
+	char *throwaway = new char[entry_size];
+        const auto size = archive_read_data(a, throwaway, entry_size);
+	const auto zero = archive_read_data(a, throwaway, 1);	
+	
         if (zero != 0 || size != entry_size)
-            throw RuntimeException("untargz", "Bug in decompression code");
+	  throw RuntimeException("untargz", archive_error_string(a));
+
+	buf.assign(throwaway, throwaway + entry_size);
+	delete[] throwaway;
       }
 
     return buf;

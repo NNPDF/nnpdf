@@ -12,8 +12,6 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <memory>
-
 
 /** @defgroup utils Utils
  * \brief libnnpdf utility functions
