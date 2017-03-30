@@ -75,18 +75,15 @@ namespace NNPDF
     struct archive_entry *entry;
 
     // allocate tar.gz decompressor
-    archive_read_support_filter_all(a);
-    archive_read_support_format_all(a);
-
-    // open file
-    auto r = archive_read_open_filename(a, filename.c_str(), 10240);
-
-    // open header
-    r = archive_read_next_header(a, &entry);
+    if ((archive_read_support_filter_all(a) != ARCHIVE_OK) ||
+        (archive_read_support_format_all(a) != ARCHIVE_OK) ||
+        (archive_read_open_filename(a, filename.c_str(), 10240)))
+        throw RuntimeException("untargz", "Cannot open file");
 
     std::vector<char> buf{};
+
     // if this operation fails, most likely you have a plain txt file.
-    if (r != ARCHIVE_OK)
+    if (archive_read_next_header(a, &entry) != ARCHIVE_OK)
       {
         std::ifstream is(filename.c_str());
         if (is.fail())
@@ -108,10 +105,8 @@ namespace NNPDF
 
         // read buffer
 	char *throwaway = new char[entry_size];
-        const auto size = archive_read_data(a, throwaway, entry_size);
-	const auto zero = archive_read_data(a, throwaway, 1);	
-	
-        if (zero != 0 || size != entry_size)
+	if ((archive_read_data(a, throwaway, entry_size) != entry_size) ||
+	    (archive_read_data(a, throwaway, 1) != 0))
 	  throw RuntimeException("untargz", archive_error_string(a));
 
 	buf.assign(throwaway, throwaway + entry_size);
@@ -123,23 +118,44 @@ namespace NNPDF
 
   //____________________________________________________________________
   void targz(std::string const& filename, std::stringstream const& data)
-  {
+  {    
+    const auto strdata = data.str();
     auto a = archive_wrapper{archive_wrapper::write};
+    if (a == NULL)
+      throw RuntimeException("targz", "Empty archive write.");
+
+    // Allocate the compressors and file
+    if ((archive_write_add_filter_gzip(a)  != ARCHIVE_OK) ||
+        (archive_write_set_format_ustar(a) != ARCHIVE_OK) ||
+        (archive_write_open_filename(a, filename.c_str()) != ARCHIVE_OK))
+        throw RuntimeException("targz", "Cannot allocate compressed file.");
+
+    // Prepare entry
     auto entry = archive_entry_wrapper{};
+    if (entry == NULL)
+      throw RuntimeException("targz", "Empty archive entry");
 
+    // Setup write file options
+    struct timespec ts;
+    if (clock_gettime(CLOCK_REALTIME, &ts) != 0)
+      throw RuntimeException("targz", "Error retrieving clock time.");
+
+    // Some options
     archive_entry_set_pathname(entry, filename.c_str());
+    archive_entry_set_perm(entry, 0644);
     archive_entry_set_filetype(entry, AE_IFREG);
-    archive_entry_set_size(entry, data.str().size());
-    // TODO: should we add more options?
+    archive_entry_set_size(entry, strdata.size());
+    archive_entry_set_atime(entry, ts.tv_sec, ts.tv_nsec);
+    archive_entry_set_birthtime(entry, ts.tv_sec, ts.tv_nsec);
+    archive_entry_set_ctime(entry, ts.tv_sec, ts.tv_nsec);
+    archive_entry_set_mtime(entry, ts.tv_sec, ts.tv_nsec);
 
-    // TODO: is that fine?
-    archive_write_add_filter_gzip(a);
+    // Write header and data
+    if (archive_write_header(a, entry) != ARCHIVE_OK)
+      throw RuntimeException("targz", "Cannot write header.");
 
-    // TODO: check write is successful
-    archive_write_header(a, entry);
-    archive_write_data(a, data.str().c_str(), data.str().size()); // Note 3
-
-    // TODO: check if the destructors of entry and a are working fine (ordering)
+    if (archive_write_data(a, strdata.c_str(), strdata.size()) != (int) strdata.size())
+      throw RuntimeException("targz", "Written length does not match data length");
   }
 
   // /very/ basic integrator
