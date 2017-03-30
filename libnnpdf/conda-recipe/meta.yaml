@@ -18,6 +18,7 @@ requirements:
         - numpy
         - pkg-config
         - cmake
+        - libarchive
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
         - nnpdf_use_double
         {% endif  %}
@@ -28,6 +29,7 @@ requirements:
         - libgcc # [linux]
         - gsl
         - numpy
+        - libarchive
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
         - nnpdf_use_double
         {% endif  %}
