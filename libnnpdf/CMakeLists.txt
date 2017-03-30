@@ -1,5 +1,3 @@
-cmake_minimum_required (VERSION 2.6)
-
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   message(STATUS "Setting build type to 'Release' as none was specified.")
@@ -277,7 +275,9 @@ add_library(nnpdf SHARED src/common.cc
                          src/randomgenerator.cc
                          src/thpredictions.cc
                          src/utils.cc)
-target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${SQLITE3_LDFLAGS} ${LIBARCHIVE_LDFLAGS})
+
+#TODO: remove rt when it becomes safe to build for glibc>2.17 everywhere
+target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${SQLITE3_LDFLAGS} ${LIBARCHIVE_LDFLAGS} rt)
 
 add_executable(FKconvolute src/fkconvolute.cc)
 target_link_libraries(FKconvolute nnpdf ${LibArchive_LIBRARIES})
