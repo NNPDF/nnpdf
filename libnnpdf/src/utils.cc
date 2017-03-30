@@ -119,9 +119,8 @@ namespace NNPDF
   }
 
   //____________________________________________________________________
-  void targz(std::string const& filename, std::stringstream const& data)
+  void targz(std::string const& filename, std::string const& data)
   {    
-    const auto strdata = data.str();
     auto a = archive_wrapper{archive_wrapper::write};
     if (a == NULL)
       throw RuntimeException("targz", "Empty archive write.");
@@ -146,7 +145,7 @@ namespace NNPDF
     archive_entry_set_pathname(entry, filename.c_str());
     archive_entry_set_perm(entry, 0644);
     archive_entry_set_filetype(entry, AE_IFREG);
-    archive_entry_set_size(entry, strdata.size());
+    archive_entry_set_size(entry, data.size());
     archive_entry_set_atime(entry, ts.tv_sec, ts.tv_nsec);
     archive_entry_set_birthtime(entry, ts.tv_sec, ts.tv_nsec);
     archive_entry_set_ctime(entry, ts.tv_sec, ts.tv_nsec);
@@ -156,7 +155,7 @@ namespace NNPDF
     if (archive_write_header(a, entry) != ARCHIVE_OK)
       throw RuntimeException("targz", "Cannot write header.");
 
-    if (archive_write_data(a, strdata.c_str(), strdata.size()) != (int) strdata.size())
+    if (archive_write_data(a, data.c_str(), data.size()) != (int) data.size())
       throw RuntimeException("targz", "Written length does not match data length");
   }
 

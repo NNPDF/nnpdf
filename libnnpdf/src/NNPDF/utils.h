@@ -35,7 +35,7 @@ namespace NNPDF
    * @param filename the output file
    * @param data the stream buffer
    */
-  void targz(std::string const& filename, std::stringstream const& data);
+  void targz(std::string const& filename, std::string const& data);
 
   // *******************  SWIG helpers *****************************
 

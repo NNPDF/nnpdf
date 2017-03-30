@@ -667,7 +667,7 @@ namespace NNPDF
       {
         std::stringstream stream;
         Print(stream);
-        targz(filename, stream);
+        targz(filename, stream.str());
       }
     else
       {
