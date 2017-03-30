@@ -21,11 +21,10 @@ namespace NNPDF
 	std::string getVersion();
 
 	// ***** Convolution alignment targets ****
+	typedef float real;
 	#ifdef SSE_CONV
-		typedef float real;
 		const int convoluteAlign = 16/sizeof(real);
 	#else
-		typedef double real;
 		const int convoluteAlign = 1;
 	#endif
     //Make extern to avoid multiple declaration
