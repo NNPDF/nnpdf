@@ -11,7 +11,7 @@
 #include <cstdlib>
 #include <sstream>
 #include <iterator>
-#include <iostream> 
+#include <iostream>
 #include <limits>
 #include <algorithm>
 
@@ -106,13 +106,11 @@ namespace NNPDF
           throw RuntimeException("untargz", "Compression algorithm not enabled.");
 
         // read buffer
-        char *throwaway = new char[entry_size];
-        if ((archive_read_data(a, throwaway, entry_size) != entry_size) ||
-            (archive_read_data(a, throwaway, 1) != 0))
+        buf.resize(entry_size);
+        char throwaway;
+        if ((archive_read_data(a, &buf[0], entry_size) != entry_size) ||
+            (archive_read_data(a, &throwaway, 1) != 0))
           throw RuntimeException("untargz", archive_error_string(a));
-
-	buf.assign(throwaway, throwaway + entry_size);
-	delete[] throwaway;
       }
 
     return buf;
@@ -120,7 +118,7 @@ namespace NNPDF
 
   //____________________________________________________________________
   void targz(std::string const& filename, std::string const& data)
-  {    
+  {
     auto a = archive_wrapper{archive_wrapper::write};
     if (a == NULL)
       throw RuntimeException("targz", "Empty archive write.");
@@ -163,15 +161,15 @@ namespace NNPDF
   double integrate(double data[], size_t npoints, double h)
   {
     double integral=0;
-    
+
     integral+=data[0]+data[npoints-1];
-    
+
     for ( size_t j=1; j<(npoints)/2 ; j++ )
       integral+=2*data[2*j -1];
-    
+
     for (size_t j=1; j<(npoints)/2 + 1; j++)
       integral+=4*data[2*j - 2];
-    
+
     return integral*h/3.0;
   }
 
@@ -192,7 +190,7 @@ namespace NNPDF
   	std::stringstream strstr(input);
   	std::istream_iterator<std::string> it(strstr);
   	std::istream_iterator<std::string> end;
-    
+
   	results.assign(it, end);
   	return;
   }
@@ -210,7 +208,7 @@ namespace NNPDF
       {
         results.push_back(atof(token));
         token = strtok(NULL, " \t");
-      }  
+      }
     delete[] buffer;
   	return results;
   }
@@ -225,7 +223,7 @@ namespace NNPDF
       {
         results.push_back(atof(token));
         token = strtok(NULL, " \t");
-      }  
+      }
     delete[] buffer;
   	return;
   }
@@ -248,7 +246,7 @@ namespace NNPDF
   	std::stringstream strstr(input);
   	std::istream_iterator<int> it(strstr);
   	std::istream_iterator<int> end;
-    
+
   	results.assign(it, end);
   	return;
   }
@@ -262,7 +260,7 @@ namespace NNPDF
   real ComputeAVG(int const& n, const real *x)
   {
     real sum = 0.0;
-    for (int i = 0; i < n; i++) 
+    for (int i = 0; i < n; i++)
       {
         sum += x[i];
       }
@@ -286,7 +284,7 @@ namespace NNPDF
 
         return sum / n;
       }
-    
+
     return 0;
   }
 
@@ -344,7 +342,7 @@ namespace NNPDF
         std::vector<real> xval(x);
         std::sort(xval.begin(),xval.end());
         up = xval[xval.size()-1-esc];
-        dn = xval[esc];	
+        dn = xval[esc];
       }
   }
 
@@ -361,7 +359,7 @@ namespace NNPDF
         std::vector<real> xval(x);
         std::sort(xval.begin(),xval.end());
         up = xval[xval.size()-1-esc];
-        dn = xval[esc];	
+        dn = xval[esc];
       }
   }
 
@@ -410,9 +408,9 @@ namespace NNPDF
     real avg = ComputeAVG(n, x);
     for (int i = 0; i < n; i++)
       sum += pow(x[i]-avg,m);
-    
+
     sum /= n;
-    
+
     return sum;
   }
 
