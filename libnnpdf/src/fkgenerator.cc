@@ -25,10 +25,6 @@ namespace NNPDF
       fAccumulator[i] = 0;
   };
 
-  FKGenerator::~FKGenerator()
-  {
-    delete[] fAccumulator;
-  }
 
   // Fill the FKTable - beware there is no error checking performed!
   void FKGenerator::Fill(   int const& d,     // Datapoint index

@@ -12,6 +12,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "common.h"
 #include "fastkernel.h"
 
@@ -28,11 +29,11 @@ namespace NNPDF
         FKGenerator( const FKGenerator& );      //!< Disable default copy-constructor
         FKGenerator& operator=(const FKGenerator&); //!< Disable copy-assignment
 
-        double* fAccumulator;
+		std::unique_ptr<double[]> fAccumulator;
 
       public:
         FKGenerator( std::istream& ); // Constructor
-        virtual ~FKGenerator(); //!< Destructor
+        virtual ~FKGenerator() = default;
 
         void Finalise();    //!< Copy Accumulator to fSigma
 
