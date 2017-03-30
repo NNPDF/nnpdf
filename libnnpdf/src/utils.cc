@@ -90,7 +90,7 @@ namespace NNPDF
           throw RuntimeException("untargz", "File not found " + filename);
 
         is.seekg(0, std::ios_base::end);
-        const auto fileSize = size_t{is.tellg()};
+        const size_t fileSize = static_cast<size_t>( is.tellg() );
         buf.resize(fileSize);
 
         is.seekg(0, std::ios_base::beg);
@@ -99,7 +99,7 @@ namespace NNPDF
     else
       {
         // get the entry size
-        auto entry_size = archive_entry_size(entry);
+        size_t entry_size = archive_entry_size(entry);
         if (entry_size == 0)
           throw RuntimeException("untargz", "Compression algorithm not enabled.");
 
@@ -119,7 +119,7 @@ namespace NNPDF
   //____________________________________________________________________
   void targz(std::string const& filename, std::stringstream const& data)
   {    
-    const auto strdata = data.str();
+    const std::string strdata = data.str();
     auto a = archive_wrapper{archive_wrapper::write};
     if (a == NULL)
       throw RuntimeException("targz", "Empty archive write.");
