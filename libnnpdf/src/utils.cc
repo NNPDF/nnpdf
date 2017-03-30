@@ -69,7 +69,7 @@ namespace NNPDF
   };
 
   //__________________________________________________________________
-  std::vector<char> untargz(std::string const& filename)
+  std::string untargz(std::string const& filename)
   {
     auto a = archive_wrapper{archive_wrapper::read};
     struct archive_entry *entry;
@@ -80,7 +80,7 @@ namespace NNPDF
         (archive_read_open_filename(a, filename.c_str(), 10240)))
         throw RuntimeException("untargz", "Cannot open file");
 
-    std::vector<char> buf{};
+    std::string buf{};
 
     // if this operation fails, most likely you have a plain txt file.
     if (archive_read_next_header(a, &entry) != ARCHIVE_OK)
@@ -90,24 +90,26 @@ namespace NNPDF
           throw RuntimeException("untargz", "File not found " + filename);
 
         is.seekg(0, std::ios_base::end);
-        const size_t fileSize = static_cast<size_t>( is.tellg() );
+        const auto fileSize = static_cast<size_t>(is.tellg());
         buf.resize(fileSize);
 
         is.seekg(0, std::ios_base::beg);
         is.read(&buf[0], fileSize);
+
+        is.close();
       }
     else
       {
         // get the entry size
-        size_t entry_size = archive_entry_size(entry);
+        auto entry_size = archive_entry_size(entry);
         if (entry_size == 0)
           throw RuntimeException("untargz", "Compression algorithm not enabled.");
 
         // read buffer
-	char *throwaway = new char[entry_size];
-	if ((archive_read_data(a, throwaway, entry_size) != entry_size) ||
-	    (archive_read_data(a, throwaway, 1) != 0))
-	  throw RuntimeException("untargz", archive_error_string(a));
+        char *throwaway = new char[entry_size];
+        if ((archive_read_data(a, throwaway, entry_size) != entry_size) ||
+            (archive_read_data(a, throwaway, 1) != 0))
+          throw RuntimeException("untargz", archive_error_string(a));
 
 	buf.assign(throwaway, throwaway + entry_size);
 	delete[] throwaway;
@@ -119,7 +121,7 @@ namespace NNPDF
   //____________________________________________________________________
   void targz(std::string const& filename, std::stringstream const& data)
   {    
-    const std::string strdata = data.str();
+    const auto strdata = data.str();
     auto a = archive_wrapper{archive_wrapper::write};
     if (a == NULL)
       throw RuntimeException("targz", "Empty archive write.");

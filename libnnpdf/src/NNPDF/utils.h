@@ -28,7 +28,7 @@ namespace NNPDF
    * @param filename the input filename
    * @return the istream object
    */
-  std::vector<char> untargz(std::string const& filename);
+  std::string untargz(std::string const& filename);
 
   /**
    * @brief targz Store to disk the compressed data

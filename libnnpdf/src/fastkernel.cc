@@ -58,7 +58,7 @@ namespace NNPDF
   */
   FKHeader::FKHeader(std::string const& filename)
   {
-    std::istringstream is(untargz(filename).data());
+    std::istringstream is(untargz(filename));
     Read(is);
   }
 
@@ -279,7 +279,7 @@ namespace NNPDF
   FKTable::FKTable(std::string const& filename,
                    std::vector<std::string> const& cFactors)
   {
-    std::istringstream is(untargz(filename).data());
+    std::istringstream is(untargz(filename));
     fFKHeader = FKHeader(is);
     fDataName = fFKHeader.GetTag(fFKHeader.GRIDINFO, "SETNAME");
     fDescription = fFKHeader.GetTag(fFKHeader.BLOB, "GridDesc");
@@ -559,6 +559,7 @@ namespace NNPDF
     delete[] fFlmap;
     delete[] fXgrid;
     delete[] fcFactors;
+    delete[] fcUncerts;
   }
 
 
