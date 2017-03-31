@@ -19,12 +19,9 @@ namespace NNPDF
 
   FKGenerator::FKGenerator( std::istream& is ):
   FKTable(is),
-  fAccumulator(new double[fNData*fDSz])
+  fAccumulator(new double[fNData*fDSz]())
   {
-    for (int i=0; i<fNData*fDSz; i++)
-      fAccumulator[i] = 0;
-  };
-
+  }
 
   // Fill the FKTable - beware there is no error checking performed!
   void FKGenerator::Fill(   int const& d,     // Datapoint index
