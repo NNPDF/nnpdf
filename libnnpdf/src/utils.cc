@@ -27,29 +27,31 @@
 namespace NNPDF
 {
   //__________________________________________________________________
-  class archive_wrapper
+  class archive_wrapper_read
   {
   public:
-    enum mode {read, write};
-
-    archive_wrapper(mode const& m):
-      fmode(m),
-      a(fmode == read ? archive_read_new() : archive_write_new()) {}
-
+    archive_wrapper_read(): a(archive_read_new()) {}
     operator struct archive*() {return a;}
-    ~archive_wrapper()
+    ~archive_wrapper_read()
     {
-      if (fmode == read)
-        archive_read_free(a);
-      else
-        {
-          archive_write_finish_entry(a);
-          archive_write_free(a);
-        }
+      archive_read_free(a);
     }
-
   private:
-    mode fmode;
+    struct archive * a;
+  };
+
+  //__________________________________________________________________
+  class archive_wrapper_write
+  {
+  public:
+    archive_wrapper_write(): a(archive_write_new()) {}
+    operator struct archive*() {return a;}
+    ~archive_wrapper_write()
+    {
+      archive_write_finish_entry(a);
+      archive_write_free(a);
+    }
+  private:
     struct archive * a;
   };
 
@@ -71,7 +73,7 @@ namespace NNPDF
   //__________________________________________________________________
   std::string untargz(std::string const& filename)
   {
-    auto a = archive_wrapper{archive_wrapper::read};
+    auto a = archive_wrapper_read{};
     struct archive_entry *entry;
 
     // allocate tar.gz decompressor
@@ -119,7 +121,7 @@ namespace NNPDF
   //____________________________________________________________________
   void targz(std::string const& filename, std::string const& data)
   {
-    auto a = archive_wrapper{archive_wrapper::write};
+    auto a = archive_wrapper_write{};
     if (a == NULL)
       throw RuntimeException("targz", "Empty archive write.");
 
