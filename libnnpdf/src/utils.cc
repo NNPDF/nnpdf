@@ -134,20 +134,11 @@ namespace NNPDF
     if (entry == NULL)
       throw RuntimeException("targz", "Empty archive entry");
 
-    // Setup write file options
-    struct timespec ts;
-    if (clock_gettime(CLOCK_REALTIME, &ts) != 0)
-      throw RuntimeException("targz", "Error retrieving clock time.");
-
     // Some options
     archive_entry_set_pathname(entry, filename.c_str());
     archive_entry_set_perm(entry, 0644);
     archive_entry_set_filetype(entry, AE_IFREG);
     archive_entry_set_size(entry, data.size());
-    archive_entry_set_atime(entry, ts.tv_sec, ts.tv_nsec);
-    archive_entry_set_birthtime(entry, ts.tv_sec, ts.tv_nsec);
-    archive_entry_set_ctime(entry, ts.tv_sec, ts.tv_nsec);
-    archive_entry_set_mtime(entry, ts.tv_sec, ts.tv_nsec);
 
     // Write header and data
     if (archive_write_header(a, entry) != ARCHIVE_OK)
