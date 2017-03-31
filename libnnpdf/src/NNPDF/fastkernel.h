@@ -45,8 +45,9 @@ namespace NNPDF
         FKHeader(FKHeader const&);               //!< Copy-construct
         ~FKHeader();                             //!< Destructor
 
-        void Read(std::istream&);  //!< Read FKTable header from ostream
-        void Print(std::ostream&) const; //!< Print FKTable header to ostream
+        void Read(std::istream&);           //!< Read FKTable header from ostream
+        void Print(std::ostream&) const;    //!< Print FKTable header to ostream
+        void ResetFlavourMap();             //!< Resets the flavourmap to the maximal version
 
         typedef std::map<std::string, std::string> keyMap;
         typedef enum {VERSIONS, GRIDINFO, THEORYINFO, BLOB} section;
@@ -68,6 +69,8 @@ namespace NNPDF
         { return static_cast<T>(atof(GetTag(sec,key).c_str())); }
 
     protected:
+        void RemTag( section sec, std::string const& key ); //!< Remove existing tags
+        
         // Printing helper functions
         std::string SectionHeader(const char* title, section) const;
 
@@ -82,8 +85,6 @@ namespace NNPDF
         const keyMap* GetMap(section const& sec) const; //!< Fetch the appropriate map for a section
         keyMap* GetMap(section const& sec)              //!< Fetch the appropriate map for a section
         { return const_cast<keyMap*>(const_cast<const FKHeader*>(this)->GetMap(sec)); };
-
-        void RemTag( section sec, std::string const& key ); //!< Remove existing tags
 
         // ********************************* Attributes *********************************
 

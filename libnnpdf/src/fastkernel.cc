@@ -138,6 +138,32 @@ namespace NNPDF
     out << SectionHeader("FastKernel", BLOB)<<std::endl;
   }
 
+  // Resets the header flavourmap to the most general case
+  void FKHeader::ResetFlavourMap()
+  {
+    if ( !HasTag( FKHeader::GRIDINFO, "HADRONIC" ) )
+      throw InitError("FKHeader::ResetFlavourMap","Header HADRONIC flag not initialised");
+    if ( HasTag( FKHeader::BLOB, "FlavourMap" ) ) RemTag(FKHeader::BLOB, "FlavourMap");
+
+    std::stringstream generalMap;
+    if (GetTag<bool>(FKHeader::GRIDINFO, "HADRONIC"))
+    {
+      for (int i=0; i<14; i++)
+      {
+        for (int i=0; i<14; i++)
+          generalMap << "1 ";
+        generalMap<<std::endl;
+      }
+    }
+    else
+    {
+      for (int i=0; i<14; i++)
+        generalMap <<"1 ";
+      generalMap<<std::endl;
+    }
+    AddTag(FKHeader::BLOB, "FlavourMap", generalMap.str());
+  }
+
   void FKHeader::AddTag( section sec, std::string const& key, std::string const& value)
   { 
     keyMap *tMap = GetMap(sec);

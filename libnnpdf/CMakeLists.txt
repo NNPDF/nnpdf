@@ -262,7 +262,6 @@ add_library(nnpdf SHARED src/common.cc
                          src/dataset.cc
                          src/experiments.cc
                          src/fastkernel.cc
-                         src/fkconvolute.cc
                          src/fkgenerator.cc
                          src/fkset.cc
                          src/lhapdfset.cc
@@ -282,12 +281,15 @@ target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${SQLITE3_LDFLAGS
 add_executable(FKconvolute src/fkconvolute.cc)
 target_link_libraries(FKconvolute nnpdf ${LibArchive_LIBRARIES})
 
+add_executable(FKmerge2 src/fkmerge2.cc)
+target_link_libraries(FKmerge2 nnpdf ${LibArchive_LIBRARIES})
+
 install(FILES ${PROJECT_SOURCE_DIR}/scripts/nnpdf-config
 	${PROJECT_SOURCE_DIR}/scripts/FKmerge
-  ${PROJECT_SOURCE_DIR}/scripts/FKmerge2
 	${PROJECT_SOURCE_DIR}/scripts/FKselfmerge
 	${PROJECT_SOURCE_DIR}/scripts/FKincrement
 	${CMAKE_BINARY_DIR}/FKconvolute
+  ${CMAKE_BINARY_DIR}/FKmerge2
 	DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 install(FILES ${PROJECT_SOURCE_DIR}/scripts/nnpdf.pc DESTINATION lib/pkgconfig)
 install(DIRECTORY src/NNPDF DESTINATION include)
