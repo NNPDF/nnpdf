@@ -29,8 +29,7 @@ int main(int argc, char **argv)
   }
 
   // Verbosity
-  NNPDF::FKTable::Verbose = false;
-  NNPDF::PDFSet::Verbose = false;
+  NNPDF::SetVerbosity(0);
   LHAPDF::setVerbosity(0); 
 
   // Init LHAPDFSET

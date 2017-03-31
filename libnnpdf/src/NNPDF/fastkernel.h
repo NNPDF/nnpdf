@@ -70,7 +70,7 @@ namespace NNPDF
 
     protected:
         void RemTag( section sec, std::string const& key ); //!< Remove existing tags
-        
+
         // Printing helper functions
         std::string SectionHeader(const char* title, section) const;
 
@@ -117,10 +117,6 @@ namespace NNPDF
         void Print(std::ostream&); //!< Print FKTable header to ostream
         void Print(std::string const&, bool const& compress = true);
 
-        // ********************* FK Verbosity ****************************
-
-        static bool Verbose;
-
         // ******************** FK Get Methods ***************************
 
         std::string const& GetDataName()  const {return fDataName;}
@@ -145,11 +141,6 @@ namespace NNPDF
 
         std::string GetTag(FKHeader::section sec, std::string const& key) const { return fFKHeader.GetTag(sec, key); }
 
-      protected:
-        void ReadCFactors(std::string const& filename); //!< Read C-factors from file
-
-        bool OptimalFlavourmap(std::string& flmap) const; //!< Determine and return the optimal flavour map
-
         // GetISig returns a position in the FK table
         int GetISig(  int const& d,     // Datapoint index
                       int const& ix1,   // First x-index
@@ -163,6 +154,11 @@ namespace NNPDF
                       int const& ix,    // x-index
                       int const& ifl    // flavour index
                    ) const;
+
+      protected:
+        void ReadCFactors(std::string const& filename); //!< Read C-factors from file
+        bool OptimalFlavourmap(std::string& flmap) const; //!< Determine and return the optimal flavour map
+
 
         // FKHeader
         FKHeader fFKHeader;

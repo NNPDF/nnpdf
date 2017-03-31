@@ -23,9 +23,6 @@
 namespace NNPDF
 {
 
-  // Default verbosity level
-  bool FKTable::Verbose = true;
-
   // *********************************************************
 
   // Section delineators for FK headers
