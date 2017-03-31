@@ -277,8 +277,7 @@ add_library(nnpdf SHARED src/common.cc
                          src/thpredictions.cc
                          src/utils.cc)
 
-#TODO: remove rt when it becomes safe to build for glibc>2.17 everywhere
-target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${SQLITE3_LDFLAGS} ${LIBARCHIVE_LDFLAGS} rt)
+target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${SQLITE3_LDFLAGS} ${LIBARCHIVE_LDFLAGS})
 
 add_executable(FKconvolute src/fkconvolute.cc)
 target_link_libraries(FKconvolute nnpdf ${LibArchive_LIBRARIES})
