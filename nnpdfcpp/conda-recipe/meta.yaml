@@ -8,7 +8,7 @@ source:
 requirements:
     build: 
         - toolchain # [osx]
-        - libnnpdf
+        - libnnpdf ==1.1.0b7
         - gcc # [linux]
         - isl # [linux]
         - yaml-cpp
