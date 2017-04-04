@@ -7,6 +7,8 @@ from __future__ import generator_stop
 import logging
 import functools
 import warnings
+import abc
+from types import SimpleNamespace
 
 import numpy as np
 import numpy.linalg as la
@@ -357,86 +359,139 @@ def _check_pdf_normalize_to(pdfs, normalize_to):
 
     raise RuntimeError("Should not be here")
 
-def _plot_pdf_factory(draw_function, setup_function=None, legend_function=None):
-    """f does the actual plotting, and returns data used to compute the axis
-    limits. It is called like f(ax, pdf, flindex ,grid)"""
-    @figuregen
-    @check_scale('xscale', allow_none=True)
-    @_check_pdf_normalize_to
-    def f_(pdfs, xplotting_grids, xscale:(str,type(None))=None,
-           normalize_to:(int,str,type(None))=None):
-        if not xplotting_grids:
-            return
 
+
+def _scale_from_grid(grid):
+    return 'linear' if grid.scale == 'linear' else 'log'
+
+
+class FlavourState(SimpleNamespace):
+    """This is the namespace for the pats specific for each flavour"""
+    pass
+
+
+class PDFPlotter(metaclass=abc.ABCMeta):
+    """Stateful object breaks plotting grids by favour, as a function of x and
+    for fixed Q.
+
+    This class has a lot of state, but it should all be defined at
+    initialization time. Things that change e.g. per flavour should be passed
+    explicitly as arguments.
+    """
+
+    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to):
+        self.pdfs = pdfs
+        self._xplotting_grids = xplotting_grids
+        self._xscale = xscale
+        self.normalize_to = normalize_to
+        self.xplotting_grids = self.normalize()
+
+
+    def setup_flavour(self, flstate):
+        pass
+
+
+    def normalize(self):
+        normalize_to = self.normalize_to
         if normalize_to is not None:
-            normalize_pdf = pdfs[normalize_to]
-            normalize_grid = xplotting_grids[normalize_to]
+            normalize_pdf = self.normalize_pdf
+            normalize_grid = self._xplotting_grids[normalize_to]
             normvals = normalize_pdf.stats_class(
                             normalize_grid.grid_values).central_value()
+
+            #Handle division by zero more quietly
             def fp_error(tp, flag):
                 log.warn("Invalid values found computing normalization to %s: "
                  "Floating point error (%s).", normalize_pdf, tp)
                 #Show warning only once
                 np.seterr(all='ignore')
+
             newgrids = []
             with np.errstate(all='call'):
                 np.seterrcall(fp_error)
-                for grid in xplotting_grids:
+                for grid in self._xplotting_grids:
                     newvalues = grid.grid_values/normvals
                     #newgrid is like the old grid but with updated values
                     newgrid = type(grid)(**{**grid._asdict(),
                                              'grid_values':newvalues})
                     newgrids.append(newgrid)
-            xplotting_grids = newgrids
-            ylabel = "Ratio to {}".format(normalize_pdf.label)
+
+            return newgrids
+        return self._xplotting_grids
+
+    @property
+    def normalize_pdf(self):
+        if self.normalize_to is None:
+            raise AttributeError("Need to set a normalize_to index.")
+        return self.pdfs[self.normalize_to]
+
+    def get_ylabel(self, parton_name):
+        if self.normalize_to is not None:
+            return "Ratio to {}".format(self.normalize_pdf.label)
         else:
-            ylabel = None
+            return '$x{}(x)$'.format(parton_name)
 
-        firstgrid = xplotting_grids[0]
-        if xscale is None:
-            xscale = _scale_from_grid(firstgrid)
-        Q = firstgrid.Q
+    def get_title(self, parton_name):
+        return "$%s$ at %.1f GeV" % (parton_name, self.Q)
 
-        for flindex, fl in enumerate(firstgrid.flavours):
+    @property
+    def xscale(self):
+        if self._xscale is None:
+            return _scale_from_grid(self.firstgrid)
+        return self._xscale
+
+    @property
+    def Q(self):
+        return self.firstgrid.Q
+
+    @property
+    def firstgrid(self):
+        if self.xplotting_grids:
+            return self.xplotting_grids[0]
+        raise AttributeError("Need at least one xgrid")
+
+
+    @abc.abstractmethod
+    def draw(self, pdf, grid, flstate):
+        """Plot the desired function of the grid and return the array to be
+        used for autoscaling"""
+        pass
+
+    def legend(self, flstate):
+        return flstate.ax.legend()
+
+
+    def __call__(self,):
+        if not self.xplotting_grids:
+            return
+
+        for flindex, fl in enumerate(self.firstgrid.flavours):
             fig, ax = plt.subplots()
-            if setup_function:
-                setupres =  saturate(setup_function, locals())
-            ax.set_title("$%s$ at %.1f GeV" % (PDG_PARTONS[fl], Q))
+            parton_name = PDG_PARTONS[fl]
+            flstate = FlavourState(flindex=flindex, fl=fl, fig=fig, ax=ax,
+                                    parton_name=parton_name)
+            self.setup_flavour(flstate)
+            ax.set_title(self.get_title(parton_name))
 
             all_vals = []
-            for pdf, grid in zip(pdfs, xplotting_grids):
-                all_vals.append(saturate(draw_function, locals()))
+            for pdf, grid in zip(self.pdfs, self.xplotting_grids):
+                all_vals.append(self.draw(pdf, grid, flstate))
 
             #Note these two lines do not conmute!
-            ax.set_xscale(xscale)
-            plotutils.frame_center(ax, firstgrid.xgrid, np.concatenate(all_vals))
+            ax.set_xscale(self.xscale)
+            plotutils.frame_center(ax, self.firstgrid.xgrid, np.concatenate(all_vals))
 
             ax.set_xlabel('x')
-            parton_name = PDG_PARTONS[fl]
-            if ylabel:
-                ax.set_ylabel(ylabel)
-            else:
-                ax.set_ylabel('$x{}(x)$'.format(parton_name))
+
+
+            ax.set_ylabel(self.get_ylabel(parton_name))
 
             ax.set_axisbelow(True)
 
-            if legend_function:
-                saturate(legend_function, locals())
-            else:
-                ax.legend()
+            self.legend(flstate)
             yield fig, parton_name
 
-    #Keep the signature of f_ instead of that of f, and also keep annotations
-    #for type checking
-    functools.update_wrapper(f_, draw_function,
-            assigned=[a for a in
-                      functools.WRAPPER_ASSIGNMENTS if a!='__annotations__'])
-    del f_.__wrapped__
 
-    return f_
-
-def _scale_from_grid(grid):
-    return 'linear' if grid.scale == 'linear' else 'log'
 
 @functools.lru_cache()
 def _warn_pdf_not_montecarlo(pdf):
@@ -452,9 +507,25 @@ def _warn_any_pdf_not_montecarlo(pdfs):
         _warn_pdf_not_montecarlo(pdf)
 
 
+class ReplicaPDFPlotter(PDFPlotter):
+    def draw(self, pdf, grid, flstate):
+        ax = flstate.ax
+        next_prop = next(ax._get_lines.prop_cycler)
+        color = next_prop['color']
+        gv = grid.grid_values[:,flstate.flindex,:]
+        ax.plot(grid.xgrid, gv.T, alpha=0.2, linewidth=0.5,
+                color=color, zorder=1)
+        stats = pdf.stats_class(gv)
+        ax.plot(grid.xgrid, stats.central_value(), color=color,
+                linewidth=2,
+                label=pdf.label)
+        return gv
+
+@figuregen
+@_check_pdf_normalize_to
 @_warn_any_pdf_not_montecarlo
-@_plot_pdf_factory
-def plot_pdfreplicas(ax, pdf, flindex ,grid):
+def plot_pdfreplicas(pdfs, xplotting_grids, xscale:(str,type(None))=None,
+                      normalize_to:(int,str,type(None))=None):
     """Plot the replicas of the specifid PDFs.
 
     - xscale sets the scale of the plot. E.g. 'linear' or 'log'. Default is
@@ -462,92 +533,103 @@ def plot_pdfreplicas(ax, pdf, flindex ,grid):
 
     - normalize_to should be, a pdf id or an index of the pdf (starting from one).
     """
-    next_prop = next(ax._get_lines.prop_cycler)
-    color = next_prop['color']
-    gv = grid.grid_values[:,flindex,:]
+    p = ReplicaPDFPlotter(pdfs=pdfs, xplotting_grids=xplotting_grids,
+                                 xscale=xscale, normalize_to=normalize_to)
+    yield from p()
 
 
-    ax.plot(grid.xgrid, gv.T, alpha=0.2, linewidth=0.5,
-            color=color, zorder=1)
-    stats = pdf.stats_class(gv)
-    ax.plot(grid.xgrid, stats.central_value(), color=color,
-            linewidth=2,
-            label=pdf.label)
-    return gv
+class UncertaintyPDFPlotter(PDFPlotter):
+    def draw(self, pdf, grid, flstate):
+        ax = flstate.ax
+        flindex = flstate.flindex
+        gv = grid.grid_values[:,flindex,:]
+        stats = pdf.stats_class(gv)
 
-@_plot_pdf_factory
-def plot_pdf_uncertainties(ax, pdf, flindex, grid):
+        res = stats.std_error()
+
+        ax.plot(grid.xgrid, res, label=pdf.label)
+
+        return res
+
+@figuregen
+@_check_pdf_normalize_to
+def plot_pdf_uncertainties(pdfs, xplotting_grids, xscale:(str,type(None))=None,
+                      normalize_to:(int,str,type(None))=None):
     """Plot the PDF standard deviations as a function of x.
     If normalize_to is set, the ratio to that
     PDF's central value is plotted. Otherwise it is the absolute values."""
-    gv = grid.grid_values[:,flindex,:]
-    stats = pdf.stats_class(gv)
+    p = UncertaintyPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
+    yield from p()
 
-    res = stats.std_error()
+class BandPDFPlotter(PDFPlotter):
+    def setup_flavour(self, flstate):
+        flstate.handles=[]
+        flstate.labels=[]
+        flstate.hatchit=plotutils.hatch_iter()
 
-    ax.plot(grid.xgrid, res, label=pdf.label)
+    def draw(self, pdf, grid, flstate):
+        ax = flstate.ax
+        flindex = flstate.flindex
+        hatchit = flstate.hatchit
+        labels = flstate.labels
+        handles = flstate.handles
+        stats = pdf.stats_class(grid.grid_values[:,flindex,:])
+        pcycler = ax._get_lines.prop_cycler
+        #This is ugly but can't think of anything better
 
-    return res
+        next_prop = next(pcycler)
+        cv = stats.central_value()
+        xgrid = grid.xgrid
+        #Ignore spurious normalization warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', RuntimeWarning)
+            err68down, err68up = stats.errorbar68()
+
+        color = next_prop['color']
+        ax.plot(xgrid, cv, color=color)
+        alpha = 0.5
+        ax.fill_between(xgrid, err68up, err68down, color=color, alpha=alpha,
+                        zorder=1)
+        #http://stackoverflow.com/questions/5195466/matplotlib-does-not-display-hatching-when-rendering-to-pdf
+        hatch = next(hatchit)
+        hatch = ''
+        ax.fill_between(xgrid, err68up, err68down, facecolor='None', alpha=alpha,
+                        edgecolor=color,
+                        hatch=hatch,
+                        zorder=1)
+        if isinstance(stats, MCStats):
+            errorstdup, errorstddown = stats.errorbarstd()
+            ax.plot(xgrid, errorstdup, linestyle='--', color=color)
+            ax.plot(xgrid, errorstddown, linestyle='--', color=color)
+            label  = "%s ($68\%%$ c.l.+$1\sigma$)" % pdf.label
+            outer = True
+        else:
+            outer = False
+            label = "%s ($68\%%$ c.l.)" % pdf.label
+        handle = plotutils.HandlerSpec(color=color, alpha=alpha,
+                                               hatch=hatch,
+                                               outer=outer)
+        handles.append(handle)
+        labels.append(label)
+
+        return [err68down, err68up]
+
+    def legend(self, flstate):
+        return flstate.ax.legend(flstate.handles, flstate.labels,
+                                 handler_map={plotutils.HandlerSpec:
+                                             plotutils.ComposedHandler()
+                                             }
+                                 )
+
+@figuregen
+@_check_pdf_normalize_to
+def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
+                      normalize_to:(int,str,type(None))=None):
+    """Plot uncertainty intervals as a function of x."""
+    p = BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
+    yield from p()
 
 
-
-#Because of how pickle works, this has to have this name, and then be redefined
-#Otherwise will complain about not being able to pickle the inner f_ in the
-#decorator.
-def plot_pdfs(ax, pdf, flindex, grid, setupres):
-    hatchit, labels, handles = (setupres['hatchit'], setupres['labels'],
-                                setupres['handles'])
-    stats = pdf.stats_class(grid.grid_values[:,flindex,:])
-    pcycler = ax._get_lines.prop_cycler
-    #This is ugly but can't think of anything better
-
-    next_prop = next(pcycler)
-    cv = stats.central_value()
-    xgrid = grid.xgrid
-    #Ignore spurious normalization warnings
-    with warnings.catch_warnings():
-        warnings.simplefilter('ignore', RuntimeWarning)
-        err68down, err68up = stats.errorbar68()
-
-    color = next_prop['color']
-    ax.plot(xgrid, cv, color=color)
-    alpha = 0.5
-    ax.fill_between(xgrid, err68up, err68down, color=color, alpha=alpha,
-                    zorder=1)
-    #http://stackoverflow.com/questions/5195466/matplotlib-does-not-display-hatching-when-rendering-to-pdf
-    hatch = next(hatchit)
-    hatch = ''
-    ax.fill_between(xgrid, err68up, err68down, facecolor='None', alpha=alpha,
-                    edgecolor=color,
-                    hatch=hatch,
-                    zorder=1)
-    if isinstance(stats, MCStats):
-        errorstdup, errorstddown = stats.errorbarstd()
-        ax.plot(xgrid, errorstdup, linestyle='--', color=color)
-        ax.plot(xgrid, errorstddown, linestyle='--', color=color)
-        label  = "%s ($68\%%$ c.l.+$1\sigma$)" % pdf.label
-        outer = True
-    else:
-        outer = False
-        label = "%s ($68\%%$ c.l.)" % pdf.label
-    handle = plotutils.HandlerSpec(color=color, alpha=alpha,
-                                           hatch=hatch,
-                                           outer=outer)
-    handles.append(handle)
-    labels.append(label)
-
-    return [err68down, err68up]
-
-def _plot_pdfs_setup():
-    return dict(handles=[], labels=[],
-                           hatchit=plotutils.hatch_iter())
-
-def _plot_pdfs_legend(ax, setupres):
-    labels, handles = (setupres['labels'], setupres['handles'])
-    return ax.legend(handles, labels, handler_map={plotutils.HandlerSpec:
-                                             plotutils.ComposedHandler()})
-
-plot_pdfs = _plot_pdf_factory(plot_pdfs, _plot_pdfs_setup, _plot_pdfs_legend)
 
 @figuregen
 def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
