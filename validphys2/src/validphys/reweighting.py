@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 import lhapdf
 from scipy import optimize
 
+from reportengine import collect
 from reportengine.table import table
 from reportengine.figure import figure
 from reportengine.checks import make_check
@@ -331,3 +332,26 @@ def plot_chi2filtered_training_validation(fit, nsigma_cut, replica_data, chi2fil
 def plot_posfiltered_training_validation(fit, replica_data, negative_filtered_index):
     """Like `plot_training_validation`, but apply `chi2filtered_index` mask."""
     return plot_training_validation(fit, replica_data, dict([negative_filtered_index.as_pair()]))
+
+
+p_alpha_for_all_datasets = collect(p_alpha_study, ('reweight_all_datasets',))
+
+chi_2_for_all_datasets = collect(chi2_data_for_reweighting_experiments,
+                                 ('reweight_all_datasets',))
+
+@table
+def p_alpha_all_datasets_table(p_alpha_for_all_datasets, reweight_all_datasets, chi_2_for_all_datasets):
+    """Compute and display P(alpha) and chi² for all datasets
+    in all experiments."""
+    data = []
+    chilabel = r'$\chi^2$'
+    modelabel = r'mode P($\alpha$)'
+    for series, rexp, chis in zip(p_alpha_for_all_datasets, reweight_all_datasets, chi_2_for_all_datasets):
+        central = chis[0][1]/chis[0][2]
+        exp = rexp['reweighting_experiments'][0]
+        data.append({'name':exp.datasets[0].name,
+                     modelabel:series.argmax(),
+                     chilabel: central,
+                    })
+    return pd.DataFrame.from_records(data, index='name',
+                                     columns=('name', modelabel, chilabel))
