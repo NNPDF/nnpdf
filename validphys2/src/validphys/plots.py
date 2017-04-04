@@ -782,3 +782,15 @@ def plot_luminosities(pdf, sqrts:(float,int)=14000):
     plt.yscale('log')
     plt.xscale('log')
     yield fig
+
+
+@figuregen
+def plot_lumi2d(pdf, sqrts:(float,int)=14000):
+    """
+    Plot 2D luminosity plot at a given center of mass energy.
+    Porting code from https://github.com/scarrazza/lumi2d.
+
+    sqrts is the center of mass energy (GeV).
+    """
+    fig = plt.figure()
+    yield fig

@@ -1,0 +1,19 @@
+sqrts: 13000
+pdf: NNPDF31_nlo_as_0118
+
+template_text: |
+    ---
+    title: 2D luminosity
+    author: Stefano Carrazza
+    keywords: [nnpdf31]
+    ---
+
+    Ported from https://github.com/scarrazza/lumi2d
+
+    2D luminosity
+    -----------
+    {@ plot_lumi2d @}
+
+actions_:
+  -   - report:
+          main: True
