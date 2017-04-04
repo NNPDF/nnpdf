@@ -1,4 +1,4 @@
-// $Id: utils.cc 2825 2015-05-03 09:14:46Z stefano.carrazza@mi.infn.it $
+﻿// $Id: utils.cc 2825 2015-05-03 09:14:46Z stefano.carrazza@mi.infn.it $
 //
 // NNPDF++ 2012
 //
@@ -11,7 +11,7 @@
 #include <cstdlib>
 #include <sstream>
 #include <iterator>
-#include <iostream> 
+#include <iostream>
 #include <limits>
 #include <algorithm>
 
@@ -21,22 +21,148 @@
 #include "gsl/gsl_matrix.h"
 #include "gsl/gsl_linalg.h"
 
+#include <archive.h>
+#include <archive_entry.h>
+
 namespace NNPDF
 {
+  //__________________________________________________________________
+  class archive_wrapper_read
+  {
+  public:
+    archive_wrapper_read(): a(archive_read_new()) {}
+    operator struct archive*() {return a;}
+    ~archive_wrapper_read()
+    {
+      archive_read_free(a);
+    }
+  private:
+    struct archive * a;
+  };
+
+  //__________________________________________________________________
+  class archive_wrapper_write
+  {
+  public:
+    archive_wrapper_write(): a(archive_write_new()) {}
+    operator struct archive*() {return a;}
+    ~archive_wrapper_write()
+    {
+      archive_write_finish_entry(a);
+      archive_write_free(a);
+    }
+  private:
+    struct archive * a;
+  };
+
+  //__________________________________________________________________
+  class archive_entry_wrapper
+  {
+  public:
+    archive_entry_wrapper(): entry(archive_entry_new()) {}
+    operator struct archive_entry*() {return entry;}
+    ~archive_entry_wrapper()
+    {
+      archive_entry_free(entry);
+    }
+
+  private:
+    struct archive_entry * entry;
+  };
+
+  //__________________________________________________________________
+  std::string untargz(std::string const& filename)
+  {
+    auto a = archive_wrapper_read{};
+    struct archive_entry *entry;
+
+    // allocate tar.gz decompressor
+    if ((archive_read_support_filter_all(a) != ARCHIVE_OK) ||
+        (archive_read_support_format_all(a) != ARCHIVE_OK) ||
+        (archive_read_open_filename(a, filename.c_str(), 10240)))
+        throw RuntimeException("untargz", "Cannot open file");
+
+    std::string buf{};
+
+    // if this operation fails, most likely you have a plain txt file.
+    if (archive_read_next_header(a, &entry) != ARCHIVE_OK)
+      {
+        std::ifstream is(filename.c_str());
+        if (is.fail())
+          throw RuntimeException("untargz", "File not found " + filename);
+
+        is.seekg(0, std::ios_base::end);
+        const auto fileSize = static_cast<size_t>(is.tellg());
+        buf.resize(fileSize);
+
+        is.seekg(0, std::ios_base::beg);
+        is.read(&buf[0], fileSize);
+
+        is.close();
+      }
+    else
+      {
+        // get the entry size
+        auto entry_size = archive_entry_size(entry);
+        if (entry_size == 0)
+          throw RuntimeException("untargz", "Compression algorithm not enabled.");
+
+        // read buffer
+        buf.resize(entry_size);
+        char throwaway;
+        if ((archive_read_data(a, &buf[0], entry_size) != entry_size) ||
+            (archive_read_data(a, &throwaway, 1) != 0))
+          throw RuntimeException("untargz", archive_error_string(a));
+      }
+
+    return buf;
+  }
+
+  //____________________________________________________________________
+  void targz(std::string const& filename, std::string const& data)
+  {
+    auto a = archive_wrapper_write{};
+    if (a == NULL)
+      throw RuntimeException("targz", "Empty archive write.");
+
+    // Allocate the compressors and file
+    if ((archive_write_add_filter_gzip(a)  != ARCHIVE_OK) ||
+        (archive_write_set_format_ustar(a) != ARCHIVE_OK) ||
+        (archive_write_open_filename(a, filename.c_str()) != ARCHIVE_OK))
+        throw RuntimeException("targz", "Cannot allocate compressed file.");
+
+    // Prepare entry
+    auto entry = archive_entry_wrapper{};
+    if (entry == NULL)
+      throw RuntimeException("targz", "Empty archive entry");
+
+    // Some options
+    archive_entry_set_pathname(entry, filename.c_str());
+    archive_entry_set_perm(entry, 0644);
+    archive_entry_set_filetype(entry, AE_IFREG);
+    archive_entry_set_size(entry, data.size());
+
+    // Write header and data
+    if (archive_write_header(a, entry) != ARCHIVE_OK)
+      throw RuntimeException("targz", "Cannot write header.");
+
+    if (archive_write_data(a, data.c_str(), data.size()) != (int) data.size())
+      throw RuntimeException("targz", "Written length does not match data length");
+  }
 
   // /very/ basic integrator
   double integrate(double data[], size_t npoints, double h)
   {
     double integral=0;
-    
+
     integral+=data[0]+data[npoints-1];
-    
+
     for ( size_t j=1; j<(npoints)/2 ; j++ )
       integral+=2*data[2*j -1];
-    
+
     for (size_t j=1; j<(npoints)/2 + 1; j++)
       integral+=4*data[2*j - 2];
-    
+
     return integral*h/3.0;
   }
 
@@ -57,7 +183,7 @@ namespace NNPDF
   	std::stringstream strstr(input);
   	std::istream_iterator<std::string> it(strstr);
   	std::istream_iterator<std::string> end;
-    
+
   	results.assign(it, end);
   	return;
   }
@@ -75,7 +201,7 @@ namespace NNPDF
       {
         results.push_back(atof(token));
         token = strtok(NULL, " \t");
-      }  
+      }
     delete[] buffer;
   	return results;
   }
@@ -90,7 +216,7 @@ namespace NNPDF
       {
         results.push_back(atof(token));
         token = strtok(NULL, " \t");
-      }  
+      }
     delete[] buffer;
   	return;
   }
@@ -113,7 +239,7 @@ namespace NNPDF
   	std::stringstream strstr(input);
   	std::istream_iterator<int> it(strstr);
   	std::istream_iterator<int> end;
-    
+
   	results.assign(it, end);
   	return;
   }
@@ -127,7 +253,7 @@ namespace NNPDF
   real ComputeAVG(int const& n, const real *x)
   {
     real sum = 0.0;
-    for (int i = 0; i < n; i++) 
+    for (int i = 0; i < n; i++)
       {
         sum += x[i];
       }
@@ -151,7 +277,7 @@ namespace NNPDF
 
         return sum / n;
       }
-    
+
     return 0;
   }
 
@@ -209,7 +335,7 @@ namespace NNPDF
         std::vector<real> xval(x);
         std::sort(xval.begin(),xval.end());
         up = xval[xval.size()-1-esc];
-        dn = xval[esc];	
+        dn = xval[esc];
       }
   }
 
@@ -226,7 +352,7 @@ namespace NNPDF
         std::vector<real> xval(x);
         std::sort(xval.begin(),xval.end());
         up = xval[xval.size()-1-esc];
-        dn = xval[esc];	
+        dn = xval[esc];
       }
   }
 
@@ -275,9 +401,9 @@ namespace NNPDF
     real avg = ComputeAVG(n, x);
     for (int i = 0; i < n; i++)
       sum += pow(x[i]-avg,m);
-    
+
     sum /= n;
-    
+
     return sum;
   }
 

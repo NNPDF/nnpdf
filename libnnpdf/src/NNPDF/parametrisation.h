@@ -121,7 +121,7 @@ namespace NNPDF
     
     Parametrisation* Duplicate();
 
-    int GetNumNodeParams(int const& layer) const { return 0; }
+    int GetNumNodeParams(int const&) const { return 0; }
     void InitParameters();   //!< Initialize (or reinitialize) parameters
 
   private:

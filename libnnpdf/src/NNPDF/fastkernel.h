@@ -45,8 +45,9 @@ namespace NNPDF
         FKHeader(FKHeader const&);               //!< Copy-construct
         ~FKHeader();                             //!< Destructor
 
-        void Read(std::istream&);  //!< Read FKTable header from ostream
-        void Print(std::ostream&) const; //!< Print FKTable header to ostream
+        void Read(std::istream&);           //!< Read FKTable header from ostream
+        void Print(std::ostream&) const;    //!< Print FKTable header to ostream
+        void ResetFlavourMap();             //!< Resets the flavourmap to the maximal version
 
         typedef std::map<std::string, std::string> keyMap;
         typedef enum {VERSIONS, GRIDINFO, THEORYINFO, BLOB} section;
@@ -68,6 +69,8 @@ namespace NNPDF
         { return static_cast<T>(atof(GetTag(sec,key).c_str())); }
 
     protected:
+        void RemTag( section sec, std::string const& key ); //!< Remove existing tags
+
         // Printing helper functions
         std::string SectionHeader(const char* title, section) const;
 
@@ -83,8 +86,6 @@ namespace NNPDF
         keyMap* GetMap(section const& sec)              //!< Fetch the appropriate map for a section
         { return const_cast<keyMap*>(const_cast<const FKHeader*>(this)->GetMap(sec)); };
 
-        void RemTag( section sec, std::string const& key ); //!< Remove existing tags
-
         // ********************************* Attributes *********************************
 
         // Key-value pairs
@@ -92,13 +93,15 @@ namespace NNPDF
         keyMap fGridInfo;
         keyMap fTheoryInfo;
         keyMap fBlobString;
+
+        friend class FKTable;
     };
 
     /**
     * \class FKTable
     * \brief Class for holding FastKernel tables
     */
-    class FKTable : public FKHeader 
+    class FKTable
     {
       public:
         FKTable(    std::istream& , 
@@ -106,21 +109,17 @@ namespace NNPDF
                 ); // Stream constructor
         FKTable(    std::string const& filename,
                     std::vector<std::string> const& cfactors = std::vector<std::string>()
-                ); //!< FK table reader
-
+                ); // Filename constructor
         FKTable(FKTable const&); //!< Copy constructor
         FKTable(FKTable const&, std::vector<int> const&); //!< Masked copy constructor
 
         virtual ~FKTable(); //!< Destructor
         void Print(std::ostream&); //!< Print FKTable header to ostream
-
-        // ********************* FK Verbosity ****************************
-
-        static bool Verbose;
+        void Print(std::string const&, bool const& compress = true);
 
         // ******************** FK Get Methods ***************************
 
-        std::string const& GetDataName()  const {return fDataName;};
+        std::string const& GetDataName()  const {return fDataName;}
 
         double const&  GetQ20()      const { return fQ20;   }
         double const*  GetCFactors() const { return fcFactors; }
@@ -140,10 +139,7 @@ namespace NNPDF
 
         bool const& IsHadronic()  const { return fHadronic;}  //!< Return fHadronic
 
-      protected:
-        void ReadCFactors(std::string const& filename); //!< Read C-factors from file
-
-        bool OptimalFlavourmap(std::string& flmap) const; //!< Determine and return the optimal flavour map
+        std::string GetTag(FKHeader::section sec, std::string const& key) const { return fFKHeader.GetTag(sec, key); }
 
         // GetISig returns a position in the FK table
         int GetISig(  int const& d,     // Datapoint index
@@ -159,34 +155,42 @@ namespace NNPDF
                       int const& ifl    // flavour index
                    ) const;
 
+      protected:
+        void ReadCFactors(std::string const& filename); //!< Read C-factors from file
+        bool OptimalFlavourmap(std::string& flmap) const; //!< Determine and return the optimal flavour map
+
+
+        // FKHeader
+        FKHeader fFKHeader;
+
         // Metadata
-        const std::string fDataName;
-        const std::string fDescription;
-        const int   fNData;
+        std::string fDataName;
+        std::string fDescription;
+        int   fNData;
 
         // Process information
-        const double  fQ20;
-        const bool  fHadronic;
-        const int   fNonZero;
-        int *const  fFlmap;
+        double  fQ20;
+        bool  fHadronic;
+        int   fNonZero;
+        int * fFlmap;
 
         // x-grid information
-        const int   fNx;
-        const int   fTx;
-        const int   fRmr;
-        const int   fPad;
-        const int   fDSz;
+        int   fNx;
+        int   fTx;
+        int   fRmr;
+        int   fPad;
+        int   fDSz;
 
         // X-arrays        
-        double *const fXgrid;
+        double * fXgrid;
 
         // FK table
-        real *const fSigma;
+        real * fSigma;
 
         // Cfactor information and uncertainties
-        const bool fHasCFactors;
-        double *const fcFactors;
-        double *const fcUncerts; // the *squared* uncorrelated uncertainty of the C-factors
+        bool fHasCFactors;
+        double * fcFactors;
+        double * fcUncerts; // the *squared* uncorrelated uncertainty of the C-factors
 
       private:
         FKTable();                          //!< Disable default constructor

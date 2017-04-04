@@ -438,7 +438,7 @@ void MultiLayerPerceptronPreproc::Compute(real* in,real* out) const
  * @param settings
  * @param rg
  */
-ChebyshevPolynomial::ChebyshevPolynomial(std::vector<int> const& order):
+ChebyshevPolynomial::ChebyshevPolynomial(std::vector<int> const&):
 Parametrisation(std::string("ChebyshevPolynomial")),
 fNOrder(10),
 fPolynomials(new real[fNOrder])

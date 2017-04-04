@@ -9,7 +9,8 @@ default_options : ['cpp_std=c++14']
 dependencies = [
     dependency('lhapdf'),
 	dependency('gsl'),
-	dependency('sqlite3')
+	dependency('sqlite3'),
+	dependency('libarchive'),
 ]
 
 headers = [

@@ -18,14 +18,9 @@ namespace NNPDF
 {
 
   FKGenerator::FKGenerator( std::istream& is ):
-  FKTable(is) 
+  FKTable(is),
+  fAccumulator(new double[fNData*fDSz]())
   {
-
-  };
-
-  FKGenerator::~FKGenerator()
-  {
-
   }
 
   // Fill the FKTable - beware there is no error checking performed!
@@ -61,7 +56,7 @@ namespace NNPDF
     const size_t iSig = d*fDSz+jFL*fTx+ix1*fNx+ix2 ;
 
     // Assign FK Table
-    fSigma[iSig] += fk;
+    fAccumulator[iSig] += fk;
 
     return;
   };
@@ -90,9 +85,15 @@ namespace NNPDF
     const size_t iSig = d*fDSz+ifl*fNx+ix;
 
     // Assign FK Table
-    fSigma[iSig] += fk;
+    fAccumulator[iSig] += fk;
 
     return;
   };
+
+  void FKGenerator::Finalise()
+  {
+    for (int i=0; i<fNData*fDSz; i++)
+      fSigma[i] = fAccumulator[i];
+  }
 
 }
