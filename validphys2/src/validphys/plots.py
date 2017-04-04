@@ -784,6 +784,12 @@ def plot_luminosities(pdf, sqrts:(float,int)=14000):
     yield fig
 
 
+def gg2(pdf, n, mx, y, s):
+    x1 = mx/s**0.5*np.exp(y)
+    x2 = mx/s**0.5*np.exp(-y)
+    return 1.0/s*pdf.xfxQ(x1,mx,n,21)/x1*pdf.xfxQ(x2,mx,n,21)/x2
+
+
 @figuregen
 def plot_lumi2d(pdf, sqrts:(float,int)=14000):
     """
@@ -792,5 +798,42 @@ def plot_lumi2d(pdf, sqrts:(float,int)=14000):
 
     sqrts is the center of mass energy (GeV).
     """
-    fig = plt.figure()
-    yield fig
+
+    # defining variables for the lumi
+    bins_y = 100
+    bins_m = 100
+    s = sqrts**2
+    mx = np.logspace(1, np.log10(1e4), bins_m)
+    eta = 5
+    y  = np.linspace(-eta, eta, bins_y)
+    y_max = [-0.5*np.log(imx**2/s) for imx in mx]
+
+    pdfset = pdf.load()
+    members = pdfset.GetMembers()
+
+    channels = ['gg']
+    for channel in channels:
+
+        # fill weight matrix
+        weights = np.zeros(shape=(bins_y, bins_m))
+        for i, imx in enumerate(mx):
+            for j, jy in enumerate(y):
+                if np.abs(jy) <= y_max[i]:
+                    obs = np.zeros(members)
+                    for n in range(members):
+                        obs[n] = gg2(pdfset, n, imx, jy, s)
+                    uset = pdf.stats_class(obs.reshape(members,1))
+                    weights[i, j] = np.abs(uset.std_error()/uset.central_value()*100)
+
+        fig = plt.figure()
+        plt.pcolormesh(y, mx, weights, vmin=0, vmax=50, shading='gouraud')
+
+        # some extra options
+        plt.colorbar().ax.tick_params(axis='y', direction='out')
+        plt.yscale('log')
+        plt.title('%s-luminosity relative unceratinty (%%)' % channel)
+        plt.ylabel('$M_{X}$ (GeV)')
+        plt.xlabel('y')
+        plt.grid(False)
+
+        yield fig
