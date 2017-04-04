@@ -539,6 +539,12 @@ def plot_pdfreplicas(pdfs, xplotting_grids, xscale:(str,type(None))=None,
 
 
 class UncertaintyPDFPlotter(PDFPlotter):
+
+    def get_ylabel(self, parton_name):
+        if self.normalize_to is not None:
+            return r"$\sigma($%s$)$" % super().get_ylabel(parton_name)
+        return r"$\sigma/\sigma_{ref}$"
+
     def draw(self, pdf, grid, flstate):
         ax = flstate.ax
         flindex = flstate.flindex

@@ -19,3 +19,4 @@ actions_:
         - plot_pdfs
     - second:
         - plot_pdfreplicas
+        - plot_pdf_uncertainties
