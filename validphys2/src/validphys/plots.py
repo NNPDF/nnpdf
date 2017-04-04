@@ -18,7 +18,6 @@ import scipy.stats as stats
 import scipy.integrate as integrate
 
 from reportengine.figure import figure, figuregen
-from reportengine.utils import saturate
 from reportengine.checks import make_check, CheckError, make_argcheck
 
 from validphys.core import MCStats
@@ -523,6 +522,7 @@ class ReplicaPDFPlotter(PDFPlotter):
 
 @figuregen
 @_check_pdf_normalize_to
+@check_scale('xscale', allow_none=True)
 @_warn_any_pdf_not_montecarlo
 def plot_pdfreplicas(pdfs, xplotting_grids, xscale:(str,type(None))=None,
                       normalize_to:(int,str,type(None))=None):
@@ -553,6 +553,7 @@ class UncertaintyPDFPlotter(PDFPlotter):
 
 @figuregen
 @_check_pdf_normalize_to
+@check_scale('xscale', allow_none=True)
 def plot_pdf_uncertainties(pdfs, xplotting_grids, xscale:(str,type(None))=None,
                       normalize_to:(int,str,type(None))=None):
     """Plot the PDF standard deviations as a function of x.
@@ -623,6 +624,7 @@ class BandPDFPlotter(PDFPlotter):
 
 @figuregen
 @_check_pdf_normalize_to
+@check_scale('xscale', allow_none=True)
 def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
                       normalize_to:(int,str,type(None))=None):
     """Plot uncertainty intervals as a function of x."""
