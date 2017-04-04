@@ -30,11 +30,33 @@ $(document).ready(function() {
 		"data": highlight_data,
 		'paging': false,
 		'info': false,
-		"order": [[2, "desc"]]
+		"order": [[2, "desc"]],
+		"columns": [null,
+		            null,
+					{"render":
+			            {
+							"_": "0",
+							"type": "1",
+							"sort": "1",
+					    }
+		            },
+					null
+		           ]
 	  } );
 	  $('#global').DataTable( {
 		"data": data,
-		"order": [[2, "desc"]]
+		"order": [[2, "desc"]],
+		"columns": [null,
+		            null,
+					{"render":
+			            {
+							"_": "0",
+							"type": "1",
+							"sort": "1",
+					    }
+		            },
+					null
+		           ]
 	  } );
 	$('#global_wrapper .dataTables_filter input').focus();
     }

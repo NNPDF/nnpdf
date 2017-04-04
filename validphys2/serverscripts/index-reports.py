@@ -1,3 +1,11 @@
+"""index-reports.py
+Read the designed report folder and generate a JSON index to be
+consumed by the index table (and possibly other applications).
+
+The fields are infered from the import file attributes (time), a file
+called meta.yaml in the report folder and finally the html
+attributes, in that order.
+"""
 import pathlib
 import datetime
 import json
@@ -52,12 +60,14 @@ def register(p):
     title, author, tags = path_meta['title'], path_meta['author'], path_meta['keywords']
     url = ROOT_URL + p.name
 
-    date = datetime.date.fromtimestamp(p.stat().st_mtime).isoformat()
+    #Use the timestamp for sorting and the string for displaying
+    timestamp = p.stat().st_mtime
+    date = datetime.date.fromtimestamp(timestamp).isoformat()
     if not title:
         title = "Validphys output (untitled)"
 
     titlelink = '<a href="%s">%s</a>' % (url, title)
-    return (titlelink, author, date, tags)
+    return (titlelink, author, [date, timestamp], tags)
 
 def make_index(root_path, out):
     root_path = pathlib.Path(root_path)
