@@ -459,6 +459,9 @@ class PDFPlotter(metaclass=abc.ABCMeta):
     def legend(self, flstate):
         return flstate.ax.legend()
 
+    def __iter__(self):
+        yield from self()
+
 
     def __call__(self,):
         if not self.xplotting_grids:
@@ -533,9 +536,8 @@ def plot_pdfreplicas(pdfs, xplotting_grids, xscale:(str,type(None))=None,
 
     - normalize_to should be, a pdf id or an index of the pdf (starting from one).
     """
-    p = ReplicaPDFPlotter(pdfs=pdfs, xplotting_grids=xplotting_grids,
+    yield from ReplicaPDFPlotter(pdfs=pdfs, xplotting_grids=xplotting_grids,
                                  xscale=xscale, normalize_to=normalize_to)
-    yield from p()
 
 
 class UncertaintyPDFPlotter(PDFPlotter):
@@ -565,8 +567,7 @@ def plot_pdf_uncertainties(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     """Plot the PDF standard deviations as a function of x.
     If normalize_to is set, the ratio to that
     PDF's central value is plotted. Otherwise it is the absolute values."""
-    p = UncertaintyPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
-    yield from p()
+    yield from UncertaintyPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
 
 class BandPDFPlotter(PDFPlotter):
     def setup_flavour(self, flstate):
@@ -634,9 +635,7 @@ class BandPDFPlotter(PDFPlotter):
 def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
                       normalize_to:(int,str,type(None))=None):
     """Plot uncertainty intervals as a function of x."""
-    p = BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
-    yield from p()
-
+    yield from BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
 
 
 @figuregen
