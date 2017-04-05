@@ -9,6 +9,7 @@ import functools
 import warnings
 import abc
 from types import SimpleNamespace
+import copy
 
 import numpy as np
 import numpy.linalg as la
@@ -815,7 +816,8 @@ def plot_lumi2d(pdf, sqrts:(float,int)=14000):
     for channel in channels:
 
         # fill weight matrix
-        weights = np.zeros(shape=(bins_y, bins_m))
+
+        weights = np.full(shape=(bins_y, bins_m), fill_value=np.NAN)
         for i, imx in enumerate(mx):
             for j, jy in enumerate(y):
                 if np.abs(jy) <= y_max[i]:
@@ -825,15 +827,37 @@ def plot_lumi2d(pdf, sqrts:(float,int)=14000):
                     uset = pdf.stats_class(obs.reshape(members,1))
                     weights[i, j] = np.abs(uset.std_error()/uset.central_value()*100)
 
-        fig = plt.figure()
-        plt.pcolormesh(y, mx, weights, vmin=0, vmax=50, shading='gouraud')
+        """
+
+        import pickle
+        with open('/tmp/w', 'wb') as f:
+            pickle.dump(weights, f)
+
+        import pickle
+        with open('/tmp/w', 'rb') as f:
+            weights = pickle.load(f)
+        """
+
+        fig,ax = plt.subplots()
+        #norm = mcolors.SymLogNorm(linthresh=10, vmin=0, vmax=50)
+        norm = mcolors.LogNorm(vmin=1, vmax=50)
+        cmap = copy.copy(cm.viridis_r)
+        cmap.set_bad("white", alpha=0)
+        masked_weights = np.ma.masked_invalid(weights, copy=True)
+
+
+        mesh = ax.pcolormesh(y, mx, masked_weights, norm=norm, cmap=cmap,
+                             shading='gouraud',
+                             linewidth=0,
+                             edgecolor='None',
+                             rasterized=True)
 
         # some extra options
-        plt.colorbar().ax.tick_params(axis='y', direction='out')
-        plt.yscale('log')
-        plt.title('%s-luminosity relative unceratinty (%%)' % channel)
-        plt.ylabel('$M_{X}$ (GeV)')
-        plt.xlabel('y')
-        plt.grid(False)
+        fig.colorbar(mesh, label="Relative uncertainty (%)", ticks=[1,5,10,25,50], format='%.0f')
+        ax.set_yscale('log')
+        ax.set_title("Relative unceratinty for %s-luminosity" % channel)
+        ax.set_ylabel('$M_{X}$ (GeV)')
+        ax.set_xlabel('y')
+        ax.grid(False)
 
         yield fig
