@@ -266,6 +266,7 @@ class Loader(LoaderBase):
 #http://stackoverflow.com/a/15645088/1007990
 def _download_file(url, stream):
     response = requests.get(url, stream=True)
+    response.raise_for_status()
     total_length = response.headers.get('content-length')
 
     if total_length is None or not log.isEnabledFor(logging.INFO):
@@ -314,39 +315,41 @@ class RemoteLoader(LoaderBase):
     theory_index = 'theorydata.json'
 
     lhapdf_url = 'http://www.hepforge.org/archive/lhapdf/pdfsets/6.1/'
+    nnpdf_pdfs_url = 'http://pcteserver.mi.infn.it/~nnpdf/pdfs/'
+    nnpdf_pdfs_index = 'pdfdata.json'
 
-    @property
-    @functools.lru_cache()
-    def remote_theories(self):
-        index_url = self.theory_url + self.theory_index
-        token = 'theory_'
+    def remote_files(self, url, index, thing='files'):
+        index_url = url + index
         try:
             resp = requests.get(index_url)
+            resp.raise_for_status()
         except Exception as e:
-            raise RemoteLoaderError("Failed to fetch remote fits index %s: %s" % (index_url,e)) from e
+            raise RemoteLoaderError("Failed to fetch remote %s index %s: %s" % (thing, index_url,e)) from e
 
         try:
             info = resp.json()['files']
         except Exception as e:
             raise RemoteLoaderError("Malformed index %s. Expecting json with a key 'files': %s" % (index_url, e)) from e
 
-        return {th[len(token):].split('.')[0] : self.theory_url+th for th in info}
+        return {file.split('.')[0] : url+file for file in info}
 
     @property
     @functools.lru_cache()
     def remote_fits(self):
-        index_url = self.fit_url+self.fit_index
-        try:
-            resp = requests.get(index_url)
-        except Exception as e:
-            raise RemoteLoaderError("Failed to fetch remote fits index %s: %s" % (index_url,e)) from e
+        return self.remote_files(self.fit_url, self.fit_index, thing="fits")
 
-        try:
-            info = resp.json()['files']
-        except Exception as e:
-            raise RemoteLoaderError("Malformed index %s. Expecting json with a key 'files': %s" % (index_url, e)) from e
+    @property
+    @functools.lru_cache()
+    def remote_theories(self):
+        token = 'theory_'
+        rt = self.remote_files(self.theory_url, self.theory_index, thing="theories")
+        return {k[len(token):]: v for k,v in rt}
 
-        return {fit.split('.')[0] : self.fit_url+fit for fit in info}
+    @property
+    @functools.lru_cache()
+    def remote_nnpdf_pdfs(self):
+        return self.remote_files(self.nnpdf_pdfs_url, self.nnpdf_pdfs_index,
+                                 thing="PDFs")
 
     @property
     def downloadable_fits(self):
@@ -361,8 +364,12 @@ class RemoteLoader(LoaderBase):
         return lhaindex.expand_index_names('*')
 
     @property
+    def nnpdf_pdfs(self):
+        return list(self.remote_nnpdf_pdfs)
+
+    @property
     def downloadable_pdfs(self):
-        return set((*self.lhapdf_pdfs, *self.downloadable_fits))
+        return set((*self.lhapdf_pdfs, *self.downloadable_fits, *self.nnpdf_pdfs))
 
 
     def download_fit(self, fitname):
@@ -406,8 +413,6 @@ class RemoteLoader(LoaderBase):
                 shutil.copytree(str(gridpath), str(p))
                 return
 
-
-
         #It would be good to use the LHAPDF command line, except that it does
         #stupid things like returning 0 exit status when it fails to download
         if name in self.lhapdf_pdfs:
@@ -415,6 +420,8 @@ class RemoteLoader(LoaderBase):
             download_and_extract(url, lhaindex.get_lha_datapath())
         elif name in self.downloadable_fits:
             self.download_fit(name)
+        elif name in self.remote_nnpdf_pdfs:
+            download_and_extract(self.remote_nnpdf_pdfs[name], lhaindex.get_lha_datapath())
         else:
             raise PDFNotFound("PDF '%s' is neither an uploaded fit nor a LHAPDF set." % name)
 
