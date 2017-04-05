@@ -1297,6 +1297,17 @@ server). See [Web Scripts] in the [Developer Documentation] for more
 details.
 
 
+Seeing the input
+----------------
+
+By default, validphys will copy the input YAML configuration, as well
+as any processed templates to a `input` folder inside the target
+output folder. The goal is to make any result reproducible by typing
+`validphys <report folder>/input/runcard.yaml`. For the fits uploaded
+to the server, it is possible to access the input files by appending
+`/input` to the URL.
+
+
 Figure formats
 --------------
 
