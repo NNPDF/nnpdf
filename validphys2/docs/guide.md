@@ -1234,10 +1234,13 @@ Downloading resources
 
 By default theories, fits and PDFs that are required will be
 downloaded automatically. PDFs are searched both in LHAPDF and in our
-custom fits. This can be controlled with the `--net` (no effect by
-default) and `--no-net` (disable all remote downloading) options.
-Because defaults could change in the future, it is useful that scripts
-calling validphys specify this behaviour explicitly.
+custom fits, as well as in a specific location in the server.
+
+The remote downloading functionality can
+be controlled with the `--net` (no effect by default) and `--no-net`
+(disable all remote downloading) options.  Because defaults could
+change in the future, it is useful that scripts calling validphys
+specify this behaviour explicitly.
 
 Uploading the result
 --------------------
@@ -2010,7 +2013,7 @@ repository under the `serverscripts` folder.
 The server side
 infrastructure that makes this possible currently aims to be
 minimalistic. The only thing that is done is maintaining some index
-files (currently one for theories, one for fits and one for reports)
+files (currently for theories, fits, reports and LHAPDF sets)
 which essentially list the files in a given directory. The indexes are
 regenerated automatically when their correspondent folders are
 modified. This is achieved by waiting for changes using the Linux
@@ -2020,7 +2023,7 @@ modified. This is achieved by waiting for changes using the Linux
 The report index is used to display a webpage indexing the reports. It
 retrieves extra information from a `meta.yaml` file in the top level
 output directory, and (with lower priority) by parsing an `index.html`
-page contained in the report folder. Properties title, author and tags
+page contained in the report folder. Properties like title, author and tags
 are retrieved from the HTML header of this file, and are expected to
 be in the same format that Pandoc would have used to write them when
 `meta.yaml` is passed as a input. To produce it, the most convenient
