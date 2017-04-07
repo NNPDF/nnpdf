@@ -343,7 +343,7 @@ class RemoteLoader(LoaderBase):
     def remote_theories(self):
         token = 'theory_'
         rt = self.remote_files(self.theory_url, self.theory_index, thing="theories")
-        return {k[len(token):]: v for k,v in rt}
+        return {k[len(token):]: v for k,v in rt.items()}
 
     @property
     @functools.lru_cache()
