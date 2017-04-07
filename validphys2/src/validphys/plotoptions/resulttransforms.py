@@ -34,25 +34,33 @@ class MissingLabelError(KeyError):
 def half(cv, error, **labels):
     return cv/2, error/2
 
+
+#TODO: Refactor these so we don't write the same code over and over?
+
 def qbinEMC(cv, error, **labels):
     q = labels['k2']
     qbin = numpy.sqrt(q)
-    return (10**qbin)*cv, (10**qbin)*error
+    k = (float(10)**qbin)
+    return k*cv, k*error
 
 def qbinexp(cv, error, **labels):
     q = labels['k2']
     qbin = bins(q)
-    return 10**qbin*cv, 10**qbin*error
+    k = float(10)**qbin
+    return k*cv, k*error
 
 def qbindis(cv, error, **labels):
     q = labels['k1']
     qbin = bins(q)
-    return 10**(10-qbin)*cv, 10**(10-qbin)*error
+    k = float(10)**(10-qbin)
+    return k*cv, k*error
 
 def qbinjets(cv, error, **labels):
     qbin = labels['k1']
-    return 1000**(5-qbin)*cv, 1000**(5-qbin)*error
+    k = float(1000)**(5-qbin)
+    return k*cv, k*error
 
 def qbindyp(cv, error, **labels):
     qbin = labels['k1']
-    return 10000**(qbin)*cv, 10000**(qbin)*error
+    k = float(10000)**(qbin)
+    return k*cv, k*error
