@@ -80,7 +80,7 @@ namespace NNPDF
     if ((archive_read_support_filter_all(a) != ARCHIVE_OK) ||
         (archive_read_support_format_all(a) != ARCHIVE_OK) ||
         (archive_read_open_filename(a, filename.c_str(), 10240)))
-        throw RuntimeException("untargz", "Cannot open file");
+        throw RuntimeException("untargz", "Cannot open file " + filename);
 
     std::string buf{};
 
@@ -129,7 +129,7 @@ namespace NNPDF
     if ((archive_write_add_filter_gzip(a)  != ARCHIVE_OK) ||
         (archive_write_set_format_ustar(a) != ARCHIVE_OK) ||
         (archive_write_open_filename(a, filename.c_str()) != ARCHIVE_OK))
-        throw RuntimeException("targz", "Cannot allocate compressed file.");
+        throw RuntimeException("targz", "Cannot allocate compressed file " + filename);
 
     // Prepare entry
     auto entry = archive_entry_wrapper{};
