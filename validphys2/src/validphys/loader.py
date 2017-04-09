@@ -245,6 +245,10 @@ class Loader(LoaderBase):
         return self.check_pdf(name).load()
 
     def check_cuts(self, setname, fit):
+        if fit is None:
+            raise TypeError("Must specify a fit to use the cuts.")
+        if not isinstance(fit, FitSpec):
+            fit = self.check_fit(fit)
         fitname, fitpath = fit
         p = (fitpath/'filter')/setname/('FKMASK_' + setname+ '.dat')
         if not p.parent.exists():
