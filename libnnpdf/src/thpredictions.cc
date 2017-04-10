@@ -13,6 +13,7 @@
 #include <sstream>
 #include <fstream>
 #include <algorithm>
+#include <cstring>
 
 #include "NNPDF/common.h"
 #include "NNPDF/experiments.h"
@@ -368,7 +369,8 @@ void ThPredictions::Convolute(const PDFSet *pdfset, const FKTable *fk, real* the
 
   real* sigma = fk->GetSigma();
   real *pdf = 0;
-  int err = posix_memalign(reinterpret_cast<void **>(&pdf), 16, Psz); memset(pdf,0,Psz);
+  int err = posix_memalign(reinterpret_cast<void **>(&pdf), 16, Psz);
+  std::memset(pdf,0,Psz);
   if (err != 0)
     throw RangeError("ThPredictions::Convolute","ThPredictions posix_memalign " + std::to_string(err));
 
@@ -416,7 +418,8 @@ void ThPredictions::Convolute(const PDFSet *pdf1, const PDFSet *pdf2, const FKTa
 
   real* sigma = fk->GetSigma();
   real *pdf = 0;
-  int err = posix_memalign(reinterpret_cast<void **>(&pdf), 16, Psz); memset(pdf,0,Psz);
+  int err = posix_memalign(reinterpret_cast<void **>(&pdf), 16, Psz);
+  std::memset(pdf,0,Psz);
 
   if (err != 0)
     throw RangeError("ThPredictions::Convolute","ThPredictions posix_memalign " + std::to_string(err));
