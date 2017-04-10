@@ -314,7 +314,7 @@ namespace NNPDF
     fNx = fFKHeader.GetTag<int>(fFKHeader.GRIDINFO, "NX");
     fTx = fHadronic ? fNx*fNx:fNx;
     fRmr = fTx*fNonZero % convoluteAlign;
-    fDSz =  fTx*fNonZero + (!fRmr ? 0:convoluteAlign - fRmr) ;
+    fDSz =  fTx*fNonZero + ((convoluteAlign - fRmr)%convoluteAlign) ;
     fXgrid = new double[fNx];
     fSigma = new real[fDSz*fNData];
     fHasCFactors = cFactors.size();
@@ -341,7 +341,7 @@ namespace NNPDF
     fNx(          fFKHeader.GetTag<int>   (fFKHeader.GRIDINFO,   "NX")),
     fTx(fHadronic ? fNx*fNx:fNx),
     fRmr(fTx*fNonZero % convoluteAlign),
-    fDSz( fTx*fNonZero + (!fRmr ? 0:convoluteAlign - fRmr )),
+    fDSz( fTx*fNonZero + (convoluteAlign - fRmr)%convoluteAlign),
     fXgrid(new double[fNx]),
     fSigma( new real[fDSz*fNData]),
     fHasCFactors(cFactors.size()),
