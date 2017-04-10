@@ -60,7 +60,7 @@ void grid_values(
     *nx_out = nx_in;
     *nf_out = nf_in;
     *nq_out = nq_in;
-    NNPDF::real* result = new NNPDF::real[nrep*nx_in*nf_in*nq_in];
+    NNPDF::real* result = (decltype(result)) malloc(sizeof(*result)*nrep*nx_in*nf_in*nq_in);
     for (int irep=0; irep<nrep; irep++){
         for (int ifl=0; ifl<nf_in; ifl++){
             for (int ix=0; ix<nx_in; ix++){

@@ -34,7 +34,7 @@
 
 void get_kintable(double** datamat, int* n, int* m){
     int len = $self->GetNData();
-    double* result = new double[len*3];
+    double* result = (decltype(result)) malloc(sizeof(*result)*len*3);
     for (int i = 0; i < len; i++){
         int pos = 3*i;
         result[pos] = $self->GetKinematics(i, 0);
@@ -48,7 +48,7 @@ void get_kintable(double** datamat, int* n, int* m){
 
 void get_cv (double **cv, int* n){
     auto len = $self->GetNData();
-    auto * result = new double[len];
+    auto * result = (double*) malloc(sizeof(double)*len);
     auto *data = self->GetData();
     for (int i = 0; i < len; i++){
         result[i] = data[i];

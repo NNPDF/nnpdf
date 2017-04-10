@@ -40,7 +40,7 @@ void get_data(NNPDF::real **data, int* m, int* n){
     *m = $self->GetNData();
     *n = $self->GetNPdf();
     int len = (*m) * (*n);
-    NNPDF::real * result = new NNPDF::real[len];
+    NNPDF::real * result = (decltype(result)) malloc(sizeof(*result)*len);
     NNPDF::real* obs = $self->GetObs();
     std::copy(obs, obs+len ,result);
     *data = result;
@@ -48,7 +48,7 @@ void get_data(NNPDF::real **data, int* m, int* n){
 
 void get_cv (NNPDF::real  **data, int* n){
     int len = $self->GetNData();
-    NNPDF::real * result = new NNPDF::real[len];
+    NNPDF::real * result = (decltype(result)) malloc(sizeof(*result)*len);
     for (int i = 0; i < len; i++){
         result[i] = self->GetObsCV(i);
     }
@@ -58,7 +58,7 @@ void get_cv (NNPDF::real  **data, int* n){
 
 void get_error (NNPDF::real  **data, int* n){
     int len = $self->GetNData();
-    NNPDF::real * result = new NNPDF::real[len];
+    NNPDF::real * result = (decltype(result)) malloc(sizeof(*result)*len);
     for (int i = 0; i < len; i++){
         result[i] = self->GetObsError(i);
     }
