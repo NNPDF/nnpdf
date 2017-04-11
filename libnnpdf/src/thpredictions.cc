@@ -13,6 +13,7 @@
 #include <sstream>
 #include <fstream>
 #include <algorithm>
+#include <cstring>
 
 #include "NNPDF/common.h"
 #include "NNPDF/experiments.h"
@@ -364,11 +365,12 @@ void ThPredictions::Convolute(const PDFSet *pdfset, const FKTable *fk, real* the
   const int Npdf   = pdfset->GetMembers();
   const int NData  = fk->GetNData();
   const int Dsz    = fk->GetDSz();
+  const int Psz    = sizeof(real)*Dsz*Npdf;
 
   real* sigma = fk->GetSigma();
   real *pdf = 0;
-  int err = posix_memalign(reinterpret_cast<void **>(&pdf), 16, sizeof(real)*Dsz*Npdf);
-
+  int err = posix_memalign(reinterpret_cast<void **>(&pdf), 16, Psz);
+  std::memset(pdf,0,Psz);
   if (err != 0)
     throw RangeError("ThPredictions::Convolute","ThPredictions posix_memalign " + std::to_string(err));
 
@@ -412,10 +414,12 @@ void ThPredictions::Convolute(const PDFSet *pdf1, const PDFSet *pdf2, const FKTa
   const int Npdf   = pdf1->GetMembers();
   const int NData  = fk->GetNData();
   const int Dsz    = fk->GetDSz();
+  const int Psz    = sizeof(real)*Dsz*Npdf;
 
   real* sigma = fk->GetSigma();
   real *pdf = 0;
-  int err = posix_memalign(reinterpret_cast<void **>(&pdf), 16, sizeof(real)*Dsz*Npdf);
+  int err = posix_memalign(reinterpret_cast<void **>(&pdf), 16, Psz);
+  std::memset(pdf,0,Psz);
 
   if (err != 0)
     throw RangeError("ThPredictions::Convolute","ThPredictions posix_memalign " + std::to_string(err));
@@ -599,13 +603,13 @@ void ThPredictions::GetNZPDF(const PDFSet* pdfset, const FKTable *fk, real* pdf)
   const int Nfl      = 14;
   const int NonZero  = fk->GetNonZero();
   const int Nx       = fk->GetNx();
-  const int Npad     = fk->GetPad();
+  const int Tx       = fk->GetTx();
+  const int DSz      = fk->GetDSz();
 
   if ( fk->IsHadronic() )
   {
     // Hadronic process
     real* EVLN = new real[Nx*Nfl];
-    int index = 0;
     
     for (int n = 0; n < NPDF; n++)
     {
@@ -616,15 +620,11 @@ void ThPredictions::GetNZPDF(const PDFSet* pdfset, const FKTable *fk, real* pdf)
       {
         const int fl1 = NZFlmap[2*fl];
         const int fl2 = NZFlmap[2*fl+1];
-        
+        const int idx = n*DSz + fl*Tx;
         for (int i = 0; i < Nx; i++)
           for (int j = 0; j < Nx; j++)
-            pdf[index++] = EVLN[i*Nfl+fl1]*EVLN[j*Nfl+fl2];
+            pdf[ idx + i*Nx + j ] = EVLN[i*Nfl+fl1]*EVLN[j*Nfl+fl2];
       }
-      
-      for (int i=0; i<Npad; i++) // Add padding PDF
-        pdf[index++] = 0;
-      
     }
     
     delete[] EVLN;
@@ -632,20 +632,13 @@ void ThPredictions::GetNZPDF(const PDFSet* pdfset, const FKTable *fk, real* pdf)
   } else {
     // DIS
     real* EVLN = new real[Nfl];
-    
     for ( int n = 0; n < NPDF; n++)
-    {
       for ( int i = 0; i < Nx; i++)
       {
         pdfset->GetPDF(xgrid[i],Q20,n,EVLN);
-        
         for (int fl=0; fl<NonZero; fl++)
-          pdf[i+Nx*fl +(Nx*NonZero+Npad)*n] = EVLN[NZFlmap[fl]];
+          pdf[ DSz*n + Nx*fl + i ] = EVLN[NZFlmap[fl]];
       }
-      
-      for (int p = 0; p<Npad; p++)
-        pdf[p+(Nx-1)+Nx*(NonZero-1) +(Nx*NonZero+Npad)*n] =0; // padding PDF (important to avoid NaNs)
-    }
     
     delete[] EVLN;
   }
@@ -677,14 +670,12 @@ void ThPredictions::GetNZPDF(const PDFSet* pdf1, const PDFSet* pdf2, const FKTab
   const int Nfl      = 14;
   const int NonZero  = fk->GetNonZero();
   const int Nx       = fk->GetNx();
-  const int Npad     = fk->GetPad();
+  const int DSz      = fk->GetDSz();
 
   // Hadronic process
   real* EVLN1 = new real[Nx*Nfl];
   real* EVLN2 = new real[Nx*Nfl];
 
-  int index = 0;
-  
   for (int n = 0; n < NPDF; n++)
   {
     for (int i = 0; i < Nx; i++)
@@ -700,11 +691,8 @@ void ThPredictions::GetNZPDF(const PDFSet* pdf1, const PDFSet* pdf2, const FKTab
       
       for (int i = 0; i < Nx; i++)
         for (int j = 0; j < Nx; j++)
-          pdf[index++] = EVLN1[i*Nfl+fl1]*EVLN2[j*Nfl+fl2];
+          pdf[n*DSz + fl*Nx*Nx + i*Nx + j] = EVLN1[i*Nfl+fl1]*EVLN2[j*Nfl+fl2];
     }
-    
-    for (int i=0; i<Npad; i++) // Add padding PDF
-      pdf[index++] = 0;
     
   }
   
