@@ -98,10 +98,16 @@ namespace NNPDF
     struct archive_entry *entry;
     std::string buf{};
 
-    if ((archive_read_support_filter_all(a) != ARCHIVE_OK) ||
-        (archive_read_support_format_all(a) != ARCHIVE_OK))
+    auto filterr = archive_read_support_filter_gzip(a);
+
+    if (!(filterr == ARCHIVE_OK || filterr == ARCHIVE_WARN))
     {
-        throw RuntimeException("untargz", "Failed to setup support for compression formats");
+        throw RuntimeException("untargz", "Failed to setup support for gzip format");
+    }
+
+    auto readerr = archive_read_support_format_tar(a);
+    if (readerr != ARCHIVE_OK){
+        throw RuntimeException("untargz", "Failed to setup support for tar format");
     }
 
     // if these operations fail, most likely you have a plain txt file.
