@@ -71,41 +71,57 @@ namespace NNPDF
   };
 
   //__________________________________________________________________
+
+  std::string buf_from_file(std::string const & filename){
+     std::string buf{};
+     std::ifstream is(filename.c_str());
+     if (is.fail()){
+       throw RuntimeException("utils", "Could not open " + filename);
+     }
+
+     is.seekg(0, std::ios_base::end);
+     const auto fileSize = static_cast<size_t>(is.tellg());
+     buf.resize(fileSize);
+
+     is.seekg(0, std::ios_base::beg);
+     is.read(&buf[0], fileSize);
+
+     is.close();
+     return buf;
+  }
+
   std::string untargz(std::string const& filename)
   {
     auto a = archive_wrapper_read{};
+
+    //The lifetime of this is managed the archive struct
     struct archive_entry *entry;
-
-    // allocate tar.gz decompressor
-    if ((archive_read_support_filter_all(a) != ARCHIVE_OK) ||
-        (archive_read_support_format_all(a) != ARCHIVE_OK) ||
-        (archive_read_open_filename(a, filename.c_str(), 10240)))
-        throw RuntimeException("untargz", "Cannot open file " + filename);
-
     std::string buf{};
 
-    // if this operation fails, most likely you have a plain txt file.
-    if (archive_read_next_header(a, &entry) != ARCHIVE_OK)
+    if ((archive_read_support_filter_all(a) != ARCHIVE_OK) ||
+        (archive_read_support_format_all(a) != ARCHIVE_OK))
+    {
+        throw RuntimeException("untargz", "Failed to setup support for compression formats");
+    }
+
+    // if these operations fail, most likely you have a plain txt file.
+    // Apparently libarchive, when supporting all the formats can, at random, either fail to
+    // recognize the format or fail to open the header. In fact, this is different for different
+    // FKTables.
+    // Could not understand the format
+    if (archive_read_open_filename(a, filename.c_str(), 10240) != ARCHIVE_OK){
+        buf = buf_from_file(filename);
+    // Could not get the header
+    } else if (archive_read_next_header(a, &entry) != ARCHIVE_OK)
       {
-        std::ifstream is(filename.c_str());
-        if (is.fail())
-          throw RuntimeException("untargz", "File not found " + filename);
-
-        is.seekg(0, std::ios_base::end);
-        const auto fileSize = static_cast<size_t>(is.tellg());
-        buf.resize(fileSize);
-
-        is.seekg(0, std::ios_base::beg);
-        is.read(&buf[0], fileSize);
-
-        is.close();
+        buf = buf_from_file(filename);
       }
     else
       {
         // get the entry size
         auto entry_size = archive_entry_size(entry);
         if (entry_size == 0)
-          throw RuntimeException("untargz", "Compression algorithm not enabled.");
+          throw RuntimeException("untargz", "Could not obtain the uncompressed size from the header in " + filename);
 
         // read buffer
         buf.resize(entry_size);
