@@ -116,7 +116,7 @@ class Loader(LoaderBase):
                  "dataset '%s'. File %s does not exist.") % (sysnum, setname,
                   sysfile))
 
-        return CommonDataSpec(datafile, sysfile, plotfiles)
+        return CommonDataSpec(datafile, sysfile, plotfiles, name=setname)
 
     @functools.lru_cache()
     def check_theoryID(self, theoryID):

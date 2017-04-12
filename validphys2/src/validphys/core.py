@@ -179,12 +179,19 @@ class PDF(TupleComp):
         raise NotImplementedError("Error type for %s: '%s' is not implemented" %
                                   (self.name, error))
 
+#TODO: Decide what to do with the name consistently
 class CommonDataSpec(TupleComp):
-    def __init__(self, datafile, sysfile, plotfiles):
+    def __init__(self, datafile, sysfile, plotfiles, name=None):
         self.datafile = datafile
         self.sysfile = sysfile
         self.plotfiles = plotfiles
+        if name is None:
+            name = self.datafile.stem
+        self.name=name
         super().__init__(datafile, sysfile, plotfiles)
+
+    def __str__(self):
+        return self.name
 
     def __iter__(self):
         return iter((self.datafile, self.sysfile, self.plotfiles))

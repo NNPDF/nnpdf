@@ -165,6 +165,28 @@ class Config(report.Config):
         cfac = dataset.get('cfac', tuple())
         return DataSetInput(name=name, sys=sysnum, cfac=cfac)
 
+    def produce_commondata(self, *, dataset_input):
+        """Produce a CommondataSpec from a dataset input"""
+
+        name = dataset_input.name
+        sysnum = dataset_input.sys
+        try:
+            return self.loader.check_commondata(setname=name, sysnum=sysnum)
+        except DataNotFoundError as e:
+            raise ConfigError(str(e), name, self.loader.available_datasets) from e
+        except LoadFailedError as e:
+            raise ConfigError(e) from e
+
+    def produce_cuts(self, *, dataset_input, use_cuts, fit):
+        """Obtain cuts from a fit, for a given dataset input"""
+        if not use_cuts:
+            raise ConfigError("use_cuts must be True for this action.")
+        name = dataset_input.name
+        try:
+            return self.loader.check_cuts(name, fit)
+        except LoadFailedError as e:
+            raise ConfigError(e) from e
+
 
     def produce_dataset(self, *, dataset_input ,theoryid, use_cuts, fit=None,
                       check_plotting:bool=False):
