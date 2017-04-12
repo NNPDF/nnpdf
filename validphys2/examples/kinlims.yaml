@@ -1,4 +1,8 @@
-fit: 170120-004
+fit: NNPDF31_nlo_as_0118_1000
+
+meta:
+    author: Zahari Kassabov
+    keywords: []
 
 use_cuts: True
 
