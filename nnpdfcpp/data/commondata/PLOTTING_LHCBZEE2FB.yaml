@@ -1,4 +1,4 @@
-label: "LHCb $Z\\to ee$ 2 fb"
+dataset_label: "LHCb $Z\\to ee$ 2 fb"
 x: k1
 y_label: '$d\sigma_{Z/\gamma^{*}}/dy$ (fb)' 
 #x_label: 'Boson rapidity $|y|$'

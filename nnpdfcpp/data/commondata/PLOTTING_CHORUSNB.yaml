@@ -1,4 +1,4 @@
-label: "CHORUS $\\sigma_{CC}^{\\bar{\\nu}}$"
+dataset_label: "CHORUS $\\sigma_{CC}^{\\bar{\\nu}}$"
 x: k2
 y_label: '$10^{i}\sigma_{CC}^{\bar{\nu}}(x,Q^2)$' 
 result_transform: qbindis

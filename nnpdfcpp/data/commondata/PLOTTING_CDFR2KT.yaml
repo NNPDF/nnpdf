@@ -1,4 +1,4 @@
-label: "CDF Run II $k_t$ jets"
+dataset_label: "CDF Run II $k_t$ jets"
 x: k2
 
 y_label: '$10^{3*qbin} d\sigma/dp_T$' 

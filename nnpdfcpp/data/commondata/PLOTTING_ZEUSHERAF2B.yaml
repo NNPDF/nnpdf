@@ -1,4 +1,4 @@
-label: "HERA ZEUS $F_2^b$"
+dataset_label: "HERA ZEUS $F_2^b$"
 x: k1
 y_label: '$10^{qbin} F_{2,b}(x,Q^2)$' 
 result_transform: qbinexp

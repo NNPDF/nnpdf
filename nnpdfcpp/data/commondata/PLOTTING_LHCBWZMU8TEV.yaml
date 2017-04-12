@@ -1,4 +1,4 @@
-label: "LHCb $W,Z \\to \\mu$ 8 TeV"
+dataset_label: "LHCb $W,Z \\to \\mu$ 8 TeV"
 x: k1
 
 y_label: '$d\sigma/dy$ (fb)' 

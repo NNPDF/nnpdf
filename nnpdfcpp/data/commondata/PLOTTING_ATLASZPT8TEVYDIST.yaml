@@ -1,4 +1,4 @@
-label: "ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$"
+dataset_label: "ATLAS $Z$ $p_T$ 8 TeV $(p_T^{ll},y_{ll})$"
 x: k2
 y_label: '$d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)'
 figure_by:

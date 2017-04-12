@@ -1,4 +1,4 @@
-label: "CMS $W+c$ ratio"
+dataset_label: "CMS $W+c$ ratio"
 x: k1
 y_label: '$\sigma(W^+ + \bar{c})/\sigma(W^- + c)$' 
 #x_label: 'Boson rapidity $|y|$'
