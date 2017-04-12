@@ -1,1 +1,3 @@
-PLOTTING_WEASY.yaml
+x: k1
+y_label: '$dA_{e}/dy$' 
+#x_label: 'Boson rapidity $|y|$'
