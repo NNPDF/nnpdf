@@ -23,6 +23,7 @@ bin/nnfit
 bin/revolve
 bin/tconvcheck
 bin/validphys
+config/*
 cmake_install.cmake
 src/libcommon.a
 
