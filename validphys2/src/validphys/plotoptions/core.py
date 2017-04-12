@@ -15,7 +15,7 @@ from reportengine.configparser import Config, ConfigError, named_element_of
 from reportengine.utils import get_functions, ChainMap
 from NNPDF import CommonData
 
-from validphys.core import CommonDataSpec, DataSetSpec
+from validphys.core import CommonDataSpec, DataSetSpec, Cuts
 from validphys.plotoptions.utils import apply_to_all_columns
 from validphys.plotoptions import labelers, kintransforms, resulttransforms
 
@@ -47,18 +47,32 @@ def get_plot_kinlabels(commondata):
                          "labels defined in commondata.cc. " % (l)) from e
     return kinlabels_latex[key]
 
-def get_infos(dataset, normalize=False):
-    if isinstance(dataset, DataSetSpec):
-        plotfiles = dataset.commondata.plotfiles
-        cuts = dataset.cuts.load() if dataset.cuts else None
-    elif isinstance(dataset, CommonDataSpec):
-        plotfiles = dataset.plotfiles
-        #TODO: Take cuts as a parameter
-        cuts = None
+def get_infos(data, *, normalize=False, cuts=None, use_plotfiles=True):
+    """Retrieve and process the plotting infoematio for the input data (which could
+    be a DatasetSpec or a CommonDataSpec).
+
+    If ``use_plotfiles`` is ``True`` (the default), the PLOTTING files will be
+    used to retrieve the infromation. Otherwise the default configuration
+    (which depends of the process type) will be used.
+
+    The cuts will be used if a
+    commondata object is passed, otherwise setting them results in an error.
+
+    If normalize is True, the specialization for ratio plots will be used to
+    generate the PlotInfo objects.
+    """
+    if isinstance(data, DataSetSpec):
+        plotfiles = data.commondata.plotfiles
+        assert cuts is None, "Cuts are ignored"
+        cuts = data.cuts.load() if data.cuts else None
+    elif isinstance(data, CommonDataSpec):
+        plotfiles = data.plotfiles
+        if isinstance(cuts, Cuts):
+            cuts=cuts.load()
     else:
         raise TypeError("Unrecognized data type")
-    nnpdf_dt = dataset.load()
-    if not plotfiles:
+    nnpdf_dt = data.load()
+    if not plotfiles or not use_plotfiles:
         infos = [_get_info(nnpdf_dt)]
     else:
         infos = []
