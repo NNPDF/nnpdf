@@ -1,3 +1,4 @@
+label: "HERA I+II inclusive NC $e^-p$"
 x: k1
 y_label: '$10^{qbin} F_2(x,Q^2)$' 
 result_transform: qbinexp

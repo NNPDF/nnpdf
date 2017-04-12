@@ -1,3 +1,4 @@
+label: "ATLAS jets 2.76 TeV"
 x: k2
 
 y_label: '$10^{3*qbin} d\sigma/dp_T$' 

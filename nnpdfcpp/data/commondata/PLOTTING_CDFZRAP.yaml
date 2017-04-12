@@ -1,3 +1,4 @@
+label: "CDF $Z$ rapidity"
 x: k1
 y_label: '$d\sigma_{Z/\gamma^{*}}/dy$ (fb)' 
 #x_label: 'Boson rapidity $|y|$'

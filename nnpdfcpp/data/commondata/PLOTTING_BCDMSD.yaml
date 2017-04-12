@@ -1,3 +1,4 @@
+label: "BCDMS $d$"
 x: k2
 y_label: '$10^{i}F_2(x,Q^2)$' 
 result_transform: qbindis
