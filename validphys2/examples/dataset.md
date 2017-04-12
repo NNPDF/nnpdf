@@ -26,3 +26,8 @@ $\chi^2$
 
 {@pdfs plot_chi2dist @}
 
+
+Data-PDF correlations
+---------------------
+
+{pdfs plot_smpdf}
