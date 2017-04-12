@@ -10,7 +10,7 @@ import numpy as np
 
 from reportengine import collect
 from reportengine.checks import make_argcheck, CheckError
-from NNPDF import _lhapdfset
+from NNPDF import _lhapdfset, LHAPDFSet
 
 from validphys.core import PDF
 
@@ -146,6 +146,7 @@ def _check_flavours(flavours):
 XPlottingGrid = namedtuple('XPlottingGrid', ('Q', 'flavours', 'xgrid',
                                              'grid_values', 'scale'))
 
+
 @make_argcheck(_check_xgrid)
 @make_argcheck(_check_flavours)
 def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None,
@@ -177,3 +178,85 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None,
     return res
 
 xplotting_grids = collect(xplotting_grid, ('pdfs',))
+
+
+LUMI_CHANNELS = {
+    'gg': r'gg',
+    'gq': r'gq',
+    'qqbar': r'q\bar{q}',
+    'qq': r'qq',
+    'udbar': r'u\bar{d}',
+    'dubar': r'd\bar{u}',
+}
+
+LUMI_FLAVORS = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]
+
+
+def _check_channel(channel):
+    if channel is None:
+        raise CheckError('Channel is None.')
+
+    if channel not in LUMI_CHANNELS:
+        raise CheckError('Channel %s not allowed.' % channel)
+
+
+@make_argcheck(_check_channel)
+def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s: float, mx: float,
+                        x1: float, x2: float, channel=None):
+    """Returns PDF luminosity at specified values of mx, x1, x2, sqrts**2 for a given channel.
+
+    pdf_set: The interested PDF set
+    s: The center of mass energy GeV.
+    mx: The invariant mass bin GeV.
+    x1 and x2: The the partonic x1 and x2.
+    channel: The channel tag name from LUMI_CHANNELS.
+    """
+
+    pdfs = 0
+    if channel == 'gg':
+        pdfs = pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, 21)
+    elif channel == 'gq':
+        for i in LUMI_FLAVORS:
+            pdfs += pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, 21) \
+                    + pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, i)
+    elif channel == 'qqbar':
+        for i in LUMI_FLAVORS:
+            pdfs += pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, -i)
+    elif channel == 'qq':
+        for i in LUMI_FLAVORS:
+            for j in LUMI_FLAVORS:
+                pdfs += pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, j)
+    elif channel == 'udbar':
+        pdfs = pdf_set.xfxQ(x1, mx, n, 2) * pdf_set.xfxQ(x2, mx, n, -1) \
+               + pdf_set.xfxQ(x1, mx, n, -1) * pdf_set.xfxQ(x2, mx, n, 2)
+    elif channel == 'dubar':
+        pdfs = pdf_set.xfxQ(x1, mx, n, 1) * pdf_set.xfxQ(x2, mx, n, -2) \
+               + pdf_set.xfxQ(x1, mx, n, -2) * pdf_set.xfxQ(x2, mx, n, 1)
+
+    return 1.0/s*pdfs/x1/x2
+
+
+@make_argcheck(_check_channel)
+def evaluate_luminosity_grid(pdf: PDF, s: float, mx: float, y: float, channel=None):
+    """Returns central value and error of PDF luminosity at the specified values
+    of mx, rapidity, sqrts**2 for a given channel.
+
+    pdf: The interested PDF
+    s: The center of mass energy GeV.
+    mx: The invariant mass bin GeV.
+    y: The rapidity value (used to compute the partonic x1 and x2).
+    channel: The channel tag name from LUMI_CHANNELS.
+    """
+
+    x1 = mx/s**0.5*np.exp(y)
+    x2 = mx/s**0.5*np.exp(-y)
+
+    pdf_set = pdf.load()
+    members = pdf_set.GetMembers()
+    obs = np.zeros(members)
+
+    for n in range(members):
+        obs[n] = evaluate_luminosity(pdf_set, n, s, mx, x1, x2, channel)
+
+    uset = pdf.stats_class(obs.reshape(members, 1))
+    return uset.central_value(), uset.std_error()

@@ -23,7 +23,7 @@ from reportengine.checks import make_check, CheckError, make_argcheck
 
 from validphys.core import MCStats
 from validphys.results import chi2_stat_labels
-from validphys.pdfgrids import PDG_PARTONS
+from validphys.pdfgrids import PDG_PARTONS, evaluate_luminosity_grid, evaluate_luminosity, LUMI_CHANNELS
 from validphys.plotoptions import get_infos, kitable, transform_result
 from validphys.checks import check_scale
 from validphys import plotutils
@@ -769,26 +769,28 @@ def plot_luminosities(pdf, sqrts:(float,int)=14000):
     sqrts is the center of mass energy (GeV).
     """
 
-    set = pdf.load()
+    s = sqrts**2
+    pdf_set = pdf.load()
+    members = pdf_set.GetMembers()
+
     x = np.logspace(1, np.log10(sqrts/10.0), 30)
     tau = (x/sqrts)**2
 
-    fig = plt.figure()
-    for n in range(len(pdf)-1):
-        ggluminosity = [integrate.quad(lambda x1: gg(x1, itau/x1, x[i], n, set), itau, 1)[0] for i, itau in enumerate(tau)]
-        plt.plot(x, ggluminosity, color='c', alpha=0.5)
+    obs = np.zeros(shape=(members, len(tau)))
+    for n in range(members):
+        obs[n] = np.array([integrate.quad(lambda x1: evaluate_luminosity(pdf_set, n, s, x[i], x1, itau/x1, 'gg'), itau, 1.0)[0] for i, itau in enumerate(tau)])
 
-    plt.title('$gg$ luminosity %s' % pdf.label)
+    uset = pdf.stats_class(obs)
+    cv = uset.central_value()
+    err = uset.std_error()
+
+    fig = plt.figure()
+    plt.fill_between(x, 1-err/cv, 1+err/cv, alpha=0.5)
+    plt.plot(x, cv/cv, label='%s' % pdf.label)
+    plt.title('$gg$ luminosity')
     plt.legend(loc='best')
-    plt.yscale('log')
     plt.xscale('log')
     yield fig
-
-
-def gg2(pdf, n, mx, y, s):
-    x1 = mx/s**0.5*np.exp(y)
-    x2 = mx/s**0.5*np.exp(-y)
-    return 1.0/s*pdf.xfxQ(x1,mx,n,21)/x1*pdf.xfxQ(x2,mx,n,21)/x2
 
 
 @figuregen
@@ -809,43 +811,23 @@ def plot_lumi2d(pdf, sqrts:(float,int)=14000):
     y  = np.linspace(-eta, eta, bins_y)
     y_max = [-0.5*np.log(imx**2/s) for imx in mx]
 
-    pdfset = pdf.load()
-    members = pdfset.GetMembers()
+    norm = mcolors.LogNorm(vmin=1, vmax=50)
+    cmap = copy.copy(cm.viridis_r)
+    cmap.set_bad("white", alpha=0)
 
-    channels = ['gg']
-    for channel in channels:
+    for channel in LUMI_CHANNELS:
 
         # fill weight matrix
-
         weights = np.full(shape=(bins_y, bins_m), fill_value=np.NAN)
         for i, imx in enumerate(mx):
             for j, jy in enumerate(y):
-                if np.abs(jy) <= y_max[i]:
-                    obs = np.zeros(members)
-                    for n in range(members):
-                        obs[n] = gg2(pdfset, n, imx, jy, s)
-                    uset = pdf.stats_class(obs.reshape(members,1))
-                    weights[i, j] = np.abs(uset.std_error()/uset.central_value()*100)
+                if np.abs(jy) <= y_max[i] and jy <= 0:
+                    cv, err = evaluate_luminosity_grid(pdf, s, imx, jy, channel)
+                    weights[i, j] = weights[i, bins_y-1-j] = np.abs(err/cv*100)
 
-        """
+        fig, ax = plt.subplots()
 
-        import pickle
-        with open('/tmp/w', 'wb') as f:
-            pickle.dump(weights, f)
-
-        import pickle
-        with open('/tmp/w', 'rb') as f:
-            weights = pickle.load(f)
-        """
-
-        fig,ax = plt.subplots()
-        #norm = mcolors.SymLogNorm(linthresh=10, vmin=0, vmax=50)
-        norm = mcolors.LogNorm(vmin=1, vmax=50)
-        cmap = copy.copy(cm.viridis_r)
-        cmap.set_bad("white", alpha=0)
         masked_weights = np.ma.masked_invalid(weights, copy=True)
-
-
         mesh = ax.pcolormesh(y, mx, masked_weights, norm=norm, cmap=cmap,
                              shading='gouraud',
                              linewidth=0,
@@ -855,7 +837,7 @@ def plot_lumi2d(pdf, sqrts:(float,int)=14000):
         # some extra options
         fig.colorbar(mesh, label="Relative uncertainty (%)", ticks=[1,5,10,25,50], format='%.0f')
         ax.set_yscale('log')
-        ax.set_title("Relative unceratinty for %s-luminosity" % channel)
+        ax.set_title("Relative uncertainty for $%s$-luminosity\n%s - $\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[channel], pdf.label, sqrts))
         ax.set_ylabel('$M_{X}$ (GeV)')
         ax.set_xlabel('y')
         ax.grid(False)
