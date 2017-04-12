@@ -171,6 +171,7 @@ def experiments_index(experiments):
     df.set_index(columns, inplace=True)
     return df.index
 
+#TODO: Use collect to calculate results outside this
 @table
 def experiment_result_table(experiments, pdf, experiments_index):
     """Generate a table containing the data central value, the central prediction,
@@ -540,11 +541,15 @@ def chi2_stats(abs_chi2_data):
 
 @table
 def dataset_chi2_table(chi2_stats, dataset):
+    """Show the chi² estimators for a given dataset"""
     return pd.DataFrame(chi2_stats, index=[dataset.name])
 
 
 @table
 def fits_chi2_table(fits, fits_experiments, fits_chi2_data):
+    """Show the chi² of each and number of points of each dataset of each fit,
+    computed with the theory corresponding to the fit. Dataset that are not
+    included in some fit appear as "Not Fitted"."""
     chi2_it = iter(fits_chi2_data)
     dfs = []
     for fit, experiments in zip(fits, fits_experiments):
