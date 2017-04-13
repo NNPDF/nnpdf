@@ -44,7 +44,7 @@ namespace NNPDF
     { "EWJ_JRAP",   {"$\\eta/y$","$M^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
     { "EWJ_JPT",    {"$p_T (GeV)$","$M^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
     { "EWJ_MLL",    {"$M_{ll} (GeV)$","$M_{ll}^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
-    { "HQP_YQQ",    {"$y^{QQ} (GeV)$","$\\mu^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
+    { "HQP_YQQ",    {"$y^{QQ}$","$\\mu^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
     { "HQP_MQQ",    {"$M^{QQ} (GeV)$","$\\mu^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
     { "HQP_PTQQ",   {"$p_T^{QQ} (GeV)$","$\\mu^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
     { "HQP_YQ",     {"$y^Q$","$\\mu^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
