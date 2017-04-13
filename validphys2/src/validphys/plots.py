@@ -146,7 +146,7 @@ def _plot_info(info, results, dataset, normalize_to):
         max_vals = []
         fig, ax = plt.subplots()
         plotutils.setup_ax(ax)
-        ax.set_title("%s %s"%(dataset.name,
+        ax.set_title("%s %s"%(info.dataset_label,
                      info.group_label(samefig_vals, info.figure_by)))
 
         lineby = sane_groupby_iter(fig_data, info.line_by)
@@ -687,7 +687,7 @@ def _plot_smpdf_info(pdf, dataset, obs_pdf_correlations, info, mark_threshold):
         label = info.group_label(same_vals, info.figure_by)
         #TODO: PY36ScalarMappable
         #TODO Improve title?
-        title = "%s %s\n[%s]" % (dataset, '(%s)'%label if label else '' ,pdf.label)
+        title = "%s %s\n[%s]" % (info.dataset_label, '(%s)'%label if label else '' ,pdf.label)
 
         #Start plotting
         w,h = plt.rcParams["figure.figsize"]

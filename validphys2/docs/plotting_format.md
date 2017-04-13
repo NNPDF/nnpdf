@@ -7,7 +7,7 @@ considered part of the implementation of the dataset, and should be
 read by various tools that want to sensibly represent the data.
 
 Naming convention
------------------
+=================
 
 Given a dataset  labeled `<DATASET>`, every file found in the
 `commondata` folder (`nnpdfcpp/data/commondata`) that matches the
@@ -40,45 +40,53 @@ PLOTTING_HERA1CCEPTEST.yaml
 ````
 
 Format
-------
+======
 
 The plot file specifies the variable as a function of which the data
 is to be plotted (in the  *x* axis) as well as the variables as
 a function of which the data will be split in different lines in the
 same figure or in different figures. The possible variables
-('*labels*') are described below.
+('*kinematic labels*') are described below.
 
 The format also allows to control several plotting properties, such
 that whether to use log scale, or the axes labels.
 
-# Labels
+## Data label
+
+A key called `dataset_label` can  be used to specify a nice plotting
+and display label for each dataset. LaTeX math is allowed between
+dollar signs.
+
+## Kinamatics labels
 
 The kinematic variables  are in principle deduced from the type of
 process declared for the data. They are deduced from the starting
 substring of the process type.  Currently they are:
 
-
-````
-'DIS': ('$x$', '$Q^2$', '$y$'),
-'DYP': ('$y$', '$M^2$', '$\\sqrt{s}$'),
-'EWJ_JPT': ('$p_T$', '$M^2$', '$\\sqrt{s}$'),
-'EWJ_JRAP': ('$\\eta/y$', '$M^2$', '$\\sqrt{s}$'),
-'EWJ_MLL': ('$M_{ll}$', '$M_{ll}^2$', '$\\sqrt{s}$'),
-'EWJ_PT': ('$p_T$', '$M^2$', '$\\sqrt{s}$'),
-'EWJ_RAP': ('$\\eta/y$', '$M^2$', '$\\sqrt{s}$'),
-'EWK_MLL': ('$M_{ll}$', '$M_{ll}^2$', '$\\sqrt{s}$'),
-'EWK_PT': ('$p_T$', '$M^2$', '$\\sqrt{s}$'),
-'EWK_RAP': ('$\\eta/y$', '$M^2$', '$\\sqrt{s}$'),
-'HIG_RAP': ('$y$', '$M_H^2$', '$\\sqrt{s}$'),
-'HQP_MQQ': ('$M^{QQ}$', '$\\mu^2$', '$\\sqrt{s}$'),
-'HQP_PTQ': ('$p_T^Q$', '$\\mu^2$', '$\\sqrt{s}$'),
-'HQP_PTQQ': ('$p_T^{QQ}$', '$\\mu^2$', '$\\sqrt{s}$'),
-'HQP_YQ': ('$y^Q$', '$\\mu^2$', '$\\sqrt{s}$'),
-'HQP_YQQ': ('$y^{QQ}$', '$\\mu^2$', '$\\sqrt{s}$'),
-'INC': ('$0$', '$\\mu^2$', '$\\sqrt{s}$'),
-'JET': ('$\\eta$', '$p_T^2$', '$\\sqrt{s}$'),
-'PHT': ('$\\eta_\\gamma$', '$E_{T,\\gamma}^2$', '$\\sqrt{s}$')
-````
+```
+'DIS': ('$x$', '$Q^2 (GeV^2)$', '$y$'),
+'DYP': ('$y$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'EWJ_JPT': ('$p_T (GeV)$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'EWJ_JRAP': ('$\\eta/y$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'EWJ_MLL': ('$M_{ll} (GeV)$', '$M_{ll}^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'EWJ_PT': ('$p_T (GeV)$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'EWJ_PTRAP': ('$\\eta/y$', '$p_T^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'EWJ_RAP': ('$\\eta/y$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'EWK_MLL': ('$M_{ll} (GeV)$', '$M_{ll}^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'EWK_PT': ('$p_T$ (GeV)', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'EWK_PTRAP': ('$\\eta/y$', '$p_T^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'EWK_RAP': ('$\\eta/y$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'HIG_RAP': ('$y$', '$M_H^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'HQP_MQQ': ('$M^{QQ} (GeV)$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'HQP_PTQ': ('$p_T^Q (GeV)$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'HQP_PTQQ': ('$p_T^{QQ} (GeV)$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'HQP_YQ': ('$y^Q$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'HQP_YQQ': ('$y^{QQ} (GeV)$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'INC': ('$0$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'JET': ('$\\eta$', '$p_T^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'PHT': ('$\\eta_\\gamma$', '$E_{T,\\gamma}^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+'SIA': ('$z$', '$Q^2 (GeV^2)$', '$y$')
+```
 
 This mapping is declared as `CommonData.kinLabel_latex` in the C++
 code.
@@ -155,7 +163,7 @@ def high_xq(k1, k2, k3, **kwargs):
 
 ````
 
-# Plotting and grouping
+## Plotting and grouping
 
 The variable as function of which the data is plotted, is simply
 declared as 
@@ -192,7 +200,7 @@ figure_by:
   - high_xq
 ````
 
-# Transforming the result
+## Transforming the result
 
 By default the y axis represents the central value and error. However
 it is possible to define a results_transform in the plotting file:
@@ -215,7 +223,7 @@ def qbinexp(cv, error, **labels):
     return 10**qbin*cv, 10**qbin*error
 ````
 
-# Plotting options
+## Plotting options
 
 Several plotting options can be specified.
 These include
@@ -224,7 +232,7 @@ These include
  - x/y_label: Any string, possibly latex formatted. Note that the
 	 x_label will be deduced automatically.
 
-# Overriding configuration for normalized plots
+## Overriding configuration for normalized plots
 
 When the results are to be plotted as a ratio, it may be convenient to
 alter the configuration of the plots, for example by changing the
