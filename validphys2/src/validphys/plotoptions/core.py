@@ -92,7 +92,7 @@ def _get_info(commondata, file=None, cuts=None, normalize=False):
         raise
 
 class PlotInfo:
-    def __init__(self, kinlabels, x=None ,extra_labels=None, func_labels=None,
+    def __init__(self, kinlabels,dataset_label,* ,x=None ,extra_labels=None, func_labels=None,
                  figure_by=None, line_by=None, kinematics_override=None,
                  result_transform=None, y_label=None, x_label=None,
                  x_scale=None, y_scale=None, **kwargs):
@@ -110,6 +110,7 @@ class PlotInfo:
         self.y_label = y_label
         self.x_scale = x_scale
         self.y_scale = y_scale
+        self.dataset_label = dataset_label
 
     def name_to_label(self, name):
         if name in labeler_functions:
@@ -156,9 +157,12 @@ class PlotInfo:
             if normalize and 'normalize' in plot_params:
                 #We might need to use reportengine.namespaces.resolve here
                 plot_params = plot_params.new_child(plot_params['normalize'])
+            if not 'dataset_label' in plot_params:
+                log.warn("'dataset_label' key not found in %s", file.name)
+                plot_params['dataset_label'] = commondata.GetSetName()
 
         else:
-            plot_params = {}
+            plot_params = {'dataset_label':commondata.GetSetName()}
 
         if 'kinematics_override' in plot_params:
             kinlabels = plot_params['kinematics_override'].new_labels
@@ -206,6 +210,9 @@ class PlotConfigParser(Config):
         raise ConfigError("Unknown label %s" % val, val, all_labels +
                           list(labeler_functions),
                               display_alternatives='all')
+
+    def parse_dataset_label(self, lb:str):
+        return lb
 
     def parse_x(self, x:str, extra_labels=None):
         return self.resolve_name(x, extra_labels)
