@@ -1,10 +1,11 @@
+Q: 10
 pdfs:
     - NNPDF30_nlo_as_0118
 
 theoryid: 53
 
 datanorm:
-    normalize_to: 1
+    normalize_to: data
 
 template: dataset.md
 
