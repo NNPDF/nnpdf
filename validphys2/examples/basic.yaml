@@ -7,7 +7,7 @@ theoryid: 53
 datanorm:
     normalize_to: data
 
-template: dataset.md
+template: templates/dataset.md
 
 use_cuts: false
 

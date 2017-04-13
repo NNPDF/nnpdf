@@ -14,10 +14,10 @@ Q: 10
 
 description:
     from_: fit
-template: report.md
+template: templates/report.md
 
 dataset_report:
-    template: dataset.md
+    template: templates/dataset.md
 
 normalize:
     normalize_to: 1

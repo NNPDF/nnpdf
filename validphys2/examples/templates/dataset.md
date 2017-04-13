@@ -30,4 +30,4 @@ $\chi^2$
 Data-PDF correlations
 ---------------------
 
-{pdfs plot_smpdf}
+{@pdfs plot_smpdf@}
