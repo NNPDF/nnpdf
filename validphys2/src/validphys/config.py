@@ -177,10 +177,11 @@ class Config(report.Config):
         except LoadFailedError as e:
             raise ConfigError(e) from e
 
-    def produce_cuts(self, *, dataset_input, use_cuts, fit):
+    #TODO: Decide how should this interact with use_cuts
+    def produce_cuts(self, *, dataset_input, use_cuts, fit=None):
         """Obtain cuts from a fit, for a given dataset input"""
         if not use_cuts:
-            raise ConfigError("use_cuts must be True for this action.")
+            return None
         name = dataset_input.name
         try:
             return self.loader.check_cuts(name, fit)
@@ -197,8 +198,6 @@ class Config(report.Config):
         name = dataset_input.name
         sysnum = dataset_input.sys
         cfac = dataset_input.cfac
-
-
 
         try:
             ds =  self.loader.check_dataset(name=name, sysnum=sysnum,
