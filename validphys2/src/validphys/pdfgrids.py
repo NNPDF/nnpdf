@@ -200,10 +200,10 @@ def _check_channel(channel):
         raise CheckError('Channel %s not allowed.' % channel)
 
 
-@make_argcheck(_check_channel)
 def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s: float, mx: float,
                         x1: float, x2: float, channel=None):
-    """Returns PDF luminosity at specified values of mx, x1, x2, sqrts**2 for a given channel.
+    """Returns PDF luminosity at specified values of mx, x1, x2, sqrts**2
+    for a given channel.
 
     pdf_set: The interested PDF set
     s: The center of mass energy GeV.
@@ -232,6 +232,9 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s: float, mx: float,
     elif channel == 'dubar':
         pdfs = pdf_set.xfxQ(x1, mx, n, 1) * pdf_set.xfxQ(x2, mx, n, -2) \
                + pdf_set.xfxQ(x1, mx, n, -2) * pdf_set.xfxQ(x2, mx, n, 1)
+
+    else:
+        raise ValueError("Bad channel")
 
     return 1.0/s*pdfs/x1/x2
 
