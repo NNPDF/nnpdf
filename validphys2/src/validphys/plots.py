@@ -10,6 +10,7 @@ import warnings
 import abc
 from types import SimpleNamespace
 import copy
+import numbers
 
 import numpy as np
 import numpy.linalg as la
@@ -23,7 +24,8 @@ from reportengine.checks import make_check, CheckError, make_argcheck
 
 from validphys.core import MCStats
 from validphys.results import chi2_stat_labels
-from validphys.pdfgrids import PDG_PARTONS, evaluate_luminosity_grid, evaluate_luminosity, LUMI_CHANNELS
+from validphys.pdfgrids import (PDG_PARTONS,
+                                evaluate_luminosity, LUMI_CHANNELS)
 from validphys.plotoptions import get_infos, kitable, transform_result
 from validphys.checks import check_scale
 from validphys import plotutils
@@ -756,11 +758,6 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset):
     return fig
 
 
-def gg(x1, x2, q, n, pdf):
-    """The gluon-gluon luminosity"""
-    return (1.0/x1)*pdf.xfxQ(x1,q,n,21)/x1*pdf.xfxQ(x2,q,n,21)/x2
-
-
 @figuregen
 def plot_luminosities(pdf, sqrts:(float,int)=14000):
     """
@@ -793,51 +790,75 @@ def plot_luminosities(pdf, sqrts:(float,int)=14000):
     yield fig
 
 
+#TODO: Move these to utils somewhere? Find better implementations?
+def _reflect_matrl(mat, impair=False):
+    """Reflect a matrix with positive values in the first axis to have the
+    same balues for the nwgative axis. The first value is not reflected.
+
+    If ``impair`` is set, the negative part will be multiplied by -1.
+
+    """
+    mat = np.asarray(mat)
+    res = np.empty(shape=(mat.shape[0]*2-1, *mat.shape[1:]),dtype=mat.dtype)
+    neglen = mat.shape[0]-1
+    fact = -1 if impair else 1
+    res[:neglen,...] = fact*mat[:0:-1,...]
+    res[neglen:,...] = mat
+    return res
+
+def _reflect_matud(mat, impair=False):
+    """Reflect a matrix with positive values in the second axis to have the
+    same balues for the nwgative axis. The first value is not reflected.
+
+    If ``impair`` is set, the negative part will be multiplied by -1.
+
+    """
+    mat = np.asarray(mat)
+    res = np.empty(shape=(mat.shape[0], mat.shape[1]*2-1, *mat.shape[2:]),
+        dtype=mat.dtype)
+    neglen = mat.shape[1]-1
+    fact = -1 if impair else 1
+    res[:,:neglen,...] = fact*mat[:,:0:-1,...]
+    res[:,neglen:,...] = mat
+    return res
+
 @figuregen
-def plot_lumi2d(pdf, sqrts:(float,int)=14000):
+def plot_lumi2d_uncertainties(pdf, lumi_channels, lumigrids2d, sqrts:numbers.Real):
     """
     Plot 2D luminosity plot at a given center of mass energy.
     Porting code from https://github.com/scarrazza/lumi2d.
 
-    sqrts is the center of mass energy (GeV).
+    The luminosity is calculated for positive rapidity, and reflected for
+    negative rapidity for display purposes.
     """
-
-    # defining variables for the lumi
-    bins_y = 100
-    bins_m = 100
-    s = sqrts**2
-    mx = np.logspace(1, np.log10(1e4), bins_m)
-    eta = 5
-    y  = np.linspace(-eta, eta, bins_y)
-    y_max = [-0.5*np.log(imx**2/s) for imx in mx]
-
     norm = mcolors.LogNorm(vmin=1, vmax=50)
     cmap = copy.copy(cm.viridis_r)
     cmap.set_bad("white", alpha=0)
-
-    for channel in LUMI_CHANNELS:
-
-        # fill weight matrix
-        weights = np.full(shape=(bins_y, bins_m), fill_value=np.NAN)
-        for i, imx in enumerate(mx):
-            for j, jy in enumerate(y):
-                if np.abs(jy) <= y_max[i] and jy <= 0:
-                    cv, err = evaluate_luminosity_grid(pdf, s, imx, jy, channel)
-                    weights[i, j] = weights[i, bins_y-1-j] = np.abs(err/cv*100)
+    for channel, grid in zip(lumi_channels, lumigrids2d):
+        gv = grid.grid_values
+        mat = gv.std_error()/np.abs(gv.central_value())*100
 
         fig, ax = plt.subplots()
 
-        masked_weights = np.ma.masked_invalid(weights, copy=True)
-        mesh = ax.pcolormesh(y, mx, masked_weights, norm=norm, cmap=cmap,
+        mat = _reflect_matud(mat)
+        y = _reflect_matrl(grid.y, impair=True)
+
+
+        masked_weights = np.ma.masked_invalid(mat, copy=False)
+
+        mesh = ax.pcolormesh(y, grid.m, masked_weights, norm=norm, cmap=cmap,
                              shading='gouraud',
                              linewidth=0,
                              edgecolor='None',
                              rasterized=True)
 
         # some extra options
-        fig.colorbar(mesh, label="Relative uncertainty (%)", ticks=[1,5,10,25,50], format='%.0f')
+        fig.colorbar(mesh, label="Relative uncertainty (%)",
+            ticks=[1,5,10,25,50], format='%.0f')
         ax.set_yscale('log')
-        ax.set_title("Relative uncertainty for $%s$-luminosity\n%s - $\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[channel], pdf.label, sqrts))
+        ax.set_title("Relative uncertainty for $%s$-luminosity\n%s - "
+                     "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[channel],
+                             pdf.label, sqrts))
         ax.set_ylabel('$M_{X}$ (GeV)')
         ax.set_xlabel('y')
         ax.grid(False)

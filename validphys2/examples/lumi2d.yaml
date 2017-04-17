@@ -1,6 +1,10 @@
 sqrts: 13000
 pdf: NNPDF31_nlo_as_0118
 
+lumi_channels:
+    - gg
+    - udbar
+
 template_text: |
     ---
     title: 2D luminosity
@@ -12,7 +16,7 @@ template_text: |
 
     2D luminosity
     -----------
-    {@ plot_lumi2d @}
+    {@ plot_lumi2d_uncertainties @}
 
 actions_:
   -   - report:
