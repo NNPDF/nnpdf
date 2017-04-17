@@ -16,7 +16,8 @@ template_text: |
 
     2D luminosity
     -----------
-    {@ plot_lumi2d_uncertainties @}
+    {@lumi_channels plot_lumi2d @}
+    {@lumi_channels plot_lumi2d_uncertainty @}
 
 actions_:
   -   - report:

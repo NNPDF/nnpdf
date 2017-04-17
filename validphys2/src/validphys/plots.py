@@ -822,10 +822,10 @@ def _reflect_matud(mat, impair=False):
     res[:,neglen:,...] = mat
     return res
 
-@figuregen
-def plot_lumi2d_uncertainties(pdf, lumi_channels, lumigrids2d, sqrts:numbers.Real):
+@figure
+def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
     """
-    Plot 2D luminosity plot at a given center of mass energy.
+    Plot 2D luminosity unciertainty plot at a given center of mass energy.
     Porting code from https://github.com/scarrazza/lumi2d.
 
     The luminosity is calculated for positive rapidity, and reflected for
@@ -834,33 +834,36 @@ def plot_lumi2d_uncertainties(pdf, lumi_channels, lumigrids2d, sqrts:numbers.Rea
     norm = mcolors.LogNorm(vmin=1, vmax=50)
     cmap = copy.copy(cm.viridis_r)
     cmap.set_bad("white", alpha=0)
-    for channel, grid in zip(lumi_channels, lumigrids2d):
-        gv = grid.grid_values
-        mat = gv.std_error()/np.abs(gv.central_value())*100
 
-        fig, ax = plt.subplots()
+    grid = lumigrid2d
+    channel = lumi_channel
 
-        mat = _reflect_matud(mat)
-        y = _reflect_matrl(grid.y, impair=True)
+    gv = grid.grid_values
+    mat = gv.std_error()/np.abs(gv.central_value())*100
+
+    fig, ax = plt.subplots()
+
+    mat = _reflect_matud(mat)
+    y = _reflect_matrl(grid.y, impair=True)
 
 
-        masked_weights = np.ma.masked_invalid(mat, copy=False)
+    masked_weights = np.ma.masked_invalid(mat, copy=False)
 
-        mesh = ax.pcolormesh(y, grid.m, masked_weights, norm=norm, cmap=cmap,
-                             shading='gouraud',
-                             linewidth=0,
-                             edgecolor='None',
-                             rasterized=True)
+    mesh = ax.pcolormesh(y, grid.m, masked_weights, norm=norm, cmap=cmap,
+                         shading='gouraud',
+                         linewidth=0,
+                         edgecolor='None',
+                         rasterized=True)
 
-        # some extra options
-        fig.colorbar(mesh, label="Relative uncertainty (%)",
-            ticks=[1,5,10,25,50], format='%.0f')
-        ax.set_yscale('log')
-        ax.set_title("Relative uncertainty for $%s$-luminosity\n%s - "
-                     "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[channel],
-                             pdf.label, sqrts))
-        ax.set_ylabel('$M_{X}$ (GeV)')
-        ax.set_xlabel('y')
-        ax.grid(False)
+    # some extra options
+    fig.colorbar(mesh, label="Relative uncertainty (%)",
+        ticks=[1,5,10,25,50], format='%.0f')
+    ax.set_yscale('log')
+    ax.set_title("Relative uncertainty for $%s$-luminosity\n%s - "
+                 "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[channel],
+                         pdf.label, sqrts))
+    ax.set_ylabel('$M_{X}$ (GeV)')
+    ax.set_xlabel('y')
+    ax.grid(False)
 
-        yield fig
+    return fig
