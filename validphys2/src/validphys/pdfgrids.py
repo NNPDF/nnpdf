@@ -271,8 +271,8 @@ def lumigrid2d(pdf:PDF, lumi_channel, sqrts:numbers.Real,
             masked_ys = ys[:ys_max[im]]
             for iy,y in enumerate(masked_ys):
                 #TODO: Fill this from lpdf.grid_values?
-                x1 = mx/s**0.5*np.exp(y)
-                x2 = mx/s**0.5*np.exp(-y)
+                x1 = mx/sqrts*np.exp(y)
+                x2 = mx/sqrts*np.exp(-y)
                 res= evaluate_luminosity(lpdf, irep, s,
                     mx, x1, x2, lumi_channel)
                 weights[irep, im, iy]  = res
