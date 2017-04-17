@@ -5,6 +5,7 @@ Tools for sampling, PDFs.
 @author: Zahari Kassabov
 """
 from collections import namedtuple
+import numbers
 
 import numpy as np
 
@@ -192,14 +193,6 @@ LUMI_CHANNELS = {
 LUMI_FLAVORS = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]
 
 
-def _check_channel(channel):
-    if channel is None:
-        raise CheckError('Channel is None.')
-
-    if channel not in LUMI_CHANNELS:
-        raise CheckError('Channel %s not allowed.' % channel)
-
-
 def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s: float, mx: float,
                         x1: float, x2: float, channel=None):
     """Returns PDF luminosity at specified values of mx, x1, x2, sqrts**2
@@ -239,27 +232,54 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s: float, mx: float,
     return 1.0/s*pdfs/x1/x2
 
 
-@make_argcheck(_check_channel)
-def evaluate_luminosity_grid(pdf: PDF, s: float, mx: float, y: float, channel=None):
-    """Returns central value and error of PDF luminosity at the specified values
-    of mx, rapidity, sqrts**2 for a given channel.
+Lumi2dGrid = namedtuple('Lumi2dGrid', ['y','m','grid_values'])
 
-    pdf: The interested PDF
-    s: The center of mass energy GeV.
-    mx: The invariant mass bin GeV.
-    y: The rapidity value (used to compute the partonic x1 and x2).
-    channel: The channel tag name from LUMI_CHANNELS.
+
+
+def lumigrid2d(pdf:PDF, lumi_channel, sqrts:numbers.Real,
+    y_lim:numbers.Real=5, nbins_m:int=100,
+    nbins_y:int=50):
+    """
+    Return the differential luminosity in a grid of (nbins_m x nbins_y)
+    points, for the allowed values of invariant mass and rpidity for  given
+    (proton-proton) collider energy ``sqrts`` (given in GeV).
+    ``y_lim`` specifies the maximum rapidy.
+
+    The grid is sampled linearly in rapidity and logarithmically in mass.
+
+    The results are computed for all relevant PDF members and wrapped in a
+    stats class, to compute statists regardless of the ErrorType.
     """
 
-    x1 = mx/s**0.5*np.exp(y)
-    x2 = mx/s**0.5*np.exp(-y)
+    s = sqrts**2
+    mxs = np.logspace(1, np.log10(sqrts), nbins_m)
 
-    pdf_set = pdf.load()
-    members = pdf_set.GetMembers()
-    obs = np.zeros(members)
 
-    for n in range(members):
-        obs[n] = evaluate_luminosity(pdf_set, n, s, mx, x1, x2, channel)
+    ys  = np.linspace(0 , y_lim, nbins_y)
 
-    uset = pdf.stats_class(obs.reshape(members, 1))
-    return uset.central_value(), uset.std_error()
+    y_kinlims = -np.log(mxs/sqrts)
+    ys_max = np.searchsorted(ys, y_kinlims)
+
+    # TODO: Write this in something fast
+    lpdf = pdf.load()
+    nmembers = lpdf.GetMembers()
+
+    weights = np.full(shape=(nmembers, nbins_m, nbins_y), fill_value=np.NaN)
+
+    for irep in range(nmembers):
+        for im,mx in enumerate(mxs):
+            masked_ys = ys[:ys_max[im]]
+            for iy,y in enumerate(masked_ys):
+                #TODO: Fill this from lpdf.grid_values?
+                x1 = mx/s**0.5*np.exp(y)
+                x2 = mx/s**0.5*np.exp(-y)
+                res= evaluate_luminosity(lpdf, irep, s,
+                    mx, x1, x2, lumi_channel)
+                weights[irep, im, iy]  = res
+
+
+    return Lumi2dGrid(ys, mxs, pdf.stats_class(weights))
+
+
+
+lumigrids2d = collect('lumigrid2d', ['lumi_channels'])
