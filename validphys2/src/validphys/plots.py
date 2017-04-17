@@ -791,33 +791,33 @@ def plot_luminosities(pdf, sqrts:(float,int)=14000):
 
 
 #TODO: Move these to utils somewhere? Find better implementations?
-def _reflect_matrl(mat, impair=False):
+def _reflect_matrl(mat, odd=False):
     """Reflect a matrix with positive values in the first axis to have the
     same balues for the nwgative axis. The first value is not reflected.
 
-    If ``impair`` is set, the negative part will be multiplied by -1.
+    If ``odd`` is set, the negative part will be multiplied by -1.
 
     """
     mat = np.asarray(mat)
     res = np.empty(shape=(mat.shape[0]*2-1, *mat.shape[1:]),dtype=mat.dtype)
     neglen = mat.shape[0]-1
-    fact = -1 if impair else 1
+    fact = -1 if odd else 1
     res[:neglen,...] = fact*mat[:0:-1,...]
     res[neglen:,...] = mat
     return res
 
-def _reflect_matud(mat, impair=False):
+def _reflect_matud(mat, odd=False):
     """Reflect a matrix with positive values in the second axis to have the
     same balues for the nwgative axis. The first value is not reflected.
 
-    If ``impair`` is set, the negative part will be multiplied by -1.
+    If ``odd`` is set, the negative part will be multiplied by -1.
 
     """
     mat = np.asarray(mat)
     res = np.empty(shape=(mat.shape[0], mat.shape[1]*2-1, *mat.shape[2:]),
         dtype=mat.dtype)
     neglen = mat.shape[1]-1
-    fact = -1 if impair else 1
+    fact = -1 if odd else 1
     res[:,:neglen,...] = fact*mat[:,:0:-1,...]
     res[:,neglen:,...] = mat
     return res
@@ -844,7 +844,7 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
     fig, ax = plt.subplots()
 
     mat = _reflect_matud(mat)
-    y = _reflect_matrl(grid.y, impair=True)
+    y = _reflect_matrl(grid.y, odd=True)
 
 
     masked_weights = np.ma.masked_invalid(mat, copy=False)
