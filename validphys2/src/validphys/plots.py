@@ -822,6 +822,75 @@ def _reflect_matud(mat, odd=False):
     res[:,neglen:,...] = mat
     return res
 
+
+@figure
+def plot_lumi2d(pdf, lumi_channel, lumigrid2d, sqrts,
+                display_negative:bool=True):
+
+
+    cmap = copy.copy(cm.viridis_r)
+    cmap.set_bad("white", alpha=0)
+    fig, ax = plt.subplots()
+    gv = lumigrid2d.grid_values
+    mat = gv.central_value()
+
+    fig, ax = plt.subplots()
+
+    mat = _reflect_matud(mat)
+    y = _reflect_matrl(lumigrid2d.y, odd=True)
+    masked_weights = np.ma.masked_invalid(mat, copy=False)
+
+    #TODO: SymLogNorm is really the right thing to do here, but I can't be
+    #bothered to make it work. Mostly the ticks around zero are completely
+    #broken and looks like it takes a lot of fidlling wirh the mpl internals
+    #to fix it.
+
+    positive_mask = masked_weights>0
+    linlim = np.nanpercentile(masked_weights[positive_mask],90)/1e5
+
+    #norm = mcolors.SymLogNorm(linlim, vmin=None)
+
+    norm = mcolors.LogNorm(vmin=linlim)
+    masked_weights[masked_weights<linlim] = linlim
+
+    mesh = ax.pcolormesh(y, lumigrid2d.m, masked_weights, cmap=cmap,
+        shading='gouraud',
+        linewidth=0,
+        edgecolor='None',
+        rasterized=True,
+        norm=norm,
+    )
+    #Annoying code because mpl does the defaults horribly
+    #loc = mticker.SymmetricalLogLocator(base=10, linthresh=linlim,)
+    #loc.numticks = 5
+
+    #fig.colorbar(mesh, ticks=loc)
+
+    if display_negative:
+        cmap_neg =  mcolors.ListedColormap(['red', (0,0,0,0)])
+        neg_norm = mcolors.BoundaryNorm([0,0.5,1],2)
+        ax.pcolormesh(y, lumigrid2d.m, positive_mask, cmap=cmap_neg,
+            shading='gouraud',
+            linewidth=0,
+            edgecolor='None',
+            rasterized=True,
+            norm=neg_norm,
+        )
+
+    fig.colorbar(mesh, extend='min', label="Differential luminosity ($GeV^{-1}$)")
+    ax.set_ylabel('$M_{X}$ (GeV)')
+    ax.set_xlabel('y')
+    ax.set_yscale('log')
+    ax.grid(False)
+
+    ax.set_title("$%s$ luminosity\n%s - "
+             "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[lumi_channel],
+                     pdf.label, sqrts))
+
+
+    return fig
+
+
 @figure
 def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
     """
