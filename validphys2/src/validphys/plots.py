@@ -925,8 +925,22 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
                          rasterized=True)
 
     # some extra options
+    extup = np.nanmax(masked_weights) > 50
+    extdown = np.nanmin(masked_weights) < 1
+
+    #TODO: Wrap this somewhere
+    if extup:
+        if extdown:
+            extend = 'both'
+        else:
+            extend = 'max'
+    elif extdown:
+        extend = 'min'
+    else:
+        extend = None
+
     fig.colorbar(mesh, label="Relative uncertainty (%)",
-        ticks=[1,5,10,25,50], format='%.0f')
+        ticks=[1,5,10,25,50], format='%.0f', extend=extend)
     ax.set_yscale('log')
     ax.set_title("Relative uncertainty for $%s$-luminosity\n%s - "
                  "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[channel],
