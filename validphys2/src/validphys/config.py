@@ -152,6 +152,8 @@ class Config(report.Config):
 
     @element_of('dataset_inputs')
     def parse_dataset_input(self, dataset):
+        """The mapping that corresponds to the dataset specifications in the
+        fit files"""
         try:
             name = dataset['dataset']
             if not isinstance(name, str):
