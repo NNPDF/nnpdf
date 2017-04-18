@@ -480,7 +480,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
 
             all_vals = []
             for pdf, grid in zip(self.pdfs, self.xplotting_grids):
-                all_vals.append(self.draw(pdf, grid, flstate))
+                all_vals.append(np.atleast_2d(self.draw(pdf, grid, flstate)))
 
             #Note these two lines do not conmute!
             ax.set_xscale(self.xscale)
@@ -571,6 +571,78 @@ def plot_pdf_uncertainties(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     If normalize_to is set, the ratio to that
     PDF's central value is plotted. Otherwise it is the absolute values."""
     yield from UncertaintyPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
+
+class DistancePDFPlotter(PDFPlotter):
+
+    def normalize(self):
+        #if self.normalize_to is None:
+            #throw an error and exit
+        normalize_to = self.normalize_to
+        if normalize_to is not None:
+            normalize_pdf = self.normalize_pdf
+            normalize_grid = self._xplotting_grids[normalize_to]
+            normvals_central = normalize_pdf.stats_class(
+                            normalize_grid.grid_values).central_value()
+            normvals_sigma = normalize_pdf.stats_class(
+                            normalize_grid.grid_values).std_error()
+
+            #need sigma of normalize_pdf
+            #need sigma of each pdfs
+            #self.pdfs
+
+            #distance = |central_i - central_norm  |/(sigma_i^2 + sigma_norm^2)^1/2
+
+            #Handle division by zero more quietly
+            def fp_error(tp, flag):
+                log.warn("Invalid values found computing normalization to %s: "
+                 "Floating point error (%s).", normalize_pdf, tp)
+                #Show warning only once
+                np.seterr(all='ignore')
+
+            newgrids = []
+            with np.errstate(all='call'):
+                np.seterrcall(fp_error)
+                for grid,pdf in zip(self._xplotting_grids,self.pdfs):
+                    numerator = pow(pdf.stats_class(grid.grid_values).central_value()-normvals_central,2)
+                    denominator = pow(pdf.stats_class(grid.grid_values).std_error(),2)+pow(normvals_sigma,2)
+                    newvalues = np.sqrt(numerator/denominator)
+                    #newgrid is like the old grid but with updated values
+                    newgrid = type(grid)(**{**grid._asdict(),
+                                             'grid_values':newvalues})
+                    newgrids.append(newgrid)
+
+            return newgrids
+        return self._xplotting_grids
+
+    def get_ylabel(self, parton_name):
+        #if self.normalize_to is None:
+            #throw an error and exit
+        return "distance from {}".format(self.normalize_pdf.label)
+
+
+    def draw(self, pdf, grid, flstate):
+        ax = flstate.ax
+        flindex = flstate.flindex
+        gv = grid.grid_values[flindex,:]
+
+        p,=ax.plot(grid.xgrid, gv, label=pdf.label)
+        color=p.get_color()
+        if(self.normalize_pdf.ErrorType=="replicas" and pdf.ErrorType=="replicas"):
+            draw_line = np.sqrt((1./(len(self.normalize_pdf)-1)+1./(len(pdf)-1))/2)
+            ax.axhline(draw_line,color=color,alpha=0.5,linestyle="--")
+                
+        
+        return gv
+
+@figuregen
+@_check_pdf_normalize_to
+@check_scale('xscale', allow_none=True)
+def plot_pdfdistance(pdfs, xplotting_grids, xscale:(str,type(None))=None,
+                      normalize_to:(int,str,type(None))=None):
+    """Plot the PDF standard deviations as a function of x.
+    If normalize_to is set, the ratio to that
+    PDF's central value is plotted. Otherwise it is the absolute values."""
+    yield from DistancePDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
 
 class BandPDFPlotter(PDFPlotter):
     def setup_flavour(self, flstate):
