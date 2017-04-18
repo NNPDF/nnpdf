@@ -320,8 +320,15 @@ class Config(report.Config):
     def produce_fitpdfs(self, fits):
         return {'pdfs': self.parse_pdfs([fit.as_input()['pdf'] for fit in fits])}
 
+    def produce_pair_pdfs(self, base, pdf):
+        #TODO: Find a better way to do this
+        from reportengine import namespaces
+        return {'pdfs': namespaces.NSList([base['pdf'], pdf], nskey='pdf')}
 
-
+    def produce_pdfs_with_base(self, base, pdfs):
+        #TODO: Find a better way to do this
+        from reportengine import namespaces
+        return {'pdfs': namespaces.NSList([base['pdf'], *pdfs], nskey='pdf')}
 
     @element_of('lumi_channels')
     def parse_lumi_channel(self, ch:str):
