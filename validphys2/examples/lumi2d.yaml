@@ -4,6 +4,7 @@ pdf: NNPDF31_nlo_as_0118
 lumi_channels:
     - gg
     - udbar
+    - fsd
 
 template_text: |
     ---
@@ -16,7 +17,6 @@ template_text: |
 
     2D luminosity
     -----------
-    {@lumi_channels plot_lumi2d @}
     {@lumi_channels plot_lumi2d_uncertainty @}
 
 actions_:
