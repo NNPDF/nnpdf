@@ -1,8 +1,5 @@
-sqrts: 14000
-fit: 170207-001
-
-pdf:
-   from_: fit
+sqrts: 13000
+pdf: NNPDF31_nlo_as_0118
 
 template_text: |
     ---

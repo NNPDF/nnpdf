@@ -152,6 +152,8 @@ class Config(report.Config):
 
     @element_of('dataset_inputs')
     def parse_dataset_input(self, dataset):
+        """The mapping that corresponds to the dataset specifications in the
+        fit files"""
         try:
             name = dataset['dataset']
             if not isinstance(name, str):
@@ -321,6 +323,14 @@ class Config(report.Config):
 
 
 
+    @element_of('lumi_channels')
+    def parse_lumi_channel(self, ch:str):
+        from validphys.pdfgrids import LUMI_CHANNELS
+        if ch not in LUMI_CHANNELS:
+            raise ConfigError('lumi_channel not understood: %s' % ch,
+                              ch, alternatives=LUMI_CHANNELS,
+                              display_alternatives='all')
+        return ch
 
     #TODO: Right name? Right interface?
     def parse_corrpair(self, pair:list):

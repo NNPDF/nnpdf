@@ -70,7 +70,7 @@ def get_infos(data, *, normalize=False, cuts=None, use_plotfiles=True):
         if isinstance(cuts, Cuts):
             cuts=cuts.load()
     else:
-        raise TypeError("Unrecognized data type")
+        raise TypeError("Unrecognized data type: %s" % type(data) )
     nnpdf_dt = data.load()
     if not plotfiles or not use_plotfiles:
         infos = [_get_info(nnpdf_dt)]

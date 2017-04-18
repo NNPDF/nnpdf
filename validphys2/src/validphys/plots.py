@@ -9,6 +9,8 @@ import functools
 import warnings
 import abc
 from types import SimpleNamespace
+import copy
+import numbers
 
 import numpy as np
 import numpy.linalg as la
@@ -22,7 +24,8 @@ from reportengine.checks import make_check, CheckError, make_argcheck
 
 from validphys.core import MCStats
 from validphys.results import chi2_stat_labels
-from validphys.pdfgrids import PDG_PARTONS
+from validphys.pdfgrids import (PDG_PARTONS,
+                                evaluate_luminosity, LUMI_CHANNELS)
 from validphys.plotoptions import get_infos, kitable, transform_result
 from validphys.checks import check_scale
 from validphys import plotutils
@@ -755,11 +758,6 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset):
     return fig
 
 
-def gg(x1, x2, q, n, pdf):
-    """The gluon-gluon luminosity"""
-    return (1.0/x1)*pdf.xfxQ(x1,q,n,21)/x1*pdf.xfxQ(x2,q,n,21)/x2
-
-
 @figuregen
 def plot_luminosities(pdf, sqrts:(float,int)=14000):
     """
@@ -768,17 +766,187 @@ def plot_luminosities(pdf, sqrts:(float,int)=14000):
     sqrts is the center of mass energy (GeV).
     """
 
-    set = pdf.load()
+    s = sqrts**2
+    pdf_set = pdf.load()
+    members = pdf_set.GetMembers()
+
     x = np.logspace(1, np.log10(sqrts/10.0), 30)
     tau = (x/sqrts)**2
 
-    fig = plt.figure()
-    for n in range(len(pdf)-1):
-        ggluminosity = [integrate.quad(lambda x1: gg(x1, itau/x1, x[i], n, set), itau, 1)[0] for i, itau in enumerate(tau)]
-        plt.plot(x, ggluminosity, color='c', alpha=0.5)
+    obs = np.zeros(shape=(members, len(tau)))
+    for n in range(members):
+        obs[n] = np.array([integrate.quad(lambda x1: evaluate_luminosity(pdf_set, n, s, x[i], x1, itau/x1, 'gg'), itau, 1.0)[0] for i, itau in enumerate(tau)])
 
-    plt.title('$gg$ luminosity %s' % pdf.label)
+    uset = pdf.stats_class(obs)
+    cv = uset.central_value()
+    err = uset.std_error()
+
+    fig = plt.figure()
+    plt.fill_between(x, 1-err/cv, 1+err/cv, alpha=0.5)
+    plt.plot(x, cv/cv, label='%s' % pdf.label)
+    plt.title('$gg$ luminosity')
     plt.legend(loc='best')
-    plt.yscale('log')
     plt.xscale('log')
     yield fig
+
+
+#TODO: Move these to utils somewhere? Find better implementations?
+def _reflect_matrl(mat, odd=False):
+    """Reflect a matrix with positive values in the first axis to have the
+    same balues for the nwgative axis. The first value is not reflected.
+
+    If ``odd`` is set, the negative part will be multiplied by -1.
+
+    """
+    mat = np.asarray(mat)
+    res = np.empty(shape=(mat.shape[0]*2-1, *mat.shape[1:]),dtype=mat.dtype)
+    neglen = mat.shape[0]-1
+    fact = -1 if odd else 1
+    res[:neglen,...] = fact*mat[:0:-1,...]
+    res[neglen:,...] = mat
+    return res
+
+def _reflect_matud(mat, odd=False):
+    """Reflect a matrix with positive values in the second axis to have the
+    same balues for the nwgative axis. The first value is not reflected.
+
+    If ``odd`` is set, the negative part will be multiplied by -1.
+
+    """
+    mat = np.asarray(mat)
+    res = np.empty(shape=(mat.shape[0], mat.shape[1]*2-1, *mat.shape[2:]),
+        dtype=mat.dtype)
+    neglen = mat.shape[1]-1
+    fact = -1 if odd else 1
+    res[:,:neglen,...] = fact*mat[:,:0:-1,...]
+    res[:,neglen:,...] = mat
+    return res
+
+
+@figure
+def plot_lumi2d(pdf, lumi_channel, lumigrid2d, sqrts,
+                display_negative:bool=True):
+
+
+    cmap = copy.copy(cm.viridis_r)
+    cmap.set_bad("white", alpha=0)
+    fig, ax = plt.subplots()
+    gv = lumigrid2d.grid_values
+    mat = gv.central_value()
+
+    fig, ax = plt.subplots()
+
+    mat = _reflect_matud(mat)
+    y = _reflect_matrl(lumigrid2d.y, odd=True)
+    masked_weights = np.ma.masked_invalid(mat, copy=False)
+
+    #TODO: SymLogNorm is really the right thing to do here, but I can't be
+    #bothered to make it work. Mostly the ticks around zero are completely
+    #broken and looks like it takes a lot of fidlling wirh the mpl internals
+    #to fix it.
+
+    positive_mask = masked_weights>0
+    linlim = np.nanpercentile(masked_weights[positive_mask],90)/1e5
+
+    #norm = mcolors.SymLogNorm(linlim, vmin=None)
+
+    norm = mcolors.LogNorm(vmin=linlim)
+    masked_weights[masked_weights<linlim] = linlim
+
+    mesh = ax.pcolormesh(y, lumigrid2d.m, masked_weights, cmap=cmap,
+        shading='gouraud',
+        linewidth=0,
+        edgecolor='None',
+        rasterized=True,
+        norm=norm,
+    )
+    #Annoying code because mpl does the defaults horribly
+    #loc = mticker.SymmetricalLogLocator(base=10, linthresh=linlim,)
+    #loc.numticks = 5
+
+    #fig.colorbar(mesh, ticks=loc)
+
+    if display_negative:
+        cmap_neg =  mcolors.ListedColormap(['red', (0,0,0,0)])
+        neg_norm = mcolors.BoundaryNorm([0,0.5,1],2)
+        ax.pcolormesh(y, lumigrid2d.m, positive_mask, cmap=cmap_neg,
+            shading='gouraud',
+            linewidth=0,
+            edgecolor='None',
+            rasterized=True,
+            norm=neg_norm,
+        )
+
+    fig.colorbar(mesh, extend='min', label="Differential luminosity ($GeV^{-1}$)")
+    ax.set_ylabel('$M_{X}$ (GeV)')
+    ax.set_xlabel('y')
+    ax.set_yscale('log')
+    ax.grid(False)
+
+    ax.set_title("$%s$ luminosity\n%s - "
+             "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[lumi_channel],
+                     pdf.label, sqrts))
+
+
+    return fig
+
+
+@figure
+def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
+    """
+    Plot 2D luminosity unciertainty plot at a given center of mass energy.
+    Porting code from https://github.com/scarrazza/lumi2d.
+
+    The luminosity is calculated for positive rapidity, and reflected for
+    negative rapidity for display purposes.
+    """
+    norm = mcolors.LogNorm(vmin=1, vmax=50)
+    cmap = copy.copy(cm.viridis_r)
+    cmap.set_bad("white", alpha=0)
+
+    grid = lumigrid2d
+    channel = lumi_channel
+
+    gv = grid.grid_values
+    mat = gv.std_error()/np.abs(gv.central_value())*100
+
+    fig, ax = plt.subplots()
+
+    mat = _reflect_matud(mat)
+    y = _reflect_matrl(grid.y, odd=True)
+
+
+    masked_weights = np.ma.masked_invalid(mat, copy=False)
+
+    mesh = ax.pcolormesh(y, grid.m, masked_weights, norm=norm, cmap=cmap,
+                         shading='gouraud',
+                         linewidth=0,
+                         edgecolor='None',
+                         rasterized=True)
+
+    # some extra options
+    extup = np.nanmax(masked_weights) > 50
+    extdown = np.nanmin(masked_weights) < 1
+
+    #TODO: Wrap this somewhere
+    if extup:
+        if extdown:
+            extend = 'both'
+        else:
+            extend = 'max'
+    elif extdown:
+        extend = 'min'
+    else:
+        extend = None
+
+    fig.colorbar(mesh, label="Relative uncertainty (%)",
+        ticks=[1,5,10,25,50], format='%.0f', extend=extend)
+    ax.set_yscale('log')
+    ax.set_title("Relative uncertainty for $%s$-luminosity\n%s - "
+                 "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[channel],
+                         pdf.label, sqrts))
+    ax.set_ylabel('$M_{X}$ (GeV)')
+    ax.set_xlabel('y')
+    ax.grid(False)
+
+    return fig
