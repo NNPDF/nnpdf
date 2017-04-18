@@ -327,8 +327,8 @@ class Config(report.Config):
     def parse_lumi_channel(self, ch:str):
         from validphys.pdfgrids import LUMI_CHANNELS
         if ch not in LUMI_CHANNELS:
-            raise ConfigError('lumi_channel not understood:',
-                              'lumi_channel', alternatives=LUMI_CHANNELS,
+            raise ConfigError('lumi_channel not understood: %s' % ch,
+                              ch, alternatives=LUMI_CHANNELS,
                               display_alternatives='all')
         return ch
 
