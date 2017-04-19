@@ -1,2 +1,2 @@
 process_description: Deep Inelastic Scattering
-xqmap: DIS
+kinematics_override: dis_sqrt_scale
