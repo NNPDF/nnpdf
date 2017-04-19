@@ -97,23 +97,32 @@ in the plot files. For example, for DIS processes, 'k1' refers to 'x',
 
 These kinematic values can be overridden by some transformation of
 them. For that purpose, it is possible to define
-a **kinematics_override** key.  The value must be a function defined
+a **kinematics_override** key.  The value must be a class defined
 in:
 
 `validphys2/src/validphys/plotoptions/kintransforms.py`
 
-The function must take three parameters: `(k1, k2 k3)` as defined in the
-dataset implementation, and return three new values `(k1', k2', k3')`
-which are the "transformed" kinematical variables, which will be used
-for plotting purposes every time the kinematic variables k1, k2 and k3
-are referred to. The function must implement a "new_labels" decorator,
-specifying the names for the new variables. An example of such
-transform is:
+The class must have a `__call__` method that takes three parameters:
+`(k1, k2 k3)` as defined in the dataset implementation, and return
+three new values `(k1', k2', k3')` which are the "transformed"
+kinematical variables, which will be used for plotting purposes every
+time the kinematic variables k1, k2 and k3 are referred to.
+Additionally, the class must implement a `new_labels` method, that
+takes the old labels and returns the new ones, and an `xq2map`
+function that takes the kinematic variables and returns a tuple of (x,
+Q²) with some approximate values. An example of such transform is:
 
-````
-@utils.new_labels('$2k_1$', '$3k_1$', '$4k_3$')
-def dummy_transform(k1,k2,k3):
-    return k1*2, k2*3, k3*4
+````python
+class dis_sqrt_scale:
+    def __call__(self, k1, k2, k3):
+        ecm = sqrt(k2/(k1*k3))
+        return k1, sqrt(k2), ceil(ecm)
+
+    def new_labels(self, *old_labels):
+        return ('$x$', '$Q$ (GeV)', r'$\sqrt{s} (GeV)$')
+
+    def xq2map(self, k1, k2, k3, **extra_labels):
+        return k1, k2*k2
 ````
 
 
