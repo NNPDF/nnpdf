@@ -32,6 +32,7 @@ def kinlimits(commondata, cuts, use_cuts, use_kinoverride:bool=True):
     ndata = len(kintable)
     if cuts:
         kintable = kintable.ix[cuts.load()]
+        nfitted = len(kintable)
     elif use_cuts:
         nfitted = len(kintable)
     else:
