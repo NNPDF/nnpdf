@@ -339,6 +339,10 @@ class Config(report.Config):
                               display_alternatives='all')
         return ch
 
+    def produce_all_lumi_channels(self):
+        from validphys.pdfgrids import LUMI_CHANNELS
+        return {'lumi_channels': self.parse_lumi_channels(list(LUMI_CHANNELS))}
+
     #TODO: Right name? Right interface?
     def parse_corrpair(self, pair:list):
         """A list of two dataset inputs."""
