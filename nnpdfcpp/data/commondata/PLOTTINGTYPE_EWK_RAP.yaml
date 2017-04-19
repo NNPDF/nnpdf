@@ -1,2 +1,2 @@
 process_description: Drell-Yan Rapidity Distribution
-xqmap: DY
+kinematics_override: ewk_rap_sqrt_scale

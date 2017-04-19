@@ -1,2 +1,2 @@
 process_description: Jet Rapidity Distribution
-xqmap: DY
+kinematics_override: ewj_rap_sqrt_scale

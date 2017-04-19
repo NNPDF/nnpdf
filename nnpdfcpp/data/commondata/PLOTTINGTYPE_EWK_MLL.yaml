@@ -1,2 +1,2 @@
 process_description: Drell-Yan Mass Distribution
-xqmap: DYm
+kinematics_override: ewk_mll_sqrt_scale

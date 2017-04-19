@@ -1,2 +1,2 @@
 process_description: Higgs Rapidity Distribution
-xqmap: DY
+kinematics_override: hig_rap_sqrt_scale

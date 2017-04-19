@@ -1,2 +1,2 @@
 process_description: Heavy Quarks Total Cross Section
-xqmap: DY
+kinematics_override: inc_sqrt_scale

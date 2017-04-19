@@ -1,2 +1,2 @@
 process_description: Heavy Quarks Production Mass Distribution
-xqmap: DYm
+kinematics_override: hqp_mqq_sqrt_scale

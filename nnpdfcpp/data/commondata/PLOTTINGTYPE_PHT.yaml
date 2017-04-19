@@ -1,2 +1,2 @@
 process_description: Photon Production
-xqmap: DY
+kinematics_override: pht_sqrt_scale

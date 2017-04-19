@@ -1,2 +1,2 @@
 process_description: Jet Mass Distribution
-xqmap: DYm
+kinematics_override: ewj_mll_sqrt_scale

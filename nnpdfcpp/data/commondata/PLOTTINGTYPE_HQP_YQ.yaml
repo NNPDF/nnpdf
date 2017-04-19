@@ -1,2 +1,2 @@
 process_description: Heavy Quarks Production Single Quark Rapidity Distribution
-xqmap: DY
+kinematics_override: hqp_yq_sqrt_scale
