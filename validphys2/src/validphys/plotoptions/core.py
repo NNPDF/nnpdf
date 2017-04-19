@@ -295,3 +295,9 @@ def transform_result(cv, error, kintable, info):
     newcv, newerror = apply_to_all_columns(pd.concat([df,kintable], axis=1),f)
 
     return np.array(newcv), np.array(newerror)
+
+def get_xq2map(kintable, info):
+    """Return a tuple of (x,Q²) from the kinematic values defined in kitable
+    (usually obtained by calling ``kitable``) using machinery specified in
+    ``info``"""
+    return apply_to_all_columns(kintable, info.kinematics_override.xq2map)

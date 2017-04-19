@@ -26,7 +26,7 @@ from validphys.core import MCStats
 from validphys.results import chi2_stat_labels
 from validphys.pdfgrids import (PDG_PARTONS,
                                 evaluate_luminosity, LUMI_CHANNELS)
-from validphys.plotoptions import get_infos, kitable, transform_result
+from validphys.plotoptions import get_infos, kitable, transform_result, get_xq2map
 from validphys.checks import check_scale
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges
@@ -960,6 +960,19 @@ def plot_lumi2d(pdf, lumi_channel, lumigrid2d, sqrts,
                      pdf.label, sqrts))
 
 
+    return fig
+
+@figure
+def xq2plot(commondata, cuts):
+    fig, ax = plt.subplots()
+    info = get_infos(commondata, cuts=cuts)[0]
+    table = kitable(commondata, info)
+    x, q2 = get_xq2map(table, info)
+
+
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+    ax.scatter(x,q2)
     return fig
 
 
