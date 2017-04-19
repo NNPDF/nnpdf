@@ -166,7 +166,7 @@ class PlotInfo:
 
         kinlabels = get_plot_kinlabels(commondata)
         if 'kinematics_override' in plot_params:
-            kinlabels = plot_params['kinematics_override'].new_labels(kinlabels)
+            kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
 
         return cls(kinlabels=kinlabels, **plot_params)
 
