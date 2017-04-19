@@ -1,0 +1,6 @@
+use_cuts: False
+dataset_input:
+    dataset: NMC
+
+actions_:
+    - - xq2plot
