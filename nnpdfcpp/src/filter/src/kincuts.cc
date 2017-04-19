@@ -122,8 +122,8 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
 
     if(set.GetSetName().compare(string("CMSZDIFF12")) == 0)
       {
-        const double pt = set.GetKinematics(idat, 0);
-        const double y = set.GetKinematics(idat, 1);
+        const double pt = sqrt(set.GetKinematics(idat, 1));
+        const double y = set.GetKinematics(idat, 0);
         if (pt < 30 || pt > 170 || y > 1.6)
           return false;
         return true;
