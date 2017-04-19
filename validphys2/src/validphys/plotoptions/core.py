@@ -48,7 +48,7 @@ def get_plot_kinlabels(commondata):
     return kinlabels_latex[key]
 
 def get_infos(data, *, normalize=False, cuts=None, use_plotfiles=True):
-    """Retrieve and process the plotting infoematio for the input data (which could
+    """Retrieve and process the plotting information for the input data (which could
     be a DatasetSpec or a CommonDataSpec).
 
     If ``use_plotfiles`` is ``True`` (the default), the PLOTTING files will be
