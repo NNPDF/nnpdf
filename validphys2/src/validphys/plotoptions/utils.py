@@ -4,6 +4,9 @@ Created on Tue Mar 15 12:49:39 2016
 
 @author: Zahari Kassabov
 """
+import collections
+import inspect
+
 import numpy as np
 
 def bins(arr):
@@ -31,6 +34,15 @@ def label(label):
         return f
     return closure
 
+def get_subclasses(obj, base):
+    """Return the classes in ``obj`` that are subclasses of ``base``"""
+    predicate =  lambda x: inspect.isclass(x) and issubclass(x, base)
+    return collections.OrderedDict(inspect.getmembers(obj, predicate))
+
+
 def apply_to_all_columns(df, func):
+    """Apply a function to all columns of a dataframe at the saem time.
+    The parameter names are the names of the column and the values are arrays
+    containing the each column's values."""
     params = dict((col,df[col].as_matrix()) for col in df.columns)
     return func(**params)

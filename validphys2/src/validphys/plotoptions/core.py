@@ -16,7 +16,7 @@ from reportengine.utils import get_functions, ChainMap
 from NNPDF import CommonData
 
 from validphys.core import CommonDataSpec, DataSetSpec, Cuts
-from validphys.plotoptions.utils import apply_to_all_columns
+from validphys.plotoptions.utils import apply_to_all_columns, get_subclasses
 from validphys.plotoptions import labelers, kintransforms, resulttransforms
 
 log = logging.getLogger(__name__)
@@ -24,7 +24,7 @@ log = logging.getLogger(__name__)
 default_labels = ('idat', 'k1', 'k2', 'k3')
 
 labeler_functions = get_functions(labelers)
-transform_functions = get_functions(kintransforms)
+transform_functions = get_subclasses(kintransforms, kintransforms.Kintransform)
 result_functions = get_functions(resulttransforms)
 
 
@@ -164,10 +164,10 @@ class PlotInfo:
         else:
             plot_params = {'dataset_label':commondata.GetSetName()}
 
+        kinlabels = get_plot_kinlabels(commondata)
         if 'kinematics_override' in plot_params:
-            kinlabels = plot_params['kinematics_override'].new_labels
-        else:
-            kinlabels = get_plot_kinlabels(commondata)
+            kinlabels = plot_params['kinematics_override'].new_labels(kinlabels)
+
         return cls(kinlabels=kinlabels, **plot_params)
 
 
@@ -227,7 +227,7 @@ class PlotConfigParser(Config):
         if not tr in transform_functions:
             raise ConfigError("Unknown transform function '%s'" % tr, tr,
                               transform_functions)
-        return transform_functions[tr]
+        return transform_functions[tr]()
 
     def parse_result_transform(self, tr:str):
         if not tr in result_functions:
