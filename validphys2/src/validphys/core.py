@@ -138,7 +138,7 @@ class PDF(TupleComp):
 
 
     def __str__(self):
-        return self.name
+        return self.label
 
     def __len__(self):
         return self.NumMembers
