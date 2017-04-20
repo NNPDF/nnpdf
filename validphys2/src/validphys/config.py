@@ -148,6 +148,16 @@ class Config(report.Config):
 
         return {'pdf': pdf, 'theoryid':thid, 'experiments': experiments}
 
+    def produce_fitinputcontext(self, fit):
+        """Like ``fitcontext`` but without setting the PDF"""
+
+
+        _, theory      = self.parse_from_('fit', 'theory', write=False)
+        _, experiments = self.parse_from_('fit', 'experiments', write=False)
+        thid = theory['theoryid']
+
+        return {'theoryid':thid, 'experiments': experiments}
+
 
 
     @element_of('dataset_inputs')
