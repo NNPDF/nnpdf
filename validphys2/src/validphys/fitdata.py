@@ -152,3 +152,20 @@ def test_for_same_cuts(fits, match_datasets_by_name):
             res.append((first,  second))
     return res
 
+def print_different_cuts(fits, test_for_same_cuts):
+    res = StringIO()
+    first_fit, second_fit = fits
+    if test_for_same_cuts:
+        res.write("The following datasets are both included but have different kinematical cuts:\n\n")
+        for (first, second) in test_for_same_cuts:
+            info = get_infos(first.commondata)[0]
+            total_points = len(first.commondata.load())
+            res.write(" - %s:\n" % info.dataset_label)
+            first_len = len(first.cuts.load()) if first.cuts else total_points
+            second_len = len(second.cuts.load()) if second.cuts else total_points
+            res.write("    * %s includes %d out of %d points.\n" % (first_fit, first_len, total_points))
+            res.write("    * %s includes %d out of %d points.\n" % (second_fit, second_len, total_points))
+        res.write('\n')
+
+
+    return res.getvalue()
