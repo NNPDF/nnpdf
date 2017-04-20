@@ -105,6 +105,8 @@ def match_datasets_by_name(fits, fits_datasets):
     second_only = {k: secondds[k] for k in seccond_keys}
     return DatasetComp(common, first_only, second_only)
 
+
+#TODO: Do we do md output here or that's for the templates?
 def print_dataset_differences(fits, match_datasets_by_name,
                               print_common:bool=True):
     m = match_datasets_by_name
@@ -113,23 +115,22 @@ def print_dataset_differences(fits, match_datasets_by_name,
     if m.common and print_common:
         res.write("The following datasets are included in both `%s` and `%s`:\n\n" % (first, second))
         for k,v in m.common.items():
-            info = get_infos(v[0])[0]
+            info = get_infos(v[0].commondata)[0]
             res.write(' - %s\n' % info.dataset_label)
         res.write('\n')
     if m.first_only:
         res.write("The following datasets were included in `%s` but not in `%s`:\n\n"% (first,second))
         for k,v in m.first_only.items():
-            info = get_infos(v)[0]
+            info = get_infos(v.commondata)[0]
             res.write(' - %s\n' % info.dataset_label)
         res.write('\n')
     if m.second_only:
         res.write("The following datasets were included in `%s` but not in `%s`:\n\n"% (second,first))
         for k,v in m.second_only.items():
-            info = get_infos(v)[0]
+            info = get_infos(v.commondata)[0]
             res.write(' - %s\n' % info.dataset_label)
         res.write('\n')
     return res.getvalue()
-
 
 
 def test_for_same_cuts(fits, match_datasets_by_name):
