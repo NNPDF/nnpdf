@@ -23,6 +23,7 @@
 #include "ATLAS.h"
 #include "ATLAS2011JETS.h"
 #include "ATLASLOMASSDY11.h"
+#include "ATLASDY2D8TEV.h"
 #include "CMS.h"
 #include "CMSDY2D12.h"
 #include "CMSZDIFF12.h"
@@ -110,7 +111,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASZPT7TEVFilter());
   target.push_back(new ATLASZPT8TEVYDISTFilter());
   //  target.push_back(new ATLASZPT8TEVYDISTNORMFilter());
-  target.push_back(new ATLASZPT8TEVMDISTFilter()); 
+  target.push_back(new ATLASZPT8TEVMDISTFilter());
+  target.push_back(new ATLASDY2D8TEVFilter());
 
   // ************************* BCDMS ******************************
 
