@@ -330,15 +330,6 @@ class Config(report.Config):
     def produce_fitpdfs(self, fits):
         return {'pdfs': self.parse_pdfs([fit.as_input()['pdf'] for fit in fits])}
 
-    def produce_pair_pdfs(self, base, pdf):
-        #TODO: Find a better way to do this
-        from reportengine import namespaces
-        return {'pdfs': namespaces.NSList([base['pdf'], pdf], nskey='pdf')}
-
-    def produce_pdfs_with_base(self, base, pdfs):
-        #TODO: Find a better way to do this
-        from reportengine import namespaces
-        return {'pdfs': namespaces.NSList([base['pdf'], *pdfs], nskey='pdf')}
 
     @element_of('lumi_channels')
     def parse_lumi_channel(self, ch:str):
@@ -352,11 +343,3 @@ class Config(report.Config):
     def produce_all_lumi_channels(self):
         from validphys.pdfgrids import LUMI_CHANNELS
         return {'lumi_channels': self.parse_lumi_channels(list(LUMI_CHANNELS))}
-
-    #TODO: Right name? Right interface?
-    def parse_corrpair(self, pair:list):
-        """A list of two dataset inputs."""
-        msg = "A list of two dataset inputs is required."
-        if len(pair) != 2:
-            raise ConfigError(msg)
-        return self.parse_dataset_inputs(pair)
