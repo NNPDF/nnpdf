@@ -119,13 +119,13 @@ def print_dataset_differences(fits, match_datasets_by_name,
             res.write(' - %s\n' % info.dataset_label)
         res.write('\n')
     if m.first_only:
-        res.write("The following datasets were included in `%s` but not in `%s`:\n\n"% (first,second))
+        res.write("The following datasets are included in `%s` but not in `%s`:\n\n"% (first,second))
         for k,v in m.first_only.items():
             info = get_infos(v.commondata)[0]
             res.write(' - %s\n' % info.dataset_label)
         res.write('\n')
     if m.second_only:
-        res.write("The following datasets were included in `%s` but not in `%s`:\n\n"% (second,first))
+        res.write("The following datasets are included in `%s` but not in `%s`:\n\n"% (second,first))
         for k,v in m.second_only.items():
             info = get_infos(v.commondata)[0]
             res.write(' - %s\n' % info.dataset_label)
