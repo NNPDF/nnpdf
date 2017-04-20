@@ -1043,6 +1043,87 @@ actions_:
 
 Note that one still needs to set manually other keys like `description` and `pdfs`.
 
+#### from_: Null
+
+As a special case, `from_: Null` will retrieve the variable from the
+current namespace. This comes handy to transform lists of items into
+other items. Consider for example:
+
+```yaml
+base:
+    fit: NNPDF31_nnlo_as_0118_1000
+
+
+pairs:
+    fits:
+        - from_: base
+        - from_: null
+
+fits:
+    - NNPDF31_nnlo_as_0118_30dataset
+    - NNPDF31_nnlo_as_0118_collider
+    - NNPDF31_nnlo_as_0118_noAWZrap11
+    - NNPDF31_nnlo_as_0118_nojets
+    - NNPDF31_nnlo_as_0118_noLHCb
+    - NNPDF31_nnlo_as_0118_noLHC
+    - NNPDF31_nnlo_as_0118_nonuclear
+    - NNPDF31_nnlo_as_0118_notop
+    - NNPDF31_nnlo_as_0118_noZpt
+    - NNPDF31_nnlo_as_0118_proton
+    - NNPDF31_nnlo_as_0118_wAZPT7TEV
+    - NNPDF31_nnlo_as_0118_wCMSDY12
+    - NNPDF31_nnlo_as_0118_wEMC
+
+use_cuts: True
+
+printopts:
+    print_common: False
+
+description:
+    from_: fit
+meta:
+    author: Zahari Kassabov
+    keywords: [nn31final, gallery]
+
+template_text: |
+    % Non-default datasets
+
+    The datasets are compared to the default `{@base fit@}` fit.
+
+    {@with fits::fitcontext@}
+    {@fit@}
+    ======
+
+    {@description@}
+
+    {@with pairs@}
+
+    {@printopts print_dataset_differences  @}
+    {@print_different_cuts@}
+
+    {@endwith@}
+    {@endwith@}
+
+actions_:
+    - - report:
+          main: True
+          mathjax: True
+
+```
+
+At the beginning, we are printing the name of the fit contained in
+`base`.  Then we are iterating over each of the `fits` (that we
+defined explicitly in the config), and using `fitcontext` to set some
+variables inside the `with` block. In the inner block `{@with
+pairs@}`, we are making use of the definition of `pairs` to set the
+`fits` variable to contain two fits: the one defined in `base` and the
+one that changes with each iteration. Because the actions
+`print_dataset_differences` and `print_different_cuts` are inside that
+`with` block, the value of the variable `fits` they see is precisely
+this pair, which supersedes our original definition, inside that
+block.
+
+
 ### Plotting labels
 
 Several resources (PDFs, theories, fits) support a short form where
