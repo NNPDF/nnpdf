@@ -52,7 +52,29 @@ class SqrtScaleMixin:
 
 class DISXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
+        #in DIS-like experiment k1 is x, k2 is Q 
         return k1, k2*k2
+
+class DYXQ2MapMixin:
+    def xq2map(self, k1, k2, k3, **extra_labels):
+        #in DY-like experiments k1 is (pseudo)-rapidity and k2 is Q
+        #for each point in the experiment there are 
+        #two points in the xQ2 map
+        x1 = k2/k3*Exp(k1)
+        x2 = k2/k3*Exp(-k1)
+        return np.concatenate(( x1,x2 )), np.concatenate(( k2*k2,k2*k2 ))
+
+class ZPTMapMixin:
+    def xq2map(self, k1, k2, k3, **extra_labels):
+        #in ZPt-like Experiments k1 is the pt, k2 is Q
+        zmass = 91.1876
+        Q = (np.sqrt(zmass^2+k1*k1)+k1)
+        return Q/k3, Q*Q
+
+class JetPTMapMixin:
+    def xq2map(self, k1, k2, k3, **extra_labels):
+        #in JetPt-like Experiments k1 is the pt, k2 is Q
+        return k1/k3, k1*k1
 
 #The transforms themselves
 class identity:
