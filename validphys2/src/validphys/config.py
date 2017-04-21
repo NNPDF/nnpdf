@@ -48,9 +48,9 @@ def _id_with_label(f):
     def parse_func(self, item, **kwargs):
         if not isinstance(item, dict):
             return f(self, item, **kwargs)
-        keydiff =  {'id', 'label'} - item.keys()
+        keydiff =  item.keys() - {'id', 'label'}
 
-        if  keydiff and 'id' in keydiff:
+        if  keydiff or not 'id' in item:
             raise ConfigError("'%s' must be a single id, or a mapping "
                               "with keys 'id', 'label'"%(item,))
         id = item['id']
