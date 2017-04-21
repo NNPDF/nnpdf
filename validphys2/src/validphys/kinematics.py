@@ -16,6 +16,20 @@ from validphys import plotoptions
 
 log = logging.getLogger(__name__)
 
+def inspect_overrides(commondata):
+    """Retun a tuple with the name of the commondata, the name of the override and the process type tag"""
+    info = plotoptions.get_infos(commondata)[0]
+    return (commondata.name, info.kinematics_override.__class__.__name__, commondata.load().GetProc(0))
+
+all_inspect_overrides = collect(inspect_overrides, ('experiments', 'experiment'))
+
+@table
+def inspect_overrides_table(all_inspect_overrides):
+    """Produce a table with all the overrides in all the experiments.
+    This is mostly for debugging purposes."""
+
+    return pd.DataFrame(all_inspect_overrides)
+
 def kinlimits(commondata, cuts, use_cuts, use_kinoverride:bool=True):
     """Return a mapping conaining the number of fitted and used datapoints,
     as well as the label, minimum and maximum value for each of the three
