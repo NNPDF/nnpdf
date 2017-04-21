@@ -1043,6 +1043,87 @@ actions_:
 
 Note that one still needs to set manually other keys like `description` and `pdfs`.
 
+#### from_: Null
+
+As a special case, `from_: Null` will retrieve the variable from the
+current namespace. This comes handy to transform lists of items into
+other items. Consider for example:
+
+```yaml
+base:
+    fit: NNPDF31_nnlo_as_0118_1000
+
+
+pairs:
+    fits:
+        - from_: base
+        - from_: null
+
+fits:
+    - NNPDF31_nnlo_as_0118_30dataset
+    - NNPDF31_nnlo_as_0118_collider
+    - NNPDF31_nnlo_as_0118_noAWZrap11
+    - NNPDF31_nnlo_as_0118_nojets
+    - NNPDF31_nnlo_as_0118_noLHCb
+    - NNPDF31_nnlo_as_0118_noLHC
+    - NNPDF31_nnlo_as_0118_nonuclear
+    - NNPDF31_nnlo_as_0118_notop
+    - NNPDF31_nnlo_as_0118_noZpt
+    - NNPDF31_nnlo_as_0118_proton
+    - NNPDF31_nnlo_as_0118_wAZPT7TEV
+    - NNPDF31_nnlo_as_0118_wCMSDY12
+    - NNPDF31_nnlo_as_0118_wEMC
+
+use_cuts: True
+
+printopts:
+    print_common: False
+
+description:
+    from_: fit
+meta:
+    author: Zahari Kassabov
+    keywords: [nn31final, gallery]
+
+template_text: |
+    % Non-default datasets
+
+    The datasets are compared to the default `{@base fit@}` fit.
+
+    {@with fits::fitcontext@}
+    {@fit@}
+    ======
+
+    {@description@}
+
+    {@with pairs@}
+
+    {@printopts print_dataset_differences  @}
+    {@print_different_cuts@}
+
+    {@endwith@}
+    {@endwith@}
+
+actions_:
+    - - report:
+          main: True
+          mathjax: True
+
+```
+
+At the beginning, we are printing the name of the fit contained in
+`base`.  Then we are iterating over each of the `fits` (that we
+defined explicitly in the config), and using `fitcontext` to set some
+variables inside the `with` block. In the inner block `{@with
+pairs@}`, we are making use of the definition of `pairs` to set the
+`fits` variable to contain two fits: the one defined in `base` and the
+one that changes with each iteration. Because the actions
+`print_dataset_differences` and `print_different_cuts` are inside that
+`with` block, the value of the variable `fits` they see is precisely
+this pair, which supersedes our original definition, inside that
+block.
+
+
 ### Plotting labels
 
 Several resources (PDFs, theories, fits) support a short form where
@@ -1063,6 +1144,10 @@ pdfs:
 
 In all plots the label will be used everywhere the PDF name needs to
 be displayed (like in legends and axes).
+
+The plotting labels for datasets are read from the `dataset_label` key
+in the plotting files (See [Plotting
+format specification](plotting_format.html)).
 
 Reports
 -------
@@ -1120,8 +1205,37 @@ and it must be closed by an `endwith` tag
 ```
 Like in the **target** tag, the spec is separated by `::`.
 
+### The report action
 
-###Example report template
+As always, see `validphys --help report` for the most complete
+information. The options allow customizing the CSS style or the
+template that contains the report itself.
+
+Here we only discuss a couple of interesting flags.
+
+#### The `main` flag
+
+The `main: True` flag can only affect one report per run. It has the
+effect of setting the name `index.html`, which comes handy for
+visualizing the uploaded result in the server (see [Uploading the
+result]). It also tries to open the web browser when the report
+finishes.
+
+#### Displaying math (the `mathjax` flag)
+
+Displaying math on browsers is painful and not without trouble. Pandoc
+tries to render the LaTeX math using utf8-characters. This doesn't
+require external dependencies and allows to work with the text
+normally, but is extremely limited (little more than subindexes and
+greek letters).
+
+It is possible to set `mathjax:True` to use the
+[Mathjax](https://www.mathjax.org/) library. This supports many more
+symbols, but is rather slow and requires an external connection in
+order to render the math.
+
+
+### Example report template
 
 A template that could correspond to the example above is:
 ```

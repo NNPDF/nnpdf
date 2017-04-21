@@ -80,3 +80,8 @@ def check_scale(scalename, allow_none=False):
             raise e
     return check
 
+@make_argcheck
+def assert_use_cuts_true(use_cuts):
+    if not use_cuts:
+        raise CheckError("use_cuts needs to be True for this action.")
+

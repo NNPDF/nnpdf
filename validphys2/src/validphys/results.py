@@ -20,7 +20,7 @@ from reportengine.checks import require_one, remove_outer
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.checks import make_check, CheckError
+from validphys.checks import make_check, CheckError, assert_use_cuts_true
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
 
 log = logging.getLogger(__name__)
@@ -463,12 +463,9 @@ def perreplica_chi2_table(experiments, pdf):
 
     return pd.DataFrame(total_chis.T, columns = ['Total', *[exp.name for exp in experiments]])
 
-@make_check
-def _assert_use_cuts_true(ns, **kwargs):
-    if not ns['use_cuts']:
-        raise CheckError("use_cuts needs to be True for this action.")
 
-@_assert_use_cuts_true
+
+@assert_use_cuts_true
 @table
 def closure_shifts(experiments_index, fit, use_cuts, experiments):
     """Save the differenve between the fitted data and the real commondata

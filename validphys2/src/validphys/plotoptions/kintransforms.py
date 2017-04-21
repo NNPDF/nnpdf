@@ -50,6 +50,11 @@ class SqrtScaleMixin:
     def __call__(self, k1, k2, k3):
         return  k1, sqrt(k2), k3
 
+    qlabel = NotImplemented
+
+    def new_labels(self, s1, s2, s3):
+        return s1, self.qlabel, s3
+
 class DISXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
         #in DIS-like experiment k1 is x, k2 is Q 
@@ -85,8 +90,8 @@ class identity:
         return old_labels
 
 class dyp_sqrt_scale(SqrtScaleMixin):
-    def new_labels(self, *old_labels):
-        return ('$y$', '$M$ (GeV)', r'$\sqrt{s} (GeV)$')
+    qlabel = '$M (GeV)$'
+
 
 class jet_sqrt_scale(SqrtScaleMixin):
     def new_labels(self, *old_labels):
@@ -100,6 +105,64 @@ class dis_sqrt_scale(DISXQ2MapMixin):
     def new_labels(self, *old_labels):
         return ('$x$', '$Q$ (GeV)', r'$\sqrt{s} (GeV)$')
 
+class ewj_jpt_sqrt_scale(SqrtScaleMixin):
+    qlabel = '$M (GeV)$'
+
+class ewj_jrap_sqrt_scale(SqrtScaleMixin):
+    qlabel = '$M (GeV)$'
+
+class ewj_mll_sqrt_scale(SqrtScaleMixin):
+    qlabel = '$M_{ll} (GeV)$'
+
+class ewj_pt_sqrt_scale(SqrtScaleMixin):
+    qlabel = '$M (GeV)$'
+
+class ewj_ptrap_sqrt_scale(SqrtScaleMixin):
+    qlabel = r'$p_T (GeV)$'
+
+class ewj_rap_sqrt_scale(SqrtScaleMixin):
+    qlabel = '$M (GeV)$'
+
+class ewk_mll_sqrt_scale(SqrtScaleMixin):
+    qlabel = '$M_{ll} (GeV)$'
+
+class ewk_pt_sqrt_scale(SqrtScaleMixin):
+    qlabel = '$M (GeV)$'
+
+class ewk_ptrap_sqrt_scale(SqrtScaleMixin):
+    qlabel = r'$p_T (GeV)$'
+
+class ewk_rap_sqrt_scale(SqrtScaleMixin):
+    qlabel = '$M (GeV)$'
+
+class hig_rap_sqrt_scale(SqrtScaleMixin):
+    qlabel = '$M_H (GeV)$'
+
+class hqp_mqq_sqrt_scale(SqrtScaleMixin):
+    qlabel = r'$\mu (GeV)$'
+
+class hqp_ptq_sqrt_scale(SqrtScaleMixin):
+    qlabel = r'$\mu (GeV)$'
+
+class hqp_ptqq_sqrt_scale(SqrtScaleMixin):
+    qlabel = r'$\mu (GeV)$'
+
+class hqp_yq_sqrt_scale(SqrtScaleMixin):
+    qlabel = r'$\mu (GeV)$'
+
+class hqp_yqq_sqrt_scale(SqrtScaleMixin):
+    qlabel = r'$\mu (GeV)$'
+
+class inc_sqrt_scale(SqrtScaleMixin):
+    qlabel = r'$\mu (GeV)$'
+
+class pht_sqrt_scale(SqrtScaleMixin):
+    qlabel = r'$E_{T,\gamma} (GeV)$'
+
+class sia_sqrt_scale(SqrtScaleMixin):
+    qlabel = '$Q (GeV)$'
+
+
 class nmc_process(DISXQ2MapMixin):
     def __call__(self, k1,k2,k3):
         xBins = [0.0045, 0.008, 0.0125, 0.0175,
@@ -111,4 +174,4 @@ class nmc_process(DISXQ2MapMixin):
         return k1, sqrt(k2), ceil(ecm)
 
     def new_labels(self, *old_labels):
-        return old_labels
+        return ('$x$', '$Q$ (GeV)', r'$\sqrt{s} (GeV)$')
