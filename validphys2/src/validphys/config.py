@@ -51,8 +51,9 @@ def _id_with_label(f):
         keydiff =  item.keys() - {'id', 'label'}
 
         if  keydiff or not 'id' in item:
-            raise ConfigError("'%s' must be a single id, or a mapping "
-                              "with keys 'id', 'label'"%(item,))
+            unrecognized = f' Unrecognized: {keydiff}' if keydiff else ''
+            raise ConfigError(f"'{item}' must be a single id, or a mapping "
+                              f"with keys 'id', 'label.{unrecognized}'")
         id = item['id']
         val = f(self, id, **kwargs)
         if 'label' in item:
