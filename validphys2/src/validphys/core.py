@@ -180,18 +180,25 @@ class PDF(TupleComp):
                                   (self.name, error))
 
 class CommonDataSpec(TupleComp):
-    def __init__(self, datafile, sysfile, plotfiles, name=None):
+    def __init__(self, datafile, sysfile, plotfiles, name=None, process_type=None):
         self.datafile = datafile
         self.sysfile = sysfile
-        self.plotfiles = plotfiles
+        self.plotfiles = tuple(plotfiles)
         self._name=name
-        super().__init__(datafile, sysfile, plotfiles)
+        self._process_type = process_type
+        super().__init__(datafile, sysfile, self.plotfiles)
 
     @property
     def name(self):
         if self._name is None:
             self._name = self.load().GetSetName()
         return self._name
+
+    @property
+    def process_type(self):
+        if self._process_type is None:
+            self._process_type = self._process_type = self.load().GetProc(0)
+        return self._process_type
 
     def __str__(self):
         return self.name
