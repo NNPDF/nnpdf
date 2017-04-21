@@ -144,6 +144,9 @@ file in attachment:
                 sys.exit(1)
 
     def run(self):
+        if sys.version_info < (3, 6):
+            log.warn("validphys 2 is discontinued on Python<3.6 and will not be longer updated. Please run\n"
+                     "conda install python=3.6\n\n If you have any problems, please ask Zahari.")
         with self.upload_context(self.args['upload'], self.args['output']):
             super().run()
 
