@@ -138,13 +138,17 @@ class Config(report.Config):
     def produce_fitcontext(self, fit):
         """Set PDF, theory ID and experiments from the fit config"""
 
-
         _, pdf         = self.parse_from_('fit', 'pdf', write=False)
         _, theory      = self.parse_from_('fit', 'theory', write=False)
-        _, experiments = self.parse_from_('fit', 'experiments', write=False)
 
         #TODO: parse we need multilevel from to do theoruid nicely
         thid = theory['theoryid']
+
+        #We need to make theoryid available to parse the experiments
+        with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
+            _, experiments = self.parse_from_('fit', 'experiments', write=False)
+
+
 
         return {'pdf': pdf, 'theoryid':thid, 'experiments': experiments}
 
@@ -153,8 +157,12 @@ class Config(report.Config):
 
 
         _, theory      = self.parse_from_('fit', 'theory', write=False)
-        _, experiments = self.parse_from_('fit', 'experiments', write=False)
         thid = theory['theoryid']
+
+        #We need to make theoryid available to parse the experiments
+        with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
+            _, experiments = self.parse_from_('fit', 'experiments', write=False)
+        _, experiments = self.parse_from_('fit', 'experiments', write=False)
 
         return {'theoryid':thid, 'experiments': experiments}
 
