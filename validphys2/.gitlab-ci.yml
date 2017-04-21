@@ -7,26 +7,13 @@ stages:
 
 #Set to "true" to generate builds for non-default branches
 variables:
-    UPLOAD_NON_MASTER: "tru"
+    UPLOAD_NON_MASTER: "false"
 
 ## Run the configure and make tests
 job1:
     variables:
-        CONDA_PY: "35"
-    stage: build-deploy
-    script: ".ciscripts/build-deploy.sh"
-
-    artifacts:
-        untracked: True
-
-job2:
-    variables:
         CONDA_PY: "36"
     stage: build-deploy
-    script: ".ciscripts/build-deploy.sh"
-
-    artifacts:
-        untracked: True
     script: ".ciscripts/build-deploy.sh"
 
     artifacts:

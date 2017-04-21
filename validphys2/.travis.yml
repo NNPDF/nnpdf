@@ -16,7 +16,6 @@ env:
 
   matrix:
     - CONDA_PY=35
-    - CONDA_PY=36
 
 
 before_install:
