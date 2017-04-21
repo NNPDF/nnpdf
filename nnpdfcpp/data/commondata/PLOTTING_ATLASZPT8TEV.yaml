@@ -1,0 +1,4 @@
+x: k1
+y_label: '$d\sigma_{Z/\gamma^{*}}/dy$ (fb)'
+figure_by:
+  - k2 
