@@ -15,7 +15,7 @@ env:
     - OUTPUT_CHANNEL=conda-pkgs-private
 
   matrix:
-    - CONDA_PY=35
+    - CONDA_PY=36
 
 
 before_install:
