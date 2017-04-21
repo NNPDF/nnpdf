@@ -31,7 +31,7 @@ The expected interface of the classes is:
 """
 import abc
 
-from numpy import sqrt, ceil, nditer
+from numpy import sqrt, ceil, nditer, exp, concatenate
 
 class Kintransform(metaclass=abc.ABCMeta):
     @classmethod
@@ -65,21 +65,35 @@ class DYXQ2MapMixin:
         #in DY-like experiments k1 is (pseudo)-rapidity and k2 is Q
         #for each point in the experiment there are 
         #two points in the xQ2 map
-        x1 = k2/k3*Exp(k1)
-        x2 = k2/k3*Exp(-k1)
-        return np.concatenate(( x1,x2 )), np.concatenate(( k2*k2,k2*k2 ))
+        x1 = k2/k3*exp(k1)
+        x2 = k2/k3*exp(-k1)
+        return concatenate(( x1,x2 )), concatenate(( k2*k2,k2*k2 ))
 
-class ZPTMapMixin:
+class EWPTXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
         #in ZPt-like Experiments k1 is the pt, k2 is Q
-        zmass = 91.1876
-        Q = (np.sqrt(zmass^2+k1*k1)+k1)
+        zmass2 = 91.1876*91.1876
+        Q = (sqrt(zmass2+k1*k1)+k1)
         return Q/k3, Q*Q
 
-class JetPTMapMixin:
+class DYMXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
-        #in JetPt-like Experiments k1 is the pt, k2 is Q
-        return k1/k3, k1*k1
+        #in DYM-like experiments the k1 is the mass, k2 is the mass
+        return k2/k3, k2*k2
+
+class HQPTXQ2MapMixin:
+    def xq2map(self, k1, k2, k3, **extra_labels):
+        #in HQPt-like Experiments k1 is the pt, k2 is Q
+        QMASS = 173.
+        Q = (sqrt(QMASS^2+k1*k1)+k1)
+        return Q/k3, Q*Q
+
+class HQQPTXQ2MapMixin:
+    def xq2map(self, k1, k2, k3, **extra_labels):
+        #in ZPt-like Experiments k1 is the pt, k2 is Q
+        QQMASS = 2*173.
+        Q = (sqrt(QQMASS^2+k1*k1)+k1)
+        return Q/k3, Q*Q
 
 #The transforms themselves
 class identity:
@@ -93,7 +107,7 @@ class dyp_sqrt_scale(SqrtScaleMixin):
     qlabel = '$M (GeV)$'
 
 
-class jet_sqrt_scale(SqrtScaleMixin):
+class jet_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
     def new_labels(self, *old_labels):
         return ('$|y|$', '$p_T$ (GeV)', r'$\sqrt{s} (GeV)$')
 
@@ -105,61 +119,61 @@ class dis_sqrt_scale(DISXQ2MapMixin):
     def new_labels(self, *old_labels):
         return ('$x$', '$Q$ (GeV)', r'$\sqrt{s} (GeV)$')
 
-class ewj_jpt_sqrt_scale(SqrtScaleMixin):
+class ewj_jpt_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
     qlabel = '$M (GeV)$'
 
-class ewj_jrap_sqrt_scale(SqrtScaleMixin):
+class ewj_jrap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
     qlabel = '$M (GeV)$'
 
-class ewj_mll_sqrt_scale(SqrtScaleMixin):
+class ewj_mll_sqrt_scale(SqrtScaleMixin,DYMXQ2MapMixin):
     qlabel = '$M_{ll} (GeV)$'
 
-class ewj_pt_sqrt_scale(SqrtScaleMixin):
+class ewj_pt_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
     qlabel = '$M (GeV)$'
 
-class ewj_ptrap_sqrt_scale(SqrtScaleMixin):
+class ewj_ptrap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
     qlabel = r'$p_T (GeV)$'
 
-class ewj_rap_sqrt_scale(SqrtScaleMixin):
+class ewj_rap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
     qlabel = '$M (GeV)$'
 
-class ewk_mll_sqrt_scale(SqrtScaleMixin):
+class ewk_mll_sqrt_scale(SqrtScaleMixin,DYMXQ2MapMixin):
     qlabel = '$M_{ll} (GeV)$'
 
-class ewk_pt_sqrt_scale(SqrtScaleMixin):
+class ewk_pt_sqrt_scale(SqrtScaleMixin,EWPTXQ2MapMixin):
     qlabel = '$M (GeV)$'
 
-class ewk_ptrap_sqrt_scale(SqrtScaleMixin):
+class ewk_ptrap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
     qlabel = r'$p_T (GeV)$'
 
-class ewk_rap_sqrt_scale(SqrtScaleMixin):
+class ewk_rap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
     qlabel = '$M (GeV)$'
 
-class hig_rap_sqrt_scale(SqrtScaleMixin):
+class hig_rap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
     qlabel = '$M_H (GeV)$'
 
-class hqp_mqq_sqrt_scale(SqrtScaleMixin):
+class hqp_mqq_sqrt_scale(SqrtScaleMixin,DYMXQ2MapMixin):
     qlabel = r'$\mu (GeV)$'
 
-class hqp_ptq_sqrt_scale(SqrtScaleMixin):
+class hqp_ptq_sqrt_scale(SqrtScaleMixin,HQPTXQ2MapMixin):
     qlabel = r'$\mu (GeV)$'
 
-class hqp_ptqq_sqrt_scale(SqrtScaleMixin):
+class hqp_ptqq_sqrt_scale(SqrtScaleMixin,HQQPTXQ2MapMixin):
     qlabel = r'$\mu (GeV)$'
 
-class hqp_yq_sqrt_scale(SqrtScaleMixin):
+class hqp_yq_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
     qlabel = r'$\mu (GeV)$'
 
-class hqp_yqq_sqrt_scale(SqrtScaleMixin):
+class hqp_yqq_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
     qlabel = r'$\mu (GeV)$'
 
-class inc_sqrt_scale(SqrtScaleMixin):
+class inc_sqrt_scale(SqrtScaleMixin,DYMXQ2MapMixin):
     qlabel = r'$\mu (GeV)$'
 
-class pht_sqrt_scale(SqrtScaleMixin):
+class pht_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
     qlabel = r'$E_{T,\gamma} (GeV)$'
 
-class sia_sqrt_scale(SqrtScaleMixin):
+class sia_sqrt_scale(SqrtScaleMixin,DISXQ2MapMixin):
     qlabel = '$Q (GeV)$'
 
 
