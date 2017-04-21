@@ -1145,6 +1145,10 @@ pdfs:
 In all plots the label will be used everywhere the PDF name needs to
 be displayed (like in legends and axes).
 
+The plotting labels for datasets are read from the `dataset_label` key
+in the plotting files (See [Plotting
+format specification](plotting_format.html)).
+
 Reports
 -------
 
@@ -1201,8 +1205,37 @@ and it must be closed by an `endwith` tag
 ```
 Like in the **target** tag, the spec is separated by `::`.
 
+### The report action
 
-###Example report template
+As always, see `validphys --help report` for the most complete
+information. The options allow customizing the CSS style or the
+template that contains the report itself.
+
+Here we only discuss a couple of interesting flags.
+
+#### The `main` flag
+
+The `main: True` flag can only affect one report per run. It has the
+effect of setting the name `index.html`, which comes handy for
+visualizing the uploaded result in the server (see [Uploading the
+result]). It also tries to open the web browser when the report
+finishes.
+
+#### Displaying math (the `mathjax` flag)
+
+Displaying math on browsers is painful and not without trouble. Pandoc
+tries to render the LaTeX math using utf8-characters. This doesn't
+require external dependencies and allows to work with the text
+normally, but is extremely limited (little more than subindexes and
+greek letters).
+
+It is possible to set `mathjax:True` to use the
+[Mathjax](https://www.mathjax.org/) library. This supports many more
+symbols, but is rather slow and requires an external connection in
+order to render the math.
+
+
+### Example report template
 
 A template that could correspond to the example above is:
 ```
