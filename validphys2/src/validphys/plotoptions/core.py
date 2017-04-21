@@ -5,7 +5,6 @@ Created on Fri Mar 11 19:27:44 2016
 @author: Zahari Kassabov
 """
 import logging
-from collections import Mapping
 
 import numpy as np
 import pandas as pd
@@ -35,18 +34,32 @@ _kinlabels_keys = sorted(kinlabels_latex, key=len, reverse=True)
 
 def get_plot_kinlabels(commondata):
     """Return the LaTex kinematic labels for a given Commondata"""
+    key = commondata.process_type
+
+    return kinlabels_latex[key]
+
+def get_kinlabel_key(process_label):
     #Since there is no 1:1 correspondence between latex keys and GetProc,
     #we match the longest key such that the proc label starts with it.
-
-    l = commondata.GetProc(0)
+    l = process_label
     try:
-        key = next(k for k in _kinlabels_keys if l.startswith(k))
+        return next(k for k in _kinlabels_keys if l.startswith(k))
     except StopIteration as e:
         raise ValueError("Could not find a set of kinematic "
                          "variables matching  the process %s Check the "
                          "labels defined in commondata.cc. " % (l)) from e
-    return kinlabels_latex[key]
 
+def peek_commondata_process_type(commondatafilename):
+    """Check the process type of a commondata object without going though the
+    trouble of processing it on the C++ side"""
+    with open(commondatafilename) as f:
+        f.readline()
+        l = f.readline()
+    process_type = l.split('\t')[1]
+    return get_kinlabel_key(process_type)
+
+
+#TODO: Change this API to return only one item
 def get_infos(data, *, normalize=False, cuts=None, use_plotfiles=True):
     """Retrieve and process the plotting information for the input data (which could
     be a DatasetSpec or a CommonDataSpec).
@@ -62,40 +75,25 @@ def get_infos(data, *, normalize=False, cuts=None, use_plotfiles=True):
     generate the PlotInfo objects.
     """
     if isinstance(data, DataSetSpec):
-        plotfiles = data.commondata.plotfiles
         assert cuts is None, "Cuts are ignored"
         cuts = data.cuts.load() if data.cuts else None
+        data = data.commondata
     elif isinstance(data, CommonDataSpec):
-        plotfiles = data.plotfiles
         if isinstance(cuts, Cuts):
             cuts=cuts.load()
     else:
         raise TypeError("Unrecognized data type: %s" % type(data) )
-    nnpdf_dt = data.load()
-    if not plotfiles or not use_plotfiles:
-        infos = [_get_info(nnpdf_dt)]
-    else:
-        infos = []
-        for p in plotfiles:
-            log.debug("Processing PLOTTING file: %s.", p)
-            with p.open() as f:
-                infos.append(_get_info(nnpdf_dt, f, cuts=cuts,
-                                       normalize=normalize))
-    return infos
 
-def _get_info(commondata, file=None, cuts=None, normalize=False):
-    try:
-        return PlotInfo.from_commondata(commondata, file=file, cuts=cuts,
-                                        normalize=normalize)
-    except ConfigError:
-        log.error("Problem processing file %s" % getattr(file, 'name', file))
-        raise
+    info = PlotInfo.from_commondata(data, cuts=cuts, normalize=normalize)
+    return [info]
+
+
 
 class PlotInfo:
     def __init__(self, kinlabels,dataset_label,* ,x=None ,extra_labels=None, func_labels=None,
                  figure_by=None, line_by=None, kinematics_override=None,
                  result_transform=None, y_label=None, x_label=None,
-                 x_scale=None, y_scale=None, **kwargs):
+                 x_scale=None, y_scale=None, process_description='-', **kwargs):
         self.kinlabels = kinlabels
         if x is None:
             x = 'idat'
@@ -111,6 +109,7 @@ class PlotInfo:
         self.x_scale = x_scale
         self.y_scale = y_scale
         self.dataset_label = dataset_label
+        self.process_description = process_description
 
     def name_to_label(self, name):
         if name in labeler_functions:
@@ -149,20 +148,32 @@ class PlotInfo:
 
 
     @classmethod
-    def from_commondata(cls, commondata, file=None, cuts=None, normalize=False):
+    def from_commondata(cls, commondata, cuts=None, normalize=False):
 
-        if file:
-            config = PlotConfigParser.from_yaml(file, commondata, cuts=cuts)
-            plot_params = config.process_all_params()
-            if normalize and 'normalize' in plot_params:
-                #We might need to use reportengine.namespaces.resolve here
-                plot_params = plot_params.new_child(plot_params['normalize'])
+        #The only reason to call the parser once per config file is to
+        #give better error messages and stricter checks
+        plot_params = ChainMap()
+        if commondata.plotfiles:
+            for file in commondata.plotfiles:
+                with open(file) as f:
+                    config = PlotConfigParser.from_yaml(f, commondata, cuts=cuts)
+                try:
+                    config_params = config.process_all_params()
+                except ConfigError:
+                    log.error(f"Error in plotting file: {file}")
+                if normalize and 'normalize' in config_params:
+                    #We might need to use reportengine.namespaces.resolve here
+                    config_params = config_params.new_child(config_params['normalize'])
+                #TODO: Right now anything with in a later file gets priority,
+                #and normalize only works within the file. Would it make sense
+                #to make anything with normalize have priority?
+                plot_params = plot_params.new_child(config_params)
             if not 'dataset_label' in plot_params:
-                log.warn("'dataset_label' key not found in %s", file.name)
-                plot_params['dataset_label'] = commondata.GetSetName()
+                    log.warn("'dataset_label' key not found in %s", file)
+            plot_params['dataset_label'] = commondata.load().GetSetName()
 
         else:
-            plot_params = {'dataset_label':commondata.GetSetName()}
+            plot_params = {'dataset_label':commondata.load().GetSetName()}
 
         kinlabels = get_plot_kinlabels(commondata)
         if 'kinematics_override' in plot_params:
@@ -210,6 +221,9 @@ class PlotConfigParser(Config):
         raise ConfigError("Unknown label %s" % val, val, all_labels +
                           list(labeler_functions),
                               display_alternatives='all')
+
+    def parse_process_description(self, desc:str):
+        return desc
 
     def parse_dataset_label(self, lb:str):
         return lb

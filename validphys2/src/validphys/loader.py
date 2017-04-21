@@ -19,11 +19,11 @@ import os.path as osp
 import yaml
 import requests
 
-from NNPDF import CommonData
-
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts)
 from validphys import lhaindex
+
+from validphys.plotoptions import peek_commondata_process_type
 
 log = logging.getLogger(__name__)
 
@@ -107,16 +107,31 @@ class Loader(LoaderBase):
         sysfile = (self.commondata_folder / 'systypes' /
                    ('SYSTYPE_%s_%s.dat' % (setname, sysnum)))
 
-        #Good luck debugging this!
-        plotfiles = tuple(p for p in self.commondata_folder.iterdir()
-                        if re.match('PLOTTING_%s(_.*)?\.ya?ml'%setname, p.name))
-
         if not sysfile.exists():
             raise SysNotFoundError(("Could not find systype %s for "
                  "dataset '%s'. File %s does not exist.") % (sysnum, setname,
                   sysfile))
 
-        return CommonDataSpec(datafile, sysfile, plotfiles, name=setname)
+        plotfiles = []
+
+
+        process_type = peek_commondata_process_type(datafile)
+        process_plotting_root = self.commondata_folder/f'PLOTTINGTYPE_{process_type}'
+        type_plotting = (process_plotting_root.with_suffix('.yml'),
+                         process_plotting_root.with_suffix('.yaml'),)
+
+        data_plotting_root = self.commondata_folder/f'PLOTTING_{setname}'
+
+        data_plotting = (data_plotting_root.with_suffix('.yml'),
+                         data_plotting_root.with_suffix('.yaml'),
+                        )
+        #TODO: What do we do when both .yml and .yaml exist?
+        for tp in (type_plotting, data_plotting):
+            for p in tp:
+                if p.exists():
+                    plotfiles.append(p)
+
+        return CommonDataSpec(datafile, sysfile, plotfiles, name=setname, process_type=process_type)
 
     @functools.lru_cache()
     def check_theoryID(self, theoryID):
@@ -132,8 +147,8 @@ class Loader(LoaderBase):
            The plotfiles argument is accepted to keep symmetry with
            the commondataSpec,
            returned by check_commondata, but it doesn't do anything."""
-        datafile, sysfile, *_ = self.check_commondata(setname, sysnum)
-        return CommonData.ReadFile(str(datafile), str(sysfile))
+        cd = self.check_commondata(setname, sysnum, plotfiles)
+        return cd.load()
 
     #   @functools.lru_cache()
     def check_fktable(self, theoryID, setname, cfac):
