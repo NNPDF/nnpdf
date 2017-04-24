@@ -29,9 +29,14 @@ The expected interface of the classes is:
 
 
 """
+
+#TODO: fix the issue with Zmass and top mass - make them (globa?) constants
+ZMASS=91.1876
+TMASS=173.3
+
 import abc
 
-from numpy import sqrt, ceil, nditer, exp, concatenate
+import numpy as np
 
 class Kintransform(metaclass=abc.ABCMeta):
     @classmethod
@@ -48,7 +53,7 @@ class KintransformWithXQ2Map(Kintransform):
 
 class SqrtScaleMixin:
     def __call__(self, k1, k2, k3):
-        return  k1, sqrt(k2), k3
+        return  k1, np.sqrt(k2), k3
 
     qlabel = NotImplemented
 
@@ -57,42 +62,42 @@ class SqrtScaleMixin:
 
 class DISXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
-        #in DIS-like experiment k1 is x, k2 is Q
+        """in DIS-like experiment k1 is x, k2 is Q"""
         return k1, k2*k2
 
 class DYXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
-        #in DY-like experiments k1 is (pseudo)-rapidity and k2 is Q
-        #for each point in the experiment there are
-        #two points in the xQ2 map
-        x1 = k2/k3*exp(k1)
-        x2 = k2/k3*exp(-k1)
-        return concatenate(( x1,x2 )), concatenate(( k2*k2,k2*k2 ))
+        """in DY-like experiments k1 is (pseudo)-rapidity and k2 is Q for each point in the experiment there are two points in the xQ2 map"""
+        ratio = k2/k3
+        x1 = ratio*np.exp(k1)
+        x2 = ratio*np.exp(-k1)
+        q2 = k2*k2
+        return np.concatenate(( x1,x2 )), np.concatenate(( q2,q2 ))
 
 class EWPTXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
-        #in ZPt-like Experiments k1 is the pt, k2 is Q
-        zmass2 = 91.1876*91.1876
-        Q = (sqrt(zmass2+k1*k1)+k1)
+        """in ZPt-like Experiments k1 is the pt, k2 is Q"""
+        zmass2 = ZMASS*ZMASS
+        Q = (np.sqrt(zmass2+k1*k1)+k1)
         return Q/k3, Q*Q
 
 class DYMXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
-        #in DYM-like experiments the k1 is the mass, k2 is the mass
+        """in DYM-like experiments the k1 is the mass, k2 is the mass"""
         return k2/k3, k2*k2
 
 class HQPTXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
-        #in HQPt-like Experiments k1 is the pt, k2 is Q
-        QMASS = 173.
-        Q = (sqrt(QMASS^2+k1*k1)+k1)
+        """in HQPt-like Experiments k1 is the pt, k2 is Q"""
+        QMASS2 = TMASS*TMASS
+        Q = (np.sqrt(QMASS2+k1*k1)+k1)
         return Q/k3, Q*Q
 
 class HQQPTXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
-        #in ZPt-like Experiments k1 is the pt, k2 is Q
-        QQMASS = 2*173.
-        Q = (sqrt(QQMASS^2+k1*k1)+k1)
+        """in ZPt-like Experiments k1 is the pt, k2 is Q"""
+        QQMASS2 = (2*TMASS)*(2*TMASS)
+        Q = (np.sqrt(QQMASS2+k1*k1)+k1)
         return Q/k3, Q*Q
 
 #The transforms themselves
@@ -113,8 +118,8 @@ class jet_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
 
 class dis_sqrt_scale(DISXQ2MapMixin):
     def __call__(self, k1, k2, k3):
-        ecm = sqrt(k2/(k1*k3))
-        return k1, sqrt(k2), ceil(ecm)
+        ecm = np.sqrt(k2/(k1*k3))
+        return k1, np.sqrt(k2), np.ceil(ecm)
 
     def new_labels(self, *old_labels):
         return ('$x$', '$Q$ (GeV)', r'$\sqrt{s} (GeV)$')
@@ -182,10 +187,10 @@ class nmc_process(DISXQ2MapMixin):
         xBins = [0.0045, 0.008, 0.0125, 0.0175,
                  0.025, 0.035, 0.05, 0.07, 0.09, 0.11,
                  0.14, 0.18, 0.225, 0.275, 0.35, 0.5]
-        for x in nditer(k1, op_flags=['readwrite']):
+        for x in np.nditer(k1, op_flags=['readwrite']):
             x[...] = min(xBins, key=lambda y:abs(x-y))
-        ecm = sqrt(k2/(k1*k3))
-        return k1, sqrt(k2), ceil(ecm)
+        ecm = np.sqrt(k2/(k1*k3))
+        return k1, np.sqrt(k2), np.ceil(ecm)
 
     def new_labels(self, *old_labels):
         return ('$x$', '$Q$ (GeV)', r'$\sqrt{s} (GeV)$')
