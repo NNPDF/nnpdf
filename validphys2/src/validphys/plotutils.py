@@ -104,9 +104,10 @@ def marker_iter_scatter():
     ``plt.scatter``.
     For ``plt.plot``, use ``marker_iter_scatter``.
     """
-    for fill in MarkerStyle.fillstyles:
-        for shape in MarkerStyle.filled_markers:
-            yield MarkerStyle(marker=shape, fillstyle=fill)
+    while True:
+        for fill in MarkerStyle.fillstyles:
+            for shape in MarkerStyle.filled_markers:
+                yield MarkerStyle(marker=shape, fillstyle=fill)
 
 def marker_iter_plot():
     """Because of the mpl strange interface, markers work differently in plots
