@@ -9,35 +9,37 @@ read by various tools that want to sensibly represent the data.
 Naming convention
 =================
 
-Given a dataset  labeled `<DATASET>`, every file found in the
+Given a dataset  labeled `<DATASET>`, a file found in the
 `commondata` folder (`nnpdfcpp/data/commondata`) that matches the
 regular expression
 
 ````
-PLOTTING_<DATASET>(_.*)?\.ya?ml
+PLOTTING_<DATASET>\.ya?ml
 ````
 
 (that is, the string `"PLOTTING_"` followed by the name of the
-dataset, possibly followed by an underscore and an arbitrary string,
+dataset,
 and ending in `.yaml` or `.yml`) is to be considering a plotting file
-for that dataset. In case there is more than one such file, plots will
-be generated for both.
+for that dataset.
 
-For example, given the dataset "HERA1CCEP", the following are valid
-plotting file names:
-
-````
-PLOTTING_HERA1CCEP.yml
-PLOTTING_HERA1CCEP_TEST.yaml
-PLOTTING_HERA1CCEP_OTHER.yaml
-````
-
-And the following are invalid and will be ignored:
+For example, given the dataset "HERA1CCEP", the corresponding
+plotting file name is:
 
 ````
-PLOTTING_HERA1CCEP.txt
-PLOTTING_HERA1CCEPTEST.yaml
+PLOTTING_HERA1CCEP.yaml
 ````
+
+Additionally, the configuration is loaded from a per-process-type file
+called:
+
+```
+PLOTTINTYPE_<type>.yaml
+```
+
+See [Kinamatic labels] below for a list of defined types. When a key
+is present both in the dataset-specific and the process type level file, the
+dataset-specific one always takes precedence.
+
 
 Format
 ======
@@ -57,11 +59,11 @@ A key called `dataset_label` can  be used to specify a nice plotting
 and display label for each dataset. LaTeX math is allowed between
 dollar signs.
 
-## Kinamatics labels
+## Kinamatic labels
 
-The kinematic variables  are in principle deduced from the type of
-process declared for the data. They are deduced from the starting
-substring of the process type.  Currently they are:
+The default kinematic variables are inferred from the *process type*
+declared in the commondata files (more specifically from
+a substring). Currently they are:
 
 ```
 'DIS': ('$x$', '$Q^2 (GeV^2)$', '$y$'),
@@ -89,7 +91,8 @@ substring of the process type.  Currently they are:
 ```
 
 This mapping is declared as `CommonData.kinLabel_latex` in the C++
-code.
+code (and accessible as `validphys.plotoptions.core.kinlabels_latex`
+in the Python code).
 
 The three kinematic variables are referred to as 'k1', 'k2' and 'k3'
 in the plot files. For example, for DIS processes, 'k1' refers to 'x',
