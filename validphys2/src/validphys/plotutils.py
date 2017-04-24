@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 import matplotlib.scale as mscale
 import matplotlib.patches as mpatches
 from matplotlib  import transforms
+from matplotlib.markers import MarkerStyle
+
 
 
 def setup_ax(ax):
@@ -96,6 +98,24 @@ def hatch_iter():
             yield hatch*i
         i+=1
 
+def marker_iter_scatter():
+    """Yield the possible matplotplib.markers.Markersyle instances with
+    different fillsyles and markers. This can be passed to
+    ``plt.scatter``.
+    For ``plt.plot``, use ``marker_iter_scatter``.
+    """
+    for fill in MarkerStyle.fillstyles:
+        for shape in MarkerStyle.filled_markers:
+            yield MarkerStyle(marker=shape, fillstyle=fill)
+
+def marker_iter_plot():
+    """Because of the mpl strange interface, markers work differently in plots
+    and scatter. This is the same as `marker_iter_scatter`, but
+    returns kwargs to be passed to ``plt.plot()``"""
+    for ms in marker_iter_scatter():
+        yield {'marker':ms.get_marker(),'fillstyle': ms.get_fillstyle()}
+
+
 HandlerSpec = namedtuple('HandelrSpec', ["color", "alpha", "hatch", "outer"])
 
 class ComposedHandler:
@@ -134,7 +154,7 @@ class ComposedHandler:
 
 def offset_xcentered(n, ax,*, offset_prop=0.05):
     """Yield ``n`` matplotlib transforms in such a way that the corresponding
-    ``n`` transofrmed x values are centeres around the middle. The offset
+    ``n`` transofrmed x values are centered around the middle. The offset
     between to consecutive points is ``offset_prop`` in units of the figure
     dpi scale."""
     first_offset = +(n//2)
