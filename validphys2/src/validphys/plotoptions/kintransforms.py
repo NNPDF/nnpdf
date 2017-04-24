@@ -103,7 +103,7 @@ class identity:
     def new_labels(self, *old_labels):
         return old_labels
 
-class dyp_sqrt_scale(SqrtScaleMixin):
+class dyp_sqrt_scale(SqrtScaleMixin, DYXQ2MapMixin):
     qlabel = '$M (GeV)$'
 
 
