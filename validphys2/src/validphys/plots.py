@@ -9,6 +9,7 @@ import functools
 import warnings
 import abc
 from types import SimpleNamespace
+from collections import defaultdict
 import copy
 import numbers
 
@@ -630,8 +631,8 @@ class DistancePDFPlotter(PDFPlotter):
         if(self.normalize_pdf.ErrorType=="replicas" and pdf.ErrorType=="replicas"):
             draw_line = np.sqrt((1./(len(self.normalize_pdf)-1)+1./(len(pdf)-1))/2)
             ax.axhline(draw_line,color=color,alpha=0.5,linestyle="--")
-                
-        
+
+
         return gv
 
 @figuregen
@@ -975,6 +976,45 @@ def xq2plot(commondata, cuts):
     ax.scatter(x,q2)
     return fig
 
+
+@make_argcheck
+def _check_display_cuts_requires_use_cuts(display_cuts, use_cuts):
+    if display_cuts and not use_cuts:
+        raise CheckError("The display_cuts option requires setting use_cuts to True")
+
+@figure
+@_check_display_cuts_requires_use_cuts
+def xq2plotfinal(experiments_xq2map, use_cuts ,display_cuts:bool=True):
+    w,h = plt.rcParams["figure.figsize"]
+    fig, ax = plt.subplots(figsize=(w*2,h*2))
+    filteredx = []
+    filteredq2 = []
+
+    x = defaultdict(list)
+    q2 = defaultdict(list)
+    for commondata, fitted, masked in experiments_xq2map:
+        info = get_infos(commondata)[0]
+        key = info.process_description
+        x[key].append(fitted[0])
+        q2[key].append(fitted[1])
+        if display_cuts:
+            x[key].append(masked[0])
+            q2[key].append(masked[1])
+            filteredx.append(masked[0])
+            filteredq2.append(masked[1])
+    for key,markeropts in zip(x, plotutils.marker_iter_plot()):
+        ax.plot(np.concatenate(x[key]), np.concatenate(q2[key]),
+            linestyle='none', label=key, **markeropts,
+        )
+    if display_cuts:
+        ax.scatter(np.concatenate(filteredx), np.concatenate(filteredq2),
+            marker='o',
+            facecolors='none', edgecolor='red', s=30, lw=0.5, label="Cut"
+        )
+    ax.legend()
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+    return fig
 
 @figure
 def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):

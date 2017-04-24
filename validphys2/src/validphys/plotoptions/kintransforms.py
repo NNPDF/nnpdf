@@ -57,13 +57,13 @@ class SqrtScaleMixin:
 
 class DISXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
-        #in DIS-like experiment k1 is x, k2 is Q 
+        #in DIS-like experiment k1 is x, k2 is Q
         return k1, k2*k2
 
 class DYXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
         #in DY-like experiments k1 is (pseudo)-rapidity and k2 is Q
-        #for each point in the experiment there are 
+        #for each point in the experiment there are
         #two points in the xQ2 map
         x1 = k2/k3*exp(k1)
         x2 = k2/k3*exp(-k1)
