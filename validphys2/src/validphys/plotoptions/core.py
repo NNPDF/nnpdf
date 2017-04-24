@@ -156,11 +156,12 @@ class PlotInfo:
         if commondata.plotfiles:
             for file in commondata.plotfiles:
                 with open(file) as f:
-                    config = PlotConfigParser.from_yaml(f, commondata, cuts=cuts)
+                    config = PlotConfigParser.from_yaml(f, commondata.load(), cuts=cuts)
                 try:
                     config_params = config.process_all_params()
                 except ConfigError:
                     log.error(f"Error in plotting file: {file}")
+                    raise
                 if normalize and 'normalize' in config_params:
                     #We might need to use reportengine.namespaces.resolve here
                     config_params = config_params.new_child(config_params['normalize'])
