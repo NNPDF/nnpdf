@@ -960,20 +960,6 @@ def plot_lumi2d(pdf, lumi_channel, lumigrid2d, sqrts,
              "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[lumi_channel],
                      pdf.label, sqrts))
 
-
-    return fig
-
-@figure
-def xq2plot(commondata, cuts):
-    fig, ax = plt.subplots()
-    info = get_infos(commondata, cuts=cuts)[0]
-    table = kitable(commondata, info)
-    x, q2 = get_xq2map(table, info)
-
-
-    ax.set_xscale('log')
-    ax.set_yscale('log')
-    ax.scatter(x,q2)
     return fig
 
 
@@ -991,8 +977,26 @@ def _check_marker_by(marker_by):
 @figure
 @_check_display_cuts_requires_use_cuts
 @_check_marker_by
-def xq2plotfinal(experiments_xq2map, use_cuts ,display_cuts:bool=True,
-                 marker_by='process type'):
+def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
+                 marker_by:str='process type'):
+    """Plot the (x,Q²) coverage based of the data based on some LO
+    approximations. These are governed by the relevant kintransform.
+
+    The representation of the filtered data depends on the `display_cuts` and
+    `use_cuts` options:
+
+     - If `use_cuts` is False, all the data will be plotted (and setting
+    `display_cuts` to True is an error).
+
+     - If `use_cuts` is True and `display_cuts` is False, the masked points
+     will be ignored.
+
+     - If `use_cuts` is True and `display_cuts` is True, the filtered points
+     will be displaed and marked.
+
+    The points are grouped according to the `marker_by` option. The possible
+    values are: "process type", "experiment" or "dataset".
+    """
     w,h = plt.rcParams["figure.figsize"]
     fig, ax = plt.subplots(figsize=(w*1.6,h*1.6))
     filteredx = []
@@ -1010,6 +1014,7 @@ def xq2plotfinal(experiments_xq2map, use_cuts ,display_cuts:bool=True,
             key = info.dataset_label
         else:
             raise ValueError('Unknown marker_by value')
+
         x[key].append(fitted[0])
         q2[key].append(fitted[1])
         if display_cuts:
