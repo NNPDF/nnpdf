@@ -1011,7 +1011,10 @@ def xq2plotfinal(experiments_xq2map, use_cuts ,display_cuts:bool=True):
             marker='o',
             facecolors='none', edgecolor='red', s=30, lw=0.5, label="Cut"
         )
+    ax.set_title("Kinematic coverage")
     ax.legend()
+    ax.set_xlabel('x')
+    ax.set_ylabel(r'$\mu^2 (GeV^2)$')
     ax.set_xscale('log')
     ax.set_yscale('log')
     return fig
