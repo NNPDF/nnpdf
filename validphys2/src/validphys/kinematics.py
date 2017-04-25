@@ -76,9 +76,9 @@ def all_kinlimits_table(all_kinlimits, use_kinoverride:bool=True):
     return table
 
 
-XQ2Map = namedtuple('XQ2Map', ('commondata', 'fitted', 'masked'))
+XQ2Map = namedtuple('XQ2Map', ('experiment', 'commondata', 'fitted', 'masked'))
 
-def xq2map_with_cuts(commondata, cuts):
+def xq2map_with_cuts(experiment, commondata, cuts):
     """Return two (x,Q²) tuples: one for the fitted data and one for the
     cut data. If `display_cuts` is false or all data passes the cuts, the second
     tuple will be empty."""
@@ -92,9 +92,9 @@ def xq2map_with_cuts(commondata, cuts):
         masked_kitable = kintable.ix[~boolmask]
         xq2fitted =  plotoptions.get_xq2map(fitted_kintable, info)
         xq2masked = plotoptions.get_xq2map(masked_kitable, info)
-        return XQ2Map(commondata, xq2fitted, xq2masked)
+        return XQ2Map(experiment, commondata, xq2fitted, xq2masked)
     fitted_kintable = plotoptions.get_xq2map(kintable, info)
     empty = (np.array([]), np.array([]))
-    return XQ2Map(commondata, fitted_kintable, empty)
+    return XQ2Map(experiment, commondata, fitted_kintable, empty)
 
 experiments_xq2map = collect(xq2map_with_cuts, ('experiments', 'experiment'))

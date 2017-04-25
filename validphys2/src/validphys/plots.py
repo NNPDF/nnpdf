@@ -982,9 +982,17 @@ def _check_display_cuts_requires_use_cuts(display_cuts, use_cuts):
     if display_cuts and not use_cuts:
         raise CheckError("The display_cuts option requires setting use_cuts to True")
 
+@make_argcheck
+def _check_marker_by(marker_by):
+    markers = ('process type', 'experiment', 'dataset')
+    if marker_by not in markers:
+        raise CheckError("Unknown marker_by value", marker_by, markers)
+
 @figure
 @_check_display_cuts_requires_use_cuts
-def xq2plotfinal(experiments_xq2map, use_cuts ,display_cuts:bool=True):
+@_check_marker_by
+def xq2plotfinal(experiments_xq2map, use_cuts ,display_cuts:bool=True,
+                 marker_by='process type'):
     w,h = plt.rcParams["figure.figsize"]
     fig, ax = plt.subplots(figsize=(w*2,h*2))
     filteredx = []
@@ -992,9 +1000,16 @@ def xq2plotfinal(experiments_xq2map, use_cuts ,display_cuts:bool=True):
 
     x = defaultdict(list)
     q2 = defaultdict(list)
-    for commondata, fitted, masked in experiments_xq2map:
+    for experiment, commondata, fitted, masked in experiments_xq2map:
         info = get_infos(commondata)[0]
-        key = info.process_description
+        if marker_by == 'process type':
+            key = info.process_description
+        elif marker_by == 'experiment':
+            key = str(experiment)
+        elif marker_by == 'dataset':
+            key = info.dataset_label
+        else:
+            raise ValueError('Unknown marker_by value')
         x[key].append(fitted[0])
         q2[key].append(fitted[1])
         if display_cuts:
