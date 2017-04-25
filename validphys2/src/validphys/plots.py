@@ -989,10 +989,10 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
     `display_cuts` to True is an error).
 
      - If `use_cuts` is True and `display_cuts` is False, the masked points
-     will be ignored.
+    will be ignored.
 
      - If `use_cuts` is True and `display_cuts` is True, the filtered points
-     will be displaed and marked.
+    will be displaed and marked.
 
     The points are grouped according to the `marker_by` option. The possible
     values are: "process type", "experiment" or "dataset".
