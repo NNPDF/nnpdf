@@ -994,7 +994,7 @@ def _check_marker_by(marker_by):
 def xq2plotfinal(experiments_xq2map, use_cuts ,display_cuts:bool=True,
                  marker_by='process type'):
     w,h = plt.rcParams["figure.figsize"]
-    fig, ax = plt.subplots(figsize=(w*2,h*2))
+    fig, ax = plt.subplots(figsize=(w*1.6,h*1.6))
     filteredx = []
     filteredq2 = []
 
@@ -1019,12 +1019,12 @@ def xq2plotfinal(experiments_xq2map, use_cuts ,display_cuts:bool=True,
             filteredq2.append(masked[1])
     for key,markeropts in zip(x, plotutils.marker_iter_plot()):
         ax.plot(np.concatenate(x[key]), np.concatenate(q2[key]),
-            linestyle='none', label=key, **markeropts,
+            linestyle='none', markeredgewidth=1 ,markeredgecolor=None ,label=key, **markeropts,
         )
     if display_cuts:
         ax.scatter(np.concatenate(filteredx), np.concatenate(filteredq2),
             marker='o',
-            facecolors='none', edgecolor='red', s=30, lw=0.5, label="Cut"
+            facecolors='none', edgecolor='red', s=40, lw=0.8, label="Cut"
         )
     ax.set_title("Kinematic coverage")
     ax.legend()
