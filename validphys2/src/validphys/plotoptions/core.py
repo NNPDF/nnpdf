@@ -170,8 +170,8 @@ class PlotInfo:
                 #to make anything with normalize have priority?
                 plot_params = plot_params.new_child(config_params)
             if not 'dataset_label' in plot_params:
-                    log.warn("'dataset_label' key not found in %s", file)
-            plot_params['dataset_label'] = commondata.load().GetSetName()
+                log.warn("'dataset_label' key not found in %s", file)
+                plot_params['dataset_label'] = commondata.load().GetSetName()
 
         else:
             plot_params = {'dataset_label':commondata.load().GetSetName()}
