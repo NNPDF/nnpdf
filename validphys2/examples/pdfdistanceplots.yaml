@@ -1,0 +1,25 @@
+pdfs:
+    - NNPDF31_nnlo_as_0118
+    - NNPDF30_nnlo_as_0118
+
+first:
+    Q: 2
+    flavours: [up, down, gluon, 4]
+
+second:
+    Q: 100
+    xgrid: linear
+
+normalize_to: 1
+
+template_text: |
+  Log scale
+  Linear scale
+  {@first plot_pdfdistances@}
+  {@second plot_pdfdistances@}
+
+actions_:
+    - - report:
+           main: True
+
+ 

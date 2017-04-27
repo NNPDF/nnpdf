@@ -324,6 +324,16 @@ def plot_corrmat_eigs(experiment):
     return fig
 
 
+@figure
+def plot_chi2_eigs(pdf,dataset,chi2_per_eig):
+    fig,ax = plt.subplots()
+    x = np.arange(1,len(chi2_per_eig) + 1)
+    ax.plot(x, chi2_per_eig, 'o', markersize=10)
+    ax.yaxis.grid(False)
+    plt.title(fr"$\chi^2/N_{{dat}}$  {dataset}")
+    plt.xlabel("# Eigenvalue")
+    return fig
+
 #The indexing to one instead of zero is so that we can be consistent with
 #how plot_fancy works, so normalize_to: 1 would normalize to the first pdf
 #for both.
@@ -571,9 +581,9 @@ def plot_pdf_uncertainties(pdfs, xplotting_grids, xscale:(str,type(None))=None,
 class DistancePDFPlotter(PDFPlotter):
 
     def normalize(self):
-        #if self.normalize_to is None:
-            #throw an error and exit
         normalize_to = self.normalize_to
+        if normalize_to is None:
+            raise ValueError("Must specify an index to normalize")
         if normalize_to is not None:
             normalize_pdf = self.normalize_pdf
             normalize_grid = self._xplotting_grids[normalize_to]
@@ -613,13 +623,13 @@ class DistancePDFPlotter(PDFPlotter):
     def get_ylabel(self, parton_name):
         #if self.normalize_to is None:
             #throw an error and exit
-        return "distance from {}".format(self.normalize_pdf.label)
+        return "Distance from {}".format(self.normalize_pdf.label)
 
 
     def draw(self, pdf, grid, flstate):
         ax = flstate.ax
         flindex = flstate.flindex
-        gv = grid.grid_values[flindex,:]
+        gv = 10.*grid.grid_values[flindex,:]
 
         p,=ax.plot(grid.xgrid, gv, label=pdf.label)
         color=p.get_color()
@@ -633,11 +643,9 @@ class DistancePDFPlotter(PDFPlotter):
 @figuregen
 @_check_pdf_normalize_to
 @check_scale('xscale', allow_none=True)
-def plot_pdfdistance(pdfs, xplotting_grids, xscale:(str,type(None))=None,
-                      normalize_to:(int,str,type(None))=None):
-    """Plot the PDF standard deviations as a function of x.
-    If normalize_to is set, the ratio to that
-    PDF's central value is plotted. Otherwise it is the absolute values."""
+def plot_pdfdistances(pdfs, xplotting_grids,*, xscale:(str,type(None))=None,normalize_to:(int,str)):
+    """Plots the distances between different PDF sets and a reference PDF set. Distances are normalized such that a value of order 10 is unlikely to be explained by purely statistical fluctuations
+    """
     yield from DistancePDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
 
 class BandPDFPlotter(PDFPlotter):
