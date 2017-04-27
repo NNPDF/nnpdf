@@ -162,13 +162,11 @@ class PlotInfo:
                 except ConfigError:
                     log.error(f"Error in plotting file: {file}")
                     raise
-                if normalize and 'normalize' in config_params:
-                    #We might need to use reportengine.namespaces.resolve here
-                    config_params = config_params.new_child(config_params['normalize'])
-                #TODO: Right now anything with in a later file gets priority,
-                #and normalize only works within the file. Would it make sense
-                #to make anything with normalize have priority?
+
                 plot_params = plot_params.new_child(config_params)
+            if normalize and 'normalize' in plot_params:
+                #We might need to use reportengine.namespaces.resolve here
+                plot_params = plot_params.new_child(config_params['normalize'])
             if not 'dataset_label' in plot_params:
                 log.warn("'dataset_label' key not found in %s", file)
                 plot_params['dataset_label'] = commondata.load().GetSetName()
