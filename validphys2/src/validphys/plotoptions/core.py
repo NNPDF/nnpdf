@@ -102,6 +102,8 @@ class PlotInfo:
         self.func_labels = func_labels
         self.figure_by = figure_by
         self.line_by = line_by
+        if kinematics_override is None:
+            raise ValueError(f'A kinematics_override must be set for {dataset_label}')
         self.kinematics_override = kinematics_override
         self.result_transform = result_transform
         self._x_label = x_label
@@ -162,16 +164,14 @@ class PlotInfo:
                 except ConfigError:
                     log.error(f"Error in plotting file: {file}")
                     raise
-                if normalize and 'normalize' in config_params:
-                    #We might need to use reportengine.namespaces.resolve here
-                    config_params = config_params.new_child(config_params['normalize'])
-                #TODO: Right now anything with in a later file gets priority,
-                #and normalize only works within the file. Would it make sense
-                #to make anything with normalize have priority?
+
                 plot_params = plot_params.new_child(config_params)
+            if normalize and 'normalize' in plot_params:
+                #We might need to use reportengine.namespaces.resolve here
+                plot_params = plot_params.new_child(config_params['normalize'])
             if not 'dataset_label' in plot_params:
-                    log.warn("'dataset_label' key not found in %s", file)
-            plot_params['dataset_label'] = commondata.load().GetSetName()
+                log.warn("'dataset_label' key not found in %s", file)
+                plot_params['dataset_label'] = commondata.load().GetSetName()
 
         else:
             plot_params = {'dataset_label':commondata.load().GetSetName()}
@@ -310,3 +310,9 @@ def transform_result(cv, error, kintable, info):
     newcv, newerror = apply_to_all_columns(pd.concat([df,kintable], axis=1),f)
 
     return np.array(newcv), np.array(newerror)
+
+def get_xq2map(kintable, info):
+    """Return a tuple of (x,Q²) from the kinematic values defined in kitable
+    (usually obtained by calling ``kitable``) using machinery specified in
+    ``info``"""
+    return apply_to_all_columns(kintable, info.kinematics_override.xq2map)

@@ -1,0 +1,9 @@
+use_cuts: False
+dataset_input:
+    dataset: NMC
+    dataset: CMSJETS11
+    dataset: CMSTOPDIFF8TEVTTRAPNORM
+    dataset: ATLASWPT31PB
+
+actions_:
+    - - xq2plot

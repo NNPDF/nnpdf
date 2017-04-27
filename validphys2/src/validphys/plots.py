@@ -9,6 +9,7 @@ import functools
 import warnings
 import abc
 from types import SimpleNamespace
+from collections import defaultdict
 import copy
 import numbers
 
@@ -26,7 +27,7 @@ from validphys.core import MCStats
 from validphys.results import chi2_stat_labels
 from validphys.pdfgrids import (PDG_PARTONS,
                                 evaluate_luminosity, LUMI_CHANNELS)
-from validphys.plotoptions import get_infos, kitable, transform_result
+from validphys.plotoptions import get_infos, kitable, transform_result, get_xq2map
 from validphys.checks import check_scale
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges
@@ -630,8 +631,8 @@ class DistancePDFPlotter(PDFPlotter):
         if(self.normalize_pdf.ErrorType=="replicas" and pdf.ErrorType=="replicas"):
             draw_line = np.sqrt((1./(len(self.normalize_pdf)-1)+1./(len(pdf)-1))/2)
             ax.axhline(draw_line,color=color,alpha=0.5,linestyle="--")
-                
-        
+
+
         return gv
 
 @figuregen
@@ -959,9 +960,84 @@ def plot_lumi2d(pdf, lumi_channel, lumigrid2d, sqrts,
              "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[lumi_channel],
                      pdf.label, sqrts))
 
-
     return fig
 
+
+@make_argcheck
+def _check_display_cuts_requires_use_cuts(display_cuts, use_cuts):
+    if display_cuts and not use_cuts:
+        raise CheckError("The display_cuts option requires setting use_cuts to True")
+
+@make_argcheck
+def _check_marker_by(marker_by):
+    markers = ('process type', 'experiment', 'dataset')
+    if marker_by not in markers:
+        raise CheckError("Unknown marker_by value", marker_by, markers)
+
+@figure
+@_check_display_cuts_requires_use_cuts
+@_check_marker_by
+def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
+                 marker_by:str='process type'):
+    """Plot the (x,Q²) coverage based of the data based on some LO
+    approximations. These are governed by the relevant kintransform.
+
+    The representation of the filtered data depends on the `display_cuts` and
+    `use_cuts` options:
+
+     - If `use_cuts` is False, all the data will be plotted (and setting
+    `display_cuts` to True is an error).
+
+     - If `use_cuts` is True and `display_cuts` is False, the masked points
+    will be ignored.
+
+     - If `use_cuts` is True and `display_cuts` is True, the filtered points
+    will be displaed and marked.
+
+    The points are grouped according to the `marker_by` option. The possible
+    values are: "process type", "experiment" or "dataset".
+    """
+    w,h = plt.rcParams["figure.figsize"]
+    fig, ax = plt.subplots(figsize=(w*1.6,h*1.6))
+    filteredx = []
+    filteredq2 = []
+
+    x = defaultdict(list)
+    q2 = defaultdict(list)
+    for experiment, commondata, fitted, masked in experiments_xq2map:
+        info = get_infos(commondata)[0]
+        if marker_by == 'process type':
+            key = info.process_description
+        elif marker_by == 'experiment':
+            key = str(experiment)
+        elif marker_by == 'dataset':
+            key = info.dataset_label
+        else:
+            raise ValueError('Unknown marker_by value')
+
+        x[key].append(fitted[0])
+        q2[key].append(fitted[1])
+        if display_cuts:
+            x[key].append(masked[0])
+            q2[key].append(masked[1])
+            filteredx.append(masked[0])
+            filteredq2.append(masked[1])
+    for key,markeropts in zip(x, plotutils.marker_iter_plot()):
+        ax.plot(np.concatenate(x[key]), np.concatenate(q2[key]),
+            linestyle='none', markeredgewidth=1 ,markeredgecolor=None ,label=key, **markeropts,
+        )
+    if display_cuts:
+        ax.scatter(np.concatenate(filteredx), np.concatenate(filteredq2),
+            marker='o',
+            facecolors='none', edgecolor='red', s=40, lw=0.8, label="Cut"
+        )
+    ax.set_title("Kinematic coverage")
+    ax.legend()
+    ax.set_xlabel('x')
+    ax.set_ylabel(r'$\mu^2 (GeV^2)$')
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+    return fig
 
 @figure
 def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
