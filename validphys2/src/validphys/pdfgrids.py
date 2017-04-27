@@ -14,50 +14,7 @@ from reportengine.checks import make_argcheck, CheckError
 from NNPDF import _lhapdfset, LHAPDFSet
 
 from validphys.core import PDF
-
-PDG_PARTONS = dict((
-                (-5 , r"\bar{b}"),
-                (-4 , r"\bar{c}"),
-                (-3 , r"\bar{s}"),
-                (-2 , r"\bar{u}"),
-                (-1 , r"\bar{d}"),
-                (0 , r"g"),
-                (1 , r"d"),
-                (2 , r"u"),
-                (3 , r"s"),
-                (4 , r"c"),
-                (5 , r"b"),
-                (22 , r"\gamma"),
-                (21 , r"g"),
-              )
-              )
-
-PDG_ALIASES = {
- '\\bar{b}': -5,
- 'bbar'    : -5,
- '\\bar{c}': -4,
- 'cbar'    : -4,
- '\\bar{d}': -1,
- 'dbar'    : -1,
- '\\bar{s}': -3,
-  'sbar'   : -3,
- '\\bar{u}': -2,
-  'ubar'   : -2,
- '\\gamma': 22,
- 'photon': 22,
- 'b': 5,
- 'bottom': 5,
- 'c': 4,
- 'charm': 4,
- 'd': 1,
- 'down': 1,
- 'g': 21,
- 'gluon': 21,
- 's': 3,
- 'strange': 3,
- 'u': 2,
- 'up': 2,
- }
+from validphys.pdfbases import PDG_ALIASES, PDG_PARTONS, parse_flarr
 
 
 #Numpy is unhappy about downcasting double to float implicitly, so we have
@@ -67,24 +24,6 @@ REALTYPE = np.double if _lhapdfset.REALDOUBLE else np.float32
 
 
 DEFAULT_FLARR = (-3,-2,-1,0,1,2,3,4)
-
-def _parse_flarr(flarr):
-    out = []
-    for elem in flarr:
-        msg = "Unknown parton '%s'" % elem
-        try:
-            num = int(elem)
-        except (ValueError, TypeError):
-            if elem in PDG_ALIASES:
-                out.append(PDG_ALIASES[elem])
-            else:
-                raise ValueError(msg)
-        else:
-            if num in PDG_PARTONS:
-                out.append(num)
-            else:
-                raise ValueError(msg)
-    return out
 
 
 def grid_values(pdf:PDF, flmat, xmat, qmat):
@@ -140,7 +79,7 @@ def _check_xgrid(xgrid):
 
 def _check_flavours(flavours):
     try:
-        return {'flavours': _parse_flarr(flavours)}
+        return {'flavours': parse_flarr(flavours)}
     except ValueError as e:
         raise CheckError(e) from e
 
