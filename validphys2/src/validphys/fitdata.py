@@ -14,7 +14,7 @@ import numpy as np
 from validphys.core import PDF
 from validphys import checks
 from validphys import lhaindex
-from validphys.plotoptions import get_infos
+from validphys.plotoptions import get_info
 
 #TODO: Add more stuff here as needed for postfit
 
@@ -115,19 +115,19 @@ def print_dataset_differences(fits, match_datasets_by_name,
     if m.common and print_common:
         res.write("The following datasets are included in both `%s` and `%s`:\n\n" % (first, second))
         for k,v in m.common.items():
-            info = get_infos(v[0].commondata)[0]
+            info = get_info(v[0].commondata)
             res.write(' - %s\n' % info.dataset_label)
         res.write('\n')
     if m.first_only:
         res.write("The following datasets are included in `%s` but not in `%s`:\n\n"% (first,second))
         for k,v in m.first_only.items():
-            info = get_infos(v.commondata)[0]
+            info = get_info(v.commondata)
             res.write(' - %s\n' % info.dataset_label)
         res.write('\n')
     if m.second_only:
         res.write("The following datasets are included in `%s` but not in `%s`:\n\n"% (second,first))
         for k,v in m.second_only.items():
-            info = get_infos(v.commondata)[0]
+            info = get_info(v.commondata)
             res.write(' - %s\n' % info.dataset_label)
         res.write('\n')
     return res.getvalue()
@@ -158,7 +158,7 @@ def print_different_cuts(fits, test_for_same_cuts):
     if test_for_same_cuts:
         res.write("The following datasets are both included but have different kinematical cuts:\n\n")
         for (first, second) in test_for_same_cuts:
-            info = get_infos(first.commondata)[0]
+            info = get_info(first.commondata)
             total_points = len(first.commondata.load())
             res.write(" - %s:\n" % info.dataset_label)
             first_len = len(first.cuts.load()) if first.cuts else total_points

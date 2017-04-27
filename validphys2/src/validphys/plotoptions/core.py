@@ -59,8 +59,7 @@ def peek_commondata_process_type(commondatafilename):
     return get_kinlabel_key(process_type)
 
 
-#TODO: Change this API to return only one item
-def get_infos(data, *, normalize=False, cuts=None, use_plotfiles=True):
+def get_info(data, *, normalize=False, cuts=None, use_plotfiles=True):
     """Retrieve and process the plotting information for the input data (which could
     be a DatasetSpec or a CommonDataSpec).
 
@@ -85,7 +84,7 @@ def get_infos(data, *, normalize=False, cuts=None, use_plotfiles=True):
         raise TypeError("Unrecognized data type: %s" % type(data) )
 
     info = PlotInfo.from_commondata(data, cuts=cuts, normalize=normalize)
-    return [info]
+    return info
 
 
 

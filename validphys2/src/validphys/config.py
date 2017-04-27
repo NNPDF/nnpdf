@@ -231,9 +231,9 @@ class Config(report.Config):
             raise ConfigError(e)
 
         if check_plotting:
-            from validphys.plotoptions import get_infos
+            from validphys.plotoptions import get_info
             #normalize=True should check for more stuff
-            get_infos(ds, normalize=True)
+            get_info(ds, normalize=True)
             if not ds.commondata.plotfiles:
                 log.warn("Plotting files not found for: %s" % (ds,))
         return ds

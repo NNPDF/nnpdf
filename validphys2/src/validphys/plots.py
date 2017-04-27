@@ -27,7 +27,7 @@ from validphys.core import MCStats
 from validphys.results import chi2_stat_labels
 from validphys.pdfgrids import (PDG_PARTONS,
                                 evaluate_luminosity, LUMI_CHANNELS)
-from validphys.plotoptions import get_infos, kitable, transform_result, get_xq2map
+from validphys.plotoptions import get_info, kitable, transform_result
 from validphys.checks import check_scale
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges
@@ -110,15 +110,8 @@ def plot_fancy(one_or_more_results, dataset,
 
     results = one_or_more_results
 
-    infos = get_infos(dataset, normalize=(normalize_to is not None))
-    for info in infos:
-        yield from _plot_info(info=info,
-                              results=results,
-                              dataset=dataset,
-                              normalize_to=normalize_to)
+    info = get_info(dataset, normalize=(normalize_to is not None))
 
-
-def _plot_info(info, results, dataset, normalize_to):
     table = kitable(dataset, info)
     nkinlabels = len(table.columns)
 
@@ -724,13 +717,8 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
     that will be used to mark the corresponding area in x in the
     background of the plot. The maximum absolute values are used for
     the comparison."""
-    infos = get_infos(dataset)
-    for info in infos:
-        yield from _plot_smpdf_info(pdf, dataset ,obs_pdf_correlations, info,
-                                    mark_threshold=mark_threshold)
+    info = get_info(dataset)
 
-
-def _plot_smpdf_info(pdf, dataset, obs_pdf_correlations, info, mark_threshold):
     table = kitable(dataset, info)
     figby = sane_groupby_iter(table, info.figure_by)
 
@@ -799,7 +787,7 @@ def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
     fig, ax = plt.subplots()
 
     ds1, ds2 = corrpair_datasets
-    in1,in2 = get_infos(ds1)[0], get_infos(ds2)[0]
+    in1,in2 = get_info(ds1), get_info(ds2)
 
     im = ax.imshow(obs_obs_correlations, cmap=cm.Spectral_r, vmin=-1, vmax=1)
 
@@ -1005,7 +993,7 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
     x = defaultdict(list)
     q2 = defaultdict(list)
     for experiment, commondata, fitted, masked in experiments_xq2map:
-        info = get_infos(commondata)[0]
+        info = get_info(commondata)
         if marker_by == 'process type':
             key = info.process_description
         elif marker_by == 'experiment':
