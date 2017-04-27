@@ -102,6 +102,8 @@ class PlotInfo:
         self.func_labels = func_labels
         self.figure_by = figure_by
         self.line_by = line_by
+        if kinematics_override is None:
+            raise ValueError(f'A kinematics_override must be set for {dataset_label}')
         self.kinematics_override = kinematics_override
         self.result_transform = result_transform
         self._x_label = x_label
