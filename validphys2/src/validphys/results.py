@@ -543,7 +543,7 @@ def dataset_chi2_table(chi2_stats, dataset):
 
 
 @table
-def fits_chi2_table(fits, fits_experiments, fits_chi2_data, ratio_to_first:bool=False):
+def fits_chi2_table(fits, fits_experiments, fits_chi2_data):
     """Show the chi² of each and number of points of each dataset of each fit,
     computed with the theory corresponding to the fit. Dataset that are not
     included in some fit appear as "Not Fitted"."""
@@ -566,14 +566,7 @@ def fits_chi2_table(fits, fits_experiments, fits_chi2_data, ratio_to_first:bool=
              )
         df.columns = pd.MultiIndex.from_product(([str(fit)], ['ndata', '$\chi^2/ndata$']))
         dfs.append(df)
-
-    res = pd.concat(dfs, axis=1)
-    if ratio_to_first:
-        for i in range(1, len(fits)):
-            res[f"Absolute difference"] = (-res[res.columns[2*i+1]] + res[res.columns[1]])*res[res.columns[0]]
-
-
-    return res.fillna("Not Fitted")
+    return pd.concat(dfs, axis=1).fillna("Not Fitted")
 
 
 @table
