@@ -41,13 +41,7 @@ import numpy as np
 class Kintransform(metaclass=abc.ABCMeta):
     @classmethod
     def __subclasshook__(cls, other):
-        return hasattr(other, '__call__') and hasattr(other, 'new_labels')
-
-#TODO: Do we ever allow a transform without this?
-class KintransformWithXQ2Map(Kintransform):
-    @classmethod
-    def __subclasshook__(cls, other):
-        return hasattr(other, 'xq2map') and issubclass(other, Kintransform)
+        return hasattr(other, 'xq2map') and hasattr(other, '__call__') and hasattr(other, 'new_labels')
 
 #Common utilities on top of which we build the transforms
 
