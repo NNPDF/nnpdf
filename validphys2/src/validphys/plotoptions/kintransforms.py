@@ -66,7 +66,8 @@ class DYXQ2MapMixin:
         x1 = ratio*np.exp(k1)
         x2 = ratio*np.exp(-k1)
         q2 = k2*k2
-        return np.concatenate(( x1,x2 )), np.concatenate(( q2,q2 ))
+        x = np.concatenate(( x1,x2 ))
+        return np.clip(x,None,1, out=x), np.concatenate(( q2,q2 ))
 
 class EWPTXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
