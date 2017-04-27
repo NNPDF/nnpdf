@@ -2,8 +2,8 @@ from __future__ import print_function
 import sys
 from setuptools import setup, find_packages
 
-if sys.version_info < (3,5):
-    print("validphys requires Python 3.5 or later", file=sys.stderr)
+if sys.version_info < (3,6):
+    print("validphys requires Python 3.6 or later", file=sys.stderr)
     sys.exit(1)
 
 with open('README.md') as f:
