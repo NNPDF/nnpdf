@@ -94,7 +94,7 @@ def parse_flarr(flarr):
 
 class Basis():
     def __init__(self, labels, from_flavour_mat,*, aliases=None,
-            default_flavours=None, flavour_representations=None):
+            default_elements=None, element_representations=None):
         """A "basis" is constructed from a list of `labels` that represent the
         canonical names of the basis elements, a matrix of dimension
         (Nelements, Npdfs) such that ``from_flavour_mat@flavours``, where
@@ -105,7 +105,7 @@ class Basis():
         strings to labels. This is used for alternative ways to refer to the
         elements of the basis.
 
-        `default_flavours` is an iterable of elements to be computed by default.
+        `default_elements` is an iterable of elements to be computed by default.
 
         `flavour_representantion` is a mapping with the printable strings of
         the elements (in case it doesn't match `labels`).
@@ -115,12 +115,12 @@ class Basis():
         self.aliases = aliases
         self.from_flavour_mat = from_flavour_mat
         #self._known_flavours = ALL_FLAVOURS[]
-        if default_flavours is None:
-            default_flavours = labels
-        self.default_flavours = default_flavours
-        if flavour_representations is None:
-            flavour_representations = {}
-        self.flavour_representations = flavour_representations
+        if default_elements is None:
+            default_elements = labels
+        self.default_elements = default_elements
+        if element_representations is None:
+            element_representations = {}
+        self.element_representations = element_representations
 
         indexes = {lb:i for i,lb in enumerate(labels)}
         if aliases:
@@ -130,8 +130,8 @@ class Basis():
     def elemlabel(self, element):
         """Return the printale representation of a given element of this
         basis."""
-        if element in self.flavour_representations:
-            return self.flavour_representations[element]
+        if element in self.element_representations:
+            return self.element_representations[element]
         elif element in self.labels:
             return element
         raise ValueError("Unknown element")
@@ -240,7 +240,7 @@ class Basis():
 
 
     @classmethod
-    def from_mapping(cls, mapping, *, aliases=None, default_flavours=None):
+    def from_mapping(cls, mapping, *, aliases=None, default_elements=None):
         """Construct a basus from a mapping of the form
         ``{label:{pdf_flavour:coefficient}}``."""
         arr = np.zeros(shape=(len(mapping), len(ALL_FLAVOURS)))
@@ -249,11 +249,11 @@ class Basis():
             indexes = [pdg_id_to_canonical_index(val) for val in parse_flarr(coefs.keys())]
             values = coefs.values()
             arr[i, indexes] = list(values)
-        return cls(labels, arr, aliases=aliases, default_flavours=default_flavours)
+        return cls(labels, arr, aliases=aliases, default_elements=default_elements)
 
 
 flavour = Basis(ALL_FLAVOURS, np.eye(len(ALL_FLAVOURS)), aliases=PDG_ALIASES,
-    default_flavours = DEFAULT_FLARR, flavour_representation=PDG_PARTONS
+    default_elements = DEFAULT_FLARR, element_representations=PDG_PARTONS
 )
 
 #dicts are oredered in python 3.6+... code shouldn't vreak if they aren't
@@ -282,6 +282,6 @@ evolution = Basis.from_mapping({
     'photon'   : {'photon':1},
     },
     aliases = {'gluon':'g'},
-    default_flavours=(r'$\Sigma$', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
+    default_elements=(r'$\Sigma$', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
 )
 
