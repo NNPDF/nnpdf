@@ -26,11 +26,14 @@ from reportengine.checks import make_check, CheckError, make_argcheck
 from validphys.core import MCStats
 from validphys.results import chi2_stat_labels
 from validphys.pdfgrids import (PDG_PARTONS,
-                                evaluate_luminosity, LUMI_CHANNELS)
-from validphys.plotoptions import get_info, kitable, transform_result
+                                evaluate_luminosity)
+from validphys.plotoptions import get_info, kitable, transform_result, get_xq2map
 from validphys.checks import check_scale
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges
+
+#TODO: Delete this once lumi plots are properly refactored. See issue  #17
+from validphys.gridvalues import LUMI_CHANNELS
 
 log = logging.getLogger(__name__)
 
