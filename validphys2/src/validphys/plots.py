@@ -1022,7 +1022,7 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
     ax.set_title("Kinematic coverage")
     ax.legend()
     ax.set_xlabel('x')
-    ax.set_ylabel(r'$\mu^2 (GeV^2)$')
+    ax.set_ylabel(r'$Q^2 (GeV^2)$')
     ax.set_xscale('log')
     ax.set_yscale('log')
     return fig
