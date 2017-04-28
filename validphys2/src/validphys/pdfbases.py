@@ -93,9 +93,23 @@ def parse_flarr(flarr):
     return out
 
 class Basis():
-    def __init__(self, labels, from_flavour_mat,*, aliases=None, default_flavours=None):
+    def __init__(self, labels, from_flavour_mat,*, aliases=None,
+            default_flavours=None, flavour_representations=None):
         """A "basis" is constructed from a list of `labels` that represent the
-        canonical names of the basis elements, an """
+        canonical names of the basis elements, a matrix of dimension
+        (Nelements, Npdfs) such that ``from_flavour_mat@flavours``, where
+        `flavours` is in the LHAPDF flavour bases (with the elements sorted
+        as in ``ALL_FLAVOURS``) gives the values in this basis.
+
+        An ``alias`` mapping can be defined, from arbitrary
+        strings to labels. This is used for alternative ways to refer to the
+        elements of the basis.
+
+        `default_flavours` is an iterable of elements to be computed by default.
+
+        `flavour_representantion` is a mapping with the printable strings of
+        the elements (in case it doesn't match `labels`).
+         """
 
         self.labels = labels
         self.aliases = aliases
@@ -104,10 +118,23 @@ class Basis():
         if default_flavours is None:
             default_flavours = labels
         self.default_flavours = default_flavours
+        if flavour_representations is None:
+            flavour_representations = {}
+        self.flavour_representations = flavour_representations
+
         indexes = {lb:i for i,lb in enumerate(labels)}
         if aliases:
              indexes.update({alias:indexes[alias_label] for alias,alias_label in aliases.items()})
         self._indexes = indexes
+
+    def elemlabel(self, element):
+        """Return the printale representation of a given element of this
+        basis."""
+        if element in self.flavour_representations:
+            return self.flavour_representations[element]
+        elif element in self.labels:
+            return element
+        raise ValueError("Unknown element")
 
     """
     NOTE: At the moment, we don't need the inverse functionality, namely
@@ -214,6 +241,8 @@ class Basis():
 
     @classmethod
     def from_mapping(cls, mapping, *, aliases=None, default_flavours=None):
+        """Construct a basus from a mapping of the form
+        ``{label:{pdf_flavour:coefficient}}``."""
         arr = np.zeros(shape=(len(mapping), len(ALL_FLAVOURS)))
         labels = tuple(mapping)
         for i, coefs in enumerate(mapping.values()):
@@ -224,35 +253,35 @@ class Basis():
 
 
 flavour = Basis(ALL_FLAVOURS, np.eye(len(ALL_FLAVOURS)), aliases=PDG_ALIASES,
-                default_flavours = DEFAULT_FLARR)
+    default_flavours = DEFAULT_FLARR, flavour_representation=PDG_PARTONS
+)
 
 #dicts are oredered in python 3.6+... code shouldn't vreak if they aren't
 #though
-evolution = Basis.from_mapping(dict(
-    singlet = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1 ,'b':1, 'bbar': 1, 't': 1, 'tbar': 1},
-    V       = {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'c': 1, 'cbar':-1 ,'b':1, 'bbar':-1, 't': 1, 'tbar':-1},
+evolution = Basis.from_mapping({
+    r'$\Sigma$': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1 ,'b':1, 'bbar': 1, 't': 1, 'tbar': 1},
+    'V'        : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'c': 1, 'cbar':-1 ,'b':1, 'bbar':-1, 't': 1, 'tbar':-1},
 
-    T3      = {'u': 1, 'ubar': 1, 'd':-1, 'dbar':-1},
-    V3      = {'u': 1, 'ubar':-1, 'd':-1, 'dbar': 1},
+    'T3'       : {'u': 1, 'ubar': 1, 'd':-1, 'dbar':-1},
+    'V3'       : {'u': 1, 'ubar':-1, 'd':-1, 'dbar': 1},
 
-    T8      = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's':-2, 'sbar':-2},
-    V8      = {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's':-2, 'sbar':+2},
+    'T8'       : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's':-2, 'sbar':-2},
+    'V8'       : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's':-2, 'sbar':+2},
 
-    T15     = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c':-3, 'cbar':-3},
-    V15     = {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'c':-3, 'cbar':+3},
+    'T15'      : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c':-3, 'cbar':-3},
+    'V15'      : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'c':-3, 'cbar':+3},
 
 
-    T24     = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'b':-4, 'bbar':-4},
-    V24     = {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'b':-4, 'bbar':+4},
+    'T24'      : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'b':-4, 'bbar':-4},
+    'V24'      : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'b':-4, 'bbar':+4},
 
-    T35     = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1, 'b': 1, 'bbar': 1, 't':-5, 'tbar':-5},
-    V35     = {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'c': 1, 'cbar':-1, 'b': 1, 'bbar':-1, 't':-5, 'tbar':+5},
+    'T35'      : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1, 'b': 1, 'bbar': 1, 't':-5, 'tbar':-5},
+    'V35'      : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'c': 1, 'cbar':-1, 'b': 1, 'bbar':-1, 't':-5, 'tbar':+5},
 
-    g       = {'g':1},
-    photon  = {'photon':1},
-    ),
+    'g'        : {'g':1},
+    'photon'   : {'photon':1},
+    },
     aliases = {'gluon':'g'},
-    default_flavours=('singlet', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
+    default_flavours=(r'$\Sigma$', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
 )
-
 
