@@ -1048,8 +1048,8 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
 
         if xh[key]:
             ax.plot(np.concatenate(xh[key]), np.concatenate(q2h[key]),
-                color = 'red',
-                linestyle='none', markeredgewidth=1 ,markeredgecolor=None ,label=key, **markeropts,
+                color = color,
+                linestyle='none', markeredgewidth=0.5 ,markeredgecolor="black" ,label=key+" [New in NNPDF3.1]", **markeropts,
             )
     if display_cuts:
         ax.scatter(np.concatenate(filteredx), np.concatenate(filteredq2),
