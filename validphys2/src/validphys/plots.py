@@ -1025,20 +1025,29 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
         else:
             raise ValueError('Unknown marker_by value')
 
+        xdict = x
+        q2dict = q2
+
+        xdicth = x
+        q2dicth = q2
+
         if commondata.name in highlight_values:
-            xdict = xh
-            q2dict = q2h
-        else:
-            xdict = x
-            q2dict = q2
+            xdicth = xh
+            q2dicth = q2h
 
         xdict[key].append(fitted[0])
         q2dict[key].append(fitted[1])
+        xdicth[key].append(fitted[0])
+        q2dicth[key].append(fitted[1])
         if display_cuts:
             xdict[key].append(masked[0])
             q2dict[key].append(masked[1])
+            xdicth[key].append(masked[0])
+            q2dicth[key].append(masked[1])
             filteredx.append(masked[0])
             filteredq2.append(masked[1])
+
+    labelh = True
     for i, (key,markeropts) in enumerate(zip(x, plotutils.marker_iter_plot())):
         color = f'C{i}'
         ax.plot(np.concatenate(x[key]), np.concatenate(q2[key]),
@@ -1049,8 +1058,17 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
         if xh[key]:
             ax.plot(np.concatenate(xh[key]), np.concatenate(q2h[key]),
                 color = color,
-                linestyle='none', markeredgewidth=0.5 ,markeredgecolor="black" ,label=key+" [New in NNPDF3.1]", **markeropts,
+                linestyle='none', markeredgewidth=0.6 ,markeredgecolor="black" ,label=None, **markeropts,
             )
+
+
+    if highlight_key:
+        #ax.plot(0, 0,
+         #   color = 'none',marker='o',markersize=6,
+         #   linestyle='none', markeredgewidth=0.6 ,markeredgecolor="black" ,label=highlight_key,
+         #   )
+        ax.annotate("black edge: "+highlight_key, xy=(0.05, 0.7), xycoords='axes fraction',size='x-small',zorder=10000)
+
     if display_cuts:
         ax.scatter(np.concatenate(filteredx), np.concatenate(filteredq2),
             marker='o',

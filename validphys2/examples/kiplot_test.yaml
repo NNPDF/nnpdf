@@ -16,7 +16,7 @@ experiments:
       - { dataset: CHORUSNB, frac: 0.5}
       - { dataset: NTVNUDMN, frac: 0.5}
       - { dataset: NTVNBDMN, frac: 0.5}
-  - experiment: HERA DIS
+  - experiment: Collider DIS
     datasets:
       - { dataset: HERACOMBNCEM , frac: 0.5}
       - { dataset: HERACOMBNCEP460, frac: 0.5}
@@ -34,18 +34,25 @@ experiments:
       - { dataset: DYE886P, frac: 0.5, cfac: [QCD] }
       - { dataset: DYE605, frac: 0.5, cfac: [QCD] }
 # Tevatron jets and W,Z production
-  - experiment: Tevatron Inclusive Jet Production
+  - experiment: Collider Inclusive Jet Production
     datasets:
-        - { dataset: CDFR2KT, frac: 0.5, sys: 10 }
-  - experiment: Tevatron Drell-Yan
+      - { dataset: CDFR2KT, frac: 0.5, sys: 10 }
+  #- experiment: LHC Inclusive Jet Production
+  #  datasets:            
+      - { dataset: ATLASR04JETS36PB, frac: 0.5, sys: 10 }
+      - { dataset: ATLASR04JETS2P76TEV, frac: 0.5, sys: 10 }
+      - { dataset: ATLAS1JET11, frac: 0.5, sys: 10 }
+      - { dataset: CMSJETS11,     frac: 0.5, sys: 10 }
+      - { dataset: CMS1JET276TEV,     frac: 0.5, sys: 10 }
+  - experiment: Collider Drell-Yan
     datasets:
       - { dataset: CDFZRAP, frac: 1.0, cfac: [QCD] }
       - { dataset: D0ZRAP, frac: 1.0, cfac: [QCD] }
       - { dataset: D0WEASY, frac: 1.0, cfac: [QCD] }
       - { dataset: D0WMASY, frac: 1.0, cfac: [QCD] }
       # ATLAS
-  - experiment: LHC Drell-Yan
-    datasets:
+  #- experiment: LHC Drell-Yan
+  #  datasets:
       - { dataset: ATLASWZRAP36PB,   frac: 1.0, cfac: [QCD] }
       - { dataset: ATLASZHIGHMASS49FB, frac: 1.0, cfac: [QCD] }
       - { dataset: ATLASLOMASSDY11EXT, frac: 1.0, cfac: [QCD] }
@@ -58,19 +65,12 @@ experiments:
       - { dataset: LHCBZEE2FB, frac: 1.0, cfac: [QCD] }
       - { dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM,QCD] }
       - { dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM,QCD] }
-  - experiment: ATLAS Inclusive Jet Production
-    datasets:            
-      - { dataset: ATLASR04JETS36PB, frac: 0.5, sys: 10 }
-      - { dataset: ATLASR04JETS2P76TEV, frac: 0.5, sys: 10 }
-      - { dataset: ATLAS1JET11, frac: 0.5, sys: 10 }
-      - { dataset: CMSJETS11,     frac: 0.5, sys: 10 }
-      - { dataset: CMS1JET276TEV,     frac: 0.5, sys: 10 }
-  - experiment: LHC Z transverse momentum
+  - experiment: Collider Z transverse momentum
     datasets:  
       - { dataset: ATLASZPT8TEVMDIST,   frac: 0.5, cfac: [QCD], sys: 10 }
       - { dataset: ATLASZPT8TEVYDIST,   frac: 0.5, cfac: [QCD], sys: 10 }
       - { dataset: CMSZDIFF12,   frac: 1.0, cfac: [QCD,NRM], sys: 10 }
-  - experiment: LHC Top-quark pair production
+  - experiment: Collider Top-quark pair production
     datasets:      
       - { dataset: ATLASTTBARTOT, frac: 1.0, cfac: [QCD] }
       - { dataset: ATLASTOPDIFF8TEVTRAPNORM, frac: 1.0, cfac: [QCD] }    
@@ -95,9 +95,11 @@ highlight_values:
     - CMSWMU8TEV
     - CMSZDIFF12
 
+highlight_key: "New in NNPDF3.1"
+
 meta:
     title: Kinplot
-    author: Luca Rottoli
+    author: Luca Rottoli, Zahari Kassabov
     keywords: [debug]
 
 dcuts:
