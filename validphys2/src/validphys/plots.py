@@ -9,7 +9,7 @@ import functools
 import warnings
 import abc
 from types import SimpleNamespace
-from collections import defaultdict
+from collections import defaultdict, Sequence
 import copy
 import numbers
 
@@ -962,11 +962,25 @@ def _check_marker_by(marker_by):
     if marker_by not in markers:
         raise CheckError("Unknown marker_by value", marker_by, markers)
 
+#TODO: Right now this is hackish Could we turn it into a permanent interface?
+@make_argcheck
+def _check_highlights(experiments, highlight_values):
+    if highlight_values:
+        values = frozenset(highlight_values)
+        names_set = {ds.name for experiment in experiments for ds in experiment }
+        diff = values - names_set
+        if diff:
+            raise CheckError(f"The following highlight elements are "
+                             "not dataset names: {diff}")
+        return {'highlight_values': values}
+
 @figure
 @_check_display_cuts_requires_use_cuts
 @_check_marker_by
+@_check_highlights
 def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
-                 marker_by:str='process type'):
+                 marker_by:str='process type', highlight_key:str='highlight',
+                 highlight_values:(Sequence,type(None))=None):
     """Plot the (x,Q²) coverage based of the data based on some LO
     approximations. These are governed by the relevant kintransform.
 
@@ -985,6 +999,7 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
     The points are grouped according to the `marker_by` option. The possible
     values are: "process type", "experiment" or "dataset".
     """
+
     w,h = plt.rcParams["figure.figsize"]
     fig, ax = plt.subplots(figsize=(w*1.6,h*1.6))
     filteredx = []
@@ -992,6 +1007,13 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
 
     x = defaultdict(list)
     q2 = defaultdict(list)
+
+    xh = defaultdict(list)
+    q2h = defaultdict(list)
+
+    if not highlight_values:
+        highlight_values = set()
+
     for experiment, commondata, fitted, masked in experiments_xq2map:
         info = get_info(commondata)
         if marker_by == 'process type':
@@ -1003,17 +1025,32 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
         else:
             raise ValueError('Unknown marker_by value')
 
-        x[key].append(fitted[0])
-        q2[key].append(fitted[1])
+        if commondata.name in highlight_values:
+            xdict = xh
+            q2dict = q2h
+        else:
+            xdict = x
+            q2dict = q2
+
+        xdict[key].append(fitted[0])
+        q2dict[key].append(fitted[1])
         if display_cuts:
-            x[key].append(masked[0])
-            q2[key].append(masked[1])
+            xdict[key].append(masked[0])
+            q2dict[key].append(masked[1])
             filteredx.append(masked[0])
             filteredq2.append(masked[1])
-    for key,markeropts in zip(x, plotutils.marker_iter_plot()):
+    for i, (key,markeropts) in enumerate(zip(x, plotutils.marker_iter_plot())):
+        color = f'C{i}'
         ax.plot(np.concatenate(x[key]), np.concatenate(q2[key]),
+            color = color,
             linestyle='none', markeredgewidth=1 ,markeredgecolor=None ,label=key, **markeropts,
         )
+
+        if xh[key]:
+            ax.plot(np.concatenate(xh[key]), np.concatenate(q2h[key]),
+                color = 'red',
+                linestyle='none', markeredgewidth=1 ,markeredgecolor=None ,label=key, **markeropts,
+            )
     if display_cuts:
         ax.scatter(np.concatenate(filteredx), np.concatenate(filteredq2),
             marker='o',
