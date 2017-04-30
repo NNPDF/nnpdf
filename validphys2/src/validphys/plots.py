@@ -1014,6 +1014,25 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
     if not highlight_values:
         highlight_values = set()
 
+    def next_options():
+        #Get the colors
+        prop_settings = plt.rcParams['axes.prop_cycle']
+        #Apparently calling the object gives us an infinite cycler
+        settings_cycler = prop_settings()
+        #So far, I don't understand how this is done with mpl "cycler"
+        #objects, or wether  I like it. So far this is godd enough
+        for  markeropts, settings in zip(plotutils.marker_iter_plot(), settings_cycler):
+            #Override last with first
+            options = {
+                'linestyle': 'none',
+                **settings,
+                **markeropts,
+            }
+            yield options
+
+    next_opts = next_options()
+    key_options = {}
+
     for experiment, commondata, fitted, masked in experiments_xq2map:
         info = get_info(commondata)
         if marker_by == 'process type':
@@ -1025,49 +1044,59 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
         else:
             raise ValueError('Unknown marker_by value')
 
-        xdict = x
-        q2dict = q2
-
-        xdicth = x
-        q2dicth = q2
+        #TODO: This is an ugly check. Is there a way to do it with .setdefault
+        # or defaultdict?
+        if key not in key_options:
+            key_options[key] = next(next_opts)
 
         if commondata.name in highlight_values:
-            xdicth = xh
-            q2dicth = q2h
+            xdict = xh
+            q2dict = q2h
+        else:
+            xdict = x
+            q2dict = q2
 
         xdict[key].append(fitted[0])
         q2dict[key].append(fitted[1])
-        xdicth[key].append(fitted[0])
-        q2dicth[key].append(fitted[1])
         if display_cuts:
             xdict[key].append(masked[0])
             q2dict[key].append(masked[1])
-            xdicth[key].append(masked[0])
-            q2dicth[key].append(masked[1])
             filteredx.append(masked[0])
             filteredq2.append(masked[1])
 
-    labelh = True
-    for i, (key,markeropts) in enumerate(zip(x, plotutils.marker_iter_plot())):
-        color = f'C{i}'
-        ax.plot(np.concatenate(x[key]), np.concatenate(q2[key]),
-            color = color,
-            linestyle='none', markeredgewidth=1 ,markeredgecolor=None ,label=key, **markeropts,
+
+
+
+    for key in key_options:
+        if key in x:
+            coords = np.concatenate(x[key]), np.concatenate(q2[key])
+        else:
+            #This is to get the label key
+            coords = [], []
+        ax.plot(*coords,
+            label=key,
+            markeredgewidth=1,
+            markeredgecolor=None,
+            **key_options[key],
         )
 
-        if xh[key]:
-            ax.plot(np.concatenate(xh[key]), np.concatenate(q2h[key]),
-                color = color,
-                linestyle='none', markeredgewidth=0.6 ,markeredgecolor="black" ,label=None, **markeropts,
-            )
+
+    #Iterate again so highlights are printed on top.
+    for key in xh:
+        ax.plot(np.concatenate(xh[key]), np.concatenate(q2h[key]),
+            markeredgewidth=0.6,
+            markeredgecolor="black",
+            **key_options[key],
+        )
+    if xh:
+        #Get legend key
+        ax.plot([], [], marker='s', markeredgewidth=0.6, color='none',
+            markersize=5,
+            markeredgecolor="black", label= f'Black edge: {highlight_key}',
+        )
 
 
-    if highlight_key:
-        #ax.plot(0, 0,
-         #   color = 'none',marker='o',markersize=6,
-         #   linestyle='none', markeredgewidth=0.6 ,markeredgecolor="black" ,label=highlight_key,
-         #   )
-        ax.annotate("black edge: "+highlight_key, xy=(0.05, 0.7), xycoords='axes fraction',size='x-small',zorder=10000)
+
 
     if display_cuts:
         ax.scatter(np.concatenate(filteredx), np.concatenate(filteredq2),
