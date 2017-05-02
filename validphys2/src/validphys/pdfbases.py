@@ -135,7 +135,7 @@ class Basis():
         indexes = {lb:i for i,lb in enumerate(labels)}
         if aliases:
              indexes.update({alias:indexes[alias_label] for alias,alias_label in aliases.items()})
-        self._indexes = indexes
+        self.indexes = indexes
 
     def elementlabel(self, element):
         """Return the printable representation of a given element of this
@@ -224,7 +224,7 @@ class Basis():
     def _to_indexes(self, basis_arr):
         """Convert a list of elements of the basis to indexes of the
         (rows of the) transformation matrix."""
-        return [self._indexes[k] for k in basis_arr]
+        return [self.indexes[k] for k in basis_arr]
 
     def _flaray_from_flindexes(self, flinds):
         """Convert a list of flavor basis indexes to PDG codes to pass to
@@ -302,7 +302,7 @@ evolution = Basis.from_mapping({
     'g'        : {'g':1},
     'photon'   : {'photon':1},
     },
-    aliases = {'gluon':'g'},
+    aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sigma':r'\Sigma'},
     default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
 )
 

@@ -69,7 +69,7 @@ def _check_basis(basis, flavours):
     except UnknownElement as e:
         bad = e.args[0]
         raise CheckError(f"Unknown basis element '{bad}'", str(bad),
-            alternatives=basis.aliases) from e
+            alternatives=basis.indexes, display_alternatives='all') from e
 
     return {'basis':basis, 'flavours':flavours}
 
@@ -82,6 +82,12 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None, basis:(str, Basis)='flavo
                    flavours:(list, tuple, type(None))=None):
     """Return an object containing the value of the PDF at the specified values
     of x and flavour.
+
+    basis: Is one of the bases defined in pdfbases.py. This includes 'flavour'
+    and 'evolution'.
+
+    flavours: A set of elements from the basis.
+    If None, the defaults for that basis will be selected.
 
     Q: The PDF scale in GeV.
     """
