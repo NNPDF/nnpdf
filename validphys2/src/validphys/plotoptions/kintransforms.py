@@ -69,12 +69,21 @@ class DYXQ2MapMixin:
         x = np.concatenate(( x1,x2 ))
         return np.clip(x,None,1, out=x), np.concatenate(( q2,q2 ))
 
+class JETXQ2MapMixin:
+    def xq2map(self, k1, k2, k3, **extra_labels):
+        """in DY-like experiments k1 is (pseudo)-rapidity and k2 is pT"""
+        ratio = k2/k3
+        x = ratio*(np.exp(k1)+np.exp(-k1))
+        q2 = k2*k2
+        return np.clip(x,None,1, out=x), q2
+
 class EWPTXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
         """in ZPt-like Experiments k1 is the pt, k2 is Q"""
         zmass2 = ZMASS*ZMASS
         Q = (np.sqrt(zmass2+k1*k1)+k1)
-        return Q/k3, Q*Q
+        effQ = np.sqrt(zmass2+k1*k1)
+        return Q/k3, effQ*effQ
 
 class DYMXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
@@ -131,7 +140,7 @@ class ewj_mll_sqrt_scale(SqrtScaleMixin,DYMXQ2MapMixin):
 class ewj_pt_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
     qlabel = '$M (GeV)$'
 
-class ewj_ptrap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
+class ewj_ptrap_sqrt_scale(SqrtScaleMixin,EWPTXQ2MapMixin):
     qlabel = r'$p_T (GeV)$'
 
 class ewj_rap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
@@ -161,7 +170,7 @@ class hqp_ptq_sqrt_scale(SqrtScaleMixin,HQPTXQ2MapMixin):
 class hqp_ptqq_sqrt_scale(SqrtScaleMixin,HQQPTXQ2MapMixin):
     qlabel = r'$\mu (GeV)$'
 
-class hqp_yq_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
+class hqp_yq_sqrt_scale(SqrtScaleMixin,JETXQ2MapMixin):
     qlabel = r'$\mu (GeV)$'
 
 class hqp_yqq_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):

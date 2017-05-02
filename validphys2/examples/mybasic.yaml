@@ -1,0 +1,19 @@
+pdfs:
+    - NNPDF30_nlo_as_0118
+
+theoryid: 53
+
+datanorm:
+    normalize_to: True
+
+template: dataset.md
+
+use_cuts: false
+
+dataset_input:
+    dataset: ATLASZPT8TEVMDIST
+#    cfac: [EWK, QCD]
+
+actions_:
+  -   - report:
+          main: True
