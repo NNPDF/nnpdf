@@ -61,13 +61,14 @@ class DISXQ2MapMixin:
 
 class DYXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
-        """in DY-like experiments k1 is (pseudo)-rapidity and k2 is Q for each point in the experiment there are two points in the xQ2 map"""
+        """in DY-like experiments k1 is (pseudo)-rapidity and k2 is Q for
+        each point in the experiment there are two points in the xQ2 map"""
         ratio = k2/k3
         x1 = ratio*np.exp(k1)
         x2 = ratio*np.exp(-k1)
         q2 = k2*k2
         x = np.concatenate(( x1,x2 ))
-        return np.clip(x,None,1, out=x), np.concatenate(( q2,q2 ))
+        return np.clip(x,a_min=None,a_max=1, out=x), np.concatenate(( q2,q2 ))
 
 class JETXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
