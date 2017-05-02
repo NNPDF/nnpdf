@@ -34,7 +34,7 @@ experiments:
       - { dataset: DYE886P, frac: 0.5, cfac: [QCD] }
       - { dataset: DYE605, frac: 0.5, cfac: [QCD] }
 # Tevatron jets and W,Z production
-  - experiment: Collider Inclusive Jet Production
+  - experiment: Inclusive Jet Production
     datasets:
       - { dataset: CDFR2KT, frac: 0.5, sys: 10 }
   #- experiment: LHC Inclusive Jet Production
@@ -65,12 +65,12 @@ experiments:
       - { dataset: LHCBZEE2FB, frac: 1.0, cfac: [QCD] }
       - { dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM,QCD] }
       - { dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM,QCD] }
-  - experiment: Collider Z transverse momentum
+  - experiment: Z transverse momentum
     datasets:  
       - { dataset: ATLASZPT8TEVMDIST,   frac: 0.5, cfac: [QCD], sys: 10 }
       - { dataset: ATLASZPT8TEVYDIST,   frac: 0.5, cfac: [QCD], sys: 10 }
       - { dataset: CMSZDIFF12,   frac: 1.0, cfac: [QCD,NRM], sys: 10 }
-  - experiment: Collider Top-quark pair production
+  - experiment: Top-quark pair production
     datasets:      
       - { dataset: ATLASTTBARTOT, frac: 1.0, cfac: [QCD] }
       - { dataset: ATLASTOPDIFF8TEVTRAPNORM, frac: 1.0, cfac: [QCD] }    
