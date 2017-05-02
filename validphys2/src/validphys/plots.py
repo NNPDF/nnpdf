@@ -765,12 +765,12 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
         fig,axes = plt.subplots(nrows=nf ,sharex=True, figsize=(w,h), sharey=True)
         fig.suptitle(title)
         colors = sm.to_rgba(info.get_xcol(fb))
-        for ax, fl in zip(axes, fls):
+        for flindex, (ax, fl) in enumerate(zip(axes, fls)):
             for i,color in enumerate(colors):
-                ax.plot(x, grid[i,fl,:].T, color=color)
+                ax.plot(x, grid[i,flindex,:].T, color=color)
 
 
-            flmask = mark_mask[fl,:]
+            flmask = mark_mask[flindex,:]
             ranges = split_ranges(x, flmask, filter_falses=True)
             for r in ranges:
                 ax.axvspan(r[0], r[-1], color='#eeeeff')
