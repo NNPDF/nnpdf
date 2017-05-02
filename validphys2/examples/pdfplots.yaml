@@ -13,6 +13,7 @@ second:
     xmin: 0.9
     xmax: 1
     npoints: 300
+    basis: evolution
 
 actions_:
     - first:

@@ -3,6 +3,8 @@
 This holds the concrete labels data relative to the PDF bases,
 as declaratively as possible.
 """
+import inspect
+
 import numpy as np
 
 from validphys.core import PDF
@@ -40,6 +42,10 @@ def pdg_id_to_canonical_index(flindex):
         return ALL_FLAVOURS.index(21)
     return ALL_FLAVOURS.index(flindex)
 
+def list_bases():
+    import validphys.pdfbases as thismodule
+    return dict(inspect.getmembers(thismodule, lambda x: isinstance(x, thismodule.Basis)))
+
 #These are varous ways to refering to the PDG partons with nicer text labels.
 PDG_ALIASES = {
  r'\bar{t}': -6,
@@ -70,6 +76,7 @@ PDG_ALIASES = {
  'strange': 3,
  'u': 2,
  'up': 2,
+ 0 : 21,
  }
 
 def parse_flarr(flarr):
@@ -91,6 +98,9 @@ def parse_flarr(flarr):
             else:
                 raise ValueError(msg)
     return out
+
+class UnknownElement(KeyError):
+    pass
 
 class Basis():
     def __init__(self, labels, from_flavour_mat,*, aliases=None,
@@ -127,14 +137,16 @@ class Basis():
              indexes.update({alias:indexes[alias_label] for alias,alias_label in aliases.items()})
         self._indexes = indexes
 
-    def elemlabel(self, element):
-        """Return the printale representation of a given element of this
+    def elementlabel(self, element):
+        """Return the printable representation of a given element of this
         basis."""
+        if element in self.aliases:
+            element = self.aliases[element]
         if element in self.element_representations:
             return self.element_representations[element]
         elif element in self.labels:
             return element
-        raise ValueError("Unknown element")
+        raise UnknownElement(element)
 
     """
     NOTE: At the moment, we don't need the inverse functionality, namely
@@ -200,6 +212,15 @@ class Basis():
 
     """
 
+    def to_known_elements(self, vmat):
+        """Transform the list of aliases into an array of known labels. Raise
+        `UnknownElement` on failure."""
+        try:
+            return np.asanyarray(self.labels)[self._to_indexes(vmat)]
+        except KeyError as e:
+            raise UnknownElement(*e.args) from e
+
+
     def _to_indexes(self, basis_arr):
         """Convert a list of elements of the basis to indexes of the
         (rows of the) transformation matrix."""
@@ -259,7 +280,7 @@ flavour = Basis(ALL_FLAVOURS, np.eye(len(ALL_FLAVOURS)), aliases=PDG_ALIASES,
 #dicts are oredered in python 3.6+... code shouldn't vreak if they aren't
 #though
 evolution = Basis.from_mapping({
-    r'$\Sigma$': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1 ,'b':1, 'bbar': 1, 't': 1, 'tbar': 1},
+    r'\Sigma'  : {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1 ,'b':1, 'bbar': 1, 't': 1, 'tbar': 1},
     'V'        : {'u': 1, 'ubar':-1, 'd': 1, 'dbar':-1, 's': 1, 'sbar':-1, 'c': 1, 'cbar':-1 ,'b':1, 'bbar':-1, 't': 1, 'tbar':-1},
 
     'T3'       : {'u': 1, 'ubar': 1, 'd':-1, 'dbar':-1},
@@ -282,6 +303,6 @@ evolution = Basis.from_mapping({
     'photon'   : {'photon':1},
     },
     aliases = {'gluon':'g'},
-    default_elements=(r'$\Sigma$', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
+    default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
 )
 

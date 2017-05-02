@@ -12,7 +12,8 @@ from reportengine.checks import make_argcheck, CheckError, check_positive
 
 from validphys.core import PDF
 from validphys.gridvalues import grid_values, evaluate_luminosity
-from validphys.pdfbases import PDG_ALIASES, PDG_PARTONS, DEFAULT_FLARR, parse_flarr
+from validphys.pdfbases import (PDG_ALIASES, PDG_PARTONS, DEFAULT_FLARR,
+                                parse_flarr, list_bases, Basis, UnknownElement)
 
 
 
@@ -52,31 +53,54 @@ def _check_flavours(flavours):
     except ValueError as e:
         raise CheckError(e) from e
 
-XPlottingGrid = namedtuple('XPlottingGrid', ('Q', 'flavours', 'xgrid',
+def _check_basis(basis, flavours):
+    if isinstance(basis, str):
+        bases = list_bases()
+        try:
+            basis = bases[basis]
+        except KeyError:
+            raise CheckError(f"Unknown basis '{basis}'", basis, bases)
+
+    if flavours is None:
+        flavours = basis.default_elements
+
+    try:
+        flavours = basis.to_known_elements(flavours)
+    except UnknownElement as e:
+        bad = e.args[0]
+        raise CheckError(f"Unknown basis element '{bad}'", str(bad),
+            alternatives=basis.aliases) from e
+
+    return {'basis':basis, 'flavours':flavours}
+
+XPlottingGrid = namedtuple('XPlottingGrid', ('Q', 'basis', 'flavours', 'xgrid',
                                              'grid_values', 'scale'))
 
 
-@make_argcheck(_check_flavours)
-def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None,
-                   flavours:(list, tuple)=DEFAULT_FLARR):
+@make_argcheck(_check_basis)
+def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None, basis:(str, Basis)='flavour',
+                   flavours:(list, tuple, type(None))=None):
     """Return an object containing the value of the PDF at the specified values
     of x and flavour.
 
     Q: The PDF scale in GeV.
     """
     #Make usable outside reportengine
+    checked = _check_basis(basis, flavours)
+    basis = checked['basis']
+    flavours = checked['flavours']
     if isinstance(xgrid, tuple) and len(xgrid)==2:
         scale, xgrid = xgrid
     elif isinstance(xgrid, np.ndarray):
         scale = 'unknown'
     else:
         raise TypeError(f"Invalid xgrid {xgrid!r}")
-    gv = grid_values(pdf, flavours, xgrid, Q)
+    gv = basis.grid_values(pdf, flavours, xgrid, Q)
     #Eliminante Q axis
     #TODO: wrap this in pdf.stats_class?
     gv = gv.reshape(gv.shape[:-1])
 
-    res = XPlottingGrid(Q, flavours, xgrid, gv, scale)
+    res = XPlottingGrid(Q, basis, flavours, xgrid, gv, scale)
     return res
 
 xplotting_grids = collect(xplotting_grid, ('pdfs',))
