@@ -11,7 +11,7 @@ from matplotlib import scale as mscale
 import lhapdf
 
 from reportengine.checks import (make_check, CheckError, require_one,
-                                 check_not_empty, make_argcheck)
+                                 check_not_empty, make_argcheck, check_positive)
 
 from validphys import lhaindex
 

@@ -9,7 +9,10 @@ first:
 
 second:
     Q: 100
-    xgrid: linear
+    scale: linear
+    xmin: 0.9
+    xmax: 1
+    npoints: 300
 
 actions_:
     - first:

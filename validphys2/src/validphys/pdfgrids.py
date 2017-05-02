@@ -8,7 +8,7 @@ import numbers
 import numpy as np
 
 from reportengine import collect
-from reportengine.checks import make_argcheck, CheckError
+from reportengine.checks import make_argcheck, CheckError, check_positive
 
 from validphys.core import PDF
 from validphys.gridvalues import grid_values, evaluate_luminosity
@@ -18,35 +18,33 @@ from validphys.pdfbases import PDG_ALIASES, PDG_PARTONS, DEFAULT_FLARR, parse_fl
 
 ScaleSpec = namedtuple('ScaleSpec', ('scale', 'values'))
 
-def _check_xgrid(xgrid):
-    #Checking code is always ugly...
-    msg = "Incorrect xgrid specification"
-    if xgrid in ('log', None):
-        xgrid = ('log', np.logspace(-5,0,200, endpoint=False))
 
-    elif xgrid == 'linear':
-        xgrid = ('linear', np.linspace(1e-6, 1, 200, endpoint=False))
-    elif isinstance(xgrid, list):
-        if len(xgrid) in (2,3):
-            try:
-                cond = xgrid[0] < 0 or xgrid[1] > 1 or xgrid[0] > xgrid[1]
-            except Exception as e:
-                raise CheckError(msg) from e
-            if cond:
-                raise CheckError("Incorrect specification: x must be in (0,1) with xmin<=xmax")
-        try:
-            if len(xgrid) == 2:
+@make_argcheck
+def _check_scale(scale):
+    scales = ('linear', 'log')
+    if scale not in scales:
+        raise CheckError(f'Unrecognized scale {scale}.', scale, scales)
 
-                xgrid = ('linear', np.linspace(*xgrid, 200, endpoint=False))
-            elif len(xgrid) == 3:
-                xgrid = ('linear', np.linspace(*xgrid, endpoint=False))
-            else:
-                raise CheckError(msg)
-        except Exception as e:
-            raise CheckError(msg) from e
-    else:
-        raise CheckError(msg)
-    return {'xgrid':xgrid}
+@make_argcheck
+def _check_limits(xmax, xmin):
+    if not (0 <= xmin < xmax <= 1):
+        raise CheckError(f'xmin ({xmin}) and xmax ({xmax}) must satisfy \n'
+                         '0 <= xmin < xmax <= 1')
+
+
+@_check_scale
+@_check_limits
+@check_positive('npoints')
+def xgrid(xmin:numbers.Real=1e-5, xmax:numbers.Real=1,
+          scale:str='log', npoints:int=200):
+    """Return a tuple ``(scale, array)`` where ``scale`` is the input scale
+    ("linear" or "log") and ``array`` is generated from the input parameters
+    and distributed according to scale."""
+    if scale == 'log':
+        arr = np.logspace(np.log10(xmin), np.log10(xmax), npoints, endpoint=False)
+    elif scale == 'linear':
+        arr = np.linspace(xmin, xmax, npoints, endpoint=False)
+    return (scale, arr)
 
 def _check_flavours(flavours):
     try:
@@ -58,7 +56,6 @@ XPlottingGrid = namedtuple('XPlottingGrid', ('Q', 'flavours', 'xgrid',
                                              'grid_values', 'scale'))
 
 
-@make_argcheck(_check_xgrid)
 @make_argcheck(_check_flavours)
 def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None,
                    flavours:(list, tuple)=DEFAULT_FLARR):
@@ -66,12 +63,6 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None,
     of x and flavour.
 
     Q: The PDF scale in GeV.
-
-    The x grid can be specified as follows:
-        log: Sample log-spaced points (default).
-        linear: Sample linearly-spaced points.
-        [xmin,xmax]: linearly sample between xmin and xmax.
-        [xmin,xmax,num]: linearly sample num points between xmin and xmax.
     """
     #Make usable outside reportengine
     if isinstance(xgrid, tuple) and len(xgrid)==2:
@@ -79,7 +70,7 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None,
     elif isinstance(xgrid, np.ndarray):
         scale = 'unknown'
     else:
-        scale, xgrid = _check_xgrid(xgrid)['xgrid']
+        raise TypeError(f"Invalid xgrid {xgrid!r}")
     gv = grid_values(pdf, flavours, xgrid, Q)
     #Eliminante Q axis
     #TODO: wrap this in pdf.stats_class?
