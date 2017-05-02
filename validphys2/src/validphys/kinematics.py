@@ -12,24 +12,51 @@ import pandas as pd
 
 from reportengine import collect
 from reportengine.table import table
+from reportengine.checks import check_positive
 
 from validphys import plotoptions
 
 log = logging.getLogger(__name__)
 
-def inspect_overrides(commondata):
-    """Retun a tuple with the name of the commondata, the name of the override and the process type tag"""
-    info = plotoptions.get_info(commondata)
-    return (commondata.name, info.kinematics_override.__class__.__name__, commondata.load().GetProc(0))
 
-all_inspect_overrides = collect(inspect_overrides, ('experiments', 'experiment'))
 
-@table
-def inspect_overrides_table(all_inspect_overrides):
-    """Produce a table with all the overrides in all the experiments.
-    This is mostly for debugging purposes."""
+@check_positive('titlelevel')
+def describe_kinematics(commondata, titlelevel:int=1):
+    """Output a markdown text describing the stored metadata for a given
+    commondata.
 
-    return pd.DataFrame(all_inspect_overrides)
+    titlelevel can be used to control the header level of the title.
+    """
+    import inspect
+    cd = commondata
+    info = plotoptions.get_info(cd)
+    proc = cd.load().GetProc(0)
+    src = inspect.getsource(info.kinematics_override.xq2map)
+    titlespec = '#'*titlelevel
+    return (f"""
+{titlespec} {cd}
+
+{info.dataset_label}
+
+Stored data:
+
+ - Process type: **{proc}** ({info.process_description})
+
+ - variables:
+     * k1: {info.kinlabels[0]}
+     * k2: {info.kinlabels[1]}
+     * k3: {info.kinlabels[2]}
+
+
+
+Map:
+
+```python
+{src}
+```
+
+""")
+
 
 def kinlimits(commondata, cuts, use_cuts, use_kinoverride:bool=True):
     """Return a mapping conaining the number of fitted and used datapoints,
