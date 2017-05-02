@@ -25,12 +25,14 @@ from reportengine.checks import make_check, CheckError, make_argcheck
 
 from validphys.core import MCStats
 from validphys.results import chi2_stat_labels
-from validphys.pdfgrids import (PDG_PARTONS,
-                                evaluate_luminosity, LUMI_CHANNELS)
+from validphys.pdfgrids import evaluate_luminosity
 from validphys.plotoptions import get_info, kitable, transform_result
 from validphys.checks import check_scale
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges
+
+#TODO: Delete this once lumi plots are properly refactored. See issue  #17
+from validphys.gridvalues import LUMI_CHANNELS
 
 log = logging.getLogger(__name__)
 
@@ -464,9 +466,11 @@ class PDFPlotter(metaclass=abc.ABCMeta):
         if not self.xplotting_grids:
             return
 
+        basis = self.firstgrid.basis
+
         for flindex, fl in enumerate(self.firstgrid.flavours):
             fig, ax = plt.subplots()
-            parton_name = PDG_PARTONS[fl]
+            parton_name = basis.elementlabel(fl)
             flstate = FlavourState(flindex=flindex, fl=fl, fig=fig, ax=ax,
                                     parton_name=parton_name)
             self.setup_flavour(flstate)
@@ -722,6 +726,8 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
     table = kitable(dataset, info)
     figby = sane_groupby_iter(table, info.figure_by)
 
+    basis = obs_pdf_correlations.basis
+
     fullgrid = obs_pdf_correlations.grid_values
 
     fls = obs_pdf_correlations.flavours
@@ -759,17 +765,17 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
         fig,axes = plt.subplots(nrows=nf ,sharex=True, figsize=(w,h), sharey=True)
         fig.suptitle(title)
         colors = sm.to_rgba(info.get_xcol(fb))
-        for ax, fl in zip(axes, fls):
+        for flindex, (ax, fl) in enumerate(zip(axes, fls)):
             for i,color in enumerate(colors):
-                ax.plot(x, grid[i,fl,:].T, color=color)
+                ax.plot(x, grid[i,flindex,:].T, color=color)
 
 
-            flmask = mark_mask[fl,:]
+            flmask = mark_mask[flindex,:]
             ranges = split_ranges(x, flmask, filter_falses=True)
             for r in ranges:
                 ax.axvspan(r[0], r[-1], color='#eeeeff')
 
-            ax.set_ylabel("$%s$"%PDG_PARTONS[fl])
+            ax.set_ylabel("$%s$"%basis.elementlabel(fl))
             ax.set_xscale(_scale_from_grid(obs_pdf_correlations))
             ax.set_ylim(-1,1)
             ax.set_xlim(x[0], x[-1])

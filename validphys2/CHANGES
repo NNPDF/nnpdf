@@ -1,0 +1,10 @@
+CHANGES
+-------
+
+02 /05/2017 Fix bug in smpdf plots, where flavour labels where
+            assigned incorrectly.
+
+02/05/2017 Add support for arbitrary basis transformations. This
+           requires a bump in the minimum version of reportengine.
+
+02/05/2017 Inagurate Changelog.
