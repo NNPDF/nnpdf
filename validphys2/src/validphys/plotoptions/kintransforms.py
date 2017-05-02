@@ -116,7 +116,7 @@ class dyp_sqrt_scale(SqrtScaleMixin, DYXQ2MapMixin):
     qlabel = '$M (GeV)$'
 
 
-class jet_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
+class jet_sqrt_scale(SqrtScaleMixin,JETXQ2MapMixin):
     def new_labels(self, *old_labels):
         return ('$|y|$', '$p_T$ (GeV)', r'$\sqrt{s} (GeV)$')
 
