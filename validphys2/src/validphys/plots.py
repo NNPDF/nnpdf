@@ -970,15 +970,15 @@ def _check_marker_by(marker_by):
 
 #TODO: Right now this is hackish Could we turn it into a permanent interface?
 @make_argcheck
-def _check_highlights(experiments, highlight_values):
-    if highlight_values:
-        values = frozenset(highlight_values)
+def _check_highlights(experiments, highlight_datasets):
+    if highlight_datasets:
+        values = frozenset(highlight_datasets)
         names_set = {ds.name for experiment in experiments for ds in experiment }
         diff = values - names_set
         if diff:
             raise CheckError(f"The following highlight elements are "
                              "not dataset names: {diff}")
-        return {'highlight_values': values}
+        return {'highlight_datasets': values}
 
 
 @make_argcheck
@@ -993,8 +993,9 @@ def _check_aspect(aspect):
 @_check_highlights
 @_check_aspect
 def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
-                 marker_by:str='process type', highlight_key:str='highlight',
-                 highlight_values:(Sequence,type(None))=None, aspect:str='landscape'):
+                 marker_by:str='process type', highlight_label:str='highlight',
+                 highlight_datasets:(Sequence,type(None))=None,
+                 aspect:str='landscape'):
     """Plot the (x,Q²) coverage based of the data based on some LO
     approximations. These are governed by the relevant kintransform.
 
@@ -1037,8 +1038,8 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
     xh = defaultdict(list)
     q2h = defaultdict(list)
 
-    if not highlight_values:
-        highlight_values = set()
+    if not highlight_datasets:
+        highlight_datasets = set()
 
     def next_options():
         #Get the colors
@@ -1075,7 +1076,7 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
         if key not in key_options:
             key_options[key] = next(next_opts)
 
-        if commondata.name in highlight_values:
+        if commondata.name in highlight_datasets:
             xdict = xh
             q2dict = q2h
         else:
@@ -1114,7 +1115,7 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
         #Get legend key
         ax.plot([], [], marker='s', markeredgewidth=0.6, color='none',
             markersize=5,
-            markeredgecolor="black", label= f'Black edge: {highlight_key}',
+            markeredgecolor="black", label= f'Black edge: {highlight_label}',
         )
 
     if display_cuts:

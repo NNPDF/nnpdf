@@ -78,7 +78,7 @@ experiments:
       - { dataset: CMSTTBARTOT, frac: 1.0, cfac: [QCD] } 
       - { dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 1.0, cfac: [QCD] }
 
-highlight_values:
+highlight_datasets:
     - ATLASLOMASSDY11EXT
     - ATLAS1JET11
     - ATLASWZRAP11
@@ -96,7 +96,7 @@ highlight_values:
     - CMSWMU8TEV
     - CMSZDIFF12
 
-highlight_key: "New in NNPDF3.1"
+highlight_label: "New in NNPDF3.1"
 
 meta:
     title: Kinplot
