@@ -980,13 +980,21 @@ def _check_highlights(experiments, highlight_values):
                              "not dataset names: {diff}")
         return {'highlight_values': values}
 
+
+@make_argcheck
+def _check_aspect(aspect):
+    aspects = ('landscape', 'portrait', 'square')
+    if aspect not in aspects:
+        raise CheckError(f"Unknown aspect {aspect}", aspect, aspects)
+
 @figure
 @_check_display_cuts_requires_use_cuts
 @_check_marker_by
 @_check_highlights
+@_check_aspect
 def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
                  marker_by:str='process type', highlight_key:str='highlight',
-                 highlight_values:(Sequence,type(None))=None):
+                 highlight_values:(Sequence,type(None))=None, aspect:str='landscape'):
     """Plot the (x,Q²) coverage based of the data based on some LO
     approximations. These are governed by the relevant kintransform.
 
@@ -1007,7 +1015,19 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
     """
 
     w,h = plt.rcParams["figure.figsize"]
-    fig, ax = plt.subplots(figsize=(w*1.6,h*1.6))
+    rescaling_factor = 1.6
+    w *= rescaling_factor
+    h *= rescaling_factor
+    if aspect=='landscape':
+        figsize = w, h
+    elif aspect=='portrait':
+        figsize = h, w
+    elif aspect=='square':
+        figsize = h, h
+    else:
+        raise ValueError(f"Unknown aspect {aspect}")
+    fig, ax = plt.subplots(figsize=figsize)
+
     filteredx = []
     filteredq2 = []
 
@@ -1031,8 +1051,8 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
             #Override last with first
             options = {
                 'linestyle': 'none',
-                **settings,
                 **markeropts,
+                **settings,
             }
             yield options
 
@@ -1070,9 +1090,6 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
             filteredx.append(masked[0])
             filteredq2.append(masked[1])
 
-
-
-
     for key in key_options:
         if key in x:
             coords = np.concatenate(x[key]), np.concatenate(q2[key])
@@ -1085,7 +1102,6 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
             markeredgecolor=None,
             **key_options[key],
         )
-
 
     #Iterate again so highlights are printed on top.
     for key in xh:
@@ -1101,14 +1117,12 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
             markeredgecolor="black", label= f'Black edge: {highlight_key}',
         )
 
-
-
-
     if display_cuts:
         ax.scatter(np.concatenate(filteredx), np.concatenate(filteredq2),
             marker='o',
             facecolors='none', edgecolor='red', s=40, lw=0.8, label="Cut"
         )
+
     ax.set_title("Kinematic coverage")
     ax.legend()
     ax.set_xlabel('x')

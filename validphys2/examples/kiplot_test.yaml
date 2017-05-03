@@ -1,5 +1,6 @@
 fit: NNPDF31_nnlo_as_0118_1000
 use_cuts: True
+display_cuts: False
 
 
 experiments:
@@ -100,21 +101,25 @@ highlight_key: "New in NNPDF3.1"
 meta:
     title: Kinplot
     author: Luca Rottoli, Zahari Kassabov
-    keywords: [debug]
+    keywords: [test]
 
-dcuts:
-  - display_cuts: True
-  - display_cuts: False
+aspects:
+ - aspect: landscape
+ - aspect: portrait
+ - aspect: square
 
 theoryid: 53
 
-markers:
-#    - marker_by: process type
-#    - marker_by: dataset
-    - marker_by: experiment
+marker_by: experiment
 
 template_text: |
-    {@markers::dcuts plot_xq2@}
+    {@with aspects@}
+    Aspect: {@aspect@}
+    =================
+
+    {@plot_xq2@}
+
+    {@endwith@}
 
 actions_:
     - - report:
