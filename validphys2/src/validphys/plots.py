@@ -530,7 +530,8 @@ class ReplicaPDFPlotter(PDFPlotter):
 @_warn_any_pdf_not_montecarlo
 def plot_pdfreplicas(pdfs, xplotting_grids, xscale:(str,type(None))=None,
                       normalize_to:(int,str,type(None))=None):
-    """Plot the replicas of the specifid PDFs.
+    """Plot the replicas of the specifid PDFs. Otherise it works the same as
+    plot_pdfs.
 
     - xscale sets the scale of the plot. E.g. 'linear' or 'log'. Default is
     deduced from the xplotting_grid, which in turn is 'log' by default.
@@ -707,7 +708,18 @@ class BandPDFPlotter(PDFPlotter):
 @check_scale('xscale', allow_none=True)
 def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
                       normalize_to:(int,str,type(None))=None):
-    """Plot uncertainty intervals as a function of x."""
+    """Plot the central value and the uncertainty of a list of pdfs as a
+    function of x for a given value of Q. If normalize_to is given, norma.
+    See the help for ``xplotting_grid`` for information on how to set basis,
+    flavours and x ranges. Yields one figure per PDF flavour.
+
+    normalize_to:  Either the name of one of the PDFs or its corresponding
+    index in the list, starting from one, or None to plot absolute values.
+
+    xscale: One of the matplotlib allowed scales. If undefined, it will be
+    set based on the scale in xgrid, which should be used instead.
+
+    """
     yield from BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
 
 
