@@ -20,8 +20,16 @@ def calc_chi2(sqrtcov, diffs):
     return np.einsum('i...,i...->...', vec,vec)
 
 def all_chi2(results):
-    """Return the chi² for all elements in the result"""
+    """Return the chi² for all elements in the result. Note that the
+    interpretation of the result will depend on the PDF error type"""
     data_result, th_result = results
     diffs = th_result._rawdata - data_result.central_value[:,np.newaxis]
     return calc_chi2(sqrtcov=data_result.sqrtcovmat, diffs=diffs)
+
+def central_chi2(results):
+    """Calculate the chi² from the central value of the theory prediction to
+    the data"""
+    data_result, th_result = results
+    central_diff = th_result.central_value - data_result.central_value
+    return calc_chi2(data_result.sqrtcovmat, central_diff)
 

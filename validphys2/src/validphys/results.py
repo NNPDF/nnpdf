@@ -22,7 +22,7 @@ from reportengine import collect
 
 from validphys.checks import assert_use_cuts_true
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
-from validphys.calcutils import all_chi2, calc_chi2
+from validphys.calcutils import all_chi2, calc_chi2, central_chi2
 
 log = logging.getLogger(__name__)
 
@@ -372,8 +372,7 @@ def abs_chi2_data(results):
 
     chi2s = all_chi2(results)
 
-    central_diff = th_result.central_value - data_result.central_value
-    central_result = calc_chi2(data_result.sqrtcovmat, central_diff)
+    central_result = central_chi2(results)
 
     return Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]),
                     central_result, len(data_result))
