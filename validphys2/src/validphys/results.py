@@ -20,8 +20,9 @@ from reportengine.checks import require_one, remove_outer
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.checks import make_check, CheckError, assert_use_cuts_true
+from validphys.checks import assert_use_cuts_true
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
+from validphys.calcutils import all_chi2, calc_chi2
 
 log = logging.getLogger(__name__)
 
@@ -363,35 +364,16 @@ def one_or_more_results(dataset:(DataSetSpec, ExperimentSpec),
     raise ValueError("Either 'pdf' or 'pdfs' is required")
 
 
-def _calc_chi2(sqrtcov, diffs):
-    """Elementary function to compute the chi², given a Cholesky decomposed
-    lower triangular part and a vector of differences"""
-    #Note la.cho_solve doesn't really improve things here
-    #NOTE: Do not enable check_finite. The upper triangular part is not
-    #guaranteed to make any sense. If this causes a problem, it is a bug in
-    #ibnnpdf.
-    vec = la.solve_triangular(sqrtcov, diffs, lower=True, check_finite=False)
-    #This sums up the result for the chi² for any input shape.
-    #Sum the squares over the first dimension and leave the others alone
-    return np.einsum('i...,i...->...', vec,vec)
-
-def _all_chi2(results):
-    """Return the chi² for all elements in the result"""
-    data_result, th_result = results
-    diffs = th_result._rawdata - data_result.central_value[:,np.newaxis]
-    return _calc_chi2(sqrtcov=data_result.sqrtcovmat, diffs=diffs)
-
-
 Chi2Data = namedtuple('Chi2Data', ('replica_result', 'central_result', 'ndata'))
 
 def abs_chi2_data(results):
     """Return a tuple (member_chi², central_chi², numpoints)"""
     data_result, th_result = results
 
-    chi2s = _all_chi2(results)
+    chi2s = all_chi2(results)
 
     central_diff = th_result.central_value - data_result.central_value
-    central_result = _calc_chi2(data_result.sqrtcovmat, central_diff)
+    central_result = calc_chi2(data_result.sqrtcovmat, central_diff)
 
     return Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]),
                     central_result, len(data_result))
