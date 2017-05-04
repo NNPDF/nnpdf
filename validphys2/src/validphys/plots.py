@@ -924,13 +924,15 @@ def plot_lumi2d(pdf, lumi_channel, lumigrid2d, sqrts,
     #broken and looks like it takes a lot of fidlling wirh the mpl internals
     #to fix it.
 
-    positive_mask = masked_weights>0
+    with np.errstate(invalid='ignore'):
+        positive_mask = masked_weights>0
     linlim = np.nanpercentile(masked_weights[positive_mask],90)/1e5
 
     #norm = mcolors.SymLogNorm(linlim, vmin=None)
 
     norm = mcolors.LogNorm(vmin=linlim)
-    masked_weights[masked_weights<linlim] = linlim
+    with np.errstate(invalid='ignore'):
+        masked_weights[masked_weights<linlim] = linlim
 
     mesh = ax.pcolormesh(y, lumigrid2d.m, masked_weights, cmap=cmap,
         shading='gouraud',
