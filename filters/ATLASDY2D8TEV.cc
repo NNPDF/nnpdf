@@ -44,8 +44,8 @@ void ATLASDY2D8TEVFilter::ReadData()
           fSys[idat][l].name = "UNCORR";
         else if (l == fNSys-1)
           {
-            fSys[idat][l].add = fabs(fSys[idat][l].add);
-            fSys[idat][l].mult = fabs(fSys[idat][l].mult);
+            fSys[idat][l].add = fSys[idat][l].add;
+            fSys[idat][l].mult = fSys[idat][l].mult;
             fSys[idat][l].name = "ATLASLUMI12";
           }
         else
