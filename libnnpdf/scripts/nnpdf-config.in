@@ -36,12 +36,6 @@ test -n "$tmp" && OUT="$OUT @libdir@"
 tmp=$( echo "$*" | egrep -- '--\<ldflags\>')
 test -n "$tmp" && OUT="$OUT -L@libdir@ -lnnpdf"
 
-a="1"
-if [ -n "@LIBNNPDF_HAVE_SSE@" ]; then
-    a="0"
-fi
-test -n "$tmp" && OUT="$OUT $a"
-
 ## Version
 tmp=$( echo "$*" | egrep -- '--\<version\>')
 test -n "$tmp" && OUT="$OUT @VERSION@"
