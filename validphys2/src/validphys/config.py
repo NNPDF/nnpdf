@@ -18,6 +18,7 @@ from reportengine import report
 from validphys.core import ExperimentSpec, DataSetInput
 from validphys.loader import (Loader, LoadFailedError ,DataNotFoundError,
                               PDFNotFound, FallbackLoader)
+from validphys.gridvalues import LUMI_CHANNELS
 
 log = logging.getLogger(__name__)
 
@@ -342,7 +343,6 @@ class Config(report.Config):
 
     @element_of('lumi_channels')
     def parse_lumi_channel(self, ch:str):
-        from validphys.pdfgrids import LUMI_CHANNELS
         if ch not in LUMI_CHANNELS:
             raise ConfigError('lumi_channel not understood: %s' % ch,
                               ch, alternatives=LUMI_CHANNELS,
