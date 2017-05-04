@@ -16,7 +16,6 @@ if [[ $# -eq 0 || -n $( echo $* | egrep -- "--help|-h" ) ]]; then
     echo "  --libdir       : show the path to the nnpdf library directory"
     echo "  --cppflags     : get compiler flags for use with the C preprocessor stage of C++ compilation"
     echo "  --ldflags      : get compiler flags for use with the linker stage of any compilation"
-    echo "  --safemode     : get a boolean with the safemode option"
     echo "  --version      : returns libnnpdf release version number"
 fi
 
@@ -36,8 +35,6 @@ test -n "$tmp" && OUT="$OUT @libdir@"
 
 tmp=$( echo "$*" | egrep -- '--\<ldflags\>')
 test -n "$tmp" && OUT="$OUT -L@libdir@ -lnnpdf"
-
-tmp=$( echo "$*" | egrep -- '--\<safemode\>')
 
 a="1"
 if [ -n "@LIBNNPDF_HAVE_SSE@" ]; then
