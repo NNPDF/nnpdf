@@ -68,7 +68,7 @@ class DataResult(NNPDFDataResult):
 
     @property
     def label(self):
-        return "CommonData"
+        return "Data"
 
     @property
     def std_error(self):
