@@ -1,8 +1,9 @@
 dataset_label: "NMC $p$"
 x: k2
-y_label: '$10^{i}F_2(x,Q^2)$' 
+y_label: '$10^{i}F_2(x,Q^2)$'
 result_transform: qbindis
 kinematics_override: nmc_process
+data_reference: "Arneodo:1996kd"
 
 y_scale: linear
 figure_by:
