@@ -199,12 +199,13 @@ class PlotConfigParser(Config):
 
     @named_element_of('extra_labels')
     def parse_label(self, elems:list):
-        if self.cuts is not None:
-            elems = [elems[c] for c in self.cuts]
+
         if len(elems) != len(self.commondata):
             raise ConfigError("The number of elements in %s (%d) must be the same as "
                               "the number of points in the CommonData (%d)" %
                               (elems, len(elems), len(self.commondata)))
+        if self.cuts is not None:
+            elems = [elems[c] for c in self.cuts]
         return elems
 
     def resolve_name(self, val, extra_labels):
