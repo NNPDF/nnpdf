@@ -199,3 +199,8 @@ class nmc_process(DISXQ2MapMixin):
 
     def new_labels(self, *old_labels):
         return ('$x$', '$Q$ (GeV)', r'$\sqrt{s} (GeV)$')
+
+class ewk_pseudorapity_sqrt_scale(ewk_rap_sqrt_scale):
+    def new_labels(self, *old_labels):
+        superlabels = super().new_labels(*old_labels)
+        return (r'$\eta$', *superlabels[1:])
