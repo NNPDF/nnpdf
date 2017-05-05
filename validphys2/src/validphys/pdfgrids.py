@@ -14,7 +14,7 @@ from validphys.core import PDF
 from validphys.gridvalues import grid_values, evaluate_luminosity
 from validphys.pdfbases import (PDG_ALIASES, PDG_PARTONS, DEFAULT_FLARR,
                                 parse_flarr, list_bases, Basis, UnknownElement)
-
+import scipy.integrate as integrate
 
 
 ScaleSpec = namedtuple('ScaleSpec', ('scale', 'values'))
@@ -130,7 +130,7 @@ def lumigrid2d(pdf:PDF, lumi_channel, sqrts:numbers.Real,
     The grid is sampled linearly in rapidity and logarithmically in mass.
 
     The results are computed for all relevant PDF members and wrapped in a
-    stats class, to compute statists regardless of the ErrorType.
+    stats class, to compute statistics regardless of the ErrorType.
     """
 
     s = sqrts**2
@@ -163,5 +163,40 @@ def lumigrid2d(pdf:PDF, lumi_channel, sqrts:numbers.Real,
     return Lumi2dGrid(ys, mxs, pdf.stats_class(weights))
 
 
-
 lumigrids2d = collect('lumigrid2d', ['lumi_channels'])
+
+
+Lumi1dGrid = namedtuple('Lumi1dGrid', ['m','grid_values'])
+
+
+def lumigrid1d(pdf:PDF, lumi_channel, sqrts:numbers.Real, nbins_m:int=30):
+    """
+    Return the integrated luminosity in a grid of nbins_m points,
+    for the values of invariant mass given (proton-proton) collider
+    energy ``sqrts`` (given in GeV).
+
+    The grid is sampled logarithmically in mass.
+
+    The results are computed for all relevant PDF members and wrapped in a
+    stats class, to compute statistics regardless of the ErrorType.
+    """
+
+    s = sqrts**2
+    mxs = np.logspace(1, np.log10(sqrts/10), nbins_m)
+    taus = (mxs / sqrts) ** 2
+
+    # TODO: Write this in something fast
+    lpdf = pdf.load()
+    nmembers = lpdf.GetMembers()
+
+    weights = np.full(shape=(nmembers, nbins_m), fill_value=np.NaN)
+
+    for irep in range(nmembers):
+        for im, mx in enumerate(mxs):
+            weights[irep, im] = integrate.quad(lambda x1: evaluate_luminosity(lpdf, irep, s, mx, x1, taus[im] / x1, lumi_channel), taus[im], 1.0)[0]
+
+    return Lumi1dGrid(mxs, pdf.stats_class(weights))
+
+
+lumigrids1d = collect('lumigrid1d', ['lumi_channels'])
+

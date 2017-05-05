@@ -838,34 +838,28 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset):
 
 
 @figuregen
-def plot_luminosities(pdf, sqrts:(float,int)=14000):
-    """
-    Plot PDF luminosities at a given center of mass energy.
-
+def plot_lumi1d(pdf, lumi_channel, lumigrid1d, sqrts:numbers.Real):
+    """Plot PDF luminosities at a given center of mass energy.
     sqrts is the center of mass energy (GeV).
     """
 
-    s = sqrts**2
-    pdf_set = pdf.load()
-    members = pdf_set.GetMembers()
+    fig, ax = plt.subplots()
+    mx = lumigrid1d.m
+    gv = lumigrid1d.grid_values
 
-    x = np.logspace(1, np.log10(sqrts/10.0), 30)
-    tau = (x/sqrts)**2
+    cv = gv.central_value()
+    err = gv.std_error()
 
-    obs = np.zeros(shape=(members, len(tau)))
-    for n in range(members):
-        obs[n] = np.array([integrate.quad(lambda x1: evaluate_luminosity(pdf_set, n, s, x[i], x1, itau/x1, 'gg'), itau, 1.0)[0] for i, itau in enumerate(tau)])
+    ax.fill_between(mx, 1-err/cv, 1+err/cv, alpha=0.5)
+    ax.plot(mx, cv/cv, label='%s' % pdf.label)
+    ax.legend(loc='best')
+    ax.set_xlabel('$M_{X}$ (GeV)')
+    ax.set_xscale('log')
+    ax.grid(False)
+    ax.set_title("$%s$ luminosity\n%s - "
+                 "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[lumi_channel],
+                                           pdf.label, sqrts))
 
-    uset = pdf.stats_class(obs)
-    cv = uset.central_value()
-    err = uset.std_error()
-
-    fig = plt.figure()
-    plt.fill_between(x, 1-err/cv, 1+err/cv, alpha=0.5)
-    plt.plot(x, cv/cv, label='%s' % pdf.label)
-    plt.title('$gg$ luminosity')
-    plt.legend(loc='best')
-    plt.xscale('log')
     yield fig
 
 
