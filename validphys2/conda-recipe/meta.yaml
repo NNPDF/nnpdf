@@ -14,7 +14,7 @@ requirements:
     - python
     - libnnpdf >=1.1.0b7
     - reportengine >=0.15
-    - matplotlib >=2.0
+    - matplotlib >=2.0.1
     - blessings
     - scipy
     - pandas

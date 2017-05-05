@@ -674,7 +674,6 @@ class BandPDFPlotter(PDFPlotter):
                         zorder=1)
         #http://stackoverflow.com/questions/5195466/matplotlib-does-not-display-hatching-when-rendering-to-pdf
         hatch = next(hatchit)
-        hatch = ''
         ax.fill_between(xgrid, err68up, err68down, facecolor='None', alpha=alpha,
                         edgecolor=color,
                         hatch=hatch,
