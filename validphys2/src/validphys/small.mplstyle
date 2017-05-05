@@ -7,7 +7,7 @@ axes.formatter.use_mathtext : True
 axes.spines.top         : False
 axes.spines.right       : False
 
-errorbar.capsize        : 1
+errorbar.capsize        : 2
 
 font.size               : 14
 
@@ -24,7 +24,6 @@ legend.loc              : best
 legend.fancybox         : True
 legend.framealpha       : 0.8
 
-lines.markeredgewidth   : 0
 lines.markersize        : 4
 
 mathtext.default        : regular
