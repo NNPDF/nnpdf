@@ -140,6 +140,8 @@ class PlotInfo:
     def group_label(self, same_vals, groupby):
         if not groupby:
             return ''
+        if len(same_vals) == 1 and isinstance(same_vals[0], str):
+            return f'({same_vals[0]})'
         pieces = []
         for column, val in zip(groupby, same_vals):
             label = self.name_to_label(column)
