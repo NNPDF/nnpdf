@@ -57,6 +57,8 @@ Map:
 
 """)
 
+describe_kinematics.highlight = 'markdown'
+
 
 def kinlimits(commondata, cuts, use_cuts, use_kinoverride:bool=True):
     """Return a mapping conaining the number of fitted and used datapoints,
