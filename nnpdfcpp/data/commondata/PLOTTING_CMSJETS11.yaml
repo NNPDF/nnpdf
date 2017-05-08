@@ -7,5 +7,11 @@ x_scale: linear
 result_transform: qbinjets
 kinematics_override: jet_sqrt_scale
 
+normalize:
+    y_scale: linear
+    line_by: []
+    figure_by:
+        - k1
+
 line_by:
     - k1

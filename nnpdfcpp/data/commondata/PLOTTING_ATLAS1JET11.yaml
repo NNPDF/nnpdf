@@ -9,3 +9,9 @@ kinematics_override: jet_sqrt_scale
 
 line_by:
     - k1
+
+normalize:
+    line_by: []
+    y_scale: linear
+    figure_by:
+        - k1
