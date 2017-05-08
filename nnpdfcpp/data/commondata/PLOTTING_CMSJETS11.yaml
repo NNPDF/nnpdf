@@ -1,3 +1,4 @@
+dataset_label: "CMS jets 7 TeV 2011"
 x: k2
 
 y_label: '$10^{3*qbin} d\sigma/dp_T$' 

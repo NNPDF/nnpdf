@@ -1,3 +1,4 @@
+dataset_label: "HERA $\\sigma_c^{\\rm NC}$"
 x: k1
 y_label: '$10^{qbin} F_{2,c}(x,Q^2)$' 
 result_transform: qbinexp

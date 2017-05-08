@@ -1,3 +1,4 @@
+dataset_label: "NuTeV $\\sigma_{c}^{\\bar{\\nu}}$"
 x: k2
 y_label: '$10^{i}\sigma_{\bar{\nu}}^{cc}(x,Q^2)$' 
 result_transform: qbindis
