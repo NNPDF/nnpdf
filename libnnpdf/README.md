@@ -19,7 +19,6 @@ CMAKE_INSTALL_PREFIX
 ENABLE_OPENMP
 ENABLE_OPENMPI
 ENABLE_PYWRAP
-ENABLE_SAFEMODE
 ```
 
 On the command line, options are controlled appending a `-D` flag. For
