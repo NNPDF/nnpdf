@@ -168,6 +168,7 @@ lumigrids2d = collect('lumigrid2d', ['lumi_channels'])
 Lumi1dGrid = namedtuple('Lumi1dGrid', ['m','grid_values'])
 
 
+@check_positive('sqrts')
 def lumigrid1d(pdf:PDF, lumi_channel, sqrts:numbers.Real, nbins_m:int=30):
     """
     Return the integrated luminosity in a grid of nbins_m points,
