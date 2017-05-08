@@ -179,6 +179,8 @@ int main(int argc, char **argv)
 
       cout << Colour::FG_GREEN << "- All replicas tested and verified"<< Colour::FG_DEFAULT << endl;
       cout << "- Global average: "<< globalAVG/(real)global.fDOF<<" STD: "<<globalSTD/(real)global.fDOF<<endl;
+      cout << "- Central: " << global.fChi2Cent/(real)global.fDOF  << endl;
+
 
       // Free memory
       for (int i = 0; i < (int) res.size(); i++)
