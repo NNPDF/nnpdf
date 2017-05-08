@@ -14,7 +14,8 @@ requirements:
         - sqlite
         - gcc <5 # [linux]
         - libgcc # [linux]
-        - gsl
+        #Gsl doesn't link openblas on old debian 7
+        - gsl ==2.2.1 1
         - numpy
         - pkg-config
         - cmake
@@ -27,7 +28,7 @@ requirements:
         - python 
         - sqlite
         - libgcc # [linux]
-        - gsl
+        - gsl ==2.2.1 1
         - numpy
         - libarchive
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
