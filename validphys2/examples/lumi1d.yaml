@@ -1,16 +1,20 @@
 sqrts: 13000
 pdf: NNPDF31_nlo_as_0118
 
+lumi_channels:
+  - gg
+  - udbar
+
 template_text: |
     ---
-    title: Luminosity integral
+    title: 1D integrated lumionsity
     author: Stefano Carrazza
     keywords: [nnpdf31]
     ---
 
-    PDF luminosities
+    1D integrated luminosity
     -----------
-    {@ plot_luminosities @}
+    {@lumi_channels plot_lumi1d @}
 
 actions_:
   -   - report:
