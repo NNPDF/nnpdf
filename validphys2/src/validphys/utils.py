@@ -57,7 +57,7 @@ def sane_groupby_iter(df, by, *args, **kwargs):
     As a concenience for plotting, if by is None, yield the empty string and
     the whole dataframe.
     """
-    if by is None:
+    if by is None or not by:
         yield ('',), df
         return
     gb = df.groupby(by, *args,**kwargs)
