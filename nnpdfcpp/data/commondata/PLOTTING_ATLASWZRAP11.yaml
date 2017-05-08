@@ -9,6 +9,7 @@ line_by:
   - Boson
 
 normalize:
+    line_by: []
     figure_by:
         - Boson
 
