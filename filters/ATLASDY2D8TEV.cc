@@ -50,8 +50,7 @@ void ATLASDY2D8TEVFilter::ReadData()
     lkstream >> tmp >> mllbin_low >> mllbin_high >> tmp >> ybin_low >> ybin_high;
 
     // ugly normalization to match applgrid predictions
-    fData[idat] *= (mllbin_high-mllbin_low);
-    fData[idat] /= 2 * (ybin_high-ybin_low);
+    fData[idat] *= 2 * (mllbin_high-mllbin_low);
     
     fStat[idat] = fStat[idat] * fData[idat] * 1e-2;
 
