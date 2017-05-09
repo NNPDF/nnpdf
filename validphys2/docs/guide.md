@@ -331,7 +331,7 @@ The conda installer will ask to add the conda bin path to the default
 this unless you know that you have a specific reason not to.
 
 Not that the script may ask you to perform some actions manually (e.g.
-it will not overwrite your existing conda configuration). Please be
+it will not overwrite your existing conda configuration). Please
 pay attention to the output text of the script.
 
 Once everything is configured, you can install validphys and nnpdf by
