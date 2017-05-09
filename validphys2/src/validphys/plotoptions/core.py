@@ -269,6 +269,12 @@ class PlotConfigParser(Config):
     def parse_y_scale(self, scale:str):
         return self._parse_scale(scale)
 
+    def parse_theory_reference(self, ref:str):
+        return ref
+
+    def parse_data_reference(self, ref:str):
+        return ref
+
 
 def kitable(commondata, info):
     if isinstance(commondata, (DataSetSpec, CommonDataSpec)):
