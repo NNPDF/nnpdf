@@ -164,7 +164,6 @@ class Config(report.Config):
         #We need to make theoryid available to parse the experiments
         with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
             _, experiments = self.parse_from_('fit', 'experiments', write=False)
-        _, experiments = self.parse_from_('fit', 'experiments', write=False)
 
         return {'theoryid':thid, 'experiments': experiments}
 
