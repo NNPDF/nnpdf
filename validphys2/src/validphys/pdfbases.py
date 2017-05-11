@@ -122,7 +122,7 @@ class Basis():
          """
 
         self.labels = labels
-        self.aliases = aliases
+
         self.from_flavour_mat = from_flavour_mat
         #self._known_flavours = ALL_FLAVOURS[]
         if default_elements is None:
@@ -135,6 +135,11 @@ class Basis():
         indexes = {lb:i for i,lb in enumerate(labels)}
         if aliases:
              indexes.update({alias:indexes[alias_label] for alias,alias_label in aliases.items()})
+        else:
+            aliases = []
+
+        self.aliases = aliases
+
         self.indexes = indexes
 
     def elementlabel(self, element):
