@@ -311,3 +311,13 @@ evolution = Basis.from_mapping({
     default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
 )
 
+pdg = Basis.from_mapping({
+'g/10': {'g':0.1},
+'u_{v}': {'u':1, 'ubar':-1},
+'d_{v}': {'d':1, 'dbar': -1},
+'s': {'s':1},
+r'\bar{u}': {'ubar':1},
+r'\bar{d}': {'dbar':1},
+'c': {'c':1},
+})
+
