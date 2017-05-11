@@ -718,6 +718,64 @@ def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     """
     yield from BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
 
+class FLavoursPlotter(BandPDFPlotter):
+
+    def setup_flavour(self, flstate):
+        flstate.handles= self.handles
+        flstate.labels= self.doesnothing
+        flstate.hatchit= self.hatchit
+
+    def __call__(self,):
+        if not self.xplotting_grids:
+            return
+
+        self.handles=[]
+        self.doesnothing=[]
+        self.labels = []
+        self.hatchit=plotutils.hatch_iter()
+
+
+        basis = self.firstgrid.basis
+        fig, ax = plt.subplots()
+        ax.set_xlabel('x')
+        ax.set_xscale(self.xscale)
+        ax.set_title(f'{self.pdfs[0]} Q={self.Q : .1f} GeV  ')
+
+        all_vals = []
+        for flindex, fl in enumerate(self.firstgrid.flavours):
+
+            parton_name = basis.elementlabel(fl)
+            self.labels.append(f'${parton_name}$')
+            flstate = FlavourState(flindex=flindex, fl=fl, fig=fig, ax=ax,
+                                    parton_name=parton_name)
+            self.setup_flavour(flstate)
+
+
+
+            for pdf, grid in zip(self.pdfs, self.xplotting_grids):
+                all_vals.append(np.atleast_2d(self.draw(pdf, grid, flstate)))
+
+        plotutils.frame_center(ax, self.firstgrid.xgrid, np.concatenate(all_vals))
+        ax.set_axisbelow(True)
+        ax.set_xlim(self.firstgrid.xgrid[0])
+        flstate.labels = self.labels
+        self.legend(flstate)
+        return fig
+
+@figure
+@check_scale('xscale', allow_none=True)
+def plot_flavours(pdf, xplotting_grid, xscale:(str,type(None))=None,
+                      normalize_to:(int,str,type(None))=None):
+    """Plot the absolute central value and the uncertainty of all the flavours
+    of a pdf as a function of x for a given value of Q.
+
+    xscale: One of the matplotlib allowed scales. If undefined, it will be
+    set based on the scale in xgrid, which should be used instead.
+
+    """
+    obj = FLavoursPlotter([pdf], [xplotting_grid], xscale, normalize_to=None)
+    return obj()
+
 
 @figuregen
 def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
