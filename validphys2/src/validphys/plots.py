@@ -302,6 +302,7 @@ def plot_trainvaliddist(fit, replica_data):
 
 @figure
 def plot_covmat_eigs(experiment):
+    """Plot the eigenvalues of the covariance matrix for a given experiment."""
     eigs = la.eigvalsh(experiment.load().get_covmat())
     fig,ax = plt.subplots()
     x = np.arange(1,len(eigs) + 1)
@@ -314,6 +315,7 @@ def plot_covmat_eigs(experiment):
 
 @figure
 def plot_corrmat_eigs(experiment):
+    """Plot the eigenvalues of the correlation matrix for a given experiment."""
     covmat = experiment.load().get_covmat()
     stds = np.sqrt(np.diag(covmat))
     corrmat = covmat/np.outer(stds,stds)
@@ -856,6 +858,7 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
 
 @figure
 def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
+    """NOTE: EXPERIMENTAL. Plot the correlation matrix between a pair of datasets."""
     fig, ax = plt.subplots()
 
     ds1, ds2 = corrpair_datasets
@@ -870,6 +873,8 @@ def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
 
 @figure
 def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset):
+    """Plot the value of a positivity observable on a symlog scale as a
+    function of the data point index."""
     fig,ax = plt.subplots()
     ax.axhline(0, color='red')
     offsets = plotutils.offset_xcentered(len(pdfs), ax)
@@ -887,134 +892,6 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset):
     ax.set_ylabel('Observable Value')
     ax.set_yscale('symlog', linthreshy=minscale)
     ax.xaxis.set_major_locator(mticker.MaxNLocator(integer=True))
-
-    return fig
-
-
-@figuregen
-def plot_lumi1d(pdf, lumi_channel, lumigrid1d, sqrts:numbers.Real):
-    """Plot PDF luminosities at a given center of mass energy.
-    sqrts is the center of mass energy (GeV).
-    """
-
-    fig, ax = plt.subplots()
-    mx = lumigrid1d.m
-    gv = lumigrid1d.grid_values
-
-    cv = gv.central_value()
-    err = gv.std_error()
-
-    ax.fill_between(mx, 1-err/cv, 1+err/cv, alpha=0.5)
-    ax.plot(mx, cv/cv, label='%s' % pdf.label)
-    ax.legend(loc='best')
-    ax.set_xlabel('$M_{X}$ (GeV)')
-    ax.set_xscale('log')
-    ax.grid(False)
-    ax.set_title("$%s$ luminosity\n%s - "
-                 "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[lumi_channel],
-                                           pdf.label, sqrts))
-
-    yield fig
-
-
-#TODO: Move these to utils somewhere? Find better implementations?
-def _reflect_matrl(mat, odd=False):
-    """Reflect a matrix with positive values in the first axis to have the
-    same balues for the nwgative axis. The first value is not reflected.
-
-    If ``odd`` is set, the negative part will be multiplied by -1.
-
-    """
-    mat = np.asarray(mat)
-    res = np.empty(shape=(mat.shape[0]*2-1, *mat.shape[1:]),dtype=mat.dtype)
-    neglen = mat.shape[0]-1
-    fact = -1 if odd else 1
-    res[:neglen,...] = fact*mat[:0:-1,...]
-    res[neglen:,...] = mat
-    return res
-
-def _reflect_matud(mat, odd=False):
-    """Reflect a matrix with positive values in the second axis to have the
-    same balues for the nwgative axis. The first value is not reflected.
-
-    If ``odd`` is set, the negative part will be multiplied by -1.
-
-    """
-    mat = np.asarray(mat)
-    res = np.empty(shape=(mat.shape[0], mat.shape[1]*2-1, *mat.shape[2:]),
-        dtype=mat.dtype)
-    neglen = mat.shape[1]-1
-    fact = -1 if odd else 1
-    res[:,:neglen,...] = fact*mat[:,:0:-1,...]
-    res[:,neglen:,...] = mat
-    return res
-
-
-@figure
-def plot_lumi2d(pdf, lumi_channel, lumigrid2d, sqrts,
-                display_negative:bool=True):
-
-
-    cmap = copy.copy(cm.viridis_r)
-    cmap.set_bad("white", alpha=0)
-    fig, ax = plt.subplots()
-    gv = lumigrid2d.grid_values
-    mat = gv.central_value()
-
-    fig, ax = plt.subplots()
-
-    mat = _reflect_matud(mat)
-    y = _reflect_matrl(lumigrid2d.y, odd=True)
-    masked_weights = np.ma.masked_invalid(mat, copy=False)
-
-    #TODO: SymLogNorm is really the right thing to do here, but I can't be
-    #bothered to make it work. Mostly the ticks around zero are completely
-    #broken and looks like it takes a lot of fidlling wirh the mpl internals
-    #to fix it.
-
-    with np.errstate(invalid='ignore'):
-        positive_mask = masked_weights>0
-    linlim = np.nanpercentile(masked_weights[positive_mask],90)/1e5
-
-    #norm = mcolors.SymLogNorm(linlim, vmin=None)
-
-    norm = mcolors.LogNorm(vmin=linlim)
-    with np.errstate(invalid='ignore'):
-        masked_weights[masked_weights<linlim] = linlim
-
-    mesh = ax.pcolormesh(y, lumigrid2d.m, masked_weights, cmap=cmap,
-        shading='gouraud',
-        linewidth=0,
-        edgecolor='None',
-        rasterized=True,
-        norm=norm,
-    )
-    #Annoying code because mpl does the defaults horribly
-    #loc = mticker.SymmetricalLogLocator(base=10, linthresh=linlim,)
-    #loc.numticks = 5
-
-    #fig.colorbar(mesh, ticks=loc)
-
-    if display_negative:
-        cmap_neg =  mcolors.ListedColormap(['red', (0,0,0,0)])
-        neg_norm = mcolors.BoundaryNorm([0,0.5,1],2)
-        ax.pcolormesh(y, lumigrid2d.m, positive_mask, cmap=cmap_neg,
-            shading='gouraud',
-            linewidth=0,
-            edgecolor='None',
-            rasterized=True,
-            norm=neg_norm,
-        )
-
-    fig.colorbar(mesh, extend='min', label="Differential luminosity ($GeV^{-1}$)")
-    ax.set_ylabel('$M_{X}$ (GeV)')
-    ax.set_xlabel('y')
-    ax.set_yscale('log')
-    ax.grid(False)
-
-    ax.set_title("$%s$ luminosity\n%s - "
-             "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[lumi_channel],
-                     pdf.label, sqrts))
 
     return fig
 
@@ -1192,6 +1069,143 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
     ax.set_ylabel(r'$Q^2 (GeV^2)$')
     ax.set_xscale('log')
     ax.set_yscale('log')
+    return fig
+
+
+@figuregen
+def plot_lumi1d(pdf, lumi_channel, lumigrid1d, sqrts:numbers.Real):
+    """Plot PDF luminosities at a given center of mass energy.
+    sqrts is the center of mass energy (GeV).
+    """
+
+    fig, ax = plt.subplots()
+    mx = lumigrid1d.m
+    gv = lumigrid1d.grid_values
+
+    cv = gv.central_value()
+    err = gv.std_error()
+
+    ax.fill_between(mx, 1-err/cv, 1+err/cv, alpha=0.5)
+    ax.plot(mx, cv/cv, label='%s' % pdf.label)
+    ax.legend(loc='best')
+    ax.set_xlabel('$M_{X}$ (GeV)')
+    ax.set_xscale('log')
+    ax.grid(False)
+    ax.set_title("$%s$ luminosity\n%s - "
+                 "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[lumi_channel],
+                                           pdf.label, sqrts))
+
+    yield fig
+
+
+#TODO: Move these to utils somewhere? Find better implementations?
+def _reflect_matrl(mat, odd=False):
+    """Reflect a matrix with positive values in the first axis to have the
+    same balues for the nwgative axis. The first value is not reflected.
+
+    If ``odd`` is set, the negative part will be multiplied by -1.
+
+    """
+    mat = np.asarray(mat)
+    res = np.empty(shape=(mat.shape[0]*2-1, *mat.shape[1:]),dtype=mat.dtype)
+    neglen = mat.shape[0]-1
+    fact = -1 if odd else 1
+    res[:neglen,...] = fact*mat[:0:-1,...]
+    res[neglen:,...] = mat
+    return res
+
+def _reflect_matud(mat, odd=False):
+    """Reflect a matrix with positive values in the second axis to have the
+    same balues for the nwgative axis. The first value is not reflected.
+
+    If ``odd`` is set, the negative part will be multiplied by -1.
+
+    """
+    mat = np.asarray(mat)
+    res = np.empty(shape=(mat.shape[0], mat.shape[1]*2-1, *mat.shape[2:]),
+        dtype=mat.dtype)
+    neglen = mat.shape[1]-1
+    fact = -1 if odd else 1
+    res[:,:neglen,...] = fact*mat[:,:0:-1,...]
+    res[:,neglen:,...] = mat
+    return res
+
+
+@figure
+def plot_lumi2d(pdf, lumi_channel, lumigrid2d, sqrts,
+                display_negative:bool=True):
+    """Plot the absolute luminosity on a grid of invariant mass and
+    rapidity for a given center of mass energy `sqrts`.
+    The color scale is logarithmic.
+    If `display_negative` is True, mark the negative values.
+
+    The luminosity is calculated for positive rapidity, and reflected for
+    negative rapidity for display purposes.
+
+    """
+
+
+    cmap = copy.copy(cm.viridis_r)
+    cmap.set_bad("white", alpha=0)
+    fig, ax = plt.subplots()
+    gv = lumigrid2d.grid_values
+    mat = gv.central_value()
+
+    fig, ax = plt.subplots()
+
+    mat = _reflect_matud(mat)
+    y = _reflect_matrl(lumigrid2d.y, odd=True)
+    masked_weights = np.ma.masked_invalid(mat, copy=False)
+
+    #TODO: SymLogNorm is really the right thing to do here, but I can't be
+    #bothered to make it work. Mostly the ticks around zero are completely
+    #broken and looks like it takes a lot of fidlling wirh the mpl internals
+    #to fix it.
+
+    with np.errstate(invalid='ignore'):
+        positive_mask = masked_weights>0
+    linlim = np.nanpercentile(masked_weights[positive_mask],90)/1e5
+
+    #norm = mcolors.SymLogNorm(linlim, vmin=None)
+
+    norm = mcolors.LogNorm(vmin=linlim)
+    with np.errstate(invalid='ignore'):
+        masked_weights[masked_weights<linlim] = linlim
+
+    mesh = ax.pcolormesh(y, lumigrid2d.m, masked_weights, cmap=cmap,
+        shading='gouraud',
+        linewidth=0,
+        edgecolor='None',
+        rasterized=True,
+        norm=norm,
+    )
+    #Annoying code because mpl does the defaults horribly
+    #loc = mticker.SymmetricalLogLocator(base=10, linthresh=linlim,)
+    #loc.numticks = 5
+
+    #fig.colorbar(mesh, ticks=loc)
+
+    if display_negative:
+        cmap_neg =  mcolors.ListedColormap(['red', (0,0,0,0)])
+        neg_norm = mcolors.BoundaryNorm([0,0.5,1],2)
+        ax.pcolormesh(y, lumigrid2d.m, positive_mask, cmap=cmap_neg,
+            shading='gouraud',
+            linewidth=0,
+            edgecolor='None',
+            rasterized=True,
+            norm=neg_norm,
+        )
+
+    fig.colorbar(mesh, extend='min', label="Differential luminosity ($GeV^{-1}$)")
+    ax.set_ylabel('$M_{X}$ (GeV)')
+    ax.set_xlabel('y')
+    ax.set_yscale('log')
+    ax.grid(False)
+
+    ax.set_title("$%s$ luminosity\n%s - "
+             "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[lumi_channel],
+                     pdf.label, sqrts))
+
     return fig
 
 @figure
