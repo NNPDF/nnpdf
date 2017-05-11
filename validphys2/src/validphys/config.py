@@ -349,5 +349,4 @@ class Config(report.Config):
         return ch
 
     def produce_all_lumi_channels(self):
-        from validphys.pdfgrids import LUMI_CHANNELS
         return {'lumi_channels': self.parse_lumi_channels(list(LUMI_CHANNELS))}
