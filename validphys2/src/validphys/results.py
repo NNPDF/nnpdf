@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Mar  9 15:19:52 2016
+results.py
 
-@author: Zahari Kassabov
+Tools to obtain theory predictions and basic statistical estimators.
 """
 from __future__ import generator_stop
 
@@ -321,6 +321,7 @@ def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None):
                                                  loaded_data=data)
 
 def experiment_results(experiment, pdf:PDF, t0set:(PDF, type(None))=None):
+    """Like `results` but for a whole experiment"""
     return results(experiment, pdf, t0set)
 
 #It's better to duplicate a few lines than to complicate the logic of
@@ -367,7 +368,8 @@ def one_or_more_results(dataset:(DataSetSpec, ExperimentSpec),
 Chi2Data = namedtuple('Chi2Data', ('replica_result', 'central_result', 'ndata'))
 
 def abs_chi2_data(results):
-    """Return a tuple (member_chi², central_chi², numpoints)"""
+    """Return a tuple (member_chi², central_chi², numpoints) for a
+    given dataset"""
     data_result, th_result = results
 
     chi2s = all_chi2(results)
@@ -378,6 +380,7 @@ def abs_chi2_data(results):
                     central_result, len(data_result))
 
 def abs_chi2_data_experiment(experiment_results):
+    """Like `abs_chi2_data` but for a whole experiment"""
     return abs_chi2_data(experiment_results)
 
 def _chs_per_replica(chs):
@@ -388,6 +391,8 @@ def _chs_per_replica(chs):
 @table
 def experiments_chi2_table(experiments, pdf, experiments_chi2,
                            each_dataset_chi2):
+    """Return a table with the chi² to the experiments and each dataset on
+    the experiments."""
     dschi2 = iter(each_dataset_chi2)
     records = []
     for experiment, expres in zip(experiments, experiments_chi2):
@@ -476,11 +481,14 @@ def closure_shifts(experiments_index, fit, use_cuts, experiments):
 
 
 def positivity_predictions(pdf, posdataset):
+    """Return an object containing the values of the positivuty observable."""
     return PositivityResult.from_convolution(pdf, posdataset)
 
 positivity_predictions_for_pdfs = collect(positivity_predictions, ('pdfs',))
 
 def count_negative_points(possets_predictions):
+    """Return the number of replicas with negative predictions for each bin
+    in the positivity observable."""
     return np.sum([(r.rawdata < 0).sum(axis=1) for r in possets_predictions], axis=0)
 
 
