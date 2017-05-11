@@ -63,6 +63,8 @@ def _basic_obs_obs_correlation(obsarr1, obsarr2):
 #TODO: Implement for other error types. Do not use the _rawdata.
 @check_pdf_is_montecarlo
 def obs_pdf_correlations(pdf, results, xplotting_grid):
+    """Return the correlations between each point in a dataset and the PDF
+    values on a grid of (x,f) points in a format similar to `xplotting_grid`."""
     _ , th = results
     corrs = _basic_obs_pdf_correlation(xplotting_grid.grid_values, th._rawdata)
     return xplotting_grid._replace(grid_values=corrs)
@@ -73,5 +75,6 @@ corrpair_datasets = collect('dataset', ['corrpair'])
 
 @check_pdf_is_montecarlo
 def obs_obs_correlations(pdf, corrpair_results):
+    """Return the theoretical correlation matrix between a pair of observables."""
     (_,th1), (_,th2) = corrpair_results
     return _basic_obs_obs_correlation(th1._rawdata, th2._rawdata)
