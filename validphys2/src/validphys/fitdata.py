@@ -2,7 +2,6 @@
 """
 Utilities for loading data from fit folders
 """
-import pathlib
 import logging
 from collections import namedtuple
 from io import StringIO
@@ -13,7 +12,6 @@ import numpy as np
 
 from validphys.core import PDF
 from validphys import checks
-from validphys import lhaindex
 from validphys.plotoptions import get_info
 
 #TODO: Add more stuff here as needed for postfit
@@ -37,15 +35,11 @@ LITERAL_FILES = (
 'nnfit.yml',
 )
 
-def check_results_path(path):
-    path = pathlib.Path(path)
-    assert path.is_dir(), 'Path is not a directory %s' % path
-    assert (path / 'nnfit').is_dir(), 'Path "nnfit" is not a folder not in path'
-
 ReplicaSpec = namedtuple('ReplicaSpec', ('index', 'path', 'info'))
 
 FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'pos_status', 'arclenghts'))
 def load_fitinfo(replica_path, prefix):
+    """Process the data in the ".fitinfo" file of a single replica."""
     p = replica_path / (prefix + '.fitinfo')
     with p.open() as f:
         line = next(f)
@@ -109,6 +103,9 @@ def match_datasets_by_name(fits, fits_datasets):
 #TODO: Do we do md output here or that's for the templates?
 def print_dataset_differences(fits, match_datasets_by_name,
                               print_common:bool=True):
+    """Given exactly two fits, print the datasets that are included in one "
+    "but not in the other. If `print_common` is True, also print the datasets
+    that are common."""
     m = match_datasets_by_name
     first,second = fits
     res = StringIO()
@@ -132,8 +129,15 @@ def print_dataset_differences(fits, match_datasets_by_name,
         res.write('\n')
     return res.getvalue()
 
+print_dataset_differences.highlight = 'markdown'
 
+@_assert_two_fits
 def test_for_same_cuts(fits, match_datasets_by_name):
+    """Given two fits, return a list of tuples `(first, second)`
+    where `first` and `second` are
+    DatasetSpecs that correspond to the same dataset but have different cuts,
+    such that `first` is included in the first fit and `second` in the second.
+    """
     common = match_datasets_by_name.common
     first_fit, second_fit = fits
     res = []
@@ -153,6 +157,8 @@ def test_for_same_cuts(fits, match_datasets_by_name):
     return res
 
 def print_different_cuts(fits, test_for_same_cuts):
+    """Print a summary of the datasets that are included in both fits but have
+    different cuts."""
     res = StringIO()
     first_fit, second_fit = fits
     if test_for_same_cuts:
