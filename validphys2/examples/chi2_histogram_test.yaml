@@ -1,0 +1,12 @@
+fit: NNPDF31_nnlo_as_0118_1000
+
+use_cuts: True
+
+template_text: |
+    {@with fitcontext@}
+    {@experiments_chi2_plot@}
+    {@endwith@}
+
+actions_:
+    - - report:
+           main: True

@@ -266,7 +266,7 @@ def experiments_chi2_plot(experiments, experiments_chi2):
         xticks.append(experiment.name) 
     fig, ax = plt.subplots()
     width = 0.5
-    plt.xticks(xvalues, xticks)
+    plt.xticks(xvalues, xticks,rotation=80)
     ax.bar(xvalues, exchi2, width)
     return fig
 
