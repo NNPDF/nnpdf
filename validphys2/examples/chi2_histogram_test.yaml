@@ -5,6 +5,7 @@ use_cuts: True
 template_text: |
     {@with fitcontext@}
     {@experiments_chi2_plot@}
+    {@datasets_chi2_plot@}
     {@endwith@}
 
 actions_:
