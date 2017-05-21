@@ -167,3 +167,66 @@ def offset_xcentered(n, ax,*, offset_prop=0.05):
                                                   ax.figure.dpi_scale_trans)
             offset_transform = ax.transData + offset
             yield offset_transform
+
+
+def centered_range(n, value=0, distance=1):
+    """Generte a range of ``n`` points centered
+    around ``value``, unifirmely sampled at
+    intervals of ``distance``."""
+    first_offset = +(n/2) - 0.5
+    for i in range(n):
+        yield distance*(i-first_offset) + value
+
+
+def barplot(values, collabels, datalabels):
+    """The barplot as matplotlib should have it. It resizes on overflow.
+    ``values``  should be one or two dimensional and should containt the
+    values for the barplot. ``colllabels`` must have as many element
+    s ``values`` has rows, and contains the labels for each column in the
+    bar plot.  ``datalabels`` should have as many elements as values has
+    columns, and contains the labels for the individual items to be
+    compared.
+
+    Returns a tuple figure, axis like plt.subplots.
+
+    """
+
+
+    values = np.atleast_2d(values)
+    ntypes, l = values.shape
+
+    width = 2
+    x = np.linspace(0, width*ntypes*l-1, l)
+
+    w,h = plt.rcParams["figure.figsize"]
+
+
+
+    wrescale = max(1, 1+(width*l*ntypes-15)*0.05)
+
+    fig, ax = plt.subplots(figsize=(w*wrescale, h))
+
+
+
+    ax.set_xticks(x)
+
+    ax.set_xticklabels(collabels,rotation=80)
+    deltas = list(centered_range(ntypes, distance=width))
+    for row, delta, datalabel in zip(values, deltas, datalabels):
+        thisx = x+delta
+        ax.bar(thisx, row, width, label=datalabel)
+        for xp,v in zip(thisx,row):
+            ax.annotate(f'{v:.2f}', (xp,v),
+                        xytext=(0,5), textcoords='offset points',
+                        horizontalalignment='center',
+                        size='small'
+                       )
+
+
+    ax.set_xlim(x[0]+deltas[0] - width/2, x[-1]+deltas[-1]+width/2)
+    ax.yaxis.set_visible(False)
+    ax.tick_params(length=0)
+    ax.spines['left'].set_color('none')
+
+    return fig, ax
+
