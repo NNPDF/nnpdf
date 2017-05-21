@@ -557,6 +557,16 @@ def fits_chi2_table(fits, fits_experiments, fits_chi2_data):
         dfs.append(df)
     return pd.concat(dfs, axis=1).fillna("Not Fitted")
 
+def total_experiments_chi2(experiments_chi2):
+    """Return a tuple (chi2/ndata, ndata) for the combination of all
+    experiments."""
+    val = 0
+    n = 0
+    for cd in experiments_chi2:
+        val += cd.central_result
+        n += cd.ndata
+    return val/n
+
 
 @table
 def theory_description(theoryid):
