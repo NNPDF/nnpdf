@@ -254,20 +254,19 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
 
 #I need to use the informations contained in experiments_chi2_table
 
+
+
 @figure
 def experiments_chi2_plot(experiments, experiments_chi2):
     """Return a plot with the chi² of all the experiments"""
     exchi2 = []
-    xvalues = []
     xticks = []
     for experiment, expres in zip(experiments, experiments_chi2):
         exchi2.append(expres.central_result/expres.ndata)
-        xvalues.append(experiments_chi2.index(expres))
-        xticks.append(experiment.name) 
-    fig, ax = plt.subplots()
-    width = 0.5
-    plt.xticks(xvalues, xticks,rotation=80)
-    ax.bar(xvalues, exchi2, width)
+        xticks.append(experiment.name)
+    fig, ax = plotutils.barplot(exchi2, collabels=xticks, datalabels=['$\chi^2$'])
+    ax.set_title(r"$\chi^2$ distribution for experiments")
+    ax.grid(False)
     return fig
 
 @figure
@@ -275,18 +274,17 @@ def datasets_chi2_plot(experiments, experiments_chi2,each_dataset_chi2):
     """Return a plot with the chi² of all the datasets"""
     ds = iter(each_dataset_chi2)
     dschi2 = []
-    xvalues = []
     xticks = []
     for experiment, expres in zip(experiments, experiments_chi2):
         for dataset, dsres in zip(experiment, ds):
-            stats = dsres.central_result
             dschi2.append(dsres.central_result/dsres.ndata)
             xticks.append(dataset.name)
-            xvalues.append(xticks.index(dataset.name))
-    fig, ax = plt.subplots()
-    width = 0.5
-    plt.xticks(xvalues, xticks,rotation=80)
-    ax.bar(xvalues, dschi2, width)
+    fig,ax = plotutils.barplot(dschi2, collabels=xticks,
+                               datalabels=['$\chi^2$'])
+
+    ax.set_title(r"$\chi^2$ distribution for datasets")
+    ax.grid(False)
+
     return fig
 
 @figure
