@@ -22,7 +22,7 @@ from reportengine import collect
 
 from validphys.checks import assert_use_cuts_true
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
-from validphys.calcutils import all_chi2, calc_chi2, central_chi2
+from validphys.calcutils import all_chi2, central_chi2
 
 log = logging.getLogger(__name__)
 
