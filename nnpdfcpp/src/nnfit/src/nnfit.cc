@@ -291,7 +291,7 @@ int main(int argc, char **argv)
           time.start();
         }
 
-        if (i % 10 == 0)
+        if (i % 100 == 0)
           {
             LogChi2(settings,fitset,pos,training,validation,Exp);
             LogPDF(settings,fitset,replica);
