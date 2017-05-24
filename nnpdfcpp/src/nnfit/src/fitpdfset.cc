@@ -561,11 +561,12 @@ void FitPDFSet::ExportPDF( int const& rep, real const& erf_val, real const& erf_
        if (fSettings.IsQED()) lhaout << 22 << " ";
        lhaout << std::endl;
 
+       const int floffset = 6-nf;
        for (int ix = 0; ix < nx; ix++)
          for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
            {
              lhaout << " ";
-             for (int fl = 6-nf; fl <= 2*nf+1; fl++)
+             for (int fl = floffset; fl <= 12-floffset; fl++)
                lhaout << setw(14) << res[s][ix + iq*nx][fl] << " ";
              if (fSettings.IsQED()) lhaout << setw(14) << res[s][ix + iq*nx][PDFSet::PHT] << " ";
              lhaout << std::endl;
@@ -624,10 +625,11 @@ string FitPDFSet::ExportPDF(int const& rep)
     else lhaout << i << " ";
   lhaout << endl;
 
+  const int floffset = 6-nf;
   for (int ix = 0; ix < nx; ix++)
     {
       lhaout << " ";
-      for (int fl = 6-nf; fl <= 2*nf+1; fl++)
+      for (int fl = floffset; fl <= 12-floffset; fl++)
         lhaout << setw(14) << res[ix][fl] << " ";
       lhaout << std::endl;
     }
