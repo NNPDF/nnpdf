@@ -129,7 +129,6 @@ namespace NNPDF
         int const&   GetNx()      const { return fNx;   }  //!< Return fNx
         int const&   GetTx()      const { return fTx;   }  //!< Return fTx
         int const&   GetDSz()     const { return fDSz;  }  //!< Return fDSz
-        int const&   GetPad()     const { return fPad;  }  //!< Return fPad
 
         double *  GetXGrid() const { return fXgrid;   }  //!< Return fXGrid
         real   *  GetSigma() const { return fSigma;   }  //!< Return fSigma
@@ -178,7 +177,6 @@ namespace NNPDF
         int   fNx;
         int   fTx;
         int   fRmr;
-        int   fPad;
         int   fDSz;
 
         // X-arrays        
