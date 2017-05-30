@@ -22,7 +22,7 @@ from reportengine import collect
 
 from validphys.checks import assert_use_cuts_true
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
-from validphys.calcutils import all_chi2, calc_chi2, central_chi2
+from validphys.calcutils import all_chi2, central_chi2
 
 log = logging.getLogger(__name__)
 
@@ -556,6 +556,16 @@ def fits_chi2_table(fits, fits_experiments, fits_chi2_data):
         df.columns = pd.MultiIndex.from_product(([str(fit)], ['ndata', '$\chi^2/ndata$']))
         dfs.append(df)
     return pd.concat(dfs, axis=1).fillna("Not Fitted")
+
+def total_experiments_chi2(experiments_chi2):
+    """Return a tuple (chi2/ndata, ndata) for the combination of all
+    experiments."""
+    val = 0
+    n = 0
+    for cd in experiments_chi2:
+        val += cd.central_result
+        n += cd.ndata
+    return val/n
 
 
 @table

@@ -1,7 +1,11 @@
 CHANGES
 -------
 
-02 /05/2017 Fix bug in smpdf plots, where flavour labels where
+21/05/2017 Fix bug in t0 processing. T0 would be used always.
+
+21/05/2017 Add fancy bar plot.
+
+02/05/2017 Fix bug in smpdf plots, where flavour labels where
             assigned incorrectly.
 
 02/05/2017 Add support for arbitrary basis transformations. This
