@@ -129,61 +129,61 @@ class dis_sqrt_scale(DISXQ2MapMixin):
     def new_labels(self, *old_labels):
         return ('$x$', '$Q$ (GeV)', r'$\sqrt{s} (GeV)$')
 
-class ewj_jpt_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
+class ewj_jpt_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):  #EWJ_JPT->DY ---> wrong, but it does not exist (should be DYMXQ2MapMixin)
     qlabel = '$M (GeV)$'
 
-class ewj_jrap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
+class ewj_jrap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin): #EWJ_JRAP->DY  ----> okay but it does not exist
     qlabel = '$M (GeV)$'
 
-class ewj_mll_sqrt_scale(SqrtScaleMixin,DYMXQ2MapMixin):
+class ewj_mll_sqrt_scale(SqrtScaleMixin,DYMXQ2MapMixin): #EWJ_MLL->DYm  ----> okay but it does not exist
     qlabel = '$M_{ll} (GeV)$'
 
-class ewj_pt_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
+class ewj_pt_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin): #EWJ_PT->DY ----> wrong, but it does not exist (should be EWPTXQ2MapMixin)
     qlabel = '$M (GeV)$'
 
-class ewj_ptrap_sqrt_scale(SqrtScaleMixin,EWPTXQ2MapMixin):
+class ewj_ptrap_sqrt_scale(SqrtScaleMixin,EWPTXQ2MapMixin): # EWJ_PTRAP -> Zpt  wrong, but it does not exist (should be DYXQ2MapMixin)
     qlabel = r'$p_T (GeV)$'
 
-class ewj_rap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
+class ewj_rap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):  # EWJ_RAP -> DY okay (can we get rid of it also in commondata?)
     qlabel = '$M (GeV)$'
 
-class ewk_mll_sqrt_scale(SqrtScaleMixin,DYMXQ2MapMixin):
+class ewk_mll_sqrt_scale(SqrtScaleMixin,DYMXQ2MapMixin): # EWK_MLL -> DYM okay
     qlabel = '$M_{ll} (GeV)$'
 
-class ewk_pt_sqrt_scale(SqrtScaleMixin,EWPTXQ2MapMixin):
+class ewk_pt_sqrt_scale(SqrtScaleMixin,EWPTXQ2MapMixin): # EWK_PT -> Zpt okay
     qlabel = '$M (GeV)$'
 
-class ewk_ptrap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
+class ewk_ptrap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin): # EWK_PT -> DY okay
     qlabel = r'$p_T (GeV)$'
 
-class ewk_rap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
+class ewk_rap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin): # EWK_RAP -> DY okay
     qlabel = '$M (GeV)$'
 
-class hig_rap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
+class hig_rap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin): #okay, but it does not exist
     qlabel = '$M_H (GeV)$'
 
-class hqp_mqq_sqrt_scale(SqrtScaleMixin,DYMXQ2MapMixin):
+class hqp_mqq_sqrt_scale(SqrtScaleMixin,DYMXQ2MapMixin): # HQP_MQQ -> DYM okay
     qlabel = r'$\mu (GeV)$'
 
-class hqp_ptq_sqrt_scale(SqrtScaleMixin,HQPTXQ2MapMixin):
+class hqp_ptq_sqrt_scale(SqrtScaleMixin,HQPTXQ2MapMixin): # HQP_PTQ -> HQPT okay
     qlabel = r'$\mu (GeV)$'
 
-class hqp_ptqq_sqrt_scale(SqrtScaleMixin,HQQPTXQ2MapMixin):
+class hqp_ptqq_sqrt_scale(SqrtScaleMixin,HQQPTXQ2MapMixin): # HQP_PTQQ -> HQQPT okay
     qlabel = r'$\mu (GeV)$'
 
-class hqp_yq_sqrt_scale(SqrtScaleMixin,JETXQ2MapMixin):
+class hqp_yq_sqrt_scale(SqrtScaleMixin,JETXQ2MapMixin): # HQP_YQ->JETXQ2 okay
     qlabel = r'$\mu (GeV)$'
 
-class hqp_yqq_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
+class hqp_yqq_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin): #HQP_YQQ->DYXQ2 okay
     qlabel = r'$\mu (GeV)$'
 
-class inc_sqrt_scale(SqrtScaleMixin,DYMXQ2MapMixin):
+class inc_sqrt_scale(SqrtScaleMixin,DYMXQ2MapMixin): # INC -> DYM okay 
     qlabel = r'$\mu (GeV)$'
 
-class pht_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):
+class pht_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin): #okay but not in commondata
     qlabel = r'$E_{T,\gamma} (GeV)$'
 
-class sia_sqrt_scale(SqrtScaleMixin,DISXQ2MapMixin):
+class sia_sqrt_scale(SqrtScaleMixin,DISXQ2MapMixin): #okay but not in commondata
     qlabel = '$Q (GeV)$'
 
 
