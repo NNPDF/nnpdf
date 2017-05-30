@@ -129,7 +129,7 @@ class dis_sqrt_scale(DISXQ2MapMixin):
     def new_labels(self, *old_labels):
         return ('$x$', '$Q$ (GeV)', r'$\sqrt{s} (GeV)$')
 
-class ewj_jpt_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):  #EWJ_JPT->DY ---> wrong, but it does not exist (should be DYMXQ2MapMixin)
+class ewj_jpt_sqrt_scale(SqrtScaleMixin,EWPTXQ2MapMixin):  #okay but it does not exist 
     qlabel = '$M (GeV)$'
 
 class ewj_jrap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin): #EWJ_JRAP->DY  ----> okay but it does not exist
@@ -138,10 +138,10 @@ class ewj_jrap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin): #EWJ_JRAP->DY  ----> ok
 class ewj_mll_sqrt_scale(SqrtScaleMixin,DYMXQ2MapMixin): #EWJ_MLL->DYm  ----> okay but it does not exist
     qlabel = '$M_{ll} (GeV)$'
 
-class ewj_pt_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin): #EWJ_PT->DY ----> wrong, but it does not exist (should be EWPTXQ2MapMixin)
+class ewj_pt_sqrt_scale(SqrtScaleMixin,EWPTXQ2MapMixin): #EWJ_PT->DY ----> Zpt, okay but it does not exist 
     qlabel = '$M (GeV)$'
 
-class ewj_ptrap_sqrt_scale(SqrtScaleMixin,EWPTXQ2MapMixin): # EWJ_PTRAP -> Zpt  wrong, but it does not exist (should be DYXQ2MapMixin)
+class ewj_ptrap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin): # EWJ_PTRAP -> DY okay, but it does not exist
     qlabel = r'$p_T (GeV)$'
 
 class ewj_rap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin):  # EWJ_RAP -> DY okay (can we get rid of it also in commondata?)
