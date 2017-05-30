@@ -267,6 +267,7 @@ def experiments_chi2_plot(experiments, experiments_chi2):
     fig, ax = plt.subplots()
     width = 0.5
     plt.xticks(xvalues, xticks,rotation=80)
+    ax.set_ylabel(r'$\chi^2/N_{dat}$')
     ax.bar(xvalues, exchi2, width)
     return fig
 
@@ -286,6 +287,7 @@ def datasets_chi2_plot(experiments, experiments_chi2,each_dataset_chi2):
     fig, ax = plt.subplots()
     width = 0.5
     plt.xticks(xvalues, xticks,rotation=80)
+    ax.set_ylabel(r'$\chi^2/N_{dat}$')
     ax.bar(xvalues, dschi2, width)
     return fig
 
