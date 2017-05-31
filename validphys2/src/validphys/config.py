@@ -333,12 +333,6 @@ class Config(report.Config):
         return theory['theoryid']
     """
 
-    #TODO: There should be a build in functionality for this. It is not easy
-    #though. The roundtrip for processing the pdfs is especially ugly.
-    #Should be for reportengine v1.0
-    def produce_fitpdfs(self, fits):
-        return {'pdfs': self.parse_pdfs([fit.as_input()['pdf'] for fit in fits])}
-
 
     @element_of('lumi_channels')
     def parse_lumi_channel(self, ch:str):
