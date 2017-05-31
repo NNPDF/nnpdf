@@ -543,7 +543,7 @@ void FitPDFSet::ExportPDF( int const& rep, real const& erf_val, real const& erf_
   ofstream lhaout(ofilename.str().c_str());
 
   lhaout << scientific << setprecision(7);
-  lhaout << "PdfType: replica\nFormat: lhagrid1\n---" << std::endl;
+  lhaout << "PdfType: replica\nFormat: lhagrid1\nFromMCReplica: " << rep << "\n---" << std::endl;
 
   for (int s = 0; s < (int) q2grid.size(); s++)
      {
@@ -612,7 +612,7 @@ string FitPDFSet::ExportPDF(int const& rep)
   // print the replica
   stringstream lhaout;
   lhaout << scientific << setprecision(7);
-  lhaout << "PdfType: replica\nFormat: lhagrid1\n---" << std::endl;
+  lhaout << "PdfType: replica\nFormat: lhagrid1\nFromMCReplica: " << rep << "\n---" << std::endl;
 
   for (int ix = 0; ix < nx; ix++)
     lhaout << xgrid[ix] << " ";
