@@ -273,17 +273,17 @@ class Config(report.Config):
         """PDF set used to generate the t0 covmat."""
         return self.parse_pdf(name)
 
-    def parse_use_t0(self, do_use_t0:bool, t0pdfset=None):
+    def parse_use_t0(self, do_use_t0:bool):
         """Whether to use the t0 PDF set to generate covariance matrices."""
-        if do_use_t0 and not t0pdfset:
-            raise ConfigError("Setting use_t0 requires specifying a valid t0pdfset")
-
         return do_use_t0
 
     #TODO: Find a good name for this
     def produce_t0set(self, use_t0=False, t0pdfset=None):
-        """Return the t0set if use_t0 is True and None otherwise."""
+        """Return the t0set if use_t0 is True and None otherwise. Raises an
+        error if t0 is requested but no t0set is given."""
         if use_t0:
+            if not t0pdfset:
+               raise ConfigError("Setting use_t0 requires specifying a valid t0pdfset")
             return t0pdfset
         else:
             return None
