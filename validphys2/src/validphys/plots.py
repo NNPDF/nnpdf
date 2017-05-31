@@ -1381,3 +1381,13 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
     ax.grid(False)
 
     return fig
+
+@figure
+def plot_fits_as_profile(fits_pdfs, fits_total_chi2):
+    """Plot the total central chi² as a function of the value of α_s.
+    Note that this plots as a function of the key "AlphaS_MZ" in the LHAPDF
+    file, which is annoyingly *not* α_s(MZ) for Nf<5."""
+    fig, ax = plt.subplots()
+    alphas = [pdf.AlphaS_MZ for pdf in fits_pdfs]
+    ax.plot(alphas, fits_total_chi2)
+    return fig

@@ -626,4 +626,7 @@ each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
 
 fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))
 fits_experiment_chi2_data = collect('experiments_chi2', ('fits', 'fitcontext'))
+fits_total_chi2 = collect('total_experiments_chi2', ('fits', 'fitcontext'))
+
 fits_experiments = collect('experiments', ('fits', 'fitcontext'))
+fits_pdfs = collect('pdf', ('fits', 'fitcontext'))
