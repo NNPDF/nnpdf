@@ -119,6 +119,7 @@ def all_kinlimits_table(all_kinlimits, use_kinoverride:bool=True):
     return table
 
 def total_fitted_points(all_kinlimits_table)->int:
+    """Print the total number of fitted points in a given set of experiments"""
     tb = all_kinlimits_table
     return int(tb[nfittedlabel].sum())
 
