@@ -284,7 +284,7 @@ def datasets_chi2_plot(experiments, experiments_chi2,each_dataset_chi2):
                                datalabels=['$\chi^2$'])
 
     ax.set_title(r"$\chi^2$ distribution for datasets")
-    ax.set_ylabel(r'$\chi^2/N_{dat}$')  
+    ax.set_ylabel(r'$\chi^2/N_{dat}$')
     ax.grid(False)
 
     return fig
