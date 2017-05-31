@@ -60,6 +60,9 @@ Map:
 describe_kinematics.highlight = 'markdown'
 
 
+nfittedlabel = '$N_{fitted}$'
+ndatalabel = '$N_{data}$'
+
 def kinlimits(commondata, cuts, use_cuts, use_kinoverride:bool=True):
     """Return a mapping conaining the number of fitted and used datapoints,
     as well as the label, minimum and maximum value for each of the three
@@ -79,7 +82,7 @@ def kinlimits(commondata, cuts, use_cuts, use_kinoverride:bool=True):
     else:
         nfitted = '-'
 
-    d = {'dataset': commondata, '$N_{data}$':ndata, '$N_{fitted}$':nfitted}
+    d = {'dataset': commondata, ndatalabel:ndata, nfittedlabel:nfitted}
     for i, key in enumerate(['k1', 'k2', 'k3']):
         kmin = kintable[key].min()
         kmax = kintable[key].max()
@@ -114,6 +117,10 @@ def all_kinlimits_table(all_kinlimits, use_kinoverride:bool=True):
 
 
     return table
+
+def total_fitted_points(all_kinlimits_table)->int:
+    tb = all_kinlimits_table
+    return int(tb[nfittedlabel].sum())
 
 
 XQ2Map = namedtuple('XQ2Map', ('experiment', 'commondata', 'fitted', 'masked'))
