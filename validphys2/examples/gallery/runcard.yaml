@@ -1,6 +1,13 @@
 pdfs:
-  -  NNPDF31_nnlo_as_0118
-  -  NNPDF31_nnlo_pch_as_0118
+  -  NNPDF31_nnlo_as_0118_1000
+  -  NNPDF31_nnlo_pch_as_0118_1000
+
+base:
+  fit: NNPDF31_nnlo_as_0118_1000
+
+fits:
+  - from_: base
+  - NNPDF31_nnlo_pch_as_0118_1000 
 
 meta:
     title: Patata
@@ -20,9 +27,18 @@ basespecs:
       basistitle: Evolution basis
 
 Q: 2
+sqrts: 13000
+
+dataset_report:
+    template: gallery/dataset_simple.md
+
+datanorm:
+    normalize_to: data
 
 template_text: |
-    # PDFs and luminosity
+    
+    # PDFs 
+    
     {@with pdfnormalize@}
     ## {@normtitle@}
     {@with basespecs@}
@@ -30,13 +46,23 @@ template_text: |
     {@plot_pdfs@}
     {@endwith@}
     {@endwith@}
+    
+    # Luminosities
+    
+    ## Absolute Luminosities at 13 TeV
 
-
-
+    {@pdfs::all_lumi_channels::lumi_channels plot_lumi1d@} 
+    
     # $\chi^2$
-    # Theory parameters
+    {@fits_chi2_table@}
+
     # Comparison with data
-    #
+    {@with base::fitcontext::experiments@}
+    ###{@ experiment @}
+    {@with experiment@}
+    [Detailed plots for dataset ' {@dataset@} ']({@dataset_report report @})
+    {@ endwith @}
+    {@ endwith @}
 
 actions_:
     - - report:
