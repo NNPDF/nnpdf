@@ -1413,11 +1413,32 @@ def plot_fitted_replicas_as_profiles(fits_pdfs, fits_replica_data, nrep:int=None
             log.error(f"Not all fits hace the required number of replicas {nrep}. Fitting the minimum {minlen}.")
             nrep = minlen
 
-
+    alphas = [pdf.AlphaS_MZ for pdf in fits_pdfs]
     for irep in range(nrep):
-        table.append([(fd[irep].training + fd[irep].validation)/2 for fd in fits_replica_data])
+        repres = ([(fd[irep].training + fd[irep].validation)/2 for fd in fits_replica_data])
+        table.append(repres)
+
+    #res = np.polyfit(alphas, np.array(table).T,2)
+    #minimums = (-res[1,:]/2/res[0,:])
+    minimums = np.asarray(alphas)[np.argmin(table, axis=1)]
 
     fig, ax = plt.subplots()
-    alphas = [pdf.AlphaS_MZ for pdf in fits_pdfs]
-    ax.plot(alphas, np.array(table).T)
+
+    from matplotlib.collections import LineCollection
+
+    lc = LineCollection([list(zip(alphas, t)) for t in table])
+    lc.set_array(minimums)
+    lc.set_clim(*np.percentile(minimums, (5,95)))
+    ax.add_collection(lc)
+    ax.set_xlim(min(alphas), max(alphas))
+    tba = np.asarray(table)
+    ax.set_ylim(tba.min(), tba.max())
+    fig.colorbar(lc, label=r"Preferred $\alpha_S$")
+    plt.title(rf"$\alpha_S$ from min ERF = ${np.mean(minimums):.4f} \pm {np.std(minimums):.4f}$")
+
+
+
+    #ax.plot(alphas, np.array(table).T, color='#ddddcc')
+    ax.set_xlabel(r'$\alpha_S$')
+    ax.set_ylabel(r'$\chi²/N_{dat}$')
     return fig

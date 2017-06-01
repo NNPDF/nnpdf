@@ -629,4 +629,4 @@ fits_experiment_chi2_data = collect('experiments_chi2', ('fits', 'fitcontext'))
 fits_total_chi2 = collect('total_experiments_chi2', ('fits', 'fitcontext'))
 
 fits_experiments = collect('experiments', ('fits', 'fitcontext'))
-fits_pdfs = collect('pdf', ('fits', 'fitcontext'))
+fits_pdfs = collect('pdf', ('fits', 'fitpdf'))
