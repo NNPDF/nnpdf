@@ -1,0 +1,43 @@
+pdfs:
+  -  NNPDF31_nnlo_as_0118
+  -  NNPDF31_nnlo_pch_as_0118
+
+meta:
+    title: Patata
+    keywords: [gallery]
+    author: NNPDF Collaboration
+
+pdfnormalize:
+    - normtitle: Absolute
+
+    - normalize_to: 1
+      normtitle: Ratio
+
+basespecs:
+    - basis: flavour
+      basistitle: Flavour basis
+    - basis: evolution
+      basistitle: Evolution basis
+
+Q: 2
+
+template_text: |
+    # PDFs and luminosity
+    {@with pdfnormalize@}
+    ## {@normtitle@}
+    {@with basespecs@}
+    ### {@basistitle@}
+    {@plot_pdfs@}
+    {@endwith@}
+    {@endwith@}
+
+
+
+    # $\chi^2$
+    # Theory parameters
+    # Comparison with data
+    #
+
+actions_:
+    - - report:
+           main: True
