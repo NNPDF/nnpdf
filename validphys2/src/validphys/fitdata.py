@@ -94,6 +94,8 @@ def fit_sum_rules_table(fit_sum_rules):
     return pdfgrids.sum_rules_table(fit_sum_rules)
 
 
+fits_replica_data = collect('replica_data', ('fits',))
+
 #Do collect in two parts so we get a list for each fit instead of a single list
 all_datasets = collect('dataset', ('experiments', 'experiment'))
 fits_datasets = collect('all_datasets', ('fits', 'fitinputcontext',))

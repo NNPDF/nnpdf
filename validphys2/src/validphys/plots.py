@@ -1390,4 +1390,34 @@ def plot_fits_as_profile(fits_pdfs, fits_total_chi2):
     fig, ax = plt.subplots()
     alphas = [pdf.AlphaS_MZ for pdf in fits_pdfs]
     ax.plot(alphas, fits_total_chi2)
+    ax.set_xlabel(r'$\alpha_S$')
+    ax.set_ylabel(r'$\chi²/N_{dat}$')
+    return fig
+
+
+
+#TODO: Add check that everybody has at least nrep (need to have len(fit))
+@figure
+def plot_fitted_replicas_as_profiles(fits_pdfs, fits_replica_data, nrep:int=None):
+    table = []
+
+    #TODO: Do this at compile time
+    lens = set(map(len, fits_replica_data))
+    minlen = min(lens)
+    if nrep is None:
+        nrep = minlen
+        if len(lens) != 1:
+            log.warn(f"Fits with different number of replicas. Fitting the minimum one: {minlen}.")
+    else:
+        if minlen < nrep:
+            log.error(f"Not all fits hace the required number of replicas {nrep}. Fitting the minimum {minlen}.")
+            nrep = minlen
+
+
+    for irep in range(nrep):
+        table.append([(fd[irep].training + fd[irep].validation)/2 for fd in fits_replica_data])
+
+    fig, ax = plt.subplots()
+    alphas = [pdf.AlphaS_MZ for pdf in fits_pdfs]
+    ax.plot(alphas, np.array(table).T)
     return fig
