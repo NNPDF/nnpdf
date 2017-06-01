@@ -1,5 +1,9 @@
 sqrts: 13000
-pdf: NNPDF31_nlo_as_0118
+pdfs:
+    - NNPDF31_nlo_as_0118
+    - NNPDF30_nlo_as_0118
+
+normalize_to: NNPDF31_nlo_as_0118
 
 lumi_channels:
   - gg

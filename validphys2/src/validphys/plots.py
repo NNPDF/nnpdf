@@ -1109,30 +1109,50 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
     return fig
 
 
-@figuregen
-def plot_lumi1d(pdf, lumi_channel, lumigrid1d, sqrts:numbers.Real):
+
+from reportengine import collect
+pdfs_lumis = collect('lumigrid1d', ('pdfs',))
+
+@figure
+@_check_pdf_normalize_to
+def plot_lumi1d(pdfs, pdfs_lumis, lumi_channel, sqrts:numbers.Real,
+                normalize_to=None):
     """Plot PDF luminosities at a given center of mass energy.
     sqrts is the center of mass energy (GeV).
     """
 
     fig, ax = plt.subplots()
-    mx = lumigrid1d.m
-    gv = lumigrid1d.grid_values
+    if normalize_to is not None:
+        norm = pdfs_lumis[normalize_to].grid_values.central_value()
+        ylabel = f"Ratio to {pdfs[normalize_to]}"
+    else:
+        norm = 1
+        ylabel = ""
 
-    cv = gv.central_value()
-    err = gv.std_error()
+    for pdf, lumigrid1d in zip(pdfs, pdfs_lumis):
+        mx = lumigrid1d.m
+        gv = lumigrid1d.grid_values
 
-    ax.fill_between(mx, 1-err/cv, 1+err/cv, alpha=0.5)
-    ax.plot(mx, cv/cv, label='%s' % pdf.label)
+        cv = gv.central_value()
+        err = gv.std_error()
+
+        ax.fill_between(mx, (cv -err)/norm, (cv+err)/norm, alpha=0.5)
+        ax.plot(mx, cv/norm, label='%s' % pdf.label)
     ax.legend(loc='best')
+    ax.set_ylabel(ylabel)
     ax.set_xlabel('$M_{X}$ (GeV)')
     ax.set_xscale('log')
     ax.grid(False)
-    ax.set_title("$%s$ luminosity\n%s - "
+    ax.set_title("$%s$ luminosity\n"
                  "$\\sqrt{s}=%.1f$ GeV" % (LUMI_CHANNELS[lumi_channel],
-                                           pdf.label, sqrts))
+                                           sqrts))
 
-    yield fig
+    return fig
+
+
+
+
+
 
 
 #TODO: Move these to utils somewhere? Find better implementations?
