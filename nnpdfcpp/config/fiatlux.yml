@@ -3,8 +3,8 @@ qed_running: on  # determines the running of alpha.
 q2_max     : 1e9  # the maximum allowed Q2.
 eps_base   : 1e-5 # precision on final integration of double integral.
 eps_rel    : 1e-1 # extra precision on any single integration.
-alpha_ref  : 7.29735256981631480e-03 # the reference alpha constant.
-alphaq0_ref: 0.000510998946 # the reference Q for alpha_ref
+alpha_ref  : 0.007492264237175117 # the reference alpha constant.
+alphaq0_ref: 1.777 # the reference Q for alpha_ref
 mproton    : 0.938272046 # proton mass from 2015 update of PDG review
 mum_proton : 2.792847356 # proton magnetic moment, from
 # http://pdglive.lbl.gov/DataBlock.action?node=S016MM which itself
