@@ -1,6 +1,6 @@
 pdfs:
-  -  NNPDF31_nnlo_as_0118_1000
-  -  NNPDF31_nnlo_pch_as_0118_1000
+  -  {id: NNPDF31_nnlo_as_0118, label: "Fitted charm"}
+  -  {id: NNPDF31_nnlo_pch_as_0118, label: "Perturbative charm"}
 
 use_cuts: True
 
@@ -34,8 +34,17 @@ sqrts: 13000
 dataset_report:
     meta: Null
     template_text: |
-        {@dataset@}
-        {@plot_fancy@}
+        % Data theory comparison for {@dataset@}
+        
+        Absolute
+        ---------
+        
+        {@ plot_fancy @}
+        
+        Normalized
+        ----------
+        
+        {@ datanorm plot_fancy@}
 
 datanorm:
     normalize_to: data
