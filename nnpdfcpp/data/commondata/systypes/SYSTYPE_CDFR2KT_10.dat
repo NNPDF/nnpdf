@@ -1,6 +1,6 @@
 26
-1    MULT    CMSLUMI11
-2    MULT    UNCORR
+1    MULT    CDFLUMI
+2    MULT    CORR
 3    MULT    CORR
 4    MULT    CORR
 5    MULT    CORR
@@ -23,5 +23,5 @@
 22    MULT    CORR
 23    MULT    CORR
 24    MULT    CORR
-25    MULT    SKIP
-26    MULT    SKIP
+25    MULT    CORR
+26    MULT    THEORYCORR
