@@ -17,6 +17,141 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
   /**
     * Special set of cuts, for full documentation and explanation look at:
     * trunk/nnpdfcpp/doc/cuts/NNPDF30
+    *
+    */
+
+
+/**
+   * Cuts on small x (specific of NNPDF31sx combo)
+   * */
+  if ( settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF31sx")) == 0 )
+  {
+    const real b0 = 0.61;
+    const real c = 1./2.;
+    const real exponent = 1./(b0*c); 
+    const real Lam2 = pow(0.088,2); //Lam = 88 MeV
+
+    // common cut: if
+    // x^(b0/c) Q^2 >= Lam^2
+    // the data point is kept 
+
+    // Kinematics Labels
+    // DIS: nothing to be done
+    
+    // 'DYP: find x1 and x2 and delete point if they do not survive cut
+    // 'DYP': ('$y$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$')
+    // 'EWJ_RAP': ('$\\eta/y$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$')
+    // 'EWK_PTRAP': ('$\\eta/y$', '$p_T^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+    // 'EWK_RAP': ('$\\eta/y$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+    //  'HQP_YQQ': ('$y^{QQ} (GeV)$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+    if (set.GetProc(idat).compare(0,3, string("DYP")) == 0 ||
+        set.GetProc(idat).compare(0,7, string("EWJ_RAP")) == 0 ||
+        set.GetProc(idat).compare(0,9, string("EWK_PTRAP")) == 0 ||
+        set.GetProc(idat).compare(0,7,string("EWK_RAP")) == 0 ||
+        set.GetProc(idat).compare(0,7,string("HQP_YQQ")) == 0)
+    {
+      const real y       = set.GetKinematics(idat,0);
+      const real Q2      = set.GetKinematics(idat,1);
+      const real sqrts   = set.GetKinematics(idat,2);
+      const real STAUdat = sqrt(Q2)/sqrts;
+
+      const real x1 = STAUdat * exp(y);
+      const real x2 = STAUdat * exp(-y);
+
+      // Cut
+      if (pow(x1,exponent)*Q2 <= Lam2 || pow(x2,exponent)*Q2 <= Lam2)  return false;
+     }
+
+  //  'EWK_MLL': ('$M_{ll} (GeV)$', '$M_{ll}^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+  //  'HQP_MQQ': ('$M^{QQ} (GeV)$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+  //  'INC': ('$0$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+     if (set.GetProc(idat).compare(0,7,string("EWK_MLL")) == 0 ||
+        set.GetProc(idat).compare(0,7,string("HQP_MQQ")) == 0 ||
+        set.GetProc(idat).compare(0,3,string("INC")) == 0)
+    {
+      const real Q2      = set.GetKinematics(idat,1);
+      const real sqrts   = set.GetKinematics(idat,2);
+      const real x = sqrt(Q2)/sqrts;
+
+      // Cut
+      if (pow(x,exponent)*Q2 <= Lam2)  return false;
+     }
+
+//  'JET': ('$\\eta$', '$p_T^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+//  'HQP_YQ': ('$y^Q$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+     if (set.GetProc(idat).compare(0,3,string("JET")) == 0 ||
+      set.GetProc(idat).compare(0,6,string("HQP_YQ")) == 0)
+     {
+      const real y       = set.GetKinematics(idat,0);
+      const real Q2      = set.GetKinematics(idat,1);
+      const real sqrts   = set.GetKinematics(idat,2);
+      const real STAUdat = sqrt(Q2)/sqrts;
+
+      const real x = STAUdat*(exp(y)+exp(-y));
+
+      // Cut
+      if (pow(x,exponent)*Q2 <= Lam2)  return false;
+     }
+
+//  'HQP_PTQ': ('$p_T^Q (GeV)$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+     if (set.GetProc(idat).compare(0,7,string("HQP_PTQ")) == 0 )
+     {
+
+      const real tmass  = 173.3; //here get tmass from the settings
+      const real qmass2 = pow(tmass,2);
+    
+      const real pT     = set.GetKinematics(idat,0);
+      const real Q      =  sqrt(qmass2+pT*pT)+pT;
+      const real sqrts  = set.GetKinematics(idat,2);
+  
+
+      const real x  = Q/sqrts;
+      const real Q2 = pow(Q,2);
+
+      // Cut
+      if (pow(x,exponent)*Q2 <= Lam2)  return false;
+     }
+//  'HQP_PTQQ': ('$p_T^{QQ} (GeV)$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+     if (set.GetProc(idat).compare(0,8,string("HQP_PTQQ")) == 0 )
+     {
+
+      const real tmass  = 173.3; //here get tmass from the settings
+      const real qqmass2 = pow(2*tmass,2);
+    
+      const real pT     = set.GetKinematics(idat,0);
+      const real Q      =  sqrt(qqmass2+pT*pT)+pT;
+      const real sqrts  = set.GetKinematics(idat,2);
+     
+      const real x  = Q/sqrts;
+      const real Q2 = pow(Q,2);
+
+      // Cut
+      if (pow(x,exponent)*Q2 <= Lam2)  return false;
+     }
+  
+//  'EWK_PT': ('$p_T$ (GeV)', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+      if (set.GetProc(idat).compare(0,6,string("EWK_PT")) == 0 )
+     {
+
+      const real Zmass  = 91.1876; 
+      const real Zmass2 = pow(2*Zmass,2);
+    
+      const real pT     = set.GetKinematics(idat,0);
+      const real Q      = sqrt(Zmass2+pT*pT)+pT;
+      const real mu     = sqrt(Zmass2+pT*pT); //factorization scale used
+      const real sqrts  = set.GetKinematics(idat,2);
+     
+      const real x  = Q/sqrts;
+      const real Q2 = pow(mu,2);
+
+      // Cut
+      if (pow(x,exponent)*Q2 <= Lam2)  return false;
+     }
+
+   }
+
+   
+  /** 
     * Cuts only available in the NNPDF30 combo.
     */
   if (settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF30")) == 0)
@@ -79,7 +214,8 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
   /**
    * Cuts only available in the NNPDF31 combo.
    * */
-  if ( settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF31")) == 0 )
+  if ( settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF31")) == 0 ||
+      settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF31sx")) == 0)
   {
     // NNPDF3.1 cut, allowing only first rapidity bin of ATLAS1JET11
     if (set.GetSetName().compare(0,11, string("ATLAS1JET11")) == 0)
@@ -138,7 +274,8 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
    * shared cuts between NNPDF30 and NNPDF31
    */
   if (settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF30")) == 0 ||
-      settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF31")) == 0 )
+      settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF31")) == 0 ||
+      settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF31sx")) == 0 )
     if (set.GetProc(idat).compare(0,3, string("EWK")) == 0 ||
         set.GetProc(idat).compare(0,3, string("DYP")) == 0 )
       {
@@ -169,13 +306,9 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
         if (set.GetSetName().compare(string("CMSDY2D12")) == 0)
           {
 
-            if (stoi(settings.GetTheory(APFEL::kPTO)) == 0 || stoi(settings.GetTheory(APFEL::kPTO)) == 1)
-              if (pTmv > maxCMSDY2Dminv || pTmv < minCMSDY2Dminv || y > maxCMSDY2Dy)
+            if (pTmv < minCMSDY2Dminv){
                 return false;
-
-            if (stoi(settings.GetTheory(APFEL::kPTO)) == 2)
-              if (pTmv > maxCMSDY2Dminv || y > maxCMSDY2Dy)
-                return false;
+			}
 
             return true; // avoid other cuts
           }
@@ -224,6 +357,8 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
             return true;
           }
       }
+
+
 
   // DIS cuts
   if (set.GetProc(idat).compare(0,3,string("DIS")) == 0)
