@@ -306,9 +306,13 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
         if (set.GetSetName().compare(string("CMSDY2D12")) == 0)
           {
 
-            if (pTmv < minCMSDY2Dminv){
-                return false;
-			}
+	    if (stoi(settings.GetTheory(APFEL::kPTO)) == 0 || stoi(settings.GetTheory(APFEL::kPTO)) == 1)		
+              if (pTmv > maxCMSDY2Dminv || pTmv < minCMSDY2Dminv || y > maxCMSDY2Dy)
+                 return false;
+ 
+            if (stoi(settings.GetTheory(APFEL::kPTO)) == 2)
+               if (pTmv > maxCMSDY2Dminv || y > maxCMSDY2Dy)
+		return false;
 
             return true; // avoid other cuts
           }
