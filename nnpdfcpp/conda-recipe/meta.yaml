@@ -1,3 +1,4 @@
+{% set libnnpdf_version = "==1.2.0b1.17" %}
 package:
     name: nnpdf
     version: "{{ GIT_DESCRIBE_TAG[1:] }}.{{ GIT_DESCRIBE_NUMBER }}"
@@ -8,16 +9,16 @@ source:
 requirements:
     build: 
         - toolchain # [osx]
-        - libnnpdf ==1.1.0b7
+        - libnnpdf {{libnnpdf_version}}
         - gcc # [linux]
         - isl # [linux]
         - yaml-cpp
         - cmake
-        - apfel
+        - apfel >=3
         - pkg-config
     run:
-        - libnnpdf
-        - apfel
+        - libnnpdf {{libnnpdf_version}}
+        - apfel >=3
         - libgcc # [linux]
         - yaml-cpp
 
