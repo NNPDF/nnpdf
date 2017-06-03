@@ -6,6 +6,8 @@ LHAPDF. The tools for representing these grids are in pdfgrids.py
 (the validphys provider module), and the
 basis transformations are in pdfbases.py
 """
+import itertools
+
 import numpy as np
 
 from NNPDF import _lhapdfset, LHAPDFSet
@@ -54,10 +56,12 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
     for a given channel.
 
     pdf_set: The interested PDF set
+    s: The center of mass energy GeV.
     mx: The invariant mass bin GeV.
     x1 and x2: The the partonic x1 and x2.
     channel: The channel tag name from LUMI_CHANNELS.
     """
+
 
     res = 0
     if channel == 'gg':
@@ -70,9 +74,13 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
         for i in LUMI_FLAVORS:
             res += pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, -i)
     elif channel == 'qq':
+        r1 = []
+        r2 = []
         for i in LUMI_FLAVORS:
-            for j in LUMI_FLAVORS:
-                res += pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, j)
+            r1.append(pdf_set.xfxQ(x1, mx, n, i))
+            r2.append(pdf_set.xfxQ(x2, mx, n, i))
+
+        res = sum(a*b for a,b in itertools.product(r1,r2))
     elif channel == 'udbar':
         res = (pdf_set.xfxQ(x1, mx, n, 2) * pdf_set.xfxQ(x2, mx, n, -1)
                + pdf_set.xfxQ(x1, mx, n, -1) * pdf_set.xfxQ(x2, mx, n, 2))
