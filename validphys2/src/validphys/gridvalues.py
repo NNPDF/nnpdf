@@ -48,41 +48,40 @@ def grid_values(pdf:PDF, flmat, xmat, qmat):
      return lpdf.grid_values(flmat, xmat, qmat)
 
 
-def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s: float, mx: float,
-                        x1: float, x2: float, channel=None):
+def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
+                        x1: float, x2: float, channel):
     """Returns PDF luminosity at specified values of mx, x1, x2, sqrts**2
     for a given channel.
 
     pdf_set: The interested PDF set
-    s: The center of mass energy GeV.
     mx: The invariant mass bin GeV.
     x1 and x2: The the partonic x1 and x2.
     channel: The channel tag name from LUMI_CHANNELS.
     """
 
-    pdfs = 0
+    res = 0
     if channel == 'gg':
-        pdfs = pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, 21)
+        res = pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, 21)
     elif channel == 'gq':
         for i in LUMI_FLAVORS:
-            pdfs += pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, 21) \
-                    + pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, i)
+            res += (pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, 21)
+                    + pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, i))
     elif channel == 'qqbar':
         for i in LUMI_FLAVORS:
-            pdfs += pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, -i)
+            res += pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, -i)
     elif channel == 'qq':
         for i in LUMI_FLAVORS:
             for j in LUMI_FLAVORS:
-                pdfs += pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, j)
+                res += pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, j)
     elif channel == 'udbar':
-        pdfs = pdf_set.xfxQ(x1, mx, n, 2) * pdf_set.xfxQ(x2, mx, n, -1) \
-               + pdf_set.xfxQ(x1, mx, n, -1) * pdf_set.xfxQ(x2, mx, n, 2)
+        res = (pdf_set.xfxQ(x1, mx, n, 2) * pdf_set.xfxQ(x2, mx, n, -1)
+               + pdf_set.xfxQ(x1, mx, n, -1) * pdf_set.xfxQ(x2, mx, n, 2))
     elif channel == 'dubar':
-        pdfs = pdf_set.xfxQ(x1, mx, n, 1) * pdf_set.xfxQ(x2, mx, n, -2) \
-               + pdf_set.xfxQ(x1, mx, n, -2) * pdf_set.xfxQ(x2, mx, n, 1)
+        res = (pdf_set.xfxQ(x1, mx, n, 1) * pdf_set.xfxQ(x2, mx, n, -2)
+               + pdf_set.xfxQ(x1, mx, n, -2) * pdf_set.xfxQ(x2, mx, n, 1))
 
     else:
         raise ValueError("Bad channel")
 
-    return pdfs
+    return res/x1/x2/s
 

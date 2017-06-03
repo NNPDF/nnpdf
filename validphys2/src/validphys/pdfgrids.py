@@ -118,8 +118,8 @@ Lumi2dGrid = namedtuple('Lumi2dGrid', ['y','m','grid_values'])
 
 
 def lumigrid2d(pdf:PDF, lumi_channel, sqrts:numbers.Real,
-    y_lim:numbers.Real=5, nbins_m:int=100,
-    nbins_y:int=50):
+        y_lim:numbers.Real=5, nbins_m:int=100,
+        nbins_y:int=50):
     """
     Return the differential luminosity in a grid of (nbins_m x nbins_y)
     points, for the allowed values of invariant mass and rpidity for  given
@@ -131,8 +131,7 @@ def lumigrid2d(pdf:PDF, lumi_channel, sqrts:numbers.Real,
     The results are computed for all relevant PDF members and wrapped in a
     stats class, to compute statistics regardless of the ErrorType.
     """
-
-    s = sqrts**2
+    s = sqrts*sqrts
     mxs = np.logspace(1, np.log10(sqrts), nbins_m)
 
 
@@ -154,8 +153,8 @@ def lumigrid2d(pdf:PDF, lumi_channel, sqrts:numbers.Real,
                 #TODO: Fill this from lpdf.grid_values?
                 x1 = mx/sqrts*np.exp(y)
                 x2 = mx/sqrts*np.exp(-y)
-                res= evaluate_luminosity(lpdf, irep, s,
-                    mx, x1, x2, lumi_channel)
+                res= evaluate_luminosity(lpdf, irep,
+                    s, mx, x1, x2, lumi_channel)
                 weights[irep, im, iy]  = res
 
 
@@ -180,8 +179,7 @@ def lumigrid1d(pdf:PDF, lumi_channel, sqrts:numbers.Real, nbins_m:int=30):
     The results are computed for all relevant PDF members and wrapped in a
     stats class, to compute statistics regardless of the ErrorType.
     """
-
-    s = sqrts**2
+    s = sqrts*sqrts
     mxs = np.logspace(1, np.log10(sqrts/10), nbins_m)
     taus = (mxs / sqrts) ** 2
 
@@ -193,7 +191,11 @@ def lumigrid1d(pdf:PDF, lumi_channel, sqrts:numbers.Real, nbins_m:int=30):
 
     for irep in range(nmembers):
         for im, mx in enumerate(mxs):
-            weights[irep, im] = integrate.quad(lambda x1: evaluate_luminosity(lpdf, irep, s, mx, x1, taus[im] / x1, lumi_channel), taus[im], 1.0)[0]
+            f = lambda x1: evaluate_luminosity(lpdf, irep,
+                                               s, mx,
+                                               x1, taus[im] / x1,
+                                               lumi_channel)
+            weights[irep, im] = integrate.quad(f, taus[im], 1.0)[0]
 
     return Lumi1dGrid(mxs, pdf.stats_class(weights))
 
