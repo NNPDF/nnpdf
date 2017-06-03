@@ -194,8 +194,9 @@ def lumigrid1d(pdf:PDF, lumi_channel, sqrts:numbers.Real, nbins_m:int=30):
             f = lambda x1: evaluate_luminosity(lpdf, irep,
                                                s, mx,
                                                x1, taus[im] / x1,
-                                               lumi_channel) / x1
-            weights[irep, im] = integrate.quad(f, taus[im], 1.0)[0]
+                                               lumi_channel)
+            res = integrate.quad(f, taus[im], 1.0, epsrel=0.05, limit=10)[0]
+            weights[irep, im] = res
 
     return Lumi1dGrid(mxs, pdf.stats_class(weights))
 
