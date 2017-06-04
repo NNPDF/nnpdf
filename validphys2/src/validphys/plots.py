@@ -1127,7 +1127,7 @@ def plot_lumi1d(pdfs, pdfs_lumis, lumi_channel, sqrts:numbers.Real,
         ylabel = f"Ratio to {pdfs[normalize_to]}"
     else:
         norm = 1
-        ylabel = ""
+        ylabel = r"$L(GeV^{-2})$"
 
     for pdf, lumigrid1d in zip(pdfs, pdfs_lumis):
         mx = lumigrid1d.m
