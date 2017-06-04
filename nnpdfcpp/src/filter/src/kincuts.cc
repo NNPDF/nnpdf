@@ -41,11 +41,6 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
     
     
     // For DY-like proces two values of x are computed
-    // 'DYP': ('$y$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$')
-    // 'EWJ_RAP': ('$\\eta/y$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$')
-    // 'EWK_PTRAP': ('$\\eta/y$', '$p_T^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-    // 'EWK_RAP': ('$\\eta/y$', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-    //  'HQP_YQQ': ('$y^{QQ} (GeV)$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
     if (set.GetProc(idat).compare(0,3, string("DYP")) == 0 ||
         set.GetProc(idat).compare(0,7, string("EWJ_RAP")) == 0 ||
         set.GetProc(idat).compare(0,9, string("EWK_PTRAP")) == 0 ||
@@ -65,10 +60,7 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
      }
 
     // for the following class of processes LO kinematics is the same
-    // 'EWK_MLL': ('$M_{ll} (GeV)$', '$M_{ll}^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-    // 'HQP_MQQ': ('$M^{QQ} (GeV)$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-    // 'INC': ('$0$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-     if (set.GetProc(idat).compare(0,7,string("EWK_MLL")) == 0 ||
+    if (set.GetProc(idat).compare(0,7,string("EWK_MLL")) == 0 ||
         set.GetProc(idat).compare(0,7,string("HQP_MQQ")) == 0 ||
         set.GetProc(idat).compare(0,3,string("INC")) == 0)
     {
@@ -80,9 +72,7 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
       if (pow(x,exponent)*Q2 <= Lam2)  return false;
      }
 
-     // Jets and ttbar production (when one top is tagged) share the same kinematic
-     //  'JET': ('$\\eta$', '$p_T^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
-     //  'HQP_YQ': ('$y^Q$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+     // Jets and ttbar production (one top is tagged) cut
      if (set.GetProc(idat).compare(0,3,string("JET")) == 0 ||
 	 set.GetProc(idat).compare(0,6,string("HQP_YQ")) == 0)
      {
@@ -97,12 +87,11 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
        if (pow(x,exponent)*Q2 <= Lam2)  return false;
      }
 
-     //  ttbar production (top quark pair) cut
-     //  'HQP_PTQ': ('$p_T^Q (GeV)$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+     //  ttbar production (pT distribution) cut, single top tagged
      if (set.GetProc(idat).compare(0,7,string("HQP_PTQ")) == 0 )
      {
        
-       const real tmass  = 173.3; //here get tmass from the settings
+       const real tmass  = 173.3; //top mass should be taken from fit settings
        const real qmass2 = pow(tmass,2);
        
        const real pT     = set.GetKinematics(idat,0);
@@ -117,12 +106,11 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
        if (pow(x,exponent)*Q2 <= Lam2)  return false;
      }
 
-     // ttbar production (pT distribution) cut
-     //  'HQP_PTQQ': ('$p_T^{QQ} (GeV)$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+     // ttbar production (pT distribution) cut, ttbar pair tagged
      if (set.GetProc(idat).compare(0,8,string("HQP_PTQQ")) == 0 )
      {
 
-       const real tmass  = 173.3; //here get tmass from the settings
+       const real tmass  = 173.3; 
        const real qqmass2 = pow(2*tmass,2);
        
        const real pT     = set.GetKinematics(idat,0);
@@ -137,7 +125,6 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
      }
 
      // Zpt cut
-     //  'EWK_PT': ('$p_T$ (GeV)', '$M^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
      if (set.GetProc(idat).compare(0,6,string("EWK_PT")) == 0 )
      {
 
@@ -155,7 +142,7 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
        // Cut
        if (pow(x,exponent)*Q2 <= Lam2)  return false;
      }
-     
+    
    }
 
    
