@@ -539,7 +539,7 @@ namespace NNPDF
   fcUncerts(new double[fNData])
   {
      if (fNData == 0)
-       throw RangeError("FKTable::FKTable", "datapoints cut to 0!");
+       throw RangeError("FKTable::FKTable", fDataName + " has 0 points, check your filter mask and your TR/VAL split!");
 
     // Copy X grid
     for (int i = 0; i < fNx; i++)
