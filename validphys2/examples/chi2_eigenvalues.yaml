@@ -1,0 +1,23 @@
+pdf:
+    NNPDF31_nnlo_as_0118_wCMSDY12
+
+theoryid: 53
+
+template_text: |
+  {@dataset_inputs plot_chi2_eigs@}
+
+
+fit: NNPDF31_nnlo_as_0118_wCMSDY12
+use_cuts: true
+
+dataset_inputs:
+    - dataset: CMSDY2D12    
+      cfac: [MMHT]
+    
+    - dataset: CMSDY2D11    
+      cfac: [QCD]
+
+
+actions_:
+  -   - report:
+          main: True
