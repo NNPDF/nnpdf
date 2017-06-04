@@ -333,6 +333,10 @@ class Config(report.Config):
         return theory['theoryid']
     """
 
+    def produce_pdf_id(self, pdf)-> str:
+        """Return a string containing the PDF's LHAPDF ID"""
+        return pdf.name
+
 
     @element_of('lumi_channels')
     def parse_lumi_channel(self, ch:str):
