@@ -27,11 +27,19 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
   if ( settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF31sx")) == 0 )
   {
 
-    // x,Q^2 are computed for all processes
+    // x,Q^2 are computed for all non-DIS processes
     // in a LO kinematic approximation
-    // common cut to all experiments:
+    // 
+    // common cut to all non-DIS experiments
     // x^(b0/c) Q^2 >= Lam^2
     // where Lam=88 MeV and b0 = 0.61.
+    // 
+    // this corresponds to cut all non-DIS points
+    // below a line in the x-Q^2 plane
+    // 
+    // The value of c tunes the slope
+    // of the line and can be modified to make 
+    // the cut tight or loose
     // c = 0.5 corresponds to a tight cut
       
     const real b0 = 0.61;
