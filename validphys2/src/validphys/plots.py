@@ -524,7 +524,9 @@ class PDFPlotter(metaclass=abc.ABCMeta):
 
             all_vals = []
             for pdf, grid in zip(self.pdfs, self.xplotting_grids):
-                all_vals.append(np.atleast_2d(self.draw(pdf, grid, flstate)))
+                limits = self.draw(pdf, grid, flstate)
+                if limits is not None:
+                    all_vals.append(np.atleast_2d(limits))
 
             #Note these two lines do not conmute!
             ax.set_xscale(self.xscale)
@@ -667,14 +669,21 @@ class DistancePDFPlotter(PDFPlotter):
 
     def draw(self, pdf, grid, flstate):
         ax = flstate.ax
+        if pdf == self.normalize_pdf:
+            #Advance color cycle
+            ax.plot([],[])
+            return None
+
         flindex = flstate.flindex
         gv = 10.*grid.grid_values[flindex,:]
 
         p,=ax.plot(grid.xgrid, gv, label=pdf.label)
-        color=p.get_color()
+        #color=p.get_color()
+        """
         if(self.normalize_pdf.ErrorType=="replicas" and pdf.ErrorType=="replicas"):
             draw_line = np.sqrt((1./(len(self.normalize_pdf)-1)+1./(len(pdf)-1))/2)
             ax.axhline(draw_line,color=color,alpha=0.5,linestyle="--")
+        """
 
 
         return gv
@@ -682,8 +691,12 @@ class DistancePDFPlotter(PDFPlotter):
 @figuregen
 @_check_pdf_normalize_to
 @check_scale('xscale', allow_none=True)
-def plot_pdfdistances(pdfs, xplotting_grids,*, xscale:(str,type(None))=None,normalize_to:(int,str)):
-    """Plots the distances between different PDF sets and a reference PDF set. Distances are normalized such that a value of order 10 is unlikely to be explained by purely statistical fluctuations
+def plot_pdfdistances(pdfs, xplotting_grids,*,
+                      xscale:(str,type(None))=None,
+                      normalize_to:(int,str)):
+    """Plots the distances between different PDF sets and a reference PDF set.
+    Distances are normalized such that a value of order 10 is unlikely
+    to be explained by purely statistical fluctuations
     """
     yield from DistancePDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
 
