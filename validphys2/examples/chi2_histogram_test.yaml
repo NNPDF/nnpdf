@@ -1,16 +1,15 @@
-fit: NNPDF31_nnlo_as_0118_1000
+fit: NNPDF31_nnlo_as_0118_noLHCb
 
 fits:
     - from_: Null
+    - NNPDF31_nnlo_as_0118_noLHC
 
 use_cuts: True
 
 template_text: |
     {@fits_chi2_table@}
-    {@with fitcontext@}
-    {@plot_experiments_chi2@}
-    {@plot_datasets_chi2@}
-    {@endwith@}
+    {@plot_fits_experiments_chi2@}
+    {@plot_fits_datasets_chi2@}
 
 actions_:
     - - report:

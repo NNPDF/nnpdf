@@ -531,26 +531,41 @@ def dataset_chi2_table(chi2_stats, dataset):
     return pd.DataFrame(chi2_stats, index=[dataset.name])
 
 
-
-
-
-
-def fits_chi2_table_impl(fits, fits_experiments, fits_chi2_data, fits_experiment_chi2_data):
-    """A version of ``fits_chi2_table`` suitable to be used as input to other
-    providers"""
-
-    chi2_it = iter(fits_chi2_data)
-
+@table
+def fits_experiments_chi2_table(fits, fits_experiments, fits_experiment_chi2_data):
+    """A table with the chi2 for each included experiment in the fits,
+    computed with the theory corresponding to each fit"""
     dfs = []
     for fit, experiments, exps_chi2 in zip(fits, fits_experiments, fits_experiment_chi2_data):
         records = []
         for experiment, exp_chi2 in zip(experiments, exps_chi2):
             records.append(dict(
                 experiment=str(experiment),
-                dataset="Total",
                 npoints=exp_chi2.ndata,
                 mean_chi2 = exp_chi2.central_result.mean()/exp_chi2.ndata
             ))
+        df = pd.DataFrame.from_records(records,
+                 columns=('experiment', 'npoints', 'mean_chi2'),
+                 index = ('experiment', )
+             )
+        df.columns = pd.MultiIndex.from_product(([str(fit)], ['ndata', '$\chi^2/ndata$']))
+        dfs.append(df)
+    res =  pd.concat(dfs, axis=1)
+    return res
+
+
+@table
+def fits_datasets_chi2_table(fits, fits_experiments, fits_chi2_data):
+    """A table with the chi2 for each included dataset in the fits, computed
+    with the theory corresponding to the fit. The result are indexed in two
+    levels by experiment and dataset."""
+
+    chi2_it = iter(fits_chi2_data)
+
+    dfs = []
+    for fit, experiments in zip(fits, fits_experiments):
+        records = []
+        for experiment in experiments:
             for dataset, chi2 in zip(experiment.datasets, chi2_it):
                 records.append(dict(
                     experiment=str(experiment),
@@ -568,11 +583,23 @@ def fits_chi2_table_impl(fits, fits_experiments, fits_chi2_data, fits_experiment
     return pd.concat(dfs, axis=1)
 
 @table
-def fits_chi2_table(fits_chi2_table_impl):
-    """Show the chi² of each and number of points of each dataset of each fit,
+def fits_chi2_table(fits_experiments_chi2_table, fits_datasets_chi2_table):
+    """Show the chi² of each and number of points of each dataset and experiment
+    of each fit,
     computed with the theory corresponding to the fit. Dataset that are not
-    included in some fit appear as "Not Fitted"."""
-    return fits_chi2_table_impl.fillna("Not Fitted")
+    included in some fit appear as "Not Fitted". This is itended for display
+    purposes."""
+    lvs = fits_experiments_chi2_table.index
+    expanded_index = pd.MultiIndex.from_product((lvs, ["Total"]))
+    edf = fits_experiments_chi2_table.set_index(expanded_index)
+    ddf = fits_datasets_chi2_table
+    dfs = []
+    #TODO: Better way to do the merge preserving the order?
+    for lv in lvs:
+        dfs.append(pd.concat((edf.loc[lv],ddf.loc[lv]), copy=False, axis=0))
+
+    res = pd.concat(dfs, axis=0, keys=lvs)
+    return res.fillna("Not Fitted")
 
 def total_experiments_chi2(experiments_chi2):
     """Return a tuple (chi2/ndata, ndata) for the combination of all

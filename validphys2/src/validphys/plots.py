@@ -287,6 +287,31 @@ def plot_datasets_chi2(experiments, experiments_chi2,each_dataset_chi2):
 
     return fig
 
+def _plot_chis_df(df):
+    chilabel = df.columns.get_level_values(1)[1]
+    data = data = df.iloc[:, df.columns.get_level_values(1)==chilabel].T.as_matrix()
+    fitnames = df.columns.levels[0]
+    expnames = list(df.index.get_level_values(0))
+    fig, ax = plotutils.barplot(data, expnames, fitnames)
+    ax.grid(False)
+    ax.legend()
+    return fig, ax
+
+
+@figure
+def plot_fits_datasets_chi2(fits_datasets_chi2_table):
+    ind = fits_datasets_chi2_table.index.droplevel(0)
+    fig, ax = _plot_chis_df(fits_datasets_chi2_table.set_index(ind))
+    ax.set_title(r"$\chi^2$ for datasets")
+    return fig
+
+@figure
+def plot_fits_experiments_chi2(fits_experiments_chi2_table):
+    fig, ax = _plot_chis_df(fits_experiments_chi2_table)
+    ax.set_title(r"$\chi^2$ for experiments")
+    return fig
+
+
 @figure
 def plot_training_validation(fit, replica_data, replica_filters=None):
     """Scatter plot with the training and validation chi² for each replica
