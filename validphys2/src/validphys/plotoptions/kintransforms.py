@@ -134,13 +134,6 @@ class HQQPTXQ2MapMixin:
         Q = (np.sqrt(QQMASS2+k1*k1)+k1)
         return Q/k3, Q*Q
 
-#The transforms themselves
-class identity:
-    def __call__(self, k1, k2, k3):
-        return k1, k2, k3
-
-    def new_labels(self, *old_labels):
-        return old_labels
 
 class dyp_sqrt_scale(SqrtScaleMixin, DYXQ2MapMixin):
     qlabel = '$M (GeV)$'
@@ -158,7 +151,7 @@ class dis_sqrt_scale(DISXQ2MapMixin):
     def new_labels(self, *old_labels):
         return ('$x$', '$Q$ (GeV)', r'$\sqrt{s} (GeV)$')
 
-class ewj_jpt_sqrt_scale(SqrtScaleMixin,EWPTXQ2MapMixin):  #okay but it does not exist 
+class ewj_jpt_sqrt_scale(SqrtScaleMixin,EWPTXQ2MapMixin):  #okay but it does not exist
     qlabel = '$M (GeV)$'
 
 class ewj_jrap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin): #EWJ_JRAP->DY  ----> okay but it does not exist
@@ -167,7 +160,7 @@ class ewj_jrap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin): #EWJ_JRAP->DY  ----> ok
 class ewj_mll_sqrt_scale(SqrtScaleMixin,DYMXQ2MapMixin): #EWJ_MLL->DYm  ----> okay but it does not exist
     qlabel = '$M_{ll} (GeV)$'
 
-class ewj_pt_sqrt_scale(SqrtScaleMixin,EWPTXQ2MapMixin): #EWJ_PT->DY ----> Zpt, okay but it does not exist 
+class ewj_pt_sqrt_scale(SqrtScaleMixin,EWPTXQ2MapMixin): #EWJ_PT->DY ----> Zpt, okay but it does not exist
     qlabel = '$M (GeV)$'
 
 class ewj_ptrap_sqrt_scale(SqrtScaleMixin,DYXQ2MapMixin): # EWJ_PTRAP -> DY okay, but it does not exist
