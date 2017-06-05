@@ -178,55 +178,85 @@ def centered_range(n, value=0, distance=1):
         yield distance*(i-first_offset) + value
 
 
-def barplot(values, collabels, datalabels):
+def barplot(values, collabels, datalabels, orientation='auto'):
     """The barplot as matplotlib should have it. It resizes on overflow.
-    ``values``  should be one or two dimensional and should containt the
+    ``values``  should be one or two dimensional and should contain the
     values for the barplot. ``colllabels`` must have as many element
     s ``values`` has rows, and contains the labels for each column in the
     bar plot.  ``datalabels`` should have as many elements as values has
     columns, and contains the labels for the individual items to be
-    compared.
+    compared. If ``orientation`` is ``"auto"``, the barplot will be
+    horizontal or vertical depending on the number of items.
+    Otherwise, the orientation can ve fixes as ``"horizontal"`` or
+    ``"vertical"``
 
     Returns a tuple figure, axis like plt.subplots.
-
     """
-
-
     values = np.atleast_2d(values)
     ntypes, l = values.shape
 
     width = 2
-    x = np.linspace(0, width*ntypes*l-1, l)
-
+    #The tick positions
+    x = np.linspace(0, 1.1*width*ntypes*l-1, l)
     w,h = plt.rcParams["figure.figsize"]
 
+    #Rescale if we have too much data
+    rescale = max(1, 1+(width*l*ntypes-15)*0.05)
+    #Rescale if the labels are too long
+    lbrescale = max(1, 1+0.05*(max(len(l) for l in collabels)-15))
 
+    if orientation == 'auto':
+        if l*ntypes > 30:
+            orientation = 'horizontal'
+        else:
+            orientation = 'vertical'
 
-    wrescale = max(1, 1+(width*l*ntypes-15)*0.05)
+    if orientation == 'vertical':
+        fig, ax = plt.subplots(figsize=(w*rescale, h*lbrescale))
+        barfunc = ax.bar
+        infoaxis = ax.xaxis
+        infolim = ax.set_xlim
+        otheraxis = ax.yaxis
+        rotation = 80
+        xycoords = (0,5)
+        horizontal_alignment='center'
+        def xytext(x,y): return x,y
+    elif orientation =='horizontal':
+        fig, ax = plt.subplots(figsize=(w*lbrescale, h*rescale))
+        barfunc = ax.barh
+        infoaxis = ax.yaxis
+        infolim = ax.set_ylim
+        otheraxis = ax.xaxis
+        rotation = 10
+        xycoords = (5,0)
+        horizontal_alignment='left'
+        def xytext(x,y): return y,x
 
-    fig, ax = plt.subplots(figsize=(w*wrescale, h))
+    else:
+        raise ValueError("orientation must be one of ('auto', 'horizontal', 'vertical')")
 
+    infoaxis.set_ticks(x)
 
-
-    ax.set_xticks(x)
-
-    ax.set_xticklabels(collabels,rotation=80)
+    infoaxis.set_ticklabels(collabels,rotation=rotation)
     deltas = list(centered_range(ntypes, distance=width))
     for row, delta, datalabel in zip(values, deltas, datalabels):
         thisx = x+delta
-        ax.bar(thisx, row, width, label=datalabel)
+        barfunc(thisx, row, width, label=datalabel)
         for xp,v in zip(thisx,row):
-            ax.annotate(f'{v:.2f}', (xp,v),
-                        xytext=(0,5), textcoords='offset points',
-                        horizontalalignment='center',
+            ax.annotate(f'{v:.2f}', xytext(xp,v),
+                        xytext=xycoords, textcoords='offset points',
+                        horizontalalignment=horizontal_alignment,
                         size='small'
                        )
 
 
-    ax.set_xlim(x[0]+deltas[0] - width/2, x[-1]+deltas[-1]+width/2)
-    ax.yaxis.set_visible(False)
+    infolim(x[0]+deltas[0] - width/2, x[-1]+deltas[-1]+width/2)
+    otheraxis.set_visible(False)
     ax.tick_params(length=0)
     ax.spines['left'].set_color('none')
+    ax.spines['bottom'].set_color('none')
+    ax.spines['top'].set_color('none')
+    ax.spines['right'].set_color('none')
 
     return fig, ax
 
