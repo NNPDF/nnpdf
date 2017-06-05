@@ -1,11 +1,15 @@
 fit: NNPDF31_nnlo_as_0118_1000
 
+fits:
+    - from_: Null
+
 use_cuts: True
 
 template_text: |
+    {@fits_chi2_table@}
     {@with fitcontext@}
-    {@experiments_chi2_plot@}
-    {@datasets_chi2_plot@}
+    {@plot_experiments_chi2@}
+    {@plot_datasets_chi2@}
     {@endwith@}
 
 actions_:

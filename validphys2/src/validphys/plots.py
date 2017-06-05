@@ -257,7 +257,7 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
 
 
 @figure
-def experiments_chi2_plot(experiments, experiments_chi2):
+def plot_experiments_chi2(experiments, experiments_chi2):
     """Return a plot with the chi² of all the experiments"""
     exchi2 = []
     xticks = []
@@ -266,12 +266,11 @@ def experiments_chi2_plot(experiments, experiments_chi2):
         xticks.append(experiment.name)
     fig, ax = plotutils.barplot(exchi2, collabels=xticks, datalabels=['$\chi^2$'])
     ax.set_title(r"$\chi^2$ distribution for experiments")
-    ax.set_ylabel(r'$\chi^2/N_{dat}$')
     ax.grid(False)
     return fig
 
 @figure
-def datasets_chi2_plot(experiments, experiments_chi2,each_dataset_chi2):
+def plot_datasets_chi2(experiments, experiments_chi2,each_dataset_chi2):
     """Return a plot with the chi² of all the datasets"""
     ds = iter(each_dataset_chi2)
     dschi2 = []
@@ -284,7 +283,6 @@ def datasets_chi2_plot(experiments, experiments_chi2,each_dataset_chi2):
                                datalabels=['$\chi^2$'])
 
     ax.set_title(r"$\chi^2$ distribution for datasets")
-    ax.set_ylabel(r'$\chi^2/N_{dat}$')
     ax.grid(False)
 
     return fig
