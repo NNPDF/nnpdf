@@ -61,12 +61,6 @@ template_text: |
     {@endwith@}
     {@endwith@}
     
-    # Luminosities
-    
-    ## Absolute Luminosities at 13 TeV
-
-    {@pdfs::all_lumi_channels::lumi_channels plot_lumi1d@} 
-    
     # $\chi^2$
     {@fits_chi2_table@}
 
