@@ -1398,7 +1398,7 @@ def plot_fits_as_profile(fits_pdfs, fits_total_chi2):
 
 #TODO: Add check that everybody has at least nrep (need to have len(fit))
 @figure
-def plot_fitted_replicas_as_profiles(fits_pdfs, fits_replica_data, nrep:int=None):
+def plot_fitted_replicas_as_profiles(fits_pdfs, fits_replica_data, nrep:(int,type(None))=None):
     table = []
 
     #TODO: Do this at compile time
