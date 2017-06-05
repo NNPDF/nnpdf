@@ -531,16 +531,26 @@ def dataset_chi2_table(chi2_stats, dataset):
     return pd.DataFrame(chi2_stats, index=[dataset.name])
 
 
-@table
-def fits_chi2_table(fits, fits_experiments, fits_chi2_data):
-    """Show the chi² of each and number of points of each dataset of each fit,
-    computed with the theory corresponding to the fit. Dataset that are not
-    included in some fit appear as "Not Fitted"."""
+
+
+
+
+def fits_chi2_table_impl(fits, fits_experiments, fits_chi2_data, fits_experiment_chi2_data):
+    """A version of ``fits_chi2_table`` suitable to be used as input to other
+    providers"""
+
     chi2_it = iter(fits_chi2_data)
+
     dfs = []
-    for fit, experiments in zip(fits, fits_experiments):
+    for fit, experiments, exps_chi2 in zip(fits, fits_experiments, fits_experiment_chi2_data):
         records = []
-        for experiment in experiments:
+        for experiment, exp_chi2 in zip(experiments, exps_chi2):
+            records.append(dict(
+                experiment=str(experiment),
+                dataset="Total",
+                npoints=exp_chi2.ndata,
+                mean_chi2 = exp_chi2.central_result.mean()/exp_chi2.ndata
+            ))
             for dataset, chi2 in zip(experiment.datasets, chi2_it):
                 records.append(dict(
                     experiment=str(experiment),
@@ -555,7 +565,14 @@ def fits_chi2_table(fits, fits_experiments, fits_chi2_data):
              )
         df.columns = pd.MultiIndex.from_product(([str(fit)], ['ndata', '$\chi^2/ndata$']))
         dfs.append(df)
-    return pd.concat(dfs, axis=1).fillna("Not Fitted")
+    return pd.concat(dfs, axis=1)
+
+@table
+def fits_chi2_table(fits_chi2_table_impl):
+    """Show the chi² of each and number of points of each dataset of each fit,
+    computed with the theory corresponding to the fit. Dataset that are not
+    included in some fit appear as "Not Fitted"."""
+    return fits_chi2_table_impl.fillna("Not Fitted")
 
 def total_experiments_chi2(experiments_chi2):
     """Return a tuple (chi2/ndata, ndata) for the combination of all
@@ -580,4 +597,5 @@ experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
 
 fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))
+fits_experiment_chi2_data = collect('experiments_chi2', ('fits', 'fitcontext'))
 fits_experiments = collect('experiments', ('fits', 'fitcontext'))
