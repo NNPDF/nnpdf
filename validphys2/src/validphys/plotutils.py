@@ -203,10 +203,10 @@ def barplot(values, collabels, datalabels, orientation='auto'):
     #Rescale if we have too much data
     rescale = max(1, 1+(width*l*ntypes-15)*0.05)
     #Rescale if the labels are too long
-    lbrescale = max(1, 1+0.05*(max(len(l) for l in collabels)-15))
+    lbrescale = max(1, 1+0.04*(max(len(l) for l in collabels)-5))
 
     if orientation == 'auto':
-        if l*ntypes > 30:
+        if l*ntypes > 20:
             orientation = 'horizontal'
         else:
             orientation = 'vertical'
@@ -257,6 +257,7 @@ def barplot(values, collabels, datalabels, orientation='auto'):
     ax.spines['bottom'].set_color('none')
     ax.spines['top'].set_color('none')
     ax.spines['right'].set_color('none')
+    fig.tight_layout()
 
     return fig, ax
 
