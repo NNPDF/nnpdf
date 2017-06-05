@@ -8,14 +8,14 @@ first:
 
 second:
     Q: 100
-    xgrid: linear
+    scale: linear
 
 normalize_to: 1
 
 template_text: |
-  Log scale
-  Linear scale
+  Log scale, low Q
   {@first plot_pdfdistances@}
+  Linear scale, high Q
   {@second plot_pdfdistances@}
 
 actions_:
