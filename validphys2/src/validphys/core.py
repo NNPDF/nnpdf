@@ -224,6 +224,18 @@ class DataSetInput(TupleComp):
     def __str__(self):
         return self.name
 
+class ExperimentInput(TupleComp):
+    def __init__(self, *, name, datasets):
+        self.name = name
+        self.datasets = datasets
+        super().__init__(name, datasets)
+
+    def as_dict(self):
+        return {'experiment':self.name, 'datasets':self.datasets}
+
+    def __str__(self):
+        return self.name
+
 
 class Cuts(TupleComp):
     def __init__(self, name, path):

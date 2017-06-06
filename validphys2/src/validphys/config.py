@@ -16,7 +16,7 @@ from reportengine.configparser import ConfigError, element_of, _parse_func
 from reportengine.helputils import get_parser_type
 from reportengine import report
 
-from validphys.core import ExperimentSpec, DataSetInput
+from validphys.core import ExperimentSpec, DataSetInput, ExperimentInput
 from validphys.loader import (Loader, LoadFailedError ,DataNotFoundError,
                               PDFNotFound, FallbackLoader)
 from validphys.gridvalues import LUMI_CHANNELS
@@ -266,6 +266,34 @@ class Config(report.Config):
                                        for dsinp in dsinputs]
 
         return ExperimentSpec(name=name, datasets=datasets, dsinputs=dsinputs)
+
+    @configparser.element_of('experiment_inputs')
+    def parse_experiment_input(self, ei:dict):
+        """The mapping that corresponds to the experiment specification in the
+        fit config files. Currently, this needs to be combined with
+        ``experiment_from_input`` to yield an useful result."""
+        try:
+            name = ei['experiment']
+        except KeyError as e:
+            raise ConfigError(f"experiment_input must have an 'experiment' key") from e
+
+        try:
+            datasets = ei['datasets']
+        except KeyError as e:
+            raise ConfigError(f"experiment_input must have an 'datasets' key") from e
+
+        return ExperimentInput(name=name, datasets=datasets)
+
+    #TODO: Do away with the mapping and make the conversion implicitly
+    def produce_experiment_from_input(self, experiment_input,theoryid, use_cuts,
+            fit=None):
+        """Return a mapping containing a single experiment from an experiment
+        input. NOTE: This might be deprecated in the future."""
+        return {'experiment':self.parse_experiment(experiment_input.as_dict(),
+                theoryid=theoryid, use_cuts=use_cuts, fit=fit)}
+
+
+
 
     #TODO: Worth it to do some black magic to not pass params explicitly?
     #Note that `parse_experiments` doesn't exist yet.
