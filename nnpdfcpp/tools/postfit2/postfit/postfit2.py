@@ -210,7 +210,7 @@ def export_to_lhapdf(nrep, fitfolder, prefix):
         log.debug("Reading: %s" % inpath)
         f = inpath.open()
         xpdf.append([])
-        for j in range(0,2): f.readline()
+        for j in range(0,3): f.readline()
 
         s = 0
         while True:
