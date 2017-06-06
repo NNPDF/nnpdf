@@ -581,7 +581,7 @@ theoryid: 52
 
 use_cuts: false
 
-dataset:
+dataset_input:
     dataset: ATLASWZRAP36PB
     sys: 2
     cfac: [EWK]
@@ -595,6 +595,7 @@ actions_:
 We are specifying one PDF (by the LHAPDF id), one dataset and one
 theory. Note that the dataset specification is identical to that of
 the nnfit configuration files.
+
 We are saying that we do not want to use the cuts of the data
 (so we don't have to specify a fit containing the cut data).
 
@@ -631,7 +632,7 @@ with_cuts:
 without_cuts:
   use_cuts: False
 
-dataset:
+dataset_input:
     dataset: ATLASWZRAP36PB
     sys: 2
     cfac: [EWK]
@@ -669,7 +670,7 @@ with_cuts:
 without_cuts:
   use_cuts: False
 
-dataset:
+dataset_input:
     dataset: ATLASWZRAP36PB
     sys: 2
     cfac: [EWK]
@@ -709,7 +710,7 @@ specifications:
 
 - use_cuts: False
 
-dataset:
+dataset_input:
     dataset: ATLASWZRAP36PB
     sys: 2
     cfac: [EWK]
@@ -747,7 +748,7 @@ theoryid: 52
 
 use_cuts: False
 
-dataset:
+dataset_input:
     dataset: ATLASWZRAP36PB
     sys: 2
     cfac: [EWK]
@@ -770,7 +771,7 @@ theoryid: 52
 
 use_cuts: False
 
-dataset:
+dataset_input:
     dataset: ATLASWZRAP36PB
     sys: 2
     cfac: [EWK]
