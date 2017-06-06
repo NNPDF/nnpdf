@@ -583,7 +583,6 @@ use_cuts: false
 
 dataset_input:
     dataset: ATLASWZRAP36PB
-    sys: 2
     cfac: [EWK]
 
 actions_:
@@ -634,7 +633,6 @@ without_cuts:
 
 dataset_input:
     dataset: ATLASWZRAP36PB
-    sys: 2
     cfac: [EWK]
 
 actions_:
@@ -672,7 +670,6 @@ without_cuts:
 
 dataset_input:
     dataset: ATLASWZRAP36PB
-    sys: 2
     cfac: [EWK]
 
 actions_:
@@ -712,7 +709,6 @@ specifications:
 
 dataset_input:
     dataset: ATLASWZRAP36PB
-    sys: 2
     cfac: [EWK]
 
 actions_:
@@ -750,7 +746,6 @@ use_cuts: False
 
 dataset_input:
     dataset: ATLASWZRAP36PB
-    sys: 2
     cfac: [EWK]
 
 actions_:
@@ -773,7 +768,6 @@ use_cuts: False
 
 dataset_input:
     dataset: ATLASWZRAP36PB
-    sys: 2
     cfac: [EWK]
 
 actions_:
