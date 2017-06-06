@@ -578,7 +578,7 @@ def fits_chi2_table(fits_experiments_chi2_table, fits_datasets_chi2_table):
     return res.fillna("Not Fitted")
 
 def total_experiments_chi2(experiments_chi2):
-    """Return a tuple (chi2/ndata, ndata) for the combination of all
+    """Return  the total chi²/ndata for the combination of all
     experiments."""
     val = 0
     n = 0
