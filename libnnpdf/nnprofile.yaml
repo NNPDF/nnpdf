@@ -1,0 +1,20 @@
+# Local resource locations
+#TODO: Change these to point to prefix/share/NNPDF/<...>
+data_path: '../nnpdfcpp/data'
+results_path: '../nnpdfcpp/results'
+
+# Remote resource locations
+fit_url: 'http://pcteserver.mi.infn.it/~nnpdf/fits/'
+fit_index: 'fitdata.json'
+
+theory_url: 'http://pcteserver.mi.infn.it/~apfelcomb/commondatatheory/'
+theory_index: 'theorydata.json'
+
+lhapdf_url: 'http://www.hepforge.org/archive/lhapdf/pdfsets/6.1/'
+nnpdf_pdfs_url: 'http://pcteserver.mi.infn.it/~nnpdf/pdfs/'
+nnpdf_pdfs_index: 'pdfdata.json'
+
+#Server side uploading locations
+upload_host: 'nnpdf@pcteserver.mi.infn.it'
+reports_target_dir: "WEB/validphys-reports/"
+reports_root_url: 'http://pcteserver.mi.infn.it/~nnpdf/validphys-reports/'

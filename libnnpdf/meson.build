@@ -8,9 +8,10 @@ default_options : ['cpp_std=c++14']
 
 dependencies = [
     dependency('lhapdf'),
-	dependency('gsl'),
-	dependency('sqlite3'),
-	dependency('libarchive'),
+    dependency('gsl'),
+    dependency('sqlite3'),
+    dependency('libarchive'),
+    dependency('yaml-cpp'),
 ]
 
 headers = [
@@ -34,19 +35,31 @@ headers = [
     'src/NNPDF/thpredictions.h',
     'src/NNPDF/timer.h',
     'src/NNPDF/utils.h',
+    'src/NNPDF/pathlib.h',
 ]
 
+#handle configure file
 conf = configuration_data()
-
-#Use this when it bcomes available
 conf.set_quoted('VERSION', meson.project_version())
-#version_string = '"@0"'.format(meson.project_version())
-
-#conf.set('VERSION', version_string)
 configure_file(
     input: 'src/NNPDF/config.h.in',
     output: 'config.h',
-	configuration: conf
+    configuration: conf
+)
+
+#handle pathlib
+profile_name = 'nnprofile.yaml'
+profile_source = profile_name
+profile_path = join_paths([
+   get_option('prefix'),
+   'share', 'NNPDF',
+])
+install_data(profile_source, install_dir:profile_path)
+add_global_arguments(
+    '-DDEFAULT_NNPDF_PROFILE_PATH="@0@"'.format(
+	    join_paths([profile_path,profile_name])
+    ),
+    language:'cpp'
 )
 
 sources = [
@@ -69,6 +82,7 @@ sources = [
     'src/randomgenerator.cc',
     'src/thpredictions.cc',
     'src/utils.cc',
+    'src/pathlib.cc',
 ]
 
 install_headers(headers, subdir:'NNPDF')
