@@ -317,7 +317,7 @@ A helper script exists to aid the configuration. All you need to do
 is:
 
     #Obtain the helper script
-    git clone ssh://git@gitlab.cern.ch:7999/NNPDF/binary-bootstrap.git
+    git clone git@github.com:NNPDF/binary-bootstrap.git
     #Execute the script
     ./binary-bootstrap/bootstrap.sh
 
@@ -429,7 +429,7 @@ For example, if you wanted to develop the validphys code you would do:
 conda install validphys
 conda remove validphys --force
 
-git clone ssh://git@gitlab.cern.ch:7999/NNPDF/validphys2.git
+git clone git@github.com:NNPDF/validphys2.git
 cd validphys2
 pip install -e .
 ```
