@@ -38,6 +38,15 @@ static void catch_int(int signal) {
     exit(-1);
 }
 
+// Set the RNG seed from replica id
+void SetSeed(int const& replica)
+{
+  unsigned long int seed = 0;
+  for (int i = 0; i < replica; i++)
+    seed = RandomGenerator::GetRNG()->GetRandomInt();
+  RandomGenerator::GetRNG()->SetSeed(seed);
+}
+
 /**
  * \param argv the filename containing the configuration
  */
@@ -97,11 +106,11 @@ int main(int argc, char **argv)
           LogManager::AddLogger("Chi2RealData","chi2expsrealdata.grid");
         }
 
-      // Setting the correct replica based seed
-      unsigned long int seed = 0;
-      for (int i = 0; i < replica; i++)
-        seed = RandomGenerator::GetRNG()->GetRandomInt();
-      RandomGenerator::GetRNG()->SetSeed(seed);
+      // Use 'dataseed' if it exists in the yml file otherwise
+      // use as the default 'seed' (set by the NNPDFSettings constructor)
+      if (settings.Exists("fitting","dataseed"))
+        RandomGenerator::GetRNG()->SetSeed(settings.Get("fitting", "dataseed").as<unsigned long int>());
+      SetSeed(replica);
 
       // Creating folders
       cout << "\n- MC generation of replica " << replica << ":" << endl;
@@ -159,6 +168,13 @@ int main(int argc, char **argv)
 
       // Fit Basis
       FitBasis* fitbasis = getFitBasis(settings, NNPDFSettings::getFitBasisType(settings.Get("fitting","fitbasis").as<string>()), replica);
+
+      // If 'dataseed' exists then reset the RNG to 'seed' for the GA
+      if (settings.Exists("fitting","dataseed"))
+        {
+          RandomGenerator::GetRNG()->SetSeed(settings.Get("fitting", "seed").as<unsigned long int>());
+          SetSeed(replica);
+        }
 
       // Minimiser control
       Minimizer* minim = NULL;

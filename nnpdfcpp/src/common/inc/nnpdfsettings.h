@@ -108,6 +108,8 @@ public:
   YAML::Node Get(const string& node, const string& item) const;  
   YAML::Node GetPlotting(const string& item) const;
   YAML::Node GetFile() const { return fConfig; }
+  bool Exists(const string& item) const;
+  bool Exists(const string& node, const string& item) const;
   string const& GetTheory(const string& item) const { return fTheory.at(item); }
   string const& GetResultsDirectory() const { return fResultsDir; }
   string const& GetTheoryDirectory()  const { return fTheoryDir;  }

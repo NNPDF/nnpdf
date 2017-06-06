@@ -260,6 +260,16 @@ YAML::Node NNPDFSettings::Get(const string& node, const string& item) const
   return fConfig[node][item];
 }
 
+bool NNPDFSettings::Exists(const string &item) const
+{
+  return !fConfig[item] ? false : true;
+}
+
+bool NNPDFSettings::Exists(const string &node, const string &item) const
+{
+  return !fConfig[node][item] ? false : true;
+}
+
 YAML::Node NNPDFSettings::GetPlotting(const string& item) const
 {
   if (!fPlotting[item])
