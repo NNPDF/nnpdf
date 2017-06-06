@@ -41,6 +41,7 @@ def yes_or_no(prompt, default = None):
             return False
         print("Please answer 'yes' or 'no'")
 
+#NOT USED ANYMORE
 def get_git_rev(path):
     path = str(path)
     call = subprocess.run(['git', 'rev-parse', 'HEAD'],
@@ -158,14 +159,13 @@ def get_config():
 
 def make_name(config):
     config_path = pathlib.Path(config['build_path']) / 'config'
-    rev = 'r' + get_git_rev(config_path)
     initials = config['initials']
     now = datetime.datetime.now()
     now = format(now, "%g%m%d")
 
     i = 1
     while True:
-        path = config_path / ('-'.join((now, rev, '%03d'%i ,initials)) + '.yaml')
+        path = config_path / ('-'.join((now, '%03d'%i ,initials)) + '.yml')
         if not path.exists():
             break
         i+=1
@@ -203,6 +203,7 @@ def main():
                         '--set-keys', 'experiments:experiment', 'datasets:dataset'])
         if yes_or_no("Do you accept the changes?"):
             break
+    print(t.bold("Written new config file %s" % name))
 
 if __name__ == '__main__':
     main()
