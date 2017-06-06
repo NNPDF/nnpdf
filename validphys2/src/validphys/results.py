@@ -624,9 +624,24 @@ each_dataset_results = collect(results, ('experiments', 'experiment'))
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
 
+#These are convenient ways to iterate and extract varios data from fits
 fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))
 fits_experiment_chi2_data = collect('experiments_chi2', ('fits', 'fitcontext'))
 fits_total_chi2 = collect('total_experiments_chi2', ('fits', 'fitcontext'))
 
+fits_total_chi2_for_experiments = collect('total_experiment_chi2',
+                                          ('fits', 'fittheoryandpdf',
+                                           'expspec', 'experiment'))
+
+
 fits_experiments = collect('experiments', ('fits', 'fitcontext'))
 fits_pdfs = collect('pdf', ('fits', 'fitpdf'))
+
+
+#Dataspec is so
+dataspecs_chi2_data = collect(abs_chi2_data, ('dataspecs', 'experiments', 'experiment'))
+dataspecs_experiment_chi2_data = collect('experiments_chi2', ('dataspecs',))
+dataspecs_total_chi2 = collect('total_experiments_chi2', ('dataspecs',))
+
+dataspecs_experiments = collect('experiments', ('dataspecs',))
+dataspecs_pdfs = collect('pdf', ('dataspecs',))

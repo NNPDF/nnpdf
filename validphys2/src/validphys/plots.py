@@ -1394,6 +1394,9 @@ def plot_fits_as_profile(fits_pdfs, fits_total_chi2):
     ax.set_ylabel(r'$\chi²/N_{dat}$')
     return fig
 
+@figure
+def plot_dataspecs_as_profile(dataspecs_pdfs, dataspecs_total_chi2):
+    return plot_fits_as_profile(dataspecs_pdfs, dataspecs_total_chi2)
 
 
 #TODO: Add check that everybody has at least nrep (need to have len(fit))
