@@ -245,13 +245,17 @@ if (LHAPDF_CONFIG)
   set(LHAPDF_LIBRARIES ${LHAPDF_LIBRARIES} CACHE STRING INTERNAL)
 endif(LHAPDF_CONFIG)
 
+# add preprocessor flag
+add_definitions(-DDEFAULT_NNPDF_PROFILE_PATH="${prefix}/share/NNPDF")
+
 find_package(PkgConfig REQUIRED)
 pkg_search_module(LIBARCHIVE REQUIRED libarchive)
 pkg_search_module(SQLITE3 REQUIRED sqlite3)
 pkg_search_module(GSL REQUIRED gsl)
+pkg_search_module(YAML REQUIRED yaml-cpp)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LHAPDF_CXX_FLAGS} ${SQLITE3_CFLAGS} ${GSL_CFLAGS} ${LIBARCHIVE_CFLAGS} -std=c++11")
-include_directories(src/NNPDF ${GSL_INCLUDE_DIRS})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LHAPDF_CXX_FLAGS} ${YAMLCPP_CFLAGS} ${SQLITE3_CFLAGS} ${GSL_CFLAGS} ${LIBARCHIVE_CFLAGS} -std=c++11")
+include_directories(src/NNPDF ${GSL_INCLUDE_DIRS} ${YAML_INCLUDE_DIRS})
 add_library(nnpdf SHARED src/common.cc
                          src/commondata.cc
                          src/chisquared.cc
@@ -270,9 +274,10 @@ add_library(nnpdf SHARED src/common.cc
                          src/positivity.cc
                          src/randomgenerator.cc
                          src/thpredictions.cc
-                         src/utils.cc)
+                         src/utils.cc
+			 src/pathlib.cc)
 
-target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${SQLITE3_LDFLAGS} ${LIBARCHIVE_LDFLAGS})
+target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${SQLITE3_LDFLAGS} ${LIBARCHIVE_LDFLAGS} ${YAML_LDFLAGS})
 
 add_executable(FKconvolute src/fkconvolute.cc)
 target_link_libraries(FKconvolute nnpdf ${LibArchive_LIBRARIES})
@@ -285,10 +290,11 @@ install(FILES ${PROJECT_SOURCE_DIR}/scripts/nnpdf-config
 	${PROJECT_SOURCE_DIR}/scripts/FKselfmerge
 	${PROJECT_SOURCE_DIR}/scripts/FKincrement
 	${CMAKE_BINARY_DIR}/FKconvolute
-  ${CMAKE_BINARY_DIR}/FKmerge2
+	${CMAKE_BINARY_DIR}/FKmerge2
 	DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 install(FILES ${PROJECT_SOURCE_DIR}/scripts/nnpdf.pc DESTINATION lib/pkgconfig)
 install(DIRECTORY src/NNPDF DESTINATION include)
+install(FILES ${PROJECT_SOURCE_DIR}/nnprofile.yaml DESTINATION share/NNPDF)
 install(TARGETS nnpdf DESTINATION lib)
 
 if(ENABLE_PYWRAP)

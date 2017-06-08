@@ -20,6 +20,7 @@ requirements:
         - pkg-config
         - cmake
         - libarchive
+        - yaml-cpp
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
         - nnpdf_use_double
         {% endif  %}
@@ -31,6 +32,7 @@ requirements:
         - gsl ==2.2.1 1
         - numpy
         - libarchive
+        - yaml-cpp
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
         - nnpdf_use_double
         {% endif  %}
