@@ -16,7 +16,7 @@ import pandas as pd
 
 from NNPDF import ThPredictions, CommonData
 from NNPDF.experiments import Experiment
-from reportengine.checks import require_one, remove_outer
+from reportengine.checks import require_one, remove_outer, check_not_empty
 from reportengine.table import table
 from reportengine import collect
 
@@ -427,30 +427,6 @@ def correlate_bad_experiments(experiments, replica_data, pdf):
     df.sort_values(df.columns[0], inplace=True, ascending=False)
     return df
 
-#TODO: Compute results
-@table
-def perreplica_chi2_table(experiments, pdf):
-    """Chi² per point for each replica for each experiment.
-    Also outputs the total chi² per replica."""
-
-    chs = [abs_chi2_data(results(exp, pdf)) for exp in experiments]
-
-    total_chis = np.zeros((len(experiments) + 1, len(pdf)))
-    ls = []
-    for i,ch in enumerate(chs, 1):
-        th, central, l = ch
-        total_chis[i]= [central, *th.error_members()]
-        ls.append(l)
-
-    #total_chis/=total_l
-    total_chis[0] = np.sum(total_chis[1:,:], axis=0)
-    total_chis[0]/= np.sum(ls)
-    total_chis[1:,:]/= np.array(ls)[:, np.newaxis]
-
-    return pd.DataFrame(total_chis.T, columns = ['Total', *[exp.name for exp in experiments]])
-
-
-
 @assert_use_cuts_true
 @table
 def closure_shifts(experiments_index, fit, use_cuts, experiments):
@@ -611,6 +587,31 @@ def total_experiments_chi2(experiments_chi2):
         n += cd.ndata
     return val/n
 
+@table
+@check_not_empty('experiments')
+def perreplica_chi2_table(experiments, experiments_chi2):
+    """Chi² per point for each replica for each experiment.
+    Also outputs the total chi² per replica.
+    The columns come in two levels: The first is the name of the experiment,
+    and the second is the number of points."""
+
+    chs = experiments_chi2
+    total_chis = np.zeros((len(experiments) + 1, 1+ len(chs[0].replica_result.error_members())))
+    ls = []
+    for i,ch in enumerate(chs, 1):
+        th, central, l = ch
+        total_chis[i]= [central, *th.error_members()]
+        ls.append(l)
+    #total_chis/=total_l
+    total_chis[0] = np.sum(total_chis[1:,:], axis=0)
+    total_n = np.sum(ls)
+    total_chis[0]/= total_n
+    total_chis[1:,:]/= np.array(ls)[:, np.newaxis]
+
+    columns = pd.MultiIndex.from_arrays(
+            (['Total', *[str(exp) for exp in experiments]],
+             [total_n, *ls]), names=['name', 'npoints'])
+    return pd.DataFrame(total_chis.T, columns =columns)
 
 @table
 def theory_description(theoryid):
