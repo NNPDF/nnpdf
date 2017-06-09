@@ -218,8 +218,15 @@ def barplot(values, collabels, datalabels, orientation='auto'):
         infolim = ax.set_xlim
         otheraxis = ax.yaxis
         rotation = 80
-        xycoords = (0,5)
-        horizontal_alignment='center'
+        def get_pos(val):
+            if val >= 0:
+                xytext = (0,5)
+            else:
+                xytext = (0,-5)
+            horizontalalignment='center'
+            return {'xytext': xytext,
+                    'horizontalalignment':horizontalalignment}
+
         def xytext(x,y): return x,y
     elif orientation =='horizontal':
         fig, ax = plt.subplots(figsize=(w*lbrescale, h*rescale))
@@ -228,8 +235,15 @@ def barplot(values, collabels, datalabels, orientation='auto'):
         infolim = ax.set_ylim
         otheraxis = ax.xaxis
         rotation = 10
-        xycoords = (5,0)
-        horizontal_alignment='left'
+        def get_pos(val):
+            if val >= 0:
+                xytext = (5,0)
+                horizontalalignment= 'left'
+            else:
+                xytext = (-5,0)
+                horizontalalignment='right'
+            return {'xytext': xytext,
+                    'horizontalalignment':horizontalalignment}
         def xytext(x,y): return y,x
 
     else:
@@ -243,10 +257,10 @@ def barplot(values, collabels, datalabels, orientation='auto'):
         thisx = x+delta
         barfunc(thisx, row, width, label=datalabel)
         for xp,v in zip(thisx,row):
-            ax.annotate(f'{v:.2f}', xytext(xp,v),
-                        xytext=xycoords, textcoords='offset points',
-                        horizontalalignment=horizontal_alignment,
-                        size='small'
+
+            ax.annotate(f'{v:.2f}', xy=xytext(xp,v),
+                         textcoords='offset points',
+                        size='small', wrap=True, **get_pos(v)
                        )
 
 
