@@ -13,7 +13,8 @@ from reportengine.table import table
 from reportengine.checks import make_argcheck, CheckError, check_positive
 
 from validphys.core import PDF
-from validphys.gridvalues import evaluate_luminosity, SUM_RULES
+from validphys.gridvalues import (evaluate_luminosity, SUM_RULES,
+                                  SUM_RULES_EXPECTED)
 from validphys.pdfbases import (parse_flarr, list_bases, Basis, UnknownElement)
 import scipy.integrate as integrate
 
@@ -235,3 +236,15 @@ def sum_rules_table(sum_rules):
     #We don't  really want the count, which is going to be the same for all.
     #Hence the .iloc[1:,:].
     return pd.DataFrame(sum_rules._asdict()).describe().iloc[1:,:]
+
+@table
+def bad_replica_sumrules(pdf, sum_rules, threshold=0.01):
+    #TODO: Get rid of this nonsense
+    ncomputed = len(sum_rules[0])
+    if pdf.ErrorType == 'replicas':
+        x = np.arange(1, ncomputed + 1)
+    else:
+        x = np.arange(ncomputed)
+    df = pd.DataFrame(sum_rules._asdict(), index=x)
+    filt = ((df - pd.Series(SUM_RULES_EXPECTED)).abs() > threshold).any(axis=1)
+    return df[filt]

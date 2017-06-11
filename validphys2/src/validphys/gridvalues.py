@@ -117,4 +117,9 @@ SUM_RULES = {
     'momentum': momentum_sum_rule_integrand,
 }
 
-
+SUM_RULES_EXPECTED= {
+    'uvalence': 2,
+    'dvalence': 1,
+    'svalence': 0,
+    'momentum': 1,
+}

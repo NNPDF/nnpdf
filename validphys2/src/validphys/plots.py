@@ -394,6 +394,22 @@ def plot_chi2_eigs(pdf,dataset,chi2_per_eig):
     plt.xlabel("# Eigenvalue")
     return fig
 
+@figure
+def plot_replica_sum_rules(pdf, sum_rules, Q):
+    """Plot the value of each sum rule as a function of the replica index"""
+    fig, axes = plt.subplots(nrows=len(sum_rules), sharex=True)
+    #TODO: Get rid of this nonsense
+    ncomputed = len(sum_rules[0])
+    if pdf.ErrorType == 'replicas':
+        x = np.arange(1, ncomputed + 1)
+    else:
+        x = np.arange(ncomputed)
+    for label, rls, ax in zip(sum_rules._fields, sum_rules, axes):
+        ax.scatter(x, rls)
+        ax.set_ylabel(label)
+    fig.suptitle(f'Sum rules for {pdf} at Q={Q} GeV')
+    return fig
+
 #The indexing to one instead of zero is so that we can be consistent with
 #how plot_fancy works, so normalize_to: 1 would normalize to the first pdf
 #for both.
