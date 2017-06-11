@@ -28,7 +28,7 @@ LUMI_CHANNELS = {
     'dubar': r'd\bar{u}',
 }
 
-LUMI_FLAVORS = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]
+QUARK_FLAVORS = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]
 
 
 
@@ -67,16 +67,16 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
     if channel == 'gg':
         res = pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, 21)
     elif channel == 'gq':
-        for i in LUMI_FLAVORS:
+        for i in QUARK_FLAVORS:
             res += (pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, 21)
                     + pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, i))
     elif channel == 'qqbar':
-        for i in LUMI_FLAVORS:
+        for i in QUARK_FLAVORS:
             res += pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, -i)
     elif channel == 'qq':
         r1 = []
         r2 = []
-        for i in LUMI_FLAVORS:
+        for i in QUARK_FLAVORS:
             r1.append(pdf_set.xfxQ(x1, mx, n, i))
             r2.append(pdf_set.xfxQ(x2, mx, n, i))
 
