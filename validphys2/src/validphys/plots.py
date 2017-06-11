@@ -266,7 +266,6 @@ def plot_experiments_chi2(experiments, experiments_chi2):
         xticks.append(experiment.name)
     fig, ax = plotutils.barplot(exchi2, collabels=xticks, datalabels=['$\chi^2$'])
     ax.set_title(r"$\chi^2$ distribution for experiments")
-    ax.grid(False)
     return fig
 
 @figure
@@ -283,7 +282,6 @@ def plot_datasets_chi2(experiments, experiments_chi2,each_dataset_chi2):
                                datalabels=['$\chi^2$'])
 
     ax.set_title(r"$\chi^2$ distribution for datasets")
-    ax.grid(False)
 
     return fig
 

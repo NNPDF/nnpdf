@@ -271,6 +271,7 @@ def barplot(values, collabels, datalabels, orientation='auto'):
     ax.spines['bottom'].set_color('none')
     ax.spines['top'].set_color('none')
     ax.spines['right'].set_color('none')
+    ax.grid(False)
     fig.tight_layout()
 
     return fig, ax
