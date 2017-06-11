@@ -19,6 +19,10 @@ from validphys.core import PDF
 FLTYPE = np.int32
 REALTYPE = np.double if _lhapdfset.REALDOUBLE else np.float32
 
+#This represents some canonical ordering of all the relevant flavours
+#we may want to query from LHAPDF
+ALL_FLAVOURS = (-6,-5,-4,-3,-2,-1,21,1,2,3,4,5,6,22)
+
 LUMI_CHANNELS = {
     'gg': r'gg',
     'gq': r'gq',

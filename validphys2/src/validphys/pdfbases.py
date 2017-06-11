@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
 """
+pdfbases.py
+
 This holds the concrete labels data relative to the PDF bases,
 as declaratively as possible.
 """
@@ -8,7 +9,7 @@ import inspect
 import numpy as np
 
 from validphys.core import PDF
-from validphys import gridvalues
+from validphys.gridvalues import grid_values, ALL_FLAVOURS
 
 
 #This mapping maps the keys passed to LHAPDF (PDG codes) to nice LaTeX labels.
@@ -30,14 +31,10 @@ PDG_PARTONS = dict((
         (21 , r"g"),
     ))
 
-#This represents some canonical ordering of all the relevant flavours
-#we may want to query from LHAPDF
-ALL_FLAVOURS = (-6,-5,-4,-3,-2,-1,21,1,2,3,4,5,6,22)
-
 DEFAULT_FLARR = (-3,-2,-1,0,1,2,3,4)
 
-
 def pdg_id_to_canonical_index(flindex):
+    """Given an LHAPDF id, return its index in the ALL_FLAVOURS list."""
     if flindex == 0:
         return ALL_FLAVOURS.index(21)
     return ALL_FLAVOURS.index(flindex)
@@ -259,7 +256,7 @@ class Basis():
         #The PDG codes for LHAPDF
         flmat = self._flaray_from_flindexes(flinds)
 
-        gv = gridvalues.grid_values(pdf, flmat, xmat, qmat)
+        gv = grid_values(pdf, flmat, xmat, qmat)
         #Matrix product along the flavour axis
         rotated_gv = np.einsum('bc,acde->abde', transformation, gv)
         return rotated_gv
