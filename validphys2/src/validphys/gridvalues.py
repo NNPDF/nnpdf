@@ -53,6 +53,7 @@ def grid_values(pdf:PDF, flmat, xmat, qmat):
      lpdf = pdf.load()
      return lpdf.grid_values(flmat, xmat, qmat)
 
+#TODO: Investigate writting these in cython/cffi/numba/...
 
 def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
                         x1: float, x2: float, channel):
@@ -96,4 +97,24 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
         raise ValueError("Bad channel")
 
     return res/x1/x2/s
+
+def uvalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
+    return (lpdf.xfxQ(x, Q=Q, n=irep, fl=2) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-2))/x
+
+def dvalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
+    return (lpdf.xfxQ(x, Q=Q, n=irep, fl=1) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-1))/x
+
+def svalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
+    return (lpdf.xfxQ(x, Q=Q, n=irep, fl=3) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-3))/x
+
+def momentum_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
+    return sum([lpdf.xfxQ(x, Q=10, n=irep, fl=fl) for fl in ALL_FLAVOURS])
+
+SUM_RULES = {
+    'uvalence': uvalence_sum_rule_integrand,
+    'dvalence': dvalence_sum_rule_integrand,
+    'svalence': svalence_sum_rule_integrand,
+    'momentum': momentum_sum_rule_integrand,
+}
+
 

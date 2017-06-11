@@ -6,12 +6,14 @@ from collections import namedtuple
 import numbers
 
 import numpy as np
+import pandas as pd
 
 from reportengine import collect
+from reportengine.table import table
 from reportengine.checks import make_argcheck, CheckError, check_positive
 
 from validphys.core import PDF
-from validphys.gridvalues import evaluate_luminosity
+from validphys.gridvalues import evaluate_luminosity, SUM_RULES
 from validphys.pdfbases import (parse_flarr, list_bases, Basis, UnknownElement)
 import scipy.integrate as integrate
 
@@ -203,3 +205,33 @@ def lumigrid1d(pdf:PDF, lumi_channel, sqrts:numbers.Real, nbins_m:int=30):
 
 lumigrids1d = collect('lumigrid1d', ['lumi_channels'])
 
+SumRulesGrid = namedtuple('SumRulesGrid', SUM_RULES)
+
+@check_positive('Q')
+def sum_rules(pdf:PDF, Q:numbers.Real):
+    """Compute the sum rules for each member (as defined by libnnpdf), at the
+    energy scale ``Q``.
+    The integration is performed with absolute and relative tolerance of 1e-4."""
+    #TODO: Write this in something fast
+    lpdf = pdf.load()
+    nmembers = lpdf.GetMembers()
+
+    #If nothing else, at least allocate and store the result contiguously
+    res = np.zeros((len(SUM_RULES), nmembers))
+    integrands = SUM_RULES.values()
+
+    for irep in range(nmembers):
+        for r, f in enumerate(integrands):
+            #We increase the limit to capture the log scale fluctuations
+            res[r,irep] = integrate.quad(f, 0, 1, args=(lpdf, irep, Q),
+               limit=1000,
+               epsabs=1e-4, epsrel=1e-4)[0]
+    return SumRulesGrid(*res)
+
+@table
+def sum_rules_table(sum_rules):
+    """Return a table with the descriptive statistics of the sum rules,
+    over members of the PDF."""
+    #We don't  really want the count, which is going to be the same for all.
+    #Hence the .iloc[1:,:].
+    return pd.DataFrame(sum_rules._asdict()).describe().iloc[1:,:]
