@@ -23,7 +23,7 @@ namespace NNPDF
     class ThPredictions {
 
       private:
-        ThPredictions();                                //!< Disable default constructor
+        ThPredictions();     //!< Disable default constructor
 
         real *fObs;          //!< Theory predictions for Observables
         real fTconv;         //!< time required for the convolution in msecs
@@ -70,7 +70,7 @@ namespace NNPDF
             
         // Get Methods
         real* GetObs() const {return fObs;}; //!< Return Obs array
-      
+        real GetObs(int const& idat, int const& imem) const {return fObs[idat*fNpdf + imem];};
         real GetObsCV     (int const& idat) const;   //!< Get Central Value
         real GetObsError  (int const& idat) const;   //!< Get Error value (fEtype)
         real GetTConv()   const { return fTconv; }   //!< Get convolution time
