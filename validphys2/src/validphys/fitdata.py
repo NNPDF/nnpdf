@@ -7,9 +7,10 @@ from collections import namedtuple
 from io import StringIO
 import pathlib
 
-
 import numpy as np
+import pandas as pd
 import yaml
+
 from reportengine import collect
 from reportengine.table import table
 from reportengine.checks import make_argcheck, CheckError
@@ -227,3 +228,11 @@ def _check_has_replica_tags(pdf):
 def fitted_replica_indexes(pdf):
     """Return nnfit index of replicas 1 to N."""
     return [_get_fitted_index(pdf,i) for i in range(1, len(pdf))]
+
+fits_replica_indexes =  collect('fitted_replica_indexes', ('fits','fitpdf'))
+
+def fits_replica_data_correlated(fits_replica_data, fits_replica_indexes, fits):
+    dfs = []
+    for dt, inds in zip(fits_replica_data, fits_replica_indexes):
+        dfs.append(pd.DataFrame(dt, columns=FitInfo._fields, index=inds))
+    return pd.concat(dfs, axis=1, keys=[fit.name for fit in fits])

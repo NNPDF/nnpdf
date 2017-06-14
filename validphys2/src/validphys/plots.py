@@ -1395,49 +1395,44 @@ def plot_fits_as_profile(fits_pdfs, fits_total_chi2):
     return fig
 
 @figure
-def plot_dataspecs_as_profile(dataspecs_pdfs, dataspecs_total_chi2):
-    return plot_fits_as_profile(dataspecs_pdfs, dataspecs_total_chi2)
+def plot_fitted_replicas_as_profiles_matched(fits_pdfs,
+        fits_replica_data_correlated, max_ndiscarded:int=4):
+    """Plot chi²(as) keeping the replica nnfit index matched.
 
-
-#TODO: Add check that everybody has at least nrep (need to have len(fit))
-@figure
-def plot_fitted_replicas_as_profiles(fits_pdfs, fits_replica_data, nrep:(int,type(None))=None):
-    table = []
-
-    #TODO: Do this at compile time
-    lens = set(map(len, fits_replica_data))
-    minlen = min(lens)
-    if nrep is None:
-        nrep = minlen
-        if len(lens) != 1:
-            log.warn(f"Fits with different number of replicas. Fitting the minimum one: {minlen}.")
-    else:
-        if minlen < nrep:
-            log.error(f"Not all fits hace the required number of replicas {nrep}. Fitting the minimum {minlen}.")
-            nrep = minlen
+    The ``max_ndiscarded`` parameter defines th number of points
+    discarded by postfit from which we discard the curve.
+    """
 
     alphas = [pdf.AlphaS_MZ for pdf in fits_pdfs]
-    for irep in range(nrep):
-        repres = ([(fd[irep].training + fd[irep].validation)/2 for fd in fits_replica_data])
-        table.append(repres)
+    df = fits_replica_data_correlated
+    def ap(x):
+        x.columns = x.columns.droplevel(0)
+        return (x['training'] + x['validation'])/2
+    table = df.groupby(axis=1, level=0).apply(ap)
+    filt = table.isnull().sum(axis=1) < max_ndiscarded
+    table = table[filt]
+    table = table.as_matrix()
 
-    #res = np.polyfit(alphas, np.array(table).T,2)
-    #minimums = (-res[1,:]/2/res[0,:])
-    minimums = np.asarray(alphas)[np.argmin(table, axis=1)]
+    minimums = []
+    asarr = np.asarray(alphas)
+    for row in table:
+        filt =  np.isfinite(row)
+        a,b,c = np.polyfit(asarr[filt], row[filt], 2)
+        minimums.append(-b/2/a)
+    minimums = np.asarray(minimums)
 
     fig, ax = plt.subplots()
 
     from matplotlib.collections import LineCollection
 
-    lc = LineCollection([list(zip(alphas, t)) for t in table])
+    lc = LineCollection([list(x for x in zip(alphas, t) if np.isfinite(x[1])) for t in table])
     lc.set_array(minimums)
     lc.set_clim(*np.percentile(minimums, (5,95)))
     ax.add_collection(lc)
     ax.set_xlim(min(alphas), max(alphas))
-    tba = np.asarray(table)
-    ax.set_ylim(tba.min(), tba.max())
+    ax.set_ylim(np.nanmin(table), np.nanmax(table))
     fig.colorbar(lc, label=r"Preferred $\alpha_S$")
-    plt.title(rf"$\alpha_S$ from min ERF = ${np.mean(minimums):.4f} \pm {np.std(minimums):.4f}$")
+    plt.title(rf"$\alpha_S$ from quadratic fit = ${np.mean(minimums):.4f} \pm {np.std(minimums):.4f}$ N={len(table)}")
 
 
 
