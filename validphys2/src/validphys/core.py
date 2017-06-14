@@ -104,6 +104,7 @@ class PDF(TupleComp):
             klass = functools.partial(klass, rescale_factor=self.rescale_factor)
         return klass
 
+    #TODO: Make this a proper Path
     @property
     def infopath(self):
         return lhaindex.infofilename(self.name)

@@ -5,11 +5,14 @@ Utilities for loading data from fit folders
 import logging
 from collections import namedtuple
 from io import StringIO
+import pathlib
 
+
+import numpy as np
+import yaml
 from reportengine import collect
 from reportengine.table import table
 from reportengine.checks import make_argcheck, CheckError
-import numpy as np
 
 from validphys.core import PDF
 from validphys import checks
@@ -202,3 +205,25 @@ def print_different_cuts(fits, test_for_same_cuts):
 
 
     return res.getvalue()
+
+def _get_fitted_index(pdf, i):
+    """Return the nnfit index for the replcia i"""
+    p = pathlib.Path(pdf.infopath).with_name(f'{pdf.name}_{i:04d}.dat')
+    with open(p) as f:
+        it = yaml.load_all(f)
+        metadata = next(it)
+    return metadata['FromMCReplica']
+
+@make_argcheck
+def _check_has_replica_tags(pdf):
+    """Check that the PDF has fitted index tags."""
+    try:
+        _get_fitted_index(pdf,1)
+    except KeyError as e:
+        raise CheckError("PDF replica file don't contain "
+                         "the fitted replica tag.") from e
+
+@_check_has_replica_tags
+def fitted_replica_indexes(pdf):
+    """Return nnfit index of replicas 1 to N."""
+    return [_get_fitted_index(pdf,i) for i in range(1, len(pdf))]
