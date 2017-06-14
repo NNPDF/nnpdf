@@ -220,13 +220,17 @@ def sum_rules(pdf:PDF, Q:numbers.Real):
     #If nothing else, at least allocate and store the result contiguously
     res = np.zeros((len(SUM_RULES), nmembers))
     integrands = SUM_RULES.values()
+    def integral(f, a, b, irep):
+        #We increase the limit to capture the log scale fluctuations
+        return integrate.quad(f, a, b, args=(lpdf, irep, Q),
+               limit=1000,
+               epsabs=1e-4, epsrel=1e-4)[0]
+
 
     for irep in range(nmembers):
         for r, f in enumerate(integrands):
-            #We increase the limit to capture the log scale fluctuations
-            res[r,irep] = integrate.quad(f, 0, 1, args=(lpdf, irep, Q),
-               limit=1000,
-               epsabs=1e-4, epsrel=1e-4)[0]
+            res[r,irep] =  (integral(f, 0, 1e-5, irep)  +
+               integral(f, 1e-5, 1e-3, irep) + integral(f,1e-3,1,irep))
     return SumRulesGrid(*res)
 
 @table
