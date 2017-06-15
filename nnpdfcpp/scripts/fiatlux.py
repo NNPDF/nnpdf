@@ -33,7 +33,7 @@ def main(nrep, fit_filename):
         oheader = open(dir + '/' + fitname_lux + '/' + fitname_lux + '.info', 'w')
         for line in header.readlines():
             if 'NumMembers' in line:
-                oheader.write('NumMembers: %d\n' % nrep)
+                oheader.write('NumMembers: %d\n' % nrep+1)
             elif 'Flavors' in line:
                 if not '22' in line:
                     oheader.write(line.replace(']', ', 22]'))
