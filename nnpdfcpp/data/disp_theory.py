@@ -45,7 +45,7 @@ try:
     except NameError: pass
     theoryID = int(input("Please select a table ID: "))
     if 0 <= theoryID <= len(rows):
-        os.system("wget http://pcteserver.mi.infn.it/~apfelcomb/commondatatheory/theory_%d.tgz" % theoryID)
+        os.system("wget http://cern.ch/nnpdf/tables/theory_%d.tgz" % theoryID)
         os.system("tar -xvzf theory_%d.tgz" % theoryID)
         os.system("rm theory_%d.tgz" % theoryID)
     else:
