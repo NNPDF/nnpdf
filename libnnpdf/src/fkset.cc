@@ -101,9 +101,6 @@ namespace NNPDF
 
       if (fFK[i]->GetNData() != fNDataFK)
         throw EvaluationError("FKSet::FKSet", "NData mismatch!");
-
-      if (fFK[i]->GetDataName().compare(fDataName) != 0)
-        throw EvaluationError("FKSet::FKSet", "Setname mismatch: " + fFK[i]->GetDataName() + "  " + fDataName);
     }
   };
 
