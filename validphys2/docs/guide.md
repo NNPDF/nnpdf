@@ -1354,56 +1354,82 @@ specify this behaviour explicitly.
 Uploading the result
 --------------------
 
+### Uploading to the server
+
 When the `--upload` flag is set, the contents of the output folder will be
 uploaded to the pcteserver, after validphys is done. An authorized ssh
-key and the `rsync` program are required in order to use this feature.
-A URL will be displayed from which the contents are publicly
-accessible.
+key and the `rsync` program are required to use this feature.
+A URL will be displayed from which the contents are
+accessible (currently password protected).
 
 Alternatively, there is the command `vp-upload <output-folder>`, which
 comes installed with validphys2. This works exactly the same as
 `--upload`, but you run it on an existing output.
 
-All the uploaded results are automatically indexed in the server. Some
-metadata (e.g. author, and title) will be obtained from an
-`index.html` file in the uploaded output folder. To automatically
-generate an `index.html` file from a `report` action, one may set the
-option `main:True` (alternatively there is the `out_filename` option,
-which may be used to specify the filename). In the template, use
-the [pandoc-maarkdown
-syntax](http://pandoc.org/MANUAL.html#metadata-blocks) to set the
-metadata at the top of the file. In the runcard you would write
-something like:
-```yaml
-template: mytemplate.md
-actions_:
-  -   - report:
-          main: True
-```
-and you would begin `mytemplate.md`, using YAML syntax,  like:
+### Metadata indexing
 
-```
----
-title: Testing the fit {@fit@}
-author: Zahari Kassabov
-keywords: [nnpdf31, nolhc]
-...
-```
+All the uploaded results are automatically indexed in the server. The
+metadata to index it is obtained from the following sources in order
+of priority:
 
-Note that you can use the report syntax to get the parameters from the
-runcard.
+  - A `meta.yaml` file in the top level folder of the report. It is
+    generated verbatim from a `meta` mapping in the yaml
+    configuration file. For example:
+    ```yaml
+    meta:
+        title: PDF comparisons
+        author: NNPDF Collaboration
+        keywords: [gallery]
+    ```
+    the keys are the same as in the [pandoc-markdown
+    syntax](http://pandoc.org/MANUAL.html#metadata-blocks), and this
+	metadata will also be used within the report (e.g. to set the
+	title and the author fields). This is the recommended option for
+	top level metadata.
 
-Finally, a `meta.yaml` file at the top level of the output, and with
-the same format as above will alsp be used to recover the metadata
-(with the highest priority for overlapping keys).
+  - An `index.html` file in the uploaded output folder. To automatically
+    generate an `index.html` file from a `report` action, one may set the
+    option `main:True` (alternatively there is the `out_filename` option,
+    which may be used to specify the filename). In the template, use
+    the [pandoc-markdown
+    syntax](http://pandoc.org/MANUAL.html#metadata-blocks) to set the
+    metadata at the top of the file. In the runcard you would write:
 
-The keywords are used for indexing, and some tags may be used to
-display the report in a promiment place in the index page. The source
-of the report index page is
+    ~~~yaml
+    template: mytemplate.md
+    actions_:
+      -   - report:
+              main: True
+    ~~~
+    and you would begin `mytemplate.md`, using YAML syntax,  like:
+    ```yaml
+    ---
+    title: Testing the fit {@fit@}
+    author: Zahari Kassabov
+    keywords: [nnpdf31, nolhc]
+    ...
+    ```
+    Note that you can use the report syntax to get the parameters from the
+    runcard. If you only want to set title or author, you can also
+	prefix the two first lines of the markdown templates with `%`:
+	```markdown
+	% Template title
+	% Myself, the template author
+
+	Content...
+	```
+	This is mostly useful for sub-reports not at the top level, in
+	more complicated documents.
+
+
+The keywords are used for indexing and filtering. It is important to
+set them properly, to aid the discoverability of the result. Some tags
+may be used to display the report in a prominent place in the index
+page. The source of the report index page is
 ```
 serverscripts/WEB/validphys-reports/index.html
 ```
-inside the validphys2 repository. This page can be edited to reflect
+inside the `validphys2` repository. This page can be edited to reflect
 the current interests (the Makefile directly uploads to the
 server). See [Web Scripts] in the [Developer Documentation] for more
 details.
