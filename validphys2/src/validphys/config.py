@@ -8,6 +8,7 @@ import logging
 import pathlib
 import functools
 import inspect
+from collections import Sequence, Mapping
 
 from  reportengine import configparser
 from reportengine.environment import Environment
@@ -348,3 +349,35 @@ class Config(report.Config):
 
     def produce_all_lumi_channels(self):
         return {'lumi_channels': self.parse_lumi_channels(list(LUMI_CHANNELS))}
+
+    def produce_matched_datasets_from_datasepcs(self, dataspecs):
+        """I am not sure what this does, honestly"""
+        if not isinstance(dataspecs, Sequence):
+            raise ConfigError("dataspecs should be a sequence of mappings, not "
+                              f"{type(dataspecs).__name__}")
+        all_names = []
+        for spec in dataspecs:
+            if not isinstance(spec, Mapping):
+                raise ConfigError("dataspecs should be a sequence of mappings, "
+                      f" but {spec} is {type(spec).__name__}")
+
+
+            with self.set_context(ns=self._curr_ns.new_child(spec)):
+                _, experiments = self.parse_from_(None, 'experiments', write=False)
+                names = {(e.name, ds.name):ds for e in experiments for ds in e.datasets}
+                all_names.append(names)
+        used_set = set.intersection(*(set(d) for d in all_names))
+
+        res = []
+        for k in used_set:
+            inres = {'experiment_name':k[0], 'dataset_name': k[1]}
+            #TODO: Should this have the same name?
+            l = inres['dataspecs'] = []
+            for ispec, spec in enumerate(dataspecs):
+                d = {
+                     **spec,
+                     'dataset': all_names[ispec][k],
+                    }
+                l.append(d)
+            res.append(inres)
+        return res
