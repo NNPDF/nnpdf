@@ -22,8 +22,8 @@ var HIGHLIGHT_TAG = 'gallery';
 
 $(document).ready(function() {
 	$.getJSON("index.json",
-    function(data){
-	  var data = data['data'];
+    function(json){
+	  var data = json['data'];
 	  var highlight_data = (filter_tag(data, HIGHLIGHT_TAG));
 
 	  $('#highlight').DataTable( {
@@ -44,7 +44,7 @@ $(document).ready(function() {
 					null
 		           ]
 	  } );
-	  $('#global').DataTable( {
+	  var global_table = $('#global').DataTable( {
 		"data": data,
 		"order": [[2, "desc"]],
 		"columns": [null,
@@ -59,7 +59,42 @@ $(document).ready(function() {
 					null
 		           ]
 	  } );
+	var ul = document.getElementById('taglist');
+	var keywords = json['keywords'];
+	keywords.forEach(function(tag){
+		var li = document.createElement('li');
+		var a = document.createElement('a');
+		a.appendChild(document.createTextNode(tag));
+		a.href='#';
+		a.onclick = function(event){
+			event.target;
+			document.getElementById("tagfilt").value=event.target.innerHTML;
+			global_table.draw();
+			return false;
+		}
+		li.appendChild(a);
+		ul.appendChild(li);
+	});
+	$.fn.dataTable.ext.search.push(
+		function(settings, dt, dataIndex){
+			var tag = $('#tagfilt').val();
+			if(tag){
+				//dt is only the displayed string, not the array of
+				//tags
+				//return dt[3].includes(tag);
+				return data[dataIndex][3].includes(tag);
+			}
+			return true;
+
+	}
+
+);
+
 	$('#global_wrapper .dataTables_filter input').focus();
+	document.getElementById("tagfilt").oninput = function(){
+		global_table.draw();
+	};
+
     }
     );
 
@@ -71,6 +106,7 @@ function filter_tag(data, tag){
 	});
 
 }
+
 
 
 </script>
@@ -90,6 +126,8 @@ function filter_tag(data, tag){
     </table>
 
 <h2>All reports</h2>
+<ul id="taglist"></ul>
+tag: <input id="tagfilt" name="tagfilt">
 
 <table id="global" class="display" width="100%" cellspacing="0">
         <thead>

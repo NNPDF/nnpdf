@@ -71,9 +71,17 @@ def register(p):
 
 def make_index(root_path, out):
     root_path = pathlib.Path(root_path)
+    data = []
+    keywords = set()
+    for p in root_path.iterdir():
+        if p.is_dir():
+            res = register(p)
+            data.append(res)
+            keywords.update(res[3])
+
     data = [register(p) for p in root_path.iterdir() if p.is_dir()]
     with open(out, 'w') as f:
-        json.dump({'data':data, }, f)
+        json.dump({'data':data, 'keywords':list(keywords)}, f)
 
 def main():
     make_index(ROOT, OUT)
