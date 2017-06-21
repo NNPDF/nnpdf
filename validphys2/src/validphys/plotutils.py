@@ -15,16 +15,6 @@ import matplotlib.patches as mpatches
 from matplotlib  import transforms
 from matplotlib.markers import MarkerStyle
 
-
-
-def setup_ax(ax):
-    """Change properties that are not correctly handled with styles.
-    Eventually this should be deprecated."""
-
-    ax.xaxis.set_ticks_position('bottom')
-    ax.yaxis.set_ticks_position('left')
-
-
 def ax_or_gca(f):
     @functools.wraps(f)
     def _f(*args, **kwargs):

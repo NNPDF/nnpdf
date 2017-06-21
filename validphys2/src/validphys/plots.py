@@ -141,7 +141,6 @@ def plot_fancy(one_or_more_results, dataset,
         min_vals = []
         max_vals = []
         fig, ax = plt.subplots()
-        plotutils.setup_ax(ax)
         ax.set_title("%s %s"%(info.dataset_label,
                      info.group_label(samefig_vals, info.figure_by)))
 
