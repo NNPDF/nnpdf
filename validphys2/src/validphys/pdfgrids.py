@@ -97,6 +97,9 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None, basis:(str, Basis)='flavo
     checked = _check_basis(basis, flavours)
     basis = checked['basis']
     flavours = checked['flavours']
+    if xgrid is None:
+        #Call the function that is shadowed
+        xgrid = globals()['xgrid']()
     if isinstance(xgrid, tuple) and len(xgrid)==2:
         scale, xgrid = xgrid
     elif isinstance(xgrid, np.ndarray):
