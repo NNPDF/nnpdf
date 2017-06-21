@@ -8,7 +8,7 @@ import logging
 import pathlib
 import functools
 import inspect
-from collections import Sequence, Mapping
+from collections import Sequence, Mapping, ChainMap
 
 from  reportengine import configparser
 from reportengine.environment import Environment
@@ -361,7 +361,6 @@ class Config(report.Config):
                 raise ConfigError("dataspecs should be a sequence of mappings, "
                       f" but {spec} is {type(spec).__name__}")
 
-
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, experiments = self.parse_from_(None, 'experiments', write=False)
                 names = {(e.name, ds.name):ds for e in experiments for ds in e.datasets}
@@ -374,10 +373,8 @@ class Config(report.Config):
             #TODO: Should this have the same name?
             l = inres['dataspecs'] = []
             for ispec, spec in enumerate(dataspecs):
-                d = {
-                     **spec,
-                     'dataset': all_names[ispec][k],
-                    }
+                #Passing spec by referene
+                d = ChainMap({'dataset': all_names[ispec][k]}, spec)
                 l.append(d)
             res.append(inres)
         return res
