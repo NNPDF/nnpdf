@@ -585,7 +585,7 @@ real EvolFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &sta
  * @brief LuxBasis::LuxBasis
  */
 LuxBasis::LuxBasis(NNPDFSettings const& nnset, int const& replica):
-  FitBasis(nnset, "LuxBasis", 7),
+  FitBasis(nnset, "LuxBasis", 8),
   fQ0(stod(nnset.GetTheory(APFEL::kQ0)))
 {
   // photon from t0
@@ -599,6 +599,7 @@ LuxBasis::LuxBasis(NNPDFSettings const& nnset, int const& replica):
   fPDFNames[FIT_V8] = "V8";
   fPDFNames[FIT_T3] = "T3";
   fPDFNames[FIT_T8] = "T8";
+  fPDFNames[FIT_CP] = "c+";
 
   // Damping factor for arclengths
   fArcDampFactor[FIT_SNG] = 1;
@@ -608,6 +609,7 @@ LuxBasis::LuxBasis(NNPDFSettings const& nnset, int const& replica):
   fArcDampFactor[FIT_V8] = 0;
   fArcDampFactor[FIT_T3] = 1;
   fArcDampFactor[FIT_T8] = 1;
+  fArcDampFactor[FIT_CP] = 1;
 }
 
 /**
@@ -629,12 +631,12 @@ void LuxBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
   EVLN[EVLN_VAL]  = FIT[FIT_VAL]; //Valence
   EVLN[EVLN_V3]   = FIT[FIT_V3];  //V3
   EVLN[EVLN_V8]   = FIT[FIT_V8];  //V8
-  EVLN[EVLN_V15]  = FIT[FIT_VAL]; //V15 = V
+  EVLN[EVLN_V15]  = FIT[FIT_VAL]; //V15 = V (c- = 0)
   EVLN[EVLN_V24]  = FIT[FIT_VAL]; //V24 = V
   EVLN[EVLN_V35]  = FIT[FIT_VAL]; //V35 = V
   EVLN[EVLN_T3]   = FIT[FIT_T3];  //T3
   EVLN[EVLN_T8]   = FIT[FIT_T8];  //T8
-  EVLN[EVLN_T15]  = FIT[FIT_SNG]; //T15 = S
+  EVLN[EVLN_T15]  = FIT[FIT_SNG] - 4*FIT[FIT_CP]; //T15
   EVLN[EVLN_T24]  = FIT[FIT_SNG]; //T24 = S
   EVLN[EVLN_T35]  = FIT[FIT_SNG]; //T35 = S
 }
@@ -645,7 +647,7 @@ void LuxBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
 void LuxBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
 {
   // Order in fitting basis
-  // S g V V3 V8 T3 T8 gam
+  // S g V V3 V8 T3 T8 c+ gam
 
   // Order in Evln bassi
   // γ, Σ, g, V, V3, V8, V15, V24, V35, T3, T8, T15, T24, T35
@@ -657,6 +659,7 @@ void LuxBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
   FIT[FIT_V8]   = EVLN[EVLN_V8];  //V8
   FIT[FIT_T3]   = EVLN[EVLN_T3];  //T3
   FIT[FIT_T8]   = EVLN[EVLN_T8];  //T8
+  FIT[FIT_CP]   = (EVLN[EVLN_SNG]-EVLN[EVLN_T15])/4;  // T15
   FIT[FIT_GAM]  = EVLN[EVLN_GAM]; //photon
 }
 
@@ -711,7 +714,8 @@ real LuxBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &status)
          real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
          real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
          real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         return ( 2.0*val + 3.0*v3 + v8 )/6.0;
+         real v15 = val;
+         return ( 3.0*val + 6.0*v3 + 2.0*v8 + v15 )/12.0;
        }
        break;
      case SUM_DVL:
@@ -719,41 +723,62 @@ real LuxBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &status)
          real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
          real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
          real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         return ( 2.0*val - 3.0*v3 + v8 )/6.0;
+         real v15 = val;
+         return ( 3.0*val - 6.0*v3 + 2.0*v8 + v15 )/12.0;
        }
        break;
      case SUM_SVL:
        {
          real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
          real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         return ( val - v8 )/3.0;
+         real v15 = val;
+         return ( 3.0*val - 4.0*v8 + v15 )/12.0;
        }
-        break;
+       break;
+      case SUM_CVL:
+       {
+         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+         real v15 = val;
+         return ( val - v15 )/4.0;
+       }
+       break;
      case SUM_USM:
        {
          real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
          real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
          real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         return ( 2.0*sng + 3.0*t3 + t8 )/6.0;
-       }
+         real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
+         real t15 = sng-4*cp;
+         return ( 3.0*sng + 6.0*t3 + 2.0*t8 + t15 )/12.0;
+      }
        break;
      case SUM_DSM:
        {
          real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
          real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
          real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         return ( 2.0*sng - 3.0*t3 + t8 )/6.0;
+         real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
+         real t15 = sng-4*cp;
+         return ( 3.0*sng - 6.0*t3 + 2.0*t8 + t15)/12.0;
        }
        break;
      case SUM_SSM:
        {
          real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
          real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         return ( sng - t8 )/3.0;
+         real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
+         real t15 = sng-4*cp;
+         return ( 3.0*sng - 4.0*t8 + t15)/12.0;
        }
        break;
+     case SUM_CSM:
+       {
+        real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
+        return cp;
+       }
+      break;
      default:
-       cerr << "EvolFitBasis::ComputeSumRules error: unknown sum rule"<<endl;
+       cerr << "LuxBasis::ComputeSumRules error: unknown sum rule"<<endl;
        exit(-1);
        break;
   }
@@ -1757,6 +1782,7 @@ real NN31ICFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &s
         real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
         return cp;
       }
+      break;
      default:
        cerr << "NN31ICFitBasis::ComputeSumRules error: unknown sum rule"<<endl;
        exit(-1);

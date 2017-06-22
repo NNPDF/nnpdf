@@ -38,7 +38,7 @@ static const vector< vector<string> > basiselem = { {},
                                      {"sng","g","v","t3","ds","sp","sm","cp"},     //NN30IC
                                      {"sng","g","v","v3","v8","t3","t8","t15"},    //EVOLIC
                                      {"sng","g","v","v3","v8","t3","t8","cp"},     //NN31IC
-                                     {"sng","g","v","v3","v8","t3","t8"}           //LUX
+                                     {"sng","g","v","v3","v8","t3","t8","cp"}      //LUX
                                      };
 
 /* Convert string to enum */
@@ -603,7 +603,7 @@ bool NNPDFSettings::IsQED() const
 bool NNPDFSettings::IsIC() const
 {
   const basisType isic = NNPDFSettings::getFitBasisType(Get("fitting","fitbasis").as<string>());
-  if (isic == BASIS_EVOLIC || isic == BASIS_NN30IC || isic == BASIS_NN31IC)
+  if (isic == BASIS_EVOLIC || isic == BASIS_NN30IC || isic == BASIS_NN31IC || isic == BASIS_LUX)
     return true;
   return false;
 }

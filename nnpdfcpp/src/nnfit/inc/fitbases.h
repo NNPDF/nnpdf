@@ -122,7 +122,7 @@ public:
   LuxBasis(NNPDFSettings const&set, int const& replica);
   ~LuxBasis();
 
-  enum fitBasis {FIT_SNG, FIT_GLU, FIT_VAL, FIT_V3, FIT_V8, FIT_T3, FIT_T8, FIT_GAM };
+  enum fitBasis { FIT_SNG, FIT_GLU, FIT_VAL, FIT_V3, FIT_V8, FIT_T3, FIT_T8, FIT_CP, FIT_GAM };
 
   void BASIS2EVLN(real const* basis, real* evln) const;
   void EVLN2BASIS(real const* evln, real* basis) const;
