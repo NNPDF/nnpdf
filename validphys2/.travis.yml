@@ -39,6 +39,6 @@ install:
       conda install --yes conda-build
 
 script:
-    - ./.ciscripts/build-deploy2.sh conda-recipe
+    - travis_wait 30 ./.ciscripts/build-deploy2.sh conda-recipe
 
 
