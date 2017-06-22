@@ -68,7 +68,10 @@ $(document).ready(function() {
 		a.href='#';
 		a.onclick = function(event){
 			event.target;
-			document.getElementById("tagfilt").value=event.target.innerHTML;
+			var filt = document.getElementById("tagfilt")
+			filt.value=event.target.innerHTML;
+			filt.focus();
+			filt.select();
 			global_table.draw();
 			return false;
 		}
