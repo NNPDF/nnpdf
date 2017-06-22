@@ -369,7 +369,7 @@ int main(int argc, char **argv)
   lhaout << endl;
 
   // 2 nodes to make LHAPDF happy
-  lhaout << q << " " << q+1e-5 << endl;
+  lhaout << q << " " << q+1e-2 << endl;
 
   for (int i = -nf; i <= nf+1; i++)
     if (i == 0) lhaout << 21 << " ";
