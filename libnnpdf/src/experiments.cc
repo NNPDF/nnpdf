@@ -522,7 +522,9 @@ vector<Experiment*> pseudodata(vector<Experiment*> const& exps,
                                int replica)
 {
   // make a copy of the experiments
-  auto output = exps;
+  vector<Experiment*> output(exps.size());
+  for (size_t i = 0; i < output.size(); i++)
+    output[i] = new Experiment(*exps[i]);
 
   // select the appropriate random seed, using dataseed
   // as initial condition and replica for the filtering selection
