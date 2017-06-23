@@ -517,9 +517,9 @@ void Experiment::ExportSqrtCov(string filename)
 }
 
 //___________________________________________________
-vector<Experiment> pseudodata(vector<Experiment*> const& exps,
-                               unsigned long int dataseed,
-                               int replica)
+vector<Experiment> NNPDF::pseudodata(vector<Experiment*> const& exps,
+				     unsigned long int dataseed,
+				     int replica)
 {
   // make a copy of the experiments
   vector<Experiment> output;
