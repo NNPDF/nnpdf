@@ -517,14 +517,15 @@ void Experiment::ExportSqrtCov(string filename)
 }
 
 //___________________________________________________
-vector<Experiment*> pseudodata(vector<Experiment*> const& exps,
+vector<Experiment> pseudodata(vector<Experiment*> const& exps,
                                unsigned long int dataseed,
                                int replica)
 {
   // make a copy of the experiments
-  vector<Experiment*> output(exps.size());
+  vector<Experiment> output;
+  output.reserve(exps.size());
   for (size_t i = 0; i < output.size(); i++)
-    output[i] = new Experiment(*exps[i]);
+    output.emplace_back(*exps[i]);
 
   // select the appropriate random seed, using dataseed
   // as initial condition and replica for the filtering selection
@@ -538,13 +539,13 @@ vector<Experiment*> pseudodata(vector<Experiment*> const& exps,
   for (size_t e = 0; e < output.size(); e++)
     {
       // take exps and MakeReplica
-      output[e]->MakeReplica();
+      output[e].MakeReplica();
 
       // keep rng flow in sync with nnfit by calling tr/val random seed shuffle
-      for (int s = 0; s < output[e]->GetNSet(); s++)
+      for (int s = 0; s < output[e].GetNSet(); s++)
         {
           // Creating Masks
-          const DataSet& set = output[e]->GetSet(s);
+          const DataSet& set = output[e].GetSet(s);
           vector<int> mask(set.GetNData());
           std::iota(mask.begin(), mask.end(), 0);
           RandomGenerator::GetRNG()->ShuffleVector(mask);

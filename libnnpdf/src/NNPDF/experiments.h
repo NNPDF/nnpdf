@@ -95,8 +95,8 @@ namespace NNPDF
    * @brief pseudodata Returns the artificial data replica
    * used by nnfit for a given data seed and replica number.
    */
-  std::vector<Experiment*> pseudodata(std::vector<Experiment*> const& exps,
-                                      unsigned long int dataseed,
-                                      int replica_id);
+  std::vector<Experiment> pseudodata(std::vector<Experiment*> const& exps,
+                                     unsigned long int dataseed,
+                                     int replica_id);
 
 }
