@@ -47,6 +47,7 @@ $(document).ready(function() {
 	  var global_table = $('#global').DataTable( {
 		"data": data,
 		"order": [[2, "desc"]],
+		"dom": 'frtipl',
 		"columns": [null,
 		            null,
 					{"render":
@@ -130,7 +131,7 @@ function filter_tag(data, tag){
 
 <h2>All reports</h2>
 <ul id="taglist"></ul>
-tag: <input id="tagfilt" name="tagfilt">
+<label>tag: <input id="tagfilt" name="tagfilt"></label>
 
 <table id="global" class="display" width="100%" cellspacing="0">
         <thead>
