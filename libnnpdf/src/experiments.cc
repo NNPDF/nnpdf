@@ -515,3 +515,40 @@ void Experiment::ExportSqrtCov(string filename)
   outCovMat.close();
   return;
 }
+
+//___________________________________________________
+vector<Experiment*> pseudodata(vector<Experiment*> const& exps,
+                               unsigned long int dataseed,
+                               int replica)
+{
+  // make a copy of the experiments
+  auto output = exps;
+
+  // select the appropriate random seed, using dataseed
+  // as initial condition and replica for the filtering selection
+  unsigned long int seed = 0;
+  RandomGenerator::GetRNG()->SetSeed(dataseed);
+  for (int i = 0; i < replica; i++)
+    seed = RandomGenerator::GetRNG()->GetRandomInt();
+  RandomGenerator::GetRNG()->SetSeed(seed);
+
+  // loop over experiments
+  for (size_t e = 0; e < output.size(); e++)
+    {
+      // take exps and MakeReplica
+      output[e]->MakeReplica();
+
+      // keep rng flow in sync with nnfit by calling tr/val random seed shuffle
+      for (int s = 0; s < output[e]->GetNSet(); s++)
+        {
+          // Creating Masks
+          const DataSet& set = output[e]->GetSet(s);
+          vector<int> mask(set.GetNData());
+          std::iota(mask.begin(), mask.end(), 0);
+          RandomGenerator::GetRNG()->ShuffleVector(mask);
+        }
+    }
+
+  return output;
+}
+
