@@ -24,7 +24,7 @@
 #include "NNPDF/exceptions.h"
 
 using namespace std;
-using namespace NNPDF;
+namespace NNPDF{
 
 /**
   * Constructor
@@ -517,7 +517,7 @@ void Experiment::ExportSqrtCov(string filename)
 }
 
 //___________________________________________________
-vector<Experiment> NNPDF::pseudodata(vector<Experiment*> const& exps,
+vector<Experiment> pseudodata(vector<Experiment*> const& exps,
 				     unsigned long int dataseed,
 				     int replica)
 {
@@ -555,3 +555,4 @@ vector<Experiment> NNPDF::pseudodata(vector<Experiment*> const& exps,
   return output;
 }
 
+} // namespace: NNPDF
