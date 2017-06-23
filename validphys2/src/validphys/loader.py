@@ -20,10 +20,10 @@ import yaml
 import requests
 
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
-                            PositivitySetSpec, DataSetSpec, PDF, Cuts)
+                            PositivitySetSpec, DataSetSpec, PDF, Cuts,
+                            peek_commondata_metadata)
 from validphys import lhaindex
 
-from validphys.plotoptions import peek_commondata_process_type
 
 log = logging.getLogger(__name__)
 
@@ -115,8 +115,8 @@ class Loader(LoaderBase):
         plotfiles = []
 
 
-        process_type = peek_commondata_process_type(datafile)
-        process_plotting_root = self.commondata_folder/f'PLOTTINGTYPE_{process_type}'
+        metadata = peek_commondata_metadata(datafile)
+        process_plotting_root = self.commondata_folder/f'PLOTTINGTYPE_{metadata.process_type}'
         type_plotting = (process_plotting_root.with_suffix('.yml'),
                          process_plotting_root.with_suffix('.yaml'),)
 
@@ -131,7 +131,7 @@ class Loader(LoaderBase):
                 if p.exists():
                     plotfiles.append(p)
 
-        return CommonDataSpec(datafile, sysfile, plotfiles, name=setname, process_type=process_type)
+        return CommonDataSpec(datafile, sysfile, plotfiles, name=setname, metadata=metadata)
 
     @functools.lru_cache()
     def check_theoryID(self, theoryID):

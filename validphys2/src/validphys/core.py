@@ -180,26 +180,74 @@ class PDF(TupleComp):
         raise NotImplementedError("Error type for %s: '%s' is not implemented" %
                                   (self.name, error))
 
+
+kinlabels_latex = CommonData.kinLabel_latex.asdict()
+_kinlabels_keys = sorted(kinlabels_latex, key=len, reverse=True)
+
+
+
+def get_plot_kinlabels(commondata):
+    """Return the LaTex kinematic labels for a given Commondata"""
+    key = commondata.process_type
+
+    return kinlabels_latex[key]
+
+def get_kinlabel_key(process_label):
+    #Since there is no 1:1 correspondence between latex keys and GetProc,
+    #we match the longest key such that the proc label starts with it.
+    l = process_label
+    try:
+        return next(k for k in _kinlabels_keys if l.startswith(k))
+    except StopIteration as e:
+        raise ValueError("Could not find a set of kinematic "
+                         "variables matching  the process %s Check the "
+                         "labels defined in commondata.cc. " % (l)) from e
+
+CommonDataMetadata = namedtuple('CommonDataMetadata', ('name', 'nsys', 'ndata', 'process_type'))
+
+def peek_commondata_metadata(commondatafilename):
+    """Check some basic properties commondata object without going though the
+    trouble of processing it on the C++ side"""
+    with open(commondatafilename) as f:
+        try:
+            l = f.readline()
+            name, nsys_str, ndata_str = l.split()
+            l = f.readline()
+            process_type_str = l.split()[1]
+        except Exception:
+            log.error(f"Error processing {commondatafilename}")
+            raise
+
+    return CommonDataMetadata(name, int(nsys_str), int(ndata_str),
+                              get_kinlabel_key(process_type_str))
+
+
 class CommonDataSpec(TupleComp):
-    def __init__(self, datafile, sysfile, plotfiles, name=None, process_type=None):
+    def __init__(self, datafile, sysfile, plotfiles, name=None, metadata=None):
         self.datafile = datafile
         self.sysfile = sysfile
         self.plotfiles = tuple(plotfiles)
         self._name=name
-        self._process_type = process_type
+        self._metadata = metadata
         super().__init__(datafile, sysfile, self.plotfiles)
 
     @property
     def name(self):
-        if self._name is None:
-            self._name = self.load().GetSetName()
-        return self._name
+        return self.metadata.name
+
+    @property
+    def ndata(self):
+        return self.metadata.ndata
 
     @property
     def process_type(self):
-        if self._process_type is None:
-            self._process_type = self._process_type = self.load().GetProc(0)
-        return self._process_type
+        return self.metadata.process_type
+
+    @property
+    def metadata(self):
+        if self._metadata is None:
+            self._metadata = peek_commondata_metadata(self.datafile)
+        return self._metadata
 
     def __str__(self):
         return self.name
@@ -211,6 +259,10 @@ class CommonDataSpec(TupleComp):
     def load(self)->CommonData:
         #TODO: Use better path handling in python 3.6
         return CommonData.ReadFile(str(self.datafile), str(self.sysfile))
+
+    @property
+    def plot_kinlabels(self):
+        return get_plot_kinlabels(self)
 
 
 class DataSetInput(TupleComp):

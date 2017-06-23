@@ -12,7 +12,6 @@ import pandas as pd
 
 from reportengine.configparser import Config, ConfigError, named_element_of
 from reportengine.utils import get_functions, ChainMap
-from NNPDF import CommonData
 
 from validphys.core import CommonDataSpec, DataSetSpec, Cuts
 from validphys.plotoptions.utils import apply_to_all_columns, get_subclasses
@@ -25,38 +24,6 @@ default_labels = ('idat', 'k1', 'k2', 'k3')
 labeler_functions = get_functions(labelers)
 transform_functions = get_subclasses(kintransforms, kintransforms.Kintransform)
 result_functions = get_functions(resulttransforms)
-
-
-kinlabels_latex = CommonData.kinLabel_latex.asdict()
-_kinlabels_keys = sorted(kinlabels_latex, key=len, reverse=True)
-
-
-
-def get_plot_kinlabels(commondata):
-    """Return the LaTex kinematic labels for a given Commondata"""
-    key = commondata.process_type
-
-    return kinlabels_latex[key]
-
-def get_kinlabel_key(process_label):
-    #Since there is no 1:1 correspondence between latex keys and GetProc,
-    #we match the longest key such that the proc label starts with it.
-    l = process_label
-    try:
-        return next(k for k in _kinlabels_keys if l.startswith(k))
-    except StopIteration as e:
-        raise ValueError("Could not find a set of kinematic "
-                         "variables matching  the process %s Check the "
-                         "labels defined in commondata.cc. " % (l)) from e
-
-def peek_commondata_process_type(commondatafilename):
-    """Check the process type of a commondata object without going though the
-    trouble of processing it on the C++ side"""
-    with open(commondatafilename) as f:
-        f.readline()
-        l = f.readline()
-    process_type = l.split('\t')[1]
-    return get_kinlabel_key(process_type)
 
 
 def get_info(data, *, normalize=False, cuts=None, use_plotfiles=True):
@@ -159,7 +126,7 @@ class PlotInfo:
         if commondata.plotfiles:
             for file in commondata.plotfiles:
                 with open(file) as f:
-                    config = PlotConfigParser.from_yaml(f, commondata.load(), cuts=cuts)
+                    config = PlotConfigParser.from_yaml(f, commondata, cuts=cuts)
                 try:
                     config_params = config.process_all_params()
                 except ConfigError:
@@ -172,12 +139,12 @@ class PlotInfo:
                 plot_params = plot_params.new_child(config_params['normalize'])
             if not 'dataset_label' in plot_params:
                 log.warn("'dataset_label' key not found in %s", file)
-                plot_params['dataset_label'] = commondata.load().GetSetName()
+                plot_params['dataset_label'] = commondata.name
 
         else:
-            plot_params = {'dataset_label':commondata.load().GetSetName()}
+            plot_params = {'dataset_label':commondata.name}
 
-        kinlabels = get_plot_kinlabels(commondata)
+        kinlabels = commondata.plot_kinlabels
         if 'kinematics_override' in plot_params:
             kinlabels = plot_params['kinematics_override'].new_labels(*kinlabels)
 
@@ -188,6 +155,8 @@ class PlotConfigParser(Config):
 
     allowed_keys = {'normalize':dict}
 
+
+    #TODO: Remove any reference to cuts from here entirely
     def __init__(self, input_params ,commondata, cuts=None, **kwargs):
         self.commondata = commondata
         self.cuts = cuts
@@ -201,11 +170,11 @@ class PlotConfigParser(Config):
 
     @named_element_of('extra_labels')
     def parse_label(self, elems:list):
-
-        if len(elems) != len(self.commondata):
+        ndata = self.commondata.ndata
+        if len(elems) != ndata:
             raise ConfigError("The number of elements in %s (%d) must be the same as "
                               "the number of points in the CommonData (%d)" %
-                              (elems, len(elems), len(self.commondata)))
+                              (elems, len(elems), (ndata)))
         if self.cuts is not None:
             elems = [elems[c] for c in self.cuts]
         return elems
