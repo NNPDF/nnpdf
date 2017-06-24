@@ -34,6 +34,9 @@
 %ignore std::vector<NNPDF::ThPredictions>::resize;
 %template (vector_thpredictions) std::vector<NNPDF::ThPredictions>;
 
+
+%template (vector_experiment_pointer) std::vector<NNPDF::Experiment*>;
+
 %apply (double** ARGOUTVIEWM_ARRAY2, int* DIM1, int* DIM2) {(double** datamat, int* n, int* m)}
 %apply (double** ARGOUTVIEWM_ARRAY1, int* DIM1) {(double** cv, int* n)}
 

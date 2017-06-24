@@ -517,40 +517,37 @@ void Experiment::ExportSqrtCov(string filename)
 }
 
 //___________________________________________________
-vector<Experiment> pseudodata(vector<Experiment*> const& exps,
-				     unsigned long int dataseed,
-				     int replica)
+vector<Experiment *> pseudodata(vector<Experiment *> const &exps,
+                                unsigned long int dataseed, int replica)
 {
   // make a copy of the experiments
-  vector<Experiment> output;
+  vector<Experiment *> output;
   output.reserve(exps.size());
-  for (size_t i = 0; i < output.size(); i++)
-    output.emplace_back(*exps[i]);
+  for (auto &e : exps) {
+    output.emplace_back(new Experiment(*e));
+  }
 
   // select the appropriate random seed, using dataseed
   // as initial condition and replica for the filtering selection
   unsigned long int seed = 0;
   RandomGenerator::GetRNG()->SetSeed(dataseed);
-  for (int i = 0; i < replica; i++)
+  for (int i = 0; i < replica; i++) {
     seed = RandomGenerator::GetRNG()->GetRandomInt();
+  }
   RandomGenerator::GetRNG()->SetSeed(seed);
+  for (auto e : output)
+  {
+    // take exps and MakeReplica
+    e->MakeReplica();
 
-  // loop over experiments
-  for (size_t e = 0; e < output.size(); e++)
-    {
-      // take exps and MakeReplica
-      output[e].MakeReplica();
-
-      // keep rng flow in sync with nnfit by calling tr/val random seed shuffle
-      for (int s = 0; s < output[e].GetNSet(); s++)
-        {
-          // Creating Masks
-          const DataSet& set = output[e].GetSet(s);
-          vector<int> mask(set.GetNData());
-          std::iota(mask.begin(), mask.end(), 0);
-          RandomGenerator::GetRNG()->ShuffleVector(mask);
-        }
+    // keep rng flow in sync with nnfit by calling tr/val random seed shuffle
+    for (auto &set : e->DataSets()) {
+      // Creating Masks
+      vector<int> mask(set.GetNData());
+      std::iota(mask.begin(), mask.end(), 0);
+      RandomGenerator::GetRNG()->ShuffleVector(mask);
     }
+  }
 
   return output;
 }

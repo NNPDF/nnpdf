@@ -35,6 +35,8 @@ namespace NNPDF
 
     int GetNSet() const {return (int) fSets.size();}    //!< Return the number of sets in the experiment
     DataSet const&  GetSet(int i)   const {return fSets[i];}        //!< Return the ith DataSet  
+    std::vector<DataSet> const&  DataSets() const {return fSets;}        //!< Return a reference to the vector of DataSets.
+
     std::string const& GetExpName() const {return fExpName;}        //!< Return the experiment name
     std::string const& GetSetName(int i) const;
     
@@ -94,8 +96,10 @@ namespace NNPDF
   /**
    * @brief pseudodata Returns the artificial data replica
    * used by nnfit for a given data seed and replica number.
+   *
+   * Note that the user is responsable to destroy the objects.
    */
-  std::vector<Experiment> pseudodata(std::vector<Experiment*> const& exps,
+  std::vector<Experiment*> pseudodata(std::vector<Experiment*> const& exps,
                                      unsigned long int dataseed,
                                      int replica_id);
 
