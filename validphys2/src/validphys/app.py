@@ -25,6 +25,7 @@ providers = [
              'validphys.pdfgrids',
              'validphys.kinematics',
              'validphys.correlations',
+             'validphys.paramfits',
              'reportengine.report'
             ]
 
