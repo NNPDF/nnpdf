@@ -232,6 +232,14 @@ def fitted_replica_indexes(pdf):
 fits_replica_indexes =  collect('fitted_replica_indexes', ('fits','fitpdf'))
 
 def fits_replica_data_correlated(fits_replica_data, fits_replica_indexes, fits):
+    """Return a table with the same columns as ``replica_data`` indexed by the
+    replica fit ID. For identical fits,
+    the values across rows should be the same.
+
+    If some replica ID is not present for a given fit (e.g. discarded by
+    postfit), the corresponding entries in the table will be null.
+
+    """
     dfs = []
     for dt, inds in zip(fits_replica_data, fits_replica_indexes):
         dfs.append(pd.DataFrame(dt, columns=FitInfo._fields, index=inds))
