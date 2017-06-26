@@ -257,7 +257,7 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
 
 @figure
 def plot_experiments_chi2(experiments, experiments_chi2):
-    """Return a plot with the chi² of all the experiments"""
+    """Plot the chi² of all experiments with bars."""
     exchi2 = []
     xticks = []
     for experiment, expres in zip(experiments, experiments_chi2):
@@ -269,7 +269,7 @@ def plot_experiments_chi2(experiments, experiments_chi2):
 
 @figure
 def plot_datasets_chi2(experiments, experiments_chi2,each_dataset_chi2):
-    """Return a plot with the chi² of all the datasets"""
+    """Plot the chi² of all datasets with bars."""
     ds = iter(each_dataset_chi2)
     dschi2 = []
     xticks = []
@@ -297,6 +297,8 @@ def _plot_chis_df(df):
 
 @figure
 def plot_fits_datasets_chi2(fits_datasets_chi2_table):
+    """Generate a plot equivalent to ``plot_datasets_chi2`` using all the
+    fitted datasets as input."""
     ind = fits_datasets_chi2_table.index.droplevel(0)
     fig, ax = _plot_chis_df(fits_datasets_chi2_table.set_index(ind))
     ax.set_title(r"$\chi^2$ for datasets")
@@ -304,6 +306,8 @@ def plot_fits_datasets_chi2(fits_datasets_chi2_table):
 
 @figure
 def plot_fits_experiments_chi2(fits_experiments_chi2_table):
+    """Generate a plot equivalent to ``plot_experiments_chi2`` using all the
+    fitted experiments as input."""
     fig, ax = _plot_chis_df(fits_experiments_chi2_table)
     ax.set_title(r"$\chi^2$ for experiments")
     return fig
