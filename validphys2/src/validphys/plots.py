@@ -252,7 +252,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
                              textcoords='offset points', zorder=10000)
 
         #TODO: Catch this earlier
-        if not anyline:
+        if anyline:
             if info.x_scale:
                 ax.set_xscale(info.x_scale)
 
