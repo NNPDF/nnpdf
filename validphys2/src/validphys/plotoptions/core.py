@@ -34,20 +34,27 @@ def get_info(data, *, normalize=False, cuts=None, use_plotfiles=True):
     used to retrieve the infromation. Otherwise the default configuration
     (which depends of the process type) will be used.
 
-    The cuts will be used if a
-    commondata object is passed, otherwise setting them results in an error.
+    If cuts is None, the cuts of the dataset will be used, but no cuts for
+    commondata.
+
+    If cuts is False, no cuts will be used.
+
+    If cuts is an instance of Cuts, it will be used.
 
     If normalize is True, the specialization for ratio plots will be used to
     generate the PlotInfo objects.
     """
+    if cuts is None:
+        if isinstance(data, DataSetSpec):
+            cuts = data.cuts.load() if data.cuts else None
+    elif isinstance(cuts, Cuts):
+        cuts = cuts.load()
+    elif not cuts:
+        cuts = None
+
     if isinstance(data, DataSetSpec):
-        assert cuts is None, "Cuts are ignored"
-        cuts = data.cuts.load() if data.cuts else None
         data = data.commondata
-    elif isinstance(data, CommonDataSpec):
-        if isinstance(cuts, Cuts):
-            cuts=cuts.load()
-    else:
+    if not isinstance(data, CommonDataSpec):
         raise TypeError("Unrecognized data type: %s" % type(data) )
 
     info = PlotInfo.from_commondata(data, cuts=cuts, normalize=normalize)

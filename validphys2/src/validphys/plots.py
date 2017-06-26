@@ -22,7 +22,7 @@ import scipy.stats as stats
 from reportengine.figure import figure, figuregen
 from reportengine.checks import make_check, CheckError, make_argcheck
 
-from validphys.core import MCStats
+from validphys.core import MCStats, cut_mask
 from validphys.results import chi2_stat_labels
 from validphys.plotoptions import get_info, kitable, transform_result
 from validphys.checks import check_scale
@@ -84,47 +84,75 @@ def _check_normalize_to(ns, **kwargs):
 
     raise RuntimeError("Should not be here")
 
+#TODO: This interface is horrible. We need to think how to adapt libnnpdf
+#to make this use case easier
+def _plot_fancy_impl(results, commondata, cutlist,
+               normalize_to:(int,type(None)) = None, labellist=None):
 
-@_check_normalize_to
-@figuregen
-def plot_fancy(one_or_more_results, dataset,
-               normalize_to:(int,str,type(None)) = None):
+    """Implementation of the data-theory comparison plots. Providers are
+    supposed to call (yield from) this.
+
+
+    Parameters
+    -----------
+    results : list
+        A list of results, where the first one is a data result and the
+        subsequent ones are theory predictions.
+    commondata : ``CommonDataSpec``
+        The specification corresponfing to the commondata to be plotted.
+    cutlist : list
+        The list of ``CutSpecs`` or ``None`` corresponding to the cuts for each
+        result.
+    normalize_to : int or None
+        The index of the result to which ratios will be computed. If ``None``,
+        plot absolute values.
+    labellist : list or None
+        The labesl that will appear in the plot. They sill be deduced
+        (from the PDF names) if None is given.
+
+    Returns
+    -------
+    A generator over figures.
     """
-    Read the PLOTTING configuration for the dataset and generate the
-    corrspondig data theory plot.
-
-    The input results are assumed to be such that the first one is the data,
-    and the subsequent ones are the predictions for the PDFfs. See
-    ``one_or_more_results``. The labelling of the predictions can be
-    influenced by setting ``label`` attribute of theories and pdfs.
-
-    normalize_to: should be either 'data', a pdf id or an index of the
-    result (0 for the data, and i for the ith pdf). None means plotting
-    absolute values.
-
-    See docs/plotting_format.md for details on the format of the PLOTTING
-    files.
-    """
 
 
-    results = one_or_more_results
+    info = get_info(commondata, normalize=(normalize_to is not None))
 
-    info = get_info(dataset, normalize=(normalize_to is not None))
-
-    table = kitable(dataset, info)
+    table = kitable(commondata, info)
     nkinlabels = len(table.columns)
+    ndata = len(table)
+
+    #This is easier than cheking every time
+    if labellist is None:
+        labellist = [None]*len(results)
 
     if normalize_to is not None:
         norm_result = results[normalize_to]
+        mask = cut_mask(cutlist[normalize_to])
+        cv = np.full(ndata, np.nan)
+        cv[mask] = norm_result.central_value
+
+        err = np.full(ndata, np.nan)
+        err[mask] =  norm_result.std_error
         #We modify the table, so we pass only the label columns
-        norm_cv, _ = transform_result(norm_result.central_value,
-                                   norm_result.std_error,
+        norm_cv, _ = transform_result(cv,
+                                   err,
                                    table.iloc[:,:nkinlabels], info)
 
-    for i,result in enumerate(results):
+    for i,(result, cuts) in enumerate(zip(results, cutlist)):
         #We modify the table, so we pass only the label columns
-        cv, err = transform_result(result.central_value, result.std_error,
+        mask = cut_mask(cuts)
+        cv = np.full(ndata, np.nan)
+        cv[mask] = result.central_value
+        err = np.full(ndata, np.nan)
+        err[mask] = result.std_error
+
+        cv, err = transform_result(cv, err,
                                    table.iloc[:,:nkinlabels], info)
+
+
+        table_err = np.full(ndata, np.nan)
+        table_err[mask] = err
         #By doing tuple keys we avoid all possible name collisions
         if normalize_to is None:
             table[('cv', i)] = cv
@@ -147,6 +175,7 @@ def plot_fancy(one_or_more_results, dataset,
         lineby = sane_groupby_iter(fig_data, info.line_by)
 
         first = True
+        anyline = False
 
 
         for (sameline_vals, line_data) in lineby:
@@ -178,21 +207,17 @@ def plot_fancy(one_or_more_results, dataset,
             #and follow the cycle for
             #the rest.
             color = '#262626'
-            for i, res in enumerate(results):
+            for i, (res, lb) in enumerate(zip(results, labellist)):
 
                 if labels:
-                    label = res.label
+                    if lb:
+                        label = lb
+                    else:
+                        label = res.label
                 else:
                     label = None
                 cv = line_data[('cv', i)].as_matrix()
                 err = line_data[('err', i)].as_matrix()
-
-
-
-                max_vals.append(np.nanmax(cv+err))
-                min_vals.append(np.nanmin(cv-err))
-
-
                 ax.errorbar(x, cv, yerr=err,
                      linestyle='--',
                      lw=0.25,
@@ -207,6 +232,13 @@ def plot_fancy(one_or_more_results, dataset,
 
                 color = 'C'+str(i)
 
+                #We 'plot' the empty lines to get the labels. But
+                #if everything is empty we skip the plot.
+                if np.any(np.isfinite(cv)):
+                    anyline = True
+                    max_vals.append(np.nanmax(cv+err))
+                    min_vals.append(np.nanmin(cv-err))
+
             glabel = info.group_label(sameline_vals, info.line_by)
 
             #Use some anchor that is not in y=1 for ratio plots
@@ -219,27 +251,99 @@ def plot_fancy(one_or_more_results, dataset,
                              size='xx-small',
                              textcoords='offset points', zorder=10000)
 
+        if not anyline:
+            if info.x_scale:
+                ax.set_xscale(info.x_scale)
+
+            if info.y_scale:
+                ax.set_yscale(info.y_scale)
+
+            if normalize_to is None:
+                if info.y_label:
+                    ax.set_ylabel(info.y_label)
+            else:
+                lb = labellist[normalize_to]
+                ax.set_ylabel(f"Ratio to {lb if lb else norm_result.label}")
 
 
-        if info.x_scale:
-            ax.set_xscale(info.x_scale)
-
-        if info.y_scale:
-            ax.set_yscale(info.y_scale)
-
-        if normalize_to is None:
-            if info.y_label:
-                ax.set_ylabel(info.y_label)
-        else:
-            ax.set_ylabel("Ratio to %s" % norm_result.label)
+            ax.legend().set_zorder(100000)
+            ax.set_xlabel(info.xlabel)
+            fig.tight_layout()
 
 
-        ax.legend().set_zorder(100000)
-        ax.set_xlabel(info.xlabel)
-        fig.tight_layout()
+            yield fig
 
 
-        yield fig
+
+@_check_normalize_to
+@figuregen
+def plot_fancy(one_or_more_results, commondata, cuts,
+               normalize_to:(int,str,type(None)) = None):
+    """
+    Read the PLOTTING configuration for the dataset and generate the
+    corrspondig data theory plot.
+
+    The input results are assumed to be such that the first one is the data,
+    and the subsequent ones are the predictions for the PDFfs. See
+    ``one_or_more_results``. The labelling of the predictions can be
+    influenced by setting ``label`` attribute of theories and pdfs.
+
+    normalize_to: should be either 'data', a pdf id or an index of the
+    result (0 for the data, and i for the ith pdf). None means plotting
+    absolute values.
+
+    See docs/plotting_format.md for details on the format of the PLOTTING
+    files.
+    """
+    yield from _plot_fancy_impl(results=one_or_more_results,
+                                commondata=commondata,
+                                cutlist=[cuts]*len(one_or_more_results),
+                                normalize_to=normalize_to)
+
+@make_argcheck
+def _check_same_dataset_name(dataspecs_commondata):
+    lst = dataspecs_commondata
+    if not lst:
+        return
+    ele = lst[0].name
+    for x in lst[1:]:
+        if x.name != ele:
+            raise CheckError("All datasets must have the same name")
+
+@make_argcheck
+def _check_dataspec_normalize_to(normalize_to, dataspecs):
+    if normalize_to in (0, None):
+        return normalize_to
+    if normalize_to == 'data':
+        return 0
+    if isinstance(normalize_to, int) and normalize_to <= len(dataspecs):
+        return normalize_to
+    raise CheckError("Unrecignized format for normalize_to. Must be either "
+                     "'data', 0 or the 1-indexed index of the dataspec "
+                     f"(<{len(dataspecs_results)}), not {normalize_to}")
+
+
+
+@_check_same_dataset_name
+@_check_dataspec_normalize_to
+@figuregen
+def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
+                         dataspecs_cuts, dataspecs_speclabel,
+                         normalize_to:(str, int, type(None))=None):
+    #We have at least one element
+    if not dataspecs_results:
+        return
+
+    #For now, simply take the first data result. We'll need to improve this.
+    results = [dataspecs_results[0][0], *[r[1] for r in dataspecs_results]]
+    cutlist = [dataspecs_cuts[0], *dataspecs_cuts]
+    commondata = dataspecs_commondata[0]
+    labellist = [None, *dataspecs_speclabel]
+    yield from _plot_fancy_impl(results = results, commondata=commondata,
+                                cutlist=cutlist, labellist=labellist)
+
+
+
 
 def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
     kwargs['s'] = kwargs.get('s', 30) + 10

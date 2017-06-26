@@ -302,6 +302,12 @@ class Cuts(TupleComp):
         #TODO: py36
         return np.loadtxt(str(self.path), dtype=int)
 
+def cut_mask(cuts):
+    """Return an objects that will act as the cuts when applied as a slice"""
+    if cuts is None:
+        return slice(None)
+    return cuts.load()
+
 class DataSetSpec(TupleComp):
 
     def __init__(self, *, name, commondata, fkspecs, thspec, cuts,

@@ -384,6 +384,11 @@ class Config(report.Config):
     def produce_all_lumi_channels(self):
         return {'lumi_channels': self.parse_lumi_channels(list(LUMI_CHANNELS))}
 
+
+    def parse_speclabel(self, label:(str, type(None))):
+        """A label for a dataspec. To be used in some plots"""
+        return label
+
     def produce_matched_datasets_from_datasepcs(self, dataspecs):
         """I am not sure what this does, honestly"""
         if not isinstance(dataspecs, Sequence):

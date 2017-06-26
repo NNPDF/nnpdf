@@ -639,9 +639,14 @@ fits_pdfs = collect('pdf', ('fits', 'fitpdf'))
 
 
 #Dataspec is so
+dataspecs_results = collect('results', ('dataspecs',))
 dataspecs_chi2_data = collect(abs_chi2_data, ('dataspecs', 'experiments', 'experiment'))
 dataspecs_experiment_chi2_data = collect('experiments_chi2', ('dataspecs',))
 dataspecs_total_chi2 = collect('total_experiments_chi2', ('dataspecs',))
 
+dataspecs_speclabel = collect('speclabel', ('dataspecs',), element_default=None)
+dataspecs_cuts = collect('cuts', ('dataspecs',))
 dataspecs_experiments = collect('experiments', ('dataspecs',))
+dataspecs_dataset = collect('dataset', ('dataspecs',))
+dataspecs_commondata = collect('commondata', ('dataspecs',))
 dataspecs_pdfs = collect('pdf', ('dataspecs',))
