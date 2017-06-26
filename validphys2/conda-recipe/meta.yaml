@@ -16,7 +16,7 @@ requirements:
     - reportengine >=0.18
     - matplotlib >=2.0.1
     - blessings
-    - scipy <0.19
+    - scipy >=0.19.1
     - pandas
     - requests
 
