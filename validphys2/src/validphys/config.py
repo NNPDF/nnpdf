@@ -389,7 +389,7 @@ class Config(report.Config):
         """A label for a dataspec. To be used in some plots"""
         return label
 
-    def produce_matched_datasets_from_datasepcs(self, dataspecs):
+    def produce_matched_datasets_from_dataspecs(self, dataspecs):
         """Take an arbitrary list of mappings called dataspecs and
         return a new list of mappings called dataspecs constructed as follows.
 
