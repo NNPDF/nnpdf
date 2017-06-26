@@ -406,6 +406,7 @@ class Config(report.Config):
                 * dataset: A dataset with the name data_set name and the
                 properties (cuts, theory, etc) corresponding to the original
                 datasepec.
+                * dataset_input: The input line used to build dataset.
                 * All the other keys in the original dataspec.
         """
         if not isinstance(dataspecs, Sequence):
@@ -419,7 +420,7 @@ class Config(report.Config):
 
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, experiments = self.parse_from_(None, 'experiments', write=False)
-                names = {(e.name, ds.name):ds for e in experiments for ds in e.datasets}
+                names = {(e.name, ds.name):(ds, dsin) for e in experiments for ds, dsin in zip(e.datasets, e)}
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
 
@@ -430,7 +431,12 @@ class Config(report.Config):
             l = inres['dataspecs'] = []
             for ispec, spec in enumerate(dataspecs):
                 #Passing spec by referene
-                d = ChainMap({'dataset': all_names[ispec][k]}, spec)
+                d = ChainMap({
+                    'dataset':       all_names[ispec][k][0],
+                    'dataset_input': all_names[ispec][k][1],
+
+                    },
+                    spec)
                 l.append(d)
             res.append(inres)
         return res
