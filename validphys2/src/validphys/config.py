@@ -390,7 +390,24 @@ class Config(report.Config):
         return label
 
     def produce_matched_datasets_from_datasepcs(self, dataspecs):
-        """I am not sure what this does, honestly"""
+        """Take an arbitrary list of mappings called dataspecs and
+        return a new list of mappings called dataspecs constructed as follows.
+
+        From each of the original datasepcs, resolve the key `experiments` and
+        all the dataset therein.
+
+        Compute the intersection of the dataset names, and for each element in
+        the intersection construct a mapping with the follwing keys:
+
+            - experiment_name : A string with the common experiment name.
+            - dataset_name : A string with the common dataset name.
+            - datasepcs : A list of mappinngs matching the original
+              "datasepcs". Each mapping contains:
+                * dataset: A dataset with the name data_set name and the
+                properties (cuts, theory, etc) corresponding to the original
+                datasepec.
+                * All the other keys in the original dataspec.
+        """
         if not isinstance(dataspecs, Sequence):
             raise ConfigError("dataspecs should be a sequence of mappings, not "
                               f"{type(dataspecs).__name__}")

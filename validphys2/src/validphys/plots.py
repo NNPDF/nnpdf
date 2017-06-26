@@ -233,7 +233,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
                 color = 'C'+str(i)
 
                 #We 'plot' the empty lines to get the labels. But
-                #if everything is empty we skip the plot.
+                #if everything is rmpty we skip the plot.
                 if np.any(np.isfinite(cv)):
                     anyline = True
                     max_vals.append(np.nanmax(cv+err))
@@ -251,6 +251,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
                              size='xx-small',
                              textcoords='offset points', zorder=10000)
 
+        #TODO: Catch this earlier
         if not anyline:
             if info.x_scale:
                 ax.set_xscale(info.x_scale)
@@ -330,6 +331,23 @@ def _check_dataspec_normalize_to(normalize_to, dataspecs):
 def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
                          dataspecs_cuts, dataspecs_speclabel,
                          normalize_to:(str, int, type(None))=None):
+    """General interface for data-theory comparison plots.
+
+    The user should define an arbitrary list of mappings called "dataspecs".
+    In each of these, ``dataset`` must resolve to a dataset with the same name
+    (but could be e.g. different theories). The production rule
+    ``matched_datasets_from_datasepcs`` may be used for this purpose.
+
+    The result will be a plot combining all the predictions from the dataspecs
+    mapping (whch could vary in theory, pdf, cuts, etc).
+
+    The user can define a "speclabel" key in each datasspec (or only on some).
+    By default, the PDF label will be used in the legend (like in
+    ``plot_fancy``).
+
+    A limitation at the moment is that the data cuts and errors will be taken
+    from the first specifiaction.
+    """
     #We have at least one element
     if not dataspecs_results:
         return
