@@ -139,6 +139,8 @@ def _plot_fancy_impl(results, commondata, cutlist,
                                    err,
                                    table.iloc[:,:nkinlabels], info)
 
+
+    cvcols = []
     for i,(result, cuts) in enumerate(zip(results, cutlist)):
         #We modify the table, so we pass only the label columns
         mask = cut_mask(cuts)
@@ -149,22 +151,23 @@ def _plot_fancy_impl(results, commondata, cutlist,
 
         cv, err = transform_result(cv, err,
                                    table.iloc[:,:nkinlabels], info)
-
-
-        table_err = np.full(ndata, np.nan)
-        table_err[mask] = err
         #By doing tuple keys we avoid all possible name collisions
+        cvcol = ('cv', i)
         if normalize_to is None:
-            table[('cv', i)] = cv
+            table[cvcol] = cv
             table[('err', i)] = err
         else:
-            table[('cv', i)] = cv/norm_cv
+            table[cvcol] = cv/norm_cv
             table[('err', i)] = err/norm_cv
+        cvcols.append(cvcol)
 
     figby = sane_groupby_iter(table, info.figure_by)
 
 
     for samefig_vals, fig_data in figby:
+        #Nothing to plot if all data is cut away
+        if np.all(np.isnan(fig_data[cvcols])):
+            continue
         #For some reason matplotlib doesn't set the axis right
         min_vals = []
         max_vals = []
@@ -175,7 +178,6 @@ def _plot_fancy_impl(results, commondata, cutlist,
         lineby = sane_groupby_iter(fig_data, info.line_by)
 
         first = True
-        anyline = False
 
 
         for (sameline_vals, line_data) in lineby:
@@ -235,7 +237,6 @@ def _plot_fancy_impl(results, commondata, cutlist,
                 #We 'plot' the empty lines to get the labels. But
                 #if everything is rmpty we skip the plot.
                 if np.any(np.isfinite(cv)):
-                    anyline = True
                     max_vals.append(np.nanmax(cv+err))
                     min_vals.append(np.nanmin(cv-err))
 
@@ -251,29 +252,24 @@ def _plot_fancy_impl(results, commondata, cutlist,
                              size='xx-small',
                              textcoords='offset points', zorder=10000)
 
-        #TODO: Catch this earlier
-        if anyline:
-            if info.x_scale:
-                ax.set_xscale(info.x_scale)
+        if info.x_scale:
+            ax.set_xscale(info.x_scale)
 
-            if info.y_scale:
-                ax.set_yscale(info.y_scale)
+        if info.y_scale:
+            ax.set_yscale(info.y_scale)
 
-            if normalize_to is None:
-                if info.y_label:
-                    ax.set_ylabel(info.y_label)
-            else:
-                lb = labellist[normalize_to]
-                ax.set_ylabel(f"Ratio to {lb if lb else norm_result.label}")
+        if normalize_to is None:
+            if info.y_label:
+                ax.set_ylabel(info.y_label)
+        else:
+            lb = labellist[normalize_to]
+            ax.set_ylabel(f"Ratio to {lb if lb else norm_result.label}")
 
 
-            ax.legend().set_zorder(100000)
-            ax.set_xlabel(info.xlabel)
-            fig.tight_layout()
-
-
-            yield fig
-
+        ax.legend().set_zorder(100000)
+        ax.set_xlabel(info.xlabel)
+        fig.tight_layout()
+        yield fig
 
 
 @_check_normalize_to
