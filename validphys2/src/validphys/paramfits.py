@@ -10,10 +10,91 @@ level modules (e.g. fitdata.py and results.py) for most of the functionality.
 They also need to work around the limitations in libnnpdf, and so the
 performance may not be optimal.
 """
+import logging
+from collections import namedtuple
 
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
+
 from reportengine.figure import figure
+from reportengine.table import table
+from reportengine import collect
+from reportengine.checks import make_argcheck, CheckError
+from NNPDF.experiments import pseudodata
+from NNPDF.lhapdfset import single_replica
+
+from validphys.core import PDF
+from validphys.results import ThPredictionsResult, DataResult, abs_chi2_data_experiment
+
+log = logging.getLogger(__name__)
+
+
+PseudoReplicaExpChi2Data = namedtuple('PseudoReplicaChi2Data',
+    ['nnfit_index', 'experiment', 'central_chi2', 'ndata'])
+
+def computed_psedorreplicas_chi2(experiments, dataseed, pdf,
+                                 fitted_replica_indexes, t0set:PDF):
+    """Return the chi2 the chi² of the pseudodata"""
+
+    #TODO: Everythning about this function is horrible. We need to rewrite
+    #experiments.cc from scratch.
+
+    #TODO: Do this somewhere else
+    from NNPDF import randomgenerator
+    randomgenerator.RandomGenerator.InitRNG(0,0)
+
+    lt0 = t0set.load_t0()
+    pdfname = pdf.name
+    datas = []
+
+    for lhapdf_index, nnfit_index in enumerate(fitted_replica_indexes, 1):
+        #No need to save these in the cache, so we call __wrapped__
+        original_experiments = [e.load.__wrapped__(e) for e in experiments]
+        flutuated_experiments = pseudodata(original_experiments, dataseed, nnfit_index)
+        lpdf = single_replica(pdfname, lhapdf_index)
+        for expspec, exp in zip(experiments, flutuated_experiments):
+            #We need to manage the memory
+            exp.thisown = True
+
+            exp.SetT0(lt0)
+
+
+            th = ThPredictionsResult.from_convolution(pdf, expspec,
+                loaded_data=exp, loaded_pdf=lpdf)
+
+
+            results = DataResult(exp), th
+            chi2 = abs_chi2_data_experiment(results)
+
+            data = PseudoReplicaExpChi2Data(
+                nnfit_index=nnfit_index,
+                experiment=expspec.name,
+                central_chi2=chi2.central_result,
+                ndata=chi2.ndata)
+            datas.append(data)
+    df =  pd.DataFrame(datas, columns=PseudoReplicaExpChi2Data._fields)
+    df.set_index(['nnfit_index', 'experiment'], inplace=True)
+    return df
+
+#TODO: Probably fitcontext should set all of the variables required to compute
+#this. But better setting
+#them explicitly than setting some, se we require the user to do that.
+fits_computed_psedorreplicas_chi2 = collect(computed_psedorreplicas_chi2, ('fits',))
+
+@make_argcheck
+def _check_fits_different(fits):
+    """Need this check because oterwise the pandas object gets confused"""
+    if not len(set(map(str, fits)))==len(fits):
+        raise CheckError("fits must be all different but there are duplicates.")
+
+@table
+@_check_fits_different
+def fits_matched_pseudorreplicas_chi2_table(fits, fits_computed_psedorreplicas_chi2):
+    return pd.concat(fits_computed_psedorreplicas_chi2, axis=1, keys=map(str,fits))
+
+
+
 
 @figure
 def plot_fits_as_profile(fits_pdfs, fits_total_chi2):
