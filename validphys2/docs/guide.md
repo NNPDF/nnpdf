@@ -1328,6 +1328,116 @@ need to be loaded in memory). This will warn of missing plotting files
 and produce early nice error messages if the configuration is not
 processed correctly.
 
+### General data specification: The dataspec API
+
+Specifying exactly which data we want to compare is an inherently
+complex problem. For example, a simple data theory-comparison plot
+depends on the following variable options:
+
+ - The name of the dataset (the `commndata` file).
+ - The systematics specification (the `systype` file).
+ - The theory used (the fktables and fkset files).
+ - The cuts (currently provided by an existing fit).
+ - The PDF(s) entering the comparison.
+
+Ideally we want to be able to compare arbitrary aggregates of
+variations of these options. Even though there is some functionality
+implemented for some specific pipelines (e.g. `fits_chi2_table`
+compares the chi² of all the fitted datasets in each fit with their
+corresponding PDFs and theories) it is clearly not possible to foresee
+all combinations that will be needed eventually. Instead, we rely on
+the capabilities offered by `reportengine` and a *convention* to
+specify arbitrary inputs.
+
+The user provides a list of *namespaces* (see [Multiple inputs and
+namespaces]) called *dataspecs* and dedicated functions in `validphys`
+know how to interpret it appropriately. One such function is
+`plot_fancy_dataspecs`: It takes a list of `dataspecs` where all the
+datasets have to resolve to the same name. For example, imagine we
+want to compare the NMC dataset at NLO and NNLO using the cuts of the
+NNPDF 3.1 NLO fit, with the corresponding compressed hessian 3.1 PDFs
+for each theory. We would wirte:
+
+```yaml
+fit: NNPDF31_nlo_as_0118_1000
+use_cuts: True
+
+dataset_input:
+    dataset: NMC
+
+dataspecs:
+    - theoryid: 52
+      pdf: NNPDF31_nlo_as_0118_hessian
+
+    - theoryid: 53
+      pdf: NNPDF31_nnlo_as_0118_hessian
+
+template_text: |
+    % NLO vs NNLO comparison for {@dataset_input@}
+    {@plot_fancy_dataspecs@}
+
+actions_:
+    - - report:
+           main: True
+
+```
+
+This would show a comparison between the data and the PDFs convolved
+with the matching fktables.
+
+We may be interesting in automatizing this comparison for all the
+datasets including in both fits. This is what the production rule
+`matched_datasets_from_dataspecs` is for. Essentially, it resolves
+`experiments` in each dataset and puts the datasets with the same name
+together (in inner `dataspecs` that are generated implicitly) by
+taking the intersection, so that actions such as
+`plot_fancy_dataspecs` can act on it. While the mechanism is
+complicated (you can see more details with `valdiphys --help config`),
+the resulting input cards are simple and powerful. It boils down to:
+
+```yaml
+use_cuts: True
+
+experiments:
+    from_: fit
+
+dataspecs:
+    - theoryid: 52
+      pdf: NNPDF31_nlo_as_0118_hessian
+      speclabel: "NLO"
+      fit: NNPDF31_nlo_as_0118_1000
+
+    - theoryid: 53
+      pdf: NNPDF31_nnlo_as_0118_hessian
+      speclabel: "NNLO"
+      fit: NNPDF31_nnlo_as_0118_1000
+
+
+meta:
+    title: NLO vs NNLO results for all NLO datasets in 3.1
+    keywords: [test, nn31final]
+    author: Zahari Kassabov
+
+template_text: |
+    {@with matched_datasets_from_dataspecs@}
+    # {@dataset_name@}
+
+    {@plot_fancy_dataspecs@}
+
+    {@endwith@}
+
+actions_:
+ - - report:
+        main: True
+```
+
+Here we are taking the experiments and cuts from a different fit,
+using the appropriate cfactors (the `dataspecs` list), putting the
+datasets with the same name together and plotting them (the
+`matched_datasets_from_dataspecs` production rule) and writing a title
+and the data-theory comparison plots for each dataset in the
+intersection.
+
 
 Parallel mode
 -------------
