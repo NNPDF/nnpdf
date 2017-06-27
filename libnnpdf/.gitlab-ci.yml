@@ -10,19 +10,6 @@ variables:
     UPLOAD_NON_MASTER: "false"
 
 ## Run the configure and make tests
-job1:
-    stage: build-deploy
-    script: ".ciscripts/build-deploy.sh"
-
-    variables:
-        CONDA_PY: "35"
-        NNPDF_USE_DOUBLE: ""
-
-    #We copy the conda package to the git path to be untracked and
-    #then catch it as an "artifact"
-    artifacts:
-        untracked: True
-
 job2:
     stage: build-deploy
     script: ".ciscripts/build-deploy.sh"
