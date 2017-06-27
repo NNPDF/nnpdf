@@ -312,9 +312,9 @@ def _check_dataspec_normalize_to(normalize_to, dataspecs):
     if normalize_to in (0, None):
         return normalize_to
     if normalize_to == 'data':
-        return 0
+        return {'normalize_to': 0}
     if isinstance(normalize_to, int) and normalize_to <= len(dataspecs):
-        return normalize_to
+        return
     raise CheckError("Unrecignized format for normalize_to. Must be either "
                      "'data', 0 or the 1-indexed index of the dataspec "
                      f"(<{len(dataspecs_results)}), not {normalize_to}")
