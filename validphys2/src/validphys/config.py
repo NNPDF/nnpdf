@@ -439,4 +439,5 @@ class Config(report.Config):
                     spec)
                 l.append(d)
             res.append(inres)
+        res.sort(key=lambda x: (x['experiment_name'], x['dataset_name']))
         return res
