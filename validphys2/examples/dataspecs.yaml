@@ -20,10 +20,12 @@ dataspecs:
     - theoryid: 52
       pdf: NNPDF31_nlo_as_0118_hessian
       speclabel: "NLO"
+      fit: NNPDF31_nlo_as_0118_1000
 
     - theoryid: 53
       pdf: NNPDF31_nnlo_as_0118_hessian
       speclabel: "NNLO"
+      fit: NNPDF31_nnlo_as_0118_1000
 
 
 meta:
