@@ -309,12 +309,12 @@ def _check_same_dataset_name(dataspecs_commondata):
 
 @make_argcheck
 def _check_dataspec_normalize_to(normalize_to, dataspecs):
-    if normalize_to in (0, None):
-        return normalize_to
+    if (normalize_to in (0, None) or
+            (isinstance(normalize_to, int) and normalize_to <= len(dataspecs))):
+        return
     if normalize_to == 'data':
         return {'normalize_to': 0}
-    if isinstance(normalize_to, int) and normalize_to <= len(dataspecs):
-        return
+
     raise CheckError("Unrecignized format for normalize_to. Must be either "
                      "'data', 0 or the 1-indexed index of the dataspec "
                      f"(<{len(dataspecs_results)}), not {normalize_to}")
@@ -327,7 +327,8 @@ def _check_dataspec_normalize_to(normalize_to, dataspecs):
 def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
                          dataspecs_cuts, dataspecs_speclabel,
                          normalize_to:(str, int, type(None))=None):
-    """General interface for data-theory comparison plots.
+    """
+    General interface for data-theory comparison plots.
 
     The user should define an arbitrary list of mappings called "dataspecs".
     In each of these, ``dataset`` must resolve to a dataset with the same name
@@ -340,6 +341,16 @@ def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
     The user can define a "speclabel" key in each datasspec (or only on some).
     By default, the PDF label will be used in the legend (like in
     ``plot_fancy``).
+
+    ``normalize_to must`` be either:
+
+        - The string 'data' or the integer 0 to plot the ratio to data,
+
+        - or the 1-based index of the dataspec to normalize to the
+          corresponding prediction,
+
+
+        - or None (default) to plot absolute values.
 
     A limitation at the moment is that the data cuts and errors will be taken
     from the first specifiaction.
@@ -354,7 +365,8 @@ def plot_fancy_dataspecs(dataspecs_results, dataspecs_commondata,
     commondata = dataspecs_commondata[0]
     labellist = [None, *dataspecs_speclabel]
     yield from _plot_fancy_impl(results = results, commondata=commondata,
-                                cutlist=cutlist, labellist=labellist)
+                                cutlist=cutlist, labellist=labellist,
+                                normalize_to=normalize_to)
 
 
 
