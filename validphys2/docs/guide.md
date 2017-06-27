@@ -1353,10 +1353,10 @@ The user provides a list of *namespaces* (see [Multiple inputs and
 namespaces]) called *dataspecs* and dedicated functions in `validphys`
 know how to interpret it appropriately. One such function is
 `plot_fancy_dataspecs`: It takes a list of `dataspecs` where all the
-datasets have to resolve to the same name. For example, imagine we
+datasets must have the same name. For example, imagine we
 want to compare the NMC dataset at NLO and NNLO using the cuts of the
 NNPDF 3.1 NLO fit, with the corresponding compressed hessian 3.1 PDFs
-for each theory. We would wirte:
+for each theory. We would write:
 
 ```yaml
 fit: NNPDF31_nlo_as_0118_1000
@@ -1385,15 +1385,16 @@ actions_:
 This would show a comparison between the data and the PDFs convolved
 with the matching fktables.
 
-We may be interesting in automatizing this comparison for all the
+We may be interested in automatizing this comparison for all the
 datasets including in both fits. This is what the production rule
 `matched_datasets_from_dataspecs` is for. Essentially, it resolves
-`experiments` in each dataset and puts the datasets with the same name
-together (in inner `dataspecs` that are generated implicitly) by
-taking the intersection, so that actions such as
-`plot_fancy_dataspecs` can act on it. While the mechanism is
-complicated (you can see more details with `valdiphys --help config`),
-the resulting input cards are simple and powerful. It boils down to:
+`experiments` in each of the `dataspecs` and puts the datasets with
+the same name together  by taking the intersection, so that actions
+such as `plot_fancy_dataspecs` can act on it (it output an inner
+`dataspec` list containing the appropriate keys). While the mechanism
+is complicated (you can see more details with `valdiphys --help
+config`), the resulting input cards are simple and powerful. It boils
+down to:
 
 ```yaml
 use_cuts: True
@@ -1432,11 +1433,12 @@ actions_:
 ```
 
 Here we are taking the experiments and cuts from a different fit,
-using the appropriate cfactors (the `dataspecs` list), putting the
-datasets with the same name together and plotting them (the
-`matched_datasets_from_dataspecs` production rule) and writing a title
-and the data-theory comparison plots for each dataset in the
-intersection.
+using the appropriate cfactors (the `dataspecs` list provides the fits
+from which the variables are taken), putting the datasets with the
+same name together (the `matched_datasets_from_dataspecs` production
+rule) and writing a title and the data-theory comparison plots for
+each dataset in the intersection (the actions inside the `with`
+block).
 
 
 Parallel mode
