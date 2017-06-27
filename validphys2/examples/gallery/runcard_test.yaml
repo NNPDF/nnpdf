@@ -1,0 +1,79 @@
+pdfs:
+  -  {id: NNPDF31_nlo_as_0118_hessian, label: "NLO"}
+  -  {id: NNPDF31_nnlo_as_0118_hessian, label: "NNLO"}
+
+use_cuts: True
+
+base:
+  fit: NNPDF31_nnlo_as_0118_1000
+
+fits:
+  - from_: base
+  - NNPDF31_nlo_as_0118_1000 
+
+meta:
+    title: Comparison between NNPDF3.1 NLO and NNLO
+    keywords: [gallery]
+    author: NNPDF Collaboration
+
+pdfnormalize:
+    - normtitle: Absolute
+
+    - normalize_to: 1
+      normtitle: Ratio
+
+basespecs:
+    - basis: flavour
+      basistitle: Flavour basis
+    - basis: evolution
+      basistitle: Evolution basis
+
+Q: 2
+sqrts: 13000
+
+dataspecs:
+    - theoryid: 52
+      pdf: NNPDF31_nlo_as_0118_hessian
+      speclabel: "NLO"
+      fit: NNPDF31_nlo_as_0118_1000
+
+    - theoryid: 53
+      pdf: NNPDF31_nnlo_as_0118_hessian
+      speclabel: "NNLO"
+      fit: NNPDF31_nnlo_as_0118_1000
+
+datanorm:
+    normalize_to: data
+
+experiments:
+    from_: fit
+
+template_text: |
+    
+    # PDFs 
+    
+    {@with pdfnormalize@}
+    ## {@normtitle@}
+    {@with basespecs@}
+    ### {@basistitle@}
+    {@plot_pdfs@}
+    {@endwith@}
+    {@endwith@}
+    
+    # $\chi^2$
+    {@fits_chi2_table@}
+
+    # Comparison with data
+    {@with matched_datasets_from_dataspecs@}
+    ## {@dataset_name@}
+    Absolute
+    ---------
+    {@plot_fancy_dataspecs@} 
+    Normalized
+    ----------
+    {@ datanorm plot_fancy_dataspecs@}
+    {@endwith@}
+
+actions_:
+    - - report:
+           main: True
