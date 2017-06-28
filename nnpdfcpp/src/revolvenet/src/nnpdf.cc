@@ -33,7 +33,7 @@ void CreateResultsFolder(const NNPDFSettings &settings, const int replica)
 
 //_______________________________________
 NNpdf::NNpdf(NNPDFSettings const& nnset, int const& replica, FitBasis *basis):
-  PDFSet("neuralnet", 1, ER_NONE),
+  PDFSet("neuralnet", 1, erType::ER_NONE),
   fSettings(nnset),
   freplica(replica),
   fFitBasis(basis),

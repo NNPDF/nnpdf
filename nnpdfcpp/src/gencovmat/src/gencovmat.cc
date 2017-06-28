@@ -69,7 +69,7 @@ int main(int argc, char **argv)
   if (settings.GetPlotting("uset0").as<bool>())
     {
       cout << Colour::FG_RED << " ----------------- SETTINGS: USING T0 COVARIANCE MATRIX -----------------\n" << Colour::FG_DEFAULT <<endl;
-      T0Set = new LHAPDFSet(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::ER_MCT0);
+      T0Set = new LHAPDFSet(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::erType::ER_MCT0);
     }
   else cout << Colour::FG_RED <<" ----------------- SETTINGS: USING EXP COVARIANCE MATRIX -----------------\n" << Colour::FG_DEFAULT << endl;
 
