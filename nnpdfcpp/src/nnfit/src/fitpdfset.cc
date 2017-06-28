@@ -34,7 +34,7 @@ using std::ofstream;
  * @param nnset the config.ini file name
  */
 FitPDFSet::FitPDFSet(NNPDFSettings const& nnset, FitBasis* basis):
-PDFSet(string("NNPDF_Fit"),1,ER_NONE),
+PDFSet(string("NNPDF_Fit"),1,erType::ER_NONE),
 fSettings(nnset),
 fFitBasis(basis),
 fNfl(nnset.GetNFL()),

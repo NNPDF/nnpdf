@@ -50,13 +50,13 @@ int main(int argc, char **argv)
 
   // Check T0 set availability
   cout << Colour::FG_BLUE << "\n- Testing T0 PDF set:" << Colour::FG_DEFAULT << endl;
-  PDFSet* T0Set = new LHAPDFSet(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::ER_MCT0);
+  PDFSet* T0Set = new LHAPDFSet(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::erType::ER_MCT0);
   delete T0Set;
 
   // Load FakeData PDF Set for closure test
   LHAPDFSet* FakeSet = NULL;
   if (settings.Get("closuretest","fakedata").as<bool>())
-    FakeSet = new LHAPDFSet(settings.Get("closuretest","fakepdf").as<string>(), LHAPDFSet::ER_MCT0);
+    FakeSet = new LHAPDFSet(settings.Get("closuretest","fakepdf").as<string>(), LHAPDFSet::erType::ER_MCT0);
 
   // RNG Seed for Fake Data
   RandomGenerator::GetRNG()->SetSeed(settings.Get("closuretest","filterseed").as<int>());

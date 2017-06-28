@@ -56,10 +56,10 @@ int main(int argc, char **argv)
   settings.VerifyConfiguration("validphys.yml");
   settings.PrintTheory("theory.log");
 
-  PDFSet* T0Set = new LHAPDFSet(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::ER_MCT0);
+  PDFSet* T0Set = new LHAPDFSet(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::erType::ER_MCT0);
   PDFSet* T0SetRef = NULL;
   if (settings.GetPlotting("uset0").as<bool>())
-    T0SetRef = new LHAPDFSet(settingsref.Get("datacuts","t0pdfset").as<string>(), PDFSet::ER_MCT0);
+    T0SetRef = new LHAPDFSet(settingsref.Get("datacuts","t0pdfset").as<string>(), PDFSet::erType::ER_MCT0);
 
   // Load experiments
   vector<Experiment*> exps, expst0, exps2;
@@ -111,8 +111,8 @@ int main(int argc, char **argv)
   // NB: these four sets MUST appear in THIS order.
 
   // Start current NNPDF and respective th. predictions
-  Pdf.push_back(new LHAPDFSet(settings.GetPDFName(),PDFSet::ER_MC));
-  Pdf68cl.push_back(new LHAPDFSet(settings.GetPDFName(),PDFSet::ER_MC68));
+  Pdf.push_back(new LHAPDFSet(settings.GetPDFName(),PDFSet::erType::ER_MC));
+  Pdf68cl.push_back(new LHAPDFSet(settings.GetPDFName(),PDFSet::erType::ER_MC68));
 
   // Getting results
   cout << "\nComputing theoretical predictions for "
@@ -154,8 +154,8 @@ int main(int argc, char **argv)
   //  plotreport->AddWPAnalysis(Pdf[CUR]);
 
   // The reference NNPDF
-  Pdf.push_back(new LHAPDFSet(settingsref.GetPDFName(), PDFSet::ER_MC));
-  Pdf68cl.push_back(new LHAPDFSet(settingsref.GetPDFName(), PDFSet::ER_MC68));
+  Pdf.push_back(new LHAPDFSet(settingsref.GetPDFName(), PDFSet::erType::ER_MC));
+  Pdf68cl.push_back(new LHAPDFSet(settingsref.GetPDFName(), PDFSet::erType::ER_MC68));
 
   cout << "\n- Building ThPredictions for "
        << settingsref.GetPDFName() << ":" << endl;
@@ -187,7 +187,7 @@ int main(int argc, char **argv)
   if (!settings.Get("closuretest","fakedata").as<bool>())
     { 
       // CTEQ reference
-      Pdf.push_back(new LHAPDFSet(settings.GetPlotting("pdfcteq").as<string>(), PDFSet::ER_EIG90));
+      Pdf.push_back(new LHAPDFSet(settings.GetPlotting("pdfcteq").as<string>(), PDFSet::erType::ER_EIG90));
       cout << "\n- Building ThPredictions for "
            << settings.GetPlotting("pdfcteq").as<string>() << ":" << endl;
       for (int i = 0; i < settings.GetNExp(); i++)
@@ -201,7 +201,7 @@ int main(int argc, char **argv)
       plotreport->AddPDF4Comparison(CTEQ,Pdf[CTEQ]);
 
       // MSTW reference
-      Pdf.push_back(new LHAPDFSet(settings.GetPlotting("pdfmstw").as<string>(), PDFSet::ER_EIG));
+      Pdf.push_back(new LHAPDFSet(settings.GetPlotting("pdfmstw").as<string>(), PDFSet::erType::ER_EIG));
       cout << "\n- Building ThPredictions for "
            << settings.GetPlotting("pdfmstw").as<string>() << ":" << endl;
       for (int i = 0; i < settings.GetNExp(); i++)
@@ -220,7 +220,7 @@ int main(int argc, char **argv)
   else
     {
       // FAKE SET - Index CTEQ becomes fakeset
-      Pdf.push_back(new LHAPDFSet(settings.Get("closuretest","fakepdf").as<string>(), PDFSet::ER_MCT0));
+      Pdf.push_back(new LHAPDFSet(settings.Get("closuretest","fakepdf").as<string>(), PDFSet::erType::ER_MCT0));
       cout << "\n- Building ThPredictions for "
            << settings.Get("closuretest","fakepdf").as<string>() << ":" << endl;
       for (int i = 0; i < settings.GetNExp(); i++)

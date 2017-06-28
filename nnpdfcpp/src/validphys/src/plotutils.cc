@@ -22,6 +22,7 @@ using std::setprecision;
 #include "pdffuns.h"
 
 #include <NNPDF/utils.h>
+#include <NNPDF/exceptions.h>
 using namespace NNPDF;
 
 #include <gsl/gsl_integration.h>
@@ -65,8 +66,8 @@ real GetFlvrCV(LHAPDFSet* const&p, real const& x, real const& Q, int const& f)
   real avg = 0;
   switch (p->GetEtype())
   {
-    case PDFSet::ER_MC:
-    case PDFSet::ER_MC68:
+    case PDFSet::erType::ER_MC:
+    case PDFSet::erType::ER_MC68:
     {
       real *pdf = new real[p->GetMembers()];
       for (int n = 0; n < p->GetMembers(); n++)
@@ -77,13 +78,17 @@ real GetFlvrCV(LHAPDFSet* const&p, real const& x, real const& Q, int const& f)
       delete[] pdf;
       break;
     }
-    case PDFSet::ER_EIG:
-    case PDFSet::ER_EIG90:
-    case PDFSet::ER_MCT0:
+    case PDFSet::erType::ER_EIG:
+    case PDFSet::erType::ER_EIG90:
+    case PDFSet::erType::ER_MCT0:
     {
       GetFlvrPDF(p, x, Q, 0, f, &avg);
       break;
     }
+
+    default:
+      throw NNPDF::RuntimeException("GetFlvrError","error type not supported");
+      break;
   }
   return avg;
 }
@@ -94,7 +99,7 @@ real GetFlvrError(LHAPDFSet* const& p, real const& x, real const& Q, int const& 
 
   switch (p->GetEtype())
   {
-    case PDFSet::ER_MC:
+    case PDFSet::erType::ER_MC:
     {
       real *pdf = new real[p->GetMembers()];
       for (int n = 0; n < p->GetMembers(); n++)
@@ -105,7 +110,7 @@ real GetFlvrError(LHAPDFSet* const& p, real const& x, real const& Q, int const& 
 
       break;
     }
-    case PDFSet::ER_MC68:
+    case PDFSet::erType::ER_MC68:
     {
       vector<real> xval;
       real *pdf = new real[p->GetMembers()];
@@ -127,7 +132,7 @@ real GetFlvrError(LHAPDFSet* const& p, real const& x, real const& Q, int const& 
 
       break;
     }
-    case PDFSet::ER_EIG:
+    case PDFSet::erType::ER_EIG:
     {
       real *pdf = new real[p->GetMembers()];
       for (int n = 0; n < p->GetMembers(); n++)
@@ -139,7 +144,7 @@ real GetFlvrError(LHAPDFSet* const& p, real const& x, real const& Q, int const& 
 
       break;
     }
-    case PDFSet::ER_EIG90:
+    case PDFSet::erType::ER_EIG90:
     {
       real *pdf = new real[p->GetMembers()];
       for (int n = 0; n < p->GetMembers(); n++)
@@ -151,6 +156,10 @@ real GetFlvrError(LHAPDFSet* const& p, real const& x, real const& Q, int const& 
 
       break;
     }
+
+    default:
+      throw NNPDF::RuntimeException("GetFlvrError","error type not supported");
+      break;
   }
 
   return err;
@@ -166,8 +175,8 @@ real GetEvolCV(LHAPDFSet* const& p, real const& x, real const& Q, int const& f)
   real avg = 0;
   switch (p->GetEtype())
   {
-    case PDFSet::ER_MC:
-    case PDFSet::ER_MC68:
+    case PDFSet::erType::ER_MC:
+    case PDFSet::erType::ER_MC68:
     {
       real* EVLN = new real[14];
       real* pdf = new real[p->GetMembers()];
@@ -184,9 +193,9 @@ real GetEvolCV(LHAPDFSet* const& p, real const& x, real const& Q, int const& f)
 
       break;
     }
-    case PDFSet::ER_EIG:
-    case PDFSet::ER_EIG90:
-    case PDFSet::ER_MCT0:
+    case PDFSet::erType::ER_EIG:
+    case PDFSet::erType::ER_EIG90:
+    case PDFSet::erType::ER_MCT0:
     {
       real *EVLN = new real[14];
       GetEvolPDF(p, x, Q, 0, EVLN);
@@ -196,6 +205,9 @@ real GetEvolCV(LHAPDFSet* const& p, real const& x, real const& Q, int const& f)
 
       break;
     }
+    default:
+      throw NNPDF::RuntimeException("GetFlvrError","error type not supported");
+      break;
   }
   return avg;
 }
@@ -205,7 +217,7 @@ real GetEvolError(LHAPDFSet* const& p, real const& x, real const& Q, int const& 
   real err = 0;
   switch (p->GetEtype())
   {
-    case PDFSet::ER_MC:
+    case PDFSet::erType::ER_MC:
     {
       real *EVLN = new real[14];
       real *pdf = new real[p->GetMembers()];
@@ -222,7 +234,7 @@ real GetEvolError(LHAPDFSet* const& p, real const& x, real const& Q, int const& 
 
       break;
     }
-    case PDFSet::ER_MC68:
+    case PDFSet::erType::ER_MC68:
     {
       vector<real> xval;
       real *EVLN = new real[14];
@@ -249,7 +261,7 @@ real GetEvolError(LHAPDFSet* const& p, real const& x, real const& Q, int const& 
 
       break;
     }
-    case PDFSet::ER_EIG:
+    case PDFSet::erType::ER_EIG:
     {
       real *EVLN = new real[14];
       real *pdf = new real[p->GetMembers()];
@@ -266,7 +278,7 @@ real GetEvolError(LHAPDFSet* const& p, real const& x, real const& Q, int const& 
 
       break;
     }
-    case PDFSet::ER_EIG90:
+    case PDFSet::erType::ER_EIG90:
     {
       real *EVLN = new real[14];
       real *pdf = new real[p->GetMembers()];
@@ -283,6 +295,9 @@ real GetEvolError(LHAPDFSet* const& p, real const& x, real const& Q, int const& 
 
       break;
     }
+    default:
+      throw NNPDF::RuntimeException("GetFlvrError","error type not supported");
+      break;
   }
 
   return err;
@@ -304,8 +319,8 @@ real GetGpdfCV(LHAPDFSet* const& p, real const& x, real const& Q, gpdf fop)
   real  cv = 0;
   switch (p->GetEtype())
   {
-    case PDFSet::ER_MC:
-    case PDFSet::ER_MC68:
+    case PDFSet::erType::ER_MC:
+    case PDFSet::erType::ER_MC68:
     {
       real *gp = new real[p->GetMembers()];
 
@@ -316,13 +331,16 @@ real GetGpdfCV(LHAPDFSet* const& p, real const& x, real const& Q, gpdf fop)
       delete[] gp;
       break;
     }
-    case PDFSet::ER_EIG:
-    case PDFSet::ER_EIG90:
-    case PDFSet::ER_MCT0:
+    case PDFSet::erType::ER_EIG:
+    case PDFSet::erType::ER_EIG90:
+    case PDFSet::erType::ER_MCT0:
     {
       cv =  GetGpdf(p,x,Q,0,fop);
       break;
     }
+    default:
+      throw NNPDF::RuntimeException("GetFlvrError","error type not supported");
+      break;
   }
   return cv;
 }
@@ -332,7 +350,7 @@ real GetGpdfError(LHAPDFSet* const& p,real const& x, real const& Q, gpdf fop, re
   real err=0;
   switch (p->GetEtype())
   {
-    case PDFSet::ER_MC:
+    case PDFSet::erType::ER_MC:
     {
       real *gp = new real[p->GetMembers()];
 
@@ -344,7 +362,7 @@ real GetGpdfError(LHAPDFSet* const& p,real const& x, real const& Q, gpdf fop, re
       break;
     }
 
-    case PDFSet::ER_MC68:
+    case PDFSet::erType::ER_MC68:
     {
       vector<real> gp;
 
@@ -363,8 +381,8 @@ real GetGpdfError(LHAPDFSet* const& p,real const& x, real const& Q, gpdf fop, re
       break;
     }
 
-    case PDFSet::ER_EIG:
-    case PDFSet::ER_EIG90:
+    case PDFSet::erType::ER_EIG:
+    case PDFSet::erType::ER_EIG90:
     {
       real *gp = new real[p->GetMembers()];
 
@@ -372,12 +390,15 @@ real GetGpdfError(LHAPDFSet* const& p,real const& x, real const& Q, gpdf fop, re
         gp[n] = GetGpdf(p, x,Q,n,fop);
 
       err = ComputeEigErr(p->GetMembers(),gp)
-      / (p->GetEtype() == PDFSet::ER_EIG90 ? 1.64485:1.0);
+      / (p->GetEtype() == PDFSet::erType::ER_EIG90 ? 1.64485:1.0);
 
       delete[] gp;
 
       break;
     }
+    default:
+      throw NNPDF::RuntimeException("GetFlvrError","error type not supported");
+      break;
   }
   return err;
 }
@@ -386,7 +407,7 @@ real GetGpdfMoment(LHAPDFSet * const&p, real const& x, real const& Q, gpdf op,in
 {
   real err = 0;
 
-  if (p->GetEtype() == PDFSet::ER_MC)
+  if (p->GetEtype() == PDFSet::erType::ER_MC)
   {
     real *pdf = new real[p->GetMembers()];
     for (int n = 0; n < p->GetMembers(); n++)
@@ -416,13 +437,13 @@ real CalculateArcLength(LHAPDFSet* const& pdf, int const& mem, real const& Q, gp
 
   if (xmin <= 0)  //xmin must be strictly larger than zero for this (due to logarithmic spacing)
   {
-    cerr << "Error in PDFSet::CalculateArcLength: xmin must be > 0. Using xmin = 1E-7" << endl;
+    cerr << "Error in PDFSet::erType::CalculateArcLength: xmin must be > 0. Using xmin = 1E-7" << endl;
     xmin = 1e-7; //Set to default rather than exit
   }
 
   if (xmax <= 0)  //Same requirement for xmax
   {
-    cerr << "Error in PDFSet::CalculateArcLength: xmax must be > 0. Using xmax = 1E-7" << endl;
+    cerr << "Error in PDFSet::erType::CalculateArcLength: xmax must be > 0. Using xmax = 1E-7" << endl;
     xmin = 1e-7; //Set to default rather than exit
   }
 
@@ -467,7 +488,7 @@ void PlotReplicaLHA(LHAPDFSet *pdfset,LHAPDFSet* pdf68cl, int flavour,
                     string *labels,string dest)
 {
   // Check if grid is LHAPDF
-  if (pdfset->GetEtype() != PDFSet::ER_MC && pdfset->GetEtype() != PDFSet::ER_MC68)
+  if (pdfset->GetEtype() != PDFSet::erType::ER_MC && pdfset->GetEtype() != PDFSet::erType::ER_MC68)
     {
       cout << "Error in PlotReplica, PDFSet must be a NNPDF!" << endl;
       exit(-1);
@@ -687,7 +708,7 @@ void PlotReplicaEVLN(LHAPDFSet *pdfset, LHAPDFSet *pdf68cl, int flavour,
                      string *labels, string dest)
 {
   // Check if grid is LHAPDF
-  if (pdfset->GetEtype() != PDFSet::ER_MC && pdfset->GetEtype() != PDFSet::ER_MC68)
+  if (pdfset->GetEtype() != PDFSet::erType::ER_MC && pdfset->GetEtype() != PDFSet::erType::ER_MC68)
     {
       cout << "Error in PlotReplica, PDFSet must be a NNPDF!" << endl;
       exit(-1);
@@ -908,7 +929,7 @@ void PlotReplicaGPDF(LHAPDFSet *pdfset,LHAPDFSet *pdf68cl, gpdf flavour,
                      string *labels, string dest)
 {
   // Check if grid is LHAPDF
-  if (pdfset->GetEtype() != PDFSet::ER_MC && pdfset->GetEtype() != PDFSet::ER_MC68)
+  if (pdfset->GetEtype() != PDFSet::erType::ER_MC && pdfset->GetEtype() != PDFSet::erType::ER_MC68)
     {
       cout << "Error in PlotReplica, PDFSet must be a NNPDF!" << endl;
       exit(-1);
