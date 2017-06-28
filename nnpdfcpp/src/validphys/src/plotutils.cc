@@ -437,13 +437,13 @@ real CalculateArcLength(LHAPDFSet* const& pdf, int const& mem, real const& Q, gp
 
   if (xmin <= 0)  //xmin must be strictly larger than zero for this (due to logarithmic spacing)
   {
-    cerr << "Error in PDFSet::erType::CalculateArcLength: xmin must be > 0. Using xmin = 1E-7" << endl;
+    cerr << "Error in PDFSet::CalculateArcLength: xmin must be > 0. Using xmin = 1E-7" << endl;
     xmin = 1e-7; //Set to default rather than exit
   }
 
   if (xmax <= 0)  //Same requirement for xmax
   {
-    cerr << "Error in PDFSet::erType::CalculateArcLength: xmax must be > 0. Using xmax = 1E-7" << endl;
+    cerr << "Error in PDFSet::CalculateArcLength: xmax must be > 0. Using xmax = 1E-7" << endl;
     xmin = 1e-7; //Set to default rather than exit
   }
 
