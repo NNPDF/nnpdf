@@ -34,7 +34,7 @@ namespace NNPDF
         std::string fPDFName; //!< Name of PDF used to do the calculation
         std::string fSetName; //!< Name of dataset in the calculation
 
-        int  fEtype;   //!< Uncertainty type
+        PDFSet::erType  fEtype;   //!< Uncertainty type
 
         static void GetNZPDF(const PDFSet*, const FKTable*, real* pdf); //!< Form up PDF array
         static void GetNZPDF(const PDFSet*, const PDFSet*, const FKTable*, real* pdf); //!< Form up PDF array (differing beams)

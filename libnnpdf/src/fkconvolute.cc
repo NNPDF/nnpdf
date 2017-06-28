@@ -33,7 +33,7 @@ int main(int argc, char **argv)
   LHAPDF::setVerbosity(0); 
 
   // Init LHAPDFSET
-  NNPDF::LHAPDFSet f(argv[1],  NNPDF::LHAPDFSet::ER_MC);
+  NNPDF::LHAPDFSet f(argv[1],  NNPDF::LHAPDFSet::erType::ER_MC);
 
   // Init FKTable
   NNPDF::FKTable sig1(argv[2]);
