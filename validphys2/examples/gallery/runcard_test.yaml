@@ -42,11 +42,26 @@ dataspecs:
       speclabel: "NNLO"
       fit: NNPDF31_nnlo_as_0118_1000
 
+dataset_report:
+    meta: Null
+    template_text: |
+        {@with matched_datasets_from_dataspecs@}
+        % Data theory comparison for {@dataset_name@}
+        
+        Absolute
+        ---------
+        
+        {@ plot_fancy_dataspecs @}
+        
+        Normalized
+        ----------
+        
+        {@ datanorm plot_fancy_dataspecs @}
+
+        {@endwith@}
+
 datanorm:
     normalize_to: data
-
-experiments:
-    from_: fit
 
 template_text: |
     
@@ -64,15 +79,12 @@ template_text: |
     {@fits_chi2_table@}
 
     # Comparison with data
-    {@with matched_datasets_from_dataspecs@}
-    ## {@dataset_name@}
-    Absolute
-    ---------
-    {@plot_fancy_dataspecs@} 
-    Normalized
-    ----------
-    {@ datanorm plot_fancy_dataspecs@}
-    {@endwith@}
+    {@with base::fitcontext::experiments@}
+    ###{@ experiment @}
+    {@with experiment@}
+    [Detailed plots for dataset ' {@dataset@} ']({@dataset_report report @})
+    {@ endwith @}
+    {@ endwith @}
 
 actions_:
     - - report:
