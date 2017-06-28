@@ -31,6 +31,19 @@ from validphys import lhaindex
 log = logging.getLogger(__name__)
 
 
+#TODO: Remove this eventually
+#Bacward compatibility error type names
+#Swig renamed these for no reason whatsoever.
+try:
+    LHAPDFSet.erType_ER_EIG
+except AttributeError:
+    import warnings
+    warnings.warn("libnnpdf out of date. Setting backwards compatible names")
+    LHAPDFSet.erType_ER_MC = LHAPDFSet.ER_MC
+    LHAPDFSet.erType_ER_EIG = LHAPDFSet.ER_EIG
+    LHAPDFSet.erType_ER_EIG90 = LHAPDFSet.ER_EIG90
+    LHAPDFSet.erType_ER_SYMEIG = LHAPDFSet.ER_SYMEIG
+
 class TupleComp:
 
     @classmethod
@@ -151,31 +164,31 @@ class PDF(TupleComp):
         """Return the NNPDF error tag, used to build the `LHAPDFSet` objeect"""
         error = self.ErrorType
         if error == "replicas":
-            return LHAPDFSet.ER_MC
+            return LHAPDFSet.erType_ER_MC
         if error == "hessian":
             if hasattr(self, 'ErrorConfLevel'):
                 cl = self.ErrorConfLevel
                 if cl == 90:
-                    return LHAPDFSet.ER_EIG90
+                    return LHAPDFSet.erType_ER_EIG90
                 elif cl == 68:
-                    return LHAPDFSet.ER_EIG
+                    return LHAPDFSet.erType_ER_EIG
                 else:
                     raise NotImplementedError("No hessian errors with confidence"
                                               " interval %s" % (cl,) )
             else:
-                return LHAPDFSet.ER_EIG
+                return LHAPDFSet.erType_ER_EIG
 
         if error == "symmhessian":
             if hasattr(self, 'ErrorConfLevel'):
                 cl = self.ErrorConfLevel
                 if cl == 68:
-                    return LHAPDFSet.ER_SYMEIG
+                    return LHAPDFSet.erType_ER_SYMEIG
                 else:
                     raise NotImplementedError("No symmetric hessian errors "
                                               "with confidence"
                                               " interval %s" % (cl,) )
             else:
-                return LHAPDFSet.ER_SYMEIG
+                return LHAPDFSet.erType_ER_SYMEIG
 
         raise NotImplementedError("Error type for %s: '%s' is not implemented" %
                                   (self.name, error))
