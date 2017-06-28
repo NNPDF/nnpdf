@@ -234,7 +234,7 @@ fNpdf(0),
 fNData(0),
 fPDFName(""),
 fSetName(""),
-fEtype(-1)
+fEtype(PDFSet::erType::ER_NONE)
 {
   swap(*this, other);
 }
@@ -256,7 +256,7 @@ ThPredictions& ThPredictions::operator+=(const ThPredictions& o)
   if (o.fNpdf != fNpdf || o.fNData != fNData)
     throw EvaluationError("ThPredictions::operator+=","Cannot sum predictions with different numbers of datapoints/PDF members");
 
-  if (fEtype != PDFSet::ER_MC && fEtype != PDFSet::ER_MC68 && fEtype != PDFSet::ER_MCT0 && ThPredictions::Verbose == true)
+  if (fEtype != PDFSet::erType::ER_MC && fEtype != PDFSet::erType::ER_MC68 && fEtype != PDFSet::erType::ER_MCT0 && ThPredictions::Verbose == true)
     std::cerr << "ThPredictions::operator+= Warning: Observable summation undefined for ErrorTypes other than Monte-Carlo" <<std::endl; 
 
   // Increment predictions 
@@ -280,7 +280,7 @@ ThPredictions& ThPredictions::operator-=(const ThPredictions& o)
   if (o.fNpdf != fNpdf || o.fNData != fNData)
     throw EvaluationError("ThPredictions::operator-=","Cannot subtract predictions with different numbers of datapoints/PDF members");
 
-  if ( ( fEtype != PDFSet::ER_MC && fEtype != PDFSet::ER_MC68 && fEtype != PDFSet::ER_MCT0 ) && ThPredictions::Verbose == true)
+  if ( ( fEtype != PDFSet::erType::ER_MC && fEtype != PDFSet::erType::ER_MC68 && fEtype != PDFSet::erType::ER_MCT0 ) && ThPredictions::Verbose == true)
     std::cerr << "ThPredictions::operator-= Warning: Observable subtraction undefined for ErrorTypes other than Monte-Carlo" <<std::endl; 
 
   // Increment predictions 
@@ -304,7 +304,7 @@ ThPredictions& ThPredictions::operator/=(const ThPredictions& o)
   if (o.fNpdf != fNpdf || o.fNData != fNData)
     throw EvaluationError("ThPredictions::operator/=","Cannot divide predictions with different numbers of datapoints/PDF members");
 
-  if ( (fEtype != PDFSet::ER_MC && fEtype != PDFSet::ER_MC68 && fEtype != PDFSet::ER_MCT0 ) && ThPredictions::Verbose == true)
+  if ( (fEtype != PDFSet::erType::ER_MC && fEtype != PDFSet::erType::ER_MC68 && fEtype != PDFSet::erType::ER_MCT0 ) && ThPredictions::Verbose == true)
     std::cerr << "ThPredictions::operator/= Warning: Observable division undefined for ErrorTypes other than Monte-Carlo" <<std::endl; 
 
   // Increment predictions 
@@ -328,7 +328,7 @@ ThPredictions& ThPredictions::operator*=(const ThPredictions& o)
   if (o.fNpdf != fNpdf || o.fNData != fNData)
     throw EvaluationError("ThPredictions::operator/=","Cannot multiply predictions with different numbers of datapoints/PDF members");
 
-  if ( (fEtype != PDFSet::ER_MC && fEtype != PDFSet::ER_MC68 && fEtype != PDFSet::ER_MCT0 ) && ThPredictions::Verbose == true)
+  if ( (fEtype != PDFSet::erType::ER_MC && fEtype != PDFSet::erType::ER_MC68 && fEtype != PDFSet::erType::ER_MCT0 ) && ThPredictions::Verbose == true)
     std::cerr << "ThPredictions::operator/= Warning: Observable multiplication undefined for ErrorTypes other than Monte-Carlo" <<std::endl; 
 
   // Increment predictions 
@@ -500,7 +500,7 @@ real ThPredictions::GetObsCV(int const& idat) const
 {
   real avg = 0;
 
-  if (fEtype == PDFSet::ER_MC || fEtype == PDFSet::ER_MC68)
+  if (fEtype == PDFSet::erType::ER_MC || fEtype == PDFSet::erType::ER_MC68)
     {
       real *iObs = fObs + idat*fNpdf;
       avg = ComputeAVG(fNpdf, iObs);
@@ -522,7 +522,7 @@ real ThPredictions::GetObsCV(int const& idat) const
 real ThPredictions::GetObsError(int const& idat) const
 {
   real err = 0;
-  if (fEtype == PDFSet::ER_MC || fEtype == PDFSet::ER_MC68)
+  if (fEtype == PDFSet::erType::ER_MC || fEtype == PDFSet::erType::ER_MC68)
     {
       real *iObs = fObs + idat*fNpdf;
       err = ComputeStdDev(fNpdf, iObs);
@@ -530,8 +530,8 @@ real ThPredictions::GetObsError(int const& idat) const
   else
     {
       real *iObs = fObs + idat*fNpdf;
-      err = (fEtype == PDFSet::ER_SYMEIG) ? ComputeSymEigErr(fNpdf, iObs) : ComputeEigErr(fNpdf, iObs);
-      if (fEtype == PDFSet::ER_EIG90)
+      err = (fEtype == PDFSet::erType::ER_SYMEIG) ? ComputeSymEigErr(fNpdf, iObs) : ComputeEigErr(fNpdf, iObs);
+      if (fEtype == PDFSet::erType::ER_EIG90)
         err /= 1.64485;
     }
   

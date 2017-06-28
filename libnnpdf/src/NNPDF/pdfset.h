@@ -24,7 +24,7 @@ namespace NNPDF
     {
       public:
            //! Error types (Etype)
-        enum erType 
+        enum class erType
         { ER_NONE,  //!< PDF set is not an error set
           ER_MC,    //!< 1sigma error for NNPDF
           ER_MC68,  //!< 68cl error for NNPDF
@@ -75,19 +75,19 @@ namespace NNPDF
         {
             switch (type)
             {
-                case ER_NONE:
+                case erType::ER_NONE:
                     return "No Errors";
-                case ER_MC:
+                case erType::ER_MC:
                     return "Monte Carlo";
-                case ER_MC68:
+                case erType::ER_MC68:
                     return "Monte Carlo 68pc";
-                case ER_MCT0:
+                case erType::ER_MCT0:
                     return "Monte Carlo t0";
-                case ER_EIG:
+                case erType::ER_EIG:
                     return "Eigenvector 68pc";
-                case ER_EIG90:
+                case erType::ER_EIG90:
                     return "Eigenvector 90pc";
-                case ER_SYMEIG:
+                case erType::ER_SYMEIG:
                     return "Symmetric eigenvector";
             }
 
