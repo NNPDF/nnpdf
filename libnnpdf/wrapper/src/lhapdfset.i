@@ -15,6 +15,8 @@
     import_array();
 %}
 
+%rename(single_replica) NNPDF::LHAPDFSet::LHAPDFSet(std::string const &,int const &);
+
 %import "pdfset.i"
 %include "common.i"
 
