@@ -48,17 +48,18 @@ def computed_psedorreplicas_chi2(experiments, dataseed, pdf,
     pdfname = pdf.name
     datas = []
 
+    original_experiments = [e.load.__wrapped__(e) for e in experiments]
+    for exp in original_experiments:
+        exp.SetT0(lt0)
+
     for lhapdf_index, nnfit_index in enumerate(fitted_replica_indexes, 1):
         #No need to save these in the cache, so we call __wrapped__
-        original_experiments = [e.load.__wrapped__(e) for e in experiments]
+
         flutuated_experiments = pseudodata(original_experiments, dataseed, nnfit_index)
         lpdf = single_replica(pdfname, lhapdf_index)
         for expspec, exp in zip(experiments, flutuated_experiments):
             #We need to manage the memory
             exp.thisown = True
-
-            exp.SetT0(lt0)
-
 
             th = ThPredictionsResult.from_convolution(pdf, expspec,
                 loaded_data=exp, loaded_pdf=lpdf)
