@@ -92,6 +92,10 @@ def _check_fits_different(fits):
 @table
 @_check_fits_different
 def fits_matched_pseudorreplicas_chi2_table(fits, fits_computed_psedorreplicas_chi2):
+    """Collect the chi^2 of the pseudoreplicas in the fits a single table,
+    groped by nnfit_id.
+    The columns come in two levels, fit name and (total chi², n).
+    The indexes also come in two levels: nnfit_id and experiment name."""
     return pd.concat(fits_computed_psedorreplicas_chi2, axis=1, keys=map(str,fits))
 
 
