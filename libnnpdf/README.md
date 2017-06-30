@@ -9,11 +9,12 @@ Dependencies
 
 libnnpdf depends on the following libraries:
 
-- lhapdf 6.1.6
-- gsl 1.16
-- libarchive 3.3
-- sqlite 3
-- yaml-cpp 0.5.3
+- pkg-config
+- lhapdf
+- gsl
+- libarchive
+- sqlite 
+- yaml-cpp
 
 please ensure to have the dependencies correctly installed and in your PATH before installing libnnpdf.
 
