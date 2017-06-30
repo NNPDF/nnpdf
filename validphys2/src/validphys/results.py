@@ -315,7 +315,7 @@ def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None):
         #Copy data to avoid chaos
         data = type(data)(data)
         log.debug("Setting T0 predictions for %s" % dataset)
-        data.SetT0(t0set.load())
+        data.SetT0(t0set.load_t0())
 
     return DataResult(data), ThPredictionsResult.from_convolution(pdf, dataset,
                                                  loaded_data=data)
@@ -326,7 +326,7 @@ def experiment_results(experiment, pdf:PDF, t0set:(PDF, type(None))=None):
 
 #It's better to duplicate a few lines than to complicate the logic of
 #``results`` to support this.
-#TODO: The above comment doesn't make sense after adding T0
+#TODO: The above comment doesn't make sense after adding T0. Deprecate this
 def pdf_results(dataset:(DataSetSpec,  ExperimentSpec), pdfs:Sequence, t0set:(PDF, type(None))):
     """Return a list of results, the first for the data and the rest for
     each of the PDFs."""
@@ -337,7 +337,7 @@ def pdf_results(dataset:(DataSetSpec,  ExperimentSpec), pdfs:Sequence, t0set:(PD
         #Copy data to avoid chaos
         data = type(data)(data)
         log.debug("Setting T0 predictions for %s" % dataset)
-        data.SetT0(t0set.load())
+        data.SetT0(t0set.load_t0())
 
     th_results = []
     for pdf in pdfs:

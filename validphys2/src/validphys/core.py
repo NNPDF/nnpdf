@@ -150,6 +150,11 @@ class PDF(TupleComp):
     def load(self):
         return LHAPDFSet(self.name, self.nnpdf_error)
 
+    @functools.lru_cache(maxsize=2)
+    def load_t0(self):
+        """Load the PDF as a t0 set"""
+        return LHAPDFSet(self.name, LHAPDFSet.erType_ER_MCT0)
+
 
     def __str__(self):
         return self.label
