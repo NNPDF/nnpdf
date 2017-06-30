@@ -1450,6 +1450,10 @@ result in a performance gain for many run configurations. The parallel
 mode will be eventually enabled by default, and you can disable it
 explicitly with the `--no-parrallel` flag.
 
+The environment variable `MAX_WORKER_PROCESSES` can be used to
+control the maximum number of workers, which defaults to the total cpu
+count.
+
 Downloading resources
 ---------------------
 
