@@ -14,6 +14,7 @@
 #include <sstream>
 #include <iomanip>
 #include <cmath>
+#include <numeric>
 
 #include "NNPDF/experiments.h"
 #include "NNPDF/pdfset.h"
