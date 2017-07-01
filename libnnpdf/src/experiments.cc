@@ -443,47 +443,52 @@ void Experiment::PullData()
 /**
  * Generate covariance matrix and inverse
  */
-void Experiment::GenCovMat()
-{
+void Experiment::GenCovMat() {
   ClearLocalCovMat();
-  
-  // Allocate arrays 
-  fCovMat = new double*[fNData];
-  fSqrtCov = new double*[fNData];
-  
-  for (int i=0; i<fNData; i++)
-  {
+
+  // Allocate arrays
+  fCovMat = new double *[fNData];
+  fSqrtCov = new double *[fNData];
+
+  for (int i = 0; i < fNData; i++) {
     fCovMat[i] = new double[fNData];
     fSqrtCov[i] = new double[fNData];
-    
-    for (int j=0; j<fNData; j++)
-    {
+
+    for (int j = 0; j < fNData; j++) {
       fCovMat[i][j] = 0;
       fSqrtCov[i][j] = 0;
     }
   }
 
-  for (int i = 0; i < fNData; i++)
-    for (int j = 0; j < fNData; j++)
-    {
-      double sig    = 0.0;
+  for (int i = 0; i < fNData; i++) {
+    for (int j = 0; j < fNData; j++) {
+      double sig = 0.0;
       double signor = 0.0;
-      
-      if (i == j)
-        sig += fStat[i]*fStat[i]; // stat error
 
-      for (int l = 0; l < fNSys; l++)
-        if (fSys[i][l].name.compare("SKIP")!=0)
-          if (i == j || ( fSys[i][l].name.compare("UNCORR")!=0 && fSys[i][l].name.compare("THEORYUNCORR")!=0))
-            switch (fSys[i][l].type)
-            {
-              case ADD: sig += fSys[i][l].add*fSys[j][l].add; break; // additive systematics
-              case MULT: signor += fSys[i][l].mult*fSys[j][l].mult; break; // multiplicative systematics
+      if (i == j) {
+        sig += fStat[i] * fStat[i]; // stat error
+      }
+
+      for (int l = 0; l < fNSys; l++) {
+        if (fSys[i][l].name.compare("SKIP") != 0) {
+          if (i == j || (fSys[i][l].name.compare("UNCORR") != 0 &&
+                         fSys[i][l].name.compare("THEORYUNCORR") != 0)) {
+            switch (fSys[i][l].type) {
+            case ADD:
+              sig += fSys[i][l].add * fSys[j][l].add;
+              break; // additive systematics
+            case MULT:
+              signor += fSys[i][l].mult * fSys[j][l].mult;
+              break; // multiplicative systematics
             }
-          
-      fCovMat[i][j] = sig + signor*fT0Pred[i]*fT0Pred[j]*1e-4;
+          }
+        }
+      }
+
+      fCovMat[i][j] = sig + signor * fT0Pred[i] * fT0Pred[j] * 1e-4;
     }
-    
+  }
+
   CholeskyDecomposition(fNData, fCovMat, fSqrtCov);
 }
 
