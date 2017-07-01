@@ -461,18 +461,36 @@ void Experiment::GenCovMat() {
   }
 
   for (int i = 0; i < fNData; i++) {
-    for (int j = 0; j < fNData; j++) {
+    // Diagonal case
+    double diagsig = 0.0;
+    double diagsignor = 0.0;
+
+    diagsig += fStat[i] * fStat[i]; // stat error
+
+    for (int l = 0; l < fNSys; l++) {
+      if (fSys[i][l].name.compare("SKIP") != 0) {
+
+        switch (fSys[i][l].type) {
+        case ADD:
+          diagsig += fSys[i][l].add * fSys[i][l].add;
+          break; // additive systematics
+        case MULT:
+          diagsignor += fSys[i][l].mult * fSys[i][l].mult;
+          break; // multiplicative systematics
+        }
+      }
+    }
+
+    fCovMat[i][i] = diagsig + diagsignor * fT0Pred[i] * fT0Pred[i] * 1e-4;
+    for (int j = 0; j < i; j++) {
+      // Off diagonal case
       double sig = 0.0;
       double signor = 0.0;
 
-      if (i == j) {
-        sig += fStat[i] * fStat[i]; // stat error
-      }
-
       for (int l = 0; l < fNSys; l++) {
         if (fSys[i][l].name.compare("SKIP") != 0) {
-          if (i == j || (fSys[i][l].name.compare("UNCORR") != 0 &&
-                         fSys[i][l].name.compare("THEORYUNCORR") != 0)) {
+          if (fSys[i][l].name.compare("UNCORR") != 0 &&
+              fSys[i][l].name.compare("THEORYUNCORR") != 0) {
             switch (fSys[i][l].type) {
             case ADD:
               sig += fSys[i][l].add * fSys[j][l].add;
@@ -485,7 +503,9 @@ void Experiment::GenCovMat() {
         }
       }
 
-      fCovMat[i][j] = sig + signor * fT0Pred[i] * fT0Pred[j] * 1e-4;
+      auto res = sig + signor * fT0Pred[i] * fT0Pred[j] * 1e-4;
+      fCovMat[i][j] = res;
+      fCovMat[j][i] = res;
     }
   }
 
