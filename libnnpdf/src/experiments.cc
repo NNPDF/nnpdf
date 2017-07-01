@@ -466,47 +466,45 @@ void Experiment::GenCovMat() {
     double diagsignor = 0.0;
 
     diagsig += fStat[i] * fStat[i]; // stat error
-
     for (int l = 0; l < fNSys; l++) {
-      if (fSys[i][l].name.compare("SKIP") != 0) {
-
-        switch (fSys[i][l].type) {
+        auto & sys = fSys[i][l];
+        if (sys.name == "SKIP"){
+            continue;
+        }
+        switch (sys.type) {
         case ADD:
-          diagsig += fSys[i][l].add * fSys[i][l].add;
+          diagsig += sys.add * sys.add;
           break; // additive systematics
         case MULT:
-          diagsignor += fSys[i][l].mult * fSys[i][l].mult;
+          diagsignor += sys.mult * sys.mult;
           break; // multiplicative systematics
         }
-      }
-    }
-
-    fCovMat[i][i] = diagsig + diagsignor * fT0Pred[i] * fT0Pred[i] * 1e-4;
-    for (int j = 0; j < i; j++) {
-      // Off diagonal case
-      double sig = 0.0;
-      double signor = 0.0;
-
-      for (int l = 0; l < fNSys; l++) {
-        if (fSys[i][l].name.compare("SKIP") != 0) {
-          if (fSys[i][l].name.compare("UNCORR") != 0 &&
-              fSys[i][l].name.compare("THEORYUNCORR") != 0) {
-            switch (fSys[i][l].type) {
+        //No need to loop over the nondiagonal parts
+        bool iscorrelated = (sys.name !="UNCORR" && sys.name != "THEORYUNCORR");
+        if (!iscorrelated){
+            continue;
+        }
+        for (int j = 0; j < i; j++) {
+            auto & othersys = fSys[j][l];
+            //Hopefully easy enough for the compiler to fuse this up
+            decltype(sys.add) res;
+            switch (sys.type){
             case ADD:
-              sig += fSys[i][l].add * fSys[j][l].add;
+              res = sys.add * othersys.add;
               break; // additive systematics
             case MULT:
-              signor += fSys[i][l].mult * fSys[j][l].mult;
+              res = sys.mult * othersys.mult * fT0Pred[i] * fT0Pred[j] * 1e-4;
               break; // multiplicative systematics
-            }
-          }
-        }
-      }
 
-      auto res = sig + signor * fT0Pred[i] * fT0Pred[j] * 1e-4;
-      fCovMat[i][j] = res;
-      fCovMat[j][i] = res;
+            }
+            fCovMat[i][j] += res;
+            fCovMat[j][i] += res;
+
+        }
+
     }
+    fCovMat[i][i] = diagsig + diagsignor * fT0Pred[i] * fT0Pred[i] * 1e-4;
+
   }
 
   CholeskyDecomposition(fNData, fCovMat, fSqrtCov);
