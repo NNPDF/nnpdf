@@ -54,7 +54,7 @@ DataSet::DataSet(CommonData const& data, FKSet const& set):
   }
   
   // Generate Covariance Matrix
-  GenCovMat();
+  //GenCovMat();
 
 }
 
@@ -83,7 +83,7 @@ DataSet::DataSet(const DataSet& set):
     }
 
   // Generate covariance matrix
-  GenCovMat();
+  //GenCovMat();
 }
 
 void NNPDF::swap(DataSet& lhs, DataSet& rhs)
@@ -154,7 +154,7 @@ DataSet::DataSet(const DataSet& set, std::vector<int> const& mask):
     }
 
   // Generate covariance matrix
-  GenCovMat();
+  //GenCovMat();
 }
 
 /**
