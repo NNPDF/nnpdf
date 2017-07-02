@@ -451,60 +451,55 @@ void Experiment::GenCovMat() {
   fSqrtCov = new double *[fNData];
 
   for (int i = 0; i < fNData; i++) {
-    fCovMat[i] = new double[fNData];
-    fSqrtCov[i] = new double[fNData];
-
-    for (int j = 0; j < fNData; j++) {
-      fCovMat[i][j] = 0;
-      fSqrtCov[i][j] = 0;
-    }
+    fCovMat[i] = new double[fNData]();
+    fSqrtCov[i] = new double[fNData]();
   }
 
   for (int i = 0; i < fNData; i++) {
     // Diagonal case
-    double diagsig = 0.0;
-    double diagsignor = 0.0;
 
-    diagsig += fStat[i] * fStat[i]; // stat error
-    for (int l = 0; l < fNSys; l++) {
-        auto & sys = fSys[i][l];
-        if (sys.name == "SKIP"){
-            continue;
-        }
-        switch (sys.type) {
+    fCovMat[i][i] = fStat[i] * fStat[i]; // stat error
+  }
+  for (int l = 0; l < fNSys; l++) {
+    auto &compsys = fSys[0][l];
+    if (compsys.name == "SKIP") {
+      continue;
+    }
+    bool iscorrelated =
+        (compsys.name != "UNCORR" && compsys.name != "THEORYUNCORR");
+    for (int i = 0; i < fNData; i++) {
+      double diagsig = 0.0;
+      double diagsignor = 0.0;
+      auto &sys = fSys[i][l];
+      switch (compsys.type) {
+      case ADD:
+        diagsig += sys.add * sys.add;
+        break; // additive systematics
+      case MULT:
+        diagsignor += sys.mult * sys.mult;
+        break; // multiplicative systematics
+      }
+      // No need to loop over the nondiagonal parts
+      if (!iscorrelated) {
+        continue;
+      }
+      for (int j = 0; j < i; j++) {
+        auto &othersys = fSys[j][l];
+        // Hopefully easy enough for the compiler to fuse this up
+        decltype(sys.add) res;
+        switch (compsys.type) {
         case ADD:
-          diagsig += sys.add * sys.add;
+          res = sys.add * othersys.add;
           break; // additive systematics
         case MULT:
-          diagsignor += sys.mult * sys.mult;
+          res = sys.mult * othersys.mult * fT0Pred[i] * fT0Pred[j] * 1e-4;
           break; // multiplicative systematics
         }
-        //No need to loop over the nondiagonal parts
-        bool iscorrelated = (sys.name !="UNCORR" && sys.name != "THEORYUNCORR");
-        if (!iscorrelated){
-            continue;
-        }
-        for (int j = 0; j < i; j++) {
-            auto & othersys = fSys[j][l];
-            //Hopefully easy enough for the compiler to fuse this up
-            decltype(sys.add) res;
-            switch (sys.type){
-            case ADD:
-              res = sys.add * othersys.add;
-              break; // additive systematics
-            case MULT:
-              res = sys.mult * othersys.mult * fT0Pred[i] * fT0Pred[j] * 1e-4;
-              break; // multiplicative systematics
-
-            }
-            fCovMat[i][j] += res;
-            fCovMat[j][i] += res;
-
-        }
-
+        fCovMat[i][j] += res;
+        fCovMat[j][i] += res;
+      }
+      fCovMat[i][i] += diagsig + diagsignor * fT0Pred[i] * fT0Pred[i] * 1e-4;
     }
-    fCovMat[i][i] = diagsig + diagsignor * fT0Pred[i] * fT0Pred[i] * 1e-4;
-
   }
 
   CholeskyDecomposition(fNData, fCovMat, fSqrtCov);
