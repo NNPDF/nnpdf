@@ -33,11 +33,12 @@ using namespace NNPDF;
  * \param data NNPDF::CommonData containing the experimental data
  * \param set  NNPDF::FKSet containing the corresponding theory calculation
  */
-DataSet::DataSet(CommonData const& data, FKSet const& set):
+DataSet::DataSet(CommonData const& data, FKSet const& set, bool computecovmat):
   CommonData(data),
   FKSet(set),
   fIsArtificial(false),
   fIsT0(false),
+  fHasCovMat(false),
   fT0Pred(new double[fNData]),
   fCovMat(new double*[fNData]),
   fSqrtCov(new double*[fNData])
@@ -52,10 +53,10 @@ DataSet::DataSet(CommonData const& data, FKSet const& set):
     for (int j = 0; j < fNData; j++)
       fCovMat[i][j] = 0.0;
   }
-  
-  // Generate Covariance Matrix
-  //GenCovMat();
 
+  // Generate Covariance Matrix
+  if (computecovmat)
+    GenCovMat();
 }
 
 DataSet::DataSet(const DataSet& set):
@@ -63,6 +64,7 @@ DataSet::DataSet(const DataSet& set):
   FKSet(set),
   fIsArtificial(set.fIsArtificial),
   fIsT0(set.fIsT0),
+  fHasCovMat(set.fHasCovMat),
   fT0Pred(new double[fNData]),
   fCovMat(new double*[fNData]),
   fSqrtCov(new double*[fNData])
@@ -77,13 +79,10 @@ DataSet::DataSet(const DataSet& set):
       
       for (int j=0; j<fNData; j++)
       {
-        fCovMat[i][j] = 0.0;
-        fSqrtCov[i][j] = 0.0;
+        fCovMat[i][j] = set.fCovMat[i][j];
+        fSqrtCov[i][j] = set.fSqrtCov[i][j];
       }
     }
-
-  // Generate covariance matrix
-  //GenCovMat();
 }
 
 void NNPDF::swap(DataSet& lhs, DataSet& rhs)
@@ -129,11 +128,12 @@ DataSet::DataSet(DataSet && other):
 
 }
 
-DataSet::DataSet(const DataSet& set, std::vector<int> const& mask):
+DataSet::DataSet(const DataSet& set, std::vector<int> const& mask, bool computecovmat):
   CommonData(set, mask),
   FKSet(set, mask),
   fIsArtificial(set.fIsArtificial),
   fIsT0(set.fIsT0),
+  fHasCovMat(false),
   fT0Pred(new double[fNData]),
   fCovMat(new double*[fNData]),
   fSqrtCov(new double*[fNData])
@@ -154,7 +154,8 @@ DataSet::DataSet(const DataSet& set, std::vector<int> const& mask):
     }
 
   // Generate covariance matrix
-  //GenCovMat();
+  if (computecovmat)
+    GenCovMat();
 }
 
 /**
@@ -214,6 +215,9 @@ void DataSet::GenCovMat()
   
   // Compute sqrt of covmat
   CholeskyDecomposition(fNData, fCovMat, fSqrtCov);
+
+  // set flag
+  fHasCovMat = true;
 }
 
 void DataSet::RescaleErrors(const double mult)
@@ -340,6 +344,40 @@ void DataSet::MakeArtificial()
   // Note DO NOT Regenerate covariance matrices  
 }
 
+/**
+ * @brief DataSet::GetCovMat
+ * @return
+ */
+double** DataSet::GetCovMat() const
+{
+  if (!fHasCovMat)
+    throw NNPDF::RuntimeException("DataSet::GetCovMat", "Covariance matrix not generated.");
+
+  return fCovMat;
+}
+
+/**
+ * @brief DataSet::GetSqrtCov
+ * @return
+ */
+double** DataSet::GetSqrtCov() const
+{
+  if (!fHasCovMat)
+    throw NNPDF::RuntimeException("DataSet::GetSqrtCov", "Sqrt of covariance matrix not generated.");
+
+  return fSqrtCov;
+}
+
+/**
+ * @brief GetSqrtCov
+ */
+double const& DataSet::GetSqrtCov(int const& i, int const& j) const
+{
+  if (!fHasCovMat)
+    throw NNPDF::RuntimeException("DataSet::GetSqrtCov(i,j)", "Sqrt of covariance matrix not generated.");
+
+  return fSqrtCov[i][j];
+}
 
 
 /**
