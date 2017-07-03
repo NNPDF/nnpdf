@@ -17,7 +17,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from reportengine.figure import figure
+from reportengine.figure import figure, figuregen
 from reportengine.table import table
 from reportengine import collect
 from reportengine.checks import make_argcheck, CheckError
@@ -52,6 +52,9 @@ def computed_psedorreplicas_chi2(experiments, dataseed, pdf,
     for exp in original_experiments:
         exp.SetT0(lt0)
 
+    import datetime
+    now = datetime.datetime.now
+    oldt = now()
     for lhapdf_index, nnfit_index in enumerate(fitted_replica_indexes, 1):
         #No need to save these in the cache, so we call __wrapped__
 
@@ -74,6 +77,9 @@ def computed_psedorreplicas_chi2(experiments, dataseed, pdf,
                 central_chi2=chi2.central_result,
                 ndata=chi2.ndata)
             datas.append(data)
+        newt = now()
+        log.info(f"Replica {nnfit_index} took {(newt - oldt).total_seconds()}")
+        oldt = newt
     df =  pd.DataFrame(datas, columns=PseudoReplicaExpChi2Data._fields)
     df.set_index(['nnfit_index', 'experiment'], inplace=True)
     return df
@@ -208,3 +214,32 @@ def plot_poly_as_fit(fits_pdfs,
     ax.set_xlabel(r'$\alpha_S$')
     ax.set_ylabel(r'$\chi²/N_{dat}$')
     return fig
+
+@table
+def analize_fits_matched_pseudorreplicas_chi2_output(tablefile:str, ):
+    """NOTE: THIS IS A QUICK HACK AND MAY BE REMOVED OR HEAVILY CHANGED IN THE FUTURE.
+    Quick and dirty analizing tool for the output of
+    fits_matched_pseudorreplicas_chi2_table."""
+    df = pd.DataFrame.from_csv(tablefile, sep='\t', index_col=[0,1],header=[0,1])
+    ndataindexer = df.columns.get_locs([slice(None), 'ndata'])
+    assert df.iloc[:,ndataindexer].apply(lambda x: len(np.unique(x.dropna()))==1, axis=1).all()
+    first = df.index.get_locs([1, slice(None)])
+    lens = df.iloc[first,ndataindexer[0]]
+    chindexer = df.columns.get_locs([slice(None), 'central_chi2'])
+    df = df.iloc[:,chindexer]
+    df = df.swaplevel(0,1)
+    newcols = df.columns.set_levels([df.columns.levels[0], ['chi2']])
+    df.columns = newcols
+    return df
+
+@figuregen
+def plot_experiments_as_determination_from_matched_psudorreplicas(
+        analize_fits_matched_pseudorreplicas_chi2_output, fits_pdfs,
+        polorder=2,
+        max_ndiscarded:int=4):
+    df = analize_fits_matched_pseudorreplicas_chi2_output
+    for expname, data in df.groupby(level=0):
+        yield from plot_poly_as_fit(data, polorder=polorder, max_ndiscarded=max_ndiscarded)
+
+
+
