@@ -12,6 +12,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <array>
 
 /** @defgroup utils Utils
  * \brief libnnpdf utility functions
@@ -69,6 +70,27 @@ namespace NNPDF
     std::ostream& stream() {return fStream;} //!< Returns the internal stream
   };
 
+  /**
+   * @brief The matrix class for the covmat related objects
+   */
+  template<class T>
+  class matrix
+  {
+  public:
+    matrix(size_t row = 0, size_t col = 0); //!< matrix constructor
+    void resize(size_t row, size_t col, T v); //!< resize matrix and fill with v
+    void clear(); //!< clear matrix size and content
+
+    //operators
+    size_t const& size(size_t dim) const { return _size[dim]; } //!< Returns the (row,col) size pair.
+    T&       operator()(size_t i, size_t j)       { return _data[i+_size[0]*j]; }
+    T const& operator()(size_t i, size_t j) const { return _data[i+_size[0]*j]; }
+
+  private:
+    std::array<size_t, 2> _size; //!< the dimension pair
+    std::vector<T>   _data; //!< the data array
+  };
+
   // *******************  Numerical *****************************
   double integrate(double data[], size_t npoints, double h); //!< Basic simpson rule integrator
 
@@ -93,7 +115,7 @@ namespace NNPDF
   void Compute68cl(std::vector<real> const& x, real &up, real &dn);//!< Compute the 68% c.l.
   void Compute95cl(std::vector<real> const& x, real &up, real &dn);//!< Compute the 95% c.l.
 
-  void CholeskyDecomposition(int const& n, double** const inmatrix, double** sqrtmat);
+  void CholeskyDecomposition(int const& n, matrix<double> const& inmatrix, matrix<double> & sqrtmat);
 
 }
 
