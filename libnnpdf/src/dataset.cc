@@ -42,7 +42,7 @@ DataSet::DataSet(CommonData const& data, FKSet const& set):
 
   // Init T0 Vector
   for (int i = 0; i < fNData; i++)
-    fT0Pred[i] = fData[i]; // Default T0 to data
+    fT0Pred.push_back(fData[i]); // Default T0 to data
 }
 
 DataSet::DataSet(const DataSet& set, std::vector<int> const& mask):
@@ -55,7 +55,7 @@ DataSet::DataSet(const DataSet& set, std::vector<int> const& mask):
 
   // Building Obs array
   for (int i = 0; i < fNData; i++)
-    fT0Pred[i] = set.fT0Pred[mask[i]];
+    fT0Pred.push_back(set.fT0Pred[mask[i]]);
 }
 
 /**
