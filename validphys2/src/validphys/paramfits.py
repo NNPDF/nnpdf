@@ -119,32 +119,72 @@ def plot_fits_as_profile(fits_pdfs, fits_total_chi2):
     ax.set_ylabel(r'$\chi²/N_{dat}$')
     return fig
 
-@figure
-def plot_fitted_replicas_as_profiles_matched(fits_pdfs,
-        fits_replica_data_correlated, max_ndiscarded:int=4):
-    """Plot chi²(as) keeping the replica nnfit index matched.
 
-    The ``max_ndiscarded`` parameter defines th number of points
-    discarded by postfit from which we discard the curve.
-    """
+@make_argcheck
+def _check_badcurves(badcurves):
+    options = ['discard', 'minimum', 'allminimum']
+    if badcurves not in  options:
+        raise CheckError(f"badcurves must be one of {options}",
+                         badcurves, options)
 
-    alphas = [pdf.AlphaS_MZ for pdf in fits_pdfs]
+
+def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated,
+        max_ndiscarded:int=4):
     df = fits_replica_data_correlated
     def ap(x):
         x.columns = x.columns.droplevel(0)
-        return (x['training'] + x['validation'])/2
+        return (x['chi2'])
     table = df.groupby(axis=1, level=0).apply(ap)
     filt = table.isnull().sum(axis=1) < max_ndiscarded
     table = table[filt]
-    table = table.as_matrix()
+    #table = np.atleast_2d(np.mean(table, axis=0))
+    return table
+
+
+@_check_badcurves
+def parabolic_as_determination(fits_pdfs,
+        fits_replica_data_with_discarded_replicas,
+        badcurves='discard'):
+    """Return the minima for alpha_s corresponding to the fitted curves."""
+    alphas = [pdf.AlphaS_MZ for pdf in fits_pdfs]
+
+    table = fits_replica_data_with_discarded_replicas.as_matrix()
 
     minimums = []
     asarr = np.asarray(alphas)
     for row in table:
         filt =  np.isfinite(row)
         a,b,c = np.polyfit(asarr[filt], row[filt], 2)
-        minimums.append(-b/2/a)
+        if badcurves == 'allminimum':
+            minimums.append(asarr[filt][np.argmin(row[filt])])
+        elif a>0:
+            minimums.append(-b/2/a)
+        elif badcurves == 'discard':
+            pass
+        elif badcurves == 'minimum':
+            minimums.append(asarr[filt][np.argmin(row[filt])])
+        else:
+            raise RuntimeError("Unknown bad curves.")
+
     minimums = np.asarray(minimums)
+    return minimums
+
+
+@figure
+def plot_fitted_replicas_as_profiles_matched(fits_pdfs,
+        fits_replica_data_with_discarded_replicas,
+        parabolic_as_determination, suptitle=None):
+    """Plot chi²(as) keeping the replica nnfit index matched.
+
+    The ``max_ndiscarded`` parameter defines th number of points
+    discarded by postfit from which we discard the curve.
+    """
+    alphas = [pdf.AlphaS_MZ for pdf in fits_pdfs]
+
+
+    minimums = parabolic_as_determination
+
+    table = fits_replica_data_with_discarded_replicas.as_matrix()
 
     fig, ax = plt.subplots()
 
@@ -157,19 +197,20 @@ def plot_fitted_replicas_as_profiles_matched(fits_pdfs,
     ax.set_xlim(min(alphas), max(alphas))
     ax.set_ylim(np.nanmin(table), np.nanmax(table))
     fig.colorbar(lc, label=r"Preferred $\alpha_S$")
-    plt.title(rf"$\alpha_S$ from quadratic fit = ${np.mean(minimums):.4f} \pm {np.std(minimums):.4f}$ N={len(table)}")
-
-
+    ax.set_title(rf"$\alpha_S$ = ${np.mean(minimums):.4f} \pm {np.std(minimums):.4f}$ N={len(minimums)}")
+    if suptitle:
+        fig.suptitle(suptitle)
 
     #ax.plot(alphas, np.array(table).T, color='#ddddcc')
     ax.set_xlabel(r'$\alpha_S$')
-    ax.set_ylabel(r'$\chi²/N_{dat}$')
+    ax.set_ylabel(r'$\chi^2$')
     return fig
 
 
 @figure
 def plot_poly_as_fit(fits_pdfs,
-        fits_replica_data_correlated, max_ndiscarded:int=4, polorder:int=2):
+        fits_replica_data_correlated, max_ndiscarded:int=4, polorder:int=2,
+        suptitle=None):
     """Plot a polynomial fit of chi²(as) of `degree polorder`, keeping the
     replica index matched.
 
@@ -197,7 +238,7 @@ def plot_poly_as_fit(fits_pdfs,
 
         #Cast away the zero complex part
         candidates = np.real(extrema[np.isreal(extrema)])
-        candidates = candidates[(candidates > alphas[0]) & (candidates<alphas[-1])]
+        #candidates = candidates[(candidates > alphas[0]) & (candidates<alphas[-1])]
         if len(candidates):
             minimums.append(candidates[np.argmin(np.polyval(fit, candidates))])
             color = f'C{i%10}'
@@ -210,36 +251,11 @@ def plot_poly_as_fit(fits_pdfs,
     ax.set_ylim(np.nanmin(table), np.nanmax(table))
     plt.title(rf"$\alpha_S$ from order {polorder} polynomial fit "
               rf"= ${np.mean(minimums):.4f} \pm {np.std(minimums):.4f}$"
-              rf"N={len(table)}")
+              rf"N={len(minimums)}")
     ax.set_xlabel(r'$\alpha_S$')
     ax.set_ylabel(r'$\chi²/N_{dat}$')
+    if suptitle:
+        fig.suptitle(suptitle)
     return fig
-
-@table
-def analize_fits_matched_pseudorreplicas_chi2_output(tablefile:str, ):
-    """NOTE: THIS IS A QUICK HACK AND MAY BE REMOVED OR HEAVILY CHANGED IN THE FUTURE.
-    Quick and dirty analizing tool for the output of
-    fits_matched_pseudorreplicas_chi2_table."""
-    df = pd.DataFrame.from_csv(tablefile, sep='\t', index_col=[0,1],header=[0,1])
-    ndataindexer = df.columns.get_locs([slice(None), 'ndata'])
-    assert df.iloc[:,ndataindexer].apply(lambda x: len(np.unique(x.dropna()))==1, axis=1).all()
-    first = df.index.get_locs([1, slice(None)])
-    lens = df.iloc[first,ndataindexer[0]]
-    chindexer = df.columns.get_locs([slice(None), 'central_chi2'])
-    df = df.iloc[:,chindexer]
-    df = df.swaplevel(0,1)
-    newcols = df.columns.set_levels([df.columns.levels[0], ['chi2']])
-    df.columns = newcols
-    return df
-
-@figuregen
-def plot_experiments_as_determination_from_matched_psudorreplicas(
-        analize_fits_matched_pseudorreplicas_chi2_output, fits_pdfs,
-        polorder=2,
-        max_ndiscarded:int=4):
-    df = analize_fits_matched_pseudorreplicas_chi2_output
-    for expname, data in df.groupby(level=0):
-        yield from plot_poly_as_fit(data, polorder=polorder, max_ndiscarded=max_ndiscarded)
-
 
 

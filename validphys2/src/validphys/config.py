@@ -441,3 +441,62 @@ class Config(report.Config):
             res.append(inres)
         res.sort(key=lambda x: (x['experiment_name'], x['dataset_name']))
         return res
+
+
+    #TODO: Move these to their own module when that's supported by reportengine
+    def produce_fits_matched_pseudorreplicas_chi2_output(self, tablefile:str,
+                                                         fits):
+        """NOTE: THIS IS A QUICK HACK AND MAY BE REMOVED OR HEAVILY CHANGED
+        IN THE FUTURE (hence the horrible name).
+        Quick and dirty analizing tool for the output of
+        fits_matched_pseudorreplicas_chi2_table."""
+        import pandas as pd
+        import numpy as np
+        try:
+            df = pd.DataFrame.from_csv(tablefile, sep='\t', index_col=[0,1],header=[0,1])
+        except Exception as e:
+            raise ConfigError(f"Failed to load the table: {e}") from e
+
+
+        #Require that the fits are matched so we filer out some that are not
+        #interesting or broken.
+        df = df[[fit.name for fit in fits]]
+        ndataindexer = df.columns.get_locs([slice(None), 'ndata'])
+        lentest = lambda x: len(np.unique(x.dropna()))==1
+        samelens = df.iloc[:,ndataindexer].apply(lentest, axis=1).all()
+        if not samelens:
+            raise ConfigError("Incorrect data: Expected all experiments to have the same length.")
+        chindexer = df.columns.get_locs([slice(None), 'central_chi2'])
+        df = df.iloc[:,chindexer]
+        df = df.swaplevel(0,1)
+        #Have it the way the existing functions like
+        newcols = df.columns.set_levels([df.columns.levels[0], ['chi2']])
+        df.columns = newcols
+        return df
+
+    def produce_fits_matched_pseudorreplicas_chi2_output_by_experiment(self,
+            fits_matched_pseudorreplicas_chi2_output, prepend_total=True):
+        """Take the table returned by
+        ``analize_fits_matched_pseudorreplicas_chi2_output`` and break it down
+        by experiment. If `preprend_total` is True, the sum over experiments
+        will be included.
+
+        This provides a namespace list with `suptilte` and
+        `fits_replica_data_correlated`.
+
+        """
+
+        if prepend_total:
+            total = [{
+            'fits_replica_data_correlated': fits_matched_pseudorreplicas_chi2_output.sum(level=1),
+            'suptitle': 'Total'}]
+        else:
+            total = []
+
+
+        return [*total,
+                *[{'fits_replica_data_correlated': df,
+                 'suptitle': exp}
+                for (exp, df) in
+                fits_matched_pseudorreplicas_chi2_output.groupby(level=0)]
+               ]
