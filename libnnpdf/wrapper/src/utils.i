@@ -9,6 +9,7 @@
 
 %include "common.i"
 
+
 /* Parse the header file to generate wrappers */
 
 %feature("autodoc", "3");
@@ -16,3 +17,6 @@
 %include "include/excepthandler.i"
 
 %include "NNPDF/utils.h"
+
+%template(matrix_double) NNPDF::matrix<double>;
+

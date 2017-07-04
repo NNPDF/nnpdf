@@ -102,6 +102,9 @@ namespace NNPDF
     size_t const& size(size_t dim) const { return _size[dim]; } //!< Returns the (row,col) size pair.
     T&       operator()(size_t i, size_t j)       { return _data[i+_size[0]*j]; }
     T const& operator()(size_t i, size_t j) const { return _data[i+_size[0]*j]; }
+    //TODO: Does this have to be const? In any case there
+    //should be a const version.
+    T const * data () const {return _data.data();} //!< Return the underlying buffer.
 
   private:
     std::array<size_t, 2> _size; //!< the dimension pair

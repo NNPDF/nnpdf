@@ -14,6 +14,7 @@
 #include "commondata.h"
 #include "dataset.h"
 #include "pdfset.h"
+#include "utils.h"
 
 namespace NNPDF
 {
