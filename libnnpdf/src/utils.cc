@@ -172,6 +172,42 @@ namespace NNPDF
       throw RuntimeException("targz", "Written length does not match data length");
   }
 
+  /**
+   * @brief matrix::matrix
+   * @param row the size of the rows
+   * @param col the size of the columns
+   */
+  template<class T>
+  matrix<T>::matrix(size_t row, size_t col):
+    _size{{row,col}}
+  {
+    if (row*col != 0)
+      _data.resize(row*col);
+  }
+
+  /**
+   * @brief matrix::resize
+   */
+  template<class T>
+  void matrix<T>::resize(size_t row, size_t col, T v)
+  {
+    _size = {{row,col}};
+    _data.resize(row*col, v);
+  }
+
+  /**
+   * @brief matrix::clear
+   */
+  template<class T>
+  void matrix<T>::clear()
+  {
+    _size = {0,0};
+    _data.clear();
+  }
+
+  template class matrix<double>;
+  template class matrix<int>;
+
   // /very/ basic integrator
   double integrate(double data[], size_t npoints, double h)
   {
@@ -431,21 +467,20 @@ namespace NNPDF
 
   // *********** Cholesky decomposition of a matrix ***************
 
-  void CholeskyDecomposition(int const& n, double** const inmatrix, double** sqrtmat)
+  void CholeskyDecomposition(int const& n, const matrix<double> &inmatrix, matrix<double> &sqrtmat)
   {
     if (n <= 0)
       throw LengthError("CholeskyDecomposition","attempting a decomposition of an empty matrix!");
     gsl_matrix* mat = gsl_matrix_calloc(n, n);
     for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++)
-        gsl_matrix_set(mat, i, j, inmatrix[i][j]);
+        gsl_matrix_set(mat, i, j, inmatrix(i, j));
 
     const int decomp = gsl_linalg_cholesky_decomp(mat);
     for (int i = 0; i < n; i++)
       for (int j = 0; j <= i; j++)
-        sqrtmat[i][j] =  gsl_matrix_get(mat, i, j);
+        sqrtmat(i, j) =  gsl_matrix_get(mat, i, j);
     gsl_matrix_free (mat);
   }
-
 
 }

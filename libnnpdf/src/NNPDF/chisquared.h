@@ -12,6 +12,5 @@
 #include "dataset.h"
 
 namespace NNPDF{
-  void ComputeChi2(const Experiment*, int const&, real *const&, real *);
-  void ComputeChi2(const DataSet*, int const&, real *const&, real *);
+  template<class T> void ComputeChi2(const T*, int const&, real *const&, real *);
 }
