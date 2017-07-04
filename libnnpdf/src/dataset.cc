@@ -48,60 +48,6 @@ DataSet::DataSet(CommonData const& data, FKSet const& set, bool gencovmat):
     GenCovMat();
 }
 
-DataSet::DataSet(const DataSet& set):
-  CommonData(set),
-  FKSet(set),
-  fIsArtificial(set.fIsArtificial),
-  fIsT0(set.fIsT0),
-  fT0Pred(set.fT0Pred),
-  fCovMat(set.fCovMat),
-  fSqrtCov(set.fSqrtCov)
-{  
-  // we probably don't need to define this constructor anymore
-}
-
-void NNPDF::swap(DataSet& lhs, DataSet& rhs)
-{
-  using std::swap;
-  swap(lhs.fIsArtificial, rhs.fIsArtificial);
-  swap(lhs.fIsT0, rhs.fIsT0);
-  swap(lhs.fT0Pred, rhs.fT0Pred);
-  swap(lhs.fCovMat, rhs.fCovMat);
-  swap(lhs.fSqrtCov, rhs.fSqrtCov);
-  //Cast as subclass objects and call the swap of those.
-  CommonData & lhs_cd = lhs;
-  CommonData & rhs_cd = rhs;
-  swap(lhs_cd, rhs_cd);
-
-  FKSet & lhs_fk = lhs;
-  FKSet & rhs_fk = rhs;
-  swap(lhs_fk, rhs_fk);
-}
-
-DataSet& DataSet::operator=(DataSet other)
-{
-  using std::swap;
-  swap(*this, other);
-  return *this;
-}
-
-DataSet::DataSet(DataSet && other):
-  CommonData(std::move(other)),
-  FKSet(std::move(other))
-{
-  fIsArtificial = other.fIsArtificial;
-  fIsT0 = other.fIsT0;
-
-  fT0Pred = other.fT0Pred;
-  other.fT0Pred.clear();
-
-  fCovMat = other.fCovMat;
-  other.fCovMat.clear();
-
-  fSqrtCov = other.fSqrtCov;
-  other.fSqrtCov.clear();
-}
-
 DataSet::DataSet(const DataSet& set, std::vector<int> const& mask, bool gencovmat):
   CommonData(set, mask),
   FKSet(set, mask),

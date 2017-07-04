@@ -47,8 +47,8 @@ namespace NNPDF
     bool IsClosure() const { return fIsClosure; }             //!< Return the artificial flag
     bool IsT0() const { return fIsT0; }                       //!< Return t0 covmat flag
 
-    matrix<double> GetCovMat()  const { return fCovMat;  } //!< Return fCovMat
-    matrix<double> GetSqrtCov() const { return fSqrtCov; } //!< Return the Cholesky decomposition of the covariance matrix
+    matrix<double> const& GetCovMat()  const { return fCovMat;  } //!< Return fCovMat
+    matrix<double> const& GetSqrtCov() const { return fSqrtCov; } //!< Return the Cholesky decomposition of the covariance matrix
     
     void ExportCovMat(std::string);         //!< Export covariance matrix
     void ExportSqrtCov(std::string);        //!< Export Cholesky decomposition

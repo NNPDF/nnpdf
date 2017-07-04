@@ -77,9 +77,26 @@ namespace NNPDF
   class matrix
   {
   public:
-    matrix(size_t row = 0, size_t col = 0); //!< matrix constructor
-    void resize(size_t row, size_t col, T v); //!< resize matrix and fill with v
-    void clear(); //!< clear matrix size and content
+    //!< matrix constructor
+    matrix(size_t row = 0, size_t col = 0): _size{{row,col}}
+    {
+      if (row*col != 0)
+        _data.resize(row*col);
+    }
+
+    //!< resize matrix and fill with v
+    void resize(size_t row, size_t col, T v)
+    {
+      _size = {{row,col}};
+      _data.resize(row*col, v);
+    }
+
+    //!< clear matrix size and content
+    void clear()
+    {
+      _size = {0,0};
+      _data.clear();
+    }
 
     //operators
     size_t const& size(size_t dim) const { return _size[dim]; } //!< Returns the (row,col) size pair.
