@@ -43,10 +43,9 @@ namespace NNPDF
     DataSet();                          //!< Disable default constructor
 
    public:
-    DataSet(CommonData const&, FKSet const&, bool gencovmat = true); //!< Constructor
+    DataSet(CommonData const&, FKSet const&); //!< Constructor
+    DataSet(const DataSet&, std::vector<int> const&); //!< Masked Copy constructor
     virtual ~DataSet();                       //!< The destructor.    
-
-    DataSet(const DataSet&, std::vector<int> const&, bool gencovmat = true); //!< Masked Copy constructor
 
     // ****************   DataSet T0 Methods  **********************
 
@@ -58,9 +57,9 @@ namespace NNPDF
     
     double const&  GetT0Pred(int i)    const { return fT0Pred[i];}  //!< Return t0 prediction
     
-    matrix<double> const& GetCovMat()  const { return fCovMat; }   //!< Return fCovMat
-    matrix<double> const& GetSqrtCov() const { return fSqrtCov; } //!< Return the Cholesky decomposition of the covariance matrix
-    double const& GetSqrtCov(int i, int j) const { return fSqrtCov(i, j); } //!< Returns an element of the Cholesky decomposition
+    matrix<double> const& GetCovMat();  //!< Return fCovMat
+    matrix<double> const& GetSqrtCov(); //!< Return the Cholesky decomposition of the covariance matrix
+    double GetSqrtCov(int i, int j);    //!< Returns an element of the Cholesky decomposition
 
     bool const& IsArtificial()         const { return fIsArtificial; } //!< Returns the artificial flag
     

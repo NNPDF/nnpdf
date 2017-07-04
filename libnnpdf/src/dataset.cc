@@ -32,7 +32,7 @@ using namespace NNPDF;
  * \param data NNPDF::CommonData containing the experimental data
  * \param set  NNPDF::FKSet containing the corresponding theory calculation
  */
-DataSet::DataSet(CommonData const& data, FKSet const& set, bool gencovmat):
+DataSet::DataSet(CommonData const& data, FKSet const& set):
   CommonData(data),
   FKSet(set),
   fIsArtificial(false),
@@ -43,12 +43,9 @@ DataSet::DataSet(CommonData const& data, FKSet const& set, bool gencovmat):
   // Init T0 Vector
   for (int i = 0; i < fNData; i++)
     fT0Pred[i] = fData[i]; // Default T0 to data
-
-  if (gencovmat)
-    GenCovMat();
 }
 
-DataSet::DataSet(const DataSet& set, std::vector<int> const& mask, bool gencovmat):
+DataSet::DataSet(const DataSet& set, std::vector<int> const& mask):
   CommonData(set, mask),
   FKSet(set, mask),
   fIsArtificial(set.fIsArtificial),
@@ -59,9 +56,6 @@ DataSet::DataSet(const DataSet& set, std::vector<int> const& mask, bool gencovma
   // Building Obs array
   for (int i = 0; i < fNData; i++)
     fT0Pred[i] = set.fT0Pred[mask[i]];
-
-  if (gencovmat)
-    GenCovMat();
 }
 
 /**
@@ -141,6 +135,37 @@ void DataSet::SetT0(const PDFSet& pdf){
   SetT0(t0pred);
 }
 
+/**
+ * @brief DataSet::GetCovMat
+ * @return
+ */
+const matrix<double> &DataSet::GetCovMat()
+{
+  if (!fCovMat.size(0)) GenCovMat();
+  return fCovMat;
+}
+
+/**
+ * @brief DataSet::GetSqrtCov
+ * @return
+ */
+matrix<double> const& DataSet::GetSqrtCov()
+{
+  if (!fSqrtCov.size(0)) GenCovMat();
+  return fSqrtCov;
+}
+
+/**
+ * @brief DataSet::GetSqrtCov
+ * @param i
+ * @param j
+ * @return
+ */
+double DataSet::GetSqrtCov(int i, int j)
+{
+  if (!fSqrtCov.size(0)) GenCovMat();
+  return fSqrtCov(i, j);
+}
 
 /**
  * @brief Dataset::MakeArtificial

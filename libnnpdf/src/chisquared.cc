@@ -11,9 +11,9 @@ namespace NNPDF
 {
 
   template<class T>
-  void ComputeChi2(const T* set, int const& nMem, real *const& theory, real *chi2)
+  void ComputeChi2(T* set, int const& nMem, real *const& theory, real *chi2)
   {
-    matrix<double> const& L   = set->GetSqrtCov();
+    matrix<double> const& L = set->GetSqrtCov();
     const double* data  = set->GetData();
     const int nDat      = set->GetNData();
 
@@ -31,6 +31,6 @@ namespace NNPDF
    return;
   }
 
-  template void ComputeChi2<Experiment>(const Experiment* set, int const& nMem, real *const& theory, real *chi2);
-  template void ComputeChi2<DataSet>(const DataSet* set, int const& nMem, real *const& theory, real *chi2);
+  template void ComputeChi2<Experiment>(Experiment* set, int const& nMem, real *const& theory, real *chi2);
+  template void ComputeChi2<DataSet>(DataSet* set, int const& nMem, real *const& theory, real *chi2);
 }
