@@ -416,6 +416,8 @@ void Experiment::PullData()
  */
 void Experiment::GenCovMat()
 {
+  fCovMat.clear();
+  fSqrtCov.clear();
   fCovMat.resize(fNData, fNData, 0);
   fSqrtCov.resize(fNData, fNData, 0);
 

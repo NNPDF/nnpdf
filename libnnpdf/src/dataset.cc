@@ -69,7 +69,9 @@ DataSet::~DataSet()
  * Generate covariance matrix and inverse
  */
 void DataSet::GenCovMat()
-{  
+{
+  fCovMat.clear();
+  fSqrtCov.clear();
   fCovMat.resize(fNData, fNData, 0);
   fSqrtCov.resize(fNData, fNData, 0);
 
