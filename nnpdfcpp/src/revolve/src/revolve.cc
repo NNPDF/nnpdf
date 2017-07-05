@@ -44,7 +44,7 @@ int main(int argc, char **argv)
   cout << Colour::FG_DEFAULT;
 
   // check PDF set
-  NNPDF::LHAPDFSet pdf(pdf_set, NNPDF::PDFSet::ER_MC);
+  NNPDF::LHAPDFSet pdf(pdf_set, NNPDF::PDFSet::erType::ER_MC);
 
   // Initialize APFEL
   APFEL::SetParam(apfel_setup);

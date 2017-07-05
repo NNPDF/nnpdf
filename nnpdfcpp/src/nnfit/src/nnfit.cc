@@ -121,7 +121,7 @@ int main(int argc, char **argv)
       vector<Experiment*> training;
       vector<Experiment*> validation;
 
-      PDFSet* T0Set = new LHAPDFSet(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::ER_MCT0);
+      PDFSet* T0Set = new LHAPDFSet(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::erType::ER_MCT0);
       for (int i = 0; i < settings.GetNExp(); i++)
         {
           if (settings.GetExpName(i) == "REWEIGHT") // Don't fit RW experiment

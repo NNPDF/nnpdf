@@ -48,7 +48,7 @@ int main(int argc, char **argv)
   NNPDFSettings settings(configPath()+filename);
 
   FKTable* fk = new FKTable(targetGrid);
-  LHAPDFSet *pdf = new LHAPDFSet(settings.GetPDFName(), PDFSet::ER_MCT0);
+  LHAPDFSet *pdf = new LHAPDFSet(settings.GetPDFName(), PDFSet::erType::ER_MCT0);
   
   int nMembers = pdf->GetMembers();
   

@@ -72,9 +72,9 @@ int main(int argc, char **argv)
   // Load PDF
   PDFSet *Pdf = NULL;
   if (argc == 3)
-    Pdf = new LHAPDFSet(pdfgrid, PDFSet::ER_MC);
+    Pdf = new LHAPDFSet(pdfgrid, PDFSet::erType::ER_MC);
   else
-    Pdf = new LHAPDFSet(settings.GetPDFName(), PDFSet::ER_MC);
+    Pdf = new LHAPDFSet(settings.GetPDFName(), PDFSet::erType::ER_MC);
 
   vector<ThPredictions*> th1;
   // Compute th predictions   
