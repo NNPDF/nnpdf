@@ -444,7 +444,8 @@ class Config(report.Config):
 
 
     #TODO: Move these to their own module when that's supported by reportengine
-    def produce_fits_matched_pseudorreplicas_chi2_output(self, tablefile:str,
+    def produce_fits_matched_pseudorreplicas_chi2_output(self,
+                                                         pseudorreplicafile:str,
                                                          fits):
         """NOTE: THIS IS A QUICK HACK AND MAY BE REMOVED OR HEAVILY CHANGED
         IN THE FUTURE (hence the horrible name).
@@ -453,14 +454,19 @@ class Config(report.Config):
         import pandas as pd
         import numpy as np
         try:
-            df = pd.DataFrame.from_csv(tablefile, sep='\t', index_col=[0,1],header=[0,1])
+            df = pd.DataFrame.from_csv(pseudorreplicafile, sep='\t',
+                index_col=[0,1],header=[0,1])
         except Exception as e:
             raise ConfigError(f"Failed to load the table: {e}") from e
 
 
         #Require that the fits are matched so we filer out some that are not
         #interesting or broken.
-        df = df[[fit.name for fit in fits]]
+        try:
+            df = df[[fit.name for fit in fits]]
+        except Exception as e:
+            raise ConfigError("Mismatch between fits provided and fits "
+                             f"in the table {pseudorreplicafile}:\n{e}") from e
         ndataindexer = df.columns.get_locs([slice(None), 'ndata'])
         lentest = lambda x: len(np.unique(x.dropna()))==1
         samelens = df.iloc[:,ndataindexer].apply(lentest, axis=1).all()
@@ -474,10 +480,58 @@ class Config(report.Config):
         df.columns = newcols
         return df
 
+    def produce_fits_absolute_chi2_output(self, fitsexperimentsfile:str, fits):
+        """"NOTE: THIS IS A QUICK HACK AND MAY BE REMOVED OR HEAVILY CHANGED
+        IN THE FUTURE. Read the output of `fits_experiments_chi2_table` and
+        produce a table with the total chi²."""
+        import pandas as pd
+        import numpy as np
+        try:
+            df = pd.DataFrame.from_csv(fitsexperimentsfile, sep='\t',
+                header=[0,1], index_col=[0])
+        except Exception as e:
+            raise ConfigError(f"Failed to load the table: {e}") from e
+
+        try:
+            df = df[[fit.name for fit in fits]]
+        except Exception as e:
+            raise ConfigError("Mismatch between fits provided and fits "
+                             f"in the table {fitsexperimentsfile}:\n{e}") from e
+
+        #Multiply ndata * chi²/ndtata
+        f = lambda x: x[x.columns[0]]*x[x.columns[1]]
+        #Group by fit
+        df = df.groupby(axis=1, level=0).apply(f)
+        df.columns = pd.MultiIndex.from_product([np.array(df.columns), ['chi2']])
+        return df
+
+    def produce_fits_absolute_chi2_output_by_experiment(self,
+            fits_absolute_chi2_output, prepend_total=True):
+        """Take the table returned by
+        ``fits_absolute_chi2_output`` and break it down
+        by experiment. If `preprend_total` is True, the sum over experiments
+        will be included."""
+        if prepend_total:
+            total = [{
+            'fits_total_chi2': fits_absolute_chi2_output.sum(),
+            'suptitle': 'Total'}]
+        else:
+            total = []
+
+        return [*total,
+                *[{'fits_total_chi2':df,
+                 'suptitle': exp}
+                for (exp, df) in
+                fits_absolute_chi2_output.groupby(level=0)]
+               ]
+
+
+
+
     def produce_fits_matched_pseudorreplicas_chi2_output_by_experiment(self,
             fits_matched_pseudorreplicas_chi2_output, prepend_total=True):
         """Take the table returned by
-        ``analize_fits_matched_pseudorreplicas_chi2_output`` and break it down
+        ``fits_matched_pseudorreplicas_chi2_output`` and break it down
         by experiment. If `preprend_total` is True, the sum over experiments
         will be included.
 

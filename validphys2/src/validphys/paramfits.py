@@ -108,15 +108,19 @@ def fits_matched_pseudorreplicas_chi2_table(fits, fits_computed_psedorreplicas_c
 
 
 @figure
-def plot_fits_as_profile(fits_pdfs, fits_total_chi2):
+def plot_fits_as_profile(fits_pdfs, fits_total_chi2, suptitle=None):
     """Plot the total central chi² as a function of the value of α_s.
     Note that this plots as a function of the key "AlphaS_MZ" in the LHAPDF
     file, which is annoyingly *not* α_s(MZ) for Nf<5."""
     fig, ax = plt.subplots()
     alphas = [pdf.AlphaS_MZ for pdf in fits_pdfs]
+    #Could be a transposed data frame
+    fits_total_chi2 = np.ravel(fits_total_chi2)
     ax.plot(alphas, fits_total_chi2)
     ax.set_xlabel(r'$\alpha_S$')
     ax.set_ylabel(r'$\chi²/N_{dat}$')
+    if suptitle:
+        fig.suptitle(suptitle)
     return fig
 
 
