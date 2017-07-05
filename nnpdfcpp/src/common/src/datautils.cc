@@ -125,7 +125,7 @@ void ComputeEstimators(DataSet const& set, ThPredictions* const& th, StatEstimat
     {
       // Building experimental estimators
       const int nData = set.GetNData();
-      matrix<double> const& covmat = set.GetCovMat();
+      auto const& covmat = set.GetCovMat();
 
       real *cov = new real[nData*(nData+1)/2];
       real *rho = new real[nData*(nData+1)/2];
