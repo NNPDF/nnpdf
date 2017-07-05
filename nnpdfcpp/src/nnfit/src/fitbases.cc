@@ -81,6 +81,7 @@ FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, const int 
     }  
 
     case BASIS_NN31IC:
+    case BASIS_NN31ICQED:
     {
       fitbasis = new NN31ICFitBasis(settings);
       cout << Colour::FG_BLUE << "Selecting FitBasis: NN31IC" << Colour::FG_DEFAULT << endl;
@@ -88,7 +89,7 @@ FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, const int 
     }
       
     default:
-      cerr << Colour::FG_RED << "ERROR: Invalid Fitting Basis" << Colour::FG_DEFAULT << endl;
+      cerr << Colour::FG_RED << "[getFitBasis] error: Invalid Fitting Basis" << Colour::FG_DEFAULT << endl;
       exit(-1);
       break;
   }

@@ -20,9 +20,9 @@
 static const string minString[6]   = {"UNDEFINED", "GA", "NGA","NGAP","NGAFT","CMAES"};
 static const string stopString[6]  = {"UNDEFINED", "FIXEDLENGTH", "GRAD", "VAR", "LOOKBACK"};
 static const string paramString[4] = {"UNDEFINED", "NN", "CHEBYSHEV", "QUADNN"};
-static const string basisString[15]= {"UNDEFINED", "NN23", "NN23QED","EVOL", "EVOLQED","EVOLS",
+static const string basisString[16]= {"UNDEFINED", "NN23", "NN23QED","EVOL", "EVOLQED","EVOLS",
                                       "EVOLSQED","NN30", "NN30QED","FLVR", "FLVRQED","NN30IC",
-                                      "EVOLIC","NN31IC","LUX"};
+                                      "EVOLIC","NN31IC","LUX", "NN31ICQED"};
 
 static const vector< vector<string> > basiselem = { {},
                                      {"sng","g","v","t3","ds","sp","sm"},          //NN23
@@ -38,7 +38,8 @@ static const vector< vector<string> > basiselem = { {},
                                      {"sng","g","v","t3","ds","sp","sm","cp"},     //NN30IC
                                      {"sng","g","v","v3","v8","t3","t8","t15"},    //EVOLIC
                                      {"sng","g","v","v3","v8","t3","t8","cp"},     //NN31IC
-                                     {"sng","g","v","v3","v8","t3","t8","cp"}      //LUX
+                                     {"sng","g","v","v3","v8","t3","t8","cp"},     //LUX
+                                     {"sng","g","v","v3","v8","t3","t8","cp","pht"}//NN31ICQED
                                      };
 
 /* Convert string to enum */
@@ -103,6 +104,7 @@ basisType NNPDFSettings::getFitBasisType(string const& method)
   if (method.compare("EVOLIC") == 0)  return BASIS_EVOLIC;
   if (method.compare("NN31IC") == 0)  return BASIS_NN31IC;
   if (method.compare("LUX") == 0)     return BASIS_LUX;
+  if (method.compare("NN31ICQED")==0) return BASIS_NN31ICQED;
 
   cerr << "getFitBasisType Error: Invalid parametrization type: "<<method;
   exit(-1);
@@ -595,7 +597,7 @@ bool NNPDFSettings::IsQED() const
   const basisType isqed = NNPDFSettings::getFitBasisType(Get("fitting","fitbasis").as<string>());
   if (isqed == BASIS_EVOLQED || isqed == BASIS_EVOLSQED ||
       isqed == BASIS_FLVRQED || isqed == BASIS_NN23QED ||
-      isqed == BASIS_LUX)
+      isqed == BASIS_LUX || isqed == BASIS_NN31ICQED)
     return true;
   return false;
 }
@@ -603,7 +605,8 @@ bool NNPDFSettings::IsQED() const
 bool NNPDFSettings::IsIC() const
 {
   const basisType isic = NNPDFSettings::getFitBasisType(Get("fitting","fitbasis").as<string>());
-  if (isic == BASIS_EVOLIC || isic == BASIS_NN30IC || isic == BASIS_NN31IC || isic == BASIS_LUX)
+  if (isic == BASIS_EVOLIC || isic == BASIS_NN30IC || isic == BASIS_NN31IC ||
+      isic == BASIS_LUX || isic == BASIS_NN31ICQED)
     return true;
   return false;
 }
