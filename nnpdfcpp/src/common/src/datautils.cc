@@ -230,7 +230,7 @@ void ComputeEstimators(Experiment * const& exp, const vector<ThPredictions *> & 
   if (!exp->IsArtificial())
     {
       const int nData = exp->GetNData();
-      matrix<double> const& covmat = exp->GetCovMat();
+      auto const& covmat = exp->GetCovMat();
 
       // Building experimental estimators
       real *cov = new real[nData*(nData+1)/2];

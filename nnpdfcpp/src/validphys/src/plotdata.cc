@@ -1253,7 +1253,7 @@ void PlotData::AddChi2HistoComparison(vector<ExperimentResult*> res, vector<Expe
               obsgraph->SetMarkerColor(kBlack);
               obsgraph->SetMarkerStyle(20);
 
-              matrix<double> const& expDataCovMat = dat->GetDataSet().GetCovMat();
+              auto const& expDataCovMat = dat->GetDataSet().GetCovMat();
 
               for (int i = 0; i < ndata; i++)
                 {
