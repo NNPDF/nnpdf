@@ -78,7 +78,7 @@ double lharanges[][6] = {
                         {1e-3, 1.0, -0.1, 1.0, -0.1, 0.1}, // c
                         {1e-3, 1.0, -0.1, 1.0, -0.1, 0.5}, // b
                         {1e-5, 1.0, -0.1, 1.3, -0.5, 0.5}, // t
-                        {1e-5, 1.0, -3.0, 3.0, -1.0, 1.0}, // photon
+                        {1e-5, 1.0,  0.0, 0.1,  0.0, 0.1}, // photon
                         };
 
 string evlnlabels[][2] = {
@@ -347,18 +347,15 @@ void PlotData::SavePDFReplicas(LHAPDFSet *pdfset, LHAPDFSet *pdf68cl)
       cout << " ***** Printing replicas in EVL Basis *****" << endl;
 
       // Plotting std. evol pdfs
-      int index = 0;
-      if (pdfset->hasFlavor(22) == true)  index++;
       int nfl = fSettings.Get("fitting","basis").size();
       if (fSettings.IsIC()) nfl = 9;
-      nfl += index;
       const int *iflmap = GetIflmap(nfl);
 
       // avoid gluon case 1 and case 2
 
       for (int i = 0; i <= 2*nf; i++)
         if (i != 1)
-          PlotReplicaEVLN(pdfset,pdf68cl,iflmap[i]+1, Q, fNPoints, evlnranges[iflmap[i+index]], evlnlabels[iflmap[i+index]], fPlotDestination);
+          PlotReplicaEVLN(pdfset,pdf68cl,iflmap[i]+1, Q, fNPoints, evlnranges[iflmap[i]], evlnlabels[iflmap[i]], fPlotDestination);
 
       // Special PDFs (fit parametrization)
       PlotReplicaGPDF(pdfset,pdf68cl, fsplus, Q, fNPoints, evlnranges[13], evlnlabels[13],fPlotDestination); // s+
@@ -419,13 +416,9 @@ void PlotData::NNPDFComparison(int i, LHAPDFSet *pdf, LHAPDFSet *pdf68cl)
   cout << " ***** Printing comparison in EVL Basis *****" << endl;
 
   // Plotting std. evol pdfs
-  int index = 0;
-  if (pdf->hasFlavor(22) == true) index++;
-
   int nfl = max(fSettings.Get("fitting","basis").size(),
                 fSettingsRef.Get("fitting","basis").size());
   if (fSettings.IsIC() || fSettingsRef.IsIC()) nfl = 9;
-  nfl += index;
   const int *iflmap = GetIflmap(nfl);
 
   int l = 0;
@@ -434,7 +427,7 @@ void PlotData::NNPDFComparison(int i, LHAPDFSet *pdf, LHAPDFSet *pdf68cl)
     {
       if (t != 1)
         {
-          if (i == 0) fEVLNComparison.push_back(new MultiPlot(Q,fNPoints,fSettings.GetPlotting("errorband").as<bool>(),evlnranges[iflmap[t+index]], evlnlabels[iflmap[t+index]],fPlotDestination,fillColor,lineColor,fillStyle));
+          if (i == 0) fEVLNComparison.push_back(new MultiPlot(Q,fNPoints,fSettings.GetPlotting("errorband").as<bool>(),evlnranges[iflmap[t]], evlnlabels[iflmap[t]],fPlotDestination,fillColor,lineColor,fillStyle));
           fEVLNComparison[l]->AddPDF2EVLNComparison(pdf,pdf68cl,iflmap[t]+1); l++;
         }
     }
@@ -488,7 +481,7 @@ void PlotData::NNPDFComparison(int i, LHAPDFSet *pdf, LHAPDFSet *pdf68cl)
         {
           if (t != 1)
             {
-              if (i == 0) fEVLNRatioComparison.push_back(new MultiPlot(Q,fNPoints,fSettings.GetPlotting("errorband").as<bool>(),evlnranges[iflmap[t+index]], evlnlabels[iflmap[t+index]],fPlotDestination,fillColor,lineColor,fillStyle));
+              if (i == 0) fEVLNRatioComparison.push_back(new MultiPlot(Q,fNPoints,fSettings.GetPlotting("errorband").as<bool>(),evlnranges[iflmap[t]], evlnlabels[iflmap[t]],fPlotDestination,fillColor,lineColor,fillStyle));
               fEVLNRatioComparison[l]->AddPDF2EVLNRatioComparison(pdf,pdf68cl,iflmap[t]+1); l++;
             }
         }
@@ -551,11 +544,8 @@ void PlotData::OtherComparison(int i, LHAPDFSet *pdf)
 
   cout << " ***** Printing comparison in EVL Basis *****" << endl;
 
-  int index = 0;
   int nfl = max(fSettings.Get("fitting","basis").size(),fSettingsRef.Get("fitting","basis").size());
   if (fSettings.IsIC() || fSettingsRef.IsIC()) nfl = 9;
-  if (fSettings.IsQED()) index++;
-  nfl += index;
   const int *iflmap = GetIflmap(nfl);
 
   int l = 0;
@@ -564,7 +554,7 @@ void PlotData::OtherComparison(int i, LHAPDFSet *pdf)
     {
       if (t != 1)
         {
-          if (i == 0) fEVLNComparisonOther.push_back(new MultiPlot(Q,fNPoints,fSettings.GetPlotting("errorband").as<bool>(),evlnranges[iflmap[t+index]], evlnlabels[iflmap[t+index]],fPlotDestination,fillColorOther,lineColorOther,fillStyleOther));
+          if (i == 0) fEVLNComparisonOther.push_back(new MultiPlot(Q,fNPoints,fSettings.GetPlotting("errorband").as<bool>(),evlnranges[iflmap[t]], evlnlabels[iflmap[t]],fPlotDestination,fillColorOther,lineColorOther,fillStyleOther));
           fEVLNComparisonOther[l]->AddPDF2EVLNComparison(pdf,NULL,iflmap[t]+1); l++;
         }
     }
@@ -618,7 +608,7 @@ void PlotData::OtherComparison(int i, LHAPDFSet *pdf)
         {
           if (t != 1)
             {
-              if (i == 0) fEVLNRatioComparisonOther.push_back(new MultiPlot(Q,fNPoints,fSettings.GetPlotting("errorband").as<bool>(),evlnranges[iflmap[t+index]], evlnlabels[iflmap[t+index]],fPlotDestination,fillColorOther,lineColorOther,fillStyleOther));
+              if (i == 0) fEVLNRatioComparisonOther.push_back(new MultiPlot(Q,fNPoints,fSettings.GetPlotting("errorband").as<bool>(),evlnranges[iflmap[t]], evlnlabels[iflmap[t]],fPlotDestination,fillColorOther,lineColorOther,fillStyleOther));
               fEVLNRatioComparisonOther[l]->AddPDF2EVLNRatioComparison(pdf,NULL,iflmap[t]+1); l++;
             }
         }
@@ -733,7 +723,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
   const basisType setbasis = NNPDFSettings::getFitBasisType(fSettings.Get("fitting","fitbasis").as<string>());
   if (setbasis == BASIS_NN23 || setbasis == BASIS_NN23QED)
     for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(nn23[t]); functions[t] = nn23f[t]; }
-  else if (setbasis == BASIS_EVOL || setbasis == BASIS_EVOLQED || setbasis == BASIS_LUX)
+  else if (setbasis == BASIS_EVOL || setbasis == BASIS_EVOLQED)
     for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
   else if (setbasis == BASIS_EVOLS || setbasis == BASIS_EVOLSQED)
     for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(evols[t]); functions[t] = evolsf[t]; }
@@ -743,7 +733,7 @@ void PlotData::AddPreprocPlots(int i, LHAPDFSet *pdf)
     for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(evol[t]); functions[t] = evolf[t]; }
   else if (setbasis == BASIS_EVOLIC || setbasis == BASIS_NN30IC)
     for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(evolic[t]); functions[t] = evolicf[t]; }
-  else if (setbasis == BASIS_NN31IC)
+  else if (setbasis == BASIS_NN31IC || setbasis == BASIS_LUX)
     for (int t = 0; t < nfl; t++) { if(i==0) fPDFNames.push_back(nn31ic[t]); functions[t] = nn31icf[t]; }
 
   size_t NPOINTS = 100;
@@ -3408,9 +3398,9 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
 
   int nflmax = 0;
   if (nfl == 7) nflmax = 7 + 3;
-  if (nfl == 8) nflmax = 7 + 3;
-  if (nfl == 9) nflmax = 7 + 3 + 4;
-  if (nfl ==10) nflmax = 9 + 3 + 4;
+  else if (nfl == 8) nflmax = 7 + 3;
+  else if (nfl == 9) nflmax = 7 + 3 + 4;
+  else if (nfl == 10) nflmax = 9 + 3 + 4;
 
   int index = 0;
   for (int i = 0; i < nflmax; i++)
@@ -3448,7 +3438,7 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
 
   index = 0;
   int ii = 1;
-  if (nfl == 8) ii--;
+  if (nfl == 8 || fSettings.IsQED()) ii--;
   for (int i = ii; i < nfl+ii; i++)
     {
       f << "\\begin{centering}" << endl;
@@ -3563,9 +3553,9 @@ void PlotData::WriteValidphysReport(vector<ExperimentResult *> a,
       if (fSettings.IsIC()) nfl = 9;
 
       if (nfl == 7) nflmax = 7 + 3;
-      if (nfl == 8) nflmax = 7 + 3;
-      if (nfl == 9) nflmax = 7 + 3 + 4;
-      if (nfl ==10) nflmax = 9 + 3 + 4;
+      else if (nfl == 8) nflmax = 7 + 3;
+      else if (nfl == 9) nflmax = 7 + 3 + 4;
+      else if (nfl ==10) nflmax = 9 + 3 + 4;
 
       for (int i = 0; i < nflmax; i++)
         {
@@ -4401,9 +4391,9 @@ void PlotData::WritePlotpdfReport()
   int nfl = fSettings.Get("fitting","basis").size();
   int nflmax = 0;
   if (nfl == 7) nflmax = 7 + 3;
-  if (nfl == 8) nflmax = 7 + 3;
-  if (nfl == 9) nflmax = 7 + 3 + 2;
-  if (nfl ==10) nflmax = 9 + 3 + 2;
+  else if (nfl == 8) nflmax = 7 + 3;
+  else if (nfl == 9) nflmax = 7 + 3 + 2;
+  else if (nfl ==10) nflmax = 9 + 3 + 2;
 
   int index = 0;
   for (int i = 0; i < nflmax; i++)
@@ -4441,7 +4431,7 @@ void PlotData::WritePlotpdfReport()
 
   index = 0;
   int ii = 1;
-  if (nfl == 8) ii--;
+  if (nfl == 8 || fSettings.IsQED()) ii--;
   for (int i = ii; i < nfl+ii; i++)
     {
       f << "\\begin{centering}" << endl;
