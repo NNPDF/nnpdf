@@ -11,7 +11,7 @@ They also need to work around the limitations in libnnpdf, and so the
 performance may not be optimal.
 """
 import logging
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -123,7 +123,6 @@ def plot_fits_as_profile(fits_pdfs, fits_total_chi2, suptitle=None):
         fig.suptitle(suptitle)
     return fig
 
-
 @make_argcheck
 def _check_badcurves(badcurves):
     options = ['discard', 'minimum', 'allminimum']
@@ -172,6 +171,81 @@ def parabolic_as_determination(fits_pdfs,
 
     minimums = np.asarray(minimums)
     return minimums
+
+
+def as_determination_from_central_chi2(fits_pdfs, fits_total_chi2):
+    """Return the alpha_s from the minimim chi² and the Delta_chi²=1 error
+    from a quadratic fit to the total chi²."""
+    alphas = [pdf.AlphaS_MZ for pdf in fits_pdfs]
+    chi2s = np.ravel(fits_total_chi2)
+    a,b,c = np.polyfit(alphas, chi2s, 2)
+    if a<=0:
+        log.error("Found non convex parabola when computing the quadratic fit.")
+        return np.nan, np.nan
+    return -b/(2*a), 1/(np.sqrt(a))
+
+
+def parabolic_as_determination_with_tag(parabolic_as_determination, suptitle):
+    """Convenience function to collect the arguments together. It is an identity"""
+    return parabolic_as_determination, suptitle
+
+
+def as_determination_from_central_chi2_with_tag(
+        as_determination_from_central_chi2, suptitle):
+    """Convenience function to collect the arguments together. It is an identity"""
+
+    return as_determination_from_central_chi2, suptitle
+
+as_exepriments_psudoreplicas_chi2 = collect(parabolic_as_determination_with_tag,
+                                         ['fits_matched_pseudorreplicas_chi2_output_by_experiment'])
+
+as_experiments_central_chi2 = collect(as_determination_from_central_chi2_with_tag,
+                                   ['fits_absolute_chi2_output_by_experiment',])
+
+@figure
+def plot_as_exepriments_psudoreplicas_chi2(as_exepriments_psudoreplicas_chi2):
+    """Plot the error bas of the alha_s determination from pseudorreplicas
+    by experiment"""
+
+    from validphys.plotutils import expand_margin
+    data, names = zip(*as_exepriments_psudoreplicas_chi2)
+    cv, err = zip(*[(np.mean(dt), np.std(dt)) for dt in data])
+    fig, ax = plt.subplots()
+    y = np.arange(len(names))
+    ax.yaxis.set_ticks(y)
+    ax.yaxis.set_ticklabels(names)
+    ax.errorbar(cv, y, xerr=err, linestyle='none', marker='o')
+    ax.set_xlim(*expand_margin(np.percentile(cv, 15), np.percentile(cv, 85), 1.1))
+    ax.set_xlabel(r"$\alpha_S$")
+    #log.critical(expand_margin(np.min(cv), np.max(cv), 10))
+    #ax.set_xlim(0.118, 0.119)
+    return fig
+
+
+
+@table
+def compare_determinations_table(as_exepriments_psudoreplicas_chi2,
+                                 as_experiments_central_chi2):
+    """Produce a table by experiment comparing the alpha_S determination
+    from pseudorreplcias and from central values."""
+    d = defaultdict(dict)
+
+    ps_mean = "pseudirreplica mean"
+    ps_error = "pseudorreplica error"
+
+    cv_mean = "central mean"
+    cv_error = "centeal error"
+
+    for distribution, tag in as_exepriments_psudoreplicas_chi2:
+        d[ps_mean][tag] = np.mean(distribution)
+        d[ps_error][tag] = np.std(distribution)
+
+    for (cv, error), tag in as_experiments_central_chi2:
+        d[cv_mean][tag] = cv
+        d[cv_error][tag] = error
+
+    return pd.DataFrame(d, columns=[ps_mean, ps_error, cv_mean, cv_error])
+
 
 
 @figure
