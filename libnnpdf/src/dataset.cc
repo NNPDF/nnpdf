@@ -68,7 +68,7 @@ DataSet::~DataSet()
 /**
  * Generate covariance matrix and inverse
  */
-void DataSet::GenCovMat()
+void DataSet::GenCovMat() const
 {
   fCovMat.clear();
   fSqrtCov.clear();
@@ -141,7 +141,7 @@ void DataSet::SetT0(const PDFSet& pdf){
  * @brief DataSet::GetCovMat
  * @return
  */
-const matrix<double> &DataSet::GetCovMat()
+const matrix<double> &DataSet::GetCovMat() const
 {
   if (!fCovMat.size(0)) GenCovMat();
   return fCovMat;
@@ -151,7 +151,7 @@ const matrix<double> &DataSet::GetCovMat()
  * @brief DataSet::GetSqrtCov
  * @return
  */
-matrix<double> const& DataSet::GetSqrtCov()
+matrix<double> const& DataSet::GetSqrtCov() const
 {
   if (!fSqrtCov.size(0)) GenCovMat();
   return fSqrtCov;
@@ -163,7 +163,7 @@ matrix<double> const& DataSet::GetSqrtCov()
  * @param j
  * @return
  */
-double DataSet::GetSqrtCov(int i, int j)
+double DataSet::GetSqrtCov(int i, int j) const
 {
   if (!fSqrtCov.size(0)) GenCovMat();
   return fSqrtCov(i, j);
