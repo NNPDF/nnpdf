@@ -471,7 +471,7 @@ void Experiment::GenCovMat()
     }
   }
 
-  CholeskyDecomposition(fNData, fCovMat, fSqrtCov);
+  CholeskyDecomposition(fCovMat, fSqrtCov);
 }
 
 void Experiment::ExportCovMat(string filename)

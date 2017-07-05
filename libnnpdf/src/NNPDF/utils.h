@@ -135,7 +135,7 @@ namespace NNPDF
   void Compute68cl(std::vector<real> const& x, real &up, real &dn);//!< Compute the 68% c.l.
   void Compute95cl(std::vector<real> const& x, real &up, real &dn);//!< Compute the 95% c.l.
 
-  void CholeskyDecomposition(int const& n, matrix<double> const& inmatrix, matrix<double> & sqrtmat);
+  void CholeskyDecomposition(matrix<double> const& inmatrix, matrix<double> & sqrtmat);
 
 }
 

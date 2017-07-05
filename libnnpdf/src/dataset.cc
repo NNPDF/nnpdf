@@ -100,7 +100,7 @@ void DataSet::GenCovMat() const
     }
   
   // Compute sqrt of covmat
-  CholeskyDecomposition(fNData, fCovMat, fSqrtCov);
+  CholeskyDecomposition(fCovMat, fSqrtCov);
 }
 
 void DataSet::RescaleErrors(const double mult)
@@ -128,8 +128,8 @@ void DataSet::SetT0(ThPredictions const& t0pred)
   for (int i=0; i<fNData; i++)
     fT0Pred[i] = t0pred.GetObsCV(i);
 
-  // Regenerate covariance matrix
-  GenCovMat();
+  fCovMat.clear();
+  fSqrtCov.clear();
 }
 
 void DataSet::SetT0(const PDFSet& pdf){
