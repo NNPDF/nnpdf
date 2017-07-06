@@ -134,5 +134,5 @@ THe code is documented with Doxygen, if you find methods or classes not fully do
 
 ### Layout documentation
 
-For specifications about data please check the APFELcomb repository.
+For specifications about data please check the `nnpdfcpp` repository in `data/doc`.
 For specifications about the code design see Chapter 3 of http://arxiv.org/pdf/1509.00209.pdf
