@@ -468,7 +468,7 @@ class Config(report.Config):
             raise ConfigError("Mismatch between fits provided and fits "
                              f"in the table {pseudorreplicafile}:\n{e}") from e
         ndataindexer = df.columns.get_locs([slice(None), 'ndata'])
-        lentest = lambda x: len(np.unique(x.dropna()))==1
+        lentest = lambda x: len(np.unique(x.dropna()))<=1
         samelens = df.iloc[:,ndataindexer].apply(lentest, axis=1).all()
         if not samelens:
             raise ConfigError("Incorrect data: Expected all experiments to have the same length.")

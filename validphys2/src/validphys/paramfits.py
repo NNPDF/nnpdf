@@ -221,8 +221,7 @@ def _plot_horizontal_error_bars(cvs, errors, categorylabels, datalabels=None):
     mi = marker_iter_plot()
 
 
-    #TODO: make adaptive
-    distance = 0.2
+    distance = 0.5/len(cvs)
     pos = centered_range(len(cvs), distance=distance)
 
     for cv, err, lb, markerspec, shift in zip(cvs, errors, datalabels, mi, pos):
@@ -256,13 +255,15 @@ def plot_as_exepriments_central_chi2(as_experiments_central_chi2):
     ax.set_title(r"$\alpha_S$ from central chi²")
     return fig
 
+
+#TODO: take compare_determinations_table
 @figure
-def plot_as_exepriments_compare(as_exepriments_psudoreplicas_chi2,
-                                as_experiments_central_chi2, marktotal:bool=True):
+def plot_as_exepriments_compare(as_exepriments_psudoreplicas_chi2, as_experiments_central_chi2, marktotal:bool=True):
     """Plot the result of ``plot_as_exepriments_psudoreplicas_chi2`` and
     ``plot_as_exepriments_central_chi2`` together."""
     datapseudo, namespesudo = zip(*as_exepriments_psudoreplicas_chi2)
     cvpseudo, errpseudo = zip(*[(np.mean(dt), np.std(dt)) for dt in datapseudo])
+
 
     datacentral, namescentral = zip(*as_experiments_central_chi2)
     cvcentral, errcentral = zip(*datacentral)
@@ -299,6 +300,7 @@ def compare_determinations_table(as_exepriments_psudoreplicas_chi2,
 
     ps_mean = "pseudirreplica mean"
     ps_error = "pseudorreplica error"
+    ps_stat_error = "pseudorreplica stat"
 
     cv_mean = "central mean"
     cv_error = "centeal error"
@@ -306,12 +308,13 @@ def compare_determinations_table(as_exepriments_psudoreplicas_chi2,
     for distribution, tag in as_exepriments_psudoreplicas_chi2:
         d[ps_mean][tag] = np.mean(distribution)
         d[ps_error][tag] = np.std(distribution)
+        d[ps_stat_error][tag] = np.random.choice(distribution, (100000, len(distribution))).mean(axis=1).std()
 
     for (cv, error), tag in as_experiments_central_chi2:
         d[cv_mean][tag] = cv
         d[cv_error][tag] = error
 
-    return pd.DataFrame(d, columns=[ps_mean, ps_error, cv_mean, cv_error])
+    return pd.DataFrame(d, columns=[ps_mean, ps_error, ps_stat_error, cv_mean, cv_error])
 
 
 

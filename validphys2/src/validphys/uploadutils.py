@@ -58,19 +58,17 @@ def upload_output(output_path):
     randname = base64.urlsafe_b64encode(uuid.uuid4().bytes).decode()
     newdir = target_dir + randname
 
-    rsync_command = ('rsync', '-az',
-                     str(output_path)+'/',
-                     ':'.join((upload_host, newdir)))
+    rsync_command = ('rsync', '-az', f"{output_path}/", f'{newhost}:{newdir}')
 
-    log.info("Uploading output (%s) to %s" % (output_path, upload_host))
+    log.info(f"Uploading output ({output_path}) to {upload_host}")
     try:
         subprocess.run(rsync_command, check=True)
     except subprocess.CalledProcessError as e:
-        msg = "Failed to upload output: %s" % e
+        msg = f"Failed to upload output: {e}"
         raise BadSSH(msg) from e
     else:
         url = root_url + randname
-        log.info("Upload completed. The result is available at:\n%s" % t.bold_blue(url))
+        log.info(f"Upload completed. The result is available at:\n{t.bold_blue(url)}")
 
 
 
