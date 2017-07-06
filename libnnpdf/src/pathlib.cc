@@ -11,7 +11,7 @@ namespace
 
 const YAML::Node &load()
 {
-    auto p = get_profile_path();
+    auto p = get_profile_path() + "/nnprofile.yaml";
     try {
         const static auto res = YAML::LoadFile(p);
         return res;
