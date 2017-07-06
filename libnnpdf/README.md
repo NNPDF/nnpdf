@@ -1,7 +1,7 @@
 # libnnpdf
 Library for core NNPDF utilities.
 
-## Project summary and aims
+## Project summary and aim
 
 The aim of `libnnpdf` is to provide a set of common tools shared between multiple
 projects for the NNPDF Collaboration. The output of this repository is a C++ library
