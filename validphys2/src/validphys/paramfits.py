@@ -27,7 +27,7 @@ from NNPDF.lhapdfset import single_replica
 
 from validphys.core import PDF
 from validphys.results import ThPredictionsResult, DataResult, abs_chi2_data_experiment
-from validphys.plotutils import expand_margin, marker_iter_plot
+from validphys.plotutils import expand_margin, marker_iter_plot, centered_range
 
 log = logging.getLogger(__name__)
 
@@ -210,15 +210,23 @@ as_experiments_central_chi2 = collect(
 
 #TODO: Move to plotutils
 def _plot_horizontal_error_bars(cvs, errors, categorylabels, datalabels=None):
-    fig, ax = plt.subplots()
+    w,h = plt.rcParams["figure.figsize"]
+    rescale = max(1, 1 + 0.1*(len(categorylabels) - 7))
+    fig, ax = plt.subplots(figsize=(w, h*rescale))
     if datalabels is None:
         datalabels = itertools.repeat(None)
     y = np.arange(len(categorylabels))
     ax.yaxis.set_ticks(y)
     ax.yaxis.set_ticklabels(categorylabels)
     mi = marker_iter_plot()
-    for cv, err, lb, markerspec in zip(cvs, errors, datalabels, mi):
-        ax.errorbar(cv, y, xerr=err, linestyle='none', label=lb,
+
+
+    #TODO: make adaptive
+    distance = 0.2
+    pos = centered_range(len(cvs), distance=distance)
+
+    for cv, err, lb, markerspec, shift in zip(cvs, errors, datalabels, mi, pos):
+        ax.errorbar(cv, y+shift, xerr=err, linestyle='none', label=lb,
                     **markerspec)
     ax.set_xlim(*expand_margin(np.percentile(cvs, 15),
                                np.percentile(cvs, 85),
@@ -230,14 +238,56 @@ def _plot_horizontal_error_bars(cvs, errors, categorylabels, datalabels=None):
 def plot_as_exepriments_psudoreplicas_chi2(as_exepriments_psudoreplicas_chi2):
     """Plot the error bas of the alha_s determination from pseudorreplicas
     by experiment"""
-
-
     data, names = zip(*as_exepriments_psudoreplicas_chi2)
     cv, err = zip(*[(np.mean(dt), np.std(dt)) for dt in data])
     fig, ax = _plot_horizontal_error_bars([cv], [err], names)
     ax.set_xlabel(r"$\alpha_S$")
     ax.set_title(r"$\alpha_S$ from pseudorreplicas")
     return fig
+
+@figure
+def plot_as_exepriments_central_chi2(as_experiments_central_chi2):
+    """Plot the error bas of the alha_s determination from centrla chi²
+    by experiment"""
+    data, names = zip(*as_experiments_central_chi2)
+    cv, err = zip(*data)
+    fig, ax = _plot_horizontal_error_bars([cv], [err], names)
+    ax.set_xlabel(r"$\alpha_S$")
+    ax.set_title(r"$\alpha_S$ from central chi²")
+    return fig
+
+@figure
+def plot_as_exepriments_compare(as_exepriments_psudoreplicas_chi2,
+                                as_experiments_central_chi2, marktotal:bool=True):
+    """Plot the result of ``plot_as_exepriments_psudoreplicas_chi2`` and
+    ``plot_as_exepriments_central_chi2`` together."""
+    datapseudo, namespesudo = zip(*as_exepriments_psudoreplicas_chi2)
+    cvpseudo, errpseudo = zip(*[(np.mean(dt), np.std(dt)) for dt in datapseudo])
+
+    datacentral, namescentral = zip(*as_experiments_central_chi2)
+    cvcentral, errcentral = zip(*datacentral)
+
+    if namespesudo != namescentral:
+        raise RuntimeError("Names do not coincide")
+
+    fig, ax = _plot_horizontal_error_bars(
+        [cvcentral, cvpseudo], [errcentral, errpseudo], namescentral,
+        [r'Central $\chi^2$', r'Pseudorreplica $\chi^2$']
+    )
+    if marktotal:
+        try:
+            pos = namespesudo.index('Total')
+        except ValueError:
+            log.error("Asked to mark total, but it was not provided.")
+        else:
+            ax.axvline(cvcentral[pos], color='C0', linewidth=0.5, linestyle='--')
+            ax.axvline(cvpseudo[pos], color='C1', linewidth=0.5, linestyle='--')
+
+    ax.set_xlabel(r"$\alpha_S$")
+    ax.set_title(r"$\alpha_S$ determination")
+    ax.legend()
+    return fig
+
 
 
 @table
