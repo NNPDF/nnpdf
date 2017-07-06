@@ -1488,20 +1488,30 @@ All the uploaded results are automatically indexed in the server. The
 metadata to index it is obtained from the following sources in order
 of priority:
 
-  - A `meta.yaml` file in the top level folder of the report. It is
-    generated verbatim from a `meta` mapping in the yaml
-    configuration file. For example:
+  - A `meta.yaml` file in the top level folder of the report. For
+	example:
+	```yaml
+	---
+    title: PDF comparisons
+    author: NNPDF Collaboration
+    keywords: [gallery]
+	...
+
+	```
+	the keys are the same as in the [pandoc-markdown
+	syntax](http://pandoc.org/MANUAL.html#metadata-blocks), and this
+	metadata will also be used within the report (e.g. to set the
+	title and the author fields). This is the recommended option for
+	top level metadata.  The `meta.yaml` file can be generated
+	verbatim from a `meta` mapping in the `validphys` runcard.
+	For example:
     ```yaml
     meta:
         title: PDF comparisons
         author: NNPDF Collaboration
         keywords: [gallery]
     ```
-    the keys are the same as in the [pandoc-markdown
-    syntax](http://pandoc.org/MANUAL.html#metadata-blocks), and this
-	metadata will also be used within the report (e.g. to set the
-	title and the author fields). This is the recommended option for
-	top level metadata.
+	would yield the same file as above.
 
   - An `index.html` file in the uploaded output folder. To automatically
     generate an `index.html` file from a `report` action, one may set the
