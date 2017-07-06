@@ -1,11 +1,28 @@
-libnnpdf 1.2.0b2
-----------------------------
-----------------------------
-
+# libNNPDF
 Library for core NNPDF utilities.
 
-Dependencies
-----------------------------
+## Project summary and aims
+
+The aim of `libNNPDF` is to provide a set of common tools shared between multiple
+projects for the NNPDF Collaboration. The output of this repository is a C++ library
+which can be imported and shared to other native C++ programs and python codes through
+the SWIG wrapper.
+
+### Release policy
+
+### Code development policy/rules
+
+### Code style
+
+### Continuous integration (CI)
+
+### Testing
+
+## Installation
+
+### Binary packages
+
+### From source
 
 libnnpdf depends on the following libraries:
 
@@ -13,13 +30,12 @@ libnnpdf depends on the following libraries:
 - lhapdf
 - gsl
 - libarchive
-- sqlite 
+- sqlite
 - yaml-cpp
 
 please ensure to have the dependencies correctly installed and in your PATH before installing libnnpdf.
 
-Configuration
-----------------------------
+#### Configurations
 
 Possible configurations:
 
@@ -60,3 +76,5 @@ make wrapper-clean
 ```
 
 This will also install the wrapper in the current Python environment.
+
+## Documentation
