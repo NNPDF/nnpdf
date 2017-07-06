@@ -446,6 +446,7 @@ void Experiment::GenCovMat()
         break; // multiplicative systematics
       }
       fCovMat(i,i) += diagsig + diagsignor * fT0Pred[i] * fT0Pred[i] * 1e-4;
+
       // No need to loop over the nondiagonal parts
       if (!iscorrelated) {
         continue;
