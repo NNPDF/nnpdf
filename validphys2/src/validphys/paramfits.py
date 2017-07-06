@@ -11,13 +11,14 @@ They also need to work around the limitations in libnnpdf, and so the
 performance may not be optimal.
 """
 import logging
+import itertools
 from collections import namedtuple, defaultdict
 
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from reportengine.figure import figure, figuregen
+from reportengine.figure import figure
 from reportengine.table import table
 from reportengine import collect
 from reportengine.checks import make_argcheck, CheckError
@@ -26,6 +27,7 @@ from NNPDF.lhapdfset import single_replica
 
 from validphys.core import PDF
 from validphys.results import ThPredictionsResult, DataResult, abs_chi2_data_experiment
+from validphys.plotutils import expand_margin, marker_iter_plot
 
 log = logging.getLogger(__name__)
 
@@ -196,31 +198,46 @@ def as_determination_from_central_chi2_with_tag(
 
     return as_determination_from_central_chi2, suptitle
 
-as_exepriments_psudoreplicas_chi2 = collect(parabolic_as_determination_with_tag,
-                                         ['fits_matched_pseudorreplicas_chi2_output_by_experiment'])
+as_exepriments_psudoreplicas_chi2 = collect(
+    parabolic_as_determination_with_tag,
+    ['fits_matched_pseudorreplicas_chi2_output_by_experiment']
+)
 
-as_experiments_central_chi2 = collect(as_determination_from_central_chi2_with_tag,
-                                   ['fits_absolute_chi2_output_by_experiment',])
+as_experiments_central_chi2 = collect(
+    as_determination_from_central_chi2_with_tag,
+    ['fits_absolute_chi2_output_by_experiment',]
+)
+
+#TODO: Move to plotutils
+def _plot_horizontal_error_bars(cvs, errors, categorylabels, datalabels=None):
+    fig, ax = plt.subplots()
+    if datalabels is None:
+        datalabels = itertools.repeat(None)
+    y = np.arange(len(categorylabels))
+    ax.yaxis.set_ticks(y)
+    ax.yaxis.set_ticklabels(categorylabels)
+    mi = marker_iter_plot()
+    for cv, err, lb, markerspec in zip(cvs, errors, datalabels, mi):
+        ax.errorbar(cv, y, xerr=err, linestyle='none', label=lb,
+                    **markerspec)
+    ax.set_xlim(*expand_margin(np.percentile(cvs, 15),
+                               np.percentile(cvs, 85),
+                               1.1))
+    return fig, ax
+
 
 @figure
 def plot_as_exepriments_psudoreplicas_chi2(as_exepriments_psudoreplicas_chi2):
     """Plot the error bas of the alha_s determination from pseudorreplicas
     by experiment"""
 
-    from validphys.plotutils import expand_margin
+
     data, names = zip(*as_exepriments_psudoreplicas_chi2)
     cv, err = zip(*[(np.mean(dt), np.std(dt)) for dt in data])
-    fig, ax = plt.subplots()
-    y = np.arange(len(names))
-    ax.yaxis.set_ticks(y)
-    ax.yaxis.set_ticklabels(names)
-    ax.errorbar(cv, y, xerr=err, linestyle='none', marker='o')
-    ax.set_xlim(*expand_margin(np.percentile(cv, 15), np.percentile(cv, 85), 1.1))
+    fig, ax = _plot_horizontal_error_bars([cv], [err], names)
     ax.set_xlabel(r"$\alpha_S$")
-    #log.critical(expand_margin(np.min(cv), np.max(cv), 10))
-    #ax.set_xlim(0.118, 0.119)
+    ax.set_title(r"$\alpha_S$ from pseudorreplicas")
     return fig
-
 
 
 @table
