@@ -104,5 +104,5 @@ target.push_back(new MY_NEW_DATASET_CLASSFilter());
 
 ### Layout documentation
 
-For specifications about data please check the APFELcomb repository.
+For specifications about data please check the `nnpdfcpp` repository in `data/doc`.
 
