@@ -124,6 +124,7 @@ run_test = executable(
 	test_sources,
 	link_with:[lib],
     include_directories: inc,
+	build_by_default: false,
 )
 
 test('run_test', run_test)
