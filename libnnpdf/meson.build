@@ -114,6 +114,22 @@ lib = shared_library(
     install_dir: 'lib/',
 )
 
+test_sources = [
+    'tests/main.cc',
+	'tests/experiment_test.cc',
+]
+
+run_test = executable(
+    'run_test',
+	test_sources,
+	link_with:[lib],
+    include_directories: inc,
+)
+
+test('run_test', run_test)
+
+
+
 pkg_mod = import('pkgconfig')
 pkg_mod.generate(
     libraries: lib,
