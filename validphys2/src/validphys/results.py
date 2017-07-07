@@ -207,7 +207,7 @@ def experiment_result_table(experiments, pdf, experiments_index):
     return df
 
 @table
-def experiments_covmat(experiments, experiments_index):
+def experiments_covmat(experiments, experiments_index, t0set):
     """Export the covariance matrix for the experiments. It exports the full
     (symmetric) matrix, with the 3 first rows and columns being:
 
@@ -222,12 +222,17 @@ def experiments_covmat(experiments, experiments_index):
     for experiment in experiments:
         name = experiment.name
         loaded_exp = experiment.load()
+        if t0set:
+            #Copy data to avoid chaos
+            data = type(loaded_exp)(loaded_exp)
+            log.debug("Setting T0 predictions for %s" % loaded_exp)
+            data.SetT0(t0set.load_t0())
         mat = loaded_exp.get_covmat()
         df.loc[[name],[name]] = mat
     return df
 
 @table
-def experiments_invcovmat(experiments, experiments_index):
+def experiments_invcovmat(experiments, experiments_index, t0set):
     """Compute and export the inverse covariance matrix.
     Note that this inverts the matrices with the LU method which is
     suboptimal."""
@@ -236,6 +241,12 @@ def experiments_invcovmat(experiments, experiments_index):
     for experiment in experiments:
         name = experiment.name
         loaded_exp = experiment.load()
+        loaded_exp = experiment.load()
+        if t0set:
+            #Copy data to avoid chaos
+            data = type(loaded_exp)(loaded_exp)
+            log.debug("Setting T0 predictions for %s" % loaded_exp)
+            data.SetT0(t0set.load_t0())
         #Improve this inversion if this method tuns out to be important
         mat = la.inv(loaded_exp.get_covmat())
         df.loc[[name],[name]] = mat
