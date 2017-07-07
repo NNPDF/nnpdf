@@ -11,13 +11,13 @@ import inspect
 from collections import Sequence, Mapping, ChainMap
 
 from  reportengine import configparser
-from reportengine.environment import Environment
+from reportengine.environment import Environment, EnvironmentError_
 from reportengine.configparser import ConfigError, element_of, _parse_func
 from reportengine.helputils import get_parser_type
 from reportengine import report
 
 from validphys.core import ExperimentSpec, DataSetInput, ExperimentInput
-from validphys.loader import (Loader, LoadFailedError ,DataNotFoundError,
+from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFoundError,
                               PDFNotFound, FallbackLoader)
 from validphys.gridvalues import LUMI_CHANNELS
 
@@ -28,10 +28,9 @@ log = logging.getLogger(__name__)
 class Environment(Environment):
     """Container for information to be filled at run time"""
 
-    def __init__(self,*, datapath, resultspath, this_folder, net=True,
+    def __init__(self,*, datapath=None, resultspath=None, this_folder, net=True,
                  upload=False, **kwargs):
-        self.deta_path = pathlib.Path(datapath)
-        self.results_path = pathlib.Path(resultspath)
+
         self.this_folder = pathlib.Path(this_folder)
 
         if net:
@@ -39,7 +38,15 @@ class Environment(Environment):
         else:
             loader_class = Loader
 
-        self.loader = loader_class(self.deta_path, resultspath=self.results_path)
+        try:
+            self.loader = loader_class(datapath, resultspath)
+        except LoaderError as e:
+            log.error("Failed to find the paths. These are configured "
+                      "in the nnprofile settings or with the "
+                      "--datapath and --resultpath options.")
+            raise EnvironmentError_(e) from e
+        self.deta_path = self.loader.datapath
+        self.results_path = self.loader.resultspath
 
         self.upload = upload
         super().__init__(**kwargs)
