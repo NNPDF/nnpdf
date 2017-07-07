@@ -246,7 +246,7 @@ if (LHAPDF_CONFIG)
 endif(LHAPDF_CONFIG)
 
 # add preprocessor flag
-add_definitions(-DDEFAULT_NNPDF_PROFILE_PATH="${prefix}/share/NNPDF")
+add_definitions(-DDEFAULT_NNPDF_PROFILE_PATH="${prefix}/share/NNPDF/nnprofile.yaml")
 
 find_package(PkgConfig REQUIRED)
 pkg_search_module(LIBARCHIVE REQUIRED libarchive)
