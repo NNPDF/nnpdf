@@ -27,6 +27,18 @@ configure_file(
 option(ENABLE_OPENMP "Enable openmp parallelism." OFF)
 option(ENABLE_OPENMPI "Enable openMPI parallelism." OFF)
 option(ENABLE_PYWRAP "Enable python wrapper building" OFF)
+option(BUREOCRATIC_PATHS "Set the nnpdfcpp paths to point to a prefix location" OFF)
+if (BUREOCRATIC_PATHS)
+	set(PROFILE_PREFIX "${CMAKE_INSTALL_PREFIX}/share/NNPDF")
+else()
+	set(PROFILE_PREFIX "..")
+endif()
+
+configure_file(
+	"nnprofile.yaml.in"
+	"nnprofile.yaml"
+)
+
 
 if (ENABLE_OPENMPI)
   set(LIBNNPDF_HAVE_MPI "#define OPENMPI")
@@ -294,7 +306,7 @@ install(FILES ${PROJECT_SOURCE_DIR}/scripts/nnpdf-config
 	DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 install(FILES ${PROJECT_SOURCE_DIR}/scripts/nnpdf.pc DESTINATION lib/pkgconfig)
 install(DIRECTORY src/NNPDF DESTINATION include)
-install(FILES ${PROJECT_SOURCE_DIR}/nnprofile.yaml DESTINATION share/NNPDF)
+install(FILES ${CMAKE_BINARY_DIR}/nnprofile.yaml DESTINATION share/NNPDF)
 install(TARGETS nnpdf DESTINATION lib)
 
 if(ENABLE_PYWRAP)
