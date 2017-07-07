@@ -148,19 +148,19 @@ actions_:
         - plot_pdfreplicas
 ```
 
-[Correct by definition]{}
+Correct by definition
 
 :   A declarative input specifies what you want. It is up to the
 underlying code to try to provide it (or fail with an informative
 message).
 
-[Obvious meaning]{}
+Obvious meaning
 
 :   It is easy for a human to verify that the input is indeed what it
 was intended. Even without any explanation it should be easy enough to
 guess what the runcard above does.
 
-[Implementation independent]{}
+Implementation independent
 
 :   The input is very loosely coupled with the underlying
 implementation, and therefore it is likely to remain valid even after
