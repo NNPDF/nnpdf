@@ -2,7 +2,7 @@ project(
 'libnnpdf',
 'cpp',
 version: '1.1',
-licence: 'SECRET',
+license: 'SECRET',
 default_options : ['cpp_std=c++14']
 )
 
