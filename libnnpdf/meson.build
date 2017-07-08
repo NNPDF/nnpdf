@@ -87,7 +87,7 @@ sources = [
 
 install_headers(headers, subdir:'NNPDF')
 
-inc = include_directories('src/NNPDF')
+inc = include_directories(['src', 'src/NNPDF'])
 
 lib = shared_library(
     'nnpdf',
@@ -108,37 +108,95 @@ pkg_mod.generate(
 
 )
 
-#TODO wrappers: This requires some work and upstream fixes.
-#swig = find_program('swig')
-#swig_sources = [
-#    'wrapper/src/dataset.i',
-#    'wrapper/src/commondata.i',
-#]
-#
-#wrapper_deps = [
-#    dependency('python'),
-#    dependency('nnpdf'),
-#]
-#
-#swig_gen = generator(
-#    swig,
-#	output: ['@BASENAME@.cxx'],
-#	arguments: ['-c++', '-python', '-py3', '-o', './@OUTPUT@',
-#                '-outdir', '.', '-I../src', '-MMD',
-#                '@INPUT@'],
-#    depfile: '@BASENAME@.d',
-#)
-#
-#foreach swig_source: swig_sources
-#    cpp_source = swig_gen.process(swig_source)
-#    shared_library(
-#       swig_source.split('.').get(-2),
-#       cpp_source,
-#       dependencies: dependencies + wrapper_deps,
-#       install: true,
-#       install_dir: 'lib/',
-#    )
-#endforeach
+swig = find_program('swig')
+swig_source = 'wrapper/src/nnpdf.i'
 
-#sm = import('swig')
-#sm.swig_lib(['lib'], ['wrapper/src/commondata.i'])
+swig_gen = generator(swig,
+    output: ['@BASENAME@_wrap.cxx'],
+	arguments: ['-c++', '-python', '-py3', '-o', './@OUTPUT@',
+	    '-outdir', '.', '-I../src', '-MMD', '@INPUT@'],
+    depfile: '@BASENAME@_wrap.d',
+)
+
+wrapper_cxx = swig_gen.process(swig_source)
+
+
+wrapper_deps = [
+     dependency('lhapdf')
+]
+
+python = import('python3')
+
+py3_dep = dependency('python3')
+
+python_install_dir = join_paths(['/', python.sysconfig_path('platlib'), 'NNPDF'])
+
+#TODO: Find a batter way to do this
+#Except for __init__.py, these are all deprecated anyway
+pyfiles = [
+    'wrapper/src/__init__.py',
+    'wrapper/src/common.py',
+    'wrapper/src/commondata.py',
+    'wrapper/src/dataset.py',
+    'wrapper/src/experiments.py',
+    'wrapper/src/fastkernel.py',
+    'wrapper/src/fkgenerator.py',
+    'wrapper/src/fkset.py',
+    'wrapper/src/lhapdfset.py',
+    'wrapper/src/logger.py',
+    'wrapper/src/nnmpi.py',
+    'wrapper/src/nnpdfdb.py',
+    'wrapper/src/parametrisation.py',
+    'wrapper/src/pathlib.py',
+    'wrapper/src/pdfset.py',
+    'wrapper/src/positivity.py',
+    'wrapper/src/randomgenerator.py',
+    'wrapper/src/thpredictions.py',
+    'wrapper/src/timer.py',
+    'wrapper/src/utils.py',
+
+
+    'wrapper/src/_common.py',
+    'wrapper/src/_commondata.py',
+    'wrapper/src/_dataset.py',
+    'wrapper/src/_experiments.py',
+    'wrapper/src/_fastkernel.py',
+    'wrapper/src/_fkgenerator.py',
+    'wrapper/src/_fkset.py',
+    'wrapper/src/_lhapdfset.py',
+    'wrapper/src/_logger.py',
+    'wrapper/src/_nnmpi.py',
+    'wrapper/src/_nnpdfdb.py',
+    'wrapper/src/_parametrisation.py',
+    'wrapper/src/_pathlib.py',
+    'wrapper/src/_pdfset.py',
+    'wrapper/src/_positivity.py',
+    'wrapper/src/_randomgenerator.py',
+    'wrapper/src/_thpredictions.py',
+    'wrapper/src/_timer.py',
+    'wrapper/src/_utils.py',
+]
+
+install_data(pyfiles, install_dir: python_install_dir)
+
+
+wrapper_lib = python.extension_module('_nnpdf',
+    [wrapper_cxx],
+    dependencies: [wrapper_deps, py3_dep],
+	include_directories: inc,
+    link_with: [lib],
+	install: true,
+    install_dir: python_install_dir,
+)
+
+#This is to fix https://github.com/ninja-build/ninja/issues/1184
+swig_python_target = custom_target('swig_python',
+    output: ['@BASENAME@.py'],
+	input: [swig_source],
+	command:['echo'],
+	depends: [wrapper_lib],
+	install: true,
+    install_dir: python_install_dir,
+
+)
+
