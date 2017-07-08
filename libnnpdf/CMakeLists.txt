@@ -31,7 +31,7 @@ option(BUREOCRATIC_PATHS "Set the nnpdfcpp paths to point to a prefix location" 
 if (BUREOCRATIC_PATHS)
 	set(PROFILE_PREFIX "${CMAKE_INSTALL_PREFIX}/share/NNPDF")
 else()
-	set(PROFILE_PREFIX "..")
+	set(PROFILE_PREFIX "../nnpdfcpp")
 endif()
 
 configure_file(
