@@ -48,12 +48,28 @@ configure_file(
 )
 
 #handle pathlib
+
 profile_name = 'nnprofile.yaml'
-profile_source = profile_name
+profile_input = '.'.join([profile_name, 'in'])
+profile_conf = configuration_data()
+
 profile_path = join_paths([
    get_option('prefix'),
    'share', 'NNPDF',
 ])
+
+if get_option('bureocratic_paths')
+	profile_conf.set('PROFILE_PREFIX', profile_path)
+else
+	profile_conf.set('PROFILE_PREFIX', '..')
+endif
+
+profile_source = configure_file(
+    input: profile_input,
+	output: profile_name,
+    configuration: profile_conf
+)
+
 install_data(profile_source, install_dir:profile_path)
 add_global_arguments(
     '-DDEFAULT_NNPDF_PROFILE_PATH="@0@"'.format(

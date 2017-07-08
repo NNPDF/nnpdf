@@ -1,0 +1,3 @@
+option('bureocratic_paths', type:'boolean', value:false,
+    description:'Whether to point the nnpdcpp paths to the prefix',
+)
