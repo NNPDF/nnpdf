@@ -232,6 +232,27 @@ def experiments_covmat(experiments, experiments_index, t0set):
     return df
 
 @table
+def experiments_sqrtcovmat(experiments, experiments_index, t0set):
+    """Like experiments_covmat, but dump the lower triangular part of the
+    Cholesky decomposition as used in the fit. The upper part indices are set
+    to zero.
+    """
+    data = np.zeros((len(experiments_index),len(experiments_index)))
+    df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
+    for experiment in experiments:
+        name = experiment.name
+        loaded_exp = experiment.load()
+        if t0set:
+            #Copy data to avoid chaos
+            data = type(loaded_exp)(loaded_exp)
+            log.debug("Setting T0 predictions for %s" % loaded_exp)
+            data.SetT0(t0set.load_t0())
+        mat = loaded_exp.get_sqrtcovmat()
+        mat[np.triu_indices_from(mat, k=1)] = 0
+        df.loc[[name],[name]] = mat
+    return df
+
+@table
 def experiments_invcovmat(experiments, experiments_index, t0set):
     """Compute and export the inverse covariance matrix.
     Note that this inverts the matrices with the LU method which is
