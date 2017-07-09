@@ -54,7 +54,7 @@ class RemoteLoaderError(LoaderError): pass
 
 class LoaderBase:
 
-    def __init__(self, datapath, resultspath):
+    def __init__(self, datapath=None, resultspath=None):
         if datapath is None:
             datapath = nnpath.get_data_path()
 
