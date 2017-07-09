@@ -27,6 +27,7 @@ configure_file(
 option(ENABLE_OPENMP "Enable openmp parallelism." OFF)
 option(ENABLE_OPENMPI "Enable openMPI parallelism." OFF)
 option(ENABLE_PYWRAP "Enable python wrapper building" OFF)
+option(ENABLE_TESTS "Enable unit test" OFF)
 option(BUREOCRATIC_PATHS "Set the nnpdfcpp paths to point to a prefix location" OFF)
 if (BUREOCRATIC_PATHS)
 	set(PROFILE_PREFIX "${CMAKE_INSTALL_PREFIX}/share/NNPDF")
@@ -311,4 +312,8 @@ install(TARGETS nnpdf DESTINATION lib)
 
 if(ENABLE_PYWRAP)
   add_subdirectory(wrapper)
+endif()
+
+if(ENABLE_TESTS)
+  add_subdirectory(tests)
 endif()
