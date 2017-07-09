@@ -19,6 +19,7 @@ from reportengine import report
 from validphys.core import ExperimentSpec, DataSetInput, ExperimentInput
 from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFoundError,
                               PDFNotFound, FallbackLoader)
+from validphys import tableloader
 from validphys.gridvalues import LUMI_CHANNELS
 
 log = logging.getLogger(__name__)
@@ -448,3 +449,22 @@ class Config(report.Config):
             res.append(inres)
         res.sort(key=lambda x: (x['experiment_name'], x['dataset_name']))
         return res
+
+    #TODO: autogenerate functions like this
+    def parse_experiments_covmat_output(self, fname:str, config_rel_path):
+        """NOTE: THIS INTERFACE IS EXPERIMENTAL AND MIGHT CHANGE IN THE FUTURE.
+        Process the output CSV table of the experiments_covmat action
+        and return an equivalent datadrame"""
+        from reportengine import filefinder
+
+        finder = filefinder.FallbackFinder(['.', config_rel_path])
+        try:
+            folder, name = finder.find(fname)
+        except FileNotFoundError as e:
+            raise ConfigError(f"Couldn't locate '{fname}': {e}") from e
+        try:
+            df = tableloader.parse_experiments_covmat(folder/name)
+        except Exception as e:
+            raise ConfigError(e) from e
+
+        return {'experiments_covmat': df}
