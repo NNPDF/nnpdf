@@ -21,7 +21,7 @@ import pandas as pd
 from reportengine.figure import figure
 from reportengine.table import table
 from reportengine import collect
-from reportengine.checks import make_argcheck, CheckError
+from reportengine.checks import make_argcheck, CheckError, check_positive
 from NNPDF.experiments import pseudodata
 from NNPDF.lhapdfset import single_replica
 
@@ -289,11 +289,26 @@ def plot_as_exepriments_compare(as_exepriments_psudoreplicas_chi2, as_experiment
     ax.legend()
     return fig
 
+@check_positive('nresamplings')
+def bootstrapping_stats_error(parabolic_as_determination, nresamplings:int=100000):
+    """Compute the bootstrapping uncertainty of the distribution of
+    deterrminations of as, by resampling the list of points with replacement
+    from the original sampling distribution `nresamplings` times
+    and thn computing the standard deviation of the means."""
+    distribution = parabolic_as_determination
+    shape = (nresamplings, len(distribution))
+    return np.random.choice(distribution, shape).mean(axis=1).std()
+
+
+as_experiments_bootstrapping_stats_error = collect(bootstrapping_stats_error,
+    ['fits_matched_pseudorreplicas_chi2_output_by_experiment'],
+)
 
 
 @table
 def compare_determinations_table(as_exepriments_psudoreplicas_chi2,
-                                 as_experiments_central_chi2):
+                                 as_experiments_central_chi2,
+                                 as_experiments_bootstrapping_stats_error):
     """Produce a table by experiment comparing the alpha_S determination
     from pseudorreplcias and from central values."""
     d = defaultdict(dict)
@@ -305,10 +320,12 @@ def compare_determinations_table(as_exepriments_psudoreplicas_chi2,
     cv_mean = "central mean"
     cv_error = "centeal error"
 
-    for distribution, tag in as_exepriments_psudoreplicas_chi2:
+    for (distribution, tag), statserr in zip(
+                as_exepriments_psudoreplicas_chi2,
+                as_experiments_bootstrapping_stats_error):
         d[ps_mean][tag] = np.mean(distribution)
         d[ps_error][tag] = np.std(distribution)
-        d[ps_stat_error][tag] = np.random.choice(distribution, (100000, len(distribution))).mean(axis=1).std()
+        d[ps_stat_error][tag] = statserr
 
     for (cv, error), tag in as_experiments_central_chi2:
         d[cv_mean][tag] = cv
