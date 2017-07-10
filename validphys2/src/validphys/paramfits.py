@@ -299,16 +299,29 @@ def bootstrapping_stats_error(parabolic_as_determination, nresamplings:int=10000
     shape = (nresamplings, len(distribution))
     return np.random.choice(distribution, shape).mean(axis=1).std()
 
+@check_positive('nresamplings')
+def half_sample_stats_error(parabolic_as_determination, nresamplings:int=100000):
+    """Like the bootstrapping error, but using only half og the data"""
+    distribution = parabolic_as_determination[:len(parabolic_as_determination)//2]
+    shape = (nresamplings, len(distribution))
+    return np.random.choice(distribution, shape).mean(axis=1).std()
+
 
 as_experiments_bootstrapping_stats_error = collect(bootstrapping_stats_error,
     ['fits_matched_pseudorreplicas_chi2_output_by_experiment'],
 )
 
+as_experiments_half_sample_stats_error = collect(half_sample_stats_error,
+    ['fits_matched_pseudorreplicas_chi2_output_by_experiment'],
+)
+
+
 
 @table
 def compare_determinations_table(as_exepriments_psudoreplicas_chi2,
                                  as_experiments_central_chi2,
-                                 as_experiments_bootstrapping_stats_error):
+                                 as_experiments_bootstrapping_stats_error,
+                                 as_experiments_half_sample_stats_error):
     """Produce a table by experiment comparing the alpha_S determination
     from pseudorreplcias and from central values."""
     d = defaultdict(dict)
@@ -316,22 +329,30 @@ def compare_determinations_table(as_exepriments_psudoreplicas_chi2,
     ps_mean = "pseudirreplica mean"
     ps_error = "pseudorreplica error"
     ps_stat_error = "pseudorreplica stat"
+    ps_half_stat_error = "pseudorreplica halfstat"
+    stats_ratio = r"$\frac{halfstat}{stat}/\sqrt 2$"
 
     cv_mean = "central mean"
     cv_error = "centeal error"
 
-    for (distribution, tag), statserr in zip(
+    for (distribution, tag), statserr, halfstaterr in zip(
                 as_exepriments_psudoreplicas_chi2,
-                as_experiments_bootstrapping_stats_error):
+                as_experiments_bootstrapping_stats_error,
+                as_experiments_half_sample_stats_error):
         d[ps_mean][tag] = np.mean(distribution)
         d[ps_error][tag] = np.std(distribution)
         d[ps_stat_error][tag] = statserr
+        d[ps_half_stat_error][tag] = halfstaterr
+        d[stats_ratio][tag] = halfstaterr/statserr/np.sqrt(2)
+
 
     for (cv, error), tag in as_experiments_central_chi2:
         d[cv_mean][tag] = cv
         d[cv_error][tag] = error
 
-    return pd.DataFrame(d, columns=[ps_mean, ps_error, ps_stat_error, cv_mean, cv_error])
+    return pd.DataFrame(d, columns=[ps_mean, ps_error,
+        ps_stat_error, ps_half_stat_error, stats_ratio,
+        cv_mean, cv_error])
 
 
 
