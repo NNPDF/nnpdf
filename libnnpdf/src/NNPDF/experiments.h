@@ -14,6 +14,7 @@
 #include "commondata.h"
 #include "dataset.h"
 #include "pdfset.h"
+#include "utils.h"
 
 namespace NNPDF
 {
@@ -38,7 +39,7 @@ namespace NNPDF
     std::vector<DataSet> const&  DataSets() const {return fSets;}        //!< Return a reference to the vector of DataSets.
 
     std::string const& GetExpName() const {return fExpName;}        //!< Return the experiment name
-    std::string const& GetSetName(int i) const;
+    std::string const& GetSetName(int i) const { return fSets[i].GetSetName(); } //!< Return the dataset name
     
     int  GetNData() const { return fNData; }                  //!< Return the number of points in the experiment
     const double* GetData() const { return fData; }
@@ -47,8 +48,8 @@ namespace NNPDF
     bool IsClosure() const { return fIsClosure; }             //!< Return the artificial flag
     bool IsT0() const { return fIsT0; }                       //!< Return t0 covmat flag
 
-    double** GetCovMat()         const { return fCovMat;    } //!< Return fCovMat
-    double** GetSqrtCov()        const { return fSqrtCov;   } //!< Return the Cholesky decomposition of the covariance matrix
+    matrix<double> const& GetCovMat()  const { return fCovMat;  } //!< Return fCovMat
+    matrix<double> const& GetSqrtCov() const { return fSqrtCov; } //!< Return the Cholesky decomposition of the covariance matrix
     
     void ExportCovMat(std::string);         //!< Export covariance matrix
     void ExportSqrtCov(std::string);        //!< Export Cholesky decomposition
@@ -70,8 +71,8 @@ namespace NNPDF
     double *fData;       //!< The experimental data
     double *fT0Pred;     //!< The t0 predictions
 
-    double **fCovMat;    //!< The covariance matrix
-    double **fSqrtCov;   //!< The Cholesky decomposition of the covariance matrix
+    matrix<double> fCovMat;    //!< The covariance matrix
+    matrix<double> fSqrtCov;   //!< The Cholesky decomposition of the covariance matrix
     
     double *fStat;       //!< The statistical errors
     sysError **fSys;    //!< The syscor
@@ -84,7 +85,6 @@ namespace NNPDF
 
         
     void ClearLocalData();            //!< Clear data pulled from datasets
-    void ClearLocalCovMat();          //!< Clear covariance matrices
 
     void PullData();                  //!< Pull experimental data from datasets
     void GenCovMat();                 //!< Generate covmat and inverse

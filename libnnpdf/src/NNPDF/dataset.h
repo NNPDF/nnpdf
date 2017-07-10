@@ -16,12 +16,11 @@
 #include "fkset.h"
 #include "pdfset.h"
 #include "commondata.h"
+#include "utils.h"
 
 namespace NNPDF
 {
-
   class ThPredictions;
-
 
   /**
    *  \class DataSet
@@ -34,24 +33,19 @@ namespace NNPDF
     bool fIsT0;         //!< Flag to determine if covmat is T0
 
     // Data information
-    double *fT0Pred;      //!< The t0 predictions - defaults to data in case of no t0-std::vector
-    double **fCovMat;     //!< The covariance matrix
-    double **fSqrtCov;    //!< The Cholesky decomposition of the covariance matrix
+    std::vector<double> fT0Pred; //!< The t0 predictions - defaults to data in case of no t0-std::vector
+    mutable matrix<double> fCovMat;      //!< The covariance matrix
+    mutable matrix<double> fSqrtCov;     //!< The Cholesky decomposition of the covariance matrix
     
     // private methods for constructor
-    void GenCovMat();     //!< Generate covariance matrix
+    void GenCovMat() const;     //!< Generate covariance matrix
 
     DataSet();                          //!< Disable default constructor
 
    public:
     DataSet(CommonData const&, FKSet const&); //!< Constructor
+    DataSet(const DataSet&, std::vector<int> const&); //!< Masked Copy constructor
     virtual ~DataSet();                       //!< The destructor.    
-
-    DataSet(const DataSet&);            //!< Copy constructor
-    friend void swap(DataSet&, DataSet&);
-    DataSet& operator=(DataSet);        //!< Copy-assignment
-    DataSet(DataSet&&);                 //!< Move constructor
-    DataSet(const DataSet&, std::vector<int> const& );     //!< Masked Copy constructor
 
     // ****************   DataSet T0 Methods  **********************
 
@@ -63,11 +57,11 @@ namespace NNPDF
     
     double const&  GetT0Pred(int i)    const { return fT0Pred[i];}  //!< Return t0 prediction
     
-    double** GetCovMat()         const { return fCovMat;   }        //!< Return fCovMat
-    double** GetSqrtCov()      const { return fSqrtCov;}            //!< Return the Cholesky decomposition of the covariance matrix
-    double const& GetSqrtCov( int const& i, int const& j) const {return fSqrtCov[i][j];}; //!< Returns an element of the Cholesky decomposition
+    matrix<double> const& GetCovMat() const;  //!< Return fCovMat
+    matrix<double> const& GetSqrtCov() const; //!< Return the Cholesky decomposition of the covariance matrix
+    double GetSqrtCov(int i, int j) const;    //!< Returns an element of the Cholesky decomposition
 
-    bool const& IsArtificial()         const { return fIsArtificial;} //!< Returns the artificial flag
+    bool const& IsArtificial()         const { return fIsArtificial; } //!< Returns the artificial flag
     
     // ****************   Update data values  ********************************
 
@@ -77,7 +71,7 @@ namespace NNPDF
     void   UpdateData(double* newdat, double* norm);  //!< Update with a rescaling - also rescales additive uncertainties
     void   UpdateData(double* newdat, sysType* type); //!< Update data and systypes
 
-    void SetArtificial( bool const& artificial) {fIsArtificial = artificial;};
+    void SetArtificial( bool const& artificial) { fIsArtificial = artificial; }
     
     // ****************   Rescale Uncertainties   ****************************
     
@@ -87,4 +81,4 @@ namespace NNPDF
   
   };
   
-};
+}

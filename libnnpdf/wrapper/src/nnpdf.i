@@ -40,6 +40,9 @@
 
 %include "NNPDF/common.h"
 %include "NNPDF/utils.h"
+
+%template(matrix_double) NNPDF::matrix<double>;
+
 %include "NNPDF/randomgenerator.h"
 %include "NNPDF/pathlib.h"
 %include "NNPDF/logger.h"
@@ -180,13 +183,10 @@ void grid_values(
 
 void get_covmat(double ** datamat, int* n, int* m){
     int len = $self->GetNData();
-    double** cov = $self->GetCovMat();
-    auto result = (double* ) malloc(sizeof(double)*len*len);
-    for (int i = 0; i < len; i++){
-        for (int j = 0; j < len; j++){
-            result[len*i + j] = cov[i][j];
-        }
-    }
+    auto data = $self->GetCovMat().data();
+    auto size = len*len;
+    auto result = (double*) malloc(sizeof(double)*size);
+    std::copy(data, data + size, result);
     *datamat = result;
     *m = *n = len;
 }
@@ -194,13 +194,10 @@ void get_covmat(double ** datamat, int* n, int* m){
 
 void get_sqrtcovmat(double ** datamat, int* n, int* m){
     int len = $self->GetNData();
-    double** pointermat = $self->GetSqrtCov();
-    auto result = (double*) malloc(sizeof(double)*len*len);
-    for (int i = 0; i < len; i++){
-        for (int j = 0; j <= i; j++){
-            result[len*i + j] = pointermat[i][j];
-        }
-    }
+    auto data = $self->GetSqrtCov().data();
+    auto size = len*len;
+    auto result = (double*) malloc(sizeof(double)*size);
+    std::copy(data, data + size, result);
     *datamat = result;
     *m = *n = len;
 }
@@ -240,13 +237,10 @@ def __len__(self):
 
 void get_covmat(double ** datamat, int* n, int* m){
     int len = $self->GetNData();
-    double** cov = $self->GetCovMat();
-    auto result = (double*) malloc(sizeof(double)*len*len);
-    for (int i = 0; i < len; i++){
-        for (int j = 0; j < len; j++){
-            result[len*i + j] = cov[i][j];
-        }
-    }
+    auto data = $self->GetCovMat().data();
+    auto size = len*len;
+    auto result = (double*) malloc(sizeof(double)*size);
+    std::copy(data, data + size, result);
     *datamat = result;
     *m = *n = len;
 }
@@ -254,13 +248,10 @@ void get_covmat(double ** datamat, int* n, int* m){
 
 void get_sqrtcovmat(double ** datamat, int* n, int* m){
     int len = $self->GetNData();
-    double** pointermat = $self->GetSqrtCov();
-    auto result = (double*) malloc(sizeof(double)*len*len);
-    for (int i = 0; i < len; i++){
-        for (int j = 0; j <= i; j++){
-            result[len*i + j] = pointermat[i][j];
-        }
-    }
+    auto data = $self->GetSqrtCov().data();
+    auto size = len*len;
+    auto result = (double*) malloc(sizeof(double)*size);
+    std::copy(data, data + size, result);
     *datamat = result;
     *m = *n = len;
 }

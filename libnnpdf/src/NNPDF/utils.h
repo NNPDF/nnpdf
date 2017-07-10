@@ -12,6 +12,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <array>
 
 /** @defgroup utils Utils
  * \brief libnnpdf utility functions
@@ -69,6 +70,47 @@ namespace NNPDF
     std::ostream& stream() {return fStream;} //!< Returns the internal stream
   };
 
+  /**
+   * @brief The matrix class for the covmat related objects
+   */
+  template<class T>
+  class matrix
+  {
+  public:
+    //!< matrix constructor
+    matrix(size_t row = 0, size_t col = 0): _size{{row,col}}
+    {
+      if (row*col != 0)
+        _data.resize(row*col);
+    }
+
+    //!< resize matrix and fill with v
+    void resize(size_t row, size_t col, T v)
+    {
+      _size = {{row,col}};
+      _data.resize(row*col, v);
+    }
+
+    //!< clear matrix size and content
+    void clear()
+    {
+      _size = {0,0};
+      _data.clear();
+    }
+
+    //operators
+    size_t const& size(size_t dim) const { return _size[dim]; } //!< Returns the (row,col) size pair.
+    T&       operator()(size_t i, size_t j)       { return _data[i*_size[1]+j]; }
+    T const& operator()(size_t i, size_t j) const { return _data[i*_size[1]+j]; }
+    //TODO: Does this have to be const? In any case there
+    //should be a const version.
+    T const * data () const {return _data.data();} //!< Return the underlying buffer.
+
+  private:
+    std::array<size_t, 2> _size; //!< the dimension pair
+    std::vector<T>   _data; //!< the data array
+  };
+
   // *******************  Numerical *****************************
   double integrate(double data[], size_t npoints, double h); //!< Basic simpson rule integrator
 
@@ -93,7 +135,7 @@ namespace NNPDF
   void Compute68cl(std::vector<real> const& x, real &up, real &dn);//!< Compute the 68% c.l.
   void Compute95cl(std::vector<real> const& x, real &up, real &dn);//!< Compute the 95% c.l.
 
-  void CholeskyDecomposition(int const& n, double** const inmatrix, double** sqrtmat);
+  void CholeskyDecomposition(matrix<double> const& inmatrix, matrix<double> & sqrtmat);
 
 }
 

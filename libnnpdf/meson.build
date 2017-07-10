@@ -2,7 +2,7 @@ project(
 'libnnpdf',
 'cpp',
 version: '1.1',
-licence: 'SECRET',
+license: 'SECRET',
 default_options : ['cpp_std=c++14']
 )
 
@@ -48,12 +48,28 @@ configure_file(
 )
 
 #handle pathlib
+
 profile_name = 'nnprofile.yaml'
-profile_source = profile_name
+profile_input = '.'.join([profile_name, 'in'])
+profile_conf = configuration_data()
+
 profile_path = join_paths([
    get_option('prefix'),
    'share', 'NNPDF',
 ])
+
+if get_option('bureocratic_paths')
+	profile_conf.set('PROFILE_PREFIX', profile_path)
+else
+	profile_conf.set('PROFILE_PREFIX', join_path(['..', 'nnpdfcpp']))
+endif
+
+profile_source = configure_file(
+    input: profile_input,
+	output: profile_name,
+    configuration: profile_conf
+)
+
 install_data(profile_source, install_dir:profile_path)
 add_global_arguments(
     '-DDEFAULT_NNPDF_PROFILE_PATH="@0@"'.format(
@@ -97,6 +113,23 @@ lib = shared_library(
 	install: true,
     install_dir: 'lib/',
 )
+
+test_sources = [
+    'tests/main.cc',
+	'tests/experiment_test.cc',
+]
+
+run_test = executable(
+    'run_test',
+	test_sources,
+	link_with:[lib],
+    include_directories: inc,
+	build_by_default: false,
+)
+
+test('run_test', run_test)
+
+
 
 pkg_mod = import('pkgconfig')
 pkg_mod.generate(

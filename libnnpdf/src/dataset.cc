@@ -20,7 +20,6 @@
 #include <memory>
 
 #include "NNPDF/dataset.h"
-#include "NNPDF/utils.h"
 #include "NNPDF/fastkernel.h"
 #include "NNPDF/thpredictions.h"
 #include "NNPDF/randomgenerator.h"
@@ -37,157 +36,45 @@ DataSet::DataSet(CommonData const& data, FKSet const& set):
   CommonData(data),
   FKSet(set),
   fIsArtificial(false),
-  fIsT0(false),
-  fT0Pred(new double[fNData]),
-  fCovMat(new double*[fNData]),
-  fSqrtCov(new double*[fNData])
+  fIsT0(false)
 {
-  // Init covariance matrix and T0 Vector
+  fT0Pred.reserve(fNData);
+
+  // Init T0 Vector
   for (int i = 0; i < fNData; i++)
-  {
-    fT0Pred[i] = fData[i]; // Default T0 to data
-
-    fCovMat[i] = new double[fNData];
-    fSqrtCov[i] = new double[fNData];
-    for (int j = 0; j < fNData; j++)
-      fCovMat[i][j] = 0.0;
-  }
-  
-  // Generate Covariance Matrix
-  GenCovMat();
-
-}
-
-DataSet::DataSet(const DataSet& set):
-  CommonData(set),
-  FKSet(set),
-  fIsArtificial(set.fIsArtificial),
-  fIsT0(set.fIsT0),
-  fT0Pred(new double[fNData]),
-  fCovMat(new double*[fNData]),
-  fSqrtCov(new double*[fNData])
-{
-  // Building Obs array
-  for (int i = 0; i < fNData; i++)
-    {
-      fT0Pred[i] = set.fT0Pred[i];
-      
-      fCovMat[i] = new double[fNData];
-      fSqrtCov[i] = new double[fNData];
-      
-      for (int j=0; j<fNData; j++)
-      {
-        fCovMat[i][j] = 0.0;
-        fSqrtCov[i][j] = 0.0;
-      }
-    }
-
-  // Generate covariance matrix
-  GenCovMat();
-}
-
-void NNPDF::swap(DataSet& lhs, DataSet& rhs)
-{
-  using std::swap;
-  swap(lhs.fIsArtificial, rhs.fIsArtificial);
-  swap(lhs.fIsT0, rhs.fIsT0);
-  swap(lhs.fT0Pred, rhs.fT0Pred);
-  swap(lhs.fCovMat, rhs.fCovMat);
-  swap(lhs.fSqrtCov, rhs.fSqrtCov);
-  //Cast as subclass objects and call the swap of those.
-  CommonData & lhs_cd = lhs;
-  CommonData & rhs_cd = rhs;
-  swap(lhs_cd, rhs_cd);
-
-  FKSet & lhs_fk = lhs;
-  FKSet & rhs_fk = rhs;
-  swap(lhs_fk, rhs_fk);
-}
-
-DataSet& DataSet::operator=(DataSet other)
-{
-  using std::swap;
-  swap(*this, other);
-  return *this;
-}
-
-DataSet::DataSet(DataSet && other):
-  CommonData(std::move(other)),
-  FKSet(std::move(other))
-{
-  fIsArtificial = other.fIsArtificial;
-  fIsT0 = other.fIsT0;
-
-  fT0Pred = other.fT0Pred;
-  other.fT0Pred = nullptr;
-
-  fCovMat = other.fCovMat;
-  other.fCovMat = nullptr;
-
-  fSqrtCov = other.fSqrtCov;
-  other.fSqrtCov = nullptr;
-
+    fT0Pred.push_back(fData[i]); // Default T0 to data
 }
 
 DataSet::DataSet(const DataSet& set, std::vector<int> const& mask):
   CommonData(set, mask),
   FKSet(set, mask),
   fIsArtificial(set.fIsArtificial),
-  fIsT0(set.fIsT0),
-  fT0Pred(new double[fNData]),
-  fCovMat(new double*[fNData]),
-  fSqrtCov(new double*[fNData])
+  fIsT0(set.fIsT0)
 {
+  fT0Pred.reserve(fNData);
+
   // Building Obs array
   for (int i = 0; i < fNData; i++)
-    {
-      fT0Pred[i] = set.fT0Pred[mask[i]];
-      
-      fCovMat[i] = new double[fNData];
-      fSqrtCov[i] = new double[fNData];
-      
-      for (int j=0; j<fNData; j++)
-      {
-        fCovMat[i][j] = 0.0;
-        fSqrtCov[i][j] = 0.0;
-      }
-    }
-
-  // Generate covariance matrix
-  GenCovMat();
+    fT0Pred.push_back(set.fT0Pred[mask[i]]);
 }
 
 /**
  * Cleanup memory
  */
 DataSet::~DataSet()
-{
-  // Delete T0
-  delete[] fT0Pred;
-
-  if (fCovMat) {
-    for (int i = 0; i < fNData; i++) {
-      if (fCovMat[i])
-        delete[] fCovMat[i];
-    }
-    delete[] fCovMat;
-  }
-
-  if (fSqrtCov) {
-    for (int i = 0; i < fNData; i++) {
-      if (fSqrtCov[i])
-        delete[] fSqrtCov[i];
-    }
-    delete[] fSqrtCov;
-  }
-  
+{   
 }
 
 /**
  * Generate covariance matrix and inverse
  */
-void DataSet::GenCovMat()
-{  
+void DataSet::GenCovMat() const
+{
+  fCovMat.clear();
+  fSqrtCov.clear();
+  fCovMat.resize(fNData, fNData, 0);
+  fSqrtCov.resize(fNData, fNData, 0);
+
   if (fNData <= 0)
     throw LengthError("DataSet::GenCovMat","invalid number of datapoints!");
 
@@ -209,11 +96,11 @@ void DataSet::GenCovMat()
               case MULT: signor += fSys[i][l].mult*fSys[j][l].mult; break; // multiplicative systematics
             }
               
-      fCovMat[i][j] = sig + signor*fT0Pred[i]*fT0Pred[j]*1e-4;
+      fCovMat(i, j) = sig + signor*fT0Pred[i]*fT0Pred[j]*1e-4;
     }
   
   // Compute sqrt of covmat
-  CholeskyDecomposition(fNData, fCovMat, fSqrtCov);
+  CholeskyDecomposition(fCovMat, fSqrtCov);
 }
 
 void DataSet::RescaleErrors(const double mult)
@@ -241,8 +128,8 @@ void DataSet::SetT0(ThPredictions const& t0pred)
   for (int i=0; i<fNData; i++)
     fT0Pred[i] = t0pred.GetObsCV(i);
 
-  // Regenerate covariance matrix
-  GenCovMat();
+  fCovMat.clear();
+  fSqrtCov.clear();
 }
 
 void DataSet::SetT0(const PDFSet& pdf){
@@ -250,6 +137,37 @@ void DataSet::SetT0(const PDFSet& pdf){
   SetT0(t0pred);
 }
 
+/**
+ * @brief DataSet::GetCovMat
+ * @return
+ */
+const matrix<double> &DataSet::GetCovMat() const
+{
+  if (!fCovMat.size(0)) GenCovMat();
+  return fCovMat;
+}
+
+/**
+ * @brief DataSet::GetSqrtCov
+ * @return
+ */
+matrix<double> const& DataSet::GetSqrtCov() const
+{
+  if (!fSqrtCov.size(0)) GenCovMat();
+  return fSqrtCov;
+}
+
+/**
+ * @brief DataSet::GetSqrtCov
+ * @param i
+ * @param j
+ * @return
+ */
+double DataSet::GetSqrtCov(int i, int j) const
+{
+  if (!fSqrtCov.size(0)) GenCovMat();
+  return fSqrtCov(i, j);
+}
 
 /**
  * @brief Dataset::MakeArtificial
@@ -339,8 +257,6 @@ void DataSet::MakeArtificial()
 
   // Note DO NOT Regenerate covariance matrices  
 }
-
-
 
 /**
  * Update data values - used by MakeArtificial and MakeReplica

@@ -1,7 +1,6 @@
 # Local resource locations
-#TODO: Change these to point to prefix/share/NNPDF/<...>
-data_path: '../nnpdfcpp/data'
-results_path: '../nnpdfcpp/results'
+data_path: '@PROFILE_PREFIX@/data'
+results_path: '@PROFILE_PREFIX@/results'
 
 # Remote resource locations
 fit_url: 'http://pcteserver.mi.infn.it/~nnpdf/fits/'

@@ -36,8 +36,6 @@ fNData(0),
 fNSys(0),
 fData(NULL),
 fT0Pred(NULL),
-fCovMat(NULL),
-fSqrtCov(NULL),
 fStat(NULL),
 fSys(NULL),
 fSetSysMap(NULL),
@@ -73,8 +71,8 @@ fNData(exp.fNData),
 fNSys(exp.fNSys),
 fData(NULL),
 fT0Pred(NULL),
-fCovMat(NULL),
-fSqrtCov(NULL),
+fCovMat(exp.fCovMat),
+fSqrtCov(exp.fSqrtCov),
 fStat(NULL),
 fSys(NULL),
 fSetSysMap(NULL),
@@ -88,7 +86,6 @@ fIsT0(exp.fIsT0)
   
   // Pull data from datasets
   PullData();
-  GenCovMat();
 }
 
 /**
@@ -100,8 +97,6 @@ fNData(exp.fNData),
 fNSys(exp.fNSys),
 fData(NULL),
 fT0Pred(NULL),
-fCovMat(NULL),
-fSqrtCov(NULL),
 fStat(NULL),
 fSys(NULL),
 fSetSysMap(NULL),
@@ -124,11 +119,7 @@ fIsT0(exp.fIsT0)
 Experiment::~Experiment()
 {
   ClearLocalData();  
-  ClearLocalCovMat();
-  fSets.clear();
 }
-
-std::string const& Experiment::GetSetName(int i) const { return fSets[i].GetSetName();};
 
 /*
  * Clears data pulled from DataSets
@@ -153,26 +144,6 @@ void Experiment::ClearLocalData()
   delete[] fSys;
   
   fNSys = 0; 
-}
-
-/*
- * Clears covariance matrices
- * This method is intentionally separate from ClearLocalData
- */
-void Experiment::ClearLocalCovMat()
-{
-  // Already clear
-  if (!fCovMat)
-    return;
-
-  for (int i = 0; i < fNData; i++)
-  {
-    delete[] fCovMat[i];
-    delete[] fSqrtCov[i];
-  }
-
-  delete[] fCovMat;
-  delete[] fSqrtCov;
 }
 
 /**
@@ -443,22 +414,17 @@ void Experiment::PullData()
 /**
  * Generate covariance matrix and inverse
  */
-void Experiment::GenCovMat() {
-  ClearLocalCovMat();
-
-  // Allocate arrays
-  fCovMat = new double *[fNData];
-  fSqrtCov = new double *[fNData];
-
-  for (int i = 0; i < fNData; i++) {
-    fCovMat[i] = new double[fNData]();
-    fSqrtCov[i] = new double[fNData]();
-  }
+void Experiment::GenCovMat()
+{
+  fCovMat.clear();
+  fSqrtCov.clear();
+  fCovMat.resize(fNData, fNData, 0);
+  fSqrtCov.resize(fNData, fNData, 0);
 
   for (int i = 0; i < fNData; i++) {
     // Diagonal case
 
-    fCovMat[i][i] = fStat[i] * fStat[i]; // stat error
+    fCovMat(i, i) = fStat[i] * fStat[i]; // stat error
   }
   for (int l = 0; l < fNSys; l++) {
     auto &compsys = fSys[0][l];
@@ -479,7 +445,8 @@ void Experiment::GenCovMat() {
         diagsignor += sys.mult * sys.mult;
         break; // multiplicative systematics
       }
-      fCovMat[i][i] += diagsig + diagsignor * fT0Pred[i] * fT0Pred[i] * 1e-4;
+      fCovMat(i,i) += diagsig + diagsignor * fT0Pred[i] * fT0Pred[i] * 1e-4;
+
       // No need to loop over the nondiagonal parts
       if (!iscorrelated) {
         continue;
@@ -495,14 +462,17 @@ void Experiment::GenCovMat() {
         case MULT:
           res = sys.mult * othersys.mult * fT0Pred[i] * fT0Pred[j] * 1e-4;
           break; // multiplicative systematics
+	default:
+	  throw NNPDF::RuntimeException("Experiment::GenCovMat", "sys type not recognized");
+	  break;
         }
-        fCovMat[i][j] += res;
-        fCovMat[j][i] += res;
+        fCovMat(i, j) += res;
+        fCovMat(j, i) += res;
       }
     }
   }
 
-  CholeskyDecomposition(fNData, fCovMat, fSqrtCov);
+  CholeskyDecomposition(fCovMat, fSqrtCov);
 }
 
 void Experiment::ExportCovMat(string filename)
@@ -513,7 +483,7 @@ void Experiment::ExportCovMat(string filename)
   for (int i=0; i<fNData; i++)
   {
     for (int j=0; j<fNData; j++)
-      outCovMat << fCovMat[i][j] << "\t";
+      outCovMat << fCovMat(i,j) << "\t";
     outCovMat <<endl;
   }
   outCovMat.close();
@@ -528,7 +498,7 @@ void Experiment::ExportSqrtCov(string filename)
   for (int i=0; i<fNData; i++)
   {
     for (int j=0; j<fNData; j++)
-      outCovMat << fSqrtCov[i][j] << "\t";
+      outCovMat << fSqrtCov(i, j) << "\t";
     outCovMat <<endl;
   }
   outCovMat.close();

@@ -431,21 +431,21 @@ namespace NNPDF
 
   // *********** Cholesky decomposition of a matrix ***************
 
-  void CholeskyDecomposition(int const& n, double** const inmatrix, double** sqrtmat)
+  void CholeskyDecomposition(const matrix<double> &inmatrix, matrix<double> &sqrtmat)
   {
+    const size_t n = inmatrix.size(0);
     if (n <= 0)
       throw LengthError("CholeskyDecomposition","attempting a decomposition of an empty matrix!");
     gsl_matrix* mat = gsl_matrix_calloc(n, n);
     for (int i = 0; i < n; i++)
       for (int j = 0; j < n; j++)
-        gsl_matrix_set(mat, i, j, inmatrix[i][j]);
+        gsl_matrix_set(mat, i, j, inmatrix(i, j));
 
     const int decomp = gsl_linalg_cholesky_decomp(mat);
     for (int i = 0; i < n; i++)
       for (int j = 0; j <= i; j++)
-        sqrtmat[i][j] =  gsl_matrix_get(mat, i, j);
+        sqrtmat(i, j) =  gsl_matrix_get(mat, i, j);
     gsl_matrix_free (mat);
   }
-
 
 }
