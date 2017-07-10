@@ -27,7 +27,7 @@ void MakeT0Predictions(PDFSet* const& T0Set, DataSet& set)
 
 void ComputeChi2(DataSet const& set, ThPredictions* const& th, Chi2Results & chi2res)
 {
-  if (!set.GetData() || !set.GetSqrtCov())
+  if (!set.GetData())
   {
     cerr << "ComputeChi2 Error: Missing required data"<<endl;
     exit(-1);
@@ -59,7 +59,7 @@ void ComputeChi2(DataSet const& set, ThPredictions* const& th, Chi2Results & chi
   // Compute diagonal chi2
   chi2res.fChi2Diag = 0.0;
   for (int i = 0; i < nData; i++)
-    chi2res.fChi2Diag += pow(set.GetData(i) - th->GetObsCV(i), 2.0) / set.GetCovMat()[i][i];
+    chi2res.fChi2Diag += pow(set.GetData(i) - th->GetObsCV(i), 2.0) / set.GetCovMat()(i, i);
 
   //Degrees of freedom
   chi2res.fDOF = nData;
@@ -107,7 +107,7 @@ void ComputeChi2(Experiment* const& exp, const vector<ThPredictions *> & th, Chi
   // Compute the diagonal chi2
   chi2res.fChi2Diag = 0.0;
   for (int i = 0; i < nData; i++)
-    chi2res.fChi2Diag += pow(exp->GetData()[i] - obsCV[i], 2.0) / exp->GetCovMat()[i][i];
+    chi2res.fChi2Diag += pow(exp->GetData()[i] - obsCV[i], 2.0) / exp->GetCovMat()(i, i);
 
   // Computing the average
   chi2res.fChi2Avg = ComputeAVG(nMem, chi2res.fChi2Mem);
@@ -125,21 +125,21 @@ void ComputeEstimators(DataSet const& set, ThPredictions* const& th, StatEstimat
     {
       // Building experimental estimators
       const int nData = set.GetNData();
-      double **covmat = set.GetCovMat();
+      auto const& covmat = set.GetCovMat();
 
       real *cov = new real[nData*(nData+1)/2];
       real *rho = new real[nData*(nData+1)/2];
       real *sigtot = new real[nData];
 
       for (int i = 0; i < nData; i++)
-        sigtot[i] = fabs(sqrt(covmat[i][i])/set.GetData(i)*100);
+        sigtot[i] = fabs(sqrt(covmat(i, i))/set.GetData(i)*100);
 
       int index = 0;
       for (int i = 0; i < nData; i++)
         for (int j = i; j < nData; j++)
          {
-            cov[index] = covmat[i][j];
-            rho[index] = covmat[i][j]/sqrt(covmat[i][i])/sqrt(covmat[j][j]);
+            cov[index] = covmat(i, j);
+            rho[index] = covmat(i, j)/sqrt(covmat(i, i))/sqrt(covmat(j, j));
             index++;
          }
 
@@ -230,7 +230,7 @@ void ComputeEstimators(Experiment * const& exp, const vector<ThPredictions *> & 
   if (!exp->IsArtificial())
     {
       const int nData = exp->GetNData();
-      double** covmat = exp->GetCovMat();
+      auto const& covmat = exp->GetCovMat();
 
       // Building experimental estimators
       real *cov = new real[nData*(nData+1)/2];
@@ -238,14 +238,14 @@ void ComputeEstimators(Experiment * const& exp, const vector<ThPredictions *> & 
       real *sigtot = new real[nData];
 
       for (int i = 0; i < nData; i++)
-        sigtot[i] = fabs(sqrt(covmat[i][i])/exp->GetData()[i]*100);
+        sigtot[i] = fabs(sqrt(covmat(i, i))/exp->GetData()[i]*100);
 
       int index = 0;
       for (int i = 0; i < nData; i++)
         for (int j = i; j < nData; j++)
          {
-            cov[index] = covmat[i][j];
-            rho[index] = covmat[i][j]/sqrt(covmat[i][i])/sqrt(covmat[j][j]);
+            cov[index] = covmat(i, j);
+            rho[index] = covmat(i, j)/sqrt(covmat(i, i))/sqrt(covmat(j, j));
             index++;
          }
 

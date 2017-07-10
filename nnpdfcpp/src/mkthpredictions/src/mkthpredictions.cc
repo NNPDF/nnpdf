@@ -132,7 +132,7 @@ void printdata(ThPredictions * const& th, Experiment * const& exp)
 	 << exp->GetData()[i]
 	 << "\t"
 	 << setw(10)
-	 << sqrt(exp->GetCovMat()[i][i])
+	 << sqrt(exp->GetCovMat()(i, i))
 	 << "\n";	 
   }
   cout << endl;

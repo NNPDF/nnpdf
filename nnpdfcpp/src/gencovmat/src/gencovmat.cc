@@ -117,7 +117,7 @@ void ExportCovMat(const DataSet &d, const string file)
   for(int i = 0; i < d.GetNData(); i++)
     {
       for (int j = 0; j < d.GetNData(); j++)
-        f << d.GetCovMat()[i][j] << "  ";
+        f << d.GetCovMat()(i, j) << "  ";
       f << endl;
     }
 
@@ -135,7 +135,7 @@ void ExportCorrMat(const DataSet &d, const string file)
   for(int i = 0; i < d.GetNData(); i++)
     {
       for (int j = 0; j < d.GetNData(); j++)
-        f << d.GetCovMat()[i][j] / sqrt(d.GetCovMat()[i][i]) / sqrt(d.GetCovMat()[j][j]) << "  ";
+        f << d.GetCovMat()(i, j) / sqrt(d.GetCovMat()(i, i)) / sqrt(d.GetCovMat()(j, j)) << "  ";
       f << endl;
     }
 
