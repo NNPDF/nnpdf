@@ -46,7 +46,7 @@ public:
   {
     // FiatLux setup
     _lux = new FiatLux{configPath() + "fiatlux.yml"};
-    _lux->PlugAlphaQED(APFEL::AlphaQED);
+    _lux->PlugAlphaQED(APFEL::AlphaQED); // using default Qref = me
     _lux->PlugStructureFunctions(APFELF2, APFELFL);
   }
 
@@ -193,7 +193,7 @@ int main(int argc, char **argv)
   if (!stoi(settings.GetTheory(APFEL::kQED))) APFEL::EnableSFNLOQEDCorrections(false);
 
   APFEL::EnableTargetMassCorrections(false);
-  APFEL::SetAlphaQEDRef(input().get<double>("alpha_ref"), input().get<double>("alphaq0_ref"));
+  APFEL::SetAlphaQEDRef(1/137.035999074, 0.000510998946);
   APFEL::SetPDFSet(settings.GetPDFName() + ".LHgrid");
   APFEL::SetReplica(replica);
   APFEL::SetQLimits(1,1e7);
