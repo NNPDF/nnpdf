@@ -1,4 +1,4 @@
-{% set libnnpdf_version = "==1.2.0b2" %}
+{% set libnnpdf_version = "==1.2.0b4" %}
 package:
     name: nnpdf
     version: "{{ GIT_DESCRIBE_TAG[1:] }}.{{ GIT_DESCRIBE_NUMBER }}"
