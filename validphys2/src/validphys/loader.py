@@ -23,6 +23,7 @@ from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts,
                             peek_commondata_metadata)
 from validphys import lhaindex
+from NNPDF import pathlib as nnpath
 
 
 log = logging.getLogger(__name__)
@@ -53,9 +54,21 @@ class RemoteLoaderError(LoaderError): pass
 
 class LoaderBase:
 
-    def __init__(self, datapath, resultspath):
+    def __init__(self, datapath=None, resultspath=None):
+        if datapath is None:
+            datapath = nnpath.get_data_path()
+
+        if resultspath is None:
+            resultspath = nnpath.get_results_path()
         datapath = pathlib.Path(datapath)
         resultspath = pathlib.Path(resultspath)
+
+        if not datapath.exists():
+            raise LoaderError(f"The data path {datapath} does not exist.")
+
+        if not resultspath.exists():
+             raise LoaderError(f"The results path {resultspath} does not exist.")
+
         self.datapath = datapath
         self.resultspath = resultspath
 

@@ -424,7 +424,9 @@ class ExperimentSpec(TupleComp, namespaces.NSList):
         #This needs to be hashable
         datasets = tuple(datasets)
 
-        dsinputs = tuple(dsinputs)
+        #TODO: Find a better way for interactive usage.
+        if dsinputs is not None:
+            dsinputs = tuple(dsinputs)
 
         self.name = name
         self.datasets = datasets

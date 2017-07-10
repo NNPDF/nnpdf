@@ -63,11 +63,13 @@ file in attachment:
     def argparser(self):
         parser = super().argparser
 
-        parser.add_argument('-p','--datapath', help="path where the NNPDF "
-                        "data is located",
-                        default='../nnpdfcpp/data')
+        parser.add_argument('-p','--datapath', help="DEPRECATED USE nnprofile "
+            "INSTEAD. path where the NNPDF "
+            "data is located",
+            default=None)
 
-        parser.add_argument('--resultspath', help="path where the fit results "
+        parser.add_argument('--resultspath', help="DEPRECATED USE nnprofile "
+                         "INSTEAD. path where the fit results "
                           "are located. Calculated from 'datapath' by default",
                          )
 
@@ -92,25 +94,8 @@ file in attachment:
         return parser
 
 
-
-    def get_commandline_arguments(self):
-        args = super().get_commandline_arguments()
-        if not args['resultspath']:
-            args['resultspath'] = pathlib.Path(args['datapath']).parent / 'results'
-        return args
-
     def init(self):
         super().init()
-        dp = pathlib.Path(self.args['datapath'])
-        if not dp.exists():
-            log.error("The data path %s does not exist. Please specify "
-            "the path to nnpdfcpp/data with the --datapath option.", dp)
-            sys.exit(1)
-        rp = pathlib.Path(self.args["resultspath"])
-        if not rp.exists():
-            log.error("The results path %s does not exist. Please specify "
-            "the path to nnpdfcpp/results with the --resultspath option.", rp)
-            sys.exit(1)
         cout = self.args['cout']
         if cout is None:
             if self.args['loglevel'] <= logging.DEBUG:
