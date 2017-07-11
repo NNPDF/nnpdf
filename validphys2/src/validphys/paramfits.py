@@ -32,7 +32,7 @@ log = logging.getLogger(__name__)
 
 
 PseudoReplicaExpChi2Data = namedtuple('PseudoReplicaChi2Data',
-    ['nnfit_index', 'experiment', 'dataset', 'chi2', ])
+    ['experiment', 'dataset', 'ndata' ,'chi2', 'nnfit_index'])
 
 def computed_psedorreplicas_chi2(experiments, dataseed, pdf,
                                  fitted_replica_indexes, t0set:PDF):
@@ -48,16 +48,21 @@ def computed_psedorreplicas_chi2(experiments, dataseed, pdf,
     pdfname = pdf.name
     datas = []
 
+    #No need to save these in the cache, so we call __wrapped__
     original_experiments = [e.load.__wrapped__(e) for e in experiments]
+    sqrtcovmat_table = []
+    log.debug("Generating dataset covmats")
     for exp in original_experiments:
         exp.SetT0(lt0)
+        #The covariance matrices are currently very expensive to recompute.
+        #Store them after computing T0
+        sqrtcovmat_table.append([ds.get_sqrtcovmat() for ds in exp.DataSets()])
 
     for lhapdf_index, nnfit_index in enumerate(fitted_replica_indexes, 1):
-        #No need to save these in the cache, so we call __wrapped__
 
         flutuated_experiments = pseudodata(original_experiments, dataseed, nnfit_index)
         lpdf = single_replica(pdfname, lhapdf_index)
-        for expspec, exp in zip(experiments, flutuated_experiments):
+        for expspec, exp, mats in zip(experiments, flutuated_experiments, sqrtcovmat_table):
             #We need to manage the memory
             exp.thisown = True
 
@@ -68,18 +73,25 @@ def computed_psedorreplicas_chi2(experiments, dataseed, pdf,
             results = DataResult(exp), th
             #The experiment already has T0. No need to set it again.
             #TODO: This is a hack. Get rid of this.
-            chi2 = chi2_breakdown_by_dataset(results, exp, t0set=None)
+            chi2 = chi2_breakdown_by_dataset(results, exp, t0set=None,
+                                             datasets_sqrtcovmat=mats)
 
-            for dsname, value in chi2.items():
+            for i, (dsname,(value, ndata)) in enumerate(chi2.items()):
                 data = PseudoReplicaExpChi2Data(
                     nnfit_index=nnfit_index,
                     experiment=expspec.name,
-                    dataset = dsname,
+                    #We set the i so that the sort order is maintaned here.
+                    dataset = (i, dsname),
+                    ndata = ndata,
                     chi2=value
                     )
                 datas.append(data)
+
     df =  pd.DataFrame(datas, columns=PseudoReplicaExpChi2Data._fields)
-    df.set_index(['nnfit_index', 'experiment', 'dataset'], inplace=True)
+    df.set_index(['experiment', 'dataset', 'ndata' , 'nnfit_index'], inplace=True)
+    df.sort_index(inplace=True)
+    #Now that we have the order we like, we remove the i
+    df.index.set_levels([x[1] for x in df.index.levels[1]], level=1, inplace=True)
     return df
 
 #TODO: Probably fitcontext should set all of the variables required to compute

@@ -415,17 +415,17 @@ def abs_chi2_data_experiment(experiment_results):
     return abs_chi2_data(experiment_results)
 
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
-                              prepend_total:bool=True) -> dict:
+                              prepend_total:bool=True,
+                              datasets_sqrtcovmat=None) -> dict:
     """Return a dict with the central chi² of each dataset in the experiment,
     by breaking down the experiment results. If ``prepend_total`` is True.
     """
     dt, th = experiment_results
     sqrtcovmat = dt.sqrtcovmat
-    print(sqrtcovmat.shape)
     central_diff = th.central_value - dt.central_value
     d = {}
     if prepend_total:
-        d['Total'] = calc_chi2(sqrtcovmat, central_diff)
+        d['Total'] = (calc_chi2(sqrtcovmat, central_diff), len(sqrtcovmat))
 
 
     #Allow lower level access useful for pseudodata and such.
@@ -441,9 +441,13 @@ def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
         loaded_exp.SetT0(t0set.load_T0())
 
     indmin = indmax = 0
-    for ds in loaded_exp.DataSets():
+
+    if datasets_sqrtcovmat is None:
+        datasets_sqrtcovmat = (ds.get_sqrtcovmat() for ds in loaded_exp.DataSets())
+
+    for ds, mat  in zip(loaded_exp.DataSets(), datasets_sqrtcovmat):
         indmax += len(ds)
-        d[ds.GetSetName] = calc_chi2(ds.get_sqrtcovmat(), central_diff[indmin:indmax])
+        d[ds.GetSetName()] = (calc_chi2(mat, central_diff[indmin:indmax]), len(mat))
         indmin = indmax
     return d
 
