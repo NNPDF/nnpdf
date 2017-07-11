@@ -19,12 +19,13 @@ import scipy.stats
 from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
 
-from NNPDF import LHAPDFSet
-from NNPDF import CommonData, FKTable
-from NNPDF.fkset import FKSet
-from NNPDF.dataset import DataSet
-from NNPDF.experiments import Experiment
-from NNPDF.positivity import PositivitySet
+from NNPDF import (LHAPDFSet,
+    CommonData,
+    FKTable,
+    FKSet,
+    DataSet,
+    Experiment,
+    PositivitySet,)
 
 from validphys import lhaindex
 
