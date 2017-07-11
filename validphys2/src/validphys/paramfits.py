@@ -25,14 +25,14 @@ from reportengine.checks import make_argcheck, CheckError, check_positive
 from NNPDF import pseudodata, single_replica, RandomGenerator
 
 from validphys.core import PDF
-from validphys.results import ThPredictionsResult, DataResult, abs_chi2_data_experiment
+from validphys.results import ThPredictionsResult, DataResult, chi2_breakdown_by_dataset
 from validphys.plotutils import expand_margin, marker_iter_plot, centered_range
 
 log = logging.getLogger(__name__)
 
 
 PseudoReplicaExpChi2Data = namedtuple('PseudoReplicaChi2Data',
-    ['nnfit_index', 'experiment', 'central_chi2', 'ndata'])
+    ['nnfit_index', 'experiment', 'dataset', 'chi2', ])
 
 def computed_psedorreplicas_chi2(experiments, dataseed, pdf,
                                  fitted_replica_indexes, t0set:PDF):
@@ -66,16 +66,20 @@ def computed_psedorreplicas_chi2(experiments, dataseed, pdf,
 
 
             results = DataResult(exp), th
-            chi2 = abs_chi2_data_experiment(results)
+            #The experiment already has T0. No need to set it again.
+            #TODO: This is a hack. Get rid of this.
+            chi2 = chi2_breakdown_by_dataset(results, exp, t0set=None)
 
-            data = PseudoReplicaExpChi2Data(
-                nnfit_index=nnfit_index,
-                experiment=expspec.name,
-                central_chi2=chi2.central_result,
-                ndata=chi2.ndata)
-            datas.append(data)
+            for dsname, value in chi2.items():
+                data = PseudoReplicaExpChi2Data(
+                    nnfit_index=nnfit_index,
+                    experiment=expspec.name,
+                    dataset = dsname,
+                    chi2=value
+                    )
+                datas.append(data)
     df =  pd.DataFrame(datas, columns=PseudoReplicaExpChi2Data._fields)
-    df.set_index(['nnfit_index', 'experiment'], inplace=True)
+    df.set_index(['nnfit_index', 'experiment', 'dataset'], inplace=True)
     return df
 
 #TODO: Probably fitcontext should set all of the variables required to compute

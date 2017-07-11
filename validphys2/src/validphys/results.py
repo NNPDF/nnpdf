@@ -21,7 +21,7 @@ from reportengine import collect
 
 from validphys.checks import assert_use_cuts_true
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
-from validphys.calcutils import all_chi2, central_chi2
+from validphys.calcutils import all_chi2, central_chi2, calc_chi2
 
 log = logging.getLogger(__name__)
 
@@ -413,6 +413,39 @@ def abs_chi2_data(results):
 def abs_chi2_data_experiment(experiment_results):
     """Like `abs_chi2_data` but for a whole experiment"""
     return abs_chi2_data(experiment_results)
+
+def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
+                              prepend_total:bool=True) -> dict:
+    """Return a dict with the central chi² of each dataset in the experiment,
+    by breaking down the experiment results. If ``prepend_total`` is True.
+    """
+    dt, th = experiment_results
+    sqrtcovmat = dt.sqrtcovmat
+    print(sqrtcovmat.shape)
+    central_diff = th.central_value - dt.central_value
+    d = {}
+    if prepend_total:
+        d['Total'] = calc_chi2(sqrtcovmat, central_diff)
+
+
+    #Allow lower level access useful for pseudodata and such.
+    #TODO: This is a hack and we should get rid of it.
+    if isinstance(experiment, Experiment):
+        loaded_exp = experiment
+    else:
+        loaded_exp = experiment.load()
+
+    #TODO: This is horrible. find a better way to do it.
+    if t0set:
+        loaded_exp = type(loaded_exp)(loaded_exp)
+        loaded_exp.SetT0(t0set.load_T0())
+
+    indmin = indmax = 0
+    for ds in loaded_exp.DataSets():
+        indmax += len(ds)
+        d[ds.GetSetName] = calc_chi2(ds.get_sqrtcovmat(), central_diff[indmin:indmax])
+        indmin = indmax
+    return d
 
 def _chs_per_replica(chs):
     th, _, l = chs

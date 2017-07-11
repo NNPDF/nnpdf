@@ -533,7 +533,7 @@ class Config(report.Config):
         return df
 
     def produce_fits_absolute_chi2_output_by_experiment(self,
-            fits_absolute_chi2_output, prepend_total=True):
+            fits_absolute_chi2_output, prepend_total:bool=True):
         """Take the table returned by
         ``fits_absolute_chi2_output`` and break it down
         by experiment. If `preprend_total` is True, the sum over experiments
@@ -556,7 +556,7 @@ class Config(report.Config):
 
 
     def produce_fits_matched_pseudorreplicas_chi2_output_by_experiment(self,
-            fits_matched_pseudorreplicas_chi2_output, prepend_total=True):
+            fits_matched_pseudorreplicas_chi2_output, prepend_total:bool=True):
         """Take the table returned by
         ``fits_matched_pseudorreplicas_chi2_output`` and break it down
         by experiment. If `preprend_total` is True, the sum over experiments
