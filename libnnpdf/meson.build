@@ -61,7 +61,7 @@ profile_path = join_paths([
 if get_option('bureocratic_paths')
 	profile_conf.set('PROFILE_PREFIX', profile_path)
 else
-	profile_conf.set('PROFILE_PREFIX', join_path(['..', 'nnpdfcpp']))
+	profile_conf.set('PROFILE_PREFIX', join_paths(['..', 'nnpdfcpp']))
 endif
 
 profile_source = configure_file(
