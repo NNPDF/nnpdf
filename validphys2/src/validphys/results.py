@@ -14,8 +14,7 @@ import numpy as np
 import scipy.linalg as la
 import pandas as pd
 
-from NNPDF import ThPredictions, CommonData
-from NNPDF.experiments import Experiment
+from NNPDF import ThPredictions, CommonData, Experiment
 from reportengine.checks import require_one, remove_outer, check_not_empty
 from reportengine.table import table
 from reportengine import collect
@@ -286,8 +285,8 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
     """
 
     #TODO: Do this somewhere else
-    from NNPDF import randomgenerator
-    randomgenerator.RandomGenerator.InitRNG(0,0)
+    from  NNPDF import RandomGenerator
+    RandomGenerator.InitRNG(0,0)
     data = np.zeros((len(experiments_index), nclosure*(1+nnoisy)))
 
     cols = []

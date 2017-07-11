@@ -10,14 +10,14 @@ import itertools
 
 import numpy as np
 
-from NNPDF import _lhapdfset, LHAPDFSet
+from NNPDF import REALDOUBLE, LHAPDFSet
 
 from validphys.core import PDF
 
 #Numpy is unhappy about downcasting double to float implicitly, so we have
 #to manually make sure all input arrays correspond to NNPDF::real.
 FLTYPE = np.int32
-REALTYPE = np.double if _lhapdfset.REALDOUBLE else np.float32
+REALTYPE = np.double if REALDOUBLE else np.float32
 
 #This represents some canonical ordering of all the relevant flavours
 #we may want to query from LHAPDF

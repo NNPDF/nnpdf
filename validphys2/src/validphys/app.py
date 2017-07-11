@@ -5,7 +5,6 @@ Created on Thu Jun 30 10:19:35 2016
 @author: Zahari Kassabov
 """
 import sys
-import pathlib
 import logging
 import contextlib
 
@@ -101,12 +100,11 @@ file in attachment:
             if self.args['loglevel'] <= logging.DEBUG:
                 cout = True
         if not cout:
-            from NNPDF import common
-            from NNPDF.lhapdfset import setVerbosity
-            common.SetVerbosity(0)
+            import NNPDF
+            NNPDF.SetVerbosity(0)
             #No idea why this doesn't work
             #import lhapdf
-            setVerbosity(0)
+            NNPDF.setVerbosity(0)
 
     @staticmethod
     @contextlib.contextmanager

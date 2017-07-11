@@ -23,7 +23,7 @@ from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts,
                             peek_commondata_metadata)
 from validphys import lhaindex
-from NNPDF import pathlib as nnpath
+import NNPDF as nnpath
 
 
 log = logging.getLogger(__name__)

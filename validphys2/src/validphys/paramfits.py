@@ -21,8 +21,7 @@ from reportengine.figure import figure
 from reportengine.table import table
 from reportengine import collect
 from reportengine.checks import make_argcheck, CheckError
-from NNPDF.experiments import pseudodata
-from NNPDF.lhapdfset import single_replica
+from NNPDF import pseudodata, single_replica, RandomGenerator
 
 from validphys.core import PDF
 from validphys.results import ThPredictionsResult, DataResult, abs_chi2_data_experiment
@@ -41,8 +40,7 @@ def computed_psedorreplicas_chi2(experiments, dataseed, pdf,
     #experiments.cc from scratch.
 
     #TODO: Do this somewhere else
-    from NNPDF import randomgenerator
-    randomgenerator.RandomGenerator.InitRNG(0,0)
+    RandomGenerator.InitRNG(0,0)
 
     lt0 = t0set.load_t0()
     pdfname = pdf.name
