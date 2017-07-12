@@ -23,6 +23,9 @@ EMPTY = '-'
 
 DEFAULTS = dict(author=EMPTY, title=EMPTY, keywords=[])
 
+
+REQUIRED_FILE_METADATA = {'title', 'author', 'keywords'}
+
 def meta_from_html(f):
     soup = BeautifulSoup(f, 'lxml')
     try:
@@ -47,14 +50,18 @@ def meta_from_html(f):
 
 def meta_from_path(p):
     meta = ChainMap(DEFAULTS)
-    index = p/'index.html'
-    if index.exists():
-        with index.open() as f:
-           meta = meta.new_child(meta_from_html(f))
     yaml_meta = p/'meta.yaml'
     if yaml_meta.exists():
         with yaml_meta.open() as f:
-            meta = meta.new_child(yaml.safe_load(f))
+            yaml_res = yaml.safe_load(f)
+    else:
+        yaml_res = {}
+    index = p/'index.html'
+    #Only do the expensive HTML parsing if we actually need a key
+    if REQUIRED_FILE_METADATA - yaml_res.keys() and index.exists():
+        with index.open() as f:
+            meta = meta.new_child(meta_from_html(f))
+    meta = meta.new_child(yaml_res)
     return meta
 
 
@@ -82,7 +89,6 @@ def make_index(root_path, out):
             data.append(res)
             keywords.update(res[3])
 
-    data = [register(p) for p in root_path.iterdir() if p.is_dir()]
     with open(out, 'w') as f:
         json.dump({'data':data, 'keywords':list(keywords)}, f)
 
