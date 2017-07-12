@@ -66,6 +66,12 @@ def convolution_results(data):
     pdf, exps = data
     return [results.experiment_results(exp, pdf, pdf) for exp in exps]
 
+@pytest.fixture
+def dataset_t0_convolution_results(data):
+    pdf, exps = data
+    ds = exps[0].datasets[0]
+    return results.results(ds, pdf, t0set=pdf)
+
 @pytest.fixture(scope='module')
 def chi2data(convolution_results):
     return [results.abs_chi2_data_experiment(r) for r in convolution_results]
@@ -94,6 +100,7 @@ def test_t0sqrtcovmat(data):
     eindex = results.experiments_index(exps)
     return results.experiments_sqrtcovmat(exps, eindex, pdf)
 
+
 @make_table_comp(sane_load)
 def test_predictions(convolution_results):
     data, th = convolution_results[0]
@@ -102,6 +109,16 @@ def test_predictions(convolution_results):
     return pd.DataFrame(th._rawdata.astype(float),
         columns=map(str,
         range(th._rawdata.shape[1])))
+
+@make_table_comp(sane_load)
+def test_dataset_t0_predictions(dataset_t0_convolution_results):
+    data, th = dataset_t0_convolution_results
+    #The explicit indeed is needed so that the pandas comparison shuts
+    #up.
+    return pd.DataFrame(th._rawdata.astype(float),
+        columns=map(str,
+        range(th._rawdata.shape[1])))
+
 @make_table_comp(sane_load)
 def test_cv(convolution_results):
     data, th = convolution_results[0]
