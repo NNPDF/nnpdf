@@ -24,7 +24,7 @@ EMPTY = '-'
 DEFAULTS = dict(author=EMPTY, title=EMPTY, keywords=[])
 
 def meta_from_html(f):
-    soup = BeautifulSoup(f, 'html.parser')
+    soup = BeautifulSoup(f, 'lxml')
     try:
         title = soup.title.string
     except Exception:
@@ -40,7 +40,10 @@ def meta_from_html(f):
         tags = []
     else:
         tags = re.split(r"\s*,\s*", tagtext)
-    return dict(title=title, author=author, keywords=tags)
+    #As it turns out, 'soup.title.string' idiotically doesn't
+    #return a strig but rather an object with the reference to
+    #the whole parse tree, causing a huge memory leak.
+    return dict(title=str(title), author=author, keywords=tags)
 
 def meta_from_path(p):
     meta = ChainMap(DEFAULTS)
