@@ -45,7 +45,8 @@ namespace NNPDF
    public:
     DataSet(CommonData const&, FKSet const&); //!< Constructor
     DataSet(const DataSet&, std::vector<int> const&); //!< Masked Copy constructor
-    virtual ~DataSet();                       //!< The destructor.    
+    DataSet(const DataSet&) = default; //!< Masked Copy constructor
+    virtual ~DataSet();                       //!< The destructor.
 
     // ****************   DataSet T0 Methods  **********************
 
