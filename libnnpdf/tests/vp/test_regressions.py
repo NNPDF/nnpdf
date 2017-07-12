@@ -19,7 +19,7 @@ from validphys.loader import FallbackLoader as Loader
 from validphys.core import ExperimentSpec
 from validphys import results
 from validphys.tableloader import (parse_exp_mat,
-parse_perreplica_chi2_table, sane_load)
+load_perreplica_chi2_table, sane_load)
 
 
 log = logging.getLogger(__name__)
@@ -107,7 +107,7 @@ def test_cv(convolution_results):
     data, th = convolution_results[0]
     return pd.DataFrame(data.central_value, columns=['CV'])
 
-@make_table_comp(parse_perreplica_chi2_table)
+@make_table_comp(load_perreplica_chi2_table)
 def test_replicachi2data(data, chi2data):
     pdf, exps = data
     return results.perreplica_chi2_table(exps, chi2data)
