@@ -15,6 +15,7 @@ performance may not be optimal.
 """
 import logging
 import itertools
+import functools
 from collections import namedtuple, defaultdict
 
 import numpy as np
@@ -24,6 +25,7 @@ import pandas as pd
 from reportengine.figure import figure
 from reportengine.table import table
 from reportengine import collect
+from reportengine.floatformatting import format_error_value_columns, format_number
 from reportengine.checks import make_argcheck, CheckError, check_positive
 from NNPDF import pseudodata, single_replica, RandomGenerator
 
@@ -379,6 +381,20 @@ def compare_determinations_table_impl(as_datasets_pseudorreplicas_chi2,
     df = df.loc[tags]
     return df
 
+@table
+def compare_determinations_table(compare_determinations_table_impl):
+    """Return ``compare_determinations_table_impl`` formatted nicely"""
+    df = compare_determinations_table_impl
+    format_error_value_columns(df, "pseudirreplica mean",
+         "pseudorreplica error", inplace=True)
+    format_error_value_columns(df, "central mean",
+        "central error", inplace=True)
+    stats_cols = [ps_stat_error, ps_half_stat_error, stats_ratio]
+
+    digits2 = functools.partial(format_number, digits=2)
+
+    df[stats_cols] = df[stats_cols].applymap(digits2)
+    return df
 
 
 
