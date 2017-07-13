@@ -171,19 +171,10 @@ int main(int argc, char **argv)
   // Creates the configuration class
   NNPDFSettings settings(configPath() + filename);
   settings.PrintConfiguration("fiatlux.yml");
-  luxInstance().loadPDF(settings.GetPDFName(), replica);
 
   // write grid to disk
   mkdir(settings.GetResultsDirectory().c_str(),0777);
   mkdir((settings.GetResultsDirectory() + "/fiatlux").c_str(),0777);
-
-  const int nfmax = stoi(settings.GetTheory(APFEL::kMaxNfPdf));
-  const double mb = stod(settings.GetTheory(APFEL::kmb));
-  const double mt = stod(settings.GetTheory(APFEL::kmt));
-  if (nfmax == 5)
-    luxInstance().getLux().InsertInelasticSplitQ({mb, 1e100});
-  else if (nfmax == 6)
-    luxInstance().getLux().InsertInelasticSplitQ({mb,mt});
 
   // APFEL setup
   APFEL::SetParam(settings.GetTheoryMap());
@@ -326,6 +317,15 @@ int main(int argc, char **argv)
   APFEL::LockGrids(true);
   APFEL::InitializeAPFEL_DIS();
   APFEL::CacheStructureFunctionsAPFEL(-1);
+
+  luxInstance().loadPDF(settings.GetPDFName(), replica);
+  const int nfmax = stoi(settings.GetTheory(APFEL::kMaxNfPdf));
+  const double mb = stod(settings.GetTheory(APFEL::kmb));
+  const double mt = stod(settings.GetTheory(APFEL::kmt));
+  if (nfmax == 5)
+    luxInstance().getLux().InsertInelasticSplitQ({mb, 1e100});
+  else if (nfmax == 6)
+    luxInstance().getLux().InsertInelasticSplitQ({mb,mt});
 
   cout << "Computing photon..." << endl;
   const double q0 = 100.0, q = stod(settings.GetTheory(APFEL::kQ0));
