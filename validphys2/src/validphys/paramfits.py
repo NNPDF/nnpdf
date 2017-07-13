@@ -1,6 +1,9 @@
 """
 paramfits.py
 
+NOTE: This module is experimental and under develpment. The interfaces here
+may change at will.
+
 Functionality to determine parameters from a scan over
 PDF fits. αs is so far the only example.
 
@@ -118,12 +121,12 @@ def fits_matched_pseudorreplicas_chi2_table(fits, fits_computed_psedorreplicas_c
 
 
 @figure
-def plot_fits_as_profile(fits_pdfs, fits_total_chi2, suptitle=None):
+def plot_fits_as_profile(fits_as, fits_total_chi2, suptitle=None):
     """Plot the total central chi² as a function of the value of α_s.
     Note that this plots as a function of the key "AlphaS_MZ" in the LHAPDF
     file, which is annoyingly *not* α_s(MZ) for Nf<5."""
     fig, ax = plt.subplots()
-    alphas = [pdf.AlphaS_MZ for pdf in fits_pdfs]
+    alphas = fits_as
     #Could be a transposed data frame
     fits_total_chi2 = np.ravel(fits_total_chi2)
     ax.plot(alphas, fits_total_chi2)
@@ -155,11 +158,11 @@ def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated,
 
 
 @_check_badcurves
-def parabolic_as_determination(fits_pdfs,
+def parabolic_as_determination(fits_as,
         fits_replica_data_with_discarded_replicas,
         badcurves='discard'):
     """Return the minima for alpha_s corresponding to the fitted curves."""
-    alphas = [pdf.AlphaS_MZ for pdf in fits_pdfs]
+    alphas = fits_as
 
     table = fits_replica_data_with_discarded_replicas.as_matrix()
 
@@ -183,16 +186,24 @@ def parabolic_as_determination(fits_pdfs,
     return minimums
 
 
-def as_determination_from_central_chi2(fits_pdfs, fits_total_chi2):
+def as_determination_from_central_chi2(fits_as, fits_total_chi2):
     """Return the alpha_s from the minimim chi² and the Delta_chi²=1 error
     from a quadratic fit to the total chi²."""
-    alphas = [pdf.AlphaS_MZ for pdf in fits_pdfs]
+    alphas = fits_as
     chi2s = np.ravel(fits_total_chi2)
     a,b,c = np.polyfit(alphas, chi2s, 2)
     if a<=0:
         log.error("Found non convex parabola when computing the quadratic fit.")
         return np.nan, np.nan
     return -b/(2*a), 1/(np.sqrt(a))
+
+fits_matched_pseudorreplicas_chi2_by_dataset = collect(
+        'by_dataset',
+        ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset'])
+
+fits_central_chi2_by_dataset = collect(
+        'by_dataset',
+        ['fits_central_chi2_by_experiment_and_dataset'])
 
 
 def parabolic_as_determination_with_tag(parabolic_as_determination, suptitle):
@@ -206,14 +217,14 @@ def as_determination_from_central_chi2_with_tag(
 
     return as_determination_from_central_chi2, suptitle
 
-as_exepriments_psudoreplicas_chi2 = collect(
+as_datasets_pseudorreplicas_chi2 = collect(
     parabolic_as_determination_with_tag,
-    ['fits_matched_pseudorreplicas_chi2_output_by_experiment']
+    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
 )
 
-as_experiments_central_chi2 = collect(
+as_datasets_central_chi2 = collect(
     as_determination_from_central_chi2_with_tag,
-    ['fits_absolute_chi2_output_by_experiment',]
+    ['fits_central_chi2_by_experiment_and_dataset','by_dataset']
 )
 
 #TODO: Move to plotutils
@@ -235,17 +246,17 @@ def _plot_horizontal_error_bars(cvs, errors, categorylabels, datalabels=None):
     for cv, err, lb, markerspec, shift in zip(cvs, errors, datalabels, mi, pos):
         ax.errorbar(cv, y+shift, xerr=err, linestyle='none', label=lb,
                     **markerspec)
-    ax.set_xlim(*expand_margin(np.percentile(cvs, 15),
-                               np.percentile(cvs, 85),
+    ax.set_xlim(*expand_margin(np.nanpercentile(cvs, 15),
+                               np.nanpercentile(cvs, 85),
                                1.1))
     return fig, ax
 
 
 @figure
-def plot_as_exepriments_psudoreplicas_chi2(as_exepriments_psudoreplicas_chi2):
+def plot_as_datasets_pseudorreplicas_chi2(as_datasets_pseudorreplicas_chi2):
     """Plot the error bas of the alha_s determination from pseudorreplicas
-    by experiment"""
-    data, names = zip(*as_exepriments_psudoreplicas_chi2)
+    by dataset"""
+    data, names = zip(*as_datasets_pseudorreplicas_chi2)
     cv, err = zip(*[(np.mean(dt), np.std(dt)) for dt in data])
     fig, ax = _plot_horizontal_error_bars([cv], [err], names)
     ax.set_xlabel(r"$\alpha_S$")
@@ -253,10 +264,10 @@ def plot_as_exepriments_psudoreplicas_chi2(as_exepriments_psudoreplicas_chi2):
     return fig
 
 @figure
-def plot_as_exepriments_central_chi2(as_experiments_central_chi2):
+def plot_as_exepriments_central_chi2(as_datasets_central_chi2):
     """Plot the error bas of the alha_s determination from centrla chi²
     by experiment"""
-    data, names = zip(*as_experiments_central_chi2)
+    data, names = zip(*as_datasets_central_chi2)
     cv, err = zip(*data)
     fig, ax = _plot_horizontal_error_bars([cv], [err], names)
     ax.set_xlabel(r"$\alpha_S$")
@@ -266,14 +277,15 @@ def plot_as_exepriments_central_chi2(as_experiments_central_chi2):
 
 #TODO: take compare_determinations_table
 @figure
-def plot_as_exepriments_compare(as_exepriments_psudoreplicas_chi2, as_experiments_central_chi2, marktotal:bool=True):
-    """Plot the result of ``plot_as_exepriments_psudoreplicas_chi2`` and
+def plot_as_datasets_compare(as_datasets_pseudorreplicas_chi2, as_datasets_central_chi2,
+                             marktotal:bool=True):
+    """Plot the result of ``plot_as_datasets_pseudorreplicas_chi2`` and
     ``plot_as_exepriments_central_chi2`` together."""
-    datapseudo, namespesudo = zip(*as_exepriments_psudoreplicas_chi2)
+    datapseudo, namespesudo = zip(*as_datasets_pseudorreplicas_chi2)
     cvpseudo, errpseudo = zip(*[(np.mean(dt), np.std(dt)) for dt in datapseudo])
 
 
-    datacentral, namescentral = zip(*as_experiments_central_chi2)
+    datacentral, namescentral = zip(*as_datasets_central_chi2)
     cvcentral, errcentral = zip(*datacentral)
 
     if namespesudo != namescentral:
@@ -315,57 +327,64 @@ def half_sample_stats_error(parabolic_as_determination, nresamplings:int=100000)
     return np.random.choice(distribution, shape).mean(axis=1).std()
 
 
-as_experiments_bootstrapping_stats_error = collect(bootstrapping_stats_error,
-    ['fits_matched_pseudorreplicas_chi2_output_by_experiment'],
+
+
+as_datasets_bootstrapping_stats_error = collect(bootstrapping_stats_error,
+    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
 )
 
-as_experiments_half_sample_stats_error = collect(half_sample_stats_error,
-    ['fits_matched_pseudorreplicas_chi2_output_by_experiment'],
+as_datasets_half_sample_stats_error = collect(half_sample_stats_error,
+    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
 )
 
+ps_mean = "pseudirreplica mean"
+ps_error = "pseudorreplica error"
+ps_stat_error = "pseudorreplica stat"
+ps_half_stat_error = "pseudorreplica halfstat"
+stats_ratio = r"$\frac{halfstat}{stat}/\sqrt 2$"
+
+cv_mean = "central mean"
+cv_error = "central error"
 
 
-@table
-def compare_determinations_table(as_exepriments_psudoreplicas_chi2,
-                                 as_experiments_central_chi2,
-                                 as_experiments_bootstrapping_stats_error,
-                                 as_experiments_half_sample_stats_error):
+def compare_determinations_table_impl(as_datasets_pseudorreplicas_chi2,
+                                 as_datasets_central_chi2,
+                                 as_datasets_bootstrapping_stats_error,
+                                 as_datasets_half_sample_stats_error):
     """Produce a table by experiment comparing the alpha_S determination
     from pseudorreplcias and from central values."""
     d = defaultdict(dict)
 
-    ps_mean = "pseudirreplica mean"
-    ps_error = "pseudorreplica error"
-    ps_stat_error = "pseudorreplica stat"
-    ps_half_stat_error = "pseudorreplica halfstat"
-    stats_ratio = r"$\frac{halfstat}{stat}/\sqrt 2$"
-
-    cv_mean = "central mean"
-    cv_error = "centeal error"
-
     for (distribution, tag), statserr, halfstaterr in zip(
-                as_exepriments_psudoreplicas_chi2,
-                as_experiments_bootstrapping_stats_error,
-                as_experiments_half_sample_stats_error):
+                as_datasets_pseudorreplicas_chi2,
+                as_datasets_bootstrapping_stats_error,
+                as_datasets_half_sample_stats_error):
         d[ps_mean][tag] = np.mean(distribution)
         d[ps_error][tag] = np.std(distribution)
         d[ps_stat_error][tag] = statserr
         d[ps_half_stat_error][tag] = halfstaterr
         d[stats_ratio][tag] = halfstaterr/statserr/np.sqrt(2)
 
-
-    for (cv, error), tag in as_experiments_central_chi2:
+    #Use this to get the right sorting
+    tags = []
+    for (cv, error), tag in as_datasets_central_chi2:
         d[cv_mean][tag] = cv
         d[cv_error][tag] = error
+        tags.append(tag)
 
-    return pd.DataFrame(d, columns=[ps_mean, ps_error,
+
+    df = pd.DataFrame(d, columns=[ps_mean, ps_error,
         ps_stat_error, ps_half_stat_error, stats_ratio,
         cv_mean, cv_error])
+    df = df.loc[tags]
+    return df
+
+
 
 
 
 @figure
-def plot_fitted_replicas_as_profiles_matched(fits_pdfs,
+def plot_fitted_replicas_as_profiles_matched(fits_as,
         fits_replica_data_with_discarded_replicas,
         parabolic_as_determination, suptitle=None):
     """Plot chi²(as) keeping the replica nnfit index matched.
@@ -373,7 +392,7 @@ def plot_fitted_replicas_as_profiles_matched(fits_pdfs,
     The ``max_ndiscarded`` parameter defines th number of points
     discarded by postfit from which we discard the curve.
     """
-    alphas = [pdf.AlphaS_MZ for pdf in fits_pdfs]
+    alphas = fits_as
 
 
     minimums = parabolic_as_determination
@@ -402,7 +421,7 @@ def plot_fitted_replicas_as_profiles_matched(fits_pdfs,
 
 
 @figure
-def plot_poly_as_fit(fits_pdfs,
+def plot_poly_as_fit(fits_as,
         fits_replica_data_correlated, max_ndiscarded:int=4, polorder:int=2,
         suptitle=None):
     """Plot a polynomial fit of chi²(as) of `degree polorder`, keeping the
@@ -412,7 +431,7 @@ def plot_poly_as_fit(fits_pdfs,
     discarded by postfit from which we discard the curve.
     """
 
-    alphas = [pdf.AlphaS_MZ for pdf in fits_pdfs]
+    alphas = fits_as
     df = fits_replica_data_correlated
     def ap(x):
         x.columns = x.columns.droplevel(0)
