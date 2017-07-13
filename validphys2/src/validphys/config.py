@@ -178,7 +178,8 @@ class Config(report.Config):
 
     def produce_fitpdf(self, fit):
         """Like ``fitcontext`` only setting the PDF"""
-        _, pdf         = self.parse_from_('fit', 'pdf', write=False)
+        with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
+            _, pdf = self.parse_from_('fit', 'pdf', write=False)
         return {'pdf': pdf}
 
 
