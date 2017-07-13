@@ -6,6 +6,7 @@ Contrary to `validphys.loader` this module consists of functions that take
 absolute paths, and return mostly dataframes.
 """
 import functools
+
 import pandas as pd
 
 sane_load = functools.partial(pd.DataFrame.from_csv, sep='\t')
@@ -24,10 +25,26 @@ def parse_exp_mat(filename):
     fixup_header(df, 2, int)
     return df
 
-parse_experiments_covmat = parse_exp_mat
-parse_experiments_invcovmat = parse_exp_mat
+load_experiments_covmat = parse_exp_mat
+load_experiments_invcovmat = parse_exp_mat
 
-def parse_perreplica_chi2_table(filename):
+def load_perreplica_chi2_table(filename):
     df = sane_load(filename, header=[0,1])
     fixup_header(df, 1, int)
+    return df
+
+
+def load_fits_computed_psedorreplicas_chi2(filename):
+    return sane_load(filename, index_col=[0,1,2,3], header=[0,1,])
+
+def load_fits_chi2_table(filename):
+    return sane_load(filename, header=[0,1], index_col=[0,1])
+
+def load_adapted_fits_chi2_table(filename):
+    """Load the fits_chi2_table and adapt it in the way that suits the
+    ``paramfits`` module."""
+    df = load_fits_chi2_table(filename)
+    f = lambda x: x[x.columns[0]]*x[x.columns[1]]
+    df = df.groupby(axis=1, level=0).apply(f)
+    df.columns = pd.MultiIndex.from_product([list(df.columns), ['chi2']])
     return df

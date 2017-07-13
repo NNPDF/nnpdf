@@ -504,11 +504,8 @@ class Config(report.Config):
         res.sort(key=lambda x: (x['experiment_name'], x['dataset_name']))
         return res
 
-    #TODO: autogenerate functions like this
-    def parse_experiments_covmat_output(self, fname:str, config_rel_path):
-        """NOTE: THIS INTERFACE IS EXPERIMENTAL AND MIGHT CHANGE IN THE FUTURE.
-        Process the output CSV table of the experiments_covmat action
-        and return an equivalent datadrame"""
+
+    def _get_table(self, loader_func, fname, config_rel_path):
         from reportengine import filefinder
 
         finder = filefinder.FallbackFinder(['.', config_rel_path])
@@ -517,21 +514,26 @@ class Config(report.Config):
         except FileNotFoundError as e:
             raise ConfigError(f"Couldn't locate '{fname}': {e}") from e
         try:
-            df = tableloader.parse_experiments_covmat(folder/name)
+            df = loader_func(folder/name)
         except Exception as e:
             raise ConfigError(e) from e
+        return df
 
+
+    #TODO: autogenerate functions like this
+    def parse_experiments_covmat_output(self, fname:str, config_rel_path):
+        """NOTE: THIS INTERFACE IS EXPERIMENTAL AND MIGHT CHANGE IN THE FUTURE.
+        Process the output CSV table of the experiments_covmat action
+        and return an equivalent datadrame"""
+        df = self._get_table(tableloader.load_experiments_covmat, fname, config_rel_path)
         return {'experiments_covmat': df}
 
 
     #TODO: Move these to their own module when that's supported by reportengine
     def produce_fits_matched_pseudorreplicas_chi2_output(self,
                                                          pseudorreplicafile:str,
-                                                         fits):
-        """NOTE: THIS IS A QUICK HACK AND MAY BE REMOVED OR HEAVILY CHANGED
-        IN THE FUTURE (hence the horrible name).
-        Quick and dirty analizing tool for the output of
-        fits_matched_pseudorreplicas_chi2_table."""
+                                                         fits_name):
+        """DEPRECATED. DO NOT USE."""
         import pandas as pd
         import numpy as np
         try:
@@ -544,7 +546,7 @@ class Config(report.Config):
         #Require that the fits are matched so we filer out some that are not
         #interesting or broken.
         try:
-            df = df[[fit.name for fit in fits]]
+            df = df[fits_name]
         except Exception as e:
             raise ConfigError("Mismatch between fits provided and fits "
                              f"in the table {pseudorreplicafile}:\n{e}") from e
@@ -561,56 +563,30 @@ class Config(report.Config):
         df.columns = newcols
         return df
 
-    def produce_fits_absolute_chi2_output(self, fitsexperimentsfile:str, fits):
-        """"NOTE: THIS IS A QUICK HACK AND MAY BE REMOVED OR HEAVILY CHANGED
-        IN THE FUTURE. Read the output of `fits_experiments_chi2_table` and
-        produce a table with the total chi²."""
-        import pandas as pd
-        import numpy as np
+
+    def parse_fits_computed_psedorreplicas_chi2_output(self, fname:str,
+            config_rel_path):
+        """Return a namespace (mapping) with the output of
+        ``fits_computed_psedorreplicas_chi2_table`` as read from the specified
+        filename. Use a {@with@} block to pass it to the providers.
+        The fit names must be provided explicitly."""
+        return self._get_table(tableloader.load_fits_computed_psedorreplicas_chi2,
+                             fname, config_rel_path)
+
+    def produce_checked_fits_computed_psedorreplicas_chi2_output(
+            self, fits_computed_psedorreplicas_chi2_output, fits_name):
+        """Select the columns of the input file matching the fits."""
+        df = fits_computed_psedorreplicas_chi2_output
         try:
-            df = pd.DataFrame.from_csv(fitsexperimentsfile, sep='\t',
-                header=[0,1], index_col=[0])
+            df = df[fits_name]
         except Exception as e:
-            raise ConfigError(f"Failed to load the table: {e}") from e
-
-        try:
-            df = df[[fit.name for fit in fits]]
-        except Exception as e:
-            raise ConfigError("Mismatch between fits provided and fits "
-                             f"in the table {fitsexperimentsfile}:\n{e}") from e
-
-        #Multiply ndata * chi²/ndtata
-        f = lambda x: x[x.columns[0]]*x[x.columns[1]]
-        #Group by fit
-        df = df.groupby(axis=1, level=0).apply(f)
-        df.columns = pd.MultiIndex.from_product([np.array(df.columns), ['chi2']])
-        return df
-
-    def produce_fits_absolute_chi2_output_by_experiment(self,
-            fits_absolute_chi2_output, prepend_total:bool=True):
-        """Take the table returned by
-        ``fits_absolute_chi2_output`` and break it down
-        by experiment. If `preprend_total` is True, the sum over experiments
-        will be included."""
-        if prepend_total:
-            total = [{
-            'fits_total_chi2': fits_absolute_chi2_output.sum(),
-            'suptitle': 'Total'}]
-        else:
-            total = []
-
-        return [*total,
-                *[{'fits_total_chi2':df,
-                 'suptitle': exp}
-                for (exp, df) in
-                fits_absolute_chi2_output.groupby(level=0)]
-               ]
+            raise ConfigError(f"Could not select the fit names from the table: {e}") from e
+        return {'fits_computed_psedorreplicas_chi2':  df}
 
 
 
-
-    def produce_fits_matched_pseudorreplicas_chi2_output_by_experiment(self,
-            fits_matched_pseudorreplicas_chi2_output, prepend_total:bool=True):
+    def produce_fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset(self,
+            fits_computed_psedorreplicas_chi2, prepend_total:bool=True):
         """Take the table returned by
         ``fits_matched_pseudorreplicas_chi2_output`` and break it down
         by experiment. If `preprend_total` is True, the sum over experiments
@@ -620,18 +596,91 @@ class Config(report.Config):
         `fits_replica_data_correlated`.
 
         """
+        df = fits_computed_psedorreplicas_chi2
 
         if prepend_total:
-            total = [{
-            'fits_replica_data_correlated': fits_matched_pseudorreplicas_chi2_output.sum(level=1),
-            'suptitle': 'Total'}]
+            s =  df.loc[(slice(None), 'Total'),:].groupby(level='nnfit_index').sum()
+            total = [
+                {'experiment_label': 'Total',
+                'by_dataset': [{
+                    'fits_replica_data_correlated': s,
+                    'suptitle': 'Total',
+                 }]}]
         else:
             total = []
 
+        expres = []
+        for exp, expdf in df.groupby(level='experiment'):
+            d = {'experiment_label': exp}
+            by_dataset = d['by_dataset'] = []
+            for ds, dsdf in expdf.groupby(level='dataset'):
+                dsdf.index  = dsdf.index.droplevel([0,1,2])
+                if ds == 'Total':
+                    ds = f'{exp} Total'
+                    by_dataset.insert(0, {'fits_replica_data_correlated': dsdf,
+                                   'suptitle':ds})
+                else:
+                    by_dataset.append({'fits_replica_data_correlated': dsdf,
+                                   'suptitle':ds})
 
-        return [*total,
-                *[{'fits_replica_data_correlated': df,
-                 'suptitle': exp}
-                for (exp, df) in
-                fits_matched_pseudorreplicas_chi2_output.groupby(level=0)]
-               ]
+            expres.append(d)
+
+        return [*total, *expres]
+
+    def parse_fits_chi2_paramfits_output(self, fname:str, config_rel_path):
+        """Load the output of ``fits_chi2_table`` adapted to suit the
+        ``paramfits`` module. The fit names must be provided explicitly."""
+        return self._get_table(tableloader.load_adapted_fits_chi2_table,
+                             fname, config_rel_path)
+
+    def produce_checked_fits_chi2_paramfits_output(self, fits_chi2_paramfits_output,
+                                                   fits_name):
+        df = fits_chi2_paramfits_output
+        try:
+            df = df[fits_name]
+        except Exception as e:
+            raise ConfigError(f"Could not select the fit names from the table: {e}") from e
+        return {'adapted_fits_chi2_table':  df}
+
+    def produce_fits_central_chi2_by_experiment_and_dataset(self,
+            adapted_fits_chi2_table, prepend_total=True):
+        """Take the table returned by
+        ``fits_matched_pseudorreplicas_chi2_output`` and break it down
+        by experiment. If `preprend_total` is True, the sum over experiments
+        will be included.
+
+        This provides a namespace list with `suptilte` and
+        `fits_replica_data_correlated`."""
+
+        df = adapted_fits_chi2_table
+
+        if prepend_total:
+            s =  df.sort_index().loc[(slice(None), 'Total'), :].sum()
+            total = [
+                {'experiment_label': 'Total',
+                'by_dataset': [{
+                    'fits_total_chi2': s,
+                    'suptitle': 'Total',
+                 }]}]
+        else:
+            total = []
+        expres = []
+        for exp, expdf in df.groupby(level='experiment'):
+            d = {'experiment_label': exp}
+            by_dataset = d['by_dataset'] = []
+            for ds, dsdf in expdf.groupby(level=1):
+                dsdf.index  = dsdf.index.droplevel([0])
+                if ds == 'Total':
+                    ds = f'{exp} Total'
+                    by_dataset.insert(0, {'fits_total_chi2': dsdf,
+                                   'suptitle':ds})
+                else:
+                    by_dataset.append({'fits_total_chi2': dsdf,
+                                   'suptitle':ds})
+
+            expres.append(d)
+
+        return [*total, *expres]
+
+
+
