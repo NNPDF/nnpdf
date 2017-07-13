@@ -8,6 +8,7 @@ import logging
 import pathlib
 import functools
 import inspect
+import re
 from collections import Sequence, Mapping, ChainMap
 
 from  reportengine import configparser
@@ -397,6 +398,58 @@ class Config(report.Config):
     def parse_speclabel(self, label:(str, type(None))):
         """A label for a dataspec. To be used in some plots"""
         return label
+
+    @element_of('fitdeclarations')
+    def parse_fitdeclaration(self, label:str):
+        """Used to guess some informtion from the fit name, without having
+        to download it. This is meant to be used with other providers like
+        e.g.:
+
+        {@with fits_as_from_fitdeclarations::fits_name_from_fitdeclarations@}
+        {@ ...do stuff... @}
+        {@endwith@}
+        """
+        return label
+
+
+    #TODO: Get rid of this
+    def produce_fits_pdf_config(self, fits):
+        """DO NOT USE. For internal use only,"""
+        return [self.produce_fitpdf(fit)['pdf'] for fit in fits]
+
+    #TODO: Try to emove the loop from here
+    def produce_fits_name(self, fits):
+        """NOTE: EXPERIMENTAL.
+        Return a list with the ids of the fits"""
+        return [fit.name for fit in fits]
+
+    #TODO: Try to remove the loop from here
+    def produce_fits_as(self, fits_pdf_config):
+        """NOTE: EXPERIMENTAL. Return  the as value of the fits, reading
+        it from the installed pdf"""
+        return [pdf.AlphaS_MZ for pdf in fits_pdf_config]
+
+    #TODO: Try to remove the loop from here.
+    def produce_fits_as_from_fitdeclarations(self, fitdeclarations):
+        """NOTE: EXPERIMENTAL. A hack to obtain fits_as from the
+        fitdeclarations, without having to
+        download and inspect the actual fits."""
+        alpha_pattern = r'NNPDF\d\d_[a-z]+_as_(\d\d\d\d).*'
+        res = []
+        for fit in fitdeclarations:
+            m = re.match(alpha_pattern, fit)
+            if not m:
+                raise ConfigError(f"Couldn't match fit name {fit} to the "
+                                  "pattern {alpha_pattern!r}")
+            res.append(float(m.group(1))/1000)
+        return {'fits_as' : res}
+
+    def produce_fits_name_from_fitdeclarations(self, fitdeclarations):
+        """Inject the names from the ``fitdeclarations`` as the fit_names
+        property"""
+        #Cast nslist away
+        return {'fits_name': list(fitdeclarations)}
+
 
     def produce_matched_datasets_from_dataspecs(self, dataspecs):
         """Take an arbitrary list of mappings called dataspecs and
