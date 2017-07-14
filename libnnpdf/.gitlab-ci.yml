@@ -2,6 +2,7 @@
 image: zaharid/debian-7-dev
 
 stages:
+    - build-test
     - build-deploy
 
 
@@ -9,6 +10,10 @@ stages:
 variables:
     UPLOAD_NON_MASTER: "false"
 
+job1:
+  stage: build-test
+  script: ".ciscripts/build-test.sh"
+    
 ## Run the configure and make tests
 job2:
     stage: build-deploy
