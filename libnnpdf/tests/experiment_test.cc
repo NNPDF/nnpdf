@@ -8,11 +8,11 @@ using namespace std;
 
 TEST_CASE( "Experiment constructor", "[Experiment]" ) {
 
-  const auto cd = CommonData::ReadFile( get_data_path() + "/commondata/DATA_NMC.dat",
-                                        get_data_path() + "/commondata/systypes/SYSTYPE_NMC_DEFAULT.dat");
+  const auto cd = CommonData::ReadFile( get_data_path() + "commondata/DATA_NMC.dat",
+                                        get_data_path() + "commondata/systypes/SYSTYPE_NMC_DEFAULT.dat");
 
   const auto fk = FKSet(FKSet::parseOperator("NULL"),
-                        {new FKTable{get_data_path() + "/theory_53/fastkernel/FK_NMC.dat"}});
+                        {new FKTable{get_data_path() + "theory_53/fastkernel/FK_NMC.dat"}});
 
   const auto pdf = LHAPDFSet("NNPDF31_nnlo_as_0118", PDFSet::erType::ER_MCT0);
 
