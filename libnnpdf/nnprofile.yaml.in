@@ -1,6 +1,7 @@
 # Local resource locations
 data_path: '@PROFILE_PREFIX@/data'
 results_path: '@PROFILE_PREFIX@/results'
+config_path: '@PROFILE_PREFIX@/config'
 
 # Remote resource locations
 fit_url: 'http://pcteserver.mi.infn.it/~nnpdf/fits/'
