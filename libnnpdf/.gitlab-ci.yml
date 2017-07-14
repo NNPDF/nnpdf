@@ -2,7 +2,6 @@
 image: zaharid/debian-7-dev
 
 stages:
-    - build-test
     - build-deploy
 
 
