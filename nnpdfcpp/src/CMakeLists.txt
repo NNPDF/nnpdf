@@ -4,7 +4,6 @@ add_library(common STATIC
   common/src/md5.cc
   common/src/loadutils.cc
   common/src/datautils.cc
-  common/src/common.cc
 )
 include_directories(common/inc)
 

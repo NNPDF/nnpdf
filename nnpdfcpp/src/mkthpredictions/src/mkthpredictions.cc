@@ -51,7 +51,7 @@ int main(int argc, char **argv)
     }
 
   // Create the configuration class
-  NNPDFSettings settings(configPath()+filename, configPath() + plottingfile);
+  NNPDFSettings settings(filename, plottingfile);
   settings.PrintConfiguration("mkthpredictions.log");
   settings.VerifyConfiguration("mkthpredictions.log");
 

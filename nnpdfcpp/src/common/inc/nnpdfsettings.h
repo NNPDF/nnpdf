@@ -23,6 +23,7 @@
 #include <NNPDF/utils.h>
 #include <NNPDF/commondata.h>
 #include <NNPDF/nnpdfdb.h>
+#include <NNPDF/pathlib.h>
 #include <APFEL/APFELdev.h>
 
 #include <md5.h>

@@ -44,10 +44,10 @@ DataSet LoadDataSet(NNPDFSettings const& settings, std::string const& setname, f
 PositivitySet LoadPositivitySet(NNPDFSettings const& settings, std::string const& posname, real const& lambda)
 {
   // allocate commondata
-  CommonData cd = CommonData::ReadFile(dataPath() + "commondata/DATA_" + posname + ".dat",
-                                       dataPath() + "commondata/systypes/SYSTYPE_" + posname + "_DEFAULT.dat");
+  CommonData cd = CommonData::ReadFile(get_data_path() + "commondata/DATA_" + posname + ".dat",
+                                       get_data_path() + "commondata/systypes/SYSTYPE_" + posname + "_DEFAULT.dat");
   // Load fkset of tables
-  FKTable fk(dataPath() + settings.GetTheoryDirectory() + "/fastkernel/FK_" + posname + ".dat");
+  FKTable fk(get_data_path() + settings.GetTheoryDirectory() + "/fastkernel/FK_" + posname + ".dat");
 
   // return positivity set
   return PositivitySet(cd,fk,lambda);
@@ -63,7 +63,7 @@ FKSet LoadFK(NNPDFSettings const& settings,
              std::string const& setname)
 {  
   const std::string theoryDir = settings.GetTheoryDirectory();
-  const std::string theoryPath = dataPath() + theoryDir + "/";
+  const std::string theoryPath = get_data_path() + theoryDir + "/";
 
   stringstream cfilename("");
   cfilename << theoryPath << "compound/"
@@ -106,7 +106,7 @@ FKSet LoadFK(NNPDFSettings const& settings,
           {
             const string cname = settings.GetSetInfo(setname).tCFactors[i];
             const string fname = sline[1].substr(3,sline[1].length());
-            cfactors.push_back(dataPath() + theoryDir + "/cfactor/CF_"+cname+"_" + fname);
+            cfactors.push_back(get_data_path() + theoryDir + "/cfactor/CF_"+cname+"_" + fname);
             cout << Colour::FG_BLUE << "-- Reading "+cname+" C-factors from: " << cfactors[i] << Colour::FG_DEFAULT << endl;
           }
 
@@ -136,7 +136,7 @@ FKSet LoadFK(NNPDFSettings const& settings,
     for (int i = 0; i<settings.GetSetInfo(setname).tCFactors.size(); i++)
     {
       const string cname = settings.GetSetInfo(setname).tCFactors[i];
-      cfactors.push_back(dataPath() + theoryDir + "/cfactor/CF_"+cname+"_" + setname + ".dat");
+      cfactors.push_back(get_data_path() + theoryDir + "/cfactor/CF_"+cname+"_" + setname + ".dat");
       cout << Colour::FG_BLUE << "-- Reading "+cname+" C-factors from: " << cfactors[i] << Colour::FG_DEFAULT << endl;
     }
 
