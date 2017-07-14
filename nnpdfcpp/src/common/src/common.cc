@@ -8,31 +8,46 @@
 #include "common.h"
 #include <iostream>
 #include <sys/stat.h>
+#include <NNPDF/pathlib.h>
 
 using namespace std;
 
 std::string configPath()
 {
-  std::string configDir(STR(CONFIG_PATH));
-  return configDir;
+  std::string configDir;
+#ifndef CONFIG_PATH
+  configDir = NNPDF::get_config_path();
+#else
+  configDir = STR(CONFIG_PATH);
+#endif
+  return configDir + "/";
 }
 
 std::string dataPath()
 {
-  std::string dataDir(STR(DATA_PATH));
-  return dataDir;
+  std::string dataDir;
+#ifndef DATA_PATH
+  dataDir = NNPDF::get_data_path();
+#else
+  dataDir = STR(DATA_PATH);
+#endif
+  return dataDir + "/";
 }
 
 std::string resultsPath()
 {
-  std::string resultsDir(STR(RESULTS_PATH));
-  
-  return resultsDir;
+  std::string resultsDir;
+#ifndef RESULTS_PATH
+  resultsDir = NNPDF::get_results_path();
+#else
+  resultsDir = STR(RESULTS_PATH);
+#endif
+  return resultsDir + "/";
 }
 
 std::string scriptPath()
 {
   std::string scriptDir(STR(SCRIPT_PATH));
   
-  return scriptDir;
+  return scriptDir + "/";
 }
