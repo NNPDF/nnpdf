@@ -28,11 +28,12 @@ option(ENABLE_OPENMP "Enable openmp parallelism." OFF)
 option(ENABLE_OPENMPI "Enable openMPI parallelism." OFF)
 option(ENABLE_PYWRAP "Enable python wrapper building" OFF)
 option(ENABLE_TESTS "Enable unit test" ON)
-option(BUREOCRATIC_PATHS "Set the nnpdfcpp paths to point to a prefix location" ON)
-if (BUREOCRATIC_PATHS)
-	set(PROFILE_PREFIX "${CMAKE_INSTALL_PREFIX}/share/NNPDF")
-else()
-	set(PROFILE_PREFIX "../nnpdfcpp")
+option(USE_CUSTOM_PROFILE_PREFIX "Set PROFILE_PREFIX for pathlib" OFF)
+
+if (USE_CUSTOM_PROFILE_PREFIX)
+  set(PROFILE_PREFIX "${CMAKE_INSTALL_PREFIX}/share/NNPDF" CACHE STRING INTERNAL)
+else (USE_CUSTOM_PROFILE_PREFIX)
+  set(PROFILE_PREFIX "${CMAKE_INSTALL_PREFIX}/share/NNPDF")
 endif()
 
 configure_file(
