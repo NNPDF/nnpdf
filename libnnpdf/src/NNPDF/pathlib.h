@@ -32,10 +32,4 @@ std::string get_data_path();
  * completed fits.
  */
 std::string get_results_path();
-
-/**
- * @brief get_config_path
- * @return The loaction of the nnpdfcpp config path, containing runcards
- */
-std::string get_config_path();
 } // namespace NNPDF

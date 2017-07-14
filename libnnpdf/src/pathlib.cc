@@ -50,7 +50,5 @@ std::string get_data_path() { return get_key<std::string>("data_path"); }
 
 std::string get_results_path() { return get_key<std::string>("results_path"); }
 
-std::string get_config_path() { return get_key<std::string>("config_path"); }
-
 } // namespace NNPDF
 
