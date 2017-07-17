@@ -251,6 +251,9 @@ def _plot_horizontal_error_bars(cvs, errors, categorylabels, datalabels=None):
     ax.set_xlim(*expand_margin(np.nanpercentile(cvs, 15),
                                np.nanpercentile(cvs, 85),
                                1.1))
+
+    ax.set_ylim(-0.5, len(categorylabels)+0.5)
+    ax.grid(axis='y')
     return fig, ax
 
 
