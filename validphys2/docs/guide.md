@@ -1119,6 +1119,92 @@ this pair, which supersedes our original definition, inside that
 block.
 
 
+### The `namespaces_` special key
+
+The `namespaces_` key can be used to form a list of namespaces in
+a similar way as with the `{@with@}` block in the report(see [Report
+template specification]). A key difference is that the `namespaces_`
+block allows the list to be names, and in this way it can interact
+with providers expecting a complex input structure (see in particular
+[General data specification: The dataspec API]). The namespace
+elements are separated by `::` and have the same meaning as in the
+report.  Consider the following example:
+
+```yaml
+dataspec_input:
+  - fitdeclarations:
+       - NNPDF31_nnlo_as_0117_uncorr
+       - NNPDF31_nnlo_as_0118_uncorr
+    fits_computed_psedorreplicas_chi2_output: new-alldata/fits_matched_pseudorreplicas_chi2_table.csv
+    fits_chi2_paramfits_output: new-alldata/central_global.csv
+    badspecs:
+       - badcurves: discard
+         speclabel: "Global, discard"
+       - badcurves: allminimum
+         speclabel: "Global, allminimum"
+
+  - fitdeclarations:
+       - NNPDF31_nnlo_as_0117_uncorr_collider
+       - NNPDF31_nnlo_as_0118_uncorr_collider
+    fits_computed_psedorreplicas_chi2_output: new-alldata/collider.csv
+    fits_chi2_paramfits_output: new-alldata/collider_central.csv
+    badspecs:
+       - badcurves: discard
+         speclabel: "Collider, discard"
+       - badcurves: allminimum
+         speclabel: "Collider, allminimum"
+
+dataspecs:
+    namespaces_: "dataspec_input::badspecs
+                  ::fits_as_from_fitdeclarations::fits_name_from_fitdeclarations
+                  ::use_fits_computed_psedorreplicas_chi2_output::use_fits_chi2_paramfits_output"
+
+meta:
+   author: Zahari Kassabov
+   title: Summary of the allminimum and discard for global and collider only fits
+   keywords: [as]
+template_text: |
+
+    We compare the results of the determinations with `allminimum`
+    and `discard` on the global and collider only fits.
+
+    # Table
+
+    {@dataspecs_as_value_error_table@}
+
+    # Plot
+
+    {@plot_dataspecs_as_value_error@}
+
+actions_:
+    - - report:
+           main: True
+
+```
+
+Here we are generating a list of namespaces called `dataspecs` which
+the actions `dataspecs_as_valie_error_table` and
+`plot_dataspecs_as_value_error` expect as an input, starting from the
+product of each of the two elements in the `dataspec_input` list and
+its corresponding `badspecs` inner namespace, so that we have four
+namespaces in total, labeled "Global, discard", "Global, allminimum",
+"Collider, discard" and "Collider, allminimum". We are further
+applying production rules (see [Configuration]) to extract the
+information we need from the fit names and input files, producing the
+corresponding values inside the correct `dataspecs` entry.
+
+The whole list namespace is then passed as input to the actions (which
+are implemented using [the collect function]).
+
+This advanced functionality allows us to generate almost arbitrary
+inputs in a declarative way and using very few primitives, at the cost
+of a bit of learning curvature.
+
+
+Currently the `namespaces_` functionality is restricted to generating
+namespaces that are used at top level.
+
+
 ### Plotting labels
 
 Several resources (PDFs, theories, fits) support a short form where
