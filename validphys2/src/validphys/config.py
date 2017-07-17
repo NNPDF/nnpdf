@@ -573,7 +573,7 @@ class Config(report.Config):
         return self._get_table(tableloader.load_fits_computed_psedorreplicas_chi2,
                              fname, config_rel_path)
 
-    def produce_checked_fits_computed_psedorreplicas_chi2_output(
+    def produce_use_fits_computed_psedorreplicas_chi2_output(
             self, fits_computed_psedorreplicas_chi2_output, fits_name):
         """Select the columns of the input file matching the fits."""
         df = fits_computed_psedorreplicas_chi2_output
@@ -633,7 +633,7 @@ class Config(report.Config):
         return self._get_table(tableloader.load_adapted_fits_chi2_table,
                              fname, config_rel_path)
 
-    def produce_checked_fits_chi2_paramfits_output(self, fits_chi2_paramfits_output,
+    def produce_use_fits_chi2_paramfits_output(self, fits_chi2_paramfits_output,
                                                    fits_name):
         df = fits_chi2_paramfits_output
         try:
