@@ -410,14 +410,75 @@ def compare_determinations_table(compare_determinations_table_impl):
          "pseudorreplica error", inplace=True)
     format_error_value_columns(df, "central mean",
         "central error", inplace=True)
-    stats_cols = [ps_stat_error, ps_half_stat_error, stats_ratio]
+    stats_cols = {ps_stat_error, ps_half_stat_error, stats_ratio}
+    #Don't fail if/when we remove a table from here
+    stats_cols &= set(df.columns)
+    stats_cols = list(stats_cols)
 
     digits2 = functools.partial(format_number, digits=2)
-
     df[stats_cols] = df[stats_cols].applymap(digits2)
     return df
 
 
+dataspecs_as_datasets_pseudorreplicas_chi2 = collect('as_datasets_pseudorreplicas_chi2', ['dataspecs'])
+
+def datasepecs_as_value_error_table_impl(
+        dataspecs_as_datasets_pseudorreplicas_chi2, dataspecs_speclabel, dataspecs):
+    tables = []
+    #Use the fact that in py3.6 a dict with None values is like an ordered set
+    #TODO: A better way to build the dataframe?
+    taglist = {}
+    for dets in dataspecs_as_datasets_pseudorreplicas_chi2:
+        d = defaultdict(dict)
+
+        for distribution, tag in dets:
+            d['mean'][tag] = np.mean(distribution)
+            d['error'][tag] = np.std(distribution)
+            taglist[tag] = None
+        tables.append(pd.DataFrame(d, columns=['mean', 'error']))
+
+    df = pd.concat(tables, axis=1, keys=dataspecs_speclabel)
+    df = df.loc[list(taglist)]
+    return df
+
+@table
+def dataspecs_as_value_error_table(datasepecs_as_value_error_table_impl):
+    """Return ``datasepecs_value_error_table_impl`` formatted nicely"""
+    def f(x):
+        return format_error_value_columns(x, x.columns[0], x.columns[1])
+    return datasepecs_as_value_error_table_impl.groupby(level=0, axis=1).apply(f)
+
+@figure
+def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
+        marktotal:bool=True):
+    """Plot the result of ``plot_as_datasets_pseudorreplicas_chi2`` and
+    ``plot_as_exepriments_central_chi2`` together."""
+
+    df = datasepecs_as_value_error_table_impl
+    datalabels = df.columns.levels[0]
+    catlabels = list(df.index)
+    cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
+    errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
+
+
+    fig, ax = _plot_horizontal_error_bars(
+        cvs, errors, catlabels,
+        datalabels
+    )
+
+    if marktotal:
+        try:
+            pos = catlabels.index('Total')
+        except ValueError:
+            log.error("Asked to mark total, but it was not provided.")
+        else:
+            for i,cv in enumerate(cvs):
+                ax.axvline(cv[pos], color=f'C{i}', linewidth=0.5, linestyle='--')
+
+    ax.set_xlabel(r"$\alpha_S$")
+    ax.set_title(r"$\alpha_S$ determination")
+    ax.legend()
+    return fig
 
 
 @figure
