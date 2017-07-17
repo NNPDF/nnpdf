@@ -280,7 +280,6 @@ def plot_as_exepriments_central_chi2(as_datasets_central_chi2):
     return fig
 
 
-#TODO: take compare_determinations_table
 @figure
 def plot_as_datasets_compare(as_datasets_pseudorreplicas_chi2, as_datasets_central_chi2,
                              marktotal:bool=True):
@@ -314,6 +313,7 @@ def plot_as_datasets_compare(as_datasets_pseudorreplicas_chi2, as_datasets_centr
     ax.legend()
     return fig
 
+
 @check_positive('nresamplings')
 def bootstrapping_stats_error(parabolic_as_determination, nresamplings:int=100000):
     """Compute the bootstrapping uncertainty of the distribution of
@@ -342,11 +342,20 @@ as_datasets_half_sample_stats_error = collect(half_sample_stats_error,
     ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
 )
 
+
+#Don't write complicated column names everywhere
 ps_mean = "pseudirreplica mean"
 ps_error = "pseudorreplica error"
 ps_stat_error = "pseudorreplica stat"
 ps_half_stat_error = "pseudorreplica halfstat"
 stats_ratio = r"$\frac{halfstat}{stat}/\sqrt 2$"
+
+stats_halfone = "cv selecting one half of the replicas"
+err_halfone = "err selecting one half of the replicas"
+
+stats_halfother = "cv selecting other half of the replicas"
+err_halfonother = "err selecting other half of the replicas"
+
 
 cv_mean = "central mean"
 cv_error = "central error"
@@ -370,6 +379,14 @@ def compare_determinations_table_impl(as_datasets_pseudorreplicas_chi2,
         d[ps_half_stat_error][tag] = halfstaterr
         d[stats_ratio][tag] = halfstaterr/statserr/np.sqrt(2)
 
+        ldh = len(distribution)//2
+        onehalf = distribution[:ldh]
+        otherhalf = distribution[ldh:]
+        d[stats_halfone][tag] = np.mean(onehalf)
+        d[err_halfone][tag] = np.std(onehalf)
+        d[stats_halfother][tag] = np.mean(otherhalf)
+        d[err_halfonother][tag] = np.std(otherhalf)
+
     #Use this to get the right sorting
     tags = []
     for (cv, error), tag in as_datasets_central_chi2:
@@ -380,6 +397,7 @@ def compare_determinations_table_impl(as_datasets_pseudorreplicas_chi2,
 
     df = pd.DataFrame(d, columns=[ps_mean, ps_error,
         ps_stat_error, ps_half_stat_error, stats_ratio,
+        stats_halfone, err_halfone, stats_halfother,err_halfonother,
         cv_mean, cv_error])
     df = df.loc[tags]
     return df
