@@ -6,6 +6,7 @@ Created on Thu Apr 21 18:41:43 2016
 @author: Zahari Kassabov
 """
 import functools
+import itertools
 from collections import namedtuple
 
 import numpy as np
@@ -266,3 +267,34 @@ def barplot(values, collabels, datalabels, orientation='auto'):
 
     return fig, ax
 
+def plot_horizontal_errorbars(cvs, errors, categorylabels, datalabels=None):
+    """A plots with a list of horizontal errorbars oriented vertically.
+    ``cvs`` and ``errors`` are the central values and errors both of shape
+    `ndatasets x ncategories`, ``cateogorylabels`` are the labels of each
+    element for which errorbars are drawn and ``datalabels`` are the labels of
+    the different datasets that are compared.
+    """
+    w,h = plt.rcParams["figure.figsize"]
+    rescale = max(1, 1 + 0.1*(len(categorylabels) - 7))
+    fig, ax = plt.subplots(figsize=(w, h*rescale))
+    if datalabels is None:
+        datalabels = itertools.repeat(None)
+    y = np.arange(len(categorylabels))
+    ax.yaxis.set_ticks(y)
+    ax.yaxis.set_ticklabels(categorylabels)
+    mi = marker_iter_plot()
+
+
+    distance = 0.5/len(cvs)
+    pos = centered_range(len(cvs), distance=distance)
+
+    for cv, err, lb, markerspec, shift in zip(cvs, errors, datalabels, mi, pos):
+        ax.errorbar(cv, y+shift, xerr=err, linestyle='none', label=lb,
+                    **markerspec)
+    ax.set_xlim(*expand_margin(np.nanpercentile(cvs, 15),
+                               np.nanpercentile(cvs, 85),
+                               1.1))
+
+    ax.set_ylim(-0.5, len(categorylabels)+0.5)
+    ax.grid(axis='y')
+    return fig, ax

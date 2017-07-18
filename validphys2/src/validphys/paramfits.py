@@ -14,7 +14,6 @@ They also need to work around the limitations in libnnpdf, and so the
 performance may not be optimal.
 """
 import logging
-import itertools
 import functools
 from collections import namedtuple, defaultdict
 
@@ -31,7 +30,7 @@ from NNPDF import pseudodata, single_replica, RandomGenerator
 
 from validphys.core import PDF
 from validphys.results import ThPredictionsResult, DataResult, chi2_breakdown_by_dataset
-from validphys.plotutils import expand_margin, marker_iter_plot, centered_range
+from validphys.plotutils import plot_horizontal_errorbars
 
 log = logging.getLogger(__name__)
 
@@ -229,33 +228,6 @@ as_datasets_central_chi2 = collect(
     ['fits_central_chi2_by_experiment_and_dataset','by_dataset']
 )
 
-#TODO: Move to plotutils
-def _plot_horizontal_error_bars(cvs, errors, categorylabels, datalabels=None):
-    w,h = plt.rcParams["figure.figsize"]
-    rescale = max(1, 1 + 0.1*(len(categorylabels) - 7))
-    fig, ax = plt.subplots(figsize=(w, h*rescale))
-    if datalabels is None:
-        datalabels = itertools.repeat(None)
-    y = np.arange(len(categorylabels))
-    ax.yaxis.set_ticks(y)
-    ax.yaxis.set_ticklabels(categorylabels)
-    mi = marker_iter_plot()
-
-
-    distance = 0.5/len(cvs)
-    pos = centered_range(len(cvs), distance=distance)
-
-    for cv, err, lb, markerspec, shift in zip(cvs, errors, datalabels, mi, pos):
-        ax.errorbar(cv, y+shift, xerr=err, linestyle='none', label=lb,
-                    **markerspec)
-    ax.set_xlim(*expand_margin(np.nanpercentile(cvs, 15),
-                               np.nanpercentile(cvs, 85),
-                               1.1))
-
-    ax.set_ylim(-0.5, len(categorylabels)+0.5)
-    ax.grid(axis='y')
-    return fig, ax
-
 
 @figure
 def plot_as_datasets_pseudorreplicas_chi2(as_datasets_pseudorreplicas_chi2):
@@ -263,7 +235,7 @@ def plot_as_datasets_pseudorreplicas_chi2(as_datasets_pseudorreplicas_chi2):
     by dataset"""
     data, names = zip(*as_datasets_pseudorreplicas_chi2)
     cv, err = zip(*[(np.mean(dt), np.std(dt)) for dt in data])
-    fig, ax = _plot_horizontal_error_bars([cv], [err], names)
+    fig, ax = plot_horizontal_errorbars([cv], [err], names)
     ax.set_xlabel(r"$\alpha_S$")
     ax.set_title(r"$\alpha_S$ from pseudorreplicas")
     return fig
@@ -274,7 +246,7 @@ def plot_as_exepriments_central_chi2(as_datasets_central_chi2):
     by experiment"""
     data, names = zip(*as_datasets_central_chi2)
     cv, err = zip(*data)
-    fig, ax = _plot_horizontal_error_bars([cv], [err], names)
+    fig, ax = plot_horizontal_errorbars([cv], [err], names)
     ax.set_xlabel(r"$\alpha_S$")
     ax.set_title(r"$\alpha_S$ from central chi²")
     return fig
@@ -295,7 +267,7 @@ def plot_as_datasets_compare(as_datasets_pseudorreplicas_chi2, as_datasets_centr
     if namespesudo != namescentral:
         raise RuntimeError("Names do not coincide")
 
-    fig, ax = _plot_horizontal_error_bars(
+    fig, ax = plot_horizontal_errorbars(
         [cvcentral, cvpseudo], [errcentral, errpseudo], namescentral,
         [r'Central $\chi^2$', r'Pseudorreplica $\chi^2$']
     )
@@ -461,7 +433,7 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
     errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
 
 
-    fig, ax = _plot_horizontal_error_bars(
+    fig, ax = plot_horizontal_errorbars(
         cvs, errors, catlabels,
         datalabels
     )
