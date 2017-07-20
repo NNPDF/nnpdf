@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
 """
 Simple utility to upload some folder to the NNPDF server.
-
-@author: Zahari Kassabov
 """
 #Note that the imports are done as late as possible to improve the speed of
 #the command line.
