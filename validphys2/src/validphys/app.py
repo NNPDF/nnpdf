@@ -107,25 +107,14 @@ file in attachment:
             NNPDF.setVerbosity(0)
 
     @staticmethod
-    @contextlib.contextmanager
     def upload_context(do_upload, output):
         """If do_upload is False, do notihing. Otherwise, on enter, check the
         requiements for uploading and on exit,
         upload the output path if do_upload is True. Otherwise do nothing.
         Raise SystemExit on error."""
         if do_upload:
-            try:
-                uploadutils.check_upload()
-            except uploadutils.BadSSH as e:
-                log.error(e)
-                sys.exit(1)
-        yield
-        if do_upload:
-            try:
-                uploadutils.upload_output(output)
-            except uploadutils.BadSSH as e:
-                log.error(e)
-                sys.exit(1)
+            return uploadutils.upload_or_exit_context(output)
+        return contextlib.ExitStack()
 
     def run(self):
         if sys.version_info < (3, 6):

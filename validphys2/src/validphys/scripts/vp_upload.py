@@ -4,32 +4,39 @@ Simple utility to upload some folder to the NNPDF server.
 
 @author: Zahari Kassabov
 """
+#Note that the imports are done as late as possible to improve the speed of
+#the command line.
+
 import sys
-import logging
 
-from validphys.app import App
-
-log = logging.getLogger(__name__)
 
 def main():
     import argparse
-    import os.path as osp
     parser = argparse.ArgumentParser(description="Upload output to the NNPDF server.")
     parser.add_argument("output", help="Folder to upload.")
-
-    a = App()
-    app_args = {'loglevel':logging.INFO}
-    a.init_logging(app_args)
-
     args = parser.parse_args()
     output = args.output
+
+    import os.path as osp
+    import logging
+    from reportengine import colors
+    log = logging.getLogger()
+    log.setLevel(logging.INFO)
+    log.addHandler(colors.ColorHandler())
+
     if not osp.isdir(output):
         log.error("Not a directory: %s", output)
         sys.exit(1)
 
 
-    with a.upload_context(True, output):
-        pass
+    from validphys.uploadutils import upload_or_exit_context
+    try:
+        with upload_or_exit_context(output):
+            pass
+    except KeyboardInterrupt:
+        print(colors.t.bold_red("\nInterrupted by user. Exiting."), file=sys.stderr)
+        exit(1)
+
 
 if __name__ == '__main__':
     main()

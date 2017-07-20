@@ -10,6 +10,8 @@ import logging
 import shutil
 import uuid
 import base64
+import sys
+import contextlib
 
 from reportengine.colors import t
 
@@ -70,5 +72,21 @@ def upload_output(output_path):
         url = root_url + randname
         log.info(f"Upload completed. The result is available at:\n{t.bold_blue(url)}")
 
+@contextlib.contextmanager
+def upload_context(output):
+    """Before entering the context, check that uploading is feasible.
+    On exiting the context, upload output.
+    """
+    check_upload()
+    yield
+    upload_output(output)
 
-
+@contextlib.contextmanager
+def upload_or_exit_context(output):
+    """Like upload context, but log and sys.exit on error"""
+    try:
+        with upload_context(output=output):
+            yield
+    except BadSSH as e:
+        log.error(e)
+        sys.exit()
