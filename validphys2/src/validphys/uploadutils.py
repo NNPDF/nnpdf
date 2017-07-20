@@ -12,6 +12,7 @@ import uuid
 import base64
 import sys
 import contextlib
+import pathlib
 
 from reportengine.colors import t
 
@@ -57,6 +58,8 @@ def check_upload():
 
 
 def upload_output(output_path):
+    #Set the date to now
+    pathlib.Path(output_path).touch()
     randname = base64.urlsafe_b64encode(uuid.uuid4().bytes).decode()
     newdir = target_dir + randname
 
