@@ -10,7 +10,7 @@ import pathlib
 import datetime
 import json
 import re
-from collections import ChainMap
+from collections import ChainMap, defaultdict
 
 import ruamel_yaml as yaml
 from bs4 import BeautifulSoup
@@ -48,6 +48,13 @@ def meta_from_html(f):
     #the whole parse tree, causing a huge memory leak.
     return dict(title=str(title), author=author, keywords=tags)
 
+class TagProps():
+    def __init__(self, count=0, last_timestamp=0):
+        self.count = count
+        self.last_timestamp = last_timestamp
+
+    __slots__ = ('count', 'last_timestamp')
+
 def meta_from_path(p):
     meta = ChainMap(DEFAULTS)
     yaml_meta = p/'meta.yaml'
@@ -82,15 +89,24 @@ def register(p):
 def make_index(root_path, out):
     root_path = pathlib.Path(root_path)
     data = []
-    keywords = set()
+    keywords = defaultdict(TagProps)
     for p in root_path.iterdir():
         if p.is_dir():
             res = register(p)
             data.append(res)
-            keywords.update(res[3])
+            newkeywords = res[3]
+            timestamp = res[2][1]
+            for k in newkeywords:
+                props = keywords[k]
+                props.count+=1
+                props.last_timestamp = max(props.last_timestamp, timestamp)
+
+    keylist = sorted(keywords.items(), key=lambda x: -x[1].last_timestamp)
+    keywordmap = [(k, v.count) for k,v in keylist]
+
 
     with open(out, 'w') as f:
-        json.dump({'data':data, 'keywords':list(keywords)}, f)
+        json.dump({'data':data, 'keywords':keywordmap}, f)
 
 def main():
     make_index(ROOT, OUT)

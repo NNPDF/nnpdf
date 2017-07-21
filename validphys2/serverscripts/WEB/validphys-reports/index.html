@@ -66,18 +66,21 @@ $(document).ready(function() {
 	keywords.forEach(function(tag){
 		var li = document.createElement('li');
 		var a = document.createElement('a');
-		a.appendChild(document.createTextNode(tag));
-		a.href='#';
+		a.appendChild(document.createTextNode(tag[0]));
+		a.href='#'+tag[0];
 		a.onclick = function(event){
 			event.target;
-			var filt = document.getElementById("tagfilt")
-			filt.value=event.target.innerHTML;
+			var filt = document.getElementById("tagfilt");
+			var tag = event.target.innerHTML;
+			filt.value=tag;
 			filt.focus();
 			filt.select();
+		    window.location.hash = tag;
 			global_table.draw();
 			return false;
 		}
 		li.appendChild(a);
+		li.appendChild(document.createTextNode(` (${tag[1]})`));
 		ul.appendChild(li);
 	});
 	$.fn.dataTable.ext.search.push(
@@ -91,18 +94,25 @@ $(document).ready(function() {
 			}
 			return true;
 
-	}
+	    }
 
-);
+    );
 
 	$('#global_wrapper .dataTables_filter input').focus();
-	document.getElementById("tagfilt").oninput = function(){
+	document.getElementById("tagfilt").oninput = function(event){
+		window.location.hash = event.target.value;
 		global_table.draw();
 	};
 
     }
     );
 
+    var hash = window.location.hash.substr(1);
+    if(hash){
+        var filt = document.getElementById("tagfilt");
+    	filt.value=hash;
+    	global_table.draw();
+    }
 } );
 
 function filter_tag(data, tag, now){
