@@ -76,7 +76,7 @@ def handle_single_file(filename):
     filename = pathlib.Path(filename)
     p = out / filename.name
     p.symlink_to(filename.absolute())
-    return out
+    return out, filename.name
 
 def edit_settings(d):
     title = d.get('title', '')
@@ -149,10 +149,10 @@ def main():
     args = parser.parse_args()
     output = pathlib.Path(args.output)
 
-
+    specific_file = None
     if not output.is_dir():
         if output.is_file():
-            output = handle_single_file(output)
+            output, specific_file = handle_single_file(output)
         else:
             if not output.exists():
                 log.error(f"No such file or directory: {output}")
@@ -163,7 +163,7 @@ def main():
 
     from validphys.uploadutils import upload_or_exit_context
     try:
-        with upload_or_exit_context(output):
+        with upload_or_exit_context(output, specific_file=specific_file):
             handle_meta_interactive(output)
     except (KeyboardInterrupt, EOFError):
         print(colors.t.bold_red("\nInterrupted by user. Exiting."), file=sys.stderr)
