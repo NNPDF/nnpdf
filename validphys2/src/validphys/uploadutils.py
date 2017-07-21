@@ -63,7 +63,7 @@ def upload_output(output_path):
     randname = base64.urlsafe_b64encode(uuid.uuid4().bytes).decode()
     newdir = target_dir + randname
 
-    rsync_command = ('rsync', '-aLz', '--chmod=D771', f"{output_path}/", f'{upload_host}:{newdir}')
+    rsync_command = ('rsync', '-aLz', '--chmod=D775', f"{output_path}/", f'{upload_host}:{newdir}')
 
     log.info(f"Uploading output ({output_path}) to {upload_host}")
     try:
