@@ -190,6 +190,7 @@ class Config(report.Config):
     def parse_dataset_input(self, dataset):
         """The mapping that corresponds to the dataset specifications in the
         fit files"""
+        known_keys = {'dataset', 'sys', 'cfac', 'frac'}
         try:
             name = dataset['dataset']
             if not isinstance(name, str):
@@ -201,6 +202,10 @@ class Config(report.Config):
 
         sysnum = dataset.get('sys')
         cfac = dataset.get('cfac', tuple())
+        kdiff = dataset.keys() - known_keys
+        for k in kdiff:
+            #Abuse ConfigError to get the suggestions.
+            log.warn(ConfigError(f"Key '{k}' in dataset_input not known.", k, known_keys))
         return DataSetInput(name=name, sys=sysnum, cfac=cfac)
 
     def produce_commondata(self, *, dataset_input):
