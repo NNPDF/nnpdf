@@ -597,6 +597,14 @@ def fits_experiments_chi2_table(fits, fits_experiments, fits_experiment_chi2_dat
     res =  pd.concat(dfs, axis=1)
     return res
 
+@table
+def dataspecs_experiments_chi2_table(dataspecs_speclabel, dataspecs_experiments,
+                                     dataspecs_experiment_chi2_data):
+    """Same as fits_experiments_chi2_table but for an arbitrary list of dataspecs."""
+    return fits_experiments_chi2_table(dataspecs_speclabel,
+                                       dataspecs_experiments,
+                                       dataspecs_experiment_chi2_data)
+
 
 @table
 def fits_datasets_chi2_table(fits, fits_experiments, fits_chi2_data):
@@ -627,6 +635,13 @@ def fits_datasets_chi2_table(fits, fits_experiments, fits_chi2_data):
     return pd.concat(dfs, axis=1)
 
 @table
+def dataspecs_datasets_chi2_table(dataspecs_speclabel, dataspecs_experiments,
+                                  dataspecs_chi2_data):
+    """Same as fits_datasets_chi2_table but for arbitrary dataspecs"""
+    return fits_datasets_chi2_table(dataspecs_speclabel, dataspecs_experiments,
+                                    dataspecs_chi2_data)
+
+@table
 def fits_chi2_table(fits_experiments_chi2_table, fits_datasets_chi2_table):
     """Show the chi² of each and number of points of each dataset and experiment
     of each fit,
@@ -644,6 +659,13 @@ def fits_chi2_table(fits_experiments_chi2_table, fits_datasets_chi2_table):
 
     res = pd.concat(dfs, axis=0, keys=lvs)
     return res.fillna("Not Fitted")
+
+@table
+def dataspecs_chi2_table(dataspecs_experiments_chi2_table,
+                         dataspecs_datasets_chi2_table):
+    """Same as fits_chi2_table but for an arbitrary list of dataspecs"""
+    return fits_chi2_table(dataspecs_experiments_chi2_table,
+                           dataspecs_datasets_chi2_table)
 
 def total_experiments_chi2(experiments_chi2):
     """Return  the total chi²/ndata for the combination of all
