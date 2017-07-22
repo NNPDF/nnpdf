@@ -1646,6 +1646,13 @@ the current interests (the Makefile directly uploads to the
 server). See [Web Scripts] in the [Developer Documentation] for more
 details.
 
+### Uploading arbitrary files
+
+The command `wiki-upload` is a more interactive version of
+`vp-upload`, allowing to upload arbitrary files and asking the user
+for the metadata for indexing. While `vp-upload` is faster and more
+suitable for usage in scripts, casual users might find `wiki-upload`
+easier to use.
 
 Seeing the input
 ----------------
