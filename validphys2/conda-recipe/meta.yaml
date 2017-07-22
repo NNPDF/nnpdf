@@ -19,6 +19,7 @@ requirements:
     - scipy >=0.19.1
     - pandas
     - requests
+    - prompt_toolkit #for wiki-upload
 
 test:
     imports:
