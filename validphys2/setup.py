@@ -20,6 +20,7 @@ setup(name= "validphys",
                     [
                         'validphys = validphys.scripts.main:main',
                         'vp-upload = validphys.scripts.vp_upload:main',
+                        'wiki-upload = validphys.scripts.wiki_upload:main',
                     ]},
       package_dir = {'': 'src'},
       packages = find_packages('src'),

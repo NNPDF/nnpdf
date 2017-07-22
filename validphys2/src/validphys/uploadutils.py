@@ -12,6 +12,7 @@ import uuid
 import base64
 import sys
 import contextlib
+import pathlib
 
 from reportengine.colors import t
 
@@ -56,11 +57,15 @@ def check_upload():
     check_auth()
 
 
-def upload_output(output_path):
+def upload_output(output_path, specific_file=None):
+    """Rsync ``output_path`` to the server and print the resulting URL. If
+    specific_file is given"""
+    #Set the date to now
+    pathlib.Path(output_path).touch()
     randname = base64.urlsafe_b64encode(uuid.uuid4().bytes).decode()
     newdir = target_dir + randname
 
-    rsync_command = ('rsync', '-az', f"{output_path}/", f'{upload_host}:{newdir}')
+    rsync_command = ('rsync', '-aLz', '--chmod=D775', f"{output_path}/", f'{upload_host}:{newdir}')
 
     log.info(f"Uploading output ({output_path}) to {upload_host}")
     try:
@@ -69,23 +74,26 @@ def upload_output(output_path):
         msg = f"Failed to upload output: {e}"
         raise BadSSH(msg) from e
     else:
-        url = root_url + randname
+        #Allow None and so on
+        if not specific_file:
+            specific_file = ''
+        url = f'{root_url}{randname}/{specific_file}'
         log.info(f"Upload completed. The result is available at:\n{t.bold_blue(url)}")
 
 @contextlib.contextmanager
-def upload_context(output):
+def upload_context(output, specific_file=None):
     """Before entering the context, check that uploading is feasible.
     On exiting the context, upload output.
     """
     check_upload()
     yield
-    upload_output(output)
+    upload_output(output, specific_file)
 
 @contextlib.contextmanager
-def upload_or_exit_context(output):
+def upload_or_exit_context(output, specific_file=None):
     """Like upload context, but log and sys.exit on error"""
     try:
-        with upload_context(output=output):
+        with upload_context(output=output, specific_file=specific_file):
             yield
     except BadSSH as e:
         log.error(e)
