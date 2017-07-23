@@ -21,6 +21,7 @@ requirements:
         - cmake
         - libarchive
         - yaml-cpp
+        - cffi
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
         - nnpdf_use_double
         {% endif  %}
@@ -33,6 +34,7 @@ requirements:
         - numpy ==1.13
         - libarchive
         - yaml-cpp
+        - cffi
         {% if environ.get("NNPDF_USE_DOUBLE", False) %}
         - nnpdf_use_double
         {% endif  %}

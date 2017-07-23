@@ -19,6 +19,7 @@
 %include "std_string.i"
 %include "std_vector.i"
 %include "std_map.i" 
+%include "stdint.i"
 
 %include "include/numpy.i"
 
@@ -153,6 +154,12 @@ void grid_values(
     *datamat = result;
 }
 }
+
+%inline %{
+uintptr_t pdf_pointer(NNPDF::LHAPDFSet* pdf){
+    return (uintptr_t)((void *)pdf);
+}
+%}
 
 /* FKtable stuff */
 

@@ -48,6 +48,12 @@ ext_modules = [Extension('NNPDF._' + name,
                     include_dirs = [numpy_include_dir],
                     sources = [source], language="c++")
                     for name,source in zip(names, sources) ]
+ext_modules += [Extension('NNPDF.ffi',
+                    extra_compile_args = extra_compile_args ,
+                    extra_link_args = extra_link_args,
+                    sources = ['ffi.cpp'], 
+                    language='c++',
+)]
 
 setup (name = 'NNPDF',
        version = @VERSION@,
@@ -57,6 +63,8 @@ setup (name = 'NNPDF',
        url = 'https://nnpdf.hepforge.org/',
        long_description = "See README",
        ext_modules = ext_modules,
+       setup_requires=["cffi>=1.0"],
+       cffi_modules=["cffi/ffibuilder.py:I"],
        #http://stackoverflow.com/questions/24799146/use-multiprocessing-process-inside-a-script-installed-by-setuptools
        package_dir = {'': 'pylibs'},
        packages = find_packages('pylibs'),
