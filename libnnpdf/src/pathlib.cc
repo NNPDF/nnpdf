@@ -36,14 +36,18 @@ template <typename T> T get_key(std::string param)
 
 } // namespace
 
-std::string get_profile_path()
-{
-    char *env_path = std::getenv("NNPDF_PROFILE_PATH");
-    if (env_path) {
-        return env_path;
-    }
-    // This is defined at compile time
-    return DEFAULT_NNPDF_PROFILE_PATH;
+std::string get_profile_path() {
+  char *env_path = std::getenv("NNPDF_PROFILE_PATH");
+  if (env_path) {
+    return env_path;
+  }
+  // This is defined at compile time
+  // It has to be volatile because tools may want
+  // to substitute the path in the binary, and
+  // the compiler needs to actually compute e.g. the
+  // length each time.
+  volatile auto p = DEFAULT_NNPDF_PROFILE_PATH;
+  return p;
 }
 
 std::string get_data_path() { return get_key<std::string>("data_path"); }
