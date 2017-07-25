@@ -95,7 +95,7 @@ def edit_settings(d):
 
     d['author'] = prompt("author: ", default=author)
     kwinp = prompt("keywords: ", default=','.join(keywords))
-    d['keywords'] = [k.strip() for k in kwinp.split(',')]
+    d['keywords'] = [k.strip() for k in kwinp.split(',') if k]
 
 def handle_meta_interactive(output):
     metapath = output / 'meta.yaml'
