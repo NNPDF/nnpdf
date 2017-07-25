@@ -14,11 +14,14 @@ import logging
 import re
 import tempfile
 import shutil
+import os
 import os.path as osp
+import urllib.parse as urls
 
 import yaml
 import requests
 
+from reportengine import filefinder
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts,
                             peek_commondata_metadata)
@@ -71,6 +74,33 @@ class LoaderBase:
 
         self.datapath = datapath
         self.resultspath = resultspath
+        self._nnprofile = None
+
+    @property
+    def nnprofile(self):
+        if self._nnprofile is None:
+            profile_path = nnpath.get_profile_path()
+            if not osp.exists(profile_path):
+                raise LoaderError(f"Could not find the profile path at "
+                                  "{profile_path}. Check your libnnpdf configuration")
+            with open(profile_path) as f:
+                try:
+                    self._nnprofile = yaml.safe_load(f)
+                except yaml.YAMLError as e:
+                    raise LoaderError(f"Could not parse profile file "
+                                      f"{profile_path}: {e}") from e
+        return self._nnprofile
+    def _vp_cache(self):
+        """Return the vp-cache path, and create it if it doesn't exist"""
+        vpcache = pathlib.Path(self.nnprofile['validphys_cache_path'])
+        if not vpcache.exists():
+            try:
+                log.info(f"Creating validphys cache directory: {vpcache}")
+                vpcache.mkdir(parents=True, exist_ok=True)
+            except Exception as e:
+                raise LoaderError("Could not create the cache directory "
+                              f"at {vpcache}") from e
+        return vpcache
 
 
 #TODO: Deprecate get methods?
@@ -293,12 +323,30 @@ class Loader(LoaderBase):
             return cuts.load()
         return None
 
+    def check_vp_output_file(self, filename, extra_paths=('.',)):
+        """Find a file in the vp-cache folder, or (with higher priority) in
+        the ``extra_paths``."""
+        try:
+            vpcache = self._vp_cache()
+        except KeyError as e:
+            log.warn("Entry validphys_cache_path expected but not found "
+                     "in the nnprofile.")
+        else:
+            extra_paths = (*extra_paths, vpcache)
+
+        finder = filefinder.FallbackFinder(extra_paths)
+        try:
+            path, name = finder.find(filename)
+        except FileNotFoundError as e:
+            raise LoadFailedError(f"Could not find '{filename}'") from e
+        except filefinder.FinderError as e:
+            raise LoaderError(e) from e
+        return path/name
 
 
 #http://stackoverflow.com/a/15645088/1007990
-def _download_file(url, stream):
-    response = requests.get(url, stream=True)
-    response.raise_for_status()
+def _download_and_show(response, stream):
+
     total_length = response.headers.get('content-length')
 
     if total_length is None or not log.isEnabledFor(logging.INFO):
@@ -315,15 +363,20 @@ def _download_file(url, stream):
             sys.stdout.flush()
         sys.stdout.write('\n')
 
-def download_file(url, stream_or_path):
-    #TODO: change to os.fspath
-    if isinstance(stream_or_path, (str,bytes)):
-        log.info("Downloading %s to %s." , url,stream_or_path)
+def download_file(url, stream_or_path, make_parents=False):
+    response = requests.get(url, stream=True)
+    response.raise_for_status()
+
+    if isinstance(stream_or_path, (str, bytes, os.PathLike)):
+        log.info("Downloading %s to %s." , url, stream_or_path)
+        if make_parents:
+            pathlib.Path(stream_or_path).parent.mkdir(exist_ok=True, parents=True)
+
         with open(stream_or_path, 'wb') as f:
-            return _download_file(url, f)
+            return _download_and_show(response, f)
     else:
         log.info("Downloading %s." , url,)
-        return _download_file(url, stream_or_path)
+        return _download_and_show(response, stream_or_path)
 
 
 def download_and_extract(url, local_path):
@@ -464,6 +517,34 @@ class RemoteLoader(LoaderBase):
             raise TheoryNotFound("Theory %s not available." % thid)
         download_and_extract(remote[thid], self.datapath)
 
+    def download_vp_output_file(self, filename, **kwargs):
+        try:
+            root_url = self.nnprofile['reports_root_url']
+        except KeyError as e:
+            raise LoadFailedError('Key report_root_url not found in nnprofile')
+        try:
+            url = root_url  + filename
+        except Exception as e:
+            raise LoadFailedError(e) from e
+        try:
+            filename = pathlib.Path(filename)
+
+            download_file(url, self._vp_cache()/filename, make_parents=True)
+        except requests.HTTPError as e:
+            if e.response.status_code == requests.codes.not_found:
+                raise RemoteLoaderError(f"Ressource {filename} could not "
+                                        f"be found on the validphys "
+                                        f"server {url}") from e
+            elif e.response.status_code == requests.codes.unauthorized:
+                log.error("Could not access the validphys reports page "
+                          "because the authentification is not provided. "
+                          "Please, update your ~/.netrc file to contain the "
+                          "following:\n\n"
+                          f"machine {urls.urlsplit(root_url).netloc}\n"
+                          f"    login nnpdf\n"
+                          f"    password <PASSWORD>\n"
+                 )
+            raise
 
 class FallbackLoader(Loader, RemoteLoader):
     """A loader that first tries to find resources locally

@@ -511,15 +511,14 @@ class Config(report.Config):
 
 
     def _get_table(self, loader_func, fname, config_rel_path):
-        from reportengine import filefinder
+        try:
+            res = self.loader.check_vp_output_file(fname,
+                    extra_paths=['.', config_rel_path])
+        except LoaderError as e:
+            raise ConfigError(e) from e
 
-        finder = filefinder.FallbackFinder(['.', config_rel_path])
         try:
-            folder, name = finder.find(fname)
-        except FileNotFoundError as e:
-            raise ConfigError(f"Couldn't locate '{fname}': {e}") from e
-        try:
-            df = loader_func(folder/name)
+            df = loader_func(res)
         except Exception as e:
             raise ConfigError(e) from e
         return df
