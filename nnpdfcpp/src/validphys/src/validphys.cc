@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 {  
   
   // Read configuration filename from arguments
-  string filename, filenameref, plottingfile = "plotting.yml";
+  string filename, filenameref, plottingfile = "../plotting.yml";
   if (argc > 2)
     {
       filename.assign(argv[1]);

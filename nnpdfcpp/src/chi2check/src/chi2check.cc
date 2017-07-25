@@ -41,7 +41,7 @@ int main(int argc, char **argv)
   if (MPI::TaskID() == 0) // master slave
     {
       // Read configuration filename from arguments
-      string filename, pdfgrid, plottingfile = "plotting.yml";
+      string filename, pdfgrid, plottingfile = "../config/plotting.yml";
       if (argc > 1)
         {
           filename.assign(argv[1]);
