@@ -162,47 +162,7 @@ python = import('python3')
 
 py3_dep = dependency('python3')
 
-pyexec = python.find_python()
-
 python_install_dir = join_paths(['/', python.sysconfig_path('platlib'), 'NNPDF'])
-
-
-
-
-wrapper_lib = python.extension_module('_nnpdf',
-    [wrapper_cxx],
-    dependencies: [wrapper_deps, py3_dep],
-	include_directories: inc,
-    link_with: [lib],
-	install: true,
-    install_dir: python_install_dir,
-)
-
-#This is to fix https://github.com/ninja-build/ninja/issues/1184
-swig_python_target = custom_target('swig_python',
-    output: ['@BASENAME@.py'],
-	input: [swig_source],
-	command:['echo'],
-	depends: [wrapper_lib],
-	install: true,
-    install_dir: python_install_dir,
-
-)
-
-cffisource = files(['wrapper/cffi/ffibuilder.py'])
-
-cffigen = custom_target('cfficc',
-    command: [pyexec, cffisource, '@OUTPUT@'],
-    output: ['ffi.cc'],
-)
-
-
-another_lib = python.extension_module('ffi', cffigen,
-    dependencies: [py3_dep],
-    link_with: [lib],
-	install: true,
-    install_dir: python_install_dir,
-)
 
 #TODO: Find a batter way to do this
 #Except for __init__.py, these are all deprecated anyway
@@ -249,4 +209,27 @@ pyfiles = [
     'wrapper/src/_timer.py',
     'wrapper/src/_utils.py',
 ]
+
 install_data(pyfiles, install_dir: python_install_dir)
+
+
+wrapper_lib = python.extension_module('_nnpdf',
+    [wrapper_cxx],
+    dependencies: [wrapper_deps, py3_dep],
+	include_directories: inc,
+    link_with: [lib],
+	install: true,
+    install_dir: python_install_dir,
+)
+
+#This is to fix https://github.com/ninja-build/ninja/issues/1184
+swig_python_target = custom_target('swig_python',
+    output: ['@BASENAME@.py'],
+	input: [swig_source],
+	command:['echo'],
+	depends: [wrapper_lib],
+	install: true,
+    install_dir: python_install_dir,
+
+)
+
