@@ -18,7 +18,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 
 # export version to file
-set(VERSION "\"1.2.0b4\"")
+set(VERSION "\"1.2.0b5\"")
 configure_file(
   "${PROJECT_SOURCE_DIR}/src/NNPDF/config.h.in"
   "${PROJECT_SOURCE_DIR}/src/NNPDF/config.h"
@@ -28,11 +28,12 @@ option(ENABLE_OPENMP "Enable openmp parallelism." OFF)
 option(ENABLE_OPENMPI "Enable openMPI parallelism." OFF)
 option(ENABLE_PYWRAP "Enable python wrapper building" OFF)
 option(ENABLE_TESTS "Enable unit test" ON)
-option(BUREOCRATIC_PATHS "Set the nnpdfcpp paths to point to a prefix location" OFF)
-if (BUREOCRATIC_PATHS)
-	set(PROFILE_PREFIX "${CMAKE_INSTALL_PREFIX}/share/NNPDF")
-else()
-	set(PROFILE_PREFIX "../nnpdfcpp")
+set(PROFILE_PREFIX "" CACHE STRING "Set custom profile prefix. Default empty uses CMAKE_INSTALL_PREFIX.")
+
+if (PROFILE_PREFIX)
+  set(PROFILE_PREFIX "${PROFILE_PREFIX}")
+else (PROFILE_PREFIX)
+  set(PROFILE_PREFIX "${CMAKE_INSTALL_PREFIX}/share/NNPDF")
 endif()
 
 configure_file(

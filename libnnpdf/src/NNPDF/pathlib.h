@@ -28,7 +28,7 @@ std::string get_data_path();
 
 /**
  * @brief get_results_path
- * @return The location of the nnpdfcpp results path, conttaining
+ * @return The location of the nnpdfcpp results path, containing
  * completed fits.
  */
 std::string get_results_path();
