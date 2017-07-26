@@ -109,6 +109,8 @@ CMAKE_INSTALL_PREFIX
 ENABLE_OPENMP
 ENABLE_OPENMPI
 ENABLE_PYWRAP
+ENABLE_TESTS
+PROFILE_PREFIX
 ```
 
 On the command line, options are controlled appending a `-D` flag. For
@@ -127,6 +129,9 @@ make wrapper-clean
 ```
 
 This will also install the wrapper in the current Python environment.
+
+If `PROFILE_PREFIX` sets paths and urls required to access the nnpdfcpp data, theory and results resources.
+If this flag is empty the paths will be set to the libnnpdf installation folder.
 
 ## Documentation
 
