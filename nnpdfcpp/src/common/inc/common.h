@@ -26,29 +26,6 @@ using std::stringstream;
 
 typedef real (*gpdf)(real*);
 
-// ******* Paths ***********************
-
-#ifndef CONFIG_PATH
-#define CONFIG_PATH ../config/
-#endif
-
-#ifndef RESULTS_PATH
-#define RESULTS_PATH ../results/
-#endif
-
-#ifndef DATA_PATH
-#define DATA_PATH ../data/
-#endif
-
-#define STR_EXPAND(tok) #tok
-#define STR(tok) STR_EXPAND(tok)
-
-// Path return functions
-std::string configPath();
-std::string resultsPath();
-std::string dataPath();
-std::string scriptPath();
-
 // ********* Physics **********************
 
 enum {TBAR,BBAR,CBAR,SBAR,UBAR,DBAR,GLUON,D,U,S,C,B,T,PHT};

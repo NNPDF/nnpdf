@@ -81,7 +81,7 @@ int main(int argc, char **argv)
         }
 
       // Creates the configuration class
-      NNPDFSettings settings(configPath() + filename);
+      NNPDFSettings settings(filename);
 
       // Creating output folder
       CreateResultsFolder(settings, replica);

@@ -17,6 +17,7 @@
 #include <NNPDF/experiments.h>
 #include <NNPDF/randomgenerator.h>
 #include <NNPDF/positivity.h>
+#include <NNPDF/pathlib.h>
 
 #include "kincuts.h"
 using namespace NNPDF;
@@ -36,7 +37,7 @@ int main(int argc, char **argv)
   else { cerr << Colour::FG_RED << "\nusage: filter [configuration filename]\n" << endl; exit(-1); }
 
   // Creates the configuration class
-  NNPDFSettings settings(configPath() + filename);
+  NNPDFSettings settings(filename);
   settings.PrintConfiguration("filter.yml");
 
   cout << "\n- Data cuts:" << endl;

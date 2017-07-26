@@ -183,7 +183,7 @@ NNPDFSettings::NNPDFSettings(const string &filename, const string &plotfile):
   fTheoryDir = td.str();
 
   // load theory map
-  IndexDB db(dataPath() + "theory.db", "theoryIndex");
+  IndexDB db(get_data_path() + "theory.db", "theoryIndex");
   db.ExtractMap(theoryID, APFEL::kValues, fTheory);
 
   cout << "==== Theory summary" << endl;
@@ -219,7 +219,7 @@ NNPDFSettings::NNPDFSettings(const string &filename, const string &plotfile):
     fPlotting = YAML::LoadFile(plotfile);
 
   // Results directory stuff
-  fResultsDir = resultsPath();
+  fResultsDir = get_results_path();
 
   struct stat st;
   if(stat(fResultsDir.c_str(),&st) != 0)
@@ -292,7 +292,7 @@ vector<string> NNPDFSettings::GetDataInfo(const string &setname, filterType useF
   // Target data directory, if useFiltered is false, read from global data
   string targetpath;
   if (!useFiltered)
-    targetpath = dataPath() + "commondata" ;
+    targetpath = get_data_path() + "commondata" ;
   else
     targetpath = fResultsDir + "/filter/" + setname ;
 

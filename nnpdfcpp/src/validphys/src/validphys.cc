@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 {  
   
   // Read configuration filename from arguments
-  string filename, filenameref, plottingfile = "plotting.yml";
+  string filename, filenameref, plottingfile = "../plotting.yml";
   if (argc > 2)
     {
       filename.assign(argv[1]);
@@ -48,8 +48,8 @@ int main(int argc, char **argv)
     }
 
   // Creates the configuration class
-  NNPDFSettings settings(configPath() + filename,configPath() + plottingfile);
-  NNPDFSettings settingsref(configPath() + filenameref,configPath() + plottingfile);
+  NNPDFSettings settings(filename,plottingfile);
+  NNPDFSettings settingsref(filenameref,plottingfile);
 
   // Printing a copy of the configuration file
   settings.PrintConfiguration("validphys.yml");

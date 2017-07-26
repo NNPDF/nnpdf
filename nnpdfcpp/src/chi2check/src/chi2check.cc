@@ -41,7 +41,7 @@ int main(int argc, char **argv)
   if (MPI::TaskID() == 0) // master slave
     {
       // Read configuration filename from arguments
-      string filename, pdfgrid, plottingfile = "plotting.yml";
+      string filename, pdfgrid, plottingfile = "../config/plotting.yml";
       if (argc > 1)
         {
           filename.assign(argv[1]);
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
         }
 
       // Creates the configuration class
-      NNPDFSettings settings(configPath()+filename,configPath() + plottingfile);
+      NNPDFSettings settings(filename,plottingfile);
       settings.PrintConfiguration("chi2check.yml");
       settings.VerifyConfiguration("chi2check.yml");
 

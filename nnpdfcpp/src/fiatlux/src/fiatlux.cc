@@ -45,7 +45,7 @@ public:
   lux()
   {
     // FiatLux setup
-    _lux = new FiatLux{configPath() + "fiatlux.yml"};
+    _lux = new FiatLux{"../config/fiatlux.yml"};
     _lux->PlugAlphaQED(APFEL::AlphaQED); // using default Qref = me
     _lux->PlugStructureFunctions(APFELF2, APFELFL);
   }
@@ -169,7 +169,7 @@ int main(int argc, char **argv)
     }
 
   // Creates the configuration class
-  NNPDFSettings settings(configPath() + filename);
+  NNPDFSettings settings(filename);
   settings.PrintConfiguration("fiatlux.yml");
 
   // write grid to disk

@@ -39,7 +39,7 @@ void ExportCorrMat(DataSet const& d, const string file);
 int main(int argc, char **argv)
 {
   // Read configuration filename from arguments
-  string filename, plottingfile = "plotting.yml";
+  string filename, plottingfile = "../plotting.yml";
   if (argc > 1)
     {
       filename.assign(argv[1]);
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
     }
 
   // Creates the configuration class
-  NNPDFSettings settings(configPath() + filename, configPath() + plottingfile);
+  NNPDFSettings settings(filename, plottingfile);
   settings.PrintConfiguration("gencovmat.yml");
   settings.VerifyConfiguration("gencovmat.yml");
 
