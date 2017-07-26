@@ -339,6 +339,38 @@ simply running:
 
     conda install validphys nnpdf
 
+### Configuring the NNPDF paths
+
+The paths where the NNPDF resources (such as fits and data) that need
+to be  localized across projects are stored are controlled by a YAML
+configuration file that comes with `libnnpdf`. The default location of
+the file itself is `<prefix>/share/NNPDF/nnprofile.yaml`, where prefix
+is the installation root (such as the `conda` folder). If you open it,
+you can see that it expects to see the nnpdfcpp data and results
+directory in a particular location, namely `<prefix>/share/NNPDF/data`
+and `<prefix>/share/NNPDF/results` respectively.
+
+The simplest solution is to create symbolic links from the git
+repository locations:
+
+```
+ln -s /path/to/nnpdfcpp/data <prefix>/share/nnpdf/data
+ln -s /path/to/nnpdfcpp/results <prefix>/share/nnpdf/results
+
+```
+
+For the data, this has the advantage that it will be kept in sync when
+the git repository is updated.
+
+Advanced users may configure the paths differently, by creating an
+alternative `nnprofile.yaml` file and setting the environment variable
+`NNPDF_PROFILE_PATH` to point at it. Note that the changes of the
+profile file in the default location will be lost every time
+`libnnpdf` is reinstalled.
+
+Future versions of the `nnpdf` package may come with the data
+preinstalled in the right location.
+
 #### Linking existing LHAPDF grids
 
 The installer will set up it's own version of the LHAPDF code, with
@@ -356,31 +388,6 @@ This will avoid symlinking the existing LHAPDF configuration, which
 may be corrupted or incompatible. You should make sure only the grid
 folders are transferred if you copy or move instead.
 
-
-#### Setting the nnpdfcpp paths
-
-
-There is only one thing left to do. We don't package the nnpdfcpp data
-in the conda packages (that would make them too big) and furthermore
-the binaries expect to be operated from specific relative paths with
-respect to the data. To work around these limitations we can symlink
-the nnpdfcpp binaries to the correct path, which is a `bin/` folder
-inside the root of the `nnpdfcpp` git repository.
-
-```
-# The nnpdfcpp git repository
-cd nnpdfcpp
-mkdir -p bin && cd bin
-#inside nnpdfcpp/bin
-ln -s `which nnfit` .
-ln -s `which postfit` .
-ln -s `which fitmanager` .
-ln -s `which chi2check` .
-```
-This requirement will disappear in the future. See also [Dealing with
-paths] below.
-
-Note this is not required for validphys to work.
 
 ### Troubleshooting
 
@@ -549,22 +556,6 @@ validphys --help config
 All other keys are interpreted literally (although they could be
 further processed by specific actions).
 
-Dealing with paths
-------------------
-
-At the moment nnpdfcpp and the resources it contains (such as fits and
-datasets) don't adhere to any common PREFIX specification, and instead
-rely on complicated relative paths relations to localize the resources.
-While this probably needs to be changed eventually, replaced by some
-more robust and standard solution, there is no way
-for validphys to work other than to behave the same way at the moment.
-
-By default, it is assumed that validphys is executed inside a folder
-at the same level as "nnpdfcpp". Otherwise, the `--datapath` should
-be set to point to `nnpdfcpp/data` and `--resultspath` should point to
-a folder containing the fits.
-
-This is extremely annoying and will be changed in the near future.
 
 
 Writing input cards
