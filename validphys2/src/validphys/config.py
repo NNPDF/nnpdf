@@ -512,7 +512,7 @@ class Config(report.Config):
 
     def _get_table(self, loader_func, fname, config_rel_path):
         try:
-            res = self.loader.check_vp_output_file(fname,
+            res = self.loader.check_vp_output_file(fname.strip(),
                     extra_paths=['.', config_rel_path])
         except LoaderError as e:
             raise ConfigError(e) from e
