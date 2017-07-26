@@ -366,7 +366,10 @@ Advanced users may configure the paths differently, by creating an
 alternative `nnprofile.yaml` file and setting the environment variable
 `NNPDF_PROFILE_PATH` to point at it. Note that the changes of the
 profile file in the default location will be lost every time
-`libnnpdf` is reinstalled.
+`libnnpdf` is reinstalled, and therefore it must be copied elsewhere
+with the environment variable pointing to it. Overwriting the profile
+allows to e.g. set the nnpdfcpp paths directly, or point the locations
+to specialized storage units when running jobs in a cluster.
 
 Future versions of the `nnpdf` package may come with the data
 preinstalled in the right location.
