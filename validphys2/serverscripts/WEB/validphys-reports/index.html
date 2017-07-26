@@ -103,16 +103,17 @@ $(document).ready(function() {
 		window.location.hash = event.target.value;
 		global_table.draw();
 	};
-
-    }
-    );
-
     var hash = window.location.hash.substr(1);
     if(hash){
         var filt = document.getElementById("tagfilt");
     	filt.value=hash;
-    	global_table.draw();
+		filt.dispatchEvent(new Event('change'));
+		global_table.draw();
     }
+
+    }
+    );
+
 } );
 
 function filter_tag(data, tag, now){
