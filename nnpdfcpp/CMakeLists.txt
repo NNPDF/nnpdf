@@ -98,3 +98,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NNPDF_CXX_FLAGS} ${LHAPDF_CXX_FLAGS} $
 
 # execute project specific targets
 add_subdirectory(src)
+
+# install scripts
+install(FILES ${PROJECT_SOURCE_DIR}/scripts/fitmanager
+        ${PROJECT_SOURCE_DIR}/scripts/postfit
+        DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)

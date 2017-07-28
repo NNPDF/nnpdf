@@ -14,6 +14,8 @@ if (COMPILE_filter)
                       filter/src/kincuts.cc)
   include_directories(filter/inc)
   target_link_libraries(filter common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${GSL_LDFLAGS})
+  install(TARGETS filter DESTINATION bin
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_filter)
 
 # nnfit
@@ -29,6 +31,8 @@ if (COMPILE_nnfit)
                        nnfit/src/stopping.cc)
   include_directories(nnfit/inc)
   target_link_libraries(nnfit common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
+  install(TARGETS nnfit DESTINATION bin
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_nnfit)
 
 # chi2check
@@ -36,6 +40,8 @@ option(COMPILE_chi2check "Compile chi2check program." ON)
 if (COMPILE_chi2check)
   add_executable(chi2check chi2check/src/chi2check.cc)
   target_link_libraries(chi2check common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${GSL_LDFLAGS})
+  install(TARGETS chi2check DESTINATION bin
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_chi2check)
 
 # validphys
@@ -46,6 +52,8 @@ if (COMPILE_validphys)
                            validphys/src/plotutils.cc)
   include_directories(validphys/inc)
   target_link_libraries(validphys common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${ROOT_LIBRARIES} ${YAMLCPP_LIBRARIES} ${GSL_LDFLAGS})
+  install(TARGETS validphys DESTINATION bin
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_validphys)
 
 # fkcheck
@@ -53,6 +61,8 @@ option(COMPILE_fkcheck "Compile fkcheck program." OFF)
 if (COMPILE_fkcheck)
   add_executable(fkcheck fkcheck/src/fkcheck.cc)
   target_link_libraries(fkcheck common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${GSL_LDFLAGS})
+  install(TARGETS fkcheck DESTINATION bin
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_fkcheck)
 
 # gencovmat
@@ -60,6 +70,8 @@ option(COMPILE_gencovmat "Compile gencovmat program." OFF)
 if (COMPILE_gencovmat)
   add_executable(gencovmat gencovmat/src/gencovmat.cc)
   target_link_libraries(gencovmat common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${GSL_LDFLAGS})
+  install(TARGETS gencovmat DESTINATION bin
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_gencovmat)
 
 # kinplot
@@ -74,6 +86,8 @@ option(COMPILE_revolve "Compile revolve program." OFF)
 if (COMPILE_revolve)
   add_executable(revolve revolve/src/revolve.cc)
   target_link_libraries(revolve common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
+  install(TARGETS revolve DESTINATION bin
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
 endif(COMPILE_revolve)
 
 # revolvenet
@@ -84,13 +98,17 @@ if (COMPILE_revolvenet)
     nnfit/src/fitbases.cc)
   include_directories(revolvenet/inc nnfit/inc)
   target_link_libraries(revolvenet common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
+  install(TARGETS revolvenet DESTINATION bin
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
 endif(COMPILE_revolvenet)
 
-# revolve
+# tconvcheck
 option(COMPILE_tconvcheck "Compile tconvcheck program." OFF)
 if (COMPILE_tconvcheck)
   add_executable(tconvcheck tconvcheck/src/tconvcheck.cc)
   target_link_libraries(tconvcheck common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
+  install(TARGETS tconvcheck DESTINATION bin
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
 endif(COMPILE_tconvcheck)
 
 # mkthpredictions
@@ -99,6 +117,8 @@ if (COMPILE_mkthpredictions)
   add_executable(mkthpredictions mkthpredictions/src/mkthpredictions.cc)
   include_directories(mkthpredictions/inc)
   target_link_libraries(mkthpredictions common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
+  install(TARGETS mkthpredictions DESTINATION bin
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
 endif(COMPILE_mkthpredictions)
 
 
@@ -122,4 +142,6 @@ if (COMPILE_fiatlux)
   add_executable(fiatlux fiatlux/src/fiatlux.cc)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FIATLUX_CXX_FLAGS}")
   target_link_libraries(fiatlux common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${GSL_LDFLAGS} ${FIATLUX_LIBRARIES} ${APFEL_LIBRARIES})
+  install(TARGETS fiatlux DESTINATION bin
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_fiatlux)
