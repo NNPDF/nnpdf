@@ -15,22 +15,22 @@ performance may not be optimal.
 """
 import logging
 import functools
-from collections import namedtuple, defaultdict
+from collections import namedtuple, defaultdict, Counter
 
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from reportengine.figure import figure
+from reportengine.figure import figure, figuregen
 from reportengine.table import table
 from reportengine import collect
 from reportengine.floatformatting import format_error_value_columns, format_number
-from reportengine.checks import make_argcheck, CheckError, check_positive
+from reportengine.checks import make_argcheck, CheckError, check_positive, check_not_empty
 from NNPDF import pseudodata, single_replica, RandomGenerator
 
 from validphys.core import PDF
 from validphys.results import ThPredictionsResult, DataResult, chi2_breakdown_by_dataset
-from validphys.plotutils import plot_horizontal_errorbars
+from validphys.plotutils import plot_horizontal_errorbars, marker_iter_plot
 
 log = logging.getLogger(__name__)
 
@@ -103,11 +103,18 @@ def computed_psedorreplicas_chi2(experiments, dataseed, pdf,
 #them explicitly than setting some, se we require the user to do that.
 fits_computed_psedorreplicas_chi2 = collect(computed_psedorreplicas_chi2, ('fits',))
 
+def _check_list_different(l, name):
+    strs = [str(item) for item in l]
+    if not len(set(strs))==len(l):
+        counter = Counter(strs)
+        duplicates = [k for k, v in counter.items() if v > 1]
+        raise CheckError(f"{name} must be all different "
+                         f"but there are duplicates: {duplicates}")
+
 @make_argcheck
 def _check_fits_different(fits):
     """Need this check because oterwise the pandas object gets confused"""
-    if not len(set(map(str, fits)))==len(fits):
-        raise CheckError("fits must be all different but there are duplicates.")
+    return _check_list_different(fits, 'fits')
 
 #TODO: Export the total here. Not having it is causing huge pain elsewhere.
 @table
@@ -157,6 +164,11 @@ def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated,
     table = table[filt]
     #table = np.atleast_2d(np.mean(table, axis=0))
     return table
+
+def _get_parabola(asvals, chi2vals):
+    filt =  np.isfinite(chi2vals)
+    return np.polyfit(asvals[filt], chi2vals[filt], 2)
+
 
 
 @_check_badcurves
@@ -219,6 +231,7 @@ def as_determination_from_central_chi2_with_tag(
 
     return as_determination_from_central_chi2, suptitle
 
+
 as_datasets_pseudorreplicas_chi2 = collect(
     parabolic_as_determination_with_tag,
     ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
@@ -254,7 +267,8 @@ def plot_as_exepriments_central_chi2(as_datasets_central_chi2):
 
 
 @figure
-def plot_as_datasets_compare(as_datasets_pseudorreplicas_chi2, as_datasets_central_chi2,
+def plot_as_datasets_compare(as_datasets_pseudorreplicas_chi2,
+                             as_datasets_central_chi2,
                              marktotal:bool=True):
     """Plot the result of ``plot_as_datasets_pseudorreplicas_chi2`` and
     ``plot_as_exepriments_central_chi2`` together."""
@@ -395,23 +409,72 @@ def compare_determinations_table(compare_determinations_table_impl):
 
 dataspecs_as_datasets_pseudorreplicas_chi2 = collect('as_datasets_pseudorreplicas_chi2', ['dataspecs'])
 
+by_dataset_suptitle = collect(
+    'suptitle',
+    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
+)
+
+dataspecs_dataset_suptitle = collect('by_dataset_suptitle', ['dataspecs'])
+
+@make_argcheck
+def _check_speclabels_different(dataspecs_speclabel):
+    return _check_list_different(dataspecs_speclabel, 'dataspecs_speclabel')
+
+@make_argcheck
+def _check_dataset_items(dataset_items, dataspecs_dataset_suptitle):
+    if dataset_items is None:
+        return
+    try:
+        s = set(dataset_items)
+    except Exception as e:
+        raise CheckError(f'dataset_items must be a list of strinfs: {e}') from e
+
+    flat = [item for l in dataspecs_dataset_suptitle for item in l]
+    d = s - set(flat)
+    if d:
+        raise CheckError(f"The floowing dataset_items are unrecognized: {d}")
+
+
+@_check_speclabels_different
+@_check_dataset_items
 def datasepecs_as_value_error_table_impl(
-        dataspecs_as_datasets_pseudorreplicas_chi2, dataspecs_speclabel, dataspecs):
+        dataspecs_as_datasets_pseudorreplicas_chi2, dataspecs_speclabel,
+        dataspecs_dataset_suptitle,
+        dataset_items:(list, type(None)) = None,
+        display_n:bool = False,
+        ):
+    """Return a table with the mean and error of the as determinations across
+    dataspecs."""
     tables = []
     #Use the fact that in py3.6 a dict with None values is like an ordered set
     #TODO: A better way to build the dataframe?
     taglist = {}
+    if display_n:
+        cols = ['mean', 'error', 'n']
+    else:
+        cols = ['mean', 'error']
     for dets in dataspecs_as_datasets_pseudorreplicas_chi2:
         d = defaultdict(dict)
 
         for distribution, tag in dets:
             d['mean'][tag] = np.mean(distribution)
             d['error'][tag] = np.std(distribution)
+            if display_n:
+                d['n'][tag] = len(distribution)
             taglist[tag] = None
-        tables.append(pd.DataFrame(d, columns=['mean', 'error']))
+
+        tables.append(pd.DataFrame(d, columns=cols))
+
 
     df = pd.concat(tables, axis=1, keys=dataspecs_speclabel)
-    df = df.loc[list(taglist)]
+    if dataset_items is None:
+        ordered_keys = list(taglist)
+    else:
+        ordered_keys = dataset_items
+
+    df = df.loc[ordered_keys]
+
+
     return df
 
 @table
@@ -423,6 +486,7 @@ def dataspecs_as_value_error_table(datasepecs_as_value_error_table_impl):
 
 @figure
 def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
+        dataspecs_fits_as,
         marktotal:bool=True):
     """Plot the result of ``plot_as_datasets_pseudorreplicas_chi2`` and
     ``plot_as_exepriments_central_chi2`` together."""
@@ -433,10 +497,15 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
     cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
     errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
 
+    asvals = np.array(dataspecs_fits_as)
+    lims = np.min(asvals), np.max(asvals)
+
 
     fig, ax = plot_horizontal_errorbars(
         cvs, errors, catlabels,
-        datalabels
+        datalabels,
+        xlim = lims
+
     )
 
     if marktotal:
@@ -490,6 +559,87 @@ def plot_fitted_replicas_as_profiles_matched(fits_as,
     ax.set_ylabel(r'$\chi^2$')
     return fig
 
+dataspecs_fits_as = collect('fits_as', ['dataspecs'])
+
+by_dataset_as_chi2 = collect(
+        fits_replica_data_with_discarded_replicas,
+        ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',])
+
+dataspecs_fits_replica_data_with_discarded_replicas = collect(
+        'by_dataset_as_chi2', ['dataspecs'])
+
+@check_not_empty('dataspecs_dataset_suptitle')
+def dataspecs_chi2_by_dataset_dict(dataspecs_dataset_suptitle,
+                        dataspecs_fits_replica_data_with_discarded_replicas,
+                        dataspecs_fits_as,
+                        ):
+    allkeys = set(dataspecs_dataset_suptitle[0])
+    for newkeys in dataspecs_dataset_suptitle[1:]:
+        newkeys = set(newkeys)
+        symdiff = newkeys ^ allkeys
+        if symdiff:
+            log.warning(f"Some datasets are not "
+                        f"common across all dataspecs {symdiff}")
+            allkeys |= symdiff
+
+    res = defaultdict(list)
+    for keys, values, asvals in zip(dataspecs_dataset_suptitle,
+            dataspecs_fits_replica_data_with_discarded_replicas,
+            dataspecs_fits_as):
+        for k, v in zip(keys, values):
+            v.columns = asvals
+            res[k].append(v)
+        for k in allkeys-set(keys):
+            res[k].append(None)
+    return res
+
+
+
+
+@figuregen
+@_check_dataset_items
+def plot_dataspecs_parabola_examples(
+        dataspecs_chi2_by_dataset_dict,
+        dataspecs_speclabel,
+        dataset_items:(list, type(None))=None,
+        examples_per_item:int = 2,
+        random_seed:int = 0,
+        ):
+    random_state = np.random.RandomState(random_seed)
+    if dataset_items is None:
+        dataset_items = list(dataspecs_chi2_by_dataset_dict)
+
+
+    for it in dataset_items:
+        table = pd.concat(dataspecs_chi2_by_dataset_dict[it],
+                         join='inner', axis=1, keys=dataspecs_speclabel)
+        if examples_per_item > len(table):
+            log.warning("Length of table is less than examples_per_item")
+            sampled = table
+        else:
+            sampled = table.sample(examples_per_item, random_state=random_state)
+
+
+        for index, row in sampled.iterrows():
+
+            fig, ax = plt.subplots()
+            im = marker_iter_plot()
+            ax.set_title(f"Parabola example for {it} (nnfit_index={index})")
+            for i, (label, vals) in enumerate(row.groupby(level=0)):
+                asvals = vals.index.levels[1]
+                color = f'C{i}'
+                y = vals.as_matrix()
+                ax.plot(asvals, y, **next(im), label=label,
+                         color=color, linestyle='none', lw=0.5)
+                a,b,c = parabola = _get_parabola(asvals, y)
+                ax.plot(asvals, np.polyval(parabola,asvals), color=color,
+                         linestyle='--', lw=0.5)
+                m = -b/2/a
+                if asvals[0] < m < asvals[-1]:
+                    ax.axvline(m ,  color=color, lw=0.4)
+            ax.legend(  )
+
+            yield fig
 
 @figure
 def plot_poly_as_fit(fits_as,
@@ -542,4 +692,7 @@ def plot_poly_as_fit(fits_as,
         fig.suptitle(suptitle)
     return fig
 
-
+@table
+def export_fits_computed_psedorreplicas_chi2(fits_computed_psedorreplicas_chi2):
+    """Hack to force writting the CSV output"""
+    return fits_computed_psedorreplicas_chi2

@@ -267,7 +267,8 @@ def barplot(values, collabels, datalabels, orientation='auto'):
 
     return fig, ax
 
-def plot_horizontal_errorbars(cvs, errors, categorylabels, datalabels=None):
+def plot_horizontal_errorbars(cvs, errors, categorylabels, datalabels=None,
+                              xlim=None):
     """A plots with a list of horizontal errorbars oriented vertically.
     ``cvs`` and ``errors`` are the central values and errors both of shape
     `ndatasets x ncategories`, ``cateogorylabels`` are the labels of each
@@ -276,10 +277,11 @@ def plot_horizontal_errorbars(cvs, errors, categorylabels, datalabels=None):
     """
     w,h = plt.rcParams["figure.figsize"]
     rescale = max(1, 1 + 0.1*(len(categorylabels) - 7))
-    fig, ax = plt.subplots(figsize=(w, h*rescale))
+    fig, ax = plt.subplots(figsize=(w*1.5, h*rescale))
     if datalabels is None:
         datalabels = itertools.repeat(None)
     y = np.arange(len(categorylabels))
+
     ax.yaxis.set_ticks(y)
     ax.yaxis.set_ticklabels(categorylabels)
     mi = marker_iter_plot()
@@ -291,10 +293,12 @@ def plot_horizontal_errorbars(cvs, errors, categorylabels, datalabels=None):
     for cv, err, lb, markerspec, shift in zip(cvs, errors, datalabels, mi, pos):
         ax.errorbar(cv, y+shift, xerr=err, linestyle='none', label=lb,
                     **markerspec)
-    ax.set_xlim(*expand_margin(np.nanpercentile(cvs, 15),
-                               np.nanpercentile(cvs, 85),
-                               1.1))
+    if xlim is None:
+        xlim =  expand_margin(*np.nanpercentile(cvs, (15, 85)),
+                              1.3)
 
+    ax.set_xlim(xlim)
     ax.set_ylim(-0.5, len(categorylabels)+0.5)
+    ax.invert_yaxis()
     ax.grid(axis='y')
     return fig, ax
