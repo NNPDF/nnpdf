@@ -39,7 +39,7 @@ void ExportCorrMat(DataSet const& d, const string file);
 int main(int argc, char **argv)
 {
   // Read configuration filename from arguments
-  string filename, plottingfile = "../plotting.yml";
+  string filename, plottingfile = "../config/plotting.yml";
   if (argc > 1)
     {
       filename.assign(argv[1]);
