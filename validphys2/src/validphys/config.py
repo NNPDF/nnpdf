@@ -615,12 +615,29 @@ class Config(report.Config):
             df = df[fits_name]
         except Exception as e:
             raise ConfigError(f"Could not select the fit names from the table: {e}") from e
+
         return {'fits_computed_psedorreplicas_chi2':  df}
+
+
+    @element_of('extra_sums')
+    def parse_extra_sum(self, s:dict):
+        keys = {'dataset_item', 'components'}
+        if s.keys() != keys:
+            d1 = s.keys() - keys
+            d2 = keys - s.keys
+            if d1:
+                raise ConfigError(f'Unable to parse extra_sum: unrecognized keys: {d1}')
+            if d2:
+                raise ConfigError(f'Unable to parse extra_sum. The following keys are required: {d2}')
+            raise RuntimeError()
+        return s
+
 
 
 
     def produce_fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset(self,
-            fits_computed_psedorreplicas_chi2, prepend_total:bool=True):
+            fits_computed_psedorreplicas_chi2, prepend_total:bool=True,
+            extra_sums=None):
         """Take the table returned by
         ``fits_matched_pseudorreplicas_chi2_output`` and break it down
         by experiment. If `preprend_total` is True, the sum over experiments
@@ -659,6 +676,21 @@ class Config(report.Config):
                                    'suptitle':ds})
 
             expres.append(d)
+
+        if extra_sums:
+            for es in extra_sums:
+                label = es['dataset_item']
+                components = es['components']
+                s =  df.loc[(slice(None), components),:].groupby(level=3).sum()
+                total.append(
+                    {'experiment_label': label,
+                    'by_dataset': [{
+                        'fits_replica_data_correlated': s,
+                        'suptitle': label,
+                     }]})
+
+
+
 
         return [*total, *expres]
 
