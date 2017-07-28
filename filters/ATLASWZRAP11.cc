@@ -1,11 +1,11 @@
 /**
- * ATLASWZRAP11.cc
- * Implementation of ATLAS 2011 W/Z rapidity data
+ * ATLASWZRAP11CC.cc
+ * Implementation of ATLAS 2011 W/Z rapidity data (central selection)
  */
 
 #include "ATLAS.h"
 
-void ATLASWZRAP11Filter::ReadData()
+void ATLASWZRAP11CCFilter::ReadData()
 {
 
   cout << "********** WARNING: Converting pb to fb to match ApplGrid output ********" << endl;
@@ -15,7 +15,7 @@ void ATLASWZRAP11Filter::ReadData()
   
   stringstream datafile("");
   datafile << dataPath() << "rawdata/"
-  << "ATLASWZRAP11/wzrap11.dat";
+  << "ATLASWZRAP11CC/wzrap11.dat";
 
   f1.open(datafile.str().c_str(), ios::in);
   
@@ -34,40 +34,46 @@ void ATLASWZRAP11Filter::ReadData()
   for (int i=0; i<fNSys; i++) 
     f1 >> sysNames[i];
  
-  int ndataWZ[3] = {11,22,fNData};  // Data thresholds for W+, W- and Z respectively
-  double MWZ2[3]= {pow(MW,2.0), pow(MW,2.0), pow(MZ,2.0)};   //Mass squared of W (+ and -) and Z
+  const int nBins = 5;
+  const int ndataWZ[nBins] = {11,22,28,40,46};  // Data thresholds for W+, W- and (Z_low, Z_peak, Z_high) respectively
+  const double MWZ2[nBins]= {pow(MW,2.0), pow(MW,2.0), pow(39.0,2.0), pow(98.0,2.0), pow(808.0,2.0)};   //Mass squared of W (+ and -) and (Z_low, Z_peak, Z_high)
 
-  for (int i = 0; i < fNData; i++)
+  int low_bin = 0;
+  for (int b = 0; b < nBins; b++)
   {
-    const int iWZ = i < ndataWZ[0] ? 0 :(i < ndataWZ[1] ? 1:2);
-    double etamin, etamax;
-
-    // Kinematics
-    f1 >> dummy; f1 >> etamin; f1 >> etamax;
-    fKin1[i] = etamin + (etamax - etamin)/2.0;
-    fKin2[i] = MWZ2[iWZ];
-    fKin3[i] = 7000;
-
-    // Observable
-    f1 >> fData[i];
-    fData[i] *= 1000; // pb -> fb
-
-    // Statistical errors - percentage with respect the observable
-    f1 >> fStat[i];
-    fStat[i] *= fData[i]*1e-2;
-
-    // Correlated systematic errors
-    for (int l = 0; l < fNSys; l++)
+    for (int i = low_bin; i < ndataWZ[b]; i++)
     {
-      f1 >> fSys[i][l].mult;
-      fSys[i][l].type = MULT;
-      fSys[i][l].name = sysNames[l];
-    }
+      double etamin, etamax;
 
-    // Additive errors   
-    for (int l = 0; l < fNSys; l++)
-      fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;
+      // Kinematics
+      f1 >> dummy; f1 >> etamin; f1 >> etamax;
+      fKin1[i] = etamin + (etamax - etamin)/2.0;
+      fKin2[i] = MWZ2[b];
+      fKin3[i] = 7000;
+
+      // Observable
+      f1 >> fData[i];
+      fData[i] *= 1000; // pb -> fb
+
+      // Statistical errors - percentage with respect the observable
+      f1 >> fStat[i];
+      fStat[i] *= fData[i]*1e-2;
+
+      // Correlated systematic errors
+      for (int l = 0; l < fNSys; l++)
+      {
+        f1 >> fSys[i][l].mult;
+        fSys[i][l].type = MULT;
+        fSys[i][l].name = sysNames[l];
+      }
+
+      // Additive errors   
+      for (int l = 0; l < fNSys; l++)
+        fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;
+    }
+    low_bin +=ndataWZ[b];
   }
+
   
   f1.close();
 }
