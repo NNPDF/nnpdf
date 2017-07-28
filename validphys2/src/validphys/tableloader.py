@@ -29,13 +29,16 @@ load_experiments_covmat = parse_exp_mat
 load_experiments_invcovmat = parse_exp_mat
 
 def load_perreplica_chi2_table(filename):
+    """Load the output of ``perreplica_chi2_table``."""
     df = sane_load(filename, header=[0,1])
     fixup_header(df, 1, int)
     return df
 
 
 def load_fits_computed_psedorreplicas_chi2(filename):
+    """Load the output of ``fits_computed_psedorreplicas_chi2``"""
     return sane_load(filename, index_col=[0,1,2,3], header=[0,1,])
+
 
 def load_fits_chi2_table(filename):
     return sane_load(filename, header=[0,1], index_col=[0,1])
@@ -51,7 +54,7 @@ def load_adapted_fits_chi2_table(filename):
 
 #TODO: Find a better place for this function
 def combine_pseudorreplica_tables(dfs, combined_names):
-    """Return a table in the same format as perreplica_chi2_table with the
+    """Return a table in the same format as perreplica_chi2_table with th   e
     minimum value of the chi² for each batch of fits."""
     for df in dfs:
         df.columns = df.columns.set_levels(combined_names, level=0)

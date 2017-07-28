@@ -155,6 +155,8 @@ def _check_badcurves(badcurves):
 
 def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated,
         max_ndiscarded:int=4):
+    """Return a table like  `fits_replica_data_correlated` where the replicas
+    with too many discarded points have been filtered out."""
     df = fits_replica_data_correlated
     def ap(x):
         x.columns = x.columns.droplevel(0)
@@ -418,10 +420,13 @@ dataspecs_dataset_suptitle = collect('by_dataset_suptitle', ['dataspecs'])
 
 @make_argcheck
 def _check_speclabels_different(dataspecs_speclabel):
+    """This is needed for grouping dataframes (and because
+    generally indecated a bug)"""
     return _check_list_different(dataspecs_speclabel, 'dataspecs_speclabel')
 
 @make_argcheck
 def _check_dataset_items(dataset_items, dataspecs_dataset_suptitle):
+    """Check that the dataset_items are legit."""
     if dataset_items is None:
         return
     try:
@@ -444,7 +449,8 @@ def datasepecs_as_value_error_table_impl(
         display_n:bool = False,
         ):
     """Return a table with the mean and error of the as determinations across
-    dataspecs."""
+    dataspecs. If display_n is True, a column showing the number of points
+    will be added to the table"""
     tables = []
     #Use the fact that in py3.6 a dict with None values is like an ordered set
     #TODO: A better way to build the dataframe?
@@ -573,6 +579,12 @@ def dataspecs_chi2_by_dataset_dict(dataspecs_dataset_suptitle,
                         dataspecs_fits_replica_data_with_discarded_replicas,
                         dataspecs_fits_as,
                         ):
+    """Return a table-like dict with the
+    suptitle: [<list of tables>]
+
+    where each table is ``fits_replica_data_with_discarded_replicas`` resolved
+    for the given dataset in each of the dataspecs.
+    """
     allkeys = set(dataspecs_dataset_suptitle[0])
     for newkeys in dataspecs_dataset_suptitle[1:]:
         newkeys = set(newkeys)
@@ -598,6 +610,7 @@ def dataspecs_chi2_by_dataset_dict(dataspecs_dataset_suptitle,
 
 @figuregen
 @_check_dataset_items
+@check_positive('examples_per_item')
 def plot_dataspecs_parabola_examples(
         dataspecs_chi2_by_dataset_dict,
         dataspecs_speclabel,
@@ -605,6 +618,10 @@ def plot_dataspecs_parabola_examples(
         examples_per_item:int = 2,
         random_seed:int = 0,
         ):
+    """Sample ``examples_per_item`` replica_indexes for each of the
+    ``dataset_items``. Yield a plot with the parabolic fit, as resoved for
+    each of the dataspecs. The random state is local to the function and
+    controlled by ``random_seed``."""
     random_state = np.random.RandomState(random_seed)
     if dataset_items is None:
         dataset_items = list(dataspecs_chi2_by_dataset_dict)
