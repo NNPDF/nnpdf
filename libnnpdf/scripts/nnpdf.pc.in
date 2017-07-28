@@ -2,6 +2,9 @@ prefix=@prefix@
 exec_prefix=@exec_prefix@
 includedir=@includedir@
 libdir=@libdir@
+data_path=@PROFILE_PREFIX@/data/
+results_path=@PROFILE_PREFIX@/results/
+validphys_cache_path=@PROFILE_PREFIX@/vp-cache/
 
 Name: nnpdf
 Description: The nnpdf library
