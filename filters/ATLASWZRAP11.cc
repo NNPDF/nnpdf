@@ -41,6 +41,8 @@ void ATLASWZRAP11CCFilter::ReadData()
   int low_bin = 0;
   for (int b = 0; b < nBins; b++)
   {
+
+    std::cout <<std::endl<< b<<"  "<< low_bin<<"  "<<ndataWZ[b]<<std::endl<<std::endl;
     for (int i = low_bin; i < ndataWZ[b]; i++)
     {
       double etamin, etamax;
@@ -50,6 +52,9 @@ void ATLASWZRAP11CCFilter::ReadData()
       fKin1[i] = etamin + (etamax - etamin)/2.0;
       fKin2[i] = MWZ2[b];
       fKin3[i] = 7000;
+
+      std::cout << b<<"  "<<i <<std::endl;
+
 
       // Observable
       f1 >> fData[i];
@@ -71,7 +76,8 @@ void ATLASWZRAP11CCFilter::ReadData()
       for (int l = 0; l < fNSys; l++)
         fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;
     }
-    low_bin +=ndataWZ[b];
+    // Update lowest point in bin
+    low_bin = ndataWZ[b];
   }
 
   
