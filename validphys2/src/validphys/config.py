@@ -509,6 +509,36 @@ class Config(report.Config):
         res.sort(key=lambda x: (x['experiment_name'], x['dataset_name']))
         return res
 
+    def produce_combine_dataspecs_pseudorreplicas_as(
+            self, dataspecs, how='min'):
+        if not isinstance(dataspecs, Sequence):
+            raise ConfigError("dataspecs should be a sequence of mappings, not "
+                              f"{type(dataspecs).__name__}")
+        if how != 'min':
+            raise ConfigError("Only min is implemented at the moment")
+
+        dfs = []
+        fitnames = []
+        for spec in dataspecs:
+            if not isinstance(spec, Mapping):
+                raise ConfigError("dataspecs should be a sequence of mappings, "
+                      f" but {spec} is {type(spec).__name__}")
+            with self.set_context(ns=self._curr_ns.new_child(spec)):
+                _, df = self.parse_from_(None, 'fits_computed_psedorreplicas_chi2', write=False)
+                _, asval = self.parse_from_(None, 'fits_as', write=False)
+                _, namelist = self.parse_from_(None, 'fits_name', write=False)
+                if not dfs:
+                    firstas = asval
+                elif asval != firstas:
+                    raise ConfigError("Expecting all as values to be the same")
+                dfs.append(df)
+                fitnames.append(namelist)
+        finalnames =  [min(ns, key=len) + '__combined' for ns in zip(*fitnames)]
+        res = tableloader.combine_pseudorreplica_tables(dfs, finalnames)
+
+        return {'fits_computed_psedorreplicas_chi2': res}
+
+
 
     def _get_table(self, loader_func, fname, config_rel_path):
         try:
@@ -567,7 +597,6 @@ class Config(report.Config):
         df.columns = newcols
         return df
 
-
     def parse_fits_computed_psedorreplicas_chi2_output(self, fname:str,
             config_rel_path):
         """Return a namespace (mapping) with the output of
@@ -576,6 +605,7 @@ class Config(report.Config):
         The fit names must be provided explicitly."""
         return self._get_table(tableloader.load_fits_computed_psedorreplicas_chi2,
                              fname, config_rel_path)
+
 
     def produce_use_fits_computed_psedorreplicas_chi2_output(
             self, fits_computed_psedorreplicas_chi2_output, fits_name):
@@ -603,7 +633,7 @@ class Config(report.Config):
         df = fits_computed_psedorreplicas_chi2
 
         if prepend_total:
-            s =  df.loc[(slice(None), 'Total'),:].groupby(level='nnfit_index').sum()
+            s =  df.loc[(slice(None), 'Total'),:].groupby(level=3).sum()
             total = [
                 {'experiment_label': 'Total',
                 'by_dataset': [{
@@ -614,13 +644,14 @@ class Config(report.Config):
             total = []
 
         expres = []
-        for exp, expdf in df.groupby(level='experiment'):
+        for exp, expdf in df.groupby(level=0):
             d = {'experiment_label': exp}
             by_dataset = d['by_dataset'] = []
-            for ds, dsdf in expdf.groupby(level='dataset'):
+            for ds, dsdf in expdf.groupby(level=1):
                 dsdf.index  = dsdf.index.droplevel([0,1,2])
                 if ds == 'Total':
-                    ds = f'{exp} Total'
+                    if exp != 'Total':
+                        ds = f'{exp} Total'
                     by_dataset.insert(0, {'fits_replica_data_correlated': dsdf,
                                    'suptitle':ds})
                 else:

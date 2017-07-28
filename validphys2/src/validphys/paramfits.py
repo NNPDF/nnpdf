@@ -109,6 +109,7 @@ def _check_fits_different(fits):
     if not len(set(map(str, fits)))==len(fits):
         raise CheckError("fits must be all different but there are duplicates.")
 
+#TODO: Export the total here. Not having it is causing huge pain elsewhere.
 @table
 @_check_fits_different
 def fits_matched_pseudorreplicas_chi2_table(fits, fits_computed_psedorreplicas_chi2):
