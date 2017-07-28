@@ -9,5 +9,5 @@ validphys_cache_path=@PROFILE_PREFIX@/vp-cache/
 Name: nnpdf
 Description: The nnpdf library
 Version: @VERSION@
-Cflags: -I@includedir@ -std=c++11
+Cflags: -I@includedir@
 Libs: -L@libdir@ -lnnpdf
