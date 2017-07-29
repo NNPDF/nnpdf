@@ -304,7 +304,7 @@ def plot_as_datasets_compare(as_datasets_pseudorreplicas_chi2,
 
 
 @check_positive('nresamplings')
-def bootstrapping_stats_error(parabolic_as_determination, nresamplings:int=100000):
+def bootstrapping_stats_error(parabolic_as_determination, nresamplings:int=100000, suptitle=""):
     """Compute the bootstrapping uncertainty of the distribution of
     deterrminations of as, by resampling the list of points with replacement
     from the original sampling distribution `nresamplings` times
@@ -345,17 +345,19 @@ err_halfone = "err selecting one half of the replicas"
 stats_halfother = "cv selecting other half of the replicas"
 err_halfonother = "err selecting other half of the replicas"
 
+ps_cols = (ps_mean, ps_error, ps_stat_error, ps_half_stat_error,
+           stats_halfone, err_halfone, stats_halfother, err_halfonother)
+
 
 cv_mean = "central mean"
 cv_error = "central error"
 
-
-def compare_determinations_table_impl(as_datasets_pseudorreplicas_chi2,
-                                 as_datasets_central_chi2,
-                                 as_datasets_bootstrapping_stats_error,
-                                 as_datasets_half_sample_stats_error):
-    """Produce a table by experiment comparing the alpha_S determination
-    from pseudorreplcias and from central values."""
+def pseudorreplicas_stats_error(
+        as_datasets_pseudorreplicas_chi2,
+        as_datasets_bootstrapping_stats_error,
+        as_datasets_half_sample_stats_error):
+    """Return a dictionary (easily convertible to a DataFrame) with the mean,
+    error and the measures of statistical error for each dataset."""
     d = defaultdict(dict)
 
     for (distribution, tag), statserr, halfstaterr in zip(
@@ -376,20 +378,75 @@ def compare_determinations_table_impl(as_datasets_pseudorreplicas_chi2,
         d[stats_halfother][tag] = np.mean(otherhalf)
         d[err_halfonother][tag] = np.std(otherhalf)
 
+    return dict(d)
+
+datasepecs_pseudorreplica_stats_error = collect(pseudorreplicas_stats_error, ['dataspecs'])
+
+@make_argcheck
+def _check_dataset_items(dataset_items, dataspecs_dataset_suptitle):
+    """Check that the dataset_items are legit."""
+    if dataset_items is None:
+        return
+    try:
+        s = set(dataset_items)
+    except Exception as e:
+        raise CheckError(f'dataset_items must be a list of strings: {e}') from e
+
+    flat = [item for l in dataspecs_dataset_suptitle for item in l]
+    d = s - set(flat)
+    if d:
+        raise CheckError(f"The floowing dataset_items are unrecognized: {d}")
+
+@make_argcheck
+def _check_speclabels_different(dataspecs_speclabel):
+    """This is needed for grouping dataframes (and because
+    generally indecated a bug)"""
+    return _check_list_different(dataspecs_speclabel, 'dataspecs_speclabel')
+
+
+def compare_determinations_table_impl(
+        pseudorreplicas_stats_error,
+        as_datasets_central_chi2):
+    """Produce a table by experiment comparing the alpha_S determination
+    from pseudorreplcias and from central values."""
+
+
     #Use this to get the right sorting
+    d  = defaultdict(list)
     tags = []
     for (cv, error), tag in as_datasets_central_chi2:
         d[cv_mean][tag] = cv
         d[cv_error][tag] = error
         tags.append(tag)
 
+    d.update(pseudorreplicas_stats_error)
 
-    df = pd.DataFrame(d, columns=[ps_mean, ps_error,
-        ps_stat_error, ps_half_stat_error, stats_ratio,
-        stats_halfone, err_halfone, stats_halfother,err_halfonother,
-        cv_mean, cv_error])
+    df = pd.DataFrame(d, columns=[*ps_cols, cv_mean, cv_error])
     df = df.loc[tags]
     return df
+
+@table
+@_check_speclabels_different
+def dataspecs_stats_error_table(
+        datasepecs_pseudorreplica_stats_error,
+        dataspecs_dataset_suptitle,
+        dataspecs_speclabel,
+        dataset_items:(type(None), list) = None,
+        ):
+    """Return a table with the stats errors of the pseudorreplica determination
+    of each dataspec"""
+    dfs = []
+    for d in datasepecs_pseudorreplica_stats_error:
+        df = pd.DataFrame(d, columns=ps_cols)
+        format_error_value_columns(df, ps_mean, ps_error)
+        format_error_value_columns(df, stats_halfone, err_halfone)
+        format_error_value_columns(df, stats_halfother, err_halfonother)
+
+        dfs.append(df)
+    table =  pd.concat(dfs, axis=1, keys=dataspecs_speclabel)
+    if dataset_items is not None:
+        table = table.loc[dataset_items]
+    return table
 
 @table
 def compare_determinations_table(compare_determinations_table_impl):
@@ -408,7 +465,6 @@ def compare_determinations_table(compare_determinations_table_impl):
     df[stats_cols] = df[stats_cols].applymap(digits2)
     return df
 
-
 dataspecs_as_datasets_pseudorreplicas_chi2 = collect('as_datasets_pseudorreplicas_chi2', ['dataspecs'])
 
 by_dataset_suptitle = collect(
@@ -417,28 +473,6 @@ by_dataset_suptitle = collect(
 )
 
 dataspecs_dataset_suptitle = collect('by_dataset_suptitle', ['dataspecs'])
-
-@make_argcheck
-def _check_speclabels_different(dataspecs_speclabel):
-    """This is needed for grouping dataframes (and because
-    generally indecated a bug)"""
-    return _check_list_different(dataspecs_speclabel, 'dataspecs_speclabel')
-
-@make_argcheck
-def _check_dataset_items(dataset_items, dataspecs_dataset_suptitle):
-    """Check that the dataset_items are legit."""
-    if dataset_items is None:
-        return
-    try:
-        s = set(dataset_items)
-    except Exception as e:
-        raise CheckError(f'dataset_items must be a list of strinfs: {e}') from e
-
-    flat = [item for l in dataspecs_dataset_suptitle for item in l]
-    d = s - set(flat)
-    if d:
-        raise CheckError(f"The floowing dataset_items are unrecognized: {d}")
-
 
 @_check_speclabels_different
 @_check_dataset_items
