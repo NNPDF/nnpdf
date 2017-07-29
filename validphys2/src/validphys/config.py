@@ -633,8 +633,6 @@ class Config(report.Config):
         return s
 
 
-
-
     def produce_fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset(self,
             fits_computed_psedorreplicas_chi2, prepend_total:bool=True,
             extra_sums=None):
@@ -681,6 +679,10 @@ class Config(report.Config):
             for es in extra_sums:
                 label = es['dataset_item']
                 components = es['components']
+                dss = set(df.index.levels[1])
+                diff = set(components) - dss
+                if diff:
+                    raise ConfigError(f"Unrecognized elements in extra_sum: {diff}")
                 s =  df.loc[(slice(None), components),:].groupby(level=3).sum()
                 total.append(
                     {'experiment_label': label,
@@ -688,9 +690,6 @@ class Config(report.Config):
                         'fits_replica_data_correlated': s,
                         'suptitle': label,
                      }]})
-
-
-
 
         return [*total, *expres]
 
