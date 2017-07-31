@@ -90,13 +90,17 @@ install(FILES ${PROJECT_SOURCE_DIR}/scripts/fitmanager
         DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 # install symlin
-set(sympath)
+set(datapath)
 execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE} nnpdf --variable=data_path
-  OUTPUT_VARIABLE sympath)
-string(STRIP "${sympath}" sympath)
-if(sympath)
-  install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${PROJECT_SOURCE_DIR}/data ${sympath})")
-  install(CODE "message(\"-- Created symlink: ${PROJECT_SOURCE_DIR}/data -> ${sympath}\")")
-else(sympath)
+  OUTPUT_VARIABLE datapath)
+string(STRIP "${datapath}" datapath)
+
+if(NOT datapath)
   message(FATAL_ERROR "unexpected: the variable data_path from libnnpdf is empty.")
-endif(sympath)
+endif()
+
+if(datapath STREQUAL ${PROJECT_SOURCE_DIR}/data)
+  message(WARNING "data path matches")
+else()
+  install(DIRECTORY ${PROJECT_SOURCE_DIR}/data/ DESTINATION ${datapath})
+endif()
