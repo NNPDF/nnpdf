@@ -111,7 +111,7 @@ void ATLASWZRAP11CFFilter::ReadData()
     f1 >> sysNames[i];
  
   const int nBins = 2;
-  const int ndataWZ[nBins] = {9,6};  // Data thresholds for Z_peak, Z_high
+  const int ndataWZ[nBins] = {9,15};  // Data thresholds for Z_peak, Z_high
   const double MWZ2[nBins]= {pow(98.0,2.0), pow(808.0,2.0)};   //Mass squared of Z_peak, Z_high
 
   int low_bin = 0;
