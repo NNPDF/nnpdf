@@ -13,6 +13,20 @@ This program requires `libnnpdf` and uses the CommonData structures defined ther
 The code is tagged and released when a major and stable status is achieved. 
 Tags and releases do not necessarily follows the NNPDF releases.
 
+### New data implementation rules
+
+Given a new data implementation request:
+
+1. 2 developers are assigned
+
+2. Each developer implements the data independently, without pushing its local branch to github
+
+3. When both implementations are ready, each developers open a pull request with his own version
+
+4. A referee is assigned, the referee must be a core developer
+
+5. The referee reads and run the code, check for code and data bugs and, decides the best implementation.
+
 ### Code development policy/rules
 
 Developers must never commit code structure modifications to master. The development pattern should follow these rules:
