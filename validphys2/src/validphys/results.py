@@ -15,7 +15,7 @@ import scipy.linalg as la
 import pandas as pd
 
 from NNPDF import ThPredictions, CommonData, Experiment
-from reportengine.checks import require_one, remove_outer, check_not_empty
+from reportengine.checks import require_one, remove_outer, check_not_empty, make_argcheck, CheckError
 from reportengine.table import table
 from reportengine import collect
 
@@ -575,71 +575,95 @@ def dataset_chi2_table(chi2_stats, dataset):
     return pd.DataFrame(chi2_stats, index=[dataset.name])
 
 
+
+#TODO: Possibly get rid of the per_point_data parameter and have separate
+#actions for absolute and relative tables.
 @table
-def fits_experiments_chi2_table(fits, fits_experiments, fits_experiment_chi2_data):
+def fits_experiments_chi2_table(fits, fits_experiments, fits_experiment_chi2_data,
+                                per_point_data:bool=True):
     """A table with the chi2 for each included experiment in the fits,
-    computed with the theory corresponding to each fit"""
+    computed with the theory corresponding to each fit.  If points_per_data is
+    True, the chi² will be shown divided by ndata.
+    Otherwise they will be absolute."""
     dfs = []
+    cols = ('ndata', '$\chi^2/ndata$') if per_point_data else ('ndata', '$\chi^2$')
     for fit, experiments, exps_chi2 in zip(fits, fits_experiments, fits_experiment_chi2_data):
         records = []
         for experiment, exp_chi2 in zip(experiments, exps_chi2):
+            mean_chi2 = exp_chi2.central_result.mean()
+            npoints = exp_chi2.ndata
             records.append(dict(
                 experiment=str(experiment),
-                npoints=exp_chi2.ndata,
-                mean_chi2 = exp_chi2.central_result.mean()/exp_chi2.ndata
+                npoints=npoints,
+                mean_chi2 = mean_chi2
+
             ))
         df = pd.DataFrame.from_records(records,
                  columns=('experiment', 'npoints', 'mean_chi2'),
                  index = ('experiment', )
              )
-        df.columns = pd.MultiIndex.from_product(([str(fit)], ['ndata', '$\chi^2/ndata$']))
+        if per_point_data:
+            df['mean_chi2'] /= df['npoints']
+        df.columns = pd.MultiIndex.from_product(([str(fit)], cols))
         dfs.append(df)
     res =  pd.concat(dfs, axis=1)
     return res
 
 @table
 def dataspecs_experiments_chi2_table(dataspecs_speclabel, dataspecs_experiments,
-                                     dataspecs_experiment_chi2_data):
+                                     dataspecs_experiment_chi2_data,
+                                     per_point_data:bool=True):
     """Same as fits_experiments_chi2_table but for an arbitrary list of dataspecs."""
     return fits_experiments_chi2_table(dataspecs_speclabel,
                                        dataspecs_experiments,
-                                       dataspecs_experiment_chi2_data)
+                                       dataspecs_experiment_chi2_data,
+                                       per_point_data=per_point_data)
 
 
 @table
-def fits_datasets_chi2_table(fits, fits_experiments, fits_chi2_data):
+def fits_datasets_chi2_table(fits, fits_experiments, fits_chi2_data,
+                             per_point_data:bool=True):
     """A table with the chi2 for each included dataset in the fits, computed
     with the theory corresponding to the fit. The result are indexed in two
-    levels by experiment and dataset."""
+    levels by experiment and dataset.  If points_per_data is True,
+    the chi² will be shown divided by ndata.
+    Otherwise they will be absolute."""
 
     chi2_it = iter(fits_chi2_data)
+
+    cols = ('ndata', '$\chi^2/ndata$') if per_point_data else ('ndata', '$\chi^2$')
 
     dfs = []
     for fit, experiments in zip(fits, fits_experiments):
         records = []
         for experiment in experiments:
             for dataset, chi2 in zip(experiment.datasets, chi2_it):
+                ndata = chi2.ndata
+
                 records.append(dict(
                     experiment=str(experiment),
                     dataset=str(dataset),
-                    npoints=chi2.ndata,
-                    mean_chi2 = chi2.central_result.mean()/chi2.ndata
+                    npoints=ndata,
+                    mean_chi2 = chi2.central_result.mean()
                 ))
+
 
         df = pd.DataFrame.from_records(records,
                  columns=('experiment', 'dataset', 'npoints', 'mean_chi2'),
                  index = ('experiment', 'dataset')
              )
-        df.columns = pd.MultiIndex.from_product(([str(fit)], ['ndata', '$\chi^2/ndata$']))
+        if per_point_data:
+            df['mean_chi2'] /= df['npoints']
+        df.columns = pd.MultiIndex.from_product(([str(fit)], cols))
         dfs.append(df)
     return pd.concat(dfs, axis=1)
 
 @table
 def dataspecs_datasets_chi2_table(dataspecs_speclabel, dataspecs_experiments,
-                                  dataspecs_chi2_data):
-    """Same as fits_datasets_chi2_table but for arbitrary dataspecs"""
+                                  dataspecs_chi2_data, per_point_data:bool=True):
+    """Same as fits_datasets_chi2_table but for arbitrary dataspecs."""
     return fits_datasets_chi2_table(dataspecs_speclabel, dataspecs_experiments,
-                                    dataspecs_chi2_data)
+                                    dataspecs_chi2_data, per_point_data=per_point_data)
 
 @table
 def fits_chi2_table(fits_experiments_chi2_table, fits_datasets_chi2_table):
@@ -666,6 +690,25 @@ def dataspecs_chi2_table(dataspecs_experiments_chi2_table,
     """Same as fits_chi2_table but for an arbitrary list of dataspecs"""
     return fits_chi2_table(dataspecs_experiments_chi2_table,
                            dataspecs_datasets_chi2_table)
+
+@make_argcheck
+def _check_two_dataspecs(dataspecs):
+    l = len(dataspecs)
+    if l != 2:
+        raise CheckError(f"Expecting exactly 2 dataspecs, not {l}")
+
+@table
+@_check_two_dataspecs
+def dataspecs_chi2_differences_table(dataspecs, dataspecs_chi2_table):
+    """Given two dataspecs, print the chi² (using dataspecs_chi2_table)
+    and the difference between the first and the second."""
+    df = dataspecs_chi2_table.copy()
+    #TODO: Make this mind the number of points somehow
+    diff = df.iloc[:,1] - df.iloc[:,3]
+    df['difference'] = diff
+    return df
+
+
 
 def total_experiments_chi2(experiments_chi2):
     """Return  the total chi²/ndata for the combination of all
