@@ -30,7 +30,7 @@ from NNPDF import pseudodata, single_replica, RandomGenerator
 
 from validphys.core import PDF
 from validphys.results import ThPredictionsResult, DataResult, chi2_breakdown_by_dataset
-from validphys.plotutils import plot_horizontal_errorbars, marker_iter_plot
+from validphys.plotutils import plot_horizontal_errorbars, marker_iter_plot, barplot
 
 log = logging.getLogger(__name__)
 
@@ -414,9 +414,10 @@ def compare_determinations_table_impl(
     #Use this to get the right sorting
     d  = defaultdict(list)
     tags = []
-    for (cv, error), tag in as_datasets_central_chi2:
+    for (cv, error,pull), tag in as_datasets_central_chi2:
         d[cv_mean][tag] = cv
         d[cv_error][tag] = error
+
         tags.append(tag)
 
     d.update(pseudorreplicas_stats_error)
@@ -424,6 +425,9 @@ def compare_determinations_table_impl(
     df = pd.DataFrame(d, columns=[*ps_cols, cv_mean, cv_error])
     df = df.loc[tags]
     return df
+
+
+
 
 @table
 @_check_speclabels_different
@@ -452,7 +456,7 @@ def dataspecs_stats_error_table(
 def compare_determinations_table(compare_determinations_table_impl):
     """Return ``compare_determinations_table_impl`` formatted nicely"""
     df = compare_determinations_table_impl
-    format_error_value_columns(df, "pseudirreplica mean",
+    format_error_value_columns(df, "pseudoreplica mean",
          "pseudorreplica error", inplace=True)
     format_error_value_columns(df, "central mean",
         "central error", inplace=True)
@@ -499,6 +503,10 @@ def datasepecs_as_value_error_table_impl(
         for distribution, tag in dets:
             d['mean'][tag] = np.mean(distribution)
             d['error'][tag] = np.std(distribution)
+            #Ok so need to access total mean and std then the pulls are done
+           # d['pull'][tag] = (np.mean(distribution)-tots_mean)/np.sqrt(np.std(distribution)**2 +tots_error**2)
+           # d['pull'][tag] = pulls
+         
             if display_n:
                 d['n'][tag] = len(distribution)
             taglist[tag] = None
@@ -513,6 +521,8 @@ def datasepecs_as_value_error_table_impl(
         ordered_keys = dataset_items
 
     df = df.loc[ordered_keys]
+    tots_error = df.loc['Total', (slice(None), 'error')].T.as_matrix()
+    tots_mean = df.loc['Total', (slice(None), 'mean')].T.as_matrix()
 
 
     return df
@@ -561,6 +571,57 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
     ax.set_title(r"$\alpha_S$ determination")
     ax.legend()
     return fig
+
+
+# Pull plots
+
+@figure
+def pull_plots_global_min(datasepecs_as_value_error_table_impl,
+        dataspecs_fits_as,
+        marktotal:bool=True):
+
+    df = datasepecs_as_value_error_table_impl
+    datalabels = df.columns.levels[1]
+    catlabels = list(df.index)
+    cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
+    errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
+    tots_error = df.loc['Total', (slice(None), 'error')].T.as_matrix()
+    tots_mean = df.loc['Total', (slice(None), 'mean')].T.as_matrix()
+
+    pulls_global_discard = (cvs[0]-tots_mean[0])/np.sqrt(errors[0]**2 +tots_error[0]**2)
+
+    fig, ax = barplot(pulls_global_discard, catlabels, " ", "horizontal")
+    ax.set_title(r"Pulls per experiment")
+    return fig
+
+
+@figure
+def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
+	    dataspecs_fits_as,
+	    marktotal:bool=True):
+	import matplotlib.mlab as mlab
+
+	df = datasepecs_as_value_error_table_impl
+	datalabels = df.columns.levels[1]
+	catlabels = list(df.index)
+	cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
+	errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
+	tots_error = df.loc['Total', (slice(None), 'error')].T.as_matrix()
+	tots_mean = df.loc['Total', (slice(None), 'mean')].T.as_matrix()
+	pulls_global_discard = (cvs[0]-tots_mean[0])/np.sqrt(errors[0]**2 +tots_error[0]**2)  
+
+	mean_cv = np.mean(pulls_global_discard)
+	std_dev = np.std(pulls_global_discard)
+	x = np.linspace(-4,4, 100)
+	print(mean_cv,std_dev)
+
+	fig, ax = plt.subplots()
+	ax.hist(pulls_global_discard,bins=8,normed=True)
+	ax.set_title(r"Histogram of pulls")
+	ax.set_xlabel(r"Pull")
+	ax.plot(x, mlab.normpdf(x, mean_cv, std_dev))
+	return fig
+
 
 
 @figure
