@@ -583,18 +583,12 @@ def pull_plots_global_min(datasepecs_as_value_error_table_impl,
     df = datasepecs_as_value_error_table_impl
     datalabels = df.columns.levels[1]
     catlabels = list(df.index)
-    cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
-    errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
-    tots_error = df.loc['Total', (slice(None), 'error')].T.as_matrix()
-    tots_mean = df.loc['Total', (slice(None), 'mean')].T.as_matrix()
+    cvs = df.loc[:, (slice(None), 'mean')].as_matrix()
+    errors = df.loc[:, (slice(None), 'error')].as_matrix()
+    tots_error = df.loc['Total', (slice(None), 'error')].as_matrix()
+    tots_mean = df.loc['Total', (slice(None), 'mean')].as_matrix()
 
-    # Map the total errors and mean onto a matrix the size of cvs and errors
-    ones_matrix = np.transpose(np.ones((cvs.shape)))
-    tots_mean = np.transpose(ones_matrix.dot(tots_mean))
-    tots_error = np.transpose(ones_matrix.dot(tots_error))
-
-
-    pulls_global_discard = (cvs-tots_mean)/np.sqrt(errors**2 +tots_error**2)
+    pulls_global_discard = ((cvs-tots_mean)/np.sqrt(errors**2 +tots_error**2)).T
 
     fig, ax = barplot(pulls_global_discard, catlabels, dataspecs_speclabel, "horizontal")
     ax.set_title(r"Pulls per experiment")
