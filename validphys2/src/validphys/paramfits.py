@@ -588,9 +588,9 @@ def pull_plots_global_min(datasepecs_as_value_error_table_impl,
     tots_error = df.loc['Total', (slice(None), 'error')].as_matrix()
     tots_mean = df.loc['Total', (slice(None), 'mean')].as_matrix()
 
-    pulls_global_discard = ((cvs-tots_mean)/np.sqrt(errors**2 +tots_error**2)).T
+    pulls = ((cvs-tots_mean)/np.sqrt(errors**2 +tots_error**2)).T
 
-    fig, ax = barplot(pulls_global_discard, catlabels, dataspecs_speclabel, "horizontal")
+    fig, ax = barplot(pulls, catlabels, dataspecs_speclabel, "horizontal")
     ax.set_title(r"Pulls per experiment")
     ax.legend()
     return fig
@@ -598,33 +598,33 @@ def pull_plots_global_min(datasepecs_as_value_error_table_impl,
 
 @figuregen
 def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
-	    dataspecs_fits_as,dataspecs_speclabel,dataset_items:(list, type(None))=None,
-        examples_per_item:int = 2,):
+	    dataspecs_fits_as,dataspecs_speclabel):
 
     """Bins the pulls computed in pull_plots_global_min and overlays
-    the normalised gaussian fit to the histogram of pulls"""
-
+    the normalised gaussian fit and KDE to the histogram of pulls"""
+ 
     df = datasepecs_as_value_error_table_impl
     datalabels = df.columns.levels[1]
     catlabels = list(df.index)
-    cvs = df.loc[:, (slice(None), 'mean')].as_matrix()
-    errors = df.loc[:, (slice(None), 'error')].as_matrix()
-    tots_error = df.loc['Total', (slice(None), 'error')].as_matrix()
-    tots_mean = df.loc['Total', (slice(None), 'mean')].as_matrix()
+    cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
+    errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
+    tots_error = df.loc['Total', (slice(None), 'error')].T.as_matrix()
+    tots_mean = df.loc['Total', (slice(None), 'mean')].T.as_matrix()
 
-    for i in range(len(cvs.T)):
-        pulls_global_discard = (cvs[i]-tots_mean[i])/np.sqrt(errors[i]**2 +tots_error[i]**2)
+    for label, i in zip(dataspecs_speclabel, range(len(cvs.T))):
+        pulls = (cvs[i]-tots_mean[i])/np.sqrt(errors[i]**2 +tots_error[i]**2)
+       # pulls_global_discard = (cvs-tots_mean)/np.sqrt(errors**2 +tots_error**2)
 
-        mean_cv = np.mean(pulls_global_discard)
-        std_dev = np.std(pulls_global_discard)
-        x = np.linspace(min(pulls_global_discard),max(pulls_global_discard), 100)
+        mean_cv = np.mean(pulls)
+        std_dev = np.std(pulls)
+        x = np.linspace(min(pulls),max(pulls), 100)
 
-        kde_pulls = stats.gaussian_kde(pulls_global_discard.T, bw_method='silverman')
+        kde_pulls = stats.gaussian_kde(pulls, bw_method='silverman')
 
         fig, ax = plt.subplots()
 
-        ax.hist(pulls_global_discard,normed=True)
-        ax.set_title(r"Histogram of pulls")
+        ax.hist(pulls,normed=True)
+        ax.set_title(f"Histogram of pulls for {label} dataset")
         ax.set_xlabel(r"Pull")
         ax.plot(x, kde_pulls(x), label="KDE of pulls")
         ax.plot(x, mlab.normpdf(x, mean_cv, std_dev),label="Normalised gaussian fit")
