@@ -573,7 +573,7 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
 
 
 # Pull plots
-def pulls_func(cv,alphas_global,error,error_global):
+def _pulls_func(cv,alphas_global,error,error_global):
     """Small definition to compute pulls"""
     return ((cv-alphas_global)/np.sqrt(error**2 +error_global**2))
 
@@ -592,7 +592,7 @@ def pull_plots_global_min(datasepecs_as_value_error_table_impl,
     tots_error = df.loc['Total', (slice(None), 'error')].as_matrix()
     tots_mean = df.loc['Total', (slice(None), 'mean')].as_matrix()
 
-    pulls = pulls_func(cvs,tots_mean,errors,tots_error).T
+    pulls = _pulls_func(cvs,tots_mean,errors,tots_error).T
 
     fig, ax = barplot(pulls, catlabels, dataspecs_speclabel, "horizontal")
     ax.set_title(r"Pulls per experiment")
@@ -615,7 +615,7 @@ def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
     tots_mean = df.loc['Total', (slice(None), 'mean')].T.as_matrix()
 
     for label, i in zip(dataspecs_speclabel, range(len(cvs))):
-        pulls = pulls_func(cvs[i],tots_mean[i],errors[i],tots_error[i])
+        pulls = _pulls_func(cvs[i],tots_mean[i],errors[i],tots_error[i])
 
         mean_cv = np.mean(pulls)
         std_dev = np.std(pulls)
@@ -624,10 +624,9 @@ def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
         kde_pulls = stats.gaussian_kde(pulls, bw_method='silverman')
         fig, ax = plt.subplots()
 
-        ax.hist(pulls,normed=True)
         ax.set_title(f"Histogram of pulls for {label} dataset")
         ax.set_xlabel(r"Pull")
-        ax.plot(x, kde_pulls(x), label="KDE of pulls")
+        ax.plot(x, kde_pulls(x), label="Kernal Density Estimation of pulls")
         ax.plot(x, mlab.normpdf(x, mean_cv, std_dev),label="Normalised gaussian fit")
         ax.legend()
 
