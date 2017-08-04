@@ -573,6 +573,10 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
 
 
 # Pull plots
+def pulls_func(cv,alphas_global,error,error_global):
+    """Small definition to compute pulls"""
+    return ((cv-alphas_global)/np.sqrt(error**2 +error_global**2))
+
 
 @figure
 def pull_plots_global_min(datasepecs_as_value_error_table_impl,
@@ -588,13 +592,12 @@ def pull_plots_global_min(datasepecs_as_value_error_table_impl,
     tots_error = df.loc['Total', (slice(None), 'error')].as_matrix()
     tots_mean = df.loc['Total', (slice(None), 'mean')].as_matrix()
 
-    pulls = ((cvs-tots_mean)/np.sqrt(errors**2 +tots_error**2)).T
+    pulls = pulls_func(cvs,tots_mean,errors,tots_error).T
 
     fig, ax = barplot(pulls, catlabels, dataspecs_speclabel, "horizontal")
     ax.set_title(r"Pulls per experiment")
-    ax.legend()
+    #ax.legend()
     return fig
-
 
 @figuregen
 def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
@@ -611,16 +614,14 @@ def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
     tots_error = df.loc['Total', (slice(None), 'error')].T.as_matrix()
     tots_mean = df.loc['Total', (slice(None), 'mean')].T.as_matrix()
 
-    for label, i in zip(dataspecs_speclabel, range(len(cvs.T))):
-        pulls = (cvs[i]-tots_mean[i])/np.sqrt(errors[i]**2 +tots_error[i]**2)
-       # pulls_global_discard = (cvs-tots_mean)/np.sqrt(errors**2 +tots_error**2)
+    for label, i in zip(dataspecs_speclabel, range(len(cvs))):
+        pulls = pulls_func(cvs[i],tots_mean[i],errors[i],tots_error[i])
 
         mean_cv = np.mean(pulls)
         std_dev = np.std(pulls)
         x = np.linspace(min(pulls),max(pulls), 100)
 
         kde_pulls = stats.gaussian_kde(pulls, bw_method='silverman')
-
         fig, ax = plt.subplots()
 
         ax.hist(pulls,normed=True)
@@ -631,8 +632,6 @@ def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
         ax.legend()
 
         yield fig
-
-
 
 @figure
 def plot_fitted_replicas_as_profiles_matched(fits_as,
