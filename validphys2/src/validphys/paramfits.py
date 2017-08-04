@@ -20,6 +20,8 @@ from collections import namedtuple, defaultdict, Counter
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import matplotlib.mlab as mlab
+import scipy.stats as stats
 
 from reportengine.figure import figure, figuregen
 from reportengine.table import table
@@ -30,7 +32,7 @@ from NNPDF import pseudodata, single_replica, RandomGenerator
 
 from validphys.core import PDF
 from validphys.results import ThPredictionsResult, DataResult, chi2_breakdown_by_dataset
-from validphys.plotutils import plot_horizontal_errorbars, marker_iter_plot
+from validphys.plotutils import plot_horizontal_errorbars, marker_iter_plot, barplot
 
 log = logging.getLogger(__name__)
 
@@ -417,6 +419,7 @@ def compare_determinations_table_impl(
     for (cv, error), tag in as_datasets_central_chi2:
         d[cv_mean][tag] = cv
         d[cv_error][tag] = error
+
         tags.append(tag)
 
     d.update(pseudorreplicas_stats_error)
@@ -424,6 +427,9 @@ def compare_determinations_table_impl(
     df = pd.DataFrame(d, columns=[*ps_cols, cv_mean, cv_error])
     df = df.loc[tags]
     return df
+
+
+
 
 @table
 @_check_speclabels_different
@@ -452,7 +458,7 @@ def dataspecs_stats_error_table(
 def compare_determinations_table(compare_determinations_table_impl):
     """Return ``compare_determinations_table_impl`` formatted nicely"""
     df = compare_determinations_table_impl
-    format_error_value_columns(df, "pseudirreplica mean",
+    format_error_value_columns(df, "pseudoreplica mean",
          "pseudorreplica error", inplace=True)
     format_error_value_columns(df, "central mean",
         "central error", inplace=True)
@@ -499,6 +505,8 @@ def datasepecs_as_value_error_table_impl(
         for distribution, tag in dets:
             d['mean'][tag] = np.mean(distribution)
             d['error'][tag] = np.std(distribution)
+
+         
             if display_n:
                 d['n'][tag] = len(distribution)
             taglist[tag] = None
@@ -513,6 +521,7 @@ def datasepecs_as_value_error_table_impl(
         ordered_keys = dataset_items
 
     df = df.loc[ordered_keys]
+
 
 
     return df
@@ -562,6 +571,66 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
     ax.legend()
     return fig
 
+
+# Pull plots
+def _pulls_func(cv,alphas_global,error,error_global):
+    """Small definition to compute pulls"""
+    return ((cv-alphas_global)/np.sqrt(error**2 +error_global**2))
+
+
+@figure
+def pull_plots_global_min(datasepecs_as_value_error_table_impl,
+        dataspecs_fits_as,dataspecs_speclabel):
+
+    """Plots the pulls of individual experiments as a barplot."""
+
+    df = datasepecs_as_value_error_table_impl
+    datalabels = df.columns.levels[1]
+    catlabels = list(df.index)
+    cvs = df.loc[:, (slice(None), 'mean')].as_matrix()
+    errors = df.loc[:, (slice(None), 'error')].as_matrix()
+    tots_error = df.loc['Total', (slice(None), 'error')].as_matrix()
+    tots_mean = df.loc['Total', (slice(None), 'mean')].as_matrix()
+
+    pulls = _pulls_func(cvs,tots_mean,errors,tots_error).T
+
+    fig, ax = barplot(pulls, catlabels, dataspecs_speclabel, "horizontal")
+    ax.set_title(r"Pulls per experiment")
+    #ax.legend()
+    return fig
+
+@figuregen
+def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
+	    dataspecs_fits_as,dataspecs_speclabel):
+
+    """Bins the pulls computed in pull_plots_global_min and overlays
+    the normalised gaussian fit and KDE to the histogram of pulls"""
+ 
+    df = datasepecs_as_value_error_table_impl
+    datalabels = df.columns.levels[1]
+    catlabels = list(df.index)
+    cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
+    errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
+    tots_error = df.loc['Total', (slice(None), 'error')].T.as_matrix()
+    tots_mean = df.loc['Total', (slice(None), 'mean')].T.as_matrix()
+
+    for label, i in zip(dataspecs_speclabel, range(len(cvs))):
+        pulls = _pulls_func(cvs[i],tots_mean[i],errors[i],tots_error[i])
+
+        mean_cv = np.mean(pulls)
+        std_dev = np.std(pulls)
+        x = np.linspace(min(pulls),max(pulls), 100)
+
+        kde_pulls = stats.gaussian_kde(pulls, bw_method='silverman')
+        fig, ax = plt.subplots()
+
+        ax.set_title(f"Histogram of pulls for {label} dataset")
+        ax.set_xlabel(r"Pull")
+        ax.plot(x, kde_pulls(x), label="Kernal Density Estimation of pulls")
+        ax.plot(x, mlab.normpdf(x, mean_cv, std_dev),label="Normalised gaussian fit")
+        ax.legend()
+
+        yield fig
 
 @figure
 def plot_fitted_replicas_as_profiles_matched(fits_as,
