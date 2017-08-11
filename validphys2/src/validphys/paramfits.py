@@ -175,11 +175,11 @@ def _get_parabola(asvals, chi2vals):
 
 
 
-@_check_badcurves
-def parabolic_as_determination(fits_as,
+def _parabolic_as_determination(fits_as,
         fits_replica_data_with_discarded_replicas,
         badcurves='discard'):
-    """Return the minima for alpha_s corresponding to the fitted curves."""
+    """This is like parabolic_as_determination but without the as_transform
+    functionality"""
     alphas = fits_as
 
     table = fits_replica_data_with_discarded_replicas.as_matrix()
@@ -202,6 +202,102 @@ def parabolic_as_determination(fits_as,
 
     minimums = np.asarray(minimums)
     return minimums
+
+@make_argcheck
+def _check_as_transform(as_transform):
+    values = (None, 'log', 'exp')
+    if not as_transform in values:
+        raise CheckError(f"The allowed valued values for "
+                         f"as_transform are {values}", str(as_transform),
+                         values[1:])
+
+@_check_badcurves
+@_check_as_transform
+def parabolic_as_determination(fits_as,
+        fits_replica_data_with_discarded_replicas,
+        badcurves='discard', as_transform:(str, type(None))=None):
+    """Return the minima for alpha_s corresponding to the fitted curves.
+    ``badcuves`` specifies what to do with concave replicas and can be one of
+    'discard', 'allminimum'
+    (which takes the minimum points
+    for *all* the replicas without fitting a parabola) or
+    'minimum' (which takes the minimum value for the concave replicas).
+
+    as_transform can be None, 'log' or 'exp' and is applied to the as_values
+    and then reversed for the minima.
+    """
+    if as_transform == 'log':
+        fits_as = np.log(fits_as)
+    elif as_transform == 'exp':
+        fits_as = np.exp(fits_as)
+    minimums = _parabolic_as_determination(
+                   fits_as,
+                   fits_replica_data_with_discarded_replicas, badcurves)
+    if as_transform == 'log':
+        minimums = np.exp(minimums)
+    elif as_transform == 'exp':
+        minimums = np.log(minimums)
+    return minimums
+
+@table
+def compare_aic(fits_as, fits_replica_data_with_discarded_replicas, suptitle):
+    """Compare the  Akaike information criterion (AIC) for a
+    parabolic and a cubic fit.  Note that
+    this does **not** yield the actual AIC score, but only the piece
+    neccessary to compare least squared fit (i.e. assuming
+    iid gaussian noise for all points). This is:
+
+        2*k + n*log(sum(residuals squared))
+
+    The mean and standard deviation are taken across curves.
+    Note that this always uses the *discard* criterion:
+    That is, it ignores the curves that have no minimim."""
+    alphas = fits_as
+    asarr = np.asarray(alphas)
+
+    aic2s = []
+    aic3s = []
+
+    table = fits_replica_data_with_discarded_replicas.as_matrix()
+    for row in table:
+        filt =  np.isfinite(row)
+        asfilt = asarr[filt]
+        rowfilt = row[filt]
+        n = len(rowfilt)
+
+        p2, res2, *stuff = np.polyfit(asfilt, rowfilt, 2, full=True)
+        if p2[0] <= 0:
+            pass
+            #log.warning(f"Concave parabola computing AIC in {suptitle}")
+        else:
+            aic2 = 2*4 + n*np.log(res2)
+            aic2s.append(aic2)
+
+        p3, res3, *stuff = np.polyfit(asfilt, rowfilt, 3, full=True)
+
+        extrema = np.roots(np.polyder(p3))
+        #Cast away the zero complex part
+        candidates = np.real(extrema[np.isreal(extrema)])
+        if not len(candidates):
+            pass
+            #log.warning(f"Bad cubic minimum computing AIC in {suptitle}")
+        else:
+            aic3 = 2*5 + n*np.log(res3)
+            aic3s.append(aic3)
+    v2, e2 = np.mean(aic2s), np.std(aic2s)
+    v3, e3 = np.mean(aic3s), np.std(aic3s)
+
+    qp  = "Quadratic polynomial"
+    cp = "Cubic polynomial"
+
+    df = pd.DataFrame({'mean': {qp: v2, cp: v3}, 'error': {qp: e2, cp:e3},
+                       'n':{qp: len(aic2s), cp: len(aic3s)}},
+                      columns=['mean', 'error', 'n'])
+    format_error_value_columns(df, 'mean', 'error', inplace=True)
+    return df
+
+
+
 
 
 def as_determination_from_central_chi2(fits_as, fits_total_chi2):
@@ -710,7 +806,8 @@ def dataspecs_chi2_by_dataset_dict(dataspecs_dataset_suptitle,
 
 
 
-
+#TODO: This should take parabolic_as_determination with the as_transforms
+#and so on, rather that refitting here.
 @figuregen
 @_check_dataset_items
 @check_positive('examples_per_item')
