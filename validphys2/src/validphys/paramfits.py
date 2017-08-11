@@ -603,7 +603,7 @@ def datasepecs_as_value_error_table_impl(
             d['mean'][tag] = np.mean(distribution)
             d['error'][tag] = np.std(distribution)
 
-         
+
             if display_n:
                 d['n'][tag] = len(distribution)
             taglist[tag] = None
@@ -702,10 +702,8 @@ def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
 
     """Bins the pulls computed in pull_plots_global_min and overlays
     the normalised gaussian fit and KDE to the histogram of pulls"""
- 
+
     df = datasepecs_as_value_error_table_impl
-    datalabels = df.columns.levels[1]
-    catlabels = list(df.index)
     cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
     errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
     tots_error = df.loc['Total', (slice(None), 'error')].T.as_matrix()
