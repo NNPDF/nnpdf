@@ -239,6 +239,10 @@ def parabolic_as_determination(fits_as,
         minimums = np.log(minimums)
     return minimums
 
+
+def _aic(residuals, n, k):
+    return 2*k + n*np.log(residuals) + 2*k*(k+1)/(n-k-1)
+
 @table
 def compare_aic(fits_as, fits_replica_data_with_discarded_replicas, suptitle):
     """Compare the  Akaike information criterion (AIC) for a
@@ -270,7 +274,7 @@ def compare_aic(fits_as, fits_replica_data_with_discarded_replicas, suptitle):
             pass
             #log.warning(f"Concave parabola computing AIC in {suptitle}")
         else:
-            aic2 = 2*4 + n*np.log(res2)
+            aic2 = _aic(res2, n, k=4)
             aic2s.append(aic2)
 
         p3, res3, *stuff = np.polyfit(asfilt, rowfilt, 3, full=True)
@@ -282,7 +286,7 @@ def compare_aic(fits_as, fits_replica_data_with_discarded_replicas, suptitle):
             pass
             #log.warning(f"Bad cubic minimum computing AIC in {suptitle}")
         else:
-            aic3 = 2*5 + n*np.log(res3)
+            aic3 = _aic(res3, n, k=5)
             aic3s.append(aic3)
     v2, e2 = np.mean(aic2s), np.std(aic2s)
     v3, e3 = np.mean(aic3s), np.std(aic3s)
@@ -291,13 +295,10 @@ def compare_aic(fits_as, fits_replica_data_with_discarded_replicas, suptitle):
     cp = "Cubic polynomial"
 
     df = pd.DataFrame({'mean': {qp: v2, cp: v3}, 'error': {qp: e2, cp:e3},
-                       'n':{qp: len(aic2s), cp: len(aic3s)}},
-                      columns=['mean', 'error', 'n'])
+                       'n minima':{qp: len(aic2s), cp: len(aic3s)}},
+                      columns=['mean', 'error', 'n minima'])
     format_error_value_columns(df, 'mean', 'error', inplace=True)
     return df
-
-
-
 
 
 def as_determination_from_central_chi2(fits_as, fits_total_chi2):
