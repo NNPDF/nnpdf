@@ -312,7 +312,7 @@ int main(int argc, char **argv)
     };
 
   APFEL::SetNumberOfGrids(1);
-  APFEL::SetExternalGrid(1, 115, 5, X1);
+  APFEL::SetExternalGrid(1, 115, 3, X1);
   APFEL::SetFastEvolution(false);
   APFEL::LockGrids(true);
   APFEL::InitializeAPFEL_DIS();
