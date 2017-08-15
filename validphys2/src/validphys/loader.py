@@ -17,6 +17,7 @@ import shutil
 import os
 import os.path as osp
 import urllib.parse as urls
+import mimetypes
 
 import yaml
 import requests
@@ -364,7 +365,32 @@ def _download_and_show(response, stream):
         sys.stdout.write('\n')
 
 def download_file(url, stream_or_path, make_parents=False):
-    response = requests.get(url, stream=True)
+    """Download a file and show a progress bar if the INFO log level is
+    enabled. If ``make_parents`` is ``True`` ``stream_or_path``
+    is path-like, all the parent folders will
+    be created."""
+    #Instead of the simple line below, we need to make requests not
+    #decompress two times the response. This is because of a bug in CERN's
+    #Apache that incorrectly sets the Content-Encodig header to gzip, even
+    #though it doesn't compress two times.
+    # See: http://mail-archives.apache.org/mod_mbox/httpd-dev/200207.mbox/%3C3D2D4E76.4010502@talex.com.pl%3E
+    # and e.g. https://bugzilla.mozilla.org/show_bug.cgi?id=610679#c30
+    # Once this problem is averted, the simple code should be used again.
+
+    #response = requests.get(url, stream=True)
+
+    #This is all to unset Accept-encoding
+    headers={'User-Agent': 'python-requests/2',
+                 'Accept': '*/*', 'Connection': 'keep-alive'}
+    #if it doesn't look like the url is already encoded, we can still request
+    #it to be compressed
+    if mimetypes.guess_type(url)[1] is None:
+        headers['Accept-Encoding'] = 'gzip, deflate'
+    req = requests.Request('GET', url, headers=headers)
+    #TODO: While we are on it, maybe reuse the session?
+    s = requests.Session()
+    response = s.send(req.prepare(), stream=True)
+
     response.raise_for_status()
 
     if isinstance(stream_or_path, (str, bytes, os.PathLike)):
@@ -380,6 +406,7 @@ def download_file(url, stream_or_path, make_parents=False):
 
 
 def download_and_extract(url, local_path):
+    """Download a compressed archive and then extract it to the given path"""
     name = url.split('/')[-1]
     with tempfile.NamedTemporaryFile(delete=False, suffix=name) as t:
         log.debug("Saving data to %s" , t.name)
@@ -389,21 +416,62 @@ def download_and_extract(url, local_path):
 
 
 
+
+def _key_or_loader_error(f):
+    @functools.wraps(f)
+    def f_(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except KeyError as e:
+            log.error(f"nnprofile is configured "
+                      f"improperly: Key {e} is missing! "
+                      f"Fix it at {nnpath.get_profile_path()}")
+            raise LoaderError("Cannot attempt download because "
+                              "nnprofile is configured improperly: "
+                              f"Missing key '{e}'") from e
+    return f_
+
+
 #TODO: Make this async someday
 class RemoteLoader(LoaderBase):
 
-    #TODO: Move these to nnprofile
-    fit_url = 'http://pcteserver.mi.infn.it/~nnpdf/fits/'
-    fit_index = 'fitdata.json'
+    @property
+    @_key_or_loader_error
+    def fit_urls(self):
+        return self.nnprofile['fit_urls']
 
-    theory_url = 'http://pcteserver.mi.infn.it/~apfelcomb/commondatatheory/'
-    theory_index = 'theorydata.json'
+    @property
+    @_key_or_loader_error
+    def fit_index(self):
+        return self.nnprofile['fit_index']
 
-    lhapdf_url = 'http://www.hepforge.org/archive/lhapdf/pdfsets/6.1/'
-    nnpdf_pdfs_url = 'http://pcteserver.mi.infn.it/~nnpdf/pdfs/'
-    nnpdf_pdfs_index = 'pdfdata.json'
+    @property
+    @_key_or_loader_error
+    def theory_urls(self):
+        return self.nnprofile['theory_urls']
 
-    def remote_files(self, url, index, thing='files'):
+    @property
+    @_key_or_loader_error
+    def theory_index(self):
+        return self.nnprofile['theory_index']
+
+    @property
+    @_key_or_loader_error
+    def nnpdf_pdfs_urls(self):
+        return self.nnprofile['nnpdf_pdfs_urls']
+
+    @property
+    @_key_or_loader_error
+    def nnpdf_pdfs_index(self):
+        return self.nnprofile['nnpdf_pdfs_index']
+
+    @property
+    @_key_or_loader_error
+    def lhapdf_urls(self):
+        return self.nnprofile['lhapdf_urls']
+
+
+    def _remote_files_from_url(self, url, index, thing='files'):
         index_url = url + index
         try:
             resp = requests.get(index_url)
@@ -418,22 +486,28 @@ class RemoteLoader(LoaderBase):
 
         return {file.split('.')[0] : url+file for file in info}
 
+    def remote_files(self, urls, index, thing='files'):
+        d = {}
+        for url in urls:
+            d.update(self._remote_files_from_url(url, index, thing))
+        return d
+
     @property
     @functools.lru_cache()
     def remote_fits(self):
-        return self.remote_files(self.fit_url, self.fit_index, thing="fits")
+        return self.remote_files(self.fit_urls, self.fit_index, thing="fits")
 
     @property
     @functools.lru_cache()
     def remote_theories(self):
         token = 'theory_'
-        rt = self.remote_files(self.theory_url, self.theory_index, thing="theories")
+        rt = self.remote_files(self.theory_urls, self.theory_index, thing="theories")
         return {k[len(token):]: v for k,v in rt.items()}
 
     @property
     @functools.lru_cache()
     def remote_nnpdf_pdfs(self):
-        return self.remote_files(self.nnpdf_pdfs_url, self.nnpdf_pdfs_index,
+        return self.remote_files(self.nnpdf_pdfs_urls, self.nnpdf_pdfs_index,
                                  thing="PDFs")
 
     @property
@@ -562,18 +636,19 @@ class FallbackLoader(Loader, RemoteLoader):
                 return orig(*args, **kwargs)
             except LoadFailedError as e:
                 saved_exception = e
-                log.info("Could not find a resource (%s): %s. "
-                "Attempting to download it.", resource, saved_exception)
+                log.info("Could not find a resource "
+                    f"({resource}): {saved_exception}. "
+                    f"Attempting to download it.")
                 try:
                     download(*args, **kwargs)
                 except RemoteLoaderError as e:
-                    log.error("Failed to download resource: %s",  e)
+                    log.error(f"Failed to download resource: {e}")
                     raise e
                 except LoadFailedError as e:
-                    log.error("Resource not in the remote repository: %s", e)
+                    log.error(f"Resource not in the remote repository: {e}")
                     raise saved_exception
                 except requests.RequestException as e:
-                    log.error("There was a problem with the connection: %s", e)
+                    log.error(f"There was a problem with the connection: {e}")
                     raise saved_exception from e
 
                 except Exception as e:

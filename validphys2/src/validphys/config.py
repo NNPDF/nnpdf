@@ -123,7 +123,7 @@ class Config(report.Config):
         corresponding theory folder is installed in te data directory."""
         try:
             return self.loader.check_theoryID(theoryID)
-        except FileNotFoundError as e:
+        except LoaderError as e:
             raise ConfigError(str(e), theoryID,
                               self.loader.available_theories,
                               display_alternatives='all')
