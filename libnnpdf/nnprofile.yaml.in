@@ -4,14 +4,22 @@ results_path: '@PROFILE_PREFIX@/results/'
 validphys_cache_path: '@PROFILE_PREFIX@/vp-cache/'
 
 # Remote resource locations
-fit_url: 'http://pcteserver.mi.infn.it/~nnpdf/fits/'
+fit_urls:
+    - 'http://pcteserver.mi.infn.it/~nnpdf/fits/'
+    - 'http://nnpdf.web.cern.ch/nnpdf/fits/'
+
 fit_index: 'fitdata.json'
 
-theory_url: 'http://pcteserver.mi.infn.it/~apfelcomb/commondatatheory/'
+theory_urls:
+    - 'http://pcteserver.mi.infn.it/~apfelcomb/commondatatheory/'
+    - 'http://nnpdf.web.cern.ch/nnpdf/tables/'
+
 theory_index: 'theorydata.json'
 
-lhapdf_url: 'http://www.hepforge.org/archive/lhapdf/pdfsets/6.1/'
-nnpdf_pdfs_url: 'http://pcteserver.mi.infn.it/~nnpdf/pdfs/'
+lhapdf_urls:
+    - 'http://www.hepforge.org/archive/lhapdf/pdfsets/6.1/'
+nnpdf_pdfs_urls:
+    - 'http://pcteserver.mi.infn.it/~nnpdf/pdfs/'
 nnpdf_pdfs_index: 'pdfdata.json'
 
 #Server side uploading locations
