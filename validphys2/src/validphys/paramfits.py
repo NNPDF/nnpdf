@@ -682,7 +682,6 @@ def pull_plots_global_min(datasepecs_as_value_error_table_impl,
     """Plots the pulls of individual experiments as a barplot."""
 
     df = datasepecs_as_value_error_table_impl
-    datalabels = df.columns.levels[1]
     catlabels = list(df.index)
     cvs = df.loc[:, (slice(None), 'mean')].as_matrix()
     errors = df.loc[:, (slice(None), 'error')].as_matrix()
