@@ -369,27 +369,18 @@ def download_file(url, stream_or_path, make_parents=False):
     enabled. If ``make_parents`` is ``True`` ``stream_or_path``
     is path-like, all the parent folders will
     be created."""
-    #Instead of the simple line below, we need to make requests not
-    #decompress two times the response. This is because of a bug in CERN's
+    #There is a bug in CERN's
     #Apache that incorrectly sets the Content-Encodig header to gzip, even
     #though it doesn't compress two times.
     # See: http://mail-archives.apache.org/mod_mbox/httpd-dev/200207.mbox/%3C3D2D4E76.4010502@talex.com.pl%3E
     # and e.g. https://bugzilla.mozilla.org/show_bug.cgi?id=610679#c30
-    # Once this problem is averted, the simple code should be used again.
-
-    #response = requests.get(url, stream=True)
-
-    #This is all to unset Accept-encoding
-    headers={'User-Agent': 'python-requests/2',
-                 'Accept': '*/*', 'Connection': 'keep-alive'}
-    #if it doesn't look like the url is already encoded, we can still request
+    #If it looks like the url is already encoded, we do not request
     #it to be compressed
-    if mimetypes.guess_type(url)[1] is None:
-        headers['Accept-Encoding'] = 'gzip, deflate'
-    req = requests.Request('GET', url, headers=headers)
-    #TODO: While we are on it, maybe reuse the session?
-    s = requests.Session()
-    response = s.send(req.prepare(), stream=True)
+    headers = {}
+    if mimetypes.guess_type(url)[1] is not None:
+        headers['Accept-Encoding'] = None
+
+    response = requests.get(url, stream=True, headers=headers)
 
     response.raise_for_status()
 
