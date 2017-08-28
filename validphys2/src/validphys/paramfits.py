@@ -643,8 +643,9 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
     cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
     errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
 
-    asvals = np.array(dataspecs_fits_as)
-    lims = np.min(asvals), np.max(asvals)
+    minlim = min(min(x for x in dataspecs_fits_as))
+    maxlim = max(max(x for x in dataspecs_fits_as))
+    lims = minlim, maxlim
 
 
     fig, ax = plot_horizontal_errorbars(
