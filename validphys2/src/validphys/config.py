@@ -682,7 +682,8 @@ class Config(report.Config):
                 dss = set(df.index.levels[1])
                 diff = set(components) - dss
                 if diff:
-                    raise ConfigError(f"Unrecognized elements in extra_sum: {diff}")
+                    bad_item = next(iter(diff))
+                    raise ConfigError(f"Unrecognized elements in extra_sum: {diff}", bad_item, dss)
                 s =  df.loc[(slice(None), components),:].groupby(level=3).sum()
                 total.append(
                     {'experiment_label': label,
