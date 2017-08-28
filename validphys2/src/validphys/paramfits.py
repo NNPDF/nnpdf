@@ -842,7 +842,7 @@ def plot_dataspecs_parabola_examples(
             im = marker_iter_plot()
             ax.set_title(f"Parabola example for {it} (nnfit_index={index})")
             for i, (label, vals) in enumerate(row.groupby(level=0)):
-                asvals = vals.index.levels[1]
+                asvals = vals.index.get_level_values(1)
                 color = f'C{i}'
                 y = vals.as_matrix()
                 ax.plot(asvals, y, **next(im), label=label,
