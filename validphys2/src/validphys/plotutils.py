@@ -172,7 +172,7 @@ def centered_range(n, value=0, distance=1):
 def barplot(values, collabels, datalabels, orientation='auto'):
     """The barplot as matplotlib should have it. It resizes on overflow.
     ``values``  should be one or two dimensional and should contain the
-    values for the barplot. ``colllabels`` must have as many element
+    values for the barplot. ``collabels`` must have as many element
     s ``values`` has rows, and contains the labels for each column in the
     bar plot.  ``datalabels`` should have as many elements as values has
     columns, and contains the labels for the individual items to be
@@ -185,6 +185,10 @@ def barplot(values, collabels, datalabels, orientation='auto'):
     """
     values = np.atleast_2d(values)
     ntypes, l = values.shape
+    lc = len(collabels)
+    if lc != l:
+        raise ValueError(f"Mismatch between the number of data points ({l}) and "
+                         f"the number axis labels ({lc})")
 
     width = 2
     #The tick positions
