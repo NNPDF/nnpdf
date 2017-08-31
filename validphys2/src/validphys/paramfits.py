@@ -675,6 +675,27 @@ def _pulls_func(cv,alphas_global,error,error_global):
     """Small definition to compute pulls"""
     return ((cv-alphas_global)/np.sqrt(error**2 +error_global**2))
 
+@figure
+def pulls_central(as_datasets_central_chi2,hide_total:bool=True):
+    """ Plots the pulls per experiment for the central results """
+
+    data, names = zip(*as_datasets_central_chi2)
+    cv, err = zip(*data)
+    pulls = list()    
+
+    if hide_total:
+        for i in range(1,len(cv)):
+            pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
+            names = [x for x in names if x!='Total']
+    else:
+        for i in range(0,len(cv)):
+            pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
+
+    fig, ax = barplot(pulls, names, " ", "horizontal")
+    ax.set_title(f"Total pulls")
+
+    return fig
+
 
 @figure
 def pull_plots_global_min(datasepecs_as_value_error_table_impl,
@@ -694,6 +715,33 @@ def pull_plots_global_min(datasepecs_as_value_error_table_impl,
     fig, ax = barplot(pulls, catlabels, dataspecs_speclabel, "horizontal")
     ax.set_title(r"Pulls per experiment")
     #ax.legend()
+    return fig
+
+@figure
+def alphas_shift(datasepecs_as_value_error_table_impl,
+        dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
+
+    """Plots NNLO - NLO alphas values for each experiment."""
+
+    df = datasepecs_as_value_error_table_impl
+
+    tots_error = df.loc['Total', (slice(None), 'error')].as_matrix()
+    tots_mean = df.loc['Total', (slice(None), 'mean')].as_matrix()
+    if hide_total:
+        df = df.loc[df.index != 'Total']
+    errors = df.loc[:, (slice(None), 'error')].as_matrix()
+    cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
+
+    catlabels = list(df.index)
+
+    alphas_shift = []
+
+    for i in range(0,len(cvs[0])):
+        alphas_shift.append(cvs[1][i]-cvs[0][i])
+
+    fig, ax = barplot(alphas_shift, catlabels, "dataspecs_speclabel", "horizontal")
+    ax.set_title(f"NNLO-NLO shifts (Total)")
+   # ax.legend()
     return fig
 
 @figuregen

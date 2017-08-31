@@ -197,6 +197,8 @@ def barplot(values, collabels, datalabels, orientation='auto'):
 
     #Rescale if we have too much data
     rescale = max(1, 1+(width*l*ntypes-15)*0.05)
+    # Trying to fix the width and scale of the barplots for the alphas paper
+    #x = np.linspace(0,ntypes*22,l)
     #Rescale if the labels are too long
     lbrescale = max(1, 1+0.04*(max(len(l) for l in collabels)-5))
 
@@ -212,6 +214,9 @@ def barplot(values, collabels, datalabels, orientation='auto'):
         infoaxis = ax.xaxis
         infolim = ax.set_xlim
         otheraxis = ax.yaxis
+         # Remove the x axis scale when finished with pull plots
+        otherlim = ax.set_xlim([-4,3.5])
+         #otherlim = ax.set_xlim([-0.5,0.9])
         rotation = 80
         def get_pos(val):
             if val >= 0:
