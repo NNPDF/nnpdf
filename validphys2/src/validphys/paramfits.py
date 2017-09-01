@@ -699,7 +699,7 @@ def pulls_central(as_datasets_central_chi2,hide_total:bool=True):
         for i in range(0,len(cv)):
             pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
 
-    fig, ax = barplot(pulls, names, " ", "horizontal")
+    fig, ax = barplot(pulls, names, " ", orientation="horizontal")
     ax.set_title(f"Total pulls")
 
     return fig
@@ -720,7 +720,7 @@ def pull_plots_global_min(datasepecs_as_value_error_table_impl,
 
     pulls = _pulls_func(cvs,tots_mean,errors,tots_error).T
 
-    fig, ax = barplot(pulls, catlabels, dataspecs_speclabel, "horizontal")
+    fig, ax = barplot(pulls, catlabels, dataspecs_speclabel, orientation="horizontal")
     ax.set_title(r"Pulls per experiment")
     #ax.legend()
     return fig
@@ -750,10 +750,13 @@ def alphas_shift(datasepecs_as_value_error_table_impl,
     alphas_shift = []
 
     for i in range(0,len(cvs[0])):
-        alphas_shift.append(cvs[1][i]-cvs[0][i])
+        #alphas_shift.append(cvs[1][i]-cvs[0][i])
+        alphas_shift.append(cvs.iloc[:,1] - cvs.iloc[:,0])
+
+    term1, term2 = dataspecs_speclabel
 
     fig, ax = barplot(alphas_shift, catlabels, " ", orientation = "horizontal")
-    ax.set_title(f"NNLO-NLO shifts (Total)")
+    ax.set_title(f"{term2} - {term1} shifts")
    # ax.legend()
     return fig
 
