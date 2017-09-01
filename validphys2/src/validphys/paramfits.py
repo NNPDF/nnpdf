@@ -689,8 +689,7 @@ def pulls_central(as_datasets_central_chi2,hide_total:bool=True):
     data, names = zip(*as_datasets_central_chi2)
     cv, err = zip(*data)
     pulls = list()    
-
-
+    print(cv[0],err[0])
     if hide_total:
         for i in range(1,len(cv)):
             pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
@@ -699,29 +698,32 @@ def pulls_central(as_datasets_central_chi2,hide_total:bool=True):
         for i in range(0,len(cv)):
             pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
 
-    fig, ax = barplot(pulls, names, " ", orientation="horizontal")
-    ax.set_title(f"Total pulls")
+    # This can probably be done better.. bit of a hack at the moment
+    fig, ax = barplot(pulls[1:9], names[1:9], " ", orientation="horizontal")
 
     return fig
 
-
 @figure
 def pull_plots_global_min(datasepecs_as_value_error_table_impl,
-        dataspecs_fits_as,dataspecs_speclabel):
+        dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
 
     """Plots the pulls of individual experiments as a barplot."""
 
     df = datasepecs_as_value_error_table_impl
+    tots_error = df.loc['Total', (slice(None), 'error')].as_matrix()
+    tots_mean = df.loc['Total', (slice(None), 'mean')].as_matrix()
+
+    if hide_total:
+        df = df.loc[df.index != 'Total']
+
     catlabels = list(df.index)
     cvs = df.loc[:, (slice(None), 'mean')].as_matrix()
     errors = df.loc[:, (slice(None), 'error')].as_matrix()
-    tots_error = df.loc['Total', (slice(None), 'error')].as_matrix()
-    tots_mean = df.loc['Total', (slice(None), 'mean')].as_matrix()
 
     pulls = _pulls_func(cvs,tots_mean,errors,tots_error).T
 
     fig, ax = barplot(pulls, catlabels, dataspecs_speclabel, orientation="horizontal")
-    ax.set_title(r"Pulls per experiment")
+    #ax.set_title(r"Pulls per experiment")
     #ax.legend()
     return fig
 
@@ -776,18 +778,21 @@ def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
     for label, i in zip(dataspecs_speclabel, range(len(cvs))):
         pulls = _pulls_func(cvs[i],tots_mean[i],errors[i],tots_error[i])
 
-        mean_cv = np.mean(pulls)
+        mean_pulls = np.mean(pulls)
         std_dev = np.std(pulls)
         x = np.linspace(min(pulls),max(pulls), 100)
 
         kde_pulls = stats.gaussian_kde(pulls, bw_method='silverman')
         fig, ax = plt.subplots()
 
-        ax.set_title(f"Histogram of pulls for {label} dataset")
+        #ax.set_title(f"Histogram of pulls for {label} dataset")
         ax.set_xlabel(r"Pull")
-        ax.plot(x, kde_pulls(x), label="Kernal Density Estimation of pulls")
-        ax.plot(x, mlab.normpdf(x, mean_cv, std_dev),label="Normalised gaussian fit")
-        ax.legend()
+        #ax.plot(x, kde_pulls(x), label="Kernal Density Estimation of pulls")
+        ax.hist(pulls,normed=True,bins=4)
+        print(mean_pulls,std_dev)
+        ax.grid(False)
+        ax.plot(x, mlab.normpdf(x, mean_pulls, std_dev),label="Normalised gaussian fit")
+        #ax.legend()
 
         yield fig
 

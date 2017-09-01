@@ -710,7 +710,7 @@ class Config(report.Config):
         return {'adapted_fits_chi2_table':  df}
 
     def produce_fits_central_chi2_by_experiment_and_dataset(self,
-            adapted_fits_chi2_table, prepend_total=True):
+            adapted_fits_chi2_table, prepend_total=True,extra_sums=None):
         """Take the table returned by
         ``fits_matched_pseudorreplicas_chi2_output`` and break it down
         by experiment. If `preprend_total` is True, the sum over experiments
@@ -746,6 +746,23 @@ class Config(report.Config):
                                    'suptitle':ds})
 
             expres.append(d)
+
+        if extra_sums:
+            for es in extra_sums:
+                label = es['dataset_item']
+                components = es['components']
+                dss = set(df.index.levels[1])
+                diff = set(components) - dss
+                if diff:
+                    bad_item = next(iter(diff))
+                    raise ConfigError(f"Unrecognised element in extra sum: {diff}", bad_item, dss)
+                s = df.sort_index().loc[(slice(None), components), :].sum()
+                total.append(
+                    {'experiment_label': label,
+                    'by_dataset': [{
+                        'fits_total_chi2': s,
+                        'suptitle': label,
+                     }]})
 
         return [*total, *expres]
 
