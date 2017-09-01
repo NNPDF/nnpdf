@@ -675,13 +675,21 @@ def _pulls_func(cv,alphas_global,error,error_global):
     """Small definition to compute pulls"""
     return ((cv-alphas_global)/np.sqrt(error**2 +error_global**2))
 
+@make_argcheck
+def _check_first_is_total(fits_central_chi2_by_experiment_and_dataset):
+    l = fits_central_chi2_by_experiment_and_dataset
+    if not l or l[0]['experiment_label'] != 'Total': 
+        raise CheckError("Expecting that the first experiment is the total. You may need to set prepend_total=True")
+
 @figure
+@_check_first_is_total
 def pulls_central(as_datasets_central_chi2,hide_total:bool=True):
     """ Plots the pulls per experiment for the central results """
 
     data, names = zip(*as_datasets_central_chi2)
     cv, err = zip(*data)
     pulls = list()    
+
 
     if hide_total:
         for i in range(1,len(cv)):
@@ -717,11 +725,16 @@ def pull_plots_global_min(datasepecs_as_value_error_table_impl,
     #ax.legend()
     return fig
 
+
 @figure
 def alphas_shift(datasepecs_as_value_error_table_impl,
         dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
 
     """Plots NNLO - NLO alphas values for each experiment."""
+
+    if not len(dataspecs_speclabel) == 2:
+        raise CheckError(f"Need 2 data specs")
+    
 
     df = datasepecs_as_value_error_table_impl
 
@@ -739,7 +752,7 @@ def alphas_shift(datasepecs_as_value_error_table_impl,
     for i in range(0,len(cvs[0])):
         alphas_shift.append(cvs[1][i]-cvs[0][i])
 
-    fig, ax = barplot(alphas_shift, catlabels, "dataspecs_speclabel", "horizontal")
+    fig, ax = barplot(alphas_shift, catlabels, " ", orientation = "horizontal")
     ax.set_title(f"NNLO-NLO shifts (Total)")
    # ax.legend()
     return fig
