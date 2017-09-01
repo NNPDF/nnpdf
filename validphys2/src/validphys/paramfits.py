@@ -699,7 +699,7 @@ def pulls_central(as_datasets_central_chi2,hide_total:bool=True):
             pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
 
     # This can probably be done better.. bit of a hack at the moment
-    fig, ax = barplot(pulls[1:9], names[1:9], " ", orientation="horizontal")
+    fig, ax = barplot(pulls[0:8], names[0:8], " ", orientation="horizontal")
 
     return fig
 
