@@ -669,17 +669,50 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
     ax.legend()
     return fig
 
+@make_argcheck
+def _check_first_is_total(fits_central_chi2_by_experiment_and_dataset):
+    l = fits_central_chi2_by_experiment_and_dataset
+    if not l or l[0]['experiment_label'] != 'Total': 
+        raise CheckError("Expecting that the first experiment is the total. You may need to set prepend_total=True")
+
+@figure
+@_check_first_is_total
+def plot_dataspecs_as_value_error_central(as_datasets_central_chi2,
+        marktotal:bool=True):
+    """Plot the result of ``plot_as_datasets_pseudorreplicas_chi2`` and
+    ``plot_as_exepriments_central_chi2`` together."""
+
+    datacentral, namescentral = zip(*as_datasets_central_chi2)
+    cvcentral, errcentral = zip(*datacentral)
+
+    reorder = [0,7,8,6,4,5,1,2,3]
+    cvcentral = cvcentral[0:9]
+    errcentral = errcentral[0:9]
+    namescentral = namescentral[0:9]
+    cvcentral = [cvcentral[i] for i in reorder]
+    errcentral = [errcentral[i] for i in reorder]
+    namescentral = [namescentral[i] for i in reorder]
+
+
+
+    fig, ax = plot_horizontal_errorbars(
+        [cvcentral], [errcentral], namescentral,
+        [r'Central']
+    )
+    ax.axvline(cvcentral[0], color=f'C{0}', linewidth=0.5, linestyle='--')
+
+    ax.set_xlabel(r"$\alpha_S$")
+    ax.set_xlim(0.110,0.125)
+    ax.set_title(r"$\alpha_S$ determination")
+    ax.legend()
+    return fig
+
 
 # Pull plots
 def _pulls_func(cv,alphas_global,error,error_global):
     """Small definition to compute pulls"""
     return ((cv-alphas_global)/np.sqrt(error**2 +error_global**2))
 
-@make_argcheck
-def _check_first_is_total(fits_central_chi2_by_experiment_and_dataset):
-    l = fits_central_chi2_by_experiment_and_dataset
-    if not l or l[0]['experiment_label'] != 'Total': 
-        raise CheckError("Expecting that the first experiment is the total. You may need to set prepend_total=True")
 
 @figure
 @_check_first_is_total
@@ -699,7 +732,58 @@ def pulls_central(as_datasets_central_chi2,hide_total:bool=True):
             pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
 
     # This can probably be done better.. bit of a hack at the moment
-    fig, ax = barplot(pulls[0:8], names[0:8], " ", orientation="horizontal")
+    reorder = [6,7,5,3,4,0,1,2]
+    pulls = pulls[0:8]
+    names = names[0:8]
+    pulls = [pulls[i] for i in reorder]
+    names = [names[i] for i in reorder]
+
+    fig, ax = barplot(pulls, names, " ", orientation="horizontal")
+
+    return fig
+
+@figure
+@_check_first_is_total
+def pull_gaussian_fit_central(as_datasets_central_chi2,
+        dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
+
+    """Bins the pulls and overlays
+    the normalised gaussian fit and KDE to the histogram of pulls"""
+
+    data, names = zip(*as_datasets_central_chi2)
+    cv, err = zip(*data)
+    pulls = list()    
+    print(cv[0],err[0])
+        
+    if hide_total:
+        for i in range(1,len(cv)):
+            pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
+            names = [x for x in names if x!='Total']
+    else:
+        for i in range(0,len(cv)):
+            pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
+
+    reorder = [6,7,5,3,4,0,1,2]
+    pulls = pulls[0:8]
+    names = names[0:8]
+    pulls = [pulls[i] for i in reorder]
+    names = [names[i] for i in reorder]   
+    print(names)
+
+    mean_pulls = np.mean(pulls)
+    std_dev = np.std(pulls)
+    x = np.linspace(min(pulls),max(pulls), 100)
+    #kde_pulls = stats.gaussian_kde(pulls, bw_method='silverman')
+    fig, ax = plt.subplots()
+
+    #ax.set_title(f"Histogram of pulls for {label} dataset")
+    ax.set_xlabel(r"Pull")
+    #ax.plot(x, kde_pulls(x), label="Kernal Density Estimation of pulls")
+    ax.hist(pulls,normed=True,bins=4)
+    print(mean_pulls,std_dev)
+    ax.grid(False)
+    ax.plot(x, mlab.normpdf(x, mean_pulls, std_dev),label="Normalised gaussian fit")
+    #ax.legend()
 
     return fig
 
@@ -764,16 +848,20 @@ def alphas_shift(datasepecs_as_value_error_table_impl,
 
 @figuregen
 def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
-	    dataspecs_fits_as,dataspecs_speclabel):
+	    dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
 
     """Bins the pulls computed in pull_plots_global_min and overlays
     the normalised gaussian fit and KDE to the histogram of pulls"""
 
     df = datasepecs_as_value_error_table_impl
-    cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
-    errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
     tots_error = df.loc['Total', (slice(None), 'error')].T.as_matrix()
     tots_mean = df.loc['Total', (slice(None), 'mean')].T.as_matrix()
+
+    if hide_total:
+        df = df.loc[df.index != 'Total']
+
+    cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
+    errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
 
     for label, i in zip(dataspecs_speclabel, range(len(cvs))):
         pulls = _pulls_func(cvs[i],tots_mean[i],errors[i],tots_error[i])
