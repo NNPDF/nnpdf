@@ -6,8 +6,12 @@ Contrary to `validphys.loader` this module consists of functions that take
 absolute paths, and return mostly dataframes.
 """
 import functools
+import logging
 
+import numpy as np
 import pandas as pd
+
+log = logging.getLogger(__name__)
 
 sane_load = functools.partial(pd.DataFrame.from_csv, sep='\t')
 
@@ -52,14 +56,36 @@ def load_adapted_fits_chi2_table(filename):
     df.columns = pd.MultiIndex.from_product([list(df.columns), ['chi2']])
     return df
 
+
+def set_actual_column_level0(df, new_levels):
+    """Set the fitst level of the index to new_levels.
+    Pandas makes it criminally difficult to do this properly."""
+    cols = df.columns
+    levels = np.asarray(cols.levels[0])
+    levels[cols.labels[0]] = new_levels
+    cols.set_levels(levels, inplace=True, level=0)
+
+
+
+
 #TODO: Find a better place for this function
-def combine_pseudorreplica_tables(dfs, combined_names):
+def combine_pseudorreplica_tables(dfs, combined_names, blacklist_datasets=None):
     """Return a table in the same format as perreplica_chi2_table with th   e
     minimum value of the chi² for each batch of fits."""
+
     for df in dfs:
-        df.columns = df.columns.set_levels(combined_names, level=0)
+        set_actual_column_level0(df, combined_names)
 
 
+    if blacklist_datasets:
+        m = np.ones(df.shape[0], dtype=bool)
+        for it in blacklist_datasets:
+            dsmask = (df.index.get_level_values(1) != it)
+            m &= dsmask
+        if m.all():
+            log.warning("Did not blacklist any dataset from the list {blacklisted_datasets}")
+        else:
+            df = df.loc[m]
 
     together = pd.concat(dfs, axis=1, keys=range(len(dfs)))
     res = together.min(axis=1, level=1, skipna=False)
