@@ -645,7 +645,7 @@ class Config(report.Config):
         by experiment. If `preprend_total` is True, the sum over experiments
         will be included.
 
-        This provides a namespace list with `suptilte` and
+        This provides a namespace list with `suptilte`, `ndata` and
         `fits_replica_data_correlated`.
 
         """
@@ -653,11 +653,13 @@ class Config(report.Config):
 
         if prepend_total:
             s =  df.loc[(slice(None), 'Total'),:].groupby(level=3).sum()
+            ndata = sum(n for (n,_) in df.loc[(slice(None), 'Total'),:].groupby(level=2))
             total = [
                 {'experiment_label': 'Total',
                 'by_dataset': [{
                     'fits_replica_data_correlated': s,
                     'suptitle': 'Total',
+                    'ndata': ndata
                  }]}]
         else:
             total = []
@@ -667,15 +669,17 @@ class Config(report.Config):
             d = {'experiment_label': exp}
             by_dataset = d['by_dataset'] = []
             for ds, dsdf in expdf.groupby(level=1):
+                ndata = sum(n for (n,_) in dsdf.groupby(level=2))
                 dsdf.index  = dsdf.index.droplevel([0,1,2])
+
                 if ds == 'Total':
                     if exp != 'Total':
                         ds = f'{exp} Total'
                     by_dataset.insert(0, {'fits_replica_data_correlated': dsdf,
-                                   'suptitle':ds})
+                                   'suptitle':ds, 'ndata':ndata})
                 else:
                     by_dataset.append({'fits_replica_data_correlated': dsdf,
-                                   'suptitle':ds})
+                                   'suptitle':ds, 'ndata':ndata})
 
             expres.append(d)
 
@@ -688,13 +692,18 @@ class Config(report.Config):
                 if diff:
                     bad_item = next(iter(diff))
                     raise ConfigError(f"Unrecognized elements in extra_sum: {diff}", bad_item, dss)
-                s =  df.loc[(slice(None), components),:].groupby(level=3).sum()
+
+                sliced = df.loc[(slice(None), components),:]
+                s =  sliced.groupby(level=3).sum()
+                ndata = sum(n for (n,_) in sliced.groupby(level=2))
                 total.append(
                     {'experiment_label': label,
                     'by_dataset': [{
                         'fits_replica_data_correlated': s,
                         'suptitle': label,
+                        'ndata': ndata
                      }]})
+
 
         return [*total, *expres]
 
