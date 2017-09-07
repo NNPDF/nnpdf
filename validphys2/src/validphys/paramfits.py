@@ -577,6 +577,39 @@ by_dataset_suptitle = collect(
 
 dataspecs_dataset_suptitle = collect('by_dataset_suptitle', ['dataspecs'])
 
+
+by_dataset_ndata = collect(
+    'ndata',
+    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
+)
+
+
+
+dataspecs_dataset_ndata = collect('by_dataset_ndata', ['dataspecs'])
+
+#TODO: Deprecate fixup dataset_items earlier
+@_check_speclabels_different
+@_check_dataset_items
+@table
+def dataspecs_ndata_table(
+            dataspecs_dataset_suptitle,
+            dataspecs_dataset_ndata,
+            dataspecs_speclabel,
+            dataset_items:(list, type(None))=None):
+    """Return a table with the same index as
+    datasepecs_as_value_error_table_impl with the number of points
+    per dataset."""
+    d = {}
+    for dslabel, datanames, ndatas in zip(dataspecs_speclabel,
+                                          dataspecs_dataset_suptitle,
+                                          dataspecs_dataset_ndata):
+        d[dslabel] = dict(zip(datanames, ndatas))
+    df = pd.DataFrame(d)
+    if dataset_items is not None:
+        df = df.loc[dataset_items]
+    return df
+
+
 @_check_speclabels_different
 @_check_dataset_items
 def datasepecs_as_value_error_table_impl(
