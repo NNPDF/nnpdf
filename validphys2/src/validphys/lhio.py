@@ -155,6 +155,9 @@ def new_pdf_from_indexes(pdf, indexes, set_name=None, folder=None,
     if extra_fields is not None:
         raise NotImplementedError()
 
+    if folder is None:
+        folder = pathlib.Path()
+
     set_root = folder/set_name
     if set_root.exists():
         log.warning("Target directory for new PDF already exists %s. "
