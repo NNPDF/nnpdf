@@ -47,7 +47,7 @@ public:
     // FiatLux setup
     _lux = new FiatLux{"../config/fiatlux.yml"};
     _lux->PlugAlphaQED(APFEL::AlphaQED); // using default Qref = me
-    _lux->PlugStructureFunctions(APFELF2, APFELFL);
+    _lux->PlugStructureFunctions(APFELF2, APFELFL, APFEL::F2LO);
   }
 
   ~lux()
