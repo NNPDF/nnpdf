@@ -203,6 +203,34 @@ def _parabolic_as_determination(fits_as,
     minimums = np.asarray(minimums)
     return minimums
 
+def quadratic_as_determination(fits_as,
+    fits_replica_data_with_discarded_replicas,
+    badcurves='discard'):
+    """This is like parabolic_as_determination but without the as_transform
+    functionality"""
+    alphas = fits_as
+
+    table = fits_replica_data_with_discarded_replicas.as_matrix()
+
+    quadratic = []
+    asarr = np.asarray(alphas)
+    for row in table:
+        filt =  np.isfinite(row)
+        a,b,c = np.polyfit(asarr[filt], row[filt], 2)
+        quadratic.append(a)
+        # if badcurves == 'allminimum':
+        #     quadratic.append(a)
+        # elif a>0:
+        #     quadratic.append(a)
+        # elif badcurves == 'discard':
+        #     pass
+        # elif badcurves == 'minimum':
+        #     quadratic.append(a)
+        # else:
+        #     raise RuntimeError("Unknown bad curves.")
+    quadratic = np.asarray(quadratic)
+    return quadratic
+
 @make_argcheck
 def _check_as_transform(as_transform):
     values = (None, 'log', 'exp')
@@ -300,6 +328,46 @@ def compare_aic(fits_as, fits_replica_data_with_discarded_replicas, suptitle):
     format_error_value_columns(df, 'mean', 'error', inplace=True)
     return df
 
+@table
+def quad_table(fits_as, fits_replica_data_with_discarded_replicas, suptitle):
+    """Compare the  Akaike information criterion (AIC) for a
+    parabolic and a cubic fit.  Note that
+    this does **not** yield the actual AIC score, but only the piece
+    neccessary to compare least squared fit (i.e. assuming
+    iid gaussian noise for all points). This is:
+
+        2*k + n*log(sum(residuals squared))
+
+    The mean and standard deviation are taken across curves.
+    Note that this always uses the *discard* criterion:
+    That is, it ignores the curves that have no minimim."""
+    alphas = fits_as
+    asarr = np.asarray(alphas)
+
+    quadratic_forms = []
+    linear_forms = []
+
+    table = fits_replica_data_with_discarded_replicas.as_matrix()
+    for row in table:
+        filt =  np.isfinite(row)
+        asfilt = asarr[filt]
+        rowfilt = row[filt]
+
+        a,b,c = np.polyfit(asarr[filt], row[filt], 2)
+        n = len(rowfilt)
+        quadratic_forms.append(a)
+
+    qp  = "Quadratic polynomial"
+    qq = np.mean(quadratic_forms)
+    sq = np.std(quadratic_forms)
+
+    df = pd.DataFrame({'mean': {qp: qq},'error':{qp:sq}},
+                    
+                      columns=['mean','error'])
+    format_error_value_columns(df, 'mean','error', inplace=True)
+    return df
+
+
 
 def as_determination_from_central_chi2(fits_as, fits_total_chi2):
     """Return the alpha_s from the minimim chi² and the Delta_chi²=1 error
@@ -326,6 +394,11 @@ def parabolic_as_determination_with_tag(parabolic_as_determination, suptitle):
     return parabolic_as_determination, suptitle
 
 
+def quadratic_as_determination_with_tag(quadratic_as_determination, suptitle):
+    """Convenience function to collect the arguments together. It is an identity"""
+    return quadratic_as_determination, suptitle
+
+
 def as_determination_from_central_chi2_with_tag(
         as_determination_from_central_chi2, suptitle):
     """Convenience function to collect the arguments together. It is an identity"""
@@ -333,15 +406,22 @@ def as_determination_from_central_chi2_with_tag(
     return as_determination_from_central_chi2, suptitle
 
 
+quadratic_datasets_pseudorreplicas_chi2 = collect(
+    quadratic_as_determination_with_tag,
+    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
+)
+
 as_datasets_pseudorreplicas_chi2 = collect(
     parabolic_as_determination_with_tag,
     ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
 )
 
+
 as_datasets_central_chi2 = collect(
     as_determination_from_central_chi2_with_tag,
     ['fits_central_chi2_by_experiment_and_dataset','by_dataset']
 )
+
 
 
 @figure
@@ -354,6 +434,7 @@ def plot_as_datasets_pseudorreplicas_chi2(as_datasets_pseudorreplicas_chi2):
     ax.set_xlabel(r"$\alpha_S$")
     ax.set_title(r"$\alpha_S$ from pseudorreplicas")
     return fig
+
 
 @figure
 def plot_as_exepriments_central_chi2(as_datasets_central_chi2):
@@ -572,10 +653,43 @@ dataspecs_as_datasets_pseudorreplicas_chi2 = collect('as_datasets_pseudorreplica
 
 by_dataset_suptitle = collect(
     'suptitle',
-    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
+    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset']
 )
 
 dataspecs_dataset_suptitle = collect('by_dataset_suptitle', ['dataspecs'])
+
+by_dataset_ndata = collect(
+     'ndata',
+     ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
+ )
+
+quad_as_datasets_pseudorreplicas_chi2 = collect('quadratic_datasets_pseudorreplicas_chi2',['dataspecs'])
+ 
+ 
+dataspecs_dataset_ndata = collect('by_dataset_ndata', ['dataspecs'])
+ 
+ #TODO: Deprecate fixup dataset_items earlier
+@_check_speclabels_different
+@_check_dataset_items
+@table
+def dataspecs_ndata_table(
+             dataspecs_dataset_suptitle,
+             dataspecs_dataset_ndata,
+             dataspecs_speclabel,
+             dataset_items:(list, type(None))=None):
+    """Return a table with the same index as
+    datasepecs_as_value_error_table_impl with the number of points
+    per dataset."""
+    d = {}
+    for dslabel, datanames, ndatas in zip(dataspecs_speclabel,
+                                           dataspecs_dataset_suptitle,
+                                           dataspecs_dataset_ndata):
+         d[dslabel] = dict(zip(datanames, ndatas))
+    df = pd.DataFrame(d)
+    if dataset_items is not None:
+        df = df.loc[dataset_items]
+    return df
+
 
 @_check_speclabels_different
 @_check_dataset_items
@@ -604,6 +718,7 @@ def datasepecs_as_value_error_table_impl(
             d['error'][tag] = np.std(distribution)
 
 
+
             if display_n:
                 d['n'][tag] = len(distribution)
             taglist[tag] = None
@@ -619,16 +734,62 @@ def datasepecs_as_value_error_table_impl(
 
     df = df.loc[ordered_keys]
 
-
-
     return df
 
+@_check_speclabels_different
+@_check_dataset_items
+def datasepecs_quad_table_impl(
+        quad_as_datasets_pseudorreplicas_chi2, dataspecs_speclabel,
+        dataspecs_dataset_suptitle,
+        dataset_items:(list, type(None)) = None,
+        display_n:bool = False,
+        ):
+    """Return a table with the mean and error of the as determinations across
+    dataspecs. If display_n is True, a column showing the number of points
+    will be added to the table"""
+    tables = []
+    #Use the fact that in py3.6 a dict with None values is like an ordered set
+    #TODO: A better way to build the dataframe?
+    taglist = {}
+    if display_n:
+        cols = ['mean', 'error', 'n']
+    else:
+        cols = ['mean', 'error']
+    for dets in quad_as_datasets_pseudorreplicas_chi2:
+        d = defaultdict(dict)
+
+        for distribution, tag in dets:
+            d['mean'][tag] = np.mean(distribution)
+            d['error'][tag] = np.std(distribution)
+
+            if display_n:
+                d['n'][tag] = len(distribution)
+            taglist[tag] = None
+
+        tables.append(pd.DataFrame(d, columns=cols))
+
+    df = pd.concat(tables, axis=1, keys=dataspecs_speclabel)
+    if dataset_items is None:
+        ordered_keys = list(taglist)
+    else:
+        ordered_keys = dataset_items
+
+    df = df.loc[ordered_keys]
+    return df
+
+# @table
+# def dataspecs_as_value_error_table(datasepecs_as_value_error_table_impl):
+#     """Return ``datasepecs_value_error_table_impl`` formatted nicely"""
+#     def f(x):
+#         return format_error_value_columns(x, x.columns[0], x.columns[1])
+#     return datasepecs_as_value_error_table_impl.groupby(level=0, axis=1).apply(f)
+
 @table
-def dataspecs_as_value_error_table(datasepecs_as_value_error_table_impl):
+def dataspecs_as_value_error_table(datasepecs_quad_table_impl):
     """Return ``datasepecs_value_error_table_impl`` formatted nicely"""
     def f(x):
         return format_error_value_columns(x, x.columns[0], x.columns[1])
-    return datasepecs_as_value_error_table_impl.groupby(level=0, axis=1).apply(f)
+    return datasepecs_quad_table_impl.groupby(level=0, axis=1).apply(f)
 
 @figure
 def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
@@ -665,6 +826,7 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
                 ax.axvline(cv[pos], color=f'C{i}', linewidth=0.5, linestyle='--')
 
     ax.set_xlabel(r"$\alpha_S$")
+    ax.set_xlim(0.110,0.130)
     ax.set_title(r"$\alpha_S$ determination")
     ax.legend()
     return fig
@@ -702,7 +864,7 @@ def plot_dataspecs_as_value_error_central(as_datasets_central_chi2,
     ax.axvline(cvcentral[0], color=f'C{0}', linewidth=0.5, linestyle='--')
 
     ax.set_xlabel(r"$\alpha_S$")
-    ax.set_xlim(0.110,0.125)
+    ax.set_xlim(0.110,0.130)
     ax.set_title(r"$\alpha_S$ determination")
     ax.legend()
     return fig
@@ -753,7 +915,7 @@ def pull_gaussian_fit_central(as_datasets_central_chi2,
     data, names = zip(*as_datasets_central_chi2)
     cv, err = zip(*data)
     pulls = list()    
-    print(cv[0],err[0])
+    print(cv[0],err[0],names[0])
         
     if hide_total:
         for i in range(1,len(cv)):
@@ -813,38 +975,108 @@ def pull_plots_global_min(datasepecs_as_value_error_table_impl,
 
 
 @figure
-def alphas_shift(datasepecs_as_value_error_table_impl,
-        dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
+def alphas_shift(datasepecs_as_value_error_table_impl,datasepecs_quad_table_impl,dataspecs_ndata_table,dataspecs_dataset_ndata,
+        dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True,hideNAN:bool=True):
 
     """Plots NNLO - NLO alphas values for each experiment."""
 
     if not len(dataspecs_speclabel) == 2:
         raise CheckError(f"Need 2 data specs")
     
-
+    df1 = dataspecs_ndata_table
+    # ndatapts = df1.loc[:,dataspecs_speclabel]
     df = datasepecs_as_value_error_table_impl
+    df2 = datasepecs_quad_table_impl
+
+
+    if hideNAN:
+        df = df.loc[df.index != 'HERACOMBNCEP460'] 
+        df = df.loc[df.index != 'HERACOMBNCEP575'] 
+        df = df.loc[df.index != 'CMSDY2D11']
+        df1 = df1.loc[df1.index != 'HERACOMBNCEP460']
+        df1 = df1.loc[df1.index != 'HERACOMBNCEP575']
+        df1 = df1.loc[df1.index != 'CMSDY2D11']
+
+ 
+    # df1 = df1.loc[df1.index != 'CMSTOPDIFF8TEVTTRAPNORM']
+    # df = df.loc[df.index != 'CMSTOPDIFF8TEVTTRAPNORM'] 
+    # df1 = df1.loc[df1.index != 'CHORUSNB']
+    # df = df.loc[df.index != 'CHORUSNB'] 
 
     tots_error = df.loc['Total', (slice(None), 'error')].as_matrix()
     tots_mean = df.loc['Total', (slice(None), 'mean')].as_matrix()
+
     if hide_total:
         df = df.loc[df.index != 'Total']
+        df1 = df1.loc[df1.index != 'Total']
+
+
     errors = df.loc[:, (slice(None), 'error')].as_matrix()
     cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
 
     catlabels = list(df.index)
 
+
+    # print(cvs,catlabels)
+
+    # ndataptsnlo = df1.iloc[:,0]
+
+    ndataptsnlo = df1.iloc[:,0]
+    ndataptsnnlo = df1.iloc[:,1]
+
+
+    print(df2)
+
+
+    weights_nlo = []
+    weights_nnlo = []
+
+    for i in range(0,len(ndataptsnlo)):
+        weights_nlo.append(ndataptsnlo[i])
+        weights_nnlo.append(ndataptsnnlo[i])
+
+
+    # print(np.sum(weights_nnlo),np.sum(weights_nlo))
+
+    # print(weights_nnlo)
+    catlabels = list(df.index)
+
     alphas_shift = []
 
+
     for i in range(0,len(cvs[0])):
-        #alphas_shift.append(cvs[1][i]-cvs[0][i])
-        alphas_shift.append(cvs.iloc[:,1] - cvs.iloc[:,0])
+        alphas_shift.append(cvs[1][i]-cvs[0][i])
+        #alphas_shift.append(cvs.iloc[:,1] - cvs.iloc[:,0])
 
     term1, term2 = dataspecs_speclabel
+    #print(ndatapts)
+    #print(alphas_shift)
+    shift_weighted_mean_nnlo = np.average(alphas_shift,weights=weights_nnlo)
+    shift_weighted_mean_nlo = np.average(alphas_shift,weights=weights_nlo)
+
+    shift_weighted_var_nnlo = np.average((alphas_shift-shift_weighted_mean_nnlo)**2,weights=weights_nnlo)
+    weighted_stddev_nnlo = np.sqrt(shift_weighted_var_nnlo)
+
+    shift_weighted_var_nlo = np.average((alphas_shift-shift_weighted_mean_nlo)**2,weights=weights_nlo)
+    weighted_stddev_nlo = np.sqrt(shift_weighted_var_nlo)
+
+    # print(catlabels,shift_weighted_mean)
+    # print(catlabels,num_points_per_catlabel)
+    
+    # print(shift_weighted_mean_nlo,np.mean(alphas_shift))
+    
+
+    # print(weighted_stddev_nlo,weighted_stddev_nnlo,np.std(alphas_shift))
 
     fig, ax = barplot(alphas_shift, catlabels, " ", orientation = "horizontal")
     ax.set_title(f"{term2} - {term1} shifts")
    # ax.legend()
     return fig
+
+
+
+
+
 
 @figuregen
 def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
