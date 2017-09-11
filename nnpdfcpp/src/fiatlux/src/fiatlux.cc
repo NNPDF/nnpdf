@@ -317,6 +317,7 @@ int main(int argc, char **argv)
   APFEL::LockGrids(true);
   APFEL::InitializeAPFEL_DIS();
   APFEL::CacheStructureFunctionsAPFEL(-1);
+  APFEL::CachePDFsAPFEL(-1);
 
   luxInstance().loadPDF(settings.GetPDFName(), replica);
   const int nfmax = stoi(settings.GetTheory(APFEL::kMaxNfPdf));
