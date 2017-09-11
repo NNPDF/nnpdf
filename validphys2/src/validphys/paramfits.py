@@ -328,46 +328,6 @@ def compare_aic(fits_as, fits_replica_data_with_discarded_replicas, suptitle):
     format_error_value_columns(df, 'mean', 'error', inplace=True)
     return df
 
-@table
-def quad_table(fits_as, fits_replica_data_with_discarded_replicas, suptitle):
-    """Compare the  Akaike information criterion (AIC) for a
-    parabolic and a cubic fit.  Note that
-    this does **not** yield the actual AIC score, but only the piece
-    neccessary to compare least squared fit (i.e. assuming
-    iid gaussian noise for all points). This is:
-
-        2*k + n*log(sum(residuals squared))
-
-    The mean and standard deviation are taken across curves.
-    Note that this always uses the *discard* criterion:
-    That is, it ignores the curves that have no minimim."""
-    alphas = fits_as
-    asarr = np.asarray(alphas)
-
-    quadratic_forms = []
-    linear_forms = []
-
-    table = fits_replica_data_with_discarded_replicas.as_matrix()
-    for row in table:
-        filt =  np.isfinite(row)
-        asfilt = asarr[filt]
-        rowfilt = row[filt]
-
-        a,b,c = np.polyfit(asarr[filt], row[filt], 2)
-        n = len(rowfilt)
-        quadratic_forms.append(a)
-
-    qp  = "Quadratic polynomial"
-    qq = np.mean(quadratic_forms)
-    sq = np.std(quadratic_forms)
-
-    df = pd.DataFrame({'mean': {qp: qq},'error':{qp:sq}},
-                    
-                      columns=['mean','error'])
-    format_error_value_columns(df, 'mean','error', inplace=True)
-    return df
-
-
 
 def as_determination_from_central_chi2(fits_as, fits_total_chi2):
     """Return the alpha_s from the minimim chi² and the Delta_chi²=1 error
@@ -777,15 +737,15 @@ def datasepecs_quad_table_impl(
     df = df.loc[ordered_keys]
     return df
 
-# @table
-# def dataspecs_as_value_error_table(datasepecs_as_value_error_table_impl):
-#     """Return ``datasepecs_value_error_table_impl`` formatted nicely"""
-#     def f(x):
-#         return format_error_value_columns(x, x.columns[0], x.columns[1])
-#     return datasepecs_as_value_error_table_impl.groupby(level=0, axis=1).apply(f)
+@table
+def dataspecs_as_value_error_table(datasepecs_as_value_error_table_impl):
+    """Return ``datasepecs_value_error_table_impl`` formatted nicely"""
+    def f(x):
+        return format_error_value_columns(x, x.columns[0], x.columns[1])
+    return datasepecs_as_value_error_table_impl.groupby(level=0, axis=1).apply(f)
 
 @table
-def dataspecs_as_value_error_table(datasepecs_quad_table_impl):
+def dataspecs_quad_value_error_table(datasepecs_quad_table_impl):
     """Return ``datasepecs_value_error_table_impl`` formatted nicely"""
     def f(x):
         return format_error_value_columns(x, x.columns[0], x.columns[1])
@@ -976,7 +936,7 @@ def pull_plots_global_min(datasepecs_as_value_error_table_impl,
 
 @figure
 def alphas_shift(datasepecs_as_value_error_table_impl,datasepecs_quad_table_impl,dataspecs_ndata_table,dataspecs_dataset_ndata,
-        dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True,hideNAN:bool=True):
+        dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True,hideNAN:bool=True,ndata_weight:bool=False):
 
     """Plots NNLO - NLO alphas values for each experiment."""
 
@@ -984,7 +944,6 @@ def alphas_shift(datasepecs_as_value_error_table_impl,datasepecs_quad_table_impl
         raise CheckError(f"Need 2 data specs")
     
     df1 = dataspecs_ndata_table
-    # ndatapts = df1.loc[:,dataspecs_speclabel]
     df = datasepecs_as_value_error_table_impl
     df2 = datasepecs_quad_table_impl
 
@@ -996,7 +955,9 @@ def alphas_shift(datasepecs_as_value_error_table_impl,datasepecs_quad_table_impl
         df1 = df1.loc[df1.index != 'HERACOMBNCEP460']
         df1 = df1.loc[df1.index != 'HERACOMBNCEP575']
         df1 = df1.loc[df1.index != 'CMSDY2D11']
-
+        df2 = df2.loc[df1.index != 'HERACOMBNCEP460']
+        df2 = df2.loc[df1.index != 'HERACOMBNCEP575']
+        df2 = df2.loc[df1.index != 'CMSDY2D11']
  
     # df1 = df1.loc[df1.index != 'CMSTOPDIFF8TEVTTRAPNORM']
     # df = df.loc[df.index != 'CMSTOPDIFF8TEVTTRAPNORM'] 
@@ -1009,44 +970,43 @@ def alphas_shift(datasepecs_as_value_error_table_impl,datasepecs_quad_table_impl
     if hide_total:
         df = df.loc[df.index != 'Total']
         df1 = df1.loc[df1.index != 'Total']
+        df2 = df2.loc[df.index != 'Total']
 
 
     errors = df.loc[:, (slice(None), 'error')].as_matrix()
     cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
-
-    catlabels = list(df.index)
-
-
-    # print(cvs,catlabels)
-
-    # ndataptsnlo = df1.iloc[:,0]
-
-    ndataptsnlo = df1.iloc[:,0]
-    ndataptsnnlo = df1.iloc[:,1]
+    quad_weights = df2.loc[:, (slice(None), 'mean')].T.as_matrix()
 
 
-    print(df2)
-
-
-    weights_nlo = []
-    weights_nnlo = []
-
-    for i in range(0,len(ndataptsnlo)):
-        weights_nlo.append(ndataptsnlo[i])
-        weights_nnlo.append(ndataptsnnlo[i])
-
-
-    # print(np.sum(weights_nnlo),np.sum(weights_nlo))
-
-    # print(weights_nnlo)
     catlabels = list(df.index)
 
     alphas_shift = []
 
-
     for i in range(0,len(cvs[0])):
         alphas_shift.append(cvs[1][i]-cvs[0][i])
-        #alphas_shift.append(cvs.iloc[:,1] - cvs.iloc[:,0])
+
+    weights_nlo = []
+    weights_nnlo = []
+
+    if ndata_weight:
+        
+        ndataptsnlo = df1.iloc[:,0]
+        ndataptsnnlo = df1.iloc[:,1]
+
+        for i in range(0,len(ndataptsnlo)):
+            weights_nlo.append(ndataptsnlo[i])
+            weights_nnlo.append(ndataptsnnlo[i])
+
+
+    else:  
+        for i in range(0,len(quad_weights.T)):
+            weights_nlo.append(quad_weights[0][i])
+            weights_nnlo.append(quad_weights[1][i])
+            # print(quad_weights[0][i])
+
+    # print(quad_weights[0])
+    print(cvs[0],quad_weights[0],catlabels)
+# print(len(quad_weights[0].T))
 
     term1, term2 = dataspecs_speclabel
     #print(ndatapts)
@@ -1063,20 +1023,15 @@ def alphas_shift(datasepecs_as_value_error_table_impl,datasepecs_quad_table_impl
     # print(catlabels,shift_weighted_mean)
     # print(catlabels,num_points_per_catlabel)
     
-    # print(shift_weighted_mean_nlo,np.mean(alphas_shift))
+    print(shift_weighted_mean_nlo,np.mean(alphas_shift))
     
 
-    # print(weighted_stddev_nlo,weighted_stddev_nnlo,np.std(alphas_shift))
+    print(weighted_stddev_nlo,weighted_stddev_nnlo,np.std(alphas_shift))
 
     fig, ax = barplot(alphas_shift, catlabels, " ", orientation = "horizontal")
     ax.set_title(f"{term2} - {term1} shifts")
    # ax.legend()
     return fig
-
-
-
-
-
 
 @figuregen
 def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
