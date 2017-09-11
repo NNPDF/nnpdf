@@ -206,8 +206,8 @@ def _parabolic_as_determination(fits_as,
 def quadratic_as_determination(fits_as,
     fits_replica_data_with_discarded_replicas,
     badcurves='discard'):
-    """This is like parabolic_as_determination but without the as_transform
-    functionality"""
+    """Return the values of the quadratic coefficients for each 
+    parabolic fit """
     alphas = fits_as
 
     table = fits_replica_data_with_discarded_replicas.as_matrix()
@@ -690,12 +690,10 @@ def datasepecs_quad_table_impl(
         dataset_items:(list, type(None)) = None,
         display_n:bool = False,
         ):
-    """Return a table with the mean and error of the as determinations across
-    dataspecs. If display_n is True, a column showing the number of points
+    """Return a table with the mean and error of the quadratic value of the parabolic 
+    determinations across dataspecs. If display_n is True, a column showing the number of points
     will be added to the table"""
     tables = []
-    #Use the fact that in py3.6 a dict with None values is like an ordered set
-    #TODO: A better way to build the dataframe?
     taglist = {}
     if display_n:
         cols = ['mean', 'error', 'n']
@@ -733,7 +731,7 @@ def dataspecs_as_value_error_table(datasepecs_as_value_error_table_impl):
 
 @table
 def dataspecs_quad_value_error_table(datasepecs_quad_table_impl):
-    """Return ``datasepecs_value_error_table_impl`` formatted nicely"""
+    """Return ``dataspecs_quad_value_error_table`` formatted nicely"""
     def f(x):
         return format_error_value_columns(x, x.columns[0], x.columns[1])
     return datasepecs_quad_table_impl.groupby(level=0, axis=1).apply(f)
@@ -957,15 +955,9 @@ def alphas_shift(datasepecs_as_value_error_table_impl,datasepecs_quad_table_impl
         for i in range(0,len(quad_weights.T)):
             weights_nlo.append(quad_weights[0][i])
             weights_nnlo.append(quad_weights[1][i])
-            # print(quad_weights[0][i])
 
-    # print(quad_weights[0])
-    print(cvs[0],quad_weights[0],catlabels,catlabels2)
-# print(len(quad_weights[0].T))
 
     term1, term2 = dataspecs_speclabel
-    #print(ndatapts)
-    #print(alphas_shift)
     shift_weighted_mean_nnlo = np.average(alphas_shift,weights=weights_nnlo)
     shift_weighted_mean_nlo = np.average(alphas_shift,weights=weights_nlo)
 
@@ -975,8 +967,6 @@ def alphas_shift(datasepecs_as_value_error_table_impl,datasepecs_quad_table_impl
     shift_weighted_var_nlo = np.average((alphas_shift-shift_weighted_mean_nlo)**2,weights=weights_nlo)
     weighted_stddev_nlo = np.sqrt(shift_weighted_var_nlo)
 
-    # print(catlabels,shift_weighted_mean)
-    # print(catlabels,num_points_per_catlabel)
     
     print(shift_weighted_mean_nlo,np.mean(alphas_shift))
     
