@@ -234,7 +234,9 @@ def barplot(values, collabels, datalabels, orientation='auto'):
         infoaxis = ax.yaxis
         infolim = ax.set_ylim
         otheraxis = ax.xaxis
-        rotation = 10
+        rotation = 0
+         # otherlim = ax.set_xlim([-3.8,4.8])
+        # otherlim = ax.set_xlim([-0.01,0.001])
         def get_pos(val):
             if val >= 0:
                 xytext = (5,0)
@@ -258,7 +260,7 @@ def barplot(values, collabels, datalabels, orientation='auto'):
         barfunc(thisx, row, width, label=datalabel)
         for xp,v in zip(thisx,row):
 
-            ax.annotate(f'{v:.2f}', xy=xytext(xp,v),
+            ax.annotate(f'{v:.6f}', xy=xytext(xp,v),
                          textcoords='offset points',
                         size='small', wrap=True, **get_pos(v)
                        )
