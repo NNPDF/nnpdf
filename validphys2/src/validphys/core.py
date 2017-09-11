@@ -14,7 +14,6 @@ import inspect
 import logging
 
 import numpy as np
-import scipy.stats
 
 from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
@@ -135,6 +134,8 @@ class PDF(TupleComp):
 
     @property
     def rescale_factor(self):
+        #This is imported here for performance reasons.
+        import scipy.stats
         if hasattr(self, "ErrorConfLevel"):
             if self.ErrorType == 'replicas':
                 raise ValueError("Attribute at %s 'ErrorConfLevel' doesn't "

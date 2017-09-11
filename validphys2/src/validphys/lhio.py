@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
 """
-Created on Tue Apr 21 22:00:01 2015
-
-@author: zah
-
 A module that reads and writes LHAPDF grids.
 """
 
@@ -45,10 +40,17 @@ def read_xqf_from_file(f):
 
 def read_xqf_from_lhapdf(pdf, replica, rep0grids):
     indexes = tuple(rep0grids.index)
+    #Use LHAPDF directly to avoid the insanely deranged replica 0 convention
+    #of libnnpdf.
+    #TODO: Find a way around this
+    import lhapdf
+
+    xfxQ = lhapdf.mkPDF(pdf.name, int(replica)).xfxQ
+
     vals = []
     for x in indexes:
         #TODO: Change this for a faster grid_values call
-        vals += [pdf.xfxQ(replica,x[3],x[1],x[2])]
+        vals += [xfxQ(x[3],x[1],x[2])]
     return pd.Series(vals, index = rep0grids.index)
 
 def read_all_xqf(f):
@@ -99,15 +101,14 @@ def _rep_to_buffer(out, header, subgrids):
                       newline=' ')
         out.write(b'\n ')
         #Reshape so printing is easy
-        reshaped = g.reshape((len(g.groupby(level=1))*len(g.groupby(level=2)),
+        reshaped = g.values.reshape((len(g.groupby(level=1))*len(g.groupby(level=2)),
                               len(g.groupby(level=3))))
         np.savetxt(out, reshaped, delimiter=" ", newline="\n ", fmt='%14.7E')
         out.write(sep)
 
-#TODO: Change root_name into something not stupid
-def write_replica(rep, root_name, header, subgrids):
+def write_replica(rep, set_root, header, subgrids):
     suffix = str(rep).zfill(4)
-    with open(root_name + "_" + suffix + ".dat", 'wb') as out:
+    with open(set_root / f'{set_root.name}_{suffix}.dat', 'wb') as out:
         _rep_to_buffer(out, header, subgrids)
 
 def load_all_replicas(pdf, db=None):
@@ -149,11 +150,38 @@ def _index_to_path(set_folder, set_name,  index):
     return set_folder/('%s_%04d.dat' % (set_name, index))
 
 
-def new_pdf_from_indexes(pdf, indexes, set_name=None, folder=None,
-                         extra_fields=None, installgrid=False):
+def new_pdf_from_indexes(
+        pdf, indexes, set_name=None, folder=None,
+        extra_fields=None, installgrid=False, use_rep0grid=False):
+    """Create a new PDF set from by selecting replicas from another one.
+
+    Parameters
+    -----------
+    pdf : validphys.core.PDF
+        An existng validphys PDF object from which the indexes will be
+        selected.
+    indexes : Iterable[int]
+        An iterable with integers corresponding to files in the LHAPDF set.
+        Note that replica 0 will be calculated for you as the mean of the
+        selected replicas.
+    set_name : str
+        The name of the new PDF set.
+    folder : str, bytes, os.PathLike
+        The path where the LHAPDF set will be written. Must exsist.
+    installgrid: bool, optional, default=``False``.
+        Whether to copy the grid to the LHAPDF path.
+    use_rep0grid: bool, optional, default=``False``
+        Whether to fill the original replica 0 grid when computing replica 0,
+        instead of relying that all grids are the same and averaging the
+        files directly. It is slower and will call LHAPDF to fill the grids,
+        but works for sets where the replicas have different grids.
+    """
 
     if extra_fields is not None:
         raise NotImplementedError()
+
+    if folder is None:
+        folder = pathlib.Path()
 
     set_root = folder/set_name
     if set_root.exists():
@@ -183,35 +211,38 @@ def new_pdf_from_indexes(pdf, indexes, set_name=None, folder=None,
                 new_file.write(line)
 
 
+    if use_rep0grid:
+        _, rep0grid = load_replica(pdf, 0)
+    else:
+        rep0grid = None
+
+
     loaded_grids = {}
     grids = []
 
-    old_header = None
     for newindex,oldindex in enumerate(indexes, 1):
         original_path = _index_to_path(original_folder, pdf, oldindex)
         new_path = _index_to_path(set_root, set_name, newindex)
-        #Need these explicit casts :(
-        shutil.copy(str(original_path), str(new_path))
+        shutil.copy(original_path, new_path)
         if oldindex in loaded_grids:
             grid = loaded_grids[oldindex]
         else:
-            header, grid = load_replica(pdf,oldindex)
-            if old_header is not None and not (header == old_header):
-                raise NotImplementedError("Cannot process grids with "
-                                          "different headers at this time")
-            else:
-                old_header = header
+            header, grid = load_replica(pdf,oldindex, rep0grids=rep0grid)
             loaded_grids[oldindex] = grid
         grids.append(grid)
-    M = rep_matrix(grids)
-    #TODO:Fix  this interface
-    dumb_path_root = str(set_root) + '/' + str(set_name)
-    write_replica(0, dumb_path_root, header, M.mean(axis=1))
+    #This takes care of failing if headers don't match
+    try:
+        M = rep_matrix(grids)
+    except ValueError as e:
+        raise ValueError("Null values found in replica grid matrix. "
+                         "This may indicate that the headers don't match. "
+                         "Try using use_rep0grid=True") from e
+    write_replica(0, set_root, header, M.mean(axis=1))
 
     if installgrid:
-        newpath = lhaindex.get_lha_datapath()+ '/' + set_name
-        log.info("Installing new PDF set at %s" % newpath)
-        shutil.copytree(str(set_root), newpath)
+        newpath = pathlib.Path(lhaindex.get_lha_datapath()) /  set_name
+        log.info(f"Installing new PDF set at {newpath}")
+        shutil.copytree(set_root, newpath)
 
 
 def hessian_from_lincomb(pdf, V, set_name=None, folder = None, db=None,
@@ -248,10 +279,9 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder = None, db=None,
             yaml.dump(extra_fields, out, default_flow_style=False)
 
     headers, grids = load_all_replicas(pdf, db=db)
-    hess_name = set_root + '/' + set_name
     result  = (big_matrix(grids).dot(V)).add(grids[0], axis=0, )
     hess_header = b"PdfType: error\nFormat: lhagrid1\n"
     for column in result.columns:
-        write_replica(column + 1, hess_name, hess_header, result[column])
+        write_replica(column + 1, set_root, hess_header, result[column])
 
     return set_root

@@ -615,7 +615,6 @@ dataspecs_dataset_ndata = collect('by_dataset_ndata', ['dataspecs'])
 
 quad_as_datasets_pseudorreplicas_chi2 = collect('quadratic_datasets_pseudorreplicas_chi2',['dataspecs'])
 
-
 #TODO: Deprecate fixup dataset_items earlier
 @_check_speclabels_different
 @_check_dataset_items

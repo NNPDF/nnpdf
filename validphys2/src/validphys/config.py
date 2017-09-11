@@ -509,8 +509,11 @@ class Config(report.Config):
         res.sort(key=lambda x: (x['experiment_name'], x['dataset_name']))
         return res
 
+    def parse_blacklist_datasets(self, datasets:list):
+        return datasets
+
     def produce_combine_dataspecs_pseudorreplicas_as(
-            self, dataspecs, how='min'):
+            self, dataspecs, how='min', blacklist_datasets=()):
         if not isinstance(dataspecs, Sequence):
             raise ConfigError("dataspecs should be a sequence of mappings, not "
                               f"{type(dataspecs).__name__}")
@@ -534,7 +537,8 @@ class Config(report.Config):
                 dfs.append(df)
                 fitnames.append(namelist)
         finalnames =  [min(ns, key=len) + '__combined' for ns in zip(*fitnames)]
-        res = tableloader.combine_pseudorreplica_tables(dfs, finalnames)
+        res = tableloader.combine_pseudorreplica_tables(dfs, finalnames,
+                blacklist_datasets=blacklist_datasets)
 
         return {'fits_computed_psedorreplicas_chi2': res}
 
