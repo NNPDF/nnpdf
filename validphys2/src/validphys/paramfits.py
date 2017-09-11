@@ -221,6 +221,7 @@ def quadratic_as_determination(fits_as,
     quadratic = np.asarray(quadratic)
     return quadratic
 
+
 @make_argcheck
 def _check_as_transform(as_transform):
     values = (None, 'log', 'exp')
@@ -343,11 +344,9 @@ def parabolic_as_determination_with_tag(parabolic_as_determination, suptitle):
     """Convenience function to collect the arguments together. It is an identity"""
     return parabolic_as_determination, suptitle
 
-
 def quadratic_as_determination_with_tag(quadratic_as_determination, suptitle):
     """Convenience function to collect the arguments together. It is an identity"""
     return quadratic_as_determination, suptitle
-
 
 def as_determination_from_central_chi2_with_tag(
         as_determination_from_central_chi2, suptitle):
@@ -356,23 +355,20 @@ def as_determination_from_central_chi2_with_tag(
     return as_determination_from_central_chi2, suptitle
 
 
-quadratic_datasets_pseudorreplicas_chi2 = collect(
-    quadratic_as_determination_with_tag,
-    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
-)
-
 as_datasets_pseudorreplicas_chi2 = collect(
     parabolic_as_determination_with_tag,
     ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
 )
-
 
 as_datasets_central_chi2 = collect(
     as_determination_from_central_chi2_with_tag,
     ['fits_central_chi2_by_experiment_and_dataset','by_dataset']
 )
 
-
+quadratic_datasets_pseudorreplicas_chi2 = collect(
+    quadratic_as_determination_with_tag,
+    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
+)
 
 @figure
 def plot_as_datasets_pseudorreplicas_chi2(as_datasets_pseudorreplicas_chi2):
@@ -384,7 +380,6 @@ def plot_as_datasets_pseudorreplicas_chi2(as_datasets_pseudorreplicas_chi2):
     ax.set_xlabel(r"$\alpha_S$")
     ax.set_title(r"$\alpha_S$ from pseudorreplicas")
     return fig
-
 
 @figure
 def plot_as_exepriments_central_chi2(as_datasets_central_chi2):
@@ -603,38 +598,39 @@ dataspecs_as_datasets_pseudorreplicas_chi2 = collect('as_datasets_pseudorreplica
 
 by_dataset_suptitle = collect(
     'suptitle',
-    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset']
+    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
 )
 
 dataspecs_dataset_suptitle = collect('by_dataset_suptitle', ['dataspecs'])
 
+
 by_dataset_ndata = collect(
-     'ndata',
-     ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
- )
+    'ndata',
+    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
+)
+
 
 quad_as_datasets_pseudorreplicas_chi2 = collect('quadratic_datasets_pseudorreplicas_chi2',['dataspecs'])
- 
- 
+
 dataspecs_dataset_ndata = collect('by_dataset_ndata', ['dataspecs'])
- 
- #TODO: Deprecate fixup dataset_items earlier
+
+#TODO: Deprecate fixup dataset_items earlier
 @_check_speclabels_different
 @_check_dataset_items
 @table
 def dataspecs_ndata_table(
-             dataspecs_dataset_suptitle,
-             dataspecs_dataset_ndata,
-             dataspecs_speclabel,
-             dataset_items:(list, type(None))=None):
+            dataspecs_dataset_suptitle,
+            dataspecs_dataset_ndata,
+            dataspecs_speclabel,
+            dataset_items:(list, type(None))=None):
     """Return a table with the same index as
     datasepecs_as_value_error_table_impl with the number of points
     per dataset."""
     d = {}
     for dslabel, datanames, ndatas in zip(dataspecs_speclabel,
-                                           dataspecs_dataset_suptitle,
-                                           dataspecs_dataset_ndata):
-         d[dslabel] = dict(zip(datanames, ndatas))
+                                          dataspecs_dataset_suptitle,
+                                          dataspecs_dataset_ndata):
+        d[dslabel] = dict(zip(datanames, ndatas))
     df = pd.DataFrame(d)
     if dataset_items is not None:
         df = df.loc[dataset_items]
@@ -666,7 +662,6 @@ def datasepecs_as_value_error_table_impl(
         for distribution, tag in dets:
             d['mean'][tag] = np.mean(distribution)
             d['error'][tag] = np.std(distribution)
-
 
 
             if display_n:
@@ -727,6 +722,7 @@ def datasepecs_quad_table_impl(
     df = df.loc[ordered_keys]
     return df
 
+
 @table
 def dataspecs_as_value_error_table(datasepecs_as_value_error_table_impl):
     """Return ``datasepecs_value_error_table_impl`` formatted nicely"""
@@ -740,6 +736,7 @@ def dataspecs_quad_value_error_table(datasepecs_quad_table_impl):
     def f(x):
         return format_error_value_columns(x, x.columns[0], x.columns[1])
     return datasepecs_quad_table_impl.groupby(level=0, axis=1).apply(f)
+
 
 @figure
 def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
@@ -776,45 +773,6 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
                 ax.axvline(cv[pos], color=f'C{i}', linewidth=0.5, linestyle='--')
 
     ax.set_xlabel(r"$\alpha_S$")
-    ax.set_xlim(0.110,0.130)
-    ax.set_title(r"$\alpha_S$ determination")
-    ax.legend()
-    return fig
-
-@make_argcheck
-def _check_first_is_total(fits_central_chi2_by_experiment_and_dataset):
-    l = fits_central_chi2_by_experiment_and_dataset
-    if not l or l[0]['experiment_label'] != 'Total': 
-        raise CheckError("Expecting that the first experiment is the total. You may need to set prepend_total=True")
-
-@figure
-@_check_first_is_total
-def plot_dataspecs_as_value_error_central(as_datasets_central_chi2,
-        marktotal:bool=True):
-    """Plot the result of ``plot_as_datasets_pseudorreplicas_chi2`` and
-    ``plot_as_exepriments_central_chi2`` together."""
-
-    datacentral, namescentral = zip(*as_datasets_central_chi2)
-    cvcentral, errcentral = zip(*datacentral)
-
-    reorder = [0,7,8,6,4,5,1,2,3]
-    cvcentral = cvcentral[0:9]
-    errcentral = errcentral[0:9]
-    namescentral = namescentral[0:9]
-    cvcentral = [cvcentral[i] for i in reorder]
-    errcentral = [errcentral[i] for i in reorder]
-    namescentral = [namescentral[i] for i in reorder]
-
-
-
-    fig, ax = plot_horizontal_errorbars(
-        [cvcentral], [errcentral], namescentral,
-        [r'Central']
-    )
-    ax.axvline(cvcentral[0], color=f'C{0}', linewidth=0.5, linestyle='--')
-
-    ax.set_xlabel(r"$\alpha_S$")
-    ax.set_xlim(0.110,0.130)
     ax.set_title(r"$\alpha_S$ determination")
     ax.legend()
     return fig
@@ -825,6 +783,11 @@ def _pulls_func(cv,alphas_global,error,error_global):
     """Small definition to compute pulls"""
     return ((cv-alphas_global)/np.sqrt(error**2 +error_global**2))
 
+@make_argcheck
+def _check_first_is_total(fits_central_chi2_by_experiment_and_dataset):
+    l = fits_central_chi2_by_experiment_and_dataset
+    if not l or l[0]['experiment_label'] != 'Total': 
+        raise CheckError("Expecting that the first experiment is the total. You may need to set prepend_total=True")
 
 @figure
 @_check_first_is_total
@@ -1026,7 +989,7 @@ def alphas_shift(datasepecs_as_value_error_table_impl,datasepecs_quad_table_impl
 
 @figuregen
 def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
-	    dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
+        dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
 
     """Bins the pulls computed in pull_plots_global_min and overlays
     the normalised gaussian fit and KDE to the histogram of pulls"""
@@ -1061,6 +1024,8 @@ def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
         #ax.legend()
 
         yield fig
+
+
 
 @figure
 def plot_fitted_replicas_as_profiles_matched(fits_as,
