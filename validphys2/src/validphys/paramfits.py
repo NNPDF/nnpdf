@@ -218,16 +218,6 @@ def quadratic_as_determination(fits_as,
         filt =  np.isfinite(row)
         a,b,c = np.polyfit(asarr[filt], row[filt], 2)
         quadratic.append(a)
-        # if badcurves == 'allminimum':
-        #     quadratic.append(a)
-        # elif a>0:
-        #     quadratic.append(a)
-        # elif badcurves == 'discard':
-        #     pass
-        # elif badcurves == 'minimum':
-        #     quadratic.append(a)
-        # else:
-        #     raise RuntimeError("Unknown bad curves.")
     quadratic = np.asarray(quadratic)
     return quadratic
 
@@ -970,7 +960,7 @@ def alphas_shift(datasepecs_as_value_error_table_impl,datasepecs_quad_table_impl
     if hide_total:
         df = df.loc[df.index != 'Total']
         df1 = df1.loc[df1.index != 'Total']
-        df2 = df2.loc[df.index != 'Total']
+        df2 = df2.loc[df2.index != 'Total']
 
 
     errors = df.loc[:, (slice(None), 'error')].as_matrix()
@@ -979,6 +969,7 @@ def alphas_shift(datasepecs_as_value_error_table_impl,datasepecs_quad_table_impl
 
 
     catlabels = list(df.index)
+    catlabels2 = list(df2.index)
 
     alphas_shift = []
 
@@ -1005,7 +996,7 @@ def alphas_shift(datasepecs_as_value_error_table_impl,datasepecs_quad_table_impl
             # print(quad_weights[0][i])
 
     # print(quad_weights[0])
-    print(cvs[0],quad_weights[0],catlabels)
+    print(cvs[0],quad_weights[0],catlabels,catlabels2)
 # print(len(quad_weights[0].T))
 
     term1, term2 = dataspecs_speclabel
