@@ -650,7 +650,6 @@ class Config(report.Config):
         if prepend_total:
             s =  df.loc[(slice(None), 'Total'),:].groupby(level=3).sum()
             ndata = sum(n for (n,_) in df.loc[(slice(None), 'Total'),:].groupby(level=2))
-
             total = [
                 {'experiment_label': 'Total',
                 'by_dataset': [{
@@ -689,7 +688,7 @@ class Config(report.Config):
                 if diff:
                     bad_item = next(iter(diff))
                     raise ConfigError(f"Unrecognized elements in extra_sum: {diff}", bad_item, dss)
-                #s =  df.loc[(slice(None), components),:].groupby(level=3).sum()
+
                 sliced = df.loc[(slice(None), components),:]
                 s =  sliced.groupby(level=3).sum()
                 ndata = sum(n for (n,_) in sliced.groupby(level=2))
@@ -700,6 +699,7 @@ class Config(report.Config):
                         'suptitle': label,
                         'ndata': ndata
                      }]})
+
 
         return [*total, *expres]
 
