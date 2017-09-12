@@ -22,7 +22,9 @@ all:	test
 test:
 	g++ -Wall $(TSTFLAGS) $(TSTLDFLAGS) applgrid-test-pp.cpp -o applgrid-test-pp
 	g++ -Wall $(TSTFLAGS) $(TSTLDFLAGS) applgrid-test-ppbar.cpp -o applgrid-test-ppbar
+	g++ -Wall $(TSTFLAGS) $(TSTLDFLAGS) applgrid-test-pd.cpp -o applgrid-test-pd
 
 clean:
 	rm -f applgrid-test-pp
 	rm -f applgrid-test-ppbar
+	rm -f applgrid-test-pd
