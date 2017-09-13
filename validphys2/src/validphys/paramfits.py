@@ -777,16 +777,49 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
     return fig
 
 
+@make_argcheck
+def _check_first_is_total(fits_central_chi2_by_experiment_and_dataset):
+    l = fits_central_chi2_by_experiment_and_dataset
+    if not l or l[0]['experiment_label'] != 'Total': 
+        raise CheckError("Expecting that the first experiment is the total. You may need to set prepend_total=True") 
+ 
+@figure
+@_check_first_is_total
+def plot_dataspecs_as_value_error_central(as_datasets_central_chi2,
+         marktotal:bool=True):
+    """Plot the result of ``plot_as_datasets_pseudorreplicas_chi2`` and
+    ``plot_as_exepriments_central_chi2`` together."""
+ 
+    datacentral, namescentral = zip(*as_datasets_central_chi2)
+    cvcentral, errcentral = zip(*datacentral)
+ 
+    reorder = [0,7,8,6,4,5,1,2,3]
+    cvcentral = cvcentral[0:9]
+    errcentral = errcentral[0:9]
+    namescentral = namescentral[0:9]
+    cvcentral = [cvcentral[i] for i in reorder]
+    errcentral = [errcentral[i] for i in reorder]
+    namescentral = [namescentral[i] for i in reorder]
+ 
+ 
+ 
+    fig, ax = plot_horizontal_errorbars(
+         [cvcentral], [errcentral], namescentral,
+         [r'Central']
+    )
+    ax.axvline(cvcentral[0], color=f'C{0}', linewidth=0.5, linestyle='--')
+ 
+    ax.set_xlabel(r"$\alpha_S$")
+    ax.set_xlim(0.110,0.125)
+    ax.set_title(r"$\alpha_S$ determination")
+    ax.legend()
+    return fig
+
 # Pull plots
 def _pulls_func(cv,alphas_global,error,error_global):
     """Small definition to compute pulls"""
     return ((cv-alphas_global)/np.sqrt(error**2 +error_global**2))
 
-@make_argcheck
-def _check_first_is_total(fits_central_chi2_by_experiment_and_dataset):
-    l = fits_central_chi2_by_experiment_and_dataset
-    if not l or l[0]['experiment_label'] != 'Total': 
-        raise CheckError("Expecting that the first experiment is the total. You may need to set prepend_total=True")
 
 @figure
 @_check_first_is_total
@@ -934,12 +967,22 @@ def alphas_shift(datasepecs_as_value_error_table_impl,datasepecs_quad_table_impl
     catlabels2 = list(df2.index)
 
     alphas_shift = []
+    nnlo_alphas_global_shift = []
+    nlo_alphas_global_shift = []
+    nnlo2_alphas_global_shift = []
+
 
     for i in range(0,len(cvs[0])):
         alphas_shift.append(cvs[1][i]-cvs[0][i])
+        nnlo2_alphas_global_shift.append((cvs[1][i]-tots_mean[1])**2)
+        nlo_alphas_global_shift.append((cvs[0][i]-tots_mean[0])**2)
+        nnlo_alphas_global_shift.append(cvs[1][i]-tots_mean[1])
+
 
     weights_nlo = []
     weights_nnlo = []
+    weights_nnlo_sq = []
+    weights_nlo_sq = []
 
     if ndata_weight:
         
@@ -955,23 +998,38 @@ def alphas_shift(datasepecs_as_value_error_table_impl,datasepecs_quad_table_impl
         for i in range(0,len(quad_weights.T)):
             weights_nlo.append(quad_weights[0][i])
             weights_nnlo.append(quad_weights[1][i])
+            weights_nnlo_sq.append((quad_weights[1][i])**2)
+            weights_nlo_sq.append((quad_weights[0][i])**2)
 
 
     term1, term2 = dataspecs_speclabel
+
     shift_weighted_mean_nnlo = np.average(alphas_shift,weights=weights_nnlo)
     shift_weighted_mean_nlo = np.average(alphas_shift,weights=weights_nlo)
+    shift_weighted_var_nnlo2 = np.average((alphas_shift-shift_weighted_mean_nnlo)**2,weights=weights_nnlo )
+    shift_weighted_var_nlo2 = np.average((alphas_shift-shift_weighted_mean_nlo)**2,weights=weights_nlo )
 
-    shift_weighted_var_nnlo = np.average((alphas_shift-shift_weighted_mean_nnlo)**2,weights=weights_nnlo)
+    # print(np.sqrt(shift_weighted_var_nnlo2),np.sqrt(shift_weighted_var_nlo2))
+    shift_weighted_var_nnlo = np.average(nnlo2_alphas_global_shift,weights=weights_nnlo)
+
+    nnlo_err = np.sqrt(shift_weighted_var_nnlo/(1-(np.sum(weights_nnlo_sq)/(np.sum(weights_nnlo))**2)))
+
     weighted_stddev_nnlo = np.sqrt(shift_weighted_var_nnlo)
 
-    shift_weighted_var_nlo = np.average((alphas_shift-shift_weighted_mean_nlo)**2,weights=weights_nlo)
+    shift_weighted_var_nlo = np.average(nlo_alphas_global_shift,weights=weights_nnlo)
     weighted_stddev_nlo = np.sqrt(shift_weighted_var_nlo)
 
-    
-    print(shift_weighted_mean_nlo,np.mean(alphas_shift))
-    
+    nlo_err = np.sqrt(shift_weighted_var_nlo/(1-(np.sum(weights_nlo_sq)/(np.sum(weights_nlo))**2)))
 
-    print(weighted_stddev_nlo,weighted_stddev_nnlo,np.std(alphas_shift))
+    weighted_diff_nlo = np.sqrt(np.sum((alphas_shift[i]*weights_nlo[i])**2))/np.sum(weights_nlo)
+
+    weighted_diff_nnlo = np.sqrt(np.sum((nnlo_alphas_global_shift[i]*weights_nnlo[i])**2))/np.sum(weights_nnlo)
+
+    # print(weighted_stddev_nlo,weighted_stddev_nnlo)
+    # print(weighted_diff_nlo,weighted_diff_nnlo)
+    print(nnlo_err)
+
+
 
     fig, ax = barplot(alphas_shift, catlabels, " ", orientation = "horizontal")
     ax.set_title(f"{term2} - {term1} shifts")
@@ -1124,14 +1182,14 @@ def plot_dataspecs_parabola_examples(
             log.warning("Length of table is less than examples_per_item")
             sampled = table
         else:
-            sampled = table.sample(examples_per_item, random_state=random_state)
+            sampled = table.sample(examples_per_item, random_state=1)
 
 
         for index, row in sampled.iterrows():
 
             fig, ax = plt.subplots()
             im = marker_iter_plot()
-            ax.set_title(f"Parabola example for {it} (nnfit_index={index})")
+            ax.set_title(f"{it}")
             for i, (label, vals) in enumerate(row.groupby(level=0)):
                 asvals = vals.index.get_level_values(1)
                 color = f'C{i}'
@@ -1142,6 +1200,9 @@ def plot_dataspecs_parabola_examples(
                 ax.plot(asvals, np.polyval(parabola,asvals), color=color,
                          linestyle='--', lw=0.5)
                 m = -b/2/a
+                ax.set_xlabel(f"$\\alpha_S$")
+                ax.set_ylabel(f"$\\chi^2$")
+
                 if asvals[0] < m < asvals[-1]:
                     ax.axvline(m ,  color=color, lw=0.4)
             ax.legend(  )
