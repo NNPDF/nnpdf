@@ -538,11 +538,12 @@ class RemoteLoader(LoaderBase):
             if p.is_symlink():
                 p.unlink()
             else:
-                shutil.rmtree(str(p))
+                shutil.rmtree(p)
         else:
-            p = osp.join(lhaindex.get_lha_datapath(), fitname)
+            p = pathlib.Path(lhaindex.get_lha_datapath()) / fitname
         gridpath = fitpath / 'nnfit' / fitname
-        shutil.copytree(str(gridpath), str(p))
+        p.symlink_to(gridpath, target_is_directory=True)
+
 
 
     def download_pdf(self, name):
@@ -554,13 +555,14 @@ class RemoteLoader(LoaderBase):
             pass
         else:
             if (fit.path/'nnfit').exists():
-                p = osp.join(lhaindex.get_lha_datapath(), fit.name)
+                p = pathlib.Path(lhaindex.get_lha_datapath()) / fit.name
                 log.info("Found existing fit with the same name as the "
-                "requested PDF (%s). Copying the grid to the LHAPDF path (%s).",
+                "requested PDF (%s). Symlinking the grid to the LHAPDF path (%s).",
                 name, p)
 
                 gridpath = fit.path / 'nnfit' / fit.name
-                shutil.copytree(str(gridpath), str(p))
+                p.symlink_to(gridpath)
+
                 return
 
         #It would be good to use the LHAPDF command line, except that it does
