@@ -82,12 +82,12 @@ void SLACPFilter::ReadData()
     fSys[i][0].name = "UNCORR";
     
     fSys[i][1].mult = 2.1;  //absnorm
-    fSys[i][1].add = fSys[i][0].mult*fData[i]*1e-2;
+    fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
     fSys[i][1].type = MULT;
     fSys[i][1].name = "SLACNORM";
     
     fSys[i][2].mult = relnor;     //relnorm
-    fSys[i][2].add = fSys[i][1].mult*fData[i]*1e-2;
+    fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
     fSys[i][2].type = MULT;
     fSys[i][2].name = "SLACRELNORM";
   }
@@ -177,12 +177,12 @@ void SLACDFilter::ReadData()
     fSys[i][0].name = "UNCORR";
     
     fSys[i][1].mult = 1.7;  //absnorm
-    fSys[i][1].add = fSys[i][0].mult*fData[i]*1e-2;
+    fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
     fSys[i][1].type = MULT;
     fSys[i][1].name = "SLACNORM";
     
     fSys[i][2].mult = -relnor;     //relnorm
-    fSys[i][2].add = fSys[i][1].mult*fData[i]*1e-2;
+    fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
     fSys[i][2].type = MULT;
     fSys[i][2].name = "SLACRELNORM";
   }
