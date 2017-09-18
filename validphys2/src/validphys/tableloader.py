@@ -88,22 +88,31 @@ def combine_pseudorreplica_tables(dfs, combined_names, blacklist_datasets=None):
             df = df.loc[m]
 
     together = pd.concat(dfs, axis=1, keys=range(len(dfs)))
-    res = together.min(axis=1, level=1, skipna=False)
-    res.columns = dfs[0].columns
 
-
-    #Kind of horrible. What we do is to select the total, collapse the replica
-    #index (min could really be anything) and sum across the index.
     total = together.loc[(slice(None), 'Total'), :]
-    #Note this is NOT the same as the sum of the minima.
-    total_chis =  total.groupby(level=3).sum().min(axis=1, level=1, skipna=False)
-    ntotal = total.min(level=(0,1,2)).index.get_level_values(2).get_values().sum()
-    total_index = pd.MultiIndex.from_product(
-            [['Total'], ['Total'], [ntotal], total_chis.index],
-            names = res.index.names)
-    total_chis.index = total_index
-    total_chis.columns = res.columns
-    res = pd.concat([res, total_chis])
+
+    total_chis =  total.groupby(level=3).sum()
+
+    #Note, asarray is needed because it ignores NANs otherwise.
+    argmin = lambda x: pd.Series(np.argmin(np.asarray(x), axis=1), index=x.index)
+
+    best_replicas = total_chis.groupby(axis=1, level=1).apply(argmin)
+    gb = together.groupby(axis=1, level=1)
+
+    def inner_select(df, indexes):
+        return df.iloc[:,indexes[df.name]]
+
+
+    def select_best_replicas(df):
+        indexes = best_replicas[df.name]
+        return df.groupby(level=3).apply(inner_select, indexes=indexes)
+
+    res = gb.apply(select_best_replicas)
+    res.index = res.index.droplevel(0)
+    res.sort_index(inplace=True)
+
+    #TODO: Why in earth did I decide to keep this?!
+    res.columns = pd.MultiIndex.from_product((res.columns, ['chi2']))
 
 
 
