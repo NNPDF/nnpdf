@@ -403,9 +403,12 @@ def download_and_extract(url, local_path):
         log.debug("Saving data to %s" , t.name)
         download_file(url, t)
     log.info("Extracting archive to %s" , local_path)
-    shutil.unpack_archive(t.name, extract_dir=str(local_path))
-
-
+    try:
+        shutil.unpack_archive(t.name, extract_dir=str(local_path))
+    except:
+        log.error(f"The original archive at {t.name} was only extracted "
+                  f"partially at \n{local_path}")
+        raise
 
 
 def _key_or_loader_error(f):
