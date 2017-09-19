@@ -712,6 +712,46 @@ class Config(report.Config):
 
         return [*total, *expres]
 
+    def _breakup_by_dataset_item(self, l, dataset_items):
+        if dataset_items is None:
+            return [{**expdict, **dsdict}
+                        for expdict in l for dsdict in expdict['by_dataset']]
+
+        positions = {ds: pos for ds,pos in zip(dataset_items, range(len(dataset_items)))}
+        #NOTE: If you want duplicates for some reason, you'll need to rewrite
+        #this algorithm.
+        if len(positions) != len(dataset_items):
+            raise ConfigError("'dataset_items' cannot have duplicates")
+
+        res = {}
+
+        for expdict in l:
+            for dsdict in expdict['by_dataset']:
+                dsname = dsdict['suptitle']
+                if dsname in positions:
+                    res[positions[dsname]] = {**expdict, **dsdict}
+                    del positions[dsname]
+        if positions:
+            raise ConfigError(f"Unrecognized dataset_items: {list(positions)}")
+        return [res[index] for index in range(len(dataset_items))]
+
+
+    def produce_fits_matched_pseudorreplicas_chi2_by_dataset_item(
+            self,
+            fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset,
+            dataset_items:(list,type(None)) = None):
+        """Reorder, filter and flatten the result of
+        fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset with the
+        dataset_items list. If it's not provided, this is eqivalent to:
+        fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset::by_dataset
+        Otherwise, the dictionaries will be returned in the order they appear
+        in dataset_items, if they appear.
+        """
+        l = fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset
+        return self._breakup_by_dataset_item(l, dataset_items)
+
+
+
     def parse_fits_chi2_paramfits_output(self, fname:str, config_rel_path):
         """Load the output of ``fits_chi2_table`` adapted to suit the
         ``paramfits`` module. The fit names must be provided explicitly."""
@@ -769,5 +809,16 @@ class Config(report.Config):
 
         return [*total, *expres]
 
-
-
+    def produce_fits_central_chi2_by_dataset_item(
+            self,
+            fits_central_chi2_by_experiment_and_dataset,
+            dataset_items:(list,type(None)) = None):
+        """Reorder, filter and flatten the result of
+        fits_central_chi2_by_experiment_and_dataset with the
+        dataset_items list. If it's not provided, this is eqivalent to:
+        fits_central_chi2_by_experiment_and_dataset::by_dataset
+        Otherwise, the dictionaries will be returned in the order they appear
+        in dataset_items, if they appear.
+        """
+        l = fits_central_chi2_by_experiment_and_dataset
+        return self._breakup_by_dataset_item(l, dataset_items)
