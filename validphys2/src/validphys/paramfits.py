@@ -142,7 +142,7 @@ def plot_fits_as_profile(fits_as, fits_total_chi2, suptitle=None):
     fits_total_chi2 = np.ravel(fits_total_chi2)
     ax.plot(alphas, fits_total_chi2)
     ax.set_xlabel(r'$\alpha_S$')
-    ax.set_ylabel(r'$\chi²/N_{dat}$')
+    ax.set_ylabel(r'$\chi²$')
     if suptitle:
         fig.suptitle(suptitle)
     return fig
