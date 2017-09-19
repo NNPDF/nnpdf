@@ -636,6 +636,29 @@ class Config(report.Config):
             raise RuntimeError()
         return s
 
+    def _append_extra_sums(self, to_append_list, extra_sums, df):
+        if not extra_sums:
+            return
+        for es in extra_sums:
+            label = es['dataset_item']
+            components = es['components']
+            dss = set(df.index.levels[1])
+            diff = set(components) - dss
+            if diff:
+                bad_item = next(iter(diff))
+                raise ConfigError(f"Unrecognized elements in extra_sum: {diff}", bad_item, dss)
+
+            sliced = df.loc[(slice(None), components),:]
+            s =  sliced.groupby(level=3).sum()
+            ndata = sum(n for (n,_) in sliced.groupby(level=2))
+            to_append_list.append(
+                {'experiment_label': label,
+                'by_dataset': [{
+                    'fits_replica_data_correlated': s,
+                    'suptitle': label,
+                    'ndata': ndata
+                 }]})
+
 
     def produce_fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset(self,
             fits_computed_psedorreplicas_chi2, prepend_total:bool=True,
@@ -683,26 +706,8 @@ class Config(report.Config):
 
             expres.append(d)
 
-        if extra_sums:
-            for es in extra_sums:
-                label = es['dataset_item']
-                components = es['components']
-                dss = set(df.index.levels[1])
-                diff = set(components) - dss
-                if diff:
-                    bad_item = next(iter(diff))
-                    raise ConfigError(f"Unrecognized elements in extra_sum: {diff}", bad_item, dss)
+        self._append_extra_sums(total, extra_sums, df)
 
-                sliced = df.loc[(slice(None), components),:]
-                s =  sliced.groupby(level=3).sum()
-                ndata = sum(n for (n,_) in sliced.groupby(level=2))
-                total.append(
-                    {'experiment_label': label,
-                    'by_dataset': [{
-                        'fits_replica_data_correlated': s,
-                        'suptitle': label,
-                        'ndata': ndata
-                     }]})
 
 
         return [*total, *expres]
@@ -760,22 +765,7 @@ class Config(report.Config):
 
             expres.append(d)
 
-        if extra_sums:
-            for es in extra_sums:
-                label = es['dataset_item']
-                components = es['components']
-                dss = set(df.index.levels[1])
-                diff = set(components) - dss
-                if diff:
-                    bad_item = next(iter(diff))
-                    raise ConfigError(f"Unrecognised element in extra sum: {diff}", bad_item, dss)
-                s = df.sort_index().loc[(slice(None), components), :].sum()
-                total.append(
-                    {'experiment_label': label,
-                    'by_dataset': [{
-                        'fits_total_chi2': s,
-                        'suptitle': label,
-                     }]})
+        self._append_extra_sums(total, extra_sums, df)
 
         return [*total, *expres]
 
