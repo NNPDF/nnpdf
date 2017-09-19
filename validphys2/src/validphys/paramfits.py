@@ -851,7 +851,7 @@ def pulls_central(as_datasets_central_chi2,hide_total:bool=True):
 
 @figure
 @_check_first_is_total
-def pull_gaussian_fit_central(as_datasets_central_chi2,
+def plot_pull_gaussian_fit_central(as_datasets_central_chi2,
         dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
 
     """Bins the pulls and overlays
@@ -918,36 +918,30 @@ def pull_plots_global_min(datasepecs_as_value_error_table_impl,
     #ax.legend()
     return fig
 
+@make_argcheck
+def _check_two_speclabels(dataspecs_speclabel):
+    if len(dataspecs_speclabel) != 2:
+        raise CheckError("Need 2 data specs")
+
 
 @figure
-def alphas_shift(datasepecs_as_value_error_table_impl,datasepecs_quad_table_impl,dataspecs_ndata_table,dataspecs_dataset_ndata,
-        dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True,hideNAN:bool=True,ndata_weight:bool=False):
+@_check_two_speclabels
+def alphas_shift(
+    datasepecs_as_value_error_table_impl,
+    datasepecs_quad_table_impl,
+    dataspecs_ndata_table,
+    dataspecs_dataset_ndata,
+    dataspecs_fits_as,
+    dataspecs_speclabel,
+    hide_total:bool=True,
+    ndata_weight:bool=False):
 
     """Plots NNLO - NLO alphas values for each experiment."""
-
-    if not len(dataspecs_speclabel) == 2:
-        raise CheckError(f"Need 2 data specs")
     
     df1 = dataspecs_ndata_table
     df = datasepecs_as_value_error_table_impl
     df2 = datasepecs_quad_table_impl
 
-
-    if hideNAN:
-        df = df.loc[df.index != 'HERACOMBNCEP460'] 
-        df = df.loc[df.index != 'HERACOMBNCEP575'] 
-        df = df.loc[df.index != 'CMSDY2D11']
-        df1 = df1.loc[df1.index != 'HERACOMBNCEP460']
-        df1 = df1.loc[df1.index != 'HERACOMBNCEP575']
-        df1 = df1.loc[df1.index != 'CMSDY2D11']
-        df2 = df2.loc[df1.index != 'HERACOMBNCEP460']
-        df2 = df2.loc[df1.index != 'HERACOMBNCEP575']
-        df2 = df2.loc[df1.index != 'CMSDY2D11']
- 
-    # df1 = df1.loc[df1.index != 'CMSTOPDIFF8TEVTTRAPNORM']
-    # df = df.loc[df.index != 'CMSTOPDIFF8TEVTTRAPNORM'] 
-    # df1 = df1.loc[df1.index != 'CHORUSNB']
-    # df = df.loc[df.index != 'CHORUSNB'] 
 
     tots_error = df.loc['Total', (slice(None), 'error')].as_matrix()
     tots_mean = df.loc['Total', (slice(None), 'mean')].as_matrix()
@@ -1037,7 +1031,7 @@ def alphas_shift(datasepecs_as_value_error_table_impl,datasepecs_quad_table_impl
     return fig
 
 @figuregen
-def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
+def plot_pull_gaussian_fit_pseudo(datasepecs_as_value_error_table_impl,
         dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
 
     """Bins the pulls computed in pull_plots_global_min and overlays
@@ -1165,6 +1159,7 @@ def plot_dataspecs_parabola_examples(
         dataset_items:(list, type(None))=None,
         examples_per_item:int = 2,
         random_seed:int = 0,
+        simpletitle:bool=False,
         ):
     """Sample ``examples_per_item`` replica_indexes for each of the
     ``dataset_items``. Yield a plot with the parabolic fit, as resoved for
@@ -1182,14 +1177,17 @@ def plot_dataspecs_parabola_examples(
             log.warning("Length of table is less than examples_per_item")
             sampled = table
         else:
-            sampled = table.sample(examples_per_item, random_state=1)
+            sampled = table.sample(examples_per_item, random_state=random_state)
 
 
         for index, row in sampled.iterrows():
 
             fig, ax = plt.subplots()
             im = marker_iter_plot()
-            ax.set_title(f"{it}")
+            if simpletitle:
+                ax.set_title(f"{it}")
+            else:
+                ax.set_title(f"Parabola example for {it} (nnfit_index={index})")
             for i, (label, vals) in enumerate(row.groupby(level=0)):
                 asvals = vals.index.get_level_values(1)
                 color = f'C{i}'
