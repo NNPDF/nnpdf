@@ -823,7 +823,7 @@ def _pulls_func(cv,alphas_global,error,error_global):
 
 @figure
 @_check_first_is_total
-def pulls_central(as_datasets_central_chi2,hide_total:bool=True):
+def plot_pulls_central(as_datasets_central_chi2,hide_total:bool=True):
     """ Plots the pulls per experiment for the central results """
 
     data, names = zip(*as_datasets_central_chi2)
@@ -880,12 +880,12 @@ def plot_pull_gaussian_fit_central(as_datasets_central_chi2,
     mean_pulls = np.mean(pulls)
     std_dev = np.std(pulls)
     x = np.linspace(min(pulls),max(pulls), 100)
-    #kde_pulls = stats.gaussian_kde(pulls, bw_method='silverman')
+    kde_pulls = stats.gaussian_kde(pulls, bw_method='silverman')
     fig, ax = plt.subplots()
 
     #ax.set_title(f"Histogram of pulls for {label} dataset")
     ax.set_xlabel(r"Pull")
-    #ax.plot(x, kde_pulls(x), label="Kernal Density Estimation of pulls")
+    ax.plot(x, kde_pulls(x), label="Kernal Density Estimation of pulls")
     ax.hist(pulls,normed=True,bins=4)
     print(mean_pulls,std_dev)
     ax.grid(False)
@@ -895,7 +895,7 @@ def plot_pull_gaussian_fit_central(as_datasets_central_chi2,
     return fig
 
 @figure
-def pull_plots_global_min(datasepecs_as_value_error_table_impl,
+def plot_pull_plots_global_min(datasepecs_as_value_error_table_impl,
         dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
 
     """Plots the pulls of individual experiments as a barplot."""
@@ -1059,7 +1059,7 @@ def plot_pull_gaussian_fit_pseudo(datasepecs_as_value_error_table_impl,
 
         #ax.set_title(f"Histogram of pulls for {label} dataset")
         ax.set_xlabel(r"Pull")
-        #ax.plot(x, kde_pulls(x), label="Kernal Density Estimation of pulls")
+        ax.plot(x, kde_pulls(x), label="Kernal Density Estimation of pulls")
         ax.hist(pulls,normed=True,bins=4)
         print(mean_pulls,std_dev)
         ax.grid(False)
