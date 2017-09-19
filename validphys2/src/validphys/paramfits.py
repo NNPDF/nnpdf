@@ -26,7 +26,7 @@ import scipy.stats as stats
 from reportengine.figure import figure, figuregen
 from reportengine.table import table
 from reportengine import collect
-from reportengine.floatformatting import format_error_value_columns, format_number
+from reportengine.floatformatting import format_error_value_columns, format_number, ValueErrorTuple
 from reportengine.checks import make_argcheck, CheckError, check_positive, check_not_empty
 from NNPDF import pseudodata, single_replica, RandomGenerator
 
@@ -310,7 +310,7 @@ def as_determination_from_central_chi2(fits_as, fits_total_chi2):
     if a<=0:
         log.error("Found non convex parabola when computing the quadratic fit.")
         return np.nan, np.nan
-    return -b/(2*a), 1/(np.sqrt(a))
+    return ValueErrorTuple(-b/(2*a), 1/(np.sqrt(a)))
 
 fits_matched_pseudorreplicas_chi2_by_dataset = collect(
         'by_dataset',
