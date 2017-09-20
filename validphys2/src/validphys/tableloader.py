@@ -83,7 +83,7 @@ def combine_pseudorreplica_tables(dfs, combined_names, blacklist_datasets=None):
             dsmask = (df.index.get_level_values(1) != it)
             m &= dsmask
         if m.all():
-            log.warning("Did not blacklist any dataset from the list {blacklisted_datasets}")
+            log.warning(f"Did not blacklist any dataset from the list {blacklist_datasets}")
         else:
             df = df.loc[m]
 
