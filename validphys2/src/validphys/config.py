@@ -22,6 +22,7 @@ from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFound
                               PDFNotFound, FallbackLoader)
 from validphys import tableloader
 from validphys.gridvalues import LUMI_CHANNELS
+from validphys import utils
 
 log = logging.getLogger(__name__)
 
@@ -536,7 +537,7 @@ class Config(report.Config):
                     raise ConfigError("Expecting all as values to be the same")
                 dfs.append(df)
                 fitnames.append(namelist)
-        finalnames =  [min(ns, key=len) + '__combined' for ns in zip(*fitnames)]
+        finalnames =  [utils.common_prefix(*ns) + '__combined' for ns in zip(*fitnames)]
         res = tableloader.combine_pseudorreplica_tables(dfs, finalnames,
                 blacklist_datasets=blacklist_datasets)
 
