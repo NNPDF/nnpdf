@@ -69,9 +69,7 @@ def sane_groupby_iter(df, by, *args, **kwargs):
 def common_prefix(s1,s2):
     """Return the longest string that is a prefix to both s1 and s2"""
     small, big = sorted((s1,s2), key=len)
-    i = 0
-    for test in range(0, len(small)):
-        if big[test] != small[test]:
-            break
-        i += 1
-    return small[:i]
+    for i, c in enumerate(small):
+        if big[i] != c:
+            return small[:i]
+    return small
