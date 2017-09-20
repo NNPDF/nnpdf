@@ -25,7 +25,7 @@ test:
     imports:
         - validphys
     commands:
-        - bash -c "TERM=linux validphys --help"
+        - bash -c "TERM=linux validphys --help validphys.plots"
 
 
 about:
