@@ -401,12 +401,18 @@ def bootstrapping_stats_error(parabolic_as_determination, nresamplings:int=10000
     and thn computing the standard deviation of the means."""
     distribution = parabolic_as_determination
     shape = (nresamplings, len(distribution))
+    if not len(distribution):
+        log.error("Cannot conpute stats error. Empty data.")
+        return np.nan
     return np.random.choice(distribution, shape).mean(axis=1).std()
 
 @check_positive('nresamplings')
 def half_sample_stats_error(parabolic_as_determination, nresamplings:int=100000):
     """Like the bootstrapping error, but using only half og the data"""
     distribution = parabolic_as_determination[:len(parabolic_as_determination)//2]
+    if not len(distribution):
+        log.error("Cannot compute half stats. Too few data")
+        return np.nan
     shape = (nresamplings, len(distribution))
     return np.random.choice(distribution, shape).mean(axis=1).std()
 
@@ -423,11 +429,12 @@ as_datasets_half_sample_stats_error = collect(half_sample_stats_error,
 
 
 #Don't write complicated column names everywhere
-ps_mean = "pseudirreplica mean"
+ps_mean = "pseudorreplica mean"
 ps_error = "pseudorreplica error"
 ps_stat_error = "pseudorreplica stat"
 ps_half_stat_error = "pseudorreplica halfstat"
 stats_ratio = r"$\frac{halfstat}{stat}/\sqrt 2$"
+n = 'n'
 
 stats_halfone = "cv selecting one half of the replicas"
 err_halfone = "err selecting one half of the replicas"
@@ -435,7 +442,7 @@ err_halfone = "err selecting one half of the replicas"
 stats_halfother = "cv selecting other half of the replicas"
 err_halfonother = "err selecting other half of the replicas"
 
-ps_cols = (ps_mean, ps_error, ps_stat_error, ps_half_stat_error,
+ps_cols = (ps_mean, ps_error ,n, ps_stat_error, ps_half_stat_error,
            stats_halfone, err_halfone, stats_halfother, err_halfonother)
 
 
@@ -455,6 +462,7 @@ def pseudorreplicas_stats_error(
                 as_datasets_bootstrapping_stats_error,
                 as_datasets_half_sample_stats_error):
         d[ps_mean][tag] = np.mean(distribution)
+        d[n][tag] = len(distribution)
         d[ps_error][tag] = np.std(distribution)
         d[ps_stat_error][tag] = statserr
         d[ps_half_stat_error][tag] = halfstaterr
@@ -502,7 +510,7 @@ def compare_determinations_table_impl(
 
 
     #Use this to get the right sorting
-    d  = defaultdict(list)
+    d  = defaultdict(dict)
     tags = []
     for (cv, error), tag in as_datasets_central_chi2:
         d[cv_mean][tag] = cv
@@ -515,9 +523,6 @@ def compare_determinations_table_impl(
     df = pd.DataFrame(d, columns=[*ps_cols, cv_mean, cv_error])
     df = df.loc[tags]
     return df
-
-
-
 
 @table
 @_check_speclabels_different
@@ -546,10 +551,10 @@ def dataspecs_stats_error_table(
 def compare_determinations_table(compare_determinations_table_impl):
     """Return ``compare_determinations_table_impl`` formatted nicely"""
     df = compare_determinations_table_impl
-    format_error_value_columns(df, "pseudoreplica mean",
-         "pseudorreplica error", inplace=True)
-    format_error_value_columns(df, "central mean",
-        "central error", inplace=True)
+    format_error_value_columns(df, ps_mean,
+         ps_error, inplace=True)
+    format_error_value_columns(df, cv_mean,
+        cv_error, inplace=True)
     stats_cols = {ps_stat_error, ps_half_stat_error, stats_ratio}
     #Don't fail if/when we remove a table from here
     stats_cols &= set(df.columns)
