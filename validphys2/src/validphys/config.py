@@ -746,6 +746,16 @@ class Config(report.Config):
         l = fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset
         return self._breakup_by_dataset_item(l, dataset_items)
 
+    def produce_matched_pseudorreplcias_for_total(
+            self,
+            fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset):
+        """Like ``fits_matched_pseudorreplicas_chi2_by_dataset_item``, but
+        restriction the ``dataset_item`` selection to "Total" exclusively."""
+        res = self.produce_fits_matched_pseudorreplicas_chi2_by_dataset_item(
+                fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset,
+                ['Total'])
+        return res
+
 
 
     def parse_fits_chi2_paramfits_output(self, fname:str, config_rel_path):

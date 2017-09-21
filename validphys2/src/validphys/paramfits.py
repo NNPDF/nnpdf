@@ -170,8 +170,9 @@ def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated,
     return table
 
 def _get_parabola(asvals, chi2vals):
+    chi2vals = np.ravel(chi2vals)
     filt =  np.isfinite(chi2vals)
-    return np.polyfit(asvals[filt], chi2vals[filt], 2)
+    return np.polyfit(np.asarray(asvals)[filt], chi2vals[filt], 2)
 
 
 
@@ -202,6 +203,36 @@ def _parabolic_as_determination(fits_as,
 
     minimums = np.asarray(minimums)
     return minimums
+
+def as_central_parabola(
+        fits_as,
+        fits_total_chi2):
+    """Return the coefficients corresponding to the parabolic fit to the
+    minimum of the pseudorreplicas"""
+    return _get_parabola(fits_as, fits_total_chi2)
+
+@figure
+def plot_as_central_parabola(
+        fits_as,
+        as_central_parabola,
+        suptitle, ndata,
+        parabolic_as_determination_for_total):
+    """Plot a parabola with the central chi² per number of points, marking
+    the chi² at the total best fit."""
+    fig,ax = plt.subplots()
+    asarr = np.linspace(min(fits_as), max(fits_as), 100)
+    ax.plot(asarr, np.polyval(as_central_parabola, asarr)/ndata)
+
+    best_as = np.mean(parabolic_as_determination_for_total)
+    chi2_at_best = np.polyval(as_central_parabola, best_as)/ndata
+    ax.scatter(best_as, chi2_at_best)
+    ax.annotate(format_number(chi2_at_best, 3), (best_as, chi2_at_best))
+    ax.set_ylabel(r'$\chi^2/N_{data}$')
+    ax.set_xlabel(r'$\alpha_S$')
+    ax.set_title(f"{suptitle}")
+    return fig
+
+
 
 @make_argcheck
 def _check_as_transform(as_transform):
@@ -238,6 +269,9 @@ def parabolic_as_determination(fits_as,
     elif as_transform == 'exp':
         minimums = np.log(minimums)
     return minimums
+
+parabolic_as_determination_for_total = collect(parabolic_as_determination,
+                                      ['matched_pseudorreplcias_for_total'])
 
 
 def _aic(residuals, n, k):
