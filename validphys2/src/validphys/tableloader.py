@@ -15,6 +15,8 @@ log = logging.getLogger(__name__)
 
 sane_load = functools.partial(pd.DataFrame.from_csv, sep='\t')
 
+class TableLoaderError(Exception): pass
+
 def fixup_header(df, head_index, dtype):
     """Set the type of the column index in place"""
     oldcols = df.columns
@@ -49,12 +51,21 @@ def load_fits_chi2_table(filename):
 
 def load_adapted_fits_chi2_table(filename):
     """Load the fits_chi2_table and adapt it in the way that suits the
-    ``paramfits`` module."""
+    ``paramfits`` module. That is, return a table with the total chi² and
+    another with the number of points."""
     df = load_fits_chi2_table(filename)
+    ndatalabel = df.columns[0][1]
+    dns= df.sort_index(axis=1).loc[:, pd.IndexSlice[:,ndatalabel]]
+    if not (dns.apply(pd.Series.nunique, axis=1) == 1).all():
+        raise TableLoaderError("Expecting all entries to have the same ndata")
+
+    ndatas = dns.iloc[:,0]
+
     f = lambda x: x[x.columns[0]]*x[x.columns[1]]
     df = df.groupby(axis=1, level=0).apply(f)
     df.columns = pd.MultiIndex.from_product([list(df.columns), ['chi2']])
-    return df
+
+    return ndatas,  df
 
 
 def set_actual_column_level0(df, new_levels):

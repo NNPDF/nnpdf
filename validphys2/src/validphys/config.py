@@ -756,15 +756,15 @@ class Config(report.Config):
 
     def produce_use_fits_chi2_paramfits_output(self, fits_chi2_paramfits_output,
                                                    fits_name):
-        df = fits_chi2_paramfits_output
+        ndatatable, chi2table = fits_chi2_paramfits_output
         try:
-            df = df[fits_name]
+            chi2table = chi2table[fits_name]
         except Exception as e:
             raise ConfigError(f"Could not select the fit names from the table: {e}") from e
-        return {'adapted_fits_chi2_table':  df}
+        return {'adapted_fits_chi2_table':  chi2table, 'ndatatable':ndatatable}
 
     def produce_fits_central_chi2_by_experiment_and_dataset(self,
-            adapted_fits_chi2_table, prepend_total=True,extra_sums=None):
+            adapted_fits_chi2_table, ndatatable, prepend_total=True,extra_sums=None):
         """Take the table returned by
         ``fits_matched_pseudorreplicas_chi2_output`` and break it down
         by experiment. If `preprend_total` is True, the sum over experiments
@@ -782,6 +782,7 @@ class Config(report.Config):
                 'by_dataset': [{
                     'fits_total_chi2': s,
                     'suptitle': 'Total',
+                    'ndata': ndatatable.loc[(slice(None), 'Total')].sum(),
                  }]}]
         else:
             total = []
@@ -791,13 +792,14 @@ class Config(report.Config):
             by_dataset = d['by_dataset'] = []
             for ds, dsdf in expdf.groupby(level=1):
                 dsdf.index  = dsdf.index.droplevel([0])
+                ndata = ndatatable[(exp,ds)]
                 if ds == 'Total':
                     ds = f'{exp} Total'
                     by_dataset.insert(0, {'fits_total_chi2': dsdf,
-                                   'suptitle':ds})
+                                   'suptitle':ds, 'ndata':ndata})
                 else:
                     by_dataset.append({'fits_total_chi2': dsdf,
-                                   'suptitle':ds})
+                                   'suptitle':ds, 'ndata':ndata})
 
             expres.append(d)
 
@@ -811,11 +813,13 @@ class Config(report.Config):
                     bad_item = next(iter(diff))
                     raise ConfigError(f"Unrecognised element in extra sum: {diff}", bad_item, dss)
                 s = df.sort_index().loc[(slice(None), components), :].sum()
+                ndata = ndatatable.sort_index().loc[(slice(None), components)].sum()
                 total.append(
                     {'experiment_label': label,
                     'by_dataset': [{
                         'fits_total_chi2': s,
                         'suptitle': label,
+                        'ndata': ndata,
                      }]})
 
         return [*total, *expres]
