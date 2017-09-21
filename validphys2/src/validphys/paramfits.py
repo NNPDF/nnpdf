@@ -211,6 +211,10 @@ def as_central_parabola(
     minimum of the pseudorreplicas"""
     return _get_parabola(fits_as, fits_total_chi2)
 
+as_datasets_central_parabolas = collect(
+        'as_central_parabola', ['fits_central_chi2_by_dataset_item'])
+
+
 @figure
 def plot_as_central_parabola(
         fits_as,
@@ -232,6 +236,53 @@ def plot_as_central_parabola(
     ax.set_title(f"{suptitle}")
     return fig
 
+@figure
+def plot_as_cummulative_central_chi2(fits_as,
+                                     as_datasets_central_parabolas,
+                                     by_dataset_suptitle):
+    """Plot the cummulative total chi² for each of the datasets"""
+    fig,ax  = plt.subplots()
+    nx = 100
+    asarr = np.linspace(min(fits_as), max(fits_as), nx)
+    last = np.zeros(nx)
+    for (p, label) in zip(as_datasets_central_parabolas, by_dataset_suptitle):
+        val = last + np.polyval(p, asarr)
+        ax.fill_between(asarr, last, val, label=label)
+        last = val
+    ax.legend()
+    ax.set_ylabel(r'$\chi^2$')
+    ax.set_xlabel(r'$\alpha_S$')
+    ax.set_ylim(0)
+    ax.set_xlim(asarr[[0,-1]])
+
+    return fig
+
+@figure
+def plot_as_cummulative_central_chi2_diff(fits_as,
+                                     as_datasets_central_parabolas,
+                                     by_dataset_suptitle,
+                                     parabolic_as_determination_for_total):
+    """Plot the cummulative difference between the χ² at the best global
+    αs fit and the χ² at αs. If the difference is negative, it is set to zero.
+    """
+    fig,ax  = plt.subplots()
+    nx = 100
+    best_as = np.mean(parabolic_as_determination_for_total)
+    asarr = np.linspace(min(fits_as), max(fits_as), nx)
+    last = np.zeros(nx)
+    for (p, label) in zip(as_datasets_central_parabolas, by_dataset_suptitle):
+        delta = np.polyval(p, asarr) - np.polyval(p, best_as)
+        delta[delta<0] = 0
+        val = last + delta
+        ax.fill_between(asarr, last, val, label=label)
+        last = val
+    ax.legend()
+    ax.set_ylabel(r'$\chi^2 - \chi^2_{{\rm best}\ \alpha_S}$')
+    ax.set_xlabel(r'$\alpha_S$')
+    ax.set_ylim(0)
+    ax.set_xlim(asarr[[0,-1]])
+
+    return fig
 
 
 @make_argcheck
@@ -514,6 +565,7 @@ def pseudorreplicas_stats_error(
 
 datasepecs_pseudorreplica_stats_error = collect(pseudorreplicas_stats_error, ['dataspecs'])
 
+#TODO: This is deprecated FAPP
 @make_argcheck
 def _check_dataset_items(dataset_items, dataspecs_dataset_suptitle):
     """Check that the dataset_items are legit."""
