@@ -77,8 +77,6 @@ def set_actual_column_level0(df, new_levels):
     cols.set_levels(levels, inplace=True, level=0)
 
 
-
-
 #TODO: Find a better place for this function
 def combine_pseudorreplica_tables(dfs, combined_names, blacklist_datasets=None):
     """Return a table in the same format as perreplica_chi2_table with th   e
@@ -128,3 +126,14 @@ def combine_pseudorreplica_tables(dfs, combined_names, blacklist_datasets=None):
 
 
     return res
+
+def get_extrasum_slice(df, components):
+    """Extract a slice of a table that has the components in the format that
+    extra_sums expects."""
+    df = pd.DataFrame(df)
+    df.sort_index(inplace=True)
+    total_token = ' Total'
+    keys = [(c[:-len(total_token)], 'Total') if c.endswith(total_token) else
+            (slice(None), c) for c in components]
+    locs = [flat for key in keys for flat in df.index.get_locs(key)]
+    return df.iloc[locs, :]

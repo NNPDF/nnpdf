@@ -1,7 +1,8 @@
-from validphys import tableloader
-
 import pandas as pd
 import numpy as np
+
+from validphys.loader import FallbackLoader as Loader
+from validphys import tableloader
 
 
 def test_min_combination():
@@ -54,3 +55,14 @@ def test_min_combination():
     res = tableloader.combine_pseudorreplica_tables(dfs, ['NNPDF31_nlo_as_0130_uncorr__combined'])
     assert pd.isnull(res.loc[pd.IndexSlice[:,:,:,394],:]).all().all()
     assert (res.loc[pd.IndexSlice[:,:,:,400],:] == dfs[1].loc[pd.IndexSlice[:,:,:,400],:]).all().all()
+
+def test_extrasum_slice():
+    l = Loader()
+    f =  l.check_vp_output_file('ljzWOixPQfmq5dA1-EUocg==/tables/fits_chi2_table.csv')
+    d, l = tableloader.load_adapted_fits_chi2_table(f)
+    components = ['LHCb Total', 'ATLASTTBARTOT', 'LHCBZ940PB']
+    sliced = tableloader.get_extrasum_slice(d, components)
+    slicel = tableloader.get_extrasum_slice(d, components)
+    assert sliced.shape == (3,1)
+    assert sliced.loc[('LHCb', 'Total'),:].shape == (1,)
+    assert slicel.size == 3

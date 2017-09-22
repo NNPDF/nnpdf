@@ -637,7 +637,6 @@ class Config(report.Config):
             raise RuntimeError()
         return s
 
-
     def produce_fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset(self,
             fits_computed_psedorreplicas_chi2, prepend_total:bool=True,
             extra_sums=None):
@@ -684,17 +683,18 @@ class Config(report.Config):
 
             expres.append(d)
 
+
         if extra_sums:
+            dss = {d['suptitle'] for l in [*total, *expres] for d in l['by_dataset']}
             for es in extra_sums:
                 label = es['dataset_item']
                 components = es['components']
-                dss = set(df.index.levels[1])
                 diff = set(components) - dss
                 if diff:
                     bad_item = next(iter(diff))
                     raise ConfigError(f"Unrecognized elements in extra_sum: {diff}", bad_item, dss)
 
-                sliced = df.loc[(slice(None), components),:]
+                sliced = tableloader.get_extrasum_slice(df, components)
                 s =  sliced.groupby(level=3).sum()
                 ndata = sum(n for (n,_) in sliced.groupby(level=2))
                 total.append(
@@ -814,16 +814,18 @@ class Config(report.Config):
             expres.append(d)
 
         if extra_sums:
+            dss = {d['suptitle'] for l in [*total, *expres] for d in l['by_dataset']}
             for es in extra_sums:
                 label = es['dataset_item']
                 components = es['components']
-                dss = set(df.index.levels[1])
                 diff = set(components) - dss
                 if diff:
                     bad_item = next(iter(diff))
                     raise ConfigError(f"Unrecognised element in extra sum: {diff}", bad_item, dss)
-                s = df.sort_index().loc[(slice(None), components), :].sum()
-                ndata = ndatatable.sort_index().loc[(slice(None), components)].sum()
+
+                sliced = tableloader.get_extrasum_slice(df, components)
+                s = sliced.sum()
+                ndata = tableloader.get_extrasum_slice(ndatatable, components).sum()
                 total.append(
                     {'experiment_label': label,
                     'by_dataset': [{
