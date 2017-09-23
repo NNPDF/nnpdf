@@ -56,6 +56,8 @@ public:
     _lux->PlugStructureFunctions(APFELF2, APFELFL, APFEL::F2LO);
   }
 
+  void add_noise(bool add_noise) { _addnoise = add_noise; }
+
   ~lux()
   {
     delete _lux;
@@ -217,6 +219,7 @@ int main(int argc, char **argv)
 {
   // Read configuration filename from arguments
   int replica = 0;
+  bool noise_status = false;
   string filename = "";
   if (argc > 2)
     {
@@ -224,13 +227,17 @@ int main(int argc, char **argv)
       filename.assign(argv[2]);
       if (filename.find("help") != string::npos)
         {
-          cout << "\nusage: fiatlux [replica] [configuration filename]\n" << endl;
+          cout << "\nusage: fiatlux [replica] [configuration filename] [add_noise (default 0)]\n" << endl;
           exit(-1);
         }
+      if (argc == 4)
+	noise_status = atoi(argv[3]);	
+	
+      cout << "Add LUX noise " << noise_status << endl;
     }
   else
     {
-      cerr << Colour::FG_RED << "\nusage: fiatlux [replica] [configuration filename]\n" << endl;
+      cerr << Colour::FG_RED << "\nusage: fiatlux [replica] [configuration filename] [add_noise (default 0)]\n" << endl;
       exit(-1);
     }
 
@@ -388,6 +395,7 @@ int main(int argc, char **argv)
   APFEL::CacheStructureFunctionsAPFEL(-1);
   APFEL::CachePDFsAPFEL(-1);
 
+  luxInstance().add_noise(noise_status);
   luxInstance().loadPDF(settings.GetPDFName(), replica, vector<double>(X1, X1 + sizeof X1 / sizeof X1[0]), q0);
   const int nfmax = stoi(settings.GetTheory(APFEL::kMaxNfPdf));
   const double mb = stod(settings.GetTheory(APFEL::kmb));
