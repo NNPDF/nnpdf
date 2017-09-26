@@ -220,7 +220,8 @@ def plot_as_central_parabola(
         fits_as,
         as_central_parabola,
         suptitle, ndata,
-        parabolic_as_determination_for_total):
+        parabolic_as_determination_for_total,
+        markmin:bool=False):
     """Plot a parabola with the central chi² per number of points, marking
     the chi² at the total best fit."""
     fig,ax = plt.subplots()
@@ -231,6 +232,8 @@ def plot_as_central_parabola(
     chi2_at_best = np.polyval(as_central_parabola, best_as)/ndata
     ax.scatter(best_as, chi2_at_best)
     ax.annotate(format_number(chi2_at_best, 3), (best_as, chi2_at_best))
+    if markmin:
+        ax.axvline(-as_central_parabola[1]/2/as_central_parabola[0])
     ax.set_ylabel(r'$\chi^2/N_{data}$')
     ax.set_xlabel(r'$\alpha_S$')
     ax.set_title(f"{suptitle}")
