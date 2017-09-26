@@ -849,3 +849,10 @@ class Config(report.Config):
         """
         l = fits_central_chi2_by_experiment_and_dataset
         return self._breakup_by_dataset_item(l, dataset_items)
+
+    def produce_fits_central_chi2_for_total(
+            self,
+            fits_central_chi2_by_experiment_and_dataset):
+        res = self.produce_fits_central_chi2_by_dataset_item(
+                fits_central_chi2_by_experiment_and_dataset, ['Total'])
+        return res

@@ -285,44 +285,23 @@ def plot_as_cummulative_central_chi2_diff(fits_as,
     return fig
 
 
-@make_argcheck
-def _check_as_transform(as_transform):
-    values = (None, 'log', 'exp')
-    if not as_transform in values:
-        raise CheckError(f"The allowed valued values for "
-                         f"as_transform are {values}", str(as_transform),
-                         values[1:])
+@table
+def derivative_dispersion_table(
+                                as_datasets_central_parabolas,
+                                fits_as,
+                                by_dataset_suptitle,
+                                as_determination_from_central_chi2_for_total):
+    best_as = np.ravel(as_determination_from_central_chi2_for_total)[0]
+    d = {}
+    for label, p in zip(by_dataset_suptitle, as_datasets_central_parabolas):
+        d[label] = np.polyval(np.polyder(p), best_as)
 
-@_check_badcurves
-@_check_as_transform
-def parabolic_as_determination(fits_as,
-        fits_replica_data_with_discarded_replicas,
-        badcurves='discard', as_transform:(str, type(None))=None):
-    """Return the minima for alpha_s corresponding to the fitted curves.
-    ``badcuves`` specifies what to do with concave replicas and can be one of
-    'discard', 'allminimum'
-    (which takes the minimum points
-    for *all* the replicas without fitting a parabola) or
-    'minimum' (which takes the minimum value for the concave replicas).
+    s = pd.Series(d)
+    s['SUM'] = np.sum(s)
+    s['SUM QUADRATURE'] = np.sqrt(np.sum(s**2))
+    res =  pd.DataFrame(s, columns=['Derivative'])
 
-    as_transform can be None, 'log' or 'exp' and is applied to the as_values
-    and then reversed for the minima.
-    """
-    if as_transform == 'log':
-        fits_as = np.log(fits_as)
-    elif as_transform == 'exp':
-        fits_as = np.exp(fits_as)
-    minimums = _parabolic_as_determination(
-                   fits_as,
-                   fits_replica_data_with_discarded_replicas, badcurves)
-    if as_transform == 'log':
-        minimums = np.exp(minimums)
-    elif as_transform == 'exp':
-        minimums = np.log(minimums)
-    return minimums
-
-parabolic_as_determination_for_total = collect(parabolic_as_determination,
-                                      ['matched_pseudorreplcias_for_total'])
+    return res
 
 
 def _aic(residuals, n, k):
@@ -418,6 +397,12 @@ as_datasets_central_chi2 = collect(
     as_determination_from_central_chi2_with_tag,
     ['fits_central_chi2_by_dataset_item']
 )
+
+parabolic_as_determination_for_total = collect(parabolic_as_determination,
+                                      ['matched_pseudorreplcias_for_total'])
+
+as_determination_from_central_chi2_for_total = collect(
+        as_determination_from_central_chi2, ['fits_central_chi2_for_total'])
 
 
 @figure
