@@ -204,6 +204,43 @@ def _parabolic_as_determination(fits_as,
     minimums = np.asarray(minimums)
     return minimums
 
+
+@make_argcheck
+def _check_as_transform(as_transform):
+    values = (None, 'log', 'exp')
+    if not as_transform in values:
+        raise CheckError(f"The allowed valued values for "
+                         f"as_transform are {values}", str(as_transform),
+                         values[1:])
+
+@_check_badcurves
+@_check_as_transform
+def parabolic_as_determination(fits_as,
+        fits_replica_data_with_discarded_replicas,
+        badcurves='discard', as_transform:(str, type(None))=None):
+    """Return the minima for alpha_s corresponding to the fitted curves.
+    ``badcuves`` specifies what to do with concave replicas and can be one of
+    'discard', 'allminimum'
+    (which takes the minimum points
+    for *all* the replicas without fitting a parabola) or
+    'minimum' (which takes the minimum value for the concave replicas).
+
+    as_transform can be None, 'log' or 'exp' and is applied to the as_values
+    and then reversed for the minima.
+    """
+    if as_transform == 'log':
+        fits_as = np.log(fits_as)
+    elif as_transform == 'exp':
+        fits_as = np.exp(fits_as)
+    minimums = _parabolic_as_determination(
+                   fits_as,
+                   fits_replica_data_with_discarded_replicas, badcurves)
+    if as_transform == 'log':
+        minimums = np.exp(minimums)
+    elif as_transform == 'exp':
+        minimums = np.log(minimums)
+    return minimums
+
 def as_central_parabola(
         fits_as,
         fits_total_chi2):
