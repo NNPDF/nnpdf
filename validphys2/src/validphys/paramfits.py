@@ -362,16 +362,16 @@ as_datasets_central_chi2 = collect(
     ['fits_central_chi2_by_dataset_item']
 )
 
-quadratic_datasets_pseudorreplicas_chi2 = collect(
-    quadratic_as_determination_with_tag,
-    ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
-)
-
 parabolic_as_determination_for_total = collect(parabolic_as_determination,
                                       ['matched_pseudorreplcias_for_total'])
 
 as_determination_from_central_chi2_for_total = collect(
         as_determination_from_central_chi2, ['fits_central_chi2_for_total'])
+
+quadratic_datasets_pseudorreplicas_chi2 = collect(
+    quadratic_as_determination_with_tag,
+    ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
+)
 
 
 @figure
