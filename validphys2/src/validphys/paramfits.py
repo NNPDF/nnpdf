@@ -175,7 +175,7 @@ def _get_parabola(asvals, chi2vals):
 
 
 
-def _parabolic_as_determination(fits_as,
+def _parabolic_as_minimum_and_coefficient(fits_as,
         fits_replica_data_with_discarded_replicas,
         badcurves='discard'):
     """This is like parabolic_as_determination but without the as_transform
@@ -185,10 +185,12 @@ def _parabolic_as_determination(fits_as,
     table = fits_replica_data_with_discarded_replicas.as_matrix()
 
     minimums = []
+    quadratic = []
     asarr = np.asarray(alphas)
     for row in table:
         filt =  np.isfinite(row)
         a,b,c = np.polyfit(asarr[filt], row[filt], 2)
+        quadratic.append(a)
         if badcurves == 'allminimum':
             minimums.append(asarr[filt][np.argmin(row[filt])])
         elif a>0:
@@ -199,27 +201,22 @@ def _parabolic_as_determination(fits_as,
             minimums.append(asarr[filt][np.argmin(row[filt])])
         else:
             raise RuntimeError("Unknown bad curves.")
-
+    quadratic = np.asarray(quadratic)
     minimums = np.asarray(minimums)
-    return minimums
+    return minimums, quadratic
+
+
+def _parabolic_as_determination(fits_as,
+        fits_replica_data_with_discarded_replicas,badcurves='discard'):
+
+    return _parabolic_as_minimum_and_coefficient( fits_as,
+                   fits_replica_data_with_discarded_replicas, badcurves)[0]
 
 def quadratic_as_determination(fits_as,
-    fits_replica_data_with_discarded_replicas,
-    badcurves='discard'):
-    """Return the values of the quadratic coefficients for each 
-    parabolic fit """
-    alphas = fits_as
+        fits_replica_data_with_discarded_replicas,badcurves='discard'):
 
-    table = fits_replica_data_with_discarded_replicas.as_matrix()
-
-    quadratic = []
-    asarr = np.asarray(alphas)
-    for row in table:
-        filt =  np.isfinite(row)
-        a,b,c = np.polyfit(asarr[filt], row[filt], 2)
-        quadratic.append(a)
-    quadratic = np.asarray(quadratic)
-    return quadratic
+    return _parabolic_as_minimum_and_coefficient( fits_as,
+                   fits_replica_data_with_discarded_replicas, badcurves)[1]
 
 
 @make_argcheck
