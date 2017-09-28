@@ -22,6 +22,7 @@ from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFound
                               PDFNotFound, FallbackLoader)
 from validphys import tableloader
 from validphys.gridvalues import LUMI_CHANNELS
+from validphys import utils
 
 log = logging.getLogger(__name__)
 
@@ -536,7 +537,7 @@ class Config(report.Config):
                     raise ConfigError("Expecting all as values to be the same")
                 dfs.append(df)
                 fitnames.append(namelist)
-        finalnames =  [min(ns, key=len) + '__combined' for ns in zip(*fitnames)]
+        finalnames =  [utils.common_prefix(*ns) + '__combined' for ns in zip(*fitnames)]
         res = tableloader.combine_pseudorreplica_tables(dfs, finalnames,
                 blacklist_datasets=blacklist_datasets)
 
@@ -636,7 +637,6 @@ class Config(report.Config):
             raise RuntimeError()
         return s
 
-
     def produce_fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset(self,
             fits_computed_psedorreplicas_chi2, prepend_total:bool=True,
             extra_sums=None):
@@ -683,17 +683,18 @@ class Config(report.Config):
 
             expres.append(d)
 
+
         if extra_sums:
+            dss = {d['suptitle'] for l in [*total, *expres] for d in l['by_dataset']}
             for es in extra_sums:
                 label = es['dataset_item']
                 components = es['components']
-                dss = set(df.index.levels[1])
                 diff = set(components) - dss
                 if diff:
                     bad_item = next(iter(diff))
                     raise ConfigError(f"Unrecognized elements in extra_sum: {diff}", bad_item, dss)
 
-                sliced = df.loc[(slice(None), components),:]
+                sliced = tableloader.get_extrasum_slice(df, components)
                 s =  sliced.groupby(level=3).sum()
                 ndata = sum(n for (n,_) in sliced.groupby(level=2))
                 total.append(
@@ -745,6 +746,16 @@ class Config(report.Config):
         l = fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset
         return self._breakup_by_dataset_item(l, dataset_items)
 
+    def produce_matched_pseudorreplcias_for_total(
+            self,
+            fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset):
+        """Like ``fits_matched_pseudorreplicas_chi2_by_dataset_item``, but
+        restriction the ``dataset_item`` selection to "Total" exclusively."""
+        res = self.produce_fits_matched_pseudorreplicas_chi2_by_dataset_item(
+                fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset,
+                ['Total'])
+        return res
+
 
 
     def parse_fits_chi2_paramfits_output(self, fname:str, config_rel_path):
@@ -755,15 +766,15 @@ class Config(report.Config):
 
     def produce_use_fits_chi2_paramfits_output(self, fits_chi2_paramfits_output,
                                                    fits_name):
-        df = fits_chi2_paramfits_output
+        ndatatable, chi2table = fits_chi2_paramfits_output
         try:
-            df = df[fits_name]
+            chi2table = chi2table[fits_name]
         except Exception as e:
             raise ConfigError(f"Could not select the fit names from the table: {e}") from e
-        return {'adapted_fits_chi2_table':  df}
+        return {'adapted_fits_chi2_table':  chi2table, 'ndatatable':ndatatable}
 
     def produce_fits_central_chi2_by_experiment_and_dataset(self,
-            adapted_fits_chi2_table, prepend_total=True,extra_sums=None):
+            adapted_fits_chi2_table, ndatatable, prepend_total=True,extra_sums=None):
         """Take the table returned by
         ``fits_matched_pseudorreplicas_chi2_output`` and break it down
         by experiment. If `preprend_total` is True, the sum over experiments
@@ -781,6 +792,7 @@ class Config(report.Config):
                 'by_dataset': [{
                     'fits_total_chi2': s,
                     'suptitle': 'Total',
+                    'ndata': ndatatable.loc[(slice(None), 'Total')].sum(),
                  }]}]
         else:
             total = []
@@ -790,31 +802,36 @@ class Config(report.Config):
             by_dataset = d['by_dataset'] = []
             for ds, dsdf in expdf.groupby(level=1):
                 dsdf.index  = dsdf.index.droplevel([0])
+                ndata = ndatatable[(exp,ds)]
                 if ds == 'Total':
                     ds = f'{exp} Total'
                     by_dataset.insert(0, {'fits_total_chi2': dsdf,
-                                   'suptitle':ds})
+                                   'suptitle':ds, 'ndata':ndata})
                 else:
                     by_dataset.append({'fits_total_chi2': dsdf,
-                                   'suptitle':ds})
+                                   'suptitle':ds, 'ndata':ndata})
 
             expres.append(d)
 
         if extra_sums:
+            dss = {d['suptitle'] for l in [*total, *expres] for d in l['by_dataset']}
             for es in extra_sums:
                 label = es['dataset_item']
                 components = es['components']
-                dss = set(df.index.levels[1])
                 diff = set(components) - dss
                 if diff:
                     bad_item = next(iter(diff))
                     raise ConfigError(f"Unrecognised element in extra sum: {diff}", bad_item, dss)
-                s = df.sort_index().loc[(slice(None), components), :].sum()
+
+                sliced = tableloader.get_extrasum_slice(df, components)
+                s = sliced.sum()
+                ndata = tableloader.get_extrasum_slice(ndatatable, components).sum()
                 total.append(
                     {'experiment_label': label,
                     'by_dataset': [{
                         'fits_total_chi2': s,
                         'suptitle': label,
+                        'ndata': ndata,
                      }]})
 
         return [*total, *expres]
@@ -832,3 +849,10 @@ class Config(report.Config):
         """
         l = fits_central_chi2_by_experiment_and_dataset
         return self._breakup_by_dataset_item(l, dataset_items)
+
+    def produce_fits_central_chi2_for_total(
+            self,
+            fits_central_chi2_by_experiment_and_dataset):
+        res = self.produce_fits_central_chi2_by_dataset_item(
+                fits_central_chi2_by_experiment_and_dataset, ['Total'])
+        return res
