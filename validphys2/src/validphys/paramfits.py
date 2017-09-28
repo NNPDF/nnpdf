@@ -891,17 +891,7 @@ def plot_as_value_error_central(as_datasets_central_chi2,
  
     datacentral, namescentral = zip(*as_datasets_central_chi2)
     cvcentral, errcentral = zip(*datacentral)
- 
-    reorder = [0,7,8,6,4,5,1,2,3]
-    cvcentral = cvcentral[0:9]
-    errcentral = errcentral[0:9]
-    namescentral = namescentral[0:9]
-    cvcentral = [cvcentral[i] for i in reorder]
-    errcentral = [errcentral[i] for i in reorder]
-    namescentral = [namescentral[i] for i in reorder]
- 
- 
- 
+  
     fig, ax = plot_horizontal_errorbars(
          [cvcentral], [errcentral], namescentral,
          [r'Central']
@@ -1021,7 +1011,12 @@ def alphas_shift(
     hide_total:bool=True,
     ndata_weight:bool=False):
 
-    """Plots NNLO - NLO alphas values for each experiment."""
+    """Plots NNLO - NLO alphas values for each experiment - i.e.
+        the shift in the best fit alphas for each process (as it currently
+        stands...) wrt the global best fit alphas at NLO or NNLO.
+        Also contains some computations for estimating MHOU, using either
+        the number of data points per experiment/process (ndata)
+        or the quadratic coefficient of the parabolic fit (quad_weights)"""
     
     df1 = dataspecs_ndata_table
     df = datasepecs_as_value_error_table_impl
