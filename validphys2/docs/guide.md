@@ -6,9 +6,9 @@ Introduction
 
 The immediate aim of validphys2 is to serve as a both very agile and
 highly reliable analysis framework for NNPDF, but the goal extends
-beyond. When the time codes, this framework should become the common
+beyond. When the time comes, this framework should become the common
 gateway that all the NNPDF code uses, providing features ranging from
-path handling to automated report generation to automatic detection
+from automated report generation to automatic detection
 of problems with the fits.
 
 The project is defined in two codes with well defined and separated
@@ -17,23 +17,22 @@ scopes:
 reportengine
  ~ It is a compiler of user-entered configuration (in the YAML format)
  into directed acyclic graphs of Python executable functions, to be
- defined by client applications based on reportengine. One such
- function that comes with reportengine is **report**, which extracts
- the requirements from a template  with a special syntax (See
- [Producing reports]) in the Markdown format and uses the `pandoc`
- program to generante a HTML report.
- Apart from the *compiler* functionality, `reportengine` also provides
- general application utilities such as crash handlers and a help
- system.
+ defined by client applications. One such function that comes with
+ reportengine is **report**, which extracts the requirements from
+ a template  with a special syntax (See [Producing reports]) in the
+ Markdown format and uses the `pandoc` program to generate an HTML
+ report.  Apart from the *compiler* functionality, `reportengine` also
+ provides general application utilities such as crash handlers and
+ a help system.
 
 validphys2
  ~ It is a set of higher level tools operating on the NNPDF resources,
  which can be used either within a `reportengine` application or
- standalone. It is based on the libnnpdf Python wrappers, and extends
- them with extra functionality (related to error checking, loading and
- downloading among others). The NNPDF objects are then used in
- functions producing plots, tables and other outputs (such as
- reweighted PDF sets)
+ standalone. It is based on the `libnnpdf` Python wrappers, and
+ extends them with extra functionality (related to error checking,
+ loading and downloading among others). The NNPDF objects are then
+ used in functions producing plots, tables and other outputs (such as
+ reweighted PDF sets).
 
 What is working
 ---------------
@@ -43,7 +42,9 @@ Right now the following features are implemented:
  - Processing of libnnpdf resources.
  - Data-Theory plotting specification.
  - PDF comparisons.
- - Statistic estimator plots and tables.
+ - A framework for fitting parameters such as $\alpha_S$ bases on
+   series of fits.
+ - Plots and tables showing statistical estimators.
  - Generation of reweighted sets.
  - Report generation from templates.
  - Automatic downloading of PDFs, fits and theories.
@@ -80,7 +81,7 @@ has the disadvantage that in order to get to the check, we presumably
 need to compute “complex\_calculation” first, and that could be
 a waste of time if it turns out that “parameter” is not correct for
 some reason and we can’t do the plot anyway. Instead we should arrange
-to call “check\_parameter\_is\_correct(parameter)” as early as
+to call `check_parameter_is_correct(parameter)` as early as
 possible (outside the plotting function) and show the user an
 informative error message.
 
@@ -181,10 +182,11 @@ Usage as a programmatic API
 While the goal of reportengine is to allow simple and easily
 repeatable bach actions, sometimes it is far simpler to get the work
 done with a raw (Python) script, or it is needed to explore the
-outcomes using something like an IPython notebook. It would be good to
+outcomes using something like an Jupyter notebook. It would be good to
 be able to use all the tools that already exist in validphys for that,
 without needing to reinvent the wheel or to alter functions so that
-for example they don’t to some preconfigured path. Therefore:
+for example they don’t write data to some preconfigured path.
+Therefore:
 
 -   The various computing and plotting tools should work well when
 	included in a normal script that doesn't use the reportengine

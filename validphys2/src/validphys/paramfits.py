@@ -26,7 +26,7 @@ import scipy.stats as stats
 from reportengine.figure import figure, figuregen
 from reportengine.table import table
 from reportengine import collect
-from reportengine.floatformatting import format_error_value_columns, format_number
+from reportengine.floatformatting import format_error_value_columns, format_number, ValueErrorTuple
 from reportengine.checks import make_argcheck, CheckError, check_positive, check_not_empty
 from NNPDF import pseudodata, single_replica, RandomGenerator
 
@@ -218,6 +218,7 @@ def quadratic_as_determination(fits_as,
 
     return _parabolic_as_minimum_and_coefficient( fits_as,
                    fits_replica_data_with_discarded_replicas, badcurves)[1]
+
 
 
 @make_argcheck
@@ -462,10 +463,12 @@ parabolic_as_determination_for_total = collect(parabolic_as_determination,
 as_determination_from_central_chi2_for_total = collect(
         as_determination_from_central_chi2, ['fits_central_chi2_for_total'])
 
+
 quadratic_datasets_pseudorreplicas_chi2 = collect(
     quadratic_as_determination_with_tag,
     ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
 )
+
 
 @figure
 def plot_as_datasets_pseudorreplicas_chi2(as_datasets_pseudorreplicas_chi2):
