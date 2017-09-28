@@ -142,7 +142,7 @@ def plot_fits_as_profile(fits_as, fits_total_chi2, suptitle=None):
     fits_total_chi2 = np.ravel(fits_total_chi2)
     ax.plot(alphas, fits_total_chi2)
     ax.set_xlabel(r'$\alpha_S$')
-    ax.set_ylabel(r'$\chi²/N_{dat}$')
+    ax.set_ylabel(r'$\chi²$')
     if suptitle:
         fig.suptitle(suptitle)
     return fig
@@ -170,8 +170,9 @@ def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated,
     return table
 
 def _get_parabola(asvals, chi2vals):
+    chi2vals = np.ravel(chi2vals)
     filt =  np.isfinite(chi2vals)
-    return np.polyfit(asvals[filt], chi2vals[filt], 2)
+    return np.polyfit(np.asarray(asvals)[filt], chi2vals[filt], 2)
 
 
 
@@ -255,6 +256,108 @@ def parabolic_as_determination(fits_as,
         minimums = np.log(minimums)
     return minimums
 
+def as_central_parabola(
+        fits_as,
+        fits_total_chi2):
+    """Return the coefficients corresponding to the parabolic fit to the
+    minimum of the pseudorreplicas"""
+    return _get_parabola(fits_as, fits_total_chi2)
+
+as_datasets_central_parabolas = collect(
+        'as_central_parabola', ['fits_central_chi2_by_dataset_item'])
+
+
+@figure
+def plot_as_central_parabola(
+        fits_as,
+        as_central_parabola,
+        suptitle, ndata,
+        parabolic_as_determination_for_total,
+        markmin:bool=False):
+    """Plot a parabola with the central chi² per number of points, marking
+    the chi² at the total best fit."""
+    fig,ax = plt.subplots()
+    asarr = np.linspace(min(fits_as), max(fits_as), 100)
+    ax.plot(asarr, np.polyval(as_central_parabola, asarr)/ndata)
+
+    best_as = np.mean(parabolic_as_determination_for_total)
+    chi2_at_best = np.polyval(as_central_parabola, best_as)/ndata
+    ax.scatter(best_as, chi2_at_best)
+    ax.annotate(format_number(chi2_at_best, 3), (best_as, chi2_at_best))
+    if markmin:
+        ax.axvline(-as_central_parabola[1]/2/as_central_parabola[0])
+    ax.set_ylabel(r'$\chi^2/N_{data}$')
+    ax.set_xlabel(r'$\alpha_S$')
+    ax.set_title(f"{suptitle}")
+    return fig
+
+@figure
+def plot_as_cummulative_central_chi2(fits_as,
+                                     as_datasets_central_parabolas,
+                                     by_dataset_suptitle):
+    """Plot the cummulative total chi² for each of the datasets"""
+    fig,ax  = plt.subplots()
+    nx = 100
+    asarr = np.linspace(min(fits_as), max(fits_as), nx)
+    last = np.zeros(nx)
+    for (p, label) in zip(as_datasets_central_parabolas, by_dataset_suptitle):
+        val = last + np.polyval(p, asarr)
+        ax.fill_between(asarr, last, val, label=label)
+        last = val
+    ax.legend()
+    ax.set_ylabel(r'$\chi^2$')
+    ax.set_xlabel(r'$\alpha_S$')
+    ax.set_ylim(0)
+    ax.set_xlim(asarr[[0,-1]])
+
+    return fig
+
+@figure
+def plot_as_cummulative_central_chi2_diff(fits_as,
+                                     as_datasets_central_parabolas,
+                                     by_dataset_suptitle,
+                                     parabolic_as_determination_for_total):
+    """Plot the cummulative difference between the χ² at the best global
+    αs fit and the χ² at αs. If the difference is negative, it is set to zero.
+    """
+    fig,ax  = plt.subplots()
+    nx = 100
+    best_as = np.mean(parabolic_as_determination_for_total)
+    asarr = np.linspace(min(fits_as), max(fits_as), nx)
+    last = np.zeros(nx)
+    for (p, label) in zip(as_datasets_central_parabolas, by_dataset_suptitle):
+        delta = np.polyval(p, asarr) - np.polyval(p, best_as)
+        delta[delta<0] = 0
+        val = last + delta
+        ax.fill_between(asarr, last, val, label=label)
+        last = val
+    ax.legend()
+    ax.set_ylabel(r'$\chi^2 - \chi^2_{{\rm best}\ \alpha_S}$')
+    ax.set_xlabel(r'$\alpha_S$')
+    ax.set_ylim(0)
+    ax.set_xlim(asarr[[0,-1]])
+
+    return fig
+
+
+@table
+def derivative_dispersion_table(
+                                as_datasets_central_parabolas,
+                                fits_as,
+                                by_dataset_suptitle,
+                                as_determination_from_central_chi2_for_total):
+    best_as = np.ravel(as_determination_from_central_chi2_for_total)[0]
+    d = {}
+    for label, p in zip(by_dataset_suptitle, as_datasets_central_parabolas):
+        d[label] = np.polyval(np.polyder(p), best_as)
+
+    s = pd.Series(d)
+    s['SUM'] = np.sum(s)
+    s['SUM QUADRATURE'] = np.sqrt(np.sum(s**2))
+    res =  pd.DataFrame(s, columns=['Derivative'])
+
+    return res
+
 
 def _aic(residuals, n, k):
     return 2*k + n*np.log(residuals) + 2*k*(k+1)/(n-k-1)
@@ -326,16 +429,7 @@ def as_determination_from_central_chi2(fits_as, fits_total_chi2):
     if a<=0:
         log.error("Found non convex parabola when computing the quadratic fit.")
         return np.nan, np.nan
-    return -b/(2*a), 1/(np.sqrt(a))
-
-fits_matched_pseudorreplicas_chi2_by_dataset = collect(
-        'by_dataset',
-        ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset'])
-
-fits_central_chi2_by_dataset = collect(
-        'by_dataset',
-        ['fits_central_chi2_by_experiment_and_dataset'])
-
+    return ValueErrorTuple(-b/(2*a), 1/(np.sqrt(a)))
 
 def parabolic_as_determination_with_tag(parabolic_as_determination, suptitle):
     """Convenience function to collect the arguments together. It is an identity"""
@@ -372,7 +466,6 @@ quadratic_datasets_pseudorreplicas_chi2 = collect(
     quadratic_as_determination_with_tag,
     ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
 )
-
 
 @figure
 def plot_as_datasets_pseudorreplicas_chi2(as_datasets_pseudorreplicas_chi2):
@@ -440,12 +533,18 @@ def bootstrapping_stats_error(parabolic_as_determination, nresamplings:int=10000
     and thn computing the standard deviation of the means."""
     distribution = parabolic_as_determination
     shape = (nresamplings, len(distribution))
+    if not len(distribution):
+        log.error("Cannot conpute stats error. Empty data.")
+        return np.nan
     return np.random.choice(distribution, shape).mean(axis=1).std()
 
 @check_positive('nresamplings')
 def half_sample_stats_error(parabolic_as_determination, nresamplings:int=100000):
     """Like the bootstrapping error, but using only half og the data"""
     distribution = parabolic_as_determination[:len(parabolic_as_determination)//2]
+    if not len(distribution):
+        log.error("Cannot compute half stats. Too few data")
+        return np.nan
     shape = (nresamplings, len(distribution))
     return np.random.choice(distribution, shape).mean(axis=1).std()
 
@@ -462,11 +561,12 @@ as_datasets_half_sample_stats_error = collect(half_sample_stats_error,
 
 
 #Don't write complicated column names everywhere
-ps_mean = "pseudirreplica mean"
+ps_mean = "pseudorreplica mean"
 ps_error = "pseudorreplica error"
 ps_stat_error = "pseudorreplica stat"
 ps_half_stat_error = "pseudorreplica halfstat"
 stats_ratio = r"$\frac{halfstat}{stat}/\sqrt 2$"
+n = 'n'
 
 stats_halfone = "cv selecting one half of the replicas"
 err_halfone = "err selecting one half of the replicas"
@@ -474,7 +574,7 @@ err_halfone = "err selecting one half of the replicas"
 stats_halfother = "cv selecting other half of the replicas"
 err_halfonother = "err selecting other half of the replicas"
 
-ps_cols = (ps_mean, ps_error, ps_stat_error, ps_half_stat_error,
+ps_cols = (ps_mean, ps_error ,n, ps_stat_error, ps_half_stat_error,
            stats_halfone, err_halfone, stats_halfother, err_halfonother)
 
 
@@ -494,6 +594,7 @@ def pseudorreplicas_stats_error(
                 as_datasets_bootstrapping_stats_error,
                 as_datasets_half_sample_stats_error):
         d[ps_mean][tag] = np.mean(distribution)
+        d[n][tag] = len(distribution)
         d[ps_error][tag] = np.std(distribution)
         d[ps_stat_error][tag] = statserr
         d[ps_half_stat_error][tag] = halfstaterr
@@ -511,6 +612,7 @@ def pseudorreplicas_stats_error(
 
 datasepecs_pseudorreplica_stats_error = collect(pseudorreplicas_stats_error, ['dataspecs'])
 
+#TODO: This is deprecated FAPP
 @make_argcheck
 def _check_dataset_items(dataset_items, dataspecs_dataset_suptitle):
     """Check that the dataset_items are legit."""
@@ -541,7 +643,7 @@ def compare_determinations_table_impl(
 
 
     #Use this to get the right sorting
-    d  = defaultdict(list)
+    d  = defaultdict(dict)
     tags = []
     for (cv, error), tag in as_datasets_central_chi2:
         d[cv_mean][tag] = cv
@@ -554,9 +656,6 @@ def compare_determinations_table_impl(
     df = pd.DataFrame(d, columns=[*ps_cols, cv_mean, cv_error])
     df = df.loc[tags]
     return df
-
-
-
 
 @table
 @_check_speclabels_different
@@ -585,10 +684,10 @@ def dataspecs_stats_error_table(
 def compare_determinations_table(compare_determinations_table_impl):
     """Return ``compare_determinations_table_impl`` formatted nicely"""
     df = compare_determinations_table_impl
-    format_error_value_columns(df, "pseudoreplica mean",
-         "pseudorreplica error", inplace=True)
-    format_error_value_columns(df, "central mean",
-        "central error", inplace=True)
+    format_error_value_columns(df, ps_mean,
+         ps_error, inplace=True)
+    format_error_value_columns(df, cv_mean,
+        cv_error, inplace=True)
     stats_cols = {ps_stat_error, ps_half_stat_error, stats_ratio}
     #Don't fail if/when we remove a table from here
     stats_cols &= set(df.columns)
@@ -599,6 +698,9 @@ def compare_determinations_table(compare_determinations_table_impl):
     return df
 
 dataspecs_as_datasets_pseudorreplicas_chi2 = collect('as_datasets_pseudorreplicas_chi2', ['dataspecs'])
+
+quad_as_datasets_pseudorreplicas_chi2 = collect('quadratic_datasets_pseudorreplicas_chi2',['dataspecs'])
+
 
 by_dataset_suptitle = collect(
     'suptitle',
@@ -613,11 +715,7 @@ by_dataset_ndata = collect(
     ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
 )
 
-
-
 dataspecs_dataset_ndata = collect('by_dataset_ndata', ['dataspecs'])
-
-quad_as_datasets_pseudorreplicas_chi2 = collect('quadratic_datasets_pseudorreplicas_chi2',['dataspecs'])
 
 #TODO: Deprecate fixup dataset_items earlier
 @_check_speclabels_different
@@ -640,6 +738,46 @@ def dataspecs_ndata_table(
     if dataset_items is not None:
         df = df.loc[dataset_items]
     return df
+
+@_check_speclabels_different
+@_check_dataset_items
+def datasepecs_quad_table_impl(
+        quad_as_datasets_pseudorreplicas_chi2, dataspecs_speclabel,
+        dataspecs_dataset_suptitle,
+        dataset_items:(list, type(None)) = None,
+        display_n:bool = False,
+        ):
+    """Return a table with the mean and error of the quadratic value of the parabolic 
+    determinations across dataspecs. If display_n is True, a column showing the number of points
+    will be added to the table"""
+    tables = []
+    taglist = {}
+    if display_n:
+        cols = ['mean', 'error', 'n']
+    else:
+        cols = ['mean', 'error']
+    for dets in quad_as_datasets_pseudorreplicas_chi2:
+        d = defaultdict(dict)
+
+        for distribution, tag in dets:
+            d['mean'][tag] = np.mean(distribution)
+            d['error'][tag] = np.std(distribution)
+
+            if display_n:
+                d['n'][tag] = len(distribution)
+            taglist[tag] = None
+
+        tables.append(pd.DataFrame(d, columns=cols))
+
+    df = pd.concat(tables, axis=1, keys=dataspecs_speclabel)
+    if dataset_items is None:
+        ordered_keys = list(taglist)
+    else:
+        ordered_keys = dataset_items
+
+    df = df.loc[ordered_keys]
+    return df
+
 
 
 @_check_speclabels_different
@@ -684,47 +822,9 @@ def datasepecs_as_value_error_table_impl(
 
     df = df.loc[ordered_keys]
 
+
+
     return df
-
-@_check_speclabels_different
-@_check_dataset_items
-def datasepecs_quad_table_impl(
-        quad_as_datasets_pseudorreplicas_chi2, dataspecs_speclabel,
-        dataspecs_dataset_suptitle,
-        dataset_items:(list, type(None)) = None,
-        display_n:bool = False,
-        ):
-    """Return a table with the mean and error of the quadratic value of the parabolic 
-    determinations across dataspecs. If display_n is True, a column showing the number of points
-    will be added to the table"""
-    tables = []
-    taglist = {}
-    if display_n:
-        cols = ['mean', 'error', 'n']
-    else:
-        cols = ['mean', 'error']
-    for dets in quad_as_datasets_pseudorreplicas_chi2:
-        d = defaultdict(dict)
-
-        for distribution, tag in dets:
-            d['mean'][tag] = np.mean(distribution)
-            d['error'][tag] = np.std(distribution)
-
-            if display_n:
-                d['n'][tag] = len(distribution)
-            taglist[tag] = None
-
-        tables.append(pd.DataFrame(d, columns=cols))
-
-    df = pd.concat(tables, axis=1, keys=dataspecs_speclabel)
-    if dataset_items is None:
-        ordered_keys = list(taglist)
-    else:
-        ordered_keys = dataset_items
-
-    df = df.loc[ordered_keys]
-    return df
-
 
 @table
 def dataspecs_as_value_error_table(datasepecs_as_value_error_table_impl):
@@ -732,14 +832,6 @@ def dataspecs_as_value_error_table(datasepecs_as_value_error_table_impl):
     def f(x):
         return format_error_value_columns(x, x.columns[0], x.columns[1])
     return datasepecs_as_value_error_table_impl.groupby(level=0, axis=1).apply(f)
-
-@table
-def dataspecs_quad_value_error_table(datasepecs_quad_table_impl):
-    """Return ``dataspecs_quad_value_error_table`` formatted nicely"""
-    def f(x):
-        return format_error_value_columns(x, x.columns[0], x.columns[1])
-    return datasepecs_quad_table_impl.groupby(level=0, axis=1).apply(f)
-
 
 @figure
 def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
@@ -780,13 +872,13 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
     ax.legend()
     return fig
 
-
 @make_argcheck
 def _check_first_is_total(fits_central_chi2_by_experiment_and_dataset):
     l = fits_central_chi2_by_experiment_and_dataset
     if not l or l[0]['experiment_label'] != 'Total': 
         raise CheckError("Expecting that the first experiment is the total. You may need to set prepend_total=True") 
- 
+
+
 @figure
 @_check_first_is_total
 def plot_as_value_error_central(as_datasets_central_chi2,
@@ -985,6 +1077,8 @@ def alphas_shift(
     term1, term2 = dataspecs_speclabel
 
 # deprecated stuff (old MHOU estimates)
+    shift_weighted_mean_nnlo = np.average(alphas_shift,weights=weights_nnlo)
+    shift_weighted_mean_nlo = np.average(alphas_shift,weights=weights_nlo)
 
     shift_weighted_var_nnlo2 = np.average((alphas_shift-shift_weighted_mean_nnlo)**2,weights=weights_nnlo )
 
@@ -1037,8 +1131,6 @@ def plot_pull_gaussian_fit_pseudo(datasepecs_as_value_error_table_impl,
         #ax.legend()
 
         yield fig
-
-
 
 @figure
 def plot_fitted_replicas_as_profiles_matched(fits_as,
@@ -1129,7 +1221,6 @@ def plot_dataspecs_parabola_examples(
         dataset_items:(list, type(None))=None,
         examples_per_item:int = 2,
         random_seed:int = 0,
-        simpletitle:bool=False,
         ):
     """Sample ``examples_per_item`` replica_indexes for each of the
     ``dataset_items``. Yield a plot with the parabolic fit, as resoved for
@@ -1154,10 +1245,7 @@ def plot_dataspecs_parabola_examples(
 
             fig, ax = plt.subplots()
             im = marker_iter_plot()
-            if simpletitle:
-                ax.set_title(f"{it}")
-            else:
-                ax.set_title(f"Parabola example for {it} (nnfit_index={index})")
+            ax.set_title(f"Parabola example for {it} (nnfit_index={index})")
             for i, (label, vals) in enumerate(row.groupby(level=0)):
                 asvals = vals.index.get_level_values(1)
                 color = f'C{i}'
@@ -1168,9 +1256,6 @@ def plot_dataspecs_parabola_examples(
                 ax.plot(asvals, np.polyval(parabola,asvals), color=color,
                          linestyle='--', lw=0.5)
                 m = -b/2/a
-                ax.set_xlabel(f"$\\alpha_S$")
-                ax.set_ylabel(f"$\\chi^2$")
-
                 if asvals[0] < m < asvals[-1]:
                     ax.axvline(m ,  color=color, lw=0.4)
             ax.legend(  )
