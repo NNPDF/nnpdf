@@ -789,7 +789,7 @@ def _check_first_is_total(fits_central_chi2_by_experiment_and_dataset):
  
 @figure
 @_check_first_is_total
-def plot_dataspecs_as_value_error_central(as_datasets_central_chi2,
+def plot_as_value_error_central(as_datasets_central_chi2,
          marktotal:bool=True):
     """Plot the result of ``plot_as_datasets_pseudorreplicas_chi2`` and
     ``plot_as_exepriments_central_chi2`` together."""
@@ -842,13 +842,6 @@ def plot_pulls_central(as_datasets_central_chi2,hide_total:bool=True):
         for i in range(0,len(cv)):
             pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
 
-    # This can probably be done better.. bit of a hack at the moment
-    reorder = [6,7,5,3,4,0,1,2]
-    pulls = pulls[0:8]
-    names = names[0:8]
-    pulls = [pulls[i] for i in reorder]
-    names = [names[i] for i in reorder]
-
     fig, ax = barplot(pulls, names, " ", orientation="horizontal")
 
     return fig
@@ -873,13 +866,6 @@ def plot_pull_gaussian_fit_central(as_datasets_central_chi2,
     else:
         for i in range(0,len(cv)):
             pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
-
-    reorder = [6,7,5,3,4,0,1,2]
-    pulls = pulls[0:8]
-    names = names[0:8]
-    pulls = [pulls[i] for i in reorder]
-    names = [names[i] for i in reorder]   
-    print(names)
 
     mean_pulls = np.mean(pulls)
     std_dev = np.std(pulls)
@@ -960,7 +946,6 @@ def alphas_shift(
     cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
     quad_weights = df2.loc[:, (slice(None), 'mean')].T.as_matrix()
 
-
     catlabels = list(df.index)
     catlabels2 = list(df2.index)
 
@@ -969,13 +954,11 @@ def alphas_shift(
     nlo_alphas_global_shift = []
     nnlo2_alphas_global_shift = []
 
-
     for i in range(0,len(cvs[0])):
         alphas_shift.append(cvs[1][i]-cvs[0][i])
         nnlo2_alphas_global_shift.append((cvs[1][i]-tots_mean[1])**2)
         nlo_alphas_global_shift.append((cvs[0][i]-tots_mean[0])**2)
         nnlo_alphas_global_shift.append(cvs[1][i]-tots_mean[1])
-
 
     weights_nlo = []
     weights_nnlo = []
@@ -991,7 +974,6 @@ def alphas_shift(
             weights_nlo.append(ndataptsnlo[i])
             weights_nnlo.append(ndataptsnnlo[i])
 
-
     else:  
         for i in range(0,len(quad_weights.T)):
             weights_nlo.append(quad_weights[0][i])
@@ -1002,31 +984,15 @@ def alphas_shift(
 
     term1, term2 = dataspecs_speclabel
 
-    shift_weighted_mean_nnlo = np.average(alphas_shift,weights=weights_nnlo)
-    shift_weighted_mean_nlo = np.average(alphas_shift,weights=weights_nlo)
+# deprecated stuff (old MHOU estimates)
+
     shift_weighted_var_nnlo2 = np.average((alphas_shift-shift_weighted_mean_nnlo)**2,weights=weights_nnlo )
+
     shift_weighted_var_nlo2 = np.average((alphas_shift-shift_weighted_mean_nlo)**2,weights=weights_nlo )
 
-    # print(np.sqrt(shift_weighted_var_nnlo2),np.sqrt(shift_weighted_var_nlo2))
     shift_weighted_var_nnlo = np.average(nnlo2_alphas_global_shift,weights=weights_nnlo)
 
     nnlo_err = np.sqrt(shift_weighted_var_nnlo/(1-(np.sum(weights_nnlo_sq)/(np.sum(weights_nnlo))**2)))
-
-    weighted_stddev_nnlo = np.sqrt(shift_weighted_var_nnlo)
-
-    shift_weighted_var_nlo = np.average(nlo_alphas_global_shift,weights=weights_nnlo)
-    weighted_stddev_nlo = np.sqrt(shift_weighted_var_nlo)
-
-    nlo_err = np.sqrt(shift_weighted_var_nlo/(1-(np.sum(weights_nlo_sq)/(np.sum(weights_nlo))**2)))
-
-    weighted_diff_nlo = np.sqrt(np.sum((alphas_shift[i]*weights_nlo[i])**2))/np.sum(weights_nlo)
-
-    weighted_diff_nnlo = np.sqrt(np.sum((nnlo_alphas_global_shift[i]*weights_nnlo[i])**2))/np.sum(weights_nnlo)
-
-    # print(weighted_stddev_nlo,weighted_stddev_nnlo)
-    # print(weighted_diff_nlo,weighted_diff_nnlo)
-    print(nnlo_err)
-
 
 
     fig, ax = barplot(alphas_shift, catlabels, " ", orientation = "horizontal")
