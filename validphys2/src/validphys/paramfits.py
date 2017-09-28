@@ -357,18 +357,25 @@ def as_determination_from_central_chi2_with_tag(
 
 as_datasets_pseudorreplicas_chi2 = collect(
     parabolic_as_determination_with_tag,
-    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
+    ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
 )
 
 as_datasets_central_chi2 = collect(
     as_determination_from_central_chi2_with_tag,
-    ['fits_central_chi2_by_experiment_and_dataset','by_dataset']
+    ['fits_central_chi2_by_dataset_item']
 )
 
 quadratic_datasets_pseudorreplicas_chi2 = collect(
     quadratic_as_determination_with_tag,
-    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
+    ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
 )
+
+parabolic_as_determination_for_total = collect(parabolic_as_determination,
+                                      ['matched_pseudorreplcias_for_total'])
+
+as_determination_from_central_chi2_for_total = collect(
+        as_determination_from_central_chi2, ['fits_central_chi2_for_total'])
+
 
 @figure
 def plot_as_datasets_pseudorreplicas_chi2(as_datasets_pseudorreplicas_chi2):
@@ -449,11 +456,11 @@ def half_sample_stats_error(parabolic_as_determination, nresamplings:int=100000)
 
 
 as_datasets_bootstrapping_stats_error = collect(bootstrapping_stats_error,
-    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
+    ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
 )
 
 as_datasets_half_sample_stats_error = collect(half_sample_stats_error,
-    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
+    ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
 )
 
 
@@ -598,7 +605,7 @@ dataspecs_as_datasets_pseudorreplicas_chi2 = collect('as_datasets_pseudorreplica
 
 by_dataset_suptitle = collect(
     'suptitle',
-    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
+    ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
 )
 
 dataspecs_dataset_suptitle = collect('by_dataset_suptitle', ['dataspecs'])
@@ -606,7 +613,7 @@ dataspecs_dataset_suptitle = collect('by_dataset_suptitle', ['dataspecs'])
 
 by_dataset_ndata = collect(
     'ndata',
-    ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',]
+    ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
 )
 
 
@@ -1110,7 +1117,7 @@ dataspecs_fits_as = collect('fits_as', ['dataspecs'])
 
 by_dataset_as_chi2 = collect(
         fits_replica_data_with_discarded_replicas,
-        ['fits_matched_pseudorreplicas_chi2_by_experiment_and_dataset', 'by_dataset',])
+        ['fits_matched_pseudorreplicas_chi2_by_dataset_item',])
 
 dataspecs_fits_replica_data_with_discarded_replicas = collect(
         'by_dataset_as_chi2', ['dataspecs'])
