@@ -176,7 +176,7 @@ def _get_parabola(asvals, chi2vals):
 
 
 
-def _parabolic_as_determination(fits_as,
+def _parabolic_as_minimum_and_coefficient(fits_as,
         fits_replica_data_with_discarded_replicas,
         badcurves='discard'):
     """This is like parabolic_as_determination but without the as_transform
@@ -186,10 +186,12 @@ def _parabolic_as_determination(fits_as,
     table = fits_replica_data_with_discarded_replicas.as_matrix()
 
     minimums = []
+    quadratic = []
     asarr = np.asarray(alphas)
     for row in table:
         filt =  np.isfinite(row)
         a,b,c = np.polyfit(asarr[filt], row[filt], 2)
+        quadratic.append(a)
         if badcurves == 'allminimum':
             minimums.append(asarr[filt][np.argmin(row[filt])])
         elif a>0:
@@ -200,9 +202,23 @@ def _parabolic_as_determination(fits_as,
             minimums.append(asarr[filt][np.argmin(row[filt])])
         else:
             raise RuntimeError("Unknown bad curves.")
-
+    quadratic = np.asarray(quadratic)
     minimums = np.asarray(minimums)
-    return minimums
+    return minimums, quadratic
+
+
+def _parabolic_as_determination(fits_as,
+        fits_replica_data_with_discarded_replicas,badcurves='discard'):
+
+    return _parabolic_as_minimum_and_coefficient( fits_as,
+                   fits_replica_data_with_discarded_replicas, badcurves)[0]
+
+def quadratic_as_determination(fits_as,
+        fits_replica_data_with_discarded_replicas,badcurves='discard'):
+
+    return _parabolic_as_minimum_and_coefficient( fits_as,
+                   fits_replica_data_with_discarded_replicas, badcurves)[1]
+
 
 
 @make_argcheck
@@ -420,6 +436,9 @@ def parabolic_as_determination_with_tag(parabolic_as_determination, suptitle):
     """Convenience function to collect the arguments together. It is an identity"""
     return parabolic_as_determination, suptitle
 
+def quadratic_as_determination_with_tag(quadratic_as_determination, suptitle):
+    """Convenience function to collect the arguments together. It is an identity"""
+    return quadratic_as_determination, suptitle
 
 def as_determination_from_central_chi2_with_tag(
         as_determination_from_central_chi2, suptitle):
@@ -443,6 +462,12 @@ parabolic_as_determination_for_total = collect(parabolic_as_determination,
 
 as_determination_from_central_chi2_for_total = collect(
         as_determination_from_central_chi2, ['fits_central_chi2_for_total'])
+
+
+quadratic_datasets_pseudorreplicas_chi2 = collect(
+    quadratic_as_determination_with_tag,
+    ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
+)
 
 
 @figure
@@ -677,6 +702,9 @@ def compare_determinations_table(compare_determinations_table_impl):
 
 dataspecs_as_datasets_pseudorreplicas_chi2 = collect('as_datasets_pseudorreplicas_chi2', ['dataspecs'])
 
+quad_as_datasets_pseudorreplicas_chi2 = collect('quadratic_datasets_pseudorreplicas_chi2',['dataspecs'])
+
+
 by_dataset_suptitle = collect(
     'suptitle',
     ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
@@ -713,6 +741,46 @@ def dataspecs_ndata_table(
     if dataset_items is not None:
         df = df.loc[dataset_items]
     return df
+
+@_check_speclabels_different
+@_check_dataset_items
+def datasepecs_quad_table_impl(
+        quad_as_datasets_pseudorreplicas_chi2, dataspecs_speclabel,
+        dataspecs_dataset_suptitle,
+        dataset_items:(list, type(None)) = None,
+        display_n:bool = False,
+        ):
+    """Return a table with the mean and error of the quadratic value of the parabolic
+    determinations across dataspecs. If display_n is True, a column showing the number of points
+    will be added to the table"""
+    tables = []
+    taglist = {}
+    if display_n:
+        cols = ['mean', 'error', 'n']
+    else:
+        cols = ['mean', 'error']
+    for dets in quad_as_datasets_pseudorreplicas_chi2:
+        d = defaultdict(dict)
+
+        for distribution, tag in dets:
+            d['mean'][tag] = np.mean(distribution)
+            d['error'][tag] = np.std(distribution)
+
+            if display_n:
+                d['n'][tag] = len(distribution)
+            taglist[tag] = None
+
+        tables.append(pd.DataFrame(d, columns=cols))
+
+    df = pd.concat(tables, axis=1, keys=dataspecs_speclabel)
+    if dataset_items is None:
+        ordered_keys = list(taglist)
+    else:
+        ordered_keys = dataset_items
+
+    df = df.loc[ordered_keys]
+    return df
+
 
 
 @_check_speclabels_different
@@ -807,6 +875,34 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
     ax.legend()
     return fig
 
+@make_argcheck
+def _check_first_is_total(fits_central_chi2_by_experiment_and_dataset):
+    l = fits_central_chi2_by_experiment_and_dataset
+    if not l or l[0]['experiment_label'] != 'Total':
+        raise CheckError("Expecting that the first experiment is the total. You may need to set prepend_total=True")
+
+
+@figure
+@_check_first_is_total
+def plot_as_value_error_central(as_datasets_central_chi2,
+         marktotal:bool=True):
+    """Plot the result of ``plot_as_datasets_pseudorreplicas_chi2`` and
+    ``plot_as_exepriments_central_chi2`` together."""
+
+    datacentral, namescentral = zip(*as_datasets_central_chi2)
+    cvcentral, errcentral = zip(*datacentral)
+
+    fig, ax = plot_horizontal_errorbars(
+         [cvcentral], [errcentral], namescentral,
+         [r'Central']
+    )
+    ax.axvline(cvcentral[0], color=f'C{0}', linewidth=0.5, linestyle='--')
+
+    ax.set_xlabel(r"$\alpha_S$")
+    ax.set_xlim(0.110,0.125)
+    ax.set_title(r"$\alpha_S$ determination")
+    ax.legend()
+    return fig
 
 # Pull plots
 def _pulls_func(cv,alphas_global,error,error_global):
@@ -815,52 +911,203 @@ def _pulls_func(cv,alphas_global,error,error_global):
 
 
 @figure
-def pull_plots_global_min(datasepecs_as_value_error_table_impl,
-        dataspecs_fits_as,dataspecs_speclabel):
+@_check_first_is_total
+def plot_pulls_central(as_datasets_central_chi2,hide_total:bool=True):
+    """ Plots the pulls per experiment for the central results """
+
+    data, names = zip(*as_datasets_central_chi2)
+    cv, err = zip(*data)
+    pulls = list()
+    if hide_total:
+        for i in range(1,len(cv)):
+            pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
+            names = [x for x in names if x!='Total']
+    else:
+        for i in range(0,len(cv)):
+            pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
+
+    fig, ax = barplot(pulls, names, " ", orientation="horizontal")
+    ax.legend()
+
+    return fig
+
+@figure
+@_check_first_is_total
+def plot_pull_gaussian_fit_central(as_datasets_central_chi2,
+        dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
+
+    """Bins the pulls and overlays
+    the normalised gaussian fit and KDE to the histogram of pulls"""
+
+    data, names = zip(*as_datasets_central_chi2)
+    cv, err = zip(*data)
+    pulls = list()
+
+    if hide_total:
+        for i in range(1,len(cv)):
+            pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
+            names = [x for x in names if x!='Total']
+    else:
+        for i in range(0,len(cv)):
+            pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
+
+    mean_pulls = np.mean(pulls)
+    std_dev = np.std(pulls)
+    x = np.linspace(min(pulls),max(pulls), 100)
+    kde_pulls = stats.gaussian_kde(pulls, bw_method='silverman')
+    fig, ax = plt.subplots()
+
+    #ax.set_title(f"Histogram of pulls for {label} dataset")
+    ax.set_xlabel(r"Pull")
+    ax.plot(x, kde_pulls(x), label="Kernal Density Estimation of pulls")
+    ax.hist(pulls,normed=True,bins=4)
+    ax.grid(False)
+    ax.plot(x, mlab.normpdf(x, mean_pulls, std_dev),label="Normalised gaussian fit")
+    ax.legend()
+
+    return fig
+
+@figure
+def plot_pull_plots_global_min(datasepecs_as_value_error_table_impl,
+        dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
 
     """Plots the pulls of individual experiments as a barplot."""
 
     df = datasepecs_as_value_error_table_impl
-    catlabels = list(df.index)
-    cvs = df.loc[:, (slice(None), 'mean')].as_matrix()
-    errors = df.loc[:, (slice(None), 'error')].as_matrix()
     tots_error = df.loc['Total', (slice(None), 'error')].as_matrix()
     tots_mean = df.loc['Total', (slice(None), 'mean')].as_matrix()
 
+    if hide_total:
+        df = df.loc[df.index != 'Total']
+
+    catlabels = list(df.index)
+    cvs = df.loc[:, (slice(None), 'mean')].as_matrix()
+    errors = df.loc[:, (slice(None), 'error')].as_matrix()
+
     pulls = _pulls_func(cvs,tots_mean,errors,tots_error).T
 
-    fig, ax = barplot(pulls, catlabels, dataspecs_speclabel, "horizontal")
-    ax.set_title(r"Pulls per experiment")
-    #ax.legend()
+    fig, ax = barplot(pulls, catlabels, dataspecs_speclabel, orientation="horizontal")
+    #ax.set_title(r"Pulls per experiment")
+    ax.legend()
+    return fig
+
+@make_argcheck
+def _check_two_speclabels(dataspecs_speclabel):
+    if len(dataspecs_speclabel) != 2:
+        raise CheckError("Need 2 data specs")
+
+
+@figure
+@_check_two_speclabels
+def alphas_shift(
+    datasepecs_as_value_error_table_impl,
+    datasepecs_quad_table_impl,
+    dataspecs_ndata_table,
+    dataspecs_dataset_ndata,
+    dataspecs_fits_as,
+    dataspecs_speclabel,
+    hide_total:bool=True,
+    ndata_weight:bool=False):
+
+    """Plots NNLO - NLO alphas values for each experiment - i.e.
+        the shift in the best fit alphas for each process (as it currently
+        stands...) wrt the global best fit alphas at NLO or NNLO.
+        Also contains some computations for estimating MHOU, using either
+        the number of data points per experiment/process (ndata)
+        or the quadratic coefficient of the parabolic fit (quad_weights)"""
+
+    df1 = dataspecs_ndata_table
+    df = datasepecs_as_value_error_table_impl
+    df2 = datasepecs_quad_table_impl
+
+
+    tots_mean = df.loc['Total', (slice(None), 'mean')].as_matrix()
+
+    if hide_total:
+        df = df.loc[df.index != 'Total']
+        df1 = df1.loc[df1.index != 'Total']
+        df2 = df2.loc[df2.index != 'Total']
+
+
+    cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
+    quad_weights = df2.loc[:, (slice(None), 'mean')].T.as_matrix()
+
+    catlabels = list(df.index)
+
+    alphas_shift = []
+    nnlo_alphas_global_shift = []
+    nlo_alphas_global_shift = []
+    nnlo2_alphas_global_shift = []
+
+    for i in range(0,len(cvs[0])):
+        alphas_shift.append(cvs[1][i]-cvs[0][i])
+        nnlo2_alphas_global_shift.append((cvs[1][i]-tots_mean[1])**2)
+        nlo_alphas_global_shift.append((cvs[0][i]-tots_mean[0])**2)
+        nnlo_alphas_global_shift.append(cvs[1][i]-tots_mean[1])
+
+    weights_nlo = []
+    weights_nnlo = []
+    weights_nnlo_sq = []
+    weights_nlo_sq = []
+
+    if ndata_weight:
+
+        ndataptsnlo = df1.iloc[:,0]
+        ndataptsnnlo = df1.iloc[:,1]
+
+        for i in range(0,len(ndataptsnlo)):
+            weights_nlo.append(ndataptsnlo[i])
+            weights_nnlo.append(ndataptsnnlo[i])
+
+    else:
+        for i in range(0,len(quad_weights.T)):
+            weights_nlo.append(quad_weights[0][i])
+            weights_nnlo.append(quad_weights[1][i])
+            weights_nnlo_sq.append((quad_weights[1][i])**2)
+            weights_nlo_sq.append((quad_weights[0][i])**2)
+
+
+    term1, term2 = dataspecs_speclabel
+
+
+    fig, ax = barplot(alphas_shift, catlabels, " ", orientation = "horizontal")
+    ax.set_title(f"{term2} - {term1} shifts")
+    ax.legend()
     return fig
 
 @figuregen
-def pull_gaussian_fit_global_min(datasepecs_as_value_error_table_impl,
-	    dataspecs_fits_as,dataspecs_speclabel):
+def plot_pull_gaussian_fit_pseudo(datasepecs_as_value_error_table_impl,
+        dataspecs_fits_as,dataspecs_speclabel,hide_total:bool=True):
 
     """Bins the pulls computed in pull_plots_global_min and overlays
     the normalised gaussian fit and KDE to the histogram of pulls"""
 
     df = datasepecs_as_value_error_table_impl
-    cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
-    errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
     tots_error = df.loc['Total', (slice(None), 'error')].T.as_matrix()
     tots_mean = df.loc['Total', (slice(None), 'mean')].T.as_matrix()
+
+    if hide_total:
+        df = df.loc[df.index != 'Total']
+
+    cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
+    errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
 
     for label, i in zip(dataspecs_speclabel, range(len(cvs))):
         pulls = _pulls_func(cvs[i],tots_mean[i],errors[i],tots_error[i])
 
-        mean_cv = np.mean(pulls)
+        mean_pulls = np.mean(pulls)
         std_dev = np.std(pulls)
         x = np.linspace(min(pulls),max(pulls), 100)
 
         kde_pulls = stats.gaussian_kde(pulls, bw_method='silverman')
         fig, ax = plt.subplots()
 
-        ax.set_title(f"Histogram of pulls for {label} dataset")
+        #ax.set_title(f"Histogram of pulls for {label} dataset")
         ax.set_xlabel(r"Pull")
         ax.plot(x, kde_pulls(x), label="Kernal Density Estimation of pulls")
-        ax.plot(x, mlab.normpdf(x, mean_cv, std_dev),label="Normalised gaussian fit")
+        ax.hist(pulls,normed=True,bins=4)
+        ax.grid(False)
+        ax.plot(x, mlab.normpdf(x, mean_pulls, std_dev),label="Normalised gaussian fit")
         ax.legend()
 
         yield fig
