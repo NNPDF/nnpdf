@@ -1015,13 +1015,12 @@ def alphas_shift(
         Also contains some computations for estimating MHOU, using either
         the number of data points per experiment/process (ndata)
         or the quadratic coefficient of the parabolic fit (quad_weights)"""
-    
+
     df1 = dataspecs_ndata_table
     df = datasepecs_as_value_error_table_impl
     df2 = datasepecs_quad_table_impl
 
 
-    tots_error = df.loc['Total', (slice(None), 'error')].as_matrix()
     tots_mean = df.loc['Total', (slice(None), 'mean')].as_matrix()
 
     if hide_total:
@@ -1030,12 +1029,10 @@ def alphas_shift(
         df2 = df2.loc[df2.index != 'Total']
 
 
-    errors = df.loc[:, (slice(None), 'error')].as_matrix()
     cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
     quad_weights = df2.loc[:, (slice(None), 'mean')].T.as_matrix()
 
     catlabels = list(df.index)
-    catlabels2 = list(df2.index)
 
     alphas_shift = []
     nnlo_alphas_global_shift = []
@@ -1062,7 +1059,7 @@ def alphas_shift(
             weights_nlo.append(ndataptsnlo[i])
             weights_nnlo.append(ndataptsnnlo[i])
 
-    else:  
+    else:
         for i in range(0,len(quad_weights.T)):
             weights_nlo.append(quad_weights[0][i])
             weights_nnlo.append(quad_weights[1][i])
@@ -1071,18 +1068,6 @@ def alphas_shift(
 
 
     term1, term2 = dataspecs_speclabel
-
-# deprecated stuff (old MHOU estimates)
-    shift_weighted_mean_nnlo = np.average(alphas_shift,weights=weights_nnlo)
-    shift_weighted_mean_nlo = np.average(alphas_shift,weights=weights_nlo)
-
-    shift_weighted_var_nnlo2 = np.average((alphas_shift-shift_weighted_mean_nnlo)**2,weights=weights_nnlo )
-
-    shift_weighted_var_nlo2 = np.average((alphas_shift-shift_weighted_mean_nlo)**2,weights=weights_nlo )
-
-    shift_weighted_var_nnlo = np.average(nnlo2_alphas_global_shift,weights=weights_nnlo)
-
-    nnlo_err = np.sqrt(shift_weighted_var_nnlo/(1-(np.sum(weights_nnlo_sq)/(np.sum(weights_nnlo))**2)))
 
 
     fig, ax = barplot(alphas_shift, catlabels, " ", orientation = "horizontal")
