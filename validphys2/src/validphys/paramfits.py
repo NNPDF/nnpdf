@@ -750,7 +750,7 @@ def datasepecs_quad_table_impl(
         dataset_items:(list, type(None)) = None,
         display_n:bool = False,
         ):
-    """Return a table with the mean and error of the quadratic value of the parabolic 
+    """Return a table with the mean and error of the quadratic value of the parabolic
     determinations across dataspecs. If display_n is True, a column showing the number of points
     will be added to the table"""
     tables = []
@@ -878,8 +878,8 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
 @make_argcheck
 def _check_first_is_total(fits_central_chi2_by_experiment_and_dataset):
     l = fits_central_chi2_by_experiment_and_dataset
-    if not l or l[0]['experiment_label'] != 'Total': 
-        raise CheckError("Expecting that the first experiment is the total. You may need to set prepend_total=True") 
+    if not l or l[0]['experiment_label'] != 'Total':
+        raise CheckError("Expecting that the first experiment is the total. You may need to set prepend_total=True")
 
 
 @figure
@@ -888,16 +888,16 @@ def plot_as_value_error_central(as_datasets_central_chi2,
          marktotal:bool=True):
     """Plot the result of ``plot_as_datasets_pseudorreplicas_chi2`` and
     ``plot_as_exepriments_central_chi2`` together."""
- 
+
     datacentral, namescentral = zip(*as_datasets_central_chi2)
     cvcentral, errcentral = zip(*datacentral)
-  
+
     fig, ax = plot_horizontal_errorbars(
          [cvcentral], [errcentral], namescentral,
          [r'Central']
     )
     ax.axvline(cvcentral[0], color=f'C{0}', linewidth=0.5, linestyle='--')
- 
+
     ax.set_xlabel(r"$\alpha_S$")
     ax.set_xlim(0.110,0.125)
     ax.set_title(r"$\alpha_S$ determination")
@@ -917,7 +917,7 @@ def plot_pulls_central(as_datasets_central_chi2,hide_total:bool=True):
 
     data, names = zip(*as_datasets_central_chi2)
     cv, err = zip(*data)
-    pulls = list()    
+    pulls = list()
     if hide_total:
         for i in range(1,len(cv)):
             pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
@@ -941,8 +941,8 @@ def plot_pull_gaussian_fit_central(as_datasets_central_chi2,
 
     data, names = zip(*as_datasets_central_chi2)
     cv, err = zip(*data)
-    pulls = list()    
-        
+    pulls = list()
+
     if hide_total:
         for i in range(1,len(cv)):
             pulls.append(_pulls_func(cv[i],cv[0],err[i],err[0]))
@@ -1051,7 +1051,7 @@ def alphas_shift(
     weights_nlo_sq = []
 
     if ndata_weight:
-        
+
         ndataptsnlo = df1.iloc[:,0]
         ndataptsnnlo = df1.iloc[:,1]
 
