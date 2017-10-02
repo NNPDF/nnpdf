@@ -1257,7 +1257,6 @@ def plot_alphas_distribution(datasepecs_as_value_error_table_impl,
         df = df.loc[df.index != 'Total']
 
     cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
-    errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
 
     alphas = []
 
