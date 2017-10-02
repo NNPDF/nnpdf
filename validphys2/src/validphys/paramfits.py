@@ -32,7 +32,7 @@ from NNPDF import pseudodata, single_replica, RandomGenerator
 
 from validphys.core import PDF
 from validphys.results import ThPredictionsResult, DataResult, chi2_breakdown_by_dataset
-from validphys.plotutils import plot_horizontal_errorbars, marker_iter_plot, barplot
+from validphys.plotutils import plot_horizontal_errorbars, marker_iter_plot, barplot,kde_plot
 
 log = logging.getLogger(__name__)
 
@@ -1241,6 +1241,37 @@ def plot_dataspecs_parabola_examples(
             ax.legend(  )
 
             yield fig
+
+@figuregen
+def plot_alphas_distribution(datasepecs_as_value_error_table_impl,
+         dataspecs_speclabel,hide_total:bool=True):
+
+    """Histograms of the values of alphas produced, with the datapoints in 
+    an array as sticks on an axis"""
+
+    df = datasepecs_as_value_error_table_impl
+    tots_error = df.loc['Total', (slice(None), 'error')].T.as_matrix()
+    tots_mean = df.loc['Total', (slice(None), 'mean')].T.as_matrix()
+
+    if hide_total:
+        df = df.loc[df.index != 'Total']
+
+    cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
+    errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
+
+    alphas = []
+
+    for label, i in zip(dataspecs_speclabel, range(len(cvs))):
+        fig, ax = plt.subplots()
+        alphas = cvs[i]
+
+        kde_plot(alphas)
+        ax.legend()
+        ax.set_title(f"KDE of $\\alpha_s$")
+    yield fig
+
+
+
 
 @figure
 def plot_poly_as_fit(fits_as,
