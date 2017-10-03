@@ -32,7 +32,7 @@ from NNPDF import pseudodata, single_replica, RandomGenerator
 
 from validphys.core import PDF
 from validphys.results import ThPredictionsResult, DataResult, chi2_breakdown_by_dataset
-from validphys.plotutils import plot_horizontal_errorbars, marker_iter_plot, barplot
+from validphys.plotutils import plot_horizontal_errorbars, marker_iter_plot, barplot,kde_plot
 
 log = logging.getLogger(__name__)
 
@@ -1241,6 +1241,23 @@ def plot_dataspecs_parabola_examples(
             ax.legend(  )
 
             yield fig
+
+@figure
+def plot_alphas_distribution(parabolic_as_determination,
+         dataspecs_speclabel,suptitle):
+
+    """Histograms of the values of alphas produced, with the datapoints in 
+    an array as sticks on an axis"""
+
+    distribution = parabolic_as_determination
+
+    fig, ax = plt.subplots()
+
+    kde_plot(distribution)
+    ax.legend()
+    ax.set_title(f"{suptitle}")
+    return fig
+
 
 @figure
 def plot_poly_as_fit(fits_as,

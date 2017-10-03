@@ -8,6 +8,7 @@ Created on Thu Apr 21 18:41:43 2016
 import functools
 import itertools
 from collections import namedtuple
+import scipy.stats as stats
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -306,3 +307,38 @@ def plot_horizontal_errorbars(cvs, errors, categorylabels, datalabels=None,
     ax.invert_yaxis()
     ax.grid(axis='y')
     return fig, ax
+
+@ax_or_gca
+def kde_plot(a, height=.05, axis="x", ax=None, **kwargs):
+	"""Plot datapoints in an array as sticks on an axis.
+	Parameters
+	----------
+	a : vector
+		1D array of observations.
+	height : scalar, optional
+		Height of ticks as proportion of the axis.
+	axis : {'x' | 'y'}, optional
+		Axis to draw rugplot on.
+	ax : matplotlib axes, optional
+		Axes to draw plot into; otherwise grabs current axes.
+	kwargs : key, value pairings
+		Other keyword arguments are passed to ``axvline`` or ``axhline``.
+	Returns
+	-------
+	ax : matplotlib axes
+		The Axes object with the plot on it.
+	"""
+	a = np.asarray(a)
+	vertical = kwargs.pop("vertical", axis == "y")
+	func = ax.axhline if vertical else ax.axvline
+	kwargs.setdefault("linewidth", 1)
+	for pt in a:
+		func(pt, 0, height, **kwargs)
+
+	kde_plot = stats.gaussian_kde(a, bw_method='silverman')
+	kde_x = np.linspace(min(a),max(a),100)
+	ax.plot(kde_x, kde_plot(kde_x), label="KDE")
+
+	return ax
+
+
