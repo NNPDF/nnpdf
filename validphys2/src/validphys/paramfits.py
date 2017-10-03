@@ -1242,34 +1242,21 @@ def plot_dataspecs_parabola_examples(
 
             yield fig
 
-@figuregen
-def plot_alphas_distribution(datasepecs_as_value_error_table_impl,
-         dataspecs_speclabel,hide_total:bool=True):
+@figure
+def plot_alphas_distribution(parabolic_as_determination,
+         dataspecs_speclabel,suptitle):
 
     """Histograms of the values of alphas produced, with the datapoints in 
     an array as sticks on an axis"""
 
-    df = datasepecs_as_value_error_table_impl
-    tots_error = df.loc['Total', (slice(None), 'error')].T.as_matrix()
-    tots_mean = df.loc['Total', (slice(None), 'mean')].T.as_matrix()
+    distribution = parabolic_as_determination
 
-    if hide_total:
-        df = df.loc[df.index != 'Total']
+    fig, ax = plt.subplots()
 
-    cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
-
-    alphas = []
-
-    for label, i in zip(dataspecs_speclabel, range(len(cvs))):
-        fig, ax = plt.subplots()
-        alphas = cvs[i]
-
-        kde_plot(alphas)
-        ax.legend()
-        ax.set_title(f"KDE of $\\alpha_s$")
-    yield fig
-
-
+    kde_plot(distribution)
+    ax.legend()
+    ax.set_title(f"{suptitle}")
+    return fig
 
 
 @figure

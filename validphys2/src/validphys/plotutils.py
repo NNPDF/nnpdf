@@ -8,6 +8,7 @@ Created on Thu Apr 21 18:41:43 2016
 import functools
 import itertools
 from collections import namedtuple
+import scipy.stats as stats
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -307,7 +308,7 @@ def plot_horizontal_errorbars(cvs, errors, categorylabels, datalabels=None,
     ax.grid(axis='y')
     return fig, ax
 
-
+@ax_or_gca
 def kde_plot(a, height=.05, axis="x", ax=None, **kwargs):
 	"""Plot datapoints in an array as sticks on an axis.
 	Parameters
@@ -327,8 +328,6 @@ def kde_plot(a, height=.05, axis="x", ax=None, **kwargs):
 	ax : matplotlib axes
 		The Axes object with the plot on it.
 	"""
-	if ax is None:
-		ax = plt.gca()
 	a = np.asarray(a)
 	vertical = kwargs.pop("vertical", axis == "y")
 	func = ax.axhline if vertical else ax.axvline
