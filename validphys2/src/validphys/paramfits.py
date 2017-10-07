@@ -105,6 +105,8 @@ def computed_psedorreplicas_chi2(experiments, dataseed, pdf,
 #them explicitly than setting some, se we require the user to do that.
 fits_computed_psedorreplicas_chi2 = collect(computed_psedorreplicas_chi2, ('fits',))
 
+dataspecs_computed_pseudorreplicas_chi2 = collect(computed_psedorreplicas_chi2, ('dataspecs',))
+
 def _check_list_different(l, name):
     strs = [str(item) for item in l]
     if not len(set(strs))==len(l):
@@ -118,6 +120,11 @@ def _check_fits_different(fits):
     """Need this check because oterwise the pandas object gets confused"""
     return _check_list_different(fits, 'fits')
 
+@make_argcheck
+def _check_dataspecs_fits_different(dataspecs_fit):
+    """Need this check because oterwise the pandas object gets confused"""
+    return _check_list_different(dataspecs_fit, 'fits')
+
 #TODO: Export the total here. Not having it is causing huge pain elsewhere.
 @table
 @_check_fits_different
@@ -128,7 +135,12 @@ def fits_matched_pseudorreplicas_chi2_table(fits, fits_computed_psedorreplicas_c
     The indexes also come in two levels: nnfit_id and experiment name."""
     return pd.concat(fits_computed_psedorreplicas_chi2, axis=1, keys=map(str,fits))
 
-
+@table
+@_check_dataspecs_fits_different
+def dataspecs_matched_pseudorreplicas_chi2_table(
+        dataspecs_fit, dataspecs_computed_pseudorreplicas_chi2):
+    """Like ``fits_matched_pseudorreplicas_chi2_table`` but for arbitrary dataspecs"""
+    return fits_matched_pseudorreplicas_chi2_table(dataspecs_fit, dataspecs_computed_pseudorreplicas_chi2)
 
 
 @figure
