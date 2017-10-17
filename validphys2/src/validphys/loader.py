@@ -462,7 +462,12 @@ class RemoteLoader(LoaderBase):
     @property
     @_key_or_loader_error
     def lhapdf_urls(self):
-        return self.nnprofile['lhapdf_urls']
+        urls = self.nnprofile['lhapdf_urls']
+        if len(urls)>1:
+            log.warning("Only one lhapdf_url is supported at the moment.")
+        if len(urls) == 0:
+            raise LoaderError("The specification for lhapdf_urls is empty in nnprofile")
+        return urls
 
 
     def _remote_files_from_url(self, url, index, thing='files'):
@@ -571,7 +576,7 @@ class RemoteLoader(LoaderBase):
         #It would be good to use the LHAPDF command line, except that it does
         #stupid things like returning 0 exit status when it fails to download
         if name in self.lhapdf_pdfs:
-            url = self.lhapdf_url + name + '.tar.gz'
+            url = self.lhapdf_urls[0] + name + '.tar.gz'
             download_and_extract(url, lhaindex.get_lha_datapath())
         elif name in self.downloadable_fits:
             self.download_fit(name)
