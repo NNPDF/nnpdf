@@ -703,6 +703,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
             plotutils.frame_center(ax, self.firstgrid.xgrid, np.concatenate(all_vals))
 
             ax.set_xlabel('x')
+            ax.set_xlim(self.firstgrid.xgrid[0])
 
 
             ax.set_ylabel(self.get_ylabel(parton_name))
