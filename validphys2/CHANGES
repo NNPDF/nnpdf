@@ -1,6 +1,9 @@
 CHANGES
 -------
 
+17/10/2017 Fix bug in error computation of assymetric Hessian PDF
+           sets. A factor two was missing.
+
 21/05/2017 Fix bug in t0 processing. T0 would be used always.
 
 21/05/2017 Add fancy bar plot.

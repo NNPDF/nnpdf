@@ -619,7 +619,7 @@ class HessianStats(SymmHessianStats):
     def std_error(self):
         data = self.data
         diffsq = (data[1::2] - data[2::2])**2
-        return np.sqrt(diffsq.sum(axis=0))/self.rescale_factor
+        return np.sqrt(diffsq.sum(axis=0))/self.rescale_factor/2
 
 
 STAT_TYPES = dict(
