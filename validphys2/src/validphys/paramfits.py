@@ -190,7 +190,7 @@ def discard_sparse_curves(fits_replica_data_correlated,
     return table
 
 def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated_for_total,fits_replica_data_correlated,fits_as,
-       max_n_discarded:(int,str)='auto'):
+       max_n_discarded:(int,str)='auto',autodiscard_confidence_level:float=0.99):
     """Return a table like  `fits_replica_data_correlated` where the replicas
     with too many discarded points have been filtered out."""
 
@@ -204,24 +204,23 @@ def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated_for_t
 
     else:
         df = fits_replica_data_correlated_for_total
-        
-        p = 0.99
+        df = df[0]    
+
         table_min = []
         stdtfac = []
-        df = df[0]    
         table = df.groupby(axis=1, level=0).apply(ap)
 
         max_ndiscarded = np.array(range(len(table.columns),0,-1))
 
+
+
         for i in range(len(max_ndiscarded),0,-1):
             filt = table.isnull().sum(axis=1) < max_ndiscarded[i-1]
             table = table[filt]
-            asfilt = fits_as < max_ndiscarded[i-1]
-
 
             parabolas = parabolic_as_determination(fits_as,table)
             print(parabolas)
-            stdT = stats.t.ppf((1-(1-p)/2),max_ndiscarded[i-1])
+            stdT = stats.t.ppf((1-(1-autodiscard_confidence_level)/2),len(parabolas)-1)
        
             std_dev = np.std(parabolas)
             print(std_dev)
@@ -232,9 +231,9 @@ def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated_for_t
             table_min.append(np.minimum(stdtfac*table))
 
 
-    
 
         return table_min
+
 
 def _get_parabola(asvals, chi2vals):
     chi2vals = np.ravel(chi2vals)
