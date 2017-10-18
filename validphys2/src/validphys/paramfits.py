@@ -167,19 +167,74 @@ def _check_badcurves(badcurves):
                          badcurves, options)
 
 
-def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated,
+fits_replica_data_correlated_for_total = collect('fits_replica_data_correlated',
+ ['matched_pseudorreplcias_for_total'])
+
+
+def discard_sparse_curves(fits_replica_data_correlated,
         max_ndiscarded:int=4):
     """Return a table like  `fits_replica_data_correlated` where the replicas
     with too many discarded points have been filtered out."""
+
+
     df = fits_replica_data_correlated
+
     def ap(x):
         x.columns = x.columns.droplevel(0)
         return (x['chi2'])
     table = df.groupby(axis=1, level=0).apply(ap)
     filt = table.isnull().sum(axis=1) < max_ndiscarded
+
     table = table[filt]
-    #table = np.atleast_2d(np.mean(table, axis=0))
+
     return table
+
+def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated_for_total,fits_replica_data_correlated,fits_as,
+       max_n_discarded:(int,str)='auto'):
+    """Return a table like  `fits_replica_data_correlated` where the replicas
+    with too many discarded points have been filtered out."""
+
+    def ap(x):
+        x.columns = x.columns.droplevel(0)
+        return (x['chi2'])
+
+    if isinstance(max_n_discarded,int):
+
+        return discard_sparse_curves(fits_replica_data_correlated)
+
+    else:
+        df = fits_replica_data_correlated_for_total
+        
+        p = 0.99
+        table_min = []
+        stdtfac = []
+        df = df[0]    
+        table = df.groupby(axis=1, level=0).apply(ap)
+
+        max_ndiscarded = np.array(range(len(table.columns),0,-1))
+
+        for i in range(len(max_ndiscarded),0,-1):
+            filt = table.isnull().sum(axis=1) < max_ndiscarded[i-1]
+            table = table[filt]
+            asfilt = fits_as < max_ndiscarded[i-1]
+
+
+            parabolas = parabolic_as_determination(fits_as,table)
+            print(parabolas)
+            stdT = stats.t.ppf((1-(1-p)/2),max_ndiscarded[i-1])
+       
+            std_dev = np.std(parabolas)
+            print(std_dev)
+            stdtfac = std_dev*stdT
+            print(stdtfac)
+       
+
+            table_min.append(np.minimum(stdtfac*table))
+
+
+    
+
+        return table_min
 
 def _get_parabola(asvals, chi2vals):
     chi2vals = np.ravel(chi2vals)
