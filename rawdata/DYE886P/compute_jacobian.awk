@@ -18,6 +18,6 @@ NR > 1 {
 	yc  = 0.5*log(( Jc + xFc )/( Jc - xFc))
 	ya  = 0.5*log(( Ja + xFa )/( Ja - xFa))
 
-	print ya, d*Ja 	# Print rapidity + converted data
+	print Ja, 0 
 }
 END{}     # End section
