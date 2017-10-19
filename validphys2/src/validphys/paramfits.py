@@ -171,7 +171,7 @@ fits_replica_data_correlated_for_total = collect('fits_replica_data_correlated',
  ['matched_pseudorreplcias_for_total'])
 
 
-def discard_sparse_curves(fits_replica_data_correlated,
+def _discard_sparse_curves(fits_replica_data_correlated,
         max_ndiscarded:int=4):
     """Return a table like  `fits_replica_data_correlated` where the replicas
     with too many discarded points have been filtered out."""
@@ -187,6 +187,7 @@ def discard_sparse_curves(fits_replica_data_correlated,
 
     table = table[filt]
 
+
     return table
 
 def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated_for_total,fits_replica_data_correlated,fits_as,
@@ -194,13 +195,11 @@ def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated_for_t
     """Return a table like  `fits_replica_data_correlated` where the replicas
     with too many discarded points have been filtered out."""
 
-    def ap(x):
-        x.columns = x.columns.droplevel(0)
-        return (x['chi2'])
+
 
     if isinstance(max_n_discarded,int):
 
-        return discard_sparse_curves(fits_replica_data_correlated)
+        return _discard_sparse_curves(fits_replica_data_correlated)
 
     else:
         df = fits_replica_data_correlated_for_total
@@ -208,31 +207,31 @@ def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated_for_t
 
         table_min = []
         stdtfac = []
-        table = df.groupby(axis=1, level=0).apply(ap)
-
-        max_ndiscarded = np.array(range(len(table.columns),0,-1))
-
+      
+    
+        max_ndiscarded = np.array(range(len(df.T),0,-1))
 
 
         for i in range(len(max_ndiscarded),0,-1):
-            filt = table.isnull().sum(axis=1) < max_ndiscarded[i-1]
-            table = table[filt]
+            tablefilt = _discard_sparse_curves(df,max_ndiscarded[i-1])
+           
+            alphas_val = _discard_sparse_curves(df,max_ndiscarded[i-1]).columns
 
-            parabolas = parabolic_as_determination(fits_as,table)
-            print(parabolas)
+            print(alphas_val)
+
+            parabolas = parabolic_as_determination(alphas_val,tablefilt)
             stdT = stats.t.ppf((1-(1-autodiscard_confidence_level)/2),len(parabolas)-1)
        
             std_dev = np.std(parabolas)
-            print(std_dev)
             stdtfac = std_dev*stdT
-            print(stdtfac)
-       
+            # print(stdtfac)
+            # print(stdtfac*table)
 
-            table_min.append(np.minimum(stdtfac*table))
+            # table_min.append(np.minimum(stdtfac*table))
 
+        # print(table_min)
 
-
-        return table_min
+        return table
 
 
 def _get_parabola(asvals, chi2vals):
