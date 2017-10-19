@@ -190,6 +190,17 @@ def _discard_sparse_curves(fits_replica_data_correlated,
 
     return table
 
+
+@make_argcheck
+def _check_discarded_string(max_n_discarded):
+    arg = max_n_discarded
+    if isinstance(arg,str):
+        if arg != 'auto':
+            raise CheckError("Expecting string to be 'auto or 'Auto'")
+
+   
+
+@_check_discarded_string
 def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated_for_total,fits_replica_data_correlated,fits_as,
        max_n_discarded:(int,str)='auto',autodiscard_confidence_level:float=0.99):
     """Return a table like  `fits_replica_data_correlated` where the replicas
