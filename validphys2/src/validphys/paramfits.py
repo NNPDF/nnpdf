@@ -209,17 +209,16 @@ def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated_for_t
         stdtfac = []
       
     
-        max_ndiscarded = np.array(range(len(df.T),0,-1))
+        max_ndiscarded = np.array(range(len(fits_as),0,-1))
 
 
         for i in range(len(max_ndiscarded),0,-1):
             tablefilt = _discard_sparse_curves(df,max_ndiscarded[i-1])
            
-            alphas_val = _discard_sparse_curves(df,max_ndiscarded[i-1]).columns
+            # alphas_val = _discard_sparse_curves(df,max_ndiscarded[i-1]).columns
 
-            print(alphas_val)
 
-            parabolas = parabolic_as_determination(alphas_val,tablefilt)
+            parabolas = parabolic_as_determination(fits_as,tablefilt)
             stdT = stats.t.ppf((1-(1-autodiscard_confidence_level)/2),len(parabolas)-1)
        
             std_dev = np.std(parabolas)
@@ -227,11 +226,11 @@ def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated_for_t
             # print(stdtfac)
             # print(stdtfac*table)
 
-            # table_min.append(np.minimum(stdtfac*table))
+            table_min.append(np.minimum(stdtfac*table))
 
         # print(table_min)
 
-        return table
+        return table_min
 
 
 def _get_parabola(asvals, chi2vals):
