@@ -196,7 +196,7 @@ def _check_discarded_string(max_n_discarded):
     arg = max_n_discarded
     if isinstance(arg,str):
         if arg != 'auto':
-            raise CheckError("Expecting string to be 'auto or 'Auto'")
+            raise CheckError("Expecting string to be 'auto'")
 
    
 
