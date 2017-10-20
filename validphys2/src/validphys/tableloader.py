@@ -78,7 +78,8 @@ def set_actual_column_level0(df, new_levels):
 
 
 #TODO: Find a better place for this function
-def combine_pseudorreplica_tables(dfs, combined_names, blacklist_datasets=None):
+def combine_pseudorreplica_tables(
+        dfs, combined_names, * ,blacklist_datasets=None, min_points_required=2):
     """Return a table in the same format as perreplica_chi2_table with th   e
     minimum value of the chi² for each batch of fits."""
 
@@ -102,6 +103,17 @@ def combine_pseudorreplica_tables(dfs, combined_names, blacklist_datasets=None):
 
     total_chis =  total.groupby(level=3).sum()
 
+    def fixup_min_points(df):
+        m = (~df.isnull()).sum(axis=1)>=min_points_required
+        df[df[m].isnull()] = np.inf
+        return df
+
+    #The idea is: Set to inf the nans of the valid curves, so that we select
+    #the minimum (which is not infinite).  Leave the bad nans as nans, so we
+    #write nan always for those.
+    total_chis = total_chis.groupby(axis=1,level=1).apply(fixup_min_points)
+
+
     #Note, asarray is needed because it ignores NANs otherwise.
     argmin = lambda x: pd.Series(np.argmin(np.asarray(x), axis=1), index=x.index)
 
@@ -122,7 +134,6 @@ def combine_pseudorreplica_tables(dfs, combined_names, blacklist_datasets=None):
 
     #TODO: Why in earth did I decide to keep this?!
     res.columns = pd.MultiIndex.from_product((res.columns, ['chi2']))
-
 
 
     return res

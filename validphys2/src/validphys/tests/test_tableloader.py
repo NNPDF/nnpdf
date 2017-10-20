@@ -52,9 +52,14 @@ def test_min_combination():
            394): 126.25943979466223, ('SLAC', 'Total', 67, 400): 101.69776217874313}},
     ]
     dfs = [pd.DataFrame.from_dict(df) for df in dfdicts]
-    res = tableloader.combine_pseudorreplica_tables(dfs, ['NNPDF31_nlo_as_0130_uncorr__combined'])
+    res = tableloader.combine_pseudorreplica_tables(dfs, ['NNPDF31_nlo_as_0130_uncorr__combined'],  )
     assert pd.isnull(res.loc[pd.IndexSlice[:,:,:,394],:]).all().all()
     assert (res.loc[pd.IndexSlice[:,:,:,400],:] == dfs[1].loc[pd.IndexSlice[:,:,:,400],:]).all().all()
+    res2 = tableloader.combine_pseudorreplica_tables(
+            dfs, ['NNPDF31_nlo_as_0130_uncorr__combined'], min_points_required=1)
+    assert not pd.isnull(res2.loc[pd.IndexSlice[:,:,:,394],:]).all().all()
+    assert (res2.loc[pd.IndexSlice[:,:,:,400],:] == dfs[1].loc[pd.IndexSlice[:,:,:,400],:]).all().all()
+
 
 def test_extrasum_slice():
     l = Loader()
