@@ -18,6 +18,8 @@ from matplotlib  import transforms
 from matplotlib.markers import MarkerStyle
 
 def ax_or_gca(f):
+    """A decorator. When applied to a function, the keyword argument  ``ax``
+    will automatically be filled with the current axis, if it was None."""
     @functools.wraps(f)
     def _f(*args, **kwargs):
             if 'ax' not in kwargs or kwargs['ax'] is None:
@@ -26,6 +28,9 @@ def ax_or_gca(f):
     return _f
 
 def ax_or_newfig(f):
+    """A decorator. When applied to a function, the keyword argument  ``ax``
+    will automatically be filled with the a new axis corresponding to an empty,
+    if it was None."""
     @functools.wraps(f)
     def _f(*args, **kwargs):
         noax = 'ax' not in kwargs or kwargs['ax'] is None
@@ -40,6 +45,9 @@ def ax_or_newfig(f):
     return _f
 
 def frame_center(ax, x, values):
+    """Set the `ylims` of the axis ``ax`` to appropriately display
+    ``values``, which cna be 1 or 2D and are assumed to be sampled uniformly
+    in the coordinates of the plot (in the second dimension, for 2D arrays)."""
     values = np.atleast_2d(values)
     scale = mscale.scale_factory(ax.xaxis.get_scale(), ax.xaxis)
     t = scale.get_transform()
@@ -84,12 +92,17 @@ def frame_center(ax, x, values):
 
 
 def expand_margin(a,b,proportion):
+    """Return a pair of numbers that have the same mean as ``(a,b)`` and their
+    distance is ``proportion`` times bigger."""
     halfdiff = (b-a)/2
     center = a + halfdiff
     expansion = halfdiff*proportion
     return center - expansion, center+expansion
 
 def hatch_iter():
+    """An infinite iterator that yields increasingly denser patterns of
+    hatches suitable for passing as the ``hatch`` argument of matplotlib
+    functions."""
     hatches = "/ \\ - + o 0".split()
     i = 1
     while True:
