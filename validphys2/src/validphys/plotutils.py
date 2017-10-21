@@ -73,6 +73,13 @@ def frame_center(ax, x, values):
     view_min = min((close_anchor_min, medium_anchor_min))
 
     amin, amax = ax.get_ylim()
+    #Fix edge cases where the limits are nan or infinite
+    #(e.g. when dividing by zero in the whole range)
+    if not np.isfinite(view_min):
+        view_min = amin
+    if not np.isfinite(view_max):
+        view_max = amax
+
     ax.set_ylim(max(view_min, amin), min(view_max, amax))
 
 
