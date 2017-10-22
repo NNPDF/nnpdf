@@ -41,7 +41,7 @@ PseudoReplicaExpChi2Data = namedtuple('PseudoReplicaChi2Data',
     ['experiment', 'dataset', 'ndata' ,'chi2', 'nnfit_index'])
 
 def computed_psedorreplicas_chi2(experiments, dataseed, pdf,
-                                 fitted_replica_indexes, t0set:PDF):
+                                 fitted_replica_indexes, t0set:(PDF, type(None))):
     """Return the chi2 the chi² of the pseudodata"""
 
     #TODO: Everythning about this function is horrible. We need to rewrite
@@ -49,8 +49,8 @@ def computed_psedorreplicas_chi2(experiments, dataseed, pdf,
 
     #TODO: Do this somewhere else
     RandomGenerator.InitRNG(0,0)
-
-    lt0 = t0set.load_t0()
+    if t0set is not None:
+        lt0 = t0set.load_t0()
     pdfname = pdf.name
     datas = []
 
@@ -59,7 +59,8 @@ def computed_psedorreplicas_chi2(experiments, dataseed, pdf,
     sqrtcovmat_table = []
     log.debug("Generating dataset covmats")
     for exp in original_experiments:
-        exp.SetT0(lt0)
+        if t0set is not None:
+            exp.SetT0(lt0)
         #The covariance matrices are currently very expensive to recompute.
         #Store them after computing T0
         sqrtcovmat_table.append([ds.get_sqrtcovmat() for ds in exp.DataSets()])
