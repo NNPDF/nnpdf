@@ -1269,6 +1269,7 @@ def plot_alphas_distribution(parabolic_as_determination,
     kde_plot(distribution)
     ax.legend()
     ax.set_title(f"{suptitle}")
+    ax.set_xlabel(r"$\alpha_S$")
     return fig
 
 
