@@ -363,5 +363,6 @@ def kde_plot(a, height=.05, axis="x", ax=None, **kwargs):
    kde_plot = stats.gaussian_kde(a, bw_method='silverman')
    kde_x = np.linspace(*expand_margin(min(a),max(a), 1.3),100)
    ax.plot(kde_x, kde_plot(kde_x), label=label, color=kwargs['color'])
+   ax.set_ylim(ymin=0)
 
    return ax
