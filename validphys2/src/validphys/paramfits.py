@@ -1256,10 +1256,8 @@ def plot_dataspecs_parabola_examples(
             yield fig
 
 @figure
-def plot_alphas_distribution(parabolic_as_determination,
-         dataspecs_speclabel,suptitle):
-
-    """Histograms of the values of alphas produced, with the datapoints in 
+def plot_as_distribution(parabolic_as_determination, suptitle):
+    """Histograms of the values of alphas produced, with the datapoints in
     an array as sticks on an axis"""
 
     distribution = parabolic_as_determination
