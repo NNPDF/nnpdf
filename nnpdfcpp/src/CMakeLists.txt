@@ -38,30 +38,30 @@ if (COMPILE_chi2check)
   target_link_libraries(chi2check common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${YAMLCPP_LIBRARIES} ${GSL_LDFLAGS})
 endif(COMPILE_chi2check)
 
-# validphys
-option(COMPILE_validphys "Compile validphys program." ON)
-if (COMPILE_validphys)
-
-  # ROOT
-  find_program(ROOT_CONFIG root-config REQUIRED)
-  if (ROOT_CONFIG)
-    exec_program(${ROOT_CONFIG}
-      ARGS --cflags
-      OUTPUT_VARIABLE ROOT_CXX_FLAGS
-      )
-    exec_program(${ROOT_CONFIG}
-      ARGS --libs
-      OUTPUT_VARIABLE ROOT_LIBRARIES
-      )
-  endif(ROOT_CONFIG)
-  
-  add_executable(validphys validphys/src/validphys.cc
-                           validphys/src/plotdata.cc
-                           validphys/src/plotutils.cc)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
-  include_directories(validphys/inc)
-  target_link_libraries(validphys common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${ROOT_LIBRARIES} ${YAMLCPP_LIBRARIES} ${GSL_LDFLAGS})
-endif(COMPILE_validphys)
+# ROOT
+find_program(ROOT_CONFIG root-config)
+if (ROOT_CONFIG)
+  exec_program(${ROOT_CONFIG}
+    ARGS --cflags
+    OUTPUT_VARIABLE ROOT_CXX_FLAGS
+    )
+  exec_program(${ROOT_CONFIG}
+    ARGS --libs
+    OUTPUT_VARIABLE ROOT_LIBRARIES
+    )
+  # validphys
+  option(COMPILE_validphys "Compile validphys program." ON)
+  if (COMPILE_validphys)  
+    add_executable(validphys validphys/src/validphys.cc
+      validphys/src/plotdata.cc
+      validphys/src/plotutils.cc)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
+    include_directories(validphys/inc)
+    target_link_libraries(validphys common ${NNPDF_LIBRARIES} ${LHAPDF_LIBRARIES} ${ROOT_LIBRARIES} ${YAMLCPP_LIBRARIES} ${GSL_LDFLAGS})
+  endif(COMPILE_validphys)
+else(ROOT_CONFIG)
+  message(WARNING "ROOT not found: validphys compilation is disabled, install ROOT and rerun cmake to enable the validphys compilation")
+endif(ROOT_CONFIG)
 
 # fkcheck
 option(COMPILE_fkcheck "Compile fkcheck program." OFF)
