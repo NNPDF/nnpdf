@@ -108,7 +108,7 @@ def svalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
     return (lpdf.xfxQ(x, Q=Q, n=irep, fl=3) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-3))/x
 
 def momentum_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
-    return sum([lpdf.xfxQ(x, Q=10, n=irep, fl=fl) for fl in ALL_FLAVOURS])
+    return sum([lpdf.xfxQ(x, Q=Q, n=irep, fl=fl) for fl in ALL_FLAVOURS])
 
 
 #NOTE: For the moment we rely on this order being the same as in the .sumrules
