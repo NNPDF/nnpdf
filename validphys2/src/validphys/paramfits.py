@@ -192,8 +192,8 @@ def _discard_sparse_curves(fits_replica_data_correlated,
 
 
 @make_argcheck
-def _check_discarded_string(max_n_discarded):
-    arg = max_n_discarded
+def _check_discarded_string(max_ndiscarded):
+    arg = max_ndiscarded
     if isinstance(arg,str):
         if arg != 'auto':
             raise CheckError("Expecting string to be 'auto'")
@@ -205,7 +205,6 @@ def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated_for_t
        max_n_discarded:(int,str)='auto',autodiscard_confidence_level:float=0.99):
     """Return a table like  `fits_replica_data_correlated` where the replicas
     with too many discarded points have been filtered out."""
-
 
 
     if isinstance(max_n_discarded,int):
@@ -240,7 +239,8 @@ def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated_for_t
             # tableaa = pd.DataFrame(stdtfac.values*tablefilt.values, columns=tablefilt.columns, index=tablefilt.index)
             # table_min.append(np.minimum(stdtfac*tablefilt))
         print(table_min)
-
+        # table_min_filt = table_min.sum(axis=1)
+        # tale_min = table_min.
 
 
         return table_min
@@ -984,7 +984,8 @@ def plot_as_value_error_central(as_datasets_central_chi2,
 # Pull plots
 def _pulls_func(cv,alphas_global,error,error_global):
     """Small definition to compute pulls"""
-    return ((cv-alphas_global)/np.sqrt(error**2 +error_global**2))
+    # return ((cv-alphas_global)/np.sqrt(error**2 +error_global**2))
+    return ((cv - alphas_global))/error
 
 
 @figure
@@ -993,7 +994,7 @@ def plot_pulls_central(as_datasets_central_chi2,hide_total:bool=True):
     """ Plots the pulls per experiment for the central results """
 
     data, names = zip(*as_datasets_central_chi2)
-    cv, err = zip(*data)
+    cv, err = zip(*data) 
     pulls = list()
     if hide_total:
         for i in range(1,len(cv)):
