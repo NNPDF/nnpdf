@@ -22,9 +22,10 @@ using namespace std;
  */
 int main(int argc, char **argv)
 {  
-  if (argc != 3)
+  if (argc < 3)
   {
-     std::cout << "Usage: FKconvolute [PDF Name] [Path to FK table]"<<std::endl;
+     std::cout << "Usage: "<< argv[0] 
+               << " <PDF Name> <Path to FK table> [Path to C-factor 1] .. [Path to C-factor N]"<<std::endl;
      exit(1);
   }
 
@@ -36,7 +37,8 @@ int main(int argc, char **argv)
   NNPDF::LHAPDFSet f(argv[1],  NNPDF::LHAPDFSet::erType::ER_MC);
 
   // Init FKTable
-  NNPDF::FKTable sig1(argv[2]);
+  const std::vector<std::string> cfactors(argv+3, argv+argc);
+  NNPDF::FKTable sig1(argv[2], cfactors);
 
   // Make predictions
   NNPDF::ThPredictions pred = NNPDF::ThPredictions(&f, &sig1);
