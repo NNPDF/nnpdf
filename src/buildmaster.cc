@@ -59,6 +59,8 @@
 #include "CMSTTBARTOT8TEV.h"
 #include "CMSTTBARTOT13TEV.h"
 #include "CMSWMU8TEV.h"
+#include "LHeC.h"
+#include "FCC.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -279,4 +281,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSTOPDIFF8TEVTTRAPNORMFilter());
   target.push_back(new CMSTOPDIFF8TEVTTPTNORMFilter());
   target.push_back(new CMSTOPDIFF8TEVTTMNORMFilter());
+
+    // ************************ LHeC + FCC pseudo-data ***************
+  target.push_back(new LHeCFilter());
+  target.push_back(new FCCFilter());
 }
