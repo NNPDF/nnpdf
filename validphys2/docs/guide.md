@@ -4,26 +4,25 @@
 Introduction
 ============
 
-The immediate aim of validphys2 is to serve as a both very agile and
+The immediate aim of `validphys2` is to serve as a both very agile and
 highly reliable analysis framework for NNPDF, but the goal extends
 beyond. When the time comes, this framework should become the common
 gateway that all the NNPDF code uses, providing features ranging from
-from automated report generation to automatic detection
-of problems with the fits.
+from automated report generation to automatic detection of problems
+with the fits.
 
-The project is defined in two codes with well defined and separated
+The project is separated in two codes with well defined and separated
 scopes:
 
-reportengine
- ~ It is a compiler of user-entered configuration (in the YAML format)
- into directed acyclic graphs of Python executable functions, to be
- defined by client applications. One such function that comes with
- reportengine is **report**, which extracts the requirements from
- a template  with a special syntax (See [Producing reports]) in the
- Markdown format and uses the `pandoc` program to generate an HTML
- report.  Apart from the *compiler* functionality, `reportengine` also
- provides general application utilities such as crash handlers and
- a help system.
+reportengine ~ It is a compiler of user-entered configuration (in the
+YAML format) into directed acyclic graphs of Python executable
+functions, which are defined by client applications. One such function
+that comes with `reportengine` is `report`, which processes a template
+in the Markdown format, with special tags that signify the resources
+requested by the user, and produces  an HTML report (See [Producing
+reports]).  Apart from the *compiler* functionality, `reportengine`
+also provides general application utilities such as crash handlers and
+a help system.
 
 validphys2
  ~ It is a set of higher level tools operating on the NNPDF resources,
@@ -62,7 +61,10 @@ A scientific program usually requires a large set of complex input
 parameters and can take a very long time to produce results. Results
 tend to be frequently unexpected even if everything is working
 correctly. It is essential to check that the inputs are correct and
-make sense. Also, the inputs of a given function should be checked as
+make sense. Thus good error reporting capabilities are an important
+design consideration.
+
+Also, the inputs of a given function should be checked as
 early as possible, which is not necessarily at the point of the
 program where the function is to be called. For example, something
 like this:
@@ -78,15 +80,15 @@ def plot(complex_calculation, parameter):
 ```
 
 has the disadvantage that in order to get to the check, we presumably
-need to compute “complex\_calculation” first, and that could be
-a waste of time if it turns out that “parameter” is not correct for
+need to compute `complex_calculation` first, and that could be
+a waste of time if it turns out that `parameter` is not correct for
 some reason and we can’t do the plot anyway. Instead we should arrange
 to call `check_parameter_is_correct(parameter)` as early as
 possible (outside the plotting function) and show the user an
 informative error message.
 
--   All inputs should be checked as early as possible. If the checks
-	pass, the program should not fail.
+>   All inputs should be checked as early as possible. If the checks
+>	pass, the program should not fail.
 
 Of course it is impossible to guarantee that this is always going to
 happen. For example it is possible that we check that a folder exists
@@ -95,7 +97,7 @@ need to write, the folder has been deleted. However in such cases the
 state of the program can be considered broken and it’s OK to make it
 fail completely.
 
-There is an API for early checks in reportengine. We would write
+There is an API for early checks in `reportengine`. We would write
 something like:
 
 ```python
