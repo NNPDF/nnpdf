@@ -8,6 +8,7 @@
 #include "FutureColliders.h"
 #include <random>
 #include <assert.h>
+#include <vector>
 
 void FutureColliderFilter::ReadData()
 {
@@ -38,7 +39,9 @@ void FutureColliderFilter::ReadData()
   }
 
   // Filtering data
-  double uncorr[fNData], data[fNData];
+  vector<double> uncorr, data;
+  uncorr.reserve(fNData); 
+  data.reserve(fNData); 
 
   string tmp;
   
