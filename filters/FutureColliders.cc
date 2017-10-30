@@ -1,8 +1,27 @@
 /**
- *  FCC.cc
- *  Pseudo-data
- *  LR
- *
+  FCC.cc
+  Pseudo-data
+  LR
+ 
+  The original pseudo-data are taken from here
+  FCC
+  http://hep.ph.liv.ac.uk/~mklein/fccdata/
+  http://hep.ph.liv.ac.uk/~mklein/fccdata/datfccreadme
+
+  LHeC
+  http://hep.ph.liv.ac.uk/~mklein/lhecdata/
+  http://hep.ph.liv.ac.uk/~mklein/lhecdata/datlhecreadme
+  
+  where READMEs are also available. 
+
+  The files LHeC.dat and FCC.dat contain the systematics,
+  but here only the total error is included without 
+  any breakdown of the systematics.
+
+  The central values originally included in LHeC.dat and FCC.dat
+  are replaced by values computed with APFEL using resummed theory
+  and resummed PDFs as commented in the rawdata files.
+ 
  */
 
 #include "FutureColliders.h"
@@ -73,7 +92,13 @@ void FutureColliderFilter::ReadData()
     rawdata_central >> tmp >> thres >> tmp;
     if(thres>0)
     {
-      data[i] = thres;  //this ensures that the for values of Q too little (which will be cut eventually) the central value is greater than zero
+      data[i] = thres; 
+      //For the data point whose values computed by APFEL are zero
+      //because Q is too low the value is set to the value contained 
+      //in the original data files
+      //This points will be however cut 
+      //as they do not pass the generic cuts
+      //usually applied in any NNPDF fits
     }
 
     // Statistical errors - percentage with respect the observable
