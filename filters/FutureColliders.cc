@@ -13,69 +13,71 @@
 void FutureColliderFilter::ReadData()
 {
   // Opening files
-  fstream f1;
+  fstream rawdata_systematics;
 
   stringstream datafile("");
   datafile << dataPath() << "rawdata/"
   << "FutureColliders/" << fSetName <<".txt";
-  f1.open(datafile.str().c_str(), ios::in);
+  rawdata_systematics.open(datafile.str().c_str(), ios::in);
 
-  if (f1.fail()) {
+  if (rawdata_systematics.fail()) {
     cerr << "Error opening data file " << datafile.str() << endl;
     exit(-1);
   }
 
     // Opening files
-  fstream f2;
+  fstream rawdata_central;
 
   stringstream pseudofile("");
   pseudofile << dataPath() << "rawdata/"
   << "FutureColliders/" << fSetName <<"_NNLONLLx.txt";
-  f2.open(pseudofile.str().c_str(), ios::in);
+  rawdata_central.open(pseudofile.str().c_str(), ios::in);
 
-  if (f2.fail()) {
+  if (rawdata_central.fail()) {
     cerr << "Error opening data file " << pseudofile.str() << endl;
     exit(-1);
   }
 
   // Filtering data
-  vector<double> uncorr, data;
+  vector<double> uncorr, data, syst;
   uncorr.reserve(fNData); 
-  data.reserve(fNData); 
+  data.reserve(fNData);
+  syst.reserve(fNData); 
 
   string tmp;
   
   //skip first three lines
-  getline(f1,tmp);
-  getline(f1,tmp);
-  getline(f1,tmp);
+  getline(rawdata_systematics,tmp);
+  getline(rawdata_systematics,tmp);
+  getline(rawdata_systematics,tmp);
 
-    //skip firs line
-  getline(f2,tmp);
+  //skip firs line
+  getline(rawdata_central,tmp);
 
-  default_random_engine de(14); //seed
+  //random generator for fluctuations of pseudo-data
+  mt19937 random_engine; //seed
+  random_engine.seed(14);
 
   for (int i = 0; i < fNData; i++)
   {
-//#          q2         x          y        thetae  thetaj   f2    sigrNC    nevent    estat    eunco  esyst   etot       eelen    ethee  ehadr  radco egamp   effic   enois
-    f1 >> fKin2[i] >> fKin1[i] >> fKin3[i]
+    rawdata_systematics >> fKin2[i] >> fKin1[i] >> fKin3[i]
     >> tmp >> tmp >> tmp
     >> data[i]
     >> tmp 
-    >> fStat[i]
+    >> syst[i]
     >> tmp >> tmp
     >> uncorr[i]
     >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp ;
 
     double thres;
-    f2 >> tmp >> thres >> tmp;
+    rawdata_central >> tmp >> thres >> tmp;
     if(thres>0)
     {
-      data[i] = thres;
+      data[i] = thres;  //this ensures that the for values of Q too little (which will be cut eventually) the central value is greater than zero
     }
 
     // Statistical errors - percentage with respect the observable
-    fStat[i] = fStat[i]*data[i]*1e-2;
+    fStat[i] = syst[i]*data[i]*1e-2;
 
     // Uncorrelated systematics
     fSys[i][0].mult = uncorr[i];
@@ -88,16 +90,16 @@ void FutureColliderFilter::ReadData()
 
     //Add Random Fluctuation
     double tmp = -1;
-    while( tmp <= 0 )
+    while( tmp <= 0 ) //ensure that the central value is bigger than zero
     {
       normal_distribution<double> nd(data[i], sqrt(pow(fSys[i][0].add,2)+pow(fStat[i],2)) ); 
-      tmp = nd(de);
+      tmp = nd(random_engine);
     }
     fData[i] = tmp;
-    assert(fData[i]>0);
+    assert(fData[i]>0);  //further check (overkill)
 
   }
 
-  f1.close();
-  f2.close();
+  rawdata_systematics.close();
+  rawdata_central.close();
 }
