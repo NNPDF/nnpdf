@@ -233,9 +233,9 @@ def fits_replica_data_with_discarded_replicas(
 
             current_err = std_dev*stdT            
 
-            if current_err < best_error:
-                best_error = current_err
-                best_table = tablefilt
+        if current_err < best_error:
+            best_error = current_err
+            best_table = tablefilt
 
         
         return best_table
