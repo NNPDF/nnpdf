@@ -59,8 +59,7 @@
 #include "CMSTTBARTOT8TEV.h"
 #include "CMSTTBARTOT13TEV.h"
 #include "CMSWMU8TEV.h"
-#include "LHeC.h"
-#include "FCC.h"
+#include "FutureColliders.h"
 
 /**
  * \param argv the filename containing the configuration
