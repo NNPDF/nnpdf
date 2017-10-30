@@ -981,7 +981,7 @@ def plot_as_value_error_central(as_datasets_central_chi2,
 def _pulls_func(cv,alphas_global,error,error_global):
     """Small definition to compute pulls"""
     # return ((cv-alphas_global)/np.sqrt(error**2 +error_global**2))
-    return error*((cv - alphas_global))/error**2
+    return error_global*((cv - alphas_global))/error**2
 
 
 @figure
