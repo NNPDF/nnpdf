@@ -201,25 +201,27 @@ def _check_discarded_string(max_ndiscarded):
    
 
 @_check_discarded_string
-def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated_for_total,fits_replica_data_correlated,fits_as,
-       max_n_discarded:(int,str)='auto',autodiscard_confidence_level:float=0.99):
+def fits_replica_data_with_discarded_replicas(
+    fits_replica_data_correlated_for_total,
+    fits_replica_data_correlated,fits_as,
+    max_n_discarded:(int,str)='auto',
+    autodiscard_confidence_level:float=0.99):
     """Return a table like  `fits_replica_data_correlated` where the replicas
-    with too many discarded points have been filtered out."""
+    with too many discarded points have been filtered out.
 
+    autodiscard_confidence_level is the student-T confidence factor. """
 
     if isinstance(max_n_discarded,int):
 
         return _discard_sparse_curves(fits_replica_data_correlated)
 
     else:
-        df = fits_replica_data_correlated_for_total
-        df = df[0]    
-
-        table_min = []
-        stdtfac = []
+        df = fits_replica_data_correlated_for_total[0]    
     
-        max_ndiscarded = np.array(range(len(fits_as),0,-1))
+        best_table = None
+        best_error = np.inf
 
+        max_ndiscarded = np.array(range(len(fits_as),0,-1))
 
         for i in range(len(max_ndiscarded),0,-1):
             tablefilt = _discard_sparse_curves(df,max_ndiscarded[i-1])
@@ -228,22 +230,15 @@ def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated_for_t
             stdT = stats.t.ppf((1-(1-autodiscard_confidence_level)/2),len(parabolas)-1)
        
             std_dev = np.std(parabolas)
-            
 
-            stdtfac.append(std_dev*stdT)
-            # stdfac = np.array(std_dev*stdT)
-            # print(stdtfac)
+            current_err = std_dev*stdT            
 
-            table_min.append(np.amin(stdtfac))
+            if current_err < best_error:
+                best_error = current_err
+                best_table = tablefilt
 
-            # tableaa = pd.DataFrame(stdtfac.values*tablefilt.values, columns=tablefilt.columns, index=tablefilt.index)
-            # table_min.append(np.minimum(stdtfac*tablefilt))
-        print(table_min)
-        # table_min_filt = table_min.sum(axis=1)
-        # tale_min = table_min.
-
-
-        return table_min
+        
+        return best_table
 
 
 def _get_parabola(asvals, chi2vals):
