@@ -216,28 +216,33 @@ def fits_replica_data_with_discarded_replicas(
         return _discard_sparse_curves(fits_replica_data_correlated)
 
     else:
-        df = fits_replica_data_correlated_for_total[0]    
+        df = fits_replica_data_correlated_for_total[0]
+        df1 = fits_replica_data_correlated
     
+        best_table_total = None
         best_table = None
         best_error = np.inf
 
-        # ndiscarded = np.array(range(len(fits_as),0,-1))
 
         ndiscarded = range(len(fits_as),0,-1)
 
         for i in range(len(ndiscarded),0,-1):
-            tablefilt = _discard_sparse_curves(df,ndiscarded[i-1])
+            tablefilt_total = _discard_sparse_curves(df,ndiscarded[i-1])
 
-            parabolas = parabolic_as_determination(fits_as,tablefilt)
+            tablefilt = _discard_sparse_curves(df1, ndiscarded[i-1])
+
+            parabolas = parabolic_as_determination(fits_as,tablefilt_total)
             stdT = stats.t.ppf((1-(1-autodiscard_confidence_level)/2),len(parabolas)-1)
        
             std_dev = np.std(parabolas)
 
             current_err = std_dev*stdT            
 
-	        if current_err < best_error:
-	            best_error = current_err
-	            best_table = tablefilt
+            if current_err < best_error:
+                best_error = current_err
+                best_table_total = tablefilt_total
+
+                best_table = tablefilt
 
         
         return best_table
