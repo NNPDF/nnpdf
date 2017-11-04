@@ -32,16 +32,17 @@ from NNPDF import pseudodata, single_replica, RandomGenerator
 
 from validphys.core import PDF
 from validphys.results import ThPredictionsResult, DataResult, chi2_breakdown_by_dataset
-from validphys.plotutils import plot_horizontal_errorbars, marker_iter_plot, barplot,kde_plot
+from validphys.plotutils import plot_horizontal_errorbars, marker_iter_plot, barplot, kde_plot
 
 log = logging.getLogger(__name__)
 
 
 PseudoReplicaExpChi2Data = namedtuple('PseudoReplicaChi2Data',
-    ['experiment', 'dataset', 'ndata' ,'chi2', 'nnfit_index'])
+    ['experiment', 'dataset', 'ndata', 'chi2', 'nnfit_index'])
 
-def computed_psedorreplicas_chi2(experiments, dataseed, pdf,
-                                 fitted_replica_indexes, t0set:(PDF, type(None))):
+def computed_psedorreplicas_chi2(
+        experiments, dataseed, pdf, fitted_replica_indexes,
+        t0set:(PDF, type(None))):
     """Return the chi2 the chi² of the pseudodata"""
 
     #TODO: Everythning about this function is horrible. We need to rewrite
