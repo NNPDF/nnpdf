@@ -22,15 +22,13 @@ from validphys.core  import PDF
 import matplotlib.pyplot as plt
 
 FLAVOUR_ALIAS = {
-    'gluon': 21,
-    'cbar'    : -4,
-    'dbar'    : -1,
-    'sbar'   : -3,
-    'ubar'   : -2,
-    'd': 1,
-    'u': 2,
-    's': 3,
-    'c': 4      }
+    'gluon' : 21,
+    'u'     :  2,
+    'd'     :  1,
+    's'     :  3,
+    'ubar'  : -2,
+    'dbar'  : -1,
+    'sbar'  : -3}
 
 ArcLengthGrid = namedtuple('ArcLengthGrid', FLAVOUR_ALIAS)
 @check_positive('Q')

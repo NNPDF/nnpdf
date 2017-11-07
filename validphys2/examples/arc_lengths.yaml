@@ -1,0 +1,11 @@
+Q: 1.65
+
+pdfs:
+    - NNPDF31_nlo_as_0118 
+    - NNPDF30_nlo_as_0118
+normalize_to: 0 
+
+actions_:
+ - pdfs:
+     - arc_length_table
+     - plot_arc_lengths
