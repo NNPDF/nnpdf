@@ -11,7 +11,7 @@ from reportengine import collect
 from reportengine.checks import make_argcheck, CheckError, check_positive
 
 from validphys.core import PDF
-from validphys.gridvalues import (evaluate_luminosity,)
+from validphys.gridvalues import (evaluate_luminosity)
 from validphys.pdfbases import (parse_flarr, list_bases, Basis, UnknownElement)
 import scipy.integrate as integrate
 
