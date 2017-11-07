@@ -101,13 +101,13 @@ void FutureColliderFilter::ReadData()
       //usually applied in any NNPDF fits
     }
 
-    // Statistical errors - percentage with respect the observable
-    fStat[i] = syst[i]*data[i]*1e-2;
-
-    // Uncorrelated systematics
+    // Uncorrelated systematics - percentage with respect to the observable
     fSys[i][0].mult = uncorr[i];
     fSys[i][0].type = MULT;
     fSys[i][0].name = "UNCORR";
+
+    // Statistical errors
+    fStat[i] = syst[i]*data[i]*1e-2;
     
     // Additive errors   
     for (int l = 0; l < fNSys; l++)
