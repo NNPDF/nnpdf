@@ -66,6 +66,10 @@ def arc_length_table(arc_lengths):
 def plot_arc_lengths(pdfs:Sequence, Q:numbers.Real, normalize_to:(type(None),int)=None):
     """Plot the arc lengths of a PDF set"""
     fig, ax = plt.subplots()
+    if normalize_to is not None:
+        ax.set_ylabel("Arc length (normalised)")
+    else:
+        ax.set_ylabel("Arc length")
 
     # I'm assuming that the dictionary.items() returns always in the same order here...
     norm_cv = None
