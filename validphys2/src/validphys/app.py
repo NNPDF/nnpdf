@@ -19,6 +19,7 @@ from validphys import uploadutils
 providers = [
              'validphys.results',
              'validphys.plots',
+             'validphys.arclength',
              'validphys.sumrules',
              'validphys.reweighting',
              'validphys.fitdata',
