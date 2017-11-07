@@ -2,6 +2,10 @@
 sumrules.py
 
 Module for the computation of sum rules
+
+Note that this contains only the code for the computation of sum rules from
+scratch using LHAPDF tables. The code reading the sum rule information output
+from the fit is present in fitinfo.py
 """
 import numbers
 from collections import namedtuple
