@@ -108,6 +108,8 @@ class Config(report.Config):
         except PDFNotFound as e:
             raise ConfigError("Bad PDF: {} not installed".format(name), name,
                           self.loader.available_pdfs) from e
+        except LoaderError as e:
+            raise ConfigError(e) from e
 
         #Check that we know how to compute errors
         try:
