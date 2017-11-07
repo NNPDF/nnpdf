@@ -19,9 +19,8 @@ from validphys.core import PDF
 FLTYPE = np.int32
 REALTYPE = np.double if REALDOUBLE else np.float32
 
-#This represents some canonical ordering of all the relevant flavours
-#we may want to query from LHAPDF
-ALL_FLAVOURS = (-6,-5,-4,-3,-2,-1,21,1,2,3,4,5,6,22)
+# Canonical ordering of PDG quark flavour codes (no top)
+QUARK_FLAVOURS = (-5, -4, -3, -2, -1, 1, 2, 3, 4, 5)
 
 LUMI_CHANNELS = {
     'gg': r'gg',
@@ -31,9 +30,6 @@ LUMI_CHANNELS = {
     'udbar': r'u\bar{d}',
     'dubar': r'd\bar{u}',
 }
-
-QUARK_FLAVORS = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]
-
 
 
 def grid_values(pdf:PDF, flmat, xmat, qmat):
@@ -72,16 +68,16 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
     if channel == 'gg':
         res = pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, 21)
     elif channel == 'gq':
-        for i in QUARK_FLAVORS:
+        for i in QUARK_FLAVOURS:
             res += (pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, 21)
                     + pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, i))
     elif channel == 'qqbar':
-        for i in QUARK_FLAVORS:
+        for i in QUARK_FLAVOURS:
             res += pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, -i)
     elif channel == 'qq':
         r1 = []
         r2 = []
-        for i in QUARK_FLAVORS:
+        for i in QUARK_FLAVOURS:
             r1.append(pdf_set.xfxQ(x1, mx, n, i))
             r2.append(pdf_set.xfxQ(x2, mx, n, i))
 
@@ -97,32 +93,3 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
         raise ValueError("Bad channel")
 
     return res/x1/x2/s
-
-def uvalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
-    return (lpdf.xfxQ(x, Q=Q, n=irep, fl=2) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-2))/x
-
-def dvalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
-    return (lpdf.xfxQ(x, Q=Q, n=irep, fl=1) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-1))/x
-
-def svalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
-    return (lpdf.xfxQ(x, Q=Q, n=irep, fl=3) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-3))/x
-
-def momentum_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
-    return sum([lpdf.xfxQ(x, Q=Q, n=irep, fl=fl) for fl in ALL_FLAVOURS])
-
-
-#NOTE: For the moment we rely on this order being the same as in the .sumrules
-#file produced by nnfit.
-SUM_RULES = {
-    'momentum': momentum_sum_rule_integrand,
-    'uvalence': uvalence_sum_rule_integrand,
-    'dvalence': dvalence_sum_rule_integrand,
-    'svalence': svalence_sum_rule_integrand,
-}
-
-SUM_RULES_EXPECTED= {
-    'momentum': 1,
-    'uvalence': 2,
-    'dvalence': 1,
-    'svalence': 0,
-}

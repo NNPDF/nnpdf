@@ -9,8 +9,9 @@ import inspect
 import numpy as np
 
 from validphys.core import PDF
-from validphys.gridvalues import grid_values, ALL_FLAVOURS
+from validphys.gridvalues import grid_values
 
+from reportengine.checks import CheckError
 
 #This mapping maps the keys passed to LHAPDF (PDG codes) to nice LaTeX labels.
 PDG_PARTONS = dict((
@@ -31,6 +32,8 @@ PDG_PARTONS = dict((
         (21 , r"g"),
     ))
 
+# Canonical ordering of PDG codes (so flavour basis)
+ALL_FLAVOURS = (-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22)
 DEFAULT_FLARR = (-3,-2,-1,0,1,2,3,4)
 
 def pdg_id_to_canonical_index(flindex):
@@ -40,10 +43,37 @@ def pdg_id_to_canonical_index(flindex):
     return ALL_FLAVOURS.index(flindex)
 
 def list_bases():
+    """ List available PDF bases """
     import validphys.pdfbases as thismodule
     return dict(inspect.getmembers(thismodule, lambda x: isinstance(x, thismodule.Basis)))
 
-#These are varous ways to refering to the PDG partons with nicer text labels.
+def check_basis(basis, flavours):
+    """ 
+        Check to verify a given basis and set of flavours.
+        Returns a dictionary with the relevant instance of the basis 
+        class and flavour specification
+    """
+    
+    if isinstance(basis, str):
+        bases = list_bases()
+        try:
+            basis = bases[basis]
+        except KeyError:
+            raise CheckError(f"Unknown basis '{basis}'", basis, bases)
+
+    if flavours is None:
+        flavours = basis.default_elements
+
+    try:
+        flavours = basis.to_known_elements(flavours)
+    except UnknownElement as e:
+        bad = e.args[0]
+        raise CheckError(f"Unknown basis element '{bad}'", str(bad),
+            alternatives=basis.indexes, display_alternatives='all') from e
+
+    return {'basis':basis, 'flavours':flavours}
+
+#These are various ways to refering to the PDG partons with nicer text labels.
 PDG_ALIASES = {
  r'\bar{t}': -6,
  'tbar'    : -6,

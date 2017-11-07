@@ -18,7 +18,7 @@ from reportengine.checks import make_argcheck, CheckError
 from validphys.core import PDF
 from validphys import checks
 from validphys.plotoptions import get_info
-from validphys import pdfgrids
+from validphys import sumrules
 
 #TODO: Add more stuff here as needed for postfit
 
@@ -64,7 +64,7 @@ def load_fitinfo(replica_path, prefix):
 def load_sumrules(replica_path, prefix):
     """Load the values of the sum rules defined in
     ``validphys.pdfgrids.SUM_RULES`` from a given replica."""
-    return np.loadtxt(replica_path/f'{prefix}.sumrules')[:len(pdfgrids.SUM_RULES)]
+    return np.loadtxt(replica_path/f'{prefix}.sumrules')[:len(sumrules.SUM_RULES)]
 
 @checks.check_has_fitted_replicas
 def replica_paths(fit):
@@ -88,14 +88,14 @@ def fit_sum_rules(fit, replica_paths):
     the one produced by
     ``validphys.pdfgrids.sum_rules`` which is instead obtained from LHAPDF at
     a given energy"""
-    res = np.zeros((len(pdfgrids.SUM_RULES),len(replica_paths)))
+    res = np.zeros((len(sumrules.SUM_RULES),len(replica_paths)))
     for i, p in enumerate(replica_paths):
         res[:, i] = load_sumrules(p, fit.name)
-    return pdfgrids.SumRulesGrid(*res)
+    return sumrules.SumRulesGrid(*res)
 
 @table
 def fit_sum_rules_table(fit_sum_rules):
-    return pdfgrids.sum_rules_table(fit_sum_rules)
+    return sumrules.sum_rules_table(fit_sum_rules)
 
 
 fits_replica_data = collect('replica_data', ('fits',))
