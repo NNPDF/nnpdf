@@ -12,7 +12,7 @@ from reportengine.checks import make_argcheck, CheckError, check_positive
 
 from validphys.core import PDF
 from validphys.gridvalues import (evaluate_luminosity)
-from validphys.pdfbases import (parse_flarr, list_bases, Basis, UnknownElement)
+from validphys.pdfbases import (Basis, check_basis)
 import scipy.integrate as integrate
 
 ScaleSpec = namedtuple('ScaleSpec', ('scale', 'values'))
@@ -44,37 +44,13 @@ def xgrid(xmin:numbers.Real=1e-5, xmax:numbers.Real=1,
         arr = np.linspace(xmin, xmax, npoints, endpoint=False)
     return (scale, arr)
 
-def _check_flavours(flavours):
-    try:
-        return {'flavours': parse_flarr(flavours)}
-    except ValueError as e:
-        raise CheckError(e) from e
 
-def _check_basis(basis, flavours):
-    if isinstance(basis, str):
-        bases = list_bases()
-        try:
-            basis = bases[basis]
-        except KeyError:
-            raise CheckError(f"Unknown basis '{basis}'", basis, bases)
-
-    if flavours is None:
-        flavours = basis.default_elements
-
-    try:
-        flavours = basis.to_known_elements(flavours)
-    except UnknownElement as e:
-        bad = e.args[0]
-        raise CheckError(f"Unknown basis element '{bad}'", str(bad),
-            alternatives=basis.indexes, display_alternatives='all') from e
-
-    return {'basis':basis, 'flavours':flavours}
 
 XPlottingGrid = namedtuple('XPlottingGrid', ('Q', 'basis', 'flavours', 'xgrid',
                                              'grid_values', 'scale'))
 
 
-@make_argcheck(_check_basis)
+@make_argcheck(check_basis)
 def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None, basis:(str, Basis)='flavour',
                    flavours:(list, tuple, type(None))=None):
     """Return an object containing the value of the PDF at the specified values
@@ -89,7 +65,7 @@ def xplotting_grid(pdf:PDF, Q:(float,int), xgrid=None, basis:(str, Basis)='flavo
     Q: The PDF scale in GeV.
     """
     #Make usable outside reportengine
-    checked = _check_basis(basis, flavours)
+    checked = check_basis(basis, flavours)
     basis = checked['basis']
     flavours = checked['flavours']
     if xgrid is None:

@@ -12,12 +12,9 @@ import scipy.integrate as integrate
 from NNPDF import LHAPDFSet
 
 from validphys.core import PDF
+from validphys.pdfbases import ALL_FLAVORS
 from reportengine.table import table
 from reportengine.checks import check_positive
-
-#This represents some canonical ordering of all the relevant flavours
-#we may want to query from LHAPDF
-_ALL_FLAVOURS = (-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22)
 
 def _uvalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
     return (lpdf.xfxQ(x, Q=Q, n=irep, fl=2) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-2))/x
@@ -29,19 +26,19 @@ def _svalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
     return (lpdf.xfxQ(x, Q=Q, n=irep, fl=3) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-3))/x
 
 def _momentum_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
-    return sum([lpdf.xfxQ(x, Q=Q, n=irep, fl=fl) for fl in _ALL_FLAVOURS])
+    return sum([lpdf.xfxQ(x, Q=Q, n=irep, fl=fl) for fl in ALL_FLAVORS])
 
 
 #NOTE: For the moment we rely on this order being the same as in the .sumrules
 #file produced by nnfit.
-_SUM_RULES = {
+SUM_RULES = {
     'momentum': _momentum_sum_rule_integrand,
     'uvalence': _uvalence_sum_rule_integrand,
     'dvalence': _dvalence_sum_rule_integrand,
     'svalence': _svalence_sum_rule_integrand,
 }
 
-_SUM_RULES_EXPECTED = {
+SUM_RULES_EXPECTED = {
     'momentum': 1,
     'uvalence': 2,
     'dvalence': 1,
@@ -49,14 +46,14 @@ _SUM_RULES_EXPECTED = {
 }
 
 #Output result tuple
-SumRulesGrid = namedtuple('SumRulesGrid', _SUM_RULES)
+SumRulesGrid = namedtuple('SumRulesGrid', SUM_RULES)
 def _sum_rules(lpdf, Q):
     """Compute a SumRulesGrid from the loaded PDF, at Q"""
     nmembers = lpdf.GetMembers()
     #TODO: Write this in something fast
     #If nothing else, at least allocate and store the result contiguously
-    res = np.zeros((len(_SUM_RULES), nmembers))
-    integrands = _SUM_RULES.values()
+    res = np.zeros((len(SUM_RULES), nmembers))
+    integrands = SUM_RULES.values()
     def integral(f, a, b, irep):
         #We increase the limit to capture the log scale fluctuations
         return integrate.quad(f, a, b, args=(lpdf, irep, Q),
@@ -110,5 +107,5 @@ def bad_replica_sumrules(pdf, sum_rules, threshold=0.01):
     else:
         x = np.arange(ncomputed)
     df = pd.DataFrame(sum_rules._asdict(), index=x)
-    filt = ((df - pd.Series(_SUM_RULES_EXPECTED)).abs() > threshold).any(axis=1)
+    filt = ((df - pd.Series(SUM_RULES_EXPECTED)).abs() > threshold).any(axis=1)
     return df[filt]

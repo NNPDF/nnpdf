@@ -9,8 +9,9 @@ import inspect
 import numpy as np
 
 from validphys.core import PDF
-from validphys.gridvalues import grid_values, ALL_FLAVOURS
+from validphys.gridvalues import grid_values
 
+from reportengine.checks import (make_check, CheckError)
 
 #This mapping maps the keys passed to LHAPDF (PDG codes) to nice LaTeX labels.
 PDG_PARTONS = dict((
@@ -31,19 +32,44 @@ PDG_PARTONS = dict((
         (21 , r"g"),
     ))
 
+# Canonical ordering of PDG codes (so flavour basis)
+ALL_FLAVORS = (-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22)
 DEFAULT_FLARR = (-3,-2,-1,0,1,2,3,4)
 
 def pdg_id_to_canonical_index(flindex):
-    """Given an LHAPDF id, return its index in the ALL_FLAVOURS list."""
+    """Given an LHAPDF id, return its index in the ALL_FLAVORS list."""
     if flindex == 0:
-        return ALL_FLAVOURS.index(21)
-    return ALL_FLAVOURS.index(flindex)
+        return ALL_FLAVORS.index(21)
+    return ALL_FLAVORS.index(flindex)
 
 def list_bases():
+    """ List available PDF bases """
     import validphys.pdfbases as thismodule
     return dict(inspect.getmembers(thismodule, lambda x: isinstance(x, thismodule.Basis)))
 
-#These are varous ways to refering to the PDG partons with nicer text labels.
+def check_basis(basis, flavours):
+    """ Check to verify a given basis and set of flavours """
+
+    if isinstance(basis, str):
+        bases = list_bases()
+        try:
+            basis = bases[basis]
+        except KeyError:
+            raise CheckError(f"Unknown basis '{basis}'", basis, bases)
+
+    if flavours is None:
+        flavours = basis.default_elements
+
+    try:
+        flavours = basis.to_known_elements(flavours)
+    except UnknownElement as e:
+        bad = e.args[0]
+        raise CheckError(f"Unknown basis element '{bad}'", str(bad),
+            alternatives=basis.indexes, display_alternatives='all') from e
+
+    return {'basis':basis, 'flavours':flavours}
+
+#These are various ways to refering to the PDG partons with nicer text labels.
 PDG_ALIASES = {
  r'\bar{t}': -6,
  'tbar'    : -6,
@@ -106,7 +132,7 @@ class Basis():
         canonical names of the basis elements, a matrix of dimension
         (Nelements, Npdfs) such that ``from_flavour_mat@flavours``, where
         `flavours` is in the LHAPDF flavour bases (with the elements sorted
-        as in ``ALL_FLAVOURS``) gives the values in this basis.
+        as in ``ALL_FLAVORS``) gives the values in this basis.
 
         An ``alias`` mapping can be defined, from arbitrary
         strings to labels. This is used for alternative ways to refer to the
@@ -121,7 +147,7 @@ class Basis():
         self.labels = labels
 
         self.from_flavour_mat = from_flavour_mat
-        #self._known_flavours = ALL_FLAVOURS[]
+        #self._known_flavours = ALL_FLAVORS[]
         if default_elements is None:
             default_elements = labels
         self.default_elements = default_elements
@@ -166,9 +192,9 @@ class Basis():
     import hypothesis.extra.numpy as npmats
     import numpy as np
 
-    from validphys.pdfbases import ALL_FLAVOURS, evolution
+    from validphys.pdfbases import ALL_FLAVORS, evolution
 
-    flmats = npmats.arrays(float, len(ALL_FLAVOURS), floats(allow_nan=False,
+    flmats = npmats.arrays(float, len(ALL_FLAVORS), floats(allow_nan=False,
         allow_infinity=False))
 
     @given(inp=flamts)
@@ -231,7 +257,7 @@ class Basis():
     def _flaray_from_flindexes(self, flinds):
         """Convert a list of flavor basis indexes to PDG codes to pass to
         LHAPDF"""
-        return np.asarray(ALL_FLAVOURS)[flinds]
+        return np.asarray(ALL_FLAVORS)[flinds]
 
     def _flmask_from_base_indexes(self, inds):
         """Return the flavour indexes of the transformation matrix
@@ -266,7 +292,7 @@ class Basis():
     def from_mapping(cls, mapping, *, aliases=None, default_elements=None):
         """Construct a basus from a mapping of the form
         ``{label:{pdf_flavour:coefficient}}``."""
-        arr = np.zeros(shape=(len(mapping), len(ALL_FLAVOURS)))
+        arr = np.zeros(shape=(len(mapping), len(ALL_FLAVORS)))
         labels = tuple(mapping)
         for i, coefs in enumerate(mapping.values()):
             indexes = [pdg_id_to_canonical_index(val) for val in parse_flarr(coefs.keys())]
@@ -275,7 +301,7 @@ class Basis():
         return cls(labels, arr, aliases=aliases, default_elements=default_elements)
 
 
-flavour = Basis(ALL_FLAVOURS, np.eye(len(ALL_FLAVOURS)), aliases=PDG_ALIASES,
+flavour = Basis(ALL_FLAVORS, np.eye(len(ALL_FLAVORS)), aliases=PDG_ALIASES,
     default_elements = DEFAULT_FLARR, element_representations=PDG_PARTONS
 )
 
