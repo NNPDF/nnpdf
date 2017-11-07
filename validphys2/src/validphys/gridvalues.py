@@ -20,7 +20,7 @@ FLTYPE = np.int32
 REALTYPE = np.double if REALDOUBLE else np.float32
 
 # Canonical ordering of PDG quark flavour codes (no top)
-QUARK_FLAVORS = (-5, -4, -3, -2, -1, 1, 2, 3, 4, 5)
+QUARK_FLAVOURS = (-5, -4, -3, -2, -1, 1, 2, 3, 4, 5)
 
 LUMI_CHANNELS = {
     'gg': r'gg',
@@ -68,16 +68,16 @@ def evaluate_luminosity(pdf_set: LHAPDFSet, n: int, s:float, mx: float,
     if channel == 'gg':
         res = pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, 21)
     elif channel == 'gq':
-        for i in QUARK_FLAVORS:
+        for i in QUARK_FLAVOURS:
             res += (pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, 21)
                     + pdf_set.xfxQ(x1, mx, n, 21) * pdf_set.xfxQ(x2, mx, n, i))
     elif channel == 'qqbar':
-        for i in QUARK_FLAVORS:
+        for i in QUARK_FLAVOURS:
             res += pdf_set.xfxQ(x1, mx, n, i) * pdf_set.xfxQ(x2, mx, n, -i)
     elif channel == 'qq':
         r1 = []
         r2 = []
-        for i in QUARK_FLAVORS:
+        for i in QUARK_FLAVOURS:
             r1.append(pdf_set.xfxQ(x1, mx, n, i))
             r2.append(pdf_set.xfxQ(x2, mx, n, i))
 

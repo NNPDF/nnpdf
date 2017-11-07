@@ -12,7 +12,7 @@ import scipy.integrate as integrate
 from NNPDF import LHAPDFSet
 
 from validphys.core import PDF
-from validphys.pdfbases import ALL_FLAVORS
+from validphys.pdfbases import ALL_FLAVOURS
 from reportengine.table import table
 from reportengine.checks import check_positive
 
@@ -26,7 +26,7 @@ def _svalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
     return (lpdf.xfxQ(x, Q=Q, n=irep, fl=3) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-3))/x
 
 def _momentum_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
-    return sum([lpdf.xfxQ(x, Q=Q, n=irep, fl=fl) for fl in ALL_FLAVORS])
+    return sum([lpdf.xfxQ(x, Q=Q, n=irep, fl=fl) for fl in ALL_FLAVOURS])
 
 
 #NOTE: For the moment we rely on this order being the same as in the .sumrules
