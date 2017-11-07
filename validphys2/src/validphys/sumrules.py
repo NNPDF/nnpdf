@@ -17,33 +17,31 @@ from reportengine.checks import check_positive
 
 #This represents some canonical ordering of all the relevant flavours
 #we may want to query from LHAPDF
-#Might want to import from gridvalues.py? Not sure, seems clearer here.
-ALL_FLAVOURS = (-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22)
-QUARK_FLAVORS = [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]
+_ALL_FLAVOURS = (-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22)
 
-def uvalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
+def _uvalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
     return (lpdf.xfxQ(x, Q=Q, n=irep, fl=2) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-2))/x
 
-def dvalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
+def _dvalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
     return (lpdf.xfxQ(x, Q=Q, n=irep, fl=1) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-1))/x
 
-def svalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
+def _svalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
     return (lpdf.xfxQ(x, Q=Q, n=irep, fl=3) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-3))/x
 
-def momentum_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
-    return sum([lpdf.xfxQ(x, Q=Q, n=irep, fl=fl) for fl in ALL_FLAVOURS])
+def _momentum_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
+    return sum([lpdf.xfxQ(x, Q=Q, n=irep, fl=fl) for fl in _ALL_FLAVOURS])
 
 
 #NOTE: For the moment we rely on this order being the same as in the .sumrules
 #file produced by nnfit.
-SUM_RULES = {
-    'momentum': momentum_sum_rule_integrand,
-    'uvalence': uvalence_sum_rule_integrand,
-    'dvalence': dvalence_sum_rule_integrand,
-    'svalence': svalence_sum_rule_integrand,
+_SUM_RULES = {
+    'momentum': _momentum_sum_rule_integrand,
+    'uvalence': _uvalence_sum_rule_integrand,
+    'dvalence': _dvalence_sum_rule_integrand,
+    'svalence': _svalence_sum_rule_integrand,
 }
 
-SUM_RULES_EXPECTED = {
+_SUM_RULES_EXPECTED = {
     'momentum': 1,
     'uvalence': 2,
     'dvalence': 1,
@@ -51,14 +49,14 @@ SUM_RULES_EXPECTED = {
 }
 
 #Output result tuple
-SumRulesGrid = namedtuple('SumRulesGrid', SUM_RULES)
+SumRulesGrid = namedtuple('SumRulesGrid', _SUM_RULES)
 def _sum_rules(lpdf, Q):
     """Compute a SumRulesGrid from the loaded PDF, at Q"""
     nmembers = lpdf.GetMembers()
     #TODO: Write this in something fast
     #If nothing else, at least allocate and store the result contiguously
-    res = np.zeros((len(SUM_RULES), nmembers))
-    integrands = SUM_RULES.values()
+    res = np.zeros((len(_SUM_RULES), nmembers))
+    integrands = _SUM_RULES.values()
     def integral(f, a, b, irep):
         #We increase the limit to capture the log scale fluctuations
         return integrate.quad(f, a, b, args=(lpdf, irep, Q),
@@ -112,5 +110,5 @@ def bad_replica_sumrules(pdf, sum_rules, threshold=0.01):
     else:
         x = np.arange(ncomputed)
     df = pd.DataFrame(sum_rules._asdict(), index=x)
-    filt = ((df - pd.Series(SUM_RULES_EXPECTED)).abs() > threshold).any(axis=1)
+    filt = ((df - pd.Series(_SUM_RULES_EXPECTED)).abs() > threshold).any(axis=1)
     return df[filt]
