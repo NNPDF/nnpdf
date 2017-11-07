@@ -8,10 +8,11 @@ import inspect
 
 import numpy as np
 
+from reportengine.checks import CheckError
+
 from validphys.core import PDF
 from validphys.gridvalues import grid_values
 
-from reportengine.checks import CheckError
 
 #This mapping maps the keys passed to LHAPDF (PDG codes) to nice LaTeX labels.
 PDG_PARTONS = dict((
@@ -48,12 +49,12 @@ def list_bases():
     return dict(inspect.getmembers(thismodule, lambda x: isinstance(x, thismodule.Basis)))
 
 def check_basis(basis, flavours):
-    """ 
+    """
         Check to verify a given basis and set of flavours.
-        Returns a dictionary with the relevant instance of the basis 
+        Returns a dictionary with the relevant instance of the basis
         class and flavour specification
     """
-    
+
     if isinstance(basis, str):
         bases = list_bases()
         try:

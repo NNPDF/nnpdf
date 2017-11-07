@@ -13,12 +13,14 @@ from collections import namedtuple
 import numpy as np
 import pandas as pd
 import scipy.integrate as integrate
+
 from NNPDF import LHAPDFSet
+from reportengine.table import table
+from reportengine.checks import check_positive
 
 from validphys.core import PDF
 from validphys.pdfbases import ALL_FLAVOURS
-from reportengine.table import table
-from reportengine.checks import check_positive
+
 
 def _uvalence_sum_rule_integrand(x, lpdf:LHAPDFSet, irep, Q):
     return (lpdf.xfxQ(x, Q=Q, n=irep, fl=2) - lpdf.xfxQ(x, Q=Q, n=irep, fl=-2))/x
@@ -103,9 +105,12 @@ def central_sum_rules_table(central_sum_rules):
 
 
 @table
-def bad_replica_sumrules(pdf, sum_rules, threshold=0.01):
-    #TODO: Get rid of this nonsense
+def bad_replica_sumrules(pdf, sum_rules, threshold:numbers.Real=0.01):
+    """Return a table with the sum rules for the replica where some sum rule is
+    farther from the correct value than ``threshold`` (in absolute value).
+    """
     ncomputed = len(sum_rules[0])
+    #TODO: Get rid of this nonsense
     if pdf.ErrorType == 'replicas':
         x = np.arange(1, ncomputed + 1)
     else:
