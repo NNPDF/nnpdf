@@ -19,8 +19,8 @@ from validphys.core import PDF
 FLTYPE = np.int32
 REALTYPE = np.double if REALDOUBLE else np.float32
 
-# Canonical ordering of PDG quark flavour codes (no top)
-QUARK_FLAVOURS = (-5, -4, -3, -2, -1, 1, 2, 3, 4, 5)
+# Canonical ordering of PDG quark flavour codes
+QUARK_FLAVOURS = (-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6)
 
 LUMI_CHANNELS = {
     'gg': r'gg',
