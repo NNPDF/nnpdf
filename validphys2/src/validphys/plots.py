@@ -55,7 +55,7 @@ def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
 #TODO: This should be simplified if at all possible. For now some more examples
 #are needed for a spec to emerge.
 @make_check
-def _check_normalize_to(ns, **kwargs):
+def check_normalize_to(ns, **kwargs):
     """Transforn normalize_to into an index."""
 
     msg = ("normalize_to should be either 'data', a pdf id or an index of the "
@@ -272,7 +272,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
         yield fig
 
 
-@_check_normalize_to
+@check_normalize_to
 @figuregen
 def plot_fancy(one_or_more_results, commondata, cuts,
                normalize_to:(int,str,type(None)) = None):

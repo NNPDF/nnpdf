@@ -1,22 +1,23 @@
 """
 arclength.py
 
-Module for the computation of arclengths
+Module for the computation and presentation of arclengths
 As of yet just works in it's own dedicated basis, needs
 to be extended to use the Basis class.
 """
-from collections import namedtuple
+from collections import namedtuple, Sequence
 import numbers
 import math
 
 import numpy as np
 import pandas as pd
 
-from reportengine.figure import figure, figuregen
+from reportengine.figure import figure
 from reportengine.table import table
 from reportengine.checks import check_positive
 
-from validphys.core import PDF
+from validphys.plots import check_normalize_to
+from validphys.core  import PDF
 
 import matplotlib.pyplot as plt
 
@@ -33,6 +34,7 @@ FLAVOUR_ALIAS = {
 
 ArcLengthGrid = namedtuple('ArcLengthGrid', FLAVOUR_ALIAS)
 @check_positive('Q')
+#TODO convert to use Basis (probably through xplotting_grid to concentrate xfx calls in one loc)
 def arc_lengths(pdf:PDF, Q:numbers.Real):
     """Compute arc lengths at scale Q"""
     lpdf = pdf.load()
@@ -62,21 +64,30 @@ def arc_length_table(arc_lengths):
     return pd.DataFrame(arc_lengths._asdict()).describe().iloc[1:,:]
 
 @figure
-def plot_arc_lengths(arc_lengths):
+@check_normalize_to
+def plot_arc_lengths(pdfs:Sequence, Q:numbers.Real, normalize_to:(type(None),int)=None):
     """Plot the arc lengths of a PDF set"""
     fig, ax = plt.subplots()
 
-    aldict = arc_lengths._asdict()
-    xvalues = range(len(aldict))
-    yvalues = []
-    yerr    = []
-    labels  = []
-    for fl, al in aldict.items():
-        labels.append(fl)
-        yvalues.append(np.mean(al))
-        yerr.append(np.std(al))
-    ax.errorbar(xvalues, yvalues, yerr = yerr, fmt='.')
-    ax.set_xticklabels(labels)
-    #l = ax.legend()
-    return fig
+    # I'm assuming that the dictionary.items() returns always in the same order here...
+    norm_cv = None
+    if normalize_to is not None:
+        norm_al = arc_lengths(pdfs[normalize_to], Q)
+        norm_cv = [ np.mean(al) for fl, al in norm_al._asdict().items() ]
 
+    for ipdf, pdf in enumerate(pdfs):
+        arclengths = arc_lengths(pdf, Q)
+        aldict = arclengths._asdict()
+        xvalues = np.array(range(len(aldict)))
+        xlabels  = [ fl for fl in aldict.keys()]
+        yvalues = [ np.mean(al) for fl, al in aldict.items()]
+        yerrors = [ np.std(al)  for fl, al in aldict.items()]
+        if norm_cv is not None:
+            yvalues = np.divide(yvalues, norm_cv)
+            yerrors = np.divide(yerrors, norm_cv)
+        #TODO should do a better job of this shift
+        ax.errorbar(xvalues + ipdf/5.0, yvalues, yerr = yerrors, fmt='.', label=pdf.label)
+        ax.set_xticks(xvalues)
+        ax.set_xticklabels(xlabels)
+        ax.legend()
+    return fig
