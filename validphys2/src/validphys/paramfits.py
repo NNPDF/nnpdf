@@ -43,7 +43,18 @@ PseudoReplicaExpChi2Data = namedtuple('PseudoReplicaChi2Data',
 def computed_psedorreplicas_chi2(
         experiments, dataseed, pdf, fitted_replica_indexes,
         t0set:(PDF, type(None))):
-    """Return the chi2 the chi² of the pseudodata"""
+    """Return a dataframe with the chi² of each replica wirh its corrsponding
+    pseudodata (i.e. the one it was fitted with). The chi² is computed for
+    both each experiment and each dataset in the experiment. The index of the
+    dataframe is
+
+    ['experiment', 'dataset', 'ndata' , 'nnfit_index']
+
+    where 'experiment' is the name of the experiment, 'dataset' is the name of
+    the dataset, or "Total" for the total value, 'ndata' is the corresponding
+    number of points and 'nnfit_index' is the index specifying the
+    pseudorreplica fluctuation.
+    """
 
     #TODO: Everythning about this function is horrible. We need to rewrite
     #experiments.cc from scratch.
