@@ -169,20 +169,80 @@ def _check_badcurves(badcurves):
                          badcurves, options)
 
 
-def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated,
+def _discard_sparse_curves(fits_replica_data_correlated,
         max_ndiscarded:int=4):
     """Return a table like  `fits_replica_data_correlated` where the replicas
     with too many discarded points have been filtered out."""
+
+
     df = fits_replica_data_correlated
+
     def ap(x):
         x.columns = x.columns.droplevel(0)
         return (x['chi2'])
     table = df.groupby(axis=1, level=0).apply(ap)
     filt = table.isnull().sum(axis=1) < max_ndiscarded
+
     table = table[filt]
-    #table = np.atleast_2d(np.mean(table, axis=0))
+
+
     return table
 
+
+@make_argcheck
+def _check_discarded_string(max_ndiscarded):
+    arg = max_ndiscarded
+    if isinstance(arg,str):
+        if arg != 'auto':
+            raise CheckError("Expecting string to be 'auto'")
+
+   
+@_check_discarded_string
+def fits_replica_data_with_discarded_replicas(
+    fits_replica_data_correlated_for_total,
+    fits_replica_data_correlated,
+    fits_as,
+    max_ndiscarded:(int,str)='auto',
+    autodiscard_confidence_level:float=0.99):
+    """Return a table like  `fits_replica_data_correlated` where the replicas
+    with too many discarded points have been filtered out.
+
+    autodiscard_confidence_level is the student-T confidence level. Is normalised to 1
+    and only is used if max_ndiscarded is set to 'auto' """
+
+    if isinstance(max_ndiscarded,int):
+
+        return _discard_sparse_curves(fits_replica_data_correlated,max_ndiscarded)
+
+    else:
+        df = fits_replica_data_correlated_for_total[0]
+        df1 = fits_replica_data_correlated
+    
+        best_table = None
+        best_error = np.inf
+
+        ndiscarded = range(len(fits_as),0,-1)
+
+        for i in range(len(ndiscarded),0,-1):
+            tablefilt_total = _discard_sparse_curves(df,ndiscarded[i-1])
+
+            tablefilt = _discard_sparse_curves(df1, ndiscarded[i-1])
+
+            parabolas = parabolic_as_determination(fits_as,tablefilt_total)
+            stdT = stats.t.ppf((1-(1-autodiscard_confidence_level)/2),len(parabolas)-1)
+       
+            std_dev = np.std(parabolas)
+
+            current_err = std_dev*stdT            
+
+            if current_err < best_error:
+                best_error = current_err
+                best_table = tablefilt
+
+        return best_table
+
+
+        
 def _get_parabola(asvals, chi2vals):
     chi2vals = np.ravel(chi2vals)
     filt =  np.isfinite(chi2vals)
