@@ -168,9 +168,11 @@ def _check_badcurves(badcurves):
         raise CheckError(f"badcurves must be one of {options}",
                          badcurves, options)
 
+fits_replica_data_correlated_for_total = collect('fits_replica_data_correlated',
+ ['matched_pseudorreplcias_for_total'])
 
 def _discard_sparse_curves(fits_replica_data_correlated,
-        max_ndiscarded:int=4):
+        max_ndiscarded):
     """Return a table like  `fits_replica_data_correlated` where the replicas
     with too many discarded points have been filtered out."""
 
@@ -242,7 +244,7 @@ def fits_replica_data_with_discarded_replicas(
         return best_table
 
 
-        
+
 def _get_parabola(asvals, chi2vals):
     chi2vals = np.ravel(chi2vals)
     filt =  np.isfinite(chi2vals)
