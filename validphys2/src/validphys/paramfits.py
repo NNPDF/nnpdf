@@ -292,6 +292,30 @@ def as_central_parabola(
 as_datasets_central_parabolas = collect(
         'as_central_parabola', ['fits_central_chi2_by_dataset_item'])
 
+central_by_dataset_suptitle = collect('suptitle', ['fits_central_chi2_by_dataset_item'])
+dataspecs_central_by_dataset_suptitle = collect('central_by_dataset_suptitle', ['dataspecs'])
+
+central_by_dataset_ndata = collect(
+    'ndata',
+    ['fits_central_chi2_by_dataset_item',]
+)
+dataspecs_central_by_dataset_ndata = collect('central_by_dataset_ndata', ['dataspecs'])
+
+by_dataset_suptitle = collect(
+    'suptitle',
+    ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
+)
+
+dataspecs_dataset_suptitle = collect('by_dataset_suptitle', ['dataspecs'])
+
+
+by_dataset_ndata = collect(
+    'ndata',
+    ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
+)
+
+dataspecs_dataset_ndata = collect('by_dataset_ndata', ['dataspecs'])
+
 
 @figure
 def plot_as_central_parabola(
@@ -320,13 +344,13 @@ def plot_as_central_parabola(
 @figure
 def plot_as_cummulative_central_chi2(fits_as,
                                      as_datasets_central_parabolas,
-                                     by_dataset_suptitle):
+                                     central_by_dataset_suptitle):
     """Plot the cummulative total chi² for each of the datasets"""
     fig,ax  = plt.subplots()
     nx = 100
     asarr = np.linspace(min(fits_as), max(fits_as), nx)
     last = np.zeros(nx)
-    for (p, label) in zip(as_datasets_central_parabolas, by_dataset_suptitle):
+    for (p, label) in zip(as_datasets_central_parabolas, central_by_dataset_suptitle):
         val = last + np.polyval(p, asarr)
         ax.fill_between(asarr, last, val, label=label)
         last = val
@@ -341,7 +365,7 @@ def plot_as_cummulative_central_chi2(fits_as,
 @figure
 def plot_as_cummulative_central_chi2_diff(fits_as,
                                      as_datasets_central_parabolas,
-                                     by_dataset_suptitle,
+                                     central_by_dataset_suptitle,
                                      parabolic_as_determination_for_total):
     """Plot the cummulative difference between the χ² at the best global
     αs fit and the χ² at αs. If the difference is negative, it is set to zero.
@@ -351,7 +375,7 @@ def plot_as_cummulative_central_chi2_diff(fits_as,
     best_as = np.mean(parabolic_as_determination_for_total)
     asarr = np.linspace(min(fits_as), max(fits_as), nx)
     last = np.zeros(nx)
-    for (p, label) in zip(as_datasets_central_parabolas, by_dataset_suptitle):
+    for (p, label) in zip(as_datasets_central_parabolas, central_by_dataset_suptitle):
         delta = np.polyval(p, asarr) - np.polyval(p, best_as)
         delta[delta<0] = 0
         val = last + delta
@@ -370,11 +394,11 @@ def plot_as_cummulative_central_chi2_diff(fits_as,
 def derivative_dispersion_table(
                                 as_datasets_central_parabolas,
                                 fits_as,
-                                by_dataset_suptitle,
+                                central_by_dataset_suptitle,
                                 as_determination_from_central_chi2_for_total):
     best_as = np.ravel(as_determination_from_central_chi2_for_total)[0]
     d = {}
-    for label, p in zip(by_dataset_suptitle, as_datasets_central_parabolas):
+    for label, p in zip(central_by_dataset_suptitle, as_datasets_central_parabolas):
         d[label] = np.polyval(np.polyder(p), best_as)
 
     s = pd.Series(d)
@@ -384,6 +408,54 @@ def derivative_dispersion_table(
 
     return res
 
+dataspecs_as_central_parabolas = collect('as_datasets_central_parabolas', ['dataspecs'])
+
+def dataspecs_as_central_parabolas_map(
+        dataspecs_speclabel,
+        dataspecs_as_central_parabolas,
+        dataspecs_central_by_dataset_suptitle,
+        dataspecs_central_by_dataset_ndata):
+    """Return a dict-like datastucture with the central chi² of the form:
+
+        d[dataset_name][dataspec] = parabola_coefficients/ndata
+
+    for all dataset items and dataspecs.
+    """
+    res = defaultdict(dict)
+    for label, parabolas, dsnames, ndatas in zip(
+            dataspecs_speclabel,
+            dataspecs_as_central_parabolas,
+            dataspecs_central_by_dataset_suptitle,
+            dataspecs_central_by_dataset_ndata):
+        for parabola, dsname, ndata  in zip(parabolas, dsnames, ndatas):
+            res[dsname][label] = parabola/np.asarray(ndata)
+    return res
+
+@figuregen
+def plot_dataspecs_central_parabolas(
+        dataspecs_as_central_parabolas_map,
+        dataspecs_fits_as):
+    """Plot the parabolas resulting from the chi² of the mean PDF to the data,
+    as a function of alpha_S. Yield one plot per ``dataset_item`` comparing
+    several dataspecs."""
+    #Note that cannot cast as a matrix if shapes are different
+    limits = min(map(min, dataspecs_fits_as)), max(map(max, dataspecs_fits_as))
+    alphasaxis = np.linspace(*limits, 100)
+    for dsname, dataspecs_parabolas in dataspecs_as_central_parabolas_map.items():
+        fig, ax = plt.subplots()
+        for label, parabola in dataspecs_parabolas.items():
+            ax.plot(alphasaxis, np.polyval(parabola, alphasaxis), label=label)
+
+        ax.set_ylabel(r'$\chi^2/N_{dat}$')
+        ax.set_xlabel(r'$\alpha_S$')
+        #ax.set_ylim(0)
+        ax.set_title(dsname)
+        ax.set_xlim(alphasaxis[[0,-1]])
+
+
+        plt.legend()
+
+        yield fig
 
 def _aic(residuals, n, k):
     return 2*k + n*np.log(residuals) + 2*k*(k+1)/(n-k-1)
@@ -729,21 +801,6 @@ dataspecs_as_datasets_pseudorreplicas_chi2 = collect('as_datasets_pseudorreplica
 
 quad_as_datasets_pseudorreplicas_chi2 = collect('quadratic_datasets_pseudorreplicas_chi2',['dataspecs'])
 
-
-by_dataset_suptitle = collect(
-    'suptitle',
-    ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
-)
-
-dataspecs_dataset_suptitle = collect('by_dataset_suptitle', ['dataspecs'])
-
-
-by_dataset_ndata = collect(
-    'ndata',
-    ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
-)
-
-dataspecs_dataset_ndata = collect('by_dataset_ndata', ['dataspecs'])
 
 #TODO: Deprecate fixup dataset_items earlier
 @_check_speclabels_different
@@ -1212,6 +1269,36 @@ def dataspecs_chi2_by_dataset_dict(dataspecs_dataset_suptitle,
         for k in allkeys-set(keys):
             res[k].append(None)
     return res
+
+@figuregen
+@_check_dataset_items
+def plot_dataspecs_pseudorreplica_means(
+        dataspecs_chi2_by_dataset_dict,
+        dataspecs_speclabel,
+        dataset_items:(list, type(None))=None,
+        ):
+    """ Plot the mean chi² from data to pseudorreplica, over replicas in a fit
+    and comparing dataspecs.
+    """
+    if dataset_items is None:
+        dataset_items = list(dataspecs_chi2_by_dataset_dict)
+
+
+    for it in dataset_items:
+        fig, ax = plt.subplots()
+        for label, tb in zip(dataspecs_speclabel, dataspecs_chi2_by_dataset_dict[it]):
+            if tb is None:
+                #Advance color cycle so all dataspecs get the same color
+                ax._get_lines.get_next_color()
+                continue
+            m = tb.mean(axis=0)
+            ax.plot(np.asarray(m.index),np.asarray(m), label=label)
+        ax.set_title(it)
+        ax.set_xlabel(r'$\alpha_S$')
+        ax.set_ylabel(r'$\left<\chi^2\right>$')
+        ax.legend()
+
+        yield fig
 
 
 
