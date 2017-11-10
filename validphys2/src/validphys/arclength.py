@@ -39,10 +39,12 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
     nmembers = lpdf.GetMembers()
     checked = check_basis(basis, flavours)
     basis, flavours = checked['basis'], checked['flavours']
+    # x-grid points and limits in three segments
     npoints = 199 #200 intervals
     seg_min = [1e-6, 1e-4, 1e-2]
     seg_max = [1e-4, 1e-2, 1.0 ]
     res = np.zeros((len(flavours), nmembers))
+    # Integrate the separate segments
     for iseg in range(len(seg_min)):
         a, b = seg_min[iseg], seg_max[iseg]
         eps = (b-a)/(npoints-1)
@@ -54,12 +56,9 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
         np.swapaxes(dfgrid, 1,2)
         for irep in range(nmembers):
             for ifl,fl in enumerate(flavours):
-                if damping_factors[fl]:
-                    asqr = eps*eps+ np.square(dfgrid[irep][ifl] * x1grid[1])
-                    res[ifl,irep] += np.sum(np.sqrt(asqr))
-                else:
-                    asqr = eps*eps+ np.square(dfgrid[irep][ifl])
-                    res[ifl,irep] += np.sum(np.sqrt(asqr))
+                dslice = dfgrid[irep][ifl]
+                asqr = np.square(dslice * x1grid[1]) if damping_factors[fl] else np.square(dslice)
+                res[ifl,irep] += np.sum(np.sqrt(eps*eps+asqr))
     return ArcLengthGrid(basis, flavours, res)
 
 #@table
