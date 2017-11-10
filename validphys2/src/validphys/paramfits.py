@@ -208,7 +208,9 @@ def fits_replica_data_with_discarded_replicas(
     with too many discarded points have been filtered out.
 
     autodiscard_confidence_level is the student-T confidence level. Is normalised to 1
-    and only is used if max_ndiscarded is set to 'auto' """
+    and only is used if max_ndiscarded is set to 'auto' 
+
+    The automated discarding is done by estimating the uncertainty on the uncertainty by bootstrapping"""
 
     if isinstance(max_ndiscarded,int):
         return _discard_sparse_curves(fits_replica_data_correlated,max_ndiscarded)
@@ -226,16 +228,15 @@ def fits_replica_data_with_discarded_replicas(
             tablefilt = _discard_sparse_curves(df1, ndiscarded[i-1])
             parabolas = parabolic_as_determination(fits_as,tablefilt_total)
 
-            if parabolas.size:
-                bootstrap_est = np.random.choice(parabolas, (1000,len(parabolas))).std(axis=0).std()
+            if parabolas.size > 1:
+                bootstrap_est = np.random.choice(parabolas,(10000,len(parabolas))).std(axis=1).std()
             else:
-                bootstrap_est = 0
+                bootstrap_est = np.inf
 
             stdT = stats.t.ppf((1-(1-autodiscard_confidence_level)/2),len(parabolas)-1)
-            std_dev = np.std(parabolas)
+            # std_dev = np.std(parabolas)
 
-            # current_err = std_dev*stdT            
-            current_err = bootstrap_est
+            current_err = bootstrap_est*stdT
 
             if current_err < best_error:
                 best_error = current_err
