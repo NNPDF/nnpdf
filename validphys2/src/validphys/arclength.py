@@ -5,12 +5,13 @@ Module for the computation and presentation of arclengths.
 """
 from collections import namedtuple, Sequence
 import numbers
+import math
 
 import numpy as np
 import pandas as pd
 
 from reportengine.figure import figure
-from reportengine.table import table
+from reportengine.table  import table
 from reportengine.checks import check_positive, make_argcheck
 
 from validphys.pdfbases import Basis, check_basis, PDG_PARTONS
@@ -61,6 +62,7 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
                 res[ifl,irep] += np.sum(np.sqrt(eps*eps+asqr))
     return ArcLengthGrid(basis, flavours, res)
 
+#TODO
 #@table
 #def arc_length_table(arc_lengths):
 #    """Return a table with the descriptive statistics of the arc lengths
@@ -71,7 +73,6 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
 
 @figure
 @check_normalize_to
-#TODO Should plot 68% C.I. Rather than stddev
 def plot_arc_lengths(pdfs:Sequence, Q:numbers.Real, normalize_to:(type(None),int)=None):
     """Plot the arc lengths of a PDF set"""
     fig, ax = plt.subplots()
@@ -91,12 +92,19 @@ def plot_arc_lengths(pdfs:Sequence, Q:numbers.Real, normalize_to:(type(None),int
         xvalues = np.array(range(len(arclengths.flavours)))
         xlabels  = [ '$'+arclengths.basis.elementlabel(fl)+'$' for fl in arclengths.flavours]
         yvalues = [ np.mean(fl) for fl in alvalues ]
-        yerrors = [ np.std(fl)  for fl in alvalues]
+        # Computation of 68% C.I - this feels like it should be somewhere else
+        nmembers = np.shape(alvalues)[1]
+        nrep_16 = math.floor(0.16*nmembers)
+        nrep_84 = math.ceil(0.84*nmembers)
+        srvalues = [np.sort(fl) for fl in alvalues] # Replicas sorted
+        yupper = [fl[nrep_84] - yvalues[ifl] for ifl, fl in enumerate(srvalues)]
+        ylower = [yvalues[ifl] - fl[nrep_16] for ifl, fl in enumerate(srvalues)]
         if norm_cv is not None:
             yvalues = np.divide(yvalues, norm_cv)
-            yerrors = np.divide(yerrors, norm_cv)
+            yupper  = np.divide(yupper,  norm_cv)
+            ylower  = np.divide(ylower,  norm_cv)
         ##TODO should do a better job of this shift
-        ax.errorbar(xvalues + ipdf/5.0, yvalues, yerr = yerrors, fmt='.', label=pdf.label)
+        ax.errorbar(xvalues + ipdf/5.0, yvalues, yerr = (ylower,yupper), fmt='.', label=pdf.label)
         ax.set_xticks(xvalues)
         ax.set_xticklabels(xlabels)
         ax.legend()
