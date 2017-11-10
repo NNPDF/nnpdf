@@ -1350,6 +1350,8 @@ def plot_dataspecs_parabola_examples(
                 m = -b/2/a
                 if asvals[0] < m < asvals[-1]:
                     ax.axvline(m ,  color=color, lw=0.4)
+                ax.set_xlabel(r'$\alpha_S$')
+                ax.set_ylabel(r'$\chi^2$')
             ax.legend(  )
 
             yield fig
