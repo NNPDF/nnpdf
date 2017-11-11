@@ -1,16 +1,17 @@
 ********************************************************************************
-SetName: CMSTOPDIFF8TEVTTMNORM
+SetName: ATLASTOPDIFF8TEVTPT
 Author: Emanuele Nocera emanuele.nocera@physics.ox.ac.uk
 Date: 02/2016
 CodesUsed: Predictions provided by Alex Mitov
-TheoryInput: Fixed muR=muF=HT/4 [HT = sqrt(mt^2+pTt^2)+sqrt(mt^2+pTT^2), mt=173.3 GeV], as(MZ) = 0.118
-PDFset: NNPDF30_nnlo_as_0118
+TheoryInput: Fixed muR=muF=sqrt(mt^2+pTt^2)/2, mt=173.3 GeV], as(MZ) = 0.118
+PDFset: NNPDF30_nlo_as_0118
 Warnings: 
 ********************************************************************************
-1.07351 0.00000
-1.05135 0.00000
-1.06054 0.00000
-1.07278 0.00000
-1.08464 0.00000
-1.10038 0.00000
-1.11975 0.00000
+1.01299 0.00000
+1.00891 0.00000
+1.00191 0.00000
+0.993028 0.00000
+0.983116 0.00000
+0.972305 0.00000
+0.961189 0.00000
+0.948909 0.00000

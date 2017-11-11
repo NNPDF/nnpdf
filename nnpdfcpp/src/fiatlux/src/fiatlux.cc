@@ -26,6 +26,11 @@
 #include <LHAPDF/GridPDF.h>
 #include <sstream>
 #include <fstream>
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_vector.h>
+#include <gsl/gsl_linalg.h>
+#include <gsl/gsl_blas.h>
+#include <NNPDF/exceptions.h>
 using namespace fiatlux;
 using namespace std;
 
@@ -42,13 +47,16 @@ double APFELFL(double const& x, double const& Q)
 class lux
 {
 public:
-  lux()
+  lux():
+    _addnoise(true)
   {
     // FiatLux setup
     _lux = new FiatLux{"../config/fiatlux.yml"};
     _lux->PlugAlphaQED(APFEL::AlphaQED); // using default Qref = me
-    _lux->PlugStructureFunctions(APFELF2, APFELFL);
+    _lux->PlugStructureFunctions(APFELF2, APFELFL, APFEL::F2LO);
   }
+
+  void add_noise(bool add_noise) { _addnoise = add_noise; }
 
   ~lux()
   {
@@ -56,11 +64,51 @@ public:
     delete _pdf;
   }
 
-  void loadPDF(string const& pdfname, int const& replica)
+  void loadPDF(string const& pdfname, int const& replica, vector<double> const& xgrid, double Q)
   {
     _pdf = LHAPDF::mkPDF(pdfname, replica);
     const LHAPDF::GridPDF& pdf = *dynamic_cast<const LHAPDF::GridPDF*>(_pdf);
     _xgrid = pdf.xKnots();
+    if (_addnoise) generateErrors(replica, xgrid, Q);
+  }
+
+  void generateErrors(int replica, vector<double> const& xgrid, double Q)
+  {
+    cout << "Generating extra LUX17 errors for replica " << replica << endl;
+    auto set = LHAPDF::mkPDFs("LUXqed17_plus_PDF4LHC15_nnlo_100");
+
+    gsl_matrix *X = gsl_matrix_alloc(xgrid.size(), 7);
+    gsl_matrix *V = gsl_matrix_alloc(7, 7);
+    gsl_vector *s = gsl_vector_alloc(7);
+    gsl_vector *work = gsl_vector_alloc(7);
+
+    // fill X matrix
+    for (int i = 0; i < (int) xgrid.size(); i++)
+      for (int rep = 101; rep < 108; rep++)
+        gsl_matrix_set(X, i, rep-101, set[rep]->xfxQ(22, xgrid[i], Q)-set[0]->xfxQ(22, xgrid[i], Q));
+
+    int status = gsl_linalg_SV_decomp(X, V, s, work);
+    if (status != GSL_SUCCESS)
+      throw NNPDF::RuntimeException("generateErrors", "SVD failed");
+
+    gsl_vector *r = gsl_vector_alloc(7);
+    for (int i = 0; i < 7; i++)
+      gsl_vector_set(r, i, NNPDF::RandomGenerator::GetRNG()->GetRandomGausDev(gsl_vector_get(s, i)));
+
+    gsl_vector *result = gsl_vector_alloc(xgrid.size());
+    status = gsl_blas_dgemv(CblasNoTrans, 1.0, X, r, 0.0, result);
+    if (status != GSL_SUCCESS)
+      throw NNPDF::RuntimeException("generateErrors", "A*x failed");
+
+    for (size_t i = 0; i < xgrid.size(); i++)
+      _noise[xgrid[i]] = gsl_vector_get(result, i);
+
+    gsl_matrix_free(X);
+    gsl_matrix_free(V);
+    gsl_vector_free(s);
+    gsl_vector_free(work);
+    gsl_vector_free(r);
+    gsl_vector_free(result);
   }
 
   FiatLux const& getLux() const { return *_lux; }
@@ -79,9 +127,18 @@ public:
              << pht.elastic << "\t"
              << pht.inelastic_pf << "\t"
              << pht.msbar_pf << "\t"
-             << pht.total << "\t"
-             << endl;
-        return pht.total;
+             << pht.total << "\t";
+        if (_addnoise)
+          {
+            const double r = pht.total + _noise.at(x);
+            cout << r << endl;
+            return r;
+          }
+        else
+          {
+            cout << endl;
+            return pht.total;
+          }
       }
   }
 
@@ -89,6 +146,8 @@ private:
   FiatLux* _lux;
   LHAPDF::PDF* _pdf;
   vector<double> _xgrid;
+  bool _addnoise;
+  map<double, double> _noise;
 };
 
 lux& luxInstance()
@@ -147,10 +206,20 @@ double SR(double (*f)(double,void*), double const& q)
   return int_res;
 }
 
+// Set the RNG seed from replica id
+void SetSeed(int const& replica)
+{
+  unsigned long int seed = 0;
+  for (int i = 0; i < replica; i++)
+    seed = RandomGenerator::GetRNG()->GetRandomInt();
+  RandomGenerator::GetRNG()->SetSeed(seed);
+}
+
 int main(int argc, char **argv)
 {
   // Read configuration filename from arguments
   int replica = 0;
+  bool noise_status = false;
   string filename = "";
   if (argc > 2)
     {
@@ -158,19 +227,26 @@ int main(int argc, char **argv)
       filename.assign(argv[2]);
       if (filename.find("help") != string::npos)
         {
-          cout << "\nusage: fiatlux [replica] [configuration filename]\n" << endl;
+          cout << "\nusage: fiatlux [replica] [configuration filename] [add_noise (default 0)]\n" << endl;
           exit(-1);
         }
+      if (argc == 4)
+	noise_status = atoi(argv[3]);	
+	
+      cout << "Add LUX noise " << noise_status << endl;
     }
   else
     {
-      cerr << Colour::FG_RED << "\nusage: fiatlux [replica] [configuration filename]\n" << endl;
+      cerr << Colour::FG_RED << "\nusage: fiatlux [replica] [configuration filename] [add_noise (default 0)]\n" << endl;
       exit(-1);
     }
 
   // Creates the configuration class
   NNPDFSettings settings(filename);
   settings.PrintConfiguration("fiatlux.yml");
+
+  SetSeed(replica);
+  const double q0 = 100.0, q = stod(settings.GetTheory(APFEL::kQ0));
 
   // write grid to disk
   mkdir(settings.GetResultsDirectory().c_str(),0777);
@@ -312,13 +388,15 @@ int main(int argc, char **argv)
     };
 
   APFEL::SetNumberOfGrids(1);
-  APFEL::SetExternalGrid(1, 115, 5, X1);
+  APFEL::SetExternalGrid(1, 115, 3, X1);
   APFEL::SetFastEvolution(false);
   APFEL::LockGrids(true);
   APFEL::InitializeAPFEL_DIS();
   APFEL::CacheStructureFunctionsAPFEL(-1);
+  APFEL::CachePDFsAPFEL(-1);
 
-  luxInstance().loadPDF(settings.GetPDFName(), replica);
+  luxInstance().add_noise(noise_status);
+  luxInstance().loadPDF(settings.GetPDFName(), replica, vector<double>(X1, X1 + sizeof X1 / sizeof X1[0]), q0);
   const int nfmax = stoi(settings.GetTheory(APFEL::kMaxNfPdf));
   const double mb = stod(settings.GetTheory(APFEL::kmb));
   const double mt = stod(settings.GetTheory(APFEL::kmt));
@@ -328,7 +406,6 @@ int main(int argc, char **argv)
     luxInstance().getLux().InsertInelasticSplitQ({mb,mt});
 
   cout << "Computing photon..." << endl;
-  const double q0 = 100.0, q = stod(settings.GetTheory(APFEL::kQ0));
   APFEL::SetPDFSet("external");
   APFEL::EvolveAPFEL(q0, q);
 
