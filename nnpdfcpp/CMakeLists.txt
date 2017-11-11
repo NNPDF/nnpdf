@@ -24,30 +24,15 @@ configure_file(
   "${PROJECT_SOURCE_DIR}/src/common/inc/version.h.in"
   "${PROJECT_BINARY_DIR}/src/common/inc/version.h"
 )
+include_directories(${PROJECT_BINARY_DIR}/src/common/inc/)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
 find_package(PkgConfig REQUIRED)
 pkg_search_module(YAML REQUIRED yaml-cpp)
-set(YAMLCPP_CXX_FLAGS ${YAML_CFLAGS} CACHE STRING INTERNAL)
-set(YAMLCPP_LIBRARIES ${YAML_LDFLAGS} CACHE STRING INTERNAL)
 pkg_search_module(SQLITE3 REQUIRED sqlite3)
 pkg_search_module(GSL REQUIRED gsl)
-
-# NNPDF
-find_program(NNPDF_CONFIG nnpdf-config REQUIRED)
-if (NNPDF_CONFIG)
-  exec_program(${NNPDF_CONFIG}
-    ARGS --cppflags
-    OUTPUT_VARIABLE NNPDF_CXX_FLAGS
-  )
-  set(NNPDF_CXX_FLAGS ${NNPDF_CXX_FLAGS} CACHE STRING INTERNAL)
-  exec_program(${NNPDF_CONFIG}
-    ARGS --ldflags
-    OUTPUT_VARIABLE NNPDF_LIBRARIES
-  )
-  set(NNPDF_LIBRARIES ${NNPDF_LIBRARIES} CACHE STRING INTERNAL)
-endif(NNPDF_CONFIG)
+pkg_search_module(NNPDF REQUIRED nnpdf)
 
 # LHAPDF
 find_program(LHAPDF_CONFIG lhapdf-config REQUIRED)
@@ -79,7 +64,29 @@ if (APFEL_CONFIG)
   set(APFEL_LIBRARIES ${APFEL_LIBRARIES} CACHE STRING INTERNAL)
 endif(APFEL_CONFIG)
 
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NNPDF_CXX_FLAGS} ${LHAPDF_CXX_FLAGS} ${APFEL_CXX_FLAGS} ${YAMLCPP_CXX_FLAGS} ${SQLITE3_CFLAGS} ${GSL_CFLAGS}")
 
 # execute project specific targets
 add_subdirectory(src)
+
+# install scripts
+install(FILES ${PROJECT_SOURCE_DIR}/scripts/fitmanager
+        ${PROJECT_SOURCE_DIR}/scripts/postfit
+        DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+
+# install symlin
+set(datapath)
+execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE} nnpdf --variable=data_path
+  OUTPUT_VARIABLE datapath)
+string(STRIP "${datapath}" datapath)
+
+if(NOT datapath)
+  message(FATAL_ERROR "unexpected: the variable data_path from libnnpdf is empty.")
+endif()
+
+if(datapath STREQUAL ${PROJECT_SOURCE_DIR}/data)
+  message(WARNING "data path matches")
+else()
+  install(DIRECTORY ${PROJECT_SOURCE_DIR}/data/ DESTINATION ${datapath})
+endif()
