@@ -1,5 +1,5 @@
 #!/bin/bash
-cmake . -DCOMPILE_validphys=OFF -DCOMPILE_mkthpredictions=ON
+cmake . -DCOMPILE_validphys=OFF -DCOMPILE_mkthpredictions=ON -DCMAKE_INSTALL_PREFIX=${PREFIX}
 make -j${CPU_COUNT}
 make install
 
