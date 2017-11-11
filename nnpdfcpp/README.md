@@ -102,23 +102,18 @@ http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html
 please ensure to have the dependencies correctly installed and in your PATH before compiling nnpdfcpp.
 The exact or minimal version requirements for each package is summarized in https://github.com/NNPDF/nnpdfcpp/blob/master/conda-recipe/meta.yaml.
 
-#### Configurations
+#### Compiling the code
 
-Possible configurations:
-
+Several options are available, please use ccmake:
 ```Shell
-cmake .
-make
-```
-
-More options are available when running:
-```Shell
+mkdir build
+cd build
+cmake ..
 ccmake .
 ```
-or 
-```Shell
-cmake-gui .
-```
+Make sure you have set correctly the `CMAKE_INSTALL_PREFIX`, this path is used when `make install` is invoked.
+
+After running cmake proceed with `make` followed by `make install`. The later will copy binaries and scripts to the `CMAKE_INSTALL_PREFIX` that you selected, while the content of `nnpdfcpp/data` folder will be copied to the `data_path` set in nnprofile.yaml.
 
 ## Documentation
 
