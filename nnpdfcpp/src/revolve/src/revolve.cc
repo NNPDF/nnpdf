@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 
   // fill map
   std::map<string,string> apfel_setup;
-  NNPDF::IndexDB db(get_data_path() + "theory.db", "theoryIndex");
+  NNPDF::IndexDB db(get_data_path() + "/theory.db", "theoryIndex");
   db.ExtractMap(theory_id, APFEL::kValues, apfel_setup);
 
   cout << Colour::FG_BLUE;
