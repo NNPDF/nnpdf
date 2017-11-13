@@ -24,10 +24,9 @@ from validphys.checks   import check_pdf_is_montecarlo
 
 import matplotlib.pyplot as plt
 
-ArcLengthGrid = namedtuple('ArcLengthGrid', ('pdf', 'basis','scale', 'flavours', 'values'))
+ArcLengthGrid = namedtuple('ArcLengthGrid', ('pdf', 'basis', 'flavours', 'stats'))
 @check_positive('Q')
 @make_argcheck(check_basis)
-@check_pdf_is_montecarlo
 def arc_lengths(pdf:PDF, Q:numbers.Real,
                 basis:(str, Basis)='flavour',
                 flavours:(list, tuple, type(None))=None):
@@ -47,13 +46,14 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
         ixgrid = xgrid(a, b, 'linear', npoints)
         # PDFs evaluated on grid
         fgrid  = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values
-        np.swapaxes(fgrid, 1,2)
+        np.swapaxes(fgrid, 1,2) # Get x-grid as last axis
         for irep in range(lpdf.GetMembers()):
             for ifl, fl in enumerate(flavours):
                 fdiff     = np.diff(fgrid[irep][ifl] * ixgrid[1])/eps
                 integrand = 1 + np.square(fdiff)
                 res[ifl,irep] += integrate.simps(integrand, ixgrid[1][1:])
-    return ArcLengthGrid(pdf, basis, Q, flavours, res)
+    stats = pdf.stats_class(np.transpose(res))
+    return ArcLengthGrid(pdf, basis, flavours, stats)
 
 # Collect arc_lengths over PDF list
 pdfs_arc_lengths = collect(arc_lengths,['pdfs'])
@@ -62,9 +62,9 @@ pdfs_arc_lengths = collect(arc_lengths,['pdfs'])
 def arc_length_table(arc_lengths):
     """Return a table with the descriptive statistics of the arc lengths
     over members of the PDF."""
-    arc_length_transpose = np.transpose(arc_lengths.values)
+    arc_length_data = arc_lengths.stats.error_members()
     arc_length_columns = [f'${arc_lengths.basis.elementlabel(fl)}$' for fl in arc_lengths.flavours]
-    return pd.DataFrame(arc_length_transpose, columns=arc_length_columns).describe().iloc[1:,:]
+    return pd.DataFrame(arc_length_data, columns=arc_length_columns).describe().iloc[1:,:]
 
 @figure
 @check_pdf_normalize_to
@@ -78,21 +78,15 @@ def plot_arc_lengths(pdfs_arc_lengths:Sequence, Q:numbers.Real, normalize_to:(ty
 
     norm_cv = None
     if normalize_to is not None:
-        norm_al = pdfs_arc_lengths[normalize_to].values
-        norm_cv = [ np.mean(fl) for fl in norm_al ]
+        norm_cv = pdfs_arc_lengths[normalize_to].stats.central_value()
 
     for ipdf, arclengths in enumerate(pdfs_arc_lengths):
-        alvalues = arclengths.values
         xvalues = np.array(range(len(arclengths.flavours)))
         xlabels  = [ '$'+arclengths.basis.elementlabel(fl)+'$' for fl in arclengths.flavours]
-        yvalues = [ np.mean(fl) for fl in alvalues ]
-        # Computation of 68% C.I - this feels like it should be somewhere else
-        nmembers = np.shape(alvalues)[1]
-        nrep_16 = math.floor(0.16*nmembers)
-        nrep_84 = math.ceil(0.84*nmembers)
-        srvalues = [np.sort(fl) for fl in alvalues] # Replicas sorted
-        yupper = [fl[nrep_84] - yvalues[ifl] for ifl, fl in enumerate(srvalues)]
-        ylower = [yvalues[ifl] - fl[nrep_16] for ifl, fl in enumerate(srvalues)]
+        yvalues = arclengths.stats.central_value()
+        ylower, yupper = arclengths.stats.errorbar68()
+        ylower = yvalues - ylower
+        yupper = yupper - yvalues
         if norm_cv is not None:
             yvalues = np.divide(yvalues, norm_cv)
             yupper  = np.divide(yupper,  norm_cv)
