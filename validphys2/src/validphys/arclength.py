@@ -23,13 +23,6 @@ from validphys.checks   import check_pdf_is_montecarlo
 
 import matplotlib.pyplot as plt
 
-#TODO This (or something like it) should be in Basis: probably as lowest_integrable_moment or something
-damping_factors={r'\Sigma':True, 'g':True, 'photon':True,
-                 'V':False, 'V3':False, 'V8':False,'V15':False, 'V24':False, 'V35':False,
-                 'T3':True, 'T8':True, 'T15':True, 'T24':True,'T35':True}
-for val in PDG_PARTONS:
-    damping_factors[val] = True
-
 ArcLengthGrid = namedtuple('ArcLengthGrid', ('pdf', 'basis','scale', 'flavours', 'values'))
 @check_positive('Q')
 @make_argcheck(check_basis)
@@ -50,17 +43,15 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
     # Integrate the separate segments
     for iseg, seg in enumerate(seg_min):
         a, b = seg, seg_max[iseg]                                # Integration limits
-        eps = (b-a)/(npoints-1)                                  # Integration step-size
+        eps = (b-a)/npoints                                      # Integration step-size
         x1grid = xgrid(a, b, 'linear', npoints)                  # Integration grid x1
-        x0grid = xgrid(a-eps, b-eps, 'linear', npoints)          # x0 = x1 - epsilon
         f1grid = xplotting_grid(pdf, Q, x1grid, basis, flavours) # PDFs evaluated at x1
-        f0grid = xplotting_grid(pdf, Q, x0grid, basis, flavours) # PDFs evaluated at x0
-        dfgrid = f1grid.grid_values - f0grid.grid_values         # Backwards-difference
+        dfgrid = f1grid.grid_values                              # Backwards-difference
         np.swapaxes(dfgrid, 1,2)
         for irep in range(lpdf.GetMembers()):
             for ifl,fl in enumerate(flavours):
-                dslice = dfgrid[irep][ifl]
-                asqr = np.square(dslice * x1grid[1]) if damping_factors[fl] else np.square(dslice)
+                dslice = np.diff(dfgrid[irep][ifl] * x1grid[1])
+                asqr = np.square(dslice)
                 res[ifl,irep] += np.sum(np.sqrt(eps*eps+asqr))
     return ArcLengthGrid(pdf, basis, Q, flavours, res)
 
