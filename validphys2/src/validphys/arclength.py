@@ -23,7 +23,7 @@ from validphys.checks   import check_pdf_is_montecarlo
 
 import matplotlib.pyplot as plt
 
-#TODO This (or something like it) should be in Basis
+#TODO This (or something like it) should be in Basis: probably as lowest_integrable_moment or something
 damping_factors={r'\Sigma':True, 'g':True, 'photon':True,
                  'V':False, 'V3':False, 'V8':False,'V15':False, 'V24':False, 'V35':False,
                  'T3':True, 'T8':True, 'T15':True, 'T24':True,'T35':True}
@@ -35,7 +35,6 @@ ArcLengthGrid = namedtuple('ArcLengthGrid', ('pdf', 'basis','scale', 'flavours',
 @make_argcheck(check_basis)
 @check_pdf_is_montecarlo
 @element_of('pdf_arc_lengths')
-# Using the same questionable integration as validphys
 def arc_lengths(pdf:PDF, Q:numbers.Real,
                 basis:(str, Basis)='flavour',
                 flavours:(list, tuple, type(None))=None):
@@ -44,6 +43,7 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
     nmembers = lpdf.GetMembers()
     checked = check_basis(basis, flavours)
     basis, flavours = checked['basis'], checked['flavours']
+    # Using the same questionable integration as validphys
     # x-grid points and limits in three segments
     npoints = 199 #200 intervals
     seg_min = [1e-6, 1e-4, 1e-2]
@@ -66,35 +66,30 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
                 res[ifl,irep] += np.sum(np.sqrt(eps*eps+asqr))
     return ArcLengthGrid(pdf, basis, Q, flavours, res)
 
-#TODO
 @table
 def arc_length_table(arc_lengths):
     """Return a table with the descriptive statistics of the arc lengths
     over members of the PDF."""
-    #We don't  really want the count, which is going to be the same for all.
-    #Hence the .iloc[1:,:].
     arc_length_transpose = np.transpose(arc_lengths.values)
-    arc_length_columns   = [ '$'+arc_lengths.basis.elementlabel(fl)+'$' for fl in arc_lengths.flavours]
+    arc_length_columns = ['$'+arc_lengths.basis.elementlabel(fl)+'$' for fl in arc_lengths.flavours]
     return pd.DataFrame(arc_length_transpose, columns=arc_length_columns).describe().iloc[1:,:]
 
-#TODO I guess this should be a sequence of arc_lengths rather than PDFs?
 @figure
 @check_normalize_to
-def plot_arc_lengths(pdfs:Sequence, Q:numbers.Real, normalize_to:(type(None),int)=None):
+def plot_arc_lengths(pdf_arc_lengths:Sequence, normalize_to:(type(None),int)=None):
     """Plot the arc lengths of a PDF set"""
     fig, ax = plt.subplots()
     if normalize_to is not None:
-        ax.set_ylabel("Arc length (normalised)")
+        ax.set_ylabel("Arc length $Q^2="+2+"$ GeV (normalised)")
     else:
-        ax.set_ylabel("Arc length")
+        ax.set_ylabel("Arc length $Q^2="+2+"$ GeV")
 
     norm_cv = None
     if normalize_to is not None:
-        norm_al = arc_lengths(pdfs[normalize_to], Q).values
+        norm_al = pdf_arc_lengths[normalize_to].values
         norm_cv = [ np.mean(fl) for fl in norm_al ]
 
-    for ipdf, pdf in enumerate(pdfs):
-        arclengths = arc_lengths(pdf, Q)
+    for ipdf, arclengths in enumerate(pdf_arc_lengths):
         alvalues = arclengths.values
         xvalues = np.array(range(len(arclengths.flavours)))
         xlabels  = [ '$'+arclengths.basis.elementlabel(fl)+'$' for fl in arclengths.flavours]
@@ -111,7 +106,7 @@ def plot_arc_lengths(pdfs:Sequence, Q:numbers.Real, normalize_to:(type(None),int
             yupper  = np.divide(yupper,  norm_cv)
             ylower  = np.divide(ylower,  norm_cv)
         ##TODO should do a better job of this shift
-        ax.errorbar(xvalues + ipdf/5.0, yvalues, yerr = (ylower,yupper), fmt='.', label=pdf.label)
+        ax.errorbar(xvalues + ipdf/5.0, yvalues, yerr = (ylower,yupper), fmt='.', label=arclengths.pdf.label)
         ax.set_xticks(xvalues)
         ax.set_xticklabels(xlabels)
         ax.legend()
