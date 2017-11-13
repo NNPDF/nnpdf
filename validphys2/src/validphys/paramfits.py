@@ -211,7 +211,7 @@ def discarded_mask(
     ndiscarded = range(len(fits_as),0,-1)
 
     if isinstance(max_ndiscarded,int):
-        return _discard_sparse_curves(fits_replica_data_correlated,max_ndiscarded)[0]
+        return _discard_sparse_curves(fits_replica_data_correlated,max_ndiscarded)[1]
 
     else:
         for i in range(len(ndiscarded),0,-1):
@@ -1341,7 +1341,6 @@ def plot_as_distribution(parabolic_as_determination, suptitle):
     ax.set_title(f"{suptitle}")
     ax.set_xlabel(r"$\alpha_S$")
     return fig
-
 
 @figure
 def plot_poly_as_fit(fits_as,
