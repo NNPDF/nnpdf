@@ -630,8 +630,10 @@ quadratic_datasets_pseudorreplicas_chi2 = collect(
 
 @figure
 def plot_as_datasets_pseudorreplicas_chi2(as_datasets_pseudorreplicas_chi2):
-    """Plot the error bas of the alha_s determination from pseudorreplicas
-    by dataset"""
+    """Plot the error bars of the αs determination from pseudorreplicas
+    by dataset item. Note that this only has meaning of preferred
+    value for "Total", and the rest of the values are the minima of
+    the partial χ²."""
     data, names = zip(*as_datasets_pseudorreplicas_chi2)
     cv, err = zip(*[(np.mean(dt), np.std(dt)) for dt in data])
     fig, ax = plot_horizontal_errorbars([cv], [err], names)
@@ -641,8 +643,10 @@ def plot_as_datasets_pseudorreplicas_chi2(as_datasets_pseudorreplicas_chi2):
 
 @figure
 def plot_as_exepriments_central_chi2(as_datasets_central_chi2):
-    """Plot the error bas of the alha_s determination from centrla chi²
-    by experiment"""
+    """Plot the error bars of the αs determination from central χ²
+    by dataset item. Note that this only has meaning of preferred
+    value for "Total", and the rest of the values are the minima of
+    the partial χ²."""
     data, names = zip(*as_datasets_central_chi2)
     cv, err = zip(*data)
     fig, ax = plot_horizontal_errorbars([cv], [err], names)
