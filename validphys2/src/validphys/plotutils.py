@@ -323,7 +323,7 @@ def plot_horizontal_errorbars(cvs, errors, categorylabels, datalabels=None,
                               1.3)
 
     ax.set_xlim(xlim)
-    ax.set_ylim(-0.5, len(categorylabels)+0.5)
+    ax.set_ylim(-0.5, len(categorylabels)-0.5)
     ax.invert_yaxis()
     ax.grid(axis='y')
     return fig, ax
