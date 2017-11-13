@@ -188,7 +188,7 @@ def _discard_sparse_curves(fits_replica_data_correlated,
 
     table = table[filt]
 
-    return table
+    return table, filt
 
 @make_argcheck
 def _check_discarded_string(max_ndiscarded):
@@ -212,8 +212,8 @@ def _discarded_mask(
     ndiscarded = range(len(fits_as),0,-1)
 
     for i in range(len(ndiscarded),0,-1):
-        tablefilt_total = _discard_sparse_curves(df,ndiscarded[i-1])
-        tablefilt = _discard_sparse_curves(df1, ndiscarded[i-1])
+        tablefilt_total = _discard_sparse_curves(df,ndiscarded[i-1])[0]
+        tablefilt = _discard_sparse_curves(df1, ndiscarded[i-1])[0]
         parabolas = parabolic_as_determination(fits_as,tablefilt_total)
 
         if parabolas.size > 1:
@@ -227,9 +227,8 @@ def _discarded_mask(
         if current_err < best_error:
             best_error = current_err
             best_table = tablefilt
-
-            mask = tablefilt.size == best_table.size
-            return mask
+        
+    return tablefilt
   
 @_check_discarded_string
 def fits_replica_data_with_discarded_replicas(
@@ -248,7 +247,7 @@ def fits_replica_data_with_discarded_replicas(
     The automated discarding is done by estimating the uncertainty on the uncertainty by bootstrapping"""
 
     if isinstance(max_ndiscarded,int):
-        return _discard_sparse_curves(fits_replica_data_correlated,max_ndiscarded)
+        return _discard_sparse_curves(fits_replica_data_correlated,max_ndiscarded)[0]
 
     else:
         return fits_replica_data_correlated[_discarded_mask]
