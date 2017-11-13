@@ -5,7 +5,6 @@ Module for the computation and presentation of arclengths.
 """
 from collections import namedtuple, Sequence
 import numbers
-import math
 
 import numpy as np
 import pandas as pd
