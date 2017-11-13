@@ -37,7 +37,7 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
     npoints = 199 # 200 intervals
     seg_min = [1e-6, 1e-4, 1e-2]
     seg_max = [1e-4, 1e-2, 1.0 ]
-    res = np.zeros((len(flavours), lpdf.GetMembers()))
+    res = np.zeros((lpdf.GetMembers(),len(flavours)))
     # Integrate the separate segments
     for a, b in zip(seg_min, seg_max):
         # Finite diff. step-size, x-grid
@@ -45,13 +45,11 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
         ixgrid = xgrid(a, b, 'linear', npoints)
         # PDFs evaluated on grid
         fgrid  = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values
-        np.swapaxes(fgrid, 1,2) # Get x-grid as last axis
-        for irep in range(lpdf.GetMembers()):
-            for ifl, fl in enumerate(flavours):
-                fdiff     = np.diff(fgrid[irep][ifl] * ixgrid[1])/eps
-                integrand = 1 + np.square(fdiff)
-                res[ifl,irep] += integrate.simps(integrand, ixgrid[1][1:])
-    stats = pdf.stats_class(np.transpose(res))
+        np.swapaxes(fgrid, 1,2)          # Get x-grid as last axis
+        fgrid *= ixgrid[1]               # Multiply by x
+        fdiff  = np.diff(fgrid)/eps      # Compute forward differences
+        res += integrate.simps(1 + np.square(fdiff), ixgrid[1][1:])
+    stats = pdf.stats_class(res)
     return ArcLengthGrid(pdf, basis, flavours, stats)
 
 # Collect arc_lengths over PDF list
