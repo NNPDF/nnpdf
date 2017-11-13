@@ -180,19 +180,80 @@ def _check_badcurves(badcurves):
                          badcurves, options)
 
 
-def fits_replica_data_with_discarded_replicas(fits_replica_data_correlated,
-        max_ndiscarded:int=4):
+fits_replica_data_correlated_for_total = collect('fits_replica_data_correlated',
+ ['matched_pseudorreplcias_for_total'])
+
+
+def _discard_sparse_curves(fits_replica_data_correlated,
+        max_ndiscarded):
     """Return a table like  `fits_replica_data_correlated` where the replicas
     with too many discarded points have been filtered out."""
+
     df = fits_replica_data_correlated
+
     def ap(x):
         x.columns = x.columns.droplevel(0)
         return (x['chi2'])
     table = df.groupby(axis=1, level=0).apply(ap)
     filt = table.isnull().sum(axis=1) < max_ndiscarded
+
     table = table[filt]
-    #table = np.atleast_2d(np.mean(table, axis=0))
+
     return table
+
+@make_argcheck
+def _check_discarded_string(max_ndiscarded):
+    arg = max_ndiscarded
+    if isinstance(arg,str):
+        if arg != 'auto':
+            raise CheckError("Expecting string to be 'auto'")
+  
+@_check_discarded_string
+def fits_replica_data_with_discarded_replicas(
+    fits_replica_data_correlated_for_total,
+    fits_replica_data_correlated,
+    fits_as,
+    max_ndiscarded:(int,str)='auto',
+    autodiscard_confidence_level:float=0.99):
+    """Return a table like  `fits_replica_data_correlated` where the replicas
+    with too many discarded points have been filtered out.
+
+    autodiscard_confidence_level is the student-T confidence level. Is normalised to 1
+    and only is used if max_ndiscarded is set to 'auto' 
+
+    The automated discarding is done by estimating the uncertainty on the uncertainty by bootstrapping"""
+
+    if isinstance(max_ndiscarded,int):
+        return _discard_sparse_curves(fits_replica_data_correlated,max_ndiscarded)
+
+    else:
+        df = fits_replica_data_correlated_for_total[0]
+        df1 = fits_replica_data_correlated
+    
+        best_table = None
+        best_error = np.inf
+        ndiscarded = range(len(fits_as),0,-1)
+
+        for i in range(len(ndiscarded),0,-1):
+            tablefilt_total = _discard_sparse_curves(df,ndiscarded[i-1])
+            tablefilt = _discard_sparse_curves(df1, ndiscarded[i-1])
+            parabolas = parabolic_as_determination(fits_as,tablefilt_total)
+
+            if parabolas.size > 1:
+                bootstrap_est = np.random.choice(parabolas,(10000,len(parabolas))).std(axis=1).std()
+            else:
+                bootstrap_est = np.inf
+
+            stdT = stats.t.ppf((1-(1-autodiscard_confidence_level)/2),len(parabolas)-1)
+            # std_dev = np.std(parabolas)
+
+            current_err = bootstrap_est*stdT
+
+            if current_err < best_error:
+                best_error = current_err
+                best_table = tablefilt
+
+        return best_table
 
 def _get_parabola(asvals, chi2vals):
     chi2vals = np.ravel(chi2vals)
@@ -631,12 +692,8 @@ def bootstrapping_stats_error(parabolic_as_determination, nresamplings:int=10000
     deterrminations of as, by resampling the list of points with replacement
     from the original sampling distribution `nresamplings` times
     and thn computing the standard deviation of the means."""
-    distribution = parabolic_as_determination
-    shape = (nresamplings, len(distribution))
-    if not len(distribution):
-        log.error("Cannot conpute stats error. Empty data.")
-        return np.nan
-    return np.random.choice(distribution, shape).mean(axis=1).std()
+
+
 
 @check_positive('nresamplings')
 def half_sample_stats_error(parabolic_as_determination, nresamplings:int=100000):
@@ -918,6 +975,16 @@ def dataspecs_as_value_error_table(datasepecs_as_value_error_table_impl):
         return format_error_value_columns(x, x.columns[0], x.columns[1])
     return datasepecs_as_value_error_table_impl.groupby(level=0, axis=1).apply(f)
 
+
+@table
+def dataspecs_quad_value_error_table(datasepecs_quad_table_impl):
+    """Return ``datasepecs_value_error_table_impl`` formatted nicely"""
+    def f(x):
+        return format_error_value_columns(x, x.columns[0], x.columns[1])
+    return datasepecs_quad_table_impl.groupby(level=0, axis=1).apply(f)
+
+
+
 @figure
 def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
         dataspecs_fits_as,
@@ -962,6 +1029,8 @@ def _check_first_is_total(fits_central_chi2_by_experiment_and_dataset):
     l = fits_central_chi2_by_experiment_and_dataset
     if not l or l[0]['experiment_label'] != 'Total':
         raise CheckError("Expecting that the first experiment is the total. You may need to set prepend_total=True")
+
+
 
 
 @figure
