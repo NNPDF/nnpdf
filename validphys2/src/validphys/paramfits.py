@@ -187,7 +187,6 @@ def _discard_sparse_curves(fits_replica_data_correlated,
     filt = table.isnull().sum(axis=1) < max_ndiscarded
 
     table = table[filt]
-
     return table, filt
 
 @make_argcheck
@@ -200,6 +199,7 @@ def _check_discarded_string(max_ndiscarded):
 @_check_discarded_string
 def discarded_mask(
     fits_replica_data_correlated_for_total,
+    fits_replica_data_correlated,
     fits_as,
     max_ndiscarded:(int,str)='auto',
     autodiscard_confidence_level:float=0.99):
@@ -209,17 +209,17 @@ def discarded_mask(
     best_table = None
     best_error = np.inf
     ndiscarded = range(len(fits_as),0,-1)
+    best_file = np.inf
 
     if isinstance(max_ndiscarded,int):
         return _discard_sparse_curves(fits_replica_data_correlated,max_ndiscarded)[0]
 
     else:
-
         for i in range(len(ndiscarded),0,-1):
-            tablefilt_total = _discard_sparse_curves(df,ndiscarded[i-1])[0]
-            parabolas = parabolic_as_determination(fits_as,tablefilt_total)
 
-            auto_filt = _discard_sparse_curves(df,ndiscarded[i-1])[1]
+            tablefilt_total, auto_filt = _discard_sparse_curves(df,ndiscarded[i-1])
+
+            parabolas = parabolic_as_determination(fits_as,tablefilt_total)
 
             if parabolas.size > 1:
                 bootstrap_est = np.random.choice(parabolas,(10000,len(parabolas))).std(axis=1).std()
@@ -231,8 +231,9 @@ def discarded_mask(
 
             if current_err < best_error:
                 best_error = current_err
+                best_filt = auto_filt
                             
-        return auto_filt
+        return best_filt
   
 @_check_discarded_string
 def fits_replica_data_with_discarded_replicas(discarded_mask,fits_replica_data_correlated):
