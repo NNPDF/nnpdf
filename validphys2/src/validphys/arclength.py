@@ -28,11 +28,11 @@ damping_factors={r'\Sigma':True, 'g':True, 'photon':True,
 for val in PDG_PARTONS:
     damping_factors[val] = True
 
-ArcLengthGrid = namedtuple('ArcLengthGrid', ('basis', 'flavours', 'values'))
+ArcLengthGrid = namedtuple('ArcLengthGrid', ('basis','scale', 'flavours', 'values'))
 @check_positive('Q')
 @make_argcheck(check_basis)
 # Using the same questionable integration as validphys
-def arc_lengths(pdf:PDF, Q:numbers.Real, 
+def arc_lengths(pdf:PDF, Q:numbers.Real,
                 basis:(str, Basis)='flavour',
                 flavours:(list, tuple, type(None))=None):
     """Compute arc lengths at scale Q"""
@@ -46,13 +46,13 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
     seg_max = [1e-4, 1e-2, 1.0 ]
     res = np.zeros((len(flavours), nmembers))
     # Integrate the separate segments
-    for iseg in range(len(seg_min)):
-        a, b = seg_min[iseg], seg_max[iseg]
-        eps = (b-a)/(npoints-1)
-        x1grid = xgrid(a, b, 'linear', npoints)                  # Integration x-grid
-        x0grid = xgrid(a-eps, b-eps, 'linear', npoints)          # x1 - epsilon
-        f1grid = xplotting_grid(pdf, Q, x1grid, basis, flavours) # PDFs evaluated at x
-        f0grid = xplotting_grid(pdf, Q, x0grid, basis, flavours) # PDFs evaluated at x-eps
+    for iseg, seg in enumerate(seg_min):
+        a, b = seg, seg_max[iseg]                                # Integration limits
+        eps = (b-a)/(npoints-1)                                  # Integration step-size
+        x1grid = xgrid(a, b, 'linear', npoints)                  # Integration grid x1
+        x0grid = xgrid(a-eps, b-eps, 'linear', npoints)          # x0 = x1 - epsilon
+        f1grid = xplotting_grid(pdf, Q, x1grid, basis, flavours) # PDFs evaluated at x1
+        f0grid = xplotting_grid(pdf, Q, x0grid, basis, flavours) # PDFs evaluated at x0
         dfgrid = f1grid.grid_values - f0grid.grid_values         # Backwards-difference
         np.swapaxes(dfgrid, 1,2)
         for irep in range(nmembers):
@@ -60,17 +60,18 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
                 dslice = dfgrid[irep][ifl]
                 asqr = np.square(dslice * x1grid[1]) if damping_factors[fl] else np.square(dslice)
                 res[ifl,irep] += np.sum(np.sqrt(eps*eps+asqr))
-    return ArcLengthGrid(basis, flavours, res)
+    return ArcLengthGrid(basis, Q, flavours, res)
 
 #TODO
 #@table
-#def arc_length_table(arc_lengths):
-#    """Return a table with the descriptive statistics of the arc lengths
-#    over members of the PDF."""
-#    #We don't  really want the count, which is going to be the same for all.
-#    #Hence the .iloc[1:,:].
-#    return pd.DataFrame(arc_lengths.values._asdict()).describe().iloc[1:,:]
+def arc_length_table(arc_lengths):
+    """Return a table with the descriptive statistics of the arc lengths
+    over members of the PDF."""
+    #We don't  really want the count, which is going to be the same for all.
+    #Hence the .iloc[1:,:].
+    return pd.DataFrame(arc_lengths.values).describe().iloc[1:,:]
 
+#TODO I guess this should be a sequence of arc_lengths rather than PDFs?
 @figure
 @check_normalize_to
 def plot_arc_lengths(pdfs:Sequence, Q:numbers.Real, normalize_to:(type(None),int)=None):
