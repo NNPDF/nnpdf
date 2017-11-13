@@ -73,10 +73,6 @@ def plot_arc_lengths(pdfs_arc_lengths:Sequence, Q:numbers.Real, normalize_to:(ty
     else:
         ax.set_ylabel(f"Arc length $Q={Q}$ GeV")
 
-    norm_cv = None
-    if normalize_to is not None:
-        norm_cv = pdfs_arc_lengths[normalize_to].stats.central_value()
-
     for ipdf, arclengths in enumerate(pdfs_arc_lengths):
         xvalues = np.array(range(len(arclengths.flavours)))
         xlabels  = [ '$'+arclengths.basis.elementlabel(fl)+'$' for fl in arclengths.flavours]
@@ -84,13 +80,14 @@ def plot_arc_lengths(pdfs_arc_lengths:Sequence, Q:numbers.Real, normalize_to:(ty
         ylower, yupper = arclengths.stats.errorbar68()
         ylower = yvalues - ylower
         yupper = yupper - yvalues
-        if norm_cv is not None:
+        if normalize_to is not None:
+            norm_cv = pdfs_arc_lengths[normalize_to].stats.central_value()
             yvalues = np.divide(yvalues, norm_cv)
             yupper  = np.divide(yupper,  norm_cv)
             ylower  = np.divide(ylower,  norm_cv)
-        ##TODO should do a better job of this shift
-        ax.errorbar(xvalues + ipdf/5.0, yvalues, yerr = (ylower,yupper), fmt='.', label=arclengths.pdf.label)
+        shift = (ipdf - (len(pdfs_arc_lengths)-1)/2.0)/5.0
+        ax.errorbar(xvalues + shift, yvalues, yerr = (ylower,yupper), fmt='.', label=arclengths.pdf.label)
         ax.set_xticks(xvalues)
         ax.set_xticklabels(xlabels)
-        ax.legend()
+    ax.legend()
     return fig
