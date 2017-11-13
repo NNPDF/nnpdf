@@ -611,7 +611,12 @@ def bootstrapping_stats_error(parabolic_as_determination, nresamplings:int=10000
     deterrminations of as, by resampling the list of points with replacement
     from the original sampling distribution `nresamplings` times
     and thn computing the standard deviation of the means."""
-
+    distribution = parabolic_as_determination
+    shape = (nresamplings, len(distribution))
+    if not len(distribution):
+        log.error("Cannot conpute stats error. Empty data.")
+        return np.nan
+    return np.random.choice(distribution, shape).mean(axis=1).std()
 
 
 @check_positive('nresamplings')
