@@ -1827,7 +1827,7 @@ corresponding to each of the two mappings in cutspecs.
 An object can customize how to be viewed as a reportengine namespace.
 This is done by defining a method called `as_namespace`, that takes no
 arguments and should return either a mapping or a list of mappings.
-This is used to implement [Automatic lists].
+This is used to implement [Automatically parsing lists].
 
 Resolving dependencies
 -----------------------
@@ -2059,9 +2059,27 @@ object representing the positivity set and the corresponding FKTables
 in a given theory is obtained from the output of
 `parse_posdataser_input` and a theory ID.
 
+#### Automatically parsing lists
+
+It is possible to easily process list of elements once the parsing for
+a single element has been defined. Simply add an `eleement_of`
+decorator to the parsing function defined in the Config class:
+```python
+@element_of('posdatasets')
+def parse_posdataset(self, posset:dict, * ,theoryid):
+```
+
+Now `posdatasets` is parsed as a list of positivity datasets, and can
+be used to loop over in namespace specifications.
+
+Note that you can also put together results from evaluating providers
+using [the collect function].
+
+
+
 #### Validphys loaders
 
-In validphys, we use a `Loader` class to load resources from various
+In `validphys`, we use a `Loader` class to load resources from various
 folders. It is good to have a common interface, since it is used to
 list the available resources of a given type or even download
 a missing resource. The functions of type `check_<resource>` should
@@ -2150,18 +2168,6 @@ Note that all possible error paths must end by raising
 a `ConfigError`.
 
 
-#### Automatic lists
-
-It is possible to easily process list of elements once the parsing for
-a single element has been defined. Simply add an `eleement_of`
-decorator to the parsing function:
-```python
-@element_of('posdatasets')
-def parse_posdataset(self, posset:dict, * ,theoryid):
-```
-
-Now `posdatasets` is parsed as a list of positivity datasets, and can
-be used to loop over in namespace specifications.
 
 ### Computing results
 
