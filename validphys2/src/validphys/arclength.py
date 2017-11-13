@@ -17,7 +17,7 @@ from reportengine.checks import check_positive, make_argcheck
 
 from validphys.pdfbases import Basis, check_basis, PDG_PARTONS
 from validphys.pdfgrids import (xgrid, xplotting_grid)
-from validphys.plots    import check_normalize_to
+from validphys.plots    import check_pdf_normalize_to
 from validphys.core     import PDF
 from validphys.checks   import check_pdf_is_montecarlo
 
@@ -76,7 +76,7 @@ def arc_length_table(arc_lengths):
     return pd.DataFrame(arc_length_transpose, columns=arc_length_columns).describe().iloc[1:,:]
 
 @figure
-@check_normalize_to
+@check_pdf_normalize_to
 def plot_arc_lengths(pdfs_arc_lengths:Sequence, Q:numbers.Real, normalize_to:(type(None),int)=None):
     """Plot the arc lengths of provided pdfs"""
     fig, ax = plt.subplots()

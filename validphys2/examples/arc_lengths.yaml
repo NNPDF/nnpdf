@@ -5,7 +5,7 @@ basis: 'evolution'
 pdfs:
     - NNPDF31_nlo_as_0118 
     - NNPDF30_nlo_as_0118
-normalize_to: 0 
+normalize_to: 1
 
 actions_:
  - pdfs:
