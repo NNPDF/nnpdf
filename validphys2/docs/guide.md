@@ -2069,11 +2069,13 @@ decorator to the parsing function defined in the Config class:
 def parse_posdataset(self, posset:dict, * ,theoryid):
 ```
 
-Now `posdatasets` is parsed as a list of positivity datasets, and can
-be used to loop over in namespace specifications.
+Now `posdatasets` is parsed as a list of positivity datasets, which
+can be passed together to a provider, or iterated over, (for example
+with a `with` tag in the report, see [Report template specification]).
 
 Note that you can also put together results from evaluating providers
-using [the collect function].
+using [the collect function], which can be used to map computations
+over the lists described here.
 
 
 
