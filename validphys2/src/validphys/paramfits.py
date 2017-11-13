@@ -199,10 +199,19 @@ def _check_discarded_string(max_ndiscarded):
 @_check_discarded_string
 def discarded_mask(
     fits_replica_data_correlated_for_total,
-    fits_replica_data_correlated,
     fits_as,
     max_ndiscarded:(int,str)='auto',
     autodiscard_confidence_level:float=0.99):
+
+    """Return a table like  `fits_replica_data_correlated` where the replicas
+    with too many discarded points have been filtered out.
+
+    autodiscard_confidence_level is the student-T confidence level. Is normalised to 1
+    and only is used if max_ndiscarded is set to 'auto' 
+
+    The automated discarding is done by estimating the uncertainty on the uncertainty by bootstrapping.
+
+    The function returns a mask to be applied in fits_replica_data_with_discarded_replicas"""
 
     df = fits_replica_data_correlated_for_total[0]
     
@@ -211,7 +220,7 @@ def discarded_mask(
     ndiscarded = range(len(fits_as),0,-1)
 
     if isinstance(max_ndiscarded,int):
-        return _discard_sparse_curves(fits_replica_data_correlated,max_ndiscarded)[1]
+        return _discard_sparse_curves(df,max_ndiscarded)[1]
 
     else:
         for i in range(len(ndiscarded),0,-1):
@@ -234,16 +243,8 @@ def discarded_mask(
                             
         return best_filt
   
-@_check_discarded_string
 def fits_replica_data_with_discarded_replicas(discarded_mask,fits_replica_data_correlated):
-    """Return a table like  `fits_replica_data_correlated` where the replicas
-    with too many discarded points have been filtered out.
-
-    autodiscard_confidence_level is the student-T confidence level. Is normalised to 1
-    and only is used if max_ndiscarded is set to 'auto' 
-
-    The automated discarding is done by estimating the uncertainty on the uncertainty by bootstrapping"""
-
+    """Applies mask from discarded_mask to dataframes"""
     return fits_replica_data_correlated[discarded_mask]
 
 def _get_parabola(asvals, chi2vals):
