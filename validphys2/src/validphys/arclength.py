@@ -13,11 +13,13 @@ import pandas as pd
 from reportengine.figure import figure
 from reportengine.table  import table
 from reportengine.checks import check_positive, make_argcheck
+from reportengine.configparser import element_of
 
 from validphys.pdfbases import Basis, check_basis, PDG_PARTONS
 from validphys.pdfgrids import (xgrid, xplotting_grid)
 from validphys.plots    import check_normalize_to
 from validphys.core     import PDF
+from validphys.checks   import check_pdf_is_montecarlo
 
 import matplotlib.pyplot as plt
 
@@ -28,9 +30,11 @@ damping_factors={r'\Sigma':True, 'g':True, 'photon':True,
 for val in PDG_PARTONS:
     damping_factors[val] = True
 
-ArcLengthGrid = namedtuple('ArcLengthGrid', ('basis','scale', 'flavours', 'values'))
+ArcLengthGrid = namedtuple('ArcLengthGrid', ('pdf', 'basis','scale', 'flavours', 'values'))
 @check_positive('Q')
 @make_argcheck(check_basis)
+@check_pdf_is_montecarlo
+@element_of('pdf_arc_lengths')
 # Using the same questionable integration as validphys
 def arc_lengths(pdf:PDF, Q:numbers.Real,
                 basis:(str, Basis)='flavour',
@@ -60,16 +64,18 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
                 dslice = dfgrid[irep][ifl]
                 asqr = np.square(dslice * x1grid[1]) if damping_factors[fl] else np.square(dslice)
                 res[ifl,irep] += np.sum(np.sqrt(eps*eps+asqr))
-    return ArcLengthGrid(basis, Q, flavours, res)
+    return ArcLengthGrid(pdf, basis, Q, flavours, res)
 
 #TODO
-#@table
+@table
 def arc_length_table(arc_lengths):
     """Return a table with the descriptive statistics of the arc lengths
     over members of the PDF."""
     #We don't  really want the count, which is going to be the same for all.
     #Hence the .iloc[1:,:].
-    return pd.DataFrame(arc_lengths.values).describe().iloc[1:,:]
+    arc_length_transpose = np.transpose(arc_lengths.values)
+    arc_length_columns   = [ '$'+arc_lengths.basis.elementlabel(fl)+'$' for fl in arc_lengths.flavours]
+    return pd.DataFrame(arc_length_transpose, columns=arc_length_columns).describe().iloc[1:,:]
 
 #TODO I guess this should be a sequence of arc_lengths rather than PDFs?
 @figure
