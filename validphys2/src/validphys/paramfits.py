@@ -209,7 +209,6 @@ def discarded_mask(
     best_table = None
     best_error = np.inf
     ndiscarded = range(len(fits_as),0,-1)
-    best_file = np.inf
 
     if isinstance(max_ndiscarded,int):
         return _discard_sparse_curves(fits_replica_data_correlated,max_ndiscarded)[0]
