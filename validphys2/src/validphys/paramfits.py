@@ -180,8 +180,6 @@ def _check_badcurves(badcurves):
                          badcurves, options)
 
 
-fits_replica_data_correlated_for_total = collect('fits_replica_data_correlated',
- ['matched_pseudorreplcias_for_total'])
 
 
 def _discard_sparse_curves(fits_replica_data_correlated,

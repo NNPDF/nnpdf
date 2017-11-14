@@ -758,6 +758,13 @@ class Config(report.Config):
                 ['Total'])
         return res
 
+    def produce_fits_replica_data_correlated_for_total(
+            self, matched_pseudorreplcias_for_total):
+        """Extract `fits_replica_data_correlated` from
+        `matched_pseudorreplcias_for_total`. This is a hack that cannot be
+        done efficiently with collect because of
+        https://github.com/NNPDF/reportengine/issues/8."""
+        return [matched_pseudorreplcias_for_total[0]['fits_replica_data_correlated']]
 
 
     def parse_fits_chi2_paramfits_output(self, fname:str, config_rel_path):
