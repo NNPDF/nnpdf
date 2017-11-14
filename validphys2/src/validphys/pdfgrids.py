@@ -6,6 +6,7 @@ from collections import namedtuple
 import numbers
 
 import numpy as np
+import scipy.integrate as integrate
 
 from reportengine import collect
 from reportengine.checks import make_argcheck, CheckError, check_positive
@@ -13,7 +14,6 @@ from reportengine.checks import make_argcheck, CheckError, check_positive
 from validphys.core import PDF
 from validphys.gridvalues import (evaluate_luminosity)
 from validphys.pdfbases import (Basis, check_basis)
-import scipy.integrate as integrate
 
 ScaleSpec = namedtuple('ScaleSpec', ('scale', 'values'))
 
