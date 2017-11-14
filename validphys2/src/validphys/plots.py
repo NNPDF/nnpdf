@@ -55,7 +55,7 @@ def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
 #TODO: This should be simplified if at all possible. For now some more examples
 #are needed for a spec to emerge.
 @make_check
-def _check_normalize_to(ns, **kwargs):
+def check_normalize_to(ns, **kwargs):
     """Transforn normalize_to into an index."""
 
     msg = ("normalize_to should be either 'data', a pdf id or an index of the "
@@ -272,7 +272,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
         yield fig
 
 
-@_check_normalize_to
+@check_normalize_to
 @figuregen
 def plot_fancy(one_or_more_results, commondata, cuts,
                normalize_to:(int,str,type(None)) = None):
@@ -547,7 +547,7 @@ def plot_replica_sum_rules(pdf, sum_rules, Q):
 #how plot_fancy works, so normalize_to: 1 would normalize to the first pdf
 #for both.
 @make_argcheck
-def _check_pdf_normalize_to(pdfs, normalize_to):
+def check_pdf_normalize_to(pdfs, normalize_to):
     """Transforn normalize_to into an index."""
 
     msg = ("normalize_to should be, a pdf id or an index of the "
@@ -744,7 +744,7 @@ class ReplicaPDFPlotter(PDFPlotter):
         return gv
 
 @figuregen
-@_check_pdf_normalize_to
+@check_pdf_normalize_to
 @check_scale('xscale', allow_none=True)
 @_warn_any_pdf_not_montecarlo
 def plot_pdfreplicas(pdfs, xplotting_grids, xscale:(str,type(None))=None,
@@ -781,7 +781,7 @@ class UncertaintyPDFPlotter(PDFPlotter):
         return res
 
 @figuregen
-@_check_pdf_normalize_to
+@check_pdf_normalize_to
 @check_scale('xscale', allow_none=True)
 def plot_pdf_uncertainties(pdfs, xplotting_grids, xscale:(str,type(None))=None,
                       normalize_to:(int,str,type(None))=None):
@@ -860,7 +860,7 @@ class DistancePDFPlotter(PDFPlotter):
         return gv
 
 @figuregen
-@_check_pdf_normalize_to
+@check_pdf_normalize_to
 @check_scale('xscale', allow_none=True)
 def plot_pdfdistances(pdfs, xplotting_grids,*,
                       xscale:(str,type(None))=None,
@@ -931,7 +931,7 @@ class BandPDFPlotter(PDFPlotter):
                                  )
 
 @figuregen
-@_check_pdf_normalize_to
+@check_pdf_normalize_to
 @check_scale('xscale', allow_none=True)
 def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
                       normalize_to:(int,str,type(None))=None):
@@ -1306,7 +1306,7 @@ from reportengine import collect
 pdfs_lumis = collect('lumigrid1d', ('pdfs',))
 
 @figure
-@_check_pdf_normalize_to
+@check_pdf_normalize_to
 def plot_lumi1d(pdfs, pdfs_lumis, lumi_channel, sqrts:numbers.Real,
                 normalize_to=None):
     """Plot PDF luminosities at a given center of mass energy.
