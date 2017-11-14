@@ -230,9 +230,14 @@ int main(int argc, char **argv)
           cout << Colour::FG_BLUE << "Parametrisation: Quadratic Neural Network" << Colour::FG_DEFAULT << endl;
           break;
 
-        case PARAM_NNP:
-          fitset = FitPDFSet::Generate<MultiLayerPerceptronPreproc,GAMinimizer>(settings, fitbasis); // need to rewrite generate
-          cout << Colour::FG_BLUE << "Parametrisation: Neural Network Preprocessing" << Colour::FG_DEFAULT << endl;
+        case PARAM_SLNPP:
+          fitset = FitPDFSet::Generate<SingleLayerPerceptronPreproc,GAMinimizer>(settings, fitbasis); // need to rewrite generate
+          cout << Colour::FG_BLUE << "Parametrisation: Single layer network (preprocessed)" << Colour::FG_DEFAULT << endl;
+          break;
+
+        case PARAM_SLN:
+          fitset = FitPDFSet::Generate<SingleLayerPerceptron,GAMinimizer>(settings, fitbasis); // need to rewrite generate
+          cout << Colour::FG_BLUE << "Parametrisation: Single layer network" << Colour::FG_DEFAULT << endl;
           break;
 
         default:
