@@ -216,14 +216,14 @@ def discarded_mask(
     with too many discarded points have been filtered out.
 
     autodiscard_confidence_level is the student-T confidence level. Is normalised to 1
-    and only is used if max_ndiscarded is set to 'auto' 
+    and only is used if max_ndiscarded is set to 'auto'
 
     The automated discarding is done by estimating the uncertainty on the uncertainty by bootstrapping.
 
     The function returns a mask to be applied in fits_replica_data_with_discarded_replicas"""
 
     df = fits_replica_data_correlated_for_total[0]
-    
+
     best_table = None
     best_error = np.inf
     ndiscarded = range(len(fits_as),0,-1)
@@ -249,9 +249,9 @@ def discarded_mask(
             if current_err < best_error:
                 best_error = current_err
                 best_filt = auto_filt
-                            
+
         return best_filt
-  
+
 def fits_replica_data_with_discarded_replicas(discarded_mask,fits_replica_data_correlated):
     """Applies mask from discarded_mask to dataframes"""
     return fits_replica_data_correlated[discarded_mask]
