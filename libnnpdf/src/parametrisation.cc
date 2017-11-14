@@ -404,8 +404,8 @@ MultiLayerPerceptron(o)
 void MultiLayerPerceptronPreproc::InitParameters()
 {
   MultiLayerPerceptron::InitParameters();
-  fParameters[fNParameters-2] = RandomGenerator::GetRNG()->GetRandomUniform(-10,2);
-  fParameters[fNParameters-1] = RandomGenerator::GetRNG()->GetRandomUniform(0,10);
+  fParameters[fNParameters-2] = RandomGenerator::GetRNG()->GetRandomGausDev(1.0);
+  fParameters[fNParameters-1] = RandomGenerator::GetRNG()->GetRandomGausDev(1.0);
 }
 
 /**
@@ -429,7 +429,10 @@ void MultiLayerPerceptronPreproc::Compute(real* in,real* out) const
   
   // apply preprocessing alpha = fNParameters-2 and beta = fNParameters-1.
   for (int i=0; i< fArch[fNLayers-1]; i++)
-    out[i] *= pow(in[i],-fParameters[fNParameters-2])*pow(1-in[i],fParameters[fNParameters-1]);
+  {
+    out[i] *= pow(in[0],-1.0 + std::fabs(fParameters[fNParameters-2]));
+    out[i] *= pow(1.0-in[0],   std::fabs(fParameters[fNParameters-1]));
+  }
 }
 
 // ******************** Chebyshev *********************************
