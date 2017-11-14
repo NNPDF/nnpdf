@@ -19,7 +19,6 @@ from validphys.pdfbases import Basis, check_basis
 from validphys.pdfgrids import (xgrid, xplotting_grid)
 from validphys.plots    import check_pdf_normalize_to
 from validphys.core     import PDF
-from validphys.checks   import check_pdf_is_montecarlo
 
 import matplotlib.pyplot as plt
 
@@ -44,10 +43,8 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
         eps    = (b-a)/npoints
         ixgrid = xgrid(a, b, 'linear', npoints)
         # PDFs evaluated on grid
-        fgrid  = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values
-        np.swapaxes(fgrid, 1,2)          # Get x-grid as last axis
-        fgrid *= ixgrid[1]               # Multiply by x
-        fdiff  = np.diff(fgrid)/eps      # Compute forward differences
+        xfgrid  = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values*ixgrid[1]
+        fdiff  = np.diff(xfgrid)/eps      # Compute forward differences
         res += integrate.simps(1 + np.square(fdiff), ixgrid[1][1:])
     stats = pdf.stats_class(res)
     return ArcLengthGrid(pdf, basis, flavours, stats)
