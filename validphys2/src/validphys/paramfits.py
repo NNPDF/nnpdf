@@ -224,7 +224,6 @@ def discarded_mask(
 
     df = fits_replica_data_correlated_for_total[0]
 
-    best_table = None
     best_error = np.inf
     ndiscarded = range(len(fits_as),0,-1)
 
@@ -235,15 +234,20 @@ def discarded_mask(
         for i in range(len(ndiscarded),0,-1):
 
             tablefilt_total, auto_filt = _discard_sparse_curves(df,ndiscarded[i-1])
+            least_points = tablefilt_total.notnull().sum(axis=1).min()
 
-            parabolas = parabolic_as_determination(fits_as,tablefilt_total)
+            #Number of points that pass the cuts
+            size = np.sum(auto_filt)
 
-            if parabolas.size > 1:
-                bootstrap_est = np.random.choice(parabolas,(10000,len(parabolas))).std(axis=1).std()
+            #We can only fit a parabola with 3 points.
+            #Use a fouth to have in principle some error estimate.
+            if least_points > 3:
+                parabolas = parabolic_as_determination(fits_as,tablefilt_total)
+                bootstrap_est = np.random.choice(parabolas,(10000,size)).std(axis=1).std()
             else:
                 bootstrap_est = np.inf
 
-            stdT = stats.t.ppf((1-(1-autodiscard_confidence_level)/2),len(parabolas)-1)
+            stdT = stats.t.ppf((1-(1-autodiscard_confidence_level)/2), size-1)
             current_err = bootstrap_est*stdT
 
             if current_err < best_error:
