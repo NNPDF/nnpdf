@@ -6,13 +6,13 @@ Implements utilities for calculating the NNPDF weights and unweighted PDF sets.
 It also allows for some basic statistics.
 """
 import logging
+import warnings
 from collections import OrderedDict
 
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import lhapdf
 from scipy import optimize
 
 from reportengine import collect
@@ -97,7 +97,7 @@ def reweighting_stats(pdf, nnpdf_weights, p_alpha_study):
                           (r'$max_{[0.5,4]}P(\alpha)$', max_alpha)
                          ])
 
-    return pd.Series(result, index=result.keys())
+    return pd.Series(result, index=result.keys(), name='Reweighting stats')
 
 def _get_p_alpha_val(alpha, chi2_data_for_reweighting_experiments):
      new_chi2 = [((type(res)(res.data/alpha**2)), central, ndata)
@@ -124,12 +124,12 @@ def p_alpha_study(chi2_data_for_reweighting_experiments):
 
 
     small = 0.5
-    limfar = 100
 
     f = lambda alpha: -_get_p_alpha_val(alpha, chi2_data_for_reweighting_experiments)
-
-    alphamax=  optimize.fmin(f, 10,
-                                      disp=False)[0]
+    #Ignore warnings for nonsensical alphas
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        alphamax=  optimize.fmin(f, 10, disp=False)[0]
 
     """
     #First find the maximum
