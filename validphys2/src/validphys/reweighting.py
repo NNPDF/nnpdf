@@ -91,7 +91,7 @@ def reweighting_stats(pdf, nnpdf_weights, p_alpha_study):
     max_alpha = p_alpha_study.idxmax()
 
     result = OrderedDict([
-                          (r'N_{initial}', initial_replicas),
+                          (r'$N_{\mathrm{initial}}$', initial_replicas),
                           (r'$N_{eff}$', er),
                           (r'median($w$)', median),
                           (r'$max_{[0.5,4]}P(\alpha)$', max_alpha)
