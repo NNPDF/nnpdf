@@ -188,6 +188,7 @@ def unweighted_index(nnpdf_weights, nreplicas:int=100):
     return pd.DataFrame(res, index=np.arange(1,nreplicas+1))
 
 
+PDFSETS_PATH = 'pdfsets'
 
 @make_check
 def _prepare_pdf_name(*, callspec, ns, environment, **kwargs):
@@ -209,10 +210,13 @@ def _prepare_pdf_name(*, callspec, ns, environment, **kwargs):
     if lhaindex.isinstalled(set_name):
         raise checks.CheckError("The PDF set that would be "
                          "generated already exists in the LHAPDF path:\n"
-                         f"{lhaindex.finddir(set_name)}"
+                         f"{lhaindex.finddir(set_name)}\n"
                          "Either delete it or explicitly assign a set_name for "
                          "the new PDF.")
 
+    output_path = ns['output_path']
+    pdfpath = output_path/PDFSETS_PATH
+    pdfpath.mkdir(exist_ok=True )
 
     #TODO: Enable this someday
     #Ugly hack to allow analyzing the generated pdf some day (as in smpdf).
@@ -242,7 +246,7 @@ def make_unweighted_pdf(pdf, unweighted_index,
     reweighting_experiments. The PDF is written to a `pdfsets` directory of
     the output folder. Return the relative path of the newly created PDF."""
 
-    out = output_path/'pdfsets'
+    out = output_path/PDFSETS_PATH
     new_pdf_from_indexes(pdf=pdf, indexes=np.ravel(unweighted_index),
                          set_name=set_name, folder=out,
                          installgrid=installgrid)
