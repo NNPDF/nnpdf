@@ -1,42 +1,44 @@
+meta:
+    title: Reweighting example
+    keywords: [test]
+
 # Example reweighting
 use_cuts: True
 use_t0: True
-actions_:
- - theory:
-      datacuts:
-          - make_unweighted_pdf:
-              set_name: reweighted_set_SLAC
-              installgrid: False
-          - plot_p_alpha
-          - reweighting_stats
 
-#TODO: Enable this someday
-# - theory:
-#     compare:
-#         reweighting_experiments:
-#             experiment:
-#               pdfs:
-#                  - plot_fancy
-#
-#compare:
-#    use_t0: False
-#    pdfs:
-#        - *prior
-#        - reweighted_set_SLAC
-#
-
-pdf: &prior NNPDF31_nnlo_as_0118
-fit: NNPDF31_nnlo_as_0118
+pdf: NNPDF31_nnlo_as_0118
+fit: NNPDF31_nnlo_as_0118_1000
 
 reweighting_experiments:
   - experiment: SLAC
     datasets:
       - { dataset: SLACP, frac: 0.5 }
       - { dataset: SLACD, frac: 0.5 }
-        
-datacuts:
-  t0pdfset     : NNPDF31_nnlo_as_0118 # PDF set to generate t0 covmat
 
+
+t0pdfset: NNPDF31_nnlo_as_0118
+
+#Get the thoery ID from the fit runcard
 theory:
-  theoryid: 52       # database id
-  
+    from_: fit
+theoryid:
+    from_: theory
+
+
+set_name: reweighted_set_SLAC
+installgrid: False
+
+template_text: |
+    # PDF Set
+    Reweighted PDF `{@set_name@}` obtained:
+
+    >   [LHAPDF set]({@make_unweighted_pdf@})
+
+    # Stats
+    {@reweighting_stats@}
+    # P(α)
+    {@plot_p_alpha@}
+
+actions_:
+    - - report:
+           main: True
