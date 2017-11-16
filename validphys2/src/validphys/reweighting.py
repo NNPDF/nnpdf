@@ -77,7 +77,7 @@ def effective_number_of_replicas(w):
 
 @table
 def reweighting_stats(pdf, nnpdf_weights, p_alpha_study):
-    """Compute varios statistics related to reweighting.
+    """Compute various statistics related to reweighting.
 
     Those are:
      - Number of initial replicas.
@@ -88,7 +88,7 @@ def reweighting_stats(pdf, nnpdf_weights, p_alpha_study):
     er = effective_number_of_replicas(nnpdf_weights)
     initial_replicas = len(pdf) - 1
     median = np.median(nnpdf_weights)
-    max_alpha = p_alpha_study.argmax()
+    max_alpha = p_alpha_study.idxmax()
 
     result = OrderedDict([
                           (r'N_{initial}', initial_replicas),
@@ -167,7 +167,7 @@ def plot_p_alpha(p_alpha_study):
     fig, ax = plt.subplots()
     ax.set_title(r"$P(\alpha)$")
 
-    xmax = p_alpha_study.argmax()
+    xmax = p_alpha_study.idxmax()
     ymax = p_alpha_study[xmax]
     ax.axvline(xmax, color='red', linestyle='--')
     ax.annotate(r'$\alpha=%.2f$'%xmax, (xmax,(ymax-ax.get_ylim()[0])/2), )
@@ -192,8 +192,8 @@ def unweighted_index(nnpdf_weights, nreplicas:int=100):
 @make_check
 def _prepare_pdf_name(*, callspec, ns, environment, **kwargs):
     #TODO: Does this make any sense?
-    if ns['output_path'] is not None:
-        raise checks.CheckError("Output folder is not meant to be overwritten")
+    #if ns['output_path'] is not None:
+    #    raise checks.CheckError("Output folder is not meant to be overwritten")
     output_path = environment.output_path / 'pdfsets'
     output_path.mkdir(exist_ok=True)
     ns['output_path'] = output_path
