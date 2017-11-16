@@ -1,234 +1,44 @@
-#
-# Configuration file for NNPDF++
-#
+meta:
+    title: Reweighting example
+    keywords: [test]
 
+# Example reweighting
 use_cuts: True
 use_t0: True
-actions_:
- - theory:
-      datacuts:
-          - make_unweighted_pdf:
-              set_name: reweighted_set_SLAC
-              installgrid: False
-          - plot_p_alpha
-          - reweighting_stats
 
-#TODO: Enable this someday
-# - theory:
-#     compare:
-#         reweighting_experiments:
-#             experiment:
-#               pdfs:
-#                  - plot_fancy
-#
-#compare:
-#    use_t0: False
-#    pdfs:
-#        - *prior
-#        - reweighted_set_SLAC
-#
+pdf: NNPDF31_nnlo_as_0118
+fit: NNPDF31_nnlo_as_0118_1000
 
-pdf: &prior 160427-r82cacd2-jr-001
-
-fit: 160427-r82cacd2-jr-001
-
-
-
-############################################################
-description: New NNPDF3.1 baseline candidate fit at NLO, adding tevatron legacy data, updated theory settings
-
-############################################################
-# frac: training fraction
-# ewk: apply ewk k-factors
-# sys: systematics treatment (see systypes)
 reweighting_experiments:
-  # Fixed target DIS
-  #  - experiment: NMC
-  #    datasets:
-  #      - { dataset: NMCPD, frac: 0.5, sys: 3 }
-  #      - { dataset: NMC,   frac: 0.5, sys: 3 }
   - experiment: SLAC
     datasets:
-      - { dataset: SLACP, frac: 0.5, sys: 3 }
-      - { dataset: SLACD, frac: 0.5, sys: 3 }
-#  - experiment: BCDMS
-#    datasets:
-#      - { dataset: BCDMSP, frac: 0.5, sys: 3 }
-#      - { dataset: BCDMSD, frac: 0.5, sys: 3 }
-#  - experiment: CHORUS
-#    datasets:
-#      - { dataset: CHORUSNU, frac: 0.5, sys: 3 }
-#      - { dataset: CHORUSNB, frac: 0.5, sys: 3 }
-#  - experiment: NTVDMN
-#    datasets:
-#      - { dataset: NTVNUDMN, frac: 0.5, sys: 3 }
-#      - { dataset: NTVNBDMN, frac: 0.5, sys: 3 }
-#  # EMC F2C data
-#  - experiment: EMCF2C
-#    datasets:
-#      - { dataset: EMCF2C, frac: 1.0, sys: 0 }
-#  # HERA data
-#  - experiment: HERACOMB
-#    datasets:
-#      - { dataset: HERACOMBNCEM , frac: 0.5, sys: 0 }
-#      - { dataset: HERACOMBNCEP460, frac: 0.5, sys: 0 }
-#      - { dataset: HERACOMBNCEP575, frac: 0.5, sys: 0 }
-#      - { dataset: HERACOMBNCEP820, frac: 0.5, sys: 0 }
-#      - { dataset: HERACOMBNCEP920, frac: 0.5, sys: 0 }
-#      - { dataset: HERACOMBCCEM , frac: 0.5, sys: 0 }
-#      - { dataset: HERACOMBCCEP , frac: 0.5, sys: 0 }
-#  # Combined HERA charm production cross-sections
-#  - experiment: HERAF2CHARM
-#    datasets:
-#      - { dataset: HERAF2CHARM, frac: 0.5, sys: 2 }
-#      # Fixed target Drell-Yan
-#  - experiment: DYE886
-#    datasets:
-#      - { dataset: DYE886R, frac: 1.0, sys: 2 }
-#      - { dataset: DYE886P, frac: 0.5, sys: 2 }
-#  - experiment: DYE605
-#    datasets:
-#      - { dataset: DYE605, frac: 0.5, sys: 2 }
-#      # Tevatron jets and W,Z production
-#  - experiment: CDF
-#    datasets:
-#      - { dataset: CDFZRAP, frac: 1.0, sys: 2 }
-#      - { dataset: CDFR2KT, frac: 0.5, sys: 2 }
-#  - experiment: D0
-#    datasets:
-#      - { dataset: D0ZRAP, frac: 1.0, sys: 2 }
-#      - { dataset: D0WEASY, frac: 1.0, sys: 2 }
-#      - { dataset: D0WMASY, frac: 1.0, sys: 2 }
-#      # ATLAS
-#  - experiment: ATLAS
-#    datasets:
-#      - { dataset: ATLASWZRAP36PB,   frac: 1.0, sys: 2, cfac: [EWK] }
-#      - { dataset: ATLASR04JETS36PB, frac: 1.0, sys: 2 }
-#      - { dataset: ATLASR04JETS2P76TEV, frac: 1.0, sys: 2 }
-#    # - { dataset: ATLASWPT31PB,     frac: 1.0, sys: 2, cfac: [QCD] }
-#      - { dataset: ATLASZHIGHMASS49FB, frac: 1.0, sys: 2, cfac: [EWK] }
-#      - { dataset: ATLASLOMASSDY11EXT, frac: 1.0, sys: 2, cfac: [EWK] }
-#    # - { dataset: ATLAS1JET11, frac: 0.5, sys: 2 }
-#  # CMS
-#  - experiment: CMS
-#    datasets:
-#      - { dataset: CMSWEASY840PB, frac: 1.0, sys: 2 }
-#      - { dataset: CMSWMASY47FB,  frac: 1.0, sys: 2 }
-#      - { dataset: CMSJETS11,     frac: 0.5, sys: 2 }
-#      - { dataset: CMSWCHARMTOT,  frac: 1.0, sys: 2 }
-#      - { dataset: CMSWCHARMRAT,  frac: 1.0, sys: 2 }
-#      - { dataset: CMSDY2D11,     frac: 0.5, sys: 2, cfac: [EWK] }
-#  # LHCb
-#  - experiment: LHCb
-#    datasets:
-#      - { dataset: LHCBW36PB, frac: 1.0, sys: 2 }
-#      - { dataset: LHCBZ940PB, frac: 1.0, sys: 2, cfac: [EWK] }
-#      - { dataset: LHCBWMU1FB, frac: 1.0, sys: 2 }
-#      - { dataset: LHCBZEE2FB, frac: 1.0, sys: 2 }
-#  # Top
-#  - experiment: TOP
-#    datasets:
-#      - { dataset: TTBARTOT, frac: 1.0, sys: 2 }
-#
-############################################################
-datacuts:
-  t0pdfset     : 160419-r0ca70fe-jr-002 # PDF set to generate t0 covmat
-  q2min        : 3.49                 # Q2 minimum
-  w2min        : 12.5                # W2 minimum
-  combocuts    : NNPDF30             # NNPDF3.0 final kin. cuts
-  jetptcut_tev : 0                   # jet pt cut for tevatron
-  jetptcut_lhc : 0                   # jet pt cut for lhc
-  wptcut_lhc   : 25.0                # Minimum pT for W pT diff distributions
-  jetycut_tev  : 1e30                # jet rap. cut for tevatron
-  jetycut_lhc  : 1e30                # jet rap. cut for lhc
-  dymasscut_min: 0                   # dy inv.mass. min cut
-  dymasscut_max: 1e30                # dy inv.mass. max cut
-  jetcfactcut  : 1e30                # jet cfact. cut
+      - { dataset: SLACP, frac: 0.5 }
+      - { dataset: SLACD, frac: 0.5 }
 
-############################################################
+
+t0pdfset: NNPDF31_nnlo_as_0118
+
+#Get the thoery ID from the fit runcard
 theory:
-  theoryid: 52       # database id
-  
-############################################################
-fitting:
-  seed     : 53489389      # set the seed for the random generator
-  genrep   : on     # on = generate MC replicas, off = use real data
-  rngalgo  : 0      # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
-  fitmethod: NGA    # Minimization algorithm
-  ngen     : 40000  # Maximum number of generations
-  nmutants : 120     # Number of mutants for replica
-  paramtype: NN
-  nnodes   : [2,5,3,1]
+    from_: fit
+theoryid:
+    from_: theory
 
-  # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
-  # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
-  # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
-  # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
-  fitbasis: NN31IC # EVOL (7), EVOLQED (8), etc.
-  basis:
-      # remeber to change the name of PDF accordingly with fitbasis
-      # pos: on for NN squared
-      # mutsize: mutation size
-      # mutprob: mutation probability
-      # smallx, largex: preprocessing ranges
-      - { fl: sng, pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.78,1.55], largex: [2.05,3.33] }
-      - { fl: g,   pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.44,1.90], largex: [0.16,9.00] }
-      - { fl: v,   pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.44,0.91], largex: [2.18,6.20] }
-      - { fl: v3,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.20,0.86], largex: [1.92,5.96] }
-      - { fl: v8,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.39,0.87], largex: [0.58,8.49] }
-      - { fl: t3,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [-0.80,1.85], largex: [2.61,5.85] }
-      - { fl: t8,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.04,1.69], largex: [2.10,4.95] }
-      - { fl: cp,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [-0.60,1.96], largex: [0.1,6.9] }
 
-############################################################
-stopping:
-  stopmethod: LOOKBACK  # Stopping method
-  lbdelta   : 0         # Delta for look-back stopping
-  mingen    : 0         # Minimum number of generations
-  window    : 500       # Window for moving average
-  minchi2   : 3.5 # Minimum chi2 
-  minchi2exp: 6.0       # Minimum chi2 for experiments
-  nsmear    : 200 # Smear for stopping
-  deltasm   : 200 # Delta smear for stopping
-  rv        : 2         # Ratio for validation stopping
-  rt        : 0.5 # Ratio for training stopping
-  epsilon   : 1e-6      # Gradient epsilon
+set_name: reweighted_set_SLAC
+installgrid: False
 
-############################################################
-positivity:
-  posdatasets:
-    - { dataset: POSF2U,   poslambda: 1e6 }  # Positivity Lagrange Multiplier
-    - { dataset: POSF2DW,  poslambda: 1e6 }
-    - { dataset: POSF2S,   poslambda: 1e6 }
-    - { dataset: POSFLL,   poslambda: 1e6 }
-    - { dataset: POSDYU,   poslambda: 1e10 }
-    - { dataset: POSDYD,   poslambda: 1e10 }
-    - { dataset: POSDYS,   poslambda: 1e10 }
-    - { dataset: POSDYUBD,   poslambda: 1e5 }  
-    - { dataset: POSDYUD,   poslambda: 1e5 }
-    - { dataset: POSDYUDB,   poslambda: 1e5 }
-    - { dataset: POSDYUBDB,   poslambda: 1e5 }
+template_text: |
+    # PDF Set
+    Reweighted PDF `{@set_name@}` obtained:
 
-############################################################
-closuretest:
-  filterseed  : 0   # Random seed to be used in filtering data partitions
-  fakedata    : off # on = to use FAKEPDF to generate pseudo-data
-  fakepdf     : MSTW2008nlo68cl # Theory input for pseudo-data
-  errorsize   : 1.0 # uncertainties rescaling
-  fakenoise   : off # on = to add random fluctuations to pseudo-data
-  rancutprob  : 1.0 # Fraction of data to be included in the fit
-  rancutmethod: 0   # Method to select rancutprob data fraction
-  rancuttrnval: off # 0(1) to output training(valiation) chi2 in report
-  printpdf4gen: off # To print info on PDFs during minimization
+    >   [LHAPDF set]({@make_unweighted_pdf@})
 
-############################################################
-lhagrid:
-  nx  : 100
-  xmin: 1e-9
-  xmed: 0.1
-  xmax: 1.0
-  nq  : 50
-  qmax: 1e5
+    # Stats
+    {@reweighting_stats@}
+    # P(α)
+    {@plot_p_alpha@}
 
-############################################################
-debug: off
+actions_:
+    - - report:
+           main: True
