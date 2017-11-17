@@ -255,8 +255,9 @@ def discarded_mask(
                 best_error = current_err
                 best_filt = auto_filt
 
-                dist_best_as = -np.abs(auto_filt - best_filt)    
-                
+            
+        best_as = np.mean(parabolas)
+        dist_best_as = -np.abs(best_as - fits_as)    
         to_remove = np.argpartition(dist_best_as, trim_ndistant)[:trim_ndistant]
         trim_filt = discarded_mask[to_remove] = False
 
