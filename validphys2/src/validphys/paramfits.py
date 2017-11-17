@@ -260,9 +260,9 @@ def discarded_mask(
         best_as = np.mean(best_parabolas)
         dist_best_as = -np.abs(best_as - fits_as)    
         to_remove = np.argpartition(dist_best_as, trim_ndistant)[:trim_ndistant]
-        trim_filt = best_filt[to_remove] = False
+        best_filt[to_remove] = False
 
-        return trim_filt
+        return best_filt
 
 def fits_replica_data_with_discarded_replicas(discarded_mask,fits_replica_data_correlated):
     """Applies mask from discarded_mask to dataframes"""
