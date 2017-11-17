@@ -255,10 +255,10 @@ def discarded_mask(
                 best_error = current_err
                 best_filt = auto_filt
 
-                return best_filt
-
-                to_remove = np.argpartition(best_filt, trim_ndistant)[:trim_ndistant]
-                trim_filt = discarded_mask[to_remove] = False
+                dist_best_as = -np.abs(auto_filt - best_filt)    
+                
+        to_remove = np.argpartition(dist_best_as, trim_ndistant)[:trim_ndistant]
+        trim_filt = discarded_mask[to_remove] = False
 
         return trim_filt
 
