@@ -210,7 +210,8 @@ def discarded_mask(
     fits_replica_data_correlated_for_total,
     fits_as,
     max_ndiscarded:(int,str)='auto',
-    autodiscard_confidence_level:float=0.99):
+    autodiscard_confidence_level:float=0.99,
+    trim_ndistant:int=0):
 
     """Return a table like  `fits_replica_data_correlated` where the replicas
     with too many discarded points have been filtered out.
@@ -254,7 +255,12 @@ def discarded_mask(
                 best_error = current_err
                 best_filt = auto_filt
 
-        return best_filt
+                return best_filt
+
+                to_remove = np.argpartition(best_filt, trim_ndistant)[:trim_ndistant]
+                trim_filt = discarded_mask[to_remove] = False
+
+        return trim_filt
 
 def fits_replica_data_with_discarded_replicas(discarded_mask,fits_replica_data_correlated):
     """Applies mask from discarded_mask to dataframes"""
