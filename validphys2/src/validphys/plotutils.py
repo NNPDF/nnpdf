@@ -17,6 +17,8 @@ import matplotlib.patches as mpatches
 from matplotlib  import transforms
 from matplotlib.markers import MarkerStyle
 
+from reportengine.floatformatting import format_number
+
 def ax_or_gca(f):
     """A decorator. When applied to a function, the keyword argument  ``ax``
     will automatically be filled with the current axis, if it was None."""
@@ -274,7 +276,7 @@ def barplot(values, collabels, datalabels, orientation='auto'):
         barfunc(thisx, row, width, label=datalabel)
         for xp,v in zip(thisx,row):
 
-            ax.annotate(f'{v:.2f}', xy=xytext(xp,v),
+            ax.annotate(f'{format_number(v,3)}', xy=xytext(xp,v),
                          textcoords='offset points',
                         size='small', wrap=True, **get_pos(v)
                        )
