@@ -244,7 +244,7 @@ def discarded_mask(
             #Use a fouth to have in principle some error estimate.
             if least_points > 3:
                 parabolas = parabolic_as_determination(fits_as,tablefilt_total)
-                bootstrap_est = np.random.choice(parabolas,(10000,size)).std(axis=1).std()
+                bootstrap_est = np.random.choice(parabolas,(100000,size)).std(axis=1).std()
             else:
                 bootstrap_est = np.inf
 
