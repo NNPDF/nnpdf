@@ -210,7 +210,8 @@ def discarded_mask(
     fits_replica_data_correlated_for_total,
     fits_as,
     max_ndiscarded:(int,str)='auto',
-    autodiscard_confidence_level:float=0.99):
+    autodiscard_confidence_level:float=0.99,
+    trim_ndistant:int=0):
 
     """Return a table like  `fits_replica_data_correlated` where the replicas
     with too many discarded points have been filtered out.
@@ -253,6 +254,13 @@ def discarded_mask(
             if current_err < best_error:
                 best_error = current_err
                 best_filt = auto_filt
+                best_parabolas = parabolas
+
+            
+        best_as = np.mean(best_parabolas)
+        dist_best_as = -np.abs(best_as - fits_as)    
+        to_remove = np.argpartition(dist_best_as, trim_ndistant)[:trim_ndistant]
+        best_filt.iloc[to_remove] = False
 
         return best_filt
 
@@ -1072,7 +1080,7 @@ def plot_as_value_error_central(as_datasets_central_chi2,
 # Pull plots
 def _pulls_func(cv,alphas_global,error,error_global):
     """Small definition to compute pulls"""
-    return ((cv-alphas_global)/np.sqrt(error**2 +error_global**2))
+    return error_global*((cv-alphas_global)/(error**2))
 
 
 @figure
