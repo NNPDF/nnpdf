@@ -2,8 +2,8 @@
  *
  * ATLASPHT15 - ATLAS inclusive photons 2015
  *
- * ATLAS isolated photon production, LHC 8 TeV, 20.2 fb^-1
- * Reference:  [arXiv:1605.03495] 
+ * ATLAS isolated photon production, LHC 13 TeV, 3.2 fb^-1
+ * Reference:  [arXiv:1701.06882] 
  * 
  *
  */
