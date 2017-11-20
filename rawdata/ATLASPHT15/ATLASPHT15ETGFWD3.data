@@ -12,12 +12,12 @@
 750 900 0.0219 33.3 11.6 -11.3	2.1
 
 
-# d#sigma/dE_{T}^{#gamma} [pb / GeV]
+# d#sigma/dE_{T}^{#gamma} [fb / GeV]
 # 1.81 < |#eta^{#gamma}| < 2.37
 
 # Correlation information:
 # Systematics are already combined
 
-# BinLowEdge, BinHighEdge, Cross Section(pb/GeV), statistical Uncertainty (%),
+# BinLowEdge, BinHighEdge, Cross Section(fb/GeV), statistical Uncertainty (%),
 # Total systematic uncertainty %),
 # ATLAS2015Luminosity (%)
