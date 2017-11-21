@@ -343,41 +343,6 @@ simply running:
 
     conda install validphys nnpdf
 
-### Configuring the NNPDF paths
-
-The paths where the NNPDF resources (such as fits and data) that need
-to be  localized across projects are stored are controlled by a YAML
-configuration file that comes with `libnnpdf`. The default location of
-the file itself is `<prefix>/share/NNPDF/nnprofile.yaml`, where prefix
-is the installation root (such as the `conda` folder). If you open it,
-you can see that it expects to see the nnpdfcpp data and results
-directory in a particular location, namely `<prefix>/share/NNPDF/data`
-and `<prefix>/share/NNPDF/results` respectively.
-
-The simplest solution is to create symbolic links from the git
-repository locations:
-
-```
-ln -s /path/to/nnpdfcpp/data <prefix>/share/nnpdf/data
-ln -s /path/to/nnpdfcpp/results <prefix>/share/nnpdf/results
-
-```
-
-For the data, this has the advantage that it will be kept in sync when
-the git repository is updated.
-
-Advanced users may configure the paths differently, by creating an
-alternative `nnprofile.yaml` file and setting the environment variable
-`NNPDF_PROFILE_PATH` to point at it. Note that the changes of the
-profile file in the default location will be lost every time
-`libnnpdf` is reinstalled, and therefore it must be copied elsewhere
-with the environment variable pointing to it. Overwriting the profile
-allows to e.g. set the nnpdfcpp paths directly, or point the locations
-to specialized storage units when running jobs in a cluster.
-
-Future versions of the `nnpdf` package may come with the data
-preinstalled in the right location.
-
 #### Linking existing LHAPDF grids
 
 The installer will set up it's own version of the LHAPDF code, with
@@ -409,7 +374,7 @@ configuration. This is easily solved by removing said hacks from
 If you include conda in your default PATH, the default Python version
 will be the conda Python 3. This could cause problems if you use code
 that expects `/usr/bin/env python` to point to Python 2. In such cases
-you will need to conditionally enable or disable conda. You can saved
+you will need to conditionally enable or disable conda. You can save
 a helper executable script (called for example `use-conda`) to some
 location in your PATH containing:
 
