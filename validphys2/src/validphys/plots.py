@@ -936,7 +936,8 @@ class BandPDFPlotter(PDFPlotter):
 def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
                       normalize_to:(int,str,type(None))=None):
     """Plot the central value and the uncertainty of a list of pdfs as a
-    function of x for a given value of Q. If normalize_to is given, norma.
+    function of x for a given value of Q. If normalize_to is given, plot the
+    ratios to the corresponding PDF. Otherwise, plot absolute values.
     See the help for ``xplotting_grid`` for information on how to set basis,
     flavours and x ranges. Yields one figure per PDF flavour.
 
