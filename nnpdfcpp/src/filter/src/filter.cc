@@ -34,7 +34,7 @@ int main(int argc, char **argv)
       filename.assign(argv[1]);
       if (filename.find("help") != string::npos) { cout << "\nusage: filter [configuration filename]\n" << endl; exit(-1); }
     }
-  else { cerr << Colour::FG_RED << "\nusage: filter [configuration filename]\n" << endl; exit(-1); }
+  else { cerr << Colour::FG_RED << "\nusage: filter [configuration filename]\n" << Colour::FG_DEFAULT << endl; exit(-1); }
 
   // Creates the configuration class
   NNPDFSettings settings(filename);
@@ -103,7 +103,7 @@ int main(int argc, char **argv)
         if (settings.Get("closuretest","fakedata").as<bool>()) RandomCut(settings,datamask);
         else
         {
-          cerr << Colour::FG_RED << "Filter::main error: Random cuts disabled in real data fits to prevent accidental use." <<endl;
+          cerr << Colour::FG_RED << "Filter::main error: Random cuts disabled in real data fits to prevent accidental use." << Colour::FG_DEFAULT <<endl;
           exit(-1);
         }
       }

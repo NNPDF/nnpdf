@@ -121,7 +121,7 @@ FNS NNPDFSettings::getVFNS(string const& vfns)
   if (vfns.compare("FONLL-B") == 0) return FONLLB;
   if (vfns.compare("FONLL-C") == 0) return FONLLC;
 
-  cerr << Colour::FG_RED << "getVFNS Error: Invalid FNS " << vfns << endl;
+  cerr << Colour::FG_RED << "getVFNS Error: Invalid FNS " << vfns << Colour::FG_DEFAULT << endl;
   exit(-1);
 }
 
@@ -131,7 +131,7 @@ MODEV NNPDFSettings::getMODEV(const string &modev)
   if (modev.compare("EXP") == 0) return EXP;
   if (modev.compare("EXA") == 0) return EXA;
 
-  cerr << Colour::FG_RED << "getMODEV Error: Invalid MODEV " << modev << endl;
+  cerr << Colour::FG_RED << "getMODEV Error: Invalid MODEV " << modev << Colour::FG_DEFAULT << endl;
   exit(-1);
 }
 
@@ -172,7 +172,11 @@ NNPDFSettings::NNPDFSettings(const string &filename, const string &plotfile):
   fPDFName = fFileName.substr(firstindex, lastindex);
 
   // Load yaml file
-  fConfig = YAML::LoadFile(fFileName);
+  try {
+    fConfig = YAML::LoadFile(fFileName);
+  } catch(YAML::BadFile &e) {
+    throw FileError("NNPDFSettings::NNPDFSettings", "runcard not found.");    
+  }
 
   // Check for theory ID
   const int theoryID = Get("theory","theoryid").as<int>();
@@ -246,7 +250,7 @@ YAML::Node NNPDFSettings::Get(const string& item) const
 {
   if (!fConfig[item])
     {
-      cerr << Colour::FG_RED << "\nNNPDFSettings::Get error: item not available " << item << endl;
+      cerr << Colour::FG_RED << "\nNNPDFSettings::Get error: item not available " << item << Colour::FG_DEFAULT << endl;
       exit(-1);
     }
   return fConfig[item];
@@ -256,7 +260,7 @@ YAML::Node NNPDFSettings::Get(const string& node, const string& item) const
 {
   if (!fConfig[node][item])
     {
-      cerr << Colour::FG_RED << "\nNNPDFSettings::Get error: item not available " << node << " " << item << endl;
+      cerr << Colour::FG_RED << "\nNNPDFSettings::Get error: item not available " << node << " " << item << Colour::FG_DEFAULT << endl;
       exit(-1);
     }
   return fConfig[node][item];
@@ -276,7 +280,7 @@ YAML::Node NNPDFSettings::GetPlotting(const string& item) const
 {
   if (!fPlotting[item])
     {
-      cerr << Colour::FG_RED << "\nNNPDFSettings::Get error: item not available " << item << endl;
+      cerr << Colour::FG_RED << "\nNNPDFSettings::Get error: item not available " << item << Colour::FG_DEFAULT << endl;
       exit(-1);
     }
   return fPlotting[item];
@@ -344,7 +348,7 @@ DataSetInfo const& NNPDFSettings::GetSetInfo(string const& setname) const
     return (*iMap).second;
   else
   {
-    cerr << Colour::FG_RED << "NNPDFSettings::GetSetInfo error: Cannot find Set info under: "<<setname<<endl;
+    cerr << Colour::FG_RED << "NNPDFSettings::GetSetInfo error: Cannot find Set info under: " << setname << Colour::FG_DEFAULT << endl;
     exit(-1);
   }
 
@@ -364,7 +368,7 @@ PosSetInfo const& NNPDFSettings::GetPosInfo(string const& posname) const
     return (*iMap).second;
   else
   {
-    cerr << Colour::FG_RED << "NNPDFSettings::GetPosInfo error: Cannot find PosSet info under: "<<posname<<endl;
+    cerr << Colour::FG_RED << "NNPDFSettings::GetPosInfo error: Cannot find PosSet info under: " << posname << Colour::FG_DEFAULT << endl;
     exit(-1);
   }
 
@@ -387,14 +391,14 @@ void NNPDFSettings::VerifyConfiguration(const string &filename)
 
   if (!targetConfig.good())
   {
-    cerr << Colour::FG_RED << "NNPDFSettings::VerifyConfiguration Error - Cannot find current config file log."<<endl;
+    cerr << Colour::FG_RED << "NNPDFSettings::VerifyConfiguration Error - Cannot find current config file log." << Colour::FG_DEFAULT << endl;
     cerr << "Search path: "<<target<<endl;
     exit(-1);
   }
 
   if (!filterConfig.good())
   {
-    cerr << Colour::FG_RED << "NNPDFSettings::VerifyConfiguration Error - Cannot find filter config file log."<<endl;
+    cerr << Colour::FG_RED << "NNPDFSettings::VerifyConfiguration Error - Cannot find filter config file log." << Colour::FG_DEFAULT << endl;
     cerr << "Search path: "<<filter<<endl;
     exit(-1);
   }
@@ -416,7 +420,7 @@ void NNPDFSettings::VerifyConfiguration(const string &filename)
   }
   else
   {
-    cerr << Colour::FG_RED << endl << " ----------------- Configuration Log Verification: FAILED -----------------"<<endl<<endl;
+    cerr << Colour::FG_RED << endl << " ----------------- Configuration Log Verification: FAILED -----------------" << Colour::FG_DEFAULT << endl << endl;
     cerr << "-- Configuration has been modified since last filter run"<<endl;
     cerr << "-- Please rerun the filter"<<endl<<endl;
     exit(-1);
@@ -529,7 +533,7 @@ void NNPDFSettings::LoadExperiments()
     {
       fExpName.push_back(exps[i]["experiment"].as<string>());
       vector<string> nsetname;
-      if (exps[i]["datasets"].size() == 0) { cerr << Colour::FG_RED << "NNPDFSettings::LoadExperiments error: experiment " << exps[i]["experiment"] << " has no datasets!" << endl; exit(-1); }
+      if (exps[i]["datasets"].size() == 0) { cerr << Colour::FG_RED << "NNPDFSettings::LoadExperiments error: experiment " << exps[i]["experiment"] << " has no datasets!" << Colour::FG_DEFAULT  << endl; exit(-1); }
 
       // loop over datasets
       YAML::Node dsets = exps[i]["datasets"];
@@ -556,7 +560,7 @@ void NNPDFSettings::LoadExperiments()
 
           DataSetInfo info = {setname, setsys, setfrac, cfactors};
           map<int,DataSetInfo>::const_iterator iMap = fDataSetInfo.find(hashval);
-          if (iMap != fDataSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadExperiments error: hash collision for set: " << setname << endl; exit(-1); }
+          if (iMap != fDataSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadExperiments error: hash collision for set: " << setname << Colour::FG_DEFAULT << endl; exit(-1); }
           else { fDataSetInfo.insert(make_pair(hashval, info)); }
           nsetname.push_back(setname);
           fSetName.push_back(setname);
@@ -587,7 +591,7 @@ void NNPDFSettings::LoadPositivities()
       const size_t hashval = str_hash(posname);
 
       map<int,PosSetInfo>::const_iterator iMap = fPosSetInfo.find(hashval);
-      if (iMap != fPosSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadPositivity error: hash collision for set: " << posname << endl; exit(-1); }
+      if (iMap != fPosSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadPositivity error: hash collision for set: " << posname << Colour::FG_DEFAULT << endl; exit(-1); }
       else { fPosSetInfo.insert(make_pair(hashval, info)); }
     }
 }
@@ -617,7 +621,7 @@ void NNPDFSettings::CheckBasis()
 
   if (basis.size() != Get("fitting","basis").size())
     {
-      cerr << Colour::FG_RED << "NNPDFSettings::CheckBasis error, mismatch between fitbasis and basis size" << endl;
+      cerr << Colour::FG_RED << "NNPDFSettings::CheckBasis error, mismatch between fitbasis and basis size" << Colour::FG_DEFAULT << endl;
       exit(-1);
     }
 
@@ -626,7 +630,7 @@ void NNPDFSettings::CheckBasis()
     if (basis[i].compare(Get("fitting","basis")[i]["fl"].as<string>()) != 0)
       {
         cerr << Colour::FG_RED << "NNPDFSettings::CheckBasis error, mismatch between basis items, expected "
-             << basis[i] << ", received " <<   Get("fitting","basis")[i]["fl"].as<string>() << endl;
+             << basis[i] << ", received " <<   Get("fitting","basis")[i]["fl"].as<string>() << Colour::FG_DEFAULT << endl;
         exit(-1);
       }
 }
