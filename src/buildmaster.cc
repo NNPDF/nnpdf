@@ -23,7 +23,6 @@
 #include "ATLAS.h"
 #include "ATLASPHT12.h"
 #include "ATLASPHT15.h"
-#include "ATLASPHT12ALL.h"
 #include "ATLAS2011JETS.h"
 #include "ATLASLOMASSDY11.h"
 #include "ATLASDY2D8TEV.h"
@@ -120,7 +119,6 @@ void InitCommonData(vector<CommonData*>& target)
 
   target.push_back(new ATLASPHT15Filter());
   target.push_back(new ATLASPHT12Filter());
-  target.push_back(new ATLASPHT12ALLFilter());
   // ************************* BCDMS ******************************
 
   target.push_back(new BCDMSPFilter());
