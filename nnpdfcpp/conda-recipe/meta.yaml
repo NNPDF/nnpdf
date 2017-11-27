@@ -1,4 +1,3 @@
-{% set libnnpdf_version = "  1.2.0b5.*" %}
 package:
     name: nnpdf
     version: "{{ GIT_DESCRIBE_TAG[1:] }}.{{ GIT_DESCRIBE_NUMBER }}"
@@ -14,11 +13,11 @@ requirements:
         # https://github.com/ContinuumIO/anaconda-issues/issues/7489#issuecomment-346964337
         - pkg-config ==0.29.1
     host:
-        - libnnpdf {{libnnpdf_version}}
+        - {{pin_subpackage('libnnpdf', max_pin='x.x')}}
         - yaml-cpp
         - apfel >=3
     run:
-        - libnnpdf {{libnnpdf_version}}
+        - {{pin_subpackage('libnnpdf', max_pin='x.x')}}
         - apfel >=3
         - libgcc # [linux]
         - yaml-cpp
