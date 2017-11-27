@@ -433,14 +433,14 @@ up a development `conda` environment. While the existing packages
 should run on any relevant Linux or Mac system, linking to them is
 a different matter: The most straightforward  way of doing so is using
 the same compiler toolchain that was used to generate the packages.
-You may find some relevant documentation [here](COMPILERS).  You need
+You may find some relevant documentation [here][COMPILERS].  You need
 to create a conda environment that has the required dependencies of
 your project (which can be found in the `meta.yaml` file of the conda
 recipe), including the C++ compiler. For example here is how we would
 set up a development environment for `libnnpdf`.
 
  1. Find out the C++ (or C or FORTRAN) compiler package name for your
-	platform [here](COMPILERS). For example, the C++ compiler for
+	platform [here][COMPILERS]. For example, the C++ compiler for
 	Linux is `gxx_linux-64`.
 
  2. Create an environment with all the build and runtime
@@ -554,13 +554,10 @@ set up a development environment for `libnnpdf`.
 	This should result in a working C++ component of the library (see
 	the documentation on how to enable e.g. the Python component).
 
- 4. Use the result. We can now compile `buildmaster` using the library
-	we just created. Since `buildmaster` uses a simple `Makefile` that
-	doesn't read the environment variables by itself, we need to pass
-	explicitly ugly the name of the C++ compiler executable. For Linux
-	it is `x86_64-conda_cos6-linux-gnu-c++`.
+ 4. Use the result. We can now compile `buildmaster` linking with the
+	library we just created.
 	```
-	buildmaster$ make CXX=x86_64-conda_cos6-linux-gnu-c++
+	buildmaster$ make
 	```
 
 [COMPILERS]: https://conda.io/docs/user-guide/tasks/build-packages/compiler-tools.html
