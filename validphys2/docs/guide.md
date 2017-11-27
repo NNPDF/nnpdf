@@ -14,15 +14,16 @@ with the fits.
 The project is separated in two codes with well defined and separated
 scopes:
 
-reportengine ~ It is a compiler of user-entered configuration (in the
-YAML format) into directed acyclic graphs of Python executable
-functions, which are defined by client applications. One such function
-that comes with `reportengine` is `report`, which processes a template
-in the Markdown format, with special tags that signify the resources
-requested by the user, and produces  an HTML report (See [Producing
-reports]).  Apart from the *compiler* functionality, `reportengine`
-also provides general application utilities such as crash handlers and
-a help system.
+reportengine 
+  ~ It is a compiler of user-entered configuration (in the YAML
+  format) into directed acyclic graphs of Python executable functions,
+  which are defined by client applications. One such function that
+  comes with `reportengine` is `report`, which processes a template in
+  the Markdown format, with special tags that signify the resources
+  requested by the user, and produces  an HTML report (See [Reports]).
+  Apart from the *compiler* functionality, `reportengine` also
+  provides general application utilities such as crash handlers and
+  a help system.
 
 validphys2
  ~ It is a set of higher level tools operating on the NNPDF resources,
