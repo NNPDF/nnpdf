@@ -13,8 +13,6 @@ MACROS = $(RESULTSDIR) $(DATADIR)
 # Compiler options
 ##################
 
-CXX=c++
-
 # NNPDF flags
 NNPDFCXX = $(shell nnpdf-config --cppflags)
 NNPDFLD = $(shell nnpdf-config --ldflags)
