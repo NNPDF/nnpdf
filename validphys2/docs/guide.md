@@ -411,7 +411,7 @@ Python 3 gains support.
 You can `conda install` a package and then `conda remove --force` it
 to obtain an environment with all the dependencies but without the
 package. Then for Python projects you can use `pip install -e .` in
-the root folder where the `setup.py` folder is located to have the
+the root folder where the `setup.py` file located to have the
 environment automatically reflect the changes you make to the files.
 For example, if you wanted to develop the validphys code you would do:
 
