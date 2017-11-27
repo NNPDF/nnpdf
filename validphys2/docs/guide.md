@@ -365,11 +365,23 @@ folders are transferred if you copy or move instead.
 
 After several iterations on the install system most issues have been
 resolved. There could be problems derived from interactions with hacks
-targeted at solving manually. In particular, see that you don’t have
-any `PYTHONPATH` environment variable (for example pointing at some
-version of LHAPDF) since that will overwrite the default conda
-configuration. This is easily solved by removing said hacks from
-`.bashrc` or similar files.
+targeted at solving environment problems manually. In particular, see
+that you don’t have any `PYTHONPATH` environment variable (for example
+pointing at some version of LHAPDF) since that will overwrite the
+default conda configuration. This is easily solved by removing said
+hacks from `.bashrc` or similar files.
+
+A different source of problems is the priority order of the conda
+*channels*: We use dependency packages from the official Anaconda
+`defaults` channel, as well as from the community `conda-forge`
+channel. If a package exists in both channels, the one from the
+channel declared first `.condarc` file is the one that gets selected.
+Unfortunately the packages are not always binary compatible and
+therefore the wrong priority causes various sorts of compiler errors.
+Also unfortunately, what the wrong priority is changes over time,
+depending on the features that both channels provide. Currently we use
+the compilers from the `defaults` channel, and therefore it has to be
+declared first.
 
 If you include conda in your default PATH, the default Python version
 will be the conda Python 3. This could cause problems if you use code
@@ -413,8 +425,146 @@ cd validphys2
 pip install -e .
 ```
 
-For C++ projects use the usual build systems, setting the prefix to
-the conda folder.
+#### Setting up a C++ development environment
+
+The easiest way to work with C++ code that depends on `libnnpdf` or
+other C++ packages (or indeed to develop `libnnpdf` itself) is to set
+up a development `conda` environment. While the existing packages
+should run on any relevant Linux or Mac system, linking to them is
+a different matter: The most straightforward  way of doing so is using
+the same compiler toolchain that was used to generate the packages.
+You may find some relevant documentation [here](COMPILERS).  You need
+to create a conda environment that has the required dependencies of
+your project (which can be found in the `meta.yaml` file of the conda
+recipe), including the C++ compiler. For example here is how we would
+set up a development environment for `libnnpdf`.
+
+ 1. Find out the C++ (or C or FORTRAN) compiler package name for your
+	platform [here](COMPILERS). For example, the C++ compiler for
+	Linux is `gxx_linux-64`.
+
+ 2. Create an environment with all the build and runtime
+	dependencies. We start of with:
+	```
+	$ conda create -n nnpdf-dev libnnpdf gxx_linux-64
+	```
+	Note that when the environment is activated, many environment
+	variables pointing to the compiler paths are activated for us:
+	```
+	$ source activate nnpdf-dev
+	INFO: activate-binutils_linux-64.sh made the following
+	environmental changes:
+	+ADDR2LINE=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-addr2line
+	+AR=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-ar
+	+AS=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-as
+	+CXXFILT=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-c++filt
+	+ELFEDIT=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-elfedit
+	+GPROF=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-gprof
+	+HOST=x86_64-conda_cos6-linux-gnu
+	+LD_GOLD=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-ld.gold
+	+LD=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-ld
+	+NM=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-nm
+	+OBJCOPY=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-objcopy
+	+OBJDUMP=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-objdump
+	+RANLIB=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-ranlib
+	+READELF=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-readelf
+	+SIZE=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-size
+	+STRINGS=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-strings
+	+STRIP=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-strip
+	INFO: activate-gcc_linux-64.sh made the following environmental
+	changes:
+	+CC=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-cc
+	+CFLAGS=-march=nocona -mtune=haswell -ftree-vectorize -fPIC
+	-fstack-protector-strong -fno-plt -O2 -pipe
+	+CPPFLAGS=-D_FORTIFY_SOURCE=2 -O2
+	+CPP=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-cpp
+	+DEBUG_CFLAGS=-march=nocona -mtune=haswell -ftree-vectorize -fPIC
+	-fstack-protector-strong -fno-plt -O2 -pipe -Og -g -Wall -Wextra
+	-fcheck=all -fbacktrace -fimplicit-none -fvar-tracking-assignments
+	+GCC_AR=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-gcc-ar
+	+GCC=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-gcc
+	+GCC_NM=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-gcc-nm
+	+GCC_RANLIB=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-gcc-ranlib
+	+LDFLAGS=-Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro
+	-Wl,-z,now
+	+_PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_x86_64_conda_cos6_linux_gnu
+	INFO: activate-gxx_linux-64.sh made the following environmental
+	changes:
+	+CXXFLAGS=-fvisibility-inlines-hidden -std=c++17
+	-fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize
+	-fPIC -fstack-protector-strong -fno-plt -O2 -pipe
+	+CXX=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-c++
+	+DEBUG_CXXFLAGS=-fvisibility-inlines-hidden -std=c++17
+	-fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize
+	-fPIC -fstack-protector-strong -fno-plt -O2 -pipe -Og -g -Wall
+	-Wextra -fcheck=all -fbacktrace -fimplicit-none
+	-fvar-tracking-assignments
+	+GXX=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-g++
+	```
+	We now remove the package for `libnnpdf` and install the other
+	build dependencies (which can be found in
+	`libnnpdf/conda-recipe/meta.yaml`).
+	```
+	$ conda remove libnnpdf
+	$ conda install pkg-config swig=3.0.10 cmake
+	```
+
+ 3. Build the library We only need to set
+	the installation prefix to the `conda` environment. Assuming `conda`
+	is installed under `~/anaconda3`:
+	```
+	libnnpdf$ mkdir conda-bld
+	libnnpdf$ cd conda-bld
+	libnnpdf/conda-bld$ cmake .. -DCMAKE_INSTALL_PREFIX=~/anaconda3/envs/nnpdf-dev/
+	```
+	Note that you need to execute this while the environment created
+	above is activated.  Both the compilers and all dependencies are now found
+	inside the environment. The output of the `cmake` command above
+	is:
+	```
+    -- Setting build type to 'Release' as none was specified.
+    -- The C compiler identification is GNU 7.2.0
+    -- The CXX compiler identification is GNU 7.2.0
+    -- Check for working C compiler: /home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-cc
+    -- Check for working C compiler: /home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-cc -- works
+    -- Detecting C compiler ABI info
+    -- Detecting C compiler ABI info - done
+    -- Detecting C compile features
+    -- Detecting C compile features - done
+    -- Check for working CXX compiler: /home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-c++
+    -- Check for working CXX compiler: /home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-c++ -- works
+    -- Detecting CXX compiler ABI info
+    -- Detecting CXX compiler ABI info - done
+    -- Detecting CXX compile features
+    -- Detecting CXX compile features - done
+    -- Found PkgConfig: /home/zah/anaconda3/envs/nnpdf-dev/bin/pkg-config (found version "0.29.2") 
+    -- Checking for one of the modules 'libarchive'
+    -- Checking for one of the modules 'sqlite3'
+    -- Checking for one of the modules 'gsl'
+    -- Checking for one of the modules 'yaml-cpp'
+    -- Configuring done
+    -- Generating done
+    -- Build files have been written to: /home/zah/nngit/libnnpdf/conda-bld
+	```
+	We can now proceed normally:
+	```
+	$ make
+	$ make install
+	```
+	This should result in a working C++ component of the library (see
+	the documentation on how to enable e.g. the Python component).
+
+ 4. Use the result. We can now compile `buildmaster` using the library
+	we just created. Since `buildmaster` uses a simple `Makefile` that
+	doesn't read the environment variables by itself, we need to pass
+	explicitly ugly the name of the C++ compiler executable. For Linux
+	it is `x86_64-conda_cos6-linux-gnu-c++`.
+	```
+	buildmaster$ make CXX=x86_64-conda_cos6-linux-gnu-c++
+	```
+
+[COMPILERS]: https://conda.io/docs/user-guide/tasks/build-packages/compiler-tools.html
+
 
 ### Updating
 
