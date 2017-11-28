@@ -2538,15 +2538,13 @@ decide to output LaTeX instead of HTML in the future).
 Example pull request
 --------------------
 
-You may find instructive to go though this pulls request to implement
-arc-length computation:
+You may find instructive to go though this pull request that
+implements arc-length computation:
 
 <https://github.com/NNPDF/validphys2/pull/64>
 
-It demonstrates how to leverage existing functionality for
-computations to perform new computations and then present those as
-plots and tables, largely using existing functionality.
-
+It demonstrates how to leverage existing functionality to perform new
+computations and then present those as plots and tables.
 
 Web Scripts
 -----------
