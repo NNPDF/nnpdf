@@ -151,10 +151,6 @@ public:
   static paramType      getParamType(string const& method);
   static stopType       getStopType(string const& method);
   static basisType      getFitBasisType(string const& method);
-
-  static FNS            getVFNS(string const& vfns);
-  static MODEV          getMODEV(string const& modev);
-
 private:
 
   void Splash() const;

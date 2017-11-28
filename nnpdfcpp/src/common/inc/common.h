@@ -42,7 +42,7 @@ enum FNS    {FFNS, ZMVFNS, FONLLA, FONLLB, FONLLC};
 
 // ************ Code Organisation Enums ***********
 
-enum minType    {MIN_UNDEF, MIN_GA, MIN_NGA, MIN_NGAP, MIN_NGAFT, MIN_CMAES};
+enum minType    {MIN_UNDEF, MIN_GA, MIN_NGA, MIN_NGAFT, MIN_CMAES};
 enum stopType   {STOP_UNDEF, STOP_NONE, STOP_LB};
 enum paramType  {PARAM_UNDEF, PARAM_NN, PARAM_SLN, PARAM_SLNPP };
 enum basisType  {BASIS_UNDEF, BASIS_NN23, BASIS_NN23QED,
