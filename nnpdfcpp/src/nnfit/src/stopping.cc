@@ -27,14 +27,10 @@ fSettings(settings)
 {
   
 }
-
-StoppingCriterion::~StoppingCriterion()
-{
-  
-  
-}
-
-bool StoppingCriterion::Stop(FitPDFSet* pdf, vector<Experiment*>& exps)
+bool StoppingCriterion::Stop(FitPDFSet* pdf,
+                             vector<Experiment*>& train,
+                             vector<Experiment*>& valid,
+                             vector<PositivitySet>const& positivity)
 {
   if (pdf->GetMembers() != 1)
   {
@@ -50,186 +46,6 @@ bool StoppingCriterion::Stop(FitPDFSet* pdf, vector<Experiment*>& exps)
   }
   
   return false;
-}
-
-bool StoppingCriterion::Stop(FitPDFSet* pdf, vector<Experiment*>& exps, vector<Experiment*>& exps2)
-{
-  return Stop(pdf,exps);
-}
-
-bool StoppingCriterion::Stop(FitPDFSet* pdf, vector<Experiment*>& exps, vector<PositivitySet> const& pos)
-{
-  return Stop(pdf,exps);
-}
-
-bool StoppingCriterion::Stop(FitPDFSet* pdf, vector<Experiment*>& exps, vector<Experiment*>& exps2, vector<PositivitySet> const& pos)
-{
-  return Stop(pdf,exps);
-}
-
-// **************** NNPDF3.0 stopping classes **********************
-StandardStopConditions::StandardStopConditions(NNPDFSettings const& settings):
-StoppingCriterion(settings)
-{
-  // Add stopping log
-  LogManager::AddLogger("Stopping","Stopping.log");  
-}
-
-StandardStopConditions::~StandardStopConditions()
-{
-
-}
-
-bool StandardStopConditions::Stop(FitPDFSet *pdf, vector<Experiment*>& exps, vector<PositivitySet> const& pos)
-{  
-  // Number of iterations exceeded max
-  if (StoppingCriterion::Stop(pdf,exps))
-    return true;
-
-  // Init PDF
-  pdf->InitPDFSet();  
-
-  // Compute Training Chi2 values
-  bool aboveThreshold = false;
-  real Chi2Tot = 0;
-  int NDataTot = 0;
-  vector<real> ExpChi2;
-  for (size_t i=0; i<exps.size(); i++)
-      if (exps[i] != NULL)
-        {
-          real* theory = new real[exps[i]->GetNData()*pdf->GetMembers()];
-          Convolute(pdf,exps[i],theory);
-
-          // Compute chi2
-          real TmpExpChi2 = 0;
-          NNPDF::ComputeChi2(exps[i],1,theory,&TmpExpChi2);
-          Chi2Tot+=TmpExpChi2;
-          ExpChi2.push_back(TmpExpChi2);
-          
-          // Check if experimental chi2 is below the required chi2 threshold
-          if (TmpExpChi2/exps[i]->GetNData() > fSettings.Get("stopping","minchi2exp").as<real>())
-            aboveThreshold = true;
-          
-          NDataTot+=exps[i]->GetNData();
-
-          delete[] theory;
-        }  
-  // Check if total chi2 is below the required total chi2 threshold
-  if (Chi2Tot/NDataTot > fSettings.Get("stopping","minchi2").as<real>())
-    aboveThreshold = true;
-  
-  AddEbf(pdf->GetEbf());
-  AddExpChi2s(ExpChi2);
-  ExpChi2.clear();
-  
-  // Update logger
-  stringstream stopLog; stopLog << "GEN "<<pdf->GetNIte()<<" Erf: " <<pdf->GetEbf();
-  LogManager::AddLogEntry("Stopping",stopLog.str());
-  
-  // Total and experimental chi2 thresholds
-  if (aboveThreshold)
-    return false;
-  
-  // Insufficient number of generations
-  if (pdf->GetNIte() < fSettings.Get("stopping","mingen").as<int>())
-    return false;
-
-  if (!CentralCondition(pdf,exps))
-    return false;
-   
-  // Check positivity is acceptable
-  //for (size_t i=0; i<pos.size(); i++)
-  //  if (pos[i]->ComputeNUnacceptable(pdf,0))
-  //    return false;
-      
-  cout << Colour::FG_GREEN << "\nReached DYStopping condition!" << Colour::FG_DEFAULT << endl;
-
-  return true;
-}
-
-bool StandardStopConditions::Stop(FitPDFSet* pdf, vector<Experiment*>& exps, vector<Experiment*>& exps2, vector<PositivitySet> const& pos)
-{
-  return Stop(pdf,exps,pos);
-}
-
-bool StandardStopConditions::CentralCondition(FitPDFSet *pdf, vector<Experiment*>& exps)
-{
-  return true;
-}
-
-// **************** Simple Gradient stopping ***********************
-SimpleGradientStop::SimpleGradientStop(NNPDFSettings const& settings):
-StandardStopConditions(settings)
-{
-
-}
-
-SimpleGradientStop::~SimpleGradientStop()
-{
-
-}
-
-bool SimpleGradientStop::CentralCondition(FitPDFSet *pdf, vector<Experiment*>& exps)
-{
-  const int NCurrent = fEbfHistory.size()-1;
-  int NBefore = NCurrent - fSettings.Get("stopping","window").as<int>();
-  if (NBefore < 0) return false;
-  
-  real gradient = 1.0 - GetEbf(NCurrent)/GetEbf(NBefore);
-  gradient/=fSettings.Get("stopping","window").as<int>();
-
-  // Update logger
-  stringstream stopLog; stopLog << "  Gradient: " <<gradient;  
-  LogManager::AddLogEntry("Stopping",stopLog.str());
-  
-  if (gradient > fSettings.Get("stopping","epsilon").as<real>())
-    return false;
-  
-  for (size_t i=0; i<exps.size(); i++)
-    if (GetExpChi2(NCurrent,i) > GetExpChi2(NBefore,i))
-      return false;
- 
-  return true;  
-}
-
-// **************** Simple Variance stopping ***********************
-SimpleVarianceStop::SimpleVarianceStop(NNPDFSettings const& settings):
-StandardStopConditions(settings)
-{
-
-}
-
-SimpleVarianceStop::~SimpleVarianceStop()
-{
-
-}
-
-bool SimpleVarianceStop::CentralCondition(FitPDFSet *pdf, vector<Experiment*>& exps)
-{
-  const int NCurrent = fEbfHistory.size()-1;
-  int NBefore = NCurrent - fSettings.Get("stopping","window").as<int>();
-  if (NBefore < 0) return false;
-  
-  real m1=0;
-  real m2=0;
-  for(int j = NBefore; j >= NCurrent; j++)
-  {
-    m1+=GetEbf(j);
-    m2+=GetEbf(j)*GetEbf(j);
-  }
-  m1/=fSettings.Get("stopping","window").as<int>();
-  m2/=fSettings.Get("stopping","window").as<int>();
-  
-  real var = m2-m1*m1;
-  
-  // Update logger
-  stringstream stopLog; stopLog << "  Variance: " <<var;  
-  LogManager::AddLogEntry("Stopping",stopLog.str());
-  
-  if(var<fSettings.Get("stopping","epsilon").as<real>())
-    return true;
-  else
-    return false;
 }
 
 /**
@@ -260,13 +76,10 @@ LookBackCV::~LookBackCV()
   }
 }
 
-bool LookBackCV::Stop(FitPDFSet *pdf, vector<Experiment*> &exps)
-{
-  cerr << "LookBackCV::Stop Error - Cross-Validation requires training and validation experiment sets"<<endl;
-  exit(-1);
-}
-
-bool LookBackCV::Stop(FitPDFSet* pdf,vector<Experiment*> &train,vector<Experiment*> &valid)
+bool LookBackCV::Stop(  FitPDFSet* pdf,
+                        vector<Experiment*>& train,
+                        vector<Experiment*>& valid,
+                        vector<PositivitySet>const& positivity)
 {
   // Grab the best fit
   if (!fCurrentBest)
@@ -293,7 +106,7 @@ bool LookBackCV::Stop(FitPDFSet* pdf,vector<Experiment*> &train,vector<Experimen
   }
   
   // Number of iterations exceeded max
-  if (StoppingCriterion::Stop(pdf,train))
+  if (StoppingCriterion::Stop(pdf,train, valid, positivity))
   {
     // Set best fit
     for (int i=0; i<fSettings.GetNFL(); i++)
@@ -312,11 +125,3 @@ bool LookBackCV::Stop(FitPDFSet* pdf,vector<Experiment*> &train,vector<Experimen
   
   return false;
 }
-
-bool LookBackCV::Stop(FitPDFSet* pdf,vector<Experiment*> &train,vector<Experiment*> &valid,vector<PositivitySet> const&pos)
-{
-  return Stop(pdf,train,valid);
-}
-  
-
-

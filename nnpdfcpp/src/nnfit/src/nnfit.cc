@@ -246,16 +246,6 @@ int main(int argc, char **argv)
           cout << Colour::FG_BLUE << "Stopping Criterion: Fixed Length Fit" << Colour::FG_DEFAULT << endl;
           break;
 
-        case STOP_GRAD:
-          stop = new SimpleGradientStop(settings);
-          cout << Colour::FG_BLUE << "Stopping Criterion: Gradient Stopping"<< Colour::FG_DEFAULT << endl;
-          break;
-
-        case STOP_VAR:
-          stop = new SimpleVarianceStop(settings);
-          cout << Colour::FG_BLUE << "Stopping Criterion: Variance Stopping" << Colour::FG_DEFAULT << endl;
-          break;
-
         case STOP_LB:
           stop = new LookBackCV(settings);
           cout << Colour::FG_BLUE << "Stopping Criterion: Look-Back Cross-Validation" << Colour::FG_DEFAULT << endl;
