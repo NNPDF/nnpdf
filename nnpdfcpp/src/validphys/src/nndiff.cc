@@ -70,11 +70,6 @@ NNdiff::NNdiff(NNPDFSettings const& set, std::string const& path,
             {
               getline(g, tmp);
               fp[n][fl][pr] = stod(tmp);	      
-	      if (NNPDFSettings::getParamType(set.Get("fitting","paramtype").as<string>()) == PARAM_NNP)
-		{
-		  if (pr == fnparam-2) falpha[n][fl] = fp[n][fl][pr];
-		  if (pr == fnparam-1) fbeta[n][fl] = fp[n][fl][pr];
-		}	     
             }
         }
 
