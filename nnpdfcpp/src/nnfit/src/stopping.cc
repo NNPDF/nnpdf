@@ -59,8 +59,6 @@ fCurrentBest(0),
 fCurrentValidErf(std::numeric_limits<real>::infinity()),
 fBestGeneration(0)
 {
-  // Add crossvalidation log
-  LogManager::AddLogger("LookBackCV","LookBack.log");
   
 }
 
