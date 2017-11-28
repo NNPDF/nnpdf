@@ -19,7 +19,7 @@
 // Strings for config file output
 static const string minString[6]   = {"UNDEFINED", "GA", "NGA","NGAP","NGAFT","CMAES"};
 static const string stopString[6]  = {"UNDEFINED", "FIXEDLENGTH", "GRAD", "VAR", "LOOKBACK"};
-static const string paramString[6] = {"UNDEFINED", "NN", "CHEBYSHEV", "QUADNN", "SLN", "SLNPP"};
+static const string paramString[6] = {"UNDEFINED", "NN", "SLN", "SLNPP"};
 static const string basisString[16]= {"UNDEFINED", "NN23", "NN23QED","EVOL", "EVOLQED","EVOLS",
                                       "EVOLSQED","NN30", "NN30QED","FLVR", "FLVRQED","NN30IC",
                                       "EVOLIC","NN31IC","LUX", "NN31ICQED"};
@@ -67,8 +67,6 @@ paramType NNPDFSettings::getParamType(string const& method)
   if (method.compare("NN") == 0)        return PARAM_NN;
   if (method.compare("SLN") == 0)        return PARAM_SLN;
   if (method.compare("SLNPP") == 0)        return PARAM_SLNPP;
-  if (method.compare("CHEBYSHEV") == 0) return PARAM_CHEBYSHEV;
-  if (method.compare("QUADNN") == 0)    return PARAM_QUADNN;
 
   cerr << "getParamType Error: Invalid parametrization type: "<<method;
   exit(-1);

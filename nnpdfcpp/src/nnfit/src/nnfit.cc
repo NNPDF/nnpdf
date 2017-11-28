@@ -220,16 +220,6 @@ int main(int argc, char **argv)
           cout << Colour::FG_BLUE << "Parametrisation: Neural Network" << Colour::FG_DEFAULT << endl;
           break;
 
-        case PARAM_CHEBYSHEV:
-          fitset = FitPDFSet::Generate<ChebyshevPolynomial,GAMinimizer>(settings, fitbasis); // need to rewrite generate
-          cout << Colour::FG_BLUE << "Parametrisation: Chebyshev Polynomial (Order 10)" << Colour::FG_DEFAULT << endl;
-          break;
-
-        case PARAM_QUADNN:
-          fitset = FitPDFSet::Generate<QuadMultiLayerPerceptron,GAMinimizer>(settings, fitbasis);
-          cout << Colour::FG_BLUE << "Parametrisation: Quadratic Neural Network" << Colour::FG_DEFAULT << endl;
-          break;
-
         case PARAM_SLNPP:
           fitset = FitPDFSet::Generate<SingleLayerPerceptronPreproc,GAMinimizer>(settings, fitbasis); // need to rewrite generate
           cout << Colour::FG_BLUE << "Parametrisation: Single layer network (preprocessed)" << Colour::FG_DEFAULT << endl;
