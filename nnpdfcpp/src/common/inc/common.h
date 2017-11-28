@@ -36,10 +36,6 @@ enum evlnBasis {  EVLN_GAM, EVLN_SNG, EVLN_GLU, EVLN_VAL, EVLN_V3, EVLN_V8, EVLN
 // PDF Sum rules
 enum sumRule {SUM_MSR, SUM_UVL, SUM_DVL, SUM_SVL, SUM_CVL, SUM_USM, SUM_DSM, SUM_SSM, SUM_CSM};
 
-// Flavour Number Scheme types
-enum MODEV  {EXA, EXP, TRN};
-enum FNS    {FFNS, ZMVFNS, FONLLA, FONLLB, FONLLC};
-
 // ************ Code Organisation Enums ***********
 
 enum minType    {MIN_UNDEF, MIN_GA, MIN_NGA, MIN_NGAFT, MIN_CMAES};
