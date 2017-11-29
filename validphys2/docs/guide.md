@@ -558,6 +558,7 @@ set up a development environment for `libnnpdf`.
  4. Use the result. We can now compile `buildmaster` linking with the
 	library we just created.
 	```
+	buildmaster$ make clean
 	buildmaster$ make
 	```
 
