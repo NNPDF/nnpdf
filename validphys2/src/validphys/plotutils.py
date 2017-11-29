@@ -321,8 +321,13 @@ def plot_horizontal_errorbars(cvs, errors, categorylabels, datalabels=None,
         ax.errorbar(cv, y+shift, xerr=err, linestyle='none', label=lb,
                     **markerspec)
     if xlim is None:
-        xlim =  expand_margin(*np.nanpercentile(cvs, (15, 85)),
-                              1.3)
+        #Support both single error and up, low.
+        errmat = np.atleast_2d(errors)
+        low = cvs - errmat[0,:]
+        high = cvs + errmat[-1,:]
+        xlim =  expand_margin(np.nanpercentile(low, 15),
+                              np.nanpercentile(high,85),
+                              1.5)
 
     ax.set_xlim(xlim)
     ax.set_ylim(-0.5, len(categorylabels)-0.5)

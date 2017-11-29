@@ -256,9 +256,9 @@ def discarded_mask(
                 best_filt = auto_filt
                 best_parabolas = parabolas
 
-            
+
         best_as = np.mean(best_parabolas)
-        dist_best_as = -np.abs(best_as - fits_as)    
+        dist_best_as = -np.abs(best_as - fits_as)
         to_remove = np.argpartition(dist_best_as, trim_ndistant)[:trim_ndistant]
         best_filt.iloc[to_remove] = False
 
@@ -1010,9 +1010,18 @@ def dataspecs_quad_value_error_table(datasepecs_quad_table_impl):
 @figure
 def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
         dataspecs_fits_as,
-        marktotal:bool=True):
-    """Plot the result of ``plot_as_datasets_pseudorreplicas_chi2`` and
-    ``plot_as_exepriments_central_chi2`` together."""
+        marktotal:bool=True, fix_limits:bool=True):
+    """
+    Plot the result for each dataspec of the pseudorreplica alpha_s
+    determination based on the  partial chi² for each ``dataset_item``.
+
+    If ``marktotal`` is True, a verical line will appear marking the position
+    of the best fit.
+
+    If ``fix_limits`` is True, the limits of the plot will span all the fitted
+    values. Otherwise an heuristic will be used.
+
+    """
 
     df = datasepecs_as_value_error_table_impl
     datalabels = df.columns.levels[0]
@@ -1020,9 +1029,12 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
     cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
     errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
 
-    minlim = min(min(x for x in dataspecs_fits_as))
-    maxlim = max(max(x for x in dataspecs_fits_as))
-    lims = minlim, maxlim
+    if fix_limits:
+        minlim = min(min(x for x in dataspecs_fits_as))
+        maxlim = max(max(x for x in dataspecs_fits_as))
+        lims = minlim, maxlim
+    else:
+        lims = None
 
 
     fig, ax = plot_horizontal_errorbars(
