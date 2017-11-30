@@ -1000,6 +1000,11 @@ def dataspecs_as_value_error_table(datasepecs_as_value_error_table_impl):
         return format_error_value_columns(x, x.columns[0], x.columns[1])
     return datasepecs_as_value_error_table_impl.groupby(level=0, axis=1).apply(f)
 
+@table
+def dataspecs_as_value_error_table_transposed(dataspecs_as_value_error_table):
+    """Transposed version of ``dataspecs_as_value_error_table``.
+    Useful for printing"""
+    return dataspecs_as_value_error_table.T
 
 @table
 def dataspecs_quad_value_error_table(datasepecs_quad_table_impl):
