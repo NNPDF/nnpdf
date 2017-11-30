@@ -225,13 +225,22 @@ def discarded_mask(
 
     df = fits_replica_data_correlated_for_total[0]
 
-    best_error = np.inf
-    ndiscarded = range(len(fits_as),0,-1)
+
+    estimate = parabolic_as_determination(fits_as,df)
+    best_as = np.mean(estimate)
+    dist_best_as = -np.abs(best_as - fits_as)
+    to_remove = np.argpartition(dist_best_as, trim_ndistant)[:trim_ndistant]
+    as_mask = np.ones(df.shape[1], dtype=bool)
+    as_mask[to_remove] = False
+
+
 
     if isinstance(max_ndiscarded,int):
-        return _discard_sparse_curves(df,max_ndiscarded)[1]
+        return _discard_sparse_curves(df,max_ndiscarded)[1], as_mask
 
     else:
+        best_error = np.inf
+        ndiscarded = range(len(fits_as),0,-1)
         for i in range(len(ndiscarded),0,-1):
 
             tablefilt_total, auto_filt = _discard_sparse_curves(df,ndiscarded[i-1])
@@ -254,15 +263,6 @@ def discarded_mask(
             if current_err < best_error:
                 best_error = current_err
                 best_filt = auto_filt
-                best_parabolas = parabolas
-
-
-        best_as = np.mean(best_parabolas)
-        dist_best_as = -np.abs(best_as - fits_as)
-        to_remove = np.argpartition(dist_best_as, trim_ndistant)[:trim_ndistant]
-        as_mask = np.ones(df.shape[1], dtype=bool)
-        as_mask[to_remove] = False
-
 
         return best_filt, as_mask
 
