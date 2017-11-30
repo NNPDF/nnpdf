@@ -260,16 +260,23 @@ def discarded_mask(
         best_as = np.mean(best_parabolas)
         dist_best_as = -np.abs(best_as - fits_as)
         to_remove = np.argpartition(dist_best_as, trim_ndistant)[:trim_ndistant]
+        as_mask = np.ones(df.shape[1], dtype=bool)
+        as_mask[to_remove] = False
 
-        mask = np.ones_like(df, dtype=np.bool)
-        mask[:] = best_filt[:,np.newaxis]
-        mask[:,to_remove] = False
 
-        return mask
+        return best_filt, as_mask
 
-def fits_replica_data_with_discarded_replicas(discarded_mask,fits_replica_data_correlated):
+def fits_replica_data_with_discarded_replicas(
+        discarded_mask,
+        fits_replica_data_correlated):
     """Applies mask from discarded_mask to dataframes"""
-    return fits_replica_data_correlated[discarded_mask]
+    curve_mask, as_mask = discarded_mask
+
+    discarded_replicas = fits_replica_data_correlated[curve_mask].copy()
+    #Set these to Nan instead to masking them away in order to not break
+    #all the apis that match this with fits_as.
+    discarded_replicas.iloc[:,~as_mask] = np.NAN
+    return discarded_replicas
 
 def _get_parabola(asvals, chi2vals):
     chi2vals = np.ravel(chi2vals)
@@ -292,6 +299,8 @@ def _parabolic_as_minimum_and_coefficient(fits_as,
     asarr = np.asarray(alphas)
     for row in table:
         filt =  np.isfinite(row)
+        if not filt.any():
+            continue
         a,b,c = np.polyfit(asarr[filt], row[filt], 2)
         quadratic.append(a)
         if badcurves == 'allminimum':
