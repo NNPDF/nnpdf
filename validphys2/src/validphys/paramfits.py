@@ -252,6 +252,9 @@ def discarded_mask(
             #We can only fit a parabola with 3 points.
             #Use a fouth to have in principle some error estimate.
             if least_points > 3:
+                #Apply as mask before fitting
+                tablefilt_total = tablefilt_total.copy()
+                tablefilt_total.iloc[:,~as_mask] = np.NAN
                 parabolas = parabolic_as_determination(fits_as,tablefilt_total)
                 bootstrap_est = np.random.choice(parabolas,(100000,size)).std(axis=1).std()
             else:
