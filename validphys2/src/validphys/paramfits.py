@@ -1059,7 +1059,7 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
             log.error("Asked to mark total, but it was not provided.")
         else:
             for i,cv in enumerate(cvs):
-                ax.axvline(cv[pos], color=f'C{i}', linewidth=0.5, linestyle='--')
+                ax.axvline(cv[pos], color=f'C{i%10}', linewidth=0.5, linestyle='--')
 
     ax.set_xlabel(r"$\alpha_S$")
     ax.set_title(r"$\alpha_S$ determination")
