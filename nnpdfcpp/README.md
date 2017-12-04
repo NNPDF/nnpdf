@@ -80,6 +80,25 @@ conda install nnpdf validphys2
 
 Which will pull also LHAPDF, libnnpdf, apfel and all the other dependencies.
 
+When the packages are installed, the necessary binaries are added to
+the `bin/` directory of the corresponding conda environment (which is
+typically in the `PATH`). Users can simply run `filter`, `nnfit`, or
+`postfit2` from any directory. Once you have the binary package
+installed, you should not need the git repositories to run a fit.
+
+By default, the data from theory and experiment is located under:
+```
+<conda root>/share/NNPDF/data
+```
+
+and the fits will be stored in:
+```
+<conda root>/share/NNPDF/results
+```
+
+These paths can be changed by tweaking `nnprofile.yaml` as
+described in [NNPDF paths and URLS](#nnpdf-paths-and-urls).
+
 A detailed validphys2 guide including conda installation instructions can be found here:
 
 http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html
@@ -102,22 +121,40 @@ http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html
 please ensure to have the dependencies correctly installed and in your PATH before compiling nnpdfcpp.
 The exact or minimal version requirements for each package is summarized in https://github.com/NNPDF/nnpdfcpp/blob/master/conda-recipe/meta.yaml.
 
-#### Configurations
+#### Compiling the code
 
-Possible configurations:
-
+Several options are available, please use ccmake:
 ```Shell
-cmake .
-make
-```
-
-More options are available when running:
-```Shell
+mkdir build
+cd build
+cmake ..
 ccmake .
 ```
-or 
-```Shell
-cmake-gui .
+Make sure you have set correctly the `CMAKE_INSTALL_PREFIX`, this path is used when `make install` is invoked.
+
+After running cmake proceed with `make` followed by `make install`. The later will copy binaries and scripts to the `CMAKE_INSTALL_PREFIX` that you selected, while the content of `nnpdfcpp/data` folder will be copied to the `data_path` set in nnprofile.yaml.
+
+### NNPDF paths and URLS
+
+The paths that various codes (such as `nnfit` and `validphys`) will
+use to find and write resources, as well as the URLS to upload and
+download them are defined in a `nnprofile.yaml` file. By default, it
+is stored in the `libnnpdf` install prefix, under `<libnnpdf install
+prefix>/share/NNPDF/nnprofile.yaml`. For binary packages, the
+`libnnpdf` install prefix is simply the path of the conda environment
+where the packages is installed.
+The paths and URLs can be
+modified: This can be useful to make the code work under specific
+cluster configurations, for example to avoid excessive I/O in NFS
+mounts. However, do not do it by editing the `nnprofile.yaml` file in the
+default location, since it will be overwritten every time that
+`libnnpdf` is installed. 
+Instead copy it to some other location, make
+the changes you wish, and define an `NNPDF_PROFILE_PATH` environment
+variable pointing to your modified file. For example, you could write
+in your `.bashrc`:
+```shell
+export NNPDF_PROFILE_PATH=/home/user/mynnprofile.yaml
 ```
 
 ## Documentation

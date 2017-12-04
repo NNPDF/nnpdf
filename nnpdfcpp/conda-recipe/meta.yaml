@@ -1,4 +1,4 @@
-{% set libnnpdf_version = "==1.2.0b5" %}
+{% set libnnpdf_version = "  1.2.0b5.*" %}
 package:
     name: nnpdf
     version: "{{ GIT_DESCRIBE_TAG[1:] }}.{{ GIT_DESCRIBE_NUMBER }}"
@@ -8,14 +8,15 @@ source:
 
 requirements:
     build: 
-        - toolchain # [osx]
-        - libnnpdf {{libnnpdf_version}}
-        - gcc # [linux]
-        - isl # [linux]
-        - yaml-cpp
+        - {{ compiler('cxx') }}
         - cmake
+        #Found bug in 0.29.2 from the defaults channel
+        # https://github.com/ContinuumIO/anaconda-issues/issues/7489#issuecomment-346964337
+        - pkg-config ==0.29.1
+    host:
+        - libnnpdf {{libnnpdf_version}}
+        - yaml-cpp
         - apfel >=3
-        - pkg-config
     run:
         - libnnpdf {{libnnpdf_version}}
         - apfel >=3
@@ -28,7 +29,7 @@ build:
 
 test:
     commands:
-        - echo 
+        - echo
 
 about:
     home: https://nnpdf.hepforge.org/

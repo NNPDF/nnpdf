@@ -1,5 +1,5 @@
 ## Load image with software requirements for libnnpdf
-image: zaharid/debian-7-devbase
+image: zaharid/conda-centos
 
 stages:
     - build-deploy
