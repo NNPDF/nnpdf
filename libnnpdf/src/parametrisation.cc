@@ -396,6 +396,9 @@ Parametrisation* SingleLayerPerceptronPreproc::Duplicate()
 
 /**
  * @brief Initialise the parameters of the preprocessed single layer perceptron 
+ * Values are initialised as uniform between 0 and 2/5 for the low/high-x exponents
+ * respectively. The lower limit is set for integrability, the higher according to
+ * maximum typically observed effective exponents.
  */
 void SingleLayerPerceptronPreproc::InitParameters()
 {
