@@ -328,11 +328,11 @@ Parametrisation(std::string("SingleLayerPerceptron")),
 fNHidden(arch[1])
 {
   if (arch.size() != 3)
-    throw EvaluationError("SingleLayerPerceptron::Constructor", "Requested architecture invalid, must be of the form (2,N,1)" );
+    throw EvaluationError("SingleLayerPerceptron::Constructor", "Requested architecture invalid: must have three layers" );
   if (arch[0] != 2)
-    throw EvaluationError("SingleLayerPerceptron::Constructor", "Requested architecture invalid, must be of the form (2,N,1)" );
+    throw EvaluationError("SingleLayerPerceptron::Constructor", "Requested architecture invalid: it must have two nodes in the first layer" );
   if (arch[2] != 1)
-    throw EvaluationError("SingleLayerPerceptron::Constructor", "Requested architecture invalid, must be of the form (2,N,1)" );
+    throw EvaluationError("SingleLayerPerceptron::Constructor", "Requested architecture invalid: it must have a single node in the third (and final) layer" );
      
   fNParameters = fNHidden*3 + fNHidden + 1 + extra_pars;
   fParameters = new real[fNParameters]();
