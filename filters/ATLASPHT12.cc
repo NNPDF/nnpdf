@@ -58,12 +58,8 @@ void ATLASPHT12Filter::ReadData()
 
   // Starting filter
 
-  // Reading data
-
-  
-  // Filtering data 1st bin
   for (int idat = 0; idat < 18; idat++) {
-    double mbin[fNData+1], stmp, dtmp;
+    double upper, lower, stmp, dtmp;
     string line; 
     getline(f1,line);
     istringstream lstream(line);
@@ -71,16 +67,15 @@ void ATLASPHT12Filter::ReadData()
     double fSystP, fSystM;
     double fATLAS2012Luminosity;
     
-    lstream >> mbin[idat] >> mbin[idat+1] >> fData[idat] >> fStat[idat]
-      >> fSystP >> fSystM
-      >> fATLAS2012Luminosity; 
+    lstream >> lower >> upper >> fData[idat] >> fStat[idat]  
+    >> fSystP >> fSystM
+    >> fATLAS2012Luminosity; 
 
-    //    cout << mbin[idat] << "   " << mbin[idat+1] << endl;
     
-      double shift = 0;
+    double shift = 0;
 
 
-    // Conver to percentages
+    // Convert to percentages
 
      fSystP = fSystP*100/fData[idat];
      fSystM = fSystM*100/fData[idat];
@@ -111,7 +106,7 @@ void ATLASPHT12Filter::ReadData()
     // Kinematic variables
     
     fKin1[idat] = 0.6/2.;                            // Avg. eta_gamma (|eta_g|<0.6)
-    fKin2[idat] = pow((mbin[idat] + mbin[idat+1]) * 0.5,2);  // Avg. Et of each bin
+    fKin2[idat] = pow((upper + lower) * 0.5,2);		// Avg. Et of each bin
     fKin3[idat] = 8000.;                              // LHC 8 TeV
     
   }
@@ -119,7 +114,7 @@ void ATLASPHT12Filter::ReadData()
 
   // 2nd bin
   for (int idat = 18; idat < 35; idat++) {
-    double mbin[fNData+1], stmp, dtmp;
+    double upper, lower, stmp, dtmp;
 
     string line; 
     getline(f2,line);
@@ -128,7 +123,7 @@ void ATLASPHT12Filter::ReadData()
     double fSystP, fSystM;
     double fATLAS2012Luminosity;
     
-      lstream >> mbin[idat] >> mbin[idat+1] >> fData[idat] >> fStat[idat]
+      lstream >> lower >> upper >> fData[idat] >> fStat[idat]  
       >> fSystP >> fSystM
       >> fATLAS2012Luminosity; 
 
@@ -136,7 +131,7 @@ void ATLASPHT12Filter::ReadData()
     
       double shift = 0;
 
-    // Conver to percentages
+    // Convert to percentages
 
      fSystP = fSystP*100/fData[idat];
      fSystM = fSystM*100/fData[idat];
@@ -167,7 +162,7 @@ void ATLASPHT12Filter::ReadData()
     // Kinematic variables
     
     fKin1[idat] = (1.37-0.6)/2.;                     // Avg. eta_gamma (0.6<|eta_g|<1.37)
-    fKin2[idat] = pow((mbin[idat] + mbin[idat+1]) * 0.5,2);  // Avg. Et of each bin
+    fKin2[idat] = pow((upper + lower) * 0.5,2);		// Avg. Et of each bin
     fKin3[idat] = 8000.;                              // LHC 8 TeV
     
   }
@@ -175,7 +170,7 @@ void ATLASPHT12Filter::ReadData()
 
   // 3rd bin
   for (int idat = 35; idat < fNData; idat++) {
-    double mbin[fNData+1]  , stmp, dtmp;
+    double upper, lower, stmp, dtmp;
  
     string line; 
     getline(f3,line);
@@ -184,15 +179,14 @@ void ATLASPHT12Filter::ReadData()
     double fSystP, fSystM;
     double fATLAS2012Luminosity;
     
-     lstream >> mbin[idat] >> mbin[idat+1]  >> fData[idat] >> fStat[idat]
-      >> fSystP >> fSystM
-      >> fATLAS2012Luminosity; 
+    lstream >> lower >> upper >> fData[idat] >> fStat[idat]  
+    >> fSystP >> fSystM
+    >> fATLAS2012Luminosity; 
 
-    //    cout << mbin[idat] << "   " << mbin[idat+1] << endl;
     
       double shift = 0;
 
-    // Conver to percentages
+    // Convert to percentages
 
      fSystP = fSystP*100/fData[idat];
      fSystM = fSystM*100/fData[idat];
@@ -223,7 +217,7 @@ void ATLASPHT12Filter::ReadData()
     // Kinematic variables
     
     fKin1[idat] = (1.81-1.56)/2.;                     // Avg. eta_gamma (1.56<|eta_g|<1.81)
-    fKin2[idat] = pow((mbin[idat] + mbin[idat+1]) * 0.5,2);  // Avg. Et of each bin
+    fKin2[idat] = pow((upper + lower) * 0.5,2);		// Avg. Et of each bin
     fKin3[idat] = 8000.;                            // LHC 8 TeV
     
   }
