@@ -31,7 +31,7 @@
 static void catch_int(int signal) {
   if ( state == FIT_ITER )
   {
-    cout << Colour::FG_RED << endl << endl << "----------------- SIGINT - Interrupting fit ----------------- "<<endl<<endl;
+    cout << Colour::FG_RED << "\n\n----------------- SIGINT - Interrupting fit -----------------\n" << Colour::FG_DEFAULT << endl;
     state = FIT_ABRT;
   }
   else
@@ -70,13 +70,13 @@ int main(int argc, char **argv)
         }
       else
         {
-          cout << Colour::FG_RED << "\nusage: nnfit [replica number] [configuration filename]\n" << endl;
+          cout << Colour::FG_RED << "\nusage: nnfit [replica number] [configuration filename]\n" << Colour::FG_DEFAULT << endl;
           exit(-1);
         }
 
       if (replica <= 0)
         {
-          cerr << Colour::FG_RED << "\nError replica must be > 0" << endl;
+          cerr << Colour::FG_RED << "\nError replica must be > 0" << Colour::FG_DEFAULT << endl;
           exit(-1);
         }
 
