@@ -14,6 +14,7 @@
 #include "nnpdfsettings.h"
 #include "fastaddchi2.h"
 
+#include <NNPDF/exceptions.h>
 #include <NNPDF/parametrisation.h>
 #include <NNPDF/thpredictions.h>
 #include <NNPDF/experiments.h>
@@ -264,6 +265,10 @@ void NGAMinimizer::Mutation(FitPDFSet* pdf, int const& nmut)
   for (int i=0; i<nmut; i++)
     for (int j=0; j<fSettings.GetNFL(); j++)
     {
+      Parametrisation* tpdf = pdfs[i][j];
+      if (tpdf->GetParamName().compare("MultiLayerPerceptron") != 0)
+          throw NNPDF::RuntimeException("NGAMinimizer", "NGAMinimizer requires a MultiLayerPerceptron as a parametrisation");
+      MultiLayerPerceptron* mlp = static_cast<MultiLayerPerceptron*>(tpdf);
       const real ex    =  rg->GetRandomUniform();
       for (int n=0; n< (int) fSettings.GetFlMutProp(j).mutsize.size(); n++)
       {
@@ -272,12 +277,12 @@ void NGAMinimizer::Mutation(FitPDFSet* pdf, int const& nmut)
           for (int l=0; l< Nnodes[m]; l++)
           {
             if (rg->GetRandomUniform() < fSettings.GetFlMutProp(j).mutprob[n]) // mutation probability
-              for (int k=0; k< pdfs[i][j]->GetNumNodeParams(m); k++)
+              for (int k=0; k< mlp->GetNumNodeParams(m); k++)
               {
                 const real sz    = fSettings.GetFlMutProp(j).mutsize[n];
-                pdfs[i][j]->GetParameters()[index+k]+=sz*rg->GetRandomUniform(-1,1)/pow(NIte,ex);
+                mlp->GetParameters()[index+k]+=sz*rg->GetRandomUniform(-1,1)/pow(NIte,ex);
               }
-            index+= pdfs[i][j]->GetNumNodeParams(m);
+            index+= mlp->GetNumNodeParams(m);
           }
       }
     }
@@ -322,6 +327,10 @@ void NGAFTMinimizer::Mutation(FitPDFSet* pdf, int const& nmut)
   for (int i=0; i<nmut; i++)
     for (int j=0; j<fSettings.GetNFL(); j++)
     {
+      Parametrisation* tpdf = pdfs[i][j];
+      if (tpdf->GetParamName().compare("MultiLayerPerceptron") != 0)
+          throw NNPDF::RuntimeException("NGAMinimizer", "NGAMinimizer requires a MultiLayerPerceptron as a parametrisation");
+      MultiLayerPerceptron* mlp = static_cast<MultiLayerPerceptron*>(tpdf);
       const real ex    =  rg->GetRandomUniform();
       for (int n=0; n< (int) fSettings.GetFlMutProp(j).mutsize.size(); n++)
       {
@@ -330,16 +339,16 @@ void NGAFTMinimizer::Mutation(FitPDFSet* pdf, int const& nmut)
           for (int l=0; l< Nnodes[m]; l++)
           {
             if (rg->GetRandomUniform() < fSettings.GetFlMutProp(j).mutprob[n]) // mutation probability
-              for (int k=0; k< pdfs[i][j]->GetNumNodeParams(m); k++)
+              for (int k=0; k< mlp->GetNumNodeParams(m); k++)
               {
                 const real sz    = fSettings.GetFlMutProp(j).mutsize[n];
-                pdfs[i][j]->GetParameters()[index+k]+=sz*rg->GetRandomUniform(-1,1)/pow(NIte,ex);
+                mlp->GetParameters()[index+k]+=sz*rg->GetRandomUniform(-1,1)/pow(NIte,ex);
               }
-            index+= pdfs[i][j]->GetNumNodeParams(m);
+            index+= mlp->GetNumNodeParams(m);
           }
       }
-      pdfs[i][j]->Compute(xvals, &fitpdfs);
-      pdfs[i][j]->GetParameters()[pdfs[i][j]->GetNParameters()-1] += fitpdfs;
+      mlp->Compute(xvals, &fitpdfs);
+      mlp->GetParameters()[pdfs[i][j]->GetNParameters()-1] += fitpdfs;
     }
 
   // Compute Preprocessing
