@@ -266,7 +266,7 @@ void NGAMinimizer::Mutation(FitPDFSet* pdf, int const& nmut)
     for (int j=0; j<fSettings.GetNFL(); j++)
     {
       Parametrisation* tpdf = pdfs[i][j];
-      if (tpdf->GetParamName().compare("MultiLayerPerceptron") != 0)
+      if (tpdf->GetParamName() != "MultiLayerPerceptron")
           throw NNPDF::RuntimeException("NGAMinimizer", "NGAMinimizer requires a MultiLayerPerceptron as a parametrisation");
       MultiLayerPerceptron* mlp = static_cast<MultiLayerPerceptron*>(tpdf);
       const real ex    =  rg->GetRandomUniform();
@@ -328,7 +328,7 @@ void NGAFTMinimizer::Mutation(FitPDFSet* pdf, int const& nmut)
     for (int j=0; j<fSettings.GetNFL(); j++)
     {
       Parametrisation* tpdf = pdfs[i][j];
-      if (tpdf->GetParamName().compare("MultiLayerPerceptron") != 0)
+      if (tpdf->GetParamName() != "MultiLayerPerceptron")
           throw NNPDF::RuntimeException("NGAMinimizer", "NGAMinimizer requires a MultiLayerPerceptron as a parametrisation");
       MultiLayerPerceptron* mlp = static_cast<MultiLayerPerceptron*>(tpdf);
       const real ex    =  rg->GetRandomUniform();
