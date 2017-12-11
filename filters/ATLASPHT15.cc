@@ -4,7 +4,8 @@
  *
  * ATLAS isolated photon production, LHC 13 TeV, 3.2 fb^-1
  * Reference:  [arXiv:1701.06882] 
- * 
+ * Datafiles from http://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/STDM-2016-08/
+ * Systematics are provided already combined - these are used as no covariance matrix is available
  *
  */
 
@@ -23,23 +24,23 @@
 void ATLASPHT15Filter::ReadData()
 {
   // Opening files
-  fstream f1, f2, f3, f4;
+  fstream cent, fwd1, fwd2, fwd3;
 
 
   stringstream datafileCNTR("");
   datafileCNTR << dataPath() << "rawdata/ATLASPHT15/ATLASPHT15ETGCTR.data";
-  f1.open(datafileCNTR.str().c_str(), ios::in);
+  cent.open(datafileCNTR.str().c_str(), ios::in);
 
-  if (f1.fail()) {
+  if (cent.fail()) {
     cerr << "Error opening data file " << datafileCNTR.str() << endl;
     exit(-1);
   }
 
   stringstream datafileFWD1("");
   datafileFWD1 << dataPath() << "rawdata/ATLASPHT15/ATLASPHT15ETGFWD1.data";
-  f2.open(datafileFWD1.str().c_str(), ios::in);
+  fwd1.open(datafileFWD1.str().c_str(), ios::in);
 
-  if (f2.fail()) {
+  if (fwd1.fail()) {
     cerr << "Error opening data file " << datafileFWD1.str() << endl;
     exit(-1);
   }
@@ -47,17 +48,17 @@ void ATLASPHT15Filter::ReadData()
 
   stringstream datafileFWD2("");
   datafileFWD2 << dataPath() << "rawdata/ATLASPHT15/ATLASPHT15ETGFWD2.data";
-  f3.open(datafileFWD2.str().c_str(), ios::in);
+  fwd2.open(datafileFWD2.str().c_str(), ios::in);
 
-  if (f3.fail()) {
+  if (fwd2.fail()) {
     cerr << "Error opening data file " << datafileFWD2.str() << endl;
     exit(-1);
   }
  stringstream datafileFWD3("");
   datafileFWD3 << dataPath() << "rawdata/ATLASPHT15/ATLASPHT15ETGFWD3.data";
-  f4.open(datafileFWD3.str().c_str(), ios::in);
+  fwd3.open(datafileFWD3.str().c_str(), ios::in);
 
-  if (f4.fail()) {
+  if (fwd3.fail()) {
     cerr << "Error opening data file " << datafileFWD3.str() << endl;
     exit(-1);
   }
@@ -72,7 +73,7 @@ void ATLASPHT15Filter::ReadData()
   for (int idat = 0; idat < 14; idat++) {
     double upper, lower, stmp, dtmp;
     string line; 
-    getline(f1,line);
+    getline(cent,line);
     istringstream lstream(line);
 
     double fSystP, fSystM;
@@ -128,7 +129,7 @@ void ATLASPHT15Filter::ReadData()
     double upper, lower, stmp, dtmp;
 
     string line; 
-    getline(f2,line);
+    getline(fwd1,line);
     istringstream lstream(line);
 
     double fSystP, fSystM;
@@ -185,7 +186,7 @@ void ATLASPHT15Filter::ReadData()
     double upper, lower, stmp, dtmp;
  
     string line; 
-    getline(f3,line);
+    getline(fwd2,line);
     istringstream lstream(line);
 
     double fSystP, fSystM;
@@ -241,7 +242,7 @@ void ATLASPHT15Filter::ReadData()
     double upper, lower, stmp, dtmp;
  
     string line; 
-    getline(f4,line);
+    getline(fwd3,line);
     istringstream lstream(line);
 
     double fSystP, fSystM;
@@ -296,10 +297,10 @@ void ATLASPHT15Filter::ReadData()
 
 
 
-  f1.close();
-  f2.close();
-  f3.close();
-  f4.close();
+  cent.close();
+  fwd1.close();
+  fwd2.close();
+  fwd3.close();
 }
 
 

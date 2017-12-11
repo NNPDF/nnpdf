@@ -23,23 +23,23 @@
 void ATLASPHT12Filter::ReadData()
 {
   // Opening files
-  fstream f1, f2, f3;
+  fstream cent, fwd1, fwd2;
 
 
   stringstream datafileCNTR("");
   datafileCNTR << dataPath() << "rawdata/ATLASPHT12/ATLASPHT12ETGCTR.data";
-  f1.open(datafileCNTR.str().c_str(), ios::in);
+  cent.open(datafileCNTR.str().c_str(), ios::in);
 
-  if (f1.fail()) {
+  if (cent.fail()) {
     cerr << "Error opening data file " << datafileCNTR.str() << endl;
     exit(-1);
   }
 
   stringstream datafileFWD1("");
   datafileFWD1 << dataPath() << "rawdata/ATLASPHT12/ATLASPHT12ETGFWD1.data";
-  f2.open(datafileFWD1.str().c_str(), ios::in);
+  fwd1.open(datafileFWD1.str().c_str(), ios::in);
 
-  if (f2.fail()) {
+  if (fwd1.fail()) {
     cerr << "Error opening data file " << datafileFWD1.str() << endl;
     exit(-1);
   }
@@ -47,9 +47,9 @@ void ATLASPHT12Filter::ReadData()
 
   stringstream datafileFWD2("");
   datafileFWD2 << dataPath() << "rawdata/ATLASPHT12/ATLASPHT12ETGFWD2.data";
-  f3.open(datafileFWD2.str().c_str(), ios::in);
+  fwd2.open(datafileFWD2.str().c_str(), ios::in);
 
-  if (f3.fail()) {
+  if (fwd2.fail()) {
     cerr << "Error opening data file " << datafileFWD2.str() << endl;
     exit(-1);
   }
@@ -59,9 +59,9 @@ void ATLASPHT12Filter::ReadData()
   // Starting filter
 
   for (int idat = 0; idat < 18; idat++) {
-    double upper, lower, stmp, dtmp;
+    double upper, lower, stmp, dtmp = 0;
     string line; 
-    getline(f1,line);
+    getline(cent,line);
     istringstream lstream(line);
 
     double fSystP, fSystM;
@@ -117,7 +117,7 @@ void ATLASPHT12Filter::ReadData()
     double upper, lower, stmp, dtmp;
 
     string line; 
-    getline(f2,line);
+    getline(fwd1,line);
     istringstream lstream(line);
 
     double fSystP, fSystM;
@@ -173,7 +173,7 @@ void ATLASPHT12Filter::ReadData()
     double upper, lower, stmp, dtmp;
  
     string line; 
-    getline(f3,line);
+    getline(fwd2,line);
     istringstream lstream(line);
 
     double fSystP, fSystM;
@@ -223,9 +223,9 @@ void ATLASPHT12Filter::ReadData()
   }
 
 
-  f1.close();
-  f2.close();
-  f3.close();
+  cent.close();
+  fwd1.close();
+  fwd2.close();
 }
 
 
