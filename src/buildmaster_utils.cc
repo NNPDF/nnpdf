@@ -27,8 +27,18 @@
 
 using namespace std;
 
+
+// Better error handling for YAML 
+template<class T>
+T fetchEntry(YAML::Node const& yml, string const& key)
+{
+  if (!yml[key])
+    throw NNPDF::RuntimeException("readMeta", "Key: "+key+" not found in metadata file");
+  return yml[key].as<T>();
+}
+
 // Reading of NNPDF Meta files
-NNPDF::dataInfoRaw readMeta(std::string setname)
+NNPDF::dataInfoRaw readMeta(string setname)
 {
     // Open metadata file
     const std::string filename = dataPath() +"meta/"+setname+".yaml";
@@ -40,10 +50,10 @@ NNPDF::dataInfoRaw readMeta(std::string setname)
     if (setname != meta["setname"].as<std::string>())
         throw NNPDF::RuntimeException("readMeta", "Setname in metadata file: "+filename+" does not match requested setname");
 
-    const NNPDF::dataInfoRaw info = { meta["ndata"].as<int>(),
-                                      meta["nsys"].as<int>(),
-                                      meta["setname"].as<std::string>(),
-                                      meta["proctype"].as<std::string>()};
+    const NNPDF::dataInfoRaw info = { fetchEntry<int>(meta,"ndata"),
+                                      fetchEntry<int>(meta,"nsys"),
+                                      fetchEntry<string>(meta,"setname"),
+                                      fetchEntry<string>(meta,"proctype")};
 
     return info;
 }
