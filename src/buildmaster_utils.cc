@@ -32,9 +32,12 @@ NNPDF::dataInfoRaw readMeta(std::string setname)
 {
     // Open metadata file
     const std::string filename = dataPath() +"meta/"+setname+".yaml";
-    const YAML::Node meta = YAML::LoadFile(filename);
+    const ifstream testfile(filename);
+    if (!testfile.good())
+        throw NNPDF::RuntimeException("readMeta", "Metadata file: "+filename+" cannot be read");
 
-    if (setname.compare(meta["setname"].as<std::string>()) != 0 )
+    const YAML::Node meta = YAML::LoadFile(filename);
+    if (setname != meta["setname"].as<std::string>())
         throw NNPDF::RuntimeException("readMeta", "Setname in metadata file: "+filename+" does not match requested setname");
 
     const NNPDF::dataInfoRaw info = { meta["ndata"].as<int>(),
