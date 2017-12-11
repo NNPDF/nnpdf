@@ -19,9 +19,31 @@
 
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_eigen.h>
+#include <yaml-cpp/yaml.h>
+#include <NNPDF/exceptions.h>
 
 #include "common.h"
+#include "buildmaster_utils.h"
+
 using namespace std;
+
+// Reading of NNPDF Meta files
+NNPDF::dataInfoRaw readMeta(std::string setname)
+{
+    // Open metadata file
+    const std::string filename = dataPath() +"meta/"+setname+".yaml";
+    const YAML::Node meta = YAML::LoadFile(filename);
+
+    if (setname.compare(meta["setname"].as<std::string>()) != 0 )
+        throw NNPDF::RuntimeException("readMeta", "Setname in metadata file: "+filename+" does not match requested setname");
+
+    const NNPDF::dataInfoRaw info = { meta["ndata"].as<int>(),
+                                      meta["nsys"].as<int>(),
+                                      meta["setname"].as<std::string>(),
+                                      meta["proctype"].as<std::string>()};
+
+    return info;
+}
 
 template <typename T>
 T sign(T t)
