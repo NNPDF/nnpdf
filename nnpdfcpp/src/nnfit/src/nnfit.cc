@@ -190,11 +190,6 @@ int main(int argc, char **argv)
           cout  << Colour::FG_BLUE << "Minimiser: Genetic Algorithm w/ nodal mutations" << Colour::FG_DEFAULT << endl;
           break;
 
-        case MIN_NGAP:
-          minim = new NGAPMinimizer(settings);
-          cout  << Colour::FG_BLUE << "Minimiser: Genetic Algorithm w/ nodal mutations for alpha/beta preprocessing" << Colour::FG_DEFAULT << endl;
-          break;
-
         case MIN_NGAFT:
           minim = new NGAFTMinimizer(settings);
           cout  << Colour::FG_BLUE << "Minimiser: Genetic Algorithm w/ fixed threshold term NN(x)-NN(1)" << Colour::FG_DEFAULT << endl;
@@ -220,19 +215,14 @@ int main(int argc, char **argv)
           cout << Colour::FG_BLUE << "Parametrisation: Neural Network" << Colour::FG_DEFAULT << endl;
           break;
 
-        case PARAM_CHEBYSHEV:
-          fitset = FitPDFSet::Generate<ChebyshevPolynomial,GAMinimizer>(settings, fitbasis); // need to rewrite generate
-          cout << Colour::FG_BLUE << "Parametrisation: Chebyshev Polynomial (Order 10)" << Colour::FG_DEFAULT << endl;
+        case PARAM_SLNPP:
+          fitset = FitPDFSet::Generate<SingleLayerPerceptronPreproc,GAMinimizer>(settings, fitbasis); // need to rewrite generate
+          cout << Colour::FG_BLUE << "Parametrisation: Single layer network (preprocessed)" << Colour::FG_DEFAULT << endl;
           break;
 
-        case PARAM_QUADNN:
-          fitset = FitPDFSet::Generate<QuadMultiLayerPerceptron,GAMinimizer>(settings, fitbasis);
-          cout << Colour::FG_BLUE << "Parametrisation: Quadratic Neural Network" << Colour::FG_DEFAULT << endl;
-          break;
-
-        case PARAM_NNP:
-          fitset = FitPDFSet::Generate<MultiLayerPerceptronPreproc,GAMinimizer>(settings, fitbasis); // need to rewrite generate
-          cout << Colour::FG_BLUE << "Parametrisation: Neural Network Preprocessing" << Colour::FG_DEFAULT << endl;
+        case PARAM_SLN:
+          fitset = FitPDFSet::Generate<SingleLayerPerceptron,GAMinimizer>(settings, fitbasis); // need to rewrite generate
+          cout << Colour::FG_BLUE << "Parametrisation: Single layer network" << Colour::FG_DEFAULT << endl;
           break;
 
         default:
@@ -249,16 +239,6 @@ int main(int argc, char **argv)
         case STOP_NONE:
           stop = new StoppingCriterion(settings);
           cout << Colour::FG_BLUE << "Stopping Criterion: Fixed Length Fit" << Colour::FG_DEFAULT << endl;
-          break;
-
-        case STOP_GRAD:
-          stop = new SimpleGradientStop(settings);
-          cout << Colour::FG_BLUE << "Stopping Criterion: Gradient Stopping"<< Colour::FG_DEFAULT << endl;
-          break;
-
-        case STOP_VAR:
-          stop = new SimpleVarianceStop(settings);
-          cout << Colour::FG_BLUE << "Stopping Criterion: Variance Stopping" << Colour::FG_DEFAULT << endl;
           break;
 
         case STOP_LB:

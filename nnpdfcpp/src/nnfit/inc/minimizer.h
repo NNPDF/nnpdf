@@ -95,25 +95,6 @@ protected:
 }; 
 
 /*!
- * \brief The NGAPMinimizer class with preprocessing mutation
- */
-class NGAPMinimizer : public NGAMinimizer
-{
-public:
-  NGAPMinimizer(NNPDFSettings const&);
-
-protected:
-   void Mutation(FitPDFSet*, int const& nmut);
-
-private:
-   vector<real> falphamin;
-   vector<real> falphamax;
-   vector<real> fbetamin;
-   vector<real> fbetamax;
-};
-
-
-/*!
  * \brief The NGAFTMinimizer class
  * A NGA which fixes the threshold term so NN(x) = NN(x)-NN(1).
  */

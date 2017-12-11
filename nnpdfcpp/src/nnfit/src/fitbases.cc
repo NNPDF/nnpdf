@@ -118,10 +118,6 @@ fGSLWork(nnset.GetGSLWorkspace())
   // Preprocessing constants
   RandomGenerator* rg = RandomGenerator::GetRNG();
 
-  if (NNPDFSettings::getParamType(nnset.Get("fitting","paramtype").as<string>()) == PARAM_NNP ||
-      NNPDFSettings::getFitMethod(nnset.Get("fitting","fitmethod").as<string>()) == MIN_NGAFT)
-    for (int i = 0; i < fNPDF; i++) fAlpha[i] = fBeta[i] = 0;
-  else
     for (int i = 0; i < fNPDF; i++)
       {
         // Small x exponents

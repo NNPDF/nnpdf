@@ -17,9 +17,9 @@
 #include "version.h"
 
 // Strings for config file output
-static const string minString[6]   = {"UNDEFINED", "GA", "NGA","NGAP","NGAFT","CMAES"};
-static const string stopString[6]  = {"UNDEFINED", "FIXEDLENGTH", "GRAD", "VAR", "LOOKBACK"};
-static const string paramString[4] = {"UNDEFINED", "NN", "CHEBYSHEV", "QUADNN"};
+static const string minString[6]   = {"UNDEFINED", "GA", "NGA", "NGAFT","CMAES"};
+static const string stopString[6]  = {"UNDEFINED", "FIXEDLENGTH", "LOOKBACK"};
+static const string paramString[6] = {"UNDEFINED", "NN", "SLN", "SLNPP"};
 static const string basisString[16]= {"UNDEFINED", "NN23", "NN23QED","EVOL", "EVOLQED","EVOLS",
                                       "EVOLSQED","NN30", "NN30QED","FLVR", "FLVRQED","NN30IC",
                                       "EVOLIC","NN31IC","LUX", "NN31ICQED"};
@@ -47,7 +47,6 @@ minType NNPDFSettings::getFitMethod(string const& method)
 {
   if (method.compare("GA") == 0)      return MIN_GA;
   if (method.compare("NGA") == 0)     return MIN_NGA;
-  if (method.compare("NGAP") == 0)     return MIN_NGAP;
   if (method.compare("NGAFT") == 0)     return MIN_NGAFT;
   if (method.compare("CMAES") == 0)     return MIN_CMAES;
 
@@ -65,9 +64,8 @@ minType NNPDFSettings::getFitMethod(string const& method)
 paramType NNPDFSettings::getParamType(string const& method)
 {
   if (method.compare("NN") == 0)        return PARAM_NN;
-  if (method.compare("CHEBYSHEV") == 0) return PARAM_CHEBYSHEV;
-  if (method.compare("QUADNN") == 0)    return PARAM_QUADNN;
-  if (method.compare("NNP") == 0)       return PARAM_NNP;
+  if (method.compare("SLN") == 0)        return PARAM_SLN;
+  if (method.compare("SLNPP") == 0)        return PARAM_SLNPP;
 
   cerr << "getParamType Error: Invalid parametrization type: "<<method;
   exit(-1);
@@ -77,8 +75,6 @@ paramType NNPDFSettings::getParamType(string const& method)
 
 stopType NNPDFSettings::getStopType(string const& method)
 {
-  if (method.compare("GRAD") == 0)        return STOP_GRAD;
-  if (method.compare("VAR") == 0)         return STOP_VAR;
   if (method.compare("LOOKBACK") == 0)    return STOP_LB;
   if (method.compare("FIXEDLENGTH") == 0) return STOP_NONE;
 
@@ -111,30 +107,6 @@ basisType NNPDFSettings::getFitBasisType(string const& method)
 
   return BASIS_UNDEF;
 }
-
-FNS NNPDFSettings::getVFNS(string const& vfns)
-{
-
-  if (vfns.compare("FFNS") == 0) return FFNS;
-  if (vfns.compare("ZM-VFNS") == 0) return ZMVFNS;
-  if (vfns.compare("FONLL-A") == 0) return FONLLA;
-  if (vfns.compare("FONLL-B") == 0) return FONLLB;
-  if (vfns.compare("FONLL-C") == 0) return FONLLC;
-
-  cerr << Colour::FG_RED << "getVFNS Error: Invalid FNS " << vfns << Colour::FG_DEFAULT << endl;
-  exit(-1);
-}
-
-MODEV NNPDFSettings::getMODEV(const string &modev)
-{
-  if (modev.compare("TRN") == 0) return TRN;
-  if (modev.compare("EXP") == 0) return EXP;
-  if (modev.compare("EXA") == 0) return EXA;
-
-  cerr << Colour::FG_RED << "getMODEV Error: Invalid MODEV " << modev << Colour::FG_DEFAULT << endl;
-  exit(-1);
-}
-
 
 // ******************** GSL integration functions ****************************
 /**
