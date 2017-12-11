@@ -21,6 +21,8 @@
 #include "SLAC.h"
 #include "BCDMS.h"
 #include "ATLAS.h"
+#include "ATLASPHT12.h"
+#include "ATLASPHT15.h"
 #include "ATLAS2011JETS.h"
 #include "ATLASLOMASSDY11.h"
 #include "ATLASDY2D8TEV.h"
@@ -116,6 +118,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASZPT8TEVMDISTFilter());
   target.push_back(new ATLASDY2D8TEVFilter());
 
+  target.push_back(new ATLASPHT15Filter());
+  target.push_back(new ATLASPHT12Filter());
   // ************************* BCDMS ******************************
 
   target.push_back(new BCDMSPFilter());
