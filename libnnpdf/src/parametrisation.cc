@@ -20,7 +20,8 @@ using namespace NNPDF;
 
 // ******************** Base ******************************
 /**
- * @brief Parametrisation constructor
+ * @brief Parametrisation base class constructor
+ * @param name a string specifying the type of parametrisation 
  */
 Parametrisation::Parametrisation( std::string name ):
 fNParameters(0),
@@ -31,8 +32,11 @@ fParamName(name)
 }
 
 /**
- * @brief Parametrisation constructor
- * @param o the copy contructor
+ * @brief Parametrisation base class copy constructor
+ * @param o the parametrisation to be copied 
+ *
+ * This constructor copies the model parameters from another
+ * parametrisation.
  */
 Parametrisation::Parametrisation( Parametrisation const& o):
 fNParameters(o.fNParameters),
@@ -46,9 +50,6 @@ fParamName(o.fParamName)
   return;
 }
 
-/**
- * @brief Parametrisation destructor
- */
 Parametrisation::~Parametrisation()
 {
 }
@@ -239,8 +240,7 @@ MultiLayerPerceptron::~MultiLayerPerceptron()
 }
 
 /**
- * @brief MultiLayerPerceptron::Duplicate
- * @return
+ * @brief Returns a Parametrisation with identical architecture and type
  */
 Parametrisation* MultiLayerPerceptron::Duplicate()
 {
@@ -317,119 +317,109 @@ real* MultiLayerPerceptron::GetNodeParams(int const& layer, int const& node)
   return &fWeightMatrix[layer-1][node];
 }
 
-
-// ******************** MLP with PREPROC **************************
 /**
- * @brief MultiLayerPerceptronPreproc::MultiLayerPerceptronPreproc
- * @param settings
- * @param rg
+ * @brief SingleLayerPerceptron::SingleLayerPerceptron
+ * @details The constructor for a single (hidden) layer perceptron class
+ * @param arch a vector specifying the NN architecture (must be of the form 2-N-1)
+ * @param extra_pars number of additional parameters required (for derived classes)
  */
-MultiLayerPerceptronPreproc::MultiLayerPerceptronPreproc(std::vector<int> const& arch):
-MultiLayerPerceptron(arch)
+SingleLayerPerceptron::SingleLayerPerceptron(std::vector<int> const& arch, unsigned int extra_pars):
+Parametrisation(std::string("SingleLayerPerceptron")),
+fNHidden(arch[1])
 {
-  // clenup constructor
-  delete[] fOutputMatrix[0];
-  for (int i=1; i<fNLayers; i++)
-    delete[] fOutputMatrix[i];
-
-  delete[] fOutputMatrix;
-
-  delete[] fArch;
-  delete[] fWeightMatrix;
-  delete[] fParameters;
-
-  // reallocated objects
-  int  pSize = 0; // size of parameter array
-  int* pMap = new int[fNLayers-1]; // map for weight matrix
-
-  // Architecture information
-  fArch = new int[fNLayers];
-  for (int i=0; i<fNLayers; i++)
-  {
-    fArch[i] = arch[i];
-
-    if (i > 0)
-    {
-      pMap[i-1] = pSize; // startpoint of this layer
-      pSize+=fArch[i]*(1+fArch[i-1]); // size of this layer
-    }
-  }
-  pSize += 2; // alpha+beta
-
-  // Alloc parameter array
-  fParameters = new real[pSize];
-  fNParameters = pSize;
-
-  // Alloc WeightMatrix (map for parameters)
-  fWeightMatrix = new real*[fNLayers - 1];
-
-  // Alloc activation function (output) matrix
-  fOutputMatrix = new real*[fNLayers];
-  fOutputMatrix[0] = new real[fArch[0]+1];
-
-  for (int i=1; i<fNLayers; i++)
-  {
-    // point to correct part of parameter array
-    fWeightMatrix[i-1] = &fParameters[pMap[i-1]];
-    // Alloc each activation function in the layer
-    fOutputMatrix[i]   = new real[fArch[i]+1];
-  }
-
-  //Init
-  fOutputMatrix[0][fArch[0]] =-1.0f;
-  for (int i=1; i<fNLayers; i++)
-  {
-    for (int j=0; j<fArch[i]; j++)
-      fOutputMatrix[i][j] = 1;
-
-    // Threshold term
-    fOutputMatrix[i][fArch[i]] = -1.0f;
-  }
-
+  if (arch.size() != 3)
+    throw EvaluationError("SingleLayerPerceptron::Constructor", "Requested architecture invalid: must have three layers" );
+  if (arch[0] != 2)
+    throw EvaluationError("SingleLayerPerceptron::Constructor", "Requested architecture invalid: it must have two nodes in the first layer" );
+  if (arch[2] != 1)
+    throw EvaluationError("SingleLayerPerceptron::Constructor", "Requested architecture invalid: it must have a single node in the third (and final) layer" );
+     
+  fNParameters = fNHidden*3 + fNHidden + 1 + extra_pars;
+  fParameters = new real[fNParameters]();
   InitParameters();
 }
 
 /**
- * @brief MultiLayerPerceptronPreproc::MultiLayerPerceptronPreproc
- * @param o
+ * @brief SingleLayerPerceptron::InitParameters
+ * @details Initialises the parameters of the neural network, normally distributed.
  */
-MultiLayerPerceptronPreproc::MultiLayerPerceptronPreproc(MultiLayerPerceptronPreproc const& o):
-MultiLayerPerceptron(o)
+void SingleLayerPerceptron::InitParameters()
 {
+  for(int i=0; i<fNParameters; i++)
+    fParameters[i] = RandomGenerator::GetRNG()->GetRandomGausDev(1.0);
 }
 
 /**
- * @brief MultiLayerPerceptronPreproc::InitParameters
+ * @copydoc MultiLayerPerceptron::Duplicate()
  */
-void MultiLayerPerceptronPreproc::InitParameters()
+Parametrisation* SingleLayerPerceptron::Duplicate()
 {
-  MultiLayerPerceptron::InitParameters();
-  fParameters[fNParameters-2] = RandomGenerator::GetRNG()->GetRandomUniform(-10,2);
-  fParameters[fNParameters-1] = RandomGenerator::GetRNG()->GetRandomUniform(0,10);
-}
-
-/**
- * @brief MultiLayerPerceptron::Duplicate
- * @return
- */
-Parametrisation* MultiLayerPerceptronPreproc::Duplicate()
-{
-  return new MultiLayerPerceptronPreproc(*this);
+  const std::vector<int> arch = {2, fNHidden, 1};
+  return new SingleLayerPerceptron(arch);
 }
 
 
 /**
- * @brief MultiLayerPerceptronPreproc::Compute
- * @param in
- * @param out
+ * @brief SingleLayerPerceptron::Compute
+ * @details Computes the output of the neural network for a given input 
+ * @param in, a 2-element array containing {x,log(x)}
+ * @param out, a pointer to the location where the output should be written
  */
-void MultiLayerPerceptronPreproc::Compute(real* in,real* out) const
+void SingleLayerPerceptron::Compute(real* in,real* out) const
 {
-  MultiLayerPerceptron::Compute(in,out);
-  
-  // apply preprocessing alpha = fNParameters-2 and beta = fNParameters-1.
-  for (int i=0; i< fArch[fNLayers-1]; i++)
-    out[i] *= pow(in[i],-fParameters[fNParameters-2])*pow(1-in[i],fParameters[fNParameters-1]);
+    out[0] = 0;
+    // Note no explicit use of fNParameters here, as it includes 'extra_pars'
+    const real* final_node = fParameters + 3*fNHidden;
+    for (int i=0; i<fNHidden; i++)
+        {
+                // Use SSE
+                const real* node = fParameters + 3*i;
+                const real h = in[0]*node[0] 
+                             + in[1]*node[1]
+                             +       node[2];
+                const real sig = 1.0 / (1+exp(h));
+                out[0] += final_node[i]*sig;
+        }
+    out[0] += final_node[fNHidden];
+}
+
+// ******************** Preprocessed SLP **************************
+
+/**
+ * @copydoc MultiLayerPerceptron::Duplicate()
+ */
+Parametrisation* SingleLayerPerceptronPreproc::Duplicate()
+{
+  const std::vector<int> arch = {2, fNHidden, 1};
+  return new SingleLayerPerceptronPreproc(arch);
+}
+
+/**
+ * @brief Initialise the parameters of the preprocessed single layer perceptron 
+ * Values are initialised as uniform between 0 and 2/5 for the low/high-x exponents
+ * respectively. The lower limit is set for integrability, the higher according to
+ * maximum typically observed effective exponents.
+ */
+void SingleLayerPerceptronPreproc::InitParameters()
+{
+    SingleLayerPerceptron::InitParameters();
+    fParameters[fNParameters - 2] = RandomGenerator::GetRNG()->GetRandomUniform(0, 2.0)/fScaleFac;
+    fParameters[fNParameters - 1] = RandomGenerator::GetRNG()->GetRandomUniform(0, 5.0)/fScaleFac;
+}
+
+/**
+ * @brief SingleLayerPerceptronPreproc::Compute
+ * @details Computes the output of the neural network for a given input and preprocesses it
+ * @param in, a 2-element array containing {x,log(x)}
+ * @param out, a pointer to the location where the output should be written
+ */
+void SingleLayerPerceptronPreproc::Compute(real* in,real* out) const
+{
+    // Implemented here as alpha, beta > 0. To set lower limits use normal preproc ranges.
+    // Use last two parameters as preprocessing exponents
+    SingleLayerPerceptron::Compute(in,out);
+    out[0] *= pow(in[0],     fScaleFac*fabs(fParameters[fNParameters -2]));
+    out[0] *= pow(1.0-in[0], fScaleFac*fabs(fParameters[fNParameters -1]));
 }
 
 // ******************** Chebyshev *********************************
@@ -486,8 +476,7 @@ ChebyshevPolynomial::~ChebyshevPolynomial()
 }
 
 /**
- * @brief ChebyshevPolynomial::Duplicate
- * @return
+ * @copydoc MultiLayerPerceptron::Duplicate()
  */
 Parametrisation* ChebyshevPolynomial::Duplicate()
 {
@@ -654,8 +643,7 @@ QuadMultiLayerPerceptron::~QuadMultiLayerPerceptron()
 }
 
 /**
- * @brief MultiLayerPerceptron::Duplicate
- * @return
+ * @copydoc MultiLayerPerceptron::Duplicate()
  */
 Parametrisation* QuadMultiLayerPerceptron::Duplicate()
 {

@@ -90,19 +90,37 @@ namespace NNPDF
     actfunction fActFunction; //!< Activation function
   };
 
-  /*!
-   * \brief The MultiLayerPerceptronPreproc class
+/*!
+ *  \class SingleLayerPerceptron
+   * \brief An implementation of a MLP with a single hidden layer, far simpler than the equivalent MultiLayerPerceptron 
    */
-  class MultiLayerPerceptronPreproc : public MultiLayerPerceptron
+  class SingleLayerPerceptron : public Parametrisation
   {
   public:
-    MultiLayerPerceptronPreproc(std::vector<int> const& arch);         //!< Network constructor
-    MultiLayerPerceptronPreproc(MultiLayerPerceptronPreproc const&);  //!< Network copy constructor
+    SingleLayerPerceptron(std::vector<int> const& arch, unsigned int extra_pars = 0);         //!< Network constructor
+    virtual Parametrisation *Duplicate();
 
-    Parametrisation *Duplicate();
+    int GetNumNodeParams(int const& layer) const {return 0;}; 
+    virtual void Compute(real*,real*) const;  
+    virtual void InitParameters();  
+  protected:
+    const int fNHidden; //!< Number of hidden nodes
+  };
 
-    void Compute(real*,real*) const;  //!< Returns a fArch[fNLayers-1] long array of output for a given input array
-    void InitParameters();   //!< Initialize (or reinitialize) parameters
+  /*!
+   * \class SingleLayerPerceptronPreproc
+   * \brief A Single-hidden-layer perceptron with preprocessing 
+   */
+  class SingleLayerPerceptronPreproc : public SingleLayerPerceptron
+  {
+  public:
+    SingleLayerPerceptronPreproc(std::vector<int> const& arch):
+    SingleLayerPerceptron(arch, 2){};    
+    virtual Parametrisation *Duplicate();
+    virtual void InitParameters();  
+    void Compute(real*,real*) const;  
+   protected:
+    const real fScaleFac = 0.2; // Reduce the sensitivity to mutations
   };
 
   /**
