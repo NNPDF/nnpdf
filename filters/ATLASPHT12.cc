@@ -59,7 +59,7 @@ void ATLASPHT12Filter::ReadData()
   // Starting filter
 
   for (int idat = 0; idat < 18; idat++) {
-    double upper, lower, stmp, dtmp = 0;
+    double upper, lower, stmp, datshift;
     string line; 
     getline(cent,line);
     istringstream lstream(line);
@@ -71,17 +71,13 @@ void ATLASPHT12Filter::ReadData()
     >> fSystP >> fSystM
     >> fATLAS2012Luminosity; 
 
-    
-    double shift = 0;
-
-
     // Convert to percentages
 
      fSystP = fSystP*100/fData[idat];
      fSystM = fSystM*100/fData[idat];
 
     // Total systematics
-    symmetriseErrors(fSystP,fSystM,&stmp,&dtmp);
+    symmetriseErrors(fSystP,fSystM,&stmp,&datshift);
 
     // convert mult to a percentage
     fSys[idat][0].mult=stmp;
@@ -90,7 +86,6 @@ void ATLASPHT12Filter::ReadData()
     // convert back again
     fSys[idat][0].add = fSys[idat][0].mult*fData[idat]*1e-2;    
 
-    shift += dtmp;
 
     // ATLAS2012 Luminosity: symmetric, fully correlated between all bins
     fSys[idat][1].mult=fATLAS2012Luminosity/fData[idat]*1e2;
@@ -101,7 +96,7 @@ void ATLASPHT12Filter::ReadData()
     // Shift of central values due to asymmetric uncertainties
     // fData[idat]+=shift*fData[idat];
 
-    fData[idat]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+    fData[idat]*=(1.0 + datshift*0.01); //Shift from asymmetric errors
 
     // Kinematic variables
     
@@ -114,7 +109,7 @@ void ATLASPHT12Filter::ReadData()
 
   // 2nd bin
   for (int idat = 18; idat < 35; idat++) {
-    double upper, lower, stmp, dtmp;
+    double upper, lower, stmp, datshift;
 
     string line; 
     getline(fwd1,line);
@@ -129,7 +124,6 @@ void ATLASPHT12Filter::ReadData()
 
     //    cout << mbin[idat] << "   " << mbin[idat+1] << endl;
     
-      double shift = 0;
 
     // Convert to percentages
 
@@ -137,7 +131,7 @@ void ATLASPHT12Filter::ReadData()
      fSystM = fSystM*100/fData[idat];
 
     // Total systematics
-    symmetriseErrors(fSystP,fSystM,&stmp,&dtmp);
+    symmetriseErrors(fSystP,fSystM,&stmp,&datshift);
 
     // convert mult to a percentage
     fSys[idat][0].mult=stmp;
@@ -146,7 +140,6 @@ void ATLASPHT12Filter::ReadData()
     // convert back again
     fSys[idat][0].add = fSys[idat][0].mult*fData[idat]*1e-2;    
 
-    shift += dtmp;
 
     // ATLAS2012 Luminosity: symmetric, fully correlated between all bins
     fSys[idat][1].mult=fATLAS2012Luminosity/fData[idat]*1e2;
@@ -157,7 +150,7 @@ void ATLASPHT12Filter::ReadData()
     // Shift of central values due to asymmetric uncertainties
     // fData[idat]+=shift*fData[idat];
 
-    fData[idat]*=(1.0 + shift*0.01);
+    fData[idat]*=(1.0 + datshift*0.01);
 
     // Kinematic variables
     
@@ -170,7 +163,7 @@ void ATLASPHT12Filter::ReadData()
 
   // 3rd bin
   for (int idat = 35; idat < fNData; idat++) {
-    double upper, lower, stmp, dtmp;
+    double upper, lower, stmp, datshift;
  
     string line; 
     getline(fwd2,line);
@@ -183,16 +176,14 @@ void ATLASPHT12Filter::ReadData()
     >> fSystP >> fSystM
     >> fATLAS2012Luminosity; 
 
-    
-      double shift = 0;
-
+   
     // Convert to percentages
 
      fSystP = fSystP*100/fData[idat];
      fSystM = fSystM*100/fData[idat];
 
     // Total systematics
-    symmetriseErrors(fSystP,fSystM,&stmp,&dtmp);
+    symmetriseErrors(fSystP,fSystM,&stmp,&datshift);
 
     // convert mult to a percentage
     fSys[idat][0].mult=stmp;
@@ -201,8 +192,6 @@ void ATLASPHT12Filter::ReadData()
     // convert back again
     fSys[idat][0].add = fSys[idat][0].mult*fData[idat]*1e-2;    
 
-    shift += dtmp;
-
     // ATLAS2012 Luminosity: symmetric, fully correlated between all bins
     fSys[idat][1].mult=fATLAS2012Luminosity/fData[idat]*1e2;
     fSys[idat][1].type = MULT;
@@ -210,9 +199,8 @@ void ATLASPHT12Filter::ReadData()
     fSys[idat][1].add = fSys[idat][1].mult*fData[idat]*1e-2;
 
     // Shift of central values due to asymmetric uncertainties
-    // fData[idat]+=shift*fData[idat];
 
-    fData[idat]*=(1.0 + shift*0.01);
+    fData[idat]*=(1.0 + datshift*0.01);
 
     // Kinematic variables
     

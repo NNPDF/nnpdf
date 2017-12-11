@@ -71,7 +71,7 @@ void ATLASPHT15Filter::ReadData()
   
   // Filtering data 1st bin
   for (int idat = 0; idat < 14; idat++) {
-    double upper, lower, stmp, dtmp;
+    double upper, lower, stmp, datshift;
     string line; 
     getline(cent,line);
     istringstream lstream(line);
@@ -83,8 +83,6 @@ void ATLASPHT15Filter::ReadData()
      >> fSystP >> fSystM
      >> fATLAS2015Luminosity; 
 
-    
-      double shift = 0;
 
 
     // Convert stat to absolute val
@@ -94,7 +92,7 @@ void ATLASPHT15Filter::ReadData()
      // fSystM = fSystM*100/fData[idat];
 
     // Total systematics
-    symmetriseErrors(fSystP,fSystM,&stmp,&dtmp);
+    symmetriseErrors(fSystP,fSystM,&stmp,&datshift);
 
     fSys[idat][0].mult=stmp;
     fSys[idat][0].type = MULT;
@@ -102,7 +100,6 @@ void ATLASPHT15Filter::ReadData()
     // convert to additive uncertainties
     fSys[idat][0].add = fSys[idat][0].mult*fData[idat]*1e-2;    
 
-    shift += dtmp;
 
     // ATLAS2015 Luminosity: symmetric, fully correlated between all bins
     fSys[idat][1].mult=fATLAS2015Luminosity;
@@ -113,7 +110,7 @@ void ATLASPHT15Filter::ReadData()
     // Shift of central values due to asymmetric uncertainties
     // fData[idat]+=shift*fData[idat];
 
-    fData[idat]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+    fData[idat]*=(1.0 + datshift*0.01); //Shift from asymmetric errors
 
     // Kinematic variables
     
@@ -126,7 +123,7 @@ void ATLASPHT15Filter::ReadData()
 
   // 2nd bin
   for (int idat = 14; idat < 28; idat++) {
-    double upper, lower, stmp, dtmp;
+    double upper, lower, stmp, datshift;
 
     string line; 
     getline(fwd1,line);
@@ -139,9 +136,6 @@ void ATLASPHT15Filter::ReadData()
 	>> fSystP >> fSystM
     >> fATLAS2015Luminosity; 
 
-    
-      double shift = 0;
-
     // Convert to percentages
    //  Convert stat to absolute val
      
@@ -152,15 +146,13 @@ void ATLASPHT15Filter::ReadData()
      // fSystM = fSystM*100/fData[idat];
 
     // Total systematics
-       symmetriseErrors(fSystP,fSystM,&stmp,&dtmp);
+       symmetriseErrors(fSystP,fSystM,&stmp,&datshift);
 
     fSys[idat][0].mult=stmp;
     fSys[idat][0].type = MULT;
     fSys[idat][0].name = "UNCORR";
     // convert to additive uncertainties
     fSys[idat][0].add = fSys[idat][0].mult*fData[idat]*1e-2;    
-
-    shift += dtmp;
 
     // ATLAS2015 Luminosity: symmetric, fully correlated between all bins
     fSys[idat][1].mult=fATLAS2015Luminosity;
@@ -170,7 +162,7 @@ void ATLASPHT15Filter::ReadData()
     // Shift of central values due to asymmetric uncertainties
     // fData[idat]+=shift*fData[idat];
 
-    fData[idat]*=(1.0 + shift*0.01);
+    fData[idat]*=(1.0 + datshift*0.01);
 
     // Kinematic variables
     
@@ -183,7 +175,7 @@ void ATLASPHT15Filter::ReadData()
 
   // 3rd bin
   for (int idat = 28; idat < 41; idat++) {
-    double upper, lower, stmp, dtmp;
+    double upper, lower, stmp, datshift;
  
     string line; 
     getline(fwd2,line);
@@ -196,8 +188,7 @@ void ATLASPHT15Filter::ReadData()
     >> fSystP >> fSystM
     >> fATLAS2015Luminosity; 
 
-    
-    double shift = 0;
+
 
     // Convert stat to absolute val
     fStat[idat] = fStat[idat]*fData[idat]*1e-2;
@@ -209,15 +200,13 @@ void ATLASPHT15Filter::ReadData()
      // fSystM = fSystM*100/fData[idat];
 
     // Total systematics
-    symmetriseErrors(fSystP,fSystM,&stmp,&dtmp);
+    symmetriseErrors(fSystP,fSystM,&stmp,&datshift);
 
     fSys[idat][0].mult=stmp;
     fSys[idat][0].type = MULT;
     fSys[idat][0].name = "UNCORR";
     // convert to additive uncertainties
     fSys[idat][0].add = fSys[idat][0].mult*fData[idat]*1e-2;    
-
-    shift += dtmp;
 
     // ATLAS2015 Luminosity: symmetric, fully correlated between all bins
     fSys[idat][1].mult=fATLAS2015Luminosity;
@@ -228,7 +217,7 @@ void ATLASPHT15Filter::ReadData()
     // Shift of central values due to asymmetric uncertainties
     // fData[idat]+=shift*fData[idat];
 
-    fData[idat]*=(1.0 + shift*0.01);
+    fData[idat]*=(1.0 + datshift*0.01);
 
     // Kinematic variables
     
@@ -239,7 +228,7 @@ void ATLASPHT15Filter::ReadData()
   }
 
  for (int idat = 41; idat < fNData; idat++) {
-    double upper, lower, stmp, dtmp;
+    double upper, lower, stmp, datshift;
  
     string line; 
     getline(fwd3,line);
@@ -252,8 +241,6 @@ void ATLASPHT15Filter::ReadData()
     >> fSystP >> fSystM
     >> fATLAS2015Luminosity; 
 
-    
-    double shift = 0;
 
     // Convert to percentages
 
@@ -266,15 +253,13 @@ void ATLASPHT15Filter::ReadData()
      // fSystM = fSystM*100/fData[idat];
 
     // Total systematics
-       symmetriseErrors(fSystP,fSystM,&stmp,&dtmp);
+       symmetriseErrors(fSystP,fSystM,&stmp,&datshift);
 
     fSys[idat][0].mult=stmp;
     fSys[idat][0].type = MULT;
     fSys[idat][0].name = "UNCORR";
     // convert to additive uncertainties
     fSys[idat][0].add = fSys[idat][0].mult*fData[idat]*1e-2;    
-
-    shift += dtmp;
 
     // ATLAS2015 Luminosity: symmetric, fully correlated between all bins
     fSys[idat][1].mult=fATLAS2015Luminosity;
@@ -285,7 +270,7 @@ void ATLASPHT15Filter::ReadData()
     // Shift of central values due to asymmetric uncertainties
     // fData[idat]+=shift*fData[idat];
 
-    fData[idat]*=(1.0 + shift*0.01);
+    fData[idat]*=(1.0 + datshift*0.01);
 
     // Kinematic variables
     
