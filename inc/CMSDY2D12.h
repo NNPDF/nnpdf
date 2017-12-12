@@ -10,17 +10,10 @@
 
 #include "buildmaster_utils.h"
 
-static const dataInfoRaw CMSDY2D12info = {
-  132,          // nData
-  133,          // Correlated uncertainties given as cov. mat. nSys=nData+Lumi
-  "CMSDY2D12",  // SetName
-  "EWK_RAP"     // ProcType
-};
-
 class CMSDY2D12Filter: public CommonData
 {
 public: CMSDY2D12Filter():
-  CommonData(CMSDY2D12info) { ReadData(); }
+  CommonData("CMSDY2D12") { ReadData(); }
 
 private:
   void ReadData();

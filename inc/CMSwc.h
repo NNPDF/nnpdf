@@ -10,40 +10,17 @@
 
 #include "buildmaster_utils.h"
 
-// ********** CMS W+charm absolute xsecs ******
-
-static const dataInfoRaw CMSWCHARMTOTinfo = {
-  5,              //nData
-  5,              //nSys
-  "CMSWCHARMTOT", //SetName
-  "EWJ_RAP"       //ProcType
-};
-
-// ********* Filters **************
-
 class CMSWCHARMTOTFilter: public CommonData
 { public: CMSWCHARMTOTFilter():
-  CommonData(CMSWCHARMTOTinfo) { ReadData(); }
+  CommonData("CMSWCHARMTOT") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-
-// ********** CMS W+charm xsec ratios ******
-
-static const dataInfoRaw CMSWCHARMRATinfo = {
-  5,              //nData
-  0,              //nSys
-  "CMSWCHARMRAT", //SetName
-  "EWJ_RAP"       //ProcType
-};
-
-// ********* Filters **************
-
 class CMSWCHARMRATFilter: public CommonData
 { public: CMSWCHARMRATFilter():
-  CommonData(CMSWCHARMRATinfo) { ReadData(); }
+  CommonData("CMSWCHARMRAT") { ReadData(); }
 
 private:
   void ReadData();
