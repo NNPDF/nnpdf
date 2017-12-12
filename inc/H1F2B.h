@@ -11,21 +11,10 @@
 
 #include "buildmaster_utils.h"
 
-// ********** H1 reduced bb xsec ***************
-
-static const dataInfoRaw H1F2Binfo = {
-  12,                //nData
-  25,                 //nSys
-  "H1HERAF2B",          //SetName
-  "DIS_NCE_BT"          //ProcType
-};
-
-// ********* Filters **************
-
 class H1F2BFilter: public CommonData
 {
 public: H1F2BFilter():
-  CommonData(H1F2Binfo) { ReadData(); }
+  CommonData("H1HERAF2B") { ReadData(); }
 
 private:
   void ReadData();

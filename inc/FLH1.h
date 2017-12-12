@@ -10,21 +10,9 @@
 
 #include "buildmaster_utils.h"
 
-// ********** FLH1 08 dataset ***************
-
-static const dataInfoRaw FLH108info = {
-  8,                 //nData
-  2,                 //nSys
-  "FLH108",           //SetName
-  "DIS_FLP"        //ProcType
-};
-
-
-// ********* Filters **************
-
 class FLH108Filter: public CommonData
 { public: FLH108Filter():
-  CommonData(FLH108info) { ReadData(); }
+  CommonData("FLH108") { ReadData(); }
 
 private:
   void ReadData();

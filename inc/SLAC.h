@@ -10,24 +10,10 @@
 
 #include "buildmaster_utils.h"
 
-static const dataInfoRaw SLACPinfo = {
-  211,      //nData
-  3,        //nSys
-  "SLACP",  //SetName
-  "DIS_F2P" //ProcType
-};
-
-static const dataInfoRaw SLACDinfo = {
-  211,      //nData
-  3,        //nSys
-  "SLACD",  //SetName
-  "DIS_F2D" //ProcType
-};
-
 class SLACPFilter: public CommonData
 {
 public: SLACPFilter():
-  CommonData(SLACPinfo) { ReadData(); }
+  CommonData("SLACP") { ReadData(); }
 
 private:
   void ReadData();
@@ -35,7 +21,7 @@ private:
 
 class SLACDFilter: public CommonData
 { public: SLACDFilter():
-  CommonData(SLACDinfo) { ReadData(); }
+  CommonData("SLACD") { ReadData(); }
 
 private:
   void ReadData();

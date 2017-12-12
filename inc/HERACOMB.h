@@ -30,63 +30,13 @@ The typical values of δrel for the scom,1 = 318 GeV ( scom,2/3) combination wer
 
 */
 
-
-static const dataInfoRaw HERACOMBCCEMinfo = {
-  42,              //nData
-  1+162+7,         //nSys 1 uncorrelated, 162 correlated, 7 procedural
-  "HERACOMBCCEM", //SetName
-  "DIS_CCE"        //ProcType
-};
-
-static const dataInfoRaw HERACOMBCCEPinfo = {
-  39,              //nData
-  1+162+7,         //nSys 1 uncorrelated, 162 correlated, 7 procedural
-  "HERACOMBCCEP", //SetName
-  "DIS_CCP"        //ProcType
-};
-
-static const dataInfoRaw HERACOMBNCEMinfo = {
-  159,             //nData
-  1+162+7,         //nSys 1 uncorrelated, 162 correlated, 7 procedural
-  "HERACOMBNCEM", //SetName
-  "DIS_NCE"        //ProcType
-};
-
-static const dataInfoRaw HERACOMBNCEP460info = {
-  209,             //nData
-  1+162+7,         //nSys 1 uncorrelated, 162 correlated, 7 procedural
-  "HERACOMBNCEP460", //SetName
-  "DIS_NCP"        //ProcType
-};
-
-static const dataInfoRaw HERACOMBNCEP575info = {
-  260,             //nData
-  1+162+7,         //nSys 1 uncorrelated, 162 correlated, 7 procedural
-  "HERACOMBNCEP575", //SetName
-  "DIS_NCP"        //ProcType
-};
-
-static const dataInfoRaw HERACOMBNCEP820info = {
-  112,             //nData
-  1+162+7,         //nSys 1 uncorrelated, 162 correlated, 7 procedural
-  "HERACOMBNCEP820", //SetName
-  "DIS_NCP"        //ProcType
-};
-
-static const dataInfoRaw HERACOMBNCEP920info = {
-  485,             //nData
-  1+162+7,         //nSys 1 uncorrelated, 162 correlated, 7 procedural
-  "HERACOMBNCEP920", //SetName
-  "DIS_NCP"        //ProcType
-};
-
 // ********* Filters **************
 
 class HERACOMBFilter: public CommonData
 {
 public: 
-	HERACOMBFilter(dataInfoRaw const& datInfo):
-  	CommonData(datInfo) { ReadData(); }
+	HERACOMBFilter(std::string const& setname):
+  	CommonData(setname) { ReadData(); }
 
 private:
   void ReadData();
@@ -96,47 +46,47 @@ class HERACOMBCCEMFilter: public HERACOMBFilter
 {
 public: 
   HERACOMBCCEMFilter():
-    HERACOMBFilter(HERACOMBCCEMinfo) { }
+    HERACOMBFilter("HERACOMBCCEM") { }
 };
 
 class HERACOMBCCEPFilter: public HERACOMBFilter
 {
 public: 
   HERACOMBCCEPFilter():
-    HERACOMBFilter(HERACOMBCCEPinfo) { }
+    HERACOMBFilter("HERACOMBCCEP") { }
 };
 
 class HERACOMBNCEMFilter: public HERACOMBFilter
 {
 public: 
   HERACOMBNCEMFilter():
-    HERACOMBFilter(HERACOMBNCEMinfo) { }
+    HERACOMBFilter("HERACOMBNCEM") { }
 };
 
 class HERACOMBNCEP460Filter: public HERACOMBFilter
 {
 public: 
   HERACOMBNCEP460Filter():
-    HERACOMBFilter(HERACOMBNCEP460info) { }
+    HERACOMBFilter("HERACOMBNCEP460") { }
 };
 
 class HERACOMBNCEP575Filter: public HERACOMBFilter
 {
 public: 
   HERACOMBNCEP575Filter():
-    HERACOMBFilter(HERACOMBNCEP575info) { }
+    HERACOMBFilter("HERACOMBNCEP575") { }
 };
 
 class HERACOMBNCEP820Filter: public HERACOMBFilter
 {
 public: 
   HERACOMBNCEP820Filter():
-    HERACOMBFilter(HERACOMBNCEP820info) { }
+    HERACOMBFilter("HERACOMBNCEP820") { }
 };
 
 class HERACOMBNCEP920Filter: public HERACOMBFilter
 {
 public: 
   HERACOMBNCEP920Filter():
-    HERACOMBFilter(HERACOMBNCEP920info) { }
+    HERACOMBFilter("HERACOMBNCEP920") { }
 };

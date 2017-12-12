@@ -10,28 +10,12 @@
 
 #include "buildmaster_utils.h"
 
-// ********** CHORUS ***************
-
-static const dataInfoRaw CHORUSNUinfo = {
-  607,                 //nData
-  15,                   //nSys
-  "CHORUSNU",           //SetName
-  "DIS_SNU"          //ProcType
-};
-
-static const dataInfoRaw CHORUSNBinfo = {
-  607,                 //nData
-  15,                   //nSys
-  "CHORUSNB",           //SetName
-  "DIS_SNB"          //ProcType
-};
-
 // ********* Filters **************
 
 class CHORUSNUFilter: public CommonData
 {
 public: CHORUSNUFilter():
-  CommonData(CHORUSNUinfo) { ReadData(); }
+  CommonData("CHORUSNU") { ReadData(); }
 
 private:
   void ReadData();
@@ -40,7 +24,7 @@ private:
 class CHORUSNBFilter: public CommonData
 {
 public: CHORUSNBFilter():
-  CommonData(CHORUSNBinfo) { ReadData(); }
+  CommonData("CHORUSNB") { ReadData(); }
 
 private:
   void ReadData();
