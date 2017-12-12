@@ -455,7 +455,7 @@ namespace NNPDF
     int idat = 1;
     for (int i=0; i<fNData; i++)
     {
-      g1.precision(15);
+      g1.precision(12);
       g1 << std::scientific << std::setw(4) << idat
       << "\t" << fProc[i]
       << "\t" << fKin1[i]
