@@ -11,24 +11,10 @@
 
 #include "buildmaster_utils.h"
 
-static const dataInfoRaw EMCF2Pinfo = {
-  237,      //nData
-  2,        //nSys
-  "EMCF2P", //SetName
-  "DIS_F2P" //ProcType
-};
-
-static const dataInfoRaw EMCF2Dinfo = {
-  66,      //nData
-  2,        //nSys
-  "EMCF2D",    //SetName
-  "DIS_F2D" //ProcType
-};
-
 class EMCF2PFilter: public CommonData
 {
 public: EMCF2PFilter():
-  CommonData(EMCF2Pinfo) { ReadData(); }
+  CommonData("EMCF2P") { ReadData(); }
 
 private:
   void ReadData();
@@ -36,7 +22,7 @@ private:
 
 class EMCF2DFilter: public CommonData
 { public: EMCF2DFilter():
-  CommonData(EMCF2Dinfo) { ReadData(); }
+  CommonData("EMCF2D") { ReadData(); }
 
 private:
   void ReadData();

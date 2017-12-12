@@ -15,18 +15,10 @@
 
 #include "buildmaster_utils.h"
 
-static const dataInfoRaw TTBARTOTinfo = {
-  6,          //nData
-  3,          //nSys
-  "TTBARTOT", //SetName
-  "INC"       //ProcType
-};
-
-
 class TTBARTOTFilter: public CommonData
 {
 public: TTBARTOTFilter():
-  CommonData(TTBARTOTinfo) { ReadData(); }
+  CommonData("TTBARTOT") { ReadData(); }
 
 private:
   void ReadData();

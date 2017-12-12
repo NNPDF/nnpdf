@@ -15,25 +15,10 @@
 
 #include "buildmaster_utils.h"
 
-static const dataInfoRaw NMCinfo = {
-  292,      //nData
-  16,       //nSys
-  "NMC",    //SetName
-  "DIS_NCE" //ProcType
-};
-
-static const dataInfoRaw NMCPDinfo = {
-  260,      //nData
-  5,        //nSys
-  "NMCPD",  //SetName
-  "DIS_F2R" //ProcType
-};
-
-
 class NMCFilter: public CommonData
 {
 public: NMCFilter():
-  CommonData(NMCinfo) { ReadData(); }
+  CommonData("NMC") { ReadData(); }
 
 private:
   void ReadData();
@@ -41,7 +26,7 @@ private:
 
 class NMCpdFilter: public CommonData
 { public: NMCpdFilter():
-  CommonData(NMCPDinfo) { ReadData(); }
+  CommonData("NMCPD") { ReadData(); }
 
 private:
   void ReadData();

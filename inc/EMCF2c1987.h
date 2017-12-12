@@ -11,16 +11,9 @@
 
 #include "buildmaster_utils.h"
 
-static const dataInfoRaw EMCF2c1987info = {
-  35,      //nData
-  1,        //nSys
-  "EMCF2c1987",    //SetName
-  "DIS_NCE_CH" //ProcType
-};
-
 class EMCF2c1987Filter: public CommonData
 { public: EMCF2c1987Filter():
-  CommonData(EMCF2c1987info) { ReadData(); }
+  CommonData("EMCF2c1987") { ReadData(); }
 
 private:
   void ReadData();
