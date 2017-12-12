@@ -10,25 +10,11 @@
 
 #include "buildmaster_utils.h"
 
-static const dataInfoRaw ATLASLOMASSDY11info = {
-  8,                     //nData
-  15,                    //nSys (13 corr. + 1 uncorr. + lumi)
-  "ATLASLOMASSDY11",     //SetName
-  "EWK_MLL"         //ProcType
-};
-
-static const dataInfoRaw ATLASLOMASSDY11EXTinfo = {
-  6,                     //nData
-  8,                    //nSys (5 corr. + 2 uncorr. + lumi)
-  "ATLASLOMASSDY11EXT",  //SetName
-  "EWK_MLL"         //ProcType
-};
-
 // ********* Filters ************
 
 class ATLASLOMASSDY11Filter: public CommonData
 { public: ATLASLOMASSDY11Filter():
-  CommonData(ATLASLOMASSDY11info) { ReadData(); }
+  CommonData("ATLASLOMASSDY11") { ReadData(); }
 
   private:
     void ReadData();
@@ -36,7 +22,7 @@ class ATLASLOMASSDY11Filter: public CommonData
 
 class ATLASLOMASSDY11EXTFilter: public CommonData
 { public: ATLASLOMASSDY11EXTFilter():
-  CommonData(ATLASLOMASSDY11EXTinfo) { ReadData(); }
+  CommonData("ATLASLOMASSDY11EXT") { ReadData(); }
 
   private:
     void ReadData();

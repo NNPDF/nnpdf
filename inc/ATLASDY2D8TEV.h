@@ -10,17 +10,10 @@
 
 #include "buildmaster_utils.h"
 
-static const dataInfoRaw ATLASDY2D8TEVinfo = {
-  48,          // nData
-  37,          // 1 uncor + 35 corr + lumi
-  "ATLASDY2D8TEV",  // SetName
-  "EWK_RAP"    // ProcType
-};
-
 class ATLASDY2D8TEVFilter: public CommonData
 {
 public: ATLASDY2D8TEVFilter():
-  CommonData(ATLASDY2D8TEVinfo) { ReadData(); }
+  CommonData("ATLASDY2D8TEV") { ReadData(); }
 
 private:
   void ReadData();
