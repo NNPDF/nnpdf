@@ -10,78 +10,12 @@
 
 #include "buildmaster_utils.h"
 
-// ********** ATLAS ***************
-
-static const dataInfoRaw ATLASWZRAP36PBinfo = {
-  30,               //nData
-  32,               //nSys
-  "ATLASWZRAP36PB", //SetName
-  "EWK_RAP"         //ProcType
-};
-
-static const dataInfoRaw ATLASWZRAP11CCinfo = {
-  46,               //nData
-  133,              //nSys
-  "ATLASWZRAP11CC",   //SetName
-  "EWK_RAP"         //ProcType
-};
-
-static const dataInfoRaw ATLASWZRAP11CFinfo = {
-  15,               //nData
-  133,              //nSys
-  "ATLASWZRAP11CF", //SetName
-  "EWK_RAP"         //ProcType
-};
-
-static const dataInfoRaw ATLASR04JETS36PBinfo = {
-  90,                 //nData
-  91,                 //nSys
-  "ATLASR04JETS36PB", //SetName
-  "JET"               //ProcType
-};
-
-static const dataInfoRaw ATLASR06JETS36PBinfo = {
-  90,                 //nData
-  91,                 //nSys
-  "ATLASR06JETS36PB", //SetName
-  "JET"               //ProcType
-};
-
-static const dataInfoRaw ATLASR04JETS2P76TEVinfo = {
-  59,                    //nData
-  90,                    //nSys
-  "ATLASR04JETS2P76TEV", //SetName
-  "JET"                  //ProcType
-};
-
-static const dataInfoRaw ATLASR06JETS2P76TEVinfo = {
-  59,                    //nData
-  90,                    //nSys
-  "ATLASR06JETS2P76TEV", //SetName
-  "JET"                  //ProcType
-};
-
-static const dataInfoRaw ATLASZHIGHMASS49FBinfo = {
-  13,                   //nData
-  11,                   //nSys (8 corr + 2 uncorr + lumi)
-  "ATLASZHIGHMASS49FB", //SetName
-  "EWK_MLL"             //ProcType
-};
-
-static const dataInfoRaw ATLASWPT31PBinfo = {
-  11,                   //nData
-  11,                   //nSys (11 sys + 11 stat) - at the moment do not include statistics
-  "ATLASWPT31PB",       //SetName
-  "EWK_PT"              //ProcType
-};
-
-
 // ********* Filters **************
 
 class ATLASWZRAP36PBFilter: public CommonData
 {
 public: ATLASWZRAP36PBFilter():
-  CommonData(ATLASWZRAP36PBinfo) { ReadData(); }
+  CommonData("ATLASWZRAP36PB") { ReadData(); }
 
 private:
   void ReadData();
@@ -90,7 +24,7 @@ private:
 class ATLASWZRAP11CCFilter: public CommonData
 {
 public: ATLASWZRAP11CCFilter():
-  CommonData(ATLASWZRAP11CCinfo) { ReadData(); }
+  CommonData("ATLASWZRAP11CC") { ReadData(); }
 
 private:
   void ReadData();
@@ -99,7 +33,7 @@ private:
 class ATLASWZRAP11CFFilter: public CommonData
 {
 public: ATLASWZRAP11CFFilter():
-  CommonData(ATLASWZRAP11CFinfo) { ReadData(); }
+  CommonData("ATLASWZRAP11CF") { ReadData(); }
 
 private:
   void ReadData();
@@ -107,7 +41,7 @@ private:
 
 class ATLASR04JETS36PBFilter: public CommonData
 { public: ATLASR04JETS36PBFilter():
-  CommonData(ATLASR04JETS36PBinfo) { ReadData(); }
+  CommonData("ATLASR04JETS36PB") { ReadData(); }
 
 private:
   void ReadData();
@@ -115,7 +49,7 @@ private:
 
 class ATLASR06JETS36PBFilter: public CommonData
 { public: ATLASR06JETS36PBFilter():
-  CommonData(ATLASR06JETS36PBinfo) { ReadData(); }
+  CommonData("ATLASR06JETS36PB") { ReadData(); }
 
 private:
   void ReadData();
@@ -123,7 +57,7 @@ private:
 
 class ATLASR04JETS2P76TEVFilter: public CommonData
 { public: ATLASR04JETS2P76TEVFilter():
-  CommonData(ATLASR04JETS2P76TEVinfo) { ReadData(); }
+  CommonData("ATLASR04JETS2P76TEV") { ReadData(); }
 
 private:
   void ReadData();
@@ -131,15 +65,15 @@ private:
 
 class ATLASR06JETS2P76TEVFilter: public CommonData
 { public: ATLASR06JETS2P76TEVFilter():
-  CommonData(ATLASR06JETS2P76TEVinfo) { ReadData(); }
+  CommonData("ATLASR06JETS2P76TEV") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class ATLASZHIGHMASS49PBFilter: public CommonData
-{ public: ATLASZHIGHMASS49PBFilter():
-  CommonData(ATLASZHIGHMASS49FBinfo) { ReadData(); }
+class ATLASZHIGHMASS49FBFilter: public CommonData
+{ public: ATLASZHIGHMASS49FBFilter():
+  CommonData("ATLASZHIGHMASS49FB") { ReadData(); }
 
 private:
   void ReadData();
@@ -147,7 +81,7 @@ private:
 
 class ATLASWPT31PBFilter: public CommonData
 { public: ATLASWPT31PBFilter():
-  CommonData(ATLASWPT31PBinfo) { ReadData(); }
+  CommonData("ATLASWPT31PB") { ReadData(); }
 
 private:
   void ReadData();
