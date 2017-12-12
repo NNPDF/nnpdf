@@ -10,17 +10,10 @@
 
 #include "buildmaster_utils.h"
 
-static const dataInfoRaw CMSWMU8TEVinfo = {
-  22,           // nData
-  45,           // Correlated uncertainties given as cov. mat., systematic and statistical nSys=nData+nData+Lumi
-  "CMSWMU8TEV", // SetName
-  "EWK_RAP"     // ProcType
-};
-
 class CMSWMU8TEVFilter: public CommonData
 {
 public: CMSWMU8TEVFilter():
-  CommonData(CMSWMU8TEVinfo) { ReadData(); }
+  CommonData("CMSWMU8TEV") { ReadData(); }
 
 private:
   void ReadData();
