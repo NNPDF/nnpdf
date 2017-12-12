@@ -924,7 +924,7 @@ void ATLASWZRAP36PBFilter::ReadData()
  * and from paper: http://arxiv.org/abs/ARXIV:1305.4192
  *
  */
-void ATLASZHIGHMASS49PBFilter::ReadData()
+void ATLASZHIGHMASS49FBFilter::ReadData()
 {
   cout << "WARNING: kinematics are not implemented" << endl;
   // Opening files
