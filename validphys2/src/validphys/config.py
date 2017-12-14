@@ -698,7 +698,17 @@ class Config(report.Config):
 
                 sliced = tableloader.get_extrasum_slice(df, components)
                 s =  sliced.groupby(level=3).sum()
-                ndata = sum(n for (n,_) in sliced.groupby(level=2))
+
+                def get_ndata(df):
+                    val = df.index.get_level_values(2).unique()
+                    if len(val) != 1:
+                        raise ConfigError(f"Found different number "
+                                          f"of points in {df.name}")
+                    return val[0]
+                ndata = sliced.groupby(level=1).apply(get_ndata).sum()
+
+
+
                 total.append(
                     {'experiment_label': label,
                     'by_dataset': [{

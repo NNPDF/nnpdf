@@ -1,6 +1,9 @@
 CHANGES
 -------
 
+14/12/2017 Fix bug in counting of points for the extra_sums tag used
+           in $alpha_s$
+
 17/10/2017 Fix bug in error computation of assymetric Hessian PDF
            sets. A factor two was missing.
 
