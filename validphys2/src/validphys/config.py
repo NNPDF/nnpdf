@@ -651,11 +651,18 @@ class Config(report.Config):
         `fits_replica_data_correlated`.
 
         """
+        def get_ndata(df):
+            val = df.index.get_level_values(2).unique()
+            if len(val) != 1:
+                raise ConfigError(f"Found different number "
+                                  f"of points in {df.name}")
+            return val[0]
+
         df = fits_computed_psedorreplicas_chi2
 
         if prepend_total:
             s =  df.loc[(slice(None), 'Total'),:].groupby(level=3).sum()
-            ndata = sum(n for (n,_) in df.loc[(slice(None), 'Total'),:].groupby(level=2))
+            ndata = df.loc[(slice(None), 'Total'),:].groupby(level=0).apply(get_ndata).sum()
             total = [
                 {'experiment_label': 'Total',
                 'by_dataset': [{
@@ -671,7 +678,7 @@ class Config(report.Config):
             d = {'experiment_label': exp}
             by_dataset = d['by_dataset'] = []
             for ds, dsdf in expdf.groupby(level=1):
-                ndata = sum(n for (n,_) in dsdf.groupby(level=2))
+                ndata = dsdf.groupby(level=0).apply(get_ndata).sum()
                 dsdf.index  = dsdf.index.droplevel([0,1,2])
 
                 if ds == 'Total':
@@ -699,12 +706,7 @@ class Config(report.Config):
                 sliced = tableloader.get_extrasum_slice(df, components)
                 s =  sliced.groupby(level=3).sum()
 
-                def get_ndata(df):
-                    val = df.index.get_level_values(2).unique()
-                    if len(val) != 1:
-                        raise ConfigError(f"Found different number "
-                                          f"of points in {df.name}")
-                    return val[0]
+
                 ndata = sliced.groupby(level=1).apply(get_ndata).sum()
 
 
