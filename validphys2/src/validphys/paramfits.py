@@ -15,6 +15,7 @@ performance may not be optimal.
 """
 import logging
 import functools
+import warnings
 from collections import namedtuple, defaultdict, Counter
 
 import numpy as np
@@ -225,8 +226,9 @@ def discarded_mask(
 
     df = fits_replica_data_correlated_for_total[0]
 
-
-    estimate = parabolic_as_determination(fits_as,df)
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        estimate = parabolic_as_determination(fits_as,df)
     best_as = np.mean(estimate)
     dist_best_as = -np.abs(best_as - fits_as)
     to_remove = np.argpartition(dist_best_as, trim_ndistant)[:trim_ndistant]
