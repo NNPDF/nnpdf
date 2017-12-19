@@ -50,12 +50,5 @@ namespace Buildmaster
         NNPDF::CommonData(readMeta(setname))
         {
         }
-
-        // Constructor from dataInfoRaw
-        CommonData(NNPDF::dataInfoRaw const& info):
-        NNPDF::CommonData(info)
-        {
-        }
-
     };
 }
