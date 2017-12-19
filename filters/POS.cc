@@ -4,104 +4,39 @@
  */
 
 #include "POS.h"
+#include <array>
 
-static const int nDYsets = 20;
-static const std::string DYSets[nDYsets] = 
+void register_positivity(vector<CommonData*>& list)
 {
-  "POSDYC",
-  "POSDYCBD",
-  "POSDYCBDB",
-  "POSDYCBS",
-  "POSDYCBSB",
-  "POSDYCD",
-  "POSDYCDB",
-  "POSDYCS",
-  "POSDYCSB",
-  "POSDYD",
-  "POSDYS",
-  "POSDYU",
-  "POSDYUBD",
-  "POSDYUBDB",
-  "POSDYUBS",
-  "POSDYUBSB",
-  "POSDYUD",
-  "POSDYUDB",
-  "POSDYUS",
-  "POSDYUSB"
-};
-
-static const std::string DYProc[nDYsets] = {
-  "DYP_PPY_CON_CH",
-  "DYP_CNS_CON_CBD",
-  "DYP_CNO_CON_CBD",
-  "DYP_CNS_CON_CBS",
-  "DYP_CNO_CON_CBS",
-  "DYP_CPO_CON_CDB",
-  "DYP_CPS_CON_CDB",
-  "DYP_CPO_CON_CSB",
-  "DYP_CPS_CON_CSB",
-  "DYP_PPY_CON_DW",
-  "DYP_PPY_CON_ST",
-  "DYP_PPY_CON_UP",
-  "DYP_CNS_CON_UBD",
-  "DYP_CNO_CON_UBD",
-  "DYP_CNS_CON_UBS",
-  "DYP_CNO_CON_UBS",
-  "DYP_CPO_CON_UDB",
-  "DYP_CPS_CON_UDB",
-  "DYP_CPO_CON_USB",
-  "DYP_CPS_CON_USB"
-};
-
-const int nDISsets = 4;
-static const std::string DISSets[nDISsets] = {
-  "POSF2DW",
-  "POSF2S",
-  "POSF2U",
-  "POSFLL"
-};
-
-static const std::string DISProc[nDISsets] = {
-  "DIS_F2d",
-  "DIS_F2S",
-  "DIS_F2U",
-  "DIS_FLL"
-};
-
-void registerDYPos(vector<CommonData*>& list)
-{
-  const int nDYpoints = 20; // Number of points in a dataset
-
-  for (int i=0; i<nDYsets; i++)
-  {
-    const dataInfoRaw posInfo = {
-      nDYpoints,  
-      0,       
-      DYSets[i],   
-      DYProc[i] 
-    };
-
-    list.push_back(new DYPosFilter(posInfo));
-  }
+  // DIS positivity sets
+  const std::array<std::string, 4>  DISsets = { "POSF2DW", "POSF2S", "POSF2U", "POSFLL"};
+  const std::array<std::string, 20> DYPsets = {
+    "POSDYC",
+    "POSDYCBD",
+    "POSDYCBDB",
+    "POSDYCBS",
+    "POSDYCBSB",
+    "POSDYCD",
+    "POSDYCDB",
+    "POSDYCS",
+    "POSDYCSB",
+    "POSDYD",
+    "POSDYS",
+    "POSDYU",
+    "POSDYUBD",
+    "POSDYUBDB",
+    "POSDYUBS",
+    "POSDYUBSB",
+    "POSDYUD",
+    "POSDYUDB",
+    "POSDYUS",
+    "POSDYUSB"
+  };
+  for (auto set : DYPsets)
+    list.push_back(new DYPosFilter(set));
+  for (auto set : DISsets)
+    list.push_back(new DISPosFilter(set));
 }
-
-void registerDISPos(vector<CommonData*>& list)
-{
-  const int nDISpoints = 20; // Number of points in a dataset
-
-  for (int i=0; i<nDISsets; i++)
-  {
-    const dataInfoRaw posInfo = {
-      nDISpoints,  
-      0,       
-      DISSets[i],   
-      DISProc[i] 
-    };
-
-    list.push_back(new DISPosFilter(posInfo));
-  }
-}
-
 
 void DYPosFilter::ReadData()
 {

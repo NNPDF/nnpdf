@@ -91,8 +91,7 @@ void InitCommonData(vector<CommonData*>& target)
 
   // ************************* POS ******************************
 
-  registerDYPos(target);
-  registerDISPos(target);
+  register_positivity(target);
 
   // ************************* ATLAS ******************************
 
