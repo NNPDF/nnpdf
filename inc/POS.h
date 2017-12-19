@@ -12,16 +12,15 @@
 
 // ********* Register *************
 
-void registerDYPos(vector<CommonData*>& list);
-void registerDISPos(vector<CommonData*>& list);
+void register_positivity(vector<CommonData*>& list);
 
 // ********* Filters **************
 
 class DYPosFilter: public CommonData
 {
 public: 
-	DYPosFilter(dataInfoRaw const& datInfo):
-  	CommonData(datInfo) { ReadData(); }
+	DYPosFilter(std::string setname):
+  	CommonData(setname) { ReadData(); }
 
 private:
   void ReadData();
@@ -30,8 +29,8 @@ private:
 class DISPosFilter: public CommonData
 {
 public: 
-	DISPosFilter(dataInfoRaw const& datInfo):
-  	CommonData(datInfo) { ReadData(); }
+	DISPosFilter(std::string setname):
+  	CommonData(setname) { ReadData(); }
 
 private:
   void ReadData();
