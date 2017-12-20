@@ -88,8 +88,9 @@ namespace NNPDF
 
   /*! Specifies which type of systematic error */
   enum sysType {  
-                  ADD, //!< Additive systematic
-                  MULT //!< Multiplicative systematic
+                  ADD,  //!< Additive systematic
+                  MULT, //!< Multiplicative systematic
+                  UNSET //!< Unset systematic
                };
 
    /*! 
@@ -106,7 +107,12 @@ namespace NNPDF
     sysType type;     //!< Type of the systematic error (ADD/MULT)
     std::string name; //!< Name of the systematic error (for correlation purposes)
     bool isRAND;      //!< Tag specifying whether the treatment should be randomised
-    sysError() : add(0.0), mult(0.0), type(ADD), name("CORR"), isRAND(false)
+    sysError():
+    add(std::numeric_limits<double>::quiet_NaN()),
+    mult(std::numeric_limits<double>::quiet_NaN()),
+    type(UNSET),
+    name("CORR"),
+    isRAND(false)
     {
     };
   };
@@ -226,6 +232,7 @@ namespace NNPDF
     // ********************************* CommonData File IO *****************************************
 
     static CommonData ReadFile(std::string const& filename, std::string const& sysfile); //!< Returns a new CommonData read from file
+    void Verify() const; //!< Verifies the current CommonData, checking that all fields are set
     void Export(std::string const& targetdir) const;  //!< Writes the current CommonData instance to file
   };
 

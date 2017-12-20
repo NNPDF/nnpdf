@@ -94,6 +94,7 @@ void DataSet::GenCovMat() const
             {
               case ADD: sig += fSys[i][l].add*fSys[j][l].add; break; // additive systematics
               case MULT: signor += fSys[i][l].mult*fSys[j][l].mult; break; // multiplicative systematics
+              case UNSET: throw RuntimeException("DataSet::GenCovMat", "UNSET systype encountered");
             }
               
       fCovMat(i, j) = sig + signor*fT0Pred[i]*fT0Pred[j]*1e-4;
@@ -218,6 +219,7 @@ void DataSet::MakeArtificial()
           {
             case ADD: xadd += rng->GetRandomGausDev(1.0)*fSys[i][l].add; break;
             case MULT: xnor[i] *= (1.0 + rng->GetRandomGausDev(1.0)*fSys[i][l].mult*1e-2); break;
+            case UNSET: throw RuntimeException("DataSet::MakeArtificial", "UNSET systype encountered");
           }
         }
         else                                              //Noise from correlated systematics
@@ -226,6 +228,7 @@ void DataSet::MakeArtificial()
           {
             case ADD: xadd += rand[l]*fSys[i][l].add; break;
             case MULT: xnor[i] *= (1.0 + rand[l]*fSys[i][l].mult*1e-2); break;
+            case UNSET: throw RuntimeException("DataSet::MakeArtificial", "UNSET systype encountered");
           }
         }
       }

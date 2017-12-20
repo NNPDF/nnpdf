@@ -205,6 +205,7 @@ void Experiment::MakeReplica()
           {
             case ADD: xadd += rng->GetRandomGausDev(1.0)*fSys[i][l].add; break;
             case MULT: xnor[i] *= (1.0 + rng->GetRandomGausDev(1.0)*fSys[i][l].mult*1e-2); break;
+            case UNSET: throw RuntimeException("Experiment::MakeReplica", "UNSET systype encountered");
           }
         }
         else                                                      // Noise from correlated systematics
@@ -213,6 +214,7 @@ void Experiment::MakeReplica()
           {
             case ADD: xadd += rand[l]*fSys[i][l].add; break;
             case MULT: xnor[i] *= (1.0 + rand[l]*fSys[i][l].mult*1e-2); break;
+            case UNSET: throw RuntimeException("Experiment::MakeReplica", "UNSET systype encountered");
           }
         }
       }
@@ -438,6 +440,7 @@ void Experiment::GenCovMat()
       double diagsignor = 0.0;
       auto &sys = fSys[i][l];
       switch (compsys.type) {
+      case UNSET: throw RuntimeException("Experiment::GenCovMat", "UNSET systype encountered");
       case ADD:
         diagsig += sys.add * sys.add;
         break; // additive systematics
@@ -456,6 +459,7 @@ void Experiment::GenCovMat()
         // Hopefully easy enough for the compiler to fuse this up
         decltype(sys.add) res;
         switch (compsys.type) {
+        case UNSET: throw RuntimeException("Experiment::GenCovMat", "UNSET systype encountered");
         case ADD:
           res = sys.add * othersys.add;
           break; // additive systematics
