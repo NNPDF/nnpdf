@@ -50,5 +50,14 @@ namespace Buildmaster
         NNPDF::CommonData(readMeta(setname))
         {
         }
+
+        // Sets the value of a datapoint
+        void SetData     ( unsigned int index, double datapoint );
+        // Sets the kinematic values of a datapoint
+        void SetKinematic( string kinematic, double kinematic_value );
+        // Sets the statistical error on a datapoint
+        void SetStatisticalError( unsigned int index, double staterror );
+        // Sets a systematic error on a datapoint
+        void SetSystematicError ( unsigned int index, string sysid, NNPDF::sysType type, double absolute_value );
     };
 }

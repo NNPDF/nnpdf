@@ -58,6 +58,24 @@ NNPDF::dataInfoRaw readMeta(string setname)
     return info;
 }
 
+void Buildmaster::CommonData::SetData( unsigned int index, double datapoint)
+{
+    if (index >= fNData)
+        throw NNPDF::RuntimeException("SetData", "Requested fill index: "+to_string(index) + " is out of bounds");
+    if (fData[index] == fData[index]) // Data value is not a NaN (unset values are NaN)
+        throw NNPDF::RuntimeException("SetData", "Requested fill index: "+to_string(index) + " is already filled");
+    fData[index] = datapoint;
+}
+
+void Buildmaster::CommonData::SetStatisticalError( unsigned int index, double staterror )
+{
+    if (index >= fNData)
+        throw NNPDF::RuntimeException("SetStatisticalError", "Requested fill index: "+to_string(index) + " is out of bounds");
+    if (fStat[index] == fStat[index]) // Value is not a NaN (unset values are NaN)
+        throw NNPDF::RuntimeException("SetStatisticalError", "Requested fill index: "+to_string(index) + " is already filled");
+    fStat[index] = staterror;
+}
+
 template <typename T>
 T sign(T t)
 {

@@ -66,6 +66,7 @@ void DYPosFilter::ReadData()
     }
 
     fData[i] = 0;
+    fStat[i] = 0;
     fKin2[i] = q2pos;
     fKin3[i] = sqrts;
   }
@@ -91,6 +92,7 @@ void DISPosFilter::ReadData()
       fKin1[i] = xch + step * ( 1 + i - nxposlog);
 
     fData[i] = 0;
+    fStat[i] = 0;
     fKin2[i] = q2pos;
     fKin3[i] = 0;
   }
