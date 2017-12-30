@@ -26,7 +26,9 @@ providers = [
              'validphys.pdfgrids',
              'validphys.kinematics',
              'validphys.correlations',
-             'validphys.paramfits',
+             'validphys.chi2grids',
+             'validphys.paramfits.dataops',
+             'validphys.paramfits.plots',
              'reportengine.report'
             ]
 
