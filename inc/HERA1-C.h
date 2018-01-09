@@ -10,42 +10,10 @@
 
 #include "buildmaster_utils.h"
 
-// ********** HERA1 Combined ***************
-
-static const dataInfoRaw HERA1NCEPinfo = {
-  528,                   //nData
-  115,                   //nSys
-  "HERA1NCEP",           //SetName
-  "DIS_NCP"              //ProcType
-};
-
-static const dataInfoRaw HERA1NCEMinfo = {
-  145,                   //nData
-  115,                   //nSys
-  "HERA1NCEM",           //SetName
-  "DIS_NCE"              //ProcType
-};
-
-static const dataInfoRaw HERA1CCEPinfo = {
-  34,                    //nData
-  115,                   //nSys
-  "HERA1CCEP",           //SetName
-  "DIS_CCP"              //ProcType
-};
-
-static const dataInfoRaw HERA1CCEMinfo = {
-  34,                 //nData
-  115,                   //nSys
-  "HERA1CCEM",           //SetName
-  "DIS_CCE"          //ProcType
-};
-
-// ********* Filters **************
-
 class HERA1NCEPFilter: public CommonData
 {
 public: HERA1NCEPFilter():
-  CommonData(HERA1NCEPinfo) { ReadData(); }
+  CommonData("HERA1NCEP") { ReadData(); }
 
 private:
   void ReadData();
@@ -54,7 +22,7 @@ private:
 class HERA1NCEMFilter: public CommonData
 {
 public: HERA1NCEMFilter():
-  CommonData(HERA1NCEMinfo) { ReadData(); }
+  CommonData("HERA1NCEM") { ReadData(); }
 
 private:
   void ReadData();
@@ -63,7 +31,7 @@ private:
 class HERA1CCEPFilter: public CommonData
 {
 public: HERA1CCEPFilter():
-  CommonData(HERA1CCEPinfo) { ReadData(); }
+  CommonData("HERA1CCEP") { ReadData(); }
 
 private:
   void ReadData();
@@ -72,7 +40,7 @@ private:
 class HERA1CCEMFilter: public CommonData
 {
 public: HERA1CCEMFilter():
-  CommonData(HERA1CCEMinfo) { ReadData(); }
+  CommonData("HERA1CCEM") { ReadData(); }
 
 private:
   void ReadData();

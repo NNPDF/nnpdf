@@ -1,6 +1,4 @@
 #pragma once
-// $Id
-//
 // NNPDF++ 2012
 //
 // Authors: Nathan Hartland,  n.p.hartland@ed.ac.uk
@@ -26,30 +24,9 @@
 #include "buildmaster_utils.h"
 #include <map>
 
-static const dataInfoRaw ATLASZPT8TEVYDISTinfo = {
-  120,          //nData  
-  101,          //nSys: 1 total uncorrelated + 99 correlated + 2.8% luminosity   
-  "ATLASZPT8TEVYDIST", //SetName
-  "EWK_PTRAP"       //ProcType
-};
-
-static const dataInfoRaw ATLASZPT8TEVYDISTNORMinfo = {
-  120,          //nData  
-  100,          //nSys: 1 total uncorrelated + 99 correlated
-  "ATLASZPT8TEVYDISTNORM", //SetName
-  "EWK_PTRAP"       //ProcType
-};
-
-static const dataInfoRaw ATLASZPT8TEVMDISTinfo = {
-  64,          //nData  
-  101,          //nSys: 1 total uncorrelated + 99 correlated + 2.8% luminosity   
-  "ATLASZPT8TEVMDIST", //SetName
-  "EWK_PT"       //ProcType
-};
-
 class ATLASZPT8TEVYDISTFilter: public CommonData
 { public: ATLASZPT8TEVYDISTFilter():
-  CommonData(ATLASZPT8TEVYDISTinfo) { ReadData(); }
+  CommonData("ATLASZPT8TEVYDIST") { ReadData(); }
 
 private:
   void ReadData();
@@ -57,7 +34,7 @@ private:
 
 class ATLASZPT8TEVYDISTNORMFilter: public CommonData
 { public: ATLASZPT8TEVYDISTNORMFilter():
-  CommonData(ATLASZPT8TEVYDISTNORMinfo) { ReadData(); }
+  CommonData("ATLASZPT8TEVYDISTNORM") { ReadData(); }
 
 private:
   void ReadData();
@@ -65,7 +42,7 @@ private:
 
 class ATLASZPT8TEVMDISTFilter: public CommonData
 { public: ATLASZPT8TEVMDISTFilter():
-  CommonData(ATLASZPT8TEVMDISTinfo) { ReadData(); }
+  CommonData("ATLASZPT8TEVMDIST") { ReadData(); }
 
 private:
   void ReadData();

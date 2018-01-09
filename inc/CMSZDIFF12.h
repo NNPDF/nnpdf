@@ -10,20 +10,9 @@
 
 #include "buildmaster_utils.h"
 
-// ********** CMSZDIFF12 ***************
-
-static const dataInfoRaw CMSZDIFF12info = {
-  50,               //nData
-  51,               //nSys
-  "CMSZDIFF12",     //SetName
-  "EWK_PTRAP"       //ProcType
-};
-
-// ********* Filters **************
-
 class CMSZDIFF12Filter: public CommonData
 { public: CMSZDIFF12Filter():
-  CommonData(CMSZDIFF12info) { ReadData(); }
+  CommonData("CMSZDIFF12") { ReadData(); }
 
 private:
   void ReadData();

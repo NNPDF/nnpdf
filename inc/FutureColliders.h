@@ -10,25 +10,11 @@
 
 #include "buildmaster_utils.h"
 
-static const dataInfoRaw FCCinfo = {
-  107,          // nData
-  1,          // 1 uncor
-  "FCC",  // SetName
-  "DIS_NCP"    // ProcType
-};
-
-static const dataInfoRaw LHeCinfo = {
-  157,          // nData
-  1,          // 1 uncor
-  "LHeC",  // SetName
-  "DIS_NCP"    // ProcType
-};
-
 class FutureColliderFilter: public CommonData
 {
 public: 
-	FutureColliderFilter(dataInfoRaw const& datInfo):
-  	CommonData(datInfo) { ReadData(); }
+	FutureColliderFilter(std::string const& setname):
+  	CommonData(setname) { ReadData(); }
 
 private:
   void ReadData();
@@ -38,12 +24,12 @@ class FCCFilter: public FutureColliderFilter
 {
 public: 
   FCCFilter():
-    FutureColliderFilter(FCCinfo) { }
+    FutureColliderFilter("FCC") { }
 };
 
 class LHeCFilter: public FutureColliderFilter
 {
 public: 
   LHeCFilter():
-    FutureColliderFilter(LHeCinfo) { }
+    FutureColliderFilter("LHeC") { }
 };

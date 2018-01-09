@@ -10,63 +10,10 @@
 
 #include "buildmaster_utils.h"
 
-// ********** LHCB ***************
-
-static const dataInfoRaw LHCBW36PBinfo = {
-  10,          //nData
-  11,          //nSys
-  "LHCBW36PB", //SetName
-  "EWK_RAP"    //ProcType
-};
-
-static const dataInfoRaw LHCBZ940PBinfo = {
-  9,            //nData
-  11,           //nSys
-  "LHCBZ940PB", //SetName
-  "EWK_RAP"     //ProcType
-};
-
-static const dataInfoRaw LHCBLOWMASS37PBinfo = {
-  9,                 //nData
-  2,                 //nSys
-  "LHCBLOWMASS37PB", //SetName
-  "DYP_MLL"          //ProcType
-};
-
-static const dataInfoRaw LHCBWMU1FBinfo = {
-  16,           //nData
-  17,           //nSys
-  "LHCBWMU1FB", //SetName
-  "EWK_RAP"     //ProcType
-};
-
-static const dataInfoRaw LHCBWZMU7TEVinfo = {
-  33,             //nData
-  35,             //nSys: covariance matrix + beam + lumi
-  "LHCBWZMU7TEV", //SetName
-  "EWK_RAP"       //ProcType
-};
-
-static const dataInfoRaw LHCBWZMU8TEVinfo = {
-  34,             //nData
-  36,             //nSys: covariance matrix + beam + lumi
-  "LHCBWZMU8TEV", //SetName
-  "EWK_RAP"       //ProcType
-};
-
-static const dataInfoRaw LHCBZEE2FBinfo = {
-  17,           //nData
-  19,           //nSys
-  "LHCBZEE2FB", //SetName
-  "EWK_RAP"     //ProcType
-};
-
-// ********* Filters **************
-
 class LHCBW36PBFilter: public CommonData
 {
 public: LHCBW36PBFilter():
-  CommonData(LHCBW36PBinfo) { ReadData(); }
+  CommonData("LHCBW36PB") { ReadData(); }
 
 private:
   void ReadData();
@@ -75,7 +22,7 @@ private:
 class LHCBZ940PBFilter: public CommonData
 {
 public: LHCBZ940PBFilter():
-  CommonData(LHCBZ940PBinfo) { ReadData(); }
+  CommonData("LHCBZ940PB") { ReadData(); }
 
 private:
   void ReadData();
@@ -84,7 +31,7 @@ private:
 class LHCBLOWMASS37PBFilter: public CommonData
 {
 public: LHCBLOWMASS37PBFilter():
-  CommonData(LHCBLOWMASS37PBinfo) { ReadData(); }
+  CommonData("LHCBLOWMASS37PB") { ReadData(); }
 
 private:
   void ReadData();
@@ -93,7 +40,7 @@ private:
 class LHCBWMU1FBFilter: public CommonData
 {
 public: LHCBWMU1FBFilter():
-  CommonData(LHCBWMU1FBinfo) { ReadData(); }
+  CommonData("LHCBWMU1FB") { ReadData(); }
 
 private:
   void ReadData();
@@ -102,7 +49,7 @@ private:
 class LHCBWZMU7TEVFilter: public CommonData
 {
 public: LHCBWZMU7TEVFilter():
-  CommonData(LHCBWZMU7TEVinfo) { ReadData(); }
+  CommonData("LHCBWZMU7TEV") { ReadData(); }
 
 private:
   void ReadData();
@@ -111,7 +58,7 @@ private:
 class LHCBWZMU8TEVFilter: public CommonData
 {
 public: LHCBWZMU8TEVFilter():
-  CommonData(LHCBWZMU8TEVinfo) { ReadData(); }
+  CommonData("LHCBWZMU8TEV") { ReadData(); }
 
 private:
   void ReadData();
@@ -120,7 +67,7 @@ private:
 class LHCBZEE2FBFilter: public CommonData
 {
 public: LHCBZEE2FBFilter():
-  CommonData(LHCBZEE2FBinfo) { ReadData(); }
+  CommonData("LHCBZEE2FB") { ReadData(); }
 
 private:
   void ReadData();

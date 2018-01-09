@@ -81,20 +81,21 @@ definitions. The input files are raw data files obtained from papers
 select his preferred format, but csv or plain text are the recommended
 formats.
 
-2. Create a new class with the dataset name in `inc` (*.h) and
-`filters` (*.cc) following the patter of other datasets, i.e. in the
-header create a
-```c++
-static const dataInfoRaw MY_NEW_DATATSET_INFO = {
-int, // number of data points
-int, // number of systematics
-string, // the set name
-string, // the process type (check apfelcomb documentation) }
+2. Create a metadata file in `meta` in yaml with the format
+```yaml
+# DATASET.yaml
+ndata:    <number of datapoints>
+nsys:     <number of systematic errors>
+setname:  <setname in double quotes, i.e "ATLAS1JET11">
+proctype: <process type (see nnpdfcpp/doc) in double quotes i.e "JET")
 ```
-followed by a new class which inherits from libnnpdf `NNPDF::CommonData`:
+
+3. Create a new class with the dataset name in `inc` (*.h) and
+`filters` (*.cc) following the patter of other datasets, i.e. in the
+header create a new class which inherits from `CommonData`:
 ```c++
 class MY_NEW_DATASET_CLASSFilter: public CommonData {
-public: MY_NEW_DATASET_CLASSFilter(MY_NEW_DATASET_INFO) { ReadData(); }
+public: MY_NEW_DATASET_CLASSFilter("MY_NEW_DATASET_NAME") { ReadData(); }
 private:
 	void ReadData();
 }

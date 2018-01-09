@@ -15,18 +15,10 @@
 
 #include "buildmaster_utils.h"
 
-static const dataInfoRaw CMSTTBARTOT13TEVinfo = {
-  1,               //nData
-  2,               //nSys
-  "CMSTTBARTOT13TEV",   //SetName
-  "INC"            //ProcType
-};
-
-
 class CMSTTBARTOT13TEVFilter: public CommonData
 {
 public: CMSTTBARTOT13TEVFilter():
-  CommonData(CMSTTBARTOT13TEVinfo) { ReadData(); }
+  CommonData("CMSTTBARTOT13TEV") { ReadData(); }
 
 private:
   void ReadData();

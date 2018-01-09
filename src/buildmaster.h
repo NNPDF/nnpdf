@@ -12,8 +12,8 @@
 #include <iostream>
 
 #include "common.h"
-#include <NNPDF/commondata.h>
-using NNPDF::CommonData;
+#include "buildmaster_utils.h"
+
 using namespace std;
 
 // Push all available filters into vector

@@ -19,9 +19,62 @@
 
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_eigen.h>
+#include <yaml-cpp/yaml.h>
+#include <NNPDF/exceptions.h>
 
 #include "common.h"
+#include "buildmaster_utils.h"
+
 using namespace std;
+
+
+// Better error handling for YAML 
+template<class T>
+T fetchEntry(YAML::Node const& yml, string const& key)
+{
+  if (!yml[key])
+    throw NNPDF::RuntimeException("readMeta", "Key: "+key+" not found in metadata file");
+  return yml[key].as<T>();
+}
+
+// Reading of NNPDF Meta files
+NNPDF::dataInfoRaw readMeta(string setname)
+{
+    // Open metadata file
+    const std::string filename = dataPath() +"meta/"+setname+".yaml";
+    const ifstream testfile(filename);
+    if (!testfile.good())
+        throw NNPDF::RuntimeException("readMeta", "Metadata file: "+filename+" cannot be read");
+
+    const YAML::Node meta = YAML::LoadFile(filename);
+    if (setname != meta["setname"].as<std::string>())
+        throw NNPDF::RuntimeException("readMeta", "Setname in metadata file: "+filename+" does not match requested setname");
+
+    const NNPDF::dataInfoRaw info = { fetchEntry<int>(meta,"ndata"),
+                                      fetchEntry<int>(meta,"nsys"),
+                                      fetchEntry<string>(meta,"setname"),
+                                      fetchEntry<string>(meta,"proctype")};
+
+    return info;
+}
+
+void Buildmaster::CommonData::SetData( unsigned int index, double datapoint)
+{
+    if (index >= fNData)
+        throw NNPDF::RuntimeException("SetData", "Requested fill index: "+to_string(index) + " is out of bounds");
+    if (fData[index] == fData[index]) // Data value is not a NaN (unset values are NaN)
+        throw NNPDF::RuntimeException("SetData", "Requested fill index: "+to_string(index) + " is already filled");
+    fData[index] = datapoint;
+}
+
+void Buildmaster::CommonData::SetStatisticalError( unsigned int index, double staterror )
+{
+    if (index >= fNData)
+        throw NNPDF::RuntimeException("SetStatisticalError", "Requested fill index: "+to_string(index) + " is out of bounds");
+    if (fStat[index] == fStat[index]) // Value is not a NaN (unset values are NaN)
+        throw NNPDF::RuntimeException("SetStatisticalError", "Requested fill index: "+to_string(index) + " is already filled");
+    fStat[index] = staterror;
+}
 
 template <typename T>
 T sign(T t)

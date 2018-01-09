@@ -93,8 +93,7 @@ void InitCommonData(vector<CommonData*>& target)
 
   // ************************* POS ******************************
 
-  registerDYPos(target);
-  registerDISPos(target);
+  register_positivity(target);
 
   // ************************* ATLAS ******************************
 
@@ -105,7 +104,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASR06JETS36PBFilter());
   target.push_back(new ATLASR04JETS2P76TEVFilter());
   target.push_back(new ATLASR06JETS2P76TEVFilter());
-  target.push_back(new ATLASZHIGHMASS49PBFilter());
+  target.push_back(new ATLASZHIGHMASS49FBFilter());
   target.push_back(new ATLASWPT31PBFilter());
   target.push_back(new ATLAS1JET11Filter());
   target.push_back(new ATLASLOMASSDY11Filter());

@@ -11,21 +11,10 @@
 
 #include "buildmaster_utils.h"
 
-// ********** ZEUS F2B ***************
-
-static const dataInfoRaw ZEUSF2Binfo = {
-  17,                //nData
-  2,                 //nSys
-  "ZEUSHERAF2B",          //SetName
-  "DIS_NCE_BT"          //ProcType
-};
-
-// ********* Filters **************
-
 class ZEUSF2BFilter: public CommonData
 {
 public: ZEUSF2BFilter():
-  CommonData(ZEUSF2Binfo) { ReadData(); }
+  CommonData("ZEUSHERAF2B") { ReadData(); }
 
 private:
   void ReadData();

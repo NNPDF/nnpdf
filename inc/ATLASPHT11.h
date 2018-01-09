@@ -10,32 +10,11 @@
 
 #include "buildmaster_utils.h"
 
-static const dataInfoRaw ATLASPHT11ETGCTRinfo = {
-  13,                    //nData
-  9,                     //nSys (7 corr. 2 uncorr.)
-  "ATLASPHT11ETGCTR",    //SetName
-  "PHT"                  //ProcType
-};
-
-static const dataInfoRaw ATLASPHT11ETGFWDinfo = {
-  10,                    //nData
-  9,                     //nSys (7 corr. 2 uncorr.)
-  "ATLASPHT11ETGFWD",    //SetName
-  "PHT"                  //ProcType
-};
-
-static const dataInfoRaw ATLASPHT11ETAGinfo = {
-  11,                    //nData
-  9,                     //nSys (7 corr. 2 uncorr.)
-  "ATLASPHT11ETAG",      //SetName
-  "PHT"                  //ProcType
-};
-
 // ********* Filters ************
 
 class ATLASPHT11ETGCTRFilter: public CommonData
 { public: ATLASPHT11ETGCTRFilter():
-  CommonData(ATLASPHT11ETGCTRinfo) { ReadData(); }
+  CommonData("ATLASPHT11ETGCTR") { ReadData(); }
 
 private:
   void ReadData();
@@ -43,7 +22,7 @@ private:
 
 class ATLASPHT11ETGFWDFilter: public CommonData
 { public: ATLASPHT11ETGFWDFilter():
-  CommonData(ATLASPHT11ETGFWDinfo) { ReadData(); }
+  CommonData("ATLASPHT11ETGCTR") { ReadData(); }
 
 private:
   void ReadData();
@@ -51,7 +30,7 @@ private:
 
 class ATLASPHT11ETAGFilter: public CommonData
 { public: ATLASPHT11ETAGFilter():
-  CommonData(ATLASPHT11ETAGinfo) { ReadData(); }
+  CommonData("ATLASPHT11ETAG") { ReadData(); }
 
 private:
   void ReadData();
