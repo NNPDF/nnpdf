@@ -22,6 +22,38 @@ from reportengine.table import table
 
 log = logging.getLogger(__name__)
 
+class StandardSampleWrapper:
+    """A class that holds a flat array of data, and has 'location' and
+    'scale' properties, which are the mean and the standard deviation.
+    The puepose of the class is to explicitly disallow calling np.mean
+    and np.std on the result while  preserving functional backward
+    compatibily with the runcards."""
+    def __init__(self, data):
+        self.data = data
+
+    @property
+    def location(self):
+        return np.mean(self.data)
+
+    @property
+    def scale(self):
+        return np.std(self.data)
+
+class RobustSampleWrapper:
+    """Similar to ``StandardSampleWrapper``, but location and scale
+    are implemented as the median and the 68% interval respectively."""
+    def __init__(self, data):
+        self.data = data
+
+    @property
+    def location(self):
+        return np.median(self.data)
+
+    @property
+    def scale(self):
+        return np.asscalar(np.diff(np.percentile(self.data, [15.87, 84.13])))/2
+
+
 def get_parabola(asvals, chi2vals):
     """Return the three coefficients of a parabola χ²(αs) given a set of
     asvals and a set of χ² values.
@@ -121,7 +153,7 @@ def discarded_mask(
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
         estimate = parabolic_as_determination(fits_as,df)
-    best_as = np.mean(estimate)
+    best_as = estimate.location
     dist_best_as = -np.abs(best_as - fits_as)
     to_remove = np.argpartition(dist_best_as, trim_ndistant)[:trim_ndistant]
     as_mask = np.ones(df.shape[1], dtype=bool)
@@ -149,7 +181,7 @@ def discarded_mask(
                 #Apply as mask before fitting
                 tablefilt_total = tablefilt_total.copy()
                 tablefilt_total.iloc[:,~as_mask] = np.NAN
-                parabolas = parabolic_as_determination(fits_as,tablefilt_total)
+                parabolas = parabolic_as_determination(fits_as,tablefilt_total).data
                 bootstrap_est = np.random.choice(parabolas,(100000,size)).std(axis=1).std()
             else:
                 bootstrap_est = np.inf
@@ -179,8 +211,8 @@ def fits_replica_data_with_discarded_replicas(
 def _parabolic_as_minimum_and_coefficient(fits_as,
         fits_replica_data_with_discarded_replicas,
         badcurves='discard'):
-    """This is like parabolic_as_determination but without the as_transform
-    functionality"""
+    """This implements the fitting in ``parabolic_as_determination``.
+    Returns the minimum and the set of locations."""
     alphas = fits_as
 
     table = fits_replica_data_with_discarded_replicas.as_matrix()
@@ -218,7 +250,7 @@ def _parabolic_as_determination(fits_as,
 def quadratic_as_determination(fits_as,
         fits_replica_data_with_discarded_replicas,badcurves='discard'):
 
-    return _parabolic_as_minimum_and_coefficient( fits_as,
+    return _parabolic_as_minimum_and_coefficient(fits_as,
                    fits_replica_data_with_discarded_replicas, badcurves)[1]
 
 
@@ -231,17 +263,34 @@ def _check_as_transform(as_transform):
                          f"as_transform are {values}", str(as_transform),
                          values[1:])
 
+@make_argcheck
+def _check_parabolic_as_statistics(parabolic_as_statistics):
+    values = 'standard', 'robust'
+    if parabolic_as_statistics not in values:
+        raise CheckError('The allowed values for'
+                f'`parabolic_as_statistics` are {values}',
+                parabolic_as_statistics, values)
+
+
 @_check_badcurves
 @_check_as_transform
-def parabolic_as_determination(fits_as,
+@_check_parabolic_as_statistics
+def parabolic_as_determination(
+        fits_as,
         fits_replica_data_with_discarded_replicas,
-        badcurves='discard', as_transform:(str, type(None))=None):
+        badcurves='discard',
+        as_transform:(str, type(None))=None,
+        parabolic_as_statistics:str='standard'):
     """Return the minima for alpha_s corresponding to the fitted curves.
     ``badcuves`` specifies what to do with concave replicas and can be one of
     'discard', 'allminimum'
     (which takes the minimum points
     for *all* the replicas without fitting a parabola) or
     'minimum' (which takes the minimum value for the concave replicas).
+
+    If ``parabolic_as_statistics`` is ``"standard"``, means and standard
+    deviations will be used to compute statstics. Otherwise, if it is
+    ``"robust"``, nedians and 68% intervals will be used.
 
     as_transform can be None, 'log' or 'exp' and is applied to the as_values
     and then reversed for the minima.
@@ -257,7 +306,13 @@ def parabolic_as_determination(fits_as,
         minimums = np.exp(minimums)
     elif as_transform == 'exp':
         minimums = np.log(minimums)
-    return minimums
+    if parabolic_as_statistics == 'standard':
+        res = StandardSampleWrapper(minimums)
+    elif parabolic_as_statistics == 'robust':
+        res = RobustSampleWrapper(minimums)
+    else:
+        raise RuntimeError("Unknown `parabolic_as_statistics`.")
+    return res
 
 def as_central_parabola(
         fits_as,
@@ -450,7 +505,7 @@ def bootstrapping_stats_error(parabolic_as_determination, nresamplings:int=10000
     deterrminations of as, by resampling the list of points with replacement
     from the original sampling distribution `nresamplings` times
     and thn computing the standard deviation of the means."""
-    distribution = parabolic_as_determination
+    distribution = parabolic_as_determination.data
     shape = (nresamplings, len(distribution))
     if not len(distribution):
         log.error("Cannot conpute stats error. Empty data.")
@@ -461,7 +516,8 @@ def bootstrapping_stats_error(parabolic_as_determination, nresamplings:int=10000
 @check_positive('nresamplings')
 def half_sample_stats_error(parabolic_as_determination, nresamplings:int=100000):
     """Like the bootstrapping error, but using only half og the data"""
-    distribution = parabolic_as_determination[:len(parabolic_as_determination)//2]
+    sample = parabolic_as_determination.data
+    distribution = sample[:len(sample)//2]
     if not len(distribution):
         log.error("Cannot compute half stats. Too few data")
         return np.nan
@@ -513,16 +569,16 @@ def pseudorreplicas_stats_error(
                 as_datasets_pseudorreplicas_chi2,
                 as_datasets_bootstrapping_stats_error,
                 as_datasets_half_sample_stats_error):
-        d[ps_mean][tag] = np.mean(distribution)
-        d[n][tag] = len(distribution)
-        d[ps_error][tag] = np.std(distribution)
+        d[ps_mean][tag] = distribution.location
+        d[n][tag] = len(distribution.data)
+        d[ps_error][tag] = distribution.scale
         d[ps_stat_error][tag] = statserr
         d[ps_half_stat_error][tag] = halfstaterr
         d[stats_ratio][tag] = halfstaterr/statserr/np.sqrt(2)
 
-        ldh = len(distribution)//2
-        onehalf = distribution[:ldh]
-        otherhalf = distribution[ldh:]
+        ldh = len(distribution.data)//2
+        onehalf = distribution.data[:ldh]
+        otherhalf = distribution.data[ldh:]
         d[stats_halfone][tag] = np.mean(onehalf)
         d[err_halfone][tag] = np.std(onehalf)
         d[stats_halfother][tag] = np.mean(otherhalf)
@@ -652,7 +708,7 @@ def datasepecs_quad_table_impl(
         dataset_items:(list, type(None)) = None,
         display_n:bool = False,
         ):
-    """Return a table with the mean and error of the quadratic value of the parabolic
+    """Return a table with the mean and error of the quadratic coefficient of the parabolic
     determinations across dataspecs. If display_n is True, a column showing the number of points
     will be added to the table"""
     tables = []
@@ -677,6 +733,7 @@ def datasepecs_quad_table_impl(
     df = pd.concat(tables, axis=1, keys=dataspecs_speclabel)
     if dataset_items is None:
         ordered_keys = list(taglist)
+
     else:
         ordered_keys = dataset_items
 
@@ -708,12 +765,12 @@ def datasepecs_as_value_error_table_impl(
         d = defaultdict(dict)
 
         for distribution, tag in dets:
-            d['mean'][tag] = np.mean(distribution)
-            d['error'][tag] = np.std(distribution)
+            d['mean'][tag] = distribution.location
+            d['error'][tag] = distribution.scale
 
 
             if display_n:
-                d['n'][tag] = len(distribution)
+                d['n'][tag] = len(distribution.data)
             taglist[tag] = None
 
         tables.append(pd.DataFrame(d, columns=cols))
@@ -790,5 +847,3 @@ def dataspecs_chi2_by_dataset_dict(dataspecs_dataset_suptitle,
         for k in allkeys-set(keys):
             res[k].append(None)
     return res
-
-

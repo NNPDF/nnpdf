@@ -90,7 +90,7 @@ def plot_as_cummulative_central_chi2_diff(fits_as,
     """
     fig,ax  = plt.subplots()
     nx = 100
-    best_as = np.mean(parabolic_as_determination_for_total)
+    best_as = parabolic_as_determination_for_total[0].location
     asarr = np.linspace(min(fits_as), max(fits_as), nx)
     last = np.zeros(nx)
     for (p, label) in zip(as_datasets_central_parabolas, central_by_dataset_suptitle):
@@ -503,13 +503,13 @@ def plot_fitted_replicas_as_profiles_matched(fits_as,
     from matplotlib.collections import LineCollection
 
     lc = LineCollection([list(x for x in zip(alphas, t) if np.isfinite(x[1])) for t in table])
-    lc.set_array(minimums)
-    lc.set_clim(*np.percentile(minimums, (5,95)))
+    lc.set_array(minimums.data)
+    lc.set_clim(*np.percentile(minimums.data, (5,95)))
     ax.add_collection(lc)
     ax.set_xlim(min(alphas), max(alphas))
     ax.set_ylim(np.nanmin(table), np.nanmax(table))
     fig.colorbar(lc, label=r"Preferred $\alpha_S$")
-    ax.set_title(rf"$\alpha_S$ = ${np.mean(minimums):.4f} \pm {np.std(minimums):.4f}$ N={len(minimums)}")
+    ax.set_title(rf"$\alpha_S$ = ${minimums.location:.4f} \pm {minimums.scale:.4f}$ N={len(minimums.data)}")
     if suptitle:
         fig.suptitle(suptitle)
 
@@ -609,7 +609,7 @@ def plot_as_distribution(parabolic_as_determination, suptitle):
     """Histograms of the values of alphas produced, with the datapoints in
     an array as sticks on an axis"""
 
-    distribution = parabolic_as_determination
+    distribution = parabolic_as_determination.data
 
     fig, ax = plt.subplots()
 
