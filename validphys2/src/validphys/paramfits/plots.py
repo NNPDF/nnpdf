@@ -4,6 +4,7 @@ plots.py
 Plots for the paramfits package.
 """
 import logging
+from collections import defaultdict
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -355,7 +356,15 @@ def plot_pull_plots_global_min(datasepecs_as_value_error_table_impl,
 
     pulls = _pulls_func(cvs,tots_mean,errors,tots_error).T
 
+    pulls = np.asarray(pulls,dtype=float)
+    #Compute sums
+    #sp = np.atleast_2d(np.nansum(pulls, axis=1)).T
+    #pulls =np.concatenate([pulls, sp], axis=1)
+
+    #fig, ax = barplot(pulls, [*catlabels, 'sum'], dataspecs_speclabel, orientation="horizontal")
     fig, ax = barplot(pulls, catlabels, dataspecs_speclabel, orientation="horizontal")
+
+
     #ax.set_title(r"Pulls per experiment")
     ax.legend()
     return fig
@@ -670,3 +679,59 @@ def plot_poly_as_fit(fits_as,
         fig.suptitle(suptitle)
     return fig
 
+
+#TODO: This should probably be done more granularly and not here
+
+def _reduce_mean_parabola(df):
+    if df is None:
+        return None
+    a,b,c = get_parabola(df.columns, df.mean(axis=0))
+    if a < 0:
+        raise ValueError("Expecting convex parabola")
+    minimum = -b/2/a
+    error  = 1/np.sqrt(a)
+    return minimum, error
+
+@figure
+def plot_mean_pulls(dataspecs_chi2_by_dataset_dict, dataspecs_speclabel):
+    """Compute the pulls from the sum of the parabolas."""
+    d = dataspecs_chi2_by_dataset_dict
+    dtotal = d['Total']
+    er_val_global = [_reduce_mean_parabola(v) for v in dtotal]
+    ks = set(d.keys())
+    ks.remove('Total')
+    l = [0]*len(dataspecs_speclabel)
+    for k in ks:
+        for i in range(len(dataspecs_speclabel)):
+            l[i] = l[i] + d[k][i]
+    er_val_global = [_reduce_mean_parabola(it) for it in l]
+
+
+    pulls = []
+    for dataset_item in d:
+        ditem = d[dataset_item]
+        ds_pulls = []
+        for tb, (alphas_global, error_global) in zip(ditem, er_val_global):
+            if tb is None:
+                ds_pulls.append(None)
+                continue
+            try:
+                cv, error = _reduce_mean_parabola(tb)
+            except ValueError:
+                log.error(f"Concave parabola for {dataset_item}")
+                ds_pulls.append(None)
+            else:
+                ds_pulls.append(_pulls_func(cv, alphas_global, error, error_global))
+
+        pulls.append(ds_pulls)
+
+    pulls = np.asarray(pulls,dtype=float)
+    #Add total sum
+    #sp = np.atleast_2d(np.nansum(pulls, axis=0))
+    #pulls =np.concatenate([pulls, sp], axis=0)
+    #fig,ax = barplot(pulls.T, [*d.keys(), 'sum'], dataspecs_speclabel)
+
+    fig,ax = barplot(pulls.T, d.keys(), dataspecs_speclabel)
+
+    ax.legend()
+    return fig
