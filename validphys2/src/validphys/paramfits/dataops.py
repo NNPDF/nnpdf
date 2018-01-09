@@ -847,3 +847,39 @@ def dataspecs_chi2_by_dataset_dict(dataspecs_dataset_suptitle,
         for k in allkeys-set(keys):
             res[k].append(None)
     return res
+
+
+as_dataset_pseudodata = collect(
+    fits_replica_data_with_discarded_replicas,
+    ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
+)
+
+@table
+def as_parabolic_coefficient_table(
+        fits_as,
+        by_dataset_suptitle,
+        as_dataset_pseudodata):
+    """Return a table of the parabolic fit of each dataset item, for each
+    correlated replica. The index is the correlated_replica index and there
+    are four columns for each dataset: 'a', 'b' and 'c'  corresponding to the
+    parabolic coefficients and 'min', which is ``-b/2/a`` if 'a' is positive,
+    and NaN otherwise."""
+    alphas = np.asarray(fits_as)
+    tb_polys = []
+    #Easier to repeat the polyfit code here than to change the format of the
+    #various outputs.
+    for tb in as_dataset_pseudodata:
+        polys = []
+        for row in np.asarray(tb):
+            filt =  np.isfinite(row)
+            if not filt.any():
+                polys.append(np.array([np.nan]*3))
+                continue
+            poly = np.polyfit(alphas[filt], row[filt], 2)
+            polys.append(poly)
+        frame = pd.DataFrame(polys, index=tb.index, columns=['a','b', 'c'])
+        frame['min'] = -frame['b']/2/frame['a']
+        frame.loc[frame['a']<0,'min'] = np.nan
+        tb_polys.append(frame)
+    final_table = pd.concat(tb_polys, axis=1, keys=by_dataset_suptitle)
+    return final_table
