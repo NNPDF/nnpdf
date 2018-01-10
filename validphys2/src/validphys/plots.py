@@ -45,7 +45,7 @@ def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
         log.warn("Chi² distribution plots have a different meaning for non MC sets.")
         label += " (%s!)" % pdf.ErrorType
     label += '\n'+ '\n'.join(str(chi2_stat_labels[k])+(' %.2f' % v) for (k,v) in chi2_stats.items())
-    ax.set_title("$\chi^2$ distribution for %s" % setlabel)
+    ax.set_title(r"$\chi^2$ distribution for %s" % setlabel)
 
     ax.hist(alldata.data, label=label, zorder=100)
     l = ax.legend()
@@ -182,10 +182,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
 
         for (sameline_vals, line_data) in lineby:
             ax.set_prop_cycle(None)
-            if first:
-                labels = True
-            else:
-                labels = False
+            labels = first
             first = False
 
             offset_iter = plotutils.offset_xcentered(len(results), ax)
@@ -317,7 +314,7 @@ def _check_dataspec_normalize_to(normalize_to, dataspecs):
 
     raise CheckError("Unrecignized format for normalize_to. Must be either "
                      "'data', 0 or the 1-indexed index of the dataspec "
-                     f"(<{len(dataspecs_results)}), not {normalize_to}")
+                     f"(<{len(dataspecs)}), not {normalize_to}")
 
 
 
@@ -393,7 +390,7 @@ def plot_experiments_chi2(experiments, experiments_chi2):
     for experiment, expres in zip(experiments, experiments_chi2):
         exchi2.append(expres.central_result/expres.ndata)
         xticks.append(experiment.name)
-    fig, ax = plotutils.barplot(exchi2, collabels=xticks, datalabels=['$\chi^2$'])
+    fig, ax = plotutils.barplot(exchi2, collabels=xticks, datalabels=[r'$\chi^2$'])
     ax.set_title(r"$\chi^2$ distribution for experiments")
     return fig
 
@@ -408,7 +405,7 @@ def plot_datasets_chi2(experiments, experiments_chi2,each_dataset_chi2):
             dschi2.append(dsres.central_result/dsres.ndata)
             xticks.append(dataset.name)
     fig,ax = plotutils.barplot(dschi2, collabels=xticks,
-                               datalabels=['$\chi^2$'])
+                               datalabels=[r'$\chi^2$'])
 
     ax.set_title(r"$\chi^2$ distribution for datasets")
 
@@ -821,8 +818,10 @@ class DistancePDFPlotter(PDFPlotter):
             with np.errstate(all='call'):
                 np.seterrcall(fp_error)
                 for grid,pdf in zip(self._xplotting_grids,self.pdfs):
-                    numerator = pow(pdf.stats_class(grid.grid_values).central_value()-normvals_central,2)
-                    denominator = pow(pdf.stats_class(grid.grid_values).std_error(),2)+pow(normvals_sigma,2)
+                    cval = pdf.stats_class(grid.grid_values).central_value()
+                    err = pdf.stats_class(grid.grid_values).std_error()
+                    numerator = pow(cval - normvals_central, 2)
+                    denominator = pow(err, 2)+pow(normvals_sigma, 2)
                     newvalues = np.sqrt(numerator/denominator)
                     #newgrid is like the old grid but with updated values
                     newgrid = type(grid)(**{**grid._asdict(),
@@ -910,11 +909,11 @@ class BandPDFPlotter(PDFPlotter):
             errorstdup, errorstddown = stats.errorbarstd()
             ax.plot(xgrid, errorstdup, linestyle='--', color=color)
             ax.plot(xgrid, errorstddown, linestyle='--', color=color)
-            label  = "%s ($68\%%$ c.l.+$1\sigma$)" % pdf.label
+            label  = rf"{pdf.label} ($68%$ c.l.+$1\sigma$)"
             outer = True
         else:
             outer = False
-            label = "%s ($68\%%$ c.l.)" % pdf.label
+            label = rf"{pdf.label} ($68\%$ c.l.)"
         handle = plotutils.HandlerSpec(color=color, alpha=alpha,
                                                hatch=hatch,
                                                outer=outer)
@@ -1092,7 +1091,7 @@ def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
     fig, ax = plt.subplots()
 
     ds1, ds2 = corrpair_datasets
-    in1,in2 = get_info(ds1), get_info(ds2)
+    #in1,in2 = get_info(ds1), get_info(ds2)
 
     im = ax.imshow(obs_obs_correlations, cmap=cm.Spectral_r, vmin=-1, vmax=1)
 
@@ -1341,11 +1340,6 @@ def plot_lumi1d(pdfs, pdfs_lumis, lumi_channel, sqrts:numbers.Real,
                                            sqrts))
 
     return fig
-
-
-
-
-
 
 
 #TODO: Move these to utils somewhere? Find better implementations?
