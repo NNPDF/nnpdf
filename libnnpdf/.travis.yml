@@ -29,6 +29,7 @@ install:
       MINICONDA_FILE="Miniconda3-latest-MacOSX-x86_64.sh"
       curl -L -O "${MINICONDA_URL}/${MINICONDA_FILE}"
       bash $MINICONDA_FILE -b
+      conda update --yes conda
 
       source /Users/travis/miniconda3/bin/activate root
       conda config --append channels conda-forge
