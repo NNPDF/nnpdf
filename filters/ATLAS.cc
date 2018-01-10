@@ -10,6 +10,8 @@
  * So effectively there are 86 source of systematic uncertainties
  * fully correlated between all pt and eta
  *
+ * This code is used for both the R=0.4 and R=0.6 analyses, with differing setnames
+ *
  * See Note added on 27 Jun 2014 at http://hepdata.cedar.ac.uk/view/ins1082936
  * updated luminosity
  */
@@ -187,152 +189,129 @@ void ATLAS2010JETSFilter::ReadData()
  */
 void ATLASR04JETS2P76TEVFilter::ReadData()
 {
-  // Opening files
-  fstream f1, f2, f3, f4, f5;
-
-  stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/ATLASR04JETS2P76TEV_raw.data";
-  f1.open(datafile.str().c_str(), ios::in);
-
-  if (f1.fail()) {
-    cerr << "Error opening data file " << datafile.str() << endl;
-    exit(-1);
-  }
-
-  stringstream covfile("");
-  covfile << dataPath() << "rawdata/"
-  << fSetName << "/ATLASR04JETS2P76TEV_raw_SYSTYPE.data";
-  f2.open(covfile.str().c_str(), ios::in);
-
-  if (f2.fail()) {
-    cerr << "Error opening data file " << covfile.str() << endl;
-    exit(-1);
-  }
-
-  // Reading hebdata file
-  string line;
-  double s = 2760;
-
-  // Reading systematic correlations
+  // Constants
   const int nrapbin = 7;   // There are seven rapidity bins
   const int nsystype = 19; // There are 19 systematics per rapidity bin (ignoring luminosity for the moment)
-  int sysnumber[nrapbin][nsystype];
-  string tmps;
+  const std::string rawdata_path = dataPath() + "rawdata/" + fSetName + "/";
+  
+  ifstream rawdata_file(rawdata_path + "/ATLASR04JETS2P76TEV_raw.data");
+  if (!rawdata_file.is_open()) throw runtime_error("/ATLASR04JETS2P76TEV_raw.data");
 
+  ifstream correlation_file(rawdata_path + "/ATLASR04JETS2P76TEV_raw_SYSTYPE.data");
+  if (!correlation_file.is_open()) throw runtime_error("/ATLASR04JETS2P76TEV_raw_SYSTYPE.data");
+
+  // Reading information on how rapidity bin-by rapidity errors should be correlated 
+  int sysnumber[nrapbin][nsystype];
   for (int isys = 0; isys < nsystype; isys++)
   {
-    getline(f2,line);
-    istringstream lstream(line);
+    string line; getline(correlation_file,line);
+    // Clear comment at beginning of each line
+    line.erase(0, line.find_last_of("\"")+1);
+    const vector<int> split_line = NNPDF::isplit(line);
 
-    //Need to avoid the strings at front of each line
-    bool atnumbers = false;
-    while(atnumbers != true) {
-      lstream >> tmps;
-      if (tmps[tmps.size()-1] == '\"') atnumbers = true;
-    }
+    if (split_line.size() != nrapbin) 
+        throw runtime_error("Mismatch between number of rapidity bins and systematic error designations: " + to_string(split_line.size())+" vs "+to_string(nrapbin));
 
+    // Read in number identifing systematic
+    //Save [0] for luminosity, [1] nonperturbative uncertainty, [2]-[3] for uncorrelated systematics
     for (int j = 0; j < nrapbin; j++)
-    {
-      lstream >> sysnumber[j][isys];      //Read in number identifing systematic
-      sysnumber[j][isys] += 3;            //Save [0] for luminosity, [1] nonperturbative uncertainty, [2]-[3] for uncorrelated systematics
-    }
+      sysnumber[j][isys] = split_line[j] + 3;      
   }
 
   //Reading data
-  double etamin, etamax, eta, ptmax, ptmin, nonpert;
-  double up,down,shift,stmp,dtmp,sys88,sys89;
+  string line;
   int ndatbin[nrapbin];
   int idat = 0;
   for (int i = 0; i < nrapbin; i++)
   {
-    getline(f1,line);
-    istringstream lstream(line);
-    lstream >> etamin >> etamax;
-    eta = (etamax+etamin)*0.5;
+    double etamin, etamax, dummy;
+    rawdata_file >> etamin >> etamax;
+    const double eta = (etamax+etamin)*0.5;
 
-    getline(f1,line);
-    istringstream lstream2(line);
-    lstream2 >> ndatbin[i];
+    rawdata_file >> ndatbin[i];
+    string dummy_string; getline(rawdata_file, dummy_string); // Eat up newline
+    std::cout << "NDAT/ETA: "<<ndatbin[i] << "  "<<eta<<std::endl;
     for (int j = 0; j < ndatbin[i]; j++)
     {
-      getline(f1,line);
-      istringstream lstream(line);
+      // Read pT bin limits
+      double ptmin, ptmax;
+      rawdata_file >> ptmin >> ptmax;
 
-      fKin1[idat] = eta;                   //eta
-
-      lstream >> ptmin >> ptmax;           //ptmin and ptmax
-      fKin2[idat] = (ptmin+ptmax)*0.5;     //pt
-      fKin2[idat] *= fKin2[idat];          //pt2
-
-      fKin3[idat] = s;                     //sqrt(s)
+      // Set kinematics
+      fKin1[idat] = eta;                      //eta
+      fKin2[idat] = pow((ptmin+ptmax)*0.5,2); //pt2
+      fKin3[idat] = 2760;                     //sqrt(s)
 
       fSys[idat][0].mult = 2.7;      //2.7% luminosity uncertainty (uncorrelated with 36PB luminosity uncertainty)
       fSys[idat][0].name = "CORR";
 
-      shift = 0;
-
-      lstream >> nonpert >> up >> down;   //nonperturbative correction and associated uncertainty
-      up *= 100/nonpert;                  //convert to percentage
-      down *= 100/nonpert;
-      symmetriseErrors(up,down,&stmp,&dtmp);
-      shift=dtmp;
-      fSys[idat][1].mult=stmp;
+      // Nonperturbative correction and associated uncertainty
+      double up, down, symmetrised, nonpert;
+      rawdata_file >> nonpert >> up >> down;
+      symmetriseErrors(up,down,&symmetrised,&dummy);
+      fSys[idat][1].mult = symmetrised*100/nonpert;
       fSys[idat][1].name = "CORR";
 
-      lstream >> fData[idat];
-      fData[idat] /= nonpert;               //apply nonperturbative correction
-                                            //note: multiplicative correction so additive systematics should be calcuated with corrected data
+      rawdata_file >> fData[idat];
+      fData[idat] /= nonpert;           // apply nonperturbative correction
+                                        // note: multiplicative correction so additive systematics should be calcuated with corrected data
 
-      lstream >> fStat[idat];                //statistical uncertainty in %
-      fStat[idat] *= fData[idat]*0.01;  //convert to absolute
+      rawdata_file >> fStat[idat];      // statistical uncertainty in %
+      fStat[idat] *= fData[idat]*0.01;  // convert to absolute
+      
+      // Firstly, let's set the inactive systypes for this rapidity bin to zero
+      // Correlated systematics block starts at systematic 4
+      for (int l = 4; l < fNSys; l++)
+        if (std::find(std::begin(sysnumber[i]), std::end(sysnumber[i]), l)  == std::end(sysnumber[i]))
+            fSys[idat][l].mult = 0;
 
       //First 5 systematics
       for (int isystype = 0; isystype < 5; isystype++)
       {
-        lstream >> up >> down;
-        symmetriseErrors(up,down,&stmp,&dtmp);
-        shift+=dtmp;
-        fSys[idat][sysnumber[i][isystype]].mult=stmp;   //systematics are in %
+        double up, down, symmetrised;
+        rawdata_file >> up >> down;
+        symmetriseErrors(up,down,&symmetrised,&dummy);
+        fSys[idat][sysnumber[i][isystype]].mult = symmetrised;   //systematics are in %
         fSys[idat][sysnumber[i][isystype]].name = "CORR";
       }
 
       //Systematics number 88 and 89 are correlated in quadrature with 31 from ATLASJETS36PB
-      lstream >> up >> down;
-      symmetriseErrors(up,down,&stmp,&dtmp);
-      shift+=dtmp;
-      sys88 = stmp;   //systematics are in %
+      // NH NOTE: They don't seem to be being correlated!
+      rawdata_file >> up >> down;
+      symmetriseErrors(up, down, &symmetrised, &dummy);
+      const double sys88 = symmetrised; //systematics are in %
 
       //Next 7 systematics
       for (int isystype = 6; isystype < 13; isystype++)
       {
-        lstream >> up >> down;
-        symmetriseErrors(up,down,&stmp,&dtmp);
-        shift+=dtmp;
-        fSys[idat][sysnumber[i][isystype]].mult=stmp;   //systematics are in %
+        double up, down, symmetrised;
+        rawdata_file >> up >> down;
+        symmetriseErrors(up, down, &symmetrised, &dummy);
+        fSys[idat][sysnumber[i][isystype]].mult = symmetrised;   //systematics are in %
         fSys[idat][sysnumber[i][isystype]].name = "CORR";
       }
 
       //Systematics number 88 and 89 are correlated in quadrature with 31 from ATLASJETS36PB
-      lstream >> up >> down;
-      symmetriseErrors(up,down,&stmp,&dtmp);
-      shift+=dtmp;
-      sys89 = stmp;                                            //systematics are in %
+      // NH NOTE: They don't seem to be being correlated!
+      rawdata_file >> up >> down;
+      symmetriseErrors(up,down, &symmetrised, &dummy);
+      const double sys89 = symmetrised; //systematics are in %
+
       fSys[idat][sysnumber[6][4]+1].mult=sqrt(sys88*sys88+sys89*sys89);  //in quadrature for sys 31 of this set
       fSys[idat][sysnumber[6][4]+1].name = "CORR";
 
       //Next 5 systematics - symmetric
       for (int isystype = 14; isystype < nsystype; isystype++)
       {
-        lstream >> fSys[idat][sysnumber[i][isystype]].mult;
+        rawdata_file >> fSys[idat][sysnumber[i][isystype]].mult;
         fSys[idat][sysnumber[i][isystype]].name = "CORR";
       }
 
       //Two sources of uncorrelated systematics (%)
-      lstream >> fSys[idat][2].mult;
+      rawdata_file >> fSys[idat][2].mult;
       fSys[idat][2].name = "UNCORR";
 
-      lstream >> fSys[idat][3].mult;
+      rawdata_file >> fSys[idat][3].mult;
       fSys[idat][3].name = "UNCORR";
 
       idat++;
@@ -347,8 +326,8 @@ void ATLASR04JETS2P76TEVFilter::ReadData()
       fSys[i][l].type = MULT;                            // All systematics multiplicative
     }
 
-  f1.close();
-  f2.close();
+  rawdata_file.close();
+  correlation_file.close();
 }
 
 
