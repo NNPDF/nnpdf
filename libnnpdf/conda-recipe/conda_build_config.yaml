@@ -1,0 +1,6 @@
+numpy:
+    - 1.13
+    - 1.14
+
+pin_run_as_build:
+    numpy: x.x
