@@ -15,185 +15,154 @@
  */
 
 #include "ATLAS.h"
+#include "NNPDF/utils.h"
+#include <numeric>
 
 void ATLASR04JETS36PBFilter::ReadData()
 {
-  // Opening files
-  fstream f1, f2, f3, f4, f5;
+  // Constants
+  const int nrapbin  = 7;      // There are seven rapidity bins
+  const int nsystype = 18;     // There are 18 systematics per rapidity bin
+  const double lcorr = 1.0187; // Correction factor due to luminosity upgrade
+  const std::string rawdata_path = dataPath() + "rawdata/" + fSetName + "/";
+  
+  ifstream hepdata_file(rawdata_path + "/ATLAS-jets-R04-36pb-hepdata.data");
+  if (!hepdata_file.is_open()) throw runtime_error("Cannot open file: ATLAS-jets-R04-36pb-hepdata.data");
 
-  stringstream hepdata("");
-  hepdata << dataPath() << "rawdata/"
-  << fSetName << "/ATLAS-jets-R04-36pb-hepdata.data";
-  f1.open(hepdata.str().c_str(), ios::in);
+  ifstream kinematics_file(rawdata_path + "ATLAS-jets-R04-36pb.data");
+  if (!kinematics_file.is_open()) throw runtime_error("Cannot open file: ATLAS-jets-R04-36pb.data");
 
-  if (f1.fail()) {
-    cerr << "Error opening data file " << hepdata.str() << endl;
-    exit(-1);
-  }
+  ifstream correlation_file(rawdata_path + "ATLAS-jets-36pb.sysmat");
+  if (!correlation_file.is_open()) throw runtime_error("Cannot open file: ATLAS-jets-36pb.sysmat");
 
-  stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/ATLAS-jets-R04-36pb.data";
-  f2.open(datafile.str().c_str(), ios::in);
+  ifstream systematics_file(rawdata_path + "ATLAS-jets-R04-36pb.sys");
+  if (!systematics_file.is_open()) throw runtime_error("Cannot open file: ATLAS-jets-R04-36pb.sys");
+    
+  ifstream nptcorr_file(rawdata_path + "ATLAS-jets-R04-36pb.npt");
+  if (!nptcorr_file.is_open()) throw runtime_error("Cannot open file: ATLAS-jets-R04-36pb.npt");
 
-  if (f2.fail()) {
-    cerr << "Error opening data file " << datafile.str() << endl;
-    exit(-1);
-  }
-
-  stringstream covfile("");
-  covfile << dataPath() << "rawdata/"
-  << fSetName << "/ATLAS-jets-36pb.sysmat";
-  f3.open(covfile.str().c_str(), ios::in);
-
-  if (f3.fail()) {
-    cerr << "Error opening data file " << covfile.str() << endl;
-    exit(-1);
-  }
-
-  stringstream covfile2("");
-  covfile2 << dataPath() << "rawdata/"
-  << fSetName << "/ATLAS-jets-R04-36pb.sys";
-  f4.open(covfile2.str().c_str(), ios::in);
-
-  if (f4.fail()) {
-    cerr << "Error opening data file " << covfile.str() << endl;
-    exit(-1);
-  }
-
-  stringstream nptcorr("");
-  nptcorr << dataPath() << "rawdata/"
-  << fSetName << "/ATLAS-jets-R04-36pb.npt";
-  f5.open(nptcorr.str().c_str(), ios::in);
-
-  if (f5.fail()) {
-    cerr << "Error opening data file " << nptcorr.str() << endl;
-    exit(-1);
-  }
-
-  // Reading hebdata file
-  string line;
-  double tmp,pt,sysup,sysdown,sysuncor;
-  double s = 7000;
-  double lcorr = 1.0187; // correction factor due to luminosity upgrade
+  // Reading data, non-perturbative corrections, and kinematics 
   for (int i = 0; i < fNData; i++)
   {
-    getline(f1,line);
-    istringstream lstream(line);
+    double dummy;
+    
+    // Read data from hepdata file
+    hepdata_file >> fKin2[i];           // pT
+    hepdata_file >> dummy >> dummy;     // pTmax and pTmin (not needed)
+    hepdata_file >> fData[i];           // Data point
+    hepdata_file >> fStat[i] >> dummy;  // Statistical uncertainty (symmetric)
 
-    lstream >> pt;
-    lstream >> tmp >> tmp;         //ptmax and ptmin
+    // Read nonperturbative correction from file
+    double nptcorr, npterr;
+    nptcorr_file >> nptcorr >> npterr;
 
-    fKin2[i] = pt*pt;              //pt2
-    fKin3[i] = s;                  //sqrt(s)
+    // Convert pT to pT^2
+    fKin2[i] *= fKin2[i];
+    fKin3[i] = 7000;                // sqrt(s)
+    
+    // Apply luminosity and nonperturbative correction
+    fData[i] *= lcorr/nptcorr;
+    fStat[i] *= lcorr/nptcorr;
 
-    lstream >> fData[i];
-    fData[i] *= lcorr; // apply lumi correction
-
-    lstream >> fStat[i] >> tmp;    //statistical uncertainty (symmetric)
-    fStat[i] *= lcorr; // apply lumi correction
-
-    lstream >> sysup >> sysdown;   //total (correlated) systematic uncertainty (asymmetric)
-    lstream >> sysuncor >> tmp;    //uncorrelated systematic uncertainty (symmetric)
-  }
-
-  // Read data file - need rapidity bins to read systematics file
-  const int nrapbin = 7;   // There are seven rapidity bins
-  double etamin, etamax, eta;
-  int ndatbin[nrapbin];
-
-  int idat = 0;
-  getline(f2,line);
-  for (int i = 0; i < nrapbin; i++)
-  {
-    getline(f2,line);
-    istringstream lstream(line);
-    lstream >> etamin >> etamax;
-    eta = (etamax+etamin)*0.5;
-
-    getline(f2,line);
-    istringstream lstream2(line);
-    lstream2 >> ndatbin[i];
-    for (int j = 0; j < ndatbin[i]; j++)
-    {
-      fKin1[idat] = eta;                   //eta
-      getline(f2,line);                   //Rest of values in file are already in the hepdata file
-      idat++;
-    }
-  }
-
-  // Reading systematic correlations
-  const int nsystype = 18; // There are 18 systematics per rapidity bin
-  int sysnumber[nrapbin][nsystype];
-  string tmps;
-
-  for (int isys = 0; isys < nsystype; isys++)
-  {
-    getline(f3,line);
-    istringstream lstream(line);
-
-    //Need to avoid the strings at front of each line
-    bool atnumbers = false;
-    while(atnumbers != true) {
-      lstream >> tmps;
-      if (tmps[tmps.size()-1] == '\"') atnumbers = true;
-    }
-
-    for (int j = 0; j < nrapbin; j++)
-    {
-      lstream >> sysnumber[j][isys];      //Read in number identifing systematic
-      sysnumber[j][isys] += 4;            //Save [0] for luminosity, [1] nonperturbative uncertainty, [2]-[4] for uncorrelated systematics
-    }
-  }
-
-  //Reading systematics
-  double up,down,shift[fNData],stmp,dtmp;
-  idat = 0;
-  for (int i = 0; i < nrapbin; i++)
-  {
-    getline(f4,line);
-    for (int j = 0; j < ndatbin[i]; j++)
-    {
-      getline(f4,line);
-      istringstream lstream(line);
-      lstream >> tmp >> tmp;      //ptmax and ptmin
-
-      shift[idat] = 0;
-      for (int isystype = 0; isystype < nsystype; isystype++)
-      {
-        lstream >> up >> down;
-        symmetriseErrors(up,down,&stmp,&dtmp);
-        shift[idat]+=dtmp;
-        fSys[idat][sysnumber[i][isystype]].mult=stmp;   //systematics are in %
-        fSys[idat][sysnumber[i][isystype]].name = "CORR";
-      }
-
-      for (int j = 2; j < 5; j++)
-      {
-        lstream >> fSys[idat][j].mult >> tmp;   //uncorrelated systematics are symmetric (%)
-        fSys[idat][j].name = "UNCORR";
-      }
-      idat++;
-    }
-  }
-
-  //Reading nonperturbative correction and associated uncertainty
-  double nonper, error;
-  for (int i = 0; i < fNData; i++)
-  {
-    getline(f5,line);
-    istringstream lstream(line);
-
-    lstream >> nonper >> error;
-
-    fData[i]/= nonper;            //Multiplicative correction to theory so instead divide out of data
-    fStat[i]/= nonper;            //Do the same to statistical uncertainty stored in absolute form
-
+    // Uncertainty due to luminosity
     fSys[i][0].mult = 3.5;           //Luminosity uncertainty of 3.5% (updated in 27 JUN 2014)
     fSys[i][0].name = "ATLASLUMI10";
 
-    fSys[i][1].mult = error/nonper*100;    // Error on nonperturbative correction (%)
+    // Uncertainty due to nonperturbative correction
+    fSys[i][1].mult = npterr/nptcorr*100.;    // Error on nonperturbative correction (%)
     fSys[i][1].name = "CORR";
+
+    hepdata_file >> dummy >> dummy;   //total (correlated) systematic uncertainty (asymmetric)
+    hepdata_file >> dummy >> dummy;  //uncorrelated systematic uncertainty (symmetric)
+  }
+
+  // Read data file - need rapidity bins to read systematics file
+  int ndatbin[nrapbin];
+
+  // Test number of rapidity bins
+  int test_nrapbin; kinematics_file >> test_nrapbin;
+  if (test_nrapbin != nrapbin) throw runtime_error("Mismatch between number of rapidity bins");
+    
+  // Read pseudorapidity bin information (bin value, number of points in bin)
+  int idat = 0;
+  for (int i = 0; i < nrapbin; i++)
+  {
+    // Pesudorapidity values
+    double etamin, etamax;
+    kinematics_file >> etamin >> etamax;
+    const double eta = (etamax+etamin)*0.5;
+
+    // Number of datapoints in pseudorapidity bin
+    kinematics_file >> ndatbin[i];
+
+    // Catch the \n
+    string dummy_line; getline(kinematics_file,dummy_line);
+    // Set eta for points in bin
+    for (int j = 0; j < ndatbin[i]; j++)
+    {
+      fKin1[idat] = eta; // Pseudorapidity value
+      //Rest of values in file are already in the hepdata file
+      getline(kinematics_file,dummy_line);
+      idat++;
+    }
+  }
+
+  // Test pseudorapidity bin information
+  const int total_datapoints = std::accumulate(ndatbin, ndatbin+nrapbin, 0); 
+  if (total_datapoints != GetNData()) throw runtime_error("Mismatch between number of data points: " + to_string(total_datapoints) + " vs " + to_string(GetNData()));
+
+  // Reading information on how rapidity bin-by rapidity errors should be correlated 
+  int sysnumber[nrapbin][nsystype];
+  for (int isys = 0; isys < nsystype; isys++)
+  {
+    string line; getline(correlation_file,line);
+    // Clear comment at beginning of each line
+    line.erase(0, line.find_last_of("\"")+1);
+    const vector<int> split_line = NNPDF::isplit(line);
+
+    if (split_line.size() != nrapbin) 
+        throw runtime_error("Mismatch between number of rapidity bins and systematic error designations: " + to_string(split_line.size())+" vs "+to_string(nrapbin));
+
+    // Read in number identifing systematic
+    // Save [0] for luminosity, [1] nonperturbative uncertainty, [2]-[4] for uncorrelated systematics
+    for (int j = 0; j < nrapbin; j++)
+      sysnumber[j][isys] = split_line[j] + 4;      
+  }
+
+  //Reading systematics
+  for (int i = 0; i < nrapbin; i++)
+  {
+    // Skip first line for every rapidity bin
+    string dummy_string; getline(systematics_file,dummy_string);
+    for (int j = 0; j < ndatbin[i]; j++)
+    {
+      double dummy; systematics_file >> dummy >> dummy;          //ptmax and ptmin
+      const int idat = std::accumulate(ndatbin, ndatbin + i, j); // Current datapoint
+
+      // Firstly, let's set the inactive systypes for this rapidity bin to zero
+      // Correlated systematics block starts at systematic 5
+      for (int l = 5; l < fNSys; l++)
+        if (std::find(std::begin(sysnumber[i]), std::end(sysnumber[i]), l)  == std::end(sysnumber[i]))
+            fSys[idat][l].mult = 0;
+
+      // Now read the relevant systematics
+      for (int isystype = 0; isystype < nsystype; isystype++)
+      {
+        double up, down, symmetrised;
+        systematics_file >> up >> down;
+        symmetriseErrors(up,down,&symmetrised,&dummy);
+        fSys[idat][sysnumber[i][isystype]].mult = symmetrised;   //systematics are in %
+        fSys[idat][sysnumber[i][isystype]].name = "CORR";
+      }
+
+      // Last few errors are uncorrelated
+      for (int j = 2; j < 5; j++)
+      {
+        systematics_file >> fSys[idat][j].mult >> dummy;   //uncorrelated systematics are symmetric (%)
+        fSys[idat][j].name = "UNCORR";
+      }
+    }
+      systematics_file >> dummy_string; // Eat the newline
   }
 
   for (int i=0; i<fNData; i++)
@@ -203,11 +172,11 @@ void ATLASR04JETS36PBFilter::ReadData()
       fSys[i][l].type = MULT;                            // All systematics multiplicative
     }
 
-  f1.close();
-  f2.close();
-  f3.close();
-  f4.close();
-  f5.close();
+  hepdata_file.close();
+  kinematics_file.close();
+  correlation_file.close();
+  systematics_file.close();
+  nptcorr_file.close();
 }
 
 /**
