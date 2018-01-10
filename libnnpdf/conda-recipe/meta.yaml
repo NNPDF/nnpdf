@@ -11,8 +11,7 @@ requirements:
         - {{ compiler("c") }}
         - swig ==3.0.10
         - cmake
-        #Found bug in 0.29.2 from the defaults channel
-        - pkg-config ==0.29.1
+        - pkg-config
     host:
         - python
         - lhapdf
