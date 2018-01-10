@@ -665,8 +665,13 @@ def dataspecs_datasets_chi2_table(dataspecs_speclabel, dataspecs_experiments,
     return fits_datasets_chi2_table(dataspecs_speclabel, dataspecs_experiments,
                                     dataspecs_chi2_data, per_point_data=per_point_data)
 
+
+#TODO: Decide what to do with the horrible totals code.
 @table
-def fits_chi2_table(fits_experiments_chi2_table, fits_datasets_chi2_table):
+def fits_chi2_table(
+        fits_experiments_chi2_table,
+        fits_datasets_chi2_table,
+        show_total:bool=False):
     """Show the chi² of each and number of points of each dataset and experiment
     of each fit,
     computed with the theory corresponding to the fit. Dataset that are not
@@ -680,16 +685,33 @@ def fits_chi2_table(fits_experiments_chi2_table, fits_datasets_chi2_table):
     #TODO: Better way to do the merge preserving the order?
     for lv in lvs:
         dfs.append(pd.concat((edf.loc[lv],ddf.loc[lv]), copy=False, axis=0))
+    if show_total:
+        total_points = fits_experiments_chi2_table.iloc[:, 0::2].sum().as_matrix()
+        total_chi = (fits_experiments_chi2_table.iloc[:, 0::2].as_matrix() *
+                     fits_experiments_chi2_table.iloc[:,1::2].as_matrix()).sum(axis=0)
+        total_chi /= total_points
+        row = np.zeros(len(total_points)*2)
+        row[::2] = total_points
+        row[1::2] = total_chi
+        df = pd.DataFrame(np.atleast_2d(row),
+                          columns=fits_experiments_chi2_table.columns,
+                          index=['Total'])
+        dfs.append(df)
+        keys = [*lvs, 'Total']
+    else:
+        keys = lvs
 
-    res = pd.concat(dfs, axis=0, keys=lvs)
+    res = pd.concat(dfs, axis=0, keys=keys)
     return res.fillna("Not Fitted")
 
 @table
-def dataspecs_chi2_table(dataspecs_experiments_chi2_table,
-                         dataspecs_datasets_chi2_table):
+def dataspecs_chi2_table(
+        dataspecs_experiments_chi2_table,
+        dataspecs_datasets_chi2_table,
+        show_total:bool=False):
     """Same as fits_chi2_table but for an arbitrary list of dataspecs"""
     return fits_chi2_table(dataspecs_experiments_chi2_table,
-                           dataspecs_datasets_chi2_table)
+                           dataspecs_datasets_chi2_table, show_total)
 
 @make_argcheck
 def _check_two_dataspecs(dataspecs):
