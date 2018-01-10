@@ -39,20 +39,22 @@ private:
   void ReadData();
 };
 
-class ATLASR04JETS36PBFilter: public CommonData
-{ public: ATLASR04JETS36PBFilter():
-  CommonData("ATLASR04JETS36PB") { ReadData(); }
+class ATLAS2010JETSFilter: public CommonData
+{ public: ATLAS2010JETSFilter( string setname ):
+  CommonData(setname) { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class ATLASR06JETS36PBFilter: public CommonData
-{ public: ATLASR06JETS36PBFilter():
-  CommonData("ATLASR06JETS36PB") { ReadData(); }
+class ATLASR04JETS36PBFilter: public ATLAS2010JETSFilter
+{ public: ATLASR04JETS36PBFilter():
+  ATLAS2010JETSFilter("ATLASR04JETS36PB") { }
+};
 
-private:
-  void ReadData();
+class ATLASR06JETS36PBFilter: public ATLAS2010JETSFilter
+{ public: ATLASR06JETS36PBFilter():
+  ATLAS2010JETSFilter("ATLASR06JETS36PB") {  }
 };
 
 class ATLASR04JETS2P76TEVFilter: public CommonData
