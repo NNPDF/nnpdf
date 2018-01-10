@@ -15,7 +15,9 @@ log = logging.getLogger(__name__)
 
 sane_load = functools.partial(pd.DataFrame.from_csv, sep='\t')
 
-class TableLoaderError(Exception): pass
+class TableLoaderError(Exception):
+    """Errors in the tableloader module."""
+    pass
 
 def fixup_header(df, head_index, dtype):
     """Set the type of the column index in place"""
@@ -27,6 +29,7 @@ def fixup_header(df, head_index, dtype):
     df.columns = newcols
 
 def parse_exp_mat(filename):
+    """Parse a dump of a matrix like experiments_covmat."""
     df = sane_load(filename, header=[0,1,2], index_col=[0,1,2])
     fixup_header(df, 2, int)
     return df
@@ -47,6 +50,7 @@ def load_fits_computed_psedorreplicas_chi2(filename):
 
 
 def load_fits_chi2_table(filename):
+    """Load the result of fits_chi2_tavle or similar."""
     return sane_load(filename, header=[0,1], index_col=[0,1])
 
 def load_adapted_fits_chi2_table(filename):
@@ -85,17 +89,15 @@ def combine_pseudorreplica_tables(
 
     for df in dfs:
         set_actual_column_level0(df, combined_names)
-
-
-    if blacklist_datasets:
-        m = np.ones(df.shape[0], dtype=bool)
-        for it in blacklist_datasets:
-            dsmask = (df.index.get_level_values(1) != it)
-            m &= dsmask
-        if m.all():
-            log.warning(f"Did not blacklist any dataset from the list {blacklist_datasets}")
-        else:
-            df = df.loc[m]
+        if blacklist_datasets:
+            m = np.ones(df.shape[0], dtype=bool)
+            for it in blacklist_datasets:
+                dsmask = (df.index.get_level_values(1) != it)
+                m &= dsmask
+            if m.all():
+                log.warning(f"Did not blacklist any dataset from the list {blacklist_datasets}")
+            else:
+                df = df.loc[m]
 
     together = pd.concat(dfs, axis=1, keys=range(len(dfs)))
 
