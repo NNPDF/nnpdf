@@ -449,6 +449,7 @@ namespace NNPDF
     bool pass_verification = true;
     for (int i=0; i<GetNData(); i++)
     {
+        // These VerifyField calls set pass_verification to false in the case of failure
         const std::string dps = std::to_string(i);
         VerifyField( GetData(i), "Data point " + dps, pass_verification);
         VerifyField( GetStat(i), "Statistical Error " + dps, pass_verification);
