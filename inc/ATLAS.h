@@ -39,6 +39,11 @@ private:
   void ReadData();
 };
 
+// ################################################################
+//  ATLAS 2010 Jets are two analyses (different R) with identical
+//  data structures. Therefore here we use a base class with the
+//  actual filter, and inherit twice using two different setnames.
+
 class ATLAS2010JETSFilter: public CommonData
 { public: ATLAS2010JETSFilter( string setname ):
   CommonData(setname) { ReadData(); }
