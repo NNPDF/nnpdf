@@ -137,6 +137,7 @@ namespace NNPDF
 
     // Read commondata
     ReadData(info.targetFile, info.systypeFile);
+    Verify();
   }
 
   // CommonData base class constructor
@@ -207,6 +208,7 @@ namespace NNPDF
         fSys[i][l] = set.fSys[i][l];
     }
 
+    Verify();
   }
 
 
@@ -247,7 +249,7 @@ namespace NNPDF
   {
       using std::swap;
       swap(*this, other);
-
+      Verify();
   }
 
   // CommonData masked copy constructor
@@ -283,6 +285,7 @@ namespace NNPDF
         fSys[i][l] = set.fSys[mask[i]][l];
     }
 
+    Verify();
   }
 
   // Destructor
