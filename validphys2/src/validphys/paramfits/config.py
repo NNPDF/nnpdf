@@ -297,9 +297,7 @@ class ParamfitsConfig(Config):
 
                 sliced = tableloader.get_extrasum_slice(df, components)
                 s =  sliced.groupby(level=3).sum()
-
-
-                ndata = sliced.groupby(level=1).apply(get_ndata).sum()
+                ndata = sliced.groupby(level=[0,1]).apply(get_ndata).sum()
 
 
 
