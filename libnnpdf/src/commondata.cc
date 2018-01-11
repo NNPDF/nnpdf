@@ -448,7 +448,6 @@ namespace NNPDF
   // Verify that all fields are set in CommonData
   void CommonData::Verify() const
   {
-    std::cout << " Verifying CommonData for set: " << GetSetName()<<std::endl;
     bool pass_verification = true;
     for (int i=0; i<GetNData(); i++)
     {

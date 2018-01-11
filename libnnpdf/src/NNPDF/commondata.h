@@ -107,14 +107,24 @@ namespace NNPDF
     sysType type;     //!< Type of the systematic error (ADD/MULT)
     std::string name; //!< Name of the systematic error (for correlation purposes)
     bool isRAND;      //!< Tag specifying whether the treatment should be randomised
+
+    // Normal constructor - sets quiet_NaNs as sentinel values
     sysError():
     add(std::numeric_limits<double>::quiet_NaN()),
     mult(std::numeric_limits<double>::quiet_NaN()),
     type(UNSET),
     name("CORR"),
     isRAND(false)
-    {
-    };
+    {};
+    
+    // Copy constructor
+    sysError(sysError const& o):
+    add(o.add),
+    mult(o.mult),
+    type(o.type),
+    name(o.name),
+    isRAND(o.isRAND)
+    {};
   };
 
   /*! 
