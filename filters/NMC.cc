@@ -61,10 +61,9 @@ void NMCpdFilter::ReadData()
     istringstream lstream(line);
     lstream >> fKin1[i]; 
     lstream >> fKin2[i];
-
     lstream >> fData[i];
-    
     lstream >> fStat[i];
+    fKin3[i] = 0;
     
     double tmp;
     lstream >> tmp;
