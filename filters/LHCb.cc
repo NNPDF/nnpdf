@@ -335,6 +335,7 @@ void LHCBLOWMASS37PBFilter::ReadData()
       f1 >> mbin[0] >> mbin[1] >> fData[i] >> fStat[i] >> fSys[i][0].add >> fSys[i][1].add >> tmp;
 
       // Load
+      fKin1[i] = 0;
       fKin2[i] = pow(0.5*(mbin[0] + mbin[1]),2.0);
       fKin3[i] = 7E3;
 
