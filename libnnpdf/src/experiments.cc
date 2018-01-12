@@ -361,6 +361,7 @@ void Experiment::PullData()
                 // Perform some consistency checks
                 if (testsys.type != existing_systematic.type || testsys.isRAND != existing_systematic.isRAND)
                   throw RangeError("Experiment::PullData","Systematic " + testsys.name + " definition not consistant between datasets");
+                break;
               }
           }
           // If the systematic doesn't already exist in the list, add it
