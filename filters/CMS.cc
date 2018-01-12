@@ -281,8 +281,7 @@ void CMSDY2D11Filter::ReadData()
 
     lstream >> fData[i];                // units are fb, check against APPLgrid predictions!
 
-    //    lstream >> fStat[i];
-    //    fStat[i] *= 1e-2;             // what about statistical uncertainties? are they already counted in cov matrix?
+    fStat[i] = 0; // Statistical errors are in the covariance matrix
   }
 
   // Reading covmat
