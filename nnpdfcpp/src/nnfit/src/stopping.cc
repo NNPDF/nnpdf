@@ -94,7 +94,7 @@ bool LookBackCV::Stop(  FitPDFSet* pdf,
       FastAddChi2(pdf, valid[i], &ValChi2Tot);
   
   // Push into current best
-  if (ValChi2Tot < fCurrentValidErf - fSettings.Get("stopping","lbdelta").as<real>())
+  if (ValChi2Tot < fCurrentValidErf)
   {
     fCurrentValidErf = ValChi2Tot;
     for (int i=0; i<fSettings.GetNFL(); i++)
