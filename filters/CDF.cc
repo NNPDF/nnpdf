@@ -195,6 +195,12 @@ void CDFR2KTFilter::ReadData()
     exit(-1);
   }
 
+  // Pre-zero all rapidity-bin-specific systematic errors
+  // The following section only fills the systemaics for the relevant
+  // rapidity bins, so we need this to initialise all the values to zero.
+  for (int i=0; i<fNData; i++)
+    for (int k = 5; k <= 19; k++)
+        fSys[i][k].mult = 0;
   /*
    Reading decomposition of the systematic uncertainties associated
    to the jet energy scale
@@ -263,6 +269,7 @@ void CDFR2KTFilter::ReadData()
       {
         lstream >> up >> down;       // Get symmetrized systematic error for beta ratios
         symmetriseErrors(up, down, &stmp, &dtmp);
+        std::cout << index <<"  "<< 5+3*i+k <<" "<< stmp <<std::endl;
         fSys[index][5+3*i+k].mult = stmp;
         shift[index]+= dtmp;
       }
