@@ -39,27 +39,26 @@ void ExportCorrMat(DataSet const& d, const string file);
 int main(int argc, char **argv)
 {
   // Read configuration filename from arguments
-  string filename, plottingfile = "../config/plotting.yml";
+  string folder, plottingfile = "../config/plotting.yml";
   if (argc > 1)
     {
-      filename.assign(argv[1]);
+      folder.assign(argv[1]);
       if (argc == 3) plottingfile.assign(argv[2]);
-      if (filename.find("help") != string::npos)
+      if (folder.find("help") != string::npos)
         {
-          cout << Colour::FG_RED << "\nusage: gencovmat [configuration filename] [optional plotting]\n" << endl;
+          cout << Colour::FG_RED << "\nusage: gencovmat [configuration folder] [optional plotting]\n" << endl;
           exit(-1);
         }
     }
   else
     {
-      cout << Colour::FG_RED << "\nusage: gencovmat [configuration filename] [optional plotting]\n" << endl;
+      cout << Colour::FG_RED << "\nusage: gencovmat [configuration folder] [optional plotting]\n" << endl;
       exit(-1);
     }
 
   // Creates the configuration class
-  NNPDFSettings settings(filename, plottingfile);
-  settings.PrintConfiguration("gencovmat.yml");
-  settings.VerifyConfiguration("gencovmat.yml");
+  NNPDFSettings settings(folder);
+  settings.SetPlotFile(plottingfile);
 
   // Create target directory if not present
   mkdir(settings.GetResultsDirectory().c_str(),0777);

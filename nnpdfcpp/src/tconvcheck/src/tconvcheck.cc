@@ -39,24 +39,23 @@ int main(int argc, char **argv)
   if (MPI::TaskID() == 0) // master slave
     {
       // Read configuration filename from arguments
-      string filename, pdfgrid, plottingfile = "../config/plotting.yml";
+      string folder, pdfgrid, plottingfile = "../config/plotting.yml";
       if (argc > 1)
         {
-          filename.assign(argv[1]);
+          folder.assign(argv[1]);
           if (argc == 3) pdfgrid.assign(argv[2]);
           if (argc == 4) plottingfile.assign(argv[3]);
-          if (filename.find("help") != string::npos) {  cout << "\nusage: chi2check [configuration filename] <optional LHgrid [no .LHgrid]> [optional plotting filename]\n" << endl;  exit(-1); }
+          if (folder.find("help") != string::npos) {  cout << "\nusage: chi2check [configuration folder] <optional LHgrid [no .LHgrid]> [optional plotting filename]\n" << endl;  exit(-1); }
         }
       else
         {
-          cerr << Colour::FG_RED << "\nusage: chi2check [configuration filename] <optional LHgrid [no .LHgrid]> [optional plotting filename]\n" << endl;
+          cerr << Colour::FG_RED << "\nusage: chi2check [configuration folder] <optional LHgrid [no .LHgrid]> [optional plotting filename]\n" << endl;
           exit(-1);
         }
 
       // Creates the configuration class
-      NNPDFSettings settings(filename,plottingfile);
-      settings.PrintConfiguration("chi2check.yml");
-      settings.VerifyConfiguration("chi2check.yml");
+      NNPDFSettings settings(folder);
+      settings.SetPlotFile(plottingfile);
 
       LHAPDFSet* T0Set = NULL;
       if (settings.GetPlotting("uset0").as<bool>())

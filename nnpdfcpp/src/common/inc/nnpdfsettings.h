@@ -101,8 +101,11 @@ private:
 
 public:
 
-  NNPDFSettings(const string& filename,const string& plotfile = ""); //!< The constructor
+  NNPDFSettings(const string& filename, bool isfilter = false); //!< The constructor
   ~NNPDFSettings(); //!< The destructor.
+
+  // extra set methods
+  void SetPlotFile(string const&);
 
   // Get methods
   YAML::Node Get(const string& item) const;
@@ -135,12 +138,14 @@ public:
   // Check methods
   bool CheckParam(string const& param, double const& p1, double const& p2) const;  //!< Check an individual parameter
   bool CheckParam(string const& param, string const& p1, string const& p2) const;  //!< Check an individual parameter
-  void VerifyConfiguration(const string& filename);    //!< Checks the log hash against filter
+  void VerifyConfiguration() const;    //!< Checks the log hash against filter
   void VerifyFK(FKTable* const&) const;                //!< Verify FastKernel table settings
 
   // Print configuration
   void PrintConfiguration(const string& filename) const;
   void PrintTheory(const string& filename) const;
+  void PrintMD5(const string& filename) const;
+  void BuildResultsFolder() const;
 
   vector<string>  GetDataInfo(string const& setname, filterType useFiltered) const;
   vector<int>     GetDataMask(string const& setname, filterType useFiltered) const;

@@ -37,8 +37,7 @@ int main(int argc, char **argv)
   else { cerr << Colour::FG_RED << "\nusage: filter [configuration filename]\n" << Colour::FG_DEFAULT << endl; exit(-1); }
 
   // Creates the configuration class
-  NNPDFSettings settings(filename);
-  settings.PrintConfiguration("filter.yml");
+  NNPDFSettings settings(filename, true);
 
   cout << "\n- Data cuts:" << endl;
   cout << Colour::FG_YELLOW << " ----------------- Selected Cuts -----------------" << Colour::FG_DEFAULT << endl;

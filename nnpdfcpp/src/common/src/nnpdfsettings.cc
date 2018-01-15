@@ -128,7 +128,7 @@ void nnpdf_GSLhandler (const char * reason,
 /**
  * \param filename the configuration file
  */
-NNPDFSettings::NNPDFSettings(const string &filename, const string &plotfile):
+NNPDFSettings::NNPDFSettings(const string &filename, bool isfilter):
   fFileName(filename),
   fPDFName(""),
   fResultsDir(""),
@@ -138,10 +138,45 @@ NNPDFSettings::NNPDFSettings(const string &filename, const string &plotfile):
   // Read current PDF grid name from file.
   Splash();
 
-  // Get raw name
-  const int firstindex  = (int) fFileName.find_last_of("/") + 1;
-  const int lastindex   = (int) fFileName.find_last_of(".") - firstindex;
-  fPDFName = fFileName.substr(firstindex, lastindex);
+  // Understand if filename string is file or directory
+  struct stat s;
+  if(stat(filename.c_str(), &s) == 0)
+    {
+      if( s.st_mode & S_IFDIR && isfilter == false)
+        {
+          // if folder contains a trailing / remove it
+          if (fFileName.back() == '/')
+            fFileName = fFileName.substr(0, fFileName.length()-1);
+          const int firstindex = (int) fFileName.find_last_of("/") + 1;
+          fPDFName = fFileName.substr(firstindex, fFileName.length()-firstindex);
+          fResultsDir = fFileName;
+          fFileName += "/" + fPDFName + ".yml";
+
+          VerifyConfiguration();
+        }
+      else if (s.st_mode & S_IFDIR && isfilter == true)
+        throw NNPDF::FileError("NNPDFSettings::NNPDFSettings",
+                               "This program takes a configuration file instead of a folder!");
+      else if( s.st_mode & S_IFREG && isfilter == true)
+        {
+          // Get raw name
+          const int firstindex  = (int) fFileName.find_last_of("/") + 1;
+          const int lastindex   = (int) fFileName.find_last_of(".") - firstindex;
+          fPDFName = fFileName.substr(firstindex, lastindex);
+          fResultsDir = fPDFName;
+
+          BuildResultsFolder();
+        }
+      else if (s.st_mode & S_IFREG && isfilter == false)
+        throw NNPDF::FileError("NNPDFSettings::NNPDFSettings",
+                               "This program takes a configuration folder instead of a file!");
+      else
+        throw NNPDF::FileError("NNPDFSettings::NNPDFSettings",
+                               "Configuration file/folder not recognized.");
+    }
+  else
+    throw NNPDF::FileError("NNPDFSettings::NNPDFSettings",
+                           "Configuration file/folder not found: " + filename);
 
   // Load yaml file
   try {
@@ -189,24 +224,6 @@ NNPDFSettings::NNPDFSettings(const string &filename, const string &plotfile):
 
   // Load positivity sets
   LoadPositivities();
-
-  // Eventually read plotting options
-  if (plotfile.size() > 0)
-    fPlotting = YAML::LoadFile(plotfile);
-
-  // Results directory stuff
-  fResultsDir = get_results_path() + "/";
-
-  struct stat st;
-  if(stat(fResultsDir.c_str(),&st) != 0)
-  {
-    printf("Warning: RESULTSDIR folder is NOT present!\nCreating a new folder.\n\n");
-    mkdir(fResultsDir.c_str(), 0777);
-  }
-
-  // Setup results directory
-  fResultsDir += fPDFName;
-  mkdir(fResultsDir.c_str(), 0777);
 }
 
 /**
@@ -348,12 +365,12 @@ PosSetInfo const& NNPDFSettings::GetPosInfo(string const& posname) const
 }
 
 // Verify configuration file is unchanged w.r.t filter.log
-void NNPDFSettings::VerifyConfiguration(const string &filename)
+void NNPDFSettings::VerifyConfiguration() const
 {
   cout <<endl;
   cout << Colour::FG_YELLOW << " ----------------- Veriying Configuration against Filter ----------------- "<<endl << Colour::FG_DEFAULT <<endl;;
-  string target = fResultsDir + "/"+filename;
-  string filter = fResultsDir + "/filter.yml";
+  string target = fResultsDir + "/"+ fPDFName + ".yml";
+  string filter = fResultsDir + "/md5";
 
   ifstream targetConfig;
   targetConfig.open(target.c_str());
@@ -375,18 +392,17 @@ void NNPDFSettings::VerifyConfiguration(const string &filename)
     exit(-1);
   }
 
-  MD5 targetHash, filterHash;
+  string md5;
+  filterConfig >> md5;
 
+  MD5 targetHash;
   targetHash.update(targetConfig);
-  filterHash.update(filterConfig);
-
   targetHash.finalize();
-  filterHash.finalize();
 
   cout << "  Current Log MD5: "<<targetHash.hexdigest()<<endl;
-  cout << "  Filter  Log MD5: "<<filterHash.hexdigest()<<endl;
+  cout << "  Filter  Log MD5: "<<md5<<endl;
 
-  if (filterHash.hexdigest().compare(targetHash.hexdigest()) == 0)
+  if (targetHash.hexdigest() == md5)
   {
     cout << endl<< Colour::FG_GREEN << " ----------------- Configuration Log Verification: PASSED -----------------"<< Colour::FG_DEFAULT <<endl<<endl;
   }
@@ -473,6 +489,58 @@ void NNPDFSettings::PrintTheory(const string& filename) const
   for (size_t i = 0; i < APFEL::kValues.size(); i++)
     f << APFEL::kValues[i] << "\t: " << fTheory.at(APFEL::kValues[i]) << endl;
   f.close();
+}
+
+/**
+ * @brief BuildResultsFolder
+ */
+void NNPDFSettings::BuildResultsFolder() const
+{
+  // check if result folder exists
+  struct stat st;
+  if(stat(fResultsDir.c_str(),&st) == 0)
+    cout << Colour::FG_YELLOW << "\nWarning: output folder is present, be carefull!" << Colour::BG_DEFAULT << endl;
+
+  // Setup results directory
+  mkdir(fResultsDir.c_str(), 0777);
+
+  // place a copy of configuration file
+  const string target = fPDFName + ".yml";
+  PrintConfiguration(target);
+
+  // store the md5 of the configuration file
+  PrintMD5(target);
+}
+
+/**
+ * @brief NNPDFSettings::PrintMD5
+ * @param filename
+ */
+void NNPDFSettings::PrintMD5(const string& filename) const
+{
+  string target = fResultsDir + "/" + filename;
+
+  ifstream targetConfig;
+  targetConfig.open(target.c_str());
+
+  if (!targetConfig.good())
+    throw NNPDF::FileError("NNPDFSettings::PrintMD5",
+                           "Cannot find current config file.");
+
+  MD5 targetHash;
+  targetHash.update(targetConfig);
+  targetHash.finalize();
+
+  fstream outputMD5;
+  outputMD5.open(fResultsDir + "/md5", ios::out);
+
+  if (!outputMD5.good())
+    throw NNPDF::FileError("NNPDFSettings::PrintMD5",
+                           "Cannot create md5 file!");
+
+  outputMD5 << targetHash.hexdigest() << endl;
+  outputMD5.close();
+  targetConfig.close();
 }
 
 /**
@@ -566,6 +634,16 @@ void NNPDFSettings::LoadPositivities()
       if (iMap != fPosSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadPositivity error: hash collision for set: " << posname << Colour::FG_DEFAULT << endl; exit(-1); }
       else { fPosSetInfo.insert(make_pair(hashval, info)); }
     }
+}
+
+/**
+ * @brief NNPDFSettings::LoadPlotFile
+ * @param plotfile
+ */
+void NNPDFSettings::SetPlotFile(string const& plotfile)
+{
+  // read plotting options
+  fPlotting = YAML::LoadFile(plotfile);
 }
 
 bool NNPDFSettings::IsQED() const

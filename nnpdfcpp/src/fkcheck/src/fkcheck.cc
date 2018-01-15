@@ -31,21 +31,21 @@ using std::vector;
 int main(int argc, char **argv)
 {  
   // Read configuration filename from arguments
-  string filename = "config.yml";
+  string folder = "";
   string targetGrid = "";
   
   if (argc > 2)
   {
-    filename.assign(argv[1]);
+    folder.assign(argv[1]);
     targetGrid.assign(argv[2]);
   }
   else
   {
-    cerr << Colour::FG_RED << "\nusage: fkcheck [configuration filename] [grid filename]\n" << endl;
+    cerr << Colour::FG_RED << "\nusage: fkcheck [configuration folder] [grid filename]\n" << endl;
     exit(-1);
   }
   
-  NNPDFSettings settings(filename);
+  NNPDFSettings settings(folder);
 
   FKTable* fk = new FKTable(targetGrid);
   LHAPDFSet *pdf = new LHAPDFSet(settings.GetPDFName(), PDFSet::erType::ER_MCT0);

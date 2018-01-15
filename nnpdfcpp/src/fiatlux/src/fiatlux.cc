@@ -220,14 +220,14 @@ int main(int argc, char **argv)
   // Read configuration filename from arguments
   int replica = 0;
   bool noise_status = false;
-  string filename = "";
+  string folder = "";
   if (argc > 2)
     {
       replica = atoi(argv[1]);
-      filename.assign(argv[2]);
-      if (filename.find("help") != string::npos)
+      folder.assign(argv[2]);
+      if (folder.find("help") != string::npos)
         {
-          cout << "\nusage: fiatlux [replica] [configuration filename] [add_noise (default 0)]\n" << endl;
+          cout << "\nusage: fiatlux [replica] [configuration folder] [add_noise (default 0)]\n" << endl;
           exit(-1);
         }
       if (argc == 4)
@@ -237,13 +237,12 @@ int main(int argc, char **argv)
     }
   else
     {
-      cerr << Colour::FG_RED << "\nusage: fiatlux [replica] [configuration filename] [add_noise (default 0)]\n" << endl;
+      cerr << Colour::FG_RED << "\nusage: fiatlux [replica] [configuration folder] [add_noise (default 0)]\n" << endl;
       exit(-1);
     }
 
   // Creates the configuration class
-  NNPDFSettings settings(filename);
-  settings.PrintConfiguration("fiatlux.yml");
+  NNPDFSettings settings(folder);
 
   SetSeed(replica);
   const double q0 = 100.0, q = stod(settings.GetTheory(APFEL::kQ0));

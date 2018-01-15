@@ -141,28 +141,26 @@ void getX(const DataSet &set, const int dp, real& x1, real& x2)
 int main(int argc, char **argv)
 {  
   // Read configuration filename from arguments
-  string filename, pdfgrid;
+  string folder, pdfgrid;
   if (argc > 1)
   {
-    filename.assign(argv[1]);
+    folder.assign(argv[1]);
     if (argc == 3)
       pdfgrid.assign(argv[2]);
-    if (filename.find("help") != string::npos)
+    if (folder.find("help") != string::npos)
     {
-      cout << "\nusage: kinplot [configuration filename] \n" << endl;
+      cout << "\nusage: kinplot [configuration folder] \n" << endl;
       exit(-1);
     }
   }
   else
   {
-    cout << "\nusage: kinplot [configuration filename]  \n" << endl;
+    cout << "\nusage: kinplot [configuration folder]  \n" << endl;
     exit(-1);
   }  
   
   // Creates the configuration class
-  NNPDFSettings settings(filename);
-  settings.PrintConfiguration("kinplot.log");
-  settings.VerifyConfiguration("kinplot.log");
+  NNPDFSettings settings(folder);
 
   // Load experiments
   vector<Experiment*> exps;

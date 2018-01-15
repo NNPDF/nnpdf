@@ -26,35 +26,33 @@ int main(int argc, char **argv)
 {  
   
   // Read configuration filename from arguments
-  string filename, filenameref, plottingfile = "../config/plotting.yml";
+  string folder, folderref, plottingfile = "../config/plotting.yml";
   if (argc > 2)
     {
-      filename.assign(argv[1]);
-      filenameref.assign(argv[2]);
+      folder.assign(argv[1]);
+      folderref.assign(argv[2]);
       if (argc == 4) plottingfile.assign(argv[3]);
 
-      if (filename.find("help") != string::npos || filenameref.find("help") != string::npos)
+      if (folder.find("help") != string::npos || folderref.find("help") != string::npos)
 	{ 
-	  cout << Colour::FG_RED << "\nusage: validphys [configuration filename] [configuration reference filename] [optional plotting filename]\n" << endl;
+	  cout << Colour::FG_RED << "\nusage: validphys [configuration folder] [configuration reference folder] [optional plotting filename]\n" << endl;
 	  cout << "plotting.ini is the default configuration file" << endl;
 	  exit(-1);
 	}      
     }
   else
     {
-      cerr << Colour::FG_RED << "\nusage: validphys [configuration filename] [configuration reference filename] [optional plotting filename]\n" << endl;
+      cerr << Colour::FG_RED << "\nusage: validphys [configuration folder] [configuration reference folder] [optional plotting filename]\n" << endl;
       cerr << "plotting.ini is the default configuration file" << endl;
       exit(-1);
     }
 
   // Creates the configuration class
-  NNPDFSettings settings(filename,plottingfile);
-  NNPDFSettings settingsref(filenameref,plottingfile);
+  NNPDFSettings settings(folder);
+  settings.SetPlotFile(plottingfile);
 
-  // Printing a copy of the configuration file
-  settings.PrintConfiguration("validphys.yml");
-  settings.VerifyConfiguration("validphys.yml");
-  settings.PrintTheory("theory.log");
+  NNPDFSettings settingsref(folderref);
+  settings.SetPlotFile(plottingfile);
 
   PDFSet* T0Set = new LHAPDFSet(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::erType::ER_MCT0);
   PDFSet* T0SetRef = NULL;
