@@ -621,7 +621,7 @@ void CMS1JET276TEVFilter::ReadData()
           fSys[index][2].name = "CORR";
 
           // filling corr uncertainties
-          for (int isys = 3; isys < 25; isys++)
+          for (int isys = 3; isys < nsys; isys++)
             {
               f1 >> fSys[index][isys].mult;
               fSys[index][isys].type = MULT;
@@ -655,6 +655,7 @@ void CMS1JET276TEVFilter::ReadData()
         {
           for (int l = nsys+index-bins[iy]; l < nsys+index; l++)
             {
+              std::cout << l << " is being filled"<<std::endl;
               fSys[index_bis][l].add = syscor[ipt][l-nsys-index+bins[iy]];
               fSys[index_bis][l].mult = fSys[index_bis][l].add*1e2/fData[index_bis];
               fSys[index_bis][l].type = MULT;

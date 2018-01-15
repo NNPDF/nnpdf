@@ -269,7 +269,6 @@ void CDFR2KTFilter::ReadData()
       {
         lstream >> up >> down;       // Get symmetrized systematic error for beta ratios
         symmetriseErrors(up, down, &stmp, &dtmp);
-        std::cout << index <<"  "<< 5+3*i+k <<" "<< stmp <<std::endl;
         fSys[index][5+3*i+k].mult = stmp;
         shift[index]+= dtmp;
       }
