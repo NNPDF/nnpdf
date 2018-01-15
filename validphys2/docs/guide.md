@@ -502,15 +502,16 @@ set up a development environment for `libnnpdf`.
 	-fvar-tracking-assignments
 	+GXX=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-g++
 	```
-	We now remove the package for `libnnpdf` and install the other
-	build dependencies (which can be found in
+	Assuming we want to modify `libnnpdf` (otherwise you can omit
+	these steps), we now remove the compiled package `libnnpdf` and install
+	the other build dependencies (which can be found in
 	`libnnpdf/conda-recipe/meta.yaml`).
 	```
 	$ conda remove libnnpdf
 	$ conda install pkg-config swig=3.0.10 cmake
 	```
 
- 3. Build the library We only need to set
+ 3. Build the library: We only need to set
 	the installation prefix to the `conda` environment. Assuming `conda`
 	is installed under `~/anaconda3`:
 	```
