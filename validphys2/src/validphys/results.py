@@ -702,7 +702,7 @@ def fits_chi2_table(
         keys = lvs
 
     res = pd.concat(dfs, axis=0, keys=keys)
-    return res.fillna("Not Fitted")
+    return res
 
 @table
 def dataspecs_chi2_table(
