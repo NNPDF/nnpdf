@@ -634,6 +634,16 @@ void CMS1JET276TEVFilter::ReadData()
               fSys[index][l].mult *= 1e2;
               fSys[index][l].add = fSys[index][l].mult*fData[index]*1e-2;
             }
+
+          // Zero systematics for use in statistical covariance matrix
+          for (int l=nsys; l<fNSys; l++)
+          {
+              fSys[index][l].mult = 0;
+              fSys[index][l].add  = 0;
+              fSys[index][l].type = MULT; // Following procedure below
+              fSys[index][l].name = "CORR";
+          }
+
           index++;
         }
 
@@ -655,7 +665,6 @@ void CMS1JET276TEVFilter::ReadData()
         {
           for (int l = nsys+index-bins[iy]; l < nsys+index; l++)
             {
-              std::cout << l << " is being filled"<<std::endl;
               fSys[index_bis][l].add = syscor[ipt][l-nsys-index+bins[iy]];
               fSys[index_bis][l].mult = fSys[index_bis][l].add*1e2/fData[index_bis];
               fSys[index_bis][l].type = MULT;
