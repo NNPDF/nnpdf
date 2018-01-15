@@ -39,33 +39,35 @@ private:
   void ReadData();
 };
 
-class ATLASR04JETS36PBFilter: public CommonData
+// ################################################################
+//  ATLAS 2010 Jets are two analyses (different R) with identical
+//  data structures. Therefore here we use a base class with the
+//  actual filter, and inherit twice using two different setnames.
+
+class ATLAS2010JETSFilter: public CommonData
+{ public: ATLAS2010JETSFilter( string setname ):
+  CommonData(setname) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class ATLASR04JETS36PBFilter: public ATLAS2010JETSFilter
 { public: ATLASR04JETS36PBFilter():
-  CommonData("ATLASR04JETS36PB") { ReadData(); }
-
-private:
-  void ReadData();
+  ATLAS2010JETSFilter("ATLASR04JETS36PB") { }
 };
 
-class ATLASR06JETS36PBFilter: public CommonData
+class ATLASR06JETS36PBFilter: public ATLAS2010JETSFilter
 { public: ATLASR06JETS36PBFilter():
-  CommonData("ATLASR06JETS36PB") { ReadData(); }
-
-private:
-  void ReadData();
+  ATLAS2010JETSFilter("ATLASR06JETS36PB") {  }
 };
 
+// In principle, this also has an analogous R=0.6 dataset,
+// however I (nh) found problems with the buildmaster implementation.
+// As it is not used in practice, I removed the buildmaster for R=0.6.
 class ATLASR04JETS2P76TEVFilter: public CommonData
 { public: ATLASR04JETS2P76TEVFilter():
   CommonData("ATLASR04JETS2P76TEV") { ReadData(); }
-
-private:
-  void ReadData();
-};
-
-class ATLASR06JETS2P76TEVFilter: public CommonData
-{ public: ATLASR06JETS2P76TEVFilter():
-  CommonData("ATLASR06JETS2P76TEV") { ReadData(); }
 
 private:
   void ReadData();
