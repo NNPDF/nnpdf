@@ -230,7 +230,6 @@ void ATLASR04JETS2P76TEVFilter::ReadData()
 
     rawdata_file >> ndatbin[i];
     string dummy_string; getline(rawdata_file, dummy_string); // Eat up newline
-    std::cout << "NDAT/ETA: "<<ndatbin[i] << "  "<<eta<<std::endl;
     for (int j = 0; j < ndatbin[i]; j++)
     {
       // Read pT bin limits
