@@ -153,12 +153,8 @@ void NMCFilter::ReadData()
         for (int isys=0; isys<8; isys++)
             fSys[idat][isys].mult = 0;
         
-        // These were used for the deuteron data
+        // This was used for the deuteron data
         fSys[idat][9].mult          = 0;
-        fSys[idat][12].mult         = 0;
-        fSys[idat][13].mult         = 0;
-        fSys[idat][14].mult         = 0;
-        fSys[idat][15].mult         = 0;
         
         fSys[idat][icom + 12].mult  = relnorbeam;
         fSys[idat][2*icom + 0].mult = datain[idat][4];
@@ -215,7 +211,6 @@ void NMCFilter::ReadData()
       exit(-1);
     }
     
-    
     fKin1[i] = x;
     fKin2[i] = q2;
     fKin3[i] = y;
@@ -228,10 +223,6 @@ void NMCFilter::ReadData()
       fSys[i][l].type = ADD;
       fSys[i][l].name = "CORR";
     }
-    for (int l = 12; l < fNSys; l++)
-      fSys[i][l].type = MULT;
-    
-      
   }
 }
 
