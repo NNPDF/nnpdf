@@ -1,5 +1,6 @@
 
 #include "NMC.h"
+#include <array>
 
 /**
  * NMCpd: hep-ex/9611022, M. Arneodo et al., Nucl. Phys. B 483 (1997) 3
@@ -121,92 +122,31 @@ void NMCpdFilter::ReadData()
 void NMCFilter::ReadData()
 {
   // Opening files
-  fstream f1, f2, f3, f4, d1, d2, d3, d4;
+  const std::string rawdata_path = dataPath() + "rawdata/" + fSetName + "/";
+  const std::array<std::string, 4> energies = {"90","120","200","280"};
+  const std::array<int,4>        datapoints = {73, 65, 75, 79}; // Number of datapoints per COM bin
   
-  stringstream datafile("");
-  datafile << dataPath() << "rawdata/"
-  << fSetName << "/nmc_p90.data";
-  f1.open(datafile.str().c_str(), ios::in);
+  ifstream f1(rawdata_path + "/nmc_p90.data");
+  if (!f1.is_open()) throw runtime_error("Cannot open file: nmc_p90.data");
+  ifstream f2(rawdata_path + "/nmc_p120.data");
+  if (!f2.is_open()) throw runtime_error("Cannot open file: nmc_p120.data");
+  ifstream f3(rawdata_path + "/nmc_p200.data");
+  if (!f3.is_open()) throw runtime_error("Cannot open file: nmc_p200.data");
+  ifstream f4(rawdata_path + "/nmc_p280.data");
+  if (!f4.is_open()) throw runtime_error("Cannot open file: nmc_p280.data");
   
-  if (f1.fail()) {
-    cerr << "Error opening data file " << datafile.str() << endl;
-    exit(-1);
-  }
-  
-  stringstream datafile2("");
-  datafile2 << dataPath() << "rawdata/"
-  << fSetName << "/nmc_p120.data";
-  f2.open(datafile2.str().c_str(), ios::in);
-  
-  if (f2.fail()) {
-    cerr << "Error opening data file " << datafile2.str() << endl;
-    exit(-1);
-  }
-  
-  stringstream datafile3("");
-  datafile3 << dataPath() << "rawdata/"
-  << fSetName << "/nmc_p200.data";
-  f3.open(datafile3.str().c_str(), ios::in);
-  
-  if (f3.fail()) {
-    cerr << "Error opening data file " << datafile3.str() << endl;
-    exit(-1);
-  }
-  
-  stringstream datafile4("");
-  datafile4 << dataPath() << "rawdata/"
-  << fSetName << "/nmc_p280.data";
-  f4.open(datafile4.str().c_str(), ios::in);
-  
-  if (f4.fail()) {
-    cerr << "Error opening data file " << datafile4.str() << endl;
-    exit(-1);
-  }
-  
-  stringstream datafiled("");
-  datafiled << dataPath() << "rawdata/"
-  << fSetName << "/nmc_d90.data";
-  d1.open(datafiled.str().c_str(), ios::in);
-  
-  if (d1.fail()) {
-    cerr << "Error opening data file " << datafiled.str() << endl;
-    exit(-1);
-  }
-  
-  stringstream datafiled2("");
-  datafiled2 << dataPath() << "rawdata/"
-  << fSetName << "/nmc_d120.data";
-  d2.open(datafiled2.str().c_str(), ios::in);
-  
-  if (d2.fail()) {
-    cerr << "Error opening data file " << datafiled2.str() << endl;
-    exit(-1);
-  }
-  
-  stringstream datafiled3("");
-  datafiled3 << dataPath() << "rawdata/"
-  << fSetName << "/nmc_d200.data";
-  d3.open(datafile3.str().c_str(), ios::in);
-  
-  if (d3.fail()) {
-    cerr << "Error opening data file " << datafiled3.str() << endl;
-    exit(-1);
-  }
-  
-  stringstream datafiled4("");
-  datafiled4 << dataPath() << "rawdata/"
-  << fSetName << "/nmc_d280.data";
-  d4.open(datafiled4.str().c_str(), ios::in);
-  
-  if (d4.fail()) {
-    cerr << "Error opening data file " << datafiled4.str() << endl;
-    exit(-1);
-  }
-  
+  ifstream d1(rawdata_path + "/nmc_d90.data");
+  if (!d1.is_open()) throw runtime_error("Cannot open file: nmc_d90.data");
+  ifstream d2(rawdata_path + "/nmc_d120.data");
+  if (!d2.is_open()) throw runtime_error("Cannot open file: nmc_d120.data");
+  ifstream d3(rawdata_path + "/nmc_d200.data");
+  if (!d3.is_open()) throw runtime_error("Cannot open file: nmc_d200.data");
+  ifstream d4(rawdata_path + "/nmc_d280.data");
+  if (!d4.is_open()) throw runtime_error("Cannot open file: nmc_d280.data");
   
   // Starting filter  
   double datain[584][13];
-  double relnorbeam = 2.0;
+  const double relnorbeam = 2.0;
     
   // Reading data
   string line;
