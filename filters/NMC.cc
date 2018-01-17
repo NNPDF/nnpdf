@@ -147,66 +147,35 @@ void NMCFilter::ReadData()
   // Starting filter  
   double datain[584][13];
   const double relnorbeam = 2.0;
+
+  // Loop over COM energies
+  int idat = 0;
+  for (int icom = 0; icom < energies.size(); icom++)
+  {
+     const std::string filename = rawdata_path +  "/nmc_p"+energies[icom]+".data";
+     ifstream datafile(filename); 
+     if (!datafile.is_open()) throw runtime_error("Cannot open file: "+filename);
+
+     for (int ibin = 0; ibin < datapoints[icom]; ibin++)
+     {
+        string line;
+        getline(datafile,line);
+        istringstream lstream(line);
+        for (int j = 0; j < 13; j++)
+          lstream >> datain[idat][j];
+        
+        fSys[idat][icom + 12].mult = relnorbeam;
+        fSys[idat][2*icom + 0].mult = datain[idat][4];
+        fSys[idat][2*icom + 1].mult = datain[idat][5];
+        fSys[idat][8].mult = datain[idat][7];
+        idat++;
+     }
+  }
     
   // Reading data
   string line;
-  int nini = 0;
-  
-  for (int i = 0; i < 73; i++)
-  {
-    getline(f1,line);
-    istringstream lstream(line);
-    for (int j = 0; j < 13; j++)
-      lstream >> datain[i][j];
-    
-    fSys[i][12].mult = relnorbeam;
-    fSys[i][0].mult = datain[i][4];
-    fSys[i][1].mult = datain[i][5];
-    
-  }
-  nini += 73;  
+  int nini = 292;
 
-  for (int i = nini; i < nini+65; i++)
-  {
-    getline(f2,line);
-    istringstream lstream(line);
-    for (int j = 0; j < 13; j++)
-      lstream >> datain[i][j];
-    
-    fSys[i][13].mult = relnorbeam;
-    fSys[i][2].mult = datain[i][4];
-    fSys[i][3].mult = datain[i][5];
-  }
-  nini += 65;  
-
-  for (int i = nini; i < nini+75; i++)
-  {
-    getline(f3,line);
-    istringstream lstream(line);
-    for (int j = 0; j < 13; j++)
-      lstream >> datain[i][j];
-    
-    fSys[i][14].mult = relnorbeam;
-    fSys[i][4].mult = datain[i][4];
-    fSys[i][5].mult = datain[i][5];
-  }
-  nini += 75;  
-
-  for (int i = nini; i < nini+79; i++)
-  {
-    getline(f4,line);
-    istringstream lstream(line);
-    for (int j = 0; j < 13; j++)
-      lstream >> datain[i][j];
-    
-    fSys[i][15].mult = relnorbeam;
-    fSys[i][6].mult = datain[i][4];
-    fSys[i][7].mult = datain[i][5];
-  }
-  nini +=79;
-
-  for (int i = 0; i < 292; i++)
-    fSys[i][8].mult = datain[i][7];
   if (fNData > 292 )
   {
   // reading deuteron data
