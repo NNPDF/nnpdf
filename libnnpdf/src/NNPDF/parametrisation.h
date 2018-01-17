@@ -42,13 +42,11 @@ namespace NNPDF
     std::string const& GetParamName() const {return fParamName;};
     
     virtual void InitParameters() = 0;
-    void SetOutputNorm( real const& onorm ) {fOutputNorm = onorm;}; 
     
   protected:
     const int   fNParameters;   //!< Total number of parameters
     real* const fParameters;    //!< Parameters
 
-    real fOutputNorm;         //!< Output normalisation
   private:
     const std::string fParamName;
   };

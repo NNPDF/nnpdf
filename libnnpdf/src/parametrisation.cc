@@ -28,7 +28,6 @@ using namespace NNPDF;
 Parametrisation::Parametrisation( std::string name, int nParameters ):
 fNParameters(nParameters),
 fParameters(new real[fNParameters]()),
-fOutputNorm(1),
 fParamName(name)
 {
 }
@@ -42,7 +41,6 @@ fParamName(name)
 Parametrisation::Parametrisation( Parametrisation const& o):
 fNParameters(o.fNParameters),
 fParameters(new real[fNParameters]()),
-fOutputNorm(o.fOutputNorm),
 fParamName(o.fParamName)
 {
   CopyPars(&o);
@@ -71,8 +69,6 @@ void Parametrisation::CopyPars(Parametrisation const* t)
   for (int i=0; i<fNParameters; i++)
     fParameters[i] = t->fParameters[i];
 
-  fOutputNorm = t->fOutputNorm;
-  
   return;
 }
 
@@ -82,7 +78,6 @@ void Parametrisation::CopyPars(Parametrisation const* t)
  */
 void Parametrisation::ReadPars(std::ifstream& instream)
 {
-  instream >> fOutputNorm;
   for (int i=0; i<fNParameters; i++)
     instream >> fParameters[i];
 }
@@ -93,7 +88,6 @@ void Parametrisation::ReadPars(std::ifstream& instream)
  */
 void Parametrisation::WritePars(std::ofstream& outstream)
 {
-  outstream << " "<<fOutputNorm;
   for (int i=0; i<fNParameters; i++)
     outstream <<" "<< fParameters[i];
 }
@@ -303,7 +297,7 @@ void MultiLayerPerceptron::Compute(real* in,real* out) const
   }
   
   for (int i=0; i<fArch[fNLayers-1]; i++)
-    out[i] = fOutputNorm*fOutputMatrix[fNLayers-1][i];
+    out[i] = fOutputMatrix[fNLayers-1][i];
 }
 
 int MultiLayerPerceptron::GetNumNodeParams(int const& layer) const
