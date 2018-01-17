@@ -118,6 +118,8 @@ void NMCpdFilter::ReadData()
  *     The conversion factor is 1 GeV^-2 = 0.3894 mb
  *     -> 1 b/GeV2 = 2568.05 1/GeV4
  *     [convfac = 0.389379304D9    ! conversion from GeV to picobarn ]
+ *
+ *     NOTE THIS IS JUST THE PROTON DATA
  */
 void NMCFilter::ReadData()
 {
@@ -126,35 +128,18 @@ void NMCFilter::ReadData()
   const std::array<std::string, 4> energies = {"90","120","200","280"};
   const std::array<int,4>        datapoints = {73, 65, 75, 79}; // Number of datapoints per COM bin
   
-  ifstream f1(rawdata_path + "/nmc_p90.data");
-  if (!f1.is_open()) throw runtime_error("Cannot open file: nmc_p90.data");
-  ifstream f2(rawdata_path + "/nmc_p120.data");
-  if (!f2.is_open()) throw runtime_error("Cannot open file: nmc_p120.data");
-  ifstream f3(rawdata_path + "/nmc_p200.data");
-  if (!f3.is_open()) throw runtime_error("Cannot open file: nmc_p200.data");
-  ifstream f4(rawdata_path + "/nmc_p280.data");
-  if (!f4.is_open()) throw runtime_error("Cannot open file: nmc_p280.data");
-  
-  ifstream d1(rawdata_path + "/nmc_d90.data");
-  if (!d1.is_open()) throw runtime_error("Cannot open file: nmc_d90.data");
-  ifstream d2(rawdata_path + "/nmc_d120.data");
-  if (!d2.is_open()) throw runtime_error("Cannot open file: nmc_d120.data");
-  ifstream d3(rawdata_path + "/nmc_d200.data");
-  if (!d3.is_open()) throw runtime_error("Cannot open file: nmc_d200.data");
-  ifstream d4(rawdata_path + "/nmc_d280.data");
-  if (!d4.is_open()) throw runtime_error("Cannot open file: nmc_d280.data");
-  
   // Starting filter  
-  double datain[584][13];
+  double datain[292][13];
   const double relnorbeam = 2.0;
 
   // Loop over COM energies
   int idat = 0;
   for (int icom = 0; icom < energies.size(); icom++)
   {
-     const std::string filename = rawdata_path +  "/nmc_p"+energies[icom]+".data";
+     const std::string filename = rawdata_path +  "nmc_p"+energies[icom]+".data";
      ifstream datafile(filename); 
      if (!datafile.is_open()) throw runtime_error("Cannot open file: "+filename);
+     std::cout << filename<<std::endl;
 
      for (int ibin = 0; ibin < datapoints[icom]; ibin++)
      {
@@ -163,84 +148,39 @@ void NMCFilter::ReadData()
         istringstream lstream(line);
         for (int j = 0; j < 13; j++)
           lstream >> datain[idat][j];
+
+        // Zero unneeded systematics
+        for (int isys=0; isys<8; isys++)
+            fSys[idat][isys].mult = 0;
         
-        fSys[idat][icom + 12].mult = relnorbeam;
+        // These were used for the deuteron data
+        fSys[idat][9].mult          = 0;
+        fSys[idat][12].mult         = 0;
+        fSys[idat][13].mult         = 0;
+        fSys[idat][14].mult         = 0;
+        fSys[idat][15].mult         = 0;
+        
+        fSys[idat][icom + 12].mult  = relnorbeam;
         fSys[idat][2*icom + 0].mult = datain[idat][4];
         fSys[idat][2*icom + 1].mult = datain[idat][5];
-        fSys[idat][8].mult = datain[idat][7];
+        fSys[idat][8].mult          = datain[idat][7];
+        fSys[idat][10].mult         = datain[idat][6];
+        fSys[idat][11].mult         = datain[idat][8];
         idat++;
      }
+     datafile.close();
   }
-    
-  // Reading data
-  string line;
-  int nini = 292;
 
-  if (fNData > 292 )
-  {
-  // reading deuteron data
-  for (int i = nini; i < nini+73; i++)
-  {
-    getline(d1,line);
-    istringstream lstream(line);
-    for (int j = 0; j < 13; j++)
-      lstream >> datain[i][j];
+  if (idat != fNData)
+      throw runtime_error("Error: datapoint mismatch");
     
-    fSys[i][12].mult = relnorbeam;
-    fSys[i][0].mult = datain[i][4];
-    fSys[i][1].mult = datain[i][5];
-  }
-  nini += 73;  
-
-  for (int i = nini; i < nini+65; i++)
-  {
-    getline(d2,line);
-    istringstream lstream(line);
-    for (int j = 0; j < 13; j++)
-      lstream >> datain[i][j];
-    
-    fSys[i][13].mult = relnorbeam;
-    fSys[i][2].mult = datain[i][4];
-    fSys[i][3].mult = datain[i][5];
-  }
-  nini += 65;  
-
-  for (int i = nini; i < nini+75; i++)
-  {
-    getline(d3,line);
-    istringstream lstream(line);
-    for (int j = 0; j < 13; j++)
-      lstream >> datain[i][j];
-    
-    fSys[i][14].mult = relnorbeam;
-    fSys[i][4].mult = datain[i][4];
-    fSys[i][5].mult = datain[i][5];
-  }
-  nini += 75;  
-
-  for (int i = nini; i < nini+79; i++)
-  {
-    getline(d4,line);
-    istringstream lstream(line);
-    for (int j = 0; j < 13; j++)
-      lstream >> datain[i][j];
-    
-    fSys[i][15].mult = relnorbeam;
-    fSys[i][6].mult = datain[i][4];
-    fSys[i][7].mult = datain[i][5];
-  }
-  nini +=79;
-
-  for (int i = 292; i < fNData; i++)
-    fSys[i][9].mult = datain[i][7];
-  }
   // Filtering data
-  double obs, x, y, rr;
-  double q2, rxsec_qed;
-  double mp = 0.93799999999999994;
-  
+  const double mp = 0.93799999999999994;
   for (int i = 0; i < fNData; i++)
   {
+    double obs, x, y, rr;
+    double q2, rxsec_qed;
+
     x  = datain[i][0];
     y  = datain[i][2];
     q2 = datain[i][1];
@@ -275,8 +215,6 @@ void NMCFilter::ReadData()
       exit(-1);
     }
     
-    fSys[i][10].mult = datain[i][6];
-    fSys[i][11].mult = datain[i][8];
     
     fKin1[i] = x;
     fKin2[i] = q2;
@@ -295,15 +233,5 @@ void NMCFilter::ReadData()
     
       
   }
-  
-  f1.close();
-  f2.close();
-  f3.close();
-  f4.close();
-  
-  d1.close();
-  d2.close();
-  d3.close();
-  d4.close();
 }
 
