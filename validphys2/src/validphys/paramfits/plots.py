@@ -244,6 +244,60 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
     ax.legend()
     return fig
 
+@figure
+def plot_dataspecs_as_value_error_comparing_with_central(
+        datasepecs_as_value_error_table_impl,
+        as_datasets_central_chi2,
+        dataspecs_fits_as,
+        speclabel,
+        marktotal:bool=True, fix_limits:bool=True):
+    """
+    This is an aberration we need to do for the paper plots. It compares the
+    central (old) and new partial chi².
+    """
+
+    df = datasepecs_as_value_error_table_impl
+    catlabels = list(df.index)
+    replica_cvs = df.loc[:, (speclabel, 'mean')].T.as_matrix()
+    replica_errors = df.loc[:, (speclabel, 'error')].T.as_matrix()
+
+    datacentral, namescentral = zip(*as_datasets_central_chi2)
+    cvcentral, errcentral = zip(*datacentral)
+
+    if fix_limits:
+        minlim = min(min(x for x in dataspecs_fits_as))
+        maxlim = max(max(x for x in dataspecs_fits_as))
+        lims = minlim, maxlim
+    else:
+        lims = None
+
+
+    cvs = np.c_[cvcentral, replica_cvs].T
+    errors = np.c_[errcentral, replica_errors].T
+
+
+
+    fig, ax = plot_horizontal_errorbars(
+        cvs, errors, catlabels,
+        [r'$\Delta \chi^2=1$', 'Replicas'],
+        xlim = lims
+
+    )
+
+    if marktotal:
+        try:
+            pos = catlabels.index('Total')
+        except ValueError:
+            log.error("Asked to mark total, but it was not provided.")
+        else:
+            for i,cv in enumerate(cvs):
+                ax.axvline(cv[pos], color=f'C{i%10}', linewidth=0.5, linestyle='--')
+
+    ax.set_xlabel(r"$\alpha_S$")
+    ax.set_title(r"$\alpha_S$ determination")
+    ax.legend()
+    return fig
+
 @make_argcheck
 def _check_first_is_total(fits_central_chi2_by_experiment_and_dataset):
     l = fits_central_chi2_by_experiment_and_dataset
