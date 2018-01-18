@@ -682,6 +682,23 @@ def plot_as_distribution(parabolic_as_determination, suptitle):
     return fig
 
 @figure
+def plot_as_distribution_with_mark(parabolic_as_determination, suptitle):
+    """This is a minor fixup of ``plot_as_distribution`` for the paper. "
+    I am inputing the value by hand because it is too difficult to get in the
+    logic to be worth it."""
+
+    distribution = parabolic_as_determination.data
+
+    fig, ax = plt.subplots()
+
+    kde_plot(distribution)
+    ax.axvline(1.1822e-1,color='C1',  label="Central value using the t0 matrices.")
+    ax.legend()
+    ax.set_title(f"{suptitle}")
+    ax.set_xlabel(r"$\alpha_S$")
+    return fig
+
+@figure
 def plot_poly_as_fit(fits_as,
         fits_replica_data_correlated, max_ndiscarded:int=4, polorder:int=2,
         suptitle=None):
