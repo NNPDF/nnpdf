@@ -358,8 +358,6 @@ void NNPDFSettings::VerifyConfiguration() const
   string target = fResultsDir + "/"+ fPDFName + ".yml";
   string filter = fResultsDir + "/md5";
 
-  cout << target << endl;
-
   ifstream targetConfig;
   targetConfig.open(target.c_str());
 
