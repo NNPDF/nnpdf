@@ -205,6 +205,7 @@ void Experiment::MakeReplica()
           {
             case ADD: xadd += rng->GetRandomGausDev(1.0)*fSys[i][l].add; break;
             case MULT: xnor[i] *= (1.0 + rng->GetRandomGausDev(1.0)*fSys[i][l].mult*1e-2); break;
+            case UNSET: throw RuntimeException("Experiment::MakeReplica", "UNSET systype encountered");
           }
         }
         else                                                      // Noise from correlated systematics
@@ -213,6 +214,7 @@ void Experiment::MakeReplica()
           {
             case ADD: xadd += rand[l]*fSys[i][l].add; break;
             case MULT: xnor[i] *= (1.0 + rand[l]*fSys[i][l].mult*1e-2); break;
+            case UNSET: throw RuntimeException("Experiment::MakeReplica", "UNSET systype encountered");
           }
         }
       }
@@ -311,104 +313,112 @@ void Experiment::PullData()
 {
   // Clear local arrays
   ClearLocalData();
-  
-  fNData = 0;
-  fNSys = 0;
+  fNData = 0; fNSys = 0;
 
-  for (int s = 0; s < GetNSet(); s++)
+  // List of types that do not need to be correlated across the experiment
+  const std::array<std::string,5> special_types = {
+      "UNCORR",
+      "CORR",
+      "THEORYUNCORR",
+      "THEORYCORR",
+      "SKIP"
+  };
+
+  // We need to correlate all subset systematics that share a name.
+  // Therefore we now loop over the subsets, and form a total systematics vector,
+  // taking into account these correlations. Futhermore we build a map (fSetSysMap)
+  // which maps each dataset systematic to a correponding systematic in the experiment
+  // (i.e an index of total_systematics)
+  vector<sysError> total_systematics;
+  fSetSysMap = new int*[GetNSet()];
+  for ( int i = 0; i< GetNSet(); i++ )
   {
-    fNData += fSets[s].GetNData();
-    fNSys += fSets[s].GetNSys();
+    DataSet& subset = fSets[i];
+    fNData += subset.GetNData();               // Count number of datapoints
+    fSetSysMap[i] = new int[subset.GetNSys()]; // Initialise map
+    for (int l = 0; l < subset.GetNSys(); l++)
+    {
+        const sysError& testsys = subset.GetSys(0,l);
+        // Check for systematics that are uncorrelated across the experiment
+        if ( find(special_types.begin(), special_types.end(), testsys.name) != special_types.end() )
+        {
+            // This systematic is an unnamed/special type, add it to the map and the total systematics vector
+            fSetSysMap[i][l] = total_systematics.size(); 
+            total_systematics.emplace_back(testsys);
+        }
+        else 
+        {
+          // This is a named systematic, we need to cross-check against existing named systematics
+          bool found_systematic = false;
+          for ( size_t k=0; k < total_systematics.size(); k++ )
+          {
+            sysError& existing_systematic = total_systematics[k];
+            if (testsys.name == existing_systematic.name ) 
+              {
+                // This already exists in total_systematics, it's not a new systematic
+                found_systematic = true;
+                fSetSysMap[i][l] = k; 
+                // Perform some consistency checks
+                if (testsys.type != existing_systematic.type || testsys.isRAND != existing_systematic.isRAND)
+                  throw RangeError("Experiment::PullData","Systematic " + testsys.name + " definition not consistant between datasets");
+                break;
+              }
+          }
+          // If the systematic doesn't already exist in the list, add it
+          if ( found_systematic == false ) 
+          {
+            fSetSysMap[i][l] = total_systematics.size(); 
+            total_systematics.emplace_back(testsys);
+          }
+        }
+    }
   }
   
-  fData = new double[fNData];
-  fStat = new double[fNData];
+  // Initialise data arrays
+  fData   = new double[fNData];
+  fStat   = new double[fNData];
   fT0Pred = new double[fNData];
+  fNSys   = total_systematics.size();
+  fSys    = new sysError*[fNData];
   
+  // Fill the experiment arrays with the values from its subsets
   int idat = 0;
   for (int s = 0; s < GetNSet(); s++)
     for (int i = 0; i < fSets[s].GetNData(); i++)
     {
-      fData[idat]=fSets[s].GetData(i);
-      fStat[idat]=fSets[s].GetStat(i);
-      fT0Pred[idat]=fSets[s].GetT0Pred(i);
+      DataSet& subset = fSets[s];
+      fData[idat]   = subset.GetData(i);
+      fStat[idat]   = subset.GetStat(i);
+      fT0Pred[idat] = subset.GetT0Pred(i);
+
+      // Loop over experimental systematics, find if there is a corresponding dataset systematic
+      // and set it accordingly.
+      fSys[idat] = new sysError[fNSys];  
+      for (int l = 0; l < fNSys; l++)
+      {
+        fSys[idat][l].name   = total_systematics[l].name;
+        fSys[idat][l].type   = total_systematics[l].type;
+        fSys[idat][l].isRAND = total_systematics[l].isRAND;
+        // Find the dataset systematic corresponding to experimental systematic 'l'
+        // If it doesn't exist (dataset 'subset' doesn't have this systematic) this
+        // will be subset.GetNSys()
+        int* map = fSetSysMap[s];
+        const int dataset_systematic = find(map, map+subset.GetNSys(), l) - map;
+        if (dataset_systematic == subset.GetNSys())
+        {
+            // This subset doesn't have this systematic, set it to zero
+            fSys[idat][l].mult = 0;
+            fSys[idat][l].add  = 0;
+        } else {
+            // Copy the systematic
+            fSys[idat][l].mult = subset.GetSys(i, dataset_systematic).mult;
+            fSys[idat][l].add  = subset.GetSys(i, dataset_systematic).add;
+        }
+      }
       idat++;
     }
   
-  // Uncertainty breakdown
-  sysError** TempSys = new sysError*[fNData];
-  for (int i=0; i<fNData; i++)
-    TempSys[i] = new sysError[fNSys];
-    
-  fSetSysMap = new int*[GetNSet()];
-  for (int s = 0; s < GetNSet(); s++)
-    fSetSysMap[s] = new int[fSets[s].GetNSys()];
-      
-  int DataIndex = 0;
-  int SysIndex = 0;
-  vector<sysError> sysdef;
-  vector<int> sysnumber;
-
-  for (int s = 0; s < GetNSet(); s++)
-  {
-    for (int l = 0; l < fSets[s].GetNSys(); l++)
-      {
-        int sysplace = l+SysIndex;
-        sysError testsys = fSets[s].GetSys(0,l);
-        if (testsys.name.compare("UNCORR")      !=0 
-         && testsys.name.compare("CORR")        !=0 
-         && testsys.name.compare("THEORYUNCORR")!=0
-         && testsys.name.compare("THEORYCORR")  !=0
-         && testsys.name.compare("SKIP") !=0 )        // Check for specially named systematics
-        {
-          for (size_t j = 0; j < sysdef.size(); j++)
-            if (sysdef[j].name.compare(testsys.name)==0)              // Check whether a systematic of that name has been seen yet
-              {
-                sysplace = sysnumber[j];
-                if (testsys.type != sysdef[j].type || testsys.isRAND != sysdef[j].isRAND)
-                  throw RangeError("Experiment::PullData","Systematic " + testsys.name + " definition not consistant between datasets");
-              }
-                
-          if (sysplace == l+SysIndex)
-          {
-            sysdef.push_back(testsys);              // If new, add to list of systematics
-            sysnumber.push_back(sysplace);
-          }
-          else 
-          {
-            SysIndex--;                             // If a repeat, need to decrement SysIndex and fNSys
-            fNSys--;
-          }
-        }
-        
-        for (int i = 0; i < fSets[s].GetNData(); i++)
-          TempSys[i+DataIndex][sysplace] = fSets[s].GetSys(i,l);         // Read sys
-        fSetSysMap[s][l] = sysplace;                                      // Build map (needed for randomization)
-        
-        for (int i = 0; i < fNData; i++)             //Need to match type, random and name of zero systematics
-        {
-          TempSys[i][sysplace].type = testsys.type;
-          TempSys[i][sysplace].isRAND = testsys.isRAND;
-          TempSys[i][sysplace].name = testsys.name;
-        }
-      }     
-    DataIndex+=fSets[s].GetNData();
-    SysIndex+=fSets[s].GetNSys();
-  }
-  
-  fSys = new sysError*[fNData];           // Build correct size systemtics array
-  for (int i=0; i<fNData; i++)
-  {
-    fSys[i] = new sysError[fNSys];  
-    for (int l = 0; l < fNSys; l++)   
-      fSys[i][l] = TempSys[i][l];
-    delete[] TempSys[i];
-  }
-  
-  delete[] TempSys;
-  
   return;
-  
 }
 
 /**
@@ -438,6 +448,7 @@ void Experiment::GenCovMat()
       double diagsignor = 0.0;
       auto &sys = fSys[i][l];
       switch (compsys.type) {
+      case UNSET: throw RuntimeException("Experiment::GenCovMat", "UNSET systype encountered");
       case ADD:
         diagsig += sys.add * sys.add;
         break; // additive systematics
@@ -456,6 +467,7 @@ void Experiment::GenCovMat()
         // Hopefully easy enough for the compiler to fuse this up
         decltype(sys.add) res;
         switch (compsys.type) {
+        case UNSET: throw RuntimeException("Experiment::GenCovMat", "UNSET systype encountered");
         case ADD:
           res = sys.add * othersys.add;
           break; // additive systematics

@@ -126,19 +126,18 @@ namespace NNPDF
     // Initialise arrays
     for (int i=0; i<fNData; i++)
     {
-      fData[i] = 0.0;
-      fKin1[i] = 0.0;
-      fKin2[i] = 0.0;
-      fKin3[i] = 0.0;
-
+      fData[i] = std::numeric_limits<double>::quiet_NaN();
+      fKin1[i] = std::numeric_limits<double>::quiet_NaN();
+      fKin2[i] = std::numeric_limits<double>::quiet_NaN();
+      fKin3[i] = std::numeric_limits<double>::quiet_NaN();
+      fStat[i] = std::numeric_limits<double>::quiet_NaN();
       fProc[i] = "";
-
-      fStat[i] = 0.0;
       fSys[i] = new sysError[fNSys];
     }
 
     // Read commondata
     ReadData(info.targetFile, info.systypeFile);
+    Verify();
   }
 
   // CommonData base class constructor
@@ -166,12 +165,12 @@ namespace NNPDF
     // Initialise arrays
     for (int i=0; i<fNData; i++)
     {
-      fData[i] = 0.0;
-      fKin1[i] = 0.0;
-      fKin2[i] = 0.0;
-      fKin3[i] = 0.0;
+      fData[i] = std::numeric_limits<double>::quiet_NaN();
+      fKin1[i] = std::numeric_limits<double>::quiet_NaN();
+      fKin2[i] = std::numeric_limits<double>::quiet_NaN();
+      fKin3[i] = std::numeric_limits<double>::quiet_NaN();
+      fStat[i] = std::numeric_limits<double>::quiet_NaN();
       fProc[i] = info.ProcType;
-      fStat[i] = 0.0;
       fSys[i] = new sysError[fNSys];
     }
   }
@@ -209,6 +208,7 @@ namespace NNPDF
         fSys[i][l] = set.fSys[i][l];
     }
 
+    Verify();
   }
 
 
@@ -249,7 +249,7 @@ namespace NNPDF
   {
       using std::swap;
       swap(*this, other);
-
+      Verify();
   }
 
   // CommonData masked copy constructor
@@ -285,6 +285,7 @@ namespace NNPDF
         fSys[i][l] = set.fSys[mask[i]][l];
     }
 
+    Verify();
   }
 
   // Destructor
@@ -431,14 +432,51 @@ namespace NNPDF
 
     h.close();
 
+    Verify();
     get_logger() << "-- COMMONDATA Files for "<<fSetName<<" successfully read."<<std::endl<<std::endl;
 
   }
 
+  // Verifies one field in CommonData
+  void VerifyField( double field, std::string name, bool& verification )
+  {
+    if (isnan(field)){
+        std::cerr << "CommonData::Verify: " + name + " unset"<<std::endl;
+        verification = false;
+    }
+  }
+  // Verify that all fields are set in CommonData
+  void CommonData::Verify() const
+  {
+    bool pass_verification = true;
+    for (int i=0; i<GetNData(); i++)
+    {
+        // These VerifyField calls set pass_verification to false in the case of failure
+        const std::string dps = std::to_string(i);
+        VerifyField( GetData(i), "Data point " + dps, pass_verification);
+        VerifyField( GetStat(i), "Statistical Error " + dps, pass_verification);
+        VerifyField( GetKinematics(i,0), "Kinematic1 for datapoint " + dps, pass_verification);
+        VerifyField( GetKinematics(i,1), "Kinematic2 for datapoint " + dps, pass_verification);
+        VerifyField( GetKinematics(i,2), "Kinematic3 for datapoint " + dps, pass_verification);
+        for (int j=0; j<GetNSys(); j++)
+        {
+            const std::string sps = std::to_string(j);
+            VerifyField( GetSys(i,j).add, "Additive systematic " + sps + " for datapoint "+dps, pass_verification);
+            VerifyField( GetSys(i,j).mult,"Multiplicative systematic " + sps + " for datapoint "+dps, pass_verification);
+            if (GetSys(i,j).type == UNSET){
+                std::cerr << "CommonData::Verify: Systematic point type "+sps+" for datapoint "+dps+" unset"<<std::endl;
+                pass_verification = false;
+            }
+        }
+    }
+    if (pass_verification == false)
+        throw std::runtime_error("CommonData::Verify failed for set " + GetSetName());
+  }
 
   // Write data to file in CommonData format
   void CommonData::Export(std::string const& targetdir) const
   {
+    Verify();
     std::fstream g1;
 
     // output datafile
