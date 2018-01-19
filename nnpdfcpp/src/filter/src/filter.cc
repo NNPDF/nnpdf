@@ -274,7 +274,7 @@ string BuildResultsFolder(string const& filename)
   // check if result folder exists
   struct stat st;
   if(stat(resultsdir.c_str(),&st) == 0)
-    throw NNPDF::FileError("BuildResultsFolder", "Output folder was already created, remove it!");
+    cout << Colour::FG_YELLOW << "Warning: Output folder was already created, remove it!" << Colour::FG_DEFAULT << endl;
   mkdir(resultsdir.c_str(), 0755);
 
   // place a copy of configuration file
