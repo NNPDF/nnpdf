@@ -128,8 +128,8 @@ void nnpdf_GSLhandler (const char * reason,
 /**
  * \param filename the configuration file
  */
-NNPDFSettings::NNPDFSettings(const string &filename, bool isfilter):
-  fFileName(filename),
+NNPDFSettings::NNPDFSettings(const string &folder):
+  fFileName(""),
   fPDFName(""),
   fResultsDir(""),
   fTheoryDir(""),
@@ -140,13 +140,12 @@ NNPDFSettings::NNPDFSettings(const string &filename, bool isfilter):
 
   // Understand if filename string is file or directory
   struct stat s;
-  if(stat(filename.c_str(), &s) == 0)
+  if(stat(folder.c_str(), &s) == 0)
     {
-      if( s.st_mode & S_IFDIR && isfilter == false)
+      if( s.st_mode & S_IFDIR)
         {
-          // if folder contains a trailing / remove it
-          if (fFileName.back() == '/')
-            fFileName = fFileName.substr(0, fFileName.length()-1);
+          // if folder contains a trailing / remove it          
+          fFileName = (folder.back() == '/') ? folder.substr(0, folder.length()-1) : folder;
           const int firstindex = (int) fFileName.find_last_of("/") + 1;
           fPDFName = fFileName.substr(firstindex, fFileName.length()-firstindex);
           fResultsDir = fFileName;
@@ -154,29 +153,16 @@ NNPDFSettings::NNPDFSettings(const string &filename, bool isfilter):
 
           VerifyConfiguration();
         }
-      else if (s.st_mode & S_IFDIR && isfilter == true)
-        throw NNPDF::FileError("NNPDFSettings::NNPDFSettings",
-                               "This program takes a configuration file instead of a folder!");
-      else if( s.st_mode & S_IFREG && isfilter == true)
-        {
-          // Get raw name
-          const int firstindex  = (int) fFileName.find_last_of("/") + 1;
-          const int lastindex   = (int) fFileName.find_last_of(".") - firstindex;
-          fPDFName = fFileName.substr(firstindex, lastindex);
-          fResultsDir = fPDFName;
-
-          BuildResultsFolder();
-        }
-      else if (s.st_mode & S_IFREG && isfilter == false)
+      else if (s.st_mode & S_IFREG)
         throw NNPDF::FileError("NNPDFSettings::NNPDFSettings",
                                "This program takes a configuration folder instead of a file!");
       else
         throw NNPDF::FileError("NNPDFSettings::NNPDFSettings",
-                               "Configuration file/folder not recognized.");
+                               "Configuration folder not recognized.");
     }
   else
     throw NNPDF::FileError("NNPDFSettings::NNPDFSettings",
-                           "Configuration file/folder not found: " + filename);
+                           "Configuration folder not found: " + folder);
 
   // Load yaml file
   try {
@@ -372,6 +358,8 @@ void NNPDFSettings::VerifyConfiguration() const
   string target = fResultsDir + "/"+ fPDFName + ".yml";
   string filter = fResultsDir + "/md5";
 
+  cout << target << endl;
+
   ifstream targetConfig;
   targetConfig.open(target.c_str());
 
@@ -489,58 +477,6 @@ void NNPDFSettings::PrintTheory(const string& filename) const
   for (size_t i = 0; i < APFEL::kValues.size(); i++)
     f << APFEL::kValues[i] << "\t: " << fTheory.at(APFEL::kValues[i]) << endl;
   f.close();
-}
-
-/**
- * @brief BuildResultsFolder
- */
-void NNPDFSettings::BuildResultsFolder() const
-{
-  // check if result folder exists
-  struct stat st;
-  if(stat(fResultsDir.c_str(),&st) == 0)
-    cout << Colour::FG_YELLOW << "\nWarning: output folder is present, be carefull!" << Colour::BG_DEFAULT << endl;
-
-  // Setup results directory
-  mkdir(fResultsDir.c_str(), 0777);
-
-  // place a copy of configuration file
-  const string target = fPDFName + ".yml";
-  PrintConfiguration(target);
-
-  // store the md5 of the configuration file
-  PrintMD5(target);
-}
-
-/**
- * @brief NNPDFSettings::PrintMD5
- * @param filename
- */
-void NNPDFSettings::PrintMD5(const string& filename) const
-{
-  string target = fResultsDir + "/" + filename;
-
-  ifstream targetConfig;
-  targetConfig.open(target.c_str());
-
-  if (!targetConfig.good())
-    throw NNPDF::FileError("NNPDFSettings::PrintMD5",
-                           "Cannot find current config file.");
-
-  MD5 targetHash;
-  targetHash.update(targetConfig);
-  targetHash.finalize();
-
-  fstream outputMD5;
-  outputMD5.open(fResultsDir + "/md5", ios::out);
-
-  if (!outputMD5.good())
-    throw NNPDF::FileError("NNPDFSettings::PrintMD5",
-                           "Cannot create md5 file!");
-
-  outputMD5 << targetHash.hexdigest() << endl;
-  outputMD5.close();
-  targetConfig.close();
 }
 
 /**

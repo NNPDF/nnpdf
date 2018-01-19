@@ -19,3 +19,6 @@ void ExportMask(string path, vector<int> mask);
 
 // Randomly cut data
 void RandomCut(NNPDFSettings const& settings, vector<int>& datamask);
+
+// Build output directory
+string BuildResultsFolder(string const& filename);

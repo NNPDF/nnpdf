@@ -37,7 +37,9 @@ int main(int argc, char **argv)
   else { cerr << Colour::FG_RED << "\nusage: filter [configuration filename]\n" << Colour::FG_DEFAULT << endl; exit(-1); }
 
   // Creates the configuration class
-  NNPDFSettings settings(filename, true);
+
+  const string folder = BuildResultsFolder(filename);
+  NNPDFSettings settings(folder);
 
   cout << "\n- Data cuts:" << endl;
   cout << Colour::FG_YELLOW << " ----------------- Selected Cuts -----------------" << Colour::FG_DEFAULT << endl;
@@ -180,7 +182,7 @@ int main(int argc, char **argv)
   cout <<   " - Filter completed with success" << endl;
   cout <<   " - please go "<< settings.GetResultsDirectory() << "/filter \n";
   cout <<   " -------------------------------------------------\n";
-  cout << Colour::FG_DEFAULT << endl;
+  cout << Colour::FG_DEFAULT << endl;  
 
   return 0;
 }
@@ -242,4 +244,65 @@ void RandomCut(NNPDFSettings const& settings, vector<int>& datamask)
   if (settings.Get("closuretest","rancuttrnval").as<bool>() == true) datamask = valdatamask;
 
   valdatamask.clear();
+}
+
+string BuildResultsFolder(string const& filename)
+{
+  // Understand if filename string is file or directory
+  struct stat s;
+  string resultsdir;
+  if(stat(filename.c_str(), &s) == 0)
+    {
+      if( s.st_mode & S_IFREG)
+        {
+          // Get raw name
+          const int firstindex  = (int) filename.find_last_of("/") + 1;
+          const int lastindex   = (int) filename.find_last_of(".") - firstindex; // convetion: we don't accept more than 1 point.
+          resultsdir = filename.substr(firstindex, lastindex);
+        }
+      else if (s.st_mode & S_IFDIR)
+        throw NNPDF::FileError("BuildResultsFolder",
+                               "This program takes a configuration file instead of a folder!");
+      else
+        throw NNPDF::FileError("BuildResultsFolder",
+                               "Configuration file not recognized.");
+    }
+  else
+    throw NNPDF::FileError("BuildResultsFolder",
+                           "Configuration file not found: " + filename);
+
+  // check if result folder exists
+  struct stat st;
+  if(stat(resultsdir.c_str(),&st) == 0)
+    throw NNPDF::FileError("BuildResultsFolder", "Output folder was already created, remove it!");
+  mkdir(resultsdir.c_str(), 0755);
+
+  // place a copy of configuration file
+  fstream inputfile(filename.c_str(), ios::in | ios::binary);
+  fstream copyfile( (resultsdir + "/" + resultsdir + ".yml").c_str(), ios::out | ios::binary);
+  if (inputfile.fail() || copyfile.fail())
+    throw NNPDF::FileError("BuildResultsFolder","file failed.");
+
+  copyfile << inputfile.rdbuf();
+  copyfile.close();
+
+  // going to the begin of the file again
+  inputfile.clear();
+  inputfile.seekg(0, ios::beg);
+
+  // store the md5 of the configuration file
+  MD5 targetHash;
+  targetHash.update(inputfile);
+  targetHash.finalize();
+
+  fstream outputMD5;
+  outputMD5.open(resultsdir + "/md5", ios::out);
+  if (!outputMD5.good())
+    throw NNPDF::FileError("BuildResultsFolder", "Cannot create md5 file!");
+
+  outputMD5 << targetHash.hexdigest() << endl;
+  outputMD5.close();
+  inputfile.close();
+
+  return resultsdir;
 }

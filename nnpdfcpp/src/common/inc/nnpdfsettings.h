@@ -101,7 +101,7 @@ private:
 
 public:
 
-  NNPDFSettings(const string& filename, bool isfilter = false); //!< The constructor
+  NNPDFSettings(const string& folder); //!< The constructor
   ~NNPDFSettings(); //!< The destructor.
 
   // extra set methods
@@ -144,8 +144,6 @@ public:
   // Print configuration
   void PrintConfiguration(const string& filename) const;
   void PrintTheory(const string& filename) const;
-  void PrintMD5(const string& filename) const;
-  void BuildResultsFolder() const;
 
   vector<string>  GetDataInfo(string const& setname, filterType useFiltered) const;
   vector<int>     GetDataMask(string const& setname, filterType useFiltered) const;
