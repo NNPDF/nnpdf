@@ -19,6 +19,7 @@
 #include "ATLAS.h"
 #include "NNPDF/utils.h"
 #include <numeric>
+#include <algorithm>
 
 void ATLAS2010JETSFilter::ReadData()
 {

@@ -410,6 +410,7 @@ void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
       lstream >> stat;
       fStat[i+fNData/2]   = stat/sqrt(2.0);  //statistical uncertainty
       fStat[fNData/2-1-i] = stat/sqrt(2.0);
+
       //fStat[i+fNData/2] = 0.;
       //fStat[fNData/2-1-i] = 0.;
 
@@ -471,12 +472,12 @@ void  ATLASTOPDIFF8TEVTRAPNORMFilter::ReadData()
 	  fSys[i+fNData/2][j].type = MULT;
 	  fSys[i+fNData/2][j].name = sysdescr;
 	  fSys[i+fNData/2][j].mult = stmp;
-	  fSys[i+fNData/2][j].add  = fSys[i][j].mult*fData[i+fNData/2]/100;
+	  fSys[i+fNData/2][j].add  = fSys[i+fNData/2][j].mult*fData[i+fNData/2]/100;
 
 	  fSys[fNData/2-1-i][j].type = MULT;
 	  fSys[fNData/2-1-i][j].name = sysdescr;
 	  fSys[fNData/2-1-i][j].mult = stmp;
-	  fSys[fNData/2-1-i][j].add  = fSys[i][j].mult*fData[fNData/2-1-i]/100;
+	  fSys[fNData/2-1-i][j].add  = fSys[fNData/2-1-i][j].mult*fData[fNData/2-1-i]/100;
 
 	  shift += dtmp;
 
@@ -637,12 +638,12 @@ void  ATLASTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 	  fSys[i+fNData/2][j].type = MULT;
 	  fSys[i+fNData/2][j].name = sysdescr;
 	  fSys[i+fNData/2][j].mult = stmp;
-	  fSys[i+fNData/2][j].add  = fSys[i][j].mult*fData[i+fNData/2]/100;
+	  fSys[i+fNData/2][j].add  = fSys[i+fNData/2][j].mult*fData[i+fNData/2]/100;
 
 	  fSys[fNData/2-1-i][j].type = MULT;
 	  fSys[fNData/2-1-i][j].name = sysdescr;
 	  fSys[fNData/2-1-i][j].mult = stmp;
-	  fSys[fNData/2-1-i][j].add  = fSys[i][j].mult*fData[fNData/2-1-i]/100;
+	  fSys[fNData/2-1-i][j].add  = fSys[fNData/2-1-i][j].mult*fData[fNData/2-1-i]/100;
 
 	  shift += dtmp;
 
@@ -1099,7 +1100,7 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
       //fStat[fNData/2-1-i] = 0.;
 
       lstream >> ddum >> ddum >> ddum >> ddum >> ddum >> ddum;
-      
+   
       double shift = 0.;
 
       /*
@@ -1148,17 +1149,18 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
       */
 
       //Real systematics
-      for(int j=0; j<fNSys-1-fNData/2; j++)
+      for(int j=0; j<fNSys-1; j++)
 	{
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
 	  string sysdescr;
 	  
 	  ostringstream id;
-	  id << j;
+	  id << j;    
 	  sysdescr = "CORR";
 	  
 	  lstream >> sys1 >> sys2; 
+
 	  if(sys1<0) {right=sys2; left=sys1;}
 	  else {right=sys1; left=sys2;}
 
@@ -1170,12 +1172,12 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 	  fSys[i+fNData/2][j].type = MULT;
 	  fSys[i+fNData/2][j].name = sysdescr;
 	  fSys[i+fNData/2][j].mult = stmp;
-	  fSys[i+fNData/2][j].add  = fSys[i][j].mult*fData[i+fNData/2]/100;
+	  fSys[i+fNData/2][j].add  = fSys[i+fNData/2][j].mult*fData[i+fNData/2]/100;
 
 	  fSys[fNData/2-1-i][j].type = MULT;
 	  fSys[fNData/2-1-i][j].name = sysdescr;
 	  fSys[fNData/2-1-i][j].mult = stmp;
-	  fSys[fNData/2-1-i][j].add  = fSys[i][j].mult*fData[fNData/2-1-i]/100;
+	  fSys[fNData/2-1-i][j].add  = fSys[fNData/2-1-i][j].mult*fData[fNData/2-1-i]/100;
 
 	  shift += dtmp;
 
@@ -1196,6 +1198,7 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 
     }  
 
+  /*
   //Artificial systematics
   for(int i=0; i<fNData/2; i++)
     {
@@ -1211,33 +1214,11 @@ void  ATLASTOPDIFF8TEVTRAPFilter::ReadData()
 	  fSys[fNData/2-1-i][fNSys-fNData/2+j].mult = fSys[fNData/2-1-i][fNSys-fNData/2+j].add*100/fData[fNData/2-1-i];
 	  fSys[fNData/2-1-i][fNSys-fNData/2+j].type = MULT;
 	  fSys[fNData/2-1-i][fNSys-fNData/2+j].name = "CORR";
-	  
-	  /*
-	    const double eps=0.0000001;
-	    
-	    fSys[i+fNData/2][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/(2.+eps);
-	    fSys[i+fNData/2][fNData/2-1-j].mult = fSys[i+fNData/2][fNData/2-1-j].add*100/fData[i+fNData/2];
-	    fSys[i+fNData/2][fNData/2-1-j].type = MULT;
-	    fSys[i+fNData/2][fNData/2-1-j].name = "CORR";
-	    
-	    fSys[i+fNData/2][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/(2.+eps);
-	    fSys[i+fNData/2][j+fNData/2].mult = fSys[i+fNData/2][j+fNData/2].add*100/fData[i+fNData/2];
-	    fSys[i+fNData/2][j+fNData/2].type = MULT;
-	    fSys[i+fNData/2][j+fNData/2].name = "CORR";
-	    
-	    fSys[fNData/2-1-i][fNData/2-1-j].add  = syscor[i][j]/sqrt(2.0)/2.;
-	    fSys[fNData/2-1-i][fNData/2-1-j].mult = fSys[fNData/2-1-i][fNData/2-1-j].add*100/fData[fNData/2-1-i];
-	    fSys[fNData/2-1-i][fNData/2-1-j].type = MULT;
-	    fSys[fNData/2-1-i][fNData/2-1-j].name = "CORR";
-	    
-	    fSys[fNData/2-1-i][j+fNData/2].add  = syscor[i][j]/sqrt(2.0)/2.;
-	    fSys[fNData/2-1-i][j+fNData/2].mult = fSys[fNData/2-1-i][j+fNData/2].add*100/fData[fNData/2-1-i];
-	    fSys[fNData/2-1-i][j+fNData/2].type = MULT;
-	    fSys[fNData/2-1-i][j+fNData/2].name = "CORR";
-	  */      
-	  
+	  	  
 	}
     } 
+*/
+
   
   f1.close();
   f2.close();
@@ -1368,7 +1349,7 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
       */
 
       //Real systematics
-      for(int j=0; j<fNSys; j++)
+      for(int j=0; j<fNSys-1; j++)
 	{
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
@@ -1390,12 +1371,12 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
 	  fSys[i+fNData/2][j].type = MULT;
 	  fSys[i+fNData/2][j].name = sysdescr;
 	  fSys[i+fNData/2][j].mult = stmp;
-	  fSys[i+fNData/2][j].add  = fSys[i][j].mult*fData[i+fNData/2]/100;
+	  fSys[i+fNData/2][j].add  = fSys[i+fNData/2][j].mult*fData[i+fNData/2]/100;
 
 	  fSys[fNData/2-1-i][j].type = MULT;
 	  fSys[fNData/2-1-i][j].name = sysdescr;
 	  fSys[fNData/2-1-i][j].mult = stmp;
-	  fSys[fNData/2-1-i][j].add  = fSys[i][j].mult*fData[fNData/2-1-i]/100;
+	  fSys[fNData/2-1-i][j].add  = fSys[fNData/2-1-i][j].mult*fData[fNData/2-1-i]/100;
 
 	  shift += dtmp;
 
@@ -1405,11 +1386,11 @@ void  ATLASTOPDIFF8TEVTTRAPFilter::ReadData()
       fSys[i+fNData/2][56].type = MULT;
       fSys[i+fNData/2][56].name = "ATLASLUMI12";
       fSys[i+fNData/2][56].mult=2.8;
-      fSys[i+fNData/2][56].add=fSys[i][56].mult*fData[i]/100;
+      fSys[i+fNData/2][56].add=fSys[i+fNData/2][56].mult*fData[i+fNData/2]/100;
       fSys[fNData/2-1-i][56].type = MULT;
       fSys[fNData/2-1-i][56].name = "ATLASLUMI12";
       fSys[fNData/2-1-i][56].mult=2.8;
-      fSys[fNData/2-1-i][56].add=fSys[i][56].mult*fData[i]/100;
+      fSys[fNData/2-1-i][56].add=fSys[fNData/2-1-i][56].mult*fData[fNData/2-1-i]/100;
 
       fData[i+fNData/2]*=(1.0 + shift*0.01); //Shift from asymmetric errors
       fData[fNData/2-1-i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
@@ -1440,7 +1421,7 @@ void  ATLASTOPDIFF8TEVTTMFilter::ReadData()
       exit(-1);
     }
 
-//Statistical covariance matrix
+  //Statistical covariance matrix
   stringstream covfile("");
   covfile << dataPath()
 	  << "rawdata/" << fSetName << "/ttbar_mass_covariance_abs.dat";
