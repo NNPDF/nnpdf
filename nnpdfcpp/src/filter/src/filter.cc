@@ -278,7 +278,7 @@ string BuildResultsFolder(string const& filename)
   if (stat(resultsdir.c_str(), &s) == 0)
     {
       if (s.st_mode & S_IFDIR)
-        cout << Colour::FG_YELLOW << "Warning: output folder already exist!" << Colour::FG_DEFAULT << endl;
+        cout << Colour::FG_YELLOW << "Warning: output folder already exists!" << Colour::FG_DEFAULT << endl;
       else
         throw NNPDF::RuntimeException("BuildResultsFolder", "cannot create output folder: " + resultsdir);
     }
