@@ -225,7 +225,7 @@ int main(int argc, char **argv)
     {
       replica = atoi(argv[1]);
       folder.assign(argv[2]);
-      if (folder.find("help") != string::npos)
+      if (folder == "--help")
         {
           cout << "\nusage: fiatlux [replica] [configuration folder] [add_noise (default 0)]\n" << endl;
           exit(-1);

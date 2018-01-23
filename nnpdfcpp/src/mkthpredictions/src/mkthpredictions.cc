@@ -38,7 +38,7 @@ int main(int argc, char **argv)
       if (argc == 3) pdfgrid.assign(argv[2]);
       if (argc == 4) plottingfile.assign(argv[3]);
 
-      if (folder.find("help") != string::npos)
+      if (folder == "--help")
         {
           cout << Colour::FG_RED << "\nusage: mkthpredictions [configuration folder] <optional LHgrid [no .LHgrid]> [optional plotting filename]\n" << Colour::FG_DEFAULT << endl;
           exit(-1);

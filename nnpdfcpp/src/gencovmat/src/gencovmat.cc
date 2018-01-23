@@ -44,7 +44,7 @@ int main(int argc, char **argv)
     {
       folder.assign(argv[1]);
       if (argc == 3) plottingfile.assign(argv[2]);
-      if (folder.find("help") != string::npos)
+      if (folder == "--help")
         {
           cout << Colour::FG_RED << "\nusage: gencovmat [configuration folder] [optional plotting]\n" << endl;
           exit(-1);

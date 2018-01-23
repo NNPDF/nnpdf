@@ -45,7 +45,7 @@ int main(int argc, char **argv)
           folder.assign(argv[1]);
           if (argc == 3) pdfgrid.assign(argv[2]);
           if (argc == 4) plottingfile.assign(argv[3]);
-          if (folder.find("help") != string::npos) {  cout << "\nusage: chi2check [configuration folder] <optional LHgrid [no .LHgrid]> [optional plotting filename]\n" << endl;  exit(-1); }
+          if (folder == "--help") {  cout << "\nusage: chi2check [configuration folder] <optional LHgrid [no .LHgrid]> [optional plotting filename]\n" << endl;  exit(-1); }
         }
       else
         {

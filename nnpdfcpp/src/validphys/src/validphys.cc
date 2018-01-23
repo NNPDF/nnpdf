@@ -33,7 +33,7 @@ int main(int argc, char **argv)
       folderref.assign(argv[2]);
       if (argc == 4) plottingfile.assign(argv[3]);
 
-      if (folder.find("help") != string::npos || folderref.find("help") != string::npos)
+      if (folder == "--help" || folderref == "--help")
 	{ 
 	  cout << Colour::FG_RED << "\nusage: validphys [configuration folder] [configuration reference folder] [optional plotting filename]\n" << endl;
 	  cout << "plotting.ini is the default configuration file" << endl;

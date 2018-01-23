@@ -147,7 +147,7 @@ int main(int argc, char **argv)
     folder.assign(argv[1]);
     if (argc == 3)
       pdfgrid.assign(argv[2]);
-    if (folder.find("help") != string::npos)
+    if (folder == "--help")
     {
       cout << "\nusage: kinplot [configuration folder] \n" << endl;
       exit(-1);

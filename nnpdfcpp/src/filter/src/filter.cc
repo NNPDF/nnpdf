@@ -32,7 +32,7 @@ int main(int argc, char **argv)
   if (argc > 1)
     {
       filename.assign(argv[1]);
-      if (filename.find("help") != string::npos) { cout << "\nusage: filter [configuration filename]\n" << endl; exit(-1); }
+      if (filename == "--help") { cout << "\nusage: filter [configuration filename]\n" << endl; exit(-1); }
     }
   else { cerr << Colour::FG_RED << "\nusage: filter [configuration filename]\n" << Colour::FG_DEFAULT << endl; exit(-1); }
 
