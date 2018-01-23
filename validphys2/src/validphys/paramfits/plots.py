@@ -682,20 +682,20 @@ def plot_as_distribution(parabolic_as_determination, suptitle):
     return fig
 
 @figure
-def plot_as_distribution_with_mark(parabolic_as_determination, suptitle):
-    """This is a minor fixup of ``plot_as_distribution`` for the paper. "
-    I am inputing the value by hand because it is too difficult to get in the
-    logic to be worth it."""
-
-    distribution = parabolic_as_determination.data
-
+def plot_total_as_distribution_dataspecs(
+        dataspecs_parabolic_as_determination_for_total,
+        dataspecs_speclabel,
+        ):
+    """Compare the total alpha_s distributions across dataspecs.
+    See ``plot_as_distribution``."""
     fig, ax = plt.subplots()
-
-    kde_plot(distribution)
-    ax.axvline(1.1822e-1,color='C1',  label="Central value using the t0 matrices.")
-    ax.legend()
-    ax.set_title(f"{suptitle}")
+    for dist, label in zip(
+            dataspecs_parabolic_as_determination_for_total,
+            dataspecs_speclabel):
+        #Remember that *_for_total is a len 1 list, so take the first elelment.
+        kde_plot(dist[0].data, ax=ax, label=label)
     ax.set_xlabel(r"$\alpha_S$")
+    ax.legend()
     return fig
 
 @figure

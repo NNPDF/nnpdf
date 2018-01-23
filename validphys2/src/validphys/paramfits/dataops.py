@@ -499,6 +499,9 @@ quadratic_datasets_pseudorreplicas_chi2 = collect(
     ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
 )
 
+dataspecs_parabolic_as_determination_for_total = collect(
+        'parabolic_as_determination_for_total', ['dataspecs'])
+
 @check_positive('nresamplings')
 def bootstrapping_stats_error(parabolic_as_determination, nresamplings:int=100000, suptitle=""):
     """Compute the bootstrapping uncertainty of the distribution of
