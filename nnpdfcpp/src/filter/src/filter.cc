@@ -11,6 +11,7 @@
 
 #include "filter.h"
 #include <sys/stat.h>
+#include <cerrno>
 #include <NNPDF/lhapdfset.h>
 #include <NNPDF/thpredictions.h>
 #include <NNPDF/dataset.h>
@@ -273,7 +274,12 @@ string BuildResultsFolder(string const& filename)
 
   // check if result folder exists
   if(mkdir(resultsdir.c_str(), 0755) != 0)
-    cout << Colour::FG_YELLOW << "Warning: Cannot create folder, something already existst!" << Colour::FG_DEFAULT << endl;
+    {
+      if (errno == EEXIST)
+        cout << Colour::FG_YELLOW << "Warning: Cannot create folder, something already existst!" << Colour::FG_DEFAULT << endl;
+      else
+        throw NNPDF::RuntimeException("BuildResultsFolder", "cannot create folder: " + resultsdir);
+    }
 
   // place a copy of configuration file
   fstream inputfile(filename.c_str(), ios::in | ios::binary);
