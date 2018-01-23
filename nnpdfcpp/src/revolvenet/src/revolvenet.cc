@@ -36,6 +36,7 @@ int main(int argc, char **argv)
 
   // Creates the configuration class
   NNPDFSettings settings(folder);
+  settings.VerifyConfiguration();
 
   // Fit Basis
   FitBasis* fitbasis = getFitBasis(settings, NNPDFSettings::getFitBasisType(settings.Get("fitting","fitbasis").as<string>()), replica);

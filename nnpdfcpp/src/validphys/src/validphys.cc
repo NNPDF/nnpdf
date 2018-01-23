@@ -50,9 +50,11 @@ int main(int argc, char **argv)
   // Creates the configuration class
   NNPDFSettings settings(folder);
   settings.SetPlotFile(plottingfile);
+  settings.VerifyConfiguration();
 
   NNPDFSettings settingsref(folderref);
-  settings.SetPlotFile(plottingfile);
+  settingsref.SetPlotFile(plottingfile);
+  settingsref.VerifyConfiguration();
 
   PDFSet* T0Set = new LHAPDFSet(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::erType::ER_MCT0);
   PDFSet* T0SetRef = NULL;

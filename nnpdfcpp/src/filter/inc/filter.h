@@ -22,3 +22,6 @@ void RandomCut(NNPDFSettings const& settings, vector<int>& datamask);
 
 // Build output directory
 string BuildResultsFolder(string const& filename);
+
+// Store md5 in the output directory
+void StoreMD5(string const& resultsdir);

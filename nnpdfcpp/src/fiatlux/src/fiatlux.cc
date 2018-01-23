@@ -243,6 +243,7 @@ int main(int argc, char **argv)
 
   // Creates the configuration class
   NNPDFSettings settings(folder);
+  settings.VerifyConfiguration();
 
   SetSeed(replica);
   const double q0 = 100.0, q = stod(settings.GetTheory(APFEL::kQ0));

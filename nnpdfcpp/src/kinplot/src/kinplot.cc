@@ -161,6 +161,7 @@ int main(int argc, char **argv)
   
   // Creates the configuration class
   NNPDFSettings settings(folder);
+  settings.VerifyConfiguration();
 
   // Load experiments
   vector<Experiment*> exps;

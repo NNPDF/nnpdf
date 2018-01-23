@@ -46,6 +46,7 @@ int main(int argc, char **argv)
   }
   
   NNPDFSettings settings(folder);
+  settings.VerifyConfiguration();
 
   FKTable* fk = new FKTable(targetGrid);
   LHAPDFSet *pdf = new LHAPDFSet(settings.GetPDFName(), PDFSet::erType::ER_MCT0);

@@ -56,6 +56,7 @@ int main(int argc, char **argv)
       // Creates the configuration class
       NNPDFSettings settings(folder);
       settings.SetPlotFile(plottingfile);
+      settings.VerifyConfiguration();
 
       LHAPDFSet* T0Set = NULL;
       if (settings.GetPlotting("uset0").as<bool>())

@@ -53,6 +53,7 @@ int main(int argc, char **argv)
   // Create the configuration class
   NNPDFSettings settings(folder);
   settings.SetPlotFile(plottingfile);
+  settings.VerifyConfiguration();
 
   // Load data sets
   vector<Experiment*> exps;

@@ -149,9 +149,7 @@ NNPDFSettings::NNPDFSettings(const string &folder):
           const int firstindex = (int) fFileName.find_last_of("/") + 1;
           fPDFName = fFileName.substr(firstindex, fFileName.length()-firstindex);
           fResultsDir = fFileName;
-          fFileName += "/" + fPDFName + ".yml";
-
-          VerifyConfiguration();
+          fFileName += "/filter.yml";
         }
       else if (s.st_mode & S_IFREG)
         throw NNPDF::FileError("NNPDFSettings::NNPDFSettings",
@@ -355,7 +353,7 @@ void NNPDFSettings::VerifyConfiguration() const
 {
   cout <<endl;
   cout << Colour::FG_YELLOW << " ----------------- Veriying Configuration against Filter ----------------- "<<endl << Colour::FG_DEFAULT <<endl;;
-  string target = fResultsDir + "/"+ fPDFName + ".yml";
+  string target = fResultsDir + "/filter.yml";
   string filter = fResultsDir + "/md5";
 
   ifstream targetConfig;

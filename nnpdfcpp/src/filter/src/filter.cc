@@ -11,7 +11,6 @@
 
 #include "filter.h"
 #include <sys/stat.h>
-#include <cerrno>
 #include <NNPDF/lhapdfset.h>
 #include <NNPDF/thpredictions.h>
 #include <NNPDF/dataset.h>
@@ -178,6 +177,9 @@ int main(int argc, char **argv)
 
   if (FakeSet) delete FakeSet;
 
+  // stores md5
+  StoreMD5(folder);
+
   cout << Colour::FG_GREEN << endl;
   cout << " -------------------------------------------------\n";
   cout <<   " - Filter completed with success" << endl;
@@ -285,16 +287,23 @@ string BuildResultsFolder(string const& filename)
 
   // place a copy of configuration file
   fstream inputfile(filename.c_str(), ios::in | ios::binary);
-  fstream copyfile( (resultsdir + "/" + resultsdir + ".yml").c_str(), ios::out | ios::binary);
+  fstream copyfile( (resultsdir + "/filter.yml").c_str(), ios::out | ios::binary);
   if (inputfile.fail() || copyfile.fail())
     throw NNPDF::FileError("BuildResultsFolder","file failed.");
 
   copyfile << inputfile.rdbuf();
+  inputfile.close();
   copyfile.close();
 
+  return resultsdir;
+}
+
+void StoreMD5(string const& resultsdir)
+{
   // going to the begin of the file again
-  inputfile.clear();
-  inputfile.seekg(0, ios::beg);
+  fstream inputfile(resultsdir + "/filter.yml");
+  if (inputfile.fail())
+    throw NNPDF::FileError("StoreMD5", "file filter.yml failed");
 
   // store the md5 of the configuration file
   MD5 targetHash;
@@ -309,6 +318,4 @@ string BuildResultsFolder(string const& filename)
   outputMD5 << targetHash.hexdigest() << endl;
   outputMD5.close();
   inputfile.close();
-
-  return resultsdir;
 }

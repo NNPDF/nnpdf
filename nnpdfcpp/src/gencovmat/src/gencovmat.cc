@@ -59,6 +59,7 @@ int main(int argc, char **argv)
   // Creates the configuration class
   NNPDFSettings settings(folder);
   settings.SetPlotFile(plottingfile);
+  settings.VerifyConfiguration();
 
   // Create target directory if not present
   mkdir(settings.GetResultsDirectory().c_str(),0777);
