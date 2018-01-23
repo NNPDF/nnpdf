@@ -512,6 +512,16 @@ def bootstrapping_stats_error(parabolic_as_determination, nresamplings:int=10000
         return np.nan
     return np.random.choice(distribution, shape).mean(axis=1).std()
 
+@check_positive('nresamplings')
+def bootstrapping_stats_error_on_the_error(parabolic_as_determination, nresamplings:int=100000, suptitle=""):
+    """Compute the bootstrapping uncertainty of standard deviation on the parabolic determination."""
+    distribution = parabolic_as_determination.data
+    shape = (nresamplings, len(distribution))
+    if not len(distribution):
+        log.error("Cannot conpute stats error. Empty data.")
+        return np.nan
+    return np.random.choice(distribution, shape).std(axis=1).std()
+
 
 @check_positive('nresamplings')
 def half_sample_stats_error(parabolic_as_determination, nresamplings:int=100000):
@@ -528,6 +538,11 @@ def half_sample_stats_error(parabolic_as_determination, nresamplings:int=100000)
 
 
 as_datasets_bootstrapping_stats_error = collect(bootstrapping_stats_error,
+    ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
+)
+
+as_datasets_bootstrapping_stats_error_on_the_error = collect(
+    bootstrapping_stats_error_on_the_error,
     ['fits_matched_pseudorreplicas_chi2_by_dataset_item',]
 )
 
@@ -550,8 +565,11 @@ err_halfone = "err selecting one half of the replicas"
 stats_halfother = "cv selecting other half of the replicas"
 err_halfonother = "err selecting other half of the replicas"
 
+stats_err_err = "Stat error on the error"
+
 ps_cols = (ps_mean, ps_error ,n, ps_stat_error, ps_half_stat_error,
-           stats_halfone, err_halfone, stats_halfother, err_halfonother)
+           stats_halfone, err_halfone, stats_halfother, err_halfonother,
+           stats_err_err)
 
 
 cv_mean = "central mean"
@@ -560,14 +578,16 @@ cv_error = "central error"
 def pseudorreplicas_stats_error(
         as_datasets_pseudorreplicas_chi2,
         as_datasets_bootstrapping_stats_error,
+        as_datasets_bootstrapping_stats_error_on_the_error,
         as_datasets_half_sample_stats_error):
     """Return a dictionary (easily convertible to a DataFrame) with the mean,
     error and the measures of statistical error for each dataset."""
     d = defaultdict(dict)
 
-    for (distribution, tag), statserr, halfstaterr in zip(
+    for (distribution, tag), statserr, staterrerr, halfstaterr in zip(
                 as_datasets_pseudorreplicas_chi2,
                 as_datasets_bootstrapping_stats_error,
+                as_datasets_bootstrapping_stats_error_on_the_error,
                 as_datasets_half_sample_stats_error):
         d[ps_mean][tag] = distribution.location
         d[n][tag] = len(distribution.data)
@@ -575,6 +595,7 @@ def pseudorreplicas_stats_error(
         d[ps_stat_error][tag] = statserr
         d[ps_half_stat_error][tag] = halfstaterr
         d[stats_ratio][tag] = halfstaterr/statserr/np.sqrt(2)
+        d[stats_err_err][tag] = staterrerr
 
         ldh = len(distribution.data)//2
         onehalf = distribution.data[:ldh]
