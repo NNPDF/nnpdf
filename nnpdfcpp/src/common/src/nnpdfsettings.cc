@@ -577,7 +577,11 @@ void NNPDFSettings::LoadPositivities()
 void NNPDFSettings::SetPlotFile(string const& plotfile)
 {
   // read plotting options
-  fPlotting = YAML::LoadFile(plotfile);
+  try {
+    fPlotting = YAML::LoadFile(plotfile);
+  } catch(YAML::BadFile &) {
+    throw FileError("NNPDFSettings::SetPlotFile", "runcard not found.");
+  }
 }
 
 bool NNPDFSettings::IsQED() const
