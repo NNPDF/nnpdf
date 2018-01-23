@@ -272,10 +272,8 @@ string BuildResultsFolder(string const& filename)
                            "Configuration file not found: " + filename);
 
   // check if result folder exists
-  struct stat st;
-  if(stat(resultsdir.c_str(),&st) == 0)
-    cout << Colour::FG_YELLOW << "Warning: Output folder was already created, remove it!" << Colour::FG_DEFAULT << endl;
-  mkdir(resultsdir.c_str(), 0755);
+  if(mkdir(resultsdir.c_str(), 0755) != 0)
+    cout << Colour::FG_YELLOW << "Warning: Cannot create folder, something already existst!" << Colour::FG_DEFAULT << endl;
 
   // place a copy of configuration file
   fstream inputfile(filename.c_str(), ios::in | ios::binary);
