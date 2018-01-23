@@ -158,7 +158,7 @@ NNPDFSettings::NNPDFSettings(const string &folder):
                                "This program takes a configuration folder instead of a file!");
       else
         throw NNPDF::FileError("NNPDFSettings::NNPDFSettings",
-                               "Configuration folder not recognized.");
+                               "Configuration folder not recognized: " + folder);
     }
   else
     throw NNPDF::FileError("NNPDFSettings::NNPDFSettings",
@@ -168,7 +168,7 @@ NNPDFSettings::NNPDFSettings(const string &folder):
   try {
     fConfig = YAML::LoadFile(fFileName);
   } catch(YAML::BadFile &e) {
-    throw FileError("NNPDFSettings::NNPDFSettings", "runcard not found.");    
+    throw FileError("NNPDFSettings::NNPDFSettings", "runcard not found: " + fFileName);
   }
 
   // Check for theory ID
@@ -580,7 +580,7 @@ void NNPDFSettings::SetPlotFile(string const& plotfile)
   try {
     fPlotting = YAML::LoadFile(plotfile);
   } catch(YAML::BadFile &) {
-    throw FileError("NNPDFSettings::SetPlotFile", "runcard not found.");
+    throw FileError("NNPDFSettings::SetPlotFile", "runcard not found: " + plotfile);
   }
 }
 
