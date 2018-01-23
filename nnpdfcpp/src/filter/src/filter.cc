@@ -273,13 +273,15 @@ string BuildResultsFolder(string const& filename)
                            "Configuration file not found: " + filename);
 
   // check if result folder exists
-  if(mkdir(resultsdir.c_str(), 0755) != 0)
+  if (stat(resultsdir.c_str(), &s) == 0)
     {
-      if (errno == EEXIST)
-        cout << Colour::FG_YELLOW << "Warning: Cannot create folder, something already existst!" << Colour::FG_DEFAULT << endl;
+      if (s.st_mode & S_IFDIR)
+        cout << Colour::FG_YELLOW << "Warning: output folder already exist!" << Colour::FG_DEFAULT << endl;
       else
-        throw NNPDF::RuntimeException("BuildResultsFolder", "cannot create folder: " + resultsdir);
+        throw NNPDF::RuntimeException("BuildResultsFolder", "cannot create output folder: " + resultsdir);
     }
+  else if(mkdir(resultsdir.c_str(), 0755) != 0)
+    throw NNPDF::RuntimeException("BuildResultsFolder", "cannot create output directory: " + resultsdir);
 
   // place a copy of configuration file
   fstream inputfile(filename.c_str(), ios::in | ios::binary);
