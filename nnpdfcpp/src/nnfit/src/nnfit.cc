@@ -61,16 +61,16 @@ int main(int argc, char **argv)
       signal(SIGINT, catch_int);
 
       // Read configuration filename from arguments
-      string filename;
+      string folder;
       int replica = 0;
       if (argc > 2)
         {
           replica = atoi(argv[1]);
-          filename.assign(argv[2]);
+          folder.assign(argv[2]);
         }
       else
         {
-          cout << Colour::FG_RED << "\nusage: nnfit [replica number] [configuration filename]\n" << Colour::FG_DEFAULT << endl;
+          cout << Colour::FG_RED << "\nusage: nnfit [replica number] [configuration folder]\n" << Colour::FG_DEFAULT << endl;
           exit(-1);
         }
 
@@ -81,17 +81,11 @@ int main(int argc, char **argv)
         }
 
       // Creates the configuration class
-      NNPDFSettings settings(filename);
+      NNPDFSettings settings(folder);
+      settings.VerifyConfiguration();
 
       // Creating output folder
       CreateResultsFolder(settings, replica);
-
-      // Configuration file verification
-      stringstream targetFile;
-      targetFile << "nnfit/replica_"<<replica<<"/nnfit.yml";
-
-      settings.PrintConfiguration(targetFile.str());
-      settings.VerifyConfiguration(targetFile.str());
 
       // Initialise log manager
       stringstream logPath;

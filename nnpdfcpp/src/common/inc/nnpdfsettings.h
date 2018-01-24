@@ -101,8 +101,11 @@ private:
 
 public:
 
-  NNPDFSettings(const string& filename,const string& plotfile = ""); //!< The constructor
+  NNPDFSettings(const string& folder); //!< The constructor
   ~NNPDFSettings(); //!< The destructor.
+
+  // extra set methods
+  void SetPlotFile(string const&);
 
   // Get methods
   YAML::Node Get(const string& item) const;
@@ -135,7 +138,7 @@ public:
   // Check methods
   bool CheckParam(string const& param, double const& p1, double const& p2) const;  //!< Check an individual parameter
   bool CheckParam(string const& param, string const& p1, string const& p2) const;  //!< Check an individual parameter
-  void VerifyConfiguration(const string& filename);    //!< Checks the log hash against filter
+  void VerifyConfiguration() const;    //!< Checks the log hash against filter
   void VerifyFK(FKTable* const&) const;                //!< Verify FastKernel table settings
 
   // Print configuration

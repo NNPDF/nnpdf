@@ -31,16 +31,16 @@ void printdata    (ThPredictions * const&, Experiment * const&);
 int main(int argc, char **argv)
 {  
   // Read configuration filename from arguments
-  string filename, pdfgrid, plottingfile = "../config/plotting.yml";
+  string folder, pdfgrid, plottingfile = "../config/plotting.yml";
   if (argc > 1)    
     {
-      filename.assign(argv[1]);
+      folder.assign(argv[1]);
       if (argc == 3) pdfgrid.assign(argv[2]);
       if (argc == 4) plottingfile.assign(argv[3]);
 
-      if (filename.find("help") != string::npos)
+      if (folder == "--help")
         {
-          cout << Colour::FG_RED << "\nusage: mkthpredictions [configuration filename] <optional LHgrid [no .LHgrid]> [optional plotting filename]\n" << Colour::FG_DEFAULT << endl;
+          cout << Colour::FG_RED << "\nusage: mkthpredictions [configuration folder] <optional LHgrid [no .LHgrid]> [optional plotting filename]\n" << Colour::FG_DEFAULT << endl;
           exit(-1);
         }
      }
@@ -51,9 +51,9 @@ int main(int argc, char **argv)
     }
 
   // Create the configuration class
-  NNPDFSettings settings(filename, plottingfile);
-  settings.PrintConfiguration("mkthpredictions.log");
-  settings.VerifyConfiguration("mkthpredictions.log");
+  NNPDFSettings settings(folder);
+  settings.SetPlotFile(plottingfile);
+  settings.VerifyConfiguration();
 
   // Load data sets
   vector<Experiment*> exps;

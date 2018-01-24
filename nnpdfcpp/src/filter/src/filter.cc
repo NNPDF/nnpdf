@@ -32,13 +32,14 @@ int main(int argc, char **argv)
   if (argc > 1)
     {
       filename.assign(argv[1]);
-      if (filename.find("help") != string::npos) { cout << "\nusage: filter [configuration filename]\n" << endl; exit(-1); }
+      if (filename == "--help") { cout << "\nusage: filter [configuration filename]\n" << endl; exit(-1); }
     }
   else { cerr << Colour::FG_RED << "\nusage: filter [configuration filename]\n" << Colour::FG_DEFAULT << endl; exit(-1); }
 
   // Creates the configuration class
-  NNPDFSettings settings(filename);
-  settings.PrintConfiguration("filter.yml");
+
+  const string folder = BuildResultsFolder(filename);
+  NNPDFSettings settings(folder);
 
   cout << "\n- Data cuts:" << endl;
   cout << Colour::FG_YELLOW << " ----------------- Selected Cuts -----------------" << Colour::FG_DEFAULT << endl;
@@ -176,12 +177,15 @@ int main(int argc, char **argv)
 
   if (FakeSet) delete FakeSet;
 
+  // stores md5
+  StoreMD5(folder);
+
   cout << Colour::FG_GREEN << endl;
   cout << " -------------------------------------------------\n";
   cout <<   " - Filter completed with success" << endl;
   cout <<   " - please go "<< settings.GetResultsDirectory() << "/filter \n";
   cout <<   " -------------------------------------------------\n";
-  cout << Colour::FG_DEFAULT << endl;
+  cout << Colour::FG_DEFAULT << endl;  
 
   return 0;
 }
@@ -243,4 +247,75 @@ void RandomCut(NNPDFSettings const& settings, vector<int>& datamask)
   if (settings.Get("closuretest","rancuttrnval").as<bool>() == true) datamask = valdatamask;
 
   valdatamask.clear();
+}
+
+string BuildResultsFolder(string const& filename)
+{
+  // Understand if filename string is file or directory
+  struct stat s;
+  string resultsdir;
+  if(stat(filename.c_str(), &s) == 0)
+    {
+      if( s.st_mode & S_IFREG)
+        {
+          // Get raw name
+          const int firstindex  = (int) filename.find_last_of("/") + 1;
+          const int lastindex   = (int) filename.find_last_of(".") - firstindex; // convetion: we don't accept more than 1 point.
+          resultsdir = filename.substr(firstindex, lastindex);
+        }
+      else if (s.st_mode & S_IFDIR)
+        throw NNPDF::FileError("BuildResultsFolder",
+                               "This program takes a configuration file instead of a folder!");
+      else
+        throw NNPDF::FileError("BuildResultsFolder",
+                               "Configuration file not recognized.");
+    }
+  else
+    throw NNPDF::FileError("BuildResultsFolder",
+                           "Configuration file not found: " + filename);
+
+  // check if result folder exists
+  if (stat(resultsdir.c_str(), &s) == 0)
+    {
+      if (s.st_mode & S_IFDIR)
+        cout << Colour::FG_YELLOW << "Warning: output folder already exists!" << Colour::FG_DEFAULT << endl;
+      else
+        throw NNPDF::RuntimeException("BuildResultsFolder", "cannot create output folder: " + resultsdir);
+    }
+  else if(mkdir(resultsdir.c_str(), 0755) != 0)
+    throw NNPDF::RuntimeException("BuildResultsFolder", "cannot create output directory: " + resultsdir);
+
+  // place a copy of configuration file
+  fstream inputfile(filename.c_str(), ios::in | ios::binary);
+  fstream copyfile( (resultsdir + "/filter.yml").c_str(), ios::out | ios::binary);
+  if (inputfile.fail() || copyfile.fail())
+    throw NNPDF::FileError("BuildResultsFolder","file failed.");
+
+  copyfile << inputfile.rdbuf();
+  inputfile.close();
+  copyfile.close();
+
+  return resultsdir;
+}
+
+void StoreMD5(string const& resultsdir)
+{
+  // going to the begin of the file again
+  fstream inputfile(resultsdir + "/filter.yml");
+  if (inputfile.fail())
+    throw NNPDF::FileError("StoreMD5", "file filter.yml failed");
+
+  // store the md5 of the configuration file
+  MD5 targetHash;
+  targetHash.update(inputfile);
+  targetHash.finalize();
+
+  fstream outputMD5;
+  outputMD5.open(resultsdir + "/md5", ios::out);
+  if (!outputMD5.good())
+    throw NNPDF::FileError("BuildResultsFolder", "Cannot create md5 file!");
+
+  outputMD5 << targetHash.hexdigest() << endl;
+  outputMD5.close();
+  inputfile.close();
 }
