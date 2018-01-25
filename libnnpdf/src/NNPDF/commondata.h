@@ -10,6 +10,7 @@
 
 #include "common.h"
 
+#include <limits>
 #include <string>
 #include <iostream>
 #include <fstream>
