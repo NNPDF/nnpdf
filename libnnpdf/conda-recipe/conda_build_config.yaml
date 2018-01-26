@@ -4,3 +4,4 @@ numpy:
 
 pin_run_as_build:
     numpy: x.x
+    lhapdf: x.x.x
