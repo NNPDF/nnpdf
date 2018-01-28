@@ -681,6 +681,12 @@ def dataspecs_stats_error_table(
     return table
 
 @table
+def dataspecs_stats_error_table_transposed(dataspecs_stats_error_table):
+    """Transposed version of dataspecs_stats_error_table for display
+    purposes."""
+    return dataspecs_stats_error_table.T
+
+@table
 def compare_determinations_table(compare_determinations_table_impl):
     """Return ``compare_determinations_table_impl`` formatted nicely"""
     df = compare_determinations_table_impl
