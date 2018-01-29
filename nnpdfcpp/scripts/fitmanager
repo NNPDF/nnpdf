@@ -13,7 +13,6 @@ import argparse
 import shutil
 from subprocess import PIPE, Popen
 sys.path.append('../tools/')
-import npyscreen
 
 modes = ['download','upload']
 webpath = "nnpdf@pcteserver.mi.infn.it:/home/nnpdf/WEB/fits/"
@@ -57,85 +56,12 @@ def upload(set):
     except:
         raise
 
-def getTerminalSize():
-    import os
-    env = os.environ
-    def ioctl_GWINSZ(fd):
-        try:
-            import fcntl, termios, struct, os
-            cr = struct.unpack('hh', fcntl.ioctl(fd, termios.TIOCGWINSZ,'1234'))
-        except:
-            return
-        return cr
-    cr = ioctl_GWINSZ(0) or ioctl_GWINSZ(1) or ioctl_GWINSZ(2)
-    if not cr:
-        try:
-            fd = os.open(os.ctermid(), os.O_RDONLY)
-            cr = ioctl_GWINSZ(fd)
-            os.close(fd)
-        except:
-            pass
-    if not cr:
-        cr = (env.get('LINES', 25), env.get('COLUMNS', 80))
-    return int(cr[1]), int(cr[0])
-
-class tui_download(npyscreen.NPSApp):
-    """
-    TUI for download
-    """
-    selected_fits = []
-    def main(self):
-        sshProcess = Popen(['ssh', '-T', 'nnpdf@pcteserver.mi.infn.it'],
-                            stdin=PIPE, stdout=PIPE)
-        out, err = sshProcess.communicate('ls -t /home/nnpdf/WEB/fits\n'.encode('utf-8'))
-        out = out.decode('utf-8').split('\n')
-        fits = []
-        for i in out:
-            if '.tgz' in i: fits.append(i.replace('.tgz',''))
-
-        npyscreen.setTheme(npyscreen.Themes.ElegantTheme)
-        h = getTerminalSize()[1]
-        f = npyscreen.FormMultiPageActionWithMenus(name='FitManager - download and press OK')
-        self.selected_fits = f.add(npyscreen.TitleMultiSelect,
-                                   name="- Select Multiple PDF sets to download:", values = fits, scroll_exit=True)
-        f.edit()
-
-class tui_upload(npyscreen.NPSApp):
-    """
-    TUI for upload
-    """
-    selected_fits = []
-    def main(self):
-
-        fits = []
-        for file in os.listdir('../config'):
-            if file.endswith('.yml') and 'plotting' not in file:
-                fits.append(file.replace('.yml',''))
-
-        npyscreen.setTheme(npyscreen.Themes.ElegantTheme)
-        h = getTerminalSize()[1]
-        f = npyscreen.FormMultiPageActionWithMenus(name='FitManager - download and press OK')
-        self.selected_fits = f.add(npyscreen.TitleMultiSelect,
-                                   name="- Select Multiple PDF sets to upload:", values = fits, scroll_exit=True)
-        f.edit()
-
 def main(mode,fit):
 
     # no TUI, download or upload directly
     if fit != None:
         if mode == modes[0]: download(fit[0])
         if mode == modes[1]: upload(fit[0])
-    else:
-        if mode == modes[0]:
-            app = tui_download()
-            app.run()
-            for i in app.selected_fits.get_selected_objects():
-                download(i)
-        if mode == modes[1]:
-            app = tui_upload()
-            app.run()
-            for i in app.selected_fits.get_selected_objects():
-                upload(i)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
