@@ -1,0 +1,22 @@
+pdfs:
+    - NNPDF30_nlo_as_0118
+    - CT14nlo
+
+fit: NNPDF30_nlo_as_0118
+theoryids:
+    - 6
+use_cuts : false
+
+datasets:
+ - dataset: ATLASWZRAP36PB
+   sys: 2
+   cfac: [EWK]
+
+ - dataset: HERA1CCEP
+   sys: 2
+
+actions_:
+- pdfs:
+    theoryids:
+      datasets:
+        - plot_fancy

@@ -1,0 +1,35 @@
+package:
+  name: validphys
+  version: "{{ GIT_DESCRIBE_TAG[1:] }}.{{ GIT_DESCRIBE_NUMBER }}"
+
+source:
+    git_url: ../
+
+requirements:
+  build:
+    - python
+    - setuptools
+
+  run:
+    - python
+    - libnnpdf >=1.2.0b5.4,<1.3
+    - reportengine >=0.22.4
+    - matplotlib >=2.0.1
+    - blessings
+    - scipy >=0.19.1
+    - pandas
+    - requests
+    - prompt_toolkit #for wiki-upload
+
+test:
+    imports:
+        - validphys
+    commands:
+        - bash -c "TERM=linux validphys --help validphys.plots"
+
+
+about:
+  home: https://gitlab.cern.ch/NNPDF/validphys2
+  license: SECRET
+  summary: 'NNPDF analysis framework'
+

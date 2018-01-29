@@ -1,0 +1,126 @@
+fit: NNPDF31_nnlo_as_0118_1000
+use_cuts: True
+display_cuts: False
+
+
+experiments:
+# Fixed target DIS
+  - experiment: Fixed target DIS
+    datasets:
+      - { dataset: NMCPD, frac: 0.5 }
+      - { dataset: NMC,   frac: 0.5  }
+      - { dataset: SLACP, frac: 0.5}
+      - { dataset: SLACD, frac: 0.5}
+      - { dataset: BCDMSP, frac: 0.5}
+      - { dataset: BCDMSD, frac: 0.5}
+      - { dataset: CHORUSNU, frac: 0.5}
+      - { dataset: CHORUSNB, frac: 0.5}
+      - { dataset: NTVNUDMN, frac: 0.5}
+      - { dataset: NTVNBDMN, frac: 0.5}
+  - experiment: Collider DIS
+    datasets:
+      - { dataset: HERACOMBNCEM , frac: 0.5}
+      - { dataset: HERACOMBNCEP460, frac: 0.5}
+      - { dataset: HERACOMBNCEP575, frac: 0.5}
+      - { dataset: HERACOMBNCEP820, frac: 0.5}
+      - { dataset: HERACOMBNCEP920, frac: 0.5}
+      - { dataset: HERACOMBCCEM , frac: 0.5}
+      - { dataset: HERACOMBCCEP , frac: 0.5}
+      - { dataset: HERAF2CHARM, frac: 0.5}
+      - { dataset: H1HERAF2B, frac: 1.0}
+      - { dataset: ZEUSHERAF2B, frac: 1.0}
+  - experiment: Fixed target Drell-Yan
+    datasets:
+      - { dataset: DYE886R, frac: 1.0 }
+      - { dataset: DYE886P, frac: 0.5, cfac: [QCD] }
+      - { dataset: DYE605, frac: 0.5, cfac: [QCD] }
+# Tevatron jets and W,Z production
+  - experiment: Inclusive Jet Production
+    datasets:
+      - { dataset: CDFR2KT, frac: 0.5, sys: 10 }
+  #- experiment: LHC Inclusive Jet Production
+  #  datasets:            
+      - { dataset: ATLASR04JETS36PB, frac: 0.5, sys: 10 }
+      - { dataset: ATLASR04JETS2P76TEV, frac: 0.5, sys: 10 }
+      - { dataset: ATLAS1JET11, frac: 0.5, sys: 10 }
+      - { dataset: CMSJETS11,     frac: 0.5, sys: 10 }
+      - { dataset: CMS1JET276TEV,     frac: 0.5, sys: 10 }
+  - experiment: Collider Drell-Yan
+    datasets:
+      - { dataset: CDFZRAP, frac: 1.0, cfac: [QCD] }
+      - { dataset: D0ZRAP, frac: 1.0, cfac: [QCD] }
+      - { dataset: D0WEASY, frac: 1.0, cfac: [QCD] }
+      - { dataset: D0WMASY, frac: 1.0, cfac: [QCD] }
+      # ATLAS
+  #- experiment: LHC Drell-Yan
+  #  datasets:
+      - { dataset: ATLASWZRAP36PB,   frac: 1.0, cfac: [QCD] }
+      - { dataset: ATLASZHIGHMASS49FB, frac: 1.0, cfac: [QCD] }
+      - { dataset: ATLASLOMASSDY11EXT, frac: 1.0, cfac: [QCD] }
+      - { dataset: ATLASWZRAP11, frac: 0.5, cfac: [QCD] }
+      - { dataset: CMSWEASY840PB, frac: 1.0, cfac: [QCD] }
+      - { dataset: CMSWMASY47FB,  frac: 1.0, cfac: [QCD] }
+      - { dataset: CMSDY2D11,     frac: 0.5, cfac: [QCD] }
+      - { dataset: CMSWMU8TEV,     frac: 1.0, cfac: [QCD] }
+      - { dataset: LHCBZ940PB, frac: 1.0, cfac: [QCD] }
+      - { dataset: LHCBZEE2FB, frac: 1.0, cfac: [QCD] }
+      - { dataset: LHCBWZMU7TEV, frac: 1.0, cfac: [NRM,QCD] }
+      - { dataset: LHCBWZMU8TEV, frac: 1.0, cfac: [NRM,QCD] }
+  - experiment: Z transverse momentum
+    datasets:  
+      - { dataset: ATLASZPT8TEVMDIST,   frac: 0.5, cfac: [QCD], sys: 10 }
+      - { dataset: ATLASZPT8TEVYDIST,   frac: 0.5, cfac: [QCD], sys: 10 }
+      - { dataset: CMSZDIFF12,   frac: 1.0, cfac: [QCD,NRM], sys: 10 }
+  - experiment: Top-quark pair production
+    datasets:      
+      - { dataset: ATLASTTBARTOT, frac: 1.0, cfac: [QCD] }
+      - { dataset: ATLASTOPDIFF8TEVTRAPNORM, frac: 1.0, cfac: [QCD] }    
+      - { dataset: CMSTTBARTOT, frac: 1.0, cfac: [QCD] } 
+      - { dataset: CMSTOPDIFF8TEVTTRAPNORM, frac: 1.0, cfac: [QCD] }
+
+highlight_datasets:
+    - ATLASLOMASSDY11EXT
+    - ATLAS1JET11
+    - ATLASWZRAP11
+    - D0WMASY
+    - D0WEASY
+    - ATLASTOPDIFF8TEVTRAPNORM
+    - CMSTOPDIFF8TEVTTRAPNORM
+    - CMS1JET276TEV
+    - LHCBWZMU7TEV
+    - LHCBWZMU8TEV
+    - H1HERAF2B
+    - ZEUSHERAF2B
+    - ATLASZPT8TEVYDIST
+    - ATLASZPT8TEVMDIST
+    - CMSWMU8TEV
+    - CMSZDIFF12
+
+highlight_label: "New in NNPDF3.1"
+
+meta:
+    title: Kinplot
+    author: Luca Rottoli, Zahari Kassabov
+    keywords: [test]
+
+aspects:
+ - aspect: landscape
+ - aspect: portrait
+ - aspect: square
+
+theoryid: 53
+
+marker_by: experiment
+
+template_text: |
+    {@with aspects@}
+    Aspect: {@aspect@}
+    =================
+
+    {@plot_xq2@}
+
+    {@endwith@}
+
+actions_:
+    - - report:
+           main: True

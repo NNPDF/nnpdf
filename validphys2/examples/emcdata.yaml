@@ -1,0 +1,17 @@
+pdfs:
+    - {id: NNPDF3_IC_nlo_as_0118_mcpole_1470, label: "Fitted Charm"}
+    - {id: CT14nlo, label: 'CT'}
+
+fit: NNPDF3_IC_nlo_as_0118_mcpole_1470
+theoryids:
+    - 45
+use_cuts : true
+
+datasets:
+
+ - { dataset: EMCF2C, frac: 1.0, sys: 0 }
+
+actions_:
+ - theoryids:
+    datasets:
+      - plot_fancy

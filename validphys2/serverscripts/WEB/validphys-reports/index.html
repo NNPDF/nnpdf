@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Zahari Kassabov">
+<title>Validphys Reports</title>
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet" href="report.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+<!--[if lt IE 9]>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+<![endif]-->
+<script type="text/javascript" class="init">
+
+
+var HIGHLIGHT_TAG = 'as';
+
+
+$(document).ready(function() {
+	$.getJSON("index.json",
+    function(json){
+	  var data = json['data'];
+	  var now = new Date()/1000;
+	  var highlight_data = (filter_tag(data, HIGHLIGHT_TAG, now));
+
+	  $('#highlight').DataTable( {
+		"data": highlight_data,
+		'paging': false,
+		'info': false,
+		'searching': false,
+		"order": [[2, "desc"]],
+		"columns": [null,
+		            null,
+					{"render":
+			            {
+							"_": "0",
+							"type": "1",
+							"sort": "1",
+					    }
+		            },
+					null
+		           ]
+	  } );
+	  var global_table = $('#global').DataTable( {
+		"data": data,
+		"order": [[2, "desc"]],
+		"dom": 'frtipl',
+		"columns": [null,
+		            null,
+					{"render":
+			            {
+							"_": "0",
+							"type": "1",
+							"sort": "1",
+					    }
+		            },
+					null
+		           ]
+	  } );
+	var ul = document.getElementById('taglist');
+	var keywords = json['keywords'];
+	keywords.forEach(function(tag){
+		var li = document.createElement('li');
+		var a = document.createElement('a');
+		a.appendChild(document.createTextNode(tag[0]));
+		a.href='#'+tag[0];
+		a.onclick = function(event){
+			event.target;
+			var filt = document.getElementById("tagfilt");
+			var tag = event.target.innerHTML;
+			filt.value=tag;
+			filt.focus();
+			filt.select();
+		    window.location.hash = tag;
+			global_table.draw();
+			return false;
+		}
+		li.appendChild(a);
+		li.appendChild(document.createTextNode(` (${tag[1]})`));
+		ul.appendChild(li);
+	});
+	$.fn.dataTable.ext.search.push(
+		function(settings, dt, dataIndex){
+			var tag = $('#tagfilt').val();
+			if(tag){
+				//dt is only the displayed string, not the array of
+				//tags
+				//return dt[3].includes(tag);
+				return data[dataIndex][3].includes(tag);
+			}
+			return true;
+
+	    }
+
+    );
+
+	$('#global_wrapper .dataTables_filter input').focus();
+	document.getElementById("tagfilt").oninput = function(event){
+		window.location.hash = event.target.value;
+		global_table.draw();
+	};
+    var hash = window.location.hash.substr(1);
+    if(hash){
+        var filt = document.getElementById("tagfilt");
+    	filt.value=hash;
+		filt.dispatchEvent(new Event('change'));
+		global_table.draw();
+    }
+
+    }
+    );
+
+} );
+
+function filter_tag(data, tag, now){
+	return data.filter(function(value){
+		return value[3].includes(tag) &&  (now - value[2][1]) < 604800;
+	});
+
+}
+
+
+
+</script>
+</head>
+<body>
+<h1 class="title" >Validphys Reports</h1>
+<h2>Recent α<sub>s</sub> reports</h2>
+<table id="highlight" class="display" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Date</th>
+                <th>Tags</th>
+            </tr>
+        </thead>
+    </table>
+
+<h2>All reports</h2>
+<ul id="taglist"></ul>
+<label>tag: <input id="tagfilt" name="tagfilt"></label>
+
+<table id="global" class="display" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Date</th>
+                <th>Tags</th>
+            </tr>
+        </thead>
+    </table>
+</body>
+</html>

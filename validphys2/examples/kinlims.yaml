@@ -1,0 +1,24 @@
+fit: NNPDF31_nlo_as_0118_1000
+
+meta:
+    author: Zahari Kassabov
+    keywords: []
+
+use_cuts: True
+
+experiments:
+    from_: fit
+
+theory:
+    from_: fit
+
+theoryid:
+    from_: theory
+
+#check_plotting: True
+
+template: templates/kinlimits.md
+
+actions_:
+    - - report:
+          main: True

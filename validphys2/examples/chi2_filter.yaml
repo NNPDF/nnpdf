@@ -1,0 +1,28 @@
+cutfits:
+  - {fit: 160802-rd29d3d3-jr-002, label: New NLO P Charm}
+  - {fit: 160802-rd29d3d3-jr-003, label: New NLO F Charm}
+
+oldfits:
+  - {fit: 160708-ra2e7848-jr-007, label: Old NLO P Charm}
+  - {fit: 160708-ra2e7848-jr-010, label: Old NLO F Charm}
+
+d_sigmas:
+  - {nsigma_cut: 1.7}
+  - {nsigma_cut: 2}
+  - {nsigma_cut: 2.5}
+  - {nsigma_cut: 3}
+  - {nsigma_cut: 3.5}
+
+actions_:
+
+  - cutfits:
+      d_sigmas:
+         - make_pdf_from_filtered_outliers
+         - plot_chi2filtered_training_validation
+
+  - oldfits:
+        - plot_training_validation
+
+  - cutfits:
+         - plot_training_validation
+
