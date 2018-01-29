@@ -1,8 +1,0 @@
-To run the plot tool, first execute
-	./plotall.py # This may take some time
-then 
-	./genhtml.sh
-
-the results are located in the ./plts/ directory.
-
-For this example, it assumes theory predictions are provided in ./th/
