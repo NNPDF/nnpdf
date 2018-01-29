@@ -1,0 +1,19 @@
+#!/bin/sh
+#Get old ref of svn
+oldsvn=$(git show-ref svn -s)
+echo "The following changes are included:" > .co
+git log --oneline svn.. >> .co
+git tag svn --force
+#Clean up git so we don't upload useless blobs.
+git gc --aggressive --prune=now
+svn add .. --force
+#Delete deleted files.
+svn st | grep '^!' | awk '{print $2}' | xargs svn delete --force
+svn commit -F .co --force-log
+status=$?
+rm .co
+#If commit fails go back to old svn tag
+if [ $status -ne 0 ]
+then
+   git tag svn --force $oldsvn
+fi

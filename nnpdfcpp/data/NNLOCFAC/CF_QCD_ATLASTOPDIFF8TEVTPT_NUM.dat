@@ -1,0 +1,17 @@
+********************************************************************************
+SetName: ATLASTOPDIFF8TEVTPT
+Author: Emanuele Nocera emanuele.nocera@physics.ox.ac.uk
+Date: 02/2016
+CodesUsed: Predictions provided by Alex Mitov
+TheoryInput: Fixed muR=muF=sqrt(mt^2+pTt^2)/2, mt=173.3 GeV], as(MZ) = 0.118
+PDFset: NNPDF30_nnlo_as_0118
+Warnings: 
+********************************************************************************
+1.10290 0.00000
+1.07677 0.00000
+1.06349 0.00000
+1.04887 0.00000
+1.03123 0.00000
+1.00981 0.00000
+0.98509 0.00000
+0.95357 0.00000

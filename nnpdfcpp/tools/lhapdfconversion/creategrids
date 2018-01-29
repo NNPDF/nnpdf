@@ -1,0 +1,346 @@
+#!/usr/bin/python
+
+"""\
+Usage: %prog <setname> [<setname2> ...]
+
+The set names given are in the format required for initialisation in LHAPDF5, e.g.
+
+  MSTW2008lo90cl_nf3.LHgrid, MSTW2008lo90cl.LHgrid, NNPDF23_nlo_as_0119.LHgrid,
+  CT10.LHgrid, cteq66.LHgrid, cteq6ll.LHpdf, cteq6ll.LHgrid, ...
+
+It's also possible to rename sets from the LHAPDF5 name to a new LHAPDF6 name, e.g.
+
+  cteq6ll.LHpdf:CTEQ6L1 or cteq6ll.LHgrid:CTEQ6L1
+
+
+TODO:
+  * Force PDF behaviour toward x = 1... and Q = 0?
+"""
+
+## Parse the command line to get the set names for migration (in LHAPDF5 format)
+import optparse
+p = optparse.OptionParser(usage=__doc__)
+p.add_option("--desc", dest="META_SETDESC", metavar="DESC", help="a value for the SetDesc metadata field", default="")
+p.add_option("--authors", dest="META_AUTHORS", metavar="AUTHORS", help="a value for the Authors metadata field", default="")
+p.add_option("--ref", dest="META_REFERENCE", metavar="REF", help="a value for the Reference metadata field", default="")
+p.add_option("--version", dest="META_DATAVERSION", metavar="VERSION", help="a value for the DataVersion metadata field", type=int, default=-1)
+p.add_option("--errtype", dest="META_ERRTYPE", metavar="TYPE", help="a value for the ErrorType metadata field", default="")
+p.add_option("--cl", dest="META_CONFLEVEL", metavar="CONFLEVEL", help="a value for the ErrorConfLevel metadata field", default="")
+p.add_option("--xmin", dest="XMIN", metavar="XMIN", help="truncate the x knots array at XMIN, even if the PDF reports knots lower than that", type=float, default=None)
+p.add_option("--extraxs", dest="EXTRAXS", metavar="X1,X2,...", help="comma-separated list of extra sample knots in x", default=None)
+p.add_option("--extraqs", dest="EXTRAQS", metavar="Q1,Q2,...", help="comma-separated list of extra sample knots in Q", default=None)
+p.add_option("--resample", dest="RESAMPLE", action="store_true", help="override the original sample grid with a new one", default=False)
+p.add_option("--ffn", dest="FIXED_NF", action="store_true", help="specify a fixed number of flavours [default=variable NF]", default=False)
+p.add_option("--nf", dest="NUM_FLAVS", type=int, help="specify the number of flavours [default=%default]", default=5)
+p.add_option("--top", dest="NUM_FLAVS", action="store_const", const=6, help="generate explicit grid entries for top (and antitop) PDFs", default=5)
+p.add_option("--diffasmass", dest="DIFFASMASS", action="store_true", help="different alpha_s and quark masses for each member", default=False)
+p.add_option("--subgrids", dest="USE_SUBGRIDS", action="store_true", help="make distinct xf and alpha_s ipol grids between flavour thresholds", default=False)
+p.add_option("--info-only", dest="INFO_ONLY", action="store_true", help="only dump the .info file", default=False)
+p.add_option("--central-only", dest="CENTRAL_ONLY", action="store_true", help="only dump the first member", default=False)
+p.add_option("--force-num-mems", dest="FORCE_NUMMEMS", metavar="N", type=int, help="ignore the reported numberPDF and dump members from 0..N-1", default=None)
+p.add_option("--force-pos", dest="FORCE_POSITIVE", action="store_const", const=1, help="forces any interpolation/extrapolation on this grid to return positive (>= 0) values", default=0)
+p.add_option("--force-posdef", dest="FORCE_POSITIVE", action="store_const", const=2, help="forces any interpolation/extrapolation on this grid to return positive definite (>= 1e-10) values", default=0)
+p.add_option("-v", "--verbose", dest="VERBOSE", action="store_true", help="verbose output", default=False)
+opts, args = p.parse_args()
+
+import os, sys
+import lhapdf, numpy, math
+
+## Standard Z mass in GeV
+MZ = 91.1876
+
+## For every PDF set
+for lha5name in args:
+
+    ## Given names can be in the format lhapdf5name:lhapdf6name for easy set renaming
+    if ":" in lha5name:
+        setname = lha5name.split(":")[1]
+        lha5name = lha5name.split(":")[0]
+    else:
+        setname = os.path.splitext(lha5name)[0]
+    print "Migrating %s -> %s" % (lha5name, setname)
+
+    ## Create output dir if needed, otherwise update the dir timestamp for convenience
+    if not os.path.exists(setname):
+        os.mkdir(setname)
+    else:
+        os.utime(setname, None)
+
+    ## Initialize LHAPDF for this set
+    lhapdf.initPDFSetByName(lha5name)
+
+    ## Get the number of members in the PDF
+    numMembers = lhapdf.numberPDF() + 1
+    if lhapdf.numberPDF() == 1:
+       numMembers -= 1
+
+    ## Perhaps override the automatically determined numberPDF
+    if opts.FORCE_NUMMEMS is not None:
+        numMembers = opts.FORCE_NUMMEMS
+
+    ## Determine the active flavors
+    # TODO: Re-order this list as e.g. [0, 1, -1, 2, -2, 3, -3, 4 -4, 5, -5]
+    pids = [n for n in xrange(-opts.NUM_FLAVS, opts.NUM_FLAVS+1) if n != 0]
+    pids.append(21)
+    if lhapdf.hasPhoton():
+        pids.append(22)
+    print "PIDs:", pids
+
+    ## This will be filled with the set's Q anchors for alpha_s ipol
+    alphas_qs = None
+
+    ## Iterate over each member in the set
+    for member in xrange(numMembers):
+        print "Converting member #%d" % member
+        lhapdf.initPDF(member)
+
+        ## Get the x and Q anchor point arrays
+        if not opts.RESAMPLE:
+            ## Use LHAPDF5 to get the exact x and q2 grid points (requires LHAPDF 5.9)
+            import ctypes
+            try:
+                _lha = ctypes.CDLL('libLHAPDF.so')
+            except:
+                _lha = ctypes.CDLL('libLHAPDF.dylib')
+            nxgrid = ctypes.c_uint()
+            nqgrid = ctypes.c_uint()
+            gridx = (ctypes.c_double * 500)()
+            gridq = (ctypes.c_double * 500)()
+            _lha.getgrid_(ctypes.byref(nxgrid), ctypes.byref(nqgrid), gridx, gridq)
+            xs, q2s = gridx[:nxgrid.value], gridq[:nqgrid.value]
+            if not xs or not q2s:
+                raise Exception("x or Q2 grids not extracted from original PDF")
+            qs = list(numpy.sqrt(numpy.array(q2s)))
+            del q2s
+            #print xs
+        else:
+            print "Overriding original grid with a new log-lin x sampling and log Q2 sampling"
+            xmin = lhapdf.getXmin(1) if opts.XMIN is None else opts.XMIN
+            q2min = lhapdf.getQ2min(1)
+            q2max = lhapdf.getQ2max(1)
+            # xs = list(numpy.logspace(math.log10(xmin), math.log10(0.05), 40)) + list(numpy.linspace(0.075, 0.2, 6)) + list(numpy.linspace(0.25, 1.0, 18))
+            # xs = list(numpy.logspace(math.log10(xmin), math.log10(0.05), 40)) + list(numpy.logspace(math.log10(0.075), 0, 21))
+            # xs = sorted(list(numpy.logspace(math.log10(xmin), 0, 70)) + [1.0 - i for i in numpy.logspace(math.log10(0.002), math.log10(0.1), 18)])
+            xs = sorted(list(numpy.logspace(math.log10(xmin), 0, 70)) + list(numpy.linspace(0.1, 0.99, 50)))
+            qs = list(numpy.sqrt(numpy.logspace(math.log10(q2min), math.log10(q2max), 50)))
+            print "Manual x grid: ", ", ".join("%0.2e" % x for x in xs)
+            print "Manual Q grid: ", ", ".join("%0.2e" % q for q in qs)
+
+
+        ## Tidy the x knots array
+        ## Remove x == 0 points: they screw up the ipol/xpol separation
+        if xs[0] == 0.0:
+            del xs[0]
+        ## Remove other grid points below xmin, if that happens
+        xmin = lhapdf.getXmin(1) if opts.XMIN is None else opts.XMIN
+        while xs[0] < xmin:
+            del xs[0]
+        ## Add xmin as the lowest point
+        if xs[0] != xmin:
+            xs.insert(0, xmin)
+        ## If there isn't an x = 1 point, create one
+        if xs[-1] != 1.0:
+            xs.append(1.0)
+        ## Fill in extra x sampling points if manually specified
+        if opts.EXTRAXS:
+            extraxs = [float(x) for x in opts.EXTRAXS.split(",")]
+            xs = sorted(xs + extraxs)
+        ## Debug printout
+        if opts.VERBOSE:
+            print "x grid: ", ", ".join("%0.2e" % x for x in xs)
+
+        ## Tidy the Q knots array
+        # TODO: Add similar knot list cleaning for Q
+        ## Fill in extra Q sampling points if manually specified
+        if opts.EXTRAQS:
+            extraqs = [float(q) for q in opts.EXTRAQS.split(",")]
+            qs = sorted(qs + extraqs)
+        ## Debug printout
+        if opts.VERBOSE:
+            print "Q grid: ", ", ".join("%0.2e" % q for q in qs)
+
+        ## Detect and assign Q interpolation subgrids (use a single subgrid if there are no subgrids)
+        qgrids = []
+        split_points = []
+        if opts.USE_SUBGRIDS:
+            ## Find Q knots with only tiny separations:
+            for iq in xrange(len(qs)-1):
+                if qs[iq+1] - qs[iq] < 1e-3:
+                    if opts.VERBOSE:
+                        print "Flavour threshold detected by tiny Q grid knot separation:", qs[iq], "->", qs[iq+1], "GeV"
+                    split_points.append(iq)
+        # TODO: Check that the split points correspond to flavour thresholds?
+
+        ## Actually split the subgrids
+        split_points.insert(0, 0) # add a start-at-first marker
+        split_points.append(None) # add an end-at-last marker
+        for isplit in xrange(len(split_points)-1):
+            start = split_points[isplit]
+            # if isplit > 0:
+            #     start += 1 # start from the +epsilon point
+            end = split_points[isplit+1]
+            if end is not None:
+                end += 1 # want to include the split point knot, so increment unless it's the last one
+            if opts.VERBOSE:
+                print "Subgrid from Q =", qs[start], "to", qs[end-1 if end is not None else -1]
+            qgrid = qs[start:end]
+            if isplit > 0:
+                del qgrid[1] # remove the mq+epsilon knot since we don't want gaps in Q coverage
+            qgrids.append(qgrid)
+        if opts.VERBOSE or len(qgrids) > 1:
+            print "Number of Q subgrids = %d" % len(qgrids)
+
+        ## Remove the Qs array, since using it now would be inconsistent
+        del qs
+
+        ## Use the PDF grid's Q knot values for alpha_s interpolation, with subgrid edge doubling and MZ included
+        alphas_qs = []
+        for qs in qgrids:
+            alphas_qs += qs
+        alphas_qs = sorted( alphas_qs + [MZ] )
+        if opts.VERBOSE:
+            print "alpha_s Qs =", alphas_qs
+
+        ## Create the set-level metadata file corresponding to zeroth member.
+        if member == 0:
+            metapath = os.path.join(setname, setname + '.info')
+            f = open(metapath, "w")
+            f.write("SetDesc: \"%s\"\n" % opts.META_SETDESC.replace("\\n","\n")) # Note line break insertion and quoting
+            f.write("Authors: %s\n" % opts.META_AUTHORS)
+            f.write("Reference: %s\n" % opts.META_REFERENCE)
+            f.write("Format: lhagrid1\n")
+            f.write("DataVersion: %d\n" % opts.META_DATAVERSION)
+            f.write("NumMembers: %d\n" % numMembers)
+            f.write("Flavors: [%s]\n" % ", ".join(str(pid) for pid in pids))
+            f.write("OrderQCD: %d\n" % lhapdf.getOrderPDF())
+            if opts.FORCE_POSITIVE > 0:
+                f.write("ForcePositive: %d\n" % opts.FORCE_POSITIVE)
+            f.write("FlavorScheme: %s\n" % ("fixed" if opts.FIXED_NF else "variable"))
+            # TODO: Yuck... this is unclear/potentially contradictory
+            if opts.NUM_FLAVS is not None:
+                f.write("NumFlavors: %d\n" % opts.NUM_FLAVS)
+            elif lhapdf.getNf() > 0:
+                f.write("NumFlavors: %d\n" % lhapdf.getNf())
+            if opts.META_ERRTYPE:
+                f.write("ErrorType: %s\n" % opts.META_ERRTYPE)
+            if opts.META_CONFLEVEL:
+                f.write("ErrorConfLevel: %s\n" % opts.META_CONFLEVEL)
+            f.write("XMin: %g\n" % lhapdf.getXmin(1))
+            f.write("XMax: %g\n" % lhapdf.getXmax(1))
+            f.write("QMin: %g\n" % math.sqrt(lhapdf.getQ2min(1)))
+            f.write("QMax: %g\n" % math.sqrt(lhapdf.getQ2max(1)))
+            f.write("MZ: %g\n" % MZ)
+
+            ## If each PDF member can have different alpha_s and quark masses, don't write them to the .info file
+            if not opts.DIFFASMASS:
+                f.write("MUp: %g\n" % lhapdf.getQMass(1, 1))
+                f.write("MDown: %g\n" % lhapdf.getQMass(1, 2))
+                f.write("MStrange: %g\n" % lhapdf.getQMass(1, 3))
+                f.write("MCharm: %g\n" % lhapdf.getQMass(1, 4))
+                f.write("MBottom: %g\n" % lhapdf.getQMass(1, 5))
+                f.write("MTop: %g\n" % lhapdf.getQMass(1, 6))
+                f.write("AlphaS_MZ: %g\n" % lhapdf.alphasPDF(MZ))
+                f.write("AlphaS_OrderQCD: %d\n" % lhapdf.getOrderAlphaS(1))
+                if alphas_qs is not None:
+                    f.write("AlphaS_Type: ipol\n")
+                    f.write("AlphaS_Qs: [%s]\n" % ", ".join("%2.6e" % q for q in alphas_qs))
+                    f.write("AlphaS_Vals: [%s]\n" % ", ".join("%2.6e" % lhapdf.alphasPDF(1, q) for q in alphas_qs))
+                else:
+                    f.write("AlphaS_Type: analytic\n")
+                    if lhapdf.getLam4(1) > 0:
+                        f.write("AlphaS_Lambda4: %g\n" % lhapdf.getLam4(1))
+                    if lhapdf.getLam5(1) > 0:
+                        f.write("AlphaS_Lambda5: %g\n" % lhapdf.getLam5(1))
+        f.close()
+
+        ## Escape here if only writing the .info file
+        if opts.INFO_ONLY:
+            break
+
+        ## Work out the member file path and open it for writing
+        memname = setname + ('_%04d.dat' % member)
+        mempath = os.path.join(setname, memname)
+        f = open(mempath, "w")
+        #f.write("PdfDesc: \n")
+        ## NOTE: If opts.DIFFASMASS is set, then usually every member set is "central" rather than "error".
+        f.write("PdfType: %s\n" % ("central" if (member == 0 or opts.DIFFASMASS) else "error"))
+        f.write("Format: lhagrid1\n")
+        ## If different alpha_s and quark masses for each PDF member write to each .dat file.
+        if opts.DIFFASMASS:
+            f.write("XMin: %g\n" % lhapdf.getXmin(1))
+            f.write("XMax: %g\n" % lhapdf.getXmax(1))
+            f.write("QMin: %g\n" % math.sqrt(lhapdf.getQ2min(1)))
+            f.write("QMax: %g\n" % math.sqrt(lhapdf.getQ2max(1)))
+            f.write("MZ: %g\n" % MZ)
+            f.write("MUp: %g\n" % lhapdf.getQMass(1, 1))
+            f.write("MDown: %g\n" % lhapdf.getQMass(1, 2))
+            f.write("MStrange: %g\n" % lhapdf.getQMass(1, 3))
+            f.write("MCharm: %g\n" % lhapdf.getQMass(1, 4))
+            f.write("MBottom: %g\n" % lhapdf.getQMass(1, 5))
+            f.write("MTop: %g\n" % lhapdf.getQMass(1, 6))
+            f.write("AlphaS_MZ: %g\n" % lhapdf.alphasPDF(MZ))
+            f.write("AlphaS_OrderQCD: %d\n" % lhapdf.getOrderAlphaS(1))
+            if alphas_qs is not None:
+                f.write("AlphaS_Type: ipol\n")
+                f.write("AlphaS_Qs: [%s]\n" % ", ".join("%2.6e" % q for q in alphas_qs))
+                f.write("AlphaS_Vals: [%s]\n" % ", ".join("%2.6e" % lhapdf.alphasPDF(1, q) for q in alphas_qs))
+            else:
+                f.write("AlphaS_Type: analytic\n")
+                if lhapdf.getLam4(1) > 0:
+                    f.write("AlphaS_Lambda4: %g\n" % lhapdf.getLam4(1))
+                if lhapdf.getLam5(1) > 0:
+                    f.write("AlphaS_Lambda5: %g\n" % lhapdf.getLam5(1))
+        f.write("---\n")
+
+        ## Get the xf values for this PDF member in each Q subgrid
+        for igrid, qs in enumerate(qgrids):
+            # print qs
+            xfs = []
+            for ix, x in enumerate(xs):
+                for iq, q in enumerate(qs):
+                    # if x != 1.0:
+                    #     xfs.append([lhapdf.xfx(x, q, pid) for pid in lha5pids])
+                    # else:
+                    #     ## Force xf(x=1) = 0 for now, until ipol is improved
+                    #     # TODO: Remove this when LHAPDF ipol knows about x=1
+                    #     xfs.append([0.0 for pid in lha5pids])
+                    ## Offset the sampling (but not the reported Q) a little on the low Q edges of later subgrids
+                    if igrid > 0 and iq == 0:
+                        q += 1e-3
+
+                    #xf_vals = [lhapdf.xfx(x, q, pid) for pid in lha5pids]
+                    xf_vals = []
+                    for pid in pids:
+                        if abs(pid) <= 6:
+                            xf_vals.append( lhapdf.xfx(x, q, pid) )
+                        elif pid == 21:
+                            xf_vals.append( lhapdf.xfx(x, q, 0) )
+                        elif pid == 22:
+                            xf_vals.append( lhapdf.xfxphoton(x, q)[-1] )
+
+                    xfs.append(xf_vals)
+                    # if igrid == 1 and ix == 10:
+                    #     print x, q, xf_vals[-1]
+
+            ## Write x points
+            line = " ".join("%2.6e" % x for x in xs)
+            f.write(line + "\n")
+            ## Write Q points
+            line = " ".join("%2.6e" % q for q in qs)
+            f.write(line + "\n")
+            ## Write internal flavour list
+            f.write(" ".join(str(pid) for pid in pids) + "\n")
+            ## Write block of xf values
+            for xfs_xq in xfs:
+                line = ""
+                for xf in xfs_xq:
+                    if xf == 0.0: xf = 0.0 # remove occurences of negative zero
+                    line += "%2.8e " % xf
+                f.write(line.strip() + "\n")
+            f.write("---\n")
+
+        f.close()
+
+        ## Escape here if only writing the .info file and first member
+        if opts.CENTRAL_ONLY:
+            break

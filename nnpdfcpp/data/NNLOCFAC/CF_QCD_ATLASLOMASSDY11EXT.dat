@@ -1,0 +1,15 @@
+*******************************************************************************************
+SetName:     ATLASLOMASSDY11EXT
+Author:      Alberto Guffanti <alberto.guffanti@to.infn.it>
+Date:        24.11.2015
+CodesUsed:   FEWZ 3.1b2 
+TheoryInput: Input Cards in external/FEWZ31b2/bin/InputCards
+PDFset:      NNPDF30_nnlo_as_0118
+Warnings:    
+********************************************************************************************
+1.5966 0.00000
+0.8519 0.00000
+0.9492 0.00000
+0.9809 0.00000
+0.9877 0.00000
+0.9945 0.00000

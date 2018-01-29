@@ -1,0 +1,9 @@
+====================== DOXYGEN ========================
+
+- To generate the doxygen documentation, just launch:
+	
+	doxywizard doxygen/doxygen.config
+
+- To compile NNPDF++ manual, just type
+
+	make

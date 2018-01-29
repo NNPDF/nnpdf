@@ -1,0 +1,10 @@
+********************************************************************************
+SetName: ATLASTTBARTOT8TEV
+Author: Emanuele R. Nocera emanuele.nocera@physics.ox.ac.uk
+Date: June 2016
+CodesUsed: top++ v2.0
+TheoryInput: NNPDF3.0 with alphas(MZ)=0.118
+PDFset: NNPDF30_nnlo_as_0118
+Warnings: NNLO theory (no NNLL effects)
+********************************************************************************
+1.0671    0.0000

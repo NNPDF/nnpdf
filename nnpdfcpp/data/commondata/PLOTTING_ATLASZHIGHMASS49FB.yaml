@@ -1,0 +1,5 @@
+dataset_label: "ATLAS HM DY 7 TeV"
+x: k2
+y_label: '$d\sigma_{Z/\gamma^{*}}/dM_{ll}$ (fb)' 
+y_scale: log
+kinematics_override: dyp_sqrt_scale

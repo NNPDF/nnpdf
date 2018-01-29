@@ -1,0 +1,43 @@
+# This file was generated automatically from conda-smithy. To update this configuration,
+# update the conda-forge.yml and/or the recipe/meta.yaml.
+
+git:
+    depth: 300
+
+language: generic
+
+os: osx
+osx_image: beta-xcode6.1
+
+env:
+  global:
+    - CONDA_PY=35
+    - CONDAPATH="/Users/travis/miniconda3"
+    - OUTPUT_ARCH=osx-64
+    - OUTPUT_CHANNEL=conda-pkgs-private
+
+
+before_install:
+    # Remove homebrew.
+    - brew remove --force $(brew list)
+    - brew cleanup -s
+    - rm -rf $(brew --cache)
+
+install:
+    - |
+      MINICONDA_URL="https://repo.continuum.io/miniconda"
+      MINICONDA_FILE="Miniconda3-latest-MacOSX-x86_64.sh"
+      curl -L -O "${MINICONDA_URL}/${MINICONDA_FILE}"
+      bash $MINICONDA_FILE -b
+
+      source /Users/travis/miniconda3/bin/activate root
+      conda config --append channels conda-forge
+      conda config --add channels https://zigzah.com/static/conda-pkgs/
+      conda config --add channels https://zigzah.com/static/conda-pkgs-private/
+      conda config --set show_channel_urls true
+      conda install --yes conda-build
+
+script:
+    - ./.ciscripts/build-deploy2.sh conda-recipe
+
+

@@ -1,0 +1,12 @@
+##########################
+# Parton luminostiy
+
+Install:
+   make
+
+Run:
+   ./luminosity
+
+Output:
+   *.dat containing pdf luminosities
+   *.eps *.C *.root containing plots
