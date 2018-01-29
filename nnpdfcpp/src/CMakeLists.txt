@@ -13,7 +13,7 @@ if (COMPILE_filter)
   add_executable(filter filter/src/filter.cc
                       filter/src/kincuts.cc)
   include_directories(filter/inc)
-  target_link_libraries(filter common ${NNPDF_LDFLAGS} ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${GSL_LDFLAGS})
+  target_link_libraries(filter common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${GSL_LDFLAGS})
   install(TARGETS filter DESTINATION bin
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_filter)
@@ -30,7 +30,7 @@ if (COMPILE_nnfit)
                        nnfit/src/pdfbasis.cc
                        nnfit/src/stopping.cc)
   include_directories(nnfit/inc)
-  target_link_libraries(nnfit common ${NNPDF_LDFLAGS} ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
+  target_link_libraries(nnfit common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
   install(TARGETS nnfit DESTINATION bin
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_nnfit)
@@ -39,7 +39,7 @@ endif(COMPILE_nnfit)
 option(COMPILE_chi2check "Compile chi2check program." ON)
 if (COMPILE_chi2check)
   add_executable(chi2check chi2check/src/chi2check.cc)
-  target_link_libraries(chi2check common ${NNPDF_LDFLAGS} ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${GSL_LDFLAGS})
+  target_link_libraries(chi2check common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${GSL_LDFLAGS})
   install(TARGETS chi2check DESTINATION bin
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_chi2check)
@@ -56,14 +56,14 @@ if (ROOT_CONFIG)
     OUTPUT_VARIABLE ROOT_LIBRARIES
     )
   # validphys
-  option(COMPILE_validphys "Compile validphys program." ON)
+  option(COMPILE_validphys "Compile validphys program." OFF)
   if (COMPILE_validphys)  
     add_executable(validphys validphys/src/validphys.cc
       validphys/src/plotdata.cc
       validphys/src/plotutils.cc)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
     include_directories(validphys/inc)
-    target_link_libraries(validphys common ${NNPDF_LDFLAGS} ${LHAPDF_LIBRARIES} ${ROOT_LIBRARIES} ${YAML_LDFLAGS} ${GSL_LDFLAGS})
+    target_link_libraries(validphys common nnpdf ${LHAPDF_LIBRARIES} ${ROOT_LIBRARIES} ${YAML_LDFLAGS} ${GSL_LDFLAGS})
     install(TARGETS validphys DESTINATION bin
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
   endif(COMPILE_validphys)
@@ -75,7 +75,7 @@ endif(ROOT_CONFIG)
 option(COMPILE_revolve "Compile revolve program." OFF)
 if (COMPILE_revolve)
   add_executable(revolve revolve/src/revolve.cc)
-  target_link_libraries(revolve common ${NNPDF_LDFLAGS} ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
+  target_link_libraries(revolve common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
   install(TARGETS revolve DESTINATION bin
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
 endif(COMPILE_revolve)
@@ -87,7 +87,7 @@ if (COMPILE_revolvenet)
     nnfit/src/apfelevol.cc revolvenet/src/nnpdf.cc
     nnfit/src/fitbases.cc)
   include_directories(revolvenet/inc nnfit/inc)
-  target_link_libraries(revolvenet common ${NNPDF_LDFLAGS} ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
+  target_link_libraries(revolvenet common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
   install(TARGETS revolvenet DESTINATION bin
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
 endif(COMPILE_revolvenet)
@@ -108,7 +108,7 @@ if (FIATLUX_CONFIG)
   if (COMPILE_fiatlux)
     add_executable(fiatlux fiatlux/src/fiatlux.cc)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FIATLUX_CXX_FLAGS}")
-    target_link_libraries(fiatlux common ${NNPDF_LDFLAGS} ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${GSL_LDFLAGS} ${FIATLUX_LIBRARIES} ${APFEL_LIBRARIES})
+    target_link_libraries(fiatlux common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${GSL_LDFLAGS} ${FIATLUX_LIBRARIES} ${APFEL_LIBRARIES})
     install(TARGETS fiatlux DESTINATION bin
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
   endif(COMPILE_fiatlux)
