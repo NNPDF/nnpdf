@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 {  
   
   // Read configuration filename from arguments
-  string folder, folderref, plottingfile = "../config/plotting.yml";
+  string folder, folderref, plottingfile = get_config_path() + "plotting.yml";
   if (argc > 2)
     {
       folder.assign(argv[1]);

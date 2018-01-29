@@ -11,7 +11,6 @@ add_subdirectory(src)
 
 # install scripts
 install(FILES ${PROJECT_SOURCE_DIR}/nnpdfcpp/scripts/fitmanager
-  ${PROJECT_SOURCE_DIR}/nnpdfcpp/scripts/postfit
   DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 # install data
