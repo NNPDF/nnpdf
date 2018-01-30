@@ -44,31 +44,31 @@ void NMCpdFilter::ReadData()
 {
   // Opening files
   fstream f1;
-  
+
   stringstream datafile("");
   datafile << dataPath() << "rawdata/"
   << fSetName << "/nmc_f2df2p.data";
   f1.open(datafile.str().c_str(), ios::in);
-  
+
   if (f1.fail()) {
     cerr << "Error opening data file " << datafile.str() << endl;
     exit(-1);
   }
-  
+
   string line;
   for (int i = 0; i < fNData; i++)
   {
     getline(f1,line);
     istringstream lstream(line);
-    lstream >> fKin1[i]; 
+    lstream >> fKin1[i];
     lstream >> fKin2[i];
     lstream >> fData[i];
     lstream >> fStat[i];
     fKin3[i] = 0;
-    
+
     double tmp;
     lstream >> tmp;
-    
+
     for (int l = 0; l < fNSys; l++)
     {
       lstream >> fSys[i][l].mult;
@@ -77,7 +77,7 @@ void NMCpdFilter::ReadData()
       fSys[i][l].name = "CORR";
     }
   }
-  
+
   f1.close();
 }
 
@@ -127,8 +127,8 @@ void NMCFilter::ReadData()
   const std::string rawdata_path = dataPath() + "rawdata/" + fSetName + "/";
   const std::array<std::string, 4> energies = {"90","120","200","280"};
   const std::array<int,4>        datapoints = {73, 65, 75, 79}; // Number of datapoints per COM bin
-  
-  // Starting filter  
+
+  // Starting filter
   double datain[292][13];
   const double relnorbeam = 2.0;
 
@@ -137,7 +137,7 @@ void NMCFilter::ReadData()
   for (int icom = 0; icom < energies.size(); icom++)
   {
      const std::string filename = rawdata_path +  "nmc_p"+energies[icom]+".data";
-     ifstream datafile(filename); 
+     ifstream datafile(filename);
      if (!datafile.is_open()) throw runtime_error("Cannot open file: "+filename);
      std::cout << filename<<std::endl;
 
@@ -152,11 +152,18 @@ void NMCFilter::ReadData()
         // Zero unneeded systematics
         for (int isys=0; isys<8; isys++)
             fSys[idat][isys].mult = 0;
-        
+
         // This was used for the deuteron data
         fSys[idat][9].mult          = 0;
-        
-        fSys[idat][icom + 12].mult  = relnorbeam;
+
+        std::cout << icom + 12 << fNSys <<std::endl;
+        // relnorbeam for different CoM energies - set the others to zero
+        fSys[idat][12].mult = 0;
+        fSys[idat][13].mult = 0;
+        fSys[idat][14].mult = 0;
+        fSys[idat][15].mult = 0;
+        fSys[idat][icom + 12].mult = relnorbeam;
+
         fSys[idat][2*icom + 0].mult = datain[idat][4];
         fSys[idat][2*icom + 1].mult = datain[idat][5];
         fSys[idat][8].mult          = datain[idat][7];
@@ -169,7 +176,7 @@ void NMCFilter::ReadData()
 
   if (idat != fNData)
       throw runtime_error("Error: datapoint mismatch");
-    
+
   // Filtering data
   const double mp = 0.93799999999999994;
   for (int i = 0; i < fNData; i++)
@@ -180,17 +187,17 @@ void NMCFilter::ReadData()
     x  = datain[i][0];
     y  = datain[i][2];
     q2 = datain[i][1];
-    
+
     // Compute reduced cross sections - from measured cross section
     // uncorrected by QCD effects
     double yplus = 1.0 + pow(1.0 - y, 2.0);
     //rxsec_noqed[i] = ( (x[i] * q2[i]*q2[i])
     //                   / (2.0 * M_PI * alphaEM*alphaEM * yplus))
     //                  * datain[i][3] * convfact;
-    
+
     // Set structure function as determined by NMC collaboration
     obs = datain[i][10];
-    
+
     // Compute reduced cross sections - from the published value
     // of f2 and the used value of R in each bin
     // Account for target mass effects, but neglect
@@ -201,7 +208,7 @@ void NMCFilter::ReadData()
     double tmc = mp*mp * x*x * y*y / q2;
     rxsec_qed = (2.0 * obs / yplus) *
     (1.0 - y - tmc + (y*y + 4.0*tmc) / (2.0 * (1.0 + rr) ) );
-    
+
     // Check
     // Reduced cross section always smaller than F2 due to
     // the negative contribution of the longitudinal structure function
@@ -210,13 +217,13 @@ void NMCFilter::ReadData()
       cerr << "Problem with NMC data" << endl;
       exit(-1);
     }
-    
+
     fKin1[i] = x;
     fKin2[i] = q2;
     fKin3[i] = y;
     fData[i] = rxsec_qed;
     fStat[i] = datain[i][11] / obs * rxsec_qed;
-    
+
     for (int l = 0; l < fNSys; l++)
     {
       fSys[i][l].add = fSys[i][l].mult * fData[i] * 1e-2;
