@@ -4,6 +4,10 @@ Makefile
 nnpdfcpp.*
 */Makefile
 scripts/nnpdf-config
+nnprofile.yaml
+scripts/nnpdf.pc
+src/NNPDF/common.h
+src/NNPDF/config.h
 
 # Compiled Object files
 *.slo
