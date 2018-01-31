@@ -91,6 +91,7 @@ class LoaderBase:
                     raise LoaderError(f"Could not parse profile file "
                                       f"{profile_path}: {e}") from e
         return self._nnprofile
+
     def _vp_cache(self):
         """Return the vp-cache path, and create it if it doesn't exist"""
         vpcache = pathlib.Path(self.nnprofile['validphys_cache_path'])
@@ -385,30 +386,47 @@ def download_file(url, stream_or_path, make_parents=False):
     response.raise_for_status()
 
     if isinstance(stream_or_path, (str, bytes, os.PathLike)):
+        p = pathlib.Path(stream_or_path)
+        if p.is_dir():
+            raise IsADirectoryError(p)
         log.info("Downloading %s to %s." , url, stream_or_path)
         if make_parents:
-            pathlib.Path(stream_or_path).parent.mkdir(exist_ok=True, parents=True)
+            p.parent.mkdir(exist_ok=True, parents=True)
 
-        with open(stream_or_path, 'wb') as f:
-            return _download_and_show(response, f)
+        download_target = tempfile.NamedTemporaryFile(delete=False,
+                                                      dir=p.parent,
+                                                      prefix=p.name,
+                                                      suffix='.part')
+
+        with download_target as f:
+            _download_and_show(response, f)
+        shutil.move(download_target.name, p)
     else:
         log.info("Downloading %s." , url,)
-        return _download_and_show(response, stream_or_path)
+        _download_and_show(response, stream_or_path)
 
 
 def download_and_extract(url, local_path):
     """Download a compressed archive and then extract it to the given path"""
+    local_path = pathlib.Path(local_path)
+    if not local_path.is_dir():
+        raise NotADirectoryError(local_path)
     name = url.split('/')[-1]
-    with tempfile.NamedTemporaryFile(delete=False, suffix=name) as t:
+    archive_dest = tempfile.NamedTemporaryFile(delete=False, suffix=name, dir=local_path)
+    with archive_dest as t:
         log.debug("Saving data to %s" , t.name)
         download_file(url, t)
     log.info("Extracting archive to %s" , local_path)
     try:
-        shutil.unpack_archive(t.name, extract_dir=str(local_path))
+        shutil.unpack_archive(t.name, extract_dir=local_path)
     except:
         log.error(f"The original archive at {t.name} was only extracted "
                   f"partially at \n{local_path}")
         raise
+    else:
+        os.unlink(archive_dest.name)
+
+
 
 
 def _key_or_loader_error(f):
