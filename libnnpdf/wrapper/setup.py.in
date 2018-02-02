@@ -24,8 +24,8 @@ def call_command(command):
 
 numpy_include_dir = numpy.get_include()
 
-nnpdf_includes = call_command('nnpdf-config --cppflags').split()
-nnpdf_libs = call_command('nnpdf-config --ldflags').split()
+nnpdf_includes = ['-I@PROJECT_SOURCE_DIR@/libnnpdf/src/']
+nnpdf_libs = ['-L${PROJECT_BINARY_DIR}/libnnpdf -lnnpdf']
 
 lhapdf_includes = call_command('lhapdf-config --cflags').split()
 lhapdf_libs = call_command('lhapdf-config --libs').split()

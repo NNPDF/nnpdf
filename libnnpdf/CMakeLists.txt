@@ -75,9 +75,7 @@ install(DIRECTORY src/NNPDF DESTINATION include)
 install(FILES ${PROJECT_SOURCE_DIR}/libnnpdf/nnprofile.yaml DESTINATION share/NNPDF)
 install(TARGETS nnpdf DESTINATION lib)
 
-if(ENABLE_PYWRAP)
-  add_subdirectory(wrapper)
-endif()
+add_subdirectory(wrapper)
 
 if(ENABLE_TESTS)
   add_subdirectory(tests)
