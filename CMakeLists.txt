@@ -19,17 +19,13 @@ set(VERSION "\"1.2.0b5\"")
 set(nnpdfcpp_VERSION 3.1)
 
 # check for dependencies
+find_package(SWIG REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_search_module(LIBARCHIVE REQUIRED libarchive)
 pkg_search_module(SQLITE3 REQUIRED sqlite3)
 pkg_search_module(GSL REQUIRED gsl)
 pkg_search_module(YAML REQUIRED yaml-cpp)
-find_program(SWIG swig)
-find_package(PythonInterp 3 REQUIRED)
-if(NOT SWIG)
-  message(FATAL_ERROR "swig not found!")
-endif(NOT SWIG)
-message(STATUS "Found swig: ${SWIG}")
+
 
 option(ENABLE_OPENMP "Enable openmp parallelism." OFF)
 option(ENABLE_OPENMPI "Enable openMPI parallelism." OFF)

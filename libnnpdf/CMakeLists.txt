@@ -56,7 +56,7 @@ add_library(nnpdf SHARED src/common.cc
                          src/randomgenerator.cc
                          src/thpredictions.cc
                          src/utils.cc
-			 src/pathlib.cc)
+            			 src/pathlib.cc)
 
 target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${SQLITE3_LDFLAGS} ${LIBARCHIVE_LDFLAGS} ${YAML_LDFLAGS})
 

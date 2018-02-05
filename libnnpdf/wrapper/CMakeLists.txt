@@ -1,22 +1,33 @@
-set(OUTPUT "${PROJECT_BINARY_DIR}/libnnpdf/wrapper/build")
+# Set up swig
+include(${SWIG_USE_FILE})
 
-add_custom_command(OUTPUT ${OUTPUT} DEPENDS nnpdf
-  COMMAND mkdir -p ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/pylibs/NNPDF
-  COMMAND cp ${PROJECT_SOURCE_DIR}/libnnpdf/wrapper/src/*.py ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/pylibs/NNPDF/
-  COMMAND find ${PROJECT_SOURCE_DIR}/libnnpdf/wrapper/src -maxdepth 1 -name "*.i" -print0 | xargs -0 -I {} ${SWIG} -c++ -outdir ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/pylibs/NNPDF -python -py3 -I${PROJECT_SOURCE_DIR}/libnnpdf/src {}
-  COMMAND mkdir -p ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/_sources
-  COMMAND mv ${PROJECT_SOURCE_DIR}/libnnpdf/wrapper/src/*.cxx ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/_sources
-  COMMAND ${PYTHON_EXECUTABLE} ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/setup.py build
-  )
+include(FindPythonLibs)
+execute_process(
+  COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
+    import numpy as np 
+    print(np.get_include())"
+    OUTPUT_VARIABLE NUMPY_INCLUDE
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-add_custom_target(python-wrapper-nnpdf ALL DEPENDS ${OUTPUT})
+include_directories(${NUMPY_INCLUDE})
+include_directories(${PYTHON_INCLUDE_DIRS})
 
-install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/setup.py install WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/libnnpdf/wrapper)")
+set_source_files_properties(./src/nnpdf.i PROPERTIES CPLUSPLUS ON)
+include_directories(../src)
 
-add_custom_target(wrapper-clean
-  COMMAND rm -rf  ${PROJECT_BINARY_DIR}/libnnpdf/_sources
-  COMMAND rm -rf  ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/build
-  COMMAND rm -rf  ${PROJECT_BINARY_DIR}/libnnpdfwrapper/dist
-  COMMAND rm -rf  ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/pylibs
-  COMMAND pip uninstall nnpdf --yes
-)
+# Add swig module
+SWIG_ADD_LIBRARY(nnpdf LANGUAGE python SOURCES ./src/nnpdf.i)
+swig_link_libraries(nnpdf ${PROJECT_NAME} ${PYTHON_LIBRARIES})
+
+# Files to install with Python
+set(PYTHON_INSTALL_FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/nnpdf.py
+    ${CMAKE_CURRENT_BINARY_DIR}/_nnpdf.so)
+
+## Configure setup.py and copy to output directory
+set(SETUP_PY_IN  ${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in)
+set(SETUP_PY_OUT ${CMAKE_CURRENT_BINARY_DIR}/setup.py)
+configure_file(${SETUP_PY_IN} ${SETUP_PY_OUT})
+
+## Install target to call setup.py
+add_custom_target(install-python DEPENDS _nnpdf COMMAND python ${SETUP_PY_OUT} install)
