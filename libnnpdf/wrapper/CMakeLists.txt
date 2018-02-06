@@ -28,7 +28,7 @@ include_directories(../src)
 
 # Add swig module
 if (${CMAKE_VERSION} VERSION_LESS "3.8.0")
-    swig_add_module(cpp python ./src/nnpdf.i)
+    swig_add_module(nnpdf python ./src/nnpdf.i)
 else()
     swig_add_library(nnpdf LANGUAGE python SOURCES ./src/nnpdf.i)
 endif()
