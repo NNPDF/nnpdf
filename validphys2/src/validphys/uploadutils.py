@@ -36,6 +36,10 @@ def _profile_key(k):
     return f
 
 class Uploader():
+    """Base class for implementing upload behaviour. The main abstraction is a
+    context manager ``upload_context`` which checks that the upload seems
+    possible, then does the work inside the context and then uploads the
+    result. The various derived classes should be used."""
 
     def __init__(self):
         self._lazy_profile = None
@@ -54,6 +58,7 @@ class Uploader():
         return base64.urlsafe_b64encode(uuid.uuid4().bytes).decode()
 
     def check_auth(self):
+        """Check that we can authenticate with a certificate."""
         ssh_command_line = ('ssh', '-o', 'PreferredAuthentications=publickey',
                             '-q', self.upload_host, 'exit')
 
@@ -75,6 +80,7 @@ class Uploader():
 
 
     def check_rsync(self):
+        """Check that the rsync command exists"""
         if not shutil.which('rsync'):
             raise BadSSH("Could not find the rsync command. "
             "Please make sure it is installed.")
@@ -106,6 +112,8 @@ class Uploader():
 
 
     def check_upload(self):
+        """Check that it looks possible to upload something.
+        Raise an UploadError if not."""
         self.check_rsync()
         self.check_auth()
 
@@ -131,6 +139,7 @@ class Uploader():
 
 
 class ReportUploader(Uploader):
+    """An uploader for validphys reports."""
     target_dir = _profile_key('reports_target_dir')
     root_url = _profile_key('reports_root_url')
 
@@ -153,6 +162,8 @@ class FileUploader(ReportUploader):
         self._print_output(res, specific_file)
 
 class FitUploader(Uploader):
+    """An uploader for fits. Fits will be automatically compressed
+    before uploading."""
     target_dir = _profile_key('fits_target_dir')
     root_url = _profile_key('fits_root_url')
 
@@ -160,6 +171,7 @@ class FitUploader(Uploader):
         return ''
 
     def compress(self, output_path):
+        """Compress the folder and put in in a directory inside its parent."""
         tempdir = tempfile.mkdtemp(prefix='fit_upload', dir=output_path.parent)
         log.info(f"Compressing")
         log.debug(f"Saving compressed archive to {tempdir}")
