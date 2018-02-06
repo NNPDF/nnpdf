@@ -156,7 +156,7 @@ def main():
         if output.is_file():
             upargs = handle_single_file(output)
             upload_output = upargs[0]
-            uploader = uploadutils.FileUploader()
+            uploader = uploadutils.SingleReportFileUploader()
         else:
             if not output.exists():
                 log.error(f"No such file or directory: {output}")

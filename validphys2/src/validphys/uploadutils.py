@@ -12,6 +12,7 @@ import sys
 import contextlib
 import pathlib
 import tempfile
+from urllib.parse import urljoin
 
 import yaml
 
@@ -107,7 +108,7 @@ class Uploader():
 
 
     def _print_output(self, name):
-        url = f'{self.root_url}{name}/'
+        url = urljoin(self.root_url, name)
         log.info(f"Upload completed. The result is available at:\n{t.bold_blue(url)}")
 
 
@@ -145,12 +146,13 @@ class ReportUploader(Uploader):
 
 
 
-class FileUploader(ReportUploader):
+class FileUploader(Uploader):
     """Uploader for individual files for single-file resources. It does the "
     "same but prints the URL of the file."""
-    def _print_output(self, name, specific_file):
-        url = f'{self.root_url}{name}/{specific_file}'
+    def _print_output(self, *args):
+        url = urljoin(self.root_url, *args)
         log.info(f"Upload completed. The result is available at:\n{t.bold_blue(url)}")
+
     @contextlib.contextmanager
     def upload_context(self, output_and_file):
         output, specific_file = output_and_file
@@ -159,20 +161,22 @@ class FileUploader(ReportUploader):
         res = self.upload_output(output)
         self._print_output(res, specific_file)
 
-class FitUploader(Uploader):
+class ReportFileUploader(FileUploader, ReportUploader):
+    pass
+
+class FitUploader(FileUploader):
     """An uploader for fits. Fits will be automatically compressed
     before uploading."""
     target_dir = _profile_key('fits_target_dir')
     root_url = _profile_key('fits_root_url')
 
-    def get_relative_path(self, output_path):
+    def get_relative_path(self):
         return ''
 
     def compress(self, output_path):
         """Compress the folder and put in in a directory inside its parent."""
         tempdir = tempfile.mkdtemp(prefix='fit_upload', dir=output_path.parent)
-        log.info(f"Compressing")
-        log.debug(f"Saving compressed archive to {tempdir}")
+        log.info(f"Compressing fit to {tempdir}")
         name = pathlib.Path(tempdir)/output_path.name
         try:
             shutil.make_archive(base_name=name, format='gztar',
@@ -180,17 +184,20 @@ class FitUploader(Uploader):
         except Exception as e:
             log.error(f"Couldn't compress archive: {e}")
             raise UploadError(e) from e
-        return tempdir
+        return tempdir, name
 
 
     def upload_output(self, output_path):
         output_path = pathlib.Path(output_path)
-        try:
-            new_out = self.compress(output_path)
-            res = super().upload_output(new_out)
-        except:
-            log.info(f"Compressed output stored in {new_out}")
-            raise
-        shutil.rmtree(new_out)
-        return res
+        new_out, name = self.compress(output_path)
+        super().upload_output(new_out)
 
+        shutil.rmtree(new_out)
+        return name.with_suffix('.tar.gz').name
+
+    @contextlib.contextmanager
+    def upload_context(self, output_path):
+        self.check_upload()
+        yield
+        res = self.upload_output(output_path)
+        self._print_output(res)
