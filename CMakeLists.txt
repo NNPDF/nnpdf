@@ -19,7 +19,6 @@ set(VERSION "\"1.2.0b5\"")
 set(nnpdfcpp_VERSION 3.1)
 
 # check for dependencies
-find_package(SWIG REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_search_module(LIBARCHIVE REQUIRED libarchive)
 pkg_search_module(SQLITE3 REQUIRED sqlite3)

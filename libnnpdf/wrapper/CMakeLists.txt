@@ -1,6 +1,4 @@
-# Set up swig
-include(${SWIG_USE_FILE})
-
+find_package(SWIG REQUIRED)
 find_package(PythonInterp 3 REQUIRED)
 find_package(PythonLibs   3 REQUIRED)
 
@@ -18,8 +16,7 @@ execute_process(
     OUTPUT_VARIABLE PYTHON_SITE_PACKAGES 
   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-message( STATUS "Installing NNPDF python wrappers to:\n " ${PYTHON_SITE_PACKAGES} )
-
+include(${SWIG_USE_FILE})
 include_directories(${NUMPY_INCLUDE})
 include_directories(${PYTHON_INCLUDE_DIRS})
 
