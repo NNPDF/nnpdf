@@ -131,7 +131,7 @@ class Uploader():
     def upload_or_exit_context(self, output):
         """Like upload context, but log and sys.exit on error"""
         try:
-            with self.upload_context(output=output):
+            with self.upload_context(output):
                 yield
         except BadSSH as e:
             log.error(e)
@@ -152,10 +152,8 @@ class FileUploader(ReportUploader):
         url = f'{self.root_url}{name}/{specific_file}'
         log.info(f"Upload completed. The result is available at:\n{t.bold_blue(url)}")
     @contextlib.contextmanager
-    def upload_context(self, output, specific_file=''):
-        """Before entering the context, check that uploading is feasible.
-        On exiting the context, upload output.
-        """
+    def upload_context(self, output_and_file):
+        output, specific_file = output_and_file
         self.check_upload()
         yield
         res = self.upload_output(output)
