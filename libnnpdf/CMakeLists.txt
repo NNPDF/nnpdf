@@ -27,12 +27,6 @@ configure_file(
   "${PROJECT_SOURCE_DIR}/libnnpdf/src/NNPDF/common.h"
   )
 
-set(wrappersrc "${PROJECT_SOURCE_DIR}/libnnpdf/wrapper/src")
-configure_file(
-  "${PROJECT_SOURCE_DIR}/libnnpdf/wrapper/setup.py.in"
-  "${PROJECT_BINARY_DIR}/libnnpdf/wrapper/setup.py"
-  )
-
 # add preprocessor flag
 add_definitions(-DDEFAULT_NNPDF_PROFILE_PATH="${prefix}/share/NNPDF/nnprofile.yaml")
 
