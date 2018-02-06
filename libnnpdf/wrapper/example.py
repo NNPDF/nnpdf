@@ -1,29 +1,27 @@
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""\ 
-Using libnnpdf in python:
-Before running this code do:
-  compile the libnnpdf
-  python setup.py install
-  python example.py
+"""
+Using libnnpdf in python
+This requires the FK table 'FK_ATLASR04JETS2P76TEV.dat'
+to be in the current directory
 """
 
 __author__ = 'Stefano Carrazza'
 __license__ = 'GPL'
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 __email__ = 'stefano.carrazza@cern.ch'
 
-from NNPDF import (LHAPDFSet,
+from nnpdf import (LHAPDFSet,
                    PDFSet,
                    FKTable,
                    ThPredictions,)
 
 ## Loading NNPDF from NNPDF::LHAPDFSet
-pdf = LHAPDFSet('NNPDF30_nlo_as_0118', PDFSet.ER_MC)
+pdf = LHAPDFSet('NNPDF30_nlo_as_0118', LHAPDFSet.erType_ER_MC)
 
 ## Loading FKTable
-filename = '../../nnpdfcpp/data/theory_6/fastkernel/FK_ATLASR04JETS2P76TEV.dat'
+filename = 'FK_ATLASR04JETS2P76TEV.dat'
 fk  = FKTable(filename, [])
 
 ## Build Theoretical Predictions
