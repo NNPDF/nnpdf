@@ -179,7 +179,7 @@ class FitUploader(Uploader):
         try:
             shutil.make_archive(base_name=name, format='gztar',
                             root_dir=output_path.parent, base_dir=output_path)
-        except BaseException as e:
+        except Exception as e:
             log.error(f"Couldn't compress archive: {e}")
             raise UploadError(e) from e
         return tempdir
@@ -187,6 +187,12 @@ class FitUploader(Uploader):
 
     def upload_output(self, output_path):
         output_path = pathlib.Path(output_path)
-        new_out = self.compress(output_path)
-        return super().upload_output(new_out)
+        try:
+            new_out = self.compress(output_path)
+            res = super().upload_output(new_out)
+        except:
+            log.info(f"Compressed output stored in {new_out}")
+            raise
+        shutil.rmtree(new_out)
+        return res
 
