@@ -91,7 +91,7 @@ class Uploader():
         specific_file is given"""
         #Set the date to now
         pathlib.Path(output_path).touch()
-        randname = self.get_relative_path(output_path)
+        randname = self.get_relative_path()
         newdir = self.target_dir + randname
 
         rsync_command = ('rsync', '-aLz', '--chmod=ug=rwx,o=rx',
