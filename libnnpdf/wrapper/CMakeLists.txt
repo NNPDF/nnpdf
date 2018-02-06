@@ -31,5 +31,6 @@ else()
 endif()
 swig_link_libraries(nnpdf ${PROJECT_NAME} ${PYTHON_LIBRARIES})
 
-install(TARGETS _nnpdf DESTINATION ${PYTHON_SITE_PACKAGES})
-install(FILES ${CMAKE_BINARY_DIR}/libnnpdf/wrapper/nnpdf.py DESTINATION ${PYTHON_SITE_PACKAGES})
+install(TARGETS _nnpdf DESTINATION ${PYTHON_SITE_PACKAGES}/NNPDF)
+install(FILES ${CMAKE_BINARY_DIR}/libnnpdf/wrapper/nnpdf.py DESTINATION ${PYTHON_SITE_PACKAGES}/NNPDF)
+#install(FILES ${CMAKE_SOURCE_DIR}/libnnpdf/wrapper/src/__init__.py DESTINATION ${PYTHON_SITE_PACKAGES}/NNPDF)
