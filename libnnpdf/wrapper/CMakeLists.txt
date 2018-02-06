@@ -1,7 +1,9 @@
 # Set up swig
 include(${SWIG_USE_FILE})
 
-include(FindPythonLibs)
+find_package(PythonInterp 3 REQUIRED)
+find_package(PythonLibs   3 REQUIRED)
+
 execute_process(
   COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
     import numpy as np 
