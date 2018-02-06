@@ -27,7 +27,11 @@ set_source_files_properties(./src/nnpdf.i PROPERTIES CPLUSPLUS ON)
 include_directories(../src)
 
 # Add swig module
-swig_add_library(nnpdf LANGUAGE python SOURCES ./src/nnpdf.i)
+if (${CMAKE_VERSION} VERSION_LESS "3.8.0")
+    swig_add_module(cpp python ./src/nnpdf.i)
+else()
+    swig_add_library(nnpdf LANGUAGE python SOURCES ./src/nnpdf.i)
+endif()
 swig_link_libraries(nnpdf ${PROJECT_NAME} ${PYTHON_LIBRARIES})
 
 install(TARGETS _nnpdf DESTINATION ${PYTHON_SITE_PACKAGES})
