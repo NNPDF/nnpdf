@@ -32,4 +32,11 @@ std::string get_data_path();
  * completed fits.
  */
 std::string get_results_path();
+
+/**
+ * @brief get_config_path
+ * @return The location of the nnpdfcpp config path, containing
+ * default configurations for plotting and fiatlux
+ */
+std::string get_config_path();
 } // namespace NNPDF

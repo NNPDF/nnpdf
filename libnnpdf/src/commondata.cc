@@ -440,7 +440,7 @@ namespace NNPDF
   // Verifies one field in CommonData
   void VerifyField( double field, std::string name, bool& verification )
   {
-    if (isnan(field)){
+    if (std::isnan(field)){
         std::cerr << "CommonData::Verify: " + name + " unset"<<std::endl;
         verification = false;
     }

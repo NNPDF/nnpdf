@@ -24,7 +24,7 @@ def download(set):
     try:
         tar = set + ".tgz"
         os.system("scp %s%s ." % (webpath,tar))
-        os.system("tar -xzf " + tar + " -C .. ")
+        os.system("tar -xzf " + tar)
         os.system("rm %s" % tar)
     except:
         print ("Error downloading PDF set")
@@ -35,7 +35,7 @@ def download(set):
         lhapath = Popen(["lhapdf-config","--datadir"],stdout=PIPE).communicate()[0]
         lhapath = lhapath.decode()
         lhapath = lhapath.replace("\n","/")
-        src     = "../results/" + set + "/nnfit/" + set
+        src     = set + "/nnfit/" + set
         dst = lhapath + set
         shutil.copytree(src,dst)
     except:
@@ -46,7 +46,7 @@ def upload(set):
     """
     Uploads the desired set of PDFs
     """
-    tartemp = 'tar -zcf {0}.tgz --exclude={0}.dat ../results/{0}/nnfit ../config/{0}.yml ../results/{0}/filter ../results/{0}/filter.yml'
+    tartemp = 'tar -zcf {0}.tgz --exclude={0}.dat {0}/'
     tarcommand = tartemp.format(set)
 
     try:
@@ -66,7 +66,7 @@ def main(mode,fit):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('mode',choices=modes, help='download or upload pdf set')
-    parser.add_argument('-f','--fit',nargs=1, help='fit name', default=None)
+    parser.add_argument('-f','--fit',nargs=1, help='fit folder', default=None)
     args = parser.parse_args()
     mainargs = vars(args)
     main(**mainargs)
