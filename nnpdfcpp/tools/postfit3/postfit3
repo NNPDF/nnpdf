@@ -4,14 +4,12 @@ from __future__ import print_function
 """ A script that analyses the vetoes for a completed fit"""
 __authors__ = 'Nathan Hartland, Zahari Kassabov'
 
+import os.path
+import shutil
 import pathlib
 import argparse
 from glob import glob
 
-import sys
-import os.path
-
-import shutil
 from validphys import fitdata
 import fitveto
 
@@ -53,6 +51,12 @@ def verify_replica_files(path, prefix):
 # }
 
 
+def relative_symlink(source, dest):
+    """ Forms a relative symlink between 'source' and 'dest' """
+    relativepath = os.path.relpath(source, dest.parents[0])
+    os.symlink(relativepath, dest)
+
+
 def main(results):
     result_path = pathlib.Path(results).resolve()
     verify_results_path(result_path)
@@ -71,22 +75,27 @@ def main(results):
     for key in fit_vetoes:
         print(sum(fit_vetoes[key]), " replicas pass " + key)
 
-    # Generate postfit directory
+    # Generate postfit and LHAPDF directory
     target_path = result_path/'postfit'
-    if target_path.is_dir():
-        log.warn("WARNING: Removing existing postfit directory")
-        shutil.rmtree(str(target_path))
-    print("Constructing postfit directory")
-    os.mkdir(result_path/'postfit')
+    LHAPDF_path = result_path/'nnfit'/fitname
+    all_paths   = [target_path, LHAPDF_path]
+    for path in all_paths:
+        if path.is_dir():
+            log.warn("WARNING: Removing existing postfit and LHAPDF directories")
+            shutil.rmtree(str(path))
+        os.mkdir(path)
 
-    # Symlink selected replicas to the postfit directory
     selected_replicas = fitveto.available(fit_vetoes["Total"])
     for drep, srep in enumerate(selected_replicas):
-        source = result_path.joinpath('nnfit', 'replica_'+str(srep+1))
-        dest   = target_path.joinpath('replica_'+str(drep+1))
-        relativepath = os.path.relpath(source, target_path)
-        sys.path.append(target_path)
-        os.symlink(relativepath, dest)
+        # Symlink results to postfit directory
+        source_dir = result_path.joinpath('nnfit', 'replica_'+str(srep+1))
+        target_dir = target_path.joinpath('replica_'+str(drep+1))
+        relative_symlink(source_dir, target_dir)
+        # Symlink results to LHAPDF directory
+        source_grid = source_dir.joinpath(fitname+'.dat')
+        target_file = fitname+'_{:04d}.dat'.format(drep+1)
+        target_grid = LHAPDF_path.joinpath(target_file)
+        relative_symlink(source_grid, target_grid)
 
 
 if __name__ == "__main__":
