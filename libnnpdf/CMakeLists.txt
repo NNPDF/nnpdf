@@ -27,12 +27,6 @@ configure_file(
   "${PROJECT_SOURCE_DIR}/libnnpdf/src/NNPDF/common.h"
   )
 
-set(wrappersrc "${PROJECT_SOURCE_DIR}/libnnpdf/wrapper/src")
-configure_file(
-  "${PROJECT_SOURCE_DIR}/libnnpdf/wrapper/setup.py.in"
-  "${PROJECT_BINARY_DIR}/libnnpdf/wrapper/setup.py"
-  )
-
 # add preprocessor flag
 add_definitions(-DDEFAULT_NNPDF_PROFILE_PATH="${prefix}/share/NNPDF/nnprofile.yaml")
 
@@ -56,7 +50,7 @@ add_library(nnpdf SHARED src/common.cc
                          src/randomgenerator.cc
                          src/thpredictions.cc
                          src/utils.cc
-			 src/pathlib.cc)
+            			 src/pathlib.cc)
 
 target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${SQLITE3_LDFLAGS} ${LIBARCHIVE_LDFLAGS} ${YAML_LDFLAGS})
 

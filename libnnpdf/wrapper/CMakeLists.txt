@@ -1,22 +1,37 @@
-set(OUTPUT "${PROJECT_BINARY_DIR}/libnnpdf/wrapper/build")
+find_package(SWIG REQUIRED)
+find_package(PythonInterp 3 REQUIRED)
+find_package(PythonLibs   3 REQUIRED)
 
-add_custom_command(OUTPUT ${OUTPUT} DEPENDS nnpdf
-  COMMAND mkdir -p ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/pylibs/NNPDF
-  COMMAND cp ${PROJECT_SOURCE_DIR}/libnnpdf/wrapper/src/*.py ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/pylibs/NNPDF/
-  COMMAND find ${PROJECT_SOURCE_DIR}/libnnpdf/wrapper/src -maxdepth 1 -name "*.i" -print0 | xargs -0 -I {} ${SWIG} -c++ -outdir ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/pylibs/NNPDF -python -py3 -I${PROJECT_SOURCE_DIR}/libnnpdf/src {}
-  COMMAND mkdir -p ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/_sources
-  COMMAND mv ${PROJECT_SOURCE_DIR}/libnnpdf/wrapper/src/*.cxx ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/_sources
-  COMMAND ${PYTHON_EXECUTABLE} ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/setup.py build
-  )
+execute_process(
+  COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
+    import numpy as np 
+    print(np.get_include())"
+    OUTPUT_VARIABLE NUMPY_INCLUDE
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-add_custom_target(python-wrapper-nnpdf ALL DEPENDS ${OUTPUT})
+execute_process(
+  COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
+    from distutils.sysconfig import get_python_lib; 
+    print(get_python_lib())"
+    OUTPUT_VARIABLE PYTHON_SITE_PACKAGES 
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/setup.py install WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/libnnpdf/wrapper)")
+include(${SWIG_USE_FILE})
+include_directories(${NUMPY_INCLUDE})
+include_directories(${PYTHON_INCLUDE_DIRS})
 
-add_custom_target(wrapper-clean
-  COMMAND rm -rf  ${PROJECT_BINARY_DIR}/libnnpdf/_sources
-  COMMAND rm -rf  ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/build
-  COMMAND rm -rf  ${PROJECT_BINARY_DIR}/libnnpdfwrapper/dist
-  COMMAND rm -rf  ${PROJECT_BINARY_DIR}/libnnpdf/wrapper/pylibs
-  COMMAND pip uninstall nnpdf --yes
-)
+set_source_files_properties(./src/nnpdf.i PROPERTIES CPLUSPLUS ON)
+include_directories(../src)
+
+# Add swig module
+if (${CMAKE_VERSION} VERSION_LESS "3.8.0")
+    swig_add_module(nnpdf python ./src/nnpdf.i)
+else()
+    swig_add_library(nnpdf LANGUAGE python SOURCES ./src/nnpdf.i)
+endif()
+swig_link_libraries(nnpdf ${PROJECT_NAME} ${PYTHON_LIBRARIES})
+
+set(LIBNNPDF_WRAPPER_PREFIX ${PYTHON_SITE_PACKAGES}/NNPDF)
+install(TARGETS _nnpdf DESTINATION ${LIBNNPDF_WRAPPER_PREFIX})
+install(FILES ${CMAKE_BINARY_DIR}/libnnpdf/wrapper/nnpdf.py DESTINATION ${LIBNNPDF_WRAPPER_PREFIX})
+install(FILES ${CMAKE_SOURCE_DIR}/libnnpdf/wrapper/src/__init__.py DESTINATION ${LIBNNPDF_WRAPPER_PREFIX})
