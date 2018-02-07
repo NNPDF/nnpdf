@@ -6,17 +6,14 @@ __authors__ = 'Nathan Hartland, Zahari Kassabov'
 
 import pathlib
 import argparse
-import numpy
 from glob import glob
 import os.path
 
 from validphys import fitdata
+import fitveto
 
 import logging
 log = logging.getLogger(__name__)
-
-# Threshold for distribution vetos
-NSIGMA_DISCARD = 4
 
 LITERAL_FILES = ('chi2exps.log', 'nnfit.yml')
 REPLICA_FILES = ('dat', 'fitinfo', 'params', 'preproc', 'sumrules')
@@ -51,29 +48,6 @@ def verify_replica_files(path, prefix):
     return valid
 
 
-def available(mask):
-    """ Converts a boolean mask into a list of passing elements """
-    replicas = []
-    for i in range(0, len(mask)):
-        if mask[i]:
-            replicas.append(i)
-    return replicas
-
-
-def distribution_veto(dist):
-    """ For a given distribution (a list of floats), returns a boolean mask specifying the passing elements """
-    replica_mask = [True for i in dist]
-    while True:
-        passing = [dist[i] for i in available(replica_mask)]
-        average_pass = sum(passing)/len(passing)
-        stderr_pass  = numpy.std(passing)
-        # NOTE that this has always not been abs
-        new_mask = [i - average_pass < 4.0*stderr_pass for i in dist]
-        if sum(new_mask) == sum(replica_mask): break
-        replica_mask = new_mask
-    return replica_mask
-
-
 def main(results):
     verify_results_path(results)
     fitname = os.path.basename(results.rstrip('/'))
@@ -81,28 +55,15 @@ def main(results):
     # Find all replicas, and filter invalid results directories
     all_replicas   = glob(results + "/nnfit/replica_*/")
     valid_replicas = [verify_replica_files(path, fitname) for path in all_replicas]
-    valid_paths    = [all_replicas[i] for i in available(valid_replicas)]
+    valid_paths    = [all_replicas[i] for i in fitveto.available(valid_replicas)]
+    print(len(valid_paths), " valid replicas found")
+
+    # Read FitInfo and compute vetoes
     fitinfo = [fitdata.load_fitinfo(pathlib.Path(path), fitname) for path in valid_paths]
-    print(len(fitinfo), " valid replicas found")
+    fit_vetoes = fitveto.determine_vetoes(fitinfo)
 
-    # Setup distributions to veto upon
-    distributions = {"ChiSquared": [i.chi2 for i in fitinfo]}
-    #TODO ensure that all replicas have the same amount of arclengths
-    for i in range(0, len(fitinfo[0].arclengths)):
-        distributions["ArcLength_"+str(i)] = [j.arclengths[i] for j in fitinfo]
-
-    # Positivity veto
-    replica_mask = [replica.is_positive for replica in fitinfo]
-    print(str(sum(replica_mask)) + " replicas pass positivity")
-
-    # Distribution vetoes (chi2 and arc-lengths)
-    for key in distributions:
-        veto_mask = distribution_veto(distributions[key])
-        print(str(sum(veto_mask)), " replicas pass " + key)
-        replica_mask = [x & y for (x, y) in zip(replica_mask, veto_mask)]
-
-    print(sum(replica_mask), " replicas pass all vetoes")
-
+    for key in fit_vetoes:
+        print(sum(fit_vetoes[key]), " replicas pass " + key)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
