@@ -41,6 +41,15 @@ def check_results_path(path):
         return False
     return True
 
+def check_lhapdf_info(results_dir, fitname):
+    """ Check that an LHAPDF info metadata file is
+    present in the fit results """
+    info_path = results_dir.joinpath('nnfit', '%s.info' % fitname)
+    if not info_path:
+        log.warn('Cannot find info file at %' % info_path)
+        return False
+    return True
+
 #TODO This should establish if the .dat files are corrupted or not
 def check_replica_files(replica_path, prefix):
     """ Verification of a replica results directory at `replica_path`
