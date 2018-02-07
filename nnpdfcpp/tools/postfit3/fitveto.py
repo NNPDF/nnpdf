@@ -11,6 +11,8 @@ Current active vetoes:
 
 import numpy
 
+#TODO import into vp2
+
 # Threshold for distribution vetos
 NSIGMA_DISCARD = 4
 
