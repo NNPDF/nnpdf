@@ -1,0 +1,125 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from __future__ import print_function
+""" A script that analyses the vetoes for a completed fit"""
+__authors__ = 'Nathan Hartland, Zahari Kassabov'
+
+import pathlib
+import argparse
+import numpy
+from glob import glob
+import os.path
+
+import logging
+log = logging.getLogger(__name__)
+
+# Threshold for distribution vetos
+NSIGMA_DISCARD = 4
+
+LITERAL_FILES = ('chi2exps.log', 'nnfit.yml')
+REPLICA_FILES = ('dat', 'fitinfo', 'params', 'preproc', 'sumrules')
+
+
+def verify_results_path(path):
+    """ Returns true if the requested path is a results directory"""
+    path = pathlib.Path(path)
+    assert path.is_dir(), 'Path is not a directory %s' % path
+    assert (path / 'nnfit').is_dir(), 'Path "nnfit" is not a directory'
+
+
+def verify_replica_files(path, prefix):
+    """ Returns true if all required files are present in the requested
+        directory """
+
+    path = pathlib.Path(path)
+    if not path.is_dir():
+        log.warn("Invalid directory for replica %s" % path)
+        return False
+    valid = True
+    for f in LITERAL_FILES:
+        if not path/f:
+            log.warn("Missing file: ", path/f)
+            valid = False
+    for f in REPLICA_FILES:
+        if not path/(prefix+'.'+f):
+            log.warn("Missing file: ", path/f)
+            valid = False
+    if not valid:
+        log.warn("Found invalid replica %s" % path)
+    return valid
+
+
+class FitInfo:
+    """ Parses .fitinfo files """
+    def __init__(self, path, fitname):
+        fitinfo_path = path + fitname + ".fitinfo"
+        fitinfo_file = open(fitinfo_path, 'r')
+        fitinfo_line = fitinfo_file.readline().split()
+        fitinfo_arcl = fitinfo_file.readline().split()
+        fitinfo_file.close()
+
+        self.path       = path
+        self.chisquared = float(fitinfo_line[3])
+        self.positivity = fitinfo_line[4] == "POS_PASS"
+        self.arclength  = [float(i) for i in fitinfo_arcl]
+
+
+def available(mask):
+    """ Converts a boolean mask into a list of passing elements """
+    replicas = []
+    for i in range(0, len(mask)):
+        if mask[i]:
+            replicas.append(i)
+    return replicas
+
+
+def distribution_veto(dist):
+    """ For a given distribution (a list of floats), returns a boolean mask specifying the passing elements """
+    replica_mask = [True for i in dist]
+    while True:
+        passing = [dist[i] for i in available(replica_mask)]
+        average_pass = sum(passing)/len(passing)
+        stderr_pass  = numpy.std(passing)
+        # NOTE that this has always not been abs
+        new_mask = [i - average_pass < 4.0*stderr_pass for i in dist]
+        if sum(new_mask) == sum(replica_mask): break
+        replica_mask = new_mask
+    return replica_mask
+
+def main(results):
+    verify_results_path(results)
+    fitname = os.path.basename(results.rstrip('/'))
+
+    # Find all replicas, and filter invalid results directories
+    all_replicas   = glob(results + "/nnfit/replica_*/")
+    valid_replicas = [verify_replica_files(path, fitname) for path in all_replicas]
+    valid_paths    = [all_replicas[i] for i in available(valid_replicas)]
+    fitinfo = [FitInfo(path, fitname) for path in valid_paths]
+    print(len(fitinfo), " valid replicas found")
+
+    # Setup distributions to veto upon
+    distributions = {"ChiSquared": [i.chisquared for i in fitinfo]}
+    for i in range(0, len(fitinfo[0].arclength)):
+        distributions["ArcLength_"+str(i)] = [j.arclength[i] for j in fitinfo]
+
+    # Positivity veto
+    replica_mask = [replica.positivity for replica in fitinfo]
+    print(str(sum(replica_mask)) + " replicas pass positivity")
+
+    # Distribution vetoes (chi2 and arc-lengths)
+    for key in distributions:
+        veto_mask = distribution_veto(distributions[key])
+        print(str(sum(veto_mask)), " replicas pass " + key)
+        replica_mask = [x & y for (x, y) in zip(replica_mask, veto_mask)]
+
+    print(sum(replica_mask), " replicas pass all vetoes")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('results', nargs='?', help="Fit results folder")
+    args = parser.parse_args()
+    if not all((args.results)):
+        parser.error("Too few arguments: results.")
+    mainargs = vars(args)
+    main(**mainargs)
