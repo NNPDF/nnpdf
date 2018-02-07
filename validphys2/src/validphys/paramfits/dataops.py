@@ -257,7 +257,7 @@ def quadratic_as_determination(fits_as,
 
 @make_argcheck
 def _check_as_transform(as_transform):
-    values = (None, 'log', 'exp')
+    values = (None, 'log', 'exp', 'logshift')
     if not as_transform in values:
         raise CheckError(f"The allowed valued values for "
                          f"as_transform are {values}", str(as_transform),
@@ -292,20 +292,26 @@ def parabolic_as_determination(
     deviations will be used to compute statstics. Otherwise, if it is
     ``"robust"``, nedians and 68% intervals will be used.
 
-    as_transform can be None, 'log' or 'exp' and is applied to the as_values
-    and then reversed for the minima.
+    as_transform can be None, 'log', 'logshift' (``log(1+αs)``) or
+    'exp' and is applied to the as_values and then reversed for the
+    minima.
     """
     if as_transform == 'log':
         fits_as = np.log(fits_as)
+    elif as_transform == 'logshift':
+        fits_as = np.log(fits_as + 1)
     elif as_transform == 'exp':
         fits_as = np.exp(fits_as)
     minimums = _parabolic_as_determination(
                    fits_as,
                    fits_replica_data_with_discarded_replicas, badcurves)
+    # Invert the transform
     if as_transform == 'log':
         minimums = np.exp(minimums)
     elif as_transform == 'exp':
         minimums = np.log(minimums)
+    elif as_transform == 'logshift':
+        minimums = np.exp(minimums - 1)
     if parabolic_as_statistics == 'standard':
         res = StandardSampleWrapper(minimums)
     elif parabolic_as_statistics == 'robust':
