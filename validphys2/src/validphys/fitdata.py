@@ -26,24 +26,9 @@ from validphys import sumrules
 #t = blessings.Terminal()
 log = logging.getLogger(__name__)
 
-#TODO: These should be the actual filenames, without the redundant prefix
-REPLICA_FILES = (
-'dat',
-'fitinfo',
-'params',
-'preproc',
-'sumrules',
-)
-
-LITERAL_FILES = (
-'chi2exps.log',
-'GAMin.log',
-'nnfit.yml',
-)
-
 ReplicaSpec = namedtuple('ReplicaSpec', ('index', 'path', 'info'))
 
-FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'pos_status', 'arclenghts'))
+FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'pos_status', 'arclengths'))
 def load_fitinfo(replica_path, prefix):
     """Process the data in the ".fitinfo" file of a single replica."""
     p = replica_path / (prefix + '.fitinfo')
@@ -56,9 +41,9 @@ def load_fitinfo(replica_path, prefix):
         chi2 = float(next(props))
         pos_status = next(props)
         line = next(f)
-        arclenghts = np.fromstring(line, sep=' ')
+        arclengths = np.fromstring(line, sep=' ')
 
-    return FitInfo(nite, training, validation, chi2, pos_status, arclenghts)
+    return FitInfo(nite, training, validation, chi2, pos_status, arclengths)
 
 #TODO: Produce a more informative .sumrules file.
 def load_sumrules(replica_path, prefix):
