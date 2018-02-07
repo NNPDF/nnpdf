@@ -10,6 +10,7 @@ import pathlib
 import argparse
 from glob import glob
 
+from validphys import lhio
 from validphys import fitdata
 import fitveto
 
@@ -85,18 +86,18 @@ def main(results):
             shutil.rmtree(str(path))
         os.mkdir(path)
 
+    # Generate symlinks
     selected_replicas = fitveto.available(fit_vetoes["Total"])
     for drep, srep in enumerate(selected_replicas):
         # Symlink results to postfit directory
-        source_dir = result_path.joinpath('nnfit', 'replica_'+str(srep+1))
-        target_dir = target_path.joinpath('replica_'+str(drep+1))
+        source_dir = result_path.joinpath('nnfit', 'replica_%d' % (srep+1))
+        target_dir = target_path.joinpath('replica_%d' % (drep+1))
         relative_symlink(source_dir, target_dir)
         # Symlink results to LHAPDF directory
         source_grid = source_dir.joinpath(fitname+'.dat')
-        target_file = fitname+'_{:04d}.dat'.format(drep+1)
+        target_file = '%s_%04d.dat' % (fitname, drep+1)
         target_grid = LHAPDF_path.joinpath(target_file)
         relative_symlink(source_grid, target_grid)
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
