@@ -10,10 +10,12 @@ import pathlib
 import argparse
 from glob import glob
 
+import lhapdf
+
+import fitveto
 from validphys import lhio
 from validphys import fitdata
 from validphys.core import PDF
-import fitveto
 
 import logging
 log = logging.getLogger(__name__)
@@ -27,18 +29,25 @@ def relative_symlink(source, dest):
     relativepath = os.path.relpath(source, dest.parents[0])
     os.symlink(relativepath, dest)
 
-def main(results):
+
+def main(results, nrep):
     result_path = pathlib.Path(results).resolve()
     fitname = os.path.basename(results.rstrip('/'))
+    nnfit_path = result_path / 'nnfit'
     assert fitdata.check_results_path(result_path)
     assert fitdata.check_lhapdf_info(result_path, fitname)
 
+    nrep = int(nrep)
+    log.warn("Postfit aiming for %d replicas" % nrep)
+
     # Setup postfit log
-    postfitlog = logging.FileHandler(result_path/'nnfit/postfit.log', mode='w')
+    postfitlog = logging.FileHandler(nnfit_path/'postfit.log', mode='w')
     postfitlog.setLevel(logging.DEBUG)
     log.addHandler(postfitlog)
 
     # Find all replicas, and filter invalid results directories
+    # This glob defines what is considered a valid replica
+    # all the following code uses paths from this glob
     all_replicas   = glob(results + "/nnfit/replica_*/")
     valid_replicas = [fitdata.check_replica_files(path, fitname) for path in all_replicas]
     valid_paths    = [all_replicas[i] for i in fitveto.available(valid_replicas)]
@@ -54,34 +63,50 @@ def main(results):
 
     # Generate postfit and LHAPDF directory
     target_path = result_path/'postfit'
-    LHAPDF_path = result_path/'nnfit'/fitname
+    LHAPDF_path = nnfit_path/fitname
     all_paths   = [target_path, LHAPDF_path]
     for path in all_paths:
         if path.is_dir():
-            log.warning("WARNING: Removing existing postfit and LHAPDF directories")
+            log.warning("WARNING: Removing existing postfit directories")
             shutil.rmtree(str(path))
         os.mkdir(path)
 
-    # Copy info file
-    info_source_path = result_path.joinpath('nnfit', '%s.info' % fitname)
-    info_target_path = result_path.joinpath('nnfit', fitname, '%s.info' % fitname)
-    shutil.copy2(info_source_path, info_target_path)
+    # Final selection
+    if sum(fit_vetoes["Total"]) < int(nrep):
+        log.warning("Number of requested replicas is too large")
+        exit()
+    # Select the first nrep passing replicas
+    selected_replicas = fitveto.available(fit_vetoes["Total"])[:nrep]
 
     # Generate symlinks
-    selected_replicas = fitveto.available(fit_vetoes["Total"])
     for drep, srep in enumerate(selected_replicas):
         # Symlink results to postfit directory
-        source_dir = result_path.joinpath('nnfit', 'replica_%d' % (srep+1))
+        source_dir = pathlib.Path(valid_paths[srep]).resolve()
         target_dir = target_path.joinpath('replica_%d' % (drep+1))
         relative_symlink(source_dir, target_dir)
-        # Symlink results to LHAPDF directory
+        # Symlink results to pdfset directory
         source_grid = source_dir.joinpath(fitname+'.dat')
         target_file = '%s_%04d.dat' % (fitname, drep+1)
         target_grid = LHAPDF_path.joinpath(target_file)
         relative_symlink(source_grid, target_grid)
 
+    # Copy info file
+    info_source_path = nnfit_path.joinpath('%s.info' % fitname)
+    info_target_path = nnfit_path.joinpath(fitname, '%s.info' % fitname)
+    shutil.copy2(info_source_path, info_target_path)
+
+    # Generate final PDF with replica 0 and install
+    log.warn("Beginning construction of replica 0")
+    lhapdf.pathsPrepend(str(nnfit_path))
+    generatingPDF = PDF(fitname)
+    lhio.new_pdf_from_indexes(generatingPDF, range(1, len(selected_replicas)),
+                              set_name=fitname, folder=target_path,
+                              installgrid=True, use_rep0grid=False)
+    log.warn("Postfit complete")
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument('nrep', nargs='?', help="Number of requested replicas")
     parser.add_argument('results', nargs='?', help="Fit results folder")
     args = parser.parse_args()
     if not all((args.results)):
