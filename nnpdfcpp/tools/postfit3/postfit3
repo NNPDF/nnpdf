@@ -10,6 +10,8 @@ import numpy
 from glob import glob
 import os.path
 
+from validphys import fitdata
+
 import logging
 log = logging.getLogger(__name__)
 
@@ -49,21 +51,6 @@ def verify_replica_files(path, prefix):
     return valid
 
 
-class FitInfo:
-    """ Parses .fitinfo files """
-    def __init__(self, path, fitname):
-        fitinfo_path = path + fitname + ".fitinfo"
-        fitinfo_file = open(fitinfo_path, 'r')
-        fitinfo_line = fitinfo_file.readline().split()
-        fitinfo_arcl = fitinfo_file.readline().split()
-        fitinfo_file.close()
-
-        self.path       = path
-        self.chisquared = float(fitinfo_line[3])
-        self.positivity = fitinfo_line[4] == "POS_PASS"
-        self.arclength  = [float(i) for i in fitinfo_arcl]
-
-
 def available(mask):
     """ Converts a boolean mask into a list of passing elements """
     replicas = []
@@ -86,6 +73,7 @@ def distribution_veto(dist):
         replica_mask = new_mask
     return replica_mask
 
+
 def main(results):
     verify_results_path(results)
     fitname = os.path.basename(results.rstrip('/'))
@@ -94,16 +82,17 @@ def main(results):
     all_replicas   = glob(results + "/nnfit/replica_*/")
     valid_replicas = [verify_replica_files(path, fitname) for path in all_replicas]
     valid_paths    = [all_replicas[i] for i in available(valid_replicas)]
-    fitinfo = [FitInfo(path, fitname) for path in valid_paths]
+    fitinfo = [fitdata.load_fitinfo(pathlib.Path(path), fitname) for path in valid_paths]
     print(len(fitinfo), " valid replicas found")
 
     # Setup distributions to veto upon
-    distributions = {"ChiSquared": [i.chisquared for i in fitinfo]}
-    for i in range(0, len(fitinfo[0].arclength)):
-        distributions["ArcLength_"+str(i)] = [j.arclength[i] for j in fitinfo]
+    distributions = {"ChiSquared": [i.chi2 for i in fitinfo]}
+    #TODO ensure that all replicas have the same amount of arclengths
+    for i in range(0, len(fitinfo[0].arclengths)):
+        distributions["ArcLength_"+str(i)] = [j.arclengths[i] for j in fitinfo]
 
     # Positivity veto
-    replica_mask = [replica.positivity for replica in fitinfo]
+    replica_mask = [replica.is_positive for replica in fitinfo]
     print(str(sum(replica_mask)) + " replicas pass positivity")
 
     # Distribution vetoes (chi2 and arc-lengths)
