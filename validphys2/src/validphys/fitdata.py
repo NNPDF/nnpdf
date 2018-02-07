@@ -21,12 +21,44 @@ from validphys.plotoptions import get_info
 from validphys import sumrules
 
 #TODO: Add more stuff here as needed for postfit
-
+LITERAL_FILES = ('chi2exps.log', 'nnfit.yml')
+REPLICA_FILES = ('dat', 'fitinfo', 'params', 'preproc', 'sumrules')
 
 #t = blessings.Terminal()
 log = logging.getLogger(__name__)
 
-ReplicaSpec = namedtuple('ReplicaSpec', ('index', 'path', 'info'))
+#ReplicaSpec = namedtuple('ReplicaSpec', ('index', 'path', 'info'))
+
+#TODO setup make_check on these
+def check_results_path(path):
+    """ Returns True if the requested path is a valid results directory,
+    i.e if it is a directory and has a 'nnfit' subdirectory"""
+    assert path.is_dir(), 'Path is not a directory %s' % path
+    assert (path / 'nnfit').is_dir(), 'Path "nnfit" is not a directory'
+
+
+#TODO This should establish if the .dat files are corrupted or not
+def check_replica_files(replica_path, prefix):
+    """ Verification of a replica results directory at `replica_path`
+    for a fit named `prefix`. Returns True if the results
+    directory is complete"""
+
+    path = pathlib.Path(replica_path)
+    if not path.is_dir():
+        log.warn("Invalid directory for replica %s" % path)
+        return False
+    valid = True
+    for f in LITERAL_FILES:
+        if not path/f:
+            log.warn("Missing file: ", path/f)
+            valid = False
+    for f in REPLICA_FILES:
+        if not path/(prefix+'.'+f):
+            log.warn("Missing file: ", path/f)
+            valid = False
+    if not valid:
+        log.warn("Found invalid replica %s" % path)
+    return valid
 
 FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'is_positive', 'arclengths'))
 def load_fitinfo(replica_path, prefix):
@@ -45,6 +77,7 @@ def load_fitinfo(replica_path, prefix):
     arclengths = np.fromstring(fitinfo_arcl, sep=' ')
 
     return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths)
+
 
 #TODO: Produce a more informative .sumrules file.
 def load_sumrules(replica_path, prefix):
