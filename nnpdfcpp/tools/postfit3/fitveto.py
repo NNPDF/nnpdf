@@ -30,13 +30,12 @@ def distribution_veto(dist):
     replica_mask = [True for i in dist]
     while True:
         passing = [dist[i] for i in available(replica_mask)]
-        average_pass = sum(passing)/len(passing)
+        average_pass = numpy.mean(passing)
         stderr_pass  = numpy.std(passing)
         # NOTE that this has always not been abs
         # i.e replicas that are lower than the average by more than 4std pass
-        new_mask = [i - average_pass < NSIGMA_DISCARD*stderr_pass for i in dist]
-        if sum(new_mask) == sum(replica_mask):
-            break
+        new_mask = dist - average_pass < NSIGMA_DISCARD*stderr_pass
+        if sum(new_mask) == sum(replica_mask): break
         replica_mask = new_mask
     return replica_mask
 
@@ -47,17 +46,19 @@ def determine_vetoes(fitinfo: list):
     Included in the dictionary is a 'Total' veto.
     """
     # Setup distributions to veto upon
+    # TODO ensure that all replicas have the same amount of arclengths
     distributions = {"ChiSquared": [i.chi2 for i in fitinfo]}
-    #TODO ensure that all replicas have the same amount of arclengths
     for i in range(0, len(fitinfo[0].arclengths)):
         distributions["ArcLength_"+str(i)] = [j.arclengths[i] for j in fitinfo]
 
     # Positivity veto
     vetoes = {"Positivity": [replica.is_positive for replica in fitinfo]}
+
     # Distribution vetoes
     for key in distributions:
         vetoes[key] = distribution_veto(distributions[key])
 
+    # Determine total veto
     vetoes["Total"] = [True for replica in fitinfo]
     for key in vetoes:
         vetoes["Total"] = [x & y for (x, y) in zip(vetoes["Total"], vetoes[key])]
