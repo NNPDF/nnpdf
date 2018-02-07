@@ -12,6 +12,7 @@ from glob import glob
 
 from validphys import lhio
 from validphys import fitdata
+from validphys.core import PDF
 import fitveto
 
 import logging
@@ -20,16 +21,17 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 log.addHandler(ch)
 
+
 def relative_symlink(source, dest):
     """ Forms a relative symlink between 'source' and 'dest' """
     relativepath = os.path.relpath(source, dest.parents[0])
     os.symlink(relativepath, dest)
 
-
 def main(results):
     result_path = pathlib.Path(results).resolve()
-    fitdata.check_results_path(result_path)
     fitname = os.path.basename(results.rstrip('/'))
+    assert fitdata.check_results_path(result_path)
+    assert fitdata.check_lhapdf_info(result_path, fitname)
 
     # Setup postfit log
     postfitlog = logging.FileHandler(result_path/'nnfit/postfit.log', mode='w')
@@ -59,6 +61,11 @@ def main(results):
             log.warning("WARNING: Removing existing postfit and LHAPDF directories")
             shutil.rmtree(str(path))
         os.mkdir(path)
+
+    # Copy info file
+    info_source_path = result_path.joinpath('nnfit', '%s.info' % fitname)
+    info_target_path = result_path.joinpath('nnfit', fitname, '%s.info' % fitname)
+    shutil.copy2(info_source_path, info_target_path)
 
     # Generate symlinks
     selected_replicas = fitveto.available(fit_vetoes["Total"])
