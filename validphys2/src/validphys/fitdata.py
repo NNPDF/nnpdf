@@ -33,9 +33,13 @@ log = logging.getLogger(__name__)
 def check_results_path(path):
     """ Returns True if the requested path is a valid results directory,
     i.e if it is a directory and has a 'nnfit' subdirectory"""
-    assert path.is_dir(), 'Path is not a directory %s' % path
-    assert (path / 'nnfit').is_dir(), 'Path "nnfit" is not a directory'
-
+    if not path.is_dir():
+        log.warn('Path is not a directory %s' % path)
+        return False
+    if not (path / 'nnfit').is_dir():
+        log.warn('Path %s is not a directory' % (str(path/'nnfit')))
+        return False
+    return True
 
 #TODO This should establish if the .dat files are corrupted or not
 def check_replica_files(replica_path, prefix):
