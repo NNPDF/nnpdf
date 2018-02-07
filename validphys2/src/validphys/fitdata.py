@@ -28,22 +28,23 @@ log = logging.getLogger(__name__)
 
 ReplicaSpec = namedtuple('ReplicaSpec', ('index', 'path', 'info'))
 
-FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'pos_status', 'arclengths'))
+FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'is_positive', 'arclengths'))
 def load_fitinfo(replica_path, prefix):
     """Process the data in the ".fitinfo" file of a single replica."""
     p = replica_path / (prefix + '.fitinfo')
-    with p.open() as f:
-        line = next(f)
-        props = iter(line.split())
-        nite = int(next(props))
-        validation = float(next(props))
-        training = float(next(props))
-        chi2 = float(next(props))
-        pos_status = next(props)
-        line = next(f)
-        arclengths = np.fromstring(line, sep=' ')
+    fitinfo_file = open(p, 'r')
+    fitinfo_line = fitinfo_file.readline().split() # General fit properties
+    fitinfo_arcl = fitinfo_file.readline()         # Replica arc-lengths
+    fitinfo_file.close()
 
-    return FitInfo(nite, training, validation, chi2, pos_status, arclengths)
+    n_iterations   = int(  fitinfo_line[0])
+    erf_validation = float(fitinfo_line[1])
+    erf_training   = float(fitinfo_line[2])
+    chisquared     = float(fitinfo_line[3])
+    is_positive    = fitinfo_line[4] == "POS_PASS"
+    arclengths = np.fromstring(fitinfo_arcl, sep=' ')
+
+    return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths)
 
 #TODO: Produce a more informative .sumrules file.
 def load_sumrules(replica_path, prefix):
