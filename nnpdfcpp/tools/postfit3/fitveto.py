@@ -25,14 +25,15 @@ def mask_to_indices(mask):
 def distribution_veto(dist):
     """ For a given distribution (a list of floats), returns a boolean mask
     specifying the passing elements """
-    replica_mask = [True for i in dist]
+    dist = np.asarray(dist)
+    replica_mask = np.ones_like(dist, dtype=bool)
     while True:
-        passing = [dist[i] for i in mask_to_indices(replica_mask)]
+        passing = dist[replica_mask]
         average_pass = np.mean(passing)
         stderr_pass  = np.std(passing)
         # NOTE that this has always not been abs
         # i.e replicas that are lower than the average by more than 4std pass
-        new_mask = dist - average_pass < NSIGMA_DISCARD*stderr_pass
+        new_mask = (dist - average_pass) < NSIGMA_DISCARD*stderr_pass
         if sum(new_mask) == sum(replica_mask): break
         replica_mask = new_mask
     return replica_mask
