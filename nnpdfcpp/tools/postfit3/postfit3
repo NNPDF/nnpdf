@@ -18,8 +18,8 @@ from validphys.core import PDF
 
 import logging
 log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
 log.addHandler(ch)
 
 
@@ -43,7 +43,6 @@ def main(results, nrep):
 
     # Setup postfit log
     postfitlog = logging.FileHandler(nnfit_path/'postfit.log', mode='w')
-    postfitlog.setLevel(logging.DEBUG)
     log.addHandler(postfitlog)
 
     # Find all replicas, and filter invalid results directories
@@ -52,15 +51,15 @@ def main(results, nrep):
     all_replicas   = glob(f"{results}/nnfit/replica_*/")
     valid_replicas = [fitdata.check_replica_files(path, fitname) for path in all_replicas]
     valid_paths    = [all_replicas[i] for i in fitveto.mask_to_indices(valid_replicas)]
-    log.warning(f"{len(all_replicas)} total replicas found")
-    log.warning(f"{len(valid_paths)} valid replicas found")
+    log.info(f"{len(all_replicas)} total replicas found")
+    log.info(f"{len(valid_paths)} valid replicas found")
 
     # Read FitInfo and compute vetoes
     fitinfo = [fitdata.load_fitinfo(pathlib.Path(path), fitname) for path in valid_paths]
     fit_vetoes = fitveto.determine_vetoes(fitinfo)
 
     for key in fit_vetoes:
-        log.warning("%d replicas pass %s" % (sum(fit_vetoes[key]), key))
+        log.info("%d replicas pass %s" % (sum(fit_vetoes[key]), key))
 
     # Generate postfit and LHAPDF directory
     target_path = result_path/'postfit'
@@ -68,13 +67,13 @@ def main(results, nrep):
     all_paths   = [target_path, LHAPDF_path]
     for path in all_paths:
         if path.is_dir():
-            log.warning("WARNING: Removing existing postfit directories")
+            log.warn(f"WARNING: Removing existing directory: {path}")
             shutil.rmtree(str(path))
         os.mkdir(path)
 
     # Final selection
     if sum(fit_vetoes["Total"]) < int(nrep):
-        log.warning("Number of requested replicas is too large")
+        log.warn("Number of requested replicas is too large")
         exit()
     # Select the first nrep passing replicas
     selected_replicas = fitveto.mask_to_indices(fit_vetoes["Total"])[:nrep]
@@ -98,13 +97,13 @@ def main(results, nrep):
     shutil.copy2(info_source_path, info_target_path)
 
     # Generate final PDF with replica 0 and install
-    log.warn("Beginning construction of replica 0")
+    log.info("Beginning construction of replica 0")
     lhapdf.pathsPrepend(str(nnfit_path))
     generatingPDF = PDF(fitname)
     lhio.new_pdf_from_indexes(generatingPDF, range(1, len(selected_replicas)),
                               set_name=fitname, folder=target_path,
                               installgrid=True, use_rep0grid=False)
-    log.warn("Postfit complete")
+    log.info("Postfit complete")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

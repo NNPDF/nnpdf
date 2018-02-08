@@ -67,7 +67,7 @@ def check_replica_files(replica_path, prefix):
             log.warn("Missing file: %s" % test_path)
             valid = False
     for f in REPLICA_FILES:
-        test_path = path/(prefix+'.'+f)
+        test_path = (path/prefix).with_suffix(f)
         if not test_path.is_file():
             log.warn("Missing file: %s" % test_path)
             valid = False
@@ -79,18 +79,17 @@ FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'is_p
 def load_fitinfo(replica_path, prefix):
     """Process the data in the ".fitinfo" file of a single replica."""
     p = replica_path / (prefix + '.fitinfo')
-    fitinfo_file = open(p, 'r')
-    fitinfo_line = fitinfo_file.readline().split() # General fit properties
-    fitinfo_arcl = fitinfo_file.readline()         # Replica arc-lengths
-    fitinfo_file.close()
+    with fitinfo_file as open(p, 'r'):
+        fitinfo_line = fitinfo_file.readline().split() # General fit properties
+        fitinfo_arcl = fitinfo_file.readline()         # Replica arc-lengths
+        fitinfo_file.close()
 
-    n_iterations   = int(  fitinfo_line[0])
-    erf_validation = float(fitinfo_line[1])
-    erf_training   = float(fitinfo_line[2])
-    chisquared     = float(fitinfo_line[3])
-    is_positive    = fitinfo_line[4] == "POS_PASS"
-    arclengths = np.fromstring(fitinfo_arcl, sep=' ')
-
+        n_iterations   = int(  fitinfo_line[0])
+        erf_validation = float(fitinfo_line[1])
+        erf_training   = float(fitinfo_line[2])
+        chisquared     = float(fitinfo_line[3])
+        is_positive    = fitinfo_line[4] == "POS_PASS"
+        arclengths = np.fromstring(fitinfo_arcl, sep=' ')
     return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths)
 
 

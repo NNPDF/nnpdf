@@ -58,7 +58,7 @@ def determine_vetoes(fitinfo: list):
         vetoes[key] = distribution_veto(distributions[key])
 
     # Determine total veto
-    vetoes["Total"] = [True for replica in fitinfo]
+    vetoes["Total"] = np.ones(len(fitinfo), dtype=bool)
     for key in vetoes:
         vetoes["Total"] = [x & y for (x, y) in zip(vetoes["Total"], vetoes[key])]
     return vetoes
