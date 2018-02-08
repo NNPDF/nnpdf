@@ -50,7 +50,7 @@ def main(results, nrep):
     # all the following code uses paths from this glob
     all_replicas   = glob(results + "/nnfit/replica_*/")
     valid_replicas = [fitdata.check_replica_files(path, fitname) for path in all_replicas]
-    valid_paths    = [all_replicas[i] for i in fitveto.available(valid_replicas)]
+    valid_paths    = [all_replicas[i] for i in fitveto.mask_to_indices(valid_replicas)]
     log.warning("%d total replicas found" % len(all_replicas))
     log.warning("%d valid replicas found" % len(valid_paths))
 
@@ -76,7 +76,7 @@ def main(results, nrep):
         log.warning("Number of requested replicas is too large")
         exit()
     # Select the first nrep passing replicas
-    selected_replicas = fitveto.available(fit_vetoes["Total"])[:nrep]
+    selected_replicas = fitveto.mask_to_indices(fit_vetoes["Total"])[:nrep]
 
     # Generate symlinks
     for drep, srep in enumerate(selected_replicas):
