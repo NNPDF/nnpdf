@@ -32,10 +32,8 @@ by the `NNPDF/binary-bootstrap` code. It can be cloned as:
 ```
 
 The script will ask for the password of the private NNPDF repositories. It is:
-
-``` BifaSali9 ``` 
-
-Once the script has finished, the nnpdf software can be installed by:
+``` BifaSali9 ```. Once the script has finished, the nnpdf software can be
+installed by:
 
 ```Shell 
     conda install nnpdf
@@ -101,23 +99,6 @@ Which will copy binaries and scripts to the `CMAKE_INSTALL_PREFIX` that you
 selected, while the content of `nnpdfcpp/data` folder will be copied to the
 `data_path` set in nnprofile.yaml.
 
-### NNPDF paths and URLS
-
-The paths that various codes (such as `nnfit` and `validphys`) will use to find
-and write resources, as well as the URLS to upload and download them are defined
-in a `nnprofile.yaml` file. By default, it is stored in the `libnnpdf` install
-prefix, under `<libnnpdf install prefix>/share/NNPDF/nnprofile.yaml`. For binary
-packages, the `libnnpdf` install prefix is simply the path of the conda
-environment where the packages is installed.  The paths and URLs can be
-modified: This can be useful to make the code work under specific cluster
-configurations, for example to avoid excessive I/O in NFS mounts. However, do
-not do it by editing the `nnprofile.yaml` file in the default location, since it
-will be overwritten every time that `libnnpdf` is installed.  Instead copy it to
-some other location, make the changes you wish, and define an
-`NNPDF_PROFILE_PATH` environment variable pointing to your modified file. For
-example, you could write in your `.bashrc`: ```shell export
-NNPDF_PROFILE_PATH=/home/user/mynnprofile.yaml ```
-
 ## Using the code
 
 ### Runcard
@@ -141,6 +122,23 @@ runcard and its md5 key.
 
 4. All programs take the `<runcard>` folder as input, e.g.  ```nnfit
 <replica_number> <runcard_folder> ``` where replica_number goes from 1-n.
+
+## NNPDF paths and URLS
+
+The paths that various codes (such as `nnfit` and `validphys`) will use to find
+and write resources, as well as the URLS to upload and download them are defined
+in a `nnprofile.yaml` file. By default, it is stored in the `libnnpdf` install
+prefix, under `<libnnpdf install prefix>/share/NNPDF/nnprofile.yaml`. For binary
+packages, the `libnnpdf` install prefix is simply the path of the conda
+environment where the packages is installed.  The paths and URLs can be
+modified: This can be useful to make the code work under specific cluster
+configurations, for example to avoid excessive I/O in NFS mounts. However, do
+not do it by editing the `nnprofile.yaml` file in the default location, since it
+will be overwritten every time that `libnnpdf` is installed.  Instead copy it to
+some other location, make the changes you wish, and define an
+`NNPDF_PROFILE_PATH` environment variable pointing to your modified file. For
+example, you could write in your `.bashrc`: ```shell export
+NNPDF_PROFILE_PATH=/home/user/mynnprofile.yaml ```
 
 ### Code development policy/rules
 
