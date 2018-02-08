@@ -31,10 +31,12 @@ def relative_symlink(source, dest):
 
 def main(results, nrep):
     result_path = pathlib.Path(results).resolve()
-    fitname = os.path.basename(results.rstrip('/'))
+    fitname = result_path.name
     nnfit_path = result_path / 'nnfit'
-    assert fitdata.check_results_path(result_path)
-    assert fitdata.check_lhapdf_info(result_path, fitname)
+    if not fitdata.check_results_path(result_path):
+        raise RuntimeError('Postfit cannot find a valid results path')
+    if not fitdata.check_lhapdf_info(result_path, fitname):
+        raise RuntimeError('Postfit cannot find a valid LHAPDF info file')
 
     nrep = int(nrep)
     log.warn("Postfit aiming for %d replicas" % nrep)
@@ -47,11 +49,11 @@ def main(results, nrep):
     # Find all replicas, and filter invalid results directories
     # This glob defines what is considered a valid replica
     # all the following code uses paths from this glob
-    all_replicas   = glob(results + "/nnfit/replica_*/")
+    all_replicas   = glob(f"{results}/nnfit/replica_*/")
     valid_replicas = [fitdata.check_replica_files(path, fitname) for path in all_replicas]
     valid_paths    = [all_replicas[i] for i in fitveto.mask_to_indices(valid_replicas)]
-    log.warning("%d total replicas found" % len(all_replicas))
-    log.warning("%d valid replicas found" % len(valid_paths))
+    log.warning(f"{len(all_replicas)} total replicas found")
+    log.warning(f"{len(valid_paths)} valid replicas found")
 
     # Read FitInfo and compute vetoes
     fitinfo = [fitdata.load_fitinfo(pathlib.Path(path), fitname) for path in valid_paths]
@@ -85,7 +87,8 @@ def main(results, nrep):
         relative_symlink(source_dir, target_dir)
         # Symlink results to pdfset directory
         source_grid = source_dir.joinpath(fitname+'.dat')
-        target_file = '%s_%04d.dat' % (fitname, drep+1)
+        #target_file = '%s_%04d.dat' % (fitname, drep+1)
+        target_file = f'{fitname}_{drep+1:04d}.dat'
         target_grid = LHAPDF_path.joinpath(target_file)
         relative_symlink(source_grid, target_grid)
 
