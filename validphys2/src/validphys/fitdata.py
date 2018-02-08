@@ -22,12 +22,10 @@ from validphys import sumrules
 
 #TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']
-REPLICA_FILES = ['dat', 'fitinfo', 'params', 'preproc', 'sumrules']
+REPLICA_FILES = ['.dat', '.fitinfo', '.params', '.preproc', '.sumrules']
 
 #t = blessings.Terminal()
 log = logging.getLogger(__name__)
-
-#ReplicaSpec = namedtuple('ReplicaSpec', ('index', 'path', 'info'))
 
 #TODO setup make_check on these
 def check_results_path(path):
@@ -79,10 +77,9 @@ FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'is_p
 def load_fitinfo(replica_path, prefix):
     """Process the data in the ".fitinfo" file of a single replica."""
     p = replica_path / (prefix + '.fitinfo')
-    with fitinfo_file as open(p, 'r'):
+    with open(p, 'r') as fitinfo_file:
         fitinfo_line = fitinfo_file.readline().split() # General fit properties
         fitinfo_arcl = fitinfo_file.readline()         # Replica arc-lengths
-        fitinfo_file.close()
 
         n_iterations   = int(  fitinfo_line[0])
         erf_validation = float(fitinfo_line[1])
