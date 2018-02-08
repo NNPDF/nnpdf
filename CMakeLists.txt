@@ -91,3 +91,5 @@ add_subdirectory(libnnpdf)
 # nnpdfcpp configuration
 add_subdirectory(nnpdfcpp)
 
+# install validphys2
+install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install -e ${PROJECT_SOURCE_DIR}/validphys2)")
