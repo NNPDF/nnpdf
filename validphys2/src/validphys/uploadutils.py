@@ -175,16 +175,19 @@ class FitUploader(FileUploader):
 
     def compress(self, output_path):
         """Compress the folder and put in in a directory inside its parent."""
+        #make_archive fails if we give it relative paths for some reason
+        output_path = output_path.resolve()
         tempdir = tempfile.mkdtemp(prefix='fit_upload', dir=output_path.parent)
         log.info(f"Compressing fit to {tempdir}")
-        name = pathlib.Path(tempdir)/output_path.name
+        archive_path_without_extension = pathlib.Path(tempdir)/(output_path.name)
         try:
-            shutil.make_archive(base_name=name, format='gztar',
+            shutil.make_archive(base_name=archive_path_without_extension,
+                                format='gztar',
                             root_dir=output_path.parent, base_dir=output_path)
         except Exception as e:
             log.error(f"Couldn't compress archive: {e}")
             raise UploadError(e) from e
-        return tempdir, name
+        return tempdir, archive_path_without_extension
 
 
     def upload_output(self, output_path):
