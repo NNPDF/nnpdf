@@ -9,7 +9,7 @@ Current active vetoes:
    ArclengthX - Replicas with ArcLengthX > NSIGMA_DISCARD*StandardDev + Average
 """
 
-import numpy
+import numpy as np
 
 #TODO import into vp2
 
@@ -17,13 +17,9 @@ import numpy
 NSIGMA_DISCARD = 4
 
 
-def available(mask):
+def mask_to_indices(mask):
     """ Converts a boolean mask into a list of passing elements """
-    replicas = []
-    for i in range(0, len(mask)):
-        if mask[i]:
-            replicas.append(i)
-    return replicas
+    return np.ravel(np.argwhere(mask))
 
 
 def distribution_veto(dist):
@@ -31,9 +27,9 @@ def distribution_veto(dist):
     specifying the passing elements """
     replica_mask = [True for i in dist]
     while True:
-        passing = [dist[i] for i in available(replica_mask)]
-        average_pass = numpy.mean(passing)
-        stderr_pass  = numpy.std(passing)
+        passing = [dist[i] for i in mask_to_indices(replica_mask)]
+        average_pass = np.mean(passing)
+        stderr_pass  = np.std(passing)
         # NOTE that this has always not been abs
         # i.e replicas that are lower than the average by more than 4std pass
         new_mask = dist - average_pass < NSIGMA_DISCARD*stderr_pass
