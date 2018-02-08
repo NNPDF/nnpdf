@@ -26,20 +26,20 @@ The master version of the `nnpdf` package and its dependencies can be obtained
 in binary format, as a conda package. Installation of the conda package is managed
 by the `NNPDF/binary-bootstrap` code. It can be cloned as: 
 
-    ```Shell 
+```Shell 
     git clone git@github.com:NNPDF/binary-bootstrap.git 
     ./binary-botstrap/bootstrap.sh 
-    ```
+```
 
 The script will ask for the password of the private NNPDF repositories. It is:
 
-    ``` BifaSali9 ``` 
+``` BifaSali9 ``` 
 
 Once the script has finished, the nnpdf software can be installed by:
 
-    ```Shell 
+```Shell 
     conda install nnpdf
-    ```
+```
 
 When the packages are installed, the necessary binaries are added to the `bin/`
 directory of the corresponding conda environment (which is typically in the
@@ -135,11 +135,11 @@ only required configuration input required for many programs of this repository.
 2. Go to `<data_path>` and download the specific theory folder using
 `disp_theory.py` and passing the `theoryid` of your runcard as theory number.
 
-3. Filter the data: ```Shell filter <runcard>.yml ``` this command will generate
+3. Filter the data: ```filter <runcard>.yml``` this command will generate
 a `<runcard>` folder in the current directory with a copy of the original YAML
 runcard and its md5 key.
 
-4. All programs take the `<runcard>` folder as input, e.g.  ```Shell nnfit
+4. All programs take the `<runcard>` folder as input, e.g.  ```nnfit
 <replica_number> <runcard_folder> ``` where replica_number goes from 1-n.
 
 ### Code development policy/rules
