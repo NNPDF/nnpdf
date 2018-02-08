@@ -86,21 +86,20 @@ def main(results, nrep):
         relative_symlink(source_dir, target_dir)
         # Symlink results to pdfset directory
         source_grid = source_dir.joinpath(fitname+'.dat')
-        #target_file = '%s_%04d.dat' % (fitname, drep+1)
         target_file = f'{fitname}_{drep+1:04d}.dat'
         target_grid = LHAPDF_path.joinpath(target_file)
         relative_symlink(source_grid, target_grid)
 
     # Copy info file
-    info_source_path = nnfit_path.joinpath('%s.info' % fitname)
-    info_target_path = nnfit_path.joinpath(fitname, '%s.info' % fitname)
+    info_source_path = nnfit_path.joinpath(f'{fitname}.info')
+    info_target_path = nnfit_path.joinpath(fitname, f'{fitname}.info')
     shutil.copy2(info_source_path, info_target_path)
 
     # Generate final PDF with replica 0 and install
     log.info("Beginning construction of replica 0")
     lhapdf.pathsPrepend(str(nnfit_path))
     generatingPDF = PDF(fitname)
-    lhio.new_pdf_from_indexes(generatingPDF, range(1, len(selected_replicas)),
+    lhio.new_pdf_from_indexes(generatingPDF, range(1, len(selected_replicas)+1),
                               set_name=fitname, folder=target_path,
                               installgrid=True, use_rep0grid=False)
     log.info("Postfit complete")
