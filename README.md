@@ -1,4 +1,6 @@
-# NNPDF/nnpdf The main repository with the NNPDF framework. 
+# NNPDF/nnpdf
+
+The main repository of the NNPDF framework. 
 
 This project contains the following components:
 - libnnpdf: core NNPDF utility library.
@@ -24,7 +26,10 @@ The master version of the `nnpdf` package and its dependencies can be obtained
 in binary format, as a conda package. Installation of the conda package is managed
 by the `NNPDF/binary-bootstrap` code. It can be cloned as: 
 
-    ```Shell git clone git@github.com:NNPDF/binary-bootstrap.git ./binary-botstrap/bootstrap.sh ```
+    ```Shell 
+    git clone git@github.com:NNPDF/binary-bootstrap.git 
+    ./binary-botstrap/bootstrap.sh 
+    ```
 
 The script will ask for the password of the private NNPDF repositories. It is:
 
@@ -32,7 +37,9 @@ The script will ask for the password of the private NNPDF repositories. It is:
 
 Once the script has finished, the nnpdf software can be installed by:
 
-```Shell conda install nnpdf```
+    ```Shell 
+    conda install nnpdf
+    ```
 
 When the packages are installed, the necessary binaries are added to the `bin/`
 directory of the corresponding conda environment (which is typically in the
@@ -55,7 +62,7 @@ http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html
 If you intend to work on the code, then building from source is the recommended
 installation procedure.
 
-# Prerequisites
+#### Prerequisites
 - cmake
 - pkg-config
 - lhapdf6
