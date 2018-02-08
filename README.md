@@ -50,10 +50,8 @@ By default, data files (both from theory and experiment) are installed to:
 These paths can be changed by tweaking `nnprofile.yaml` as described in [NNPDF
 paths and URLS](#nnpdf-paths-and-urls).
 
-A detailed validphys2 guide including conda installation instructions can be
-found here:
-
-http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html
+Detailed conda installation instructions can be found in the [validphy2 guide](
+http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html)
 
 ### From source
 
