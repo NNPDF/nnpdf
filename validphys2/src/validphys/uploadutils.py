@@ -177,7 +177,8 @@ class FitUploader(FileUploader):
         """Compress the folder and put in in a directory inside its parent."""
         #make_archive fails if we give it relative paths for some reason
         output_path = output_path.resolve()
-        tempdir = tempfile.mkdtemp(prefix='fit_upload', dir=output_path.parent)
+        tempdir = tempfile.mkdtemp(prefix='fit_upload_deleteme_',
+                                   dir=output_path.parent)
         log.info(f"Compressing fit to {tempdir}")
         archive_path_without_extension = pathlib.Path(tempdir)/(output_path.name)
         try:

@@ -552,7 +552,7 @@ class RemoteLoader(LoaderBase):
         if not fitname in self.remote_fits:
             raise FitNotFound("Could not find fit '{}' in remote index {}".format(fitname, self.fit_index))
 
-        tempdir = pathlib.Path(tempfile.mkdtemp(prefix='fit_download',
+        tempdir = pathlib.Path(tempfile.mkdtemp(prefix='fit_download_deleteme_',
                                                 dir=self.resultspath))
         download_and_extract(self.remote_fits[fitname], tempdir)
         #Handle old-style fits compressed with 'results' as root.
