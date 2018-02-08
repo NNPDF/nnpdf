@@ -21,8 +21,8 @@ from validphys.plotoptions import get_info
 from validphys import sumrules
 
 #TODO: Add more stuff here as needed for postfit
-LITERAL_FILES = ('chi2exps.log', 'nnfit.yml')
-REPLICA_FILES = ('dat', 'fitinfo', 'params', 'preproc', 'sumrules')
+LITERAL_FILES = ['chi2exps.log']
+REPLICA_FILES = ['dat', 'fitinfo', 'params', 'preproc', 'sumrules']
 
 #t = blessings.Terminal()
 log = logging.getLogger(__name__)
@@ -45,7 +45,7 @@ def check_lhapdf_info(results_dir, fitname):
     """ Check that an LHAPDF info metadata file is
     present in the fit results """
     info_path = results_dir.joinpath('nnfit', '%s.info' % fitname)
-    if not info_path:
+    if not info_path.is_file():
         log.warn('Cannot find info file at %' % info_path)
         return False
     return True
@@ -62,12 +62,14 @@ def check_replica_files(replica_path, prefix):
         return False
     valid = True
     for f in LITERAL_FILES:
-        if not path/f:
-            log.warn("Missing file: ", path/f)
+        test_path = path/f
+        if not test_path.is_file():
+            log.warn("Missing file: %s" % test_path)
             valid = False
     for f in REPLICA_FILES:
-        if not path/(prefix+'.'+f):
-            log.warn("Missing file: ", path/f)
+        test_path = path/(prefix+'.'+f)
+        if not test_path.is_file():
+            log.warn("Missing file: %s" % test_path)
             valid = False
     if not valid:
         log.warn("Found invalid replica %s" % path)
