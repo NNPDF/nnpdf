@@ -152,7 +152,7 @@ def rep_matrix(gridlist):
 def _index_to_path(set_folder, set_name,  index):
     return set_folder/('%s_%04d.dat' % (set_name, index))
 
-def generate_replica0(pdf, extra_fields=None):
+def generate_replica0(pdf, rep0grid=None, extra_fields=None):
     """ Generates a replica 0 as an average over an existing set of LHAPDF
         replicas and outputs it to the PDF's parent folder
 
@@ -161,6 +161,9 @@ def generate_replica0(pdf, extra_fields=None):
     pdf : validphys.core.PDF
         An existing validphys PDF object from which the average replica will be
         (re-)computed
+
+    rep0grid: result of load_replica (whatever that is)
+        *Zahari, please fill this in*
     """
 
     if extra_fields is not None:
@@ -174,12 +177,12 @@ def generate_replica0(pdf, extra_fields=None):
     loaded_grids = {}
     grids = []
 
-    for replica in range(1, len(pdf)):
-        if replica in loaded_grids:
-            grid = loaded_grids[replica]
+    for irep in range(1, len(pdf)):
+        if irep in loaded_grids:
+            grid = loaded_grids[irep]
         else:
-            header, grid = load_replica(pdf, replica, None)
-            loaded_grids[replica] = grid
+            header, grid = load_replica(pdf, irep, rep0grids=rep0grid)
+            loaded_grids[irep] = grid
         grids.append(grid)
 
     # This takes care of failing if headers don't match
@@ -187,7 +190,8 @@ def generate_replica0(pdf, extra_fields=None):
         M = rep_matrix(grids)
     except ValueError as e:
         raise ValueError("Null values found in replica grid matrix. "
-                         "This may indicate that the headers don't match") from e
+                         "This may indicate that the headers don't match"
+                         "If this is intentional try using use_rep0grid=True") from e
     write_replica(0, set_root, header, M.mean(axis=1))
 
 def new_pdf_from_indexes(
