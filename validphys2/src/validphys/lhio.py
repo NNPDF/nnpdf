@@ -266,9 +266,11 @@ def new_pdf_from_indexes(
         shutil.copy(original_path, new_path)
 
     # Generate replica 0
-    lhapdf.pathsPrepend(str(folder))
+    oldpaths = lhapdf.paths()
+    lhapdf.setPaths([str(folder)])
     generatedPDF = PDF(set_name)
     generate_replica0(generatedPDF, rep0grid)
+    lhapdf.setPaths(oldpaths)
 
     if installgrid:
         newpath = pathlib.Path(lhaindex.get_lha_datapath()) /  set_name
