@@ -15,6 +15,7 @@ import yaml
 import lhapdf
 
 from validphys import lhaindex
+from validphys.core import PDF
 
 log = logging.getLogger(__name__)
 
@@ -254,34 +255,20 @@ def new_pdf_from_indexes(
             else:
                 new_file.write(line)
 
-
     if use_rep0grid:
         _, rep0grid = load_replica(pdf, 0)
     else:
         rep0grid = None
 
-
-    loaded_grids = {}
-    grids = []
-
     for newindex,oldindex in enumerate(indexes, 1):
         original_path = _index_to_path(original_folder, pdf, oldindex)
         new_path = _index_to_path(set_root, set_name, newindex)
         shutil.copy(original_path, new_path)
-        if oldindex in loaded_grids:
-            grid = loaded_grids[oldindex]
-        else:
-            header, grid = load_replica(pdf,oldindex, kin_grids=rep0grid)
-            loaded_grids[oldindex] = grid
-        grids.append(grid)
-    #This takes care of failing if headers don't match
-    try:
-        M = rep_matrix(grids)
-    except ValueError as e:
-        raise ValueError("Null values found in replica grid matrix. "
-                         "This may indicate that the headers don't match. "
-                         "Try using use_rep0grid=True") from e
-    write_replica(0, set_root, header, M.mean(axis=1))
+
+    # Generate replica 0
+    lhapdf.pathsPrepend(str(folder))
+    generatedPDF = PDF(set_name)
+    generate_replica0(generatedPDF, rep0grid)
 
     if installgrid:
         newpath = pathlib.Path(lhaindex.get_lha_datapath()) /  set_name
