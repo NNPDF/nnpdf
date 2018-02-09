@@ -1,7 +1,4 @@
 Better/actually working argument parsing
 More informative output
 Put fitveto.py into vp2
-Make a lighter version of new_pdf_from_indices
-    that doesn't install all the files, just computes rep0
-    and installs
 Check whether or not this works with Tommaso's difficult fit.
