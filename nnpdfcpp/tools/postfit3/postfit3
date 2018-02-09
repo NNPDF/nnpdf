@@ -62,14 +62,13 @@ def main(results, nrep):
         log.info("%d replicas pass %s" % (sum(fit_vetoes[key]), key))
 
     # Generate postfit and LHAPDF directory
-    target_path = result_path/'postfit'
-    LHAPDF_path = nnfit_path/fitname
-    all_paths   = [target_path, LHAPDF_path]
-    for path in all_paths:
-        if path.is_dir():
-            log.warn(f"WARNING: Removing existing directory: {path}")
-            shutil.rmtree(str(path))
-        os.mkdir(path)
+    postfit_path = result_path/'postfit'
+    LHAPDF_path = postfit_path/fitname
+    if postfit_path.is_dir():
+        log.warn(f"WARNING: Removing existing postfit directory: {postfit_path}")
+        shutil.rmtree(str(postfit_path))
+    os.mkdir(postfit_path)
+    os.mkdir(LHAPDF_path)
 
     # Final selection
     if sum(fit_vetoes["Total"]) < nrep:
@@ -82,7 +81,7 @@ def main(results, nrep):
     for drep, srep in enumerate(selected_replicas):
         # Symlink results to postfit directory
         source_dir = pathlib.Path(valid_paths[srep]).resolve()
-        target_dir = target_path.joinpath('replica_%d' % (drep+1))
+        target_dir = postfit_path.joinpath('replica_%d' % (drep+1))
         relative_symlink(source_dir, target_dir)
         # Symlink results to pdfset directory
         source_grid = source_dir.joinpath(fitname+'.dat')
@@ -92,15 +91,16 @@ def main(results, nrep):
 
     # Copy info file
     info_source_path = nnfit_path.joinpath(f'{fitname}.info')
-    info_target_path = nnfit_path.joinpath(fitname, f'{fitname}.info')
+    info_target_path = LHAPDF_path.joinpath(f'{fitname}.info')
     shutil.copy2(info_source_path, info_target_path)
     os.system(f"sed -i '' 's/REPLACE_NREP/{nrep+1}/g' {info_target_path}")
 
     # Generate final PDF with replica 0 and install
     log.info("Beginning construction of replica 0")
-    lhapdf.pathsPrepend(str(nnfit_path))
+    lhapdf.pathsPrepend(str(postfit_path))
     generatingPDF = PDF(fitname)
     lhio.generate_replica0(generatingPDF)
+    lhapdf.mkPDF(fitname, 0)
     log.info("Postfit complete")
 
 if __name__ == "__main__":

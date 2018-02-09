@@ -108,7 +108,10 @@ def _rep_to_buffer(out, header, subgrids):
 
 def write_replica(rep, set_root, header, subgrids):
     suffix = str(rep).zfill(4)
-    with open(set_root / f'{set_root.name}_{suffix}.dat', 'wb') as out:
+    target_file = set_root / f'{set_root.name}_{suffix}.dat'
+    if target_file.is_file():
+        log.warn(f"Overwriting replica file {target_file}")
+    with open(target_file, 'wb') as out:
         _rep_to_buffer(out, header, subgrids)
 
 def load_all_replicas(pdf, db=None):
@@ -171,7 +174,6 @@ def generate_replica0(pdf, extra_fields=None):
     loaded_grids = {}
     grids = []
 
-    print(len(pdf))
     for replica in range(1, len(pdf)):
         if replica in loaded_grids:
             grid = loaded_grids[replica]
