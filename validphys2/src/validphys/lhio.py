@@ -149,6 +149,44 @@ def rep_matrix(gridlist):
 def _index_to_path(set_folder, set_name,  index):
     return set_folder/('%s_%04d.dat' % (set_name, index))
 
+def generate_replica0(pdf, extra_fields=None):
+    """ Generates a replica 0 as an average over an existing set of LHAPDF
+        replicas and outputs it to the PDF's parent folder
+
+    Parameters
+    -----------
+    pdf : validphys.core.PDF
+        An existing validphys PDF object from which the average replica will be
+        (re-)computed
+    """
+
+    if extra_fields is not None:
+        raise NotImplementedError()
+
+    set_info = pathlib.Path(pdf.infopath)
+    set_root = set_info.parent
+    if not set_root.exists():
+        raise RuntimeError(f"Target directory {set_root} does not exist")
+
+    loaded_grids = {}
+    grids = []
+
+    print(len(pdf))
+    for replica in range(1, len(pdf)):
+        if replica in loaded_grids:
+            grid = loaded_grids[replica]
+        else:
+            header, grid = load_replica(pdf, replica, None)
+            loaded_grids[replica] = grid
+        grids.append(grid)
+
+    # This takes care of failing if headers don't match
+    try:
+        M = rep_matrix(grids)
+    except ValueError as e:
+        raise ValueError("Null values found in replica grid matrix. "
+                         "This may indicate that the headers don't match") from e
+    write_replica(0, set_root, header, M.mean(axis=1))
 
 def new_pdf_from_indexes(
         pdf, indexes, set_name=None, folder=None,
