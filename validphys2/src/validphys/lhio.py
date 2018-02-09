@@ -38,8 +38,8 @@ def read_xqf_from_file(f):
     return pd.Series(vals, index = pd.MultiIndex.from_product((xvals, qvals, fvals)))
 
 
-def read_xqf_from_lhapdf(pdf, replica, rep0grids):
-    indexes = tuple(rep0grids.index)
+def read_xqf_from_lhapdf(pdf, replica, kin_grids):
+    indexes = tuple(kin_grids.index)
     #Use LHAPDF directly to avoid the insanely deranged replica 0 convention
     #of libnnpdf.
     #TODO: Find a way around this
@@ -51,7 +51,7 @@ def read_xqf_from_lhapdf(pdf, replica, rep0grids):
     for x in indexes:
         #TODO: Change this for a faster grid_values call
         vals += [xfxQ(x[3],x[1],x[2])]
-    return pd.Series(vals, index = rep0grids.index)
+    return pd.Series(vals, index = kin_grids.index)
 
 def read_all_xqf(f):
     while True:
@@ -60,7 +60,7 @@ def read_all_xqf(f):
             return
         yield result
 
-def load_replica(pdf, rep, rep0grids=None):
+def load_replica(pdf, rep, kin_grids=None):
 
     suffix = str(rep).zfill(4)
 
@@ -75,8 +75,8 @@ def load_replica(pdf, rep, rep0grids=None):
     with open(path, 'rb') as inn:
         header = b"".join(split_sep(inn))
 
-        if rep0grids is not None:
-            xfqs = read_xqf_from_lhapdf(pdf, rep, rep0grids)
+        if kin_grids is not None:
+            xfqs = read_xqf_from_lhapdf(pdf, rep, kin_grids)
         else:
             xfqs = list(read_all_xqf(inn))
             xfqs = pd.concat(xfqs, keys=range(len(xfqs)))
@@ -152,7 +152,7 @@ def rep_matrix(gridlist):
 def _index_to_path(set_folder, set_name,  index):
     return set_folder/('%s_%04d.dat' % (set_name, index))
 
-def generate_replica0(pdf, rep0grid=None, extra_fields=None):
+def generate_replica0(pdf, kin_grids=None, extra_fields=None):
     """ Generates a replica 0 as an average over an existing set of LHAPDF
         replicas and outputs it to the PDF's parent folder
 
@@ -162,8 +162,8 @@ def generate_replica0(pdf, rep0grid=None, extra_fields=None):
         An existing validphys PDF object from which the average replica will be
         (re-)computed
 
-    rep0grid: result of load_replica (whatever that is)
-        *Zahari, please fill this in*
+    kin_grids: Grids in (x,Q) used to print replica0 upon. If None, the grids
+        of the source replicas are used.
     """
 
     if extra_fields is not None:
@@ -181,7 +181,7 @@ def generate_replica0(pdf, rep0grid=None, extra_fields=None):
         if irep in loaded_grids:
             grid = loaded_grids[irep]
         else:
-            header, grid = load_replica(pdf, irep, rep0grids=rep0grid)
+            header, grid = load_replica(pdf, irep, kin_grids=kin_grids)
             loaded_grids[irep] = grid
         grids.append(grid)
 
@@ -271,7 +271,7 @@ def new_pdf_from_indexes(
         if oldindex in loaded_grids:
             grid = loaded_grids[oldindex]
         else:
-            header, grid = load_replica(pdf,oldindex, rep0grids=rep0grid)
+            header, grid = load_replica(pdf,oldindex, kin_grids=rep0grid)
             loaded_grids[oldindex] = grid
         grids.append(grid)
     #This takes care of failing if headers don't match
