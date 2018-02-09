@@ -34,7 +34,7 @@ def set_lhapdf_info(info_path, nrep):
     with open(info_path, 'r+') as f:
         txt = f.read()
         f.seek(0)
-        f.write(txt.replace('REPLACE_NREP', nrep))
+        f.write(txt.replace('REPLACE_NREP', str(nrep)))
         f.truncate()
 
 def main(results, nrep):
@@ -115,7 +115,8 @@ def main(results, nrep):
     try:
         lhapdf.mkPDF(fitname, 0)
     except RuntimeError:
-        log.critical("CRITICAL ERROR: Failure in reading generated replica zero")
+        log.critical("CRITICAL ERROR: Failure in reading replica zero")
+        exit(-1)
     else:
         log.info("Postfit complete")
 
