@@ -44,7 +44,11 @@ class ListAction(argparse.Action):
 def main():
     p = argparse.ArgumentParser(description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
-    l = Loader()
+    try:
+        l = Loader()
+    except Exception as e:
+        log.error(f"Could not set up environment: {e}")
+        sys.exit(1)
     p.add_argument('resource_type', help="Type of the resource to be obtained. "
                    "See --list for a list of resource types.")
     p.add_argument('resource_name', help="Identifier of the resource.")
