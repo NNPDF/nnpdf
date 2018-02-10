@@ -1,7 +1,17 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Resource downloader
+NNPDF resource downloader. The basic syntax is
+
+vp-get <resource_type> <resource_name>
+
+Use
+
+vp-get --list
+
+to see a list of resource types.
+If the resource is already installed, a string with its name will be
+printed to stdout. If not, it will be searched in the remote repositories
+and installed if found.
 """
 import sys
 import argparse
@@ -17,16 +27,35 @@ log = logging.getLogger()
 log.setLevel(logging.INFO)
 log.addHandler(colors.ColorHandler())
 
+class ListAction(argparse.Action):
+    def __init__(self, *args, loader ,**kwargs):
+        self.loader = loader
+        super().__init__(*args, **kwargs)
+
+    def __call__(self, parser, *args, **kwargs):
+        prefix = 'download_'
+        prefix_len = len(prefix)
+        tps = [f'\n - {it[prefix_len:]}' for it in dir(self.loader)
+               if it.startswith(prefix)]
+        print(f"Available resource types:{''.join(tps)}")
+        parser.exit()
+
 
 def main():
-    p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('type')
-    p.add_argument('name')
-    args = p.parse_args()
-    tp = args.type
-    name = args.name
-
+    p = argparse.ArgumentParser(description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
     l = Loader()
+    p.add_argument('resource_type', help="Type of the resource to be obtained. "
+                   "See --list for a list of resource types.")
+    p.add_argument('resource_name', help="Identifier of the resource.")
+    p.add_argument('--list', action=ListAction, loader=l, nargs=0,
+                   help="List available resources and exit.")
+    args = p.parse_args()
+
+
+    tp = args.resource_type
+    name = args.resource_name
+
     try:
         f = getattr(l, f'check_{tp}')
     except AttributeError as e:
@@ -35,7 +64,8 @@ def main():
     try:
         res = f(name)
     except LoadFailedError as e:
-        raise ErrorWithAlternatives(f"Could not find resource ({tp}): '{name}'.", name)
+        print(ErrorWithAlternatives(f"Could not find resource ({tp}): '{name}'.", name))
+        sys.exit("Failed to download resource.")
     print(repr(res))
 
 
