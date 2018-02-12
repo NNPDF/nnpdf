@@ -1,0 +1,36 @@
+meta:
+   author: Cameron Voisey and Rosalyn Pearson
+   keywords: [test]
+   title: BCDMS experiment + theory tables for theory covariance matrix
+
+default_theory:
+   - theoryid: 52
+
+theories:
+   - theoryid: 52
+   - theoryid: 66
+   - theoryid: 67
+
+use_cuts: True
+
+pdf: NNPDF31_nlo_as_0118
+
+fit: 180202-lr-nlo-central_DISonly
+
+experiments:
+   - experiment: BCDMS
+     datasets:
+         - dataset: BCDMSP
+         - dataset: BCDMSD
+
+template_text: |
+   Theory tables (order: $\mu = \mu_{ref}, 0.5\mu_{ref}, 2\mu_{ref})$)
+   {@theories experiment_result_table@}
+
+   {@default_theory experiments_covmat@}
+
+   {@default_theory experiments_corrmat@}
+
+actions_:
+   - - report:
+         main: True

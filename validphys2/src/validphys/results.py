@@ -272,6 +272,27 @@ def experiments_invcovmat(experiments, experiments_index, t0set):
         df.loc[[name],[name]] = mat
     return df
 
+
+@table
+def experiments_corrmat(experiments, experiments_index, t0set):
+    """Calculates the experimental correlation matrix."""
+    data = np.zeros((len(experiments_index),len(experiments_index)))
+    df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
+    for experiment in experiments:
+        name = experiment.name
+        loaded_exp = experiment.load()
+        if t0set:
+            #Copy data to avoid chaos
+            data = type(loaded_exp)(loaded_exp)
+            log.debug("Setting T0 predictions for %s" % loaded_exp)
+            data.SetT0(t0set.load_t0())
+        covmat = loaded_exp.get_covmat()
+        diag_minus_half = (np.diagonal(covmat))**(-0.5)
+        mat = diag_minus_half*covmat*np.transpose(diag_minus_half)
+        df.loc[[name],[name]] = mat
+    return df
+
+
 @table
 def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
                                 experiments_index, nnoisy:int=0):
