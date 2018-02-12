@@ -37,7 +37,8 @@ def set_lhapdf_info(info_path, nrep):
         f.write(txt.replace('REPLACE_NREP', str(nrep)))
         f.truncate()
 
-def main(results, nrep):
+
+def main(results: str, nrep: int):
     result_path = pathlib.Path(results).resolve()
     fitname = result_path.name
     nnfit_path = result_path / 'nnfit'
@@ -118,14 +119,23 @@ def main(results, nrep):
         log.critical("CRITICAL ERROR: Failure in reading replica zero")
         exit(-1)
     else:
+        log.info("\n\n*****************************************************************\n")
         log.info("Postfit complete")
+        log.info("Please upload your results with:")
+        log.info(f"\tvp-upload {result_path}\n")
+        log.info("and install with:")
+        log.info(f"\tvp-get fit {fitname}\n")
+        log.info("*****************************************************************\n\n")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('nrep', nargs='?', help="Number of requested replicas")
-    parser.add_argument('results', nargs='?', help="Fit results folder")
+    parser.add_argument('nrep', type=int, help="Number of desired replicas")
+    parser.add_argument('result_path', help="Folder containig the "
+                                            "results of the fit")
+    parser.add_argument('-d', '--debug', action='store_true', help='show debug messages')
     args = parser.parse_args()
-    if not all((args.results)):
-        parser.error("Too few arguments: results.")
-    mainargs = vars(args)
-    main(**mainargs)
+    if args.debug:
+        log.setLevel(logging.DEBUG)
+    else:
+        log.setLevel(logging.INFO)
+    main(args.result_path, args.nrep)
