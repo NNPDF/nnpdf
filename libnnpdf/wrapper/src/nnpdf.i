@@ -118,6 +118,7 @@ int* nq_out)}
 %apply (NNPDF::real* IN_ARRAY1, int DIM1) {(NNPDF::real* qmat,  int nq_in)}
 %include "NNPDF/lhapdfset.h"
 
+%rename(SetLHAPDFVerbosity) LHAPDF::setVerbosity(int v);
 namespace LHAPDF{
     int verbosity();
     void setVerbosity(int v);

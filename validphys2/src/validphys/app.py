@@ -106,9 +106,7 @@ file in attachment:
         if not cout:
             import NNPDF
             NNPDF.SetVerbosity(0)
-            #No idea why this doesn't work
-            #import lhapdf
-            NNPDF.setVerbosity(0)
+            NNPDF.SetLHAPDFVerbosity(0)
 
     @staticmethod
     def upload_context(do_upload, output):
