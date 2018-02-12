@@ -11,8 +11,6 @@ Current active vetoes:
 
 import numpy as np
 
-#TODO import into vp2
-
 # Threshold for distribution vetos
 NSIGMA_DISCARD = 4
 
@@ -39,26 +37,26 @@ def distribution_veto(dist):
     return replica_mask
 
 
-def determine_vetoes(fitinfo: list):
+def determine_vetoes(fitinfos: list):
     """ Assesses whether replica fitinfo passes standard NNPDF vetoes
     Returns a dictionary of vetoes and their passing boolean masks.
     Included in the dictionary is a 'Total' veto.
     """
     # Setup distributions to veto upon
     # TODO ensure that all replicas have the same amount of arclengths
-    distributions = {"ChiSquared": [i.chi2 for i in fitinfo]}
-    for i in range(0, len(fitinfo[0].arclengths)):
-        distributions["ArcLength_"+str(i)] = [j.arclengths[i] for j in fitinfo]
+    distributions = {"ChiSquared": [i.chi2 for i in fitinfos]}
+    for i in range(0, len(fitinfos[0].arclengths)):
+        distributions["ArcLength_"+str(i)] = [j.arclengths[i] for j in fitinfos]
 
     # Positivity veto
-    vetoes = {"Positivity": [replica.is_positive for replica in fitinfo]}
+    vetoes = {"Positivity": [replica.is_positive for replica in fitinfos]}
 
     # Distribution vetoes
     for key in distributions:
         vetoes[key] = distribution_veto(distributions[key])
 
-    # Determine total veto
-    vetoes["Total"] = np.ones(len(fitinfo), dtype=bool)
+    vetoes["Total"] = np.ones(len(fitinfos), dtype=bool)
     for key in vetoes:
-        vetoes["Total"] = [x & y for (x, y) in zip(vetoes["Total"], vetoes[key])]
+        vetoes["Total"] = np.asarray([x & y for (x, y) in
+            zip(vetoes["Total"], vetoes[key])])
     return vetoes
