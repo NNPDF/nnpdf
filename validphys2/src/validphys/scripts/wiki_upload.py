@@ -148,23 +148,29 @@ def main():
     parser.add_argument("output", help="Folder to upload.")
     args = parser.parse_args()
     output = pathlib.Path(args.output)
+    upload_output = output
 
-    specific_file = None
+    from validphys import uploadutils
+
     if not output.is_dir():
         if output.is_file():
-            output, specific_file = handle_single_file(output)
+            upargs = handle_single_file(output)
+            upload_output = upargs[0]
+            uploader = uploadutils.SingleReportFileUploader()
         else:
             if not output.exists():
                 log.error(f"No such file or directory: {output}")
             else:
                 log.errorr(f"{output} is not a file or a directory")
             sys.exit(1)
+    else:
+        uploader = uploadutils.ReportUploader()
+        upargs = output
 
 
-    from validphys.uploadutils import upload_or_exit_context
     try:
-        with upload_or_exit_context(output, specific_file=specific_file):
-            handle_meta_interactive(output)
+        with uploader.upload_or_exit_context(upargs):
+            handle_meta_interactive(upload_output)
     except (KeyboardInterrupt, EOFError):
         print(colors.t.bold_red("\nInterrupted by user. Exiting."), file=sys.stderr)
         exit(1)

@@ -117,7 +117,7 @@ file in attachment:
         upload the output path if do_upload is True. Otherwise do nothing.
         Raise SystemExit on error."""
         if do_upload:
-            return uploadutils.upload_or_exit_context(output)
+            return uploadutils.ReportUploader().upload_or_exit_context(output)
         return contextlib.ExitStack()
 
     def run(self):

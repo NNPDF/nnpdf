@@ -17,6 +17,9 @@ install(FILES ${PROJECT_SOURCE_DIR}/nnpdfcpp/scripts/fitmanager
 # install data
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/nnpdfcpp/data/ DESTINATION ${PROFILE_PREFIX}/data/)
 
+# install results
+install(DIRECTORY DESTINATION ${PROFILE_PREFIX}/results/)
+
 # install configs
 install(FILES ${PROJECT_SOURCE_DIR}/nnpdfcpp/config/plotting.yml
   ${PROJECT_SOURCE_DIR}/nnpdfcpp/config/fiatlux.yml
