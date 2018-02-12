@@ -552,10 +552,23 @@ class RemoteLoader(LoaderBase):
         if not fitname in self.remote_fits:
             raise FitNotFound("Could not find fit '{}' in remote index {}".format(fitname, self.fit_index))
 
-        #TODO: Change the crazy paths in fitmanager. Why depend on results??
-        download_and_extract(self.remote_fits[fitname], self.resultspath.parent)
+        tempdir = pathlib.Path(tempfile.mkdtemp(prefix='fit_download_deleteme_',
+                                                dir=self.resultspath))
+        download_and_extract(self.remote_fits[fitname], tempdir)
+        #Handle old-style fits compressed with 'results' as root.
+        old_style_res = tempdir/'results'
+        if old_style_res.is_dir():
+            move_target = old_style_res / fitname
+        else:
+            move_target = tempdir/fitname
+        if not move_target.is_dir():
+            raise RemoteLoaderError(f"Unknown format for fit in {tempdir}. Expecting a folder {move_target}")
 
         fitpath = self.resultspath / fitname
+        shutil.move(move_target, fitpath)
+        shutil.rmtree(tempdir)
+
+
         if lhaindex.isinstalled(fitname):
             log.warn("The PDF corresponding to the downloaded fit '%s' "
              "exists in the LHAPDF path."

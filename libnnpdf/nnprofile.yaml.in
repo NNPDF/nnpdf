@@ -27,3 +27,5 @@ nnpdf_pdfs_index: 'pdfdata.json'
 upload_host: 'nnpdf@pcteserver.mi.infn.it'
 reports_target_dir: "WEB/validphys-reports/"
 reports_root_url: 'http://pcteserver.mi.infn.it/~nnpdf/validphys-reports/'
+fits_target_dir: "WEB/fits/"
+fits_root_url: 'http://pcteserver.mi.infn.it/~nnpdf/fits/'

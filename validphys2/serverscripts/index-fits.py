@@ -5,16 +5,20 @@ Generate an index with the existing fits
 
 import pathlib
 import json
+import itertools
 
 root = '/home/nnpdf/WEB/fits'
 
-glob = '*.tgz'
+#TODO: Find a better way
+glob1 = '*.tar.gz'
+glob2 = '*.tgz'
 
 indexname = 'fitdata.json'
 
 if __name__ == '__main__':
     p = pathlib.Path(root)
-    files = p.glob(glob)
+    files = itertools.chain(p.glob(glob1), p.glob(glob2))
+
     files = [f.name for f in files]
     with (p/indexname).open('w') as f:
         json.dump({'files':files}, f, indent=4)
