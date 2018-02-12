@@ -292,6 +292,15 @@ def experiments_corrmat(experiments, experiments_index, t0set):
         df.loc[[name],[name]] = mat
     return df
 
+@table
+def experiments_corrmat2(experiments_covmat):
+	diags = np.diag(experiments_covmat)
+	stdd = np.sqrt(diags)
+	stdd_transpose = diags[:, np.newaxis]
+	corrmat = experiments_covmat / stdd / stdd_transpose
+	df.loc[[name],[name]] = corrmat
+	return corrmat
+
 
 @table
 def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
