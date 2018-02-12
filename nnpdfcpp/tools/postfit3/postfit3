@@ -11,9 +11,9 @@ from glob import glob
 
 import lhapdf
 
-import fitveto
 from validphys import lhio
 from validphys import fitdata
+from validphys import fitveto
 from validphys.core import PDF
 
 import logging
