@@ -21,6 +21,8 @@ def distribution_veto(dist):
     dist = np.asarray(dist)
     replica_mask = np.ones_like(dist, dtype=bool)
     while True:
+        if sum(replica_mask) == 1:
+            return replica_mask
         passing = dist[replica_mask]
         average_pass = np.mean(passing)
         stderr_pass  = np.std(passing)
@@ -37,6 +39,7 @@ def determine_vetoes(fitinfos: list):
     Returns a dictionary of vetoes and their passing boolean masks.
     Included in the dictionary is a 'Total' veto.
     """
+
     # Setup distributions to veto upon
     # TODO ensure that all replicas have the same amount of arclengths
     distributions = {"ChiSquared": [i.chi2 for i in fitinfos]}
