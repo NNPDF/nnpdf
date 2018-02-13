@@ -70,6 +70,10 @@ def filter_replicas(nnfit_path, fitname):
     log.info(f"{len(all_replicas)} total replicas found")
     log.info(f"{len(valid_paths)} valid replicas found")
 
+    if len(valid_paths) == 0:
+        log.critical("No valid replicas found")
+        sys.exit(1)
+
     # Read FitInfo and compute vetoes
     fitinfo = [fitdata.load_fitinfo(pathlib.Path(path), fitname) for path in valid_paths]
     fit_vetoes = fitveto.determine_vetoes(fitinfo)
