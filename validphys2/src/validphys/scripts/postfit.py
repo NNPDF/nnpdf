@@ -19,7 +19,9 @@ import os.path
 import shutil
 import pathlib
 import argparse
+import itertools
 from glob import glob
+import logging
 
 import lhapdf
 
@@ -28,7 +30,6 @@ from validphys import fitdata
 from validphys import fitveto
 from validphys.core import PDF
 
-import logging
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
@@ -65,8 +66,7 @@ def filter_replicas(nnfit_path, fitname):
     # This glob defines what is considered a valid replica
     # all the following code uses paths from this glob
     all_replicas   = glob(f"{nnfit_path}/replica_*/")
-    valid_replicas = [fitdata.check_replica_files(path, fitname) for path in all_replicas]
-    valid_paths    = [all_replicas[i] for i in fitveto.mask_to_indices(valid_replicas)]
+    valid_paths = [path for path in all_replicas if fitdata.check_replica_files(path, fitname)]
     log.info(f"{len(all_replicas)} total replicas found")
     log.info(f"{len(valid_paths)} valid replicas found")
 
@@ -76,8 +76,7 @@ def filter_replicas(nnfit_path, fitname):
 
     for key in fit_vetoes:
         log.info("%d replicas pass %s" % (sum(fit_vetoes[key]), key))
-    passing_replicas = fitveto.mask_to_indices(fit_vetoes["Total"])
-    passing_paths    = [valid_paths[i] for i in passing_replicas]
+    passing_paths = list(itertools.compress(valid_paths, fit_vetoes["Total"]))
     return passing_paths
 
 
@@ -131,7 +130,7 @@ def postfit(results: str, nrep: int):
         relative_symlink(source_dir, target_dir)
         # Symlink results to pdfset directory
         source_grid = source_dir.joinpath(fitname+'.dat')
-        target_file = f'{fitname}_{drep+1:04d}.dat'
+        target_file = f'{fitname}_{drep:04d}.dat'
         target_grid = LHAPDF_path.joinpath(target_file)
         relative_symlink(source_grid, target_grid)
 

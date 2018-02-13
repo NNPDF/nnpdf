@@ -15,11 +15,6 @@ import numpy as np
 NSIGMA_DISCARD = 4
 
 
-def mask_to_indices(mask):
-    """ Converts a boolean mask into a list of passing elements """
-    return np.ravel(np.argwhere(mask))
-
-
 def distribution_veto(dist):
     """ For a given distribution (a list of floats), returns a boolean mask
     specifying the passing elements """
