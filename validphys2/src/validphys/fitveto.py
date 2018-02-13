@@ -14,16 +14,16 @@ import numpy as np
 # Threshold for distribution vetos
 NSIGMA_DISCARD = 4
 
-
-def distribution_veto(dist):
+def distribution_veto(dist, prior_mask):
     """ For a given distribution (a list of floats), returns a boolean mask
-    specifying the passing elements """
+    specifying the passing elements. Only points passing the prior_mask are
+    considered in the average or standard deviation."""
     dist = np.asarray(dist)
     replica_mask = np.ones_like(dist, dtype=bool)
     while True:
-        if sum(replica_mask) == 1:
-            return replica_mask
-        passing = dist[replica_mask]
+        total_mask = np.logical_and(replica_mask, prior_mask)
+        if sum(total_mask) <= 1: break
+        passing = dist[total_mask]
         average_pass = np.mean(passing)
         stderr_pass  = np.std(passing)
         # NOTE that this has always not been abs
@@ -48,10 +48,15 @@ def determine_vetoes(fitinfos: list):
 
     # Positivity veto
     vetoes = {"Positivity": [replica.is_positive for replica in fitinfos]}
+    total_mask = np.asarray(vetoes["Positivity"])
 
     # Distribution vetoes
-    for key in distributions:
-        vetoes[key] = distribution_veto(distributions[key])
+    while True:
+        for key in distributions:
+            vetoes[key] = distribution_veto(distributions[key], total_mask)
+        new_total_mask = np.all(list(vetoes.values()), axis=0)
+        if sum(new_total_mask) == sum(total_mask): break
+        total_mask = new_total_mask
 
-    vetoes["Total"] = np.all(list(vetoes.values()), axis=0)
+    vetoes["Total"] = total_mask
     return vetoes

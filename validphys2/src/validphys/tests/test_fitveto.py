@@ -21,10 +21,10 @@ fitinfos = tuples(integers(min_value=1),
 @pytest.mark.filterwarnings('ignore')
 @given(arrays(float, shape=shape1d, elements=nicefloats))
 def test_distribution_veto(arr):
-    veto = distribution_veto(arr)
+    veto = distribution_veto(arr, np.ones_like(arr, dtype=bool))
     masked = arr[veto]
     assert np.all(masked - np.mean(masked) <= NSIGMA_DISCARD*np.std(masked))
-    assert sum(distribution_veto(masked)) == len(masked)
+    assert sum(distribution_veto(masked, np.ones_like(masked, dtype=bool))) == len(masked)
 
 
 #The case where the list is empty is handled in postfit
