@@ -23,6 +23,7 @@ def test_distribution_veto(arr):
     veto = distribution_veto(arr)
     masked = arr[veto]
     assert np.all(masked - np.mean(masked) <= NSIGMA_DISCARD*np.std(masked))
+    assert sum(distribution_veto(masked)) == len(masked)
 
 
 #The case where the list is handled in postfit
