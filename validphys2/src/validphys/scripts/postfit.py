@@ -97,6 +97,13 @@ def postfit(results: str, nrep: int):
     nrep = int(nrep)
     log.warn("Postfit aiming for %d replicas" % nrep)
 
+    # Generate postfit and LHAPDF directory
+    if postfit_path.is_dir():
+        log.warn(f"WARNING: Removing existing postfit directory: {postfit_path}")
+        shutil.rmtree(str(postfit_path))
+    os.mkdir(postfit_path)
+    os.mkdir(LHAPDF_path)
+
     # Setup postfit log
     postfitlog = logging.FileHandler(postfit_path/'postfit.log', mode='w')
     log.addHandler(postfitlog)
@@ -109,12 +116,6 @@ def postfit(results: str, nrep: int):
     # Select the first nrep passing replicas
     selected_paths = passing_paths[:nrep]
 
-    # Generate postfit and LHAPDF directory
-    if postfit_path.is_dir():
-        log.warn(f"WARNING: Removing existing postfit directory: {postfit_path}")
-        shutil.rmtree(str(postfit_path))
-    os.mkdir(postfit_path)
-    os.mkdir(LHAPDF_path)
 
     # Copy info file
     info_source_path = nnfit_path.joinpath(f'{fitname}.info')
