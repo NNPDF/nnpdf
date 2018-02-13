@@ -60,6 +60,10 @@ def set_lhapdf_info(info_path, nrep):
         f.write(txt.replace('REPLACE_NREP', str(nrep)))
         f.truncate()
 
+class PostfitError(Exception):
+    """Exception raised when postfit cannot suceed and knows why"""
+    pass
+
 def filter_replicas(nnfit_path, fitname):
     """ Find the paths of all replicas passing the standard NNPDF fit vetoes
     as defined in fitveto.py. Returns a list of the replica directories that pass."""
@@ -71,8 +75,7 @@ def filter_replicas(nnfit_path, fitname):
     log.info(f"{len(valid_paths)} valid replicas found")
 
     if len(valid_paths) == 0:
-        log.critical("No valid replicas found")
-        sys.exit(1)
+        raise PostfitError("No valid replicas found")
 
     # Read FitInfo and compute vetoes
     fitinfo = [fitdata.load_fitinfo(pathlib.Path(path), fitname) for path in valid_paths]
@@ -82,6 +85,8 @@ def filter_replicas(nnfit_path, fitname):
         log.info("%d replicas pass %s" % (sum(fit_vetoes[key]), key))
     passing_paths = list(itertools.compress(valid_paths, fit_vetoes["Total"]))
     return passing_paths
+
+
 
 
 def postfit(results: str, nrep: int):
@@ -94,9 +99,9 @@ def postfit(results: str, nrep: int):
     LHAPDF_path  = postfit_path/fitname     # Path for LHAPDF grid output
 
     if not fitdata.check_nnfit_results_path(result_path):
-        raise RuntimeError('Postfit cannot find a valid results path')
+        raise PostfitError('Postfit cannot find a valid results path')
     if not fitdata.check_lhapdf_info(result_path, fitname):
-        raise RuntimeError('Postfit cannot find a valid LHAPDF info file')
+        raise PostfitError('Postfit cannot find a valid LHAPDF info file')
 
     nrep = int(nrep)
     log.warn("Postfit aiming for %d replicas" % nrep)
@@ -115,8 +120,7 @@ def postfit(results: str, nrep: int):
     # Perform postfit selection
     passing_paths = filter_replicas(nnfit_path, fitname)
     if len(passing_paths) < nrep:
-        log.warn("Number of requested replicas is too large")
-        sys.exit(1)
+        raise PostfitError("Number of requested replicas is too large")
     # Select the first nrep passing replicas
     selected_paths = passing_paths[:nrep]
 
@@ -150,9 +154,8 @@ def postfit(results: str, nrep: int):
     # Test replica 0
     try:
         lhapdf.mkPDF(fitname, 0)
-    except RuntimeError:
-        log.critical("CRITICAL ERROR: Failure in reading replica zero")
-        sys.exit(1)
+    except RuntimeError as e:
+        raise PostfitError("CRITICAL ERROR: Failure in reading replica zero") from e
     else:
         log.info("\n\n*****************************************************************\n")
         log.info("Postfit complete")
@@ -176,4 +179,11 @@ def main():
         log.setLevel(logging.DEBUG)
     else:
         log.setLevel(logging.INFO)
-    postfit(args.result_path, args.nrep)
+    try:
+        postfit(args.result_path, args.nrep)
+    except PostfitError as e:
+        log.error(f"Error in postfit:\n{e}")
+        sys.exit(1)
+    except Exception as e:
+        log.critical(f"Bug in postfit ocurred. Please report it.")
+        raise
