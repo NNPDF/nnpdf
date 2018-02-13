@@ -1,6 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-""" A script that analyses the vetoes for a completed fit"""
+"""
+        postfit - fit output processing tool
+
+        postfit constructs a final PDF fit ensemble and LHAPDF set from the
+        output of a batch of `nnfit` jobs. The jobs are assessed on the basis
+        of standard NNPDF fit veto criteria as described in the validphys
+        fitveto module. Passing replicas are symlinked to the [results]/postfit
+        directory in the standard NNPDF layout and also in the standard LHAPDF
+        layout.
+"""
 __authors__ = 'Nathan Hartland, Zahari Kassabov'
 
 import os.path
@@ -37,11 +46,37 @@ def set_lhapdf_info(info_path, nrep):
         f.write(txt.replace('REPLACE_NREP', str(nrep)))
         f.truncate()
 
+def filter_replicas(nnfit_path, fitname):
+    """ Find the paths of all replicas passing the standard NNPDF fit vetoes
+    as defined in fitveto.py. Returns a list of the replica directories that pass."""
+    # This glob defines what is considered a valid replica
+    # all the following code uses paths from this glob
+    all_replicas   = glob(f"{nnfit_path}/replica_*/")
+    valid_replicas = [fitdata.check_replica_files(path, fitname) for path in all_replicas]
+    valid_paths    = [all_replicas[i] for i in fitveto.mask_to_indices(valid_replicas)]
+    log.info(f"{len(all_replicas)} total replicas found")
+    log.info(f"{len(valid_paths)} valid replicas found")
 
-def main(results: str, nrep: int):
+    # Read FitInfo and compute vetoes
+    fitinfo = [fitdata.load_fitinfo(pathlib.Path(path), fitname) for path in valid_paths]
+    fit_vetoes = fitveto.determine_vetoes(fitinfo)
+
+    for key in fit_vetoes:
+        log.info("%d replicas pass %s" % (sum(fit_vetoes[key]), key))
+    passing_replicas = fitveto.mask_to_indices(fit_vetoes["Total"])
+    passing_paths    = [valid_paths[i] for i in passing_replicas]
+    return passing_paths
+
+
+def postfit(results: str, nrep: int):
     result_path = pathlib.Path(results).resolve()
     fitname = result_path.name
-    nnfit_path = result_path / 'nnfit'
+
+    # Standard paths
+    nnfit_path   = result_path / 'nnfit'    # Path of nnfit replica output
+    postfit_path = result_path / 'postfit'  # Path for postfit result output
+    LHAPDF_path  = postfit_path/fitname     # Path for LHAPDF grid output
+
     if not fitdata.check_results_path(result_path):
         raise RuntimeError('Postfit cannot find a valid results path')
     if not fitdata.check_lhapdf_info(result_path, fitname):
@@ -54,42 +89,31 @@ def main(results: str, nrep: int):
     postfitlog = logging.FileHandler(nnfit_path/'postfit.log', mode='w')
     log.addHandler(postfitlog)
 
-    # Find all replicas, and filter invalid results directories
-    # This glob defines what is considered a valid replica
-    # all the following code uses paths from this glob
-    all_replicas   = glob(f"{results}/nnfit/replica_*/")
-    valid_replicas = [fitdata.check_replica_files(path, fitname) for path in all_replicas]
-    valid_paths    = [all_replicas[i] for i in fitveto.mask_to_indices(valid_replicas)]
-    log.info(f"{len(all_replicas)} total replicas found")
-    log.info(f"{len(valid_paths)} valid replicas found")
-
-    # Read FitInfo and compute vetoes
-    fitinfo = [fitdata.load_fitinfo(pathlib.Path(path), fitname) for path in valid_paths]
-    fit_vetoes = fitveto.determine_vetoes(fitinfo)
-
-    for key in fit_vetoes:
-        log.info("%d replicas pass %s" % (sum(fit_vetoes[key]), key))
+    # Perform postfit selection
+    passing_paths = filter_replicas(nnfit_path, fitname)
+    if len(passing_paths) < nrep:
+        log.warn("Number of requested replicas is too large")
+        exit()
+    # Select the first nrep passing replicas
+    selected_paths = passing_paths[:nrep]
 
     # Generate postfit and LHAPDF directory
-    postfit_path = result_path/'postfit'
-    LHAPDF_path = postfit_path/fitname
     if postfit_path.is_dir():
         log.warn(f"WARNING: Removing existing postfit directory: {postfit_path}")
         shutil.rmtree(str(postfit_path))
     os.mkdir(postfit_path)
     os.mkdir(LHAPDF_path)
 
-    # Final selection
-    if sum(fit_vetoes["Total"]) < nrep:
-        log.warn("Number of requested replicas is too large")
-        exit()
-    # Select the first nrep passing replicas
-    selected_replicas = fitveto.mask_to_indices(fit_vetoes["Total"])[:nrep]
+    # Copy info file
+    info_source_path = nnfit_path.joinpath(f'{fitname}.info')
+    info_target_path = LHAPDF_path.joinpath(f'{fitname}.info')
+    shutil.copy2(info_source_path, info_target_path)
+    set_lhapdf_info(info_target_path, nrep)
 
     # Generate symlinks
-    for drep, srep in enumerate(selected_replicas):
+    for drep, source_path in enumerate(selected_paths):
         # Symlink results to postfit directory
-        source_dir = pathlib.Path(valid_paths[srep]).resolve()
+        source_dir = pathlib.Path(source_path).resolve()
         target_dir = postfit_path.joinpath('replica_%d' % (drep+1))
         relative_symlink(source_dir, target_dir)
         # Symlink results to pdfset directory
@@ -98,15 +122,9 @@ def main(results: str, nrep: int):
         target_grid = LHAPDF_path.joinpath(target_file)
         relative_symlink(source_grid, target_grid)
 
-    # Copy info file
-    info_source_path = nnfit_path.joinpath(f'{fitname}.info')
-    info_target_path = LHAPDF_path.joinpath(f'{fitname}.info')
-    shutil.copy2(info_source_path, info_target_path)
-    set_lhapdf_info(info_target_path, nrep)
-
     # Generate final PDF with replica 0
     log.info("Beginning construction of replica 0")
-    # It's important that this is prePended, so that any existing instance of
+    # It's important that this is prepended, so that any existing instance of
     # `fitname` is not read from some other path
     lhapdf.pathsPrepend(str(postfit_path))
     generatingPDF = PDF(fitname)
@@ -127,8 +145,10 @@ def main(results: str, nrep: int):
         log.info(f"\tvp-get fit {fitname}\n")
         log.info("*****************************************************************\n\n")
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+def main():
+
+    parser = argparse.ArgumentParser(description=__doc__,
+            formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('nrep', type=int, help="Number of desired replicas")
     parser.add_argument('result_path', help="Folder containig the "
                                             "results of the fit")
@@ -138,4 +158,4 @@ if __name__ == "__main__":
         log.setLevel(logging.DEBUG)
     else:
         log.setLevel(logging.INFO)
-    main(args.result_path, args.nrep)
+    postfit(args.result_path, args.nrep)
