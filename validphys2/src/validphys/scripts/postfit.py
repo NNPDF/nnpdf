@@ -34,6 +34,16 @@ ch = logging.StreamHandler()
 log.addHandler(ch)
 
 
+def splash():
+    print("                                                        ")
+    print("  ██████╗  ██████╗ ███████╗████████╗███████╗██╗████████╗")
+    print("  ██╔══██╗██╔═══██╗██╔════╝╚══██╔══╝██╔════╝██║╚══██╔══╝")
+    print("  ██████╔╝██║   ██║███████╗   ██║   █████╗  ██║   ██║   ")
+    print("  ██╔═══╝ ██║   ██║╚════██║   ██║   ██╔══╝  ██║   ██║   ")
+    print("  ██║     ╚██████╔╝███████║   ██║   ██║     ██║   ██║   ")
+    print("  ╚═╝      ╚═════╝ ╚══════╝   ╚═╝   ╚═╝     ╚═╝   ╚═╝   ")
+    print("  __v" + __version__ + "__, __coredevs__: S.C, N.H. Z.K.\n")
+
 def relative_symlink(source, dest):
     """ Forms a relative symlink between 'source' and 'dest' """
     relativepath = os.path.relpath(source, dest.parents[0])
@@ -149,6 +159,7 @@ def postfit(results: str, nrep: int):
 
 
 def main():
+    splash()
     parser = argparse.ArgumentParser(description=__doc__,
             formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('nrep', type=int, help="Number of desired replicas")
