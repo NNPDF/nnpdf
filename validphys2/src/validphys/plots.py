@@ -52,6 +52,17 @@ def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
     l.set_zorder(1000)
     return fig
 
+@figure
+def plot_phi(results, dataset, phi_data, chi2_stats, pdf):
+    """Plot the chi² of all experiments with bars."""
+    phi = []
+    xticks = []
+    phi.append(phi_data)
+    xticks.append(dataset.name)
+    fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=[r'$\phi$'])
+    ax.set_title(r"$\phi$ for a dataset")
+    return fig
+
 #TODO: This should be simplified if at all possible. For now some more examples
 #are needed for a spec to emerge.
 @make_check
