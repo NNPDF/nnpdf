@@ -288,7 +288,7 @@ def experiments_corrmat(experiments, experiments_index, t0set):
             data.SetT0(t0set.load_t0())
         covmat = loaded_exp.get_covmat()
         diag_minus_half = (np.diagonal(covmat))**(-0.5)
-        mat = diag_minus_half*covmat*np.transpose(diag_minus_half)
+        mat = diag_minus_half*covmat*diag_minus_half[:,np.newaxis]
         df.loc[[name],[name]] = mat
     return df
 
