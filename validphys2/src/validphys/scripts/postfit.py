@@ -67,7 +67,7 @@ def filter_replicas(nnfit_path, fitname):
     # all the following code uses paths from this glob
     all_replicas   = glob(f"{nnfit_path}/replica_*/")
     valid_replicas = (fitdata.check_replica_files(path, fitname) for path in all_replicas)
-    valid_paths    = list(itertools.compress(all_replicas, valid_paths))
+    valid_paths    = list(itertools.compress(all_replicas, valid_replicas))
     log.info(f"{len(all_replicas)} total replicas found")
     log.info(f"{len(valid_paths)} valid replicas found")
 
