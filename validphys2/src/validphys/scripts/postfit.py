@@ -98,7 +98,7 @@ def postfit(results: str, nrep: int):
     log.warn("Postfit aiming for %d replicas" % nrep)
 
     # Setup postfit log
-    postfitlog = logging.FileHandler(nnfit_path/'postfit.log', mode='w')
+    postfitlog = logging.FileHandler(postfit_path/'postfit.log', mode='w')
     log.addHandler(postfitlog)
 
     # Perform postfit selection
