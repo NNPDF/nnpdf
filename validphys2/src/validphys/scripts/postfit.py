@@ -160,7 +160,7 @@ def postfit(results: str, nrep: int):
         log.info("\n\n*****************************************************************\n")
         log.info("Postfit complete")
         log.info("Please upload your results with:")
-        log.info(f"\tvp-upload {result_path}\n")
+        log.info(f"\tvp-upload --fit {result_path}\n")
         log.info("and install with:")
         log.info(f"\tvp-get fit {fitname}\n")
         log.info("*****************************************************************\n\n")
