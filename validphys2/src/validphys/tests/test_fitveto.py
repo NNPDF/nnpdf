@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+import itertools
 from hypothesis import given
 from hypothesis.strategies import (floats, integers, tuples, lists,
     booleans)
@@ -26,13 +27,16 @@ def test_distribution_veto(arr):
     assert sum(distribution_veto(masked)) == len(masked)
 
 
-#The case where the list is handled in postfit
+#The case where the list is empty is handled in postfit
 @pytest.mark.filterwarnings('ignore')
 @given(lists(fitinfos, min_size=1))
 def test_determine_vetoes(fitinfos):
     vetoes = determine_vetoes(fitinfos)
-    assert np.all(vetoes['Positivity'] == np.array([info.is_positive for info in
-            fitinfos]))
+    assert np.all(vetoes['Positivity'] == np.array([info.is_positive for info in fitinfos]))
     tot = vetoes['Total']
     assert all(np.all(tot & val == tot) for val in vetoes.values())
-
+    # distribution_vetoes applied a second time should veto nothing
+    if sum(tot) > 0:
+        passing_fitinfos = list(itertools.compress(fitinfos, tot))
+        second_vetoes = determine_vetoes(passing_fitinfos)
+        assert sum(vetoes["Total"]) == sum(second_vetoes["Total"])
