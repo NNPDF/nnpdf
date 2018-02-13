@@ -11,6 +11,8 @@
         layout.
 """
 __authors__ = 'Nathan Hartland, Zahari Kassabov'
+__version__ = "3.0b"
+
 
 import os.path
 import shutil
@@ -145,8 +147,8 @@ def postfit(results: str, nrep: int):
         log.info(f"\tvp-get fit {fitname}\n")
         log.info("*****************************************************************\n\n")
 
-def main():
 
+def main():
     parser = argparse.ArgumentParser(description=__doc__,
             formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('nrep', type=int, help="Number of desired replicas")
