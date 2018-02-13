@@ -184,7 +184,7 @@ class FitUploader(FileUploader):
         try:
             shutil.make_archive(base_name=archive_path_without_extension,
                                 format='gztar',
-                            root_dir=output_path.parent, base_dir=output_path)
+                            root_dir=output_path.parent, base_dir=output_path.name)
         except Exception as e:
             log.error(f"Couldn't compress archive: {e}")
             raise UploadError(e) from e
