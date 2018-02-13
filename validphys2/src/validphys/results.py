@@ -404,8 +404,11 @@ def abs_chi2_data(results):
     data_result, th_result = results
 
     chi2s = all_chi2(results)
+    print(chi2s)
 
     central_result = central_chi2(results)
+    print(Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]),
+                    central_result, len(data_result)))
 
     return Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]),
                     central_result, len(data_result))
