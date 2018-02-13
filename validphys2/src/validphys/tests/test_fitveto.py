@@ -23,8 +23,7 @@ fitinfos = tuples(integers(min_value=1),
 def test_distribution_veto(arr):
     veto = distribution_veto(arr, np.ones_like(arr, dtype=bool))
     masked = arr[veto]
-    assert np.all(masked - np.mean(masked) <= NSIGMA_DISCARD*np.std(masked))
-    assert sum(distribution_veto(masked, np.ones_like(masked, dtype=bool))) == len(masked)
+    assert np.all(masked - np.mean(arr) <= NSIGMA_DISCARD*np.std(arr))
 
 
 #The case where the list is empty is handled in postfit

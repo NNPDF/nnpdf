@@ -14,24 +14,19 @@ import numpy as np
 # Threshold for distribution vetos
 NSIGMA_DISCARD = 4
 
+
 def distribution_veto(dist, prior_mask):
     """ For a given distribution (a list of floats), returns a boolean mask
     specifying the passing elements. Only points passing the prior_mask are
     considered in the average or standard deviation."""
+    if sum(prior_mask) <= 1: return prior_mask
     dist = np.asarray(dist)
-    replica_mask = np.ones_like(dist, dtype=bool)
-    while True:
-        total_mask = np.logical_and(replica_mask, prior_mask)
-        if sum(total_mask) <= 1: break
-        passing = dist[total_mask]
-        average_pass = np.mean(passing)
-        stderr_pass  = np.std(passing)
-        # NOTE that this has always not been abs
-        # i.e replicas that are lower than the average by more than 4std pass
-        new_mask = (dist - average_pass) < NSIGMA_DISCARD*stderr_pass
-        if sum(new_mask) == sum(replica_mask): break
-        replica_mask = new_mask
-    return replica_mask
+    passing = dist[prior_mask]
+    average_pass = np.mean(passing)
+    stderr_pass  = np.std(passing)
+    # NOTE that this has always not been abs
+    # i.e replicas that are lower than the average by more than 4std pass
+    return (dist - average_pass) <= NSIGMA_DISCARD*stderr_pass
 
 
 def determine_vetoes(fitinfos: list):
