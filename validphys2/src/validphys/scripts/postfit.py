@@ -14,6 +14,7 @@ __authors__ = 'Nathan Hartland, Zahari Kassabov'
 __version__ = "3.0b"
 
 
+import sys
 import os.path
 import shutil
 import pathlib
@@ -89,7 +90,7 @@ def postfit(results: str, nrep: int):
     postfit_path = result_path / 'postfit'  # Path for postfit result output
     LHAPDF_path  = postfit_path/fitname     # Path for LHAPDF grid output
 
-    if not fitdata.check_results_path(result_path):
+    if not fitdata.check_nnfit_results_path(result_path):
         raise RuntimeError('Postfit cannot find a valid results path')
     if not fitdata.check_lhapdf_info(result_path, fitname):
         raise RuntimeError('Postfit cannot find a valid LHAPDF info file')
@@ -105,7 +106,7 @@ def postfit(results: str, nrep: int):
     passing_paths = filter_replicas(nnfit_path, fitname)
     if len(passing_paths) < nrep:
         log.warn("Number of requested replicas is too large")
-        exit()
+        sys.exit(1)
     # Select the first nrep passing replicas
     selected_paths = passing_paths[:nrep]
 
@@ -123,10 +124,10 @@ def postfit(results: str, nrep: int):
     set_lhapdf_info(info_target_path, nrep)
 
     # Generate symlinks
-    for drep, source_path in enumerate(selected_paths):
+    for drep, source_path in enumerate(selected_paths, 1):
         # Symlink results to postfit directory
         source_dir = pathlib.Path(source_path).resolve()
-        target_dir = postfit_path.joinpath('replica_%d' % (drep+1))
+        target_dir = postfit_path.joinpath('replica_%d' % drep)
         relative_symlink(source_dir, target_dir)
         # Symlink results to pdfset directory
         source_grid = source_dir.joinpath(fitname+'.dat')
@@ -147,7 +148,7 @@ def postfit(results: str, nrep: int):
         lhapdf.mkPDF(fitname, 0)
     except RuntimeError:
         log.critical("CRITICAL ERROR: Failure in reading replica zero")
-        exit(-1)
+        sys.exit(1)
     else:
         log.info("\n\n*****************************************************************\n")
         log.info("Postfit complete")

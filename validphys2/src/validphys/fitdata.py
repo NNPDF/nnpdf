@@ -28,7 +28,7 @@ REPLICA_FILES = ['.dat', '.fitinfo', '.params', '.preproc', '.sumrules']
 log = logging.getLogger(__name__)
 
 #TODO setup make_check on these
-def check_results_path(path):
+def check_nnfit_results_path(path):
     """ Returns True if the requested path is a valid results directory,
     i.e if it is a directory and has a 'nnfit' subdirectory"""
     if not path.is_dir():
@@ -86,7 +86,7 @@ def load_fitinfo(replica_path, prefix):
         erf_training   = float(fitinfo_line[2])
         chisquared     = float(fitinfo_line[3])
         is_positive    = fitinfo_line[4] == "POS_PASS"
-        arclengths = np.fromstring(fitinfo_arcl, sep=' ')
+        arclengths     = np.fromstring(fitinfo_arcl, sep=' ')
     return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths)
 
 
@@ -101,7 +101,14 @@ def replica_paths(fit):
     """Return the paths of all the replicas"""
     #Total number of members = number of replicas + 1
     l = len(PDF(fit.name))
-    return [fit.path / 'nnfit' / f'replica_{index}' for index in range(1, l)]
+    postfit_path     = fit.path / 'postfit'
+    old_postfit_path = fit.path / 'nnfit'
+    if postfit_path.is_dir():
+        return [postfit_path / f'replica_{index}' for index in range(1, l)]
+    else:
+        log.warn(f"Cannot find postfit log at: {postfit_path}")
+        log.warn(f"Falling back to old location: {old_postfit_path}")
+    return [old_postfit_path / f'replica_{index}' for index in range(1, l)]
 
 def replica_data(fit, replica_paths):
     """Load the data from the fitinfo file of each of the replicas.
