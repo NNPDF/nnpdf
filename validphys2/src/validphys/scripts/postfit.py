@@ -76,7 +76,7 @@ def filter_replicas(nnfit_path, fitname):
 
     for key in fit_vetoes:
         log.info("%d replicas pass %s" % (sum(fit_vetoes[key]), key))
-    passing_paths = list(itetools.compress(valid_paths, fit_vetos["Total"]))
+    passing_paths = list(itertools.compress(valid_paths, fit_vetoes["Total"]))
     return passing_paths
 
 
@@ -130,7 +130,7 @@ def postfit(results: str, nrep: int):
         relative_symlink(source_dir, target_dir)
         # Symlink results to pdfset directory
         source_grid = source_dir.joinpath(fitname+'.dat')
-        target_file = f'{fitname}_{drep+1:04d}.dat'
+        target_file = f'{fitname}_{drep:04d}.dat'
         target_grid = LHAPDF_path.joinpath(target_file)
         relative_symlink(source_grid, target_grid)
 
