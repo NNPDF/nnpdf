@@ -50,8 +50,5 @@ def determine_vetoes(fitinfos: list):
     for key in distributions:
         vetoes[key] = distribution_veto(distributions[key])
 
-    vetoes["Total"] = np.ones(len(fitinfos), dtype=bool)
-    for key in vetoes:
-        vetoes["Total"] = np.asarray([x & y for (x, y) in
-            zip(vetoes["Total"], vetoes[key])])
+    vetoes["Total"] = np.all(list(vetoes.values()), axis=0)
     return vetoes
