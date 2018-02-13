@@ -21,7 +21,8 @@ fitinfos = tuples(integers(min_value=1),
 @given(arrays(float, shape=shape1d, elements=nicefloats))
 def test_distribution_veto(arr):
     veto = distribution_veto(arr)
-    assert np.all(veto - np.mean(veto) <= NSIGMA_DISCARD*np.std(veto))
+    masked = arr[veto]
+    assert np.all(masked - np.mean(masked) <= NSIGMA_DISCARD*np.std(masked))
 
 
 #The case where the list is handled in postfit
