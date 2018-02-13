@@ -44,7 +44,7 @@ def check_lhapdf_info(results_dir, fitname):
     present in the fit results """
     info_path = results_dir.joinpath('nnfit', '%s.info' % fitname)
     if not info_path.is_file():
-        log.warn('Cannot find info file at %' % info_path)
+        log.warn('Cannot find info file at %s' % info_path)
         return False
     return True
 
