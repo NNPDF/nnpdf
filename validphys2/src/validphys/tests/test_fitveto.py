@@ -24,7 +24,7 @@ def test_distribution_veto(arr):
     assert np.all(veto - np.mean(veto) <= NSIGMA_DISCARD*np.std(veto))
 
 
-#TODO: Fix the case where the list is empty somewhere
+#The case where the list is handled in postfit
 @pytest.mark.filterwarnings('ignore')
 @given(lists(fitinfos, min_size=1))
 def test_determine_vetoes(fitinfos):
