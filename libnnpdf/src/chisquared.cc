@@ -80,13 +80,11 @@ namespace NNPDF
     return sqrtmat;
   }
 
-  template<class T>
-  void ComputeChi2(const T* set, int const& nMem, real *const& theory, real *chi2)
+  // TODO to sort this out, need to make data and theory vectors
+  void ComputeChi2_basic(int const& nDat, int const& nMem,
+                   const double* data, matrix<double> const& L,
+                   real *const& theory, real *chi2)
   {
-    matrix<double> const& L = set->GetSqrtCov();
-    const double* data  = set->GetData();
-    const int nDat      = set->GetNData();
-
     // Forward solve Lx = diffs
     double x[nDat];
     for (int n = 0; n < nMem; n++)
@@ -99,6 +97,17 @@ namespace NNPDF
         chi2[n] += x[i]*x[i];
       }
    return;
+  }
+
+  template<class T>
+  void ComputeChi2(const T* set, int const& nMem, real *const& theory, real *chi2)
+  {
+    matrix<double> const& L = set->GetSqrtCov();
+    const double* data  = set->GetData();
+    const int nDat      = set->GetNData();
+
+    ComputeChi2_basic(nDat, nMem, data, L, theory, chi2);
+    return;
   }
 
   template void ComputeChi2<Experiment>(const Experiment* set, int const& nMem, real *const& theory, real *chi2);
