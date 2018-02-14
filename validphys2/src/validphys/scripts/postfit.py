@@ -22,6 +22,7 @@ import argparse
 import itertools
 from glob import glob
 import logging
+import tempfile
 
 import lhapdf
 
@@ -93,9 +94,13 @@ def postfit(results: str, nrep: int):
     result_path = pathlib.Path(results).resolve()
     fitname = result_path.name
 
-    # Standard paths
+    # Paths
     nnfit_path   = result_path / 'nnfit'    # Path of nnfit replica output
-    postfit_path = result_path / 'postfit'  # Path for postfit result output
+    # Create a temporary path to store work in progress and move it to
+    # the final location in the end,
+    postfit_path = pathlib.Path(tempfile.mkdtemp(prefix='postfit_work_deleteme_',
+        dir=result_path))
+    final_postfit_path = result_path / 'postfit'
     LHAPDF_path  = postfit_path/fitname     # Path for LHAPDF grid output
 
     if not fitdata.check_nnfit_results_path(result_path):
@@ -107,10 +112,9 @@ def postfit(results: str, nrep: int):
     log.warn("Postfit aiming for %d replicas" % nrep)
 
     # Generate postfit and LHAPDF directory
-    if postfit_path.is_dir():
+    if final_postfit_path.is_dir():
         log.warn(f"WARNING: Removing existing postfit directory: {postfit_path}")
-        shutil.rmtree(str(postfit_path))
-    os.mkdir(postfit_path)
+        shutil.rmtree(final_postfit_path)
     os.mkdir(LHAPDF_path)
 
     # Setup postfit log
@@ -156,14 +160,14 @@ def postfit(results: str, nrep: int):
         lhapdf.mkPDF(fitname, 0)
     except RuntimeError as e:
         raise PostfitError("CRITICAL ERROR: Failure in reading replica zero") from e
-    else:
-        log.info("\n\n*****************************************************************\n")
-        log.info("Postfit complete")
-        log.info("Please upload your results with:")
-        log.info(f"\tvp-upload --fit {result_path}\n")
-        log.info("and install with:")
-        log.info(f"\tvp-get fit {fitname}\n")
-        log.info("*****************************************************************\n\n")
+    postfit_path.rename(final_postfit_path)
+    log.info("\n\n*****************************************************************\n")
+    log.info("Postfit complete")
+    log.info("Please upload your results with:")
+    log.info(f"\tvp-upload --fit {result_path}\n")
+    log.info("and install with:")
+    log.info(f"\tvp-get fit {fitname}\n")
+    log.info("*****************************************************************\n\n")
 
 
 def main():
