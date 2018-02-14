@@ -69,11 +69,20 @@ installation procedure.
 - APFEL
 And optionally
 - fiatlux   (for QED fits)
-- CERN-ROOT v5 (for validphys1)
+
+#### Prerequisites for validphys
+- python3.6
+- reportengine
+- matplotlib
+- blessings
+- scipy
+- pandas
+- requests
+- prompt_toolkit
 
 In general installing the most recent versions of these packages is supported. 
 For precise version requirements, see 
-[the conda specification](https://github.com/NNPDF/nnpdfcpp/blob/master/conda-recipe/meta.yaml).
+[the conda specification](https://github.com/NNPDF/nnpdf/blob/master/conda-recipe/meta.yaml).
 
 #### Compiling the code
 
@@ -123,8 +132,10 @@ runcard and its md5 key.
 4. All programs take the `<runcard>` folder as input, e.g.  ```nnfit
 <replica_number> <runcard_folder> ``` where replica_number goes from 1-n.
 
-5. Wait until you have fit results, then use `postfit` to finalize the
-PDF set by applying post selection criteria.
+5. Wait until you have fit results, then use `postfit
+<number_of_replicas> <runcard_folder>` to finalize the PDF set by
+applying post selection criteria. This will produce a set of
+`<number_of_replicas>+1` replicas.
 
 6. Upload the results using `vp-upload` then install the fitted set
 with `vp-get`.
