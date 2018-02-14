@@ -34,6 +34,8 @@ def test_determine_vetoes(fitinfos):
     assert np.all(vetoes['Positivity'] == np.array([info.is_positive for info in fitinfos]))
     tot = vetoes['Total']
     assert all(np.all(tot & val == tot) for val in vetoes.values())
+    single_replica_veto = determine_vetoes([fitinfos[0]])
+    assert single_replica_veto['Total'][0] == single_replica_veto['Positivity'][0]
     # distribution_vetoes applied a second time should veto nothing
     if sum(tot) > 0:
         passing_fitinfos = list(itertools.compress(fitinfos, tot))
