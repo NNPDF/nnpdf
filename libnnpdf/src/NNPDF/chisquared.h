@@ -14,8 +14,5 @@
 namespace NNPDF{
   matrix<double> ComputeCovMat(CommonData const& cd, std::vector<double> const& t0);
   matrix<double> ComputeSqrtMat(matrix<double> const& inmatrix);
-  void ComputeChi2_basic(int const& nDat, int const& nMem,
-                   const double* data, matrix<double> const& L,
-                   real *const& theory, real *chi2);
   template<class T> void ComputeChi2(const T*, int const&, real *const&, real *);
 }
