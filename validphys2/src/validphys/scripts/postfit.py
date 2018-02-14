@@ -25,15 +25,15 @@ import logging
 
 import lhapdf
 
+from reportengine import colors
 from validphys import lhio
 from validphys import fitdata
 from validphys import fitveto
 from validphys.core import PDF
 
-log = logging.getLogger(__name__)
+log = logging.getLogger()
 log.setLevel(logging.DEBUG)
-ch = logging.StreamHandler()
-log.addHandler(ch)
+log.addHandler(colors.ColorHandler())
 
 
 def splash():
