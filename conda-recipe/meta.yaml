@@ -1,6 +1,6 @@
 package:
-    name: libnnpdf
-    version: "{{ GIT_DESCRIBE_TAG[1:] }}.{{ GIT_DESCRIBE_NUMBER }}"
+    name: nnpdf
+    version: "{{ GIT_DESCRIBE_TAG }}.{{ GIT_DESCRIBE_NUMBER }}"
 
 source:
     git_url: ../
@@ -15,12 +15,20 @@ requirements:
     host:
         - python
         - lhapdf
+        - reportengine >=0.22.4
+        - matplotlib >=2.0.1
+        - blessings
+        - scipy >=0.19.1
+        - pandas
+        - requests
+        - prompt_toolkit
         - sqlite
         #Gsl doesn't link openblas on old debian 7
         - gsl
         - numpy {{ numpy }}
         - libarchive
         - yaml-cpp
+        - apfel >=3        
     run:
         - lhapdf
         - python
@@ -30,6 +38,7 @@ requirements:
         - numpy {{ numpy }}
         - libarchive
         - yaml-cpp
+        - apfel >=3
 
 build:
     number: 0
@@ -40,5 +49,6 @@ test:
         - nnpdf-config
 
 about:
-    home: https://nnpdf.hepforge.org/
+    home: https://nnpdf.mi.infn.it/
     license: SECRET
+    summary: "NNPDF analysis framework"
