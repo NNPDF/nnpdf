@@ -1,6 +1,6 @@
 find_package(SWIG REQUIRED)
-find_package(PythonInterp 3 REQUIRED)
-find_package(PythonLibs   3 REQUIRED)
+find_package(PythonInterp 3.6 REQUIRED)
+find_package(PythonLibs   3.6 REQUIRED)
 
 execute_process(
   COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
