@@ -181,9 +181,6 @@ std::string joinpath(const std::initializer_list<std::string> &list);
   real ComputeMom(int const& n, const real *x, int const& m);//!< Compute mth moment of distribution
   void Compute68cl(std::vector<real> const& x, real &up, real &dn);//!< Compute the 68% c.l.
   void Compute95cl(std::vector<real> const& x, real &up, real &dn);//!< Compute the 95% c.l.
-
-  void CholeskyDecomposition(matrix<double> const& inmatrix, matrix<double> & sqrtmat);
-
 }
 
 /*! @} */
