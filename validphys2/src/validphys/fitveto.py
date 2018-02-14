@@ -42,8 +42,9 @@ def determine_vetoes(fitinfos: list):
         distributions["ArcLength_"+str(i)] = [j.arclengths[i] for j in fitinfos]
 
     # Positivity veto
-    vetoes = {"Positivity": [replica.is_positive for replica in fitinfos]}
-    total_mask = np.asarray(vetoes["Positivity"])
+    posmask = np.array([replica.is_positive for replica in fitinfos], dtype=bool)
+    vetoes = {"Positivity": posmask}
+    total_mask = posmask.copy()
 
     # Distribution vetoes
     while True:
