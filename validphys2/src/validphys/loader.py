@@ -580,6 +580,10 @@ class RemoteLoader(LoaderBase):
                 shutil.rmtree(p)
         else:
             p = pathlib.Path(lhaindex.get_lha_datapath()) / fitname
+            #This is needed here as well because the path may be a
+            #broken symlink.
+            if p.is_symlink():
+                p.unlink()
         gridpath = fitpath / 'nnfit' / fitname
         p.symlink_to(gridpath, target_is_directory=True)
 
@@ -600,6 +604,10 @@ class RemoteLoader(LoaderBase):
                 name, p)
 
                 gridpath = fit.path / 'nnfit' / fit.name
+                #This is needed here as well because the path may be a
+                #broken symlink.
+                if p.is_symlink():
+                    p.unlink()
                 p.symlink_to(gridpath)
 
                 return
