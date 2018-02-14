@@ -12,7 +12,6 @@ fit_urls:
 fit_index: 'fitdata.json'
 
 theory_urls:
-    - 'http://pcteserver.mi.infn.it/~apfelcomb/commondatatheory/'
     - 'http://nnpdf.web.cern.ch/nnpdf/tables/'
 
 theory_index: 'theorydata.json'
