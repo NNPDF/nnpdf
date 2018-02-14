@@ -12,5 +12,7 @@
 #include "dataset.h"
 
 namespace NNPDF{
+  matrix<double> ComputeCovMat(CommonData const& cd, std::vector<double> const& t0);
+  matrix<double> ComputeSqrtMat(matrix<double> const& inmatrix);
   template<class T> void ComputeChi2(const T*, int const&, real *const&, real *);
 }

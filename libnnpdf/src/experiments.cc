@@ -17,6 +17,7 @@
 #include <numeric>
 
 #include "NNPDF/experiments.h"
+#include "NNPDF/chisquared.h"
 #include "NNPDF/pdfset.h"
 #include "NNPDF/dataset.h"
 #include "NNPDF/thpredictions.h"
@@ -427,9 +428,7 @@ void Experiment::PullData()
 void Experiment::GenCovMat()
 {
   fCovMat.clear();
-  fSqrtCov.clear();
   fCovMat.resize(fNData, fNData, 0);
-  fSqrtCov.resize(fNData, fNData, 0);
 
   for (int i = 0; i < fNData; i++) {
     // Diagonal case
@@ -484,7 +483,7 @@ void Experiment::GenCovMat()
     }
   }
 
-  CholeskyDecomposition(fCovMat, fSqrtCov);
+  fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 
 void Experiment::ExportCovMat(string filename)
