@@ -58,7 +58,7 @@ http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html)
 If you intend to work on the code, then building from source is the recommended
 installation procedure.
 
-#### Prerequisites
+#### Prerequisites for compiled code
 - cmake
 - pkg-config
 - lhapdf6
@@ -67,6 +67,7 @@ installation procedure.
 - sqlite3
 - yaml-cpp
 - APFEL
+
 And optionally
 - fiatlux   (for QED fits)
 
