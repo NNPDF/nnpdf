@@ -41,7 +41,7 @@ installed by:
 
 When the packages are installed, the necessary binaries are added to the `bin/`
 directory of the corresponding conda environment (which is typically in the
-`PATH`). Users can run `filter`, `nnfit`, or `postfit2` from any directory.
+`PATH`). Users can run `filter`, `nnfit`, or `postfit` from any directory.
 
 By default, data files (both from theory and experiment) are installed to:
 `<conda root>/share/NNPDF/data` and fit results will be written to 
@@ -112,7 +112,9 @@ only required configuration input required for many programs of this repository.
 1. Create a runcard by taking as template one of the files in `nnpdfcpp/config`.
 
 2. Go to `<data_path>` and download the specific theory folder using
-`disp_theory.py` and passing the `theoryid` of your runcard as theory number.
+`disp_theory.py` and passing the `theoryid` of your runcard as theory
+number. Please make sure you have installed the PDF set selected by
+the `t0pdfset` key.
 
 3. Filter the data: ```filter <runcard>.yml``` this command will generate
 a `<runcard>` folder in the current directory with a copy of the original YAML
@@ -120,6 +122,14 @@ runcard and its md5 key.
 
 4. All programs take the `<runcard>` folder as input, e.g.  ```nnfit
 <replica_number> <runcard_folder> ``` where replica_number goes from 1-n.
+
+5. Wait until you have fit results, then use `postfit` to finalize the
+PDF set by applying post selection criteria.
+
+6. Upload the results using `vp-upload` then install the fitted set
+with `vp-get`.
+
+7. Analyze results with `validphys`.
 
 ## NNPDF paths and URLS
 
