@@ -9,7 +9,11 @@ Current active vetoes:
    ArclengthX - Replicas with ArcLengthX > NSIGMA_DISCARD*StandardDev + Average
 """
 
+import json
+import logging
 import numpy as np
+
+log = logging.getLogger(__name__)
 
 # Threshold for distribution vetos
 NSIGMA_DISCARD = 4
@@ -56,3 +60,14 @@ def determine_vetoes(fitinfos: list):
 
     vetoes["Total"] = total_mask
     return vetoes
+
+
+def save_vetoes(veto_dict: dict, filepath):
+    """ Saves a fit veto dictionary to file """
+    if filepath.exists():
+        log.warn("Warning: veto file {filepath} already exists. Overwriting file")
+    with open(str(filepath), 'w') as f:
+        veto_dict_tolist = {}
+        for key in veto_dict:
+            veto_dict_tolist[key] = veto_dict[key].tolist()
+        json.dump(veto_dict_tolist, f)

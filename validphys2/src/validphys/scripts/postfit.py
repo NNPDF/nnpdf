@@ -65,7 +65,7 @@ class PostfitError(Exception):
     """Exception raised when postfit cannot suceed and knows why"""
     pass
 
-def filter_replicas(nnfit_path, fitname):
+def filter_replicas(postfit_path, nnfit_path, fitname):
     """ Find the paths of all replicas passing the standard NNPDF fit vetoes
     as defined in fitveto.py. Returns a list of the replica directories that pass."""
     # This glob defines what is considered a valid replica
@@ -81,6 +81,7 @@ def filter_replicas(nnfit_path, fitname):
     # Read FitInfo and compute vetoes
     fitinfo = [fitdata.load_fitinfo(pathlib.Path(path), fitname) for path in valid_paths]
     fit_vetoes = fitveto.determine_vetoes(fitinfo)
+    fitveto.save_vetoes(fit_vetoes, postfit_path / 'veto_count.json')
 
     for key in fit_vetoes:
         log.info("%d replicas pass %s" % (sum(fit_vetoes[key]), key))
@@ -122,7 +123,7 @@ def postfit(results: str, nrep: int):
     log.addHandler(postfitlog)
 
     # Perform postfit selection
-    passing_paths = filter_replicas(nnfit_path, fitname)
+    passing_paths = filter_replicas(postfit_path, nnfit_path, fitname)
     if len(passing_paths) < nrep:
         raise PostfitError("Number of requested replicas is too large")
     # Select the first nrep passing replicas
