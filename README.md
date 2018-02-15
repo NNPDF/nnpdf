@@ -98,14 +98,14 @@ only required configuration input required for many programs of this repository.
 
 1. Create a runcard by taking as template one of the files in `<profile_prefix>/config`.
 
-2. Go to `<data_path>` and download the specific theory folder using
-`disp_theory.py` and passing the `theoryid` of your runcard as theory
-number. Please make sure you have installed the PDF set selected by
-the `t0pdfset` key.
+2. Download the specific theory folder using `vp-get --theoryID
+<theoryid>` where `<theoryid>` is the number specified in your
+runcard. Download the t0 PDF set with `vp-get --pdf <t0pdfset>` where
+`<t0pdfset>` is the string specified in the runcard.
 
-3. Filter the data: ```filter <runcard>.yml``` this command will generate
-a `<runcard_folder>` folder in the current directory with a copy of the original YAML
-runcard and its md5 key.
+3. Filter the data: ```filter <runcard>.yml``` this command will
+generate a `<runcard_folder>` folder in the current directory with a
+copy of the original YAML runcard and its md5 key.
 
 4. All programs take the `<runcard_folder>` as input, e.g.  ```nnfit
 <replica_number> <runcard_folder> ``` where replica_number goes from 1-n.
@@ -115,8 +115,8 @@ runcard and its md5 key.
 applying post selection criteria. This will produce a set of
 `<number_of_replicas>+1` replicas.
 
-6. Upload the results using `vp-upload` then install the fitted set
-with `vp-get`.
+6. Upload the results using `vp-upload --fit <runcard_folder>` then
+install the fitted set with `vp-get --fit <fit_name>`.
 
 7. Analyze results with `validphys`.
 
