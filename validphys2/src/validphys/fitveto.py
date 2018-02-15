@@ -67,7 +67,5 @@ def save_vetoes(veto_dict: dict, filepath):
     if filepath.exists():
         log.warn("Warning: veto file {filepath} already exists. Overwriting file")
     with open(str(filepath), 'w') as f:
-        veto_dict_tolist = {}
-        for key in veto_dict:
-            veto_dict_tolist[key] = veto_dict[key].tolist()
+        veto_dict_tolist = {key: val.to_list() for key, val in veto_dict.items()}
         json.dump(veto_dict_tolist, f)
