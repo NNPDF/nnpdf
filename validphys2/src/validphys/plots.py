@@ -53,12 +53,13 @@ def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
     return fig
 
 @figure
-def plot_phi(results, dataset, phi_data, chi2_stats, pdf):
+def plot_phi(experiments, experiments_phi):
     """Plot the chi² of all experiments with bars."""
     phi = []
     xticks = []
-    phi.append(phi_data)
-    xticks.append(dataset.name)
+    for experiment, expres in zip(experiments, experiments_phi):
+        phi.append(expres)
+        xticks.append(experiment.name)
     fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=[r'$\phi$'])
     ax.set_title(r"$\phi$ for a dataset")
     return fig
