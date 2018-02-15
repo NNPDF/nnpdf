@@ -46,6 +46,13 @@ namespace NNPDF
 
         ThPredictions(const PDFSet*, const PDFSet*, const FKTable*);    //!< Different-beam constructor
 
+        // Empty constructor
+        ThPredictions(std::string pdfname,
+                      std::string setname,
+                      int nPDF,
+                      int nDat,
+                      PDFSet::erType);
+
         ThPredictions(const ThPredictions&);  //!< Copy-constructor
         friend void swap(ThPredictions&, ThPredictions&);
         ThPredictions& operator=(ThPredictions); //!< Copy-assignment

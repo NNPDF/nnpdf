@@ -208,6 +208,20 @@ fEtype(o.fEtype)
   fObs[i] = o.fObs[i];
 }
 
+/**
+ * Empty Constructor
+ */
+ThPredictions::ThPredictions(std::string pdfname, std::string setname, int nPDF, int nDat, PDFSet::erType erty):
+fObs(new real[nPDF*nDat]()),
+fTconv(0),
+fNpdf(nPDF),
+fNData(nDat),
+fPDFName(pdfname),
+fSetName(setname),
+fEtype(erty)
+{
+}
+
 
 void NNPDF::swap(ThPredictions& lhs, ThPredictions& rhs)
 {
