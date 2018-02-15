@@ -98,9 +98,9 @@ only required configuration input required for many programs of this repository.
 
 1. Create a runcard by taking as template one of the files in `<profile_prefix>/config`.
 
-2. Download the specific theory folder using `vp-get --theoryID
+2. Download the specific theory folder using `vp-get theoryID
 <theoryid>` where `<theoryid>` is the number specified in your
-runcard. Download the t0 PDF set with `vp-get --pdf <t0pdfset>` where
+runcard. Download the t0 PDF set with `vp-get pdf <t0pdfset>` where
 `<t0pdfset>` is the string specified in the runcard.
 
 3. Filter the data: ```filter <runcard>.yml``` this command will
@@ -116,7 +116,7 @@ applying post selection criteria. This will produce a set of
 `<number_of_replicas>+1` replicas.
 
 6. Upload the results using `vp-upload --fit <runcard_folder>` then
-install the fitted set with `vp-get --fit <fit_name>`.
+install the fitted set with `vp-get fit <fit_name>`.
 
 7. Analyze results with `validphys`.
 
