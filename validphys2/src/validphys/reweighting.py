@@ -73,7 +73,7 @@ def nnpdf_weights(chi2_data_for_reweighting_experiments):
 def effective_number_of_replicas(w):
     N = len(w)
     w = w*N/np.sum(w)
-    return np.exp(np.nansum(w*np.log(N/w))/N)
+    return np.exp(np.nansum(w*np.log(N)-w*np.log(w))/N)
 
 @table
 def reweighting_stats(pdf, nnpdf_weights, p_alpha_study):
