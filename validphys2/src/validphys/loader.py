@@ -584,9 +584,13 @@ class RemoteLoader(LoaderBase):
             #broken symlink.
             if p.is_symlink():
                 p.unlink()
-        gridpath = fitpath / 'nnfit' / fitname
-        p.symlink_to(gridpath, target_is_directory=True)
-
+        gridpath     = fitpath / 'postfit' / fitname
+        gridpath_old = fitpath / 'nnfit' / fitname
+        if gridpath.is_dir():
+            p.symlink_to(gridpath, target_is_directory=True)
+        else:
+            log.warn(f"Cannot find {gridpath}. Falling back to old behaviour")
+            p.symlink_to(gridpath_old, target_is_directory=True)
 
 
     def download_pdf(self, name):
@@ -597,19 +601,21 @@ class RemoteLoader(LoaderBase):
         except FitNotFound:
             pass
         else:
-            if (fit.path/'nnfit').exists():
-                p = pathlib.Path(lhaindex.get_lha_datapath()) / fit.name
+            p = pathlib.Path(lhaindex.get_lha_datapath()) / fit.name
+            fitpath     = fit.path / 'postfit'
+            fitpath_old = fit.path / 'nnfit'
+            if fitpath.exists() or fitpath_old.exists():
                 log.info("Found existing fit with the same name as the "
                 "requested PDF (%s). Symlinking the grid to the LHAPDF path (%s).",
                 name, p)
-
-                gridpath = fit.path / 'nnfit' / fit.name
                 #This is needed here as well because the path may be a
                 #broken symlink.
                 if p.is_symlink():
                     p.unlink()
-                p.symlink_to(gridpath)
-
+                if fitpath.exists():
+                    p.symlink_to(fitpath / fit.name)
+                else:
+                    p.symlink_to(fitpath_old / fit.name)
                 return
 
         #It would be good to use the LHAPDF command line, except that it does
