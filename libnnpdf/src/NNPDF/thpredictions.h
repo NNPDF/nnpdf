@@ -46,6 +46,13 @@ namespace NNPDF
 
         ThPredictions(const PDFSet*, const PDFSet*, const FKTable*);    //!< Different-beam constructor
 
+        // Empty constructor
+        ThPredictions(std::string pdfname,
+                      std::string setname,
+                      int nPDF,
+                      int nDat,
+                      PDFSet::erType);
+
         ThPredictions(const ThPredictions&);  //!< Copy-constructor
         friend void swap(ThPredictions&, ThPredictions&);
         ThPredictions& operator=(ThPredictions); //!< Copy-assignment
@@ -67,7 +74,7 @@ namespace NNPDF
         static void Convolute(const PDFSet*,const FKTable*,real*);
         static void Convolute(const PDFSet*,const FKSet*,real*);
         static void Convolute(const PDFSet*,const PDFSet*,const FKTable*,real*);
-            
+
         // Get Methods
         real* GetObs() const {return fObs;}; //!< Return Obs array
         real GetObs(int const& idat, int const& imem) const {return fObs[idat*fNpdf + imem];};
