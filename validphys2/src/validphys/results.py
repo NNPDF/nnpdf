@@ -415,14 +415,14 @@ def abs_chi2_data_experiment(experiment_results):
     """Like `abs_chi2_data` but for a whole experiment"""
     return abs_chi2_data(experiment_results)
 
-def phi_data(results):
+def phi_data(abs_chi2_data):
     """Calculate phi using values returned by abs_chi2_data """
-    alldata, central, npoints = abs_chi2_data(results)
+    alldata, central, npoints = abs_chi2_data
     return np.sqrt((alldata.data.mean() - central)/npoints)
 
-def phi_data_experiment(experiment_results):
+def phi_data_experiment(abs_chi2_data_experiment):
     """Like 'phi_data' but for whole experiment"""
-    return phi_data(experiment_results)
+    return phi_data(abs_chi2_data_experiment)
 
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
                               prepend_total:bool=True,
