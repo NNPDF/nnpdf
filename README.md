@@ -58,32 +58,9 @@ http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html)
 If you intend to work on the code, then building from source is the recommended
 installation procedure.
 
-#### Prerequisites for compiled code
-- cmake
-- pkg-config
-- lhapdf6
-- gsl
-- libarchive
-- sqlite3
-- yaml-cpp
-- APFEL
-
-And optionally
-- fiatlux   (for QED fits)
-
-#### Prerequisites for validphys
-- python3.6
-- reportengine
-- matplotlib
-- blessings
-- scipy
-- pandas
-- requests
-- prompt_toolkit
-
-In general installing the most recent versions of these packages is supported. 
 For precise version requirements, see 
 [the conda specification](https://github.com/NNPDF/nnpdf/blob/master/conda-recipe/meta.yaml).
+
 
 #### Compiling the code
 
@@ -119,7 +96,7 @@ only required configuration input required for many programs of this repository.
 
 0. compile the code and install
 
-1. Create a runcard by taking as template one of the files in `nnpdfcpp/config`.
+1. Create a runcard by taking as template one of the files in `<profile_prefix>/config`.
 
 2. Go to `<data_path>` and download the specific theory folder using
 `disp_theory.py` and passing the `theoryid` of your runcard as theory
@@ -127,10 +104,10 @@ number. Please make sure you have installed the PDF set selected by
 the `t0pdfset` key.
 
 3. Filter the data: ```filter <runcard>.yml``` this command will generate
-a `<runcard>` folder in the current directory with a copy of the original YAML
+a `<runcard_folder>` folder in the current directory with a copy of the original YAML
 runcard and its md5 key.
 
-4. All programs take the `<runcard>` folder as input, e.g.  ```nnfit
+4. All programs take the `<runcard_folder>` as input, e.g.  ```nnfit
 <replica_number> <runcard_folder> ``` where replica_number goes from 1-n.
 
 5. Wait until you have fit results, then use `postfit
