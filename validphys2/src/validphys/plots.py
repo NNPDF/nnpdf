@@ -57,9 +57,8 @@ def plot_phi(experiments, experiments_phi):
     """plots phi for all experiments as a barplot"""
     phi = experiments_phi
     xticks = [experiment.name for experiment in experiments]
-    fig, ax = plotutils.barplot(np.array(phi).transpose(), collabels=xticks, datalabels=[r'$\chi^2$'])
+    fig, ax = plotutils.barplot(np.array(phi).transpose(), collabels=xticks, datalabels=[r'$\phi'])
     ax.set_title(r"$\phi$ for each experiment")
-    ax.legend()
     return fig
 
 @figure
