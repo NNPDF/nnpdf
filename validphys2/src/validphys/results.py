@@ -379,6 +379,10 @@ def pdf_results(dataset:(DataSetSpec,  ExperimentSpec), pdfs:Sequence, t0set:(PD
 
     return (DataResult(data), *th_results)
 
+def experiment_pdf_results(experiment, pdfs:Sequence, t0set:(PDF, type(None))=None):
+    """Like pdf_results but for a whole experiment"""
+    return pdf_results(experiment, pdfs, t0set)
+
 @require_one('pdfs', 'pdf')
 @remove_outer('pdfs', 'pdf')
 def one_or_more_results(dataset:(DataSetSpec, ExperimentSpec),
