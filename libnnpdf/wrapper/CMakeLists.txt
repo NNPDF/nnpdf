@@ -29,17 +29,18 @@ if (${CMAKE_VERSION} VERSION_LESS "3.8.0")
 else()
     swig_add_library(nnpdf LANGUAGE python SOURCES ./src/nnpdf.i)
 endif()
-swig_link_libraries(nnpdf ${PROJECT_NAME} ${PYTHON_LIBRARIES})
-
-set(LIBNNPDF_WRAPPER_PREFIX ${PYTHON_SITE_PACKAGES}/NNPDF)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 #
 https://groups.google.com/a/continuum.io/d/msg/anaconda/057P4uNWyCU/Iem6OtjBCQAJ
 set_target_properties(_nnpdf PROPERTIES LINK_FLAGS "-undefined
 dynamic_lookup")
+swig_link_libraries(nnpdf ${PROJECT_NAME})
+else()
+swig_link_libraries(nnpdf ${PROJECT_NAME} ${PYTHON_LIBRARIES})
 endif()
 
+set(LIBNNPDF_WRAPPER_PREFIX ${PYTHON_SITE_PACKAGES}/NNPDF)
 install(TARGETS _nnpdf DESTINATION ${LIBNNPDF_WRAPPER_PREFIX})
 install(FILES ${CMAKE_BINARY_DIR}/libnnpdf/wrapper/nnpdf.py DESTINATION ${LIBNNPDF_WRAPPER_PREFIX})
 install(FILES ${CMAKE_SOURCE_DIR}/libnnpdf/wrapper/src/__init__.py DESTINATION ${LIBNNPDF_WRAPPER_PREFIX})
