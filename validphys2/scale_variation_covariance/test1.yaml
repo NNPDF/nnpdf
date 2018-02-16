@@ -1,0 +1,34 @@
+meta:
+   author: Cameron Voisey and Rosalyn Pearson
+   keywords: [test]
+   title: BCDMSP theory tables for theory covariance matrix
+
+default_theory:
+   - theoryid: 52
+
+theories:
+   - theoryid: 52
+   - theoryid: 66
+   - theoryid: 67
+
+use_cuts: True
+
+pdf: NNPDF31_nlo_as_0118
+
+fit: 180202-lr-nlo-central_DISonly
+
+experiments:
+   - experiment: BCDMS
+     datasets:
+         - dataset: BCDMSP
+
+template_text: |
+   Theory tables 
+   {@default_theory theory_lists@}
+
+
+actions_:
+   - - report:
+         main: True
+
+
