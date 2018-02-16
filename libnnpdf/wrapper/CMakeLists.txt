@@ -31,10 +31,8 @@ else()
 endif()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-#
-https://groups.google.com/a/continuum.io/d/msg/anaconda/057P4uNWyCU/Iem6OtjBCQAJ
-set_target_properties(_nnpdf PROPERTIES LINK_FLAGS "-undefined
-dynamic_lookup")
+#https://groups.google.com/a/continuum.io/d/msg/anaconda/057P4uNWyCU/Iem6OtjBCQAJ
+set_target_properties(_nnpdf PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
 swig_link_libraries(nnpdf ${PROJECT_NAME})
 else()
 swig_link_libraries(nnpdf ${PROJECT_NAME} ${PYTHON_LIBRARIES})
