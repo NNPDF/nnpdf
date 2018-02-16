@@ -9,6 +9,7 @@ variables:
   UPLOAD_NON_MASTER: "false"
   GIT_STRATEGY: clone
   GIT_CHECKOUT: "false"
+  GIT_DEPTH: 1000
   
 ## Run the configure and make tests
 job2:
