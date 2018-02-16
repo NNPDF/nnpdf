@@ -379,10 +379,6 @@ def pdf_results(dataset:(DataSetSpec,  ExperimentSpec), pdfs:Sequence, t0set:(PD
 
     return (DataResult(data), *th_results)
 
-def experiment_pdf_results(experiment, pdfs:Sequence, t0set:(PDF, type(None))=None):
-    """Like pdf_results but for a whole experiment"""
-    return pdf_results(experiment, pdfs, t0set)
-
 @require_one('pdfs', 'pdf')
 @remove_outer('pdfs', 'pdf')
 def one_or_more_results(dataset:(DataSetSpec, ExperimentSpec),
@@ -418,14 +414,6 @@ def abs_chi2_data(results):
 def abs_chi2_data_experiment(experiment_results):
     """Like `abs_chi2_data` but for a whole experiment"""
     return abs_chi2_data(experiment_results)
-
-def abs_chi2_data_experiment_pdf(experiment_pdf_results):
-    """Like `abs_chi2_data_experiment` but for several PDFS"""
-    (expdt, *expths) = experiment_pdf_results
-    chis = []
-    for expth in expths:
-        chis.append(abs_chi2_data_experiment([expdt, expth]))
-    return chis
     
 def phi_data(abs_chi2_data):
     """Calculate phi using values returned by abs_chi2_data """
@@ -435,15 +423,6 @@ def phi_data(abs_chi2_data):
 def phi_data_experiment(abs_chi2_data_experiment):
     """Like `phi_data` but for whole experiment"""
     return phi_data(abs_chi2_data_experiment)
-
-def phi_data_experiment_pdf(abs_chi2_data_experiment_pdf):
-    """Like `phi_data_experiment` but for several PDFs"""
-    chi_datas = abs_chi2_data_experiment_pdf
-    phis = []
-    for chi_data in chi_datas:
-        alldata, central, npoints = chi_data
-        phis.append(np.sqrt((alldata.data.mean() - central)/npoints))    
-    return phis
 
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
                               prepend_total:bool=True,
@@ -811,7 +790,7 @@ experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
 
 experiments_phi = collect(phi_data_experiment, ('experiments',))
-experiments_pdfs_phi = collect(phi_data_experiment_pdf, ('experiments',))
+experiments_pdfs_phi = collect('experiments_phi', ('pdfs',))
 
 #These are convenient ways to iterate and extract varios data from fits
 fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))
