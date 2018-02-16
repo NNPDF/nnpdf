@@ -54,11 +54,24 @@ def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
 
 @figure
 def plot_phi(experiments, experiments_phi):
-    """Plot phi for all experiments with bars."""
+    """plots phi for all experiments as a barplot"""
     phi = experiments_phi
     xticks = [experiment.name for experiment in experiments]
-    fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=[r'$\phi$'])
+    fig, ax = plotutils.barplot(np.array(phi).transpose(), collabels=xticks, datalabels=[r'$\chi^2$'])
     ax.set_title(r"$\phi$ for each experiment")
+    ax.legend()
+    return fig
+
+@figure
+def plot_phi_pdfs(experiments, pdfs, experiments_pdfs_phi):
+    """Like `plot_phi` but for multiple pdfs as input"""
+    phi = experiments_pdfs_phi
+    phi_labels = [pdf.name for pdf in pdfs]
+    xticks = [experiment.name for experiment in experiments]
+    #barplot doesn't work as per description, instead columns of values must = length of collabels, I believe this to be a slight bug but probably easier to fix barplot description not change how it works
+    fig, ax = plotutils.barplot(np.array(phi).transpose(), collabels=xticks, datalabels=phi_labels)
+    ax.set_title(r"$\phi$ for each experiment")
+    ax.legend()
     return fig
 
 #TODO: This should be simplified if at all possible. For now some more examples
