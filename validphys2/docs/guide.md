@@ -2388,15 +2388,18 @@ providers that collect the results of such computations with the
 
 The signature is:
 ```python
-collect(function, fuzzyspec)
+collect('provider_name', fuzzyspec)
 ```
 
 This will expand the `fuzzyspec` relative to the current namespace and
-compute the function once for each frame. Then it will put all the
+compute the function once for each frame.  Then it will put all the
 results in a list (to be iterated in the same order as the fuzzyspec)
-and set that as the result of the provider.
-
-For example
+and set that list as the result of the provider. The provider in the
+first argument is found following the standard `reportengine` rules.
+It can be a function defined in a provider module, a configuration
+input or a production rule, as well as another `collect` provider. As
+a special case, one can pass directly functions
+(defined with the `def` keyword).  For example
 ```python
 possets_predictionsa = collect(positivity_predictions, ('posdatasets',))
 ```
@@ -2410,16 +2413,61 @@ example:
 ```python
 def count_negative_points(possets_predictions):
     return np.sum([(r.rawdata < 0).sum(axis=1) for r in
-	possets_predictions], axis=0)
+	    possets_predictions], axis=0)
 ```
 
-Apart from functions, `collect` can also take strings as first
-argument. The resource will then be resolved using the standard
-`reportengine` machinery. For example, this is how to get the
-experiments in all fits:
+`collect` can be used to appropriately group nested inputs. For
+example here is how to obtain a list of the experiments for each fit.
+```python
+fits_experiments = collect('experiments', ('fits',))
+```
+
+Note that `collect` always returns a flat list with the provider
+evaluated for each of the namespaces spanned by the fuzzyspec. For
+example
+```python
+fits_experiments_chi2_flat = collect(abs_chi2_data_experiment,
+    ('fits', 'fitcontext', 'experiments',))
+```
+results in a flat list
+containing the result of `abs_chi2_data_experiment` resolved for each
+experiment in each fit.  One can instead retain the structure by
+chaining several `collect` providers. For instance, the code
+```python
+experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
+fits_experiment_chi2_data = collect('experiments_chi2', ('fits', 'fitcontext'))
+```
+will result in `fits_experiment_chi2_data` producing one result for
+each fit, where each of them is itself list where each item result of
+`abs_chi2_data_experiment` evaluated for each experiment in a given
+fit.
+
+Standard iteration techniques can be used to process the results of
+collect. For example here is how we would print the χ² for each
+experiment in each fit:
 
 ```python
-fits_experiments = collect('experiments', ('fits', 'fitcontext'))
+def print_fits_experiments_chi2(
+        fits, fits_experiments, fits_experiment_chi2_data):
+    for fit, fit_experiments, experiments_data in zip(
+            fits, fits_experiments, fits_experiment_chi2_data):
+         print(f"Printing results for {fit}")
+         for experiment, chi2data in zip(fit_experiments, experiments_data):
+             print(f"χ² for {experiment} is ",
+                f"{chi2data.central_result}/{chi2data.ndata}")
+```
+
+A minimal runcard to use the action above is:
+
+```yaml
+fits:
+  - NNPDF31_nlo_as_0118
+  - NNPDF31_nnlo_as_0118
+
+use_cuts: True
+
+actions_:
+    - - print_fits_experiments_chi2
 ```
 
 
