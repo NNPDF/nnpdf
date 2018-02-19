@@ -35,7 +35,6 @@ void CMSTTBARTOT5TEVFilter::ReadData()
       int idum;
       double cme;
       double sys1, sys2;
-      double stmp, dtmp;
 
       getline(f1,line);
       istringstream lstream(line);
@@ -65,7 +64,6 @@ void CMSTTBARTOT5TEVFilter::ReadData()
       fSys[i][1].type = MULT;
       fSys[i][1].name = "CMSLUMI5";
 
-      fData[i]*=(1.0 + dtmp*0.01); //Shift from asymmetric errors
 
     }
 
