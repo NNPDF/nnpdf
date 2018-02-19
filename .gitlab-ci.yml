@@ -6,7 +6,7 @@ stages:
 
 #Set to "true" to upload builds for non-default branches
 variables:
-  UPLOAD_NON_MASTER: "true"
+  UPLOAD_NON_MASTER: "false"
   GIT_STRATEGY: clone
   GIT_CHECKOUT: "true"
   GIT_DEPTH: 1000
