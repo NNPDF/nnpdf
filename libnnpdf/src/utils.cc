@@ -26,6 +26,10 @@
 
 namespace NNPDF
 {
+std::string joinpath(const std::initializer_list<std::string> &list)
+{
+  return joinpath_inner(list);
+}
   //__________________________________________________________________
   class archive_wrapper_read
   {
