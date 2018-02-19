@@ -11,7 +11,7 @@ env:
     - CONDAPATH="/Users/travis/miniconda3"
     - OUTPUT_ARCH=osx-64
     - OUTPUT_CHANNEL=conda-pkgs-private
-    - UPLOAD_NON_MASTER="false"
+    - UPLOAD_NON_MASTER="true"
 
   matrix:
     - CONDA_PY=36
