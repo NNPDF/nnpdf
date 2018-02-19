@@ -193,18 +193,44 @@ def centered_range(n, value=0, distance=1):
 
 
 def barplot(values, collabels, datalabels, orientation='auto'):
-    """The barplot as matplotlib should have it. It resizes on overflow.
+    """The barplot as matplotlib should have it.
+    It resizes on overflow.
     ``values``  should be one or two dimensional and should contain the
-    values for the barplot. ``collabels`` must have as many element
-    s ``values`` has rows, and contains the labels for each column in the
+    values for the barplot. ``collabels`` must have as many elements
+    as ``values`` has columns (or total elements if it is one dimensional),
+    and contains the labels for each column in the
     bar plot.  ``datalabels`` should have as many elements as values has
-    columns, and contains the labels for the individual items to be
+    rows, and contains the labels for the individual items to be
     compared. If ``orientation`` is ``"auto"``, the barplot will be
     horizontal or vertical depending on the number of items.
     Otherwise, the orientation can ve fixes as ``"horizontal"`` or
-    ``"vertical"``
+    ``"vertical"``.
 
-    Returns a tuple figure, axis like plt.subplots.
+    Parameters
+    ----------
+    values : array of dimensions *M×N* or *N*.
+        The input data.
+    collabels : Iterable[str] of dimensions N
+        The labels for each of the bars.
+    datalabels : Iterable[str] of dimensions M or 1
+        The label for each of the datasets to be compared.
+    orientation : {'auto', 'horizontal', 'vertical'}, 'optional'
+        The orientation of the bars.
+
+    Returns
+    -------
+    (fig, ax) : tuple
+        a tuple of a matplotlib figure and an axis, like
+        matplotlib.pyplot.subplots.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from validphys.plotutils import barplot
+    >>> vals = np.random.rand(2,5)
+    >>> collabels = ["A", "B", "C", "D", "e"]
+    >>> fig, ax = barplot(vals, collabels, ['First try', 'Second try'])
+    >>> ax.legend()
     """
     values = np.atleast_2d(values)
     ntypes, l = values.shape
