@@ -108,6 +108,9 @@ Date & Version & Major/Minor & Author & Comments\\
 \hline
 29/11/16 & 1.3.0 & Major & nh & Added uncertainties upon C-factors  \\
 \hline
+19/02/18 & 1.4.0 & Major & nh & Added global\_nx parameter. Removed SYSTYPES
+file discussion, removed references to old scripts.\\
+\hline
 \end{tabular}
 \end{center}
 \label{tab:revsum}
@@ -218,7 +221,10 @@ For a \emph{Dataset} with $N_{\text{dat}}$ datapoints and $N_{\text{sys}}$ sourc
 \subsection{{\tt SYSTYPE} file format}
 The explicit presentation of the systematic uncertainties in the {\tt CommonData} file allows for a great deal of flexibility in the treatment of these errors. Specifically, whether they should be treated as additive or multiplicative uncertainties, and how they are correlated, both within the \emph{Dataset} and within a larger \emph{Experiment}. A specification for how the systematic uncertainties should be treated is provided by a {\tt SYSTYPE} file. As there is not always an unambiguous method for the treatment of these uncertainties, these information is kept outside the (unambiguous) {\tt CommonData} file. Several options for this treatment are often provided in the form of multiple {\tt SYSTYPE} files which may be selected between in the fit.
 
-Each {\tt SYSTYPE} file begins with a line specifying the total number of systematics. Naturally this must match with the $N_{\text{sys}}$ variable specified in the associated {\tt CommonData} file. This is presented as a simple number. For example, in the case of the BCDMSD {\tt SYSTYPE} files, the first line is
+Each {\tt SYSTYPE} file begins with a line specifying the total number of
+systematics. Naturally this must match with the $N_{\text{sys}}$ variable
+specified in the associated {\tt CommonData} file. This is presented as a single
+integer. For example, in the case of the BCDMSD {\tt SYSTYPE} files, the first line is
 %%
 \begin{quotation}\noindent
 8
@@ -230,7 +236,7 @@ As there are $N_{\text{sys}}=8$ sources of systematic uncertainty for this \emph
 $i_{\text{sys}}$\quad $[$\emph{uncertainty treatment}$]$\quad $[$\emph{uncertainty description}$]$
 \end{quotation}
 %%
-Where $1< i_{\text{sys}} \leq N_{\mathrm{sys}}$ enumerates each systematic. The \emph{uncertainty treatment} determines whether the uncertainty should be treated as additive, multiplicative, or in cases where the choice is unclear, as randomised on a replica by replica basis. These choices are selected by using the strings \textbf{ADD}, \textbf{MULT}, or \textbf{RAND}. The \emph{uncertainty description} specifies how the systematic is to be correlated with other datapoints. There are three special cases for the \emph{uncertainty description}, specified by the strings \textbf{CORR}, \textbf{UNCORR}, \textbf{THEORYCORR}, \textbf{THEORYUNCORR} and \textbf{SKIP}. The first two specify whether the systematic is fully correlated \textbf{only} within the \emph{Dataset} (\textbf{CORR}), or whether the systematic is totally uncorrelated (\textbf{UNCORR}). The \textbf{THEORY} descriptor is used to describe theoretical systematics due to e.g missing NNLO corrections, which are treated as either \textbf{CORR} or \textbf{UNCORR} according to their suffix, but are not included in the generation of artificial replicas (their only contribution is to the fitting error function). If the user wishes to correlate a specific uncertainty between multiple \emph{Datasets} within an \emph{Experiment}, then they should use a custom \emph{uncertainty description}. When building a covariance matrix for an \emph{Experiment}, the {\tt nnpdf++} code checks for matches between the \emph{uncertainty descriptions} of systematics of its constituent \emph{Datasets}. If a match is found, the code will correlate those systematics over the relevant datasets. The \textbf{SKIP} descriptor removes the systematic from the convariance matrices for debug purposes.
+Where $1< i_{\text{sys}} \leq N_{\mathrm{sys}}$ enumerates each systematic. The \emph{uncertainty treatment} determines whether the uncertainty should be treated as additive, multiplicative, or in cases where the choice is unclear, as randomised on a replica by replica basis. These choices are selected by using the strings \textbf{ADD}, \textbf{MULT}, or \textbf{RAND}. The \emph{uncertainty description} specifies how the systematic is to be correlated with other datapoints. There are three special cases for the \emph{uncertainty description}, specified by the strings \textbf{CORR}, \textbf{UNCORR}, \textbf{THEORYCORR}, \textbf{THEORYUNCORR} and \textbf{SKIP}. The first two specify whether the systematic is fully correlated \textbf{only} within the \emph{Dataset} (\textbf{CORR}), or whether the systematic is totally uncorrelated (\textbf{UNCORR}). The \textbf{THEORY} descriptor is used to describe theoretical systematics due to e.g missing NNLO corrections, which are treated as either \textbf{CORR} or \textbf{UNCORR} according to their suffix, but are not included in the generation of artificial replicas (their only contribution is to the fitting error function). If the user wishes to correlate a specific uncertainty between multiple \emph{Datasets} within an \emph{Experiment}, then they should use a custom \emph{uncertainty description}. When building a covariance matrix for an \emph{Experiment}, the {\tt nnpdf++} code checks for matches between the \emph{uncertainty descriptions} of systematics of its constituent \emph{Datasets}. If a match is found, the code will correlate those systematics over the relevant datasets. The \textbf{SKIP} descriptor removes the systematic from the covariance matrices for debug purposes.
 
 As an example, let us consider an NNPDF2.3 standard {\tt SYSTYPE} for the BCDMSD \emph{Dataset}.
 %%
@@ -456,7 +462,7 @@ The {\tt nnpdf++} code needs to be able to handle a great deal of different opti
 and theoretical choices. In the code, every effort has been made to keep experimental and theoretical parameters strictly separate.
 
 In this section we shall specify the layout of the various {\tt nnpdf++} data directory. It is in this directory that all of the read-only data to be used in
-the fit are accessed. The data directory is located in the {\tt nnpdfcpp} git repository, under the path {\tt /nnpdfcpp/data/}. This path is typically supplied to the different projects by way of the compile time macro {\tt DATA\_PATH} which is by default set to {\tt ../nnpdfcpp/data} therefore assuming that the different {\tt nnpdf++} project repositories have been checked out in the same directory. However the user may change this to specify a custom data directory location.
+the fit are accessed. The data directory is located in the {\tt nnpdfcpp} git repository, under the path {\tt /nnpdfcpp/data/}.
 \subsection{Experimental data storage}
 The central repository for {\tt CommonData} in use by {\tt nnpdf++} projects is located in the {\tt nnpdfcpp} git repository at
 \begin{quotation}
@@ -470,27 +476,14 @@ Information on the treatment of systematic uncertainties, provided in {\tt SYSTY
 \begin{quotation}
     {\tt /nnpdfcpp/data/commondata/systypes}
 \end{quotation}
-Here several {\tt SYSTYPE} files may be supplied for each {\it Dataset}. The various options are enumerated by an integer suffix to the filename. The filename format for {\tt SYSTYPE} files is therefore
+Here several {\tt SYSTYPE} files may be supplied for each {\it Dataset}. The various options are enumerated by suffix to the filename. The filename format for {\tt SYSTYPE} files is therefore
 \begin{quotation}
 	{\tt SYSTYPE\_<SETNAME>\_<SYSID>.dat }
 \end{quotation}
-As an example, consider the first {\tt SYSTYPE} file for the D0ZRAP {\it Dataset}:
+Where the default systematic ID is {\textbf DEFAULT}. As an example, consider
+the first {\tt SYSTYPE} file for the D0ZRAP {\it Dataset}:
 \begin{quotation}
-	{\tt SYSTYPE\_D0ZRAP\_0.dat }
-\end{quotation}
-In addition to the {\tt SYSTYPE} files, this directory also includes files containing a description of each treatment of systematic errors. They have the filename format
-\begin{quotation}
-	{\tt SYSTYPES\_<SETNAME>.info }
-\end{quotation}
-and have no particular layout, but must enumerate and give a brief explanation for all of the possible systematics treatments for the associated {\it Dataset}. For example, here is the info file for the D0ZRAP systypes:
-\begin{quotation}\noindent
-\# SYSTYPES.info : SysType options description.\\
-\# Please fill this in when you add a new SysType Option\\
-\\
-1: NNPDF2.3 Standard (Default)\\
-2: All systematic uncertainties assumed to be multiplicative\\
-3: All systematic uncertainties assumed to be additive\\
-4: Baseline Standard (Collider data: All systematics random)
+	{\tt SYSTYPE\_D0ZRAP\_DEFAULT.dat }
 \end{quotation}
 
 \subsection{Theory lookup table}
@@ -513,17 +506,9 @@ Each theory configuration is stored as a GZIP compressed Tar archive with filena
 \begin{quotation}
     {\tt theory\_<THEORYID>.tgz}
 \end{quotation}
-and are stored at
-\begin{quotation}
-    {\tt pcteserver.mi.infn.it:/home/apfelcomb/WEB/commondatatheory/}
-\end{quotation}
-For easy access, they can be downloaded through the {\tt disp\_theory.py} script mentioned above, or through the web interface at
-
-\begin{quotation}
-    \url{http://pcteserver.mi.infn.it/~apfelcomb/fkviewer/}
-\end{quotation}
-The uploading of a new theory archive can be performed through the {\tt upload\_theory.sh} script which generates and uploads the archive.
-Each archive contains the following directory structure
+and are stored at the location specified in the default nnprofile.yaml. For easy
+access, they can be downloaded through the {\tt vp-get} utility.  Each archive
+contains the following directory structure
 \begin{quotation}\noindent
 {\tt
 theory\_X/ \\
@@ -546,9 +531,6 @@ Finally the {\tt FK} tables themselves are stored in {\tt theory\_X/fastkernel/}
 {\tt FK\_<SETNAME>.dat }
 \end{quotation}
 Naturally, all of the FastKernel and C-factor files within the directory {\tt theory\_X/} have been determined with the theoretical parameters specified in the theory lookup table under ID {\tt X}.
-\\\\
-For use in the {\tt nnpdf++} code, these theory archives should be uncompressed in the relevant
-data directory. The code then may switch between different theory settings by using the relevant files from the relevant theory directory.
 
 \clearpage
 \appendix
@@ -611,6 +593,8 @@ Field/Key       & Type    & Description                    & Comments \\
   SIN2TW    & Real    & $\sin^2\theta_W$               & \\
   TMC       & Integer & Target mass corrections        & Boolean \\
   MP        & Real    & $M_P$ Proton mass              & Units: GeV \\
+  global\_nx & Integer    & Global x-grid precision    & Default (0) uses
+  set-by-set precision \\
   Comments  & Text    & General comments               & \\
 \hline
 \end{tabular}
