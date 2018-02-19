@@ -19,8 +19,17 @@ requirements:
         - libarchive
         - yaml-cpp
         - apfel >=3   # see https://github.com/scarrazza/apfel
-        # requirements for validphys
         - python
+    run:
+        - lhapdf
+        - sqlite
+        - libgcc # [linux]
+        - gsl
+        - numpy {{ numpy }}
+        - libarchive
+        - yaml-cpp
+        - apfel >=3
+        - python # requirements for validphys
         - reportengine >=0.22.4 # see https://github.com/NNPDF/reportengine
         - matplotlib >=2.0.1
         - blessings
@@ -29,16 +38,6 @@ requirements:
         - requests
         - prompt_toolkit
         - numpy {{ numpy }}
-    run:
-        - lhapdf
-        - python
-        - sqlite
-        - libgcc # [linux]
-        - gsl
-        - numpy {{ numpy }}
-        - libarchive
-        - yaml-cpp
-        - apfel >=3
 
 build:
     number: 0
