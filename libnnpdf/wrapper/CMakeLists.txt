@@ -16,6 +16,16 @@ execute_process(
     OUTPUT_VARIABLE PYTHON_SITE_PACKAGES 
   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+
+execute_process(
+  COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
+    import sysconfig; 
+    lcom = sysconfig.get_config_var(\"LDSHARED\");
+    cc, _, flags = lcom.partition(\" \");
+    print(flags)"
+    OUTPUT_VARIABLE PYTHON_EXTENSION_LINKFLAGS 
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
 include(${SWIG_USE_FILE})
 include_directories(${NUMPY_INCLUDE})
 include_directories(${PYTHON_INCLUDE_DIRS})
@@ -29,7 +39,7 @@ if (${CMAKE_VERSION} VERSION_LESS "3.8.0")
 else()
     swig_add_library(nnpdf LANGUAGE python SOURCES ./src/nnpdf.i)
 endif()
-swig_link_libraries(nnpdf ${PROJECT_NAME} ${PYTHON_LIBRARIES})
+swig_link_libraries(nnpdf ${PROJECT_NAME} ${PYTHON_EXTENSION_LINKFLAGS})
 
 set(LIBNNPDF_WRAPPER_PREFIX ${PYTHON_SITE_PACKAGES}/NNPDF)
 install(TARGETS _nnpdf DESTINATION ${LIBNNPDF_WRAPPER_PREFIX})
