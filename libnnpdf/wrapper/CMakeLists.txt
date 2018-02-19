@@ -39,12 +39,7 @@ if (${CMAKE_VERSION} VERSION_LESS "3.8.0")
 else()
     swig_add_library(nnpdf LANGUAGE python SOURCES ./src/nnpdf.i)
 endif()
-
-if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    swig_link_libraries(nnpdf ${PROJECT_NAME} ${PYTHON_EXTENSION_LINKFLAGS})
-else()
-    swig_link_libraries(nnpdf ${PROJECT_NAME} ${PYTHON_LIBRARIES})
-endif()
+swig_link_libraries(nnpdf ${PROJECT_NAME} ${PYTHON_EXTENSION_LINKFLAGS})
 
 set(LIBNNPDF_WRAPPER_PREFIX ${PYTHON_SITE_PACKAGES}/NNPDF)
 install(TARGETS _nnpdf DESTINATION ${LIBNNPDF_WRAPPER_PREFIX})
