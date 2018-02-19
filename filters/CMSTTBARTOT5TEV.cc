@@ -46,12 +46,10 @@ void CMSTTBARTOT5TEVFilter::ReadData()
 
       lstream >> fData[i];       //central value
       lstream >> fStat[i];       //statistical uncertainty
-      lstream >> sys1 >> sys2;   //Asymmetric systematic uncertainty
+      lstream >> sys1 >> dummy;   //Symmetric systematic uncertainty, so reading 2nd systematic to dummmy
       sys1 = sys1/fData[i]*100;
-      sys2 = sys2/fData[i]*100;
-      symmetriseErrors(sys1,sys2,&stmp,&dtmp);
 
-      fSys[i][0].mult = stmp;    //Symmetric systematic uncertainty
+      fSys[i][0].mult = sys1;    //Symmetric systematic uncertainty
       lstream >> fSys[i][1].add; //Luminosity uncertainty
 
       fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
@@ -60,7 +58,7 @@ void CMSTTBARTOT5TEVFilter::ReadData()
 
       fSys[i][1].mult = fSys[i][1].add/fData[i]*100;
       fSys[i][1].type = MULT;
-      fSys[i][1].name = "CMSLUMI11";
+      fSys[i][1].name = "CMSLUMI5";
 
       fData[i]*=(1.0 + dtmp*0.01); //Shift from asymmetric errors
 
