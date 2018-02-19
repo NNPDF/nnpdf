@@ -15,6 +15,9 @@ from reportengine.checks import (make_check, CheckError, require_one,
 
 from validphys import lhaindex
 
+import logging
+log = logging.getLogger(__name__)
+
 @make_check
 def check_pdf_is_montecarlo(ns, **kwargs):
     pdf = ns['pdf']
@@ -46,14 +49,17 @@ def check_can_save_grid(ns, **kwags):
                          "parameter is set to True:\n%s" %
                         (write_path, e))
 
-#TODO: Make postfit know about which replicas it has selected
 @make_check
 def check_has_fitted_replicas(ns, **kwargs):
     name, path = ns['fit']
-    postfit_path = path/'nnfit'/'postfit.log'
+    postfit_path = path/'postfit'/'postfit.log'
+    old_postfit_path = path/'nnfit'/'postfit.log'
     if not postfit_path.exists():
-        raise CheckError("Fit {name} does not appear to be completed. "
-        "Expected to find file {postfit_path}".format(**locals()))
+        log.warn(f"Cannot find postfit log at: {postfit_path}")
+        log.warn(f"Falling back to old location: {old_postfit_path}")
+        if not old_postfit_path.exists():
+            raise CheckError("Fit {name} does not appear to be completed. "
+            "Expected to find file {postfit_path}".format(**locals()))
 
     if not lhaindex.isinstalled(name):
         raise CheckError("The PDF corresponding to the fit, '%s', "
