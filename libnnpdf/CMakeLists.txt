@@ -1,3 +1,8 @@
+set(prefix ${CMAKE_INSTALL_PREFIX})
+set(exec_prefix "${prefix}")
+set(includedir "${prefix}/include")
+set(libdir "${prefix}/lib")
+
 configure_file(
   "${PROJECT_SOURCE_DIR}/libnnpdf/nnprofile.yaml.in"
   "${PROJECT_SOURCE_DIR}/libnnpdf/nnprofile.yaml"
@@ -13,10 +18,6 @@ configure_file(
   "${PROJECT_SOURCE_DIR}/libnnpdf/src/NNPDF/config.h"
   )
 
-set(prefix ${CMAKE_INSTALL_PREFIX})
-set(exec_prefix "${prefix}")
-set(includedir "${prefix}/include")
-set(libdir "${prefix}/lib")
 configure_file(
   "${PROJECT_SOURCE_DIR}/libnnpdf/scripts/nnpdf.pc.in"
   "${PROJECT_SOURCE_DIR}/libnnpdf/scripts/nnpdf.pc"
