@@ -410,9 +410,23 @@ def abs_chi2_data(results):
     return Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]),
                     central_result, len(data_result))
 
+
 def abs_chi2_data_experiment(experiment_results):
     """Like `abs_chi2_data` but for a whole experiment"""
     return abs_chi2_data(experiment_results)
+    
+def phi_data(abs_chi2_data):
+    """Calculate phi using values returned by `abs_chi2_data`.
+
+    For more information on how phi is calculated see Eq.(24) in
+    1410.8849
+    """
+    alldata, central, npoints = abs_chi2_data
+    return np.sqrt((alldata.data.mean() - central)/npoints)
+
+def phi_data_experiment(abs_chi2_data_experiment):
+    """Like `phi_data` but for whole experiment"""
+    return phi_data(abs_chi2_data_experiment)
 
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
                               prepend_total:bool=True,
@@ -778,6 +792,9 @@ each_dataset_results = collect(results, ('experiments', 'experiment'))
 
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
+
+experiments_phi = collect(phi_data_experiment, ('experiments',))
+experiments_pdfs_phi = collect('experiments_phi', ('pdfs',))
 
 #These are convenient ways to iterate and extract varios data from fits
 fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))
