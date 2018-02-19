@@ -12,33 +12,32 @@ requirements:
         - swig ==3.0.10
         - cmake
         - pkg-config
-    host:      
+    host:
         - lhapdf      # with python3.6 wrapper
-        - sqlite    
+        - sqlite
         - gsl         # Gsl doesn't link openblas on old debian 7
         - libarchive
         - yaml-cpp
         - apfel >=3   # see https://github.com/scarrazza/apfel
         - python
-        - numpy {{ numpy }}
+        - numpy =1.14
     run:
         - lhapdf
         - sqlite
         - libgcc # [linux]
         - gsl
-        - numpy {{ numpy }}
+        - numpy
         - libarchive
         - yaml-cpp
-        - apfel >=3
+        - apfel
         - python # requirements for validphys
         - reportengine >=0.22.4 # see https://github.com/NNPDF/reportengine
         - matplotlib >=2.0.1
         - blessings
         - scipy >=0.19.1
-        - pandas
+        - pandas =0.20
         - requests
         - prompt_toolkit
-        - numpy {{ numpy }}
 
 build:
     number: 0
