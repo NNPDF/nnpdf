@@ -11,8 +11,6 @@
         layout.
 """
 __authors__ = 'Nathan Hartland, Zahari Kassabov'
-__version__ = "3.0b"
-
 
 import sys
 import os.path
@@ -45,7 +43,8 @@ def splash():
     print("  ██╔═══╝ ██║   ██║╚════██║   ██║   ██╔══╝  ██║   ██║   ")
     print("  ██║     ╚██████╔╝███████║   ██║   ██║     ██║   ██║   ")
     print("  ╚═╝      ╚═════╝ ╚══════╝   ╚═╝   ╚═╝     ╚═╝   ╚═╝   ")
-    print("  __v" + __version__ + "__, __coredevs__: S.C, N.H. Z.K.\n")
+    print("  __coredevs__: S.C, N.H. Z.K.\n")
+
 
 def relative_symlink(source, dest):
     """ Forms a relative symlink between 'source' and 'dest' """
@@ -61,9 +60,11 @@ def set_lhapdf_info(info_path, nrep):
         f.write(txt.replace('REPLACE_NREP', str(nrep)))
         f.truncate()
 
+
 class PostfitError(Exception):
     """Exception raised when postfit cannot suceed and knows why"""
     pass
+
 
 def filter_replicas(postfit_path, nnfit_path, fitname):
     """ Find the paths of all replicas passing the standard NNPDF fit vetoes
@@ -87,8 +88,6 @@ def filter_replicas(postfit_path, nnfit_path, fitname):
         log.info("%d replicas pass %s" % (sum(fit_vetoes[key]), key))
     passing_paths = list(itertools.compress(valid_paths, fit_vetoes["Total"]))
     return passing_paths
-
-
 
 
 def postfit(results: str, nrep: int):

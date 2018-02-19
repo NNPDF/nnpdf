@@ -58,6 +58,9 @@ def determine_vetoes(fitinfos: list):
         if sum(new_total_mask) == sum(total_mask): break
         total_mask = new_total_mask
 
+    pass_chi2 = np.asarray(distributions["ChiSquared"])[total_mask]
+    log.info(f"Passing average chi2: {np.mean(pass_chi2)}")
+
     vetoes["Total"] = total_mask
     return vetoes
 
@@ -67,5 +70,5 @@ def save_vetoes(veto_dict: dict, filepath):
     if filepath.exists():
         log.warn("Warning: veto file {filepath} already exists. Overwriting file")
     with open(str(filepath), 'w') as f:
-        veto_dict_tolist = {key: val.to_list() for key, val in veto_dict.items()}
+        veto_dict_tolist = {key: val.tolist() for key, val in veto_dict.items()}
         json.dump(veto_dict_tolist, f)
