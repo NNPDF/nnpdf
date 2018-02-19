@@ -54,7 +54,11 @@ def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
 
 @figure
 def plot_phi(experiments, experiments_phi):
-    """plots phi for all experiments as a barplot"""
+    """plots phi for each experiment as a bar for a single
+    PDF input
+
+    See `phi_data` for information on how phi is calculated 
+    """
     phi = experiments_phi
     xticks = [experiment.name for experiment in experiments]
     fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=pdf.name)
@@ -63,7 +67,7 @@ def plot_phi(experiments, experiments_phi):
 
 @figure
 def plot_phi_pdfs(experiments, pdfs, experiments_pdfs_phi):
-    """Like `plot_phi` but for multiple pdfs as input"""
+    """Like `plot_phi` but plots a set of bars for each PDF input"""
     phi = experiments_pdfs_phi
     phi_labels = [pdf.name for pdf in pdfs]
     xticks = [experiment.name for experiment in experiments]

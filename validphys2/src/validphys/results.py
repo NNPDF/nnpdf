@@ -416,7 +416,11 @@ def abs_chi2_data_experiment(experiment_results):
     return abs_chi2_data(experiment_results)
     
 def phi_data(abs_chi2_data):
-    """Calculate phi using values returned by abs_chi2_data """
+    """Calculate phi using values returned by `abs_chi2_data`.
+
+    For more information on how phi is calculated see Eq.(24) in
+    1410.8849
+    """
     alldata, central, npoints = abs_chi2_data
     return np.sqrt((alldata.data.mean() - central)/npoints)
 
