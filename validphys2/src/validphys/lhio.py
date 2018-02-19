@@ -15,6 +15,7 @@ import yaml
 import lhapdf
 
 from validphys import lhaindex
+from validphys.core import PDF
 
 log = logging.getLogger(__name__)
 
@@ -38,8 +39,8 @@ def read_xqf_from_file(f):
     return pd.Series(vals, index = pd.MultiIndex.from_product((xvals, qvals, fvals)))
 
 
-def read_xqf_from_lhapdf(pdf, replica, rep0grids):
-    indexes = tuple(rep0grids.index)
+def read_xqf_from_lhapdf(pdf, replica, kin_grids):
+    indexes = tuple(kin_grids.index)
     #Use LHAPDF directly to avoid the insanely deranged replica 0 convention
     #of libnnpdf.
     #TODO: Find a way around this
@@ -51,7 +52,7 @@ def read_xqf_from_lhapdf(pdf, replica, rep0grids):
     for x in indexes:
         #TODO: Change this for a faster grid_values call
         vals += [xfxQ(x[3],x[1],x[2])]
-    return pd.Series(vals, index = rep0grids.index)
+    return pd.Series(vals, index = kin_grids.index)
 
 def read_all_xqf(f):
     while True:
@@ -60,7 +61,7 @@ def read_all_xqf(f):
             return
         yield result
 
-def load_replica(pdf, rep, rep0grids=None):
+def load_replica(pdf, rep, kin_grids=None):
 
     suffix = str(rep).zfill(4)
 
@@ -75,8 +76,8 @@ def load_replica(pdf, rep, rep0grids=None):
     with open(path, 'rb') as inn:
         header = b"".join(split_sep(inn))
 
-        if rep0grids is not None:
-            xfqs = read_xqf_from_lhapdf(pdf, rep, rep0grids)
+        if kin_grids is not None:
+            xfqs = read_xqf_from_lhapdf(pdf, rep, kin_grids)
         else:
             xfqs = list(read_all_xqf(inn))
             xfqs = pd.concat(xfqs, keys=range(len(xfqs)))
@@ -108,7 +109,10 @@ def _rep_to_buffer(out, header, subgrids):
 
 def write_replica(rep, set_root, header, subgrids):
     suffix = str(rep).zfill(4)
-    with open(set_root / f'{set_root.name}_{suffix}.dat', 'wb') as out:
+    target_file = set_root / f'{set_root.name}_{suffix}.dat'
+    if target_file.is_file():
+        log.warn(f"Overwriting replica file {target_file}")
+    with open(target_file, 'wb') as out:
         _rep_to_buffer(out, header, subgrids)
 
 def load_all_replicas(pdf, db=None):
@@ -149,6 +153,47 @@ def rep_matrix(gridlist):
 def _index_to_path(set_folder, set_name,  index):
     return set_folder/('%s_%04d.dat' % (set_name, index))
 
+def generate_replica0(pdf, kin_grids=None, extra_fields=None):
+    """ Generates a replica 0 as an average over an existing set of LHAPDF
+        replicas and outputs it to the PDF's parent folder
+
+    Parameters
+    -----------
+    pdf : validphys.core.PDF
+        An existing validphys PDF object from which the average replica will be
+        (re-)computed
+
+    kin_grids: Grids in (x,Q) used to print replica0 upon. If None, the grids
+        of the source replicas are used.
+    """
+
+    if extra_fields is not None:
+        raise NotImplementedError()
+
+    set_info = pathlib.Path(pdf.infopath)
+    set_root = set_info.parent
+    if not set_root.exists():
+        raise RuntimeError(f"Target directory {set_root} does not exist")
+
+    loaded_grids = {}
+    grids = []
+
+    for irep in range(1, len(pdf)):
+        if irep in loaded_grids:
+            grid = loaded_grids[irep]
+        else:
+            header, grid = load_replica(pdf, irep, kin_grids=kin_grids)
+            loaded_grids[irep] = grid
+        grids.append(grid)
+
+    # This takes care of failing if headers don't match
+    try:
+        M = rep_matrix(grids)
+    except ValueError as e:
+        raise ValueError("Null values found in replica grid matrix. "
+                         "This may indicate that the headers don't match"
+                         "If this is intentional try using use_rep0grid=True") from e
+    write_replica(0, set_root, header, M.mean(axis=1))
 
 def new_pdf_from_indexes(
         pdf, indexes, set_name=None, folder=None,
@@ -210,34 +255,24 @@ def new_pdf_from_indexes(
             else:
                 new_file.write(line)
 
-
     if use_rep0grid:
         _, rep0grid = load_replica(pdf, 0)
     else:
         rep0grid = None
 
-
-    loaded_grids = {}
-    grids = []
-
     for newindex,oldindex in enumerate(indexes, 1):
         original_path = _index_to_path(original_folder, pdf, oldindex)
         new_path = _index_to_path(set_root, set_name, newindex)
         shutil.copy(original_path, new_path)
-        if oldindex in loaded_grids:
-            grid = loaded_grids[oldindex]
-        else:
-            header, grid = load_replica(pdf,oldindex, rep0grids=rep0grid)
-            loaded_grids[oldindex] = grid
-        grids.append(grid)
-    #This takes care of failing if headers don't match
+
+    # Generate replica 0
+    oldpaths = lhapdf.paths()
     try:
-        M = rep_matrix(grids)
-    except ValueError as e:
-        raise ValueError("Null values found in replica grid matrix. "
-                         "This may indicate that the headers don't match. "
-                         "Try using use_rep0grid=True") from e
-    write_replica(0, set_root, header, M.mean(axis=1))
+        lhapdf.setPaths([str(folder)])
+        generatedPDF = PDF(set_name)
+        generate_replica0(generatedPDF, rep0grid)
+    finally:
+        lhapdf.setPaths(oldpaths)
 
     if installgrid:
         newpath = pathlib.Path(lhaindex.get_lha_datapath()) /  set_name

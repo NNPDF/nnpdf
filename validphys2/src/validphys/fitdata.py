@@ -21,44 +21,74 @@ from validphys.plotoptions import get_info
 from validphys import sumrules
 
 #TODO: Add more stuff here as needed for postfit
-
+LITERAL_FILES = ['chi2exps.log']
+REPLICA_FILES = ['.dat', '.fitinfo', '.params', '.preproc', '.sumrules']
 
 #t = blessings.Terminal()
 log = logging.getLogger(__name__)
 
-#TODO: These should be the actual filenames, without the redundant prefix
-REPLICA_FILES = (
-'dat',
-'fitinfo',
-'params',
-'preproc',
-'sumrules',
-)
+#TODO setup make_check on these
+def check_nnfit_results_path(path):
+    """ Returns True if the requested path is a valid results directory,
+    i.e if it is a directory and has a 'nnfit' subdirectory"""
+    if not path.is_dir():
+        log.warn('Path is not a directory %s' % path)
+        return False
+    if not (path / 'nnfit').is_dir():
+        log.warn('Path %s is not a directory' % (str(path/'nnfit')))
+        return False
+    return True
 
-LITERAL_FILES = (
-'chi2exps.log',
-'GAMin.log',
-'nnfit.yml',
-)
+def check_lhapdf_info(results_dir, fitname):
+    """ Check that an LHAPDF info metadata file is
+    present in the fit results """
+    info_path = results_dir.joinpath('nnfit', '%s.info' % fitname)
+    if not info_path.is_file():
+        log.warn('Cannot find info file at %s' % info_path)
+        return False
+    return True
 
-ReplicaSpec = namedtuple('ReplicaSpec', ('index', 'path', 'info'))
+#TODO This should establish if the .dat files are corrupted or not
+def check_replica_files(replica_path, prefix):
+    """ Verification of a replica results directory at `replica_path`
+    for a fit named `prefix`. Returns True if the results
+    directory is complete"""
 
-FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'pos_status', 'arclenghts'))
+    path = pathlib.Path(replica_path)
+    if not path.is_dir():
+        log.warn("Invalid directory for replica %s" % path)
+        return False
+    valid = True
+    for f in LITERAL_FILES:
+        test_path = path/f
+        if not test_path.is_file():
+            log.warn("Missing file: %s" % test_path)
+            valid = False
+    for f in REPLICA_FILES:
+        test_path = (path/prefix).with_suffix(f)
+        if not test_path.is_file():
+            log.warn("Missing file: %s" % test_path)
+            valid = False
+    if not valid:
+        log.warn("Found invalid replica %s" % path)
+    return valid
+
+FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'is_positive', 'arclengths'))
 def load_fitinfo(replica_path, prefix):
     """Process the data in the ".fitinfo" file of a single replica."""
     p = replica_path / (prefix + '.fitinfo')
-    with p.open() as f:
-        line = next(f)
-        props = iter(line.split())
-        nite = int(next(props))
-        validation = float(next(props))
-        training = float(next(props))
-        chi2 = float(next(props))
-        pos_status = next(props)
-        line = next(f)
-        arclenghts = np.fromstring(line, sep=' ')
+    with open(p, 'r') as fitinfo_file:
+        fitinfo_line = fitinfo_file.readline().split() # General fit properties
+        fitinfo_arcl = fitinfo_file.readline()         # Replica arc-lengths
 
-    return FitInfo(nite, training, validation, chi2, pos_status, arclenghts)
+        n_iterations   = int(  fitinfo_line[0])
+        erf_validation = float(fitinfo_line[1])
+        erf_training   = float(fitinfo_line[2])
+        chisquared     = float(fitinfo_line[3])
+        is_positive    = fitinfo_line[4] == "POS_PASS"
+        arclengths     = np.fromstring(fitinfo_arcl, sep=' ')
+    return FitInfo(n_iterations, erf_training, erf_validation, chisquared, is_positive, arclengths)
+
 
 #TODO: Produce a more informative .sumrules file.
 def load_sumrules(replica_path, prefix):
@@ -71,7 +101,14 @@ def replica_paths(fit):
     """Return the paths of all the replicas"""
     #Total number of members = number of replicas + 1
     l = len(PDF(fit.name))
-    return [fit.path / 'nnfit' / f'replica_{index}' for index in range(1, l)]
+    postfit_path     = fit.path / 'postfit'
+    old_postfit_path = fit.path / 'nnfit'
+    if postfit_path.is_dir():
+        return [postfit_path / f'replica_{index}' for index in range(1, l)]
+    else:
+        log.warn(f"Cannot find postfit log at: {postfit_path}")
+        log.warn(f"Falling back to old location: {old_postfit_path}")
+    return [old_postfit_path / f'replica_{index}' for index in range(1, l)]
 
 def replica_data(fit, replica_paths):
     """Load the data from the fitinfo file of each of the replicas.
