@@ -11,6 +11,7 @@ sigma ttbar = 69.5 ± 6.1 (stat) +5.6 - 5.6 (syst) ± 1.6 (lumi) pb
  */
 
 #include "CMSTTBARTOT5TEV.h"
+#include <NNPDF/exceptions.h>
 
 void CMSTTBARTOT5TEVFilter::ReadData()
 {
@@ -46,7 +47,11 @@ void CMSTTBARTOT5TEVFilter::ReadData()
 
       lstream >> fData[i];       //central value
       lstream >> fStat[i];       //statistical uncertainty
-      lstream >> sys1 >> dummy;   //Symmetric systematic uncertainty, so reading 2nd systematic to dummmy
+      lstream >> sys1 >> sys2;   //Symmetric systematic uncertainty
+     
+      if (sys2 != -sys1)
+          throw NNPDF::LogicException("CMSTTBARTOT5TEVFilter::ReadData", "systematics are not symmetric.");
+
       sys1 = sys1/fData[i]*100;
 
       fSys[i][0].mult = sys1;    //Symmetric systematic uncertainty
