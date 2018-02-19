@@ -57,7 +57,7 @@ def plot_phi(experiments, experiments_phi):
     """plots phi for all experiments as a barplot"""
     phi = experiments_phi
     xticks = [experiment.name for experiment in experiments]
-    fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=[r'$\phi'])
+    fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=pdf.name)
     ax.set_title(r"$\phi$ for each experiment")
     return fig
 
@@ -68,14 +68,6 @@ def plot_phi_pdfs(experiments, pdfs, experiments_pdfs_phi):
     phi_labels = [pdf.name for pdf in pdfs]
     xticks = [experiment.name for experiment in experiments]
     fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=phi_labels)
-    #test for how barplot plotted bars
-    if ax.yaxis.get_visible():
-        avgline = ax.axvline
-    else:
-        avgline = ax.axhline
-        #for loop seems unneccessary but couldn't label vlines/hlines seperately
-    for i, phi_label in enumerate(phi_labels):
-        avgline(np.mean(phi[i]), 0, 1, label = phi_label + " average", linestyle='solid', color="C" + str(i))
     ax.set_title(r"$\phi$ for each experiment")
     ax.legend()
     return fig
