@@ -20,6 +20,7 @@ requirements:
         - yaml-cpp
         - apfel >=3   # see https://github.com/scarrazza/apfel
         - python
+        - numpy {{ numpy }}
     run:
         - lhapdf
         - sqlite
