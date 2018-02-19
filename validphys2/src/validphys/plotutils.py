@@ -221,7 +221,9 @@ def barplot(values, collabels, datalabels, orientation='auto'):
     -------
     (fig, ax) : tuple
         a tuple of a matplotlib figure and an axis, like
-        matplotlib.pyplot.subplots.
+        matplotlib.pyplot.subplots. The axis will have a ``_bar_orientation``
+        attribute that will either be 'horizontal' or 'vertical' and will
+        correspond to the actual orientaion of the plot.
 
     Examples
     --------
@@ -317,7 +319,7 @@ def barplot(values, collabels, datalabels, orientation='auto'):
     ax.spines['right'].set_color('none')
     ax.grid(False)
     fig.tight_layout()
-
+    ax._bar_orientation = orientation
     return fig, ax
 
 def plot_horizontal_errorbars(cvs, errors, categorylabels, datalabels=None,
