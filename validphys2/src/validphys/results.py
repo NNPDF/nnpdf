@@ -805,7 +805,7 @@ def theory_description(theoryid):
     return pd.DataFrame(pd.Series(theoryid.get_description()), columns=[theoryid])
 
 @table
-def theory_lists(experiments, pdf, experiments_index):
+def theory_list(experiments, pdf, experiments_index):
 
     result_records = []
     for exp_index, experiment in enumerate(experiments):
@@ -832,6 +832,36 @@ def theory_lists(experiments, pdf, experiments_index):
                        index=experiments_index)
 
     return df
+
+def theory_central_values(experiments, pdf, experiments_index):
+
+    result_records = []
+    for exp_index, experiment in enumerate(experiments):
+        loaded_exp = experiment.load()
+
+
+        th_result = ThPredictionsResult.from_convolution(pdf, experiment,
+                                                         loaded_data=loaded_exp)
+
+        for index in range(len(th_result.central_value)):
+
+            result_records.append(th_result.central_value[index])
+                        
+    return result_records
+
+
+cent_th = collect(theory_central_values, ('theories',))
+
+
+def theory_cov(cent_th): 
+    s = np.zeros((len(cent_th[0]),len(cent_th[0])))
+    for i in range(len(cent_th[0])):
+        for j in range(len(cent_th[0])):
+
+            s[i,j] = 0.5*(((cent_th[1][i]-cent_th[0][i])*(cent_th[1][j]-cent_th[0][j])) 
+                  +  ((cent_th[2][i]-cent_th[0][i])*(cent_th[2][j]-cent_th[0][j])))
+
+    return s
 
 
 experiments_results = collect(experiment_results, ('experiments',))
