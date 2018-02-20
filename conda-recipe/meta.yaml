@@ -1,0 +1,53 @@
+package:
+    name: nnpdf
+    version: "{{ GIT_DESCRIBE_TAG }}.{{ GIT_DESCRIBE_NUMBER }}"
+
+source:
+    git_url: ../
+
+requirements:
+    build:
+        - {{ compiler("cxx") }}
+        - {{ compiler("c") }}
+        - swig ==3.0.10
+        - cmake
+        - pkg-config
+    host:
+        - lhapdf      # with python3.6 wrapper
+        - sqlite
+        - gsl         # Gsl doesn't link openblas on old debian 7
+        - libarchive
+        - yaml-cpp
+        - apfel >=3   # see https://github.com/scarrazza/apfel
+        - python
+        - numpy =1.14
+    run:
+        - lhapdf
+        - sqlite
+        - libgcc # [linux]
+        - gsl
+        - numpy
+        - libarchive
+        - yaml-cpp
+        - apfel
+        - python # requirements for validphys
+        - reportengine >=0.22.4 # see https://github.com/NNPDF/reportengine
+        - matplotlib >=2.0.1
+        - blessings
+        - scipy >=0.19.1
+        - pandas =0.20
+        - requests
+        - prompt_toolkit
+
+build:
+    number: 0
+    detect_binary_files_with_prefix: True
+
+test:
+    commands:
+        - nnpdf-config
+
+about:
+    home: https://nnpdf.mi.infn.it/
+    license: SECRET
+    summary: "NNPDF analysis framework"

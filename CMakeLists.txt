@@ -29,6 +29,7 @@ pkg_search_module(YAML REQUIRED yaml-cpp)
 option(ENABLE_OPENMP "Enable openmp parallelism." OFF)
 option(ENABLE_OPENMPI "Enable openMPI parallelism." OFF)
 option(ENABLE_TESTS "Enable unit test" OFF)
+option(VP_DEV "validphys in developer mode" ON)
 set(PROFILE_PREFIX "" CACHE STRING "Where you store the 'data' folder. Default empty uses CMAKE_INSTALL_PREFIX/share/NNPDF.")
 
 if (PROFILE_PREFIX)
@@ -92,4 +93,8 @@ add_subdirectory(libnnpdf)
 add_subdirectory(nnpdfcpp)
 
 # install validphys2
-install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install -e ${PROJECT_SOURCE_DIR}/validphys2)")
+if(VP_DEV)
+  install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install -e ${PROJECT_SOURCE_DIR}/validphys2)")
+else(VP_DEV)
+  install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps --ignore-installed ${PROJECT_SOURCE_DIR}/validphys2)")
+endif(VP_DEV)

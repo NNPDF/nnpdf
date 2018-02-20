@@ -20,6 +20,9 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/nnpdfcpp/data/ DESTINATION ${PROFILE_PRE
 # install results
 install(DIRECTORY DESTINATION ${PROFILE_PREFIX}/results/)
 
+file(WRITE ${PROJECT_BINARY_DIR}/nnpdfcpp/README.md "Store here your fit output.")
+install(FILES ${PROJECT_BINARY_DIR}/nnpdfcpp/README.md DESTINATION ${PROFILE_PREFIX}/results/)
+
 # install configs
 install(FILES ${PROJECT_SOURCE_DIR}/nnpdfcpp/config/plotting.yml
   ${PROJECT_SOURCE_DIR}/nnpdfcpp/config/fiatlux.yml
