@@ -24,7 +24,7 @@ experiments:
 
 template_text: |
    Theory tables 
-   {@default_theory theory_lists@}
+   {@theories theory_list@}
 
 
 actions_:
