@@ -8,5 +8,5 @@ pdfs:
     - NNPDF30_nlo_as_0118
 
 actions_:
- -  - plot_alfaEff
+ -  - plot_alphaEff
  -  - plot_betaEff

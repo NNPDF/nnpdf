@@ -5,32 +5,14 @@ Figures for visualizing results
 from __future__ import generator_stop
 
 import logging
-import functools
-import warnings
-import abc
-from types import SimpleNamespace
-from collections import defaultdict, Sequence
-import copy
-import numbers
 
 import numpy as np
-import numpy.linalg as la
-import matplotlib.pyplot as plt
-from matplotlib import cm, colors as mcolors, ticker as mticker
-import scipy.stats as stats
 
-from reportengine.figure import figure, figuregen
-from reportengine.checks import make_check, CheckError, make_argcheck
+from reportengine.figure import figuregen
 
-from validphys.core import MCStats, cut_mask
-from validphys.results import chi2_stat_labels
-from validphys.plotoptions import get_info, kitable, transform_result
 from validphys.checks import check_scale
-from validphys import plotutils
-from validphys.utils import sane_groupby_iter, split_ranges
 from validphys.plots import check_pdf_normalize_to
 from validphys.plots import BandPDFPlotter
-from validphys.gridvalues import LUMI_CHANNELS
 
 log = logging.getLogger(__name__)
 
@@ -58,7 +40,7 @@ def beta_eff(xplotting_grid):
 @figuregen
 @check_pdf_normalize_to
 @check_scale('xscale', allow_none=True)
-def plot_alfaEff(pdfs, xplotting_grids, xscale:(str,type(None))=None,
+def plot_alphaEff(pdfs, xplotting_grids, xscale:(str,type(None))=None,
                       normalize_to:(int,str,type(None))=None):
 
     yield from BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to, alpha_eff, 'alpha effective')
