@@ -1,0 +1,12 @@
+Q: 1.65
+basis: 'evolution'
+#normalize_to: 1
+#flavours: ['gluon', 'singlet']
+
+pdfs:
+    - NNPDF31_nlo_as_0118
+    - NNPDF30_nlo_as_0118
+
+actions_:
+ -  - plot_alfaEff
+ -  - plot_betaEff

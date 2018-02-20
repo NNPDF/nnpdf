@@ -590,16 +590,26 @@ class PDFPlotter(metaclass=abc.ABCMeta):
     explicitly as arguments.
     """
 
-    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to):
+    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to, extern, label):
         self.pdfs = pdfs
         self._xplotting_grids = xplotting_grids
         self._xscale = xscale
         self.normalize_to = normalize_to
+        self._xplotting_grids = self.extern_function(extern)
         self.xplotting_grids = self.normalize()
 
 
     def setup_flavour(self, flstate):
         pass
+
+    def extern_function(self, fun):
+        newgrids = []
+        if fun is not None:
+            for grid in self._xplotting_grids:
+                newgrids.append(fun(grid)) # x = grid.xgrid
+                    # pdf = grid.grid_values
+        return newgrids
+
 
 
     def normalize(self):
