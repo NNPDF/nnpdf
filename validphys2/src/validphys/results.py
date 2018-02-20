@@ -805,7 +805,9 @@ def theory_description(theoryid):
     return pd.DataFrame(pd.Series(theoryid.get_description()), columns=[theoryid])
 
 def theory_central_values(experiments, pdf, experiments_index):
-
+    """Returns a theoryid-dependent list of central theory predictions
+    for a given experiment."""
+    
     result_records = []
     for exp_index, experiment in enumerate(experiments):
         loaded_exp = experiment.load()
@@ -821,7 +823,9 @@ def theory_central_values(experiments, pdf, experiments_index):
 
 cent_th = collect(theory_central_values, ('theories',))
 
-def theory_cov(cent_th): 
+def theory_covmat(cent_th): 
+    """Calculates the theory covariance matrix."""
+
     s = np.zeros((len(cent_th[0]),len(cent_th[0])))
     for i in range(len(cent_th[0])):
         for j in range(len(cent_th[0])):
