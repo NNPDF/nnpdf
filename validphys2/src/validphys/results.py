@@ -827,6 +827,7 @@ def theory_covmat(cent_th):
     """Calculates the theory covariance matrix."""
 
     s = np.zeros((len(cent_th[0]),len(cent_th[0])))
+    
     for i in range(len(cent_th[0])):
         for j in range(len(cent_th[0])):
 
