@@ -1511,3 +1511,14 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
     ax.grid(False)
 
     return fig
+
+@figure
+def plot_matrix_heatmap(experiment):
+    covmat = experiment.load().get_covmat()
+    fig,ax = plt.subplots()
+    matrixplot = ax.matshow(covmat)
+    cbar = fig.colorbar(matrixplot)
+    ax.set_title('Matrix plot')
+    ax.set_xlabel('Data points')
+    ax.set_ylabel('Data points')
+    return fig
