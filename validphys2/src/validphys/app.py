@@ -17,6 +17,7 @@ from validphys import uploadutils
 
 
 providers = [
+             'validphys.eff_exponents',
              'validphys.results',
              'validphys.plots',
              'validphys.arclength',
