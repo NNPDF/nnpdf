@@ -55,8 +55,11 @@ http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html)
 
 ### From source
 
-If you intend to work on the code, then building from source is the recommended
-installation procedure.
+If you intend to work on the code, then building from source is the
+recommended installation procedure. However, you can still use conda
+to get all the dependecies and setup the validphys and C++ development
+environment. Further information is available in the
+[vp-guide](http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html#development-installs)
 
 For precise version requirements, see 
 [the conda specification](https://github.com/NNPDF/nnpdf/blob/master/conda-recipe/meta.yaml).
