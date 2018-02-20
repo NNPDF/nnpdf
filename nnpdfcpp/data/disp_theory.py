@@ -21,12 +21,12 @@ con = None
 
 try:
     con = lite.connect('theory.db')
-    
-    cur = con.cursor()    
+
+    cur = con.cursor()
     cur.execute('SELECT SQLITE_VERSION()')
-    
+
     data = cur.fetchone()
-    
+
     print("SQLite version: %s" % data)
 
     cur.execute('SELECT * FROM TheoryIndex')
@@ -41,23 +41,12 @@ try:
 
     print(tabulate(table, headers=col_sub))
 
-    try: input = raw_input
-    except NameError: pass
-    theoryID = int(input("Please select a table ID: "))
-    if 0 <= theoryID <= len(rows):
-        os.system("wget http://cern.ch/nnpdf/tables/theory_%d.tgz" % theoryID)
-        os.system("tar -xvzf theory_%d.tgz" % theoryID)
-        os.system("rm theory_%d.tgz" % theoryID)
-    else:
-        print("Invalid theory ID: %s" % str(theoryID))
-        sys.exit(1)
-    
 except lite.Error as e:
-    
+
     print("Error %s:" % e.args[0])
     sys.exit(1)
-    
+
 finally:
-    
+
     if con:
         con.close()
