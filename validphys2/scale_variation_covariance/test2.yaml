@@ -25,7 +25,7 @@ experiments:
 
 template_text: |
    Theory tables 
-   {@theory_cov@}
+   {@theory_covmat@}
 
 
 actions_:
