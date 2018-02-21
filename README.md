@@ -20,8 +20,8 @@ In order to compile just type `make`.
 
 In order to generate a master copy of all experimental data run the
 `buildmaster` program. This program will create for each dataset:
-- DATA_<exp>.dat are generated and placed in the results folder
-- SYSTYPE_<exp>_DEFAULT.dat are generated and placed in results/systypes
+- DATA_[exp].dat are generated and placed in the results folder
+- SYSTYPE_[exp]_DEFAULT.dat are generated and placed in results/systypes
 After generating these files the user can copy them to the `nnpdfcpp/data/commondata` folder.
 
 
