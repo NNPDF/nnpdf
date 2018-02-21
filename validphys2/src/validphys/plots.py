@@ -1526,13 +1526,13 @@ def plot_expcovmat_heatmap(experiments_covmat):
     return fig
 
 @figure
-def plot_thcovmat_heatmap(theory_covmat):
-    df = theory_covmat
+def plot_thcovmat_heatmap(theory_covmat_norm):
+    df = theory_covmat_norm
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
-    matrixplot = ax.matshow(matrix)
+    matrixplot = ax.matshow(matrix*100)
     cbar = fig.colorbar(matrixplot)
-    ax.set_title('Theoretical covariance matrix')
+    ax.set_title('Theoretical covariance matrix as % of central theory')
     ax.xaxis.set_ticks_position('bottom')
     plt.xlabel('Data points', labelpad=10)
     ax.set_ylabel('Data points')
