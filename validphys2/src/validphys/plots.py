@@ -1540,6 +1540,7 @@ def plot_thcovmat_heatmap(theory_covmat):
 
 @figure
 def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
+   """ Plots (s+sigma)/sigma for s=theory cov, sigma=exp cov """
     df1 = theory_covmat
     df2 = experiments_covmat
     matrix1 = df1.as_matrix()
