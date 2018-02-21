@@ -1519,8 +1519,9 @@ def plot_expcovmat_heatmap(experiments_covmat):
     fig,ax = plt.subplots()
     matrixplot = ax.matshow(matrix)
     cbar = fig.colorbar(matrixplot)
-    ax.set_title('Matrix plot')
-    ax.set_xlabel('Data points')
+    ax.set_title('Experimental covariance matrix')
+    ax.xaxis.set_ticks_position('bottom')
+    plt.xlabel('Data points', labelpad=10)
     ax.set_ylabel('Data points')
     return fig
 
@@ -1531,7 +1532,8 @@ def plot_thcovmat_heatmap(theory_covmat):
     fig,ax = plt.subplots()
     matrixplot = ax.matshow(matrix)
     cbar = fig.colorbar(matrixplot)
-    ax.set_title('Matrix plot')
-    ax.set_xlabel('Data points')
+    ax.set_title('Theoretical covariance matrix')
+    ax.xaxis.set_ticks_position('bottom')
+    plt.xlabel('Data points', labelpad=10)
     ax.set_ylabel('Data points')
     return fig

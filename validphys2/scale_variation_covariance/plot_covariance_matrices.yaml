@@ -25,10 +25,8 @@ experiments:
          - dataset: BCDMSD
 
 template_text: |
-    Experimental covariance matrix
     {@default_theory plot_expcovmat_heatmap@}
     
-    Theoretical covariance matrix
     {@default_theory plot_thcovmat_heatmap@}
 
 actions_:
