@@ -5,8 +5,9 @@ basis: 'evolution'
 
 pdfs:
     - NNPDF31_nlo_as_0118
-    - NNPDF30_nlo_as_0118
+#    - NNPDF30_nlo_as_0118
 
 actions_:
- -  - plot_alphaEff
- -  - plot_betaEff
+   - - plot_alphaEff
+   - - plot_betaEff
+   - - plot_pdfs

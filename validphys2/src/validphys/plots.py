@@ -57,7 +57,7 @@ def plot_phi(experiments, experiments_phi):
     """plots phi for each experiment as a bar for a single
     PDF input
 
-    See `phi_data` for information on how phi is calculated 
+    See `phi_data` for information on how phi is calculated
     """
     phi = experiments_phi
     xticks = [experiment.name for experiment in experiments]
@@ -614,12 +614,13 @@ class PDFPlotter(metaclass=abc.ABCMeta):
     explicitly as arguments.
     """
 
-    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to):
+    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to, choice):
         self.pdfs = pdfs
         self._xplotting_grids = xplotting_grids
         self._xscale = xscale
         self.normalize_to = normalize_to
         self.xplotting_grids = self.normalize()
+        self.plot_choice = choice
 
 
     def setup_flavour(self, flstate):
@@ -664,7 +665,13 @@ class PDFPlotter(metaclass=abc.ABCMeta):
         if self.normalize_to is not None:
             return "Ratio to {}".format(self.normalize_pdf.label)
         else:
-            return '$x{}(x)$'.format(parton_name)
+            if self.plot_choice  is 'alpha':
+                return r"$\alpha_e$ of ${}$".format(parton_name)
+            else:
+                if self.plot_choice  is 'beta':
+                    return r"$\beta_e$ of ${}$".format(parton_name)
+                else:
+                    return '$x{}(x)$'.format(parton_name)
 
     def get_title(self, parton_name):
         return "$%s$ at %.1f GeV" % (parton_name, self.Q)
@@ -957,7 +964,7 @@ class BandPDFPlotter(PDFPlotter):
 @check_pdf_normalize_to
 @check_scale('xscale', allow_none=True)
 def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
-                      normalize_to:(int,str,type(None))=None):
+                      normalize_to:(int,str,type(None))=None, choice=''):
     """Plot the central value and the uncertainty of a list of pdfs as a
     function of x for a given value of Q. If normalize_to is given, plot the
     ratios to the corresponding PDF. Otherwise, plot absolute values.
@@ -971,7 +978,7 @@ def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     set based on the scale in xgrid, which should be used instead.
 
     """
-    yield from BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
+    yield from BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to, choice)
 
 class FLavoursPlotter(BandPDFPlotter):
 

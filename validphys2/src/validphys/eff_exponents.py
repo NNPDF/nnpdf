@@ -50,11 +50,11 @@ def beta_eff(xplotting_grids):
 def plot_alphaEff(pdfs, alpha_eff,
                       normalize_to:(int,str,type(None))=None):
 
-    yield from BandPDFPlotter(pdfs, alpha_eff, 'log', normalize_to)
+    yield from BandPDFPlotter(pdfs, alpha_eff, 'log', normalize_to, 'alpha')
 
 @figuregen
 @check_pdf_normalize_to
 def plot_betaEff(pdfs, beta_eff,
                       normalize_to:(int,str,type(None))=None):
 
-    yield from BandPDFPlotter(pdfs, beta_eff, 'linear', normalize_to)
+    yield from BandPDFPlotter(pdfs, beta_eff, 'linear', normalize_to, 'beta')
