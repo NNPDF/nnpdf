@@ -52,6 +52,30 @@ def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
     l.set_zorder(1000)
     return fig
 
+@figure
+def plot_phi(experiments, experiments_phi):
+    """plots phi for each experiment as a bar for a single
+    PDF input
+
+    See `phi_data` for information on how phi is calculated 
+    """
+    phi = experiments_phi
+    xticks = [experiment.name for experiment in experiments]
+    fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=pdf.name)
+    ax.set_title(r"$\phi$ for each experiment")
+    return fig
+
+@figure
+def plot_phi_pdfs(experiments, pdfs, experiments_pdfs_phi):
+    """Like `plot_phi` but plots a set of bars for each PDF input"""
+    phi = experiments_pdfs_phi
+    phi_labels = [pdf.name for pdf in pdfs]
+    xticks = [experiment.name for experiment in experiments]
+    fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=phi_labels)
+    ax.set_title(r"$\phi$ for each experiment")
+    ax.legend()
+    return fig
+
 #TODO: This should be simplified if at all possible. For now some more examples
 #are needed for a spec to emerge.
 @make_check
@@ -590,26 +614,16 @@ class PDFPlotter(metaclass=abc.ABCMeta):
     explicitly as arguments.
     """
 
-    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to, extern, label):
+    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to):
         self.pdfs = pdfs
         self._xplotting_grids = xplotting_grids
         self._xscale = xscale
         self.normalize_to = normalize_to
-        self._xplotting_grids = self.extern_function(extern)
         self.xplotting_grids = self.normalize()
 
 
     def setup_flavour(self, flstate):
         pass
-
-    def extern_function(self, fun):
-        newgrids = []
-        if fun is not None:
-            for grid in self._xplotting_grids:
-                newgrids.append(fun(grid)) # x = grid.xgrid
-                    # pdf = grid.grid_values
-        return newgrids
-
 
 
     def normalize(self):
