@@ -42,7 +42,7 @@ formats.
 ndata:    <number of datapoints>
 nsys:     <number of systematic errors>
 setname:  <setname in double quotes, i.e "ATLAS1JET11">
-proctype: <process type (see nnpdfcpp/doc) in double quotes i.e "JET")
+proctype: <process type (see nnpdf/nnpdfcpp/doc) in double quotes i.e "JET")
 ```
 
 3. Create a new class with the dataset name in `inc` (*.h) and
