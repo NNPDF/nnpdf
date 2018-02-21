@@ -25,7 +25,7 @@ experiments:
 
 template_text: |
    Theory tables 
-   {@default_theory theory_covmat_inverse@}
+   {@default_theory theory_covmat_norm@}
 
 
 actions_:
