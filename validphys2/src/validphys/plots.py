@@ -1537,3 +1537,19 @@ def plot_thcovmat_heatmap(theory_covmat):
     plt.xlabel('Data points', labelpad=10)
     ax.set_ylabel('Data points')
     return fig
+
+@figure
+def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
+    df1 = theory_covmat
+    df2 = experiments_covmat
+    matrix1 = df1.as_matrix()
+    matrix2 = df2.as_matrix()
+    matrix = (matrix1+matrix2)/matrix2
+    fig,ax = plt.subplots()
+    matrixplot = ax.matshow(matrix)
+    cbar = fig.colorbar(matrixplot)
+    ax.set_title('(Theoretical + experimental)/experimental covariance matrices')
+    ax.xaxis.set_ticks_position('bottom')
+    plt.xlabel('Data points', labelpad=10)
+    ax.set_ylabel('Data points')
+    return fig

@@ -29,6 +29,8 @@ template_text: |
     
     {@default_theory plot_thcovmat_heatmap@}
 
+    {@default_theory plot_covdiff_heatmap@}
+
 actions_:
    - - report:
          main: True
