@@ -1546,7 +1546,7 @@ def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
     matrix2 = df2.as_matrix()
     matrix = (matrix1+matrix2)/matrix2
     fig,ax = plt.subplots()
-    matrixplot = ax.matshow(matrix)
+    matrixplot = ax.matshow(matrix, vmin=-5,vmax=5)
     cbar = fig.colorbar(matrixplot)
     ax.set_title('(Theoretical + experimental)/experimental covariance matrices')
     ax.xaxis.set_ticks_position('bottom')
