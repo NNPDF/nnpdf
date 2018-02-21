@@ -1530,7 +1530,7 @@ def plot_thcovmat_heatmap(theory_covmat_norm):
     df = theory_covmat_norm
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
-    matrixplot = ax.matshow(matrix*100)
+    matrixplot = ax.matshow(matrix*100, vmin= -5, vmax=5)
     cbar = fig.colorbar(matrixplot, label="% of central theory")
     ax.set_title('Theoretical covariance matrix')
     ax.xaxis.set_ticks_position('bottom')

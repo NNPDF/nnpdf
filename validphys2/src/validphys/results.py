@@ -858,7 +858,7 @@ def theory_covmat_norm(cent_th, experiments, experiments_index,t0set):
         for j in range(len(cent_th[0])):
 
             snorm[i,j] = (0.5*(((cent_th[1][i]-cent_th[0][i])*(cent_th[1][j]-cent_th[0][j])) 
-                  +  ((cent_th[2][i]-cent_th[0][i])*(cent_th[2][j]-cent_th[0][j]))))/np.sqrt(cent_th[0][i]*cent_th[0][j])
+                  +  ((cent_th[2][i]-cent_th[0][i])*(cent_th[2][j]-cent_th[0][j]))))/(cent_th[0][i]*cent_th[0][j])
         df.loc[[name],[name]] = snorm
     return df
 
