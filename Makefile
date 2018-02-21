@@ -25,7 +25,7 @@ YAMLCXX = $(shell pkg-config yaml-cpp --cflags)
 GSLCXX = $(shell gsl-config --cflags)
 GSLLD  = $(shell gsl-config --libs)
 
-CXXFLAGS=-Wall -g -I ./inc -I ./src  -std=c++14 $(NNPDFCXX) $(GSLCXX) $(MACROS) $(YAMLCXX)
+CXXFLAGS=-Wall -g -I ./inc -I ./src $(NNPDFCXX) $(GSLCXX) $(MACROS) $(YAMLCXX)
 LDFLAGS= $(NNPDFLD) $(GSLLD) $(YAMLLD)
 
 #####################################
