@@ -28,7 +28,7 @@ tmp=$( echo "$*" | egrep -- '--\<incdir\>')
 test -n "$tmp" && OUT="$OUT @includedir@"
 
 tmp=$( echo "$*" | egrep -- '--\<cppflags\>')
-test -n "$tmp" && OUT="$OUT -I@includedir@ -std=c++11"
+test -n "$tmp" && OUT="$OUT -I@includedir@ -std=c++14"
 
 tmp=$( echo "$*" | egrep -- '--\<libdir\>')
 test -n "$tmp" && OUT="$OUT @libdir@"
