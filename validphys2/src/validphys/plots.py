@@ -61,7 +61,7 @@ def plot_phi(experiments, experiments_phi):
     """
     phi = experiments_phi
     xticks = [experiment.name for experiment in experiments]
-    fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=pdf.name)
+    fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=[r'$\phi$'])
     ax.set_title(r"$\phi$ for each experiment")
     return fig
 
