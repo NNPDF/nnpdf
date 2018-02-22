@@ -839,6 +839,33 @@ def theory_covmat(cent_th, experiments, experiments_index, t0set):
     return df
 
 @table
+def theory_corrmat(cent_th, experiments, experiments_index, t0set):
+    """Calculates theory correlation matrix."""
+    data = np.zeros((len(experiments_index),len(experiments_index)))
+    df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
+    for experiment in experiments:
+        name = experiment.name
+        loaded_exp = experiment.load()
+        if t0set:
+            #Copy data to avoid chaos
+            data = type(loaded_exp)(loaded_exp)
+            log.debug("Setting T0 predictions for %s" % loaded_exp)
+            data.SetT0(t0set.load_t0())
+        
+        s = np.zeros((len(cent_th[0]),len(cent_th[0])))
+    
+        for i in range(len(cent_th[0])):
+            for j in range(len(cent_th[0])):
+
+                s[i,j] = 0.5*(((cent_th[1][i]-cent_th[0][i])*(cent_th[1][j]-cent_th[0][j])) 
+                  +  ((cent_th[2][i]-cent_th[0][i])*(cent_th[2][j]-cent_th[0][j])))
+
+        diag_minus_half = (np.diagonal(s))**(-0.5)
+        mat = diag_minus_half*s*diag_minus_half[:,np.newaxis]
+        df.loc[[name],[name]] = mat
+    return df
+
+@table
 def theory_covmat_norm(cent_th, experiments, experiments_index, t0set): 
     """Calculates the theory covariance matrix normalised to data."""
     data_list = []
