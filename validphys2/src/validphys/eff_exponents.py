@@ -12,9 +12,23 @@ from reportengine.figure import figuregen
 
 from validphys.checks import check_scale
 from validphys.plots import check_pdf_normalize_to
-from validphys.plots import ExponentBandPlotter
+from validphys.plots import BandPDFPlotter
+from validphys.plots import PDFPlotter
 
 log = logging.getLogger(__name__)
+
+class PreprocessingPlotter(PDFPlotter):
+    def __init__(self, exponent, *args,  **kwargs):
+        self.exponent = exponent
+        super().__init__(*args, **kwargs)
+
+    def get_title(self, parton_name):
+        return fr"$\{self.exponent}_e$ for ${parton_name}$ at {self.Q:.1} Gev"
+
+    def get_ylabel(self, parton_name):
+        return fr"$\{self.exponent}_e$ for ${parton_name}$"
+
+class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter): pass
 
 def alpha_eff(xplotting_grids):
     alpha_grids=[]
