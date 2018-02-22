@@ -9,11 +9,6 @@ configure_file(
   )
 
 configure_file(
-  "${PROJECT_SOURCE_DIR}/libnnpdf/scripts/nnpdf-config.in"
-  "${PROJECT_SOURCE_DIR}/libnnpdf/scripts/nnpdf-config"
-  )
-
-configure_file(
   "${PROJECT_SOURCE_DIR}/libnnpdf/src/NNPDF/config.h.in"
   "${PROJECT_SOURCE_DIR}/libnnpdf/src/NNPDF/config.h"
   )
@@ -61,8 +56,7 @@ target_link_libraries(FKconvolute nnpdf ${LibArchive_LIBRARIES})
 add_executable(FKmerge2 src/fkmerge2.cc)
 target_link_libraries(FKmerge2 nnpdf ${LibArchive_LIBRARIES})
 
-install(FILES ${PROJECT_SOURCE_DIR}/libnnpdf/scripts/nnpdf-config
-	${CMAKE_BINARY_DIR}/libnnpdf/FKconvolute
+install(FILES ${CMAKE_BINARY_DIR}/libnnpdf/FKconvolute
 	${CMAKE_BINARY_DIR}/libnnpdf/FKmerge2
 	DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 install(FILES ${PROJECT_SOURCE_DIR}/libnnpdf/scripts/nnpdf.pc DESTINATION lib/pkgconfig)
