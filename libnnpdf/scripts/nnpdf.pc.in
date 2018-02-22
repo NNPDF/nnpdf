@@ -6,5 +6,5 @@ libdir=@libdir@
 Name: nnpdf
 Description: The nnpdf library
 Version: @VERSION@
-Cflags: -I@includedir@
+Cflags: -I@includedir@ -std=c++14
 Libs: -L@libdir@ -lnnpdf
