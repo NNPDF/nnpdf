@@ -1513,11 +1513,11 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
     return fig
 
 @figure
-def plot_expcovmat_heatmap(experiments_covmat):
-    df = experiments_covmat
+def plot_expcovmat_heatmap(experiments_normcovmat):
+    df = experiments_normcovmat
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
-    matrixplot = ax.matshow(matrix)
+    matrixplot = ax.matshow(matrix, vmin=-0.005, vmax=0.015)
     cbar = fig.colorbar(matrixplot)
     ax.set_title('Experimental covariance matrix')
     ax.xaxis.set_ticks_position('bottom')
