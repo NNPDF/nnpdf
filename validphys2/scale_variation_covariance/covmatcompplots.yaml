@@ -1,0 +1,43 @@
+meta:
+   author: Cameron Voisey and Rosalyn Pearson
+   keywords: [test]
+   title: BCDMSP 3pt theory covariance matrix comparison plots
+
+default_theory:
+   - theoryid: 52
+
+theories:
+   - theoryid: 52
+   - theoryid: 66
+   - theoryid: 67
+
+pdf: NNPDF31_nlo_as_0118
+
+use_cuts: True
+fit: 180202-lr-nlo-central_DISonly
+
+experiments:
+   - experiment: BCDMS
+     datasets:
+         - dataset: BCDMSP
+         - dataset: BCDMSD
+
+template_text: |
+   {@with default_theory@}
+
+   {@plot_expcovmat_heatmap@}
+   {@plot_thcovmat_heatmap@}
+
+   {@plot_expcorrmat_heatmap@}
+   {@plot_thcorrmat_heatmap@}
+
+   {@plot_covdiff_heatmap@}
+
+   {@plot_diag_cov_comparison@}
+   {@plot_diag_cov_impact@}
+
+   {@endwith@}
+
+actions_:
+   - - report:
+         main: True
