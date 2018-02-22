@@ -45,13 +45,13 @@ directory of the corresponding conda environment (which is typically in the
 
 By default, data files (both from theory and experiment) are installed to:
 `<conda root>/share/NNPDF/data` and fit results will be written to 
-`<conda root>/share/NNPDF/results`
+`<conda root>/share/NNPDF/results`.
 
 These paths can be changed by tweaking `nnprofile.yaml` as described in [NNPDF
-paths and URLS](#nnpdf-paths-and-urls).
+paths and URLs](#nnpdf-paths-and-urls).
 
 Detailed conda installation instructions can be found in the [validphy2 guide](
-http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html)
+http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html).
 
 ### From source
 
@@ -89,17 +89,18 @@ selected, while the content of `nnpdfcpp/data` folder will be copied to the
 
 ## Using the code
 
-### Runcard
+### nnfit runcard
 
-The runcard is written in YAML. The interpretation of the entries should be
-self-explanatory. The runcard is the unique identifier of a fit, it is also the
+The runcard is written in YAML. The runcard is the unique identifier of a fit, it is also the
 only required configuration input required for many programs of this repository.
 
 ### Workflow
 
 0. compile the code and install
 
-1. Create a runcard by taking as template one of the files in `<profile_prefix>/config`.
+1. Create a runcard by taking as template one of the files in `<profile_prefix>/config`. 
+The `<profile_prefix>` path is by default `<install prefix>/share/NNPDF` for source installation 
+while `<conda root>/share/NNPDF` for conda installation.
 
 2. Download the specific theory folder using `vp-get theoryID
 <theoryid>` where `<theoryid>` is the number specified in your
@@ -108,7 +109,7 @@ runcard. Download the t0 PDF set with `vp-get pdf <t0pdfset>` where
 
 3. Filter the data: ```filter <runcard>.yml``` this command will
 generate a `<runcard_folder>` folder in the current directory with a
-copy of the original YAML runcard and its md5 key.
+copy of the original YAML runcard.
 
 4. All programs take the `<runcard_folder>` as input, e.g.  ```nnfit
 <replica_number> <runcard_folder> ``` where replica_number goes from 1-n.
@@ -121,20 +122,20 @@ applying post selection criteria. This will produce a set of
 6. Upload the results using `vp-upload --fit <runcard_folder>` then
 install the fitted set with `vp-get fit <fit_name>`.
 
-7. Analyze results with `validphys`.
+7. Analyze results with `validphys`, see the [vp-guide](http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html#development-installs).
 
 ## NNPDF paths and URLS
 
 The paths that various codes (such as `nnfit` and `validphys`) will use to find
 and write resources, as well as the URLS to upload and download them are defined
-in a `nnprofile.yaml` file. By default, it is stored in the `libnnpdf` install
-prefix, under `<libnnpdf install prefix>/share/NNPDF/nnprofile.yaml`. For binary
-packages, the `libnnpdf` install prefix is simply the path of the conda
+in a `nnprofile.yaml` file. By default, it is stored in the `nnpdf` install
+prefix, under `<nnpdf install prefix>/share/NNPDF/nnprofile.yaml`. For binary
+packages, the `nnpdf` install prefix is simply the path of the conda
 environment where the packages is installed.  The paths and URLs can be
 modified: This can be useful to make the code work under specific cluster
 configurations, for example to avoid excessive I/O in NFS mounts. However, do
 not do it by editing the `nnprofile.yaml` file in the default location, since it
-will be overwritten every time that `libnnpdf` is installed.  Instead copy it to
+will be overwritten every time that `nnpdf` is installed.  Instead copy it to
 some other location, make the changes you wish, and define an
 `NNPDF_PROFILE_PATH` environment variable pointing to your modified file. For
 example, you could write in your `.bashrc`: ```shell export
@@ -154,7 +155,7 @@ development pattern should follow these rules:
 
 ### Code documentation
 
-THe code is documented with Doxygen, if you find methods or classes not fully
+The C++ code is documented with Doxygen, if you find methods or classes not fully
 documented open a issue request.
 
 ### Layout documentation
