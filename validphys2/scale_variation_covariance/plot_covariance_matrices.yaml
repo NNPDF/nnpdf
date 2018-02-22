@@ -31,6 +31,10 @@ template_text: |
 
     {@default_theory plot_covdiff_heatmap@}
 
+    {@default_theory plot_diag_cov_comparison@}
+
+ #   {@default_theory plot_diag_cov_impact@}
+
 actions_:
    - - report:
          main: True

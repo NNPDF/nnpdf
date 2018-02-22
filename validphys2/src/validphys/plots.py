@@ -1580,3 +1580,42 @@ def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
     plt.xlabel('Data points', labelpad=10)
     ax.set_ylabel('Data points')
     return fig
+
+@figure
+def plot_diag_cov_comparison(theory_covmat,experiments_covmat):  ### CHANGE ALL THESE TO NORMS!!
+    """ Plot of sqrt(cov_ii)/data_i for cov = exp versus cov = theory """
+    df1 = theory_covmat
+    df2 = experiments_covmat
+    sqrtdiags1 = np.diag(np.sqrt(df1.as_matrix()))
+    sqrtdiags2 = np.diag(np.sqrt(df2.as_matrix()))
+    fig,ax = plt.subplots() 
+    ax.plot(sqrtdiags1, '.', label="Theory")
+    ax.plot(sqrtdiags2, '.', label="Experiment")
+    plt.xlabel("Data points")
+    ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{D_i}$")
+    ax.set_title("Diagonal elements of normalised theoretical and experimental covariance matrices")
+    ax.legend()
+    return fig
+
+@figure
+def plot_diag_cov_impact(theory_covmat,experiments_covmat):  ### CHANGE ALL THESE TO NORMS!!
+    """ Plot of ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5 """
+    df1 = theory_covmat
+    df2 = experiments_covmat
+    matrix1 = df1.as_matrix()
+    matrix2 = df2.as_matrix()
+    a = (np.diag(la.inv(matrix1)))**(-0.5)
+    b = (np.diag(la.inv(matrix1+matrix2)))**(-0.5)
+    fig,ax = plt.subplots() 
+    ax.plot(a, '.', label="Experiment")
+    ax.plot(b, '.', label="Experiment + Theory")
+    plt.xlabel("Data points")
+    ax.set_ylabel(r"$\frac{1}{\sqrt{cov^-1_{ii}}}$")
+    ax.set_title("Impact of adding theory covariance matrix")
+    ax.legend()
+    return fig
+
+
+
+
+    
