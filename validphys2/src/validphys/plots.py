@@ -1552,6 +1552,19 @@ def plot_thcovmat_heatmap(theory_covmat_norm):
     return fig
 
 @figure
+def plot_thcorrmat_heatmap(theory_corrmat):
+    df = theory_corrmat
+    matrix = df.as_matrix()
+    fig, ax = plt.subplots()
+    matrixplot = ax.matshow(matrix)
+    cbar = fig.colorbar(matrixplot)
+    ax.set_title('Theoretical correlation matrix')
+    ax.xaxis.set_ticks_position('bottom')
+    plt.xlabel('Data points', labelpad=10)
+    ax.set_ylabel('Data points')
+    return fig
+
+@figure
 def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
     """ Plots (s+sigma)/sigma for s=theory cov, sigma=exp cov """
     df1 = theory_covmat
