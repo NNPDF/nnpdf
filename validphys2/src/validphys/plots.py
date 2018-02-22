@@ -614,7 +614,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
     explicitly as arguments.
     """
 
-    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to, exponent=''):
+    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to):
         self.pdfs = pdfs
         self._xplotting_grids = xplotting_grids
         self._xscale = xscale
@@ -1541,7 +1541,11 @@ class PreprocessingPlotter(PDFPlotter):
         self.exponent = exponent
         super().__init__(*args, **kwargs)
 
+    def get_title(self, parton_name):
+        return fr"$\{self.exponent}_e$ for $%s$ at %.1f GeV" % (parton_name, self.Q)
+
     def get_ylabel(self, parton_name):
         return fr"$\{self.exponent}_e$ for ${parton_name}$"
+
 
 class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter): pass
