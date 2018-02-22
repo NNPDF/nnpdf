@@ -24,8 +24,4 @@ file(WRITE ${PROJECT_BINARY_DIR}/nnpdfcpp/README.md "Store here your fit output.
 install(FILES ${PROJECT_BINARY_DIR}/nnpdfcpp/README.md DESTINATION ${PROFILE_PREFIX}/results/)
 
 # install configs
-install(FILES ${PROJECT_SOURCE_DIR}/nnpdfcpp/config/plotting.yml
-  ${PROJECT_SOURCE_DIR}/nnpdfcpp/config/fiatlux.yml
-  ${PROJECT_SOURCE_DIR}/nnpdfcpp/config/NNPDF30_nnlo_as_0118.yml
-  DESTINATION ${PROFILE_PREFIX}/config PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-  )
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/nnpdfcpp/config/ DESTINATION ${PROFILE_PREFIX}/config/)
