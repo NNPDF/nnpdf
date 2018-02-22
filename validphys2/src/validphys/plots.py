@@ -61,7 +61,7 @@ def plot_phi(experiments, experiments_phi):
     """
     phi = experiments_phi
     xticks = [experiment.name for experiment in experiments]
-    fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=pdf.name)
+    fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=[r'$\phi$'])
     ax.set_title(r"$\phi$ for each experiment")
     return fig
 
@@ -614,13 +614,12 @@ class PDFPlotter(metaclass=abc.ABCMeta):
     explicitly as arguments.
     """
 
-    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to, choice):
+    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to, exponent=''):
         self.pdfs = pdfs
         self._xplotting_grids = xplotting_grids
         self._xscale = xscale
         self.normalize_to = normalize_to
         self.xplotting_grids = self.normalize()
-        self.plot_choice = choice
 
 
     def setup_flavour(self, flstate):
@@ -665,13 +664,7 @@ class PDFPlotter(metaclass=abc.ABCMeta):
         if self.normalize_to is not None:
             return "Ratio to {}".format(self.normalize_pdf.label)
         else:
-            if self.plot_choice  is 'alpha':
-                return r"$\alpha_e$ of ${}$".format(parton_name)
-            else:
-                if self.plot_choice  is 'beta':
-                    return r"$\beta_e$ of ${}$".format(parton_name)
-                else:
-                    return '$x{}(x)$'.format(parton_name)
+            return '$x{}(x)$'.format(parton_name)
 
     def get_title(self, parton_name):
         return "$%s$ at %.1f GeV" % (parton_name, self.Q)
@@ -964,7 +957,7 @@ class BandPDFPlotter(PDFPlotter):
 @check_pdf_normalize_to
 @check_scale('xscale', allow_none=True)
 def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
-                      normalize_to:(int,str,type(None))=None, choice=''):
+                      normalize_to:(int,str,type(None))=None):
     """Plot the central value and the uncertainty of a list of pdfs as a
     function of x for a given value of Q. If normalize_to is given, plot the
     ratios to the corresponding PDF. Otherwise, plot absolute values.
@@ -978,7 +971,7 @@ def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     set based on the scale in xgrid, which should be used instead.
 
     """
-    yield from BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to, choice)
+    yield from BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
 
 class FLavoursPlotter(BandPDFPlotter):
 
@@ -1542,3 +1535,13 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
     ax.grid(False)
 
     return fig
+
+class PreprocessingPlotter(PDFPlotter):
+    def __init__(self, exponent, *args,  **kwargs):
+        self.exponent = exponent
+        super().__init__(*args, **kwargs)
+
+    def get_ylabel(self, parton_name):
+        return fr"$\{self.exponent}_e$ for ${parton_name}$"
+
+class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter): pass

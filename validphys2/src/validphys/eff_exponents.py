@@ -12,7 +12,7 @@ from reportengine.figure import figuregen
 
 from validphys.checks import check_scale
 from validphys.plots import check_pdf_normalize_to
-from validphys.plots import BandPDFPlotter
+from validphys.plots import ExponentBandPlotter
 
 log = logging.getLogger(__name__)
 
@@ -50,11 +50,11 @@ def beta_eff(xplotting_grids):
 def plot_alphaEff(pdfs, alpha_eff,
                       normalize_to:(int,str,type(None))=None):
 
-    yield from BandPDFPlotter(pdfs, alpha_eff, 'log', normalize_to, 'alpha')
+    yield from ExponentBandPlotter('alpha', pdfs, alpha_eff, 'log', normalize_to)
 
 @figuregen
 @check_pdf_normalize_to
 def plot_betaEff(pdfs, beta_eff,
                       normalize_to:(int,str,type(None))=None):
 
-    yield from BandPDFPlotter(pdfs, beta_eff, 'linear', normalize_to, 'beta')
+    yield from ExponentBandPlotter('beta', pdfs, beta_eff, 'linear', normalize_to)
