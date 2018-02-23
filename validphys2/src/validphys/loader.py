@@ -506,7 +506,10 @@ class RemoteLoader(LoaderBase):
     def remote_files(self, urls, index, thing='files'):
         d = {}
         for url in urls:
-            d.update(self._remote_files_from_url(url, index, thing))
+            try:
+                d.update(self._remote_files_from_url(url, index, thing))
+            except RemoteLoaderError as e:
+                log.error(e)
         return d
 
     @property
