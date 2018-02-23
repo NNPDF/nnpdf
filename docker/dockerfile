@@ -1,0 +1,44 @@
+FROM centos:6
+
+MAINTAINER Zahari Kassabov
+
+ENV SUMMARY = "CentOS toolchain for conda recipes"\
+DESCRIPTION = "Image that allows building packages uisng newer\
+               compilers in a way that they are compatible\
+               with old linuxes"
+
+#Set locale for good
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
+
+ENV CONDA_URL https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+ENV CONDA_FILE Miniconda3-latest-Linux-x86_64.sh
+
+LABEL summary="$SUMMARY"\
+      description="$DESCRIPTION"
+
+RUN yum install -y centos-release-scl &&\
+    yum install -y devtoolset-7         \
+                   wget                 \
+                   git                  \
+                   patch
+
+RUN wget "$CONDA_URL"      && \
+    chmod +x "$CONDA_FILE" && \
+    ./"$CONDA_FILE" -b     && \
+    rm "$CONDA_FILE"
+
+ENV PATH /root/miniconda3/bin:$PATH
+
+RUN conda config --append channels conda-forge                                    && \
+    conda config --prepend channels https://zigzah.com/static/conda-pkgs/         && \
+    conda config --prepend channels https://zigzah.com/static/conda-pkgs-private/ && \
+    conda config --set show_channel_urls true                                     && \
+    conda install conda-build --yes
+
+ENV CXXFLAGS -D_GLIBCXX_USE_CXX11_ABI=1
+
+ENTRYPOINT scl enable devtoolset-7 bash
+
