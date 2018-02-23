@@ -15,6 +15,9 @@ from validphys.plots import check_pdf_normalize_to
 from validphys.plots import BandPDFPlotter
 from validphys.plots import PDFPlotter
 
+from validphys.pdfgrids import xgrid
+from validphys.pdfgrids import xplotting_grid
+
 log = logging.getLogger(__name__)
 
 class PreprocessingPlotter(PDFPlotter):
@@ -61,14 +64,28 @@ def beta_eff(xplotting_grids):
 
 @figuregen
 @check_pdf_normalize_to
-def plot_alphaEff(pdfs, alpha_eff,
-                      normalize_to:(int,str,type(None))=None):
+def plot_alphaEff(pdfs, normalize_to:(int,str,type(None))=None,xmin=1e-5,Q=1.65,basis='evolution',flavours=None):
 
-    yield from ExponentBandPlotter('alpha', pdfs, alpha_eff, 'log', normalize_to)
+    xpdfs = []
+    xmax=0.1
+    temp_xgrid = xgrid(xmin, xmax,'log', 200)
+
+    for pdf in pdfs:
+        xpdf = xplotting_grid(pdf, Q, xgrid=temp_xgrid, basis=basis,flavours=flavours)
+        xpdfs.append(xpdf)
+
+    yield from ExponentBandPlotter('alpha', pdfs, alpha_eff(xpdfs), 'log', normalize_to)
 
 @figuregen
 @check_pdf_normalize_to
-def plot_betaEff(pdfs, beta_eff,
-                      normalize_to:(int,str,type(None))=None):
+def plot_betaEff(pdfs, normalize_to:(int,str,type(None))=None,xmin=1e-2,Q=1.65,basis='evolution',flavours=None):
 
-    yield from ExponentBandPlotter('beta', pdfs, beta_eff, 'linear', normalize_to)
+    xpdfs = []
+    xmax=0.9
+    temp_xgrid = xgrid(xmin, xmax,'linear', 200)
+
+    for pdf in pdfs:
+        xpdf = xplotting_grid(pdf, Q, xgrid=temp_xgrid, basis=basis,flavours=flavours)
+        xpdfs.append(xpdf)
+
+    yield from ExponentBandPlotter('beta', pdfs, beta_eff(xpdfs), 'linear', normalize_to)

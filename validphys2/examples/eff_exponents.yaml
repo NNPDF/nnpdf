@@ -1,19 +1,13 @@
 Q: 1.65
 basis: 'evolution'
+#normalize_to: 1
+#flavours: ['gluon', 'singlet']
+
 pdfs:
     - NNPDF31_nlo_as_0118
-alpha_ranges:
-    xmin: 1.e-5
-    xmax: 1.e-2
-
-beta_ranges:
-    xmin: 0.01
-    xmax: 1
-
-template_text: |
-    {@alpha_ranges plot_alphaEff@}
-    {@beta_ranges plot_betaEff@}
+#    - NNPDF30_nlo_as_0118
 
 actions_:
-   - - report:
-           main: True
+   - - plot_alphaEff
+   - - plot_betaEff
+#   - - plot_pdfs
