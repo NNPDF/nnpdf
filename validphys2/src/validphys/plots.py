@@ -1517,8 +1517,8 @@ def plot_normexpcovmat_heatmap(experiments_normcovmat):
     df = experiments_normcovmat
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
-    matrixplot = ax.matshow(matrix, vmin=-0.005, vmax=0.015)
-    cbar = fig.colorbar(matrixplot)
+    matrixplot = ax.matshow(matrix*100, vmin=-0.5, vmax=1.5)
+    cbar = fig.colorbar(matrixplot, label="% of data")
     ax.set_title('Experimental covariance matrix')
     ax.xaxis.set_ticks_position('bottom')
     plt.xlabel('Data points', labelpad=10)
@@ -1543,8 +1543,8 @@ def plot_normthcovmat_heatmap(theory_normcovmat):
     df = theory_covmat_norm
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
-    matrixplot = ax.matshow(matrix*100, vmin= -0.5, vmax=1.5)
-    cbar = fig.colorbar(matrixplot, label="% of central theory")
+    matrixplot = ax.matshow(matrix*100, vmin=-0.5, vmax=1.5)
+    cbar = fig.colorbar(matrixplot, label="% of data")
     ax.set_title('Theoretical covariance matrix')
     ax.xaxis.set_ticks_position('bottom')
     plt.xlabel('Data points', labelpad=10)
