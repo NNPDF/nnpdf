@@ -1519,7 +1519,7 @@ def plot_normexpcovmat_heatmap(experiments_normcovmat):
     fig,ax = plt.subplots()
     matrixplot = ax.matshow(matrix*100, vmin=-0.5, vmax=1.5)
     cbar = fig.colorbar(matrixplot, label="% of data")
-    ax.set_title('Experimental covariance matrix')
+    ax.set_title('Experiment covariance matrix')
     ax.xaxis.set_ticks_position('bottom')
     plt.xlabel('Data points', labelpad=10)
     ax.set_ylabel('Data points')
@@ -1532,7 +1532,7 @@ def plot_expcorrmat_heatmap(experiments_corrmat):
     fig, ax = plt.subplots()
     matrixplot = ax.matshow(matrix)
     cbar = fig.colorbar(matrixplot)
-    ax.set_title('Experimental correlation matrix')
+    ax.set_title('Experiment correlation matrix')
     ax.xaxis.set_ticks_position('bottom')
     plt.xlabel('Data points', labelpad=10)
     ax.set_ylabel('Data points')
@@ -1540,12 +1540,12 @@ def plot_expcorrmat_heatmap(experiments_corrmat):
 
 @figure
 def plot_normthcovmat_heatmap(theory_normcovmat):
-    df = theory_covmat_norm
+    df = theory_normcovmat
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
     matrixplot = ax.matshow(matrix*100, vmin=-0.5, vmax=1.5)
     cbar = fig.colorbar(matrixplot, label="% of data")
-    ax.set_title('Theoretical covariance matrix')
+    ax.set_title('Theory covariance matrix')
     ax.xaxis.set_ticks_position('bottom')
     plt.xlabel('Data points', labelpad=10)
     ax.set_ylabel('Data points')
@@ -1558,7 +1558,7 @@ def plot_thcorrmat_heatmap(theory_corrmat):
     fig, ax = plt.subplots()
     matrixplot = ax.matshow(matrix)
     cbar = fig.colorbar(matrixplot)
-    ax.set_title('Theoretical correlation matrix')
+    ax.set_title('Theory correlation matrix')
     ax.xaxis.set_ticks_position('bottom')
     plt.xlabel('Data points', labelpad=10)
     ax.set_ylabel('Data points')
@@ -1575,48 +1575,44 @@ def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
     fig,ax = plt.subplots()
     matrixplot = ax.matshow(matrix, vmin=-5,vmax=5)
     cbar = fig.colorbar(matrixplot)
-    ax.set_title('(Theoretical + experimental)/experimental covariance matrices')
+    ax.set_title('(Theory + experiment)/experiment covariance matrices')
     ax.xaxis.set_ticks_position('bottom')
     plt.xlabel('Data points', labelpad=10)
     ax.set_ylabel('Data points')
     return fig
 
 @figure
-def plot_diag_cov_comparison(theory_covmat,experiments_covmat, datapoints):  
+def plot_diag_cov_comparison(theory_covmat,experiments_covmat, datapoints):
     """ Plot of sqrt(cov_ii)/data_i for cov = exp versus cov = theory """
     data = datapoints
     df1 = theory_covmat
     df2 = experiments_covmat
     sqrtdiags1 = np.diag(np.sqrt(df1.as_matrix()))
     sqrtdiags2 = np.diag(np.sqrt(df2.as_matrix()))
-    fig,ax = plt.subplots() 
-    ax.plot(sqrtdiags1/data, '.', label="Theory")
-    ax.plot(sqrtdiags2/data, '.', label="Experiment")
+    fig,ax = plt.subplots()
+    ax.plot(sqrtdiags2/data, '.', label="Experiment", color="orange")
+    ax.plot(sqrtdiags1/data, '.', label="Theory", color = "darkorchid")
     plt.xlabel("Data points")
     ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{D_i}$")
-    ax.set_title("Diagonal elements of normalised theoretical and experimental covariance matrices")
+    ax.set_title("Diagonal elements of normalised covariance matrices")
     ax.legend()
     return fig
 
 @figure
-def plot_diag_cov_impact(theory_covmat,experiments_covmat, datapoints):  
+def plot_diag_cov_impact(theory_covmat,experiments_covmat, datapoints):
     """ Plot of ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5 """
+    data = datapoints
     df1 = theory_covmat
     df2 = experiments_covmat
     matrix1 = df1.as_matrix()
     matrix2 = df2.as_matrix()
     a = (np.diag(la.inv(matrix2)))**(-0.5)
     b = (np.diag(la.inv(matrix1+matrix2)))**(-0.5)
-    fig,ax = plt.subplots() 
-    ax.plot(a, '.', label="Experiment")
-    ax.plot(b, '.', label="Experiment + Theory")
+    fig,ax = plt.subplots()
+    ax.plot(a/data, '.', label="Experiment", color="orange")
+    ax.plot(b/data, '.', label="Experiment + Theory", color="mediumseagreen")
     plt.xlabel("Data points")
-    ax.set_ylabel(r"$\frac{1}{\sqrt{[cov^{-1}_]{ii}}}$")
+    ax.set_ylabel(r"$\frac{1}{D_i}\frac{1}{\sqrt{[cov^{-1}_]{ii}}}$")
     ax.set_title("Impact of adding theory covariance matrix")
     ax.legend()
     return fig
-
-
-
-
-    
