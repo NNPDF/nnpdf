@@ -1513,7 +1513,7 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
     return fig
 
 @figure
-def plot_expcovmat_heatmap(experiments_normcovmat):
+def plot_normexpcovmat_heatmap(experiments_normcovmat):
     df = experiments_normcovmat
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
@@ -1539,7 +1539,7 @@ def plot_expcorrmat_heatmap(experiments_corrmat):
     return fig
 
 @figure
-def plot_thcovmat_heatmap(theory_normcovmat):
+def plot_normthcovmat_heatmap(theory_normcovmat):
     df = theory_covmat_norm
     matrix = df.as_matrix()
     fig,ax = plt.subplots()

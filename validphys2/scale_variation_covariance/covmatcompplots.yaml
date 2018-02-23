@@ -25,8 +25,8 @@ experiments:
 template_text: |
    {@with default_theory@}
 
-   {@plot_expcovmat_heatmap@}
-   {@plot_thcovmat_heatmap@}
+   {@plot_normexpcovmat_heatmap@}
+   {@plot_normthcovmat_heatmap@}
 
    {@plot_expcorrmat_heatmap@}
    {@plot_thcorrmat_heatmap@}
