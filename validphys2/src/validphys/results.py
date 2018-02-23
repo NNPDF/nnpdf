@@ -893,7 +893,7 @@ def theory_corrmat(cent_th, experiments, experiments_index, t0set):
     return df
 
 @table
-def theory_covmat_norm(cent_th, experiments, experiments_index, t0set): 
+def theory_normcovmat(cent_th, experiments, experiments_index, t0set): 
     """Calculates the theory covariance matrix normalised to data."""
     data_list = []
     data = np.zeros((len(experiments_index),len(experiments_index)))

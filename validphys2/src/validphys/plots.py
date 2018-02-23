@@ -1539,7 +1539,7 @@ def plot_expcorrmat_heatmap(experiments_corrmat):
     return fig
 
 @figure
-def plot_thcovmat_heatmap(theory_covmat_norm):
+def plot_thcovmat_heatmap(theory_normcovmat):
     df = theory_covmat_norm
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
