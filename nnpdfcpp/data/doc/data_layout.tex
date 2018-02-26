@@ -74,8 +74,8 @@
 \maketitle
 \tableofcontents
 \clearpage
-\section{Revision history}
 
+\section{Revision history}
 \begin{table}[htp]
 \begin{center}
 \begin{tabular}{|c|c|c|c|p{50mm}|}
@@ -111,50 +111,99 @@ Date & Version & Major/Minor & Author & Comments\\
 19/02/18 & 1.4.0 & Major & nh & Added global\_nx parameter. Removed SYSTYPES
 file discussion, removed references to old scripts.\\
 \hline
+26/02/18 & 1.4.1 & Minor & nh & Formatting improvments, discussed FK table
+compression.\\
+\hline
 \end{tabular}
 \end{center}
-\label{tab:revsum}
 \end{table}%
 
 \clearpage
 
 \section{Introduction}
 
-In the {\tt nnpdf++} project, data files used by the code may be grouped into two categories, theory and experiment. Experimental data and the information pertaining to the treatment of systematic errors are held in {\tt CommonData} and {\tt SYSTYPE} files. {\tt FK} tables, {\tt COMPOUND} and {\tt CFACTOR} files store the precomputed information for use when calculating theoretical predictions corresponding to information held in the equivalent {\tt CommonData} file. In this document the file formats and naming conventions for these files will be detailed, along with the directory structure employed by the {\tt nnpdf++} code.
+In the {\tt nnpdf++} project, data files used by the code may be grouped into
+two categories, theory and experiment. Experimental data and the information
+pertaining to the treatment of systematic errors are held in {\tt CommonData}
+and {\tt SYSTYPE} files. {\tt FK} tables, {\tt COMPOUND} and {\tt CFACTOR} files
+store the precomputed information for use when calculating theoretical
+predictions corresponding to information held in the equivalent {\tt CommonData}
+file. In this document the file formats and naming conventions for these files
+will be detailed, along with the directory structure employed by the {\tt
+nnpdf++} code.
 
-For NNPDF3.1 and later fits, a considerably larger number of theory options will be explored than in previous determinations. In NNPDF3.0 the main theory variations used were perturbative order, value of the strong coupling and the number of active flavours in the VFNS. For NNPDF3.1 and later, variations in additional parameters must be accommodated, such as treatments of the heavy quark mass (pole vs $\overline{\mathrm{MS}}$), scale variations,  intrinsic charm, resummation effects etc. The book-keeping used to enable efficient variations of the theoretical treatment used in fits post-3.0 will therefore also be outlined here.
+For NNPDF3.1 and later fits, a considerably larger number of theory options will
+be explored than in previous determinations. In NNPDF3.0 the main theory
+variations used were perturbative order, value of the strong coupling and the
+number of active flavours in the VFNS. For NNPDF3.1 and later, variations in
+additional parameters must be accommodated, such as treatments of the heavy
+quark mass (pole vs MS-bar), scale variations,  intrinsic charm, resummation
+effects etc. The book-keeping used to enable efficient variations of the
+theoretical treatment used in fits post-3.0 will therefore also be outlined
+here.
 
-This document will begin by detailing the specifications for the file formats used by the code, first with the experimental data file formats and layouts in Section~\ref{sec:experimental} and secondly with the file formats used for theoretical predictions in Section~\ref{sec:theory}. Finally the organisation of these files within the {\tt nnpdf++} structure will be described in Section~\ref{sec:org}.
+This document will begin by detailing the specifications for the file formats
+used by the code, first with the experimental data file formats and layouts in
+Section~\ref{sec:experimental} and secondly with the file formats used for
+theoretical predictions in Section~\ref{sec:theory}. Finally the organisation of
+these files within the {\tt nnpdf++} structure will be described in
+Section~\ref{sec:org}.
 
 \subsection{Important definitions}
-In order to clarify the later description, here are a few important terminological points to note.
+In order to clarify the later description, here are a few important
+terminological points to note.
 
 \subsubsection*{\emph{Dataset} vs \emph{Experiment}}
-When referring to a collection of data points two words are used in the {\tt nnpdf++} code which have specific meanings.
-\emph{Dataset} refers to the result of a specific measurement, typically associated with a single experimental paper and corresponds to the {\tt DataSet} class in the {\tt nnpdf++} code. \emph{Experiment} refers
-to a collection of \emph{Datasets} which are associated by experimental cross-correlations. For example, the ATLAS 2010 $R=0.4$ inclusive jet measurement~\cite{Aad:2011fc}
-and the ATLAS high-mass Drell-Yan measurement of~\cite{Aad:2013iua} are both examples of \emph{Datasets} as used in the NNPDF3.0 analysis. Both of these datasets are
-grouped into the ATLAS \emph{Experiment} as they have systematic uncertainties that are cross-correlated with each other. In this document, when using these terms in
-this sense, they will be italicised for clarity.
+When referring to a collection of data points two words are used in the {\tt
+nnpdf++} code which have specific meanings.  \emph{Dataset} refers to the result
+of a specific measurement, typically associated with a single experimental paper
+and corresponds to the {\tt DataSet} class in the {\tt nnpdf++} code.
+\emph{Experiment} refers to a collection of \emph{Datasets} which are associated
+by experimental cross-correlations. For example, the ATLAS 2010 R=0.4 inclusive
+jet measurement and the ATLAS 2011 high-mass Drell-Yan measurement are both
+examples of \emph{Datasets} as used in the NNPDF3.0 analysis. Both of these
+datasets are grouped into the ATLAS \emph{Experiment} as they have systematic
+uncertainties that are cross-correlated with each other. In this document, when
+using these terms in this sense, they will be italicised for clarity.
 
 \subsubsection*{\emph{Dataset} and \emph{Experiment} names}
-When referred to, the \emph{Dataset} and \emph{Experiment} names refer to the short identifying string used in the code for each \emph{Dataset} and \emph{Experiment}.
-For example, the \emph{Dataset} name for the aforementioned ATLAS 2010 inclusive jet measurement with $R=0.4$ is \mbox{ATLASR04JETS36PB}.
+When referred to, the \emph{Dataset} and \emph{Experiment} names refer to the
+short identifying string used in the code for each \emph{Dataset} and
+\emph{Experiment}.  For example, the \emph{Dataset} name for the aforementioned
+ATLAS 2010 inclusive jet measurement with R=0.4 is \mbox{ATLASR04JETS36PB}.
 
 \section{Experimental data files}\label{sec:experimental}
-Data made available by experimental collaborations comes in a variety of formats. For use in a fitting code, this data must be converted into a common format
-that contains all the required information for use in PDF fitting. Existing formats commonly used by the community, such as in HepData, are generally unsuitable.
-Principally as they often do not fully describe the breakdown of systematic uncertainties. Therefore over several years an NNPDF standard data format has been
-iteratively developed, now denoted {\tt CommonData}. In addition to the {\tt CommonData} files themselves, in the {\tt nnpdf++} project the user has the ability to vary
-the treatment of individual systematic errors by use of parameter files denoted {\tt SYSTYPE} files. In this section we shall detail the specifications of these two files.
+Data made available by experimental collaborations comes in a variety of
+formats. For use in a fitting code, this data must be converted into a common
+format that contains all the required information for use in PDF fitting.
+Existing formats commonly used by the community, such as in HepData, are
+generally unsuitable.  Principally as they often do not fully describe the
+breakdown of systematic uncertainties. Therefore over several years an NNPDF
+standard data format has been iteratively developed, now denoted {\tt
+CommonData}. In addition to the {\tt CommonData} files themselves, in the {\tt
+nnpdf++} project the user has the ability to vary the treatment of individual
+systematic errors by use of parameter files denoted {\tt SYSTYPE} files. In this
+section we shall detail the specifications of these two files.
 
-In principle, the file specification and classes described in this section are independent of the {\tt nnpdf++} project and may be generated by whatever means the user sees fit.
-In practice, the {\tt CommonData} and {\tt SYSTYPE} files are generated by the {\tt buildmaster} project of {\tt nnpdf++} from the raw experimental data files.
+In principle, the file specification and classes described in this section are
+independent of the {\tt nnpdf++} project and may be generated by whatever means
+the user sees fit.  In practice, the {\tt CommonData} and {\tt SYSTYPE} files
+are generated by the {\tt buildmaster} project of {\tt nnpdf++} from the raw
+experimental data files.
 
 \subsection{Process types and kinematics}
-Before going into the file formats, we shall summarise the identifying features used for data in the {\tt nnpdf++} code.
+Before going into the file formats, we shall summarise the identifying features
+used for data in the {\tt nnpdf++} code.
 
-Each datapoint has an associated \emph{process type} string. This can be specified by the user, but \textbf{must} begin with the appropriate identifying base process type. Additionally for each datapoint three kinematic values are given, the \emph{process type} being primarily to identify the nature of these values. Typically the first kinematic variable is the principal differential quantity used in the measurement. The second kinematic variable defines the scale of the process. The third is generally the centre-of-mass energy of the process, or inelasticity in the case of DIS. The allowed basic process types, and their corresponding three kinematic variables are outlined below.
+Each datapoint has an associated \emph{process type} string. This can be
+specified by the user, but \textbf{must} begin with the appropriate identifying
+base process type. Additionally for each datapoint three kinematic values are
+given, the \emph{process type} being primarily to identify the nature of these
+values. Typically the first kinematic variable is the principal differential
+quantity used in the measurement. The second kinematic variable defines the
+scale of the process. The third is generally the centre-of-mass energy of the
+process, or inelasticity in the case of DIS. The allowed basic process types,
+and their corresponding three kinematic variables are outlined below.
 
 \begin{itemize}
 \item \textbf{DIS} - Deep inelastic scattering measurements: $(x,Q^2,y)$
@@ -178,48 +227,110 @@ Each datapoint has an associated \emph{process type} string. This can be specifi
 \item \textbf{HIG\_RAP} - Higgs boson rapidity distribution $(y,M_H^2,\sqrt{s})$
 \end{itemize}
 
-As examples of \emph{process type} strings, consider \textbf{EWK\_RAP} for a collider $W$ boson asymmetry measurement binned in rapidity, and \textbf{DIS\_F2P} for the $F_2^p$ structure function in DIS. The user is free to choose something identifying for the second segment of the process type, the important feature being the basic process type. However, users are encouraged to only use this freedom when absolutely necessary (such as when used in combination with APFEL).
+As examples of \emph{process type} strings, consider \textbf{EWK\_RAP} for a
+collider $W$ boson asymmetry measurement binned in rapidity, and
+\textbf{DIS\_F2P} for the $F_2^p$ structure function in DIS. The user is free to
+choose something identifying for the second segment of the process type, the
+important feature being the basic process type. However, users are encouraged to
+only use this freedom when absolutely necessary (such as when used in
+combination with APFEL).
 
-One special case is that of W boson lepton asymmetry measurements, which being cross-section asymmetries may occasionally have negative datapoints. Therefore asymmetry measurements must have the final tag \textbf{ASY} to ensure that artificial data generation permits negative data values. An example \emph{process type} string would be \textbf{EWK\_RAP\_ASY}.
+One special case is that of $W$ boson lepton asymmetry measurements, which being
+cross-section asymmetries may occasionally have negative datapoints. Therefore
+asymmetry measurements must have the final tag \textbf{ASY} to ensure that
+artificial data generation permits negative data values. An example
+\emph{process type} string would be \textbf{EWK\_RAP\_ASY}.
 
 \subsubsection*{Notes for the future}
-In the future it would be nice to have a more flexible treatment of the kinematic variables, both in their number and labelling.
+In the future it would be nice to have a more flexible treatment of the
+kinematic variables, both in their number and labelling.
 
 
 \subsection{{\tt CommonData} file format}
-Each experimental \emph{Dataset} has its own {\tt CommonData} file. {\tt CommonData} files contain the bulk of the experimental information used in the {\tt nnpdf++} project, with the only other experimental data files controlling the treatment and correlation of systematic errors. Each {\tt CommonData} file is a plaintext file with the following layout.
+Each experimental \emph{Dataset} has its own {\tt CommonData} file. {\tt
+CommonData} files contain the bulk of the experimental information used in the
+{\tt nnpdf++} project, with the only other experimental data files controlling
+the treatment and correlation of systematic errors. Each {\tt CommonData} file
+is a plaintext file with the following layout.
 
-The first line begins with the \emph{Dataset} name, the number of systematic errors, and the number of datapoints in the set, whitespace separated.
-For example for the ATLAS 2010 jet measurement the first line of the file reads:
+The first line begins with the \emph{Dataset} name, the number of systematic
+errors, and the number of datapoints in the set, whitespace separated.  For
+example for the ATLAS 2010 jet measurement the first line of the file reads:
+%
 \begin{quotation}\noindent
 ATLASR04JETS36PB        91      90
 \end{quotation}
-Which demonstrates that the set \emph{name} is `ATLASR04JETS36PB', that there are 91 sources of systematic uncertainty, 90 datapoints, one associated {\tt FK} table, and that the {\tt FK} table corresponds to a proton initial state. As another example, consider the NMCPD \emph{Dataset}:
+%
+Which demonstrates that the set \emph{name} is `ATLASR04JETS36PB', that there
+are 91 sources of systematic uncertainty, 90 datapoints, one associated {\tt FK}
+table, and that the {\tt FK} table corresponds to a proton initial state. As
+another example, consider the NMCPD \emph{Dataset}:
+%
 \begin{quotation}\noindent
 NMCPD   5       211
 \end{quotation}
+%
 Here there are 5 sources of systematic uncertainty and 211 datapoints.
 
-Following this, each line specifies the details of a single datapoint. The first value being the datapoint index $1< i_{\text{dat}} \leq N_{\mathrm{dat}}$, followed by the \emph{process type} string as outlined above, and the three kinematic variables in order. These are followed by the value of the experimental datapoint itself, and the value of the statistical uncertainty associated with it (absolute value). Finally the systematic uncertainties are specified. The layout per datapoint is therefore
+Following this, each line specifies the details of a single datapoint. The first
+value being the datapoint index $1< i_{\text{dat}} \leq N_{\mathrm{dat}}$,
+followed by the \emph{process type} string as outlined above, and the three
+kinematic variables in order. These are followed by the value of the
+experimental datapoint itself, and the value of the statistical uncertainty
+associated with it (absolute value). Finally the systematic uncertainties are
+specified. The layout per datapoint is therefore
+%
 \begin{quotation}\noindent
 $i_{\mathrm{dat}}$   \emph{ProcessType} kin$_1$ kin$_2$ kin$_3$ data\_value stat\_error  $[..$ systematics $..]$
 \end{quotation}
+%
 For example, in the case of a DIS datapoint from the BCDMSD \emph{Dataset}:
+%
 \begin{quotation}\noindent
 1    DIS\_F2D 7.0e-02   8.75e+00   5.666e-01   3.6575e-01   6.43e-03 $[..$ systematics $..]$
 \end{quotation}
-In these lines the systematic uncertainties are laid out as so. For each uncertainty, additive and multiplicative versions are given. The additive uncertainty is given by absolute value, and the multiplicative as a percentage of the data value (that is, relative error multiplied by 100). The systematics string is formed by the sequence of $N_{\text{sys}}$ pairs of systematic uncertainties:
+%
+In these lines the systematic uncertainties are laid out as so. For each
+uncertainty, additive and multiplicative versions are given. The additive
+uncertainty is given by absolute value, and the multiplicative as a percentage
+of the data value (that is, relative error multiplied by 100). The systematics
+string is formed by the sequence of $N_{\text{sys}}$ pairs of systematic
+uncertainties:
 %%
 \begin{quotation}\noindent
 $[..$ systematics $..] =  \sigma^{\mathrm{add}}_0 \quad  \sigma^{\mathrm{mul}}_0\quad \sigma^{\mathrm{add}}_1 \quad \sigma^{\mathrm{mul}}_1 \quad....\quad \sigma^{\mathrm{add}}_n  \quad\sigma^{\mathrm{mul}}_n$
 \end{quotation}
 %%
-where $\sigma^{\mathrm{add}}_i$ and $\sigma^{\mathrm{mul}}_i$ are the additive and multiplicative versions respectively of the systematic uncertainty arising from the $i$th source. While it may seem at first that the multiplicative error is spurious given the presence of the additive error and data central value, this may not be the case. For example in a closure test scenario, the data central values may have been replaced in the {\tt CommonData} file by theoretical predictions. Therefore if you wish to use a covariance matrix generated with the original multiplicative uncertainties via the $t_0$ method, you must also store the original multiplicative (percentage) error. For flexibility and ease of I/O this is therefore done in the {\tt CommonData} file itself
+where $\sigma^{\mathrm{add}}_i$ and $\sigma^{\mathrm{mul}}_i$ are the additive
+and multiplicative versions respectively of the systematic uncertainty arising
+from the $i$th source. While it may seem at first that the multiplicative error
+is spurious given the presence of the additive error and data central value,
+this may not be the case. For example in a closure test scenario, the data
+central values may have been replaced in the {\tt CommonData} file by
+theoretical predictions. Therefore if you wish to use a covariance matrix
+generated with the original multiplicative uncertainties via the $t_0$ method,
+you must also store the original multiplicative (percentage) error. For
+flexibility and ease of I/O this is therefore done in the {\tt CommonData} file
+itself.
 
-For a \emph{Dataset} with $N_{\text{dat}}$ datapoints and $N_{\text{sys}}$ sources of systematic uncertainty, the total {\tt CommonData} file should therefore be $N_{\text{dat}}+1$ lines long. Its first line contains the set parameters, and every subsequent line should consist of the description of a single datapoint. Each datapoint line should therefore contain $7 + 2N_{\text{sys}}$ columns.
+For a \emph{Dataset} with $N_{\text{dat}}$ datapoints and $N_{\text{sys}}$
+sources of systematic uncertainty, the total {\tt CommonData} file should
+therefore be $N_{\text{dat}}+1$ lines long. Its first line contains the set
+parameters, and every subsequent line should consist of the description of a
+single datapoint. Each datapoint line should therefore contain $7 +
+2N_{\text{sys}}$ columns.
 
 \subsection{{\tt SYSTYPE} file format}
-The explicit presentation of the systematic uncertainties in the {\tt CommonData} file allows for a great deal of flexibility in the treatment of these errors. Specifically, whether they should be treated as additive or multiplicative uncertainties, and how they are correlated, both within the \emph{Dataset} and within a larger \emph{Experiment}. A specification for how the systematic uncertainties should be treated is provided by a {\tt SYSTYPE} file. As there is not always an unambiguous method for the treatment of these uncertainties, these information is kept outside the (unambiguous) {\tt CommonData} file. Several options for this treatment are often provided in the form of multiple {\tt SYSTYPE} files which may be selected between in the fit.
+The explicit presentation of the systematic uncertainties in the {\tt
+CommonData} file allows for a great deal of flexibility in the treatment of
+these errors. Specifically, whether they should be treated as additive or
+multiplicative uncertainties, and how they are correlated, both within the
+\emph{Dataset} and within a larger \emph{Experiment}. A specification for how
+the systematic uncertainties should be treated is provided by a {\tt SYSTYPE}
+file. As there is not always an unambiguous method for the treatment of these
+uncertainties, these information is kept outside the (unambiguous) {\tt
+CommonData} file. Several options for this treatment are often provided in the
+form of multiple {\tt SYSTYPE} files which may be selected between in the fit.
 
 Each {\tt SYSTYPE} file begins with a line specifying the total number of
 systematics. Naturally this must match with the $N_{\text{sys}}$ variable
@@ -230,15 +341,43 @@ integer. For example, in the case of the BCDMSD {\tt SYSTYPE} files, the first l
 8
 \end{quotation}
 %%
-As there are $N_{\text{sys}}=8$ sources of systematic uncertainty for this \emph{Dataset}. Following this line are $N_{\text{sys}}$ lines, describing each source of systematic uncertainty. For each source two parameters are provided, the \emph{uncertainty treatment} and the \emph{uncertainty description}. These are laid out for each systematic as:
+As there are $N_{\text{sys}}=8$ sources of systematic uncertainty for this
+\emph{Dataset}. Following this line are $N_{\text{sys}}$ lines, describing each
+source of systematic uncertainty. For each source two parameters are provided,
+the \emph{uncertainty treatment} and the \emph{uncertainty description}. These
+are laid out for each systematic as:
 %%
 \begin{quotation}\noindent
 $i_{\text{sys}}$\quad $[$\emph{uncertainty treatment}$]$\quad $[$\emph{uncertainty description}$]$
 \end{quotation}
 %%
-Where $1< i_{\text{sys}} \leq N_{\mathrm{sys}}$ enumerates each systematic. The \emph{uncertainty treatment} determines whether the uncertainty should be treated as additive, multiplicative, or in cases where the choice is unclear, as randomised on a replica by replica basis. These choices are selected by using the strings \textbf{ADD}, \textbf{MULT}, or \textbf{RAND}. The \emph{uncertainty description} specifies how the systematic is to be correlated with other datapoints. There are three special cases for the \emph{uncertainty description}, specified by the strings \textbf{CORR}, \textbf{UNCORR}, \textbf{THEORYCORR}, \textbf{THEORYUNCORR} and \textbf{SKIP}. The first two specify whether the systematic is fully correlated \textbf{only} within the \emph{Dataset} (\textbf{CORR}), or whether the systematic is totally uncorrelated (\textbf{UNCORR}). The \textbf{THEORY} descriptor is used to describe theoretical systematics due to e.g missing NNLO corrections, which are treated as either \textbf{CORR} or \textbf{UNCORR} according to their suffix, but are not included in the generation of artificial replicas (their only contribution is to the fitting error function). If the user wishes to correlate a specific uncertainty between multiple \emph{Datasets} within an \emph{Experiment}, then they should use a custom \emph{uncertainty description}. When building a covariance matrix for an \emph{Experiment}, the {\tt nnpdf++} code checks for matches between the \emph{uncertainty descriptions} of systematics of its constituent \emph{Datasets}. If a match is found, the code will correlate those systematics over the relevant datasets. The \textbf{SKIP} descriptor removes the systematic from the covariance matrices for debug purposes.
+Where $1< i_{\text{sys}} \leq N_{\mathrm{sys}}$ enumerates each systematic. The
+\emph{uncertainty treatment} determines whether the uncertainty should be
+treated as additive, multiplicative, or in cases where the choice is unclear, as
+randomised on a replica by replica basis. These choices are selected by using
+the strings \textbf{ADD}, \textbf{MULT}, or \textbf{RAND}. The \emph{uncertainty
+description} specifies how the systematic is to be correlated with other
+datapoints. There are three special cases for the \emph{uncertainty
+description}, specified by the strings \textbf{CORR}, \textbf{UNCORR},
+\textbf{THEORYCORR}, \textbf{THEORYUNCORR} and \textbf{SKIP}. The first two
+specify whether the systematic is fully correlated \textbf{only} within the
+\emph{Dataset} (\textbf{CORR}), or whether the systematic is totally
+uncorrelated (\textbf{UNCORR}). The \textbf{THEORY} descriptor is used to
+describe theoretical systematics due to e.g missing NNLO corrections, which are
+treated as either \textbf{CORR} or \textbf{UNCORR} according to their suffix,
+but are not included in the generation of artificial replicas (their only
+contribution is to the fitting error function). If the user wishes to correlate
+a specific uncertainty between multiple \emph{Datasets} within an
+\emph{Experiment}, then they should use a custom \emph{uncertainty description}.
+When building a covariance matrix for an \emph{Experiment}, the {\tt nnpdf++}
+code checks for matches between the \emph{uncertainty descriptions} of
+systematics of its constituent \emph{Datasets}. If a match is found, the code
+will correlate those systematics over the relevant datasets. The \textbf{SKIP}
+descriptor removes the systematic from the covariance matrices for debug
+purposes.
 
-As an example, let us consider an NNPDF2.3 standard {\tt SYSTYPE} for the BCDMSD \emph{Dataset}.
+As an example, let us consider an NNPDF2.3 standard {\tt SYSTYPE} for the BCDMSD
+\emph{Dataset}.
 %%
 \begin{quotation}\noindent
 8\\
@@ -252,7 +391,13 @@ As an example, let us consider an NNPDF2.3 standard {\tt SYSTYPE} for the BCDMSD
 8    MULT    CORR
 \end{quotation}
 %%
-Here the first five systematics have custom \emph{uncertainty descriptions}, thereby allowing them to be cross-correlated with other \emph{Datasets} in a larger \emph{Experiment}. Systematics six to eight are specified as being fully correlated, but only within the BCDMSD  \emph{Dataset}. Additionally note that the first three systematics are specified as additive, and the remainder are multiplicative. If we compare now to the equivalent {\tt SYSTYPE} file for the BCDMSP \emph{Dataset}:
+Here the first five systematics have custom \emph{uncertainty descriptions},
+thereby allowing them to be cross-correlated with other \emph{Datasets} in a
+larger \emph{Experiment}. Systematics six to eight are specified as being fully
+correlated, but only within the BCDMSD  \emph{Dataset}. Additionally note that
+the first three systematics are specified as additive, and the remainder are
+multiplicative. If we compare now to the equivalent {\tt SYSTYPE} file for the
+BCDMSP \emph{Dataset}:
 %%
 \begin{quotation}\noindent
 11\\
@@ -268,24 +413,61 @@ Here the first five systematics have custom \emph{uncertainty descriptions}, the
 10    MULT    CORR\\
 11    MULT    CORR
 \end{quotation}
-It is clear that the first five systematics are the same as in the BCDMSD \emph{Dataset}, and therefore should the two sets be combined into a common \emph{Experiment}, the code will cross-correlate them appropriately. The combination of {\tt SYSTYPE} and {\tt CommonData} is quite flexible. As stated previously, once generated from the original raw experimental data, the {\tt CommonData} file is fixed and should not be altered apart from for the purpose of correcting errors. In practice the full details on the systematic correlation and their treatment is often not precisely specified. This system allows for the safe variation of these parameters for testing purposes.
+It is clear that the first five systematics are the same as in the BCDMSD
+\emph{Dataset}, and therefore should the two sets be combined into a common
+\emph{Experiment}, the code will cross-correlate them appropriately. The
+combination of {\tt SYSTYPE} and {\tt CommonData} is quite flexible. As stated
+previously, once generated from the original raw experimental data, the {\tt
+CommonData} file is fixed and should not be altered apart from for the purpose
+of correcting errors. In practice the full details on the systematic correlation
+and their treatment is often not precisely specified. This system allows for the
+safe variation of these parameters for testing purposes.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Theory data files} \label{sec:theory}
-In the {\tt nnpdf++} project, {\tt FK} tables (or grids) are used to provide the information required to compute pQCD cross sections in a compact fashion.
-With the {\tt FK} method a typical hadronic observable datapoint $\mathcal{O}$, is computed as,
+In the {\tt nnpdf++} project, {\tt FK} tables (or grids) are used to provide the
+information required to compute pQCD cross sections in a compact fashion.  With
+the {\tt FK} method a typical hadronic observable datapoint $\mathcal{O}$, is
+computed as,
+%
 \be \mathcal{O}_d= \sum_{\alpha,\beta}^{N_x}\sum_{i,j}^{N_{\mathrm{pdf}}} \sigma^{(d)}_{\alpha\beta i j}N_i^0(x_\alpha)N_j^0(x_\beta). \label{eq:FKprod}\ee
-Where $\sigma_{\alpha\beta i j}^{(d)}$, the {\tt FK} table, is a five index object with two indices in flavour ($i$, $j$), two indices in $x$ ($\alpha$, $\beta$) and a datapoint index $d$. $N^0_i({x_\alpha})$ is the $i^{\mathrm{th}}$ initial scale PDF in the evolution basis at x-grid point $x=x_\alpha$. Each {\tt FK} table has an internally specified $x$-grid upon which the PDFs are interpolated.
-The full 14-PDF evolution basis used in the {\tt FK} tables is given by :
+%
+Where $\sigma_{\alpha\beta i j}^{(d)}$, the {\tt FK} table, is a five index
+object with two indices in flavour ($i$, $j$), two indices in $x$ ($\alpha$,
+$\beta$) and a datapoint index $d$. $N^0_i({x_\alpha})$ is the $i^{\mathrm{th}}$
+initial scale PDF in the evolution basis at x-grid point $x=x_\alpha$. Each {\tt
+FK} table has an internally specified $x$-grid upon which the PDFs are
+interpolated.  The full 14-PDF evolution basis used in the {\tt FK} tables is
+given by:
+%
 \be \left\{ \gamma, \Sigma,g,V,V3,V8,V15,V24,V35,T3,T8,T15,T24,T35\right\}. \label{eq:evolbasis} \ee
-Additional information may be introduced via correction factors known internally as $C$-factors. These consist of datapoint by datapoint multiplicative corrections to the final result of the {\tt FK} convolution $\mathcal{O}$. These are provided by {\tt CFACTOR} files, typical applications being the application of NNLO and electroweak corrections.
-For processes which depend nonlinearly upon PDFs, such as cross-section ratios or asymmetries, multiple FK tables may be required for one observable. In this case information is provided in the form of a {\tt COMPOUND} file which specifies how the results from several {\tt FK} tables may be combined to produce the target observable.
-In this section we shall specify the layout of the {\tt FK}, {\tt COMPOUND} and {\tt CFACTOR} files.
+%
+Additional information may be introduced via correction factors known internally
+as $C$-factors. These consist of datapoint by datapoint multiplicative
+corrections to the final result of the {\tt FK} convolution $\mathcal{O}$. These
+are provided by {\tt CFACTOR} files, typical applications being the application
+of NNLO and electroweak corrections.  For processes which depend non-linearly
+upon PDFs, such as cross-section ratios or asymmetries, multiple FK tables may
+be required for one observable. In this case information is provided in the form
+of a {\tt COMPOUND} file which specifies how the results from several {\tt FK}
+tables may be combined to produce the target observable.  In this section we
+shall specify the layout of the {\tt FK}, {\tt COMPOUND} and {\tt CFACTOR}
+files.
+
+\subsubsection{FK table compression}
+It is important to note that the FK table format as described here pertains to
+the \emph{uncompressed} tables. Typically FK tables as found and read by the
+NNPDF code are compressed individually with gzip.
+
 \subsection{{\tt FK} file format}
 \subsubsection*{{\tt FK} preamble layout}
-The FK preamble is constructed by a set of data segments, of which there are two configurations. The first configuration consists of a list of key-value pairs,a nd the second is a simple data 'blob' with no requirements as to it's formatting. Each segment is begun by a delineating line, for key-value pairs the segment opening line is
+The FK preamble is constructed by a set of data segments, of which there are two
+configurations. The first configuration consists of a list of key-value pairs,
+and the second is a simple data `blob' with no requirements as to it's
+formatting. Each segment is begun by a delineating line, for key-value pairs the
+segment opening line is
 \begin{verbatim}
     _SegmentName_____________________________________________
 \end{verbatim}
@@ -293,14 +475,23 @@ and for data blobs the opening line is
 \begin{verbatim}
     {SegmentName_____________________________________________
 \end{verbatim}
-The key difference being in the first character, underscore ({\tt \_}) for key-value pair segments, and open curly brace (\{) for data blobs.
-The name of the segment is specified from the second character, to a terminating underscore ({\tt \_}). The line is then typically padded out
-with underscores up to 60 characters. Following this delineating line, for a key-value segment, the following lines must all be of the format
+The key difference being in the first character, underscore ({\tt \_}) for
+key-value pair segments, and open curly brace (\{) for data blobs. The name of
+the segment is specified from the second character, to a terminating
+underscore ({\tt \_}). The line is then typically padded out with underscores up
+to 60 characters. Following this delineating line, for a key-value segment, the
+following lines must all be of the format
 \begin{verbatim}
     *KEY: VALUE
 \end{verbatim}
-with the first character required to be an asterisk (*), then specifying the key, and value for that segment. For blob-type segments, no constraints are placed upon the format, aside from that each line \textbf{must not} begin with one of the delineating characters \{ or \_, as these will trigger the construction of a new segment.\\\\
-While the user may specify additional segments, both key-value pair and blob-type for their own use, there are seven segments required by the code.
+with the first character required to be an asterisk (*), then specifying the
+key, and value for that segment. For blob-type segments, no constraints are
+placed upon the format, aside from that each line \textbf{must not} begin with
+one of the delineating characters \{ or \_, as these will trigger the
+construction of a new segment.
+
+While the user may specify additional segments, both key-value pair and
+blob-type for their own use, there are seven segments required by the code.
 These are, specified by their segment name:
 \begin{itemize}
 \item \textbf{GridDesc} [BLOB] \\
@@ -312,70 +503,117 @@ These are, specified by their segment name:
 \item \textbf{TheoryInfo} [K-V]\\
 	A list of all the theory parameters used in the generation of the table. The required keys are specified in Table~\ref{tab:theoryparams}.
 \item \textbf{FlavourMap} [BLOB]\\
-The segment describes the flavour structure
-of the grid by means of a flavour map. This map details which flavour channels are active in the grid, using the basis specified in Eqn.~\ref{eq:evolbasis}. For DIS processes, an example section would be
-\begin{verbatim}
-{FlavourMap_____________________________________________
-0 1 1 0 0 0 0 0 0 0 1 0 0 0
-\end{verbatim}
-Which specifies that only the Singlet, gluon and $T_8$ channels are populated in the grid. In the case of hadronic FK tables, the full $14\times 14$ flavour combination matrix is specified in the same manner. Consider the flavourmap for the CDFR2KT \emph{Dataset}:
-\begin{verbatim}
-{FlavourMap_____________________________________________
-0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 1 1 0 0 0 0 0 0 0 0 0 0 0
-0 1 1 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 1 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 1 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 1 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 1 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 1 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0
-\end{verbatim}
-This flavourmap contains 9 nonzero entries, demonstrating the importance of only computing those flavour combinations that are relevant to the process. Additionally this map instructs the {\tt nnpdf++} convolution code as to which elements of the FastKernel grid should be read, to minimise holding zero entries in memory.\\\\
-
+    %
+    The segment describes the flavour structure of the grid by means of a flavour
+    map. This map details which flavour channels are active in the grid, using the
+    basis specified in Eqn.~\ref{eq:evolbasis}. For DIS processes, an example
+    section would be
+    %
+    \begin{verbatim}
+    {FlavourMap_____________________________________________
+    0 1 1 0 0 0 0 0 0 0 1 0 0 0
+    \end{verbatim}
+    %
+    Which specifies that only the Singlet, gluon and $T_8$ channels are populated in
+    the grid. In the case of hadronic FK tables, the full $14\times 14$ flavour
+    combination matrix is specified in the same manner. Consider the flavourmap for
+    the CDFR2KT \emph{Dataset}:
+    %
+    \begin{verbatim}
+    {FlavourMap_____________________________________________
+    0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    0 1 1 0 0 0 0 0 0 0 0 0 0 0
+    0 1 1 0 0 0 0 0 0 0 0 0 0 0
+    0 0 0 1 0 0 0 0 0 0 0 0 0 0
+    0 0 0 0 1 0 0 0 0 0 0 0 0 0
+    0 0 0 0 0 1 0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0 0 0 1 0 0 0 0
+    0 0 0 0 0 0 0 0 0 0 1 0 0 0
+    0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    \end{verbatim}
+    %
+    This flavourmap contains 9 nonzero entries, demonstrating the importance of only
+    computing those flavour combinations that are relevant to the process.
+    Additionally this map instructs the {\tt nnpdf++} convolution code as to which
+    elements of the FastKernel grid should be read, to minimise holding zero entries
+    in memory.
 \item \textbf{xGrid} [BLOB]\\
-This segment defines the $x$ grid upon which the {\tt FK} grid is defined, given as an $N_x$ long list of the $x$-grid points. This grid should be optimised to minimise {\tt FK} grid zeros in $x$-space. The blob is a simple list of the grid points, here is an example of an $x$-grid with $N_x=5$ entries:
-\begin{verbatim}
-{xGrid_____________________________________________
-0.10000000000000001
-0.13750000000000001
-0.17499999999999999
-0.21250000000000002
-1.00000000000000000
-\end{verbatim}
+    This segment defines the $x$ grid upon which the {\tt FK} grid is defined,
+    given as an $N_x$ long list of the $x$-grid points. This grid should be
+    optimised to minimise {\tt FK} grid zeros in $x$-space. The blob is a simple
+    list of the grid points, here is an example of an $x$-grid with $N_x=5$
+    entries:
+    %
+    \begin{verbatim}
+    {xGrid_____________________________________________
+    0.10000000000000001
+    0.13750000000000001
+    0.17499999999999999
+    0.21250000000000002
+    1.00000000000000000
+    \end{verbatim}
 \end{itemize}
 
- For examples of complete DIS and hadronic {\tt FK} table headers, see Appendix~\ref{app:FKheaders}.
+For examples of complete DIS and hadronic {\tt FK} table headers, see
+Appendix~\ref{app:FKheaders}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \subsubsection*{{\tt FK} grid layout}
-To start the section of the file with the {\tt FK} grid itself, we begin with a blob-type segment delineator:
+To start the section of the file with the {\tt FK} grid itself, we begin with a
+blob-type segment delineator:
+%
 \begin{verbatim}
 {FastKernel_____________________________________________
 \end{verbatim}
 The grid itself is now written out. For hadronic data, the format is line by line as follows:
+%
 \be d \:\: \alpha \:\: \beta \:\: \sigma^d_{\alpha\beta 1 1} \:\: \sigma^d_{\alpha\beta 1 2}\:\: ....\:\: \sigma^d_{\alpha\beta n n} \ee
-Where $d$ is the index of the data point for that line, $\alpha$ is the x-index of the first PDF, $\beta$ is the x-index of the second PDF, the $\sigma^d_{\alpha\beta i j}$ are the values of the FastKernel grid for data point $d$ as in Eqn~\ref{eq:FKprod}, and $n=14$ is the total number of parton flavours in the grid. Therefore the full $14\times 14$ flavour space for one combination of the indices $\{d,\alpha,\beta\}$ is written out on each line.
+%
+Where $d$ is the index of the data point for that line, $\alpha$ is the x-index
+of the first PDF, $\beta$ is the x-index of the second PDF, the
+$\sigma^d_{\alpha\beta i j}$ are the values of the FastKernel grid for data
+point $d$ as in Eqn~\ref{eq:FKprod}, and $n=14$ is the total number of parton
+flavours in the grid. Therefore the full $14\times 14$ flavour space for one
+combination of the indices $\{d,\alpha,\beta\}$ is written out on each line.
 
-These lines should be written out first in $\beta$, then $\alpha$ and finally $d$ so that the {\tt FK} grids are written in blocks of datapoints. All {\tt FK} grid values should be written out in double precision. For DIS data the {\tt FK} grids must be written out as
+These lines should be written out first in $\beta$, then $\alpha$ and finally
+$d$ so that the {\tt FK} grids are written in blocks of datapoints. All {\tt FK}
+grid values should be written out in double precision. For DIS data the {\tt FK}
+grids must be written out as
+%
 \be d \:\: \alpha \:\: \sigma^d_{\alpha 1} \:\: \sigma^d_{\alpha 2}\:\: ....\:\: \sigma^d_{\alpha n} \ee
+%
 Therefore here all $n=14$ values are written out for each combination of $\{d,\alpha\}$.
 
-When writing out the grids, note that only $x$-grid points for which there are nonzero {\tt FK} entries are written out. For example, there should be no lines such as:
+When writing out the grids, note that only $x$-grid points for which there are
+nonzero {\tt FK} entries are written out. For example, there should be no lines
+such as:
+%
 \begin{quotation} d \:\: $\alpha$ \:\: $\beta$ \:\:  0 \:\: 0      \:\:                 0    \:\:  ... \:\: 0  \end{quotation}
-However, for those $x$-grid points which do have nonzero $\sigma$ contributions, the full set of flavour contributions must be written out regardless of the number of zero entries. This choice was made in order that the nonzero flavour entries may be examined/optimised by hand after the FK table is generated.
+%
+However, for those $x$-grid points which do have nonzero $\sigma$ contributions,
+the full set of flavour contributions must be written out regardless of the
+number of zero entries. This choice was made in order that the nonzero flavour
+entries may be examined/optimised by hand after the FK table is generated.
 
-The {\tt FK} file should end on the last entry in the grid, and without empty lines at the end of file.
+The {\tt FK} file should end on the last entry in the grid, and without empty
+lines at the end of file.
 
 \subsection{{\tt CFACTOR} file format}
-Additional multiplicative factors to be applied to the output of the {\tt FK} convolution may be introduced by the use of {\tt CFACTOR} files. These files have a very simple format. They begin with a header providing a description of the $C$-factor information stored in the file. This segment is initialised and terminated by a line beginning with a star (\mbox{*}) character and consists of six mandatory fields
+Additional multiplicative factors to be applied to the output of the {\tt FK}
+convolution may be introduced by the use of {\tt CFACTOR} files. These files
+have a very simple format. They begin with a header providing a description of
+the $C$-factor information stored in the file. This segment is initialised and
+terminated by a line beginning with a star (\mbox{*}) character and consists of
+six mandatory fields
+%
 \begin{itemize}
 \item \textbf{SetName} - The \emph{Dataset} name.
 \item \textbf{Author} - The author of the {\tt CFACTOR} file.
@@ -384,11 +622,16 @@ Additional multiplicative factors to be applied to the output of the {\tt FK} co
 \item \textbf{TheoryInput} - Theory input parameters used in the $C-$factors (e.g $\alpha_S$, scales).
 \item \textbf{PDFset} - The PDF set used in the $C-$factors.
 \end{itemize}
+%
 These fields are formatted as
+%
 \begin{quotation}
 FieldName: FieldEntry
 \end{quotation}
-and may be accompanied by any additional information, within the star delineated header region. Consider the following as a complete example of the header,
+%
+and may be accompanied by any additional information, within the star delineated
+header region. Consider the following as a complete example of the header,
+%
 \begin{quotation}\noindent
 *******************************************\\
 SetName: D0ZRAP\\
@@ -401,7 +644,12 @@ Warnings: None\\
 Additional Information here\\
 *******************************************
 \end{quotation}
-The remainder of the file consists of the $C$-factors themselves, and the error upon the $C$-factors. Each line is now the $C$-factor for each datapoint, with the whitespace separated uncertainty. For example, for \emph{Dataset} with five points, the data section of a {\tt CFACTOR} file may be:
+%
+The remainder of the file consists of the $C$-factors themselves, and the error
+upon the $C$-factors. Each line is now the $C$-factor for each datapoint, with
+the whitespace separated uncertainty. For example, for \emph{Dataset} with five
+points, the data section of a {\tt CFACTOR} file may be:
+%
 \begin{quotation}\noindent
  1.1	0.1\\
  1.2	0.12\\
@@ -409,13 +657,26 @@ The remainder of the file consists of the $C$-factors themselves, and the error 
  1.4	0.14\\
  1.5	0.15
 \end{quotation}
-Where the $i^{\text{th}}$ line corresponds to the $C$-factor to be applied to the {\tt FK} prediction for the $(i-1)^{\text{th}}$ datapoint.
-The first column denotes the value of the $C$-factor and the second column denotes the uncertainty upon it (in absolute terms, not as a percentage or otherwise relative to the $C$-factor). For a complete example of a {\tt CFACTOR} file, please see Appendix~\ref{app:CFACexa}.
+Where the $i^{\text{th}}$ line corresponds to the $C$-factor to be applied to
+the {\tt FK} prediction for the $(i-1)^{\text{th}}$ datapoint.  The first column
+denotes the value of the $C$-factor and the second column denotes the
+uncertainty upon it (in absolute terms, not as a percentage or otherwise
+relative to the $C$-factor). For a complete example of a {\tt CFACTOR} file,
+please see Appendix~\ref{app:CFACexa}.
 
 \subsection{{\tt COMPOUND} file format}
-Some \emph{Datasets} cover observables that depend nonlinearly upon the input PDFs. For example, the NMCPD \emph{Dataset} is a measurement of the ratio of deuteron to proton structure functions. In the {\tt nnpdf++} code such sets are denoted \emph{Compound Datasets}. In these cases, a prescription for how the results from FK convolutions as in Eqn~\ref{eq:FKprod} should be combined must be given.
+Some \emph{Datasets} cover observables that depend non-linearly upon the input
+PDFs. For example, the NMCPD \emph{Dataset} is a measurement of the ratio of
+deuteron to proton structure functions. In the {\tt nnpdf++} code such sets are
+denoted \emph{Compound Datasets}. In these cases, a prescription for how the
+results from FK convolutions as in Eqn~\ref{eq:FKprod} should be combined must
+be given.
 
-The {\tt COMPOUND} files are a simple method of providing this information. For each \emph{Compound Dataset} a {\tt COMPOUND} file is provided that contains the information on how to build the observable from constituent {\tt FK} tables. The following operations are currently implemented.
+The {\tt COMPOUND} files are a simple method of providing this information. For
+each \emph{Compound Dataset} a {\tt COMPOUND} file is provided that contains the
+information on how to build the observable from constituent {\tt FK} tables. The
+following operations are currently implemented.
+%
 \begin{table}[htp]
 \begin{center}
 \begin{tabular}{|l|c|l|}
@@ -433,16 +694,30 @@ Ratio (2)&  \textbf{RATIO} & $\mathcal{O}_d = \mathcal{O}^{(1)}_d / \mathcal{O}^
 \label{default}
 \end{table}%
 
-Here $N_{\text{\tt FK}}$ refers to the number of tables required for each compound operation. $\mathcal{O}_d$ is final observable prediction for the $d^{\text{th}}$ point in the \emph{Dataset}. $\mathcal{O}_d^{(i)}$ refers to the observable prediction for the $d^{\text{th}}$ point arising from the $i^{\text{th}}$ {\tt FK} table calculation. Note that here the ordering in $i$ is important.
+Here $N_{\text{\tt FK}}$ refers to the number of tables required for each
+compound operation. $\mathcal{O}_d$ is final observable prediction for the
+$d^{\text{th}}$ point in the \emph{Dataset}. $\mathcal{O}_d^{(i)}$ refers to the
+observable prediction for the $d^{\text{th}}$ point arising from the
+$i^{\text{th}}$ {\tt FK} table calculation. Note that here the ordering in $i$
+is important.
 
-The {\tt COMPOUND} file layout is as so. The first line is once again a general comment line and is not used by the code, and therefore has no particular requirements other than its presence. Following this line should come a list of the {\tt} FK tables required for the calculation. This must be given as the table's filename \emph{without} its path, preceded by the string `\textbf{FK: }'. For example,
+The {\tt COMPOUND} file layout is as so. The first line is once again a general
+comment line and is not used by the code, and therefore has no particular
+requirements other than its presence. Following this line should come a list of
+the {\tt} FK tables required for the calculation. This must be given as the
+table's filename \emph{without} its path, preceded by the string `\textbf{FK:
+}'. For example,
 
 \begin{quotation}\noindent
 FK: FK\_SETNAME\_1.dat\\
 FK: FK\_SETNAME\_2.dat
 \end{quotation}
 
-The ordering of the list is once again important, and must match the above table. For example the observables $\mathcal{O}^{(i)}$ arise from the computation with the $i^{\text{th}}$ element of this list. The final line specified the operation to be performed upon the list of tables, and must take the form
+The ordering of the list is once again important, and must match the above
+table. For example the observables $\mathcal{O}^{(i)}$ arise from the
+computation with the $i^{\text{th}}$ element of this list. The final line
+specified the operation to be performed upon the list of tables, and must take
+the form
 
 \begin{quotation}\noindent
 OP: \textbf{[CODE]}
@@ -458,57 +733,90 @@ OP: RATIO
 
 \clearpage
 \section{Organisation of data files} \label{sec:org}
-The {\tt nnpdf++} code needs to be able to handle a great deal of different options with regard to the treatment of both experimental data
-and theoretical choices. In the code, every effort has been made to keep experimental and theoretical parameters strictly separate.
+The {\tt nnpdf++} code needs to be able to handle a great deal of different
+options with regard to the treatment of both experimental data and theoretical
+choices. In the code, every effort has been made to keep experimental and
+theoretical parameters strictly separate.
 
-In this section we shall specify the layout of the various {\tt nnpdf++} data directory. It is in this directory that all of the read-only data to be used in
-the fit are accessed. The data directory is located in the {\tt nnpdfcpp} git repository, under the path {\tt /nnpdfcpp/data/}.
+In this section we shall specify the layout of the various {\tt nnpdf++} data
+directory. It is in this directory that all of the read-only data to be used in
+the fit are accessed. The data directory is located in the {\tt nnpdfcpp} git
+repository, under the path {\tt /nnpdfcpp/data/}.
+
 \subsection{Experimental data storage}
-The central repository for {\tt CommonData} in use by {\tt nnpdf++} projects is located in the {\tt nnpdfcpp} git repository at
+The central repository for {\tt CommonData} in use by {\tt nnpdf++} projects is
+located in the {\tt nnpdfcpp} git repository at
+%
 \begin{quotation}
     {\tt /nnpdfcpp/data/commondata/}
 \end{quotation}
-Where a separate {\tt CommonData} file is stored for each {\it Dataset} with the filename format
+%
+Where a separate {\tt CommonData} file is stored for each {\it Dataset} with the
+filename format
+%
 \begin{quotation}
 	{\tt DATA\_<SETNAME>.dat }
 \end{quotation}
-Information on the treatment of systematic uncertainties, provided in {\tt SYSTYPE} files, are located in the subdirectory
+%
+Information on the treatment of systematic uncertainties, provided in {\tt
+SYSTYPE} files, are located in the subdirectory
+%
 \begin{quotation}
     {\tt /nnpdfcpp/data/commondata/systypes}
 \end{quotation}
-Here several {\tt SYSTYPE} files may be supplied for each {\it Dataset}. The various options are enumerated by suffix to the filename. The filename format for {\tt SYSTYPE} files is therefore
+%
+Here several {\tt SYSTYPE} files may be supplied for each {\it Dataset}. The
+various options are enumerated by suffix to the filename. The filename format
+for {\tt SYSTYPE} files is therefore
+%
 \begin{quotation}
 	{\tt SYSTYPE\_<SETNAME>\_<SYSID>.dat }
 \end{quotation}
+%
 Where the default systematic ID is {\textbf DEFAULT}. As an example, consider
 the first {\tt SYSTYPE} file for the D0ZRAP {\it Dataset}:
+%
 \begin{quotation}
 	{\tt SYSTYPE\_D0ZRAP\_DEFAULT.dat }
 \end{quotation}
 
 \subsection{Theory lookup table}
-In order to organise the various different theoretical treatments available, a lookup table
-is provided in {\tt sqlite3} format. This lookup table can be found in the {\tt nnpdfcpp} repository data directory at:
+In order to organise the various different theoretical treatments available, a
+lookup table is provided in {\tt sqlite3} format. This lookup table can be found
+in the {\tt nnpdfcpp} repository data directory at:
+%
 \begin{quotation}
     {\tt /nnpdfcpp/data/theory.db}
 \end{quotation}
-This file should only be edited in order to add new theory options. It may be edited with any appropriate sqlite3-supported software. A script is provided to give a brief overview of the various theory options available. It can be found at
+%
+This file should only be edited in order to add new theory options. It may be
+edited with any appropriate sqlite3-supported software. A script is provided to
+give a brief overview of the various theory options available. It can be found
+at
+%
 \begin{quotation}
     {\tt /nnpdfcpp/data/disp\_theory.py}
 \end{quotation}
+%
 and should be run without any arguments.
-\\\\
-Theory options are enumerated by an integer {\it TheoryID}. The parameters of each theory option are described in the lookup table under the appropriate ID. The current available parameters are summarised in Table~\ref{tab:theoryparams}.
+
+Theory options are enumerated by an integer {\it TheoryID}. The parameters of
+each theory option are described in the lookup table under the appropriate ID.
+The current available parameters are summarised in Table~\ref{tab:theoryparams}.
 
 \subsection{Theory storage}
 
-Each theory configuration is stored as a GZIP compressed Tar archive with filename format
+Each theory configuration is stored as a GZIP compressed Tar archive with
+filename format
+%
 \begin{quotation}
     {\tt theory\_<THEORYID>.tgz}
 \end{quotation}
+%
 and are stored at the location specified in the default nnprofile.yaml. For easy
 access, they can be downloaded through the {\tt vp-get} utility.  Each archive
 contains the following directory structure
+%
 \begin{quotation}\noindent
 {\tt
 theory\_X/ \\
@@ -517,20 +825,34 @@ theory\_X/ \\
 \-\hspace{1cm}-fastkernel/\\
 }
 \end{quotation}
-Inside the directory {\tt theory\_X/cfactor/} are stored {\tt CFACTOR} files with the filename format
+%
+Inside the directory {\tt theory\_X/cfactor/} are stored {\tt CFACTOR} files
+with the filename format
+%
 \begin{quotation}\noindent
 {\tt CF\_<TYP>\_<SETNAME>.dat }
 \end{quotation}
-where {\tt<TYP>} is a three-letter designation for the source of the C-factor (i.e EWK or QCD) and {\tt<SETNAME>} is the typical {\it Dataset} designation. \\\\
-The directory {\tt theory\_X/compound/} contains the {\tt COMPOUND} files described earlier, this time with the filename format
+%
+where {\tt<TYP>} is a three-letter designation for the source of the C-factor
+(i.e EWK or QCD) and {\tt<SETNAME>} is the typical {\it Dataset} designation.
+
+The directory {\tt theory\_X/compound/} contains the {\tt COMPOUND} files
+described earlier, this time with the filename format
+%
 \begin{quotation}\noindent
 {\tt FK\_<SETNAME>-COMPOUND.dat }
 \end{quotation}
-Finally the {\tt FK} tables themselves are stored in {\tt theory\_X/fastkernel/} with the filename format
+%
+Finally the {\tt FK} tables themselves are stored in {\tt theory\_X/fastkernel/}
+with the filename format
+%
 \begin{quotation}\noindent
 {\tt FK\_<SETNAME>.dat }
 \end{quotation}
-Naturally, all of the FastKernel and C-factor files within the directory {\tt theory\_X/} have been determined with the theoretical parameters specified in the theory lookup table under ID {\tt X}.
+%
+Naturally, all of the FastKernel and C-factor files within the directory {\tt
+theory\_X/} have been determined with the theoretical parameters specified in
+the theory lookup table under ID {\tt X}.
 
 \clearpage
 \appendix
@@ -578,14 +900,14 @@ Field/Key       & Type    & Description                    & Comments \\
   SxOrd     & Text    & small-$x$ pt order             & (``LL'', ``NLL'', ``NNLL'') \\
   HQ        & Text    & HQ mass treatment              & POLE/MSBAR \\
   mc        & Real    & $c$ quark mass $M_c/m_c(Q_{\mathrm{mc}})$   & Units: GeV \\
-  Qmc     & Real    & $Q_{\mathrm{mc}}$ & $c$ reference scale (GeV)\\
-  kcThr   & Real    & c production threshold ratio & Ratio to mc\\
+  Qmc       & Real    & $Q_{\mathrm{mc}}$ & $c$ reference scale (GeV)\\
+  kcThr     & Real    & c production threshold ratio & Ratio to mc\\
   mb        & Real    & $b$ quark mass $M_b/m_b(Q_{\mathrm{mb}})$   & Units: GeV \\
-  Qmb     & Real    & $Q_{\mathrm{mb}}$ & $b$ reference scale (GeV)\\
- kbThr   & Real    & b production threshold ratio & Ratio to mb\\
+  Qmb       & Real    & $Q_{\mathrm{mb}}$ & $b$ reference scale (GeV)\\
+  kbThr     & Real    & b production threshold ratio & Ratio to mb\\
   mt        & Real    & $t$ quark mass $M_t/m_t(Q_{\mathrm{mt}})$   & Units: GeV \\
-  Qmt     & Real    & $Q_{\mathrm{mt}}$ & $t$ reference scale (GeV)\\
-   ktThr   & Real    & t production threshold ratio & Ratio to mt\\
+  Qmt       & Real    & $Q_{\mathrm{mt}}$ & $t$ reference scale (GeV)\\
+  ktThr     & Real    & t production threshold ratio & Ratio to mt\\
   CKM       & Text    & CKM matrix elements & unpacked 3X3 matrix \\ \pagebreak
   MZ        & Real    & $M_Z$                          & $Z$ mass (GeV) \\
   MW        & Real    & $M_W$                          & $W$ mass (GeV) \\
@@ -836,27 +1158,5 @@ _TheoryInfo_________________________________________________
 9.4558322764065939e-01
 {FastKernel_________________________________________________
 \end{verbatim}
-
-\clearpage
-\begin{thebibliography}{1}
-%\cite{Aad:2011fc}
-\bibitem{Aad:2011fc}
-  G.~Aad {\it et al.}  [ATLAS Collaboration],
-  %``Measurement of inclusive jet and dijet production in $pp$ collisions at $\sqrt{s}=7$ TeV using the ATLAS detector,''
-  Phys.\ Rev.\ D {\bf 86} (2012) 014022
-  [arXiv:1112.6297 [hep-ex]].
-  %%CITATION = ARXIV:1112.6297;%%
-  %164 citations counted in INSPIRE as of 27 Jan 2015
-
-  %\cite{Aad:2013iua}
-\bibitem{Aad:2013iua}
-  G.~Aad {\it et al.}  [ATLAS Collaboration],
-  %``Measurement of the high-mass Drell--Yan differential cross-section in pp collisions at sqrt(s)=7 TeV with the ATLAS detector,''
-  Phys.\ Lett.\ B {\bf 725} (2013) 223
-  [arXiv:1305.4192 [hep-ex]].
-  %%CITATION = ARXIV:1305.4192;%%
-  %36 citations counted in INSPIRE as of 27 Jan 2015
-
-\end{thebibliography}
 
 \end{document}
