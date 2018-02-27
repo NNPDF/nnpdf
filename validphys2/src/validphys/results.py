@@ -824,25 +824,21 @@ def theory_description(theoryid):
 def theory_central_values(experiments, pdf, experiments_index):
     """Returns a theoryid-dependent list of central theory predictions
     for a given experiment."""
-    
     result_records = []
     for exp_index, experiment in enumerate(experiments):
         loaded_exp = experiment.load()
-
         th_result = ThPredictionsResult.from_convolution(pdf, experiment,
                                                          loaded_data=loaded_exp)
-
         for index in range(len(th_result.central_value)):
-
             result_records.append(th_result.central_value[index])
-                        
     return result_records
 
-cent_th = collect(theory_central_values, ('theories',))
+theory_lists = collect(theory_central_values, ('theories',))
 
 @table
-def theory_covmat(cent_th, experiments, experiments_index, t0set): 
-    """Calculates the theory covariance matrix."""
+def theory_covmat_3pt(cent_th, experiments, experiments_index, t0set): 
+    """Calculates the theory covariance matrix for 3-point scale variations."""
+    t = theory_lists
     data = np.zeros((len(experiments_index),len(experiments_index)))
     df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
     for experiment in experiments:
@@ -854,20 +850,19 @@ def theory_covmat(cent_th, experiments, experiments_index, t0set):
             log.debug("Setting T0 predictions for %s" % loaded_exp)
             data.SetT0(t0set.load_t0())
 
-    s = np.zeros((len(cent_th[0]),len(cent_th[0])))
+    s = np.zeros((len(t[0]),len(t[0])))
     
-    for i in range(len(cent_th[0])):
-        for j in range(len(cent_th[0])):
-
-            s[i,j] = 0.5*(((cent_th[1][i]-cent_th[0][i])*(cent_th[1][j]-cent_th[0][j])) 
-                  +  ((cent_th[2][i]-cent_th[0][i])*(cent_th[2][j]-cent_th[0][j])))
-
+    for i in range(len(t[0])):
+        for j in range(len(t[0])):
+            s[i,j] = 0.5*(((t[1][i]-t[0][i])*(t[1][j]-t[0][j])) 
+                  +  ((t[2][i]-t[0][i])*(t[2][j]-t[0][j])))
         df.loc[[name],[name]] = s
     return df
 
 @table
-def theory_corrmat(cent_th, experiments, experiments_index, t0set):
-    """Calculates theory correlation matrix."""
+def theory_corrmat_3pt(cent_th, experiments, experiments_index, t0set):
+    """Calculates the theory correlation matrix for 3-point scale variations."""
+    t = theory_lists
     data = np.zeros((len(experiments_index),len(experiments_index)))
     df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
     for experiment in experiments:
@@ -879,22 +874,20 @@ def theory_corrmat(cent_th, experiments, experiments_index, t0set):
             log.debug("Setting T0 predictions for %s" % loaded_exp)
             data.SetT0(t0set.load_t0())
         
-        s = np.zeros((len(cent_th[0]),len(cent_th[0])))
+        s = np.zeros((len(t[0]),len(t[0])))
     
-        for i in range(len(cent_th[0])):
-            for j in range(len(cent_th[0])):
-
-                s[i,j] = 0.5*(((cent_th[1][i]-cent_th[0][i])*(cent_th[1][j]-cent_th[0][j])) 
-                  +  ((cent_th[2][i]-cent_th[0][i])*(cent_th[2][j]-cent_th[0][j])))
-
+        for i in range(len(t[0])):
+            for j in range(len(t[0])):
+                s[i,j] = 0.5*(((t[1][i]-t[0][i])*(t[1][j]-t[0][j])) 
+                  +  ((t[2][i]-t[0][i])*(t[2][j]-t[0][j])))
         diag_minus_half = (np.diagonal(s))**(-0.5)
         mat = diag_minus_half*s*diag_minus_half[:,np.newaxis]
         df.loc[[name],[name]] = mat
     return df
 
 @table
-def theory_normcovmat(cent_th, experiments, experiments_index, t0set): 
-    """Calculates the theory covariance matrix normalised to data."""
+def theory_normcovmat_3pt(cent_th, experiments, experiments_index, t0set): 
+    """Calculates the theory covariance matrix for 3-point scale variations normalised to data."""
     data_list = []
     data = np.zeros((len(experiments_index),len(experiments_index)))
     df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
@@ -910,22 +903,20 @@ def theory_normcovmat(cent_th, experiments, experiments_index, t0set):
         for index in range(len(data_result.central_value)):
             data_list.append(data_result.central_value[index])
 
-    snorm = np.zeros((len(cent_th[0]),len(cent_th[0])))
+    snorm = np.zeros((len(t[0]),len(t[0])))
 
-    for i in range(len(cent_th[0])):
-        for j in range(len(cent_th[0])):
-
-            snorm[i,j] = (0.5*(((cent_th[1][i]-cent_th[0][i])*(cent_th[1][j]-cent_th[0][j])) 
-                  +  ((cent_th[2][i]-cent_th[0][i])*(cent_th[2][j]-cent_th[0][j]))))/(data_list[i]*data_list[j])
+    for i in range(len(t[0])):
+        for j in range(len(t[0])):
+            snorm[i,j] = (0.5*(((t[1][i]-t[0][i])*(t[1][j]-t[0][j])) 
+                  +  ((t[2][i]-t[0][i])*(t[2][j]-t[0][j]))))/(data_list[i]*data_list[j])
         df.loc[[name],[name]] = snorm
     return df
 
 def datapoints(experiments, experiments_index, t0set):
+    """Returns list of data values for the input experiments."""
     data_list = []
     data = np.zeros((len(experiments_index),len(experiments_index)))
-    df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
     for experiment in experiments:
-        name = experiment.name
         loaded_exp = experiment.load()
         data_result = DataResult(loaded_exp)
         if t0set:
@@ -936,8 +927,6 @@ def datapoints(experiments, experiments_index, t0set):
         for index in range(len(data_result.central_value)):
             data_list.append(data_result.central_value[index])
     return data_list 
-
-
 
 experiments_results = collect(experiment_results, ('experiments',))
 each_dataset_results = collect(results, ('experiments', 'experiment'))
