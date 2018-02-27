@@ -1514,6 +1514,7 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
 
 @figure
 def plot_normexpcovmat_heatmap(experiments_normcovmat):
+    """Matrix plot of the experiment covariance matrix normalised to data."""
     df = experiments_normcovmat
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
@@ -1527,6 +1528,7 @@ def plot_normexpcovmat_heatmap(experiments_normcovmat):
 
 @figure
 def plot_expcorrmat_heatmap(experiments_corrmat):
+    """Matrix plot of the experiment correlation matrix"""
     df = experiments_corrmat
     matrix = df.as_matrix()
     fig, ax = plt.subplots()
@@ -1540,6 +1542,7 @@ def plot_expcorrmat_heatmap(experiments_corrmat):
 
 @figure
 def plot_normthcovmat_heatmap(theory_normcovmat):
+    """Matrix plot of the theory covariance matrix for 3-point scale variations normalised to data."""
     df = theory_normcovmat
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
@@ -1553,6 +1556,7 @@ def plot_normthcovmat_heatmap(theory_normcovmat):
 
 @figure
 def plot_thcorrmat_heatmap(theory_corrmat):
+    """Matrix plot of the theory correlation matrix"""
     df = theory_corrmat
     matrix = df.as_matrix()
     fig, ax = plt.subplots()
@@ -1566,7 +1570,7 @@ def plot_thcorrmat_heatmap(theory_corrmat):
 
 @figure
 def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
-    """ Plots (s+sigma)/sigma for s=theory cov, sigma=exp cov """
+    """Matrix plot (thcov + expcov)/expcov"""
     df1 = theory_covmat
     df2 = experiments_covmat
     matrix1 = df1.as_matrix()
@@ -1582,8 +1586,8 @@ def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
     return fig
 
 @figure
-def plot_diag_cov_comparison(theory_covmat,experiments_covmat, datapoints):
-    """ Plot of sqrt(cov_ii)/data_i for cov = exp versus cov = theory """
+def plot_diag_cov_comparison(theory_covmat, experiments_covmat, datapoints):
+    """Plot of sqrt(cov_ii)/data_i for cov = exp versus cov = theory"""
     data = datapoints
     df1 = theory_covmat
     df2 = experiments_covmat
@@ -1599,8 +1603,8 @@ def plot_diag_cov_comparison(theory_covmat,experiments_covmat, datapoints):
     return fig
 
 @figure
-def plot_diag_cov_impact(theory_covmat,experiments_covmat, datapoints):
-    """ Plot of ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5 """
+def plot_diag_cov_impact(theory_covmat, experiments_covmat, datapoints):
+    """Plot ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5"""
     data = datapoints
     df1 = theory_covmat
     df2 = experiments_covmat
