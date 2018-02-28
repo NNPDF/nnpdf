@@ -3,7 +3,8 @@ set -u
 set -v
 set -e
 
-export CPPFLAGS=$DEBUG_CPPFLAGS
+#Aparently this is undefined in Mac
+export CPPFLAGS=${DEBUG_CPPFLAGS:-}
 export CXXFLAGS=$DEBUG_CXXFLAGS
 export CFLAGS=$DEBUG_CFLAGS
 
