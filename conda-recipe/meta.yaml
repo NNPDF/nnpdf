@@ -39,6 +39,25 @@ requirements:
         - requests
         - prompt_toolkit
 
+test:
+    requires:
+        - hypothesis
+        - pytest
+        - coverage
+        #Build dependencies for catch tests
+        - {{ compiler("cxx") }}
+        - {{ compiler("c") }}
+        - swig ==3.0.10
+        - cmake
+        - pkg-config
+
+    source_files:
+        - "*"
+
+    commands:
+        - conda inspect linkages -p $PREFIX $PKG_NAME
+        - pytest --pyargs validphys
+
 build:
     number: 0
     detect_binary_files_with_prefix: True
