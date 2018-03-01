@@ -9,5 +9,5 @@ pdfs:
 
 actions_:
    - - plot_alphaEff
-   - - plot_betaEff
+#   - - plot_betaEff
 #   - - plot_pdfs
