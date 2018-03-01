@@ -307,14 +307,14 @@ uploaded to a remote server where they are accessible. These packages
 are known to compile on clean default environments (namely those of
 the CI servers used to produce the packages), and the Python packages
 are known to be importable. Everything that an user has to do is to
-configure conda correctly and ask it to install the validphys2 package
-with all its dependencies. This results in an environment that
-contains not only an usable version of validphys, but also of the
-nnpdf code and all its dependencies (including for example LHAPDF and
-APFEL). Therefore an user who doesn't need to modify the code should
-not need to compile anything to work with the NNPDF related programs.
-This should be useful in clusters where we don’t completely control
-the environment and frequently need to deal with outdated compilers.
+configure `conda` correctly and ask it to install the `nnpdf`. This
+results in an environment that contains not only an usable version of
+validphys, but also of the nnpdf code and all its dependencies
+(including for example LHAPDF and APFEL). Therefore an user who
+doesn't need to modify the code should not need to compile anything to
+work with the NNPDF related programs.  This should be useful in
+clusters where we don’t completely control the environment and
+frequently need to deal with outdated compilers.
 
 ### Installation steps
 
@@ -333,21 +333,37 @@ repositories. You can find it here:
 
 The conda installer will ask to add the conda bin path to the default
 `$PATH` environment variable (by editing your `.bashrc` file). Confirm
-this unless you know that you have a specific reason not to.
+this unless you know that you have a specific reason not to. Note that
+newer versions of conda give the option of having `conda` available,
+but not any environment (which you have to enable explicitly by either
+having `conda activate` in `.bashrc` or typing it each time you want
+to use the environment). On remote machines, the addition to `.bashrc`
+should read as follows:
+
+```bash
+if shopt -q login_shell; then
+    . /home/zaharik/miniconda3/etc/profile.d/conda.sh
+    conda activate
+fi
+```
+the if condition is important because `conda activate` prints to the
+standard output, which interferes with commands like `scp` and
+`rsync`.
 
 Not that the script may ask you to perform some actions manually (e.g.
 it will not overwrite your existing conda configuration). Please
 pay attention to the output text of the script.
 
-Once everything is configured, you can install validphys and nnpdf by
-simply running:
+Once everything is configured, you can install the code running:
 
-    conda install validphys nnpdf
+    conda install nnpdf
+
+This will provide functioning C++ and Python executables.
 
 #### Linking existing LHAPDF grids
 
 The installer will set up it's own version of the LHAPDF code, with
-its own path for storing PDFS, which can be seen running `lhapdf
+its own path for storing PDFs, which can be seen running `lhapdf
 --help`. If you have an exiting folder with LHAPDF grids, you may want
 to either move, symlink or copy them to the new path (depending on
 whether you want to keep around the older installation). The command
@@ -409,27 +425,27 @@ Python 3 gains support.
 
 ### Development installs
 
-You can `conda install` a package and then `conda remove --force` it
-to obtain an environment with all the dependencies but without the
-package. Then for Python projects you can use `pip install -e .` in
-the root folder where the `setup.py` file located to have the
-environment automatically reflect the changes you make to the files.
-For example, if you wanted to develop the validphys code you would do:
+You can install all the runtime dependencies of a package (like)
+`nnpdf` with  `conda install <package> --only-deps`. Note that you
+still need to obtain the build dependencies. Then for Python projects
+you can use `pip install --ignore-installed  -e .` in the root folder
+where the `setup.py` file located to have the environment
+automatically reflect the changes you make to the files.  For example,
+if you wanted to develop the `validphys` code you would do:
 
 ```bash
 #Quickest way to get all the dependencies in place
-conda install validphys
-conda remove validphys --force
+conda install --only-deps nnpdf
 
-git clone git@github.com:NNPDF/validphys2.git
-cd validphys2
-pip install -e .
+git clone git@github.com:NNPDF/nnpdf.git
+cd nnpdf/validphys2
+pip install --ignore-installed -e .
 ```
 
 #### Setting up a C++ development environment
 
-The easiest way to work with C++ code that depends on `libnnpdf` or
-other C++ packages (or indeed to develop `libnnpdf` itself) is to set
+The easiest way to work with C++ code that depends on `nnpdf` or
+other C++ packages (or indeed to develop `nnpdf` itself) is to set
 up a development `conda` environment. While the existing packages
 should run on any relevant Linux or Mac system, linking to them is
 a different matter: The most straightforward  way of doing so is using
@@ -438,7 +454,7 @@ You may find some relevant documentation [here][COMPILERS].  You need
 to create a conda environment that has the required dependencies of
 your project (which can be found in the `meta.yaml` file of the conda
 recipe), including the C++ compiler. For example here is how we would
-set up a development environment for `libnnpdf`.
+set up a development environment for `nnpdf`.
 
  1. Find out the C++ (or C or FORTRAN) compiler package name for your
 	platform [here][COMPILERS]. For example, the C++ compiler for
@@ -447,7 +463,7 @@ set up a development environment for `libnnpdf`.
  2. Create an environment with all the build and runtime
 	dependencies. We start of with:
 	```
-	$ conda create -n nnpdf-dev libnnpdf gxx_linux-64
+	$ conda create -n nnpdf-dev nnpdf gxx_linux-64
 	```
 	Note that when the environment is activated, many environment
 	variables pointing to the compiler paths are activated for us:
@@ -502,22 +518,24 @@ set up a development environment for `libnnpdf`.
 	-fvar-tracking-assignments
 	+GXX=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-g++
 	```
-	Assuming we want to modify `libnnpdf` (otherwise you can omit
-	these steps), we now remove the compiled package `libnnpdf` and install
+	Assuming we want to modify `nnpdf` (otherwise you can omit
+	these steps), we now remove the compiled package `nnpdf` and install
 	the other build dependencies (which can be found in
 	`libnnpdf/conda-recipe/meta.yaml`).
 	```
-	$ conda remove libnnpdf
+	$ conda remove nnpdf --force
 	$ conda install pkg-config swig=3.0.10 cmake
 	```
+
+	Note that `conda install --only-deps` also works.
 
  3. Build the library: We only need to set
 	the installation prefix to the `conda` environment. Assuming `conda`
 	is installed under `~/anaconda3`:
 	```
-	libnnpdf$ mkdir conda-bld
-	libnnpdf$ cd conda-bld
-	libnnpdf/conda-bld$ cmake .. -DCMAKE_INSTALL_PREFIX=~/anaconda3/envs/nnpdf-dev/
+	nnpdf$ mkdir conda-bld
+	nnpdf$ cd conda-bld
+	nnpdf/conda-bld$ cmake .. -DCMAKE_INSTALL_PREFIX=~/anaconda3/envs/nnpdf-dev/
 	```
 	Note that you need to execute this while the environment created
 	above is activated.  Both the compilers and all dependencies are now found
