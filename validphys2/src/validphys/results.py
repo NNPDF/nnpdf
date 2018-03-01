@@ -836,7 +836,7 @@ def theory_central_values(experiments, pdf, experiments_index):
 theory_lists = collect(theory_central_values, ('theories',))
 
 @table
-def theory_covmat_3pt(cent_th, experiments, experiments_index, t0set): 
+def theory_covmat_3pt(theory_lists, experiments, experiments_index, t0set): 
     """Calculates the theory covariance matrix for 3-point scale variations."""
     t = theory_lists
     data = np.zeros((len(experiments_index),len(experiments_index)))
@@ -860,7 +860,7 @@ def theory_covmat_3pt(cent_th, experiments, experiments_index, t0set):
     return df
 
 @table
-def theory_corrmat_3pt(cent_th, experiments, experiments_index, t0set):
+def theory_corrmat_3pt(theory_lists, experiments, experiments_index, t0set):
     """Calculates the theory correlation matrix for 3-point scale variations."""
     t = theory_lists
     data = np.zeros((len(experiments_index),len(experiments_index)))
@@ -886,9 +886,10 @@ def theory_corrmat_3pt(cent_th, experiments, experiments_index, t0set):
     return df
 
 @table
-def theory_normcovmat_3pt(cent_th, experiments, experiments_index, t0set): 
+def theory_normcovmat_3pt(theory_lists, experiments, experiments_index, t0set): 
     """Calculates the theory covariance matrix for 3-point scale variations normalised to data."""
     data_list = []
+    t = theory_lists
     data = np.zeros((len(experiments_index),len(experiments_index)))
     df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
     for experiment in experiments:
@@ -903,7 +904,7 @@ def theory_normcovmat_3pt(cent_th, experiments, experiments_index, t0set):
         for index in range(len(data_result.central_value)):
             data_list.append(data_result.central_value[index])
 
-    snorm = np.zeros((len(t[0]),len(t[0])))
+    snorm = np.zeros((len(t[0]),len(t[0])))   
 
     for i in range(len(t[0])):
         for j in range(len(t[0])):

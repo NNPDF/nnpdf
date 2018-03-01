@@ -1541,9 +1541,9 @@ def plot_expcorrmat_heatmap(experiments_corrmat):
     return fig
 
 @figure
-def plot_normthcovmat_heatmap(theory_normcovmat):
+def plot_normthcovmat_heatmap(theory_normcovmat_3pt):
     """Matrix plot of the theory covariance matrix for 3-point scale variations normalised to data."""
-    df = theory_normcovmat
+    df = theory_normcovmat_3pt
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
     matrixplot = ax.matshow(matrix*100, vmin=-0.5, vmax=1.5)
@@ -1555,9 +1555,9 @@ def plot_normthcovmat_heatmap(theory_normcovmat):
     return fig
 
 @figure
-def plot_thcorrmat_heatmap(theory_corrmat):
+def plot_thcorrmat_heatmap(theory_corrmat_3pt):
     """Matrix plot of the theory correlation matrix"""
-    df = theory_corrmat
+    df = theory_corrmat_3pt
     matrix = df.as_matrix()
     fig, ax = plt.subplots()
     matrixplot = ax.matshow(matrix)
@@ -1569,9 +1569,9 @@ def plot_thcorrmat_heatmap(theory_corrmat):
     return fig
 
 @figure
-def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
+def plot_covdiff_heatmap(theory_covmat_3pt, experiments_covmat):
     """Matrix plot (thcov + expcov)/expcov"""
-    df1 = theory_covmat
+    df1 = theory_covmat_3pt
     df2 = experiments_covmat
     matrix1 = df1.as_matrix()
     matrix2 = df2.as_matrix()
@@ -1586,13 +1586,13 @@ def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
     return fig
 
 @figure
-def plot_diag_cov_comparison(theory_covmat, experiments_covmat, datapoints):
+def plot_diag_cov_comparison(theory_covmat_3pt, experiments_covmat, datapoints):
     """Plot of sqrt(cov_ii)/data_i for cov = exp versus cov = theory"""
     data = datapoints
-    df1 = theory_covmat
+    df1 = theory_covmat_3pt
     df2 = experiments_covmat
-    sqrtdiags1 = np.diag(np.sqrt(df1.as_matrix()))
-    sqrtdiags2 = np.diag(np.sqrt(df2.as_matrix()))
+    sqrtdiags1 = np.sqrt(np.diag(df1.as_matrix()))
+    sqrtdiags2 = np.sqrt(np.diag(df2.as_matrix()))
     fig,ax = plt.subplots()
     ax.plot(sqrtdiags2/data, '.', label="Experiment", color="orange")
     ax.plot(sqrtdiags1/data, '.', label="Theory", color = "darkorchid")
@@ -1603,10 +1603,10 @@ def plot_diag_cov_comparison(theory_covmat, experiments_covmat, datapoints):
     return fig
 
 @figure
-def plot_diag_cov_impact(theory_covmat, experiments_covmat, datapoints):
+def plot_diag_cov_impact(theory_covmat_3pt, experiments_covmat, datapoints):
     """Plot ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5"""
     data = datapoints
-    df1 = theory_covmat
+    df1 = theory_covmat_3pt
     df2 = experiments_covmat
     matrix1 = df1.as_matrix()
     matrix2 = df2.as_matrix()
