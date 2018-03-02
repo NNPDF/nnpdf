@@ -12,7 +12,7 @@ import numpy as np
 
 from reportengine.figure import figuregen
 
-from validphys.checks import check_scale, make_argcheck
+from validphys.checks import check_scale, CheckError, make_argcheck, check_positive
 from validphys.plots import check_pdf_normalize_to
 from validphys.plots import BandPDFPlotter
 from validphys.plots import PDFPlotter
@@ -22,6 +22,8 @@ import validphys.pdfgrids as pdfgrids
 
 log = logging.getLogger(__name__)
 
+@check_positive('Q')
+@pdfgrids._check_limits
 @make_argcheck(check_basis)
 def alpha_eff(pdfs,xmin=1e-5,xmax=0.1,Q=1.65,basis='evolution',flavours=None):
     """Return a list of xplotting_grids containing the value of the effective
@@ -53,6 +55,9 @@ def alpha_eff(pdfs,xmin=1e-5,xmax=0.1,Q=1.65,basis='evolution',flavours=None):
 
     return alphaGrids #.grid_values
 
+
+@check_positive('Q')
+@pdfgrids._check_limits
 @make_argcheck(check_basis)
 def beta_eff(pdfs,xmin=1e-2,xmax=0.9,Q=1.65,basis='evolution',flavours=None):
     """Return a list of xplotting_grids containing the value of the effective
@@ -84,6 +89,22 @@ def beta_eff(pdfs,xmin=1e-2,xmax=0.9,Q=1.65,basis='evolution',flavours=None):
 
     return betaGrids #.grid_values
 
+class PreprocessingPlotter(PDFPlotter):
+    """ Class inherenting from BandPDFPlotter, has the same functionality
+    but with overloaded title and ylabel to take into account the effective
+    exponents names.
+    """
+    def __init__(self, exponent, *args,  **kwargs):
+        self.exponent = exponent
+        super().__init__(*args, **kwargs)
+
+    def get_title(self, parton_name):
+        return fr"$\{self.exponent}_e$ for ${parton_name}$ at {self.Q:.1} Gev"
+
+    def get_ylabel(self, parton_name):
+        return fr"$\{self.exponent}_e$ for ${parton_name}$"
+
+class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter): pass
 
 @figuregen
 @check_pdf_normalize_to
@@ -109,20 +130,3 @@ def plot_alphaEff(pdfs, alpha_eff, normalize_to:(int,str,type(None))=None):
 def plot_betaEff(pdfs, beta_eff, normalize_to:(int,str,type(None))=None):
     """ Same as plot_alphaEff but for beta effective exponent """
     yield from ExponentBandPlotter('beta', pdfs, beta_eff, 'linear', normalize_to)
-
-class PreprocessingPlotter(PDFPlotter):
-    """ Class inherenting from BandPDFPlotter, has the same functionality
-    but with overloaded title and ylabel to take into account the effective
-    exponents names.
-    """
-    def __init__(self, exponent, *args,  **kwargs):
-        self.exponent = exponent
-        super().__init__(*args, **kwargs)
-
-    def get_title(self, parton_name):
-        return fr"$\{self.exponent}_e$ for ${parton_name}$ at {self.Q:.1} Gev"
-
-    def get_ylabel(self, parton_name):
-        return fr"$\{self.exponent}_e$ for ${parton_name}$"
-
-class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter): pass
