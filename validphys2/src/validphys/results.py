@@ -171,6 +171,23 @@ def experiments_index(experiments):
     df.set_index(columns, inplace=True)
     return df.index
 
+def datapoints(experiments, experiments_index, t0set):
+    """Returns list of data values for the input experiments."""
+    data_list = []
+    data = np.zeros((len(experiments_index),len(experiments_index)))
+    for experiment in experiments:
+        loaded_exp = experiment.load()
+        data_result = DataResult(loaded_exp)
+        if t0set:
+            #Copy data to avoid chaos
+            data = type(loaded_exp)(loaded_exp)
+            log.debug("Setting T0 predictions for %s" % loaded_exp)
+            data.SetT0(t0set.load_t0())
+        for index in range(len(data_result.central_value)):
+            data_list.append(data_result.central_value[index])
+    return data_list 
+
+
 #TODO: Use collect to calculate results outside this
 @table
 def experiment_result_table(experiments, pdf, experiments_index):
@@ -913,21 +930,6 @@ def theory_normcovmat_3pt(theory_lists, experiments, experiments_index, t0set):
         df.loc[[name],[name]] = snorm
     return df
 
-def datapoints(experiments, experiments_index, t0set):
-    """Returns list of data values for the input experiments."""
-    data_list = []
-    data = np.zeros((len(experiments_index),len(experiments_index)))
-    for experiment in experiments:
-        loaded_exp = experiment.load()
-        data_result = DataResult(loaded_exp)
-        if t0set:
-            #Copy data to avoid chaos
-            data = type(loaded_exp)(loaded_exp)
-            log.debug("Setting T0 predictions for %s" % loaded_exp)
-            data.SetT0(t0set.load_t0())
-        for index in range(len(data_result.central_value)):
-            data_list.append(data_result.central_value[index])
-    return data_list 
 
 experiments_results = collect(experiment_results, ('experiments',))
 each_dataset_results = collect(results, ('experiments', 'experiment'))
