@@ -867,31 +867,16 @@ def theory_covmat_3pt(theory_lists, experiments, experiments_index, t0set):
         df.loc[[name],[name]] = s
     return df
 
+
 @table
-def theory_corrmat_3pt(theory_lists, experiments, experiments_index, t0set):
+def theory_corrmat_3pt(theory_covmat_3pt):
     """Calculates the theory correlation matrix for 3-point scale variations."""
-    t = theory_lists
-    data = np.zeros((len(experiments_index),len(experiments_index)))
-    df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
-    for experiment in experiments:
-        name = experiment.name
-        loaded_exp = experiment.load()
-        if t0set:
-            #Copy data to avoid chaos
-            data = type(loaded_exp)(loaded_exp)
-            log.debug("Setting T0 predictions for %s" % loaded_exp)
-            data.SetT0(t0set.load_t0())
-        
-        s = np.zeros((len(t[0]),len(t[0])))
-    
-        for i in range(len(t[0])):
-            for j in range(len(t[0])):
-                s[i,j] = 0.5*(((t[1][i]-t[0][i])*(t[1][j]-t[0][j])) 
-                  +  ((t[2][i]-t[0][i])*(t[2][j]-t[0][j])))
-        diag_minus_half = (np.diagonal(s))**(-0.5)
-        mat = diag_minus_half*s*diag_minus_half[:,np.newaxis]
-        df.loc[[name],[name]] = mat
-    return df
+    df = theory_covmat_3pt
+    covmat = df.as_matrix()
+    diag_minus_half = (np.diagonal(covmat))**(-0.5)
+    print(diag_minus_half.shape)
+    mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
+    return mat 
 
 @table
 def theory_normcovmat_3pt(theory_lists, experiments, experiments_index, t0set): 
