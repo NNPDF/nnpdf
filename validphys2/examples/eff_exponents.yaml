@@ -1,13 +1,14 @@
-Q: 1.65
-basis: 'evolution'
-#normalize_to: 1
-#flavours: ['gluon', 'singlet']
+# This RunCard is used to generate the effective exponents plots implemented
+# in eff_exponents.py. The effective exponents are the optimal a (alpha) and
+# b (beta) exponents such as pdf = x^a (1-x)^b NN(x) fit has the minimal error
+# function.
+
+Q: 1.65 #Q is the PDF scale in GeV.
+basis: 'evolution' #The evolution basis of the DGLAP equations
 
 pdfs:
     - NNPDF31_nlo_as_0118
-#    - NNPDF30_nlo_as_0118
 
 actions_:
    - - plot_alphaEff
-#   - - plot_betaEff
-#   - - plot_pdfs
+   - - plot_betaEff
