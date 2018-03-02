@@ -295,7 +295,6 @@ def experiments_invcovmat(experiments, experiments_index, t0set):
 def experiments_normcovmat(experiments_covmat, datapoints):
     """Calculates the experimental covariance matrix normalised to data."""
     df = theory_covmat_3ptexperiments_covmat
-    covmat = df.as_matrix()
     mat = df/datapoints
     return mat 
 
@@ -856,7 +855,6 @@ def theory_corrmat_3pt(theory_covmat_3pt):
 def theory_normcovmat_3pt(theory_covmat_3pt, datapoints):
     """Calculates the theory correlation matrix for 3-point scale variations normalised to data."""
     df = theory_covmat_3pt
-    covmat = df.as_matrix()
     mat = df/datapoints
     return mat 
 
