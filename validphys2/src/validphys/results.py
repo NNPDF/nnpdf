@@ -319,23 +319,14 @@ def experiments_normcovmat(experiments, experiments_index, t0set):
     return df
 
 @table
-def experiments_corrmat(experiments, experiments_index, t0set):
-    """Calculates the experimental correlation matrix."""
-    data = np.zeros((len(experiments_index),len(experiments_index)))
-    df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
-    for experiment in experiments:
-        name = experiment.name
-        loaded_exp = experiment.load()
-        if t0set:
-            #Copy data to avoid chaos
-            data = type(loaded_exp)(loaded_exp)
-            log.debug("Setting T0 predictions for %s" % loaded_exp)
-            data.SetT0(t0set.load_t0())
-        covmat = loaded_exp.get_covmat()
-        diag_minus_half = (np.diagonal(covmat))**(-0.5)
-        mat = diag_minus_half*covmat*diag_minus_half[:,np.newaxis]
-        df.loc[[name],[name]] = mat
-    return df
+def experiments_corrmat(experiments_covmat):
+    """Generates the experimental correlation matrix with experiments_covmat as input"""
+    df = experiments_covmat
+    covmat = df.as_matrix()
+    diag_minus_half = (np.diagonal(covmat))**(-0.5)
+    print(diag_minus_half.shape)
+    mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
+    return mat 
 
 @table
 def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
