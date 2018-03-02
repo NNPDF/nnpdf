@@ -318,13 +318,21 @@ def experiments_normcovmat(experiments, experiments_index, t0set):
         df.loc[[name],[name]] = matnorm
     return df
 
+
+@table
+def experiments_normcovmat(experiments_covmat, datapoints):
+    """Calculates the experimental covariance matrix normalised to data."""
+    df = theory_covmat_3ptexperiments_covmat
+    covmat = df.as_matrix()
+    mat = df/datapoints
+    return mat 
+
 @table
 def experiments_corrmat(experiments_covmat):
     """Generates the experimental correlation matrix with experiments_covmat as input"""
     df = experiments_covmat
     covmat = df.as_matrix()
     diag_minus_half = (np.diagonal(covmat))**(-0.5)
-    print(diag_minus_half.shape)
     mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
     return mat 
 
@@ -874,37 +882,16 @@ def theory_corrmat_3pt(theory_covmat_3pt):
     df = theory_covmat_3pt
     covmat = df.as_matrix()
     diag_minus_half = (np.diagonal(covmat))**(-0.5)
-    print(diag_minus_half.shape)
     mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
     return mat 
 
 @table
-def theory_normcovmat_3pt(theory_lists, experiments, experiments_index, t0set): 
-    """Calculates the theory covariance matrix for 3-point scale variations normalised to data."""
-    data_list = []
-    t = theory_lists
-    data = np.zeros((len(experiments_index),len(experiments_index)))
-    df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
-    for experiment in experiments:
-        name = experiment.name
-        loaded_exp = experiment.load()
-        data_result = DataResult(loaded_exp)
-        if t0set:
-            #Copy data to avoid chaos
-            data = type(loaded_exp)(loaded_exp)
-            log.debug("Setting T0 predictions for %s" % loaded_exp)
-            data.SetT0(t0set.load_t0())
-        for index in range(len(data_result.central_value)):
-            data_list.append(data_result.central_value[index])
-
-    snorm = np.zeros((len(t[0]),len(t[0])))   
-
-    for i in range(len(t[0])):
-        for j in range(len(t[0])):
-            snorm[i,j] = (0.5*(((t[1][i]-t[0][i])*(t[1][j]-t[0][j])) 
-                  +  ((t[2][i]-t[0][i])*(t[2][j]-t[0][j]))))/(data_list[i]*data_list[j])
-        df.loc[[name],[name]] = snorm
-    return df
+def theory_normcovmat_3pt(theory_covmat_3pt, datapoints):
+    """Calculates the theory correlation matrix for 3-point scale variations normalised to data."""
+    df = theory_covmat_3pt
+    covmat = df.as_matrix()
+    mat = df/datapoints
+    return mat 
 
 
 experiments_results = collect(experiment_results, ('experiments',))
