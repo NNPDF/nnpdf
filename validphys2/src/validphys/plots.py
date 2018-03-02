@@ -1518,7 +1518,7 @@ def plot_normexpcovmat_heatmap(experiments_normcovmat):
     df = experiments_normcovmat
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
-    matrixplot = ax.matshow(matrix*100, vmin=-0.5, vmax=1.5)
+    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, vmin=-0.5, vmax=1.5)
     cbar = fig.colorbar(matrixplot, label="% of data")
     ax.set_title('Experiment covariance matrix')
     ax.xaxis.set_ticks_position('bottom')
@@ -1532,7 +1532,7 @@ def plot_expcorrmat_heatmap(experiments_corrmat):
     df = experiments_corrmat
     matrix = df.as_matrix()
     fig, ax = plt.subplots()
-    matrixplot = ax.matshow(matrix)
+    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r)
     cbar = fig.colorbar(matrixplot)
     ax.set_title('Experiment correlation matrix')
     ax.xaxis.set_ticks_position('bottom')
@@ -1546,7 +1546,7 @@ def plot_normthcovmat_heatmap(theory_normcovmat_3pt):
     df = theory_normcovmat_3pt
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
-    matrixplot = ax.matshow(matrix*100, vmin=-0.5, vmax=1.5)
+    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, vmin=-0.5, vmax=1.5)
     cbar = fig.colorbar(matrixplot, label="% of data")
     ax.set_title('Theory covariance matrix')
     ax.xaxis.set_ticks_position('bottom')
@@ -1560,7 +1560,7 @@ def plot_thcorrmat_heatmap(theory_corrmat_3pt):
     df = theory_corrmat_3pt
     matrix = df.as_matrix()
     fig, ax = plt.subplots()
-    matrixplot = ax.matshow(matrix)
+    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r)
     cbar = fig.colorbar(matrixplot)
     ax.set_title('Theory correlation matrix')
     ax.xaxis.set_ticks_position('bottom')
@@ -1577,7 +1577,7 @@ def plot_covdiff_heatmap(theory_covmat_3pt, experiments_covmat):
     matrix2 = df2.as_matrix()
     matrix = (matrix1+matrix2)/matrix2
     fig,ax = plt.subplots()
-    matrixplot = ax.matshow(matrix, vmin=-5,vmax=5)
+    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-5,vmax=5)
     cbar = fig.colorbar(matrixplot)
     ax.set_title('(Theory + experiment)/experiment covariance matrices')
     ax.xaxis.set_ticks_position('bottom')
