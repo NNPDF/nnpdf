@@ -808,7 +808,7 @@ def theory_description(theoryid):
     """A table with the theory settings."""
     return pd.DataFrame(pd.Series(theoryid.get_description()), columns=[theoryid])
 
-def theory_central_values(experiments, pdf, experiments_index):
+def experiments_central_values(experiments, pdf, experiments_index):
     """Returns a theoryid-dependent list of central theory predictions
     for a given experiment."""
     result_records = []
@@ -820,12 +820,12 @@ def theory_central_values(experiments, pdf, experiments_index):
             result_records.append(th_result.central_value[index])
     return result_records
 
-theory_lists = collect(theory_central_values, ('theories',))
+theoryids_experiments_central_values = collect(experiments_central_values, ('theories',))
 
 @table
-def theory_covmat_3pt(theory_lists, experiments, experiments_index, t0set): 
+def theory_covmat_3pt(theoryids_experiments_central_values, experiments, experiments_index, t0set): 
     """Calculates the theory covariance matrix for 3-point scale variations."""
-    t = theory_lists
+    t = theoryids_experiments_central_values,
     data = np.zeros((len(experiments_index),len(experiments_index)))
     df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
     for experiment in experiments:
