@@ -583,6 +583,11 @@ class MCStats(Stats):
     def error_members(self):
         return self.data
 
+    def bootstrap_values(self):
+    #input N_pdf*N_bin data, return MCstats object with data input N_sample*N_bin where each row has been selected using MC
+    #currently N_sample = N_pdf, could change this in future
+        return MCStats(self.data[np.floor(np.random.rand(self.data.shape[0])*self.data.shape[0]).astype(int), :])
+
 
 class SymmHessianStats(Stats):
     """Compute stats in the 'assymetric' hessian format: The first index (0)

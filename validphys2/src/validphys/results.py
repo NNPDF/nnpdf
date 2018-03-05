@@ -139,8 +139,15 @@ class PositivityResult(StatsResult):
     def rawdata(self):
         return self.stats.data
 
+#adding class because don't want to add _rawdata to StatsResult, will probably need to change this in future
 
+class BootStatResult(StatsResult):
 
+    def __init__(self, stats, stats_class):
+        self.stats_class = stats_class
+        super().__init__(stats)
+        self._rawdata = self.stats.data.T
+        
 def experiments_index(experiments):
     """Return an empy dataframe with index
        per experiment per dataset per point"""
@@ -414,7 +421,16 @@ def abs_chi2_data(results):
 def abs_chi2_data_experiment(experiment_results):
     """Like `abs_chi2_data` but for a whole experiment"""
     return abs_chi2_data(experiment_results)
-    
+
+def boot_test(results):
+    """input results, output bootstrap of `abs_chi2_data`"""
+    alldata, central, npoints = abs_chi2_data(results)
+
+    #give th_result rawdata transposed to MCstats, bootstrap_values returns a mcstats object of sampled th_results
+    th_sample = BootStatResult(results[1].stats_class(np.array(results[1]._rawdata).T).bootstrap_values(), results[1].stats_class)
+    alldata_b, central_b, npoints_b = abs_chi2_data([results[0], th_sample])
+    return [[alldata.data.mean(), central, npoints], [alldata_b.data.mean(), central_b, npoints_b]]
+        
 def phi_data(abs_chi2_data):
     """Calculate phi using values returned by `abs_chi2_data`.
 
@@ -795,6 +811,7 @@ each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
 
 experiments_phi = collect(phi_data_experiment, ('experiments',))
 experiments_pdfs_phi = collect('experiments_phi', ('pdfs',))
+
 
 #These are convenient ways to iterate and extract varios data from fits
 fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))
