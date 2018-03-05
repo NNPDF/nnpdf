@@ -808,17 +808,11 @@ def theory_description(theoryid):
     """A table with the theory settings."""
     return pd.DataFrame(pd.Series(theoryid.get_description()), columns=[theoryid])
 
-def experiments_central_values(experiments, pdf, experiments_index):
+def experiments_central_values(experiment_result_table):
     """Returns a theoryid-dependent list of central theory predictions
     for a given experiment."""
-    result_records = []
-    for exp_index, experiment in enumerate(experiments):
-        loaded_exp = experiment.load()
-        th_result = ThPredictionsResult.from_convolution(pdf, experiment,
-                                                         loaded_data=loaded_exp)
-        for index in range(len(th_result.central_value)):
-            result_records.append(th_result.central_value[index])
-    return result_records
+    central_theory_values = experiment_result_table["theory_central"].tolist()
+    return central_theory_values
 
 theoryids_experiments_central_values = collect(experiments_central_values, ('theories',))
 
