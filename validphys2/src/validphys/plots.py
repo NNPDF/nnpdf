@@ -1518,7 +1518,7 @@ def plot_normexpcovmat_heatmap(experiments_normcovmat):
     df = experiments_normcovmat
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
-    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, vmin=-1.5, vmax=1.5)
+    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, vmin=-0.02, vmax=0.02)
     cbar = fig.colorbar(matrixplot, label="% of data")
     ax.set_title('Experiment covariance matrix')
     ax.xaxis.set_ticks_position('bottom')

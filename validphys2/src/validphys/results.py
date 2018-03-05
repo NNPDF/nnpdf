@@ -294,7 +294,7 @@ def experiments_invcovmat(experiments, experiments_index, t0set):
 @table
 def experiments_normcovmat(experiments_covmat, datapoints):
     """Calculates the experimental covariance matrix normalised to data."""
-    df = theory_covmat_3ptexperiments_covmat
+    df = experiments_covmat
     mat = df/datapoints
     return mat 
 
@@ -838,6 +838,7 @@ def theory_covmat_3pt(theory_lists, experiments, experiments_index, t0set):
         for j in range(len(t[0])):
             s[i,j] = 0.5*(((t[1][i]-t[0][i])*(t[1][j]-t[0][j])) 
                   +  ((t[2][i]-t[0][i])*(t[2][j]-t[0][j])))
+        
         df.loc[[name],[name]] = s
     return df
 

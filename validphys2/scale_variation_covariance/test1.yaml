@@ -1,7 +1,7 @@
 meta:
    author: Cameron Voisey and Rosalyn Pearson
    keywords: [test]
-   title: BCDMSP theory tables for theory covariance matrix
+   title: DIS covariance matrix plots
 
 default_theory:
    - theoryid: 52
@@ -11,21 +11,57 @@ theories:
    - theoryid: 66
    - theoryid: 67
 
-use_cuts: True
-
 pdf: NNPDF31_nlo_as_0118
 
+use_cuts: True
 fit: 180202-lr-nlo-central_DISonly
 
-
 experiments:
-   - experiment: BCDMS
-     datasets:
-         - dataset: BCDMSP
+# Fixed target DIS
+  - experiment: NMC
+    datasets:
+      - dataset: NMCPD
+      - dataset: NMC
+  - experiment: SLAC
+    datasets:
+      - dataset: SLACP
+      - dataset: SLACD
+  - experiment: BCDMS
+    datasets:
+      - dataset: BCDMSP
+      - dataset: BCDMSD
+  - experiment: CHORUS
+    datasets:
+      - dataset: CHORUSNU
+      - dataset: CHORUSNB
+  - experiment: NTVDMN
+    datasets:
+      - dataset: NTVNUDMN
+      - dataset: NTVNBDMN
+# HERA data
+  - experiment: HERACOMB
+    datasets:
+      - dataset: HERACOMBNCEM 
+      - dataset: HERACOMBNCEP460
+      - dataset: HERACOMBNCEP575
+      - dataset: HERACOMBNCEP820
+      - dataset: HERACOMBNCEP920
+      - dataset: HERACOMBCCEM 
+      - dataset: HERACOMBCCEP 
+# Combined HERA charm production cross-sections
+  - experiment: HERAF2CHARM
+    datasets:
+      - dataset: HERAF2CHARM
+# F2bottom data
+  - experiment: F2BOTTOM
+    datasets: 
+      - dataset: H1HERAF2B
+      - dataset: ZEUSHERAF2B
 
 template_text: |
-   Theory tables 
-   {@theories theory_list@}
+   {@default_theory theory_covmat_3pt@}
+##   {@default_theory plot_normexpcovmat_heatmap@}
+##   {@default_theory plot_normthcovmat_heatmap@}
 
 
 actions_:
