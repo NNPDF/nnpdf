@@ -76,6 +76,15 @@ def plot_phi_pdfs(experiments, pdfs, experiments_pdfs_phi):
     ax.legend()
     return fig
 
+@figure
+def plot_bootstrap_phi(experiment, bootstrap_samples, bootstrap_phi_data_experiment):
+    """Plots histogram of phi for a single experiment, specify bootstrap_samples in runcard"""
+    phi = bootstrap_phi_data_experiment
+    fig, ax = plt.subplots()
+    ax.hist(phi)
+    ax.set_title(r"$\phi$ distribution for " + experiment.name)
+    return fig
+        
 #TODO: This should be simplified if at all possible. For now some more examples
 #are needed for a spec to emerge.
 @make_check

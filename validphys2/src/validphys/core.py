@@ -583,10 +583,11 @@ class MCStats(Stats):
     def error_members(self):
         return self.data
 
-    def bootstrap_values(self):
-    #input N_pdf*N_bin data, return MCstats object with data input N_sample*N_bin where each row has been selected using MC
-    #currently N_sample = N_pdf, could change this in future
-        return MCStats(self.data[np.floor(np.random.rand(self.data.shape[0])*self.data.shape[0]).astype(int), :])
+    def bootstrap_values(self, sample_number):
+    #give mcstats of N_reps * N_samples * N_datas (N_reps out = N_reps in, in other words sample the same number of replicas for each sample as the number of replicas in the original dataset)
+        N_reps = self.data.shape[0]
+        N_sample = sample_number
+        return MCStats(self.data[np.floor(np.random.rand(N_reps, N_sample)*N_reps).astype(int), :])
 
 
 class SymmHessianStats(Stats):

@@ -422,15 +422,6 @@ def abs_chi2_data_experiment(experiment_results):
     """Like `abs_chi2_data` but for a whole experiment"""
     return abs_chi2_data(experiment_results)
 
-def boot_test(results):
-    """input results, output bootstrap of `abs_chi2_data`"""
-    alldata, central, npoints = abs_chi2_data(results)
-
-    #give th_result rawdata transposed to MCstats, bootstrap_values returns a mcstats object of sampled th_results
-    th_sample = BootStatResult(results[1].stats_class(np.array(results[1]._rawdata).T).bootstrap_values(), results[1].stats_class)
-    alldata_b, central_b, npoints_b = abs_chi2_data([results[0], th_sample])
-    return [[alldata.data.mean(), central, npoints], [alldata_b.data.mean(), central_b, npoints_b]]
-        
 def phi_data(abs_chi2_data):
     """Calculate phi using values returned by `abs_chi2_data`.
 
@@ -444,6 +435,19 @@ def phi_data_experiment(abs_chi2_data_experiment):
     """Like `phi_data` but for whole experiment"""
     return phi_data(abs_chi2_data_experiment)
 
+def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples):
+    """Take experimental result, use MCStats.bootstrap_values to return stats object of data from a sample, ready to be inputted into BootStatResult to create object compatible with abs_chi2_data calc phi with this and output sampled phis for each experiment ready for histogram"""
+    dt, th = experiment_results
+    th_sample = BootStatResult(th.stats_class(np.array(th._rawdata).T).bootstrap_values(bootstrap_samples), th.stats_class)
+    cov_mat = dt.sqrtcovmat
+    #expect chi2 to be N_samples*N_reps
+    _allchi2 = calc_chi2(cov_mat, (th_sample.stats.data.T - dt.central_value[:, np.newaxis, np.newaxis]))
+    #centralchi2 should be N_samples
+    _centralchi2 = calc_chi2(cov_mat, (th_sample.stats.data.mean(axis=0).T - dt.central_value[:, np.newaxis]))
+    return np.sqrt((_allchi2.mean(axis=1) - _centralchi2)/len(dt))
+    
+    
+    
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
                               prepend_total:bool=True,
                               datasets_sqrtcovmat=None) -> dict:
@@ -811,7 +815,6 @@ each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
 
 experiments_phi = collect(phi_data_experiment, ('experiments',))
 experiments_pdfs_phi = collect('experiments_phi', ('pdfs',))
-
 
 #These are convenient ways to iterate and extract varios data from fits
 fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))
