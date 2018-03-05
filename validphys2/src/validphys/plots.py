@@ -1571,11 +1571,11 @@ def plot_thcorrmat_heatmap(theory_corrmat_3pt):
 @figure
 def plot_covdiff_heatmap(theory_covmat_3pt, experiments_covmat):
     """Matrix plot (thcov + expcov)/expcov"""
-    df1 = theory_covmat_3pt
-    df2 = experiments_covmat
-    matrix1 = df1.as_matrix()
-    matrix2 = df2.as_matrix()
-    matrix = (matrix1+matrix2)/matrix2
+    df_theory = theory_covmat_3pt
+    df_experiment = experiments_covmat
+    matrix_theory = df_theory.as_matrix()
+    matrix_experiment = df_experiment.as_matrix()
+    matrix = (matrix_theory+matrix_experiment)/matrix_experiment
     fig,ax = plt.subplots()
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-5, vmax=5)
     cbar = fig.colorbar(matrixplot)
@@ -1589,10 +1589,10 @@ def plot_covdiff_heatmap(theory_covmat_3pt, experiments_covmat):
 def plot_diag_cov_comparison(theory_covmat_3pt, experiments_covmat, datapoints):
     """Plot of sqrt(cov_ii)/data_i for cov = exp versus cov = theory"""
     data = datapoints
-    df1 = theory_covmat_3pt
-    df2 = experiments_covmat
-    sqrtdiags1 = np.sqrt(np.diag(df1.as_matrix()))
-    sqrtdiags2 = np.sqrt(np.diag(df2.as_matrix()))
+    df_theory = theory_covmat_3pt
+    df_experiment = experiments_covmat
+    sqrtdiags1 = np.sqrt(np.diag(df_theory.as_matrix()))
+    sqrtdiags2 = np.sqrt(np.diag(df_experiment.as_matrix()))
     fig,ax = plt.subplots()
     ax.plot(sqrtdiags2/data, '.', label="Experiment", color="orange")
     ax.plot(sqrtdiags1/data, '.', label="Theory", color = "darkorchid")
@@ -1606,12 +1606,12 @@ def plot_diag_cov_comparison(theory_covmat_3pt, experiments_covmat, datapoints):
 def plot_diag_cov_impact(theory_covmat_3pt, experiments_covmat, datapoints):
     """Plot ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5"""
     data = datapoints
-    df1 = theory_covmat_3pt
-    df2 = experiments_covmat
-    matrix1 = df1.as_matrix()
-    matrix2 = df2.as_matrix()
-    a = (np.diag(la.inv(matrix2)))**(-0.5)
-    b = (np.diag(la.inv(matrix1+matrix2)))**(-0.5)
+    df_theory = theory_covmat_3pt
+    df_experiment = experiments_covmat
+    matrix_theory = df_theory.as_matrix()
+    matrix_experiment = df_experiment.as_matrix()
+    a = (np.diag(la.inv(matrix_experiment)))**(-0.5)
+    b = (np.diag(la.inv(matrix_theory+matrix_experiment)))**(-0.5)
     fig,ax = plt.subplots()
     ax.plot(a/data, '.', label="Experiment", color="orange")
     ax.plot(b/data, '.', label="Experiment + Theory", color="mediumseagreen")
