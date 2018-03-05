@@ -825,23 +825,14 @@ theoryids_experiments_central_values = collect(experiments_central_values, ('the
 @table
 def theory_covmat_3pt(theoryids_experiments_central_values, experiments, experiments_index, t0set): 
     """Calculates the theory covariance matrix for 3-point scale variations."""
-    t = theoryids_experiments_central_values,
-    data = np.zeros((len(experiments_index),len(experiments_index)))
-    df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
-    for experiment in experiments:
-        name = experiment.name
-        loaded_exp = experiment.load()
-
+    t = theoryids_experiments_central_values
     s = np.zeros((len(t[0]),len(t[0])))
-    
     for i in range(len(t[0])):
         for j in range(len(t[0])):
             s[i,j] = 0.5*(((t[1][i]-t[0][i])*(t[1][j]-t[0][j])) 
                   +  ((t[2][i]-t[0][i])*(t[2][j]-t[0][j])))
-        
-        df.loc[[name],[name]] = s
+    df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
-
 
 @table
 def theory_corrmat_3pt(theory_covmat_3pt):
@@ -858,7 +849,6 @@ def theory_normcovmat_3pt(theory_covmat_3pt, datapoints):
     df = theory_covmat_3pt
     mat = df/datapoints
     return mat 
-
 
 experiments_results = collect(experiment_results, ('experiments',))
 each_dataset_results = collect(results, ('experiments', 'experiment'))
