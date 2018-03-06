@@ -805,12 +805,17 @@ def experiments_central_values(experiment_result_table):
 
 theoryids_experiments_central_values = collect(experiments_central_values, ('theoryids',))
 
+@make_argcheck
+def check_have_three_theories(theoryids):
+    l = len(theoryids)
+    if l!=3:
+        raise CheckError(f"Expecting exactly 3 theories, but got {l}.")
+
 @table
+@check_have_three_theories
 def theory_covmat_3pt(theoryids_experiments_central_values, experiments, experiments_index): 
     """Calculates the theory covariance matrix for 3-point scale variations."""
     number_theories = len(theoryids_experiments_central_values)
-    if number_theories != 3:
-       print("ERROR: Three theory ids are required for 3pt scale variations in theory_covmat_3pt")
     central, low, high = np.array(theoryids_experiments_central_values)
     lowdiff  = low - central
     highdiff = high - central
