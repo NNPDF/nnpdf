@@ -124,7 +124,10 @@ def plot_phi_scatter_dataspecs(dataspecs, dataspecs_experiments, dataspecs_pdf, 
     fig, ax = plt.subplots()
     for i, dataspec in enumerate(dataspecs):
         phi_means = [phis[i][j].mean() for j in range(len(phis[i]))]
-        phi_errs = [phis[i][j].std() for j in range(len(phis[i]))]
+        #error is 68% instead of std dev
+        phi_minus = np.asarray(phi_means) - np.asarray([np.sort(phis[i][j])[int(0.16*len(phis[i][j]))] for j in range(len(phis[i]))])
+        phi_plus = np.asarray([np.sort(phis[i][j])[int(0.84*len(phis[i][j]))] for j in range(len(phis[i]))]) - np.asarray(phi_means)
+        phi_errs = np.vstack((phi_minus, phi_plus))
         ax.errorbar(x, phi_means, yerr=phi_errs, fmt='.', label=labels[i])
     ax.set_xticks(x, minor=False)
     ax.set_xticklabels(xticks, minor=False, rotation=45)
