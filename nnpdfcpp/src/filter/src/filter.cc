@@ -185,7 +185,7 @@ int main(int argc, char **argv)
   cout <<   " - Filter completed with success" << endl;
   cout <<   " - please go "<< settings.GetResultsDirectory() << "/filter \n";
   cout <<   " -------------------------------------------------\n";
-  cout << Colour::FG_DEFAULT << endl;  
+  cout << Colour::FG_DEFAULT << endl;
 
   return 0;
 }

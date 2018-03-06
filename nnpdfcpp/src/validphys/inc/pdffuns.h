@@ -52,7 +52,7 @@ static inline real fmsrqed(real *pdf)
 static inline real fdoveru(real* pdf) {return pdf[D]/pdf[U];}
 
 static inline real fsinglet(real* pdf) {
-  return 
+  return
   pdf[D]+pdf[DBAR] +
   pdf[U]+pdf[UBAR] +
   pdf[S]+pdf[SBAR] +
@@ -61,7 +61,7 @@ static inline real fsinglet(real* pdf) {
   pdf[T]+pdf[TBAR];
 }
 
-static inline real fT3(real* pdf) {  
+static inline real fT3(real* pdf) {
   return
   (pdf[U]+pdf[UBAR]) - (pdf[D]+pdf[DBAR]) ;
 }
@@ -75,7 +75,7 @@ static inline real fV(real* pdf) {
 
 static inline real fDelta(real* pdf) {
   return
-  pdf[DBAR]-pdf[UBAR];    
+  pdf[DBAR]-pdf[UBAR];
 }
 
 static inline real fsplus(real* pdf) {

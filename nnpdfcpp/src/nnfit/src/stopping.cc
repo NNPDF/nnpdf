@@ -25,7 +25,7 @@
 StoppingCriterion::StoppingCriterion(NNPDFSettings const& settings):
 fSettings(settings)
 {
-  
+
 }
 bool StoppingCriterion::Stop(FitPDFSet* pdf,
                              vector<Experiment*>& train,
@@ -38,13 +38,13 @@ bool StoppingCriterion::Stop(FitPDFSet* pdf,
     cerr << "N_members = "<<pdf->GetMembers()<<endl;
     exit(-1);
   }
-  
+
   if (pdf->GetNIte() >= fSettings.Get("fitting","ngen").as<int>())
   {
     cout << Colour::FG_GREEN << "Stopping: Max number of iterations ("<<fSettings.Get("fitting","ngen").as<int>()<<") reached!"<< Colour::FG_DEFAULT << endl;
     return true;
   }
-  
+
   return false;
 }
 
@@ -59,7 +59,7 @@ fCurrentBest(0),
 fCurrentValidErf(std::numeric_limits<real>::infinity()),
 fBestGeneration(0)
 {
-  
+
 }
 
 LookBackCV::~LookBackCV()
@@ -69,7 +69,7 @@ LookBackCV::~LookBackCV()
   {
     for (int i=0; i<fSettings.GetNFL(); i++)
       delete fCurrentBest[i];
-    
+
     delete[] fCurrentBest;
   }
 }
@@ -86,40 +86,40 @@ bool LookBackCV::Stop(  FitPDFSet* pdf,
     for (int i=0; i<fSettings.GetNFL(); i++)
       fCurrentBest[i] = pdf->GetPDFs()[0][i]->Duplicate();
   }
-  
+
   // Compute Validation Chi2 values
   real ValChi2Tot = 0;
   for (size_t i=0; i<valid.size(); i++)
-    if (valid[i])      
+    if (valid[i])
       FastAddChi2(pdf, valid[i], &ValChi2Tot);
-  
+
   // Push into current best
   if (ValChi2Tot < fCurrentValidErf)
   {
     fCurrentValidErf = ValChi2Tot;
     for (int i=0; i<fSettings.GetNFL(); i++)
       fCurrentBest[i]->CopyPars(pdf->GetBestFit()[i]);
-    
+
     fBestGeneration = pdf->GetNIte();
   }
-  
+
   // Number of iterations exceeded max
   if (StoppingCriterion::Stop(pdf,train, valid, positivity))
   {
     // Set best fit
     for (int i=0; i<fSettings.GetNFL(); i++)
       pdf->GetBestFit()[i]->CopyPars(fCurrentBest[i]);
-    
+
     // Set zeroth member fit
     for (int i=0; i<fSettings.GetNFL(); i++)
       pdf->GetPDFs()[0][i]->CopyPars(fCurrentBest[i]);
-          
+
     pdf->ComputeSumRules();
-    
+
     pdf->SetNIte(fBestGeneration);
-    
+
     return true;
   }
-  
+
   return false;
 }

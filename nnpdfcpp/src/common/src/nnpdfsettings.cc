@@ -144,7 +144,7 @@ NNPDFSettings::NNPDFSettings(const string &folder):
     {
       if( s.st_mode & S_IFDIR)
         {
-          // if folder contains a trailing / remove it          
+          // if folder contains a trailing / remove it
           fFileName = (folder.back() == '/') ? folder.substr(0, folder.length()-1) : folder;
           const int firstindex = (int) fFileName.find_last_of("/") + 1;
           fPDFName = fFileName.substr(firstindex, fFileName.length()-firstindex);

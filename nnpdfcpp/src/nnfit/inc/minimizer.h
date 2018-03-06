@@ -10,7 +10,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
-#include <iomanip>  
+#include <iomanip>
 
 #include "common.h"
 #include "fitpdfset.h"
@@ -37,29 +37,29 @@ class Minimizer
 public:
   Minimizer(NNPDFSettings const&);
   virtual ~Minimizer();
-  
+
   enum Mode {
     SetMode,
     ExpMode
   };  //!< Minimisation mode
-  
+
   enum SortPDF {
     PDF_SORT,
     PDF_NOSORT
   };  //!< PDF sorting
-  
+
   virtual void Init(FitPDFSet*, vector<Experiment*> const&, vector<PositivitySet> const&);
   virtual void Iterate(FitPDFSet*, vector<Experiment*> const&, vector<PositivitySet> const&) = 0;  //!< Perform an iteration of the minimisation
-    
+
 protected:
   virtual void ComputeErf(FitPDFSet*,
                   vector<Experiment*> const&,
                   vector<PositivitySet> const&,
                   Minimizer::Mode,
                   Minimizer::SortPDF); //!< Compute fChi2Mem
-  
+
   real*  fChi2Mem;
-  
+
   const NNPDFSettings& fSettings;
 };
 
@@ -72,9 +72,9 @@ class GAMinimizer : public Minimizer
 {
 public:
   GAMinimizer(NNPDFSettings const&);
- 
+
   virtual void Iterate(FitPDFSet*, vector<Experiment*> const&, vector<PositivitySet> const&);
-  
+
 protected:
   virtual void Mutation(FitPDFSet*, int const& nmut);
   int  Selection(FitPDFSet*);
@@ -84,15 +84,15 @@ protected:
  *  \class NGAMinimiser
  *  \brief GA minimiser with nodal mutations
  */
- 
+
 class NGAMinimizer : public GAMinimizer
 {
 public:
   NGAMinimizer(NNPDFSettings const&);
-  
+
 protected:
    virtual void Mutation(FitPDFSet*, int const& nmut);
-}; 
+};
 
 /*!
  * \brief The NGAFTMinimizer class
@@ -132,7 +132,7 @@ public:
  *  \class CMAESMinimizer
  *  \brief CMA-ES minimiser
  */
- 
+
 class CMAESMinimizer : public Minimizer
 {
 public:
@@ -160,6 +160,6 @@ protected:
   double fSigma;
   CMAESParam* fCMAES;
   gsl_vector *fpsigma, *fpc;
-  gsl_matrix *fC, *fBD, *finvC;  
+  gsl_matrix *fC, *fBD, *finvC;
   gsl_eigen_symmv_workspace *fwrkspc;
-}; 
+};

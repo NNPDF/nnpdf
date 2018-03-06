@@ -14,7 +14,7 @@ namespace NNPDF {
   class LHAPDFSet;
 }
 
-/** 
+/**
  * Return an initialised fitting basis
  */
 class FitBasis;
@@ -28,26 +28,26 @@ class FitBasis: public PDFBasis
 {
 public:
   FitBasis(NNPDFSettings const&, string name, int nPDF); //!< FitBasis constructor
-  
+
   virtual void BASIS2EVLN(real const* basis, real* evln) const = 0;
   virtual void EVLN2BASIS(real const* evln, real* basis) const = 0;
-  
+
   // Compute associated sum rules
   virtual real ComputeSumRules(sumRule, int mem, PDFSet*, bool&) const = 0;
-  
+
   // Preprocessing
   virtual void ComputeParam(PDFSet*, int mem, PreprocParam&, bool&) const = 0;
   virtual void Preprocess(real const& x, int const& fl, real& pdf, PreprocParam const&);
   virtual void Preprocess(real const& x, real* pdf, PreprocParam const&);
   virtual void NetTransform(int const& fl, int const& nfl, int*);
-  
+
   real const& GetAlpha(int const& fl) const { return fAlpha[fl]; }
-  real const& GetBeta(int const& fl) const { return fBeta[fl]; }  
+  real const& GetBeta(int const& fl) const { return fBeta[fl]; }
   void SetAlpha(int const& fl, real const& v) { fAlpha[fl] = v; }
   void SetBeta(int const& fl, real const& v)  { fBeta[fl] = v; }
-    
+
   bool const& GetPDFSqrPos(int const& fl) const { return fPDFSqrPos[fl]; }
-  
+
   double* fArcDampFactor;
 protected:
   // Basic Preprocessing Constants
@@ -67,25 +67,25 @@ class NN23FitBasis: public FitBasis
 {
 public:
   NN23FitBasis(NNPDFSettings const&);
-  
+
   enum fitBasis {FIT_SNG, FIT_GLU, FIT_VAL, FIT_T3, FIT_DS, FIT_SP, FIT_SM, FIT_GAM };
-  
+
   void BASIS2EVLN(real const* basis, real* evln) const;
   void EVLN2BASIS(real const* evln, real* basis) const;
-  
+
   real ComputeSumRules(sumRule, int mem, PDFSet*, bool&) const;
-  
+
   // Preprocessing
   void ComputeParam(PDFSet*, int mem, PreprocParam&, bool&) const;
   void Preprocess(real const& x, int const& fl, real& pdf, PreprocParam const&);
 
 private:
   const bool fQED;
-  
+
   // Strange Auxilliary terms
   real fSauxAlpha;
   real fSauxBeta;
-  real fSauxGamma;  
+  real fSauxGamma;
 };
 
 /**
@@ -96,19 +96,19 @@ class EvolFitBasis: public FitBasis
 {
 public:
   EvolFitBasis(NNPDFSettings const&);
-  
+
   // Σ, g, V, V3, V8, V15, V24, V35, T3, T8, T15, T24, T35, γ
 
   enum fitBasis {FIT_SNG, FIT_GLU, FIT_VAL, FIT_V3, FIT_V8, FIT_T3, FIT_T8, FIT_GAM };
-  
+
   void BASIS2EVLN(real const* basis, real* evln) const;
   void EVLN2BASIS(real const* evln, real* basis) const;
-  
+
   real ComputeSumRules(sumRule, int mem, PDFSet*, bool&) const;
-  
+
   // Preprocessing
   void ComputeParam(PDFSet*, int mem, PreprocParam&, bool&) const;
-  
+
 protected:
   bool fQED;
 };
@@ -171,7 +171,7 @@ public:
    NN30FitBasis(NNPDFSettings const&);
 
    enum netBasis {NET_SNG, NET_GLU, NET_VAL, NET_T3, NET_DS, NET_SP, NET_SM, NET_GAM };
-   
+
    void NetTransform(int const& fl, int const& nfl, int*);
    void Preprocess(real const& x, real* pdf, PreprocParam const&);
 };
@@ -180,9 +180,9 @@ class FLVRFitBasis: public EvolFitBasis
 {
 public:
    FLVRFitBasis(NNPDFSettings const&);
-   
+
    enum netBasis {NET_GLU, NET_U, NET_UBAR, NET_D, NET_DBAR, NET_S, NET_SBAR, NET_GAM };
-   
+
    void NetTransform(int const& fl, int const& nfl, int*);
    void Preprocess(real const& x, real* pdf, PreprocParam const&);
 };
@@ -253,4 +253,4 @@ protected:
   const bool fQED;
 
 };
-   
+

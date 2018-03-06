@@ -42,7 +42,7 @@ private:
   vector<int>    fIndexA;
   vector<int>    fIndexB;
   vector<double> fChi2A;
-  vector<double> fChi2B;  
+  vector<double> fChi2B;
 public:
   SortExperiments(vector<ExperimentResult*>,vector<ExperimentResult*>);
 
@@ -97,7 +97,7 @@ private:
 
   const int fNpoints;
   int fNfl;
-  
+
   bool fUseTheory;
 
   real*     fXgrid;
@@ -149,7 +149,7 @@ class PlotData {
     vector<real>   fSUMRULES[14];    //!< Array with the sum rule values for the current pdf
     vector<real>*  fAlphaExp;        //!< Array with the Alpha preproc exponents in the fit basis
     vector<real>*  fBetaExp;         //!< Array with the Beta preproc exponents in the fit basis
-    
+
     real fAvgDist[2];            //!< Closure test estimator averaged ct distance
     real fAvgAbsDist[2];         //!< Closure test estimator averaged absolute ct distance
     real fSF[2];             //!< Closure test estimator f_sf
@@ -166,7 +166,7 @@ class PlotData {
 
     vector<real>   fSetAVGChi2CTEQ;  //!< Array with the AVG Chi2 for CTEQ set
     vector<real>   fSetAVGChi2MSTW;  //!< Array with the AVG Chi2 for MSTW set
-  
+
     vector<string>        fPDFNames;  //!< PDF names
     vector<TCanvas*>      fAlphaCanvas; //!< Effective alpha canvas
     vector<TCanvas*>      fBetaCanvas;  //!< Effective beta canvas
@@ -179,13 +179,13 @@ class PlotData {
     vector<real>          fNewBetaUp; //!< Effective alpha value
     vector<real>          fNewBetaDn;  //!< Effective beta value
     vector<TLegend*>      fEffExpLegend;  //!< Legend for PDF effective exponents
-    
+
     /*
     int fNWPStr;      //!< Number of WP strength parameters
     real** fWPStrEst; //!< WP strength estimates
     real** fWPStrSig;  //!< Standard deviation of WP strengths
     */
-  
+
     void NNPDFComparison(int, LHAPDFSet*, LHAPDFSet *);
     void OtherComparison(int,LHAPDFSet*);
 
@@ -207,16 +207,16 @@ class PlotData {
      * 1 - reference nnpdf fit
      */
     void AddChi2HistoComparison(vector<ExperimentResult*>,vector<ExperimentResult*>); //!< Append a new theory prediction
-    /* 
+    /*
      * 0 - current nnpdf fit
      * 1 - reference nnpdf fit
      */
     void AddPDF4Comparison(int, LHAPDFSet*, LHAPDFSet *pdf68cl = NULL); //!< Append a new PDF to plots
-    /* 
+    /*
      * 0 - current nnpdf fit
      * 1 - reference nnpdf fit
      * 2 - CTEQ pdf
-     * 3 - MSTW pdf 
+     * 3 - MSTW pdf
      */
     void AddPreprocPlots(int, LHAPDFSet *); //!< Add preprocessing exponent plots (NNPDF only)
     //void AddWPAnalysis(LHAPDFSet *);    //!< Calculate WP numbers for report (current only)

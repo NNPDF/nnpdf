@@ -36,7 +36,7 @@ APFELSingleton::APFELSingleton():
 }
 
 void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
-{    
+{
   // Check APFEL
   bool check = APFEL::CheckAPFEL();
   if (check == false)
@@ -265,18 +265,18 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
       9.916101961506623e-01,
       1.000000000000000e+00
     };
-  
 
-  // initialize apfel  
+
+  // initialize apfel
   APFEL::SetParam(set.GetTheoryMap());
   APFEL::SetQLimits(getInstance()->fQ0, getInstance()->fQmax + 1E-5); // Epsilon for limits
-  
+
   APFEL::SetNumberOfGrids(1);
   APFEL::SetExternalGrid(1, 195, 5, X1);
   APFEL::LockGrids(true);
   APFEL::SetPDFSet("external");
   APFEL::SetFastEvolution(false);
-  APFEL::InitializeAPFEL();  
+  APFEL::InitializeAPFEL();
 
   // allocate grid in x
   std::vector<double> xgrid;
@@ -325,7 +325,7 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
             {
               q2n[s].push_back(q2node);
               break;
-            }          
+            }
         }
     }
 
@@ -346,7 +346,7 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
       const double lnQmax = log( ( (s == (int) q2n.size()-1) ? q2max : pow(getInstance()->mth[s +nfin-3], 2) ) /lambda2);
 
       for (int iq2 = 1; iq2 <= (int) q2n[s].size(); iq2++)
-        q2n[s][iq2-1] = lambda2*exp(lnQmin*exp( (iq2-1)/(q2n[s].size()-1.0) * log(lnQmax/lnQmin) ));      
+        q2n[s][iq2-1] = lambda2*exp(lnQmin*exp( (iq2-1)/(q2n[s].size()-1.0) * log(lnQmax/lnQmin) ));
     }
 
   getInstance()->fQ2nodes = q2n;

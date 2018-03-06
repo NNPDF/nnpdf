@@ -61,7 +61,7 @@ PositivitySet LoadPositivitySet(NNPDFSettings const& settings, std::string const
  */
 FKSet LoadFK(NNPDFSettings const& settings,
              std::string const& setname)
-{  
+{
   const std::string theoryDir = settings.GetTheoryDirectory();
   const std::string theoryPath = get_data_path() + "/" + theoryDir + "/";
 
@@ -98,7 +98,7 @@ FKSet LoadFK(NNPDFSettings const& settings,
           stringstream sigfilename("");
           sigfilename << theoryPath
           << "fastkernel/"
-          << sline[1];        
+          << sline[1];
 
           // load cfactors
           vector<string> cfactors;

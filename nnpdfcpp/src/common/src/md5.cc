@@ -1,33 +1,33 @@
 /* MD5
  converted to C++ class by Frank Thilo (thilo@unix-ag.org)
  for bzflag (http://www.bzflag.org)
- 
+
  based on:
- 
+
  md5.h and md5.c
  reference implemantion of RFC 1321
- 
+
  Copyright (C) 1991-2, RSA Data Security, Inc. Created 1991. All
  rights reserved.
- 
+
  License to copy and use this software is granted provided that it
  is identified as the "RSA Data Security, Inc. MD5 Message-Digest
  Algorithm" in all material mentioning or referencing this software
  or this function.
- 
+
  License is also granted to make and use derivative works provided
  that such works are identified as "derived from the RSA Data
  Security, Inc. MD5 Message-Digest Algorithm" in all material
  mentioning or referencing the derived work.
- 
+
  RSA Data Security, Inc. makes no representations concerning either
  the merchantability of this software or the suitability of this
  software for any particular purpose. It is provided "as is"
  without express or implied warranty of any kind.
- 
+
  These notices must be retained in any copies of any part of this
  documentation and/or software.
- 
+
  */
 
 /* interface header */
@@ -122,10 +122,10 @@ MD5::MD5(const std::string &text)
 void MD5::init()
 {
   finalized=false;
-  
+
   count[0] = 0;
   count[1] = 0;
-  
+
   // load magic initialization constants.
   state[0] = 0x67452301;
   state[1] = 0xefcdab89;
@@ -164,7 +164,7 @@ void MD5::transform(const uint1 block[blocksize])
 {
   uint4 a = state[0], b = state[1], c = state[2], d = state[3], x[16];
   decode (x, block, blocksize);
-  
+
   /* Round 1 */
   FF (a, b, c, d, x[ 0], S11, 0xd76aa478); /* 1 */
   FF (d, a, b, c, x[ 1], S12, 0xe8c7b756); /* 2 */
@@ -182,7 +182,7 @@ void MD5::transform(const uint1 block[blocksize])
   FF (d, a, b, c, x[13], S12, 0xfd987193); /* 14 */
   FF (c, d, a, b, x[14], S13, 0xa679438e); /* 15 */
   FF (b, c, d, a, x[15], S14, 0x49b40821); /* 16 */
-  
+
   /* Round 2 */
   GG (a, b, c, d, x[ 1], S21, 0xf61e2562); /* 17 */
   GG (d, a, b, c, x[ 6], S22, 0xc040b340); /* 18 */
@@ -200,7 +200,7 @@ void MD5::transform(const uint1 block[blocksize])
   GG (d, a, b, c, x[ 2], S22, 0xfcefa3f8); /* 30 */
   GG (c, d, a, b, x[ 7], S23, 0x676f02d9); /* 31 */
   GG (b, c, d, a, x[12], S24, 0x8d2a4c8a); /* 32 */
-  
+
   /* Round 3 */
   HH (a, b, c, d, x[ 5], S31, 0xfffa3942); /* 33 */
   HH (d, a, b, c, x[ 8], S32, 0x8771f681); /* 34 */
@@ -218,7 +218,7 @@ void MD5::transform(const uint1 block[blocksize])
   HH (d, a, b, c, x[12], S32, 0xe6db99e5); /* 46 */
   HH (c, d, a, b, x[15], S33, 0x1fa27cf8); /* 47 */
   HH (b, c, d, a, x[ 2], S34, 0xc4ac5665); /* 48 */
-  
+
   /* Round 4 */
   II (a, b, c, d, x[ 0], S41, 0xf4292244); /* 49 */
   II (d, a, b, c, x[ 7], S42, 0x432aff97); /* 50 */
@@ -236,12 +236,12 @@ void MD5::transform(const uint1 block[blocksize])
   II (d, a, b, c, x[11], S42, 0xbd3af235); /* 62 */
   II (c, d, a, b, x[ 2], S43, 0x2ad7d2bb); /* 63 */
   II (b, c, d, a, x[ 9], S44, 0xeb86d391); /* 64 */
-  
+
   state[0] += a;
   state[1] += b;
   state[2] += c;
   state[3] += d;
-  
+
   // Zeroize sensitive information.
   memset(x, 0, sizeof x);
 }
@@ -254,33 +254,33 @@ void MD5::update(const unsigned char input[], size_type length)
 {
   // compute number of bytes mod 64
   size_type index = count[0] / 8 % blocksize;
-  
+
   // Update number of bits
   if ((count[0] += (length << 3)) < (length << 3))
     count[1]++;
   count[1] += (length >> 29);
-  
+
   // number of bytes we need to fill in buffer
   size_type firstpart = 64 - index;
-  
+
   size_type i;
-  
+
   // transform as many times as possible.
   if (length >= firstpart)
   {
     // fill buffer first, transform
     memcpy(&buffer[index], input, firstpart);
     transform(buffer);
-    
+
     // transform chunks of blocksize (64 bytes)
     for (i = firstpart; i + blocksize <= length; i += blocksize)
       transform(&input[i]);
-    
+
     index = 0;
   }
   else
     i = 0;
-  
+
   // buffer remaining input
   memcpy(&buffer[index], &input[i], length-i);
 }
@@ -294,17 +294,17 @@ void MD5::update(const char input[], size_type length)
   update((const unsigned char*)input, length);
 }
 
-// update with stream ---nh 
+// update with stream ---nh
 void MD5::update(std::istream& stream){
-  
+
   char buffer[1024];
-  
+
   while (stream.good()){
     stream.read(buffer, 1024); // note that return value of read is unusable.
     size_t len=stream.gcount();
     update(buffer, len);
   }
-  
+
 }
 
 //////////////////////////////
@@ -318,30 +318,30 @@ MD5& MD5::finalize()
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   };
-  
+
   if (!finalized) {
     // Save number of bits
     unsigned char bits[8];
     encode(bits, count, 8);
-    
+
     // pad out to 56 mod 64.
     size_type index = count[0] / 8 % 64;
     size_type padLen = (index < 56) ? (56 - index) : (120 - index);
     update(padding, padLen);
-    
+
     // Append length (before padding)
     update(bits, 8);
-    
+
     // Store state in digest
     encode(digest, state, 16);
-    
+
     // Zeroize sensitive information.
     memset(buffer, 0, sizeof buffer);
     memset(count, 0, sizeof count);
-    
+
     finalized=true;
   }
-  
+
   return *this;
 }
 
@@ -352,12 +352,12 @@ std::string MD5::hexdigest() const
 {
   if (!finalized)
     return "";
-  
+
   char buf[33];
   for (int i=0; i<16; i++)
     sprintf(buf+i*2, "%02x", digest[i]);
   buf[32]=0;
-  
+
   return std::string(buf);
 }
 
@@ -373,6 +373,6 @@ std::ostream& operator<<(std::ostream& out, MD5 md5)
 std::string md5(const std::string str)
 {
   MD5 md5 = MD5(str);
-  
+
   return md5.hexdigest();
 }

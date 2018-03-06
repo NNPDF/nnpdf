@@ -21,19 +21,19 @@ class NNPDFSettings;
 
 /**
  *  \class StoppingCriterion
- *  \brief Abstract class defining the interface for a stopping criterion 
+ *  \brief Abstract class defining the interface for a stopping criterion
  */
 class StoppingCriterion
 {
 public:
   StoppingCriterion(NNPDFSettings const&);
   virtual ~StoppingCriterion(){};
-  
+
   virtual bool Stop(FitPDFSet* pdfset,
                     vector<Experiment*>& training,
                     vector<Experiment*>& validation,
                     vector<PositivitySet>const& positivity);
-  
+
 protected:
   const NNPDFSettings& fSettings;
 };
@@ -47,14 +47,14 @@ class LookBackCV : public StoppingCriterion
 public:
   LookBackCV(NNPDFSettings const&);
   ~LookBackCV();
-  
+
   bool Stop(  FitPDFSet* pdfset,
               vector<Experiment*>& training,
               vector<Experiment*>& validation,
               vector<PositivitySet>const& positivity);
-  
+
 private:
   Parametrisation** fCurrentBest;
   float fCurrentValidErf;
-  int fBestGeneration;  
+  int fBestGeneration;
 };

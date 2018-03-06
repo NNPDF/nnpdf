@@ -18,7 +18,7 @@ FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, const int 
   // Fit Basis
   FitBasis* fitbasis = NULL;
   switch ( btype ) {
-      
+
     case BASIS_NN23:
     case BASIS_NN23QED:
     {
@@ -26,7 +26,7 @@ FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, const int 
       cout << Colour::FG_BLUE << "Selecting FitBasis: NN23" << Colour::FG_DEFAULT << endl;
       break;
     }
-      
+
     case BASIS_EVOL:
     case BASIS_EVOLQED:
     {
@@ -41,7 +41,7 @@ FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, const int 
       cout << Colour::FG_BLUE << "Selecting FitBasis: LUX" << Colour::FG_DEFAULT << endl;
       break;
     }
-      
+
     case BASIS_EVOLS:
     case BASIS_EVOLSQED:
     {
@@ -49,7 +49,7 @@ FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, const int 
       cout << Colour::FG_BLUE <<"Selecting FitBasis: EVOLS" << Colour::FG_DEFAULT << endl;
       break;
     }
-          
+
     case BASIS_NN30:
     case BASIS_NN30QED:
     {
@@ -57,7 +57,7 @@ FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, const int 
       cout << Colour::FG_BLUE << "Selecting FitBasis: NN30" << Colour::FG_DEFAULT << endl;
       break;
     }
-    
+
     case BASIS_FLVR:
     case BASIS_FLVRQED:
     {
@@ -78,7 +78,7 @@ FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, const int 
       fitbasis = new EvolICFitBasis(settings);
       cout << Colour::FG_BLUE << "Selecting FitBasis: EVOLIC" << Colour::FG_DEFAULT << endl;
       break;
-    }  
+    }
 
     case BASIS_NN31IC:
     case BASIS_NN31ICQED:
@@ -87,15 +87,15 @@ FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, const int 
       cout << Colour::FG_BLUE << "Selecting FitBasis: NN31IC" << Colour::FG_DEFAULT << endl;
       break;
     }
-      
+
     default:
       cerr << Colour::FG_RED << "[getFitBasis] error: Invalid Fitting Basis" << Colour::FG_DEFAULT << endl;
       exit(-1);
       break;
   }
-  
+
   return fitbasis;
-  
+
 }
 
 /**
@@ -114,7 +114,7 @@ fGSLWork(nnset.GetGSLWorkspace())
   // Squared Positivity
   for (int i = 0; i < fNPDF; i++)
     fPDFSqrPos[i] = nnset.Get("fitting","basis")[i]["pos"].as<bool>();
-  
+
   // Preprocessing constants
   RandomGenerator* rg = RandomGenerator::GetRNG();
 
@@ -148,10 +148,10 @@ void FitBasis::Preprocess(real const& x, real* pdf, PreprocParam const& par)
     // Positive definite PDFs
     if (fPDFSqrPos[i])
       pdf[i] *= pdf[i];
-    
+
     Preprocess(x,i,pdf[i],par);
-  } 
-  
+  }
+
   return;
 }
 
@@ -180,7 +180,7 @@ fQED(nnset.IsQED())
   fPDFNames[FIT_SM] = "Strange Valence";
   if (fQED)
     fPDFNames[FIT_GAM] = "Photon";
-    
+
   // Damping factor for arclengths
   fArcDampFactor[FIT_SNG] = 1;
   fArcDampFactor[FIT_GLU] = 1;
@@ -191,7 +191,7 @@ fQED(nnset.IsQED())
   fArcDampFactor[FIT_SM] = 0;
   if (fQED)
     fArcDampFactor[FIT_GAM] = 1;
-  
+
   RandomGenerator* rg = RandomGenerator::GetRNG();
   fSauxBeta = 3.5 + rg->GetRandomUniform(0.0,1.0);
   fSauxAlpha = fSauxBeta/2;
@@ -209,7 +209,7 @@ void NN23FitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool 
     param.fPDFNorm[i] = 1.0;
     param.fPDFAux[i] = 0.0;
   }
-  
+
   // Normalisations pointer
   real* norm = param.fPDFNorm;
 
@@ -217,10 +217,10 @@ void NN23FitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool 
   norm[FIT_VAL] = 3.0f/pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork); // Total valence
   norm[ FIT_DS] = (1-pdf->IntegratePDF(mem,FIT_T3,fQ2, PDFSet::FX,status,fGSLWork))/
   (2*pdf->IntegratePDF(mem,FIT_DS,fQ2, PDFSet::FX,status,fGSLWork)); // D_S - 1-t3/2d_s
-  
+
   // Strange valence sum rule
   param.fPDFAux[FIT_SM] = pdf->IntegratePDF(mem,FIT_SM,fQ2,PDFSet::FX,status,fGSLWork)*fSauxGamma;
-  
+
   // ************ QED dependent normalisations **************
   if (fQED)
   {
@@ -232,9 +232,9 @@ void NN23FitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool 
     norm[FIT_GLU] = (1-pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork))/
     pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
   }
-  
+
   return;
-  
+
 }
 
 // Preprocess a supplied PDF
@@ -242,11 +242,11 @@ void NN23FitBasis::Preprocess(real const& x, int const& fl, real& pdf, PreprocPa
 {
   // Basic Preprocessing
   FitBasis::Preprocess(x,fl,pdf,par);
-  
+
   // Strange auxilliary term
   if (fl == FIT_SM)
     pdf -= par.fPDFAux[FIT_SM]*pow(1-x,fSauxBeta)*pow(x,fSauxAlpha+1);
-  
+
   return;
 }
 
@@ -261,7 +261,7 @@ void NN23FitBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
     EVLN[EVLN_GAM] = FIT[FIT_GAM];
   else
     EVLN[EVLN_GAM] = 0;
-  
+
   EVLN[EVLN_SNG] = FIT[FIT_SNG]; //Singlet
   EVLN[EVLN_GLU] = FIT[FIT_GLU]; //Gluon
   EVLN[EVLN_VAL] = FIT[FIT_VAL]; //Valence
@@ -275,7 +275,7 @@ void NN23FitBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
   EVLN[EVLN_T15] = FIT[FIT_SNG]; //T15
   EVLN[EVLN_T24] = FIT[FIT_SNG]; //T24
   EVLN[EVLN_T35] = FIT[FIT_SNG]; //T35
-  
+
   return;
 }
 
@@ -283,26 +283,26 @@ void NN23FitBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
 {
   // Order in fitting basis
   // S g V T3 Ds sp sm gam
-  
+
   // Order in Evln bassi
   // γ, Σ, g, V, V3, V8, V15, V24, V35, T3, T8, T15, T24, T35
-  
+
   //V3 = T3+2*Ds
   //V8 = V - 3sm
   //T8 = S - 3sp
-  
+
   FIT[FIT_SNG] = EVLN[EVLN_SNG]; //Singlet
   FIT[FIT_GLU] = EVLN[EVLN_GLU]; //gluon
   FIT[FIT_VAL] = EVLN[EVLN_VAL]; //valence
   FIT[FIT_T3]  = EVLN[EVLN_T3];   // T3
   FIT[FIT_DS]  = 0.5*(EVLN[EVLN_V3] - EVLN[EVLN_T3]);   // Ds = (V3-T3)/2
-  
+
   FIT[FIT_SP]  = (EVLN[EVLN_SNG] - EVLN[EVLN_T8])/3.0;  //sp = (S-T8)/3
   FIT[FIT_SM]  = (EVLN[EVLN_VAL] - EVLN[EVLN_V8])/3.0;  //sm = (V - V8)/3
-  
+
   if (fQED)
     FIT[FIT_GAM] =  EVLN[EVLN_GAM];  // photon
-  
+
   return;
 }
 
@@ -310,25 +310,25 @@ real NN23FitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &sta
 {
   // status
   status = false;
-  
+
   // sum rule calculations
   switch (rule) {
      // total momentum
-     case SUM_MSR: 
+     case SUM_MSR:
        {
          real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
          real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
          real msr = xsng+xglu;
          if (fQED)
-           { 
+           {
              real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
              msr += xgam;
            }
          return msr;
        }
-       break;       
+       break;
      // up valence
-     case SUM_UVL: 
+     case SUM_UVL:
        {
          real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
          real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::FX,status,fGSLWork);
@@ -338,7 +338,7 @@ real NN23FitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &sta
        }
        break;
      // down valence
-     case SUM_DVL: 
+     case SUM_DVL:
        {
          real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
          real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::FX,status,fGSLWork);
@@ -402,7 +402,7 @@ fQED(nnset.IsQED())
   fPDFNames[FIT_T8] = "T8";
   if (fQED)
     fPDFNames[FIT_GAM] = "Photon";
-    
+
   // Damping factor for arclengths
   fArcDampFactor[FIT_SNG] = 1;
   fArcDampFactor[FIT_GLU] = 1;
@@ -427,10 +427,10 @@ void EvolFitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool 
     param.fPDFNorm[i] = 1.0;
     param.fPDFAux[i] = 0.0;
   }
-  
+
   // Normalisations pointer
   real* norm = param.fPDFNorm;
-  
+
   // Quantum number sum rules
   norm[FIT_VAL] = 3.0f/pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork); // Total valence
   norm[FIT_V3] = 1.0f/pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork); // V3
@@ -447,9 +447,9 @@ void EvolFitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool 
     norm[FIT_GLU] = (1-pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork))/
     pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
   }
-  
+
   return;
-  
+
 }
 
 /**
@@ -463,7 +463,7 @@ void EvolFitBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
     EVLN[EVLN_GAM] = FIT[FIT_GAM];
   else
     EVLN[EVLN_GAM] = 0;
-  
+
   EVLN[EVLN_SNG]  = FIT[FIT_SNG]; //Singlet
   EVLN[EVLN_GLU]  = FIT[FIT_GLU]; //Gluon
   EVLN[EVLN_VAL]  = FIT[FIT_VAL]; //Valence
@@ -477,7 +477,7 @@ void EvolFitBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
   EVLN[EVLN_T15]  = FIT[FIT_SNG]; //T15 = S
   EVLN[EVLN_T24]  = FIT[FIT_SNG]; //T24 = S
   EVLN[EVLN_T35]  = FIT[FIT_SNG]; //T35 = S
-  
+
   return;
 }
 
@@ -485,10 +485,10 @@ void EvolFitBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
 {
   // Order in fitting basis
   // S g V V3 V8 T3 T8 gam
-  
+
   // Order in Evln bassi
   // γ, Σ, g, V, V3, V8, V15, V24, V35, T3, T8, T15, T24, T35
-  
+
   FIT[FIT_SNG]  = EVLN[EVLN_SNG]; //Singlet
   FIT[FIT_GLU]  = EVLN[EVLN_GLU]; //gluon
   FIT[FIT_VAL]  = EVLN[EVLN_VAL]; //valence
@@ -496,10 +496,10 @@ void EvolFitBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
   FIT[FIT_V8]   = EVLN[EVLN_V8]; // V8
   FIT[FIT_T3]   = EVLN[EVLN_T3]; // T3
   FIT[FIT_T8]   = EVLN[EVLN_T8]; // T8
-  
+
   if (fQED)
     FIT[FIT_GAM] =  EVLN[0];  // photon
-  
+
   return;
 }
 
@@ -507,23 +507,23 @@ real EvolFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &sta
 {
   // status
   status = false;
-  
+
   // sum rule calculations
   switch (rule) {
-     case SUM_MSR: 
+     case SUM_MSR:
        {
          real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
          real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
          real msr = xsng+xglu;
          if (fQED)
-           { 
+           {
              real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
              msr += xgam;
            }
          return msr;
        }
-       break;       
-     case SUM_UVL: 
+       break;
+     case SUM_UVL:
        {
          real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
          real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
@@ -531,7 +531,7 @@ real EvolFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &sta
          return ( 2.0*val + 3.0*v3 + v8 )/6.0;
        }
        break;
-     case SUM_DVL: 
+     case SUM_DVL:
        {
          real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
          real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
@@ -823,7 +823,7 @@ fQED(nnset.IsQED())
   fPDFNames[FIT_DS] = "Sea Asymmetry";
   if (fQED)
     fPDFNames[FIT_GAM] = "Photon";
-    
+
   // Damping factor for arclengths
   fArcDampFactor[FIT_SNG] = 1;
   fArcDampFactor[FIT_GLU] = 1;
@@ -885,7 +885,7 @@ void EvolSFitBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
   else
     EVLN[EVLN_GAM] = 0;
 
-  
+
   enum fitBasis {FIT_SNG, FIT_GLU, FIT_VAL, FIT_V8, FIT_T3, FIT_T8, FIT_DS, FIT_GAM };
 
   EVLN[EVLN_SNG] = FIT[FIT_SNG]; //Singlet
@@ -901,7 +901,7 @@ void EvolSFitBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
   EVLN[EVLN_T15] = FIT[FIT_SNG]; //T15 = S
   EVLN[EVLN_T24] = FIT[FIT_SNG]; //T24 = S
   EVLN[EVLN_T35] = FIT[FIT_SNG]; //T35 = S
-  
+
   return;
 }
 
@@ -935,23 +935,23 @@ real EvolSFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &st
 {
   // status
   status = false;
-  
+
   // sum rule calculations
   switch (rule) {
-     case SUM_MSR: 
+     case SUM_MSR:
        {
          real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
          real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
          real msr = xsng+xglu;
          if (fQED)
-           { 
+           {
              real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
              msr += xgam;
            }
          return msr;
        }
-       break;       
-     case SUM_UVL: 
+       break;
+     case SUM_UVL:
        {
          real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
          real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::FX,status,fGSLWork);
@@ -960,7 +960,7 @@ real EvolSFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &st
          return ( 2.0*val + 3.0*t3 + 6.0*ds + v8 )/6.0;
        }
        break;
-     case SUM_DVL: 
+     case SUM_DVL:
        {
          real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
          real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::FX,status,fGSLWork);
@@ -1027,7 +1027,7 @@ void NN30FitBasis::Preprocess(real const& x, real* pdf, PreprocParam const& par)
    for (int i = 0; i < fNPDF; i++)
      if (fPDFSqrPos[i])
        pdf[i] *= pdf[i];
-   
+
    // Transform to evol basis
    real tmppdf[15];
    tmppdf[FIT_SNG] = pdf[NET_SNG];
@@ -1039,14 +1039,14 @@ void NN30FitBasis::Preprocess(real const& x, real* pdf, PreprocParam const& par)
    tmppdf[FIT_T8] = pdf[NET_SNG]-3*pdf[NET_SP];
    if (fQED)
      tmppdf[FIT_GAM] = pdf[NET_GAM];
-   
+
    for (int i = 0; i < fNPDF; i++)
      pdf[i] = tmppdf[i];
-     
+
    // Preproccess in evol basis
    for (int i = 0; i < fNPDF; i++)
      FitBasis::Preprocess(x,i,pdf[i],par);
-     
+
    return;
 }
 
@@ -1054,10 +1054,10 @@ void NN30FitBasis::NetTransform(int const& fl, int const& nfl, int* transform)
 {
   for (int i = 0; i < nfl; i++)
     transform[i] = 0;
-  
+
   switch (fl)
   {
-    case FIT_SNG: 
+    case FIT_SNG:
     {
       transform[NET_SNG] = 1;
       break;
@@ -1101,7 +1101,7 @@ void NN30FitBasis::NetTransform(int const& fl, int const& nfl, int* transform)
       break;
     }
   }
- 
+
   return;
 }
 
@@ -1127,7 +1127,7 @@ void FLVRFitBasis::Preprocess(real const& x, real* pdf, PreprocParam const& par)
    for (int i = 0; i < fNPDF; i++)
      if (fPDFSqrPos[i])
        pdf[i] *= pdf[i];
-   
+
    // Transform to evol basis
    real tmppdf[15];
    tmppdf[FIT_SNG] = pdf[NET_U]+pdf[NET_UBAR]+pdf[NET_D]+pdf[NET_DBAR]+pdf[NET_S]+pdf[NET_SBAR];
@@ -1139,14 +1139,14 @@ void FLVRFitBasis::Preprocess(real const& x, real* pdf, PreprocParam const& par)
    tmppdf[FIT_T8] = pdf[NET_U]+pdf[NET_UBAR]+pdf[NET_D]+pdf[NET_DBAR]-2*pdf[NET_S]-2*pdf[NET_SBAR];
    if (fQED)
      tmppdf[FIT_GAM] = pdf[NET_GAM];
-   
+
    for (int i = 0; i < fNPDF; i++)
      pdf[i] = tmppdf[i];
-   
+
    // Preprocess in evol basis
    for (int i = 0; i < fNPDF; i++)
      FitBasis::Preprocess(x,i,pdf[i],par);
-   
+
    return;
 }
 
@@ -1154,10 +1154,10 @@ void FLVRFitBasis::NetTransform(int const& fl, int const& nfl, int* transform)
 {
   for (int i = 0; i < nfl; i++)
     transform[i] = 0;
-  
+
   switch (fl)
   {
-    case FIT_SNG: 
+    case FIT_SNG:
     {
       transform[NET_U] = 1;
       transform[NET_UBAR] = 1;
@@ -1224,7 +1224,7 @@ void FLVRFitBasis::NetTransform(int const& fl, int const& nfl, int* transform)
       break;
     }
   }
- 
+
   return;
 }
 
@@ -1247,7 +1247,7 @@ fQED(nnset.IsQED())
   fPDFNames[FIT_T15]= "T15";
   if (fQED)
     fPDFNames[FIT_GAM] = "Photon";
-    
+
   // Damping factor for arclengths
   fArcDampFactor[FIT_SNG] = 1;
   fArcDampFactor[FIT_GLU] = 1;
@@ -1461,12 +1461,12 @@ EvolICFitBasis(nnset)
 }
 
 void NN30ICFitBasis::Preprocess(real const& x, real* pdf, PreprocParam const& par)
-{  
+{
    // Positive definite PDFs
    for (int i = 0; i < fNPDF; i++)
      if (fPDFSqrPos[i])
        pdf[i] *= pdf[i];
-   
+
    // Transform to evol basis
    real tmppdf[15];
    tmppdf[FIT_SNG] = pdf[NET_SNG];
@@ -1479,14 +1479,14 @@ void NN30ICFitBasis::Preprocess(real const& x, real* pdf, PreprocParam const& pa
    tmppdf[FIT_T15] = pdf[NET_SNG]-4*pdf[NET_CP];
    if (fQED)
      tmppdf[FIT_GAM] = pdf[NET_GAM];
-   
+
    for (int i = 0; i < fNPDF; i++)
      pdf[i] = tmppdf[i];
-   
+
    // Preprocess in evol basis
    for (int i = 0; i < fNPDF; i++)
      FitBasis::Preprocess(x,i,pdf[i],par);
-     
+
    return;
 }
 
@@ -1524,7 +1524,7 @@ void NN30ICFitBasis::NetTransform(int const& fl, int const& nfl, int* transform)
       transform[NET_SM] = -3;
       //transform[NET_CM] = -1;
       break;
-    } 
+    }
     case FIT_T3:
     {
       transform[NET_T3] = 1;
