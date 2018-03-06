@@ -68,7 +68,7 @@ bool ThPredictions::Verbose = true;
     __m256 t2 = _mm256_hadd_ps(t1,t1);
     __m128 t3 = _mm256_extractf128_ps(t2,1);
     __m128 t4 = _mm_add_ss(_mm256_castps256_ps128(t2),t3);
-    retval = _mm_cvtss_f32(t4);        
+    retval = _mm_cvtss_f32(t4);
 
     _mm_empty();
     */
@@ -100,7 +100,7 @@ fEtype(pdfset->GetEtype())
 {
   // New theory array
   fObs = new real[fNData*fNpdf];
-  
+
   Timer timer=Timer();
   timer.start();
 
@@ -127,7 +127,7 @@ fEtype(pdfset->GetEtype())
 {
   // New theory array
   fObs = new real[fNData*fNpdf];
-  
+
   Timer timer=Timer();
   timer.start();
 
@@ -150,7 +150,7 @@ fEtype(pdfset->GetEtype())
 {
   // New theory array
   fObs = new real[fNData*fNpdf];
-  
+
   Timer timer=Timer();
   timer.start();
 
@@ -180,7 +180,7 @@ fEtype(pdf1->GetEtype())
 
   // New theory array
   fObs = new real[fNData*fNpdf];
-  
+
   Timer timer=Timer();
   timer.start();
 
@@ -257,9 +257,9 @@ ThPredictions& ThPredictions::operator+=(const ThPredictions& o)
     throw EvaluationError("ThPredictions::operator+=","Cannot sum predictions with different numbers of datapoints/PDF members");
 
   if (fEtype != PDFSet::erType::ER_MC && fEtype != PDFSet::erType::ER_MC68 && fEtype != PDFSet::erType::ER_MCT0 && ThPredictions::Verbose == true)
-    std::cerr << "ThPredictions::operator+= Warning: Observable summation undefined for ErrorTypes other than Monte-Carlo" <<std::endl; 
+    std::cerr << "ThPredictions::operator+= Warning: Observable summation undefined for ErrorTypes other than Monte-Carlo" <<std::endl;
 
-  // Increment predictions 
+  // Increment predictions
  for (int i=0; i<fNpdf*fNData; i++)
   fObs[i] += o.fObs[i];
 
@@ -281,9 +281,9 @@ ThPredictions& ThPredictions::operator-=(const ThPredictions& o)
     throw EvaluationError("ThPredictions::operator-=","Cannot subtract predictions with different numbers of datapoints/PDF members");
 
   if ( ( fEtype != PDFSet::erType::ER_MC && fEtype != PDFSet::erType::ER_MC68 && fEtype != PDFSet::erType::ER_MCT0 ) && ThPredictions::Verbose == true)
-    std::cerr << "ThPredictions::operator-= Warning: Observable subtraction undefined for ErrorTypes other than Monte-Carlo" <<std::endl; 
+    std::cerr << "ThPredictions::operator-= Warning: Observable subtraction undefined for ErrorTypes other than Monte-Carlo" <<std::endl;
 
-  // Increment predictions 
+  // Increment predictions
  for (int i=0; i<fNpdf*fNData; i++)
   fObs[i] -= o.fObs[i];
 
@@ -305,9 +305,9 @@ ThPredictions& ThPredictions::operator/=(const ThPredictions& o)
     throw EvaluationError("ThPredictions::operator/=","Cannot divide predictions with different numbers of datapoints/PDF members");
 
   if ( (fEtype != PDFSet::erType::ER_MC && fEtype != PDFSet::erType::ER_MC68 && fEtype != PDFSet::erType::ER_MCT0 ) && ThPredictions::Verbose == true)
-    std::cerr << "ThPredictions::operator/= Warning: Observable division undefined for ErrorTypes other than Monte-Carlo" <<std::endl; 
+    std::cerr << "ThPredictions::operator/= Warning: Observable division undefined for ErrorTypes other than Monte-Carlo" <<std::endl;
 
-  // Increment predictions 
+  // Increment predictions
  for (int i=0; i<fNpdf*fNData; i++)
   fObs[i] /= o.fObs[i];
 
@@ -329,9 +329,9 @@ ThPredictions& ThPredictions::operator*=(const ThPredictions& o)
     throw EvaluationError("ThPredictions::operator/=","Cannot multiply predictions with different numbers of datapoints/PDF members");
 
   if ( (fEtype != PDFSet::erType::ER_MC && fEtype != PDFSet::erType::ER_MC68 && fEtype != PDFSet::erType::ER_MCT0 ) && ThPredictions::Verbose == true)
-    std::cerr << "ThPredictions::operator/= Warning: Observable multiplication undefined for ErrorTypes other than Monte-Carlo" <<std::endl; 
+    std::cerr << "ThPredictions::operator/= Warning: Observable multiplication undefined for ErrorTypes other than Monte-Carlo" <<std::endl;
 
-  // Increment predictions 
+  // Increment predictions
  for (int i=0; i<fNpdf*fNData; i++)
   fObs[i] *= o.fObs[i];
 
@@ -345,16 +345,16 @@ ThPredictions& ThPredictions::operator*=(const ThPredictions& o)
 }
 
 
-const ThPredictions ThPredictions::operator+(const ThPredictions &o) const 
+const ThPredictions ThPredictions::operator+(const ThPredictions &o) const
 {  ThPredictions res = *this;  res += o; return res;   }
 
-const ThPredictions ThPredictions::operator-(const ThPredictions &o) const 
+const ThPredictions ThPredictions::operator-(const ThPredictions &o) const
 {  ThPredictions res = *this;  res -= o; return res;   }
 
-const ThPredictions ThPredictions::operator/(const ThPredictions &o) const 
+const ThPredictions ThPredictions::operator/(const ThPredictions &o) const
 {  ThPredictions res = *this;  res /= o; return res;   }
 
-const ThPredictions ThPredictions::operator*(const ThPredictions &o) const 
+const ThPredictions ThPredictions::operator*(const ThPredictions &o) const
 {  ThPredictions res = *this;  res *= o; return res;   }
 
   /**
@@ -388,7 +388,7 @@ void ThPredictions::Convolute(const PDFSet *pdfset, const FKTable *fk, real* the
       theory[i*Npdf + n] = 0;
       convolute(pdf+Dsz*n,sigma+Dsz*i,theory[i*Npdf + n],Dsz);
     }
-#else 
+#else
   int offset, chunksize;
   MPI::DecomposeDomain(NData, 0, &offset, &chunksize); // compule data for master
   MPI::SendJobs(NData, Npdf, Dsz, theory, pdf, sigma); // prepare slaves
@@ -400,7 +400,7 @@ void ThPredictions::Convolute(const PDFSet *pdfset, const FKTable *fk, real* the
     }
   MPI::RecvJobs(NData, Npdf, theory);
 #endif
-  
+
   // Delete pdfs
   free(reinterpret_cast<void *>(pdf));
   return;
@@ -423,7 +423,7 @@ void ThPredictions::Convolute(const PDFSet *pdf1, const PDFSet *pdf2, const FKTa
 
   if (err != 0)
     throw RangeError("ThPredictions::Convolute","ThPredictions posix_memalign " + std::to_string(err));
-  
+
   // Fetch PDF array
   GetNZPDF(pdf1, pdf2, fk, pdf);
 
@@ -451,7 +451,7 @@ void ThPredictions::Convolute(const PDFSet *pdf1, const PDFSet *pdf2, const FKTa
     }
   MPI::RecvJobs(NData, Npdf, theory);
 #endif
-  
+
   // Delete pdfs
   free(reinterpret_cast<void *>(pdf));
   return;
@@ -463,7 +463,7 @@ void ThPredictions::Convolute(const PDFSet *pdf1, const PDFSet *pdf2, const FKTa
 void ThPredictions::Convolute(const PDFSet *pdfset, const FKSet *fkset, real* theory)
 {
   const int NSigma = fkset->GetNSigma();
-  
+
   if (NSigma == 1)
     ThPredictions::Convolute(pdfset,fkset->GetFK(0), theory );
   else
@@ -471,22 +471,22 @@ void ThPredictions::Convolute(const PDFSet *pdfset, const FKSet *fkset, real* th
     SigmaOp   op = fkset->GetOperator();
     const int NData = fkset->GetNDataFK();
     const int Npdf  = pdfset->GetMembers();
-    
+
     std::vector<real*> results;
     for (int i=0; i<NSigma; i++)
       results.push_back(new real[NData*Npdf]);
-    
+
     for (int i=0; i<NSigma; i++)
       ThPredictions::Convolute(pdfset, fkset->GetFK(i), results[i] );
-    
+
     op( NData*Npdf, results, theory );
-    
+
     for (int i=0; i<NSigma; i++)
       delete[] results[i];
-    
+
     results.clear();
   }
-  
+
   return;
 }
 
@@ -534,12 +534,12 @@ real ThPredictions::GetObsError(int const& idat) const
       if (fEtype == PDFSet::erType::ER_EIG90)
         err /= 1.64485;
     }
-  
+
   return err;
 }
 
 /**
- * Export ThPredictions observables to ostream 
+ * Export ThPredictions observables to ostream
  */
 void ThPredictions::Print(std::ostream& out, bool latex) const
 {
@@ -610,12 +610,12 @@ void ThPredictions::GetNZPDF(const PDFSet* pdfset, const FKTable *fk, real* pdf)
   {
     // Hadronic process
     real* EVLN = new real[Nx*Nfl];
-    
+
     for (int n = 0; n < NPDF; n++)
     {
       for (int i = 0; i < Nx; i++)
         pdfset->GetPDF(xgrid[i],Q20,n,&EVLN[i*Nfl]);
-      
+
       for (int fl=0; fl<NonZero; fl++)
       {
         const int fl1 = NZFlmap[2*fl];
@@ -626,9 +626,9 @@ void ThPredictions::GetNZPDF(const PDFSet* pdfset, const FKTable *fk, real* pdf)
             pdf[ idx + i*Nx + j ] = EVLN[i*Nfl+fl1]*EVLN[j*Nfl+fl2];
       }
     }
-    
+
     delete[] EVLN;
-    
+
   } else {
     // DIS
     real* EVLN = new real[Nfl];
@@ -639,10 +639,10 @@ void ThPredictions::GetNZPDF(const PDFSet* pdfset, const FKTable *fk, real* pdf)
         for (int fl=0; fl<NonZero; fl++)
           pdf[ DSz*n + Nx*fl + i ] = EVLN[NZFlmap[fl]];
       }
-    
+
     delete[] EVLN;
   }
-  
+
 }
 
 /*
@@ -683,21 +683,21 @@ void ThPredictions::GetNZPDF(const PDFSet* pdf1, const PDFSet* pdf2, const FKTab
       pdf1->GetPDF(xgrid[i],Q20,n,&EVLN1[i*Nfl]);
       pdf2->GetPDF(xgrid[i],Q20,n,&EVLN2[i*Nfl]);
     }
-    
+
     for (int fl=0; fl<NonZero; fl++)
     {
       const int fl1 = NZFlmap[2*fl];
       const int fl2 = NZFlmap[2*fl+1];
-      
+
       for (int i = 0; i < Nx; i++)
         for (int j = 0; j < Nx; j++)
           pdf[n*DSz + fl*Nx*Nx + i*Nx + j] = EVLN1[i*Nfl+fl1]*EVLN2[j*Nfl+fl2];
     }
-    
+
   }
-  
+
   delete[] EVLN1;
   delete[] EVLN2;
-  
+
 }
 

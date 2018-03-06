@@ -6,7 +6,7 @@ Library for core NNPDF utilities.
 The aim of `libnnpdf` is to provide a set of common tools shared between multiple
 projects for the NNPDF Collaboration. The output of this repository is a C++ library
 which can be imported and shared to other native C++ programs and python codes through
-the SWIG wrapper. 
+the SWIG wrapper.
 
 The library implements the following principle components:
 - Data I/O

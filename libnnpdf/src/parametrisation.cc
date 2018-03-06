@@ -22,8 +22,8 @@ using namespace NNPDF;
 /**
  * @brief Parametrisation base class constructor
  * This is an abstract class handling parameter arrays and I/O
- * @param name a string specifying the type of parametrisation 
- * @param nParameters the number of parameters requested by the derived class 
+ * @param name a string specifying the type of parametrisation
+ * @param nParameters the number of parameters requested by the derived class
  */
 Parametrisation::Parametrisation( std::string name, int nParameters ):
 fNParameters(nParameters),
@@ -34,7 +34,7 @@ fParamName(name)
 
 /**
  * @brief Parametrisation base class copy constructor
- * @param o the parametrisation to be copied 
+ * @param o the parametrisation to be copied
  *
  * This constructor copies the model parameters from another parametrisation.
  */
@@ -50,7 +50,7 @@ fParamName(o.fParamName)
 /**
  * @brief Parametrisation base class destructor
  *
- * Frees parametrisation array 
+ * Frees parametrisation array
  */
 Parametrisation::~Parametrisation()
 {
@@ -65,7 +65,7 @@ void Parametrisation::CopyPars(Parametrisation const* t)
 {
   if (fNParameters != t->GetNParameters())
     throw EvaluationError("Parametrisation::CopyPars", "number of parameters does not match: " + std::to_string(fNParameters) + " vs " + std::to_string(t->GetNParameters()));
-  
+
   for (int i=0; i<fNParameters; i++)
     fParameters[i] = t->fParameters[i];
 
@@ -134,13 +134,13 @@ fActFunction(sigmoid)
 {
   int  pSize = 0; // size of parameter array
   int* pMap = new int[fNLayers-1]; // map for weight matrix
-  
+
   // Architecture information
   fArch = new int[fNLayers];
   for (int i=0; i<fNLayers; i++)
   {
     fArch[i] = arch[i];
-    
+
     if (i > 0)
     {
       pMap[i-1] = pSize; // startpoint of this layer
@@ -151,7 +151,7 @@ fActFunction(sigmoid)
   // Alloc parameter array
   if (fNParameters != pSize)
     throw EvaluationError("MultiLayerPerceptron::Constructor", "Error in the computation of nParameters");
-  
+
   // Alloc WeightMatrix (map for parameters)
   fWeightMatrix = new real*[fNLayers - 1];
 
@@ -173,13 +173,13 @@ fActFunction(sigmoid)
   {
     for (int j=0; j<fArch[i]; j++)
       fOutputMatrix[i][j] = 1;
-    
+
     // Threshold term
     fOutputMatrix[i][fArch[i]] = -1.0f;
   }
 
   InitParameters();
-  
+
   delete[] pMap;
 }
 
@@ -197,13 +197,13 @@ fActFunction(o.fActFunction)
 {
   int  pSize = 0; // size of parameter array
   int* pMap = new int[fNLayers-1]; // map for weight matrix
-  
+
   // Architecture information
   fArch = new int[fNLayers];
   for (int i=0; i<fNLayers; i++)
   {
     fArch[i] = o.fArch[i];
-    
+
     if (i > 0)
     {
       pMap[i-1] = pSize; // startpoint of this layer
@@ -212,11 +212,11 @@ fActFunction(o.fActFunction)
   }
   // Alloc WeightMatrix (map for parameters)
   fWeightMatrix = new real*[fNLayers - 1];
-  
+
   // Alloc activation function (output) matrix
   fOutputMatrix = new real*[fNLayers];
   fOutputMatrix[0] = new real[fArch[0]+1];
-  
+
   for (int i=1; i<fNLayers; i++)
   {
     // point to correct part of parameter array
@@ -224,10 +224,10 @@ fActFunction(o.fActFunction)
     // Alloc each activation function in the layer
     fOutputMatrix[i]   = new real[fArch[i]+1];
   }
-  
+
   for (int i=0; i<fNLayers; i++) // Threshold term init
     fOutputMatrix[i][fArch[i]] = -1.0f;
-  
+
   delete[] pMap;
 }
 
@@ -239,9 +239,9 @@ MultiLayerPerceptron::~MultiLayerPerceptron()
   delete[] fOutputMatrix[0];
   for (int i=1; i<fNLayers; i++)
     delete[] fOutputMatrix[i];
-  
+
   delete[] fOutputMatrix;
-  
+
   delete[] fArch;
   delete[] fWeightMatrix;
 }
@@ -273,29 +273,29 @@ void MultiLayerPerceptron::Compute(real* in,real* out) const
   // setup input
   for (int i=0; i<fArch[0]; i++)
     fOutputMatrix[0][i] = in[i];
-  
+
   for (int i=1; i<(fNLayers -1); i++)
     for (int j=0; j<fArch[i]; j++)
     {
       real h=0.0f;
-      
+
       real *p = &fWeightMatrix[i-1][j*(1+fArch[i-1])]; // seems to help the compiler out
       for (int k=0; k<=fArch[i-1]; k++) // <= due to threshold term
         h-= (*(p+k))*fOutputMatrix[i-1][k];
-      
+
       fOutputMatrix[i][j] = fActFunction(h);
     }
-  
+
   // Linear in final layer - get 10% speedup by unrolling this from previous loop
   for (int j=0; j<fArch[fNLayers-1]; j++)
   {
     fOutputMatrix[fNLayers-1][j] = 0.0f;
-    
+
     real *p = &fWeightMatrix[fNLayers-2][j*(1+fArch[fNLayers-2])];
     for (int k=0; k<=fArch[fNLayers-2]; k++)
       fOutputMatrix[fNLayers-1][j] += (*(p+k))*fOutputMatrix[fNLayers-2][k];
   }
-  
+
   for (int i=0; i<fArch[fNLayers-1]; i++)
     out[i] = fOutputMatrix[fNLayers-1][i];
 }
@@ -312,10 +312,10 @@ real* MultiLayerPerceptron::GetNodeParams(int const& layer, int const& node)
 {
   if (layer <=0 || layer >= fNLayers)
     throw RangeError("MultiLayerPerceptron::GetNodeParams","layer requested (" + std::to_string(layer) + ") is out of bounds!");
-  
+
   if (node < 0 || node >= fArch[layer] )
     throw RangeError("MultiLayerPerceptron::GetNodeParams","node requested (" + std::to_string(node) + ") is out of bounds!");
-  
+
   return &fWeightMatrix[layer-1][node];
 }
 
@@ -337,7 +337,7 @@ fNHidden(arch[1])
     throw EvaluationError("SingleLayerPerceptron::Constructor", "Requested architecture invalid: it must have two nodes in the first layer" );
   if (arch[2] != 1)
     throw EvaluationError("SingleLayerPerceptron::Constructor", "Requested architecture invalid: it must have a single node in the third (and final) layer" );
-     
+
   InitParameters();
 }
 
@@ -361,8 +361,8 @@ Parametrisation* SingleLayerPerceptron::Duplicate()
 }
 
 /**
- * @brief Single layer neural network evaluation 
- * @details Computes the output of the neural network for a given input 
+ * @brief Single layer neural network evaluation
+ * @details Computes the output of the neural network for a given input
  * @param in, a 2-element array containing {x,log(x)}
  * @param out, a pointer to the location where the output should be written
  */
@@ -375,7 +375,7 @@ void SingleLayerPerceptron::Compute(real* in,real* out) const
         {
                 // Use SSE
                 const real* node = fParameters + 3*i;
-                const real h = in[0]*node[0] 
+                const real h = in[0]*node[0]
                              + in[1]*node[1]
                              +       node[2];
                 const real sig = 1.0 / (1+exp(h));
@@ -396,7 +396,7 @@ Parametrisation* SingleLayerPerceptronPreproc::Duplicate()
 }
 
 /**
- * @brief Initialise the parameters of the preprocessed single layer perceptron 
+ * @brief Initialise the parameters of the preprocessed single layer perceptron
  * Values are initialised as uniform between 0 and 2/5 for the low/high-x exponents
  * respectively. The lower limit is set for integrability, the higher according to
  * maximum typically observed effective exponents.
@@ -412,7 +412,7 @@ void SingleLayerPerceptronPreproc::InitParameters()
 }
 
 /**
- * @brief Initialise the parameters of the preprocessed single layer perceptron 
+ * @brief Initialise the parameters of the preprocessed single layer perceptron
  * Preprocessing is performed on the output of SingleLayerPerceptron::Compute
  */
 void SingleLayerPerceptronPreproc::Compute(real* in,real* out) const

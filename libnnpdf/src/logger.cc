@@ -35,7 +35,7 @@ namespace NNPDF
   fMap(),
   fBasePath("")
   {
-    
+
   }
 
   /**
@@ -50,7 +50,7 @@ namespace NNPDF
   /**
    * @brief LogManager::AddLogger
    * Adds a new logger class to the manager.
-   * Logger classes are kept in a hash map, indexed by the hash of logname 
+   * Logger classes are kept in a hash map, indexed by the hash of logname
    * @param logname The identifier for the log, e.g NNFIT or GAMinimizer
    * @param filename The target filename to which the log is written out. Relative to base path in LogManager
    */
@@ -60,14 +60,14 @@ namespace NNPDF
 
     std::hash<std::string> str_hash;
     const size_t hashval = str_hash(logname);
-    
+
     // Collision
     if (LM->fMap.find(hashval)!=LM->fMap.end())
     {
       cerr << "LogManager::AddLogger Error - hash collision for new log: \'" <<logname<<"\' with hash: "<< hashval<<". ";
       throw LogError("LogManager::AddLogger","Log already exists!");
     }
-    
+
     // Insert new logger
     string targetfile = LM->fBasePath + "/" + filename;
     LM->fMap.insert(std::pair<size_t,Logger>(hashval,Logger(logname, targetfile )));
@@ -83,7 +83,7 @@ namespace NNPDF
     LogManager* LM = GetLM();
     std::hash<std::string> str_hash;
     const size_t hashval = str_hash(logname);
-    
+
     // Collision
     LogMap::iterator iLog = LM->fMap.find(hashval);
     if ( iLog == LM->fMap.end())
@@ -91,7 +91,7 @@ namespace NNPDF
       cerr << "LogManager::GetLogger Error - log: \'" <<logname<<"\' does not exist!"<<endl;
       throw LogError("LogManager::AddLogger","Log does not exists!");
     }
-    
+
     return (*iLog).second;
   }
 
@@ -147,22 +147,22 @@ namespace NNPDF
       cout << "** Log "<<fLogname<<" contains no entries. Log not exported. "<<endl;
       return;
     }
-    
+
     std::ofstream targetFile;
     targetFile.open(fFilename.c_str());
-    
+
     if (!targetFile.good())
     {
       cerr << "Logger::Export Error - target filename "<<fFilename<<" cannot be accessed!"<<endl;
       cerr << "Log not exported"<<endl;
       return;
     }
-    
+
     targetFile << "NNPDFCPP Log file. Identifier: "<<fLogname<<". "<<fLogEntries.size()<<" entries. "<<endl;
-    
+
     for (size_t i=0; i<fLogEntries.size(); i++)
       targetFile << fLogEntries[i]<<endl;
-    
+
     cout << "** Log "<<fLogname<<" successfully exported to "<<fFilename<<endl;
   }
 

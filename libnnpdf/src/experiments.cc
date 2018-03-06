@@ -56,7 +56,7 @@ fIsT0(false)
     if (sets[i].IsT0() != fIsT0)
       throw UserError("Experiment::Experiment", "Supplied datasets must all be either T0 or EXP");
   }
-  
+
   // Pull data from datasets
   PullData();
   GenCovMat();
@@ -83,7 +83,7 @@ fIsT0(exp.fIsT0)
   // Copy datasets
   for (size_t i=0; i< exp.fSets.size(); i++)
     fSets.push_back(exp.fSets[i]);
-  
+
   // Pull data from datasets
   PullData();
 }
@@ -107,7 +107,7 @@ fIsT0(exp.fIsT0)
   // Copy datasets
   for (size_t i=0; i< sets.size(); i++)
     fSets.push_back(sets[i]);
-  
+
   // Pull data from datasets
   PullData();
   GenCovMat();
@@ -118,14 +118,14 @@ fIsT0(exp.fIsT0)
   */
 Experiment::~Experiment()
 {
-  ClearLocalData();  
+  ClearLocalData();
 }
 
 /*
  * Clears data pulled from DataSets
  */
 void Experiment::ClearLocalData()
-{ 
+{
   // Already clear
   if (!fData)
     return;
@@ -133,17 +133,17 @@ void Experiment::ClearLocalData()
   delete[] fData;
   delete[] fStat;
   delete[] fT0Pred;
-  
+
   for (int s = 0; s < GetNSet(); s++)
     delete[] fSetSysMap[s];
-    
+
   delete[] fSetSysMap;
-  
+
   for (int i = 0; i < fNData; i++)
     delete[] fSys[i];
   delete[] fSys;
-  
-  fNSys = 0; 
+
+  fNSys = 0;
 }
 
 /**
@@ -160,7 +160,7 @@ void Experiment::MakeReplica()
 
   RandomGenerator* rng = RandomGenerator::GetRNG();
 
-  double *rand  = new double[fNSys];  
+  double *rand  = new double[fNSys];
   double *xnor  = new double[fNData];
   double *artdata = new double[fNData];
   sysType rST[2] = {ADD,MULT};
@@ -185,20 +185,20 @@ void Experiment::MakeReplica()
         fSys[0][l].type = rST[rng->GetRandomUniform(2)];
       for (int i = 1; i < fNData; i++)
         fSys[i][l].type = fSys[0][l].type;
-    } 
-    
+    }
+
     for (int i = 0; i < fNData; i++) // should rearrange to update set-by-set -- nh
     {
       double xstat = rng->GetRandomGausDev(1.0)*fStat[i];   //Noise from statistical uncertainty
-      
+
       double xadd = 0;
       xnor[i] = 1.0;
-      
+
       for (int l = 0; l < fNSys; l++)
       {
         if (fSys[i][l].name.compare("THEORYCORR")==0) continue;   // Skip theoretical uncertainties
         if (fSys[i][l].name.compare("THEORYUNCORR")==0) continue; // Skip theoretical uncertainties
-        if (fSys[i][l].name.compare("SKIP")==0) continue;         // Skip uncertainties	
+        if (fSys[i][l].name.compare("SKIP")==0) continue;         // Skip uncertainties
         if (fSys[i][l].name.compare("UNCORR")==0)                 // Noise from uncorrelated systematics
         {
           switch (fSys[i][l].type)
@@ -219,7 +219,7 @@ void Experiment::MakeReplica()
         }
       }
       artdata[i] = xnor[i] * ( fData[i] + xadd + xstat );
-      
+
       // Only generates positive artificial data (except for closure tests and asymmetry data)
       if (artdata[i] < 0 && !fIsClosure && proctype[i].find("ASY") == std::string::npos )
       {
@@ -235,22 +235,22 @@ void Experiment::MakeReplica()
   {
     sysType *type = new sysType[fSets[s].GetNSys()];
     for (int l = 0; l < fSets[s].GetNSys(); l++)
-      type[l] = fSys[0][fSetSysMap[s][l]].type; 
+      type[l] = fSys[0][fSetSysMap[s][l]].type;
     fSets[s].UpdateData(artdata+index, type);
     fSets[s].SetArtificial(true);
     index+=fSets[s].GetNData();
     delete[] type;
   }
-  
+
   // Update local data and recompute covariance matrix
   PullData();
   //GenCovMat();   //Use standard t0 covariance matrix for all replicas
-  
+
   delete[] rand;
   delete[] xnor;
   delete[] artdata;
   delete[] proctype;
-  
+
   // Now the fData is artificial
   fIsArtificial = true;
 }
@@ -343,21 +343,21 @@ void Experiment::PullData()
         if ( find(special_types.begin(), special_types.end(), testsys.name) != special_types.end() )
         {
             // This systematic is an unnamed/special type, add it to the map and the total systematics vector
-            fSetSysMap[i][l] = total_systematics.size(); 
+            fSetSysMap[i][l] = total_systematics.size();
             total_systematics.emplace_back(testsys);
         }
-        else 
+        else
         {
           // This is a named systematic, we need to cross-check against existing named systematics
           bool found_systematic = false;
           for ( size_t k=0; k < total_systematics.size(); k++ )
           {
             sysError& existing_systematic = total_systematics[k];
-            if (testsys.name == existing_systematic.name ) 
+            if (testsys.name == existing_systematic.name )
               {
                 // This already exists in total_systematics, it's not a new systematic
                 found_systematic = true;
-                fSetSysMap[i][l] = k; 
+                fSetSysMap[i][l] = k;
                 // Perform some consistency checks
                 if (testsys.type != existing_systematic.type || testsys.isRAND != existing_systematic.isRAND)
                   throw RangeError("Experiment::PullData","Systematic " + testsys.name + " definition not consistant between datasets");
@@ -365,22 +365,22 @@ void Experiment::PullData()
               }
           }
           // If the systematic doesn't already exist in the list, add it
-          if ( found_systematic == false ) 
+          if ( found_systematic == false )
           {
-            fSetSysMap[i][l] = total_systematics.size(); 
+            fSetSysMap[i][l] = total_systematics.size();
             total_systematics.emplace_back(testsys);
           }
         }
     }
   }
-  
+
   // Initialise data arrays
   fData   = new double[fNData];
   fStat   = new double[fNData];
   fT0Pred = new double[fNData];
   fNSys   = total_systematics.size();
   fSys    = new sysError*[fNData];
-  
+
   // Fill the experiment arrays with the values from its subsets
   int idat = 0;
   for (int s = 0; s < GetNSet(); s++)
@@ -393,7 +393,7 @@ void Experiment::PullData()
 
       // Loop over experimental systematics, find if there is a corresponding dataset systematic
       // and set it accordingly.
-      fSys[idat] = new sysError[fNSys];  
+      fSys[idat] = new sysError[fNSys];
       for (int l = 0; l < fNSys; l++)
       {
         fSys[idat][l].name   = total_systematics[l].name;
@@ -417,7 +417,7 @@ void Experiment::PullData()
       }
       idat++;
     }
-  
+
   return;
 }
 

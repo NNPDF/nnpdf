@@ -20,7 +20,7 @@ using NNPDF::FKHeader;
  * \param argv the filename containing the configuration
  */
 int main(int argc, char **argv)
-{  
+{
   if (argc < 3)
   {
      std::cout << "Usage: "<< argv[0]<<" [TargetFK] [FK table 1] ... [FK table N]"<<std::endl;
@@ -74,7 +74,7 @@ int main(int argc, char **argv)
   }
 
   mergeFK.Finalise();
-  mergeFK.Print(argv[1], true); 
-  
+  mergeFK.Print(argv[1], true);
+
   return 0;
 }

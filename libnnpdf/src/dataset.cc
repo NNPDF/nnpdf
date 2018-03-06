@@ -62,7 +62,7 @@ DataSet::DataSet(const DataSet& set, std::vector<int> const& mask):
  * Cleanup memory
  */
 DataSet::~DataSet()
-{   
+{
 }
 
 /**
@@ -83,10 +83,10 @@ void DataSet::GenCovMat() const
     {
       double sig    = 0.0;
       double signor = 0.0;
-      
+
       if (i == j)
         sig += fStat[i]*fStat[i]; // stat error
-      
+
       for (int l = 0; l < fNSys; l++)
         if (fSys[i][l].name.compare("SKIP")!=0)
           if (i == j || ( fSys[i][l].name.compare("UNCORR")!=0 && fSys[i][l].name.compare("THEORYUNCORR")!=0))
@@ -96,10 +96,10 @@ void DataSet::GenCovMat() const
               case MULT: signor += fSys[i][l].mult*fSys[j][l].mult; break; // multiplicative systematics
               case UNSET: throw RuntimeException("DataSet::GenCovMat", "UNSET systype encountered");
             }
-              
+
       fCovMat(i, j) = sig + signor*fT0Pred[i]*fT0Pred[j]*1e-4;
     }
-  
+
   // Compute sqrt of covmat
   CholeskyDecomposition(fCovMat, fSqrtCov);
 }
@@ -109,9 +109,9 @@ void DataSet::RescaleErrors(const double mult)
   for (int i = 0; i < fNData; i++)
   {
     fStat[i] *= mult;         // Rescale stat and sys to new data value
-    
+
     for (int l = 0; l < fNSys; l++)
-    {  
+    {
       fSys[i][l].add *=  mult;
       fSys[i][l].mult *= mult;
     }
@@ -178,11 +178,11 @@ void DataSet::MakeArtificial()
 {
   std::cout << "-- Generating replica data for " << fSetName << std::endl;
 
-  double *rand  = new double[fNSys];  
+  double *rand  = new double[fNSys];
   double *xnor  = new double[fNData];
   double *artdata = new double[fNData];
   sysType rST[2] = {ADD,MULT};
-  
+
   NNPDF::RandomGenerator* rng = NNPDF::RandomGenerator::GetRNG();
 
   // Generate random systematics
@@ -193,26 +193,26 @@ void DataSet::MakeArtificial()
       fSys[0][l].type = rST[rng->GetRandomUniform(2)];
     for (int i = 1; i < fNData; i++)
       fSys[i][l].type = fSys[0][l].type;
-  } 
+  }
 
   int genTries = 0; // Number of attempts at generation
   bool genRep = false;
-  while ( genTries < 1E6 ) 
+  while ( genTries < 1E6 )
   {
-    
+
     // Update the data
     for (int i = 0; i < fNData; i++)
     {
       const double xstat = rng->GetRandomGausDev(1.0)*fStat[i];   //Noise from statistical uncertainty
-      
+
       double xadd = 0;
       xnor[i] = 1.0;
-      
+
       for (int l = 0; l < fNSys; l++)
       {
         if (fSys[i][l].name.compare("THEORYCORR")==0) continue; // Skip theoretical uncertainties
         if (fSys[i][l].name.compare("THEORYUNCORR")==0) continue; // Skip theoretical uncertainties
-        if (fSys[i][l].name.compare("SKIP")==0) continue; // Skip uncertainties	
+        if (fSys[i][l].name.compare("SKIP")==0) continue; // Skip uncertainties
         if (fSys[i][l].name.compare("UNCORR")==0)           // Noise from uncorrelated systematics
         {
           switch (fSys[i][l].type)
@@ -235,13 +235,13 @@ void DataSet::MakeArtificial()
 
       // Generate the artificial data
       artdata[i] = xnor[i] * ( fData[i] + xadd + xstat );
-      
+
       // Only generates positive artificial data (except for closure tests)
       if ( artdata[i] < 0 and fProc[i].find("ASY") != std::string::npos )
         break;
 
     }
-    
+
     // Stop when all the datapoints are positive
     genRep = true;
     break;
@@ -253,12 +253,12 @@ void DataSet::MakeArtificial()
   // Update data in set
   UpdateData(artdata);
   fIsArtificial = true;
-  
+
   delete[] rand;
   delete[] xnor;
   delete[] artdata;
 
-  // Note DO NOT Regenerate covariance matrices  
+  // Note DO NOT Regenerate covariance matrices
 }
 
 /**
@@ -273,11 +273,11 @@ void DataSet::UpdateData(double *newdata)      // Update data only
 void DataSet::UpdateData(double *newdata, double* uncnorm)      // Update data only and rescale systematics by normalisation
 {
   UpdateData(newdata);
-  
+
   for (int i = 0; i < fNData; i++)
   {
     fStat[i] *= uncnorm[i];         // Rescale stat and sys to new data value
-    
+
     for (int l = 0; l < fNSys; l++)
       fSys[i][l].add *=  uncnorm[i];
   }
@@ -286,8 +286,8 @@ void DataSet::UpdateData(double *newdata, double* uncnorm)      // Update data o
 void DataSet::UpdateData(double *newdata, sysType *type)       // Update data and change systypes
 {
   UpdateData(newdata);
-  
+
   for (int l = 0; l < fNSys; l++)
     for (int i = 0; i < fNData; i++)
-      fSys[i][l].type = type[l]; 
+      fSys[i][l].type = type[l];
 }

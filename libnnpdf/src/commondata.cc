@@ -329,7 +329,7 @@ namespace NNPDF
       "HQP_YQ",
       "HQP_PTQ",
       "SIA"
-    }; 
+    };
 
     bool foundString = false;
     for (int i=0; i<nProc; i++)
@@ -370,7 +370,7 @@ namespace NNPDF
 
     if (nsys != fNSys)
       throw std::runtime_error("CommonData::ReadData: N_Uncertainty Mismatch.");
- 
+
     if (ndata != fNData)
       throw std::runtime_error("CommonData::ReadData: NData Mismatch.");
 

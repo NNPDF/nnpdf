@@ -33,7 +33,7 @@ namespace NNPDF
     }
 
    /**
-    * \class FKHeader 
+    * \class FKHeader
     * \brief Class for parsing the header of FK tables
     */
     class FKHeader
@@ -63,7 +63,7 @@ namespace NNPDF
 
         // ********************************* Tag Getters *********************************
 
-        bool HasTag( section sec, std::string const& key ) const; 
+        bool HasTag( section sec, std::string const& key ) const;
         std::string GetTag( section sec, std::string const& key) const;
         template<typename T> T GetTag( section sec, std::string const& key) const
         { return static_cast<T>(atof(GetTag(sec,key).c_str())); }
@@ -104,7 +104,7 @@ namespace NNPDF
     class FKTable
     {
       public:
-        FKTable(    std::istream& , 
+        FKTable(    std::istream& ,
                     std::vector<std::string> const& cFactors = std::vector<std::string>()
                 ); // Stream constructor
         FKTable(    std::string const& filename,
@@ -179,7 +179,7 @@ namespace NNPDF
         int   fRmr;
         int   fDSz;
 
-        // X-arrays        
+        // X-arrays
         double * fXgrid;
 
         // FK table

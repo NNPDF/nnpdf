@@ -22,7 +22,7 @@ conda install swig
 = INSTALL
 
 Set the --enable-pywrap flag for configure (in the top level linnpdf
-folder). 
+folder).
 
 ./configure --enable-pywrap
 

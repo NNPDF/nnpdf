@@ -29,17 +29,17 @@ namespace NNPDF
   public:
     PositivitySet(CommonData const&, FKTable const&, real const& lambda); //!< Constructor
     PositivitySet(const PositivitySet&);  //!< Copy constructor
-    virtual ~PositivitySet(); //!< Destructor.    
+    virtual ~PositivitySet(); //!< Destructor.
 
     void ComputeErf   (const PDFSet*, real*) const; //!< Compute error function for supplied PDF set
-    
+
     void ComputeNViolated( const PDFSet*, int* res) const; //!< Number of violated points
     void ComputeNUnacceptable(const PDFSet*, int* res) const; //!< Number of unacceptable points (less than bounds)
 
     void SetBounds(const PDFSet*); //!< Set bounds
 
     void GetPredictions(const PDFSet&, real **result, int* ndata, int* npdf);
-     
+
   private:
 
     PositivitySet(); // disable default constructor
@@ -48,7 +48,7 @@ namespace NNPDF
     void ComputePoints(const PDFSet*, real*) const; //!< Compute the positivity points
 
     const real        fLambda; //!< Lagrange Multiplier
-    
+
     std::vector<real> fBounds;
   };
 
