@@ -6,10 +6,10 @@ meta:
 default_theory:
    - theoryid: 52
 
-theories:
-   - theoryid: 52
-   - theoryid: 66
-   - theoryid: 67
+theoryids:
+   - 52
+   - 66
+   - 67
 
 pdf: NNPDF31_nlo_as_0118
 
