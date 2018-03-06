@@ -1532,7 +1532,7 @@ def plot_expcorrmat_heatmap(experiments_corrmat):
     df = experiments_corrmat
     matrix = df.as_matrix()
     fig, ax = plt.subplots()
-    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r)
+    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-0.8, vmax=0.8)
     cbar = fig.colorbar(matrixplot)
     ax.set_title('Experiment correlation matrix')
     ax.xaxis.set_ticks_position('bottom')
@@ -1546,7 +1546,7 @@ def plot_normthcovmat_heatmap(theory_normcovmat_3pt):
     df = theory_normcovmat_3pt
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
-    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, vmin=-1.5, vmax=1.5)
+    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, vmin=-1, vmax=1)
     cbar = fig.colorbar(matrixplot, label="% of data")
     ax.set_title('Theory covariance matrix')
     ax.xaxis.set_ticks_position('bottom')
@@ -1560,7 +1560,7 @@ def plot_thcorrmat_heatmap(theory_corrmat_3pt):
     df = theory_corrmat_3pt
     matrix = df.as_matrix()
     fig, ax = plt.subplots()
-    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r)
+    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
     cbar = fig.colorbar(matrixplot)
     ax.set_title('Theory correlation matrix')
     ax.xaxis.set_ticks_position('bottom')
