@@ -173,7 +173,7 @@ def experiments_index(experiments):
 
 def experiments_data(experiment_result_table):
     """Returns list of data values for the input experiments."""
-    data_central_values = experiment_result_table["data_central"].tolist()
+    data_central_values = experiment_result_table["data_central"]
     return data_central_values
 
 
