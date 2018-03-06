@@ -48,7 +48,7 @@ class PDFBasis;
  *  Container struct for Dataset level info - corresponds to each dataset line in config file
  */
 struct DataSetInfo
-{ 
+{
   const string tSetName;
   const string tSysOpt;
   const real tTrainingFraction;
@@ -75,7 +75,7 @@ struct PosSetInfo
 };
 
 class NNPDFSettings
-{ 
+{
 private:
   string fFileName;
   string fPDFName;
@@ -109,7 +109,7 @@ public:
 
   // Get methods
   YAML::Node Get(const string& item) const;
-  YAML::Node Get(const string& node, const string& item) const;  
+  YAML::Node Get(const string& node, const string& item) const;
   YAML::Node GetPlotting(const string& item) const;
   YAML::Node GetFile() const { return fConfig; }
   bool Exists(const string& item) const;
@@ -121,7 +121,7 @@ public:
   int GetNExp() const { return (int) fExpName.size(); }
   int GetNSet() const { return (int) fSetName.size(); }
   int GetNPos() const { return (int) fPosName.size(); }
-  int GetNFL()  const;  
+  int GetNFL()  const;
   string const& GetExpName(int i) const { return fExpName[i]; }
   string const& GetSetName(int i) const { return fSetName[i]; }
   string const& GetPosName(int i) const { return fPosName[i]; }
@@ -148,7 +148,7 @@ public:
   vector<string>  GetDataInfo(string const& setname, filterType useFiltered) const;
   vector<int>     GetDataMask(string const& setname, filterType useFiltered) const;
   DataSetInfo     const& GetSetInfo(string const& setname) const;
-  PosSetInfo      const& GetPosInfo(string const& posname) const;  
+  PosSetInfo      const& GetPosInfo(string const& posname) const;
 
   static minType        getFitMethod(string const& method);
   static paramType      getParamType(string const& method);

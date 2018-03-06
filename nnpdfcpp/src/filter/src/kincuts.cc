@@ -19,8 +19,8 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
    * trunk/nnpdfcpp/doc/cuts/NNPDF30
    *
    */
-  
-  
+
+
   /**
    * Cuts on small x (specific of NNPDF31sx combo)
    * */
@@ -29,25 +29,25 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
 
     // x,Q^2 are computed for all non-DIS processes
     // in a LO kinematic approximation
-    // 
+    //
     // common cut to all non-DIS experiments
     // x^(b0/c) Q^2 >= Lam^2
     // where Lam=88 MeV and b0 = 0.61.
-    // 
+    //
     // this corresponds to cut all non-DIS points
     // below a line in the x-Q^2 plane
-    // 
+    //
     // The value of c tunes the slope
-    // of the line and can be modified to make 
+    // of the line and can be modified to make
     // the cut tight or loose
     // c = 0.5 corresponds to a tight cut
-      
+
     const real b0 = 0.61;
     const real c = 1./2.;
-    const real exponent = 1./(b0*c); 
+    const real exponent = 1./(b0*c);
     const real Lam2 = pow(0.088,2);
-    
-    
+
+
     // For DY-like proces two values of x are computed
     if (set.GetProc(idat).compare(0,3, string("DYP")) == 0 ||
         set.GetProc(idat).compare(0,7, string("EWJ_RAP")) == 0 ||
@@ -75,7 +75,7 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
       const real Q2      = set.GetKinematics(idat,1);
       const real sqrts   = set.GetKinematics(idat,2);
       const real x = sqrt(Q2)/sqrts;
-      
+
       // Cut
       if (pow(x,exponent)*Q2 <= Lam2)  return false;
      }
@@ -98,18 +98,18 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
      //  ttbar production (pT distribution) cut, single top tagged
      if (set.GetProc(idat).compare(0,7,string("HQP_PTQ")) == 0 )
      {
-       
+
        const real tmass  = 173.3; //top mass should be taken from fit settings
        const real qmass2 = pow(tmass,2);
-       
+
        const real pT     = set.GetKinematics(idat,0);
        const real Q      =  sqrt(qmass2+pT*pT)+pT;
        const real sqrts  = set.GetKinematics(idat,2);
-  
+
 
        const real x  = Q/sqrts;
        const real Q2 = pow(Q,2);
-      
+
        // Cut
        if (pow(x,exponent)*Q2 <= Lam2)  return false;
      }
@@ -118,16 +118,16 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
      if (set.GetProc(idat).compare(0,8,string("HQP_PTQQ")) == 0 )
      {
 
-       const real tmass  = 173.3; 
+       const real tmass  = 173.3;
        const real qqmass2 = pow(2*tmass,2);
-       
+
        const real pT     = set.GetKinematics(idat,0);
        const real Q      =  sqrt(qqmass2+pT*pT)+pT;
        const real sqrts  = set.GetKinematics(idat,2);
-     
+
        const real x  = Q/sqrts;
        const real Q2 = pow(Q,2);
-      
+
        // Cut
        if (pow(x,exponent)*Q2 <= Lam2)  return false;
      }
@@ -136,25 +136,25 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
      if (set.GetProc(idat).compare(0,6,string("EWK_PT")) == 0 )
      {
 
-       const real Zmass  = 91.1876; 
+       const real Zmass  = 91.1876;
        const real Zmass2 = pow(2*Zmass,2);
-    
+
        const real pT     = set.GetKinematics(idat,0);
        const real Q      = sqrt(Zmass2+pT*pT)+pT;
        const real mu     = sqrt(Zmass2+pT*pT); //factorization scale used
        const real sqrts  = set.GetKinematics(idat,2);
-     
+
        const real x  = Q/sqrts;
        const real Q2 = pow(mu,2);
 
        // Cut
        if (pow(x,exponent)*Q2 <= Lam2)  return false;
      }
-    
+
    }
 
-   
-  /** 
+
+  /**
     * Cuts only available in the NNPDF30 combo.
     */
   if (settings.Get("datacuts","combocuts").as<string>().compare(string("NNPDF30")) == 0)
@@ -309,10 +309,10 @@ bool passKinCuts(NNPDFSettings const& settings, DataSet const& set, int const& i
         if (set.GetSetName().compare(string("CMSDY2D12")) == 0)
           {
 
-	    if (stoi(settings.GetTheory(APFEL::kPTO)) == 0 || stoi(settings.GetTheory(APFEL::kPTO)) == 1)		
+	    if (stoi(settings.GetTheory(APFEL::kPTO)) == 0 || stoi(settings.GetTheory(APFEL::kPTO)) == 1)
               if (pTmv > maxCMSDY2Dminv || pTmv < minCMSDY2Dminv || y > maxCMSDY2Dy)
                  return false;
- 
+
             if (stoi(settings.GetTheory(APFEL::kPTO)) == 2)
                if (pTmv > maxCMSDY2Dminv || y > maxCMSDY2Dy)
 		return false;

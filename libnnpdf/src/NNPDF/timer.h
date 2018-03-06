@@ -46,7 +46,7 @@ namespace NNPDF
     static void printTime(double duration){
       printf("%5.6f seconds\n", duration);
     }
-    
+
   };
 
 }

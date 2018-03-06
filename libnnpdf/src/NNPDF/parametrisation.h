@@ -27,7 +27,7 @@ namespace NNPDF
     Parametrisation(std::string name, int nParameters);
     Parametrisation(Parametrisation const& );
     virtual ~Parametrisation();
-    
+
     virtual void Compute(real*,real*) const = 0;
     virtual Parametrisation* Duplicate() = 0;
     void CopyPars(Parametrisation const* );
@@ -35,14 +35,14 @@ namespace NNPDF
     void ReadPars(std::ifstream&);
     void WritePars(std::ofstream&);
     void SetPars(std::vector<real> const& param);
-    
+
     real* GetParameters() {return fParameters;}
     int const& GetNParameters() const {return fNParameters;}
-    
+
     std::string const& GetParamName() const {return fParamName;};
-    
+
     virtual void InitParameters() = 0;
-    
+
   protected:
     const int   fNParameters;   //!< Total number of parameters
     real* const fParameters;    //!< Parameters
@@ -61,24 +61,24 @@ namespace NNPDF
     MultiLayerPerceptron(std::vector<int> const& arch); //!< Network constructor
     MultiLayerPerceptron(MultiLayerPerceptron const&);  //!< Network copy constructor
     ~MultiLayerPerceptron();                            //!< Network destructor
-    
+
     void InitParameters();            //!< Initialize (or reinitialize) parameters
     void Compute(real*,real*) const;  //!< Returns a fArch[fNLayers-1] long array of output for a given input array
     Parametrisation* Duplicate();     //!< Returns a parametrisation based on an MLP
 
     void SetActivationFunction(actfunction const& f) { fActFunction = f; } //!< set the activation function
-   
+
     // Nodal GA
     const int*  GetArch() const {return fArch;}
     //!< Returns the number of parameters that belong to a specific node (including biases).
     int   GetNumNodeParams(int const& layer) const;
     //!< Returns a pointer to the fParameters coordinate representing the parameters for a specific node
-    real*       GetNodeParams   (int const& layer, int const& node);  
-    
+    real*       GetNodeParams   (int const& layer, int const& node);
+
   protected:
     const int fNLayers;   //!< Number of layers
     int* fArch;           //!< Network architecture
-    
+
     real** fWeightMatrix;         //!< Weights/Thresholds
     mutable real** fOutputMatrix; //!< Neuron Activation
 
@@ -96,16 +96,16 @@ namespace NNPDF
   public:
     SingleLayerPerceptron(std::vector<int> const& arch, unsigned int extra_pars = 0);
     virtual Parametrisation *Duplicate();
-    virtual void Compute(real*,real*) const;  
-    virtual void InitParameters();  
+    virtual void Compute(real*,real*) const;
+    virtual void InitParameters();
   protected:
     // Number of hidden nodes
-    const int fNHidden; 
+    const int fNHidden;
   };
 
   /*!
    * \class SingleLayerPerceptronPreproc
-   * \brief A Single-hidden-layer perceptron with preprocessing 
+   * \brief A Single-hidden-layer perceptron with preprocessing
    * Preprocessing is performed to the output of the network as
    *        output*x^{|alpha|}(1-x)^{|beta|}
    * where alpha and beta are the last and second-to-last parameters
@@ -115,10 +115,10 @@ namespace NNPDF
   {
   public:
     SingleLayerPerceptronPreproc(std::vector<int> const& arch):
-    SingleLayerPerceptron(arch, 2){};    
+    SingleLayerPerceptron(arch, 2){};
     virtual Parametrisation *Duplicate();
-    virtual void InitParameters();  
-    void Compute(real*,real*) const;  
+    virtual void InitParameters();
+    void Compute(real*,real*) const;
    protected:
     // This attribute scales the parameters corresponding to preprocessing
     // exponents in order to balance the training between them and NN params.

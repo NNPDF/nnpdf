@@ -32,7 +32,7 @@
 
 namespace NNPDF
 {
-  /*! 
+  /*!
    *  \brief Consted information on a CommonData file - precursor to full CommonData class.
    *
    *  This struct is used to communicate the basic required information to build a CommonData instance.
@@ -42,7 +42,7 @@ namespace NNPDF
    */
   struct dataInfo
   {
-    /*! 
+    /*!
      *  dataInfo constructor (required by SWIG)
      */
     dataInfo(int nD, int nS, std::string sN, std::string tF, std::string sF):
@@ -58,11 +58,11 @@ namespace NNPDF
 
     const std::string SetName;      //!< Prototype CommonData set name
 
-    const std::string targetFile;   //!< Target filename for prototype CommonData 
+    const std::string targetFile;   //!< Target filename for prototype CommonData
     const std::string systypeFile;  //!< Target filename for prototype SYSTYPE
   };
 
-  /*! 
+  /*!
    *  \brief Minimal Consted information on CommonData - precursor to full CommonData class.
    *
    *  This struct is used to communicate the basic required information to build a CommonData instance,
@@ -71,7 +71,7 @@ namespace NNPDF
    */
   struct dataInfoRaw
   {
-    /*! 
+    /*!
      *  dataInfoRaw constructor (required by SWIG)
      */
     dataInfoRaw(int nD, int nS, std::string sN, std::string pT):
@@ -88,13 +88,13 @@ namespace NNPDF
   };
 
   /*! Specifies which type of systematic error */
-  enum sysType {  
+  enum sysType {
                   ADD,  //!< Additive systematic
                   MULT, //!< Multiplicative systematic
                   UNSET //!< Unset systematic
                };
 
-   /*! 
+   /*!
    *  \brief Systematics struct - contains information on a single source of systematic error
    *
    *  This struct is used to detail how individual sources of systematic error should be treated,
@@ -117,7 +117,7 @@ namespace NNPDF
     name("CORR"),
     isRAND(false)
     {};
-    
+
     // Copy constructor
     sysError(sysError const& o):
     add(o.add),
@@ -128,21 +128,21 @@ namespace NNPDF
     {};
   };
 
-  /*! 
+  /*!
    *  \brief Generate a dataInfo struct from file
    *
    *  This function returns a new dataInfo struct from the provided filenames.
    *  The return value is used to generate a full CommonData instance.
    */
   dataInfo genInfoStruct(std::string const& targetfile, std::string const& sysfile);
-  
-  /*! 
+
+  /*!
    *  \brief Extract systematics suffix number
    *
    *  This function returns the systematic ID present in the filename provided.
    */
   std::string extractSysID(std::string const& sysfile);
-    
+
   /**
    *  \class CommonData
    *  \brief Class to handle NNPDF CommonData file format
@@ -155,7 +155,7 @@ namespace NNPDF
     static void VerifyProc(std::string const& proc); //!< Verify process types
 
   protected:
-    CommonData(dataInfo const&);         //!< Constructor from file 
+    CommonData(dataInfo const&);         //!< Constructor from file
     CommonData(dataInfoRaw const&);      //!< Constructor for empty CommonData
 
     std::string fSetName; //!< Dataset name
@@ -174,7 +174,7 @@ namespace NNPDF
     double *fStat;      //!< Statistical error array
     sysError **fSys;    //!< Systematic errors
 
-    /*! 
+    /*!
      *  Read data from provided CommonData filenames
      */
     void ReadData(std::string const& targetfile, std::string const& sysfile);

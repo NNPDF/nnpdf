@@ -73,7 +73,7 @@ void PositivitySet::SetBounds(const NNPDF::PDFSet* pdf)
   fBounds.clear();
   for (int i = 0; i < Ndat; i++)
     fBounds.push_back(-0.25*fabs(tmp[i]));
-  
+
   delete[] tmp;
 }
 
@@ -84,14 +84,14 @@ void PositivitySet::SetBounds(const NNPDF::PDFSet* pdf)
  * if the theoretical prediction for such observable is < 0 we penalize the error function
  */
 void PositivitySet::ComputeErf(const NNPDF::PDFSet* pdf, real* res) const
-{  
+{
   const int Npdf = pdf->GetMembers();
   const int Ndat = CommonData::GetNData();
-  
+
   // Compute positivity points
   real* tmp = new real[Npdf*Ndat];
   ComputePoints(pdf,tmp);
-  
+
   // Contribution to Error Function
   for (int i = 0; i< Ndat; i++)
     for (int j = 0; j< Npdf; j++)
@@ -110,7 +110,7 @@ void PositivitySet::ComputePoints(const PDFSet* pdf, real* res) const
 {
   for (int i=0; i<CommonData::GetNData()*pdf->GetMembers(); i++)
     res[i] = 0;
-  
+
   ThPredictions::Convolute(pdf,this,res);
 }
 
@@ -130,10 +130,10 @@ void PositivitySet::GetPredictions(const PDFSet &pdf, real **result, int *ndata,
  * @param res The total number of points which violates the positivity observable per PDF member
  */
 void PositivitySet::ComputeNViolated( const PDFSet* pdf, int* res) const
-{  
+{
   const int Npdf = pdf->GetMembers();
   const int Ndat = CommonData::GetNData();
-  
+
   // Compute positivity points
   real* tmp = new real[Npdf*Ndat];
   ComputePoints(pdf,tmp);
@@ -159,10 +159,10 @@ void PositivitySet::ComputeNViolated( const PDFSet* pdf, int* res) const
  * @param res The total number of points which are unacceptable per PDF member
  */
 void PositivitySet::ComputeNUnacceptable( const PDFSet* pdf, int* res) const
-{  
+{
   const int Npdf = pdf->GetMembers();
   const int Ndat = CommonData::GetNData();
-  
+
   // Compute positivity points
   real* tmp = new real[Npdf*Ndat];
   ComputePoints(pdf,tmp);

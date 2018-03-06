@@ -66,7 +66,7 @@ private:
   int    fNFas;
   std::vector<double> fX;
   std::vector<double> mth;    //!< HQ Masses
-  std::vector<double> mthref; //!< HQ Mass Reference scales 
+  std::vector<double> mthref; //!< HQ Mass Reference scales
   std::vector<std::vector<double> > fQ2nodes;
 
   static APFELSingleton* apfelInstance;

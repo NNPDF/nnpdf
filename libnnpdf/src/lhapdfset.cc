@@ -90,7 +90,7 @@ void LHAPDFSet::GetPDF(real const& x, real const& Q2, int const& n, real* pdf)  
 {
   // Skip replica 0 for MC like ensembles
   const int iMem = (fEtype == erType::ER_MC || fEtype == erType::ER_MC68) ? n+1:n;
-  
+
   if (!fMemberPDFs[iMem]->inPhysicalRangeXQ2(x, Q2))
     throw RangeError("LHAPDFSet::GetPDF","kinematics out of set range: x="+ std::to_string(x) +" Q2="+ std::to_string(Q2));
 
@@ -126,7 +126,7 @@ real LHAPDFSet::xfxQ(real const& x, real const& Q, int const& n, int const& fl) 
 {
   // Skip replica 0 for MC like ensembles
   const int iMem = (fEtype == erType::ER_MC || fEtype == erType::ER_MC68) ? n+1:n;
-  
+
   if (!fMemberPDFs[iMem]->inPhysicalRangeXQ(x, Q))
     throw RangeError("LHAPDFSet::GetPDF", "kinematics out of set range: x=" + std::to_string(x) + " Q=" + std::to_string(Q));
 

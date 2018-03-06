@@ -1408,7 +1408,7 @@ void MultiPlot::AddPDF2EVLNComparison(LHAPDFSet *pdfset,LHAPDFSet *pdf68cl, int 
 
       dne->SetPoint(i, x, xpdf - dnerr);
       dnelog->SetPoint(i, xlog, xpdflog - dnerrlog);
-    }  
+    }
 
   // Legend
   leg->AddEntry(g,pdfset->GetSetName().c_str(),"fl");
@@ -2128,10 +2128,10 @@ void MultiPlot::Save(string suffix)
 double mPDF(double x, void *p)
 {
   struct param * par = (struct param *) p;
-  
+
   double d = 1.0;
   if (par->div) d = x;
-  
+
   return GetGpdf(par->pdf, x, sqrt(2.0), par->n, par->f)/d;
 }
 
@@ -2142,17 +2142,17 @@ SumRules::SumRules(LHAPDFSet *o, gpdf g, bool divx)
     //size_t neval;
     gsl_function F;
     F.function = &mPDF;
-    
+
     gsl_error_handler_t * old_handler=gsl_set_error_handler_off();
-    
+
     gsl_integration_workspace * w
     = gsl_integration_workspace_alloc (10000);
-    
+
     const double relerr = 1e-5;
     double epsrel = relerr;
-    
+
     double *cv = new double[o->GetMembers()];
-    
+
     if (g == frstrange)
     {
       double *n = new double[o->GetMembers()];
@@ -2163,10 +2163,10 @@ SumRules::SumRules(LHAPDFSet *o, gpdf g, bool divx)
         for (int i = 0; i < o->GetMembers(); i++)
         {
           epsrel = relerr;
-          
+
           struct param u  = { o, pdf[t], i, false};
           F.params = &u;
-          
+
           //int status = 1;
           //while (status)
           {
@@ -2176,7 +2176,7 @@ SumRules::SumRules(LHAPDFSet *o, gpdf g, bool divx)
             epsrel *=10;
             //if (status)
             //cout << " - Increased tolerance = " << relerr << "\t" << r << "\t" << e << endl;
-            
+
             if (t == 0)
               n[i] = r;
             else
@@ -2184,7 +2184,7 @@ SumRules::SumRules(LHAPDFSet *o, gpdf g, bool divx)
           }
         }
       }
-      
+
       for (int i = 0; i < o->GetMembers(); i++)
         cv[i] = n[i]/d[i];
     }
@@ -2193,10 +2193,10 @@ SumRules::SumRules(LHAPDFSet *o, gpdf g, bool divx)
       for (int i = 0; i < o->GetMembers(); i++)
       {
         epsrel = relerr;
-        
+
         struct param u  = { o, g, i, divx};
         F.params = &u;
-        
+
         //int status = 1;
         //while (status)
         {
@@ -2208,7 +2208,7 @@ SumRules::SumRules(LHAPDFSet *o, gpdf g, bool divx)
         }
       }
     }
-    
+
     real *cvr = new real[o->GetMembers()];
     for (int i = 0; i < o->GetMembers(); i++) cvr[i] = (real) cv[i];
 
@@ -2217,10 +2217,10 @@ SumRules::SumRules(LHAPDFSet *o, gpdf g, bool divx)
 
     delete[] cv;
     delete[] cvr;
-    
+
     gsl_integration_workspace_free (w);
     gsl_set_error_handler(old_handler);
-    
+
     cout << setprecision(8) << scientific << "Final integral: " << result << " +/- " << error << endl;
   }
 

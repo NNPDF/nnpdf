@@ -4,26 +4,26 @@ find_package(PythonLibs   3.6 REQUIRED)
 
 execute_process(
   COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
-    import numpy as np 
+    import numpy as np
     print(np.get_include())"
     OUTPUT_VARIABLE NUMPY_INCLUDE
   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 execute_process(
   COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
-    from distutils.sysconfig import get_python_lib; 
+    from distutils.sysconfig import get_python_lib;
     print(get_python_lib())"
-    OUTPUT_VARIABLE PYTHON_SITE_PACKAGES 
+    OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 
 execute_process(
   COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
-    import sysconfig; 
+    import sysconfig;
     lcom = sysconfig.get_config_var(\"LDSHARED\");
     cc, _, flags = lcom.partition(\" \");
     print(flags)"
-    OUTPUT_VARIABLE PYTHON_EXTENSION_LINKFLAGS 
+    OUTPUT_VARIABLE PYTHON_EXTENSION_LINKFLAGS
   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 include(${SWIG_USE_FILE})

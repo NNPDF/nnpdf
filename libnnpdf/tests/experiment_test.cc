@@ -38,7 +38,7 @@ TEST_CASE( "Experiment constructor", "[Experiment]" ) {
     {
       REQUIRE( exp.GetData()[i] == exp2.GetData()[i]);
       for (int j = 0; j < exp.GetNData(); j++)
-	{	  
+	{
 	  REQUIRE( exp.GetCovMat()(i,j) == exp2.GetCovMat()(i,j) );
 	  REQUIRE( exp.GetSqrtCov()(i,j) == exp2.GetSqrtCov()(i,j) );
 	}
@@ -51,9 +51,9 @@ TEST_CASE( "Experiment constructor", "[Experiment]" ) {
     {
       REQUIRE( exp.GetData()[i] == exp3.GetData()[i]);
       for (int j = 0; j < exp.GetNData(); j++)
-	{	  
+	{
 	  REQUIRE( exp.GetCovMat()(i,j) == exp3.GetCovMat()(i,j) );
-	  REQUIRE( exp.GetSqrtCov()(i,j) == exp3.GetSqrtCov()(i,j) );	  
+	  REQUIRE( exp.GetSqrtCov()(i,j) == exp3.GetSqrtCov()(i,j) );
 	}
     }
 

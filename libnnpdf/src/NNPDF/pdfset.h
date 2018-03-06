@@ -38,12 +38,12 @@ namespace NNPDF
         enum {TBAR,BBAR,CBAR,SBAR,UBAR,DBAR,GLUON,D,U,S,C,B,T,PHT};
         // NNPDF-style EVLN basis
         enum evlnBasis {  EVLN_GAM, EVLN_SNG, EVLN_GLU, EVLN_VAL, EVLN_V3,
-                          EVLN_V8, EVLN_V15, EVLN_V24, EVLN_V35,  EVLN_T3, 
+                          EVLN_V8, EVLN_V15, EVLN_V24, EVLN_V35,  EVLN_T3,
                           EVLN_T8, EVLN_T15, EVLN_T24, EVLN_T35 };
 
       protected:
         PDFSet(std::string const&, int const& fMembers, erType const& etype ); //!< Constructor
-      
+
         const std::string fSetName;   //!< Name of the PDF Set
 
         int fMembers;           //!< Number of members in the PDF set
@@ -66,10 +66,10 @@ namespace NNPDF
 
         enum intType {  XFX = true,  FX = false  }; // Integration type helper
         // Integrate the PDF
-        real IntegratePDF(  int const& mem, int const& fl, real const& Q2, 
-                            PDFSet::intType xfx, bool& gslerror, 
+        real IntegratePDF(  int const& mem, int const& fl, real const& Q2,
+                            PDFSet::intType xfx, bool& gslerror,
                             gsl_integration_workspace *,
-                            real xmin = 0.0,real xmax = 1.0) const; 
+                            real xmin = 0.0,real xmax = 1.0) const;
 
         static std::string errString(erType const& type)
         {

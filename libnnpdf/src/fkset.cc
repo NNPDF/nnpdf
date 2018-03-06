@@ -30,7 +30,7 @@ namespace NNPDF
   {
     for (int i=0; i<Nvals; i++)
       out[i] = obs[0][i];
-    
+
     return;
   }
 
@@ -38,7 +38,7 @@ namespace NNPDF
   {
     for (int i=0; i<Nvals; i++)
       out[i] = obs[0][i] + obs[1][i];
-    
+
     return;
   }
 
@@ -46,10 +46,10 @@ namespace NNPDF
   {
     if (obs.size()!=2)
       throw LengthError("OpRatio","number of FK grids is incorrect");
-    
+
     for (int i=0; i<Nvals; i++)
       out[i] = obs[0][i]/obs[1][i];
-    
+
     return;
   }
 
@@ -57,10 +57,10 @@ namespace NNPDF
   {
     if (obs.size()!=2)
       throw LengthError("OpAsy","number of FK grids is incorrect");
-    
+
     for (int i=0; i<Nvals; i++)
       out[i] = (obs[0][i]-obs[1][i])/(obs[0][i]+obs[1][i]);
-    
+
     return;
   }
 
@@ -73,7 +73,7 @@ namespace NNPDF
 
     for (int i=0; i<Nvals; i++)
       out[i] = (obs[0][i]+obs[1][i])/(obs[2][i]+obs[3][i]);
-    
+
     return;
   }
 

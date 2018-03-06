@@ -231,8 +231,8 @@ int main(int argc, char **argv)
           exit(-1);
         }
       if (argc == 4)
-	noise_status = atoi(argv[3]);	
-	
+	noise_status = atoi(argv[3]);
+
       cout << "Add LUX noise " << noise_status << endl;
     }
   else

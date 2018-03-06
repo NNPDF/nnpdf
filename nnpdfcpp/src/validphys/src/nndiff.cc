@@ -69,7 +69,7 @@ NNdiff::NNdiff(NNPDFSettings const& set, std::string const& path,
           for (int pr = 0; pr < fnparam; pr++)
             {
               getline(g, tmp);
-              fp[n][fl][pr] = stod(tmp);	      
+              fp[n][fl][pr] = stod(tmp);
             }
         }
 

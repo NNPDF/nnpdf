@@ -67,7 +67,7 @@ namespace NNPDF
         static void Convolute(const PDFSet*,const FKTable*,real*);
         static void Convolute(const PDFSet*,const FKSet*,real*);
         static void Convolute(const PDFSet*,const PDFSet*,const FKTable*,real*);
-            
+
         // Get Methods
         real* GetObs() const {return fObs;}; //!< Return Obs array
         real GetObs(int const& idat, int const& imem) const {return fObs[idat*fNpdf + imem];};

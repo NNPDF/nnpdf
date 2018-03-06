@@ -23,8 +23,8 @@ using std::flush;
  * \param argv the filename containing the configuration
  */
 int main(int argc, char **argv)
-{  
-  
+{
+
   // Read configuration filename from arguments
   string folder, folderref, plottingfile = get_config_path() + "plotting.yml";
   if (argc > 2)
@@ -34,11 +34,11 @@ int main(int argc, char **argv)
       if (argc == 4) plottingfile.assign(argv[3]);
 
       if (folder == "--help" || folderref == "--help")
-	{ 
+	{
 	  cout << Colour::FG_RED << "\nusage: validphys [configuration folder] [configuration reference folder] [optional plotting filename]\n" << endl;
 	  cout << "plotting.ini is the default configuration file" << endl;
 	  exit(-1);
-	}      
+	}
     }
   else
     {
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
   for (int i = 0; i < settings.GetNExp(); i++)
     {
       res1.push_back(new ExperimentResult(Pdf[CUR], exps[i]));
-      rest0.push_back(new ExperimentResult(Pdf[CUR], expst0[i]));      
+      rest0.push_back(new ExperimentResult(Pdf[CUR], expst0[i]));
       cout << "[" << exps[i]->GetExpName() << "]" << flush;
       printchi2(res1[i],exps[i]);
     }
@@ -170,7 +170,7 @@ int main(int argc, char **argv)
 
   plotreport->AddFitProperties(REF,Pdf[REF],res2);
   plotreport->AddPDF4Comparison(REF,Pdf[REF],Pdf68cl[REF]);
-  
+
   // Requires both PDFs Fit Properties
   plotreport->AddPreprocPlots(CUR,Pdf[CUR]);
   plotreport->AddPreprocPlots(REF,Pdf[REF]);
@@ -185,7 +185,7 @@ int main(int argc, char **argv)
   plotreport->AddChi2HistoComparison(res1,res2);
 
   if (!settings.Get("closuretest","fakedata").as<bool>())
-    { 
+    {
       // CTEQ reference
       Pdf.push_back(new LHAPDFSet(settings.GetPlotting("pdfcteq").as<string>(), PDFSet::erType::ER_EIG90));
       cout << "\n- Building ThPredictions for "
@@ -213,7 +213,7 @@ int main(int argc, char **argv)
       printchi2tot(res4);
 
       plotreport->AddPDF4Comparison(MSTW,Pdf[MSTW]);
-      
+
       // Generate arc lengths without MSTW and CTEQ
       if (settings.GetPlotting("plotarclengths").as<bool>()) plotreport->PlotArcLenght(Pdf);
     }

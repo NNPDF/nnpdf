@@ -44,7 +44,7 @@ namespace NNPDF
     double GetRandomUniformPos();
     double GetRandomGausDev(const double);
 
-    template<typename T> 
+    template<typename T>
     void ShuffleVector( std::vector<T>& vec )
     {return gsl_ran_shuffle (fR, &vec[0], vec.size(), sizeof(T));}
 

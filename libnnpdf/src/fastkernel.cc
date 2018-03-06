@@ -64,7 +64,7 @@ namespace NNPDF
   fGridInfo(ref.fGridInfo),
   fTheoryInfo(ref.fTheoryInfo)
   {
- 
+
   }
 
   FKHeader::~FKHeader()
@@ -72,7 +72,7 @@ namespace NNPDF
 
   }
 
-  void FKHeader::Read(std::istream& is) 
+  void FKHeader::Read(std::istream& is)
   {
     if (!is.good())
         throw FileError("FKHeader::FKHeader","cannot open FK grid file ");
@@ -128,7 +128,7 @@ namespace NNPDF
 
     out << SectionHeader("TheoryInfo", THEORYINFO)<<std::endl;
     PrintKeyValue(out, THEORYINFO);
-  
+
     out << SectionHeader("xGrid", BLOB)<<std::endl;
     PrintBlob(out, "xGrid");
 
@@ -162,10 +162,10 @@ namespace NNPDF
   }
 
   void FKHeader::AddTag( section sec, std::string const& key, std::string const& value)
-  { 
+  {
     keyMap *tMap = GetMap(sec);
     keyMap::const_iterator iMap = (*tMap).find(key);
-      
+
     if (iMap != (*tMap).end())
       throw FileError("FKHeader::AddTag","key clash: " + key);
 
@@ -185,10 +185,10 @@ namespace NNPDF
   }
 
   std::string FKHeader::GetTag( section sec, std::string const& key) const
-  { 
+  {
       const keyMap *tMap = GetMap(sec);
       keyMap::const_iterator iMap = (*tMap).find(key);
-      
+
       if (iMap != (*tMap).end())
           return (*iMap).second;
       else
@@ -371,7 +371,7 @@ namespace NNPDF
       bool maxMap[nFL]; // Maximal size flavourmap
       for (int i=0; i<nFL; i++)
         fmBlob >> maxMap[i];
-     
+
       // Build FLMap
       int index = 0;
       for (int i=0; i<nFL; i++)
@@ -404,10 +404,10 @@ namespace NNPDF
     // Sanity checks
     if ( fNData <= 0 )
       throw RangeError("FKTable::FKTable","Number of datapoints is set to: " + std::to_string(fNData) );
-    
+
     if ( fNx <= 0 )
       throw RangeError("FKTable::FKTable","Number of x-points is set to: " + std::to_string(fNx) );
-    
+
     if ( fNonZero <= 0 )
       throw RangeError("FKTable::FKTable","Number of nonzero flavours is set to: " + std::to_string(fNonZero) );
 
@@ -421,7 +421,7 @@ namespace NNPDF
       fSigma[i]=0;
 
     // Read Cfactors
-    for (int i = 0; i < fNData; i++) 
+    for (int i = 0; i < fNData; i++)
     {
         fcFactors[i] = 1.0;
         fcUncerts[i] = 0.0;
@@ -439,7 +439,7 @@ namespace NNPDF
         const int d = datasplit[0]; // datapoint
         const int a = datasplit[1]; // x1 index
         const int b = datasplit[2]; // x2 index
-              
+
         for (int j=0; j<fNonZero; j++)
           {
             const int targetFlIndex = 14*fFlmap[2*j] + fFlmap[2*j+1]+3;
@@ -451,15 +451,15 @@ namespace NNPDF
       {
         std::vector<real> datasplit;
         rsplit(datasplit,line);
-        
+
         const int d = datasplit[0];
         const int a = datasplit[1];
-        
+
         for (int j=0; j<fNonZero; j++)
           fSigma[ d*fDSz+j*fNx+a ] = fcFactors[d]*datasplit[fFlmap[j]+2];
 
       }
-    }  
+    }
   }
 
 
@@ -489,7 +489,7 @@ namespace NNPDF
      // Copy X grid
     for (int i = 0; i < fNx; i++)
       fXgrid[i] = set.fXgrid[i];
-      
+
     // Copy flavour map
     if (IsHadronic()) // Hadronic
     {
@@ -504,7 +504,7 @@ namespace NNPDF
       for (int fl = 0; fl < fNonZero; fl++)
         fFlmap[fl] = set.fFlmap[fl];
     }
-    
+
     // Copy reduced FK table
     for (int i = 0; i < fNData; i++)
       {
@@ -544,7 +544,7 @@ namespace NNPDF
     // Copy X grid
     for (int i = 0; i < fNx; i++)
       fXgrid[i] = set.fXgrid[i];
-      
+
     // Copy flavour map
     if (IsHadronic()) // Hadronic
     {
@@ -558,7 +558,7 @@ namespace NNPDF
       for (int fl = 0; fl < fNonZero; fl++)
         fFlmap[fl] = set.fFlmap[fl];
     }
-    
+
     // Copy reduced FK table
     for (int i = 0; i < fNData; i++)
       {
@@ -613,7 +613,7 @@ namespace NNPDF
     }
 
     // Write FastKernel Table
-    if (fHadronic) 
+    if (fHadronic)
     {
       for (int d=0; d<fNData; d++)
         for(int a=0; a<fNx; a++ )
@@ -639,7 +639,7 @@ namespace NNPDF
                 if (iSigma != -1) if (fSigma[iSigma] != 0) isNonZero = true;
               }
 
-            if (isNonZero) 
+            if (isNonZero)
               os << d << "\t" << a <<"\t" << b <<"\t" <<  outputline.str() <<std::endl;
           }
     } else { // DIS
@@ -667,7 +667,7 @@ namespace NNPDF
             if (isNonZero)
               os << d << "\t" << a <<"\t" << outputline.str() <<std::endl;
           }
-    }      
+    }
 
     // Restore current map
     if (!optmap)
@@ -675,8 +675,8 @@ namespace NNPDF
       fFKHeader.RemTag(fFKHeader.BLOB, "FlavourMap");
       fFKHeader.AddTag(fFKHeader.BLOB, "FlavourMap", cflmap);
     }
-  
-    return;    
+
+    return;
   }
 
   //__________________________________________________________________
@@ -695,7 +695,7 @@ namespace NNPDF
         f.close();
       }
   }
-  
+
   void FKTable::ReadCFactors(std::string const& cfilename)
   {
     std::fstream g;
@@ -849,7 +849,7 @@ namespace NNPDF
           if (found) outmap << 1 <<" ";
           else outmap << 0 <<" ";
         }
-        
+
         outmap << std::endl;
       }
 

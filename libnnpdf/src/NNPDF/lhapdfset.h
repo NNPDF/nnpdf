@@ -29,10 +29,10 @@ namespace NNPDF
 
     //!< Get PDF array in evolution basis
     virtual void GetPDF(real const& x, real const& Q2, int const& n, real* pdf) const;
-    
+
     //!< Check if flavor exists
     bool hasFlavor(int pdgid) const;
-    
+
     //!< Return single flavor
     real xfxQ(real const& x, real const& Q, int const& n, int const& fl) const;
 

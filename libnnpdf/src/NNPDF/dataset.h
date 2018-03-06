@@ -28,7 +28,7 @@ namespace NNPDF
    */
   class DataSet : public CommonData, public FKSet
   {
-   private:    
+   private:
     bool fIsArtificial; //!< Flag to determine if data is artifical
     bool fIsT0;         //!< Flag to determine if covmat is T0
 
@@ -36,7 +36,7 @@ namespace NNPDF
     std::vector<double> fT0Pred; //!< The t0 predictions - defaults to data in case of no t0-std::vector
     mutable matrix<double> fCovMat;      //!< The covariance matrix
     mutable matrix<double> fSqrtCov;     //!< The Cholesky decomposition of the covariance matrix
-    
+
     // private methods for constructor
     void GenCovMat() const;     //!< Generate covariance matrix
 
@@ -53,33 +53,33 @@ namespace NNPDF
     void   SetT0( ThPredictions  const&);               //!< Set T0 predictions
     void   SetT0(PDFSet const&);                        //!< Set T0 predictions
     bool   const& IsT0 ()  const { return fIsT0; }      //!< Return t0 covmat flag
-    
+
     // ************************ Data Get Methods ******************************
-    
+
     double const&  GetT0Pred(int i)    const { return fT0Pred[i];}  //!< Return t0 prediction
-    
+
     matrix<double> const& GetCovMat() const;  //!< Return fCovMat
     matrix<double> const& GetSqrtCov() const; //!< Return the Cholesky decomposition of the covariance matrix
     double GetSqrtCov(int i, int j) const;    //!< Returns an element of the Cholesky decomposition
 
     bool const& IsArtificial()         const { return fIsArtificial; } //!< Returns the artificial flag
-    
+
     // ****************   Update data values  ********************************
 
     void   MakeArtificial(); //!< Make an artificial data replica
-    
+
     void   UpdateData(double* newdat);                //!< Update data
     void   UpdateData(double* newdat, double* norm);  //!< Update with a rescaling - also rescales additive uncertainties
     void   UpdateData(double* newdat, sysType* type); //!< Update data and systypes
 
     void SetArtificial( bool const& artificial) { fIsArtificial = artificial; }
-    
+
     // ****************   Rescale Uncertainties   ****************************
-    
+
     void RescaleErrors(const double mult); //!< Rescale uncertainties by a multiplicative factor
-    
+
     // **************************************************************************
-  
+
   };
-  
+
 }

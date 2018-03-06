@@ -26,7 +26,7 @@ public:
   void GetPDF(real const& x, real const& Q2, int const&, real* pdf) const;
   void Export() const;
 
-private:  
+private:
   NNPDFSettings const& fSettings;
   const int freplica;
   FitBasis* fFitBasis;

@@ -57,12 +57,12 @@ FitPDFSet::~FitPDFSet()
   for (int j=0; j<fSettings.GetNFL(); j++)
     if (fBestFit[j] != NULL)
       delete fBestFit[j];
-  
+
   for (size_t i=0; i<fPDFs.size(); i++)
   {
     for (int j=0; j<fSettings.GetNFL(); j++)
       delete fPDFs[i][j];
-    
+
     delete[] fPDFs[i];
   }
   fPDFs.clear();
@@ -91,7 +91,7 @@ void FitPDFSet::SetBestFit(int const& i)
     cerr << "FitPDFSet::SetBestFit error: requested best fit index is not in fPDFs range"<<endl;
     exit(-1);
   }
-  
+
   // Set best fit PDF
   for (int fl = 0; fl < fSettings.GetNFL(); fl++)
     fBestFit[fl]->CopyPars(fPDFs[i][fl]);
@@ -104,12 +104,12 @@ void FitPDFSet::ExpandMembers()
 {
   // Number of members to be added
   const int nnew = fMembers - fPDFs.size();
-  
+
   if (nnew <= 0)
     return;
-  
+
   cout <<"Generating " << nnew <<" new parameterisations."<<endl;
-  
+
   // Generate new mutants if required by duplicating best fit parametrization and architecture
   for (int i=0; i<nnew; i++)
   {
@@ -117,7 +117,7 @@ void FitPDFSet::ExpandMembers()
 
     for (int j=0; j<fSettings.GetNFL(); j++)
       newpdf[j] = fBestFit[j]->Duplicate();
-    
+
     fPDFs.push_back(newpdf);
     fPreprocParam.push_back(new PreprocParam(fNfl));
   }
@@ -130,17 +130,17 @@ void FitPDFSet::ExpandMembers()
 void FitPDFSet::DisableMember(int i)
 {
   fMembers--;
-  
+
   // Already the last element
   if (i == fMembers)
-    return;  
-  
+    return;
+
   // Swap parametrisations
   Parametrisation **movePDF = fPDFs[i];
   fPDFs[i] = fPDFs[fMembers];
   fPDFs[fMembers] = movePDF;
-    
-  // Swap Preprocessing  
+
+  // Swap Preprocessing
   PreprocParam* movePP = fPreprocParam[i];
   fPreprocParam[i] = fPreprocParam[fMembers];
   fPreprocParam[fMembers] = movePP;
@@ -158,7 +158,7 @@ void FitPDFSet::SortMembers(real* chi2)
      // Disable member and swap chi2
       DisableMember(i);
       chi2[i] = chi2[fMembers];
-      
+
       i--;
     }
 }
@@ -175,15 +175,15 @@ void FitPDFSet::ClearPDFs(int const& indx)
     {
       for (int fl = 0; fl<fNfl; fl++)
         delete fPDFs[i][fl];
-        
+
       delete[] fPDFs[i];
       delete[] fPreprocParam[i];
     }
-    
+
     fPDFs.erase(fPDFs.begin()+fMembers, fPDFs.end());
     fPreprocParam.erase(fPreprocParam.begin()+fMembers, fPreprocParam.end());
   }
-  
+
   return;
 }
 
@@ -197,9 +197,9 @@ bool FitPDFSet::ComputeIntegrals( int const& i )
   fFitBasis->ComputeSumRules(SUM_USM, i, this, err);                       if (err) return false;
   fFitBasis->ComputeSumRules(SUM_DSM, i, this, err);                       if (err) return false;
   fFitBasis->ComputeSumRules(SUM_SSM, i, this, err);                       if (err) return false;
-  if (fSettings.IsIC()) fFitBasis->ComputeSumRules(SUM_CSM, i, this, err); 
+  if (fSettings.IsIC()) fFitBasis->ComputeSumRules(SUM_CSM, i, this, err);
   return !err;
-} 
+}
 
 /**
  * @brief Compute the sum rules.
@@ -209,14 +209,14 @@ void FitPDFSet::ComputeSumRules()
   for (int i=0; i<fMembers; i++)
     if (!ComputeIntegrals(i))
     {
-      if (fMembers != 1) 
+      if (fMembers != 1)
       {
-        DisableMember(i); 
-        i--; 
+        DisableMember(i);
+        i--;
       }
       else
-      { 
-        for (int j=0; j<fNfl; j++) 
+      {
+        for (int j=0; j<fNfl; j++)
           fPDFs[0][j]->CopyPars(fBestFit[j]);
       }
     }
@@ -236,13 +236,13 @@ void FitPDFSet::ValidateStartingPDFs()
 
   // Add a mutant
   SetNMembers(1);
- 
-  for (int i=0; i<50000; i++)  
+
+  for (int i=0; i<50000; i++)
     if (!ComputeIntegrals(0))
     {
       cout << "FitPDFSet::ValidateStartingFit:: Rerolling initial PDF attempt "<<i+1 << endl;
       // Reinitialize starting PDF
-      for (int j=0; j<fNfl; j++) 
+      for (int j=0; j<fNfl; j++)
       {
         fPDFs[0][j]->InitParameters();
         fBestFit[j]->CopyPars(fPDFs[0][j]);
@@ -255,13 +255,13 @@ void FitPDFSet::ValidateStartingPDFs()
       SetNMembers(0);
       return;
     }
-  
+
   cerr << "FitPDFSet::ValidateStartingPDF error: Difficulty finding valid starting PDF." << endl;
   cout << "Preprocessing exponents:" << endl;
   for (int i=0; i<fNfl; i++)
     cout << " " << fFitBasis->GetAlpha(i) << "  " << fFitBasis->GetBeta(i) << endl;
   exit(-1);
-}   
+}
 
 /**
  * @brief Returns the Inital scale evolution basis PDF vector at fixed x, for a fixed member
@@ -373,7 +373,7 @@ void FitPDFSet::ExportPDF( int const& rep, real const& erf_val, real const& erf_
   fitfilename << fSettings.GetResultsDirectory()
   << "/nnfit/replica_" << rep << "/"
   << fSettings.GetPDFName() <<".fitinfo";
-  
+
   // Print fit information
   ofstream fitinfo(fitfilename.str().c_str());
     fitinfo << fNIte <<"  " << erf_val <<"  "<<erf_trn<<"  "<<chi2<<"  ";
@@ -388,7 +388,7 @@ void FitPDFSet::ExportPDF( int const& rep, real const& erf_val, real const& erf_
   for (int i = 0; i < fNfl; i++)
     fitinfo << CalculateArcLength(0,i,fFitBasis->fArcDampFactor[i]) << "  ";
   fitinfo.close();
-  
+
   // Print sumrules to file
   cout << Colour::FG_BLUE << "- Writing sumrules file..." << Colour::FG_DEFAULT << endl;
 
@@ -397,11 +397,11 @@ void FitPDFSet::ExportPDF( int const& rep, real const& erf_val, real const& erf_
   sumrulefilename << fSettings.GetResultsDirectory()
   << "/nnfit/replica_" << rep << "/"
   << fSettings.GetPDFName() <<".sumrules";
-  
+
   ofstream sumruleinfo(sumrulefilename.str().c_str());
   sumruleinfo.precision(8);
   sumruleinfo << scientific;
-  
+
   bool status;
   sumruleinfo << fFitBasis->ComputeSumRules(SUM_MSR, 0, this, status) << "  ";
   sumruleinfo << fFitBasis->ComputeSumRules(SUM_UVL, 0, this, status) << "  ";
@@ -414,24 +414,24 @@ void FitPDFSet::ExportPDF( int const& rep, real const& erf_val, real const& erf_
   if (fSettings.IsIC()) sumruleinfo << fFitBasis->ComputeSumRules(SUM_CSM, 0, this, status) << "  ";
   sumruleinfo << endl;
 
-  sumruleinfo.close();  
-  
+  sumruleinfo.close();
+
   // Print preprocessing to file
   stringstream preprocfilename;
   preprocfilename.str("");
   preprocfilename << fSettings.GetResultsDirectory()
   << "/nnfit/replica_" << rep << "/"
   << fSettings.GetPDFName() <<".preproc";
-  
+
   cout << Colour::FG_BLUE << "- Writing preproc file..." << Colour::FG_DEFAULT << endl;
 
   ofstream preprocinfo(preprocfilename.str().c_str());
-  
+
   for (int i = 0; i < fNfl; i++)
       preprocinfo << -fFitBasis->GetAlpha(i) << "  " << fFitBasis->GetBeta(i) << "  " << fPreprocParam[0]->fPDFNorm[i] << endl;
- 
+
   preprocinfo.close();
-  
+
   // printing parameters to file
   cout << Colour::FG_BLUE << "- Writing params file..." << Colour::FG_DEFAULT << endl;
 

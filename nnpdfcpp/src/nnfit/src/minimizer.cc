@@ -415,7 +415,7 @@ CMAESParam::CMAESParam(size_t const& _n, size_t const& _lambda):
 
   // Eigensystem solution interval
   eigenInterval = (lambda/(c1+cmu)/n)/10.0;
-  
+
   // ********************************** Normalising weights  ****************************************
 
   for (int i=0; i<lambda; i++)
@@ -575,14 +575,14 @@ void CMAESMinimizer::Iterate(FitPDFSet* pdf, vector<Experiment*> const& exps, ve
 std::vector<gsl_vector*> CMAESMinimizer::Mutation(FitPDFSet* pdf) const
 {
   gsl_vector* m  = gsl_vector_calloc( fNTparam );
-  gsl_vector* z = gsl_vector_calloc(fCMAES->n); 
-  gsl_vector* x = gsl_vector_calloc(fCMAES->n); 
+  gsl_vector* z = gsl_vector_calloc(fCMAES->n);
+  gsl_vector* x = gsl_vector_calloc(fCMAES->n);
 
   GetParam(pdf->GetBestFit(), m);
   std::vector<gsl_vector*> yvals;
   for (size_t i=0; i<fCMAES->lambda; i++)
   {
-    gsl_vector* y = gsl_vector_calloc(fCMAES->n); 
+    gsl_vector* y = gsl_vector_calloc(fCMAES->n);
     do
     {
       gsl_vector_set_zero (z); NormVect(z);
@@ -614,7 +614,7 @@ gsl_vector* CMAESMinimizer::Recombination(FitPDFSet* pdf, vector<size_t> const& 
 
   // Compute new average
   gsl_vector *newm  = gsl_vector_calloc( fNTparam );
-  gsl_vector_memcpy(newm, m); 
+  gsl_vector_memcpy(newm, m);
   gsl_blas_daxpy (fSigma, yavg, newm);
 
     // Set new mean
@@ -653,7 +653,7 @@ void CMAESMinimizer::CMA( FitPDFSet* pdf, vector<size_t> const& irank_map, std::
   const double hr = (1.4 + 2.0/(fNTparam + 1))*fCMAES->expN;
   const double hsig = (hl < hr) ? 1:0;
   const double dhsig = (1 - hsig)*fCMAES->cc*(2-fCMAES->cc);
-  
+
   const double alpha = hsig*sqrt(fCMAES->cc*(2.0-fCMAES->cc)*fCMAES->mu_eff);
   gsl_vector_scale( fpc, (1.0-fCMAES->cc));
   gsl_blas_daxpy (alpha, yavg, fpc);
@@ -677,7 +677,7 @@ void CMAESMinimizer::CMA( FitPDFSet* pdf, vector<size_t> const& irank_map, std::
       wo *= fNTparam / (norm*norm);
       gsl_vector_free(cy);
     }
-    gsl_blas_dger (fCMAES->cmu*wo, yval, yval, fC); 
+    gsl_blas_dger (fCMAES->cmu*wo, yval, yval, fC);
   }
 }
 
