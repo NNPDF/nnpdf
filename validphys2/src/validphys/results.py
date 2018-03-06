@@ -138,15 +138,6 @@ class PositivityResult(StatsResult):
     @property
     def rawdata(self):
         return self.stats.data
-
-#adding class because don't want to add _rawdata to StatsResult, will probably need to change this in future
-
-class BootStatResult(StatsResult):
-
-    def __init__(self, stats, stats_class):
-        self.stats_class = stats_class
-        super().__init__(stats)
-        self._rawdata = self.stats.data.T
         
 def experiments_index(experiments):
     """Return an empy dataframe with index
@@ -435,10 +426,10 @@ def phi_data_experiment(abs_chi2_data_experiment):
     """Like `phi_data` but for whole experiment"""
     return phi_data(abs_chi2_data_experiment)
 
-def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples):
+def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples=100):
     """Take experimental result, use MCStats.bootstrap_values to return stats object of data from a sample, ready to be inputted into BootStatResult to create object compatible with abs_chi2_data calc phi with this and output sampled phis for each experiment ready for histogram"""
     dt, th = experiment_results
-    th_sample = BootStatResult(th.stats_class(np.array(th._rawdata).T).bootstrap_values(bootstrap_samples), th.stats_class)
+    th_sample = StatsResult(th.stats_class(np.array(th._rawdata).T).bootstrap_values(bootstrap_samples))
     cov_mat = dt.sqrtcovmat
     #expect chi2 to be N_samples*N_reps
     _allchi2 = calc_chi2(cov_mat, (th_sample.stats.data.T - dt.central_value[:, np.newaxis, np.newaxis]))
@@ -815,6 +806,9 @@ each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
 
 experiments_phi = collect(phi_data_experiment, ('experiments',))
 experiments_pdfs_phi = collect('experiments_phi', ('pdfs',))
+
+experiments_bootstrap_phi = collect(bootstrap_phi_data_experiment, ('experiments',))
+dataspecs_experiments_bootstrap_phi = collect('experiments_bootstrap_phi', ('dataspecs',))
 
 #These are convenient ways to iterate and extract varios data from fits
 fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))

@@ -77,16 +77,60 @@ def plot_phi_pdfs(experiments, pdfs, experiments_pdfs_phi):
     return fig
 
 @figure
-def plot_bootstrap_phi(experiment, bootstrap_samples, bootstrap_phi_data_experiment):
+def plot_phi_experiment_dist(experiment, bootstrap_phi_data_experiment):
     """Plots histogram of phi for a single experiment, specify bootstrap_samples in runcard"""
     phi = bootstrap_phi_data_experiment
-    label = [r'$\phi$ mean = ' + str(round(phi.mean(), 5)) +  '\n' +  r'$\phi$ std dev = ' + str(round(phi.std(), 5)) ]
+    label = (r'$\phi$ mean = ' + str(round(phi.mean(), 5)) +  '\n' +  r'$\phi$ std dev = ' + str(round(phi.std(), 5)))
     fig, ax = plt.subplots()
     ax.hist(phi, label=label)
     ax.set_title(r"$\phi$ distribution for " + experiment.name)
     ax.legend()
     return fig
+
+@figure
+def plot_phi_scatter(pdf, experiments, experiments_bootstrap_phi):
+    """Plots a scatter graph of phi for experiments, error is 68% confidence interval
+    specify bootstrap_samples in runcard"""
+    phis = experiments_bootstrap_phi
+    phi_means = [phis[i].mean() for i in range(len(phis))]
+    phi_errs = [phis[i].std() for i in range(len(phis))]
+    xticks = [experiment.name for experiment in experiments]
+    x = range(1, len(phis)+1)
+    label = pdf.name
+    fig, ax = plt.subplots()
+    ax.errorbar(x, phi_means, yerr=phi_errs, fmt='.')
+    ax.set_xticks(x, minor=False)
+    ax.set_xticklabels(xticks, minor=False, rotation=45)
+    return fig
+
+@figure
+def plot_phi_scatter_dataspecs(dataspecs, dataspecs_experiments, dataspecs_pdf, dataspecs_speclabel, dataspecs_experiments_bootstrap_phi):
+    """Plots a scatter graph of phi for experiments with error for each of the dataspecs
+    one limitation at present is experiments are taken from first dataspec for the x axis
+    """
+    speclabels = dataspecs_speclabel
+    ds_pdfs = dataspecs_pdf
+    phis = dataspecs_experiments_bootstrap_phi
+    if speclabels[0]:
+        labels = speclabels
+    elif ds_pdfs[0]:
+        labels = [pdf.name for pdf in ds_pdfs]
+    else:
+        labels = ["undefined label" for i in range(len(dataspecs))]
         
+    exps = dataspecs_experiments
+    xticks = [experiment.name for experiment in exps[0]]
+    x = range(1, len(xticks)+1)
+    fig, ax = plt.subplots()
+    for i, dataspec in enumerate(dataspecs):
+        phi_means = [phis[i][j].mean() for j in range(len(phis[i]))]
+        phi_errs = [phis[i][j].std() for j in range(len(phis[i]))]
+        ax.errorbar(x, phi_means, yerr=phi_errs, fmt='.', label=labels[i])
+    ax.set_xticks(x, minor=False)
+    ax.set_xticklabels(xticks, minor=False, rotation=45)
+    ax.legend()
+    return fig
+
 #TODO: This should be simplified if at all possible. For now some more examples
 #are needed for a spec to emerge.
 @make_check
