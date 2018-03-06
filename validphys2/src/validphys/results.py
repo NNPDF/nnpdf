@@ -281,10 +281,10 @@ def experiments_invcovmat(experiments, experiments_index, t0set):
 
 
 @table
-def experiments_normcovmat(experiments_covmat, datapoints):
+def experiments_normcovmat(experiments_covmat, experiments_data):
     """Calculates the experimental covariance matrix normalised to data."""
     df = experiments_covmat
-    mat = df/datapoints
+    mat = df/experiments_data
     return mat 
 
 @table
@@ -829,10 +829,10 @@ def theory_corrmat_3pt(theory_covmat_3pt):
     return mat 
 
 @table
-def theory_normcovmat_3pt(theory_covmat_3pt, datapoints):
+def theory_normcovmat_3pt(theory_covmat_3pt, experiments_data):
     """Calculates the theory correlation matrix for 3-point scale variations normalised to data."""
     df = theory_covmat_3pt
-    mat = df/datapoints
+    mat = df/experiments_data
     return mat 
 
 experiments_results = collect(experiment_results, ('experiments',))

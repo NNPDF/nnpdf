@@ -1586,9 +1586,9 @@ def plot_covdiff_heatmap(theory_covmat_3pt, experiments_covmat):
     return fig
 
 @figure
-def plot_diag_cov_comparison(theory_covmat_3pt, experiments_covmat, datapoints):
+def plot_diag_cov_comparison(theory_covmat_3pt, experiments_covmat, experiments_data):
     """Plot of sqrt(cov_ii)/data_i for cov = exp versus cov = theory"""
-    data = datapoints
+    data = experiments_data
     df_theory = theory_covmat_3pt
     df_experiment = experiments_covmat
     sqrtdiags1 = np.sqrt(np.diag(df_theory.as_matrix()))
@@ -1603,9 +1603,9 @@ def plot_diag_cov_comparison(theory_covmat_3pt, experiments_covmat, datapoints):
     return fig
 
 @figure
-def plot_diag_cov_impact(theory_covmat_3pt, experiments_covmat, datapoints):
+def plot_diag_cov_impact(theory_covmat_3pt, experiments_covmat, experiments_data):
     """Plot ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5"""
-    data = datapoints
+    data = experiments_data
     df_theory = theory_covmat_3pt
     df_experiment = experiments_covmat
     matrix_theory = df_theory.as_matrix()
