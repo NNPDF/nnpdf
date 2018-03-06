@@ -817,11 +817,16 @@ def experiments_central_values(experiment_result_table):
 theoryids_experiments_central_values = collect(experiments_central_values, ('theoryids',))
 
 @table
-def theory_covmat_3pt(theoryids_experiments_central_values, experiments, experiments_index, t0set): 
+def theory_covmat_3pt(theoryids_experiments_central_values, experiments, experiments_index): 
     """Calculates the theory covariance matrix for 3-point scale variations."""
-    t = np.array(theoryids_experiments_central_values)
-    s = np.zeros((len(t[0]),len(t[0])))
-    s = 0.5*(np.outer((t[1,:]-t[0,:]),(t[1,:]-t[0,:])) + np.outer((t[2,:]-t[0,:]),(t[2,:]-t[0,:])))
+    number_theories = len(theoryids_experiments_central_values)
+    if number_theories != 3:
+       print("ERROR: Three theory ids are required for 3pt scale variations in theory_covmat_3pt")
+    central, low, high = np.array(theoryids_experiments_central_values)
+    lowdiff  = low - central
+    highdiff = high - central
+    s = np.zeros((len(central),len(central)))
+    s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
 
