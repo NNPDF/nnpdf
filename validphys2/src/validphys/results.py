@@ -814,7 +814,7 @@ def experiments_central_values(experiment_result_table):
     central_theory_values = experiment_result_table["theory_central"].tolist()
     return central_theory_values
 
-theoryids_experiments_central_values = collect(experiments_central_values, ('theories',))
+theoryids_experiments_central_values = collect(experiments_central_values, ('theoryids',))
 
 @table
 def theory_covmat_3pt(theoryids_experiments_central_values, experiments, experiments_index, t0set): 
