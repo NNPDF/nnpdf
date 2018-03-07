@@ -102,7 +102,7 @@ class PreprocessingPlotter(PDFPlotter):
         super().__init__(*args, **kwargs)
 
     def get_title(self, parton_name):
-        return fr"$\{self.exponent}_e$ for ${parton_name}$ at {self.Q:.1} Gev"
+        return fr"$\{self.exponent}_e$ for ${parton_name}$ at {format_number(self.Q, 3)} Gev"
 
     def get_ylabel(self, parton_name):
         if self.normalize_to is not None:
