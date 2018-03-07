@@ -173,7 +173,7 @@ def experiments_index(experiments):
 
 def experiments_data(experiment_result_table):
     """Returns list of data values for the input experiments."""
-    data_central_values = experiment_result_table["data_central"].tolist()
+    data_central_values = experiment_result_table["data_central"]
     return data_central_values
 
 
@@ -800,7 +800,7 @@ def theory_description(theoryid):
 def experiments_central_values(experiment_result_table):
     """Returns a theoryid-dependent list of central theory predictions
     for a given experiment."""
-    central_theory_values = experiment_result_table["theory_central"].tolist()
+    central_theory_values = experiment_result_table["theory_central"]
     return central_theory_values
 
 theoryids_experiments_central_values = collect(experiments_central_values, ('theoryids',))
