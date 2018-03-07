@@ -9,6 +9,7 @@ import warnings
 import numpy as np
 
 from reportengine.figure import figuregen
+from reportengine.floatformatting import format_number
 
 from validphys.checks import check_scale, CheckError, make_argcheck, check_positive
 from validphys.plots import check_pdf_normalize_to
@@ -101,7 +102,7 @@ class PreprocessingPlotter(PDFPlotter):
         super().__init__(*args, **kwargs)
 
     def get_title(self, parton_name):
-        return fr"$\{self.exponent}_e$ for ${parton_name}$ at {self.Q:.1} Gev"
+        return fr"$\{self.exponent}_e$ for ${parton_name}$ at {format_number(self.Q, 3)} Gev"
 
     def get_ylabel(self, parton_name):
         return fr"$\{self.exponent}_e$ for ${parton_name}$"
