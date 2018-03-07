@@ -55,7 +55,7 @@ def make_table_comp(loader_func):
 @pytest.fixture(scope='module')
 def data():
     l = Loader()
-    ds = l.check_dataset(name='NMC', theoryid= 53, use_cuts=False)
+    ds = l.check_dataset(name='NMC', theoryid=162, use_cuts=False)
     exp = ExperimentSpec('NMC Experiment', [ds])
     pdf = l.check_pdf("NNPDF31_nnlo_as_0118")
     exps = [exp]
