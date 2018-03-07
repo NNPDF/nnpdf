@@ -19,13 +19,13 @@ namespace NNPDF
   {
     const int ndat = cd.GetNData();
     const int nsys = cd.GetNSys();
-    if (ndat <= 0)
-      throw LengthError("ComputeCovMat","invalid number of datapoints!");
+
     if (t0.size() != ndat)
       throw LengthError("ComputeCovMat","invalid number of points in t0 vector!");
 
     auto CovMat = NNPDF::matrix<double>(ndat, ndat);
     for (int i = 0; i < ndat; i++)
+    {
       for (int j = 0; j < ndat; j++)
       {
         double sig    = 0.0;
@@ -54,6 +54,7 @@ namespace NNPDF
 
         CovMat(i, j) = sig + signor*t0[i]*t0[j]*1e-4;
       }
+    }
     return CovMat;
   }
 
@@ -81,7 +82,7 @@ namespace NNPDF
   }
 
   // TODO to sort this out, need to make data and theory vectors
-  void ComputeChi2_basic(int const& nDat, int const& nMem,
+  void ComputeChi2_basic(int const nDat, int const nMem,
                    const double* data, matrix<double> const& L,
                    real *const& theory, real *chi2)
   {
