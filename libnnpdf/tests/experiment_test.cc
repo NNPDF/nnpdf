@@ -14,7 +14,7 @@ TEST_CASE("Experiment constructor", "[Experiment]") {
 
   const auto fk = FKSet(
       FKSet::parseOperator("NULL"),
-      {new FKTable{get_data_path() + "theory_53/fastkernel/FK_NMC.dat"}});
+      {new FKTable{get_data_path() + "theory_162/fastkernel/FK_NMC.dat"}});
 
   const auto pdf = LHAPDFSet("NNPDF31_nnlo_as_0118", PDFSet::erType::ER_MCT0);
 

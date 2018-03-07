@@ -54,10 +54,6 @@ test:
     source_files:
         - "*"
 
-    commands:
-        - conda inspect linkages -p $PREFIX $PKG_NAME
-        - pytest --pyargs validphys
-
 build:
     number: 0
     detect_binary_files_with_prefix: True
