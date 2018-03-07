@@ -1518,7 +1518,7 @@ def plot_normexpcovmat_heatmap(experiments_normcovmat):
     df = experiments_normcovmat
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
-    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.00001, linscale=0.00001, vmin=100*matrix.min(), vmax=100*matrix.max()))
+    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.01, linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
     cbar = fig.colorbar(matrixplot, label="% of data")
     ax.set_title('Experiment covariance matrix')
     ax.xaxis.set_ticks_position('bottom')
@@ -1532,7 +1532,7 @@ def plot_expcorrmat_heatmap(experiments_corrmat):
     df = experiments_corrmat
     matrix = df.as_matrix()
     fig, ax = plt.subplots()
-    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.00001, linscale=0.00001, vmin=matrix.min(), vmax=matrix.max()))
+    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
     cbar = fig.colorbar(matrixplot)
     ax.set_title('Experiment correlation matrix')
     ax.xaxis.set_ticks_position('bottom')
@@ -1546,7 +1546,7 @@ def plot_normthcovmat_heatmap(theory_normcovmat_3pt):
     df = theory_normcovmat_3pt
     matrix = df.as_matrix()
     fig,ax = plt.subplots()
-    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.00001, linscale=0.00001, vmin=100*matrix.min(), vmax=100*matrix.max()))
+    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1, linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
     cbar = fig.colorbar(matrixplot, label="% of data")
     ax.set_title('Theory covariance matrix')
     ax.xaxis.set_ticks_position('bottom')
@@ -1560,7 +1560,7 @@ def plot_thcorrmat_heatmap(theory_corrmat_3pt):
     df = theory_corrmat_3pt
     matrix = df.as_matrix()
     fig, ax = plt.subplots()
-    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.00001, linscale=0.00001, vmin=matrix.min(), vmax=matrix.max()))
+    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
     cbar = fig.colorbar(matrixplot)
     ax.set_title('Theory correlation matrix')
     ax.xaxis.set_ticks_position('bottom')
@@ -1620,3 +1620,6 @@ def plot_diag_cov_impact(theory_covmat_3pt, experiments_covmat, experiments_data
     ax.set_title("Diagonal impact of adding theory covariance matrix")
     ax.legend()
     return fig
+
+
+
