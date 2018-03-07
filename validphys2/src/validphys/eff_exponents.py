@@ -7,7 +7,7 @@ a way that pdf = x^a (1-x)^b NN(x) fit has the minimal error function.
 from __future__ import generator_stop
 
 import logging
-
+import warnings
 import numpy as np
 
 from reportengine.figure import figuregen
@@ -25,7 +25,7 @@ log = logging.getLogger(__name__)
 @check_positive('Q')
 @pdfgrids._check_limits
 @make_argcheck(check_basis)
-def alpha_eff(pdfs,xmin=1e-5,xmax=0.1,Q=1.65,basis='evolution',flavours=None):
+def alpha_eff(pdfs,xmin=1e-6,xmax=0.1,Q=1.65,basis='evolution',flavours=None):
     """Return a list of xplotting_grids containing the value of the effective
     exponent alpha at the specified values of x and flavour.
     alpha is relevant at small x, hence the linear scale.
@@ -49,7 +49,9 @@ def alpha_eff(pdfs,xmin=1e-5,xmax=0.1,Q=1.65,basis='evolution',flavours=None):
         pdfGrid = pdfgrids.xplotting_grid(pdf, Q, xgrid=xGrid, basis=basis,flavours=flavours)
         pdfGrid_values = pdfGrid.grid_values
         xGrid = pdfGrid.xgrid #NOTE: without this I get "setting an array element with a sequence"
-        alphaGrid_values = -np.log(abs(pdfGrid_values/xGrid))/np.log(xGrid)
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', RuntimeWarning)
+            alphaGrid_values = -np.log(abs(pdfGrid_values/xGrid))/np.log(xGrid)
         alphaGrid = pdfGrid._replace(grid_values=alphaGrid_values)
         alphaGrids.append(alphaGrid)
 
@@ -83,7 +85,9 @@ def beta_eff(pdfs,xmin=1e-2,xmax=0.9,Q=1.65,basis='evolution',flavours=None):
         pdfGrid = pdfgrids.xplotting_grid(pdf, Q, xgrid=xGrid, basis=basis,flavours=flavours)
         pdfGrid_values = pdfGrid.grid_values
         xGrid = pdfGrid.xgrid #NOTE: without this I get "setting an array element with a sequence"
-        betaGrid_values = np.log(abs(pdfGrid_values/xGrid))/np.log(1-xGrid)
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', RuntimeWarning)
+            betaGrid_values = np.log(abs(pdfGrid_values/xGrid))/np.log(1-xGrid)
         betaGrid = pdfGrid._replace(grid_values=betaGrid_values)
         betaGrids.append(betaGrid)
 
