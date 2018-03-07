@@ -1,7 +1,6 @@
 # This RunCard is used to generate the effective exponents plots implemented
-# in eff_exponents.py. The effective exponents are the optimal a (alpha) and
-# b (beta) exponents such as pdf = x^a (1-x)^b NN(x) fit has the minimal error
-# function.
+# in eff_exponents.py. Effective exponents study potential power law behaviour
+# of pdfs in the high and low x regimes.
 
 Q: 1.65 #Q is the PDF scale in GeV.
 basis: 'evolution' #The evolution basis of the DGLAP equations
