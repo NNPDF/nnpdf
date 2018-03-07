@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-The effective exponents plots are a check of optimization of two important
-fit parameters in the NNPDF model: a (alpha) and b (beta) exponents chosen in
-a way that pdf = x^a (1-x)^b NN(x) fit has the minimal error function.
+Tools for computing and plotting effective exponents.
 """
 from __future__ import generator_stop
 
