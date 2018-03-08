@@ -20,6 +20,7 @@
 #include <memory>
 
 #include "NNPDF/dataset.h"
+#include "NNPDF/chisquared.h"
 #include "NNPDF/fastkernel.h"
 #include "NNPDF/thpredictions.h"
 #include "NNPDF/randomgenerator.h"
@@ -70,38 +71,8 @@ DataSet::~DataSet()
  */
 void DataSet::GenCovMat() const
 {
-  fCovMat.clear();
-  fSqrtCov.clear();
-  fCovMat.resize(fNData, fNData, 0);
-  fSqrtCov.resize(fNData, fNData, 0);
-
-  if (fNData <= 0)
-    throw LengthError("DataSet::GenCovMat","invalid number of datapoints!");
-
-  for (int i = 0; i < fNData; i++)
-    for (int j = 0; j < fNData; j++)
-    {
-      double sig    = 0.0;
-      double signor = 0.0;
-
-      if (i == j)
-        sig += fStat[i]*fStat[i]; // stat error
-
-      for (int l = 0; l < fNSys; l++)
-        if (fSys[i][l].name.compare("SKIP")!=0)
-          if (i == j || ( fSys[i][l].name.compare("UNCORR")!=0 && fSys[i][l].name.compare("THEORYUNCORR")!=0))
-            switch (fSys[i][l].type)
-            {
-              case ADD: sig += fSys[i][l].add*fSys[j][l].add; break; // additive systematics
-              case MULT: signor += fSys[i][l].mult*fSys[j][l].mult; break; // multiplicative systematics
-              case UNSET: throw RuntimeException("DataSet::GenCovMat", "UNSET systype encountered");
-            }
-
-      fCovMat(i, j) = sig + signor*fT0Pred[i]*fT0Pred[j]*1e-4;
-    }
-
-  // Compute sqrt of covmat
-  CholeskyDecomposition(fCovMat, fSqrtCov);
+  fCovMat = ComputeCovMat(*this, fT0Pred);
+  fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 
 void DataSet::RescaleErrors(const double mult)

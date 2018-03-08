@@ -149,9 +149,10 @@ std::string joinpath(const std::initializer_list<std::string> &list);
     size_t const& size(size_t dim) const { return _size[dim]; } //!< Returns the (row,col) size pair.
     T&       operator()(size_t i, size_t j)       { return _data[i*_size[1]+j]; }
     T const& operator()(size_t i, size_t j) const { return _data[i*_size[1]+j]; }
-    //TODO: Does this have to be const? In any case there
-    //should be a const version.
-    T const * data () const {return _data.data();} //!< Return the underlying buffer.
+
+    // Data access
+    T *       data ()       {return _data.data();}  //!< Return the underlying buffer.
+    T const * data () const {return _data.data();}  //!< Return the underlying buffer (const version).
 
   private:
     std::array<size_t, 2> _size; //!< the dimension pair
@@ -181,9 +182,6 @@ std::string joinpath(const std::initializer_list<std::string> &list);
   real ComputeMom(int const& n, const real *x, int const& m);//!< Compute mth moment of distribution
   void Compute68cl(std::vector<real> const& x, real &up, real &dn);//!< Compute the 68% c.l.
   void Compute95cl(std::vector<real> const& x, real &up, real &dn);//!< Compute the 95% c.l.
-
-  void CholeskyDecomposition(matrix<double> const& inmatrix, matrix<double> & sqrtmat);
-
 }
 
 /*! @} */
