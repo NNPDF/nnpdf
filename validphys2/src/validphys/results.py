@@ -171,6 +171,12 @@ def experiments_index(experiments):
     df.set_index(columns, inplace=True)
     return df.index
 
+def experiments_data(experiment_result_table):
+    """Returns list of data values for the input experiments."""
+    data_central_values = experiment_result_table["data_central"]
+    return data_central_values
+
+
 #TODO: Use collect to calculate results outside this
 @table
 def experiment_result_table(experiments, pdf, experiments_index):
@@ -203,6 +209,7 @@ def experiment_result_table(experiments, pdf, experiments_index):
         return pd.DataFrame()
     df =  pd.DataFrame(result_records, columns=result_records[0].keys(),
                        index=experiments_index)
+
     return df
 
 @table
@@ -271,6 +278,24 @@ def experiments_invcovmat(experiments, experiments_index, t0set):
         mat = la.inv(loaded_exp.get_covmat())
         df.loc[[name],[name]] = mat
     return df
+
+
+@table
+def experiments_normcovmat(experiments_covmat, experiments_data):
+    """Calculates the experimental covariance matrix normalised to data."""
+    df = experiments_covmat
+    experiments_data_array = np.array(experiments_data)
+    mat = df/np.outer(experiments_data_array, experiments_data_array)
+    return mat 
+
+@table
+def experiments_corrmat(experiments_covmat):
+    """Generates the experimental correlation matrix with experiments_covmat as input"""
+    df = experiments_covmat
+    covmat = df.as_matrix()
+    diag_minus_half = (np.diagonal(covmat))**(-0.5)
+    mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
+    return mat 
 
 @table
 def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
@@ -786,6 +811,50 @@ def perreplica_chi2_table(experiments, experiments_chi2):
 def theory_description(theoryid):
     """A table with the theory settings."""
     return pd.DataFrame(pd.Series(theoryid.get_description()), columns=[theoryid])
+
+def experiments_central_values(experiment_result_table):
+    """Returns a theoryid-dependent list of central theory predictions
+    for a given experiment."""
+    central_theory_values = experiment_result_table["theory_central"]
+    return central_theory_values
+
+theoryids_experiments_central_values = collect(experiments_central_values, ('theoryids',))
+
+@make_argcheck
+def check_have_three_theories(theoryids):
+    l = len(theoryids)
+    if l!=3:
+        raise CheckError(f"Expecting exactly 3 theories, but got {l}.")
+
+@table
+@check_have_three_theories
+def theory_covmat_3pt(theoryids_experiments_central_values, experiments, experiments_index): 
+    """Calculates the theory covariance matrix for 3-point scale variations."""
+    number_theories = len(theoryids_experiments_central_values)
+    central, low, high = np.array(theoryids_experiments_central_values)
+    lowdiff  = low - central
+    highdiff = high - central
+    s = np.zeros((len(central),len(central)))
+    s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
+    df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
+    return df
+
+@table
+def theory_corrmat_3pt(theory_covmat_3pt):
+    """Calculates the theory correlation matrix for 3-point scale variations."""
+    df = theory_covmat_3pt
+    covmat = df.as_matrix()
+    diag_minus_half = (np.diagonal(covmat))**(-0.5)
+    mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
+    return mat 
+
+@table
+def theory_normcovmat_3pt(theory_covmat_3pt, experiments_data):
+    """Calculates the theory correlation matrix for 3-point scale variations normalised to data."""
+    df = theory_covmat_3pt
+    experiments_data_array = np.array(experiments_data)
+    mat = df/np.outer(experiments_data_array, experiments_data_array)
+    return mat 
 
 experiments_results = collect(experiment_results, ('experiments',))
 each_dataset_results = collect(results, ('experiments', 'experiment'))
