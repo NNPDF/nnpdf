@@ -1137,9 +1137,9 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
     xvals = np.arange(ndata)
     ax.set_xlabel('idat')
 
-    if pos_use_kin is True:
+    if pos_use_kin:
         ax.set_xlabel('kin1')
-        xvals = [posset.GetKinematics(i, 0) for i in range(0,ndata)]
+        xvals = [posset.GetKinematics(i, 0) for i in range(0, ndata)]
 
     offsets = plotutils.offset_xcentered(len(pdfs), ax)
     minscale = np.inf
