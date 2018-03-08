@@ -105,7 +105,10 @@ class PreprocessingPlotter(PDFPlotter):
         return fr"$\{self.exponent}_e$ for ${parton_name}$ at {format_number(self.Q, 3)} Gev"
 
     def get_ylabel(self, parton_name):
-        return fr"$\{self.exponent}_e$ for ${parton_name}$"
+        if self.normalize_to is not None:
+            return "Ratio to {}".format(self.normalize_pdf.label)
+        else:
+            return fr"$\{self.exponent}_e$ for ${parton_name}$"
 
 class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter): pass
 

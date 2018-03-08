@@ -2,11 +2,12 @@
 # The effective exponents are used to find the exponents a (alpha) and
 # b (beta) used to parametrize the PDF in the fit: pdf = x^{-a} (1-x)^b NN(x).
 
-Q: 1.65 #Q is the PDF scale in GeV.
-basis: 'evolution' #The evolution basis of the DGLAP equations
-
+Q: 1.65 # Q is the PDF scale in GeV.
+basis: 'evolution' # The evolution basis of the DGLAP equations
+normalize_to: 1 # Ratio of effective exponents with different pdf sets
 pdfs:
     - NNPDF31_nlo_as_0118
+    - NNPDF30_nnlo_as_0118
 
 actions_:
    - - plot_alphaEff
