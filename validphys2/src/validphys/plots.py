@@ -1125,23 +1125,36 @@ def plot_obscorrs(corrpair_datasets, obs_obs_correlations, pdf):
     return fig
 
 @figure
-def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset):
+def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_kin=False):
     """Plot the value of a positivity observable on a symlog scale as a
-    function of the data point index."""
-    fig,ax = plt.subplots()
+    function of the data point index (if pos_use_kin==False) or the first
+    kinematic variable (if pos_use_kin==True)."""
+    fig, ax = plt.subplots()
     ax.axhline(0, color='red')
+
+    posset = posdataset.load()
+    ndata  = posset.GetNData()
+    xvals = []
+
+    if pos_use_kin:
+        ax.set_xlabel('kin1')
+        xvals = [posset.GetKinematics(i, 0) for i in range(0, ndata)]
+    else:
+        ax.set_xlabel('idat')
+        xvals - np.arange(ndata)
+
     offsets = plotutils.offset_xcentered(len(pdfs), ax)
     minscale = np.inf
-    for i,(pdf, pred) in enumerate(zip(pdfs, positivity_predictions_for_pdfs)):
+    for i, (pdf, pred) in enumerate(zip(pdfs, positivity_predictions_for_pdfs)):
         cv = pred.central_value
-        ax.errorbar(np.arange(len(cv)), cv, yerr=pred.std_error,
+        ax.errorbar(xvals, cv, yerr=pred.std_error,
                     linestyle='--',
                     marker='s',
-                    label=pdf.label, lw=0.5,transform=next(offsets))
+                    label=pdf.label, lw=0.5, transform=next(offsets))
         minscale = min(minscale, np.abs(np.min(cv)))
     ax.legend()
     ax.set_title(str(posdataset))
-    ax.set_xlabel('idat')
+
     ax.set_ylabel('Observable Value')
     ax.set_yscale('symlog', linthreshy=minscale)
     ax.xaxis.set_major_locator(mticker.MaxNLocator(integer=True))
