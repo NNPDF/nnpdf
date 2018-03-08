@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # This RunCard is used to generate the effective exponents plots implemented
 # in eff_exponents.py. Effective exponents study potential power law behaviour
 # of pdfs in the high and low x regimes.
@@ -9,6 +10,17 @@ normalize_to: 1 # The Ratio of Effective exponents from different pdf sets
 pdfs:
     - NNPDF31_nlo_as_0118
     - NNPDF30_nnlo_as_0118
+=======
+# Generate the effective exponent plots.
+# The effective exponents are used to find the exponents a (alpha) and
+# b (beta) used to parametrize the PDF in the fit: pdf = x^{-a} (1-x)^b NN(x).
+
+Q: 1.65 #Q is the PDF scale in GeV.
+basis: 'evolution' #The evolution basis of the DGLAP equations
+
+pdfs:
+    - NNPDF31_nlo_as_0118
+>>>>>>> 6484e8da1bab8cc0e25e844c799db8de4b5d73de
 
 actions_:
    - - plot_alphaEff

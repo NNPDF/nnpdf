@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 """
+<<<<<<< HEAD
 The effective exponents plots are a check of optimization of two important
 fit parameters in the NNPDF model: a (alpha) and b (beta) exponents chosen in
 a way that pdf = x^a (1-x)^b NN(x) fit has the minimal error function.
+=======
+Tools for computing and plotting effective exponents.
+>>>>>>> 6484e8da1bab8cc0e25e844c799db8de4b5d73de
 """
 from __future__ import generator_stop
 
@@ -11,6 +15,7 @@ import warnings
 import numpy as np
 
 from reportengine.figure import figuregen
+from reportengine.floatformatting import format_number
 
 from validphys.checks import check_scale, CheckError, make_argcheck, check_positive
 from validphys.plots import check_pdf_normalize_to
@@ -25,7 +30,11 @@ log = logging.getLogger(__name__)
 @check_positive('Q')
 @pdfgrids._check_limits
 @make_argcheck(check_basis)
+<<<<<<< HEAD
 def alpha_eff(pdfs,xmin=1e-5,xmax=0.1,Q=1.65,basis='evolution',flavours=None):
+=======
+def alpha_eff(pdfs,xmin=1e-6,xmax=0.1,Q=1.65,basis='evolution',flavours=None):
+>>>>>>> 6484e8da1bab8cc0e25e844c799db8de4b5d73de
     """Return a list of xplotting_grids containing the value of the effective
     exponent alpha at the specified values of x and flavour.
     alpha is relevant at small x, hence the linear scale.
@@ -103,6 +112,7 @@ class PreprocessingPlotter(PDFPlotter):
         super().__init__(*args, **kwargs)
 
     def get_title(self, parton_name):
+<<<<<<< HEAD
         return fr"$\{self.exponent}_e$ for ${parton_name}$ at {self.Q:.1} Gev"
 
     def get_ylabel(self, parton_name):
@@ -110,6 +120,12 @@ class PreprocessingPlotter(PDFPlotter):
             return "Ratio to {}".format(self.normalize_pdf.label)
         else:
             return fr"$\{self.exponent}_e$ for ${parton_name}$"
+=======
+        return fr"$\{self.exponent}_e$ for ${parton_name}$ at {format_number(self.Q, 3)} Gev"
+
+    def get_ylabel(self, parton_name):
+        return fr"$\{self.exponent}_e$ for ${parton_name}$"
+>>>>>>> 6484e8da1bab8cc0e25e844c799db8de4b5d73de
 
 class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter): pass
 
