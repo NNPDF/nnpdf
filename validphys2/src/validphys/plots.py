@@ -57,7 +57,7 @@ def plot_phi(experiments, experiments_phi):
     """plots phi for each experiment as a bar for a single
     PDF input
 
-    See `phi_data` for information on how phi is calculated 
+    See `phi_data` for information on how phi is calculated
     """
     phi = experiments_phi
     xticks = [experiment.name for experiment in experiments]

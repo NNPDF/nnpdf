@@ -18,15 +18,16 @@ from validphys import uploadutils
 
 providers = [
              'validphys.results',
+             'validphys.pdfgrids',
              'validphys.plots',
+             'validphys.fitdata',
              'validphys.arclength',
              'validphys.sumrules',
              'validphys.reweighting',
-             'validphys.fitdata',
-             'validphys.pdfgrids',
              'validphys.kinematics',
              'validphys.correlations',
              'validphys.chi2grids',
+             'validphys.eff_exponents',
              'validphys.paramfits.dataops',
              'validphys.paramfits.plots',
              'reportengine.report'
