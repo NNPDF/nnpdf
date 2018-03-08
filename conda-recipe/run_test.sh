@@ -7,6 +7,9 @@ set -e
 pytest --pyargs validphys
 
 
+# TESTING DELETEME 
+export LDFLAGS="-Wl,-pie -Wl,-headerpad_max_install_names -Wl,-rpath,${PREFIX}/lib"
+
 #Compile in debug mode and run the cpp tests
 
 
