@@ -2,11 +2,13 @@
 # in eff_exponents.py. Effective exponents study potential power law behaviour
 # of pdfs in the high and low x regimes.
 
-Q: 1.65 #Q is the PDF scale in GeV.
-basis: 'evolution' #The evolution basis of the DGLAP equations
+Q: 1.65 # Q is the PDF scale in GeV.
+basis: 'evolution' # The evolution basis of the DGLAP equations
+normalize_to: 1 # The Ratio of Effective exponents from different pdf sets
 
 pdfs:
     - NNPDF31_nlo_as_0118
+    - NNPDF30_nnlo_as_0118
 
 actions_:
    - - plot_alphaEff

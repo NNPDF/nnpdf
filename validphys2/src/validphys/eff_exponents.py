@@ -25,7 +25,7 @@ log = logging.getLogger(__name__)
 @check_positive('Q')
 @pdfgrids._check_limits
 @make_argcheck(check_basis)
-def alpha_eff(pdfs,xmin=1e-6,xmax=0.1,Q=1.65,basis='evolution',flavours=None):
+def alpha_eff(pdfs,xmin=1e-5,xmax=0.1,Q=1.65,basis='evolution',flavours=None):
     """Return a list of xplotting_grids containing the value of the effective
     exponent alpha at the specified values of x and flavour.
     alpha is relevant at small x, hence the linear scale.
@@ -106,7 +106,10 @@ class PreprocessingPlotter(PDFPlotter):
         return fr"$\{self.exponent}_e$ for ${parton_name}$ at {self.Q:.1} Gev"
 
     def get_ylabel(self, parton_name):
-        return fr"$\{self.exponent}_e$ for ${parton_name}$"
+        if self.normalize_to is not None:
+            return "Ratio to {}".format(self.normalize_pdf.label)
+        else:
+            return fr"$\{self.exponent}_e$ for ${parton_name}$"
 
 class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter): pass
 
