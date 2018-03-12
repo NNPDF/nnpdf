@@ -584,10 +584,13 @@ class MCStats(Stats):
         return self.data
 
     def bootstrap_values(self, sample_number):
-    #give mcstats of N_reps * N_samples * N_datas (N_reps out = N_reps in, in other words sample the same number of replicas for each sample as the number of replicas in the original dataset)
-        N_reps = self.data.shape[0]
-        N_sample = sample_number
-        return MCStats(self.data[np.floor(np.random.rand(N_reps, N_sample)*N_reps).astype(int), :])
+    """Input theory predictions in standard stats.data format of N_pdf*N_bins
+`bootstrap_values` will then return a MCStats object with data in format of 
+N_pdf*N_bootstrap samples*N_bins, where each bootstrap sample is a monte carlo
+sample of replicas this returned object can then be used to create a 
+StatsResults object ready to be used with most usual functions"""
+        N_reps, N_sample = self.data.shape[0], sample_number
+        return MCStats(self.data[np.random.randint(N_reps, size=(N_reps, N_sample)), :])
 
 
 class SymmHessianStats(Stats):
