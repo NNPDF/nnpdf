@@ -91,7 +91,9 @@ default it is set to 100 which is rather low"""
 
 @figure
 def plot_phi_scatter(pdf, experiments, experiments_bootstrap_phi):
-    """Plots a scatter graph of phi for experiments, error is the 68% 
+    """does a bootstrap sample of theoretical predictions for each experiment 
+and uses this to find a distribution of phi the distributions are represented as
+a scatter point of the mean value, with an error bar which represents the 68% 
 confidence region"""
     phis = experiments_bootstrap_phi
     phi_means = np.mean(phis, axis=1)
