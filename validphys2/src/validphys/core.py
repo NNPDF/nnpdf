@@ -588,7 +588,7 @@ class MCStats(Stats):
 `bootstrap_values` will then return a MCStats object with data in format of 
 N_pdf*N_bootstrap samples*N_bins, where each bootstrap sample is a monte carlo
 sample of replicas this returned object can then be used to create a 
-StatsResults object ready to be used with most usual functions"""
+StatsResult object ready to be used with most usual functions"""
         N_reps, N_sample = self.data.shape[0], sample_number
         return MCStats(self.data[np.random.randint(N_reps, size=(N_reps, N_sample)), :])
 

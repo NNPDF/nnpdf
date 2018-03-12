@@ -19,7 +19,7 @@ from reportengine.checks import require_one, remove_outer, check_not_empty, make
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.checks import assert_use_cuts_true
+from validphys.checks import assert_use_cuts_true, check_pdf_is_montecarlo
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
 from validphys.calcutils import all_chi2, central_chi2, calc_chi2
 
@@ -426,16 +426,23 @@ def phi_data_experiment(abs_chi2_data_experiment):
     """Like `phi_data` but for whole experiment"""
     return phi_data(abs_chi2_data_experiment)
 
-def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples=100):
-    """Take experimental result, use MCStats.bootstrap_values to return stats object of data from a sample, ready to be inputted into BootStatResult to create object compatible with abs_chi2_data calc phi with this and output sampled phis for each experiment ready for histogram"""
+@check_pdf_is_montecarlo
+def bootstrap_phi_data_experiment(experiment_results,
+                                  bootstrap_samples=100):
+    """Using `experimental_results` as an input, performs a bootstrap sample 
+of theoretical predictions across replicas using MCStats.bootstrap_values.
+The output of MCStats.bootstrap_values is used to create a `StatsResult` object
+which can then be used to calculate phi. The output will be a distribution of
+phi generated from the bootstrap sample in the form of a np.array which is 
+bootstrap_samples long"""
     dt, th = experiment_results
     th_sample = StatsResult(th.stats_class(np.array(th._rawdata).T).bootstrap_values(bootstrap_samples))
     cov_mat = dt.sqrtcovmat
     #expect chi2 to be N_samples*N_reps
-    _allchi2 = calc_chi2(cov_mat, (th_sample.stats.data.T - dt.central_value[:, np.newaxis, np.newaxis]))
+    allchi2 = calc_chi2(cov_mat, (th_sample.stats.data.T - dt.central_value[:, np.newaxis, np.newaxis]))
     #centralchi2 should be N_samples
-    _centralchi2 = calc_chi2(cov_mat, (th_sample.stats.data.mean(axis=0).T - dt.central_value[:, np.newaxis]))
-    return np.sqrt((_allchi2.mean(axis=1) - _centralchi2)/len(dt))
+    centralchi2 = calc_chi2(cov_mat, (th_sample.stats.data.mean(axis=0).T - dt.central_value[:, np.newaxis]))
+    return np.sqrt((allchi2.mean(axis=1) - centralchi2)/len(dt))
     
     
     
