@@ -21,6 +21,7 @@ import scipy.stats as stats
 
 from reportengine.figure import figure, figuregen
 from reportengine.checks import make_check, CheckError, make_argcheck
+from reportengine.floatformatting import format_number
 
 from validphys.core import MCStats, cut_mask
 from validphys.results import chi2_stat_labels
@@ -82,7 +83,7 @@ def plot_phi_experiment_dist(experiment, bootstrap_phi_data_experiment):
 `bootstrap_samples` in runcard to control the number of samples taken, by 
 default it is set to 100 which is rather low"""
     phi = bootstrap_phi_data_experiment
-    label = (r'$\phi$ mean = ' + str(round(phi.mean(), 5)) +  '\n' +  r'$\phi$ std dev = ' + str(round(phi.std(), 5)))
+    label = (r'$\phi$ mean = ' + format_number(phi.mean()) +  '\n' +  r'$\phi$ std dev = ' + format_number(phi.std()))
     fig, ax = plt.subplots()
     ax.hist(phi, label=label)
     ax.set_title(r"$\phi$ distribution for " + experiment.name)
