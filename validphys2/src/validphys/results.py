@@ -429,12 +429,13 @@ def phi_data_experiment(abs_chi2_data_experiment):
 @check_pdf_is_montecarlo
 def bootstrap_phi_data_experiment(experiment_results,
                                   bootstrap_samples=100):
-    """Using `experimental_results` as an input, performs a bootstrap sample 
-of theoretical predictions across replicas using MCStats.bootstrap_values.
-The output of MCStats.bootstrap_values is used to create a `StatsResult` object
-which can then be used to calculate phi. The output will be a distribution of
-phi generated from the bootstrap sample in the form of a np.array which is 
-bootstrap_samples long"""
+    """Using `experimental_results` as an input, performs a bootstrap sample o
+    theoretical predictions across replicas using MCStats.bootstrap_values. The
+    output of MCStats.bootstrap_values is used to create a `StatsResult` object
+    which can then be used to calculate phi. The output will be a distribution
+    of phi generated from the bootstrap sample in the form of a np.array which
+    is bootstrap_samples long
+    """
     dt, th = experiment_results
     th_sample = StatsResult(th.stats_class(np.array(th._rawdata).T).bootstrap_values(bootstrap_samples))
     cov_mat = dt.sqrtcovmat

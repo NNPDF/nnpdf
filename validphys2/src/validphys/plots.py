@@ -80,8 +80,9 @@ def plot_phi_pdfs(experiments, pdfs, experiments_pdfs_phi):
 @figure
 def plot_phi_experiment_dist(experiment, bootstrap_phi_data_experiment):
     """Plots a histogram of phi for a single experiment, specify 
-`bootstrap_samples` in runcard to control the number of samples taken, by 
-default it is set to 100 which is rather low"""
+    `bootstrap_samples` in runcard to control the number of samples taken, by 
+    default it is set to 100 which is rather low
+    """
     phi = bootstrap_phi_data_experiment
     label = (r'$\phi$ mean = ' + format_number(phi.mean()) +  '\n' +  r'$\phi$ std dev = ' + format_number(phi.std()))
     fig, ax = plt.subplots()
@@ -93,9 +94,10 @@ default it is set to 100 which is rather low"""
 @figure
 def plot_phi_scatter(pdf, experiments, experiments_bootstrap_phi):
     """does a bootstrap sample of theoretical predictions for each experiment 
-and uses this to find a distribution of phi the distributions are represented as
-a scatter point of the mean value, with an error bar which represents the 68% 
-confidence region"""
+    and uses this to find a distribution of phi the distributions are 
+    represented as a scatter point of the mean value, with an error bar which 
+    represents the 68% confidence region
+    """
     phis = experiments_bootstrap_phi
     phi_means = np.mean(phis, axis=1)
     phi_minus = phi_means - np.percentile(phis, 16, axis=1)
@@ -116,11 +118,11 @@ def plot_phi_scatter_dataspecs(dataspecs, dataspecs_experiments,
         dataspecs_speclabel, dataspecs_experiments_bootstrap_phi, 
         bootstrap_samples=100):
     """For each of the dataspecs, does a bootstrap sample of theoretical 
-predictions and uses this to find a distribution of phi for all experiments
-the distributions are represented as a scatter point of the mean value, with
-an error bar which shows the 68% confidence region
+    predictions and uses this to find a distribution of phi for all experiments
+    the distributions are represented as a scatter point of the mean value, 
+    with an error bar which shows the 68% confidence region
 
-NOTE:both dataspecs must have the same experiments
+    NOTE:both dataspecs must have the same experiments
     """
     labels = dataspecs_speclabel
     phis = dataspecs_experiments_bootstrap_phi    
