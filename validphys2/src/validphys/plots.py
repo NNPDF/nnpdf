@@ -78,7 +78,9 @@ def plot_phi_pdfs(experiments, pdfs, experiments_pdfs_phi):
 
 @figure
 def plot_phi_experiment_dist(experiment, bootstrap_phi_data_experiment):
-    """Plots histogram of phi for a single experiment, specify bootstrap_samples in runcard"""
+    """Plots a histogram of phi for a single experiment, specify 
+`bootstrap_samples` in runcard to control the number of samples taken, by 
+default it is set to 100 which is rather low"""
     phi = bootstrap_phi_data_experiment
     label = (r'$\phi$ mean = ' + str(round(phi.mean(), 5)) +  '\n' +  r'$\phi$ std dev = ' + str(round(phi.std(), 5)))
     fig, ax = plt.subplots()
@@ -89,11 +91,13 @@ def plot_phi_experiment_dist(experiment, bootstrap_phi_data_experiment):
 
 @figure
 def plot_phi_scatter(pdf, experiments, experiments_bootstrap_phi):
-    """Plots a scatter graph of phi for experiments, error is 68% confidence interval
-    specify bootstrap_samples in runcard"""
+    """Plots a scatter graph of phi for experiments, error is the 68% 
+confidence region"""
     phis = experiments_bootstrap_phi
-    phi_means = [phis[i].mean() for i in range(len(phis))]
-    phi_errs = [phis[i].std() for i in range(len(phis))]
+    phi_means = np.mean(phis, axis=1)
+    phi_minus = phi_means - np.percentile(phis, 16, axis=1)
+    phi_plus = np.percentile(phis, 84, axis=1) - phi_means
+    phi_errs = np.vstack((phi_minus, phi_plus))
     xticks = [experiment.name for experiment in experiments]
     x = range(1, len(phis)+1)
     label = pdf.name
@@ -103,30 +107,28 @@ def plot_phi_scatter(pdf, experiments, experiments_bootstrap_phi):
     ax.set_xticklabels(xticks, minor=False, rotation=45)
     return fig
 
+#@_check_same_dataset_name
 @figure
-def plot_phi_scatter_dataspecs(dataspecs, dataspecs_experiments, dataspecs_pdf, dataspecs_speclabel, dataspecs_experiments_bootstrap_phi):
-    """Plots a scatter graph of phi for experiments with error for each of the dataspecs
-    one limitation at present is experiments are taken from first dataspec for the x axis
+def plot_phi_scatter_dataspecs(dataspecs, dataspecs_experiments,
+        dataspecs_speclabel, dataspecs_experiments_bootstrap_phi, 
+        bootstrap_samples=100):
+    """For each of the dataspecs, does a bootstrap sample of theoretical 
+predictions and uses this to find a distribution of phi for all experiments
+the distributions are represented as a scatter point of the mean value, with
+an error bar which shows the 68% confidence region
+
+NOTE:both dataspecs must have the same experiments
     """
-    speclabels = dataspecs_speclabel
-    ds_pdfs = dataspecs_pdf
-    phis = dataspecs_experiments_bootstrap_phi
-    if speclabels[0]:
-        labels = speclabels
-    elif ds_pdfs[0]:
-        labels = [pdf.name for pdf in ds_pdfs]
-    else:
-        labels = ["undefined label" for i in range(len(dataspecs))]
-        
+    labels = dataspecs_speclabel
+    phis = dataspecs_experiments_bootstrap_phi    
     exps = dataspecs_experiments
     xticks = [experiment.name for experiment in exps[0]]
     x = range(1, len(xticks)+1)
     fig, ax = plt.subplots()
     for i, dataspec in enumerate(dataspecs):
-        phi_means = [phis[i][j].mean() for j in range(len(phis[i]))]
-        #error is 68% instead of std dev
-        phi_minus = np.asarray(phi_means) - np.asarray([np.sort(phis[i][j])[int(0.16*len(phis[i][j]))] for j in range(len(phis[i]))])
-        phi_plus = np.asarray([np.sort(phis[i][j])[int(0.84*len(phis[i][j]))] for j in range(len(phis[i]))]) - np.asarray(phi_means)
+        phi_means = np.mean(phis[i], axis=1)
+        phi_minus = phi_means - np.percentile(phis[i], 16, axis=1)
+        phi_plus = np.percentile(phis[i], 84, axis=1) - phi_means
         phi_errs = np.vstack((phi_minus, phi_plus))
         ax.errorbar(x, phi_means, yerr=phi_errs, fmt='.', label=labels[i])
     ax.set_xticks(x, minor=False)
