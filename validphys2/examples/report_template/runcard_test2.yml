@@ -1,0 +1,105 @@
+current:
+  fit: {id: 180307-lr-nlo-xF2dot0xR2dot0_DISonly}
+  pdf: {id: 180307-lr-nlo-xF2dot0xR2dot0_DISonly, label: "Current Fit"}
+  theory: 
+    from_: fit
+  theoryid: 
+    from_: theory
+  speclabel: "Current Fit"
+
+reference: 
+  fit: {id: 180307-lr-nlo-central_DISonly}
+  pdf: {id: 180307-lr-nlo-central_DISonly, label: "Reference Fit" }
+  theory: 
+    from_: fit
+  theoryid: 
+    from_: theory
+  speclabel: "Reference Fit"
+
+pdfs:
+    - from_: current
+    - from_: reference
+
+fits:
+  - from_: current
+  - from_: reference
+
+meta:
+    title: NNPDF Report Template - xF=xR=2.0, DIS only vs. central 
+    keywords: [report,template]
+    author: NNPDF Collaboration
+
+use_cuts: True
+
+Q: 3
+
+pdfnormalize:
+    - normtitle: Absolute
+
+    - normalize_to: 1
+      normtitle: Ratio
+
+basespecs:
+    - basis: flavour
+      basistitle: Flavour basis
+    - basis: evolution
+      basistitle: Evolution basis
+
+template: report2.md
+
+experiments:
+    from_: fit
+
+# experiments:
+# # Fixed target DIS
+#   - experiment: Fixed target DIS
+#     datasets:
+#       - { dataset: NMCPD, frac: 0.5 }
+
+
+dataspecs:
+  - theoryid: 
+      from_: current
+    pdf: 
+      from_: current
+    fit:
+      from_: current
+    speclabel:
+      from_: current
+
+  - theoryid: 
+      from_: reference
+    pdf: 
+      from_: reference
+    fit:
+      from_: reference
+    speclabel:
+      from_: reference
+
+# dataset_report:
+#     meta: Null
+#     template_text: |
+#         {@with matched_datasets_from_dataspecs@}
+#         % Data theory comparison for {@dataset_name@}
+        
+#         Absolute
+#         ---------
+        
+#         {@ plot_fancy_dataspecs @}
+        
+#         Normalized
+#         ----------
+        
+#         {@ datanorm plot_fancy_dataspecs @}
+
+#         {@endwith@}
+
+normalize:
+  normalize_to: 1
+
+datanorm:
+    normalize_to: data
+
+actions_:
+    - - report:
+          main: True

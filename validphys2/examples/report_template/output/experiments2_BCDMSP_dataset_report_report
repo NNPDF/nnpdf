@@ -1,0 +1,77 @@
+% Data theory comparison for BCDMSP
+
+Predictions using theory theory 165
+
+Absolute
+---------
+
+![[.png](figures/experiments2_BCDMSP_dataset_report_plot_fancy_0.png) [.pdf](figures/experiments2_BCDMSP_dataset_report_plot_fancy_0.pdf)](figures/experiments2_BCDMSP_dataset_report_plot_fancy_0.png)
+
+
+Normalized
+----------
+
+![[.png](figures/experiments2_BCDMSP_dataset_report_datanorm_plot_fancy_0.png) [.pdf](figures/experiments2_BCDMSP_dataset_report_datanorm_plot_fancy_0.pdf)](figures/experiments2_BCDMSP_dataset_report_datanorm_plot_fancy_0.png)
+
+
+$\chi^2$
+----
+
+###Tables
+
+
+#### Current
+<table border="0" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>central_mean</th>
+<th>npoints</th>
+<th>chi2_per_data</th>
+<th>perreplica_mean</th>
+<th>perreplica_std</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>BCDMSP</th>
+<td>323.3</td>
+<td>296</td>
+<td>1.092</td>
+<td>361.9</td>
+<td>26.90</td>
+</tr>
+</tbody>
+</table>
+
+#### Reference
+<table border="0" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>central_mean</th>
+<th>npoints</th>
+<th>chi2_per_data</th>
+<th>perreplica_mean</th>
+<th>perreplica_std</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>BCDMSP</th>
+<td>388.5</td>
+<td>296</td>
+<td>1.313</td>
+<td>535.3</td>
+<td>105.2</td>
+</tr>
+</tbody>
+</table>
+
+
+### Replica distributions
+
+![[.png](figures/experiments2_BCDMSP_dataset_report_Current_plot_chi2dist.png) [.pdf](figures/experiments2_BCDMSP_dataset_report_Current_plot_chi2dist.pdf)](figures/experiments2_BCDMSP_dataset_report_Current_plot_chi2dist.png)
+
+![[.png](figures/experiments2_BCDMSP_dataset_report_Reference_plot_chi2dist.png) [.pdf](figures/experiments2_BCDMSP_dataset_report_Reference_plot_chi2dist.pdf)](figures/experiments2_BCDMSP_dataset_report_Reference_plot_chi2dist.png)
+

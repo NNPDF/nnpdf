@@ -1,0 +1,71 @@
+Qs:
+ - Q: 3
+ - Q: 100
+
+normalize_to_first:
+    normalize_to: 1
+
+basisspec:
+    - basis: flavour
+      basistitle: Flavour Basis
+
+    - basis: evolution
+      basistitle: Evolution Basis
+
+current:
+    pdf: {id: NNPDF31_nnlo_as_0118, label: NNPDF 3.1 NNLO}
+
+reference:
+    pdf: {id: NNPDF31_nnlo_as_0118, label: NNPDF 3.1 NNLO}
+
+specs:
+    - pdfs:
+        - from_: 31nnlo
+      pdfcomptitle: Comparison between NNPDF 3.1 NNLO and NLO
+
+    - pdfs:
+        - from_: fcnnlo
+        - from_: pcnnlo
+      pdfcomptitle: Comparison between NNPDF 3.1 with perturbative and fitted charm
+
+    - pdfs:
+        - from_: 31nnlo
+        - from_: 30nnlo
+      pdfcomptitle: Comparison between NNPDF 3.1 and NNPDF 3.0 at NNLO
+
+    - pdfs:
+        - from_: 31nlo
+        - from_: 30nlo
+      pdfcomptitle: Comparison between NNPDF 3.1 and NNPDF 3.0 at NLO
+
+    - pdfs:
+        - from_: 31nnlo
+        - from_: 30nnlo
+        - MMHT2014nnlo68cl
+        - CT14nnlo
+      pdfcomptitle: Comparison between NNPDF 3.1 and the sets entering the PDF4LHC combination at NNLO
+
+
+
+
+pdgbasis:
+    basis: pdg
+
+mathjax: True
+
+each_report:
+    meta: Null
+    template: templates/pdfcomp.md
+
+template: templates/runpdfcomp.md
+
+meta:
+    title: PDF comparisons for the main 3.1 sets
+    author: NNPDF Collaboration
+    keywords: gallery
+
+actions_:
+    - - report:
+           main: True
+
+

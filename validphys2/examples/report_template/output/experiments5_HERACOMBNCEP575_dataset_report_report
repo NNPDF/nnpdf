@@ -1,0 +1,85 @@
+% Data theory comparison for HERACOMBNCEP575
+
+Predictions using theory theory 165
+
+Absolute
+---------
+
+![[.png](figures/experiments5_HERACOMBNCEP575_dataset_report_plot_fancy_0.png) [.pdf](figures/experiments5_HERACOMBNCEP575_dataset_report_plot_fancy_0.pdf)](figures/experiments5_HERACOMBNCEP575_dataset_report_plot_fancy_0.png)
+
+![[.png](figures/experiments5_HERACOMBNCEP575_dataset_report_plot_fancy_1.png) [.pdf](figures/experiments5_HERACOMBNCEP575_dataset_report_plot_fancy_1.pdf)](figures/experiments5_HERACOMBNCEP575_dataset_report_plot_fancy_1.png)
+
+![[.png](figures/experiments5_HERACOMBNCEP575_dataset_report_plot_fancy_2.png) [.pdf](figures/experiments5_HERACOMBNCEP575_dataset_report_plot_fancy_2.pdf)](figures/experiments5_HERACOMBNCEP575_dataset_report_plot_fancy_2.png)
+
+
+Normalized
+----------
+
+![[.png](figures/experiments5_HERACOMBNCEP575_dataset_report_datanorm_plot_fancy_0.png) [.pdf](figures/experiments5_HERACOMBNCEP575_dataset_report_datanorm_plot_fancy_0.pdf)](figures/experiments5_HERACOMBNCEP575_dataset_report_datanorm_plot_fancy_0.png)
+
+![[.png](figures/experiments5_HERACOMBNCEP575_dataset_report_datanorm_plot_fancy_1.png) [.pdf](figures/experiments5_HERACOMBNCEP575_dataset_report_datanorm_plot_fancy_1.pdf)](figures/experiments5_HERACOMBNCEP575_dataset_report_datanorm_plot_fancy_1.png)
+
+![[.png](figures/experiments5_HERACOMBNCEP575_dataset_report_datanorm_plot_fancy_2.png) [.pdf](figures/experiments5_HERACOMBNCEP575_dataset_report_datanorm_plot_fancy_2.pdf)](figures/experiments5_HERACOMBNCEP575_dataset_report_datanorm_plot_fancy_2.png)
+
+
+$\chi^2$
+----
+
+###Tables
+
+
+#### Current
+<table border="0" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>central_mean</th>
+<th>npoints</th>
+<th>chi2_per_data</th>
+<th>perreplica_mean</th>
+<th>perreplica_std</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>HERACOMBNCEP575</th>
+<td>170.1</td>
+<td>206</td>
+<td>0.8259</td>
+<td>173.3</td>
+<td>3.328</td>
+</tr>
+</tbody>
+</table>
+
+#### Reference
+<table border="0" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>central_mean</th>
+<th>npoints</th>
+<th>chi2_per_data</th>
+<th>perreplica_mean</th>
+<th>perreplica_std</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>HERACOMBNCEP575</th>
+<td>732.5</td>
+<td>206</td>
+<td>3.556</td>
+<td>736.8</td>
+<td>49.18</td>
+</tr>
+</tbody>
+</table>
+
+
+### Replica distributions
+
+![[.png](figures/experiments5_HERACOMBNCEP575_dataset_report_Current_plot_chi2dist.png) [.pdf](figures/experiments5_HERACOMBNCEP575_dataset_report_Current_plot_chi2dist.pdf)](figures/experiments5_HERACOMBNCEP575_dataset_report_Current_plot_chi2dist.png)
+
+![[.png](figures/experiments5_HERACOMBNCEP575_dataset_report_Reference_plot_chi2dist.png) [.pdf](figures/experiments5_HERACOMBNCEP575_dataset_report_Reference_plot_chi2dist.pdf)](figures/experiments5_HERACOMBNCEP575_dataset_report_Reference_plot_chi2dist.png)
+
