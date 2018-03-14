@@ -258,6 +258,11 @@ string BuildResultsFolder(string const& filename)
     {
       if( s.st_mode & S_IFREG)
         {
+          // Stop if filename contains more than 1 dot
+          if (count(filename.begin(), filename.end(), '.') > 1)
+            throw NNPDF::FileError("BuildResultsFolder",
+                                   "This program does not accept a configuration file with more than 1 dot.");
+
           // Get raw name
           const int firstindex  = (int) filename.find_last_of("/") + 1;
           const int lastindex   = (int) filename.find_last_of(".") - firstindex; // convetion: we don't accept more than 1 point.
