@@ -289,11 +289,12 @@ class CommonDataSpec(TupleComp):
 class DataSetInput(TupleComp):
     """Represents whatever the user enters in the YAML to specidy a
     dataset."""
-    def __init__(self, *, name, sys, cfac):
+    def __init__(self, *, name, sys, cfac, weight):
         self.name=name
         self.sys=sys
         self.cfac = cfac
-        super().__init__(name, sys, cfac)
+        self.weight = weight
+        super().__init__(name, sys, cfac, weight)
 
     def __str__(self):
         return self.name
@@ -334,7 +335,7 @@ def cut_mask(cuts):
 class DataSetSpec(TupleComp):
 
     def __init__(self, *, name, commondata, fkspecs, thspec, cuts,
-                 op=None):
+                 op=None, weight=1):
         self.name = name
         self.commondata = commondata
 
@@ -350,10 +351,10 @@ class DataSetSpec(TupleComp):
         if op is None:
             op = 'NULL'
         self.op = op
-
+        self.weight = weight
 
         super().__init__(name, commondata, fkspecs, thspec, cuts,
-                         op)
+                         op, weight)
 
     @functools.lru_cache()
     def load(self):
@@ -370,7 +371,7 @@ class DataSetSpec(TupleComp):
 
         fkset = FKSet(FKSet.parseOperator(self.op), fktables)
 
-        data = DataSet(cd, fkset)
+        data = DataSet(cd, fkset, self.weight)
 
 
         if self.cuts is not None:
