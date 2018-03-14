@@ -1800,8 +1800,7 @@ real NN31ICFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &s
  *  Evolution Fit Basis with c+
  **/
 NoSumRuleBasis::NoSumRuleBasis(NNPDFSettings const& nnset):
-FitBasis(nnset, "NoSumRuleBasis", 8+nnset.IsQED()),
-fQED(nnset.IsQED())
+FitBasis(nnset, "NoSumRuleBasis", 8)
 {
   // PDF Names for plotting
   fPDFNames[FIT_SNG] = "Singlet";
@@ -1812,8 +1811,6 @@ fQED(nnset.IsQED())
   fPDFNames[FIT_T3] = "T3";
   fPDFNames[FIT_T8] = "T8";
   fPDFNames[FIT_CP] = "c+";
-  if (fQED)
-    fPDFNames[FIT_GAM] = "Photon";
 
   // Damping factor for arclengths
   fArcDampFactor[FIT_SNG] = 1;
@@ -1824,8 +1821,6 @@ fQED(nnset.IsQED())
   fArcDampFactor[FIT_T3] = 1;
   fArcDampFactor[FIT_T8] = 1;
   fArcDampFactor[FIT_CP] = 1;
-  if (fQED)
-    fArcDampFactor[FIT_GAM] = 1;
 }
 
 /*!
@@ -1853,11 +1848,7 @@ void NoSumRuleBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, boo
  */
 void NoSumRuleBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
 {
-  if ( fQED )
-    EVLN[EVLN_GAM] = FIT[FIT_GAM];
-  else
-    EVLN[EVLN_GAM] = 0;
-
+  EVLN[EVLN_GAM] = 0;
   EVLN[EVLN_SNG]  = FIT[FIT_SNG]; //Singlet
   EVLN[EVLN_GLU]  = FIT[FIT_GLU]; //Gluon
   EVLN[EVLN_VAL]  = FIT[FIT_VAL]; //Valence
@@ -1897,9 +1888,6 @@ void NoSumRuleBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
   FIT[FIT_T8]   = EVLN[EVLN_T8];  // T8
   FIT[FIT_CP]   = (EVLN[EVLN_SNG]-EVLN[EVLN_T15])/4;  // T15
 
-  if (fQED)
-    FIT[FIT_GAM] =  EVLN[0];  // photon
-
   return;
 }
 
@@ -1923,11 +1911,6 @@ real NoSumRuleBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &s
          real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
          real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
          real msr = xsng+xglu;
-         if (fQED)
-           {
-             real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
-             msr += xgam;
-           }
          return msr;
        }
        break;

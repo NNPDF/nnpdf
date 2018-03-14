@@ -263,9 +263,9 @@ class NoSumRuleBasis: public FitBasis
 public:
   NoSumRuleBasis(NNPDFSettings const&);
 
-  // Σ, g, V, V3, V8, T3, T8, c+, (γ)
+  // Σ, g, V, V3, V8, T3, T8, c+
 
-  enum fitBasis {FIT_SNG, FIT_GLU, FIT_VAL, FIT_V3, FIT_V8, FIT_T3, FIT_T8, FIT_CP, FIT_GAM };
+  enum fitBasis {FIT_SNG, FIT_GLU, FIT_VAL, FIT_V3, FIT_V8, FIT_T3, FIT_T8, FIT_CP};
 
   void BASIS2EVLN(real const* basis, real* evln) const;
   void EVLN2BASIS(real const* evln, real* basis) const;
@@ -274,10 +274,4 @@ public:
 
   // Preprocessing
   void ComputeParam(PDFSet*, int mem, PreprocParam&, bool&) const;
-
-protected:
-  const bool fQED;
-
 };
-
-
