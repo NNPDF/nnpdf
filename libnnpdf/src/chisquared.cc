@@ -15,7 +15,7 @@ namespace NNPDF
   /**
    * Generate covariance matrix from CommonData and a t0 vector
    */
-  matrix<double> ComputeCovMat(CommonData const& cd, std::vector<double> const& t0)
+  matrix<double> ComputeCovMat(CommonData const& cd, std::vector<double> const& t0, double weight)
   {
     const int ndat = cd.GetNData();
     const int nsys = cd.GetNSys();
@@ -52,7 +52,7 @@ namespace NNPDF
             }
         }
 
-        CovMat(i, j) = sig + signor*t0[i]*t0[j]*1e-4;
+        CovMat(i, j) = (sig + signor*t0[i]*t0[j]*1e-4)/weight;
       }
     }
     return CovMat;
