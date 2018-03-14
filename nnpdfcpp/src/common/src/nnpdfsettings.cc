@@ -20,26 +20,27 @@
 static const string minString[6]   = {"UNDEFINED", "GA", "NGA", "NGAFT","CMAES"};
 static const string stopString[6]  = {"UNDEFINED", "FIXEDLENGTH", "LOOKBACK"};
 static const string paramString[6] = {"UNDEFINED", "NN", "SLN", "SLNPP"};
-static const string basisString[16]= {"UNDEFINED", "NN23", "NN23QED","EVOL", "EVOLQED","EVOLS",
+static const string basisString[17]= {"UNDEFINED", "NN23", "NN23QED","EVOL", "EVOLQED","EVOLS",
                                       "EVOLSQED","NN30", "NN30QED","FLVR", "FLVRQED","NN30IC",
-                                      "EVOLIC","NN31IC","LUX", "NN31ICQED"};
+                                      "EVOLIC","NN31IC","LUX", "NN31ICQED", "NSR"};
 
 static const vector< vector<string> > basiselem = { {},
-                                     {"sng","g","v","t3","ds","sp","sm"},          //NN23
-                                     {"sng","g","v","t3","ds","sp","sm","pht"},    //NN23QED
-                                     {"sng","g","v","v3","v8","t3","t8"},          //EVOL
-                                     {"sng","g","v","v3","v8","t3","t8","pht"},    //EVOLQED
-                                     {"sng","g","v","v8","t3","t8","ds"},          //EVOLS
-                                     {"sng","g","v","v8","t3","t8","ds","pht"},    //EVOLSQED
-                                     {"sng","g","v","v8","t3","t8","ds"},          //NN30
-                                     {"sng","g","v","v8","t3","t8","ds","pht"},    //NN30QED
-                                     {"g","u","ubar","d","dbar","s","sbar"},       //FLVR
-                                     {"g","u","ubar","d","dbar","s","sbar","pht"}, //FLVRQED
-                                     {"sng","g","v","t3","ds","sp","sm","cp"},     //NN30IC
-                                     {"sng","g","v","v3","v8","t3","t8","t15"},    //EVOLIC
-                                     {"sng","g","v","v3","v8","t3","t8","cp"},     //NN31IC
-                                     {"sng","g","v","v3","v8","t3","t8","cp"},     //LUX
-                                     {"sng","g","v","v3","v8","t3","t8","cp","pht"}//NN31ICQED
+                                     {"sng","g","v","t3","ds","sp","sm"},           //NN23
+                                     {"sng","g","v","t3","ds","sp","sm","pht"},     //NN23QED
+                                     {"sng","g","v","v3","v8","t3","t8"},           //EVOL
+                                     {"sng","g","v","v3","v8","t3","t8","pht"},     //EVOLQED
+                                     {"sng","g","v","v8","t3","t8","ds"},           //EVOLS
+                                     {"sng","g","v","v8","t3","t8","ds","pht"},     //EVOLSQED
+                                     {"sng","g","v","v8","t3","t8","ds"},           //NN30
+                                     {"sng","g","v","v8","t3","t8","ds","pht"},     //NN30QED
+                                     {"g","u","ubar","d","dbar","s","sbar"},        //FLVR
+                                     {"g","u","ubar","d","dbar","s","sbar","pht"},  //FLVRQED
+                                     {"sng","g","v","t3","ds","sp","sm","cp"},      //NN30IC
+                                     {"sng","g","v","v3","v8","t3","t8","t15"},     //EVOLIC
+                                     {"sng","g","v","v3","v8","t3","t8","cp"},      //NN31IC
+                                     {"sng","g","v","v3","v8","t3","t8","cp"},      //LUX
+                                     {"sng","g","v","v3","v8","t3","t8","cp","pht"},//NN31ICQED
+                                     {"sng","g","v","v3","v8","t3","t8","cp"}       //NSR
                                      };
 
 /* Convert string to enum */
@@ -101,6 +102,7 @@ basisType NNPDFSettings::getFitBasisType(string const& method)
   if (method.compare("NN31IC") == 0)  return BASIS_NN31IC;
   if (method.compare("LUX") == 0)     return BASIS_LUX;
   if (method.compare("NN31ICQED")==0) return BASIS_NN31ICQED;
+  if (method.compare("NSR")==0) return BASIS_NSR;
 
   cerr << "getFitBasisType Error: Invalid parametrization type: "<<method;
   exit(-1);
