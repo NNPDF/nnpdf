@@ -40,6 +40,7 @@ static const vector< vector<string> > basiselem = { {},
                                      {"sng","g","v","v3","v8","t3","t8","cp"},     //NN31IC
                                      {"sng","g","v","v3","v8","t3","t8","cp"},     //LUX
                                      {"sng","g","v","v3","v8","t3","t8","cp","pht"}//NN31ICQED
+                                     {"sng","g","v","v3","v8","t3","t8","cp"},     //NSR
                                      };
 
 /* Convert string to enum */
