@@ -47,7 +47,7 @@ DataSet::DataSet(CommonData const& data, FKSet const& set, double weight):
     fT0Pred.push_back(fData[i]); // Default T0 to data
 }
 
-DataSet::DataSet(const DataSet& set, std::vector<int> const& mask, double weight):
+DataSet::DataSet(const DataSet& set, std::vector<int> const& mask):
   CommonData(set, mask),
   FKSet(set, mask),
   fIsArtificial(set.fIsArtificial),
