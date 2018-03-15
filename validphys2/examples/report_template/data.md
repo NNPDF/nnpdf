@@ -1,4 +1,4 @@
-% Data-fits comparisons for {@dataset_name@}
+% Data-theory comparison for {@dataset_name@}
 # Absolute
 {@plot_fancy_dataspecs@}
 # Normalized
