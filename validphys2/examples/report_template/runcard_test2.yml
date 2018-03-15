@@ -26,7 +26,7 @@ fits:
 
 meta:
     title: NNPDF Report Template - xF=xR=2.0, DIS only vs. central 
-    keywords: [report,template]
+    keywords: [report_template]
     author: NNPDF Collaboration
 
 use_cuts: True
