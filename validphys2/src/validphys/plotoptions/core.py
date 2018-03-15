@@ -8,8 +8,9 @@ import logging
 
 import numpy as np
 import pandas as pd
+import numbers
 
-
+from reportengine.floatformatting import format_number
 from reportengine.configparser import Config, ConfigError, named_element_of
 from reportengine.utils import get_functions, ChainMap
 
@@ -119,6 +120,8 @@ class PlotInfo:
         pieces = []
         for column, val in zip(groupby, same_vals):
             label = self.name_to_label(column)
+            if isinstance(val, numbers.Real):
+                val = format_number(val)
             pieces.append('%s = %s' % (label, val))
         return '%s' % ' '.join(pieces)
 

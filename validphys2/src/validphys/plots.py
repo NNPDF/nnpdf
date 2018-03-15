@@ -21,7 +21,6 @@ import scipy.stats as stats
 
 from reportengine.figure import figure, figuregen
 from reportengine.checks import make_check, CheckError, make_argcheck
-from reportengine.floatformatting import format_number
 
 from validphys.core import MCStats, cut_mask
 from validphys.results import chi2_stat_labels
@@ -262,8 +261,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
                     max_vals.append(np.nanmax(cv+err))
                     min_vals.append(np.nanmin(cv-err))
 
-
-            glabel = info.group_label((float(format_number(sameline_vals[0],3)),), info.line_by)
+            glabel = info.group_label(sameline_vals, info.line_by)
         
             #Use some anchor that is not in y=1 for ratio plots
             if normalize_to is not None:
