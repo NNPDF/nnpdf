@@ -209,6 +209,8 @@ class CoreConfig(configparser.Config):
         weight = dataset.get('weight', 1)
         if  not isinstance(weight, numbers.Real):
             raise ConfigError(f"'weight' must be a number, not '{weight}'")
+        if weight < 0:
+            raise ConfigError(f"'weight' must be greater than zero not '{weight}'")
         kdiff = dataset.keys() - known_keys
         for k in kdiff:
             #Abuse ConfigError to get the suggestions.
