@@ -37,28 +37,22 @@ DataSet::DataSet(CommonData const& data, FKSet const& set, double weight):
   CommonData(data),
   FKSet(set),
   fIsArtificial(false),
-  fIsT0(false)
+  fIsT0(false),
+  fWeight(weight)
 {
   fT0Pred.reserve(fNData);
 
   // Init T0 Vector
   for (int i = 0; i < fNData; i++)
     fT0Pred.push_back(fData[i]); // Default T0 to data
-
-  if (weight!=1){
-      if (weight < 0){
-          throw LogicException("DataSet", "weight must be positive");
-      }
-      double sqrtw = std::sqrt((long double) weight);
-      RescaleErrors(1/sqrtw);
-  }
 }
 
-DataSet::DataSet(const DataSet& set, std::vector<int> const& mask):
+DataSet::DataSet(const DataSet& set, std::vector<int> const& mask, double weight):
   CommonData(set, mask),
   FKSet(set, mask),
   fIsArtificial(set.fIsArtificial),
-  fIsT0(set.fIsT0)
+  fIsT0(set.fIsT0),
+  fWeight(weight)
 {
   fT0Pred.reserve(fNData);
 
@@ -79,7 +73,7 @@ DataSet::~DataSet()
  */
 void DataSet::GenCovMat() const
 {
-  fCovMat = ComputeCovMat(*this, fT0Pred);
+  fCovMat = ComputeCovMat(*this, fT0Pred, fWeight);
   fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 

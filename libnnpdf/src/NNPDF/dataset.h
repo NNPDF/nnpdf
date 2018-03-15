@@ -39,12 +39,14 @@ namespace NNPDF
 
     // private methods for constructor
     void GenCovMat() const;     //!< Generate covariance matrix
+    double fWeight = 1; //!< Factor that divides the covariance matrix and increases
+                        //!the weight of this dataset in the fit proportionally.
 
     DataSet();                          //!< Disable default constructor
 
    public:
     DataSet(CommonData const&, FKSet const&, double weight=1.); //!< Constructor
-    DataSet(const DataSet&, std::vector<int> const&); //!< Masked Copy constructor
+    DataSet(const DataSet&, std::vector<int> const&, double weight=1.); //!< Masked Copy constructor
     DataSet(const DataSet&) = default; //!< Masked Copy constructor
     virtual ~DataSet();                       //!< The destructor.
 
