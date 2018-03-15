@@ -18,11 +18,6 @@ $\chi^2$
 
 Experiment plots
 ---------------
-
 {@with matched_datasets_from_dataspecs@}
-## Data theory comparison for {@dataset_name@}        
-### Absolute
-{@ plot_fancy_dataspecs @}
-### Normalized
-{@ datanorm plot_fancy_dataspecs @}
+[Detailed plots for dataset ' {@dataset_name@} ']({@dataset_report report@})
 {@endwith@}

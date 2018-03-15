@@ -45,6 +45,10 @@ basespecs:
     - basis: evolution
       basistitle: Evolution basis
 
+dataset_report:
+    meta: Null
+    template: data.md
+
 template: report2.md
 
 experiments:
@@ -75,24 +79,6 @@ dataspecs:
       from_: reference
     speclabel:
       from_: reference
-
-# dataset_report:
-#     meta: Null
-#     template_text: |
-#         {@with matched_datasets_from_dataspecs@}
-#         % Data theory comparison for {@dataset_name@}
-        
-#         Absolute
-#         ---------
-        
-#         {@ plot_fancy_dataspecs @}
-        
-#         Normalized
-#         ----------
-        
-#         {@ datanorm plot_fancy_dataspecs @}
-
-#         {@endwith@}
 
 normalize:
   normalize_to: 1
