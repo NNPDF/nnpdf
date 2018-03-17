@@ -26,7 +26,7 @@ configure_file(
 # add preprocessor flag
 add_definitions(-DDEFAULT_NNPDF_PROFILE_PATH="${prefix}/share/NNPDF/nnprofile.yaml")
 
-include_directories(src/NNPDF ${GSL_INCLUDE_DIRS} ${YAML_INCLUDE_DIRS})
+include_directories(src/NNPDF src ${GSL_INCLUDE_DIRS} ${YAML_INCLUDE_DIRS})
 add_library(nnpdf SHARED src/common.cc
                          src/commondata.cc
                          src/chisquared.cc
