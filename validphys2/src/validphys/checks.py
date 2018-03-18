@@ -55,17 +55,20 @@ def check_has_fitted_replicas(ns, **kwargs):
     postfit_path = path/'postfit'/'postfit.log'
     old_postfit_path = path/'nnfit'/'postfit.log'
     if not postfit_path.exists():
-        log.warn(f"Cannot find postfit log at: {postfit_path}")
-        log.warn(f"Falling back to old location: {old_postfit_path}")
         if not old_postfit_path.exists():
-            raise CheckError("Fit {name} does not appear to be completed. "
-            "Expected to find file {postfit_path}".format(**locals()))
+            raise CheckError(
+                f"Fit {name} does not appear to be completed. "
+                f"Expected to find file {postfit_path}")
+        else:
+            log.info(f"Cannot find postfit log at: {postfit_path}. "
+                     f"Falling back to old location: {old_postfit_path}")
 
     if not lhaindex.isinstalled(name):
-        raise CheckError("The PDF corresponding to the fit, '%s', "
-        "needs to be "
-        "installed in LHAPDF (i.e. copied to %s)."%
-        (name, lhaindex.get_lha_datapath()))
+        raise CheckError(
+            f"The PDF corresponding to the fit, '{name}'"
+            "needs to be installed in LHAPDF (i.e. copied to "
+            f"{lhaindex.get_lha_datapath()})."
+        )
 
 
 def check_scale(scalename, allow_none=False):

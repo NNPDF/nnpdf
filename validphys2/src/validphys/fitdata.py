@@ -105,9 +105,6 @@ def replica_paths(fit):
     old_postfit_path = fit.path / 'nnfit'
     if postfit_path.is_dir():
         return [postfit_path / f'replica_{index}' for index in range(1, l)]
-    else:
-        log.warn(f"Cannot find postfit log at: {postfit_path}")
-        log.warn(f"Falling back to old location: {old_postfit_path}")
     return [old_postfit_path / f'replica_{index}' for index in range(1, l)]
 
 def replica_data(fit, replica_paths):
