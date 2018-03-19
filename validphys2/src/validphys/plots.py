@@ -29,7 +29,6 @@ from validphys.checks import check_scale
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges
 from validphys.fitdata import replica_data
-from validphys.plotutils import kde_plot
 
 from validphys.gridvalues import LUMI_CHANNELS
 
