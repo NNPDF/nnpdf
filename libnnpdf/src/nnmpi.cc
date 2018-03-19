@@ -5,9 +5,9 @@
 // Authors: Nathan Hartland,  n.p.hartland@ed.ac.uk
 //          Stefano Carrazza, stefano.carrazza@mi.infn.it
 
-#include "common.h"
-#include "nnmpi.h"
-#include "thpredictions.h"
+#include "NNPDF/common.h"
+#include "NNPDF/nnmpi.h"
+#include "NNPDF/thpredictions.h"
 using namespace NNPDF;
 
 #ifdef OPENMPI

@@ -7,7 +7,7 @@
 //          Luigi Del Debbio, luigi.del.debbio@ed.ac.uk
 
 #include "NNPDF/common.h"
-#include "config.h"
+#include "NNPDF/config.h"
 
 namespace{
 
