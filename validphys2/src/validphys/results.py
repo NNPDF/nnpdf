@@ -884,6 +884,19 @@ def theory_normcovmat_3pt(theory_covmat_3pt, experiments_data):
     return mat
 
 
+@table
+def experimentsplustheory_corrmat_3pt(experiments_covmat, theory_covmat_3pt):
+    """Calculates the correlation matrix for the experimental  plus theory (3 pt) covariance matrices."""
+    exp_df = experiments_covmat
+    theory_df = theory_covmat_3pt
+    total_df = experiments_covmat + theory_covmat_3pt
+    exp_covmat = exp_df.as_matrix()
+    theory_covmat = theory_df.as_matrix()
+    total_covmat = exp_covmat + theory_covmat
+    diag_minus_half = (np.diagonal(total_covmat))**(-0.5)
+    corrmat = diag_minus_half[:,np.newaxis]*total_df*diag_minus_half 
+    return corrmat
+
 experiments_results = collect(experiment_results, ('experiments',))
 each_dataset_results = collect(results, ('experiments', 'experiment'))
 
