@@ -258,15 +258,26 @@ string BuildResultsFolder(string const& filename)
     {
       if( s.st_mode & S_IFREG)
         {
-          // Stop if filename contains more than 1 dot
-          if (count(filename.begin(), filename.end(), '.') > 1)
-            throw NNPDF::FileError("BuildResultsFolder",
-                                   "This program does not accept a configuration file with more than 1 dot.");
-
-          // Get raw name
+          // Get file name without path
           const int firstindex  = (int) filename.find_last_of("/") + 1;
-          const int lastindex   = (int) filename.find_last_of(".") - firstindex; // convetion: we don't accept more than 1 point.
+          const string file = filename.substr(firstindex, filename.size()-firstindex);
+
+          // Check runcard name contains an extension
+          if (count(file.begin(), file.end(), '.') == 0)
+            throw NNPDF::FileError("BuildResultsFolder", "This program does not accept a configuration file without extension.");
+
+          // Remove extension from runcard name
+          const int lastindex   = (int) filename.find_last_of(".") - firstindex;
           resultsdir = filename.substr(firstindex, lastindex);
+
+          // Check name is valid (not empty and contains only alphanum chars)
+          if (!resultsdir.size())
+            throw NNPDF::FileError("BuildResultsFolder", "Configuration file name is empty");
+
+          auto is_valid = [](unsigned char c) { return std::isalnum(c) || c == '_' || c == '-' || c == '+'; };
+          if (!std::all_of(resultsdir.begin(), resultsdir.end(), is_valid))
+            throw NNPDF::FileError("BuildResultsFolder", "Configuration file name is invalid. Only alphanum characters and one extension are allowed.");
+
         }
       else if (s.st_mode & S_IFDIR)
         throw NNPDF::FileError("BuildResultsFolder",
