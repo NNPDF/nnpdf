@@ -274,7 +274,7 @@ string BuildResultsFolder(string const& filename)
           if (!resultsdir.size())
             throw NNPDF::FileError("BuildResultsFolder", "Configuration file name is empty");
 
-          auto is_valid = [](unsigned char c) { return std::isalnum(c) || c == '_' || c == '-' || c == '+'; };
+          auto is_valid = [](unsigned char c) { return std::isalnum(c) || c == '_' || c == '-'; };
           if (!std::all_of(resultsdir.begin(), resultsdir.end(), is_valid))
             throw NNPDF::FileError("BuildResultsFolder", "Configuration file name is invalid. Only alphanum characters and one extension are allowed.");
 
