@@ -16,7 +16,7 @@ import numbers
 import numpy as np
 import numpy.linalg as la
 import matplotlib.pyplot as plt
-from matplotlib import cm, colors as mcolors, ticker as mticker
+from matplotlib import cm, colors as mcolors, ticker as mticker, rcParams as rc
 import scipy.stats as stats
 
 from reportengine.figure import figure, figuregen
@@ -495,6 +495,32 @@ def plot_datasets_chi2(experiments, experiments_chi2,each_dataset_chi2):
                                datalabels=[r'$\chi^2$'])
 
     ax.set_title(r"$\chi^2$ distribution for datasets")
+
+    return fig
+
+@figure
+def plot_datasets_chi2_theory(experiments, experiments_chi2, each_dataset_chi2, 
+                              abs_chi2_data_theory_experiment, abs_chi2_data_theory_dataset):
+    """Plot the chi² of all datasets, before and after adding theory errors, with bars."""
+    ds = iter(each_dataset_chi2)
+    dstheory = iter(abs_chi2_data_theory_dataset)
+    dschi2 = []
+    dschi2theory = []
+    xticks = []
+    for experiment, expres in zip(experiments, experiments_chi2):
+        for dataset, dsres in zip(experiment, ds):
+            dschi2.append(dsres.central_result/dsres.ndata)
+            xticks.append(dataset.name)
+    for experiment, expres in zip(experiments, abs_chi2_data_theory_experiment):
+        for dataset, dsres in zip(experiment, dstheory):
+            dschi2theory.append(dsres.central_result/dsres.ndata)
+#            xticks.append(dataset.name)
+    plotvalues = np.stack((dschi2theory, dschi2))
+    fig,ax = plotutils.barplot(plotvalues, collabels=xticks,
+                               datalabels=["experiment + theory","experiment"])
+
+    ax.set_title(r"$\chi^2$ distribution for datasets")
+    ax.legend(fontsize=14)
 
     return fig
 
@@ -1633,6 +1659,8 @@ def matrix_plot_labels(df):
     ticklocs = [0 for x in range(len(startlocs)-1)]
     for i in range(len(startlocs)-1):
         ticklocs[i] = 0.5*(startlocs[i+1]+startlocs[i])
+    print("Experiment names:   " + str(ticklabels))
+    print("Datapoint start locations:   " + str(startlocs))
     return ticklocs, ticklabels
 
 @figure
@@ -1763,6 +1791,83 @@ def plot_diag_cov_impact(theory_covmat_3pt, experiments_covmat, experiments_data
     ax.legend()
     return fig
 
+@figure
+def plot_theory_error_test(theory_covmat_3pt, experiments_covmat, experiments_data, theoryids_experiments_central_values):
+    rc.update({'font.size': 30})
+    data = experiments_data.as_matrix()
+    df_theory = theory_covmat_3pt
+    df_experiment = experiments_covmat
+    matrix_theory = df_theory.as_matrix()
+    matrix_experiment = df_experiment.as_matrix()
+    central, low, high = np.array(theoryids_experiments_central_values)
+    experrors = np.sqrt(np.diag(matrix_experiment))
+    theoryerrors = np.sqrt(np.diag(matrix_theory))
+    fig,ax = plt.subplots(figsize=(20, 10))
+    ax.plot(central/data, label="central", color="red")
+    ax.plot(low/data, label="low",color="blue")
+    ax.plot(high/data, label="high",color="blue")
+    ax.errorbar(np.arange(len(data)),data/data, yerr=experrors/data,fmt='--o', label="experiment errors",color="black")
+    ax.errorbar(np.arange(len(data))+0.25,data/data, yerr=theoryerrors/data,fmt='none', label="theory errors",color="green")
+    ticklocs, ticklabels = matrix_plot_labels(df_experiment)
+#    plt.xticks(ticklocs, ticklabels, rotation="vertical")
+    ax.set_ylabel("Observable normalised to experiment")
+    ax.set_title("Theory error comparison")
+    ax.legend()
+ #   ax.set_ylim(-1,3)
+ #   ax.set_xlim(2145,2167) 
+    plt.show()
+    return fig
+
+@figure
+def plot_theory_error_test_zoom(theory_covmat_3pt, experiments_covmat, experiments_data, theoryids_experiments_central_values):
+    rc.update({'font.size': 30})
+    data = experiments_data.as_matrix()
+    df_theory = theory_covmat_3pt
+    df_experiment = experiments_covmat
+    matrix_theory = df_theory.as_matrix()
+    matrix_experiment = df_experiment.as_matrix()
+    central, low, high = np.array(theoryids_experiments_central_values)
+    experrors = np.sqrt(np.diag(matrix_experiment))
+    theoryerrors = np.sqrt(np.diag(matrix_theory))
+    fig,ax = plt.subplots(figsize=(20, 10))
+    ax.plot(central/data, label="central", color="red")
+    ax.plot(low/data, label="low",color="blue")
+    ax.plot(high/data, label="high",color="blue")
+    ax.errorbar(np.arange(len(data)),data/data, yerr=experrors/data,fmt='--o', label="experiment errors",color="black")
+    ax.errorbar(np.arange(len(data))+0.25,data/data, yerr=theoryerrors/data,fmt='none', label="theory errors",color="green")
+    ticklocs, ticklabels = matrix_plot_labels(df_experiment)
+#    plt.xticks(ticklocs, ticklabels, rotation="vertical")
+    ax.set_ylabel("Observable normalised to experiment")
+    ax.set_title("NTVDMN")
+    ax.legend()
+    ax.set_ylim(0.5,1.5)
+    ax.set_xlim(1106,1147) 
+    return fig
+    
+@figure
+def plot_theory_error_test_2(theory_covmat_3pt, experiments_covmat, experiments_data, theoryids_experiments_central_values):
+    rc.update({'font.size': 30})
+    data = experiments_data.as_matrix()
+    df_theory = theory_covmat_3pt
+    df_experiment = experiments_covmat
+    matrix_theory = df_theory.as_matrix()
+    matrix_experiment = df_experiment.as_matrix()
+    central, low, high = np.array(theoryids_experiments_central_values)
+    experrors = np.sqrt(np.diag(matrix_experiment))
+    theoryerrors = np.sqrt(np.diag(matrix_theory))
+    fig,ax = plt.subplots(figsize=(20, 10))
+    ax.plot(central/data, label="central", color="red")
+    ax.plot(low/data, label="low",color="blue")
+    ax.plot(high/data, label="high",color="blue")
+    ax.errorbar(np.arange(len(data)),data/data, yerr=experrors/data, fmt='--o',label="experiment errors",color="black")
+    ax.errorbar(np.arange(0,len(data))+0.25,data/data, yerr=theoryerrors/data,fmt='none', label="theory errors",color="green")
+    ticklocs, ticklabels = matrix_plot_labels(df_experiment)
+#    plt.xticks(ticklocs, ticklabels, rotation="vertical")
+    ax.set_ylabel("Observable normalised to experiment")
+    ax.set_title("HERA last 30 data points")
+    ax.legend()
+    ax.set_ylim(0,2)
+    ax.set_xlim(2084,2114) 
+    return fig
 
 
->>>>>>> cfd2cc2... Edit plot_diag_cov_comparison so exp+th is plotted, axis labels are rotated and plot is enlarged.
