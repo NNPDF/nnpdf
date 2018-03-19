@@ -463,6 +463,17 @@ def plot_fits_experiments_chi2(fits_experiments_chi2_table):
     ax.set_title(r"$\chi^2$ for experiments")
     return fig
 
+@figure
+def plot_training_length(replica_data, fit):
+    """Generate an histogram for the distribution
+    of training lengths in a given fit."""
+    fig, ax = plt.subplots()
+    x = [x.nite for x in replica_data]
+    ax.hist(x, density=True, label=str(fit))
+    ax.set_title("Distribution of training lengths")
+    ax.legend()
+    return fig
+
 
 @figure
 def plot_training_validation(fit, replica_data, replica_filters=None):
