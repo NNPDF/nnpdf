@@ -1613,6 +1613,26 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
 
     return fig
 
+def matrix_plot_labels(df):
+    explabels  = [list(df)[x][0] for x in range(len(list(df)))]
+    datlabels  = [list(df)[x][1] for x in range(len(list(df)))]
+    points     = [list(df)[x][2] for x in range(len(list(df)))]
+    unique_exp = [[0 for x in range(2)] for y in range(len(explabels))]
+    unique_exp[0] = [explabels[0],points[0]]
+    i=1
+    for x in range(len(explabels)-1):
+        if explabels[x+1] != explabels[x]:
+            unique_exp[i] = [explabels[x+1],x+1]
+            i=i+1
+    unique_exp = [sublist for i, sublist in enumerate(unique_exp) if sublist[0] != 0]
+    ticklabels = [unique_exp[x][0] for x in range(len(unique_exp))]
+    startlocs = [unique_exp[x][1] for x in range(len(unique_exp))]
+    startlocs += [len(explabels)]
+    ticklocs = [0 for x in range(len(startlocs))]
+    for i in range(len(startlocs)-1):
+        ticklocs[i] = 0.5*(startlocs[i+1]+startlocs[i])
+    return ticklocs, ticklabels
+
 @figure
 def plot_normexpcovmat_heatmap(experiments_normcovmat):
     """Matrix plot of the experiment covariance matrix normalised to data."""
@@ -1622,9 +1642,9 @@ def plot_normexpcovmat_heatmap(experiments_normcovmat):
     matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.01, linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
     cbar = fig.colorbar(matrixplot, label="% of data")
     ax.set_title('Experiment covariance matrix')
-    ax.xaxis.set_ticks_position('bottom')
-    plt.xlabel('Data points', labelpad=10)
-    ax.set_ylabel('Data points')
+    ticklocs, ticklabels = matrix_plot_labels(df)
+    plt.xticks([])
+    plt.yticks(ticklocs, ticklabels)
     return fig
 
 @figure
@@ -1636,9 +1656,9 @@ def plot_expcorrmat_heatmap(experiments_corrmat):
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
     cbar = fig.colorbar(matrixplot)
     ax.set_title('Experiment correlation matrix')
-    ax.xaxis.set_ticks_position('bottom')
-    plt.xlabel('Data points', labelpad=10)
-    ax.set_ylabel('Data points')
+    ticklocs, ticklabels = matrix_plot_labels(df)
+    plt.xticks([])
+    plt.yticks(ticklocs, ticklabels)    
     return fig
 
 @figure
@@ -1650,9 +1670,9 @@ def plot_normthcovmat_heatmap(theory_normcovmat_3pt):
     matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1, linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
     cbar = fig.colorbar(matrixplot, label="% of data")
     ax.set_title('Theory covariance matrix')
-    ax.xaxis.set_ticks_position('bottom')
-    plt.xlabel('Data points', labelpad=10)
-    ax.set_ylabel('Data points')
+    ticklocs, ticklabels = matrix_plot_labels(df)
+    plt.xticks([])
+    plt.yticks(ticklocs, ticklabels)
     return fig
 
 @figure
@@ -1664,9 +1684,23 @@ def plot_thcorrmat_heatmap(theory_corrmat_3pt):
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
     cbar = fig.colorbar(matrixplot)
     ax.set_title('Theory correlation matrix')
-    ax.xaxis.set_ticks_position('bottom')
-    plt.xlabel('Data points', labelpad=10)
-    ax.set_ylabel('Data points')
+    ticklocs, ticklabels = matrix_plot_labels(df)
+    plt.xticks([])
+    plt.yticks(ticklocs, ticklabels)
+    return fig
+
+@figure
+def plot_expplusthcorrmat_heatmap(experimentsplustheory_corrmat_3pt):
+    """Matrix plot of the exp + theory correlation matrix"""
+    df = experimentsplustheory_corrmat_3pt
+    matrix = experimentsplustheory_corrmat_3pt.as_matrix()
+    fig, ax = plt.subplots()
+    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
+    cbar = fig.colorbar(matrixplot)
+    ax.set_title('Experiment + theory correlation matrix')
+    ticklocs, ticklabels = matrix_plot_labels(df)
+    plt.xticks([])
+    plt.yticks(ticklocs, ticklabels)
     return fig
 
 @figure
@@ -1676,14 +1710,14 @@ def plot_covdiff_heatmap(theory_covmat_3pt, experiments_covmat):
     df_experiment = experiments_covmat
     matrix_theory = df_theory.as_matrix()
     matrix_experiment = df_experiment.as_matrix()
-    matrix = (matrix_theory+matrix_experiment)/matrix_experiment
+    matrix = (matrix_theory+matrix_experiment)/np.mean(matrix_experiment)
     fig,ax = plt.subplots()
-    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-5, vmax=5)
+    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1, linscale=10, vmin=-matrix.max(), vmax=matrix.max()))
     cbar = fig.colorbar(matrixplot)
-    ax.set_title('(Theory + experiment)/experiment covariance matrices')
-    ax.xaxis.set_ticks_position('bottom')
-    plt.xlabel('Data points', labelpad=10)
-    ax.set_ylabel('Data points')
+    ax.set_title('(Theory + experiment)/mean(experiment) covariance matrices')
+    ticklocs, ticklabels = matrix_plot_labels(df_experiment)
+    plt.xticks([])
+    plt.yticks(ticklocs, ticklabels)
     return fig
 
 @figure
@@ -1697,7 +1731,8 @@ def plot_diag_cov_comparison(theory_covmat_3pt, experiments_covmat, experiments_
     fig,ax = plt.subplots()
     ax.plot((sqrtdiags2/data).as_matrix(), '.', label="Experiment", color="orange")
     ax.plot((sqrtdiags1/data).as_matrix(), '.', label="Theory", color = "darkorchid")
-    plt.xlabel("Data points")
+    ticklocs, ticklabels = matrix_plot_labels(df_experiment)
+    plt.xticks(ticklocs, ticklabels, rotation="vertical")
     ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{D_i}$")
     ax.set_title("Diagonal elements of normalised covariance matrices")
     ax.legend()
@@ -1716,7 +1751,8 @@ def plot_diag_cov_impact(theory_covmat_3pt, experiments_covmat, experiments_data
     fig,ax = plt.subplots()
     ax.plot((a/data).as_matrix(), '.', label="Experiment", color="orange")
     ax.plot((b/data).as_matrix(), '.', label="Experiment + Theory", color="mediumseagreen")
-    plt.xlabel("Data points")
+    ticklocs, ticklabels = matrix_plot_labels(df_experiment)
+    plt.xticks(ticklocs, ticklabels, rotation="vertical")
     ax.set_ylabel(r"$\frac{1}{D_i}\frac{1}{\sqrt{[cov^{-1}_]{ii}}}$")
     ax.set_title("Diagonal impact of adding theory covariance matrix")
     ax.legend()
