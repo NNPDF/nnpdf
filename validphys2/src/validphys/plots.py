@@ -1564,9 +1564,11 @@ def matrix_plot_labels(df):
     ticklabels = [unique_exp[x][0] for x in range(len(unique_exp))]
     startlocs = [unique_exp[x][1] for x in range(len(unique_exp))]
     startlocs += [len(explabels)]
-    ticklocs = [0 for x in range(len(startlocs))]
+    ticklocs = [0 for x in range(len(startlocs)-1)]
     for i in range(len(startlocs)-1):
         ticklocs[i] = 0.5*(startlocs[i+1]+startlocs[i])
+    print(ticklocs)
+    print(ticklabels)
     return ticklocs, ticklabels
 
 @figure
