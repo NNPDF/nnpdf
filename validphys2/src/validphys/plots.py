@@ -468,12 +468,13 @@ def plot_fits_experiments_chi2(fits_experiments_chi2_table):
 def plot_training_length(fit, replica_paths):
     """Generate an histogram for the distribution 
     of replicas across the training length."""
-    a = replica_data(fit, replica_paths)
     fig, ax = plt.subplots()
     x = []
-    for i in range(len(a)):
-       x.append(a[i][0])
-    ax.hist(x, normed=True)
+    for i in range(len(replica_data(fit, replica_paths))):
+       x.append(replica_data(fit, replica_paths)[i][0])
+    ax.hist(x, normed=True, label=str(fit))
+    ax.set_title("Replicas across training length")
+    ax.legend()
     return fig
     
     
