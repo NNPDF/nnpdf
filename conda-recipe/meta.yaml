@@ -38,6 +38,7 @@ requirements:
         - pandas =0.20
         - requests
         - prompt_toolkit
+        - pyyaml
 
 build:
     number: 0
