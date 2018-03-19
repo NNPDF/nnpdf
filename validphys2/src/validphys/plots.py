@@ -1722,17 +1722,20 @@ def plot_covdiff_heatmap(theory_covmat_3pt, experiments_covmat):
 
 @figure
 def plot_diag_cov_comparison(theory_covmat_3pt, experiments_covmat, experiments_data):
-    """Plot of sqrt(cov_ii)/data_i for cov = exp versus cov = theory"""
+    """Plot of sqrt(cov_ii)/data_i for cov = exp, theory, exp+theory"""
     data = experiments_data
     df_theory = theory_covmat_3pt
     df_experiment = experiments_covmat
+    df_total = df_theory + df_experiment
     sqrtdiags1 = np.sqrt(np.diag(df_theory.as_matrix()))
     sqrtdiags2 = np.sqrt(np.diag(df_experiment.as_matrix()))
-    fig,ax = plt.subplots()
+    sqrtdiags3 = np.sqrt(np.diag(df_total.as_matrix()))
+    fig,ax = plt.subplots(figsize=(20,10))
     ax.plot((sqrtdiags2/data).as_matrix(), '.', label="Experiment", color="orange")
-    ax.plot((sqrtdiags1/data).as_matrix(), '.', label="Theory", color = "darkorchid")
+    ax.plot((sqrtdiags1/data).as_matrix(), '.', label="Theory", color = "red")
+    ax.plot((sqrtdiags3/data).as_matrix(), '.', label="Total", color = "blue")
     ticklocs, ticklabels = matrix_plot_labels(df_experiment)
-    plt.xticks(ticklocs, ticklabels, rotation="vertical")
+    plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=6)
     ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{D_i}$")
     ax.set_title("Diagonal elements of normalised covariance matrices")
     ax.legend()
