@@ -472,8 +472,8 @@ def plot_training_length(fit, replica_paths):
     x = []
     for i in range(len(replica_data(fit, replica_paths))):
        x.append(replica_data(fit, replica_paths)[i][0])
-    ax.hist(x, normed=True, label=str(fit))
-    ax.set_title("Replicas across training length")
+    ax.hist(x, density=True, label=str(fit))
+    ax.set_title("Distribution of training lengths")
     ax.legend()
     return fig
     
