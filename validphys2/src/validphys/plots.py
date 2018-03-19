@@ -1631,8 +1631,6 @@ def matrix_plot_labels(df):
     ticklocs = [0 for x in range(len(startlocs)-1)]
     for i in range(len(startlocs)-1):
         ticklocs[i] = 0.5*(startlocs[i+1]+startlocs[i])
-    print(ticklocs)
-    print(ticklabels)
     return ticklocs, ticklabels
 
 @figure
