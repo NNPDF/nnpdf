@@ -28,7 +28,6 @@ from validphys.plotoptions import get_info, kitable, transform_result
 from validphys.checks import check_scale
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges
-from validphys.fitdata import replica_data
 
 from validphys.gridvalues import LUMI_CHANNELS
 
@@ -58,7 +57,7 @@ def plot_phi(experiments, experiments_phi):
     """plots phi for each experiment as a bar for a single
     PDF input
 
-    See `phi_data` for information on how phi is calculated 
+    See `phi_data` for information on how phi is calculated
     """
     phi = experiments_phi
     xticks = [experiment.name for experiment in experiments]
@@ -466,18 +465,16 @@ def plot_fits_experiments_chi2(fits_experiments_chi2_table):
 
 @figure
 def plot_training_length(replica_data, fit):
-    """Generate an histogram for the distribution 
-    of replicas across the training length."""
+    """Generate an histogram for the distribution
+    of training lengths in a given fit."""
     fig, ax = plt.subplots()
     x = [x.nite for x in replica_data]
     ax.hist(x, density=True, label=str(fit))
     ax.set_title("Distribution of training lengths")
     ax.legend()
     return fig
-    
-    
-    
-    
+
+
 @figure
 def plot_training_validation(fit, replica_data, replica_filters=None):
     """Scatter plot with the training and validation chi² for each replica
