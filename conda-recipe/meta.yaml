@@ -31,14 +31,13 @@ requirements:
         - yaml-cpp
         - apfel
         - python # requirements for validphys
-        - reportengine >=0.22.4 # see https://github.com/NNPDF/reportengine
+        - reportengine >=0.24 # see https://github.com/NNPDF/reportengine
         - matplotlib >=2.0.1
         - blessings
         - scipy >=0.19.1
         - pandas =0.20
         - requests
         - prompt_toolkit
-        - pyyaml
 
 build:
     number: 0

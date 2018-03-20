@@ -19,10 +19,10 @@ import os.path as osp
 import urllib.parse as urls
 import mimetypes
 
-import yaml
 import requests
-
+from reportengine.compat import yaml
 from reportengine import filefinder
+
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts,
                             peek_commondata_metadata)
