@@ -220,7 +220,7 @@ class Loader(LoaderBase):
             raise CompoundNotFound(msg)
         #This is a little bit stupid, but is the least amount of thinking...
         yaml_format = 'FK:\n' + re.sub('FK:', ' - ', txt)
-        data = yaml.load(yaml_format)
+        data = yaml.safe_load(yaml_format)
         #we have to split out 'FK_' the extension to get a name consistent
         #with everything else
         tables = [self.check_fktable(theoryID, name[3:-4], cfac)

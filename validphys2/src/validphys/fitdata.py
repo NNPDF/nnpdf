@@ -245,7 +245,7 @@ def _get_fitted_index(pdf, i):
     """Return the nnfit index for the replcia i"""
     p = pathlib.Path(pdf.infopath).with_name(f'{pdf.name}_{i:04d}.dat')
     with open(p) as f:
-        it = yaml.load_all(f)
+        it = yaml.safe_load_all(f)
         metadata = next(it)
     return metadata['FromMCReplica']
 
