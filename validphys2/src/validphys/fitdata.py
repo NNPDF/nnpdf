@@ -9,7 +9,7 @@ import pathlib
 
 import numpy as np
 import pandas as pd
-import yaml
+from reportengine.compat import yaml
 
 from reportengine import collect
 from reportengine.table import table

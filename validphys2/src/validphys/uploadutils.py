@@ -14,7 +14,7 @@ import pathlib
 import tempfile
 from urllib.parse import urljoin
 
-import yaml
+from reportengine.compat import yaml
 
 from NNPDF import get_profile_path
 from reportengine.colors import t

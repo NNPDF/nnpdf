@@ -17,6 +17,7 @@ import numpy as np
 
 from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
+from reportengine.compat import yaml
 
 from NNPDF import (LHAPDFSet,
     CommonData,
@@ -474,7 +475,6 @@ class FitSpec(TupleComp):
 
     @functools.lru_cache()
     def as_input(self):
-        import yaml
         p = self.path/'filter.yml'
         log.debug('Reading input from fit configuration %s' % (p,))
         try:

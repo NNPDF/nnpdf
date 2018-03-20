@@ -5,7 +5,6 @@ Created on Fri Jan 23 12:11:23 2015
 
 @author: zah
 """
-from __future__ import print_function
 import os
 import os.path as osp
 import re
@@ -13,7 +12,7 @@ import glob
 import fnmatch
 from functools import lru_cache
 
-import yaml
+from reportengine.compat import yaml
 import lhapdf
 
 

@@ -99,7 +99,7 @@ def edit_settings(d):
 
 def handle_meta_interactive(output):
     metapath = output / 'meta.yaml'
-    import ruamel_yaml as yaml
+    from reportengine.compat import yaml
     #The yaml lexer is broken. Use something else.
     lex = pygments.lexers.get_lexer_by_name('pkgconfig')
     fmt = pygments.formatters.TerminalFormatter()
