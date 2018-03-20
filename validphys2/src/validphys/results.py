@@ -443,8 +443,14 @@ def bootstrap_phi_data_experiment(experiment_results,
     #centralchi2 should be N_samples
     centralchi2 = calc_chi2(cov_mat, (th_sample.stats.data.mean(axis=0).T - dt.central_value[:, np.newaxis]))
     return np.sqrt((allchi2.mean(axis=1) - centralchi2)/len(dt))
-    
-    
+
+@check_pdf_is_montecarlo
+def phi_stats(results):
+    """Does same as `phi_data` but compatible with either stats tuple"""
+    dt, th = results
+    centralchi2 = central_chi2(results)
+    allchi2 = calc_chi2(sqrtcov=dt.sqrtcovmat, th.data.T - dt.central_value[:, np.newaxis])
+    return np.sqrt((allchi2.mean() - centralchi2)/len(dt))
     
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
                               prepend_total:bool=True,
