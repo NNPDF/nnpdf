@@ -503,44 +503,64 @@ void NNPDFSettings::LoadExperiments()
   YAML::Node exps = fConfig["experiments"];
 
   // loop over experiments
-  for (int i = 0; i < (int) exps.size(); i++)
-    {
-      fExpName.push_back(exps[i]["experiment"].as<string>());
-      vector<string> nsetname;
-      if (exps[i]["datasets"].size() == 0) { cerr << Colour::FG_RED << "NNPDFSettings::LoadExperiments error: experiment " << exps[i]["experiment"] << " has no datasets!" << Colour::FG_DEFAULT  << endl; exit(-1); }
-
-      // loop over datasets
-      YAML::Node dsets = exps[i]["datasets"];
-      for (int j = 0; j < (int) dsets.size(); j++)
-        {
-          const string setname = dsets[j]["dataset"].as<string>();
-          const real setfrac = dsets[j]["frac"].as<real>();
-          string setsys;
-          try { setsys = dsets[j]["sys"].as<string>(); }
-          catch (...) { setsys = "DEFAULT";}
-
-          // Read C-factor sources
-          std::vector<string> cfactors;
-          YAML::Node cfac = dsets[j]["cfac"];
-          for(size_t k=0; k<cfac.size(); k++)
-          {
-            std::stringstream cfs; cfs << cfac[k];
-            cfactors.push_back(cfs.str());
-          }
-
-          // Generate hash of setname
-          std::hash<std::string> str_hash;
-          const size_t hashval = str_hash(setname);
-
-          DataSetInfo info = {setname, setsys, setfrac, cfactors};
-          map<int,DataSetInfo>::const_iterator iMap = fDataSetInfo.find(hashval);
-          if (iMap != fDataSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadExperiments error: hash collision for set: " << setname << Colour::FG_DEFAULT << endl; exit(-1); }
-          else { fDataSetInfo.insert(make_pair(hashval, info)); }
-          nsetname.push_back(setname);
-          fSetName.push_back(setname);
-        }
-      fExpSetName.push_back(nsetname);
+  for (int i = 0; i < (int)exps.size(); i++) {
+    fExpName.push_back(exps[i]["experiment"].as<string>());
+    vector<string> nsetname;
+    if (exps[i]["datasets"].size() == 0) {
+      cerr << Colour::FG_RED
+           << "NNPDFSettings::LoadExperiments error: experiment "
+           << exps[i]["experiment"] << " has no datasets!" << Colour::FG_DEFAULT
+           << endl;
+      exit(EXIT_FAILURE);
     }
+
+    // loop over datasets
+    YAML::Node dsets = exps[i]["datasets"];
+    for (const auto &ds : dsets) {
+      const string setname = ds["dataset"].as<string>();
+      const real setfrac = ds["frac"].as<real>();
+      string setsys;
+      if(ds["sys"]){
+          setsys = ds["sys"].as<string>();
+      }else{
+          setsys = "DEFAULT";
+      }
+
+      // Read C-factor sources
+      std::vector<string> cfactors;
+      YAML::Node cfac = ds["cfac"];
+      for (size_t k = 0; k < cfac.size(); k++) {
+        std::stringstream cfs;
+        cfs << cfac[k];
+        cfactors.push_back(cfs.str());
+      }
+
+      double weight;
+      if (ds["weigh"]) {
+        weight = ds["weight"].as<double>();
+      }else{
+          weight = 1;
+      }
+
+      // Generate hash of setname
+      std::hash<std::string> str_hash;
+      const size_t hashval = str_hash(setname);
+
+      DataSetInfo info = {setname, setsys, setfrac, cfactors, weight};
+      map<int, DataSetInfo>::const_iterator iMap = fDataSetInfo.find(hashval);
+      if (iMap != fDataSetInfo.end()) {
+        cerr << Colour::FG_RED
+             << "NNPDFSettings::LoadExperiments error: hash collision for set: "
+             << setname << Colour::FG_DEFAULT << endl;
+        exit(EXIT_FAILURE);
+      } else {
+        fDataSetInfo.insert(make_pair(hashval, info));
+      }
+      nsetname.push_back(setname);
+      fSetName.push_back(setname);
+    }
+    fExpSetName.push_back(nsetname);
+  }
 }
 
 /**

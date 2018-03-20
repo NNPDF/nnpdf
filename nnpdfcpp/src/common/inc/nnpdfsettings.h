@@ -53,6 +53,7 @@ struct DataSetInfo
   const string tSysOpt;
   const real tTrainingFraction;
   const std::vector<string> tCFactors;
+  const double weight;
 };
 
 /**
