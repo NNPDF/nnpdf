@@ -899,8 +899,10 @@ def experimentsplustheory_corrmat_3pt(experiments_covmat, theory_covmat_3pt):
 
 def chi2_impact(theory_covmat_3pt, experiments_covmat, experiments_results):
     dataresults = [ x[0] for x in experiments_results ]
+    print(dataresults)
     theoryresults = [ x[1] for x in experiments_results ]
     dat_central_list = [x.central_value for x in dataresults]
+    print(dat_central_list)
     th_central_list = [x.central_value for x in theoryresults]
     dat_central = np.concatenate([x for x in dat_central_list])
     th_central  = np.concatenate([x for x in th_central_list])
@@ -912,22 +914,6 @@ def chi2_impact(theory_covmat_3pt, experiments_covmat, experiments_results):
     return chi2_before, chi2
 
 
-def chi2_impact2(theory_covmat_3pt, experiments_covmat, experiments_results):
-    dataresults = [ x[0] for x in experiments_results ]
-    theoryresults = [ x[1] for x in experiments_results ]
-    dat_central_list = [x.central_value for x in dataresults]
-    th_central_list = [x.central_value for x in theoryresults]
-    dat_central = np.concatenate([x for x in dat_central_list])
-    th_central  = np.concatenate([x for x in th_central_list])
-    central_diff = dat_central - th_central
-    cov_before_inverse = la.inv(experiments_covmat.as_matrix())
-    chi2_total = 0.0
-    for i in range(1, len(dat_central)):
-       for j in range(1, len(dat_central)):
-          chi2 = (dat_central[i] - th_central[i])*cov_before_inverse[i,j]*(dat_central[j] - th_central[j])
-          chi2_total += chi2
-    chi2_test = (1/len(dat_central))*chi2_total
-    return chi2_test
 
 experiments_results = collect(experiment_results, ('experiments',))
 each_dataset_results = collect(results, ('experiments', 'experiment'))
