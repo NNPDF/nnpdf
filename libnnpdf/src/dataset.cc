@@ -52,7 +52,7 @@ DataSet::DataSet(const DataSet& set, std::vector<int> const& mask):
   FKSet(set, mask),
   fIsArtificial(set.fIsArtificial),
   fIsT0(set.fIsT0),
-  fWeight(weight)
+  fWeight(set.fWeight)
 {
   fT0Pred.reserve(fNData);
 

@@ -70,6 +70,7 @@ namespace NNPDF
 
     double *fData;       //!< The experimental data
     double *fT0Pred;     //!< The t0 predictions
+    std::vector<double> fSqrtWeights;    //!< The weights
 
     matrix<double> fCovMat;    //!< The covariance matrix
     matrix<double> fSqrtCov;   //!< The Cholesky decomposition of the covariance matrix

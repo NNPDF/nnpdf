@@ -59,6 +59,7 @@ namespace NNPDF
     // ************************ Data Get Methods ******************************
 
     double const&  GetT0Pred(int i)    const { return fT0Pred[i];}  //!< Return t0 prediction
+    double GetWeight() const {return fWeight;}
 
     matrix<double> const& GetCovMat() const;  //!< Return fCovMat
     matrix<double> const& GetSqrtCov() const; //!< Return the Cholesky decomposition of the covariance matrix
