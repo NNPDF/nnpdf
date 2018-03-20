@@ -33,22 +33,22 @@ def central_chi2(results):
     central_diff = th_result.central_value - data_result.central_value
     return calc_chi2(data_result.sqrtcovmat, central_diff)
 
-def bootstrap_error(Stats_Object, nresamples, 
-                    apply_func:Callable=None, Data_Result_Object=None):
+def bootstrap_stats(Stats_Object, nresamples, 
+                    apply_func=None, Data_Result_Object=None):
     """Performs bootstrap sample on either the input Stats_Object.data, a
     function applied to the Stats_Object.data or a function applied to a 
     tuple of (Data_Result_Object, Stats_Object.data) and returns error
     according to bootstrap sample
     """
     resample_data = np.empty(nresamples)
-    if ~apply_func:
+    if apply_func == None:
         for i in range(nresamples):
             resample_data[i] = Stats_Object.bootstrap_values().central_value()
-    elif apply_func && ~Data_Result_Object:
+    elif Data_Result_Object == None:
         for i in range(nresamples):
             resample_data[i] = apply_func(Stats_Object.bootstrap_values().data())
-    elif apply_func && Data_Result_Object:
+    else:
         for i in range(nresamples):
-            results = Data_Result_Object, Stats_Object.bootstrap_values().data()
+            results = Data_Result_Object, Stats_Object.bootstrap_values()
             resample_data[i] = apply_func(results)
-    return np.std(resample_data)
+    return np.mean(resample_data), np.std(resample_data)

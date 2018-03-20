@@ -95,19 +95,15 @@ def plot_phi_experiment_dist(experiment, bootstrap_phi_data_experiment):
 def plot_phi_scatter(pdf, experiments, experiments_bootstrap_phi):
     """does a bootstrap sample of theoretical predictions for each experiment 
     and uses this to find a distribution of phi the distributions are 
-    represented as a scatter point of the mean value, with an error bar which 
-    represents the 68% confidence region
+    represented as a scatter point of the mean value, with an error bar of std
+    deviation
     """
-    phis = experiments_bootstrap_phi
-    phi_means = np.mean(phis, axis=1)
-    phi_minus = phi_means - np.percentile(phis, 16, axis=1)
-    phi_plus = np.percentile(phis, 84, axis=1) - phi_means
-    phi_errs = np.vstack((phi_minus, phi_plus))
+    phis = np.array(experiments_bootstrap_phi)
     xticks = [experiment.name for experiment in experiments]
     x = range(1, len(phis)+1)
     label = pdf.name
     fig, ax = plt.subplots()
-    ax.errorbar(x, phi_means, yerr=phi_errs, fmt='.')
+    ax.errorbar(x, phis[:, 0], yerr=phis[:, 1], fmt='.')
     ax.set_xticks(x, minor=False)
     ax.set_xticklabels(xticks, minor=False, rotation=45)
     return fig
