@@ -57,7 +57,7 @@ def set_lhapdf_info(info_path, nrep):
     with open(info_path, 'r+') as f:
         txt = f.read()
         f.seek(0)
-        f.write(txt.replace('REPLACE_NREP', str(nrep)))
+        f.write(txt.replace('REPLACE_NREP', str(nrep+1)))
         f.truncate()
 
 
