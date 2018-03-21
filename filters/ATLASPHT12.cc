@@ -16,7 +16,8 @@
  * d sigma/dE_{T}^{gamma} [pb / GeV], |eta^{gamma}| < 0.6
  *
  * Correlation information:
- * Systematics are already combined
+ * All statistical uncertainties uncorrelated in a given E_T bin
+ * and fully correlated between bins. 
  *
  */
 
@@ -27,7 +28,7 @@ void ATLASPHT12Filter::ReadData()
 
 
   stringstream datafileCNTR("");
-  datafileCNTR << dataPath() << "rawdata/ATLASPHT12/ATLASPHT12ETGCTR.data";
+  datafileCNTR << dataPath() << "rawdata/ATLASPHT12/Table1.dat";
   cent.open(datafileCNTR.str().c_str(), ios::in);
 
   if (cent.fail()) {
@@ -36,7 +37,7 @@ void ATLASPHT12Filter::ReadData()
   }
 
   stringstream datafileFWD1("");
-  datafileFWD1 << dataPath() << "rawdata/ATLASPHT12/ATLASPHT12ETGFWD1.data";
+  datafileFWD1 << dataPath() << "rawdata/ATLASPHT12/Table2.dat";
   fwd1.open(datafileFWD1.str().c_str(), ios::in);
 
   if (fwd1.fail()) {
@@ -46,7 +47,7 @@ void ATLASPHT12Filter::ReadData()
 
 
   stringstream datafileFWD2("");
-  datafileFWD2 << dataPath() << "rawdata/ATLASPHT12/ATLASPHT12ETGFWD2.data";
+  datafileFWD2 << dataPath() << "rawdata/ATLASPHT12/Table3.dat";
   fwd2.open(datafileFWD2.str().c_str(), ios::in);
 
   if (fwd2.fail()) {
@@ -55,102 +56,153 @@ void ATLASPHT12Filter::ReadData()
   }
 
 
-
   // Starting filter
 
-  for (int idat = 0; idat < 18; idat++) {
-    double upper, lower, stmp, datshift;
+  for (int idat = 0; idat < 18; ++idat) {
+  	  double shift = 0.;
+
+    double central, upper, lower, dummy;
     string line; 
     getline(cent,line);
     istringstream lstream(line);
 
-    double fSystP, fSystM;
-    double fATLAS2012Luminosity;
+    lstream >> central >> lower >> upper >> fData[idat] >> fStat[idat] >> dummy;
+    // convert to fb
+
+    fData[idat] = fData[idat]*1000;
+    fStat[idat] = fStat[idat]*1000;
+
+
+  // read in systematics except lumi
+    for(int j=0; j<fNSys-1; ++j) {
+ 
+     double sys1, sys2, plus, minus;
+     double stmp, dtmp;
+
+     lstream >> sys1 >> sys2;
+     minus=sys2;   
+     plus=sys1;
+
+    //convert to relative percentage values and to fb (*1000)
+    plus = plus/fData[idat]*100*1000;  
+    minus = minus/fData[idat]*100*1000;
+    symmetriseErrors(plus,minus,&stmp,&dtmp);
+
     
-    lstream >> lower >> upper >> fData[idat] >> fStat[idat]  
-    >> fSystP >> fSystM
-    >> fATLAS2012Luminosity; 
+    fSys[idat][j].type = MULT;
+    fSys[idat][j].name = "CORR";
+    fSys[idat][j].mult = stmp;
+    fSys[idat][j].add  = fSys[idat][j].mult*fData[idat]/100;
 
-    // Convert to percentages
+    shift += dtmp;
 
-     fSystP = fSystP*100/fData[idat];
-     fSystM = fSystM*100/fData[idat];
+   }
 
-    // Total systematics
-    symmetriseErrors(fSystP,fSystM,&stmp,&datshift);
+ // read in lumi
+    for(int j=fNSys-1; j<fNSys; ++j) {
+      
+     double sys1, sys2, plus, minus;
+     double stmp, dtmp;
 
-    // convert mult to a percentage
-    fSys[idat][0].mult=stmp;
-    fSys[idat][0].type = MULT;
-    fSys[idat][0].name = "UNCORR";
-    // convert back again
-    fSys[idat][0].add = fSys[idat][0].mult*fData[idat]*1e-2;    
+     lstream >> sys1 >> sys2;
+     minus=sys2; 
+     plus=sys1;
+    
+    // ATLAS2012 Luminosity
+    //convert to relative percentage values and to fb (*1000)
+    plus = plus/fData[idat]*100*1000;  
+    minus = minus/fData[idat]*100*1000;
+    symmetriseErrors(plus,minus,&stmp,&dtmp);
 
+    
+    fSys[idat][j].type = MULT;
+    fSys[idat][j].name = "ATLASLUMI12";
+    fSys[idat][j].mult = stmp;
+    fSys[idat][j].add  = fSys[idat][j].mult*fData[idat]/100;
 
-    // ATLAS2012 Luminosity: symmetric, fully correlated between all bins
-    fSys[idat][1].mult=fATLAS2012Luminosity/fData[idat]*1e2;
-    fSys[idat][1].type = MULT;
-    fSys[idat][1].name = "ATLASLUMI12";
-    fSys[idat][1].add = fSys[idat][1].mult*fData[idat]*1e-2;
+    shift += dtmp;
 
-    // Shift of central values due to asymmetric uncertainties
-    // fData[idat]+=shift*fData[idat];
+  }
 
-    fData[idat]*=(1.0 + datshift*0.01); //Shift from asymmetric errors
+  fData[idat]*=(1.0 + shift*0.01); //Shift from asymmetric errors
 
     // Kinematic variables
     
-    fKin1[idat] = 0.6/2.;                            // Avg. eta_gamma (|eta_g|<0.6)
-    fKin2[idat] = pow((upper + lower) * 0.5,2);		// Avg. Et of each bin
-    fKin3[idat] = 8000.;                              // LHC 8 TeV
+   fKin1[idat] = 0.6/2.;                            // Avg. eta_gamma (|eta_g|<0.6)
+   fKin2[idat] = pow((upper + lower) * 0.5,2);		// Avg. Et of each bin
+   fKin3[idat] = 8000.;                              // LHC 8 TeV
     
   }
   
 
   // 2nd bin
   for (int idat = 18; idat < 35; idat++) {
-    double upper, lower, stmp, datshift;
+   
+   double shift = 0.;
 
-    string line; 
-    getline(fwd1,line);
-    istringstream lstream(line);
+   double central, upper, lower, dummy;
+   string line; 
+   getline(fwd1,line);
+   istringstream lstream(line);
 
-    double fSystP, fSystM;
-    double fATLAS2012Luminosity;
+   lstream >> central >> lower >> upper >> fData[idat] >> fStat[idat] >> dummy;
+
+    // convert to fb
+    fData[idat] = fData[idat]*1000;
+    fStat[idat] = fStat[idat]*1000;
+
+
+   // read in systematics except lumi
+    for(int j=0; j<fNSys-1; ++j) {
+
+    double sys1, sys2, plus, minus;
+    double stmp, dtmp;
+
+    lstream >> sys1 >> sys2;
+    minus=sys2; 
+    plus=sys1;
+
+   //convert to relative percentage values and to fb (*1000)
+    plus = plus/fData[idat]*100*1000;  
+    minus = minus/fData[idat]*100*1000;
+    symmetriseErrors(plus,minus,&stmp,&dtmp);
+
     
-      lstream >> lower >> upper >> fData[idat] >> fStat[idat]  
-      >> fSystP >> fSystM
-      >> fATLAS2012Luminosity; 
+    fSys[idat][j].type = MULT;
+    fSys[idat][j].name = "CORR";
+    fSys[idat][j].mult = stmp;
+    fSys[idat][j].add  = fSys[idat][j].mult*fData[idat]/100;
 
-    //    cout << mbin[idat] << "   " << mbin[idat+1] << endl;
+    shift += dtmp;
+
+   }
+
+ // read in lumi
+    for(int j=fNSys-1; j<fNSys; ++j) {
+ 
+    double sys1, sys2, plus, minus;
+    double stmp, dtmp;
     
+    lstream >> sys1 >> sys2;
+    minus=sys2;  
+    plus=sys1;
+    // ATLAS2012 Luminosity
+    //convert to relative percentage values and to fb (*1000)
+    plus = plus/fData[idat]*100*1000;  
+    minus = minus/fData[idat]*100*1000;
+    symmetriseErrors(plus,minus,&stmp,&dtmp);
 
-    // Convert to percentages
+    
+    fSys[idat][j].type = MULT;
+    fSys[idat][j].name = "ATLASLUMI12";
+    fSys[idat][j].mult = stmp;
+    fSys[idat][j].add  = fSys[idat][j].mult*fData[idat]/100;
 
-     fSystP = fSystP*100/fData[idat];
-     fSystM = fSystM*100/fData[idat];
+    shift += dtmp;
 
-    // Total systematics
-    symmetriseErrors(fSystP,fSystM,&stmp,&datshift);
+  }
 
-    // convert mult to a percentage
-    fSys[idat][0].mult=stmp;
-    fSys[idat][0].type = MULT;
-    fSys[idat][0].name = "UNCORR";
-    // convert back again
-    fSys[idat][0].add = fSys[idat][0].mult*fData[idat]*1e-2;    
-
-
-    // ATLAS2012 Luminosity: symmetric, fully correlated between all bins
-    fSys[idat][1].mult=fATLAS2012Luminosity/fData[idat]*1e2;
-    fSys[idat][1].type = MULT;
-    fSys[idat][1].name = "ATLASLUMI12";
-    fSys[idat][1].add = fSys[idat][1].mult*fData[idat]*1e-2;
-
-    // Shift of central values due to asymmetric uncertainties
-    // fData[idat]+=shift*fData[idat];
-
-    fData[idat]*=(1.0 + datshift*0.01);
+   fData[idat]*=(1.0 + shift*0.01); //Shift from asymmetric errors
 
     // Kinematic variables
     
@@ -162,61 +214,85 @@ void ATLASPHT12Filter::ReadData()
 
 
   // 3rd bin
-  for (int idat = 35; idat < fNData; idat++) {
-    double upper, lower, stmp, datshift;
+  for (int idat = 35; idat < 49; idat++) {
  
-    string line; 
-    getline(fwd2,line);
-    istringstream lstream(line);
+     double shift = 0.;
+     double central, upper, lower, dummy;
+     string line; 
+     getline(fwd2,line);
+     istringstream lstream(line);
 
-    double fSystP, fSystM;
-    double fATLAS2012Luminosity;
+     lstream >> central >> lower >> upper >> fData[idat] >> fStat[idat] >> dummy;
+
+
+// convert to fb
+    fData[idat] = fData[idat]*1000;
+    fStat[idat] = fStat[idat]*1000;
+
+
+ // read in systematics except lumi
+    for(int j=0; j<fNSys-1; ++j) {
+
+  
+     double sys1, sys2, plus, minus;
+     double stmp, dtmp;
+      
+     lstream >> sys1 >> sys2;
+     minus=sys2; 
+     plus=sys1;
+
+
+   //convert to relative percentage values and to fb (*1000)
+    plus = plus/fData[idat]*100*1000;  
+    minus = minus/fData[idat]*100*1000;
+    symmetriseErrors(plus,minus,&stmp,&dtmp);
+
     
-    lstream >> lower >> upper >> fData[idat] >> fStat[idat]  
-    >> fSystP >> fSystM
-    >> fATLAS2012Luminosity; 
+    fSys[idat][j].type = MULT;
+    fSys[idat][j].name = "CORR";
+    fSys[idat][j].mult = stmp;
+    fSys[idat][j].add  = fSys[idat][j].mult*fData[idat]/100;
 
-   
-    // Convert to percentages
+    shift += dtmp;
 
-     fSystP = fSystP*100/fData[idat];
-     fSystM = fSystM*100/fData[idat];
+   }
 
-    // Total systematics
-    symmetriseErrors(fSystP,fSystM,&stmp,&datshift);
+ // read in lumi
+    for(int j=fNSys-1; j<fNSys; ++j) {
 
-    // convert mult to a percentage
-    fSys[idat][0].mult=stmp;
-    fSys[idat][0].type = MULT;
-    fSys[idat][0].name = "UNCORR";
-    // convert back again
-    fSys[idat][0].add = fSys[idat][0].mult*fData[idat]*1e-2;    
+     double sys1, sys2, plus, minus;
+     double stmp, dtmp;
 
-    // ATLAS2012 Luminosity: symmetric, fully correlated between all bins
-    fSys[idat][1].mult=fATLAS2012Luminosity/fData[idat]*1e2;
-    fSys[idat][1].type = MULT;
-    fSys[idat][1].name = "ATLASLUMI12";
-    fSys[idat][1].add = fSys[idat][1].mult*fData[idat]*1e-2;
-
-    // Shift of central values due to asymmetric uncertainties
-
-    fData[idat]*=(1.0 + datshift*0.01);
-
-    // Kinematic variables
+     lstream >> sys1 >> sys2;
+     minus=sys2; 
+     plus=sys1;
     
-    fKin1[idat] = (1.81-1.56)/2.;                     // Avg. eta_gamma (1.56<|eta_g|<1.81)
-    fKin2[idat] = pow((upper + lower) * 0.5,2);		// Avg. Et of each bin
-    fKin3[idat] = 8000.;                            // LHC 8 TeV
+    // ATLAS2012 Luminosity
+    //convert to relative percentage values and to fb (*1000)
+    plus = plus/fData[idat]*100*1000;  
+    minus = minus/fData[idat]*100*1000;
+    symmetriseErrors(plus,minus,&stmp,&dtmp);
+
     
+    fSys[idat][j].type = MULT;
+    fSys[idat][j].name = "ATLASLUMI12";
+    fSys[idat][j].mult = stmp;
+    fSys[idat][j].add  = fSys[idat][j].mult*fData[idat]/100;
+
+    shift += dtmp;
+
   }
 
+  fData[idat]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+
+    // Kinematic variables
+   
+    fKin1[idat] = (1.81-1.56)/2.;                     // Avg. eta_gamma (1.56<|eta_g|<1.81)
+    fKin2[idat] = pow((upper + lower) * 0.5,2);		// Avg. Et of each bin
+    fKin3[idat] = 8000.;                            // LHC 8 TeV    
+  }
 
   cent.close();
   fwd1.close();
   fwd2.close();
 }
-
-
-
-
-

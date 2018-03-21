@@ -12,7 +12,7 @@
 
 static const dataInfoRaw ATLASPHT12info = {
   49,                    //nData
-  2,                     //nSys (Total sys, lumi)
+  30,                     //nSys (Total sys, lumi)
   "ATLASPHT12",    //SetName
   "PHT"                  //ProcType
 };
