@@ -11,7 +11,7 @@ from matplotlib import scale as mscale
 import lhapdf
 
 from reportengine.checks import (make_check, CheckError, require_one,
-                                 check_not_empty, make_argcheck, check_positive)
+                                 check_not_empty, make_argcheck, check_positive, check)
 
 from validphys import lhaindex
 
@@ -94,3 +94,7 @@ def assert_use_cuts_true(use_cuts):
     if not use_cuts:
         raise CheckError("use_cuts needs to be True for this action.")
 
+
+@make_argcheck
+def check_have_two_pdfs(pdfs):
+    check(len(pdfs) == 2,'Expecting exactly two pdfs.')

@@ -25,7 +25,7 @@ from reportengine.checks import make_check, CheckError, make_argcheck
 from validphys.core import MCStats, cut_mask
 from validphys.results import chi2_stat_labels
 from validphys.plotoptions import get_info, kitable, transform_result
-from validphys.checks import check_scale
+from validphys.checks import check_scale, check_have_two_pdfs
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges
 
@@ -822,88 +822,105 @@ def plot_pdf_uncertainties(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     PDF's central value is plotted. Otherwise it is the absolute values."""
     yield from UncertaintyPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
 
+
+class AllFlavoursPlotter(PDFPlotter):
+    """Auxiliary class which groups multiple PDF flavours in one plot."""
+
+    def setup_flavour(self, flstate):
+        flstate.handles= self.handles
+        flstate.labels= self.doesnothing
+        flstate.hatchit= self.hatchit
+
+    def __call__(self):
+        if not self.xplotting_grids:
+            return
+
+        self.handles = []
+        self.doesnothing = []
+        self.labels = []
+        self.hatchit = plotutils.hatch_iter()
+
+        basis = self.firstgrid.basis
+        fig, ax = plt.subplots()
+        ax.set_xlabel('x')
+        ax.set_ylabel(self.get_ylabel(None))
+        ax.set_xscale(self.xscale)
+        ax.set_title(f'{self.pdfs[0]} Q={self.Q : .1f} GeV')
+
+        all_vals = []
+        for flindex, fl in enumerate(self.firstgrid.flavours):
+
+            parton_name = basis.elementlabel(fl)
+            self.labels.append(f'${parton_name}$')
+            flstate = FlavourState(flindex=flindex, fl=fl, fig=fig, ax=ax,
+                                   parton_name=parton_name)
+            self.setup_flavour(flstate)
+
+            for pdf, grid in zip(self.pdfs, self.xplotting_grids):
+                limits = self.draw(pdf, grid, flstate)
+                if limits is not None:
+                    all_vals.append(np.atleast_2d(limits))
+
+        plotutils.frame_center(ax, self.firstgrid.xgrid, np.concatenate(all_vals))
+        ax.set_axisbelow(True)
+        ax.set_xlim(self.firstgrid.xgrid[0])
+        flstate.labels = self.labels
+        self.legend(flstate)
+        return fig
+
+    def legend(self, flstate):
+        return flstate.ax.legend(flstate.handles, flstate.labels,
+                                 handler_map={plotutils.HandlerSpec:
+                                             plotutils.ComposedHandler()
+                                             }
+                                 )
+
+
 class DistancePDFPlotter(PDFPlotter):
+    """Auxiliary class which draws the distance plots."""
 
     def normalize(self):
-        normalize_to = self.normalize_to
-        if normalize_to is None:
-            raise ValueError("Must specify an index to normalize")
-        if normalize_to is not None:
-            normalize_pdf = self.normalize_pdf
-            normalize_grid = self._xplotting_grids[normalize_to]
-            normvals_central = normalize_pdf.stats_class(
-                            normalize_grid.grid_values).central_value()
-            normvals_sigma = normalize_pdf.stats_class(
-                            normalize_grid.grid_values).std_error()
-
-            #need sigma of normalize_pdf
-            #need sigma of each pdfs
-            #self.pdfs
-
-            #distance = |central_i - central_norm  |/(sigma_i^2 + sigma_norm^2)^1/2
-
-            #Handle division by zero more quietly
-            def fp_error(tp, flag):
-                log.warn("Invalid values found computing normalization to %s: "
-                 "Floating point error (%s).", normalize_pdf, tp)
-                #Show warning only once
-                np.seterr(all='ignore')
-
-            newgrids = []
-            with np.errstate(all='call'):
-                np.seterrcall(fp_error)
-                for grid,pdf in zip(self._xplotting_grids,self.pdfs):
-                    cval = pdf.stats_class(grid.grid_values).central_value()
-                    err = pdf.stats_class(grid.grid_values).std_error()
-                    numerator = pow(cval - normvals_central, 2)
-                    denominator = pow(err, 2)+pow(normvals_sigma, 2)
-                    newvalues = np.sqrt(numerator/denominator)
-                    #newgrid is like the old grid but with updated values
-                    newgrid = type(grid)(**{**grid._asdict(),
-                                             'grid_values':newvalues})
-                    newgrids.append(newgrid)
-
-            return newgrids
         return self._xplotting_grids
 
     def get_ylabel(self, parton_name):
-        #if self.normalize_to is None:
-            #throw an error and exit
         return "Distance from {}".format(self.normalize_pdf.label)
 
-
     def draw(self, pdf, grid, flstate):
-        ax = flstate.ax
+
         if pdf == self.normalize_pdf:
-            #Advance color cycle
-            ax.plot([],[])
             return None
 
+        ax = flstate.ax
         flindex = flstate.flindex
-        gv = 10.*grid.grid_values[flindex,:]
+        handles = flstate.handles
+        pcycler = ax._get_lines.prop_cycler
+        next_prop = next(pcycler)
+        color = next_prop['color']
 
-        p,=ax.plot(grid.xgrid, gv, label=pdf.label)
-        #color=p.get_color()
-        """
-        if(self.normalize_pdf.ErrorType=="replicas" and pdf.ErrorType=="replicas"):
-            draw_line = np.sqrt((1./(len(self.normalize_pdf)-1)+1./(len(pdf)-1))/2)
-            ax.axhline(draw_line,color=color,alpha=0.5,linestyle="--")
-        """
+        gv = grid.grid_values[flindex,:]
 
+        handle, = ax.plot(grid.xgrid, gv, color=color)
+        handles.append(handle)
 
         return gv
 
-@figuregen
-@check_pdf_normalize_to
+
+class FlavoursDistancePlotter(AllFlavoursPlotter, DistancePDFPlotter): pass
+
+
+@figure
+@check_normalize_to
+@check_have_two_pdfs
 @check_scale('xscale', allow_none=True)
-def plot_pdfdistances(pdfs, xplotting_grids,*,
+def plot_pdfdistances(pdfs, distance_grids, *,
                       xscale:(str,type(None))=None,
                       normalize_to:(int,str)):
-    """Plots the distances between different PDF sets and a reference PDF set.
-    Distances are normalized such that a value of order 10 is unlikely
-    to be explained by purely statistical fluctuations
+    """Plots the distances between different PDF sets and a reference PDF set
+    for all flavours. Distances are normalized such that a value of order 10
+    is unlikely to be explained by purely statistical fluctuations
     """
-    yield from DistancePDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
+    return FlavoursDistancePlotter(pdfs, distance_grids, xscale, normalize_to)()
+
 
 class BandPDFPlotter(PDFPlotter):
     def setup_flavour(self, flstate):
@@ -957,12 +974,9 @@ class BandPDFPlotter(PDFPlotter):
 
         return [err68down, err68up]
 
-    def legend(self, flstate):
-        return flstate.ax.legend(flstate.handles, flstate.labels,
-                                 handler_map={plotutils.HandlerSpec:
-                                             plotutils.ComposedHandler()
-                                             }
-                                 )
+    def get_ylabel(self, parton_name):
+        return ''
+
 
 @figuregen
 @check_pdf_normalize_to
@@ -984,49 +998,8 @@ def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     """
     yield from BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
 
-class FLavoursPlotter(BandPDFPlotter):
 
-    def setup_flavour(self, flstate):
-        flstate.handles= self.handles
-        flstate.labels= self.doesnothing
-        flstate.hatchit= self.hatchit
-
-    def __call__(self,):
-        if not self.xplotting_grids:
-            return
-
-        self.handles=[]
-        self.doesnothing=[]
-        self.labels = []
-        self.hatchit=plotutils.hatch_iter()
-
-
-        basis = self.firstgrid.basis
-        fig, ax = plt.subplots()
-        ax.set_xlabel('x')
-        ax.set_xscale(self.xscale)
-        ax.set_title(f'{self.pdfs[0]} Q={self.Q : .1f} GeV  ')
-
-        all_vals = []
-        for flindex, fl in enumerate(self.firstgrid.flavours):
-
-            parton_name = basis.elementlabel(fl)
-            self.labels.append(f'${parton_name}$')
-            flstate = FlavourState(flindex=flindex, fl=fl, fig=fig, ax=ax,
-                                    parton_name=parton_name)
-            self.setup_flavour(flstate)
-
-
-
-            for pdf, grid in zip(self.pdfs, self.xplotting_grids):
-                all_vals.append(np.atleast_2d(self.draw(pdf, grid, flstate)))
-
-        plotutils.frame_center(ax, self.firstgrid.xgrid, np.concatenate(all_vals))
-        ax.set_axisbelow(True)
-        ax.set_xlim(self.firstgrid.xgrid[0])
-        flstate.labels = self.labels
-        self.legend(flstate)
-        return fig
+class FlavoursPlotter(AllFlavoursPlotter, BandPDFPlotter): pass
 
 @figure
 @check_scale('xscale', allow_none=True)
@@ -1039,8 +1012,7 @@ def plot_flavours(pdf, xplotting_grid, xscale:(str,type(None))=None,
     set based on the scale in xgrid, which should be used instead.
 
     """
-    obj = FLavoursPlotter([pdf], [xplotting_grid], xscale, normalize_to=None)
-    return obj()
+    return FlavoursPlotter([pdf], [xplotting_grid], xscale, normalize_to=None)()
 
 
 @figuregen

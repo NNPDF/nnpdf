@@ -1,6 +1,8 @@
 pdfs:
     - NNPDF31_nnlo_as_0118
-    - NNPDF30_nnlo_as_0118
+    - NNPDF31_nnlo_as_0118_luxqed
+
+pdf: NNPDF31_nnlo_as_0118
 
 first:
     Q: 2
@@ -9,17 +11,24 @@ first:
 second:
     Q: 100
     scale: linear
+    flavours: [up, down, gluon, 4]
 
 normalize_to: 1
 
 template_text: |
+  ---
+  title: Distances plots
+  keywords: [distances]
+  ---
+
   Log scale, low Q
+  -----------
   {@first plot_pdfdistances@}
+
   Linear scale, high Q
+  -----------
   {@second plot_pdfdistances@}
 
 actions_:
-    - - report:
-           main: True
-
+  - report(main=true)
  
