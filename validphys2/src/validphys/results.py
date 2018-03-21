@@ -899,13 +899,10 @@ def chi2_impact(theory_covmat_3pt, experiments_covmat, experiments_results):
     dat_central = np.concatenate([x for x in dat_central_list])
     th_central  = np.concatenate([x for x in th_central_list])
     central_diff = dat_central - th_central
-    cov_before = experiments_covmat.as_matrix()
-    cov_after = theory_covmat_3pt.as_matrix() + experiments_covmat.as_matrix()
-    elements_before = np.dot(central_diff.T,np.dot(la.inv(cov_before),central_diff))
-    chi2_before = (1/len(central_diff))*np.sum(elements_before)
-    elements_after = np.dot(central_diff.T,np.dot(la.inv(cov_after),central_diff))
-    chi2_after = (1/len(central_diff))*np.sum(elements_after)
-    return chi2_before, chi2_after
+    cov = theory_covmat_3pt.as_matrix() + experiments_covmat.as_matrix()
+    elements = np.dot(central_diff.T,np.dot(la.inv(cov),central_diff))
+    chi2 = (1/len(central_diff))*np.sum(elements)
+    return chi2
 
 
 
