@@ -839,6 +839,28 @@ def theory_covmat_3pt(theoryids_experiments_central_values, experiments, experim
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
 
+theoryids_results = collect(results, ('theoryids',))
+
+def test(theoryids_results):
+    print(theoryids_results)
+    data_centrals =  [x[0].central_value for x in theoryids_results]
+    theory_centrals = [x[1].central_value for x in theoryids_results]
+    print(data_centrals)
+    print(theory_centrals)
+
+@table
+@check_have_three_theories
+def theory_covmat_3pt_dataset(theoryids_dataset_central_values, dataset, dataset_index): 
+    """Calculates the theory covariance matrix for 3-point scale variations."""
+    number_theories = len(theoryids_experiments_central_values)
+    central, low, high = np.array(theoryids_experiments_central_values)
+    lowdiff  = low - central
+    highdiff = high - central
+    s = np.zeros((len(central),len(central)))
+    s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
+    df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
+    return df
+
 @table
 def theory_corrmat_3pt(theory_covmat_3pt):
     """Calculates the theory correlation matrix for 3-point scale variations."""
@@ -871,19 +893,19 @@ def experimentsplustheory_corrmat_3pt(experiments_covmat, theory_covmat_3pt):
 
 def chi2_impact(theory_covmat_3pt, experiments_covmat, experiments_results):
     dataresults = [ x[0] for x in experiments_results ]
-    print(dataresults)
     theoryresults = [ x[1] for x in experiments_results ]
     dat_central_list = [x.central_value for x in dataresults]
-    print(dat_central_list)
     th_central_list = [x.central_value for x in theoryresults]
     dat_central = np.concatenate([x for x in dat_central_list])
     th_central  = np.concatenate([x for x in th_central_list])
     central_diff = dat_central - th_central
     cov_before = experiments_covmat.as_matrix()
     cov_after = theory_covmat_3pt.as_matrix() + experiments_covmat.as_matrix()
-    chi2_before = (1/len(central_diff))*np.sum(np.dot(central_diff.T,np.dot(la.inv(cov_before),central_diff)))
-    chi2 = (1/len(central_diff))*np.sum(np.dot(central_diff.T,np.dot(la.inv(cov_after),central_diff)))
-    return chi2_before, chi2
+    elements_before = np.dot(central_diff.T,np.dot(la.inv(cov_before),central_diff))
+    chi2_before = (1/len(central_diff))*np.sum(elements_before)
+    elements_after = np.dot(central_diff.T,np.dot(la.inv(cov_after),central_diff))
+    chi2_after = (1/len(central_diff))*np.sum(elements_after)
+    return chi2_before, chi2_after
 
 
 
