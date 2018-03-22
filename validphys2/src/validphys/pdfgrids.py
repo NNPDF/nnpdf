@@ -181,9 +181,17 @@ def lumigrid1d(pdf:PDF, lumi_channel, sqrts:numbers.Real, nbins_m:int=30):
 lumigrids1d = collect('lumigrid1d', ['lumi_channels'])
 
 
+
 def distance_grids(pdfs, xplotting_grids, normalize_to):
     """Return an object containing the value of the distance PDF at the specified values
-    of x and flavour."""
+    of x and flavour.
+
+    The parameter ``normalize_to`` identifies the reference PDF set with respect to the
+    distance is computed.
+
+    This method returns distance grids where the relative distance between both PDF
+    set is computed. At least one grid will be identical to zero.
+    """
 
     gr2 = xplotting_grids[normalize_to]
     cv2 = pdfs[normalize_to].stats_class(gr2.grid_values).central_value()
@@ -194,19 +202,18 @@ def distance_grids(pdfs, xplotting_grids, normalize_to):
     for grid, pdf in zip(xplotting_grids, pdfs):
 
         if pdf == pdfs[normalize_to]:
-            newgrid = type(grid)(**{**grid._asdict(),
-                                    'grid_values': np.zeros(shape=(grid.grid_values.shape[1],
-                                                                   grid.grid_values.shape[2]))})
-        else:
-            cv1 = pdf.stats_class(grid.grid_values).central_value()
-            sg1 = pdf.stats_class(grid.grid_values).std_error()
-            N1 = grid.grid_values.shape[0]
+            newgrid = grid._replace(grid_values=np.zeros(shape=(grid.grid_values.shape[1], grid.grid_values.shape[2])))
+            newgrids.append(newgrid)
+            continue
 
-            # the distance definition
-            distance = np.sqrt( pow(cv1 - cv2, 2) / (pow(sg1, 2)/N1 + pow(sg2, 2)/N2))
+        cv1 = pdf.stats_class(grid.grid_values).central_value()
+        sg1 = pdf.stats_class(grid.grid_values).std_error()
+        N1 = grid.grid_values.shape[0]
 
-            newgrid = type(grid)(**{**grid._asdict(), 'grid_values': distance})
+        # the distance definition
+        distance = np.sqrt((cv1-cv2)**2/(sg1**2/N1+sg2**2/N2))
 
+        newgrid = grid._replace(grid_values=distance)
         newgrids.append(newgrid)
 
     return newgrids
