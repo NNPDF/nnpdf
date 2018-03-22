@@ -183,7 +183,7 @@ lumigrids1d = collect('lumigrid1d', ['lumi_channels'])
 
 
 @check_pdf_normalize_to
-def distance_grids(pdfs, xplotting_grids, normalize_to):
+def distance_grids(pdfs, xplotting_grids, normalize_to:(int,str,type(None))=None):
     """Return an object containing the value of the distance PDF at the specified values
     of x and flavour.
 
