@@ -14,6 +14,7 @@ from reportengine.checks import make_argcheck, CheckError, check_positive
 from validphys.core import PDF
 from validphys.gridvalues import (evaluate_luminosity)
 from validphys.pdfbases import (Basis, check_basis)
+from validphys.checks import check_pdf_normalize_to
 
 ScaleSpec = namedtuple('ScaleSpec', ('scale', 'values'))
 
@@ -181,7 +182,7 @@ def lumigrid1d(pdf:PDF, lumi_channel, sqrts:numbers.Real, nbins_m:int=30):
 lumigrids1d = collect('lumigrid1d', ['lumi_channels'])
 
 
-
+@check_pdf_normalize_to
 def distance_grids(pdfs, xplotting_grids, normalize_to):
     """Return an object containing the value of the distance PDF at the specified values
     of x and flavour.

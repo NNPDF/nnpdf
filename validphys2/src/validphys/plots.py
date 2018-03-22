@@ -25,7 +25,7 @@ from reportengine.checks import make_check, CheckError, make_argcheck
 from validphys.core import MCStats, cut_mask
 from validphys.results import chi2_stat_labels
 from validphys.plotoptions import get_info, kitable, transform_result
-from validphys.checks import check_scale, check_have_two_pdfs
+from validphys.checks import check_scale, check_have_two_pdfs, check_pdf_normalize_to
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges
 
@@ -575,37 +575,6 @@ def plot_replica_sum_rules(pdf, sum_rules, Q):
     fig.suptitle(f'Sum rules for {pdf} at Q={Q} GeV')
     return fig
 
-#The indexing to one instead of zero is so that we can be consistent with
-#how plot_fancy works, so normalize_to: 1 would normalize to the first pdf
-#for both.
-@make_argcheck
-def check_pdf_normalize_to(pdfs, normalize_to):
-    """Transforn normalize_to into an index."""
-
-    msg = ("normalize_to should be, a pdf id or an index of the "
-           "pdf (starting from one)")
-
-    if normalize_to is None:
-        return
-
-    names = [pdf.name for pdf in pdfs]
-    if isinstance(normalize_to, int):
-        normalize_to -= 1
-        if not normalize_to < len(names) or normalize_to<0:
-            raise CheckError(msg)
-        return {'normalize_to': normalize_to}
-
-    if isinstance(normalize_to, str):
-        try:
-            normalize_to = names.index(normalize_to)
-        except ValueError:
-            raise CheckError(msg, normalize_to, alternatives=names)
-        return {'normalize_to': normalize_to}
-
-
-    raise RuntimeError("Should not be here")
-
-
 
 def _scale_from_grid(grid):
     return 'linear' if grid.scale == 'linear' else 'log'
@@ -868,6 +837,9 @@ class AllFlavoursPlotter(PDFPlotter):
         self.legend(flstate)
         return fig
 
+    def get_ylabel(self, parton_name):
+        return ''
+
 
 class DistancePDFPlotter(PDFPlotter):
     """Auxiliary class which draws the distance plots."""
@@ -895,7 +867,7 @@ class DistancePDFPlotter(PDFPlotter):
         return gv
 
 
-class FlavoursDistancePlotter(AllFlavoursPlotter, DistancePDFPlotter): pass
+class FlavoursDistancePlotter(DistancePDFPlotter, AllFlavoursPlotter): pass
 
 
 @figure
@@ -904,7 +876,7 @@ class FlavoursDistancePlotter(AllFlavoursPlotter, DistancePDFPlotter): pass
 @check_scale('xscale', allow_none=True)
 def plot_pdfdistances(pdfs, distance_grids, *,
                       xscale:(str,type(None))=None,
-                      normalize_to:(int,str)):
+                      normalize_to:(int,str,type(None))=None):
     """Plots the distances between different PDF sets and a reference PDF set
     for all flavours. Distances are normalized such that a value of order 10
     is unlikely to be explained by purely statistical fluctuations

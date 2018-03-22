@@ -98,3 +98,34 @@ def assert_use_cuts_true(use_cuts):
 @make_argcheck
 def check_have_two_pdfs(pdfs):
     check(len(pdfs) == 2,'Expecting exactly two pdfs.')
+
+
+#The indexing to one instead of zero is so that we can be consistent with
+#how plot_fancy works, so normalize_to: 1 would normalize to the first pdf
+#for both.
+@make_argcheck
+def check_pdf_normalize_to(pdfs, normalize_to):
+    """Transforn normalize_to into an index."""
+
+    msg = ("normalize_to should be, a pdf id or an index of the "
+           "pdf (starting from one)")
+
+    if normalize_to is None:
+        return
+
+    names = [pdf.name for pdf in pdfs]
+    if isinstance(normalize_to, int):
+        normalize_to -= 1
+        if not normalize_to < len(names) or normalize_to<0:
+            raise CheckError(msg)
+        return {'normalize_to': normalize_to}
+
+    if isinstance(normalize_to, str):
+        try:
+            normalize_to = names.index(normalize_to)
+        except ValueError:
+            raise CheckError(msg, normalize_to, alternatives=names)
+        return {'normalize_to': normalize_to}
+
+
+    raise RuntimeError("Should not be here")
