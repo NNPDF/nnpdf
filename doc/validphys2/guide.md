@@ -457,8 +457,8 @@ recipe), including the C++ compiler. For example here is how we would
 set up a development environment for `nnpdf`.
 
  1. Find out the C++ (or C or FORTRAN) compiler package name for your
-	platform [here][COMPILERS]. For example, the C++ compiler for
-	Linux is `gxx_linux-64`.
+	platform [here][COMPILERS]. For example, the C++ compilers for
+	Linux and macOS are `gxx_linux-64` and `clangxx_osx-64` respectively.
 
  2. Create an environment with all the build and runtime
 	dependencies. We start of with:

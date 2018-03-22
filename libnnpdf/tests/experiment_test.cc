@@ -1,8 +1,8 @@
 #include "catch.hpp"
 
-#include "experiments.h"
-#include "pathlib.h"
-#include "lhapdfset.h"
+#include "NNPDF/experiments.h"
+#include "NNPDF/pathlib.h"
+#include "NNPDF/lhapdfset.h"
 using namespace NNPDF;
 using namespace std;
 
