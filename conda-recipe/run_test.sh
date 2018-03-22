@@ -7,11 +7,7 @@ set -e
 pytest --pyargs validphys
 
 
-# TESTING DELETEME 
-export LDFLAGS="-Wl,-pie -Wl,-headerpad_max_install_names -Wl,-rpath,${PREFIX}/lib"
-
-#Compile in debug mode and run the cpp tests
-
+export LDFLAGS=$(echo $LDFLAGS | sed 's/-Wl,-dead_strip_dylibs//g')
 
 mkdir bldtest
 cd bldtest

@@ -1,6 +1,5 @@
 #!/bin/bash
-# TESTING DELETEME
-export LDFLAGS="-Wl,-pie -Wl,-headerpad_max_install_names -Wl,-rpath,${PREFIX}/lib"
+export LDFLAGS=$(echo $LDFLAGS | sed 's/-Wl,-dead_strip_dylibs//g')
 
 mkdir build
 cd build
