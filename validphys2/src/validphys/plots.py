@@ -118,13 +118,13 @@ def _check_same_experiment_name(dataspecs_experiments):
     lst = dataspecs_experiments
     if not lst:
         return
-    for i, exp in enumerate(lst[0]):
-        ele = exp.name
-        for x in lst[1:]:
-            if x[i].name != ele:
-                print(x.name + " x")
+    for x in lst[1:]:
+        if len(x) != len(lst[0]):
+            raise CheckError("All Dataspecs should have same number of experiments")
+        for i, exp in enumerate(x):
+            if exp.name != lst[0][i].name:
                 raise CheckError("All experiments must have the same name")
-
+            
 @_check_same_experiment_name
 @figure
 def plot_phi_scatter_dataspecs(dataspecs, dataspecs_experiments,

@@ -583,6 +583,7 @@ class MCStats(Stats):
     def error_members(self):
         return self.data
 
+
 class SymmHessianStats(Stats):
     """Compute stats in the 'assymetric' hessian format: The first index (0)
     is the
