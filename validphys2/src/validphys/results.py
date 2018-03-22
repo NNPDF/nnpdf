@@ -21,7 +21,7 @@ from reportengine import collect
 
 from validphys.checks import assert_use_cuts_true, check_pdf_is_montecarlo
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
-from validphys.calcutils import all_chi2, central_chi2, calc_chi2, bootstrap_stats
+from validphys.calcutils import all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values
 
 log = logging.getLogger(__name__)
 
@@ -427,14 +427,6 @@ def phi_data_experiment(abs_chi2_data_experiment):
     return phi_data(abs_chi2_data_experiment)
 
 @check_pdf_is_montecarlo
-def phi_stats(results):
-    """Does same as `phi_data` but compatible with either stats tuple"""
-    dt, th = results
-    centralchi2 = calc_chi2(dt.sqrtcovmat, th.central_value() - dt.central_value)
-    allchi2 = calc_chi2(dt.sqrtcovmat, th.data.T - dt.central_value[:, np.newaxis])
-    return np.sqrt((allchi2.mean() - centralchi2)/len(dt))
-    
-@check_pdf_is_montecarlo
 def bootstrap_phi_data_experiment(experiment_results,
                                   bootstrap_samples=100):
     """Takes the data result and theory prediction for a given experiment and
@@ -444,10 +436,10 @@ def bootstrap_phi_data_experiment(experiment_results,
     see `phi_data`
     """
     dt, th = experiment_results
-    th_stat = th.stats_class(np.array(th._rawdata).T)
-    phi_mean_error = bootstrap_stats(th_stat, bootstrap_samples, 
-                                     phi_stats, dt)
-    return phi_mean_error
+    diff = np.array(th._rawdata - dt.central_value[:, np.newaxis]).T
+    phi_resample = bootstrap_values(diff, bootstrap_samples, calc_phi,
+                                    dt.sqrtcovmat)
+    return phi_resample
 
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
                               prepend_total:bool=True,

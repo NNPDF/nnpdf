@@ -6,6 +6,7 @@ higher level functions in results.py
 """
 import numpy as np
 import scipy.linalg as la
+from typing import Callable
 
 def calc_chi2(sqrtcov, diffs):
     """Elementary function to compute the chi², given a Cholesky decomposed
@@ -33,22 +34,33 @@ def central_chi2(results):
     central_diff = th_result.central_value - data_result.central_value
     return calc_chi2(data_result.sqrtcovmat, central_diff)
 
-def bootstrap_stats(Stats_Object, nresamples, 
-                    apply_func=None, Data_Result_Object=None):
-    """Performs bootstrap sample on either the input Stats_Object.data, a
-    function applied to the Stats_Object.data or a function applied to a 
-    tuple of (Data_Result_Object, Stats_Object.data) and returns error
-    according to bootstrap sample
+def calc_phi(diffs, sqrtcov):
+    """Low level phi calc, calculates phi given a Cholesky decomposed
+    lower triangular part and a vector of differences. Primarily used
+    when chi2 is not also being calculated.
+    `diffs` should be N_pdf*N_bins
     """
+    diffs = np.array(diffs).T
+    return np.sqrt((np.mean(calc_chi2(sqrtcov, diffs)) - calc_chi2(sqrtcov, 
+                    diffs.mean(axis=1)))/diffs.shape[0])
+
+def bootstrap_values(data, nresamples, 
+                    apply_func:Callable=None, *args):
+    """Performs bootstrap sample on either the input data or a function
+    applied to that data.
+    `data` should be N_pdf*N_bins
+    """
+    data = np.atleast_2d(data)
+    N_reps = data.shape[0]
+    bootstrap_data = data[np.random.randint(N_reps, 
+                                            size=(nresamples, N_reps)), :]
     resample_data = np.empty(nresamples)
     if apply_func == None:
+        resample_data = np.mean(bootstrap_data, axis=1)
+    elif not args:
         for i in range(nresamples):
-            resample_data[i] = Stats_Object.bootstrap_values().central_value()
-    elif Data_Result_Object == None:
-        for i in range(nresamples):
-            resample_data[i] = apply_func(Stats_Object.bootstrap_values().data())
+            resample_data[i] = apply_func(bootstrap_data[i])
     else:
         for i in range(nresamples):
-            results = Data_Result_Object, Stats_Object.bootstrap_values()
-            resample_data[i] = apply_func(results)
-    return np.mean(resample_data), np.std(resample_data)
+            resample_data[i] = apply_func(bootstrap_data[i], *args)
+    return resample_data

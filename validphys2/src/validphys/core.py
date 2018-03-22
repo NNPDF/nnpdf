@@ -583,16 +583,6 @@ class MCStats(Stats):
     def error_members(self):
         return self.data
 
-    def bootstrap_values(self):
-        """Returns a single bootstrap of self.data. The bootstrap takes a 
-        monte carlo sample across replicas of self.data and then 
-        `bootstrap_values` returns a new stats object with the bootstrap
-        sample as input data
-        """
-        N_reps = self.data.shape[0]
-        return MCStats(self.data[np.random.randint(N_reps, size=N_reps)])
-
-
 class SymmHessianStats(Stats):
     """Compute stats in the 'assymetric' hessian format: The first index (0)
     is the

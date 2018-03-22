@@ -98,17 +98,34 @@ def plot_phi_scatter(pdf, experiments, experiments_bootstrap_phi):
     represented as a scatter point of the mean value, with an error bar of std
     deviation
     """
-    phis = np.array(experiments_bootstrap_phi)
+    phis = experiments_bootstrap_phi
     xticks = [experiment.name for experiment in experiments]
     x = range(1, len(phis)+1)
     label = pdf.name
     fig, ax = plt.subplots()
-    ax.errorbar(x, phis[:, 0], yerr=phis[:, 1], fmt='.')
+    phi_means = np.mean(phis, axis=1)
+    phi_minus = phi_means - np.percentile(phis, 16, axis=1)
+    phi_plus = np.percentile(phis, 84, axis=1) - phi_means
+    phi_errs = np.vstack((phi_minus, phi_plus))
+    ax.errorbar(x, phi_means, yerr=phi_errs, fmt='.')
     ax.set_xticks(x, minor=False)
     ax.set_xticklabels(xticks, minor=False, rotation=45)
+    ax.legend()
     return fig
 
-#@_check_same_dataset_name
+@make_argcheck
+def _check_same_experiment_name(dataspecs_experiments):
+    lst = dataspecs_experiments
+    if not lst:
+        return
+    for i, exp in enumerate(lst[0]):
+        ele = exp.name
+        for x in lst[1:]:
+            if x[i].name != ele:
+                print(x.name + " x")
+                raise CheckError("All experiments must have the same name")
+
+@_check_same_experiment_name
 @figure
 def plot_phi_scatter_dataspecs(dataspecs, dataspecs_experiments,
         dataspecs_speclabel, dataspecs_experiments_bootstrap_phi, 
