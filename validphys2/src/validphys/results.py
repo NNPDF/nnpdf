@@ -841,25 +841,22 @@ def theory_covmat_3pt(theoryids_experiments_central_values, experiments, experim
 
 theoryids_results = collect(results, ('theoryids',))
 
-def test(theoryids_results):
-    print(theoryids_results)
+@check_have_three_theories
+def theory_chi2_dataset(theoryids_results):
     data_centrals =  [x[0].central_value for x in theoryids_results]
     theory_centrals = [x[1].central_value for x in theoryids_results]
-    print(data_centrals)
-    print(theory_centrals)
-
-@table
-@check_have_three_theories
-def theory_covmat_3pt_dataset(theoryids_dataset_central_values, dataset, dataset_index): 
-    """Calculates the theory covariance matrix for 3-point scale variations."""
-    number_theories = len(theoryids_experiments_central_values)
-    central, low, high = np.array(theoryids_experiments_central_values)
+    central,low,high = theory_centrals
     lowdiff  = low - central
     highdiff = high - central
     s = np.zeros((len(central),len(central)))
     s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
-    df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
-    return df
+    sigmas = [x[0].covmat for x in theoryids_results]
+    sigma = sigmas[0]
+    cov = s + sigma
+    central_diff = data_centrals[0]-central
+    elements = np.dot(central_diff.T,np.dot(la.inv(cov),central_diff))
+    chi2 = (1/len(central_diff))*np.sum(elements)
+    return chi2
 
 @table
 def theory_corrmat_3pt(theory_covmat_3pt):
