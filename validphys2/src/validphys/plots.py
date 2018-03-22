@@ -868,13 +868,6 @@ class AllFlavoursPlotter(PDFPlotter):
         self.legend(flstate)
         return fig
 
-    def legend(self, flstate):
-        return flstate.ax.legend(flstate.handles, flstate.labels,
-                                 handler_map={plotutils.HandlerSpec:
-                                             plotutils.ComposedHandler()
-                                             }
-                                 )
-
 
 class DistancePDFPlotter(PDFPlotter):
     """Auxiliary class which draws the distance plots."""
@@ -892,15 +885,12 @@ class DistancePDFPlotter(PDFPlotter):
 
         ax = flstate.ax
         flindex = flstate.flindex
-        handles = flstate.handles
         pcycler = ax._get_lines.prop_cycler
         next_prop = next(pcycler)
         color = next_prop['color']
 
         gv = grid.grid_values[flindex,:]
-
-        handle, = ax.plot(grid.xgrid, gv, color=color)
-        handles.append(handle)
+        ax.plot(grid.xgrid, gv, color=color, label=flstate.parton_name)
 
         return gv
 
@@ -909,7 +899,7 @@ class FlavoursDistancePlotter(AllFlavoursPlotter, DistancePDFPlotter): pass
 
 
 @figure
-@check_normalize_to
+@check_pdf_normalize_to
 @check_have_two_pdfs
 @check_scale('xscale', allow_none=True)
 def plot_pdfdistances(pdfs, distance_grids, *,
@@ -974,8 +964,12 @@ class BandPDFPlotter(PDFPlotter):
 
         return [err68down, err68up]
 
-    def get_ylabel(self, parton_name):
-        return ''
+    def legend(self, flstate):
+        return flstate.ax.legend(flstate.handles, flstate.labels,
+                                 handler_map={plotutils.HandlerSpec:
+                                             plotutils.ComposedHandler()
+                                             }
+                                 )
 
 
 @figuregen
