@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "utils.h"
+#include "NNPDF/utils.h"
 
 using namespace NNPDF;
 
