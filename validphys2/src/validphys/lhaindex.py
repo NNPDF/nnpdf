@@ -109,7 +109,7 @@ def infofilename(name):
 @lru_cache()
 def parse_info(name):
     with open(infofilename(name)) as infofile:
-        result = yaml.load(infofile)
+        result = yaml.safe_load(infofile)
     return result
 
 def get_lha_paths():
