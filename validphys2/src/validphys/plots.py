@@ -81,7 +81,7 @@ def plot_phi_pdfs(experiments, pdfs, experiments_pdfs_phi):
 def plot_phi_experiment_dist(experiment, bootstrap_phi_data_experiment):
     """Plots a histogram of phi for a single experiment, specify 
     `bootstrap_samples` in runcard to control the number of samples taken, by 
-    default it is set to 100 which is rather low
+    default it is set to a sensible number (500)
     """
     phi = bootstrap_phi_data_experiment
     label = '\n'.join([fr'$\phi$ mean = {format_number(phi.mean())}',
@@ -119,12 +119,14 @@ def _check_same_experiment_name(dataspecs_experiments):
     lst = dataspecs_experiments
     if not lst:
         return
-    for x in lst[1:]:
+    for j, x in enumerate(lst[1:]):
         if len(x) != len(lst[0]):
-            raise CheckError("All Dataspecs should have same number of experiments")
+            raise CheckError("All dataspecs should have the same number of experiments")
         for i, exp in enumerate(x):
             if exp.name != lst[0][i].name:
-                raise CheckError("All experiments must have the same name")
+                raise CheckError("\n".join(["All experiments must have the same name", 
+                                            fr"dataspec {j+1}, experiment {i+1}: {exp.name}",
+                                            fr"dataspec 1, experiment {i+1}: {lst[0][i].name}"]))
             
 @_check_same_experiment_name
 @figure

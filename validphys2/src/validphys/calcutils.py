@@ -35,32 +35,38 @@ def central_chi2(results):
     return calc_chi2(data_result.sqrtcovmat, central_diff)
 
 def calc_phi(diffs, sqrtcov):
-    """Low level phi calc, calculates phi given a Cholesky decomposed
-    lower triangular part and a vector of differences. Primarily used
-    when chi2 is not also being calculated.
-    `diffs` should be N_pdf*N_bins
+    """Low level function which calculates phi given a vector of differences
+    and a Cholesky decomposed lower triangular part. Primarily used when phi
+    is to be calculated independently from chi2.
+    
+    The vector of differences `diffs` should have N_bins on the final axis
+    E.g. N_replicas*N_bins
     """
     diffs = np.array(diffs).T
-    return np.sqrt((np.mean(calc_chi2(sqrtcov, diffs)) - calc_chi2(sqrtcov, 
-                    diffs.mean(axis=1)))/diffs.shape[0])
+    return np.sqrt((np.mean(calc_chi2(sqrtcov, diffs), axis=0) -
+                    calc_chi2(sqrtcov, diffs.mean(axis=1)))/diffs.shape[0])
 
 def bootstrap_values(data, nresamples, 
                     apply_func:Callable=None, *args):
-    """Performs bootstrap sample on either the input data or a function
-    applied to that data.
-    `data` should be N_pdf*N_bins
+    """General bootstrap sample
+
+    If just `data` and `nresamples` is provided, then `bootstrap_values` 
+    creates N resamples of the data, where each resample is a Monte Carlo 
+    selection of the data across replicas. The mean of each resample is 
+    returned
+
+    The user can additionally specify a function to be sampled `apply_func`
+    plus any additional arguments required by that function. 
+    `bootstrap_values` then returns `apply_func(bootstrap_data, *args)`
+    where `bootstrap_data.shape = (nresamples, data.shape)`. It is 
+    critical that `apply_func` can support an input of this kind.
     """
     data = np.atleast_2d(data)
     N_reps = data.shape[0]
     bootstrap_data = data[np.random.randint(N_reps, 
-                                            size=(nresamples, N_reps)), :]
+                                            size=(nresamples, N_reps)), ...]
     resample_data = np.empty(nresamples)
-    if apply_func == None:
-        resample_data = np.mean(bootstrap_data, axis=1)
-    elif not args:
-        for i in range(nresamples):
-            resample_data[i] = apply_func(bootstrap_data[i])
+    if apply_func is None:
+        return np.mean(bootstrap_data, axis=1)
     else:
-        for i in range(nresamples):
-            resample_data[i] = apply_func(bootstrap_data[i], *args)
-    return resample_data
+        return apply_func(bootstrap_data, *args)
