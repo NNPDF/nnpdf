@@ -2,7 +2,9 @@
 set -u
 set -v
 
-#Find conda
+#Set up netrc file for uploading/downloading
+echo "$NETRC_FILE" | base64 --decode > ~/.netrc
+
 conda build -q conda-recipe
 if [ $? != 0 ]; then
 	echo failed to build

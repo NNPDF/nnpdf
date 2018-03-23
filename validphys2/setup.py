@@ -27,7 +27,9 @@ setup(name= "validphys",
       package_dir = {'': 'src'},
       packages = find_packages('src'),
        package_data = {
-            '':['*.template', '*.mplstyle']
+           #TODO: Get rid of this nonsense
+            '':['*.template', '*.mplstyle', '*.csv'],
+            'tests/regressions': ['*'],
        },
       zip_safe = False,
       classifiers=[
