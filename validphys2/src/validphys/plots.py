@@ -84,7 +84,8 @@ def plot_phi_experiment_dist(experiment, bootstrap_phi_data_experiment):
     default it is set to 100 which is rather low
     """
     phi = bootstrap_phi_data_experiment
-    label = (r'$\phi$ mean = ' + format_number(phi.mean()) +  '\n' +  r'$\phi$ std dev = ' + format_number(phi.std()))
+    label = '\n'.join([fr'$\phi$ mean = {format_number(phi.mean())}',
+                       fr'$\phi$ std dev = {format_number(phi.std())}'])
     fig, ax = plt.subplots()
     ax.hist(phi, label=label)
     ax.set_title(r"$\phi$ distribution for " + experiment.name)
