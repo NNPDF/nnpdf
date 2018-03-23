@@ -218,3 +218,43 @@ def distance_grids(pdfs, xplotting_grids, normalize_to:(int,str,type(None))=None
         newgrids.append(newgrid)
 
     return newgrids
+
+
+@check_pdf_normalize_to
+def variance_distance_grids(pdfs, xplotting_grids, normalize_to:(int,str,type(None))=None):
+    """Return an object containing the value of the variance distance PDF at the specified values
+    of x and flavour.
+
+    The parameter ``normalize_to`` identifies the reference PDF set with respect to the
+    distance is computed.
+
+    This method returns distance grids where the relative distance between both PDF
+    set is computed. At least one grid will be identical to zero.
+    """
+
+    gr2 = xplotting_grids[normalize_to]
+    sg2 = pdfs[normalize_to].stats_class(gr2.grid_values).std_error()
+    mo2 = pdfs[normalize_to].stats_class(gr2.grid_values).moment(4)
+    N2 = gr2.grid_values.shape[0]
+    s2 = (mo2-(N2-3)/(N2-1)*sg2**4)/N2
+
+    newgrids = list()
+    for grid, pdf in zip(xplotting_grids, pdfs):
+
+        if pdf == pdfs[normalize_to]:
+            newgrid = grid._replace(grid_values=np.zeros(shape=(grid.grid_values.shape[1], grid.grid_values.shape[2])))
+            newgrids.append(newgrid)
+            continue
+
+        sg1 = pdf.stats_class(grid.grid_values).std_error()
+        mo1 = pdf.stats_class(grid.grid_values).moment(4)
+        N1 = grid.grid_values.shape[0]
+        s1 = (mo1-(N1-3)/(N1-1)*sg1**4)/N1
+
+        # the distance definition
+        variance_distance = np.sqrt((sg1**2-sg2**2)**2/(s1+s2))
+
+        newgrid = grid._replace(grid_values=variance_distance)
+        newgrids.append(newgrid)
+
+    return newgrids

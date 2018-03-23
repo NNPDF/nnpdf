@@ -24,10 +24,12 @@ template_text: |
   Log scale, low Q
   -----------
   {@first plot_pdfdistances@}
+  {@first plot_pdfvardistances@}
 
   Linear scale, high Q
   -----------
   {@second plot_pdfdistances@}
+  {@second plot_pdfvardistances@}
 
 actions_:
   - report(main=true)

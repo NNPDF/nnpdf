@@ -867,7 +867,17 @@ class DistancePDFPlotter(PDFPlotter):
         return gv
 
 
+class VarDistancePDFPlotter(DistancePDFPlotter):
+    """Auxiliary class which draws the variance distance plots"""
+
+    def get_ylabel(self, parton_name):
+        return "Variance distance from {}".format(self.normalize_pdf.label)
+
+
 class FlavoursDistancePlotter(DistancePDFPlotter, AllFlavoursPlotter): pass
+
+
+class FlavoursVarDistancePlotter(VarDistancePDFPlotter, AllFlavoursPlotter): pass
 
 
 @figure
@@ -882,6 +892,20 @@ def plot_pdfdistances(pdfs, distance_grids, *,
     is unlikely to be explained by purely statistical fluctuations
     """
     return FlavoursDistancePlotter(pdfs, distance_grids, xscale, normalize_to)()
+
+
+@figure
+@check_pdf_normalize_to
+@check_have_two_pdfs
+@check_scale('xscale', allow_none=True)
+def plot_pdfvardistances(pdfs, variance_distance_grids, *,
+                      xscale:(str,type(None))=None,
+                      normalize_to:(int,str,type(None))=None):
+    """Plots the distances between different PDF sets and a reference PDF set
+    for all flavours. Distances are normalized such that a value of order 10
+    is unlikely to be explained by purely statistical fluctuations
+    """
+    return FlavoursVarDistancePlotter(pdfs, variance_distance_grids, xscale, normalize_to)()
 
 
 class BandPDFPlotter(PDFPlotter):
