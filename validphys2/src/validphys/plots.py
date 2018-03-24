@@ -79,9 +79,10 @@ def plot_phi_pdfs(experiments, pdfs, experiments_pdfs_phi):
 
 @figure
 def plot_phi_experiment_dist(experiment, bootstrap_phi_data_experiment):
-    """Plots a histogram of phi for a single experiment, specify 
-    `bootstrap_samples` in runcard to control the number of samples taken, by 
-    default it is set to a sensible number (500)
+    """Generates a bootstrap distribution of phi and then plots a histogram
+    of the individual bootstrap samples for a single experiment. By default
+    the number of bootstrap samples is set to a sensible number (500) however
+    this number can be changed by specifying `bootstrap_samples` in the runcard
     """
     phi = bootstrap_phi_data_experiment
     label = '\n'.join([fr'$\phi$ mean = {format_number(phi.mean())}',
@@ -92,28 +93,6 @@ def plot_phi_experiment_dist(experiment, bootstrap_phi_data_experiment):
     ax.legend()
     return fig
 
-@figure
-def plot_phi_scatter(pdf, experiments, experiments_bootstrap_phi):
-    """does a bootstrap sample of theoretical predictions for each experiment 
-    and uses this to find a distribution of phi the distributions are 
-    represented as a scatter point of the mean value, with an error bar of std
-    deviation
-    """
-    phis = experiments_bootstrap_phi
-    xticks = [experiment.name for experiment in experiments]
-    x = range(1, len(phis)+1)
-    label = pdf.name
-    fig, ax = plt.subplots()
-    phi_means = np.mean(phis, axis=1)
-    phi_minus = phi_means - np.percentile(phis, 16, axis=1)
-    phi_plus = np.percentile(phis, 84, axis=1) - phi_means
-    phi_errs = np.vstack((phi_minus, phi_plus))
-    ax.errorbar(x, phi_means, yerr=phi_errs, fmt='.')
-    ax.set_xticks(x, minor=False)
-    ax.set_xticklabels(xticks, minor=False, rotation=45)
-    ax.legend()
-    return fig
-
 @make_argcheck
 def _check_same_experiment_name(dataspecs_experiments):
     lst = dataspecs_experiments
@@ -121,24 +100,28 @@ def _check_same_experiment_name(dataspecs_experiments):
         return
     for j, x in enumerate(lst[1:]):
         if len(x) != len(lst[0]):
-            raise CheckError("All dataspecs should have the same number of experiments")
+            raise CheckError("All dataspecs should have the same number "
+                             "of experiments")
         for i, exp in enumerate(x):
             if exp.name != lst[0][i].name:
-                raise CheckError("\n".join(["All experiments must have the same name", 
-                                            fr"dataspec {j+1}, experiment {i+1}: {exp.name}",
-                                            fr"dataspec 1, experiment {i+1}: {lst[0][i].name}"]))
+                raise CheckError("\n".join(["All experiments must have the "
+                                            "same name", 
+                                            fr"dataspec {j+1}, "
+                                            fr"experiment {i+1}: {exp.name}",
+                                            fr"dataspec 1, experiment {i+1}: "
+                                            fr"{lst[0][i].name}"]))
             
 @_check_same_experiment_name
 @figure
 def plot_phi_scatter_dataspecs(dataspecs, dataspecs_experiments,
         dataspecs_speclabel, dataspecs_experiments_bootstrap_phi, 
-        bootstrap_samples=100):
-    """For each of the dataspecs, does a bootstrap sample of theoretical 
-    predictions and uses this to find a distribution of phi for all experiments
-    the distributions are represented as a scatter point of the mean value, 
-    with an error bar which shows the 68% confidence region
-
-    NOTE:both dataspecs must have the same experiments
+        bootstrap_samples=500):
+    """For each of the dataspecs, a bootstrap distribution of phi is generated
+    for all specified experiments. The distribution is then represented as a
+    scatter point which is the median of the bootstrap distribution and an
+    errorbar which spans the 68% confidence interval. By default the number
+    of bootstrap samples is set to a sensible value, however it can be 
+    controlled by specifying `bootstrap_samples` in the runcard.
     """
     labels = dataspecs_speclabel
     phis = dataspecs_experiments_bootstrap_phi    
@@ -146,12 +129,13 @@ def plot_phi_scatter_dataspecs(dataspecs, dataspecs_experiments,
     xticks = [experiment.name for experiment in exps[0]]
     x = range(1, len(xticks)+1)
     fig, ax = plt.subplots()
+    phi_stats = np.percentile(phis, [16, 50, 84], axis=2)
+    print(phi_stats.shape)
     for i, dataspec in enumerate(dataspecs):
-        phi_means = np.mean(phis[i], axis=1)
-        phi_minus = phi_means - np.percentile(phis[i], 16, axis=1)
-        phi_plus = np.percentile(phis[i], 84, axis=1) - phi_means
-        phi_errs = np.vstack((phi_minus, phi_plus))
-        ax.errorbar(x, phi_means, yerr=phi_errs, fmt='.', label=labels[i])
+        phi_errs = np.vstack((phi_stats[2, i, :] - phi_stats[1, i, :],
+                              phi_stats[1, i, :] - phi_stats[0, i, :]))
+        ax.errorbar(x, phi_stats[1, i, :], yerr=phi_errs, fmt='.',
+                    label=labels[i])
     ax.set_xticks(x, minor=False)
     ax.set_xticklabels(xticks, minor=False, rotation=45)
     ax.legend()

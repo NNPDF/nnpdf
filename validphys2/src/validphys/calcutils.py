@@ -55,11 +55,11 @@ def bootstrap_values(data, nresamples,
     selection of the data across replicas. The mean of each resample is 
     returned
 
-    The user can additionally specify a function to be sampled `apply_func`
+    Alternatively, the user can specify a function to be sampled `apply_func`
     plus any additional arguments required by that function. 
     `bootstrap_values` then returns `apply_func(bootstrap_data, *args)`
     where `bootstrap_data.shape = (nresamples, data.shape)`. It is 
-    critical that `apply_func` can support an input of this kind.
+    critical that `apply_func` can handle data input in this format.
     """
     data = np.atleast_2d(data)
     N_reps = data.shape[0]
