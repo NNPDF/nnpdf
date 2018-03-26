@@ -17,6 +17,11 @@ PDF replicas
 {@plot_pdfreplicas@}
 {@endwith@}
 
+Effective preprocessing exponents
+---------------------------------
+{@plot_alphaEff@}
+{@plot_betaEff@}
+
 $\chi^2$
 --------
 {@fits_chi2_table@}
