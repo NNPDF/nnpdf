@@ -21,3 +21,7 @@ Experiment plots
 {@with matched_datasets_from_dataspecs@}
 [Detailed plots for dataset ' {@dataset_name@} ']({@dataset_report report@})
 {@endwith@}
+
+PDF arc-lengths
+---------------
+{@plot_arc_lengths@}
