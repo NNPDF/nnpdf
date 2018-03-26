@@ -24,7 +24,7 @@ from validphys.core import PDF, Filter
 from validphys.results import abs_chi2_data, results
 from validphys import checks
 from validphys import lhaindex
-from validphys.lhio import new_pdf_from_indexes
+from validphys.lhio import new_pdf_from_indexes, pdfset
 from validphys.plots import plot_training_validation
 
 log = logging.getLogger(__name__)
@@ -241,10 +241,6 @@ def make_unweighted_pdf(pdf, unweighted_index,
 
     return  (out/set_name).relative_to(output_path)
 
-#Display this in the help
-make_unweighted_pdf.highlight = 'pdfset'
-
-
 @checks.make_check
 def _check_cut(ns, *args, **kwargs):
     cut = ns['nsigma_cut']
@@ -298,6 +294,7 @@ def negative_filtered_index(count_negative_points, filter_Q=75):
     log.info("Positivity cut for Q=%.2f is at %.0f negative points" % (filter_Q, cut))
     return Filter(indexes, label, filter_Q=filter_Q)
 
+@pdfset
 @_prepare_pdf_name
 @checks.check_can_save_grid
 def make_pdf_from_filtered_outliers(fit, chi2filtered_index,
@@ -310,8 +307,6 @@ def make_pdf_from_filtered_outliers(fit, chi2filtered_index,
     new_pdf_from_indexes(pdf=PDF(fit.name), indexes=indexes,
                          set_name=set_name, folder=output_path/PDFSETS_PATH,
                          installgrid=installgrid)
-
-make_pdf_from_filtered_outliers.highlight = 'pdfset'
 
 #TODO: Use the filter framework here when it exists
 @figure

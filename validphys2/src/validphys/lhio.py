@@ -320,3 +320,8 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder = None, db=None,
         write_replica(column + 1, set_root, hess_header, result[column])
 
     return set_root
+
+def pdfset(f):
+    """Mark the function as returning a PDF set."""
+    f.highlight = 'pdfset'
+    return f
