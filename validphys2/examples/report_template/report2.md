@@ -2,7 +2,6 @@
 
 PDF plots
 ---------
-
 {@with pdfnormalize@}
 ## {@normtitle@}
 {@with basespecs@}
@@ -11,10 +10,16 @@ PDF plots
 {@endwith@}
 {@endwith@}
 
+PDF replicas
+------------
+{@with basespecs@}
+### {@basistitle@}
+{@plot_pdfreplicas@}
+{@endwith@}
+
 $\chi^2$
 --------
 {@fits_chi2_table@}
-
 
 Experiment plots
 ---------------
