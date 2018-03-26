@@ -35,12 +35,12 @@ def central_chi2(results):
     return calc_chi2(data_result.sqrtcovmat, central_diff)
 
 def calc_phi(sqrtcov, diffs):
-    """Low level function which calculates phi given a vector of differences
-    and a Cholesky decomposed lower triangular part. Primarily used when phi
+    """Low level function which calculates phi given a Cholesky decomposed 
+    lower triangular part and a vector of differences. Primarily used when phi
     is to be calculated independently from chi2.
     
-    The vector of differences `diffs` should have N_bins on the final axis
-    E.g. N_replicas*N_bins
+    The vector of differences `diffs` is expected to have N_bins on the first
+    axis
     """
     diffs = np.array(diffs)
     return np.sqrt((np.mean(calc_chi2(sqrtcov, diffs), axis=0) -
@@ -61,7 +61,7 @@ def bootstrap_values(data, nresamples,
     Alternatively, the user can specify a function to be sampled `apply_func`
     plus any additional arguments required by that function. 
     `bootstrap_values` then returns `apply_func(bootstrap_data, *args)`
-    where `bootstrap_data.shape = (nresamples, data.shape)`. It is 
+    where `bootstrap_data.shape = (data.shape, nresamples)`. It is 
     critical that `apply_func` can handle data input in this format.
     """
     data = np.atleast_2d(data)
