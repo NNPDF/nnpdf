@@ -26,8 +26,18 @@ Effective preprocessing exponents
 {@plot_alphaEff@}
 {@plot_betaEff@}
 
-$\chi^2$
---------
+$\chi^2$ by experiment
+----------------------
+{@with dataspecs@}
+### {@fit@}
+{@plot_experiments_chi2@}
+{@endwith@}
+
+$\chi^2$ by dataset comparisons
+-------------------------------
+### Plot
+{@plot_fits_datasets_chi2@}
+### Table
 {@fits_chi2_table@}
 
 Experiment plots
