@@ -436,8 +436,9 @@ def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples=500):
     For more information on how phi is calculated see `phi_data`
     """
     dt, th = experiment_results
-    diff = np.array(th._rawdata - dt.central_value[:, np.newaxis]).T
-    phi_resample = bootstrap_values(diff, bootstrap_samples, calc_phi,
+    diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
+    phi_resample = bootstrap_values(diff, bootstrap_samples, 
+                                    lambda x, y: calc_phi(y, x), 
                                     dt.sqrtcovmat)
     return phi_resample
 
