@@ -2,7 +2,8 @@ cmake_minimum_required (VERSION 3.0.2)
 
 #This helps executables on Mac (where the linker didn't graduate from
 #the kindergarden) to find the libraries
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+SET(CMAKE_SKIP_RPATH TRUE)
+#SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
