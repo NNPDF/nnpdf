@@ -19,7 +19,6 @@ from reportengine import collect
 from reportengine.table import table
 from reportengine.figure import figure
 from reportengine.checks import make_check
-from reportengine.formattingtools import spec_to_nice_name
 
 from validphys.core import PDF, Filter
 from validphys.results import abs_chi2_data, results
@@ -191,21 +190,9 @@ def unweighted_index(nnpdf_weights, nreplicas:int=100):
 PDFSETS_PATH = 'pdfsets'
 
 @make_check
-def _prepare_pdf_name(*, callspec, ns, environment, **kwargs):
-
-    #TODO: Maybe just require a name and do away with the magic? It's not
-    # going to be useful 90% of the time anyway.
+def _prepare_pdf_name(*, callspec, ns, **kwargs):
     set_name = ns['set_name']
     rootns = ns.maps[-1]
-    if set_name is None:
-        if 'nreplicas' in ns:
-            suffix = ns['nreplicas']
-        elif 'fit' in ns:
-            suffix = ns['fit'].name
-        else:
-            raise RuntimeError("Bad namespace")
-        set_name = spec_to_nice_name(rootns, callspec, str(suffix))
-        ns['set_name'] = set_name
 
     if lhaindex.isinstalled(set_name):
         raise checks.CheckError("The PDF set that would be "
@@ -237,10 +224,11 @@ def _prepare_pdf_name(*, callspec, ns, environment, **kwargs):
     future_pdfs[set_name] = callspec
 
 
+@pdfset
 @_prepare_pdf_name
 @checks.check_can_save_grid
 def make_unweighted_pdf(pdf, unweighted_index,
-                        set_name:(str, type(None))=None, output_path=None,
+                        set_name:str, output_path=None,
                         installgrid:bool=True):
     """Generate an unweighted PDF set, from the prior ``pdf`` and the
     reweighting_experiments. The PDF is written to a `pdfsets` directory of
@@ -313,14 +301,14 @@ def negative_filtered_index(count_negative_points, filter_Q=75):
 @_prepare_pdf_name
 @checks.check_can_save_grid
 def make_pdf_from_filtered_outliers(fit, chi2filtered_index,
-                                    set_name:(str, type(None))=None,
+                                    set_name:str,
                                     output_path=None,
                                     installgrid:bool=True):
     """Produce a new grid with the result of chi2filtered_index"""
 
     indexes = chi2filtered_index.indexes + 1 #libnnpdf nonsense
     new_pdf_from_indexes(pdf=PDF(fit.name), indexes=indexes,
-                         set_name=set_name, folder=output_path,
+                         set_name=set_name, folder=output_path/PDFSETS_PATH,
                          installgrid=installgrid)
 
 make_pdf_from_filtered_outliers.highlight = 'pdfset'
