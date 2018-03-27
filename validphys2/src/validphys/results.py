@@ -904,6 +904,7 @@ def chi2_impact(theory_covmat_3pt, experiments_covmat, experiments_results):
 
 
 experiments_results = collect(experiment_results, ('experiments',))
+theoryids_experiments_results = collect(experiments_results, ('theoryids',))
 each_dataset_results = collect(results, ('experiments', 'experiment'))
 
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))

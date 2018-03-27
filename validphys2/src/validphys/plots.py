@@ -16,7 +16,7 @@ import numbers
 import numpy as np
 import numpy.linalg as la
 import matplotlib.pyplot as plt
-from matplotlib import cm, colors as mcolors, ticker as mticker
+from matplotlib import cm, colors as mcolors, ticker as mticker, rcParams as rc
 import scipy.stats as stats
 
 from reportengine.figure import figure, figuregen
@@ -1567,6 +1567,8 @@ def matrix_plot_labels(df):
     ticklocs = [0 for x in range(len(startlocs)-1)]
     for i in range(len(startlocs)-1):
         ticklocs[i] = 0.5*(startlocs[i+1]+startlocs[i])
+    print("Experiment names:   " + str(ticklabels))
+    print("Datapoint start locations:   " + str(startlocs))
     return ticklocs, ticklabels
 
 @figure
@@ -1697,5 +1699,81 @@ def plot_diag_cov_impact(theory_covmat_3pt, experiments_covmat, experiments_data
     ax.legend()
     return fig
 
+@figure
+def plot_theory_error_test(theory_covmat_3pt, experiments_covmat, experiments_data, theoryids_experiments_central_values):
+    rc.update({'font.size': 30})
+    data = experiments_data.as_matrix()
+    df_theory = theory_covmat_3pt
+    df_experiment = experiments_covmat
+    matrix_theory = df_theory.as_matrix()
+    matrix_experiment = df_experiment.as_matrix()
+    central, low, high = np.array(theoryids_experiments_central_values)
+    experrors = np.sqrt(np.diag(matrix_experiment))
+    theoryerrors = np.sqrt(np.diag(matrix_theory))
+    fig,ax = plt.subplots(figsize=(20, 10))
+    ax.plot(central/data, label="central", color="red")
+    ax.plot(low/data, label="low",color="blue")
+    ax.plot(high/data, label="high",color="blue")
+    ax.errorbar(np.arange(len(data)),data/data, yerr=experrors/data,fmt='--o', label="experiment errors",color="black")
+    ax.errorbar(np.arange(len(data))+0.25,data/data, yerr=theoryerrors/data,fmt='none', label="theory errors",color="green")
+    ticklocs, ticklabels = matrix_plot_labels(df_experiment)
+#    plt.xticks(ticklocs, ticklabels, rotation="vertical")
+    ax.set_ylabel("Observable normalised to experiment")
+    ax.set_title("HERAF2CHARM")
+    ax.legend()
+    ax.set_ylim(-1,3)
+    ax.set_xlim(2145,2167) 
+    plt.show()
+    return fig
 
-
+@figure
+def plot_theory_error_test_zoom(theory_covmat_3pt, experiments_covmat, experiments_data, theoryids_experiments_central_values):
+    rc.update({'font.size': 30})
+    data = experiments_data.as_matrix()
+    df_theory = theory_covmat_3pt
+    df_experiment = experiments_covmat
+    matrix_theory = df_theory.as_matrix()
+    matrix_experiment = df_experiment.as_matrix()
+    central, low, high = np.array(theoryids_experiments_central_values)
+    experrors = np.sqrt(np.diag(matrix_experiment))
+    theoryerrors = np.sqrt(np.diag(matrix_theory))
+    fig,ax = plt.subplots(figsize=(20, 10))
+    ax.plot(central/data, label="central", color="red")
+    ax.plot(low/data, label="low",color="blue")
+    ax.plot(high/data, label="high",color="blue")
+    ax.errorbar(np.arange(len(data)),data/data, yerr=experrors/data,fmt='--o', label="experiment errors",color="black")
+    ax.errorbar(np.arange(len(data))+0.25,data/data, yerr=theoryerrors/data,fmt='none', label="theory errors",color="green")
+    ticklocs, ticklabels = matrix_plot_labels(df_experiment)
+#    plt.xticks(ticklocs, ticklabels, rotation="vertical")
+    ax.set_ylabel("Observable normalised to experiment")
+    ax.set_title("NTVDMN")
+    ax.legend()
+    ax.set_ylim(0.5,1.5)
+    ax.set_xlim(1106,1147) 
+    return fig
+    
+@figure
+def plot_theory_error_test_2(theory_covmat_3pt, experiments_covmat, experiments_data, theoryids_experiments_central_values):
+    rc.update({'font.size': 30})
+    data = experiments_data.as_matrix()
+    df_theory = theory_covmat_3pt
+    df_experiment = experiments_covmat
+    matrix_theory = df_theory.as_matrix()
+    matrix_experiment = df_experiment.as_matrix()
+    central, low, high = np.array(theoryids_experiments_central_values)
+    experrors = np.sqrt(np.diag(matrix_experiment))
+    theoryerrors = np.sqrt(np.diag(matrix_theory))
+    fig,ax = plt.subplots(figsize=(20, 10))
+    ax.plot(central/data, label="central", color="red")
+    ax.plot(low/data, label="low",color="blue")
+    ax.plot(high/data, label="high",color="blue")
+    ax.errorbar(np.arange(len(data)),data/data, yerr=experrors/data, fmt='--o',label="experiment errors",color="black")
+    ax.errorbar(np.arange(0,len(data))+0.25,data/data, yerr=theoryerrors/data,fmt='none', label="theory errors",color="green")
+    ticklocs, ticklabels = matrix_plot_labels(df_experiment)
+#    plt.xticks(ticklocs, ticklabels, rotation="vertical")
+    ax.set_ylabel("Observable normalised to experiment")
+    ax.set_title("HERA last 30 data points")
+    ax.legend()
+    ax.set_ylim(0,2)
+    ax.set_xlim(2084,2114) 
+    return fig
