@@ -456,7 +456,7 @@ set up a development environment for `nnpdf`.
 	Linux and macOS are `gxx_linux-64` and `clangxx_osx-64` respectively.
 
  2. Create an environment with all the build and runtime
-	dependencies. We start of with:
+	dependencies. We start off with:
 	```
 	$ conda create -n nnpdf-dev nnpdf gxx_linux-64
 	```
@@ -518,13 +518,19 @@ set up a development environment for `nnpdf`.
 	the other build dependencies (which can be found in
 	`libnnpdf/conda-recipe/meta.yaml`).
 	```
-	$ conda remove nnpdf --force
 	$ conda install pkg-config swig=3.0.10 cmake
 	```
 
 	Note that `conda install --only-deps` also works.
 
- 3. Build the library: We only need to set
+ 3. Obtain the dependencies of the code you want to build. Where to
+	find those depends on the particular code, but something linking
+	to `libnnpdf` will likely require `pkg-config`. Projects based on
+	`autotools` (those that have a `./configure` script) will
+	additionally require `automake` and `libtool`. Similarly projects
+	based on `cmake` will require installing the `cmake` package.
+
+ 4. Build the library: We only need to set
 	the installation prefix to the `conda` environment. Assuming `conda`
 	is installed under `~/anaconda3`:
 	```
@@ -569,7 +575,7 @@ set up a development environment for `nnpdf`.
 	This should result in a working C++ component of the library (see
 	the documentation on how to enable e.g. the Python component).
 
- 4. Use the result. We can now compile `buildmaster` linking with the
+ 5. Use the result. We can now compile `buildmaster` linking with the
 	library we just created.
 	```
 	buildmaster$ make clean

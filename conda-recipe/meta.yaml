@@ -30,6 +30,7 @@ requirements:
         - libarchive
         - yaml-cpp
         - apfel
+        - pkg-config
         - python # requirements for validphys
         - reportengine >=0.25 # see https://github.com/NNPDF/reportengine
         - matplotlib >=2.0.1
@@ -49,7 +50,6 @@ test:
         - {{ compiler("c") }}
         - swig ==3.0.10
         - cmake
-        - pkg-config
 
     source_files:
         - "*"
