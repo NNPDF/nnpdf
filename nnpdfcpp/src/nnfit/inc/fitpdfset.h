@@ -50,8 +50,9 @@ public:
   }
 
   void InitPDFSet() const;
-  void ExportPDF(int const& rep, real const& erf_val, real const& erf_trn, real const& chi2, bool posVeto);
-  string ExportPDF(int const& rep);
+  void ExportPDF(int const& rep);  //!< Export LHAPDF grid
+  void ExportGrid(int const& rep); //!< Export initial-value pdf grid
+  void ExportMeta(int const& rep, real const& erf_val, real const& erf_trn, real const& chi2, bool posVeto);
 
   bool ComputeIntegrals( int const& mem ); //!< Compute all associated integrals and sum rules
   void ComputeSumRules();                  //!< Compute preprocessing sum rule constraints over all members
@@ -64,8 +65,6 @@ public:
   void SortMembers(real*);
 
   void SetBestFit(int const&);
-  void ClearPDFs (int const&);
-
   real GetEbf()         { return fEbf; }
   void SetEbf( real const& e) {fEbf = e;} //!< Sets the new best fit error function
 

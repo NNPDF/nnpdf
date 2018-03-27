@@ -282,10 +282,7 @@ int main(int argc, char **argv)
         }
 
         if (i % 100 == 0)
-          {
             LogChi2(settings,fitset,pos,training,validation,Exp);
-            LogPDF(settings,fitset,replica);
-          }
       }
 
       state = FIT_END;
@@ -388,8 +385,10 @@ int main(int argc, char **argv)
       }
       pos.clear();
 
-      // Export LHgrid part
-      fitset->ExportPDF(replica, erf_val/dofval, erf_trn/doftrn, chi2/dof, posVeto);
+      // Export fit results
+      fitset->ExportMeta(replica, erf_val/dofval, erf_trn/doftrn, chi2/dof, posVeto);
+      fitset->ExportGrid(replica);
+      fitset->ExportPDF(replica);
 
       // Export Logs
       delete minim;
@@ -518,14 +517,6 @@ void LogChi2(NNPDFSettings const& settings,
     }
 
   return;
-}
-
-void LogPDF(NNPDFSettings const& settings,
-            FitPDFSet* pdf,
-            int replica)
-{
-  if (settings.Get("closuretest","printpdf4gen").as<bool>())
-    LogManager::AddLogEntry("PDFgenerations",pdf->ExportPDF(replica));
 }
 
 void TrainValidSplit(NNPDFSettings const& settings,
