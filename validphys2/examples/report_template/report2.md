@@ -40,6 +40,13 @@ $\chi^2$ by dataset comparisons
 ### Table
 {@fits_chi2_table@}
 
+$\phi$ by experiment
+--------------------
+{@with dataspecs@}
+### {@fit@}
+{@plot_phi@}
+{@endwith@}
+
 Experiment plots
 ---------------
 {@with matched_datasets_from_dataspecs@}
