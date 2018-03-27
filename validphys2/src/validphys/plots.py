@@ -130,11 +130,11 @@ def plot_phi_scatter_dataspecs(dataspecs_experiments,
     x = range(1, len(xticks)+1)
     fig, ax = plt.subplots()
     phi_stats = np.percentile(phis, [16, 50, 84], axis=2)
-    for i, dataspec in enumerate(dataspecs):
+    for i, label in enumerate(labels):
         phi_errs = np.vstack((phi_stats[2, i, :] - phi_stats[1, i, :],
                               phi_stats[1, i, :] - phi_stats[0, i, :]))
         ax.errorbar(x, phi_stats[1, i, :], yerr=phi_errs, fmt='.',
-                    label=labels[i])
+                    label=label)
     ax.set_xticks(x, minor=False)
     ax.set_xticklabels(xticks, minor=False, rotation=45)
     ax.legend()
