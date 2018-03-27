@@ -13,6 +13,7 @@ normalize:
     y_scale: linear
     line_by: []
     figure_by:
+        - qplot
         - k2
 
 extra_labels:
