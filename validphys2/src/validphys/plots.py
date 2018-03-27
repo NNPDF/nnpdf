@@ -113,7 +113,7 @@ def _check_same_experiment_name(dataspecs_experiments):
             
 @_check_same_experiment_name
 @figure
-def plot_phi_scatter_dataspecs(dataspecs, dataspecs_experiments,
+def plot_phi_scatter_dataspecs(dataspecs_experiments,
         dataspecs_speclabel, dataspecs_experiments_bootstrap_phi, 
         bootstrap_samples=500):
     """For each of the dataspecs, a bootstrap distribution of phi is generated
@@ -130,7 +130,6 @@ def plot_phi_scatter_dataspecs(dataspecs, dataspecs_experiments,
     x = range(1, len(xticks)+1)
     fig, ax = plt.subplots()
     phi_stats = np.percentile(phis, [16, 50, 84], axis=2)
-    print(phi_stats.shape)
     for i, dataspec in enumerate(dataspecs):
         phi_errs = np.vstack((phi_stats[2, i, :] - phi_stats[1, i, :],
                               phi_stats[1, i, :] - phi_stats[0, i, :]))
