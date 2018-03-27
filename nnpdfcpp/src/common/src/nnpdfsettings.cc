@@ -528,11 +528,13 @@ void NNPDFSettings::LoadExperiments()
 
       // Read C-factor sources
       std::vector<string> cfactors;
-      YAML::Node cfac = ds["cfac"];
-      for (size_t k = 0; k < cfac.size(); k++) {
-        std::stringstream cfs;
-        cfs << cfac[k];
-        cfactors.push_back(cfs.str());
+      if(ds["cfac"]){
+          auto cfac = ds["cfac"];
+          for (size_t k = 0; k < cfac.size(); k++) {
+            std::stringstream cfs;
+            cfs << cfac[k];
+            cfactors.push_back(cfs.str());
+          }
       }
 
       double weight;
