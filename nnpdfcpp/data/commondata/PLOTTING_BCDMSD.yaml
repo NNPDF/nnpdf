@@ -12,6 +12,6 @@ line_by:
 
 normalize:
     y_scale: linear
-    line_by: []
+    line_by: [k3]
     figure_by:
         - k1
