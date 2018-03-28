@@ -38,7 +38,7 @@ $\chi^2$ by dataset comparisons
 ### Plot
 {@plot_fits_datasets_chi2@}
 ### Table
-{@fits_chi2_table@}
+{@fits_chi2_table(show_total=true)@}
 
 $\phi$ by experiment
 --------------------
