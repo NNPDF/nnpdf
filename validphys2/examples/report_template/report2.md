@@ -21,7 +21,10 @@ PDF replicas
 ------------
 {@with basespecs@}
 ### {@basistitle@}
+{@with pdfscalespecs@}
+#### {@xscaletitle@}
 {@plot_pdfreplicas@}
+{@endwith@}
 {@endwith@}
 
 Effective preprocessing exponents
