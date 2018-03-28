@@ -45,6 +45,12 @@ basespecs:
     - basis: evolution
       basistitle: Evolution basis
 
+pdfscalespecs:
+    - xscale: log
+      xscaletitle: Log
+    - xscale: linear
+      xscaletitle: Linear
+
 dataset_report:
     meta: Null
     template: data.md
