@@ -34,10 +34,7 @@ Effective preprocessing exponents
 
 $\chi^2$ by experiment
 ----------------------
-{@with dataspecs@}
-### {@fit@}
-{@plot_experiments_chi2@}
-{@endwith@}
+{@plot_fits_experiments_chi2@}
 
 $\chi^2$ by dataset comparisons
 -------------------------------
