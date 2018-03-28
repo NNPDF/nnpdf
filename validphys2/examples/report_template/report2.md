@@ -46,6 +46,10 @@ $\chi^2$ by dataset comparisons
 $\phi$ by experiment
 --------------------
 {@with dataspecs@}
+{@plot_phi_pdfs@}
+{@endwith@}
+
+{@with dataspecs@}
 ### {@fit@}
 {@plot_phi@}
 {@endwith@}
