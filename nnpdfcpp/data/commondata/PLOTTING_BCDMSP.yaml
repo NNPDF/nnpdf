@@ -9,3 +9,10 @@ data_reference: bcdms1
 y_scale: symlog
 line_by:
   - k1
+
+normalize:
+    y_scale: linear
+    line_by: []
+    figure_by:
+        - k1
+        - k3
