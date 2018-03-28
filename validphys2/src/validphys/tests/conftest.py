@@ -1,9 +1,7 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Created on Fri Mar 23 18:05:51 2018
+conftest.py
 
-@author: zah
+Pytest fixtures.
 """
 import pytest
 from validphys.loader import FallbackLoader as Loader
@@ -35,3 +33,22 @@ def dataset_t0_convolution_results(data):
 @pytest.fixture(scope='module')
 def chi2data(convolution_results):
     return [results.abs_chi2_data_experiment(r) for r in convolution_results]
+
+@pytest.fixture(scope='module')
+def weighted_data():
+    l = Loader()
+    ds = l.check_dataset(name='NMC', theoryid=162, use_cuts=False)
+    wds = l.check_dataset(name='NMC', theoryid=162, use_cuts=False, weight=100)
+    exp = ExperimentSpec('NMC Experiment', [ds])
+    wexp = ExperimentSpec('Weighted', [wds])
+    pdf = l.check_pdf("NNPDF31_nnlo_as_0118")
+    exps = [exp, wexp]
+    return pdf, exps
+
+@pytest.fixture(scope='module')
+def weighted_convolution_results(weighted_data):
+    return convolution_results(weighted_data)
+
+@pytest.fixture(scope='module')
+def weighted_chi2data(weighted_convolution_results):
+    return chi2data(weighted_convolution_results)
