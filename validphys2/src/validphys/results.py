@@ -64,6 +64,7 @@ class DataResult(NNPDFDataResult):
         super().__init__(dataobj)
         self._covmat = dataobj.get_covmat()
         self._sqrtcovmat = dataobj.get_sqrtcovmat()
+   #     self._total_covmat = None
 
     @property
     def label(self):
@@ -81,6 +82,11 @@ class DataResult(NNPDFDataResult):
     def sqrtcovmat(self):
         """Lower part of the Cholesky decomposition"""
         return self._sqrtcovmat
+
+#    @property
+ #   def  total_covmat(self):
+ #       """Total theory + experiment covariance matrix"""
+ #       return self._total_covmat
 
 
 class ThPredictionsResult(NNPDFDataResult):
@@ -924,11 +930,22 @@ def theory_covmat_dataset_3pt(theoryids_results):
 @check_have_three_theories
 def blah(theoryids_experiments_central_values, each_dataset_results_theory, experiments, experiments_index):
     number_theories = len(theoryids_experiments_central_values)
-    print(theoryids_experiments_central_values)
-    print("***********************************************************")
-    print([x for x in theoryids_experiments_central_values])
-    print("***********************************************************")
-    print(each_dataset_results_theory)
+    for dataset in each_dataset_results_theory:
+        data_centrals = [x[0].central_value for x in dataset]
+        theory_centrals = [x[1].central_value for x in dataset]
+        central, low, high = theory_centrals
+        lowdiff = low - central
+        highdiff = high - central
+        s = np.zeros((len(central),len(central)))
+        s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
+        sigmas = [x[0].covmat for x in dataset]
+        sigma = sigmas[0]
+        cov = s + sigma
+        for x in dataset:
+            x[0].total_covmat = cov
+    dataset_covmats = [x[0].total_covmat for dataset in each_dataset_results_theory for x in dataset]
+    print(len(dataset_covmats)) ## Currently too many of these!!
+        
  #   central, low, high = np.array(theoryids_experiments_central_values)
   #  lowdiff  = low - central
  #   highdiff = high - central
@@ -986,7 +1003,8 @@ def chi2_impact(theory_covmat_3pt, experiments_covmat, experiments_results):
 experiments_results = collect(experiment_results, ('experiments',))
 theoryids_experiments_results = collect(experiments_results, ('theoryids',))
 each_dataset_results = collect(results, ('experiments', 'experiment'))
-each_dataset_results_theory = collect(collect(results,('theoryids',)), ('experiments', 'experiment'))
+results_theoryids = collect(results,('theoryids',))
+each_dataset_results_theory = collect('results_theoryids', ('experiments', 'experiment'))
 
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
