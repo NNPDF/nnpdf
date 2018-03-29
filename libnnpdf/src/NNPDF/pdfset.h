@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include <array>
 #include <string>
 #include "common.h"
 
@@ -36,6 +37,8 @@ namespace NNPDF
 
         // LHA-style flavour basis
         enum {TBAR,BBAR,CBAR,SBAR,UBAR,DBAR,GLUON,D,U,S,C,B,T,PHT};
+        const std::array<std::string, 14> fl_labels = {"TBAR","BBAR","CBAR","SBAR","UBAR","DBAR","GLUON","D","U","S","C","B","T","PHT"};
+
         // NNPDF-style EVLN basis
         enum evlnBasis {  EVLN_GAM, EVLN_SNG, EVLN_GLU, EVLN_VAL, EVLN_V3,
                           EVLN_V8, EVLN_V15, EVLN_V24, EVLN_V35,  EVLN_T3,
