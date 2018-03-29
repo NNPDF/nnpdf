@@ -840,13 +840,6 @@ class AllFlavoursPlotter(PDFPlotter):
     def get_ylabel(self, parton_name):
         return ''
 
-    def get_title(self, parton_name):
-        if self.normalize_to is None:
-            title = f'{self.pdfs[0]} Q={self.Q : .1f} GeV'
-        else:
-            title = f'{self.pdfs[(1+self.normalize_to)%2]} Q={self.Q : .1f} GeV'
-        return title
-
 
 class DistancePDFPlotter(PDFPlotter):
     """Auxiliary class which draws the distance plots."""
@@ -873,12 +866,18 @@ class DistancePDFPlotter(PDFPlotter):
 
         return gv
 
+    def get_title(self, parton_name):
+        return f'{self.pdfs[(1+self.normalize_to)%2]} Q={self.Q : .1f} GeV'
+
 
 class VarDistancePDFPlotter(DistancePDFPlotter):
     """Auxiliary class which draws the variance distance plots"""
 
     def get_ylabel(self, parton_name):
         return "Variance distance from {}".format(self.normalize_pdf.label)
+
+    def get_title(self, parton_name):
+        return f'{self.pdfs[(1+self.normalize_to)%2]} Q={self.Q : .1f} GeV'
 
 
 class FlavoursDistancePlotter(DistancePDFPlotter, AllFlavoursPlotter): pass
@@ -973,6 +972,9 @@ class BandPDFPlotter(PDFPlotter):
                                              plotutils.ComposedHandler()
                                              }
                                  )
+
+    def get_title(self, parton_name):
+        return f'{self.pdfs[0]} Q={self.Q : .1f} GeV'
 
 
 @figuregen
