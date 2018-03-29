@@ -187,11 +187,8 @@ class Loader(LoaderBase):
                   "Folder '%s' not found") % (theoryID, theopath) )
         return TheoryIDSpec(theoryID, theopath)
 
-    def get_commondata(self, setname, sysnum, plotfiles=None):
-        """Get a Commondata from the set name and number.
-           The plotfiles argument is accepted to keep symmetry with
-           the commondataSpec,
-           returned by check_commondata, but it doesn't do anything."""
+    def get_commondata(self, setname, sysnum):
+        """Get a Commondata from the set name and number."""
         cd = self.check_commondata(setname, sysnum)
         return cd.load()
 
