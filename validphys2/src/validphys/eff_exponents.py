@@ -11,8 +11,7 @@ import numpy as np
 from reportengine.figure import figuregen
 from reportengine.floatformatting import format_number
 
-from validphys.checks import check_scale, CheckError, make_argcheck, check_positive
-from validphys.plots import check_pdf_normalize_to
+from validphys.checks import check_scale, CheckError, make_argcheck, check_positive, check_pdf_normalize_to
 from validphys.plots import BandPDFPlotter
 from validphys.plots import PDFPlotter
 from validphys.pdfbases import (Basis, check_basis)
