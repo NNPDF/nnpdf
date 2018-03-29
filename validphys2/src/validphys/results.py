@@ -941,10 +941,12 @@ def blah(theoryids_experiments_central_values, each_dataset_results_theory, expe
         sigmas = [x[0].covmat for x in dataset]
         sigma = sigmas[0]
         cov = s + sigma
-        for x in dataset:
-            x[0].total_covmat = cov
-    dataset_covmats = [x[0].total_covmat for dataset in each_dataset_results_theory for x in dataset]
-    print(len(dataset_covmats)) ## Currently too many of these!!
+        dataset_cent_th = dataset[0]
+        for x in dataset_cent_th:
+            x.total_covmat = cov
+    dataset_cent = [dataset[0] for dataset in each_dataset_results_theory]
+    dataset_covmats = [x[0].total_covmat for x in dataset_cent]
+    print(len(dataset_covmats))
         
  #   central, low, high = np.array(theoryids_experiments_central_values)
   #  lowdiff  = low - central
