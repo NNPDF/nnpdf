@@ -112,3 +112,16 @@ def bootstrap_values(data, nresamples, *,
         return np.mean(bootstrap_data, axis=-2)
     else:
         return apply_func(bootstrap_data, *args)
+
+def all_chi2_theory(results, theory_covmat_dataset_3pt):
+    data_result, th_result = results
+    diffs = th_result._rawdata - data_result.central_value[:,np.newaxis]
+    total_covmat = np.array(theory_covmat_dataset_3pt)
+    return calc_chi2(sqrtcov=la.cholesky(total_covmat), diffs=diffs)
+
+def central_chi2_theory(results, theory_covmat_dataset_3pt):
+    data_result, th_result = results
+    central_diff = th_result.central_value - data_result.central_value
+    total_covmat = np.array(theory_covmat_dataset_3pt)
+    return calc_chi2(la.cholesky(total_covmat), central_diff)
+
