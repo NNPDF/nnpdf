@@ -814,7 +814,7 @@ class AllFlavoursPlotter(PDFPlotter):
         ax.set_xlabel('x')
         ax.set_ylabel(self.get_ylabel(None))
         ax.set_xscale(self.xscale)
-        ax.set_title(f'{self.pdfs[(1+self.normalize_to)%2]} Q={self.Q : .1f} GeV')
+        ax.set_title(self.get_title(None))
 
         all_vals = []
         for flindex, fl in enumerate(self.firstgrid.flavours):
@@ -839,6 +839,13 @@ class AllFlavoursPlotter(PDFPlotter):
 
     def get_ylabel(self, parton_name):
         return ''
+
+    def get_title(self, parton_name):
+        if self.normalize_to is None:
+            title = f'{self.pdfs[0]} Q={self.Q : .1f} GeV'
+        else:
+            title = f'{self.pdfs[(1+self.normalize_to)%2]} Q={self.Q : .1f} GeV'
+        return title
 
 
 class DistancePDFPlotter(PDFPlotter):
