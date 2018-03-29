@@ -31,10 +31,6 @@ template_text: |
   {@second plot_pdfdistances@}
   {@second plot_pdfvardistances@}
 
-  Test
-  ------------
-  {@first plot_flavours@}
-
 actions_:
   - report(main=true)
  
