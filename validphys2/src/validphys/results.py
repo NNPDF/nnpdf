@@ -13,12 +13,12 @@ import logging
 import numpy as np
 import scipy.linalg as la
 import pandas as pd
-import yaml
 
 from NNPDF import ThPredictions, CommonData, Experiment
 from reportengine.checks import require_one, remove_outer, check_not_empty, make_argcheck, CheckError
 from reportengine.table import table
 from reportengine import collect
+from reportengine.compat import yaml
 
 from validphys.checks import assert_use_cuts_true
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
