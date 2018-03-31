@@ -18,7 +18,6 @@ from NNPDF import ThPredictions, CommonData, Experiment
 from reportengine.checks import require_one, remove_outer, check_not_empty, make_argcheck, CheckError
 from reportengine.table import table
 from reportengine import collect
-from reportengine.compat import yaml
 
 from validphys.checks import assert_use_cuts_true
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
@@ -857,28 +856,6 @@ def theory_normcovmat_3pt(theory_covmat_3pt, experiments_data):
     mat = df/np.outer(experiments_data_array, experiments_data_array)
     return mat 
 
-@table
-def datasets_properties_table(fit):
-    """Returns table of dataset properties for each dataset used in a fit."""
-    name, fitpath = fit
-    expmap = yaml.safe_load(open(fitpath/'filter.yml'))
-    expmap_exps = expmap['experiments']
-    expmap_datasets = [x['datasets'] for x in expmap_exps]
-    list_of_datasets = [it for x in expmap_exps for it in x['datasets']]
-    names = []
-    tfs = []
-    cfacs = []
-    for ele in list_of_datasets:
-       name = ele.pop('dataset')
-       tf = ele.pop('frac')
-       names.append(str(name))
-       tfs.append(str(tf))
-       if 'cfac' in ele:
-           cfacs.append(ele.pop('cfac'))
-       else:
-           cfacs.append('No')
-    df = pd.DataFrame({'Training fraction':tfs, 'C-factors':cfacs}, index=names)
-    return df
 
 experiments_results = collect(experiment_results, ('experiments',))
 each_dataset_results = collect(results, ('experiments', 'experiment'))

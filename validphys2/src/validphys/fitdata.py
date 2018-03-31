@@ -14,6 +14,7 @@ from reportengine.compat import yaml
 from reportengine import collect
 from reportengine.table import table
 from reportengine.checks import make_argcheck, CheckError
+from reportengine.compat import yaml
 
 from validphys.core import PDF
 from validphys import checks
@@ -278,3 +279,26 @@ def fits_replica_data_correlated(fits_replica_data, fits_replica_indexes, fits):
     for dt, inds in zip(fits_replica_data, fits_replica_indexes):
         dfs.append(pd.DataFrame(dt, columns=FitInfo._fields, index=inds))
     return pd.concat(dfs, axis=1, keys=[fit.name for fit in fits])
+
+@table
+def datasets_properties_table(fit):
+    """Returns table of dataset properties for each dataset used in a fit."""
+    name, fitpath = fit
+    expmap = yaml.safe_load(open(fitpath/'filter.yml'))
+    expmap_exps = expmap['experiments']
+    expmap_datasets = [x['datasets'] for x in expmap_exps]
+    list_of_datasets = [it for x in expmap_exps for it in x['datasets']]
+    names = []
+    tfs = []
+    cfacs = []
+    for ele in list_of_datasets:
+       name = ele.pop('dataset')
+       tf = ele.pop('frac')
+       names.append(str(name))
+       tfs.append(str(tf))
+       if 'cfac' in ele:
+           cfacs.append(ele.pop('cfac'))
+       else:
+           cfacs.append('No')
+    df = pd.DataFrame({'Training fraction':tfs, 'C-factors':cfacs}, index=names)
+    return df
