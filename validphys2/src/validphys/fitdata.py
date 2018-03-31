@@ -301,7 +301,7 @@ def datasets_properties_table(fit):
            dataset_cfacs = ele.pop('cfac')
            cfacs.append(', '.join(dataset_cfacs))
        else:
-           cfacs.append('No')
+           cfacs.append('-')
        if 'sys' in ele:
            systs.append(ele.pop('sys'))
        else:
