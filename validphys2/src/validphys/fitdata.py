@@ -298,7 +298,8 @@ def datasets_properties_table(fit):
        names.append(str(name))
        tfs.append(str(tf))
        if 'cfac' in ele:
-           cfacs.append(ele.pop('cfac'))
+           dataset_cfacs = ele.pop('cfac')
+           cfacs.append(', '.join(dataset_cfacs))
        else:
            cfacs.append('No')
        if 'sys' in ele:
