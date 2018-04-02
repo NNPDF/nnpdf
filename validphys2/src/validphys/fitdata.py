@@ -303,7 +303,7 @@ def datasets_properties_table(fit):
        else:
           others.append('-')
     df = pd.DataFrame({'Training fraction':tfs, 'C-factors':cfacs,
-                       'Other info.':others}, index=names)
-    df = df[['Training fraction', 'C-factors', 'Other info.']]
+                       'Other fields':others}, index=names)
+    df = df[['Training fraction', 'C-factors', 'Other fields']]
     df.index.name = 'Dataset'
     return df
