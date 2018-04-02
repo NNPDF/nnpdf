@@ -294,13 +294,10 @@ def datasets_properties_table(fit):
     for ele in list_of_datasets:
        name = ele.pop('dataset')
        tf = ele.pop('frac','-')
+       dataset_cfacs = ele.pop('cfac','-')
        names.append(str(name))
        tfs.append(str(tf))
-       if 'cfac' in ele:
-           dataset_cfacs = ele.pop('cfac')
-           cfacs.append(', '.join(dataset_cfacs))
-       else:
-           cfacs.append('-')
+       cfacs.append(', '.join(dataset_cfacs))
        if 'sys' in ele:
            systs.append(ele.pop('sys'))
        else:
