@@ -305,7 +305,8 @@ def datasets_properties_table(fit):
            systs.append(ele.pop('sys'))
        else:
            systs.append('-')
-    df = pd.DataFrame({'Training fraction':tfs, 'C-factors':cfacs, 'Non-default systematics':systs}, index=names)
+    df = pd.DataFrame({'Training fraction':tfs, 'C-factors':cfacs,
+                       'Non-default systematics':systs}, index=names)
     df = df[['Training fraction', 'Non-default systematics', 'C-factors']]
     df.index.name = 'Dataset'
     return df
