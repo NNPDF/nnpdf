@@ -290,6 +290,7 @@ def datasets_properties_table(fit):
     names = []
     tfs = []
     cfacs = []
+    others = []
     for ele in list_of_datasets:
        name = ele.pop('dataset')
        tf = ele.pop('frac','-')
@@ -297,8 +298,9 @@ def datasets_properties_table(fit):
        names.append(str(name))
        tfs.append(str(tf))
        cfacs.append(', '.join(dataset_cfacs))
-    df = pd.DataFrame({'Training fraction':tfs, 'C-factors':cfacs},
-                        index=names)
-    df = df[['Training fraction', 'C-factors']]
+       others.append(ele)
+    df = pd.DataFrame({'Training fraction':tfs, 'C-factors':cfacs,
+                       'Other info':others}, index=names)
+    df = df[['Training fraction', 'C-factors', 'Other info']]
     df.index.name = 'Dataset'
     return df
