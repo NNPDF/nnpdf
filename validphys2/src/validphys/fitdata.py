@@ -298,9 +298,12 @@ def datasets_properties_table(fit):
        names.append(str(name))
        tfs.append(str(tf))
        cfacs.append(', '.join(dataset_cfacs))
-       others.append(ele)
+       if ele:
+          others.append(ele)
+       else:
+          others.append('-')
     df = pd.DataFrame({'Training fraction':tfs, 'C-factors':cfacs,
-                       'Other info':others}, index=names)
-    df = df[['Training fraction', 'C-factors', 'Other info']]
+                       'Other info.':others}, index=names)
+    df = df[['Training fraction', 'C-factors', 'Other info.']]
     df.index.name = 'Dataset'
     return df
