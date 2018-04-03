@@ -278,3 +278,30 @@ def fits_replica_data_correlated(fits_replica_data, fits_replica_indexes, fits):
     for dt, inds in zip(fits_replica_data, fits_replica_indexes):
         dfs.append(pd.DataFrame(dt, columns=FitInfo._fields, index=inds))
     return pd.concat(dfs, axis=1, keys=[fit.name for fit in fits])
+
+@table
+def datasets_properties_table(fit):
+    """Returns table of dataset properties for each dataset used in a fit."""
+    expmap = yaml.safe_load(open(fit.path/'filter.yml'))
+    expmap_exps = expmap['experiments']
+    list_of_datasets = [it for x in expmap_exps for it in x['datasets']]
+    names = []
+    tfs = []
+    cfacs = []
+    others = []
+    for ele in list_of_datasets:
+        name = ele.pop('dataset')
+        tf = ele.pop('frac','-')
+        dataset_cfacs = ele.pop('cfac','-')
+        names.append(str(name))
+        tfs.append(str(tf))
+        cfacs.append(', '.join(dataset_cfacs))
+        if ele:
+            others.append(ele)
+        else:
+            others.append('-')
+    df = pd.DataFrame({'Training fraction':tfs, 'C-factors':cfacs,
+                       'Other fields':others}, index=names)
+    df = df[['Training fraction', 'C-factors', 'Other fields']]
+    df.index.name = 'Dataset'
+    return df

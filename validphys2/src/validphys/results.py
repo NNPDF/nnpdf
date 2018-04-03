@@ -856,6 +856,7 @@ def theory_normcovmat_3pt(theory_covmat_3pt, experiments_data):
     mat = df/np.outer(experiments_data_array, experiments_data_array)
     return mat 
 
+
 experiments_results = collect(experiment_results, ('experiments',))
 each_dataset_results = collect(results, ('experiments', 'experiment'))
 
