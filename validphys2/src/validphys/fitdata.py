@@ -14,7 +14,6 @@ from reportengine.compat import yaml
 from reportengine import collect
 from reportengine.table import table
 from reportengine.checks import make_argcheck, CheckError
-from reportengine.compat import yaml
 
 from validphys.core import PDF
 from validphys import checks
