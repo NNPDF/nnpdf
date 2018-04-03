@@ -1,5 +1,9 @@
 %NNPDF Report for fit {@ current fit @}
 
+Dataset properties
+------------------
+{@current datasets_properties_table@}
+
 PDF arc-lengths
 ---------------
 {@plot_arc_lengths@}
