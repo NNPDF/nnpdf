@@ -292,16 +292,16 @@ def datasets_properties_table(fit):
     cfacs = []
     others = []
     for ele in list_of_datasets:
-       name = ele.pop('dataset')
-       tf = ele.pop('frac','-')
-       dataset_cfacs = ele.pop('cfac','-')
-       names.append(str(name))
-       tfs.append(str(tf))
-       cfacs.append(', '.join(dataset_cfacs))
-       if ele:
-          others.append(ele)
-       else:
-          others.append('-')
+        name = ele.pop('dataset')
+        tf = ele.pop('frac','-')
+        dataset_cfacs = ele.pop('cfac','-')
+        names.append(str(name))
+        tfs.append(str(tf))
+        cfacs.append(', '.join(dataset_cfacs))
+        if ele:
+            others.append(ele)
+        else:
+            others.append('-')
     df = pd.DataFrame({'Training fraction':tfs, 'C-factors':cfacs,
                        'Other fields':others}, index=names)
     df = df[['Training fraction', 'C-factors', 'Other fields']]
