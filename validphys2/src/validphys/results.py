@@ -441,15 +441,32 @@ def abs_chi2_data(results):
     return Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]),
                     central_result, len(data_result))
 
-def abs_chi2_data_theory(results, theory_covmat_dataset_3pt):
-    data_result, th_result = results
+def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets_3pt):
+    """ Returns an array of tuples (member_chi², central_chi², numpoints)
+    corresponding to each data set, where theory errors are included"""
+    for i, results in enumerate(each_dataset_results):
+        data_result, th_result = results
+        covmat = theory_covmat_datasets_3pt[i]
 
-    chi2s = all_chi2_theory(results, theory_covmat_dataset_3pt)
+        chi2s = all_chi2_theory(results, covmat)
 
-    central_result = central_chi2_theory(results, theory_covmat_dataset_3pt)
+        central_result = central_chi2_theory(results, covmat)
 
-    return Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]),
-                    central_result, len(data_result))
+        data_result.chi2data = Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
+                                  central_result, len(data_result))
+
+    chi2data_array = [x[0].chi2data for x in each_dataset_results]
+    return chi2data_array 
+
+#def abs_chi2_data_theory(results, theory_covmat_dataset_3pt):
+#    data_result, th_result = results
+
+#    chi2s = all_chi2_theory(results, theory_covmat_dataset_3pt)
+
+#    central_result = central_chi2_theory(results, theory_covmat_dataset_3pt)
+
+#    return Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]),
+#                    central_result, len(data_result))
    
 
 
@@ -535,20 +552,21 @@ def experiments_chi2_table(experiments, pdf, experiments_chi2,
 
 @table
 def experiments_chi2_table_theory(experiments, pdf, experiments_chi2_theory,
-                           each_dataset_chi2_theory):
-    """Same as experiments_chi2_table but including theory covariance matrix"""
-    dschi2 = iter(each_dataset_chi2_theory)
-    records = []
-    for experiment, expres in zip(experiments, experiments_chi2_theory):
-        stats = chi2_stats(expres)
-        stats['experiment'] = experiment.name
-        records.append(stats)
-        for dataset, dsres in zip(experiment, dschi2):
-            stats = chi2_stats(dsres)
-            stats['experiment'] = dataset.name
-            records.append(stats)
-    return pd.DataFrame(records)
-
+                                  abs_chi2_data_theory_dataset):
+#    """Same as experiments_chi2_table but including theory covariance matrix"""
+#    dschi2 = iter(each_dataset_chi2_theory)
+#    records = []
+#    for experiment, expres in zip(experiments, experiments_chi2_theory):
+#        stats = chi2_stats(expres)
+#        stats['experiment'] = experiment.name
+#        records.append(stats)
+#        for dataset, dsres in zip(experiment, dschi2):
+#            stats = chi2_stats(dsres)
+#            stats['experiment'] = dataset.name
+#            records.append(stats)
+#    return pd.DataFrame(records)
+    return experiments_chi2_table(experiments, pdf, experiments_chi2_theory,
+                                abs_chi2_data_theory_dataset)
 @table
 def correlate_bad_experiments(experiments, replica_data, pdf):
     """Generate a table for each replica with entries
@@ -880,25 +898,7 @@ def theory_covmat_3pt(theoryids_experiments_central_values, experiments, experim
 theoryids_results = collect(results, ('theoryids',))
 
 @check_have_three_theories
-def theory_covmat_dataset_3pt(theoryids_results):
-    """Same as theory_covmat_3pt but for one dataset only."""
-    data_centrals =  [x[0].central_value for x in theoryids_results]
-    theory_centrals = [x[1].central_value for x in theoryids_results]
-    central,low,high = theory_centrals
-    lowdiff  = low - central
-    highdiff = high - central
-    s = np.zeros((len(central),len(central)))
-    s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
-    sigmas = [x[0].covmat for x in theoryids_results]
-    sigma = sigmas[0]
-    cov = s + sigma
-  #  central_diff = data_centrals[0]-central
-  #  elements = np.dot(central_diff.T,np.dot(la.inv(cov),central_diff))
-  #  chi2 = (1/len(central_diff))*np.sum(elements)
-    return cov
-
-@check_have_three_theories
-def blah(theoryids_experiments_central_values, each_dataset_results_theory, experiments, experiments_index):
+def theory_covmat_datasets_3pt(theoryids_experiments_central_values, each_dataset_results_theory):
     number_theories = len(theoryids_experiments_central_values)
     for dataset in each_dataset_results_theory:
         data_centrals = [x[0].central_value for x in dataset]
@@ -913,18 +913,10 @@ def blah(theoryids_experiments_central_values, each_dataset_results_theory, expe
         cov = s + sigma
         dataset_cent_th = dataset[0]
         for x in dataset_cent_th:
-            x.total_covmat = cov
+            x.total_covmat = cov 
     dataset_cent = [dataset[0] for dataset in each_dataset_results_theory]
     dataset_covmats = [x[0].total_covmat for x in dataset_cent]
-    print(len(dataset_covmats))
-        
- #   central, low, high = np.array(theoryids_experiments_central_values)
-  #  lowdiff  = low - central
- #   highdiff = high - central
- #   s = np.zeros((len(central),len(central)))
- #   s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
- #   df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
-#    return df
+    return dataset_covmats
 
 @table
 def theory_corrmat_3pt(theory_covmat_3pt):
@@ -980,8 +972,10 @@ each_dataset_results_theory = collect('results_theoryids', ('experiments', 'expe
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
 
-experiments_chi2_theory = collect(abs_chi2_data_experiment_theory, ('experiments',))
-each_dataset_chi2_theory = collect(abs_chi2_data_theory, ('experiments', 'experiment'))
+#experiments_chi2_theory = collect(abs_chi2_data_experiment_theory, ('experiments',))
+experiments_chi2_theory = collect(abs_chi2_data_theory_dataset, ('experiments',))
+each_dataset_chi2_theory = collect(abs_chi2_data_theory_dataset, ('experiments', 'experiment'))
+
 
 experiments_phi = collect(phi_data_experiment, ('experiments',))
 experiments_pdfs_phi = collect('experiments_phi', ('pdfs',))
