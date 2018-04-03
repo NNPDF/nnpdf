@@ -44,3 +44,4 @@ def central_chi2_theory(results, theory_covmat_dataset_3pt):
     central_diff = th_result.central_value - data_result.central_value
     total_covmat = np.array(theory_covmat_dataset_3pt)
     return calc_chi2(la.cholesky(total_covmat), central_diff)
+
