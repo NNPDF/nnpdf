@@ -285,7 +285,6 @@ def datasets_properties_table(fit):
     """Returns table of dataset properties for each dataset used in a fit."""
     expmap = yaml.safe_load(open(fit.path/'filter.yml'))
     expmap_exps = expmap['experiments']
-    expmap_datasets = [x['datasets'] for x in expmap_exps]
     list_of_datasets = [it for x in expmap_exps for it in x['datasets']]
     names = []
     tfs = []
