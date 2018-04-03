@@ -3,6 +3,9 @@
 
 language: generic
 
+git:
+    depth: 1000
+
 os: osx
 osx_image: xcode6.4
 
