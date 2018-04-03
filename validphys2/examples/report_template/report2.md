@@ -4,6 +4,10 @@ Dataset properties
 ------------------
 {@current datasets_properties_table@}
 
+Distances
+------------------
+{@normalize::basespecs::pdfscalespecs plot_pdfdistances@}
+
 PDF arc-lengths
 ---------------
 {@plot_arc_lengths@}
