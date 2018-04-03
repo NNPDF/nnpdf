@@ -984,8 +984,21 @@ def experimentsplustheory_corrmat_3pt(experiments_covmat, theory_covmat_3pt):
     corrmat = diag_minus_half[:,np.newaxis]*total_df*diag_minus_half 
     return corrmat
 
+def chi2_impact(theory_covmat_3pt, experiments_covmat, experiments_results):
+    dataresults = [ x[0] for x in experiments_results ]
+    theoryresults = [ x[1] for x in experiments_results ]
+    dat_central_list = [x.central_value for x in dataresults]
+    th_central_list = [x.central_value for x in theoryresults]
+    dat_central = np.concatenate([x for x in dat_central_list])
+    th_central  = np.concatenate([x for x in th_central_list])
+    central_diff = dat_central - th_central
+    cov = theory_covmat_3pt.as_matrix() + experiments_covmat.as_matrix()
+    elements = np.dot(central_diff.T,np.dot(la.inv(cov),central_diff))
+    chi2 = (1/len(central_diff))*np.sum(elements)
+    return chi2
+
 experiments_results = collect(experiment_results, ('experiments',))
-theoryids_experiments_results = collect(experiments_results, ('theoryids',))
+theoryids_experiments_results = collect('experiments_results', ('theoryids',))
 each_dataset_results = collect(results, ('experiments', 'experiment'))
 results_theoryids = collect(results,('theoryids',))
 experiment_results_theoryids = collect(experiment_results, ('theoryids',))
