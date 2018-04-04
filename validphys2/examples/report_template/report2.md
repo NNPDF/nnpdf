@@ -10,7 +10,7 @@ Distances
 
 PDF arc-lengths
 ---------------
-{@plot_arc_lengths@}
+{@basespecs plot_arc_lengths@}
 
 PDF plots
 ---------
