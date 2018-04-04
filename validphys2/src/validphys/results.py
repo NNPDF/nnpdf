@@ -972,7 +972,7 @@ def theory_normcovmat_3pt(theory_covmat_3pt, experiments_data):
 
 
 @table
-def expplusth_normcovmat_3pt(experiments_covmat, theory_covmat_3pt, experiments_data):
+def experimentsplustheory_normcovmat_3pt(experiments_covmat, theory_covmat_3pt, experiments_data):
     """Calculates the experiment + theory covariance matrix for 3-point scale variations normalised to data."""
     df = experiments_covmat + theory_covmat_3pt
     experiments_data_array = np.array(experiments_data)
