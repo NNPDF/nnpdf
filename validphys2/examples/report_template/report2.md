@@ -40,6 +40,10 @@ Effective preprocessing exponents
 {@plot_alphaEff@}
 {@plot_betaEff@}
 
+Training lengths
+----------------
+{@fits plot_training_length@}
+
 Training validation
 -------------------
 {@fits plot_training_validation@}
