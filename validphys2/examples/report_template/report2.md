@@ -40,6 +40,10 @@ Effective preprocessing exponents
 {@plot_alphaEff@}
 {@plot_betaEff@}
 
+Training validation
+-------------------
+{@fits plot_training_validation@}
+
 $\chi^2$ by experiment
 ----------------------
 {@plot_fits_experiments_chi2@}
