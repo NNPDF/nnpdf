@@ -14,31 +14,7 @@ PDF arc-lengths
 
 PDF plots
 ---------
-{@with pdfnormalize@}
-## {@normtitle@}
-{@with basespecs@}
-### {@basistitle@}
-{@with pdfscalespecs@}
-#### {@xscaletitle@}
-{@plot_pdfs@}
-{@endwith@}
-{@endwith@}
-{@endwith@}
-
-PDF replicas
-------------
-{@with basespecs@}
-### {@basistitle@}
-{@with pdfscalespecs@}
-#### {@xscaletitle@}
-{@plot_pdfreplicas@}
-{@endwith@}
-{@endwith@}
-
-Effective preprocessing exponents
----------------------------------
-{@plot_alphaEff@}
-{@plot_betaEff@}
+[Detailed plots]({@pdf_report report@})
 
 Training lengths
 ----------------

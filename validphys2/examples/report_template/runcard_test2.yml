@@ -55,17 +55,14 @@ dataset_report:
     meta: Null
     template: data.md
 
+pdf_report:
+    meta: Null
+    template: pdf.md
+
 template: report2.md
 
 experiments:
     from_: fit
-
-# experiments:
-# # Fixed target DIS
-#   - experiment: Fixed target DIS
-#     datasets:
-#       - { dataset: NMCPD, frac: 0.5 }
-
 
 dataspecs:
   - theoryid: 
