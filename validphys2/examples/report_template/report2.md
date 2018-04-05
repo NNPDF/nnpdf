@@ -6,7 +6,10 @@ Dataset properties
 
 Distances
 ------------------
-{@normalize::basespecs::pdfscalespecs plot_pdfdistances@}
+{@with normalize::basespecs::pdfscalespecs@}
+{@plot_pdfdistances@}
+{@plot_pdfvardistances@}
+{@endwith@}
 
 PDF arc-lengths
 ---------------
