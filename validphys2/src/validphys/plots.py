@@ -1655,13 +1655,13 @@ def plot_thcorrmat_heatmap(theory_corrmat_3pt):
 
 @figure
 def plot_normexpplusthcovmat_heatmap(experimentsplustheory_normcovmat_3pt):
-    """Matrix plot of the exp + theory covariance matrix"""
+    """Matrix plot of the exp + theory covariance matrix normalised to data"""
     df = experimentsplustheory_normcovmat_3pt
     matrix = experimentsplustheory_normcovmat_3pt.as_matrix()
     fig, ax = plt.subplots()
     matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1, linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
     cbar = fig.colorbar(matrixplot, label="% of data")
-    ax.set_title('Experiment + theory covariance matrix normalised to data')
+    ax.set_title('Experiment + theory covariance matrix')
     ticklocs, ticklabels = matrix_plot_labels(df)
     plt.xticks([])
     plt.yticks(ticklocs, ticklabels)
