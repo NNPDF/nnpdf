@@ -925,7 +925,7 @@ class DistancePDFPlotter(PDFPlotter):
         color = next_prop['color']
 
         gv = grid.grid_values[flindex,:]
-        ax.plot(grid.xgrid, gv, color=color, label=flstate.parton_name)
+        ax.plot(grid.xgrid, gv, color=color, label='$%s$' % flstate.parton_name)
 
         return gv
 
