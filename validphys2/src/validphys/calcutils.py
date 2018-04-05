@@ -46,8 +46,8 @@ def calc_phi(sqrtcov, diffs):
     return np.sqrt((np.mean(calc_chi2(sqrtcov, diffs), axis=0) -
                     calc_chi2(sqrtcov, diffs.mean(axis=1)))/diffs.shape[0])
 
-def bootstrap_values(data, nresamples,
-                    apply_func:Callable=None, *args):
+def bootstrap_values(data, nresamples, *,
+                    apply_func:Callable=None, args):
     """General bootstrap sample
 
     `data` is the data which is to be sampled, replicas is assumed to

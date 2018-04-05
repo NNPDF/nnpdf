@@ -438,8 +438,8 @@ def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples=500):
     dt, th = experiment_results
     diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
     phi_resample = bootstrap_values(diff, bootstrap_samples, 
-                                    lambda x, y: calc_phi(y, x), 
-                                    dt.sqrtcovmat)
+                                    apply_func=(lambda x, y: calc_phi(y, x)), 
+                                    args=[dt.sqrtcovmat])
     return phi_resample
 
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
