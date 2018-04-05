@@ -429,7 +429,7 @@ def phi_data_experiment(abs_chi2_data_experiment):
 @check_pdf_is_montecarlo
 def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples=500):
     """Takes the data result and theory prediction for a given experiment and
-    then returns a bootstrap distribution of phi. 
+    then returns a bootstrap distribution of phi.
     By default `bootstrap_samples` is set to a sensible value (500). However
     a different value can be specified in the runcard.
 
@@ -437,8 +437,8 @@ def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples=500):
     """
     dt, th = experiment_results
     diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
-    phi_resample = bootstrap_values(diff, bootstrap_samples, 
-                                    apply_func=(lambda x, y: calc_phi(y, x)), 
+    phi_resample = bootstrap_values(diff, bootstrap_samples,
+                                    apply_func=(lambda x, y: calc_phi(y, x)),
                                     args=[dt.sqrtcovmat])
     return phi_resample
 
