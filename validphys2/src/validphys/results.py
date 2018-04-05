@@ -933,7 +933,7 @@ def theory_corrmat_3pt(theory_covmat_3pt):
 
 @table
 def theory_normcovmat_3pt(theory_covmat_3pt, experiments_data):
-    """Calculates the theory correlation matrix for 3-point scale variations normalised to data."""
+    """Calculates the theory covariance matrix for 3-point scale variations normalised to data."""
     df = theory_covmat_3pt
     experiments_data_array = np.array(experiments_data)
     mat = df/np.outer(experiments_data_array, experiments_data_array)
