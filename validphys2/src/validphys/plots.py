@@ -1654,7 +1654,7 @@ def plot_thcorrmat_heatmap(theory_corrmat_3pt):
     return fig
 
 @figure
-def plot_expplusthnormcovmat_heatmap(experimentsplustheory_normcovmat_3pt):
+def plot_normexpplusthcovmat_heatmap(experimentsplustheory_normcovmat_3pt):
     """Matrix plot of the exp + theory covariance matrix"""
     df = experimentsplustheory_normcovmat_3pt
     matrix = experimentsplustheory_normcovmat_3pt.as_matrix()
