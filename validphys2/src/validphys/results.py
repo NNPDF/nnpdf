@@ -138,7 +138,7 @@ class PositivityResult(StatsResult):
     @property
     def rawdata(self):
         return self.stats.data
-        
+
 def experiments_index(experiments):
     """Return an empy dataframe with index
        per experiment per dataset per point"""
