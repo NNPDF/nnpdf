@@ -114,8 +114,7 @@ def _check_same_experiment_name(dataspecs_experiments):
 @_check_same_experiment_name
 @figure
 def plot_phi_scatter_dataspecs(dataspecs_experiments,
-        dataspecs_speclabel, dataspecs_experiments_bootstrap_phi,
-        bootstrap_samples=500):
+        dataspecs_speclabel, dataspecs_experiments_bootstrap_phi):
     """For each of the dataspecs, a bootstrap distribution of phi is generated
     for all specified experiments. The distribution is then represented as a
     scatter point which is the median of the bootstrap distribution and an
