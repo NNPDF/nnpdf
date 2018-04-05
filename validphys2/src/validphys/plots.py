@@ -21,6 +21,7 @@ import scipy.stats as stats
 
 from reportengine.figure import figure, figuregen
 from reportengine.checks import make_check, CheckError, make_argcheck
+from reportengine.floatformatting import format_number
 
 from validphys.core import MCStats, cut_mask
 from validphys.results import chi2_stat_labels
@@ -73,6 +74,68 @@ def plot_phi_pdfs(experiments, pdfs, experiments_pdfs_phi):
     xticks = [experiment.name for experiment in experiments]
     fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=phi_labels)
     ax.set_title(r"$\phi$ for each experiment")
+    ax.legend()
+    return fig
+
+@figure
+def plot_phi_experiment_dist(experiment, bootstrap_phi_data_experiment):
+    """Generates a bootstrap distribution of phi and then plots a histogram
+    of the individual bootstrap samples for a single experiment. By default
+    the number of bootstrap samples is set to a sensible number (500) however
+    this number can be changed by specifying `bootstrap_samples` in the runcard
+    """
+    phi = bootstrap_phi_data_experiment
+    label = '\n'.join([fr'$\phi$ mean = {format_number(phi.mean())}',
+                       fr'$\phi$ std dev = {format_number(phi.std())}'])
+    fig, ax = plt.subplots()
+    ax.hist(phi, label=label)
+    ax.set_title(r"$\phi$ distribution for " + experiment.name)
+    ax.legend()
+    return fig
+
+@make_argcheck
+def _check_same_experiment_name(dataspecs_experiments):
+    lst = dataspecs_experiments
+    if not lst:
+        return
+    for j, x in enumerate(lst[1:]):
+        if len(x) != len(lst[0]):
+            raise CheckError("All dataspecs should have the same number "
+                             "of experiments")
+        for i, exp in enumerate(x):
+            if exp.name != lst[0][i].name:
+                raise CheckError("\n".join(["All experiments must have the "
+                                            "same name",
+                                            fr"dataspec {j+1}, "
+                                            fr"experiment {i+1}: {exp.name}",
+                                            fr"dataspec 1, experiment {i+1}: "
+                                            fr"{lst[0][i].name}"]))
+
+@_check_same_experiment_name
+@figure
+def plot_phi_scatter_dataspecs(dataspecs_experiments,
+        dataspecs_speclabel, dataspecs_experiments_bootstrap_phi):
+    """For each of the dataspecs, a bootstrap distribution of phi is generated
+    for all specified experiments. The distribution is then represented as a
+    scatter point which is the median of the bootstrap distribution and an
+    errorbar which spans the 68% confidence interval. By default the number
+    of bootstrap samples is set to a sensible value, however it can be
+    controlled by specifying `bootstrap_samples` in the runcard.
+    """
+    labels = dataspecs_speclabel
+    phis = dataspecs_experiments_bootstrap_phi
+    exps = dataspecs_experiments
+    xticks = [experiment.name for experiment in exps[0]]
+    x = range(1, len(xticks)+1)
+    fig, ax = plt.subplots()
+    phi_stats = np.percentile(phis, [16, 50, 84], axis=2)
+    for i, label in enumerate(labels):
+        phi_errs = np.vstack((phi_stats[2, i, :] - phi_stats[1, i, :],
+                              phi_stats[1, i, :] - phi_stats[0, i, :]))
+        ax.errorbar(x, phi_stats[1, i, :], yerr=phi_errs, fmt='.',
+                    label=label)
+    ax.set_xticks(x, minor=False)
+    ax.set_xticklabels(xticks, minor=False, rotation=45)
     ax.legend()
     return fig
 

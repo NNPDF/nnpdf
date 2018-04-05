@@ -4,6 +4,7 @@ calcutils.py
 Low level utilities to calculate χ² and such. These are used to implement the
 higher level functions in results.py
 """
+from typing import Callable
 import numpy as np
 import scipy.linalg as la
 
@@ -33,3 +34,41 @@ def central_chi2(results):
     central_diff = th_result.central_value - data_result.central_value
     return calc_chi2(data_result.sqrtcovmat, central_diff)
 
+def calc_phi(sqrtcov, diffs):
+    """Low level function which calculates phi given a Cholesky decomposed
+    lower triangular part and a vector of differences. Primarily used when phi
+    is to be calculated independently from chi2.
+
+    The vector of differences `diffs` is expected to have N_bins on the first
+    axis
+    """
+    diffs = np.array(diffs)
+    return np.sqrt((np.mean(calc_chi2(sqrtcov, diffs), axis=0) -
+                    calc_chi2(sqrtcov, diffs.mean(axis=1)))/diffs.shape[0])
+
+def bootstrap_values(data, nresamples, *,
+                    apply_func:Callable=None, args):
+    """General bootstrap sample
+
+    `data` is the data which is to be sampled, replicas is assumed to
+    be on the final axis e.g N_bins*N_replicas
+
+    If just `data` and `nresamples` is provided, then `bootstrap_values`
+    creates N resamples of the data, where each resample is a Monte Carlo
+    selection of the data across replicas. The mean of each resample is
+    returned
+
+    Alternatively, the user can specify a function to be sampled `apply_func`
+    plus any additional arguments required by that function.
+    `bootstrap_values` then returns `apply_func(bootstrap_data, *args)`
+    where `bootstrap_data.shape = (data.shape, nresamples)`. It is
+    critical that `apply_func` can handle data input in this format.
+    """
+    data = np.atleast_2d(data)
+    N_reps = data.shape[-1]
+    bootstrap_data = data[..., np.random.randint(N_reps,
+                                                 size=(N_reps, nresamples))]
+    if apply_func is None:
+        return np.mean(bootstrap_data, axis=-2)
+    else:
+        return apply_func(bootstrap_data, *args)
