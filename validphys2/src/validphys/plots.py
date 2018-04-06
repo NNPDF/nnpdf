@@ -1036,9 +1036,6 @@ class BandPDFPlotter(PDFPlotter):
                                              }
                                  )
 
-    def get_title(self, parton_name):
-        return f'{self.pdfs[0]} Q={self.Q : .1f} GeV'
-
 
 @figuregen
 @check_pdf_normalize_to
@@ -1061,7 +1058,9 @@ def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     yield from BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
 
 
-class FlavoursPlotter(AllFlavoursPlotter, BandPDFPlotter): pass
+class FlavoursPlotter(AllFlavoursPlotter, BandPDFPlotter):
+    def get_title(self, parton_name):
+        return f'{self.pdfs[0]} Q={self.Q : .1f} GeV'
 
 @figure
 @check_scale('xscale', allow_none=True)
