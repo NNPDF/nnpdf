@@ -83,26 +83,28 @@ void CHORUSNUFilter::ReadData()
     
     //Isoscalar target correction interpreted as uncertainty
     lstream >> nortmp;
+    /*
     fSys[i][0].mult = (1.0-nortmp)*100.0;
     fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
     fSys[i][0].type = MULT;
     fSys[i][0].name = "CHORUSISOTARGCOR";
-    
+    */    
+
     //QED radiation correction interpreted as uncertainty
     lstream >> nortmp;
-    fSys[i][1].mult = (1.0-nortmp)*100.0;
-    fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
-    fSys[i][1].type = MULT;
-    fSys[i][1].name = "CHORUSQEDRADCOR";
+    fSys[i][0].mult = (1.0-nortmp)*100.0;
+    fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
+    fSys[i][0].type = MULT;
+    fSys[i][0].name = "CHORUSQEDRADCOR";
     
     //Systematics
-    for (int l = 2; l < fNSys; l++)
+    for (int l = 1; l < fNSys; l++)
     {
       lstream >> fSys[i][l].add;
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = ADD;
       ostringstream sysname;
-      sysname << "CHORUSSYS" << l-1;
+      sysname << "CHORUSSYS" << l;
       fSys[i][l].name = sysname.str();
     }
   }
@@ -191,26 +193,28 @@ void CHORUSNBFilter::ReadData()
     
     //Isoscalar target correction interpreted as uncertainty
     lstream >> nortmp;
+    /*
     fSys[i][0].mult = (1.0-nortmp)*100.0;
     fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
     fSys[i][0].type = MULT;
     fSys[i][0].name = "CHORUSISOTARGCOR";
-    
+    */    
+
     //QED radiation correction interpreted as uncertainty
     lstream >> nortmp;
-    fSys[i][1].mult = (1.0-nortmp)*100.0;
-    fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
-    fSys[i][1].type = MULT;
-    fSys[i][1].name = "CHORUSQEDRADCOR";
+    fSys[i][0].mult = (1.0-nortmp)*100.0;
+    fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
+    fSys[i][0].type = MULT;
+    fSys[i][0].name = "CHORUSQEDRADCOR";
     
     //Systematics
-    for (int l = 2; l < fNSys; l++)
+    for (int l = 1; l < fNSys; l++)
     {
       lstream >> fSys[i][l].add;
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = ADD;
       ostringstream sysname;
-      sysname << "CHORUSSYS" << l-1;
+      sysname << "CHORUSSYS" << l;
       fSys[i][l].name = sysname.str();
     }
   }
