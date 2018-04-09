@@ -65,7 +65,6 @@ int main(int argc, char **argv)
 
   // Filter experiments
   cout << "- Filtering experimental points\n" << endl;
-  vector<Experiment*> filtered;
   for (int i=0; i<settings.GetNExp(); i++)
   {
     // Read unfiltered experiment from data folder
@@ -75,7 +74,7 @@ int main(int argc, char **argv)
     for (int j = 0; j < Nsets; j++)
       datasets.push_back(LoadDataSet(settings, settings.GetExpSets(i)[j], DATA_UNFILTERED));
 
-    Experiment *uncutExp = new Experiment(datasets, settings.GetExpName(i));
+    std::unique_ptr<Experiment> uncutExp(new Experiment(datasets, settings.GetExpName(i)));
 
     if (settings.Get("closuretest","fakedata").as<bool>())
     {
@@ -129,8 +128,7 @@ int main(int argc, char **argv)
     }
 
     // cut experiment
-    Experiment* cutExp = new Experiment(cutsets, settings.GetExpName(i));
-    filtered.push_back(cutExp);
+    std::unique_ptr<Experiment> cutExp(new Experiment(cutsets, settings.GetExpName(i)));
 
     // Write filtered data to file
     cout << "\n- Exporting filtered data\n" << endl;
@@ -158,8 +156,6 @@ int main(int argc, char **argv)
 
     cutsets.clear();
     cutmasks.clear();
-
-    delete uncutExp;
 
   } // End experiment loop
 
