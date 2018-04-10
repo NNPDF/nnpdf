@@ -119,6 +119,42 @@ class ParamfitsConfig(Config):
         res.sort(key=lambda x: (x['experiment_name'], x['dataset_name']))
         return res
 
+    def produce_matched_positivity_from_dataspecs(self, dataspecs):
+        """
+        """
+        if not isinstance(dataspecs, Sequence):
+            raise ConfigError("dataspecs should be a sequence of mappings, not "
+                              f"{type(dataspecs).__name__}")
+        all_names = []
+        for spec in dataspecs:
+            if not isinstance(spec, Mapping):
+                raise ConfigError("dataspecs should be a sequence of mappings, "
+                      f" but {spec} is {type(spec).__name__}")
+
+            with self.set_context(ns=self._curr_ns.new_child(spec)):
+                _, pos = self.parse_from_(None, 'posdatasets', write=False)
+                names = {(p.name):(p) for p in pos}
+                all_names.append(names)
+        used_set = set.intersection(*(set(d) for d in all_names))
+
+        res = []
+        for k in used_set:
+            inres = {'posdataset_name': k}
+            #TODO: Should this have the same name?
+            l = inres['dataspecs'] = []
+            for ispec, spec in enumerate(dataspecs):
+                #Passing spec by referene
+                d = ChainMap({
+                    'posdataset':       all_names[ispec][k],
+
+                    },
+                    spec)
+                l.append(d)
+            res.append(inres)
+        res.sort(key=lambda x: (x['posdataset_name']))
+        return res
+
+
     def parse_blacklist_datasets(self, datasets:list):
         return datasets
 

@@ -54,3 +54,12 @@ Experiment plots
 {@with matched_datasets_from_dataspecs@}
 [Detailed plots for dataset ' {@dataset_name@} ']({@dataset_report report@})
 {@endwith@}
+
+Positivity
+----------
+
+{@with matched_positivity_from_dataspecs::dataspecs@}
+{@plot_positivity@}
+{@endwith@}
+
+
