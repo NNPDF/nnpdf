@@ -40,7 +40,8 @@
 
 %typemap(out) NNPDF::matrix<double> {
     auto size = $1.size(0)*$1.size(1);
-    npy_intp dims[2] = {$1.size(0), $1.size(1)};
+    /*Have to cast to long explicitly in clang*/
+    npy_intp dims[2] = {(long) $1.size(0),  (long) $1.size(1)};
     auto data = (double*) malloc(sizeof(double)*size);
     std::copy($1.data(), $1.data()+size,data);
     $result = PyArray_SimpleNewFromData(2, dims, NPY_DOUBLE, data);
