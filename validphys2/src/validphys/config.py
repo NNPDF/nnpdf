@@ -310,6 +310,94 @@ class CoreConfig(configparser.Config):
 
 
 
+    def produce_matched_datasets_from_dataspecs(self, dataspecs):
+        """Take an arbitrary list of mappings called dataspecs and
+        return a new list of mappings called dataspecs constructed as follows.
+
+        From each of the original datasepcs, resolve the key `experiments` and
+        all the dataset therein.
+
+        Compute the intersection of the dataset names, and for each element in
+        the intersection construct a mapping with the follwing keys:
+
+            - experiment_name : A string with the common experiment name.
+            - dataset_name : A string with the common dataset name.
+            - datasepcs : A list of mappinngs matching the original
+              "datasepcs". Each mapping contains:
+                * dataset: A dataset with the name data_set name and the
+                properties (cuts, theory, etc) corresponding to the original
+                datasepec.
+                * dataset_input: The input line used to build dataset.
+                * All the other keys in the original dataspec.
+        """
+        if not isinstance(dataspecs, Sequence):
+            raise ConfigError("dataspecs should be a sequence of mappings, not "
+                              f"{type(dataspecs).__name__}")
+        all_names = []
+        for spec in dataspecs:
+            if not isinstance(spec, Mapping):
+                raise ConfigError("dataspecs should be a sequence of mappings, "
+                      f" but {spec} is {type(spec).__name__}")
+
+            with self.set_context(ns=self._curr_ns.new_child(spec)):
+                _, experiments = self.parse_from_(None, 'experiments', write=False)
+                names = {(e.name, ds.name):(ds, dsin) for e in experiments for ds, dsin in zip(e.datasets, e)}
+                all_names.append(names)
+        used_set = set.intersection(*(set(d) for d in all_names))
+
+        res = []
+        for k in used_set:
+            inres = {'experiment_name':k[0], 'dataset_name': k[1]}
+            #TODO: Should this have the same name?
+            l = inres['dataspecs'] = []
+            for ispec, spec in enumerate(dataspecs):
+                #Passing spec by referene
+                d = ChainMap({
+                    'dataset':       all_names[ispec][k][0],
+                    'dataset_input': all_names[ispec][k][1],
+
+                    },
+                    spec)
+                l.append(d)
+            res.append(inres)
+        res.sort(key=lambda x: (x['experiment_name'], x['dataset_name']))
+        return res
+
+    def produce_matched_positivity_from_dataspecs(self, dataspecs):
+        """
+        """
+        if not isinstance(dataspecs, Sequence):
+            raise ConfigError("dataspecs should be a sequence of mappings, not "
+                              f"{type(dataspecs).__name__}")
+        all_names = []
+        for spec in dataspecs:
+            if not isinstance(spec, Mapping):
+                raise ConfigError("dataspecs should be a sequence of mappings, "
+                      f" but {spec} is {type(spec).__name__}")
+
+            with self.set_context(ns=self._curr_ns.new_child(spec)):
+                _, pos = self.parse_from_(None, 'posdatasets', write=False)
+                names = {(p.name):(p) for p in pos}
+                all_names.append(names)
+        used_set = set.intersection(*(set(d) for d in all_names))
+
+        res = []
+        for k in used_set:
+            inres = {'posdataset_name': k}
+            #TODO: Should this have the same name?
+            l = inres['dataspecs'] = []
+            for ispec, spec in enumerate(dataspecs):
+                #Passing spec by referene
+                d = ChainMap({
+                    'posdataset':       all_names[ispec][k],
+
+                    },
+                    spec)
+                l.append(d)
+            res.append(inres)
+        res.sort(key=lambda x: (x['posdataset_name']))
+        return res
+
 
     #TODO: Worth it to do some black magic to not pass params explicitly?
     #Note that `parse_experiments` doesn't exist yet.
