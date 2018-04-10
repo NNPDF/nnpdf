@@ -74,7 +74,7 @@ int main(int argc, char **argv)
     for (int j = 0; j < Nsets; j++)
       datasets.push_back(LoadDataSet(settings, settings.GetExpSets(i)[j], DATA_UNFILTERED));
 
-    std::unique_ptr<Experiment> uncutExp(new Experiment(datasets, settings.GetExpName(i)));
+    auto uncutExp = std::make_unique<Experiment>(datasets, settings.GetExpName(i));
 
     if (settings.Get("closuretest","fakedata").as<bool>())
     {
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
     }
 
     // cut experiment
-    std::unique_ptr<Experiment> cutExp(new Experiment(cutsets, settings.GetExpName(i)));
+    auto cutExp = std::make_unique<Experiment>(cutsets, settings.GetExpName(i));
 
     // Write filtered data to file
     cout << "\n- Exporting filtered data\n" << endl;
