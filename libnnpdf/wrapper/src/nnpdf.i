@@ -13,6 +13,7 @@
 #include "NNPDF/experiments.h"
 #include "NNPDF/thpredictions.h"
 #include "NNPDF/positivity.h"
+#include "NNPDF/chisquared.h"
  %}
 
 
@@ -34,7 +35,16 @@
 %include "include/real_typemap.i"
 
 %template(vector_str) std::vector<std::string>;
+%template(vector_double) std::vector<double>;
 %template(vector_int) std::vector<int>;
+
+%typemap(out) NNPDF::matrix<double> {
+    auto size = $1.size(0)*$1.size(1);
+    npy_intp dims[2] = {$1.size(0), $1.size(1)};
+    auto data = (double*) malloc(sizeof(double)*size);
+    std::copy($1.data(), $1.data()+size,data);
+    $result = PyArray_SimpleNewFromData(2, dims, NPY_DOUBLE, data);
+}
 
 /* Simpler headers without a lot of dependencies and headers */
 
@@ -326,3 +336,7 @@ def __iter__(self):
 {(NNPDF::real** result, int* ndata, int* npdf)}
 
 %include "NNPDF/positivity.h"
+
+
+
+%include "NNPDF/chisquared.h"
