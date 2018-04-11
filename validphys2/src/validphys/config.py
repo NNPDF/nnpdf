@@ -9,7 +9,9 @@ import pathlib
 import functools
 import inspect
 
-from  reportengine import configparser
+from collections import Mapping, Sequence, ChainMap
+
+from reportengine import configparser
 from reportengine.environment import Environment, EnvironmentError_
 from reportengine.configparser import ConfigError, element_of, _parse_func
 from reportengine.helputils import get_parser_type
