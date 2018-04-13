@@ -14,6 +14,7 @@ from pandas.testing import assert_frame_equal
 
 from reportengine.table import savetable
 
+import NNPDF
 from validphys import results
 from validphys.tableloader import (parse_exp_mat,
 load_perreplica_chi2_table, sane_load)
@@ -51,7 +52,11 @@ def make_table_comp(loader_func):
 def test_expcovmat(data):
     pdf, exps = data
     eindex = results.experiments_index(exps)
-    return results.experiments_covmat(exps, eindex, t0set=None)
+    mat = results.experiments_covmat(exps, eindex, t0set=None)
+    cd = exps[0].datasets[0].commondata.load()
+    othermat = NNPDF.ComputeCovMat(cd, cd.get_cv())
+    assert np.alltrue(mat == othermat)
+    return mat
 
 @make_table_comp(parse_exp_mat)
 def test_t0covmat(data):
