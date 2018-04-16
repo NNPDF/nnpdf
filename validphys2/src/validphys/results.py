@@ -884,10 +884,13 @@ theoryids_results = collect(results, ('theoryids',))
 @check_have_three_theories
 def theory_covmat_datasets_3pt(theoryids_experiments_central_values, each_dataset_results_theory):
     number_theories = len(theoryids_experiments_central_values)
+    print(np.shape(each_dataset_results_theory))
     for dataset in each_dataset_results_theory:
         data_centrals = [x[0].central_value for x in dataset]
         theory_centrals = [x[1].central_value for x in dataset]
         central, low, high = theory_centrals
+        print(low)
+        print("////////////////////")
         lowdiff = low - central
         highdiff = high - central
         s = np.zeros((len(central),len(central)))
@@ -899,22 +902,31 @@ def theory_covmat_datasets_3pt(theoryids_experiments_central_values, each_datase
         for x in dataset_cent_th:
             x.total_covmat = cov 
     dataset_cent = [dataset[0] for dataset in each_dataset_results_theory]
+    print(np.shape(dataset_cent))
     dataset_covmats = [x[0].total_covmat for x in dataset_cent]
     return dataset_covmats
 
 def theory_covmat_experiments_3pt(theoryids_experiments_central_values, experiments_results_theory):
     number_theories = len(theoryids_experiments_central_values)
+    print(np.shape(experiments_results_theory))
     for experiment in experiments_results_theory:
         data_centrals = [x[0].central_value for x in experiment]
         theory_centrals = [x[1].central_value for x in experiment]
         central, low, high = theory_centrals
+     #   print(np.shape(theory_centrals))
+        print(low)
+      #  print(len(low))
+      #  print(len(high))
+      #  print(np.sum(central-low))
+      #  print(np.sum(central-high))
+        print("**************")
         lowdiff = low - central
         highdiff = high - central
         s = np.zeros((len(central),len(central)))
         s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
         sigmas = [x[0].covmat for x in experiment]
         sigma = sigmas[0]
-        cov = s + sigma
+        cov = s
         experiment_cent_th = experiment[0]
         for x in experiment_cent_th:
             x.total_covmat = cov 
@@ -973,12 +985,20 @@ def chi2_impact(theory_covmat_3pt, experiments_covmat, experiments_results):
     chi2 = (1/len(central_diff))*np.sum(elements)
     return chi2
 
+def test(experiments_results_theory, experiments_results_theory2):
+ #   print(np.shape(experiment_results))
+#    print(np.shape(experiment_results_theoryids))
+    print(np.shape(experiments_results_theory))
+    print(np.shape(experiments_results_theory2))
+
+
 experiments_results = collect(experiment_results, ('experiments',))
 theoryids_experiments_results = collect('experiments_results', ('theoryids',))
 each_dataset_results = collect(results, ('experiments', 'experiment'))
 results_theoryids = collect(results,('theoryids',))
 experiment_results_theoryids = collect(experiment_results, ('theoryids',))
 each_dataset_results_theory = collect('results_theoryids', ('experiments', 'experiment'))
+experiments_results_theory2 = collect('experiment_results_theoryids', ('experiments', 'experiment'))
 experiments_results_theory = collect('experiment_results_theoryids', ('experiments',))
 
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
@@ -999,7 +1019,6 @@ fits_total_chi2_for_experiments = collect('total_experiment_chi2',
 
 fits_experiments = collect('experiments', ('fits', 'fitcontext'))
 fits_pdf = collect('pdf', ('fits', 'fitpdf'))
-
 
 #Dataspec is so
 dataspecs_results = collect('results', ('dataspecs',))
