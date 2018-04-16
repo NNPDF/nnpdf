@@ -441,6 +441,10 @@ def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets_3p
     for i, results in enumerate(each_dataset_results):
         data_result, th_result = results
         covmat = theory_covmat_datasets_3pt[i]
+        print(covmat)
+        print(data_result.central_value)
+        print(th_result.central_value)
+        print("88888888888888888888")
 
         chi2s = all_chi2_theory(results, covmat)
 
@@ -917,10 +921,13 @@ theoryids_results = collect(results, ('theoryids',))
 @check_have_three_theories
 def theory_covmat_datasets_3pt(theoryids_experiments_central_values, each_dataset_results_theory):
     number_theories = len(theoryids_experiments_central_values)
+    print(np.shape(each_dataset_results_theory))
     for dataset in each_dataset_results_theory:
         data_centrals = [x[0].central_value for x in dataset]
         theory_centrals = [x[1].central_value for x in dataset]
         central, low, high = theory_centrals
+        print(low)
+        print("////////////////////")
         lowdiff = low - central
         highdiff = high - central
         s = np.zeros((len(central),len(central)))
@@ -932,11 +939,13 @@ def theory_covmat_datasets_3pt(theoryids_experiments_central_values, each_datase
         for x in dataset_cent_th:
             x.total_covmat = cov 
     dataset_cent = [dataset[0] for dataset in each_dataset_results_theory]
+    print(np.shape(dataset_cent))
     dataset_covmats = [x[0].total_covmat for x in dataset_cent]
     return dataset_covmats
 
 def theory_covmat_experiments_3pt(theoryids_experiments_central_values, experiments_results_theory):
     number_theories = len(theoryids_experiments_central_values)
+    experiments_results_theory = np.swapaxes(experiments_results_theory, 0, 1)
     for experiment in experiments_results_theory:
         data_centrals = [x[0].central_value for x in experiment]
         theory_centrals = [x[1].central_value for x in experiment]
@@ -1007,13 +1016,26 @@ def chi2_impact(theory_covmat_3pt, experiments_covmat, experiments_results):
     chi2 = (1/len(central_diff))*np.sum(elements)
     return chi2
 
+def test(experiments_results_theory, experiments_results_theory2):
+ #   print(np.shape(experiment_results))
+#    print(np.shape(experiment_results_theoryids))
+    print(np.shape(experiments_results_theory))
+    print(np.shape(experiments_results_theory2))
+
+
 experiments_results = collect(experiment_results, ('experiments',))
 theoryids_experiments_results = collect('experiments_results', ('theoryids',))
 each_dataset_results = collect(results, ('experiments', 'experiment'))
 results_theoryids = collect(results,('theoryids',))
 experiment_results_theoryids = collect(experiment_results, ('theoryids',))
 each_dataset_results_theory = collect('results_theoryids', ('experiments', 'experiment'))
-experiments_results_theory = collect('experiment_results_theoryids', ('experiments',))
+experiments_results_theory2 = collect('experiment_results_theoryids', ('experiments', 'experiment'))
+#experiments_results_theory = collect('experiment_results_theoryids', ('experiments',))
+#experiments_results_theory = collect('results_theoryids', ('experiments',))
+
+experiments_results_theory = collect('experiments_results', ('theoryids',))
+
+
 
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
