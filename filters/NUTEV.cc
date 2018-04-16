@@ -167,7 +167,7 @@
  *
  *     Similar considerations for the branching ratio of averaged
  *     charmed mesons into muons
- *     BRC = 0.099 \pm 0.012, same as used in NuTeV dimuon analysis
+ *     BRC = 0.089 \pm 0.012, same as used in NuTeV dimuon analysis
  *     from  a reanalysis of 125 charm events measured by FNAL E531
  *
  *     Effects of finite charm mass, which are potentially important,
@@ -209,6 +209,13 @@
  *
  */
 
+/* Note added by ERN 16th April 2018:
+   The value of BrC is updated from 0.099 +- 0.012 to
+   0.086 +- 0.005 according to the PDF(2017)
+   The uncertainty on the BR is now accounted for as
+   an additional fully correlated systematic uncertainty
+*/
+
 
 #include "NUTEV.h"
 
@@ -239,7 +246,8 @@ void NTVNUDMNFilter::ReadData()
   
   // Starting filter
   double mn = 0.938;
-  double BrC = 0.099;
+  double BrC = 0.087;
+  double BrCunc = 0.005;
   
   double acc_cor[fNData];
   string line;
@@ -290,6 +298,12 @@ void NTVNUDMNFilter::ReadData()
     fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
     fSys[i][1].type = MULT;
     fSys[i][1].name = "NUTEVNORM";
+
+    // Br uncertainty
+    fSys[i][2].mult = BrCunc/BrC * 100;
+    fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
+    fSys[i][2].type = MULT;
+    fSys[i][2].name = "NUTEVBRC";
     
     for(int i = 0; i < 8; i++)
       lstream >> tmp;           //Individual systematics (not used)
@@ -333,7 +347,8 @@ void NTVNBDMNFilter::ReadData()
   // Starting filter
   // Starting filter
   double mn = 0.938;
-  double BrC = 0.099;
+  double BrC = 0.087;
+  double BrCunc = 0.005;
   
   double acc_cor[fNData];
   string line;
@@ -385,6 +400,12 @@ void NTVNBDMNFilter::ReadData()
     fSys[i][1].type = MULT;
     fSys[i][1].name = "NUTEVNORM";
     
+    // Br uncertainty
+    fSys[i][2].mult = BrCunc/BrC * 100;
+    fSys[i][2].add = fSys[i][2].mult*fData[i]*1e-2;
+    fSys[i][2].type = MULT;
+    fSys[i][2].name = "NUTEVBRC";
+
     for(int i = 0; i < 8; i++)
       lstream >> tmp;           //Individual systematics (not used)
     
