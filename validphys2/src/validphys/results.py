@@ -436,42 +436,6 @@ def abs_chi2_data(results):
     return Chi2Data(th_result.stats_class(chi2s[:, np.newaxis]),
                     central_result, len(data_result))
 
-def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets_3pt):
-    """ Returns an array of tuples (member_chi², central_chi², numpoints)
-    corresponding to each data set, where theory errors are included"""
-    chi2data_array = []
-    for i, results in enumerate(each_dataset_results):
-        print(i)
-        data_result, th_result = results
-        covmat = theory_covmat_datasets_3pt[i]
-  #      print(covmat)
-  #      print(data_result.central_value)
-  #      print(th_result.central_value)
-  #      print("88888888888888888888")
-
-        chi2s = all_chi2_theory(results, covmat)
-
-        central_result = central_chi2_theory(results, covmat)
-
-        chi2data_array += Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
-                                  central_result, len(data_result))
-    return chi2data_array 
-
-def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experiments_3pt):
-    """ Like abs_chi2_data_theory_dataset but for experiments not datasets"""
-    chi2data_array = []
-    for i, results in enumerate(experiments_results):
-        data_result, th_result = results
-        covmat = theory_covmat_experiments_3pt[i]
-
-        chi2s = all_chi2_theory(results, covmat)
-
-        central_result = central_chi2_theory(results, covmat)
-
-        chi2data_array += Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
-                                  central_result, len(data_result))
-
-    return chi2data_array 
 
 def abs_chi2_data_experiment(experiment_results):
     """Like `abs_chi2_data` but for a whole experiment"""
