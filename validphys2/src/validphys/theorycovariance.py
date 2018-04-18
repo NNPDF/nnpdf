@@ -393,3 +393,29 @@ def plot_theory_error_test(theory_covmat_3pt, experiments_covmat, experiments_da
  #   ax.set_xlim(2145,2167)
     plt.show()
     return fig
+
+@figure
+def plot_datasets_chi2_theory(experiments, experiments_chi2, each_dataset_chi2, 
+                              abs_chi2_data_theory_experiment, abs_chi2_data_theory_dataset):
+    """Plot the chi² of all datasets, before and after adding theory errors, with bars."""
+    ds = iter(each_dataset_chi2)
+    dstheory = iter(abs_chi2_data_theory_dataset)
+    dschi2 = []
+    dschi2theory = []
+    xticks = []
+    for experiment, expres in zip(experiments, experiments_chi2):
+        for dataset, dsres in zip(experiment, ds):
+            dschi2.append(dsres.central_result/dsres.ndata)
+            xticks.append(dataset.name)
+    for experiment, expres in zip(experiments, abs_chi2_data_theory_experiment):
+        for dataset, dsres in zip(experiment, dstheory):
+            dschi2theory.append(dsres.central_result/dsres.ndata)
+#            xticks.append(dataset.name)
+    plotvalues = np.stack((dschi2theory, dschi2))
+    fig,ax = plotutils.barplot(plotvalues, collabels=xticks,
+                               datalabels=["experiment + theory","experiment"])
+
+    ax.set_title(r"$\chi^2$ distribution for datasets")
+    ax.legend(fontsize=14)
+
+    return fig
