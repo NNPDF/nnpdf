@@ -30,6 +30,7 @@ providers = [
              'validphys.eff_exponents',
              'validphys.paramfits.dataops',
              'validphys.paramfits.plots',
+             'validphys.theorycovariance',
              'reportengine.report'
             ]
 
