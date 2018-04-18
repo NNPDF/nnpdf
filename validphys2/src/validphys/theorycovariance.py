@@ -22,8 +22,9 @@ from reportengine.checks import make_argcheck, CheckError
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.results import results, experiment_results, experiments_central_values, Chi2Data
+from validphys.results import results, experiment_results, experiments_central_values, Chi2Data, experiments_chi2_table
 from validphys.calcutils import all_chi2, central_chi2, calc_chi2, all_chi2_theory, central_chi2_theory
+from validphys import plotutils
 
 log = logging.getLogger(__name__)
 
@@ -40,27 +41,24 @@ def check_have_three_theories(theoryids):
 def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets_3pt):
     """ Returns an array of tuples (member_chi², central_chi², numpoints)
     corresponding to each data set, where theory errors are included"""
-    chi2data_array = []
     for i, results in enumerate(each_dataset_results):
-        print(i)
         data_result, th_result = results
         covmat = theory_covmat_datasets_3pt[i]
-  #      print(covmat)
-  #      print(data_result.central_value)
-  #      print(th_result.central_value)
-  #      print("88888888888888888888")
-
         chi2s = all_chi2_theory(results, covmat)
 
         central_result = central_chi2_theory(results, covmat)
 
-        chi2data_array += Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
-                                  central_result, len(data_result))
+        if i==0:
+            chi2data_array = [Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
+                                        central_result, len(data_result))]
+        else:
+            chi2data_array.append(
+                          Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
+                                  central_result, len(data_result)))
     return chi2data_array 
 
 def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experiments_3pt):
     """ Like abs_chi2_data_theory_dataset but for experiments not datasets"""
-    chi2data_array = []
     for i, results in enumerate(experiments_results):
         data_result, th_result = results
         covmat = theory_covmat_experiments_3pt[i]
@@ -68,9 +66,15 @@ def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experimen
         chi2s = all_chi2_theory(results, covmat)
 
         central_result = central_chi2_theory(results, covmat)
+        central_result2 = central_chi2(results)
 
-        chi2data_array += Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
-                                  central_result, len(data_result))
+        if i==0:
+            chi2data_array = [Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
+                                        central_result, len(data_result))]
+        else:
+            chi2data_array.append(
+                          Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
+                                  central_result, len(data_result)))                         
 
     return chi2data_array 
 
@@ -102,8 +106,6 @@ def theory_covmat_datasets_3pt(theoryids_experiments_central_values, each_datase
         data_centrals = [x[0].central_value for x in dataset]
         theory_centrals = [x[1].central_value for x in dataset]
         central, low, high = theory_centrals
-        print(low)
-        print("////////////////////")
         lowdiff = low - central
         highdiff = high - central
         s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
@@ -129,7 +131,7 @@ def theory_covmat_experiments_3pt(theoryids_experiments_central_values, experime
         s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
         sigmas = [x[0].covmat for x in experiment]
         sigma = sigmas[0]
-        cov = s + sigma
+        cov =  sigma
         experiment_cent_th = experiment[0]
         for x in experiment_cent_th:
             x.total_covmat = cov
@@ -187,12 +189,6 @@ def chi2_impact(theory_covmat_3pt, experiments_covmat, experiments_results):
     elements = np.dot(central_diff.T,np.dot(la.inv(cov),central_diff))
     chi2 = (1/len(central_diff))*np.sum(elements)
     return chi2
-
-def test(experiments_results_theory, experiments_results_theory2):
- #   print(np.shape(experiment_results))
-#    print(np.shape(experiment_results_theoryids))
-    print(np.shape(experiments_results_theory))
-    print(np.shape(experiments_results_theory2))
 
 experiments_results = collect(experiment_results, ('experiments',))
 theoryids_experiments_results = collect('experiments_results', ('theoryids',))
