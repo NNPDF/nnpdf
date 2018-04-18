@@ -72,10 +72,16 @@ def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experimen
     return chi2data_array 
 
 @table
+def experiments_chi2_table_theory(experiments, pdf, abs_chi2_data_theory_experiment,
+                                  abs_chi2_data_theory_dataset):
+    """Same as experiments_chi2_table but including theory covariance matrix"""
+    return experiments_chi2_table(experiments, pdf, abs_chi2_data_theory_experiment,
+                                abs_chi2_data_theory_dataset)
+
+@table
 @check_have_three_theories
 def theory_covmat_3pt(theoryids_experiments_central_values, experiments, experiments_index):
     """Calculates the theory covariance matrix for 3-point scale variations."""
-    number_theories = len(theoryids_experiments_central_values)
     central, low, high = np.array(theoryids_experiments_central_values)
     lowdiff  = low - central
     highdiff = high - central
@@ -88,7 +94,6 @@ theoryids_results = collect(results, ('theoryids',))
 
 @check_have_three_theories
 def theory_covmat_datasets_3pt(theoryids_experiments_central_values, each_dataset_results_theory):
-    number_theories = len(theoryids_experiments_central_values)
     print(np.shape(each_dataset_results_theory))
     for dataset in each_dataset_results_theory:
         data_centrals = [x[0].central_value for x in dataset]
@@ -112,7 +117,6 @@ def theory_covmat_datasets_3pt(theoryids_experiments_central_values, each_datase
     return dataset_covmats
 
 def theory_covmat_experiments_3pt(theoryids_experiments_central_values, experiments_results_theory):
-    number_theories = len(theoryids_experiments_central_values)
     experiments_results_theory = np.swapaxes(experiments_results_theory, 0, 1)
     for experiment in experiments_results_theory:
         data_centrals = [x[0].central_value for x in experiment]
