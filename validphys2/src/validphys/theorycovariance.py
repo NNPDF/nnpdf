@@ -103,7 +103,6 @@ def theory_covmat_datasets_3pt(theoryids_experiments_central_values, each_datase
         print("////////////////////")
         lowdiff = low - central
         highdiff = high - central
-        s = np.zeros((len(central),len(central)))
         s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
         sigmas = [x[0].covmat for x in dataset]
         sigma = sigmas[0]
@@ -124,7 +123,6 @@ def theory_covmat_experiments_3pt(theoryids_experiments_central_values, experime
         central, low, high = theory_centrals
         lowdiff = low - central
         highdiff = high - central
-        s = np.zeros((len(central),len(central)))
         s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
         sigmas = [x[0].covmat for x in experiment]
         sigma = sigmas[0]
