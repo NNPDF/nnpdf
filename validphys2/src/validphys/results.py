@@ -568,13 +568,6 @@ def experiments_chi2_table(experiments, pdf, experiments_chi2,
             records.append(stats)
     return pd.DataFrame(records)
 
-
-@table
-def experiments_chi2_table_theory(experiments, pdf, abs_chi2_data_theory_experiment,
-                                  abs_chi2_data_theory_dataset):
-    """Same as experiments_chi2_table but including theory covariance matrix"""
-    return experiments_chi2_table(experiments, pdf, abs_chi2_data_theory_experiment,
-                                abs_chi2_data_theory_dataset)
 @table
 def correlate_bad_experiments(experiments, replica_data, pdf):
     """Generate a table for each replica with entries

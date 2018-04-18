@@ -8,6 +8,8 @@ from __future__ import generator_stop
 
 import logging
 
+from IPython import embed
+
 import numpy as np
 import scipy.linalg as la
 import matplotlib.pyplot as plt
@@ -19,9 +21,8 @@ from reportengine.checks import make_argcheck, CheckError
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.results import results, experiment_results, experiments_central_values
-from validphys.results import Chi2Data, experiments_chi2_table
-from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
+from validphys.results import results, experiment_results, experiments_central_values, Chi2Data, experiments_chi2_table
+from validphys.calcutils import all_chi2, central_chi2, calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys import plotutils
 
 log = logging.getLogger(__name__)
@@ -40,13 +41,45 @@ def _check_three_theories(theoryids):
     if l!=3:
         raise CheckError(f"Expecting exactly 3 theories, but got {l}.")
 
-def make_scale_var_covmat(predictions):
-    """Takes N theory predictions at different scales and applies N-pt scale variations
-    to produce a covariance matrix."""
-    central, *others = predictions
-    diffs = (other - central for other in others)
-    s = sum(np.outer(d,d) for d in diffs)/len(others)
-    return s
+def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets_3pt):
+    """ Returns an array of tuples (member_chi², central_chi², numpoints)
+    corresponding to each data set, where theory errors are included"""
+    for i, results in enumerate(each_dataset_results):
+        data_result, th_result = results
+        covmat = theory_covmat_datasets_3pt[i]
+        chi2s = all_chi2_theory(results, covmat)
+
+        central_result = central_chi2_theory(results, covmat)
+
+        if i==0:
+            chi2data_array = [Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
+                                        central_result, len(data_result))]
+        else:
+            chi2data_array.append(
+                          Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
+                                  central_result, len(data_result)))
+    return chi2data_array 
+
+def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experiments_3pt):
+    """ Like abs_chi2_data_theory_dataset but for experiments not datasets"""
+    for i, results in enumerate(experiments_results):
+        data_result, th_result = results
+        covmat = theory_covmat_experiments_3pt[i]
+
+        chi2s = all_chi2_theory(results, covmat)
+
+        central_result = central_chi2_theory(results, covmat)
+        central_result2 = central_chi2(results)
+
+        if i==0:
+            chi2data_array = [Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
+                                        central_result, len(data_result))]
+        else:
+            chi2data_array.append(
+                          Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
+                                  central_result, len(data_result)))                         
+
+    return chi2data_array 
 
 @table
 @_check_three_or_seven_theories
@@ -80,65 +113,34 @@ def total_covmat_datasets(each_dataset_results_theory):
     dataset_covmats=[]
     for dataset in each_dataset_results_theory:
         theory_centrals = [x[1].central_value for x in dataset]
-        s = make_scale_var_covmat(theory_centrals)
-        sigma = dataset[0][0].covmat
+        central, low, high = theory_centrals
+        lowdiff = low - central
+        highdiff = high - central
+        s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
+        sigmas = [x[0].covmat for x in dataset]
+        sigma = sigmas[0]
         cov = s + sigma
         dataset_covmats.append(cov)
     return dataset_covmats
 
-@_check_three_or_seven_theories
-def total_covmat_diagtheory_datasets(each_dataset_results_theory):
-    """Same as total_covmat_theory_datasets but for diagonal theory only"""
-    dataset_covmats=[]
-    for dataset in each_dataset_results_theory:
-        theory_centrals = [x[1].central_value for x in dataset]
-        s = make_scale_var_covmat(theory_centrals)
-        s_diag = np.zeros((len(s),len(s)))
-        np.fill_diagonal(s_diag, np.diag(s))
-        sigma = dataset[0][0].covmat
-        cov = s_diag + sigma
-        dataset_covmats.append(cov)
-    return dataset_covmats
-
-
-def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
-    """Takes the theory covariance matrices for individual datasets and
-    returns a data frame with a block diagonal theory covariance matrix
-    by dataset"""
-    s  = la.block_diag(*theory_covmat_datasets)
-    df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
-    return df
-
-experiments_results = collect(experiment_results, ('experiments',))
-experiments_results_theory = collect('experiments_results', ('theoryids',))
-
-@_check_three_or_seven_theories
-def total_covmat_experiments(experiments_results_theory):
-    """Same as total_covmat_datasets but per experiment rather than
-    per dataset. Needed for calculation of chi2 per experiment."""
-    exp_result_covmats = []
-    for exp_result in zip(*experiments_results_theory):
-        theory_centrals = [x[1].central_value for x in exp_result]
-        s = make_scale_var_covmat(theory_centrals)
-        sigma = exp_result[0][0].covmat
-        cov = s + sigma
-        exp_result_covmats.append(cov)
-    return exp_result_covmats
-
-@_check_three_or_seven_theories
-def total_covmat_diagtheory_experiments(experiments_results_theory):
-    """Same as total_covmat_datasets but per experiment rather than
-    per dataset. Needed for calculation of chi2 per experiment."""
-    exp_result_covmats = []
-    for exp_result in zip(*experiments_results_theory):
-        theory_centrals = [x[1].central_value for x in exp_result]
-        s = make_scale_var_covmat(theory_centrals)
-        s_diag = np.zeros((len(s),len(s)))
-        np.fill_diagonal(s_diag, np.diag(s))
-        sigma = exp_result[0][0].covmat
-        cov = s_diag + sigma
-        exp_result_covmats.append(cov)
-    return exp_result_covmats
+def theory_covmat_experiments_3pt(theoryids_experiments_central_values, experiments_results_theory):
+    experiments_results_theory = np.swapaxes(experiments_results_theory, 0, 1)
+    for experiment in experiments_results_theory:
+        data_centrals = [x[0].central_value for x in experiment]
+        theory_centrals = [x[1].central_value for x in experiment]
+        central, low, high = theory_centrals
+        lowdiff = low - central
+        highdiff = high - central
+        s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
+        sigmas = [x[0].covmat for x in experiment]
+        sigma = sigmas[0]
+        cov =  sigma
+        experiment_cent_th = experiment[0]
+        for x in experiment_cent_th:
+            x.total_covmat = cov
+    experiment_cent = [experiment[0] for experiment in experiments_results_theory]
+    experiment_covmats = [x[0].total_covmat for x in experiment_cent]
+    return experiment_covmats
 
 @table
 def theory_corrmat(theory_covmat):
@@ -248,20 +250,8 @@ def chi2_block_impact(theory_block_diag_covmat, experiments_covmat, experiments_
     chi2 = chi2_impact(theory_block_diag_covmat, experiments_covmat, experiments_results)
     return chi2
 
-def theory_diagcovmat(theory_covmat):
-    """Returns theory covmat with only diagonal values"""
-    s = theory_covmat.values
-    s_diag = np.zeros((len(s),len(s)))
-    np.fill_diagonal(s_diag, np.diag(s))
-    return s
-
-def chi2_diag_only(theory_diagcovmat, experiments_covmat, data_theory_diff):
-    """ Returns total chi2 including only diags of theory cov mat """
-    cov = theory_diagcovmat + experiments_covmat.values
-    elements = np.dot(data_theory_diff.T,np.dot(la.inv(cov),data_theory_diff))
-    chi2 = (1/len(data_theory_diff))*np.sum(elements)
-    return chi2
-
+experiments_results = collect(experiment_results, ('experiments',))
+theoryids_experiments_results = collect('experiments_results', ('theoryids',))
 each_dataset_results = collect(results, ('experiments', 'experiment'))
 
 def abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_datasets):
