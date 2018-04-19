@@ -117,11 +117,11 @@ def all_chi2_theory(results, totcov):
     data_result, th_result = results
     diffs = th_result._rawdata - data_result.central_value[:,np.newaxis]
     total_covmat = np.array(totcov)
-    return calc_chi2(sqrtcov=la.cholesky(total_covmat), diffs=diffs)
+    return calc_chi2(sqrtcov=la.cholesky(total_covmat, lower=True), diffs=diffs)
 
 def central_chi2_theory(results, totcov):
     data_result, th_result = results
     central_diff = th_result.central_value - data_result.central_value
     total_covmat = np.array(totcov)
-    return calc_chi2(la.cholesky(total_covmat), central_diff)
+    return calc_chi2(la.cholesky(total_covmat, lower=True), central_diff)
 
