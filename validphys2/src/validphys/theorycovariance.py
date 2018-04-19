@@ -65,6 +65,7 @@ def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experimen
         chi2s = all_chi2_theory(results, covmat)
 
         central_result = central_chi2_theory(results, covmat)
+        central_result2 = central_chi2(results)
 
         if i==0:
             chi2data_array = [Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
@@ -74,7 +75,6 @@ def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experimen
                           Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
                                   central_result, len(data_result)))                         
 
-    embed()
     return chi2data_array 
 
 @table
@@ -130,7 +130,7 @@ def theory_covmat_experiments_3pt(theoryids_experiments_central_values, experime
         s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
         sigmas = [x[0].covmat for x in experiment]
         sigma = sigmas[0]
-        cov = s + sigma
+        cov =  sigma
         experiment_cent_th = experiment[0]
         for x in experiment_cent_th:
             x.total_covmat = cov
