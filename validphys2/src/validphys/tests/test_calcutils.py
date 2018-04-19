@@ -22,4 +22,4 @@ def test_calc_chi2(s, d):
     assert np.allclose(chi2, calc)
     dd = np.repeat(d, 5).reshape(len(d), 5)
     calcdd = calcutils.calc_chi2(chol, dd)
-    assert np.allclose(chi2, calc)
+    assert np.allclose(chi2, calcdd)
