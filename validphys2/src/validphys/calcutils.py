@@ -10,7 +10,47 @@ import scipy.linalg as la
 
 def calc_chi2(sqrtcov, diffs):
     """Elementary function to compute the chi², given a Cholesky decomposed
-    lower triangular part and a vector of differences"""
+    lower triangular part and a vector of differences.
+
+    Parameters
+    ----------
+    sqrtcov : matrix
+        A lower tringular matrix corresponding to the lower part of
+        the Cholesky decomposition of the covariance matrix.
+    diffs : array
+        A vector of differences (e.g. between data and theory).
+        The first dimenssion must match the shape of `sqrtcov`.
+        The computation will be broadcast over the other dimensions.
+
+    Returns
+    -------
+    chi2 : array
+        The result of the χ² for each vector of differences.
+        Will have the same shape as ``diffs.shape[1:]``.
+
+    Notes
+    -----
+    This function computes the χ² more efficiently and accurately than
+    following the direct definition of inverting the covariance matrix,
+    :math:`\chi^2 = d\Sigma^{-1}d`,
+    by solving the triangular linear system instead.
+
+    Examples
+    --------
+
+    >>> from validphys.calcutils import calc_chi2
+    >>> import numpy as np
+    >>> import scipy.linalg as la
+    >>> np.random.seed(0)
+    >>> diffs = np.random.rand(10)
+    >>> s = np.random.rand(10,10)
+    >>> cov = s@s.T
+    >>> calc_chi2(la.cholesky(cov, lower=True), diffs)
+    44.64401691354948
+    >>> diffs@la.inv(cov)@diffs
+    44.64401691354948
+
+    """
     #Note la.cho_solve doesn't really improve things here
     #NOTE: Do not enable check_finite. The upper triangular part is not
     #guaranteed to make any sense. If this causes a problem, it is a bug in
