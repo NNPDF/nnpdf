@@ -74,12 +74,12 @@ int main(int argc, char **argv)
     for (int j = 0; j < Nsets; j++)
       datasets.push_back(LoadDataSet(settings, settings.GetExpSets(i)[j], DATA_UNFILTERED));
 
-    auto uncutExp = std::make_unique<Experiment>(datasets, settings.GetExpName(i));
+    Experiment uncutExp(datasets, settings.GetExpName(i));
 
     if (settings.Get("closuretest","fakedata").as<bool>())
     {
       cout << Colour::FG_YELLOW <<"\n----------------- CLOSURE TEST ----------------- " << Colour::FG_DEFAULT << endl;
-      uncutExp->MakeClosure(FakeSet, settings.Get("closuretest","fakenoise").as<bool>());
+      uncutExp.MakeClosure(FakeSet, settings.Get("closuretest","fakenoise").as<bool>());
       cout << Colour::FG_YELLOW << " -------------------------------------------------\n" << Colour::FG_DEFAULT << endl;
     }
 
@@ -88,9 +88,9 @@ int main(int argc, char **argv)
 
     cout << endl;
     // Process sets in experiment
-    for (int j=0; j< uncutExp->GetNSet(); j++)
+    for (int j=0; j< uncutExp.GetNSet(); j++)
     {
-      const DataSet& uncut = uncutExp->GetSet(j);
+      const DataSet& uncut = uncutExp.GetSet(j);
 
       // Calculating data mask
       vector<int> datamask;
@@ -123,19 +123,19 @@ int main(int argc, char **argv)
     if (settings.Get("closuretest","errorsize").as<double>() != 1.0)
     {
       cout << "\n Rescaling uncertainties by " << settings.Get("closuretest","errorsize").as<double>() << endl;
-      for (int j=0; j< uncutExp->GetNSet(); j++)
+      for (int j=0; j< uncutExp.GetNSet(); j++)
         cutsets[j].RescaleErrors(settings.Get("closuretest","errorsize").as<double>());
     }
 
     // cut experiment
-    auto cutExp = std::make_unique<Experiment>(cutsets, settings.GetExpName(i));
+    Experiment cutExp(cutsets, settings.GetExpName(i));
 
     // Write filtered data to file
     cout << "\n- Exporting filtered data\n" << endl;
-    for (int j=0; j< cutExp->GetNSet(); j++)
+    for (int j=0; j< cutExp.GetNSet(); j++)
       {
-        const DataSet &cut = cutExp->GetSet(j);
-        const DataSet &uncut = uncutExp->GetSet(j);
+        const DataSet &cut = cutExp.GetSet(j);
+        const DataSet &uncut = uncutExp.GetSet(j);
 
         // output directory for filter data
         const string targetPath = settings.GetResultsDirectory() + "/filter/"+cut.GetSetName();
