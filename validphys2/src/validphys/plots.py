@@ -16,7 +16,7 @@ import numbers
 import numpy as np
 import numpy.linalg as la
 import matplotlib.pyplot as plt
-from matplotlib import cm, colors as mcolors, ticker as mticker, rcParams as rc
+from matplotlib import cm, colors as mcolors, ticker as mticker
 import scipy.stats as stats
 
 from reportengine.figure import figure, figuregen
