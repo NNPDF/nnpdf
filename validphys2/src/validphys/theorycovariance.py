@@ -177,6 +177,7 @@ def experimentsplustheory_corrmat_3pt(experiments_covmat, theory_covmat_3pt):
     return corrmat
 
 def chi2_impact(theory_covmat_3pt, experiments_covmat, experiments_results):
+    """ Returns total chi2 including theory cov mat """
     dataresults = [ x[0] for x in experiments_results ]
     theoryresults = [ x[1] for x in experiments_results ]
     dat_central_list = [x.central_value for x in dataresults]
@@ -185,6 +186,23 @@ def chi2_impact(theory_covmat_3pt, experiments_covmat, experiments_results):
     th_central  = np.concatenate([x for x in th_central_list])
     central_diff = dat_central - th_central
     cov = theory_covmat_3pt.as_matrix() + experiments_covmat.as_matrix()
+    elements = np.dot(central_diff.T,np.dot(la.inv(cov),central_diff))
+    chi2 = (1/len(central_diff))*np.sum(elements)
+    return chi2
+
+def chi2_diag_only(theory_covmat_3pt, experiments_covmat, experiments_results):
+    """ Returns total chi2 including only diags of theory cov mat """
+    dataresults = [ x[0] for x in experiments_results ]
+    theoryresults = [ x[1] for x in experiments_results ]
+    dat_central_list = [x.central_value for x in dataresults]
+    th_central_list = [x.central_value for x in theoryresults]
+    dat_central = np.concatenate([x for x in dat_central_list])
+    th_central  = np.concatenate([x for x in th_central_list])
+    central_diff = dat_central - th_central
+    s = theory_covmat_3pt.as_matrix()
+    s_diag = np.zeros((len(central_diff),len(central_diff)))
+    np.fill_diagonal(s_diag, np.diag(s))
+    cov = s_diag + experiments_covmat.as_matrix()
     elements = np.dot(central_diff.T,np.dot(la.inv(cov),central_diff))
     chi2 = (1/len(central_diff))*np.sum(elements)
     return chi2
