@@ -21,8 +21,9 @@ from reportengine.checks import make_argcheck, CheckError
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.results import results, experiment_results, experiments_central_values, Chi2Data, experiments_chi2_table
-from validphys.calcutils import all_chi2, central_chi2, calc_chi2, all_chi2_theory, central_chi2_theory
+from validphys.results import results, experiment_results, experiments_central_values
+from validphys.results import Chi2Data, experiments_chi2_table
+from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys import plotutils
 
 log = logging.getLogger(__name__)
@@ -53,7 +54,7 @@ def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets_3p
         else:
             chi2data_array.append(
                           Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
-                                  central_result, len(data_result)))
+                                   central_result, len(data_result)))
     return chi2data_array 
 
 def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experiments_3pt):
@@ -68,8 +69,7 @@ def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experimen
         central_result2 = central_chi2(results)
 
         if i==0:
-            chi2data_array = [Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
-                                        central_result, len(data_result))]
+            chi2data_array = [Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),                                                      central_result, len(data_result))]
         else:
             chi2data_array.append(
                           Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
@@ -102,7 +102,6 @@ theoryids_results = collect(results, ('theoryids',))
 def theory_covmat_datasets_3pt(theoryids_experiments_central_values, each_dataset_results_theory):
     print(np.shape(each_dataset_results_theory))
     for dataset in each_dataset_results_theory:
-        data_centrals = [x[0].central_value for x in dataset]
         theory_centrals = [x[1].central_value for x in dataset]
         central, low, high = theory_centrals
         lowdiff = low - central
@@ -122,7 +121,6 @@ def theory_covmat_datasets_3pt(theoryids_experiments_central_values, each_datase
 def theory_covmat_experiments_3pt(theoryids_experiments_central_values, experiments_results_theory):
     experiments_results_theory = np.swapaxes(experiments_results_theory, 0, 1)
     for experiment in experiments_results_theory:
-        data_centrals = [x[0].central_value for x in experiment]
         theory_centrals = [x[1].central_value for x in experiment]
         central, low, high = theory_centrals
         lowdiff = low - central
@@ -157,7 +155,8 @@ def theory_normcovmat_3pt(theory_covmat_3pt, experiments_data):
 
 @table
 def experimentsplustheory_normcovmat_3pt(experiments_covmat, theory_covmat_3pt, experiments_data):
-    """Calculates the experiment + theory covariance matrix for 3-point scale variations normalised to data."""
+    """Calculates the experiment + theory covariance matrix for 3-point scale 
+       variations normalised to data."""
     df = experiments_covmat + theory_covmat_3pt
     experiments_data_array = np.array(experiments_data)
     mat = df/np.outer(experiments_data_array, experiments_data_array)
@@ -214,8 +213,6 @@ results_theoryids = collect(results,('theoryids',))
 experiment_results_theoryids = collect(experiment_results, ('theoryids',))
 each_dataset_results_theory = collect('results_theoryids', ('experiments', 'experiment'))
 experiments_results_theory2 = collect('experiment_results_theoryids', ('experiments', 'experiment'))
-#experiments_results_theory = collect('experiment_results_theoryids', ('experiments',))
-#experiments_results_theory = collect('results_theoryids', ('experiments',))
 
 experiments_results_theory = collect('experiments_results', ('theoryids',))
 
@@ -400,8 +397,6 @@ def plot_theory_error_test(theory_covmat_3pt, experiments_covmat, experiments_da
     ax.plot(high/data, label="high",color="blue")
     ax.errorbar(np.arange(len(data)),data/data, yerr=experrors/data,fmt='--o', label="experiment errors",color="black")
     ax.errorbar(np.arange(len(data))+0.25,data/data, yerr=theoryerrors/data,fmt='none', label="theory errors",color="green")
-    ticklocs, ticklabels = matrix_plot_labels(df_experiment)
-#    plt.xticks(ticklocs, ticklabels, rotation="vertical")
     ax.set_ylabel("Observable normalised to experiment")
     ax.set_title("Theory error comparison")
     ax.legend()
