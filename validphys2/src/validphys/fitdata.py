@@ -306,12 +306,12 @@ def datasets_properties_table(fit):
     df.index.name = 'Dataset'
     return df
 
-def print_systype_overlap(fit, experiments):
+def print_systype_overlap(experiments):
     """Returns a set of systypes that overlap between experiments"""
     exps = experiments
     experiment_names = []
     systype_exps = []
-    whitelist = {'CORR', 'UNCORR', 'SKIP'}
+    whitelist = {'CORR', 'UNCORR', 'SKIP', 'THEORYUNCORR', 'THEORYCORR'}
     for exp in exps:
         systype_exp = set()
         for ds in exp.datasets:
@@ -319,13 +319,18 @@ def print_systype_overlap(fit, experiments):
             Nsys = cd.GetNSys()
             for i in range(Nsys):
                 systype_exp.add(cd.GetSys(0, i).name)
+                systype_exp.difference_update(whitelist)
         systype_exps.append(systype_exp)
         experiment_names.append(exp.name)
     systype_overlap = set()
+    exps_overlap = []
     for i in range(len(systype_exps)-2):
         for j, systype_compare in enumerate(systype_exps[i+1:]):
-            systype_overlap.update(systype_exps[i].intersection(systype_compare))
-    if len(systype_overlap) is not None:
-        return(systype_overlap)
+            comp = systype_exps[i].intersection(systype_compare)
+            if comp:
+                exps_overlap.extend((experiment_names[i], experiment_names[j]))
+            systype_overlap.update(comp)
+    if systype_overlap:
+        return(exps_overlap, systype_overlap)
     else:
         return("No overlap of systypes")
