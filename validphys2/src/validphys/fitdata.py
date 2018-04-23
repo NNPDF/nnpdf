@@ -326,6 +326,6 @@ def print_systype_overlap(fit, experiments):
         for j, systype_compare in enumerate(systype_exps[i+1:]):
             systype_overlap.update(systype_exps[i].intersection(systype_compare))
     if len(systype_overlap) is not None:
-        print(systype_overlap)
+        return(systype_overlap)
     else:
-        print("No overlap of systypes")
+        return("No overlap of systypes")
