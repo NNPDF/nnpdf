@@ -11,8 +11,7 @@ import numpy as np
 from reportengine.figure import figuregen
 from reportengine.floatformatting import format_number
 
-from validphys.checks import check_scale, CheckError, make_argcheck, check_positive
-from validphys.plots import check_pdf_normalize_to
+from validphys.checks import check_scale, CheckError, make_argcheck, check_positive, check_pdf_normalize_to
 from validphys.plots import BandPDFPlotter
 from validphys.plots import PDFPlotter
 from validphys.pdfbases import (Basis, check_basis)
@@ -24,7 +23,7 @@ log = logging.getLogger(__name__)
 @check_positive('Q')
 @pdfgrids._check_limits
 @make_argcheck(check_basis)
-def alpha_eff(pdfs,xmin=1e-5,xmax=0.1,Q=1.65,basis='evolution',flavours=None):
+def alpha_eff(pdfs,xmin=1e-5,xmax=1e-3,Q=1.65,basis='evolution',flavours=None):
     """Return a list of xplotting_grids containing the value of the effective
     exponent alpha at the specified values of x and flavour.
     alpha is relevant at small x, hence the linear scale.
@@ -60,7 +59,7 @@ def alpha_eff(pdfs,xmin=1e-5,xmax=0.1,Q=1.65,basis='evolution',flavours=None):
 @check_positive('Q')
 @pdfgrids._check_limits
 @make_argcheck(check_basis)
-def beta_eff(pdfs,xmin=1e-2,xmax=0.9,Q=1.65,basis='evolution',flavours=None):
+def beta_eff(pdfs,xmin=0.5,xmax=0.9,Q=1.65,basis='evolution',flavours=None):
     """Return a list of xplotting_grids containing the value of the effective
     exponent beta at the specified values of x and flavour.
     beta is relevant at large x, hence the linear scale.

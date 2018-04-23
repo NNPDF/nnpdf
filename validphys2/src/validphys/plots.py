@@ -21,11 +21,12 @@ import scipy.stats as stats
 
 from reportengine.figure import figure, figuregen
 from reportengine.checks import make_check, CheckError, make_argcheck
+from reportengine.floatformatting import format_number
 
 from validphys.core import MCStats, cut_mask
 from validphys.results import chi2_stat_labels
 from validphys.plotoptions import get_info, kitable, transform_result
-from validphys.checks import check_scale
+from validphys.checks import check_scale, check_have_two_pdfs, check_pdf_normalize_to
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges
 
@@ -73,6 +74,68 @@ def plot_phi_pdfs(experiments, pdfs, experiments_pdfs_phi):
     xticks = [experiment.name for experiment in experiments]
     fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=phi_labels)
     ax.set_title(r"$\phi$ for each experiment")
+    ax.legend()
+    return fig
+
+@figure
+def plot_phi_experiment_dist(experiment, bootstrap_phi_data_experiment):
+    """Generates a bootstrap distribution of phi and then plots a histogram
+    of the individual bootstrap samples for a single experiment. By default
+    the number of bootstrap samples is set to a sensible number (500) however
+    this number can be changed by specifying `bootstrap_samples` in the runcard
+    """
+    phi = bootstrap_phi_data_experiment
+    label = '\n'.join([fr'$\phi$ mean = {format_number(phi.mean())}',
+                       fr'$\phi$ std dev = {format_number(phi.std())}'])
+    fig, ax = plt.subplots()
+    ax.hist(phi, label=label)
+    ax.set_title(r"$\phi$ distribution for " + experiment.name)
+    ax.legend()
+    return fig
+
+@make_argcheck
+def _check_same_experiment_name(dataspecs_experiments):
+    lst = dataspecs_experiments
+    if not lst:
+        return
+    for j, x in enumerate(lst[1:]):
+        if len(x) != len(lst[0]):
+            raise CheckError("All dataspecs should have the same number "
+                             "of experiments")
+        for i, exp in enumerate(x):
+            if exp.name != lst[0][i].name:
+                raise CheckError("\n".join(["All experiments must have the "
+                                            "same name",
+                                            fr"dataspec {j+1}, "
+                                            fr"experiment {i+1}: {exp.name}",
+                                            fr"dataspec 1, experiment {i+1}: "
+                                            fr"{lst[0][i].name}"]))
+
+@_check_same_experiment_name
+@figure
+def plot_phi_scatter_dataspecs(dataspecs_experiments,
+        dataspecs_speclabel, dataspecs_experiments_bootstrap_phi):
+    """For each of the dataspecs, a bootstrap distribution of phi is generated
+    for all specified experiments. The distribution is then represented as a
+    scatter point which is the median of the bootstrap distribution and an
+    errorbar which spans the 68% confidence interval. By default the number
+    of bootstrap samples is set to a sensible value, however it can be
+    controlled by specifying `bootstrap_samples` in the runcard.
+    """
+    labels = dataspecs_speclabel
+    phis = dataspecs_experiments_bootstrap_phi
+    exps = dataspecs_experiments
+    xticks = [experiment.name for experiment in exps[0]]
+    x = range(1, len(xticks)+1)
+    fig, ax = plt.subplots()
+    phi_stats = np.percentile(phis, [16, 50, 84], axis=2)
+    for i, label in enumerate(labels):
+        phi_errs = np.vstack((phi_stats[2, i, :] - phi_stats[1, i, :],
+                              phi_stats[1, i, :] - phi_stats[0, i, :]))
+        ax.errorbar(x, phi_stats[1, i, :], yerr=phi_errs, fmt='.',
+                    label=label)
+    ax.set_xticks(x, minor=False)
+    ax.set_xticklabels(xticks, minor=False, rotation=45)
     ax.legend()
     return fig
 
@@ -575,37 +638,6 @@ def plot_replica_sum_rules(pdf, sum_rules, Q):
     fig.suptitle(f'Sum rules for {pdf} at Q={Q} GeV')
     return fig
 
-#The indexing to one instead of zero is so that we can be consistent with
-#how plot_fancy works, so normalize_to: 1 would normalize to the first pdf
-#for both.
-@make_argcheck
-def check_pdf_normalize_to(pdfs, normalize_to):
-    """Transforn normalize_to into an index."""
-
-    msg = ("normalize_to should be, a pdf id or an index of the "
-           "pdf (starting from one)")
-
-    if normalize_to is None:
-        return
-
-    names = [pdf.name for pdf in pdfs]
-    if isinstance(normalize_to, int):
-        normalize_to -= 1
-        if not normalize_to < len(names) or normalize_to<0:
-            raise CheckError(msg)
-        return {'normalize_to': normalize_to}
-
-    if isinstance(normalize_to, str):
-        try:
-            normalize_to = names.index(normalize_to)
-        except ValueError:
-            raise CheckError(msg, normalize_to, alternatives=names)
-        return {'normalize_to': normalize_to}
-
-
-    raise RuntimeError("Should not be here")
-
-
 
 def _scale_from_grid(grid):
     return 'linear' if grid.scale == 'linear' else 'log'
@@ -822,88 +854,128 @@ def plot_pdf_uncertainties(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     PDF's central value is plotted. Otherwise it is the absolute values."""
     yield from UncertaintyPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
 
+
+class AllFlavoursPlotter(PDFPlotter):
+    """Auxiliary class which groups multiple PDF flavours in one plot."""
+
+    def setup_flavour(self, flstate):
+        flstate.handles= self.handles
+        flstate.labels= self.doesnothing
+        flstate.hatchit= self.hatchit
+
+    def __call__(self):
+        if not self.xplotting_grids:
+            return
+
+        self.handles = []
+        self.doesnothing = []
+        self.labels = []
+        self.hatchit = plotutils.hatch_iter()
+
+        basis = self.firstgrid.basis
+        fig, ax = plt.subplots()
+        ax.set_xlabel('x')
+        ax.set_ylabel(self.get_ylabel(None))
+        ax.set_xscale(self.xscale)
+        ax.set_title(self.get_title(None))
+
+        all_vals = []
+        for flindex, fl in enumerate(self.firstgrid.flavours):
+
+            parton_name = basis.elementlabel(fl)
+            self.labels.append(f'${parton_name}$')
+            flstate = FlavourState(flindex=flindex, fl=fl, fig=fig, ax=ax,
+                                   parton_name=parton_name)
+            self.setup_flavour(flstate)
+
+            for pdf, grid in zip(self.pdfs, self.xplotting_grids):
+                limits = self.draw(pdf, grid, flstate)
+                if limits is not None:
+                    all_vals.append(np.atleast_2d(limits))
+
+        plotutils.frame_center(ax, self.firstgrid.xgrid, np.concatenate(all_vals))
+        ax.set_axisbelow(True)
+        ax.set_xlim(self.firstgrid.xgrid[0])
+        flstate.labels = self.labels
+        self.legend(flstate)
+        return fig
+
+    def get_ylabel(self, parton_name):
+        return ''
+
+
 class DistancePDFPlotter(PDFPlotter):
+    """Auxiliary class which draws the distance plots."""
 
     def normalize(self):
-        normalize_to = self.normalize_to
-        if normalize_to is None:
-            raise ValueError("Must specify an index to normalize")
-        if normalize_to is not None:
-            normalize_pdf = self.normalize_pdf
-            normalize_grid = self._xplotting_grids[normalize_to]
-            normvals_central = normalize_pdf.stats_class(
-                            normalize_grid.grid_values).central_value()
-            normvals_sigma = normalize_pdf.stats_class(
-                            normalize_grid.grid_values).std_error()
-
-            #need sigma of normalize_pdf
-            #need sigma of each pdfs
-            #self.pdfs
-
-            #distance = |central_i - central_norm  |/(sigma_i^2 + sigma_norm^2)^1/2
-
-            #Handle division by zero more quietly
-            def fp_error(tp, flag):
-                log.warn("Invalid values found computing normalization to %s: "
-                 "Floating point error (%s).", normalize_pdf, tp)
-                #Show warning only once
-                np.seterr(all='ignore')
-
-            newgrids = []
-            with np.errstate(all='call'):
-                np.seterrcall(fp_error)
-                for grid,pdf in zip(self._xplotting_grids,self.pdfs):
-                    cval = pdf.stats_class(grid.grid_values).central_value()
-                    err = pdf.stats_class(grid.grid_values).std_error()
-                    numerator = pow(cval - normvals_central, 2)
-                    denominator = pow(err, 2)+pow(normvals_sigma, 2)
-                    newvalues = np.sqrt(numerator/denominator)
-                    #newgrid is like the old grid but with updated values
-                    newgrid = type(grid)(**{**grid._asdict(),
-                                             'grid_values':newvalues})
-                    newgrids.append(newgrid)
-
-            return newgrids
         return self._xplotting_grids
 
     def get_ylabel(self, parton_name):
-        #if self.normalize_to is None:
-            #throw an error and exit
         return "Distance from {}".format(self.normalize_pdf.label)
 
-
     def draw(self, pdf, grid, flstate):
-        ax = flstate.ax
+
         if pdf == self.normalize_pdf:
-            #Advance color cycle
-            ax.plot([],[])
             return None
 
+        ax = flstate.ax
         flindex = flstate.flindex
-        gv = 10.*grid.grid_values[flindex,:]
+        pcycler = ax._get_lines.prop_cycler
+        next_prop = next(pcycler)
+        color = next_prop['color']
 
-        p,=ax.plot(grid.xgrid, gv, label=pdf.label)
-        #color=p.get_color()
-        """
-        if(self.normalize_pdf.ErrorType=="replicas" and pdf.ErrorType=="replicas"):
-            draw_line = np.sqrt((1./(len(self.normalize_pdf)-1)+1./(len(pdf)-1))/2)
-            ax.axhline(draw_line,color=color,alpha=0.5,linestyle="--")
-        """
-
+        gv = grid.grid_values[flindex,:]
+        ax.plot(grid.xgrid, gv, color=color, label='$%s$' % flstate.parton_name)
 
         return gv
 
-@figuregen
+    def get_title(self, parton_name):
+        return f'{self.pdfs[(1+self.normalize_to)%2]} Q={self.Q : .1f} GeV'
+
+
+class VarDistancePDFPlotter(DistancePDFPlotter):
+    """Auxiliary class which draws the variance distance plots"""
+
+    def get_ylabel(self, parton_name):
+        return "Variance distance from {}".format(self.normalize_pdf.label)
+
+    def get_title(self, parton_name):
+        return f'{self.pdfs[(1+self.normalize_to)%2]} Q={self.Q : .1f} GeV'
+
+
+class FlavoursDistancePlotter(DistancePDFPlotter, AllFlavoursPlotter): pass
+
+
+class FlavoursVarDistancePlotter(VarDistancePDFPlotter, AllFlavoursPlotter): pass
+
+
+@figure
 @check_pdf_normalize_to
+@check_have_two_pdfs
 @check_scale('xscale', allow_none=True)
-def plot_pdfdistances(pdfs, xplotting_grids,*,
+def plot_pdfdistances(pdfs, distance_grids, *,
                       xscale:(str,type(None))=None,
-                      normalize_to:(int,str)):
-    """Plots the distances between different PDF sets and a reference PDF set.
-    Distances are normalized such that a value of order 10 is unlikely
-    to be explained by purely statistical fluctuations
+                      normalize_to:(int,str,type(None))=None):
+    """Plots the distances between different PDF sets and a reference PDF set
+    for all flavours. Distances are normalized such that a value of order 10
+    is unlikely to be explained by purely statistical fluctuations
     """
-    yield from DistancePDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
+    return FlavoursDistancePlotter(pdfs, distance_grids, xscale, normalize_to)()
+
+
+@figure
+@check_pdf_normalize_to
+@check_have_two_pdfs
+@check_scale('xscale', allow_none=True)
+def plot_pdfvardistances(pdfs, variance_distance_grids, *,
+                      xscale:(str,type(None))=None,
+                      normalize_to:(int,str,type(None))=None):
+    """Plots the distances between different PDF sets and a reference PDF set
+    for all flavours. Distances are normalized such that a value of order 10
+    is unlikely to be explained by purely statistical fluctuations
+    """
+    return FlavoursVarDistancePlotter(pdfs, variance_distance_grids, xscale, normalize_to)()
+
 
 class BandPDFPlotter(PDFPlotter):
     def setup_flavour(self, flstate):
@@ -964,6 +1036,7 @@ class BandPDFPlotter(PDFPlotter):
                                              }
                                  )
 
+
 @figuregen
 @check_pdf_normalize_to
 @check_scale('xscale', allow_none=True)
@@ -984,49 +1057,10 @@ def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     """
     yield from BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
 
-class FLavoursPlotter(BandPDFPlotter):
 
-    def setup_flavour(self, flstate):
-        flstate.handles= self.handles
-        flstate.labels= self.doesnothing
-        flstate.hatchit= self.hatchit
-
-    def __call__(self,):
-        if not self.xplotting_grids:
-            return
-
-        self.handles=[]
-        self.doesnothing=[]
-        self.labels = []
-        self.hatchit=plotutils.hatch_iter()
-
-
-        basis = self.firstgrid.basis
-        fig, ax = plt.subplots()
-        ax.set_xlabel('x')
-        ax.set_xscale(self.xscale)
-        ax.set_title(f'{self.pdfs[0]} Q={self.Q : .1f} GeV  ')
-
-        all_vals = []
-        for flindex, fl in enumerate(self.firstgrid.flavours):
-
-            parton_name = basis.elementlabel(fl)
-            self.labels.append(f'${parton_name}$')
-            flstate = FlavourState(flindex=flindex, fl=fl, fig=fig, ax=ax,
-                                    parton_name=parton_name)
-            self.setup_flavour(flstate)
-
-
-
-            for pdf, grid in zip(self.pdfs, self.xplotting_grids):
-                all_vals.append(np.atleast_2d(self.draw(pdf, grid, flstate)))
-
-        plotutils.frame_center(ax, self.firstgrid.xgrid, np.concatenate(all_vals))
-        ax.set_axisbelow(True)
-        ax.set_xlim(self.firstgrid.xgrid[0])
-        flstate.labels = self.labels
-        self.legend(flstate)
-        return fig
+class FlavoursPlotter(AllFlavoursPlotter, BandPDFPlotter):
+    def get_title(self, parton_name):
+        return f'{self.pdfs[0]} Q={self.Q : .1f} GeV'
 
 @figure
 @check_scale('xscale', allow_none=True)
@@ -1039,8 +1073,7 @@ def plot_flavours(pdf, xplotting_grid, xscale:(str,type(None))=None,
     set based on the scale in xgrid, which should be used instead.
 
     """
-    obj = FLavoursPlotter([pdf], [xplotting_grid], xscale, normalize_to=None)
-    return obj()
+    return FlavoursPlotter([pdf], [xplotting_grid], xscale, normalize_to=None)()
 
 
 @figuregen

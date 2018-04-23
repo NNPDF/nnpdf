@@ -17,6 +17,7 @@ import numpy as np
 
 from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
+from reportengine.compat import yaml
 
 from NNPDF import (LHAPDFSet,
     CommonData,
@@ -474,12 +475,11 @@ class FitSpec(TupleComp):
 
     @functools.lru_cache()
     def as_input(self):
-        import yaml
         p = self.path/'filter.yml'
         log.debug('Reading input from fit configuration %s' % (p,))
         try:
             with p.open() as f:
-                d = yaml.load(f)
+                d = yaml.safe_load(f)
         except (yaml.YAMLError, FileNotFoundError) as e:
             raise AsInputError(str(e)) from e
         d['pdf'] = self.name
@@ -545,6 +545,9 @@ class Stats:
     def std_error(self):
         raise NotImplementedError()
 
+    def moment(self, order):
+        raise NotImplementedError()
+
     def sample_values(self, size):
         raise NotImplementedError()
 
@@ -561,6 +564,7 @@ class Stats:
     #TODO...
     ...
 
+
 class MCStats(Stats):
     """Result obtained from a Monte Carlo sample"""
 
@@ -569,6 +573,9 @@ class MCStats(Stats):
 
     def std_error(self):
         return np.std(self.data, axis=0)
+
+    def moment(self, order):
+        return np.mean(np.power(self.data-self.central_value(),order), axis=0)
 
     def errorbar68(self):
         #Use nanpercentile here because we can have e.g. 0/0==nan normalization

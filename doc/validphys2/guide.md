@@ -134,6 +134,9 @@ pdfs:
     - NNPDF30_nnlo_as_0118
     - CT14nlo
 
+norm:
+    normalize_to: NNPDF30_nlo_as_0118
+
 first:
     Q: 1
     flavours: [up, down, gluon]
@@ -143,13 +146,9 @@ second:
     xgrid: linear
 
 actions_:
-    - first:
-        - plot_pdfreplicas:
-            normalize_to: NNPDF30_nlo_as_0118
-
-        - plot_pdfs
-    - second:
-        - plot_pdfreplicas
+    - first::norm plot_pdfreplicas
+	- first plot_pdfs
+	- second plot_pdfreplicas
 ```
 
 Correct by definition
@@ -246,11 +245,7 @@ experiments:
       - { dataset: ATLASWZRAP36PB}
 
 actions_:
- - theoryids:
-    pdfs:
-        experiments:
-            experiment:
-              - plot_fancy
+ - theoryids::pdfs::experiments::experiment plot_fancy
 ```
 
 Will produce a separate plot for each combination of the two theories
@@ -457,11 +452,11 @@ recipe), including the C++ compiler. For example here is how we would
 set up a development environment for `nnpdf`.
 
  1. Find out the C++ (or C or FORTRAN) compiler package name for your
-	platform [here][COMPILERS]. For example, the C++ compiler for
-	Linux is `gxx_linux-64`.
+	platform [here][COMPILERS]. For example, the C++ compilers for
+	Linux and macOS are `gxx_linux-64` and `clangxx_osx-64` respectively.
 
  2. Create an environment with all the build and runtime
-	dependencies. We start of with:
+	dependencies. We start off with:
 	```
 	$ conda create -n nnpdf-dev nnpdf gxx_linux-64
 	```
@@ -523,13 +518,19 @@ set up a development environment for `nnpdf`.
 	the other build dependencies (which can be found in
 	`libnnpdf/conda-recipe/meta.yaml`).
 	```
-	$ conda remove nnpdf --force
 	$ conda install pkg-config swig=3.0.10 cmake
 	```
 
 	Note that `conda install --only-deps` also works.
 
- 3. Build the library: We only need to set
+ 3. Obtain the dependencies of the code you want to build. Where to
+	find those depends on the particular code, but something linking
+	to `libnnpdf` will likely require `pkg-config`. Projects based on
+	`autotools` (those that have a `./configure` script) will
+	additionally require `automake` and `libtool`. Similarly projects
+	based on `cmake` will require installing the `cmake` package.
+
+ 4. Build the library: We only need to set
 	the installation prefix to the `conda` environment. Assuming `conda`
 	is installed under `~/anaconda3`:
 	```
@@ -574,7 +575,7 @@ set up a development environment for `nnpdf`.
 	This should result in a working C++ component of the library (see
 	the documentation on how to enable e.g. the Python component).
 
- 4. Use the result. We can now compile `buildmaster` linking with the
+ 5. Use the result. We can now compile `buildmaster` linking with the
 	library we just created.
 	```
 	buildmaster$ make clean
@@ -717,8 +718,8 @@ dataset_input:
     cfac: [EWK]
 
 actions_:
-  -   - plot_fancy
-      - plot_chi2dist
+  - plot_fancy
+  - plot_chi2dist
 
 ```
 
@@ -730,11 +731,12 @@ We are saying that we do not want to use the cuts of the data
 (so we don't have to specify a fit containing the cut data).
 
 The special `actions_` key is used to declare the actions we want to
-have executed. We want a data/theory comparison (plot_fancy) and to
-plot the distribution of the chi² for each replica (plot_chi2dist). If we
-save the above runcard to a file called `runcard.yaml`
-we
-can produce the plots with:
+have executed. The syntax is the same as for the targets inside the
+report, and discussed in detail in the [Report template
+specification].  We want a data/theory comparison (plot_fancy) and to
+plot the distribution of the chi² for each replica (plot_chi2dist). If
+we save the above runcard to a file called `runcard.yaml` we can
+produce the plots with:
 ```bash
 validphys runcard.yaml
 ```
@@ -767,11 +769,8 @@ dataset_input:
     cfac: [EWK]
 
 actions_:
-  - with_cuts:
-      - plot_fancy
-
-  - without_cuts:
-      - plot_chi2dist
+  - with_cuts plot_fancy
+  - without_cuts plot_chi2dist
 
 ```
 
@@ -804,11 +803,9 @@ dataset_input:
     cfac: [EWK]
 
 actions_:
-  - with_cuts:
-      - plot_fancy
+  - with_cuts plot_fancy
 
-  - without_cuts:
-      - plot_chi2dist
+  - without_cuts plot_chi2dist
 
 ```
 
@@ -843,8 +840,7 @@ dataset_input:
     cfac: [EWK]
 
 actions_:
-  - specifications:
-      - plot_fancy
+  - specifications plot_fancy
 
 ```
 
@@ -880,7 +876,7 @@ dataset_input:
     cfac: [EWK]
 
 actions_:
-  - - plot_fancy
+  - plot_fancy
 
 ```
 
@@ -902,8 +898,7 @@ dataset_input:
     cfac: [EWK]
 
 actions_:
-  - pdfs:
-      - plot_fancy
+  - pdfs plot_fancy
 
 ```
 
@@ -954,12 +949,7 @@ experiments:
       - { dataset: ATLASWZRAP36PB}
 
 actions_:
-    - with_cuts:
-        theoryids:
-          pdfs:
-            experiments:
-                experiment:
-                  - plot_fancy
+  - with_cuts::theoryids::pdfs::experiments::experiment plot_fancy
 
 ```
 
@@ -1017,13 +1007,9 @@ second:
     xgrid: linear
 
 actions_:
-    - first:
-        - plot_pdfreplicas:
-            normalize_to: NNPDF30_nlo_as_0118
-
-        - plot_pdfs
-    - second:
-        - plot_pdfreplicas
+  - first::plot_pdfreplicas (normalize_to=NNPDF30_nlo_as_0118)
+  - first plot_pdfs
+  - second plot_pdfreplicas
 ```
 
 The `normalize_to` key only affects the `plot_pdfreplicas` action.
@@ -1069,8 +1055,7 @@ experiments:
     from_: fit
 
 actions_:
-   -   - report:
-            out_filename: index.md
+   - report(out_filename=index.md)
 
 ```
 
@@ -1125,8 +1110,7 @@ experiments:
     from_: fit
 
 actions_:
-    - fits:
-        - report
+  - fits report
 ```
 This will work exactly as the example above, except that a new action
 (with its corresponding different set of resources) will be generated
@@ -1162,9 +1146,7 @@ pdfs:
     - NNPDF30_nlo_as_0118
 
 actions_:
-    - fits:
-		fitcontext:
-          - report
+  - fits::fitcontext report
 ```
 
 Note that one still needs to set manually other keys like `description` and `pdfs`.
@@ -1231,9 +1213,7 @@ template_text: |
     {@endwith@}
 
 actions_:
-    - - report:
-          main: True
-          mathjax: True
+  - report(main=True, mathjax=True)
 
 ```
 
@@ -1308,8 +1288,7 @@ template_text: |
     {@plot_dataspecs_as_value_error@}
 
 actions_:
-    - - report:
-           main: True
+  - report(main=True)
 
 ```
 
@@ -1594,8 +1573,7 @@ template_text: |
     {@plot_fancy_dataspecs@}
 
 actions_:
-    - - report:
-           main: True
+  - report(main=True)
 
 ```
 
@@ -1645,8 +1623,7 @@ template_text: |
     {@endwith@}
 
 actions_:
- - - report:
-        main: True
+ - report(main=True)
 ```
 
 Here we are taking the experiments and cuts from a different fit,
@@ -1741,8 +1718,7 @@ of priority:
     ~~~yaml
     template: mytemplate.md
     actions_:
-      -   - report:
-              main: True
+      - report(main=True)
     ~~~
     and you would begin `mytemplate.md`, using YAML syntax,  like:
     ```yaml
@@ -2059,8 +2035,8 @@ Then, an input card like the following:
 pdf: NNPDF30_nlo_as_0118
 
 actions_:
- - - plot1
-   - plot2
+  - plot1
+  - plot2
 ```
 Would result in the following DAG:
 
@@ -2100,9 +2076,8 @@ scan_params:
 
 
 actions_:
- - scan_params:
-   - plot1
-   - plot2
+  - scan_params plot1
+  - scan_params plot2
 ```
 which would result in the following computation:
 
@@ -2128,9 +2103,7 @@ scan_params:
 
 
 actions_:
- - pdfs:
-	scan_params:
-     - plot1
+  - pdfs::scan_params plot1
 ```
 
 The corresponding graph would be:
@@ -2485,7 +2458,7 @@ fits:
 use_cuts: True
 
 actions_:
-    - - print_fits_experiments_chi2
+  - print_fits_experiments_chi2
 ```
 
 

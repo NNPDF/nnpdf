@@ -9,6 +9,13 @@ line_by:
 figure_by: 
   - k2bins10
 
+normalize:
+    y_scale: linear
+    line_by: []
+    figure_by:
+        - k2bins10
+        - k2
+
 extra_labels:
   qplot: [
   0,0,0,0,0,0,0,0,0,0,

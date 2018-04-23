@@ -7,17 +7,17 @@ config_path: '@PROFILE_PREFIX@/config/'
 # Remote resource locations
 fit_urls:
     - 'http://pcteserver.mi.infn.it/~nnpdf/fits/'
-    - 'http://nnpdf.web.cern.ch/nnpdf/fits/'
+    - 'https://nnpdf.web.cern.ch/nnpdf/fits/'
 
 fit_index: 'fitdata.json'
 
 theory_urls:
-    - 'http://nnpdf.web.cern.ch/nnpdf/tables/'
+    - 'https://nnpdf.web.cern.ch/nnpdf/tables/'
 
 theory_index: 'theorydata.json'
 
 lhapdf_urls:
-    - 'http://www.hepforge.org/archive/lhapdf/pdfsets/6.1/'
+    - 'https://www.hepforge.org/archive/lhapdf/pdfsets/6.1/'
 nnpdf_pdfs_urls:
     - 'http://pcteserver.mi.infn.it/~nnpdf/pdfs/'
 nnpdf_pdfs_index: 'pdfdata.json'

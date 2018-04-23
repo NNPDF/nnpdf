@@ -19,9 +19,9 @@ from reportengine.checks import require_one, remove_outer, check_not_empty, make
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.checks import assert_use_cuts_true
+from validphys.checks import assert_use_cuts_true, check_pdf_is_montecarlo
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
-from validphys.calcutils import all_chi2, central_chi2, calc_chi2, all_chi2_theory, central_chi2_theory
+from validphys.calcutils import all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values
 
 log = logging.getLogger(__name__)
 
@@ -139,8 +139,6 @@ class PositivityResult(StatsResult):
     @property
     def rawdata(self):
         return self.stats.data
-
-
 
 def experiments_index(experiments):
     """Return an empy dataframe with index
@@ -440,7 +438,7 @@ def abs_chi2_data(results):
 def abs_chi2_data_experiment(experiment_results):
     """Like `abs_chi2_data` but for a whole experiment"""
     return abs_chi2_data(experiment_results)
-    
+
 def phi_data(abs_chi2_data):
     """Calculate phi using values returned by `abs_chi2_data`.
 
@@ -453,6 +451,22 @@ def phi_data(abs_chi2_data):
 def phi_data_experiment(abs_chi2_data_experiment):
     """Like `phi_data` but for whole experiment"""
     return phi_data(abs_chi2_data_experiment)
+
+@check_pdf_is_montecarlo
+def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples=500):
+    """Takes the data result and theory prediction for a given experiment and
+    then returns a bootstrap distribution of phi.
+    By default `bootstrap_samples` is set to a sensible value (500). However
+    a different value can be specified in the runcard.
+
+    For more information on how phi is calculated see `phi_data`
+    """
+    dt, th = experiment_results
+    diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
+    phi_resample = bootstrap_values(diff, bootstrap_samples,
+                                    apply_func=(lambda x, y: calc_phi(y, x)),
+                                    args=[dt.sqrtcovmat])
+    return phi_resample
 
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
                               prepend_total:bool=True,
@@ -820,12 +834,14 @@ def experiments_central_values(experiment_result_table):
     central_theory_values = experiment_result_table["theory_central"]
     return central_theory_values
 
-
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
 
 experiments_phi = collect(phi_data_experiment, ('experiments',))
 experiments_pdfs_phi = collect('experiments_phi', ('pdfs',))
+
+experiments_bootstrap_phi = collect(bootstrap_phi_data_experiment, ('experiments',))
+dataspecs_experiments_bootstrap_phi = collect('experiments_bootstrap_phi', ('dataspecs',))
 
 #These are convenient ways to iterate and extract varios data from fits
 fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))

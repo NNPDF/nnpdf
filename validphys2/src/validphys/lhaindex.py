@@ -5,7 +5,6 @@ Created on Fri Jan 23 12:11:23 2015
 
 @author: zah
 """
-from __future__ import print_function
 import os
 import os.path as osp
 import re
@@ -13,7 +12,7 @@ import glob
 import fnmatch
 from functools import lru_cache
 
-import yaml
+from reportengine.compat import yaml
 import lhapdf
 
 
@@ -110,7 +109,7 @@ def infofilename(name):
 @lru_cache()
 def parse_info(name):
     with open(infofilename(name)) as infofile:
-        result = yaml.load(infofile)
+        result = yaml.safe_load(infofile)
     return result
 
 def get_lha_paths():

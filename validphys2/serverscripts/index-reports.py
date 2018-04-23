@@ -10,6 +10,7 @@ import pathlib
 import datetime
 import json
 import re
+import sys
 from collections import ChainMap, defaultdict
 
 import ruamel_yaml as yaml
@@ -58,11 +59,13 @@ class TagProps():
 def meta_from_path(p):
     meta = ChainMap(DEFAULTS)
     yaml_meta = p/'meta.yaml'
+    yaml_res = {}
     if yaml_meta.exists():
         with yaml_meta.open() as f:
-            yaml_res = yaml.safe_load(f)
-    else:
-        yaml_res = {}
+            try:
+                yaml_res = yaml.safe_load(f)
+            except yaml.YAMLError as e:
+                print(f"Error processing {yaml_meta}: {e}", file=sys.stderr)
     index = p/'index.html'
     #Only do the expensive HTML parsing if we actually need a key
     if REQUIRED_FILE_METADATA - yaml_res.keys() and index.exists():
@@ -113,5 +116,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-

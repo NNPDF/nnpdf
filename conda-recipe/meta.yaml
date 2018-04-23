@@ -30,15 +30,29 @@ requirements:
         - libarchive
         - yaml-cpp
         - apfel
+        - pkg-config
         - python # requirements for validphys
-        - reportengine >=0.22.4 # see https://github.com/NNPDF/reportengine
+        - reportengine >=0.25 # see https://github.com/NNPDF/reportengine
         - matplotlib >=2.0.1
         - blessings
         - scipy >=0.19.1
         - pandas =0.20
         - requests
         - prompt_toolkit
-        - pyyaml
+
+test:
+    requires:
+        - hypothesis
+        - pytest
+        - coverage
+        #Build dependencies for catch tests
+        - {{ compiler("cxx") }}
+        - {{ compiler("c") }}
+        - swig ==3.0.10
+        - cmake
+
+    source_files:
+        - "*"
 
 build:
     number: 0

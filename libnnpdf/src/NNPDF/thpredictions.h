@@ -8,11 +8,11 @@
 
 #pragma once
 
-#include "common.h"
-#include "experiments.h"
-#include "pdfset.h"
-#include "fastkernel.h"
-#include "fkset.h"
+#include "NNPDF/common.h"
+#include "NNPDF/experiments.h"
+#include "NNPDF/pdfset.h"
+#include "NNPDF/fastkernel.h"
+#include "NNPDF/fkset.h"
 
 namespace NNPDF
 {

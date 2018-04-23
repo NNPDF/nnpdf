@@ -14,10 +14,10 @@ import pathlib
 import tempfile
 from urllib.parse import urljoin
 
-import yaml
+from reportengine.compat import yaml
+from reportengine.colors import t
 
 from NNPDF import get_profile_path
-from reportengine.colors import t
 
 log = logging.getLogger(__name__)
 
@@ -54,7 +54,7 @@ class Uploader():
                 self._lazy_profile = yaml.safe_load(f)
         return self._lazy_profile
 
-    def get_relative_path(output_path):
+    def get_relative_path(self, output_path):
         """Return the relative path to the ``target_dir``."""
         return base64.urlsafe_b64encode(uuid.uuid4().bytes).decode()
 
@@ -92,7 +92,7 @@ class Uploader():
         specific_file is given"""
         #Set the date to now
         pathlib.Path(output_path).touch()
-        randname = self.get_relative_path()
+        randname = self.get_relative_path(output_path)
         newdir = self.target_dir + randname
 
         rsync_command = ('rsync', '-aLz', '--chmod=ug=rwx,o=rx',
@@ -149,8 +149,8 @@ class ReportUploader(Uploader):
 class FileUploader(Uploader):
     """Uploader for individual files for single-file resources. It does the "
     "same but prints the URL of the file."""
-    def _print_output(self, *args):
-        url = urljoin(self.root_url, *args)
+    def _print_output(self, result, name):
+        url = urljoin(result, name)
         log.info(f"Upload completed. The result is available at:\n{t.bold_blue(url)}")
 
     @contextlib.contextmanager
@@ -159,7 +159,7 @@ class FileUploader(Uploader):
         self.check_upload()
         yield
         res = self.upload_output(output)
-        self._print_output(res, specific_file)
+        self._print_output(self.root_url+'/'+res+'/', specific_file)
 
 class ReportFileUploader(FileUploader, ReportUploader):
     pass

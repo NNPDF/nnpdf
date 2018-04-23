@@ -13,8 +13,8 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "common.h"
-#include "fastkernel.h"
+#include "NNPDF/common.h"
+#include "NNPDF/fastkernel.h"
 
 namespace NNPDF
 {

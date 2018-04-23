@@ -10,3 +10,9 @@ figure_by:
  - k3
 line_by:
  - k1
+
+normalize:
+    line_by: []
+    figure_by:
+        - k3
+        - k1

@@ -19,10 +19,10 @@ import os.path as osp
 import urllib.parse as urls
 import mimetypes
 
-import yaml
 import requests
-
+from reportengine.compat import yaml
 from reportengine import filefinder
+
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts,
                             peek_commondata_metadata)
@@ -187,12 +187,9 @@ class Loader(LoaderBase):
                   "Folder '%s' not found") % (theoryID, theopath) )
         return TheoryIDSpec(theoryID, theopath)
 
-    def get_commondata(self, setname, sysnum, plotfiles=None):
-        """Get a Commondata from the set name and number.
-           The plotfiles argument is accepted to keep symmetry with
-           the commondataSpec,
-           returned by check_commondata, but it doesn't do anything."""
-        cd = self.check_commondata(setname, sysnum, plotfiles)
+    def get_commondata(self, setname, sysnum):
+        """Get a Commondata from the set name and number."""
+        cd = self.check_commondata(setname, sysnum)
         return cd.load()
 
     #   @functools.lru_cache()
@@ -220,7 +217,7 @@ class Loader(LoaderBase):
             raise CompoundNotFound(msg)
         #This is a little bit stupid, but is the least amount of thinking...
         yaml_format = 'FK:\n' + re.sub('FK:', ' - ', txt)
-        data = yaml.load(yaml_format)
+        data = yaml.safe_load(yaml_format)
         #we have to split out 'FK_' the extension to get a name consistent
         #with everything else
         tables = [self.check_fktable(theoryID, name[3:-4], cfac)
