@@ -324,9 +324,9 @@ def print_systype_overlap(experiments):
         experiment_names.append(exp.name)
     systype_overlap = set()
     exps_overlap = set()
-    for i in range(len(systype_exps)-2):
-        for j, systype_compare in enumerate(systype_exps[i+1:]):
-            comp = systype_exps[i].intersection(systype_compare)
+    for i in range(len(systype_exps)):
+        for j in range(i+1, len(systype_exps)):
+            comp = systype_exps[i].intersection(systype_exps[j])
             if comp:
                 exps_overlap.update({experiment_names[i], experiment_names[j]})
             systype_overlap.update(comp)
