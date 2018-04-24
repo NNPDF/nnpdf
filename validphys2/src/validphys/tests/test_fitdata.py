@@ -15,3 +15,5 @@ def test_print_systype_overlap():
     ediffbis = ExperimentSpec('e3bis', [ds2])
     match3 = print_systype_overlap([e, ediffbis])
     assert isinstance(match3, tuple)
+    match4 = print_systype_overlap([])
+    assert isinstance(match4, str)
