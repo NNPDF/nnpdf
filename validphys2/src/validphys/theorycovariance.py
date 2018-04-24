@@ -285,6 +285,7 @@ def theory_normcovmat_3pt(theory_covmat_3pt, experiments_data):
     return mat
 
 @table
+<<<<<<< HEAD
 def experimentsplustheory_covmat(experiments_covmat, theory_covmat):
     """Calculates the experiment + theory covariance matrix for
     scale variations."""
@@ -303,6 +304,12 @@ def experimentsplustheory_normcovmat(experiments_covmat, theory_covmat, experime
        variations normalised to data."""
     df = experiments_covmat + theory_covmat
 
+def experimentsplustheory_covmat_3pt(experiments_covmat, theory_covmat_3pt):
+    """Calculates the experiment + theory covariance matrix for 3-point scale variations."""
+    df = experiments_covmat + theory_covmat_3pt
+    return df
+
+@table
 def experimentsplustheory_normcovmat_3pt(experiments_covmat, theory_covmat_3pt, experiments_data):
     """Calculates the experiment + theory covariance matrix for 3-point scale 
        variations normalised to data."""
