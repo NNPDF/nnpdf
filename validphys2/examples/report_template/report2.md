@@ -56,3 +56,8 @@ Positivity
 {@with matched_positivity_from_dataspecs::dataspecs@}
 {@plot_positivity@}
 {@endwith@}
+
+Dataset differences and cuts
+----------------------------
+{@print_dataset_differences@}
+{@print_different_cuts@}
