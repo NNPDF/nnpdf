@@ -41,10 +41,6 @@ $\chi^2$ by dataset comparisons
 $\phi$ by experiment
 --------------------
 {@with dataspecs@}
-{@plot_phi_pdfs@}
-{@endwith@}
-
-{@with dataspecs@}
 ### {@fit@}
 {@plot_phi@}
 {@endwith@}
@@ -57,9 +53,6 @@ Experiment plots
 
 Positivity
 ----------
-
 {@with matched_positivity_from_dataspecs::dataspecs@}
 {@plot_positivity@}
 {@endwith@}
-
-
