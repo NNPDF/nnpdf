@@ -307,7 +307,10 @@ def datasets_properties_table(fit):
     return df
 
 def print_systype_overlap(experiments):
-    """Returns a set of systypes that overlap between experiments"""
+    """Returns a set of systypes that overlap between experiments.
+    Discards the set of systypes which overlap but do not imply 
+    correlations
+    """
     exps = experiments
     experiment_names = []
     systype_exps = []
