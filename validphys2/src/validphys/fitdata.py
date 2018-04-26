@@ -305,3 +305,35 @@ def datasets_properties_table(fit):
     df = df[['Training fraction', 'C-factors', 'Other fields']]
     df.index.name = 'Dataset'
     return df
+
+def print_systype_overlap(experiments):
+    """Returns a set of systypes that overlap between experiments.
+    Discards the set of systypes which overlap but do not imply 
+    correlations
+    """
+    exps = experiments
+    experiment_names = []
+    systype_exps = []
+    whitelist = {'CORR', 'UNCORR', 'SKIP', 'THEORYUNCORR', 'THEORYCORR'}
+    for exp in exps:
+        systype_exp = set()
+        for ds in exp.datasets:
+            cd = ds.commondata.load()
+            Nsys = cd.GetNSys()
+            for i in range(Nsys):
+                systype_exp.add(cd.GetSys(0, i).name)
+                systype_exp.difference_update(whitelist)
+        systype_exps.append(systype_exp)
+        experiment_names.append(exp.name)
+    systype_overlap = set()
+    exps_overlap = set()
+    for i in range(len(systype_exps)):
+        for j in range(i+1, len(systype_exps)):
+            comp = systype_exps[i].intersection(systype_exps[j])
+            if comp:
+                exps_overlap.update({experiment_names[i], experiment_names[j]})
+            systype_overlap.update(comp)
+    if systype_overlap:
+        return(exps_overlap, systype_overlap)
+    else:
+        return("No overlap of systypes")
