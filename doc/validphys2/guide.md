@@ -1661,6 +1661,38 @@ be controlled with the `--net` (no effect by default) and `--no-net`
 change in the future, it is useful that scripts calling validphys
 specify this behaviour explicitly.
 
+Additionally there is the `vp-get` utility, that can by itself download
+resources in the same way `validphys` would do. The basic syntax is:
+
+```bash
+vp-get <resource_type> <resource_name>
+````
+
+The available options for `<resource type>` can be seen with `vp-get --list`.
+Currently they are:
+
+```bash
+ $ vp-get --list                                                                                         (nnpdf-
+Available resource types:
+ - fit
+ - pdf
+ - theoryID
+ - vp_output_file
+```
+
+For example to download the fit `NNPDF31_nlo_as_0118_1000` we would write
+```
+$ vp-get fit NNPDF31_nlo_as_0118_1000
+```
+
+If the resource is already installed, the tool will display some information on
+it and bail out:
+
+```bash
+$ vp-get fit NNPDF31_nlo_as_0118_1000
+FitSpec(name='NNPDF31_nlo_as_0118_1000', path=PosixPath('/home/zah/anaconda3/envs/nnpdf-dev/share/NNPDF/results/NNPDF31_nlo_as_0118_1000'))
+```
+
 Uploading the result
 --------------------
 
@@ -1752,6 +1784,17 @@ inside the `validphys2` repository. This page can be edited to reflect
 the current interests (the Makefile directly uploads to the
 server). See [Web Scripts] in the [Developer Documentation] for more
 details.
+
+### Uploading fits
+
+To upload fits use:
+
+```
+vp-upload --fit <completed_fit_path>
+```
+
+Note there are [plans](https://github.com/NNPDF/nnpdf/issues/162) to change this
+command.
 
 ### Uploading arbitrary files
 
