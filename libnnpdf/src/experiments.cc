@@ -486,6 +486,31 @@ void Experiment::GenCovMat()
   fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 
+/**
+* Read in covariance matrix for replica generation from file, and generate covariance matrix and its square root
+*/
+void Experiment::LoadRepCovMat(string filename)
+{
+  ifstream f1;
+  f1.open(covmatfile.str().c_str(), ios::in);
+
+  if (!f1.good()) {
+    throw FileError("Cannot read covariance matrix file from " + filename);
+  }
+
+  for (int i=0; i<fNData; i++) {
+    getline(f1, line);
+    istringstream lstream(line);
+    for(int j=0; j<fNData; j++) {
+    lstream >> fCovMat(i, j);
+    }
+  }
+
+  f1.close();
+
+  fSqrtCov = ComputeSqrtCov(fCovMat);
+}
+
 void Experiment::ExportCovMat(string filename)
 {
   ofstream outCovMat(filename.c_str());
