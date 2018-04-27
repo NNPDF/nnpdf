@@ -491,13 +491,17 @@ void Experiment::GenCovMat()
 */
 void Experiment::LoadRepCovMat(string filename)
 {
+  fCovMat.clear();
+  fCovMat.resize(fNData, fNData, 0);  
+
   ifstream f1;
-  f1.open(covmatfile.str().c_str(), ios::in);
+  f1.open(filename.c_str(), ios::in);
 
   if (!f1.good()) {
-    throw FileError("Cannot read covariance matrix file from " + filename);
+    throw FileError("experiments", "Cannot read covariance matrix file from " + filename);
   }
 
+  string line;
   for (int i=0; i<fNData; i++) {
     getline(f1, line);
     istringstream lstream(line);
@@ -508,7 +512,7 @@ void Experiment::LoadRepCovMat(string filename)
 
   f1.close();
 
-  fSqrtCov = ComputeSqrtCov(fCovMat);
+  fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 
 void Experiment::ExportCovMat(string filename)
