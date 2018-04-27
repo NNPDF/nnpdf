@@ -90,6 +90,8 @@ namespace NNPDF
     void PullData();                  //!< Pull experimental data from datasets
     void GenCovMat();                 //!< Generate covmat and inverse
 
+    void LoadRepCovMat();             //!< Read in covmat for rep gen, generate covmat and sqrt
+
   };
 
   // Auxiliary tools for replica generation
