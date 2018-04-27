@@ -38,6 +38,8 @@ providers = [
              'validphys.replica_selector',
              'reportengine.report',
              'validphys.theorycovariance',
+             'validphys.theorycovariance',
+             'validphys.replica_selector',
              'reportengine.report'
             ]
 
