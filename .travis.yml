@@ -25,6 +25,9 @@ before_install:
     - brew cleanup -s
     - rm -rf $(brew --cache)
 
+# Need to pin conda build to 3.8 because of:
+# https://github.com/conda/conda-build/issues/2841
+
 install:
     - |
       MINICONDA_URL="https://repo.continuum.io/miniconda"
@@ -38,7 +41,7 @@ install:
       conda config --add channels https://zigzah.com/static/conda-pkgs/
       conda config --add channels https://zigzah.com/static/conda-pkgs-private/
       conda config --set show_channel_urls true
-      conda install --yes conda-build
+      conda install --yes conda-build=3.8
 
 script:
     - ./.ciscripts/build-deploy-osx.sh

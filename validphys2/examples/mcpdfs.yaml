@@ -1,0 +1,30 @@
+meta:
+    title: Monte Carlo PDFs
+    author: Zahari Kassabov
+    keywords: [mcpdfs]
+
+Q: 2
+pdf: NNPDF31_nnlo_as_0118_1000
+installgrid: False
+set_name: test_31_mcpdf
+
+#xgrid_config
+xmin: 1e-9
+xmax: 0.05
+npoints: 1500
+
+template_text: |
+    # MCPDF derived from `{@pdf@}`
+
+    Unconstrained limit: $x < {@unconstrained_limit@}$
+
+    {@mcpdf_stats_table@}
+
+    ## Filter plots
+
+    {@plot_filtered_replicas@}
+
+    [LHAPDF Set]({@make_montecarlo_pdf@})
+
+actions_:
+    - report(main=true)

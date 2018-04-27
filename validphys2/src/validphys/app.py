@@ -30,8 +30,12 @@ providers = [
              'validphys.eff_exponents',
              'validphys.paramfits.dataops',
              'validphys.paramfits.plots',
+
              'validphys.theorycovariance',
+             'validphys.replica_selector',
              'reportengine.report'
+             'validphys.replica_selector',
+             'reportengine.report',
             ]
 
 log = logging.getLogger(__name__)

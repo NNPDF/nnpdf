@@ -1,6 +1,6 @@
 #taglist{
 	columns: 200px;
-
+	word-break: break-all;
 }
 h1.title{
     text-align: center;

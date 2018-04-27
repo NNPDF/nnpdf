@@ -170,7 +170,7 @@ class FitUploader(FileUploader):
     target_dir = _profile_key('fits_target_dir')
     root_url = _profile_key('fits_root_url')
 
-    def get_relative_path(self):
+    def get_relative_path(self, output_path=None):
         return ''
 
     def compress(self, output_path):
@@ -204,4 +204,4 @@ class FitUploader(FileUploader):
         self.check_upload()
         yield
         res = self.upload_output(output_path)
-        self._print_output(res)
+        self._print_output(self.root_url, res)
