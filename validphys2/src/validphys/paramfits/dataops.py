@@ -9,7 +9,7 @@ be consumed by plotting functions.
 import logging
 import warnings
 import functools
-from collections import Counter, defaultdict
+from collections import defaultdict
 
 import numpy as np
 import pandas as pd
@@ -19,6 +19,12 @@ from reportengine import collect
 from reportengine.floatformatting import format_error_value_columns, ValueErrorTuple, format_number
 from reportengine.checks import make_argcheck, CheckError, check_positive, check_not_empty
 from reportengine.table import table
+
+from validphys.checks import (
+    check_fits_different,
+    check_dataspecs_fits_different,
+    check_speclabels_different,
+)
 
 log = logging.getLogger(__name__)
 
@@ -62,27 +68,9 @@ def get_parabola(asvals, chi2vals):
     filt =  np.isfinite(chi2vals)
     return np.polyfit(np.asarray(asvals)[filt], chi2vals[filt], 2)
 
-def _check_list_different(l, name):
-    strs = [str(item) for item in l]
-    if not len(set(strs))==len(l):
-        counter = Counter(strs)
-        duplicates = [k for k, v in counter.items() if v > 1]
-        raise CheckError(f"{name} must be all different "
-                         f"but there are duplicates: {duplicates}")
-
-@make_argcheck
-def _check_fits_different(fits):
-    """Need this check because oterwise the pandas object gets confused"""
-    return _check_list_different(fits, 'fits')
-
-@make_argcheck
-def _check_dataspecs_fits_different(dataspecs_fit):
-    """Need this check because oterwise the pandas object gets confused"""
-    return _check_list_different(dataspecs_fit, 'fits')
-
 #TODO: Export the total here. Not having it is causing huge pain elsewhere.
 @table
-@_check_fits_different
+@check_fits_different
 def fits_matched_pseudorreplicas_chi2_table(fits, fits_computed_psedorreplicas_chi2):
     """Collect the chi^2 of the pseudoreplicas in the fits a single table,
     groped by nnfit_id.
@@ -91,7 +79,7 @@ def fits_matched_pseudorreplicas_chi2_table(fits, fits_computed_psedorreplicas_c
     return pd.concat(fits_computed_psedorreplicas_chi2, axis=1, keys=map(str,fits))
 
 @table
-@_check_dataspecs_fits_different
+@check_dataspecs_fits_different
 def dataspecs_matched_pseudorreplicas_chi2_table(
         dataspecs_fit, dataspecs_computed_pseudorreplicas_chi2):
     """Like ``fits_matched_pseudorreplicas_chi2_table`` but for arbitrary dataspecs"""
@@ -634,11 +622,6 @@ def check_dataset_items(dataset_items, dataspecs_dataset_suptitle):
     if d:
         raise CheckError(f"The floowing dataset_items are unrecognized: {d}")
 
-@make_argcheck
-def _check_speclabels_different(dataspecs_speclabel):
-    """This is needed for grouping dataframes (and because
-    generally indecated a bug)"""
-    return _check_list_different(dataspecs_speclabel, 'dataspecs_speclabel')
 
 
 def compare_determinations_table_impl(
@@ -664,7 +647,7 @@ def compare_determinations_table_impl(
     return df
 
 @table
-@_check_speclabels_different
+@check_speclabels_different
 def dataspecs_stats_error_table(
         datasepecs_pseudorreplica_stats_error,
         dataspecs_dataset_suptitle,
@@ -715,7 +698,7 @@ quad_as_datasets_pseudorreplicas_chi2 = collect('quadratic_datasets_pseudorrepli
 
 
 #TODO: Deprecate fixup dataset_items earlier
-@_check_speclabels_different
+@check_speclabels_different
 @check_dataset_items
 @table
 def dataspecs_ndata_table(
@@ -736,7 +719,7 @@ def dataspecs_ndata_table(
         df = df.loc[dataset_items]
     return df
 
-@_check_speclabels_different
+@check_speclabels_different
 @check_dataset_items
 def datasepecs_quad_table_impl(
         quad_as_datasets_pseudorreplicas_chi2, dataspecs_speclabel,
@@ -778,7 +761,7 @@ def datasepecs_quad_table_impl(
 
 
 
-@_check_speclabels_different
+@check_speclabels_different
 @check_dataset_items
 def datasepecs_as_value_error_table_impl(
         dataspecs_as_datasets_pseudorreplicas_chi2, dataspecs_speclabel,
