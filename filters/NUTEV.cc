@@ -167,7 +167,7 @@
  *
  *     Similar considerations for the branching ratio of averaged
  *     charmed mesons into muons
- *     BRC = 0.089 \pm 0.012, same as used in NuTeV dimuon analysis
+ *     BRC = 0.099 \pm 0.012, same as used in NuTeV dimuon analysis
  *     from  a reanalysis of 125 charm events measured by FNAL E531
  *
  *     Effects of finite charm mass, which are potentially important,
@@ -211,7 +211,7 @@
 
 /* Note added by ERN 16th April 2018:
    The value of BrC is updated from 0.099 +- 0.012 to
-   0.086 +- 0.005 according to the PDF(2017)
+   0.086 +- 0.005 according to the PDG(2017)
    The uncertainty on the BR is now accounted for as
    an additional fully correlated systematic uncertainty
 */
