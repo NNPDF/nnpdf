@@ -1,4 +1,3 @@
-
 /**
  * CHORUS: ONENGUT et al. Phys.LETT.632(2006)65
  *
@@ -80,15 +79,7 @@ void CHORUSNUFilter::ReadData()
     lstream >> fStat[i];   //stat
     
     lstream >> tmp;
-    
-    //Isoscalar target correction interpreted as uncertainty
-    lstream >> nortmp;
-    /*
-    fSys[i][0].mult = (1.0-nortmp)*100.0;
-    fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
-    fSys[i][0].type = MULT;
-    fSys[i][0].name = "CHORUSISOTARGCOR";
-    */    
+    lstream >> nortmp;   
 
     //QED radiation correction interpreted as uncertainty
     lstream >> nortmp;
@@ -190,15 +181,7 @@ void CHORUSNBFilter::ReadData()
     lstream >> fStat[i];   //stat
     
     lstream >> tmp;
-    
-    //Isoscalar target correction interpreted as uncertainty
-    lstream >> nortmp;
-    /*
-    fSys[i][0].mult = (1.0-nortmp)*100.0;
-    fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
-    fSys[i][0].type = MULT;
-    fSys[i][0].name = "CHORUSISOTARGCOR";
-    */    
+    lstream >> nortmp;    
 
     //QED radiation correction interpreted as uncertainty
     lstream >> nortmp;
