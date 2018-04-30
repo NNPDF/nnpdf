@@ -23,7 +23,7 @@ from reportengine import collect
 
 from validphys.results import results, experiment_results, experiments_central_values
 from validphys.results import Chi2Data, experiments_chi2_table
-from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
+from validphys.calcutils import calc_chi2, central_chi2, all_chi2_theory, central_chi2_theory
 from validphys import plotutils
 
 log = logging.getLogger(__name__)
