@@ -519,12 +519,22 @@ def plot_fits_datasets_chi2(fits_datasets_chi2_table):
     return fig
 
 @figure
+def plot_dataspecs_datasets_chi2(dataspecs_datasets_chi2_table):
+    """Same as plot_fits_datasets_chi2 but for arbitrary dataspecs"""
+    return plot_fits_datasets_chi2(dataspecs_datasets_chi2_table)
+
+@figure
 def plot_fits_experiments_chi2(fits_experiments_chi2_table):
     """Generate a plot equivalent to ``plot_experiments_chi2`` using all the
     fitted experiments as input."""
     fig, ax = _plot_chis_df(fits_experiments_chi2_table)
     ax.set_title(r"$\chi^2$ for experiments")
     return fig
+
+@figure
+def plot_dataspecs_experiments_chi2(dataspecs_experiments_chi2_table):
+    """Same as plot_fits_experiments_chi2 but for arbitrary dataspecs"""
+    return plot_fits_experiments_chi2(dataspecs_experiments_chi2_table)
 
 @figure
 def plot_training_length(replica_data, fit):
