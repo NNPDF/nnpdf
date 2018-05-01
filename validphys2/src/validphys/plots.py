@@ -325,7 +325,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
                     min_vals.append(np.nanmin(cv-err))
 
             glabel = info.group_label(sameline_vals, info.line_by)
-        
+
             #Use some anchor that is not in y=1 for ratio plots
             if normalize_to is not None:
                 next_after_normalize = (normalize_to + 1) % len(results)
@@ -1195,7 +1195,7 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
         xvals = [posset.GetKinematics(i, 0) for i in range(0, ndata)]
     else:
         ax.set_xlabel('idat')
-        xvals - np.arange(ndata)
+        xvals = np.arange(ndata)
 
     offsets = plotutils.offset_xcentered(len(pdfs), ax)
     minscale = np.inf
