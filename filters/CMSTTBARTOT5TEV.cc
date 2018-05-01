@@ -40,8 +40,10 @@ void CMSTTBARTOT5TEVFilter::ReadData()
       istringstream lstream(line);
       lstream >> idum >> cme;
 
+      double mt=172.5;
+
       fKin1[i] = 0.;
-      fKin2[i] = Mt*Mt;             //top mass
+      fKin2[i] = mt*mt;          //top mass
       fKin3[i] = cme*1000;       //sqrt(s)
 
       lstream >> fData[i];       //central value
