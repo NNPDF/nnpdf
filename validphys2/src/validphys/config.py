@@ -366,8 +366,7 @@ class CoreConfig(configparser.Config):
         return res
 
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
-        """
-        """
+        """Like produce_matched_datasets_from_dataspecs but for positivity datasets."""
         if not isinstance(dataspecs, Sequence):
             raise ConfigError("dataspecs should be a sequence of mappings, not "
                               f"{type(dataspecs).__name__}")
