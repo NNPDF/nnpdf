@@ -50,8 +50,8 @@ class App(app.App):
 
 The traceback above should help determine the cause of the problem. If you
 believe this is a bug in validphys (please discard the cosmic rays first),
-please send an email to Zahari<kassabov@to.infn.it>, including the following
-file in attachment:
+please open an issue on GitHub<https://github.com/NNPDF/nnpdf/issues>,
+including the contents of the following file:
 
 %s
 """
