@@ -1,8 +1,13 @@
-# -*- coding: utf-8 -*-
 """
-Created on Thu Jun 30 10:19:35 2016
+app.py
 
-@author: Zahari Kassabov
+Mainloop of the validphys application.  Here we define tailoted extensions to
+the reporthengine application (such as extra command line flags). Additionally
+the *provider modules* that serve as source to the validphys actions are
+declared here.
+
+The entry point of the validphys application is the ``main`` funcion of this
+module.
 """
 import sys
 import logging
