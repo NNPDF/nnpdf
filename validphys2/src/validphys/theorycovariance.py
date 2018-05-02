@@ -39,19 +39,13 @@ def check_have_three_theories(theoryids):
 def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets_3pt):
     """ Returns an array of tuples (member_chi², central_chi², numpoints)
     corresponding to each data set, where theory errors are included"""
+    chi2data_array = []
     for i, results in enumerate(each_dataset_results):
         data_result, th_result = results
         covmat = theory_covmat_datasets_3pt[i]
         chi2s = all_chi2_theory(results, covmat)
-
         central_result = central_chi2_theory(results, covmat)
-
-        if i==0:
-            chi2data_array = [Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
-                                        central_result, len(data_result))]
-        else:
-            chi2data_array.append(
-                          Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
+        chi2data_array.append(Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
                                    central_result, len(data_result)))
     return chi2data_array 
 
