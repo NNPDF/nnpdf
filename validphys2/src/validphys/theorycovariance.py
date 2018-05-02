@@ -8,8 +8,6 @@ from __future__ import generator_stop
 
 import logging
 
-from IPython import embed
-
 import numpy as np
 import scipy.linalg as la
 import matplotlib.pyplot as plt
@@ -87,7 +85,8 @@ def experiments_chi2_table_theory(experiments, pdf, abs_chi2_data_theory_experim
 @table
 @check_have_three_theories
 def theory_covmat_3pt(theoryids_experiments_central_values, experiments, experiments_index):
-    """Calculates the theory covariance matrix for 3-point scale variations."""
+    """Calculates the theory covariance matrix for 3-point scale variations.
+    The matrix is a dataframe indexed by experiments_index."""
     central, low, high = np.array(theoryids_experiments_central_values)
     lowdiff  = low - central
     highdiff = high - central
@@ -100,7 +99,10 @@ theoryids_results = collect(results, ('theoryids',))
 
 @check_have_three_theories
 def theory_covmat_datasets_3pt(theoryids_experiments_central_values, each_dataset_results_theory):
-    print(np.shape(each_dataset_results_theory))
+    """Produces an array of total covariance matrices; the sum of experimental
+    and  3pt scale-varied theory covariance matrices. Each matrix corresponds
+    to a different dataset, which must be specified in the runcard.
+    These are needed for calculation of chi2 per dataset. """
     for dataset in each_dataset_results_theory:
         theory_centrals = [x[1].central_value for x in dataset]
         central, low, high = theory_centrals
@@ -114,11 +116,12 @@ def theory_covmat_datasets_3pt(theoryids_experiments_central_values, each_datase
         for x in dataset_cent_th:
             x.total_covmat = cov
     dataset_cent = [dataset[0] for dataset in each_dataset_results_theory]
-    print(np.shape(dataset_cent))
     dataset_covmats = [x[0].total_covmat for x in dataset_cent]
     return dataset_covmats
 
 def theory_covmat_experiments_3pt(theoryids_experiments_central_values, experiments_results_theory):
+    """Same as theory_covmat_datasets_3pt but per experiment rather than 
+    per dataset. Needed for calculation of chi2 per experiment."""
     experiments_results_theory = np.swapaxes(experiments_results_theory, 0, 1)
     for experiment in experiments_results_theory:
         theory_centrals = [x[1].central_value for x in experiment]
