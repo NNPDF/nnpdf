@@ -1,0 +1,20 @@
+fit: 180307-lr-nlo-xF2dot0xR2dot0_DISonly
+
+theory:
+    from_: fit
+
+experiments:
+    from_: fit
+
+template_text: |
+    ---
+    title: Fit summary table example 
+    author: Dave Smith 
+    keywords: [example]
+    ---
+
+    {@ fit_summary @}
+
+actions_:
+  -   - report:
+          main: True

@@ -116,6 +116,30 @@ def replica_data(fit, replica_paths):
     ('nite', 'training', 'validation', 'chi2', 'pos_status', 'arclenghts')"""
     return [load_fitinfo(path, fit.name) for path in replica_paths]
 
+
+@table
+def fit_summary(fit, replica_data):
+    """ Summary table of fit properties
+        - Average chi-squared
+        - Training and Validation error functions
+        - Training lengths
+
+        TODO:
+        - Phi
+        - Central chi-squared
+        Maybe we want to run this over a collection of fits?
+    """
+
+    chi2 = [x.chi2 for x in replica_data]
+    nite = [x.nite for x in replica_data]
+    etrain = [x.training for x in replica_data]
+    evalid = [x.validation for x in replica_data]
+    data = {"$<\chi^2>$":         [np.mean(chi2), np.std(chi2)],
+            "$E_{\mathrm{trn}}$": [np.mean(etrain), np.std(etrain)],
+            "$E_{\mathrm{val}}$": [np.mean(evalid), np.std(evalid)],
+            "$TL$": [np.mean(nite), np.std(nite)]}
+    return pd.DataFrame(data, index=["Mean", "StdDev"]).transpose()
+
 def fit_sum_rules(fit, replica_paths):
     """Return a SumRulesGrid object with the sumrules for each replica as
     calculated by nnfit at the initial scale. This is the same object as
@@ -308,7 +332,7 @@ def datasets_properties_table(fit):
 
 def print_systype_overlap(experiments):
     """Returns a set of systypes that overlap between experiments.
-    Discards the set of systypes which overlap but do not imply 
+    Discards the set of systypes which overlap but do not imply
     correlations
     """
     exps = experiments
