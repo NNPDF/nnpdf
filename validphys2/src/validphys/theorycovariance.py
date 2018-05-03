@@ -31,10 +31,10 @@ log = logging.getLogger(__name__)
 theoryids_experiments_central_values = collect(experiments_central_values, ('theoryids',))
 
 @make_argcheck
-def check_have_three_theories(theoryids):
+def check_three_or_seven_theories(theoryids):
     l = len(theoryids)
-    if l!=3:
-        raise CheckError(f"Expecting exactly 3 theories, but got {l}.")
+    if l!=3 and l!=7:
+        raise CheckError(f"Expecting exactly 3 or 7 theories, but got {l}.")
 
 def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets_3pt):
     """ Returns an array of tuples (member_chi², central_chi², numpoints)
