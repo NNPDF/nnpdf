@@ -36,24 +36,24 @@ def check_three_or_seven_theories(theoryids):
     if l!=3 and l!=7:
         raise CheckError(f"Expecting exactly 3 or 7 theories, but got {l}.")
 
-def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets_3pt):
+def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets):
     """ Returns an array of tuples (member_chi², central_chi², numpoints)
     corresponding to each data set, where theory errors are included"""
     chi2data_array = []
     for i, results in enumerate(each_dataset_results):
         data_result, th_result = results
-        covmat = theory_covmat_datasets_3pt[i]
+        covmat = theory_covmat_datasets[i]
         chi2s = all_chi2_theory(results, covmat)
         central_result = central_chi2_theory(results, covmat)
         chi2data_array.append(Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
                                    central_result, len(data_result)))
     return chi2data_array 
 
-def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experiments_3pt):
+def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experiments):
     """ Like abs_chi2_data_theory_dataset but for experiments not datasets"""
     for i, results in enumerate(experiments_results):
         data_result, th_result = results
-        covmat = theory_covmat_experiments_3pt[i]
+        covmat = theory_covmat_experiments[i]
 
         chi2s = all_chi2_theory(results, covmat)
 
@@ -106,17 +106,30 @@ def theory_covmat(theoryids_experiments_central_values, experiments, experiments
 theoryids_results = collect(results, ('theoryids',))
 
 @check_three_or_seven_theories
-def theory_covmat_datasets_3pt(theoryids_experiments_central_values, each_dataset_results_theory):
+def theory_covmat_datasets(theoryids_experiments_central_values, each_dataset_results_theory):
     """Produces an array of total covariance matrices; the sum of experimental
-    and  3pt scale-varied theory covariance matrices. Each matrix corresponds
+    and  3/7pt scale-varied theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard.
     These are needed for calculation of chi2 per dataset. """
     for dataset in each_dataset_results_theory:
         theory_centrals = [x[1].central_value for x in dataset]
-        central, low, high = theory_centrals
-        lowdiff = low - central
-        highdiff = high - central
-        s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
+        l = len(theory_centrals)
+        if l==3:
+            central, low, high = theory_centrals
+            lowdiff = low - central
+            highdiff = high - central
+            s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
+        elif: l==7:
+            central, a, b, c, d, e, f = theory_centrals
+            diff1  = a - central
+            diff2  = b - central
+            diff3  = c - central
+            diff4  = d - central
+            diff5  = e - central
+            diff6  = f - central
+            s = np.zeros((len(central),len(central)))
+            s = (1/6)*(np.outer(diff1,diff1) + np.outer(diff2,diff2)+ np.outer(diff3,diff3)
+                   + np.outer(diff4,diff4)+ np.outer(diff5,diff5) + np.outer(diff6,diff6))             
         sigmas = [x[0].covmat for x in dataset]
         sigma = sigmas[0]
         cov = s + sigma
@@ -127,16 +140,29 @@ def theory_covmat_datasets_3pt(theoryids_experiments_central_values, each_datase
     dataset_covmats = [x[0].total_covmat for x in dataset_cent]
     return dataset_covmats
 
-def theory_covmat_experiments_3pt(theoryids_experiments_central_values, experiments_results_theory):
-    """Same as theory_covmat_datasets_3pt but per experiment rather than 
+def theory_covmat_experiments(theoryids_experiments_central_values, experiments_results_theory):
+    """Same as theory_covmat_datasets but per experiment rather than 
     per dataset. Needed for calculation of chi2 per experiment."""
     experiments_results_theory = np.swapaxes(experiments_results_theory, 0, 1)
     for experiment in experiments_results_theory:
         theory_centrals = [x[1].central_value for x in experiment]
-        central, low, high = theory_centrals
-        lowdiff = low - central
-        highdiff = high - central
-        s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
+        l = len(theory_centrals)
+        if l==3:
+            central, low, high = theory_centrals
+            lowdiff = low - central
+            highdiff = high - central
+            s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
+        elif: l==7:
+            central, a, b, c, d, e, f = theory_centrals
+            diff1  = a - central
+            diff2  = b - central
+            diff3  = c - central
+            diff4  = d - central
+            diff5  = e - central
+            diff6  = f - central
+            s = np.zeros((len(central),len(central)))
+            s = (1/6)*(np.outer(diff1,diff1) + np.outer(diff2,diff2)+ np.outer(diff3,diff3)
+                   + np.outer(diff4,diff4)+ np.outer(diff5,diff5) + np.outer(diff6,diff6))  
         sigmas = [x[0].covmat for x in experiment]
         sigma = sigmas[0]
         cov =  sigma
