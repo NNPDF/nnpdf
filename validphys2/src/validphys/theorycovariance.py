@@ -246,7 +246,7 @@ def plot_normexpcovmat_heatmap(experiments_normcovmat):
     """Matrix plot of the experiment covariance matrix normalised to data."""
     df = experiments_normcovmat
     matrix = df.as_matrix()
-    fig,ax = plt.subplots()
+    fig,ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.01, linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
     cbar = fig.colorbar(matrixplot, label="% of data")
     ax.set_title('Experiment covariance matrix')
@@ -260,7 +260,7 @@ def plot_expcorrmat_heatmap(experiments_corrmat):
     """Matrix plot of the experiment correlation matrix"""
     df = experiments_corrmat
     matrix = df.as_matrix()
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
     cbar = fig.colorbar(matrixplot)
     ax.set_title('Experiment correlation matrix')
@@ -274,7 +274,7 @@ def plot_normthcovmat_heatmap(theory_normcovmat_3pt):
     """Matrix plot of the theory covariance matrix for 3-point scale variations normalised to data."""
     df = theory_normcovmat_3pt
     matrix = df.as_matrix()
-    fig,ax = plt.subplots()
+    fig,ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1, linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
     cbar = fig.colorbar(matrixplot, label="% of data")
     ax.set_title('Theory covariance matrix')
@@ -288,7 +288,7 @@ def plot_thcorrmat_heatmap(theory_corrmat_3pt):
     """Matrix plot of the theory correlation matrix"""
     df = theory_corrmat_3pt
     matrix = df.as_matrix()
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
     cbar = fig.colorbar(matrixplot)
     ax.set_title('Theory correlation matrix')
@@ -316,7 +316,7 @@ def plot_expplusthcorrmat_heatmap(experimentsplustheory_corrmat_3pt):
     """Matrix plot of the exp + theory correlation matrix"""
     df = experimentsplustheory_corrmat_3pt
     matrix = experimentsplustheory_corrmat_3pt.as_matrix()
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
     cbar = fig.colorbar(matrixplot)
     ax.set_title('Experiment + theory correlation matrix')
@@ -333,7 +333,7 @@ def plot_covdiff_heatmap(theory_covmat_3pt, experiments_covmat):
     matrix_theory = df_theory.as_matrix()
     matrix_experiment = df_experiment.as_matrix()
     matrix = (matrix_theory+matrix_experiment)/np.mean(matrix_experiment)
-    fig,ax = plt.subplots()
+    fig,ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1, linscale=10, vmin=-matrix.max(), vmax=matrix.max()))
     cbar = fig.colorbar(matrixplot)
     ax.set_title('(Theory + experiment)/mean(experiment) covariance matrices')
@@ -433,3 +433,4 @@ def plot_datasets_chi2_theory(experiments, experiments_chi2, each_dataset_chi2,
     ax.legend(fontsize=14)
 
     return fig
+
