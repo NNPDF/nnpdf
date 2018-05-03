@@ -117,8 +117,8 @@ def theory_covmat_datasets(theoryids_experiments_central_values, each_dataset_re
             lowdiff = low - central
             highdiff = high - central
             s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
-        elif: l==7:
-            central, a, b, c, d, e, f = theory_centrals
+        elif l==7:
+            central, a, b, c, d, e, f= theory_centrals
             diff1  = a - central
             diff2  = b - central
             diff3  = c - central
@@ -150,8 +150,8 @@ def theory_covmat_experiments(theoryids_experiments_central_values, experiments_
             lowdiff = low - central
             highdiff = high - central
             s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
-        elif: l==7:
-            central, a, b, c, d, e, f = theory_centrals
+        elif l==7:
+            central, a, b, c, d, e, f= theory_centrals
             diff1  = a - central
             diff2  = b - central
             diff3  = c - central
@@ -542,7 +542,7 @@ def experimentsplustheory_corrmat(experiments_covmat, theory_covmat):
     total_df = experiments_covmat + theory_covmat
     exp_cov = exp_df.as_matrix()
     theory_cov = theory_df.as_matrix()
-    total_covmat = exp_cov + theory_cov
+    total_cov = exp_cov + theory_cov
     diag_minus_half = (np.diagonal(total_cov))**(-0.5)
     corrmat = diag_minus_half[:,np.newaxis]*total_df*diag_minus_half
     return corrmat
@@ -713,8 +713,8 @@ def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
 
 @figure
 def plot_diag_cov_comparison(theory_covmat, experiments_covmat, experiments_data):
-    """Plot of sqrt(cov_ii)/data_i for cov = exp, theory, exp+theory"""
-    data = experiments_data
+    """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory"""
+    data = np.abs(experiments_data)
     df_theory = theory_covmat
     df_experiment = experiments_covmat
     df_total = df_theory + df_experiment
@@ -727,8 +727,8 @@ def plot_diag_cov_comparison(theory_covmat, experiments_covmat, experiments_data
     ax.plot((sqrtdiags3/data).as_matrix(), '.', label="Total", color = "blue")
     ticklocs, ticklabels = matrix_plot_labels(df_experiment)
     plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=6)
-    ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{D_i}$")
-    ax.set_title("Diagonal elements of normalised covariance matrices")
+    ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{|D_i|}$")
+    ax.set_title("Square root of diagonal elements of covariances matrices, normalised to absolute value of data")
     ax.legend()
     return fig
 
