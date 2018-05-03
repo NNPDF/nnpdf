@@ -16,6 +16,7 @@ import hashlib
 
 from reportengine import app
 from validphys.config import Environment, EnvironmentError_
+from validphys.app import App
 
 log = logging.getLogger(__name__)
 
@@ -53,8 +54,7 @@ class SetupFitEnvironment(Environment):
         # check if results folder exists
         self.output_path = pathlib.Path(filename).absolute()
         if self.output_path.exists():
-            log.warning("Output folder exists: %s Overwritting contents" %
-                        self.output_path)
+            log.warning(f"Output folder exists: {self.output_path} Overwritting contents")
         else:
             try:
                 self.output_path.mkdir()
@@ -77,26 +77,20 @@ class SetupFitEnvironment(Environment):
             hash_md5 = hashlib.md5(f.read()).hexdigest()
         with open(output_filename, 'w') as g:
             g.write(hash_md5)
-        log.info("md5 %s stored in %s" % (hash_md5, output_filename))
+        log.info(f"md5 {hash_md5} stored in {output_filename}")
 
 
-class SetupFitApp(app.App):
+class SetupFitApp(App):
     """The class which parsers and perform the filtering"""
     environment_class = SetupFitEnvironment
 
     def __init__(self):
-        super(SetupFitApp, self).__init__('setup-fit', ['validphys.plots'])
+        super(SetupFitApp, self).__init__(name='setup-fit',
+                                          providers=['validphys.plots'])
 
-    def init(self, cmdline=None):
-        super(SetupFitApp, self).init(cmdline)
-        cout = self.args['cout']
-        if cout is None:
-            if self.args['loglevel'] <= logging.DEBUG:
-                cout = True
-        if not cout:
-            import NNPDF
-            NNPDF.SetVerbosity(0)
-            NNPDF.SetLHAPDFVerbosity(0)
+    @property
+    def default_style(self):
+        return str(self.this_folder() / '../small.mplstyle')
 
     @property
     def argparser(self):

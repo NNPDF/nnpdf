@@ -67,8 +67,8 @@ including the contents of the following file:
     def default_style(self):
         return str(self.this_folder() / 'small.mplstyle')
 
-    def __init__(self):
-        super().__init__('validphys', providers)
+    def __init__(self, name='validphys', providers=providers):
+        super().__init__(name, providers)
 
     @property
     def argparser(self):
