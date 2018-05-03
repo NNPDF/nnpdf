@@ -119,7 +119,7 @@ def theory_covmat_datasets(theoryids_experiments_central_values, each_dataset_re
             lowdiff = low - central
             highdiff = high - central
             s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
-        elif: l==7:
+        elif l==7:
             central, a, b, c, d, e, f = theory_centrals
             diff1  = a - central
             diff2  = b - central
@@ -152,7 +152,7 @@ def theory_covmat_experiments(theoryids_experiments_central_values, experiments_
             lowdiff = low - central
             highdiff = high - central
             s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
-        elif: l==7:
+        elif l==7:
             central, a, b, c, d, e, f = theory_centrals
             diff1  = a - central
             diff2  = b - central
