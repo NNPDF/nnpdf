@@ -120,7 +120,7 @@ def theory_covmat_datasets(theoryids_experiments_central_values, each_dataset_re
             highdiff = high - central
             s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
         elif l==7:
-            central, a, b, c, d, e, f = theory_centrals
+            central, a, b, c, d, e, f= theory_centrals
             diff1  = a - central
             diff2  = b - central
             diff3  = c - central
@@ -153,7 +153,7 @@ def theory_covmat_experiments(theoryids_experiments_central_values, experiments_
             highdiff = high - central
             s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
         elif l==7:
-            central, a, b, c, d, e, f = theory_centrals
+            central, a, b, c, d, e, f= theory_centrals
             diff1  = a - central
             diff2  = b - central
             diff3  = c - central
@@ -213,7 +213,7 @@ def experimentsplustheory_corrmat(experiments_covmat, theory_covmat):
     total_df = experiments_covmat + theory_covmat
     exp_cov = exp_df.as_matrix()
     theory_cov = theory_df.as_matrix()
-    total_covmat = exp_cov + theory_cov
+    total_cov = exp_cov + theory_cov
     diag_minus_half = (np.diagonal(total_cov))**(-0.5)
     corrmat = diag_minus_half[:,np.newaxis]*total_df*diag_minus_half
     return corrmat
