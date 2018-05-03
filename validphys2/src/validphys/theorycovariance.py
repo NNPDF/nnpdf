@@ -82,14 +82,13 @@ def theory_covmat(theoryids_experiments_central_values, experiments, experiments
     """Calculates the theory covariance matrix for 3- or 7-point scale variations.
     The matrix is a dataframe indexed by experiments_index."""
     l = len(theoryids)
-    if l=3:
+    if l==3:
         central, low, high = np.array(theoryids_experiments_central_values)
         lowdiff  = low - central
         highdiff = high - central
         s = np.zeros((len(central),len(central)))
         s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
-
-    else if l=7:
+    elif l==7:
         central, a, b, c, d, e, f = np.array(theoryids_experiments_central_values)
         diff1  = a - central
         diff2  = b - central
@@ -106,7 +105,7 @@ def theory_covmat(theoryids_experiments_central_values, experiments, experiments
 
 theoryids_results = collect(results, ('theoryids',))
 
-@check_have_three_theories
+@check_three_or_seven_theories
 def theory_covmat_datasets_3pt(theoryids_experiments_central_values, each_dataset_results_theory):
     """Produces an array of total covariance matrices; the sum of experimental
     and  3pt scale-varied theory covariance matrices. Each matrix corresponds
