@@ -77,15 +77,30 @@ def experiments_chi2_table_theory(experiments, pdf, abs_chi2_data_theory_experim
                                 abs_chi2_data_theory_dataset)
 
 @table
-@check_have_three_theories
-def theory_covmat_3pt(theoryids_experiments_central_values, experiments, experiments_index):
-    """Calculates the theory covariance matrix for 3-point scale variations.
+@check_three_or_seven_theories
+def theory_covmat(theoryids_experiments_central_values, experiments, experiments_index, theoryids):
+    """Calculates the theory covariance matrix for 3- or 7-point scale variations.
     The matrix is a dataframe indexed by experiments_index."""
-    central, low, high = np.array(theoryids_experiments_central_values)
-    lowdiff  = low - central
-    highdiff = high - central
-    s = np.zeros((len(central),len(central)))
-    s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
+    l = len(theoryids)
+    if l=3:
+        central, low, high = np.array(theoryids_experiments_central_values)
+        lowdiff  = low - central
+        highdiff = high - central
+        s = np.zeros((len(central),len(central)))
+        s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
+
+    else if l=7:
+        central, a, b, c, d, e, f = np.array(theoryids_experiments_central_values)
+        diff1  = a - central
+        diff2  = b - central
+        diff3  = c - central
+        diff4  = d - central
+        diff5  = e - central
+        diff6  = f - central
+        s = np.zeros((len(central),len(central)))
+        s = (1/6)*(np.outer(diff1,diff1) + np.outer(diff2,diff2)+ np.outer(diff3,diff3)
+                   + np.outer(diff4,diff4)+ np.outer(diff5,diff5) + np.outer(diff6,diff6))
+    
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
 
@@ -134,51 +149,51 @@ def theory_covmat_experiments_3pt(theoryids_experiments_central_values, experime
     return experiment_covmats
 
 @table
-def theory_corrmat_3pt(theory_covmat_3pt):
-    """Calculates the theory correlation matrix for 3-point scale variations."""
-    df = theory_covmat_3pt
+def theory_corrmat(theory_covmat):
+    """Calculates the theory correlation matrix for 3- or 7-point scale variations."""
+    df = theory_covmat
     covmat = df.as_matrix()
     diag_minus_half = (np.diagonal(covmat))**(-0.5)
     mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
     return mat
 
 @table
-def theory_normcovmat_3pt(theory_covmat_3pt, experiments_data):
-    """Calculates the theory covariance matrix for 3-point scale variations normalised to data."""
-    df = theory_covmat_3pt
+def theory_normcovmat(theory_covmat, experiments_data):
+    """Calculates the theory covariance matrix for 3- or 7-point scale variations normalised to data."""
+    df = theory_covmat
     experiments_data_array = np.array(experiments_data)
     mat = df/np.outer(experiments_data_array, experiments_data_array)
     return mat
 
 @table
-def experimentsplustheory_covmat_3pt(experiments_covmat, theory_covmat_3pt):
-    """Calculates the experiment + theory covariance matrix for 3-point scale variations."""
-    df = experiments_covmat + theory_covmat_3pt
+def experimentsplustheory_covmat(experiments_covmat, theory_covmat):
+    """Calculates the experiment + theory covariance matrix for 3- or 7-point scale variations."""
+    df = experiments_covmat + theory_covmat
     return df
 
 @table
-def experimentsplustheory_normcovmat_3pt(experiments_covmat, theory_covmat_3pt, experiments_data):
-    """Calculates the experiment + theory covariance matrix for 3-point scale 
+def experimentsplustheory_normcovmat(experiments_covmat, theory_covmat, experiments_data):
+    """Calculates the experiment + theory covariance matrix for 3- or 7-point scale 
        variations normalised to data."""
-    df = experiments_covmat + theory_covmat_3pt
+    df = experiments_covmat + theory_covmat
     experiments_data_array = np.array(experiments_data)
     mat = df/np.outer(experiments_data_array, experiments_data_array)
     return mat
 
 @table
-def experimentsplustheory_corrmat_3pt(experiments_covmat, theory_covmat_3pt):
-    """Calculates the correlation matrix for the experimental  plus theory (3 pt) covariance matrices."""
+def experimentsplustheory_corrmat(experiments_covmat, theory_covmat):
+    """Calculates the correlation matrix for the experimental  plus theory (3/7 pt) covariance matrices."""
     exp_df = experiments_covmat
-    theory_df = theory_covmat_3pt
-    total_df = experiments_covmat + theory_covmat_3pt
-    exp_covmat = exp_df.as_matrix()
-    theory_covmat = theory_df.as_matrix()
-    total_covmat = exp_covmat + theory_covmat
-    diag_minus_half = (np.diagonal(total_covmat))**(-0.5)
+    theory_df = theory_covmat
+    total_df = experiments_covmat + theory_covmat
+    exp_cov = exp_df.as_matrix()
+    theory_cov = theory_df.as_matrix()
+    total_covmat = exp_cov + theory_cov
+    diag_minus_half = (np.diagonal(total_cov))**(-0.5)
     corrmat = diag_minus_half[:,np.newaxis]*total_df*diag_minus_half
     return corrmat
 
-def chi2_impact(theory_covmat_3pt, experiments_covmat, experiments_results):
+def chi2_impact(theory_covmat, experiments_covmat, experiments_results):
     """ Returns total chi2 including theory cov mat """
     dataresults = [ x[0] for x in experiments_results ]
     theoryresults = [ x[1] for x in experiments_results ]
@@ -187,12 +202,12 @@ def chi2_impact(theory_covmat_3pt, experiments_covmat, experiments_results):
     dat_central = np.concatenate([x for x in dat_central_list])
     th_central  = np.concatenate([x for x in th_central_list])
     central_diff = dat_central - th_central
-    cov = theory_covmat_3pt.as_matrix() + experiments_covmat.as_matrix()
+    cov = theory_covmat.as_matrix() + experiments_covmat.as_matrix()
     elements = np.dot(central_diff.T,np.dot(la.inv(cov),central_diff))
     chi2 = (1/len(central_diff))*np.sum(elements)
     return chi2
 
-def chi2_diag_only(theory_covmat_3pt, experiments_covmat, experiments_results):
+def chi2_diag_only(theory_covmat, experiments_covmat, experiments_results):
     """ Returns total chi2 including only diags of theory cov mat """
     dataresults = [ x[0] for x in experiments_results ]
     theoryresults = [ x[1] for x in experiments_results ]
@@ -201,7 +216,7 @@ def chi2_diag_only(theory_covmat_3pt, experiments_covmat, experiments_results):
     dat_central = np.concatenate([x for x in dat_central_list])
     th_central  = np.concatenate([x for x in th_central_list])
     central_diff = dat_central - th_central
-    s = theory_covmat_3pt.as_matrix()
+    s = theory_covmat.as_matrix()
     s_diag = np.zeros((len(central_diff),len(central_diff)))
     np.fill_diagonal(s_diag, np.diag(s))
     cov = s_diag + experiments_covmat.as_matrix()
@@ -270,9 +285,9 @@ def plot_expcorrmat_heatmap(experiments_corrmat):
     return fig
 
 @figure
-def plot_normthcovmat_heatmap(theory_normcovmat_3pt):
-    """Matrix plot of the theory covariance matrix for 3-point scale variations normalised to data."""
-    df = theory_normcovmat_3pt
+def plot_normthcovmat_heatmap(theory_normcovmat):
+    """Matrix plot of the theory covariance matrix for 3/7-point scale variations normalised to data."""
+    df = theory_normcovmat
     matrix = df.as_matrix()
     fig,ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1, linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
@@ -284,9 +299,9 @@ def plot_normthcovmat_heatmap(theory_normcovmat_3pt):
     return fig
 
 @figure
-def plot_thcorrmat_heatmap(theory_corrmat_3pt):
+def plot_thcorrmat_heatmap(theory_corrmat):
     """Matrix plot of the theory correlation matrix"""
-    df = theory_corrmat_3pt
+    df = theory_corrmat
     matrix = df.as_matrix()
     fig, ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
@@ -298,10 +313,10 @@ def plot_thcorrmat_heatmap(theory_corrmat_3pt):
     return fig
 
 @figure
-def plot_normexpplusthcovmat_heatmap(experimentsplustheory_normcovmat_3pt):
+def plot_normexpplusthcovmat_heatmap(experimentsplustheory_normcovmat):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
-    df = experimentsplustheory_normcovmat_3pt
-    matrix = experimentsplustheory_normcovmat_3pt.as_matrix()
+    df = experimentsplustheory_normcovmat
+    matrix = experimentsplustheory_normcovmat.as_matrix()
     fig, ax = plt.subplots()
     matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1, linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
     cbar = fig.colorbar(matrixplot, label="% of data")
@@ -312,10 +327,10 @@ def plot_normexpplusthcovmat_heatmap(experimentsplustheory_normcovmat_3pt):
     return fig
 
 @figure
-def plot_expplusthcorrmat_heatmap(experimentsplustheory_corrmat_3pt):
+def plot_expplusthcorrmat_heatmap(experimentsplustheory_corrmat):
     """Matrix plot of the exp + theory correlation matrix"""
-    df = experimentsplustheory_corrmat_3pt
-    matrix = experimentsplustheory_corrmat_3pt.as_matrix()
+    df = experimentsplustheory_corrmat
+    matrix = experimentsplustheory_corrmat.as_matrix()
     fig, ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
     cbar = fig.colorbar(matrixplot)
@@ -326,9 +341,9 @@ def plot_expplusthcorrmat_heatmap(experimentsplustheory_corrmat_3pt):
     return fig
 
 @figure
-def plot_covdiff_heatmap(theory_covmat_3pt, experiments_covmat):
+def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
     """Matrix plot (thcov + expcov)/expcov"""
-    df_theory = theory_covmat_3pt
+    df_theory = theory_covmat
     df_experiment = experiments_covmat
     matrix_theory = df_theory.as_matrix()
     matrix_experiment = df_experiment.as_matrix()
@@ -343,10 +358,10 @@ def plot_covdiff_heatmap(theory_covmat_3pt, experiments_covmat):
     return fig
 
 @figure
-def plot_diag_cov_comparison(theory_covmat_3pt, experiments_covmat, experiments_data):
+def plot_diag_cov_comparison(theory_covmat, experiments_covmat, experiments_data):
     """Plot of sqrt(cov_ii)/data_i for cov = exp, theory, exp+theory"""
     data = experiments_data
-    df_theory = theory_covmat_3pt
+    df_theory = theory_covmat
     df_experiment = experiments_covmat
     df_total = df_theory + df_experiment
     sqrtdiags1 = np.sqrt(np.diag(df_theory.as_matrix()))
@@ -364,10 +379,10 @@ def plot_diag_cov_comparison(theory_covmat_3pt, experiments_covmat, experiments_
     return fig
 
 @figure
-def plot_diag_cov_impact(theory_covmat_3pt, experiments_covmat, experiments_data):
+def plot_diag_cov_impact(theory_covmat, experiments_covmat, experiments_data):
     """Plot ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5"""
     data = experiments_data
-    df_theory = theory_covmat_3pt
+    df_theory = theory_covmat
     df_experiment = experiments_covmat
     matrix_theory = df_theory.as_matrix()
     matrix_experiment = df_experiment.as_matrix()
@@ -384,10 +399,10 @@ def plot_diag_cov_impact(theory_covmat_3pt, experiments_covmat, experiments_data
     return fig
 
 @figure
-def plot_theory_error_test(theory_covmat_3pt, experiments_covmat, experiments_data, theoryids_experiments_central_values):
+def plot_theory_error_test(theory_covmat, experiments_covmat, experiments_data, theoryids_experiments_central_values):
     rc.update({'font.size': 30})
     data = experiments_data.as_matrix()
-    df_theory = theory_covmat_3pt
+    df_theory = theory_covmat
     df_experiment = experiments_covmat
     matrix_theory = df_theory.as_matrix()
     matrix_experiment = df_experiment.as_matrix()
