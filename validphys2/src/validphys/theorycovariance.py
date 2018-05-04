@@ -36,46 +36,6 @@ def check_three_or_seven_theories(theoryids):
     if l!=3 and l!=7:
         raise CheckError(f"Expecting exactly 3 or 7 theories, but got {l}.")
 
-def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets):
-    """ Returns an array of tuples (member_chi², central_chi², numpoints)
-    corresponding to each data set, where theory errors are included"""
-    chi2data_array = []
-    for i, results in enumerate(each_dataset_results):
-        data_result, th_result = results
-        covmat = theory_covmat_datasets[i]
-        chi2s = all_chi2_theory(results, covmat)
-        central_result = central_chi2_theory(results, covmat)
-        chi2data_array.append(Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
-                                   central_result, len(data_result)))
-    return chi2data_array
-
-def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experiments):
-    """ Like abs_chi2_data_theory_dataset but for experiments not datasets"""
-    for i, results in enumerate(experiments_results):
-        data_result, th_result = results
-        covmat = theory_covmat_experiments[i]
-
-        chi2s = all_chi2_theory(results, covmat)
-
-        central_result = central_chi2_theory(results, covmat)
-
-        if i==0:
-            chi2data_array = [Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
-                                       central_result, len(data_result))]
-        else:
-            chi2data_array.append(
-                          Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
-                                  central_result, len(data_result)))
-
-    return chi2data_array
-
-@table
-def experiments_chi2_table_theory(experiments, pdf, abs_chi2_data_theory_experiment,
-                                  abs_chi2_data_theory_dataset):
-    """Same as experiments_chi2_table but including theory covariance matrix"""
-    return experiments_chi2_table(experiments, pdf, abs_chi2_data_theory_experiment,
-                                abs_chi2_data_theory_dataset)
-
 @table
 @check_three_or_seven_theories
 def theory_covmat(theoryids_experiments_central_values, experiments_index, theoryids):
@@ -250,6 +210,48 @@ def chi2_diag_only(theory_covmat, experiments_covmat, experiments_results):
     elements = np.dot(central_diff.T,np.dot(la.inv(cov),central_diff))
     chi2 = (1/len(central_diff))*np.sum(elements)
     return chi2
+
+def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets):
+    """ Returns an array of tuples (member_chi², central_chi², numpoints)
+    corresponding to each data set, where theory errors are included"""
+    chi2data_array = []
+    for i, results in enumerate(each_dataset_results):
+        data_result, th_result = results
+        covmat = theory_covmat_datasets[i]
+        chi2s = all_chi2_theory(results, covmat)
+        central_result = central_chi2_theory(results, covmat)
+        chi2data_array.append(Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
+                                   central_result, len(data_result)))
+    return chi2data_array
+
+def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experiments):
+    """ Like abs_chi2_data_theory_dataset but for experiments not datasets"""
+    for i, results in enumerate(experiments_results):
+        data_result, th_result = results
+        covmat = theory_covmat_experiments[i]
+
+        chi2s = all_chi2_theory(results, covmat)
+
+        central_result = central_chi2_theory(results, covmat)
+
+        if i==0:
+            chi2data_array = [Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
+                                       central_result, len(data_result))]
+        else:
+            chi2data_array.append(
+                          Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
+                                  central_result, len(data_result)))
+
+    return chi2data_array
+
+@table
+def experiments_chi2_table_theory(experiments, pdf, abs_chi2_data_theory_experiment,
+                                  abs_chi2_data_theory_dataset):
+    """Same as experiments_chi2_table but including theory covariance matrix"""
+    return experiments_chi2_table(experiments, pdf, abs_chi2_data_theory_experiment,
+                                abs_chi2_data_theory_dataset)
+
+
 
 experiments_results = collect(experiment_results, ('experiments',))
 theoryids_experiments_results = collect('experiments_results', ('theoryids',))
