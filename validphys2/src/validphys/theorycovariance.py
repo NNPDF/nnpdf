@@ -121,7 +121,7 @@ def theory_covmat_experiments(experiments_results_theory):
                    + np.outer(diff4,diff4)+ np.outer(diff5,diff5) + np.outer(diff6,diff6)) 
         sigmas = [x[0].covmat for x in experiment]
         sigma = sigmas[0]
-        cov = sigma
+        cov = s + sigma
         experiment_cent_th = experiment[0]
         for x in experiment_cent_th:
             x.total_covmat = cov
