@@ -25,6 +25,9 @@ namespace NNPDF
     //!< Constructor
     LHAPDFSet(std::string const&, erType);
     LHAPDFSet(std::string const&, int const&);
+    LHAPDFSet(const LHAPDFSet&) = delete;
+    LHAPDFSet& operator=(const LHAPDFSet&) = delete;
+
     virtual ~LHAPDFSet();   //!< Destructor
 
     //!< Get PDF array in evolution basis
