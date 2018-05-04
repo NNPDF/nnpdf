@@ -21,7 +21,7 @@ from reportengine import collect
 
 from validphys.results import results, experiment_results, experiments_central_values
 from validphys.results import Chi2Data, experiments_chi2_table
-from validphys.calcutils import calc_chi2, central_chi2, all_chi2_theory, central_chi2_theory
+from validphys.calcutils import central_chi2, all_chi2_theory, central_chi2_theory
 from validphys import plotutils
 
 log = logging.getLogger(__name__)
@@ -47,7 +47,7 @@ def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets):
         central_result = central_chi2_theory(results, covmat)
         chi2data_array.append(Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
                                    central_result, len(data_result)))
-    return chi2data_array 
+    return chi2data_array
 
 def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experiments):
     """ Like abs_chi2_data_theory_dataset but for experiments not datasets"""
@@ -58,16 +58,16 @@ def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experimen
         chi2s = all_chi2_theory(results, covmat)
 
         central_result = central_chi2_theory(results, covmat)
-        central_result2 = central_chi2(results)
 
         if i==0:
-            chi2data_array = [Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),                                                      central_result, len(data_result))]
+            chi2data_array = [Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
+                                       central_result, len(data_result))]
         else:
             chi2data_array.append(
                           Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
-                                  central_result, len(data_result)))                         
+                                  central_result, len(data_result)))
 
-    return chi2data_array 
+    return chi2data_array
 
 @table
 def experiments_chi2_table_theory(experiments, pdf, abs_chi2_data_theory_experiment,
@@ -78,7 +78,7 @@ def experiments_chi2_table_theory(experiments, pdf, abs_chi2_data_theory_experim
 
 @table
 @check_three_or_seven_theories
-def theory_covmat(theoryids_experiments_central_values, experiments, experiments_index, theoryids):
+def theory_covmat(theoryids_experiments_central_values, experiments_index, theoryids):
     """Calculates the theory covariance matrix for 3- or 7-point scale variations.
     The matrix is a dataframe indexed by experiments_index."""
     l = len(theoryids)
@@ -99,14 +99,14 @@ def theory_covmat(theoryids_experiments_central_values, experiments, experiments
         s = np.zeros((len(central),len(central)))
         s = (1/6)*(np.outer(diff1,diff1) + np.outer(diff2,diff2)+ np.outer(diff3,diff3)
                    + np.outer(diff4,diff4)+ np.outer(diff5,diff5) + np.outer(diff6,diff6))
-    
+
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
 
 theoryids_results = collect(results, ('theoryids',))
 
 @check_three_or_seven_theories
-def theory_covmat_datasets(theoryids_experiments_central_values, each_dataset_results_theory):
+def theory_covmat_datasets(each_dataset_results_theory):
     """Produces an array of total covariance matrices; the sum of experimental
     and  3/7pt scale-varied theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard.
@@ -129,7 +129,7 @@ def theory_covmat_datasets(theoryids_experiments_central_values, each_dataset_re
             diff6  = f - central
             s = np.zeros((len(central),len(central)))
             s = (1/6)*(np.outer(diff1,diff1) + np.outer(diff2,diff2)+ np.outer(diff3,diff3)
-                   + np.outer(diff4,diff4)+ np.outer(diff5,diff5) + np.outer(diff6,diff6))             
+                   + np.outer(diff4,diff4)+ np.outer(diff5,diff5) + np.outer(diff6,diff6))
         sigmas = [x[0].covmat for x in dataset]
         sigma = sigmas[0]
         cov = s + sigma
@@ -140,8 +140,8 @@ def theory_covmat_datasets(theoryids_experiments_central_values, each_dataset_re
     dataset_covmats = [x[0].total_covmat for x in dataset_cent]
     return dataset_covmats
 
-def theory_covmat_experiments(theoryids_experiments_central_values, experiments_results_theory):
-    """Same as theory_covmat_datasets but per experiment rather than 
+def theory_covmat_experiments(experiments_results_theory):
+    """Same as theory_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
     experiments_results_theory = np.swapaxes(experiments_results_theory, 0, 1)
     for experiment in experiments_results_theory:
@@ -162,7 +162,7 @@ def theory_covmat_experiments(theoryids_experiments_central_values, experiments_
             diff6  = f - central
             s = np.zeros((len(central),len(central)))
             s = (1/6)*(np.outer(diff1,diff1) + np.outer(diff2,diff2)+ np.outer(diff3,diff3)
-                   + np.outer(diff4,diff4)+ np.outer(diff5,diff5) + np.outer(diff6,diff6))  
+                   + np.outer(diff4,diff4)+ np.outer(diff5,diff5) + np.outer(diff6,diff6)) 
         sigmas = [x[0].covmat for x in experiment]
         sigma = sigmas[0]
         cov =  sigma
@@ -184,7 +184,8 @@ def theory_corrmat(theory_covmat):
 
 @table
 def theory_normcovmat(theory_covmat, experiments_data):
-    """Calculates the theory covariance matrix for 3- or 7-point scale variations normalised to data."""
+    """Calculates the theory covariance matrix for 3- or
+     7-point scale variations normalised to data."""
     df = theory_covmat
     experiments_data_array = np.array(experiments_data)
     mat = df/np.outer(experiments_data_array, experiments_data_array)
@@ -207,7 +208,8 @@ def experimentsplustheory_normcovmat(experiments_covmat, theory_covmat, experime
 
 @table
 def experimentsplustheory_corrmat(experiments_covmat, theory_covmat):
-    """Calculates the correlation matrix for the experimental  plus theory (3/7 pt) covariance matrices."""
+    """Calculates the correlation matrix for the experimental
+    plus theory (3/7 pt) covariance matrices."""
     exp_df = experiments_covmat
     theory_df = theory_covmat
     total_df = experiments_covmat + theory_covmat
@@ -261,7 +263,6 @@ experiments_results_theory = collect('experiments_results', ('theoryids',))
 
 def matrix_plot_labels(df):
     explabels  = [list(df)[x][0] for x in range(len(list(df)))]
-    datlabels  = [list(df)[x][1] for x in range(len(list(df)))]
     points     = [list(df)[x][2] for x in range(len(list(df)))]
     unique_exp = [[0 for x in range(2)] for y in range(len(explabels))]
     unique_exp[0] = [explabels[0],points[0]]
@@ -287,7 +288,8 @@ def plot_normexpcovmat_heatmap(experiments_normcovmat):
     df = experiments_normcovmat
     matrix = df.as_matrix()
     fig,ax = plt.subplots(figsize=(15,15))
-    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.01, linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
+    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.01,
+                            linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
     cbar = fig.colorbar(matrixplot, label="% of data")
     ax.set_title('Experiment covariance matrix')
     ticklocs, ticklabels = matrix_plot_labels(df)
@@ -311,11 +313,13 @@ def plot_expcorrmat_heatmap(experiments_corrmat):
 
 @figure
 def plot_normthcovmat_heatmap(theory_normcovmat):
-    """Matrix plot of the theory covariance matrix for 3/7-point scale variations normalised to data."""
+    """Matrix plot of the theory covariance matrix for
+     3/7-point scale variations normalised to data."""
     df = theory_normcovmat
     matrix = df.as_matrix()
     fig,ax = plt.subplots(figsize=(15,15))
-    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1, linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
+    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1,
+                            linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
     cbar = fig.colorbar(matrixplot, label="% of data")
     ax.set_title('Theory covariance matrix')
     ticklocs, ticklabels = matrix_plot_labels(df)
@@ -343,7 +347,8 @@ def plot_normexpplusthcovmat_heatmap(experimentsplustheory_normcovmat):
     df = experimentsplustheory_normcovmat
     matrix = experimentsplustheory_normcovmat.as_matrix()
     fig, ax = plt.subplots()
-    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1, linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
+    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1,
+                            linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
     cbar = fig.colorbar(matrixplot, label="% of data")
     ax.set_title('Experiment + theory covariance matrix')
     ticklocs, ticklabels = matrix_plot_labels(df)
@@ -374,7 +379,8 @@ def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
     matrix_experiment = df_experiment.as_matrix()
     matrix = (matrix_theory+matrix_experiment)/np.mean(matrix_experiment)
     fig,ax = plt.subplots(figsize=(15,15))
-    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1, linscale=10, vmin=-matrix.max(), vmax=matrix.max()))
+    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1,
+                            linscale=10, vmin=-matrix.max(), vmax=matrix.max()))
     cbar = fig.colorbar(matrixplot)
     ax.set_title('(Theory + experiment)/mean(experiment) covariance matrices')
     ticklocs, ticklabels = matrix_plot_labels(df_experiment)
@@ -399,7 +405,7 @@ def plot_diag_cov_comparison(theory_covmat, experiments_covmat, experiments_data
     ticklocs, ticklabels = matrix_plot_labels(df_experiment)
     plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=6)
     ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{|D_i|}$")
-    ax.set_title("Square root of diagonal elements of covariances matrices, normalised to absolute value of data")
+    ax.set_title("""Square root of diagonal elements of covariances matrices, normalised to absolute value of data""")
     ax.legend()
     return fig
 
@@ -424,7 +430,8 @@ def plot_diag_cov_impact(theory_covmat, experiments_covmat, experiments_data):
     return fig
 
 @figure
-def plot_theory_error_test(theory_covmat, experiments_covmat, experiments_data, theoryids_experiments_central_values):
+def plot_theory_error_test(theory_covmat, experiments_covmat, experiments_data,
+                           theoryids_experiments_central_values):
     rc.update({'font.size': 30})
     data = experiments_data.as_matrix()
     df_theory = theory_covmat
@@ -438,8 +445,10 @@ def plot_theory_error_test(theory_covmat, experiments_covmat, experiments_data, 
     ax.plot(central/data, label="central", color="red")
     ax.plot(low/data, label="low",color="blue")
     ax.plot(high/data, label="high",color="blue")
-    ax.errorbar(np.arange(len(data)),data/data, yerr=experrors/data,fmt='--o', label="experiment errors",color="black")
-    ax.errorbar(np.arange(len(data))+0.25,data/data, yerr=theoryerrors/data,fmt='none', label="theory errors",color="green")
+    ax.errorbar(np.arange(len(data)),data/data, yerr=experrors/data,fmt='--o',
+                label="experiment errors",color="black")
+    ax.errorbar(np.arange(len(data))+0.25,data/data, yerr=theoryerrors/data,fmt='none',
+                label="theory errors",color="green")
     ax.set_ylabel("Observable normalised to experiment")
     ax.set_title("Theory error comparison")
     ax.legend()
@@ -449,7 +458,7 @@ def plot_theory_error_test(theory_covmat, experiments_covmat, experiments_data, 
     return fig
 
 @figure
-def plot_datasets_chi2_theory(experiments, experiments_chi2, each_dataset_chi2, 
+def plot_datasets_chi2_theory(experiments, experiments_chi2, each_dataset_chi2,
                               abs_chi2_data_theory_experiment, abs_chi2_data_theory_dataset):
     """Plot the chi² of all datasets, before and after adding theory errors, with bars."""
     ds = iter(each_dataset_chi2)
@@ -468,9 +477,6 @@ def plot_datasets_chi2_theory(experiments, experiments_chi2, each_dataset_chi2,
     plotvalues = np.stack((dschi2theory, dschi2))
     fig,ax = plotutils.barplot(plotvalues, collabels=xticks,
                                datalabels=["experiment + theory","experiment"])
-
     ax.set_title(r"$\chi^2$ distribution for datasets")
     ax.legend(fontsize=14)
-
     return fig
-
