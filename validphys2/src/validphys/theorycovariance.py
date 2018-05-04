@@ -41,22 +41,10 @@ def check_three_or_seven_theories(theoryids):
 def theory_covmat(theoryids_experiments_central_values, experiments_index, theoryids):
     """Calculates the theory covariance matrix for 3- or 7-point scale variations.
     The matrix is a dataframe indexed by experiments_index."""
-    l = len(theoryids)
-    if l==3:
-        central, low, high = np.array(theoryids_experiments_central_values)
-        lowdiff  = low - central
-        highdiff = high - central
-        s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
-    elif l==7:
-        central, a, b, c, d, e, f = np.array(theoryids_experiments_central_values)
-        diff1  = a - central
-        diff2  = b - central
-        diff3  = c - central
-        diff4  = d - central
-        diff5  = e - central
-        diff6  = f - central
-        s = (1/6)*(np.outer(diff1,diff1) + np.outer(diff2,diff2)+ np.outer(diff3,diff3)
-                   + np.outer(diff4,diff4)+ np.outer(diff5,diff5) + np.outer(diff6,diff6))
+
+    central, *others = np.array(theoryids_experiments_central_values)
+    diffs = (other - central for other in others)
+    s = sum(np.outer(d,d) for d in diffs)/len(others)
 
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
@@ -71,22 +59,11 @@ def theory_covmat_datasets(each_dataset_results_theory):
     These are needed for calculation of chi2 per dataset. """
     for dataset in each_dataset_results_theory:
         theory_centrals = [x[1].central_value for x in dataset]
-        l = len(theory_centrals)
-        if l==3:
-            central, low, high = theory_centrals
-            lowdiff = low - central
-            highdiff = high - central
-            s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
-        elif l==7:
-            central, a, b, c, d, e, f= theory_centrals
-            diff1  = a - central
-            diff2  = b - central
-            diff3  = c - central
-            diff4  = d - central
-            diff5  = e - central
-            diff6  = f - central
-            s = (1/6)*(np.outer(diff1,diff1) + np.outer(diff2,diff2)+ np.outer(diff3,diff3)
-                   + np.outer(diff4,diff4)+ np.outer(diff5,diff5) + np.outer(diff6,diff6))
+        
+        central, *others = theory_centrals
+        diffs = (other - central for other in others)
+        s = sum(np.outer(d,d) for d in diffs)/len(others)
+        
         sigma = dataset[0][0].covmat
         cov = s + sigma
         dataset_cent_th = dataset[0]
@@ -102,22 +79,11 @@ def theory_covmat_experiments(experiments_results_theory):
     experiments_results_theory = np.swapaxes(experiments_results_theory, 0, 1)
     for experiment in experiments_results_theory:
         theory_centrals = [x[1].central_value for x in experiment]
-        l = len(theory_centrals)
-        if l==3:
-            central, low, high = theory_centrals
-            lowdiff = low - central
-            highdiff = high - central
-            s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
-        elif l==7:
-            central, a, b, c, d, e, f= theory_centrals
-            diff1  = a - central
-            diff2  = b - central
-            diff3  = c - central
-            diff4  = d - central
-            diff5  = e - central
-            diff6  = f - central
-            s = (1/6)*(np.outer(diff1,diff1) + np.outer(diff2,diff2)+ np.outer(diff3,diff3)
-                   + np.outer(diff4,diff4)+ np.outer(diff5,diff5) + np.outer(diff6,diff6)) 
+       
+        central, *others = theory_centrals
+        diffs = (other - central for other in others)
+        s = sum(np.outer(d,d) for d in diffs)/len(others)
+
         sigma = experiment[0][0].covmat
         cov = s + sigma
         experiment_cent_th = experiment[0]
