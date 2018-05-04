@@ -384,8 +384,8 @@ def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
 
 @figure
 def plot_diag_cov_comparison(theory_covmat, experiments_covmat, experiments_data):
-    """Plot of sqrt(cov_ii)/data_i for cov = exp, theory, exp+theory"""
-    data = experiments_data
+    """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory"""
+    data = np.abs(experiments_data)
     df_theory = theory_covmat
     df_experiment = experiments_covmat
     df_total = df_theory + df_experiment
@@ -398,8 +398,8 @@ def plot_diag_cov_comparison(theory_covmat, experiments_covmat, experiments_data
     ax.plot((sqrtdiags3/data).as_matrix(), '.', label="Total", color = "blue")
     ticklocs, ticklabels = matrix_plot_labels(df_experiment)
     plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=6)
-    ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{D_i}$")
-    ax.set_title("Diagonal elements of normalised covariance matrices")
+    ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{|D_i|}$")
+    ax.set_title("Square root of diagonal elements of covariances matrices, normalised to absolute value of data")
     ax.legend()
     return fig
 
