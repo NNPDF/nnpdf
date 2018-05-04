@@ -46,7 +46,6 @@ def theory_covmat(theoryids_experiments_central_values, experiments_index, theor
         central, low, high = np.array(theoryids_experiments_central_values)
         lowdiff  = low - central
         highdiff = high - central
-        s = np.zeros((len(central),len(central)))
         s = 0.5*(np.outer(lowdiff,lowdiff) + np.outer(highdiff,highdiff))
     elif l==7:
         central, a, b, c, d, e, f = np.array(theoryids_experiments_central_values)
@@ -56,7 +55,6 @@ def theory_covmat(theoryids_experiments_central_values, experiments_index, theor
         diff4  = d - central
         diff5  = e - central
         diff6  = f - central
-        s = np.zeros((len(central),len(central)))
         s = (1/6)*(np.outer(diff1,diff1) + np.outer(diff2,diff2)+ np.outer(diff3,diff3)
                    + np.outer(diff4,diff4)+ np.outer(diff5,diff5) + np.outer(diff6,diff6))
 
@@ -119,12 +117,11 @@ def theory_covmat_experiments(experiments_results_theory):
             diff4  = d - central
             diff5  = e - central
             diff6  = f - central
-            s = np.zeros((len(central),len(central)))
             s = (1/6)*(np.outer(diff1,diff1) + np.outer(diff2,diff2)+ np.outer(diff3,diff3)
                    + np.outer(diff4,diff4)+ np.outer(diff5,diff5) + np.outer(diff6,diff6)) 
         sigmas = [x[0].covmat for x in experiment]
         sigma = sigmas[0]
-        cov =  sigma
+        cov = sigma
         experiment_cent_th = experiment[0]
         for x in experiment_cent_th:
             x.total_covmat = cov
