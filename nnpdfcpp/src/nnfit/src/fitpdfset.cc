@@ -344,121 +344,59 @@ void FitPDFSet::ExportMeta( int const& rep, real const& erf_val, real const& erf
 {
   // Printing fitinfo to file
   cout << Colour::FG_BLUE << "\n- Writing fitinfo file..." << Colour::FG_DEFAULT << endl;
-
-  stringstream fitfilename;
-  fitfilename.str("");
-  fitfilename << fSettings.GetResultsDirectory()
-  << "/nnfit/replica_" << rep << "/"
-  << fSettings.GetPDFName() <<".fitinfo";
-
-  // Print fit information
-  ofstream fitinfo;
-  fitinfo.exceptions(ofstream::failbit | ofstream::badbit);
-  try {
-    fitinfo.open(fitfilename.str());
-      fitinfo << fNIte <<"  " << erf_val <<"  "<<erf_trn<<"  "<<chi2<<"  ";
-    if (posVeto)
-      fitinfo << "POS_VETO"<<endl;
-    else
-      fitinfo << "POS_PASS"<<endl;
-
-    // Arclengths
-    cout << Colour::FG_BLUE << "- Computing arclengths..." << Colour::FG_DEFAULT << endl;
-    fitinfo.precision(8);
-    fitinfo << scientific;
-    for (int i = 0; i < fNfl; i++)
-      fitinfo << CalculateArcLength(0,i,fFitBasis->fArcDampFactor[i]) << "  ";
-    fitinfo.close();
-  }
-  catch (ofstream::failure)
-  {
-    throw FileError("FitPDFSet::ExportMeta", "File exception for " + fitfilename.str());
-  }
+  stringstream fitinfofile, fitinfodata;
+  fitinfofile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/" << fSettings.GetPDFName() <<".fitinfo";
+  fitinfodata << fNIte <<"  " << erf_val <<"  "<<erf_trn<<"  "<<chi2<<"  ";
+  if (posVeto)
+    fitinfodata << "POS_VETO"<<endl;
+  else
+    fitinfodata << "POS_PASS"<<endl;
+  // Arclengths
+  cout << Colour::FG_BLUE << "- Computing arclengths..." << Colour::FG_DEFAULT << endl;
+  fitinfodata.precision(8);
+  fitinfodata << scientific;
+  for (int i = 0; i < fNfl; i++)
+    fitinfodata << CalculateArcLength(0,i,fFitBasis->fArcDampFactor[i]) << "  ";
+  write_to_file(fitinfofile.str(), fitinfodata.str());
 
   // Print sumrules to file
   cout << Colour::FG_BLUE << "- Writing sumrules file..." << Colour::FG_DEFAULT << endl;
-
-  stringstream sumrulefilename;
-  sumrulefilename.str("");
-  sumrulefilename << fSettings.GetResultsDirectory()
-  << "/nnfit/replica_" << rep << "/"
-  << fSettings.GetPDFName() <<".sumrules";
-
-  ofstream sumruleinfo;
-  sumruleinfo.exceptions(ofstream::failbit | ofstream::badbit);
-  try {
-    sumruleinfo.open(sumrulefilename.str());
-    sumruleinfo.precision(8);
-    sumruleinfo << scientific;
-
-    bool status;
-    sumruleinfo << fFitBasis->ComputeSumRules(SUM_MSR, 0, this, status) << "  ";
-    sumruleinfo << fFitBasis->ComputeSumRules(SUM_UVL, 0, this, status) << "  ";
-    sumruleinfo << fFitBasis->ComputeSumRules(SUM_DVL, 0, this, status) << "  ";
-    sumruleinfo << fFitBasis->ComputeSumRules(SUM_SVL, 0, this, status) << "  ";
-    if (fSettings.IsIC()) sumruleinfo << fFitBasis->ComputeSumRules(SUM_CVL, 0, this, status) << "  ";
-    sumruleinfo << fFitBasis->ComputeSumRules(SUM_USM, 0, this, status) << "  ";
-    sumruleinfo << fFitBasis->ComputeSumRules(SUM_DSM, 0, this, status) << "  ";
-    sumruleinfo << fFitBasis->ComputeSumRules(SUM_SSM, 0, this, status) << "  ";
-    if (fSettings.IsIC()) sumruleinfo << fFitBasis->ComputeSumRules(SUM_CSM, 0, this, status) << "  ";
-    sumruleinfo << endl;
-    sumruleinfo.close();
-  }
-  catch(ofstream::failure)
-  {
-      throw FileError("FitPDFSet::ExportMeta", "File exception for " + sumrulefilename.str());
-  }
+  stringstream sumrulefile, sumruledata;
+  sumrulefile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/" << fSettings.GetPDFName() <<".sumrules";
+  bool status;
+  sumruledata.precision(8);
+  sumruledata << scientific;
+  sumruledata << fFitBasis->ComputeSumRules(SUM_MSR, 0, this, status) << "  ";
+  sumruledata << fFitBasis->ComputeSumRules(SUM_UVL, 0, this, status) << "  ";
+  sumruledata << fFitBasis->ComputeSumRules(SUM_DVL, 0, this, status) << "  ";
+  sumruledata << fFitBasis->ComputeSumRules(SUM_SVL, 0, this, status) << "  ";
+  if (fSettings.IsIC()) sumruledata << fFitBasis->ComputeSumRules(SUM_CVL, 0, this, status) << "  ";
+  sumruledata << fFitBasis->ComputeSumRules(SUM_USM, 0, this, status) << "  ";
+  sumruledata << fFitBasis->ComputeSumRules(SUM_DSM, 0, this, status) << "  ";
+  sumruledata << fFitBasis->ComputeSumRules(SUM_SSM, 0, this, status) << "  ";
+  if (fSettings.IsIC()) sumruledata << fFitBasis->ComputeSumRules(SUM_CSM, 0, this, status) << "  ";
+  sumruledata << endl;
+  write_to_file(sumrulefile.str(), sumruledata.str());
 
   // Print preprocessing to file
-  stringstream preprocfilename;
-  preprocfilename.str("");
-  preprocfilename << fSettings.GetResultsDirectory()
-  << "/nnfit/replica_" << rep << "/"
-  << fSettings.GetPDFName() <<".preproc";
-
   cout << Colour::FG_BLUE << "- Writing preproc file..." << Colour::FG_DEFAULT << endl;
-
-  ofstream preprocinfo;
-  preprocinfo.exceptions(ofstream::failbit | ofstream::badbit);
-  try {
-    preprocinfo.open(preprocfilename.str());
-
-    for (int i = 0; i < fNfl; i++)
-        preprocinfo << -fFitBasis->GetAlpha(i) << "  " << fFitBasis->GetBeta(i) << "  " << fPreprocParam[0]->fPDFNorm[i] << endl;
-
-    preprocinfo.close();
-  }
-  catch(ofstream::failure)
-  {
-      throw FileError("FitPDFSet::ExportMeta", "File exception for " + preprocfilename.str());
-  }
+  stringstream preprocfile, preprocdata;
+  preprocfile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/" << fSettings.GetPDFName() <<".preproc";
+  for (int i = 0; i < fNfl; i++)
+    preprocdata << -fFitBasis->GetAlpha(i) << "  " << fFitBasis->GetBeta(i) << "  " << fPreprocParam[0]->fPDFNorm[i] << endl;
+  write_to_file(preprocfile.str(), preprocdata.str());
 
   // printing parameters to file
   cout << Colour::FG_BLUE << "- Writing params file..." << Colour::FG_DEFAULT << endl;
-
-  stringstream file;
-  file.str("");
-  file << fSettings.GetResultsDirectory()
-            << "/nnfit/replica_" << rep << "/"
-            << fSettings.GetPDFName() <<".params";
-
-  ofstream params;
-  params.exceptions(ofstream::failbit | ofstream::badbit);
-  try {
-    params.open(file.str());
-    for (int i = 0; i < fNfl; i++)
-      {
-        params << fFitBasis->GetPDFName(i) << endl;
-        for (int j = 0; j < (int) fBestFit[i]->GetNParameters(); j++)
-          params << fBestFit[i]->GetParameters()[j] << endl;
-      }
-
-    params.close();
-  }
-  catch(ofstream::failure)
-  {
-    throw FileError("FitPDFSet::ExportMeta", "File exception for " + file.str());
-  }
+  stringstream paramsfile, paramsdata;
+  paramsfile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/" << fSettings.GetPDFName() <<".params";
+  for (int i = 0; i < fNfl; i++)
+    {
+      paramsdata << fFitBasis->GetPDFName(i) << endl;
+      for (int j = 0; j < (int) fBestFit[i]->GetNParameters(); j++)
+        paramsdata << fBestFit[i]->GetParameters()[j] << endl;
+    }
+  write_to_file(paramsfile.str(), paramsdata.str());
 }
 
 /**
@@ -482,66 +420,52 @@ void FitPDFSet::ExportPDF( int const& rep )
   if (rep==1)
   {
     // LHAPDF6 HEADER
-    stringstream info;
-    info << fSettings.GetResultsDirectory() << "/nnfit/"
-         << fSettings.GetPDFName() <<".info";
+    stringstream infofile, infodata;
+    infofile << fSettings.GetResultsDirectory() << "/nnfit/" << fSettings.GetPDFName() <<".info";
+    infodata << "SetDesc: \"NNPDF x.x\"" << endl;
+    infodata << "SetIndex: " << endl;
+    infodata << "Authors: NNPDF Collaboration." << endl;
+    infodata << "Reference: arXiv:xxxx.xxxxxx" << endl;
+    infodata << "Format: lhagrid1" << endl;
+    infodata << "DataVersion: 1" << endl;
+    infodata << "NumMembers: REPLACE_NREP" << endl;
+    infodata << "Particle: 2212" << endl;
+    infodata << "Flavors: [";
+    for (int i = -nf; i <= nf; i++)
+      infodata << ((i == 0) ? 21 : i) << ((i == nf && !fSettings.IsQED()) ? "]\n" : ( (i == nf && fSettings.IsQED()) ? ", 22]\n" : ", "));
+    infodata << "OrderQCD: " << fSettings.GetTheory(APFEL::kPTO) << endl;
+    infodata << "FlavorScheme: variable" << endl;
+    infodata << "NumFlavors: " << nf << endl;
+    infodata << "ErrorType: replicas" << endl;
+    infodata.precision(7);
+    infodata << scientific;
+    infodata << "XMin: "<< APFELSingleton::getXmin() << endl;
+    infodata << "XMax: "<< APFELSingleton::getXmax() << endl;
+    infodata << "QMin: "<< APFELSingleton::getQmin() << endl;
+    infodata << "QMax: "<< APFELSingleton::getQmax() << endl;
+    infodata << "MZ: "  << APFELSingleton::getMZ() << endl;
+    infodata << "MUp: 0\nMDown: 0\nMStrange: 0" << std::endl;
+    infodata << "MCharm: "  << APFELSingleton::getMCharm() << endl;
+    infodata << "MBottom: " << APFELSingleton::getMBottom() << endl;
+    infodata << "MTop: "    << APFELSingleton::getMTop() << endl;
+    infodata << fixed << "AlphaS_MZ: " << APFELSingleton::getAlphas() << endl;
+    infodata << scientific;
+    infodata << "AlphaS_OrderQCD: " << fSettings.GetTheory(APFEL::kPTO) << endl;
+    infodata << "AlphaS_Type: ipol" << endl;
 
-    ofstream lhaoutheader6;
-    lhaoutheader6.exceptions(ofstream::failbit | ofstream::badbit);
-    try {
-      lhaoutheader6.open(info.str());
-      lhaoutheader6 << "SetDesc: \"NNPDF x.x\"" << endl;
-      lhaoutheader6 << "SetIndex: " << endl;
-      lhaoutheader6 << "Authors: NNPDF Collaboration." << endl;
-      lhaoutheader6 << "Reference: arXiv:xxxx.xxxxxx" << endl;
-      lhaoutheader6 << "Format: lhagrid1" << endl;
-      lhaoutheader6 << "DataVersion: 1" << endl;
-      lhaoutheader6 << "NumMembers: REPLACE_NREP" << endl;
-      lhaoutheader6 << "Particle: 2212" << endl;
-      lhaoutheader6 << "Flavors: [";
-      for (int i = -nf; i <= nf; i++)
-        lhaoutheader6 << ((i == 0) ? 21 : i) << ((i == nf && !fSettings.IsQED()) ? "]\n" : ( (i == nf && fSettings.IsQED()) ? ", 22]\n" : ", "));
-      lhaoutheader6 << "OrderQCD: " << fSettings.GetTheory(APFEL::kPTO) << endl;
+    infodata << "AlphaS_Qs: [";
+    for (int s = 0; s < (int) q2grid.size(); s++)
+      for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
+        infodata << sqrt(q2grid[s][iq]) << ((s == (int) q2grid.size()-1 && iq == (int) q2grid[s].size()-1) ? "]\n" : ", ");
 
-      lhaoutheader6 << "FlavorScheme: variable" << endl;
-      lhaoutheader6 << "NumFlavors: " << nf << endl;
-      lhaoutheader6 << "ErrorType: replicas" << endl;
+    infodata << "AlphaS_Vals: [";
+    for (int s = 0; s < (int) q2grid.size(); s++)
+      for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
+        infodata << APFELSingleton::alphas(sqrt(q2grid[s][iq])) << ((s == (int) q2grid.size()-1 && iq == (int) q2grid[s].size()-1) ? "]\n" : ", ");
 
-      lhaoutheader6.precision(7);
-      lhaoutheader6 << scientific;
-      lhaoutheader6 << "XMin: "<< APFELSingleton::getXmin() << endl;
-      lhaoutheader6 << "XMax: "<< APFELSingleton::getXmax() << endl;
-      lhaoutheader6 << "QMin: "<< APFELSingleton::getQmin() << endl;
-      lhaoutheader6 << "QMax: "<< APFELSingleton::getQmax() << endl;
-      lhaoutheader6 << "MZ: "  << APFELSingleton::getMZ() << endl;
-      lhaoutheader6 << "MUp: 0\nMDown: 0\nMStrange: 0" << std::endl;
-      lhaoutheader6 << "MCharm: "  << APFELSingleton::getMCharm() << endl;
-      lhaoutheader6 << "MBottom: " << APFELSingleton::getMBottom() << endl;
-      lhaoutheader6 << "MTop: "    << APFELSingleton::getMTop() << endl;
-      lhaoutheader6 << fixed << "AlphaS_MZ: " << APFELSingleton::getAlphas() << endl;
-      lhaoutheader6 << scientific;
-      lhaoutheader6 << "AlphaS_OrderQCD: " << fSettings.GetTheory(APFEL::kPTO) << endl;
-      lhaoutheader6 << "AlphaS_Type: ipol" << endl;
-
-      lhaoutheader6 << "AlphaS_Qs: [";
-      for (int s = 0; s < (int) q2grid.size(); s++)
-        for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-          lhaoutheader6 << sqrt(q2grid[s][iq]) << ((s == (int) q2grid.size()-1 && iq == (int) q2grid[s].size()-1) ? "]\n" : ", ");
-
-      lhaoutheader6 << "AlphaS_Vals: [";
-      for (int s = 0; s < (int) q2grid.size(); s++)
-        for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-          lhaoutheader6 << APFELSingleton::alphas(sqrt(q2grid[s][iq])) << ((s == (int) q2grid.size()-1 && iq == (int) q2grid[s].size()-1) ? "]\n" : ", ");
-
-      lhaoutheader6 << "AlphaS_Lambda4: 0.342207" << std::endl;
-      lhaoutheader6 << "AlphaS_Lambda5: 0.239" << std::endl;
-
-      lhaoutheader6.close();
-    }
-    catch(ofstream::failure)
-    {
-      throw FileError("FitPDFSet::ExportPDF", "File exception for " + info.str());
-    }
+    infodata << "AlphaS_Lambda4: 0.342207" << std::endl;
+    infodata << "AlphaS_Lambda5: 0.239" << std::endl;
+    write_to_file(infofile.str(), infodata.str());
   }
 
   // Performing DGLAP
@@ -561,54 +485,40 @@ void FitPDFSet::ExportPDF( int const& rep )
         }
 
   // print the replica
-  stringstream ofilename;
-  ofilename << fSettings.GetResultsDirectory()
-            << "/nnfit/replica_" << rep << "/"
-            << fSettings.GetPDFName() <<".dat";
+  stringstream lhafile, lhadata;
+  lhafile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/" << fSettings.GetPDFName() <<".dat";
+  lhadata << scientific << setprecision(7);
+  lhadata << "PdfType: replica\nFormat: lhagrid1\nFromMCReplica: " << rep << "\n---" << std::endl;
+  for (int s = 0; s < (int) q2grid.size(); s++)
+     {
+       for (int ix = 0; ix < nx; ix++)
+         lhadata << xgrid[ix] << " ";
+       lhadata << std::endl;
 
-  ofstream lhaout;
-  lhaout.exceptions(ofstream::failbit | ofstream::badbit);
-  try {
-    lhaout.open(ofilename.str());
-    lhaout << scientific << setprecision(7);
-    lhaout << "PdfType: replica\nFormat: lhagrid1\nFromMCReplica: " << rep << "\n---" << std::endl;
+       for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
+         lhadata << sqrt(q2grid[s][iq]) << " ";
+       lhadata << std::endl;
 
-    for (int s = 0; s < (int) q2grid.size(); s++)
-       {
-         for (int ix = 0; ix < nx; ix++)
-           lhaout << xgrid[ix] << " ";
-         lhaout << std::endl;
+       for (int i = -nf; i <= nf; i++)
+         if (i == 0) lhadata << 21 << " ";
+         else lhadata << i << " ";
+       if (fSettings.IsQED()) lhadata << 22 << " ";
+       lhadata << std::endl;
 
+       const int floffset = 6-nf;
+       for (int ix = 0; ix < nx; ix++)
          for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-           lhaout << sqrt(q2grid[s][iq]) << " ";
-         lhaout << std::endl;
-
-         for (int i = -nf; i <= nf; i++)
-           if (i == 0) lhaout << 21 << " ";
-           else lhaout << i << " ";
-         if (fSettings.IsQED()) lhaout << 22 << " ";
-         lhaout << std::endl;
-
-         const int floffset = 6-nf;
-         for (int ix = 0; ix < nx; ix++)
-           for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-             {
-               lhaout << " ";
-               for (int fl = floffset; fl <= 12-floffset; fl++)
-                 lhaout << setw(14) << res[s][ix + iq*nx][fl] << " ";
-               if (fSettings.IsQED()) lhaout << setw(14) << res[s][ix + iq*nx][PDFSet::PHT] << " ";
-               lhaout << std::endl;
-             }
-         lhaout << "---" << std::endl;
-       }
-
-    delete[] pdf;
-    lhaout.close();
-  }
-  catch(ofstream::failure)
-  {
-    throw FileError("FitPDFSet::ExportPDF", "File exception for " + ofilename.str());
-  }
+           {
+             lhadata << " ";
+             for (int fl = floffset; fl <= 12-floffset; fl++)
+               lhadata << setw(14) << res[s][ix + iq*nx][fl] << " ";
+             if (fSettings.IsQED()) lhadata << setw(14) << res[s][ix + iq*nx][PDFSet::PHT] << " ";
+             lhadata << std::endl;
+           }
+       lhadata << "---" << std::endl;
+     }
+  delete[] pdf;
+  write_to_file(lhafile.str(), lhadata.str());
 
   cout << Colour::FG_GREEN << "\n- LHAPDF successful writeout!" << Colour::FG_DEFAULT << endl << endl;
 }
@@ -692,58 +602,48 @@ void FitPDFSet::ExportGrid(int const& rep)
       1.000000000000000e+00
     };
 
-  stringstream gridfilename;
-  gridfilename << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/"
-               << fSettings.GetPDFName() <<".gridvalues";
-  cout << "- Printing grid to file: " << gridfilename.str() <<endl;
+  stringstream gridfile, griddata;
+  gridfile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/" << fSettings.GetPDFName() <<".gridvalues";
+  cout << "- Printing grid to file: " << gridfile.str() <<endl;
 
-  ofstream gridfile;
-  gridfile.exceptions(ofstream::failbit | ofstream::badbit);
-  try {
-    gridfile.open(gridfilename.str());
-    gridfile << scientific << setprecision(14);
-    gridfile << "{" << std::endl
-             << "\"replica\": "<< rep << "," << std::endl
-             << "\"q20\": " << fQ20 << ","<<std::endl
-             << "\"xgrid\": ["<<xgrid[0];
-    for (size_t ix=1; ix < xgrid.size(); ix++)
-      gridfile <<", "<< xgrid[ix];
-    gridfile << "]," <<std::endl;
+  griddata << scientific << setprecision(14);
+  griddata << "{" << std::endl
+           << "\"replica\": "<< rep << "," << std::endl
+           << "\"q20\": " << fQ20 << ","<<std::endl
+           << "\"xgrid\": ["<<xgrid[0];
+  for (size_t ix=1; ix < xgrid.size(); ix++)
+    griddata <<", "<< xgrid[ix];
+  griddata << "]," <<std::endl;
 
-    // Write out the contents of the xfxvals array to the LHgrid
-    vector<real*> pdf_grid;
-    for (auto x : xgrid)
-      {
-        real *pdf = new real[14]();
-        real *lha = new real[14]();
-        GetPDF(x, fQ20, 0, pdf);
-        PDFSet::EVLN2LHA(pdf, lha);
-        pdf_grid.push_back(lha);
-        delete[] pdf;
-      }
-
-    // Print pdf grid to file
-    for (int ipdf = 0; ipdf < 14; ipdf++)
+  // Write out the contents of the xfxvals array to the LHgrid
+  vector<real*> pdf_grid;
+  for (auto x : xgrid)
     {
-      gridfile << "\""<<PDFSet::fl_labels[ipdf]<<"\": ["
-               << pdf_grid[0][ipdf];
-      for (size_t ix = 1; ix < pdf_grid.size(); ix++)
-          gridfile << ", " << pdf_grid[ix][ipdf];
-      gridfile << "]";
-      if (ipdf < 13) gridfile << ",";
-      gridfile << std::endl;
+      real *pdf = new real[14]();
+      real *lha = new real[14]();
+      GetPDF(x, fQ20, 0, pdf);
+      PDFSet::EVLN2LHA(pdf, lha);
+      pdf_grid.push_back(lha);
+      delete[] pdf;
     }
 
-    for (size_t ix=0; ix<pdf_grid.size(); ix++)
-      delete[] pdf_grid[ix];
-
-    gridfile << "}" <<std::endl;
-    gridfile.close();
-  }
-  catch(ofstream::failure)
+  // Print pdf grid to file
+  for (int ipdf = 0; ipdf < 14; ipdf++)
   {
-    throw FileError("FitPDFSet::ExportGrid", "File exception for " + gridfilename.str());
+    griddata << "\""<<PDFSet::fl_labels[ipdf]<<"\": ["
+             << pdf_grid[0][ipdf];
+    for (size_t ix = 1; ix < pdf_grid.size(); ix++)
+        griddata << ", " << pdf_grid[ix][ipdf];
+    griddata << "]";
+    if (ipdf < 13) griddata << ",";
+    griddata << std::endl;
   }
+
+  for (size_t ix=0; ix<pdf_grid.size(); ix++)
+    delete[] pdf_grid[ix];
+
+  griddata << "}" <<std::endl;
+  write_to_file(gridfile.str(), griddata.str());
 }
 
 /**
