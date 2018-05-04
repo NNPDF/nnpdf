@@ -74,6 +74,24 @@ def central_chi2(results):
     central_diff = th_result.central_value - data_result.central_value
     return calc_chi2(data_result.sqrtcovmat, central_diff)
 
+
+def all_chi2_theory(results, totcov):
+    """Like all_chi2 but here the chi² are calculated using a covariance matrix
+    that is the sum of the experimental covmat and the theory covmat."""
+    data_result, th_result = results
+    diffs = th_result._rawdata - data_result.central_value[:,np.newaxis]
+    total_covmat = np.array(totcov)
+    return calc_chi2(sqrtcov=la.cholesky(total_covmat, lower=True), diffs=diffs)
+
+def central_chi2_theory(results, totcov):
+    """Like central_chi2 but here the chi² is calculated using a covariance matrix
+    that is the sum of the experimental covmat and the theory covmat."""
+    data_result, th_result = results
+    central_diff = th_result.central_value - data_result.central_value
+    total_covmat = np.array(totcov)
+    return calc_chi2(la.cholesky(total_covmat, lower=True), central_diff)
+
+>>>>>>> Add docstrings to all_chi2_theory and central_chi2_theory
 def calc_phi(sqrtcov, diffs):
     """Low level function which calculates phi given a Cholesky decomposed
     lower triangular part and a vector of differences. Primarily used when phi
