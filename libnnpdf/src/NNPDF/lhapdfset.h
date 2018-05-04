@@ -11,6 +11,7 @@
 #include "LHAPDF/LHAPDF.h"
 
 #include <vector>
+#include <memory>
 
 namespace NNPDF
 {
@@ -43,7 +44,5 @@ namespace NNPDF
     // Member PDFs
     std::vector<LHAPDF::PDF*> fMemberPDFs;
 
-    // Internal transformation array
-    real* fLHA;
   };
 }
