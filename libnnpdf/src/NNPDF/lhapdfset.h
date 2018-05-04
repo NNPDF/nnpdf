@@ -11,7 +11,6 @@
 #include "LHAPDF/LHAPDF.h"
 
 #include <vector>
-#include <memory>
 
 namespace NNPDF
 {
