@@ -123,7 +123,9 @@ void nnpdf_GSLhandler (const char * reason,
                        int line,
                        int gsl_errno)
 {
-  cerr << "GSL Error: "<<reason<<endl;
+  cerr << "GSL Error " << gsl_errno << " : " << reason
+       << " line " << line
+       << " file " << file << endl;
   return;
 }
 
