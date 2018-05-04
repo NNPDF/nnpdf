@@ -1409,8 +1409,18 @@ Here we only discuss a couple of interesting flags.
 The `main: True` flag can only affect one report per run. It has the
 effect of setting the name `index.html`, which comes handy for
 visualizing the uploaded result in the server (see [Uploading the
-result]). It also tries to open the web browser when the report
-finishes.
+result]).
+
+The main flag also tries to open the web browser when the report finishes. The
+browser will be chosen according to internal heuristics, by queering system
+preferences. These can be overridden by setting the `BROWSER` environment
+variable. For example in text-only environments such as remote clusters, it may
+be preferable to just print the URL. This can be achieved by setting the
+environment variable to `echo` (for example in the `.bashrc` file):
+
+```bash
+export BROWSER=echo
+```
 
 #### Displaying math (the `mathjax` flag)
 
