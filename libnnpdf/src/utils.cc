@@ -14,6 +14,7 @@
 #include <iostream>
 #include <limits>
 #include <algorithm>
+#include <fcntl.h>
 
 #include "NNPDF/utils.h"
 #include "NNPDF/exceptions.h"
@@ -75,7 +76,30 @@ std::string joinpath(const std::initializer_list<std::string> &list)
   };
 
   //__________________________________________________________________
+  void write_to_file(std::string const& filename, std::string const& data)
+  {
+    int file = creat(filename.c_str(), S_IRUSR | S_IWUSR);
+    if (file == -1)
+      throw FileError("write_to_file::creat", "Error creating file " +
+                      filename + ". Errno = " + std::string(strerror(errno)));
 
+    int wr_err = write(file, data.c_str(), data.size());
+    if (wr_err == -1)
+      throw FileError("write_to_file::write", "Error writing to file " +
+                      filename + ". Errno = " + std::string(strerror(errno)));
+
+    int fs_err = fsync(file);
+    if (fs_err == -1)
+      throw FileError("write_to_file::write", "Error flushing file " +
+                      filename + ". Errno = " + std::string(strerror(errno)));
+
+    int close_err = close(file);
+    if (close_err == -1)
+      throw FileError("write_to_file::write", "Error closing file " +
+                      filename + ". Errno = " + std::string(strerror(errno)));
+  }
+
+  //__________________________________________________________________
   std::string buf_from_file(std::string const & filename){
      std::string buf{};
      std::ifstream is(filename.c_str());

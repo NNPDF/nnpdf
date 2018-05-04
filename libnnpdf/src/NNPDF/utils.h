@@ -25,51 +25,58 @@
  */
 
 namespace NNPDF
-{
+{  
 
-// This is all so we can call both joinpath({"a", "b", "c"}) which
-// requires a special treatment and auto v = vector<string>{"a", "b", "c"}; joinpath(v). See
-// https://stackoverflow.com/questions/4757614/why-doesnt-my-template-accept-an-initializer-list#4763493
-namespace
-{
-template <typename T> inline std::string joinpath_inner(const T &list)
-{
-  // This is implemented following
-  // https://github.com/python/cpython/blob/05d68a8bd84cb141be9f9335f5b3540f15a989c4/Lib/posixpath.py#L75
-  const auto sep = '/';
-  auto path = std::string{""};
+  // This is all so we can call both joinpath({"a", "b", "c"}) which
+  // requires a special treatment and auto v = vector<string>{"a", "b", "c"}; joinpath(v). See
+  // https://stackoverflow.com/questions/4757614/why-doesnt-my-template-accept-an-initializer-list#4763493
+  namespace
+  {
+    template <typename T> inline std::string joinpath_inner(const T &list)
+    {
+      // This is implemented following
+      // https://github.com/python/cpython/blob/05d68a8bd84cb141be9f9335f5b3540f15a989c4/Lib/posixpath.py#L75
+      const auto sep = '/';
+      auto path = std::string{""};
 
-  for (const auto &it : list) {
-    //TODO: Use this in C++17
-    //if (std::empty(it)) {
-    if (it.empty()) {
-      continue;
-    }
-    if (*std::cbegin(it) == sep) {
-      path = it;
-    } else if (path.empty() || *std::crbegin(path) == sep) {
-      path += it;
-    } else {
-      path += sep + it;
+      for (const auto &it : list) {
+        //TODO: Use this in C++17
+        //if (std::empty(it)) {
+        if (it.empty()) {
+          continue;
+        }
+        if (*std::cbegin(it) == sep) {
+          path = it;
+        } else if (path.empty() || *std::crbegin(path) == sep) {
+          path += it;
+        } else {
+          path += sep + it;
+        }
+      }
+      return path;
     }
   }
-  return path;
-}
-}
 
-/**
- * @brief Produce a UNIX path from a container of string-like objects.
- * @param A iterable of objects that can be joined with strings and iterated over.
- * @return A string representing a joined path.
- *
- * The resuts should be the same as os.path.join in Python (on POSIX), except
- * that an empty string is returned from an empty iterable.
- */
-template <typename T> std::string joinpath(const T &list)
-{
-  return joinpath_inner(list);
-}
-std::string joinpath(const std::initializer_list<std::string> &list);
+  /**
+   * @brief Produce a UNIX path from a container of string-like objects.
+   * @param A iterable of objects that can be joined with strings and iterated over.
+   * @return A string representing a joined path.
+   *
+   * The resuts should be the same as os.path.join in Python (on POSIX), except
+   * that an empty string is returned from an empty iterable.
+   */
+  template <typename T> std::string joinpath(const T &list)
+  {
+    return joinpath_inner(list);
+  }
+  std::string joinpath(const std::initializer_list<std::string> &list);
+
+  /**
+   * @brief write_to_file Writes stringstream to file handling failures
+   * @param data the data string
+   * @param filename the file name
+   */
+  void write_to_file(std::string const& filename, const std::string &data);
 
   /**
    * @brief untargz Decompress tar.gz files in istream.
