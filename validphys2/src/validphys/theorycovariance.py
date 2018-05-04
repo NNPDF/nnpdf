@@ -138,6 +138,12 @@ def theory_covmat_datasets(theoryids_experiments_central_values, each_dataset_re
     dataset_covmats = [x[0].total_covmat for x in dataset_cent]
     return dataset_covmats
 
+def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
+    s  = la.block_diag(theory_covmat_datasets)
+    embed()
+    df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)   
+    return s
+
 def theory_covmat_experiments(theoryids_experiments_central_values, experiments_results_theory):
     """Same as theory_covmat_datasets but per experiment rather than 
     per dataset. Needed for calculation of chi2 per experiment."""
@@ -188,6 +194,18 @@ def theory_normcovmat(theory_covmat, experiments_data):
     mat = df/np.outer(experiments_data_array, experiments_data_array)
     return mat
 
+<<<<<<< HEAD
+=======
+@table
+def theory_normblockcovmat(theory_block_diag_covmat, experiments_data):
+    """Calculates the theory covariance matrix for 3- or 7-point scale variations normalised to data."""
+    df = theory_block_diag_covmat
+    experiments_data_array = np.array(experiments_data)
+    mat = df/np.outer(experiments_data_array, experiments_data_array)
+    return mat
+
+@table
+>>>>>>> 409bf0c... WIP: functions to calculate block diag theory covmats - currently broken
 def experimentsplustheory_covmat(experiments_covmat, theory_covmat):
     """Calculates the experiment + theory covariance matrix for 3- or 7-point scale variations."""
     df = experiments_covmat + theory_covmat
@@ -624,6 +642,7 @@ def plot_normexpcovmat_heatmap(experiments_normcovmat):
     plt.yticks(ticklocs, ticklabels)
     return fig
 
+
 @figure
 def plot_expcorrmat_heatmap(experiments_corrmat):
     """Matrix plot of the experiment correlation matrix"""
@@ -642,6 +661,19 @@ def plot_expcorrmat_heatmap(experiments_corrmat):
 def plot_normthcovmat_heatmap(theory_normcovmat):
     """Matrix plot of the theory covariance matrix for 3/7-point scale variations normalised to data."""
     df = theory_normcovmat
+    matrix = df.as_matrix()
+    fig,ax = plt.subplots(figsize=(15,15))
+    matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1, linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
+    cbar = fig.colorbar(matrixplot, label="% of data")
+    ax.set_title('Theory covariance matrix')
+    ticklocs, ticklabels = matrix_plot_labels(df)
+    plt.xticks([])
+    plt.yticks(ticklocs, ticklabels)
+    return fig
+
+@figure
+def plot_normthblockcovmat_heatmap(theory_normblockcovmat):
+    df = theory_normblockcovmat
     matrix = df.as_matrix()
     fig,ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1, linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
