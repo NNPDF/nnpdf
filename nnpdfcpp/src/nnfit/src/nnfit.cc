@@ -115,7 +115,7 @@ int main(int argc, char **argv)
       vector<Experiment*> training;
       vector<Experiment*> validation;
 
-      PDFSet* T0Set = new LHAPDFSet(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::erType::ER_MCT0);
+      auto T0Set = std::make_unique<LHAPDFSet>(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::erType::ER_MCT0);
       for (int i = 0; i < settings.GetNExp(); i++)
         {
           if (settings.GetExpName(i) == "REWEIGHT") // Don't fit RW experiment
@@ -125,10 +125,10 @@ int main(int argc, char **argv)
           for (int j = 0; j < settings.GetExpSets(i).size(); j++)
             {
               datasets.push_back(LoadDataSet(settings, settings.GetExpSets(i)[j], DATA_FILTERED));
-              MakeT0Predictions(T0Set,datasets[j]);
+              MakeT0Predictions(T0Set.get(),datasets[j]);
             }
 
-          Experiment *exp = new Experiment(datasets, settings.GetExpName(i));
+          auto exp = std::make_unique<Experiment>(datasets, settings.GetExpName(i));
 
           if (settings.Get("closuretest","printpdf4gen").as<bool>())
             Exp.push_back(new Experiment(datasets, settings.GetExpName(i)));
@@ -140,9 +140,7 @@ int main(int argc, char **argv)
           training.push_back(NULL);
           validation.push_back(NULL);
 
-          TrainValidSplit(settings, exp, training.back(), validation.back());
-
-          delete exp;
+          TrainValidSplit(settings, exp.get(), training.back(), validation.back());
         }
 
       // Read Positivity Sets
@@ -155,13 +153,13 @@ int main(int argc, char **argv)
         {
           cout << Colour::FG_BLUE << "\n- Loading: " << Colour::FG_DEFAULT << settings.GetPosName(i) << endl;
           pos.push_back(LoadPositivitySet(settings,settings.GetPosName(i),settings.GetPosInfo(settings.GetPosName(i)).tLambda));
-          pos[i].SetBounds(T0Set);
+          pos[i].SetBounds(T0Set.get());
         }
 
       cout <<endl;
 
       // Fit Basis
-      FitBasis* fitbasis = getFitBasis(settings, NNPDFSettings::getFitBasisType(settings.Get("fitting","fitbasis").as<string>()), replica);
+      std::unique_ptr<FitBasis> fitbasis(getFitBasis(settings, NNPDFSettings::getFitBasisType(settings.Get("fitting","fitbasis").as<string>()), replica));
 
       // If 'dataseed' exists then reset the RNG to 'seed' for the GA
       if (settings.Exists("fitting","dataseed"))
@@ -171,26 +169,26 @@ int main(int argc, char **argv)
         }
 
       // Minimiser control
-      Minimizer* minim = NULL;
+      std::unique_ptr<Minimizer> minim;
       switch (NNPDFSettings::getFitMethod(settings.Get("fitting","fitmethod").as<string>()))
       {
         case MIN_GA:
-          minim = new GAMinimizer(settings);
+          minim = std::make_unique<GAMinimizer>(settings);
           cout  << Colour::FG_BLUE << "Minimiser: Genetic Algorithm" << Colour::FG_DEFAULT << endl;
           break;
 
         case MIN_NGA:
-          minim = new NGAMinimizer(settings);
+          minim = std::make_unique<NGAMinimizer>(settings);
           cout  << Colour::FG_BLUE << "Minimiser: Genetic Algorithm w/ nodal mutations" << Colour::FG_DEFAULT << endl;
           break;
 
         case MIN_NGAFT:
-          minim = new NGAFTMinimizer(settings);
+          minim = std::make_unique<NGAFTMinimizer>(settings);
           cout  << Colour::FG_BLUE << "Minimiser: Genetic Algorithm w/ fixed threshold term NN(x)-NN(1)" << Colour::FG_DEFAULT << endl;
           break;
 
         case MIN_CMAES:
-          minim = new CMAESMinimizer(settings);
+          minim = std::make_unique<CMAESMinimizer>(settings);
           cout  << Colour::FG_BLUE << "Minimiser: CMA-ES" << Colour::FG_DEFAULT << endl;
           break;
 
@@ -201,21 +199,21 @@ int main(int argc, char **argv)
       }
 
       // Parametrisation control
-      FitPDFSet* fitset = NULL;
+      std::unique_ptr<FitPDFSet> fitset;
       switch (NNPDFSettings::getParamType(settings.Get("fitting","paramtype").as<string>()))
       {
         case PARAM_NN:
-          fitset = FitPDFSet::Generate<MultiLayerPerceptron,GAMinimizer>(settings, fitbasis); // need to rewrite generate
+          fitset = std::unique_ptr<FitPDFSet>(FitPDFSet::Generate<MultiLayerPerceptron,GAMinimizer>(settings, fitbasis.get())); // need to rewrite generate
           cout << Colour::FG_BLUE << "Parametrisation: Neural Network" << Colour::FG_DEFAULT << endl;
           break;
 
         case PARAM_SLNPP:
-          fitset = FitPDFSet::Generate<SingleLayerPerceptronPreproc,GAMinimizer>(settings, fitbasis); // need to rewrite generate
+          fitset = std::unique_ptr<FitPDFSet>(FitPDFSet::Generate<SingleLayerPerceptronPreproc,GAMinimizer>(settings, fitbasis.get())); // need to rewrite generate
           cout << Colour::FG_BLUE << "Parametrisation: Single layer network (preprocessed)" << Colour::FG_DEFAULT << endl;
           break;
 
         case PARAM_SLN:
-          fitset = FitPDFSet::Generate<SingleLayerPerceptron,GAMinimizer>(settings, fitbasis); // need to rewrite generate
+          fitset = std::unique_ptr<FitPDFSet>(FitPDFSet::Generate<SingleLayerPerceptron,GAMinimizer>(settings, fitbasis.get())); // need to rewrite generate
           cout << Colour::FG_BLUE << "Parametrisation: Single layer network" << Colour::FG_DEFAULT << endl;
           break;
 
@@ -227,16 +225,16 @@ int main(int argc, char **argv)
       fitset->ValidateStartingPDFs();
 
       // Stopping criterion
-      StoppingCriterion *stop = NULL;
+      std::unique_ptr<StoppingCriterion> stop;
       switch (NNPDFSettings::getStopType(settings.Get("stopping","stopmethod").as<string>()))
       {
         case STOP_NONE:
-          stop = new StoppingCriterion(settings);
+          stop = std::make_unique<StoppingCriterion>(settings);
           cout << Colour::FG_BLUE << "Stopping Criterion: Fixed Length Fit" << Colour::FG_DEFAULT << endl;
           break;
 
         case STOP_LB:
-          stop = new LookBackCV(settings);
+          stop = std::make_unique<LookBackCV>(settings);
           cout << Colour::FG_BLUE << "Stopping Criterion: Look-Back Cross-Validation" << Colour::FG_DEFAULT << endl;
           break;
 
@@ -262,7 +260,7 @@ int main(int argc, char **argv)
       }
 
       // Initialise minimiser
-      minim->Init(fitset,training, pos);
+      minim->Init(fitset.get(),training, pos);
 
       for (int i = 0; i < settings.Get("fitting","ngen").as<int>(); i++)
       {
@@ -270,9 +268,9 @@ int main(int argc, char **argv)
         if (state == FIT_ABRT)
           break;
 
-        minim->Iterate(fitset,training, pos);
+        minim->Iterate(fitset.get(),training, pos);
 
-        if (stop->Stop(fitset,training,validation,pos)) break;
+        if (stop->Stop(fitset.get(),training,validation,pos)) break;
 
         if (settings.Get("debug").as<bool>())
         {
@@ -282,7 +280,7 @@ int main(int argc, char **argv)
         }
 
         if (i % 100 == 0)
-            LogChi2(settings,fitset,pos,training,validation,Exp);
+            LogChi2(settings,fitset.get(),pos,training,validation,Exp);
       }
 
       state = FIT_END;
@@ -297,7 +295,7 @@ int main(int argc, char **argv)
       {
         real* theory = new real[training[i]->GetNData()];
 
-        Convolute(fitset,training[i],theory);
+        Convolute(fitset.get(),training[i],theory);
         NNPDF::ComputeChi2(training[i],1,theory,&erf_trn);
 
         doftrn += training[i]->GetNData();
@@ -312,7 +310,7 @@ int main(int argc, char **argv)
         {
           real* theory = new real[validation[i]->GetNData()];
 
-          Convolute(fitset,validation[i],theory);
+          Convolute(fitset.get(),validation[i],theory);
           NNPDF::ComputeChi2(validation[i],1,theory,&erf_val);
 
           dofval += validation[i]->GetNData();
@@ -349,14 +347,14 @@ int main(int argc, char **argv)
         for (int j = 0; j < settings.GetExpSets(i).size(); j++)
           {
             datasets.push_back(LoadDataSet(settings, settings.GetExpSets(i)[j], DATA_FILTERED));
-            MakeT0Predictions(T0Set, datasets[j]);
+            MakeT0Predictions(T0Set.get(), datasets[j]);
           }
 
         // Load Experiments
         Experiment *exp = new Experiment(datasets, settings.GetExpName(i));
         real* theory = new real[exp->GetNData()];
 
-        Convolute(fitset,exp,theory);
+        Convolute(fitset.get(),exp,theory);
         NNPDF::ComputeChi2(exp,1,theory,&chi2);
 
         dof += exp->GetNData();
@@ -373,7 +371,7 @@ int main(int argc, char **argv)
       {
         // Load Experiments
         int res;
-        pos[i].ComputeNUnacceptable(fitset,&res);
+        pos[i].ComputeNUnacceptable(fitset.get(),&res);
         if (res != 0)
           {
             cout << Colour::FG_RED << "- Positivity Vetoed\n" << Colour::FG_DEFAULT << endl;
@@ -391,11 +389,7 @@ int main(int argc, char **argv)
       fitset->ExportPDF(replica);
 
       // Export Logs
-      delete minim;
       LogManager::ExportLogs();
-
-      // Delete t0set
-      delete T0Set;
 
       cout << Colour::FG_GREEN << endl;
       cout << " -------------------------------------------------\n";

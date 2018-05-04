@@ -13,6 +13,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <array>
 
 #include "fitpdfset.h"
 #include "nnpdfsettings.h"
@@ -25,6 +26,7 @@ using std::setprecision;
 using std::scientific;
 using std::fixed;
 using std::ofstream;
+using std::array;
 
 #define EPSILON 1e-5
 
@@ -55,8 +57,8 @@ fbtype(NNPDFSettings::getFitBasisType(nnset.Get("fitting","fitbasis").as<string>
 FitPDFSet::~FitPDFSet()
 {
   for (int j=0; j<fSettings.GetNFL(); j++)
-    if (fBestFit[j] != NULL)
-      delete fBestFit[j];
+    delete fBestFit[j];
+  delete[] fBestFit;
 
   for (size_t i=0; i<fPDFs.size(); i++)
   {
@@ -68,7 +70,7 @@ FitPDFSet::~FitPDFSet()
   fPDFs.clear();
 
   for (size_t i=0; i<fPreprocParam.size(); i++)
-    delete[] fPreprocParam[i];
+    delete fPreprocParam[i];
   fPreprocParam.clear();
 }
 
@@ -509,17 +511,17 @@ void FitPDFSet::ExportPDF( int const& rep )
 
   // Performing DGLAP
   cout << Colour::FG_BLUE << "- Solving DGLAP for LHAPDF grid..." << Colour::FG_DEFAULT << endl;
-  real *pdf = new real[14];
+  array<real, 14> pdf;
   const int nx = xgrid.size();
-  vector<vector<real*> > res(q2grid.size());
+  vector<vector<array<real, 14> > > res(q2grid.size());
 
   for (int s = 0; s < (int) q2grid.size(); s++)
     for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
       for (int ix = 0; ix < nx; ix++)
         {
-          real *lha = new real[14];
-          GetPDF(xgrid[ix], q2grid[s][iq], 0, pdf);
-          PDFSet::EVLN2LHA(pdf, lha);
+          array<real, 14> lha;
+          GetPDF(xgrid[ix], q2grid[s][iq], 0, pdf.data());
+          PDFSet::EVLN2LHA(pdf.data(), lha.data());
           res[s].push_back(lha);
         }
 
@@ -563,7 +565,8 @@ void FitPDFSet::ExportPDF( int const& rep )
        lhaout << "---" << std::endl;
      }
 
-  delete[] pdf;
+  //delete[] pdf;
+
   lhaout.close();
 
   cout << Colour::FG_GREEN << "\n- LHAPDF successful writeout!" << Colour::FG_DEFAULT << endl << endl;

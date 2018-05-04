@@ -28,6 +28,7 @@ class FitBasis: public PDFBasis
 {
 public:
   FitBasis(NNPDFSettings const&, string name, int nPDF); //!< FitBasis constructor
+  ~FitBasis(); //!< FitBasis destructor
 
   virtual void BASIS2EVLN(real const* basis, real* evln) const = 0;
   virtual void EVLN2BASIS(real const* evln, real* basis) const = 0;
