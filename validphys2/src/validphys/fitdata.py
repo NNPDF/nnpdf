@@ -118,7 +118,7 @@ def replica_data(fit, replica_paths):
 
 
 @table
-def fit_summary(fit, replica_data):
+def fit_summary(replica_data):
     """ Summary table of fit properties
         - Average chi-squared
         - Training and Validation error functions
@@ -134,10 +134,10 @@ def fit_summary(fit, replica_data):
     nite = [x.nite for x in replica_data]
     etrain = [x.training for x in replica_data]
     evalid = [x.validation for x in replica_data]
-    data = {"$<\chi^2>$":         [np.mean(chi2), np.std(chi2)],
-            "$E_{\mathrm{trn}}$": [np.mean(etrain), np.std(etrain)],
-            "$E_{\mathrm{val}}$": [np.mean(evalid), np.std(evalid)],
-            "$TL$": [np.mean(nite), np.std(nite)]}
+    data = {r"$<\chi^2>$":         [np.mean(chi2), np.std(chi2)],
+            r"$E_{\mathrm{trn}}$": [np.mean(etrain), np.std(etrain)],
+            r"$E_{\mathrm{val}}$": [np.mean(evalid), np.std(evalid)],
+            r"$TL$": [np.mean(nite), np.std(nite)]}
     return pd.DataFrame(data, index=["Mean", "StdDev"]).transpose()
 
 def fit_sum_rules(fit, replica_paths):
