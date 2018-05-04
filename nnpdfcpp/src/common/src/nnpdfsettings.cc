@@ -315,10 +315,7 @@ vector<int> NNPDFSettings::GetDataMask(const string &setname, filterType useFilt
  */
 DataSetInfo const& NNPDFSettings::GetSetInfo(string const& setname) const
 {
-  std::hash<std::string> str_hash;
-  const size_t hashval = str_hash(setname);
-
-  map<int,DataSetInfo>::const_iterator iMap = fDataSetInfo.find(hashval);
+  map<string,DataSetInfo>::const_iterator iMap = fDataSetInfo.find(setname);
   if (iMap != fDataSetInfo.end())
     return (*iMap).second;
   else
@@ -335,10 +332,7 @@ DataSetInfo const& NNPDFSettings::GetSetInfo(string const& setname) const
  */
 PosSetInfo const& NNPDFSettings::GetPosInfo(string const& posname) const
 {
-  std::hash<std::string> str_hash;
-  const size_t hashval = str_hash(posname);
-
-  map<int,PosSetInfo>::const_iterator iMap = fPosSetInfo.find(hashval);
+  map<string,PosSetInfo>::const_iterator iMap = fPosSetInfo.find(posname);
   if (iMap != fPosSetInfo.end())
     return (*iMap).second;
   else
@@ -528,14 +522,10 @@ void NNPDFSettings::LoadExperiments()
             cfactors.push_back(cfs.str());
           }
 
-          // Generate hash of setname
-          std::hash<std::string> str_hash;
-          const size_t hashval = str_hash(setname);
-
           DataSetInfo info = {setname, setsys, setfrac, cfactors};
-          map<int,DataSetInfo>::const_iterator iMap = fDataSetInfo.find(hashval);
-          if (iMap != fDataSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadExperiments error: hash collision for set: " << setname << Colour::FG_DEFAULT << endl; exit(-1); }
-          else { fDataSetInfo.insert(make_pair(hashval, info)); }
+          map<string,DataSetInfo>::const_iterator iMap = fDataSetInfo.find(setname);
+          if (iMap != fDataSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadExperiments error: duplicate for set: " << setname << Colour::FG_DEFAULT << endl; exit(-1); }
+          else { fDataSetInfo.insert(make_pair(setname, info)); }
           nsetname.push_back(setname);
           fSetName.push_back(setname);
         }
@@ -560,13 +550,9 @@ void NNPDFSettings::LoadPositivities()
       fPosName.push_back(posname);
       PosSetInfo info = {posname, poslambda};
 
-      // Generate hash of setname
-      std::hash<std::string> str_hash;
-      const size_t hashval = str_hash(posname);
-
-      map<int,PosSetInfo>::const_iterator iMap = fPosSetInfo.find(hashval);
-      if (iMap != fPosSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadPositivity error: hash collision for set: " << posname << Colour::FG_DEFAULT << endl; exit(-1); }
-      else { fPosSetInfo.insert(make_pair(hashval, info)); }
+      map<string,PosSetInfo>::const_iterator iMap = fPosSetInfo.find(posname);
+      if (iMap != fPosSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadPositivity error: duplicate for set: " << posname << Colour::FG_DEFAULT << endl; exit(-1); }
+      else { fPosSetInfo.insert(make_pair(posname, info)); }
     }
 }
 
