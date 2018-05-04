@@ -87,8 +87,7 @@ def theory_covmat_datasets(each_dataset_results_theory):
             diff6  = f - central
             s = (1/6)*(np.outer(diff1,diff1) + np.outer(diff2,diff2)+ np.outer(diff3,diff3)
                    + np.outer(diff4,diff4)+ np.outer(diff5,diff5) + np.outer(diff6,diff6))
-        sigmas = [x[0].covmat for x in dataset]
-        sigma = sigmas[0]
+        sigma = dataset[0][0].covmat
         cov = s + sigma
         dataset_cent_th = dataset[0]
         for x in dataset_cent_th:
@@ -119,8 +118,7 @@ def theory_covmat_experiments(experiments_results_theory):
             diff6  = f - central
             s = (1/6)*(np.outer(diff1,diff1) + np.outer(diff2,diff2)+ np.outer(diff3,diff3)
                    + np.outer(diff4,diff4)+ np.outer(diff5,diff5) + np.outer(diff6,diff6)) 
-        sigmas = [x[0].covmat for x in experiment]
-        sigma = sigmas[0]
+        sigma = experiment[0][0].covmat
         cov = s + sigma
         experiment_cent_th = experiment[0]
         for x in experiment_cent_th:
