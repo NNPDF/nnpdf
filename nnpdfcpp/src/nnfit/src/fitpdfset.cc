@@ -564,9 +564,6 @@ void FitPDFSet::ExportPDF( int const& rep )
            }
        lhaout << "---" << std::endl;
      }
-
-  //delete[] pdf;
-
   lhaout.close();
 
   cout << Colour::FG_GREEN << "\n- LHAPDF successful writeout!" << Colour::FG_DEFAULT << endl << endl;
