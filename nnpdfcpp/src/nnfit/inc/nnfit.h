@@ -37,7 +37,6 @@ void CreateResultsFolder(const NNPDFSettings &settings, const int replica)
   stringstream folder("");
   folder << settings.GetResultsDirectory() << "/nnfit";
   int status = mkdir(folder.str().c_str(), 0777);
-  cout << status << endl;
   if (status == -1 && errno != EEXIST)
     throw FileError("CreateResultsFolder", "Cannot create folder " + folder.str());
   folder << "/replica_" << replica;
