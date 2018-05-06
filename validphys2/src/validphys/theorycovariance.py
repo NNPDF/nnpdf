@@ -331,7 +331,7 @@ def plot_normexpplusthcovmat_heatmap(experimentsplustheory_normcovmat):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
     df = experimentsplustheory_normcovmat
     matrix = experimentsplustheory_normcovmat.as_matrix()
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix*100, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.1,
                             linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
     cbar = fig.colorbar(matrixplot, label="% of data")
