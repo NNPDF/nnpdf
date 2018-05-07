@@ -30,77 +30,79 @@ log = logging.getLogger(__name__)
 theoryids_experiments_central_values = collect(experiments_central_values, ('theoryids',))
 
 @make_argcheck
-def check_three_or_seven_theories(theoryids):
+def _check_three_or_seven_theories(theoryids):
     l = len(theoryids)
     if l!=3 and l!=7:
         raise CheckError(f"Expecting exactly 3 or 7 theories, but got {l}.")
 
-@table
-@check_three_or_seven_theories
-def theory_covmat(theoryids_experiments_central_values, experiments_index):
-    """Calculates the theory covariance matrix for 3- or 7-point scale variations.
-    The matrix is a dataframe indexed by experiments_index."""
+@make_argcheck
+def _check_three_theories(theoryids):
+    l = len(theoryids)
+    if l!=3:
+        raise CheckError(f"Expecting exactly 3 theories, but got {l}.")
 
-    central, *others = np.array(theoryids_experiments_central_values)
+def make_scale_var_covmat(predictions):
+    """Takes N theory predictions at different scales and applies N-pt scale variations
+    to produce a covariance matrix."""
+    central, *others = predictions
     diffs = (other - central for other in others)
-    s = sum(np.outer(d,d) for d in diffs)/len(others)
-    
+    s = sum(np.outer(d,d) for d in diffs)/len(others)  
+    return s
+
+@table
+@_check_three_or_seven_theories
+def theory_covmat(theoryids_experiments_central_values, experiments_index):
+    """Calculates the theory covariance matrix for scale variations.
+    The matrix is a dataframe indexed by experiments_index."""
+    s = make_scale_var_covmat(theoryids_experiments_central_values)
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
 
-theoryids_results = collect(results, ('theoryids',))
+results_theoryids = collect(results,('theoryids',))
+each_dataset_results_theory = collect('results_theoryids', ('experiments', 'experiment'))
 
-@check_three_or_seven_theories
+@_check_three_or_seven_theories
 def theory_covmat_datasets(each_dataset_results_theory):
     """Produces an array of total covariance matrices; the sum of experimental
-    and  3/7pt scale-varied theory covariance matrices. Each matrix corresponds
+    and scale-varied theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard.
     These are needed for calculation of chi2 per dataset. """
+    dataset_covmats=[]
     for dataset in each_dataset_results_theory:
         theory_centrals = [x[1].central_value for x in dataset]
-
-        central, *others = theory_centrals
-        diffs = (other - central for other in others)
-        s = sum(np.outer(d,d) for d in diffs)/len(others)
-
+        s = make_scale_var_covmat(theory_centrals)
         sigma = dataset[0][0].covmat
         cov = s + sigma
-        dataset_cent_th = dataset[0]
-        for x in dataset_cent_th:
-            x.total_covmat = cov
-    dataset_cent = [dataset[0] for dataset in each_dataset_results_theory]
-    dataset_covmats = [x[0].total_covmat for x in dataset_cent]
+        dataset_covmats.append(cov)
     return dataset_covmats
 
 <<<<<<< HEAD
 def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
+    """Takes the theory covariance matrices for individual datasets and
+    returns a data frame with a block diagonal theory covariance matrix
+    by dataset"""
     s  = la.block_diag(*theory_covmat_datasets)
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)   
     return df
 
+experiments_results = collect(experiment_results, ('experiments',))
+experiments_results_theory = collect('experiments_results', ('theoryids',))
+
 def theory_covmat_experiments(experiments_results_theory):
     """Same as theory_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
-    experiments_results_theory = np.swapaxes(experiments_results_theory, 0, 1)
-    for exp in experiments_results_theory:
-        theory_centrals = [x[1].central_value for x in exp]
-
-        central, *others = theory_centrals
-        diffs = (other - central for other in others)
-        s = sum(np.outer(d,d) for d in diffs)/len(others)
-
-        sigma = exp[0][0].covmat
+    exp_result_covmats = []
+    for exp_result in zip(*experiments_results_theory):
+        theory_centrals = [x[1].central_value for x in exp_result]
+        s = make_scale_var_covmat(theory_centrals)
+        sigma = exp_result[0][0].covmat
         cov = s + sigma
-        exp_cent_th = exp[0]
-        for x in exp_cent_th:
-            x.total_covmat = cov
-    exp_cent = [exp[0] for exp in experiments_results_theory]
-    exp_covmats = [x[0].total_covmat for x in exp_cent]
-    return exp_covmats
+        exp_result_covmats.append(cov)
+    return exp_result_covmats
 
 @table
 def theory_corrmat(theory_covmat):
-    """Calculates the theory correlation matrix for 3- or 7-point scale variations."""
+    """Calculates the theory correlation matrix for scale variations."""
     df = theory_covmat
     covmat = df.as_matrix()
     diag_minus_half = (np.diagonal(covmat))**(-0.5)
@@ -109,17 +111,15 @@ def theory_corrmat(theory_covmat):
 
 @table
 def theory_blockcorrmat(theory_block_diag_covmat):
-    """Calculates the theory correlation matrix for 3- or 7-point scale variations with block diagonal entries by dataset only"""
-    df = theory_block_diag_covmat
-    covmat = df.as_matrix()
-    diag_minus_half = (np.diagonal(covmat))**(-0.5)
-    mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
+    """Calculates the theory correlation matrix for scale variations 
+    with block diagonal entries by dataset only"""
+    mat = theory_corrmat(theory_block_diag_covmat)
     return mat
 
 @table
 def theory_normcovmat(theory_covmat, experiments_data):
-    """Calculates the theory covariance matrix for 3- or
-     7-point scale variations normalised to data."""
+    """Calculates the theory covariance matrix for scale variations normalised
+    to data."""
     df = theory_covmat
     experiments_data_array = np.array(experiments_data)
     mat = df/np.outer(experiments_data_array, experiments_data_array)
@@ -127,7 +127,8 @@ def theory_normcovmat(theory_covmat, experiments_data):
 
 @table
 def theory_normblockcovmat(theory_block_diag_covmat, experiments_data):
-    """Calculates the theory covariance matrix for 3- or 7-point scale variations normalised to data."""
+    """Calculates the theory covariance matrix for scale variations 
+    normalised to data, block diagonal by dataset."""
     df = theory_block_diag_covmat
     experiments_data_array = np.array(experiments_data)
     mat = df/np.outer(experiments_data_array, experiments_data_array)
@@ -135,19 +136,20 @@ def theory_normblockcovmat(theory_block_diag_covmat, experiments_data):
 
 @table
 def experimentsplustheory_covmat(experiments_covmat, theory_covmat):
-    """Calculates the experiment + theory covariance matrix for 3- or 7-point scale variations."""
+    """Calculates the experiment + theory covariance matrix for 
+    scale variations."""
     df = experiments_covmat + theory_covmat
     return df
 
 @table
 def experimentsplusblocktheory_covmat(experiments_covmat, theory_block_diag_covmat):
-    """Calculates the experiment + theory covariance matrix for 3- or 7-point scale variations."""
+    """Calculates the experiment + theory covariance matrix for scale variations."""
     df = experiments_covmat + theory_block_diag_covmat
     return df
 
 @table
 def experimentsplustheory_normcovmat(experiments_covmat, theory_covmat, experiments_data):
-    """Calculates the experiment + theory covariance matrix for 3- or 7-point scale
+    """Calculates the experiment + theory covariance matrix for scale
        variations normalised to data."""
     df = experiments_covmat + theory_covmat
     experiments_data_array = np.array(experiments_data)
@@ -155,24 +157,18 @@ def experimentsplustheory_normcovmat(experiments_covmat, theory_covmat, experime
     return mat
 
 @table
-def experimentsplusblocktheory_normcovmat(experiments_covmat, theory_block_diag_covmat, experiments_data):
-    """Calculates the experiment + theory covariance matrix for 3- or 7-point scale
-       variations normalised to data."""
-    df = experiments_covmat + theory_block_diag_covmat
-    experiments_data_array = np.array(experiments_data)
-    mat = df/np.outer(experiments_data_array, experiments_data_array)
+def experimentsplusblocktheory_normcovmat(experiments_covmat, theory_block_diag_covmat, experiments_data, experimentsplustheory_normcovmat):
+    """Calculates the experiment + theory covariance matrix for scale
+       variations normalised to data, block diagonal by data set."""
+    mat = experimentsplustheory_normcovmat(experiments_covmat, theory_block_diag_covmat, experiments_data)
     return mat
 
 @table
 def experimentsplustheory_corrmat(experiments_covmat, theory_covmat):
     """Calculates the correlation matrix for the experimental
-    plus theory (3/7 pt) covariance matrices."""
-    exp_df = experiments_covmat
-    theory_df = theory_covmat
+    plus theory covariance matrices."""
     total_df = experiments_covmat + theory_covmat
-    exp_cov = exp_df.as_matrix()
-    theory_cov = theory_df.as_matrix()
-    total_cov = exp_cov + theory_cov
+    total_cov = (experiments_covmat + theory_covmat).as_matrix()
     diag_minus_half = (np.diagonal(total_cov))**(-0.5)
     corrmat = diag_minus_half[:,np.newaxis]*total_df*diag_minus_half
     return corrmat
@@ -180,70 +176,57 @@ def experimentsplustheory_corrmat(experiments_covmat, theory_covmat):
 @table
 def experimentsplusblocktheory_corrmat(experiments_covmat, theory_block_diag_covmat):
     """Calculates the correlation matrix for the experimental
-    plus theory (3/7 pt) covariance matrices."""
-    exp_df = experiments_covmat
-    theory_df = theory_block_diag_covmat
-    total_df = experiments_covmat + theory_block_diag_covmat
-    exp_cov = exp_df.as_matrix()
-    theory_cov = theory_df.as_matrix()
-    total_cov = exp_cov + theory_cov
-    diag_minus_half = (np.diagonal(total_cov))**(-0.5)
-    corrmat = diag_minus_half[:,np.newaxis]*total_df*diag_minus_half
+    plus theory covariance matrices, block diagonal by dataset."""
+    corrmat = experimentsplustheory_corrmat(experiments_covmat, theory_block_diag_covmat)
     return corrmat
 
 def chi2_impact(theory_covmat, experiments_covmat, experiments_results):
     """ Returns total chi2 including theory cov mat """
-    dataresults = [ x[0] for x in experiments_results ]
-    theoryresults = [ x[1] for x in experiments_results ]
+    dataresults, theoryresults = zip(*experiments_results)
     dat_central_list = [x.central_value for x in dataresults]
     th_central_list = [x.central_value for x in theoryresults]
-    dat_central = np.concatenate([x for x in dat_central_list])
+    dat_central = np.concatenate(dat_central_list)
     th_central  = np.concatenate([x for x in th_central_list])
     central_diff = dat_central - th_central
     cov = theory_covmat.as_matrix() + experiments_covmat.as_matrix()
-    elements = np.dot(central_diff.T,np.dot(la.inv(cov),central_diff))
+    elements = central_diff.T@(la.inv(cov)@central_diff)
     chi2 = (1/len(central_diff))*np.sum(elements)
     return chi2
+
+def data_theory_diff(experiments_results):
+    """Returns (D-T) for central theory, for use in chi2 calculations"""
+    dataresults, theoryresults = zip(*experiments_results)
+    dat_central_list = [x.central_value for x in dataresults]
+    th_central_list = [x.central_value for x in theoryresults]
+    dat_central = np.concatenate(dat_central_list)
+    th_central  = np.concatenate(th_central_list)
+    central_diff = dat_central - th_central
+    return central_diff
 
 def chi2_block_impact(theory_block_diag_covmat, experiments_covmat, experiments_results):
     """ Returns total chi2 including theory cov mat """
-    dataresults = [ x[0] for x in experiments_results ]
-    theoryresults = [ x[1] for x in experiments_results ]
-    dat_central_list = [x.central_value for x in dataresults]
-    th_central_list = [x.central_value for x in theoryresults]
-    dat_central = np.concatenate([x for x in dat_central_list])
-    th_central  = np.concatenate([x for x in th_central_list])
-    central_diff = dat_central - th_central
-    cov = theory_block_diag_covmat.as_matrix() + experiments_covmat.as_matrix()
-    elements = np.dot(central_diff.T,np.dot(la.inv(cov),central_diff))
-    chi2 = (1/len(central_diff))*np.sum(elements)
+    chi2 = chi2_impact(theory_block_diag_covmat, experiments_covmat, experiments_results)
     return chi2
 
-def chi2_diag_only(theory_covmat, experiments_covmat, experiments_results):
+def chi2_diag_only(theory_covmat, experiments_covmat, data_theory_diff):
     """ Returns total chi2 including only diags of theory cov mat """
-    dataresults = [ x[0] for x in experiments_results ]
-    theoryresults = [ x[1] for x in experiments_results ]
-    dat_central_list = [x.central_value for x in dataresults]
-    th_central_list = [x.central_value for x in theoryresults]
-    dat_central = np.concatenate([x for x in dat_central_list])
-    th_central  = np.concatenate([x for x in th_central_list])
-    central_diff = dat_central - th_central
     s = theory_covmat.as_matrix()
-    s_diag = np.zeros((len(central_diff),len(central_diff)))
+    s_diag = np.zeros((len(data_theory_diff),len(data_theory_diff)))
     np.fill_diagonal(s_diag, np.diag(s))
     cov = s_diag + experiments_covmat.as_matrix()
-    elements = np.dot(central_diff.T,np.dot(la.inv(cov),central_diff))
-    chi2 = (1/len(central_diff))*np.sum(elements)
+    elements = np.dot(data_theory_diff.T,np.dot(la.inv(cov),data_theory_diff))
+    chi2 = (1/len(data_theory_diff))*np.sum(elements)
     return chi2
+
+each_dataset_results = collect(results, ('experiments', 'experiment'))
 
 def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets):
     """ Returns an array of tuples (member_chi², central_chi², numpoints)
     corresponding to each data set, where theory errors are included"""
     chi2data_array = []
-    for i, results in enumerate(each_dataset_results):
+    for results, covmat in zip(each_dataset_results, theory_covmat_datasets):
         data_result, th_result = results
-        covmat = theory_covmat_datasets[i]
-        chi2s = all_chi2_theory(results, covmat)
+        chi2s = all_chi2_theory(results,covmat)
         central_result = central_chi2_theory(results, covmat)
         chi2data_array.append(Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
                                    central_result, len(data_result)))
@@ -252,9 +235,8 @@ def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets):
 def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experiments):
     """ Like abs_chi2_data_theory_dataset but for experiments not datasets"""
     chi2data_array = []
-    for i, results in enumerate(experiments_results):
+    for results, covmat in zip(experiments_results, theory_covmat_experiments):
         data_result, th_result = results
-        covmat = theory_covmat_experiments[i]
         chi2s = all_chi2_theory(results, covmat)
         central_result = central_chi2_theory(results, covmat)
         chi2data_array.append(Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
@@ -268,29 +250,14 @@ def experiments_chi2_table_theory(experiments, pdf, abs_chi2_data_theory_experim
     return experiments_chi2_table(experiments, pdf, abs_chi2_data_theory_experiment,
                                 abs_chi2_data_theory_dataset)
 
-
-
-experiments_results = collect(experiment_results, ('experiments',))
-theoryids_experiments_results = collect('experiments_results', ('theoryids',))
-each_dataset_results = collect(results, ('experiments', 'experiment'))
-results_theoryids = collect(results,('theoryids',))
-experiment_results_theoryids = collect(experiment_results, ('theoryids',))
-each_dataset_results_theory = collect('results_theoryids', ('experiments', 'experiment'))
-experiments_results_theory2 = collect('experiment_results_theoryids', ('experiments', 'experiment'))
-
-
-experiments_results_theory = collect('experiments_results', ('theoryids',))
-
 def matrix_plot_labels(df):
-    explabels  = [list(df)[x][0] for x in range(len(list(df)))]
-    points     = [list(df)[x][2] for x in range(len(list(df)))]
-    unique_exp = [[0 for x in range(2)] for y in range(len(explabels))]
-    unique_exp[0] = [explabels[0],points[0]]
+    explabels = [x[0] for x in df.columns]
+    points = [x[2] for x in df.columns]
+    unique_exp = []
     i=1
     for x in range(len(explabels)-1):
         if explabels[x+1] != explabels[x]:
-            unique_exp[i] = [explabels[x+1],x+1]
-            i=i+1
+            unique_exp.append([explabels[x+1],x+1])
     unique_exp = [sublist for i, sublist in enumerate(unique_exp) if sublist[0] != 0]
     ticklabels = [unique_exp[x][0] for x in range(len(unique_exp))]
     startlocs = [unique_exp[x][1] for x in range(len(unique_exp))]
@@ -298,8 +265,6 @@ def matrix_plot_labels(df):
     ticklocs = [0 for x in range(len(startlocs)-1)]
     for i in range(len(startlocs)-1):
         ticklocs[i] = 0.5*(startlocs[i+1]+startlocs[i])
-    print("Experiment names:   " + str(ticklabels))
-    print("Datapoint start locations:   " + str(startlocs))
     return ticklocs, ticklabels
 
 @figure
@@ -525,9 +490,11 @@ def plot_diag_cov_impact(theory_covmat, experiments_covmat, experiments_data):
     ax.legend()
     return fig
 
+@_check_three_theories
 @figure
 def plot_theory_error_test(theory_covmat, experiments_covmat, experiments_data,
                            theoryids_experiments_central_values):
+    """This is a test function which works for 3 point scale variations only"""
     rc.update({'font.size': 30})
     data = experiments_data.as_matrix()
     df_theory = theory_covmat
