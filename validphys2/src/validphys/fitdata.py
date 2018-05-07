@@ -118,27 +118,33 @@ def replica_data(fit, replica_paths):
 
 
 @table
-def fit_summary(replica_data):
+def fit_summary(replica_data, experiments_chi2_table):
     """ Summary table of fit properties
+        - Central chi-squared
         - Average chi-squared
         - Training and Validation error functions
         - Training lengths
 
         TODO:
         - Phi
-        - Central chi-squared
         Maybe we want to run this over a collection of fits?
     """
+    total_chi2 = 0
+    total_ndat = 0
+    for index, row in experiments_chi2_table.iterrows():
+        total_ndat = total_ndat + row["npoints"]
+        total_chi2 = total_chi2 + row["central_mean"]
 
     chi2 = [x.chi2 for x in replica_data]
     nite = [x.nite for x in replica_data]
     etrain = [x.training for x in replica_data]
     evalid = [x.validation for x in replica_data]
-    data = {r"$<\chi^2>$":         [np.mean(chi2), np.std(chi2)],
-            r"$E_{\mathrm{trn}}$": [np.mean(etrain), np.std(etrain)],
-            r"$E_{\mathrm{val}}$": [np.mean(evalid), np.std(evalid)],
-            r"$TL$": [np.mean(nite), np.std(nite)]}
-    return pd.DataFrame(data, index=["Mean", "StdDev"]).transpose()
+    data = {r"$\chi^2$":           [total_chi2/total_ndat, "-"],
+            r"$<\chi^2>$":         [np.mean(chi2), np.std(chi2)],
+            r"$<E_{\mathrm{trn}}>$": [np.mean(etrain), np.std(etrain)],
+            r"$<E_{\mathrm{val}}>$": [np.mean(evalid), np.std(evalid)],
+            r"$<TL>$": [np.mean(nite), np.std(nite)]}
+    return pd.DataFrame(data, index=["Value", "StdDev"]).transpose()
 
 def fit_sum_rules(fit, replica_paths):
     """Return a SumRulesGrid object with the sumrules for each replica as

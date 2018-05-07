@@ -1,11 +1,13 @@
 fit: 180307-lr-nlo-xF2dot0xR2dot0_DISonly
-
-theory:
-    from_: fit
-
+pdf: 180307-lr-nlo-xF2dot0xR2dot0_DISonly
+theory: 
+  from_: fit
+theoryid: 
+  from_: theory
 experiments:
-    from_: fit
+  from_: fit
 
+use_cuts: True
 template_text: |
     ---
     title: Fit summary table example 
@@ -16,5 +18,4 @@ template_text: |
     {@ fit_summary @}
 
 actions_:
-  -   - report:
-          main: True
+  - report(main=True)
