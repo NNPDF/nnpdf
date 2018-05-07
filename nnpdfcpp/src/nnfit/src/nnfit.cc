@@ -111,52 +111,11 @@ int main(int argc, char **argv)
 
       // Read data and perform training-validation split
       cout << Colour::FG_YELLOW << "-----------------  Performing training - validation split ----------------- " << Colour::FG_DEFAULT << endl;
-      vector<Experiment*> Exp;
+
       vector<Experiment*> training;
       vector<Experiment*> validation;
-
-      auto T0Set = std::make_unique<LHAPDFSet>(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::erType::ER_MCT0);
-      for (int i = 0; i < settings.GetNExp(); i++)
-        {
-          if (settings.GetExpName(i) == "REWEIGHT") // Don't fit RW experiment
-            continue;
-
-          vector<DataSet> datasets;
-          for (int j = 0; j < settings.GetExpSets(i).size(); j++)
-            {
-              datasets.push_back(LoadDataSet(settings, settings.GetExpSets(i)[j], DATA_FILTERED));
-              MakeT0Predictions(T0Set.get(),datasets[j]);
-            }
-
-          auto exp = std::make_unique<Experiment>(datasets, settings.GetExpName(i));
-
-          if (settings.Get("closuretest","printpdf4gen").as<bool>())
-            Exp.push_back(new Experiment(datasets, settings.GetExpName(i)));
-
-          // Apply MC shifts
-          if (settings.Get("fitting","genrep").as<bool>())
-            exp->MakeReplica();
-
-          training.push_back(NULL);
-          validation.push_back(NULL);
-
-          TrainValidSplit(settings, exp.get(), training.back(), validation.back());
-        }
-
-      // Read Positivity Sets
-      if (settings.GetNPos())
-        cout << Colour::FG_YELLOW << " ----------------- Reading positivity sets ----------------- " << Colour::FG_DEFAULT << endl;
-
-      // Positivity sets
       vector<PositivitySet> pos;
-      for (int i = 0; i < settings.GetNPos(); i++)
-        {
-          cout << Colour::FG_BLUE << "\n- Loading: " << Colour::FG_DEFAULT << settings.GetPosName(i) << endl;
-          pos.push_back(LoadPositivitySet(settings,settings.GetPosName(i),settings.GetPosInfo(settings.GetPosName(i)).tLambda));
-          pos[i].SetBounds(T0Set.get());
-        }
-
-      cout <<endl;
+      LoadAllDataAndSplit(settings, training, validation, pos);
 
       // Fit Basis
       std::unique_ptr<FitBasis> fitbasis(getFitBasis(settings, NNPDFSettings::getFitBasisType(settings.Get("fitting","fitbasis").as<string>()), replica));
@@ -268,9 +227,9 @@ int main(int argc, char **argv)
         if (state == FIT_ABRT)
           break;
 
-        minim->Iterate(fitset.get(),training, pos);
+        minim->Iterate(fitset.get(), training, pos);
 
-        if (stop->Stop(fitset.get(),training,validation,pos)) break;
+        if (stop->Stop(fitset.get(), training, validation, pos)) break;
 
         if (settings.Get("debug").as<bool>())
         {
@@ -280,7 +239,7 @@ int main(int argc, char **argv)
         }
 
         if (i % 100 == 0)
-            LogChi2(settings,fitset.get(),pos,training,validation,Exp);
+            LogChi2(settings, fitset.get(), pos, training, validation);
       }
 
       state = FIT_END;
@@ -293,14 +252,13 @@ int main(int argc, char **argv)
       // Compute training error function and free training sets
       for (size_t i = 0; i < training.size(); i++)
       {
-        real* theory = new real[training[i]->GetNData()];
+        vector<real> theory(training[i]->GetNData());
 
-        Convolute(fitset.get(),training[i],theory);
-        NNPDF::ComputeChi2(training[i],1,theory,&erf_trn);
+        Convolute(fitset.get(),training[i],theory.data());
+        NNPDF::ComputeChi2(training[i],1,theory.data(),&erf_trn);
 
         doftrn += training[i]->GetNData();
 
-        delete[] theory;
         delete training[i];
       }
 
@@ -308,14 +266,13 @@ int main(int argc, char **argv)
       for (size_t i = 0; i < validation.size(); i++)
         if (validation[i])
         {
-          real* theory = new real[validation[i]->GetNData()];
+          vector<real> theory(validation[i]->GetNData());
 
-          Convolute(fitset.get(),validation[i],theory);
-          NNPDF::ComputeChi2(validation[i],1,theory,&erf_val);
+          Convolute(fitset.get(),validation[i],theory.data());
+          NNPDF::ComputeChi2(validation[i],1,theory.data(),&erf_val);
 
           dofval += validation[i]->GetNData();
 
-          delete[] theory;
           delete validation[i];
         }
 
@@ -329,15 +286,11 @@ int main(int argc, char **argv)
       training.clear();
       validation.clear();
 
-      // Free experiment array when PRINTPDF4GEN is activated
-      for (size_t i = 0; i < Exp.size(); i++)
-        if (Exp[i]) delete Exp[i];
-      Exp.clear();
-
       // Compute Final Chi2
       cout << Colour::FG_YELLOW << "Final Chi2 Test" << Colour::FG_DEFAULT << endl;
       int dof = 0;
       real chi2 = 0;
+      auto T0Set = std::make_unique<LHAPDFSet>(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::erType::ER_MCT0);
       for (int i = 0; i < settings.GetNExp(); i++)
       {
         if (settings.GetExpName(i) == "REWEIGHT") // Don't fit RW experiment
@@ -351,16 +304,13 @@ int main(int argc, char **argv)
           }
 
         // Load Experiments
-        Experiment *exp = new Experiment(datasets, settings.GetExpName(i));
-        real* theory = new real[exp->GetNData()];
+        auto exp = std::make_unique<Experiment>(datasets, settings.GetExpName(i));
+        vector<real> theory(exp->GetNData());
 
-        Convolute(fitset.get(),exp,theory);
-        NNPDF::ComputeChi2(exp,1,theory,&chi2);
+        Convolute(fitset.get(),exp.get(),theory.data());
+        NNPDF::ComputeChi2(exp.get(),1,theory.data(),&chi2);
 
         dof += exp->GetNData();
-
-        delete[] theory;
-        delete exp;
       }
 
       // Check Positivity Veto
@@ -405,14 +355,57 @@ int main(int argc, char **argv)
   return 0;
 }
 
+// Load data and perform trainng validation split
+void LoadAllDataAndSplit(NNPDFSettings const& settings,
+                         vector<Experiment*> & training,
+                         vector<Experiment*> & validation,
+                         vector<PositivitySet> & pos)
+{
+  auto T0Set = std::make_unique<LHAPDFSet>(settings.Get("datacuts","t0pdfset").as<string>(), PDFSet::erType::ER_MCT0);
+  for (int i = 0; i < settings.GetNExp(); i++)
+    {
+      if (settings.GetExpName(i) == "REWEIGHT") // Don't fit RW experiment
+        continue;
+
+      vector<DataSet> datasets;
+      for (int j = 0; j < settings.GetExpSets(i).size(); j++)
+        {
+          datasets.push_back(LoadDataSet(settings, settings.GetExpSets(i)[j], DATA_FILTERED));
+          MakeT0Predictions(T0Set.get(),datasets[j]);
+        }
+
+      auto exp = std::make_unique<Experiment>(datasets, settings.GetExpName(i));
+
+      // Apply MC shifts
+      if (settings.Get("fitting","genrep").as<bool>())
+        exp->MakeReplica();
+
+      training.push_back(NULL);
+      validation.push_back(NULL);
+
+      TrainValidSplit(settings, exp.get(), training.back(), validation.back());
+    }
+
+  // Read Positivity Sets
+  if (settings.GetNPos())
+    cout << Colour::FG_YELLOW << " ----------------- Reading positivity sets ----------------- " << Colour::FG_DEFAULT << endl;
+
+  // Positivity sets
+  for (int i = 0; i < settings.GetNPos(); i++)
+    {
+      cout << Colour::FG_BLUE << "\n- Loading: " << Colour::FG_DEFAULT << settings.GetPosName(i) << endl;
+      pos.push_back(LoadPositivitySet(settings,settings.GetPosName(i),settings.GetPosInfo(settings.GetPosName(i)).tLambda));
+      pos[i].SetBounds(T0Set.get());
+    }
+  cout << endl;
+}
 
 // Chi2 per experiment logger
 void LogChi2(NNPDFSettings const& settings,
              const FitPDFSet* pdf,
              vector<PositivitySet> const& pos,
              vector<Experiment*> const& train,
-             vector<Experiment*> const& valid,
-             vector<Experiment*> const& exp)
+             vector<Experiment*> const& valid)
 {
 
   if (pdf->GetMembers() != 1)
@@ -474,53 +467,16 @@ void LogChi2(NNPDFSettings const& settings,
   // Push log into logger class
   LogManager::AddLogEntry("Chi2Breakdown",logString.str());
 
-  // Now fill the log with chi2 to real data
-  if (settings.Get("closuretest","printpdf4gen").as<bool>())
-    {
-      stringstream logStringrd;
-      logStringrd << "Generation "<<pdf->GetNIte()<<"  NExp: "<<Nexp<<endl;
-
-      // Total chi^2 values for real data
-      real ExpChi2Tot = 0;
-      int nDataExp = 0;
-
-      const int Nexprd = exp.size();
-
-      for (int i = 0; i < Nexprd; i++)
-        {
-          string ExpName;
-          real Exp = 0;
-
-          // compute the chi^2 to real data
-          if (exp[i] != NULL)
-            {
-              ExpName = exp[i]->GetExpName();
-              FastAddChi2(pdf,exp[i],&Exp);
-              ExpChi2Tot += Exp;
-              Exp /= exp[i]->GetNData();
-              nDataExp += exp[i]->GetNData();
-            }
-
-          // Write to log string
-          logStringrd << "\t" << ExpName << "  " << Exp << endl;
-        }
-
-      logStringrd << "Total Exp: " << ExpChi2Tot/nDataExp << endl;
-
-      LogManager::AddLogEntry("Chi2RealData",logStringrd.str());
-    }
-
   return;
 }
 
 void TrainValidSplit(NNPDFSettings const& settings,
-                     Experiment* const& exp, Experiment *&tr, Experiment *&val)
+                     Experiment* const& exp, Experiment* &tr, Experiment* &val)
 {
   vector<DataSet> trainingSets;
   vector<DataSet> validationSets;
 
   int expValSize = 0; // size of validation experiment
-  RandomGenerator *rng = RandomGenerator::GetRNG(); // Random number generator
 
   for (int s = 0; s < exp->GetNSet(); s++)
     {
