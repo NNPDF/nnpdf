@@ -49,12 +49,14 @@ def theory_covmat(theoryids_experiments_central_values, experiments_index):
 
 theoryids_results = collect(results, ('theoryids',))
 
+
 @check_three_or_seven_theories
 def theory_covmat_datasets(each_dataset_results_theory):
     """Produces an array of total covariance matrices; the sum of experimental
     and  3/7pt scale-varied theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard.
     These are needed for calculation of chi2 per dataset. """
+    dataset_covmats=[]
     for dataset in each_dataset_results_theory:
         theory_centrals = [x[1].central_value for x in dataset]
 
@@ -65,10 +67,8 @@ def theory_covmat_datasets(each_dataset_results_theory):
         sigma = dataset[0][0].covmat
         cov = s + sigma
         dataset_cent_th = dataset[0]
-        for x in dataset_cent_th:
-            x.total_covmat = cov
+        dataset_covmats.append(cov)
     dataset_cent = [dataset[0] for dataset in each_dataset_results_theory]
-    dataset_covmats = [x[0].total_covmat for x in dataset_cent]
     return dataset_covmats
 
 def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
@@ -80,6 +80,7 @@ def theory_covmat_experiments(experiments_results_theory):
     """Same as theory_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
     experiments_results_theory = np.swapaxes(experiments_results_theory, 0, 1)
+    exp_covmats = []
     for exp in experiments_results_theory:
         theory_centrals = [x[1].central_value for x in exp]
 
@@ -90,10 +91,8 @@ def theory_covmat_experiments(experiments_results_theory):
         sigma = exp[0][0].covmat
         cov = s + sigma
         exp_cent_th = exp[0]
-        for x in exp_cent_th:
-            x.total_covmat = cov
+        exp_covmats.append(cov)
     exp_cent = [exp[0] for exp in experiments_results_theory]
-    exp_covmats = [x[0].total_covmat for x in exp_cent]
     return exp_covmats
 
 @table
