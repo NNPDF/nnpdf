@@ -18,7 +18,7 @@ namespace NNPDF {
  * Return an initialised fitting basis
  */
 class FitBasis;
-FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, int const& rep = 0);
+FitBasis* getFitBasis(NNPDFSettings const& settings, int const& rep = 0);
 
 /**
  *  \class FitBasis

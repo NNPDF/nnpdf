@@ -161,7 +161,7 @@ int main(int argc, char **argv)
       cout <<endl;
 
       // Fit Basis
-      FitBasis* fitbasis = getFitBasis(settings, NNPDFSettings::getFitBasisType(settings.Get("fitting","fitbasis").as<string>()), replica);
+      FitBasis* fitbasis = getFitBasis(settings, replica);
 
       // If 'dataseed' exists then reset the RNG to 'seed' for the GA
       if (settings.Exists("fitting","dataseed"))
@@ -201,29 +201,7 @@ int main(int argc, char **argv)
       }
 
       // Parametrisation control
-      FitPDFSet* fitset = NULL;
-      switch (NNPDFSettings::getParamType(settings.Get("fitting","paramtype").as<string>()))
-      {
-        case PARAM_NN:
-          fitset = FitPDFSet::Generate<MultiLayerPerceptron,GAMinimizer>(settings, fitbasis); // need to rewrite generate
-          cout << Colour::FG_BLUE << "Parametrisation: Neural Network" << Colour::FG_DEFAULT << endl;
-          break;
-
-        case PARAM_SLNPP:
-          fitset = FitPDFSet::Generate<SingleLayerPerceptronPreproc,GAMinimizer>(settings, fitbasis); // need to rewrite generate
-          cout << Colour::FG_BLUE << "Parametrisation: Single layer network (preprocessed)" << Colour::FG_DEFAULT << endl;
-          break;
-
-        case PARAM_SLN:
-          fitset = FitPDFSet::Generate<SingleLayerPerceptron,GAMinimizer>(settings, fitbasis); // need to rewrite generate
-          cout << Colour::FG_BLUE << "Parametrisation: Single layer network" << Colour::FG_DEFAULT << endl;
-          break;
-
-        default:
-          cout << Colour::FG_RED << "ERROR: Invalid Parametrisation" << Colour::FG_DEFAULT << endl;
-          exit(-1);
-          break;
-      }
+      FitPDFSet* fitset = getFitSet(settings, fitbasis);
       fitset->ValidateStartingPDFs();
 
       // Stopping criterion
