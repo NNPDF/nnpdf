@@ -6,7 +6,6 @@
 //          Stefano Carrazza, stefano.carrazza@mi.infn.it
 
 #include "common.h"
-#include "nnpdfsettings.h"
 #include "apfelevol.h"
 #include <NNPDF/exceptions.h>
 #include <APFEL/APFELdev.h>

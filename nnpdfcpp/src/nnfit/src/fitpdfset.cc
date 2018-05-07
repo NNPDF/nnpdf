@@ -31,6 +31,35 @@ using std::array;
 
 #define EPSILON 1e-5
 
+// return param type
+FitPDFSet* getFitSet(NNPDFSettings const& settings, FitBasis* const& fitbasis)
+{
+  FitPDFSet* fitset = NULL;
+  switch (NNPDFSettings::getParamType(settings.Get("fitting","paramtype").as<string>()))
+    {
+    case PARAM_NN:
+      fitset = FitPDFSet::Generate<MultiLayerPerceptron>(settings, fitbasis); // need to rewrite generate
+      cout << Colour::FG_BLUE << "Parametrisation: Neural Network" << Colour::FG_DEFAULT << endl;
+      break;
+
+    case PARAM_SLNPP:
+      fitset = FitPDFSet::Generate<SingleLayerPerceptronPreproc>(settings, fitbasis); // need to rewrite generate
+      cout << Colour::FG_BLUE << "Parametrisation: Single layer network (preprocessed)" << Colour::FG_DEFAULT << endl;
+      break;
+
+    case PARAM_SLN:
+      fitset = FitPDFSet::Generate<SingleLayerPerceptron>(settings, fitbasis); // need to rewrite generate
+      cout << Colour::FG_BLUE << "Parametrisation: Single layer network" << Colour::FG_DEFAULT << endl;
+      break;
+
+    default:
+      cout << Colour::FG_RED << "ERROR: Invalid Parametrisation" << Colour::FG_DEFAULT << endl;
+      exit(-1);
+      break;
+    }
+  return fitset;
+}
+
 // *************************** FitPDFSet *************************************
 /**
  * @brief FitPDFSet constructor
@@ -49,7 +78,7 @@ fNIte(0),
 fbtype(NNPDFSettings::getFitBasisType(nnset.Get("fitting","fitbasis").as<string>()))
 {
   fMembers = 0; // copies
-  APFELSingleton::Initialize(nnset,this);
+  //APFELSingleton::Initialize(nnset,this);
 }
 
 /**

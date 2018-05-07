@@ -38,13 +38,15 @@ APFELSingleton::APFELSingleton():
 
 void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
 {
-  // Check APFEL  
+  // Check APFEL
+  /*
   bool check = APFEL::CheckAPFEL();
   if (check == false)
     {
       std::cout << Colour::FG_RED << "[CheckAPFEL] ERROR, test not succeeded!" << std::endl;
       std::exit(-1);
-    }    
+    }
+  */
 
   // initialize attributes
   getInstance()->fPDF = pdf;
@@ -273,10 +275,10 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
   APFEL::SetQLimits(getInstance()->fQ0, getInstance()->fQmax + 1E-5); // Epsilon for limits
 
   APFEL::SetNumberOfGrids(1);
-  APFEL::SetExternalGrid(1, 195, 5, X1);
+  //APFEL::SetExternalGrid(1, 195, 5, X1);
   APFEL::LockGrids(true);
   APFEL::SetPDFSet("external");
-  APFEL::SetFastEvolution(false);
+  //APFEL::SetFastEvolution(false);
   APFEL::InitializeAPFEL();
 
   // allocate grid in x

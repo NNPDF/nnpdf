@@ -119,9 +119,7 @@ basisType NNPDFSettings::getFitBasisType(string const& method)
  * @param gsl_errno
  */
 void nnpdf_GSLhandler (const char * reason,
-                       const char * file,
-                       int line,
-                       int gsl_errno)
+                       const char *, int, int)
 {
   cerr << "GSL Error: "<<reason<<endl;
   return;

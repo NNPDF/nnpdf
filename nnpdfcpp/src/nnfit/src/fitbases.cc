@@ -13,9 +13,10 @@
 #include <gsl/gsl_sf_gamma.h>
 
 // Initialise a fit basis
-FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, const int &rep)
+FitBasis* getFitBasis(NNPDFSettings const& settings, const int &rep)
 {
   // Fit Basis
+  basisType btype = NNPDFSettings::getFitBasisType(settings.Get("fitting","fitbasis").as<string>());
   FitBasis* fitbasis = NULL;
   switch ( btype ) {
 
