@@ -70,15 +70,6 @@ endif(COMPILE_chi2check)
 #  message(WARNING "ROOT not found: validphys compilation is disabled, install ROOT and rerun cmake to enable the validphys compilation")
 #endif(ROOT_CONFIG)
 
-# revolve
-option(COMPILE_revolve "Compile revolve program." OFF)
-if (COMPILE_revolve)
-  add_executable(revolve revolve/src/revolve.cc)
-  target_link_libraries(revolve common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
-  install(TARGETS revolve DESTINATION bin
-          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
-endif(COMPILE_revolve)
-
 # revolvenet
 option(COMPILE_revolvenet "Compile revolvenet program." OFF)
 if (COMPILE_revolvenet)
