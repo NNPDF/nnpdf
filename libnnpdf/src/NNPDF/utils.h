@@ -72,7 +72,18 @@ namespace NNPDF
   std::string joinpath(const std::initializer_list<std::string> &list);
 
   /**
-   * @brief write_to_file Writes stringstream to file handling failures
+   * @brief write_to_file Writes string to file handling failures.
+   *
+   * This function creates and writes data using a POSIX file
+   * descriptor. The data buffer is written to the filesystem through
+   * write and fsync methods. The implementation also throws
+   * exceptions at multiple layers (opening, writing, flushing and
+   * closing the file). This is quite useful on clusters like
+   * LXPLUS/EOS where IO issues are non negligible. The downside of
+   * this method is the requirement of loading in memory the entire
+   * buffer as a string (and obviously the portability to non POSIX
+   * systems).
+   *
    * @param data the data string
    * @param filename the file name
    */
