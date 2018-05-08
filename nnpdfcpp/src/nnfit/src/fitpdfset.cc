@@ -83,8 +83,8 @@ fbtype(NNPDFSettings::getFitBasisType(nnset.Get("fitting","fitbasis").as<string>
 FitPDFSet::~FitPDFSet()
 {
   for (int j=0; j<fSettings.GetNFL(); j++)
-    if (fBestFit[j] != NULL)
-      delete fBestFit[j];
+    delete fBestFit[j];
+  delete[] fBestFit;
 
   for (size_t i=0; i<fPDFs.size(); i++)
   {
@@ -304,7 +304,7 @@ void FitPDFSet::GetPDF(real const& x, real const& Q2, int const& n, real* pdf) c
     {
       real *lha = new real[14];
       for (int i = 0; i < 14; i++) lha[i] = pdf[i] = 0.0;
-      apfelInstance.xfxQ(x,sqrt(Q2),n,lha);
+      apfelInstance().xfxQ(x,sqrt(Q2),n,lha);
       PDFSet::LHA2EVLN(lha,pdf);
       delete[] lha;
     }
@@ -475,9 +475,9 @@ void FitPDFSet::ExportPDF( int const& rep )
   cout << Colour::FG_BLUE <<"- Writing out LHAPDF grid: "<< fSettings.GetPDFName() << Colour::FG_DEFAULT << endl;
 
   // if replica 1 print the header
-  const int nf = std::max(apfelInstance.getNFpdf(),apfelInstance.getNFas());
-  vector<double> xgrid = apfelInstance.getX();
-  vector<vector<double> > q2grid = apfelInstance.getQ2nodes();
+  const int nf = std::max(apfelInstance().getNFpdf(),apfelInstance().getNFas());
+  vector<double> xgrid = apfelInstance().getX();
+  vector<vector<double> > q2grid = apfelInstance().getQ2nodes();
 
   if (rep==1)
   {
@@ -507,16 +507,16 @@ void FitPDFSet::ExportPDF( int const& rep )
 
     lhaoutheader6.precision(7);
     lhaoutheader6 << scientific;
-    lhaoutheader6 << "XMin: "<< apfelInstance.getXmin() << endl;
-    lhaoutheader6 << "XMax: "<< apfelInstance.getXmax() << endl;
-    lhaoutheader6 << "QMin: "<< apfelInstance.getQmin() << endl;
-    lhaoutheader6 << "QMax: "<< apfelInstance.getQmax() << endl;
-    lhaoutheader6 << "MZ: "  << apfelInstance.getMZ() << endl;
+    lhaoutheader6 << "XMin: "<< apfelInstance().getXmin() << endl;
+    lhaoutheader6 << "XMax: "<< apfelInstance().getXmax() << endl;
+    lhaoutheader6 << "QMin: "<< apfelInstance().getQmin() << endl;
+    lhaoutheader6 << "QMax: "<< apfelInstance().getQmax() << endl;
+    lhaoutheader6 << "MZ: "  << apfelInstance().getMZ() << endl;
     lhaoutheader6 << "MUp: 0\nMDown: 0\nMStrange: 0" << std::endl;
-    lhaoutheader6 << "MCharm: "  << apfelInstance.getMCharm() << endl;
-    lhaoutheader6 << "MBottom: " << apfelInstance.getMBottom() << endl;
-    lhaoutheader6 << "MTop: "    << apfelInstance.getMTop() << endl;
-    lhaoutheader6 << fixed << "AlphaS_MZ: " << apfelInstance.getAlphas() << endl;
+    lhaoutheader6 << "MCharm: "  << apfelInstance().getMCharm() << endl;
+    lhaoutheader6 << "MBottom: " << apfelInstance().getMBottom() << endl;
+    lhaoutheader6 << "MTop: "    << apfelInstance().getMTop() << endl;
+    lhaoutheader6 << fixed << "AlphaS_MZ: " << apfelInstance().getAlphas() << endl;
     lhaoutheader6 << scientific;
     lhaoutheader6 << "AlphaS_OrderQCD: " << fSettings.GetTheory(APFEL::kPTO) << endl;
     lhaoutheader6 << "AlphaS_Type: ipol" << endl;
@@ -529,7 +529,7 @@ void FitPDFSet::ExportPDF( int const& rep )
     lhaoutheader6 << "AlphaS_Vals: [";
     for (int s = 0; s < (int) q2grid.size(); s++)
       for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-        lhaoutheader6 << apfelInstance.alphas(sqrt(q2grid[s][iq])) << ((s == (int) q2grid.size()-1 && iq == (int) q2grid[s].size()-1) ? "]\n" : ", ");
+        lhaoutheader6 << apfelInstance().alphas(sqrt(q2grid[s][iq])) << ((s == (int) q2grid.size()-1 && iq == (int) q2grid[s].size()-1) ? "]\n" : ", ");
 
     lhaoutheader6 << "AlphaS_Lambda4: 0.342207" << std::endl;
     lhaoutheader6 << "AlphaS_Lambda5: 0.239" << std::endl;

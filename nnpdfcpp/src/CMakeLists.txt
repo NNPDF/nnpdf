@@ -84,8 +84,7 @@ endif(COMPILE_revolve)
 option(COMPILE_revolvenet "Compile revolvenet program." OFF)
 if (COMPILE_revolvenet)
   add_executable(revolvenet revolvenet/src/revolvenet.cc
-    nnfit/src/apfelevol.cc revolvenet/src/nnpdf.cc
-    nnfit/src/fitbases.cc nnfit/src/fitpdfset.cc)
+    nnfit/src/apfelevol.cc nnfit/src/fitbases.cc nnfit/src/fitpdfset.cc)
   include_directories(revolvenet/inc nnfit/inc)
   target_link_libraries(revolvenet common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
   install(TARGETS revolvenet DESTINATION bin

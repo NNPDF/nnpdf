@@ -140,6 +140,17 @@ fGSLWork(nnset.GetGSLWorkspace())
   return;
 }
 
+/**
+ * @brief The FitBasis destructor
+ */
+FitBasis::~FitBasis()
+{
+  delete[] fArcDampFactor;
+  delete[] fPDFSqrPos;
+  delete[] fAlpha;
+  delete[] fBeta;
+}
+
 // Preprocess a supplied PDF
 void FitBasis::Preprocess(real const& x, int const& fl, real& pdf, PreprocParam const& par)
 {
