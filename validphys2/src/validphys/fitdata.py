@@ -124,16 +124,23 @@ def fit_summary(replica_data, total_experiments_chi2):
         - Average chi-squared
         - Training and Validation error functions
         - Training lengths
+        - Phi
 
         TODO:
-        - Phi
+        Check Phi+Error
         Maybe we want to run this over a collection of fits?
     """
+    nrep = len(replica_data)
     chi2 = [x.chi2 for x in replica_data]
     nite = [x.nite for x in replica_data]
     etrain = [x.training for x in replica_data]
     evalid = [x.validation for x in replica_data]
+
+    phi = np.sqrt(np.mean(chi2) - total_experiments_chi2)
+    phi_err = np.std(chi2)*(np.sqrt(1.+1./np.sqrt(nrep))) / (2*phi)
+
     data = {r"$\chi^2$":           [total_experiments_chi2, "-"],
+            r"$\phi$":             [phi, phi_err],
             r"$<\chi^2>$":         [np.mean(chi2), np.std(chi2)],
             r"$<E_{\mathrm{trn}}>$": [np.mean(etrain), np.std(etrain)],
             r"$<E_{\mathrm{val}}>$": [np.mean(evalid), np.std(evalid)],
