@@ -70,20 +70,20 @@ endif(COMPILE_chi2check)
 #  message(WARNING "ROOT not found: validphys compilation is disabled, install ROOT and rerun cmake to enable the validphys compilation")
 #endif(ROOT_CONFIG)
 
-# revolvenet
-option(COMPILE_revolvenet "Compile revolvenet program." OFF)
-if (COMPILE_revolvenet)
-  add_executable(revolvenet
-    revolvenet/src/revolvenet.cc
-    revolvenet/src/apfelevol.cc
+# evolvefit
+option(COMPILE_evolvefit "Compile evolvefit program." ON)
+if (COMPILE_evolvefit)
+  add_executable(evolvefit
+    evolvefit/main.cc
+    evolvefit/apfelevol.cc
     nnfit/src/fitbases.cc
     nnfit/src/fitpdfset.cc)
-  include_directories(revolvenet/inc nnfit/inc)
-  target_compile_definitions(revolvenet PRIVATE EVOLVEFIT)
-  target_link_libraries(revolvenet common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
-  install(TARGETS revolvenet DESTINATION bin
+  include_directories(nnfit/inc)
+  target_compile_definitions(evolvefit PRIVATE EVOLVEFIT)
+  target_link_libraries(evolvefit common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
+  install(TARGETS evolvefit DESTINATION bin
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
-endif(COMPILE_revolvenet)
+endif(COMPILE_evolvefit)
 
 # libfiatlux
 find_program(FIATLUX_CONFIG fiatlux-config)
