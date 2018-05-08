@@ -307,7 +307,7 @@ void FitPDFSet::GetPDF(real const& x, real const& Q2, int const& n, real* pdf) c
     {
       real *lha = new real[14];
       for (int i = 0; i < 14; i++) lha[i] = pdf[i] = 0.0;
-      apfelInstance.xfxQ(x,sqrt(Q2),n,lha);
+      apfelInstance().xfxQ(x,sqrt(Q2),n,lha);
       PDFSet::LHA2EVLN(lha,pdf);
       delete[] lha;
     }
@@ -445,9 +445,9 @@ void FitPDFSet::ExportPDF( int const& rep )
   cout << Colour::FG_BLUE <<"- Writing out LHAPDF grid: "<< fSettings.GetPDFName() << Colour::FG_DEFAULT << endl;
 
   // if replica 1 print the header
-  const int nf = std::max(apfelInstance.getNFpdf(),apfelInstance.getNFas());
-  vector<double> xgrid = apfelInstance.getX();
-  vector<vector<double> > q2grid = apfelInstance.getQ2nodes();
+  const int nf = std::max(apfelInstance().getNFpdf(),apfelInstance().getNFas());
+  vector<double> xgrid = apfelInstance().getX();
+  vector<vector<double> > q2grid = apfelInstance().getQ2nodes();
 
   if (rep==1)
   {
