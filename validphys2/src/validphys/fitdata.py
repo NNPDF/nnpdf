@@ -118,7 +118,7 @@ def replica_data(fit, replica_paths):
 
 
 @table
-def fit_summary(replica_data, experiments_chi2_table):
+def fit_summary(replica_data, total_experiments_chi2):
     """ Summary table of fit properties
         - Central chi-squared
         - Average chi-squared
@@ -129,17 +129,11 @@ def fit_summary(replica_data, experiments_chi2_table):
         - Phi
         Maybe we want to run this over a collection of fits?
     """
-    total_chi2 = 0
-    total_ndat = 0
-    for index, row in experiments_chi2_table.iterrows():
-        total_ndat = total_ndat + row["npoints"]
-        total_chi2 = total_chi2 + row["central_mean"]
-
     chi2 = [x.chi2 for x in replica_data]
     nite = [x.nite for x in replica_data]
     etrain = [x.training for x in replica_data]
     evalid = [x.validation for x in replica_data]
-    data = {r"$\chi^2$":           [total_chi2/total_ndat, "-"],
+    data = {r"$\chi^2$":           [total_experiments_chi2, "-"],
             r"$<\chi^2>$":         [np.mean(chi2), np.std(chi2)],
             r"$<E_{\mathrm{trn}}>$": [np.mean(etrain), np.std(etrain)],
             r"$<E_{\mathrm{val}}>$": [np.mean(evalid), np.std(evalid)],
