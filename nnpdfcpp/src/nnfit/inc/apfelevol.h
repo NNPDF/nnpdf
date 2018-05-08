@@ -5,14 +5,10 @@
 // Authors: Nathan Hartland,  n.p.hartland@ed.ac.uk
 //          Stefano Carrazza, stefano.carrazza@mi.infn.it
 #pragma once
-
-#include "nnpdfsettings.h"
-#include <NNPDF/pdfset.h>
-using NNPDF::PDFSet;
-
+#include <vector>
 
 // Largest x-grid admissible in APFEL
-const vector<double> apfel_xgrid =
+const std::vector<double> apfel_xgrid =
   {
     1.000000000000000e-09, 1.297084823439570e-09, 1.682429034742569e-09,
     2.182253154205826e-09, 2.830567417398188e-09, 3.671485978929410e-09,
@@ -83,6 +79,10 @@ const vector<double> apfel_xgrid =
   };
 
 #ifdef EVOLVEFIT
+#include "nnpdfsettings.h"
+#include <NNPDF/pdfset.h>
+using NNPDF::PDFSet;
+
 class APFELSingleton
 {
 public:
