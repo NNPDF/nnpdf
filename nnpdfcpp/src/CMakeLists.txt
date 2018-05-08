@@ -22,7 +22,6 @@ endif(COMPILE_filter)
 option(COMPILE_nnfit "Compile nnfit program." ON)
 if (COMPILE_nnfit)
   add_executable(nnfit nnfit/src/nnfit.cc
-                       nnfit/src/apfelevol.cc
                        nnfit/src/fastaddchi2.cc
                        nnfit/src/fitbases.cc
                        nnfit/src/fitpdfset.cc
@@ -30,7 +29,7 @@ if (COMPILE_nnfit)
                        nnfit/src/pdfbasis.cc
                        nnfit/src/stopping.cc)
   include_directories(nnfit/inc)
-  target_link_libraries(nnfit common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
+  target_link_libraries(nnfit common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${GSL_LDFLAGS})
   install(TARGETS nnfit DESTINATION bin
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_nnfit)
@@ -83,9 +82,13 @@ endif(COMPILE_revolve)
 # revolvenet
 option(COMPILE_revolvenet "Compile revolvenet program." OFF)
 if (COMPILE_revolvenet)
-  add_executable(revolvenet revolvenet/src/revolvenet.cc
-    nnfit/src/apfelevol.cc nnfit/src/fitbases.cc nnfit/src/fitpdfset.cc)
+  add_executable(revolvenet
+    revolvenet/src/revolvenet.cc
+    revolvenet/src/apfelevol.cc
+    nnfit/src/fitbases.cc
+    nnfit/src/fitpdfset.cc)
   include_directories(revolvenet/inc nnfit/inc)
+  target_compile_definitions(revolvenet PRIVATE EVOLVEFIT)
   target_link_libraries(revolvenet common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
   install(TARGETS revolvenet DESTINATION bin
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
