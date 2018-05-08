@@ -17,7 +17,7 @@
 #include "apfelevol.h"
 #include "fitbases.h"
 #include "fitpdfset.h"
-#include "nnpdfsettings.h"
+
 using namespace NNPDF;
 using std::cout;
 using std::endl;
@@ -106,7 +106,7 @@ void CreateFolder(string const& path)
 }
 
 //
-void Export(NNPDFSettings const& settings, unique_ptr<FitPDFSet> const& fitset, int replica)
+void ExportEvolvedReplica(NNPDFSettings const& settings, unique_ptr<FitPDFSet> const& fitset, int replica)
 {
   // Creating output folder
   const string lhapath = settings.GetResultsDirectory() + "/evolvefit/" + settings.GetPDFName();
@@ -123,13 +123,72 @@ void Export(NNPDFSettings const& settings, unique_ptr<FitPDFSet> const& fitset, 
   vector<double> xgrid = apfelInstance().getX();
   vector<vector<double> > q2grid = apfelInstance().getQ2nodes();
 
-  if (replica==1)
-  {
-    // LHAPDF6 HEADER
-    stringstream info;
-    info << lhapath << "/" << settings.GetPDFName() << ".info";
+  // Performing DGLAP
+  cout << Colour::FG_BLUE << "- Solving DGLAP for LHAPDF grid..." << Colour::FG_DEFAULT << endl;
+  array<real, 14> pdf;
+  const int nx = xgrid.size();
+  vector<vector<array<real, 14>>> res(q2grid.size());
 
-    ofstream lhaoutheader6(info.str().c_str());
+  for (int s = 0; s < (int) q2grid.size(); s++)
+    for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
+      for (int ix = 0; ix < nx; ix++)
+        {
+          array<real, 14> lha;
+          fitset->GetPDF(xgrid[ix], q2grid[s][iq], 0, pdf.data());
+          PDFSet::EVLN2LHA(pdf.data(), lha.data());
+          res[s].push_back(lha);
+        }
+
+  // print the replica  
+  ofstream lhaout(ofile.c_str());
+  lhaout << scientific << setprecision(7);
+  lhaout << "PdfType: replica\nFormat: lhagrid1\n---" << std::endl;
+
+  for (int s = 0; s < (int) q2grid.size(); s++)
+     {
+       for (int ix = 0; ix < nx; ix++)
+         lhaout << xgrid[ix] << " ";
+       lhaout << std::endl;
+
+       for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
+         lhaout << sqrt(q2grid[s][iq]) << " ";
+       lhaout << std::endl;
+
+       for (int i = -nf; i <= nf; i++)
+         if (i == 0) lhaout << 21 << " ";
+         else lhaout << i << " ";
+       if (settings.IsQED()) lhaout << 22 << " ";
+       lhaout << std::endl;
+
+       const int floffset = 6-nf;
+       for (int ix = 0; ix < nx; ix++)
+         for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
+           {
+             lhaout << " ";
+             for (int fl = floffset; fl <= 12-floffset; fl++)
+               lhaout << setw(14) << res[s][ix + iq*nx][fl] << " ";
+             if (settings.IsQED()) lhaout << setw(14) << res[s][ix + iq*nx][PDFSet::PHT] << " ";
+             lhaout << std::endl;
+           }
+       lhaout << "---" << std::endl;
+     }
+  lhaout.close();  
+}
+
+//
+void ExportInfoFile(NNPDFSettings const& settings, int nreplicas)
+{
+  cout << "Exporting LHAPDF info file"<< endl;
+
+  // LHAPDF6 HEADER
+  const int nf = std::max(apfelInstance().getNFpdf(),apfelInstance().getNFas());
+  const string lhapath = settings.GetResultsDirectory() + "/evolvefit/" + settings.GetPDFName();
+  vector<vector<double> > q2grid = apfelInstance().getQ2nodes();
+
+  stringstream info;
+  info << lhapath << "/" << settings.GetPDFName() << ".info";
+
+  ofstream lhaoutheader6(info.str().c_str());
 
     lhaoutheader6 << "SetDesc: \"NNPDF x.x\"" << endl;
     lhaoutheader6 << "SetIndex: " << endl;
@@ -137,7 +196,7 @@ void Export(NNPDFSettings const& settings, unique_ptr<FitPDFSet> const& fitset, 
     lhaoutheader6 << "Reference: arXiv:xxxx.xxxxxx" << endl;
     lhaoutheader6 << "Format: lhagrid1" << endl;
     lhaoutheader6 << "DataVersion: 1" << endl;
-    lhaoutheader6 << "NumMembers: REPLACE_NREP" << endl;
+    lhaoutheader6 << "NumMembers: " << nreplicas << endl;
     lhaoutheader6 << "Particle: 2212" << endl;
     lhaoutheader6 << "Flavors: [";
     for (int i = -nf; i <= nf; i++)
@@ -178,59 +237,6 @@ void Export(NNPDFSettings const& settings, unique_ptr<FitPDFSet> const& fitset, 
     lhaoutheader6 << "AlphaS_Lambda5: 0.239" << std::endl;
 
     lhaoutheader6.close();
-  }
-
-  // Performing DGLAP
-  cout << Colour::FG_BLUE << "- Solving DGLAP for LHAPDF grid..." << Colour::FG_DEFAULT << endl;
-  array<real, 14> pdf;
-  const int nx = xgrid.size();
-  vector<vector<array<real, 14>>> res(q2grid.size());
-
-  for (int s = 0; s < (int) q2grid.size(); s++)
-    for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-      for (int ix = 0; ix < nx; ix++)
-        {
-          array<real, 14> lha;
-          fitset->GetPDF(xgrid[ix], q2grid[s][iq], 0, pdf.data());
-          PDFSet::EVLN2LHA(pdf.data(), lha.data());
-          res[s].push_back(lha);
-        }
-
-  // print the replica  
-  ofstream lhaout(ofile.c_str());
-
-  lhaout << scientific << setprecision(7);
-  lhaout << "PdfType: replica\nFormat: lhagrid1\n---" << std::endl;
-
-  for (int s = 0; s < (int) q2grid.size(); s++)
-     {
-       for (int ix = 0; ix < nx; ix++)
-         lhaout << xgrid[ix] << " ";
-       lhaout << std::endl;
-
-       for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-         lhaout << sqrt(q2grid[s][iq]) << " ";
-       lhaout << std::endl;
-
-       for (int i = -nf; i <= nf; i++)
-         if (i == 0) lhaout << 21 << " ";
-         else lhaout << i << " ";
-       if (settings.IsQED()) lhaout << 22 << " ";
-       lhaout << std::endl;
-
-       const int floffset = 6-nf;
-       for (int ix = 0; ix < nx; ix++)
-         for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-           {
-             lhaout << " ";
-             for (int fl = floffset; fl <= 12-floffset; fl++)
-               lhaout << setw(14) << res[s][ix + iq*nx][fl] << " ";
-             if (settings.IsQED()) lhaout << setw(14) << res[s][ix + iq*nx][PDFSet::PHT] << " ";
-             lhaout << std::endl;
-           }
-       lhaout << "---" << std::endl;
-     }
-  lhaout.close();  
 }
 
 int main(int argc, char **argv)
@@ -273,10 +279,13 @@ int main(int argc, char **argv)
       apfelInstance().SetPDF(fitset.get());
 
       // export pdf
-      Export(settings, fitset, replica);
+      ExportEvolvedReplica(settings, fitset, replica);
 
       replica++;
     }
+
+  // export info file
+  ExportInfoFile(settings, replica);
 
   return 0;
 }

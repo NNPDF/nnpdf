@@ -65,10 +65,10 @@ void APFELSingleton::Initialize(NNPDFSettings const& set)
   APFEL::SetQLimits(fQ0, fQmax + 1E-5); // Epsilon for limits
 
   APFEL::SetNumberOfGrids(1);
-  //APFEL::SetExternalGrid(1, apfel_xgrid.size()-1, 5, apfel_xgrid);
+  APFEL::SetExternalGrid(1, apfel_xgrid.size()-1, 5, (double*) apfel_xgrid.data());
   APFEL::LockGrids(true);
   APFEL::SetPDFSet("external");
-  //APFEL::SetFastEvolution(false);
+  APFEL::SetFastEvolution(false);
   APFEL::InitializeAPFEL();
 
   // allocate grid in x
@@ -165,11 +165,8 @@ NNPDF::real APFELSingleton::xfx(const double &x, const int &fl) const
 void APFELSingleton::xfxQ(double x, double Q, int n, NNPDF::real *xf)
 {
   // check that we are doing the right evolution
-  if ( fabs(fQ0 - Q ) < 1E-5 ) // Fuzzy comparison for Q0
-    {
-      std::cerr << "APFELSingleton::xfxQ calling PDF at initial scale, this is not supposed to happen" << std::endl;
-      std::exit(-1);
-    }
+  if ( fabs(fQ0 - Q ) < 1E-5 ) // Fuzzy comparison for Q0      
+    throw RuntimeException("APFELSingleton::xfxQ", "calling PDF at initial scale, this is not supposed to happen in apfelevol");
 
   fMem = n;
   if ( fabs(fQtmp - Q) > 1E-5)

@@ -303,11 +303,10 @@ void FitPDFSet::GetPDF(real const& x, real const& Q2, int const& n, real* pdf) c
   else
     {
 #ifdef EVOLVEFIT
-      real *lha = new real[14];
+      std::array<real, 14> lha;
       for (int i = 0; i < 14; i++) lha[i] = pdf[i] = 0.0;
-      apfelInstance().xfxQ(x,sqrt(Q2),n,lha);
-      PDFSet::LHA2EVLN(lha,pdf);
-      delete[] lha;
+      apfelInstance().xfxQ(x,sqrt(Q2),n,lha.data());
+      PDFSet::LHA2EVLN(lha.data(),pdf);
 #else
       throw RuntimeException("FitPDFSet::GetPDF", "Calling PDF at Q which requires DGLAP.");
 #endif
