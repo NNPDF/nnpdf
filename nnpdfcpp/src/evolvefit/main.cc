@@ -5,17 +5,19 @@
 // Authors: Nathan Hartland,  n.p.hartland@ed.ac.uk
 //          Stefano Carrazza, stefano.carrazza@mi.infn.it
 
-#include "revolvenet.h"
-#include "nnpdf.h"
-#include "fitbases.h"
-#include "fitpdfset.h"
-#include "nnpdfsettings.h"
 #include <array>
 #include <sys/stat.h>
 #include <iomanip>
 #include <fstream>
 #include <NNPDF/parametrisation.h>
-
+#include <NNPDF/exceptions.h>
+#include <APFEL/APFELdev.h>
+#include <APFEL/APFEL.h>
+#include "common.h"
+#include "apfelevol.h"
+#include "fitbases.h"
+#include "fitpdfset.h"
+#include "nnpdfsettings.h"
 using namespace NNPDF;
 using std::cout;
 using std::endl;
