@@ -12,43 +12,36 @@ using NNPDF::PDFSet;
 class APFELSingleton
 {
 public:
-  static void Initialize(NNPDFSettings const& set, PDFSet *const& pdf);
+  void Initialize(NNPDFSettings const& set, PDFSet *const& pdf);
 
   // returns the PDF at initial scale fQ0, flavor basis
-  static NNPDF::real xfx(const double& x, const int& fl);
+  NNPDF::real xfx(const double& x, const int& fl) const;
 
   // returns the evolved PDF at Q from Q0, flavor basis
-  static void xfxQ(const double& x, const double& Q, const int& n, NNPDF::real *xf);
+  void xfxQ(double x, double Q, int n, NNPDF::real *xf);
 
-  static double alphas(double);
-  static bool isInstance();
-  static std::vector<double> getX() { return getInstance()->fX; }
-  static std::vector<std::vector<double> > getQ2nodes() { return getInstance()->fQ2nodes; }
-  static int getNFpdf() { return getInstance()->fNFpdf; }
-  static int getNFas() { return getInstance()->fNFas; }
-  static double getXmin() { return getInstance()->fXmin; }
-  static double getXmax() { return getInstance()->fXmax; }
-  static double getQmin() { return getInstance()->fQ0; }
-  static double getQmax() { return getInstance()->fQmax; }
-  static double getMZ()     { return getInstance()->fMZ; }
-  static double getAlphas()     { return getInstance()->fAlphas; }
-  static double getMCharm() { return getInstance()->mth[0]; }
-  static double getMBottom() { return getInstance()->mth[1]; }
-  static double getMTop()    { return getInstance()->mth[2]; }
-  static double getQCharm() { return getInstance()->mthref[0]; }
-  static double getQBottom() { return getInstance()->mthref[1]; }
-  static double getQTop()    { return getInstance()->mthref[2]; }
-private:
+  double alphas(double) const;
+  vector<double> const& getX() const { return fX; }
+  vector<vector<double>> const& getQ2nodes() const { return fQ2nodes; }
+  int    getNFpdf()  const { return fNFpdf; }
+  int    getNFas()   const { return fNFas; }
+  double getXmin()   const { return fXmin; }
+  double getXmax()   const { return fXmax; }
+  double getQmin()   const { return fQ0; }
+  double getQmax()   const { return fQmax; }
+  double getMZ()     const { return fMZ; }
+  double getAlphas() const { return fAlphas; }
+  double getMCharm() const { return mth[0]; }
+  double getMBottom()const { return mth[1]; }
+  double getMTop()   const { return mth[2]; }
+  double getQCharm() const { return mthref[0]; }
+  double getQBottom()const { return mthref[1]; }
+  double getQTop()   const { return mthref[2]; }
+
   APFELSingleton();
   ~APFELSingleton();
 
-  static APFELSingleton* getInstance()
-  {
-    if (!apfelInstance)
-      apfelInstance = new APFELSingleton();
-    return apfelInstance;
-  }
-
+private:
   // member
   PDFSet *fPDF;
   double fMZ;
@@ -68,6 +61,10 @@ private:
   std::vector<double> mth;    //!< HQ Masses
   std::vector<double> mthref; //!< HQ Mass Reference scales
   std::vector<std::vector<double> > fQ2nodes;
-
-  static APFELSingleton* apfelInstance;
 };
+
+APFELSingleton& apfelInstance()
+{
+  static APFELSingleton as{};
+  return as;
+}
