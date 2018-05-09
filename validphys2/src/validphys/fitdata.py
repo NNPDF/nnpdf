@@ -3,7 +3,7 @@
 Utilities for loading data from fit folders
 """
 import logging
-from collections import namedtuple
+from collections import namedtuple, OrderedDict
 from io import StringIO
 import pathlib
 
@@ -147,15 +147,15 @@ def fit_summary(replica_data, total_experiments_chi2data):
     # Not sure if I can get this value for the error, it's
     # supposed to be assuming that the only error is due to <chi2>
     # just plucked straight from vp1 here.
-    phi = phi_data(total_experiments_chi2data) #np.sqrt(np.mean(member_chi2) - central_chi2)
+    phi = phi_data(total_experiments_chi2data)
     phi_err = 2.0*phi*np.std(member_chi2)/(np.mean(member_chi2)*np.sqrt(nrep))
 
-    data = {r"$\chi^2$":           [central_chi2, "-"],
-            r"$\phi$":             [phi, phi_err],
-            r"$<\chi^2>$":         [np.mean(member_chi2), np.std(member_chi2)],
-            r"$<E_{\mathrm{trn}}>$": [np.mean(etrain), np.std(etrain)],
-            r"$<E_{\mathrm{val}}>$": [np.mean(evalid), np.std(evalid)],
-            r"$<TL>$": [np.mean(nite), np.std(nite)]}
+    data = OrderedDict( ((r"$\chi^2$", [central_chi2, "-"]),
+                         (r"$<E_{\mathrm{trn}}>$", [np.mean(etrain), np.std(etrain)]),
+                         (r"$<E_{\mathrm{val}}>$", [np.mean(evalid), np.std(evalid)]),
+                         (r"$<TL>$", [np.mean(nite), np.std(nite)]),
+                         (r"$<\chi^2>$",         [np.mean(member_chi2), np.std(member_chi2)]),
+                         (r"$\phi$",             [phi, phi_err])))
     return pd.DataFrame(data, index=["Value", "StdDev"]).transpose()
 
 def fit_sum_rules(fit, replica_paths):
