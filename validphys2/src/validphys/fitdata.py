@@ -19,6 +19,7 @@ from validphys.core import PDF
 from validphys import checks
 from validphys.plotoptions import get_info
 from validphys import sumrules
+from validphys.results import phi_data
 
 #TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']
@@ -118,7 +119,7 @@ def replica_data(fit, replica_paths):
 
 
 @table
-def fit_summary(replica_data, experiments_chi2):
+def fit_summary(replica_data, total_experiments_chi2data):
     """ Summary table of fit properties
         - Central chi-squared
         - Average chi-squared
@@ -134,16 +135,10 @@ def fit_summary(replica_data, experiments_chi2):
         Check error on phi
         Maybe we want to run this over a collection of fits?
     """
-    central_chi2, ndata = 0, 0
     nrep = len(replica_data)
-    chi2 = np.zeros(nrep)
-    for expres in experiments_chi2:
-        chi2 += expres.replica_result.error_members().T[0]
-        central_chi2 += expres.central_result
-        ndata += expres.ndata
-
-    chi2 /= ndata
-    central_chi2 /= ndata
+    ndata = total_experiments_chi2data.ndata
+    central_chi2 = total_experiments_chi2data.central_result / ndata
+    member_chi2 = total_experiments_chi2data.replica_result.error_members() / ndata
 
     nite = [x.nite for x in replica_data]
     etrain = [x.training for x in replica_data]
@@ -152,12 +147,12 @@ def fit_summary(replica_data, experiments_chi2):
     # Not sure if I can get this value for the error, it's
     # supposed to be assuming that the only error is due to <chi2>
     # just plucked straight from vp1 here.
-    phi = np.sqrt(np.mean(chi2) - central_chi2)
-    phi_err = 2.0*phi*np.std(chi2)/(np.mean(chi2)*np.sqrt(nrep))
+    phi = phi_data(total_experiments_chi2data) #np.sqrt(np.mean(member_chi2) - central_chi2)
+    phi_err = 2.0*phi*np.std(member_chi2)/(np.mean(member_chi2)*np.sqrt(nrep))
 
     data = {r"$\chi^2$":           [central_chi2, "-"],
             r"$\phi$":             [phi, phi_err],
-            r"$<\chi^2>$":         [np.mean(chi2), np.std(chi2)],
+            r"$<\chi^2>$":         [np.mean(member_chi2), np.std(member_chi2)],
             r"$<E_{\mathrm{trn}}>$": [np.mean(etrain), np.std(etrain)],
             r"$<E_{\mathrm{val}}>$": [np.mean(evalid), np.std(evalid)],
             r"$<TL>$": [np.mean(nite), np.std(nite)]}
