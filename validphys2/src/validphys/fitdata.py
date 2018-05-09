@@ -138,7 +138,7 @@ def fit_summary(replica_data, experiments_chi2):
     nrep = len(replica_data)
     chi2 = np.zeros(nrep)
     for expres in experiments_chi2:
-        chi2 += expres.replica_result.error_members()
+        chi2 += expres.replica_result.error_members().T[0]
         central_chi2 += expres.central_result
         ndata += expres.ndata
 
@@ -149,8 +149,11 @@ def fit_summary(replica_data, experiments_chi2):
     etrain = [x.training for x in replica_data]
     evalid = [x.validation for x in replica_data]
 
+    # Not sure if I can get this value for the error, it's
+    # supposed to be assuming that the only error is due to <chi2>
+    # just plucked straight from vp1 here.
     phi = np.sqrt(np.mean(chi2) - central_chi2)
-    phi_err = np.std(chi2)*(np.sqrt(1.+1./np.sqrt(nrep))) / (2*phi)
+    phi_err = 2.0*phi*np.std(chi2)/(np.mean(chi2)*np.sqrt(nrep))
 
     data = {r"$\chi^2$":           [central_chi2, "-"],
             r"$\phi$":             [phi, phi_err],
