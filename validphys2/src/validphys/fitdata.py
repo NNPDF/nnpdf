@@ -158,6 +158,15 @@ def fit_summary(replica_data, total_experiments_chi2data):
                          (r"$\phi$",             [phi, phi_err])))
     return pd.DataFrame(data, index=["Value", "StdDev"]).transpose()
 
+
+collected_fit_summaries = collect('fit_summary', ('fits',))
+@table
+def summarise_fits(fits, collected_fit_summaries):
+    """ Produces a table of basic comparisons between fits, includes
+    all the fields used in fit_summary """
+    return pd.concat(collected_fit_summaries, axis=1, keys=[fit.name for fit in fits])
+
+
 def fit_sum_rules(fit, replica_paths):
     """Return a SumRulesGrid object with the sumrules for each replica as
     calculated by nnfit at the initial scale. This is the same object as

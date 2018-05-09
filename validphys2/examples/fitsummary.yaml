@@ -1,5 +1,9 @@
-fit: 180307-lr-nlo-xF2dot0xR2dot0_DISonly
-pdf: 180307-lr-nlo-xF2dot0xR2dot0_DISonly
+fits:
+    - {id: 170412-nh-001, label: "Fit one"}
+    - {id: 170227-001, label: "Fit two"}
+
+pdf:
+  from_: fit
 theory: 
   from_: fit
 theoryid: 
@@ -15,7 +19,7 @@ template_text: |
     keywords: [example]
     ---
 
-    {@ fit_summary @}
+    {@ summarise_fits @}
 
 actions_:
   - report(main=True)
