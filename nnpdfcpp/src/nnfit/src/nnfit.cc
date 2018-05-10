@@ -118,7 +118,7 @@ int main(int argc, char **argv)
       LoadAllDataAndSplit(settings, training, validation, pos);
 
       // Fit Basis
-      std::unique_ptr<FitBasis> fitbasis(getFitBasis(settings, NNPDFSettings::getFitBasisType(settings.Get("fitting","fitbasis").as<string>()), replica));
+      std::unique_ptr<FitBasis> fitbasis(getFitBasis(settings, replica));
 
       // If 'dataseed' exists then reset the RNG to 'seed' for the GA
       if (settings.Exists("fitting","dataseed"))
@@ -162,17 +162,17 @@ int main(int argc, char **argv)
       switch (NNPDFSettings::getParamType(settings.Get("fitting","paramtype").as<string>()))
       {
         case PARAM_NN:
-          fitset = std::unique_ptr<FitPDFSet>(FitPDFSet::Generate<MultiLayerPerceptron,GAMinimizer>(settings, fitbasis.get())); // need to rewrite generate
+          fitset = std::unique_ptr<FitPDFSet>(FitPDFSet::Generate<MultiLayerPerceptron>(settings, fitbasis.get())); // need to rewrite generate
           cout << Colour::FG_BLUE << "Parametrisation: Neural Network" << Colour::FG_DEFAULT << endl;
           break;
 
         case PARAM_SLNPP:
-          fitset = std::unique_ptr<FitPDFSet>(FitPDFSet::Generate<SingleLayerPerceptronPreproc,GAMinimizer>(settings, fitbasis.get())); // need to rewrite generate
+          fitset = std::unique_ptr<FitPDFSet>(FitPDFSet::Generate<SingleLayerPerceptronPreproc>(settings, fitbasis.get())); // need to rewrite generate
           cout << Colour::FG_BLUE << "Parametrisation: Single layer network (preprocessed)" << Colour::FG_DEFAULT << endl;
           break;
 
         case PARAM_SLN:
-          fitset = std::unique_ptr<FitPDFSet>(FitPDFSet::Generate<SingleLayerPerceptron,GAMinimizer>(settings, fitbasis.get())); // need to rewrite generate
+          fitset = std::unique_ptr<FitPDFSet>(FitPDFSet::Generate<SingleLayerPerceptron>(settings, fitbasis.get())); // need to rewrite generate
           cout << Colour::FG_BLUE << "Parametrisation: Single layer network" << Colour::FG_DEFAULT << endl;
           break;
 
