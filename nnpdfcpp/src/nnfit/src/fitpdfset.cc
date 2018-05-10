@@ -426,6 +426,7 @@ void FitPDFSet::ExportMeta( int const& rep, real const& erf_val, real const& erf
 }
 
 /**
+<<<<<<< HEAD
  * @brief Prototype LHGrid output
  * @param rep the replica
  * @param erf_val the validation error function
@@ -550,12 +551,18 @@ void FitPDFSet::ExportPDF( int const& rep )
 
 
 /**
+=======
+>>>>>>> ccc864103d8292fbbea385dc7fc66cdb267cd47d
  * @brief FitPDFSet::ExportGrid
  * @param rep the replica ID
  * Export initial scale PDF on a grid in x
  */
 void FitPDFSet::ExportGrid(int const& rep)
+<<<<<<< HEAD
 {
+=======
+{ 
+>>>>>>> ccc864103d8292fbbea385dc7fc66cdb267cd47d
   stringstream gridfilename;
   gridfilename << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/"
                << fSettings.GetPDFName() <<".gridvalues";
