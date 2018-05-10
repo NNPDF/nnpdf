@@ -8,6 +8,7 @@
 #include "apfelevol.h"
 #include "APFEL/APFEL.h"
 #include "NNPDF/exceptions.h"
+#include <array>
 
 APFELSingleton *APFELSingleton::apfelInstance = NULL;
 
@@ -37,13 +38,13 @@ APFELSingleton::APFELSingleton():
 
 void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
 {
-  // Check APFEL
+  // Check APFEL  
   bool check = APFEL::CheckAPFEL();
   if (check == false)
     {
       std::cout << Colour::FG_RED << "[CheckAPFEL] ERROR, test not succeeded!" << std::endl;
       std::exit(-1);
-    }
+    }    
 
   // initialize attributes
   getInstance()->fPDF = pdf;
@@ -355,10 +356,9 @@ void APFELSingleton::Initialize(NNPDFSettings const& set, PDFSet *const& pdf)
 
 NNPDF::real APFELSingleton::xfx(const double &x, const int &fl)
 {
-  NNPDF::real *pdf = new NNPDF::real[14];
-  NNPDF::real *lha = new NNPDF::real[14];
-  getInstance()->fPDF->GetPDF(x, pow(getInstance()->fQ0, 2.0), getInstance()->fMem, pdf);
-  PDFSet::EVLN2LHA(pdf, lha);
+  std::array<real, 14> pdf, lha;
+  getInstance()->fPDF->GetPDF(x, pow(getInstance()->fQ0, 2.0), getInstance()->fMem, pdf.data());
+  PDFSet::EVLN2LHA(pdf.data(), lha.data());
 
   return lha[fl+6];
 }
