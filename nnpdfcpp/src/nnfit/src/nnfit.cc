@@ -122,7 +122,7 @@ int main(int argc, char **argv)
             continue;
 
           vector<DataSet> datasets;
-          for (int j = 0; j < settings.GetExpSets(i).size(); j++)
+          for (size_t j = 0; j < settings.GetExpSets(i).size(); j++)
             {
               datasets.push_back(LoadDataSet(settings, settings.GetExpSets(i)[j], DATA_FILTERED));
               MakeT0Predictions(T0Set,datasets[j]);
@@ -346,7 +346,7 @@ int main(int argc, char **argv)
           continue;
 
         vector<DataSet> datasets;
-        for (int j = 0; j < settings.GetExpSets(i).size(); j++)
+        for (size_t j = 0; j < settings.GetExpSets(i).size(); j++)
           {
             datasets.push_back(LoadDataSet(settings, settings.GetExpSets(i)[j], DATA_FILTERED));
             MakeT0Predictions(T0Set, datasets[j]);
@@ -369,7 +369,7 @@ int main(int argc, char **argv)
       bool posVeto = false;
       // Compute Final Chi2
       cout << Colour::FG_BLUE << "\n- Final Positivity Test" << Colour::FG_DEFAULT << endl;
-      for (int i = 0; i < pos.size(); i++)
+      for (size_t i = 0; i < pos.size(); i++)
       {
         // Load Experiments
         int res;
@@ -526,7 +526,6 @@ void TrainValidSplit(NNPDFSettings const& settings,
   vector<DataSet> validationSets;
 
   int expValSize = 0; // size of validation experiment
-  RandomGenerator *rng = RandomGenerator::GetRNG(); // Random number generator
 
   for (int s = 0; s < exp->GetNSet(); s++)
     {

@@ -9,6 +9,7 @@
 #include "NNPDF/common.h"
 #include "NNPDF/logger.h"
 #include "NNPDF/exceptions.h"
+#include "NNPDF/utils.h"
 
 #include <iostream>
 #include <fstream>
@@ -148,21 +149,13 @@ namespace NNPDF
       return;
     }
 
-    std::ofstream targetFile;
-    targetFile.open(fFilename.c_str());
-
-    if (!targetFile.good())
-    {
-      cerr << "Logger::Export Error - target filename "<<fFilename<<" cannot be accessed!"<<endl;
-      cerr << "Log not exported"<<endl;
-      return;
-    }
-
-    targetFile << "NNPDFCPP Log file. Identifier: "<<fLogname<<". "<<fLogEntries.size()<<" entries. "<<endl;
+    std::stringstream datastream;
+    datastream << "NNPDFCPP Log file. Identifier: "<<fLogname<<". "<<fLogEntries.size()<<" entries. "<<endl;
 
     for (size_t i=0; i<fLogEntries.size(); i++)
-      targetFile << fLogEntries[i]<<endl;
+      datastream << fLogEntries[i]<<endl;
 
+    write_to_file(fFilename, datastream.str());
     cout << "** Log "<<fLogname<<" successfully exported to "<<fFilename<<endl;
   }
 
