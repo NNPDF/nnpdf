@@ -35,9 +35,13 @@ void CreateResultsFolder(const NNPDFSettings &settings, const int replica)
 {
   stringstream folder("");
   folder << settings.GetResultsDirectory() << "/nnfit";
-  mkdir(folder.str().c_str(), 0777);
+  int status = mkdir(folder.str().c_str(), 0777);
+  if (status == -1 && errno != EEXIST)
+    throw FileError("CreateResultsFolder", "Cannot create folder " + folder.str());
   folder << "/replica_" << replica;
-  mkdir(folder.str().c_str(), 0777);
+  status = mkdir(folder.str().c_str(), 0777);
+  if (status == -1 && errno != EEXIST)
+    throw FileError("CreateResultsFolder", "Cannot create folder " + folder.str());
 }
 
 // Load data and perform trainng validation split
