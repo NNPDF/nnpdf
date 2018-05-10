@@ -195,22 +195,8 @@ def chi2_impact(theory_covmat, experiments_covmat, experiments_results):
     chi2 = (1/len(central_diff))*np.sum(elements)
     return chi2
 
-def chi2_block_impact(theory_block_diag_covmat, experiments_covmat, experiments_results):
-    """ Returns total chi2 including theory cov mat """
-    dataresults = [ x[0] for x in experiments_results ]
-    theoryresults = [ x[1] for x in experiments_results ]
-    dat_central_list = [x.central_value for x in dataresults]
-    th_central_list = [x.central_value for x in theoryresults]
-    dat_central = np.concatenate([x for x in dat_central_list])
-    th_central  = np.concatenate([x for x in th_central_list])
-    central_diff = dat_central - th_central
-    cov = theory_block_diag_covmat.as_matrix() + experiments_covmat.as_matrix()
-    elements = np.dot(central_diff.T,np.dot(la.inv(cov),central_diff))
-    chi2 = (1/len(central_diff))*np.sum(elements)
-    return chi2
-
-def chi2_diag_only(theory_covmat, experiments_covmat, experiments_results):
-    """ Returns total chi2 including only diags of theory cov mat """
+def data_theory_diff(experiments_results):
+    """Returns (D-T) for central theory, for use in chi2 calculations"""
     dataresults = [ x[0] for x in experiments_results ]
     theoryresults = [ x[1] for x in experiments_results ]
     dat_central_list = [x.central_value for x in dataresults]
@@ -218,12 +204,23 @@ def chi2_diag_only(theory_covmat, experiments_covmat, experiments_results):
     dat_central = np.concatenate(dat_central_list)
     th_central  = np.concatenate(th_central_list)
     central_diff = dat_central - th_central
+    return central_diff
+
+def chi2_block_impact(theory_block_diag_covmat, experiments_covmat, data_theory_diff):
+    """ Returns total chi2 including theory cov mat """
+    cov = theory_block_diag_covmat.as_matrix() + experiments_covmat.as_matrix()
+    elements = np.dot(data_theory_diff.T,np.dot(la.inv(cov),data_theory_diff))
+    chi2 = (1/len(central_diff))*np.sum(elements)
+    return chi2
+
+def chi2_diag_only(theory_covmat, experiments_covmat, data_theory_diff):
+    """ Returns total chi2 including only diags of theory cov mat """
     s = theory_covmat.as_matrix()
-    s_diag = np.zeros((len(central_diff),len(central_diff)))
+    s_diag = np.zeros((len(data_theory_diff),len(data_theory_diff)))
     np.fill_diagonal(s_diag, np.diag(s))
     cov = s_diag + experiments_covmat.as_matrix()
-    elements = np.dot(central_diff.T,np.dot(la.inv(cov),central_diff))
-    chi2 = (1/len(central_diff))*np.sum(elements)
+    elements = np.dot(data_theory_diff.T,np.dot(la.inv(cov),data_theory_diff))
+    chi2 = (1/len(data_theory_diff))*np.sum(elements)
     return chi2
 
 each_dataset_results = collect(results, ('experiments', 'experiment'))
