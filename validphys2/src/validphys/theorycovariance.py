@@ -85,13 +85,13 @@ def theory_covmat_experiments(experiments_results_theory, make_scale_var_covmat)
     """Same as theory_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
     exp_covmats = []
-    for exp in zip(*experiments_results_theory):
-        theory_centrals = [x[1].central_value for x in exp]
+    for exp_result in zip(*experiments_results_theory):
+        theory_centrals = [x[1].central_value for x in exp_result]
         s = make_scale_var_covmat(theory_centrals)
-        sigma = exp[0][0].covmat
+        sigma = exp_result[0][0].covmat
         cov = s + sigma
-        exp_covmats.append(cov)
-    return exp_covmats
+        exp_result_covmats.append(cov)
+    return exp_result_covmats
 
 @table
 def theory_corrmat(theory_covmat):
