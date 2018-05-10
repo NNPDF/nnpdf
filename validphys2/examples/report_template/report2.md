@@ -1,5 +1,9 @@
 %NNPDF Report for fit {@ current fit @}
 
+Fit summary 
+------------------
+{@ summarise_fits @}
+
 Dataset properties
 ------------------
 {@current datasets_properties_table@}
