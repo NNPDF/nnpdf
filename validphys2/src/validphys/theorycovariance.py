@@ -197,8 +197,7 @@ def chi2_impact(theory_covmat, experiments_covmat, experiments_results):
 
 def data_theory_diff(experiments_results):
     """Returns (D-T) for central theory, for use in chi2 calculations"""
-    dataresults = [ x[0] for x in experiments_results ]
-    theoryresults = [ x[1] for x in experiments_results ]
+    dataresults, theoryresults = zip(*experiments_results)
     dat_central_list = [x.central_value for x in dataresults]
     th_central_list = [x.central_value for x in theoryresults]
     dat_central = np.concatenate(dat_central_list)
