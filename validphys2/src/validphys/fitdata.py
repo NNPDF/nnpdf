@@ -128,12 +128,13 @@ def fit_summary(replica_data, total_experiments_chi2data):
         - Phi
 
         Note:
-        Chi-squared values from the replica_data are not
-        used here (presumably they are fixed to being t0)
+        Chi-squared values from the replica_data are not used here (presumably
+        they are fixed to being t0)
 
-        TODO:
-        Check error on phi
-        Maybe we want to run this over a collection of fits?
+        This uses a corrected form for the error on phi in comparison to the
+        vp1 value. The error is propagated from the uncertainty on the
+        average chi-squared only.
+
     """
     nrep = len(replica_data)
     ndata = total_experiments_chi2data.ndata
@@ -144,11 +145,8 @@ def fit_summary(replica_data, total_experiments_chi2data):
     etrain = [x.training for x in replica_data]
     evalid = [x.validation for x in replica_data]
 
-    # Not sure if I can get this value for the error, it's
-    # supposed to be assuming that the only error is due to <chi2>
-    # just plucked straight from vp1 here.
     phi = phi_data(total_experiments_chi2data)
-    phi_err = 2.0*phi*np.std(member_chi2)/(np.mean(member_chi2)*np.sqrt(nrep))
+    phi_err = np.std(member_chi2)/(2.0*phi*np.sqrt(nrep))
 
     data = OrderedDict( ((r"$\chi^2$", [central_chi2, "-"]),
                          (r"$<E_{\mathrm{trn}}>$", [np.mean(etrain), np.std(etrain)]),
