@@ -216,8 +216,8 @@ def chi2_diag_only(theory_covmat, experiments_covmat, experiments_results):
     theoryresults = [ x[1] for x in experiments_results ]
     dat_central_list = [x.central_value for x in dataresults]
     th_central_list = [x.central_value for x in theoryresults]
-    dat_central = np.concatenate([x for x in dat_central_list])
-    th_central  = np.concatenate([x for x in th_central_list])
+    dat_central = np.concatenate(dat_central_list)
+    th_central  = np.concatenate(th_central_list)
     central_diff = dat_central - th_central
     s = theory_covmat.as_matrix()
     s_diag = np.zeros((len(central_diff),len(central_diff)))
