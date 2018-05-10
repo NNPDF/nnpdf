@@ -52,6 +52,9 @@ def theory_covmat(theoryids_experiments_central_values, experiments_index):
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
 
+results_theoryids = collect(results,('theoryids',))
+each_dataset_results_theory = collect('results_theoryids', ('experiments', 'experiment'))
+
 @_check_three_or_seven_theories
 def theory_covmat_datasets(each_dataset_results_theory):
     """Produces an array of total covariance matrices; the sum of experimental
@@ -74,6 +77,9 @@ def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
     s  = la.block_diag(*theory_covmat_datasets)
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)   
     return df
+
+experiments_results = collect(experiment_results, ('experiments',))
+experiments_results_theory = collect('experiments_results', ('theoryids',))
 
 def theory_covmat_experiments(experiments_results_theory, make_scale_var_covmat):
     """Same as theory_covmat_datasets but per experiment rather than
@@ -226,6 +232,8 @@ def chi2_diag_only(theory_covmat, experiments_covmat, experiments_results):
     chi2 = (1/len(central_diff))*np.sum(elements)
     return chi2
 
+each_dataset_results = collect(results, ('experiments', 'experiment'))
+
 def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets):
     """ Returns an array of tuples (member_chi², central_chi², numpoints)
     corresponding to each data set, where theory errors are included"""
@@ -257,19 +265,6 @@ def experiments_chi2_table_theory(experiments, pdf, abs_chi2_data_theory_experim
     """Same as experiments_chi2_table but including theory covariance matrix"""
     return experiments_chi2_table(experiments, pdf, abs_chi2_data_theory_experiment,
                                 abs_chi2_data_theory_dataset)
-
-
-
-experiments_results = collect(experiment_results, ('experiments',))
-theoryids_experiments_results = collect('experiments_results', ('theoryids',))
-each_dataset_results = collect(results, ('experiments', 'experiment'))
-results_theoryids = collect(results,('theoryids',))
-experiment_results_theoryids = collect(experiment_results, ('theoryids',))
-each_dataset_results_theory = collect('results_theoryids', ('experiments', 'experiment'))
-experiments_results_theory2 = collect('experiment_results_theoryids', ('experiments', 'experiment'))
-
-
-experiments_results_theory = collect('experiments_results', ('theoryids',))
 
 def matrix_plot_labels(df):
     explabels  = [list(df)[x][0] for x in range(len(list(df)))]
