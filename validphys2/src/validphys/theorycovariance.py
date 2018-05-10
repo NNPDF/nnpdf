@@ -46,7 +46,7 @@ def make_scale_var_covmat(theory_centrals):
 @table
 @_check_three_or_seven_theories
 def theory_covmat(theoryids_experiments_central_values, experiments_index):
-    """Calculates the theory covariance matrix for 3- or 7-point scale variations.
+    """Calculates the theory covariance matrix for scale variations.
     The matrix is a dataframe indexed by experiments_index."""
     s = make_scale_var_covmat(theoryids_experiments_central_values)
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
@@ -58,7 +58,7 @@ each_dataset_results_theory = collect('results_theoryids', ('experiments', 'expe
 @_check_three_or_seven_theories
 def theory_covmat_datasets(each_dataset_results_theory):
     """Produces an array of total covariance matrices; the sum of experimental
-    and  3/7pt scale-varied theory covariance matrices. Each matrix corresponds
+    and scale-varied theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard.
     These are needed for calculation of chi2 per dataset. """
     dataset_covmats=[]
@@ -95,7 +95,7 @@ def theory_covmat_experiments(experiments_results_theory, make_scale_var_covmat)
 
 @table
 def theory_corrmat(theory_covmat):
-    """Calculates the theory correlation matrix for 3- or 7-point scale variations."""
+    """Calculates the theory correlation matrix for scale variations."""
     df = theory_covmat
     covmat = df.as_matrix()
     diag_minus_half = (np.diagonal(covmat))**(-0.5)
@@ -104,7 +104,8 @@ def theory_corrmat(theory_covmat):
 
 @table
 def theory_blockcorrmat(theory_block_diag_covmat):
-    """Calculates the theory correlation matrix for 3- or 7-point scale variations with block diagonal entries by dataset only"""
+    """Calculates the theory correlation matrix for scale variations 
+    with block diagonal entries by dataset only"""
     df = theory_block_diag_covmat
     covmat = df.as_matrix()
     diag_minus_half = (np.diagonal(covmat))**(-0.5)
@@ -113,8 +114,8 @@ def theory_blockcorrmat(theory_block_diag_covmat):
 
 @table
 def theory_normcovmat(theory_covmat, experiments_data):
-    """Calculates the theory covariance matrix for 3- or
-     7-point scale variations normalised to data."""
+    """Calculates the theory covariance matrix for scale variations normalised
+    to data."""
     df = theory_covmat
     experiments_data_array = np.array(experiments_data)
     mat = df/np.outer(experiments_data_array, experiments_data_array)
@@ -122,7 +123,8 @@ def theory_normcovmat(theory_covmat, experiments_data):
 
 @table
 def theory_normblockcovmat(theory_block_diag_covmat, experiments_data):
-    """Calculates the theory covariance matrix for 3- or 7-point scale variations normalised to data."""
+    """Calculates the theory covariance matrix for scale variations 
+    normalised to data, block diagonal by dataset."""
     df = theory_block_diag_covmat
     experiments_data_array = np.array(experiments_data)
     mat = df/np.outer(experiments_data_array, experiments_data_array)
@@ -130,19 +132,20 @@ def theory_normblockcovmat(theory_block_diag_covmat, experiments_data):
 
 @table
 def experimentsplustheory_covmat(experiments_covmat, theory_covmat):
-    """Calculates the experiment + theory covariance matrix for 3- or 7-point scale variations."""
+    """Calculates the experiment + theory covariance matrix for 
+    scale variations."""
     df = experiments_covmat + theory_covmat
     return df
 
 @table
 def experimentsplusblocktheory_covmat(experiments_covmat, theory_block_diag_covmat):
-    """Calculates the experiment + theory covariance matrix for 3- or 7-point scale variations."""
+    """Calculates the experiment + theory covariance matrix for scale variations."""
     df = experiments_covmat + theory_block_diag_covmat
     return df
 
 @table
 def experimentsplustheory_normcovmat(experiments_covmat, theory_covmat, experiments_data):
-    """Calculates the experiment + theory covariance matrix for 3- or 7-point scale
+    """Calculates the experiment + theory covariance matrix for scale
        variations normalised to data."""
     df = experiments_covmat + theory_covmat
     experiments_data_array = np.array(experiments_data)
@@ -151,8 +154,8 @@ def experimentsplustheory_normcovmat(experiments_covmat, theory_covmat, experime
 
 @table
 def experimentsplusblocktheory_normcovmat(experiments_covmat, theory_block_diag_covmat, experiments_data):
-    """Calculates the experiment + theory covariance matrix for 3- or 7-point scale
-       variations normalised to data."""
+    """Calculates the experiment + theory covariance matrix for scale
+       variations normalised to data, block diagonal by data set."""
     df = experiments_covmat + theory_block_diag_covmat
     experiments_data_array = np.array(experiments_data)
     mat = df/np.outer(experiments_data_array, experiments_data_array)
@@ -161,7 +164,7 @@ def experimentsplusblocktheory_normcovmat(experiments_covmat, theory_block_diag_
 @table
 def experimentsplustheory_corrmat(experiments_covmat, theory_covmat):
     """Calculates the correlation matrix for the experimental
-    plus theory (3/7 pt) covariance matrices."""
+    plus theory covariance matrices."""
     exp_df = experiments_covmat
     theory_df = theory_covmat
     total_df = experiments_covmat + theory_covmat
@@ -175,7 +178,7 @@ def experimentsplustheory_corrmat(experiments_covmat, theory_covmat):
 @table
 def experimentsplusblocktheory_corrmat(experiments_covmat, theory_block_diag_covmat):
     """Calculates the correlation matrix for the experimental
-    plus theory (3/7 pt) covariance matrices."""
+    plus theory covariance matrices."""
     exp_df = experiments_covmat
     theory_df = theory_block_diag_covmat
     total_df = experiments_covmat + theory_block_diag_covmat
