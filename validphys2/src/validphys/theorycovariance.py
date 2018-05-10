@@ -69,6 +69,9 @@ def theory_covmat_datasets(each_dataset_results_theory):
 
 <<<<<<< HEAD
 def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
+    """Takes the theory covariance matrices for individual datasets and
+    returns a data frame with a block diagonal theory covariance matrix
+    by dataset"""
     s  = la.block_diag(*theory_covmat_datasets)
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)   
     return df
