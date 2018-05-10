@@ -157,7 +157,7 @@ def fit_summary(replica_data, total_experiments_chi2data):
     return pd.DataFrame(data, index=["Value", "StdDev"]).transpose()
 
 
-collected_fit_summaries = collect('fit_summary', ('fits',))
+collected_fit_summaries = collect('fit_summary', ('fits','fitcontext'))
 @table
 def summarise_fits(fits, collected_fit_summaries):
     """ Produces a table of basic comparisons between fits, includes
