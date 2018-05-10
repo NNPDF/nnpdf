@@ -84,9 +84,8 @@ experiments_results_theory = collect('experiments_results', ('theoryids',))
 def theory_covmat_experiments(experiments_results_theory, make_scale_var_covmat):
     """Same as theory_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
-    experiments_results_theory = np.swapaxes(experiments_results_theory, 0, 1)
     exp_covmats = []
-    for exp in experiments_results_theory:
+    for exp in zip(*experiments_results_theory):
         theory_centrals = [x[1].central_value for x in exp]
         s = make_scale_var_covmat(theory_centrals)
         sigma = exp[0][0].covmat
