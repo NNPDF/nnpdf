@@ -34,11 +34,10 @@ def _check_three_or_seven_theories(theoryids):
     if l!=3 and l!=7:
         raise CheckError(f"Expecting exactly 3 or 7 theories, but got {l}.")
 
-
-def make_scale_var_covmat(theory_centrals):
+def make_scale_var_covmat(cent_th):
     """Takes N theories at different scales and applies N-pt scale variations
     to produce a covariance matrix """
-    central, *others = theory_centrals
+    central, *others = cent_th
     diffs = (other - central for other in others)
     s = sum(np.outer(d,d) for d in diffs)/len(others)  
     return s
@@ -82,7 +81,7 @@ def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
 experiments_results = collect(experiment_results, ('experiments',))
 experiments_results_theory = collect('experiments_results', ('theoryids',))
 
-def theory_covmat_experiments(experiments_results_theory, make_scale_var_covmat):
+def theory_covmat_experiments(experiments_results_theory):
     """Same as theory_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
     exp_covmats = []
