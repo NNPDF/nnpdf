@@ -165,12 +165,8 @@ def experimentsplusblocktheory_normcovmat(experiments_covmat, theory_block_diag_
 def experimentsplustheory_corrmat(experiments_covmat, theory_covmat):
     """Calculates the correlation matrix for the experimental
     plus theory covariance matrices."""
-    exp_df = experiments_covmat
-    theory_df = theory_covmat
     total_df = experiments_covmat + theory_covmat
-    exp_cov = exp_df.as_matrix()
-    theory_cov = theory_df.as_matrix()
-    total_cov = exp_cov + theory_cov
+    total_cov = (experiments_covmat + theory_covmat).as_matrix()
     diag_minus_half = (np.diagonal(total_cov))**(-0.5)
     corrmat = diag_minus_half[:,np.newaxis]*total_df*diag_minus_half
     return corrmat
