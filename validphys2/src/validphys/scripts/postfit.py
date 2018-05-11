@@ -65,6 +65,9 @@ class PostfitError(Exception):
     """Exception raised when postfit cannot suceed and knows why"""
     pass
 
+class FatalPostfitError(Exception):
+    """Excption raised when some corrupted input is detected"""
+    pass
 
 def filter_replicas(postfit_path, nnfit_path, fitname):
     """ Find the paths of all replicas passing the standard NNPDF fit vetoes
@@ -80,7 +83,14 @@ def filter_replicas(postfit_path, nnfit_path, fitname):
         raise PostfitError("No valid replicas found")
 
     # Read FitInfo and compute vetoes
-    fitinfo = [fitdata.load_fitinfo(pathlib.Path(path), fitname) for path in valid_paths]
+    fitinfo = []
+    for path in valid_paths:
+        try:
+            fitinfo.append(fitdata.load_fitinfo(pathlib.Path(path), fitname))
+        except Exception as e:
+            raise FatalPostfitError(
+                f"Corrupted replica replica at {path}. "
+                f"Error when loading replica information:\n {e}") from e
     fit_vetoes = fitveto.determine_vetoes(fitinfo)
     fitveto.save_vetoes(fit_vetoes, postfit_path / 'veto_count.json')
 
@@ -188,6 +198,13 @@ def main():
     except PostfitError as e:
         log.error(f"Error in postfit:\n{e}")
         sys.exit(1)
+    except FatalPostfitError as e:
+        log.error(f"Corrupted input encountered")
+        print(
+            colors.color_exception(e.__class__, e, e.__traceback__),
+            file=sys.stderr)
     except Exception as e:
         log.critical(f"Bug in postfit ocurred. Please report it.")
-        raise
+        print(
+            colors.color_exception(e.__class__, e, e.__traceback__),
+            file=sys.stderr)
