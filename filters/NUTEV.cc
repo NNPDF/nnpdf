@@ -217,9 +217,9 @@
 */
 
 
-#include "NUTEV.h"
+#include "NUTEVFe.h"
 
-void NTVNUDMNFilter::ReadData()
+void NTVNUDMNFeFilter::ReadData()
 {
   // Opening files
   fstream f1, f2;
@@ -319,7 +319,7 @@ void NTVNUDMNFilter::ReadData()
 /**
  * See filterNTVNUDMN()
  */
-void NTVNBDMNFilter::ReadData()
+void NTVNBDMNFeFilter::ReadData()
 {
   // Opening files
   fstream f1, f2;

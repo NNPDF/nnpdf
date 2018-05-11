@@ -10,19 +10,19 @@
 
 #include "buildmaster_utils.h"
 
-class NTVNUDMNFilter: public CommonData
+class NTVNUDMNFeFilter: public CommonData
 {
-public: NTVNUDMNFilter():
-  CommonData("NTVNUDMN") { ReadData(); }
+public: NTVNUDMNFeFilter():
+  CommonData("NTVNUDMNFe") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class NTVNBDMNFilter: public CommonData
+class NTVNBDMNFeFilter: public CommonData
 {
-public: NTVNBDMNFilter():
-  CommonData("NTVNBDMN") { ReadData(); }
+public: NTVNBDMNFeFilter():
+  CommonData("NTVNBDMNFe") { ReadData(); }
 
 private:
   void ReadData();

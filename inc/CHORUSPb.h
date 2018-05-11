@@ -12,19 +12,19 @@
 
 // ********* Filters **************
 
-class CHORUSNUFilter: public CommonData
+class CHORUSNUPbFilter: public CommonData
 {
-public: CHORUSNUFilter():
-  CommonData("CHORUSNU") { ReadData(); }
+public: CHORUSNUPbFilter():
+  CommonData("CHORUSNUPb") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class CHORUSNBFilter: public CommonData
+class CHORUSNBPbFilter: public CommonData
 {
-public: CHORUSNBFilter():
-  CommonData("CHORUSNB") { ReadData(); }
+public: CHORUSNBPbFilter():
+  CommonData("CHORUSNBPb") { ReadData(); }
 
 private:
   void ReadData();

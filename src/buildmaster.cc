@@ -33,8 +33,8 @@
 #include "CDF.h"
 #include "D0.h"
 #include "FTDY.h"
-#include "CHORUS.h"
-#include "NUTEV.h"
+#include "CHORUSPb.h"
+#include "NUTEVFe.h"
 #include "HERA1-C.h"
 #include "HERA2-C.h"
 #include "H1HERA2.h"
@@ -132,8 +132,8 @@ void InitCommonData(vector<CommonData*>& target)
 
   // ************************* CHORUS ******************************
 
-  target.push_back(new CHORUSNUFilter());
-  target.push_back(new CHORUSNBFilter());
+  target.push_back(new CHORUSNUPbFilter());
+  target.push_back(new CHORUSNBPbFilter());
 
   // ************************* CMS ******************************
 
@@ -215,8 +215,8 @@ void InitCommonData(vector<CommonData*>& target)
 
   // ************************* NuTeV ******************************
 
-  target.push_back(new NTVNBDMNFilter());
-  target.push_back(new NTVNUDMNFilter());
+  target.push_back(new NTVNBDMNFeFilter());
+  target.push_back(new NTVNUDMNFeFilter());
 
   // ************************* SLAC ******************************
 

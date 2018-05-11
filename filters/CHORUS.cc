@@ -43,9 +43,9 @@
  *
  */
 
-#include "CHORUS.h"
+#include "CHORUSPb.h"
 
-void CHORUSNUFilter::ReadData()
+void CHORUSNUPbFilter::ReadData()
 {
   // Opening files
   fstream f1;
@@ -147,7 +147,7 @@ void CHORUSNUFilter::ReadData()
  *     Enu    x    y    dsdxy   dstat   dsyst    isos    radc    sh1     sh2     sh3     sh4     sh5     sh6     sh7     sh8     sh9     sh10    sh11    sh12     sh13
  *
  */
-void CHORUSNBFilter::ReadData()
+void CHORUSNBPbFilter::ReadData()
 {
   // Opening files
   fstream f1;
