@@ -14,7 +14,7 @@ from reportengine.compat import yaml
 from reportengine import collect
 from reportengine.table import table
 from reportengine.checks import make_argcheck, CheckError
-from reportengine.floatformatting import format_error_value_columns
+from reportengine.floatformatting import ValueErrorTuple
 
 from validphys.core import PDF
 from validphys import checks
@@ -120,7 +120,7 @@ def replica_data(fit, replica_paths):
 
 
 @table
-def fit_summary(replica_data, total_experiments_chi2data):
+def fit_summary(fit, replica_data, total_experiments_chi2data):
     """ Summary table of fit properties
         - Central chi-squared
         - Average chi-squared
@@ -149,25 +149,23 @@ def fit_summary(replica_data, total_experiments_chi2data):
     phi = phi_data(total_experiments_chi2data)
     phi_err = np.std(member_chi2)/(2.0*phi*np.sqrt(nrep))
 
-    data = OrderedDict( ((r"$\chi^2$",             [central_chi2, 0]),
-                         (r"$<E_{\mathrm{trn}}>$", [np.mean(etrain), np.std(etrain)]),
-                         (r"$<E_{\mathrm{val}}>$", [np.mean(evalid), np.std(evalid)]),
-                         (r"$<TL>$",               [np.mean(nite), np.std(nite)]),
-                         (r"$<\chi^2>$",           [np.mean(member_chi2), np.std(member_chi2)]),
-                         (r"$\phi$",               [phi, phi_err])))
+    VET = ValueErrorTuple
+    data = OrderedDict( ((r"$\chi^2$",             f"{central_chi2:.5f}"),
+                         (r"$<E_{\mathrm{trn}}>$", f"{VET(np.mean(etrain), np.std(etrain))}"),
+                         (r"$<E_{\mathrm{val}}>$", f"{VET(np.mean(evalid), np.std(evalid))}"),
+                         (r"$<TL>$",               f"{VET(np.mean(nite), np.std(nite))}"),
+                         (r"$<\chi^2>$", f"{VET(np.mean(member_chi2), np.std(member_chi2))}"),
+                         (r"$\phi$",     f"{VET(phi, phi_err)}")))
 
-    df = pd.DataFrame(data, index=["Value", "Error"]).transpose()
-    #format_error_value_columns(df, "Value", "Error", inplace=True)
-
-    return df
+    return pd.Series(data, index=data.keys(), name=fit.name)
 
 
-collected_fit_summaries = collect('fit_summary', ('fits','fitcontext'))
+collected_fit_summaries = collect('fit_summary', ('fits', 'fitcontext'))
 @table
-def summarise_fits(fits, collected_fit_summaries):
+def summarise_fits(collected_fit_summaries):
     """ Produces a table of basic comparisons between fits, includes
     all the fields used in fit_summary """
-    return pd.concat(collected_fit_summaries, axis=1, keys=[fit.name for fit in fits])
+    return pd.concat(collected_fit_summaries, axis=1)
 
 
 def fit_sum_rules(fit, replica_paths):
