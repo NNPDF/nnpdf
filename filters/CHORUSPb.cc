@@ -1,4 +1,3 @@
-
 /**
  * CHORUS: ONENGUT et al. Phys.LETT.632(2006)65
  *
@@ -44,9 +43,9 @@
  *
  */
 
-#include "CHORUS.h"
+#include "CHORUSPb.h"
 
-void CHORUSNUFilter::ReadData()
+void CHORUSNUPbFilter::ReadData()
 {
   // Opening files
   fstream f1;
@@ -80,29 +79,23 @@ void CHORUSNUFilter::ReadData()
     lstream >> fStat[i];   //stat
     
     lstream >> tmp;
-    
-    //Isoscalar target correction interpreted as uncertainty
+    lstream >> nortmp;   
+
+    //QED radiation correction interpreted as uncertainty
     lstream >> nortmp;
     fSys[i][0].mult = (1.0-nortmp)*100.0;
     fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
     fSys[i][0].type = MULT;
-    fSys[i][0].name = "CHORUSISOTARGCOR";
-    
-    //QED radiation correction interpreted as uncertainty
-    lstream >> nortmp;
-    fSys[i][1].mult = (1.0-nortmp)*100.0;
-    fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
-    fSys[i][1].type = MULT;
-    fSys[i][1].name = "CHORUSQEDRADCOR";
+    fSys[i][0].name = "CHORUSQEDRADCOR";
     
     //Systematics
-    for (int l = 2; l < fNSys; l++)
+    for (int l = 1; l < fNSys; l++)
     {
       lstream >> fSys[i][l].add;
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = ADD;
       ostringstream sysname;
-      sysname << "CHORUSSYS" << l-1;
+      sysname << "CHORUSSYS" << l;
       fSys[i][l].name = sysname.str();
     }
   }
@@ -154,7 +147,7 @@ void CHORUSNUFilter::ReadData()
  *     Enu    x    y    dsdxy   dstat   dsyst    isos    radc    sh1     sh2     sh3     sh4     sh5     sh6     sh7     sh8     sh9     sh10    sh11    sh12     sh13
  *
  */
-void CHORUSNBFilter::ReadData()
+void CHORUSNBPbFilter::ReadData()
 {
   // Opening files
   fstream f1;
@@ -188,29 +181,23 @@ void CHORUSNBFilter::ReadData()
     lstream >> fStat[i];   //stat
     
     lstream >> tmp;
-    
-    //Isoscalar target correction interpreted as uncertainty
+    lstream >> nortmp;    
+
+    //QED radiation correction interpreted as uncertainty
     lstream >> nortmp;
     fSys[i][0].mult = (1.0-nortmp)*100.0;
     fSys[i][0].add = fSys[i][0].mult*fData[i]*1e-2;
     fSys[i][0].type = MULT;
-    fSys[i][0].name = "CHORUSISOTARGCOR";
-    
-    //QED radiation correction interpreted as uncertainty
-    lstream >> nortmp;
-    fSys[i][1].mult = (1.0-nortmp)*100.0;
-    fSys[i][1].add = fSys[i][1].mult*fData[i]*1e-2;
-    fSys[i][1].type = MULT;
-    fSys[i][1].name = "CHORUSQEDRADCOR";
+    fSys[i][0].name = "CHORUSQEDRADCOR";
     
     //Systematics
-    for (int l = 2; l < fNSys; l++)
+    for (int l = 1; l < fNSys; l++)
     {
       lstream >> fSys[i][l].add;
       fSys[i][l].mult = fSys[i][l].add*100/fData[i];
       fSys[i][l].type = ADD;
       ostringstream sysname;
-      sysname << "CHORUSSYS" << l-1;
+      sysname << "CHORUSSYS" << l;
       fSys[i][l].name = sysname.str();
     }
   }
