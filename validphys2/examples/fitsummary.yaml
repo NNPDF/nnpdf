@@ -1,15 +1,6 @@
 fits:
-    - {id: 170412-nh-001, label: "Fit one"}
-    - {id: 170227-001, label: "Fit two"}
-
-pdf:
-  from_: fit
-theory: 
-  from_: fit
-theoryid: 
-  from_: theory
-experiments:
-  from_: fit
+    - {id: 171113-nh-001, label: "Fit one"}
+    - {id: 171113-nh-002, label: "Fit two"}
 
 use_cuts: True
 template_text: |
