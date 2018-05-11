@@ -37,7 +37,7 @@ bool ReplicaFolderExists(NNPDFSettings const& settings, int replica)
 
   struct stat s;
   stringstream folder;
-  folder << settings.GetResultsDirectory() << "/postfit/replica_" << replica;
+  folder << settings.GetResultsDirectory() << "/nnfit/replica_" << replica;
 
   if(stat(folder.str().c_str(), &s) == 0)
     if (s.st_mode & S_IFDIR) exist = true;
@@ -53,7 +53,7 @@ void LoadParams(NNPDFSettings const& settings, int replica,
   cout << Colour::FG_BLUE << "- Reading params file..." << Colour::FG_DEFAULT << endl;
 
   stringstream params;
-  params << settings.GetResultsDirectory() << "/postfit/replica_" << replica << "/" << settings.GetPDFName() <<".params";
+  params << settings.GetResultsDirectory() << "/nnfit/replica_" << replica << "/" << settings.GetPDFName() <<".params";
 
   ifstream fin(params.str().c_str());
   if (fin.fail())
@@ -81,7 +81,7 @@ void LoadParams(NNPDFSettings const& settings, int replica,
   cout << Colour::FG_BLUE << "- Reading preprocessing file..." << Colour::FG_DEFAULT << endl;
 
   stringstream preproc;
-  preproc << settings.GetResultsDirectory() << "/postfit/replica_" << replica << "/" << settings.GetPDFName() <<".preproc";
+  preproc << settings.GetResultsDirectory() << "/nnfit/replica_" << replica << "/" << settings.GetPDFName() <<".preproc";
 
   ifstream fin2(preproc.str().c_str());
   if (fin2.fail())
@@ -98,24 +98,12 @@ void LoadParams(NNPDFSettings const& settings, int replica,
 }
 
 //
-void CreateFolder(string const& path)
-{
-  int status = mkdir(path.c_str(), 0777);
-  if (status == -1 && errno != EEXIST)
-    throw FileError("CreateResultsFolder", "Cannot create folder " + path);
-}
-
-//
 void ExportEvolvedReplica(NNPDFSettings const& settings, unique_ptr<FitPDFSet> const& fitset, int replica)
 {
   // Creating output folder
-  const string lhapath = settings.GetResultsDirectory() + "/evolvefit/" + settings.GetPDFName();
-  CreateFolder(lhapath);
+  const string ofile = settings.GetResultsDirectory() + "/nnfit/replica_" + std::to_string(replica) + "/" + settings.GetPDFName() + ".dat";
 
   // Preparing settings from APFELSingleton
-  stringstream path;
-  path << lhapath << "/" << settings.GetPDFName() << "_" << std::setw(4) << std::setfill('0') << replica << ".dat";
-  const string ofile = path.str();
   cout << Colour::FG_BLUE <<"- Writing out LHAPDF file: "<< ofile << Colour::FG_DEFAULT << endl;
 
   // if replica 1 print the header
@@ -140,43 +128,43 @@ void ExportEvolvedReplica(NNPDFSettings const& settings, unique_ptr<FitPDFSet> c
         }
 
   // print the replica  
-  ofstream lhaout(ofile.c_str());
-  lhaout << scientific << setprecision(7);
-  lhaout << "PdfType: replica\nFormat: lhagrid1\n---" << std::endl;
+  stringstream lhadata;
+  lhadata << scientific << setprecision(7);
+  lhadata << "PdfType: replica\nFormat: lhagrid1\n---" << std::endl;
 
   for (int s = 0; s < (int) q2grid.size(); s++)
      {
        for (int ix = 0; ix < nx; ix++)
-         lhaout << xgrid[ix] << " ";
-       lhaout << std::endl;
+         lhadata << xgrid[ix] << " ";
+       lhadata << std::endl;
 
        for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-         lhaout << sqrt(q2grid[s][iq]) << " ";
-       lhaout << std::endl;
+         lhadata << sqrt(q2grid[s][iq]) << " ";
+       lhadata << std::endl;
 
        for (int i = -nf; i <= nf; i++)
-         if (i == 0) lhaout << 21 << " ";
-         else lhaout << i << " ";
-       if (settings.IsQED()) lhaout << 22 << " ";
-       lhaout << std::endl;
+         if (i == 0) lhadata << 21 << " ";
+         else lhadata << i << " ";
+       if (settings.IsQED()) lhadata << 22 << " ";
+       lhadata << std::endl;
 
        const int floffset = 6-nf;
        for (int ix = 0; ix < nx; ix++)
          for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
            {
-             lhaout << " ";
+             lhadata << " ";
              for (int fl = floffset; fl <= 12-floffset; fl++)
-               lhaout << setw(14) << res[s][ix + iq*nx][fl] << " ";
-             if (settings.IsQED()) lhaout << setw(14) << res[s][ix + iq*nx][PDFSet::PHT] << " ";
-             lhaout << std::endl;
+               lhadata << setw(14) << res[s][ix + iq*nx][fl] << " ";
+             if (settings.IsQED()) lhadata << setw(14) << res[s][ix + iq*nx][PDFSet::PHT] << " ";
+             lhadata << std::endl;
            }
-       lhaout << "---" << std::endl;
+       lhadata << "---" << std::endl;
      }
-  lhaout.close();  
+  write_to_file(ofile, lhadata.str());
 }
 
 //
-void ExportInfoFile(NNPDFSettings const& settings, int nreplicas)
+void ExportInfoFile(NNPDFSettings const& settings)
 {
   cout << "Exporting LHAPDF info file"<< endl;
 
@@ -196,7 +184,7 @@ void ExportInfoFile(NNPDFSettings const& settings, int nreplicas)
     lhaoutheader6 << "Reference: arXiv:xxxx.xxxxxx" << endl;
     lhaoutheader6 << "Format: lhagrid1" << endl;
     lhaoutheader6 << "DataVersion: 1" << endl;
-    lhaoutheader6 << "NumMembers: " << nreplicas << endl;
+    lhaoutheader6 << "NumMembers: REPLACE_NREP" << endl;
     lhaoutheader6 << "Particle: 2212" << endl;
     lhaoutheader6 << "Flavors: [";
     for (int i = -nf; i <= nf; i++)
@@ -242,28 +230,31 @@ void ExportInfoFile(NNPDFSettings const& settings, int nreplicas)
 int main(int argc, char **argv)
 {
   // Read configuration filename from arguments
+  int replica;
   string folder;
-  if (argc == 2)
-    folder.assign(argv[1]);
+  if (argc == 3)
+    {
+      replica = atoi(argv[1]);
+      folder.assign(argv[2]);
+    }
   else
     {
-      cerr << Colour::FG_RED << "usage: evolvefit [-h] result_path" << Colour::FG_DEFAULT << endl;
+      cerr << Colour::FG_RED << "usage: evolvefit [-h] replica result_path" << Colour::FG_DEFAULT << endl;
       exit(-1);
     }
 
   // Creates the configuration class
   NNPDFSettings settings(folder);
   settings.VerifyConfiguration();
-  CreateFolder(settings.GetResultsDirectory() + "/evolvefit");
-
-  // Initialize APFEL
-  apfelInstance().Initialize(settings);
 
   // Fit Basis
-  int replica = 1;
-  while(ReplicaFolderExists(settings, replica))
+  if (ReplicaFolderExists(settings, replica))
     {
-      cout << Colour::FG_GREEN << "# Evolving replica " << replica << Colour::FG_DEFAULT << endl;
+      // Initialize APFEL
+      apfelInstance().Initialize(settings);
+
+      // export info file
+      ExportInfoFile(settings);
 
       // load fitbasis
       unique_ptr<FitBasis> fitbasis(getFitBasis(settings, replica));
@@ -280,12 +271,9 @@ int main(int argc, char **argv)
 
       // export pdf
       ExportEvolvedReplica(settings, fitset, replica);
-
-      replica++;
     }
-
-  // export info file
-  ExportInfoFile(settings, replica);
+  else
+    throw RuntimeException("evolvefit", " replica folder does not exist replica_" + replica);
 
   return 0;
 }
