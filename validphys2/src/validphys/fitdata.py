@@ -14,6 +14,7 @@ from reportengine.compat import yaml
 from reportengine import collect
 from reportengine.table import table
 from reportengine.checks import make_argcheck, CheckError
+from reportengine.floatformatting import format_error_value_columns
 
 from validphys.core import PDF
 from validphys import checks
@@ -148,13 +149,17 @@ def fit_summary(replica_data, total_experiments_chi2data):
     phi = phi_data(total_experiments_chi2data)
     phi_err = np.std(member_chi2)/(2.0*phi*np.sqrt(nrep))
 
-    data = OrderedDict( ((r"$\chi^2$", [central_chi2, "-"]),
+    data = OrderedDict( ((r"$\chi^2$",             [central_chi2, 0]),
                          (r"$<E_{\mathrm{trn}}>$", [np.mean(etrain), np.std(etrain)]),
                          (r"$<E_{\mathrm{val}}>$", [np.mean(evalid), np.std(evalid)]),
-                         (r"$<TL>$", [np.mean(nite), np.std(nite)]),
-                         (r"$<\chi^2>$",         [np.mean(member_chi2), np.std(member_chi2)]),
-                         (r"$\phi$",             [phi, phi_err])))
-    return pd.DataFrame(data, index=["Value", "StdDev"]).transpose()
+                         (r"$<TL>$",               [np.mean(nite), np.std(nite)]),
+                         (r"$<\chi^2>$",           [np.mean(member_chi2), np.std(member_chi2)]),
+                         (r"$\phi$",               [phi, phi_err])))
+
+    df = pd.DataFrame(data, index=["Value", "Error"]).transpose()
+    #format_error_value_columns(df, "Value", "Error", inplace=True)
+
+    return df
 
 
 collected_fit_summaries = collect('fit_summary', ('fits','fitcontext'))

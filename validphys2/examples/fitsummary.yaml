@@ -15,7 +15,7 @@ use_cuts: True
 template_text: |
     ---
     title: Fit summary table example 
-    author: Dave Smith 
+    author: nh 
     keywords: [example]
     ---
 
