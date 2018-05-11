@@ -80,7 +80,13 @@ def filter_replicas(postfit_path, nnfit_path, fitname):
         raise PostfitError("No valid replicas found")
 
     # Read FitInfo and compute vetoes
-    fitinfo = [fitdata.load_fitinfo(pathlib.Path(path), fitname) for path in valid_paths]
+    fitinfo = []
+    for path in valid_paths:
+        try:
+            fitinfo.append(fitdata.load_fitinfo(pathlib.Path(path), fitname))
+        except Exception as e:
+            raise PostfitError(
+                f"Corrupted replica replica at {path}: {e}") from e
     fit_vetoes = fitveto.determine_vetoes(fitinfo)
     fitveto.save_vetoes(fit_vetoes, postfit_path / 'veto_count.json')
 
