@@ -203,8 +203,10 @@ def main():
         print(
             colors.color_exception(e.__class__, e, e.__traceback__),
             file=sys.stderr)
+        sys.exit(1)
     except Exception as e:
         log.critical(f"Bug in postfit ocurred. Please report it.")
         print(
             colors.color_exception(e.__class__, e, e.__traceback__),
             file=sys.stderr)
+        sys.exit(1)
