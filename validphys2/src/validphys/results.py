@@ -284,7 +284,7 @@ def experiments_normcovmat(experiments_covmat, experiments_data):
     df = experiments_covmat
     experiments_data_array = np.array(experiments_data)
     mat = df/np.outer(experiments_data_array, experiments_data_array)
-    return mat 
+    return mat
 
 @table
 def experiments_corrmat(experiments_covmat):
@@ -293,7 +293,7 @@ def experiments_corrmat(experiments_covmat):
     covmat = df.as_matrix()
     diag_minus_half = (np.diagonal(covmat))**(-0.5)
     mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
-    return mat 
+    return mat
 
 @table
 def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
@@ -786,16 +786,27 @@ def dataspecs_chi2_differences_table(dataspecs, dataspecs_chi2_table):
     return df
 
 
+def total_experiments_chi2data(pdf: PDF, experiments_chi2):
+    """Return the central and member chi² values for the sum
+    over all experiments. Values are not normalised to ndat.
+    """
+    ndata = 0
+    central_chi2 = 0
+    nmembers = len(experiments_chi2[0].replica_result.error_members())  # ugh
+    member_chi2  = np.zeros(nmembers)
 
-def total_experiments_chi2(experiments_chi2):
-    """Return  the total chi²/ndata for the combination of all
-    experiments."""
-    val = 0
-    n = 0
     for cd in experiments_chi2:
-        val += cd.central_result
-        n += cd.ndata
-    return val/n
+        # not sure why the transpose or [0] are needed here
+        member_chi2  += cd.replica_result.error_members().T[0]
+        central_chi2 += cd.central_result
+        ndata += cd.ndata
+    return Chi2Data(pdf.stats_class(member_chi2), central_chi2, ndata)
+
+
+def total_experiments_chi2(total_experiments_chi2data):
+    """Return the total chi²/ndata for the combination of all
+    experiments."""
+    return total_experiments_chi2data.central_result/total_experiments_chi2data.ndata
 
 @table
 @check_not_empty('experiments')
@@ -844,7 +855,7 @@ def check_have_three_theories(theoryids):
 
 @table
 @check_have_three_theories
-def theory_covmat_3pt(theoryids_experiments_central_values, experiments, experiments_index): 
+def theory_covmat_3pt(theoryids_experiments_central_values, experiments, experiments_index):
     """Calculates the theory covariance matrix for 3-point scale variations."""
     number_theories = len(theoryids_experiments_central_values)
     central, low, high = np.array(theoryids_experiments_central_values)
@@ -862,7 +873,7 @@ def theory_corrmat_3pt(theory_covmat_3pt):
     covmat = df.as_matrix()
     diag_minus_half = (np.diagonal(covmat))**(-0.5)
     mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
-    return mat 
+    return mat
 
 @table
 def theory_normcovmat_3pt(theory_covmat_3pt, experiments_data):
@@ -870,7 +881,7 @@ def theory_normcovmat_3pt(theory_covmat_3pt, experiments_data):
     df = theory_covmat_3pt
     experiments_data_array = np.array(experiments_data)
     mat = df/np.outer(experiments_data_array, experiments_data_array)
-    return mat 
+    return mat
 
 
 experiments_results = collect(experiment_results, ('experiments',))
