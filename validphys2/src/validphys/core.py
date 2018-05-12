@@ -506,7 +506,7 @@ class TheoryIDSpec:
         #to be changed eventually. Depend on it as little as possible.
         import sqlite3
         dbpath = self.path.parent/'theory.db'
-        #TODO: remove str in PY36
+        #Note this still requires a string and not a path
         conn = sqlite3.connect(str(dbpath))
         with conn:
             cursor = conn.cursor()
@@ -521,13 +521,11 @@ class TheoryIDSpec:
 
     __slots__ = ('id', 'path')
 
-
-
+    def __repr__(self):
+        return f"{self.__class__.__name__}(id={self.id}, path={self.path!r})"
 
     def __str__(self):
-        return "theory %s" % self.id
-
-
+        return f"Theory {self.id}"
 
 #TODO: Decide if we want methods or properties
 class Stats:
