@@ -224,7 +224,7 @@ def print_dataset_differences(fits, match_datasets_by_name,
     "but not in the other. If `print_common` is True, also print the datasets
     that are common."""
     m = match_datasets_by_name
-    first,second = fits
+    first, second = fits
     res = StringIO()
     if m.common and print_common:
         res.write("The following datasets are included in both `%s` and `%s`:\n\n" % (first, second))
@@ -244,6 +244,8 @@ def print_dataset_differences(fits, match_datasets_by_name,
             info = get_info(v.commondata)
             res.write(' - %s\n' % info.dataset_label)
         res.write('\n')
+    if not first and not second and not print_common:
+        res.write("The datasets included in the fits are identical.")
     return res.getvalue()
 
 print_dataset_differences.highlight = 'markdown'
