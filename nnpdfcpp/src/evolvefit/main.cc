@@ -56,57 +56,6 @@ void CheckInputs(NNPDFSettings const& settings, int replica)
 }
 
 /**
- * @brief Loads NN parameters and preprocessing.
- */
-void LoadParams(NNPDFSettings const& settings, int replica,
-                unique_ptr<FitBasis> &fitbasis,
-                unique_ptr<FitPDFSet> &fitset)
-{
-  // reading parameters to file
-  stringstream params;
-  params << settings.GetResultsDirectory() << "/nnfit/replica_" << replica << "/" << settings.GetPDFName() <<".params";
-
-  ifstream fin(params.str().c_str());
-  if (fin.fail())
-    throw FileError("SetupFromFile", "parameter file not found " + params.str());
-
-  for (int i = 0; i < settings.GetNFL(); i++)
-    {
-      string name;
-      fin >> name;
-
-      const string fitbasis_name = fitbasis->GetPDFName(i);
-      if (fitbasis_name != name)
-        throw RuntimeException("LoadParams", "base name mismatch " + name + " expected " + fitbasis_name);
-
-      const auto nparams = fitset->GetPDFs()[0][i]->GetNParameters();
-      vector<real> params(nparams);
-      for (auto j = 0; j < nparams; j++)
-        fin >> params[j];
-      fitset->GetPDFs()[0][i]->SetPars(params);
-      fitset->GetBestFit()[i]->CopyPars(fitset->GetPDFs()[0][i]);
-    }
-  fin.close();
-
-  // Read preprocessing
-  stringstream preproc;
-  preproc << settings.GetResultsDirectory() << "/nnfit/replica_" << replica << "/" << settings.GetPDFName() <<".preproc";
-
-  ifstream fin2(preproc.str().c_str());
-  if (fin2.fail())
-    throw FileError("NNpdf::NNpdf", "preprocessing file not found " + preproc.str());
-
-  for (int i = 0; i < settings.GetNFL(); i++)
-    {
-      real alpha, beta;
-      fin2 >> alpha >> beta >> fitset->GetPreprocParam()[0]->fPDFNorm[i];
-      fitbasis->SetAlpha(i, -alpha);
-      fitbasis->SetBeta(i, beta);
-    }
-  fin2.close();
-}
-
-/**
  * @brief Perform DGLAP and write LHAPDF grid file.
  */
 void ExportEvolvedReplica(NNPDFSettings const& settings, unique_ptr<FitPDFSet> const& fitset, int replica)
@@ -261,10 +210,7 @@ int main(int argc, char **argv)
 
   // load fitpdf
   unique_ptr<FitPDFSet> fitset(getFitSet(settings, fitbasis.get()));
-  fitset->SetNMembers(1);
-
-  // read parameters from file
-  LoadParams(settings, replica, fitbasis, fitset);
+  fitset->LoadParamsFromFile(replica);
 
   // Initialize APFEL
   apfelInstance().Initialize(settings, fitset.get());

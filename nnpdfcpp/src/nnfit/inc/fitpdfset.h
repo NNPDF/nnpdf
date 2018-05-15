@@ -83,6 +83,9 @@ public:
 
   real CalculateArcLength(int const& mem, int const& fl, real const& dampfact, real xmin = 1e-15, real xmax = 1.0) const;
 
+  void SaveParamsToFile(int rep) const;
+  void LoadParamsFromFile(int rep);
+
 private:
   FitPDFSet(NNPDFSettings const&, FitBasis*);
 

@@ -281,27 +281,24 @@ void FitPDFSet::GetPDF(real const& x, real const& Q2, int const& n, real* pdf) c
   if (fabs(fQ20 - Q2) < EPSILON)
     {
       // Fetch fit basis PDFs
-      real* xvals = new real[2];
+      std::array<real, 2> xvals;
       xvals[0] = x;
       xvals[1] = log(x);
-      real* fitpdfs = nullptr;
+      std::vector<real> fitpdfs;
 
       if (fbtype == BASIS_LUX)
-	fitpdfs = new real[fNfl+1];
+        fitpdfs.resize(fNfl+1, 0);
       else
-	fitpdfs = new real[fNfl];
+        fitpdfs.resize(fNfl, 0);
 
       for (int i=0; i<fNfl; i++)
-        fPDFs[n][i]->Compute(xvals,&fitpdfs[i]);
+        fPDFs[n][i]->Compute(xvals.data(), &fitpdfs.data()[i]);
 
       // Preprocess
-      fFitBasis->Preprocess(x, fitpdfs, *fPreprocParam[n]);
+      fFitBasis->Preprocess(x, fitpdfs.data(), *fPreprocParam[n]);
 
       // Rotate to evolution basis
-      fFitBasis->BASIS2EVLN(fitpdfs,pdf);
-
-      delete[] xvals;
-      delete[] fitpdfs;
+      fFitBasis->BASIS2EVLN(fitpdfs.data(), pdf);
     }
   else
     {
@@ -327,27 +324,21 @@ real FitPDFSet::GetPDF(real const& x, const real &Q2, int const& n, int const& f
   real pdf = 0;
   if (fabs(fQ20 - Q2) < EPSILON)
     {
-      real* xvals = new real[2];
-
+      std::array<real, 2> xvals;
       xvals[0] = x;
       xvals[1] = log(x);
-
-      int* transform = new int[fNfl];
-      fFitBasis->NetTransform(fl,fNfl,transform);
+      std::vector<int> transform(fNfl, 0);
+      fFitBasis->NetTransform(fl,fNfl,transform.data());
 
       for (int i = 0; i < fNfl; i++)
         if (transform[i])
         {
           real tmp = 0;
-          fPDFs[n][i]->Compute(xvals,&tmp);
+          fPDFs[n][i]->Compute(xvals.data(), &tmp);
           if(fFitBasis->GetPDFSqrPos(i)) tmp *= tmp;
           pdf+=transform[i]*tmp;
         }
-
       fFitBasis->Preprocess(x, fl, pdf, *fPreprocParam[n]);
-
-      delete[] xvals;
-      delete[] transform;
     }
   else
     {
@@ -404,25 +395,80 @@ void FitPDFSet::ExportMeta( int const& rep, real const& erf_val, real const& erf
   sumruledata << endl;
   write_to_file(sumrulefile.str(), sumruledata.str());
 
-  // Print preprocessing to file
-  cout << Colour::FG_BLUE << "- Writing preproc file..." << Colour::FG_DEFAULT << endl;
-  stringstream preprocfile, preprocdata;
-  preprocfile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/" << fSettings.GetPDFName() <<".preproc";
-  for (int i = 0; i < fNfl; i++)
-    preprocdata << -fFitBasis->GetAlpha(i) << "  " << fFitBasis->GetBeta(i) << "  " << fPreprocParam[0]->fPDFNorm[i] << endl;
-  write_to_file(preprocfile.str(), preprocdata.str());
+  SaveParamsToFile(rep);
+}
 
-  // printing parameters to file
-  cout << Colour::FG_BLUE << "- Writing params file..." << Colour::FG_DEFAULT << endl;
-  stringstream paramsfile, paramsdata;
+/**
+ * @brief FitPDFSet::SaveParamsToFile
+ */
+void FitPDFSet::SaveParamsToFile(int rep) const
+{
+  stringstream paramsfile, preprocfile, preprocdata, paramsdata;
+  preprocfile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/" << fSettings.GetPDFName() <<".preproc";
   paramsfile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/" << fSettings.GetPDFName() <<".params";
+
+  cout << "- Writing preproc file " << preprocfile.str() << endl;
+  cout << "- Writing params file " << paramsfile.str() << endl;
+
   for (int i = 0; i < fNfl; i++)
     {
+      preprocdata << -fFitBasis->GetAlpha(i) << "  " << fFitBasis->GetBeta(i) << "  " << fPreprocParam[0]->fPDFNorm[i] << endl;
       paramsdata << fFitBasis->GetPDFName(i) << endl;
       for (int j = 0; j < (int) fBestFit[i]->GetNParameters(); j++)
         paramsdata << fBestFit[i]->GetParameters()[j] << endl;
     }
+
+  write_to_file(preprocfile.str(), preprocdata.str());
   write_to_file(paramsfile.str(), paramsdata.str());
+}
+
+/**
+ * @brief FitPDFSet::LoadParamsFromFile
+ * @param paramsfile
+ * @param preprocfile
+ */
+void FitPDFSet::LoadParamsFromFile(int rep)
+{
+  // populate set with 1 replica
+  SetNMembers(1);
+
+  stringstream paramsfile, preprocfile;
+  preprocfile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/" << fSettings.GetPDFName() <<".preproc";
+  paramsfile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/" << fSettings.GetPDFName() <<".params";
+
+  cout << "- Reading preproc file " << preprocfile.str() << endl;
+  cout << "- Reading params file " << paramsfile.str() << endl;
+
+  // reading parameters to file
+  ifstream f1(paramsfile.str()), f2(preprocfile.str());
+  if (f1.fail())
+    throw FileError("FitPDFSet::LoadParamsFromFile", "parameter file not found " + paramsfile.str());
+  if (f2.fail())
+    throw FileError("FitPDFSet::LoadParamsFromFile", "preprocessing file not found " + preprocfile.str());
+
+  for (int i = 0; i < fNfl; i++)
+    {
+      string name;
+      f1 >> name;
+
+      const string fitbasis_name = fFitBasis->GetPDFName(i);
+      if (fitbasis_name != name)
+        throw RuntimeException("FitPDFSet::LoadParamsFromFile", "base name mismatch " + name + " expected " + fitbasis_name);
+
+      const auto nparams = fPDFs[0][i]->GetNParameters();
+      vector<real> params(nparams);
+      for (auto j = 0; j < nparams; j++)
+        f1 >> params[j];
+      fPDFs[0][i]->SetPars(params);
+      fBestFit[i]->CopyPars(fPDFs[0][i]);
+
+      real alpha, beta;
+      f2 >> alpha >> beta >> fPreprocParam[0]->fPDFNorm[i];
+      fFitBasis->SetAlpha(i, -alpha);
+      fFitBasis->SetBeta(i, beta);
+    }
+  f1.close();
+  f2.close();
 }
 
 /**
