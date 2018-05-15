@@ -86,8 +86,7 @@ using NNPDF::PDFSet;
 class APFELSingleton
 {
 public:
-  void Initialize(NNPDFSettings const& set);
-  void SetPDF(PDFSet *const& pdf);
+  void Initialize(NNPDFSettings const& set, PDFSet * const &pdf);
 
   // returns the PDF at initial scale fQ0, flavor basis
   NNPDF::real xfx(const double& x, const int& fl) const;

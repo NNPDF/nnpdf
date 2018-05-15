@@ -9,9 +9,9 @@
 #include "APFEL/APFEL.h"
 #include "NNPDF/exceptions.h"
 
-extern "C" void externalsetapfel_(double x, double, double *xf)
+extern "C" void externalsetapfel_(double const& x, double const&, double *xf)
 {
-  for (int i = 0; i <= 13; i++)
+  for (int i = 0; i <= 13; i++)    
     xf[i] = (double) apfelInstance().xfx(x, i-6);
 }
 
@@ -39,9 +39,11 @@ APFELSingleton::APFELSingleton():
 {
 }
 
-void APFELSingleton::Initialize(NNPDFSettings const& set)
+void APFELSingleton::Initialize(NNPDFSettings const& set,
+                                PDFSet * const &pdf)
 {
   // initialize attributes
+  fPDF = pdf;
   fMZ = stod(set.GetTheory(APFEL::kQref));
   fQ0 = fQtmp = stod(set.GetTheory(APFEL::kQ0));
   fAlphas = stod(set.GetTheory(APFEL::kalphas));
@@ -67,7 +69,7 @@ void APFELSingleton::Initialize(NNPDFSettings const& set)
   APFEL::SetNumberOfGrids(1);
   APFEL::SetExternalGrid(1, apfel_xgrid.size()-1, 5, (double*) apfel_xgrid.data());
   APFEL::LockGrids(true);
-  APFEL::SetPDFSet("external");
+  APFEL::SetPDFSet("external");  
   APFEL::SetFastEvolution(false);
   APFEL::InitializeAPFEL();
 
@@ -146,19 +148,11 @@ void APFELSingleton::Initialize(NNPDFSettings const& set)
 
 }
 
-void APFELSingleton::SetPDF(PDFSet * const &pdf)
-{
-  fPDF = pdf;  // set the new pdf set for evolution in the external function.
-  fQtmp = fQ0; // force APFEL to reload new PDF set
-}
-
 NNPDF::real APFELSingleton::xfx(const double &x, const int &fl) const
 {
-  std::array<real, 14> pdf;
-  std::array<real, 14> lha;
+  std::array<real, 14> pdf, lha;
   fPDF->GetPDF(x, pow(fQ0, 2.0), fMem, pdf.data());
   PDFSet::EVLN2LHA(pdf.data(), lha.data());
-
   return lha[fl+6];
 }
 

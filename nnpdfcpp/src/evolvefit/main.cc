@@ -1,10 +1,8 @@
-// $Id$
 //
-// NNPDF++ 2016
+// NNPDF++ 2018
 //
-// Authors: Nathan Hartland,  n.p.hartland@ed.ac.uk
-//          Stefano Carrazza, stefano.carrazza@mi.infn.it
-
+// Perform DGLAP evolution from NN replicas
+//
 #include <array>
 #include <sys/stat.h>
 #include <iomanip>
@@ -13,7 +11,6 @@
 #include <NNPDF/exceptions.h>
 #include <APFEL/APFELdev.h>
 #include <APFEL/APFEL.h>
-#include "common.h"
 #include "apfelevol.h"
 #include "fitbases.h"
 #include "fitpdfset.h"
@@ -30,28 +27,42 @@ using std::fixed;
 using std::setprecision;
 using std::array;
 
-//
-bool ReplicaFolderExists(NNPDFSettings const& settings, int replica)
+/**
+ * @brief Verifies if the following input exists:
+ * - replica folder
+ * - file with NN parameters
+ * - file with preprocessing coefficients
+ */
+void CheckInputs(NNPDFSettings const& settings, int replica)
 {
-  bool exist = false;
-
+  // check nnfit replica folder exists
   struct stat s;
-  stringstream folder;
-  folder << settings.GetResultsDirectory() << "/nnfit/replica_" << replica;
+  stringstream object;
+  object << settings.GetResultsDirectory() << "/nnfit/replica_" << replica;
 
-  if(stat(folder.str().c_str(), &s) == 0)
-    if (s.st_mode & S_IFDIR) exist = true;
+  if(stat(object.str().c_str(), &s) != 0 || !S_ISDIR(s.st_mode))
+    throw FileError("CheckInputs", "input folder not found " + object.str());
 
-  return exist;
+  // check param files
+  object.str("");
+  object << settings.GetResultsDirectory() << "/nnfit/replica_" << replica << "/" << settings.GetPDFName() <<".params";
+  if (stat(object.str().c_str(), &s) != 0 || !S_ISREG(s.st_mode))
+    throw FileError("CheckInputs", "parameters file does not exists " + object.str());
+
+  object.str("");
+  object <<  settings.GetResultsDirectory() << "/nnfit/replica_" << replica << "/" + settings.GetPDFName() + ".preproc";
+  if (stat(object.str().c_str(), &s) != 0 || !S_ISREG(s.st_mode))
+    throw FileError("CheckInputs", "preprocessing file does not exists " + object.str());
 }
 
-//
+/**
+ * @brief Loads NN parameters and preprocessing.
+ */
 void LoadParams(NNPDFSettings const& settings, int replica,
-                unique_ptr<FitBasis> &fitbasis, unique_ptr<FitPDFSet> &fitset)
+                unique_ptr<FitBasis> &fitbasis,
+                unique_ptr<FitPDFSet> &fitset)
 {
   // reading parameters to file
-  cout << Colour::FG_BLUE << "- Reading params file..." << Colour::FG_DEFAULT << endl;
-
   stringstream params;
   params << settings.GetResultsDirectory() << "/nnfit/replica_" << replica << "/" << settings.GetPDFName() <<".params";
 
@@ -78,8 +89,6 @@ void LoadParams(NNPDFSettings const& settings, int replica,
   fin.close();
 
   // Read preprocessing
-  cout << Colour::FG_BLUE << "- Reading preprocessing file..." << Colour::FG_DEFAULT << endl;
-
   stringstream preproc;
   preproc << settings.GetResultsDirectory() << "/nnfit/replica_" << replica << "/" << settings.GetPDFName() <<".preproc";
 
@@ -97,22 +106,22 @@ void LoadParams(NNPDFSettings const& settings, int replica,
   fin2.close();
 }
 
-//
+/**
+ * @brief Perform DGLAP and write LHAPDF grid file.
+ */
 void ExportEvolvedReplica(NNPDFSettings const& settings, unique_ptr<FitPDFSet> const& fitset, int replica)
 {
   // Creating output folder
   const string ofile = settings.GetResultsDirectory() + "/nnfit/replica_" + std::to_string(replica) + "/" + settings.GetPDFName() + ".dat";
-
-  // Preparing settings from APFELSingleton
-  cout << Colour::FG_BLUE <<"- Writing out LHAPDF file: "<< ofile << Colour::FG_DEFAULT << endl;
+  cout << "- Writing out LHAPDF file: "<< ofile << endl;
 
   // if replica 1 print the header
   const int nf = std::max(apfelInstance().getNFpdf(),apfelInstance().getNFas());
-  vector<double> xgrid = apfelInstance().getX();
-  vector<vector<double> > q2grid = apfelInstance().getQ2nodes();
+  const auto xgrid  = apfelInstance().getX();
+  const auto q2grid = apfelInstance().getQ2nodes();
 
   // Performing DGLAP
-  cout << Colour::FG_BLUE << "- Solving DGLAP for LHAPDF grid..." << Colour::FG_DEFAULT << endl;
+  cout << "- Solving DGLAP for LHAPDF grid..." << endl;
   array<real, 14> pdf;
   const int nx = xgrid.size();
   vector<vector<array<real, 14>>> res(q2grid.size());
@@ -163,70 +172,67 @@ void ExportEvolvedReplica(NNPDFSettings const& settings, unique_ptr<FitPDFSet> c
   write_to_file(ofile, lhadata.str());
 }
 
-//
+/**
+ * @brief Write LHAPDF info file if it does not exist.
+ */
 void ExportInfoFile(NNPDFSettings const& settings)
 {
-  cout << "Exporting LHAPDF info file"<< endl;
+  // skip if file exists
+  struct stat s;
+  stringstream infofile, infodata;
+  infofile << settings.GetResultsDirectory() + "/nnfit/" << settings.GetPDFName() << ".info";
+  if(stat(infofile.str().c_str(), &s) == 0 && S_ISREG(s.st_mode)) return;
+
+  cout << "- Exporting LHAPDF info file"<< endl;
 
   // LHAPDF6 HEADER
   const int nf = std::max(apfelInstance().getNFpdf(),apfelInstance().getNFas());
-  const string lhapath = settings.GetResultsDirectory() + "/evolvefit/" + settings.GetPDFName();
-  vector<vector<double> > q2grid = apfelInstance().getQ2nodes();
+  const auto q2grid = apfelInstance().getQ2nodes();
 
-  stringstream info;
-  info << lhapath << "/" << settings.GetPDFName() << ".info";
-
-  ofstream lhaoutheader6(info.str().c_str());
-
-    lhaoutheader6 << "SetDesc: \"NNPDF x.x\"" << endl;
-    lhaoutheader6 << "SetIndex: " << endl;
-    lhaoutheader6 << "Authors: NNPDF Collaboration." << endl;
-    lhaoutheader6 << "Reference: arXiv:xxxx.xxxxxx" << endl;
-    lhaoutheader6 << "Format: lhagrid1" << endl;
-    lhaoutheader6 << "DataVersion: 1" << endl;
-    lhaoutheader6 << "NumMembers: REPLACE_NREP" << endl;
-    lhaoutheader6 << "Particle: 2212" << endl;
-    lhaoutheader6 << "Flavors: [";
-    for (int i = -nf; i <= nf; i++)
-      lhaoutheader6 << ((i == 0) ? 21 : i) << ((i == nf && !settings.IsQED()) ? "]\n" : ( (i == nf && settings.IsQED()) ? ", 22]\n" : ", "));
-    lhaoutheader6 << "OrderQCD: " << settings.GetTheory(APFEL::kPTO) << endl;
-
-    lhaoutheader6 << "FlavorScheme: variable" << endl;
-    lhaoutheader6 << "NumFlavors: " << nf << endl;
-    lhaoutheader6 << "ErrorType: replicas" << endl;
-
-    lhaoutheader6.precision(7);
-    lhaoutheader6 << scientific;
-    lhaoutheader6 << "XMin: "<< apfelInstance().getXmin() << endl;
-    lhaoutheader6 << "XMax: "<< apfelInstance().getXmax() << endl;
-    lhaoutheader6 << "QMin: "<< apfelInstance().getQmin() << endl;
-    lhaoutheader6 << "QMax: "<< apfelInstance().getQmax() << endl;
-    lhaoutheader6 << "MZ: "  << apfelInstance().getMZ() << endl;
-    lhaoutheader6 << "MUp: 0\nMDown: 0\nMStrange: 0" << std::endl;
-    lhaoutheader6 << "MCharm: "  << apfelInstance().getMCharm() << endl;
-    lhaoutheader6 << "MBottom: " << apfelInstance().getMBottom() << endl;
-    lhaoutheader6 << "MTop: "    << apfelInstance().getMTop() << endl;
-    lhaoutheader6 << fixed << "AlphaS_MZ: " << apfelInstance().getAlphas() << endl;
-    lhaoutheader6 << scientific;
-    lhaoutheader6 << "AlphaS_OrderQCD: " << settings.GetTheory(APFEL::kPTO) << endl;
-    lhaoutheader6 << "AlphaS_Type: ipol" << endl;
-
-    lhaoutheader6 << "AlphaS_Qs: [";
-    for (int s = 0; s < (int) q2grid.size(); s++)
-      for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-        lhaoutheader6 << sqrt(q2grid[s][iq]) << ((s == (int) q2grid.size()-1 && iq == (int) q2grid[s].size()-1) ? "]\n" : ", ");
-
-    lhaoutheader6 << "AlphaS_Vals: [";
-    for (int s = 0; s < (int) q2grid.size(); s++)
-      for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-        lhaoutheader6 << apfelInstance().alphas(sqrt(q2grid[s][iq])) << ((s == (int) q2grid.size()-1 && iq == (int) q2grid[s].size()-1) ? "]\n" : ", ");
-
-    lhaoutheader6 << "AlphaS_Lambda4: 0.342207" << std::endl;
-    lhaoutheader6 << "AlphaS_Lambda5: 0.239" << std::endl;
-
-    lhaoutheader6.close();
+  infodata << "SetDesc: \"NNPDF x.x\"" << endl;
+  infodata << "SetIndex: " << endl;
+  infodata << "Authors: NNPDF Collaboration." << endl;
+  infodata << "Reference: arXiv:xxxx.xxxxxx" << endl;
+  infodata << "Format: lhagrid1" << endl;
+  infodata << "DataVersion: 1" << endl;
+  infodata << "NumMembers: REPLACE_NREP" << endl;
+  infodata << "Particle: 2212" << endl;
+  infodata << "Flavors: [";
+  for (int i = -nf; i <= nf; i++)
+    infodata << ((i == 0) ? 21 : i) << ((i == nf && !settings.IsQED()) ? "]\n" : ( (i == nf && settings.IsQED()) ? ", 22]\n" : ", "));
+  infodata << "OrderQCD: " << settings.GetTheory(APFEL::kPTO) << endl;
+  infodata << "FlavorScheme: variable" << endl;
+  infodata << "NumFlavors: " << nf << endl;
+  infodata << "ErrorType: replicas" << endl;
+  infodata.precision(7);
+  infodata << scientific;
+  infodata << "XMin: "<< apfelInstance().getXmin() << endl;
+  infodata << "XMax: "<< apfelInstance().getXmax() << endl;
+  infodata << "QMin: "<< apfelInstance().getQmin() << endl;
+  infodata << "QMax: "<< apfelInstance().getQmax() << endl;
+  infodata << "MZ: "  << apfelInstance().getMZ() << endl;
+  infodata << "MUp: 0\nMDown: 0\nMStrange: 0" << std::endl;
+  infodata << "MCharm: "  << apfelInstance().getMCharm() << endl;
+  infodata << "MBottom: " << apfelInstance().getMBottom() << endl;
+  infodata << "MTop: "    << apfelInstance().getMTop() << endl;
+  infodata << fixed << "AlphaS_MZ: " << apfelInstance().getAlphas() << endl;
+  infodata << scientific;
+  infodata << "AlphaS_OrderQCD: " << settings.GetTheory(APFEL::kPTO) << endl;
+  infodata << "AlphaS_Type: ipol" << endl;
+  infodata << "AlphaS_Qs: [";
+  for (int s = 0; s < (int) q2grid.size(); s++)
+    for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
+      infodata << sqrt(q2grid[s][iq]) << ((s == (int) q2grid.size()-1 && iq == (int) q2grid[s].size()-1) ? "]\n" : ", ");
+  infodata << "AlphaS_Vals: [";
+  for (int s = 0; s < (int) q2grid.size(); s++)
+    for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
+      infodata << apfelInstance().alphas(sqrt(q2grid[s][iq])) << ((s == (int) q2grid.size()-1 && iq == (int) q2grid[s].size()-1) ? "]\n" : ", ");
+  infodata << "AlphaS_Lambda4: 0.342207" << endl;
+  infodata << "AlphaS_Lambda5: 0.239" << endl;
+  write_to_file(infofile.str(), infodata.str());
 }
 
+//_________________________________________________
 int main(int argc, char **argv)
 {
   // Read configuration filename from arguments
@@ -239,7 +245,7 @@ int main(int argc, char **argv)
     }
   else
     {
-      cerr << Colour::FG_RED << "usage: evolvefit [-h] replica result_path" << Colour::FG_DEFAULT << endl;
+      cerr << "usage: evolvefit [-h] replica result_path" << endl;
       exit(-1);
     }
 
@@ -248,32 +254,26 @@ int main(int argc, char **argv)
   settings.VerifyConfiguration();
 
   // Fit Basis
-  if (ReplicaFolderExists(settings, replica))
-    {
-      // Initialize APFEL
-      apfelInstance().Initialize(settings);
+  CheckInputs(settings, replica);
 
-      // export info file
-      ExportInfoFile(settings);
+  // load fitbasis
+  unique_ptr<FitBasis> fitbasis(getFitBasis(settings, replica));
 
-      // load fitbasis
-      unique_ptr<FitBasis> fitbasis(getFitBasis(settings, replica));
+  // load fitpdf
+  unique_ptr<FitPDFSet> fitset(getFitSet(settings, fitbasis.get()));
+  fitset->SetNMembers(1);
 
-      // load fitpdf
-      unique_ptr<FitPDFSet> fitset(getFitSet(settings, fitbasis.get()));
-      fitset->SetNMembers(1);
+  // read parameters from file
+  LoadParams(settings, replica, fitbasis, fitset);
 
-      // read parameters from file
-      LoadParams(settings, replica, fitbasis, fitset);
+  // Initialize APFEL
+  apfelInstance().Initialize(settings, fitset.get());
 
-      // attach pdf for dglap
-      apfelInstance().SetPDF(fitset.get());
+  // export pdf
+  ExportEvolvedReplica(settings, fitset, replica);
 
-      // export pdf
-      ExportEvolvedReplica(settings, fitset, replica);
-    }
-  else
-    throw RuntimeException("evolvefit", " replica folder does not exist replica_" + replica);
+  // export info file
+  ExportInfoFile(settings);
 
   return 0;
 }
