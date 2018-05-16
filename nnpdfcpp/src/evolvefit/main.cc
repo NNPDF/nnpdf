@@ -62,7 +62,7 @@ void ExportEvolvedReplica(NNPDFSettings const& settings, unique_ptr<FitPDFSet> c
 {
   // Creating output folder
   const string ofile = settings.GetResultsDirectory() + "/nnfit/replica_" + std::to_string(replica) + "/" + settings.GetPDFName() + ".dat";
-  cout << "- Writing out LHAPDF file: "<< ofile << endl;
+  cout << "- Writing out LHAPDF file: " << ofile << endl;
 
   // if replica 1 print the header
   const int nf = std::max(apfelInstance().getNFpdf(),apfelInstance().getNFas());
@@ -70,7 +70,6 @@ void ExportEvolvedReplica(NNPDFSettings const& settings, unique_ptr<FitPDFSet> c
   const auto q2grid = apfelInstance().getQ2nodes();
 
   // Performing DGLAP
-  cout << "- Solving DGLAP for LHAPDF grid..." << endl;
   array<real, 14> pdf;
   const int nx = xgrid.size();
   vector<vector<array<real, 14>>> res(q2grid.size());
@@ -132,7 +131,7 @@ void ExportInfoFile(NNPDFSettings const& settings)
   infofile << settings.GetResultsDirectory() + "/nnfit/" << settings.GetPDFName() << ".info";
   if(stat(infofile.str().c_str(), &s) == 0 && S_ISREG(s.st_mode)) return;
 
-  cout << "- Exporting LHAPDF info file"<< endl;
+  cout << "- Exporting LHAPDF info file: " << infofile.str() << endl;
 
   // LHAPDF6 HEADER
   const int nf = std::max(apfelInstance().getNFpdf(),apfelInstance().getNFas());
