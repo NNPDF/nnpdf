@@ -14,7 +14,7 @@ PTO:
    fit: 170131-r520032e-002-zk
    inputs:
        - dataset_input: { dataset: ATLASZPT7TEV,   frac: 0.5, cfac: [QCD, NRM] }
-       - dataset_input: { dataset: CMSDY2D12,     frac: 0.5, cfac:[MMHT]}
+       - dataset_input: { dataset: CMSDY2D12,     frac: 0.5, cfac: [MMHT]}
 
 use_cuts: True
 

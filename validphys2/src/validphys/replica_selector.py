@@ -215,7 +215,7 @@ class FilteredReplicaPlotter(ReplicaPDFPlotter):
                 stats.central_value(),
                 color=color,
                 linewidth=2,
-                label=f'{pdf.label}: {label}')
+                label=f'{label}')
 
         return limits
 

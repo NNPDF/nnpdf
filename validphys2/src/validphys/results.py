@@ -19,7 +19,7 @@ from reportengine.checks import require_one, remove_outer, check_not_empty, make
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.checks import assert_use_cuts_true, check_pdf_is_montecarlo
+from validphys.checks import assert_use_cuts_true, check_pdf_is_montecarlo, check_speclabels_different
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
 from validphys.calcutils import all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values
 
@@ -285,7 +285,7 @@ def experiments_normcovmat(experiments_covmat, experiments_data):
     df = experiments_covmat
     experiments_data_array = np.array(experiments_data)
     mat = df/np.outer(experiments_data_array, experiments_data_array)
-    return mat 
+    return mat
 
 @table
 def experiments_corrmat(experiments_covmat):
@@ -294,7 +294,7 @@ def experiments_corrmat(experiments_covmat):
     covmat = df.as_matrix()
     diag_minus_half = (np.diagonal(covmat))**(-0.5)
     mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
-    return mat 
+    return mat
 
 @table
 def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
@@ -665,6 +665,7 @@ def fits_experiments_chi2_table(fits, fits_experiments, fits_experiment_chi2_dat
     return res
 
 @table
+@check_speclabels_different
 def dataspecs_experiments_chi2_table(dataspecs_speclabel, dataspecs_experiments,
                                      dataspecs_experiment_chi2_data,
                                      per_point_data:bool=True):
@@ -714,6 +715,7 @@ def fits_datasets_chi2_table(fits, fits_experiments, fits_chi2_data,
     return pd.concat(dfs, axis=1)
 
 @table
+@check_speclabels_different
 def dataspecs_datasets_chi2_table(dataspecs_speclabel, dataspecs_experiments,
                                   dataspecs_chi2_data, per_point_data:bool=True):
     """Same as fits_datasets_chi2_table but for arbitrary dataspecs."""
@@ -786,16 +788,27 @@ def dataspecs_chi2_differences_table(dataspecs, dataspecs_chi2_table):
     return df
 
 
+def total_experiments_chi2data(pdf: PDF, experiments_chi2):
+    """Return the central and member chi² values for the sum
+    over all experiments. Values are not normalised to ndat.
+    """
+    ndata = 0
+    central_chi2 = 0
+    nmembers = len(experiments_chi2[0].replica_result.error_members())  # ugh
+    member_chi2  = np.zeros(nmembers)
 
-def total_experiments_chi2(experiments_chi2):
-    """Return  the total chi²/ndata for the combination of all
-    experiments."""
-    val = 0
-    n = 0
     for cd in experiments_chi2:
-        val += cd.central_result
-        n += cd.ndata
-    return val/n
+        # not sure why the transpose or [0] are needed here
+        member_chi2  += cd.replica_result.error_members().T[0]
+        central_chi2 += cd.central_result
+        ndata += cd.ndata
+    return Chi2Data(pdf.stats_class(member_chi2), central_chi2, ndata)
+
+
+def total_experiments_chi2(total_experiments_chi2data):
+    """Return the total chi²/ndata for the combination of all
+    experiments."""
+    return total_experiments_chi2data.central_result/total_experiments_chi2data.ndata
 
 @table
 @check_not_empty('experiments')

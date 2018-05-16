@@ -19,13 +19,12 @@
 #include <NNPDF/experiments.h>
 #include <NNPDF/positivity.h>
 
+using std::unique_ptr;
 class FitPDFSet;
 
 // Fit status
 enum fitStatus {FIT_INIT, FIT_END, FIT_ITER, FIT_ABRT};
 fitStatus state(FIT_INIT);
-
-void TrainValidSplit(const NNPDFSettings &settings, Experiment* const& exp, Experiment *&tr, Experiment *&val);
 
 /**
  * @brief CreateResultsFolder
@@ -36,10 +35,22 @@ void CreateResultsFolder(const NNPDFSettings &settings, const int replica)
 {
   stringstream folder("");
   folder << settings.GetResultsDirectory() << "/nnfit";
-  mkdir(folder.str().c_str(), 0777);
+  int status = mkdir(folder.str().c_str(), 0777);
+  if (status == -1 && errno != EEXIST)
+    throw FileError("CreateResultsFolder", "Cannot create folder " + folder.str());
   folder << "/replica_" << replica;
-  mkdir(folder.str().c_str(), 0777);
+  status = mkdir(folder.str().c_str(), 0777);
+  if (status == -1 && errno != EEXIST)
+    throw FileError("CreateResultsFolder", "Cannot create folder " + folder.str());
 }
+
+// Load data and perform trainng validation split
+void LoadAllDataAndSplit(NNPDFSettings const& settings,
+                         vector<Experiment*> & training,
+                         vector<Experiment*> & validation,
+                         vector<PositivitySet> & pos);
+
+void TrainValidSplit(const NNPDFSettings &settings, Experiment* const& exp, Experiment *&tr, Experiment *&val);
 
 
 // Add chi^2 results to fit log
@@ -47,8 +58,7 @@ void LogChi2(NNPDFSettings const& settings,
              const FitPDFSet* pdf,
              vector<PositivitySet> const& pos,
              vector<Experiment*> const& train,
-             vector<Experiment*> const& valid,
-             vector<Experiment*> const& exp);
+             vector<Experiment*> const& valid);
 
 void LogPDF(NNPDFSettings const& settings,
             FitPDFSet* pdf,

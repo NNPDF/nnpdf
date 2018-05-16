@@ -1,8 +1,13 @@
-# -*- coding: utf-8 -*-
 """
-Created on Thu Jun 30 10:19:35 2016
+app.py
 
-@author: Zahari Kassabov
+Mainloop of the validphys application.  Here we define tailoted extensions to
+the reporthengine application (such as extra command line flags). Additionally
+the *provider modules* that serve as source to the validphys actions are
+declared here.
+
+The entry point of the validphys application is the ``main`` funcion of this
+module.
 """
 import sys
 import logging
@@ -51,8 +56,8 @@ class App(app.App):
 
 The traceback above should help determine the cause of the problem. If you
 believe this is a bug in validphys (please discard the cosmic rays first),
-please send an email to Zahari<kassabov@to.infn.it>, including the following
-file in attachment:
+please open an issue on GitHub<https://github.com/NNPDF/nnpdf/issues>,
+including the contents of the following file:
 
 %s
 """

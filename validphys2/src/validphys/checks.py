@@ -5,6 +5,7 @@ Created on Thu Jun  2 19:35:40 2016
 @author: Zahari Kassabov
 """
 import tempfile
+from collections import Counter
 
 from matplotlib import scale as mscale
 
@@ -129,3 +130,28 @@ def check_pdf_normalize_to(pdfs, normalize_to):
 
 
     raise RuntimeError("Should not be here")
+
+
+def _check_list_different(l, name):
+    strs = [str(item) for item in l]
+    if not len(set(strs))==len(l):
+        counter = Counter(strs)
+        duplicates = [k for k, v in counter.items() if v > 1]
+        raise CheckError(f"{name} must be all different "
+                         f"but there are duplicates: {duplicates}")
+
+@make_argcheck
+def check_fits_different(fits):
+    """Need this check because oterwise the pandas object gets confused"""
+    return _check_list_different(fits, 'fits')
+
+@make_argcheck
+def check_dataspecs_fits_different(dataspecs_fit):
+    """Need this check because oterwise the pandas object gets confused"""
+    return _check_list_different(dataspecs_fit, 'fits')
+
+@make_argcheck
+def check_speclabels_different(dataspecs_speclabel):
+    """This is needed for grouping dataframes (and because
+    generally indecated a bug)"""
+    return _check_list_different(dataspecs_speclabel, 'dataspecs_speclabel')

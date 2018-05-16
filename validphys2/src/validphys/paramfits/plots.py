@@ -4,6 +4,7 @@ plots.py
 Plots for the paramfits package.
 """
 import logging
+import numbers
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -84,7 +85,8 @@ def plot_as_cummulative_central_chi2(fits_as,
 def plot_as_cummulative_central_chi2_diff(fits_as,
                                      as_datasets_central_parabolas,
                                      central_by_dataset_suptitle,
-                                     parabolic_as_determination_for_total):
+                                     parabolic_as_determination_for_total,
+                                     ymax:(numbers.Real, type(None))=None):
     """Plot the cummulative difference between the χ² at the best global
     αs fit and the χ² at αs. If the difference is negative, it is set to zero.
     """
@@ -103,10 +105,91 @@ def plot_as_cummulative_central_chi2_diff(fits_as,
     ax.set_ylabel(r'$\chi^2 - \chi^2_{{\rm best}\ \alpha_S}$')
     ax.set_xlabel(r'$\alpha_S$')
     ax.set_ylim(0)
+    if ymax is not None:
+        ax.set_ylim(ymax=ymax)
     ax.set_xlim(asarr[[0,-1]])
 
     return fig
 
+@figure
+def plot_as_cummulative_central_chi2_diff_underflow(
+                                     fits_as,
+                                     as_datasets_central_parabolas,
+                                     central_by_dataset_suptitle,
+                                     parabolic_as_determination_for_total,
+                                     ymax:(numbers.Real, type(None))=None):
+    """Plot the cummulative difference between the χ² at the best global
+    αs fit and the χ² at αs. If the difference is negative, it is set to zero.
+    """
+    fig,ax  = plt.subplots()
+    nx = 100
+    best_as = parabolic_as_determination_for_total[0].location
+    asarr = np.linspace(min(fits_as), max(fits_as), nx)
+
+    #ordering = [np.polyval(p, best_as + 0.001) - np.polyval(p, best_as) for p in as_datasets_central_parabolas]
+    #ordered_indexes = sorted(range(len(ordering)), key=ordering.__getitem__)
+    #as_datasets_central_parabolas = [as_datasets_central_parabolas[i] for i in ordered_indexes]
+    #central_by_dataset_suptitle = [central_by_dataset_suptitle[i] for i in ordered_indexes]
+
+
+
+    last = np.zeros(nx)
+    for (p, label) in zip(as_datasets_central_parabolas, central_by_dataset_suptitle):
+        delta = np.polyval(p, asarr) - np.polyval(p, best_as)
+        delta[delta<0] = 0
+        val = last + delta
+        ax.fill_between(asarr, last, val, label=label)
+        last = val
+    last = np.zeros(nx)
+    for (p, label) in zip(as_datasets_central_parabolas, central_by_dataset_suptitle):
+        delta = np.polyval(p, asarr) - np.polyval(p, best_as)
+        delta[delta>0] = 0
+        val = last + delta
+        ax.fill_between(asarr, last, val)
+        last = val
+    ax.legend()
+    ax.set_ylabel(r'$\chi^2 - \chi^2_{{\rm best}\ \alpha_S}$')
+    ax.set_xlabel(r'$\alpha_S$')
+    ax.set_xlim(asarr[[0,-1]])
+    if ymax is not None:
+        ax.set_ylim(ymax=ymax)
+    ymin = np.min(last)
+    ax.set_ylim(ymin=ymin)
+
+    return fig
+
+@figure
+def plot_as_cummulative_central_chi2_diff_negative(
+                                     fits_as,
+                                     as_datasets_central_parabolas,
+                                     central_by_dataset_suptitle,
+                                     parabolic_as_determination_for_total):
+    """Plot the cummulative difference between the χ² at the best global
+    αs fit and the χ² at αs. If the difference is negative, it is set to zero.
+    """
+    """Plot the cummulative difference between the χ² at the best global
+    αs fit and the χ² at αs. If the difference is negative, it is set to zero.
+    """
+    fig,ax  = plt.subplots()
+    nx = 100
+    best_as = parabolic_as_determination_for_total[0].location
+    asarr = np.linspace(min(fits_as), max(fits_as), nx)
+    last = np.zeros(nx)
+    for (p, label) in zip(as_datasets_central_parabolas, central_by_dataset_suptitle):
+        delta = np.polyval(p, asarr) - np.polyval(p, best_as)
+        delta[delta>0] = 0
+        val = last + delta
+        ax.fill_between(asarr, last, val, label=label)
+        last = val
+    #Seems that fill_between doesn't compute for the legend location
+    ax.legend(loc='lower left')
+    ax.set_ylabel(r'$\chi^2 - \chi^2_{{\rm best}\ \alpha_S}$')
+    ax.set_xlabel(r'$\alpha_S$')
+    ymin = np.min(last)
+    ax.set_ylim(ymin=ymin)
+    ax.set_xlim(asarr[[0,-1]])
+
+    return fig
 @figuregen
 def plot_dataspecs_central_parabolas(
         dataspecs_as_central_parabolas_map,
