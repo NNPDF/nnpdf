@@ -28,6 +28,38 @@
 using namespace std;
 namespace NNPDF{
 
+matrix<double> read_experiment_mat(const std::string filename) {
+  // Reads in covariance matrix for an experiment from pandas dataframe
+  ifstream f1;
+  f1.open(filename.c_str(), ios::in);
+
+  if(!f1.good()) {
+    throw FileError("experiments", "Cannot read covariance matrix file from " + filename);
+  }
+
+  // Skip first four lines (headers)
+  for (int i = 0; i < 4; i++) {
+    read.ignore(fNData, '\n')
+  }
+
+  double mat[fNData][fNData];
+  string line, exp_name, dataset_name;
+  double row_number;
+  for (int i = 0; i < fNData; i++) {
+    getline(f1, line);
+    istringstream lstream(line);
+    // Skip over first three elements of line
+    lstream >> exp_name >> dataset_name >> row_number;
+    for (int j = 0; j < fNData; j++) {
+      lstream >> mat[i][j];
+    }
+  }
+
+  f1.close();
+
+  return mat;
+}
+
 /**
   * Constructor
   */
@@ -74,6 +106,10 @@ fData(NULL),
 fT0Pred(NULL),
 fCovMat(exp.fCovMat),
 fSqrtCov(exp.fSqrtCov),
+fRepCovMat(exp.fRepCovMat),
+fSqrtRepCov(exp.fSqrtRepCov),
+fFitCovMat(exp.fFitCovMat),
+fSqrtFitCov(exp.fSqrtFitCov),
 fStat(NULL),
 fSys(NULL),
 fSetSysMap(NULL),
@@ -508,28 +544,23 @@ void Experiment::GenCovMat()
 */
 void Experiment::LoadRepCovMat(string filename)
 {
-  fCovMat.clear();
-  fCovMat.resize(fNData, fNData, 0);  
+  fRepCovMat.clear();
+  fRepCovMat.resize(fNData, fNData, 0);  
 
-  ifstream f1;
-  f1.open(filename.c_str(), ios::in);
+  fRepCovMat = read_experiment_mat(filename);
+  fSqrtRepCov = ComputeSqrtMat(fRepCovMat);
+}
 
-  if (!f1.good()) {
-    throw FileError("experiments", "Cannot read covariance matrix file from " + filename);
-  }
+/**
+* Read in covariance matrix to be used in fit from file, and generate covariance matrix and its square root
+*/
+void Experiment::LoadRepCovMat(string filename)
+{
+  fFitCovMat.clear();
+  fFitCovMat.resize(fNData, fNData, 0);  
 
-  string line;
-  for (int i=0; i<fNData; i++) {
-    getline(f1, line);
-    istringstream lstream(line);
-    for(int j=0; j<fNData; j++) {
-    lstream >> fCovMat(i, j);
-    }
-  }
-
-  f1.close();
-
-  fSqrtCov = ComputeSqrtMat(fCovMat);
+  fFitCovMat = read_experiment_mat(filename);
+  fSqrtFitCov = ComputeSqrtMat(fRepFitMat);
 }
 
 void Experiment::ExportCovMat(string filename)
