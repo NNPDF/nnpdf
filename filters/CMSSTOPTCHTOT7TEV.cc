@@ -8,6 +8,10 @@ LHC-CMS 7 TeV
 Data corresponds to the muon (L=1.17 1/fb) and electron (L=1.56 1/fb) final states collected in 2011
 [1209.4533]
 sigma t-ch = 67.2 ± 3.7 (stat.) ± 3.0 (syst.) ± 3.5 (theor.) ± 1.5 (lumi.) pb
+
+For more details of uncertainties taken into account in the above measurement, see Table 2 in the paper.
+Note that the theoretical (theor.) uncertainty is based on the theory uncertainty on the background subtraction
+and on the signal templates, and includes scale, matching, signal generator and PDF uncertainties.
 */
 
 #include "CMSSTOPTCHTOT7TEV.h"
