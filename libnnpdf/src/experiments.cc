@@ -554,7 +554,7 @@ void Experiment::LoadRepCovMat(string filename)
 /**
 * Read in covariance matrix to be used in fit from file, and generate covariance matrix and its square root
 */
-void Experiment::LoadRepCovMat(string filename)
+void Experiment::LoadFitCovMat(string filename)
 {
   fFitCovMat.clear();
   fFitCovMat.resize(fNData, fNData, 0);  
