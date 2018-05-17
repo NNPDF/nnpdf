@@ -63,6 +63,7 @@
 #include "CMSTTBARTOT13TEV.h"
 #include "CMSWMU8TEV.h"
 #include "FutureColliders.h"
+#include "CMSSTOPTCHTOT7TEV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -145,6 +146,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSZDIFF12Filter());
   target.push_back(new CMS1JET276TEVFilter());
   target.push_back(new CMSWMU8TEVFilter());
+  target.push_back(new CMSSTOPTCHTOT7TEVFilter());
 
  // ************************* CMSwc ******************************
 
