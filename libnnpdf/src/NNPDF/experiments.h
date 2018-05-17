@@ -90,6 +90,7 @@ namespace NNPDF
     void GenCovMat();                 //!< Generate covmat and inverse
 
     void LoadRepCovMat(std::string filename); //!< Read in covmat for rep gen, generate covmat and sqrt
+    void LoadFitCovMat(std::string filename); //!< Read in covmat for fitting, generate covmat and sqrt
 
   };
 
