@@ -37,7 +37,6 @@ class SetupFitEnvironment(Environment):
 
     def init_output(self):
         # check file exists, is a file, has extension.
-        #self.config_yml = pathlib.Path(runcard).absolute()
         if not self.config_yml.exists():
             raise SetupFitError("Invalid runcard. File not found.")
         else:
@@ -126,8 +125,15 @@ class SetupFitApp(App):
             self.environment.config_yml = pathlib.Path(self.args['runcard']).absolute()
             self.environment.init_output()
 
-            # here we continue with the action setup
+            # very ugly, require changes/hooks in validphys.app.run
+            self.args['config_yml'] = self.environment.config_yml
+            self.args['upload'] = False
+            self.args['output'] = ''
 
+            # proceed with default run
+            super().run()
+
+            # if succeeded print md5
             self.environment.save_md5()
         except SetupFitError as e:
             log.error(f"Error in setup-fit:\n{e}")
@@ -135,6 +141,12 @@ class SetupFitApp(App):
         except Exception as e:
             log.critical(f"Bug in setup-fit ocurred. Please report it.")
             raise
+
+    def get_config(self):
+        # first read the runcard
+        config_file = self.args['config_yml']
+        #return self.config_class.from_yaml(, environment=self.environment)
+
 
 
 def main():
