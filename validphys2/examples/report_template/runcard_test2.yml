@@ -31,7 +31,7 @@ meta:
 
 use_cuts: True
 
-Q: 3
+Q: 1.651
 
 pdfnormalize:
     - normtitle: Absolute
