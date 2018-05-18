@@ -146,7 +146,6 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSZDIFF12Filter());
   target.push_back(new CMS1JET276TEVFilter());
   target.push_back(new CMSWMU8TEVFilter());
-  target.push_back(new CMSSTOPTCHTOT7TEVFilter());
 
  // ************************* CMSwc ******************************
 
@@ -237,6 +236,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSTTBARTOT8TEVFilter());
   target.push_back(new CMSTTBARTOT13TEVFilter());
   target.push_back(new CMSTTBARTOTFilter());
+  target.push_back(new CMSSTOPTCHTOT7TEVFilter());
 
   // ************************* ZEUS ******************************
 
