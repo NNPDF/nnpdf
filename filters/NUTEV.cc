@@ -1,3 +1,8 @@
+/*
+WARNING:
+THE USE OF THIS FILTER IS DEPRECATED IN FAVOUR OF NUTECFe.cc
+*/
+
 /**
  *
  *     nutev-dimuon.f
