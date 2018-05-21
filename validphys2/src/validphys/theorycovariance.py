@@ -181,7 +181,7 @@ def chi2_impact(theory_covmat, experiments_covmat, experiments_results):
     th_central  = np.concatenate([x for x in th_central_list])
     central_diff = dat_central - th_central
     cov = theory_covmat.as_matrix() + experiments_covmat.as_matrix()
-    elements = np.dot(central_diff.T,np.dot(la.inv(cov),central_diff))
+    elements = central_diff.T@(la.inv(cov)@central_diff)
     chi2 = (1/len(central_diff))*np.sum(elements)
     return chi2
 
@@ -218,10 +218,9 @@ def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets):
     """ Returns an array of tuples (member_chi², central_chi², numpoints)
     corresponding to each data set, where theory errors are included"""
     chi2data_array = []
-    for i, results in enumerate(each_dataset_results):
+    for results, covmat in zip(each_dataset_results, theory_covmat_datasets):
         data_result, th_result = results
-        covmat = theory_covmat_datasets[i]
-        chi2s = all_chi2_theory(results, covmat)
+        chi2s = all_chi2_theory(results,covmat)
         central_result = central_chi2_theory(results, covmat)
         chi2data_array.append(Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
                                    central_result, len(data_result)))
@@ -230,9 +229,8 @@ def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets):
 def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experiments):
     """ Like abs_chi2_data_theory_dataset but for experiments not datasets"""
     chi2data_array = []
-    for i, results in enumerate(experiments_results):
+    for results, covmat in zip(experiments_results, theory_covmat_experiments):
         data_result, th_result = results
-        covmat = theory_covmat_experiments[i]
         chi2s = all_chi2_theory(results, covmat)
         central_result = central_chi2_theory(results, covmat)
         chi2data_array.append(Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
