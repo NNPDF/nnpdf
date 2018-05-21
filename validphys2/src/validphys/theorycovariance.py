@@ -198,9 +198,7 @@ def data_theory_diff(experiments_results):
 
 def chi2_block_impact(theory_block_diag_covmat, experiments_covmat, data_theory_diff):
     """ Returns total chi2 including theory cov mat """
-    cov = theory_block_diag_covmat.as_matrix() + experiments_covmat.as_matrix()
-    elements = np.dot(data_theory_diff.T,np.dot(la.inv(cov),data_theory_diff))
-    chi2 = (1/len(central_diff))*np.sum(elements)
+    chi2 = chi2_impact(theory_block_diag_covmat, experiments_covmat, experiments_results)
     return chi2
 
 def chi2_diag_only(theory_covmat, experiments_covmat, data_theory_diff):
