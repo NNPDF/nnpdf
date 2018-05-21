@@ -103,13 +103,10 @@ def theory_corrmat(theory_covmat):
     return mat
 
 @table
-def theory_blockcorrmat(theory_block_diag_covmat):
+def theory_blockcorrmat(theory_block_diag_covmat, theory_corrmat):
     """Calculates the theory correlation matrix for scale variations 
     with block diagonal entries by dataset only"""
-    df = theory_block_diag_covmat
-    covmat = df.as_matrix()
-    diag_minus_half = (np.diagonal(covmat))**(-0.5)
-    mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
+    mat = theory_corrmat(theory_block_diag_covmat)
     return mat
 
 @table
@@ -153,12 +150,10 @@ def experimentsplustheory_normcovmat(experiments_covmat, theory_covmat, experime
     return mat
 
 @table
-def experimentsplusblocktheory_normcovmat(experiments_covmat, theory_block_diag_covmat, experiments_data):
+def experimentsplusblocktheory_normcovmat(experiments_covmat, theory_block_diag_covmat, experiments_data, experimentsplustheory_normcovmat):
     """Calculates the experiment + theory covariance matrix for scale
        variations normalised to data, block diagonal by data set."""
-    df = experiments_covmat + theory_block_diag_covmat
-    experiments_data_array = np.array(experiments_data)
-    mat = df/np.outer(experiments_data_array, experiments_data_array)
+    mat = experimentsplustheory_normcovmat(experiments_covmat, theory_block_diag_covmat, experiments_data)
     return mat
 
 @table
@@ -172,19 +167,15 @@ def experimentsplustheory_corrmat(experiments_covmat, theory_covmat):
     return corrmat
 
 @table
-def experimentsplusblocktheory_corrmat(experiments_covmat, theory_block_diag_covmat):
+def experimentsplusblocktheory_corrmat(experiments_covmat, theory_block_diag_covmat, experimentsplustheory_corrmat):
     """Calculates the correlation matrix for the experimental
     plus theory covariance matrices, block diagonal by dataset."""
-    total_df = experiments_covmat + theory_block_diag_covmat
-    total_cov = (experiments_covmat + theory_block_diag_covmat).as_matrix()
-    diag_minus_half = (np.diagonal(total_cov))**(-0.5)
-    corrmat = diag_minus_half[:,np.newaxis]*total_df*diag_minus_half
+    corrmat = experimentsplustheory_corrmat(experiments_covmat, theory_block_diag_covmat)
     return corrmat
 
 def chi2_impact(theory_covmat, experiments_covmat, experiments_results):
     """ Returns total chi2 including theory cov mat """
-    dataresults = [ x[0] for x in experiments_results ]
-    theoryresults = [ x[1] for x in experiments_results ]
+    dataresults, theoryresults = zip(*experiments_results)
     dat_central_list = [x.central_value for x in dataresults]
     th_central_list = [x.central_value for x in theoryresults]
     dat_central = np.concatenate(dat_central_list)
