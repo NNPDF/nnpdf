@@ -250,8 +250,8 @@ def experiments_chi2_table_theory(experiments, pdf, abs_chi2_data_theory_experim
                                 abs_chi2_data_theory_dataset)
 
 def matrix_plot_labels(df):
-    explabels  = [list(df)[x][0] for x in range(len(list(df)))]
-    points     = [list(df)[x][2] for x in range(len(list(df)))]
+    explabels = [x[0] for x in df.columns]
+    points = [x[2] for x in df.columns]
     unique_exp = [[0 for x in range(2)] for y in range(len(explabels))]
     unique_exp[0] = [explabels[0],points[0]]
     i=1
