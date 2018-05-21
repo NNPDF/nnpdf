@@ -34,6 +34,12 @@ def _check_three_or_seven_theories(theoryids):
     if l!=3 and l!=7:
         raise CheckError(f"Expecting exactly 3 or 7 theories, but got {l}.")
 
+@make_argcheck
+def _check_three_theories(theoryids):
+    l = len(theoryids)
+    if l!=3:
+        raise CheckError(f"Expecting exactly 3 theories, but got {l}.")
+
 def make_scale_var_covmat(predictions):
     """Takes N theory predictions at different scales and applies N-pt scale variations
     to produce a covariance matrix."""
@@ -259,8 +265,6 @@ def matrix_plot_labels(df):
     ticklocs = [0 for x in range(len(startlocs)-1)]
     for i in range(len(startlocs)-1):
         ticklocs[i] = 0.5*(startlocs[i+1]+startlocs[i])
-    print("Experiment names:   " + str(ticklabels))
-    print("Datapoint start locations:   " + str(startlocs))
     return ticklocs, ticklabels
 
 @figure
@@ -486,9 +490,11 @@ def plot_diag_cov_impact(theory_covmat, experiments_covmat, experiments_data):
     ax.legend()
     return fig
 
+@_check_three_theories
 @figure
 def plot_theory_error_test(theory_covmat, experiments_covmat, experiments_data,
                            theoryids_experiments_central_values):
+    """This is a test function which works for 3 point scale variations only"""
     rc.update({'font.size': 30})
     data = experiments_data.as_matrix()
     df_theory = theory_covmat
