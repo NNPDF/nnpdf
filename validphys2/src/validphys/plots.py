@@ -667,13 +667,14 @@ class PDFPlotter(metaclass=abc.ABCMeta):
     explicitly as arguments.
     """
 
-    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to):
+    def __init__(self, pdfs, xplotting_grids, xscale, normalize_to, ymin, ymax):
         self.pdfs = pdfs
         self._xplotting_grids = xplotting_grids
         self._xscale = xscale
         self.normalize_to = normalize_to
         self.xplotting_grids = self.normalize()
-
+        self.ymin = ymin
+        self.ymax = ymax
 
     def setup_flavour(self, flstate):
         pass
@@ -775,8 +776,12 @@ class PDFPlotter(metaclass=abc.ABCMeta):
             #Note these two lines do not conmute!
             ax.set_xscale(self.xscale)
             plotutils.frame_center(ax, self.firstgrid.xgrid, np.concatenate(all_vals))
+            if (self.ymin is not None):
+                ax.set_ylim(ymin=self.ymin)
+            if (self.ymax is not None):
+                ax.set_ylim(ymax=self.ymax)
 
-            ax.set_xlabel('x')
+            ax.set_xlabel('$x$')
             ax.set_xlim(self.firstgrid.xgrid[0])
 
 
@@ -822,7 +827,7 @@ class ReplicaPDFPlotter(PDFPlotter):
 @check_scale('xscale', allow_none=True)
 @_warn_any_pdf_not_montecarlo
 def plot_pdfreplicas(pdfs, xplotting_grids, xscale:(str,type(None))=None,
-                      normalize_to:(int,str,type(None))=None):
+                      normalize_to:(int,str,type(None))=None, ymin = None, ymax = None):
     """Plot the replicas of the specifid PDFs. Otherise it works the same as
     plot_pdfs.
 
@@ -832,7 +837,7 @@ def plot_pdfreplicas(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     - normalize_to should be, a pdf id or an index of the pdf (starting from one).
     """
     yield from ReplicaPDFPlotter(pdfs=pdfs, xplotting_grids=xplotting_grids,
-                                 xscale=xscale, normalize_to=normalize_to)
+                                 xscale=xscale, normalize_to=normalize_to, ymin=ymin, ymax=ymax)
 
 
 class UncertaintyPDFPlotter(PDFPlotter):
@@ -858,11 +863,11 @@ class UncertaintyPDFPlotter(PDFPlotter):
 @check_pdf_normalize_to
 @check_scale('xscale', allow_none=True)
 def plot_pdf_uncertainties(pdfs, xplotting_grids, xscale:(str,type(None))=None,
-                      normalize_to:(int,str,type(None))=None):
+                      normalize_to:(int,str,type(None))=None, ymin=None, ymax=None):
     """Plot the PDF standard deviations as a function of x.
     If normalize_to is set, the ratio to that
     PDF's central value is plotted. Otherwise it is the absolute values."""
-    yield from UncertaintyPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
+    yield from UncertaintyPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to, ymin, ymax)
 
 
 class AllFlavoursPlotter(PDFPlotter):
@@ -884,7 +889,7 @@ class AllFlavoursPlotter(PDFPlotter):
 
         basis = self.firstgrid.basis
         fig, ax = plt.subplots()
-        ax.set_xlabel('x')
+        ax.set_xlabel('$x$')
         ax.set_ylabel(self.get_ylabel(None))
         ax.set_xscale(self.xscale)
         ax.set_title(self.get_title(None))
@@ -904,6 +909,11 @@ class AllFlavoursPlotter(PDFPlotter):
                     all_vals.append(np.atleast_2d(limits))
 
         plotutils.frame_center(ax, self.firstgrid.xgrid, np.concatenate(all_vals))
+        if (self.ymin is not None):
+            ax.set_ylim(ymin=self.ymin)
+        if (self.ymax is not None):
+            ax.set_ylim(ymax=self.ymax)
+
         ax.set_axisbelow(True)
         ax.set_xlim(self.firstgrid.xgrid[0])
         flstate.labels = self.labels
@@ -965,12 +975,12 @@ class FlavoursVarDistancePlotter(VarDistancePDFPlotter, AllFlavoursPlotter): pas
 @check_scale('xscale', allow_none=True)
 def plot_pdfdistances(pdfs, distance_grids, *,
                       xscale:(str,type(None))=None,
-                      normalize_to:(int,str,type(None))=None):
+                      normalize_to:(int,str,type(None))=None,ymin=None,ymax=None):
     """Plots the distances between different PDF sets and a reference PDF set
     for all flavours. Distances are normalized such that a value of order 10
     is unlikely to be explained by purely statistical fluctuations
     """
-    return FlavoursDistancePlotter(pdfs, distance_grids, xscale, normalize_to)()
+    return FlavoursDistancePlotter(pdfs, distance_grids, xscale, normalize_to, ymin, ymax)()
 
 
 @figure
@@ -979,12 +989,12 @@ def plot_pdfdistances(pdfs, distance_grids, *,
 @check_scale('xscale', allow_none=True)
 def plot_pdfvardistances(pdfs, variance_distance_grids, *,
                       xscale:(str,type(None))=None,
-                      normalize_to:(int,str,type(None))=None):
+                      normalize_to:(int,str,type(None))=None,ymin=None,ymax=None):
     """Plots the distances between different PDF sets and a reference PDF set
     for all flavours. Distances are normalized such that a value of order 10
     is unlikely to be explained by purely statistical fluctuations
     """
-    return FlavoursVarDistancePlotter(pdfs, variance_distance_grids, xscale, normalize_to)()
+    return FlavoursVarDistancePlotter(pdfs, variance_distance_grids, xscale, normalize_to, ymin, ymax)()
 
 
 class BandPDFPlotter(PDFPlotter):
@@ -1051,7 +1061,7 @@ class BandPDFPlotter(PDFPlotter):
 @check_pdf_normalize_to
 @check_scale('xscale', allow_none=True)
 def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
-                      normalize_to:(int,str,type(None))=None):
+                      normalize_to:(int,str,type(None))=None,ymin=None,ymax=None):
     """Plot the central value and the uncertainty of a list of pdfs as a
     function of x for a given value of Q. If normalize_to is given, plot the
     ratios to the corresponding PDF. Otherwise, plot absolute values.
@@ -1065,7 +1075,7 @@ def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     set based on the scale in xgrid, which should be used instead.
 
     """
-    yield from BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to)
+    yield from BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to, ymin, ymax)
 
 
 class FlavoursPlotter(AllFlavoursPlotter, BandPDFPlotter):
@@ -1075,7 +1085,7 @@ class FlavoursPlotter(AllFlavoursPlotter, BandPDFPlotter):
 @figure
 @check_scale('xscale', allow_none=True)
 def plot_flavours(pdf, xplotting_grid, xscale:(str,type(None))=None,
-                      normalize_to:(int,str,type(None))=None):
+                      normalize_to:(int,str,type(None))=None,ymin=None,ymax=None):
     """Plot the absolute central value and the uncertainty of all the flavours
     of a pdf as a function of x for a given value of Q.
 
@@ -1083,7 +1093,7 @@ def plot_flavours(pdf, xplotting_grid, xscale:(str,type(None))=None,
     set based on the scale in xgrid, which should be used instead.
 
     """
-    return FlavoursPlotter([pdf], [xplotting_grid], xscale, normalize_to=None)()
+    return FlavoursPlotter([pdf], [xplotting_grid], xscale, normalize_to=None, ymin= ymin, ymax=ymax)()
 
 
 @figuregen
@@ -1385,8 +1395,8 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
 
     ax.set_title("Kinematic coverage")
     ax.legend()
-    ax.set_xlabel('x')
-    ax.set_ylabel(r'$Q^2 (GeV^2)$')
+    ax.set_xlabel('$x$')
+    ax.set_ylabel(r'$Q^2$ (GeV$^2$)')
     ax.set_xscale('log')
     ax.set_yscale('log')
     return fig
