@@ -252,13 +252,11 @@ def experiments_chi2_table_theory(experiments, pdf, abs_chi2_data_theory_experim
 def matrix_plot_labels(df):
     explabels = [x[0] for x in df.columns]
     points = [x[2] for x in df.columns]
-    unique_exp = [[0 for x in range(2)] for y in range(len(explabels))]
-    unique_exp[0] = [explabels[0],points[0]]
+    unique_exp = []
     i=1
     for x in range(len(explabels)-1):
         if explabels[x+1] != explabels[x]:
-            unique_exp[i] = [explabels[x+1],x+1]
-            i=i+1
+            unique_exp.append([explabels[x+1],x+1])
     unique_exp = [sublist for i, sublist in enumerate(unique_exp) if sublist[0] != 0]
     ticklabels = [unique_exp[x][0] for x in range(len(unique_exp))]
     startlocs = [unique_exp[x][1] for x in range(len(unique_exp))]
