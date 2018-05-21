@@ -538,7 +538,7 @@ void NNPDFSettings::LoadExperiments()
       }
 
       double weight;
-      if (ds["weigh"]) {
+      if (ds["weight"]) {
         weight = ds["weight"].as<double>();
       }else{
           weight = 1;

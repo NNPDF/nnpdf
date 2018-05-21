@@ -32,6 +32,8 @@ using namespace NNPDF;
  * Principal dataset constructor
  * \param data NNPDF::CommonData containing the experimental data
  * \param set  NNPDF::FKSet containing the corresponding theory calculation
+ * \param weight the factor by which the importance of the dataset in the fit chi²
+ * is increased.
  */
 DataSet::DataSet(CommonData const& data, FKSet const& set, double weight):
   CommonData(data),
