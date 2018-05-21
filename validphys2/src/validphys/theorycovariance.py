@@ -109,7 +109,7 @@ def theory_corrmat(theory_covmat):
     return mat
 
 @table
-def theory_blockcorrmat(theory_block_diag_covmat, theory_corrmat):
+def theory_blockcorrmat(theory_block_diag_covmat):
     """Calculates the theory correlation matrix for scale variations 
     with block diagonal entries by dataset only"""
     mat = theory_corrmat(theory_block_diag_covmat)
@@ -173,7 +173,7 @@ def experimentsplustheory_corrmat(experiments_covmat, theory_covmat):
     return corrmat
 
 @table
-def experimentsplusblocktheory_corrmat(experiments_covmat, theory_block_diag_covmat, experimentsplustheory_corrmat):
+def experimentsplusblocktheory_corrmat(experiments_covmat, theory_block_diag_covmat):
     """Calculates the correlation matrix for the experimental
     plus theory covariance matrices, block diagonal by dataset."""
     corrmat = experimentsplustheory_corrmat(experiments_covmat, theory_block_diag_covmat)
@@ -202,7 +202,7 @@ def data_theory_diff(experiments_results):
     central_diff = dat_central - th_central
     return central_diff
 
-def chi2_block_impact(theory_block_diag_covmat, experiments_covmat, data_theory_diff):
+def chi2_block_impact(theory_block_diag_covmat, experiments_covmat, experiments_results):
     """ Returns total chi2 including theory cov mat """
     chi2 = chi2_impact(theory_block_diag_covmat, experiments_covmat, experiments_results)
     return chi2
