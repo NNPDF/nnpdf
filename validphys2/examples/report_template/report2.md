@@ -10,7 +10,7 @@ Dataset properties
 
 Distances
 ------------------
-{@with normalize::basespecs::pdfscalespecs@}
+{@with normalize::basespecs::pdfscalespecs::distspecs@}
 {@plot_pdfdistances@}
 {@plot_pdfvardistances@}
 {@endwith@}

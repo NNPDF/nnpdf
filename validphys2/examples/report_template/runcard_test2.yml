@@ -51,6 +51,10 @@ pdfscalespecs:
     - xscale: linear
       xscaletitle: Linear
 
+distspecs:
+   - ymin: 0
+     ymax: 20
+
 pos_use_kin: True
 
 dataset_report:
