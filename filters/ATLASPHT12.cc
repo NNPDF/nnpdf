@@ -180,9 +180,9 @@ void ATLASPHT12Filter::ReadData()
   // Starting filter
 
 
-FilterData(fstream & cent,  0,  18,  0.3)
-FilterData(fstream & fwd1,  18,  35,  0.385)
-FilterData(fstream & fwd2,  35,  49,  0.125)
+FilterData(cent,  0,  18,  0.3);
+FilterData(fwd1,  18,  35,  0.385);
+FilterData(fwd2,  35,  49,  0.125);
 
   
 
