@@ -17,6 +17,32 @@
  *
  */
 
+void ATLASPHT12Filter::CorrLoop(int & idat, int jmin, int jmax, std::string CORR, double &shift, istringstream & linestrm)
+{
+
+for(int j=jmin; j<jmax; ++j) {
+
+        double sys1, sys2, plus, minus;
+        double stmp, dtmp;
+
+        linestrm >> sys1 >> sys2;
+        minus=sys2; 
+        plus=sys1;
+
+        //convert to relative percentage values
+        plus = plus/fData[idat]*100;  
+        minus = minus/fData[idat]*100;
+        symmetriseErrors(plus,minus,&stmp,&dtmp);
+
+        fSys[idat][j].type = MULT;
+        fSys[idat][j].name = CORR;
+        fSys[idat][j].mult = stmp;
+        fSys[idat][j].add  = fSys[idat][j].mult*fData[idat]/100;
+
+        shift += dtmp;
+      }
+}
+
 void ATLASPHT12Filter::FilterData(fstream & file, int nDataMin, int nDataMax, double rap)
 {
 
@@ -30,99 +56,16 @@ void ATLASPHT12Filter::FilterData(fstream & file, int nDataMin, int nDataMax, do
 
       lstream >> central >> lower >> upper >> fData[idat] >> fStat[idat] >> dummy;
 
-      for(int j=0; j<2; ++j) {
+      
+	CorrLoop(idat, 0, 2, "CORR", shift, lstream);
+	CorrLoop(idat, 2, 7, "UNCORR", shift, lstream);
+	CorrLoop(idat, 7, fNSys-1, "CORR", shift, lstream);
+	CorrLoop(idat, fNSys-1, fNSys, "ATLASLUMI12", shift, lstream);
 
-        double sys1, sys2, plus, minus;
-        double stmp, dtmp;
-
-        lstream >> sys1 >> sys2;
-        minus=sys2; 
-        plus=sys1;
-
-        //convert to relative percentage values
-        plus = plus/fData[idat]*100;  
-        minus = minus/fData[idat]*100;
-        symmetriseErrors(plus,minus,&stmp,&dtmp);
-
-        fSys[idat][j].type = MULT;
-        fSys[idat][j].name = "CORR";
-        fSys[idat][j].mult = stmp;
-        fSys[idat][j].add  = fSys[idat][j].mult*fData[idat]/100;
-
-        shift += dtmp;
-      }
-
-      for(int j=2; j<7; ++j) {
-
-        double sys1, sys2, plus, minus;
-        double stmp, dtmp;
-
-        lstream >> sys1 >> sys2;
-        minus=sys2; 
-        plus=sys1;
-
-        //convert to relative percentage values
-        plus = plus/fData[idat]*100;  
-        minus = minus/fData[idat]*100;
-        symmetriseErrors(plus,minus,&stmp,&dtmp);
-
-        fSys[idat][j].type = MULT;
-        fSys[idat][j].name = "UNCORR";
-        fSys[idat][j].mult = stmp;
-        fSys[idat][j].add  = fSys[idat][j].mult*fData[idat]/100;
-
-        shift += dtmp;
-      }
-
-      for(int j=7; j<fNSys-1; ++j) {
-
-        double sys1, sys2, plus, minus;
-        double stmp, dtmp;
-
-        lstream >> sys1 >> sys2;
-        minus=sys2; 
-        plus=sys1;
-
-        //convert to relative percentage values
-        plus = plus/fData[idat]*100;  
-        minus = minus/fData[idat]*100;
-        symmetriseErrors(plus,minus,&stmp,&dtmp);
-
-        fSys[idat][j].type = MULT;
-        fSys[idat][j].name = "CORR";
-        fSys[idat][j].mult = stmp;
-        fSys[idat][j].add  = fSys[idat][j].mult*fData[idat]/100;
-
-        shift += dtmp;
-      }
-
-    for(int j=fNSys-1; j<fNSys; ++j) {
-
-        double sys1, sys2, plus, minus;
-        double stmp, dtmp;
-
-        lstream >> sys1 >> sys2;
-        minus=sys2; 
-        plus=sys1;
-
-        //convert to relative percentage values
-        plus = plus/fData[idat]*100;  
-        minus = minus/fData[idat]*100;
-        symmetriseErrors(plus,minus,&stmp,&dtmp);
-
-        // some of the uncertainties are uncorrelated
-        fSys[idat][j].type = MULT;
-        fSys[idat][j].name = "ATLASLUMI12";
-        fSys[idat][j].mult = stmp;
-        fSys[idat][j].add  = fSys[idat][j].mult*fData[idat]/100;
-
-        shift += dtmp;
-    }
 
   fData[idat]*=(1.0 + shift*0.01); //Shift from asymmetric errors
 
     // Kinematic variables
-    
     fKin1[idat] = rap;                     // Avg. eta_gamma 
     fKin2[idat] = pow((upper + lower) * 0.5,2);   // Avg. Et of each bin
     fKin3[idat] = 8000.;                              // LHC 8 TeV
@@ -162,12 +105,11 @@ void ATLASPHT12Filter::ReadData()
     exit(-1);
   }
 
-FilterData(cent,  0,  18,  0.3);
-FilterData(fwd1,  18,  35,  0.385);
-FilterData(fwd2,  35,  49,  0.125);
+  FilterData(cent,  0,  18,  0.3);
+  FilterData(fwd1,  18,  35,  0.385);
+  FilterData(fwd2,  35,  49,  0.125);
 
   cent.close();
   fwd1.close();
   fwd2.close();
 }
-
