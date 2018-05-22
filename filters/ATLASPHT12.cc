@@ -1,18 +1,14 @@
 /*
- *
  * ATLASPHT12 - ATLAS inclusive photons 2012
  *
  * ATLAS isolated photon production, LHC 8 TeV, 20.2 fb^-1
  * Reference:  [arXiv:1605.03495] 
  * 
- *
  */
 
 #include "ATLASPHT12.h"
 
 /*
- * ATLASPHT12ETCTR dataset
- * 
  * d sigma/dE_{T}^{gamma} [pb / GeV], 
  * Bin 1: |eta| < 0.6
  * Bin 2: 0.6 < |eta| < 1.37
@@ -65,7 +61,7 @@ void ATLASPHT12Filter::FilterData(fstream & file, int nDataMin, int nDataMax, do
         minus=sys2; 
         plus=sys1;
 
-        //convert to relative percentage values and to fb (*1000)
+        //convert to relative percentage values
         plus = plus/fData[idat]*100;  
         minus = minus/fData[idat]*100;
         symmetriseErrors(plus,minus,&stmp,&dtmp);
@@ -87,7 +83,7 @@ void ATLASPHT12Filter::FilterData(fstream & file, int nDataMin, int nDataMax, do
         minus=sys2; 
         plus=sys1;
 
-        //convert to relative percentage values and to fb (*1000)
+        //convert to relative percentage values
         plus = plus/fData[idat]*100;  
         minus = minus/fData[idat]*100;
         symmetriseErrors(plus,minus,&stmp,&dtmp);
@@ -109,7 +105,7 @@ void ATLASPHT12Filter::FilterData(fstream & file, int nDataMin, int nDataMax, do
         minus=sys2; 
         plus=sys1;
 
-        //convert to relative percentage values and to fb (*1000)
+        //convert to relative percentage values
         plus = plus/fData[idat]*100;  
         minus = minus/fData[idat]*100;
         symmetriseErrors(plus,minus,&stmp,&dtmp);
