@@ -13,7 +13,7 @@
  * Bin 1: |eta| < 0.6
  * Bin 2: 0.6 < |eta| < 1.37
  * Bin 3: 1.56 < |eta| < 1.81
- * 4th bin excluded 
+ * 4th bin excluded due to very poor chi2
  *
  */
 
@@ -46,7 +46,7 @@ for(int j=jmin; j<jmax; ++j) {
 void ATLASPHT12Filter::FilterData(fstream & file, int nDataMin, int nDataMax, double rap)
 {
 
- for (int idat = nDataMin; idat < nDataMax; idat++) {
+ for (int idat = nDataMin; idat < nDataMax; ++idat) {
       double shift = 0.;
 
       double central, upper, lower, dummy;
@@ -56,21 +56,20 @@ void ATLASPHT12Filter::FilterData(fstream & file, int nDataMin, int nDataMax, do
 
       lstream >> central >> lower >> upper >> fData[idat] >> fStat[idat] >> dummy;
 
-      
-	CorrLoop(idat, 0, 2, "CORR", shift, lstream);
-	CorrLoop(idat, 2, 7, "UNCORR", shift, lstream);
-	CorrLoop(idat, 7, fNSys-1, "CORR", shift, lstream);
-	CorrLoop(idat, fNSys-1, fNSys, "ATLASLUMI12", shift, lstream);
+      // Loop over different systematic correlations      
+      CorrLoop(idat, 0, 2, "CORR", shift, lstream); 
+      CorrLoop(idat, 2, 7, "UNCORR", shift, lstream); 
+      CorrLoop(idat, 7, fNSys-1, "CORR", shift, lstream);
+      CorrLoop(idat, fNSys-1, fNSys, "ATLASLUMI12", shift, lstream);
 
+      fData[idat]*=(1.0 + shift*0.01); //Shift from asymmetric errors
 
-  fData[idat]*=(1.0 + shift*0.01); //Shift from asymmetric errors
-
-    // Kinematic variables
-    fKin1[idat] = rap;                     // Avg. eta_gamma 
-    fKin2[idat] = pow((upper + lower) * 0.5,2);   // Avg. Et of each bin
-    fKin3[idat] = 8000.;                              // LHC 8 TeV
+     // Kinematic variables
+     fKin1[idat] = rap;                     // Avg. eta_gamma 
+     fKin2[idat] = pow((upper + lower) * 0.5,2);   // Avg. p_t of each bin
+     fKin3[idat] = 8000.;                              // LHC 8 TeV
     
-  }
+     }
 }
 
 void ATLASPHT12Filter::ReadData()
@@ -105,6 +104,7 @@ void ATLASPHT12Filter::ReadData()
     exit(-1);
   }
 
+  // Now filter all the data in the 3 rapidity bins
   FilterData(cent,  0,  18,  0.3);
   FilterData(fwd1,  18,  35,  0.385);
   FilterData(fwd2,  35,  49,  0.125);
