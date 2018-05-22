@@ -218,15 +218,36 @@ class CoreConfig(configparser.Config):
         return DataSetInput(name=name, sys=sysnum, cfac=cfac,
                 weight=weight)
 
-    def produce_commondata(self, *, dataset_input):
+    def parse_use_fitcommondata(self, do_use: bool, use_cuts, fit=None):
+        """Use the commondata files in the fit instead of those in the data
+        directory."""
+        if do_use:
+            if not fit:
+                raise ConfigError("Setting `use_fitcommondata` "
+                                  "requires specifying a fit.")
+            if use_cuts:
+                raise ConfigError("`use_cuts` must be set to false whenever "
+                                  "`use_fitcommondata` is true.")
+        return do_use
+
+    def produce_commondata(self,
+                           *,
+                           dataset_input,
+                           use_fitcommondata=False,
+                           fit=None):
         """Produce a CommondataSpec from a dataset input"""
 
         name = dataset_input.name
         sysnum = dataset_input.sys
         try:
-            return self.loader.check_commondata(setname=name, sysnum=sysnum)
+            return self.loader.check_commondata(
+                setname=name,
+                sysnum=sysnum,
+                use_fitcommondata=use_fitcommondata,
+                fit=fit)
         except DataNotFoundError as e:
-            raise ConfigError(str(e), name, self.loader.available_datasets) from e
+            raise ConfigError(str(e), name,
+                              self.loader.available_datasets) from e
         except LoadFailedError as e:
             raise ConfigError(e) from e
 
@@ -242,8 +263,14 @@ class CoreConfig(configparser.Config):
             raise ConfigError(e) from e
 
 
-    def produce_dataset(self, *, dataset_input ,theoryid, use_cuts, fit=None,
-                      check_plotting:bool=False):
+    def produce_dataset(self,
+                        *,
+                        dataset_input,
+                        theoryid,
+                        use_cuts,
+                        use_fitcommondata=False,
+                        fit=None,
+                        check_plotting: bool = False):
         """Dataset specification from the theory and CommonData.
            Use the cuts from the fit, if provided. If check_plotting is set to
            True, attempt to lod and check the PLOTTING files
@@ -254,10 +281,15 @@ class CoreConfig(configparser.Config):
         weight = dataset_input.weight
 
         try:
-            ds =  self.loader.check_dataset(name=name, sysnum=sysnum,
-                                             theoryid=theoryid, cfac=cfac,
-                                             use_cuts=use_cuts, fit=fit,
-                                             weight=weight)
+            ds = self.loader.check_dataset(
+                name=name,
+                sysnum=sysnum,
+                theoryid=theoryid,
+                cfac=cfac,
+                use_cuts=use_cuts,
+                use_fitcommondata=use_fitcommondata,
+                fit=fit,
+                weight=weight)
         except DataNotFoundError as e:
             raise ConfigError(str(e), name, self.loader.available_datasets)
 

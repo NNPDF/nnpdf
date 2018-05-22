@@ -141,15 +141,23 @@ class Loader(LoaderBase):
     def commondata_folder(self):
         return self.datapath / 'commondata'
 
-    def check_commondata(self, setname, sysnum=None):
-        datafile = self.commondata_folder / ('DATA_' + setname + '.dat')
+    def check_commondata(self, setname, sysnum=None, use_fitcommondata=False,
+                         fit=None):
+        if use_fitcommondata:
+            if not fit:
+                raise LoadFailedError(
+                        "Must specify a fit when setting use_fitcommondata")
+            datafilefolder = (fit.path/'filter')/setname
+        else:
+            datafilefolder = self.commondata_folder
+        datafile = datafilefolder / ('DATA_' + setname + '.dat')
         if not datafile.exists():
             raise DataNotFoundError(("Could not find Commondata set: '%s'. "
                   "File '%s' does not exist.")
                  % (setname, datafile))
         if sysnum is None:
             sysnum = 'DEFAULT'
-        sysfile = (self.commondata_folder / 'systypes' /
+        sysfile = (datafilefolder / 'systypes' /
                    ('SYSTYPE_%s_%s.dat' % (setname, sysnum)))
 
         if not sysfile.exists():
@@ -273,17 +281,24 @@ class Loader(LoaderBase):
                    "'{p}' must be a folder").format(**locals())
         raise FitNotFound(msg)
 
-    def check_dataset(self, *, name, sysnum=None,
-                     theoryid, cfac=(),
-                     use_cuts, fit=None, weight=1):
+    def check_dataset(self,
+                      name,
+                      *,
+                      sysnum=None,
+                      theoryid,
+                      cfac=(),
+                      use_cuts,
+                      use_fitcommondata=False,
+                      fit=None,
+                      weight=1):
 
         if not isinstance(theoryid, TheoryIDSpec):
             theoryid = self.check_theoryID(theoryid)
 
         theoryno, _ = theoryid
 
-        commondata = self.check_commondata(name, sysnum)
-
+        commondata = self.check_commondata(
+            name, sysnum, use_fitcommondata=use_fitcommondata, fit=fit)
         try:
             fkspec, op = self.check_compound(theoryno, name, cfac)
         except CompoundNotFound:
