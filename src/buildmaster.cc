@@ -57,10 +57,13 @@
 #include "ATLASTTBARTOT7TEV.h"
 #include "ATLASTTBARTOT8TEV.h"
 #include "ATLASTTBARTOT13TEV.h"
+#include "CMSTTBARTOT5TEV.h"
 #include "CMSTTBARTOT7TEV.h"
 #include "CMSTTBARTOT8TEV.h"
 #include "CMSTTBARTOT13TEV.h"
 #include "CMSWMU8TEV.h"
+#include "FutureColliders.h"
+#include "CMSSTOPTCHTOT7TEV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -92,8 +95,7 @@ void InitCommonData(vector<CommonData*>& target)
 
   // ************************* POS ******************************
 
-  registerDYPos(target);
-  registerDISPos(target);
+  register_positivity(target);
 
   // ************************* ATLAS ******************************
 
@@ -103,8 +105,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASR04JETS36PBFilter());
   target.push_back(new ATLASR06JETS36PBFilter());
   target.push_back(new ATLASR04JETS2P76TEVFilter());
-  target.push_back(new ATLASR06JETS2P76TEVFilter());
-  target.push_back(new ATLASZHIGHMASS49PBFilter());
+  target.push_back(new ATLASZHIGHMASS49FBFilter());
   target.push_back(new ATLASWPT31PBFilter());
   target.push_back(new ATLAS1JET11Filter());
   target.push_back(new ATLASLOMASSDY11Filter());
@@ -230,10 +231,12 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASTTBARTOT8TEVFilter());
   target.push_back(new ATLASTTBARTOT13TEVFilter());
   target.push_back(new ATLASTTBARTOTFilter());
+  target.push_back(new CMSTTBARTOT5TEVFilter());
   target.push_back(new CMSTTBARTOT7TEVFilter());
   target.push_back(new CMSTTBARTOT8TEVFilter());
   target.push_back(new CMSTTBARTOT13TEVFilter());
   target.push_back(new CMSTTBARTOTFilter());
+  target.push_back(new CMSSTOPTCHTOT7TEVFilter());
 
   // ************************* ZEUS ******************************
 
@@ -283,4 +286,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSTOPDIFF8TEVTTRAPNORMFilter());
   target.push_back(new CMSTOPDIFF8TEVTTPTNORMFilter());
   target.push_back(new CMSTOPDIFF8TEVTTMNORMFilter());
+
+    // ************************ LHeC + FCC pseudo-data ***************
+  target.push_back(new LHeCFilter());
+  target.push_back(new FCCFilter());
 }

@@ -10,24 +10,10 @@
 
 #include "buildmaster_utils.h"
 
-static const dataInfoRaw BCDMSPinfo = {
-  351,      //nData
-  11,        //nSys
-  "BCDMSP", //SetName
-  "DIS_F2P" //ProcType
-};
-
-static const dataInfoRaw BCDMSDinfo = {
-  254,      //nData
-  8,        //nSys
-  "BCDMSD",    //SetName
-  "DIS_F2D" //ProcType
-};
-
 class BCDMSPFilter: public CommonData
 {
 public: BCDMSPFilter():
-  CommonData(BCDMSPinfo) { ReadData(); }
+  CommonData("BCDMSP") { ReadData(); }
 
 private:
   void ReadData();
@@ -35,7 +21,7 @@ private:
 
 class BCDMSDFilter: public CommonData
 { public: BCDMSDFilter():
-  CommonData(BCDMSDinfo) { ReadData(); }
+  CommonData("BCDMSD") { ReadData(); }
 
 private:
   void ReadData();

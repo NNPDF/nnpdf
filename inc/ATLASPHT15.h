@@ -10,19 +10,11 @@
 
 #include "buildmaster_utils.h"
 
-static const dataInfoRaw ATLASPHT15info = {
-  53,                    //nData
-  2,                     //nSys (Total sys, lumi)
-  "ATLASPHT15",    //SetName
-  "PHT"                  //ProcType
-};
-
-
 // ********* Filters ************
 
 class ATLASPHT15Filter: public CommonData
 { public: ATLASPHT15Filter():
-  CommonData(ATLASPHT15info) { ReadData(); }
+  CommonData("ATLASPHT15") { ReadData(); }
 
 private:
   void ReadData();

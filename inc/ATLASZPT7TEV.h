@@ -1,6 +1,4 @@
 #pragma once
-// $Id
-//
 // NNPDF++ 2012
 //
 // Authors: Nathan Hartland,  n.p.hartland@ed.ac.uk
@@ -18,16 +16,9 @@
 #include "buildmaster_utils.h"
 #include <map>
 
-static const dataInfoRaw ATLASZPT7TEVinfo = {
-  78,          //nData  --> for inclusive rapidity bin 26
-  78,          //nSys   --> for inclusive rapidity bin 27
-  "ATLASZPT7TEV", //SetName
-  "EWK_PTRAP"     //ProcType
-};
-
 class ATLASZPT7TEVFilter: public CommonData
 { public: ATLASZPT7TEVFilter():
-  CommonData(ATLASZPT7TEVinfo) { ReadData(); }
+  CommonData("ATLASZPT7TEV") { ReadData(); }
 
 private:
   void ReadData();

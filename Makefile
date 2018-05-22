@@ -13,18 +13,20 @@ MACROS = $(RESULTSDIR) $(DATADIR)
 # Compiler options
 ##################
 
-CXX=c++
-
 # NNPDF flags
-NNPDFCXX = $(shell nnpdf-config --cppflags)
-NNPDFLD = $(shell nnpdf-config --ldflags)
+NNPDFCXX = $(shell pkg-config nnpdf --cflags)
+NNPDFLD  = $(shell pkg-config nnpdf --libs)
+
+# YAML-cpp flags
+YAMLLD  = $(shell pkg-config yaml-cpp --libs)
+YAMLCXX = $(shell pkg-config yaml-cpp --cflags)
 
 # GSL flags
 GSLCXX = $(shell gsl-config --cflags)
-GSLLD = $(shell gsl-config --libs)
+GSLLD  = $(shell gsl-config --libs)
 
-CXXFLAGS=-Wall -g -I ./inc -I ./src -std=c++11 $(NNPDFCXX) $(GSLCXX) $(MACROS)
-LDFLAGS= $(NNPDFLD) $(GSLLD)
+CXXFLAGS=-Wall -g -I ./inc -I ./src $(NNPDFCXX) $(GSLCXX) $(MACROS) $(YAMLCXX)
+LDFLAGS= $(NNPDFLD) $(GSLLD) $(YAMLLD)
 
 #####################################
 

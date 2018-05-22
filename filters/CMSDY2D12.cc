@@ -41,6 +41,7 @@ void CMSDY2D12Filter::ReadData()
     fKin2[idat] = pow(Mll,2);
     fKin3[idat] = 8e3;         // LHC ( TeV)
     fData[idat] *= 1000.;      // Convert from pb (datafiles) to fb (APPLgrid)
+    fStat[idat] = 0; // Statistical errors are correlated
 
   }
 

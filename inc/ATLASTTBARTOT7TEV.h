@@ -15,18 +15,10 @@
 
 #include "buildmaster_utils.h"
 
-static const dataInfoRaw ATLASTTBARTOT7TEVinfo = {
-  1,               //nData
-  3,               //nSys
-  "ATLASTTBARTOT7TEV", //SetName
-  "INC"            //ProcType
-};
-
-
 class ATLASTTBARTOT7TEVFilter: public CommonData
 {
 public: ATLASTTBARTOT7TEVFilter():
-  CommonData(ATLASTTBARTOT7TEVinfo) { ReadData(); }
+  CommonData("ATLASTTBARTOT7TEV") { ReadData(); }
 
 private:
   void ReadData();

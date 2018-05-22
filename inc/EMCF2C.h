@@ -10,21 +10,12 @@
 
 #include "buildmaster_utils.h"
 
-// ********** EMC F2C ***************
-
-static const dataInfoRaw EMCF2Cinfo = {
-  21,                //nData
-  1,                 //nSys
-  "EMCF2C",          //SetName
-  "DIS_F2C"          //ProcType
-};
-
 // ********* Filters **************
 
 class EMCF2CFilter: public CommonData
 {
 public: EMCF2CFilter():
-  CommonData(EMCF2Cinfo) { ReadData(); }
+  CommonData("EMCF2C") { ReadData(); }
 
 private:
   void ReadData();

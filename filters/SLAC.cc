@@ -66,8 +66,8 @@ void SLACPFilter::ReadData()
     istringstream lstream(line);
     lstream >> fKin1[i];  //x
     lstream >> fKin2[i];  //q2
-    
     lstream >> fData[i];  //obs 
+    fKin3[i] = 0;
     
     //  SLAC gives errors in absolute value
     //  and we assume the sys errors to be uncorrelated in order
@@ -161,8 +161,8 @@ void SLACDFilter::ReadData()
     istringstream lstream(line);
     lstream >> fKin1[i];  //x
     lstream >> fKin2[i];  //q2
-    
     lstream >> fData[i];  //obs 
+    fKin3[i] = 0;
     
     //  SLAC gives errors in absolute value
     //  and we assume the sys errors to be uncorrelated in order

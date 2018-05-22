@@ -103,9 +103,12 @@ void BCDMSPFilter::ReadData()
     for (int j = 0; j < 3; j++)
       lstream2 >> fSys[i][j].mult;
       
-    fSys[i][5].mult = relnorbeam;
-    fSys[i][6].mult = relnorbeam;
-    fSys[i][7].mult = relnorbeam;    
+    fSys[i][5].mult  = relnorbeam;
+    fSys[i][6].mult  = relnorbeam;
+    fSys[i][7].mult  = relnorbeam;    
+    fSys[i][8].mult  = 0;    
+    fSys[i][9].mult  = 0;    
+    fSys[i][10].mult = 0;    
   }
   nini += 97;
 
@@ -122,9 +125,12 @@ void BCDMSPFilter::ReadData()
     for (int j = 0; j < 3; j++)
       lstream2 >> fSys[i][j].mult;
       
-    fSys[i][5].mult = -relnorbeam;
-    fSys[i][8].mult = relnorbeam;
-    fSys[i][9].mult = relnorbeam;    
+    fSys[i][5].mult  = -relnorbeam;
+    fSys[i][6].mult  = 0;
+    fSys[i][7].mult  = 0;    
+    fSys[i][8].mult  = relnorbeam;
+    fSys[i][9].mult  = relnorbeam;    
+    fSys[i][10].mult = 0;    
   }
   nini += 99;  
 
@@ -141,8 +147,11 @@ void BCDMSPFilter::ReadData()
     for (int j = 0; j < 3; j++)
       lstream2 >> fSys[i][j].mult;
       
-    fSys[i][6].mult = -relnorbeam;
-    fSys[i][8].mult = -relnorbeam;
+    fSys[i][5].mult  = 0;    
+    fSys[i][6].mult  = -relnorbeam;
+    fSys[i][7].mult  = 0;    
+    fSys[i][8].mult  = -relnorbeam;
+    fSys[i][9].mult  = 0;    
     fSys[i][10].mult = relnorbeam;    
   } 
   nini += 79;
@@ -160,8 +169,11 @@ void BCDMSPFilter::ReadData()
     for (int j = 0; j < 3; j++)
       lstream2 >> fSys[i][j].mult;
       
-    fSys[i][7].mult = -relnorbeam;
-    fSys[i][9].mult = -relnorbeam;
+    fSys[i][5].mult  = 0;    
+    fSys[i][6].mult  = 0;
+    fSys[i][7].mult  = -relnorbeam;
+    fSys[i][9].mult  = -relnorbeam;
+    fSys[i][8].mult  = 0;    
     fSys[i][10].mult = -relnorbeam;    
   }  
   nini += 76;
@@ -301,6 +313,7 @@ void BCDMSDFilter::ReadData()
       lstream2 >> fSys[i][j].mult;
 
     fSys[i][5].mult = relnorbeam1;
+    fSys[i][6].mult = 0;
     fSys[i][7].mult = relnorbeam3;
   }
   nini += 99;
@@ -320,6 +333,7 @@ void BCDMSDFilter::ReadData()
 
     fSys[i][5].mult = -relnorbeam1;
     fSys[i][6].mult = relnorbeam2;
+    fSys[i][7].mult = 0;
   }
   nini += 79;
 
@@ -336,6 +350,7 @@ void BCDMSDFilter::ReadData()
     for (int j = 0; j < 3; j++)
       lstream2 >> fSys[i][j].mult;
 
+    fSys[i][5].mult = 0;
     fSys[i][6].mult = -relnorbeam2;
     fSys[i][7].mult = -relnorbeam3;
   }

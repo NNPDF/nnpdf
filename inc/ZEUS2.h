@@ -10,42 +10,10 @@
 
 #include "buildmaster_utils.h"
 
-// ********** ZEUS HERA-II ***************
-
-static const dataInfoRaw Z06NCinfo = {
-  90,                 //nData
-  10,                  //nSys
-  "Z06NC",           //SetName
-  "DIS_NCE"          //ProcType
-};
-
-static const dataInfoRaw Z06CCinfo = {
-  37,                 //nData
-  2,                  //nSys
-  "Z06CC",           //SetName
-  "DIS_CCE"        //ProcType
-};
-
-static const dataInfoRaw ZEUSHERA2NCPinfo = {
-  90,                 //nData
-  16,                //nSys
-  "ZEUSHERA2NCP",     //SetName
-  "DIS_NCP"          //ProcType
-};
-
-static const dataInfoRaw ZEUSHERA2CCPinfo = {
-  35,                 //nData
-  2,                  //nSys
-  "ZEUSHERA2CCP",     //SetName
-  "DIS_CCP"           //ProcType
-};
-
-// ********* Filters **************
-
 class Z06NCFilter: public CommonData
 {
 public: Z06NCFilter():
-  CommonData(Z06NCinfo) { ReadData(); }
+  CommonData("Z06NC") { ReadData(); }
 
 private:
   void ReadData();
@@ -53,7 +21,7 @@ private:
 
 class Z06CCFilter: public CommonData
 { public: Z06CCFilter():
-  CommonData(Z06CCinfo) { ReadData(); }
+  CommonData("Z06CC") { ReadData(); }
 
 private:
   void ReadData();
@@ -62,7 +30,7 @@ private:
 class ZEUSHERA2NCPFilter: public CommonData
 {
 public: ZEUSHERA2NCPFilter():
-  CommonData(ZEUSHERA2NCPinfo) { ReadData(); }
+  CommonData("ZEUSHERA2NCP") { ReadData(); }
 
 private:
   void ReadData();
@@ -70,7 +38,7 @@ private:
 
 class ZEUSHERA2CCPFilter: public CommonData
 { public: ZEUSHERA2CCPFilter():
-  CommonData(ZEUSHERA2CCPinfo) { ReadData(); }
+  CommonData("ZEUSHERA2CCP") { ReadData(); }
 
 private:
   void ReadData();

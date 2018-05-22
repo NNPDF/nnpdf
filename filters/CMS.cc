@@ -281,8 +281,7 @@ void CMSDY2D11Filter::ReadData()
 
     lstream >> fData[i];                // units are fb, check against APPLgrid predictions!
 
-    //    lstream >> fStat[i];
-    //    fStat[i] *= 1e-2;             // what about statistical uncertainties? are they already counted in cov matrix?
+    fStat[i] = 0; // Statistical errors are in the covariance matrix
   }
 
   // Reading covmat
@@ -622,7 +621,7 @@ void CMS1JET276TEVFilter::ReadData()
           fSys[index][2].name = "CORR";
 
           // filling corr uncertainties
-          for (int isys = 3; isys < 25; isys++)
+          for (int isys = 3; isys < nsys; isys++)
             {
               f1 >> fSys[index][isys].mult;
               fSys[index][isys].type = MULT;
@@ -635,6 +634,16 @@ void CMS1JET276TEVFilter::ReadData()
               fSys[index][l].mult *= 1e2;
               fSys[index][l].add = fSys[index][l].mult*fData[index]*1e-2;
             }
+
+          // Zero systematics for use in statistical covariance matrix
+          for (int l=nsys; l<fNSys; l++)
+          {
+              fSys[index][l].mult = 0;
+              fSys[index][l].add  = 0;
+              fSys[index][l].type = MULT; // Following procedure below
+              fSys[index][l].name = "CORR";
+          }
+
           index++;
         }
 

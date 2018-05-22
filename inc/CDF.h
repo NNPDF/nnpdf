@@ -10,35 +10,12 @@
 
 #include "buildmaster_utils.h"
 
-// ********** CDF ***************
-
-static const dataInfoRaw CDFWASYMinfo = {
-  13,             //nData
-  7,              //nSys
-  "CDFWASYM",     //SetName
-  "EWK_RAP_ASY"   //ProcType
-};
-
-static const dataInfoRaw CDFZRAPinfo = {
-  29,         //nData
-  11,         //nSys
-  "CDFZRAP",  //SetName
-  "EWK_RAP"   //ProcType
-};
-
-static const dataInfoRaw CDFR2KTinfo = {
-  76,        //nData
-  25,        //nSys
-  "CDFR2KT", //SetName
-  "JET"      //ProcType
-};
-
 // ********* Filters **************
 
 class CDFWASYMFilter: public CommonData
 {
 public: CDFWASYMFilter():
-  CommonData(CDFWASYMinfo) { ReadData(); }
+  CommonData("CDFWASYM") { ReadData(); }
 
 private:
   void ReadData();
@@ -46,7 +23,7 @@ private:
 
 class CDFZRAPFilter: public CommonData
 { public: CDFZRAPFilter():
-  CommonData(CDFZRAPinfo) { ReadData(); }
+  CommonData("CDFZRAP") { ReadData(); }
 
 private:
   void ReadData();
@@ -54,7 +31,7 @@ private:
 
 class CDFR2KTFilter: public CommonData
 { public: CDFR2KTFilter():
-  CommonData(CDFR2KTinfo) { ReadData(); }
+  CommonData("CDFR2KT") { ReadData(); }
 
 private:
   void ReadData();
