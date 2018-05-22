@@ -34,11 +34,6 @@ void ATLASPHT12Filter::FilterData(fstream & file, int nDataMin, int nDataMax, do
 
       lstream >> central >> lower >> upper >> fData[idat] >> fStat[idat] >> dummy;
 
-      // convert to fb
-      fData[idat] = fData[idat]*1000;
-      fStat[idat] = fStat[idat]*1000;
-
-      // read in  systematics 
       for(int j=0; j<2; ++j) {
 
         double sys1, sys2, plus, minus;
@@ -48,9 +43,9 @@ void ATLASPHT12Filter::FilterData(fstream & file, int nDataMin, int nDataMax, do
         minus=sys2; 
         plus=sys1;
 
-        //convert to relative percentage values and to fb (*1000)
-        plus = plus/fData[idat]*100*1000;  
-        minus = minus/fData[idat]*100*1000;
+        //convert to relative percentage values
+        plus = plus/fData[idat]*100;  
+        minus = minus/fData[idat]*100;
         symmetriseErrors(plus,minus,&stmp,&dtmp);
 
         fSys[idat][j].type = MULT;
@@ -71,8 +66,8 @@ void ATLASPHT12Filter::FilterData(fstream & file, int nDataMin, int nDataMax, do
         plus=sys1;
 
         //convert to relative percentage values and to fb (*1000)
-        plus = plus/fData[idat]*100*1000;  
-        minus = minus/fData[idat]*100*1000;
+        plus = plus/fData[idat]*100;  
+        minus = minus/fData[idat]*100;
         symmetriseErrors(plus,minus,&stmp,&dtmp);
 
         fSys[idat][j].type = MULT;
@@ -83,7 +78,6 @@ void ATLASPHT12Filter::FilterData(fstream & file, int nDataMin, int nDataMax, do
         shift += dtmp;
       }
 
-// read in  systematics 
       for(int j=7; j<fNSys-1; ++j) {
 
         double sys1, sys2, plus, minus;
@@ -94,8 +88,8 @@ void ATLASPHT12Filter::FilterData(fstream & file, int nDataMin, int nDataMax, do
         plus=sys1;
 
         //convert to relative percentage values and to fb (*1000)
-        plus = plus/fData[idat]*100*1000;  
-        minus = minus/fData[idat]*100*1000;
+        plus = plus/fData[idat]*100;  
+        minus = minus/fData[idat]*100;
         symmetriseErrors(plus,minus,&stmp,&dtmp);
 
         fSys[idat][j].type = MULT;
@@ -116,8 +110,8 @@ void ATLASPHT12Filter::FilterData(fstream & file, int nDataMin, int nDataMax, do
         plus=sys1;
 
         //convert to relative percentage values and to fb (*1000)
-        plus = plus/fData[idat]*100*1000;  
-        minus = minus/fData[idat]*100*1000;
+        plus = plus/fData[idat]*100;  
+        minus = minus/fData[idat]*100;
         symmetriseErrors(plus,minus,&stmp,&dtmp);
 
         // some of the uncertainties are uncorrelated
@@ -133,21 +127,17 @@ void ATLASPHT12Filter::FilterData(fstream & file, int nDataMin, int nDataMax, do
 
     // Kinematic variables
     
-    fKin1[idat] = rap;                     // Avg. eta_gamma (0.6<|eta_g|<1.37)
+    fKin1[idat] = rap;                     // Avg. eta_gamma 
     fKin2[idat] = pow((upper + lower) * 0.5,2);   // Avg. Et of each bin
     fKin3[idat] = 8000.;                              // LHC 8 TeV
     
   }
-
 }
-
-
 
 void ATLASPHT12Filter::ReadData()
 {
   // Opening files
   fstream cent, fwd1, fwd2;
-
 
   stringstream datafileCNTR("");
   datafileCNTR << dataPath() << "rawdata/ATLASPHT12/eta_bin1.dat";
@@ -167,7 +157,6 @@ void ATLASPHT12Filter::ReadData()
     exit(-1);
   }
 
-
   stringstream datafileFWD2("");
   datafileFWD2 << dataPath() << "rawdata/ATLASPHT12/eta_bin3.dat";
   fwd2.open(datafileFWD2.str().c_str(), ios::in);
@@ -177,16 +166,9 @@ void ATLASPHT12Filter::ReadData()
     exit(-1);
   }
 
-  // Starting filter
-
-
 FilterData(cent,  0,  18,  0.3);
 FilterData(fwd1,  18,  35,  0.385);
 FilterData(fwd2,  35,  49,  0.125);
-
-  
-
- 
 
   cent.close();
   fwd1.close();
