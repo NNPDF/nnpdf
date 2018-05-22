@@ -16,4 +16,5 @@ class ATLASPHT12Filter: public CommonData
 
 private:
   void ReadData();
+  void FilterData(fstream &, int, int, double);
 };
