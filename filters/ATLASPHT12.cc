@@ -13,11 +13,11 @@
 /*
  * ATLASPHT12ETCTR dataset
  * 
- * d sigma/dE_{T}^{gamma} [pb / GeV], |eta^{gamma}| < 0.6
- *
- * Correlation information:
- * All statistical uncertainties uncorrelated in a given E_T bin
- * and fully correlated between bins. 
+ * d sigma/dE_{T}^{gamma} [pb / GeV], 
+ * Bin 1: |eta| < 0.6
+ * Bin 2: 0.6 < |eta| < 1.37
+ * Bin 3: 1.56 < |eta| < 1.81
+ * 4th bin excluded 
  *
  */
 
@@ -28,7 +28,7 @@ void ATLASPHT12Filter::ReadData()
 
 
   stringstream datafileCNTR("");
-  datafileCNTR << dataPath() << "rawdata/ATLASPHT12/Table1.dat";
+  datafileCNTR << dataPath() << "rawdata/ATLASPHT12/eta_bin1.dat";
   cent.open(datafileCNTR.str().c_str(), ios::in);
 
   if (cent.fail()) {
@@ -37,7 +37,7 @@ void ATLASPHT12Filter::ReadData()
   }
 
   stringstream datafileFWD1("");
-  datafileFWD1 << dataPath() << "rawdata/ATLASPHT12/Table2.dat";
+  datafileFWD1 << dataPath() << "rawdata/ATLASPHT12/eta_bin2.dat";
   fwd1.open(datafileFWD1.str().c_str(), ios::in);
 
   if (fwd1.fail()) {
@@ -47,7 +47,7 @@ void ATLASPHT12Filter::ReadData()
 
 
   stringstream datafileFWD2("");
-  datafileFWD2 << dataPath() << "rawdata/ATLASPHT12/Table3.dat";
+  datafileFWD2 << dataPath() << "rawdata/ATLASPHT12/eta_bin3.dat";
   fwd2.open(datafileFWD2.str().c_str(), ios::in);
 
   if (fwd2.fail()) {
