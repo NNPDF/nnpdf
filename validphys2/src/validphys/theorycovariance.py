@@ -276,7 +276,8 @@ def plot_covmat_heatmap(covmat, title):
     cbar = fig.colorbar(matrixplot, label="% of data")
     ax.set_title(title)
     ticklocs, ticklabels = matrix_plot_labels(df)
-    plt.xticks([])
+    plt.xticks(ticklocs, ticklabels, rotation=30, ha="right")
+    plt.gca().xaxis.tick_bottom()
     plt.yticks(ticklocs, ticklabels)
     return fig
 
@@ -290,7 +291,8 @@ def plot_corrmat_heatmap(corrmat, title):
     cbar = fig.colorbar(matrixplot)
     ax.set_title(title)
     ticklocs, ticklabels = matrix_plot_labels(df)
-    plt.xticks([])
+    plt.xticks(ticklocs, ticklabels, rotation=30, ha="right")
+    plt.gca().xaxis.tick_bottom()
     plt.yticks(ticklocs, ticklabels)
     return fig
 
