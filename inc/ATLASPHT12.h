@@ -16,4 +16,6 @@ class ATLASPHT12Filter: public CommonData
 
 private:
   void ReadData();
+  void CorrLoop(int &, int, int, std::string, double &, istringstream &);
+  void FilterData(fstream &, int, int, double);
 };
