@@ -62,6 +62,17 @@ each_dataset_results_theory = collect('results_theoryids', ('experiments', 'expe
 
 @_check_three_or_seven_theories
 def theory_covmat_datasets(each_dataset_results_theory):
+    """Produces an array of theory covariance matrices. Each matrix corresponds
+    to a different dataset, which must be specified in the runcard. """
+    dataset_covmats=[]
+    for dataset in each_dataset_results_theory:
+        theory_centrals = [x[1].central_value for x in dataset]
+        s = make_scale_var_covmat(theory_centrals)
+        dataset_covmats.append(s)
+    return dataset_covmats
+
+@_check_three_or_seven_theories
+def total_covmat_datasets(each_dataset_results_theory):
     """Produces an array of total covariance matrices; the sum of experimental
     and scale-varied theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard.
@@ -87,8 +98,8 @@ def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
 experiments_results = collect(experiment_results, ('experiments',))
 experiments_results_theory = collect('experiments_results', ('theoryids',))
 
-def theory_covmat_experiments(experiments_results_theory):
-    """Same as theory_covmat_datasets but per experiment rather than
+def total_covmat_experiments(experiments_results_theory):
+    """Same as total_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
     exp_result_covmats = []
     for exp_result in zip(*experiments_results_theory):
@@ -219,11 +230,11 @@ def chi2_diag_only(theory_covmat, experiments_covmat, data_theory_diff):
 
 each_dataset_results = collect(results, ('experiments', 'experiment'))
 
-def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets):
+def abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_datasets):
     """ Returns an array of tuples (member_chi², central_chi², numpoints)
     corresponding to each data set, where theory errors are included"""
     chi2data_array = []
-    for results, covmat in zip(each_dataset_results, theory_covmat_datasets):
+    for results, covmat in zip(each_dataset_results, total_covmat_datasets):
         data_result, th_result = results
         chi2s = all_chi2_theory(results,covmat)
         central_result = central_chi2_theory(results, covmat)
@@ -231,10 +242,10 @@ def abs_chi2_data_theory_dataset(each_dataset_results, theory_covmat_datasets):
                                    central_result, len(data_result)))
     return chi2data_array
 
-def abs_chi2_data_theory_experiment(experiments_results, theory_covmat_experiments):
+def abs_chi2_data_theory_experiment(experiments_results, total_covmat_experiments):
     """ Like abs_chi2_data_theory_dataset but for experiments not datasets"""
     chi2data_array = []
-    for results, covmat in zip(experiments_results, theory_covmat_experiments):
+    for results, covmat in zip(experiments_results, total_covmat_experiments):
         data_result, th_result = results
         chi2s = all_chi2_theory(results, covmat)
         central_result = central_chi2_theory(results, covmat)
