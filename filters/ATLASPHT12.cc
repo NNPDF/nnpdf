@@ -2,14 +2,14 @@
  * ATLASPHT12 - ATLAS inclusive photons 2012
  *
  * ATLAS isolated photon production, LHC 8 TeV, 20.2 fb^-1
- * Reference:  [arXiv:1605.03495] 
- * 
+ * Reference:  [arXiv:1605.03495]
+ *
  */
 
 #include "ATLASPHT12.h"
 
 /*
- * d sigma/dE_{T}^{gamma} [pb / GeV], 
+ * d sigma/dE_{T}^{gamma} [pb / GeV],
  * Bin 1: |eta| < 0.6
  * Bin 2: 0.6 < |eta| < 1.37
  * Bin 3: 1.56 < |eta| < 1.81
@@ -17,70 +17,69 @@
  *
  */
 
-/* Function that loops over the systematics in each bin and assigns their relevant correlation info
- * and converts them to percentages.
- * idat is the current data point in the FilterData loop, and jmin and jmax determine uncertainties should
- * be assigned which correlation type.
- * Shift is passed by ref so that the total shift can be stored as we iterate over systematics 
+/* Function that loops over the systematics in each bin and assigns their
+ * relevant correlation info and converts them to percentages. idat is the
+ * current data point in the FilterData loop, and jmin and jmax determine
+ * uncertainties should be assigned which correlation type. Shift is passed by
+ * ref so that the total shift can be stored as we iterate over systematics
  */
-void ATLASPHT12Filter::CorrLoop(int & idat, int jmin, int jmax, std::string CORR, double &shift, istringstream & linestrm)
-{
+void ATLASPHT12Filter::CorrLoop(int &idat, int jmin, int jmax, std::string CORR,
+                                double &shift, istringstream &linestrm) {
 
-for(int j=jmin; j<jmax; ++j) {
+  for (int j = jmin; j < jmax; ++j) {
 
-        double plus, minus;
-        double stmp, dtmp;
+    double plus, minus;
+    double stmp, dtmp;
 
-        linestrm >> plus >> minus;
+    linestrm >> plus >> minus;
 
-        //convert to relative percentage values
-        plus = plus/fData[idat]*100;  
-        minus = minus/fData[idat]*100;
-        symmetriseErrors(plus,minus,&stmp,&dtmp);
+    // convert to relative percentage values
+    plus = plus / fData[idat] * 100;
+    minus = minus / fData[idat] * 100;
+    symmetriseErrors(plus, minus, &stmp, &dtmp);
 
-        fSys[idat][j].type = MULT;
-        fSys[idat][j].name = CORR;
-        fSys[idat][j].mult = stmp;
-        fSys[idat][j].add  = fSys[idat][j].mult*fData[idat]/100;
+    fSys[idat][j].type = MULT;
+    fSys[idat][j].name = CORR;
+    fSys[idat][j].mult = stmp;
+    fSys[idat][j].add = fSys[idat][j].mult * fData[idat] / 100;
 
-        shift += dtmp;
-      }
+    shift += dtmp;
+  }
 }
 
-/* FilterData reads in the rawdata and loops over the total number of data points in each file and stores kinematic information
- * such as rap (photon rapidity).
+/* FilterData reads in the rawdata and loops over the total number of data
+ * points in each file and stores kinematic information such as rap (photon
+ * rapidity).
  */
-void ATLASPHT12Filter::FilterData(fstream & file, int nDataMin, int nDataMax, double rap)
-{
+void ATLASPHT12Filter::FilterData(fstream &file, int nDataMin, int nDataMax,
+                                  double rap) {
 
- for (int idat = nDataMin; idat < nDataMax; ++idat) {
-      double shift = 0.;
+  for (int idat = nDataMin; idat < nDataMax; ++idat) {
+    double shift = 0.;
 
-      double central, upper, lower, dummy;
-      string line; 
-      getline(file,line);
-      istringstream lstream(line);
+    double central, upper, lower, dummy;
+    string line;
+    getline(file, line);
+    istringstream lstream(line);
 
-      lstream >> central >> lower >> upper >> fData[idat] >> fStat[idat] >> dummy;
+    lstream >> central >> lower >> upper >> fData[idat] >> fStat[idat] >> dummy;
 
-      // Loop over different systematic correlations      
-      CorrLoop(idat, 0, 2, "CORR", shift, lstream); 
-      CorrLoop(idat, 2, 7, "UNCORR", shift, lstream); 
-      CorrLoop(idat, 7, fNSys-1, "CORR", shift, lstream);
-      CorrLoop(idat, fNSys-1, fNSys, "ATLASLUMI12", shift, lstream);
+    // Loop over different systematic correlations
+    CorrLoop(idat, 0, 2, "CORR", shift, lstream);
+    CorrLoop(idat, 2, 7, "UNCORR", shift, lstream);
+    CorrLoop(idat, 7, fNSys - 1, "CORR", shift, lstream);
+    CorrLoop(idat, fNSys - 1, fNSys, "ATLASLUMI12", shift, lstream);
 
-      fData[idat]*=(1.0 + shift*0.01); //Shift from asymmetric errors
+    fData[idat] *= (1.0 + shift * 0.01); // Shift from asymmetric errors
 
-     // Kinematic variables
-     fKin1[idat] = rap;                     // Avg. eta_gamma 
-     fKin2[idat] = pow((upper + lower) * 0.5,2);   // Avg. p_t of each bin
-     fKin3[idat] = 8000.;                              // LHC 8 TeV
-    
-     }
+    // Kinematic variables
+    fKin1[idat] = rap;                           // Avg. eta_gamma
+    fKin2[idat] = pow((upper + lower) * 0.5, 2); // Avg. p_t of each bin
+    fKin3[idat] = 8000.;                         // LHC 8 TeV
+  }
 }
 
-void ATLASPHT12Filter::ReadData()
-{
+void ATLASPHT12Filter::ReadData() {
   // Opening files
   fstream cent, fwd1, fwd2;
 
