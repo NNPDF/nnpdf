@@ -3,7 +3,9 @@
  *
  * ATLAS isolated photon production, LHC 8 TeV, 20.2 fb^-1
  * Reference:  [arXiv:1605.03495]
- *
+ * HEPData from https://hepdata.net/record/ins1457605 
+ * Correlation model contrary to published paper (new model from private exchange 
+ * Juan Cuadrado and Bogdan Malaescu)
  */
 
 #include "ATLASPHT12.h"
