@@ -110,6 +110,55 @@ def total_covmat_experiments(experiments_results_theory):
         exp_result_covmats.append(cov)
     return exp_result_covmats
 
+def mapping(experiments_xq2map, each_dataset_results_theory):
+    dict = {}
+    for experiment, commondata, fitted, masked in experiments_xq2map:
+        info = get_info(commondata)
+        key  = commondata.name
+        if key in dict:
+            pass
+        else:
+            dict.setdefault(key, [])
+        dict[key].append(info.process_description)
+    return dict
+
+def dataset_names(experiments_xq2map):
+    names = []
+    for experiment, commondata, fitted, masked in experiments_xq2map:
+        info = get_info(commondata)
+        name = commondata.name
+        names.append(commondata.name)
+    return names
+
+def combine_by_type(mapping, each_dataset_results_theory, dataset_names):
+    by_process = defaultdict(list)
+    for dataset, name in zip(each_dataset_results_theory, dataset_names):
+        theory_centrals = [x[1].central_value for x in dataset]      
+        current_value = by_process[mapping[name][0]]
+        if current_value == []:
+            new_value = theory_centrals
+        else:
+            new_value = np.concatenate((current_value, theory_centrals), axis=1)
+        by_process[mapping[name][0]] = new_value 
+    return by_process
+
+#def theory_covmat_by_type(combine_by_type, theory_block_diag_covmat, experiments_index):
+#    process_covmats=[]
+#    for dataset, theory_centrals in by_process.items():
+#        s = make_scale_var_covmat(theory_centrals)
+        
+
+
+#    for dataset in each_dataset_results_theory:
+#        theory_centrals = [x[1].central_value for x in dataset]
+#        s = make_scale_var_covmat(theory_centrals)
+#        sigma = dataset[0][0].covmat
+#        cov = s + sigma
+ #       dataset_covmats.append(cov)
+ #   covmat_block = theory_block_diag_covmat(dataset_covmats, experiments_index)
+ #   return dataset_covmats
+
+
 @table
 def theory_corrmat(theory_covmat):
     """Calculates the theory correlation matrix for scale variations."""
