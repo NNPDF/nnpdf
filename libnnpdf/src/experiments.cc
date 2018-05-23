@@ -379,6 +379,10 @@ void Experiment::PullData()
   fData   = new double[fNData];
   fStat   = new double[fNData];
   fT0Pred = new double[fNData];
+  fSqrtWeights = vector<double>();
+  fSqrtWeights.reserve(fNData);
+
+
   fNSys   = total_systematics.size();
   fSys    = new sysError*[fNData];
 
@@ -391,6 +395,9 @@ void Experiment::PullData()
       fData[idat]   = subset.GetData(i);
       fStat[idat]   = subset.GetStat(i);
       fT0Pred[idat] = subset.GetT0Pred(i);
+      //The cast is so that it does not complain about an ambiguous resolution,
+      //since apparently there is sqrt(float) and sqrt(long double) but not sqrt(double)
+      fSqrtWeights.push_back(std::sqrt((long double)subset.GetWeight()));
 
       // Loop over experimental systematics, find if there is a corresponding dataset systematic
       // and set it accordingly.
@@ -481,6 +488,16 @@ void Experiment::GenCovMat()
         fCovMat(j, i) += res;
       }
     }
+  }
+  //Hopefully the compiler will merge the loops?
+  for(int i=0; i<fNData; i++){
+      for(int j=0; j<=i; j++){
+          auto w = fSqrtWeights[i]*fSqrtWeights[j];
+          fCovMat(i,j) /= w;
+          if(i!=j){
+              fCovMat(j,i) /= w;
+          }
+      }
   }
 
   fSqrtCov = ComputeSqrtMat(fCovMat);

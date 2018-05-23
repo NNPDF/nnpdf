@@ -57,7 +57,7 @@ minType NNPDFSettings::getFitMethod(string const& method)
   cerr <<" - NGA"<<endl;
   cerr <<" - NGAP"<<endl;
   cerr <<" - NGAFT"<<endl;
-  exit(-1);
+  exit(EXIT_FAILURE);
 
   return MIN_UNDEF;
 }
@@ -69,7 +69,7 @@ paramType NNPDFSettings::getParamType(string const& method)
   if (method.compare("SLNPP") == 0)        return PARAM_SLNPP;
 
   cerr << "getParamType Error: Invalid parametrization type: "<<method;
-  exit(-1);
+  exit(EXIT_FAILURE);
 
   return PARAM_UNDEF;
 }
@@ -80,7 +80,7 @@ stopType NNPDFSettings::getStopType(string const& method)
   if (method.compare("FIXEDLENGTH") == 0) return STOP_NONE;
 
   cerr << "getStopType Error: Invalid stopping type: "<<method;
-  exit(-1);
+  exit(EXIT_FAILURE);
 
   return STOP_UNDEF;
 }
@@ -105,7 +105,7 @@ basisType NNPDFSettings::getFitBasisType(string const& method)
   if (method.compare("NSR")==0) return BASIS_NSR;
 
   cerr << "getFitBasisType Error: Invalid parametrization type: "<<method;
-  exit(-1);
+  exit(EXIT_FAILURE);
 
   return BASIS_UNDEF;
 }
@@ -226,7 +226,7 @@ YAML::Node NNPDFSettings::Get(const string& item) const
   if (!fConfig[item])
     {
       cerr << Colour::FG_RED << "\nNNPDFSettings::Get error: item not available " << item << Colour::FG_DEFAULT << endl;
-      exit(-1);
+      exit(EXIT_FAILURE);
     }
   return fConfig[item];
 }
@@ -236,7 +236,7 @@ YAML::Node NNPDFSettings::Get(const string& node, const string& item) const
   if (!fConfig[node][item])
     {
       cerr << Colour::FG_RED << "\nNNPDFSettings::Get error: item not available " << node << " " << item << Colour::FG_DEFAULT << endl;
-      exit(-1);
+      exit(EXIT_FAILURE);
     }
   return fConfig[node][item];
 }
@@ -256,7 +256,7 @@ YAML::Node NNPDFSettings::GetPlotting(const string& item) const
   if (!fPlotting[item])
     {
       cerr << Colour::FG_RED << "\nNNPDFSettings::Get error: item not available " << item << Colour::FG_DEFAULT << endl;
-      exit(-1);
+      exit(EXIT_FAILURE);
     }
   return fPlotting[item];
 }
@@ -324,7 +324,7 @@ DataSetInfo const& NNPDFSettings::GetSetInfo(string const& setname) const
   else
   {
     cerr << Colour::FG_RED << "NNPDFSettings::GetSetInfo error: Cannot find Set info under: " << setname << Colour::FG_DEFAULT << endl;
-    exit(-1);
+    exit(EXIT_FAILURE);
   }
 
   return (*iMap).second;
@@ -344,7 +344,7 @@ PosSetInfo const& NNPDFSettings::GetPosInfo(string const& posname) const
   else
   {
     cerr << Colour::FG_RED << "NNPDFSettings::GetPosInfo error: Cannot find PosSet info under: " << posname << Colour::FG_DEFAULT << endl;
-    exit(-1);
+    exit(EXIT_FAILURE);
   }
 
   return (*iMap).second;
@@ -368,14 +368,14 @@ void NNPDFSettings::VerifyConfiguration() const
   {
     cerr << Colour::FG_RED << "NNPDFSettings::VerifyConfiguration Error - Cannot find current config file log." << Colour::FG_DEFAULT << endl;
     cerr << "Search path: "<<target<<endl;
-    exit(-1);
+    exit(EXIT_FAILURE);
   }
 
   if (!filterConfig.good())
   {
     cerr << Colour::FG_RED << "NNPDFSettings::VerifyConfiguration Error - Cannot find filter config file log." << Colour::FG_DEFAULT << endl;
     cerr << "Search path: "<<filter<<endl;
-    exit(-1);
+    exit(EXIT_FAILURE);
   }
 
   string md5;
@@ -397,7 +397,7 @@ void NNPDFSettings::VerifyConfiguration() const
     cerr << Colour::FG_RED << endl << " ----------------- Configuration Log Verification: FAILED -----------------" << Colour::FG_DEFAULT << endl << endl;
     cerr << "-- Configuration has been modified since last filter run"<<endl;
     cerr << "-- Please rerun the filter"<<endl<<endl;
-    exit(-1);
+    exit(EXIT_FAILURE);
   }
 }
 
@@ -503,44 +503,66 @@ void NNPDFSettings::LoadExperiments()
   YAML::Node exps = fConfig["experiments"];
 
   // loop over experiments
-  for (int i = 0; i < (int) exps.size(); i++)
-    {
-      fExpName.push_back(exps[i]["experiment"].as<string>());
-      vector<string> nsetname;
-      if (exps[i]["datasets"].size() == 0) { cerr << Colour::FG_RED << "NNPDFSettings::LoadExperiments error: experiment " << exps[i]["experiment"] << " has no datasets!" << Colour::FG_DEFAULT  << endl; exit(-1); }
+  for (int i = 0; i < (int)exps.size(); i++) {
+    fExpName.push_back(exps[i]["experiment"].as<string>());
+    vector<string> nsetname;
+    if (exps[i]["datasets"].size() == 0) {
+      cerr << Colour::FG_RED
+           << "NNPDFSettings::LoadExperiments error: experiment "
+           << exps[i]["experiment"] << " has no datasets!" << Colour::FG_DEFAULT
+           << endl;
+      exit(EXIT_FAILURE);
+    }
 
-      // loop over datasets
-      YAML::Node dsets = exps[i]["datasets"];
-      for (int j = 0; j < (int) dsets.size(); j++)
-        {
-          const string setname = dsets[j]["dataset"].as<string>();
-          const real setfrac = dsets[j]["frac"].as<real>();
-          string setsys;
-          try { setsys = dsets[j]["sys"].as<string>(); }
-          catch (...) { setsys = "DEFAULT";}
+    // loop over datasets
+    YAML::Node dsets = exps[i]["datasets"];
+    for (const auto &ds : dsets) {
+      const string setname = ds["dataset"].as<string>();
+      const real setfrac = ds["frac"].as<real>();
+      string setsys;
+      if(ds["sys"]){
+          setsys = ds["sys"].as<string>();
+      }else{
+          setsys = "DEFAULT";
+      }
 
-          // Read C-factor sources
-          std::vector<string> cfactors;
-          YAML::Node cfac = dsets[j]["cfac"];
-          for(size_t k=0; k<cfac.size(); k++)
-          {
-            std::stringstream cfs; cfs << cfac[k];
+      // Read C-factor sources
+      std::vector<string> cfactors;
+      if(ds["cfac"]){
+          auto cfac = ds["cfac"];
+          for (size_t k = 0; k < cfac.size(); k++) {
+            std::stringstream cfs;
+            cfs << cfac[k];
             cfactors.push_back(cfs.str());
           }
+      }
 
-          // Generate hash of setname
-          std::hash<std::string> str_hash;
-          const size_t hashval = str_hash(setname);
+      double weight;
+      if (ds["weight"]) {
+        weight = ds["weight"].as<double>();
+      }else{
+          weight = 1;
+      }
 
-          DataSetInfo info = {setname, setsys, setfrac, cfactors};
-          map<int,DataSetInfo>::const_iterator iMap = fDataSetInfo.find(hashval);
-          if (iMap != fDataSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadExperiments error: hash collision for set: " << setname << Colour::FG_DEFAULT << endl; exit(-1); }
-          else { fDataSetInfo.insert(make_pair(hashval, info)); }
-          nsetname.push_back(setname);
-          fSetName.push_back(setname);
-        }
-      fExpSetName.push_back(nsetname);
+      // Generate hash of setname
+      std::hash<std::string> str_hash;
+      const size_t hashval = str_hash(setname);
+
+      DataSetInfo info = {setname, setsys, setfrac, cfactors, weight};
+      map<int, DataSetInfo>::const_iterator iMap = fDataSetInfo.find(hashval);
+      if (iMap != fDataSetInfo.end()) {
+        cerr << Colour::FG_RED
+             << "NNPDFSettings::LoadExperiments error: hash collision for set: "
+             << setname << Colour::FG_DEFAULT << endl;
+        exit(EXIT_FAILURE);
+      } else {
+        fDataSetInfo.insert(make_pair(hashval, info));
+      }
+      nsetname.push_back(setname);
+      fSetName.push_back(setname);
     }
+    fExpSetName.push_back(nsetname);
+  }
 }
 
 /**
@@ -565,7 +587,7 @@ void NNPDFSettings::LoadPositivities()
       const size_t hashval = str_hash(posname);
 
       map<int,PosSetInfo>::const_iterator iMap = fPosSetInfo.find(hashval);
-      if (iMap != fPosSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadPositivity error: hash collision for set: " << posname << Colour::FG_DEFAULT << endl; exit(-1); }
+      if (iMap != fPosSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadPositivity error: hash collision for set: " << posname << Colour::FG_DEFAULT << endl; exit(EXIT_FAILURE); }
       else { fPosSetInfo.insert(make_pair(hashval, info)); }
     }
 }
@@ -610,7 +632,7 @@ void NNPDFSettings::CheckBasis()
   if (basis.size() != Get("fitting","basis").size())
     {
       cerr << Colour::FG_RED << "NNPDFSettings::CheckBasis error, mismatch between fitbasis and basis size" << Colour::FG_DEFAULT << endl;
-      exit(-1);
+      exit(EXIT_FAILURE);
     }
 
   // check order and names
@@ -619,7 +641,7 @@ void NNPDFSettings::CheckBasis()
       {
         cerr << Colour::FG_RED << "NNPDFSettings::CheckBasis error, mismatch between basis items, expected "
              << basis[i] << ", received " <<   Get("fitting","basis")[i]["fl"].as<string>() << Colour::FG_DEFAULT << endl;
-        exit(-1);
+        exit(EXIT_FAILURE);
       }
 }
 
@@ -637,7 +659,7 @@ void NNPDFSettings::LoadGA()
         {
           cerr << Colour::FG_RED << "NNPDFSettings::LoadGA error, mismatch between mutsize and mutprob for flavor "
                << Get("fitting","basis")[f]["fl"].as<string>() << Colour::FG_DEFAULT << endl;
-          exit(-1);
+          exit(EXIT_FAILURE);
         }
       else
         {

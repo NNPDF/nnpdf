@@ -8,6 +8,7 @@ import logging
 import pathlib
 import functools
 import inspect
+import numbers
 
 from collections import Mapping, Sequence, ChainMap
 
@@ -193,11 +194,11 @@ class CoreConfig(configparser.Config):
     def parse_dataset_input(self, dataset):
         """The mapping that corresponds to the dataset specifications in the
         fit files"""
-        known_keys = {'dataset', 'sys', 'cfac', 'frac'}
+        known_keys = {'dataset', 'sys', 'cfac', 'frac', 'weight'}
         try:
             name = dataset['dataset']
             if not isinstance(name, str):
-                raise Config("'name' must be a string, not %s" % type(name))
+                raise ConfigError(f"'dataset' must be a string, not {type(name)}")
         except KeyError:
             raise ConfigError("'dataset' must be a mapping with "
                               "'dataset' and 'sysnum'")
@@ -205,11 +206,17 @@ class CoreConfig(configparser.Config):
 
         sysnum = dataset.get('sys')
         cfac = dataset.get('cfac', tuple())
+        weight = dataset.get('weight', 1)
+        if  not isinstance(weight, numbers.Real):
+            raise ConfigError(f"'weight' must be a number, not '{weight}'")
+        if weight < 0:
+            raise ConfigError(f"'weight' must be greater than zero not '{weight}'")
         kdiff = dataset.keys() - known_keys
         for k in kdiff:
             #Abuse ConfigError to get the suggestions.
-            log.warn(ConfigError(f"Key '{k}' in dataset_input not known.", k, known_keys))
-        return DataSetInput(name=name, sys=sysnum, cfac=cfac)
+            log.warninig(ConfigError(f"Key '{k}' in dataset_input not known.", k, known_keys))
+        return DataSetInput(name=name, sys=sysnum, cfac=cfac,
+                weight=weight)
 
     def produce_commondata(self, *, dataset_input):
         """Produce a CommondataSpec from a dataset input"""
@@ -244,11 +251,13 @@ class CoreConfig(configparser.Config):
         name = dataset_input.name
         sysnum = dataset_input.sys
         cfac = dataset_input.cfac
+        weight = dataset_input.weight
 
         try:
             ds =  self.loader.check_dataset(name=name, sysnum=sysnum,
                                              theoryid=theoryid, cfac=cfac,
-                                             use_cuts=use_cuts, fit=fit)
+                                             use_cuts=use_cuts, fit=fit,
+                                             weight=weight)
         except DataNotFoundError as e:
             raise ConfigError(str(e), name, self.loader.available_datasets)
 

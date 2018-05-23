@@ -32,12 +32,15 @@ using namespace NNPDF;
  * Principal dataset constructor
  * \param data NNPDF::CommonData containing the experimental data
  * \param set  NNPDF::FKSet containing the corresponding theory calculation
+ * \param weight the factor by which the importance of the dataset in the fit chi²
+ * is increased.
  */
-DataSet::DataSet(CommonData const& data, FKSet const& set):
+DataSet::DataSet(CommonData const& data, FKSet const& set, double weight):
   CommonData(data),
   FKSet(set),
   fIsArtificial(false),
-  fIsT0(false)
+  fIsT0(false),
+  fWeight(weight)
 {
   fT0Pred.reserve(fNData);
 
@@ -50,7 +53,8 @@ DataSet::DataSet(const DataSet& set, std::vector<int> const& mask):
   CommonData(set, mask),
   FKSet(set, mask),
   fIsArtificial(set.fIsArtificial),
-  fIsT0(set.fIsT0)
+  fIsT0(set.fIsT0),
+  fWeight(set.fWeight)
 {
   fT0Pred.reserve(fNData);
 
@@ -71,7 +75,7 @@ DataSet::~DataSet()
  */
 void DataSet::GenCovMat() const
 {
-  fCovMat = ComputeCovMat(*this, fT0Pred);
+  fCovMat = ComputeCovMat(*this, fT0Pred, fWeight);
   fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 

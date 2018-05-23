@@ -53,6 +53,7 @@ struct DataSetInfo
   const string tSysOpt;
   const real tTrainingFraction;
   const std::vector<string> tCFactors;
+  const double weight;
 };
 
 /**
@@ -88,6 +89,7 @@ private:
   vector< vector<string> > fExpSetName;   //!< Contains dataset names per experiment
   vector<FlMutProperty>    fFlMutProperty;//!< Contains the mutation - not really need by improves NGA performance
   vector<int>              fArch;         //!< Contains the NN architecture
+  //TODO: Make these map<string, T>
   map<int,DataSetInfo>     fDataSetInfo;  //!< Contains the dataset info
   map<int, PosSetInfo>     fPosSetInfo;   //!< Map of PosSetInfo structs
 
