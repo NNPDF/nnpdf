@@ -37,9 +37,6 @@ providers = [
              'validphys.paramfits.plots',
              'validphys.theorycovariance',
              'validphys.replica_selector',
-             'validphys.theorycovariance',
-             'validphys.theorycovariance',
-             'validphys.replica_selector',
              'reportengine.report'
             ]
 
