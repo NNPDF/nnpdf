@@ -46,9 +46,9 @@ def weighted_data():
     return pdf, exps
 
 @pytest.fixture(scope='module')
-def weighted_convolution_results(weighted_data):
+def convolution_results_with_weights(weighted_data):
     return convolution_results(weighted_data)
 
 @pytest.fixture(scope='module')
-def weighted_chi2data(weighted_convolution_results):
-    return chi2data(weighted_convolution_results)
+def weighted_chi2data(convolution_results_with_weights):
+    return chi2data(convolution_results_with_weights)
