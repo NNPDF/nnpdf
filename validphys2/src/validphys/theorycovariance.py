@@ -13,6 +13,7 @@ import scipy.linalg as la
 import matplotlib.pyplot as plt
 from matplotlib import cm, colors as mcolors, rcParams as rc
 import pandas as pd
+from collections import defaultdict
 
 from reportengine.figure import figure
 from reportengine.checks import make_argcheck, CheckError
@@ -22,7 +23,10 @@ from reportengine import collect
 from validphys.results import results, experiment_results, experiments_central_values
 from validphys.results import Chi2Data, experiments_chi2_table
 from validphys.calcutils import all_chi2_theory, central_chi2_theory
+from validphys.plotoptions import get_info
 from validphys import plotutils
+
+from IPython import embed
 
 log = logging.getLogger(__name__)
 
@@ -141,22 +145,15 @@ def combine_by_type(mapping, each_dataset_results_theory, dataset_names):
         by_process[mapping[name][0]] = new_value 
     return by_process
 
-#def theory_covmat_by_type(combine_by_type, theory_block_diag_covmat, experiments_index):
-#    process_covmats=[]
-#    for dataset, theory_centrals in by_process.items():
-#        s = make_scale_var_covmat(theory_centrals)
-        
-
-
-#    for dataset in each_dataset_results_theory:
-#        theory_centrals = [x[1].central_value for x in dataset]
-#        s = make_scale_var_covmat(theory_centrals)
-#        sigma = dataset[0][0].covmat
-#        cov = s + sigma
- #       dataset_covmats.append(cov)
- #   covmat_block = theory_block_diag_covmat(dataset_covmats, experiments_index)
- #   return dataset_covmats
-
+@_check_three_or_seven_theories
+def theory_covmat_by_type(combine_by_type, theory_block_diag_covmat, experiments_index):
+    dictionary = combine_by_type
+    covmats = defaultdict(list)
+    for dataset, theory_centrals in dictionary.items():
+        s = make_scale_var_covmat(theory_centrals)
+        covmats[dataset] = s
+#    df = pd.DataFrame.from_dict(data=covmats, orient="index")
+    return df
 
 @table
 def theory_corrmat(theory_covmat):
