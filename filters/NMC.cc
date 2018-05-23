@@ -139,7 +139,6 @@ void NMCFilter::ReadData()
      const std::string filename = rawdata_path +  "nmc_p"+energies[icom]+".data";
      ifstream datafile(filename);
      if (!datafile.is_open()) throw runtime_error("Cannot open file: "+filename);
-     std::cout << filename<<std::endl;
 
      for (int ibin = 0; ibin < datapoints[icom]; ibin++)
      {
@@ -156,7 +155,6 @@ void NMCFilter::ReadData()
         // This was used for the deuteron data
         fSys[idat][9].mult          = 0;
 
-        std::cout << icom + 12 << fNSys <<std::endl;
         // relnorbeam for different CoM energies - set the others to zero
         fSys[idat][12].mult = 0;
         fSys[idat][13].mult = 0;
