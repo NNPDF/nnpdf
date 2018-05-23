@@ -26,8 +26,6 @@ from validphys.calcutils import all_chi2_theory, central_chi2_theory
 from validphys.plotoptions import get_info
 from validphys import plotutils
 
-from IPython import embed
-
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values, ('theoryids',))
@@ -304,6 +302,11 @@ def data_theory_diff(experiments_results):
 def chi2_block_impact(theory_block_diag_covmat, experiments_covmat, experiments_results):
     """ Returns total chi2 including theory cov mat """
     chi2 = chi2_impact(theory_block_diag_covmat, experiments_covmat, experiments_results)
+    return chi2
+
+def chi2_impact_by_type(theory_covmat_by_type, experiments_covmat, experiments_results):
+    """ Returns total chi2 including theory cov mat """
+    chi2 = chi2_impact(theory_covmat_by_type, experiments_covmat, experiments_results)
     return chi2
 
 def chi2_diag_only(theory_covmat, experiments_covmat, data_theory_diff):
