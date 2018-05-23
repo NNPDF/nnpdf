@@ -17,17 +17,21 @@
  *
  */
 
+/* Function that loops over the systematics in each bin and assigns their relevant correlation info
+ * and converts them to percentages.
+ * idat is the current data point in the FilterData loop, and jmin and jmax determine uncertainties should
+ * be assigned which correlation type.
+ * Shift is passed by ref so that the total shift can be stored as we iterate over systematics 
+ */
 void ATLASPHT12Filter::CorrLoop(int & idat, int jmin, int jmax, std::string CORR, double &shift, istringstream & linestrm)
 {
 
 for(int j=jmin; j<jmax; ++j) {
 
-        double sys1, sys2, plus, minus;
+        double plus, minus;
         double stmp, dtmp;
 
-        linestrm >> sys1 >> sys2;
-        minus=sys2; 
-        plus=sys1;
+        linestrm >> plus >> minus;
 
         //convert to relative percentage values
         plus = plus/fData[idat]*100;  
@@ -43,6 +47,9 @@ for(int j=jmin; j<jmax; ++j) {
       }
 }
 
+/* FilterData reads in the rawdata and loops over the total number of data points in each file and stores kinematic information
+ * such as rap (photon rapidity).
+ */
 void ATLASPHT12Filter::FilterData(fstream & file, int nDataMin, int nDataMax, double rap)
 {
 
@@ -105,9 +112,9 @@ void ATLASPHT12Filter::ReadData()
   }
 
   // Now filter all the data in the 3 rapidity bins
-  FilterData(cent,  0,  18,  0.3);
-  FilterData(fwd1,  18,  35,  0.385);
-  FilterData(fwd2,  35,  49,  0.125);
+  FilterData(cent, 0, 18, 0.3);
+  FilterData(fwd1, 18, 35, 0.385);
+  FilterData(fwd2, 35, 49, 0.125);
 
   cent.close();
   fwd1.close();
