@@ -14,9 +14,9 @@ import pathlib
 import logging
 import hashlib
 
-from reportengine import app
-from validphys.config import Environment, EnvironmentError_
+from validphys.config import Environment, Config, EnvironmentError_, ConfigError
 from validphys.app import App
+from reportengine.compat import yaml
 
 log = logging.getLogger(__name__)
 
@@ -79,9 +79,23 @@ class SetupFitEnvironment(Environment):
         log.info(f"md5 {hash_md5} stored in {output_filename}")
 
 
+class SetupFitConfig(Config):
+    """Specialization for yaml parsing"""
+    @classmethod
+    def from_yaml(cls, o, *args, **kwargs):
+        try:
+            file_content = yaml.round_trip_load(o)
+            file_content['use_cuts'] = False
+            file_content['actions_'] = ['report(main=true)']
+        except yaml.error.YAMLError as e:
+            raise ConfigError(f"Failed to parse yaml file: {e}")
+        return cls(file_content, *args, ** kwargs)
+
+
 class SetupFitApp(App):
     """The class which parsers and perform the filtering"""
     environment_class = SetupFitEnvironment
+    config_class = SetupFitConfig
 
     def __init__(self):
         super(SetupFitApp, self).__init__(name='setup-fit',
@@ -141,12 +155,6 @@ class SetupFitApp(App):
         except Exception as e:
             log.critical(f"Bug in setup-fit ocurred. Please report it.")
             raise
-
-    def get_config(self):
-        # first read the runcard
-        config_file = self.args['config_yml']
-        #return self.config_class.from_yaml(, environment=self.environment)
-
 
 
 def main():
