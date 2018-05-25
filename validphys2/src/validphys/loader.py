@@ -220,8 +220,13 @@ class Loader(LoaderBase):
         data = yaml.safe_load(yaml_format)
         #we have to split out 'FK_' the extension to get a name consistent
         #with everything else
-        tables = [self.check_fktable(theoryID, name[3:-4], cfac)
+        try:
+            tables = [self.check_fktable(theoryID, name[3:-4], cfac)
                   for name in data['FK']]
+        except FKTableNotFound as e:
+            raise LoadFailedError(
+                    f"Incorrect COMPOUND file '{compound_spec_path}'. "
+                    f"Searching for non-existing FKTable:\n{e}")
         op = data['OP']
         return tuple(tables), op
 
