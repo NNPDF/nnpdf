@@ -500,8 +500,8 @@ def plot_datasets_chi2(experiments, experiments_chi2,each_dataset_chi2):
 
 def _plot_chis_df(df):
     chilabel = df.columns.get_level_values(1)[1]
-    data = data = df.iloc[:, df.columns.get_level_values(1)==chilabel].T.as_matrix()
-    fitnames = df.columns.levels[0]
+    data = df.iloc[:, df.columns.get_level_values(1)==chilabel].T.as_matrix()
+    fitnames = df.columns.get_level_values(0).unique()
     expnames = list(df.index.get_level_values(0))
     fig, ax = plotutils.barplot(data, expnames, fitnames)
     ax.grid(False)
