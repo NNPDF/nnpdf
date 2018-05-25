@@ -226,7 +226,7 @@ class Loader(LoaderBase):
         except FKTableNotFound as e:
             raise LoadFailedError(
                     f"Incorrect COMPOUND file '{compound_spec_path}'. "
-                    f"Searching for non-existing FKTable:\n{e}")
+                    f"Searching for non-existing FKTable:\n{e}") from e
         op = data['OP']
         return tuple(tables), op
 
