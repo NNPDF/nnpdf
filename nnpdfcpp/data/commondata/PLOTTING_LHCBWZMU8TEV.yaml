@@ -7,7 +7,5 @@ y_label: '$d\sigma/dy$ (fb)'
 figure_by:
   - Boson
 
-kinematics_override: ewk_pseudorapity_sqrt_scale
-
 extra_labels:
    Boson:  ["$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$","$Z$", "$Z$", "$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^+$","$W^+$", "$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$","$W^-$"]
