@@ -45,7 +45,7 @@ def make_scale_var_covmat(predictions):
     to produce a covariance matrix."""
     central, *others = predictions
     diffs = (other - central for other in others)
-    s = sum(np.outer(d,d) for d in diffs)/len(others)  
+    s = sum(np.outer(d,d) for d in diffs)/len(others)
     return s
 
 @table
@@ -91,7 +91,7 @@ def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
     returns a data frame with a block diagonal theory covariance matrix
     by dataset"""
     s  = la.block_diag(*theory_covmat_datasets)
-    df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)   
+    df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
 
 experiments_results = collect(experiment_results, ('experiments',))
@@ -120,7 +120,7 @@ def theory_corrmat(theory_covmat):
 
 @table
 def theory_blockcorrmat(theory_block_diag_covmat):
-    """Calculates the theory correlation matrix for scale variations 
+    """Calculates the theory correlation matrix for scale variations
     with block diagonal entries by dataset only"""
     mat = theory_corrmat(theory_block_diag_covmat)
     return mat
@@ -136,7 +136,7 @@ def theory_normcovmat(theory_covmat, experiments_data):
 
 @table
 def theory_normblockcovmat(theory_block_diag_covmat, experiments_data):
-    """Calculates the theory covariance matrix for scale variations 
+    """Calculates the theory covariance matrix for scale variations
     normalised to data, block diagonal by dataset."""
     df = theory_block_diag_covmat
     experiments_data_array = np.array(experiments_data)
@@ -145,7 +145,7 @@ def theory_normblockcovmat(theory_block_diag_covmat, experiments_data):
 
 @table
 def experimentsplustheory_covmat(experiments_covmat, theory_covmat):
-    """Calculates the experiment + theory covariance matrix for 
+    """Calculates the experiment + theory covariance matrix for
     scale variations."""
     df = experiments_covmat + theory_covmat
     return df
@@ -396,7 +396,7 @@ def plot_diag_cov_comparison(theory_covmat, experiments_covmat, experiments_data
     ticklocs, ticklabels = matrix_plot_labels(df_experiment)
     plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=6)
     ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{|D_i|}$")
-    ax.set_title("Square root of diagonal elements of covariances matrices, " 
+    ax.set_title("Square root of diagonal elements of covariances matrices, "
                  + "normalised to absolute value of data")
     ax.legend()
     return fig
