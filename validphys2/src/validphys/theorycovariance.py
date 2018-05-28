@@ -166,10 +166,12 @@ def experimentsplustheory_normcovmat(experiments_covmat, theory_covmat, experime
     return mat
 
 @table
-def experimentsplusblocktheory_normcovmat(experiments_covmat, theory_block_diag_covmat, experiments_data, experimentsplustheory_normcovmat):
+def experimentsplusblocktheory_normcovmat(experiments_covmat, theory_block_diag_covmat,
+                                          experiments_data, experimentsplustheory_normcovmat):
     """Calculates the experiment + theory covariance matrix for scale
        variations normalised to data, block diagonal by data set."""
-    mat = experimentsplustheory_normcovmat(experiments_covmat, theory_block_diag_covmat, experiments_data)
+    mat = experimentsplustheory_normcovmat(experiments_covmat, theory_block_diag_covmat,
+                                           experiments_data)
     return mat
 
 @table
@@ -328,7 +330,8 @@ def plot_normthcovmat_heatmap(theory_normcovmat):
 @figure
 def plot_normthblockcovmat_heatmap(theory_normblockcovmat):
     """Matrix plot for block diagonal theory covariance matrix"""
-    fig = plot_covmat_heatmap(theory_normblockcovmat, "Block diagonal theory covariance matrix by dataset")
+    fig = plot_covmat_heatmap(theory_normblockcovmat,
+                              "Block diagonal theory covariance matrix by dataset")
     return fig
 
 @figure
@@ -340,43 +343,51 @@ def plot_thcorrmat_heatmap(theory_corrmat):
 @figure
 def plot_thblockcorrmat_heatmap(theory_blockcorrmat):
     """Matrix plot of the theory correlation matrix"""
-    fig = plot_corrmat_heatmap(theory_blockcorrmat, "Theory correlation matrix block diagonal by dataset")
+    fig = plot_corrmat_heatmap(theory_blockcorrmat,
+                               "Theory correlation matrix block diagonal by dataset")
     return fig
 
 @figure
 def plot_normexpplusthcovmat_heatmap(experimentsplustheory_normcovmat):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
-    fig = plot_covmat_heatmap(experimentsplustheory_normcovmat, "Experiment + theory covariance matrix")
+    fig = plot_covmat_heatmap(experimentsplustheory_normcovmat,
+                              "Experiment + theory covariance matrix")
     return fig
 
 @figure
 def plot_normexpplusblockthcovmat_heatmap(experimentsplusblocktheory_normcovmat):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
-    fig = plot_covmat_heatmap(experimentsplusblocktheory_normcovmat, "Experiment + theory (block diagonal by dataset) covariance matrix")
+    fig = plot_covmat_heatmap(experimentsplusblocktheory_normcovmat,
+                              "Experiment + theory (block diagonal by dataset) covariance matrix")
     return fig
 
 @figure
 def plot_expplusthcorrmat_heatmap(experimentsplustheory_corrmat):
     """Matrix plot of the exp + theory correlation matrix"""
-    fig = plot_corrmat_heatmap(experimentsplustheory_corrmat, "Experiment + theory correlation matrix")
+    fig = plot_corrmat_heatmap(experimentsplustheory_corrmat,
+                               "Experiment + theory correlation matrix")
     return fig
 
 @figure
 def plot_expplusblockthcorrmat_heatmap(experimentsplusblocktheory_corrmat):
     """Matrix plot of the exp + theory correlation matrix"""
-    fig = plot_corrmat_heatmap(experimentsplusblocktheory_corrmat,"Experiment + theory (block diagonal by dataset) correlation matrix")
+    fig = plot_corrmat_heatmap(experimentsplusblocktheory_corrmat,
+                               "Experiment + theory (block diagonal by dataset) correlation matrix")
     return fig
 
 @figure
 def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
     """Matrix plot (thcov + expcov)/expcov"""
-    fig = plot_covmat_heatmap((theory_covmat.as_matrix()+experiments_covmat.as_matrix())/np.mean(experiments_covmat.as_matrix()),"(Theory + experiment)/mean(experiment) covariance matrices'")
+    df = (theory_covmat+experiments_covmat)/np.mean(experiments_covmat.as_matrix()) 
+    fig = plot_covmat_heatmap(df, "(Theory + experiment)/mean(experiment) covariance matrices")
     return fig
 
 @figure
 def plot_blockcovdiff_heatmap(theory_block_diag_covmat, experiments_covmat):
     """Matrix plot (thcov + expcov)/expcov"""
-    fig = plot_covmat_heatmap((theor_block_diagy_covmat.as_matrix()+experiments_covmat.as_matrix())/np.mean(experiments_covmat.as_matrix()),"(Theory + experiment)/mean(experiment) covariance matrices for block diagonal theory covmat by dataset")
+    df = (theory_block_diag_covmat+experiments_covmat)/np.mean(experiments_covmat.as_matrix())
+    fig = plot_covmat_heatmap(df, "(Theory + experiment)/mean(experiment) covariance matrices "
+                              + "\n for block diagonal theory covmat by dataset")
     return fig
 
 @figure
