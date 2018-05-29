@@ -376,7 +376,7 @@ def plot_expplusblockthcorrmat_heatmap(experimentsplusblocktheory_corrmat):
 @figure
 def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
     """Matrix plot (thcov + expcov)/expcov"""
-    df = (theory_covmat+experiments_covmat)/np.mean(experiments_covmat.as_matrix()) 
+    df = (theory_covmat+experiments_covmat)/np.mean(experiments_covmat.as_matrix())
     fig = plot_covmat_heatmap(df, "(Theory + experiment)/mean(experiment) covariance matrices")
     return fig
 
