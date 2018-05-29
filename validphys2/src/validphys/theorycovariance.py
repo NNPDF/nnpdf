@@ -466,7 +466,7 @@ def plot_datasets_chi2_theory(experiments, experiments_chi2, each_dataset_chi2,
     dschi2 = []
     dschi2theory = []
     xticks = []
-    for experiment, expres in zip(experiments, experiments_chi2):
+    for experiment in experiments:
         for dataset, dsres in zip(experiment, ds):
             dschi2.append(dsres.central_result/dsres.ndata)
             xticks.append(dataset.name)
