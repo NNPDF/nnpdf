@@ -72,6 +72,35 @@ the class created in step 2. Namely:
 target.push_back(new MY_NEW_DATASET_CLASSFilter());
 ```
 
+## Important notes
+
+### Symmetrising uncertainties
+
+Occasionally experiments present uncertainties that are asymmetric, i.e
+
+```
+    \sigma + \Delta_+ - \Delta_-
+```
+
+These must be symmetrised in `buildmaster` as the CommonData format accepts only
+symmetric uncertainties. When provided, the symmetrisation procedure suggested
+by the experimental paper should be used. If no such procedure is suggested, we
+follow the symmetrisation procedure of D'Agostini [physics/0403086]. This is
+implemented in the function `symmetriseErrors` provided in buildmaster_utils.
+
+**Be careful** with signs when using this function. The function expects all
+signs to be present in it's arguments. So when symmetrising an error that
+appears as above you should call
+
+```
+    symmetriseErrors(\Delta_+, - \Delta_-, ... )
+``` 
+
+where it is important to note that the sign is intact in the downwards
+uncertainty. This method returns a symmetrised error along with a *shift* to be
+applied to the data central value.
+
+
 ## Code development policy/rules
 
 Developers must never commit code structure modifications to master. The development pattern should follow these rules:
