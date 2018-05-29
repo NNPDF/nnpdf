@@ -21,14 +21,6 @@ private:
   void ReadData();
 };
 
-class D0R2CONFilter: public CommonData
-{ public: D0R2CONFilter():
-  CommonData("D0R2CON") { ReadData(); }
-
-private:
-  void ReadData();
-};
-
 class D0WMASYFilter: public CommonData
 { public: D0WMASYFilter():
   CommonData("D0WMASY") { ReadData(); }
