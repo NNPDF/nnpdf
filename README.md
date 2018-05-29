@@ -89,7 +89,7 @@ follow the symmetrisation procedure of D'Agostini [physics/0403086]. This is
 implemented in the function `symmetriseErrors` provided in buildmaster_utils.
 
 **Be careful** with signs when using this function. The function expects all
-signs to be present in it's arguments. So when symmetrising an error that
+signs to be present in its arguments. So when symmetrising an error that
 appears as above you should call
 
 ```
