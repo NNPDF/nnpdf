@@ -9,7 +9,6 @@ import os
 import sys
 import re
 import shutil
-import argparse
 import pathlib
 import logging
 import hashlib
@@ -17,6 +16,7 @@ import hashlib
 from validphys.config import Environment, Config, EnvironmentError_, ConfigError
 from validphys.app import App
 from reportengine.compat import yaml
+from reportengine import colors
 
 log = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ class SetupFitError(Exception):
 class SetupFitEnvironment(Environment):
     """Container for information to be filled at run time"""
     def __init__(self, **kwargs):
-        super(SetupFitEnvironment, self).__init__(output='', **kwargs)
+        super(SetupFitEnvironment, self).__init__(**kwargs)
 
     def init_output(self):
         # check file exists, is a file, has extension.
@@ -105,44 +105,10 @@ class SetupFitApp(App):
     def default_style(self):
         return str(self.this_folder() / '../small.mplstyle')
 
-    @property
-    def argparser(self):
-        parser = argparse.ArgumentParser(description=__doc__,
-                                         formatter_class=argparse.RawDescriptionHelpFormatter)
-        parser.add_argument('runcard', help="configuration file name")
-
-        cout = parser.add_mutually_exclusive_group()
-        cout.add_argument('--cout', action='store_const', const=True,
-                          help="display C output. Default depends on log level")
-        cout.add_argument('--no-cout', dest='cout',
-                          action='store_const', const=False)
-
-        loglevel = parser.add_mutually_exclusive_group()
-        loglevel.add_argument('-q', '--quiet', help="supress INFO messages",
-                              action='store_true')
-        loglevel.add_argument('-d', '--debug', help="show debug info",
-                              action='store_true')
-
-        parser.add_argument('-x', '--extra-providers', nargs='+',
-                            help="additional providers from which to "
-                                 "load actions. Must be an importable specifiaction.")
-
-        parallel = parser.add_mutually_exclusive_group()
-        parallel.add_argument('--parallel', action='store_true',
-                              help="execute actions in parallel")
-        parallel.add_argument('--no-parrallel', dest='parallel',
-                              action='store_false')
-        return parser
-
     def run(self):
         try:
-            self.environment.config_yml = pathlib.Path(self.args['runcard']).absolute()
+            self.environment.config_yml = pathlib.Path(self.args['config_yml']).absolute()
             self.environment.init_output()
-
-            # very ugly, require changes/hooks in validphys.app.run
-            self.args['config_yml'] = self.environment.config_yml
-            self.args['upload'] = False
-            self.args['output'] = ''
 
             # proceed with default run
             super().run()
@@ -154,7 +120,10 @@ class SetupFitApp(App):
             sys.exit(1)
         except Exception as e:
             log.critical(f"Bug in setup-fit ocurred. Please report it.")
-            raise
+            print(
+                colors.color_exception(e.__class__, e, e.__traceback__),
+                file=sys.stderr)
+            sys.exit(1)
 
 
 def main():
