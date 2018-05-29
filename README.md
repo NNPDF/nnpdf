@@ -111,5 +111,5 @@ Developers must never commit code structure modifications to master. The develop
 
 ## File format documentation
 
-For specifications about data file formats please check the `nnpdf` repository in `nnpdfcpp/data/doc`.
+For specifications about data file formats please check the `nnpdf` repository at `nnpdf/doc/data/`.
 
