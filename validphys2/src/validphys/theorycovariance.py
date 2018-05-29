@@ -21,7 +21,7 @@ from reportengine import collect
 
 from validphys.results import results, experiment_results, experiments_central_values
 from validphys.results import Chi2Data, experiments_chi2_table
-from validphys.calcutils import all_chi2_theory, central_chi2_theory
+from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys import plotutils
 
 log = logging.getLogger(__name__)
@@ -192,7 +192,7 @@ def experimentsplusblocktheory_corrmat(experiments_covmat, theory_block_diag_cov
     return corrmat
 
 def chi2_impact(theory_covmat, experiments_covmat, experiments_results):
-    """ Returns total chi2 including theory cov mat """
+    """Returns total chi2 including theory cov mat"""
     dataresults, theoryresults = zip(*experiments_results)
     dat_central_list = [x.central_value for x in dataresults]
     th_central_list = [x.central_value for x in theoryresults]
@@ -200,9 +200,7 @@ def chi2_impact(theory_covmat, experiments_covmat, experiments_results):
     th_central  = np.concatenate([x for x in th_central_list])
     central_diff = dat_central - th_central
     cov = theory_covmat.as_matrix() + experiments_covmat.as_matrix()
-    elements = central_diff.T@(la.inv(cov)@central_diff)
-    chi2 = (1/len(central_diff))*np.sum(elements)
-    return chi2
+    return calc_chi2(la.cholesky(cov, lower=True), central_diff)/len(central_diff)
 
 def data_theory_diff(experiments_results):
     """Returns (D-T) for central theory, for use in chi2 calculations"""
