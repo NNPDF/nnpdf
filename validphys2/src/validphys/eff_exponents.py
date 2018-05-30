@@ -7,8 +7,10 @@ from __future__ import generator_stop
 import logging
 import warnings
 import numpy as np
+import pandas as pd
 
 from reportengine.figure import figuregen
+from reportengine.table  import table
 from reportengine.floatformatting import format_number
 
 from validphys.checks import check_scale, CheckError, make_argcheck, check_positive, check_pdf_normalize_to
@@ -23,7 +25,7 @@ log = logging.getLogger(__name__)
 @check_positive('Q')
 @pdfgrids._check_limits
 @make_argcheck(check_basis)
-def alpha_eff(pdfs,xmin=1e-5,xmax=1e-3,Q=1.65,basis='evolution',flavours=None):
+def alpha_eff(pdfs,xmin=1e-5,xmax=1e-3,Nstep=200,Q=1.65,basis='evolution',flavours=None):
     """Return a list of xplotting_grids containing the value of the effective
     exponent alpha at the specified values of x and flavour.
     alpha is relevant at small x, hence the linear scale.
@@ -41,7 +43,7 @@ def alpha_eff(pdfs,xmin=1e-5,xmax=1e-3,Q=1.65,basis='evolution',flavours=None):
     flavours = checked['flavours']
 
     alphaGrids=[]
-    xGrid = pdfgrids.xgrid(xmin, xmax,'log', 200)
+    xGrid = pdfgrids.xgrid(xmin, xmax,'log', Nstep)
 
     for pdf in pdfs:
         pdfGrid = pdfgrids.xplotting_grid(pdf, Q, xgrid=xGrid, basis=basis,flavours=flavours)
@@ -59,7 +61,7 @@ def alpha_eff(pdfs,xmin=1e-5,xmax=1e-3,Q=1.65,basis='evolution',flavours=None):
 @check_positive('Q')
 @pdfgrids._check_limits
 @make_argcheck(check_basis)
-def beta_eff(pdfs,xmin=0.5,xmax=0.9,Q=1.65,basis='evolution',flavours=None):
+def beta_eff(pdfs,xmin=0.5,xmax=0.9,Nstep=200,Q=1.65,basis='evolution',flavours=None):
     """Return a list of xplotting_grids containing the value of the effective
     exponent beta at the specified values of x and flavour.
     beta is relevant at large x, hence the linear scale.
@@ -77,7 +79,7 @@ def beta_eff(pdfs,xmin=0.5,xmax=0.9,Q=1.65,basis='evolution',flavours=None):
     flavours = checked['flavours']
 
     betaGrids=[]
-    xGrid = pdfgrids.xgrid(xmin, xmax,'linear', 200)
+    xGrid = pdfgrids.xgrid(xmin, xmax,'linear', Nstep)
 
     for pdf in pdfs:
         pdfGrid = pdfgrids.xplotting_grid(pdf, Q, xgrid=xGrid, basis=basis,flavours=flavours)
@@ -135,3 +137,46 @@ def plot_alphaEff(pdfs, alpha_eff, normalize_to:(int,str,type(None))=None, ymin=
 def plot_betaEff(pdfs, beta_eff, normalize_to:(int,str,type(None))=None, ymin=None, ymax=None):
     """ Same as plot_alphaEff but for beta effective exponent """
     yield from ExponentBandPlotter('beta', pdfs, beta_eff, 'linear', normalize_to, ymin, ymax)
+
+@table
+def effective_exponents_table(pdfs,xmin_alpha=1e-6,xmax_alpha=1e-3,xmin_beta=0.65,xmax_beta=0.95,Q=1.65,basis='evolution',flavours=None):
+    """Return a table with the effective exponents for the next fit"""
+
+
+    xGridmin_alpha = pdfgrids.xgrid(xmin_alpha, xmin_alpha,'linear', 1)
+    xGridmax_alpha = pdfgrids.xgrid(xmax_alpha, xmax_alpha,'linear', 1)
+    xGridmin_beta = pdfgrids.xgrid(xmin_beta, xmin_beta,'linear', 1)
+    xGridmax_beta = pdfgrids.xgrid(xmax_beta, xmax_beta,'linear', 1)
+
+    alpha_xGrids=[xGridmin_alpha,xGridmax_alpha]
+    beta_xGrids=[xGridmin_beta,xGridmax_beta]
+
+    checked = check_basis(basis, flavours)
+    basis = checked['basis']
+    flavours = checked['flavours']
+
+    alphamin_grids=alpha_eff(pdfs,xmin=xmin_alpha,xmax=xmin_alpha,Nstep=1,Q=1.65,basis='evolution',flavours=None)
+    alphamax_grids=alpha_eff(pdfs,xmin=xmax_alpha,xmax=xmax_alpha,Nstep=1,Q=1.65,basis='evolution',flavours=None)
+    betamin_grids=alpha_eff(pdfs,xmin=xmin_beta,xmax=xmin_beta,Nstep=1,Q=1.65,basis='evolution',flavours=None)
+    betamax_grids=alpha_eff(pdfs,xmin=xmax_beta,xmax=xmax_beta,Nstep=1,Q=1.65,basis='evolution',flavours=None)
+    alphas=[alphamin_grids,alphamax_grids]
+    betas=[betamin_grids,betamax_grids]
+
+    for alpha_grids in alphas:
+        i=0
+        for alpha_grid in alpha_grids:
+            alpha_grid_values= alpha_grid.grid_values
+            stats = pdfs[i].stats_class(alpha_grid_values)
+            i=i+1
+            with warnings.catch_warnings():
+                warnings.simplefilter('ignore', RuntimeWarning)
+                err68down, err68up = stats.errorbar68()
+            print(err68down)
+    eff_exp_lines=[]
+    for fl in flavours:
+        eff_exp_lines.append(f'${basis.elementlabel(fl)}$')
+        eff_exp_lines.append("")
+
+    eff_exp_columns=["Effective exponent","Min","Max"]
+
+    return pd.DataFrame(np.random.randn(16, 3),index=eff_exp_lines,columns=eff_exp_columns)
