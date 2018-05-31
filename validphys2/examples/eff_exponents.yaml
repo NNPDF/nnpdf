@@ -3,7 +3,11 @@
 # b (beta) used to parametrize the PDF in the fit: pdf = x^{-a} (1-x)^b NN(x).
 
 Q: 1.65 #Q is the PDF scale in GeV.
-xmin: 1e-6
+
+ymin_alpha: 0
+ymax_alpha: 1.5
+ymin_beta: 0
+ymax_beta: 5
 basis: 'evolution' #The evolution basis of the DGLAP equations
 
 pdfs:

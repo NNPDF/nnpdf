@@ -25,7 +25,7 @@ log = logging.getLogger(__name__)
 @check_positive('Q')
 @pdfgrids._check_limits
 @make_argcheck(check_basis)
-def alpha_eff(pdfs,xmin=1e-5,xmax=1e-3,Nstep=200,Q=1.65,basis='evolution',flavours=None):
+def alpha_eff(pdfs,xmin=1e-6,xmax=1e-3,Nstep=200,Q=1.65,basis='evolution',flavours=None):
     """Return a list of xplotting_grids containing the value of the effective
     exponent alpha at the specified values of x and flavour.
     alpha is relevant at small x, hence the linear scale.
@@ -61,7 +61,7 @@ def alpha_eff(pdfs,xmin=1e-5,xmax=1e-3,Nstep=200,Q=1.65,basis='evolution',flavou
 @check_positive('Q')
 @pdfgrids._check_limits
 @make_argcheck(check_basis)
-def beta_eff(pdfs,xmin=0.5,xmax=0.9,Nstep=200,Q=1.65,basis='evolution',flavours=None):
+def beta_eff(pdfs,xmin=0.6,xmax=0.9,Nstep=200,Q=1.65,basis='evolution',flavours=None):
     """Return a list of xplotting_grids containing the value of the effective
     exponent beta at the specified values of x and flavour.
     beta is relevant at large x, hence the linear scale.
@@ -115,7 +115,7 @@ class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter): pass
 
 @figuregen
 @check_pdf_normalize_to
-def plot_alphaEff(pdfs, alpha_eff, normalize_to:(int,str,type(None))=None, ymin=None, ymax=None):
+def plot_alphaEff(pdfs, alpha_eff, normalize_to:(int,str,type(None))=None, ymin_alpha=None, ymax_alpha=None):
     """Plot the central value and the uncertainty of a list of effective
     exponents as a function of x for a given value of Q. If normalize_to
     is given, plot the ratios to the corresponding alpha effective.
@@ -130,25 +130,25 @@ def plot_alphaEff(pdfs, alpha_eff, normalize_to:(int,str,type(None))=None, ymin=
     xscale: One of the matplotlib allowed scales. If undefined, it will be
     set based on the scale in xgrid, which should be used instead.
     """
-    yield from ExponentBandPlotter('alpha', pdfs, alpha_eff, 'log', normalize_to, ymin, ymax)
+    yield from ExponentBandPlotter('alpha', pdfs, alpha_eff, 'log', normalize_to, ymin_alpha, ymax_alpha)
 
 @figuregen
 @check_pdf_normalize_to
-def plot_betaEff(pdfs, beta_eff, normalize_to:(int,str,type(None))=None, ymin=None, ymax=None):
+def plot_betaEff(pdfs, beta_eff, normalize_to:(int,str,type(None))=None, ymin_beta=None, ymax_beta=None):
     """ Same as plot_alphaEff but for beta effective exponent """
-    yield from ExponentBandPlotter('beta', pdfs, beta_eff, 'linear', normalize_to, ymin, ymax)
+    yield from ExponentBandPlotter('beta', pdfs, beta_eff, 'linear', normalize_to, ymin_beta, ymax_beta)
 
 @table
-def next_effective_exponents_table(pdfs,xmin_alpha=1e-6,xmax_alpha=1e-3,xmin_beta=0.65,xmax_beta=0.95,Q=1.65,basis='evolution',flavours=None):
+def next_effective_exponents_table(pdfs,x1_alpha=1e-6,x2_alpha=1e-3,x1_beta=0.65,x2_beta=0.95,Q=1.65,basis='evolution',flavours=None):
     """Return a table with the effective exponents for the next fit"""
     checked = check_basis(basis, flavours)
     basis = checked['basis']
     flavours = checked['flavours']
 
-    alphamin_grids=alpha_eff(pdfs,xmin=xmin_alpha,xmax=xmin_alpha,Nstep=1,Q=Q,basis=basis,flavours=flavours)
-    alphamax_grids=alpha_eff(pdfs,xmin=xmax_alpha,xmax=xmax_alpha,Nstep=1,Q=Q,basis=basis,flavours=flavours)
-    betamin_grids=beta_eff(pdfs,xmin=xmin_beta,xmax=xmin_beta,Nstep=1,Q=Q,basis=basis,flavours=flavours)
-    betamax_grids=beta_eff(pdfs,xmin=xmax_beta,xmax=xmax_beta,Nstep=1,Q=Q,basis=basis,flavours=flavours)
+    alphamin_grids=alpha_eff(pdfs,xmin=x1_alpha,xmax=x1_alpha,Nstep=1,Q=Q,basis=basis,flavours=flavours)
+    alphamax_grids=alpha_eff(pdfs,xmin=x2_alpha,xmax=x2_alpha,Nstep=1,Q=Q,basis=basis,flavours=flavours)
+    betamin_grids=beta_eff(pdfs,xmin=x1_beta,xmax=x1_beta,Nstep=1,Q=Q,basis=basis,flavours=flavours)
+    betamax_grids=beta_eff(pdfs,xmin=x2_beta,xmax=x2_beta,Nstep=1,Q=Q,basis=basis,flavours=flavours)
 
     eff_exp_data=[]
 
