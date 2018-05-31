@@ -139,45 +139,41 @@ def plot_betaEff(pdfs, beta_eff, normalize_to:(int,str,type(None))=None, ymin=No
     yield from ExponentBandPlotter('beta', pdfs, beta_eff, 'linear', normalize_to, ymin, ymax)
 
 @table
-def effective_exponents_table(pdfs,xmin_alpha=1e-6,xmax_alpha=1e-3,xmin_beta=0.65,xmax_beta=0.95,Q=1.65,basis='evolution',flavours=None):
+def next_effective_exponents_table(pdfs,xmin_alpha=1e-6,xmax_alpha=1e-3,xmin_beta=0.65,xmax_beta=0.95,Q=1.65,basis='evolution',flavours=None):
     """Return a table with the effective exponents for the next fit"""
     checked = check_basis(basis, flavours)
     basis = checked['basis']
     flavours = checked['flavours']
 
-    xGridmin_alpha = pdfgrids.xgrid(xmin_alpha, xmin_alpha,'log', 1)
-    xGridmax_alpha = pdfgrids.xgrid(xmax_alpha, xmax_alpha,'log', 1)
-    xGridmin_beta = pdfgrids.xgrid(xmin_beta, xmin_beta,'log', 1)
-    xGridmax_beta = pdfgrids.xgrid(xmax_beta, xmax_beta,'log', 1)
-
-    alphamin_grids=alpha_eff(pdfs,xmin=xmin_alpha,xmax=xmin_alpha,Nstep=1,Q=1.65,basis='evolution',flavours=None)
-    alphamax_grids=alpha_eff(pdfs,xmin=xmax_alpha,xmax=xmax_alpha,Nstep=1,Q=1.65,basis='evolution',flavours=None)
-    betamin_grids=alpha_eff(pdfs,xmin=xmin_beta,xmax=xmin_beta,Nstep=1,Q=1.65,basis='evolution',flavours=None)
-    betamax_grids=alpha_eff(pdfs,xmin=xmax_beta,xmax=xmax_beta,Nstep=1,Q=1.65,basis='evolution',flavours=None)
+    alphamin_grids=alpha_eff(pdfs,xmin=xmin_alpha,xmax=xmin_alpha,Nstep=1,Q=Q,basis=basis,flavours=flavours)
+    alphamax_grids=alpha_eff(pdfs,xmin=xmax_alpha,xmax=xmax_alpha,Nstep=1,Q=Q,basis=basis,flavours=flavours)
+    betamin_grids=beta_eff(pdfs,xmin=xmin_beta,xmax=xmin_beta,Nstep=1,Q=Q,basis=basis,flavours=flavours)
+    betamax_grids=beta_eff(pdfs,xmin=xmax_beta,xmax=xmax_beta,Nstep=1,Q=Q,basis=basis,flavours=flavours)
 
     eff_exp_data=[]
 
+    alphamin_grid_values = alphamin_grids[0].grid_values
+    alphamax_grid_values = alphamax_grids[0].grid_values
+    betamin_grid_values = betamin_grids[0].grid_values
+    betamax_grid_values = betamax_grids[0].grid_values
 
-    for pdf in pdfs:
-        i=0
-        alphamin_grid_values = alphamin_grids[i].grid_values
-        alphamax_grid_values = alphamax_grids[i].grid_values
-        betamin_grid_values = betamin_grids[i].grid_values
-        betamax_grid_values = betamax_grids[i].grid_values
+    alphamin_stats = pdfs[0].stats_class(alphamin_grid_values)
+    alphamax_stats = pdfs[0].stats_class(alphamax_grid_values)
+    betamin_stats = pdfs[0].stats_class(betamin_grid_values)
+    betamax_stats = pdfs[0].stats_class(betamax_grid_values)
 
-        alphamin_stats = pdfs[i].stats_class(alphamin_grid_values)
-        alphamax_stats = pdfs[i].stats_class(alphamax_grid_values)
-        betamin_stats = pdfs[i].stats_class(betamin_grid_values)
-        betamax_stats = pdfs[i].stats_class(betamax_grid_values)
+    if len(pdfs) > 1:
+        print("The effective exponents table is implemented for one PDF set at a time")
+        exit()
 
-        i=i+1
-        with warnings.catch_warnings():
-            warnings.simplefilter('ignore', RuntimeWarning)
-            alphamin_err68down, alphamin_err68up = alphamin_stats.errorbar68()
-            alphamax_err68down, alphamax_err68up = alphamax_stats.errorbar68()
-            betamin_err68down, betamin_err68up = betamin_stats.errorbar68()
-            betamax_err68down, betamax_err68up = betamax_stats.errorbar68()
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', RuntimeWarning)
+        alphamin_err68down, alphamin_err68up = alphamin_stats.errorbar68()
+        alphamax_err68down, alphamax_err68up = alphamax_stats.errorbar68()
+        betamin_err68down, betamin_err68up = betamin_stats.errorbar68()
+        betamax_err68down, betamax_err68up = betamax_stats.errorbar68()
 
+    for fl,j in zip(flavours,range(0,len(flavours))):
         #Defining the bounds
         # alpha_min = singlet/gluon: the 2x68% c.l. lower value evaluated at x=1e-6.
         #                  others  : min(2x68% c.l. lower value evaluated at x=1e-6 and x=1e-3)
@@ -187,19 +183,12 @@ def effective_exponents_table(pdfs,xmin_alpha=1e-6,xmax_alpha=1e-3,xmin_beta=0.6
         # beta_max  =  max(2x68% c.l. upper value evaluated at x=0.65 and x=0.95)
         alpha_line=[]
         beta_line=[]
-
-        if i is 0 or 1: #the gluon/singlet case
-            alpha_line.append("alpha")
-            alpha_line.append(alphamin_err68down)
-            alpha_line.append(min(2,alphamin_err68up))
+        if basis.elementlabel(fl) is "\Sigma" or basis.elementlabel(fl) is "g": #the gluon/singlet case
+            alpha_line=["alpha",round(alphamin_err68down[j][0],3),round(min(2,alphamin_err68up[j][0]),3)]
         else:
-            alpha_line.append("alpha")
-            alpha_line.append(min(alphamin_err68down,alphamax_err68down))
-            alpha_line.append(min(2,max(alphamin_err68up,alphamax_err68up)))
+            alpha_line=["alpha",round(min(alphamin_err68down[j][0],alphamax_err68down[j][0]),3),round(min(2,max(alphamin_err68up[j][0],alphamax_err68up[j][0])),3)]
 
-        beta_line.append("beta")
-        beta_line.append(max(0,min(betamin_err68down,betamax_err68down)))
-        beta_line.append(max(betamin_err68up,betamax_err68up))
+        beta_line=["beta",round(max(0,min(betamin_err68down[j][0],betamax_err68down[j][0])),3),round(max(betamin_err68up[j][0],betamax_err68up[j][0]),3)]
         eff_exp_data.append(alpha_line)
         eff_exp_data.append(beta_line)
 
@@ -210,4 +199,4 @@ def effective_exponents_table(pdfs,xmin_alpha=1e-6,xmax_alpha=1e-3,xmin_beta=0.6
 
     eff_exp_columns=["Effective exponent","Min","Max"]
 
-    return pd.DataFrame(np.random.randn(16, 3),index=flavours_label,columns=eff_exp_columns)
+    return pd.DataFrame(eff_exp_data,index=flavours_label,columns=eff_exp_columns)
