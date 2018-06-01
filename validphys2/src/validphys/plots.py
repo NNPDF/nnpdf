@@ -975,7 +975,7 @@ class FlavoursVarDistancePlotter(VarDistancePDFPlotter, AllFlavoursPlotter): pas
 @check_scale('xscale', allow_none=True)
 def plot_pdfdistances(pdfs, distance_grids, *,
                       xscale:(str,type(None))=None,
-                      normalize_to:(int,str,type(None))=None,ymin=None,ymax=None):
+                      normalize_to:(int,str)=None,ymin=None,ymax=None):
     """Plots the distances between different PDF sets and a reference PDF set
     for all flavours. Distances are normalized such that a value of order 10
     is unlikely to be explained by purely statistical fluctuations
@@ -989,7 +989,7 @@ def plot_pdfdistances(pdfs, distance_grids, *,
 @check_scale('xscale', allow_none=True)
 def plot_pdfvardistances(pdfs, variance_distance_grids, *,
                       xscale:(str,type(None))=None,
-                      normalize_to:(int,str,type(None))=None,ymin=None,ymax=None):
+                      normalize_to:(int,str)=None,ymin=None,ymax=None):
     """Plots the distances between different PDF sets and a reference PDF set
     for all flavours. Distances are normalized such that a value of order 10
     is unlikely to be explained by purely statistical fluctuations
