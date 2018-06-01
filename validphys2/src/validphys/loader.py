@@ -105,6 +105,65 @@ class LoaderBase:
         return vpcache
 
 
+def rebuild_commondata_without_cuts(
+         filename_with_cuts, cuts, datapath_filename, newpath):
+    """Take a CommonData file that is stored with the cuts applied "
+    and write another file with no cuts. The points that were not present in
+    the original file have the same kinematics as the file in
+    ``datapath_filename``, which must correspond to the original CommonData
+    file which does not have the cuts applied. However, to aboid confusion, the
+    values and uncertainties are all set to zero. The new file is written
+    to ``newname``.
+    """
+
+    metadata = peek_commondata_metadata(datapath_filename)
+    if cuts is None:
+        shutil.copy2(filename_with_cuts, newpath)
+        return
+
+    index_pattern = re.compile(r'(?P<startspace>\s*)(?P<index>\d+)')
+    data_line_pattern = re.compile(r'\s*(?P<index>\d+)'
+                                   r'\s+(?P<process_type>\S+)\s+'
+                                   r'(?P<kinematics>(\s*\S+){3})\s+')
+    mask = cuts.load()
+    maskiter = iter(mask)
+    ndata = metadata.ndata
+    nsys = metadata.nsys
+
+    ni = next(maskiter)
+    with open(filename_with_cuts, 'r') as fitfile, \
+         open(datapath_filename) as dtfile, \
+         open(newpath, 'w') as newfile:
+        newfile.write(dtfile.readline())
+        #discard this line
+        fitfile.readline()
+        for i in range(1 ,ndata+1):
+            #You gotta love mismatched indexing
+            if i-1 == ni:
+                line = fitfile.readline()
+                line = re.sub(
+                        index_pattern, rf'\g<startspace>{i}', line, count=1)
+                newfile.write(line)
+                ni = next(maskiter, None)
+                #drop the data file line
+                dtfile.readline()
+            else:
+                line = dtfile.readline()
+                #check that we know where we are
+                m = re.match(index_pattern, line)
+                assert int(m.group('index')) == i
+                #We have index, process type, and 3*kinematics
+                #that we would like to keep.
+                m = re.match(data_line_pattern, line)
+                newfile.write(line[:m.end()])
+                #And value, stat, *sys that we want to drop
+                #Do not use string join to keep up with thw ugly format
+                #This shold really be nan's, but the c++ streams that read this
+                #are rarher stupid, and I am not doing the insane thing.
+                #https://stackoverflow.com/questions/11420263/is-it-possible-to-read-infinity-or-nan-values-using-input-streams
+                zeros = '-0\t'*(2+ 2*nsys)
+                newfile.write(f'{zeros}\n')
+
 #TODO: Deprecate get methods?
 class Loader(LoaderBase):
     """Load various resources from the NNPDF data path."""
@@ -148,16 +207,28 @@ class Loader(LoaderBase):
                 raise LoadFailedError(
                         "Must specify a fit when setting use_fitcommondata")
             datafilefolder = (fit.path/'filter')/setname
+            newpath = datafilefolder/f'FILTER_{setname}.dat'
+            if not newpath.exists():
+                oldpath = datafilefolder/f'DATA_{setname}.dat'
+                if not oldpath.exists():
+                    raise DataNotFoundError(f"Either {newpath} or {oldpath} "
+                        "are needed with `use_fitcommondata`")
+                #This is to not repeat all the error handling stuff
+                basedata = self.check_commondata(setname, sysnum=sysnum).datafile
+                cuts = self.check_cuts(setname, fit=fit)
+                log.info(f"Upgrading filtered commondata. Writing {newpath}")
+                log.warn(f"Points that do not pass the cuts are set to zero!")
+                rebuild_commondata_without_cuts(oldpath, cuts, basedata, newpath)
+            datafile = newpath
         else:
-            datafilefolder = self.commondata_folder
-        datafile = datafilefolder / ('DATA_' + setname + '.dat')
+            datafile = self.commondata_folder / f'DATA_{setname}.dat'
         if not datafile.exists():
             raise DataNotFoundError(("Could not find Commondata set: '%s'. "
                   "File '%s' does not exist.")
                  % (setname, datafile))
         if sysnum is None:
             sysnum = 'DEFAULT'
-        sysfile = (datafilefolder / 'systypes' /
+        sysfile = (self.commondata_folder / 'systypes' /
                    ('SYSTYPE_%s_%s.dat' % (setname, sysnum)))
 
         if not sysfile.exists():
