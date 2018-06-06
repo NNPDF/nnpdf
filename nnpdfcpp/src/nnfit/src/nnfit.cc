@@ -19,6 +19,7 @@
 #include <NNPDF/timer.h>
 #include <NNPDF/chisquared.h>
 
+#include "evolution.h"
 #include "loadutils.h"
 #include "datautils.h"
 #include "fitbases.h"
@@ -334,9 +335,9 @@ int main(int argc, char **argv)
       pos.clear();
 
       // Export fit results
+      std::vector<EvolutionSubGrid> subgrids({EvolutionSubGrid()});
       fitset->ExportMeta(replica, erf_val/dofval, erf_trn/doftrn, chi2/dof, posVeto);
-      fitset->ExportGrid(replica);
-      fitset->ExportPDF(replica);
+      fitset->ExportPDF(replica, subgrids);
 
       // Export Logs
       LogManager::ExportLogs();
