@@ -18,8 +18,8 @@
 #include <NNPDF/parametrisation.h>
 #include <NNPDF/timer.h>
 #include <NNPDF/chisquared.h>
+#include <NNPDF/evolution.h>
 
-#include "evolution.h"
 #include "loadutils.h"
 #include "datautils.h"
 #include "fitbases.h"

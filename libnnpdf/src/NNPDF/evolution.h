@@ -38,7 +38,7 @@ namespace NNPDF {
             vector<NNPDF::real> EvolPDF(const PDFSet& ipdf,
                                         const size_t iMember,
                                         const size_t ix_out,
-                                        const size_t iQ_out);
+                                        const size_t iQ_out) const;
 
             // Note PIDs must return 21 for gluon, not 0. And 22 for photon if present.
             vector<int>    GetPIDs()          const {return fPIDs;}; // Get a list of returned PIDs

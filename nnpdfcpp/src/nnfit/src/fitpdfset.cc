@@ -406,7 +406,7 @@ void FitPDFSet::ExportPDF( int const& rep, vector<EvolutionSubGrid> const& subgr
   lhadata << scientific << setprecision(7);
   lhadata << "PdfType: replica\nFormat: lhagrid1\nFromMCReplica: " << rep << "\n---" << std::endl;
 
-  for ( EvolutionSubGrid& subgrid : subgrid_list )
+  for ( EvolutionSubGrid const& subgrid : subgrid_list )
   {
       const vector<double> q2grid = subgrid.GetEvolvedQ2grid();
       const vector<double> xgrid  = subgrid.GetEvolvedXgrid();

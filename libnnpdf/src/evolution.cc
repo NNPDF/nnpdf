@@ -16,7 +16,7 @@ namespace NNPDF
     vector<NNPDF::real> EvolutionSubGrid::EvolPDF(const PDFSet& ipdf,
                                                   const size_t iMember,
                                                   const size_t ix_out,
-                                                  const size_t iQ_out)
+                                                  const size_t iQ_out) const
     {
         if (ix_out >= fXout.size())
             throw RangeError("EvolutionSubGrid::EvolPDF","requested x-point" + std::to_string(ix_out) + "out of bounds.");
