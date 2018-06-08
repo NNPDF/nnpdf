@@ -1,3 +1,7 @@
+dataset_label: "ATLAS $Z$ $p_T$ 7 TeV $(p_T^{ll},y_{ll})$"
+
+y_label: '$d\sigma_{Z/\gamma^{*}}/dp_T$ (fb)'
+
 x: k2
 figure_by:
     - k1

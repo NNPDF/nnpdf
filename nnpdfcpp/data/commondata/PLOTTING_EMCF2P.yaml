@@ -1,4 +1,5 @@
 x: k1
+dataset_label: "EMC $F^2_p^{\\rm NC}$"
 
 #y_label: '$10^{qbin}F^c_{2}(x,Q^2)$' 
 #y_scale: log
