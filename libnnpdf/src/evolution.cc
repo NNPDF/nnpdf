@@ -1,7 +1,7 @@
 #include "NNPDF/exceptions.h"
 #include "NNPDF/pathlib.h"
 
-#include "evolution.h"
+#include "NNPDF/evolution.h"
 #include <cstdlib>
 
 namespace NNPDF
