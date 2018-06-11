@@ -317,16 +317,7 @@ vector<int> NNPDFSettings::GetDataMask(const string &setname, filterType useFilt
  */
 DataSetInfo const& NNPDFSettings::GetSetInfo(string const& setname) const
 {
-  map<string,DataSetInfo>::const_iterator iMap = fDataSetInfo.find(setname);
-  if (iMap != fDataSetInfo.end())
-    return (*iMap).second;
-  else
-  {
-    cerr << Colour::FG_RED << "NNPDFSettings::GetSetInfo error: Cannot find Set info under: " << setname << Colour::FG_DEFAULT << endl;
-    exit(-1);
-  }
-
-  return (*iMap).second;
+    return fDataSetInfo.at(setname);
 }
 
 /**
@@ -334,16 +325,7 @@ DataSetInfo const& NNPDFSettings::GetSetInfo(string const& setname) const
  */
 PosSetInfo const& NNPDFSettings::GetPosInfo(string const& posname) const
 {
-  map<string,PosSetInfo>::const_iterator iMap = fPosSetInfo.find(posname);
-  if (iMap != fPosSetInfo.end())
-    return (*iMap).second;
-  else
-  {
-    cerr << Colour::FG_RED << "NNPDFSettings::GetPosInfo error: Cannot find PosSet info under: " << posname << Colour::FG_DEFAULT << endl;
-    exit(-1);
-  }
-
-  return (*iMap).second;
+    return fPosSetInfo.at(posname);
 }
 
 // Verify configuration file is unchanged w.r.t filter.log
@@ -524,10 +506,12 @@ void NNPDFSettings::LoadExperiments()
             cfactors.push_back(cfs.str());
           }
 
+          if (fDataSetInfo.count(setname) == 1)
+            throw RuntimeException("NNPDFSettings::LoadExperiments","Duplicate key: " + setname);
+
           DataSetInfo info = {setname, setsys, setfrac, cfactors};
-          map<string,DataSetInfo>::const_iterator iMap = fDataSetInfo.find(setname);
-          if (iMap != fDataSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadExperiments error: duplicate for set: " << setname << Colour::FG_DEFAULT << endl; exit(-1); }
-          else { fDataSetInfo.insert(make_pair(setname, info)); }
+          fDataSetInfo.insert(make_pair(setname, info));
+
           nsetname.push_back(setname);
           fSetName.push_back(setname);
         }
@@ -549,12 +533,12 @@ void NNPDFSettings::LoadPositivities()
       const string posname = pos[i]["dataset"].as<string>();
       const real poslambda = pos[i]["poslambda"].as<real>();
 
+      if (fPosSetInfo.count(posname) == 1)
+        throw RuntimeException("NNPDFSettings::LoadPositivities","Duplicate key: " + posname);
+
       fPosName.push_back(posname);
       PosSetInfo info = {posname, poslambda};
-
-      map<string,PosSetInfo>::const_iterator iMap = fPosSetInfo.find(posname);
-      if (iMap != fPosSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadPositivity error: duplicate for set: " << posname << Colour::FG_DEFAULT << endl; exit(-1); }
-      else { fPosSetInfo.insert(make_pair(posname, info)); }
+      fPosSetInfo.insert(make_pair(posname, info));
     }
 }
 
