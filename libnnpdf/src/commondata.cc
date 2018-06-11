@@ -28,6 +28,7 @@ namespace NNPDF
 {
 
   // Kinematics type labels
+  // Also defines all permissable process types
   const CommonData::kinMap CommonData::kinLabel_latex = {
     { "DIS",        {"$x$","$Q^2 (GeV^2)$","$y$"}},
     { "DYP",        {"$y$","$M^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
@@ -311,32 +312,7 @@ namespace NNPDF
   // Verify that the process type is one of allowed processes
   void CommonData::VerifyProc(std::string const& proc)
   {
-    const int nProc = 17;
-    const std::string validProc[nProc] = {
-      "DIS",
-      "DYP",
-      "JET",
-      "PHT",
-      "INC",
-      "EWK_RAP",
-      "EWK_PT",
-      "EWK_MLL",
-      "EWJ_RAP",
-      "EWJ_PT",
-      "EWJ_MLL",
-      "HQP_YQQ",
-      "HQP_MQQ",
-      "HQP_PTQQ",
-      "HQP_YQ",
-      "HQP_PTQ",
-      "SIA"
-    };
-
-    bool foundString = false;
-    for (int i=0; i<nProc; i++)
-      foundString = foundString || (proc.find(validProc[i]) == 0);
-
-    if (!foundString)
+    if (CommonData::kinLabel_latex.count(proc) == 0)
       throw std::invalid_argument("CommonData::VerifyProc: process " + proc + " is unsupported.");
 
   }
