@@ -312,9 +312,10 @@ namespace NNPDF
   // Verify that the process type is one of allowed processes
   void CommonData::VerifyProc(std::string const& proc)
   {
-    if (CommonData::kinLabel_latex.count(proc) == 0)
+      for ( const auto &kin : kinLabel_latex )
+          if (proc.find(kin.first) == 0)
+              return;
       throw std::invalid_argument("CommonData::VerifyProc: process " + proc + " is unsupported.");
-
   }
 
   CommonData CommonData::ReadFile(std::string const& filename, std::string const& sysfile)
