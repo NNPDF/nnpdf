@@ -49,13 +49,13 @@ class ParamfitsConfig(Config):
         """NOTE: EXPERIMENTAL. A hack to obtain fits_as from the
         fitdeclarations, without having to
         download and inspect the actual fits."""
-        alpha_pattern = r'NNPDF\d\d_[a-z]+_as_(\d\d\d\d).*'
+        alpha_pattern = r'NNPDF\d\d(?:_[a-z]+)*_as_(\d\d\d\d).*'
         res = []
         for fit in fitdeclarations:
             m = re.match(alpha_pattern, fit)
             if not m:
                 raise ConfigError(f"Couldn't match fit name {fit} to the "
-                                  "pattern {alpha_pattern!r}")
+                                  f"pattern {alpha_pattern!r}")
             res.append(float(m.group(1))/1000)
         return {'fits_as' : res}
 
