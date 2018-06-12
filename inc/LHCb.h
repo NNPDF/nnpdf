@@ -37,15 +37,6 @@ private:
   void ReadData();
 };
 
-class LHCBWMU1FBFilter: public CommonData
-{
-public: LHCBWMU1FBFilter():
-  CommonData("LHCBWMU1FB") { ReadData(); }
-
-private:
-  void ReadData();
-};
-
 class LHCBWZMU7TEVFilter: public CommonData
 {
 public: LHCBWZMU7TEVFilter():
