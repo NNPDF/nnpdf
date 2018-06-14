@@ -91,7 +91,6 @@ def central_chi2_theory(results, totcov):
     total_covmat = np.array(totcov)
     return calc_chi2(la.cholesky(total_covmat, lower=True), central_diff)
 
->>>>>>> Add docstrings to all_chi2_theory and central_chi2_theory
 def calc_phi(sqrtcov, diffs):
     """Low level function which calculates phi given a Cholesky decomposed
     lower triangular part and a vector of differences. Primarily used when phi

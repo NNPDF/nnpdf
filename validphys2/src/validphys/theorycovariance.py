@@ -88,7 +88,6 @@ def total_covmat_datasets(each_dataset_results_theory):
         dataset_covmats.append(cov)
     return dataset_covmats
 
-<<<<<<< HEAD
 def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
     """Takes the theory covariance matrices for individual datasets and
     returns a data frame with a block diagonal theory covariance matrix
