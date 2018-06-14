@@ -32,7 +32,6 @@ add_library(nnpdf SHARED src/common.cc
                          src/commondata.cc
                          src/chisquared.cc
                          src/dataset.cc
-                         src/evolution.cc
                          src/experiments.cc
                          src/fastkernel.cc
                          src/fkgenerator.cc
@@ -43,7 +42,6 @@ add_library(nnpdf SHARED src/common.cc
                          src/nnpdfdb.cc
                          src/parametrisation.cc
                          src/pdfset.cc
-                         src/positivity.cc
                          src/positivity.cc
                          src/randomgenerator.cc
                          src/thpredictions.cc
