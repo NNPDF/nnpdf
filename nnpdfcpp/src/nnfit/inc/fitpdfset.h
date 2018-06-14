@@ -51,7 +51,6 @@ public:
   }
 
   void InitPDFSet() const;
-  void ExportGrid(int const& rep); //!< Export initial-value pdf grid
   void ExportMeta(int const& rep, real const& erf_val, real const& erf_trn, real const& chi2, bool posVeto);
 
   bool ComputeIntegrals( int const& mem ); //!< Compute all associated integrals and sum rules
@@ -71,6 +70,8 @@ public:
   int  GetNIte()        const { return fNIte; }
   void SetNIte( int const& newIte) { fNIte = newIte; }
   void Iterate()        { fNIte++; }
+
+  double GetQ20() const {return fQ20;}
 
   void GetPDF (real const& x, real const& Q2, int const& n, real* pdf) const; //!< Get evolution basis PDF
   real GetPDF  (real const& x, real const& Q2, int const& n, int const& fl) const; //!< Get preprocessed Fit basis PDF

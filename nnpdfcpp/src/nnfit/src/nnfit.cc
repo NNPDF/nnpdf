@@ -20,6 +20,7 @@
 #include <NNPDF/chisquared.h>
 #include <NNPDF/evolution.h>
 
+#include "exportgrid.h"
 #include "loadutils.h"
 #include "datautils.h"
 #include "fitbases.h"
@@ -334,8 +335,14 @@ int main(int argc, char **argv)
       }
       pos.clear();
 
-      // Export fit results to an initial scale grid, and a metadata file
-      fitset->ExportGrid(replica);
+      // Export fit results to an initial scale grid
+      std::stringstream grid_buffer;
+      std::string gridfile = settings.GetResultsDirectory()
+                           + "/nnfit/replica_" + std::to_string(replica) + "/"
+                           + settings.GetPDFName() +"gridvalues";
+      ExportGrid(*fitset, 0, replica, fitset->GetQ20()).Print(gridfile);
+
+      // Export metadata
       fitset->ExportMeta(replica, erf_val/dofval, erf_trn/doftrn, chi2/dof, posVeto);
 
       // Export Logs

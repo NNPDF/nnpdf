@@ -17,7 +17,6 @@
 
 #include "fitpdfset.h"
 #include "nnpdfsettings.h"
-#include "xgrid.h"
 #include <NNPDF/randomgenerator.h>
 #include <NNPDF/fastkernel.h>
 #include <NNPDF/exceptions.h>
@@ -390,56 +389,6 @@ void FitPDFSet::ExportMeta( int const& rep, real const& erf_val, real const& erf
         paramsdata << fBestFit[i]->GetParameters()[j] << endl;
     }
   write_to_file(paramsfile.str(), paramsdata.str());
-}
-
-/**
- * @brief FitPDFSet::ExportGrid
- */
-
-void FitPDFSet::ExportGrid(int const& rep)
-{
-  stringstream gridfile, griddata;
-  gridfile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/" << fSettings.GetPDFName() <<".gridvalues";
-  cout << "- Printing grid to file: " << gridfile.str() <<endl;
-
-  griddata << scientific << setprecision(14);
-  griddata << "{" << std::endl
-           << "\"replica\": "<< rep << "," << std::endl
-           << "\"q20\": " << fQ20 << ","<<std::endl
-           << "\"xgrid\": ["<<export_xgrid[0];
-  for (size_t ix=1; ix < export_xgrid.size(); ix++)
-    griddata <<", "<< export_xgrid[ix];
-  griddata << "]," <<std::endl;
-
-  // Write out the contents of the xfxvals array to the LHgrid
-  vector<real*> pdf_grid;
-  for (auto x : export_xgrid)
-    {
-      real *pdf = new real[14]();
-      real *lha = new real[14]();
-      GetPDF(x, fQ20, 0, pdf);
-      PDFSet::EVLN2LHA(pdf, lha);
-      pdf_grid.push_back(lha);
-      delete[] pdf;
-    }
-
-  // Print pdf grid to file
-  for (int ipdf = 0; ipdf < 14; ipdf++)
-  {
-    griddata << "\""<<PDFSet::fl_labels[ipdf]<<"\": ["
-             << pdf_grid[0][ipdf];
-    for (size_t ix = 1; ix < pdf_grid.size(); ix++)
-        griddata << ", " << pdf_grid[ix][ipdf];
-    griddata << "]";
-    if (ipdf < 13) griddata << ",";
-    griddata << std::endl;
-  }
-
-  for (size_t ix=0; ix<pdf_grid.size(); ix++)
-    delete[] pdf_grid[ix];
-
-  griddata << "}" <<std::endl;
-  write_to_file(gridfile.str(), griddata.str());
 }
 
 /**
