@@ -32,6 +32,7 @@ add_library(nnpdf SHARED src/common.cc
                          src/commondata.cc
                          src/chisquared.cc
                          src/dataset.cc
+                         src/evolution.cc
                          src/experiments.cc
                          src/fastkernel.cc
                          src/fkgenerator.cc

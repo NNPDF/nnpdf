@@ -22,7 +22,6 @@ endif(COMPILE_filter)
 option(COMPILE_nnfit "Compile nnfit program." ON)
 if (COMPILE_nnfit)
   add_executable(nnfit nnfit/src/nnfit.cc
-                       nnfit/src/apfelevol.cc
                        nnfit/src/fastaddchi2.cc
                        nnfit/src/fitbases.cc
                        nnfit/src/fitpdfset.cc
