@@ -90,12 +90,12 @@ std::string joinpath(const std::initializer_list<std::string> &list)
 
     int fs_err = fsync(file);
     if (fs_err == -1)
-      throw FileError("write_to_file::write", "Error flushing file " +
+      throw FileError("write_to_file::fsync", "Error flushing file " +
                       filename + ". Errno = " + std::string(strerror(errno)));
 
     int close_err = close(file);
     if (close_err == -1)
-      throw FileError("write_to_file::write", "Error closing file " +
+      throw FileError("write_to_file::close", "Error closing file " +
                       filename + ". Errno = " + std::string(strerror(errno)));
   }
 

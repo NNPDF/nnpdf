@@ -27,13 +27,18 @@ class PreprocParam;
  *  \class NNPDFSet
  *  \brief Neural Network PDFSet to be minimized
  */
+class FitPDFSet;
+FitPDFSet* getFitSet(const NNPDFSettings &settings, FitBasis * const &fitbasis);
 
+/**
+ * @brief The FitPDFSet class
+ */
 class FitPDFSet : public PDFSet
 {
 public:
   ~FitPDFSet();
 
-  template <class T, class A> static FitPDFSet* Generate(NNPDFSettings const& settings, FitBasis* basis)
+  template <class T> static FitPDFSet* Generate(NNPDFSettings const& settings, FitBasis* basis)
   {
     const int nfl = basis->GetNPDF();
     FitPDFSet* ns = new FitPDFSet(settings, basis);
@@ -62,6 +67,7 @@ public:
 
   vector<Parametrisation**>& GetPDFs() {return fPDFs;}
   Parametrisation**          GetBestFit() {return fBestFit;}
+  vector<PreprocParam*>    & GetPreprocParam() { return fPreprocParam; }
   void SortMembers(real*);
 
   void SetBestFit(int const&);
@@ -76,6 +82,9 @@ public:
   real GetPDF  (real const& x, real const& Q2, int const& n, int const& fl) const; //!< Get preprocessed Fit basis PDF
 
   real CalculateArcLength(int const& mem, int const& fl, real const& dampfact, real xmin = 1e-15, real xmax = 1.0) const;
+
+  void SaveParamsToFile(int rep) const;
+  void LoadParamsFromFile(int rep);
 
 private:
   FitPDFSet(NNPDFSettings const&, FitBasis*);
@@ -99,3 +108,4 @@ private:
 
   friend class Minimizer;
 };
+

@@ -114,15 +114,19 @@ copy of the original YAML runcard.
 4. All programs take the `<runcard_folder>` as input, e.g.  ```nnfit
 <replica_number> <runcard_folder> ``` where replica_number goes from 1-n.
 
-5. Wait until you have fit results, then use `postfit
+5. When `nnfit` is done run `evolvefit <replica_number>
+<runcard_folder>` where replica_number goes from 1-n. This program
+will apply DGLAP evolution to the solution obtained by nnfit.
+
+6. Wait until you have fit results, then use `postfit
 <number_of_replicas> <runcard_folder>` to finalize the PDF set by
 applying post selection criteria. This will produce a set of
 `<number_of_replicas>+1` replicas.
 
-6. Upload the results using `vp-upload --fit <runcard_folder>` then
+7. Upload the results using `vp-upload --fit <runcard_folder>` then
 install the fitted set with `vp-get fit <fit_name>`.
 
-7. Analyze results with `validphys`, see the [vp-guide](http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html#development-installs).
+8. Analyze results with `validphys`, see the [vp-guide](http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html#development-installs).
 
 ## NNPDF paths and URLS
 
