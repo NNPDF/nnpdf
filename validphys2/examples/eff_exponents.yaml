@@ -4,14 +4,19 @@
 
 Q: 1.65 #Q is the PDF scale in GeV.
 
-ymin_alpha: 0
-ymax_alpha: 1.5
-ymin_beta: 0
-ymax_beta: 5
+alpha:
+  ymin: 0
+  ymax: 1.5
+
+beta:
+  ymin: 0
+  ymax: 5
+
 basis: 'evolution' #The evolution basis of the DGLAP equations
 
 pdfs:
-    - NNPDF31_nlo_as_0118
+  - {id: NNPDF31_nlo_as_0118, label: NNPDF 3.1 NLO}
+  - {id: NNPDF30_nlo_as_0118, label: NNPDF 3.0 NLO}
 
 meta:
     author: Rabah Abdul Khalek
@@ -19,10 +24,21 @@ meta:
     keywords: [test, eff_exp]
 
 template_text: |
-  {@plot_alphaEff@}
-  {@plot_betaEff@}
+  ---
+  title: Effective exponents
+  keywords: [eff_exp]
+  ---
+
+  Effective exponents plots
+  -----------
+  {@alpha plot_alphaEff@}
+  {@beta plot_betaEff@}
+
+  {@with pdfs@}
+  Next effective exponents table for {@pdf@}
+  -----------
   {@next_effective_exponents_table@}
+  {@endwith@}
 
 actions_:
-   - - report:
-           main: True
+  - report(main=true)
