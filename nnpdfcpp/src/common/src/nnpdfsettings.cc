@@ -123,7 +123,9 @@ void nnpdf_GSLhandler (const char * reason,
                        int line,
                        int gsl_errno)
 {
-  cerr << "GSL Error: "<<reason<<endl;
+  cerr << "GSL Error " << gsl_errno << " : " << reason
+       << " line " << line
+       << " file " << file << endl;
   return;
 }
 
@@ -315,19 +317,7 @@ vector<int> NNPDFSettings::GetDataMask(const string &setname, filterType useFilt
  */
 DataSetInfo const& NNPDFSettings::GetSetInfo(string const& setname) const
 {
-  std::hash<std::string> str_hash;
-  const size_t hashval = str_hash(setname);
-
-  map<int,DataSetInfo>::const_iterator iMap = fDataSetInfo.find(hashval);
-  if (iMap != fDataSetInfo.end())
-    return (*iMap).second;
-  else
-  {
-    cerr << Colour::FG_RED << "NNPDFSettings::GetSetInfo error: Cannot find Set info under: " << setname << Colour::FG_DEFAULT << endl;
-    exit(EXIT_FAILURE);
-  }
-
-  return (*iMap).second;
+    return fDataSetInfo.at(setname);
 }
 
 /**
@@ -335,19 +325,7 @@ DataSetInfo const& NNPDFSettings::GetSetInfo(string const& setname) const
  */
 PosSetInfo const& NNPDFSettings::GetPosInfo(string const& posname) const
 {
-  std::hash<std::string> str_hash;
-  const size_t hashval = str_hash(posname);
-
-  map<int,PosSetInfo>::const_iterator iMap = fPosSetInfo.find(hashval);
-  if (iMap != fPosSetInfo.end())
-    return (*iMap).second;
-  else
-  {
-    cerr << Colour::FG_RED << "NNPDFSettings::GetPosInfo error: Cannot find PosSet info under: " << posname << Colour::FG_DEFAULT << endl;
-    exit(EXIT_FAILURE);
-  }
-
-  return (*iMap).second;
+    return fPosSetInfo.at(posname);
 }
 
 // Verify configuration file is unchanged w.r.t filter.log
@@ -494,75 +472,75 @@ void NNPDFSettings::Splash() const
   cout << endl;
 }
 
-/**
+/*
  * @brief NNPDFSettings::LoadExperiments parser for the experiment
  * This is a possible way to preceed which simplifies the data structure
  */
 void NNPDFSettings::LoadExperiments()
 {
-  YAML::Node exps = fConfig["experiments"];
+    YAML::Node exps = fConfig["experiments"];
 
-  // loop over experiments
-  for (int i = 0; i < (int)exps.size(); i++) {
-    fExpName.push_back(exps[i]["experiment"].as<string>());
-    vector<string> nsetname;
-    if (exps[i]["datasets"].size() == 0) {
-      cerr << Colour::FG_RED
-           << "NNPDFSettings::LoadExperiments error: experiment "
-           << exps[i]["experiment"] << " has no datasets!" << Colour::FG_DEFAULT
-           << endl;
-      exit(EXIT_FAILURE);
+    // loop over experiments
+    for (int i = 0; i < (int)exps.size(); i++) {
+        fExpName.push_back(exps[i]["experiment"].as<string>());
+
+        // List of datasets in experiment
+        vector<string> nsetname;
+
+        if (exps[i]["datasets"].size() == 0) {
+            cerr << Colour::FG_RED
+                << "NNPDFSettings::LoadExperiments error: experiment "
+                << exps[i]["experiment"] << " has no datasets!" << Colour::FG_DEFAULT
+                << endl;
+            exit(EXIT_FAILURE);
+        }
+
+        // loop over datasets
+        YAML::Node dsets = exps[i]["datasets"];
+        for (const auto &ds : dsets)
+        {
+            const string setname = ds["dataset"].as<string>();
+            const real setfrac = ds["frac"].as<real>();
+
+            // Read systematic type
+            string setsys;
+            if(ds["sys"]){
+                setsys = ds["sys"].as<string>();
+            }else{
+                setsys = "DEFAULT";
+            }
+
+            // Read C-factor sources
+            std::vector<string> cfactors;
+            if(ds["cfac"]){
+                auto cfac = ds["cfac"];
+                for (size_t k = 0; k < cfac.size(); k++) {
+                    std::stringstream cfs;
+                    cfs << cfac[k];
+                    cfactors.push_back(cfs.str());
+                }
+            }
+
+            // Read weights
+            double weight;
+            if (ds["weight"]) {
+                weight = ds["weight"].as<double>();
+            }else{
+                weight = 1;
+            }
+
+            if (fDataSetInfo.count(setname) == 1)
+                throw RuntimeException("NNPDFSettings::LoadExperiments","Duplicate key: " + setname);
+
+            DataSetInfo info = {setname, setsys, setfrac, cfactors, weight};
+            fDataSetInfo.insert(make_pair(setname, info));
+
+            nsetname.push_back(setname);
+            fSetName.push_back(setname);
+        }
+
+        fExpSetName.push_back(nsetname);
     }
-
-    // loop over datasets
-    YAML::Node dsets = exps[i]["datasets"];
-    for (const auto &ds : dsets) {
-      const string setname = ds["dataset"].as<string>();
-      const real setfrac = ds["frac"].as<real>();
-      string setsys;
-      if(ds["sys"]){
-          setsys = ds["sys"].as<string>();
-      }else{
-          setsys = "DEFAULT";
-      }
-
-      // Read C-factor sources
-      std::vector<string> cfactors;
-      if(ds["cfac"]){
-          auto cfac = ds["cfac"];
-          for (size_t k = 0; k < cfac.size(); k++) {
-            std::stringstream cfs;
-            cfs << cfac[k];
-            cfactors.push_back(cfs.str());
-          }
-      }
-
-      double weight;
-      if (ds["weight"]) {
-        weight = ds["weight"].as<double>();
-      }else{
-          weight = 1;
-      }
-
-      // Generate hash of setname
-      std::hash<std::string> str_hash;
-      const size_t hashval = str_hash(setname);
-
-      DataSetInfo info = {setname, setsys, setfrac, cfactors, weight};
-      map<int, DataSetInfo>::const_iterator iMap = fDataSetInfo.find(hashval);
-      if (iMap != fDataSetInfo.end()) {
-        cerr << Colour::FG_RED
-             << "NNPDFSettings::LoadExperiments error: hash collision for set: "
-             << setname << Colour::FG_DEFAULT << endl;
-        exit(EXIT_FAILURE);
-      } else {
-        fDataSetInfo.insert(make_pair(hashval, info));
-      }
-      nsetname.push_back(setname);
-      fSetName.push_back(setname);
-    }
-    fExpSetName.push_back(nsetname);
-  }
 }
 
 /**
@@ -579,16 +557,12 @@ void NNPDFSettings::LoadPositivities()
       const string posname = pos[i]["dataset"].as<string>();
       const real poslambda = pos[i]["poslambda"].as<real>();
 
+      if (fPosSetInfo.count(posname) == 1)
+        throw RuntimeException("NNPDFSettings::LoadPositivities","Duplicate key: " + posname);
+
       fPosName.push_back(posname);
       PosSetInfo info = {posname, poslambda};
-
-      // Generate hash of setname
-      std::hash<std::string> str_hash;
-      const size_t hashval = str_hash(posname);
-
-      map<int,PosSetInfo>::const_iterator iMap = fPosSetInfo.find(hashval);
-      if (iMap != fPosSetInfo.end()) { cerr << Colour::FG_RED << "NNPDFSettings::LoadPositivity error: hash collision for set: " << posname << Colour::FG_DEFAULT << endl; exit(EXIT_FAILURE); }
-      else { fPosSetInfo.insert(make_pair(hashval, info)); }
+      fPosSetInfo.insert(make_pair(posname, info));
     }
 }
 
