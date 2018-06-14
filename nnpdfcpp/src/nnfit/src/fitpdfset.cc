@@ -17,6 +17,7 @@
 
 #include "fitpdfset.h"
 #include "nnpdfsettings.h"
+#include "xgrid.h"
 #include <NNPDF/randomgenerator.h>
 #include <NNPDF/fastkernel.h>
 #include <NNPDF/exceptions.h>
@@ -392,59 +393,53 @@ void FitPDFSet::ExportMeta( int const& rep, real const& erf_val, real const& erf
 }
 
 /**
- * @brief LHGrid output
- * @param rep the replica to be exported
- * @param subgrid_list a vector of evolution table subgrids
- * Print to file a LHgrid for replica `rep`
+ * @brief FitPDFSet::ExportGrid
  */
-void FitPDFSet::ExportPDF( int const& rep, vector<EvolutionSubGrid> const& subgrid_list)
+
+void FitPDFSet::ExportGrid(int const& rep)
 {
-  cout << Colour::FG_BLUE <<"- Writing out LHAPDF grid: "<< fSettings.GetPDFName() << Colour::FG_DEFAULT << endl;
+  stringstream gridfile, griddata;
+  gridfile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/" << fSettings.GetPDFName() <<".gridvalues";
+  cout << "- Printing grid to file: " << gridfile.str() <<endl;
 
-  // Setup stringstream for LHgrid writing
-  stringstream lhadata;
-  lhadata << scientific << setprecision(7);
-  lhadata << "PdfType: replica\nFormat: lhagrid1\nFromMCReplica: " << rep << "\n---" << std::endl;
+  griddata << scientific << setprecision(14);
+  griddata << "{" << std::endl
+           << "\"replica\": "<< rep << "," << std::endl
+           << "\"q20\": " << fQ20 << ","<<std::endl
+           << "\"xgrid\": ["<<export_xgrid[0];
+  for (size_t ix=1; ix < export_xgrid.size(); ix++)
+    griddata <<", "<< export_xgrid[ix];
+  griddata << "]," <<std::endl;
 
-  for ( EvolutionSubGrid const& subgrid : subgrid_list )
+  // Write out the contents of the xfxvals array to the LHgrid
+  vector<real*> pdf_grid;
+  for (auto x : export_xgrid)
+    {
+      real *pdf = new real[14]();
+      real *lha = new real[14]();
+      GetPDF(x, fQ20, 0, pdf);
+      PDFSet::EVLN2LHA(pdf, lha);
+      pdf_grid.push_back(lha);
+      delete[] pdf;
+    }
+
+  // Print pdf grid to file
+  for (int ipdf = 0; ipdf < 14; ipdf++)
   {
-      const vector<double> q2grid = subgrid.GetEvolvedQ2grid();
-      const vector<double> xgrid  = subgrid.GetEvolvedXgrid();
-
-      // Print out x-grid
-      for ( auto xg : xgrid )
-          lhadata << xg << " ";
-      lhadata << std::endl;
-
-      // Print out q2-grid
-      for ( auto q2 : q2grid )
-          lhadata << sqrt(q2) << " ";
-      lhadata << std::endl;
-
-      // Print out final-state PIDs
-      for ( auto fl : subgrid.GetPIDs() )
-          lhadata << fl << " ";
-      lhadata << std::endl;
-
-       for (size_t ix = 0; ix < xgrid.size(); ix++)
-         for (size_t iq = 0; iq < q2grid.size(); iq++)
-           {
-             // Compute evolved PDFs
-             const vector<NNPDF::real> pdfs = subgrid.EvolPDF(*this, rep, ix, iq);
-             lhadata << " ";
-             for ( auto fl : pdfs )
-               lhadata << setw(14) << fl << " ";
-             lhadata << std::endl;
-           }
-       lhadata << "---" << std::endl;
+    griddata << "\""<<PDFSet::fl_labels[ipdf]<<"\": ["
+             << pdf_grid[0][ipdf];
+    for (size_t ix = 1; ix < pdf_grid.size(); ix++)
+        griddata << ", " << pdf_grid[ix][ipdf];
+    griddata << "]";
+    if (ipdf < 13) griddata << ",";
+    griddata << std::endl;
   }
 
-  const string repstring = std::to_string(rep);
-  const string lhafile = fSettings.GetResultsDirectory() + "/nnfit/replica_" + repstring + "/" + fSettings.GetPDFName() +" dat";
+  for (size_t ix=0; ix<pdf_grid.size(); ix++)
+    delete[] pdf_grid[ix];
 
-  write_to_file(lhafile, lhadata.str());
-
-  cout << Colour::FG_GREEN << "\n- LHAPDF successful writeout!" << Colour::FG_DEFAULT << endl << endl;
+  griddata << "}" <<std::endl;
+  write_to_file(gridfile.str(), griddata.str());
 }
 
 /**

@@ -51,7 +51,7 @@ public:
   }
 
   void InitPDFSet() const;
-  void ExportPDF(int const& rep, vector<EvolutionSubGrid> const& subgrid_list); //!< Export LHAPDF grid
+  void ExportGrid(int const& rep); //!< Export initial-value pdf grid
   void ExportMeta(int const& rep, real const& erf_val, real const& erf_trn, real const& chi2, bool posVeto);
 
   bool ComputeIntegrals( int const& mem ); //!< Compute all associated integrals and sum rules

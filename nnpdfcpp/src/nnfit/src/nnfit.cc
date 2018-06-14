@@ -334,10 +334,9 @@ int main(int argc, char **argv)
       }
       pos.clear();
 
-      // Export fit results
-      std::vector<EvolutionSubGrid> subgrids({EvolutionSubGrid()});
+      // Export fit results to an initial scale grid, and a metadata file
+      fitset->ExportGrid(replica);
       fitset->ExportMeta(replica, erf_val/dofval, erf_trn/doftrn, chi2/dof, posVeto);
-      fitset->ExportPDF(replica, subgrids);
 
       // Export Logs
       LogManager::ExportLogs();
