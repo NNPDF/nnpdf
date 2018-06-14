@@ -1,12 +1,16 @@
 %NNPDF Report for fit {@ current fit @}
 
+Fit summary 
+------------------
+{@ summarise_fits @}
+
 Dataset properties
 ------------------
 {@current datasets_properties_table@}
 
 Distances
 ------------------
-{@with normalize::basespecs::pdfscalespecs@}
+{@with normalize::basespecs::pdfscalespecs::distspecs@}
 {@plot_pdfdistances@}
 {@plot_pdfvardistances@}
 {@endwith@}

@@ -27,6 +27,7 @@ configure_file(
 add_definitions(-DDEFAULT_NNPDF_PROFILE_PATH="${prefix}/share/NNPDF/nnprofile.yaml")
 
 include_directories(src/NNPDF src ${GSL_INCLUDE_DIRS} ${YAML_INCLUDE_DIRS})
+FILE(GLOB_RECURSE Headers "src/NNPDF/*.h")
 add_library(nnpdf SHARED src/common.cc
                          src/commondata.cc
                          src/chisquared.cc
@@ -46,7 +47,9 @@ add_library(nnpdf SHARED src/common.cc
                          src/randomgenerator.cc
                          src/thpredictions.cc
                          src/utils.cc
-            			 src/pathlib.cc)
+                         src/pathlib.cc
+                         ${Headers}
+)
 
 target_link_libraries(nnpdf ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${SQLITE3_LDFLAGS} ${LIBARCHIVE_LDFLAGS} ${YAML_LDFLAGS})
 

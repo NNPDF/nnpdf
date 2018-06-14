@@ -220,8 +220,13 @@ class Loader(LoaderBase):
         data = yaml.safe_load(yaml_format)
         #we have to split out 'FK_' the extension to get a name consistent
         #with everything else
-        tables = [self.check_fktable(theoryID, name[3:-4], cfac)
+        try:
+            tables = [self.check_fktable(theoryID, name[3:-4], cfac)
                   for name in data['FK']]
+        except FKTableNotFound as e:
+            raise LoadFailedError(
+                    f"Incorrect COMPOUND file '{compound_spec_path}'. "
+                    f"Searching for non-existing FKTable:\n{e}") from e
         op = data['OP']
         return tuple(tables), op
 
@@ -270,7 +275,7 @@ class Loader(LoaderBase):
 
     def check_dataset(self, *, name, sysnum=None,
                      theoryid, cfac=(),
-                     use_cuts, fit=None):
+                     use_cuts, fit=None, weight=1):
 
         if not isinstance(theoryid, TheoryIDSpec):
             theoryid = self.check_theoryID(theoryid)
@@ -291,7 +296,8 @@ class Loader(LoaderBase):
             cuts = None
 
         return DataSetSpec(name=name, commondata=commondata,
-                           fkspecs=fkspec, thspec=theoryid, cuts=cuts, op=op)
+                           fkspecs=fkspec, thspec=theoryid, cuts=cuts,
+                           op=op, weight=weight)
 
     def check_pdf(self, name):
         if lhaindex.isinstalled(name):

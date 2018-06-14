@@ -15,11 +15,13 @@
  * @param useFilter
  * @return
  */
-DataSet LoadDataSet(NNPDFSettings const& settings, std::string const& setname, filterType useFilter)
+DataSet LoadDataSet(NNPDFSettings const &settings, std::string const &setname,
+                    filterType useFilter)
 {
   // get path for setname
   vector<string> fs = settings.GetDataInfo(setname, useFilter);
-  vector<int> mask  = settings.GetDataMask(setname, useFilter);
+  vector<int> mask = settings.GetDataMask(setname, useFilter);
+  auto weight = settings.GetSetInfo(setname).weight;
 
   // allocate commondata
   CommonData cd = CommonData::ReadFile(fs[0], fs[1]);
@@ -28,10 +30,10 @@ DataSet LoadDataSet(NNPDFSettings const& settings, std::string const& setname, f
   FKSet fk = LoadFK(settings, setname);
 
   // return dataset
-  if (mask.size() > 0)
-    return DataSet(cd, FKSet(fk,mask));
-  else
-    return DataSet(cd, fk);
+  if (mask.size() > 0) {
+    fk = FKSet(fk, mask);
+  }
+  return DataSet(cd, fk, weight);
 }
 
 /**

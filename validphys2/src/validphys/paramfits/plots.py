@@ -47,9 +47,11 @@ def plot_as_central_parabola(
     the chi² at the total best fit."""
     fig,ax = plt.subplots()
     asarr = np.linspace(min(fits_as), max(fits_as), 100)
+    as_central_parabola = np.asarray(as_central_parabola)
+    ndata = int(ndata)
     ax.plot(asarr, np.polyval(as_central_parabola, asarr)/ndata)
 
-    best_as = np.mean(parabolic_as_determination_for_total)
+    best_as = parabolic_as_determination_for_total[0].location
     chi2_at_best = np.polyval(as_central_parabola, best_as)/ndata
     ax.scatter(best_as, chi2_at_best)
     ax.annotate(format_number(chi2_at_best, 3), (best_as, chi2_at_best))

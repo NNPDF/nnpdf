@@ -113,7 +113,7 @@ class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter): pass
 
 @figuregen
 @check_pdf_normalize_to
-def plot_alphaEff(pdfs, alpha_eff, normalize_to:(int,str,type(None))=None):
+def plot_alphaEff(pdfs, alpha_eff, normalize_to:(int,str,type(None))=None, ymin=None, ymax=None):
     """Plot the central value and the uncertainty of a list of effective
     exponents as a function of x for a given value of Q. If normalize_to
     is given, plot the ratios to the corresponding alpha effective.
@@ -128,10 +128,10 @@ def plot_alphaEff(pdfs, alpha_eff, normalize_to:(int,str,type(None))=None):
     xscale: One of the matplotlib allowed scales. If undefined, it will be
     set based on the scale in xgrid, which should be used instead.
     """
-    yield from ExponentBandPlotter('alpha', pdfs, alpha_eff, 'log', normalize_to)
+    yield from ExponentBandPlotter('alpha', pdfs, alpha_eff, 'log', normalize_to, ymin, ymax)
 
 @figuregen
 @check_pdf_normalize_to
-def plot_betaEff(pdfs, beta_eff, normalize_to:(int,str,type(None))=None):
+def plot_betaEff(pdfs, beta_eff, normalize_to:(int,str,type(None))=None, ymin=None, ymax=None):
     """ Same as plot_alphaEff but for beta effective exponent """
-    yield from ExponentBandPlotter('beta', pdfs, beta_eff, 'linear', normalize_to)
+    yield from ExponentBandPlotter('beta', pdfs, beta_eff, 'linear', normalize_to, ymin, ymax)

@@ -23,8 +23,7 @@ using namespace NNPDF;
  */
 LHAPDFSet::LHAPDFSet(std::string const& pdfname, erType etype):
 LHAPDF::PDFSet(pdfname),
-NNPDF::PDFSet(pdfname, size(), etype),
-fLHA(new real[14])
+NNPDF::PDFSet(pdfname, size(), etype)
 {
   // Verify erType
   const std::string LHError = errorType();
@@ -65,8 +64,7 @@ fLHA(new real[14])
 
 LHAPDFSet::LHAPDFSet(const std::string & pdfname, const int &replica):
   LHAPDF::PDFSet(pdfname),
-  NNPDF::PDFSet(pdfname, 1, NNPDF::PDFSet::erType::ER_NONE),
-  fLHA(new real[14])
+  NNPDF::PDFSet(pdfname, 1, NNPDF::PDFSet::erType::ER_NONE)
 {
   fMemberPDFs.push_back(mkPDF(replica));
   get_logger() << pdfname << " Initialised with " << fMembers <<" members and no errorType." << std::endl;
@@ -74,8 +72,6 @@ LHAPDFSet::LHAPDFSet(const std::string & pdfname, const int &replica):
 
 LHAPDFSet::~LHAPDFSet()
 {
-  delete[] fLHA;
-
   for (size_t i=0; i<fMemberPDFs.size(); i++)
     delete fMemberPDFs[i];
   fMemberPDFs.clear();
@@ -94,32 +90,29 @@ void LHAPDFSet::GetPDF(real const& x, real const& Q2, int const& n, real* pdf)  
   if (!fMemberPDFs[iMem]->inPhysicalRangeXQ2(x, Q2))
     throw RangeError("LHAPDFSet::GetPDF","kinematics out of set range: x="+ std::to_string(x) +" Q2="+ std::to_string(Q2));
 
-  // Clear LHA (probably unneeded)
-  for (int i=0; i<14; i++)
-    fLHA[i] = 0.0;
-
    //** PDG CODES **//
   // Let's be super explicit here
+  std::array<real, 14> LHA;
 
-  fLHA[TBAR] = fMemberPDFs[iMem]->xfxQ2(-6, x, Q2);
-  fLHA[BBAR] = fMemberPDFs[iMem]->xfxQ2(-5, x, Q2);
-  fLHA[CBAR] = fMemberPDFs[iMem]->xfxQ2(-4, x, Q2);
-  fLHA[SBAR] = fMemberPDFs[iMem]->xfxQ2(-3, x, Q2);
-  fLHA[UBAR] = fMemberPDFs[iMem]->xfxQ2(-2, x, Q2);
-  fLHA[DBAR] = fMemberPDFs[iMem]->xfxQ2(-1, x, Q2);
+  LHA[TBAR] = fMemberPDFs[iMem]->xfxQ2(-6, x, Q2);
+  LHA[BBAR] = fMemberPDFs[iMem]->xfxQ2(-5, x, Q2);
+  LHA[CBAR] = fMemberPDFs[iMem]->xfxQ2(-4, x, Q2);
+  LHA[SBAR] = fMemberPDFs[iMem]->xfxQ2(-3, x, Q2);
+  LHA[UBAR] = fMemberPDFs[iMem]->xfxQ2(-2, x, Q2);
+  LHA[DBAR] = fMemberPDFs[iMem]->xfxQ2(-1, x, Q2);
 
-  fLHA[T] = fMemberPDFs[iMem]->xfxQ2(6, x, Q2);
-  fLHA[B] = fMemberPDFs[iMem]->xfxQ2(5, x, Q2);
-  fLHA[C] = fMemberPDFs[iMem]->xfxQ2(4, x, Q2);
-  fLHA[S] = fMemberPDFs[iMem]->xfxQ2(3, x, Q2);
-  fLHA[U] = fMemberPDFs[iMem]->xfxQ2(2, x, Q2);
-  fLHA[D] = fMemberPDFs[iMem]->xfxQ2(1, x, Q2);
+  LHA[T] = fMemberPDFs[iMem]->xfxQ2(6, x, Q2);
+  LHA[B] = fMemberPDFs[iMem]->xfxQ2(5, x, Q2);
+  LHA[C] = fMemberPDFs[iMem]->xfxQ2(4, x, Q2);
+  LHA[S] = fMemberPDFs[iMem]->xfxQ2(3, x, Q2);
+  LHA[U] = fMemberPDFs[iMem]->xfxQ2(2, x, Q2);
+  LHA[D] = fMemberPDFs[iMem]->xfxQ2(1, x, Q2);
 
-  fLHA[GLUON] = fMemberPDFs[iMem]->xfxQ2(21, x, Q2);
-  fLHA[PHT]   = fMemberPDFs[iMem]->xfxQ2(22, x, Q2);
+  LHA[GLUON] = fMemberPDFs[iMem]->xfxQ2(21, x, Q2);
+  LHA[PHT]   = fMemberPDFs[iMem]->xfxQ2(22, x, Q2);
 
   // Transform
-  LHA2EVLN(fLHA, pdf);
+  LHA2EVLN(LHA.data(), pdf);
 }
 
 real LHAPDFSet::xfxQ(real const& x, real const& Q, int const& n, int const& fl) const

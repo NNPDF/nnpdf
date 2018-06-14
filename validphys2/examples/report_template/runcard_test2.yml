@@ -31,7 +31,7 @@ meta:
 
 use_cuts: True
 
-Q: 3
+Q: 1.651
 
 pdfnormalize:
     - normtitle: Absolute
@@ -50,6 +50,10 @@ pdfscalespecs:
       xscaletitle: Log
     - xscale: linear
       xscaletitle: Linear
+
+distspecs:
+   - ymin: 0
+     ymax: 20
 
 pos_use_kin: True
 

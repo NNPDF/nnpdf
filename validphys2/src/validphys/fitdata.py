@@ -3,7 +3,7 @@
 Utilities for loading data from fit folders
 """
 import logging
-from collections import namedtuple
+from collections import namedtuple, OrderedDict
 from io import StringIO
 import pathlib
 
@@ -14,11 +14,13 @@ from reportengine.compat import yaml
 from reportengine import collect
 from reportengine.table import table
 from reportengine.checks import make_argcheck, CheckError
+from reportengine.floatformatting import ValueErrorTuple
 
 from validphys.core import PDF
 from validphys import checks
 from validphys.plotoptions import get_info
 from validphys import sumrules
+from validphys.results import phi_data
 
 #TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']
@@ -115,6 +117,56 @@ def replica_data(fit, replica_paths):
 
     ('nite', 'training', 'validation', 'chi2', 'pos_status', 'arclenghts')"""
     return [load_fitinfo(path, fit.name) for path in replica_paths]
+
+
+@table
+def fit_summary(fit, replica_data, total_experiments_chi2data):
+    """ Summary table of fit properties
+        - Central chi-squared
+        - Average chi-squared
+        - Training and Validation error functions
+        - Training lengths
+        - Phi
+
+        Note:
+        Chi-squared values from the replica_data are not used here (presumably
+        they are fixed to being t0)
+
+        This uses a corrected form for the error on phi in comparison to the
+        vp1 value. The error is propagated from the uncertainty on the
+        average chi-squared only.
+
+    """
+    nrep = len(replica_data)
+    ndata = total_experiments_chi2data.ndata
+    central_chi2 = total_experiments_chi2data.central_result / ndata
+    member_chi2 = total_experiments_chi2data.replica_result.error_members() / ndata
+
+    nite = [x.nite for x in replica_data]
+    etrain = [x.training for x in replica_data]
+    evalid = [x.validation for x in replica_data]
+
+    phi = phi_data(total_experiments_chi2data)
+    phi_err = np.std(member_chi2)/(2.0*phi*np.sqrt(nrep))
+
+    VET = ValueErrorTuple
+    data = OrderedDict( ((r"$\chi^2$",             f"{central_chi2:.5f}"),
+                         (r"$<E_{\mathrm{trn}}>$", f"{VET(np.mean(etrain), np.std(etrain))}"),
+                         (r"$<E_{\mathrm{val}}>$", f"{VET(np.mean(evalid), np.std(evalid))}"),
+                         (r"$<TL>$",               f"{VET(np.mean(nite), np.std(nite))}"),
+                         (r"$<\chi^2>$", f"{VET(np.mean(member_chi2), np.std(member_chi2))}"),
+                         (r"$\phi$",     f"{VET(phi, phi_err)}")))
+
+    return pd.Series(data, index=data.keys(), name=fit.name)
+
+
+collected_fit_summaries = collect('fit_summary', ('fits', 'fitcontext'))
+@table
+def summarise_fits(collected_fit_summaries):
+    """ Produces a table of basic comparisons between fits, includes
+    all the fields used in fit_summary """
+    return pd.concat(collected_fit_summaries, axis=1)
+
 
 def fit_sum_rules(fit, replica_paths):
     """Return a SumRulesGrid object with the sumrules for each replica as
@@ -308,7 +360,7 @@ def datasets_properties_table(fit):
 
 def print_systype_overlap(experiments):
     """Returns a set of systypes that overlap between experiments.
-    Discards the set of systypes which overlap but do not imply 
+    Discards the set of systypes which overlap but do not imply
     correlations
     """
     exps = experiments
