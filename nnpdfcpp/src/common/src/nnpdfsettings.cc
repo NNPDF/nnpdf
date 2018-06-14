@@ -472,69 +472,75 @@ void NNPDFSettings::Splash() const
   cout << endl;
 }
 
-/**
+/*
  * @brief NNPDFSettings::LoadExperiments parser for the experiment
  * This is a possible way to preceed which simplifies the data structure
  */
 void NNPDFSettings::LoadExperiments()
 {
-  YAML::Node exps = fConfig["experiments"];
+    YAML::Node exps = fConfig["experiments"];
 
-  // loop over experiments
-  for (int i = 0; i < (int)exps.size(); i++) {
-    fExpName.push_back(exps[i]["experiment"].as<string>());
-    vector<string> nsetname;
-    if (exps[i]["datasets"].size() == 0) {
-      cerr << Colour::FG_RED
-           << "NNPDFSettings::LoadExperiments error: experiment "
-           << exps[i]["experiment"] << " has no datasets!" << Colour::FG_DEFAULT
-           << endl;
-      exit(EXIT_FAILURE);
-    }
+    // loop over experiments
+    for (int i = 0; i < (int)exps.size(); i++) {
+        fExpName.push_back(exps[i]["experiment"].as<string>());
 
-    // loop over datasets
-    YAML::Node dsets = exps[i]["datasets"];
-    for (const auto &ds : dsets) {
-      const string setname = ds["dataset"].as<string>();
-      const real setfrac = ds["frac"].as<real>();
-      string setsys;
-      if(ds["sys"]){
-          setsys = ds["sys"].as<string>();
-      }else{
-          setsys = "DEFAULT";
-      }
+        // List of datasets in experiment
+        vector<string> nsetname;
 
-      // Read C-factor sources
-      std::vector<string> cfactors;
-      if(ds["cfac"]){
-          auto cfac = ds["cfac"];
-          for (size_t k = 0; k < cfac.size(); k++) {
-            std::stringstream cfs;
-            cfs << cfac[k];
-            cfactors.push_back(cfs.str());
-          }
-      }
-
-       if (fDataSetInfo.count(setname) == 1)
-           throw RuntimeException("NNPDFSettings::LoadExperiments","Duplicate key: " + setname);
-      
-      double weight;
-      if (ds["weight"]) {
-        weight = ds["weight"].as<double>();
-      }else{
-          weight = 1;
-      }
-          DataSetInfo info = {setname, setsys, setfrac, cfactors, weight};
-          fDataSetInfo.insert(make_pair(setname, info));
-
-          nsetname.push_back(setname);
-          fSetName.push_back(setname);
+        if (exps[i]["datasets"].size() == 0) {
+            cerr << Colour::FG_RED
+                << "NNPDFSettings::LoadExperiments error: experiment "
+                << exps[i]["experiment"] << " has no datasets!" << Colour::FG_DEFAULT
+                << endl;
+            exit(EXIT_FAILURE);
         }
-      fExpSetName.push_back(nsetname);
 
+        // loop over datasets
+        YAML::Node dsets = exps[i]["datasets"];
+        for (const auto &ds : dsets)
+        {
+            const string setname = ds["dataset"].as<string>();
+            const real setfrac = ds["frac"].as<real>();
+
+            // Read systematic type
+            string setsys;
+            if(ds["sys"]){
+                setsys = ds["sys"].as<string>();
+            }else{
+                setsys = "DEFAULT";
+            }
+
+            // Read C-factor sources
+            std::vector<string> cfactors;
+            if(ds["cfac"]){
+                auto cfac = ds["cfac"];
+                for (size_t k = 0; k < cfac.size(); k++) {
+                    std::stringstream cfs;
+                    cfs << cfac[k];
+                    cfactors.push_back(cfs.str());
+                }
+            }
+
+            // Read weights
+            double weight;
+            if (ds["weight"]) {
+                weight = ds["weight"].as<double>();
+            }else{
+                weight = 1;
+            }
+
+            if (fDataSetInfo.count(setname) == 1)
+                throw RuntimeException("NNPDFSettings::LoadExperiments","Duplicate key: " + setname);
+
+            DataSetInfo info = {setname, setsys, setfrac, cfactors, weight};
+            fDataSetInfo.insert(make_pair(setname, info));
+
+            nsetname.push_back(setname);
+            fSetName.push_back(setname);
+        }
+
+        fExpSetName.push_back(nsetname);
     }
-    fExpSetName.push_back(nsetname);
-  }
 }
 
 /**
