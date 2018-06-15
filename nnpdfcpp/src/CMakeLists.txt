@@ -3,6 +3,7 @@ add_library(common STATIC
   common/src/nnpdfsettings.cc
   common/src/md5.cc
   common/src/loadutils.cc
+  common/src/exportgrid.cc
   common/src/datautils.cc
 )
 include_directories(common/inc)
@@ -25,7 +26,6 @@ if (COMPILE_nnfit)
                        nnfit/src/fastaddchi2.cc
                        nnfit/src/fitbases.cc
                        nnfit/src/fitpdfset.cc
-                       nnfit/src/exportgrid.cc
                        nnfit/src/minimizer.cc
                        nnfit/src/pdfbasis.cc
                        nnfit/src/stopping.cc)
