@@ -1,7 +1,6 @@
 #include <iomanip>
 #include <array>
 
-#include <yaml-cpp/yaml.h>
 
 #include <NNPDF/utils.h>
 #include <NNPDF/utils.h>
@@ -108,15 +107,20 @@ ExportGrid::ExportGrid(PDFSet const& pdf,
     }
 }
 
+ExportGrid::ExportGrid(string filename):
+    ExportGrid(YAML::LoadFile(filename))
+{}
 
-
-//ExportGrid::ExportGrid(string const& filename)
-//    fQ0(),
-//    fXgrid(),
-//    fPDFgrid()
-//{
-//
-//}
+ExportGrid::ExportGrid(YAML::Node input):
+    fRep(input["replica"].as<int>()),
+    fQ20(input["q20"].as<double>()),
+    fXgrid(input["xgrid"].as<vector<double>>()),
+    fLabels(input["labels"].as<array<string,14>>()),
+    fPDFgrid()
+{
+    for (auto xfx : input["pdfgrid"])
+        fPDFgrid.push_back(xfx.as<array<real,14>>());
+}
 
 // Because yaml-cpp doesn't like scientific notation
 std::string ExportGrid::Format(double in)
@@ -137,7 +141,6 @@ void ExportGrid::Print(const std::string filename)
                    [](double in) -> std::string { return ExportGrid::Format(in); });
 
     data << YAML::BeginMap;
-    //data << scientific << setprecision(14);
     data << YAML::Key << "replica" << YAML::Value << fRep;
     data << YAML::Key << "q20"     << YAML::Value << Format(fQ20);
     data << YAML::Key << "xgrid"   << YAML::Value;

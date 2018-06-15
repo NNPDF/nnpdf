@@ -1,5 +1,6 @@
 // exportgrid.h
 // Definition of initial scale export PDF grid
+#include <yaml-cpp/yaml.h>
 #include <NNPDF/pdfset.h>
 #include <vector>
 #include <array>
@@ -18,7 +19,8 @@ class ExportGrid
                    const double Q0);         // The scale at which to export
 
         // Read an ExportGrid from file
-        //ExportGrid(std::string const&);
+        ExportGrid(std::string filename);
+        ExportGrid(YAML::Node input);
 
         // Print exportgrid to file
         void Print(const std::string filename);
