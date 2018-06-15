@@ -24,6 +24,8 @@ class ExportGrid
         void Print(const std::string filename);
 
     private:
+        static std::string Format(double in);
+
         const int    fRep;
         const double fQ20;
         const vector<double> fXgrid;
