@@ -339,7 +339,7 @@ int main(int argc, char **argv)
       std::stringstream grid_buffer;
       std::string gridfile = settings.GetResultsDirectory()
                            + "/nnfit/replica_" + std::to_string(replica) + "/"
-                           + settings.GetPDFName() +"gridvalues";
+                           + settings.GetPDFName() +".exportgrid";
       ExportGrid(*fitset, 0, replica, fitset->GetQ20()).Print(gridfile);
 
       // Export metadata
