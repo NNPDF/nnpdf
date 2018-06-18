@@ -81,9 +81,9 @@ vector< vector<double> > generate_q2subgrids( const int nq2,
 
 int main(int argc, char **argv)
 {
-    if (argc !=2 )
+    if (argc < 3 )
     {
-        const std::string usage = "\nusage: " + string(argv[0]) + " [fit directory]\n";
+        const std::string usage = "\nusage: " + string(argv[0]) + " [fit directory] [replica directories]\n";
         cerr << Colour::FG_RED << usage << Colour::FG_DEFAULT << endl;
         exit(EXIT_FAILURE);
     }
@@ -92,19 +92,68 @@ int main(int argc, char **argv)
     NNPDFSettings settings(argv[1]);
     const map<string,string> theory = settings.GetTheoryMap();
 
-    // Read ExportGrids
-
-    // Initialize APFEL
-    APFEL::SetParam(theory);
-    APFEL::InitializeAPFEL();
-
+    // Scale settings
     const int nq2 = 50;
     const double q2min = pow(atof(theory.at("Q0").c_str()),2);
     const double q2max = 1E5*1E5;
+
+    // Read ExportGrids
+    std::vector<ExportGrid> initialscale_grids;
+    for (int igrid=2; igrid < argc; igrid++)
+    {
+        const std::string path = std::string(argv[igrid]) + "/"+settings.GetPDFName()+".exportgrid";
+        initialscale_grids.emplace_back(path);
+    }
+
+    // Check here that all grids are the same
+    auto xg = initialscale_grids[0].GetXGrid();
+    std::cout << "Initialising evolution with " + std::to_string(xg.size()) + " x-points" <<std::endl;
+
+    // Initialize APFEL
+    APFEL::SetParam(theory);
+
+    // Fetch initial-scale x-grid
+    APFEL::SetNumberOfGrids(1);
+    APFEL::SetExternalGrid(1, xg.size()-1, 3, xg.data());
+
+    // General settings
+    APFEL::SetQLimits(sqrt(q2min), sqrt(q2max));
+    APFEL::SetFastEvolution(false);
+    APFEL::EnableEvolutionOperator(true);
+
+    APFEL::InitializeAPFEL();
+
     const vector<vector<double>> q2subgrids = generate_q2subgrids(nq2, q2min, q2max);
     for ( auto subgrid: q2subgrids)
-        for ( auto qval: subgrid)
-            std::cout << std::sqrt(qval) << std::endl;
+        for ( auto q2val: subgrid)
+        {
+
+            const double qi = sqrt(q2min);
+            const double qt = sqrt(q2val);
+            std::cout << qi << "  "<<qt<<std::endl;
+            std::cout << "-------------------------"<<std::endl;
+
+            if ( fabs(qi - qt ) < 1E-5 )
+                APFEL::EvolveAPFEL(qi,qi);
+            else
+                APFEL::EvolveAPFEL(qi,qt);
+
+            // Convolute intial scale PDFs with the evolution operator and
+            // compare with the evolved PDFs taked directly from the LHAPDF set.
+            cout << std::scientific;
+            for(int i = -6; i <= 6; i++)
+                for(int alpha = 0; alpha < xg.size(); alpha++)
+                {
+                    double f = 0;
+                    // Try playing around with loop order
+                    for(int j = -6; j <= 6; j++)
+                        for(int beta = alpha; beta < xg.size(); beta++)
+                            f += APFEL::ExternalEvolutionMatrixPh2Ph(i, j, alpha, beta)
+                              * initialscale_grids[0].GetPDF(beta, j+6);
+
+                    cout << i << "\t" << alpha << "\t" << f << "\t" << endl;
+                }
+        }
 
     return 0;
 }

@@ -18,7 +18,6 @@
 #include <NNPDF/parametrisation.h>
 #include <NNPDF/timer.h>
 #include <NNPDF/chisquared.h>
-#include <NNPDF/evolution.h>
 
 #include "exportgrid.h"
 #include "loadutils.h"

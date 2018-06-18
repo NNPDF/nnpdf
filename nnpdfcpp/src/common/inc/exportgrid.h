@@ -25,6 +25,12 @@ class ExportGrid
         // Print exportgrid to file
         void Print(const std::string filename);
 
+        // Return the initial-scale x-grid
+        vector<double> GetXGrid() const {return fXgrid;};
+
+        // Return the initial-scale x-grid
+        real GetPDF(int ix, int ifl) const {return fPDFgrid[ix][ifl];};
+
     private:
         static std::string Format(double in);
 

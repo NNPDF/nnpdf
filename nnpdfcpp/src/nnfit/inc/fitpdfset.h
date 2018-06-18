@@ -12,7 +12,6 @@
 
 #include "common.h"
 #include "fitbases.h"
-#include <NNPDF/evolution.h>
 #include <NNPDF/pdfset.h>
 #include <NNPDF/parametrisation.h>
 #include <nnpdfsettings.h>

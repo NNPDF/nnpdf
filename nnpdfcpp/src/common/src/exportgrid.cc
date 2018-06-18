@@ -109,7 +109,9 @@ ExportGrid::ExportGrid(PDFSet const& pdf,
 
 ExportGrid::ExportGrid(string filename):
     ExportGrid(YAML::LoadFile(filename))
-{}
+{
+    std::cout << "Read ExportGrid from: " +filename <<std::endl;
+}
 
 ExportGrid::ExportGrid(YAML::Node input):
     fRep(input["replica"].as<int>()),
