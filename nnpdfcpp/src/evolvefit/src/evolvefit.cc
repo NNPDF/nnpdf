@@ -6,6 +6,8 @@
 //          Stefano Carrazza, stefano.carrazza@mi.infn.it
 
 #include "common.h"
+#include "exportgrid.h"
+
 #include <nnpdfsettings.h>
 #include <NNPDF/nnpdfdb.h>
 #include <NNPDF/lhapdfset.h>
@@ -18,25 +20,95 @@ using std::endl;
 using std::cerr;
 using namespace NNPDF;
 
+
+// Generates a list of nq2 Q2 points between q2min and q2max.
+// Distributed as linear in tau = log( log( Q2 / lambda2 ) )
+vector<double> generate_q2grid( const int nq2,
+        const double q2min,
+        const double q2max,
+        const double lambda2)
+{
+    vector<double> q2grid;
+    const double tau_min   = log( log( q2min / lambda2 ));
+    const double tau_max   = log( log( q2max / lambda2 ));
+    const double delta_tau = (tau_max - tau_min) /( (double) nq2 - 1);
+
+    for (int iq2 = 0; iq2 < nq2; iq2++)
+        q2grid.push_back(lambda2 * exp(exp( tau_min + iq2*delta_tau)));
+    return q2grid;
+}
+
+// Compute Q2 grid
+// This is suitable for PDFs not AlphaS (see maxNF used below)
+vector< vector<double> > generate_q2subgrids( const int nq2,
+        const double q2min, const double q2max)
+{
+    const double eps     = 1E-4;
+    const double lambda2 = 0.0625e0;
+    const int nfpdf = APFEL::GetMaxFlavourPDFs();
+
+    const std::array<double, 3> hqth = {{
+        pow(APFEL::GetThreshold(4),2),
+        pow(APFEL::GetThreshold(5),2),
+        pow(APFEL::GetThreshold(6),2),
+    }};
+
+    // Determine subgrid edges
+    vector<double> subgrid_edges={q2min};
+    for (int i=0; i<(nfpdf-3); i++)
+        if (hqth[i] > q2min) subgrid_edges.push_back(hqth[i]);
+    subgrid_edges.push_back(q2max);
+
+    // Determine point distribution across subgrids and generate subgrids
+    const std::vector<double> point_dist = generate_q2grid(nq2, q2min, q2max, lambda2);
+    std::vector<vector<double>> q2grid_subgrids;
+    for (size_t i=0; i<subgrid_edges.size()-1; i++)
+    {
+        const double min_edge = subgrid_edges[i];
+        const double max_edge = subgrid_edges[i+1];
+        auto in_sub = [=](double q2pt){return (q2pt - min_edge) > -eps && (q2pt - max_edge) < eps;};
+        const int npoints_sub = std::count_if(point_dist.begin(), point_dist.end(), in_sub);
+
+        if (npoints_sub < 2)
+            throw std::runtime_error("Too few points to sufficiently populate subgrids. More Q points required");
+
+        const vector< double > subgrid = generate_q2grid(npoints_sub, min_edge, max_edge, lambda2);
+        q2grid_subgrids.push_back(subgrid);
+    }
+
+    return q2grid_subgrids;
+}
+
 int main(int argc, char **argv)
 {
-  if (argc !=2 )
+    if (argc !=2 )
     {
         const std::string usage = "\nusage: " + string(argv[0]) + " [fit directory]\n";
         cerr << Colour::FG_RED << usage << Colour::FG_DEFAULT << endl;
         exit(EXIT_FAILURE);
     }
 
-  // Load settings from config file
-  NNPDFSettings settings(argv[1]);
-  const map<string,string> theory = settings.GetTheoryMap();
+    // Load settings from config file
+    NNPDFSettings settings(argv[1]);
+    const map<string,string> theory = settings.GetTheoryMap();
 
-  // Initialize APFEL
-  APFEL::SetParam(theory);
-  APFEL::InitializeAPFEL();
+    // Read ExportGrids
 
-  return 0;
+    // Initialize APFEL
+    APFEL::SetParam(theory);
+    APFEL::InitializeAPFEL();
+
+    const int nq2 = 50;
+    const double q2min = pow(atof(theory.at("Q0").c_str()),2);
+    const double q2max = 1E5*1E5;
+    const vector<vector<double>> q2subgrids = generate_q2subgrids(nq2, q2min, q2max);
+    for ( auto subgrid: q2subgrids)
+        for ( auto qval: subgrid)
+            std::cout << std::sqrt(qval) << std::endl;
+
+    return 0;
 }
+
 
 ///**
 // * @brief LHGrid output
