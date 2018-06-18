@@ -49,6 +49,9 @@ Right now the following features are implemented:
  - Report generation from templates.
  - Automatic downloading of PDFs, fits and theories.
  - Automatic uploading of reports and other outputs.
+ - Standalone executables implementing functionality such as `postfit` or
+   uploading and downloading resources.
+
 
 These features are documented in more detail in [Usage].
 
