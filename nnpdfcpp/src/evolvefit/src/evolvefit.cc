@@ -123,6 +123,7 @@ int main(int argc, char **argv)
 
     APFEL::InitializeAPFEL();
 
+    cout << std::scientific;
     const vector<vector<double>> q2subgrids = generate_q2subgrids(nq2, q2min, q2max);
     for ( auto subgrid: q2subgrids)
         for ( auto q2val: subgrid)
@@ -140,7 +141,7 @@ int main(int argc, char **argv)
 
             // Convolute intial scale PDFs with the evolution operator and
             // compare with the evolved PDFs taked directly from the LHAPDF set.
-            cout << std::scientific;
+            for (int stress = 0; stress < 100; stress++)
             for(int i = -6; i <= 6; i++)
                 for(int alpha = 0; alpha < xg.size(); alpha++)
                 {
@@ -151,7 +152,7 @@ int main(int argc, char **argv)
                             f += APFEL::ExternalEvolutionMatrixPh2Ph(i, j, alpha, beta)
                               * initialscale_grids[0].GetPDF(beta, j+6);
 
-                    cout << i << "\t" << alpha << "\t" << f << "\t" << endl;
+    //                cout << i << "\t" << alpha << "\t" << f << "\t" << endl;
                 }
         }
 

@@ -1,4 +1,6 @@
 #include <iomanip>
+#include <algorithm>
+
 #include <array>
 
 
@@ -132,7 +134,7 @@ std::string ExportGrid::Format(double in)
     return cvrt.str();
 }
 
-void ExportGrid::Print(const std::string filename)
+void ExportGrid::Write(const std::string filename)
 {
     YAML::Emitter data;
     data.SetOutputCharset(YAML::EscapeNonAscii);

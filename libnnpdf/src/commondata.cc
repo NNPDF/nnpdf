@@ -35,7 +35,6 @@ namespace NNPDF
     { "JET",        {"$\\eta$","$p_T^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
     { "PHT",        {"$\\eta_\\gamma$","$E_{T,\\gamma}^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
     { "INC",        {"$0$","$\\mu^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
-    { "PDF",        {"x","$Q^2 (GeV^2)$","flavour (PID)$"}},
     { "EWK_RAP",    {"$\\eta/y$","$M^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
     { "EWK_PT",     {"$p_T$ (GeV)","$M^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
     { "EWK_PTRAP",  {"$\\eta/y$","$p_T^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},

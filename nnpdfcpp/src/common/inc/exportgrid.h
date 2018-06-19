@@ -23,7 +23,7 @@ class ExportGrid
         ExportGrid(YAML::Node input);
 
         // Print exportgrid to file
-        void Print(const std::string filename);
+        void Write(const std::string filename);
 
         // Return the initial-scale x-grid
         vector<double> GetXGrid() const {return fXgrid;};
