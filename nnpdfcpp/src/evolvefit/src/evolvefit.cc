@@ -81,15 +81,19 @@ vector< vector<double> > generate_q2subgrids( const int nq2,
 
 int main(int argc, char **argv)
 {
-    if (argc < 3 )
+    if (argc != 3 )
     {
-        const std::string usage = "\nusage: " + string(argv[0]) + " [fit directory] [replica directories]\n";
+        const std::string usage = "\nusage: " + string(argv[0]) + " [fit directory] [nreplicas]\n";
         cerr << Colour::FG_RED << usage << Colour::FG_DEFAULT << endl;
         exit(EXIT_FAILURE);
     }
 
+    const std::string fit_path = argv[1];
+    const int nrep = atoi(argv[2]);
+
+
     // Load settings from config file
-    NNPDFSettings settings(argv[1]);
+    NNPDFSettings settings(fit_path);
     const map<string,string> theory = settings.GetTheoryMap();
 
     // Scale settings
@@ -99,9 +103,11 @@ int main(int argc, char **argv)
 
     // Read ExportGrids
     std::vector<ExportGrid> initialscale_grids;
-    for (int igrid=2; igrid < argc; igrid++)
+    for (int i=1; i<= nrep; i++)
     {
-        const std::string path = std::string(argv[igrid]) + "/"+settings.GetPDFName()+".exportgrid";
+        const std::string path = fit_path + "/postfit/replica_"
+                               + std::to_string(i) + "/"
+                               + settings.GetPDFName() +".exportgrid";
         initialscale_grids.emplace_back(path);
     }
 
@@ -141,7 +147,7 @@ int main(int argc, char **argv)
 
             // Convolute intial scale PDFs with the evolution operator and
             // compare with the evolved PDFs taked directly from the LHAPDF set.
-            for (int stress = 0; stress < 100; stress++)
+            for (auto grid : initialscale_grids)
             for(int i = -6; i <= 6; i++)
                 for(int alpha = 0; alpha < xg.size(); alpha++)
                 {
@@ -150,7 +156,7 @@ int main(int argc, char **argv)
                     for(int j = -6; j <= 6; j++)
                         for(int beta = alpha; beta < xg.size(); beta++)
                             f += APFEL::ExternalEvolutionMatrixPh2Ph(i, j, alpha, beta)
-                              * initialscale_grids[0].GetPDF(beta, j+6);
+                              * grid.GetPDF(beta, j+6);
 
     //                cout << i << "\t" << alpha << "\t" << f << "\t" << endl;
                 }

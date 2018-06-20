@@ -29,7 +29,7 @@ class ExportGrid
         vector<double> GetXGrid() const {return fXgrid;};
 
         // Return the initial-scale x-grid
-        real GetPDF(int ix, int ifl) const {return fPDFgrid[ix][ifl];};
+        double GetPDF(int ix, int ifl) const {return fPDFgrid[ix][ifl];};
 
     private:
         static std::string Format(double in);
@@ -38,5 +38,5 @@ class ExportGrid
         const double fQ20;
         const vector<double> fXgrid;
         const array<std::string,14> fLabels;
-        vector<array<real,14>> fPDFgrid;
+        vector<array<double,14>> fPDFgrid;
 };

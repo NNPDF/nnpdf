@@ -5,7 +5,7 @@
 
 
 #include <NNPDF/utils.h>
-#include <NNPDF/utils.h>
+#include <NNPDF/exceptions.h>
 
 #include "exportgrid.h"
 
@@ -105,7 +105,12 @@ ExportGrid::ExportGrid(PDFSet const& pdf,
         array<real,14> lha{};
         pdf.GetPDF(x, fQ20, imem, evl.data());
         PDFSet::EVLN2LHA(evl.data(), lha.data());
-        fPDFgrid.push_back(lha);
+
+        // Cast to double for export
+        array<double,14> lha_double{};
+        std::copy(lha.begin(), lha.end(), lha_double.begin());
+
+        fPDFgrid.push_back(lha_double);
     }
 }
 
@@ -123,7 +128,9 @@ ExportGrid::ExportGrid(YAML::Node input):
     fPDFgrid()
 {
     for (auto xfx : input["pdfgrid"])
-        fPDFgrid.push_back(xfx.as<array<real,14>>());
+        fPDFgrid.push_back(xfx.as<array<double,14>>());
+    if (fPDFgrid.size() != fXgrid.size())
+        throw RuntimeException("ExportGrid::ExportGrid", "Mismatch in x-grid and number of PDFgrid entries");
 }
 
 // Because yaml-cpp doesn't like scientific notation
