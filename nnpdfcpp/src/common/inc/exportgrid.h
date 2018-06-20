@@ -31,6 +31,9 @@ class ExportGrid
         // Return the initial-scale x-grid
         double GetPDF(int ix, int ifl) const {return fPDFgrid[ix][ifl];};
 
+        // Get the replica ID
+        int GetReplica() const {return fRep;};
+
     private:
         static std::string Format(double in);
 

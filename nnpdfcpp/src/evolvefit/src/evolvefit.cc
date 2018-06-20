@@ -15,6 +15,9 @@
 #include <APFEL/APFELdev.h>
 #include <APFEL/APFEL.h>
 
+#include <limits>
+#include <iostream>
+
 using std::cout;
 using std::endl;
 using std::cerr;
@@ -129,14 +132,62 @@ int main(int argc, char **argv)
 
     APFEL::InitializeAPFEL();
 
-    cout << std::scientific;
+    // Setup stringstreams for LHgrid writing
+    std::vector<std::ofstream> replica_files(nrep);
+    for ( size_t i=0; i< initialscale_grids.size(); i++)
+    {
+        std::stringstream path;
+        path << fit_path << "/postfit/"
+             << settings.GetPDFName() << "/"
+             << settings.GetPDFName() << "_"
+             << std::setfill('0') << std::setw(4)
+             << i+1
+             << ".dat";
+        std::cout << path.str() <<std::endl;
+        replica_files[i].open(path.str());
+        replica_files[i] << std::scientific << std::setprecision(7)
+                         << "PdfType: replica\nFormat: lhagrid1\nFromMCReplica: "
+                         << initialscale_grids[i].GetReplica() << "\n---" << std::endl;
+    }
+
     const vector<vector<double>> q2subgrids = generate_q2subgrids(nq2, q2min, q2max);
     for ( auto subgrid: q2subgrids)
-        for ( auto q2val: subgrid)
+    {
+        // Metadata
+        for (auto& outstream : replica_files)
         {
+            // Print out x-grid
+            for ( auto x : xg )
+                outstream << x << " ";
+            outstream << std::endl;
 
+            // Print out q2-grid
+            for ( auto q2val : subgrid )
+                outstream << sqrt(q2val) << " ";
+            outstream << std::endl;
+
+            // Print out final-state PIDs
+            // Currently prints out all flavours
+            const array<int, 14> pids = {-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22};
+            for ( auto fl : pids )
+                outstream << fl << " ";
+            outstream << std::endl;
+        }
+
+        // Compute Evolution for all replicas
+        // Ordered evolved_pdfs[irep][x][q][fl]
+        // This is a big array
+        //double snan = std::numeric_limits<double>::signaling_NaN();
+        const int evol_pdfs_size = nrep*xg.size()*subgrid.size()*14;
+        double* evol_pdfs = new double[evol_pdfs_size]();
+        for (int i=0; i<evol_pdfs_size; i++)
+            evol_pdfs[i] = std::numeric_limits<double>::signaling_NaN();
+
+        for ( size_t iq = 0; iq < subgrid.size(); iq++ )
+        {
             const double qi = sqrt(q2min);
-            const double qt = sqrt(q2val);
+            const double qt = sqrt(subgrid[iq]);
+
             std::cout << qi << "  "<<qt<<std::endl;
             std::cout << "-------------------------"<<std::endl;
 
@@ -147,20 +198,47 @@ int main(int argc, char **argv)
 
             // Convolute intial scale PDFs with the evolution operator and
             // compare with the evolved PDFs taked directly from the LHAPDF set.
-            for (auto grid : initialscale_grids)
-            for(int i = -6; i <= 6; i++)
+            for (size_t rep = 0; rep < initialscale_grids.size(); rep++)
                 for(int alpha = 0; alpha < xg.size(); alpha++)
+                    for(int i = 0; i < 14; i++)
                 {
-                    double f = 0;
-                    // Try playing around with loop order
-                    for(int j = -6; j <= 6; j++)
+                    const ExportGrid& grid = initialscale_grids[rep];
+                    const int index = i + 14*alpha + 14*xg.size()*rep + 14*xg.size()*nrep*iq;
+                    double* f = evol_pdfs + index;
+                    *f = 0;
+                    for(int j = 0; j < 14; j++)
                         for(int beta = alpha; beta < xg.size(); beta++)
-                            f += APFEL::ExternalEvolutionMatrixPh2Ph(i, j, alpha, beta)
-                              * grid.GetPDF(beta, j+6);
-
-    //                cout << i << "\t" << alpha << "\t" << f << "\t" << endl;
+                            *f += APFEL::ExternalEvolutionMatrixPh2Ph(i-6, j-6, alpha, beta)
+                               * grid.GetPDF(beta, j);
                 }
+
         }
+
+        // Write to file
+        for (size_t rep = 0; rep < initialscale_grids.size(); rep++)
+        {
+            auto& outstream = replica_files[rep];
+            for(int alpha = 0; alpha < xg.size(); alpha++)
+            for(size_t iq = 0; iq < subgrid.size(); iq++ )
+            {
+                outstream << " ";
+                const int index = 14*alpha + 14*xg.size()*rep + 14*xg.size()*nrep*iq;
+                for (int i=0; i<14; i++)
+                    outstream << std::setw(14) << evol_pdfs[index + i];
+                outstream <<std::endl;
+            }
+        }
+
+        delete[] evol_pdfs;
+
+        // Terminate each subgrid
+        for (auto& outstream : replica_files)
+            outstream << "---" << std::endl;
+    }
+
+    // Terminate each subgrid
+    for (auto& outstream : replica_files)
+        outstream.close();
 
     return 0;
 }
@@ -175,11 +253,6 @@ int main(int argc, char **argv)
 //void FitPDFSet::ExportPDF( int const& rep, vector<EvolutionSubGrid> const& subgrid_list)
 //{
 //  cout << Colour::FG_BLUE <<"- Writing out LHAPDF grid: "<< fSettings.GetPDFName() << Colour::FG_DEFAULT << endl;
-//
-//  // Setup stringstream for LHgrid writing
-//  stringstream lhadata;
-//  lhadata << scientific << setprecision(7);
-//  lhadata << "PdfType: replica\nFormat: lhagrid1\nFromMCReplica: " << rep << "\n---" << std::endl;
 //
 //  for ( EvolutionSubGrid const& subgrid : subgrid_list )
 //  {
