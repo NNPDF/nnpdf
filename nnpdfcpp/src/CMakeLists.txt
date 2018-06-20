@@ -53,6 +53,16 @@ if (COMPILE_evolvefit)
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_evolvefit)
 
+# lha_to_exportgrid
+option(COMPILE_lha_to_exportgrid "Compile lha_to_exportgrid program." ON)
+if (COMPILE_lha_to_exportgrid)
+  add_executable(lha_to_exportgrid evolvefit/src/lha_to_exportgrid.cc)
+  target_link_libraries(lha_to_exportgrid common nnpdf ${LHAPDF_LIBRARIES} ${APFEL_LIBRARIES} ${YAML_LDFLAGS} ${GSL_LDFLAGS})
+  install(TARGETS lha_to_exportgrid DESTINATION bin
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+endif(COMPILE_lha_to_exportgrid)
+
+
 # ROOT
 #find_program(ROOT_CONFIG root-config)
 #if (ROOT_CONFIG)
