@@ -107,8 +107,8 @@ class SetupFitApp(App):
 
     def run(self):
         try:
+            # set folder output name
             self.environment.config_yml = pathlib.Path(self.args['config_yml']).absolute()
-            self.environment.init_output()
 
             # proceed with default run
             super().run()
