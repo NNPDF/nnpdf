@@ -174,14 +174,13 @@ int main(int argc, char **argv)
             outstream << std::endl;
         }
 
-        // Compute Evolution for all replicas
-        // Ordered evolved_pdfs[irep][x][q][fl]
+        // Compute Evolution Operators
+        // Ordered evol_op[q][ox][ofl][ix][ifl]
         // This is a big array
-        //double snan = std::numeric_limits<double>::signaling_NaN();
-        const int evol_pdfs_size = nrep*xg.size()*subgrid.size()*14;
-        double* evol_pdfs = new double[evol_pdfs_size]();
-        for (int i=0; i<evol_pdfs_size; i++)
-            evol_pdfs[i] = std::numeric_limits<double>::signaling_NaN();
+        const int evol_op_size = subgrid.size()*xg.size()*xg.size()*14*14;
+        double* evol_op = new double[evol_op_size]();
+        for (int i=0; i<evol_op_size; i++)
+            evol_op[i] = std::numeric_limits<double>::signaling_NaN();
 
         for ( size_t iq = 0; iq < subgrid.size(); iq++ )
         {
@@ -196,40 +195,46 @@ int main(int argc, char **argv)
             else
                 APFEL::EvolveAPFEL(qi,qt);
 
-            // Convolute intial scale PDFs with the evolution operator and
-            // compare with the evolved PDFs taked directly from the LHAPDF set.
-            for (size_t rep = 0; rep < initialscale_grids.size(); rep++)
-                for(int alpha = 0; alpha < xg.size(); alpha++)
-                    for(int i = 0; i < 14; i++)
+                for(int ix_out = 0; ix_out < xg.size(); ix_out++)
+                for(int if_out = 0; if_out < 14;        if_out++) // These can be optimised, don't always need 14 flavours
+                for( int if_in = 0; if_in  < 14;        if_in++ )
+                for( int ix_in = 0; ix_in  < xg.size(); ix_in++ ) // This can be optimised, should start from ix_in = ix_out and above
                 {
-                    const ExportGrid& grid = initialscale_grids[rep];
-                    const int index = i + 14*alpha + 14*xg.size()*rep + 14*xg.size()*nrep*iq;
-                    double* f = evol_pdfs + index;
-                    *f = 0;
-                    for(int j = 0; j < 14; j++)
-                        for(int beta = alpha; beta < xg.size(); beta++)
-                            *f += APFEL::ExternalEvolutionMatrixPh2Ph(i-6, j-6, alpha, beta)
-                               * grid.GetPDF(beta, j);
+                    const int index = ix_in + if_in*xg.size() + if_out*xg.size()*14 + ix_out*xg.size()*14*14 + iq*xg.size()*xg.size()*14*14;
+                    evol_op[index] = APFEL::ExternalEvolutionMatrixPh2Ph(if_out-6, if_in-6, ix_out, ix_in);
                 }
-
         }
 
-        // Write to file
+        for (int i=0; i<evol_op_size; i++)
+            if (isnan(evol_op[i])) exit(1);
+
+        // Evolve and write to file
         for (size_t rep = 0; rep < initialscale_grids.size(); rep++)
         {
             auto& outstream = replica_files[rep];
-            for(int alpha = 0; alpha < xg.size(); alpha++)
+            auto& grid      = initialscale_grids[rep];
+            for(int ix_out = 0; ix_out < xg.size(); ix_out++)
             for(size_t iq = 0; iq < subgrid.size(); iq++ )
             {
+                // New line in LHAgrid
                 outstream << " ";
-                const int index = 14*alpha + 14*xg.size()*rep + 14*xg.size()*nrep*iq;
-                for (int i=0; i<14; i++)
-                    outstream << std::setw(14) << evol_pdfs[index + i];
+                for(int if_out=0; if_out<14; if_out++)
+                {
+                    double evolved_pdf = 0;
+                    for(int if_in = 0; if_in < 14; if_in++)
+                    for(int ix_in = 0; ix_in < xg.size(); ix_in++) // ix_in = ix_out
+                    {
+                        const int index = ix_in + if_in*xg.size() + if_out*xg.size()*14 + ix_out*xg.size()*14*14 + iq*xg.size()*xg.size()*14*14;
+                        evolved_pdf += evol_op[index] * grid.GetPDF(ix_in, if_in);
+                    }
+                    outstream << std::setw(14) << evolved_pdf;
+                }
+                // End of LHAgrid line
                 outstream <<std::endl;
             }
         }
 
-        delete[] evol_pdfs;
+        delete[] evol_op;
 
         // Terminate each subgrid
         for (auto& outstream : replica_files)
