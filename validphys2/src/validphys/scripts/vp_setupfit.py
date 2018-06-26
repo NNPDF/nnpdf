@@ -86,7 +86,7 @@ class SetupFitConfig(Config):
         try:
             file_content = yaml.round_trip_load(o)
             file_content['use_cuts'] = False
-            file_content['actions_'] = ['report(main=true)']
+            file_content['actions_'] = ['filter']
         except yaml.error.YAMLError as e:
             raise ConfigError(f"Failed to parse yaml file: {e}")
         return cls(file_content, *args, ** kwargs)
@@ -99,7 +99,7 @@ class SetupFitApp(App):
 
     def __init__(self):
         super(SetupFitApp, self).__init__(name='setup-fit',
-                                          providers=['validphys.plots'])
+                                          providers=['validphys.filters'])
 
     @property
     def default_style(self):
