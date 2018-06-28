@@ -6,25 +6,25 @@ config_path: '@PROFILE_PREFIX@/config/'
 
 # Remote resource locations
 fit_urls:
-    - 'http://pcteserver.mi.infn.it/~nnpdf/fits/'
+    - 'https://data.nnpdf.science/fits/'
     - 'https://nnpdf.web.cern.ch/nnpdf/fits/'
 
 fit_index: 'fitdata.json'
 
 theory_urls:
-    - 'https://nnpdf.web.cern.ch/nnpdf/tables/'
+    - 'https://data.nnpdf.science/tables/'
 
 theory_index: 'theorydata.json'
 
 lhapdf_urls:
     - 'https://www.hepforge.org/archive/lhapdf/pdfsets/6.1/'
 nnpdf_pdfs_urls:
-    - 'http://pcteserver.mi.infn.it/~nnpdf/pdfs/'
+    - 'https://data.nnpdf.science/pdfs/'
 nnpdf_pdfs_index: 'pdfdata.json'
 
 #Server side uploading locations
-upload_host: 'nnpdf@pcteserver.mi.infn.it'
+upload_host: 'nnpdf@vp.nnpdf.science'
 reports_target_dir: "WEB/validphys-reports/"
-reports_root_url: 'http://pcteserver.mi.infn.it/~nnpdf/validphys-reports/'
+reports_root_url: 'https://vp.nnpdf.science/'
 fits_target_dir: "WEB/fits/"
-fits_root_url: 'http://pcteserver.mi.infn.it/~nnpdf/fits/'
+fits_root_url: 'https://data.nnpdf.science/fits/'
