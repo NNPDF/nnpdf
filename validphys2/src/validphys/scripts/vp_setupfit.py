@@ -94,6 +94,8 @@ class SetupFitConfig(Config):
             file_content['use_cuts'] = False
             file_content['t0pdfset'] = {'from_': 'datacuts'}
             file_content['combocuts'] = {'from_': 'datacuts'}
+            file_content['q2min'] = {'from_': 'datacuts'}
+            file_content['w2min'] = {'from_': 'datacuts'}
             file_content['actions_'] = ['filter']
         except yaml.error.YAMLError as e:
             raise ConfigError(f"Failed to parse yaml file: {e}")
