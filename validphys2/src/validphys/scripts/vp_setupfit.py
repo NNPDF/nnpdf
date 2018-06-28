@@ -78,14 +78,22 @@ class SetupFitEnvironment(Environment):
             g.write(hash_md5)
         log.info(f"md5 {hash_md5} stored in {output_filename}")
 
+    @classmethod
+    def ns_dump_description(cls):
+        return {'filter_path': "The filter output folder",
+                **super().ns_dump_description()}
+
 
 class SetupFitConfig(Config):
     """Specialization for yaml parsing"""
     @classmethod
     def from_yaml(cls, o, *args, **kwargs):
         try:
-            file_content = yaml.round_trip_load(o)
+            file_content = yaml.safe_load(o)
+            file_content['theoryid'] = {'from_': 'theory'}
             file_content['use_cuts'] = False
+            file_content['t0pdfset'] = {'from_': 'datacuts'}
+            file_content['combocuts'] = {'from_': 'datacuts'}
             file_content['actions_'] = ['filter']
         except yaml.error.YAMLError as e:
             raise ConfigError(f"Failed to parse yaml file: {e}")
