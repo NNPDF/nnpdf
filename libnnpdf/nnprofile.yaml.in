@@ -12,7 +12,7 @@ fit_urls:
 fit_index: 'fitdata.json'
 
 theory_urls:
-    - 'https://data.nnpdf.science/tables/'
+    - 'http://nnpdf.web.cern.ch/nnpdf/tables/'
 
 theory_index: 'theorydata.json'
 
