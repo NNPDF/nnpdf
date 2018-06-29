@@ -4,8 +4,9 @@ Filters for NNPDF fits
 """
 
 import logging
+import numbers
 import numpy as np
-from reportengine.checks import make_argcheck, check
+from reportengine.checks import make_argcheck, check, check_positive
 from NNPDF import DataSet
 
 log = logging.getLogger(__name__)
@@ -32,7 +33,11 @@ def export_mask(path, mask):
 
 
 @check_combocuts
-def filter(experiments, theoryid, filter_path, q2min, w2min, combocuts, t0set=None):
+@check_positive('q2min')
+@check_positive('w2min')
+def filter(experiments, theoryid, filter_path,
+           q2min:numbers.Real, w2min:numbers.Real,
+           posdatasets, combocuts, t0set=None):
     """Apply filters to all datasets"""
     pto = theoryid.get_description().get('PTO')
     vfns = theoryid.get_description().get('FNS')
@@ -61,16 +66,16 @@ def filter(experiments, theoryid, filter_path, q2min, w2min, combocuts, t0set=No
             # save to disk
             if len(datamask) != ds.GetNData():
                 export_mask(path / ('FKMASK_%s.dat' % dataset.name), datamask)
-                ## in principle one should do:
-                # dataset.cuts = datamask
-                # ds = dataset.load()
-                ## however the lru cache ignores the self.cuts change
-                ## thus this is the quick solution:
                 ds = DataSet(ds, datamask)
 
             ds.Export(str(path))
 
     log.info('TOTAL: %d/%d datapoints passed kinematic cuts.' % (total_cut_data_points, total_data_points))
+
+    log.info('Verifying positivity tables:')
+    for pos in posdatasets:
+        pos.load()
+        log.info('%s checked.' % pos)
 
 
 def pass_kincuts(set, idat, pto, q2min, w2min, vfns, ic):
