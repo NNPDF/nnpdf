@@ -17,7 +17,7 @@ import ruamel_yaml as yaml
 from bs4 import BeautifulSoup
 
 ROOT = '/home/nnpdf/WEB/validphys-reports'
-ROOT_URL = 'http://pcteserver.mi.infn.it/~nnpdf/validphys-reports/'
+ROOT_URL = 'https://vp.nnpdf.science/'
 OUT = '/home/nnpdf/WEB/validphys-reports/index.json'
 
 EMPTY = '-'
