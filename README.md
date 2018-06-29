@@ -51,7 +51,7 @@ These paths can be changed by tweaking `nnprofile.yaml` as described in [NNPDF
 paths and URLs](#nnpdf-paths-and-urls).
 
 Detailed conda installation instructions can be found in the [validphy2 guide](
-http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html).
+https://data.nnpdf.science/validphys-docs/guide.html).
 
 ### From source
 
@@ -59,7 +59,7 @@ If you intend to work on the code, then building from source is the
 recommended installation procedure. However, you can still use conda
 to get all the dependecies and setup the validphys and C++ development
 environment. Further information is available in the
-[vp-guide](http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html#development-installs)
+[vp-guide](https://data.nnpdf.science/validphys-docs/guide.html#development-installs)
 
 For precise version requirements, see 
 [the conda specification](https://github.com/NNPDF/nnpdf/blob/master/conda-recipe/meta.yaml).
@@ -122,7 +122,7 @@ applying post selection criteria. This will produce a set of
 6. Upload the results using `vp-upload --fit <runcard_folder>` then
 install the fitted set with `vp-get fit <fit_name>`.
 
-7. Analyze results with `validphys`, see the [vp-guide](http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html#development-installs).
+7. Analyze results with `validphys`, see the [vp-guide](https://data.nnpdf.science/validphys-docs/guide.html#development-installs).
 
 ## NNPDF paths and URLS
 

@@ -1711,10 +1711,10 @@ Uploading the result
 
 ### Uploading to the server
 
-When the `--upload` flag is set, the contents of the output folder will be
-uploaded to the pcteserver, after validphys is done. An authorized ssh
-key and the `rsync` program are required to use this feature.
-A URL will be displayed from which the contents are
+When the `--upload` flag is set, the contents of the output folder
+will be uploaded to the NNPDF data server, after validphys is done. An
+authorized ssh key and the `rsync` program are required to use this
+feature.  A URL will be displayed from which the contents are
 accessible (currently password protected).
 
 Alternatively, there is the command `vp-upload <output-folder>`, which
