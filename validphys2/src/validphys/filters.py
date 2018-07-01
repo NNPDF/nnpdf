@@ -29,8 +29,8 @@ def check_rngalgo(rngalgo: int):
 @make_argcheck
 def check_rancutmethod(rancutmethod: int):
     """Check rancutmethod content"""
-    check(1 <= rancutmethod <= 3,
-          "Invalid rancutmethod. Must be int between [1, 3].")
+    check(0 <= rancutmethod <= 3,
+          "Invalid rancutmethod. Must be int between [0, 3].")
 
 
 def check_positive_int(var):
