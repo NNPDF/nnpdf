@@ -13,7 +13,11 @@ import pandas as pd
 
 log = logging.getLogger(__name__)
 
-sane_load = functools.partial(pd.DataFrame.from_csv, sep='\t')
+#NOTE:Considering the first columns as index by default (the index_col=0)
+#is not particularly sane, but  turns out that it is advantageous for backward
+#compatibility with the older DataFrame.from_csv method, that was employed
+#previously.
+sane_load = functools.partial(pd.read_csv, sep='\t', index_col=0)
 
 class TableLoaderError(Exception):
     """Errors in the tableloader module."""
@@ -39,7 +43,7 @@ load_experiments_invcovmat = parse_exp_mat
 
 def load_perreplica_chi2_table(filename):
     """Load the output of ``perreplica_chi2_table``."""
-    df = sane_load(filename, header=[0,1])
+    df = sane_load(filename, index_col=0 ,header=[0,1])
     fixup_header(df, 1, int)
     return df
 

@@ -116,7 +116,7 @@ class ParamfitsConfig(Config):
         import pandas as pd
         import numpy as np
         try:
-            df = pd.DataFrame.from_csv(pseudorreplicafile, sep='\t',
+            df = pd.read_csv(pseudorreplicafile, sep='\t',
                 index_col=[0,1],header=[0,1])
         except Exception as e:
             raise ConfigError(f"Failed to load the table: {e}") from e
