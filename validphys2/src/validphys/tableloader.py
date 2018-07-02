@@ -103,10 +103,10 @@ def combine_pseudorreplica_tables(
 
     total = together.loc[(slice(None), 'Total'), :]
 
-    total_chis =  total.groupby(level=3).sum()
+    total_chis =  total.groupby(level=3).sum(min_count=1)
 
     def fixup_min_points(df):
-        m = (~df.isnull()).sum(axis=1)>=min_points_required
+        m = (~df.isnull()).sum(axis=1, min_count=1)>=min_points_required
         df[df[m].isnull()] = np.inf
         return df
 

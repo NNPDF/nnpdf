@@ -106,7 +106,7 @@ def _discard_sparse_curves(fits_replica_data_correlated,
         x.columns = x.columns.droplevel(0)
         return (x['chi2'])
     table = df.groupby(axis=1, level=0).apply(ap)
-    filt = table.isnull().sum(axis=1) < max_ndiscarded
+    filt = table.isnull().sum(axis=1, min_count=1) < max_ndiscarded
 
     table = table[filt]
     return table, filt
@@ -158,7 +158,7 @@ def discarded_mask(
         for i in range(len(ndiscarded),0,-1):
 
             tablefilt_total, auto_filt = _discard_sparse_curves(df,ndiscarded[i-1])
-            least_points = tablefilt_total.notnull().sum(axis=1).min()
+            least_points = tablefilt_total.notnull().sum(axis=1, min_count=1).min()
 
             #Number of points that pass the cuts
             size = np.sum(auto_filt)
