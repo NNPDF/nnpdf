@@ -38,7 +38,7 @@ theory:
 ############################################################
 fitting:
   seed     : 65532133529      # set the seed for the random generator
-  genrep   : on     # on = generate MC replicas, off = use real data
+  genrep   : true   # true = generate MC replicas, false = use real data
   rngalgo  : 0      # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
   fitmethod: NGA    # Minimization algorithm
   ngen     : 30000  # Maximum number of generations
@@ -57,14 +57,14 @@ fitting:
       # mutsize: mutation size
       # mutprob: mutation probability
       # smallx, largex: preprocessing ranges
-      - { fl: sng, pos: off, mutsize: [15], mutprob: [0.05], smallx: [1.05,1.19], largex: [1.47,2.70] }
-      - { fl: g,   pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.94,1.25], largex: [0.11,5.87] }
-      - { fl: v,   pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.54,0.75], largex: [1.15,2.76] }
-      - { fl: v3,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.21,0.57], largex: [1.35,3.08] }
-      - { fl: v8,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.52,0.76], largex: [0.77,3.56] }
-      - { fl: t3,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [-0.37,1.52], largex: [1.74,3.39] }
-      - { fl: t8,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.56,1.29], largex: [1.45,3.03] }
-      - { fl: cp,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.12,1.19], largex: [1.83,6.70] }
+      - { fl: sng, pos: false, mutsize: [15], mutprob: [0.05], smallx: [1.05,1.19], largex: [1.47,2.70] }
+      - { fl: g,   pos: false, mutsize: [15], mutprob: [0.05], smallx: [0.94,1.25], largex: [0.11,5.87] }
+      - { fl: v,   pos: false, mutsize: [15], mutprob: [0.05], smallx: [0.54,0.75], largex: [1.15,2.76] }
+      - { fl: v3,  pos: false, mutsize: [15], mutprob: [0.05], smallx: [0.21,0.57], largex: [1.35,3.08] }
+      - { fl: v8,  pos: false, mutsize: [15], mutprob: [0.05], smallx: [0.52,0.76], largex: [0.77,3.56] }
+      - { fl: t3,  pos: false, mutsize: [15], mutprob: [0.05], smallx: [-0.37,1.52], largex: [1.74,3.39] }
+      - { fl: t8,  pos: false, mutsize: [15], mutprob: [0.05], smallx: [0.56,1.29], largex: [1.45,3.03] }
+      - { fl: cp,  pos: false, mutsize: [15], mutprob: [0.05], smallx: [0.12,1.19], largex: [1.83,6.70] }
 
 ############################################################
 stopping:
@@ -94,14 +94,14 @@ positivity:
 ############################################################
 closuretest:
   filterseed  : 0   # Random seed to be used in filtering data partitions
-  fakedata    : off # on = to use FAKEPDF to generate pseudo-data
+  fakedata    : false # true = to use FAKEPDF to generate pseudo-data
   fakepdf     : MSTW2008nlo68cl # Theory input for pseudo-data
   errorsize   : 1.0 # uncertainties rescaling
-  fakenoise   : off # on = to add random fluctuations to pseudo-data
+  fakenoise   : false # on = to add random fluctuations to pseudo-data
   rancutprob  : 1.0 # Fraction of data to be included in the fit
   rancutmethod: 0   # Method to select rancutprob data fraction
-  rancuttrnval: off # 0(1) to output training(valiation) chi2 in report
-  printpdf4gen: off # To print info on PDFs during minimization
+  rancuttrnval: false # 0(1) to output training(valiation) chi2 in report
+  printpdf4gen: false # To print info on PDFs during minimization
 
 ############################################################
 lhagrid:
@@ -113,4 +113,4 @@ lhagrid:
   qmax: 1e5
 
 ############################################################
-debug: off
+debug: false
