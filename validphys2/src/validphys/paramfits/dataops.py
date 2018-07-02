@@ -203,7 +203,7 @@ def _parabolic_as_minimum_and_coefficient(fits_as,
     Returns the minimum and the set of locations."""
     alphas = fits_as
 
-    table = fits_replica_data_with_discarded_replicas.as_matrix()
+    table = fits_replica_data_with_discarded_replicas.values
 
     minimums = []
     quadratic = []
@@ -406,7 +406,7 @@ def compare_aic(fits_as, fits_replica_data_with_discarded_replicas, suptitle):
     aic2s = []
     aic3s = []
 
-    table = fits_replica_data_with_discarded_replicas.as_matrix()
+    table = fits_replica_data_with_discarded_replicas.values
     for row in table:
         filt =  np.isfinite(row)
         asfilt = asarr[filt]

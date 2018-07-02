@@ -302,8 +302,8 @@ def _plot_fancy_impl(results, commondata, cutlist,
                         label = res.label
                 else:
                     label = None
-                cv = line_data[('cv', i)].as_matrix()
-                err = line_data[('err', i)].as_matrix()
+                cv = line_data[('cv', i)].values
+                err = line_data[('err', i)].values
                 ax.errorbar(x, cv, yerr=err,
                      linestyle='--',
                      lw=0.25,
@@ -329,9 +329,9 @@ def _plot_fancy_impl(results, commondata, cutlist,
             #Use some anchor that is not in y=1 for ratio plots
             if normalize_to is not None:
                 next_after_normalize = (normalize_to + 1) % len(results)
-                annotate_point = x[-1], line_data[('cv', next_after_normalize)].as_matrix()[-1]
+                annotate_point = x[-1], line_data[('cv', next_after_normalize)].values[-1]
             else:
-                annotate_point = x[-1], line_data[('cv', 0)].as_matrix()[-1]
+                annotate_point = x[-1], line_data[('cv', 0)].values[-1]
             ax.annotate(glabel, annotate_point, xytext=(15 ,-10),
                              size='xx-small',
                              textcoords='offset points', zorder=10000)
@@ -500,7 +500,7 @@ def plot_datasets_chi2(experiments, experiments_chi2,each_dataset_chi2):
 
 def _plot_chis_df(df):
     chilabel = df.columns.get_level_values(1)[1]
-    data = df.iloc[:, df.columns.get_level_values(1)==chilabel].T.as_matrix()
+    data = df.iloc[:, df.columns.get_level_values(1)==chilabel].T.values
     fitnames = df.columns.get_level_values(0).unique()
     expnames = list(df.index.get_level_values(0))
     fig, ax = plotutils.barplot(data, expnames, fitnames)
