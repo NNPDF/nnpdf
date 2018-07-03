@@ -449,7 +449,7 @@ class CoreConfig(configparser.Config):
         error if fakepdf is requested but no fakepdf is given."""
         if fakedata:
             if not fakepdf:
-               raise ConfigError("Setting fakedata requires specifying a valid fakepdf")
+                raise ConfigError("Setting fakedata requires specifying a valid fakepdf")
             return fakepdf
         else:
             return None
