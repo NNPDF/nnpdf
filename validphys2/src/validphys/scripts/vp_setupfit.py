@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """
-    setup-fit - prepare and apply data cuts before fit (filter replacement)
-
+    setup-fit - prepare and apply data cuts before fit
     setup-fit constructs the fit [results] folder where data used by nnfit
     will be stored.
 """
@@ -32,9 +31,6 @@ class SetupFitError(Exception):
 
 class SetupFitEnvironment(Environment):
     """Container for information to be filled at run time"""
-    def __init__(self, **kwargs):
-        super(SetupFitEnvironment, self).__init__(**kwargs)
-
     def init_output(self):
         # check file exists, is a file, has extension.
         if not self.config_yml.exists():
@@ -47,7 +43,7 @@ class SetupFitEnvironment(Environment):
 
         # check filename
         filename, extension = os.path.splitext(self.config_yml.name)
-        if not len(extension):
+        if not extension:
             raise SetupFitError("Invalid runcard. File extension missing.")
 
         # check if results folder exists
@@ -90,25 +86,25 @@ class SetupFitConfig(Config):
     def from_yaml(cls, o, *args, **kwargs):
         try:
             file_content = yaml.safe_load(o)
-            file_content['theoryid'] = {'from_': 'theory'}
-            file_content['use_cuts'] = False
-            file_content['t0pdfset'] = {'from_': 'datacuts'}
-            file_content['combocuts'] = {'from_': 'datacuts'}
-            file_content['q2min'] = {'from_': 'datacuts'}
-            file_content['w2min'] = {'from_': 'datacuts'}
-            file_content['rngalgo'] = {'from_': 'fitting'}
-            file_content['seed'] = {'from_': 'fitting'}
-            file_content['fakedata'] = {'from_': 'closuretest'}
-            file_content['fakenoise'] = {'from_': 'closuretest'}
-            file_content['fakepdf'] = {'from_': 'closuretest'}
-            file_content['filterseed'] = {'from_': 'closuretest'}
-            file_content['rancutmethod'] = {'from_': 'closuretest'}
-            file_content['rancutprob'] = {'from_': 'closuretest'}
-            file_content['errorsize'] = {'from_': 'closuretest'}
-            file_content['rancuttrnval'] = {'from_': 'closuretest'}
-            file_content['actions_'] = ['filter']
         except yaml.error.YAMLError as e:
             raise ConfigError(f"Failed to parse yaml file: {e}")
+        file_content['theoryid'] = {'from_': 'theory'}
+        file_content['use_cuts'] = False
+        file_content['t0pdfset'] = {'from_': 'datacuts'}
+        file_content['combocuts'] = {'from_': 'datacuts'}
+        file_content['q2min'] = {'from_': 'datacuts'}
+        file_content['w2min'] = {'from_': 'datacuts'}
+        file_content['rngalgo'] = {'from_': 'fitting'}
+        file_content['seed'] = {'from_': 'fitting'}
+        file_content['fakedata'] = {'from_': 'closuretest'}
+        file_content['fakenoise'] = {'from_': 'closuretest'}
+        file_content['fakepdf'] = {'from_': 'closuretest'}
+        file_content['filterseed'] = {'from_': 'closuretest'}
+        file_content['rancutmethod'] = {'from_': 'closuretest'}
+        file_content['rancutprob'] = {'from_': 'closuretest'}
+        file_content['errorsize'] = {'from_': 'closuretest'}
+        file_content['rancuttrnval'] = {'from_': 'closuretest'}
+        file_content['actions_'] = ['check_positivity', 'filter']
         return cls(file_content, *args, ** kwargs)
 
 

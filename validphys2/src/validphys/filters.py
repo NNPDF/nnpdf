@@ -7,7 +7,7 @@ import logging
 import numbers
 import numpy as np
 from reportengine.checks import make_argcheck, check, check_positive, make_check, CheckError
-from NNPDF import DataSet, RandomGenerator_GetRNG, RandomGenerator_InitRNG
+from NNPDF import DataSet, RandomGenerator
 
 log = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 @make_argcheck
 def check_combocuts(combocuts: str):
     """Check combocuts content"""
-    check(combocuts in 'NNPDF31',
+    check(combocuts == 'NNPDF31',
           "Invalid combocut. Must be NNPDF31 (or implement it yourself).")
 
 
@@ -28,7 +28,12 @@ def check_rngalgo(rngalgo: int):
 
 @make_argcheck
 def check_rancutmethod(rancutmethod: int):
-    """Check rancutmethod content"""
+    """Check rancutmethod content
+    If rancutmethod is 0: no random cut is applied to CT data.
+    If rancutmethod is 1: cuts are pure random.
+    If rancutmethod is 2: evently spread points (non-random).
+    If rancutmethod is 3: random w/ exact 50:50 split.
+    """
     check(0 <= rancutmethod <= 3,
           "Invalid rancutmethod. Must be int between [0, 3].")
 
@@ -44,7 +49,7 @@ def check_positive_int(var):
 
 
 def make_dataset_dir(path):
-    """check if results folder exists"""
+    """Creates directory at path location."""
     if path.exists():
         log.warning(f"Dataset output folder exists: {path} Overwritting contents")
     else:
@@ -64,7 +69,7 @@ def export_mask(path, mask):
 @check_positive('errorsize')
 @check_positive_int('filterseed')
 @check_positive_int('seed')
-def filter(experiments, posdatasets, theoryid, filter_path,
+def filter(experiments, theoryid, filter_path,
            q2min:numbers.Real, w2min:numbers.Real, fakepdfset,
            fakedata, filterseed:int, rngalgo:int, seed:int,
            fakenoise:bool, rancutmethod:int, rancutprob:numbers.Real,
@@ -98,8 +103,8 @@ def filter(experiments, posdatasets, theoryid, filter_path,
                 ds.Export(str(path))
     else:
         log.info('Closure Test mode.')
-        RandomGenerator_InitRNG(rngalgo, seed)
-        RandomGenerator_GetRNG().SetSeed(filterseed)
+        RandomGenerator.InitRNG(rngalgo, seed)
+        RandomGenerator.GetRNG().SetSeed(filterseed)
         fakeset = fakepdfset.load()
         # Load experiments
         for experiment in experiments:
@@ -126,60 +131,63 @@ def filter(experiments, posdatasets, theoryid, filter_path,
                 if errorsize != 1.0:
                     ds.RescaleErrors(errorsize)
                 ds.Export(str(path))
-
     log.info(f'Summary: {total_cut_data_points}/{total_data_points} datapoints passed kinematic cuts.')
+
+
+def check_positivity(posdatasets):
+    """Verify positive datasets are ready for the fit."""
     log.info('Verifying positivity tables:')
     for pos in posdatasets:
         pos.load()
-        log.info('%s checked.' % pos)
+        log.info(f'{pos.name} checked.')
 
 
-def pass_kincuts(set, idat, pto, q2min, w2min, vfns, ic):
+def pass_kincuts(dataset, idat, pto, q2min, w2min, vfns, ic):
     """Applies cuts as in C++ for NNPDF3.1 combo cuts.
     This function replicas the c++ code but should be upgraded as
     discussed several times.
     """
-    if set.GetSetName() in 'ATLAS1JET11':
+    if dataset.GetSetName() == 'ATLAS1JET11':
         # allow only first rapidity bin of ATLAS1JET11
-        return set.GetKinematics(idat, 0) < 0.3
+        return dataset.GetKinematics(idat, 0) < 0.3
 
-    if set.GetSetName() in ('LHCBWZMU8TEV', 'LHCBWZMU7TEV'):
+    if dataset.GetSetName() in ('LHCBWZMU8TEV', 'LHCBWZMU7TEV'):
         if pto == 2:
-            return set.GetKinematics(idat, 0) >= 2.25
+            return dataset.GetKinematics(idat, 0) >= 2.25
 
-    if set.GetSetName() in ('D0WMASY', 'D0WEASY'):
+    if dataset.GetSetName() in ('D0WMASY', 'D0WEASY'):
         if pto == 2:
-            return set.GetData(idat) >= 0.03
+            return dataset.GetData(idat) >= 0.03
 
-    if set.GetSetName() in 'ATLASZPT7TEV':
-        pt = np.sqrt(set.GetKinematics(idat, 1))
+    if dataset.GetSetName() == 'ATLASZPT7TEV':
+        pt = np.sqrt(dataset.GetKinematics(idat, 1))
         if pt < 30 or pt > 500:
             return False
         return True
 
-    if set.GetSetName() in 'ATLASZPT8TEVMDIST':
-        return set.GetKinematics(idat, 0) >= 30
+    if dataset.GetSetName() == 'ATLASZPT8TEVMDIST':
+        return dataset.GetKinematics(idat, 0) >= 30
 
-    if set.GetSetName() in 'ATLASZPT8TEVYDIST':
-        pt = np.sqrt(set.GetKinematics(idat, 1))
+    if dataset.GetSetName() == 'ATLASZPT8TEVYDIST':
+        pt = np.sqrt(dataset.GetKinematics(idat, 1))
         if pt < 30 or pt > 150:
             return False
         return True
 
-    if set.GetSetName() in 'CMSZDIFF12':
-        pt = np.sqrt(set.GetKinematics(idat, 1))
-        y = set.GetKinematics(idat, 0)
+    if dataset.GetSetName() == 'CMSZDIFF12':
+        pt = np.sqrt(dataset.GetKinematics(idat, 1))
+        y = dataset.GetKinematics(idat, 0)
         if pt < 30 or pt > 170 or y > 1.6:
             return False
         return True
 
-    if set.GetSetName() in 'ATLASWPT31PB':
-        return set.GetKinematics(idat, 0) > 30
+    if dataset.GetSetName() == 'ATLASWPT31PB':
+        return dataset.GetKinematics(idat, 0) > 30
 
-    if set.GetProc(idat)[0:3] in ('EWK', 'DYP'):
+    if dataset.GetProc(idat)[0:3] in ('EWK', 'DYP'):
         # building rapidity and pT or Mll
-        y = set.GetKinematics(idat, 0)
-        pTmv = np.sqrt(set.GetKinematics(idat, 1))
+        y = dataset.GetKinematics(idat, 0)
+        pTmv = np.sqrt(dataset.GetKinematics(idat, 1))
 
         # generalized cuts
         maxCMSDY2Dy = 2.2
@@ -188,7 +196,7 @@ def pass_kincuts(set, idat, pto, q2min, w2min, vfns, ic):
         maxTau = 0.080
         maxY = 0.663
 
-        if set.GetSetName() in ('CMSDY2D11', 'CMSDY2D12'):
+        if dataset.GetSetName() in ('CMSDY2D11', 'CMSDY2D12'):
             if pto == 0 or pto == 1:
                 if pTmv > maxCMSDY2Dminv or pTmv < minCMSDY2Dminv or y > maxCMSDY2Dy:
                     return False
@@ -197,28 +205,28 @@ def pass_kincuts(set, idat, pto, q2min, w2min, vfns, ic):
                     return False
             return True
 
-        if set.GetSetName() in ('ATLASZHIGHMASS49FB', 'LHCBLOWMASS37PB'):
+        if dataset.GetSetName() in ('ATLASZHIGHMASS49FB', 'LHCBLOWMASS37PB'):
             if pTmv > maxCMSDY2Dminv:
                 return False
             return True
 
-        if set.GetSetName() in 'ATLASLOMASSDY11':
+        if dataset.GetSetName() == 'ATLASLOMASSDY11':
             if pto == 0 or pto == 1:
                 if idat < 6:
                     return False
             return True
 
-        if set.GetSetName() in 'ATLASLOMASSDY11EXT':
+        if dataset.GetSetName() == 'ATLASLOMASSDY11EXT':
             if pto == 0 or pto == 1:
                 if idat < 2:
                     return False
             return True
 
         # new cuts for the fixed target DY
-        if set.GetSetName() in ('DYE886P', 'DYE605'):
-            rapidity = set.GetKinematics(idat, 0)
-            invM2 = set.GetKinematics(idat, 1)
-            sqrts = set.GetKinematics(idat, 2)
+        if dataset.GetSetName() in ('DYE886P', 'DYE605'):
+            rapidity = dataset.GetKinematics(idat, 0)
+            invM2 = dataset.GetKinematics(idat, 1)
+            sqrts = dataset.GetKinematics(idat, 2)
             tau = invM2 / sqrts**2
             ymax = -0.5 * np.log(tau)
 
@@ -227,21 +235,21 @@ def pass_kincuts(set, idat, pto, q2min, w2min, vfns, ic):
             return True
 
     # DIS cuts
-    if set.GetProc(idat)[0:3] in 'DIS':
+    if dataset.GetProc(idat)[0:3] == 'DIS':
         # load kinematics
-        x = set.GetKinematics(idat, 0)
-        Q2 = set.GetKinematics(idat, 1)
+        x = dataset.GetKinematics(idat, 0)
+        Q2 = dataset.GetKinematics(idat, 1)
         W2 = Q2 * (1 - x) / x
 
         # basic cuts
         if W2 <= w2min or Q2 <= q2min:
             return False
 
-        if set.GetSetName() in ('EMCF2P', 'EMCF2D'):
+        if dataset.GetSetName() in ('EMCF2P', 'EMCF2D'):
             return x > 0.1
 
         # additional F2C cuts in case of FONLL-A
-        if set.GetProc(idat) in 'DIS_NCP_CH' and vfns in 'FONLL-A':
+        if dataset.GetProc(idat) == 'DIS_NCP_CH' and vfns == 'FONLL-A':
             Q2cut1_f2c = 4
             Q2cut2_f2c = 10
             xcut_f2c = 1e-3
@@ -253,7 +261,7 @@ def pass_kincuts(set, idat, pto, q2min, w2min, vfns, ic):
                 return False
 
         # additional F2C cut in case of FONLL-C + IC
-        if set.GetProc(idat) in 'DIS_NCP_CH' and vfns in 'FONLL-C' and ic:
+        if dataset.GetProc(idat) == 'DIS_NCP_CH' and vfns == 'FONLL-C' and ic:
             Q2cut1_f2c = 8
             if Q2 <= Q2cut1_f2c:
                 return False
@@ -268,7 +276,7 @@ def random_cut(datamask, rancutmethod, rancutprob, rancuttrnval):
     if rancutmethod == 1: # Option 1: pure random
         i = 0
         while i < len(datamask):
-            if RandomGenerator_GetRNG().GetRandomUniform() > datamask and len(datamask) > 2:
+            if RandomGenerator.GetRNG().GetRandomUniform() > datamask and len(datamask) > 2:
                 valdatamask.append(datamask[i])
                 datamask.pop(i)
                 i -= 1
@@ -287,7 +295,7 @@ def random_cut(datamask, rancutmethod, rancutprob, rancuttrnval):
     elif rancutmethod == 3: # Option 3: random w/ exact 50:50 split
         Ndatremove = int(min(len(datamask) * (1.0 - rancutprob), len(datamask) - 2))
         for i in range(Ndatremove):
-            position = RandomGenerator_GetRNG().GetRandomUniform(len(datamask))
+            position = RandomGenerator.GetRNG().GetRandomUniform(len(datamask))
             valdatamask.append(datamask[position])
             datamask.pop(position)
     if rancuttrnval:
