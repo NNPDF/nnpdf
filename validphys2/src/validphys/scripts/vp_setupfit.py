@@ -36,8 +36,6 @@ class SetupFitEnvironment(Environment):
         if not self.config_yml.exists():
             raise SetupFitError("Invalid runcard. File not found.")
         else:
-            if not re.fullmatch(r'[\w.\-]+', self.config_yml.name):
-                raise SetupFitError("Invalid runcard. Must be alphanumeric.")
             if not self.config_yml.is_file():
                 raise SetupFitError("Invalid runcard. Must be a file.")
 
@@ -51,6 +49,8 @@ class SetupFitEnvironment(Environment):
         if self.output_path.exists():
             log.warning(f"Output folder exists: {self.output_path} Overwritting contents")
         else:
+            if not re.fullmatch(r'[\w.\-]+', self.output_path.name):
+                raise SetupFitError("Invalid output folder name. Must be alphanumeric.")
             try:
                 self.output_path.mkdir()
             except OSError as e:

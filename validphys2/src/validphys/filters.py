@@ -75,63 +75,77 @@ def filter(experiments, theoryid, filter_path,
            fakenoise:bool, rancutmethod:int, rancutprob:numbers.Real,
            errorsize:numbers.Real, rancuttrnval:bool, combocuts, t0set=None):
     """Apply filters to all datasets"""
-    pto = theoryid.get_description().get('PTO')
-    vfns = theoryid.get_description().get('FNS')
-    ic = theoryid.get_description().get('IC')
-
-    total_data_points = 0
-    total_cut_data_points = 0
-    # I make this distinction to speedup calculation
     if not fakedata:
-        for experiment in experiments:
-            for dataset in experiment.datasets:
-                path = filter_path / dataset.name
-                make_dataset_dir(path)
-                ds = dataset.load()
-                total_data_points += ds.GetNData()
-                # build data mask
-                datamask = []
-                for idat in range(ds.GetNData()):
-                    if pass_kincuts(ds, idat, pto, q2min, w2min, vfns, ic):
-                        datamask.append(idat)
-                log.info(f'{len(datamask)}/{ds.GetNData()} datapoints in {dataset.name} passed kinematic cuts.')
-                total_cut_data_points += len(datamask)
-                # save to disk
-                if len(datamask) != ds.GetNData():
-                    export_mask(path / ('FKMASK_%s.dat' % dataset.name), datamask)
-                    ds = DataSet(ds, datamask)
-                ds.Export(str(path))
+        log.info('Filtering real data.')
+        total_data, total_cut_data = _filter_real_data(filter_path, experiments, theoryid, q2min, w2min)
     else:
-        log.info('Closure Test mode.')
+        log.info('Filtering closure-test data.')
         RandomGenerator.InitRNG(rngalgo, seed)
         RandomGenerator.GetRNG().SetSeed(filterseed)
-        fakeset = fakepdfset.load()
-        # Load experiments
-        for experiment in experiments:
-            uncut_exp = experiment.load()
-            uncut_exp.MakeClosure(fakeset, fakenoise)
-            for j, dataset in enumerate(experiment.datasets):
-                path = filter_path / dataset.name
-                make_dataset_dir(path)
-                ds = uncut_exp.GetSet(j)
-                total_data_points += ds.GetNData()
-                # build data mask
-                datamask = []
-                for idat in range(ds.GetNData()):
-                    if pass_kincuts(ds, idat, pto, q2min, w2min, vfns, ic):
-                        datamask.append(idat)
-                if 1 <= rancutmethod <= 3:
-                    random_cut(datamask, rancutmethod, rancutprob, rancuttrnval)
-                log.info(f'{len(datamask)}/{ds.GetNData()} datapoints in {dataset.name} passed kinematic cuts.')
-                total_cut_data_points += len(datamask)
-                # save to disk
-                if len(datamask) != ds.GetNData():
-                    export_mask(path / ('FKMASK_%s.dat' % dataset.name), datamask)
-                    ds = DataSet(ds, datamask)
-                if errorsize != 1.0:
-                    ds.RescaleErrors(errorsize)
-                ds.Export(str(path))
-    log.info(f'Summary: {total_cut_data_points}/{total_data_points} datapoints passed kinematic cuts.')
+        total_data, total_cut_data = _filter_closure_data(filter_path, experiments, theoryid, q2min, w2min,
+                                                          fakepdfset, fakenoise, rancutmethod, rancutprob,
+                                                          rancuttrnval, errorsize)
+    log.info(f'Summary: {total_cut_data}/{total_data} datapoints passed kinematic cuts.')
+
+
+def _filter_real_data(filter_path, experiments, theoryid, q2min, w2min):
+    """Filter real experimental data."""
+    total_data_points = 0
+    total_cut_data_points = 0
+    for experiment in experiments:
+        for dataset in experiment.datasets:
+            path = filter_path / dataset.name
+            make_dataset_dir(path)
+            ds = dataset.load()
+            total_data_points += ds.GetNData()
+            # build data mask
+            datamask = []
+            for idat in range(ds.GetNData()):
+                if pass_kincuts(ds, idat, theoryid, q2min, w2min):
+                    datamask.append(idat)
+            log.info(f'{len(datamask)}/{ds.GetNData()} datapoints in {dataset.name} passed kinematic cuts.')
+            total_cut_data_points += len(datamask)
+            # save to disk
+            if len(datamask) != ds.GetNData():
+                export_mask(path / ('FKMASK_%s.dat' % dataset.name), datamask)
+                ds = DataSet(ds, datamask)
+            ds.Export(str(path))
+    return total_data_points, total_cut_data_points
+
+
+def _filter_closure_data(filter_path, experiments, theoryid, q2min, w2min,
+                         fakepdfset, fakenoise, rancutmethod, rancutprob,
+                         rancuttrnval, errorsize):
+    """Filter closure test data."""
+    total_data_points = 0
+    total_cut_data_points = 0
+    fakeset = fakepdfset.load()
+    # Load experiments
+    for experiment in experiments:
+        uncut_exp = experiment.load()
+        uncut_exp.MakeClosure(fakeset, fakenoise)
+        for j, dataset in enumerate(experiment.datasets):
+            path = filter_path / dataset.name
+            make_dataset_dir(path)
+            ds = uncut_exp.GetSet(j)
+            total_data_points += ds.GetNData()
+            # build data mask
+            datamask = []
+            for idat in range(ds.GetNData()):
+                if pass_kincuts(ds, idat, theoryid, q2min, w2min):
+                    datamask.append(idat)
+            if 1 <= rancutmethod <= 3:
+                random_cut(datamask, rancutmethod, rancutprob, rancuttrnval)
+            log.info(f'{len(datamask)}/{ds.GetNData()} datapoints in {dataset.name} passed kinematic cuts.')
+            total_cut_data_points += len(datamask)
+            # save to disk
+            if len(datamask) != ds.GetNData():
+                export_mask(path / ('FKMASK_%s.dat' % dataset.name), datamask)
+                ds = DataSet(ds, datamask)
+            if errorsize != 1.0:
+                ds.RescaleErrors(errorsize)
+            ds.Export(str(path))
+    return total_data_points, total_cut_data_points
 
 
 def check_positivity(posdatasets):
@@ -142,11 +156,19 @@ def check_positivity(posdatasets):
         log.info(f'{pos.name} checked.')
 
 
-def pass_kincuts(dataset, idat, pto, q2min, w2min, vfns, ic):
+def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
     """Applies cuts as in C++ for NNPDF3.1 combo cuts.
     This function replicas the c++ code but should be upgraded as
     discussed several times.
     """
+    pto = theoryid.get_description().get('PTO')
+    vfns = theoryid.get_description().get('FNS')
+    ic = theoryid.get_description().get('IC')
+
+    check(0 <= pto <= 2, "Invalid PTO. Must be 0, 1 or 2.")
+    check(vfns in ('FONLL-A', 'FONLL-B', 'FONLL-C'), "Invalid FNS. Must be FONLL-A/B/C.")
+    check(ic in (True, False), "Invalid IC. Must be True or False.")
+
     if dataset.GetSetName() == 'ATLAS1JET11':
         # allow only first rapidity bin of ATLAS1JET11
         return dataset.GetKinematics(idat, 0) < 0.3
