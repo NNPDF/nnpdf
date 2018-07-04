@@ -104,7 +104,7 @@ class SetupFitConfig(Config):
         file_content['rancutprob'] = {'from_': 'closuretest'}
         file_content['errorsize'] = {'from_': 'closuretest'}
         file_content['rancuttrnval'] = {'from_': 'closuretest'}
-        file_content['actions_'] = ['check_positivity', 'filter']
+        file_content['actions_'] = ['check_t0pdfset', 'check_positivity', 'filter']
         return cls(file_content, *args, ** kwargs)
 
 

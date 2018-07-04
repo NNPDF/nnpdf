@@ -26,26 +26,13 @@ def check_rngalgo(rngalgo: int):
           "Invalid rngalgo. Must be int between [0, 16].")
 
 
-@make_argcheck
-def check_rancutmethod(rancutmethod: int):
-    """Check rancutmethod content
-    If rancutmethod is 0: no random cut is applied to CT data.
-    If rancutmethod is 1: cuts are pure random.
-    If rancutmethod is 2: evently spread points (non-random).
-    If rancutmethod is 3: random w/ exact 50:50 split.
-    """
-    check(0 <= rancutmethod <= 3,
-          "Invalid rancutmethod. Must be int between [0, 3].")
-
-
-def check_positive_int(var):
+def check_nonnegative(var: str):
     """Ensure that `var` is positive"""
     @make_check
-    def check(ns, **kwargs):
+    def run_check(ns, **kwargs):
         val = ns[var]
-        if not val>=0:
-            raise CheckError(f"'{var}' must be positive or equal zero, but it is {val!r}.")
-    return check
+        check(val >= 0, f"'{var}' must be positive or equal zero, but it is {val!r}.")
+    return run_check
 
 
 def make_dataset_dir(path):
@@ -63,17 +50,15 @@ def export_mask(path, mask):
 
 @check_combocuts
 @check_rngalgo
-@check_rancutmethod
 @check_positive('q2min')
 @check_positive('w2min')
 @check_positive('errorsize')
-@check_positive_int('filterseed')
-@check_positive_int('seed')
+@check_nonnegative('filterseed')
+@check_nonnegative('seed')
 def filter(experiments, theoryid, filter_path,
-           q2min:numbers.Real, w2min:numbers.Real, fakepdfset,
-           fakedata, filterseed:int, rngalgo:int, seed:int,
-           fakenoise:bool, rancutmethod:int, rancutprob:numbers.Real,
-           errorsize:numbers.Real, rancuttrnval:bool, combocuts, t0set=None):
+           q2min:numbers.Real, w2min:numbers.Real, fakedata: bool,
+           filterseed:int, rngalgo:int, seed:int, fakenoise:bool,
+           errorsize:numbers.Real, combocuts, t0pdfset):
     """Apply filters to all datasets"""
     if not fakedata:
         log.info('Filtering real data.')
@@ -82,9 +67,8 @@ def filter(experiments, theoryid, filter_path,
         log.info('Filtering closure-test data.')
         RandomGenerator.InitRNG(rngalgo, seed)
         RandomGenerator.GetRNG().SetSeed(filterseed)
-        total_data, total_cut_data = _filter_closure_data(filter_path, experiments, theoryid, q2min, w2min,
-                                                          fakepdfset, fakenoise, rancutmethod, rancutprob,
-                                                          rancuttrnval, errorsize)
+        total_data, total_cut_data = _filter_closure_data(filter_path, experiments, theoryid,
+                                                          q2min, w2min, t0pdfset, fakenoise, errorsize)
     log.info(f'Summary: {total_cut_data}/{total_data} datapoints passed kinematic cuts.')
 
 
@@ -114,8 +98,7 @@ def _filter_real_data(filter_path, experiments, theoryid, q2min, w2min):
 
 
 def _filter_closure_data(filter_path, experiments, theoryid, q2min, w2min,
-                         fakepdfset, fakenoise, rancutmethod, rancutprob,
-                         rancuttrnval, errorsize):
+                         fakepdfset, fakenoise, errorsize):
     """Filter closure test data."""
     total_data_points = 0
     total_cut_data_points = 0
@@ -134,8 +117,6 @@ def _filter_closure_data(filter_path, experiments, theoryid, q2min, w2min,
             for idat in range(ds.GetNData()):
                 if pass_kincuts(ds, idat, theoryid, q2min, w2min):
                     datamask.append(idat)
-            if 1 <= rancutmethod <= 3:
-                random_cut(datamask, rancutmethod, rancutprob, rancuttrnval)
             log.info(f'{len(datamask)}/{ds.GetNData()} datapoints in {dataset.name} passed kinematic cuts.')
             total_cut_data_points += len(datamask)
             # save to disk
@@ -146,6 +127,11 @@ def _filter_closure_data(filter_path, experiments, theoryid, q2min, w2min,
                 ds.RescaleErrors(errorsize)
             ds.Export(str(path))
     return total_data_points, total_cut_data_points
+
+
+def check_t0pdfset(t0set):
+    """T0 pdf check"""
+    log.info(f'T0 pdf checked.')
 
 
 def check_positivity(posdatasets):
@@ -288,38 +274,3 @@ def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
             if Q2 <= Q2cut1_f2c:
                 return False
     return True
-
-
-def random_cut(datamask, rancutmethod, rancutprob, rancuttrnval):
-    """Apply random cuts for closure test data"""
-    log.info(f'Applying random cuts to data using method {rancutmethod}')
-    log.info(f'Cutting to {rancutprob}%')
-    valdatamask = []
-    if rancutmethod == 1: # Option 1: pure random
-        i = 0
-        while i < len(datamask):
-            if RandomGenerator.GetRNG().GetRandomUniform() > datamask and len(datamask) > 2:
-                valdatamask.append(datamask[i])
-                datamask.pop(i)
-                i -= 1
-            i += 1
-    elif rancutmethod == 2: # Option 2: evently spread points (non-random)
-        counter = 0.0
-        i = 0
-        while i < len(datamask):
-            counter += (1.0 - rancutprob)
-            if counter >= 1 and len(datamask) > 2:
-                valdatamask.append(datamask[i])
-                datamask.pop(i)
-                i -= 1
-                counter -= 1
-            i += 1
-    elif rancutmethod == 3: # Option 3: random w/ exact 50:50 split
-        Ndatremove = int(min(len(datamask) * (1.0 - rancutprob), len(datamask) - 2))
-        for i in range(Ndatremove):
-            position = RandomGenerator.GetRNG().GetRandomUniform(len(datamask))
-            valdatamask.append(datamask[position])
-            datamask.pop(position)
-    if rancuttrnval:
-        datamask = valdatamask
-
