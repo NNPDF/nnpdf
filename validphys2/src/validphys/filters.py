@@ -129,9 +129,10 @@ def _filter_closure_data(filter_path, experiments, theoryid, q2min, w2min,
     return total_data_points, total_cut_data_points
 
 
-def check_t0pdfset(t0set):
+def check_t0pdfset(t0pdfset):
     """T0 pdf check"""
-    log.info(f'T0 pdf checked.')
+    t0pdfset.load()
+    log.info(f'{t0pdfset} T0 checked.')
 
 
 def check_positivity(posdatasets):
@@ -150,10 +151,6 @@ def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
     pto = theoryid.get_description().get('PTO')
     vfns = theoryid.get_description().get('FNS')
     ic = theoryid.get_description().get('IC')
-
-    check(0 <= pto <= 2, "Invalid PTO. Must be 0, 1 or 2.")
-    check(vfns in ('FONLL-A', 'FONLL-B', 'FONLL-C'), "Invalid FNS. Must be FONLL-A/B/C.")
-    check(ic in (True, False), "Invalid IC. Must be True or False.")
 
     if dataset.GetSetName() == 'ATLAS1JET11':
         # allow only first rapidity bin of ATLAS1JET11
