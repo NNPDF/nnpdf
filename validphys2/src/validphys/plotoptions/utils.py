@@ -44,5 +44,5 @@ def apply_to_all_columns(df, func):
     """Apply a function to all columns of a dataframe at the saem time.
     The parameter names are the names of the column and the values are arrays
     containing the each column's values."""
-    params = dict((col,df[col].as_matrix()) for col in df.columns)
+    params = dict((col,df[col].values) for col in df.columns)
     return func(**params)

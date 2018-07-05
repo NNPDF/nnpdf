@@ -116,7 +116,7 @@ class ParamfitsConfig(Config):
         import pandas as pd
         import numpy as np
         try:
-            df = pd.DataFrame.from_csv(pseudorreplicafile, sep='\t',
+            df = pd.read_csv(pseudorreplicafile, sep='\t',
                 index_col=[0,1],header=[0,1])
         except Exception as e:
             raise ConfigError(f"Failed to load the table: {e}") from e
@@ -199,8 +199,8 @@ class ParamfitsConfig(Config):
         df = fits_computed_psedorreplicas_chi2
 
         if prepend_total:
-            s =  df.loc[(slice(None), 'Total'),:].groupby(level=3).sum()
-            ndata = df.loc[(slice(None), 'Total'),:].groupby(level=0).apply(get_ndata).sum()
+            s =  df.loc[(slice(None), 'Total'),:].groupby(level=3).sum(min_count=1)
+            ndata = df.loc[(slice(None), 'Total'),:].groupby(level=0).apply(get_ndata).sum(min_count=1)
             total = [
                 {'experiment_label': 'Total',
                 'by_dataset': [{
@@ -242,7 +242,7 @@ class ParamfitsConfig(Config):
                     raise ConfigError(f"Unrecognized elements in extra_sum: {diff}", bad_item, dss)
 
                 sliced = tableloader.get_extrasum_slice(df, components)
-                s =  sliced.groupby(level=3).sum()
+                s =  sliced.groupby(level=3).sum(min_count=1)
                 ndata = sliced.groupby(level=[0,1]).apply(get_ndata).sum()
 
 
@@ -343,7 +343,7 @@ class ParamfitsConfig(Config):
         df = adapted_fits_chi2_table
 
         if prepend_total:
-            s =  df.sort_index().loc[(slice(None), 'Total'), :].sum()
+            s =  df.sort_index().loc[(slice(None), 'Total'), :].sum(min_count=1)
             total = [
                 {'experiment_label': 'Total',
                 'by_dataset': [{

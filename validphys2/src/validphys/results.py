@@ -291,7 +291,7 @@ def experiments_normcovmat(experiments_covmat, experiments_data):
 def experiments_corrmat(experiments_covmat):
     """Generates the experimental correlation matrix with experiments_covmat as input"""
     df = experiments_covmat
-    covmat = df.as_matrix()
+    covmat = df.values
     diag_minus_half = (np.diagonal(covmat))**(-0.5)
     mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
     return mat
@@ -743,9 +743,9 @@ def fits_chi2_table(
     for lv in lvs:
         dfs.append(pd.concat((edf.loc[lv],ddf.loc[lv]), copy=False, axis=0))
     if show_total:
-        total_points = fits_experiments_chi2_table.iloc[:, 0::2].sum().as_matrix()
-        total_chi = (fits_experiments_chi2_table.iloc[:, 0::2].as_matrix() *
-                     fits_experiments_chi2_table.iloc[:,1::2].as_matrix()).sum(axis=0)
+        total_points = fits_experiments_chi2_table.iloc[:, 0::2].sum().values
+        total_chi = (fits_experiments_chi2_table.iloc[:, 0::2].values *
+                     fits_experiments_chi2_table.iloc[:,1::2].values).sum(axis=0)
         total_chi /= total_points
         row = np.zeros(len(total_points)*2)
         row[::2] = total_points

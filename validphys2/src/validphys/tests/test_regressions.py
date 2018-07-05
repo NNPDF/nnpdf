@@ -16,8 +16,9 @@ from reportengine.table import savetable
 
 import NNPDF
 from validphys import results
-from validphys.tableloader import (parse_exp_mat,
-load_perreplica_chi2_table, sane_load)
+from validphys.tableloader import (parse_exp_mat, load_perreplica_chi2_table,
+                                   sane_load)
+
 
 
 log = logging.getLogger(__name__)
