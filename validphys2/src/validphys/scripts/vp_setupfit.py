@@ -88,23 +88,10 @@ class SetupFitConfig(Config):
             file_content = yaml.safe_load(o)
         except yaml.error.YAMLError as e:
             raise ConfigError(f"Failed to parse yaml file: {e}")
-        file_content['theoryid'] = {'from_': 'theory'}
         file_content['use_cuts'] = False
-        file_content['t0pdfset'] = {'from_': 'datacuts'}
-        file_content['combocuts'] = {'from_': 'datacuts'}
-        file_content['q2min'] = {'from_': 'datacuts'}
-        file_content['w2min'] = {'from_': 'datacuts'}
-        file_content['rngalgo'] = {'from_': 'fitting'}
-        file_content['seed'] = {'from_': 'fitting'}
-        file_content['fakedata'] = {'from_': 'closuretest'}
-        file_content['fakenoise'] = {'from_': 'closuretest'}
-        file_content['fakepdf'] = {'from_': 'closuretest'}
-        file_content['filterseed'] = {'from_': 'closuretest'}
-        file_content['rancutmethod'] = {'from_': 'closuretest'}
-        file_content['rancutprob'] = {'from_': 'closuretest'}
-        file_content['errorsize'] = {'from_': 'closuretest'}
-        file_content['rancuttrnval'] = {'from_': 'closuretest'}
-        file_content['actions_'] = ['check_t0pdfset', 'check_positivity', 'filter']
+        file_content['actions_'] = ['datacuts check_t0pdfset',
+                                    'theory check_positivity',
+                                    'datacuts::closuretest::theory::fitting filter']
         return cls(file_content, *args, ** kwargs)
 
 
