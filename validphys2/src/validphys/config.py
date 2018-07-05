@@ -436,24 +436,6 @@ class CoreConfig(configparser.Config):
         else:
             return None
 
-    def parse_fakepdf(self, name):
-        """PDF set used to generate the closure test data."""
-        return self.parse_pdf(name)
-
-    def parse_fakedata(self, do_fakedata:bool):
-        """Whether to use the fakeset PDF set to closure tests."""
-        return do_fakedata
-
-    def produce_fakepdfset(self, fakedata=False, fakepdf=None):
-        """Return the fakepdfset if fakedata is True and None otherwise. Raises an
-        error if fakepdf is requested but no fakepdf is given."""
-        if fakedata:
-            if not fakepdf:
-                raise ConfigError("Setting fakedata requires specifying a valid fakepdf")
-            return fakepdf
-        else:
-            return None
-
     @element_of('posdatasets')
     def parse_posdataset(self, posset:dict, * ,theoryid):
         """An observable used as positivity constrain in the fit.

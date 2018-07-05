@@ -95,12 +95,8 @@ positivity:
 closuretest:
   filterseed  : 0   # Random seed to be used in filtering data partitions
   fakedata    : false # true = to use FAKEPDF to generate pseudo-data
-  fakepdf     : MSTW2008nlo68cl # Theory input for pseudo-data
   errorsize   : 1.0 # uncertainties rescaling
   fakenoise   : false # on = to add random fluctuations to pseudo-data
-  rancutprob  : 1.0 # Fraction of data to be included in the fit
-  rancutmethod: 0   # Method to select rancutprob data fraction
-  rancuttrnval: false # 0(1) to output training(valiation) chi2 in report
   printpdf4gen: false # To print info on PDFs during minimization
 
 ############################################################
