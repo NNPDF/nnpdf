@@ -43,7 +43,6 @@ add_library(nnpdf SHARED src/common.cc
                          src/parametrisation.cc
                          src/pdfset.cc
                          src/positivity.cc
-                         src/positivity.cc
                          src/randomgenerator.cc
                          src/thpredictions.cc
                          src/utils.cc

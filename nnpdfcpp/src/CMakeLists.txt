@@ -3,6 +3,7 @@ add_library(common STATIC
   common/src/nnpdfsettings.cc
   common/src/md5.cc
   common/src/loadutils.cc
+  common/src/exportgrid.cc
   common/src/datautils.cc
 )
 include_directories(common/inc)
@@ -22,7 +23,6 @@ endif(COMPILE_filter)
 option(COMPILE_nnfit "Compile nnfit program." ON)
 if (COMPILE_nnfit)
   add_executable(nnfit nnfit/src/nnfit.cc
-                       nnfit/src/apfelevol.cc
                        nnfit/src/fastaddchi2.cc
                        nnfit/src/fitbases.cc
                        nnfit/src/fitpdfset.cc
@@ -43,6 +43,25 @@ if (COMPILE_chi2check)
   install(TARGETS chi2check DESTINATION bin
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_chi2check)
+
+# evolvefit
+option(COMPILE_evolvefit "Compile evolvefit program." ON)
+if (COMPILE_evolvefit)
+  add_executable(evolvefit evolvefit/src/evolvefit.cc)
+  target_link_libraries(evolvefit common nnpdf ${LHAPDF_LIBRARIES} ${APFEL_LIBRARIES} ${YAML_LDFLAGS} ${GSL_LDFLAGS})
+  install(TARGETS evolvefit DESTINATION bin
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+endif(COMPILE_evolvefit)
+
+# lha_to_exportgrid
+option(COMPILE_lha_to_exportgrid "Compile lha_to_exportgrid program." ON)
+if (COMPILE_lha_to_exportgrid)
+  add_executable(lha_to_exportgrid evolvefit/src/lha_to_exportgrid.cc)
+  target_link_libraries(lha_to_exportgrid common nnpdf ${LHAPDF_LIBRARIES} ${APFEL_LIBRARIES} ${YAML_LDFLAGS} ${GSL_LDFLAGS})
+  install(TARGETS lha_to_exportgrid DESTINATION bin
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+endif(COMPILE_lha_to_exportgrid)
+
 
 # ROOT
 #find_program(ROOT_CONFIG root-config)
