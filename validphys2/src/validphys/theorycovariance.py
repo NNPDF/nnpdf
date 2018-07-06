@@ -217,12 +217,16 @@ def chi2_block_impact(theory_block_diag_covmat, experiments_covmat, experiments_
     chi2 = chi2_impact(theory_block_diag_covmat, experiments_covmat, experiments_results)
     return chi2
 
-def chi2_diag_only(theory_covmat, experiments_covmat, data_theory_diff):
-    """ Returns total chi2 including only diags of theory cov mat """
+def theory_diagcovmat(theory_covmat):
+    """Returns theory covmat with only diagonal values"""
     s = theory_covmat.values
     s_diag = np.zeros((len(data_theory_diff),len(data_theory_diff)))
     np.fill_diagonal(s_diag, np.diag(s))
-    cov = s_diag + experiments_covmat.values
+    return s
+
+def chi2_diag_only(theory_diagcovmat, experiments_covmat, data_theory_diff):
+    """ Returns total chi2 including only diags of theory cov mat """
+    cov = theory_diagcovmat + experiments_covmat.values
     elements = np.dot(data_theory_diff.T,np.dot(la.inv(cov),data_theory_diff))
     chi2 = (1/len(data_theory_diff))*np.sum(elements)
     return chi2
