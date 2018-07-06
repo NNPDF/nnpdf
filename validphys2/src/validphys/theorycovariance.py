@@ -86,6 +86,24 @@ def total_covmat_datasets(each_dataset_results_theory):
         dataset_covmats.append(cov)
     return dataset_covmats
 
+@_check_three_or_seven_theories
+def total_covmat_diagtheory_datasets(each_dataset_results_theory):
+    """Produces an array of total covariance matrices; the sum of experimental
+    and scale-varied theory covariance matrices. Each matrix corresponds
+    to a different dataset, which must be specified in the runcard.
+    These are needed for calculation of chi2 per dataset. """
+    dataset_covmats=[]
+    for dataset in each_dataset_results_theory:
+        theory_centrals = [x[1].central_value for x in dataset]
+        s = make_scale_var_covmat(theory_centrals)
+        s_diag = np.zeros((len(data_theory_diff),len(data_theory_diff)))
+        np.fill_diagonal(s_diag, np.diag(s))
+        sigma = dataset[0][0].covmat
+        cov = s_diag + sigma
+        dataset_covmats.append(cov)
+    return dataset_covmats
+
+
 def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
     """Takes the theory covariance matrices for individual datasets and
     returns a data frame with a block diagonal theory covariance matrix
@@ -97,6 +115,7 @@ def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
 experiments_results = collect(experiment_results, ('experiments',))
 experiments_results_theory = collect('experiments_results', ('theoryids',))
 
+@_check_three_or_seven_theories
 def total_covmat_experiments(experiments_results_theory):
     """Same as total_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
@@ -106,6 +125,21 @@ def total_covmat_experiments(experiments_results_theory):
         s = make_scale_var_covmat(theory_centrals)
         sigma = exp_result[0][0].covmat
         cov = s + sigma
+        exp_result_covmats.append(cov)
+    return exp_result_covmats
+
+@_check_three_or_seven_theories
+def total_covmat_diagtheory_experiments(experiments_results_theory):
+    """Same as total_covmat_datasets but per experiment rather than
+    per dataset. Needed for calculation of chi2 per experiment."""
+    exp_result_covmats = []
+    for exp_result in zip(*experiments_results_theory):
+        theory_centrals = [x[1].central_value for x in exp_result]
+        s = make_scale_var_covmat(theory_centrals)
+        s_diag = np.zeros((len(data_theory_diff),len(data_theory_diff)))
+        np.fill_diagonal(s_diag, np.diag(s))
+        sigma = exp_result[0][0].covmat
+        cov = s_diag + sigma
         exp_result_covmats.append(cov)
     return exp_result_covmats
 
@@ -256,12 +290,25 @@ def abs_chi2_data_theory_experiment(experiments_results, total_covmat_experiment
                               central_result, len(data_result)))
     return chi2data_array
 
+def abs_chi2_data_diagtheory_dataset(experiments_results, total_covmat_diagtheory_experiments):
+    """ For a diagonal theory covmat """
+    return abs_chi2_data_theory_experiment(experiments_results, total_covmat_diagtheory_experiments)
+
+def abs_chi2_data_diagtheory_dataset(experiments_results, total_covmat_diagtheory_datasets):
+    """ For a diagonal theory covmat """
+    return abs_chi2_data_theory_experiment(experiments_results, total_covmat_diagtheory_datasets)
 @table
 def experiments_chi2_table_theory(experiments, pdf, abs_chi2_data_theory_experiment,
                                   abs_chi2_data_theory_dataset):
     """Same as experiments_chi2_table but including theory covariance matrix"""
     return experiments_chi2_table(experiments, pdf, abs_chi2_data_theory_experiment,
                                 abs_chi2_data_theory_dataset)
+@table
+def experiments_chi2_table_diagtheory(experiments, pdf, abs_chi2_data_diagtheory_experiment,
+                                  abs_chi2_data_diagtheory_dataset):
+    """Same as experiments_chi2_table but including diagonal theory covariance matrix"""
+    return experiments_chi2_table(experiments, pdf, abs_chi2_data_diagtheory_experiment,
+                                abs_chi2_data_diagtheory_dataset)
 
 def matrix_plot_labels(df):
     explabels = [x[0] for x in df.columns]
