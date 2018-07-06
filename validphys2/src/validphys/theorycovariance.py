@@ -96,7 +96,7 @@ def total_covmat_diagtheory_datasets(each_dataset_results_theory):
     for dataset in each_dataset_results_theory:
         theory_centrals = [x[1].central_value for x in dataset]
         s = make_scale_var_covmat(theory_centrals)
-        s_diag = np.zeros((len(data_theory_diff),len(data_theory_diff)))
+        s_diag = np.zeros((len(s),len(s)))
         np.fill_diagonal(s_diag, np.diag(s))
         sigma = dataset[0][0].covmat
         cov = s_diag + sigma
@@ -136,7 +136,7 @@ def total_covmat_diagtheory_experiments(experiments_results_theory):
     for exp_result in zip(*experiments_results_theory):
         theory_centrals = [x[1].central_value for x in exp_result]
         s = make_scale_var_covmat(theory_centrals)
-        s_diag = np.zeros((len(data_theory_diff),len(data_theory_diff)))
+        s_diag = np.zeros((len(s),len(s)))
         np.fill_diagonal(s_diag, np.diag(s))
         sigma = exp_result[0][0].covmat
         cov = s_diag + sigma
