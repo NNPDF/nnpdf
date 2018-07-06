@@ -290,7 +290,7 @@ def abs_chi2_data_theory_experiment(experiments_results, total_covmat_experiment
                               central_result, len(data_result)))
     return chi2data_array
 
-def abs_chi2_data_diagtheory_dataset(experiments_results, total_covmat_diagtheory_experiments):
+def abs_chi2_data_diagtheory_experiment(experiments_results, total_covmat_diagtheory_experiments):
     """ For a diagonal theory covmat """
     return abs_chi2_data_theory_experiment(experiments_results, total_covmat_diagtheory_experiments)
 
