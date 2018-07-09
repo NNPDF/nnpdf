@@ -254,7 +254,7 @@ def chi2_block_impact(theory_block_diag_covmat, experiments_covmat, experiments_
 def theory_diagcovmat(theory_covmat):
     """Returns theory covmat with only diagonal values"""
     s = theory_covmat.values
-    s_diag = np.zeros((len(data_theory_diff),len(data_theory_diff)))
+    s_diag = np.zeros((len(s),len(s)))
     np.fill_diagonal(s_diag, np.diag(s))
     return s
 
