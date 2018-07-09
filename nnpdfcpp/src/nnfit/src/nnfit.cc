@@ -335,6 +335,7 @@ int main(int argc, char **argv)
 
       // Export fit results
       fitset->ExportMeta(replica, erf_val/dofval, erf_trn/doftrn, chi2/dof, posVeto);
+      fitset->ExportInfoFile();
       fitset->ExportGrid(replica);
       fitset->ExportPDF(replica);
 

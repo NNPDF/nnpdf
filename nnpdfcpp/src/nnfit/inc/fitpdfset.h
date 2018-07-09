@@ -50,7 +50,8 @@ public:
   }
 
   void InitPDFSet() const;
-  void ExportPDF(int const& rep);  //!< Export LHAPDF grid
+  void ExportInfoFile() const; //!< Write LHAPDF info file if it does not exist.
+  void ExportPDF(int const& replica);  //!< Export LHAPDF grid
   void ExportGrid(int const& rep); //!< Export initial-value pdf grid
   void ExportMeta(int const& rep, real const& erf_val, real const& erf_trn, real const& chi2, bool posVeto);
 
