@@ -294,9 +294,9 @@ def abs_chi2_data_diagtheory_experiment(experiments_results, total_covmat_diagth
     """ For a diagonal theory covmat """
     return abs_chi2_data_theory_experiment(experiments_results, total_covmat_diagtheory_experiments)
 
-def abs_chi2_data_diagtheory_dataset(experiments_results, total_covmat_diagtheory_datasets):
+def abs_chi2_data_diagtheory_dataset(each_dataset_results, total_covmat_diagtheory_datasets):
     """ For a diagonal theory covmat """
-    return abs_chi2_data_theory_experiment(experiments_results, total_covmat_diagtheory_datasets)
+    return abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_diagtheory_datasets)
 @table
 def experiments_chi2_table_theory(experiments, pdf, abs_chi2_data_theory_experiment,
                                   abs_chi2_data_theory_dataset):
