@@ -63,7 +63,7 @@ namespace Colour {
         BG_BLUE     = 44,
         BG_DEFAULT  = 49
     };
-    static std::ostream& operator<<(std::ostream& os, Code code) {
+    static inline std::ostream& operator<<(std::ostream& os, Code code) {
         return os << "\033[" << static_cast<int>(code) << "m";
     }
 }

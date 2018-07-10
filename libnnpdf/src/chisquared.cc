@@ -20,7 +20,7 @@ namespace NNPDF
     const int ndat = cd.GetNData();
     const int nsys = cd.GetNSys();
 
-    if (t0.size() != ndat)
+    if ((int) t0.size() != ndat)
       throw LengthError("ComputeCovMat","invalid number of points in t0 vector!");
 
     auto CovMat = NNPDF::matrix<double>(ndat, ndat);
@@ -78,7 +78,7 @@ namespace NNPDF
     if (decomp != 0 ) throw RuntimeException("CholeskyDecomposition", "Error encountered in gsl decomposition");
 
     // Zero upper-diagonal part of matrix left by gsl (probably unneccesary)
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < (int) n; i++)
       for (int j = 0; j > i; j++)
         sqrtmat(i, j) = 0;
 
