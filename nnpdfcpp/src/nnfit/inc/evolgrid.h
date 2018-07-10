@@ -25,7 +25,7 @@ public:
    * @param initialscale_grids vector with initial grids per replica
    * @param theory the theory mapping for APFEL
    */
-  EvolveGrid(std::vector<ExportGrid> const& initialscale_grids,
+  EvolveGrid(const ExportGrid &initialscale_grid,
              std::map<std::string, std::string> const& theory);
 
   /**
@@ -40,13 +40,13 @@ public:
    * @param rep replica number, by default =0 (for nnfit) while can take
    * larger numbers for revolve/evolvefit programs.
    */
-  void WriteLHAFile(const std::string replica_file, int rep = 0) const;
+  void WriteLHAFile(const std::string replica_file) const;
 
 private:
   const int fnq2;
   const double fq2min;
   const double fq2max;
-  const std::vector<ExportGrid> finitialscale_grids;
+  ExportGrid const& finitialscale_grid;
 };
 
 /**

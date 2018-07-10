@@ -349,7 +349,7 @@ int main(int argc, char **argv)
       std::string infofile = basefile + settings.GetPDFName() + ".info";
       std::string replica_file = basefile + "replica_" + std::to_string(replica) + "/"
                                + settings.GetPDFName() + ".dat";
-      auto dglapg = EvolveGrid(vector<ExportGrid>{eg}, settings.GetTheoryMap());
+      auto dglapg = EvolveGrid(eg, settings.GetTheoryMap());
       dglapg.WriteInfoFile(infofile);
       dglapg.WriteLHAFile(replica_file);
 

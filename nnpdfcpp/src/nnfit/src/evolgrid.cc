@@ -76,14 +76,14 @@ vector< vector<double> > generate_q2subgrids( const int nq2,
 }
 
 //______________________________________________________
-EvolveGrid::EvolveGrid(vector<ExportGrid> const& initialscale_grids,
+EvolveGrid::EvolveGrid(ExportGrid const& initialscale_grid,
                        map<string, string> const& theory):
   fnq2(50),
   fq2min(pow(atof(theory.at("Q0").c_str()),2)),
   fq2max(1E5*1E5),
-  finitialscale_grids(initialscale_grids)
+  finitialscale_grid(initialscale_grid)
 {
-  const auto xg = initialscale_grids[0].GetXGrid();
+  const auto xg = initialscale_grid.GetXGrid();
   cout << "- Initialising evolution with " + std::to_string(xg.size()) + " x-points" << endl;
 
   // Initialize APFEL
@@ -116,7 +116,7 @@ void EvolveGrid::WriteInfoFile(const string infofile) const
     cout << "- Exporting LHAPDF info file: " << infofile << endl;
 
   // LHAPDF6 HEADER
-  const auto xg = finitialscale_grids[0].GetXGrid();
+  const auto xg = finitialscale_grid.GetXGrid();
   const auto q2subgrids = generate_q2subgrids(fnq2, fq2min, fq2max);
 
   infodata << "SetDesc: \"NNPDF x.x\"" << endl;
@@ -165,17 +165,17 @@ void EvolveGrid::WriteInfoFile(const string infofile) const
 }
 
 //______________________________________________________
-void EvolveGrid::WriteLHAFile(const string replica_file, int rep) const
+void EvolveGrid::WriteLHAFile(const string replica_file) const
 {
   cout << "- Writing out LHAPDF file: " << replica_file << endl;
   // Setup stringstreams for LHgrid writing
 
   stringstream outstream;
   outstream << scientific << setprecision(7);
-  outstream << "PdfType: replica\nFormat: lhagrid1\nFromMCReplica: " << finitialscale_grids[rep].GetReplica() << "\n---" << std::endl;
+  outstream << "PdfType: replica\nFormat: lhagrid1\nFromMCReplica: " << finitialscale_grid.GetReplica() << "\n---" << std::endl;
 
   // compute q2 subgrids
-  const auto xg = finitialscale_grids[rep].GetXGrid();
+  const auto xg = finitialscale_grid.GetXGrid();
   const auto q2subgrids = generate_q2subgrids(fnq2, fq2min, fq2max);
   for (auto subgrid: q2subgrids)
     {
@@ -242,7 +242,7 @@ void EvolveGrid::WriteLHAFile(const string replica_file, int rep) const
                   for(int ix_in = 0; ix_in < (int) xg.size(); ix_in++) // ix_in = ix_out
                   {
                       const int index = ix_in + if_in*xg.size() + if_out*xg.size()*14 + ix_out*xg.size()*14*14 + iq*xg.size()*xg.size()*14*14;
-                      evolved_pdf += evol_op[index] * finitialscale_grids[rep].GetPDF(ix_in, if_in);
+                      evolved_pdf += evol_op[index] * finitialscale_grid.GetPDF(ix_in, if_in);
                   }
                 outstream << std::setw(14) << evolved_pdf;
             }
