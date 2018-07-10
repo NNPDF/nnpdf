@@ -5,132 +5,72 @@
 // Authors: Nathan Hartland,  n.p.hartland@ed.ac.uk
 //          Stefano Carrazza, stefano.carrazza@mi.infn.it
 #pragma once
+
+#include <map>
+#include <string>
 #include <vector>
-#include "nnpdfsettings.h"
 #include <NNPDF/pdfset.h>
-using NNPDF::PDFSet;
+class ExportGrid;
 
-// Largest x-grid admissible in APFEL
-const std::vector<double> apfel_xgrid =
-  {
-    1.000000000000000e-09, 1.297084823439570e-09, 1.682429034742569e-09,
-    2.182253154205826e-09, 2.830567417398188e-09, 3.671485978929410e-09,
-    4.762228629353150e-09, 6.177014273761803e-09, 8.012111098984379e-09,
-    1.039238706072454e-08, 1.347980640738050e-08, 1.748445036917782e-08,
-    2.267881188811028e-08, 2.941633703008346e-08, 3.815547465958784e-08,
-    4.949087072321288e-08, 6.419382957083709e-08, 8.326479519868589e-08,
-    1.080014229938285e-07, 1.400868730811297e-07, 1.817043317937722e-07,
-    2.356855515453774e-07, 3.057035125953233e-07, 3.965223098417466e-07,
-    5.143212572365697e-07, 6.671152451366758e-07, 8.652999229731433e-07,
-    1.122358752414873e-06, 1.455779955476825e-06, 1.888245605146129e-06,
-    2.449173524549460e-06, 3.176716500287171e-06, 4.120354152327973e-06,
-    5.344252657520903e-06, 6.931618978063155e-06, 8.990342582381449e-06,
-    1.166030301122581e-05, 1.512283122887690e-05, 1.961295293492122e-05,
-    2.543522071345024e-05, 3.298416834359921e-05, 4.277070539720159e-05,
-    5.545612481058487e-05, 7.189583136325140e-05, 9.319542279796139e-05,
-    1.207823677313300e-04, 1.564972094665545e-04, 2.027089363284954e-04,
-    2.624597993319508e-04, 3.396452441689850e-04, 4.392344430004219e-04,
-    5.675356601045333e-04, 7.325076157255367e-04, 9.441121054524513e-04,
-    1.214693176869783e-03, 1.559353061182245e-03, 1.996274511413378e-03,
-    2.546914937365516e-03, 3.235975102131256e-03, 4.091034365095647e-03,
-    5.141759770839620e-03, 6.418650960623169e-03, 7.951379403063506e-03,
-    9.766899996240997e-03, 1.188761392513640e-02, 1.432989476439189e-02,
-    1.710322794602712e-02, 2.021007339250794e-02, 2.364639713695425e-02,
-    2.740269157283572e-02, 3.146525061324443e-02, 3.581748292824286e-02,
-    4.044110601633167e-02, 4.531713439738071e-02, 5.042663479500688e-02,
-    5.575126100843393e-02, 6.127360193905193e-02, 6.697738294982548e-02,
-    7.284755899865170e-02, 7.887033222927267e-02, 8.503311978014517e-02,
-    9.132449102786790e-02, 9.773408797837715e-02, 1.042525382086388e-01,
-    1.108713665472371e-01, 1.175829093728782e-01, 1.243802338015993e-01,
-    1.312570629450312e-01, 1.382077077072888e-01, 1.452270051356506e-01,
-    1.523102630659852e-01, 1.594532106521559e-01, 1.666519542939869e-01,
-    1.739029384555782e-01, 1.812029108733327e-01, 1.885488916790972e-01,
-    1.959381459991933e-01, 2.033681596297647e-01, 2.108366174291031e-01,
-    2.183413841065613e-01, 2.258804871240649e-01, 2.334521014595030e-01,
-    2.410545360116810e-01, 2.486862214527622e-01, 2.563456993587234e-01,
-    2.640316124686842e-01, 2.717426959427826e-01, 2.794777695041488e-01,
-    2.872357303648326e-01, 2.950155468476644e-01, 3.028162526268661e-01,
-    3.106369415195031e-01, 3.184767627680818e-01, 3.263349167616716e-01,
-    3.342106511491565e-01, 3.421032573036267e-01, 3.500120671016855e-01,
-    3.579364499855710e-01, 3.658758102796432e-01, 3.738295847359622e-01,
-    3.817972402864939e-01, 3.897782719819471e-01, 3.977722010992863e-01,
-    4.057785734023404e-01, 4.137969575406706e-01, 4.218269435745480e-01,
-    4.298681416141745e-01, 4.379201805632053e-01, 4.459827069569899e-01,
-    4.540553838875619e-01, 4.621378900076507e-01, 4.702299186071416e-01,
-    4.783311767556753e-01, 4.864413845060586e-01, 4.945602741533477e-01,
-    5.026875895451769e-01, 5.108230854390865e-01, 5.189665269032351e-01,
-    5.271176887569979e-01, 5.352763550484283e-01, 5.434423185656607e-01,
-    5.516153803797675e-01, 5.597953494166407e-01, 5.679820420558005e-01,
-    5.761752817540883e-01, 5.843748986924983e-01, 5.925807294444404e-01,
-    6.007926166639503e-01, 6.090104087923975e-01, 6.172339597824495e-01,
-    6.254631288380691e-01, 6.336977801694852e-01, 6.419377827620891e-01,
-    6.501830101583613e-01, 6.584333402519444e-01, 6.666886550930888e-01,
-    6.749488407047076e-01, 6.832137869083856e-01, 6.914833871596969e-01,
-    6.997575383922505e-01, 7.080361408699164e-01, 7.163190980467328e-01,
-    7.246063164340254e-01, 7.328977054742707e-01, 7.411931774214037e-01,
-    7.494926472270083e-01, 7.577960324322238e-01, 7.661032530649272e-01,
-    7.744142315419215e-01, 7.827288925758362e-01, 7.910471630864785e-01,
-    7.993689721163776e-01, 8.076942507502913e-01, 8.160229320384573e-01,
-    8.243549509233821e-01, 8.326902441699869e-01, 8.410287502988437e-01,
-    8.493704095226000e-01, 8.577151636849855e-01, 8.660629562026835e-01,
-    8.744137320097212e-01, 8.827674375042057e-01, 8.911240204974589e-01,
-    8.994834301652264e-01, 9.078456170010206e-01, 9.162105327713991e-01,
-    9.245781304731123e-01, 9.329483642920292e-01, 9.413211895637338e-01,
-    9.496965627357548e-01, 9.580744413312983e-01, 9.664547839144387e-01,
-    9.748375500567046e-01, 9.832227003049778e-01, 9.916101961506623e-01,
-    1.000000000000000e+00
-};
-
-class APFELSingleton
+/**
+ * @brief The EvolveGrid class.
+ * Allocates APFEL evolution once for all replicas.
+ * Computes the evolution operator and writes info and LHA files.
+ */
+class EvolveGrid
 {
 public:
-  void Initialize(NNPDFSettings const& set, PDFSet *const& pdf);
+  /**
+   * @brief Class constructor.
+   * @param initialscale_grids vector with initial grids per replica
+   * @param theory the theory mapping for APFEL
+   */
+  EvolveGrid(std::vector<ExportGrid> const& initialscale_grids,
+             std::map<std::string, std::string> const& theory);
 
-  // returns the PDF at initial scale fQ0, flavor basis
-  NNPDF::real xfx(const double& x, const int& fl);
+  /**
+   * @brief Export LHAPDF info file, if infofile does not exist.
+   * @param infofile the desired file path
+   */
+  void WriteInfoFile(const std::string infofile) const;
 
-  // returns the evolved PDF at Q from Q0, flavor basis
-  void xfxQ(const double& x, const double& Q, const int& n, NNPDF::real *xf);
-
-  double alphas(double);
-  std::vector<double> getX() const { return fX; }
-  std::vector<std::vector<double> > getQ2nodes() const { return fQ2nodes; }
-  int getNFpdf()      const { return fNFpdf; }
-  int getNFas()       const { return fNFas; }
-  double getXmin()    const { return fXmin; }
-  double getXmax()    const { return fXmax; }
-  double getQmin()    const { return fQ0; }
-  double getQmax()    const { return fQmax; }
-  double getMZ()      const { return fMZ; }
-  double getAlphas()  const { return fAlphas; }
-  double getMCharm()  const { return mth[0]; }
-  double getMBottom() const { return mth[1]; }
-  double getMTop()    const { return mth[2]; }
-  double getQCharm()  const { return mthref[0]; }
-  double getQBottom() const { return mthref[1]; }
-  double getQTop()    const { return mthref[2]; }
-
-  APFELSingleton();
+  /**
+   * @brief Export the LHA evolved grid file.
+   * @param replica_file the desired file path
+   * @param rep replica number, by default =0 (for nnfit) while can take
+   * larger numbers for revolve/evolvefit programs.
+   */
+  void WriteLHAFile(const std::string replica_file, int rep = 0) const;
 
 private:
-  PDFSet *fPDF;
-  double fMZ;
-  double fAlphas;
-  double fQ0;
-  double fQtmp;
-  double fQmax;
-  int    fNQ;
-  double fXmin;
-  double fXmed;
-  double fXmax;
-  int    fNX;
-  int    fMem;
-  int    fNFpdf;
-  int    fNFas;
-  std::vector<double> fX;
-  std::vector<double> mth;    //!< HQ Masses
-  std::vector<double> mthref; //!< HQ Mass Reference scales
-  std::vector<std::vector<double> > fQ2nodes;
+  const int fnq2;
+  const double fq2min;
+  const double fq2max;
+  const std::vector<ExportGrid> finitialscale_grids;
 };
 
-APFELSingleton& apfelInstance();
+/**
+ * @brief Generates a list of nq2 Q2 points between q2min and q2max.
+ * Distributed as linear in tau = log( log( Q2 / lambda2 ) )
+ * @param nq2 number of q2 points (nodes).
+ * @param q2min minimum q2 value for the grid.
+ * @param q2max maximum q2 value for the grid.
+ * @param lambda2 coefficient for the distribution density.
+ * @return a vector with the q2grid nodes
+ */
+std::vector<double> generate_q2grid(const int nq2,
+                                    const double q2min,
+                                    const double q2max,
+                                    const double lambda2);
+
+/**
+ * @brief Compute Q2 grid.
+ * This is suitable for PDFs not AlphaS (see maxNF used below)
+ * @param nq2 the number of q2 points for the grid.
+ * @param q2min minimum q2 value for the grid.
+ * @param q2max maximum q2 value for the grid.
+ * @return the q2 subgrid vector
+ */
+std::vector<std::vector<double>> generate_q2subgrids(const int nq2,
+                                                     const double q2min,
+                                                     const double q2max);

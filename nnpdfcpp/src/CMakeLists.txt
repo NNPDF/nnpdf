@@ -22,13 +22,14 @@ endif(COMPILE_filter)
 option(COMPILE_nnfit "Compile nnfit program." ON)
 if (COMPILE_nnfit)
   add_executable(nnfit nnfit/src/nnfit.cc
-                       nnfit/src/apfelevol.cc
+                       nnfit/src/evolgrid.cc
                        nnfit/src/fastaddchi2.cc
                        nnfit/src/fitbases.cc
                        nnfit/src/fitpdfset.cc
                        nnfit/src/minimizer.cc
                        nnfit/src/pdfbasis.cc
-                       nnfit/src/stopping.cc)
+                       nnfit/src/stopping.cc
+		       nnfit/src/exportgrid.cc)
   include_directories(nnfit/inc)
   target_link_libraries(nnfit common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
   install(TARGETS nnfit DESTINATION bin

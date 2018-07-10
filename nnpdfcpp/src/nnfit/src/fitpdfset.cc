@@ -18,7 +18,6 @@
 
 #include "fitpdfset.h"
 #include "nnpdfsettings.h"
-#include "apfelevol.h"
 #include <NNPDF/randomgenerator.h>
 #include <NNPDF/fastkernel.h>
 #include <NNPDF/exceptions.h>
@@ -50,7 +49,6 @@ fNIte(0),
 fbtype(NNPDFSettings::getFitBasisType(nnset.Get("fitting","fitbasis").as<string>()))
 {
   fMembers = 0; // copies
-  apfelInstance().Initialize(nnset, this);
 }
 
 /**
@@ -274,12 +272,7 @@ void FitPDFSet::GetPDF(real const& x, real const& Q2, int const& n, real* pdf) c
       fFitBasis->BASIS2EVLN(fitpdfs.data(), pdf);
     }
   else
-    {
-      std::array<real, 14> lha;
-      for (int i = 0; i < 14; i++) lha[i] = pdf[i] = 0.0;
-      apfelInstance().xfxQ(x,sqrt(Q2),n,lha.data());
-      PDFSet::LHA2EVLN(lha.data(),pdf);
-    }
+    throw RuntimeException("FitPDFSet::GetPDF", "Evolved PDFs not implemented for this function anymore");
 
   return;
 }
@@ -313,7 +306,7 @@ real FitPDFSet::GetPDF(real const& x, const real &Q2, int const& n, int const& f
       fFitBasis->Preprocess(x, fl, pdf, *fPreprocParam[n]);
     }
   else
-    throw RuntimeException("FitPDFSet::GetPDF", "APFEL singleton not implemented for this function");
+    throw RuntimeException("FitPDFSet::GetPDF", "Evolved PDFs not implemented for this function anymore");
 
   return pdf;
 }
@@ -383,183 +376,6 @@ void FitPDFSet::ExportMeta( int const& rep, real const& erf_val, real const& erf
         paramsdata << fBestFit[i]->GetParameters()[j] << endl;
     }
   write_to_file(paramsfile.str(), paramsdata.str());
-}
-
-/**
- * @brief FitPDFSet::ExportInfoFile
- */
-void FitPDFSet::ExportInfoFile() const
-{
-  // skip if file exists
-  struct stat s;
-  stringstream infofile, infodata;
-  infofile << fSettings.GetResultsDirectory() + "/nnfit/" << fSettings.GetPDFName() << ".info";
-  if(stat(infofile.str().c_str(), &s) == 0 && S_ISREG(s.st_mode)) return;
-
-  cout << "- Exporting LHAPDF info file: " << infofile.str() << endl;
-
-  // LHAPDF6 HEADER
-  const int nf = std::max(apfelInstance().getNFpdf(),apfelInstance().getNFas());
-  const auto q2grid = apfelInstance().getQ2nodes();
-
-  infodata << "SetDesc: \"NNPDF x.x\"" << endl;
-  infodata << "SetIndex: " << endl;
-  infodata << "Authors: NNPDF Collaboration." << endl;
-  infodata << "Reference: arXiv:xxxx.xxxxxx" << endl;
-  infodata << "Format: lhagrid1" << endl;
-  infodata << "DataVersion: 1" << endl;
-  infodata << "NumMembers: REPLACE_NREP" << endl;
-  infodata << "Particle: 2212" << endl;
-  infodata << "Flavors: [";
-  for (int i = -nf; i <= nf; i++)
-    infodata << ((i == 0) ? 21 : i) << ((i == nf && !fSettings.IsQED()) ? "]\n" : ( (i == nf && fSettings.IsQED()) ? ", 22]\n" : ", "));
-  infodata << "OrderQCD: " << fSettings.GetTheory(APFEL::kPTO) << endl;
-  infodata << "FlavorScheme: variable" << endl;
-  infodata << "NumFlavors: " << nf << endl;
-  infodata << "ErrorType: replicas" << endl;
-  infodata.precision(7);
-  infodata << scientific;
-  infodata << "XMin: "<< apfelInstance().getXmin() << endl;
-  infodata << "XMax: "<< apfelInstance().getXmax() << endl;
-  infodata << "QMin: "<< apfelInstance().getQmin() << endl;
-  infodata << "QMax: "<< apfelInstance().getQmax() << endl;
-  infodata << "MZ: "  << apfelInstance().getMZ() << endl;
-  infodata << "MUp: 0\nMDown: 0\nMStrange: 0" << std::endl;
-  infodata << "MCharm: "  << apfelInstance().getMCharm() << endl;
-  infodata << "MBottom: " << apfelInstance().getMBottom() << endl;
-  infodata << "MTop: "    << apfelInstance().getMTop() << endl;
-  infodata << fixed << "AlphaS_MZ: " << apfelInstance().getAlphas() << endl;
-  infodata << scientific;
-  infodata << "AlphaS_OrderQCD: " << fSettings.GetTheory(APFEL::kPTO) << endl;
-  infodata << "AlphaS_Type: ipol" << endl;
-  infodata << "AlphaS_Qs: [";
-  for (int s = 0; s < (int) q2grid.size(); s++)
-    for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-      infodata << sqrt(q2grid[s][iq]) << ((s == (int) q2grid.size()-1 && iq == (int) q2grid[s].size()-1) ? "]\n" : ", ");
-  infodata << "AlphaS_Vals: [";
-  for (int s = 0; s < (int) q2grid.size(); s++)
-    for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-      infodata << apfelInstance().alphas(sqrt(q2grid[s][iq])) << ((s == (int) q2grid.size()-1 && iq == (int) q2grid[s].size()-1) ? "]\n" : ", ");
-  infodata << "AlphaS_Lambda4: 0.342207" << endl;
-  infodata << "AlphaS_Lambda5: 0.239" << endl;
-  write_to_file(infofile.str(), infodata.str());
-}
-
-/**
- * @brief Prototype LHGrid output
- * @param rep the replica
- * @param erf_val the validation error function
- * @param erf_trn the training error function
- * @param chi2 the chi2
- * Print to file a partial LHgrid for the current replica
- */
-void FitPDFSet::ExportPDF(int const& rep)
-{  
-  // Creating output folder
-  const string ofile = fSettings.GetResultsDirectory() + "/nnfit/replica_" + std::to_string(rep) + "/" + fSettings.GetPDFName() + ".dat";
-  cout << "- Writing out LHAPDF file: " << ofile << endl;
-
-  // if replica 1 print the header
-  const int nf = std::max(apfelInstance().getNFpdf(),apfelInstance().getNFas());
-  const auto xgrid  = apfelInstance().getX();
-  const auto q2grid = apfelInstance().getQ2nodes();
-
-  // Performing DGLAP
-  array<real, 14> pdf;
-  const int nx = xgrid.size();
-  vector<vector<array<real, 14>>> res(q2grid.size());
-
-  for (int s = 0; s < (int) q2grid.size(); s++)
-    for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-      for (int ix = 0; ix < nx; ix++)
-        {
-          array<real, 14> lha;
-          GetPDF(xgrid[ix], q2grid[s][iq], 0, pdf.data());
-          PDFSet::EVLN2LHA(pdf.data(), lha.data());
-          res[s].push_back(lha);
-        }
-
-  // print the replica
-  stringstream lhadata;
-  lhadata << scientific << setprecision(7);
-  lhadata << "PdfType: replica\nFormat: lhagrid1\nFromMCReplica: " << rep << "\n---" << std::endl;
-
-  for (int s = 0; s < (int) q2grid.size(); s++)
-     {
-       for (int ix = 0; ix < nx; ix++)
-         lhadata << xgrid[ix] << " ";
-       lhadata << std::endl;
-
-       for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-         lhadata << sqrt(q2grid[s][iq]) << " ";
-       lhadata << std::endl;
-
-       for (int i = -nf; i <= nf; i++)
-         if (i == 0) lhadata << 21 << " ";
-         else lhadata << i << " ";
-       if (fSettings.IsQED()) lhadata << 22 << " ";
-       lhadata << std::endl;
-
-       const int floffset = 6-nf;
-       for (int ix = 0; ix < nx; ix++)
-         for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-           {
-             lhadata << " ";
-             for (int fl = floffset; fl <= 12-floffset; fl++)
-               lhadata << setw(14) << res[s][ix + iq*nx][fl] << " ";
-             if (fSettings.IsQED()) lhadata << setw(14) << res[s][ix + iq*nx][PDFSet::PHT] << " ";
-             lhadata << std::endl;
-           }
-       lhadata << "---" << std::endl;
-     }
-  write_to_file(ofile, lhadata.str());
-}
-
-
-/**
- * @brief FitPDFSet::ExportGrid
- * @param rep the replica ID
- * Export initial scale PDF on a grid in x
- */
-void FitPDFSet::ExportGrid(int const& rep)
-{
-  stringstream gridfile, griddata;
-  gridfile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/" << fSettings.GetPDFName() <<".gridvalues";
-  cout << "- Printing grid to file: " << gridfile.str() <<endl;
-
-  griddata << scientific << setprecision(14);
-  griddata << "{" << std::endl
-           << "\"replica\": "<< rep << "," << std::endl
-           << "\"q20\": " << fQ20 << ","<<std::endl
-           << "\"xgrid\": ["<<apfel_xgrid[0];
-  for (size_t ix=1; ix < apfel_xgrid.size(); ix++)
-    griddata <<", "<< apfel_xgrid[ix];
-  griddata << "]," <<std::endl;
-
-  // Write out the contents of the xfxvals array to the LHgrid
-  vector<array<real, 14>> pdf_grid;
-  for (auto x : apfel_xgrid)
-    {
-      array<real, 14> pdf, lha;
-      GetPDF(x, fQ20, 0, pdf.data());
-      PDFSet::EVLN2LHA(pdf.data(), lha.data());
-      pdf_grid.push_back(lha);
-    }
-
-  // Print pdf grid to file
-  for (int ipdf = 0; ipdf < 14; ipdf++)
-  {
-    griddata << "\""<<PDFSet::fl_labels[ipdf]<<"\": ["
-             << pdf_grid[0][ipdf];
-    for (size_t ix = 1; ix < pdf_grid.size(); ix++)
-        griddata << ", " << pdf_grid[ix][ipdf];
-    griddata << "]";
-    if (ipdf < 13) griddata << ",";
-    griddata << std::endl;
-  }
-
-  griddata << "}" <<std::endl;
-  write_to_file(gridfile.str(), griddata.str());
 }
 
 /**

@@ -26,9 +26,11 @@
 #include "minimizer.h"
 #include "stopping.h"
 #include "fastaddchi2.h"
+#include "exportgrid.h"
+#include "evolgrid.h"
 
 // Signal catcher
-static void catch_int(int signal) {
+static void catch_int(int) {
   if ( state == FIT_ITER )
   {
     cout << Colour::FG_RED << "\n\n----------------- SIGINT - Interrupting fit -----------------\n" << Colour::FG_DEFAULT << endl;
@@ -239,7 +241,7 @@ int main(int argc, char **argv)
         }
 
         if (i % 100 == 0)
-            LogChi2(settings, fitset.get(), pos, training, validation);
+            LogChi2(fitset.get(), pos, training, validation);
       }
 
       state = FIT_END;
@@ -333,11 +335,23 @@ int main(int argc, char **argv)
       }
       pos.clear();
 
-      // Export fit results
+      // Export meta file
       fitset->ExportMeta(replica, erf_val/dofval, erf_trn/doftrn, chi2/dof, posVeto);
-      fitset->ExportInfoFile();
-      fitset->ExportGrid(replica);
-      fitset->ExportPDF(replica);
+
+      // Export fit results to an initial scale grid
+      std::string basefile = settings.GetResultsDirectory() + "/nnfit/";
+      std::string gridfile = basefile + "replica_" + std::to_string(replica) + "/"
+                           + settings.GetPDFName() +".exportgrid";
+      const auto eg = ExportGrid(*fitset, 0, replica, fitset->GetQ20());
+      eg.Write(gridfile);
+
+      // Export evolved fit
+      std::string infofile = basefile + settings.GetPDFName() + ".info";
+      std::string replica_file = basefile + "replica_" + std::to_string(replica) + "/"
+                               + settings.GetPDFName() + ".dat";
+      auto dglapg = EvolveGrid(vector<ExportGrid>{eg}, settings.GetTheoryMap());
+      dglapg.WriteInfoFile(infofile);
+      dglapg.WriteLHAFile(replica_file);
 
       // Export Logs
       LogManager::ExportLogs();
@@ -369,7 +383,7 @@ void LoadAllDataAndSplit(NNPDFSettings const& settings,
         continue;
 
       vector<DataSet> datasets;
-      for (int j = 0; j < settings.GetExpSets(i).size(); j++)
+      for (int j = 0; j < (int) settings.GetExpSets(i).size(); j++)
         {
           datasets.push_back(LoadDataSet(settings, settings.GetExpSets(i)[j], DATA_FILTERED));
           MakeT0Predictions(T0Set.get(),datasets[j]);
@@ -402,8 +416,7 @@ void LoadAllDataAndSplit(NNPDFSettings const& settings,
 }
 
 // Chi2 per experiment logger
-void LogChi2(NNPDFSettings const& settings,
-             const FitPDFSet* pdf,
+void LogChi2(const FitPDFSet* pdf,
              vector<PositivitySet> const& pos,
              vector<Experiment*> const& train,
              vector<Experiment*> const& valid)
