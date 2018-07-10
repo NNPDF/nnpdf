@@ -453,10 +453,10 @@ void FitPDFSet::ExportInfoFile() const
  * @param chi2 the chi2
  * Print to file a partial LHgrid for the current replica
  */
-void FitPDFSet::ExportPDF(int const& replica)
+void FitPDFSet::ExportPDF(int const& rep)
 {  
   // Creating output folder
-  const string ofile = fSettings.GetResultsDirectory() + "/nnfit/replica_" + std::to_string(replica) + "/" + fSettings.GetPDFName() + ".dat";
+  const string ofile = fSettings.GetResultsDirectory() + "/nnfit/replica_" + std::to_string(rep) + "/" + fSettings.GetPDFName() + ".dat";
   cout << "- Writing out LHAPDF file: " << ofile << endl;
 
   // if replica 1 print the header
