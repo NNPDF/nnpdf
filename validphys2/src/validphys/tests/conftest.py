@@ -3,13 +3,23 @@ conftest.py
 
 Pytest fixtures.
 """
+import pathlib
+
 import pytest
+
 from validphys.loader import FallbackLoader as Loader
 from validphys.core import ExperimentSpec
 from validphys import results
 
+
+
 #Fortunately py.test works much like reportengine and providers are
 #connected by argument names.
+@pytest.fixture
+def tmp(tmpdir):
+    """A tempdir that is manipulated like pathlib Paths"""
+    return pathlib.Path(tmpdir)
+
 @pytest.fixture(scope='module')
 def data():
     l = Loader()
