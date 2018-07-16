@@ -130,7 +130,7 @@ def rebuild_commondata_without_cuts(
     ndata = metadata.ndata
     nsys = metadata.nsys
 
-    ni = next(maskiter)
+    next_index = next(maskiter)
     with open(filename_with_cuts, 'r') as fitfile, \
          open(datapath_filename) as dtfile, \
          open(newpath, 'w') as newfile:
@@ -139,12 +139,12 @@ def rebuild_commondata_without_cuts(
         fitfile.readline()
         for i in range(1 ,ndata+1):
             #You gotta love mismatched indexing
-            if i-1 == ni:
+            if i-1 == next_index:
                 line = fitfile.readline()
                 line = re.sub(
                         index_pattern, rf'\g<startspace>{i}', line, count=1)
                 newfile.write(line)
-                ni = next(maskiter, None)
+                next_index = next(maskiter, None)
                 #drop the data file line
                 dtfile.readline()
             else:
