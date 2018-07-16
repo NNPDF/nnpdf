@@ -20,6 +20,16 @@ private:
   void ReadData();
 };
 
+class FutureColliderFilterCC: public CommonData
+{
+public: 
+  FutureColliderFilterCC(std::string const& setname):
+    CommonData(setname) { ReadData(); }
+
+private:
+  void ReadData();
+};
+
 class FCCFilter: public FutureColliderFilter
 {
 public: 
@@ -32,4 +42,18 @@ class LHeCFilter: public FutureColliderFilter
 public: 
   LHeCFilter():
     FutureColliderFilter("LHeC") { }
+};
+
+class FCCCCFilter: public FutureColliderFilterCC
+{
+public: 
+  FCCCCFilter():
+    FutureColliderFilterCC("FCCCC") { }
+};
+
+class LHeCCCFilter: public FutureColliderFilterCC
+{
+public: 
+  LHeCCCFilter():
+    FutureColliderFilterCC("LHeCCC") { }
 };

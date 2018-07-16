@@ -296,4 +296,6 @@ void InitCommonData(vector<CommonData*>& target)
     // ************************ LHeC + FCC pseudo-data ***************
   target.push_back(new LHeCFilter());
   target.push_back(new FCCFilter());
+  target.push_back(new LHeCCCFilter());
+  target.push_back(new FCCCCFilter());
 }
