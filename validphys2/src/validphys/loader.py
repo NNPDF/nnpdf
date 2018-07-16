@@ -76,6 +76,7 @@ class LoaderBase:
         self.datapath = datapath
         self.resultspath = resultspath
         self._nnprofile = None
+        self._old_commondata_fits = set()
 
     @property
     def nnprofile(self):
@@ -216,8 +217,18 @@ class Loader(LoaderBase):
                 #This is to not repeat all the error handling stuff
                 basedata = self.check_commondata(setname, sysnum=sysnum).datafile
                 cuts = self.check_cuts(setname, fit=fit)
+
+                if fit not in self._old_commondata_fits:
+                    self._old_commondata_fits.add(fit)
+                    log.warn(
+                        f"Found fit using old commondata export settings: "
+                        f"'{fit}'. The commondata that are used in this run "
+                        "will be updated now."
+                        "Please consider re-uploading it.")
+                    log.warn(
+                        f"Points that do not pass the cuts are set to zero!")
+
                 log.info(f"Upgrading filtered commondata. Writing {newpath}")
-                log.warn(f"Points that do not pass the cuts are set to zero!")
                 rebuild_commondata_without_cuts(oldpath, cuts, basedata, newpath)
             datafile = newpath
         else:
