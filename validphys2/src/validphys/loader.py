@@ -107,13 +107,13 @@ class LoaderBase:
 
 def rebuild_commondata_without_cuts(
          filename_with_cuts, cuts, datapath_filename, newpath):
-    """Take a CommonData file that is stored with the cuts applied "
+    """Take a CommonData file that is stored with the cuts applied
     and write another file with no cuts. The points that were not present in
     the original file have the same kinematics as the file in
     ``datapath_filename``, which must correspond to the original CommonData
-    file which does not have the cuts applied. However, to aboid confusion, the
+    file which does not have the cuts applied. However, to avoid confusion, the
     values and uncertainties are all set to zero. The new file is written
-    to ``newname``.
+    to ``newpath``.
     """
 
     metadata = peek_commondata_metadata(datapath_filename)
@@ -157,11 +157,11 @@ def rebuild_commondata_without_cuts(
                 m = re.match(data_line_pattern, line)
                 newfile.write(line[:m.end()])
                 #And value, stat, *sys that we want to drop
-                #Do not use string join to keep up with thw ugly format
-                #This shold really be nan's, but the c++ streams that read this
+                #Do not use string join to keep up with the ugly format
+                #This should really be nan's, but the c++ streams that read this
                 #are rarher stupid, and I am not doing the insane thing.
                 #https://stackoverflow.com/questions/11420263/is-it-possible-to-read-infinity-or-nan-values-using-input-streams
-                zeros = '-0\t'*(2+ 2*nsys)
+                zeros = '-0\t'*(2 + 2*nsys)
                 newfile.write(f'{zeros}\n')
 
 #TODO: Deprecate get methods?
