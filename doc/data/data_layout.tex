@@ -111,8 +111,10 @@ Date & Version & Major/Minor & Author & Comments\\
 19/02/18 & 1.4.0 & Major & nh & Added global\_nx parameter. Removed SYSTYPES
 file discussion, removed references to old scripts.\\
 \hline
-26/02/18 & 1.4.1 & Minor & nh & Formatting improvments, discussed FK table
+26/02/18 & 1.4.1 & Minor & nh & Formatting improvements, discussed FK table
 compression.\\
+\hline
+05/06/18 & 1.4.2 & Minor & nh & Addition of EScaleVar entry in theory database.\\
 \hline
 \end{tabular}
 \end{center}
@@ -135,7 +137,7 @@ nnpdf++} code.
 For NNPDF3.1 and later fits, a considerably larger number of theory options will
 be explored than in previous determinations. In NNPDF3.0 the main theory
 variations used were perturbative order, value of the strong coupling and the
-number of active flavours in the VFNS. For NNPDF3.1 and later, variations in
+number of active flavours in the VFNS\@. For NNPDF3.1 and later, variations in
 additional parameters must be accommodated, such as treatments of the heavy
 quark mass (pole vs MS-bar), scale variations,  intrinsic charm, resummation
 effects etc. The book-keeping used to enable efficient variations of the
@@ -683,11 +685,11 @@ following operations are currently implemented.
 \hline
 Operation $(N_{\text{\tt FK}})$ & Code & Output Observable\\
 \hline\hline
-Null Operation(1)& \textbf{NULL} &  $\mathcal{O}_d =  \mathcal{O}_d^{(1)}$ \\
-Sum (2)& \textbf{ADD} &  $\mathcal{O}_d = \mathcal{O}^{(1)}_d + \mathcal{O}^{(2)}_d $\\
-Normalised Sum (4)&  \textbf{SMN}  & $\mathcal{O}_d = (\mathcal{O}^{(1)}_d + \mathcal{O}^{(2)}_d)/(\mathcal{O}^{(3)}_d + \mathcal{O}^{(4)}_d) $ \\
-Asymmetry (2)& \textbf{ASY} &  $\mathcal{O}_d = (\mathcal{O}^{(1)}_d - \mathcal{O}^{(2)}_d)/(\mathcal{O}^{(1)}_d + \mathcal{O}^{(2)}_d) $\\
-Ratio (2)&  \textbf{RATIO} & $\mathcal{O}_d = \mathcal{O}^{(1)}_d / \mathcal{O}^{(2)}_d $\\
+Null Operation(1)   & \textbf{NULL}  & $\mathcal{O}_d = \mathcal{O}_d^{(1)}$ \\
+Sum (2)             & \textbf{ADD}   & $\mathcal{O}_d = \mathcal{O}^{(1)}_d + \mathcal{O}^{(2)}_d $\\
+Normalised Sum (4)  & \textbf{SMN}   & $\mathcal{O}_d = (\mathcal{O}^{(1)}_d + \mathcal{O}^{(2)}_d)/(\mathcal{O}^{(3)}_d + \mathcal{O}^{(4)}_d) $ \\
+Asymmetry (2)       & \textbf{ASY}   & $\mathcal{O}_d = (\mathcal{O}^{(1)}_d - \mathcal{O}^{(2)}_d)/(\mathcal{O}^{(1)}_d + \mathcal{O}^{(2)}_d) $\\
+Ratio (2)           & \textbf{RATIO} & $\mathcal{O}_d = \mathcal{O}^{(1)}_d / \mathcal{O}^{(2)}_d $\\
 \hline
 \end{tabular}
 \end{center}
@@ -722,7 +724,8 @@ the form
 \begin{quotation}\noindent
 OP: \textbf{[CODE]}
 \end{quotation}
-where the \textbf{[CODE]} is given in the above table. Here is an example of a complete {\tt COMPOUND} file
+where the \textbf{[CODE]} is given in the above table. Here is an example of a
+complete {\tt COMPOUND} file
 
 \begin{quotation}\noindent
 \# COMPOUND FK\\
@@ -861,23 +864,25 @@ the theory lookup table under ID {\tt X}.
 \begin{center}
 \begin{tabular}{|r|l|l|p{50mm}|}
 \hline
-Key       & Type    & Description                    & Comments \\
+Key             & Type    & Description         & Comments \\
 \hline\hline
-  SETNAME        & String &  \emph{SetName}       &   \\
-  HADRONIC        & Boolean &  Hadronic flag & 0 or 1 \\
-  NDATA        & Integer & $N_{\text{dat}}$                   &  Number of data points \\
-  NX        & Integer & $N_x$      &  Number of $x-$points in grid \\
+  SETNAME       & String  &  \emph{SetName}     & \\
+  HADRONIC      & Boolean &  Hadronic flag      & 0 or 1 \\
+  NDATA         & Integer & $N_{\text{dat}}$    &  Number of data points \\
+  NX            & Integer & $N_x$               &  Number of $x-$points in grid \\
 \hline
 \end{tabular}
-\caption{Table specifying the required elements of the GridInfo {\tt FK} header segment. The Key column specifies the exact format of the Key in the K-V pair used in the GridInfo segment.}\label{tab:gridparams}
-\end{center}
+\caption{Table specifying the required elements of the GridInfo {\tt FK} header
+segment. The Key column specifies the exact format of the Key in the K-V pair
+used in the GridInfo segment.}
+\label{tab:gridparams}\end{center}
 \end{table}%
 
 \begin{table}[htp]
 \begin{center}
 \begin{tabular}{|r|l|l|p{50mm}|}
 \hline
-Field/Key       & Type    & Description                    & Comments \\
+Field/Key   & Type    & Description                    & Comments \\
 \hline\hline
   ID        & Integer & \it TheoryID                   &  Theory enumerating ID \\
   PTO       & Integer & pQCD order                     & (0/1/2 = LO/NLO/NNLO) \\
@@ -887,15 +892,16 @@ Field/Key       & Type    & Description                    & Comments \\
   ModEv     & Text    & DGLAP solution mode            & EXA/EXP/TRN \\
   XIR       & Real    & $\xi_R$                        & $\mu_R/Q$ \\
   XIF       & Real    & $\xi_F$                        & $\mu_F/Q$ \\
+  EScaleVar & Real    & Switch for DGLAP scale variation & Boolean \\
   NfFF      & Integer & Number of flavours in the FFNS & 3/4/5/6 \\
-  MaxNfAs   & Integer & $n_{f,\rm max}^{(\alpha_S)}$        & Max active flavours in $\alpha_s$ \\
-  MaxNfPdf  & Integer & $n_{f,\rm max}^{(\rm PDF)}$         & Max active flavours in PDFs \\
+  MaxNfAs   & Integer & $n_{f,\rm max}^{(\alpha_S)}$   & Max active flavours in $\alpha_s$ \\
+  MaxNfPdf  & Integer & $n_{f,\rm max}^{(\rm PDF)}$    & Max active flavours in PDFs \\
   Q0        & Real    & $Q_0$                          & FK Table initial scale \\
   alphas    & Real    & Strong coupling                & Format: $\alpha_S(Q_{\textbf{ref}})$ \\
-  Qref      & Real    & $Q_{\textbf{ref}}$                & Reference scale for $\alpha_S$ in GeV \\
+  Qref      & Real    & $Q_{\textbf{ref}}$             & Reference scale for $\alpha_S$ in GeV \\
   QED       & Integer & QED switch                     & Boolean \\
   alphaqed  & Real    & QED coupling                   & Format: $\alpha_{\mathrm{QED}}(Q_{\textbf{qedref}})$ \\
-  Qedref    & Real    & $Q_{\textbf{qedref}}$              & QED reference scale (GeV) \\
+  Qedref    & Real    & $Q_{\textbf{qedref}}$          & QED reference scale (GeV) \\
   SxRes     & Integer & small-$x$ resummation switch   & Boolean \\
   SxOrd     & Text    & small-$x$ pt order             & (``LL'', ``NLL'', ``NNLL'') \\
   HQ        & Text    & HQ mass treatment              & POLE/MSBAR \\
@@ -908,19 +914,21 @@ Field/Key       & Type    & Description                    & Comments \\
   mt        & Real    & $t$ quark mass $M_t/m_t(Q_{\mathrm{mt}})$   & Units: GeV \\
   Qmt       & Real    & $Q_{\mathrm{mt}}$ & $t$ reference scale (GeV)\\
   ktThr     & Real    & t production threshold ratio & Ratio to mt\\
-  CKM       & Text    & CKM matrix elements & unpacked 3X3 matrix \\ \pagebreak
+  CKM       & Text    & CKM matrix elements            & unpacked 3X3 matrix \\ \pagebreak
   MZ        & Real    & $M_Z$                          & $Z$ mass (GeV) \\
   MW        & Real    & $M_W$                          & $W$ mass (GeV) \\
   GF        & Real    & $G_F$                          & Fermi coupling constant \\
   SIN2TW    & Real    & $\sin^2\theta_W$               & \\
   TMC       & Integer & Target mass corrections        & Boolean \\
   MP        & Real    & $M_P$ Proton mass              & Units: GeV \\
-  global\_nx & Integer    & Global x-grid precision    & Default (0) uses
-  set-by-set precision \\
+  global\_nx& Integer & Global x-grid precision        & Default (0) uses set-by-set precision \\
   Comments  & Text    & General comments               & \\
 \hline
 \end{tabular}
-\caption{Table describing the variables used to specify theory choices in the {\tt nnpdf++} project. Here they are shown directly as the fields of the {\tt theory.db} lookup table. The Type column refers directly to the {\tt sqlite3} data type of the field.}\label{tab:theoryparams}
+\caption{Table describing the variables used to specify theory choices in the
+{\tt nnpdf++} project. Here they are shown directly as the fields of the {\tt
+theory.db} lookup table. The Type column refers directly to the {\tt sqlite3}
+data type of the field.}\label{tab:theoryparams}
 \end{center}
 \end{table}%
 
