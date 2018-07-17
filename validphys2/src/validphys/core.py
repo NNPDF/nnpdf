@@ -323,8 +323,7 @@ class Cuts(TupleComp):
 
     def load(self):
         log.debug("Loading cuts for %s", self.name)
-        #TODO: py36
-        return np.loadtxt(str(self.path), dtype=int)
+        return np.atleast_1d(np.loadtxt(self.path, dtype=int))
 
 def cut_mask(cuts):
     """Return an objects that will act as the cuts when applied as a slice"""
