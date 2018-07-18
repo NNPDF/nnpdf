@@ -298,4 +298,10 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new FCCFilter());
   target.push_back(new LHeCCCFilter());
   target.push_back(new FCCCCFilter());
+
+  target.push_back(new LHeC160NCEMFilter());
+  target.push_back(new LHeC160CCEMFilter());
+  target.push_back(new LHeC760NCEMFilter());
+  target.push_back(new LHeC760CCEMFilter());
+
 }

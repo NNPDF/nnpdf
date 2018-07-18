@@ -176,7 +176,7 @@ void FutureColliderFilterCC::ReadData()
 
   //random generator for fluctuations of pseudo-data
   mt19937 random_engine; //seed
-  random_engine.seed(14);
+  random_engine.seed(15);
 
   for (int i = 0; i < fNData; i++)
   {

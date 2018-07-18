@@ -37,18 +37,18 @@ public:
     FutureColliderFilter("FCC") { }
 };
 
-class LHeCFilter: public FutureColliderFilter
-{
-public: 
-  LHeCFilter():
-    FutureColliderFilter("LHeC") { }
-};
-
 class FCCCCFilter: public FutureColliderFilterCC
 {
 public: 
   FCCCCFilter():
     FutureColliderFilterCC("FCCCC") { }
+};
+
+class LHeCFilter: public FutureColliderFilter
+{
+public: 
+  LHeCFilter():
+    FutureColliderFilter("LHeC") { }
 };
 
 class LHeCCCFilter: public FutureColliderFilterCC
@@ -57,3 +57,46 @@ public:
   LHeCCCFilter():
     FutureColliderFilterCC("LHeCCC") { }
 };
+
+class LHeC160NCEMFilter: public FutureColliderFilter
+{
+public: 
+  LHeC160NCEMFilter():
+    FutureColliderFilter("LHeC160NCEM") { }
+};
+
+class LHeC160CCEMFilter: public FutureColliderFilterCC
+{
+public: 
+  LHeC160CCEMFilter():
+    FutureColliderFilterCC("LHeC160CCEM") { }
+};
+
+class LHeC760NCEMFilter: public FutureColliderFilter
+{
+public: 
+  LHeC760NCEMFilter():
+    FutureColliderFilter("LHeC760NCEM") { }
+};
+
+class LHeC760CCEMFilter: public FutureColliderFilterCC
+{
+public: 
+ LHeC760CCEMFilter():
+    FutureColliderFilterCC("LHeC760CCEM") { }
+};
+
+class LHeC760NCEPFilter: public FutureColliderFilter
+{
+public: 
+  LHeC760NCEPFilter():
+    FutureColliderFilter("LHeC760NCEP") { }
+};
+
+class LHeC760CCEPFilter: public FutureColliderFilterCC
+{
+public: 
+  LHeC760CCEPFilter():
+    FutureColliderFilterCC("LHeC760CCEP") { }
+};
+
