@@ -41,7 +41,7 @@ installed by:
 
 When the packages are installed, the necessary binaries are added to the `bin/`
 directory of the corresponding conda environment (which is typically in the
-`PATH`). Users can run `filter`, `nnfit`, or `postfit` from any directory.
+`PATH`). Users can run `vp-setupfit`, `nnfit`, or `postfit` from any directory.
 
 By default, data files (both from theory and experiment) are installed to:
 `<conda root>/share/NNPDF/data` and fit results will be written to 
@@ -107,7 +107,7 @@ while `<conda root>/share/NNPDF` for conda installation.
 runcard. Download the t0 PDF set with `vp-get pdf <t0pdfset>` where
 `<t0pdfset>` is the string specified in the runcard.
 
-3. Filter the data: ```filter <runcard>.yml``` this command will
+3. Prepare the fit: ```vp-setupfit <runcard>.yml``` this command will
 generate a `<runcard_folder>` folder in the current directory with a
 copy of the original YAML runcard.
 

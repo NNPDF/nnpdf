@@ -8,7 +8,7 @@ add_library(common STATIC
 include_directories(common/inc)
 
 # filter
-option(COMPILE_filter "Compile filter program." ON)
+option(COMPILE_filter "Compile filter program." OFF)
 if (COMPILE_filter)
   add_executable(filter filter/src/filter.cc
                       filter/src/kincuts.cc)
