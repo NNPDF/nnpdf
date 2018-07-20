@@ -10,7 +10,7 @@ variables:
   GIT_STRATEGY: clone
   GIT_CHECKOUT: "true"
   GIT_DEPTH: 1000
-  
+
 ## Run the configure and make tests
 job1:
     stage: build-deploy
@@ -18,5 +18,13 @@ job1:
       - ".ciscripts/build-deploy.sh"
     variables:
         CONDA_PY: "36"
+    artifacts:
+        untracked: True
+job2:
+    stage: build-deploy
+    script:
+      - ".ciscripts/build-deploy.sh"
+    variables:
+        CONDA_PY: "37"
     artifacts:
         untracked: True

@@ -18,6 +18,7 @@ env:
 
   matrix:
     - CONDA_PY=36
+    - CONDA_PY=37
 
 before_install:
     # Remove homebrew.
