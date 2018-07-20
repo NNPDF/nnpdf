@@ -4,7 +4,6 @@
     setup-fit constructs the fit [results] folder where data used by nnfit
     will be stored.
 """
-import os
 import sys
 import re
 import shutil
@@ -39,13 +38,8 @@ class SetupFitEnvironment(Environment):
             if not self.config_yml.is_file():
                 raise SetupFitError("Invalid runcard. Must be a file.")
 
-        # check filename
-        filename, extension = os.path.splitext(self.config_yml.name)
-        if not extension:
-            raise SetupFitError("Invalid runcard. File extension missing.")
-
         # check if results folder exists
-        self.output_path = pathlib.Path(filename).absolute()
+        self.output_path = pathlib.Path(self.output_path).absolute()
         if self.output_path.exists():
             log.warning(f"Output folder exists: {self.output_path} Overwritting contents")
         else:
@@ -103,6 +97,21 @@ class SetupFitApp(App):
     def __init__(self):
         super(SetupFitApp, self).__init__(name='setup-fit',
                                           providers=['validphys.filters'])
+
+    @property
+    def argparser(self):
+        parser = super().argparser
+        parser.add_argument('-o','--output',
+                        help="Output folder and name of the fit",
+                        default=None)
+        return parser
+
+    def get_commandline_arguments(self, cmdline=None):
+        args = super().get_commandline_arguments(cmdline)
+        if args['output'] is None:
+            config = pathlib.Path(args['config_yml'])
+            args['output'] = config.with_name(config.stem)
+        return args
 
     @property
     def default_style(self):
