@@ -109,8 +109,7 @@ class SetupFitApp(App):
     def get_commandline_arguments(self, cmdline=None):
         args = super().get_commandline_arguments(cmdline)
         if args['output'] is None:
-            config = pathlib.Path(args['config_yml'])
-            args['output'] = config.with_name(config.stem)
+            args['output'] = pathlib.Path(args['config_yml']).stem
         return args
 
     @property
