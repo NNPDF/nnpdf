@@ -82,16 +82,14 @@ if (COMPILE_revolve)
 endif(COMPILE_revolve)
 
 # revolvenet
-option(COMPILE_revolvenet "Compile revolvenet program." OFF)
-if (COMPILE_revolvenet)
-  add_executable(revolvenet revolvenet/src/revolvenet.cc
-    nnfit/src/apfelevol.cc revolvenet/src/nnpdf.cc
-    nnfit/src/fitbases.cc)
-  include_directories(revolvenet/inc nnfit/inc)
-  target_link_libraries(revolvenet common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
-  install(TARGETS revolvenet DESTINATION bin
+option(COMPILE_evolvefit "Compile evolvefit program." OFF)
+if (COMPILE_evolvefit)
+  add_executable(evolvefit evolvefit/src/evolvefit.cc)
+  include_directories(evolvefit/inc)
+  target_link_libraries(evolvefit common nnpdf ${YAML_LDFLAGS} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
+  install(TARGETS evolvefit DESTINATION bin
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
-endif(COMPILE_revolvenet)
+endif(COMPILE_evolvefit)
 
 # libfiatlux
 find_program(FIATLUX_CONFIG fiatlux-config)
