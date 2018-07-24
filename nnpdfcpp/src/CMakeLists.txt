@@ -4,6 +4,7 @@ add_library(common STATIC
   common/src/md5.cc
   common/src/loadutils.cc
   common/src/datautils.cc
+  common/src/exportgrid.cc
 )
 include_directories(common/inc)
 
@@ -28,8 +29,7 @@ if (COMPILE_nnfit)
                        nnfit/src/fitpdfset.cc
                        nnfit/src/minimizer.cc
                        nnfit/src/pdfbasis.cc
-                       nnfit/src/stopping.cc
-		       nnfit/src/exportgrid.cc)
+                       nnfit/src/stopping.cc)
   include_directories(nnfit/inc)
   target_link_libraries(nnfit common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
   install(TARGETS nnfit DESTINATION bin
@@ -84,8 +84,10 @@ endif(COMPILE_revolve)
 # revolvenet
 option(COMPILE_evolvefit "Compile evolvefit program." OFF)
 if (COMPILE_evolvefit)
-  add_executable(evolvefit evolvefit/src/evolvefit.cc)
-  include_directories(evolvefit/inc)
+  add_executable(evolvefit
+    evolvefit/src/evolvefit.cc
+    nnfit/src/evolgrid.cc)
+  include_directories(evolvefit/inc nnfit/inc)
   target_link_libraries(evolvefit common nnpdf ${YAML_LDFLAGS} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
   install(TARGETS evolvefit DESTINATION bin
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  

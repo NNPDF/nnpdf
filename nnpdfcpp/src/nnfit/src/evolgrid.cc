@@ -76,14 +76,14 @@ vector< vector<double> > generate_q2subgrids( const int nq2,
 }
 
 //______________________________________________________
-EvolveGrid::EvolveGrid(ExportGrid const& initialscale_grid,
+EvolveGrid::EvolveGrid(vector<ExportGrid> const& initialscale_grid,
                        map<string, string> const& theory):
   fnq2(50),
   fq2min(pow(atof(theory.at("Q0").c_str()),2)),
   fq2max(1E5*1E5),
   finitialscale_grid(initialscale_grid)
 {
-  const auto xg = initialscale_grid.GetXGrid();
+  const auto xg = initialscale_grid[0].GetXGrid();
   cout << "- Initialising evolution with " + std::to_string(xg.size()) + " x-points" << endl;
 
   // Initialize APFEL
@@ -116,7 +116,7 @@ void EvolveGrid::WriteInfoFile(const string infofile) const
     cout << "- Exporting LHAPDF info file: " << infofile << endl;
 
   // LHAPDF6 HEADER
-  const auto xg = finitialscale_grid.GetXGrid();
+  const auto xg = finitialscale_grid[0].GetXGrid();
   const auto q2subgrids = generate_q2subgrids(fnq2, fq2min, fq2max);
 
   infodata << "SetDesc: \"NNPDF x.x\"" << endl;
@@ -165,36 +165,40 @@ void EvolveGrid::WriteInfoFile(const string infofile) const
 }
 
 //______________________________________________________
-void EvolveGrid::WriteLHAFile(const string replica_file) const
+vector<stringstream> EvolveGrid::WriteLHAFile() const
 {
-  cout << "- Writing out LHAPDF file: " << replica_file << endl;
-  // Setup stringstreams for LHgrid writing
+  const auto xg = finitialscale_grid[0].GetXGrid();
+  vector<stringstream> outstream(finitialscale_grid.size());
 
-  stringstream outstream;
-  outstream << scientific << setprecision(7);
-  outstream << "PdfType: replica\nFormat: lhagrid1\nFromMCReplica: " << finitialscale_grid.GetReplica() << "\n---" << std::endl;
+  for (size_t i = 0; i < finitialscale_grid.size(); i++)
+    {
+      outstream[i] << scientific << setprecision(7);
+      outstream[i] << "PdfType: replica\nFormat: lhagrid1\nFromMCReplica: " << finitialscale_grid[i].GetReplica() << "\n---" << std::endl;
+    }
 
   // compute q2 subgrids
-  const auto xg = finitialscale_grid.GetXGrid();
   const auto q2subgrids = generate_q2subgrids(fnq2, fq2min, fq2max);
   for (auto subgrid: q2subgrids)
     {
-      // Print out x-grid
-      for ( auto x : xg )
-        outstream << x << " ";
-      outstream << std::endl;
+      for (auto& stream: outstream)
+        {
+          // Print out x-grid
+          for ( auto x : xg )
+            stream << x << " ";
+          stream << std::endl;
 
-      // Print out q2-grid
-      for ( auto q2val : subgrid )
-        outstream << sqrt(q2val) << " ";
-      outstream << std::endl;
+          // Print out q2-grid
+          for ( auto q2val : subgrid )
+            stream << sqrt(q2val) << " ";
+          stream << std::endl;
 
-      // Print out final-state PIDs
-      // Currently prints out all flavours
-      const array<int, 14> pids = {-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22};
-      for ( auto fl : pids )
-        outstream << fl << " ";
-      outstream << std::endl;
+          // Print out final-state PIDs
+          // Currently prints out all flavours
+          const array<int, 14> pids = {-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22};
+          for ( auto fl : pids )
+            stream << fl << " ";
+          stream << std::endl;
+        }
 
       // Compute Evolution Operators
       // Ordered evol_op[q][ox][ofl][ix][ifl]
@@ -230,29 +234,32 @@ void EvolveGrid::WriteLHAFile(const string replica_file) const
           throw NNPDF::RuntimeException("EvolveGrid::WriteLHAFile", "Evolution operator is NAN.");
 
       // Evolve and write to file
-      for(int ix_out = 0; ix_out < (int) xg.size(); ix_out++)
-        for(size_t iq = 0; iq < subgrid.size(); iq++ )
+      for (size_t rep = 0; rep < finitialscale_grid.size(); rep++)
         {
-            // New line in LHAgrid
-            outstream << " ";
-            for(int if_out=0; if_out<14; if_out++)
+          auto& stream = outstream[rep];
+          for(int ix_out = 0; ix_out < (int) xg.size(); ix_out++)
+            for(size_t iq = 0; iq < subgrid.size(); iq++ )
             {
-                double evolved_pdf = 0;
-                for(int if_in = 0; if_in < 14; if_in++)
-                  for(int ix_in = 0; ix_in < (int) xg.size(); ix_in++) // ix_in = ix_out
-                  {
-                      const int index = ix_in + if_in*xg.size() + if_out*xg.size()*14 + ix_out*xg.size()*14*14 + iq*xg.size()*xg.size()*14*14;
-                      evolved_pdf += evol_op[index] * finitialscale_grid.GetPDF(ix_in, if_in);
-                  }
-                outstream << std::setw(14) << evolved_pdf;
+                // New line in LHAgrid
+                stream << " ";
+                for(int if_out=0; if_out<14; if_out++)
+                {
+                    double evolved_pdf = 0;
+                    for(int if_in = 0; if_in < 14; if_in++)
+                      for(int ix_in = 0; ix_in < (int) xg.size(); ix_in++) // ix_in = ix_out
+                      {
+                          const int index = ix_in + if_in*xg.size() + if_out*xg.size()*14 + ix_out*xg.size()*14*14 + iq*xg.size()*xg.size()*14*14;
+                          evolved_pdf += evol_op[index] * finitialscale_grid[rep].GetPDF(ix_in, if_in);
+                      }
+                    stream << std::setw(14) << evolved_pdf;
+                }
+                // End of LHAgrid line
+                stream <<std::endl;
             }
-            // End of LHAgrid line
-            outstream <<std::endl;
+          // Terminate each subgrid
+          stream << "---" << std::endl;
         }
-
-      // Terminate each subgrid
-      outstream << "---" << std::endl;
     }
   // Terminate each subgrid
-  write_to_file(replica_file, outstream.str());
+  return outstream;
 }
