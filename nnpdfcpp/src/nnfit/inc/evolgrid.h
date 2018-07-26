@@ -31,6 +31,8 @@ public:
   /**
    * @brief Export LHAPDF info file, if infofile does not exist.
    * @param infofile the desired file path
+   * @int nrep if not set (ie. set to -1) will print REPLACE_NREP in the info file
+   * if specified (ie. != -1) will print nrep in the info file.
    */
   void WriteInfoFile(const std::string infofile, int const& nrep = -1) const;
 

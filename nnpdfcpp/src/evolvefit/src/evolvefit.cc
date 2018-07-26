@@ -95,6 +95,7 @@ int main(int argc, char **argv)
           cout << "- Reading exportgrid: " << path << endl;
           initialscale_grids.emplace_back(path);
 
+          // take first replica and duplicate entry, we will use it as baseline for replica 0
           if (nrep == 0)
             initialscale_grids.emplace_back(path);
 
