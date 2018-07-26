@@ -34,6 +34,12 @@ public:
   // Get the replica ID
   int GetReplica() const {return fRep;}
 
+  // Get PDF grid
+  vector<array<double,14>> const& GetPDFgrid() const { return fPDFgrid; }
+
+  // Set PDF grid
+  void SetPDFgrid(vector<array<double,14>> const& pgrid) { fPDFgrid = pgrid; }
+
 private:
   static std::string Format(double in);
   const int    fRep;
@@ -42,4 +48,3 @@ private:
   const array<std::string,14> fLabels;
   vector<array<double,14>> fPDFgrid;
 };
-

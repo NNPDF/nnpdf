@@ -102,7 +102,7 @@ EvolveGrid::EvolveGrid(vector<ExportGrid> const& initialscale_grid,
 }
 
 //______________________________________________________
-void EvolveGrid::WriteInfoFile(const string infofile) const
+void EvolveGrid::WriteInfoFile(const string infofile, int const& nrep) const
 {
   // skip if file exists
   struct stat s;
@@ -125,7 +125,10 @@ void EvolveGrid::WriteInfoFile(const string infofile) const
   infodata << "Reference: arXiv:xxxx.xxxxxx" << endl;
   infodata << "Format: lhagrid1" << endl;
   infodata << "DataVersion: 1" << endl;
-  infodata << "NumMembers: REPLACE_NREP" << endl;
+  if (nrep == -1)
+    infodata << "NumMembers: REPLACE_NREP" << endl;
+  else
+    infodata << "NumMembers: " << nrep << endl;
   infodata << "Particle: 2212" << endl;
   infodata << "Flavors: [-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22]" << endl;
   infodata << "OrderQCD: " << APFEL::GetPerturbativeOrder() << endl;

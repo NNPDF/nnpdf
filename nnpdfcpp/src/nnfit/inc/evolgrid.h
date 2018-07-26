@@ -32,7 +32,7 @@ public:
    * @brief Export LHAPDF info file, if infofile does not exist.
    * @param infofile the desired file path
    */
-  void WriteInfoFile(const std::string infofile) const;
+  void WriteInfoFile(const std::string infofile, int const& nrep = -1) const;
 
   /**
    * @brief Export the LHA evolved grid file.
