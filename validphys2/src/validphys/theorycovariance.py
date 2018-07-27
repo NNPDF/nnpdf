@@ -88,10 +88,7 @@ def total_covmat_datasets(each_dataset_results_theory):
 
 @_check_three_or_seven_theories
 def total_covmat_diagtheory_datasets(each_dataset_results_theory):
-    """Produces an array of total covariance matrices; the sum of experimental
-    and scale-varied theory covariance matrices. Each matrix corresponds
-    to a different dataset, which must be specified in the runcard.
-    These are needed for calculation of chi2 per dataset. """
+    """Same as total_covmat_theory_datasets but for diagonal theory only"""
     dataset_covmats=[]
     for dataset in each_dataset_results_theory:
         theory_centrals = [x[1].central_value for x in dataset]
