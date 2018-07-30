@@ -27,6 +27,8 @@ from validphys.calcutils import all_chi2_theory, central_chi2_theory
 from validphys.plotoptions import get_info
 from validphys import plotutils
 
+from IPython import embed
+
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values, ('theoryids',))
@@ -133,30 +135,51 @@ def dataset_names(experiments_xq2map):
     return names
 
 def combine_by_type(mapping, each_dataset_results_theory, dataset_names):
+    dataset_size = defaultdict(list)
     by_process = defaultdict(list)
+    ordered_names = defaultdict(list)
     for dataset, name in zip(each_dataset_results_theory, dataset_names):
-        theory_centrals = [x[1].central_value for x in dataset]      
-        current_value = by_process[mapping[name][0]]
+        theory_centrals = [x[1].central_value for x in dataset]
+        dataset_size[name] = len(theory_centrals[0])
+        proc_type = mapping[name][0]
+        current_value = by_process[proc_type]
+        ordered_names[proc_type].append(name)
         if current_value == []:
             new_value = theory_centrals
         else:
             new_value = np.concatenate((current_value, theory_centrals), axis=1)
-        by_process[mapping[name][0]] = new_value 
-    return by_process
+        by_process[proc_type] = new_value 
+    return by_process, ordered_names, dataset_size
 
 @_check_three_or_seven_theories
-def theory_covmat_by_type(combine_by_type, theory_block_diag_covmat, experiments_index):
+def theory_covmat_by_type(combine_by_type, theory_block_diag_covmat, experiments_index, dataset_names):
     """Calculates the theory covariance matrix for scale variations 
     with variations by process type"""
-    dictionary = combine_by_type
+    dictionary, ordered_names, dataset_size = combine_by_type
     covmats = defaultdict(list)
-    for dataset, theory_centrals in dictionary.items():
+    for process, theory_centrals in dictionary.items():
         s = make_scale_var_covmat(theory_centrals)
-        covmats[dataset] = s
+        covmats[process] = s
     covmats_list = covmats.values()
-    block = la.block_diag(*covmats_list)
-#    df = pd.DataFrame.from_dict(data=covmats, orient="index")
-    df = pd.DataFrame(block, index=experiments_index, columns=experiments_index)
+    cov_by_proc = la.block_diag(*covmats_list)
+    start_exp = defaultdict(list)
+    map = defaultdict(list)
+    running_index = 0
+    for dataset in dataset_names:
+        size = dataset_size[dataset]
+        start_exp[dataset] = running_index
+        running_index += size
+    start = 0
+    names_by_proc_list = [item for sublist in ordered_names.values() for item in sublist]
+    for dataset in names_by_proc_list:
+        for i in range(dataset_size[dataset]):
+            map[start+i] = start_exp[dataset] + i 
+        start += dataset_size[dataset]
+    cov_by_exp = np.zeros((len(cov_by_proc), len(cov_by_proc)))
+    for i in range(len(cov_by_proc)):
+        for j in range(len(cov_by_proc)):
+            cov_by_exp[map[i]][map[j]] = cov_by_proc[i][j]
+    df = pd.DataFrame(cov_by_exp, index=experiments_index, columns=experiments_index)
     return df
 
 @table
