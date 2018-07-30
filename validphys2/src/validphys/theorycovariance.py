@@ -135,28 +135,32 @@ def dataset_names(experiments_xq2map):
 
 def combine_by_type(mapping, each_dataset_results_theory, dataset_names):
     dataset_size = defaultdict(list)
-    by_process = defaultdict(list)
+    theories_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
     for dataset, name in zip(each_dataset_results_theory, dataset_names):
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
         proc_type = mapping[name][0]
-        current_value = by_process[proc_type]
+        current_value = theories_by_process[proc_type]
         ordered_names[proc_type].append(name)
         if current_value == []:
             new_value = theory_centrals
         else:
             new_value = np.concatenate((current_value, theory_centrals), axis=1)
-        by_process[proc_type] = new_value 
-    return by_process, ordered_names, dataset_size
+        theories_by_process[proc_type] = new_value 
+    return theories_by_process, ordered_names, dataset_size
 
 @_check_three_or_seven_theories
 def theory_covmat_by_type(combine_by_type, theory_block_diag_covmat, experiments_index, dataset_names):
     """Calculates the theory covariance matrix for scale variations 
-    with variations by process type"""
-    dictionary, ordered_names, dataset_size = combine_by_type
+    with variations by process type.  Scale variations are carried out,
+    correlating by proces type. The resulting covariance matrix is then 
+    reshuffled so it is ordered by dataset as they appear
+    in the runcard, rather than by process type (i.e. it is then indexed
+    in the same was as the experiment covariance matrix)."""
+    theories_by_process, ordered_names, dataset_size = combine_by_type
     covmats = defaultdict(list)
-    for process, theory_centrals in dictionary.items():
+    for process, theory_centrals in theories_by_process.items():
         s = make_scale_var_covmat(theory_centrals)
         covmats[process] = s
     covmats_list = covmats.values()
