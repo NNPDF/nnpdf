@@ -165,7 +165,7 @@ def combine_by_type(process_lookup, each_dataset_results_theory, dataset_names):
 def theory_covmat_by_type(combine_by_type, theory_block_diag_covmat, experiments_index, dataset_names):
     """Calculates the theory covariance matrix for scale variations 
     with variations by process type.  Scale variations are carried out,
-    correlating by proces type. The resulting covariance matrix is then 
+    correlating by process type. The resulting covariance matrix is then 
     reshuffled so it is ordered by dataset as they appear
     in the runcard, rather than by process type (i.e. it is then indexed
     in the same was as the experiment covariance matrix)."""
