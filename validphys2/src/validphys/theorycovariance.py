@@ -163,12 +163,26 @@ def combine_by_type(process_lookup, each_dataset_results_theory, dataset_names):
 
 @_check_three_or_seven_theories
 def theory_covmat_by_type(combine_by_type, theory_block_diag_covmat, experiments_index, dataset_names):
-    """Calculates the theory covariance matrix for scale variations 
+    """
+    Calculates the theory covariance matrix for scale variations 
     with variations by process type.  Scale variations are carried out,
     correlating by process type. The resulting covariance matrix is then 
     reshuffled so it is ordered by dataset as they appear
     in the runcard, rather than by process type (i.e. it is then indexed
-    in the same was as the experiment covariance matrix)."""
+    in the same was as the experiment covariance matrix so can be easily
+    combined and compared).
+
+    Notes: 
+    ------
+    - cov_by_proc is the covariance matrix ordered by process type, 
+      cov_by_exp is the covariance matrix orderd by experiment.
+    - to reshuffle cov_by_proc to cov_by_exp, a mapping "map" is 
+      constructed which maps the index of a datapoint in cov_by_proc
+      onto its corresponding index in cov_by_exp. This is done by comparing
+      the ordering of the datasets in cov_by_proc (according to ordered_names)
+      with the ordering of datasets in cov_by_exp (according to dataset_names), 
+      and using knowledge of the size of each dataset, stored in dataset_size.
+    """
     theories_by_process, ordered_names, dataset_size = combine_by_type
     covmats = defaultdict(list)
     for process, theory_centrals in theories_by_process.items():
