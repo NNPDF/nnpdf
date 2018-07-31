@@ -128,6 +128,8 @@ def process_lookup(experiments_xq2map, each_dataset_results_theory):
     return dict
 
 def dataset_names(experiments_xq2map):
+    """Returns a list of the names of the datasets, in the same order as 
+    they are inputted in the runcard"""
     names = []
     for experiment, commondata, fitted, masked in experiments_xq2map:
         info = get_info(commondata)
@@ -136,6 +138,13 @@ def dataset_names(experiments_xq2map):
     return names
 
 def combine_by_type(process_lookup, each_dataset_results_theory, dataset_names):
+    """Groups the datasets according to processes and returns three objects:
+    theories_by_process: the relevant theories grouped by process type
+    ordered_names: dictionary with keys of process type and values being the 
+                   corresponding list of names of datasets, in the order they
+                   are appended to theories_by_process
+    dataset_size:  dictionary with keys of dataset name and values being the 
+                   number of points in that dataset"""
     dataset_size = defaultdict(list)
     theories_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
