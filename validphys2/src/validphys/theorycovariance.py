@@ -113,7 +113,7 @@ def total_covmat_experiments(experiments_results_theory):
         exp_result_covmats.append(cov)
     return exp_result_covmats
 
-def mapping(experiments_xq2map, each_dataset_results_theory):
+def process_lookup(experiments_xq2map, each_dataset_results_theory):
     dict = {}
     for experiment, commondata, fitted, masked in experiments_xq2map:
         info = get_info(commondata)
@@ -133,14 +133,14 @@ def dataset_names(experiments_xq2map):
         names.append(commondata.name)
     return names
 
-def combine_by_type(mapping, each_dataset_results_theory, dataset_names):
+def combine_by_type(process_lookup, each_dataset_results_theory, dataset_names):
     dataset_size = defaultdict(list)
     theories_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
     for dataset, name in zip(each_dataset_results_theory, dataset_names):
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
-        proc_type = mapping[name][0]
+        proc_type = process_lookup[name][0]
         current_value = theories_by_process[proc_type]
         ordered_names[proc_type].append(name)
         if current_value == []:
