@@ -85,7 +85,8 @@ class SetupFitConfig(Config):
         file_content['use_cuts'] = False
         file_content['actions_'] = ['datacuts check_t0pdfset',
                                     'theory check_positivity',
-                                    'datacuts::closuretest::theory::fitting filter']
+                                    'datacuts::closuretest::theory::fitting filter',
+                                    'theory theory_covmat']
         return cls(file_content, *args, ** kwargs)
 
 
