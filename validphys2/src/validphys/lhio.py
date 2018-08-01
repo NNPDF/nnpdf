@@ -287,25 +287,25 @@ def hessian_from_lincomb(pdf, V, set_name=None, folder = None, db=None,
     # preparing output folder
     neig = V.shape[1]
 
-    base = lhapdf.paths()[-1] + "/" + str(pdf) + "/" + str(pdf)
+    base = pathlib.Path(lhapdf.paths()[-1])  / str(pdf)
     if set_name is None:
         set_name = str(pdf) + "_hessian_" + str(neig)
     if folder is None:
         folder = ''
-    set_root = os.path.join(folder,set_name)
+    set_root = pathlib.Path(folder) / set_name
     if not os.path.exists(set_root): os.makedirs(os.path.join(set_root))
 
     # copy replica 0
-    shutil.copy(base + "_0000.dat", set_root + "/" + set_name + "_0000.dat")
+    shutil.copy(base/f'{pdf}_0000.dat', set_root / f"{set_name }_0000.dat")
 
-    with open(base + ".info", 'r') as inn, \
-         open(set_root + "/" + set_name + ".info", 'w') as out:
+    with open(base/f'{pdf}.info', 'r') as inn, \
+         open(set_root  / f'{set_name }.info', 'w') as out:
 
         for l in inn.readlines():
             if l.find("SetDesc:") >= 0:
-                out.write("SetDesc: \"Hessian " + str(pdf) + "_hessian\"\n")
+                out.write(f"SetDesc: \"Hessian {pdf}_hessian\"\n")
             elif l.find("NumMembers:") >= 0:
-                out.write("NumMembers: " + str(neig+1) + "\n")
+                out.write(f"NumMembers: {neig+1}\n")
             elif l.find("ErrorType: replicas") >= 0:
                 out.write("ErrorType: symmhessian\n")
             else:

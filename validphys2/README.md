@@ -6,5 +6,5 @@ Guide
 
 See guide at
 
-http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html
+https://data.nnpdf.science/validphys-docs/guide.html
 

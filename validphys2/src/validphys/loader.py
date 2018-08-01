@@ -76,6 +76,7 @@ class LoaderBase:
         self.datapath = datapath
         self.resultspath = resultspath
         self._nnprofile = None
+        self._old_commondata_fits = set()
 
     @property
     def nnprofile(self):
@@ -104,6 +105,65 @@ class LoaderBase:
                               f"at {vpcache}") from e
         return vpcache
 
+
+def rebuild_commondata_without_cuts(
+         filename_with_cuts, cuts, datapath_filename, newpath):
+    """Take a CommonData file that is stored with the cuts applied
+    and write another file with no cuts. The points that were not present in
+    the original file have the same kinematics as the file in
+    ``datapath_filename``, which must correspond to the original CommonData
+    file which does not have the cuts applied. However, to avoid confusion, the
+    values and uncertainties are all set to zero. The new file is written
+    to ``newpath``.
+    """
+
+    metadata = peek_commondata_metadata(datapath_filename)
+    if cuts is None:
+        shutil.copy2(filename_with_cuts, newpath)
+        return
+
+    index_pattern = re.compile(r'(?P<startspace>\s*)(?P<index>\d+)')
+    data_line_pattern = re.compile(r'\s*(?P<index>\d+)'
+                                   r'\s+(?P<process_type>\S+)\s+'
+                                   r'(?P<kinematics>(\s*\S+){3})\s+')
+    mask = cuts.load()
+    maskiter = iter(mask)
+    ndata = metadata.ndata
+    nsys = metadata.nsys
+
+    next_index = next(maskiter)
+    with open(filename_with_cuts, 'r') as fitfile, \
+         open(datapath_filename) as dtfile, \
+         open(newpath, 'w') as newfile:
+        newfile.write(dtfile.readline())
+        #discard this line
+        fitfile.readline()
+        for i in range(1 ,ndata+1):
+            #You gotta love mismatched indexing
+            if i-1 == next_index:
+                line = fitfile.readline()
+                line = re.sub(
+                        index_pattern, rf'\g<startspace>{i}', line, count=1)
+                newfile.write(line)
+                next_index = next(maskiter, None)
+                #drop the data file line
+                dtfile.readline()
+            else:
+                line = dtfile.readline()
+                #check that we know where we are
+                m = re.match(index_pattern, line)
+                assert int(m.group('index')) == i
+                #We have index, process type, and 3*kinematics
+                #that we would like to keep.
+                m = re.match(data_line_pattern, line)
+                newfile.write(line[:m.end()])
+                #And value, stat, *sys that we want to drop
+                #Do not use string join to keep up with the ugly format
+                #This should really be nan's, but the c++ streams that read this
+                #are rarher stupid, and I am not doing the insane thing.
+                #https://stackoverflow.com/questions/11420263/is-it-possible-to-read-infinity-or-nan-values-using-input-streams
+                zeros = '-0\t'*(2 + 2*nsys)
+                newfile.write(f'{zeros}\n')
 
 #TODO: Deprecate get methods?
 class Loader(LoaderBase):
@@ -141,8 +201,38 @@ class Loader(LoaderBase):
     def commondata_folder(self):
         return self.datapath / 'commondata'
 
-    def check_commondata(self, setname, sysnum=None):
-        datafile = self.commondata_folder / ('DATA_' + setname + '.dat')
+    def check_commondata(self, setname, sysnum=None, use_fitcommondata=False,
+                         fit=None):
+        if use_fitcommondata:
+            if not fit:
+                raise LoadFailedError(
+                        "Must specify a fit when setting use_fitcommondata")
+            datafilefolder = (fit.path/'filter')/setname
+            newpath = datafilefolder/f'FILTER_{setname}.dat'
+            if not newpath.exists():
+                oldpath = datafilefolder/f'DATA_{setname}.dat'
+                if not oldpath.exists():
+                    raise DataNotFoundError(f"Either {newpath} or {oldpath} "
+                        "are needed with `use_fitcommondata`")
+                #This is to not repeat all the error handling stuff
+                basedata = self.check_commondata(setname, sysnum=sysnum).datafile
+                cuts = self.check_cuts(setname, fit=fit)
+
+                if fit not in self._old_commondata_fits:
+                    self._old_commondata_fits.add(fit)
+                    log.warn(
+                        f"Found fit using old commondata export settings: "
+                        f"'{fit}'. The commondata that are used in this run "
+                        "will be updated now."
+                        "Please consider re-uploading it.")
+                    log.warn(
+                        f"Points that do not pass the cuts are set to zero!")
+
+                log.info(f"Upgrading filtered commondata. Writing {newpath}")
+                rebuild_commondata_without_cuts(oldpath, cuts, basedata, newpath)
+            datafile = newpath
+        else:
+            datafile = self.commondata_folder / f'DATA_{setname}.dat'
         if not datafile.exists():
             raise DataNotFoundError(("Could not find Commondata set: '%s'. "
                   "File '%s' does not exist.")
@@ -220,8 +310,13 @@ class Loader(LoaderBase):
         data = yaml.safe_load(yaml_format)
         #we have to split out 'FK_' the extension to get a name consistent
         #with everything else
-        tables = [self.check_fktable(theoryID, name[3:-4], cfac)
+        try:
+            tables = [self.check_fktable(theoryID, name[3:-4], cfac)
                   for name in data['FK']]
+        except FKTableNotFound as e:
+            raise LoadFailedError(
+                    f"Incorrect COMPOUND file '{compound_spec_path}'. "
+                    f"Searching for non-existing FKTable:\n{e}") from e
         op = data['OP']
         return tuple(tables), op
 
@@ -268,17 +363,25 @@ class Loader(LoaderBase):
                    "'{p}' must be a folder").format(**locals())
         raise FitNotFound(msg)
 
-    def check_dataset(self, *, name, sysnum=None,
-                     theoryid, cfac=(),
-                     use_cuts, fit=None, weight=1):
+
+    def check_dataset(self,
+                      name,
+                      *,
+                      sysnum=None,
+                      theoryid,
+                      cfac=(),
+                      use_cuts,
+                      use_fitcommondata=False,
+                      fit=None,
+                      weight=1):
 
         if not isinstance(theoryid, TheoryIDSpec):
             theoryid = self.check_theoryID(theoryid)
 
         theoryno, _ = theoryid
 
-        commondata = self.check_commondata(name, sysnum)
-
+        commondata = self.check_commondata(
+            name, sysnum, use_fitcommondata=use_fitcommondata, fit=fit)
         try:
             fkspec, op = self.check_compound(theoryno, name, cfac)
         except CompoundNotFound:

@@ -16,7 +16,7 @@ make catch_test -j
 ./libnnpdf/tests/catch_test
 
 #Check that filter an chi2check run
-filter ../nnpdfcpp/config/testconfig.yml
+vp-setupfit ../nnpdfcpp/config/testconfig.yml
 chi2check testconfig NNPDF31_nnlo_as_0118
 
 

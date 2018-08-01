@@ -41,7 +41,7 @@ installed by:
 
 When the packages are installed, the necessary binaries are added to the `bin/`
 directory of the corresponding conda environment (which is typically in the
-`PATH`). Users can run `filter`, `nnfit`, or `postfit` from any directory.
+`PATH`). Users can run `vp-setupfit`, `nnfit`, or `postfit` from any directory.
 
 By default, data files (both from theory and experiment) are installed to:
 `<conda root>/share/NNPDF/data` and fit results will be written to 
@@ -51,7 +51,7 @@ These paths can be changed by tweaking `nnprofile.yaml` as described in [NNPDF
 paths and URLs](#nnpdf-paths-and-urls).
 
 Detailed conda installation instructions can be found in the [validphy2 guide](
-http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html).
+https://data.nnpdf.science/validphys-docs/guide.html).
 
 ### From source
 
@@ -59,7 +59,7 @@ If you intend to work on the code, then building from source is the
 recommended installation procedure. However, you can still use conda
 to get all the dependecies and setup the validphys and C++ development
 environment. Further information is available in the
-[vp-guide](http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html#development-installs)
+[vp-guide](https://data.nnpdf.science/validphys-docs/guide.html#development-installs)
 
 For precise version requirements, see 
 [the conda specification](https://github.com/NNPDF/nnpdf/blob/master/conda-recipe/meta.yaml).
@@ -107,7 +107,7 @@ while `<conda root>/share/NNPDF` for conda installation.
 runcard. Download the t0 PDF set with `vp-get pdf <t0pdfset>` where
 `<t0pdfset>` is the string specified in the runcard.
 
-3. Filter the data: ```filter <runcard>.yml``` this command will
+3. Prepare the fit: ```vp-setupfit <runcard>.yml``` this command will
 generate a `<runcard_folder>` folder in the current directory with a
 copy of the original YAML runcard.
 
@@ -122,7 +122,7 @@ applying post selection criteria. This will produce a set of
 6. Upload the results using `vp-upload --fit <runcard_folder>` then
 install the fitted set with `vp-get fit <fit_name>`.
 
-7. Analyze results with `validphys`, see the [vp-guide](http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html#development-installs).
+7. Analyze results with `validphys`, see the [vp-guide](https://data.nnpdf.science/validphys-docs/guide.html#development-installs).
 
 ## NNPDF paths and URLS
 

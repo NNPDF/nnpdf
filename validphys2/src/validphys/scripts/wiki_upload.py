@@ -57,10 +57,9 @@ def confirm(message, default=None):
         event.cli.buffers[DEFAULT_BUFFER].text = 'n'
         event.cli.set_return_value(False)
 
-    #Require explicitly True or False
-    if default is True:
+    if default:
         registry.add_binding(Keys.Enter)(yes_event)
-    elif default is False:
+    elif default is not None:
         registry.add_binding(Keys.Enter)(no_event)
     #There doesn't seem to be an easy way to do this "idiomatically". The lib
     #esccapes ANSI sequences.

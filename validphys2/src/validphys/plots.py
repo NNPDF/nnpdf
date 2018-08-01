@@ -302,8 +302,8 @@ def _plot_fancy_impl(results, commondata, cutlist,
                         label = res.label
                 else:
                     label = None
-                cv = line_data[('cv', i)].as_matrix()
-                err = line_data[('err', i)].as_matrix()
+                cv = line_data[('cv', i)].values
+                err = line_data[('err', i)].values
                 ax.errorbar(x, cv, yerr=err,
                      linestyle='--',
                      lw=0.25,
@@ -329,9 +329,9 @@ def _plot_fancy_impl(results, commondata, cutlist,
             #Use some anchor that is not in y=1 for ratio plots
             if normalize_to is not None:
                 next_after_normalize = (normalize_to + 1) % len(results)
-                annotate_point = x[-1], line_data[('cv', next_after_normalize)].as_matrix()[-1]
+                annotate_point = x[-1], line_data[('cv', next_after_normalize)].values[-1]
             else:
-                annotate_point = x[-1], line_data[('cv', 0)].as_matrix()[-1]
+                annotate_point = x[-1], line_data[('cv', 0)].values[-1]
             ax.annotate(glabel, annotate_point, xytext=(15 ,-10),
                              size='xx-small',
                              textcoords='offset points', zorder=10000)
@@ -500,8 +500,8 @@ def plot_datasets_chi2(experiments, experiments_chi2,each_dataset_chi2):
 
 def _plot_chis_df(df):
     chilabel = df.columns.get_level_values(1)[1]
-    data = data = df.iloc[:, df.columns.get_level_values(1)==chilabel].T.as_matrix()
-    fitnames = df.columns.levels[0]
+    data = df.iloc[:, df.columns.get_level_values(1)==chilabel].T.values
+    fitnames = df.columns.get_level_values(0).unique()
     expnames = list(df.index.get_level_values(0))
     fig, ax = plotutils.barplot(data, expnames, fitnames)
     ax.grid(False)
@@ -975,7 +975,7 @@ class FlavoursVarDistancePlotter(VarDistancePDFPlotter, AllFlavoursPlotter): pas
 @check_scale('xscale', allow_none=True)
 def plot_pdfdistances(pdfs, distance_grids, *,
                       xscale:(str,type(None))=None,
-                      normalize_to:(int,str,type(None))=None,ymin=None,ymax=None):
+                      normalize_to:(int,str),ymin=None,ymax=None):
     """Plots the distances between different PDF sets and a reference PDF set
     for all flavours. Distances are normalized such that a value of order 10
     is unlikely to be explained by purely statistical fluctuations
@@ -989,7 +989,7 @@ def plot_pdfdistances(pdfs, distance_grids, *,
 @check_scale('xscale', allow_none=True)
 def plot_pdfvardistances(pdfs, variance_distance_grids, *,
                       xscale:(str,type(None))=None,
-                      normalize_to:(int,str,type(None))=None,ymin=None,ymax=None):
+                      normalize_to:(int,str),ymin=None,ymax=None):
     """Plots the distances between different PDF sets and a reference PDF set
     for all flavours. Distances are normalized such that a value of order 10
     is unlikely to be explained by purely statistical fluctuations

@@ -3,7 +3,7 @@ Here we store documentation (user / developer guides) and specifications
 (for cuts / data formats) for the NNPDF code.
 
 ### Currently documented
-- [Validphys2 guide](http://pcteserver.mi.infn.it/~nnpdf/validphys-docs/guide.html)
+- [Validphys2 guide](https://data.nnpdf.science/validphys-docs/guide.html)
 - [Data format specifications](./data/data_layout.pdf)
 - Ancient (NNPDF3.0) cut specifications
 

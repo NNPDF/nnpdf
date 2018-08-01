@@ -47,9 +47,11 @@ def plot_as_central_parabola(
     the chi² at the total best fit."""
     fig,ax = plt.subplots()
     asarr = np.linspace(min(fits_as), max(fits_as), 100)
+    as_central_parabola = np.asarray(as_central_parabola)
+    ndata = int(ndata)
     ax.plot(asarr, np.polyval(as_central_parabola, asarr)/ndata)
 
-    best_as = np.mean(parabolic_as_determination_for_total)
+    best_as = parabolic_as_determination_for_total[0].location
     chi2_at_best = np.polyval(as_central_parabola, best_as)/ndata
     ax.scatter(best_as, chi2_at_best)
     ax.annotate(format_number(chi2_at_best, 3), (best_as, chi2_at_best))
@@ -295,8 +297,8 @@ def plot_dataspecs_as_value_error(datasepecs_as_value_error_table_impl,
     df = datasepecs_as_value_error_table_impl
     datalabels = df.columns.levels[0]
     catlabels = list(df.index)
-    cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
-    errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
+    cvs = df.loc[:, (slice(None), 'mean')].T.values
+    errors = df.loc[:, (slice(None), 'error')].T.values
 
     if fix_limits:
         minlim = min(min(x for x in dataspecs_fits_as))
@@ -341,8 +343,8 @@ def plot_dataspecs_as_value_error_comparing_with_central(
 
     df = datasepecs_as_value_error_table_impl
     catlabels = list(df.index)
-    replica_cvs = df.loc[:, (speclabel, 'mean')].T.as_matrix()
-    replica_errors = df.loc[:, (speclabel, 'error')].T.as_matrix()
+    replica_cvs = df.loc[:, (speclabel, 'mean')].T.values
+    replica_errors = df.loc[:, (speclabel, 'error')].T.values
 
     datacentral, namescentral = zip(*as_datasets_central_chi2)
     cvcentral, errcentral = zip(*datacentral)
@@ -480,15 +482,15 @@ def plot_pull_plots_global_min(datasepecs_as_value_error_table_impl,
     """Plots the pulls of individual experiments as a barplot."""
 
     df = datasepecs_as_value_error_table_impl
-    tots_error = df.loc['Total', (slice(None), 'error')].as_matrix()
-    tots_mean = df.loc['Total', (slice(None), 'mean')].as_matrix()
+    tots_error = df.loc['Total', (slice(None), 'error')].values
+    tots_mean = df.loc['Total', (slice(None), 'mean')].values
 
     if hide_total:
         df = df.loc[df.index != 'Total']
 
     catlabels = list(df.index)
-    cvs = df.loc[:, (slice(None), 'mean')].as_matrix()
-    errors = df.loc[:, (slice(None), 'error')].as_matrix()
+    cvs = df.loc[:, (slice(None), 'mean')].values
+    errors = df.loc[:, (slice(None), 'error')].values
 
     pulls = _pulls_func(cvs,tots_mean,errors,tots_error).T
 
@@ -535,7 +537,7 @@ def alphas_shift(
     df2 = datasepecs_quad_table_impl
 
 
-    tots_mean = df.loc['Total', (slice(None), 'mean')].as_matrix()
+    tots_mean = df.loc['Total', (slice(None), 'mean')].values
 
     if hide_total:
         df = df.loc[df.index != 'Total']
@@ -543,8 +545,8 @@ def alphas_shift(
         df2 = df2.loc[df2.index != 'Total']
 
 
-    cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
-    quad_weights = df2.loc[:, (slice(None), 'mean')].T.as_matrix()
+    cvs = df.loc[:, (slice(None), 'mean')].T.values
+    quad_weights = df2.loc[:, (slice(None), 'mean')].T.values
 
     catlabels = list(df.index)
 
@@ -597,14 +599,14 @@ def plot_pull_gaussian_fit_pseudo(datasepecs_as_value_error_table_impl,
     the normalised gaussian fit and KDE to the histogram of pulls"""
 
     df = datasepecs_as_value_error_table_impl
-    tots_error = df.loc['Total', (slice(None), 'error')].T.as_matrix()
-    tots_mean = df.loc['Total', (slice(None), 'mean')].T.as_matrix()
+    tots_error = df.loc['Total', (slice(None), 'error')].T.values
+    tots_mean = df.loc['Total', (slice(None), 'mean')].T.values
 
     if hide_total:
         df = df.loc[df.index != 'Total']
 
-    cvs = df.loc[:, (slice(None), 'mean')].T.as_matrix()
-    errors = df.loc[:, (slice(None), 'error')].T.as_matrix()
+    cvs = df.loc[:, (slice(None), 'mean')].T.values
+    errors = df.loc[:, (slice(None), 'error')].T.values
 
     for label, i in zip(dataspecs_speclabel, range(len(cvs))):
         pulls = _pulls_func(cvs[i],tots_mean[i],errors[i],tots_error[i])
@@ -641,7 +643,7 @@ def plot_fitted_replicas_as_profiles_matched(fits_as,
 
     minimums = parabolic_as_determination
 
-    table = fits_replica_data_with_discarded_replicas.as_matrix()
+    table = fits_replica_data_with_discarded_replicas.values
 
     fig, ax = plt.subplots()
 
@@ -734,7 +736,7 @@ def plot_dataspecs_parabola_examples(
             for i, (label, vals) in enumerate(row.groupby(level=0)):
                 asvals = vals.index.get_level_values(1)
                 color = f'C{i}'
-                y = vals.as_matrix()
+                y = vals.values
                 ax.plot(asvals, y, **next(im), label=label,
                          color=color, linestyle='none', lw=0.5)
                 a,b,c = parabola = get_parabola(asvals, y)
@@ -800,7 +802,7 @@ def plot_poly_as_fit(fits_as,
     table = df.groupby(axis=1, level=0).apply(ap)
     filt = table.isnull().sum(axis=1) < max_ndiscarded
     table = table[filt]
-    table = table.as_matrix()
+    table = table.values
     fig, ax = plt.subplots()
 
     minimums = []
