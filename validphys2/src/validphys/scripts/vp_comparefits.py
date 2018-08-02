@@ -6,6 +6,7 @@ import logging
 import prompt_toolkit
 from prompt_toolkit.contrib.completers import WordCompleter
 
+from reportengine.compat import yaml
 from reportengine.colors import t
 
 from validphys.app import App
@@ -45,8 +46,11 @@ class CompareFitApp(App):
         bad = [argname for argname in argnames if not args[argname]]
         if bad and not args['interactive']:
             sys.exit(f"The following arguments are required: {bad}")
-        for arg in bad:
-            self.args[arg] = getattr(self, f'interactive_{arg}')()
+        try:
+            for arg in bad:
+                self.args[arg] = getattr(self, f'interactive_{arg}')()
+        except EOFError:
+            raise KeyboardInterrupt()
         texts = '\n'.join(
             f'    {argname.replace("_", " ").capitalize()}: {args[argname]}'
             for argname in argnames)
@@ -96,9 +100,50 @@ class CompareFitApp(App):
         args['config_yml'] = comparefittemplates.template_path
         return args
 
+    def complate_mapping(self):
+        args = self.args
+        autosettings = {}
+        autosettings['meta'] = {
+            'title': args['title'],
+            'author': args['author'],
+            'keywords': args['keywords']
+        }
+        basemap = {'id': args['base_fit'], 'label': "Current Fit"}
+        autosettings['current'] = {
+            'fit': basemap,
+            'pdf': basemap,
+            'theory': {
+                'from_': 'fit'
+            },
+            'theoryid': {
+                'from_': 'theory'
+            },
+            'speclabel': 'Current Fit'
+        }
+        refmap = {'id': args['reference_fit'], 'label': "Reference Fit"}
+        autosettings['reference'] = {
+            'fit': refmap,
+            'pdf': refmap,
+            'theory': {
+                'from_': 'fit'
+            },
+            'theoryid': {
+                'from_': 'theory'
+            },
+            'speclabel': 'Reference Fit'
+        }
+        return autosettings
+
+
     def get_config(self):
         self.try_complete_args()
-        return super().get_config()
+        #No error handling here because this is our internal file
+        with open(self.args['config_yml']) as f:
+            #TODO: Ideally this would load round trip but needs
+            #to be fixed in reportengine.
+            c = yaml.safe_load(f)
+        c.update(self.complate_mapping())
+        return self.config_class(c, environment=self.environment)
 
 
 def main():
