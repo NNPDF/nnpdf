@@ -112,10 +112,6 @@ class SetupFitApp(App):
             args['output'] = pathlib.Path(args['config_yml']).stem
         return args
 
-    @property
-    def default_style(self):
-        return str(self.this_folder() / '../small.mplstyle')
-
     def run(self):
         try:
             # set folder output name
