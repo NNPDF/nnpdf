@@ -74,9 +74,9 @@ positivity:
       from_: fit
 
 dataspecs:
-  - theoryid: 
+  - theoryid:
       from_: current
-    pdf: 
+    pdf:
       from_: current
     fit:
       from_: current
@@ -84,9 +84,9 @@ dataspecs:
       from_: current
 
 
-  - theoryid: 
+  - theoryid:
       from_: reference
-    pdf: 
+    pdf:
       from_: reference
     fit:
       from_: reference
