@@ -1648,6 +1648,42 @@ each dataset in the intersection (the actions inside the `with`
 block).
 
 
+### The vp-comparefits application
+
+While `validphys` provides the flexibility to produce analyses that
+are specific for the task at hand, it is sometimes useful to run a
+standardized set of comparisons, which can be easily integrated in a
+production workflow.
+
+The script `vp-comparefits` produces a comparison between a *base fit*
+that we are mainly interested in analyzing and a *reference fit* we
+want to compare it with. The script will produce a report detailing
+the statistical estimators, display PDF comparisons at various scales
+or compare the theory predictions.
+
+The basic usage is:
+
+```bash
+vp-comparefits -i
+```
+
+Where the `-i` option stands for `--interactive` and it will cause the
+script to ask the user for the parameters of the comparison.
+Specifically users need to provide the base and reference fits, as
+well as the metadata parameters required to index the report
+(including author, title and keywords); see [Metadata Indexing].  All
+these options can be set via command line parameters, and this must be
+done for non interactive usage (without the `-i` option). Additionally
+all the relevant command line arguments of `validphys` work in the
+same way. See `vp-comparefits --help` for details.
+
+
+The `vp-comparefits` script is a thin wrapper around a `validphys`
+runcard stored under `comparefittemplates/comparecard.yaml` in the
+source code. That runcard (and its associated templates) can be
+modified to improve the default comparison.
+
+
 Parallel mode
 -------------
 

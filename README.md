@@ -59,9 +59,9 @@ If you intend to work on the code, then building from source is the
 recommended installation procedure. However, you can still use conda
 to get all the dependecies and setup the validphys and C++ development
 environment. Further information is available in the
-[vp-guide](https://data.nnpdf.science/validphys-docs/guide.html#development-installs)
+[vp-guide](https://data.nnpdf.science/validphys-docs/guide.html#development-installs).
 
-For precise version requirements, see 
+For precise version requirements, see
 [the conda specification](https://github.com/NNPDF/nnpdf/blob/master/conda-recipe/meta.yaml).
 
 
@@ -96,33 +96,32 @@ only required configuration input required for many programs of this repository.
 
 ### Workflow
 
-0. compile the code and install
+0. Install the code
 
 1. Create a runcard by taking as template one of the files in `<profile_prefix>/config`. 
 The `<profile_prefix>` path is by default `<install prefix>/share/NNPDF` for source installation 
 while `<conda root>/share/NNPDF` for conda installation.
 
-2. Download the specific theory folder using `vp-get theoryID
-<theoryid>` where `<theoryid>` is the number specified in your
-runcard. Download the t0 PDF set with `vp-get pdf <t0pdfset>` where
-`<t0pdfset>` is the string specified in the runcard.
-
-3. Prepare the fit: ```vp-setupfit <runcard>.yml``` this command will
+2. Prepare the fit: `vp-setupfit <runcard>.yml` this command will
 generate a `<runcard_folder>` folder in the current directory with a
-copy of the original YAML runcard.
+copy of the original YAML runcard.  The required resources (such as the theory
+and t0 PDF) will be downloaded automatically. Alternatively they can be obtained
+with the `vp-get` tool.
 
-4. All programs take the `<runcard_folder>` as input, e.g.  ```nnfit
+3. The `nnfit` coda takes a `<runcard_folder>` as input, e.g.  ```nnfit
 <replica_number> <runcard_folder> ``` where replica_number goes from 1-n.
 
-5. Wait until you have fit results, then use `postfit
+4. Wait until you have fit results, then use `postfit
 <number_of_replicas> <runcard_folder>` to finalize the PDF set by
 applying post selection criteria. This will produce a set of
 `<number_of_replicas>+1` replicas.
 
-6. Upload the results using `vp-upload --fit <runcard_folder>` then
+5. Upload the results using `vp-upload --fit <runcard_folder>` then
 install the fitted set with `vp-get fit <fit_name>`.
 
-7. Analyze results with `validphys`, see the [vp-guide](https://data.nnpdf.science/validphys-docs/guide.html#development-installs).
+6. Analyze results with `validphys`, see the
+[vp-guide](https://data.nnpdf.science/validphys-docs/guide.html#development-installs).
+Consider using the `vp-comparefits` tool.
 
 ## NNPDF paths and URLS
 
