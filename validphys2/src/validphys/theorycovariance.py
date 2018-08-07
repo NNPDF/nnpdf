@@ -215,7 +215,7 @@ def theory_covmat_by_type(combine_by_type, theory_block_diag_covmat, experiments
 def theory_corrmat(theory_covmat):
     """Calculates the theory correlation matrix for scale variations."""
     df = theory_covmat
-    covmat = df.values()
+    covmat = df.values
     diag_minus_half = (np.diagonal(covmat))**(-0.5)
     mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
     return mat
@@ -423,7 +423,7 @@ def matrix_plot_labels(df):
 def plot_covmat_heatmap(covmat, title):
     """Matrix plot of a covariance matrix"""
     df = covmat
-    matrix = df.values()
+    matrix = df.values
     fig,ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(100*matrix, cmap=cm.Spectral_r, norm=mcolors.SymLogNorm(linthresh=0.01,
                             linscale=10, vmin=-100*matrix.max(), vmax=100*matrix.max()))
@@ -439,7 +439,7 @@ def plot_covmat_heatmap(covmat, title):
 def plot_corrmat_heatmap(corrmat, title):
     """Matrix plot of a correlation matrix"""
     df = corrmat
-    matrix = df.values()
+    matrix = df.values
     fig, ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
     cbar = fig.colorbar(matrixplot)
