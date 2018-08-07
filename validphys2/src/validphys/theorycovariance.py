@@ -390,7 +390,7 @@ def chi2_impact_by_type(theory_covmat_by_type, experiments_covmat, experiments_r
 
 def chi2_diag_only(theory_covmat, experiments_covmat, data_theory_diff):
     """ Returns total chi2 including only diags of theory cov mat """
-    s = theory_covmat.as_matrix()
+    s = theory_covmat.values
     s_diag = np.zeros((len(data_theory_diff),len(data_theory_diff)))
 
 def theory_diagcovmat(theory_covmat):
@@ -601,7 +601,7 @@ def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
 def plot_blockcovdiff_heatmap(theory_block_diag_covmat, experiments_covmat):
     """Matrix plot (thcov + expcov)/expcov"""
     df =
-    fig = plot_covmat_heatmap((theory_block_diag_covmat.as_matrix()+experiments_covmat.as_matrix())/np.mean(experiments_covmat.as_matrix()),"(Theory + experiment)/mean(experiment) covariance matrices for block diagonal theory covmat by dataset")
+    fig = plot_covmat_heatmap((theory_block_diag_covmat.as_matrix()+experiments_covmat.values)/np.mean(experiments_covmat.values),"(Theory + experiment)/mean(experiment) covariance matrices for block diagonal theory covmat by dataset")
     return fig
 
 @figure
@@ -702,4 +702,4 @@ def plot_datasets_chi2_theory(experiments, experiments_chi2, each_dataset_chi2,
                                datalabels=["experiment + theory", "experiment"])
     ax.set_title(r"$\chi^2$ distribution for datasets")
     ax.legend(fontsize=14)
-return fig
+    return fig
