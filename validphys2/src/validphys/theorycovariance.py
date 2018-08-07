@@ -600,8 +600,8 @@ def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
 @figure
 def plot_blockcovdiff_heatmap(theory_block_diag_covmat, experiments_covmat):
     """Matrix plot (thcov + expcov)/expcov"""
-    df =
-    fig = plot_covmat_heatmap((theory_block_diag_covmat.as_matrix()+experiments_covmat.values)/np.mean(experiments_covmat.values),"(Theory + experiment)/mean(experiment) covariance matrices for block diagonal theory covmat by dataset")
+    df = (theory_block_diag_covmat.as_matrix()+experiments_covmat.values)/np.mean(experiments_covmat.values)
+    fig = plot_covmat_heatmap(df,"(Theory + experiment)/mean(experiment) covariance matrices for block diagonal theory covmat by dataset")
     return fig
 
 @figure
