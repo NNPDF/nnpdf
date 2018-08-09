@@ -8,6 +8,8 @@ Created on Thu Apr 21 18:41:43 2016
 import functools
 import itertools
 from collections import namedtuple
+import logging
+
 import scipy.stats as stats
 
 import numpy as np
@@ -18,6 +20,8 @@ from matplotlib  import transforms
 from matplotlib.markers import MarkerStyle
 
 from reportengine.floatformatting import format_number
+
+log = logging.getLogger(__name__)
 
 def ax_or_gca(f):
     """A decorator. When applied to a function, the keyword argument  ``ax``
@@ -129,6 +133,18 @@ def marker_iter_plot():
     returns kwargs to be passed to ``plt.plot()``"""
     for ms in marker_iter_scatter():
         yield {'marker':ms.get_marker(),'fillstyle': ms.get_fillstyle()}
+
+
+def color_iter():
+    """Yield the colors in the cycle defined in the matplotlib style.  When the
+    colores are exhausted a warning will be logged and the cycle will be
+    repeated infinitely. Therefore this avoids the overflow error at runtime
+    when using matplotlib's ``f'C{i}'`` color specification (equivalent to
+    ``colors[i]``) when ``i>len(colors)`` """
+    color_list = [prop['color'] for prop in plt.rcParams['axes.prop_cycle']]
+    yield from color_list
+    log.warning("Color cycle exhausted. Will repeat colors.")
+    yield from itertools.cycle(color_list)
 
 
 HandlerSpec = namedtuple('HandelrSpec', ["color", "alpha", "hatch", "outer"])
