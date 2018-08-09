@@ -26,57 +26,59 @@ from validphys.calcutils import all_chi2_theory, central_chi2_theory
 from validphys.plotoptions import get_info
 from validphys import plotutils
 
-from IPython import embed
-
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values, ('theoryids',))
 
 @make_argcheck
-def _check_three_or_seven_theories(theoryids):
+def _check_allowed_theory_number(theoryids):
     l = len(theoryids)
-    if l!=3 and l!=7:
-        raise CheckError(f"Expecting exactly 3 or 7 theories, but got {l}.")
+    if l!=3 and l!=5 and l!=7 and l!=9:
+        raise CheckError(f"Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
 
-@make_argcheck
-def _check_three_theories(theoryids):
-    l = len(theoryids)
-    if l!=3:
-        raise CheckError(f"Expecting exactly 3 theories, but got {l}.")
-
-def make_scale_var_covmat(predictions):
+@_check_allowed_theory_number
+def make_scale_var_covmat(predictions, theoryids):
     """Takes N theory predictions at different scales and applies N-pt scale variations
     to produce a covariance matrix."""
+    l = len(theoryids)
     central, *others = predictions
-    diffs = (other - central for other in others)
-    s = sum(np.outer(d,d) for d in diffs)/len(others)  
+    deltas = (other - central for other in others)
+    if l==3:
+        norm = 0.5
+    elif l==5:
+        norm = 0.5
+    elif l==7:
+        norm = 1/3
+    elif l==9:
+        norm = 0.25
+    s = norm*sum(np.outer(d, d) for d in deltas)
     return s
 
 @table
-@_check_three_or_seven_theories
-def theory_covmat(theoryids_experiments_central_values, experiments_index):
+@_check_allowed_theory_number
+def theory_covmat(theoryids_experiments_central_values, experiments_index, theoryids):
     """Calculates the theory covariance matrix for scale variations.
     The matrix is a dataframe indexed by experiments_index."""
-    s = make_scale_var_covmat(theoryids_experiments_central_values)
+    s = make_scale_var_covmat(theoryids_experiments_central_values, theoryids)
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
 
 results_theoryids = collect(results,('theoryids',))
 each_dataset_results_theory = collect('results_theoryids', ('experiments', 'experiment'))
 
-@_check_three_or_seven_theories
-def theory_covmat_datasets(each_dataset_results_theory):
+@_check_allowed_theory_number
+def theory_covmat_datasets(each_dataset_results_theory, theoryids):
     """Produces an array of theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard. """
     dataset_covmats=[]
     for dataset in each_dataset_results_theory:
         theory_centrals = [x[1].central_value for x in dataset]
-        s = make_scale_var_covmat(theory_centrals)
+        s = make_scale_var_covmat(theory_centrals, theoryids)
         dataset_covmats.append(s)
     return dataset_covmats
 
-@_check_three_or_seven_theories
-def total_covmat_datasets(each_dataset_results_theory):
+@_check_allowed_theory_number
+def total_covmat_datasets(each_dataset_results_theory, theoryids):
     """Produces an array of total covariance matrices; the sum of experimental
     and scale-varied theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard.
@@ -84,9 +86,23 @@ def total_covmat_datasets(each_dataset_results_theory):
     dataset_covmats=[]
     for dataset in each_dataset_results_theory:
         theory_centrals = [x[1].central_value for x in dataset]
-        s = make_scale_var_covmat(theory_centrals)
+        s = make_scale_var_covmat(theory_centrals, theoryids)
         sigma = dataset[0][0].covmat
         cov = s + sigma
+        dataset_covmats.append(cov)
+    return dataset_covmats
+
+@_check_allowed_theory_number
+def total_covmat_diagtheory_datasets(each_dataset_results_theory, theoryids):
+    """Same as total_covmat_theory_datasets but for diagonal theory only"""
+    dataset_covmats=[]
+    for dataset in each_dataset_results_theory:
+        theory_centrals = [x[1].central_value for x in dataset]
+        s = make_scale_var_covmat(theory_centrals, theoryids)
+        s_diag = np.zeros((len(s),len(s)))
+        np.fill_diagonal(s_diag, np.diag(s))
+        sigma = dataset[0][0].covmat
+        cov = s_diag + sigma
         dataset_covmats.append(cov)
     return dataset_covmats
 
@@ -101,13 +117,14 @@ def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
 experiments_results = collect(experiment_results, ('experiments',))
 experiments_results_theory = collect('experiments_results', ('theoryids',))
 
-def total_covmat_experiments(experiments_results_theory):
+@_check_allowed_theory_number
+def total_covmat_experiments(experiments_results_theory, theoryids):
     """Same as total_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
     exp_result_covmats = []
     for exp_result in zip(*experiments_results_theory):
         theory_centrals = [x[1].central_value for x in exp_result]
-        s = make_scale_var_covmat(theory_centrals)
+        s = make_scale_var_covmat(theory_centrals, theoryids)
         sigma = exp_result[0][0].covmat
         cov = s + sigma
         exp_result_covmats.append(cov)
@@ -171,26 +188,60 @@ def process_starting_points(combine_by_type):
         running_index += size
     return start_proc
 
-@_check_three_theories
-def covs_3_pt(combine_by_type, process_starting_points):
+def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids):
+    l = len(theoryids)
     start_proc = process_starting_points
     covmats = defaultdict(list)
     theories_by_process, ordered_names, dataset_size = combine_by_type
     for name1 in theories_by_process:
         for name2 in theories_by_process:    
-            central1, low1, high1 = theories_by_process[name1]
-            plus1 = central1 - high1
-            minus1 = central1 - low1
-            central2, low2, high2 = theories_by_process[name2]
-            plus2 = central2 - high2
-            minus2 = central2 -low2
-            if name1 == name2:
-                s = 0.5*(np.outer(plus1,plus2) + np.outer(minus1,minus2))
-            else:
-                s = 0.25*(np.outer(plus1,plus2) + np.outer(plus1,minus2)
-                      + np.outer(minus1,plus2) + np.outer(minus1,minus2))
-            start_locs = (start_proc[name1], start_proc[name2])
-            covmats[start_locs] = s
+            central1, *others1 = theories_by_process[name1]
+            deltas1 = list((other - central1 for other in others1))
+            central2, *others2 = theories_by_process[name2]
+            deltas2 = list((other - central2 for other in others2))
+            if l==3:
+                if name1 == name2:
+                    s = 0.5*sum(np.outer(d, d) for d in deltas1)
+                else:
+                    s = 0.25*(np.outer((deltas1[0]+deltas1[1]), (deltas2[0]+deltas2[1])))
+                start_locs = (start_proc[name1], start_proc[name2])
+                covmats[start_locs] = s
+            elif l==5:
+                if name1 == name2:
+                    s = 0.5*sum(np.outer(d, d) for d in deltas1)
+                else:
+                    s = 0.5*(np.outer(deltas1[0], deltas2[0]) 
+                              + np.outer(deltas1[1], deltas2[1]))
+                start_locs = (start_proc[name1], start_proc[name2])
+                covmats[start_locs] = s
+#                if name1 == name2:
+#                    s = 0.5*sum(np.outer(d, d) for d in deltas1)
+#                else:
+#                    s = 0.25*(np.outer((deltas1[0]+deltas1[2]),(deltas2[0]+deltas2[2])) 
+ #                             + np.outer((deltas1[1]+deltas1[3]),(deltas2[1]+deltas2[3])))
+ #               start_locs = (start_proc[name1], start_proc[name2])
+ #               covmats[start_locs] = s
+            elif l==7:
+                if name1 == name2:
+                    s = (1/3)*sum(np.outer(d, d) for d in deltas1)
+                else:
+                    s = (1/6)*(np.outer((deltas1[0]+ deltas1[4]), (deltas2[0] + deltas2[4])) 
+                               + np.outer((deltas1[1]+ deltas1[5]), (deltas2[1] + deltas2[5]))
+                               + np.outer((deltas1[2]+deltas1[3]), (deltas2[2]+ deltas2[3])))
+                start_locs = (start_proc[name1], start_proc[name2])
+                covmats[start_locs] = s
+            elif l==9:
+                if name1 == name2:
+                    s = 0.25*sum(np.outer(d, d) for d in deltas1)
+                else:
+                    s = (1/12)*(np.outer((deltas1[0]+deltas1[4]+deltas1[6]),
+                                         (deltas2[0]+deltas2[4]+deltas2[6])) 
+                                + np.outer((deltas1[1]+deltas1[5]+deltas1[7]), 
+                                           (deltas2[1]+deltas2[5]+deltas2[7]))
+                                + np.outer((deltas1[2]+deltas1[3]), 
+                                           (deltas2[2]+deltas2[3])))
+                start_locs = (start_proc[name1], start_proc[name2])
+                covmats[start_locs] = s
     return covmats
 
 def map(combine_by_type, dataset_names):
@@ -212,80 +263,30 @@ def map(combine_by_type, dataset_names):
         start += dataset_size[dataset]
     return mapping  
 
-def theory_covmat_custom(covs_3_pt, map, experiments_index):
+def theory_covmat_custom(covs_pt_prescrip, map, experiments_index):
     """Takes the individual sub-covmats between each two processes and assembles
     them into a full covmat. Then reshuffles the order from ordering by process
     to ordering by experiment as listed in the runcard"""
-    matlength = int(sum([len(covmat) for covmat in covs_3_pt.values()])/int(np.sqrt(len(covs_3_pt))))
+    matlength = int(sum([len(covmat) for covmat in covs_pt_prescrip.values()])/int(np.sqrt(len(covs_pt_prescrip))))
     mat = np.zeros((matlength,matlength))
     cov_by_exp = np.zeros((matlength,matlength))
-    for locs in covs_3_pt:
-        cov = covs_3_pt[locs]
+    for locs in covs_pt_prescrip:
+        cov = covs_pt_prescrip[locs]
         mat[locs[0]:(len(cov) + locs[0]),locs[1]:(len(cov.T)+locs[1])] = cov
     for i in range(matlength):
         for j in range(matlength):
             cov_by_exp[map[i]][map[j]] = mat[i][j]
     df = pd.DataFrame(cov_by_exp, index=experiments_index, columns=experiments_index)
     return df
-    
-"""    
-@_check_three_or_seven_theories
-def theory_covmat_by_type(combine_by_type, theory_block_diag_covmat, experiments_index, dataset_names):
-    """"""
-    Calculates the theory covariance matrix for scale variations 
-    with variations by process type.  Scale variations are carried out,
-    correlating by process type. The resulting covariance matrix is then 
-    reshuffled so it is ordered by dataset as they appear
-    in the runcard, rather than by process type (i.e. it is then indexed
-    in the same was as the experiment covariance matrix so can be easily
-    combined and compared).
 
-    Notes: 
-    ------
-    - cov_by_proc is the covariance matrix ordered by process type, 
-      cov_by_exp is the covariance matrix orderd by experiment.
-    - to reshuffle cov_by_proc to cov_by_exp, a mapping "map" is 
-      constructed which maps the index of a datapoint in cov_by_proc
-      onto its corresponding index in cov_by_exp. This is done by comparing
-      the ordering of the datasets in cov_by_proc (according to ordered_names)
-      with the ordering of datasets in cov_by_exp (according to dataset_names), 
-      and using knowledge of the size of each dataset, stored in dataset_size.
-    """"""
-    theories_by_process, ordered_names, dataset_size = combine_by_type
-    covmats = defaultdict(list)
-    for process, theory_centrals in theories_by_process.items():
-        s = make_scale_var_covmat(theory_centrals)
-        covmats[process] = s
-    covmats_list = covmats.values()
-    cov_by_proc = la.block_diag(*covmats_list)
-    start_exp = defaultdict(list)
-    map = defaultdict(list)
-    running_index = 0
-    for dataset in dataset_names:
-        size = dataset_size[dataset]
-        start_exp[dataset] = running_index
-        running_index += size
-    start = 0
-    names_by_proc_list = [item for sublist in ordered_names.values() for item in sublist]
-    for dataset in names_by_proc_list:
-        for i in range(dataset_size[dataset]):
-            map[start+i] = start_exp[dataset] + i 
-        start += dataset_size[dataset]
-    cov_by_exp = np.zeros((len(cov_by_proc), len(cov_by_proc)))
-    for i in range(len(cov_by_proc)):
-        for j in range(len(cov_by_proc)):
-            cov_by_exp[map[i]][map[j]] = cov_by_proc[i][j]
-    df = pd.DataFrame(cov_by_exp, index=experiments_index, columns=experiments_index)
-    return df
-"""
-@_check_three_or_seven_theories
-def total_covmat_diagtheory_experiments(experiments_results_theory):
+@_check_allowed_theory_number
+def total_covmat_diagtheory_experiments(experiments_results_theory, theoryids):
     """Same as total_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
     exp_result_covmats = []
     for exp_result in zip(*experiments_results_theory):
         theory_centrals = [x[1].central_value for x in exp_result]
-        s = make_scale_var_covmat(theory_centrals)
+        s = make_scale_var_covmat(theory_centrals, theoryids)
         s_diag = np.zeros((len(s),len(s)))
         np.fill_diagonal(s_diag, np.diag(s))
         sigma = exp_result[0][0].covmat
@@ -545,28 +546,17 @@ def plot_expcorrmat_heatmap(experiments_corrmat):
     return fig
 
 @figure
-def plot_normthcovmat_heatmap(theory_normcovmat):
-    """Matrix plot of the theory covariance matrix for
-     3/7-point scale variations normalised to data."""
-    fig = plot_covmat_heatmap(theory_normcovmat, "Theory covariance matrix")
-    return fig
-
-@figure
 def plot_normthblockcovmat_heatmap(theory_normblockcovmat):
     """Matrix plot for block diagonal theory covariance matrix"""
     fig = plot_covmat_heatmap(theory_normblockcovmat, "Block diagonal theory covariance matrix by dataset")
     return fig
 
 @figure
-def plot_normthcovmat_heatmap_custom(theory_normcovmat_custom):
+def plot_normthcovmat_heatmap_custom(theory_normcovmat_custom, theoryids):
     """Matrix plot for block diagonal theory covariance matrix by process type"""
-    fig = plot_covmat_heatmap(theory_normcovmat_custom, "Theory covariance matrix by process type")
-    return fig
-
-@figure
-def plot_thcorrmat_heatmap(theory_corrmat):
-    """Matrix plot of the theory correlation matrix"""
-    fig = plot_corrmat_heatmap(theory_corrmat, "Theory correlation matrix")
+    l = len(theoryids)
+    fig = plot_covmat_heatmap(theory_normcovmat_custom, 
+                              "Theory covariance matrix for {0} points".format(l))
     return fig
 
 @figure
@@ -576,15 +566,11 @@ def plot_thblockcorrmat_heatmap(theory_blockcorrmat):
     return fig
 
 @figure
-def plot_thcorrmat_heatmap_custom(theory_corrmat_custom):
+def plot_thcorrmat_heatmap_custom(theory_corrmat_custom, theoryids):
     """Matrix plot of the theory correlation matrix, correlations by process type"""
-    fig = plot_corrmat_heatmap(theory_corrmat_custom, "Theory correlation matrix")
-    return fig
-
-@figure
-def plot_normexpplusthcovmat_heatmap(experimentsplustheory_normcovmat):
-    """Matrix plot of the exp + theory covariance matrix normalised to data"""
-    fig = plot_covmat_heatmap(experimentsplustheory_normcovmat, "Experiment + theory covariance matrix")
+    l = len(theoryids)
+    fig = plot_corrmat_heatmap(theory_corrmat_custom, 
+                               "Theory correlation matrix for {0} points".format(l))
     return fig
 
 @figure
@@ -594,15 +580,11 @@ def plot_normexpplusblockthcovmat_heatmap(experimentsplusblocktheory_normcovmat)
     return fig
 
 @figure
-def plot_normexpplusthcovmat_heatmap_custom(experimentsplustheory_normcovmat_custom):
+def plot_normexpplusthcovmat_heatmap_custom(experimentsplustheory_normcovmat_custom, theoryids):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
-    fig = plot_covmat_heatmap(experimentsplustheory_normcovmat_custom, "Experiment + theory covariance matrix")
-    return fig
-
-@figure
-def plot_expplusthcorrmat_heatmap(experimentsplustheory_corrmat):
-    """Matrix plot of the exp + theory correlation matrix"""
-    fig = plot_corrmat_heatmap(experimentsplustheory_corrmat, "Experiment + theory correlation matrix")
+    l = len(theoryids)
+    fig = plot_covmat_heatmap(experimentsplustheory_normcovmat_custom, 
+                              "Experiment + theory covariance matrix for {0} points".format(l))
     return fig
 
 @figure
@@ -612,15 +594,10 @@ def plot_expplusblockthcorrmat_heatmap(experimentsplusblocktheory_corrmat):
     return fig
 
 @figure
-def plot_expplusthcorrmat_heatmap_custom(experimentsplustheory_corrmat_custom):
+def plot_expplusthcorrmat_heatmap_custom(experimentsplustheory_corrmat_custom, theoryids):
     """Matrix plot of the exp + theory correlation matrix"""
-    fig = plot_corrmat_heatmap(experimentsplustheory_corrmat_custom,"Experiment + theory correlation matrix")
-    return fig
-
-@figure
-def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
-    """Matrix plot (thcov + expcov)/expcov"""
-    fig = plot_covmat_heatmap((theory_covmat.as_matrix()+experiments_covmat.as_matrix())/np.mean(experiments_covmat.as_matrix()),"(Theory + experiment)/mean(experiment) covariance matrices'")
+    l = len(theoryids)
+    fig = plot_corrmat_heatmap(experimentsplustheory_corrmat_custom,"Experiment + theory correlation matrix for {0} points".format(l))
     return fig
 
 @figure
@@ -630,17 +607,20 @@ def plot_blockcovdiff_heatmap(theory_block_diag_covmat, experiments_covmat):
     return fig
 
 @figure
-def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat):
+def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat, theoryids):
     """Matrix plot (thcov + expcov)/expcov"""
+    l = len(theoryids)
     df = (theory_block_diag_covmat+experiments_covmat)/np.mean(experiments_covmat.values)
-    fig = plot_covmat_heatmap(df, "(Theory + experiment)/mean(experiment) covariance matrices")
+    fig = plot_covmat_heatmap(df, 
+                              "(Theory + experiment)/mean(experiment) covariance matrices for {0} points".format(l))
     return fig
 
 @figure
-def plot_diag_cov_comparison(theory_covmat, experiments_covmat, experiments_data):
+def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat, experiments_data, theoryids):
     """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory"""
+    l = len(theoryids)
     data = np.abs(experiments_data)
-    df_theory = theory_covmat
+    df_theory = theory_covmat_custom
     df_experiment = experiments_covmat
     df_total = df_theory + df_experiment
     sqrtdiags1 = np.sqrt(np.diag(df_theory.as_matrix()))
@@ -653,16 +633,17 @@ def plot_diag_cov_comparison(theory_covmat, experiments_covmat, experiments_data
     ticklocs, ticklabels = matrix_plot_labels(df_experiment)
     plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=6)
     ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{|D_i|}$")
-    ax.set_title("Square root of diagonal elements of covariances matrices, " 
+    ax.set_title("Square root of diagonal elements of covariances matrices for {0} points, ".format(l)
                  + "normalised to absolute value of data")
     ax.legend()
     return fig
 
 @figure
-def plot_diag_cov_impact(theory_covmat, experiments_covmat, experiments_data):
+def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat, experiments_data, theoryids):
     """Plot ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5"""
+    l = len(theoryids)
     data = experiments_data
-    df_theory = theory_covmat
+    df_theory = theory_covmat_custom
     df_experiment = experiments_covmat
     matrix_theory = df_theory.as_matrix()
     matrix_experiment = df_experiment.as_matrix()
@@ -674,34 +655,7 @@ def plot_diag_cov_impact(theory_covmat, experiments_covmat, experiments_data):
     ticklocs, ticklabels = matrix_plot_labels(df_experiment)
     plt.xticks(ticklocs, ticklabels, rotation="vertical")
     ax.set_ylabel(r"$\frac{1}{D_i}\frac{1}{\sqrt{[cov^{-1}_]{ii}}}$")
-    ax.set_title("Diagonal impact of adding theory covariance matrix")
-    ax.legend()
-    return fig
-
-@_check_three_theories
-@figure
-def plot_theory_error_test(theory_covmat, experiments_covmat, experiments_data,
-                           theoryids_experiments_central_values):
-    """This is a test function which works for 3 point scale variations only"""
-    rc.update({'font.size': 30})
-    data = experiments_data.as_matrix()
-    df_theory = theory_covmat
-    df_experiment = experiments_covmat
-    matrix_theory = df_theory.as_matrix()
-    matrix_experiment = df_experiment.as_matrix()
-    central, low, high = np.array(theoryids_experiments_central_values)
-    experrors = np.sqrt(np.diag(matrix_experiment))
-    theoryerrors = np.sqrt(np.diag(matrix_theory))
-    fig,ax = plt.subplots(figsize=(20, 10))
-    ax.plot(central/data, label="central", color="red")
-    ax.plot(low/data, label="low", color="blue")
-    ax.plot(high/data, label="high", color="blue")
-    ax.errorbar(np.arange(len(data)), data/data, yerr=experrors/data,fmt='--o',
-                label="experiment errors", color="black")
-    ax.errorbar(np.arange(len(data))+0.25, data/data, yerr=theoryerrors/data,fmt='none',
-                label="theory errors", color="green")
-    ax.set_ylabel("Observable normalised to experiment")
-    ax.set_title("Theory error comparison")
+    ax.set_title("Diagonal impact of adding theory covariance matrix for {0} points".format(l))
     ax.legend()
     return fig
 
