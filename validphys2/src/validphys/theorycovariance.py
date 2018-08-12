@@ -188,7 +188,7 @@ def theory_covmat_by_type(combine_by_type, theory_block_diag_covmat, experiments
     ------
     - cov_by_proc is the covariance matrix ordered by process type, 
       cov_by_exp is the covariance matrix orderd by experiment.
-    - to reshuffle cov_by_proc to cov_by_exp, a mapping "map" is 
+    - to reshuffle cov_by_proc to cov_by_exp, a mapping "covmap" is 
       constructed which maps the index of a datapoint in cov_by_proc
       onto its corresponding index in cov_by_exp. This is done by comparing
       the ordering of the datasets in cov_by_proc (according to ordered_names)
@@ -203,7 +203,7 @@ def theory_covmat_by_type(combine_by_type, theory_block_diag_covmat, experiments
     covmats_list = covmats.values()
     cov_by_proc = la.block_diag(*covmats_list)
     start_exp = defaultdict(list)
-    map = defaultdict(list)
+    covmap = defaultdict(list)
     running_index = 0
     for dataset in dataset_names:
         size = dataset_size[dataset]
@@ -213,12 +213,12 @@ def theory_covmat_by_type(combine_by_type, theory_block_diag_covmat, experiments
     names_by_proc_list = [item for sublist in ordered_names.values() for item in sublist]
     for dataset in names_by_proc_list:
         for i in range(dataset_size[dataset]):
-            map[start+i] = start_exp[dataset] + i 
+            covmap[start+i] = start_exp[dataset] + i 
         start += dataset_size[dataset]
     cov_by_exp = np.zeros((len(cov_by_proc), len(cov_by_proc)))
     for i in range(len(cov_by_proc)):
         for j in range(len(cov_by_proc)):
-            cov_by_exp[map[i]][map[j]] = cov_by_proc[i][j]
+            cov_by_exp[covmap[i]][covmap[j]] = cov_by_proc[i][j]
     df = pd.DataFrame(cov_by_exp, index=experiments_index, columns=experiments_index)
     return df
 
@@ -601,7 +601,7 @@ def plot_covdiff_heatmap(theory_covmat, experiments_covmat):
 def plot_blockcovdiff_heatmap(theory_block_diag_covmat, experiments_covmat):
     """Matrix plot (thcov + expcov)/expcov"""
     df = (theory_block_diag_covmat.as_matrix()+experiments_covmat.values)/np.mean(experiments_covmat.values)
-    fig = plot_covmat_heatmap(df,"(Theory + experiment)/mean(experiment) covariance matrices for block diagonal theory covmat by dataset")
+    fig = plot_covmat_heatmap(df,"(Theory + experiment)/mean(experiment) for block diagonal theory covmat by dataset")
     return fig
 
 @figure
