@@ -58,28 +58,28 @@ def theory_covmat(theoryids_experiments_central_values, experiments_index):
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
 
-results_theoryids = collect(results,('theoryids',))
-each_dataset_results_theory = collect('results_theoryids', ('experiments', 'experiment'))
+results_bytheoryids = collect(results,('theoryids',))
+each_dataset_results_bytheory = collect('results_bytheoryids', ('experiments', 'experiment'))
 
 @_check_three_or_seven_theories
-def theory_covmat_datasets(each_dataset_results_theory):
+def theory_covmat_datasets(each_dataset_results_bytheory):
     """Produces an array of theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard. """
     dataset_covmats=[]
-    for dataset in each_dataset_results_theory:
+    for dataset in each_dataset_results_bytheory:
         theory_centrals = [x[1].central_value for x in dataset]
         s = make_scale_var_covmat(theory_centrals)
         dataset_covmats.append(s)
     return dataset_covmats
 
 @_check_three_or_seven_theories
-def total_covmat_datasets(each_dataset_results_theory):
+def total_covmat_datasets(each_dataset_results_bytheory):
     """Produces an array of total covariance matrices; the sum of experimental
     and scale-varied theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard.
     These are needed for calculation of chi2 per dataset. """
     dataset_covmats=[]
-    for dataset in each_dataset_results_theory:
+    for dataset in each_dataset_results_bytheory:
         theory_centrals = [x[1].central_value for x in dataset]
         s = make_scale_var_covmat(theory_centrals)
         sigma = dataset[0][0].covmat
@@ -88,10 +88,10 @@ def total_covmat_datasets(each_dataset_results_theory):
     return dataset_covmats
 
 @_check_three_or_seven_theories
-def total_covmat_diagtheory_datasets(each_dataset_results_theory):
+def total_covmat_diagtheory_datasets(each_dataset_results_bytheory):
     """Same as total_covmat_theory_datasets but for diagonal theory only"""
     dataset_covmats=[]
-    for dataset in each_dataset_results_theory:
+    for dataset in each_dataset_results_bytheory:
         theory_centrals = [x[1].central_value for x in dataset]
         s = make_scale_var_covmat(theory_centrals)
         s_diag = np.zeros((len(s),len(s)))
@@ -126,7 +126,7 @@ def total_covmat_experiments(experiments_results_theory):
         exp_result_covmats.append(cov)
     return exp_result_covmats
 
-def process_lookup(experiments_xq2map, each_dataset_results_theory):
+def process_lookup(experiments_xq2map, each_dataset_results_bytheory):
     """Produces a dictionary with keys corresponding to dataset names
     and values corresponding to process types"""
     dict = {}
@@ -150,7 +150,7 @@ def dataset_names(experiments_xq2map):
         names.append(commondata.name)
     return names
 
-def combine_by_type(process_lookup, each_dataset_results_theory, dataset_names):
+def combine_by_type(process_lookup, each_dataset_results_bytheory, dataset_names):
     """Groups the datasets according to processes and returns three objects:
     theories_by_process: the relevant theories grouped by process type
     ordered_names: dictionary with keys of process type and values being the 
@@ -161,7 +161,7 @@ def combine_by_type(process_lookup, each_dataset_results_theory, dataset_names):
     dataset_size = defaultdict(list)
     theories_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
-    for dataset, name in zip(each_dataset_results_theory, dataset_names):
+    for dataset, name in zip(each_dataset_results_bytheory, dataset_names):
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
         proc_type = process_lookup[name][0]
