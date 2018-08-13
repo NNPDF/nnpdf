@@ -24,7 +24,8 @@ from validphys import uploadutils
 providers = [
              'validphys.results',
              'validphys.pdfgrids',
-             'validphys.plots',
+             'validphys.pdfplots',
+             'validphys.dataplots',
              'validphys.fitdata',
              'validphys.arclength',
              'validphys.sumrules',

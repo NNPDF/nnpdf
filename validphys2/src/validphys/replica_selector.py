@@ -18,7 +18,7 @@ from validphys.pdfbases import flavour
 from validphys.pdfoutput import pdfset
 from validphys.lhio import new_pdf_from_indexes
 from validphys.checks import check_pdf_is_montecarlo, check_scale
-from validphys.plots import ReplicaPDFPlotter
+from validphys.pdfplots import ReplicaPDFPlotter
 
 log = logging.getLogger(__name__)
 
