@@ -175,7 +175,7 @@ def combine_by_type(process_lookup, each_dataset_results_bytheory, dataset_names
     return theories_by_process, ordered_names, dataset_size
 
 @_check_three_or_seven_theories
-def theory_covmat_by_type(combine_by_type, theory_block_diag_covmat, experiments_index, dataset_names):
+def theory_covmat_custom(combine_by_type, theory_block_diag_covmat, experiments_index, dataset_names):
     """
     Calculates the theory covariance matrix for scale variations 
     with variations by process type.  Scale variations are carried out,
@@ -254,10 +254,10 @@ def theory_blockcorrmat(theory_block_diag_covmat):
     return mat
 
 @table
-def theory_corrmat_by_type(theory_covmat_by_type):
+def theory_corrmat_custom(theory_covmat_custom):
     """Calculates the theory correlation matrix for scale variations 
     with variations by process type"""
-    mat = theory_corrmat(theory_covmat_by_type)
+    mat = theory_corrmat(theory_covmat_custom)
     return mat
 
 @table
@@ -279,10 +279,10 @@ def theory_normblockcovmat(theory_block_diag_covmat, experiments_data):
     return mat
 
 @table
-def theory_normcovmat_by_type(theory_covmat_by_type, experiments_data):
+def theory_normcovmat_custom(theory_covmat_custom, experiments_data):
     """Calculates the theory covariance matrix for scale variations 
     normalised to data, with variations by process type."""
-    df = theory_covmat_by_type
+    df = theory_covmat_custom
     experiments_data_array = np.array(experiments_data)
     mat = df/np.outer(experiments_data_array, experiments_data_array)
     return mat
@@ -301,10 +301,10 @@ def experimentsplusblocktheory_covmat(experiments_covmat, theory_block_diag_covm
     return df
 
 @table
-def experimentsplustheory_covmat_by_type(experiments_covmat, theory_covmat_by_type):
+def experimentsplustheory_covmat_custom(experiments_covmat, theory_covmat_custom):
     """Calculates the experiment + theory covariance matrix for scale variations correlated
     by process type."""
-    df = experiments_covmat + theory_covmat_by_type
+    df = experiments_covmat + theory_covmat_custom
     return df
 
 @table
@@ -326,10 +326,10 @@ def experimentsplusblocktheory_normcovmat(experiments_covmat, theory_block_diag_
     return mat
 
 @table
-def experimentsplustheory_normcovmat_by_type(experiments_covmat, theory_covmat_by_type, experiments_data, experimentsplustheory_normcovmat):
+def experimentsplustheory_normcovmat_custom(experiments_covmat, theory_covmat_custom, experiments_data, experimentsplustheory_normcovmat):
     """Calculates the experiment + theory covariance matrix for scale
        variations normalised to data, correlations by process type."""
-    mat = experimentsplustheory_normcovmat(experiments_covmat, theory_covmat_by_type, experiments_data)
+    mat = experimentsplustheory_normcovmat(experiments_covmat, theory_covmat_custom, experiments_data)
 
     return mat
 @table
@@ -350,10 +350,10 @@ def experimentsplusblocktheory_corrmat(experiments_covmat, theory_block_diag_cov
     return corrmat
 
 @table
-def experimentsplustheory_corrmat_by_type(experiments_covmat, theory_covmat_by_type):
+def experimentsplustheory_corrmat_custom(experiments_covmat, theory_covmat_custom):
     """Calculates the correlation matrix for the experimental
     plus theory covariance matrices, correlations by process type."""
-    corrmat = experimentsplustheory_corrmat(experiments_covmat, theory_covmat_by_type)
+    corrmat = experimentsplustheory_corrmat(experiments_covmat, theory_covmat_custom)
     return corrmat
 
 def chi2_impact(theory_covmat, experiments_covmat, experiments_results):
@@ -383,9 +383,9 @@ def chi2_block_impact(theory_block_diag_covmat, experiments_covmat, experiments_
     return chi2
 
 
-def chi2_impact_by_type(theory_covmat_by_type, experiments_covmat, experiments_results):
+def chi2_impact_custom(theory_covmat_custom, experiments_covmat, experiments_results):
     """ Returns total chi2 including theory cov mat """
-    chi2 = chi2_impact(theory_covmat_by_type, experiments_covmat, experiments_results)
+    chi2 = chi2_impact(theory_covmat_custom, experiments_covmat, experiments_results)
     return chi2
 
 def chi2_diag_only(theory_covmat, experiments_covmat, data_theory_diff):
@@ -526,9 +526,9 @@ def plot_normthblockcovmat_heatmap(theory_normblockcovmat):
     return fig
 
 @figure
-def plot_normthcovmat_heatmap_by_type(theory_normcovmat_by_type):
+def plot_normthcovmat_heatmap_custom(theory_normcovmat_custom):
     """Matrix plot for block diagonal theory covariance matrix by process type"""
-    fig = plot_covmat_heatmap(theory_normcovmat_by_type, "Block diagonal theory covariance matrix by process type")
+    fig = plot_covmat_heatmap(theory_normcovmat_custom, "Block diagonal theory covariance matrix by process type")
     return fig
 
 @figure
@@ -545,9 +545,9 @@ def plot_thblockcorrmat_heatmap(theory_blockcorrmat):
     return fig
 
 @figure
-def plot_thcorrmat_heatmap_by_type(theory_corrmat_by_type):
+def plot_thcorrmat_heatmap_custom(theory_corrmat_custom):
     """Matrix plot of the theory correlation matrix, correlations by process type"""
-    fig = plot_corrmat_heatmap(theory_corrmat_by_type, "Theory correlation matrix block diagonal by process type")
+    fig = plot_corrmat_heatmap(theory_corrmat_custom, "Theory correlation matrix block diagonal by process type")
     return fig
 
 @figure
@@ -565,9 +565,9 @@ def plot_normexpplusblockthcovmat_heatmap(experimentsplusblocktheory_normcovmat)
     return fig
 
 @figure
-def plot_normexpplusthcovmat_heatmap_by_type(experimentsplustheory_normcovmat_by_type):
+def plot_normexpplusthcovmat_heatmap_custom(experimentsplustheory_normcovmat_custom):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
-    fig = plot_covmat_heatmap(experimentsplustheory_normcovmat_by_type, "Experiment + theory (block diagonal by process type) covariance matrix")
+    fig = plot_covmat_heatmap(experimentsplustheory_normcovmat_custom, "Experiment + theory (block diagonal by process type) covariance matrix")
     return fig
 
 @figure
@@ -585,9 +585,9 @@ def plot_expplusblockthcorrmat_heatmap(experimentsplusblocktheory_corrmat):
     return fig
 
 @figure
-def plot_expplusthcorrmat_heatmap_by_type(experimentsplustheory_corrmat_by_type):
+def plot_expplusthcorrmat_heatmap_custom(experimentsplustheory_corrmat_custom):
     """Matrix plot of the exp + theory correlation matrix"""
-    fig = plot_corrmat_heatmap(experimentsplustheory_corrmat_by_type,"Experiment + theory (block diagonal by process type) correlation matrix")
+    fig = plot_corrmat_heatmap(experimentsplustheory_corrmat_custom,"Experiment + theory (block diagonal by process type) correlation matrix")
     return fig
 
 @figure
@@ -605,7 +605,7 @@ def plot_blockcovdiff_heatmap(theory_block_diag_covmat, experiments_covmat):
     return fig
 
 @figure
-def plot_covdiff_heatmap_by_type(theory_covmat_by_type, experiments_covmat):
+def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat):
     """Matrix plot (thcov + expcov)/expcov"""
     df = (theory_block_diag_covmat+experiments_covmat)/np.mean(experiments_covmat.values)
     fig = plot_covmat_heatmap(df, "(Theory + experiment)/mean(experiment) covariance matrices "
