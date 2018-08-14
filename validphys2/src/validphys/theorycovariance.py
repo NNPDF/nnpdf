@@ -126,18 +126,12 @@ def total_covmat_experiments(experiments_results_theory):
         exp_result_covmats.append(cov)
     return exp_result_covmats
 
-def process_lookup(experiments_xq2map, each_dataset_results_bytheory):
+commondata_experiments = collect('commondata', ['experiments', 'experiment'])
+
+def process_lookup(commondata_experiments, each_dataset_results_bytheory):
     """Produces a dictionary with keys corresponding to dataset names
     and values corresponding to process types"""
-    dict = {}
-    for experiment, commondata, fitted, masked in experiments_xq2map:
-        info = get_info(commondata)
-        key  = commondata.name
-        if key in dict:
-            pass
-        else:
-            dict.setdefault(key, [])
-        dict[key].append(info.process_description)
+    dict = {commondata.name: get_info(commondata).process_description for commondata in commondata_experiments}
     return dict
 
 def dataset_names(experiments_xq2map):
