@@ -100,7 +100,7 @@ class CompareFitApp(App):
         args['config_yml'] = comparefittemplates.template_path
         return args
 
-    def complate_mapping(self):
+    def complete_mapping(self):
         args = self.args
         autosettings = {}
         autosettings['meta'] = {
@@ -142,7 +142,7 @@ class CompareFitApp(App):
             #TODO: Ideally this would load round trip but needs
             #to be fixed in reportengine.
             c = yaml.safe_load(f)
-        c.update(self.complate_mapping())
+        c.update(self.complete_mapping())
         return self.config_class(c, environment=self.environment)
 
 

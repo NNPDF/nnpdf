@@ -108,7 +108,7 @@ copy of the original YAML runcard.  The required resources (such as the theory
 and t0 PDF) will be downloaded automatically. Alternatively they can be obtained
 with the `vp-get` tool.
 
-3. The `nnfit` coda takes a `<runcard_folder>` as input, e.g.  ```nnfit
+3. The `nnfit` program takes a `<runcard_folder>` as input, e.g.  ```nnfit
 <replica_number> <runcard_folder> ``` where replica_number goes from 1-n.
 
 4. Wait until you have fit results, then use `postfit
