@@ -40,15 +40,10 @@ class SetupFitEnvironment(Environment):
 
         # check if results folder exists
         self.output_path = pathlib.Path(self.output_path).absolute()
-        if self.output_path.exists():
-            log.warning(f"Output folder exists: {self.output_path} Overwritting contents")
-        else:
-            if not re.fullmatch(r'[\w.\-]+', self.output_path.name):
-                raise SetupFitError("Invalid output folder name. Must be alphanumeric.")
-            try:
-                self.output_path.mkdir()
-            except OSError as e:
-                raise EnvironmentError_(e) from e
+        if not re.fullmatch(r'[\w.\-]+', self.output_path.name):
+            raise SetupFitError("Invalid output folder name. Must be alphanumeric.")
+
+        super().init_output()
 
         try:
             shutil.copy2(self.config_yml, self.output_path / RUNCARD_COPY_FILENAME)
