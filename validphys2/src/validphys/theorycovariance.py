@@ -128,32 +128,19 @@ def total_covmat_experiments(experiments_results_theory):
         exp_result_covmats.append(cov)
     return exp_result_covmats
 
-#commondata_experiments = collect('commondata', ['experiments', 'experiment'])
+commondata_experiments = collect('commondata', ['experiments', 'experiment'])
 
-def process_lookup(experiments_xq2map, each_dataset_results_bytheory):
+def process_lookup(each_dataset_results_bytheory, commondata_experiments):
     """Produces a dictionary with keys corresponding to dataset names
     and values corresponding to process types"""
-    dict = {commondata.name: get_info(commondata).process_description for _, commondata, _, _ in experiments_xq2map}
-#    dict2 = {commondata.name: get_info(commondata).process_description for commondata in commondata_experiments}
-    return dict
+    d = {commondata.name: [get_info(commondata).process_description] for commondata in commondata_experiments}
+    return d
     
-def dataset_names(experiments_xq2map):
+def dataset_names(commondata_experiments):
     """Returns a list of the names of the datasets, in the same order as 
     they are inputted in the runcard"""
-    names = []
-    names2 = [commondata.name for _, commondata, _, _ in experiments_xq2map]
-    for experiment, commondata, fitted, masked in experiments_xq2map:
-        info = get_info(commondata)
-        name = commondata.name
-        names.append(commondata.name)
-    if names == names2:
-        print("YES, the two lists are equal!!!!!!!!!!!!!!!!!!")
-    else:
-        print("NOOOOOOOOOOOOO the two lists are different....")
-        print(names)
-        print(names2)
-    embed()
-    return names2
+    names = [commondata.name for commondata in commondata_experiments]  
+    return names
 
 def combine_by_type(process_lookup, each_dataset_results_bytheory, dataset_names):
     """Groups the datasets according to processes and returns three objects:
