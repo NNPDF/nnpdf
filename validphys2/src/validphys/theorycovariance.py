@@ -148,9 +148,9 @@ def combine_by_type(process_lookup, each_dataset_results_bytheory, dataset_names
                    are appended to theories_by_process
     dataset_size:  dictionary with keys of dataset name and values being the 
                    number of points in that dataset"""
-    dataset_size = defaultdict(list)
-    theories_by_process = defaultdict(list)
-    ordered_names = defaultdict(list)
+    dataset_size = dict(list)
+    theories_by_process = dict(list)
+    ordered_names = dict(list)
     for dataset, name in zip(each_dataset_results_bytheory, dataset_names):
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
@@ -186,7 +186,7 @@ def theory_covmat_by_type(combine_by_type, theory_block_diag_covmat, experiments
       and using knowledge of the size of each dataset, stored in dataset_size.
     """
     theories_by_process, ordered_names, dataset_size = combine_by_type
-    covmats = defaultdict(list)
+    covmats = dict(list)
     for process, theory_centrals in theories_by_process.items():
         s = make_scale_var_covmat(theory_centrals)
         covmats[process] = s
