@@ -16,6 +16,20 @@ from validphys.app import App
 from reportengine.compat import yaml
 from reportengine import colors
 
+
+SETUPFIT_FIXED_CONFIG = dict(
+    use_cuts=False,
+    actions_=[
+        'datacuts check_t0pdfset',
+        'theory check_positivity',
+        'datacuts::closuretest::theory::fitting filter',
+        'theory::theorycovmatconfig theory_covmat',
+    ])
+
+SETUPFIT_PROVIDERS = ['validphys.filters',
+                      'validphys.theorycovariance',
+                      'validphys.results',]
+
 log = logging.getLogger(__name__)
 
 RUNCARD_COPY_FILENAME = "filter.yml"
@@ -77,11 +91,7 @@ class SetupFitConfig(Config):
             file_content = yaml.safe_load(o)
         except yaml.error.YAMLError as e:
             raise ConfigError(f"Failed to parse yaml file: {e}")
-        file_content['use_cuts'] = False
-        file_content['actions_'] = ['datacuts check_t0pdfset',
-                                    'theory check_positivity',
-                                    'datacuts::closuretest::theory::fitting filter',
-                                    'theory::theorycovmatconfig theory_covmat']
+        file_content.update(SETUPFIT_FIXED_CONFIG)
         return cls(file_content, *args, ** kwargs)
 
 
@@ -92,9 +102,7 @@ class SetupFitApp(App):
 
     def __init__(self):
         super(SetupFitApp, self).__init__(name='setup-fit',
-                                          providers=['validphys.filters',
-                                                     'validphys.theorycovariance',
-                                                     'validphys.results'])
+                                          providers=SETUPFIT_PROVIDERS)
 
     @property
     def argparser(self):
