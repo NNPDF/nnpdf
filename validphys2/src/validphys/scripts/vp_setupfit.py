@@ -92,7 +92,9 @@ class SetupFitApp(App):
 
     def __init__(self):
         super(SetupFitApp, self).__init__(name='setup-fit',
-                                          providers=['validphys.filters', 'validphys.theorycovariance', 'validphys.results'])
+                                          providers=['validphys.filters',
+                                                     'validphys.theorycovariance',
+                                                     'validphys.results'])
 
     @property
     def argparser(self):
