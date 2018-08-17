@@ -35,6 +35,13 @@ datacuts:
 theory:
   theoryid: 162        # database id
 
+theorycovmatconfig:
+  theoryids:
+    - 162
+    - 168
+    - 167
+  pdf: NNPDF31_nnlo_as_0118
+
 ############################################################
 fitting:
   seed     : 65532133529      # set the seed for the random generator
