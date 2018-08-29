@@ -55,7 +55,7 @@ void CMSSTOPTCHRAT8TEVFilter::ReadData()
       lstream >> fData[0];       //central value
       lstream >> fStat[0];       //statistical uncertainty
 
-      for (int i = 0; i < (fNSys - 1); i++)
+      for (int i = 0; i < fNSys; i++)
         {
            lstream >> fSys[0][i].mult;
            fSys[0][i].add = fSys[0][i].mult*fData[0]/100; 
