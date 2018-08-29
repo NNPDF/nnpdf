@@ -66,6 +66,7 @@
 #include "CMSWMU8TEV.h"
 #include "FutureColliders.h"
 #include "CMSSTOPTCHTOT7TEV.h"
+#include "CMSSTOPTCHRAT13TEV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -243,6 +244,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSTTBARTOT13TEVFilter());
   target.push_back(new CMSTTBARTOTFilter());
   target.push_back(new CMSSTOPTCHTOT7TEVFilter());
+  target.push_back(new CMSSTOPTCHRAT13TEVFilter());
 
   // ************************* ZEUS ******************************
 
