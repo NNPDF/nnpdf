@@ -48,21 +48,21 @@ void CMSSTOPTCHRAT8TEVFilter::ReadData()
   istringstream lstream(line);
   lstream >> idum >> cme;
       
-   fKin1[0] = 0.;
-   fKin2[0] = Mt*Mt;          //top mass
-   fKin3[0] = cme*1000;       //sqrt(s)
+  fKin1[0] = 0.;
+  fKin2[0] = Mt*Mt;          //top mass
+  fKin3[0] = cme*1000;       //sqrt(s)
 
-   lstream >> fData[0];       //central value
-   lstream >> fStat[0];       //statistical uncertainty
+  lstream >> fData[0];       //central value
+  lstream >> fStat[0];       //statistical uncertainty
 
-   for (int i = 0; i < fNSys; i++)
-     {
-        lstream >> fSys[0][i].mult;
-        fSys[0][i].add = fSys[0][i].mult*fData[0]/100; 
-        fSys[0][i].type = MULT;
-        fSys[0][i].name = "UNCORR";      
-     }
+  for (int i = 0; i < fNSys; i++)
+    {
+       lstream >> fSys[0][i].mult;
+       fSys[0][i].add = fSys[0][i].mult*fData[0]/100; 
+       fSys[0][i].type = MULT;
+       fSys[0][i].name = "UNCORR";      
+    }
 
-   f1.close();
+  f1.close();
 
 }
