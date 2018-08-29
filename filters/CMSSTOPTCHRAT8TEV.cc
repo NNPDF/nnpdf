@@ -43,6 +43,7 @@ void CMSSTOPTCHRAT8TEVFilter::ReadData()
   string line;
   int idum;
   double cme;
+  double fstat_percentage;
 
   getline(f1,line);
   istringstream lstream(line);
@@ -53,7 +54,8 @@ void CMSSTOPTCHRAT8TEVFilter::ReadData()
   fKin3[0] = cme*1000;       //sqrt(s)
 
   lstream >> fData[0];       //central value
-  lstream >> fStat[0];       //statistical uncertainty
+  lstream >> fstat_percentage; //statistical (percentage) uncertainty
+  fStat[0] = fstat_percentage*fData[0]/100; //convert percentage uncertainty to absolute uncertainty and store
 
   for (int i = 0; i < fNSys; i++)
     {
