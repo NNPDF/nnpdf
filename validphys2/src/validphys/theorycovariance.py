@@ -21,20 +21,44 @@ from reportengine.table import table
 from reportengine import collect
 
 from validphys.results import results, experiment_results, experiments_central_values
-from validphys.results import Chi2Data, experiments_chi2_table
-from validphys.calcutils import all_chi2_theory, central_chi2_theory
+from validphys.results import Chi2Data, experiments_chi2_table, DataResult, NNPDFDataResult,ThPredictionsResult, fits_results, fits_experiments
+from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys.plotoptions import get_info
+from validphys.fitdata import match_datasets_by_cuts, fits_datasets
 from validphys import plotutils
+
+from IPython import embed
 
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values, ('theoryids',))
+fits_experiments_central_values = collect(experiments_central_values, ('fits','fitcontext'))
 
 @make_argcheck
 def _check_allowed_theory_number(theoryids):
     l = len(theoryids)
     if l!=3 and l!=5 and l!=7 and l!=9:
         raise CheckError(f"Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
+    
+@make_argcheck
+def _check_two_fits(fits):
+    l = len(fits)
+    if l!=2:
+        raise CheckError(f"Expecting 2 fits, one for NLO and one for NNLO, but got {l}.")
+
+@_check_two_fits
+def evalue(match_datasets_by_cuts, fits_datasets, fits_experiments_central_values):
+    embed()
+    nlo_dataset, nnlo_dataset = [{ds.name: ds for ds in datasets} for datasets in fits_datasets]
+    newnlo_dataset = {x: nlo_dataset[x] for x in match_datasets_by_cuts}
+    newnnlo_dataset = {x: nnlo_dataset[x] for x in match_datasets_by_cuts}
+    NLO = np.concatenate([ThPredictionsResult(newnlo_dataset[x].load()).central_value for x in match_datasets_by_cuts], axis =0)
+    NNLO = np.concatenate([ThPredictionsResult(newnnlo_dataset[x].load()).central_value for x in match_datasets_by_cuts], axis=0)
+    diff = NLO - NNLO
+    newdiff = np.where(np.absolute(diff) >= np.absolute(NLO/2), 0, diff)
+    vetoes = np.where(newdiff == 0)[0]
+    evalue = (np.dot(newdiff, newdiff)/np.dot(NLO,NLO))/(len(NLO)-len(vetoes))
+    return evalue, len(vetoes)
 
 @_check_allowed_theory_number
 def make_scale_var_covmat(predictions, theoryids):
@@ -210,15 +234,23 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids):
                 if name1 == name2:
                     s = 0.5*sum(np.outer(d, d) for d in deltas1)
                 else:
-                    s = 0.5*(np.outer(deltas1[0], deltas2[0]) 
-                              + np.outer(deltas1[1], deltas2[1]))
+                    s = 0.5*(np.outer(deltas1[0], deltas2[0]) + np.outer(
+                        deltas1[1], deltas2[1])) + 0.25*(np.outer(
+                                   (deltas1[2] + deltas1[3]),(deltas2[2] + deltas2[3])))
                 start_locs = (start_proc[name1], start_proc[name2])
                 covmats[start_locs] = s
 #                if name1 == name2:
 #                    s = 0.5*sum(np.outer(d, d) for d in deltas1)
 #                else:
+#                    s = 0.5*(np.outer(deltas1[0], deltas2[0]) 
+#                              + np.outer(deltas1[1], deltas2[1]))
+#                start_locs = (start_proc[name1], start_proc[name2])
+#                covmats[start_locs] = s
+#                if name1 == name2:
+#                    s = 0.5*sum(np.outer(d, d) for d in deltas1)
+#                else:
 #                    s = 0.25*(np.outer((deltas1[0]+deltas1[2]),(deltas2[0]+deltas2[2])) 
- #                             + np.outer((deltas1[1]+deltas1[3]),(deltas2[1]+deltas2[3])))
+ #                                                         + np.outer((deltas1[1]+deltas1[3]),(deltas2[1]+deltas2[3])))
  #               start_locs = (start_proc[name1], start_proc[name2])
  #               covmats[start_locs] = s
             elif l==7:
@@ -279,6 +311,14 @@ def theory_covmat_custom(covs_pt_prescrip, map, experiments_index):
     df = pd.DataFrame(cov_by_exp, index=experiments_index, columns=experiments_index)
     return df
 
+def evalue_prescrip(theory_covmat_custom, experiments_data):
+    data = np.abs(experiments_data)
+    diags = np.diag(theory_covmat_custom)
+    newdiags = np.where(np.sqrt(np.absolute(diags)) >= np.absolute(50*data), 0, diags)
+    vetoes = np.where(newdiags == 0)[0]
+    ev = np.sum(newdiags/data**2)/(len(data)-len(vetoes))
+    return ev, len(vetoes)
+
 @_check_allowed_theory_number
 def total_covmat_diagtheory_experiments(experiments_results_theory, theoryids):
     """Same as total_covmat_datasets but per experiment rather than
@@ -298,7 +338,7 @@ def total_covmat_diagtheory_experiments(experiments_results_theory, theoryids):
 def theory_corrmat(theory_covmat):
     """Calculates the theory correlation matrix for scale variations."""
     df = theory_covmat
-    covmat = df.as_matrix()
+    covmat = df.values
     diag_minus_half = (np.diagonal(covmat))**(-0.5)
     mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
     return mat
@@ -633,6 +673,7 @@ def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat, experimen
     ticklocs, ticklabels = matrix_plot_labels(df_experiment)
     plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=6)
     ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{|D_i|}$")
+    ax.set_ylim([0,0.5])
     ax.set_title("Square root of diagonal elements of covariances matrices for {0} points, ".format(l)
                  + "normalised to absolute value of data")
     ax.legend()

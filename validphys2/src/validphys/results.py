@@ -869,8 +869,10 @@ fits_total_chi2_for_experiments = collect('total_experiment_chi2',
                                           ('fits', 'fittheoryandpdf',
                                            'expspec', 'experiment'))
 
+fits_results = collect(results, ('fits', 'fitcontext', 'experiments', 'experiment'))
 
-fits_experiments = collect('experiments', ('fits', 'fitcontext'))
+
+fits_experiments = collect(experiment_results, ('fits', 'fitcontext'))
 fits_pdf = collect('pdf', ('fits', 'fitpdf'))
 
 #Dataspec is so
