@@ -75,6 +75,11 @@ namespace NNPDF
     matrix<double> fCovMat;    //!< The covariance matrix
     matrix<double> fSqrtCov;   //!< The Cholesky decomposition of the covariance matrix
 
+    matrix<double> fRepCovMat;  //!< The total covmat for replica generation
+    matrix<double> fSqrtRepCov; //!< The Cholesky decomposition of the total replica generation covmat
+    matrix<double> fFitCovMat;  //!< The total covmat for fitting
+    matrix<double> fSqrtFitCov; //!< The Cholesky decomposition of the total fitting covmat
+
     double *fStat;       //!< The statistical errors
     sysError **fSys;    //!< The syscor
 
@@ -89,6 +94,9 @@ namespace NNPDF
 
     void PullData();                  //!< Pull experimental data from datasets
     void GenCovMat();                 //!< Generate covmat and inverse
+
+    void LoadRepCovMat(std::string filename); //!< Read in covmat for rep gen, generate covmat and sqrt
+    void LoadFitCovMat(std::string filename); //!< Read in covmat for fitting, generate covmat and sqrt
 
   };
 
