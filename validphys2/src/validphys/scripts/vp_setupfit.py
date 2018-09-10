@@ -30,6 +30,7 @@ import shutil
 import pathlib
 import logging
 import hashlib
+import warnings
 
 from validphys.config import Environment, Config, EnvironmentError_, ConfigError
 from validphys.app import App
@@ -111,7 +112,15 @@ class SetupFitConfig(Config):
     @classmethod
     def from_yaml(cls, o, *args, **kwargs):
         try:
-            file_content = yaml.safe_load(o)
+            with warnings.catch_warnings():
+                warnings.simplefilter('ignore',
+                                      yaml.error.MantissaNoDotYAML1_1Warning)
+                #We need to specify the older version 1.1 to support the
+                #older configuration files, which liked to use on/off for
+                #booleans.
+                #The floating point parsing yields warnings everywhere, which
+                #we suppress.
+                file_content = yaml.safe_load(o, version='1.1')
         except yaml.error.YAMLError as e:
             raise ConfigError(f"Failed to parse yaml file: {e}")
         if not isinstance(file_content, dict):
