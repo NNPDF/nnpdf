@@ -47,7 +47,7 @@ def _check_two_fits(fits):
         raise CheckError(f"Expecting 2 fits, one for NLO and one for NNLO, but got {l}.")
 
 @_check_two_fits
-def evalue(match_datasets_by_cuts, fits_datasets, fits_experiments_central_values):
+def evalue(match_datasets_by_cuts, fits_datasets, fits_experiments_central_values, fits_results):
     embed()
     nlo_dataset, nnlo_dataset = [{ds.name: ds for ds in datasets} for datasets in fits_datasets]
     newnlo_dataset = {x: nlo_dataset[x] for x in match_datasets_by_cuts}
@@ -166,6 +166,16 @@ def process_lookup(experiments_xq2map, each_dataset_results_theory):
         else:
             dict.setdefault(key, [])
         dict[key].append(info.process_description)
+    # combining processes
+    for key, value in dict.items():
+        if "Drell-Yan" in value[0]:
+            dict[key] = ['Drell-Yan']
+        elif "Heavy Quarks" in value[0]:
+            dict[key] = "Heavy Quarks"
+        elif "Jet" in value[0]:
+            dict[key] = "Jets"
+        else:
+            pass         
     return dict
 
 def dataset_names(experiments_xq2map):
@@ -199,7 +209,7 @@ def combine_by_type(process_lookup, each_dataset_results_theory, dataset_names):
             new_value = theory_centrals
         else:
             new_value = np.concatenate((current_value, theory_centrals), axis=1)
-        theories_by_process[proc_type] = new_value 
+        theories_by_process[proc_type] = new_value
     return theories_by_process, ordered_names, dataset_size
 
 def process_starting_points(combine_by_type):
@@ -269,8 +279,8 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids):
                     s = (1/12)*(np.outer((deltas1[0]+deltas1[4]+deltas1[6]),
                                          (deltas2[0]+deltas2[4]+deltas2[6])) 
                                 + np.outer((deltas1[1]+deltas1[5]+deltas1[7]), 
-                                           (deltas2[1]+deltas2[5]+deltas2[7]))
-                                + np.outer((deltas1[2]+deltas1[3]), 
+                                           (deltas2[1]+deltas2[5]+deltas2[7])))
+                                + (3/2)*(np.outer((deltas1[2]+deltas1[3]), 
                                            (deltas2[2]+deltas2[3])))
                 start_locs = (start_proc[name1], start_proc[name2])
                 covmats[start_locs] = s
