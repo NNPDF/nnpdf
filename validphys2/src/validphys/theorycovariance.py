@@ -243,26 +243,18 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids):
             elif l==5:
                 if name1 == name2:
                     s = 0.5*sum(np.outer(d, d) for d in deltas1)
+            # 5 point --------------------------------------------------------------------
+#                else:
+#                    s = 0.5*(np.outer(deltas1[0], deltas2[0]) + np.outer(
+#                        deltas1[1], deltas2[1])) + 0.25*(np.outer(
+#                                   (deltas1[2] + deltas1[3]),(deltas2[2] + deltas2[3])))
+             # 5bar-point -----------------------------------------------------------------
                 else:
-                    s = 0.5*(np.outer(deltas1[0], deltas2[0]) + np.outer(
-                        deltas1[1], deltas2[1])) + 0.25*(np.outer(
-                                   (deltas1[2] + deltas1[3]),(deltas2[2] + deltas2[3])))
+                    s = 0.25*(np.outer((deltas1[0]+deltas1[2]),(deltas2[0]+deltas2[2])) 
+                               + np.outer((deltas1[1]+deltas1[3]),(deltas2[1]+deltas2[3])))
+             #  -----------------------------------------------------------------
                 start_locs = (start_proc[name1], start_proc[name2])
                 covmats[start_locs] = s
-#                if name1 == name2:
-#                    s = 0.5*sum(np.outer(d, d) for d in deltas1)
-#                else:
-#                    s = 0.5*(np.outer(deltas1[0], deltas2[0]) 
-#                              + np.outer(deltas1[1], deltas2[1]))
-#                start_locs = (start_proc[name1], start_proc[name2])
-#                covmats[start_locs] = s
-#                if name1 == name2:
-#                    s = 0.5*sum(np.outer(d, d) for d in deltas1)
-#                else:
-#                    s = 0.25*(np.outer((deltas1[0]+deltas1[2]),(deltas2[0]+deltas2[2])) 
- #                                                         + np.outer((deltas1[1]+deltas1[3]),(deltas2[1]+deltas2[3])))
- #               start_locs = (start_proc[name1], start_proc[name2])
- #               covmats[start_locs] = s
             elif l==7:
                 if name1 == name2:
                     s = (1/3)*sum(np.outer(d, d) for d in deltas1)
@@ -279,9 +271,8 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids):
                     s = (1/12)*(np.outer((deltas1[0]+deltas1[4]+deltas1[6]),
                                          (deltas2[0]+deltas2[4]+deltas2[6])) 
                                 + np.outer((deltas1[1]+deltas1[5]+deltas1[7]), 
-                                           (deltas2[1]+deltas2[5]+deltas2[7])))
-                                + (3/2)*(np.outer((deltas1[2]+deltas1[3]), 
-                                           (deltas2[2]+deltas2[3])))
+                                           (deltas2[1]+deltas2[5]+deltas2[7]))) + (1/8)*(
+                                np.outer((deltas1[2]+deltas1[3]), (deltas2[2]+deltas2[3])))
                 start_locs = (start_proc[name1], start_proc[name2])
                 covmats[start_locs] = s
     return covmats
