@@ -851,6 +851,17 @@ def experiments_central_values(experiment_result_table):
     central_theory_values = experiment_result_table["theory_central"]
     return central_theory_values
 
+def bias(dataspecs_results):
+    """Returns the chi^2 between replicas zero of two chosen fits,
+       to be used in a closure test with the result and the underlying law"""
+    th_lst = []
+    for i, ds_rs in enumerate(dataspecs_results):
+         data, th = ds_rs
+         th_lst.append(th)
+    central_diff = th_lst[1].central_value - th_lst[0].central_value
+    return calc_chi2(data.sqrtcovmat, central_diff)
+
+   
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
 
@@ -886,3 +897,4 @@ dataspecs_dataset = collect('dataset', ('dataspecs',))
 dataspecs_commondata = collect('commondata', ('dataspecs',))
 dataspecs_pdf = collect('pdf', ('dataspecs',))
 dataspecs_fit = collect('fit', ('dataspecs',))
+dataspecs_bias = collect('bias', ('matched_datasets_from_dataspecs',))

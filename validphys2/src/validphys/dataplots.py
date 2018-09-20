@@ -19,7 +19,7 @@ from reportengine.checks import make_check, CheckError, make_argcheck
 from reportengine.floatformatting import format_number
 
 from validphys.core import MCStats, cut_mask
-from validphys.results import chi2_stat_labels
+from validphys.results import chi2_stat_labels, dataspecs_bias
 from validphys.plotoptions import get_info, kitable, transform_result
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges, scale_from_grid
@@ -459,7 +459,17 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
 
 #I need to use the informations contained in experiments_chi2_table
 
-
+@figure
+def plot_biases(experiments, dataspecs_bias):
+    """Plot the biases of all experiments with bars."""
+    biases = []
+    xticks = []
+    for experiment, b in zip(experiments, dataspecs_bias):
+        biases.append(b)
+        xticks.append(experiment.name)
+    fig, ax = plotutils.barplot(biases, collabels=xticks, datalabels=[r'$\chi^2$'])
+    ax.set_title("biases for experiments")
+    return fig
 
 @figure
 def plot_experiments_chi2(experiments, experiments_chi2):
