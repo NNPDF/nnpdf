@@ -541,6 +541,8 @@ void NNPDFSettings::LoadExperiments()
 
         fExpSetName.push_back(nsetname);
     }
+    fExpSetName.push_back(nsetname);
+  }
 }
 
 /**

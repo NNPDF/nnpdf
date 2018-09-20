@@ -363,6 +363,7 @@ class Loader(LoaderBase):
                    "'{p}' must be a folder").format(**locals())
         raise FitNotFound(msg)
 
+
     def check_dataset(self,
                       name,
                       *,

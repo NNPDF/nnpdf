@@ -228,6 +228,7 @@ class CoreConfig(configparser.Config):
                            dataset_input,
                            use_fitcommondata=False,
                            fit=None):
+      
         """Produce a CommondataSpec from a dataset input"""
 
         name = dataset_input.name
@@ -283,6 +284,7 @@ class CoreConfig(configparser.Config):
                 use_fitcommondata=use_fitcommondata,
                 fit=fit,
                 weight=weight)
+
         except DataNotFoundError as e:
             raise ConfigError(str(e), name, self.loader.available_datasets)
 

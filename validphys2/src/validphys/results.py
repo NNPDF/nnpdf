@@ -21,7 +21,7 @@ from reportengine import collect
 
 from validphys.checks import assert_use_cuts_true, check_pdf_is_montecarlo, check_speclabels_different
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
-from validphys.calcutils import all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values
+from validphys.calcutils import all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values, all_chi2_theory, central_chi2_theory
 
 log = logging.getLogger(__name__)
 
@@ -438,6 +438,10 @@ def abs_chi2_data(results):
 def abs_chi2_data_experiment(experiment_results):
     """Like `abs_chi2_data` but for a whole experiment"""
     return abs_chi2_data(experiment_results)
+
+def abs_chi2_data_experiment_theory(experiment_results, theory_covmat_dataset_3pt):
+    """Like `abs_chi2_data_theory` but for a whole experiment"""
+    return abs_chi2_data_theory(experiment_results, theory_covmat_dataset_3pt)
 
 def phi_data(abs_chi2_data):
     """Calculate phi using values returned by `abs_chi2_data`.
