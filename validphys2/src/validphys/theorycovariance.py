@@ -155,13 +155,10 @@ def combine_by_type(process_lookup, each_dataset_results_bytheory, dataset_names
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
         proc_type = process_lookup[name][0]
-        current_value = theories_by_process[proc_type]
         ordered_names[proc_type].append(name)
-        if current_value == []:
-            new_value = theory_centrals
-        else:
-            new_value = np.concatenate((current_value, theory_centrals), axis=1)
-        theories_by_process[proc_type] = new_value 
+        theories_by_process[proc_type].append(theory_centrals)
+    for key, item in theories_by_process.items():
+        theories_by_process[key] = np.concatenate(item, axis=1)
     return theories_by_process, ordered_names, dataset_size
 
 @_check_three_or_seven_theories
@@ -208,7 +205,7 @@ def theory_covmat_by_type(combine_by_type, theory_block_diag_covmat, experiments
     cov_by_exp = np.zeros((len(cov_by_proc), len(cov_by_proc)))
     for i in range(len(cov_by_proc)):
         for j in range(len(cov_by_proc)):
-            cov_by_exp[covmap[i]][covmap[j]] = cov_by_proc[i][j]
+            cov_by_exp[covmap[i]][covmap[j]] = cov_by_proc[i][j]     
     df = pd.DataFrame(cov_by_exp, index=experiments_index, columns=experiments_index)
     return df
 
