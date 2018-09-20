@@ -108,8 +108,16 @@ def _check_just_two_pdfs(pdfs):
         raise CheckError("Delta chi2 can only be calculated between "
                          "two PDFs")
 
+@make_argcheck
+def _check_fit_in_pdfs(fit, pdfs):
+    fname = fit.name
+    pname = [pdf.name for pdf in pdfs]
+    if fname not in pname:
+        raise CheckError("Closure test fit not compatible with chosen PDFs")
+
 @_check_use_fitcommondata
 @_check_just_two_pdfs
+@_check_fit_in_pdfs
 @figure
 def plot_delta_chi2(experiments, use_fitcommondata, pdfs, pdfs_total_chi2):
     """Plots delta chi2 defined according to 1410.8849 eq (28)"""
