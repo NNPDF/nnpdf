@@ -111,7 +111,7 @@ def _check_just_two_pdfs(pdfs):
 @_check_use_fitcommondata
 @_check_just_two_pdfs
 @figure
-def plot_delta_chi2(experiments, pdfs, pdfs_total_chi2):
+def plot_delta_chi2(experiments, pdfs, pdfs_total_chi2, use_fitcommondata):
     """Plots delta chi2 defined according to 1410.8849 eq (28)"""
     chi2 = pdfs_total_chi2
     print((chi2[0] - chi2[1])/chi2[1])
