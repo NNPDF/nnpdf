@@ -105,17 +105,18 @@ def _check_use_fitcommondata(use_fitcommondata):
 def _check_just_two_pdfs(pdfs):
     lst = pdfs
     if len(lst) is not 2:
-        raise CheckError("Delta chi2 can only be calculated between"
+        raise CheckError("Delta chi2 can only be calculated between "
                          "two PDFs")
 
 @_check_use_fitcommondata
 @_check_just_two_pdfs
 @figure
-def plot_delta_chi2(experiments, pdfs, pdfs_total_chi2, use_fitcommondata):
+def plot_delta_chi2(experiments, use_fitcommondata, pdfs, pdfs_total_chi2):
     """Plots delta chi2 defined according to 1410.8849 eq (28)"""
     chi2 = pdfs_total_chi2
-    print((chi2[0] - chi2[1])/chi2[1])
-    return
+    print(chi2)
+    fig, ax = plt.subplots()    
+    return fig
 
 @make_argcheck
 def _check_same_experiment_name(dataspecs_experiments):
