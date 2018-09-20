@@ -28,7 +28,7 @@
 using namespace std;
 namespace NNPDF{
 
-matrix<double> read_total_covmat(const std::string filename) {
+matrix<double> read_total_covmat(const std::string filename, int NData) {
   // Reads in covariance matrix for an experiment from pandas dataframe
   ifstream f1;
   f1.open(filename.c_str(), ios::in);
@@ -37,21 +37,22 @@ matrix<double> read_total_covmat(const std::string filename) {
     throw FileError("experiments", "Cannot read covariance matrix file from " + filename);
   }
 
+  string line, exp_name, dataset_name;
+
   // Skip first four lines (headers)
   for (int i = 0; i < 4; i++) {
-    read.ignore(fNData, '\n')
+    getline(f1, line);
   }
 
-  double mat[fNData][fNData];
-  string line, exp_name, dataset_name;
+  matrix<double> mat(NData,NData);
   double row_number;
-  for (int i = 0; i < fNData; i++) {
+  for (int i = 0; i < NData; i++) {
     getline(f1, line);
     istringstream lstream(line);
     // Skip over first three elements of line
     lstream >> exp_name >> dataset_name >> row_number;
-    for (int j = 0; j < fNData; j++) {
-      lstream >> mat[i][j];
+    for (int j = 0; j < NData; j++) {
+      lstream >> mat(i,j);
     }
   }
 
@@ -544,10 +545,7 @@ void Experiment::GenCovMat()
 */
 void Experiment::LoadRepCovMat(string filename)
 {
-  fRepCovMat.clear();
-  fRepCovMat.resize(fNData, fNData, 0);  
-
-  fRepCovMat = read_total_covmat(filename);
+  fRepCovMat = read_total_covmat(filename, fNData);
   fSqrtRepCov = ComputeSqrtMat(fRepCovMat);
 }
 
@@ -556,11 +554,8 @@ void Experiment::LoadRepCovMat(string filename)
 */
 void Experiment::LoadFitCovMat(string filename)
 {
-  fFitCovMat.clear();
-  fFitCovMat.resize(fNData, fNData, 0);  
-
-  fFitCovMat = read_total_covmat(filename);
-  fSqrtFitCov = ComputeSqrtMat(fRepFitMat);
+  fFitCovMat = read_total_covmat(filename, fNData);
+  fSqrtFitCov = ComputeSqrtMat(fFitCovMat);
 }
 
 void Experiment::ExportCovMat(string filename)
