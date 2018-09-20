@@ -28,7 +28,7 @@
 using namespace std;
 namespace NNPDF{
 
-matrix<double> read_experiment_mat(const std::string filename) {
+matrix<double> read_total_covmat(const std::string filename) {
   // Reads in covariance matrix for an experiment from pandas dataframe
   ifstream f1;
   f1.open(filename.c_str(), ios::in);
@@ -547,7 +547,7 @@ void Experiment::LoadRepCovMat(string filename)
   fRepCovMat.clear();
   fRepCovMat.resize(fNData, fNData, 0);  
 
-  fRepCovMat = read_experiment_mat(filename);
+  fRepCovMat = read_total_covmat(filename);
   fSqrtRepCov = ComputeSqrtMat(fRepCovMat);
 }
 
@@ -559,7 +559,7 @@ void Experiment::LoadFitCovMat(string filename)
   fFitCovMat.clear();
   fFitCovMat.resize(fNData, fNData, 0);  
 
-  fFitCovMat = read_experiment_mat(filename);
+  fFitCovMat = read_total_covmat(filename);
   fSqrtFitCov = ComputeSqrtMat(fRepFitMat);
 }
 
