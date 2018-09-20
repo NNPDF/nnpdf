@@ -857,6 +857,8 @@ each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
 experiments_phi = collect(phi_data_experiment, ('experiments',))
 experiments_pdfs_phi = collect('experiments_phi', ('pdfs',))
 
+pdfs_total_chi2 = collect(total_experiments_chi2, ('pdfs',))
+
 experiments_bootstrap_phi = collect(bootstrap_phi_data_experiment, ('experiments',))
 dataspecs_experiments_bootstrap_phi = collect('experiments_bootstrap_phi', ('dataspecs',))
 
