@@ -17,7 +17,7 @@ theory_urls:
 theory_index: 'theorydata.json'
 
 lhapdf_urls:
-    - 'https://www.hepforge.org/archive/lhapdf/pdfsets/6.1/'
+    - 'https://lhapdf.hepforge.org/downloads/pdfsets/6.1/'
 nnpdf_pdfs_urls:
     - 'https://data.nnpdf.science/pdfs/'
 nnpdf_pdfs_index: 'pdfdata.json'

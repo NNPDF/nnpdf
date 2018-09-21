@@ -48,9 +48,12 @@ def finddir(name):
             return d
     raise FileNotFoundError(name)
 
+
 def isinstalled(name):
     """Check that name exists in LHAPDF dir"""
-    return any(osp.isdir(osp.join(path, name)) for path in get_lha_paths())
+    return name and any(
+        osp.isdir(osp.join(path, name)) for path in get_lha_paths())
+
 
 def get_names_to_indexes():
     global _names_to_indexes

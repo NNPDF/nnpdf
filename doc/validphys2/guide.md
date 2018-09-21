@@ -423,22 +423,21 @@ Python 3 gains support.
 
 ### Development installs
 
-You can install all the runtime dependencies of a package (like)
-`nnpdf` with  `conda install <package> --only-deps`. Note that you
-still need to obtain the build dependencies. Then for Python projects
-you can use `pip install --ignore-installed  -e .` in the root folder
-where the `setup.py` file located to have the environment
-automatically reflect the changes you make to the files.  For example,
-if you wanted to develop the `validphys` code you would do:
+Installing the `nnpdf` conda package is sufficient for running the
+NNPDF tools.  In addition it is possible to set up a development
+environment in a way that it can be modified and then rebuilt. In
+general, you can install all the runtime dependencies of a package
+(like) `nnpdf` with  `conda install <package> --only-deps`. Note that
+you still need to obtain the build dependencies.
 
-```bash
-#Quickest way to get all the dependencies in place
-conda install --only-deps nnpdf
+The development environment as described here works for developing the
+NNPDF code. Other external projects might work within the development
+environment in a similar way, but configuring them may prove more
+difficult (for example due to build scripts with hard coded paths).
+Thus contributing conda recipes for those is highly encouraged when
+they can be generally useful.
 
-git clone git@github.com:NNPDF/nnpdf.git
-cd nnpdf/validphys2
-pip install --ignore-installed -e .
-```
+
 
 #### Setting up a C++ development environment
 
@@ -450,9 +449,9 @@ a different matter: The most straightforward  way of doing so is using
 the same compiler toolchain that was used to generate the packages.
 You may find some relevant documentation [here][COMPILERS].  You need
 to create a conda environment that has the required dependencies of
-your project (which can be found in the `meta.yaml` file of the conda
-recipe), including the C++ compiler. For example here is how we would
-set up a development environment for `nnpdf`.
+your project, including the relevant build toolchain (including things
+like a C++ compiler). For example here is how we would set up a
+development environment for `nnpdf`.
 
  1. Find out the C++ (or C or FORTRAN) compiler package name for your
 	platform [here][COMPILERS]. For example, the C++ compilers for
@@ -460,8 +459,12 @@ set up a development environment for `nnpdf`.
 
  2. Create an environment with all the build and runtime
 	dependencies. We start off with:
-	```
-	$ conda create -n nnpdf-dev nnpdf gxx_linux-64
+	```bash
+	$ conda create -n nnpdf-dev
+	#Install the runtime dependencies of nnpdf
+	$ conda install --only-deps nnpdf
+	#Install the c++ compiler for Linux (see above)
+	$ conda install gxx_linux-64
 	```
 	Note that when the environment is activated, many environment
 	variables pointing to the compiler paths are activated for us:
@@ -516,30 +519,43 @@ set up a development environment for `nnpdf`.
 	-fvar-tracking-assignments
 	+GXX=/home/zah/anaconda3/envs/nnpdf-dev/bin/x86_64-conda_cos6-linux-gnu-g++
 	```
-	Assuming we want to modify `nnpdf` (otherwise you can omit
-	these steps), we now remove the compiled package `nnpdf` and install
-	the other build dependencies (which can be found in
-	`libnnpdf/conda-recipe/meta.yaml`).
+	These environment variables are read and interpreted by build
+	systems such as `cmake`, so that building a project normally will
+	use the conda compilers, when the build system has been configured
+	with this environment. Note that for `cmake` this means that the
+	environment has to be activated at the moment you run the `cmake`
+	executable.
+
+3.	Obtain the dependencies of the code you want to build. Where to
+	find those depends on the particular cod.  For example, something
+	linking to `libnnpdf` will likely require `pkg-config`.  Projects
+	based on `autotools` (those that have a `./configure` script) will
+	additionally require `automake` and `libtool`. Similarly projects
+	based on `cmake` will require installing the `cmake` package. In
+	the case of `nnpdf` itself, the build dependencies can be found in
+	`<nnodf git root>/conda-recipe/meta.yaml`. We have to install the
+	remaining ones manually:
+
 	```
 	$ conda install pkg-config swig=3.0.10 cmake
 	```
+	Where we also installed the C++ compiler in the previous step.
 
-	Note that `conda install --only-deps` also works.
+	Note that you should not have the `nnpdf` package installed in the
+	conda environment used for development. You can remove it with
+	`conda remove nnpdf`.
 
- 3. Obtain the dependencies of the code you want to build. Where to
-	find those depends on the particular code, but something linking
-	to `libnnpdf` will likely require `pkg-config`. Projects based on
-	`autotools` (those that have a `./configure` script) will
-	additionally require `automake` and `libtool`. Similarly projects
-	based on `cmake` will require installing the `cmake` package.
 
- 4. Build the library: We only need to set
-	the installation prefix to the `conda` environment. Assuming `conda`
-	is installed under `~/anaconda3`:
-	```
+ 4. Build the project: Assuming the environment is set, the only
+	remaining requirement is setting the installation prefix to point
+	to the `conda` environment. This is conveniently stored in the
+	`$CONDA_PREFIX` environment variable. We would build the nnpdf
+	project like this:
+	```bash
 	nnpdf$ mkdir conda-bld
 	nnpdf$ cd conda-bld
-	nnpdf/conda-bld$ cmake .. -DCMAKE_INSTALL_PREFIX=~/anaconda3/envs/nnpdf-dev/
+	#We have something like $CONDA_PREFIX==~/anaconda3/envs/nnpdf-dev/
+	nnpdf/conda-bld$ cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
 	```
 	Note that you need to execute this while the environment created
 	above is activated.  Both the compilers and all dependencies are now found
@@ -575,17 +591,41 @@ set up a development environment for `nnpdf`.
 	$ make
 	$ make install
 	```
-	This should result in a working C++ component of the library (see
-	the documentation on how to enable e.g. the Python component).
+	This should result in a working installation, both for the C++ and
+	Python parts of the code.
 
- 5. Use the result. We can now compile `buildmaster` linking with the
-	library we just created.
+ 5. Use the result. For example, we can now compile `buildmaster`
+	linking with the `libnnpdf` library we just created. Since the
+	conda environment is all set and `buildmaster` doesn't install,
+	not additional configuration is necessary:
 	```
 	buildmaster$ make clean
 	buildmaster$ make
 	```
 
 [COMPILERS]: https://conda.io/docs/user-guide/tasks/build-packages/compiler-tools.html
+
+#### Developing Python projects
+
+Python code should be installed in the specific folder of the conda
+environment. This is handled automatically when the environment is
+activated. Like with C++ projects we need to make sure to have the
+correct dependencies in our environment, and that varies by project.
+
+In addition since we do not need to compile Python we would
+like that the changes we make to the code are reflected automatically
+when we run it. To that end, we can run the following command for
+projects containing a `setup.py` file.
+
+```
+pip install --ignore-installed  -e .
+```
+
+This command will symlink the relevant files to our conda prefix and
+allow the modules to me imported from the conda version of python.
+Note that the validphys2 works like this by default when you install
+the `nnpdf` project with `make install`, and so does not require any
+additional configuration.
 
 
 ### Updating

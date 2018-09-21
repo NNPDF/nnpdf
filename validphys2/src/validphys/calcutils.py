@@ -129,3 +129,6 @@ def bootstrap_values(data, nresamples, *,
         return np.mean(bootstrap_data, axis=-2)
     else:
         return apply_func(bootstrap_data, *args)
+
+
+

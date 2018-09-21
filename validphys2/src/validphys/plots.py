@@ -12,6 +12,7 @@ from types import SimpleNamespace
 from collections import defaultdict, Sequence
 import copy
 import numbers
+import itertools
 
 import numpy as np
 import numpy.linalg as la
@@ -292,8 +293,9 @@ def _plot_fancy_impl(results, commondata, cutlist,
             #Use black for the first iteration (data),
             #and follow the cycle for
             #the rest.
-            color = '#262626'
-            for i, (res, lb) in enumerate(zip(results, labellist)):
+            next_color = itertools.chain(['#262626'], plotutils.color_iter())
+
+            for i, (res, lb, color) in enumerate(zip(results, labellist, next_color)):
 
                 if labels:
                     if lb:
@@ -316,7 +318,6 @@ def _plot_fancy_impl(results, commondata, cutlist,
                      zorder=1000,
                      transform=next(offset_iter))
 
-                color = 'C'+str(i)
 
                 #We 'plot' the empty lines to get the labels. But
                 #if everything is rmpty we skip the plot.
