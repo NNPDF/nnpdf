@@ -279,7 +279,7 @@ class AllFlavoursPlotter(PDFPlotter):
 
             for pdf, grid in zip(self.pdfs, self.xplotting_grids):
                 limits = self.draw(pdf, grid, flstate)
-                if limits:
+                if limits is not None:
                     all_vals.append(np.atleast_2d(limits))
 
         #It can happen that we don't get anything to concatenate

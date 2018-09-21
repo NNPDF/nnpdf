@@ -482,8 +482,7 @@ def bootstrap_chi2_central_experiment(experiment_results, bootstrap_samples=500,
     """
     dt, th = experiment_results
     diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
-    chi2_central_resample = bootstrap_values(diff, bootstrap_samples, boot_seed=boot_seed,
-                                    apply_func=(lambda x, y: calc_chi2(y, x.mean(axis=1))),
+    chi2_central_resample = bootstrap_values(diff, bootstrap_samples, boot_seed=boot_seed, apply_func=(lambda x, y: calc_chi2(y, x.mean(axis=1))),
                                     args=[dt.sqrtcovmat])
     return chi2_central_resample
 
@@ -876,6 +875,7 @@ experiments_pdfs_phi = collect('experiments_phi', ('pdfs',))
 pdfs_total_chi2 = collect(total_experiments_chi2, ('pdfs',))
 
 experiments_bootstrap_phi = collect(bootstrap_phi_data_experiment, ('experiments',))
+
 experiments_bootstrap_chi2_central = collect(bootstrap_chi2_central_experiment,
                                              ('experiments',))
 

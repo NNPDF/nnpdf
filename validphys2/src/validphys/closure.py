@@ -97,6 +97,7 @@ closures_speclabel = collect('speclabel', ('closures',), element_default=None)
 exp_result_closure = collect(experiment_results, ('closures',))
 exp_result_t0 = collect(experiment_results, ('closures', 'fitunderlyinglaw',))
 
+bias_experiments = collect(bias_experiment, ('experiments',))
 closures_experiments_bootstrap_chi2_central = collect('experiments_bootstrap_chi2_central',
                                                       ('closures',))
 fakepdf_chi2_pseudodata = collect(total_experiments_chi2data, ('closures', 'fakepdf'))
