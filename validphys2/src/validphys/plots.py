@@ -25,7 +25,7 @@ from reportengine.checks import make_check, CheckError, make_argcheck
 from reportengine.floatformatting import format_number
 
 from validphys.core import MCStats, cut_mask
-from validphys.results import chi2_stat_labels
+from validphys.results import chi2_stat_labels, dataspecs_variance
 from validphys.plotoptions import get_info, kitable, transform_result
 from validphys.checks import check_scale, check_have_two_pdfs, check_pdf_normalize_to
 from validphys import plotutils
@@ -468,6 +468,17 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
 
 #I need to use the informations contained in experiments_chi2_table
 
+@figure
+def plot_variance(experiments, dataspecs_variance):
+    """Plot the variance of all experiments with bars."""
+    var = []
+    xticks = []
+    for experiment, v in zip(experiments, dataspecs_variance):
+        var.append(v)
+        xticks.append(experiment.name)
+    fig, ax = plotutils.barplot(var, collabels=xticks, datalabels=['variance'])
+    ax.set_title("variance for experiments")
+    return fig
 
 
 @figure
