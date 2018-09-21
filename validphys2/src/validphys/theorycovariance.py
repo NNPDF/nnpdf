@@ -15,7 +15,7 @@ import pandas as pd
 from collections import defaultdict
 
 from reportengine.figure import figure
-from reportengine.checks import make_argcheck, CheckError
+from reportengine.checks import make_argcheck, CheckError, check
 from reportengine.table import table
 from reportengine import collect
 
@@ -24,8 +24,6 @@ from validphys.results import Chi2Data, experiments_chi2_table, DataResult, NNPD
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys.plotoptions import get_info
 from validphys import plotutils
-
-from IPython import embed
 
 log = logging.getLogger(__name__)
 
@@ -38,6 +36,14 @@ def _check_allowed_theory_number(theoryids):
     if l!=3 and l!=5 and l!=7 and l!=9:
         raise CheckError(f"Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
 
+@make_argcheck
+def _check_five_theories_scheme(theoryids, fivetheories):
+    l = len(theoryids)
+    if l==5:
+        check(fivetheories in ('bar', 'nobar'), 
+              "For five input theories a prescription bar or nobar for the flag fivetheories must be specified.")
+
+@_check_five_theories_scheme
 @_check_allowed_theory_number
 def make_scale_var_covmat(predictions, theoryids):
     """Takes N theory predictions at different scales and applies N-pt scale variations
@@ -204,8 +210,10 @@ def covmap(combine_by_type, dataset_names):
             mapping[start+i] = start_exp[dataset] + i 
         start += dataset_size[dataset]
     return mapping  
-  
-def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids):
+
+@_check_five_theories_scheme  
+def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids, 
+                     fivetheories:(str, type(None)) = None):
     l = len(theoryids)
     start_proc = process_starting_points
     covmats = defaultdict(list)
@@ -225,15 +233,15 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids):
                 covmats[start_locs] = s
             elif l==5:
                 if name1 == name2:
-                    s = 0.5*sum(np.outer(d, d) for d in deltas1)
+                     s = 0.5*sum(np.outer(d, d) for d in deltas1)
             # 5 point --------------------------------------------------------------------
-#                else:
-#                    s = 0.5*(np.outer(deltas1[0], deltas2[0]) + np.outer(
-#                        deltas1[1], deltas2[1])) + 0.25*(np.outer(
-#                                   (deltas1[2] + deltas1[3]),(deltas2[2] + deltas2[3])))
+                elif fivetheories=='nobar':
+                     s = 0.5*(np.outer(deltas1[0], deltas2[0]) + np.outer(
+                                             deltas1[1], deltas2[1])) + 0.25*(np.outer(
+                                            (deltas1[2] + deltas1[3]),(deltas2[2] + deltas2[3])))
              # 5bar-point -----------------------------------------------------------------
                 else:
-                    s = 0.25*(np.outer((deltas1[0]+deltas1[2]),(deltas2[0]+deltas2[2])) 
+                     s = 0.25*(np.outer((deltas1[0]+deltas1[2]),(deltas2[0]+deltas2[2])) 
                                + np.outer((deltas1[1]+deltas1[3]),(deltas2[1]+deltas2[3])))
              #  -----------------------------------------------------------------
                 start_locs = (start_proc[name1], start_proc[name2])
