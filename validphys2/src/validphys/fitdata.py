@@ -216,6 +216,14 @@ def match_datasets_by_name(fits, fits_datasets):
     second_only = {k: secondds[k] for k in seccond_keys}
     return DatasetComp(common, first_only, second_only)
 
+def match_datasets_by_cuts(match_datasets_by_name, test_for_same_cuts):
+    """Returns a list of the datasets which are in common AND have the same
+    cuts for all of the fits."""   
+    common = match_datasets_by_name[0]
+    common_keys = common.keys()
+    different_cuts = [x.name for (x,y) in test_for_same_cuts]
+    remaining_datasets = common_keys - different_cuts
+    return remaining_datasets
 
 #TODO: Do we do md output here or that's for the templates?
 def print_dataset_differences(fits, match_datasets_by_name,

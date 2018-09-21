@@ -1611,5 +1611,4 @@ def plot_lumi2d_uncertainty(pdf, lumi_channel, lumigrid2d, sqrts:numbers.Real):
     ax.set_ylabel('$M_{X}$ (GeV)')
     ax.set_xlabel('y')
     ax.grid(False)
-
     return fig
