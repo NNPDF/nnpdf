@@ -186,7 +186,7 @@ def process_starting_points(combine_by_type):
         running_index += size
     return start_proc
   
-  def covmap(combine_by_type, dataset_names):
+def covmap(combine_by_type, dataset_names):
     """Creates a map between the covmat indices from matrices ordered by process to 
     matrices ordered by experiment as listed in the runcard"""
     mapping = defaultdict(list)
