@@ -17,8 +17,8 @@ from reportengine.checks import check_positive, make_argcheck
 
 from validphys.pdfbases import Basis, check_basis
 from validphys.pdfgrids import (xgrid, xplotting_grid)
-from validphys.plots    import check_pdf_normalize_to
 from validphys.core     import PDF
+from validphys.checks import check_pdf_normalize_to
 
 import matplotlib.pyplot as plt
 

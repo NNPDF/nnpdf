@@ -73,3 +73,9 @@ def common_prefix(*s):
         if big[i] != c:
             return small[:i]
     return small
+
+def scale_from_grid(grid):
+    """Guess the appropriate matplotlib scale from a grid object.
+    Returns ``'linear'`` if the scale of the grid object is linear,
+    and otherwise ``' log'``."""
+    return 'linear' if grid.scale == 'linear' else 'log'
