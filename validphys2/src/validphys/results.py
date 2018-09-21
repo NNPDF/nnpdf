@@ -473,6 +473,17 @@ def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples=500):
                                     args=[dt.sqrtcovmat])
     return phi_resample
 
+
+def variance(experiment_results):
+    """Computes chi^2 between replica 0 and replica k 
+    and takes the average over k."""
+    dt, th = experiment_results
+    diff = np.array(th._rawdata - th.central_value[:, np.newaxis])
+    replicas_chi = np.asarray(calc_chi2(dt.sqrtcovmat, diff))
+    var = replicas_chi.mean()
+    return var
+
+    
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
                               prepend_total:bool=True,
                               datasets_sqrtcovmat=None) -> dict:
@@ -886,3 +897,4 @@ dataspecs_dataset = collect('dataset', ('dataspecs',))
 dataspecs_commondata = collect('commondata', ('dataspecs',))
 dataspecs_pdf = collect('pdf', ('dataspecs',))
 dataspecs_fit = collect('fit', ('dataspecs',))
+dataspecs_variance = collect('variance', ('experiments',))
