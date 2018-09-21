@@ -103,12 +103,16 @@ def calc_phi(sqrtcov, diffs):
     return np.sqrt((np.mean(calc_chi2(sqrtcov, diffs), axis=0) -
                     calc_chi2(sqrtcov, diffs.mean(axis=1)))/diffs.shape[0])
 
-def bootstrap_values(data, nresamples, *,
+def bootstrap_values(data, nresamples, *, boot_seed:int=None,
                     apply_func:Callable=None, args):
     """General bootstrap sample
 
     `data` is the data which is to be sampled, replicas is assumed to
     be on the final axis e.g N_bins*N_replicas
+
+    `boot_seed` can now be specified if the user wishes to be able to
+    take exact same bootstrap samples multiple times, as default it is
+    set as None
 
     If just `data` and `nresamples` is provided, then `bootstrap_values`
     creates N resamples of the data, where each resample is a Monte Carlo
@@ -123,7 +127,7 @@ def bootstrap_values(data, nresamples, *,
     """
     data = np.atleast_2d(data)
     N_reps = data.shape[-1]
-    bootstrap_data = data[..., np.random.RandomState(123).randint(N_reps,
+    bootstrap_data = data[..., np.random.RandomState(boot_seed).randint(N_reps,
                                                  size=(N_reps, nresamples))]
     if apply_func is None:
         return np.mean(bootstrap_data, axis=-2)

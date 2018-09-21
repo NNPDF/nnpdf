@@ -468,28 +468,30 @@ def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples=500):
                                     args=[dt.sqrtcovmat])
     return phi_resample
 
-def bootstrap_chi2_central_experiment(experiment_results, bootstrap_samples=500):
+@check_pdf_is_montecarlo
+def bootstrap_chi2_central_experiment(experiment_results, bootstrap_samples=500, boot_seed=123):
     """Takes the data result and theory prediction for a given experiment and
     then returns a bootstrap distribution of central chi2.
     By default `bootstrap_samples` is set to a sensible value (500). However
     a different value can be specified in the runcard.
-
-    For more information on how phi is calculated see `phi_data`
     """
     dt, th = experiment_results
     diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
-    chi2_central_resample = bootstrap_values(diff, bootstrap_samples,
+    chi2_central_resample = bootstrap_values(diff, bootstrap_samples, boot_seed=boot_seed,
                                     apply_func=(lambda x, y: calc_chi2(y, x.mean(axis=1))),
                                     args=[dt.sqrtcovmat])
     return chi2_central_resample
 
 def delta_chi2_bootstrap(fakepdf_chi2_pseudodata, 
                          closures_experiments_bootstrap_chi2_central):
-    #exps_chi2 = np.sum(closures_experiments_bootstrap_chi2_central, axis=0)
-    ct_cc = np.sum(closures_experiments_bootstrap_chi2_central, axis=1)
-    fp_c = np.array([fpdf.central_result for fpdf in fakepdf_chi2_pseudodata])
-    dchi2 = (ct_cc - fp_c[:, np.newaxis])/fp_c[:, np.newaxis]
-    return dchi2
+    """Bootstraps deltachi2 for specified closures, details on how delta
+    chi2 is calculated can be found in 1410.8849 eq (28).
+    """
+    closure_total_chi2_boot = np.sum(closures_experiments_bootstrap_chi2_central, axis=1)
+    fakepdf_pseudodata_chi2 = np.array([fpdf.central_result for fpdf in fakepdf_chi2_pseudodata])
+    deltachi2boot = (closure_total_chi2_boot - 
+             fakepdf_pseudodata_chi2[:, np.newaxis])/fakepdf_pseudodata_chi2[:, np.newaxis]
+    return deltachi2boot
 
 
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
@@ -886,6 +888,8 @@ dataspecs_experiments_bootstrap_phi = collect('experiments_bootstrap_phi', ('dat
 
 experiments_bootstrap_chi2_central = collect(bootstrap_chi2_central_experiment,
                                              ('experiments',))
+
+#Closure test collect functions
 closures_experiments_bootstrap_chi2_central = collect('experiments_bootstrap_chi2_central',
                                                       ('closures',))
 fakepdf_chi2_pseudodata = collect(total_experiments_chi2data, ('closures', 'fakepdf'))
