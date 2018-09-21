@@ -24,13 +24,15 @@ setup(name= "validphys",
                         'postfit = validphys.scripts.postfit:main',
                         'vp-get = validphys.scripts.vp_get:main',
                         'vp-setupfit = validphys.scripts.vp_setupfit:main',
+                        'vp-comparefits = validphys.scripts.vp_comparefits:main',
                     ]},
       package_dir = {'': 'src'},
       packages = find_packages('src'),
        package_data = {
            #TODO: Get rid of this nonsense
-            '':['*.template', '*.mplstyle', '*.csv'],
+            '':['*.template', '*.mplstyle', '*.csv', '*.yaml', '*.md'],
             'tests/regressions': ['*'],
+            'comparefit': ['*'],
        },
       zip_safe = False,
       classifiers=[

@@ -10,6 +10,7 @@ The entry point of the validphys application is the ``main`` funcion of this
 module.
 """
 import sys
+import os
 import logging
 import contextlib
 
@@ -18,7 +19,7 @@ from reportengine import app
 
 from validphys.config import Config, Environment
 from validphys import uploadutils
-#from validphys import providers
+from validphys import mplstyles
 
 
 providers = [
@@ -65,7 +66,7 @@ including the contents of the following file:
 
     @property
     def default_style(self):
-        return str(self.this_folder() / 'small.mplstyle')
+        return os.fspath(mplstyles.smallstyle)
 
     def __init__(self, name='validphys', providers=providers):
         super().__init__(name, providers)
