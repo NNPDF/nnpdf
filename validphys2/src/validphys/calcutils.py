@@ -142,3 +142,4 @@ def central_chi2_theory(results, totcov):
     total_covmat = np.array(totcov)
     return calc_chi2(la.cholesky(total_covmat, lower=True), central_diff)
 
+

@@ -4,17 +4,49 @@
     setup-fit constructs the fit [results] folder where data used by nnfit
     will be stored.
 """
+
+# Implementation notes
+#
+# This is a validphys-like app in disguise. It takes an nnfit runcard and adds
+# a fixed list of actions and some associated resourced to it so as to make it
+# a proper validphys runcard. These config options are defined in the
+# SETUPFIT_FIXED_CONFIG mapping below.
+#
+# Extensions to the setup procedure can be implemented by adding suitable
+# actions_ to the mapping (making sure that they are executed in the right
+# namespace that pulls all the required resources from the fi runcard),
+# together with the additional non variable resources required by said actions
+# (such as `use_cuts: False`) in the current code. vp-setupfit also gets its
+# own provider modules, so you may need to add the modules of your actions to
+# SETUPFIT_PROVIDERS.
+#
+# The state of the output folder must be such that the nnfit code can be run on
+# top.
+
+
 import sys
 import re
 import shutil
 import pathlib
 import logging
 import hashlib
+import warnings
 
 from validphys.config import Environment, Config, EnvironmentError_, ConfigError
 from validphys.app import App
 from reportengine.compat import yaml
 from reportengine import colors
+
+
+SETUPFIT_FIXED_CONFIG = dict(
+    use_cuts=False,
+    actions_=[
+        'datacuts check_t0pdfset',
+        'theory check_positivity',
+        'datacuts::closuretest::theory::fitting filter',
+    ])
+
+SETUPFIT_PROVIDERS = ['validphys.filters',]
 
 log = logging.getLogger(__name__)
 
@@ -76,17 +108,26 @@ class SetupFitEnvironment(Environment):
 
 class SetupFitConfig(Config):
     """Specialization for yaml parsing"""
+
     @classmethod
     def from_yaml(cls, o, *args, **kwargs):
         try:
-            file_content = yaml.safe_load(o)
+            with warnings.catch_warnings():
+                warnings.simplefilter('ignore',
+                                      yaml.error.MantissaNoDotYAML1_1Warning)
+                #We need to specify the older version 1.1 to support the
+                #older configuration files, which liked to use on/off for
+                #booleans.
+                #The floating point parsing yields warnings everywhere, which
+                #we suppress.
+                file_content = yaml.safe_load(o, version='1.1')
         except yaml.error.YAMLError as e:
             raise ConfigError(f"Failed to parse yaml file: {e}")
-        file_content['use_cuts'] = False
-        file_content['actions_'] = ['datacuts check_t0pdfset',
-                                    'theory check_positivity',
-                                    'datacuts::closuretest::theory::fitting filter']
-        return cls(file_content, *args, ** kwargs)
+        if not isinstance(file_content, dict):
+            raise ConfigError(f"Expecting input runcard to be a mapping, "
+                              f"not '{type(file_content)}'.")
+        file_content.update(SETUPFIT_FIXED_CONFIG)
+        return cls(file_content, *args, **kwargs)
 
 
 class SetupFitApp(App):
@@ -96,7 +137,7 @@ class SetupFitApp(App):
 
     def __init__(self):
         super(SetupFitApp, self).__init__(name='setup-fit',
-                                          providers=['validphys.filters'])
+                                          providers=SETUPFIT_PROVIDERS)
 
     @property
     def argparser(self):

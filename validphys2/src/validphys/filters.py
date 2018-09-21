@@ -7,7 +7,7 @@ import logging
 import numbers
 import numpy as np
 from NNPDF import DataSet, RandomGenerator
-from reportengine.checks import make_argcheck, check, check_positive, make_check, CheckError
+from reportengine.checks import make_argcheck, check, check_positive, make_check
 
 log = logging.getLogger(__name__)
 
