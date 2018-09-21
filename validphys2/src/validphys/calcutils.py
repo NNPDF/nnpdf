@@ -123,7 +123,7 @@ def bootstrap_values(data, nresamples, *,
     """
     data = np.atleast_2d(data)
     N_reps = data.shape[-1]
-    bootstrap_data = data[..., np.random.randint(N_reps,
+    bootstrap_data = data[..., np.random.RandomState(123).randint(N_reps,
                                                  size=(N_reps, nresamples))]
     if apply_func is None:
         return np.mean(bootstrap_data, axis=-2)

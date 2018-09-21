@@ -468,6 +468,30 @@ def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples=500):
                                     args=[dt.sqrtcovmat])
     return phi_resample
 
+def bootstrap_chi2_central_experiment(experiment_results, bootstrap_samples=500):
+    """Takes the data result and theory prediction for a given experiment and
+    then returns a bootstrap distribution of central chi2.
+    By default `bootstrap_samples` is set to a sensible value (500). However
+    a different value can be specified in the runcard.
+
+    For more information on how phi is calculated see `phi_data`
+    """
+    dt, th = experiment_results
+    diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
+    chi2_central_resample = bootstrap_values(diff, bootstrap_samples,
+                                    apply_func=(lambda x, y: calc_chi2(y, x.mean(axis=1))),
+                                    args=[dt.sqrtcovmat])
+    return chi2_central_resample
+
+def delta_chi2_bootstrap(fakepdf_chi2_pseudodata, 
+                         closures_experiments_bootstrap_chi2_central):
+    #exps_chi2 = np.sum(closures_experiments_bootstrap_chi2_central, axis=0)
+    ct_cc = np.sum(closures_experiments_bootstrap_chi2_central, axis=1)
+    fp_c = np.array([fpdf.central_result for fpdf in fakepdf_chi2_pseudodata])
+    dchi2 = (ct_cc - fp_c[:, np.newaxis])/fp_c[:, np.newaxis]
+    return dchi2
+
+
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
                               prepend_total:bool=True,
                               datasets_sqrtcovmat=None) -> dict:
@@ -850,6 +874,8 @@ def experiments_central_values(experiment_result_table):
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
 
+experiments_results = collect(experiment_results, ('experiments',))
+
 experiments_phi = collect(phi_data_experiment, ('experiments',))
 experiments_pdfs_phi = collect('experiments_phi', ('pdfs',))
 
@@ -857,6 +883,13 @@ pdfs_total_chi2 = collect(total_experiments_chi2, ('pdfs',))
 
 experiments_bootstrap_phi = collect(bootstrap_phi_data_experiment, ('experiments',))
 dataspecs_experiments_bootstrap_phi = collect('experiments_bootstrap_phi', ('dataspecs',))
+
+experiments_bootstrap_chi2_central = collect(bootstrap_chi2_central_experiment,
+                                             ('experiments',))
+closures_experiments_bootstrap_chi2_central = collect('experiments_bootstrap_chi2_central',
+                                                      ('closures',))
+fakepdf_chi2_pseudodata = collect(total_experiments_chi2data, ('closures', 'fakepdf'))
+closures_speclabel = collect('speclabel', ('closures',), element_default=None)
 
 #These are convenient ways to iterate and extract varios data from fits
 fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))
