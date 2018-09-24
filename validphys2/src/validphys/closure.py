@@ -14,7 +14,7 @@ from reportengine.figure import figure
 from reportengine.checks import make_argcheck, CheckError
 from reportengine import collect
 
-from validphys.results import experiment_results
+from validphys.results import experiment_results, total_experiments_chi2data
 from validphys import plotutils
 from validphys.calcutils import calc_chi2
 
@@ -100,5 +100,3 @@ exp_result_t0 = collect(experiment_results, ('closures', 'fitunderlyinglaw',))
 closures_experiments_bootstrap_chi2_central = collect('experiments_bootstrap_chi2_central',
                                                       ('closures',))
 fakepdf_chi2_pseudodata = collect(total_experiments_chi2data, ('closures', 'fakepdf'))
-
-bias_experiments = collect(bias_experiment, ('experiments',))
