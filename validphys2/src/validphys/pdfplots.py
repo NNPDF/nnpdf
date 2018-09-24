@@ -282,7 +282,11 @@ class AllFlavoursPlotter(PDFPlotter):
                 if limits is not None:
                     all_vals.append(np.atleast_2d(limits))
 
-        plotutils.frame_center(ax, self.firstgrid.xgrid, np.concatenate(all_vals))
+        #It can happen that we don't get anything to concatenate
+        #e.g. because we are comparing to the base PDF several times.
+        if all_vals:
+            plotutils.frame_center(ax, self.firstgrid.xgrid,
+                                   np.concatenate(all_vals))
         if (self.ymin is not None):
             ax.set_ylim(ymin=self.ymin)
         if (self.ymax is not None):
