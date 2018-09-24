@@ -1687,59 +1687,6 @@ rule) and writing a title and the data-theory comparison plots for
 each dataset in the intersection (the actions inside the `with`
 block).
 
-### Processing closure test data
-
-When analyzing closure tests (see the [NNPDF 3.0] paper), we typically want to
-refer to the *fake* closure data, rather at the original experimental
-data. The configuration option `use_fitcommondata: True` serves this
-purpose.
-
-When starting a fit (with `vp-setupfit`) currently CommonData
-files are copied to the output folder. For normal fits,
-these correspond to the usual CommonData files stored in the data
-folder. For closure test fits, the CommonData files correspond to the
-fake data, generated based on the underlying PDF.
-
-Setting the `use_fitcommondata` key to `True` causes the actions
-declared within some [namespace] causes the actions in that namespace
-to look for CommonData files in the fit output folder (it is thus
-required that a fit is specified that contains the desired
-CommonData). For closure test fits, this will have the effect of
-making actions data-theory comparisons or chi² (and indeed everything
-that uses experimental data) compare with the fake data rather than
-the experimental data. It should make no difference for the normal
-fits, unless the CommonData files have changed between the installed
-version of the code and the fit. This is typically discouraged.
-
-For example, the following runcard takes a closure test fit and its
-corresponding reference fit and produces a plot of the experimental
-χ². In both cases the CommonData files are read from the corresponding
-fit folder (because we set `use_fitcommondata: True` at the top
-level). For the reference fit, this will cause the theory predictions
-to be compared with the original experimental data, while in the
-closure test data, predictions will be compared to the fake data. This
-is typically the relevant comparison.
-
-```yaml
-meta:
-    title: Example using use_fitcommondata
-    author: Zahari Kassanov
-    keywords: test
-
-use_fitcommondata: True
-use_cuts: True
-
-fits:
-  - {id: 180501-nh-004, label: "Closure fit"}
-  - {id: 180307-nh-001, label: "Reference fit"}
-
-actions_:
-  - plot_fits_datasets_chi2
-```
-
-[NNPDF 3.0]: https://arxiv.org/abs/1410.8849
-[namespace]: #multiple-inputs-and-namespaces
-
 
 ### The vp-comparefits application
 
