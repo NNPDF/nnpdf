@@ -487,18 +487,6 @@ def bootstrap_chi2_central_experiment(experiment_results, bootstrap_samples=500,
                                     args=[dt.sqrtcovmat])
     return chi2_central_resample
 
-def delta_chi2_bootstrap(fakepdf_chi2_pseudodata, 
-                         closures_experiments_bootstrap_chi2_central):
-    """Bootstraps deltachi2 for specified closures, details on how delta
-    chi2 is calculated can be found in 1410.8849 eq (28).
-    """
-    closure_total_chi2_boot = np.sum(closures_experiments_bootstrap_chi2_central, axis=1)
-    fakepdf_pseudodata_chi2 = np.array([fpdf.central_result for fpdf in fakepdf_chi2_pseudodata])
-    deltachi2boot = (closure_total_chi2_boot - 
-             fakepdf_pseudodata_chi2[:, np.newaxis])/fakepdf_pseudodata_chi2[:, np.newaxis]
-    return deltachi2boot
-
-
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
                               prepend_total:bool=True,
                               datasets_sqrtcovmat=None) -> dict:
@@ -888,15 +876,8 @@ experiments_pdfs_phi = collect('experiments_phi', ('pdfs',))
 pdfs_total_chi2 = collect(total_experiments_chi2, ('pdfs',))
 
 experiments_bootstrap_phi = collect(bootstrap_phi_data_experiment, ('experiments',))
-
 experiments_bootstrap_chi2_central = collect(bootstrap_chi2_central_experiment,
                                              ('experiments',))
-
-#Closure test collect functions
-closures_experiments_bootstrap_chi2_central = collect('experiments_bootstrap_chi2_central',
-                                                      ('closures',))
-fakepdf_chi2_pseudodata = collect(total_experiments_chi2data, ('closures', 'fakepdf'))
-closures_speclabel = collect('speclabel', ('closures',), element_default=None)
 
 #These are convenient ways to iterate and extract varios data from fits
 fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))
