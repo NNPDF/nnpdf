@@ -12,16 +12,20 @@
 
 namespace NNPDF
 {
-  /**
-   * Generate covariance matrix from CommonData and a t0 vector
-   */
-  matrix<double> ComputeCovMat(CommonData const& cd, std::vector<double> const& t0, double weight)
-  {
-    const int ndat = cd.GetNData();
-    const int nsys = cd.GetNSys();
 
-    if (t0.size() != ndat)
-      throw LengthError("ComputeCovMat","invalid number of points in t0 vector!");
+  /**
+   * Generate covariance matrix from basic quantities.
+   */
+  matrix<double> ComputeCovMat_basic(int const ndat,
+                                     int const nsys,
+                                     std::vector<double> const& sqrt_weights,
+                                     std::vector<double> const& central_values,
+                                     std::vector<double> const& stat_error,
+                                     sysError** const systematic_errors,
+                                     bool const use_theory_errors)
+  {
+    if (central_values.size() != stat_error.size())
+      throw LengthError("ComputeCovMat_basic","mismatch in points between central_values and stat_error!");
 
     auto CovMat = NNPDF::matrix<double>(ndat, ndat);
     for (int i = 0; i < ndat; i++)
@@ -31,17 +35,20 @@ namespace NNPDF
         double sig    = 0.0;
         double signor = 0.0;
 
+        // Statistical error
         if (i == j)
-          sig += pow(cd.GetStat(i),2); // stat error
+          sig += pow(stat_error[i],2);
 
         for (int l = 0; l < nsys; l++)
         {
-          sysError const& isys = cd.GetSys(i,l);
-          sysError const& jsys = cd.GetSys(j,l);
+          sysError const& isys = systematic_errors[i][l];
+          sysError const& jsys = systematic_errors[j][l];
           if (isys.name != jsys.name)
               throw RuntimeException("ComputeCovMat", "Inconsistent naming of systematics");
           if (isys.name == "SKIP")
-              continue;
+              continue; // Continue if systype is skipped
+          if ((isys.name == "THEORYCORR" || isys.name == "THEORYUNCORR") && !use_theory_errors)
+              continue; // Continue if systype is theoretical and use_theory_errors == false
           const bool is_correlated = ( isys.name != "UNCORR" && isys.name !="THEORYUNCORR");
           if (i == j || is_correlated)
             switch (isys.type)
@@ -52,10 +59,31 @@ namespace NNPDF
             }
         }
 
-        CovMat(i, j) = (sig + signor*t0[i]*t0[j]*1e-4)/weight;
+        // Covariance matrix entry
+        CovMat(i, j) = (sig + signor*central_values[i]*central_values[j]*1e-4);
+        // Covariance matrix weight
+        CovMat(i, j) /= sqrt_weights[i]*sqrt_weights[j];
       }
     }
+
     return CovMat;
+  }
+
+  /**
+   * Generate covariance matrix from CommonData and a t0 vector
+   * This should be deprecated in favour of a version of `Experiment` that does not contain an FK table.
+   * CommonData should be considered only as an I/O class with all logic belonging to `Experiment`.
+   */
+  matrix<double> ComputeCovMat(CommonData const& cd, std::vector<double> const& t0, double weight)
+  {
+    const int ndat = cd.GetNData();
+    const int nsys = cd.GetNSys();
+
+    std::vector<double> sqrt_weights(ndat, sqrt(weight));
+    std::vector<double> stat_error(ndat, 0);
+    for (int i=0; i<ndat; i++)
+        stat_error[i] = cd.GetStat(i);
+    return ComputeCovMat_basic(ndat, nsys, sqrt_weights, t0, stat_error, cd.GetSysErrors(), false);
   }
 
   matrix<double> ComputeSqrtMat(matrix<double> const& inmatrix)

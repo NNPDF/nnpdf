@@ -12,8 +12,16 @@
 #include "dataset.h"
 
 namespace NNPDF{
+  matrix<double> ComputeCovMat_basic(int const nDat,
+                                     int const nSys,
+                                     std::vector<double> const& sqrt_weights,
+                                     std::vector<double> const& central_values,
+                                     std::vector<double> const& stat_error,
+                                     const sysError** systematic_errors);
+
   matrix<double> ComputeCovMat(CommonData const& cd, std::vector<double> const& t0, double weight=1.);
   matrix<double> ComputeSqrtMat(matrix<double> const& inmatrix);
+
   void ComputeChi2_basic(int const nDat, int const nMem,
                    const double* data, matrix<double> const& L,
                    real *const& theory, real *chi2);
