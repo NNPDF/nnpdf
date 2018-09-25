@@ -68,14 +68,14 @@ namespace NNPDF
     int fNData;        //!< Number of data points
     int fNSys;      //!< Number of additive systematics correlations
 
-    double *fData;       //!< The experimental data
-    double *fT0Pred;     //!< The t0 predictions
-    std::vector<double> fSqrtWeights;    //!< The weights
+    double *fData;                    //!< The experimental data
+    std::vector<double> fT0Pred;      //!< The t0 predictions
+    std::vector<double> fSqrtWeights; //!< The weights
 
     matrix<double> fCovMat;    //!< The covariance matrix
     matrix<double> fSqrtCov;   //!< The Cholesky decomposition of the covariance matrix
 
-    double *fStat;       //!< The statistical errors
+    std::vector<double> fStat; //!< The statistical errors
     sysError **fSys;    //!< The syscor
 
     int **fSetSysMap;    //!< Map for ordering of systematics in datasets

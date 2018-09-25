@@ -36,8 +36,6 @@ fExpName(expname),
 fNData(0),
 fNSys(0),
 fData(NULL),
-fT0Pred(NULL),
-fStat(NULL),
 fSys(NULL),
 fSetSysMap(NULL),
 fIsArtificial(false),
@@ -71,10 +69,8 @@ fExpName(exp.fExpName),
 fNData(exp.fNData),
 fNSys(exp.fNSys),
 fData(NULL),
-fT0Pred(NULL),
 fCovMat(exp.fCovMat),
 fSqrtCov(exp.fSqrtCov),
-fStat(NULL),
 fSys(NULL),
 fSetSysMap(NULL),
 fIsArtificial(exp.fIsArtificial),
@@ -97,8 +93,6 @@ fExpName(exp.fExpName),
 fNData(exp.fNData),
 fNSys(exp.fNSys),
 fData(NULL),
-fT0Pred(NULL),
-fStat(NULL),
 fSys(NULL),
 fSetSysMap(NULL),
 fIsArtificial(exp.fIsArtificial),
@@ -132,8 +126,6 @@ void Experiment::ClearLocalData()
     return;
 
   delete[] fData;
-  delete[] fStat;
-  delete[] fT0Pred;
 
   for (int s = 0; s < GetNSet(); s++)
     delete[] fSetSysMap[s];
@@ -375,10 +367,10 @@ void Experiment::PullData()
     }
   }
 
-  // Initialise data arrays
+  // Initialise data arrays, use quiet NaNs to indicate mis-filling
   fData   = new double[fNData];
-  fStat   = new double[fNData];
-  fT0Pred = new double[fNData];
+  fStat   = vector<double>(fNData, std::numeric_limits<double>::quiet_NaN());
+  fT0Pred = vector<double>(fNData, std::numeric_limits<double>::quiet_NaN());
   fSqrtWeights = vector<double>();
   fSqrtWeights.reserve(fNData);
 
@@ -434,72 +426,8 @@ void Experiment::PullData()
  */
 void Experiment::GenCovMat()
 {
-  fCovMat.clear();
-  fCovMat.resize(fNData, fNData, 0);
-
-  for (int i = 0; i < fNData; i++) {
-    // Diagonal case
-
-    fCovMat(i, i) = fStat[i] * fStat[i]; // stat error
-  }
-  for (int l = 0; l < fNSys; l++) {
-    auto &compsys = fSys[0][l];
-    if (compsys.name == "SKIP") {
-      continue;
-    }
-    bool iscorrelated =
-        (compsys.name != "UNCORR" && compsys.name != "THEORYUNCORR");
-    for (int i = 0; i < fNData; i++) {
-      double diagsig = 0.0;
-      double diagsignor = 0.0;
-      auto &sys = fSys[i][l];
-      switch (compsys.type) {
-      case UNSET: throw RuntimeException("Experiment::GenCovMat", "UNSET systype encountered");
-      case ADD:
-        diagsig += sys.add * sys.add;
-        break; // additive systematics
-      case MULT:
-        diagsignor += sys.mult * sys.mult;
-        break; // multiplicative systematics
-      }
-      fCovMat(i,i) += diagsig + diagsignor * fT0Pred[i] * fT0Pred[i] * 1e-4;
-
-      // No need to loop over the nondiagonal parts
-      if (!iscorrelated) {
-        continue;
-      }
-      for (int j = 0; j < i; j++) {
-        auto &othersys = fSys[j][l];
-        // Hopefully easy enough for the compiler to fuse this up
-        decltype(sys.add) res;
-        switch (compsys.type) {
-        case UNSET: throw RuntimeException("Experiment::GenCovMat", "UNSET systype encountered");
-        case ADD:
-          res = sys.add * othersys.add;
-          break; // additive systematics
-        case MULT:
-          res = sys.mult * othersys.mult * fT0Pred[i] * fT0Pred[j] * 1e-4;
-          break; // multiplicative systematics
-	default:
-	  throw NNPDF::RuntimeException("Experiment::GenCovMat", "sys type not recognized");
-	  break;
-        }
-        fCovMat(i, j) += res;
-        fCovMat(j, i) += res;
-      }
-    }
-  }
-  //Hopefully the compiler will merge the loops?
-  for(int i=0; i<fNData; i++){
-      for(int j=0; j<=i; j++){
-          auto w = fSqrtWeights[i]*fSqrtWeights[j];
-          fCovMat(i,j) /= w;
-          if(i!=j){
-              fCovMat(j,i) /= w;
-          }
-      }
-  }
-
+  // Compute the Covariance matrix with t0 and NNPDF3.1 theory errors
+  fCovMat  = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, true);
   fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 
