@@ -473,20 +473,6 @@ def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples=500):
                                     args=[dt.sqrtcovmat])
     return phi_resample
 
-@check_pdf_is_montecarlo
-def bootstrap_chi2_central_experiment(experiment_results, bootstrap_samples=500, boot_seed=123):
-    """Takes the data result and theory prediction for a given experiment and
-    then returns a bootstrap distribution of central chi2.
-    By default `bootstrap_samples` is set to a sensible value (500). However
-    a different value can be specified in the runcard.
-    """
-    dt, th = experiment_results
-    diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
-    chi2_central_resample = bootstrap_values(diff, bootstrap_samples, boot_seed=boot_seed,
-                                    apply_func=(lambda x, y: calc_chi2(y, x.mean(axis=1))),
-                                    args=[dt.sqrtcovmat])
-    return chi2_central_resample
-
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
                               prepend_total:bool=True,
                               datasets_sqrtcovmat=None) -> dict:
@@ -865,31 +851,13 @@ def experiments_central_values(experiment_result_table):
     central_theory_values = experiment_result_table["theory_central"]
     return central_theory_values
 
-def bias(dataspecs_results):
-    """Returns the chi^2 between replicas zero of two chosen fits,
-       to be used in a closure test with the result and the underlying law"""
-    th_lst = []
-    for i, ds_rs in enumerate(dataspecs_results):
-         data, th = ds_rs
-         th_lst.append(th)
-    central_diff = th_lst[1].central_value - th_lst[0].central_value
-    return calc_chi2(data.sqrtcovmat, central_diff)
-
-   
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
-
-experiments_results = collect(experiment_results, ('experiments',))
 
 experiments_phi = collect(phi_data_experiment, ('experiments',))
 experiments_pdfs_phi = collect('experiments_phi', ('pdfs',))
 
-pdfs_total_chi2 = collect(total_experiments_chi2, ('pdfs',))
-
-
 experiments_bootstrap_phi = collect(bootstrap_phi_data_experiment, ('experiments',))
-experiments_bootstrap_chi2_central = collect(bootstrap_chi2_central_experiment,
-                                             ('experiments',))
 
 #These are convenient ways to iterate and extract varios data from fits
 fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))
