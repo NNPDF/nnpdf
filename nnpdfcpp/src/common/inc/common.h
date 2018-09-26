@@ -45,7 +45,7 @@ enum basisType  {BASIS_UNDEF, BASIS_NN23, BASIS_NN23QED,
                  BASIS_EVOL, BASIS_EVOLQED,BASIS_EVOLS, BASIS_EVOLSQED,
                  BASIS_NN30, BASIS_NN30QED, BASIS_FLVR, BASIS_FLVRQED,
                  BASIS_NN30IC, BASIS_EVOLIC, BASIS_NN31IC, BASIS_LUX, BASIS_NN31ICQED,
-                 BASIS_NSR};
+                 BASIS_NSR,BASIS_DISEVOL};
 
 enum covType {COV_EXP = false, COV_T0 = true};
 enum filterType {DATA_UNFILTERED = false,DATA_FILTERED = true};

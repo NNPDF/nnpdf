@@ -94,11 +94,12 @@ FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, const int 
       cout << Colour::FG_BLUE << "Selecting FitBasis: NSR" << Colour::FG_DEFAULT << endl;
       break;
     }
+    case BASIS_DISEVOL:
 
     default:
-      cerr << Colour::FG_RED << "[getFitBasis] error: Invalid Fitting Basis" << Colour::FG_DEFAULT << endl;
-      exit(-1);
-      break;
+    cerr << Colour::FG_RED << "[getFitBasis] error: Invalid Fitting Basis" << Colour::FG_DEFAULT << endl;
+    exit(-1);
+    break;
   }
 
   return fitbasis;
@@ -106,9 +107,9 @@ FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, const int 
 }
 
 /**
- *  Basic FitBasis constructor
- *  Common attributes for all fit bases
- **/
+*  Basic FitBasis constructor
+*  Common attributes for all fit bases
+**/
 FitBasis::FitBasis(NNPDFSettings const& nnset, string name, int nPDF):
 PDFBasis(name, nPDF),
 fArcDampFactor(new double[fNPDF]),
@@ -120,28 +121,28 @@ fGSLWork(nnset.GetGSLWorkspace())
 {
   // Squared Positivity
   for (int i = 0; i < fNPDF; i++)
-    fPDFSqrPos[i] = nnset.Get("fitting","basis")[i]["pos"].as<bool>();
+  fPDFSqrPos[i] = nnset.Get("fitting","basis")[i]["pos"].as<bool>();
 
   // Preprocessing constants
   RandomGenerator* rg = RandomGenerator::GetRNG();
 
-    for (int i = 0; i < fNPDF; i++)
-      {
-        // Small x exponents
-        fAlpha[i] = -rg->GetRandomUniform(nnset.Get("fitting","basis")[i]["smallx"][0].as<real>(),
-                                          nnset.Get("fitting","basis")[i]["smallx"][1].as<real>());
+  for (int i = 0; i < fNPDF; i++)
+  {
+    // Small x exponents
+    fAlpha[i] = -rg->GetRandomUniform(nnset.Get("fitting","basis")[i]["smallx"][0].as<real>(),
+    nnset.Get("fitting","basis")[i]["smallx"][1].as<real>());
 
-        // Large x exponents
-        fBeta[i]  =  rg->GetRandomUniform(nnset.Get("fitting","basis")[i]["largex"][0].as<real>(),
-                                          nnset.Get("fitting","basis")[i]["largex"][1].as<real>());
-      }
+    // Large x exponents
+    fBeta[i]  =  rg->GetRandomUniform(nnset.Get("fitting","basis")[i]["largex"][0].as<real>(),
+    nnset.Get("fitting","basis")[i]["largex"][1].as<real>());
+  }
 
   return;
 }
 
 /**
- * @brief The FitBasis destructor
- */
+* @brief The FitBasis destructor
+*/
 FitBasis::~FitBasis()
 {
   delete[] fArcDampFactor;
@@ -165,7 +166,7 @@ void FitBasis::Preprocess(real const& x, real* pdf, PreprocParam const& par)
   {
     // Positive definite PDFs
     if (fPDFSqrPos[i])
-      pdf[i] *= pdf[i];
+    pdf[i] *= pdf[i];
 
     Preprocess(x,i,pdf[i],par);
   }
@@ -176,13 +177,13 @@ void FitBasis::Preprocess(real const& x, real* pdf, PreprocParam const& par)
 void FitBasis::NetTransform(int const& fl, int const& nfl, int* transform)
 {
   for (int i = 0; i < nfl; i++)
-    transform[i] = 0;
+  transform[i] = 0;
   transform[fl] = 1;
 }
 
 /**
- *  NNPDF2.3 Fit Basis
- **/
+*  NNPDF2.3 Fit Basis
+**/
 
 NN23FitBasis::NN23FitBasis(NNPDFSettings const& nnset):
 FitBasis(nnset, "NN23FitBasis", 7+nnset.IsQED()),
@@ -197,7 +198,7 @@ fQED(nnset.IsQED())
   fPDFNames[FIT_SP] = "Strange Sea";
   fPDFNames[FIT_SM] = "Strange Valence";
   if (fQED)
-    fPDFNames[FIT_GAM] = "Photon";
+  fPDFNames[FIT_GAM] = "Photon";
 
   // Damping factor for arclengths
   fArcDampFactor[FIT_SNG] = 1;
@@ -208,7 +209,7 @@ fQED(nnset.IsQED())
   fArcDampFactor[FIT_SP] = 1;
   fArcDampFactor[FIT_SM] = 0;
   if (fQED)
-    fArcDampFactor[FIT_GAM] = 1;
+  fArcDampFactor[FIT_GAM] = 1;
 
   RandomGenerator* rg = RandomGenerator::GetRNG();
   fSauxBeta = 3.5 + rg->GetRandomUniform(0.0,1.0);
@@ -263,22 +264,22 @@ void NN23FitBasis::Preprocess(real const& x, int const& fl, real& pdf, PreprocPa
 
   // Strange auxilliary term
   if (fl == FIT_SM)
-    pdf -= par.fPDFAux[FIT_SM]*pow(1-x,fSauxBeta)*pow(x,fSauxAlpha+1);
+  pdf -= par.fPDFAux[FIT_SM]*pow(1-x,fSauxBeta)*pow(x,fSauxAlpha+1);
 
   return;
 }
 
 /**
- * @brief NN23FitBasis::BASIS2EVLN
- * @param FIT
- * @param EVLN
- */
+* @brief NN23FitBasis::BASIS2EVLN
+* @param FIT
+* @param EVLN
+*/
 void NN23FitBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
 {
   if ( fQED )
-    EVLN[EVLN_GAM] = FIT[FIT_GAM];
+  EVLN[EVLN_GAM] = FIT[FIT_GAM];
   else
-    EVLN[EVLN_GAM] = 0;
+  EVLN[EVLN_GAM] = 0;
 
   EVLN[EVLN_SNG] = FIT[FIT_SNG]; //Singlet
   EVLN[EVLN_GLU] = FIT[FIT_GLU]; //Gluon
@@ -319,7 +320,7 @@ void NN23FitBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
   FIT[FIT_SM]  = (EVLN[EVLN_VAL] - EVLN[EVLN_V8])/3.0;  //sm = (V - V8)/3
 
   if (fQED)
-    FIT[FIT_GAM] =  EVLN[EVLN_GAM];  // photon
+  FIT[FIT_GAM] =  EVLN[EVLN_GAM];  // photon
 
   return;
 }
@@ -331,70 +332,70 @@ real NN23FitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &sta
 
   // sum rule calculations
   switch (rule) {
-     // total momentum
-     case SUM_MSR:
-       {
-         real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
-         real msr = xsng+xglu;
-         if (fQED)
-           {
-             real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
-             msr += xgam;
-           }
-         return msr;
-       }
-       break;
-     // up valence
-     case SUM_UVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::FX,status,fGSLWork);
-         real delta = pdf->IntegratePDF(mem,FIT_DS,fQ2,PDFSet::FX,status,fGSLWork);
-         real sm = pdf->IntegratePDF(mem,FIT_SM,fQ2,PDFSet::FX,status,fGSLWork);
-         return 0.5*( val + t3 + 2.0*delta - sm );
-       }
-       break;
-     // down valence
-     case SUM_DVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::FX,status,fGSLWork);
-         real delta = pdf->IntegratePDF(mem,FIT_DS,fQ2,PDFSet::FX,status,fGSLWork);
-         real sm = pdf->IntegratePDF(mem,FIT_SM,fQ2,PDFSet::FX,status,fGSLWork);
-         return 0.5*( val - t3 - 2.0*delta - sm );
-       }
-       break;
-     case SUM_SVL:
-     // strange valence
-        return pdf->IntegratePDF(mem,FIT_SM,fQ2,PDFSet::FX,status,fGSLWork);
-        break;
-     case SUM_USM:
-     // up momentum fraction
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
-         real sp = pdf->IntegratePDF(mem,FIT_SP,fQ2,PDFSet::XFX,status,fGSLWork);
-         return 0.5*( sng + t3 - sp );
-       }
-       break;
-     case SUM_DSM:
-     // down momentum fraction
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
-         real sp = pdf->IntegratePDF(mem,FIT_SP,fQ2,PDFSet::XFX,status,fGSLWork);
-         return 0.5*( sng - t3 - sp );
-       }
-       break;
-     case SUM_SSM:
-     // strange momentum fraction
-       return pdf->IntegratePDF(mem,FIT_SP,fQ2,PDFSet::XFX,status,fGSLWork);
-       break;
-     default:
-       cerr << "NN23FitBasis::ComputeSumRules error: unknown sum rule"<<endl;
-       exit(-1);
-       break;
+    // total momentum
+    case SUM_MSR:
+    {
+      real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
+      real msr = xsng+xglu;
+      if (fQED)
+      {
+        real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
+        msr += xgam;
+      }
+      return msr;
+    }
+    break;
+    // up valence
+    case SUM_UVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::FX,status,fGSLWork);
+      real delta = pdf->IntegratePDF(mem,FIT_DS,fQ2,PDFSet::FX,status,fGSLWork);
+      real sm = pdf->IntegratePDF(mem,FIT_SM,fQ2,PDFSet::FX,status,fGSLWork);
+      return 0.5*( val + t3 + 2.0*delta - sm );
+    }
+    break;
+    // down valence
+    case SUM_DVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::FX,status,fGSLWork);
+      real delta = pdf->IntegratePDF(mem,FIT_DS,fQ2,PDFSet::FX,status,fGSLWork);
+      real sm = pdf->IntegratePDF(mem,FIT_SM,fQ2,PDFSet::FX,status,fGSLWork);
+      return 0.5*( val - t3 - 2.0*delta - sm );
+    }
+    break;
+    case SUM_SVL:
+    // strange valence
+    return pdf->IntegratePDF(mem,FIT_SM,fQ2,PDFSet::FX,status,fGSLWork);
+    break;
+    case SUM_USM:
+    // up momentum fraction
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
+      real sp = pdf->IntegratePDF(mem,FIT_SP,fQ2,PDFSet::XFX,status,fGSLWork);
+      return 0.5*( sng + t3 - sp );
+    }
+    break;
+    case SUM_DSM:
+    // down momentum fraction
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
+      real sp = pdf->IntegratePDF(mem,FIT_SP,fQ2,PDFSet::XFX,status,fGSLWork);
+      return 0.5*( sng - t3 - sp );
+    }
+    break;
+    case SUM_SSM:
+    // strange momentum fraction
+    return pdf->IntegratePDF(mem,FIT_SP,fQ2,PDFSet::XFX,status,fGSLWork);
+    break;
+    default:
+    cerr << "NN23FitBasis::ComputeSumRules error: unknown sum rule"<<endl;
+    exit(-1);
+    break;
   }
 }
 
@@ -404,8 +405,8 @@ real NN23FitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &sta
 
 
 /**
- *  Evolution Fit Basis
- **/
+*  Evolution Fit Basis
+**/
 EvolFitBasis::EvolFitBasis(NNPDFSettings const& nnset):
 FitBasis(nnset, "EvolFitBasis", 7+nnset.IsQED()),
 fQED(nnset.IsQED())
@@ -419,7 +420,7 @@ fQED(nnset.IsQED())
   fPDFNames[FIT_T3] = "T3";
   fPDFNames[FIT_T8] = "T8";
   if (fQED)
-    fPDFNames[FIT_GAM] = "Photon";
+  fPDFNames[FIT_GAM] = "Photon";
 
   // Damping factor for arclengths
   fArcDampFactor[FIT_SNG] = 1;
@@ -430,7 +431,7 @@ fQED(nnset.IsQED())
   fArcDampFactor[FIT_T3] = 1;
   fArcDampFactor[FIT_T8] = 1;
   if (fQED)
-    fArcDampFactor[FIT_GAM] = 1;
+  fArcDampFactor[FIT_GAM] = 1;
 
 }
 
@@ -471,16 +472,16 @@ void EvolFitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool 
 }
 
 /**
- * @brief EvolFitBasis::BASIS2EVLN
- * @param FIT
- * @param EVLN
- */
+* @brief EvolFitBasis::BASIS2EVLN
+* @param FIT
+* @param EVLN
+*/
 void EvolFitBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
 {
   if ( fQED )
-    EVLN[EVLN_GAM] = FIT[FIT_GAM];
+  EVLN[EVLN_GAM] = FIT[FIT_GAM];
   else
-    EVLN[EVLN_GAM] = 0;
+  EVLN[EVLN_GAM] = 0;
 
   EVLN[EVLN_SNG]  = FIT[FIT_SNG]; //Singlet
   EVLN[EVLN_GLU]  = FIT[FIT_GLU]; //Gluon
@@ -516,7 +517,7 @@ void EvolFitBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
   FIT[FIT_T8]   = EVLN[EVLN_T8]; // T8
 
   if (fQED)
-    FIT[FIT_GAM] =  EVLN[0];  // photon
+  FIT[FIT_GAM] =  EVLN[0];  // photon
 
   return;
 }
@@ -528,80 +529,80 @@ real EvolFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &sta
 
   // sum rule calculations
   switch (rule) {
-     case SUM_MSR:
-       {
-         real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
-         real msr = xsng+xglu;
-         if (fQED)
-           {
-             real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
-             msr += xgam;
-           }
-         return msr;
-       }
-       break;
-     case SUM_UVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         return ( 2.0*val + 3.0*v3 + v8 )/6.0;
-       }
-       break;
-     case SUM_DVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         return ( 2.0*val - 3.0*v3 + v8 )/6.0;
-       }
-       break;
-     case SUM_SVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         return ( val - v8 )/3.0;
-       }
-        break;
-     case SUM_USM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         return ( 2.0*sng + 3.0*t3 + t8 )/6.0;
-       }
-       break;
-     case SUM_DSM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         return ( 2.0*sng - 3.0*t3 + t8 )/6.0;
-       }
-       break;
-     case SUM_SSM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         return ( sng - t8 )/3.0;
-       }
-       break;
-     default:
-       cerr << "EvolFitBasis::ComputeSumRules error: unknown sum rule"<<endl;
-       exit(-1);
-       break;
+    case SUM_MSR:
+    {
+      real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
+      real msr = xsng+xglu;
+      if (fQED)
+      {
+        real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
+        msr += xgam;
+      }
+      return msr;
+    }
+    break;
+    case SUM_UVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      return ( 2.0*val + 3.0*v3 + v8 )/6.0;
+    }
+    break;
+    case SUM_DVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      return ( 2.0*val - 3.0*v3 + v8 )/6.0;
+    }
+    break;
+    case SUM_SVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      return ( val - v8 )/3.0;
+    }
+    break;
+    case SUM_USM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      return ( 2.0*sng + 3.0*t3 + t8 )/6.0;
+    }
+    break;
+    case SUM_DSM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      return ( 2.0*sng - 3.0*t3 + t8 )/6.0;
+    }
+    break;
+    case SUM_SSM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      return ( sng - t8 )/3.0;
+    }
+    break;
+    default:
+    cerr << "EvolFitBasis::ComputeSumRules error: unknown sum rule"<<endl;
+    exit(-1);
+    break;
   }
 }
 
 // ******************** EVOLUTION with LUXQED *********************
 
 /**
- * @brief LuxBasis::LuxBasis
- */
+* @brief LuxBasis::LuxBasis
+*/
 LuxBasis::LuxBasis(NNPDFSettings const& nnset, int const& replica):
-  FitBasis(nnset, "LuxBasis", 8),
-  fQ0(stod(nnset.GetTheory(APFEL::kQ0)))
+FitBasis(nnset, "LuxBasis", 8),
+fQ0(stod(nnset.GetTheory(APFEL::kQ0)))
 {
   // photon from t0
   fPhotonSet = new LHAPDFSet(nnset.Get("datacuts","t0pdfset").as<string>(), replica);
@@ -628,16 +629,16 @@ LuxBasis::LuxBasis(NNPDFSettings const& nnset, int const& replica):
 }
 
 /**
- * @brief LuxBasis::~LuxBasis
- */
+* @brief LuxBasis::~LuxBasis
+*/
 LuxBasis::~LuxBasis()
 {
   delete fPhotonSet;
 }
 
 /**
- * @brief LuxBasis::BASIS2EVLN
- */
+* @brief LuxBasis::BASIS2EVLN
+*/
 void LuxBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
 {
   EVLN[EVLN_GAM]  = FIT[FIT_GAM]; //Photon
@@ -657,8 +658,8 @@ void LuxBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
 }
 
 /**
- * @brief LuxBasis::EVLN2BASIS
- */
+* @brief LuxBasis::EVLN2BASIS
+*/
 void LuxBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
 {
   // Order in fitting basis
@@ -679,8 +680,8 @@ void LuxBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
 }
 
 /**
- * @brief LuxBasis::ComputeParam
- */
+* @brief LuxBasis::ComputeParam
+*/
 void LuxBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool &status) const
 {
   // status
@@ -706,8 +707,8 @@ void LuxBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool &sta
 }
 
 /**
- * @brief LuxBasis::ComputeSumRules
- */
+* @brief LuxBasis::ComputeSumRules
+*/
 real LuxBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &status) const
 {
   // status
@@ -715,103 +716,103 @@ real LuxBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &status)
 
   // sum rule calculations
   switch (rule) {
-     case SUM_MSR:
-       {
-         real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
-         real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
-         real msr = xsng+xglu+xgam;
-         return msr;
-       }
-       break;
-     case SUM_UVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = val;
-         return ( 3.0*val + 6.0*v3 + 2.0*v8 + v15 )/12.0;
-       }
-       break;
-     case SUM_DVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = val;
-         return ( 3.0*val - 6.0*v3 + 2.0*v8 + v15 )/12.0;
-       }
-       break;
-     case SUM_SVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = val;
-         return ( 3.0*val - 4.0*v8 + v15 )/12.0;
-       }
-       break;
-      case SUM_CVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = val;
-         return ( val - v15 )/4.0;
-       }
-       break;
-     case SUM_USM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t15 = sng-4*cp;
-         return ( 3.0*sng + 6.0*t3 + 2.0*t8 + t15 )/12.0;
-      }
-       break;
-     case SUM_DSM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t15 = sng-4*cp;
-         return ( 3.0*sng - 6.0*t3 + 2.0*t8 + t15)/12.0;
-       }
-       break;
-     case SUM_SSM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t15 = sng-4*cp;
-         return ( 3.0*sng - 4.0*t8 + t15)/12.0;
-       }
-       break;
-     case SUM_CSM:
-       {
-        real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
-        return cp;
-       }
-      break;
-     default:
-       cerr << "LuxBasis::ComputeSumRules error: unknown sum rule"<<endl;
-       exit(-1);
-       break;
+    case SUM_MSR:
+    {
+      real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
+      real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
+      real msr = xsng+xglu+xgam;
+      return msr;
+    }
+    break;
+    case SUM_UVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      real v15 = val;
+      return ( 3.0*val + 6.0*v3 + 2.0*v8 + v15 )/12.0;
+    }
+    break;
+    case SUM_DVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      real v15 = val;
+      return ( 3.0*val - 6.0*v3 + 2.0*v8 + v15 )/12.0;
+    }
+    break;
+    case SUM_SVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      real v15 = val;
+      return ( 3.0*val - 4.0*v8 + v15 )/12.0;
+    }
+    break;
+    case SUM_CVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v15 = val;
+      return ( val - v15 )/4.0;
+    }
+    break;
+    case SUM_USM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t15 = sng-4*cp;
+      return ( 3.0*sng + 6.0*t3 + 2.0*t8 + t15 )/12.0;
+    }
+    break;
+    case SUM_DSM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t15 = sng-4*cp;
+      return ( 3.0*sng - 6.0*t3 + 2.0*t8 + t15)/12.0;
+    }
+    break;
+    case SUM_SSM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t15 = sng-4*cp;
+      return ( 3.0*sng - 4.0*t8 + t15)/12.0;
+    }
+    break;
+    case SUM_CSM:
+    {
+      real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
+      return cp;
+    }
+    break;
+    default:
+    cerr << "LuxBasis::ComputeSumRules error: unknown sum rule"<<endl;
+    exit(-1);
+    break;
   }
 }
 
 /**
- * @brief LuxBasis::Preprocess
- */
+* @brief LuxBasis::Preprocess
+*/
 void LuxBasis::Preprocess(const real &x, const int &fl, real &pdf, const PreprocParam &par)
 {
   FitBasis::Preprocess(x,fl,pdf,par);
   if (fl == FIT_GAM)
-    pdf = fPhotonSet->xfxQ(x, fQ0, 0, 22);
+  pdf = fPhotonSet->xfxQ(x, fQ0, 0, 22);
 }
 
 /**
- * @brief FitBasis::Preprocess
- */
+* @brief FitBasis::Preprocess
+*/
 void LuxBasis::Preprocess(real const& x, real* pdf, PreprocParam const& par)
 {
   FitBasis::Preprocess(x, pdf, par);
@@ -824,8 +825,8 @@ void LuxBasis::Preprocess(real const& x, real* pdf, PreprocParam const& par)
 // ******************** EVOLUTION ONLY STRANGENESS *********************
 
 /**
- *  Evolution only for strangeness
- **/
+*  Evolution only for strangeness
+**/
 
 EvolSFitBasis::EvolSFitBasis(NNPDFSettings const& nnset):
 FitBasis(nnset, "EvolSFitBasis", 7+nnset.IsQED()),
@@ -840,7 +841,7 @@ fQED(nnset.IsQED())
   fPDFNames[FIT_T8] = "T8";
   fPDFNames[FIT_DS] = "Sea Asymmetry";
   if (fQED)
-    fPDFNames[FIT_GAM] = "Photon";
+  fPDFNames[FIT_GAM] = "Photon";
 
   // Damping factor for arclengths
   fArcDampFactor[FIT_SNG] = 1;
@@ -851,7 +852,7 @@ fQED(nnset.IsQED())
   fArcDampFactor[FIT_T8] = 1;
   fArcDampFactor[FIT_DS] = 1;
   if (fQED)
-    fArcDampFactor[FIT_GAM] = 1;
+  fArcDampFactor[FIT_GAM] = 1;
 }
 
 void EvolSFitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool &status) const
@@ -892,16 +893,16 @@ void EvolSFitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool
 }
 
 /**
- * @brief NN23FitBasis::BASIS2EVLN
- * @param FIT
- * @param EVLN
- */
+* @brief NN23FitBasis::BASIS2EVLN
+* @param FIT
+* @param EVLN
+*/
 void EvolSFitBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
 {
   if ( fQED )
-    EVLN[EVLN_GAM] = FIT[FIT_GAM];
+  EVLN[EVLN_GAM] = FIT[FIT_GAM];
   else
-    EVLN[EVLN_GAM] = 0;
+  EVLN[EVLN_GAM] = 0;
 
 
   enum fitBasis {FIT_SNG, FIT_GLU, FIT_VAL, FIT_V8, FIT_T3, FIT_T8, FIT_DS, FIT_GAM };
@@ -944,7 +945,7 @@ void EvolSFitBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
   FIT[FIT_DS]  = 0.5*(EVLN[EVLN_V3] - EVLN[EVLN_T3]); // Ds = (V3-T3)/2
 
   if (fQED)
-    FIT[FIT_GAM] =  EVLN[EVLN_GAM];  // photon
+  FIT[FIT_GAM] =  EVLN[EVLN_GAM];  // photon
 
   return;
 }
@@ -956,71 +957,71 @@ real EvolSFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &st
 
   // sum rule calculations
   switch (rule) {
-     case SUM_MSR:
-       {
-         real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
-         real msr = xsng+xglu;
-         if (fQED)
-           {
-             real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
-             msr += xgam;
-           }
-         return msr;
-       }
-       break;
-     case SUM_UVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::FX,status,fGSLWork);
-         real ds = pdf->IntegratePDF(mem,FIT_DS,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         return ( 2.0*val + 3.0*t3 + 6.0*ds + v8 )/6.0;
-       }
-       break;
-     case SUM_DVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::FX,status,fGSLWork);
-         real ds = pdf->IntegratePDF(mem,FIT_DS,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         return ( 2.0*val - 3.0*t3 - 6.0*ds + v8 )/6.0;
-       }
-       break;
-     case SUM_SVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         return ( val - v8 )/3.0;
-       }
-        break;
-     case SUM_USM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         return ( 2.0*sng + 3.0*t3 + t8 )/6.0;
-       }
-       break;
-     case SUM_DSM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         return ( 2.0*sng - 3.0*t3 + t8 )/6.0;
-       }
-       break;
-     case SUM_SSM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         return ( sng - t8 )/3.0;
-       }
-       break;
-     default:
-       cerr << "EvolSFitBasis::ComputeSumRules error: unknown sum rule"<<endl;
-       exit(-1);
-       break;
+    case SUM_MSR:
+    {
+      real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
+      real msr = xsng+xglu;
+      if (fQED)
+      {
+        real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
+        msr += xgam;
+      }
+      return msr;
+    }
+    break;
+    case SUM_UVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::FX,status,fGSLWork);
+      real ds = pdf->IntegratePDF(mem,FIT_DS,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      return ( 2.0*val + 3.0*t3 + 6.0*ds + v8 )/6.0;
+    }
+    break;
+    case SUM_DVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::FX,status,fGSLWork);
+      real ds = pdf->IntegratePDF(mem,FIT_DS,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      return ( 2.0*val - 3.0*t3 - 6.0*ds + v8 )/6.0;
+    }
+    break;
+    case SUM_SVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      return ( val - v8 )/3.0;
+    }
+    break;
+    case SUM_USM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      return ( 2.0*sng + 3.0*t3 + t8 )/6.0;
+    }
+    break;
+    case SUM_DSM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      return ( 2.0*sng - 3.0*t3 + t8 )/6.0;
+    }
+    break;
+    case SUM_SSM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      return ( sng - t8 )/3.0;
+    }
+    break;
+    default:
+    cerr << "EvolSFitBasis::ComputeSumRules error: unknown sum rule"<<endl;
+    exit(-1);
+    break;
   }
 }
 
@@ -1036,42 +1037,42 @@ EvolFitBasis(nnset)
   fPDFNames[NET_SP] = "Strange Sea";
   fPDFNames[NET_SM] = "Strange Valence";
   if (fQED)
-    fPDFNames[NET_GAM] = "Photon";
+  fPDFNames[NET_GAM] = "Photon";
 }
 
 void NN30FitBasis::Preprocess(real const& x, real* pdf, PreprocParam const& par)
 {
-   // Positive definite PDFs
-   for (int i = 0; i < fNPDF; i++)
-     if (fPDFSqrPos[i])
-       pdf[i] *= pdf[i];
+  // Positive definite PDFs
+  for (int i = 0; i < fNPDF; i++)
+  if (fPDFSqrPos[i])
+  pdf[i] *= pdf[i];
 
-   // Transform to evol basis
-   real tmppdf[15];
-   tmppdf[FIT_SNG] = pdf[NET_SNG];
-   tmppdf[FIT_GLU] = pdf[NET_GLU];
-   tmppdf[FIT_VAL] = pdf[NET_VAL];
-   tmppdf[FIT_V3] = pdf[NET_T3]+2*pdf[NET_DS];
-   tmppdf[FIT_V8] = pdf[NET_VAL]-3*pdf[NET_SM];
-   tmppdf[FIT_T3] = pdf[NET_T3];
-   tmppdf[FIT_T8] = pdf[NET_SNG]-3*pdf[NET_SP];
-   if (fQED)
-     tmppdf[FIT_GAM] = pdf[NET_GAM];
+  // Transform to evol basis
+  real tmppdf[15];
+  tmppdf[FIT_SNG] = pdf[NET_SNG];
+  tmppdf[FIT_GLU] = pdf[NET_GLU];
+  tmppdf[FIT_VAL] = pdf[NET_VAL];
+  tmppdf[FIT_V3] = pdf[NET_T3]+2*pdf[NET_DS];
+  tmppdf[FIT_V8] = pdf[NET_VAL]-3*pdf[NET_SM];
+  tmppdf[FIT_T3] = pdf[NET_T3];
+  tmppdf[FIT_T8] = pdf[NET_SNG]-3*pdf[NET_SP];
+  if (fQED)
+  tmppdf[FIT_GAM] = pdf[NET_GAM];
 
-   for (int i = 0; i < fNPDF; i++)
-     pdf[i] = tmppdf[i];
+  for (int i = 0; i < fNPDF; i++)
+  pdf[i] = tmppdf[i];
 
-   // Preproccess in evol basis
-   for (int i = 0; i < fNPDF; i++)
-     FitBasis::Preprocess(x,i,pdf[i],par);
+  // Preproccess in evol basis
+  for (int i = 0; i < fNPDF; i++)
+  FitBasis::Preprocess(x,i,pdf[i],par);
 
-   return;
+  return;
 }
 
 void NN30FitBasis::NetTransform(int const& fl, int const& nfl, int* transform)
 {
   for (int i = 0; i < nfl; i++)
-    transform[i] = 0;
+  transform[i] = 0;
 
   switch (fl)
   {
@@ -1136,42 +1137,42 @@ EvolFitBasis(nnset)
   fPDFNames[NET_S] = "Strange";
   fPDFNames[NET_SBAR] = "AntiStrange";
   if (fQED)
-    fPDFNames[NET_GAM] = "Photon";
+  fPDFNames[NET_GAM] = "Photon";
 }
 
 void FLVRFitBasis::Preprocess(real const& x, real* pdf, PreprocParam const& par)
 {
-   // Positive definite PDFs
-   for (int i = 0; i < fNPDF; i++)
-     if (fPDFSqrPos[i])
-       pdf[i] *= pdf[i];
+  // Positive definite PDFs
+  for (int i = 0; i < fNPDF; i++)
+  if (fPDFSqrPos[i])
+  pdf[i] *= pdf[i];
 
-   // Transform to evol basis
-   real tmppdf[15];
-   tmppdf[FIT_SNG] = pdf[NET_U]+pdf[NET_UBAR]+pdf[NET_D]+pdf[NET_DBAR]+pdf[NET_S]+pdf[NET_SBAR];
-   tmppdf[FIT_GLU] = pdf[NET_GLU];
-   tmppdf[FIT_VAL] = pdf[NET_U]-pdf[NET_UBAR]+pdf[NET_D]-pdf[NET_DBAR]+pdf[NET_S]-pdf[NET_SBAR];
-   tmppdf[FIT_V3] = pdf[NET_U]-pdf[NET_UBAR]-pdf[NET_D]+pdf[NET_DBAR];
-   tmppdf[FIT_V8] = pdf[NET_U]-pdf[NET_UBAR]+pdf[NET_D]-pdf[NET_DBAR]-2*pdf[NET_S]+2*pdf[NET_SBAR];
-   tmppdf[FIT_T3] = pdf[NET_U]+pdf[NET_UBAR]-pdf[NET_D]-pdf[NET_DBAR];
-   tmppdf[FIT_T8] = pdf[NET_U]+pdf[NET_UBAR]+pdf[NET_D]+pdf[NET_DBAR]-2*pdf[NET_S]-2*pdf[NET_SBAR];
-   if (fQED)
-     tmppdf[FIT_GAM] = pdf[NET_GAM];
+  // Transform to evol basis
+  real tmppdf[15];
+  tmppdf[FIT_SNG] = pdf[NET_U]+pdf[NET_UBAR]+pdf[NET_D]+pdf[NET_DBAR]+pdf[NET_S]+pdf[NET_SBAR];
+  tmppdf[FIT_GLU] = pdf[NET_GLU];
+  tmppdf[FIT_VAL] = pdf[NET_U]-pdf[NET_UBAR]+pdf[NET_D]-pdf[NET_DBAR]+pdf[NET_S]-pdf[NET_SBAR];
+  tmppdf[FIT_V3] = pdf[NET_U]-pdf[NET_UBAR]-pdf[NET_D]+pdf[NET_DBAR];
+  tmppdf[FIT_V8] = pdf[NET_U]-pdf[NET_UBAR]+pdf[NET_D]-pdf[NET_DBAR]-2*pdf[NET_S]+2*pdf[NET_SBAR];
+  tmppdf[FIT_T3] = pdf[NET_U]+pdf[NET_UBAR]-pdf[NET_D]-pdf[NET_DBAR];
+  tmppdf[FIT_T8] = pdf[NET_U]+pdf[NET_UBAR]+pdf[NET_D]+pdf[NET_DBAR]-2*pdf[NET_S]-2*pdf[NET_SBAR];
+  if (fQED)
+  tmppdf[FIT_GAM] = pdf[NET_GAM];
 
-   for (int i = 0; i < fNPDF; i++)
-     pdf[i] = tmppdf[i];
+  for (int i = 0; i < fNPDF; i++)
+  pdf[i] = tmppdf[i];
 
-   // Preprocess in evol basis
-   for (int i = 0; i < fNPDF; i++)
-     FitBasis::Preprocess(x,i,pdf[i],par);
+  // Preprocess in evol basis
+  for (int i = 0; i < fNPDF; i++)
+  FitBasis::Preprocess(x,i,pdf[i],par);
 
-   return;
+  return;
 }
 
 void FLVRFitBasis::NetTransform(int const& fl, int const& nfl, int* transform)
 {
   for (int i = 0; i < nfl; i++)
-    transform[i] = 0;
+  transform[i] = 0;
 
   switch (fl)
   {
@@ -1248,8 +1249,8 @@ void FLVRFitBasis::NetTransform(int const& fl, int const& nfl, int* transform)
 
 /************************ Intrinsic Charm ****************************/
 /**
- *  Evolution Fit Basis
- **/
+*  Evolution Fit Basis
+**/
 EvolICFitBasis::EvolICFitBasis(NNPDFSettings const& nnset):
 FitBasis(nnset, "EvolICFitBasis", 8+nnset.IsQED()),
 fQED(nnset.IsQED())
@@ -1264,7 +1265,7 @@ fQED(nnset.IsQED())
   fPDFNames[FIT_T8] = "T8";
   fPDFNames[FIT_T15]= "T15";
   if (fQED)
-    fPDFNames[FIT_GAM] = "Photon";
+  fPDFNames[FIT_GAM] = "Photon";
 
   // Damping factor for arclengths
   fArcDampFactor[FIT_SNG] = 1;
@@ -1276,7 +1277,7 @@ fQED(nnset.IsQED())
   fArcDampFactor[FIT_T8] = 1;
   fArcDampFactor[FIT_T15] = 1;
   if (fQED)
-    fArcDampFactor[FIT_GAM] = 1;
+  fArcDampFactor[FIT_GAM] = 1;
 }
 
 void EvolICFitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool &status) const
@@ -1316,16 +1317,16 @@ void EvolICFitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, boo
 }
 
 /**
- * @brief EvolFitBasis::BASIS2EVLN
- * @param FIT
- * @param EVLN
- */
+* @brief EvolFitBasis::BASIS2EVLN
+* @param FIT
+* @param EVLN
+*/
 void EvolICFitBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
 {
   if ( fQED )
-    EVLN[EVLN_GAM] = FIT[FIT_GAM];
+  EVLN[EVLN_GAM] = FIT[FIT_GAM];
   else
-    EVLN[EVLN_GAM] = 0;
+  EVLN[EVLN_GAM] = 0;
 
   EVLN[EVLN_SNG]  = FIT[FIT_SNG]; //Singlet
   EVLN[EVLN_GLU]  = FIT[FIT_GLU]; //Gluon
@@ -1362,7 +1363,7 @@ void EvolICFitBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
   FIT[FIT_T15]  = EVLN[EVLN_T15];  // T15
 
   if (fQED)
-    FIT[FIT_GAM] =  EVLN[0];  // photon
+  FIT[FIT_GAM] =  EVLN[0];  // photon
 
   return;
 }
@@ -1374,89 +1375,89 @@ real EvolICFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &s
 
   // sum rule calculations
   switch (rule) {
-     case SUM_MSR:
-       {
-         real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
-         real msr = xsng+xglu;
-         if (fQED)
-           {
-             real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
-             msr += xgam;
-           }
-         return msr;
-       }
-       break;
-     case SUM_UVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = val;
-         return ( 3.0*val + 6.0*v3 + 2.0*v8 + v15 )/12.0;
-       }
-       break;
-     case SUM_DVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = val;
-         return ( 3.0*val - 6.0*v3 + 2.0*v8 + v15 )/12.0;
-       }
-       break;
-     case SUM_SVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = val;
-         return ( 3.0*val - 4.0*v8 + v15 )/12.0;
-       }
-        break;
-     case SUM_CVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = val;
-         return ( val - v15 )/4.0;
-       }
-        break;
-
-     case SUM_USM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t15 = pdf->IntegratePDF(mem,FIT_T15,fQ2,PDFSet::XFX,status,fGSLWork);
-         return ( 3.0*sng + 6.0*t3 + 2.0*t8 + t15 )/12.0;
-       }
-       break;
-     case SUM_DSM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t15 = pdf->IntegratePDF(mem,FIT_T15,fQ2,PDFSet::XFX,status,fGSLWork);
-         return ( 3.0*sng - 6.0*t3 + 2.0*t8 + t15)/12.0;
-       }
-       break;
-     case SUM_SSM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t15 = pdf->IntegratePDF(mem,FIT_T15,fQ2,PDFSet::XFX,status,fGSLWork);
-         return ( 3.0*sng - 4.0*t8 + t15)/12.0;
-       }
-       break;
-    case SUM_CSM:
+    case SUM_MSR:
+    {
+      real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
+      real msr = xsng+xglu;
+      if (fQED)
       {
-        real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-        real t15 = pdf->IntegratePDF(mem,FIT_T15,fQ2,PDFSet::XFX,status,fGSLWork);
-        return ( sng - t15)/4.0;
+        real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
+        msr += xgam;
       }
-     default:
-       cerr << "EvolFitBasis::ComputeSumRules error: unknown sum rule"<<endl;
-       exit(-1);
-       break;
+      return msr;
+    }
+    break;
+    case SUM_UVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      real v15 = val;
+      return ( 3.0*val + 6.0*v3 + 2.0*v8 + v15 )/12.0;
+    }
+    break;
+    case SUM_DVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      real v15 = val;
+      return ( 3.0*val - 6.0*v3 + 2.0*v8 + v15 )/12.0;
+    }
+    break;
+    case SUM_SVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      real v15 = val;
+      return ( 3.0*val - 4.0*v8 + v15 )/12.0;
+    }
+    break;
+    case SUM_CVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v15 = val;
+      return ( val - v15 )/4.0;
+    }
+    break;
+
+    case SUM_USM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t15 = pdf->IntegratePDF(mem,FIT_T15,fQ2,PDFSet::XFX,status,fGSLWork);
+      return ( 3.0*sng + 6.0*t3 + 2.0*t8 + t15 )/12.0;
+    }
+    break;
+    case SUM_DSM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t15 = pdf->IntegratePDF(mem,FIT_T15,fQ2,PDFSet::XFX,status,fGSLWork);
+      return ( 3.0*sng - 6.0*t3 + 2.0*t8 + t15)/12.0;
+    }
+    break;
+    case SUM_SSM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t15 = pdf->IntegratePDF(mem,FIT_T15,fQ2,PDFSet::XFX,status,fGSLWork);
+      return ( 3.0*sng - 4.0*t8 + t15)/12.0;
+    }
+    break;
+    case SUM_CSM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t15 = pdf->IntegratePDF(mem,FIT_T15,fQ2,PDFSet::XFX,status,fGSLWork);
+      return ( sng - t15)/4.0;
+    }
+    default:
+    cerr << "EvolFitBasis::ComputeSumRules error: unknown sum rule"<<endl;
+    exit(-1);
+    break;
   }
 }
 
@@ -1475,43 +1476,43 @@ EvolICFitBasis(nnset)
   fPDFNames[NET_CP] = "Charm Sea";
   //fPDFNames[NET_CM] = "Charm Valence";
   if (fQED)
-    fPDFNames[NET_GAM] = "Photon";
+  fPDFNames[NET_GAM] = "Photon";
 }
 
 void NN30ICFitBasis::Preprocess(real const& x, real* pdf, PreprocParam const& par)
 {
-   // Positive definite PDFs
-   for (int i = 0; i < fNPDF; i++)
-     if (fPDFSqrPos[i])
-       pdf[i] *= pdf[i];
+  // Positive definite PDFs
+  for (int i = 0; i < fNPDF; i++)
+  if (fPDFSqrPos[i])
+  pdf[i] *= pdf[i];
 
-   // Transform to evol basis
-   real tmppdf[15];
-   tmppdf[FIT_SNG] = pdf[NET_SNG];
-   tmppdf[FIT_GLU] = pdf[NET_GLU];
-   tmppdf[FIT_VAL] = pdf[NET_VAL];
-   tmppdf[FIT_V3] = pdf[NET_T3]+2*pdf[NET_DS];
-   tmppdf[FIT_V8] = pdf[NET_VAL]-3*pdf[NET_SM]; //-pdf[NET_CM];
-   tmppdf[FIT_T3] = pdf[NET_T3];
-   tmppdf[FIT_T8] = pdf[NET_SNG]-3*pdf[NET_SP]-pdf[NET_CP];
-   tmppdf[FIT_T15] = pdf[NET_SNG]-4*pdf[NET_CP];
-   if (fQED)
-     tmppdf[FIT_GAM] = pdf[NET_GAM];
+  // Transform to evol basis
+  real tmppdf[15];
+  tmppdf[FIT_SNG] = pdf[NET_SNG];
+  tmppdf[FIT_GLU] = pdf[NET_GLU];
+  tmppdf[FIT_VAL] = pdf[NET_VAL];
+  tmppdf[FIT_V3] = pdf[NET_T3]+2*pdf[NET_DS];
+  tmppdf[FIT_V8] = pdf[NET_VAL]-3*pdf[NET_SM]; //-pdf[NET_CM];
+  tmppdf[FIT_T3] = pdf[NET_T3];
+  tmppdf[FIT_T8] = pdf[NET_SNG]-3*pdf[NET_SP]-pdf[NET_CP];
+  tmppdf[FIT_T15] = pdf[NET_SNG]-4*pdf[NET_CP];
+  if (fQED)
+  tmppdf[FIT_GAM] = pdf[NET_GAM];
 
-   for (int i = 0; i < fNPDF; i++)
-     pdf[i] = tmppdf[i];
+  for (int i = 0; i < fNPDF; i++)
+  pdf[i] = tmppdf[i];
 
-   // Preprocess in evol basis
-   for (int i = 0; i < fNPDF; i++)
-     FitBasis::Preprocess(x,i,pdf[i],par);
+  // Preprocess in evol basis
+  for (int i = 0; i < fNPDF; i++)
+  FitBasis::Preprocess(x,i,pdf[i],par);
 
-   return;
+  return;
 }
 
 void NN30ICFitBasis::NetTransform(int const& fl, int const& nfl, int* transform)
 {
   for (int i = 0; i < nfl; i++)
-    transform[i] = 0;
+  transform[i] = 0;
 
   switch (fl)
   {
@@ -1570,8 +1571,8 @@ void NN30ICFitBasis::NetTransform(int const& fl, int const& nfl, int* transform)
 }
 
 /**
- *  Evolution Fit Basis with c+
- **/
+*  Evolution Fit Basis with c+
+**/
 NN31ICFitBasis::NN31ICFitBasis(NNPDFSettings const& nnset):
 FitBasis(nnset, "NN31ICFitBasis", 8+nnset.IsQED()),
 fQED(nnset.IsQED())
@@ -1586,7 +1587,7 @@ fQED(nnset.IsQED())
   fPDFNames[FIT_T8] = "T8";
   fPDFNames[FIT_CP] = "c+";
   if (fQED)
-    fPDFNames[FIT_GAM] = "Photon";
+  fPDFNames[FIT_GAM] = "Photon";
 
   // Damping factor for arclengths
   fArcDampFactor[FIT_SNG] = 1;
@@ -1598,16 +1599,16 @@ fQED(nnset.IsQED())
   fArcDampFactor[FIT_T8] = 1;
   fArcDampFactor[FIT_CP] = 1;
   if (fQED)
-    fArcDampFactor[FIT_GAM] = 1;
+  fArcDampFactor[FIT_GAM] = 1;
 }
 
 /*!
- * \brief NN31ICFitBasis::ComputeParam
- * \param pdf
- * \param mem
- * \param param
- * \param status
- */
+* \brief NN31ICFitBasis::ComputeParam
+* \param pdf
+* \param mem
+* \param param
+* \param status
+*/
 void NN31ICFitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool &status) const
 {
   // status
@@ -1645,16 +1646,16 @@ void NN31ICFitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, boo
 }
 
 /**
- * @brief EvolFitBasis::BASIS2EVLN
- * @param FIT
- * @param EVLN
- */
+* @brief EvolFitBasis::BASIS2EVLN
+* @param FIT
+* @param EVLN
+*/
 void NN31ICFitBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
 {
   if ( fQED )
-    EVLN[EVLN_GAM] = FIT[FIT_GAM];
+  EVLN[EVLN_GAM] = FIT[FIT_GAM];
   else
-    EVLN[EVLN_GAM] = 0;
+  EVLN[EVLN_GAM] = 0;
 
   EVLN[EVLN_SNG]  = FIT[FIT_SNG]; //Singlet
   EVLN[EVLN_GLU]  = FIT[FIT_GLU]; //Gluon
@@ -1674,10 +1675,10 @@ void NN31ICFitBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
 }
 
 /*!
- * \brief NN31ICFitBasis::EVLN2BASIS
- * \param EVLN
- * \param FIT
- */
+* \brief NN31ICFitBasis::EVLN2BASIS
+* \param EVLN
+* \param FIT
+*/
 void NN31ICFitBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
 {
   // Order in fitting basis
@@ -1696,19 +1697,19 @@ void NN31ICFitBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
   FIT[FIT_CP]   = (EVLN[EVLN_SNG]-EVLN[EVLN_T15])/4;  // T15
 
   if (fQED)
-    FIT[FIT_GAM] =  EVLN[0];  // photon
+  FIT[FIT_GAM] =  EVLN[0];  // photon
 
   return;
 }
 
 /*!
- * \brief NN31ICFitBasis::ComputeSumRules
- * \param rule
- * \param mem
- * \param pdf
- * \param status
- * \return
- */
+* \brief NN31ICFitBasis::ComputeSumRules
+* \param rule
+* \param mem
+* \param pdf
+* \param status
+* \return
+*/
 real NN31ICFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &status) const
 {
   // status
@@ -1716,100 +1717,100 @@ real NN31ICFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &s
 
   // sum rule calculations
   switch (rule) {
-     case SUM_MSR:
-       {
-         real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
-         real msr = xsng+xglu;
-         if (fQED)
-           {
-             real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
-             msr += xgam;
-           }
-         return msr;
-       }
-       break;
-     case SUM_UVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = val;
-         return ( 3.0*val + 6.0*v3 + 2.0*v8 + v15 )/12.0;
-       }
-       break;
-     case SUM_DVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = val;
-         return ( 3.0*val - 6.0*v3 + 2.0*v8 + v15 )/12.0;
-       }
-       break;
-     case SUM_SVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = val;
-         return ( 3.0*val - 4.0*v8 + v15 )/12.0;
-       }
-        break;
-     case SUM_CVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = val;
-         return ( val - v15 )/4.0;
-       }
-        break;
-
-     case SUM_USM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t15 = sng-4*cp;
-         return ( 3.0*sng + 6.0*t3 + 2.0*t8 + t15 )/12.0;
-       }
-       break;
-     case SUM_DSM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t15 = sng-4*cp;
-         return ( 3.0*sng - 6.0*t3 + 2.0*t8 + t15)/12.0;
-       }
-       break;
-     case SUM_SSM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t15 = sng-4*cp;
-         return ( 3.0*sng - 4.0*t8 + t15)/12.0;
-       }
-       break;
-    case SUM_CSM:
+    case SUM_MSR:
+    {
+      real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
+      real msr = xsng+xglu;
+      if (fQED)
       {
-        real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
-        return cp;
+        real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
+        msr += xgam;
       }
-      break;
-     default:
-       cerr << "NN31ICFitBasis::ComputeSumRules error: unknown sum rule"<<endl;
-       exit(-1);
-       break;
+      return msr;
+    }
+    break;
+    case SUM_UVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      real v15 = val;
+      return ( 3.0*val + 6.0*v3 + 2.0*v8 + v15 )/12.0;
+    }
+    break;
+    case SUM_DVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      real v15 = val;
+      return ( 3.0*val - 6.0*v3 + 2.0*v8 + v15 )/12.0;
+    }
+    break;
+    case SUM_SVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      real v15 = val;
+      return ( 3.0*val - 4.0*v8 + v15 )/12.0;
+    }
+    break;
+    case SUM_CVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v15 = val;
+      return ( val - v15 )/4.0;
+    }
+    break;
+
+    case SUM_USM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t15 = sng-4*cp;
+      return ( 3.0*sng + 6.0*t3 + 2.0*t8 + t15 )/12.0;
+    }
+    break;
+    case SUM_DSM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t15 = sng-4*cp;
+      return ( 3.0*sng - 6.0*t3 + 2.0*t8 + t15)/12.0;
+    }
+    break;
+    case SUM_SSM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t15 = sng-4*cp;
+      return ( 3.0*sng - 4.0*t8 + t15)/12.0;
+    }
+    break;
+    case SUM_CSM:
+    {
+      real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
+      return cp;
+    }
+    break;
+    default:
+    cerr << "NN31ICFitBasis::ComputeSumRules error: unknown sum rule"<<endl;
+    exit(-1);
+    break;
   }
 }
 
 // ***********************************************************************************
 
 /**
- *  Evolution Fit Basis with c+
- **/
+*  Evolution Fit Basis with c+
+**/
 NoSumRuleBasis::NoSumRuleBasis(NNPDFSettings const& nnset):
 FitBasis(nnset, "NoSumRuleBasis", 8)
 {
@@ -1835,12 +1836,12 @@ FitBasis(nnset, "NoSumRuleBasis", 8)
 }
 
 /*!
- * \brief NoSumRuleBasis::ComputeParam
- * \param pdf
- * \param mem
- * \param param
- * \param status
- */
+* \brief NoSumRuleBasis::ComputeParam
+* \param pdf
+* \param mem
+* \param param
+* \param status
+*/
 void NoSumRuleBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool &status) const
 {
   // Clear old normalisations
@@ -1853,10 +1854,10 @@ void NoSumRuleBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, boo
 }
 
 /**
- * @brief EvolFitBasis::BASIS2EVLN
- * @param FIT
- * @param EVLN
- */
+* @brief EvolFitBasis::BASIS2EVLN
+* @param FIT
+* @param EVLN
+*/
 void NoSumRuleBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
 {
   EVLN[EVLN_GAM] = 0;
@@ -1878,10 +1879,10 @@ void NoSumRuleBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
 }
 
 /*!
- * \brief NoSumRuleBasis::EVLN2BASIS
- * \param EVLN
- * \param FIT
- */
+* \brief NoSumRuleBasis::EVLN2BASIS
+* \param EVLN
+* \param FIT
+*/
 void NoSumRuleBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
 {
   // Order in fitting basis
@@ -1903,13 +1904,13 @@ void NoSumRuleBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
 }
 
 /*!
- * \brief NoSumRuleBasis::ComputeSumRules
- * \param rule
- * \param mem
- * \param pdf
- * \param status
- * \return
- */
+* \brief NoSumRuleBasis::ComputeSumRules
+* \param rule
+* \param mem
+* \param pdf
+* \param status
+* \return
+*/
 real NoSumRuleBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &status) const
 {
   // status
@@ -1917,86 +1918,230 @@ real NoSumRuleBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &s
 
   // sum rule calculations
   switch (rule) {
-     case SUM_MSR:
-       {
-         real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
-         real msr = xsng+xglu;
-         return msr;
-       }
-       break;
-     case SUM_UVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = val;
-         return ( 3.0*val + 6.0*v3 + 2.0*v8 + v15 )/12.0;
-       }
-       break;
-     case SUM_DVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = val;
-         return ( 3.0*val - 6.0*v3 + 2.0*v8 + v15 )/12.0;
-       }
-       break;
-     case SUM_SVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = val;
-         return ( 3.0*val - 4.0*v8 + v15 )/12.0;
-       }
-        break;
-     case SUM_CVL:
-       {
-         real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
-         real v15 = val;
-         return ( val - v15 )/4.0;
-       }
-        break;
+    case SUM_MSR:
+    {
+      real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
+      real msr = xsng+xglu;
+      return msr;
+    }
+    break;
+    case SUM_UVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      real v15 = val;
+      return ( 3.0*val + 6.0*v3 + 2.0*v8 + v15 )/12.0;
+    }
+    break;
+    case SUM_DVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v3 = pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      real v15 = val;
+      return ( 3.0*val - 6.0*v3 + 2.0*v8 + v15 )/12.0;
+    }
+    break;
+    case SUM_SVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v8 = pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork);
+      real v15 = val;
+      return ( 3.0*val - 4.0*v8 + v15 )/12.0;
+    }
+    break;
+    case SUM_CVL:
+    {
+      real val = pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork);
+      real v15 = val;
+      return ( val - v15 )/4.0;
+    }
+    break;
 
-     case SUM_USM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t15 = sng-4*cp;
-         return ( 3.0*sng + 6.0*t3 + 2.0*t8 + t15 )/12.0;
-       }
-       break;
-     case SUM_DSM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t15 = sng-4*cp;
-         return ( 3.0*sng - 6.0*t3 + 2.0*t8 + t15)/12.0;
-       }
-       break;
-     case SUM_SSM:
-       {
-         real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
-         real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
-         real t15 = sng-4*cp;
-         return ( 3.0*sng - 4.0*t8 + t15)/12.0;
-       }
-       break;
+    case SUM_USM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t15 = sng-4*cp;
+      return ( 3.0*sng + 6.0*t3 + 2.0*t8 + t15 )/12.0;
+    }
+    break;
+    case SUM_DSM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t3 = pdf->IntegratePDF(mem,FIT_T3,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t15 = sng-4*cp;
+      return ( 3.0*sng - 6.0*t3 + 2.0*t8 + t15)/12.0;
+    }
+    break;
+    case SUM_SSM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t15 = sng-4*cp;
+      return ( 3.0*sng - 4.0*t8 + t15)/12.0;
+    }
+    break;
     case SUM_CSM:
+    {
+      real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
+      return cp;
+    }
+    break;
+    default:
+    cerr << "NoSumRuleBasis::ComputeSumRules error: unknown sum rule"<<endl;
+    exit(-1);
+    break;
+  }
+}
+
+// ****************** DIS EVOLUTION BASIS *************************
+
+
+/**
+*  Evolution Fit Basis
+**/
+DISEvolFitBasis::DISEvolFitBasis(NNPDFSettings const& nnset):
+FitBasis(nnset, "DISEvolFitBasis", 3+nnset.IsQED()),
+fQED(nnset.IsQED())
+{
+  // PDF Names for plotting
+  fPDFNames[FIT_SNG] = "Singlet";
+  fPDFNames[FIT_GLU] = "Gluon";
+  fPDFNames[FIT_T8] = "T8";
+  if (fQED)
+  fPDFNames[FIT_GAM] = "Photon";
+
+  // Damping factor for arclengths
+  fArcDampFactor[FIT_SNG] = 1;
+  fArcDampFactor[FIT_GLU] = 1;
+  fArcDampFactor[FIT_T8] = 1;
+  if (fQED)
+  fArcDampFactor[FIT_GAM] = 1;
+
+}
+/*
+void EvolFitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool &status) const
+{
+// status
+status = false;
+
+// Clear old normalisations
+for (int i=0; i<fNPDF; i++)
+{
+param.fPDFNorm[i] = 1.0;
+param.fPDFAux[i] = 0.0;
+}
+
+// Normalisations pointer
+real* norm = param.fPDFNorm;
+
+// Quantum number sum rules
+norm[FIT_VAL] = 3.0f/pdf->IntegratePDF(mem,FIT_VAL,fQ2,PDFSet::FX,status,fGSLWork); // Total valence
+norm[FIT_V3] = 1.0f/pdf->IntegratePDF(mem,FIT_V3,fQ2,PDFSet::FX,status,fGSLWork); // V3
+norm[FIT_V8] = 3.0f/pdf->IntegratePDF(mem,FIT_V8,fQ2,PDFSet::FX,status,fGSLWork); // V8
+
+// ************ QED dependent normalisations **************
+if (fQED)
+{
+norm[FIT_GLU] = (1-pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork) - pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork))
+/ pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
+}
+else
+{
+norm[FIT_GLU] = (1-pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork))/
+pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
+}
+
+return;
+
+}
+*/
+/**
+* @brief EvolFitBasis::BASIS2EVLN
+* @param FIT
+* @param EVLN
+*/
+void DISEvolFitBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
+{
+  if ( fQED )
+  EVLN[EVLN_GAM] = FIT[FIT_GAM];
+  else
+  EVLN[EVLN_GAM] = 0;
+
+  EVLN[EVLN_SNG]  = FIT[FIT_SNG]; //Singlet
+  EVLN[EVLN_GLU]  = FIT[FIT_GLU]; //Gluon
+  EVLN[EVLN_VAL]  = 0;//FIT[FIT_VAL]; //Valence
+  EVLN[EVLN_V3]   = 0;//FIT[FIT_V3];  //V3
+  EVLN[EVLN_V8]   = 0;//FIT[FIT_V8];  //V8
+  EVLN[EVLN_V15]  = 0;//FIT[FIT_VAL]; //V15 = V
+  EVLN[EVLN_V24]  = 0;//FIT[FIT_VAL]; //V24 = V
+  EVLN[EVLN_V35]  = 0;//FIT[FIT_VAL]; //V35 = V
+  EVLN[EVLN_T3]   = 0;//FIT[FIT_T3];  //T3
+  EVLN[EVLN_T8]   = FIT[FIT_T8];  //T8
+  EVLN[EVLN_T15]  = FIT[FIT_SNG]; //T15 = S
+  EVLN[EVLN_T24]  = FIT[FIT_SNG]; //T24 = S
+  EVLN[EVLN_T35]  = FIT[FIT_SNG]; //T35 = S
+
+  return;
+}
+
+void DISEvolFitBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
+{
+  // Order in fitting basis
+  // S g V V3 V8 T3 T8 gam
+
+  // Order in Evln bassi
+  // γ, Σ, g, V, V3, V8, V15, V24, V35, T3, T8, T15, T24, T35
+
+  FIT[FIT_SNG]  = EVLN[EVLN_SNG]; //Singlet
+  FIT[FIT_GLU]  = EVLN[EVLN_GLU]; //gluon
+  FIT[FIT_T8]   = EVLN[EVLN_T8]; // T8
+
+  if (fQED)
+  FIT[FIT_GAM] =  EVLN[0];  // photon
+
+  return;
+}
+
+real DISEvolFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &status) const
+{
+  // status
+  status = false;
+
+  // sum rule calculations
+  switch (rule) {
+    case SUM_MSR:
+    {
+      real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
+      real msr = xsng+xglu;
+      if (fQED)
       {
-        real cp = pdf->IntegratePDF(mem,FIT_CP,fQ2,PDFSet::XFX,status,fGSLWork);
-        return cp;
+        real xgam = pdf->IntegratePDF(mem,FIT_GAM,fQ2,PDFSet::XFX,status,fGSLWork);
+        msr += xgam;
       }
-      break;
-     default:
-       cerr << "NoSumRuleBasis::ComputeSumRules error: unknown sum rule"<<endl;
-       exit(-1);
-       break;
+      return msr;
+    }
+    break;
+
+    case SUM_SSM:
+    {
+      real sng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+      real t8 = pdf->IntegratePDF(mem,FIT_T8,fQ2,PDFSet::XFX,status,fGSLWork);
+      return ( sng - t8 )/3.0;
+    }
+    break;
+    default:
+    cerr << "EvolFitBasis::ComputeSumRules error: unknown sum rule"<<endl;
+    exit(-1);
+    break;
   }
 }
