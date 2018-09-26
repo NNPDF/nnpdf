@@ -42,7 +42,7 @@ namespace NNPDF
     std::string const& GetSetName(int i) const { return fSets[i].GetSetName(); } //!< Return the dataset name
 
     int  GetNData() const { return fNData; }                  //!< Return the number of points in the experiment
-    const double* GetData() const { return fData; }
+    const double* GetData() const { return fData.data(); }
 
     bool IsArtificial() const { return fIsArtificial; }       //!< Return the artificial flag
     bool IsClosure() const { return fIsClosure; }             //!< Return the artificial flag
@@ -68,7 +68,7 @@ namespace NNPDF
     int fNData;        //!< Number of data points
     int fNSys;      //!< Number of additive systematics correlations
 
-    double *fData;                    //!< The experimental data
+    std::vector<double> fData;        //!< The experimental data
     std::vector<double> fT0Pred;      //!< The t0 predictions
     std::vector<double> fSqrtWeights; //!< The weights
 
@@ -76,7 +76,7 @@ namespace NNPDF
     matrix<double> fSqrtCov;   //!< The Cholesky decomposition of the covariance matrix
 
     std::vector<double> fStat; //!< The statistical errors
-    sysError **fSys;    //!< The syscor
+    sysError **fSys;           //!< The syscor
 
     int **fSetSysMap;    //!< Map for ordering of systematics in datasets
 
