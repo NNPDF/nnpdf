@@ -9,6 +9,7 @@ Created on Wed Mar  9 15:19:52 2016
 from __future__ import generator_stop
 
 from collections import namedtuple, OrderedDict
+import enum
 import functools
 import inspect
 import logging
@@ -311,8 +312,11 @@ class ExperimentInput(TupleComp):
     def __str__(self):
         return self.name
 
-
-
+#TODO: Not sure I like these
+class CutsPolicy(enum.Enum):
+    INTERNAL = "INTERNAL"
+    NOCUTS = "NOCUTS"
+    FROMFIT = "FROMFIT"
 
 class Cuts(TupleComp):
     def __init__(self, name, path):

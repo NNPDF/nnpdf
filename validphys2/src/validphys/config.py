@@ -18,7 +18,7 @@ from reportengine.configparser import ConfigError, element_of, _parse_func
 from reportengine.helputils import get_parser_type
 from reportengine import report
 
-from validphys.core import ExperimentSpec, DataSetInput, ExperimentInput
+from validphys.core import ExperimentSpec, DataSetInput, ExperimentInput, CutsPolicy
 from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFoundError,
                               PDFNotFound, FallbackLoader)
 from validphys.gridvalues import LUMI_CHANNELS
@@ -132,14 +132,39 @@ class CoreConfig(configparser.Config):
                               self.loader.available_theories,
                               display_alternatives='all')
 
-    def parse_use_cuts(self, use_cuts:bool, *, fit=None):
-        """Whether to use the filtered points in the fit, or the whole
-        data in the dataset."""
-        if use_cuts and not fit:
-            raise ConfigError("Setting 'use_cuts' true requires "
+    def parse_use_cuts(self, use_cuts:(bool,str), *, fit=None):
+        """Whether to filter the points based on the cuts applied in the fit,
+        or the whole data in the dataset. The possible options are:
+
+        - internal: Calculate the cuts based on the existing rules. This is
+          the default.
+
+        - fromfit: Read the cuts stored in the fit.
+
+        - nocuts: Use the whole dataset.
+        """
+        #The lower is an aesthetic preference...
+        valid_cuts = {c.value.lower() for c in CutsPolicy}
+        if isinstance(use_cuts, bool):
+            if use_cuts:
+                res = CutsPolicy.FROMFIT
+            else:
+                res = CutsPolicy.NOCUTS
+            log.warn("Setting a boolean for `use_cuts` is deprecated. "
+                     f"The available values are {valid_cuts} and the default "
+                     f"value is 'internal'. Your input ('{use_cuts}') is "
+                     f"equivalent to '{res}'.")
+        elif isinstance(use_cuts, str) and use_cuts in valid_cuts:
+            res = CutsPolicy[use_cuts.upper()]
+        else:
+            raise ConfigError(f"Invalid use_cuts setting: '{use_cuts}'.", use_cuts, valid_cuts)
+
+        if res==CutsPolicy.FROMFIT and not fit:
+            raise ConfigError("Setting 'use_cuts' to 'fromfit' requires "
             "specifying a fit on which filter "
             "has been executed, e.g.\nfit : NNPDF30_nlo_as_0118")
-        return use_cuts
+
+        return res
 
     #TODO: load fit config from here
     @element_of('fits')
