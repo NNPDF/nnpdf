@@ -11,6 +11,7 @@ import sys
 import pathlib
 import functools
 import logging
+import numbers
 import re
 import tempfile
 import shutil
@@ -25,7 +26,8 @@ from reportengine import filefinder
 
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts,
-                            peek_commondata_metadata)
+                            peek_commondata_metadata, CutsPolicy,
+                            InternalCutsWrapper)
 from validphys import lhaindex
 import NNPDF as nnpath
 
@@ -369,10 +371,12 @@ class Loader(LoaderBase):
                       sysnum=None,
                       theoryid,
                       cfac=(),
-                      use_cuts,
+                      cuts=CutsPolicy.INTERNAL,
                       use_fitcommondata=False,
                       fit=None,
-                      weight=1):
+                      weight=1,
+                      q2min=None,
+                      w2min=None):
 
         if not isinstance(theoryid, TheoryIDSpec):
             theoryid = self.check_theoryID(theoryid)
@@ -387,10 +391,18 @@ class Loader(LoaderBase):
             fkspec = self.check_fktable(theoryno, name, cfac)
             op = None
 
-        if use_cuts:
-            cuts = self.check_cuts(name, fit)
-        else:
-            cuts = None
+        #Note this is simply for convenience when scripting. The config will
+        #construct the actual Cuts object by itself
+        if isinstance(cuts, CutsPolicy):
+            if cuts is CutsPolicy.NOCUTS:
+                cuts = None
+            elif cuts is CutsPolicy.FROMFIT:
+                cuts = self.check_fit_cuts(name, fit)
+            elif cuts is CutsPolicy.INTERNAL:
+                full_ds = DataSetSpec(name=name, commondata=commondata,
+                           fkspecs=fkspec, thspec=theoryid, cuts=None,
+                           op=op, weight=weight)
+                cuts = self.check_internal_cuts(full_ds, q2min, w2min)
 
         return DataSetSpec(name=name, commondata=commondata,
                            fkspecs=fkspec, thspec=theoryid, cuts=cuts,
@@ -404,7 +416,7 @@ class Loader(LoaderBase):
     def get_pdf(self, name):
         return self.check_pdf(name).load()
 
-    def check_cuts(self, setname, fit):
+    def check_fit_cuts(self, setname, fit):
         if fit is None:
             raise TypeError("Must specify a fit to use the cuts.")
         if not isinstance(fit, FitSpec):
@@ -418,6 +430,14 @@ class Loader(LoaderBase):
             return None
         return Cuts(setname, p)
 
+    def check_internal_cuts(self, full_ds, q2min, w2min):
+        if full_ds.cuts is not None:
+            raise TypeError("full_ds must have empty cuts")
+        if not isinstance(q2min, numbers.Number):
+            raise TypeError("q2min must be a number")
+        if not isinstance(w2min, numbers.Number):
+            raise TypeError("w2min must be a number")
+        return InternalCutsWrapper(full_ds, q2min, w2min)
 
     def get_cuts(self, setname, fit):
         cuts = self.check_cuts(setname, fit)

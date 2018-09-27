@@ -28,7 +28,9 @@ from NNPDF import (LHAPDFSet,
     Experiment,
     PositivitySet,)
 
-from validphys import lhaindex
+#TODO: There is a bit of a circular dependency between filters.py and this.
+#Maybe move the cuts logic to its own module?
+from validphys import lhaindex, filters
 
 log = logging.getLogger(__name__)
 
@@ -328,6 +330,20 @@ class Cuts(TupleComp):
     def load(self):
         log.debug("Loading cuts for %s", self.name)
         return np.atleast_1d(np.loadtxt(self.path, dtype=int))
+
+class InternalCutsWrapper(TupleComp):
+    def __init__(self, full_ds, q2min, w2min):
+        self.full_ds = full_ds
+        self.q2min = q2min
+        self.w2min = w2min
+        super().__init__(full_ds, q2min, w2min)
+
+    def load(self):
+        return np.atleast_1d(
+            np.asarray(
+                filters.get_cuts_for_dataset(self.full_ds, self.q2min,
+                                             self.w2min),
+                dtype=int))
 
 def cut_mask(cuts):
     """Return an objects that will act as the cuts when applied as a slice"""
