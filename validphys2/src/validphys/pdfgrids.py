@@ -180,6 +180,7 @@ def lumigrid1d(pdf:PDF, lumi_channel, sqrts:numbers.Real, nbins_m:int=30):
 
 
 lumigrids1d = collect('lumigrid1d', ['lumi_channels'])
+pdfs_lumis = collect('lumigrid1d', ('pdfs',))
 
 
 @check_pdf_normalize_to

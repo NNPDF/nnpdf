@@ -32,13 +32,13 @@ requirements:
         - apfel
         - pkg-config
         - python # requirements for validphys
-        - reportengine >=0.25 # see https://github.com/NNPDF/reportengine
+        - reportengine >=0.26 # see https://github.com/NNPDF/reportengine
         - matplotlib >=2.0.1
         - blessings
         - scipy >=0.19.1
         - pandas =0.23
         - requests
-        - prompt_toolkit
+        - prompt_toolkit =1
 
 test:
     requires:
