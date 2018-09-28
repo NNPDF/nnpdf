@@ -393,6 +393,8 @@ class Loader(LoaderBase):
 
         #Note this is simply for convenience when scripting. The config will
         #construct the actual Cuts object by itself
+        if isinstance(cuts, str):
+            cuts = CutsPolicy(cuts)
         if isinstance(cuts, CutsPolicy):
             if cuts is CutsPolicy.NOCUTS:
                 cuts = None
