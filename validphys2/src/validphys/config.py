@@ -132,7 +132,7 @@ class CoreConfig(configparser.Config):
                               self.loader.available_theories,
                               display_alternatives='all')
 
-    def parse_use_cuts(self, use_cuts:(bool,str), *, fit=None):
+    def parse_use_cuts(self, use_cuts: (bool, str)):
         """Whether to filter the points based on the cuts applied in the fit,
         or the whole data in the dataset. The possible options are:
 
@@ -144,27 +144,25 @@ class CoreConfig(configparser.Config):
         - nocuts: Use the whole dataset.
         """
         #The lower is an aesthetic preference...
-        valid_cuts = {c.value.lower() for c in CutsPolicy}
+        valid_cuts = {c.value for c in CutsPolicy}
         if isinstance(use_cuts, bool):
             if use_cuts:
                 res = CutsPolicy.FROMFIT
             else:
                 res = CutsPolicy.NOCUTS
-            log.warn("Setting a boolean for `use_cuts` is deprecated. "
-                     f"The available values are {valid_cuts} and the default "
-                     f"value is 'internal'. Your input ('{use_cuts}') is "
-                     f"equivalent to '{res}'.")
+            log.warning(
+                "Setting a boolean for `use_cuts` is deprecated. "
+                f"The available values are {valid_cuts} and the default "
+                f"value is 'internal'. Your input ('{use_cuts}') is "
+                f"equivalent to '{res}'.")
         elif isinstance(use_cuts, str) and use_cuts in valid_cuts:
-            res = CutsPolicy[use_cuts.upper()]
+            res = CutsPolicy(use_cuts)
         else:
-            raise ConfigError(f"Invalid use_cuts setting: '{use_cuts}'.", use_cuts, valid_cuts)
-
-        if res==CutsPolicy.FROMFIT and not fit:
-            raise ConfigError("Setting 'use_cuts' to 'fromfit' requires "
-            "specifying a fit on which filter "
-            "has been executed, e.g.\nfit : NNPDF30_nlo_as_0118")
+            raise ConfigError(f"Invalid use_cuts setting: '{use_cuts}'.",
+                              use_cuts, valid_cuts)
 
         return res
+
 
     #TODO: load fit config from here
     @element_of('fits')
@@ -269,19 +267,26 @@ class CoreConfig(configparser.Config):
         except LoadFailedError as e:
             raise ConfigError(e) from e
 
-    #TODO: Decide how should this interact with use_cuts
-    def produce_cuts(self, *, dataset_input, use_cuts, fit=None,
-                     q2min:(numbers.Number, type(None))=None,
-                     w2min:(numbers.Number, type(None))=None,
+    def produce_cuts(self,
+                     *,
+                     dataset_input,
+                     use_cuts,
+                     fit=None,
+                     q2min: (numbers.Number, type(None)) = None,
+                     w2min: (numbers.Number, type(None)) = None,
                      theoryid=None,
-                     use_fitcommondata=False
-                     ):
+                     use_fitcommondata=False):
         """Obtain cuts for a given dataset input, based on the
         appropriate policy."""
         #TODO: Put this bit of logic into loader.check_cuts
         if use_cuts is CutsPolicy.NOCUTS:
             return None
         elif use_cuts is CutsPolicy.FROMFIT:
+            if not fit:
+                raise ConfigError(
+                    "Setting 'use_cuts' to 'fromfit' requires "
+                    "specifying a fit on which filter "
+                    "has been executed, e.g.\nfit : NNPDF30_nlo_as_0118")
             name = dataset_input.name
             try:
                 return self.loader.check_fit_cuts(name, fit)
@@ -293,10 +298,14 @@ class CoreConfig(configparser.Config):
             if not isinstance(w2min, numbers.Number):
                 raise ConfigError("w2min must be specified for internal cuts")
             if not theoryid:
-                raise ConfigError("thoeryid must be specified for internal cuts")
-            full_ds = self.produce_dataset(dataset_input=dataset_input, theoryid=theoryid, cuts=None,
-                                           use_fitcommondata=use_fitcommondata,
-                                           fit=fit)
+                raise ConfigError(
+                    "thoeryid must be specified for internal cuts")
+            full_ds = self.produce_dataset(
+                dataset_input=dataset_input,
+                theoryid=theoryid,
+                cuts=None,
+                use_fitcommondata=use_fitcommondata,
+                fit=fit)
             return self.loader.check_internal_cuts(full_ds, q2min, w2min)
         raise TypeError("Wrong use_cuts")
 

@@ -316,9 +316,9 @@ class ExperimentInput(TupleComp):
 
 #TODO: Not sure I like these
 class CutsPolicy(enum.Enum):
-    INTERNAL = "INTERNAL"
-    NOCUTS = "NOCUTS"
-    FROMFIT = "FROMFIT"
+    INTERNAL = "internal"
+    NOCUTS = "nocuts"
+    FROMFIT = "fromfit"
 
 class Cuts(TupleComp):
     def __init__(self, name, path):
