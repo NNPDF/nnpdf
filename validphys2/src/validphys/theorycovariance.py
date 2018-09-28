@@ -375,11 +375,6 @@ def chi2_impact_by_type(theory_covmat_by_type, experiments_covmat, experiments_r
     chi2 = chi2_impact(theory_covmat_by_type, experiments_covmat, experiments_results)
     return chi2
 
-def chi2_diag_only(theory_covmat, experiments_covmat, data_theory_diff):
-    """ Returns total chi2 including only diags of theory cov mat """
-    s = theory_covmat.values
-    s_diag = np.zeros((len(data_theory_diff),len(data_theory_diff)))
-
 def theory_diagcovmat(theory_covmat):
     """Returns theory covmat with only diagonal values"""
     s = theory_covmat.values
