@@ -185,6 +185,8 @@ def combine_by_type(process_lookup, each_dataset_results_bytheory, dataset_names
     return theories_by_process, ordered_names, dataset_size
  
 def process_starting_points(combine_by_type):
+    """Returns a dictionary of indices in the covariance matrix corresponding
+    to the starting point of each process."""
     theories_by_process = combine_by_type[0]
     running_index = 0
     start_proc = defaultdict(list)
