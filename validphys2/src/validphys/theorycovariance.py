@@ -32,12 +32,14 @@ fits_experiments_central_values = collect(experiments_central_values, ('fits','f
 
 @make_argcheck
 def _check_allowed_theory_number(theoryids):
+    """Checks that an expected number of theories (3, 5, 7 or 9) have been provided"""
     l = len(theoryids)
     if l!=3 and l!=5 and l!=7 and l!=9:
         raise CheckError(f"Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
 
 @make_argcheck
 def _check_five_theories_scheme(theoryids, fivetheories):
+    """Checks that a scheme of bar or nobar is specified when 5 theories are inputted"""
     l = len(theoryids)
     if l==5:
         check(fivetheories in ('bar', 'nobar'), 
@@ -142,7 +144,7 @@ commondata_experiments = collect('commondata', ['experiments', 'experiment'])
 
 def process_lookup(each_dataset_results_bytheory, commondata_experiments):
     """Produces a dictionary with keys corresponding to dataset names
-    and values corresponding to process types"""
+    and values corresponding to process types."""
     d = {commondata.name: [get_info(commondata).process_description] for commondata in commondata_experiments}
     for key, value in d.items():
         if "Drell-Yan" in value[0]:
@@ -214,6 +216,13 @@ def covmap(combine_by_type, dataset_names):
 @_check_five_theories_scheme  
 def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids, 
                      fivetheories:(str, type(None)) = None):
+    """Produces the sub-matrices of the theory covariance matrix according
+    to a point prescription which matches the number of input theories.
+    If 5 theories are provided, a scheme 'bar' or 'nobar' must be 
+    chosen in the runcard in order to specify the prescription. Sub-matrices
+    correspond to applying the scale variation prescription to each pair of 
+    processes in turn, using a different procedure for the case where the
+    processes are the same relative to when they are different."""
     l = len(theoryids)
     start_proc = process_starting_points
     covmats = defaultdict(list)
