@@ -235,7 +235,7 @@ fit: 160603-r654e559-jr-003
 theoryids:
     - 52
     - 53
-use_cuts : False
+use_cuts : nocuts
 
 experiments:
   - experiment: LHCb
@@ -669,12 +669,12 @@ example the command below results currently in the following output:
 ```
 plot_fancy
 
-Defined in: validphys.plots
+Defined in: validphys.dataplots
 
 Generates: figuregen
 
-plot_fancy(one_or_more_results, dataset, normalize_to:(<class 'int'>,
-  <class 'str'>, <class 'NoneType'>)=None)
+plot_fancy(one_or_more_results, commondata, cuts, normalize_to:
+  (<class 'int'>, <class 'str'>, <class 'NoneType'>) = None)
 
 Read the PLOTTING configuration for the dataset and generate the
 corrspondig data theory plot.
@@ -693,22 +693,36 @@ files.
 
 The following resources are read from the configuration:
 
-    dataset(dict): Dataset specification from the theory and
-  CommonData. Use the cuts from the fit, if provided.
+    dataset_input: The mapping that corresponds to the dataset
+  specifications in the fit files
+  [Used by commondata]
 
     theoryid: A number corresponding to the database theory ID where
   the corresponding theory folder is installed in te data directory.
   Either just an id (str or int), or a mapping with 'id' and 'label'.
-  [Used by dataset]
+  [Used by cuts]
 
-    use_cuts(bool): Whether to use the filtered points in the fit, or
-  the whole data in the dataset.
-  [Used by dataset]
+    use_cuts(bool or str): Whether to filter the points based on the
+  cuts applied in the fit, or the whole data in the dataset. The
+  possible options are:
+  
+  - internal: Calculate the cuts based on the existing rules. This
+  is
+    the default.
+  
+  - fromfit: Read the cuts stored in the fit.
+  
+  - nocuts: Use the whole dataset.
+  [Used by cuts]
 
     fit: A fit in the results folder, containing at least a valid
   filter result. Either just an id (str), or a mapping with 'id' and
   'label'.
-  [Used by dataset]
+  [Used by commondata]
+
+    use_fitcommondata(bool): Use the commondata files in the fit
+  instead of those in the data directory.
+  [Used by commondata]
 
     pdfs(list): A list of pdf objects.
   [Used by one_or_more_results]
@@ -719,15 +733,18 @@ The following resources are read from the configuration:
 
     use_t0(bool): Whether to use the t0 PDF set to generate
   covariance matrices.
-  [Used by one_or_more_results]
+  [Used by t0set]
 
     t0pdfset: PDF set used to generate the t0 covmat.
-  [Used by one_or_more_results]
+  [Used by t0set]
 
 The following additionl arguments can be used to control the
 behaviour. They are set by default to sensible values:
 
   normalize_to(int or str or NoneType) = None
+  q2min(Number or NoneType) = None [Used by cuts]
+  w2min(Number or NoneType) = None [Used by cuts]
+  check_plotting(bool) = False [Used by dataset]
 ```
 
 We can see which keys have a special meaning in the configuration file
@@ -754,7 +771,7 @@ pdf: NNPDF30_nlo_as_0118
 
 theoryid: 52
 
-use_cuts: false
+use_cuts: "nocuts"
 
 dataset_input:
     dataset: ATLASWZRAP36PB
@@ -802,10 +819,10 @@ theoryid: 52
 fit: 161222-jr-004
 
 with_cuts:
-  use_cuts: True
+  use_cuts: "fromfit"
 
 without_cuts:
-  use_cuts: False
+  use_cuts: "nocuts"
 
 dataset_input:
     dataset: ATLASWZRAP36PB
@@ -835,11 +852,11 @@ theoryid: 52
 fit: 161222-jr-004
 
 with_cuts:
-  use_cuts: True
+  use_cuts: "fromfit"
   pdf: CT14nlo
 
 without_cuts:
-  use_cuts: False
+  use_cuts: "nocuts"
 
 dataset_input:
     dataset: ATLASWZRAP36PB
@@ -873,10 +890,10 @@ theoryid: 52
 fit: 161222-jr-004
 
 specifications:
-- use_cuts: True
+- use_cuts: "fromfit"
   pdf: CT14nlo
 
-- use_cuts: False
+- use_cuts: "nocuts"
 
 dataset_input:
     dataset: ATLASWZRAP36PB
@@ -912,7 +929,7 @@ pdfs:
 
 theoryid: 52
 
-use_cuts: False
+use_cuts: "nocuts"
 
 dataset_input:
     dataset: ATLASWZRAP36PB
@@ -934,7 +951,7 @@ pdfs:
 
 theoryid: 52
 
-use_cuts: False
+use_cuts: "nocuts"
 
 dataset_input:
     dataset: ATLASWZRAP36PB
@@ -979,7 +996,7 @@ theoryids:
     - 53
 
 with_cuts:
-    use_cuts : False
+    use_cuts : "nocuts"
 
 experiments:
   - experiment: LHCb
@@ -997,10 +1014,10 @@ actions_:
 ```
 
 This will first enter the "*with_cuts*" namespace (thus setting
-`use_cuts=False` for the action), and then loop over all the theories,
-pdfs, experiments and datasets inside each experiment (note that when
-used as a namespace specification, `experiment` refers to the list of
-datasets it contains).
+`use_cuts="nocuts"` for the action), and then loop over all the
+theories, pdfs, experiments and datasets inside each experiment (note
+that when used as a namespace specification, `experiment` refers to
+the list of datasets it contains).
 
 The order over which the looping is done is significative: For one the
 outer specifications must set all the variables required for the inner
@@ -1069,7 +1086,7 @@ that). For example:
 ```yaml
 fit: 161208-jr-003
 
-use_cuts: False
+use_cuts: "nocuts"
 
 description:
     from_: fit
@@ -1125,7 +1142,7 @@ fits:
     - 161222-jr-004
 
 
-use_cuts: False
+use_cuts: "nocuts"
 
 theory:
     from_: fit
@@ -1169,7 +1186,7 @@ fits:
     - 161222-jr-004
 
 
-use_cuts: False
+use_cuts: "nocuts"
 
 
 Q: 10
@@ -1225,7 +1242,7 @@ fits:
     - NNPDF31_nnlo_as_0118_wCMSDY12
     - NNPDF31_nnlo_as_0118_wEMC
 
-use_cuts: True
+use_cuts: "fromfit"
 
 printopts:
     print_common: False
@@ -1609,7 +1626,7 @@ for each theory. We would write:
 
 ```yaml
 fit: NNPDF31_nlo_as_0118_1000
-use_cuts: True
+use_cuts: "fromfit"
 
 dataset_input:
     dataset: NMC
@@ -1645,7 +1662,7 @@ config`), the resulting input cards are simple and powerful. It boils
 down to:
 
 ```yaml
-use_cuts: True
+use_cuts: "fromfit"
 
 experiments:
     from_: fit
@@ -1727,7 +1744,7 @@ meta:
     keywords: test
 
 use_fitcommondata: True
-use_cuts: True
+use_cuts: "fromfit"
 
 fits:
   - {id: 180501-nh-004, label: "Closure fit"}
@@ -2111,15 +2128,15 @@ Consider the example:
 first:
    pdf: NNPDF30_nlo_as_0118
    normalize_to: None
-   use_cuts: False
+   use_cuts: "nocuts"
 
 second:
    pdf: CT14nlo
    normalize_to: CT14nlo
 
 cutspecs:
- - {use_cuts: False}
- - {use_cuts: True}
+ - {use_cuts: "nocuts"}
+ - {use_cuts: "fromfit"}
 
 ```
 
@@ -2130,7 +2147,7 @@ Given the input above, we could form the following `nsspec`.
 This would correspond to a namespace where we have the following
 symbols available:
 
-- `use_cuts` (set to `False`) from `cutspecs`.
+- `use_cuts` (set to `"nocuts"`) from `cutspecs`.
 
 - `pdf` and `normalize_to` (set to CT) from `second`.
 
@@ -2142,7 +2159,7 @@ We could also form the specification:
 (('cutspecs', 1), 'first')
 ```
 Because the innermost specification is last, the value of `use_cuts`
-is `False`.
+is `"nocuts"`.
 
 
 The function `reportengine.namespaces.resolve(ns, nsspec)` returns
@@ -2640,7 +2657,7 @@ fits:
   - NNPDF31_nlo_as_0118
   - NNPDF31_nnlo_as_0118
 
-use_cuts: True
+use_cuts: "fromfit"
 
 actions_:
   - print_fits_experiments_chi2
