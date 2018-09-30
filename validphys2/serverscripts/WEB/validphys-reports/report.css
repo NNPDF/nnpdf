@@ -2,6 +2,11 @@
 	columns: 200px;
 	word-break: break-all;
 }
+
+#taglist > li:nth-child(n+10) {
+	display: none;
+}
+
 h1.title{
     text-align: center;
 }
