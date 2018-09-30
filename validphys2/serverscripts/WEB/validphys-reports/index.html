@@ -21,6 +21,27 @@ var HIGHLIGHT_TAG = 'theory uncertainties';
 
 
 $(document).ready(function() {
+	const show_img = (data, type, row, meta )  => {
+		if (data === null){
+			return '';
+		}
+		return `<img src="${data}" width="150", height="100" />`;
+	};
+	const columns = [null,
+		            null,
+					{"render":
+			            {
+							"_": "0",
+							"type": "1",
+							"sort": "1",
+					    }
+		            },
+					null,
+			       {"render": show_img,
+                   "width": "150"
+			        }
+		           ];
+	const order = [[2, "desc"]];
 	$.getJSON("index.json",
     function(json){
 	  var data = json['data'];
@@ -32,34 +53,14 @@ $(document).ready(function() {
 		'paging': false,
 		'info': false,
 		'searching': false,
-		"order": [[2, "desc"]],
-		"columns": [null,
-		            null,
-					{"render":
-			            {
-							"_": "0",
-							"type": "1",
-							"sort": "1",
-					    }
-		            },
-					null
-		           ]
+		"order": order,
+		"columns": columns
 	  } );
 	  var global_table = $('#global').DataTable( {
 		"data": data,
-		"order": [[2, "desc"]],
+		"order": order,
 		"dom": 'frtipl',
-		"columns": [null,
-		            null,
-					{"render":
-			            {
-							"_": "0",
-							"type": "1",
-							"sort": "1",
-					    }
-		            },
-					null
-		           ]
+		"columns": columns
 	  } );
 	var ul = document.getElementById('taglist');
 	var keywords = json['keywords'];
@@ -137,6 +138,7 @@ function filter_tag(data, tag, now){
                 <th>Author</th>
                 <th>Date</th>
                 <th>Tags</th>
+                <th></th>
             </tr>
         </thead>
     </table>
@@ -152,6 +154,7 @@ function filter_tag(data, tag, now){
                 <th>Author</th>
                 <th>Date</th>
                 <th>Tags</th>
+                <th></th>
             </tr>
         </thead>
     </table>
