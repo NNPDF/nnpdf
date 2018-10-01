@@ -12,7 +12,7 @@ import scipy.linalg as la
 import matplotlib.pyplot as plt
 from matplotlib import cm, colors as mcolors, rcParams as rc
 import pandas as pd
-from collections import defaultdict
+from collections import defaultdict namedtuple
 
 from reportengine.figure import figure
 from reportengine.checks import make_argcheck, CheckError, check
@@ -33,16 +33,16 @@ theoryids_experiments_central_values = collect(experiments_central_values, ('the
 def _check_allowed_theory_number(theoryids):
     """Checks that an expected number of theories (3, 5, 7 or 9) have been provided"""
     l = len(theoryids)
-    if l!=3 and l!=5 and l!=7 and l!=9:
-        raise CheckError(f"Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
+    check(l in {3,5,7}, "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
 
 @make_argcheck
 def _check_five_theories_scheme(theoryids, fivetheories):
     """Checks that a scheme of bar or nobar is specified when 5 theories are inputted"""
     l = len(theoryids)
+    opts = {'bar','nobar'}
     if l==5:
-        check(fivetheories in ('bar', 'nobar'), 
-              "For five input theories a prescription bar or nobar for the flag fivetheories must be specified.")
+        check(fivetheories not None, "For five input theories a prescription bar or nobar for the flag fivetheories must be specified")
+        check(fivetheories in opts, "Invalid choice of prescription for 5 points", fivetheories, opts)
 
 @_check_five_theories_scheme
 @_check_allowed_theory_number
@@ -144,7 +144,9 @@ commondata_experiments = collect('commondata', ['experiments', 'experiment'])
 
 def process_lookup(each_dataset_results_bytheory, commondata_experiments):
     """Produces a dictionary with keys corresponding to dataset names
-    and values corresponding to process types"""
+    and values corresponding to process types. Process types are 
+    regrouped into the four categories 'Drell-Yan', 'Heavy Quarks', Jets'
+    and 'DIS'."""
     d = {commondata.name: [get_info(commondata).process_description] for commondata in commondata_experiments}
     for key, value in d.items():
         if "Drell-Yan" in value[0]:
@@ -182,6 +184,7 @@ def combine_by_type(process_lookup, each_dataset_results_bytheory, dataset_names
         theories_by_process[proc_type].append(theory_centrals)
     for key, item in theories_by_process.items():
         theories_by_process[key] = np.concatenate(item, axis=1)
+    output = namedtuple('process', 'theories datasets size')
     return theories_by_process, ordered_names, dataset_size
 
 
@@ -593,7 +596,7 @@ def plot_normthcovmat_heatmap_custom(theory_normcovmat_custom, theoryids):
     """Matrix plot for block diagonal theory covariance matrix by process type"""
     l = len(theoryids)
     fig = plot_covmat_heatmap(theory_normcovmat_custom, 
-                              "Theory covariance matrix for {0} points".format(l))
+                              f"Theory covariance matrix for {l} points")
     return fig
 
 @figure
@@ -608,7 +611,7 @@ def plot_thcorrmat_heatmap_custom(theory_corrmat_custom, theoryids):
     """Matrix plot of the theory correlation matrix, correlations by process type"""    
     l = len(theoryids)
     fig = plot_corrmat_heatmap(theory_corrmat_custom, 
-                               "Theory correlation matrix for {0} points".format(l))
+                               f"Theory correlation matrix for {l} points")
     return fig
 
 @figure
@@ -623,7 +626,7 @@ def plot_normexpplusthcovmat_heatmap_custom(experimentsplustheory_normcovmat_cus
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
     l = len(theoryids)
     fig = plot_covmat_heatmap(experimentsplustheory_normcovmat_custom, 
-                              "Experiment + theory covariance matrix for {0} points".format(l))
+                              f"Experiment + theory covariance matrix for {l} points")
     return fig
 
 @figure
@@ -637,7 +640,7 @@ def plot_expplusblockthcorrmat_heatmap(experimentsplusblocktheory_corrmat):
 def plot_expplusthcorrmat_heatmap_custom(experimentsplustheory_corrmat_custom, theoryids):
     """Matrix plot of the exp + theory correlation matrix"""
     l = len(theoryids)
-    fig = plot_corrmat_heatmap(experimentsplustheory_corrmat_custom,"Experiment + theory correlation matrix for {0} points".format(l))
+    fig = plot_corrmat_heatmap(experimentsplustheory_corrmat_custom,f"Experiment + theory correlation matrix for {l} points")
     return fig
 
 @figure
@@ -653,7 +656,7 @@ def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat, theory
     l = len(theoryids)
     df = (theory_covmat_custom+experiments_covmat)/np.mean(experiments_covmat.values)
     fig = plot_covmat_heatmap(df, 
-                              "(Theory + experiment)/mean(experiment) covariance matrices for {0} points".format(l))
+                              f"(Theory + experiment)/mean(experiment) covariance matrices for {l} points")
     return fig
 
 @figure
@@ -675,7 +678,7 @@ def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat, experimen
     plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=6)
     ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{|D_i|}$")
     ax.set_ylim([0,0.5])
-    ax.set_title("Square root of diagonal elements of covariances matrices for {0} points, ".format(l)
+    ax.set_title(f"Square root of diagonal elements of covariances matrices for {l} points, "
                  + "normalised to absolute value of data")
     ax.legend()
     return fig
@@ -697,7 +700,7 @@ def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat, experiments_d
     ticklocs, ticklabels = matrix_plot_labels(df_experiment)
     plt.xticks(ticklocs, ticklabels, rotation="vertical")
     ax.set_ylabel(r"$\frac{1}{D_i}\frac{1}{\sqrt{[cov^{-1}_]{ii}}}$")
-    ax.set_title("Diagonal impact of adding theory covariance matrix for {0} points".format(l))
+    ax.set_title(f"Diagonal impact of adding theory covariance matrix for {l} points")
     ax.legend()
     return fig
 
