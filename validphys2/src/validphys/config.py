@@ -191,10 +191,10 @@ class CoreConfig(configparser.Config):
         """Reads closuretest: fakepdf from fit config file and passes as
         pdf
         """
-        _, datacuts = self.parse_from_('fit', 'datacuts', write=False)
-        fakepdf = datacuts['t0pdfset']
-        underlying_law = self.parse_pdf(fakepdf)
-        return {'pdf': underlying_law}
+        with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
+            _, datacuts = self.parse_from_('fit', 'datacuts', write=False)
+        underlyinglaw = datacuts['t0pdfset']
+        return {'pdf': underlyinglaw}
 
 
 
