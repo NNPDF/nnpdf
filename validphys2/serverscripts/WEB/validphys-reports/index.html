@@ -50,6 +50,9 @@ $(document).ready(function() {
 		}
 		return `<img class="lazy" src="thumbnails/loading.gif" data-original="${data}" width="150", height="100" />`;
 	};
+	const space_join = (data, type, row, meta) => {
+		return data.join(", ");
+	};
 	const columns = [null,
 		            null,
 					{"render":
@@ -59,7 +62,7 @@ $(document).ready(function() {
 							"sort": "1",
 					    }
 		            },
-					null,
+				   {"render": space_join},
 			       {"render": show_img,
                    "width": "150"
 			        }
