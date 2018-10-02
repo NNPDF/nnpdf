@@ -39,7 +39,8 @@ providers = [
              'validphys.paramfits.plots',
              'validphys.theorycovariance',
              'validphys.replica_selector',
-             'reportengine.report'
+             'validphys.closure',
+             'reportengine.report',
             ]
 
 log = logging.getLogger(__name__)

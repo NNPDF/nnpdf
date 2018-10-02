@@ -858,7 +858,6 @@ experiments_phi = collect(phi_data_experiment, ('experiments',))
 experiments_pdfs_phi = collect('experiments_phi', ('pdfs',))
 
 experiments_bootstrap_phi = collect(bootstrap_phi_data_experiment, ('experiments',))
-dataspecs_experiments_bootstrap_phi = collect('experiments_bootstrap_phi', ('dataspecs',))
 
 #These are convenient ways to iterate and extract varios data from fits
 fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))
@@ -878,6 +877,7 @@ dataspecs_results = collect('results', ('dataspecs',))
 dataspecs_chi2_data = collect(abs_chi2_data, ('dataspecs', 'experiments', 'experiment'))
 dataspecs_experiment_chi2_data = collect('experiments_chi2', ('dataspecs',))
 dataspecs_total_chi2 = collect('total_experiments_chi2', ('dataspecs',))
+dataspecs_experiments_bootstrap_phi = collect('experiments_bootstrap_phi', ('dataspecs',))
 
 dataspecs_speclabel = collect('speclabel', ('dataspecs',), element_default=None)
 dataspecs_cuts = collect('cuts', ('dataspecs',))
