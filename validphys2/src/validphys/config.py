@@ -191,7 +191,7 @@ class CoreConfig(configparser.Config):
 
 
     @element_of('dataset_inputs')
-    def parse_dataset_input(self, dataset):
+    def parse_dataset_input(self, dataset:Mapping):
         """The mapping that corresponds to the dataset specifications in the
         fit files"""
         known_keys = {'dataset', 'sys', 'cfac', 'frac', 'weight'}
