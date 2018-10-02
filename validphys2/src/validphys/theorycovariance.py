@@ -12,7 +12,7 @@ import scipy.linalg as la
 import matplotlib.pyplot as plt
 from matplotlib import cm, colors as mcolors, rcParams as rc
 import pandas as pd
-from collections import defaultdict namedtuple
+from collections import defaultdict, namedtuple
 
 from reportengine.figure import figure
 from reportengine.checks import make_argcheck, CheckError, check
