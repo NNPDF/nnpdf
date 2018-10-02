@@ -33,7 +33,7 @@ theoryids_experiments_central_values = collect(experiments_central_values, ('the
 def _check_allowed_theory_number(theoryids):
     """Checks that an expected number of theories (3, 5, 7 or 9) have been provided"""
     l = len(theoryids)
-    check(l in {3,5,7}, "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
+    check(l in {3,5,7,9}, "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
 
 @make_argcheck
 def _check_five_theories_scheme(theoryids, fivetheories):
