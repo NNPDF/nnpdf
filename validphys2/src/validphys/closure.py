@@ -31,17 +31,17 @@ def plot_biases(experiments, bias_experiments, closures_speclabel):
     ax.legend()
     return fig
 
-def bias_experiment(experiment_result_closure,
-                    experiment_result_ul):
+def bias_experiment(exp_result_closure,
+                    exp_result_t0):
     """Calculates the bias for all closure fit specified in runcard for
     one experiment. The bias is the chi2 between the level zero closure
     replica and the level zero of the PDF used to generate the data.
     The underlying law is taken to be the same as the PDF used to generate
     the t0 covariance matrix
     """
-    bias_out = np.zeros(len(experiment_result_closure))
-    for i, (ct, ul) in enumerate(zip(experiment_result_closure,
-                                       experiment_result_ul)):
+    bias_out = np.zeros(len(exp_result_closure))
+    for i, (ct, ul) in enumerate(zip(exp_result_closure,
+                                       exp_result_t0)):
         ((dt_ct, th_ct), (_, th_ul)) = ct, ul
         central_diff = th_ct.central_value - th_ul.central_value
         bias_out[i] = calc_chi2(dt_ct.sqrtcovmat, central_diff)/len(dt_ct)
