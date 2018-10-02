@@ -110,7 +110,6 @@ def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
 
-experiments_results = collect(experiment_results, ('experiments',))
 experiments_results_theory = collect('experiments_results', ('theoryids',))
 
 @_check_three_or_seven_theories

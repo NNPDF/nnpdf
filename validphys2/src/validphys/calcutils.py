@@ -110,9 +110,9 @@ def bootstrap_values(data, nresamples, *, boot_seed:int=None,
     `data` is the data which is to be sampled, replicas is assumed to
     be on the final axis e.g N_bins*N_replicas
 
-    `boot_seed` can now be specified if the user wishes to be able to
+    `boot_seed` can be specified if the user wishes to be able to
     take exact same bootstrap samples multiple times, as default it is
-    set as None
+    set as None, in which case a random seed is used.
 
     If just `data` and `nresamples` is provided, then `bootstrap_values`
     creates N resamples of the data, where each resample is a Monte Carlo

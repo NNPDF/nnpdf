@@ -474,7 +474,8 @@ def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples=500):
     return phi_resample
 
 @check_pdf_is_montecarlo
-def bootstrap_chi2_central_experiment(experiment_results, bootstrap_samples=500, boot_seed=123):
+def bootstrap_chi2_central_experiment(experiment_results, bootstrap_samples=500,
+                                      boot_seed=123):
     """Takes the data result and theory prediction for a given experiment and
     then returns a bootstrap distribution of central chi2.
     By default `bootstrap_samples` is set to a sensible value (500). However
@@ -482,8 +483,9 @@ def bootstrap_chi2_central_experiment(experiment_results, bootstrap_samples=500,
     """
     dt, th = experiment_results
     diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
-    chi2_central_resample = bootstrap_values(diff, bootstrap_samples, boot_seed=boot_seed, apply_func=(lambda x, y: calc_chi2(y, x.mean(axis=1))),
-                                    args=[dt.sqrtcovmat])
+    cchi2 = lambda x, y: calc_chi2(y, x.mean(axis=1))
+    chi2_central_resample = bootstrap_values(diff, bootstrap_samples, boot_seed=boot_seed,
+                                             apply_func=(cchi2), args=[dt.sqrtcovmat])
     return chi2_central_resample
 
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
