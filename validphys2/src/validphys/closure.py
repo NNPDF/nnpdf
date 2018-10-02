@@ -36,6 +36,8 @@ def bias_experiment(experiment_result_closure,
     """Calculates the bias for all closure fit specified in runcard for
     one experiment. The bias is the chi2 between the level zero closure
     replica and the level zero of the PDF used to generate the data.
+    The underlying law is taken to be the same as the PDF used to generate
+    the t0 covariance matrix
     """
     bias_out = np.zeros(len(experiment_result_closure))
     for i, (ct, ul) in enumerate(zip(experiment_result_closure,
@@ -49,8 +51,7 @@ def bias_experiment(experiment_result_closure,
 
 closures_speclabel = collect('speclabel', ('closures',), element_default=None)
 
-experiment_result_closure = collect(experiment_results, ('closures',))
-#closures_ul = collect('closures', 'fitunderlyinglaw',)
-experiment_result_ul = collect(experiment_results, ('closures', 'fitunderlyinglaw',))
+exp_result_closure = collect(experiment_results, ('closures',))
+exp_result_t0 = collect(experiment_results, ('closures', 'fitunderlyinglaw',))
 
 bias_experiments = collect(bias_experiment, ('experiments',))
