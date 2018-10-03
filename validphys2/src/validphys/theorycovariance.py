@@ -10,12 +10,12 @@ import logging
 import numpy as np
 import scipy.linalg as la
 import matplotlib.pyplot as plt
-from matplotlib import cm, colors as mcolors, rcParams as rc
+from matplotlib import cm, colors as mcolors
 import pandas as pd
-from collections import defaultdict, namedtuple
+from collections import defaultdict
 
 from reportengine.figure import figure
-from reportengine.checks import make_argcheck, CheckError, check
+from reportengine.checks import make_argcheck, check
 from reportengine.table import table
 from reportengine import collect
 
@@ -41,7 +41,7 @@ def _check_five_theories_scheme(theoryids, fivetheories):
     l = len(theoryids)
     opts = {'bar','nobar'}
     if l==5:
-        check(fivetheories not None, "For five input theories a prescription bar or nobar for the flag fivetheories must be specified")
+        check(fivetheories is not None, "For five input theories a prescription bar or nobar for the flag fivetheories must be specified")
         check(fivetheories in opts, "Invalid choice of prescription for 5 points", fivetheories, opts)
 
 @_check_five_theories_scheme
@@ -184,7 +184,6 @@ def combine_by_type(process_lookup, each_dataset_results_bytheory, dataset_names
         theories_by_process[proc_type].append(theory_centrals)
     for key, item in theories_by_process.items():
         theories_by_process[key] = np.concatenate(item, axis=1)
-    output = namedtuple('process', 'theories datasets size')
     return theories_by_process, ordered_names, dataset_size
 
 
@@ -217,7 +216,7 @@ def covmap(combine_by_type, dataset_names):
         for i in range(dataset_size[dataset]):
             mapping[start+i] = start_exp[dataset] + i 
         start += dataset_size[dataset]
-   return mapping  
+    return mapping  
 
 @_check_five_theories_scheme  
 def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids, 
@@ -281,7 +280,7 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
                                 np.outer((deltas1[2]+deltas1[3]), (deltas2[2]+deltas2[3])))
                 start_locs = (start_proc[name1], start_proc[name2])
                 covmats[start_locs] = s
-return covmats
+    return covmats
 
 def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     """Takes the individual sub-covmats between each two processes and assembles
@@ -297,7 +296,7 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
         for j in range(matlength):
             cov_by_exp[covmap[i]][covmap[j]] = mat[i][j]
     df = pd.DataFrame(cov_by_exp, index=experiments_index, columns=experiments_index)
-return df
+    return df
 
 @_check_allowed_theory_number
 def total_covmat_diagtheory_experiments(experiments_results_theory, theoryids):
@@ -381,7 +380,7 @@ def experimentsplusblocktheory_covmat(experiments_covmat, theory_block_diag_covm
 def experimentsplustheory_covmat_custom(experiments_covmat, theory_covmat_custom):
     """Calculates the experiment + theory covariance matrix for scale variations correlated
     according to the relevant prescription."""
-    df = experiments_covmat + theory_covmatcustom
+    df = experiments_covmat + theory_covmat_custom
     return df
 
 @table
@@ -485,10 +484,10 @@ def abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_datasets):
     """ Returns an array of tuples (member_chi², central_chi², numpoints)
     corresponding to each data set, where theory errors are included"""
     chi2data_array = []
-    for results, covmat in zip(each_dataset_results, total_covmat_datasets):
-        data_result, th_result = results
-        chi2s = all_chi2_theory(results,covmat)
-        central_result = central_chi2_theory(results, covmat)
+    for datresults, covmat in zip(each_dataset_results, total_covmat_datasets):
+        data_result, th_result = datresults
+        chi2s = all_chi2_theory(datresults,covmat)
+        central_result = central_chi2_theory(datresults, covmat)
         chi2data_array.append(Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
                                    central_result, len(data_result)))
     return chi2data_array
@@ -496,10 +495,10 @@ def abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_datasets):
 def abs_chi2_data_theory_experiment(experiments_results, total_covmat_experiments):
     """ Like abs_chi2_data_theory_dataset but for experiments not datasets"""
     chi2data_array = []
-    for results, covmat in zip(experiments_results, total_covmat_experiments):
-        data_result, th_result = results
-        chi2s = all_chi2_theory(results, covmat)
-        central_result = central_chi2_theory(results, covmat)
+    for expresults, covmat in zip(experiments_results, total_covmat_experiments):
+        data_result, th_result = expresults
+        chi2s = all_chi2_theory(expresults, covmat)
+        central_result = central_chi2_theory(expresults, covmat)
         chi2data_array.append(Chi2Data(th_result.stats_class(chi2s[:,np.newaxis]),
                               central_result, len(data_result)))
     return chi2data_array
