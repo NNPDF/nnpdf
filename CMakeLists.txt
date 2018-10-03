@@ -97,10 +97,8 @@ endif(APFEL_CONFIG)
 
 set(DEFAULT_CXX_OPTIONS "-Wall -Wextra -march=nocona -mtune=haswell -fvisibility-inlines-hidden -fmessage-length=0 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe")
 
-#set(CMAKE_EXE_LINKER_FLAGS_STRIPPED "")
-#set(CMAKE_EXE_LINKER_FLAGS_DEBUG_STRIPPED "")
-string(REPLACE "-fsanitize=address" "" CMAKE_EXE_LINKER_FLAGS_STRIPPED CMAKE_EXE_LINKER_FLAGS)
-string(REPLACE "-fsanitize=address" "" CMAKE_EXE_LINKER_FLAGS_DEBUG_STRIPPED CMAKE_EXE_LINKER_FLAGS_DEBUG)
+string(REPLACE "-fsanitize=address" "" CMAKE_EXE_LINKER_FLAGS_STRIPPED "${CMAKE_EXE_LINKER_FLAGS}")
+string(REPLACE "-fsanitize=address" "" CMAKE_EXE_LINKER_FLAGS_DEBUG_STRIPPED "${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
 
 # Flags for ASAN
 if(ENABLE_ASAN)
