@@ -22,11 +22,24 @@ var HIGHLIGHT_TAG = 'theory uncertainties';
 const show_all_tags = () => {
  let items = document.getElementById('taglist').children;
  for (it of items){
-	 it.style.display="block";
+	 it.style.display = "block";
  }
- document.getElementById('showtags_btn').style.display = 'none';
+ let btn = document.getElementById('showtags_btn');
+ btn.value = "Show fewer tags";
+ btn.onclick = hide_some_tags;
 
 };
+
+const hide_some_tags = () => {
+	let items = document.querySelectorAll('#taglist > li:nth-child(n+10)');
+	for (it of items){
+		it.style.display = "none";
+	}
+	let btn = document.getElementById('showtags_btn');
+	showtags_btn.value = "Show all tags";
+	showtags_btn.onclick = show_all_tags;
+
+}
 
 
 $(document).ready(function() {
