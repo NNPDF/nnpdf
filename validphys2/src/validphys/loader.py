@@ -744,7 +744,7 @@ class RemoteLoader(LoaderBase):
                 try:
                     self.download_fit(name)
                 except:
-                    return
+                    pass
                 try:
                     download_and_extract(self.remote_nnpdf_pdfs[name], lhaindex.get_lha_datapath())
                 except:
