@@ -724,8 +724,33 @@ class RemoteLoader(LoaderBase):
         #It would be good to use the LHAPDF command line, except that it does
         #stupid things like returning 0 exit status when it fails to download
         if name in self.lhapdf_pdfs:
-            url = self.lhapdf_urls[0] + name + '.tar.gz'
-            download_and_extract(url, lhaindex.get_lha_datapath())
+            #try downloading from lhapdf
+            #except
+            # warning dl failed
+            # try download from next step
+            # except
+            # return
+            # try download from final
+            # except
+            # raise
+            #url = self.lhapdf_urls[0] + name + '.tar.gz'
+            #download_and_extract(url, lhaindex.get_lha_datapath())
+            try:
+                url = self.lhapdf_urls[0] + name + '.tar.gz'
+                download_and_extract(url, lhaindex.get_lha_datapath())
+            except:
+                log.warn("PDF failed to download and extract properly from "
+                         "LHAPDF, attempting to find PDF in other repositories.")
+                try:
+                    self.download_fit(name)
+                except:
+                    return
+                try:
+                    download_and_extract(self.remote_nnpdf_pdfs[name], lhaindex.get_lha_datapath())
+                except:
+                    raise PDFNotFound("LHAPDF download is broken for PDF '%s' "
+                                      "couldn't find the PDF in any of the other "
+                                      "repositories."% name)
         elif name in self.downloadable_fits:
             self.download_fit(name)
         elif name in self.remote_nnpdf_pdfs:
