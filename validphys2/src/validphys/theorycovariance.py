@@ -25,6 +25,8 @@ from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys.plotoptions import get_info
 from validphys import plotutils
 
+from IPython import embed
+
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values, ('theoryids',))
@@ -44,8 +46,6 @@ def _check_five_theories_scheme(theoryids, fivetheories):
         check(fivetheories is not None, "For five input theories a prescription bar or nobar for the flag fivetheories must be specified")
         check(fivetheories in opts, "Invalid choice of prescription for 5 points", fivetheories, opts)
 
-@_check_five_theories_scheme
-@_check_allowed_theory_number
 def make_scale_var_covmat(predictions, theoryids):
     """Takes N theory predictions at different scales and applies N-pt scale variations
     to produce a covariance matrix."""
@@ -147,13 +147,13 @@ def process_lookup(each_dataset_results_bytheory, commondata_experiments):
     and values corresponding to process types. Process types are 
     regrouped into the four categories 'Drell-Yan', 'Heavy Quarks', Jets'
     and 'DIS'."""
-    d = {commondata.name: [get_info(commondata).process_description] for commondata in commondata_experiments}
+    d = {commondata.name: get_info(commondata).process_description for commondata in commondata_experiments}
     for key, value in d.items():
-        if "Drell-Yan" in value[0]:
-            d[key] = ['Drell-Yan']
-        elif "Heavy Quarks" in value[0]:
+        if "Drell-Yan" in value:
+            d[key] = "Drell-Yan"
+        elif "Heavy Quarks" in value:
             d[key] = "Heavy Quarks"
-        elif "Jet" in value[0]:
+        elif "Jet" in value:
             d[key] = "Jets"
         else:
             pass  
@@ -179,7 +179,7 @@ def combine_by_type(process_lookup, each_dataset_results_bytheory, dataset_names
     for dataset, name in zip(each_dataset_results_bytheory, dataset_names):
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
-        proc_type = process_lookup[name][0]
+        proc_type = process_lookup[name]
         ordered_names[proc_type].append(name)
         theories_by_process[proc_type].append(theory_centrals)
     for key, item in theories_by_process.items():
