@@ -727,25 +727,28 @@ class RemoteLoader(LoaderBase):
             try:
                 url = self.lhapdf_urls[0] + name + '.tar.gz'
                 #url = 'https://data.nnpdf.science/thisisatesttodelete/NNPDF31_nlo_as_0118.tar.gz'
-                download_and_extract(url, lhaindex.get_lha_datapath())
-            except shutil.ReadError:
-                log.error("LHAPDF URL appears to be broken, attempting to find resource in other repositories")
-                try:
-                    self.download_fit(name)
-                except LoadFailedError as e:
-                    log.warn(f"Resource not in the remote repository: {e}. Trying next repository")
-                    pass
-                try:
-                    download_and_extract(self.remote_nnpdf_pdfs[name], lhaindex.get_lha_datapath())
-                except LoadFailedError as e:
-                    raise PDFNotFound("LHAPDF URL appeared to be broken for PDF '%s' "
-                                      "and it could not be found in another repository" % name)
-        elif name in self.downloadable_fits:
-            self.download_fit(name)
-        elif name in self.remote_nnpdf_pdfs:
-            download_and_extract(self.remote_nnpdf_pdfs[name], lhaindex.get_lha_datapath())
+                #url = 'https://data.nnpdf.science/patata/NNPDF31_nlo_as_0118.tar.gz'
+                return download_and_extract(url, lhaindex.get_lha_datapath())
+            except shutil.ReadError as e:
+                log.error(f"{e}. It seems the LHAPDF URLs aren't behaving, "
+                          f"attempting to find resource in other repositories")
+                pass
+            except requests.RequestException as e:
+                log.error(f"There was a problem with the connection: {e}. "
+                          f"Attempting to find resource elsewhere.")
+                pass
+            except RemoteLoaderError as e:
+                log.error(f"Failed to download resource: {e}. Attempting "
+                          f"to find it elsewhere.")
+                pass
+        if name in self.downloadable_fits:
+            return self.download_fit(name)
+        if name in self.remote_nnpdf_pdfs:
+            return download_and_extract(self.remote_nnpdf_pdfs[name], 
+                                        lhaindex.get_lha_datapath())
         else:
-            raise PDFNotFound("PDF '%s' is neither an uploaded fit nor a LHAPDF set." % name)
+            raise PDFNotFound("PDF '%s' is neither an uploaded fit nor an "
+                              "LHAPDF set." % name)
 
     def download_theoryID(self, thid):
         thid = str(thid)
