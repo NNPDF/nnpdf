@@ -730,22 +730,42 @@ class RemoteLoader(LoaderBase):
                 #url = 'https://data.nnpdf.science/patata/NNPDF31_nlo_as_0118.tar.gz'
                 return download_and_extract(url, lhaindex.get_lha_datapath())
             except shutil.ReadError as e:
+                _lhapdf_fail = e
                 log.error(f"{e}. It seems the LHAPDF URLs aren't behaving, "
                           f"attempting to find resource in other repositories")
                 pass
             except requests.RequestException as e:
+                _lhapdf_fail = e
                 log.error(f"There was a problem with the connection: {e}. "
                           f"Attempting to find resource elsewhere.")
                 pass
             except RemoteLoaderError as e:
+                _lhapdf_fail = e
                 log.error(f"Failed to download resource: {e}. Attempting "
                           f"to find it elsewhere.")
                 pass
         if name in self.downloadable_fits:
-            return self.download_fit(name)
+            try:
+                return self.download_fit(name)
+            except requests.RequestException as e:
+                _downloadfit_fail = e
+                log.error(f"There was a problem with the connection: {e}. "
+                          f"Attempting to find resource elsewhere.")
+                pass
+            except RemoteLoaderError as e:
+                _downloadfit_fail = e
+                log.error(f"Failed to download resource: {e}. Attempting "
+                          f"to find it elsewhere.")
+                pass
         if name in self.remote_nnpdf_pdfs:
             return download_and_extract(self.remote_nnpdf_pdfs[name], 
                                         lhaindex.get_lha_datapath())
+        elif _lhapdf_fail:
+            raise LoadFailedError(f"{_lhapdf_fail}. "
+                                  f"The resource couldn't be found elsewhere.") from _lhapdf_fail
+        elif _downloadfit_fail:
+            raise LoadFailedError(f"{_downloadfit_fail}. "
+                                  f"The resource couldn't be found elsewhere.")
         else:
             raise PDFNotFound("PDF '%s' is neither an uploaded fit nor an "
                               "LHAPDF set." % name)
