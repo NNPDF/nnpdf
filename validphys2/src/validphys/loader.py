@@ -761,11 +761,11 @@ class RemoteLoader(LoaderBase):
             return download_and_extract(self.remote_nnpdf_pdfs[name], 
                                         lhaindex.get_lha_datapath())
         elif _lhapdf_fail:
-            raise LoadFailedError(f"{_lhapdf_fail}. "
-                                  f"The resource couldn't be found elsewhere.") from _lhapdf_fail
+            raise LoadFailedError(f"{_lhapdf_fail}. The resource could not "
+                                  f"be found elsewhere.") from _lhapdf_fail
         elif _downloadfit_fail:
-            raise LoadFailedError(f"{_downloadfit_fail}. "
-                                  f"The resource couldn't be found elsewhere.")
+            raise LoadFailedError(f"{_downloadfit_fail}. The resource could "
+                                  f"not be found elsewhere.") from _downloadfit_fail
         else:
             raise PDFNotFound("PDF '%s' is neither an uploaded fit nor an "
                               "LHAPDF set." % name)
