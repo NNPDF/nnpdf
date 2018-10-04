@@ -723,6 +723,7 @@ class RemoteLoader(LoaderBase):
 
         #It would be good to use the LHAPDF command line, except that it does
         #stupid things like returning 0 exit status when it fails to download
+        _saved_exception = False
         if name in self.lhapdf_pdfs:
             try:
                 url = self.lhapdf_urls[0] + name + '.tar.gz'
@@ -730,17 +731,17 @@ class RemoteLoader(LoaderBase):
                 #url = 'https://data.nnpdf.science/patata/NNPDF31_nlo_as_0118.tar.gz'
                 return download_and_extract(url, lhaindex.get_lha_datapath())
             except shutil.ReadError as e:
-                _lhapdf_fail = e
+                _saved_exception = e
                 log.error(f"{e}. It seems the LHAPDF URLs aren't behaving, "
                           f"attempting to find resource in other repositories")
                 pass
             except requests.RequestException as e:
-                _lhapdf_fail = e
+                _saved_exception = e
                 log.error(f"There was a problem with the connection: {e}. "
                           f"Attempting to find resource elsewhere.")
                 pass
             except RemoteLoaderError as e:
-                _lhapdf_fail = e
+                _saved_exception = e
                 log.error(f"Failed to download resource: {e}. Attempting "
                           f"to find it elsewhere.")
                 pass
@@ -748,24 +749,21 @@ class RemoteLoader(LoaderBase):
             try:
                 return self.download_fit(name)
             except requests.RequestException as e:
-                _downloadfit_fail = e
+                _saved_exception = e
                 log.error(f"There was a problem with the connection: {e}. "
                           f"Attempting to find resource elsewhere.")
                 pass
             except RemoteLoaderError as e:
-                _downloadfit_fail = e
+                _saved_exception = e
                 log.error(f"Failed to download resource: {e}. Attempting "
                           f"to find it elsewhere.")
                 pass
         if name in self.remote_nnpdf_pdfs:
             return download_and_extract(self.remote_nnpdf_pdfs[name], 
                                         lhaindex.get_lha_datapath())
-        elif _lhapdf_fail:
-            raise LoadFailedError(f"{_lhapdf_fail}. The resource could not "
-                                  f"be found elsewhere.") from _lhapdf_fail
-        elif _downloadfit_fail:
-            raise LoadFailedError(f"{_downloadfit_fail}. The resource could "
-                                  f"not be found elsewhere.") from _downloadfit_fail
+        elif _saved_exception:
+            raise LoadFailedError(f"{_saved_exception}. The resource could not "
+                                  f"be found elsewhere.") from _saved_exception
         else:
             raise PDFNotFound("PDF '%s' is neither an uploaded fit nor an "
                               "LHAPDF set." % name)
