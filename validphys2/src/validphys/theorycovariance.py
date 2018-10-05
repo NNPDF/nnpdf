@@ -35,10 +35,10 @@ def _check_correct_theory_combination(theoryids, fivetheories):
     """Checks that a valid theory combination corresponding to an existing prescription has been inputted"""
     l = len(theoryids)
     check(l in {3,5,7,9}, "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")    
-    lo = Loader
+    lo = Loader()
     opts = {'bar','nobar'}
-    xifs = [lo.check_theoryID(theoryid).get_description()['XIF'] for theoryid in theoryids]
-    xirs = [lo.check_theoryID(theoryid).get_description()['XIR'] for theoryid in theoryids]   
+    xifs = [lo.check_theoryID(theoryid.id).get_description()['XIF'] for theoryid in theoryids]
+    xirs = [lo.check_theoryID(theoryid.id).get_description()['XIR'] for theoryid in theoryids] 
     if l==3:
         correct_xifs = [1.0, 2.0, 0.5]
         correct_xirs = [1.0, 2.0, 0.5]
@@ -56,24 +56,9 @@ def _check_correct_theory_combination(theoryids, fivetheories):
             correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]   
     else:
             correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
-            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5, 0.5, 2.0]  
+            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5, 0.5, 2.0]
     check(xifs==correct_xifs and xirs==correct_xirs, 
           "Choice of input theories does not correspond to a valid prescription for theory covariance matrix calculation")
-
-@make_argcheck
-def _check_allowed_theory_number(theoryids):
-    """Checks that an expected number of theories (3, 5, 7 or 9) have been provided"""
-    l = len(theoryids)
-    check(l in {3,5,7,9}, "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")    
-
-@make_argcheck
-def _check_five_theories_scheme(theoryids, fivetheories):
-    """Checks that a scheme of bar or nobar is specified when 5 theories are inputted"""
-    l = len(theoryids)
-    opts = {'bar','nobar'}
-    if l==5:
-        check(fivetheories is not None, "For five input theories a prescription bar or nobar for the flag fivetheories must be specified")
-        check(fivetheories in opts, "Invalid choice of prescription for 5 points", fivetheories, opts)
 
 def make_scale_var_covmat(predictions, theoryids):
     """Takes N theory predictions at different scales and applies N-pt scale variations
@@ -327,7 +312,7 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     df = pd.DataFrame(cov_by_exp, index=experiments_index, columns=experiments_index)
     return df
 
-@_check_allowed_theory_number
+@_check_correct_theory_combination
 def total_covmat_diagtheory_experiments(experiments_results_theory, theoryids):
     """Same as total_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
