@@ -24,16 +24,47 @@ from validphys.results import Chi2Data, experiments_chi2_table
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys.plotoptions import get_info
 from validphys import plotutils
+from validphys.loader import Loader
 
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values, ('theoryids',))
 
 @make_argcheck
+def _check_correct_theory_combination(theoryids, fivetheories):
+    """Checks that a valid theory combination corresponding to an existing prescription has been inputted"""
+    l = len(theoryids)
+    check(l in {3,5,7,9}, "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")    
+    lo = Loader
+    opts = {'bar','nobar'}
+    xifs = [lo.check_theoryID(theoryid).get_description()['XIF'] for theoryid in theoryids]
+    xirs = [lo.check_theoryID(theoryid).get_description()['XIR'] for theoryid in theoryids]   
+    if l==3:
+        correct_xifs = [1.0, 2.0, 0.5]
+        correct_xirs = [1.0, 2.0, 0.5]
+    elif l==5:
+        check(fivetheories is not None, "For five input theories a prescription bar or nobar for the flag fivetheories must be specified")
+        check(fivetheories in opts, "Invalid choice of prescription for 5 points", fivetheories, opts)
+        if fivetheories == "nobar":
+            correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0]
+            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5]
+        else:
+            correct_xifs = [1.0, 2.0, 0.5, 2.0, 0.5]
+            correct_xirs = [1.0, 2.0, 0.5, 0.5, 2.0] 
+    elif l==7:
+            correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
+            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]   
+    else:
+            correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
+            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5, 0.5, 2.0]  
+    check(xifs==correct_xifs and xirs==correct_xirs, 
+          "Choice of input theories does not correspond to a valid prescription for theory covariance matrix calculation")
+
+@make_argcheck
 def _check_allowed_theory_number(theoryids):
     """Checks that an expected number of theories (3, 5, 7 or 9) have been provided"""
     l = len(theoryids)
-    check(l in {3,5,7,9}, "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
+    check(l in {3,5,7,9}, "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")    
 
 @make_argcheck
 def _check_five_theories_scheme(theoryids, fivetheories):
@@ -62,7 +93,7 @@ def make_scale_var_covmat(predictions, theoryids):
     return s
 
 @table
-@_check_allowed_theory_number
+@_check_correct_theory_combination
 def theory_covmat(theoryids_experiments_central_values, experiments_index, theoryids):
     """Calculates the theory covariance matrix for scale variations.
     The matrix is a dataframe indexed by experiments_index."""
@@ -73,7 +104,7 @@ def theory_covmat(theoryids_experiments_central_values, experiments_index, theor
 results_bytheoryids = collect(results,('theoryids',))
 each_dataset_results_bytheory = collect('results_bytheoryids', ('experiments', 'experiment'))
 
-@_check_allowed_theory_number
+@_check_correct_theory_combination
 def theory_covmat_datasets(each_dataset_results_bytheory, theoryids):
     """Produces an array of theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard. """
@@ -84,7 +115,7 @@ def theory_covmat_datasets(each_dataset_results_bytheory, theoryids):
         dataset_covmats.append(s)
     return dataset_covmats
 
-@_check_allowed_theory_number
+@_check_correct_theory_combination
 def total_covmat_datasets(each_dataset_results_bytheory, theoryids):
     """Produces an array of total covariance matrices; the sum of experimental
     and scale-varied theory covariance matrices. Each matrix corresponds
@@ -99,7 +130,7 @@ def total_covmat_datasets(each_dataset_results_bytheory, theoryids):
         dataset_covmats.append(cov)
     return dataset_covmats
 
-@_check_allowed_theory_number
+@_check_correct_theory_combination
 def total_covmat_diagtheory_datasets(each_dataset_results_bytheory, theoryids):
     """Same as total_covmat_theory_datasets but for diagonal theory only"""
     dataset_covmats=[]
@@ -125,7 +156,7 @@ def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
 experiments_results = collect(experiment_results, ('experiments',))
 experiments_results_theory = collect('experiments_results', ('theoryids',))
 
-@_check_allowed_theory_number
+@_check_correct_theory_combination
 def total_covmat_experiments(experiments_results_theory, theoryids):
     """Same as total_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
@@ -216,7 +247,7 @@ def covmap(combine_by_type, dataset_names):
         start += dataset_size[dataset]
     return mapping  
 
-@_check_five_theories_scheme  
+@_check_correct_theory_combination
 def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids, 
                      fivetheories:(str, type(None)) = None):
     """Produces the sub-matrices of the theory covariance matrix according
