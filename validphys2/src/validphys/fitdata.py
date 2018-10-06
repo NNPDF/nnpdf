@@ -34,19 +34,19 @@ def check_nnfit_results_path(path):
     """ Returns True if the requested path is a valid results directory,
     i.e if it is a directory and has a 'nnfit' subdirectory"""
     if not path.is_dir():
-        log.warn('Path is not a directory %s' % path)
+        log.warning(f"Path is not a directory {path}")
         return False
     if not (path / 'nnfit').is_dir():
-        log.warn('Path %s is not a directory' % (str(path/'nnfit')))
+        log.warning("Path {path/'nnfit'} is not a directory")
         return False
     return True
 
 def check_lhapdf_info(results_dir, fitname):
     """ Check that an LHAPDF info metadata file is
     present in the fit results """
-    info_path = results_dir.joinpath('nnfit', '%s.info' % fitname)
+    info_path = results_dir.joinpath('nnfit', f'{fitname}.info')
     if not info_path.is_file():
-        log.warn('Cannot find info file at %s' % info_path)
+        log.warning(f"Cannot find info file at {info_path}")
         return False
     return True
 
@@ -58,21 +58,21 @@ def check_replica_files(replica_path, prefix):
 
     path = pathlib.Path(replica_path)
     if not path.is_dir():
-        log.warn("Invalid directory for replica %s" % path)
+        log.warning(f"Invalid directory for replica {path}")
         return False
     valid = True
     for f in LITERAL_FILES:
         test_path = path/f
         if not test_path.is_file():
-            log.warn("Missing file: %s" % test_path)
+            log.warning(f"Missing file: {test_path}")
             valid = False
     for f in REPLICA_FILES:
         test_path = (path/prefix).with_suffix(f)
         if not test_path.is_file():
-            log.warn("Missing file: %s" % test_path)
+            log.warning(f"Missing file: {test_path}")
             valid = False
     if not valid:
-        log.warn("Found invalid replica %s" % path)
+        log.warning(f"Found invalid replica {path}")
     return valid
 
 FitInfo = namedtuple("FitInfo", ("nite", 'training', 'validation', 'chi2', 'is_positive', 'arclengths'))

@@ -119,11 +119,11 @@ def postfit(results: str, nrep: int):
         raise PostfitError('Postfit cannot find a valid LHAPDF info file')
 
     nrep = int(nrep)
-    log.warn("Postfit aiming for %d replicas" % nrep)
+    log.warning(f"Postfit aiming for {nrep} replicas")
 
     # Generate postfit and LHAPDF directory
     if final_postfit_path.is_dir():
-        log.warn(f"WARNING: Removing existing postfit directory: {postfit_path}")
+        log.warning(f"Removing existing postfit directory: {postfit_path}")
         shutil.rmtree(final_postfit_path)
     os.mkdir(LHAPDF_path)
 

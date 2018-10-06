@@ -205,7 +205,7 @@ def experiment_result_table(experiments, pdf, experiments_index):
                                  ]))
 
     if not result_records:
-        log.warn("Empty records for experiment results")
+        log.warning("Empty records for experiment results")
         return pd.DataFrame()
     df =  pd.DataFrame(result_records, columns=result_records[0].keys(),
                        index=experiments_index)

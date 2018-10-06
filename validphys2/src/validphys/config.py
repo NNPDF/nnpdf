@@ -302,7 +302,7 @@ class CoreConfig(configparser.Config):
             #normalize=True should check for more stuff
             get_info(ds, normalize=True)
             if not ds.commondata.plotfiles:
-                log.warn("Plotting files not found for: %s" % (ds,))
+                log.warning(f"Plotting files not found for: {ds}")
         return ds
 
 
