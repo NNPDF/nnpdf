@@ -35,7 +35,8 @@ def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
     alldata, central, npoints = abs_chi2_data
     if not isinstance(alldata, MCStats):
         ax.set_facecolor("#ffcccc")
-        log.warn("Chi² distribution plots have a different meaning for non MC sets.")
+        log.warning("Chi² distribution plots have a "
+                "different meaning for non MC sets.")
         label += " (%s!)" % pdf.ErrorType
     label += '\n'+ '\n'.join(str(chi2_stat_labels[k])+(' %.2f' % v) for (k,v) in chi2_stats.items())
     ax.set_title(r"$\chi^2$ distribution for %s" % setlabel)

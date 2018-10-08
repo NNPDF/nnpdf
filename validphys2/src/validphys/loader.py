@@ -220,12 +220,12 @@ class Loader(LoaderBase):
 
                 if fit not in self._old_commondata_fits:
                     self._old_commondata_fits.add(fit)
-                    log.warn(
+                    log.warning(
                         f"Found fit using old commondata export settings: "
                         f"'{fit}'. The commondata that are used in this run "
                         "will be updated now."
                         "Please consider re-uploading it.")
-                    log.warn(
+                    log.warning(
                         f"Points that do not pass the cuts are set to zero!")
 
                 log.info(f"Upgrading filtered commondata. Writing {newpath}")
@@ -431,7 +431,7 @@ class Loader(LoaderBase):
         try:
             vpcache = self._vp_cache()
         except KeyError as e:
-            log.warn("Entry validphys_cache_path expected but not found "
+            log.warning("Entry validphys_cache_path expected but not found "
                      "in the nnprofile.")
         else:
             extra_paths = (*extra_paths, vpcache)
@@ -673,9 +673,10 @@ class RemoteLoader(LoaderBase):
 
 
         if lhaindex.isinstalled(fitname):
-            log.warn("The PDF corresponding to the downloaded fit '%s' "
-             "exists in the LHAPDF path."
-             " Will be erased and replaced with the new one.", fitname)
+            log.warning(
+                f"The PDF corresponding to the downloaded fit '{fitname}' "
+                "exists in the LHAPDF path."
+                " Will be erased and replaced with the new one.")
             p = pathlib.Path(lhaindex.finddir(fitname))
             if p.is_symlink():
                 p.unlink()
@@ -692,7 +693,7 @@ class RemoteLoader(LoaderBase):
         if gridpath.is_dir():
             p.symlink_to(gridpath, target_is_directory=True)
         else:
-            log.warn(f"Cannot find {gridpath}. Falling back to old behaviour")
+            log.warning(f"Cannot find {gridpath}. Falling back to old behaviour")
             p.symlink_to(gridpath_old, target_is_directory=True)
 
 
