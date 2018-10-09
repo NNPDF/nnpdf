@@ -15,10 +15,15 @@ from collections import ChainMap, defaultdict
 
 import ruamel_yaml as yaml
 from bs4 import BeautifulSoup
+#TODO: Move the thumbnail logic somewhere
+import skimage.transform
+import skimage.io
+import numpy as np
 
 ROOT = '/home/nnpdf/WEB/validphys-reports'
 ROOT_URL = 'https://vp.nnpdf.science/'
 OUT = '/home/nnpdf/WEB/validphys-reports/index.json'
+THUMBNAILS =  '/home/nnpdf/WEB/thumbnails/'
 
 EMPTY = '-'
 
@@ -74,6 +79,56 @@ def meta_from_path(p):
     meta = meta.new_child(yaml_res)
     return meta
 
+def make_single_thumbnail(f, shape=(100, 150)):
+    img = skimage.io.imread(f)
+    res = skimage.transform.resize(
+        img, shape, anti_aliasing=True, mode='constant')
+    return res
+
+def make_4_img_thumbnail(paths, shape=(100, 150)):
+    w, h = shape
+    whalf, hhalf = w // 2, h // 2
+    positions = (
+        (slice(0,whalf), slice(0,hhalf)),
+        (slice(whalf,w), slice(0,hhalf)),
+        (slice(0,whalf), slice(hhalf,h)),
+        (slice(whalf,w), slice(hhalf,h))
+    )
+    res = np.zeros((*shape, 4))
+    imgs = skimage.io.imread_collection(paths)
+    for img, pos in zip(imgs, positions):
+        res[pos] = skimage.transform.resize(
+            img, (whalf, hhalf), anti_aliasing=True, mode='constant')
+    return res
+
+def make_thumbnail(folder):
+    folder = pathlib.Path(folder)
+    pngs = sorted(folder.glob('*.png'))
+    if not pngs:
+        return None
+    if len(pngs) < 4:
+        return make_single_thumbnail(pngs[0])
+    else:
+        l = len(pngs)
+        imgs = pngs[:l-(l%4):l//4]
+        return make_4_img_thumbnail(imgs)
+
+
+def thumbnail_tag(name):
+    return f'{ROOT_URL}thumbnails/{name}"'
+
+def handle_thumbnail(p):
+    dest = (pathlib.Path(THUMBNAILS) / p.name).with_suffix('.png')
+    name = dest.name
+    if dest.exists():
+        return thumbnail_tag(name)
+    figures = (p / 'figures')
+    if figures.is_dir():
+        res = make_thumbnail(figures)
+        if res is not None:
+            skimage.io.imsave(dest, res)
+            return thumbnail_tag(name)
+    return None
 
 def register(p):
     path_meta = meta_from_path(p)
@@ -87,7 +142,10 @@ def register(p):
         title = "Validphys output (untitled)"
 
     titlelink = '<a href="%s">%s</a>' % (url, title)
-    return (titlelink, author, [date, timestamp], tags)
+
+    thumbnail = handle_thumbnail(p)
+
+    return (titlelink, author, [date, timestamp], tags, thumbnail)
 
 def make_index(root_path, out):
     root_path = pathlib.Path(root_path)

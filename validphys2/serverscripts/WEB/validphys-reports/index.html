@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
 <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
 <!--[if lt IE 9]>
   <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
@@ -21,6 +22,31 @@ var HIGHLIGHT_TAG = 'theory uncertainties';
 
 
 $(document).ready(function() {
+	const show_img = (data, type, row, meta )  => {
+		if (data === null){
+			return '';
+		}
+		return `<img class="lazy" src="thumbnails/loading.gif" data-original="${data}" width="150", height="100" />`;
+	};
+	const columns = [null,
+		            null,
+					{"render":
+			            {
+							"_": "0",
+							"type": "1",
+							"sort": "1",
+					    }
+		            },
+					null,
+			       {"render": show_img,
+                   "width": "150"
+			        }
+		           ];
+	const draw_callback = () => {
+		$("img.lazy").lazyload();
+	};
+
+	const order = [[2, "desc"]];
 	$.getJSON("index.json",
     function(json){
 	  var data = json['data'];
@@ -32,34 +58,16 @@ $(document).ready(function() {
 		'paging': false,
 		'info': false,
 		'searching': false,
-		"order": [[2, "desc"]],
-		"columns": [null,
-		            null,
-					{"render":
-			            {
-							"_": "0",
-							"type": "1",
-							"sort": "1",
-					    }
-		            },
-					null
-		           ]
+		"order": order,
+		"drawCallback": draw_callback,
+		"columns": columns
 	  } );
 	  var global_table = $('#global').DataTable( {
 		"data": data,
-		"order": [[2, "desc"]],
+		"order": order,
 		"dom": 'frtipl',
-		"columns": [null,
-		            null,
-					{"render":
-			            {
-							"_": "0",
-							"type": "1",
-							"sort": "1",
-					    }
-		            },
-					null
-		           ]
+		"drawCallback": draw_callback,
+		"columns": columns
 	  } );
 	var ul = document.getElementById('taglist');
 	var keywords = json['keywords'];
@@ -137,6 +145,7 @@ function filter_tag(data, tag, now){
                 <th>Author</th>
                 <th>Date</th>
                 <th>Tags</th>
+                <th></th>
             </tr>
         </thead>
     </table>
@@ -152,6 +161,7 @@ function filter_tag(data, tag, now){
                 <th>Author</th>
                 <th>Date</th>
                 <th>Tags</th>
+                <th></th>
             </tr>
         </thead>
     </table>
