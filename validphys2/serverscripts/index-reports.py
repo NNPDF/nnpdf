@@ -23,7 +23,7 @@ import numpy as np
 ROOT = '/home/nnpdf/WEB/validphys-reports'
 ROOT_URL = 'https://vp.nnpdf.science/'
 OUT = '/home/nnpdf/WEB/validphys-reports/index.json'
-THUMBNAILS =  '/home/nnpdf/WEB/validphys-reports/thumbnails/'
+THUMBNAILS =  '/home/nnpdf/WEB/thumbnails/'
 
 EMPTY = '-'
 
@@ -152,7 +152,7 @@ def make_index(root_path, out):
     data = []
     keywords = defaultdict(TagProps)
     for p in root_path.iterdir():
-        if p.is_dir() and p.name != 'thumbnails':
+        if p.is_dir():
             res = register(p)
             data.append(res)
             newkeywords = res[3]
