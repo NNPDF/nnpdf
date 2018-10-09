@@ -9,10 +9,12 @@ import shutil
 import uuid
 import base64
 import sys
+import os
 import contextlib
 import pathlib
 import tempfile
 from urllib.parse import urljoin
+from html.parser import HTMLParser
 
 from reportengine.compat import yaml
 from reportengine.colors import t
@@ -24,6 +26,8 @@ log = logging.getLogger(__name__)
 class UploadError(Exception): pass
 
 class BadSSH(UploadError): pass
+
+class TooManyFigures(UploadError): pass
 
 def _profile_key(k):
     """Return a property that fetches a given key from ``self._profile``."""
@@ -137,14 +141,50 @@ class Uploader():
         except BadSSH as e:
             log.error(e)
             sys.exit()
+        except TooManyFigures as e:
+            log.error(e)
+            sys.exit()
 
+class MyParse(HTMLParser):
+    def __init__(self):
+        HTMLParser.__init__(self)
+        self.figs = []
+    def handle_starttag(self, tag, attrs):
+        if tag=="img":
+            self.figs.append(dict(attrs)["src"])
 
 class ReportUploader(Uploader):
     """An uploader for validphys reports."""
     target_dir = _profile_key('reports_target_dir')
     root_url = _profile_key('reports_root_url')
+    def check_redundant_figures(self, output):
+        """checks if all of the files in the <output-directory>/figures/ directory are declared"""
+        h=MyParse()
 
+        for htmlfile in os.listdir(output):
+            if htmlfile.endswith(".html"):
+                page=open(os.path.join(output, htmlfile)).read()
+                h.feed(page)
 
+        src = h.figs
+
+        for imgfile in os.listdir(os.path.join(output, "figures")):
+            if imgfile.endswith(".png"):
+                if "figures/" + imgfile not in src:
+                    raise TooManyFigures(imgfile + " is a file in " + os.path.join(output, "figures/")
+                                        + " but it is not used in the report. Please do not upload "
+                                        + "figures which are not used in the report.")
+
+    @contextlib.contextmanager
+    def upload_context(self, output):
+        """Before entering the context, check that uploading is feasible.
+        On exiting the context, upload output.
+        """
+        self.check_upload()
+        yield
+        self.check_redundant_figures(output)
+        res = self.upload_output(output)
+        self._print_output(res)
 
 class FileUploader(Uploader):
     """Uploader for individual files for single-file resources. It does the "
