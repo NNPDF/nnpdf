@@ -2816,3 +2816,10 @@ the reports marked with some keyword (for example 'nnpdf31').
 
 The Makefile inside will synchronize them with
 the server.
+
+The report indexing script generates thumbnails in the
+`WEB/thumbnails` which are then associated to each report. This is
+done by looking at the image files inside the `figures` folder of each
+uploaded report (see the source of the script for more details). It is
+expected that the server redirects the requests for
+`vp.nnpdf.science/thumbnails` to this folder.
