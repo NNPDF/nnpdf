@@ -20,6 +20,28 @@
 
 var HIGHLIGHT_TAG = 'theory uncertainties';
 
+const show_all_tags = () => {
+ let items = document.getElementById('taglist').children;
+ for (it of items){
+	 it.style.display = "block";
+ }
+ let btn = document.getElementById('showtags_btn');
+ btn.value = "Show fewer tags";
+ btn.onclick = hide_some_tags;
+
+};
+
+const hide_some_tags = () => {
+	let items = document.querySelectorAll('#taglist > li:nth-child(n+10)');
+	for (it of items){
+		it.style.display = "none";
+	}
+	let btn = document.getElementById('showtags_btn');
+	showtags_btn.value = "Show all tags";
+	showtags_btn.onclick = show_all_tags;
+
+}
+
 
 $(document).ready(function() {
 	const show_img = (data, type, row, meta )  => {
@@ -71,6 +93,7 @@ $(document).ready(function() {
 	  } );
 	var ul = document.getElementById('taglist');
 	var keywords = json['keywords'];
+	let dlist = document.getElementById('tagdlist')
 	keywords.forEach(function(tag){
 		var li = document.createElement('li');
 		var a = document.createElement('a');
@@ -90,7 +113,17 @@ $(document).ready(function() {
 		li.appendChild(a);
 		li.appendChild(document.createTextNode(` (${tag[1]})`));
 		ul.appendChild(li);
+		let opt = document.createElement('option');
+		opt.value = tag[0];
+		dlist.appendChild(opt);
+
 	});
+	let showtags_btn = document.createElement('input');
+	showtags_btn.type = "button";
+	showtags_btn.value = "Show all tags";
+	showtags_btn.onclick = show_all_tags;
+	showtags_btn.id = "showtags_btn";
+	ul.appendChild(showtags_btn);
 	$.fn.dataTable.ext.search.push(
 		function(settings, dt, dataIndex){
 			var tag = $('#tagfilt').val();
@@ -152,7 +185,8 @@ function filter_tag(data, tag, now){
 
 <h2>All reports</h2>
 <ul id="taglist"></ul>
-<label>tag: <input id="tagfilt" name="tagfilt"></label>
+<datalist id="tagdlist"></datalist>
+<label>tag: <input id="tagfilt" name="tagfilt", placeholder="Enter tag name", list=tagdlist></label>
 
 <table id="global" class="display" width="100%" cellspacing="0">
         <thead>
