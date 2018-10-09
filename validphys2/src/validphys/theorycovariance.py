@@ -12,7 +12,7 @@ import scipy.linalg as la
 import matplotlib.pyplot as plt
 from matplotlib import cm, colors as mcolors
 import pandas as pd
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 
 from reportengine.figure import figure
 from reportengine.checks import make_argcheck, check
@@ -53,10 +53,10 @@ def _check_five_theories_scheme(theoryids, fivetheories):
               "Invalid choice of prescription for 5 points",
               fivetheories, opts)
 
-def make_scale_var_covmat(predictions, theoryids):
+def make_scale_var_covmat(predictions):
     """Takes N theory predictions at different scales and applies N-pt scale
     variations to produce a covariance matrix."""
-    l = len(theoryids)
+    l = len(predictions)
     central, *others = predictions
     deltas = (other - central for other in others)
     if l==3:
@@ -197,17 +197,23 @@ def combine_by_type(process_lookup,
         theories_by_process[proc_type].append(theory_centrals)
     for key, item in theories_by_process.items():
         theories_by_process[key] = np.concatenate(item, axis=1)
-    return theories_by_process, ordered_names, dataset_size
+    ProcessInfo = namedtuple("ProcessInfo", ('theory',
+                                             'namelist',
+                                             'sizes'))
+    process_info = ProcessInfo(theory = theories_by_process, 
+                               namelist = ordered_names,
+                               sizes = dataset_size)
+    return process_info
 
 
 def process_starting_points(combine_by_type):
     """Returns a dictionary of indices in the covariance matrix corresponding
     to the starting point of each process."""
-    theories_by_process = combine_by_type[0]
+    process_info = combine_by_type
     running_index = 0
     start_proc = defaultdict(list)
-    for name in theories_by_process:
-        size = len(theories_by_process[name][0])
+    for name in process_info.theory:
+        size = len(process_info.theory[name][0])
         start_proc[name] = running_index
         running_index += size
     return start_proc
@@ -217,18 +223,18 @@ def covmap(combine_by_type, dataset_names):
     process to matrices ordered by experiment as listed in the runcard"""
     mapping = defaultdict(list)
     start_exp = defaultdict(list)
-    theories_by_process, ordered_names, dataset_size = combine_by_type
+    process_info = combine_by_type
     running_index = 0
     for dataset in dataset_names:
-        size = dataset_size[dataset]
+        size = process_info.sizes[dataset]
         start_exp[dataset] = running_index
         running_index += size
     start = 0
-    names_by_proc_list = [item for sublist in ordered_names.values() for item in sublist]
+    names_by_proc_list = [item for sublist in process_info.namelist.values() for item in sublist]
     for dataset in names_by_proc_list:
-        for i in range(dataset_size[dataset]):
+        for i in range(process_info.sizes[dataset]):
             mapping[start+i] = start_exp[dataset] + i
-        start += dataset_size[dataset]
+        start += process_info.sizes[dataset]
     return mapping
 
 @_check_five_theories_scheme
@@ -244,12 +250,12 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
     l = len(theoryids)
     start_proc = process_starting_points
     covmats = defaultdict(list)
-    theories_by_process, ordered_names, dataset_size = combine_by_type
-    for name1 in theories_by_process:
-        for name2 in theories_by_process:
-            central1, *others1 = theories_by_process[name1]
+    process_info = combine_by_type
+    for name1 in process_info.theory:
+        for name2 in process_info.theory:
+            central1, *others1 = process_info.theory[name1]
             deltas1 = list((other - central1 for other in others1))
-            central2, *others2 = theories_by_process[name2]
+            central2, *others2 = process_info.theory[name2]
             deltas2 = list((other - central2 for other in others2))
             if l==3:
                 if name1 == name2:
