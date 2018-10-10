@@ -147,8 +147,8 @@ def register(p):
 
     return (titlelink, author, [date, timestamp], tags, thumbnail)
 
-def make_index(root_path, out):
-    root_path = pathlib.Path(root_path)
+def make_index():
+    root_path = pathlib.Path(ROOT)
     data = []
     keywords = defaultdict(TagProps)
     for p in root_path.iterdir():
@@ -166,11 +166,9 @@ def make_index(root_path, out):
     keywordmap = [(k, v.count) for k,v in keylist]
 
 
-    with open(out, 'w') as f:
+    with open(OUT, 'w') as f:
         json.dump({'data':data, 'keywords':keywordmap}, f)
 
-def main():
-    make_index(ROOT, OUT)
 
 if __name__ == '__main__':
-    main()
+    make_index()
