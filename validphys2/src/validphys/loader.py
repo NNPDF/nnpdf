@@ -162,7 +162,7 @@ def rebuild_commondata_without_cuts(
                 #And value, stat, *sys that we want to drop
                 #Do not use string join to keep up with the ugly format
                 #This should really be nan's, but the c++ streams that read this
-                #are rarher stupid, and I am not doing the insane thing.
+                #do not have the right interface.
                 #https://stackoverflow.com/questions/11420263/is-it-possible-to-read-infinity-or-nan-values-using-input-streams
                 zeros = '-0\t'*(2 + 2*nsys)
                 newfile.write(f'{zeros}\n')
@@ -307,7 +307,7 @@ class Loader(LoaderBase):
             msg = ("Could not find COMPOUND set '%s' for theory %d: %s" %
                    (setname, int(thid), e))
             raise CompoundNotFound(msg)
-        #This is a little bit stupid, but is the least amount of thinking...
+        #This is a little bit funny, but is the least amount of thinking...
         yaml_format = 'FK:\n' + re.sub('FK:', ' - ', txt)
         data = yaml.safe_load(yaml_format)
         #we have to split out 'FK_' the extension to get a name consistent
@@ -745,7 +745,8 @@ class RemoteLoader(LoaderBase):
                 return
 
         #It would be good to use the LHAPDF command line, except that it does
-        #stupid things like returning 0 exit status when it fails to download
+        #questionable things like returning 0 exit status when it fails to
+        #download.
         _saved_exception = False
         if name in self.lhapdf_pdfs:
             try:

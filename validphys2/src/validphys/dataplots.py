@@ -277,7 +277,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
                 x = np.arange(npoints)
                 ax.set_xticks(x)
                 ax.set_xticklabels(xticklabels)
-                #TODO: Remove this when mpl stops doing the idiotic thing
+                #TODO: Remove this when mpl stops doing the wrong thing
                 #(in v2?)
                 ax.set_xlim(-npoints/20, npoints - 1+ npoints/20)
 

@@ -49,7 +49,7 @@ def meta_from_html(f):
         tags = []
     else:
         tags = re.split(r"\s*,\s*", tagtext)
-    #As it turns out, 'soup.title.string' idiotically doesn't
+    #'soup.title.string' doesn't
     #return a strig but rather an object with the reference to
     #the whole parse tree, causing a huge memory leak.
     return dict(title=str(title), author=author, keywords=tags)
