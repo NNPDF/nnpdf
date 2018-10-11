@@ -8,8 +8,14 @@ Fit summary
 
 Closures test estimators
 -----------------------
+## $\Delta_{\chi^{2}}$ by experiment
 {@ plot_delta_chi2 @}
+## Bias by experiment
 {@ plot_biases @}
+## $\phi$ by experiment
+{@with fits@}
+{@plot_phi@}
+{@endwith@}
 
 Dataset properties
 ------------------
@@ -52,11 +58,5 @@ $\chi^2$ by dataset comparisons
 {@plot_fits_datasets_chi2@}
 ### Table
 {@fits_chi2_table(show_total=true)@}
-
-$\phi$ by experiment
---------------------
-{@with fits@}
-{@plot_phi@}
-{@endwith@}
 
 {@endwith@}
