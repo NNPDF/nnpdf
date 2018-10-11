@@ -7,12 +7,12 @@ from __future__ import generator_stop
 
 import logging
 
+from collections import defaultdict, namedtuple
 import numpy as np
 import scipy.linalg as la
 import matplotlib.pyplot as plt
 from matplotlib import cm, colors as mcolors
 import pandas as pd
-from collections import defaultdict, namedtuple
 
 from reportengine.figure import figure
 from reportengine.checks import make_argcheck, check
@@ -73,7 +73,7 @@ def make_scale_var_covmat(predictions):
 @table
 @_check_allowed_theory_number
 def theory_covmat(theoryids_experiments_central_values,
-                  experiments_index, theoryids):
+                  experiments_index):
     """Calculates the theory covariance matrix for scale variations.
     The matrix is a dataframe indexed by experiments_index."""
     s = make_scale_var_covmat(theoryids_experiments_central_values)
@@ -85,7 +85,7 @@ each_dataset_results_bytheory = collect('results_bytheoryids',
                                         ('experiments', 'experiment'))
 
 @_check_allowed_theory_number
-def theory_covmat_datasets(each_dataset_results_bytheory, theoryids):
+def theory_covmat_datasets(each_dataset_results_bytheory):
     """Produces an array of theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard. """
     dataset_covmats=[]
@@ -96,7 +96,7 @@ def theory_covmat_datasets(each_dataset_results_bytheory, theoryids):
     return dataset_covmats
 
 @_check_allowed_theory_number
-def total_covmat_datasets(each_dataset_results_bytheory, theoryids):
+def total_covmat_datasets(each_dataset_results_bytheory):
     """Produces an array of total covariance matrices; the sum of experimental
     and scale-varied theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard.
@@ -111,7 +111,7 @@ def total_covmat_datasets(each_dataset_results_bytheory, theoryids):
     return dataset_covmats
 
 @_check_allowed_theory_number
-def total_covmat_diagtheory_datasets(each_dataset_results_bytheory, theoryids):
+def total_covmat_diagtheory_datasets(each_dataset_results_bytheory):
     """Same as total_covmat_theory_datasets but for diagonal theory only"""
     dataset_covmats=[]
     for dataset in each_dataset_results_bytheory:
@@ -137,7 +137,7 @@ experiments_results = collect(experiment_results, ('experiments',))
 experiments_results_theory = collect('experiments_results', ('theoryids',))
 
 @_check_allowed_theory_number
-def total_covmat_experiments(experiments_results_theory, theoryids):
+def total_covmat_experiments(experiments_results_theory):
     """Same as total_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
     exp_result_covmats = []
@@ -159,7 +159,8 @@ def process_lookup(each_dataset_results_bytheory, commondata_experiments):
     and values corresponding to process types. Process types are
     regrouped into the four categories 'Drell-Yan', 'Heavy Quarks', Jets'
     and 'DIS'."""
-    d = {commondata.name: get_info(commondata).process_description for commondata in commondata_experiments}
+    d = {commondata.name: get_info(commondata).process_description
+         for commondata in commondata_experiments}
     for key, value in d.items():
         if "Drell-Yan" in value:
             d[key] = "Drell-Yan"
@@ -200,7 +201,7 @@ def combine_by_type(process_lookup,
     ProcessInfo = namedtuple("ProcessInfo", ('theory',
                                              'namelist',
                                              'sizes'))
-    process_info = ProcessInfo(theory = theories_by_process, 
+    process_info = ProcessInfo(theory = theories_by_process,
                                namelist = ordered_names,
                                sizes = dataset_size)
     return process_info
@@ -267,16 +268,16 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
                 covmats[start_locs] = s
             elif l==5:
                 if name1 == name2:
-                     s = 0.5*sum(np.outer(d, d) for d in deltas1)
+                    s = 0.5*sum(np.outer(d, d) for d in deltas1)
             # 5 point --------------------------------------------------------------------
                 elif fivetheories=='nobar':
-                     s = 0.5*(np.outer(deltas1[0], deltas2[0]) + np.outer(
+                    s = 0.5*(np.outer(deltas1[0], deltas2[0]) + np.outer(
                                              deltas1[1], deltas2[1])) + 0.25*(
                         np.outer((deltas1[2] + deltas1[3]),
                                  (deltas2[2] + deltas2[3])))
              # 5bar-point -----------------------------------------------------------------
                 else:
-                     s = 0.25*(np.outer((deltas1[0]+deltas1[2]),
+                    s = 0.25*(np.outer((deltas1[0]+deltas1[2]),
                                         (deltas2[0]+deltas2[2]))
                                + np.outer((deltas1[1]+deltas1[3]),
                                           (deltas2[1]+deltas2[3])))
@@ -313,7 +314,8 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     """Takes the individual sub-covmats between each two processes and assembles
     them into a full covmat. Then reshuffles the order from ordering by process
     to ordering by experiment as listed in the runcard"""
-    matlength = int(sum([len(covmat) for covmat in covs_pt_prescrip.values()])/int(np.sqrt(len(covs_pt_prescrip))))
+    matlength = int(sum([len(covmat) for covmat in covs_pt_prescrip.values()]
+                        )/int(np.sqrt(len(covs_pt_prescrip))))
     mat = np.zeros((matlength,matlength))
     cov_by_exp = np.zeros((matlength,matlength))
     for locs in covs_pt_prescrip:
@@ -327,7 +329,7 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     return df
 
 @_check_allowed_theory_number
-def total_covmat_diagtheory_experiments(experiments_results_theory, theoryids):
+def total_covmat_diagtheory_experiments(experiments_results_theory):
     """Same as total_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
     exp_result_covmats = []
@@ -709,17 +711,21 @@ def plot_expplusthcorrmat_heatmap_custom(experimentsplustheory_corrmat_custom, t
 @figure
 def plot_blockcovdiff_heatmap(theory_block_diag_covmat, experiments_covmat):
     """Matrix plot (thcov + expcov)/expcov"""
-    df = (theory_block_diag_covmat.as_matrix()+experiments_covmat.values)/np.mean(experiments_covmat.values)
-    fig = plot_covmat_heatmap(df,"(Theory + experiment)/mean(experiment) for block diagonal theory covmat by dataset")
+    df = (theory_block_diag_covmat.as_matrix()+experiments_covmat.values
+          )/np.mean(experiments_covmat.values)
+    fig = plot_covmat_heatmap(df,"(Theory + experiment)/mean(experiment)" +
+                              "for block diagonal theory covmat by dataset")
     return fig
 
 @figure
 def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat, theoryids):
     """Matrix plot (thcov + expcov)/expcov"""
     l = len(theoryids)
-    df = (theory_covmat_custom+experiments_covmat)/np.mean(experiments_covmat.values)
+    df = (theory_covmat_custom+experiments_covmat
+          )/np.mean(experiments_covmat.values)
     fig = plot_covmat_heatmap(df,
-                              f"(Theory + experiment)/mean(experiment) covariance matrices for {l} points")
+                              "(Theory + experiment)/mean(experiment)"
+                              + f"covariance matrices for {l} points")
     return fig
 
 @figure
@@ -770,7 +776,6 @@ def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat,
 
 @figure
 def plot_datasets_chi2_theory(experiments,
-                              experiments_chi2,
                               each_dataset_chi2,
                               abs_chi2_data_theory_experiment,
                               abs_chi2_data_theory_dataset):
