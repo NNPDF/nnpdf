@@ -604,7 +604,7 @@ def plot_covmat_heatmap(covmat, title):
     matrix = df.values
     fig,ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(100*matrix,
-                            cmap=cm.Spectral,
+                            cmap=cm.Spectral_r,
                             norm=mcolors.SymLogNorm(linthresh=0.01,
                             linscale=10,
                             vmin=-100*matrix.max(),
@@ -623,7 +623,7 @@ def plot_corrmat_heatmap(corrmat, title):
     df = corrmat
     matrix = df.values
     fig, ax = plt.subplots(figsize=(15,15))
-    matrixplot = ax.matshow(matrix, cmap=cm.Spectral, vmin=-1, vmax=1)
+    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
     fig.colorbar(matrixplot)
     ax.set_title(title)
     ticklocs, ticklabels = matrix_plot_labels(df)
