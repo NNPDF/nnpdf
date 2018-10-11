@@ -1,0 +1,90 @@
+# This is a generic runcard which generates a report comparing a closure
+# test to its underlying law
+meta:
+    title: I didn't change the title
+    keywords: [Guilty]
+    author: Lazy Person
+
+closure1:
+    fit: {id: 071018-edi-001}
+    pdf: {id: 071018-edi-001, label: "closure 1"}
+    theory:
+      from_: fit
+    theoryid:
+      from_: theory
+    speclabel: "closure 1"
+
+closure2:
+    fit: {id: 071018-edi-002}
+    pdf: {id: 071018-edi-002, label: "closure 2"}
+    theory:
+      from_: fit
+    theoryid:
+      from_: theory
+    speclabel: "closure 2"
+
+closures:
+  - fit:
+      from_: closure1
+    pdf:
+      from_: closure1
+    theory:
+      from_: closure1
+    theoryid:
+      from_: closure1
+    speclabel:
+      from_: closure1
+  - fit:
+      from_: closure2
+    pdf:
+      from_: closure2
+    theory:
+      from_: closure2
+    theoryid:
+      from_: closure2
+    speclabel:
+      from_: closure2
+
+fits:
+    - from_: closure1
+    - from_: closure2
+
+theory:
+    from_: closure1
+theoryid:
+    from_: closure1
+#fit: 
+#    from_: closure1
+
+use_cuts: True
+use_fitcommondata: True
+
+template: report.md
+
+experiments:
+    from_: fit
+
+dataspecs:
+  - fit:
+      from_: closure1
+    pdf:
+      from_: closure1
+    theory:
+      from_: closure1
+    theoryid:
+      from_: closure1
+    speclabel:
+      from_: closure1
+  - fit:
+      from_: closure2
+    pdf:
+      from_: closure2
+    theory:
+      from_: closure2
+    theoryid:
+      from_: closure2
+    speclabel:
+      from_: closure2
+
+actions_:
+  - report(main=true)

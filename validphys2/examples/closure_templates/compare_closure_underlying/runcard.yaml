@@ -1,0 +1,90 @@
+# This is a generic runcard which generates a report comparing a closure
+# test to its underlying law
+meta:
+    title: I didn't change the title
+    keywords: [Guilty]
+    author: Lazy Person
+
+closures:
+    fit: {id: 071018-edi-001}
+    pdf: {id: 071018-edi-001, label: "test closures"}
+    theory:
+      from_: fit
+    theoryid:
+      from_: theory
+    speclabel: "closures"
+
+fits:
+    - from_: closures
+pdfs:
+    - from_: closures
+    - from_: Null
+theory:
+    from_: closures
+theoryid:
+    from_: closures
+
+use_cuts: True
+use_fitcommondata: True
+
+Q: 1.651
+
+pdfnormalize:
+    - normtitle: Absolute
+
+    - normalize_to: 1
+      normtitle: Ratio
+
+basespecs:
+    - basis: flavour
+      basistitle: Flavour basis
+    - basis: evolution
+      basistitle: Evolution basis
+
+pdfscalespecs:
+    - xscale: log
+      xscaletitle: Log
+    - xscale: linear
+      xscaletitle: Linear
+
+distspecs:
+   - ymin: 0
+     ymax: 20
+
+pos_use_kin: True
+
+dataset_report:
+    meta: Null
+    template: data.md
+
+pdf_report:
+    meta: Null
+    template: pdf.md
+
+pdf_uncertainty_report:
+    meta: Null
+    template: pdfuncertainty.md
+
+template: report.md
+
+experiments:
+    from_: fit
+
+dataspecs:
+  - theoryid:
+      from_: closures
+    pdf:
+      from_: closures
+    fit:
+      from_: closures
+    speclabel:
+      from_: closures
+   
+normalize:
+  normalize_to: 1
+
+datanorm:
+    normalize_to: data
+
+actions_:
+  - report(main=true)
