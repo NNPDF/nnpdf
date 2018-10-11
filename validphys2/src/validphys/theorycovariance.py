@@ -76,7 +76,7 @@ def theory_covmat(theoryids_experiments_central_values,
                   experiments_index, theoryids):
     """Calculates the theory covariance matrix for scale variations.
     The matrix is a dataframe indexed by experiments_index."""
-    s = make_scale_var_covmat(theoryids_experiments_central_values, theoryids)
+    s = make_scale_var_covmat(theoryids_experiments_central_values)
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
 
@@ -91,7 +91,7 @@ def theory_covmat_datasets(each_dataset_results_bytheory, theoryids):
     dataset_covmats=[]
     for dataset in each_dataset_results_bytheory:
         theory_centrals = [x[1].central_value for x in dataset]
-        s = make_scale_var_covmat(theory_centrals, theoryids)
+        s = make_scale_var_covmat(theory_centrals)
         dataset_covmats.append(s)
     return dataset_covmats
 
@@ -104,7 +104,7 @@ def total_covmat_datasets(each_dataset_results_bytheory, theoryids):
     dataset_covmats=[]
     for dataset in each_dataset_results_bytheory:
         theory_centrals = [x[1].central_value for x in dataset]
-        s = make_scale_var_covmat(theory_centrals, theoryids)
+        s = make_scale_var_covmat(theory_centrals)
         sigma = dataset[0][0].covmat
         cov = s + sigma
         dataset_covmats.append(cov)
@@ -116,7 +116,7 @@ def total_covmat_diagtheory_datasets(each_dataset_results_bytheory, theoryids):
     dataset_covmats=[]
     for dataset in each_dataset_results_bytheory:
         theory_centrals = [x[1].central_value for x in dataset]
-        s = make_scale_var_covmat(theory_centrals, theoryids)
+        s = make_scale_var_covmat(theory_centrals)
         s_diag = np.zeros((len(s),len(s)))
         np.fill_diagonal(s_diag, np.diag(s))
         sigma = dataset[0][0].covmat
@@ -143,7 +143,7 @@ def total_covmat_experiments(experiments_results_theory, theoryids):
     exp_result_covmats = []
     for exp_result in zip(*experiments_results_theory):
         theory_centrals = [x[1].central_value for x in exp_result]
-        s = make_scale_var_covmat(theory_centrals, theoryids)
+        s = make_scale_var_covmat(theory_centrals)
         sigma = exp_result[0][0].covmat
         cov = s + sigma
         exp_result_covmats.append(cov)
@@ -333,7 +333,7 @@ def total_covmat_diagtheory_experiments(experiments_results_theory, theoryids):
     exp_result_covmats = []
     for exp_result in zip(*experiments_results_theory):
         theory_centrals = [x[1].central_value for x in exp_result]
-        s = make_scale_var_covmat(theory_centrals, theoryids)
+        s = make_scale_var_covmat(theory_centrals)
         s_diag = np.zeros((len(s),len(s)))
         np.fill_diagonal(s_diag, np.diag(s))
         sigma = exp_result[0][0].covmat
@@ -604,7 +604,7 @@ def plot_covmat_heatmap(covmat, title):
     matrix = df.values
     fig,ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(100*matrix,
-                            cmap=cm.Spectral_r,
+                            cmap=cm.Spectral,
                             norm=mcolors.SymLogNorm(linthresh=0.01,
                             linscale=10,
                             vmin=-100*matrix.max(),
@@ -623,7 +623,7 @@ def plot_corrmat_heatmap(corrmat, title):
     df = corrmat
     matrix = df.values
     fig, ax = plt.subplots(figsize=(15,15))
-    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
+    matrixplot = ax.matshow(matrix, cmap=cm.Spectral, vmin=-1, vmax=1)
     fig.colorbar(matrixplot)
     ax.set_title(title)
     ticklocs, ticklabels = matrix_plot_labels(df)
