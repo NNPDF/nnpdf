@@ -8,13 +8,4 @@ Closures test estimators
 {@ plot_biases @}
 {@ plot_phi_scatter_dataspecs @}
 
-{@with closure1@}
-{@ fit @}
-{@endwith@}
-
-{@with closure2@}
-{@ fit @}
-{@endwith@}
-
-
 {@endwith@}
