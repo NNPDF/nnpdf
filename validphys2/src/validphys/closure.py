@@ -95,6 +95,7 @@ def plot_delta_chi2(delta_chi2_bootstrap, fits, use_fitcommondata):
     fig, ax = plt.subplots()
     for i, label in enumerate(labels):
         ax.hist(delta_chi2[:, i], alpha=0.3, label=label, zorder=100)
+    plt.xlabel(r'$\Delta_{\chi^{2}}$')
     l = ax.legend()
     l.set_zorder(1000)
     return fig
