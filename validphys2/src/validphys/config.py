@@ -539,6 +539,9 @@ class CoreConfig(configparser.Config):
         res.sort(key=lambda x: (x['posdataset_name']))
         return res
 
+    def produce_impose_matched_cuts(self):
+        return {'matched_cuts': True}
+
 
     #TODO: Worth it to do some black magic to not pass params explicitly?
     #Note that `parse_experiments` doesn't exist yet.
