@@ -9,6 +9,7 @@ import pathlib
 import functools
 import inspect
 import numbers
+import copy
 
 from collections import Mapping, Sequence, ChainMap
 
@@ -18,7 +19,8 @@ from reportengine.configparser import ConfigError, element_of, _parse_func
 from reportengine.helputils import get_parser_type
 from reportengine import report
 
-from validphys.core import ExperimentSpec, DataSetInput, ExperimentInput, CutsPolicy
+from validphys.core import (ExperimentSpec, DataSetInput, ExperimentInput,
+                            CutsPolicy, MatchedCuts)
 from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFoundError,
                               PDFNotFound, FallbackLoader)
 from validphys.gridvalues import LUMI_CHANNELS
@@ -435,8 +437,9 @@ class CoreConfig(configparser.Config):
                 theoryid=theoryid, use_cuts=use_cuts, fit=fit)}
 
 
-
-    def produce_matched_datasets_from_dataspecs(self, dataspecs):
+    def produce_matched_datasets_from_dataspecs(self,
+                                                dataspecs,
+                                                matched_cuts: bool = False):
         """Take an arbitrary list of mappings called dataspecs and
         return a new list of mappings called dataspecs constructed as follows.
 
@@ -457,34 +460,47 @@ class CoreConfig(configparser.Config):
                 * All the other keys in the original dataspec.
         """
         if not isinstance(dataspecs, Sequence):
-            raise ConfigError("dataspecs should be a sequence of mappings, not "
-                              f"{type(dataspecs).__name__}")
+            raise ConfigError(
+                "dataspecs should be a sequence of mappings, not "
+                f"{type(dataspecs).__name__}")
         all_names = []
         for spec in dataspecs:
             if not isinstance(spec, Mapping):
-                raise ConfigError("dataspecs should be a sequence of mappings, "
-                      f" but {spec} is {type(spec).__name__}")
+                raise ConfigError(
+                    "dataspecs should be a sequence of mappings, "
+                    f" but {spec} is {type(spec).__name__}")
 
             with self.set_context(ns=self._curr_ns.new_child(spec)):
-                _, experiments = self.parse_from_(None, 'experiments', write=False)
-                names = {(e.name, ds.name):(ds, dsin) for e in experiments for ds, dsin in zip(e.datasets, e)}
+                _, experiments = self.parse_from_(
+                    None, 'experiments', write=False)
+                names = {(e.name, ds.name): (ds, dsin)
+                         for e in experiments
+                         for ds, dsin in zip(e.datasets, e)}
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
 
         res = []
         for k in used_set:
-            inres = {'experiment_name':k[0], 'dataset_name': k[1]}
+            inres = {'experiment_name': k[0], 'dataset_name': k[1]}
             #TODO: Should this have the same name?
-            l = inres['dataspecs'] = []
+            inner_spec_list = inres['dataspecs'] = []
             for ispec, spec in enumerate(dataspecs):
                 #Passing spec by referene
                 d = ChainMap({
-                    'dataset':       all_names[ispec][k][0],
+                    'dataset': all_names[ispec][k][0],
                     'dataset_input': all_names[ispec][k][1],
+                }, spec)
+                inner_spec_list.append(d)
 
-                    },
-                    spec)
-                l.append(d)
+            if matched_cuts:
+                ndata = d['dataset'].commondata.ndata
+                matched_cuts = MatchedCuts(
+                    [d['dataset'].cuts for d in inner_spec_list], ndata=ndata)
+                for d in inner_spec_list:
+                    ds = copy.copy(d['dataset'])
+                    ds.cuts = matched_cuts
+                    d['dataset'] = ds
+
             res.append(inres)
         res.sort(key=lambda x: (x['experiment_name'], x['dataset_name']))
         return res
