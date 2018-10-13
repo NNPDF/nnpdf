@@ -6,7 +6,7 @@ LHC-CMS 8 TeV
 ---------------
 
 emu events with b-tagged jets (L=19.7 1/fb)
-Archived as: 1403.7366
+Archived as: 1403.7366v2
 Published in: JHEP 06 (2014) 090
 R_{t-ch.} = 1.95 ± 0.10 (stat) ± 0.19 (syst)
 
