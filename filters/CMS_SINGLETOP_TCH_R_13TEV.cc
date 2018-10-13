@@ -5,12 +5,12 @@ There is a single point
 LHC-CMS 13 TeV
 ---------------
 
-Selected events contain one muon and two jets where on eof the jets is identified as originating from a b-quark (L=2.2 1/fb)
+Selected events contain one muon and two jets where one of the jets is identified as originating from a b-quark (L=2.2 1/fb)
 Archived as: http://arxiv.org/pdf/1610.00678v3.pdf
 Published in: Physics Letters B, Vol. 772, 2017, pp 752-776
 R_{t-ch.} = 1.81 ± 0.18 (stat) ± 0.15 (syst)
 
-Here systematic uncertainties are split into 10 different categories (see Table 4 in the paper for the full breakdown and for more details):
+The systematic uncertainty is composed of the following 10 uncertainties (see Table 4 in the paper for the full breakdown and for more details):
 Profiled exp. uncert.
 Signal modelling
 ttbar modelling
@@ -45,9 +45,6 @@ void CMS_SINGLETOP_TCH_R_13TEVFilter::ReadData()
   string line;
   int idum;
   double cme;
-  double fstat_percentage;
-  double up, down, sigma, data_shift;
-  double total_shift;
 
   getline(f1,line);
   istringstream lstream(line);
@@ -58,35 +55,12 @@ void CMS_SINGLETOP_TCH_R_13TEVFilter::ReadData()
   fKin3[0] = cme*1000;       // Sqrt(s)
 
   lstream >> fData[0];       // Central value
-  lstream >> fstat_percentage; // Statistical (percentage) uncertainty
-  fStat[0] = fstat_percentage*fData[0]/100; // Convert percentage uncertainty to absolute uncertainty and store
+  lstream >> fStat[0];       // Absolute statistical uncertainty
 
-  for (int i = 0; i < 3; i++) // Profiled exp. uncert., signal modelling, ttbar modelling
-    {
-       lstream >> fSys[0][i].mult;
-       fSys[0][i].add = fSys[0][i].mult*fData[0]/100; 
-       fSys[0][i].type = MULT;
-       fSys[0][i].name = "UNCORR";      
-    }
-
-  for (int i = 3; i < 9; i++) // Symmetrise W+jets modelling uncert., scale variations uncerts., and PDF uncert.
-    {
-       lstream >> up >> down;
-       symmetriseErrors(up, down, &sigma, &data_shift);
-       fSys[0][i].mult = sigma;
-       fSys[0][i].add = fSys[0][i].mult*fData[0]/100;
-       fSys[0][i].type = MULT;
-       fSys[0][i].name = "UNCORR";
-       total_shift += data_shift;
-    }
-
-  lstream >> fSys[0][9].mult; // Top quark p_T modelling
-  fSys[0][9].add = fSys[0][9].mult*fData[0]/100;
-  fSys[0][9].type = MULT;
-  fSys[0][9].name = "UNCORR";
-
-  fData[0] *= (1.0 + total_shift*0.01); // Shift of central value due to asymmetric uncertainties
+  lstream >> fSys[0][0].add; // Absolute total systematic uncertainty
+  fSys[0][0].mult = fSys[0][0].add*100/fData[0]; // Multiplicative total systematic uncertainty
+  fSys[0][0].type = MULT;
+  fSys[0][0].name = "UNCORR";
 
   f1.close();
-
 }
