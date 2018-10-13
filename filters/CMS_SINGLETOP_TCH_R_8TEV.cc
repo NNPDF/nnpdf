@@ -56,10 +56,10 @@ void CMS_SINGLETOP_TCH_R_8TEVFilter::ReadData()
   lstream >> fData[0];       // Central value
   lstream >> fStat[0];       // Absolute statistical uncertainty
 
-  lstream >> fSys[0][i].add; // Absolute total systematic uncertainty
-  fSys[0][i].mult = fSys[0][i].mult*100/fData[0]; // Multiplicative total systematic uncertainty
-  fSys[0][i].type = MULT;
-  fSys[0][i].name = "UNCORR";      
+  lstream >> fSys[0][0].add; // Absolute total systematic uncertainty
+  fSys[0][0].mult = fSys[0][0].add*100/fData[0]; // Multiplicative total systematic uncertainty
+  fSys[0][0].type = MULT;
+  fSys[0][0].name = "UNCORR";      
 
   f1.close();
 }
