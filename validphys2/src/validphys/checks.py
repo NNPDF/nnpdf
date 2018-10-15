@@ -156,3 +156,8 @@ def check_speclabels_different(dataspecs_speclabel):
     """This is needed for grouping dataframes (and because
     generally indecated a bug)"""
     return _check_list_different(dataspecs_speclabel, 'dataspecs_speclabel')
+
+@make_argcheck
+def check_two_dataspecs(dataspecs):
+    l = len(dataspecs)
+    check(l == 2, f"Expecting exactly 2 dataspecs, not {l}")

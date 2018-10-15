@@ -9,8 +9,10 @@ import pathlib
 import functools
 import inspect
 import numbers
+import copy
 
-from collections import Mapping, Sequence, ChainMap
+from collections import ChainMap
+from collections.abc import Mapping, Sequence
 
 from reportengine import configparser
 from reportengine.environment import Environment, EnvironmentError_
@@ -18,7 +20,8 @@ from reportengine.configparser import ConfigError, element_of, _parse_func
 from reportengine.helputils import get_parser_type
 from reportengine import report
 
-from validphys.core import ExperimentSpec, DataSetInput, ExperimentInput, CutsPolicy
+from validphys.core import (ExperimentSpec, DataSetInput, ExperimentInput,
+                            CutsPolicy, MatchedCuts)
 from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFoundError,
                               PDFNotFound, FallbackLoader)
 from validphys.gridvalues import LUMI_CHANNELS
@@ -434,7 +437,19 @@ class CoreConfig(configparser.Config):
         return {'experiment':self.parse_experiment(experiment_input.as_dict(),
                 theoryid=theoryid, use_cuts=use_cuts, fit=fit)}
 
+    #TODO: Do this better and elsewhere
+    @staticmethod
+    def _check_dataspecs_type(dataspecs):
+        if not isinstance(dataspecs, Sequence):
+            raise ConfigError(
+                "dataspecs should be a sequence of mappings, not "
+                f"{type(dataspecs).__name__}")
 
+        for spec in dataspecs:
+            if not isinstance(spec, Mapping):
+                raise ConfigError(
+                    "dataspecs should be a sequence of mappings, "
+                    f" but {spec} is {type(spec).__name__}")
 
     def produce_matched_datasets_from_dataspecs(self, dataspecs):
         """Take an arbitrary list of mappings called dataspecs and
@@ -456,50 +471,39 @@ class CoreConfig(configparser.Config):
                 * dataset_input: The input line used to build dataset.
                 * All the other keys in the original dataspec.
         """
-        if not isinstance(dataspecs, Sequence):
-            raise ConfigError("dataspecs should be a sequence of mappings, not "
-                              f"{type(dataspecs).__name__}")
+        self._check_dataspecs_type(dataspecs)
         all_names = []
         for spec in dataspecs:
-            if not isinstance(spec, Mapping):
-                raise ConfigError("dataspecs should be a sequence of mappings, "
-                      f" but {spec} is {type(spec).__name__}")
-
             with self.set_context(ns=self._curr_ns.new_child(spec)):
-                _, experiments = self.parse_from_(None, 'experiments', write=False)
-                names = {(e.name, ds.name):(ds, dsin) for e in experiments for ds, dsin in zip(e.datasets, e)}
+                _, experiments = self.parse_from_(
+                    None, 'experiments', write=False)
+                names = {(e.name, ds.name): (ds, dsin)
+                         for e in experiments
+                         for ds, dsin in zip(e.datasets, e)}
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
 
         res = []
         for k in used_set:
-            inres = {'experiment_name':k[0], 'dataset_name': k[1]}
+            inres = {'experiment_name': k[0], 'dataset_name': k[1]}
             #TODO: Should this have the same name?
-            l = inres['dataspecs'] = []
+            inner_spec_list = inres['dataspecs'] = []
             for ispec, spec in enumerate(dataspecs):
                 #Passing spec by referene
                 d = ChainMap({
-                    'dataset':       all_names[ispec][k][0],
+                    'dataset': all_names[ispec][k][0],
                     'dataset_input': all_names[ispec][k][1],
-
-                    },
-                    spec)
-                l.append(d)
+                }, spec)
+                inner_spec_list.append(d)
             res.append(inres)
         res.sort(key=lambda x: (x['experiment_name'], x['dataset_name']))
         return res
 
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
         """Like produce_matched_datasets_from_dataspecs but for positivity datasets."""
-        if not isinstance(dataspecs, Sequence):
-            raise ConfigError("dataspecs should be a sequence of mappings, not "
-                              f"{type(dataspecs).__name__}")
+        self._check_dataspecs_type(dataspecs)
         all_names = []
         for spec in dataspecs:
-            if not isinstance(spec, Mapping):
-                raise ConfigError("dataspecs should be a sequence of mappings, "
-                      f" but {spec} is {type(spec).__name__}")
-
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, pos = self.parse_from_(None, 'posdatasets', write=False)
                 names = {(p.name):(p) for p in pos}
@@ -521,6 +525,45 @@ class CoreConfig(configparser.Config):
                 l.append(d)
             res.append(inres)
         res.sort(key=lambda x: (x['posdataset_name']))
+        return res
+
+    def produce_dataspecs_with_matched_cuts(self, dataspecs):
+        """Take a list of namespaces (dataspecs), resolve ``dataset`` within
+        each of them, and return another list of dataspecs where the datasets
+        all have the same cuts, corresponding to the intersection of the
+        selected points. All the datasets must have the same name (i.e.
+        correspond with the same experimental measurement), but can otherwise
+        differ, for example in the theory used for the experimental
+        predictions.
+
+        This rule can be combined with ``matched_datasets_from_dataspecs``.
+        """
+        self._check_dataspecs_type(dataspecs)
+        if not dataspecs:
+            return dataspecs
+        #Can now assume we have at least one element
+        cutlist = []
+        dslist = []
+        names = set()
+        for spec in dataspecs:
+            with self.set_context(ns=self._curr_ns.new_child(spec)):
+                _, ds = self.parse_from_(None, 'dataset', write=False)
+            dslist.append(ds)
+            cutlist.append(ds.cuts)
+            names.add(ds.name)
+
+        lnames = len(names)
+        if lnames != 1:
+            raise ConfigError("Each dataspec must have a dataset with the same"
+                f"name, but got {lnames} different ones: {names}")
+
+        ndata = ds.commondata.ndata
+        matched_cuts = MatchedCuts(cutlist, ndata=ndata)
+        res = []
+        for spec, ds in zip(dataspecs, dslist):
+            newds = copy.copy(ds)
+            newds.cuts = matched_cuts
+            res.append(ChainMap({'dataset': newds}, spec))
         return res
 
 

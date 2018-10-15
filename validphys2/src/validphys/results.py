@@ -15,13 +15,14 @@ import scipy.linalg as la
 import pandas as pd
 
 from NNPDF import ThPredictions, CommonData, Experiment
-from reportengine.checks import require_one, remove_outer, check_not_empty, make_argcheck, CheckError
+from reportengine.checks import require_one, remove_outer, check_not_empty
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.checks import check_cuts_considered, check_pdf_is_montecarlo, check_speclabels_different
+from validphys.checks import (check_cuts_considered, check_pdf_is_montecarlo,
+                              check_speclabels_different, check_two_dataspecs)
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
-from validphys.calcutils import all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values, all_chi2_theory, central_chi2_theory
+from validphys.calcutils import all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values
 
 log = logging.getLogger(__name__)
 
@@ -789,14 +790,9 @@ def dataspecs_chi2_table(
     return fits_chi2_table(dataspecs_experiments_chi2_table,
                            dataspecs_datasets_chi2_table, show_total)
 
-@make_argcheck
-def _check_two_dataspecs(dataspecs):
-    l = len(dataspecs)
-    if l != 2:
-        raise CheckError(f"Expecting exactly 2 dataspecs, not {l}")
 
 @table
-@_check_two_dataspecs
+@check_two_dataspecs
 def dataspecs_chi2_differences_table(dataspecs, dataspecs_chi2_table):
     """Given two dataspecs, print the chi² (using dataspecs_chi2_table)
     and the difference between the first and the second."""

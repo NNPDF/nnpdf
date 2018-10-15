@@ -345,6 +345,20 @@ class InternalCutsWrapper(TupleComp):
                                              self.w2min),
                 dtype=int))
 
+class MatchedCuts(TupleComp):
+    def __init__(self, othercuts, ndata):
+        self.othercuts = othercuts
+        self.ndata = ndata
+        super().__init__(othercuts, ndata)
+
+    def load(self):
+        loaded =  [c.load() for c in self.othercuts if c]
+        if loaded:
+            return functools.reduce(np.intersect1d, loaded)
+        self._full = True
+        return np.arange(self.ndata)
+
+
 def cut_mask(cuts):
     """Return an objects that will act as the cuts when applied as a slice"""
     if cuts is None:
@@ -398,8 +412,12 @@ class DataSetSpec(TupleComp):
             #it happily to the vector to the SWIG wrapper.
             #Do not do this (or find how to enable in SWIG):
             #data = DataSet(data, list(dataset.cuts))
-            intmask = [int(ele) for ele in self.cuts.load()]
-            data = DataSet(data, intmask)
+            loaded_cuts = self.cuts.load()
+            #This is an optimization to avoid recomputing the dataset if
+            #nothing is discarded
+            if not (hasattr(loaded_cuts, '_full') and loaded_cuts._full):
+                intmask = [int(ele) for ele in loaded_cuts]
+                data = DataSet(data, intmask)
         return data
 
     def __str__(self):
