@@ -686,31 +686,27 @@ def plot_datasets_chi2_theory(experiments, experiments_chi2, each_dataset_chi2,
     ax.legend(fontsize=14)
     return fig
 
-@make_argcheck
-def check_matched_cuts(matched_cuts):
-    check(matched_cuts, "`matched_cuts` must be set to True for this action")
 
-LabeledShifts = namedtuple('LabeledShifts', ('experiment_name', 'dataset_name', 'shifts'))
-#TODO: This should actuallly make sure that we have matched cuts. A better way
-#would be to have a different production rule.
+matched_dataspecs_results = collect('results', ['dataspecs_with_matched_cuts'])
+
+LabeledShifts = namedtuple('LabeledShifts',
+    ('experiment_name', 'dataset_name', 'shifts'))
 @check_two_dataspecs
-@check_matched_cuts
-def dataspecs_dataset_prediction_shift(dataspecs_results, experiment_name,
-                                       dataset_name , matched_cuts:bool):
+def dataspecs_dataset_prediction_shift(matched_dataspecs_results, experiment_name,
+                                       dataset_name):
     """Compute the differnce in theory predictions between two dataspecs.
     This can be used in combination with `matched_datasets_from_dataspecs`
 
     It returns a ``LabeledShifts`` containing ``dataset_name``,
     ``experiment_name`` and``shifts``.
     """
-    r1, r2 = dataspecs_results
+    r1, r2 = matched_dataspecs_results
     res =  r1[1].central_value - r2[1].central_value
     return LabeledShifts(dataset_name=dataset_name,
                          experiment_name=experiment_name, shifts=res)
 
 matched_dataspecs_dataset_prediction_shift = collect(
-        'dataspecs_dataset_prediction_shift',
-        ['impose_matched_cuts', 'matched_datasets_from_dataspecs'])
+    'dataspecs_dataset_prediction_shift', ['matched_datasets_from_dataspecs'])
 
 
 #TODO: Not sure we want to export this, as it is 231 Mb...
