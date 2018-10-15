@@ -13,14 +13,13 @@ import scipy.linalg as la
 import matplotlib.pyplot as plt
 from matplotlib import cm, colors as mcolors
 import pandas as pd
-from collections import defaultdict, namedtuple
 
 from reportengine.figure import figure
-from reportengine.checks import make_argcheck, CheckError, check
+from reportengine.checks import make_argcheck, check
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.results import results, experiment_results
+from validphys.results import results
 from validphys.results import experiments_central_values
 from validphys.results import Chi2Data, experiments_chi2_table
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
@@ -778,7 +777,6 @@ def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat,
 @figure
 def plot_datasets_chi2_theory(experiments,
                               each_dataset_chi2,
-                              abs_chi2_data_theory_experiment,
                               abs_chi2_data_theory_dataset):
     """Plot the chi² of all datasets, before and after adding theory errors, with bars."""
     ds = iter(each_dataset_chi2)
@@ -790,7 +788,7 @@ def plot_datasets_chi2_theory(experiments,
         for dataset, dsres in zip(experiment, ds):
             dschi2.append(dsres.central_result/dsres.ndata)
             xticks.append(dataset.name)
-    for experiment, expres in zip(experiments, abs_chi2_data_theory_experiment):
+    for experiment in experiments:
         for dataset, dsres in zip(experiment, dstheory):
             dschi2theory.append(dsres.central_result/dsres.ndata)
     plotvalues = np.stack((dschi2theory, dschi2))
