@@ -13,9 +13,10 @@ import scipy.linalg as la
 import matplotlib.pyplot as plt
 from matplotlib import cm, colors as mcolors
 import pandas as pd
+from collections import defaultdict, namedtuple
 
 from reportengine.figure import figure
-from reportengine.checks import make_argcheck, check
+from reportengine.checks import make_argcheck, CheckError, check
 from reportengine.table import table
 from reportengine import collect
 
@@ -25,6 +26,7 @@ from validphys.results import Chi2Data, experiments_chi2_table
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys.plotoptions import get_info
 from validphys import plotutils
+from validphys.checks import check_two_dataspecs
 
 log = logging.getLogger(__name__)
 
@@ -133,7 +135,6 @@ def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
 
-experiments_results = collect(experiment_results, ('experiments',))
 experiments_results_theory = collect('experiments_results', ('theoryids',))
 
 @_check_allowed_theory_number
@@ -798,3 +799,77 @@ def plot_datasets_chi2_theory(experiments,
     ax.set_title(r"$\chi^2$ distribution for datasets")
     ax.legend(fontsize=14)
     return fig
+
+
+matched_dataspecs_results = collect('results', ['dataspecs_with_matched_cuts'])
+
+LabeledShifts = namedtuple('LabeledShifts',
+    ('experiment_name', 'dataset_name', 'shifts'))
+@check_two_dataspecs
+def dataspecs_dataset_prediction_shift(matched_dataspecs_results, experiment_name,
+                                       dataset_name):
+    """Compute the differnce in theory predictions between two dataspecs.
+    This can be used in combination with `matched_datasets_from_dataspecs`
+
+    It returns a ``LabeledShifts`` containing ``dataset_name``,
+    ``experiment_name`` and``shifts``.
+    """
+    r1, r2 = matched_dataspecs_results
+    res =  r1[1].central_value - r2[1].central_value
+    return LabeledShifts(dataset_name=dataset_name,
+                         experiment_name=experiment_name, shifts=res)
+
+matched_dataspecs_dataset_prediction_shift = collect(
+    'dataspecs_dataset_prediction_shift', ['matched_datasets_from_dataspecs'])
+
+
+#TODO: Not sure we want to export this, as it is 231 Mb...
+#@table
+def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift):
+    """Priduce a matrix out of the outer product of
+    ``dataspecs_dataset_prediction_shift``. The matrix will be a
+    pandas DataFrame, indexed similarly to ``experiments_index``."""
+    all_shifts = np.concatenate(
+        [val.shifts for val in matched_dataspecs_dataset_prediction_shift])
+    mat = np.outer(all_shifts, all_shifts)
+    #build index
+    expnames = np.concatenate([
+        np.full(len(val.shifts), val.experiment_name, dtype=object)
+        for val in matched_dataspecs_dataset_prediction_shift
+    ])
+    dsnames = np.concatenate([
+        np.full(len(val.shifts), val.dataset_name, dtype=object)
+        for val in matched_dataspecs_dataset_prediction_shift
+    ])
+    point_indexes = np.concatenate([
+        np.arange(len(val.shifts))
+        for val in matched_dataspecs_dataset_prediction_shift
+    ])
+
+    index = pd.MultiIndex.from_arrays(
+        [expnames, dsnames, point_indexes],
+        names=["Experiment name", "Dataset name", "Point"])
+
+    return pd.DataFrame(mat, columns=index, index=index)
+
+@figure
+def plot_matched_datasets_shift_matrix(matched_datasets_shift_matrix):
+    """Heatmap plot of matched_datasets_shift_matrix"""
+    return plot_covmat_heatmap(matched_datasets_shift_matrix,
+                               "Shift outer product matrix")
+
+@figure
+def plot_matched_datasets_shift_matrix_correlations(
+        matched_datasets_shift_matrix):
+    """Heatmap plot of the correlations of
+    matched_datasets_shift_matrix. By construction these are
+    zero or one."""
+    mat = matched_datasets_shift_matrix.values
+    diag_minus_half = (np.diagonal(mat))**(-0.5)
+    corrmat = diag_minus_half[:, np.newaxis] * mat * diag_minus_half
+    corrmat = pd.DataFrame(
+        corrmat,
+        columns=matched_datasets_shift_matrix.columns,
+        index=matched_datasets_shift_matrix.index)
+    return plot_corrmat_heatmap(
+        corrmat, "Shift outer product normalized (correlation) matrix")

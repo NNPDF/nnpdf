@@ -9,8 +9,10 @@ import pathlib
 import functools
 import inspect
 import numbers
+import copy
 
-from collections import Mapping, Sequence, ChainMap
+from collections import ChainMap
+from collections.abc import Mapping, Sequence
 
 from reportengine import configparser
 from reportengine.environment import Environment, EnvironmentError_
@@ -18,7 +20,8 @@ from reportengine.configparser import ConfigError, element_of, _parse_func
 from reportengine.helputils import get_parser_type
 from reportengine import report
 
-from validphys.core import ExperimentSpec, DataSetInput, ExperimentInput
+from validphys.core import (ExperimentSpec, DataSetInput, ExperimentInput,
+                            CutsPolicy, MatchedCuts)
 from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFoundError,
                               PDFNotFound, FallbackLoader)
 from validphys.gridvalues import LUMI_CHANNELS
@@ -132,14 +135,37 @@ class CoreConfig(configparser.Config):
                               self.loader.available_theories,
                               display_alternatives='all')
 
-    def parse_use_cuts(self, use_cuts:bool, *, fit=None):
-        """Whether to use the filtered points in the fit, or the whole
-        data in the dataset."""
-        if use_cuts and not fit:
-            raise ConfigError("Setting 'use_cuts' true requires "
-            "specifying a fit on which filter "
-            "has been executed, e.g.\nfit : NNPDF30_nlo_as_0118")
-        return use_cuts
+    def parse_use_cuts(self, use_cuts: (bool, str)):
+        """Whether to filter the points based on the cuts applied in the fit,
+        or the whole data in the dataset. The possible options are:
+
+        - internal: Calculate the cuts based on the existing rules. This is
+          the default.
+
+        - fromfit: Read the cuts stored in the fit.
+
+        - nocuts: Use the whole dataset.
+        """
+        #The lower is an aesthetic preference...
+        valid_cuts = {c.value for c in CutsPolicy}
+        if isinstance(use_cuts, bool):
+            if use_cuts:
+                res = CutsPolicy.FROMFIT
+            else:
+                res = CutsPolicy.NOCUTS
+            log.warning(
+                "Setting a boolean for `use_cuts` is deprecated. "
+                f"The available values are {valid_cuts} and the default "
+                f"value is 'internal'. Your input ('{use_cuts}') is "
+                f"equivalent to '{res}'.")
+        elif isinstance(use_cuts, str) and use_cuts in valid_cuts:
+            res = CutsPolicy(use_cuts)
+        else:
+            raise ConfigError(f"Invalid use_cuts setting: '{use_cuts}'.",
+                              use_cuts, valid_cuts)
+
+        return res
+
 
     #TODO: load fit config from here
     @element_of('fits')
@@ -187,11 +213,19 @@ class CoreConfig(configparser.Config):
             _, pdf = self.parse_from_('fit', 'pdf', write=False)
         return {'pdf': pdf}
 
+    def produce_fitunderlyinglaw(self, fit):
+        """Reads closuretest: fakepdf from fit config file and passes as
+        pdf
+        """
+        with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
+            _, datacuts = self.parse_from_('fit', 'datacuts', write=False)
+        underlyinglaw = datacuts['t0pdfset']
+        return {'pdf': underlyinglaw}
 
 
 
     @element_of('dataset_inputs')
-    def parse_dataset_input(self, dataset):
+    def parse_dataset_input(self, dataset:Mapping):
         """The mapping that corresponds to the dataset specifications in the
         fit files"""
         known_keys = {'dataset', 'sys', 'cfac', 'frac', 'weight'}
@@ -218,7 +252,7 @@ class CoreConfig(configparser.Config):
         return DataSetInput(name=name, sys=sysnum, cfac=cfac,
                 weight=weight)
 
-    def parse_use_fitcommondata(self, do_use: bool, use_cuts):
+    def parse_use_fitcommondata(self, do_use: bool):
         """Use the commondata files in the fit instead of those in the data
         directory."""
         return do_use
@@ -244,23 +278,54 @@ class CoreConfig(configparser.Config):
         except LoadFailedError as e:
             raise ConfigError(e) from e
 
-    #TODO: Decide how should this interact with use_cuts
-    def produce_cuts(self, *, dataset_input, use_cuts, fit=None):
-        """Obtain cuts from a fit, for a given dataset input"""
-        if not use_cuts:
+    def produce_cuts(self,
+                     *,
+                     dataset_input,
+                     use_cuts,
+                     fit=None,
+                     q2min: (numbers.Number, type(None)) = None,
+                     w2min: (numbers.Number, type(None)) = None,
+                     theoryid=None,
+                     use_fitcommondata=False):
+        """Obtain cuts for a given dataset input, based on the
+        appropriate policy."""
+        #TODO: Put this bit of logic into loader.check_cuts
+        if use_cuts is CutsPolicy.NOCUTS:
             return None
-        name = dataset_input.name
-        try:
-            return self.loader.check_cuts(name, fit)
-        except LoadFailedError as e:
-            raise ConfigError(e) from e
+        elif use_cuts is CutsPolicy.FROMFIT:
+            if not fit:
+                raise ConfigError(
+                    "Setting 'use_cuts' to 'fromfit' requires "
+                    "specifying a fit on which filter "
+                    "has been executed, e.g.\nfit : NNPDF30_nlo_as_0118")
+            name = dataset_input.name
+            try:
+                return self.loader.check_fit_cuts(name, fit)
+            except LoadFailedError as e:
+                raise ConfigError(e) from e
+        elif use_cuts is CutsPolicy.INTERNAL:
+            if not isinstance(q2min, numbers.Number):
+                raise ConfigError("q2min must be specified for internal cuts")
+            if not isinstance(w2min, numbers.Number):
+                raise ConfigError("w2min must be specified for internal cuts")
+            if not theoryid:
+                raise ConfigError(
+                    "thoeryid must be specified for internal cuts")
+            full_ds = self.produce_dataset(
+                dataset_input=dataset_input,
+                theoryid=theoryid,
+                cuts=None,
+                use_fitcommondata=use_fitcommondata,
+                fit=fit)
+            return self.loader.check_internal_cuts(full_ds, q2min, w2min)
+        raise TypeError("Wrong use_cuts")
 
 
     def produce_dataset(self,
                         *,
                         dataset_input,
                         theoryid,
-                        use_cuts,
+                        cuts,
                         use_fitcommondata=False,
                         fit=None,
                         check_plotting: bool = False):
@@ -279,7 +344,7 @@ class CoreConfig(configparser.Config):
                 sysnum=sysnum,
                 theoryid=theoryid,
                 cfac=cfac,
-                use_cuts=use_cuts,
+                cuts=cuts,
                 use_fitcommondata=use_fitcommondata,
                 fit=fit,
                 weight=weight)
@@ -294,33 +359,58 @@ class CoreConfig(configparser.Config):
             #normalize=True should check for more stuff
             get_info(ds, normalize=True)
             if not ds.commondata.plotfiles:
-                log.warn("Plotting files not found for: %s" % (ds,))
+                log.warning(f"Plotting files not found for: {ds}")
         return ds
 
-
     @configparser.element_of('experiments')
-    def parse_experiment(self, experiment:dict, *, theoryid, use_cuts,
-                         fit=None,
-                         check_plotting:bool=False,
-                         use_fitcommondata=False):
+    def parse_experiment(
+            self,
+            experiment: dict,
+            *,
+            theoryid,
+            use_cuts,
+            fit=None,
+            check_plotting: bool = False,
+            use_fitcommondata=False,
+            q2min: (numbers.Number, type(None)) = None,
+            w2min: (numbers.Number, type(None)) = None,
+    ):
         """A set of datasets where correlated systematics are taken
            into account. It is a mapping where the keys are the experiment
            name 'experiment' and a list of datasets."""
         try:
             name, datasets = experiment['experiment'], experiment['datasets']
         except KeyError as e:
-            raise ConfigError("'experiment' must be a mapping with "
-                              "'experiment' and 'datasets', but %s is missing" % e)
+            raise ConfigError(
+                "'experiment' must be a mapping with "
+                "'experiment' and 'datasets', but %s is missing" % e)
 
         dsinputs = [self.parse_dataset_input(ds) for ds in datasets]
+        cutinps = [
+            self.produce_cuts(
+                dataset_input=dsinp,
+                use_cuts=use_cuts,
+                q2min=q2min,
+                w2min=w2min,
+                fit=fit,
+                theoryid=theoryid,
+                use_fitcommondata=use_fitcommondata) for dsinp in dsinputs
+        ]
+
         #autogenerated func, from elemet_of
-        datasets = [self.produce_dataset(dataset_input=dsinp, theoryid=theoryid,
-                                       use_cuts=use_cuts, fit=fit,
-                                       check_plotting=check_plotting,
-                                       use_fitcommondata=use_fitcommondata)
-                                       for dsinp in dsinputs]
+        datasets = [
+            self.produce_dataset(
+                dataset_input=dsinp,
+                theoryid=theoryid,
+                cuts=cuts,
+                fit=fit,
+                check_plotting=check_plotting,
+                use_fitcommondata=use_fitcommondata)
+            for (dsinp, cuts) in zip(dsinputs, cutinps)
+        ]
 
         return ExperimentSpec(name=name, datasets=datasets, dsinputs=dsinputs)
+
 
     @configparser.element_of('experiment_inputs')
     def parse_experiment_input(self, ei:dict):
@@ -347,7 +437,19 @@ class CoreConfig(configparser.Config):
         return {'experiment':self.parse_experiment(experiment_input.as_dict(),
                 theoryid=theoryid, use_cuts=use_cuts, fit=fit)}
 
+    #TODO: Do this better and elsewhere
+    @staticmethod
+    def _check_dataspecs_type(dataspecs):
+        if not isinstance(dataspecs, Sequence):
+            raise ConfigError(
+                "dataspecs should be a sequence of mappings, not "
+                f"{type(dataspecs).__name__}")
 
+        for spec in dataspecs:
+            if not isinstance(spec, Mapping):
+                raise ConfigError(
+                    "dataspecs should be a sequence of mappings, "
+                    f" but {spec} is {type(spec).__name__}")
 
     def produce_matched_datasets_from_dataspecs(self, dataspecs):
         """Take an arbitrary list of mappings called dataspecs and
@@ -369,50 +471,39 @@ class CoreConfig(configparser.Config):
                 * dataset_input: The input line used to build dataset.
                 * All the other keys in the original dataspec.
         """
-        if not isinstance(dataspecs, Sequence):
-            raise ConfigError("dataspecs should be a sequence of mappings, not "
-                              f"{type(dataspecs).__name__}")
+        self._check_dataspecs_type(dataspecs)
         all_names = []
         for spec in dataspecs:
-            if not isinstance(spec, Mapping):
-                raise ConfigError("dataspecs should be a sequence of mappings, "
-                      f" but {spec} is {type(spec).__name__}")
-
             with self.set_context(ns=self._curr_ns.new_child(spec)):
-                _, experiments = self.parse_from_(None, 'experiments', write=False)
-                names = {(e.name, ds.name):(ds, dsin) for e in experiments for ds, dsin in zip(e.datasets, e)}
+                _, experiments = self.parse_from_(
+                    None, 'experiments', write=False)
+                names = {(e.name, ds.name): (ds, dsin)
+                         for e in experiments
+                         for ds, dsin in zip(e.datasets, e)}
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
 
         res = []
         for k in used_set:
-            inres = {'experiment_name':k[0], 'dataset_name': k[1]}
+            inres = {'experiment_name': k[0], 'dataset_name': k[1]}
             #TODO: Should this have the same name?
-            l = inres['dataspecs'] = []
+            inner_spec_list = inres['dataspecs'] = []
             for ispec, spec in enumerate(dataspecs):
                 #Passing spec by referene
                 d = ChainMap({
-                    'dataset':       all_names[ispec][k][0],
+                    'dataset': all_names[ispec][k][0],
                     'dataset_input': all_names[ispec][k][1],
-
-                    },
-                    spec)
-                l.append(d)
+                }, spec)
+                inner_spec_list.append(d)
             res.append(inres)
         res.sort(key=lambda x: (x['experiment_name'], x['dataset_name']))
         return res
 
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
         """Like produce_matched_datasets_from_dataspecs but for positivity datasets."""
-        if not isinstance(dataspecs, Sequence):
-            raise ConfigError("dataspecs should be a sequence of mappings, not "
-                              f"{type(dataspecs).__name__}")
+        self._check_dataspecs_type(dataspecs)
         all_names = []
         for spec in dataspecs:
-            if not isinstance(spec, Mapping):
-                raise ConfigError("dataspecs should be a sequence of mappings, "
-                      f" but {spec} is {type(spec).__name__}")
-
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, pos = self.parse_from_(None, 'posdatasets', write=False)
                 names = {(p.name):(p) for p in pos}
@@ -434,6 +525,45 @@ class CoreConfig(configparser.Config):
                 l.append(d)
             res.append(inres)
         res.sort(key=lambda x: (x['posdataset_name']))
+        return res
+
+    def produce_dataspecs_with_matched_cuts(self, dataspecs):
+        """Take a list of namespaces (dataspecs), resolve ``dataset`` within
+        each of them, and return another list of dataspecs where the datasets
+        all have the same cuts, corresponding to the intersection of the
+        selected points. All the datasets must have the same name (i.e.
+        correspond with the same experimental measurement), but can otherwise
+        differ, for example in the theory used for the experimental
+        predictions.
+
+        This rule can be combined with ``matched_datasets_from_dataspecs``.
+        """
+        self._check_dataspecs_type(dataspecs)
+        if not dataspecs:
+            return dataspecs
+        #Can now assume we have at least one element
+        cutlist = []
+        dslist = []
+        names = set()
+        for spec in dataspecs:
+            with self.set_context(ns=self._curr_ns.new_child(spec)):
+                _, ds = self.parse_from_(None, 'dataset', write=False)
+            dslist.append(ds)
+            cutlist.append(ds.cuts)
+            names.add(ds.name)
+
+        lnames = len(names)
+        if lnames != 1:
+            raise ConfigError("Each dataspec must have a dataset with the same"
+                f"name, but got {lnames} different ones: {names}")
+
+        ndata = ds.commondata.ndata
+        matched_cuts = MatchedCuts(cutlist, ndata=ndata)
+        res = []
+        for spec, ds in zip(dataspecs, dslist):
+            newds = copy.copy(ds)
+            newds.cuts = matched_cuts
+            res.append(ChainMap({'dataset': newds}, spec))
         return res
 
 
