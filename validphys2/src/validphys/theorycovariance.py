@@ -155,7 +155,7 @@ commondata_experiments = collect('commondata', ['experiments', 'experiment'])
 # TODO: Improve how processes are assigned. Currently we group manually into
 # Drell-Yan, Heavy Quarks and Jets but adding more processes could break
 # this assignment
-def process_lookup(each_dataset_results_bytheory, commondata_experiments):
+def process_lookup(commondata_experiments):
     """Produces a dictionary with keys corresponding to dataset names
     and values corresponding to process types. Process types are
     regrouped into the four categories 'Drell-Yan', 'Heavy Quarks', Jets'
