@@ -19,7 +19,7 @@ from reportengine.checks import require_one, remove_outer, check_not_empty, make
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.checks import assert_use_cuts_true, check_pdf_is_montecarlo, check_speclabels_different
+from validphys.checks import check_cuts_considered, check_pdf_is_montecarlo, check_speclabels_different
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
 from validphys.calcutils import all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values, all_chi2_theory, central_chi2_theory
 
@@ -569,7 +569,7 @@ def correlate_bad_experiments(experiments, replica_data, pdf):
     df.sort_values(df.columns[0], inplace=True, ascending=False)
     return df
 
-@assert_use_cuts_true
+@check_cuts_considered
 @table
 def closure_shifts(experiments_index, fit, use_cuts, experiments):
     """Save the differenve between the fitted data and the real commondata

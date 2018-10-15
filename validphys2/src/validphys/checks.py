@@ -15,6 +15,7 @@ from reportengine.checks import (make_check, CheckError, require_one,
                                  check_not_empty, make_argcheck, check_positive, check)
 
 from validphys import lhaindex
+from validphys.core import CutsPolicy
 
 import logging
 log = logging.getLogger(__name__)
@@ -91,9 +92,9 @@ def check_scale(scalename, allow_none=False):
     return check
 
 @make_argcheck
-def assert_use_cuts_true(use_cuts):
-    if not use_cuts:
-        raise CheckError("use_cuts needs to be True for this action.")
+def check_cuts_considered(use_cuts):
+    if use_cuts not in (CutsPolicy.FROMFIT, CutsPolicy.INTERNAL):
+        raise CheckError(f"Cuts must be computed for this action, but they are set to {use_cuts.value}")
 
 
 @make_argcheck
