@@ -7,7 +7,7 @@ set -e
 pytest --pyargs validphys
 
 
-export LDFLAGS=$(echo $LDFLAGS | sed 's/-Wl,-dead_strip_dylibs//g')
+#export LDFLAGS=$(echo $LDFLAGS | sed 's/-Wl,-dead_strip_dylibs//g')
 
 mkdir bldtest
 cd bldtest
