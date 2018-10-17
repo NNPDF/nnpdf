@@ -15,10 +15,10 @@ from matplotlib import cm, colors as mcolors, ticker as mticker
 import scipy.stats as stats
 
 from reportengine.figure import figure, figuregen
-from reportengine.checks import make_check, CheckError, make_argcheck
+from reportengine.checks import make_check, CheckError, make_argcheck, check
 from reportengine.floatformatting import format_number
 
-from validphys.core import MCStats, cut_mask
+from validphys.core import MCStats, cut_mask, CutsPolicy
 from validphys.results import chi2_stat_labels
 from validphys.plotoptions import get_info, kitable, transform_result
 from validphys import plotutils
@@ -35,7 +35,8 @@ def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
     alldata, central, npoints = abs_chi2_data
     if not isinstance(alldata, MCStats):
         ax.set_facecolor("#ffcccc")
-        log.warn("Chi² distribution plots have a different meaning for non MC sets.")
+        log.warning("Chi² distribution plots have a "
+                "different meaning for non MC sets.")
         label += " (%s!)" % pdf.ErrorType
     label += '\n'+ '\n'.join(str(chi2_stat_labels[k])+(' %.2f' % v) for (k,v) in chi2_stats.items())
     ax.set_title(r"$\chi^2$ distribution for %s" % setlabel)
@@ -276,7 +277,7 @@ def _plot_fancy_impl(results, commondata, cutlist,
                 x = np.arange(npoints)
                 ax.set_xticks(x)
                 ax.set_xticklabels(xticklabels)
-                #TODO: Remove this when mpl stops doing the idiotic thing
+                #TODO: Remove this when mpl stops doing the wrong thing
                 #(in v2?)
                 ax.set_xlim(-npoints/20, npoints - 1+ npoints/20)
 
@@ -769,11 +770,12 @@ def plot_positivity(pdfs, positivity_predictions_for_pdfs, posdataset, pos_use_k
 
     return fig
 
-
 @make_argcheck
 def _check_display_cuts_requires_use_cuts(display_cuts, use_cuts):
-    if display_cuts and not use_cuts:
-        raise CheckError("The display_cuts option requires setting use_cuts to True")
+    check(
+        not (display_cuts
+             and use_cuts not in (CutsPolicy.FROMFIT, CutsPolicy.INTERNAL)),
+        "The display_cuts option requires setting use_cuts to True")
 
 @make_argcheck
 def _check_marker_by(marker_by):
@@ -815,13 +817,14 @@ def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
     The representation of the filtered data depends on the `display_cuts` and
     `use_cuts` options:
 
-     - If `use_cuts` is False, all the data will be plotted (and setting
-    `display_cuts` to True is an error).
+     - If cuts are disabled (`use_cuts` is CutsPolicy.NOCUTS), all the data
+    will be plotted (and setting `display_cuts` to True is an error).
 
-     - If `use_cuts` is True and `display_cuts` is False, the masked points
-    will be ignored.
+     - If cuts are enabled (`use_cuts` is either CutsPolicy.FROMFIT or
+    CutsPolicy.INTERNAL) and `display_cuts` is False, the masked points will
+    be ignored.
 
-     - If `use_cuts` is True and `display_cuts` is True, the filtered points
+     - If cuts are enabled and `display_cuts` is True, the filtered points
     will be displaed and marked.
 
     The points are grouped according to the `marker_by` option. The possible

@@ -111,7 +111,7 @@ def write_replica(rep, set_root, header, subgrids):
     suffix = str(rep).zfill(4)
     target_file = set_root / f'{set_root.name}_{suffix}.dat'
     if target_file.is_file():
-        log.warn(f"Overwriting replica file {target_file}")
+        log.warning(f"Overwriting replica file {target_file}")
     with open(target_file, 'wb') as out:
         _rep_to_buffer(out, header, subgrids)
 

@@ -64,8 +64,9 @@ class PDFPlotter(metaclass=abc.ABCMeta):
 
             #Handle division by zero more quietly
             def fp_error(tp, flag):
-                log.warn("Invalid values found computing normalization to %s: "
-                 "Floating point error (%s).", normalize_pdf, tp)
+                log.warning("Invalid values found computing "
+                    f"normalization to {normalize_pdf}: "
+                    f"Floating point error ({tp}).")
                 #Show warning only once
                 np.seterr(all='ignore')
 
@@ -172,8 +173,8 @@ class PDFPlotter(metaclass=abc.ABCMeta):
 def _warn_pdf_not_montecarlo(pdf):
     et = pdf.ErrorType
     if et != 'replicas':
-        log.warn("Plotting members of a non-Monte Carlo PDF set:"
-        " %s with error type '%s'.", pdf.name, et)
+        log.warning("Plotting members of a non-Monte Carlo PDF set:"
+        f" {pdf.name} with error type '{et}'.")
 
 #Cant't add the lru_cache here because pdfs is not hashable at the moment
 @make_argcheck
