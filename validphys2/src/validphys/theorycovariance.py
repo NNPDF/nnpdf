@@ -35,10 +35,10 @@ theoryids_experiments_central_values = collect(experiments_central_values,
 def _check_correct_theory_combination(theoryids, fivetheories):
     """Checks that a valid theory combination corresponding to an existing prescription has been inputted"""
     l = len(theoryids)
-    check(l in {3,5,7,9}, "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")    
+    check(l in {3,5,7,9}, "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
     opts = {'bar','nobar'}
-    xifs = [lo.check_theoryID(theoryid.id).get_description()['XIF'] for theoryid in theoryids]
-    xirs = [lo.check_theoryID(theoryid.id).get_description()['XIR'] for theoryid in theoryids] 
+    xifs = [theoryid.get_description()['XIF'] for theoryid in theoryids]
+    xirs = [theoryid.get_description()['XIR'] for theoryid in theoryids]
     if l==3:
         correct_xifs = [1.0, 2.0, 0.5]
         correct_xirs = [1.0, 2.0, 0.5]
@@ -50,14 +50,14 @@ def _check_correct_theory_combination(theoryids, fivetheories):
             correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5]
         else:
             correct_xifs = [1.0, 2.0, 0.5, 2.0, 0.5]
-            correct_xirs = [1.0, 2.0, 0.5, 0.5, 2.0] 
+            correct_xirs = [1.0, 2.0, 0.5, 0.5, 2.0]
     elif l==7:
             correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
-            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]   
+            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
     else:
             correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
             correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5, 0.5, 2.0]
-    check(xifs==correct_xifs and xirs==correct_xirs, 
+    check(xifs==correct_xifs and xirs==correct_xirs,
           "Choice of input theories does not correspond to a valid prescription for theory covariance matrix calculation")
 
 def make_scale_var_covmat(predictions):
