@@ -99,6 +99,9 @@ set(DEFAULT_CXX_OPTIONS "-Wall -Wextra -march=nocona -mtune=haswell -fvisibility
 
 string(REPLACE "-fsanitize=address" "" CMAKE_EXE_LINKER_FLAGS_STRIPPED "${CMAKE_EXE_LINKER_FLAGS}")
 string(REPLACE "-fsanitize=address" "" CMAKE_EXE_LINKER_FLAGS_DEBUG_STRIPPED "${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
+string(REPLACE "-Wl,-dead_strip_dylibs" "" CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}" CACHE STRING "shared linker flags" FORCE)
 
 # Flags for ASAN
 if(ENABLE_ASAN)
