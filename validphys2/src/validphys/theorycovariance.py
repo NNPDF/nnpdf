@@ -33,32 +33,41 @@ theoryids_experiments_central_values = collect(experiments_central_values,
 
 @make_argcheck
 def _check_correct_theory_combination(theoryids, fivetheories):
-    """Checks that a valid theory combination corresponding to an existing prescription has been inputted"""
+    """Checks that a valid theory combination corresponding to an existing
+    prescription has been inputted"""
     l = len(theoryids)
-    check(l in {3,5,7,9}, "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
-    opts = {'bar','nobar'}
+    check(l in {3, 5, 7, 9},
+          "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
+    opts = {'bar', 'nobar'}
     xifs = [theoryid.get_description()['XIF'] for theoryid in theoryids]
     xirs = [theoryid.get_description()['XIR'] for theoryid in theoryids]
-    if l==3:
+    if l == 3:
         correct_xifs = [1.0, 2.0, 0.5]
         correct_xirs = [1.0, 2.0, 0.5]
-    elif l==5:
-        check(fivetheories is not None, "For five input theories a prescription bar or nobar for the flag fivetheories must be specified")
-        check(fivetheories in opts, "Invalid choice of prescription for 5 points", fivetheories, opts)
+    elif l == 5:
+        check(
+            fivetheories is not None,
+            "For five input theories a prescription bar or nobar for "
+            "the flag fivetheories must be specified.")
+        check(fivetheories in opts,
+              "Invalid choice of prescription for 5 points", fivetheories,
+              opts)
         if fivetheories == "nobar":
             correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0]
             correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5]
         else:
             correct_xifs = [1.0, 2.0, 0.5, 2.0, 0.5]
             correct_xirs = [1.0, 2.0, 0.5, 0.5, 2.0]
-    elif l==7:
-            correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
-            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
+    elif l == 7:
+        correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
+        correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
     else:
-            correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
-            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5, 0.5, 2.0]
-    check(xifs==correct_xifs and xirs==correct_xirs,
-          "Choice of input theories does not correspond to a valid prescription for theory covariance matrix calculation")
+        correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
+        correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5, 0.5, 2.0]
+    check(
+        xifs == correct_xifs and xirs == correct_xirs,
+        "Choice of input theories does not correspond to a valid "
+        "prescription for theory covariance matrix calculation")
 
 def make_scale_var_covmat(predictions):
     """Takes N theory predictions at different scales and applies N-pt scale
