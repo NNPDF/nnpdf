@@ -34,7 +34,12 @@ FitBasis* getFitBasis(NNPDFSettings const& settings, basisType btype, const int 
       cout << Colour::FG_BLUE << "Selecting FitBasis: EVOL" << Colour::FG_DEFAULT << endl;
       break;
     }
-
+    case BASIS_DISEVOL:
+    {
+      fitbasis = new DISEvolFitBasis(settings);
+      cout << Colour::FG_BLUE << "Selecting FitBasis: DISEVOL" << Colour::FG_DEFAULT << endl;
+      break;
+    }
     case BASIS_LUX:
     {
       fitbasis = new LuxBasis(settings, rep);
@@ -594,6 +599,104 @@ real EvolFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &sta
   }
 }
 
+// ******************** DIS EVOLUTION BASIS (ISOSCALAR CASE)*******
+
+
+/**
+ *  DIS Evolution Fit Basis
+ **/
+DISEvolFitBasis::DISEvolFitBasis(NNPDFSettings const& nnset):
+FitBasis(nnset, "EvolFitBasis", 3),
+fQED(nnset.IsQED())
+{
+  // PDF Names for plotting
+  fPDFNames[FIT_SNG] = "Singlet";
+  fPDFNames[FIT_GLU] = "Gluon";
+  fPDFNames[FIT_T8] = "T8";
+
+  // Damping factor for arclengths
+  fArcDampFactor[FIT_SNG] = 1;
+  fArcDampFactor[FIT_GLU] = 1;
+  fArcDampFactor[FIT_T8] = 1;
+}
+
+void DISEvolFitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool &status) const
+{
+  // status
+  status = false;
+
+  // Clear old normalisations
+  for (int i=0; i<fNPDF; i++)
+  {
+    param.fPDFNorm[i] = 1.0;
+    param.fPDFAux[i] = 0.0;
+  }
+
+  // Normalisations pointer
+  real* norm = param.fPDFNorm;
+
+  // ************ QED dependent normalisations **************
+
+    norm[FIT_GLU] = (1-pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork))/
+    pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
+
+
+  return;
+
+}
+
+/**
+ * @brief EvolFitBasis::BASIS2EVLN
+ * @param FIT
+ * @param EVLN
+ */
+void DISEvolFitBasis::BASIS2EVLN(const real *FIT, real *EVLN) const
+{
+
+  EVLN[EVLN_SNG]  = FIT[FIT_SNG]; //Singlet
+  EVLN[EVLN_GLU]  = FIT[FIT_GLU]; //Gluon
+  EVLN[EVLN_T8]   = FIT[FIT_T8];  //T8
+
+  return;
+}
+
+void DISEvolFitBasis::EVLN2BASIS(const real *EVLN, real *FIT) const
+{
+  // Order in fitting basis
+  // S g V V3 V8 T3 T8 gam
+
+  // Order in Evln bassi
+  // γ, Σ, g, V, V3, V8, V15, V24, V35, T3, T8, T15, T24, T35
+
+  FIT[FIT_SNG]  = EVLN[EVLN_SNG]; //Singlet
+  FIT[FIT_GLU]  = EVLN[EVLN_GLU]; //gluon
+  FIT[FIT_T8]   = EVLN[EVLN_T8]; // T8
+
+  return;
+}
+
+real DISEvolFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &status) const
+{
+  // status
+  status = false;
+
+  // sum rule calculations
+  switch (rule) {
+     case SUM_MSR:
+       {
+         real xsng = pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork);
+         real xglu = pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
+         real msr = xsng+xglu;
+
+         return msr;
+       }
+       break;
+     default:
+       cerr << "DISEvolFitBasis::ComputeSumRules error: unknown sum rule"<<endl;
+       exit(-1);
+       break;
+  }
+}
 // ******************** EVOLUTION with LUXQED *********************
 
 /**
