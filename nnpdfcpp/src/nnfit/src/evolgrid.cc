@@ -254,7 +254,7 @@ vector<stringstream> EvolveGrid::WriteLHAFile() const
                           const int index = ix_in + if_in*xg.size() + if_out*xg.size()*14 + ix_out*xg.size()*14*14 + iq*xg.size()*xg.size()*14*14;
                           evolved_pdf += evol_op[index] * finitialscale_grid[rep].GetPDF(ix_in, if_in);
                       }
-                    stream << std::setw(14) << evolved_pdf;
+                    stream << std::setw(14) << evolved_pdf << " ";
                 }
                 // End of LHAgrid line
                 stream <<std::endl;
