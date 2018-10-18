@@ -115,6 +115,31 @@ protected:
 };
 
 /**
+ *  \class DISEvolFitBasis
+ *  \brief DIS Evol basis for fitting
+ */
+class DISEvolFitBasis: public FitBasis
+{
+public:
+  DISEvolFitBasis(NNPDFSettings const&);
+
+  // Σ, g, V, V3, V8, V15, V24, V35, T3, T8, T15, T24, T35, γ
+
+  enum fitBasis {FIT_SNG, FIT_GLU, FIT_T8};
+
+  void BASIS2EVLN(real const* basis, real* evln) const;
+  void EVLN2BASIS(real const* evln, real* basis) const;
+
+  real ComputeSumRules(sumRule, int mem, PDFSet*, bool&) const;
+
+  // Preprocessing
+  void ComputeParam(PDFSet*, int mem, PreprocParam&, bool&) const;
+
+protected:
+  bool fQED;
+};
+
+/**
  * @brief The LuxBasis class
  */
 class LuxBasis: public FitBasis
