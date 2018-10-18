@@ -26,6 +26,8 @@ from validphys.plotoptions import get_info
 from validphys import plotutils
 from validphys.checks import check_two_dataspecs
 
+from IPython import embed
+
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values,
@@ -95,9 +97,13 @@ def theory_covmat(theoryids_experiments_central_values, experiments_index, theor
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
 
-results_bytheoryids = collect(results,('theoryids',))
+#results_bytheoryids = collect(results,('theoryids',))
+#each_dataset_results_bytheory = collect('results_bytheoryids',
+#                                        ('experiments', 'experiment'))
+
+results_bytheoryids = collect(results,('dataspecs_with_matched_cuts',))
 each_dataset_results_bytheory = collect('results_bytheoryids',
-                                        ('experiments', 'experiment'))
+                                        ('matched_datasets_from_dataspecs',))
 
 @_check_correct_theory_combination
 def theory_covmat_datasets(each_dataset_results_bytheory):
@@ -163,7 +169,9 @@ def total_covmat_experiments(experiments_results_theory):
         exp_result_covmats.append(cov)
     return exp_result_covmats
 
-commondata_experiments = collect('commondata', ['experiments', 'experiment'])
+commondata_experiments_sub = collect('commondata', ['dataspecs_with_matched_cuts'])
+commondata_experiments = collect('commondata_experiments_sub',['matched_datasets_from_dataspecs'])
+#commondata_experiments = collect('commondata', ['experiments', 'experiment'])
 
 # TODO: Improve how processes are assigned. Currently we group manually into
 # Drell-Yan, Heavy Quarks and Jets but adding more processes could break
@@ -174,7 +182,7 @@ def process_lookup(commondata_experiments):
     regrouped into the four categories 'Drell-Yan', 'Heavy Quarks', Jets'
     and 'DIS'."""
     d = {commondata.name: get_info(commondata).process_description
-         for commondata in commondata_experiments}
+         for commondata in np.array(commondata_experiments).T[0]}
     for key, value in d.items():
         if "Drell-Yan" in value:
             d[key] = "Drell-Yan"
@@ -189,7 +197,7 @@ def process_lookup(commondata_experiments):
 def dataset_names(commondata_experiments):
     """Returns a list of the names of the datasets, in the same order as
     they are inputted in the runcard"""
-    names = [commondata.name for commondata in commondata_experiments]
+    names = [commondata.name for commondata in np.array(commondata_experiments).T[0]]
     return names
 
 ProcessInfo = namedtuple("ProcessInfo", ('theory', 'namelist', 'sizes'))
@@ -324,7 +332,7 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
                 covmats[start_locs] = s
     return covmats
 
-def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
+def theory_covmat_custom(covs_pt_prescrip, covmap, matched_index_info):
     """Takes the individual sub-covmats between each two processes and assembles
     them into a full covmat. Then reshuffles the order from ordering by process
     to ordering by experiment as listed in the runcard"""
@@ -338,8 +346,27 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     for i in range(matlength):
         for j in range(matlength):
             cov_by_exp[covmap[i]][covmap[j]] = mat[i][j]
-    df = pd.DataFrame(cov_by_exp, index=experiments_index,
-                      columns=experiments_index)
+    # Build index
+    embed()
+    expnames = np.concatenate([
+            np.full(val.length, val.experiment_name, dtype=object)
+            for val in matched_index_info
+    ])
+    dsnames = np.concatenate([
+            np.full(val.length, val.dataset_name, dtype=object)
+            for val in matched_index_info
+    ])
+    point_indexes = np.concatenate([
+            np.arange(val.length)
+            for val in matched_index_info
+    ])
+
+    index = pd.MultiIndex.from_arrays(
+        [expnames, dsnames, point_indexes],
+        names=["Experiment name", "Dataset name", "Point"])
+
+    return pd.DataFrame(mat, columns=index, index=index)
+    df = pd.DataFrame(cov_by_exp, index=index, columns=index)
     return df
 
 @_check_correct_theory_combination
@@ -833,6 +860,19 @@ def dataspecs_dataset_prediction_shift(matched_dataspecs_results, experiment_nam
 
 matched_dataspecs_dataset_prediction_shift = collect(
     'dataspecs_dataset_prediction_shift', ['matched_datasets_from_dataspecs'])
+
+IndexInfo = namedtuple('IndexInfo',
+    ('experiment_name', 'dataset_name', 'length'))
+
+def index_info(matched_dataspecs_results, experiment_name,
+                                       dataset_name):
+    central_entry = matched_dataspecs_results[0]
+    datalength = len(central_entry)
+    return IndexInfo(dataset_name=dataset_name,
+                         experiment_name=experiment_name, length=datalength)
+
+matched_index_info = collect(
+    'index_info', ['matched_datasets_from_dataspecs'])
 
 
 #Not sure we want to export this, as it is 231 Mb...
