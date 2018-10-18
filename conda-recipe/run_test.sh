@@ -6,9 +6,6 @@ set -e
 #Python tests for the installed validphys package
 pytest --pyargs validphys
 
-
-#export LDFLAGS=$(echo $LDFLAGS | sed 's/-Wl,-dead_strip_dylibs//g')
-
 mkdir bldtest
 cd bldtest
 cmake .. -DENABLE_TESTS=ON
