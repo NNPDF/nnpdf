@@ -4,7 +4,7 @@ import logging
 
 #TODO: Look into making these lazy imports
 import prompt_toolkit
-from prompt_toolkit.contrib.completers import WordCompleter
+from prompt_toolkit.completion import WordCompleter
 
 from reportengine.compat import yaml
 from reportengine.colors import t
