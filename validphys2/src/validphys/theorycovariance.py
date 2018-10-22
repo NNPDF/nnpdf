@@ -889,13 +889,13 @@ def plot_matched_datasets_shift_matrix_correlations(
 all_matched_results = collect('matched_dataspecs_results',
                               ['matched_datasets_from_dataspecs'])
 
-def combine_by_type2(process_lookup, all_matched_results, dataset_names):
+def combine_by_type_dataspecs(process_lookup, all_matched_results, dataset_names):
     return combine_by_type(process_lookup, all_matched_results, dataset_names)
 
 datapsecs_theoryids = collect('theoryid', ['dataspecs'])
 
-def process_starting_points2(combine_by_type2):
-    return process_starting_points(combine_by_type2)
+def process_starting_points_dataspecs(combine_by_type_dataspecs):
+    return process_starting_points(combine_by_type_dataspecs)
 
 @make_argcheck
 def _check_correct_theory_combination_dataspecs(datapsecs_theoryids,
@@ -904,15 +904,15 @@ def _check_correct_theory_combination_dataspecs(datapsecs_theoryids,
         datapsecs_theoryids, fivetheories)
 
 #@_check_correct_theory_combination_dataspecs
-def covs_pt_prescrip2(combine_by_type2,
-                      process_starting_points2,
+def covs_pt_prescrip_dataspecs(combine_by_type_dataspecs,
+                      process_starting_points_dataspecs,
                       datapsecs_theoryids,
                       fivetheories: (str, type(None)) = None):
-    return covs_pt_prescrip(combine_by_type2, process_starting_points2,
+    return covs_pt_prescrip(combine_by_type_dataspecs, process_starting_points_dataspecs,
                             datapsecs_theoryids, fivetheories)
 
-def covmap2(combine_by_type2, dataset_names):
-    return covmap(combine_by_type2, dataset_names)
+def covmap2(combine_by_type_dataspecs, dataset_names):
+    return covmap(combine_by_type_dataspecs, dataset_names)
 
 matched_dataspecs_experiment_name = collect(
     'experiment_name', ['matched_datasets_from_dataspecs'])
@@ -956,22 +956,22 @@ def matched_experiments_index(matched_dataspecs_experiment_name,
     return index
 
 @table
-def theory_covmat_custom2(covs_pt_prescrip2, covmap2,
+def theory_covmat_custom_dataspecs(covs_pt_prescrip_dataspecs, covmap_dataspecs,
                           matched_experiments_index):
-    return theory_covmat_custom(covs_pt_prescrip2, covmap2,
+    return theory_covmat_custom(covs_pt_prescrip_dataspecs, covmap_dataspecs,
                                 matched_experiments_index)
 
 @table
-def theory_corrmat_custom2(theory_covmat_custom2):
+def theory_corrmat_custom_dataspecs(theory_covmat_custom_dataspecs):
     """Calculates the theory correlation matrix for scale variations
     with variations by process type"""
-    mat = theory_corrmat(theory_covmat_custom2)
+    mat = theory_corrmat(theory_covmat_custom_dataspecs)
     return mat
 
 @figure
-def plot_thcorrmat_heatmap_custom2(theory_corrmat_custom2, theoryids):
+def plot_thcorrmat_heatmap_custom_dataspecs(theory_corrmat_custom_dataspecs, theoryids):
     """Matrix plot of the theory correlation matrix, correlations by process type"""
     l = len(theoryids)
-    fig = plot_corrmat_heatmap(theory_corrmat_custom2,
+    fig = plot_corrmat_heatmap(theory_corrmat_custom_dataspecs,
                                f"Theory correlation matrix for {l} points")
     return fig
