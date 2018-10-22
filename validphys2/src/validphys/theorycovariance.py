@@ -889,8 +889,8 @@ def plot_matched_datasets_shift_matrix_correlations(
 all_matched_results = collect('matched_dataspecs_results',
                               ['matched_datasets_from_dataspecs'])
 
-def combine_by_type_dataspecs(process_lookup, all_matched_results, dataset_names):
-    return combine_by_type(process_lookup, all_matched_results, dataset_names)
+def combine_by_type_dataspecs(process_lookup, all_matched_results, matched_dataspecs_dataset_name):
+    return combine_by_type(process_lookup, all_matched_results, matched_dataspecs_dataset_name)
 
 datapsecs_theoryids = collect('theoryid', ['dataspecs'])
 
@@ -911,8 +911,8 @@ def covs_pt_prescrip_dataspecs(combine_by_type_dataspecs,
     return covs_pt_prescrip(combine_by_type_dataspecs, process_starting_points_dataspecs,
                             datapsecs_theoryids, fivetheories)
 
-def covmap2(combine_by_type_dataspecs, dataset_names):
-    return covmap(combine_by_type_dataspecs, dataset_names)
+def covmap_dataspecs(combine_by_type_dataspecs, matched_dataspecs_dataset_name):
+    return covmap(combine_by_type_dataspecs, matched_dataspecs_dataset_name)
 
 matched_dataspecs_experiment_name = collect(
     'experiment_name', ['matched_datasets_from_dataspecs'])
