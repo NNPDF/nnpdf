@@ -885,3 +885,93 @@ def plot_matched_datasets_shift_matrix_correlations(
         index=matched_datasets_shift_matrix.index)
     return plot_corrmat_heatmap(
         corrmat, "Shift outer product normalized (correlation) matrix")
+
+all_matched_results = collect('matched_dataspecs_results',
+                              ['matched_datasets_from_dataspecs'])
+
+def combine_by_type2(process_lookup, all_matched_results, dataset_names):
+    return combine_by_type(process_lookup, all_matched_results, dataset_names)
+
+datapsecs_theoryids = collect('theoryid', ['dataspecs'])
+
+def process_starting_points2(combine_by_type2):
+    return process_starting_points(combine_by_type2)
+
+@make_argcheck
+def _check_correct_theory_combination_dataspecs(datapsecs_theoryids,
+                                                fivetheories):
+    return _check_correct_theory_combination.__wrapped__(
+        datapsecs_theoryids, fivetheories)
+
+#@_check_correct_theory_combination_dataspecs
+def covs_pt_prescrip2(combine_by_type2,
+                      process_starting_points2,
+                      datapsecs_theoryids,
+                      fivetheories: (str, type(None)) = None):
+    return covs_pt_prescrip(combine_by_type2, process_starting_points2,
+                            datapsecs_theoryids, fivetheories)
+
+def covmap2(combine_by_type2, dataset_names):
+    return covmap(combine_by_type2, dataset_names)
+
+matched_dataspecs_experiment_name = collect(
+    'experiment_name', ['matched_datasets_from_dataspecs'])
+matched_dataspecs_dataset_name = collect(
+    'dataset_name', ['matched_datasets_from_dataspecs'])
+matched_cuts_datasets = collect('dataset', ['dataspecs_with_matched_cuts'])
+all_matched_datasets = collect('matched_cuts_datasets',
+                               ['matched_datasets_from_dataspecs'])
+
+
+def all_matched_data_lengths(all_matched_datasets):
+    lens = []
+    for rlist in all_matched_datasets:
+        lens.append(rlist[0].load().GetNData())
+    return lens
+
+def matched_experiments_index(matched_dataspecs_experiment_name,
+                              matched_dataspecs_dataset_name,
+                              all_matched_data_lengths):
+
+    enames = matched_dataspecs_experiment_name
+    dsnames = matched_dataspecs_dataset_name
+    lens = all_matched_data_lengths
+    #build index
+    expnames = np.concatenate([
+        np.full(l, ename, dtype=object)
+        for (l, ename) in zip(lens, enames)
+    ])
+    dsnames = np.concatenate([
+        np.full(l, dsname, dtype=object)
+        for (l, dsname) in zip(lens, dsnames)
+    ])
+    point_indexes = np.concatenate([
+        np.arange(l)
+        for l in lens
+    ])
+
+    index = pd.MultiIndex.from_arrays(
+        [expnames, dsnames, point_indexes],
+        names=["Experiment name", "Dataset name", "Point"])
+    return index
+
+@table
+def theory_covmat_custom2(covs_pt_prescrip2, covmap2,
+                          matched_experiments_index):
+    return theory_covmat_custom(covs_pt_prescrip2, covmap2,
+                                matched_experiments_index)
+
+@table
+def theory_corrmat_custom2(theory_covmat_custom2):
+    """Calculates the theory correlation matrix for scale variations
+    with variations by process type"""
+    mat = theory_corrmat(theory_covmat_custom2)
+    return mat
+
+@figure
+def plot_thcorrmat_heatmap_custom2(theory_corrmat_custom2, theoryids):
+    """Matrix plot of the theory correlation matrix, correlations by process type"""
+    l = len(theoryids)
+    fig = plot_corrmat_heatmap(theory_corrmat_custom2,
+                               f"Theory correlation matrix for {l} points")
+    return fig
