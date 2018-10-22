@@ -606,8 +606,7 @@ real EvolFitBasis::ComputeSumRules(sumRule rule, int mem, PDFSet *pdf, bool &sta
  *  DIS Evolution Fit Basis
  **/
 DISEvolFitBasis::DISEvolFitBasis(NNPDFSettings const& nnset):
-FitBasis(nnset, "EvolFitBasis", 3),
-fQED(nnset.IsQED())
+FitBasis(nnset, "EvolFitBasis", 3)
 {
   //PDF names for plotting
   fPDFNames[FIT_SNG] = "Singlet";
@@ -638,17 +637,14 @@ void DISEvolFitBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bo
   real* norm = param.fPDFNorm;
 
   // ************ QED dependent normalisations **************
-
     norm[FIT_GLU] = (1-pdf->IntegratePDF(mem,FIT_SNG,fQ2,PDFSet::XFX,status,fGSLWork))/
     pdf->IntegratePDF(mem,FIT_GLU,fQ2,PDFSet::XFX,status,fGSLWork);
 
-
   return;
-
 }
 
 /**
- * @brief EvolFitBasis::BASIS2EVLN
+ * @brief DISEvolFitBasis::BASIS2EVLN
  * @param FIT
  * @param EVLN
  */
