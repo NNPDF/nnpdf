@@ -66,6 +66,7 @@
 #include "CMSWMU8TEV.h"
 #include "FutureColliders.h"
 #include "CMS_SINGLETOP_TCH_TOT_7TEV.h"
+#include "CMS_SINGLETOP_TCH_R_8TEV.h"
 #include "CMS_SINGLETOP_TCH_R_13TEV.h"
 
 /**
@@ -244,6 +245,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSTTBARTOT13TEVFilter());
   target.push_back(new CMSTTBARTOTFilter());
   target.push_back(new CMS_SINGLETOP_TCH_TOT_7TEVFilter());
+  target.push_back(new CMS_SINGLETOP_TCH_R_8TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_13TEVFilter());
 
   // ************************* ZEUS ******************************
