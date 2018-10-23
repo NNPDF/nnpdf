@@ -67,6 +67,7 @@
 #include "FutureColliders.h"
 #include "CMSSTOPTCHTOT7TEV.h"
 #include "CMS_SINGLETOP_TCH_R_8TEV.h"
+#include "CMS_SINGLETOP_TCH_R_13TEV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -245,6 +246,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSTTBARTOTFilter());
   target.push_back(new CMSSTOPTCHTOT7TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_8TEVFilter());
+  target.push_back(new CMS_SINGLETOP_TCH_R_13TEVFilter());
 
   // ************************* ZEUS ******************************
 
