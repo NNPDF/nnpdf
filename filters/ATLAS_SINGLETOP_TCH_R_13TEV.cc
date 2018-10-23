@@ -10,7 +10,8 @@ exactly one of which is required to be b-tagged.
 Archived as: https://arxiv.org/pdf/1609.03920v2.pdf
 Published in: JHEP 04 (2017) 086
 R_t = 1.72 ± 0.09 (stat.) ± 0.18 (syst.)
-Here systematics are split into 14 categories (see Table 4 in the paper for the full breakdown and for more details):
+
+The systematic uncertainty is composed of the following 14 uncertainties (see Table 4 in the paper for the full breakdown and for more details):
 Monte Carlo statistics
 Muon uncertainties
 Electron uncertainties
@@ -48,7 +49,6 @@ void ATLAS_SINGLETOP_TCH_R_13TEVFilter::ReadData()
   string line;
   int idum;
   double cme;
-  double fstat_percentage;
 
   getline(f1,line);
   istringstream lstream(line);
@@ -59,17 +59,10 @@ void ATLAS_SINGLETOP_TCH_R_13TEVFilter::ReadData()
   fKin3[0] = cme*1000;       // Sqrt(s)
 
   lstream >> fData[0];       // Central value
-  lstream >> fstat_percentage;       // Statistical (percentage) uncertainty
-  fStat[0] = fstat_percentage*fData[0]/100; // Convert percentage uncertainty to absolute uncertainty and store
+  lstream >> fStat[0];       // Statistical (percentage) uncertainty
 
-  for (int i = 0; i < fNSys; i++)
-    {
-       lstream >> fSys[0][i].mult;
-       fSys[0][i].add = fSys[0][i].mult*fData[0]/100;
-       fSys[0][i].type = MULT;
-       fSys[0][i].name = "UNCORR";
-    }
-
-  f1.close();
-
+  lstream >> fSys[0][0].add; // Absolute total systematic uncertainty
+  fSys[0][0].mult = fSys[0][0].add*100/fData[0]; // Multiplicative total systematic uncertainty
+  fSys[0][0].type = MULT;
+  fSys[0][0].name = "UNCORR";
 }
