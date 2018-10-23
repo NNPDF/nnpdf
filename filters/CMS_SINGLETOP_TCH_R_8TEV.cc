@@ -60,6 +60,4 @@ void CMS_SINGLETOP_TCH_R_8TEVFilter::ReadData()
   fSys[0][0].mult = fSys[0][0].add*100/fData[0]; // Multiplicative total systematic uncertainty
   fSys[0][0].type = MULT;
   fSys[0][0].name = "UNCORR";      
-
-  f1.close();
 }
