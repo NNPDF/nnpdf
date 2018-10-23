@@ -338,6 +338,25 @@ evolution = Basis.from_mapping({
     aliases = {'gluon':'g', 'singlet': r'\Sigma', 'sigma':r'\Sigma'},
     default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
 )
+# g,      c+, (γ)
+NN31ICFitBasis = Basis.from_mapping({
+    r'\Sigma': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1, 'b': 1, 'bbar': 1, 't': 1, 'tbar': 1},
+    'V': {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 1, 'cbar': -1, 'b': 1, 'bbar': -1, 't': 1, 'tbar': -1},
+
+    'T3': {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1},
+    'V3': {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1},
+
+    'T8': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2},
+    'V8': {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': +2},
+    
+    r'c^+': {'c': 1, 'cbar': 1},
+
+    'g': {'g': 1},
+    'photon': {'photon': 1},
+    },
+    aliases={'gluon': 'g', 'singlet': r'\Sigma', 'sigma': r'\Sigma', 'cp': r'c^+'},
+    default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', r'c^+')
+)
 
 pdg = Basis.from_mapping({
 'g/10': {'g':0.1},
