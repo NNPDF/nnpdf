@@ -14,9 +14,9 @@ Note that the theoretical (theor.) uncertainty is based on the theory uncertaint
 and on the signal templates, and includes scale, matching, signal generator and PDF uncertainties.
 */
 
-#include "CMSSTOPTCHTOT7TEV.h"
+#include "CMS_SINGLETOP_TCH_TOT_7TEV.h"
 
-void CMSSTOPTCHTOT7TEVFilter::ReadData()
+void CMS_SINGLETOP_TCH_TOT_7TEVFilter::ReadData()
 {
   // Opening file
   fstream f1;
