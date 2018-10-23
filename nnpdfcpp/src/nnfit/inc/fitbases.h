@@ -80,6 +80,9 @@ public:
   void ComputeParam(PDFSet*, int mem, PreprocParam&, bool&) const;
   void Preprocess(real const& x, int const& fl, real& pdf, PreprocParam const&);
 
+private:
+  const bool fQED;
+
   // Strange Auxilliary terms
   real fSauxAlpha;
   real fSauxBeta;
@@ -107,6 +110,8 @@ public:
   // Preprocessing
   void ComputeParam(PDFSet*, int mem, PreprocParam&, bool&) const;
 
+protected:
+  bool fQED;
 };
 
 /**
@@ -179,6 +184,9 @@ public:
   // Preprocessing
   void ComputeParam(PDFSet*, int mem, PreprocParam&, bool&) const;
 
+private:
+  const bool fQED;
+
 };
 
 class NN30FitBasis: public EvolFitBasis
@@ -224,6 +232,9 @@ public:
   // Preprocessing
   void ComputeParam(PDFSet*, int mem, PreprocParam&, bool&) const;
 
+protected:
+  const bool fQED;
+
 };
 
 /**
@@ -261,6 +272,9 @@ public:
 
   // Preprocessing
   void ComputeParam(PDFSet*, int mem, PreprocParam&, bool&) const;
+
+protected:
+  const bool fQED;
 
 };
 

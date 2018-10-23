@@ -13,39 +13,39 @@ experiments:
 # Fixed target DIS
   - experiment: NMC
     datasets:
-      - { dataset: nNMCCD, frac: 0.5, cfac: [NRM] }
-      - { dataset: nNMCHED,frac: 0.5, cfac: [NRM] }
-      - { dataset: nNMCCAD,frac: 0.5, cfac: [NRM] }
-      - { dataset: nNMCLID,frac: 0.5, cfac: [NRM] }
+      - { dataset: nNMCCD, frac: 0.5 }
+      - { dataset: nNMCHED,frac: 0.5 }
+      - { dataset: nNMCCAD,frac: 0.5 }
+      - { dataset: nNMCLID,frac: 0.5 }
 
   - experiment: SLAC
     datasets:
-      - { dataset nE139AGD,frac: 0.5, cfac: [NRM] }
-      - { dataset nE139ALD,frac: 0.5, cfac: [NRM] }
-      - { dataset nE139AUD,frac: 0.5, cfac: [NRM] }
-      - { dataset nE139BED,frac: 0.5, cfac: [NRM] }
-      - { dataset nE139CAD,frac: 0.5, cfac: [NRM] }
-      - { dataset nE139CD ,frac: 0.5, cfac: [NRM] }
-      - { dataset nE139FED,frac: 0.5, cfac: [NRM] }
-      - { dataset nE139HED,frac: 0.5, cfac: [NRM] }
+      - { dataset: nE139AGD,frac: 0.5 }
+      - { dataset: nE139ALD,frac: 0.5 }
+      - { dataset: nE139AUD,frac: 0.5 }
+      - { dataset: nE139BED,frac: 0.5 }
+      - { dataset: nE139CAD,frac: 0.5 }
+      - { dataset: nE139CD ,frac: 0.5 }
+      - { dataset: nE139FED,frac: 0.5 }
+      - { dataset: nE139HED,frac: 0.5 }
 
   - experiment: EMC
     datasets:
       - { dataset: nEMCC ,frac: 0.5 }
       - { dataset: nEMCCA,frac: 0.5 }
-      - { dataset: nEMCCAD,frac: 0.5, cfac: [NRM] }
-      - { dataset: nEMCCD,frac: 0.5, cfac: [NRM] }
-      - { dataset: nEMCCUD,frac: 0.5, cfac: [NRM] }
+      - { dataset: nEMCCAD,frac: 0.5 }
+      - { dataset: nEMCCD,frac: 0.5 }
+      - { dataset: nEMCCUD,frac: 0.5 }
       - { dataset: nEMCFE ,frac: 0.5 }
-      - { dataset: nEMCFED,frac: 0.5, cfac: [NRM]}
-      - { dataset: nEMCSND,frac: 0.5, cfac: [NRM] }
+      - { dataset: nEMCFED,frac: 0.5}
+      - { dataset: nEMCSND,frac: 0.5 }
 
 
 ############################################################
 datacuts:
   t0pdfset     : NNPDF30_nlo_as_0118       # PDF set to generate t0 covmat
   q2min        : 1.69                # Q2 minimum
-  w2min        : 0                # W2 minimum
+  w2min        : 0.01                   # W2 minimum
   combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
   jetptcut_tev : 0                   # jet pt cut for tevatron
   jetptcut_lhc : 0                   # jet pt cut for lhc
@@ -58,7 +58,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 173        # database id
+  theoryid: 200        # database id
 
 ############################################################
 fitting:
