@@ -190,14 +190,14 @@ void Experiment::MakeReplica()
         fSets[s].SetArtificial(true);
         index+=fSets[s].GetNData();
       }
-
-      // Update local data
-      PullData();
-
-      // Now the fData is artificial
-      fIsArtificial = true;
-      return;
   }
+
+  // Update local data
+  PullData();
+
+  // Now the fData is artificial
+  fIsArtificial = true;
+  return;
 }
 
 void Experiment::SetT0(const PDFSet& pdf){
