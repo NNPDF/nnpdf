@@ -568,13 +568,12 @@ class CoreConfig(configparser.Config):
 
     def produce_combined_shift_and_theory_dataspecs(self, theoryconfig, shiftconfig):
         total_dataspecs = theoryconfig['dataspecs'] + shiftconfig['dataspecs']
-        embed()
         matched_datasets = self.produce_matched_datasets_from_dataspecs(total_dataspecs)
-
-       # matched_datasets = produce_matched_datasets_from_dataspecs(total_dataspecs)
-       # matched_datasets_with_cuts = produce_dataspecs_with_matched_cuts(matched_datasets)
-        print(total_dataspecs)
-        return total_dataspecs
+        matched_dataspecs_with_cuts = []
+        for exp in matched_datasets:
+            matched_dataspecs_with_cuts.append(self.produce_dataspecs_with_matched_cuts(exp['dataspecs']))
+        print(len(matched_dataspecs_with_cuts))
+        return 0
 
 
     #TODO: Worth it to do some black magic to not pass params explicitly?
