@@ -76,10 +76,43 @@ vector< vector<double> > generate_q2subgrids( const int nq2,
 }
 
 //______________________________________________________
+vector<int> compute_pids(int maxnf, bool qed)
+{
+  vector<int> pids;
+  for (int i = -maxnf; i <= maxnf; i++)
+  {
+    int fl = i;
+    if (i == 0) fl = 21;
+    pids.push_back(fl);
+  }
+  if (qed)
+    pids.push_back(22);
+  return pids;
+}
+
+//______________________________________________________
+vector<int> convert_pids_to_indexes(vector<int> const& pids)
+{
+  vector<int> indexes;
+  for (auto fl: pids)
+  {
+    if (fl == 21)
+      indexes.push_back(6);
+    else if (fl == 22) 
+      indexes.push_back(14);
+    else
+      indexes.push_back(fl+6);
+  }   
+  return indexes;
+}
+
+//______________________________________________________
 EvolveGrid::EvolveGrid(vector<ExportGrid> const& initialscale_grid,
                        map<string, string> const& theory):
   fnq2(50),
-  fq2min(pow(atof(theory.at("Q0").c_str()),2)),
+  fnf(max(stoi(theory.at("MaxNfPdf")), stoi(theory.at("MaxNfAs")))),
+  fqed(stoi(theory.at("QED"))),
+  fq2min(pow(stof(theory.at("Q0")), 2)),
   fq2max(1E5*1E5),
   finitialscale_grid(initialscale_grid)
 {
@@ -130,7 +163,10 @@ void EvolveGrid::WriteInfoFile(const string infofile, int const& nrep) const
   else
     infodata << "NumMembers: " << nrep << endl;
   infodata << "Particle: 2212" << endl;
-  infodata << "Flavors: [-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22]" << endl;
+  infodata << "Flavors: [";
+  for (auto fl: compute_pids(fnf, fqed))
+    infodata << fl << (fl == 22 ? "" : ", ");
+  infodata << "]" << endl;
   infodata << "OrderQCD: " << APFEL::GetPerturbativeOrder() << endl;
   infodata << "FlavorScheme: variable" << endl;
   infodata << "NumFlavors: " << std::max(APFEL::GetMaxFlavourPDFs(), APFEL::GetMaxFlavourAlpha()) << endl;
@@ -172,6 +208,7 @@ vector<stringstream> EvolveGrid::WriteLHAFile() const
 {
   const auto xg = finitialscale_grid[0].GetXGrid();
   vector<stringstream> outstream(finitialscale_grid.size());
+  const vector<int> pids = compute_pids(fnf, fqed);
 
   for (size_t i = 0; i < finitialscale_grid.size(); i++)
     {
@@ -195,10 +232,8 @@ vector<stringstream> EvolveGrid::WriteLHAFile() const
             stream << sqrt(q2val) << " ";
           stream << std::endl;
 
-          // Print out final-state PIDs
-          // Currently prints out all flavours
-          const array<int, 14> pids = {-6, -5, -4, -3, -2, -1, 21, 1, 2, 3, 4, 5, 6, 22};
-          for ( auto fl : pids )
+          // Print out final-state PIDs          
+          for (auto fl: pids)
             stream << fl << " ";
           stream << std::endl;
         }
@@ -245,8 +280,8 @@ vector<stringstream> EvolveGrid::WriteLHAFile() const
             {
                 // New line in LHAgrid
                 stream << " ";
-                for(int if_out=0; if_out<14; if_out++)
-                {
+                for(auto if_out: convert_pids_to_indexes(pids))
+                {                    
                     double evolved_pdf = 0;
                     for(int if_in = 0; if_in < 14; if_in++)
                       for(int ix_in = 0; ix_in < (int) xg.size(); ix_in++) // ix_in = ix_out

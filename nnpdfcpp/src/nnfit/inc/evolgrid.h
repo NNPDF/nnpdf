@@ -46,6 +46,8 @@ public:
 
 private:
   const int fnq2;
+  const int fnf;
+  const bool fqed;
   const double fq2min;
   const double fq2max;
   std::vector<ExportGrid> const& finitialscale_grid;
