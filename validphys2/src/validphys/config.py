@@ -30,7 +30,7 @@ from validphys.paramfits.config import ParamfitsConfig
 
 log = logging.getLogger(__name__)
 
-
+from IPython import embed
 
 class Environment(Environment):
     """Container for information to be filled at run time"""
@@ -565,6 +565,16 @@ class CoreConfig(configparser.Config):
             newds.cuts = matched_cuts
             res.append(ChainMap({'dataset': newds}, spec))
         return res
+
+    def produce_combined_shift_and_theory_dataspecs(self, theoryconfig, shiftconfig):
+        total_dataspecs = theoryconfig['dataspecs'] + shiftconfig['dataspecs']
+        embed()
+        matched_datasets = self.produce_matched_datasets_from_dataspecs(total_dataspecs)
+
+       # matched_datasets = produce_matched_datasets_from_dataspecs(total_dataspecs)
+       # matched_datasets_with_cuts = produce_dataspecs_with_matched_cuts(matched_datasets)
+        print(total_dataspecs)
+        return total_dataspecs
 
 
     #TODO: Worth it to do some black magic to not pass params explicitly?
