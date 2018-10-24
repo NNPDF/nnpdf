@@ -572,8 +572,17 @@ class CoreConfig(configparser.Config):
         matched_dataspecs_with_cuts = []
         for exp in matched_datasets:
             matched_dataspecs_with_cuts.append(self.produce_dataspecs_with_matched_cuts(exp['dataspecs']))
-        print(len(matched_dataspecs_with_cuts))
-        return 0
+        #for i in range(len(matched_datasets)):
+        #    matched_datasets[0] = self.produce_dataspecs_with_matched_cuts(matched_datasets[i]['dataspecs'])
+        final_res = [{}]*len(total_dataspecs)
+        for ispec, spec in enumerate(final_res):
+            for ds in matched_dataspecs_with_cuts:
+                final_res[ispec] = ChainMap(ds[ispec], final_res[ispec])
+        new_theoryconfig = final_res[:len(theoryconfig)]
+        new_shiftconfig = final_res[len(theoryconfig):]
+     #   print(final_res[0])
+        return {'shiftconfig': ChainMap({'dataspecs': new_shiftconfig}, shiftconfig),
+                'theoryconfig': ChainMap({'dataspecs': new_theoryconfig}, theoryconfig)}
 
 
     #TODO: Worth it to do some black magic to not pass params explicitly?
