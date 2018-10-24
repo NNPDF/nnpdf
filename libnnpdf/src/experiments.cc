@@ -157,8 +157,11 @@ void Experiment::MakeReplica()
     for (int i=0; i< GetSet(s).GetNData(); i++)
       proctype.push_back(GetSet(s).GetProc(i));
 
-  while (true)
+  bool isArtNegative = true;
+  while (isArtNegative)
   {
+      isArtNegative = false;
+
       // Generate normal deviates
       vector<double> deviates(fNData, std::numeric_limits<double>::quiet_NaN());
       generate(deviates.begin(), deviates.end(),
@@ -178,8 +181,13 @@ void Experiment::MakeReplica()
               // If it's negative and not an assymmetry, continue the loop
               const bool is_asymmetry = proctype[i].find("ASY") != std::string::npos;
               if (!is_asymmetry)
-                  continue;
+              {
+                isArtNegative = true;
+                break;
+              }
           }
+
+      if (isArtNegative) continue;
 
       // Update data in set
       int index = 0;
