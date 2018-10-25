@@ -5,12 +5,13 @@ There is a single point
 LHC-ATLAS 8 TeV
 ---------------
 
-Selected events contain exactly one charged lepton, exactly two jets, and E_T^{miss} > 30 GeV. For more details of the event selection see Section 5 of the paper.
+Selected events contain exactly one electron or muon, exactly two jets (exactly one of which must be b-tagged), and E_T^{miss} > 30 GeV. 
+For more details of the event selection see Section 5 of the paper.
 Archived as: https://arxiv.org/pdf/1702.02859v3.pdf
 Published in: Eur. Phys. J. C 77 (2017) 531
 R_t = 1.72 ± 0.05 (stat.) ± 0.07 (exp.)
 
-The systematic uncertainty is composed of the following nine uncertainties (see Table 5 in the paper for the full breakdown and for more details):
+The experimental systematic uncertainty (exp.) has the following significant contributions (see Table 5 in the paper for the full breakdown and for more details):
 Monte Carlo statistics
 Background modelling
 Jet reconstruction
