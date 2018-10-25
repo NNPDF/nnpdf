@@ -569,19 +569,17 @@ class CoreConfig(configparser.Config):
     def produce_combined_shift_and_theory_dataspecs(self, theoryconfig, shiftconfig):
         total_dataspecs = theoryconfig["dataspecs"] + shiftconfig["dataspecs"]
         matched_datasets = self.produce_matched_datasets_from_dataspecs(total_dataspecs)
-        final_res = [
-            self.produce_dataspecs_with_matched_cuts(ds["dataspecs"])
-            for ds in matched_datasets
-        ]
+        for ns in matched_datasets:
+            ns["dataspecs"] = self.produce_dataspecs_with_matched_cuts(ns["dataspecs"])
         new_theoryconfig = []
         new_shiftconfig = []
         len_th = len(theoryconfig['dataspecs'])
-        for s in final_res:
-            new_theoryconfig.append({"dataspecs": s[:len_th]})
-            new_shiftconfig.append({"dataspecs": s[len_th:]})
+        for s in matched_datasets:
+            new_theoryconfig.append(ChainMap({"dataspecs": s['dataspecs'][:len_th]}, s))
+            new_shiftconfig.append(ChainMap({"dataspecs": s['dataspecs'][len_th:]}, s))
         return {
-            "shiftconfig": ChainMap({"dataspecs": new_shiftconfig}, shiftconfig),
-            "theoryconfig": ChainMap({"dataspecs": new_theoryconfig}, theoryconfig),
+            "shiftconfig": {"dataspecs": new_shiftconfig, "original": shiftconfig},
+            "theoryconfig": {"dataspecs": new_theoryconfig, "original": theoryconfig}
         }
 
 

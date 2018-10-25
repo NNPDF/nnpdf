@@ -28,6 +28,8 @@ from validphys.checks import check_two_dataspecs
 
 log = logging.getLogger(__name__)
 
+from IPython import embed
+
 theoryids_experiments_central_values = collect(experiments_central_values,
                                                ('theoryids',))
 
@@ -813,7 +815,7 @@ def plot_datasets_chi2_theory(experiments,
     return fig
 
 
-matched_dataspecs_results = collect('results', ['dataspecs_with_matched_cuts'])
+matched_dataspecs_results = collect('results', ['dataspecs'])
 
 LabeledShifts = namedtuple('LabeledShifts',
     ('experiment_name', 'dataset_name', 'shifts'))
@@ -832,7 +834,7 @@ def dataspecs_dataset_prediction_shift(matched_dataspecs_results, experiment_nam
                          experiment_name=experiment_name, shifts=res)
 
 matched_dataspecs_dataset_prediction_shift = collect(
-    'dataspecs_dataset_prediction_shift', ['matched_datasets_from_dataspecs'])
+    'dataspecs_dataset_prediction_shift', ['dataspecs'])
 
 
 #Not sure we want to export this, as it is 231 Mb...
@@ -887,12 +889,12 @@ def plot_matched_datasets_shift_matrix_correlations(
         corrmat, "Shift outer product normalized (correlation) matrix")
 
 all_matched_results = collect('matched_dataspecs_results',
-                              ['matched_datasets_from_dataspecs'])
+                              ['dataspecs'])
 
 def combine_by_type_dataspecs(process_lookup, all_matched_results, matched_dataspecs_dataset_name):
     return combine_by_type(process_lookup, all_matched_results, matched_dataspecs_dataset_name)
 
-datapsecs_theoryids = collect('theoryid', ['dataspecs'])
+datapsecs_theoryids = collect('theoryid', ['theoryconfig', 'original', 'dataspecs'])
 
 def process_starting_points_dataspecs(combine_by_type_dataspecs):
     return process_starting_points(combine_by_type_dataspecs)
@@ -915,12 +917,12 @@ def covmap_dataspecs(combine_by_type_dataspecs, matched_dataspecs_dataset_name):
     return covmap(combine_by_type_dataspecs, matched_dataspecs_dataset_name)
 
 matched_dataspecs_experiment_name = collect(
-    'experiment_name', ['matched_datasets_from_dataspecs'])
+    'experiment_name', ['dataspecs'])
 matched_dataspecs_dataset_name = collect(
-    'dataset_name', ['matched_datasets_from_dataspecs'])
-matched_cuts_datasets = collect('dataset', ['dataspecs_with_matched_cuts'])
+    'dataset_name', ['dataspecs'])
+matched_cuts_datasets = collect('dataset', ['dataspecs'])
 all_matched_datasets = collect('matched_cuts_datasets',
-                               ['matched_datasets_from_dataspecs'])
+                               ['dataspecs'])
 
 
 def all_matched_data_lengths(all_matched_datasets):
@@ -961,6 +963,36 @@ def theory_covmat_custom_dataspecs(covs_pt_prescrip_dataspecs, covmap_dataspecs,
     return theory_covmat_custom(covs_pt_prescrip_dataspecs, covmap_dataspecs,
                                 matched_experiments_index)
 
+thx_corrmat = collect('theory_corrmat_custom_dataspecs', 
+                      ['combined_shift_and_theory_dataspecs', 'theoryconfig'])
+
+shx_corrmat = collect('matched_datasets_shift_matrix', 
+                      ['combined_shift_and_theory_dataspecs', 'shiftconfig'])
+
+@table
+def shift_to_theory_ratio(thx_corrmat, shx_corrmat):
+    ratio = shx_corrmat[0]/thx_corrmat[0]
+    return ratio
+
+@figure
+def shift_to_theory_ratio_plot(shift_to_theory_ratio):
+    fig = plot_corrmat_heatmap(shift_to_theory_ratio, 
+                               "Shift to theory ratio matrix")
+    return fig
+
+@figure
+def shift_corrmat_plot(shx_corrmat):
+    fig = plot_corrmat_heatmap(shx_corrmat[0],
+                               "Shift correlation matrix")
+    return fig
+
+@figure
+def theory_corrmat_plot(thx_corrmat):
+    fig = plot_corrmat_heatmap(thx_corrmat[0],
+                               "Theory correlation matrix")
+    return fig
+
+
 @table
 def theory_corrmat_custom_dataspecs(theory_covmat_custom_dataspecs):
     """Calculates the theory correlation matrix for scale variations
@@ -975,3 +1007,5 @@ def plot_thcorrmat_heatmap_custom_dataspecs(theory_corrmat_custom_dataspecs, the
     fig = plot_corrmat_heatmap(theory_corrmat_custom_dataspecs,
                                f"Theory correlation matrix for {l} points")
     return fig
+
+
