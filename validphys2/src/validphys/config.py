@@ -567,22 +567,22 @@ class CoreConfig(configparser.Config):
         return res
 
     def produce_combined_shift_and_theory_dataspecs(self, theoryconfig, shiftconfig):
-        total_dataspecs = theoryconfig['dataspecs'] + shiftconfig['dataspecs']
+        total_dataspecs = theoryconfig["dataspecs"] + shiftconfig["dataspecs"]
         matched_datasets = self.produce_matched_datasets_from_dataspecs(total_dataspecs)
-        matched_dataspecs_with_cuts = []
-        for exp in matched_datasets:
-            matched_dataspecs_with_cuts.append(self.produce_dataspecs_with_matched_cuts(exp['dataspecs']))
-        #for i in range(len(matched_datasets)):
-        #    matched_datasets[0] = self.produce_dataspecs_with_matched_cuts(matched_datasets[i]['dataspecs'])
-        final_res = [{}]*len(total_dataspecs)
-        for ispec, spec in enumerate(final_res):
-            for ds in matched_dataspecs_with_cuts:
-                final_res[ispec] = ChainMap(ds[ispec], final_res[ispec])
-        new_theoryconfig = final_res[:len(theoryconfig)]
-        new_shiftconfig = final_res[len(theoryconfig):]
-     #   print(final_res[0])
-        return {'shiftconfig': ChainMap({'dataspecs': new_shiftconfig}, shiftconfig),
-                'theoryconfig': ChainMap({'dataspecs': new_theoryconfig}, theoryconfig)}
+        final_res = [
+            self.produce_dataspecs_with_matched_cuts(ds["dataspecs"])
+            for ds in matched_datasets
+        ]
+        new_theoryconfig = []
+        new_shiftconfig = []
+        len_th = len(theoryconfig['dataspecs'])
+        for s in final_res:
+            new_theoryconfig.append({"dataspecs": s[:len_th]})
+            new_shiftconfig.append({"dataspecs": s[len_th:]})
+        return {
+            "shiftconfig": ChainMap({"dataspecs": new_shiftconfig}, shiftconfig),
+            "theoryconfig": ChainMap({"dataspecs": new_theoryconfig}, theoryconfig),
+        }
 
 
     #TODO: Worth it to do some black magic to not pass params explicitly?
