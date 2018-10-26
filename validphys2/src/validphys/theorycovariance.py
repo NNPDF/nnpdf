@@ -26,6 +26,8 @@ from validphys.plotoptions import get_info
 from validphys import plotutils
 from validphys.checks import check_two_dataspecs
 
+from IPython import embed
+
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values,
@@ -880,7 +882,7 @@ def matched_datasets_shift_matrix_correlations(matched_datasets_shift_matrix):
         columns=matched_datasets_shift_matrix.columns,
         index=matched_datasets_shift_matrix.index)
     return corrmat
-    
+
 
 @figure
 def plot_matched_datasets_shift_matrix_correlations(
@@ -967,21 +969,21 @@ def theory_covmat_custom_dataspecs(covs_pt_prescrip_dataspecs, covmap_dataspecs,
     return theory_covmat_custom(covs_pt_prescrip_dataspecs, covmap_dataspecs,
                                 matched_experiments_index)
 
-thx_corrmat = collect('theory_corrmat_custom_dataspecs', 
+thx_corrmat = collect('theory_corrmat_custom_dataspecs',
                       ['combined_shift_and_theory_dataspecs', 'theoryconfig'])
 
-shx_corrmat = collect('matched_datasets_shift_matrix_correlations', 
+shx_corrmat = collect('matched_datasets_shift_matrix_correlations',
                       ['combined_shift_and_theory_dataspecs', 'shiftconfig'])
 
 @table
 def shift_to_theory_ratio(thx_corrmat, shx_corrmat):
-    ratio = shx_corrmat[0]/thx_corrmat[0]
+    ratio = thx_corrmat[0]/shx_corrmat[0]
     return ratio
 
 @figure
 def shift_to_theory_ratio_plot(shift_to_theory_ratio):
-    fig = plot_corrmat_heatmap(shift_to_theory_ratio, 
-                               "Shift to theory ratio matrix")
+    fig = plot_corrmat_heatmap(shift_to_theory_ratio,
+                               "Ratio of theory to shift correlation matrices")
     return fig
 
 @figure
@@ -995,6 +997,46 @@ def theory_corrmat_plot(thx_corrmat):
     fig = plot_corrmat_heatmap(thx_corrmat[0],
                                "Theory correlation matrix")
     return fig
+
+@table
+def shift_corrmat_value_fractions(shx_corrmat):
+    mat = shx_corrmat[0].values
+    matsize = np.size(mat)
+    fracplus = 100*np.size(np.where(mat>0))/(2*matsize)
+    fracminus = 100*np.size(np.where(mat<0))/(2*matsize)
+    fraczero = 100*np.size(np.where(mat==0))/(2*matsize)
+    table = pd.DataFrame([fracplus, fracminus, fraczero],
+                         index=[r'$f_{\rho=+1}$',
+                                r'$f_{\rho=-1}$',
+                                r'$f_{\rho=0}$'],
+                         columns = ["% of total entries"])
+    return table
+
+@table
+def theory_corrmat_value_fractions(thx_corrmat):
+    mat = thx_corrmat[0].values
+    matsize = np.size(mat)
+    fracplus = 100*np.size(np.where(mat>0))/(2*matsize)
+    fracminus = 100*np.size(np.where(mat<0))/(2*matsize)
+    fraczero = 100*np.size(np.where(mat==0))/(2*matsize)
+    table = pd.DataFrame([fracplus, fracminus, fraczero],
+                         index=[r'$\tilde{f}_{\rho=+1}$',
+                                r'$\tilde{f}_{\rho=-1}$',
+                                r'$\tilde{f}_{\rho=0}$'],
+                         columns = ["% of total entries"])
+    return table
+
+@table
+def shift_theory_element_comparison(shx_corrmat, thx_corrmat):
+    mat = thx_corrmat[0].values/shx_corrmat[0].values
+    matsize = np.size(mat)
+    fracplus = 100*np.size(np.where(mat>0))/(2*matsize)
+    fracminus = 100*np.size(np.where(mat<0))/(2*matsize)
+    table = pd.DataFrame([fracplus, fracminus],
+                         index=['same sign',
+                                'different signs'],
+                         columns = ["% of total entries"])
+    return table
 
 
 @table
