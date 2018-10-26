@@ -12,12 +12,18 @@ from reportengine.checks import make_argcheck, check, check_positive, make_check
 
 log = logging.getLogger(__name__)
 
+# list all possible combocuts
+COMBOCUTS = (
+    'NNPDF31', 
+    'NNPDF40'
+    )
+
 
 @make_argcheck
 def check_combocuts(combocuts: str):
     """Check combocuts content"""
-    check(combocuts == 'NNPDF31',
-          "Invalid combocut. Must be NNPDF31 (or implement it yourself).")
+    check(combocuts in COMBOCUTS,
+          "Invalid combocut. Must be NNPDF31 or NNPDF40 (or implement it yourself).")
 
 
 @make_argcheck
@@ -59,21 +65,21 @@ def export_mask(path, mask):
 def filter(experiments, theoryid, filter_path,
            q2min:numbers.Real, w2min:numbers.Real, fakedata: bool,
            filterseed:int, rngalgo:int, seed:int, fakenoise:bool,
-           errorsize:numbers.Real, combocuts, t0pdfset):
+           errorsize:numbers.Real, combocuts:str, t0pdfset):
     """Apply filters to all datasets"""
     if not fakedata:
         log.info('Filtering real data.')
-        total_data, total_cut_data = _filter_real_data(filter_path, experiments, q2min, w2min)
+        total_data, total_cut_data = _filter_real_data(filter_path, experiments, q2min, w2min, combocuts)
     else:
         log.info('Filtering closure-test data.')
         RandomGenerator.InitRNG(rngalgo, seed)
         RandomGenerator.GetRNG().SetSeed(filterseed)
         total_data, total_cut_data = _filter_closure_data(filter_path, experiments, q2min, w2min,
-                                                          t0pdfset, fakenoise, errorsize)
+                                                          combocuts, t0pdfset, fakenoise, errorsize)
     log.info(f'Summary: {total_cut_data}/{total_data} datapoints passed kinematic cuts.')
 
 
-def _filter_real_data(filter_path, experiments, q2min, w2min):
+def _filter_real_data(filter_path, experiments, q2min, w2min, combocuts):
     """Filter real experimental data."""
     total_data_points = 0
     total_cut_data_points = 0
@@ -83,7 +89,7 @@ def _filter_real_data(filter_path, experiments, q2min, w2min):
             make_dataset_dir(path)
             ds = dataset.load()
             total_data_points += ds.GetNData()
-            datamask = get_cuts_for_dataset(dataset, q2min, w2min) # build data mask
+            datamask = get_cuts_for_dataset(dataset, q2min, w2min, combocuts) # build data mask
             log.info(f'{len(datamask)}/{ds.GetNData()} datapoints in {dataset.name} passed kinematic cuts.')
             total_cut_data_points += len(datamask)
             # save to disk
@@ -94,7 +100,7 @@ def _filter_real_data(filter_path, experiments, q2min, w2min):
     return total_data_points, total_cut_data_points
 
 
-def _filter_closure_data(filter_path, experiments, q2min, w2min, fakepdfset, fakenoise, errorsize):
+def _filter_closure_data(filter_path, experiments, q2min, w2min, combocuts, fakepdfset, fakenoise, errorsize):
     """Filter closure test data."""
     total_data_points = 0
     total_cut_data_points = 0
@@ -108,7 +114,7 @@ def _filter_closure_data(filter_path, experiments, q2min, w2min, fakepdfset, fak
             make_dataset_dir(path)
             ds = uncut_exp.GetSet(j)
             total_data_points += ds.GetNData()
-            datamask = get_cuts_for_dataset(dataset, q2min, w2min) # build data mask
+            datamask = get_cuts_for_dataset(dataset, q2min, w2min, combocuts) # build data mask
             log.info(f'{len(datamask)}/{ds.GetNData()} datapoints in {dataset.name} passed kinematic cuts.')
             total_cut_data_points += len(datamask)
             # save to disk
@@ -121,12 +127,12 @@ def _filter_closure_data(filter_path, experiments, q2min, w2min, fakepdfset, fak
     return total_data_points, total_cut_data_points
 
 
-def get_cuts_for_dataset(dataset, q2min, w2min):
+def get_cuts_for_dataset(dataset, q2min, w2min, combocuts):
     """Return cut mask for dataset"""
     datamask = []
     ds = dataset.load()
     for idat in range(ds.GetNData()):
-        if pass_kincuts(ds, idat, dataset.thspec, q2min, w2min):
+        if globals()['%s_combocuts' % combocuts](ds, idat, dataset.thspec, q2min, w2min):
             datamask.append(idat)
     return datamask
 
@@ -145,7 +151,19 @@ def check_positivity(posdatasets):
         log.info(f'{pos.name} checked.')
 
 
-def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
+def NNPDF40_combocuts(dataset, idat, theoryid, q2min, w2min):
+    """Applies cuts ... based on NNPDF3.1
+    CHANGE DESCRIPTION HERE
+    """
+    status = NNPDF31_combocuts(dataset, idat, theoryid, q2min, w2min)
+    if status:
+        # APPLY YOUR CUSTOM CUTS HERE
+        # BY SETTING STATUS TO FALSE
+        pass
+    return status
+
+
+def NNPDF31_combocuts(dataset, idat, theoryid, q2min, w2min):
     """Applies cuts as in C++ for NNPDF3.1 combo cuts.
     This function replicas the c++ code but should be upgraded as
     discussed several times.
