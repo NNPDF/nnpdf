@@ -28,8 +28,6 @@ from validphys.checks import check_two_dataspecs
 
 log = logging.getLogger(__name__)
 
-from IPython import embed
-
 theoryids_experiments_central_values = collect(experiments_central_values,
                                                ('theoryids',))
 
@@ -872,12 +870,8 @@ def plot_matched_datasets_shift_matrix(matched_datasets_shift_matrix):
     return plot_covmat_heatmap(matched_datasets_shift_matrix,
                                "Shift outer product matrix")
 
-@figure
-def plot_matched_datasets_shift_matrix_correlations(
-        matched_datasets_shift_matrix):
-    """Heatmap plot of the correlations of
-    matched_datasets_shift_matrix. By construction these are
-    zero or one."""
+@table
+def matched_datasets_shift_matrix_correlations(matched_datasets_shift_matrix):
     mat = matched_datasets_shift_matrix.values
     diag_minus_half = (np.diagonal(mat))**(-0.5)
     corrmat = diag_minus_half[:, np.newaxis] * mat * diag_minus_half
@@ -885,6 +879,16 @@ def plot_matched_datasets_shift_matrix_correlations(
         corrmat,
         columns=matched_datasets_shift_matrix.columns,
         index=matched_datasets_shift_matrix.index)
+    return corrmat
+    
+
+@figure
+def plot_matched_datasets_shift_matrix_correlations(
+        matched_datasets_shift_matrix):
+    """Heatmap plot of the correlations of
+    matched_datasets_shift_matrix. By construction these are
+    zero or one."""
+    corrmat = matched_datasets_shift_matrix_correlations
     return plot_corrmat_heatmap(
         corrmat, "Shift outer product normalized (correlation) matrix")
 
@@ -966,7 +970,7 @@ def theory_covmat_custom_dataspecs(covs_pt_prescrip_dataspecs, covmap_dataspecs,
 thx_corrmat = collect('theory_corrmat_custom_dataspecs', 
                       ['combined_shift_and_theory_dataspecs', 'theoryconfig'])
 
-shx_corrmat = collect('matched_datasets_shift_matrix', 
+shx_corrmat = collect('matched_datasets_shift_matrix_correlations', 
                       ['combined_shift_and_theory_dataspecs', 'shiftconfig'])
 
 @table
