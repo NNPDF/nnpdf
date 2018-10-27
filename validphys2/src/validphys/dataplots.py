@@ -325,7 +325,9 @@ def _plot_fancy_impl(results, commondata, cutlist,
                 annotate_point = x[-1], line_data[('cv', next_after_normalize)].values[-1]
             else:
                 annotate_point = x[-1], line_data[('cv', 0)].values[-1]
-            ax.annotate(glabel, annotate_point, xytext=(15 ,-10),
+            #This is a workaround for https://github.com/matplotlib/matplotlib/issues/12648
+            if np.isfinite(annotate_point).all():
+                ax.annotate(glabel, annotate_point, xytext=(15 ,-10),
                              size='xx-small',
                              textcoords='offset points', zorder=10000)
 
