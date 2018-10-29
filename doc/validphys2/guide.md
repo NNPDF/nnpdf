@@ -235,7 +235,7 @@ fit: 160603-r654e559-jr-003
 theoryids:
     - 52
     - 53
-use_cuts : False
+use_cuts : nocuts
 
 experiments:
   - experiment: LHCb
@@ -669,12 +669,12 @@ example the command below results currently in the following output:
 ```
 plot_fancy
 
-Defined in: validphys.plots
+Defined in: validphys.dataplots
 
 Generates: figuregen
 
-plot_fancy(one_or_more_results, dataset, normalize_to:(<class 'int'>,
-  <class 'str'>, <class 'NoneType'>)=None)
+plot_fancy(one_or_more_results, commondata, cuts, normalize_to:
+  (<class 'int'>, <class 'str'>, <class 'NoneType'>) = None)
 
 Read the PLOTTING configuration for the dataset and generate the
 corrspondig data theory plot.
@@ -693,22 +693,36 @@ files.
 
 The following resources are read from the configuration:
 
-    dataset(dict): Dataset specification from the theory and
-  CommonData. Use the cuts from the fit, if provided.
+    dataset_input: The mapping that corresponds to the dataset
+  specifications in the fit files
+  [Used by commondata]
 
     theoryid: A number corresponding to the database theory ID where
   the corresponding theory folder is installed in te data directory.
   Either just an id (str or int), or a mapping with 'id' and 'label'.
-  [Used by dataset]
+  [Used by cuts]
 
-    use_cuts(bool): Whether to use the filtered points in the fit, or
-  the whole data in the dataset.
-  [Used by dataset]
+    use_cuts(bool or str): Whether to filter the points based on the
+  cuts applied in the fit, or the whole data in the dataset. The
+  possible options are:
+  
+  - internal: Calculate the cuts based on the existing rules. This
+  is
+    the default.
+  
+  - fromfit: Read the cuts stored in the fit.
+  
+  - nocuts: Use the whole dataset.
+  [Used by cuts]
 
     fit: A fit in the results folder, containing at least a valid
   filter result. Either just an id (str), or a mapping with 'id' and
   'label'.
-  [Used by dataset]
+  [Used by commondata]
+
+    use_fitcommondata(bool): Use the commondata files in the fit
+  instead of those in the data directory.
+  [Used by commondata]
 
     pdfs(list): A list of pdf objects.
   [Used by one_or_more_results]
@@ -719,15 +733,18 @@ The following resources are read from the configuration:
 
     use_t0(bool): Whether to use the t0 PDF set to generate
   covariance matrices.
-  [Used by one_or_more_results]
+  [Used by t0set]
 
     t0pdfset: PDF set used to generate the t0 covmat.
-  [Used by one_or_more_results]
+  [Used by t0set]
 
 The following additionl arguments can be used to control the
 behaviour. They are set by default to sensible values:
 
   normalize_to(int or str or NoneType) = None
+  q2min(Number or NoneType) = None [Used by cuts]
+  w2min(Number or NoneType) = None [Used by cuts]
+  check_plotting(bool) = False [Used by dataset]
 ```
 
 We can see which keys have a special meaning in the configuration file
@@ -754,7 +771,7 @@ pdf: NNPDF30_nlo_as_0118
 
 theoryid: 52
 
-use_cuts: false
+use_cuts: "nocuts"
 
 dataset_input:
     dataset: ATLASWZRAP36PB
@@ -802,10 +819,10 @@ theoryid: 52
 fit: 161222-jr-004
 
 with_cuts:
-  use_cuts: True
+  use_cuts: "fromfit"
 
 without_cuts:
-  use_cuts: False
+  use_cuts: "nocuts"
 
 dataset_input:
     dataset: ATLASWZRAP36PB
@@ -835,11 +852,11 @@ theoryid: 52
 fit: 161222-jr-004
 
 with_cuts:
-  use_cuts: True
+  use_cuts: "fromfit"
   pdf: CT14nlo
 
 without_cuts:
-  use_cuts: False
+  use_cuts: "nocuts"
 
 dataset_input:
     dataset: ATLASWZRAP36PB
@@ -873,10 +890,10 @@ theoryid: 52
 fit: 161222-jr-004
 
 specifications:
-- use_cuts: True
+- use_cuts: "fromfit"
   pdf: CT14nlo
 
-- use_cuts: False
+- use_cuts: "nocuts"
 
 dataset_input:
     dataset: ATLASWZRAP36PB
@@ -912,7 +929,7 @@ pdfs:
 
 theoryid: 52
 
-use_cuts: False
+use_cuts: "nocuts"
 
 dataset_input:
     dataset: ATLASWZRAP36PB
@@ -934,7 +951,7 @@ pdfs:
 
 theoryid: 52
 
-use_cuts: False
+use_cuts: "nocuts"
 
 dataset_input:
     dataset: ATLASWZRAP36PB
@@ -979,7 +996,7 @@ theoryids:
     - 53
 
 with_cuts:
-    use_cuts : False
+    use_cuts : "nocuts"
 
 experiments:
   - experiment: LHCb
@@ -997,10 +1014,10 @@ actions_:
 ```
 
 This will first enter the "*with_cuts*" namespace (thus setting
-`use_cuts=False` for the action), and then loop over all the theories,
-pdfs, experiments and datasets inside each experiment (note that when
-used as a namespace specification, `experiment` refers to the list of
-datasets it contains).
+`use_cuts="nocuts"` for the action), and then loop over all the
+theories, pdfs, experiments and datasets inside each experiment (note
+that when used as a namespace specification, `experiment` refers to
+the list of datasets it contains).
 
 The order over which the looping is done is significative: For one the
 outer specifications must set all the variables required for the inner
@@ -1069,7 +1086,7 @@ that). For example:
 ```yaml
 fit: 161208-jr-003
 
-use_cuts: False
+use_cuts: "nocuts"
 
 description:
     from_: fit
@@ -1125,7 +1142,7 @@ fits:
     - 161222-jr-004
 
 
-use_cuts: False
+use_cuts: "nocuts"
 
 theory:
     from_: fit
@@ -1169,7 +1186,7 @@ fits:
     - 161222-jr-004
 
 
-use_cuts: False
+use_cuts: "nocuts"
 
 
 Q: 10
@@ -1225,7 +1242,7 @@ fits:
     - NNPDF31_nnlo_as_0118_wCMSDY12
     - NNPDF31_nnlo_as_0118_wEMC
 
-use_cuts: True
+use_cuts: "fromfit"
 
 printopts:
     print_common: False
@@ -1548,6 +1565,95 @@ command line help ([Seeing what actions are available]) for more
 up to date documentation. Here we only cover the complex tools that
 require more specific documentation.
 
+### Specifying data cuts
+
+The experimental `CommonData` files contain more data points than we
+actually fit. Some data points are excluded for reasons such as the
+instability of the perturbative expansion in their corresponding
+kinematic regions.
+
+There are three possibilities for handling the experimental cuts
+within validphys, which are controlled with the `use_cuts`
+configuration setting:
+
+`use_cuts: 'nocuts'`
+  ~ This causes the content of the data files to be taken unmodified.
+  Note that some theory predictions may be ill defined in this
+  situation.
+
+`use_cuts: 'fromfit'`
+  ~ The cuts are read from the masks given as input to `nnfit`, and
+  generated by `vp-setupfit`. An existing fit is required, to load the
+  cuts, and must contain the masks for all the datasets analyzed in
+  the active namespace.
+
+`use_cuts: 'internal'`
+  ~ Compute the cut masks as `vp-setupfit` would do. Currently the
+  parameters `q2min` and `w2min` must be given. These can in turn be
+  set to the same as the fit values by loading the `datacuts`
+  namespace from the fit. In this case, the cuts will normally
+  coincide with the ones loaded with  the `fromfit` setting.
+
+The following example demonstrates the three options:
+
+```yaml
+meta:
+    title: Test the various options for CutsPolicy
+    author: Zahari Kassabov
+    keywords: [test, debug]
+
+fit: NNPDF31_nlo_as_0118_1000
+
+theory:
+    from_: fit
+
+theoryid:
+    from_: theory
+
+#Load q2min and w2min from the fit
+datacuts:
+    from_: fit
+
+dataset_input: {dataset: ATLAS1JET11}
+
+dataspecs:
+  - speclabel: "No cuts"
+    use_cuts: "nocuts"
+
+  - speclabel: "Fit cuts"
+    use_cuts: "fromfit"
+
+  - speclabel: "Internal cuts"
+    use_cuts: "internal"
+
+template_text: |
+    {@with fitpdf::datacuts@}
+    # Plot
+
+    {@fitpdf::datacuts plot_fancy_dataspecs@}
+
+    # χ² plots
+
+    {@with dataspecs@}
+    ## {@speclabel@}
+
+    {@plot_chi2dist@}
+
+    {@endwith@}
+    {@endwith@}
+
+
+
+actions_:
+    - report(main=True)
+```
+
+Here we put together the three options in a [Data theory comparison]
+plot and then plot the χ² distribution for each one individually.
+With these settings the later two
+[dataspecs](#general-data-specification-the-dataspec-api) give the
+same result.
+
 ### Data theory comparison
 
 The name of the data-theory comparison tool is `plot_fancy`. You can
@@ -1586,7 +1692,7 @@ depends on the following variable options:
  - The name of the dataset (the `commndata` file).
  - The systematics specification (the `systype` file).
  - The theory used (the fktables and fkset files).
- - The cuts (currently provided by an existing fit).
+ - [The cuts](#specifying-data-cuts).
  - The PDF(s) entering the comparison.
 
 Ideally we want to be able to compare arbitrary aggregates of
@@ -1609,7 +1715,7 @@ for each theory. We would write:
 
 ```yaml
 fit: NNPDF31_nlo_as_0118_1000
-use_cuts: True
+use_cuts: "fromfit"
 
 dataset_input:
     dataset: NMC
@@ -1645,7 +1751,7 @@ config`), the resulting input cards are simple and powerful. It boils
 down to:
 
 ```yaml
-use_cuts: True
+use_cuts: "fromfit"
 
 experiments:
     from_: fit
@@ -1686,6 +1792,95 @@ same name together (the `matched_datasets_from_dataspecs` production
 rule) and writing a title and the data-theory comparison plots for
 each dataset in the intersection (the actions inside the `with`
 block).
+
+### Processing closure test data
+
+When analyzing closure tests (see the [NNPDF 3.0] paper), we typically want to
+refer to the *fake* closure data, rather at the original experimental
+data. The configuration option `use_fitcommondata: True` serves this
+purpose.
+
+When starting a fit (with `vp-setupfit`) currently CommonData
+files are copied to the output folder. For normal fits,
+these correspond to the usual CommonData files stored in the data
+folder. For closure test fits, the CommonData files correspond to the
+fake data, generated based on the underlying PDF.
+
+Setting the `use_fitcommondata` key to `True` causes the actions
+declared within some [namespace] causes the actions in that namespace
+to look for CommonData files in the fit output folder (it is thus
+required that a fit is specified that contains the desired
+CommonData). For closure test fits, this will have the effect of
+making actions data-theory comparisons or chi² (and indeed everything
+that uses experimental data) compare with the fake data rather than
+the experimental data. It should make no difference for the normal
+fits, unless the CommonData files have changed between the installed
+version of the code and the fit. This is typically discouraged.
+
+For example, the following runcard takes a closure test fit and its
+corresponding reference fit and produces a plot of the experimental
+χ². In both cases the CommonData files are read from the corresponding
+fit folder (because we set `use_fitcommondata: True` at the top
+level). For the reference fit, this will cause the theory predictions
+to be compared with the original experimental data, while in the
+closure test data, predictions will be compared to the fake data. This
+is typically the relevant comparison.
+
+```yaml
+meta:
+    title: Example using use_fitcommondata
+    author: Zahari Kassanov
+    keywords: test
+
+use_fitcommondata: True
+use_cuts: "fromfit"
+
+fits:
+  - {id: 180501-nh-004, label: "Closure fit"}
+  - {id: 180307-nh-001, label: "Reference fit"}
+
+actions_:
+  - plot_fits_datasets_chi2
+```
+
+[NNPDF 3.0]: https://arxiv.org/abs/1410.8849
+[namespace]: #multiple-inputs-and-namespaces
+
+
+### The vp-comparefits application
+
+While `validphys` provides the flexibility to produce analyses that
+are specific for the task at hand, it is sometimes useful to run a
+standardized set of comparisons, which can be easily integrated in a
+production workflow.
+
+The script `vp-comparefits` produces a comparison between a *base fit*
+that we are mainly interested in analyzing and a *reference fit* we
+want to compare it with. The script will produce a report detailing
+the statistical estimators, display PDF comparisons at various scales
+or compare the theory predictions.
+
+The basic usage is:
+
+```bash
+vp-comparefits -i
+```
+
+Where the `-i` option stands for `--interactive` and it will cause the
+script to ask the user for the parameters of the comparison.
+Specifically users need to provide the base and reference fits, as
+well as the metadata parameters required to index the report
+(including author, title and keywords); see [Metadata Indexing].  All
+these options can be set via command line parameters, and this must be
+done for non interactive usage (without the `-i` option). Additionally
+all the relevant command line arguments of `validphys` work in the
+same way. See `vp-comparefits --help` for details.
+
+
+The `vp-comparefits` script is a thin wrapper around a `validphys`
+runcard stored under `comparefittemplates/comparecard.yaml` in the
+source code. That runcard (and its associated templates) can be
+modified to improve the default comparison.
 
 
 Parallel mode
@@ -2022,15 +2217,15 @@ Consider the example:
 first:
    pdf: NNPDF30_nlo_as_0118
    normalize_to: None
-   use_cuts: False
+   use_cuts: "nocuts"
 
 second:
    pdf: CT14nlo
    normalize_to: CT14nlo
 
 cutspecs:
- - {use_cuts: False}
- - {use_cuts: True}
+ - {use_cuts: "nocuts"}
+ - {use_cuts: "fromfit"}
 
 ```
 
@@ -2041,7 +2236,7 @@ Given the input above, we could form the following `nsspec`.
 This would correspond to a namespace where we have the following
 symbols available:
 
-- `use_cuts` (set to `False`) from `cutspecs`.
+- `use_cuts` (set to `"nocuts"`) from `cutspecs`.
 
 - `pdf` and `normalize_to` (set to CT) from `second`.
 
@@ -2053,7 +2248,7 @@ We could also form the specification:
 (('cutspecs', 1), 'first')
 ```
 Because the innermost specification is last, the value of `use_cuts`
-is `False`.
+is `"nocuts"`.
 
 
 The function `reportengine.namespaces.resolve(ns, nsspec)` returns
@@ -2551,7 +2746,7 @@ fits:
   - NNPDF31_nlo_as_0118
   - NNPDF31_nnlo_as_0118
 
-use_cuts: True
+use_cuts: "fromfit"
 
 actions_:
   - print_fits_experiments_chi2
@@ -2727,3 +2922,10 @@ the reports marked with some keyword (for example 'nnpdf31').
 
 The Makefile inside will synchronize them with
 the server.
+
+The report indexing script generates thumbnails in the
+`WEB/thumbnails` which are then associated to each report. This is
+done by looking at the image files inside the `figures` folder of each
+uploaded report (see the source of the script for more details). It is
+expected that the server redirects the requests for
+`vp.nnpdf.science/thumbnails` to this folder.

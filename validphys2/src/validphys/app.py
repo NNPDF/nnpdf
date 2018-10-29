@@ -10,6 +10,7 @@ The entry point of the validphys application is the ``main`` funcion of this
 module.
 """
 import sys
+import os
 import logging
 import contextlib
 
@@ -18,13 +19,14 @@ from reportengine import app
 
 from validphys.config import Config, Environment
 from validphys import uploadutils
-#from validphys import providers
+from validphys import mplstyles
 
 
 providers = [
              'validphys.results',
              'validphys.pdfgrids',
-             'validphys.plots',
+             'validphys.pdfplots',
+             'validphys.dataplots',
              'validphys.fitdata',
              'validphys.arclength',
              'validphys.sumrules',
@@ -37,7 +39,8 @@ providers = [
              'validphys.paramfits.plots',
              'validphys.theorycovariance',
              'validphys.replica_selector',
-             'reportengine.report'
+             'validphys.closure',
+             'reportengine.report',
             ]
 
 log = logging.getLogger(__name__)
@@ -65,7 +68,7 @@ including the contents of the following file:
 
     @property
     def default_style(self):
-        return str(self.this_folder() / 'small.mplstyle')
+        return os.fspath(mplstyles.smallstyle)
 
     def __init__(self, name='validphys', providers=providers):
         super().__init__(name, providers)
@@ -128,8 +131,11 @@ including the contents of the following file:
 
     def run(self):
         if sys.version_info < (3, 6):
-            log.warn("validphys 2 is discontinued on Python<3.6 and will not be longer updated. Please run\n"
-                     "conda install python=3.6\n\n If you have any problems, please ask Zahari.")
+            log.warning("validphys 2 is discontinued on Python<3.6 and will "
+                    "not be longer updated. Please run\n"
+                     "conda install python=3.6\n\n"
+                     "If you have any problems, please open an issue "
+                     "on https://github.com/NNPDF/nnpdf/issues.")
         with self.upload_context(self.args['upload'], self.args['output']):
             super().run()
 

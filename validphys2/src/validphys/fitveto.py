@@ -68,7 +68,7 @@ def determine_vetoes(fitinfos: list):
 def save_vetoes(veto_dict: dict, filepath):
     """ Saves a fit veto dictionary to file """
     if filepath.exists():
-        log.warn("Warning: veto file {filepath} already exists. Overwriting file")
+        log.warning(f"Veto file {filepath} already exists. Overwriting file")
     with open(str(filepath), 'w') as f:
         veto_dict_tolist = {key: val.tolist() for key, val in veto_dict.items()}
         json.dump(veto_dict_tolist, f)

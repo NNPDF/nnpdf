@@ -12,10 +12,10 @@ import os
 import logging
 
 import pygments
+from prompt_toolkit import HTML
 from prompt_toolkit.shortcuts import prompt
 
 from reportengine import colors
-
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)
@@ -24,50 +24,55 @@ log.addHandler(colors.ColorHandler())
 def yes_no_str(default=None):
     """Return a yes or no string for the prompt, with the default
     highlighted"""
-    y = 'y' if default is not True else colors.t.bold('Y')
-    n = 'n' if default is not False else colors.t.bold('N')
-    return f'[{y}/{n}]'
-
+    if default is None:
+        return f'[y/n]'
+    elif default:
+        return HTML('[<b>Y</b>/n]')
+    else:
+        return HTML('[y/<b>N</b>]')
 
 
 def confirm(message, default=None):
     """
-    This is like prompt_toolkit.shortcuts.create_confirm_application
-    except that it doesn't bind control+c to "No", which is nonsensical.
-    Instead, it raises an exception.
+    This is like prompt_toolkit.shortcuts.confirm (implemented by
+    create_confirm_session) except that it doesn't bind control+c to "No", but
+    instead raises an exception.
 
-    Also support defaults.
+    It also support defaults.
     """
-    from prompt_toolkit.enums import DEFAULT_BUFFER
-    from prompt_toolkit.key_binding.bindings.basic import load_abort_and_exit_bindings
+    from prompt_toolkit.key_binding.key_bindings import KeyBindings
     from prompt_toolkit.keys import Keys
-    from prompt_toolkit.shortcuts import create_prompt_application, run_application
+    from prompt_toolkit.formatted_text import merge_formatted_text
+    from prompt_toolkit.shortcuts import PromptSession
+    bindings = KeyBindings()
 
-    registry = load_abort_and_exit_bindings()
+    @bindings.add('y')
+    @bindings.add('Y')
+    def yes(event):
+        session.default_buffer.text = 'y'
+        event.app.exit(result=True)
 
-    @registry.add_binding('y')
-    @registry.add_binding('Y')
-    def yes_event(event):
-        event.cli.buffers[DEFAULT_BUFFER].text = 'y'
-        event.cli.set_return_value(True)
+    @bindings.add('n')
+    @bindings.add('N')
+    def no(event):
+        session.default_buffer.text = 'n'
+        event.app.exit(result=False)
 
-    @registry.add_binding('n')
-    @registry.add_binding('N')
-    def no_event(event):
-        event.cli.buffers[DEFAULT_BUFFER].text = 'n'
-        event.cli.set_return_value(False)
+    @bindings.add(Keys.Any)
+    def nothing(event):
+        " Disallow inserting other text. "
+        pass
 
     if default:
-        registry.add_binding(Keys.Enter)(yes_event)
+        bindings.add(Keys.Enter)(yes)
     elif default is not None:
-        registry.add_binding(Keys.Enter)(no_event)
-    #There doesn't seem to be an easy way to do this "idiomatically". The lib
-    #esccapes ANSI sequences.
-    message = f'{message} {yes_no_str(default)}'
-    print(message)
+        bindings.add(Keys.Enter)(no)
+    else:
+        bindings.add(Keys.Enter)(nothing)
 
-    app = create_prompt_application('', key_bindings_registry=registry)
-    return run_application(app, patch_stdout=True)
+    complete_message = merge_formatted_text([message, yes_no_str(default)])
+    session = PromptSession(complete_message, key_bindings=bindings)
+    return session.prompt()
 
 def handle_single_file(filename):
     import tempfile

@@ -24,7 +24,7 @@ from validphys.results import abs_chi2_data, results
 from validphys import checks
 from validphys.lhio import new_pdf_from_indexes
 from validphys.pdfoutput import pdfset
-from validphys.plots import plot_training_validation
+from validphys.dataplots import plot_training_validation
 
 log = logging.getLogger(__name__)
 

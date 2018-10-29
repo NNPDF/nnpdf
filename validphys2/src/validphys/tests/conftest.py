@@ -23,7 +23,7 @@ def tmp(tmpdir):
 @pytest.fixture(scope='module')
 def data():
     l = Loader()
-    ds = l.check_dataset(name='NMC', theoryid=162, use_cuts=False)
+    ds = l.check_dataset(name='NMC', theoryid=162, cuts=None)
     exp = ExperimentSpec('NMC Experiment', [ds])
     pdf = l.check_pdf("NNPDF31_nnlo_as_0118")
     exps = [exp]
@@ -47,8 +47,8 @@ def chi2data(convolution_results):
 @pytest.fixture(scope='module')
 def weighted_data():
     l = Loader()
-    ds = l.check_dataset(name='NMC', theoryid=162, use_cuts=False)
-    wds = l.check_dataset(name='NMC', theoryid=162, use_cuts=False, weight=100)
+    ds = l.check_dataset(name='NMC', theoryid=162, cuts=None)
+    wds = l.check_dataset(name='NMC', theoryid=162, cuts=None, weight=100)
     exp = ExperimentSpec('NMC Experiment', [ds])
     wexp = ExperimentSpec('Weighted', [wds])
     pdf = l.check_pdf("NNPDF31_nnlo_as_0118")

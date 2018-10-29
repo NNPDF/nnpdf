@@ -14,6 +14,7 @@ from reportengine import collect
 from reportengine.table import table
 from reportengine.checks import check_positive
 
+from validphys.core import CutsPolicy
 from validphys import plotoptions
 
 log = logging.getLogger(__name__)
@@ -64,12 +65,12 @@ nfittedlabel = '$N_{fitted}$'
 ndatalabel = '$N_{data}$'
 
 def kinlimits(commondata, cuts, use_cuts, use_kinoverride:bool=True):
-    """Return a mapping conaining the number of fitted and used datapoints,
-    as well as the label, minimum and maximum value for each of the three
-    kinematics. If ``use_kinoverride`` is set to False, the PLOTTING files
-    will be ignored and the kinematics will be interpred based on the process
-    type only. If use_cuts is False, the information on the total number of
-    points will be displayed, instead of the fitted ones."""
+    """Return a mapping containing the number of fitted and used datapoints, as
+    well as the label, minimum and maximum value for each of the three
+    kinematics. If ``use_kinoverride`` is set to False, the PLOTTING files will
+    be ignored and the kinematics will be interpred based on the process type
+    only. If use_cuts is 'CutsPolicy.NOCUTS', the information on the total
+    number of points will be displayed, instead of the fitted ones."""
     info = plotoptions.get_info(commondata, cuts=None, use_plotfiles=use_kinoverride)
 
     kintable = plotoptions.kitable(commondata, info)
@@ -77,7 +78,7 @@ def kinlimits(commondata, cuts, use_cuts, use_kinoverride:bool=True):
     if cuts:
         kintable = kintable.ix[cuts.load()]
         nfitted = len(kintable)
-    elif use_cuts:
+    elif use_cuts is not CutsPolicy.NOCUTS:
         nfitted = len(kintable)
     else:
         nfitted = '-'
