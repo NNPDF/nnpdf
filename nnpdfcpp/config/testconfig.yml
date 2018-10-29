@@ -33,13 +33,13 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 162        # database id
+  theoryid: 163        # database id
 
 theorycovmatconfig:
   theoryids:
-    - 162
-    - 168
-    - 167
+    - 163
+    - 180
+    - 173
   pdf: NNPDF31_nnlo_as_0118
 
 ############################################################
