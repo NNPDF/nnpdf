@@ -60,7 +60,7 @@ int main(int argc, char **argv)
   // Read configuration filename from arguments
   if (argc != 3)
     {
-      cerr << Colour::FG_RED << "\nusage: evolvefit [filter directory] [theoryid]\n" << Colour::FG_DEFAULT << endl;
+      cerr << Colour::FG_RED << "\nusage: evolvefit [configuration folder] [theoryid]\n" << Colour::FG_DEFAULT << endl;
       exit(EXIT_FAILURE);
     }
 
@@ -83,9 +83,9 @@ int main(int argc, char **argv)
   CreateResultsFolder(settings, theory_id);
 
   // load grids
-  int nrep = 0;
   vector<ExportGrid> initialscale_grids;
-  for (;;)
+  int nrep;
+  for (nrep = 0;; nrep++)
     {
       const string folder = fit_path + "/postfit/replica_" + std::to_string(nrep+1);
       bool status = CheckFolderExists(folder);
@@ -98,8 +98,6 @@ int main(int argc, char **argv)
           // take first replica and duplicate entry, we will use it as baseline for replica 0
           if (nrep == 0)
             initialscale_grids.emplace_back(path);
-
-          nrep++;
         }
       else
         break;
