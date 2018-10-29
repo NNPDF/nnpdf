@@ -34,7 +34,7 @@ public:
    * @int nrep if not set (ie. set to -1) will print REPLACE_NREP in the info file
    * if specified (ie. != -1) will print nrep in the info file.
    */
-  void WriteInfoFile(const std::string infofile, int const& nrep = -1) const;
+  void WriteInfoFile(std::string const& infofile, int nrep = -1) const;
 
   /**
    * @brief Export the LHA evolved grid file.

@@ -135,7 +135,7 @@ EvolveGrid::EvolveGrid(vector<ExportGrid> const& initialscale_grid,
 }
 
 //______________________________________________________
-void EvolveGrid::WriteInfoFile(const string infofile, int const& nrep) const
+void EvolveGrid::WriteInfoFile(string const& infofile, int nrep) const
 {
   // skip if file exists
   struct stat s;
