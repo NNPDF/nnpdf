@@ -41,10 +41,8 @@ theorycovmatconfig:
     - 180
     - 173
   fivetheories: None
-  fit: NNPDF31_nnlo_as_0118_1000
-  pdf:
-    from_: fit
-  use_cuts: fromfit
+  pdf: NNPDF31_nnlo_as_0118
+  use_cuts: internal
   sampling:
     use_t0: false
   fitting:
