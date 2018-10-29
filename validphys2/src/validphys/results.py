@@ -231,9 +231,9 @@ def experiments_covmat(experiments, experiments_index, t0set):
         loaded_exp = experiment.load()
         if t0set:
             #Copy data to avoid chaos
-            data = type(loaded_exp)(loaded_exp)
+            loaded_exp = type(loaded_exp)(loaded_exp)
             log.debug("Setting T0 predictions for %s" % loaded_exp)
-            data.SetT0(t0set.load_t0())
+            loaded_exp.SetT0(t0set.load_t0())
         mat = loaded_exp.get_covmat()
         df.loc[[name],[name]] = mat
     return df
