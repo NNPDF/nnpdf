@@ -28,6 +28,8 @@ from validphys.gridvalues import LUMI_CHANNELS
 
 from validphys.paramfits.config import ParamfitsConfig
 
+from validphys.theorycovariance import experimentsplustheory_covmat
+
 log = logging.getLogger(__name__)
 
 
@@ -656,6 +658,15 @@ class CoreConfig(configparser.Config):
     def produce_all_lumi_channels(self):
         return {'lumi_channels': self.parse_lumi_channels(list(LUMI_CHANNELS))}
 
+    @configparser.explicit_node
+    def produce_sampling_covmat(self):
+        sampling_covmat = experimentsplustheory_covmat
+        return sampling_covmat
+
+    @configparser.explicit_node
+    def produce_fitting_covmat(self):
+        fitting_covmat = experimentsplustheory_covmat
+        return fitting_covmat
 
     def parse_speclabel(self, label:(str, type(None))):
         """A label for a dataspec. To be used in some plots"""
