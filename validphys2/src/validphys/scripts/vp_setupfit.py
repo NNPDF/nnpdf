@@ -41,11 +41,8 @@ from reportengine import colors
 SETUPFIT_FIXED_CONFIG = dict(
     Nocuts={'use_cuts': 'nocuts'},
     actions_=[
-        'datacuts check_t0pdfset',
-        'theory check_positivity',
-        'Nocuts::datacuts::closuretest::theory::fitting filter',
-        'datacuts::theory::theorycovmatconfig::sampling sampling_covmat',
-        'datacuts::theory::theorycovmatconfig::fitting fitting_covmat',
+        'datacuts::theory::theorycovmatconfig::sampling_t0 sampling_covmat',
+        'datacuts::theory::theorycovmatconfig::fitting_t0 fitting_covmat',
     ])
 
 SETUPFIT_PROVIDERS = ['validphys.filters',

@@ -15,6 +15,12 @@ experiments:
     datasets:
       - { dataset: NMCPD, frac: 0.5 }
       - { dataset: NMC,   frac: 0.5, weight: 10000}
+  # ATLAS top
+  - experiment: CMS
+    datasets:
+# CMS jets
+      - { dataset: CMSJETS11,     frac: 0.5, sys: 10 }
+      - { dataset: CMS1JET276TEV,     frac: 0.5, sys: 10 }
 
 ############################################################
 datacuts:
@@ -43,10 +49,12 @@ theorycovmatconfig:
   fivetheories: None
   pdf: NNPDF31_nnlo_as_0118
   use_cuts: internal
-  sampling:
-    use_t0: false
-  fitting:
-    use_t0: true
+
+sampling_t0:
+  use_t0: false
+
+fitting_t0:
+  use_t0: true
 
 ############################################################
 fitting:
