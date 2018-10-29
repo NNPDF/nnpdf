@@ -44,8 +44,8 @@ SETUPFIT_FIXED_CONFIG = dict(
         'datacuts check_t0pdfset',
         'theory check_positivity',
         'Nocuts::datacuts::closuretest::theory::fitting filter',
-        'theory::theorycovmatconfig experimentsplustheory_covmat',
-        'datacuts::theory::theorycovmatconfig experimentsplustheory_covmat',
+        'datacuts::theory::theorycovmatconfig::sampling experimentsplustheory_covmat',
+        'datacuts::theory::theorycovmatconfig::fitting experimentsplustheory_covmat',
     ])
 
 SETUPFIT_PROVIDERS = ['validphys.filters',
