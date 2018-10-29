@@ -69,7 +69,7 @@ std::vector<double> generate_q2grid(const int nq2,
 
 /**
  * @brief Compute Q2 grid.
- * This is suitable for PDFs not AlphaS (see maxNF used below)
+ * This is suitable for PDFs not AlphaS (see the nfpdf variable)
  * @param nq2 the number of q2 points for the grid.
  * @param q2min minimum q2 value for the grid.
  * @param q2max maximum q2 value for the grid.
