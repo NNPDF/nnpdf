@@ -103,6 +103,9 @@ int main(int argc, char **argv)
         break;
     }
   cout << "- Detected " << nrep << " replicas (contiguous)." << endl;
+  
+  if (nrep == 0)
+      throw NNPDF::RuntimeException("main", "nrep = 0, check replica folder/files.");
 
   // compute avg over pdfgrid and set to replica 0 - if someone has a better idea let me know
   vector<vector<array<double,14>>> pdfgridvectors(initialscale_grids.size()-1);
