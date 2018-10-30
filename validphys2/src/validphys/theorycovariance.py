@@ -885,10 +885,3 @@ def plot_matched_datasets_shift_matrix_correlations(
         index=matched_datasets_shift_matrix.index)
     return plot_corrmat_heatmap(
         corrmat, "Shift outer product normalized (correlation) matrix")
-
-@table
-def additional_covmat(experimentsplustheory_covmat):
-    """Fudge factor covariance matrix"""
-    df = experimentsplustheory_covmat
-    list(df)
-    return 0

@@ -11,6 +11,10 @@ import inspect
 import numbers
 import copy
 
+from IPython import embed
+from os import listdir
+from re import match
+
 from collections import ChainMap
 from collections.abc import Mapping, Sequence
 
@@ -667,6 +671,23 @@ class CoreConfig(configparser.Config):
     def produce_fitting_covmat(self):
         fitting_covmat = experimentsplustheory_covmat
         return fitting_covmat
+
+    def produce_additionalerrors(self, dataset):
+        mask = dataset.cuts.load()
+        path = '../nnpdfcpp/data/commondata/'
+        for f in listdir(path):
+            if match("DATA_TH_" + dataset.name + ".dat", f):
+                infile = open(path + f, "r")
+                systematics = []
+                for i, line in enumerate(infile):
+                    info = line.split()
+                    if i == 0:
+                        nsys = info[1]
+                    else:
+                        systematics.append(info[1:])
+                infile.close()
+        embed()
+        return 0
 
     def parse_speclabel(self, label:(str, type(None))):
         """A label for a dataspec. To be used in some plots"""
