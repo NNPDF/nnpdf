@@ -4,6 +4,14 @@ libnnpdf/scripts/nnpdf.pc
 libnnpdf/src/NNPDF/common.h
 libnnpdf/src/NNPDF/config.h
 
+# Created by https://www.gitignore.io/api/macos
+
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
 # Created by https://www.gitignore.io/api/c++,latex,cmake,python,jupyternotebook,qtcreator,vim
 
 ### C++ ###
