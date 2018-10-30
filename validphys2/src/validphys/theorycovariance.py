@@ -32,7 +32,7 @@ theoryids_experiments_central_values = collect(experiments_central_values,
                                                ('theoryids',))
 
 @make_argcheck
-def _check_correct_theory_combination(theoryids, fivetheories):
+def _check_correct_theory_combination(theoryids, fivetheories=None):
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
     l = len(theoryids)
@@ -885,3 +885,10 @@ def plot_matched_datasets_shift_matrix_correlations(
         index=matched_datasets_shift_matrix.index)
     return plot_corrmat_heatmap(
         corrmat, "Shift outer product normalized (correlation) matrix")
+
+@table
+def additional_covmat(experimentsplustheory_covmat):
+    """Fudge factor covariance matrix"""
+    df = experimentsplustheory_covmat
+    list(df)
+    return 0
