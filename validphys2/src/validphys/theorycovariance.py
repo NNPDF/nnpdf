@@ -32,7 +32,7 @@ theoryids_experiments_central_values = collect(experiments_central_values,
                                                ('theoryids',))
 
 @make_argcheck
-def _check_correct_theory_combination(theoryids, fivetheories=None):
+def _check_correct_theory_combination(theoryids, fivetheories:(str, type(None)) = None):
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
     l = len(theoryids)
@@ -88,7 +88,7 @@ def make_scale_var_covmat(predictions):
 
 @table
 @_check_correct_theory_combination
-def theory_covmat(theoryids_experiments_central_values, experiments_index, theoryids):
+def theory_covmat(theoryids_experiments_central_values, experiments_index, theoryids, fivetheories:(str, type(None)) = None):
     """Calculates the theory covariance matrix for scale variations.
     The matrix is a dataframe indexed by experiments_index."""
     s = make_scale_var_covmat(theoryids_experiments_central_values)
