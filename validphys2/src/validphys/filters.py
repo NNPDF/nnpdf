@@ -157,8 +157,11 @@ def NNPDF40_combocuts(dataset, idat, theoryid, q2min, w2min):
     """
     status = NNPDF31_combocuts(dataset, idat, theoryid, q2min, w2min)
     if status:
-        # APPLY YOUR CUSTOM CUTS HERE
-        # BY SETTING STATUS TO FALSE
+        # additional F2C cut in case of FONLL-C + IC
+        if dataset.GetProc(idat) == 'DIS_NCP_CH' and vfns == 'FONLL-B' and ic:
+            Q2cut1_f2c = 8
+            if Q2 <= Q2cut1_f2c:
+                return False
         pass
     return status
 
