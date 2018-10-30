@@ -162,6 +162,8 @@ def NNPDF40_combocuts(dataset, idat, theoryid, q2min, w2min):
             Q2cut1_f2c = 8
             if Q2 <= Q2cut1_f2c:
                 return False
+        # APPLY YOUR CUSTOM CUTS HERE
+        # BY SETTING STATUS TO FALSE
         pass
     return status
 
