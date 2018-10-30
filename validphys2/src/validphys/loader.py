@@ -441,12 +441,6 @@ class Loader(LoaderBase):
             raise TypeError("w2min must be a number")
         return InternalCutsWrapper(full_ds, q2min, w2min)
 
-    def get_cuts(self, setname, fit):
-        cuts = self.check_cuts(setname, fit)
-        if cuts:
-            return cuts.load()
-        return None
-
     def check_vp_output_file(self, filename, extra_paths=('.',)):
         """Find a file in the vp-cache folder, or (with higher priority) in
         the ``extra_paths``."""
