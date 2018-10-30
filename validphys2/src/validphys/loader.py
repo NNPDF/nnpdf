@@ -218,7 +218,7 @@ class Loader(LoaderBase):
                         "are needed with `use_fitcommondata`")
                 #This is to not repeat all the error handling stuff
                 basedata = self.check_commondata(setname, sysnum=sysnum).datafile
-                cuts = self.check_cuts(setname, fit=fit)
+                cuts = self.check_fit_cuts(setname, fit=fit)
 
                 if fit not in self._old_commondata_fits:
                     self._old_commondata_fits.add(fit)
