@@ -9,6 +9,7 @@ import logging
 import functools
 
 import numpy as np
+import scipy.linalg as la
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
@@ -54,9 +55,12 @@ def test_expcovmat(data):
     pdf, exps = data
     eindex = results.experiments_index(exps)
     mat = results.experiments_covmat(exps, eindex, t0set=None)
-    cd = exps[0].datasets[0].commondata.load()
-    othermat = NNPDF.ComputeCovMat(cd, cd.get_cv())
-    assert np.alltrue(mat == othermat)
+    cd1 = exps[0].datasets[0].commondata.load()
+    cd2 = exps[1].datasets[0].commondata.load()
+    othermat1 = NNPDF.ComputeCovMat(cd1, cd1.get_cv())
+    othermat2 = NNPDF.ComputeCovMat(cd2, cd2.get_cv())
+    othermat = la.block_diag(othermat1, othermat2)
+    assert np.allclose(mat.values, othermat)
     return mat
 
 @make_table_comp(parse_exp_mat)
