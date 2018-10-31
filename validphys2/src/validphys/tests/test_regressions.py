@@ -102,8 +102,12 @@ def test_dataset_t0_predictions(dataset_t0_convolution_results):
 
 @make_table_comp(sane_load)
 def test_cv(convolution_results):
-    data, th = convolution_results[0]
-    return pd.DataFrame(data.central_value, columns=['CV'])
+    data1, th1 = convolution_results[0]
+    data2, th2 = convolution_results[1]
+    data1_values = data1.central_value
+    data2_values = data1.central_value
+    data_values = data1_values + data2_values
+    return pd.DataFrame(data_values, columns=['CV'])
 
 @make_table_comp(load_perreplica_chi2_table)
 def test_replicachi2data(data, chi2data):
