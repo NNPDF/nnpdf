@@ -80,12 +80,14 @@ def test_t0sqrtcovmat(data):
 
 @make_table_comp(sane_load)
 def test_predictions(convolution_results):
-    data, th = convolution_results[0]
-    #The explicit indeed is needed so that the pandas comparison shuts
-    #up.
-    return pd.DataFrame(th._rawdata.astype(float),
+    data1, th1 = convolution_results[0]
+    data2, th2 = convolution_results[1]
+    th1_values = th1._rawdata.astype(float)
+    th2_values = th2._rawdata.astype(float)
+    th = np.concatenate((th1_values, th2_values))
+    return pd.DataFrame(th,
         columns=map(str,
-        range(th._rawdata.shape[1])))
+        range(th1._rawdata.shape[1])))
 
 @make_table_comp(sane_load)
 def test_dataset_t0_predictions(dataset_t0_convolution_results):
