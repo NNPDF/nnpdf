@@ -30,6 +30,19 @@ def data():
     return pdf, exps
 
 @pytest.fixture(scope='module')
+def theory_data():
+    l = Loader()
+    names = ['NMC', 'ATLASTTBARTOT']
+    theoryids = [163, 180, 173]
+    ds1 = [l.check_dataset(name=names[0], theoryid=x, cuts=None) for x in theoryids]
+    ds2 = [l.check_dataset(name=names[1], theoryid=x, cuts=None) for x in theoryids]
+    exp1 = [ExperimentSpec(x.name, [x]) for x in ds1]
+    exp2 = [ExperimentSpec(x.name, [x]) for x in ds2]
+    exps = [exp1, exp2]
+    pdf = l.check_pdf("NNPDF31_nnlo_as_0118")
+    return pdf, exps, theoryids
+
+@pytest.fixture(scope='module')
 def convolution_results(data):
     pdf, exps = data
     return [results.experiment_results(exp, pdf, pdf) for exp in exps]
