@@ -17,6 +17,7 @@ from reportengine.table import savetable
 
 import NNPDF
 from validphys import results
+from validphys import theorycovariance
 from validphys.tableloader import (parse_exp_mat, load_perreplica_chi2_table,
                                    sane_load)
 
@@ -81,6 +82,11 @@ def test_t0sqrtcovmat(data):
     eindex = results.experiments_index(exps)
     return results.experiments_sqrtcovmat(exps, eindex, pdf)
 
+@make_table_comp(parse_exp_mat)
+def test_theorycovmat(theory_data):
+    pdf, exps, theoryids = theory_data
+    eindex = results.experiments_index(exps[0])
+    #return theorycovariance.theory_covmat(, eindex, theoryids)
 
 @make_table_comp(sane_load)
 def test_predictions(convolution_results):
