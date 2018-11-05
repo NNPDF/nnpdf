@@ -24,7 +24,6 @@ requirements:
     run:
         - lhapdf
         - sqlite
-        - libgcc # [linux]
         - gsl
         - numpy
         - libarchive
