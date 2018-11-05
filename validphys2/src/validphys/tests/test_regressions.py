@@ -110,7 +110,7 @@ def test_cv(convolution_results):
     data2, th2 = convolution_results[1]
     data1_values = data1.central_value
     data2_values = data1.central_value
-    data_values = data1_values + data2_values
+    data_values = np.concatenate((data1_values, data2_values))
     return pd.DataFrame(data_values, columns=['CV'])
 
 @make_table_comp(load_perreplica_chi2_table)
