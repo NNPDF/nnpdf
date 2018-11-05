@@ -1,4 +1,4 @@
-find_package(SWIG REQUIRED)
+find_package(SWIG 3.0.10 REQUIRED)
 find_package(PythonInterp 3 REQUIRED)
 find_package(PythonLibs   3 REQUIRED)
 

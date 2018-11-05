@@ -4,7 +4,7 @@ import logging
 
 #TODO: Look into making these lazy imports
 import prompt_toolkit
-from prompt_toolkit.contrib.completers import WordCompleter
+from prompt_toolkit.completion import WordCompleter
 
 from reportengine.compat import yaml
 from reportengine.colors import t
@@ -13,6 +13,28 @@ from validphys.app import App
 from validphys import comparefittemplates
 
 log = logging.getLogger(__name__)
+
+def get_remote_keywords():
+    import requests
+    from validphys import loader
+    from urllib.parse import urljoin
+    root = loader.Loader().nnprofile['reports_root_url']
+    url = urljoin(root, 'index.json')
+    try:
+        keyobjs= requests.get(url).json()['keywords']
+        l = [k[0] for k in keyobjs]
+    except requests.RequestException:
+        l = []
+    return l
+
+#We need some sort of cache because prompt_toolkit calls the callable
+#every time it tries to complete.
+class KeywordsWithCache():
+    words = None
+    def __call__(self):
+        if self.words is None:
+            self.words = get_remote_keywords()
+        return self.words
 
 
 class CompareFitApp(App):
@@ -89,7 +111,10 @@ class CompareFitApp(App):
         return prompt_toolkit.prompt("Enter author name: ", default=default)
 
     def interactive_keywords(self):
-        kwinp = prompt_toolkit.prompt("Enter keywords: ")
+        kwinp = prompt_toolkit.prompt(
+            "Enter keywords: ",
+            completer=WordCompleter(words=KeywordsWithCache()),
+            complete_in_thread=True)
         return [k.strip() for k in kwinp.split(',') if k]
 
     def get_commandline_arguments(self, cmdline=None):
