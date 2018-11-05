@@ -975,6 +975,11 @@ thx_corrmat = collect('theory_corrmat_custom_dataspecs',
 shx_corrmat = collect('matched_datasets_shift_matrix_correlations',
                       ['combined_shift_and_theory_dataspecs', 'shiftconfig'])
 
+thx_covmat = collect('theory_covmat_custom_dataspecs',
+                      ['combined_shift_and_theory_dataspecs', 'theoryconfig'])
+
+combined_dataspecs_results = collect('all_matched_results',
+                	['combined_shift_and_theory_dataspecs', 'theoryconfig'])
 @table
 def shift_to_theory_ratio(thx_corrmat, shx_corrmat):
     ratio = thx_corrmat[0]/shx_corrmat[0]
@@ -1054,4 +1059,22 @@ def plot_thcorrmat_heatmap_custom_dataspecs(theory_corrmat_custom_dataspecs, the
                                f"Theory correlation matrix for {l} points")
     return fig
 
-
+@table
+def theory_covmat_eigenvectors(thx_covmat, combined_dataspecs_results):
+    theory_central_list = []
+    for dataset in combined_dataspecs_results:
+        theory_central_list.append([x[0][1].central_value for x in dataset])
+    theory_centrals = np.concatenate(theory_central_list[0])
+    matrix = thx_covmat[0].values
+    norm = np.sqrt(np.outer(theory_centrals, theory_centrals))
+    matrix = matrix/norm
+    w, v = la.eigh(matrix)
+    w_nonzero = w[w>0.1]
+    nonzero_locs = np.nonzero(w>0.1)[0]
+    # ^ taking 0th element to extract list from tuple
+    v_nonzero = []
+    for i in nonzero_locs:
+        v_nonzero.append(v[i])
+    table = pd.DataFrame([w_nonzero, v_nonzero],
+         		index = ['eigenvalue', 'eigenvector'])
+    return table
