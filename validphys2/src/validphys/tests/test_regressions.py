@@ -85,8 +85,22 @@ def test_t0sqrtcovmat(data):
 @make_table_comp(parse_exp_mat)
 def test_theorycovmat(theory_data):
     pdf, exps, theoryids = theory_data
+    data_theory_centrals_1 = [results.experiment_results(exp, pdf) for exp in exps[0]]
+    data_theory_centrals_2 = [results.experiment_results(exp, pdf) for exp in exps[1]]
+    each_dataset_results_bytheory = [data_theory_centrals_1, data_theory_centrals_2]
+    #construct commondata_experiments
+    print(exps[0])
+    print("*****")
+    print(exps[0][1])
+    print("*****")
+    print(exps[0].datasets)
+    commondata_1 = exps[0][0].datasets.commondata
+    commondata_2 = exps[1][0].datasets.commondata
+    commondata_experiments = [commondata_1, commondata_2]
+    print(commondata_experiments)
     eindex = results.experiments_index(exps[0])
-    #return theorycovariance.theory_covmat(, eindex, theoryids)
+        
+    #return theorycovariance.theory_covmat_custom(covs_pt_prescrip, covmap, eindex)
 
 @make_table_comp(sane_load)
 def test_predictions(convolution_results):
