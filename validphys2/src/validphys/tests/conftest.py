@@ -38,11 +38,10 @@ def theory_data():
     ds2 = [l.check_dataset(name=names[1], theoryid=x, cuts=None) for x in theoryids]
     exp1 = [ExperimentSpec(x.name, [x]) for x in ds1]
     exp2 = [ExperimentSpec(x.name, [x]) for x in ds2]
-    exps = [exp1, exp2]
-    ds_centrals = [l.check_dataset(name=x, theoryid=163, cuts=None) for x in names]
-    central_exps = [ExperimentSpec(x.name, [x]) for x in ds_centrals]
+    exps_by_theoryid = [exp1, exp2]
+    exps_central_theory = [exp1[0], exp2[0]]
     pdf = l.check_pdf("NNPDF31_nnlo_as_0118")
-    return pdf, exps, central_exps, theoryids
+    return pdf, exps_by_theoryid, exps_central_theory, theoryids
 
 @pytest.fixture(scope='module')
 def convolution_results(data):
