@@ -150,7 +150,7 @@ void Experiment::MakeReplica()
   // Compute the sampling covariance matrix with data CVs and no theory errors
   matrix<double> SamplingMatrix  = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fData, fStat, fSys, false);
   SamplingMatrix = ComputeSqrtMat(SamplingMatrix); // Take the sqrt of the sampling matrix
-
+  
   // generate procType array for ease of checking
   std::vector<std::string> proctype;
   for (int s = 0; s < GetNSet(); s++)

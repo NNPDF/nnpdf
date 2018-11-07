@@ -92,23 +92,18 @@ namespace NNPDF
     if (n <= 0)
       throw LengthError("CholeskyDecomposition","attempting a decomposition of an empty matrix!");
 
-    gsl_matrix_const_view inmatrix_view = gsl_matrix_const_view_array(inmatrix.data(), n, n);
-    const gsl_matrix *inmatrix_gsl = &(inmatrix_view.matrix);
-
     matrix<double> sqrtmat(n,n);
-    gsl_matrix_view sqrtmat_view = gsl_matrix_view_array(sqrtmat.data(), n, n);
-    gsl_matrix *sqrtmat_gsl = &(sqrtmat_view.matrix);
 
-    // Copy and decompose inmatrix
-    const int copy = gsl_matrix_memcpy (sqrtmat_gsl, inmatrix_gsl);
-    if (copy != 0 ) throw RuntimeException("CholeskyDecomposition", "Error encountered in gsl matrix copy");
-    const int decomp = gsl_linalg_cholesky_decomp(sqrtmat_gsl);
-    if (decomp != 0 ) throw RuntimeException("CholeskyDecomposition", "Error encountered in gsl decomposition");
-
-    // Zero upper-diagonal part of matrix left by gsl (probably unneccesary)
+    gsl_matrix* mat = gsl_matrix_calloc(n, n);
     for (int i = 0; i < n; i++)
-      for (int j = 0; j > i; j++)
-        sqrtmat(i, j) = 0;
+      for (int j = 0; j < n; j++)
+        gsl_matrix_set(mat, i, j, inmatrix(i, j));
+
+    const int decomp = gsl_linalg_cholesky_decomp(mat);
+    for (int i = 0; i < n; i++)
+      for (int j = 0; j <= i; j++)
+        sqrtmat(i, j) =  gsl_matrix_get(mat, i, j);
+    gsl_matrix_free (mat);
 
     return sqrtmat;
   }
