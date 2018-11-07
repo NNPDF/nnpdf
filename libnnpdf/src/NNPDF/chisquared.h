@@ -18,6 +18,7 @@ namespace NNPDF{
                                      std::vector<double> const& central_values,
                                      std::vector<double> const& stat_error,
                                      sysError** const systematic_errors,
+                                     bool const mult_errors,
                                      bool const use_theory_errors);
 
   matrix<double> ComputeCovMat(CommonData const& cd, std::vector<double> const& t0, double weight=1.);

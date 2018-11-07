@@ -22,6 +22,7 @@ namespace NNPDF
                                      std::vector<double> const& central_values,
                                      std::vector<double> const& stat_error,
                                      sysError** const systematic_errors,
+                                     bool const mult_errors,
                                      bool const use_theory_errors)
   {
     if (central_values.size() != stat_error.size())
@@ -54,7 +55,8 @@ namespace NNPDF
             switch (isys.type)
             {
               case ADD:   sig    += isys.add *jsys.add;  break;
-              case MULT:  signor += isys.mult*jsys.mult; break;
+              case MULT: if (mult_errors) { signor += isys.mult*jsys.mult; break; }
+                         else { continue; }
               case UNSET: throw RuntimeException("ComputeCovMat", "UNSET systype encountered");
             }
         }
@@ -83,7 +85,7 @@ namespace NNPDF
     std::vector<double> stat_error(ndat, 0);
     for (int i=0; i<ndat; i++)
         stat_error[i] = cd.GetStat(i);
-    return ComputeCovMat_basic(ndat, nsys, sqrt_weights, t0, stat_error, cd.GetSysErrors(), false);
+    return ComputeCovMat_basic(ndat, nsys, sqrt_weights, t0, stat_error, cd.GetSysErrors(), true, false);
   }
 
   matrix<double> ComputeSqrtMat(matrix<double> const& inmatrix)

@@ -147,8 +147,14 @@ void Experiment::MakeReplica()
   if (fNData == 0)
     throw RangeError("Experiment::MakeReplica","you must run ReadData before making a replica.");
 
-  // Compute the sampling covariance matrix with data CVs and no theory errors
-  matrix<double> SamplingMatrix  = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fData, fStat, fSys, false);
+  RandomGenerator* rng = RandomGenerator::GetRNG();
+
+  double *rand  = new double[fNSys];
+  double *xnor  = new double[fNData];
+  sysType rST[2] = {ADD,MULT};
+
+  // Compute the sampling covariance matrix with data CVs, no multiplicative error and no theory errors
+  matrix<double> SamplingMatrix  = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fData, fStat, fSys, false, false);
   SamplingMatrix = ComputeSqrtMat(SamplingMatrix); // Take the sqrt of the sampling matrix
   
   // generate procType array for ease of checking
@@ -162,16 +168,59 @@ void Experiment::MakeReplica()
   {
       isArtNegative = false;
 
+      for (int l = 0; l < fNSys; l++)
+      {
+        rand[l] = rng->GetRandomGausDev(1.0);
+        if (fSys[0][l].isRAND)
+          fSys[0][l].type = rST[rng->GetRandomUniform(2)];
+        for (int i = 1; i < fNData; i++)
+          fSys[i][l].type = fSys[0][l].type;
+      }
+
       // Generate normal deviates
       vector<double> deviates(fNData, std::numeric_limits<double>::quiet_NaN());
       generate(deviates.begin(), deviates.end(),
                []()->double {return RandomGenerator::GetRNG()->GetRandomGausDev(1); } );
       const vector<double> correlated_deviates = SamplingMatrix*deviates;
 
-      // Form artificial data from mean + correlated deviates
+      // Additive noise is generated directly from the covariance matrix
       vector<double> artdata(fData);
       for (int i=0; i<fNData; i++)
           artdata[i] += correlated_deviates[i];
+
+      // For the multiplicative noise is generated according to the old implementation
+      for (int i = 0; i < fNData; i++) // should rearrange to update set-by-set -- nh
+      {
+        xnor[i] = 1.0;
+
+        for (int l = 0; l < fNSys; l++)
+        {     
+          if (fSys[i][l].name.compare("THEORYCORR")==0) continue;   // Skip theoretical uncertainties
+          if (fSys[i][l].name.compare("THEORYUNCORR")==0) continue; // Skip theoretical uncertainties
+          if (fSys[i][l].name.compare("SKIP")==0) continue;         // Skip uncertainties
+          if (fSys[i][l].name.compare("UNCORR")==0)                 // Noise from uncorrelated systematics
+          {
+            switch (fSys[i][l].type)
+            {
+              case ADD: break;
+              case MULT: xnor[i] *= (1.0 + rng->GetRandomGausDev(1.0)*fSys[i][l].mult*1e-2); break;
+              case UNSET: throw RuntimeException("Experiment::MakeReplica", "UNSET systype encountered");
+            }
+          }
+          else                                                      // Noise from correlated systematics
+          {
+            switch (fSys[i][l].type)
+            {
+              case ADD: break;
+              case MULT: xnor[i] *= (1.0 + rand[l]*fSys[i][l].mult*1e-2); break;
+              case UNSET: throw RuntimeException("Experiment::MakeReplica", "UNSET systype encountered");
+            }
+          }
+        }
+        
+        artdata[i] = xnor[i] * artdata[i];
+        
+      }
 
       // If it's not a closure test, check for positivity of artifical data
       if (!fIsClosure)
@@ -387,8 +436,8 @@ void Experiment::PullData()
 void Experiment::GenCovMat()
 {
   // Compute the Covariance matrix with t0 and NNPDF3.1 theory errors
-  fCovMat  = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, true);
-  fSqrtCov = ComputeSqrtMat(fCovMat);
+  fCovMat  = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, true, true);
+  fSqrtCov = ComputeSqrtMat(fCovMat); 
 }
 
 void Experiment::ExportCovMat(string filename)
