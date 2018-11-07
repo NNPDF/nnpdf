@@ -84,13 +84,12 @@ def test_t0sqrtcovmat(data):
 
 @make_table_comp(parse_exp_mat)
 def test_theorycovmat(theory_data):
-    pdf, exps_by_theoryid, exps, theoryids = theory_data
+    pdf, exps_by_theoryid, exps_central_theory, theoryids = theory_data
+    eindex = results.experiments_index(exps_central_theory)
 
     data_theory_centrals_1 = [results.experiment_results(exp, pdf) for exp in exps_by_theoryid[0]]
     data_theory_centrals_2 = [results.experiment_results(exp, pdf) for exp in exps_by_theoryid[1]]
     each_dataset_results_bytheory = [data_theory_centrals_1, data_theory_centrals_2]
-
-    eindex = results.experiments_index(exps)
 
     commondata_experiments = [ds.commondata for exp in exps_by_theoryid for ds in exp[0].datasets]
 
