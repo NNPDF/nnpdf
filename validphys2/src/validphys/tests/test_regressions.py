@@ -9,6 +9,7 @@ import logging
 import functools
 
 import numpy as np
+import scipy.linalg as la
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
@@ -54,9 +55,12 @@ def test_expcovmat(data):
     pdf, exps = data
     eindex = results.experiments_index(exps)
     mat = results.experiments_covmat(exps, eindex, t0set=None)
-    cd = exps[0].datasets[0].commondata.load()
-    othermat = NNPDF.ComputeCovMat(cd, cd.get_cv())
-    assert np.alltrue(mat == othermat)
+    cd1 = exps[0].datasets[0].commondata.load()
+    cd2 = exps[1].datasets[0].commondata.load()
+    othermat1 = NNPDF.ComputeCovMat(cd1, cd1.get_cv())
+    othermat2 = NNPDF.ComputeCovMat(cd2, cd2.get_cv())
+    othermat = la.block_diag(othermat1, othermat2)
+    assert np.allclose(mat.values, othermat)
     return mat
 
 @make_table_comp(parse_exp_mat)
@@ -80,26 +84,34 @@ def test_t0sqrtcovmat(data):
 
 @make_table_comp(sane_load)
 def test_predictions(convolution_results):
-    data, th = convolution_results[0]
-    #The explicit indeed is needed so that the pandas comparison shuts
-    #up.
-    return pd.DataFrame(th._rawdata.astype(float),
+    data1, th1 = convolution_results[0]
+    data2, th2 = convolution_results[1]
+    th1_values = th1._rawdata.astype(float)
+    th2_values = th2._rawdata.astype(float)
+    th = np.concatenate((th1_values, th2_values))
+    return pd.DataFrame(th,
         columns=map(str,
-        range(th._rawdata.shape[1])))
+        range(th1._rawdata.shape[1])))
 
 @make_table_comp(sane_load)
 def test_dataset_t0_predictions(dataset_t0_convolution_results):
-    data, th = dataset_t0_convolution_results
-    #The explicit indeed is needed so that the pandas comparison shuts
-    #up.
-    return pd.DataFrame(th._rawdata.astype(float),
+    data1, th1 = dataset_t0_convolution_results[0]
+    data2, th2 = dataset_t0_convolution_results[1]
+    th1_values = th1._rawdata.astype(float)
+    th2_values = th2._rawdata.astype(float)
+    th = np.concatenate((th1_values, th2_values))
+    return pd.DataFrame(th,
         columns=map(str,
-        range(th._rawdata.shape[1])))
+        range(th1._rawdata.shape[1])))
 
 @make_table_comp(sane_load)
 def test_cv(convolution_results):
-    data, th = convolution_results[0]
-    return pd.DataFrame(data.central_value, columns=['CV'])
+    data1, th1 = convolution_results[0]
+    data2, th2 = convolution_results[1]
+    data1_values = data1.central_value
+    data2_values = data1.central_value
+    data_values = np.concatenate((data1_values, data2_values))
+    return pd.DataFrame(data_values, columns=['CV'])
 
 @make_table_comp(load_perreplica_chi2_table)
 def test_replicachi2data(data, chi2data):
