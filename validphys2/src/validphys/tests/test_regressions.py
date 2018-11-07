@@ -84,23 +84,24 @@ def test_t0sqrtcovmat(data):
 
 @make_table_comp(parse_exp_mat)
 def test_theorycovmat(theory_data):
-    pdf, exps, theoryids = theory_data
-    data_theory_centrals_1 = [results.experiment_results(exp, pdf) for exp in exps[0]]
-    data_theory_centrals_2 = [results.experiment_results(exp, pdf) for exp in exps[1]]
+    pdf, exps_by_theoryid, exps, theoryids = theory_data
+
+    data_theory_centrals_1 = [results.experiment_results(exp, pdf) for exp in exps_by_theoryid[0]]
+    data_theory_centrals_2 = [results.experiment_results(exp, pdf) for exp in exps_by_theoryid[1]]
     each_dataset_results_bytheory = [data_theory_centrals_1, data_theory_centrals_2]
-    #construct commondata_experiments
-    print(exps[0])
-    print("*****")
-    print(exps[0][1])
-    print("*****")
-    print(exps[0].datasets)
-    commondata_1 = exps[0][0].datasets.commondata
-    commondata_2 = exps[1][0].datasets.commondata
-    commondata_experiments = [commondata_1, commondata_2]
-    print(commondata_experiments)
-    eindex = results.experiments_index(exps[0])
-        
-    #return theorycovariance.theory_covmat_custom(covs_pt_prescrip, covmap, eindex)
+
+    eindex = results.experiments_index(exps)
+
+    commondata_experiments = [ds.commondata for exp in exps_by_theoryid for ds in exp[0].datasets]
+
+    dataset_names = theorycovariance.dataset_names(commondata_experiments)
+    process_lookup = theorycovariance.process_lookup(commondata_experiments)
+    combine_by_type = theorycovariance.combine_by_type(process_lookup, each_dataset_results_bytheory, dataset_names)
+    covmap = theorycovariance.covmap(combine_by_type, dataset_names)
+    process_starting_points = theorycovariance.process_starting_points(combine_by_type)
+    covs_pt_prescrip = theorycovariance.covs_pt_prescrip(combine_by_type, process_starting_points, theoryids)
+
+    return theorycovariance.theory_covmat_custom(covs_pt_prescrip, covmap, eindex)
 
 @make_table_comp(sane_load)
 def test_predictions(convolution_results):
