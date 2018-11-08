@@ -17,7 +17,7 @@ from reportengine.table import savetable
 
 import NNPDF
 from validphys import results
-from validphys import theorycovariance
+from validphys import theorycovariance as tc
 from validphys.tableloader import (parse_exp_mat, load_perreplica_chi2_table,
                                    sane_load)
 
@@ -93,14 +93,14 @@ def test_theorycovmat(theory_data):
 
     commondata_experiments = [ds.commondata for exp in exps_by_theoryid for ds in exp[0].datasets]
 
-    dataset_names = theorycovariance.dataset_names(commondata_experiments)
-    process_lookup = theorycovariance.process_lookup(commondata_experiments)
-    combine_by_type = theorycovariance.combine_by_type(process_lookup, each_dataset_results_bytheory, dataset_names)
-    covmap = theorycovariance.covmap(combine_by_type, dataset_names)
-    process_starting_points = theorycovariance.process_starting_points(combine_by_type)
-    covs_pt_prescrip = theorycovariance.covs_pt_prescrip(combine_by_type, process_starting_points, theoryids)
+    dataset_names = tc.dataset_names(commondata_experiments)
+    process_lookup = tc.process_lookup(commondata_experiments)
+    combine_by_type = tc.combine_by_type(process_lookup, each_dataset_results_bytheory, dataset_names)
+    covmap = tc.covmap(combine_by_type, dataset_names)
+    process_starting_points = tc.process_starting_points(combine_by_type)
+    covs_pt_prescrip = tc.covs_pt_prescrip(combine_by_type, process_starting_points, theoryids)
 
-    return theorycovariance.theory_covmat_custom(covs_pt_prescrip, covmap, eindex)
+    return tc.theory_covmat_custom(covs_pt_prescrip, covmap, eindex)
 
 @make_table_comp(sane_load)
 def test_predictions(convolution_results):
