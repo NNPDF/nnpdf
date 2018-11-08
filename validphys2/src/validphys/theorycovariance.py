@@ -1126,8 +1126,8 @@ def theory_covmat_eigenvectors(thx_covmat, shx_vector, thx_vector):
     nonzero_locs = np.nonzero(w>0.1)[0]
     # ^ taking 0th element to extract list from tuple
     v_nonzero = []
-    for i in nonzero_locs:
-        v_nonzero.append(v[i])
+    for loc in nonzero_locs:
+        v_nonzero.append(v[:,loc])
     fnorm = (shx_vector[0]/thx_vector[0]).values.T[0]
     projectors = np.sum(fnorm*v_nonzero, axis=1)
     projected_evectors = np.zeros((len(projectors), (len(fnorm))))
@@ -1137,7 +1137,7 @@ def theory_covmat_eigenvectors(thx_covmat, shx_vector, thx_vector):
     fmod = np.sqrt(np.sum(fnorm**2))
     fmiss_mod = np.sqrt(np.sum(fmiss_norm**2))
     modrat = fmiss_mod/fmod
-#    embed()
+    embed()
     table = pd.DataFrame([w_nonzero, v_nonzero],
          		index = ['eigenvalue', 'eigenvector'])
 #    modrat_table = pd.DataFrame(modrat)
