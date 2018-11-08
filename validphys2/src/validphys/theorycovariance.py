@@ -888,6 +888,36 @@ def shift_vector(matched_dataspecs_dataset_prediction_shift):
         names=["Experiment name", "Dataset name", "Point"])
     return pd.DataFrame(all_shifts, index=index)
 
+def dataspecs_dataset_theory(matched_dataspecs_results, experiment_name, dataset_name):
+    central, *others = matched_dataspecs_results
+    res = central[1].central_value
+    return LabeledShifts(dataset_name=dataset_name,
+                         experiment_name=experiment_name, shifts=res)
+
+matched_dataspecs_dataset_theory = collect('dataspecs_dataset_theory', ['dataspecs'])
+
+def theory_vector(matched_dataspecs_dataset_theory):
+    all_theory = np.concatenate(
+        [val.shifts for val in matched_dataspecs_dataset_theory])
+     #build index
+    expnames = np.concatenate([
+        np.full(len(val.shifts), val.experiment_name, dtype=object)
+        for val in matched_dataspecs_dataset_theory
+    ])
+    dsnames = np.concatenate([
+        np.full(len(val.shifts), val.dataset_name, dtype=object)
+        for val in matched_dataspecs_dataset_theory
+    ])
+    point_indexes = np.concatenate([
+        np.arange(len(val.shifts))
+        for val in matched_dataspecs_dataset_theory
+    ])
+
+    index = pd.MultiIndex.from_arrays(
+        [expnames, dsnames, point_indexes],
+        names=["Experiment name", "Dataset name", "Point"])
+    return pd.DataFrame(all_theory, index=index)
+
 @figure
 def plot_matched_datasets_shift_matrix(matched_datasets_shift_matrix):
     """Heatmap plot of matched_datasets_shift_matrix"""
@@ -1005,6 +1035,9 @@ combined_dataspecs_results = collect('all_matched_results',
 
 shx_vector = collect('shift_vector', ['combined_shift_and_theory_dataspecs', 'shiftconfig'])
 
+thx_vector = collect('theory_vector', ['combined_shift_and_theory_dataspecs', 'theoryconfig'])
+
+
 @table
 def shift_to_theory_ratio(thx_corrmat, shx_corrmat):
     ratio = thx_corrmat[0]/shx_corrmat[0]
@@ -1084,17 +1117,10 @@ def plot_thcorrmat_heatmap_custom_dataspecs(theory_corrmat_custom_dataspecs, the
                                f"Theory correlation matrix for {l} points")
     return fig
 
-@table
-def theory_covmat_eigenvectors(thx_covmat, combined_dataspecs_results,
-			      shx_vector):
-    theory_central_list = []
-    for dataset in combined_dataspecs_results:
-        theory_central_list.append([x[0][1].central_value for x in dataset])
-    theory_centrals = np.concatenate(theory_central_list[0])
-    f = shx_vector[0].values
-    matrix = thx_covmat[0].values
-    norm = np.sqrt(np.outer(theory_centrals, theory_centrals))
-    matrix = matrix/norm
+#@table
+def theory_covmat_eigenvectors(thx_covmat, shx_vector, thx_vector):
+    matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
+    # Finding eigenvalues and eigenvectors
     w, v = la.eigh(matrix)
     w_nonzero = w[w>0.1]
     nonzero_locs = np.nonzero(w>0.1)[0]
@@ -1102,13 +1128,17 @@ def theory_covmat_eigenvectors(thx_covmat, combined_dataspecs_results,
     v_nonzero = []
     for i in nonzero_locs:
         v_nonzero.append(v[i])
-    embed()
-    projections = []
-    for evector in v_nonzero:
-        projections.append(f*evector)
-    fmiss = f - np.sum(projections, axis=0)
-    modrat = np.abs(fmiss/f)
-    embed()
+    fnorm = (shx_vector[0]/thx_vector[0]).values.T[0]
+    projectors = np.sum(fnorm*v_nonzero, axis=1)
+    projected_evectors = np.zeros((len(projectors), (len(fnorm))))
+    for i in range(len(projectors)):
+        projected_evectors[i] = projectors[i]*v_nonzero[i]
+    fmiss_norm = fnorm - np.sum(projected_evectors, axis=0)
+    fmod = np.sqrt(np.sum(fnorm**2))
+    fmiss_mod = np.sqrt(np.sum(fmiss_norm**2))
+    modrat = fmiss_mod/fmod
+#    embed()
     table = pd.DataFrame([w_nonzero, v_nonzero],
          		index = ['eigenvalue', 'eigenvector'])
-    return table
+#    modrat_table = pd.DataFrame(modrat)
+    return modrat
