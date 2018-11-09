@@ -13,12 +13,15 @@ import numbers
 from reportengine.figure import figuregen
 from reportengine.table  import table
 from reportengine.floatformatting import format_number
+from reportengine.compat import yaml
 
 from validphys.checks import check_scale, CheckError, make_argcheck, check_positive, check_pdf_normalize_to
 from validphys.plots import BandPDFPlotter
 from validphys.plots import PDFPlotter
 from validphys.pdfbases import (Basis, check_basis)
 from validphys.core     import PDF
+
+import NNPDF as nnpath
 
 import validphys.pdfgrids as pdfgrids
 
@@ -141,14 +144,22 @@ def plot_betaEff(pdfs, beta_eff, normalize_to:(int,str,type(None))=None, ymin=No
     yield from ExponentBandPlotter('beta', pdfs, beta_eff, 'linear', normalize_to, ymin, ymax)
 
 @table
-@make_argcheck(check_basis)
-@check_positive('Q')
+#@make_argcheck(check_basis)
 def next_effective_exponents_table(pdf:PDF,x1_alpha:numbers.Real=1e-6,x2_alpha:numbers.Real=1e-3,
-x1_beta:numbers.Real=0.65,x2_beta:numbers.Real=0.95,Q:numbers.Real=1.65,basis='evolution',flavours=None):
+x1_beta:numbers.Real=0.65,x2_beta:numbers.Real=0.95):
     """Return a table with the effective exponents for the next fit"""
+
+    #Reading from the filter
+    pdfpath = nnpath.get_results_path()+pdf.name
+    filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
+    Q=np.sqrt(filtermap['datacuts']['q2min'])
+    basis=filtermap['fitting']['fitbasis']+'FitBasis'
+
+    flavours=None
     checked = check_basis(basis, flavours)
     basis = checked['basis']
     flavours = checked['flavours']
+
     pdfs=[pdf]
     alphamin_grids=alpha_eff(pdfs,xmin=x1_alpha,xmax=x1_alpha,npoints=1,Q=Q,basis=basis,flavours=flavours)
     alphamax_grids=alpha_eff(pdfs,xmin=x2_alpha,xmax=x2_alpha,npoints=1,Q=Q,basis=basis,flavours=flavours)
@@ -204,3 +215,96 @@ x1_beta:numbers.Real=0.65,x2_beta:numbers.Real=0.95,Q:numbers.Real=1.65,basis='e
     df=pd.DataFrame(eff_exp_data,index=flavours_label,columns=eff_exp_columns)
     df.name=pdf.name
     return df
+
+#@make_argcheck(check_basis)
+def next_effective_exponents_yaml(pdf:PDF,x1_alpha:numbers.Real=1e-6,x2_alpha:numbers.Real=1e-3,
+x1_beta:numbers.Real=0.65,x2_beta:numbers.Real=0.95):
+    """Return a table with the effective exponents for the next fit"""
+
+    #Reading from the filter
+    pdfpath = nnpath.get_results_path()+pdf.name
+    filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
+    Q=np.sqrt(filtermap['datacuts']['q2min'])
+    basis=filtermap['fitting']['fitbasis']+'FitBasis'
+
+    flavours=None
+    checked = check_basis(basis, flavours)
+    basis = checked['basis']
+    flavours = checked['flavours']
+
+    pdfs=[pdf]
+    alphamin_grids=alpha_eff(pdfs,xmin=x1_alpha,xmax=x1_alpha,npoints=1,Q=Q,basis=basis,flavours=flavours)
+    alphamax_grids=alpha_eff(pdfs,xmin=x2_alpha,xmax=x2_alpha,npoints=1,Q=Q,basis=basis,flavours=flavours)
+    betamin_grids=beta_eff(pdfs,xmin=x1_beta,xmax=x1_beta,npoints=1,Q=Q,basis=basis,flavours=flavours)
+    betamax_grids=beta_eff(pdfs,xmin=x2_beta,xmax=x2_beta,npoints=1,Q=Q,basis=basis,flavours=flavours)
+
+    eff_exp_data=[]
+
+    alphamin_grid_values = alphamin_grids[0].grid_values
+    alphamax_grid_values = alphamax_grids[0].grid_values
+    betamin_grid_values = betamin_grids[0].grid_values
+    betamax_grid_values = betamax_grids[0].grid_values
+
+    alphamin_stats = pdf.stats_class(alphamin_grid_values)
+    alphamax_stats = pdf.stats_class(alphamax_grid_values)
+    betamin_stats = pdf.stats_class(betamin_grid_values)
+    betamax_stats = pdf.stats_class(betamax_grid_values)
+
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', RuntimeWarning)
+        alphamin_err68down, alphamin_err68up = alphamin_stats.errorbar68()
+        alphamax_err68down, alphamax_err68up = alphamax_stats.errorbar68()
+        betamin_err68down, betamin_err68up = betamin_stats.errorbar68()
+        betamax_err68down, betamax_err68up = betamax_stats.errorbar68()
+    flavours_label=[]
+
+    #Put it in pdfbases.py!
+    YAMLflaliases={r'\Sigma':'sng', 'V':'v', 'T3':'t3', 'V3':'v3', 'T8':'t8', 'V8':'v8', 'gluon':'g', r'c^+':'cp'}
+
+    with open("output/NextEffExps.yaml", 'w') as out:
+        out.write("basis:\n")
+
+        for (j,fl) in enumerate(flavours):
+            #Defining the bounds
+            # alpha_min = singlet/gluon: the 2x68% c.l. lower value evaluated at x=1e-6.
+            #                  others  : min(2x68% c.l. lower value evaluated at x=1e-6 and x=1e-3)
+            # alpha_max = singlet/gluon: min(2 and the 2x68% c.l. upper value evaluated at x=1e-6)
+            #                others    : min(2 and max(2x68% c.l. upper value evaluated at x=1e-6 and x=1e-3))
+            # beta_min  =  max(0 and min(2x68% c.l. lower value evaluated at x=0.65 and x=0.95))
+            # beta_max  =  max(2x68% c.l. upper value evaluated at x=0.65 and x=0.95)
+            if basis.elementlabel(fl) == "\Sigma" or basis.elementlabel(fl) == "g": #the gluon/singlet case
+                min_bound=round(alphamin_err68down[j][0],3)
+                max_bound=round(min(2,alphamin_err68up[j][0]),3)
+                alpha_line=["alpha",min_bound,max_bound]
+            else:
+                min_bound=round(min(alphamin_err68down[j][0],alphamax_err68down[j][0]),3)
+                max_bound=round(min(2,max(alphamin_err68up[j][0],alphamax_err68up[j][0])),3)
+                alpha_line=["alpha",min_bound,max_bound]
+
+            min_bound=round(max(0,min(betamin_err68down[j][0],betamax_err68down[j][0])),3)
+            max_bound=round(max(betamin_err68up[j][0],betamax_err68up[j][0]),3)
+            beta_line=["beta",min_bound,max_bound]
+
+            eff_exp_data.append(alpha_line)
+            eff_exp_data.append(beta_line)
+            flavours_label.append(f'${basis.elementlabel(fl)}$')
+            flavours_label.append("")
+
+            YAMLlabel=" "
+            if basis.elementlabel(fl) in YAMLflaliases.keys(): 
+                YAMLlabel= YAMLflaliases[basis.elementlabel(fl)]
+            else: 
+                YAMLlabel= basis.elementlabel(fl)
+            
+            out.write(" - {")
+            out.write("fl: "+YAMLlabel)
+            out.write(", pos: "+filtermap['fitting']['basis'][j]['pos'])
+            out.write(", mutsize: ["+str(filtermap['fitting']['basis'][j]['mutsize'][0])+"]")
+            out.write(", mutprob: ["+str(filtermap['fitting']['basis'][j]['mutprob'][0])+"]")
+            out.write(", smallx: ["+str(alpha_line[1])+","+str(alpha_line[2])+"]")
+            out.write(", largex: ["+str(beta_line[1])+","+str(beta_line[2])+"]")
+            out.write("")
+
+            out.write("}\n")
+
+    pass

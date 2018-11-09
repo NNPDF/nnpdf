@@ -355,7 +355,7 @@ NN31ICFitBasis = Basis.from_mapping({
     'photon': {'photon': 1},
     },
     aliases={'gluon': 'g', 'singlet': r'\Sigma', 'sigma': r'\Sigma', 'cp': r'c^+'},
-    default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', r'c^+')
+    default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'gluon', r'c^+', )
 )
 
 pdg = Basis.from_mapping({
