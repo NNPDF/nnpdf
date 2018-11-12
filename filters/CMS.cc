@@ -315,7 +315,7 @@ void CMSDY2D11Filter::ReadData()
       {
         fSys[i][l].add  = syscor[i][l];
         fSys[i][l].mult = fSys[i][l].add*100/fData[i];
-        fSys[i][l].type = MULT;
+        fSys[i][l].type = ADD;
         fSys[i][l].name = "CORR";
       }
 
@@ -612,19 +612,19 @@ void CMS1JET276TEVFilter::ReadData()
           fSys[index][0].name = "CMS2P76LUMI";
 
           // uncorr uncertainties 2nd entry
-          fSys[index][1].type = MULT;
+          fSys[index][1].type = ADD;
           fSys[index][1].name = "UNCORR";
 
           // add np error
           fSys[index][2].mult = nperr/rescalenp;
-          fSys[index][2].type = MULT;
+          fSys[index][2].type = ADD;
           fSys[index][2].name = "CORR";
 
           // filling corr uncertainties
           for (int isys = 3; isys < nsys; isys++)
             {
               f1 >> fSys[index][isys].mult;
-              fSys[index][isys].type = MULT;
+              fSys[index][isys].type = ADD;
               fSys[index][isys].name = "CORR";
             }
 
@@ -640,7 +640,7 @@ void CMS1JET276TEVFilter::ReadData()
           {
               fSys[index][l].mult = 0;
               fSys[index][l].add  = 0;
-              fSys[index][l].type = MULT; // Following procedure below
+              fSys[index][l].type = ADD; // Following procedure below
               fSys[index][l].name = "CORR";
           }
 
@@ -667,7 +667,7 @@ void CMS1JET276TEVFilter::ReadData()
             {
               fSys[index_bis][l].add = syscor[ipt][l-nsys-index+bins[iy]];
               fSys[index_bis][l].mult = fSys[index_bis][l].add*1e2/fData[index_bis];
-              fSys[index_bis][l].type = MULT;
+              fSys[index_bis][l].type = ADD;
               fSys[index_bis][l].name = "CORR";
             }
           // resettings stat errors.
