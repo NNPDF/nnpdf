@@ -1117,28 +1117,51 @@ def plot_thcorrmat_heatmap_custom_dataspecs(theory_corrmat_custom_dataspecs, the
                                f"Theory correlation matrix for {l} points")
     return fig
 
-#@table
-def theory_covmat_eigenvectors(thx_covmat, shx_vector, thx_vector):
+
+def theory_shift_test(thx_covmat, shx_vector, thx_vector):
     matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
     # Finding eigenvalues and eigenvectors
     w, v = la.eigh(matrix)
-    w_nonzero = w[w>0.1]
-    nonzero_locs = np.nonzero(w>0.1)[0]
+    w_nonzero = w[np.abs(w)>10**(-5)]
+    nonzero_locs = np.nonzero(np.abs(w)>10**(-5))[0]
     # ^ taking 0th element to extract list from tuple
     v_nonzero = []
     for loc in nonzero_locs:
         v_nonzero.append(v[:,loc])
-    fnorm = (shx_vector[0]/thx_vector[0]).values.T[0]
-    projectors = np.sum(fnorm*v_nonzero, axis=1)
-    projected_evectors = np.zeros((len(projectors), (len(fnorm))))
+    f = (-shx_vector[0]/thx_vector[0]).values.T[0]
+    projectors = np.sum(f*v_nonzero, axis=1)
+    projected_evectors = np.zeros((len(projectors), (len(f))))
     for i in range(len(projectors)):
         projected_evectors[i] = projectors[i]*v_nonzero[i]
-    fmiss_norm = fnorm - np.sum(projected_evectors, axis=0)
-    fmod = np.sqrt(np.sum(fnorm**2))
-    fmiss_mod = np.sqrt(np.sum(fmiss_norm**2))
+    fmiss = f - np.sum(projected_evectors, axis=0)
+    return w_nonzero, v_nonzero, projectors, f, fmiss
+
+@table
+def theory_covmat_eigenvectors(theory_shift_test):
+    w_nonzero, v_nonzero, projectors = theory_shift_test[:3]
+    table = pd.DataFrame([w_nonzero, projectors, v_nonzero],
+         		index = ['eigenvalue', 'projector', 'eigenvector'])
+    return table
+
+def modrat(theory_shift_test):
+    f = theory_shift_test[3]
+    fmiss = theory_shift_test[4]
+    fmod = np.sqrt(np.sum(f**2))
+    fmiss_mod = np.sqrt(np.sum(fmiss**2))
     modrat = fmiss_mod/fmod
-    embed()
-    table = pd.DataFrame([w_nonzero, v_nonzero],
-         		index = ['eigenvalue', 'eigenvector'])
-#    modrat_table = pd.DataFrame(modrat)
     return modrat
+
+@figure
+def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
+    matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
+    fnorm = -shx_vector[0]/thx_vector[0]
+    sqrtdiags = np.sqrt(np.diag(matrix))
+    fig, ax = plt.subplots(figsize=(20,10))
+    ax.plot(sqrtdiags*100, '.-', label="Theory", color = "red")
+    ax.plot(fnorm.values*100, '.-', label="NNLO-NLO Shift", color = "black")
+    ticklocs, ticklabels = matrix_plot_labels(matrix)
+    plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=20)
+    ax.set_ylabel("% of central theory", fontsize=20)
+    ax.legend(fontsize=20)
+    return fig
+
