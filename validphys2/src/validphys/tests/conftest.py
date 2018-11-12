@@ -33,7 +33,7 @@ def data():
 def theory_data():
     l = Loader()
     names = ['NMC', 'ATLASTTBARTOT']
-    theoryids = [163, 180, 173]
+    theoryids = [160, 180, 173]
     ds1 = [l.check_dataset(name=names[0], theoryid=x, cuts=None) for x in theoryids]
     ds2 = [l.check_dataset(name=names[1], theoryid=x, cuts=None) for x in theoryids]
     exp1 = [ExperimentSpec(x.name, [x]) for x in ds1]
