@@ -1151,6 +1151,35 @@ def modrat(theory_shift_test):
     modrat = fmiss_mod/fmod
     return modrat
 
+def maxrat(theory_shift_test):
+    f = theory_shift_test[3]
+    fmiss = theory_shift_test[4]
+    maxrat = np.max(np.abs(fmiss))/np.max(np.abs(f))
+    return maxrat
+
+def validation_theory_chi2(theory_shift_test):
+    projectors = theory_shift_test[2]
+    evals = theory_shift_test[0]
+    ratio = projectors/evals
+    th_chi2 = 1/len(evals)*np.sum(ratio**2)
+    return th_chi2
+
+@figure
+def projector_eigenvalue_ratio(theory_shift_test):
+    projectors = theory_shift_test[2]
+    evals = theory_shift_test[0]
+    ratio = projectors/evals
+    fig, (ax1, ax2, ax3) = plt.subplots(3, figsize=(5,5))
+    ax1.plot(projectors, 'o')
+    ax2.plot(evals, 'o')
+    ax3.plot(ratio, 'o', color="red")
+    ax1.set_title(f"Subspace dimension = {len(evals)}", fontsize=10)
+    ax1.set_xlabel("a", fontsize=20)
+    ax1.set_ylabel(r"$\delta_a$")
+    ax2.set_ylabel(r"$s_a$")
+    ax3.set_ylabel(r"$\delta_a$/$s_a$")
+    return fig
+
 @figure
 def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
     matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
