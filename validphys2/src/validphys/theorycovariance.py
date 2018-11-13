@@ -953,7 +953,7 @@ def all_matched_data_lengths(all_matched_datasets):
 def matched_experiments_index(matched_dataspecs_experiment_name,
                               matched_dataspecs_dataset_name,
                               all_matched_data_lengths):
-    """"""
+    """Labels for matched experiments"""
     enames = matched_dataspecs_experiment_name
     dsnames = matched_dataspecs_dataset_name
     lens = all_matched_data_lengths
@@ -979,6 +979,8 @@ def matched_experiments_index(matched_dataspecs_experiment_name,
 @table
 def theory_covmat_custom_dataspecs(covs_pt_prescrip_dataspecs, covmap_dataspecs,
                           matched_experiments_index):
+    """Analogue of theory_covmat_custom but for use with matched dataspecs when
+    comparing shift and theory"""
     return theory_covmat_custom(covs_pt_prescrip_dataspecs, covmap_dataspecs,
                                 matched_experiments_index)
 
@@ -990,29 +992,39 @@ shx_corrmat = collect('matched_datasets_shift_matrix_correlations',
 
 @table
 def shift_to_theory_ratio(thx_corrmat, shx_corrmat):
+    """Returns the ratio of the theory correlation
+    matrix to the shift correlation matrix"""
     ratio = thx_corrmat[0]/shx_corrmat[0]
     return ratio
 
 @figure
 def shift_to_theory_ratio_plot(shift_to_theory_ratio):
+    """Heat plot of the ratio of the theory correlation
+    matrix to the shift correlation matrix"""
     fig = plot_corrmat_heatmap(shift_to_theory_ratio,
                                "Ratio of theory to shift correlation matrices")
     return fig
 
 @figure
 def shift_corrmat_plot(shx_corrmat):
+    """Heat plot of the shift correlation matrix"""
     fig = plot_corrmat_heatmap(shx_corrmat[0],
                                "Shift correlation matrix")
     return fig
 
 @figure
 def theory_corrmat_plot(thx_corrmat):
+    """Heat plot of the theory correlation matrix 
+    for matched dataspecs"""
     fig = plot_corrmat_heatmap(thx_corrmat[0],
                                "Theory correlation matrix")
     return fig
 
 @table
 def shift_corrmat_value_fractions(shx_corrmat):
+    """Returns a table detailing the fractions of entries
+    which have signs +, - or are 0 in the shift correlation
+    matrix"""
     mat = shx_corrmat[0].values
     matsize = np.size(mat)
     fracplus = 100*np.size(np.where(mat>0))/(2*matsize)
@@ -1027,6 +1039,9 @@ def shift_corrmat_value_fractions(shx_corrmat):
 
 @table
 def theory_corrmat_value_fractions(thx_corrmat):
+    """Returns a table detailing the fractions of entries
+    which have signs +, - or are 0 in the theory correlation
+    matrix"""
     mat = thx_corrmat[0].values
     matsize = np.size(mat)
     fracplus = 100*np.size(np.where(mat>0))/(2*matsize)
@@ -1041,6 +1056,8 @@ def theory_corrmat_value_fractions(thx_corrmat):
 
 @table
 def shift_theory_element_comparison(shx_corrmat, thx_corrmat):
+    """Table of comparisons between the signs of corresponding
+    elements in the shift and theory covariance matrices"""
     mat = thx_corrmat[0].values/shx_corrmat[0].values
     matsize = np.size(mat)
     fracplus = 100*np.size(np.where(mat>0))/(2*matsize)
