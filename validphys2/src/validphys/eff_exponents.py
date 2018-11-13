@@ -43,6 +43,15 @@ def alpha_eff(pdfs,xmin:numbers.Real=1e-6,xmax:numbers.Real=1e-3,npoints:int=200
 
     Q: The PDF scale in GeV.
     """
+    #Reading from the filter
+    #TODO: check that the pdfs given have the same basis, Q2min.
+    any_pdf, = pdfs
+    pdfpath = nnpath.get_results_path()+any_pdf.name
+    filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
+    Q=np.sqrt(filtermap['datacuts']['q2min'])
+    basis=filtermap['fitting']['fitbasis']+'FitBasis'
+
+    flavours=None
     checked = check_basis(basis, flavours)
     basis = checked['basis']
     flavours = checked['flavours']
@@ -79,6 +88,15 @@ def beta_eff(pdfs,xmin:numbers.Real=0.6,xmax:numbers.Real=0.9,npoints:int=200,Q:
 
     Q: The PDF scale in GeV.
     """
+    #Reading from the filter
+    #TODO: check that the pdfs given have the same basis, Q2min.
+    any_pdf, = pdfs
+    pdfpath = nnpath.get_results_path()+any_pdf.name
+    filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
+    Q=np.sqrt(filtermap['datacuts']['q2min'])
+    basis=filtermap['fitting']['fitbasis']+'FitBasis'
+
+    flavours=None
     checked = check_basis(basis, flavours)
     basis = checked['basis']
     flavours = checked['flavours']
@@ -145,7 +163,7 @@ def plot_betaEff(pdfs, beta_eff, normalize_to:(int,str,type(None))=None, ymin=No
 
 @table
 #@make_argcheck(check_basis)
-def next_effective_exponents_table(pdf:PDF,x1_alpha:numbers.Real=1e-6,x2_alpha:numbers.Real=1e-3,
+def effective_exponents_table(pdf:PDF,x1_alpha:numbers.Real=1e-6,x2_alpha:numbers.Real=1e-3,
 x1_beta:numbers.Real=0.65,x2_beta:numbers.Real=0.95):
     """Return a table with the effective exponents for the next fit"""
 
@@ -193,30 +211,34 @@ x1_beta:numbers.Real=0.65,x2_beta:numbers.Real=0.95):
         #                others    : min(2 and max(2x68% c.l. upper value evaluated at x=1e-6 and x=1e-3))
         # beta_min  =  max(0 and min(2x68% c.l. lower value evaluated at x=0.65 and x=0.95))
         # beta_max  =  max(2x68% c.l. upper value evaluated at x=0.65 and x=0.95)
-        if basis.elementlabel(fl) == "\Sigma" or basis.elementlabel(fl) == "g": #the gluon/singlet case
-            min_bound=round(alphamin_err68down[j][0],3)
-            max_bound=round(min(2,alphamin_err68up[j][0]),3)
-            alpha_line=["alpha",min_bound,max_bound]
-        else:
-            min_bound=round(min(alphamin_err68down[j][0],alphamax_err68down[j][0]),3)
-            max_bound=round(min(2,max(alphamin_err68up[j][0],alphamax_err68up[j][0])),3)
-            alpha_line=["alpha",min_bound,max_bound]
+        prev_amin_bound=filtermap['fitting']['basis'][j]['smallx'][0]
+        prev_amax_bound=filtermap['fitting']['basis'][j]['smallx'][1]
+        prev_bmin_bound=filtermap['fitting']['basis'][j]['largex'][0]
+        prev_bmax_bound=filtermap['fitting']['basis'][j]['largex'][1]
 
-        min_bound=round(max(0,min(betamin_err68down[j][0],betamax_err68down[j][0])),3)
-        max_bound=round(max(betamin_err68up[j][0],betamax_err68up[j][0]),3)
-        beta_line=["beta",min_bound,max_bound]
+        if basis.elementlabel(fl) == "\Sigma" or basis.elementlabel(fl) == "g": #the gluon/singlet case
+            new_min_bound=round(alphamin_err68down[j][0],3)
+            new_max_bound=round(min(2,alphamin_err68up[j][0]),3)
+            alpha_line=[r"$\alpha$",prev_amin_bound,prev_amax_bound,new_min_bound,new_max_bound]
+        else:
+            new_min_bound=round(min(alphamin_err68down[j][0],alphamax_err68down[j][0]),3)
+            new_max_bound=round(min(2,max(alphamin_err68up[j][0],alphamax_err68up[j][0])),3)
+            alpha_line=[r"$\alpha$",prev_amin_bound,prev_amax_bound,new_min_bound,new_max_bound]
+
+        new_min_bound=round(max(0,min(betamin_err68down[j][0],betamax_err68down[j][0])),3)
+        new_max_bound=round(max(betamin_err68up[j][0],betamax_err68up[j][0]),3)
+        beta_line=[r"$\beta$",prev_bmin_bound,prev_bmax_bound,new_min_bound,new_max_bound]
 
         eff_exp_data.append(alpha_line)
         eff_exp_data.append(beta_line)
         flavours_label.append(f'${basis.elementlabel(fl)}$')
         flavours_label.append("")
 
-    eff_exp_columns=["Effective exponent","Min","Max"]
+    eff_exp_columns=[r"$\alpha/\beta$","prev Min", "prev Max","next Min","next Max"]
     df=pd.DataFrame(eff_exp_data,index=flavours_label,columns=eff_exp_columns)
     df.name=pdf.name
     return df
 
-#@make_argcheck(check_basis)
 def next_effective_exponents_yaml(pdf:PDF,x1_alpha:numbers.Real=1e-6,x2_alpha:numbers.Real=1e-3,
 x1_beta:numbers.Real=0.65,x2_beta:numbers.Real=0.95):
     """Return a table with the effective exponents for the next fit"""
