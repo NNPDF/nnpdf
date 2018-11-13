@@ -1118,12 +1118,13 @@ def plot_thcorrmat_heatmap_custom_dataspecs(theory_corrmat_custom_dataspecs, the
     return fig
 
 
-def theory_shift_test(thx_covmat, shx_vector, thx_vector):
+def theory_shift_test(evalue_cutoff, thx_covmat, shx_vector, thx_vector):
+    n = evalue_cutoff
     matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
     # Finding eigenvalues and eigenvectors
     w, v = la.eigh(matrix)
-    w_nonzero = w[np.abs(w)>10**(-5)]
-    nonzero_locs = np.nonzero(np.abs(w)>10**(-5))[0]
+    w_nonzero = w[np.abs(w)>10**(-n)]
+    nonzero_locs = np.nonzero(np.abs(w)>10**(-n))[0]
     # ^ taking 0th element to extract list from tuple
     v_nonzero = []
     for loc in nonzero_locs:
@@ -1134,7 +1135,13 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector):
     for i in range(len(projectors)):
         projected_evectors[i] = projectors[i]*v_nonzero[i]
     fmiss = f - np.sum(projected_evectors, axis=0)
-    return w_nonzero, v_nonzero, projectors, f, fmiss
+    embed()
+    return w_nonzero, v_nonzero, projectors, f, fmiss, n
+
+def cutoff(theory_shift_test):
+    n = theory_shift_test[5]
+    cutoff = 10**(-n)
+    return cutoff
 
 @table
 def theory_covmat_eigenvectors(theory_shift_test):
