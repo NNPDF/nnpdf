@@ -874,6 +874,7 @@ def plot_matched_datasets_shift_matrix(matched_datasets_shift_matrix):
 
 @table
 def matched_datasets_shift_matrix_correlations(matched_datasets_shift_matrix):
+    """Returns the correlation shift matrix for matched datasets"""
     mat = matched_datasets_shift_matrix.values
     diag_minus_half = (np.diagonal(mat))**(-0.5)
     corrmat = diag_minus_half[:, np.newaxis] * mat * diag_minus_half
@@ -898,28 +899,39 @@ all_matched_results = collect('matched_dataspecs_results',
                               ['dataspecs'])
 
 def combine_by_type_dataspecs(process_lookup, all_matched_results, matched_dataspecs_dataset_name):
+    """The analogue of combine_by_type but for use with matched dataspecs functions for theory and
+    shift comparison"""
     return combine_by_type(process_lookup, all_matched_results, matched_dataspecs_dataset_name)
 
 datapsecs_theoryids = collect('theoryid', ['theoryconfig', 'original', 'dataspecs'])
 
 def process_starting_points_dataspecs(combine_by_type_dataspecs):
+    """The analogus of process_starting_points_dataspecs but for 
+    use with matched dataspecs functions for theory and shift
+    comparison"""
     return process_starting_points(combine_by_type_dataspecs)
 
 @make_argcheck
 def _check_correct_theory_combination_dataspecs(datapsecs_theoryids,
                                                 fivetheories):
+    """Checks the correct theories have been chosen for a valid
+    point prescription, for use with matched dataspecs"""
     return _check_correct_theory_combination.__wrapped__(
         datapsecs_theoryids, fivetheories)
 
-#@_check_correct_theory_combination_dataspecs
+@_check_correct_theory_combination_dataspecs
 def covs_pt_prescrip_dataspecs(combine_by_type_dataspecs,
                       process_starting_points_dataspecs,
                       datapsecs_theoryids,
                       fivetheories: (str, type(None)) = None):
+    """The analogue of covs_pt_prescrip_dataspecs but for use with
+    matched dataspecs functions for theory and shift comparison"""
     return covs_pt_prescrip(combine_by_type_dataspecs, process_starting_points_dataspecs,
                             datapsecs_theoryids, fivetheories)
 
 def covmap_dataspecs(combine_by_type_dataspecs, matched_dataspecs_dataset_name):
+    """The analogue of covmap but for use with matched dataspecs functions 
+    for theory and shift comparison"""
     return covmap(combine_by_type_dataspecs, matched_dataspecs_dataset_name)
 
 matched_dataspecs_experiment_name = collect(
@@ -932,6 +944,7 @@ all_matched_datasets = collect('matched_cuts_datasets',
 
 
 def all_matched_data_lengths(all_matched_datasets):
+    """Returns a list of dataset lengths from matched data"""
     lens = []
     for rlist in all_matched_datasets:
         lens.append(rlist[0].load().GetNData())
@@ -940,7 +953,7 @@ def all_matched_data_lengths(all_matched_datasets):
 def matched_experiments_index(matched_dataspecs_experiment_name,
                               matched_dataspecs_dataset_name,
                               all_matched_data_lengths):
-
+    """"""
     enames = matched_dataspecs_experiment_name
     dsnames = matched_dataspecs_dataset_name
     lens = all_matched_data_lengths
