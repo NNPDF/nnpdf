@@ -102,7 +102,7 @@ each_dataset_results_bytheory = collect('results_bytheoryids',
 
 @_check_correct_theory_combination
 def theory_covmat_datasets(each_dataset_results_bytheory,
-                           fivetheories:(str, type(None)) = None)):
+                           fivetheories:(str, type(None)) = None):
     """Produces an array of theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard. """
     dataset_covmats=[]
@@ -114,7 +114,7 @@ def theory_covmat_datasets(each_dataset_results_bytheory,
 
 @_check_correct_theory_combination
 def total_covmat_datasets(each_dataset_results_bytheory,
-                          fivetheories:(str, type(None)) = None)):
+                          fivetheories:(str, type(None)) = None):
     """Produces an array of total covariance matrices; the sum of experimental
     and scale-varied theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard.
@@ -130,7 +130,7 @@ def total_covmat_datasets(each_dataset_results_bytheory,
 
 @_check_correct_theory_combination
 def total_covmat_diagtheory_datasets(each_dataset_results_bytheory,
-                                     fivetheories:(str, type(None)) = None)):
+                                     fivetheories:(str, type(None)) = None):
     """Same as total_covmat_theory_datasets but for diagonal theory only"""
     dataset_covmats=[]
     for dataset in each_dataset_results_bytheory:
@@ -156,7 +156,7 @@ experiments_results_theory = collect('experiments_results', ('theoryids',))
 
 @_check_correct_theory_combination
 def total_covmat_experiments(experiments_results_theory,
-                             fivetheories:(str, type(None)) = None)):
+                             fivetheories:(str, type(None)) = None):
     """Same as total_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
     exp_result_covmats = []
@@ -349,7 +349,7 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
 
 @_check_correct_theory_combination
 def total_covmat_diagtheory_experiments(experiments_results_theory,
-                                        fivetheories:(str, type(None)) = None)):
+                                        fivetheories:(str, type(None)) = None):
     """Same as total_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
     exp_result_covmats = []
