@@ -9,6 +9,11 @@ using std::vector;
 using std::array;
 using NNPDF::real;
 
+/**
+ * This class writes to a YAML file the values of a PDFSet
+ * (for a given replica number and input scale) in a grid of x points
+ * for all 14 flavours enumerated in the PDFSet class.
+ */
 class ExportGrid
 {    
 public:
