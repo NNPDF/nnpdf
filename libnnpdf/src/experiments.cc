@@ -15,6 +15,7 @@
 #include <iomanip>
 #include <cmath>
 #include <numeric>
+#include <algorithm>
 
 #include "NNPDF/experiments.h"
 #include "NNPDF/chisquared.h"
@@ -27,39 +28,6 @@
 
 using namespace std;
 namespace NNPDF{
-
-matrix<double> read_total_covmat(const std::string filename, int NData) {
-  // Reads in covariance matrix for an experiment from pandas dataframe
-  ifstream f1;
-  f1.open(filename.c_str(), ios::in);
-
-  if(!f1.good()) {
-    throw FileError("experiments", "Cannot read covariance matrix file from " + filename);
-  }
-
-  string line, exp_name, dataset_name;
-
-  // Skip first four lines (headers)
-  for (int i = 0; i < 4; i++) {
-    getline(f1, line);
-  }
-
-  matrix<double> mat(NData,NData);
-  double row_number;
-  for (int i = 0; i < NData; i++) {
-    getline(f1, line);
-    istringstream lstream(line);
-    // Skip over first three elements of line
-    lstream >> exp_name >> dataset_name >> row_number;
-    for (int j = 0; j < NData; j++) {
-      lstream >> mat(i,j);
-    }
-  }
-
-  f1.close();
-
-  return mat;
-}
 
 /**
   * Constructor
@@ -540,12 +508,102 @@ void Experiment::GenCovMat()
   fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 
+/*
+* Reads in covariance matrix for an experiment from pandas dataframe
+*/
+
+matrix<double> read_total_covmat(const std::string filename)
+{
+  const int first_lines_to_skip = 4;   //experiment, dataset, id, header
+  const int first_columns_to_skip = 3; //experiment, dataset, id
+
+  ifstream file(filename.c_str());
+
+  if (!file.good())
+    throw FileError("experiments", "Cannot read covariance matrix file from " + filename);
+
+  string line;
+
+  //====Initialise CovMat (get lines and columns from txt file)
+  int lines = 0, columns = 0;
+  bool ONCE = true;
+  // Skip the first lines
+  for (int i = 0; i < first_lines_to_skip; ++i)
+    std::getline(file, line);
+  while (std::getline(file, line))
+  {
+    std::stringstream ss(line);
+    string entry;
+
+    if (ONCE)
+    {
+      // Skip the first columns
+      for (int i = 0; i < first_columns_to_skip; ++i)
+        ss >> entry;
+
+      while (ss >> entry)
+        columns++;
+    }
+    ONCE = false;
+
+    lines++;
+  }
+
+  //! CHECKPOINT0: Check if the lines and columns of covmat matches.
+  if (lines != columns)
+    throw EvaluationError("experiments", "Lines and Columns of covmat doesn't match.")
+
+        matrix<double>
+            covmat(lines, lines);
+
+  //====READ CovMat into matrix object
+  // Skip the first lines
+  file.close();
+  file.clear();
+  file.open(filename.c_str());
+
+  for (int i = 0; i < first_lines_to_skip; ++i)
+    std::getline(file, line);
+
+  int l = 0, c = 0;
+  while (std::getline(file, line)) //Read a line
+  {
+    double entry;
+    //! Extra check, in case the format changes
+    //! CHECKPOINT1: Read the last character of the line, if it's alphabetical, throw an error.
+    if (isalpha(line[line.size() - 1]))
+      throw EvaluationError("experiments", "The format of covmat has probably changed.")
+
+          std::stringstream ss(line);
+
+    // Skip the first columns
+    for (int i = 0; i < first_columns_to_skip; ++i)
+    {
+      string entry;
+      ss >> entry;
+    }
+
+    while (ss >> entry || !ss.eof())
+    {
+      //! CHECKPOINT2: Throw an error if reading of a line element fails
+      if (ss.fail())
+        throw EvaluationError("experiments", "Error while reading lines of the covmat.")
+
+            covmat(l, c) = entry;
+      c++;
+    } //columns loop
+    l++;
+  } //line loop
+
+  return covmat;
+}
+
 /**
 * Read in covariance matrix for replica generation from file, and generate covariance matrix and its square root
 */
 void Experiment::LoadRepCovMat(string filename)
 {
-  fRepCovMat = read_total_covmat(filename, fNData);
+  fRepCovMat = read_total_covmat(filename);
   fSqrtRepCov = ComputeSqrtMat(fRepCovMat);
 }
 
@@ -554,7 +612,7 @@ void Experiment::LoadRepCovMat(string filename)
 */
 void Experiment::LoadFitCovMat(string filename)
 {
-  fFitCovMat = read_total_covmat(filename, fNData);
+  fFitCovMat = read_total_covmat(filename);
   fSqrtFitCov = ComputeSqrtMat(fFitCovMat);
 }
 
