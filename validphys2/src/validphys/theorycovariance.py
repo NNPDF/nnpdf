@@ -918,11 +918,21 @@ def theory_vector(matched_dataspecs_dataset_theory):
         names=["Experiment name", "Dataset name", "Point"])
     return pd.DataFrame(all_theory, index=index)
 
+def dataspecs_dataset_alltheory(matched_dataspecs_results, experiment_name, dataset_name):
+    central, *others = matched_dataspecs_results
+    res = [other[1].central_value for other in others]
+    return LabeledShifts(dataset_name=dataset_name,
+                         experiment_name=experiment_name, shifts=res)
+
+matched_dataspecs_dataset_alltheory = collect('dataspecs_dataset_alltheory', ['dataspecs'])
+
+
 @figure
 def plot_matched_datasets_shift_matrix(matched_datasets_shift_matrix):
     """Heatmap plot of matched_datasets_shift_matrix"""
     return plot_covmat_heatmap(matched_datasets_shift_matrix,
-                               "Shift outer product matrix")
+
+    "Shift outer product matrix")
 
 @table
 def matched_datasets_shift_matrix_correlations(matched_datasets_shift_matrix):
@@ -1123,8 +1133,8 @@ def theory_shift_test(evalue_cutoff, thx_covmat, shx_vector, thx_vector):
     matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
     # Finding eigenvalues and eigenvectors
     w, v = la.eigh(matrix)
-    w_nonzero = w[np.abs(w)>10**(-n)]
-    nonzero_locs = np.nonzero(np.abs(w)>10**(-n))[0]
+    w_nonzero = w[w>10**(-n)]
+    nonzero_locs = np.nonzero(w>10**(-n))[0]
     # ^ taking 0th element to extract list from tuple
     v_nonzero = []
     for loc in nonzero_locs:
@@ -1135,7 +1145,6 @@ def theory_shift_test(evalue_cutoff, thx_covmat, shx_vector, thx_vector):
     for i in range(len(projectors)):
         projected_evectors[i] = projectors[i]*v_nonzero[i]
     fmiss = f - np.sum(projected_evectors, axis=0)
-    embed()
     return w_nonzero, v_nonzero, projectors, f, fmiss, n
 
 def cutoff(theory_shift_test):
@@ -1167,7 +1176,7 @@ def maxrat(theory_shift_test):
 def validation_theory_chi2(theory_shift_test):
     projectors = theory_shift_test[2]
     evals = theory_shift_test[0]
-    ratio = projectors/evals
+    ratio = projectors/np.sqrt(evals)
     th_chi2 = 1/len(evals)*np.sum(ratio**2)
     return th_chi2
 
@@ -1175,10 +1184,10 @@ def validation_theory_chi2(theory_shift_test):
 def projector_eigenvalue_ratio(theory_shift_test):
     projectors = theory_shift_test[2]
     evals = theory_shift_test[0]
-    ratio = projectors/evals
+    ratio = projectors/np.sqrt(evals)
     fig, (ax1, ax2, ax3) = plt.subplots(3, figsize=(5,5))
     ax1.plot(projectors, 'o')
-    ax2.plot(evals, 'o')
+    ax2.plot(np.sqrt(evals), 'o')
     ax3.plot(ratio, 'o', color="red")
     ax1.set_title(f"Subspace dimension = {len(evals)}", fontsize=10)
     ax1.set_xlabel("a", fontsize=20)
