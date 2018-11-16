@@ -170,7 +170,7 @@ commondata_experiments = collect('commondata', ['experiments', 'experiment'])
 # TODO: Improve how processes are assigned. Currently we group manually into
 # Drell-Yan, Heavy Quarks and Jets but adding more processes could break
 # this assignment
-def process_lookup(commondata_experiments):
+def _process_lookup(commondata_experiments):
     """Produces a dictionary with keys corresponding to dataset names
     and values corresponding to process types. Process types are
     regrouped into the four categories 'Drell-Yan', 'Heavy Quarks', Jets'
@@ -197,8 +197,7 @@ def dataset_names(commondata_experiments):
 ProcessInfo = namedtuple("ProcessInfo", ('theory', 'namelist', 'sizes'))
 
 
-def combine_by_type(process_lookup,
-                    each_dataset_results_bytheory, dataset_names):
+def combine_by_type(each_dataset_results_bytheory, dataset_names):
     """Groups the datasets according to processes and returns three objects:
     theories_by_process: the relevant theories grouped by process type
     ordered_names: dictionary with keys of process type and values being the
@@ -212,7 +211,8 @@ def combine_by_type(process_lookup,
     for dataset, name in zip(each_dataset_results_bytheory, dataset_names):
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
-        proc_type = process_lookup[name]
+        embed()
+        proc_type = _process_lookup[name]
         ordered_names[proc_type].append(name)
         theories_by_process[proc_type].append(theory_centrals)
     for key, item in theories_by_process.items():
@@ -898,15 +898,15 @@ def plot_matched_datasets_shift_matrix_correlations(
 all_matched_results = collect('matched_dataspecs_results',
                               ['dataspecs'])
 
-def combine_by_type_dataspecs(process_lookup, all_matched_results, matched_dataspecs_dataset_name):
+def combine_by_type_dataspecs(all_matched_results, matched_dataspecs_dataset_name):
     """The analogue of combine_by_type but for use with matched dataspecs functions for theory and
     shift comparison"""
-    return combine_by_type(process_lookup, all_matched_results, matched_dataspecs_dataset_name)
+    return combine_by_type(all_matched_results, matched_dataspecs_dataset_name)
 
 datapsecs_theoryids = collect('theoryid', ['theoryconfig', 'original', 'dataspecs'])
 
 def process_starting_points_dataspecs(combine_by_type_dataspecs):
-    """The analogus of process_starting_points_dataspecs but for 
+    """The analogus of process_starting_points_dataspecs but for
     use with matched dataspecs functions for theory and shift
     comparison"""
     return process_starting_points(combine_by_type_dataspecs)
@@ -930,7 +930,7 @@ def covs_pt_prescrip_dataspecs(combine_by_type_dataspecs,
                             datapsecs_theoryids, fivetheories)
 
 def covmap_dataspecs(combine_by_type_dataspecs, matched_dataspecs_dataset_name):
-    """The analogue of covmap but for use with matched dataspecs functions 
+    """The analogue of covmap but for use with matched dataspecs functions
     for theory and shift comparison"""
     return covmap(combine_by_type_dataspecs, matched_dataspecs_dataset_name)
 
@@ -1014,7 +1014,7 @@ def shift_corrmat_plot(shx_corrmat):
 
 @figure
 def theory_corrmat_plot(thx_corrmat):
-    """Heat plot of the theory correlation matrix 
+    """Heat plot of the theory correlation matrix
     for matched dataspecs"""
     fig = plot_corrmat_heatmap(thx_corrmat[0],
                                "Theory correlation matrix")
