@@ -612,19 +612,19 @@ void CMS1JET276TEVFilter::ReadData()
           fSys[index][0].name = "CMS2P76LUMI";
 
           // uncorr uncertainties 2nd entry
-          fSys[index][1].type = ADD;
+          fSys[index][1].type = MULT;
           fSys[index][1].name = "UNCORR";
 
           // add np error
           fSys[index][2].mult = nperr/rescalenp;
-          fSys[index][2].type = ADD;
+          fSys[index][2].type = MULT;
           fSys[index][2].name = "CORR";
 
           // filling corr uncertainties
           for (int isys = 3; isys < nsys; isys++)
             {
               f1 >> fSys[index][isys].mult;
-              fSys[index][isys].type = ADD;
+              fSys[index][isys].type = MULT;
               fSys[index][isys].name = "CORR";
             }
 
