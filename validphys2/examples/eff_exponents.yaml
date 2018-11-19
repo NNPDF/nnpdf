@@ -10,7 +10,7 @@ beta:
   ymax: 5
 
 pdfs:
-  - 181031-si-nlo-central_DISonly
+  - 170120-008
 
 meta:
     author: Rabah Abdul Khalek
@@ -31,7 +31,7 @@ template_text: |
   {@with pdfs@}
   Effective exponents table for {@pdf@}
   -----------
-  {@effective_exponents_table@}
+  {@new_effective_exponents_table@}
   {@endwith@}
 
 actions_:
