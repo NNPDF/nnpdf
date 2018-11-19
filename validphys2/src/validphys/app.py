@@ -40,6 +40,7 @@ providers = [
              'validphys.theorycovariance',
              'validphys.replica_selector',
              'validphys.MCgen_checks',
+             'validphys.closure',
              'reportengine.report'
             ]
 
@@ -131,8 +132,11 @@ including the contents of the following file:
 
     def run(self):
         if sys.version_info < (3, 6):
-            log.warn("validphys 2 is discontinued on Python<3.6 and will not be longer updated. Please run\n"
-                     "conda install python=3.6\n\n If you have any problems, please ask Zahari.")
+            log.warning("validphys 2 is discontinued on Python<3.6 and will "
+                    "not be longer updated. Please run\n"
+                     "conda install python=3.6\n\n"
+                     "If you have any problems, please open an issue "
+                     "on https://github.com/NNPDF/nnpdf/issues.")
         with self.upload_context(self.args['upload'], self.args['output']):
             super().run()
 

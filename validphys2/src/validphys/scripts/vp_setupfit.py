@@ -14,11 +14,11 @@
 #
 # Extensions to the setup procedure can be implemented by adding suitable
 # actions_ to the mapping (making sure that they are executed in the right
-# namespace that pulls all the required resources from the fi runcard),
+# namespace that pulls all the required resources from the fit runcard),
 # together with the additional non variable resources required by said actions
-# (such as `use_cuts: False`) in the current code. vp-setupfit also gets its
-# own provider modules, so you may need to add the modules of your actions to
-# SETUPFIT_PROVIDERS.
+# (such as `use_cuts: "internal"`) in the current code. vp-setupfit also gets
+# its own provider modules, so you may need to add the modules of your actions
+# to SETUPFIT_PROVIDERS.
 #
 # The state of the output folder must be such that the nnfit code can be run on
 # top.
@@ -39,11 +39,11 @@ from reportengine import colors
 
 
 SETUPFIT_FIXED_CONFIG = dict(
-    use_cuts=False,
+    Nocuts={'use_cuts': 'nocuts'},
     actions_=[
         'datacuts check_t0pdfset',
         'theory check_positivity',
-        'datacuts::closuretest::theory::fitting filter',
+        'Nocuts::datacuts::closuretest::theory::fitting filter',
     ])
 
 SETUPFIT_PROVIDERS = ['validphys.filters',]

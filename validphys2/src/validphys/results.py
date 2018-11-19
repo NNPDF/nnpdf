@@ -15,13 +15,14 @@ import scipy.linalg as la
 import pandas as pd
 
 from NNPDF import ThPredictions, CommonData, Experiment
-from reportengine.checks import require_one, remove_outer, check_not_empty, make_argcheck, CheckError
+from reportengine.checks import require_one, remove_outer, check_not_empty
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.checks import assert_use_cuts_true, check_pdf_is_montecarlo, check_speclabels_different
+from validphys.checks import (check_cuts_considered, check_pdf_is_montecarlo,
+                              check_speclabels_different, check_two_dataspecs)
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
-from validphys.calcutils import all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values, all_chi2_theory, central_chi2_theory
+from validphys.calcutils import all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values
 
 log = logging.getLogger(__name__)
 
@@ -205,7 +206,7 @@ def experiment_result_table(experiments, pdf, experiments_index):
                                  ]))
 
     if not result_records:
-        log.warn("Empty records for experiment results")
+        log.warning("Empty records for experiment results")
         return pd.DataFrame()
     df =  pd.DataFrame(result_records, columns=result_records[0].keys(),
                        index=experiments_index)
@@ -230,9 +231,9 @@ def experiments_covmat(experiments, experiments_index, t0set):
         loaded_exp = experiment.load()
         if t0set:
             #Copy data to avoid chaos
-            data = type(loaded_exp)(loaded_exp)
+            loaded_exp = type(loaded_exp)(loaded_exp)
             log.debug("Setting T0 predictions for %s" % loaded_exp)
-            data.SetT0(t0set.load_t0())
+            loaded_exp.SetT0(t0set.load_t0())
         mat = loaded_exp.get_covmat()
         df.loc[[name],[name]] = mat
     return df
@@ -473,6 +474,21 @@ def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples=500):
                                     args=[dt.sqrtcovmat])
     return phi_resample
 
+@check_pdf_is_montecarlo
+def bootstrap_chi2_central_experiment(experiment_results, bootstrap_samples=500,
+                                      boot_seed=123):
+    """Takes the data result and theory prediction for a given experiment and
+    then returns a bootstrap distribution of central chi2.
+    By default `bootstrap_samples` is set to a sensible value (500). However
+    a different value can be specified in the runcard.
+    """
+    dt, th = experiment_results
+    diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
+    cchi2 = lambda x, y: calc_chi2(y, x.mean(axis=1))
+    chi2_central_resample = bootstrap_values(diff, bootstrap_samples, boot_seed=boot_seed,
+                                             apply_func=(cchi2), args=[dt.sqrtcovmat])
+    return chi2_central_resample
+
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
                               prepend_total:bool=True,
                               datasets_sqrtcovmat=None) -> dict:
@@ -554,7 +570,7 @@ def correlate_bad_experiments(experiments, replica_data, pdf):
     df.sort_values(df.columns[0], inplace=True, ascending=False)
     return df
 
-@assert_use_cuts_true
+@check_cuts_considered
 @table
 def closure_shifts(experiments_index, fit, use_cuts, experiments):
     """Save the differenve between the fitted data and the real commondata
@@ -774,14 +790,9 @@ def dataspecs_chi2_table(
     return fits_chi2_table(dataspecs_experiments_chi2_table,
                            dataspecs_datasets_chi2_table, show_total)
 
-@make_argcheck
-def _check_two_dataspecs(dataspecs):
-    l = len(dataspecs)
-    if l != 2:
-        raise CheckError(f"Expecting exactly 2 dataspecs, not {l}")
 
 @table
-@_check_two_dataspecs
+@check_two_dataspecs
 def dataspecs_chi2_differences_table(dataspecs, dataspecs_chi2_table):
     """Given two dataspecs, print the chi² (using dataspecs_chi2_table)
     and the difference between the first and the second."""
@@ -854,11 +865,17 @@ def experiments_central_values(experiment_result_table):
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
 
+experiments_results = collect(experiment_results, ('experiments',))
+
 experiments_phi = collect(phi_data_experiment, ('experiments',))
 experiments_pdfs_phi = collect('experiments_phi', ('pdfs',))
 
+pdfs_total_chi2 = collect(total_experiments_chi2, ('pdfs',))
+
 experiments_bootstrap_phi = collect(bootstrap_phi_data_experiment, ('experiments',))
-dataspecs_experiments_bootstrap_phi = collect('experiments_bootstrap_phi', ('dataspecs',))
+
+experiments_bootstrap_chi2_central = collect(bootstrap_chi2_central_experiment,
+                                             ('experiments',))
 
 #These are convenient ways to iterate and extract varios data from fits
 fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))
@@ -878,6 +895,7 @@ dataspecs_results = collect('results', ('dataspecs',))
 dataspecs_chi2_data = collect(abs_chi2_data, ('dataspecs', 'experiments', 'experiment'))
 dataspecs_experiment_chi2_data = collect('experiments_chi2', ('dataspecs',))
 dataspecs_total_chi2 = collect('total_experiments_chi2', ('dataspecs',))
+dataspecs_experiments_bootstrap_phi = collect('experiments_bootstrap_phi', ('dataspecs',))
 
 dataspecs_speclabel = collect('speclabel', ('dataspecs',), element_default=None)
 dataspecs_cuts = collect('cuts', ('dataspecs',))

@@ -1,10 +1,6 @@
 cmake_minimum_required (VERSION 3.0.2)
 
-# Disable the use of RPATHS - we probably are not
-# that interested in relocatable binaries and it
-# causes a lot of trouble on macOS
-#SET(CMAKE_SKIP_RPATH TRUE)
-
+# Use rpaths for now, previously there were issues with osx
 SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
 
 # when building, don't use the install RPATH already
@@ -42,6 +38,8 @@ pkg_search_module(YAML REQUIRED yaml-cpp)
 option(ENABLE_OPENMP "Enable openmp parallelism." OFF)
 option(ENABLE_OPENMPI "Enable openMPI parallelism." OFF)
 option(ENABLE_TESTS "Enable unit test" OFF)
+option(ENABLE_ASAN "Enable ASAN" OFF)
+option(ENABLE_DEAD_STRIP "Enable use of flag `-dead_strip-dylibs`" OFF)
 option(VP_DEV "validphys in developer mode" ON)
 set(PROFILE_PREFIX "" CACHE STRING "Where you store the 'data' folder. Default empty uses CMAKE_INSTALL_PREFIX/share/NNPDF.")
 
@@ -94,10 +92,43 @@ if (APFEL_CONFIG)
   set(APFEL_LIBRARIES ${APFEL_LIBRARIES} CACHE STRING INTERNAL)
 endif(APFEL_CONFIG)
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -march=nocona -mtune=haswell -fvisibility-inlines-hidden -fmessage-length=0 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LHAPDF_CXX_FLAGS} ${APFEL_CXX_FLAGS} ${YAML_CFLAGS} ${SQLITE3_CFLAGS} ${GSL_CFLAGS} ${LIBARCHIVE_CFLAGS}" CACHE STRING "compile flags" FORCE)
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address -fPIC ${CMAKE_CXX_FLAGS}" CACHE STRING "debug compile flags" FORCE)
-set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-fsanitize=address" CACHE STRING "debug linker flags" FORCE)
+set(DEFAULT_CXX_OPTIONS "-Wall -Wextra -march=nocona -mtune=haswell -fvisibility-inlines-hidden -fmessage-length=0 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe")
+
+#strip linker flags to avoid duplication of asan flags
+string(REPLACE "-fsanitize=address" "" CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+string(REPLACE "-fsanitize=address" "" CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
+
+set(CMAKE_ALL_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_MODULE_LINKER_FLAGS} ${CMAKE_SHARED_LINKER_FLAGS}")
+
+#dead_strip_dylibs can cause issues, warn if we remove it
+if(ENABLE_DEAD_STRIP)
+  if(NOT ${CMAKE_ALL_LINKER_FLAGS} MATCHES "-Wl,-dead_strip_dylibs")
+    message(WARNING "ENABLE_DEAD_STRIP was set true but there were no occurences of the flag `dead_strip_dylibs` found")
+  endif(NOT ${CMAKE_ALL_LINKER_FLAGS} MATCHES "-Wl,-dead_strip_dylibs")
+else(ENABLE_DEAD_STRIP)
+  if(CMAKE_ALL_LINKER_FLAGS MATCHES "-Wl,-dead_strip_dylibs")
+    message(WARNING "removing all occurence of flag: `dead_strip_dylibs` (default behaviour). If you are sure this flag is required then ENABLE_DEAD_STRIP")
+    string(REPLACE "-Wl,-dead_strip_dylibs" "" CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+    string(REPLACE "-Wl,-dead_strip_dylibs" "" CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
+    string(REPLACE "-Wl,-dead_strip_dylibs" "" CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+    #executable linker flags get set later
+    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}" CACHE STRING "Flags used by the linker during the creation of modules during all build types" FORCE)
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}" CACHE STRING "Flags used by the linker during the creation of shared libraries during all build types" FORCE)
+  endif(CMAKE_ALL_LINKER_FLAGS MATCHES "-Wl,-dead_strip_dylibs")
+endif(ENABLE_DEAD_STRIP)
+
+# Flags for ASAN
+if(ENABLE_ASAN)
+  set(CMAKE_CXX_FLAGS "-fsanitize=address ${DEFAULT_CXX_OPTIONS} ${LHAPDF_CXX_FLAGS} ${APFEL_CXX_FLAGS} ${YAML_CFLAGS} ${SQLITE3_CFLAGS} ${GSL_CFLAGS} ${LIBARCHIVE_CFLAGS}" CACHE STRING "compile flags" FORCE)
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g" CACHE STRING "debug compile flags" FORCE)
+  set(CMAKE_EXE_LINKER_FLAGS "-fsanitize=address ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "linker flags" FORCE)
+  set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-fsanitize=address ${CMAKE_EXE_LINKER_FLAGS_DEBUG}" CACHE STRING "debug linker flags" FORCE)
+else(ENABLE_ASAN)
+  set(CMAKE_CXX_FLAGS "${DEFAULT_CXX_OPTIONS} ${LHAPDF_CXX_FLAGS} ${APFEL_CXX_FLAGS} ${YAML_CFLAGS} ${SQLITE3_CFLAGS} ${GSL_CFLAGS} ${LIBARCHIVE_CFLAGS}" CACHE STRING "compile flags" FORCE)
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g" CACHE STRING "debug compile flags" FORCE)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "linker flags" FORCE)
+  set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG}" CACHE STRING "debug linker flags" FORCE)
+endif(ENABLE_ASAN)
 
 # libnnpdf configuration
 add_subdirectory(libnnpdf)

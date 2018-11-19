@@ -64,8 +64,9 @@ class PDFPlotter(metaclass=abc.ABCMeta):
 
             #Handle division by zero more quietly
             def fp_error(tp, flag):
-                log.warn("Invalid values found computing normalization to %s: "
-                 "Floating point error (%s).", normalize_pdf, tp)
+                log.warning("Invalid values found computing "
+                    f"normalization to {normalize_pdf}: "
+                    f"Floating point error ({tp}).")
                 #Show warning only once
                 np.seterr(all='ignore')
 
@@ -172,8 +173,8 @@ class PDFPlotter(metaclass=abc.ABCMeta):
 def _warn_pdf_not_montecarlo(pdf):
     et = pdf.ErrorType
     if et != 'replicas':
-        log.warn("Plotting members of a non-Monte Carlo PDF set:"
-        " %s with error type '%s'.", pdf.name, et)
+        log.warning("Plotting members of a non-Monte Carlo PDF set:"
+        f" {pdf.name} with error type '{et}'.")
 
 #Cant't add the lru_cache here because pdfs is not hashable at the moment
 @make_argcheck
@@ -282,7 +283,11 @@ class AllFlavoursPlotter(PDFPlotter):
                 if limits is not None:
                     all_vals.append(np.atleast_2d(limits))
 
-        plotutils.frame_center(ax, self.firstgrid.xgrid, np.concatenate(all_vals))
+        #It can happen that we don't get anything to concatenate
+        #e.g. because we are comparing to the base PDF several times.
+        if all_vals:
+            plotutils.frame_center(ax, self.firstgrid.xgrid,
+                                   np.concatenate(all_vals))
         if (self.ymin is not None):
             ax.set_ylim(ymin=self.ymin)
         if (self.ymax is not None):

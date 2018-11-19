@@ -36,7 +36,7 @@ fits:
   - from_: reference
 
 
-use_cuts: True
+use_cuts: "fromfit"
 
 Q: 1.651
 

@@ -13,7 +13,7 @@ from validphys.plotoptions import kitable, get_info
 
 l = Loader()
 #The sorted is to appease hypothesis
-dss = sorted(l.available_datasets - {'PDFEVOLTEST', 'LHCBWMU1FB', 'CMSZRAP'})
+dss = sorted(l.available_datasets - {'PDFEVOLTEST'})
 
 @composite
 def commodata_and_cuts(draw):
