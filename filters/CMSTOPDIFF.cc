@@ -653,7 +653,7 @@ void  CMSTOPDIFF8TEVTTRAPNORMFilter::ReadData()
 	{
 	  fSys[i][j].add  = syscor[i][j];
 	  fSys[i][j].mult = fSys[i][j].add*100/fData[i];
-	  fSys[i][j].type = MULT;
+	  fSys[i][j].type = ADD;
 	  fSys[i][j].name = "CORR";
 	}
     }
