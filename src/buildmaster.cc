@@ -161,7 +161,7 @@ void InitCommonData(vector<CommonData*>& target)
 
   target.push_back(new CMSWCHARMTOTFilter());
   target.push_back(new CMSWCHARMRATFilter());
-  target.push_back(new CMSWC13TEVFilter())
+  target.push_back(new CMSWC13TEVFilter());
 
   // ************************* D0 ******************************
 
