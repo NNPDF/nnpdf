@@ -71,6 +71,7 @@
 #include "CMS_SINGLETOP_TCH_TOT_7TEV.h"
 #include "CMS_SINGLETOP_TCH_R_8TEV.h"
 #include "CMS_SINGLETOP_TCH_R_13TEV.h"
+#include "CMSWC13TEV"
 
 /**
  * \param argv the filename containing the configuration
@@ -160,6 +161,7 @@ void InitCommonData(vector<CommonData*>& target)
 
   target.push_back(new CMSWCHARMTOTFilter());
   target.push_back(new CMSWCHARMRATFilter());
+  target.push_back(new CMSWC13TEVFilter())
 
   // ************************* D0 ******************************
 
