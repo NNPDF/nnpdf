@@ -5,9 +5,12 @@
 
 #include "buildmaster_utils.h"
 
-class CMSWC13TEVFilter: public CommonData {
+class CMSWC13TEVFilter: public CommonData
+{
 public: CMSWC13TEVFilter():
   CommonData("CMSWC13TEV") { ReadData(); }
+
 private:
   void ReadData();
 };
+
