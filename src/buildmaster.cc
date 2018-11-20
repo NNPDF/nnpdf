@@ -71,7 +71,7 @@
 #include "CMS_SINGLETOP_TCH_TOT_7TEV.h"
 #include "CMS_SINGLETOP_TCH_R_8TEV.h"
 #include "CMS_SINGLETOP_TCH_R_13TEV.h"
-#include "CMSWC13TEV"
+#include "CMSWC13TEV.h"
 
 /**
  * \param argv the filename containing the configuration
