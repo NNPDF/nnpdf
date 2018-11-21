@@ -9,6 +9,7 @@ Created on Wed Mar  9 15:19:52 2016
 from __future__ import generator_stop
 
 from collections import namedtuple, OrderedDict
+import enum
 import functools
 import inspect
 import logging
@@ -27,7 +28,9 @@ from NNPDF import (LHAPDFSet,
     Experiment,
     PositivitySet,)
 
-from validphys import lhaindex
+#TODO: There is a bit of a circular dependency between filters.py and this.
+#Maybe move the cuts logic to its own module?
+from validphys import lhaindex, filters
 
 log = logging.getLogger(__name__)
 
@@ -311,8 +314,11 @@ class ExperimentInput(TupleComp):
     def __str__(self):
         return self.name
 
-
-
+#TODO: Not sure I like these
+class CutsPolicy(enum.Enum):
+    INTERNAL = "internal"
+    NOCUTS = "nocuts"
+    FROMFIT = "fromfit"
 
 class Cuts(TupleComp):
     def __init__(self, name, path):
@@ -324,6 +330,34 @@ class Cuts(TupleComp):
     def load(self):
         log.debug("Loading cuts for %s", self.name)
         return np.atleast_1d(np.loadtxt(self.path, dtype=int))
+
+class InternalCutsWrapper(TupleComp):
+    def __init__(self, full_ds, q2min, w2min):
+        self.full_ds = full_ds
+        self.q2min = q2min
+        self.w2min = w2min
+        super().__init__(full_ds, q2min, w2min)
+
+    def load(self):
+        return np.atleast_1d(
+            np.asarray(
+                filters.get_cuts_for_dataset(self.full_ds, self.q2min,
+                                             self.w2min),
+                dtype=int))
+
+class MatchedCuts(TupleComp):
+    def __init__(self, othercuts, ndata):
+        self.othercuts = othercuts
+        self.ndata = ndata
+        super().__init__(othercuts, ndata)
+
+    def load(self):
+        loaded =  [c.load() for c in self.othercuts if c]
+        if loaded:
+            return functools.reduce(np.intersect1d, loaded)
+        self._full = True
+        return np.arange(self.ndata)
+
 
 def cut_mask(cuts):
     """Return an objects that will act as the cuts when applied as a slice"""
@@ -378,8 +412,12 @@ class DataSetSpec(TupleComp):
             #it happily to the vector to the SWIG wrapper.
             #Do not do this (or find how to enable in SWIG):
             #data = DataSet(data, list(dataset.cuts))
-            intmask = [int(ele) for ele in self.cuts.load()]
-            data = DataSet(data, intmask)
+            loaded_cuts = self.cuts.load()
+            #This is an optimization to avoid recomputing the dataset if
+            #nothing is discarded
+            if not (hasattr(loaded_cuts, '_full') and loaded_cuts._full):
+                intmask = [int(ele) for ele in loaded_cuts]
+                data = DataSet(data, intmask)
         return data
 
     def __str__(self):

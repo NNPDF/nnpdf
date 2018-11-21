@@ -35,9 +35,6 @@ Experiment::Experiment(std::vector<DataSet> const& sets, std::string const& expn
 fExpName(expname),
 fNData(0),
 fNSys(0),
-fData(NULL),
-fT0Pred(NULL),
-fStat(NULL),
 fSys(NULL),
 fSetSysMap(NULL),
 fIsArtificial(false),
@@ -70,11 +67,8 @@ Experiment::Experiment(Experiment const& exp):
 fExpName(exp.fExpName),
 fNData(exp.fNData),
 fNSys(exp.fNSys),
-fData(NULL),
-fT0Pred(NULL),
 fCovMat(exp.fCovMat),
 fSqrtCov(exp.fSqrtCov),
-fStat(NULL),
 fSys(NULL),
 fSetSysMap(NULL),
 fIsArtificial(exp.fIsArtificial),
@@ -96,9 +90,6 @@ Experiment::Experiment(Experiment const& exp, std::vector<DataSet> const& sets):
 fExpName(exp.fExpName),
 fNData(exp.fNData),
 fNSys(exp.fNSys),
-fData(NULL),
-fT0Pred(NULL),
-fStat(NULL),
 fSys(NULL),
 fSetSysMap(NULL),
 fIsArtificial(exp.fIsArtificial),
@@ -128,12 +119,9 @@ Experiment::~Experiment()
 void Experiment::ClearLocalData()
 {
   // Already clear
-  if (!fData)
+  if (fData.size() == 0)
     return;
-
-  delete[] fData;
-  delete[] fStat;
-  delete[] fT0Pred;
+  fData.clear();
 
   for (int s = 0; s < GetNSet(); s++)
     delete[] fSetSysMap[s];
@@ -163,97 +151,110 @@ void Experiment::MakeReplica()
 
   double *rand  = new double[fNSys];
   double *xnor  = new double[fNData];
-  double *artdata = new double[fNData];
   sysType rST[2] = {ADD,MULT};
 
+  // Compute the sampling covariance matrix with data CVs, no multiplicative error and no theory errors
+  matrix<double> SamplingMatrix  = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fData, fStat, fSys, false, false);
+  SamplingMatrix = ComputeSqrtMat(SamplingMatrix); // Take the sqrt of the sampling matrix
+  
   // generate procType array for ease of checking
-  std::string *proctype = new std::string[fNData];
-  int counter = 0;
+  std::vector<std::string> proctype;
   for (int s = 0; s < GetNSet(); s++)
     for (int i=0; i< GetSet(s).GetNData(); i++)
-      proctype[counter++] = GetSet(s).GetProc(i);
+      proctype.push_back(GetSet(s).GetProc(i));
 
-
-  // Generate positive defined replicas
   bool isArtNegative = true;
   while (isArtNegative)
   {
-    isArtNegative = false;
-    for (int l = 0; l < fNSys; l++)
-    {
-      rand[l] = rng->GetRandomGausDev(1.0);
-      if (fSys[0][l].isRAND)
-        fSys[0][l].type = rST[rng->GetRandomUniform(2)];
-      for (int i = 1; i < fNData; i++)
-        fSys[i][l].type = fSys[0][l].type;
-    }
-
-    for (int i = 0; i < fNData; i++) // should rearrange to update set-by-set -- nh
-    {
-      double xstat = rng->GetRandomGausDev(1.0)*fStat[i];   //Noise from statistical uncertainty
-
-      double xadd = 0;
-      xnor[i] = 1.0;
+      isArtNegative = false;
 
       for (int l = 0; l < fNSys; l++)
       {
-        if (fSys[i][l].name.compare("THEORYCORR")==0) continue;   // Skip theoretical uncertainties
-        if (fSys[i][l].name.compare("THEORYUNCORR")==0) continue; // Skip theoretical uncertainties
-        if (fSys[i][l].name.compare("SKIP")==0) continue;         // Skip uncertainties
-        if (fSys[i][l].name.compare("UNCORR")==0)                 // Noise from uncorrelated systematics
-        {
-          switch (fSys[i][l].type)
-          {
-            case ADD: xadd += rng->GetRandomGausDev(1.0)*fSys[i][l].add; break;
-            case MULT: xnor[i] *= (1.0 + rng->GetRandomGausDev(1.0)*fSys[i][l].mult*1e-2); break;
-            case UNSET: throw RuntimeException("Experiment::MakeReplica", "UNSET systype encountered");
-          }
-        }
-        else                                                      // Noise from correlated systematics
-        {
-          switch (fSys[i][l].type)
-          {
-            case ADD: xadd += rand[l]*fSys[i][l].add; break;
-            case MULT: xnor[i] *= (1.0 + rand[l]*fSys[i][l].mult*1e-2); break;
-            case UNSET: throw RuntimeException("Experiment::MakeReplica", "UNSET systype encountered");
-          }
-        }
+        rand[l] = rng->GetRandomGausDev(1.0);
+        if (fSys[0][l].isRAND)
+          fSys[0][l].type = rST[rng->GetRandomUniform(2)];
+        for (int i = 1; i < fNData; i++)
+          fSys[i][l].type = fSys[0][l].type;
       }
-      artdata[i] = xnor[i] * ( fData[i] + xadd + xstat );
 
-      // Only generates positive artificial data (except for closure tests and asymmetry data)
-      if (artdata[i] < 0 && !fIsClosure && proctype[i].find("ASY") == std::string::npos )
+      // Generate normal deviates
+      vector<double> deviates(fNData, std::numeric_limits<double>::quiet_NaN());
+      generate(deviates.begin(), deviates.end(),
+               []()->double {return RandomGenerator::GetRNG()->GetRandomGausDev(1); } );
+      const vector<double> correlated_deviates = SamplingMatrix*deviates;
+
+      // Additive noise is generated directly from the covariance matrix
+      vector<double> artdata(fData);
+      for (int i=0; i<fNData; i++)
+          artdata[i] += correlated_deviates[i];
+
+      // For the multiplicative noise is generated according to the old implementation
+      for (int i = 0; i < fNData; i++) // should rearrange to update set-by-set -- nh
       {
-        isArtNegative = true;
-        break;
+        xnor[i] = 1.0;
+
+        for (int l = 0; l < fNSys; l++)
+        {     
+          if (fSys[i][l].name.compare("THEORYCORR")==0) continue;   // Skip theoretical uncertainties
+          if (fSys[i][l].name.compare("THEORYUNCORR")==0) continue; // Skip theoretical uncertainties
+          if (fSys[i][l].name.compare("SKIP")==0) continue;         // Skip uncertainties
+          if (fSys[i][l].name.compare("UNCORR")==0)                 // Noise from uncorrelated systematics
+          {
+            switch (fSys[i][l].type)
+            {
+              case ADD: break;
+              case MULT: xnor[i] *= (1.0 + rng->GetRandomGausDev(1.0)*fSys[i][l].mult*1e-2); break;
+              case UNSET: throw RuntimeException("Experiment::MakeReplica", "UNSET systype encountered");
+            }
+          }
+          else                                                      // Noise from correlated systematics
+          {
+            switch (fSys[i][l].type)
+            {
+              case ADD: break;
+              case MULT: xnor[i] *= (1.0 + rand[l]*fSys[i][l].mult*1e-2); break;
+              case UNSET: throw RuntimeException("Experiment::MakeReplica", "UNSET systype encountered");
+            }
+          }
+        }
+        
+        artdata[i] = xnor[i] * artdata[i];
+        
       }
-    }
+
+      // If it's not a closure test, check for positivity of artifical data
+      if (!fIsClosure)
+        for (int i=0; i<fNData; i++)
+          if (artdata[i] < 0 )
+          {
+              // If it's negative and not an assymmetry, continue the loop
+              const bool is_asymmetry = proctype[i].find("ASY") != std::string::npos;
+              if (!is_asymmetry)
+              {
+                isArtNegative = true;
+                break;
+              }
+          }
+
+      if (isArtNegative) continue;
+
+      // Update data in set
+      int index = 0;
+      for (int s = 0; s < GetNSet(); s++)
+      {
+        double* data_pointer = artdata.data() + index;
+        fSets[s].UpdateData(data_pointer);
+        fSets[s].SetArtificial(true);
+        index+=fSets[s].GetNData();
+      }
   }
 
-  // Update data in set
-  int index = 0;
-  for (int s = 0; s < GetNSet(); s++)
-  {
-    sysType *type = new sysType[fSets[s].GetNSys()];
-    for (int l = 0; l < fSets[s].GetNSys(); l++)
-      type[l] = fSys[0][fSetSysMap[s][l]].type;
-    fSets[s].UpdateData(artdata+index, type);
-    fSets[s].SetArtificial(true);
-    index+=fSets[s].GetNData();
-    delete[] type;
-  }
-
-  // Update local data and recompute covariance matrix
+  // Update local data
   PullData();
-  //GenCovMat();   //Use standard t0 covariance matrix for all replicas
-
-  delete[] rand;
-  delete[] xnor;
-  delete[] artdata;
-  delete[] proctype;
 
   // Now the fData is artificial
   fIsArtificial = true;
+  return;
 }
 
 void Experiment::SetT0(const PDFSet& pdf){
@@ -375,10 +376,10 @@ void Experiment::PullData()
     }
   }
 
-  // Initialise data arrays
-  fData   = new double[fNData];
-  fStat   = new double[fNData];
-  fT0Pred = new double[fNData];
+  // Initialise data arrays, use quiet NaNs to indicate mis-filling
+  fData   = vector<double>(fNData, std::numeric_limits<double>::quiet_NaN());
+  fStat   = vector<double>(fNData, std::numeric_limits<double>::quiet_NaN());
+  fT0Pred = vector<double>(fNData, std::numeric_limits<double>::quiet_NaN());
   fSqrtWeights = vector<double>();
   fSqrtWeights.reserve(fNData);
 
@@ -434,73 +435,9 @@ void Experiment::PullData()
  */
 void Experiment::GenCovMat()
 {
-  fCovMat.clear();
-  fCovMat.resize(fNData, fNData, 0);
-
-  for (int i = 0; i < fNData; i++) {
-    // Diagonal case
-
-    fCovMat(i, i) = fStat[i] * fStat[i]; // stat error
-  }
-  for (int l = 0; l < fNSys; l++) {
-    auto &compsys = fSys[0][l];
-    if (compsys.name == "SKIP") {
-      continue;
-    }
-    bool iscorrelated =
-        (compsys.name != "UNCORR" && compsys.name != "THEORYUNCORR");
-    for (int i = 0; i < fNData; i++) {
-      double diagsig = 0.0;
-      double diagsignor = 0.0;
-      auto &sys = fSys[i][l];
-      switch (compsys.type) {
-      case UNSET: throw RuntimeException("Experiment::GenCovMat", "UNSET systype encountered");
-      case ADD:
-        diagsig += sys.add * sys.add;
-        break; // additive systematics
-      case MULT:
-        diagsignor += sys.mult * sys.mult;
-        break; // multiplicative systematics
-      }
-      fCovMat(i,i) += diagsig + diagsignor * fT0Pred[i] * fT0Pred[i] * 1e-4;
-
-      // No need to loop over the nondiagonal parts
-      if (!iscorrelated) {
-        continue;
-      }
-      for (int j = 0; j < i; j++) {
-        auto &othersys = fSys[j][l];
-        // Hopefully easy enough for the compiler to fuse this up
-        decltype(sys.add) res;
-        switch (compsys.type) {
-        case UNSET: throw RuntimeException("Experiment::GenCovMat", "UNSET systype encountered");
-        case ADD:
-          res = sys.add * othersys.add;
-          break; // additive systematics
-        case MULT:
-          res = sys.mult * othersys.mult * fT0Pred[i] * fT0Pred[j] * 1e-4;
-          break; // multiplicative systematics
-	default:
-	  throw NNPDF::RuntimeException("Experiment::GenCovMat", "sys type not recognized");
-	  break;
-        }
-        fCovMat(i, j) += res;
-        fCovMat(j, i) += res;
-      }
-    }
-  }
-  //Hopefully the compiler will merge the loops?
-  for(int i=0; i<fNData; i++){
-      for(int j=0; j<=i; j++){
-          auto w = fSqrtWeights[i]*fSqrtWeights[j];
-          fCovMat(i,j) /= w;
-          if(i!=j){
-              fCovMat(j,i) /= w;
-          }
-      }
-  }
-
-  fSqrtCov = ComputeSqrtMat(fCovMat);
+  // Compute the Covariance matrix with t0 and NNPDF3.1 theory errors
+  fCovMat  = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, true, true);
+  fSqrtCov = ComputeSqrtMat(fCovMat); 
 }
 
 void Experiment::ExportCovMat(string filename)

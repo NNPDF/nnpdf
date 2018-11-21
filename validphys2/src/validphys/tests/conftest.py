@@ -23,10 +23,10 @@ def tmp(tmpdir):
 @pytest.fixture(scope='module')
 def data():
     l = Loader()
-    ds = l.check_dataset(name='NMC', theoryid=162, use_cuts=False)
-    exp = ExperimentSpec('NMC Experiment', [ds])
+    names = ['NMC', 'ATLASTTBARTOT']
+    ds = [l.check_dataset(name=x, theoryid=162, cuts=None) for x in names]
+    exps = [ExperimentSpec(x.name, [x]) for x in ds]
     pdf = l.check_pdf("NNPDF31_nnlo_as_0118")
-    exps = [exp]
     return pdf, exps
 
 @pytest.fixture(scope='module')
@@ -37,8 +37,8 @@ def convolution_results(data):
 @pytest.fixture
 def dataset_t0_convolution_results(data):
     pdf, exps = data
-    ds = exps[0].datasets[0]
-    return results.results(ds, pdf, t0set=pdf)
+    ds = [x.datasets[0] for x in exps]
+    return [results.results(x, pdf, t0set=pdf) for x in ds]
 
 @pytest.fixture(scope='module')
 def chi2data(convolution_results):
@@ -47,8 +47,8 @@ def chi2data(convolution_results):
 @pytest.fixture(scope='module')
 def weighted_data():
     l = Loader()
-    ds = l.check_dataset(name='NMC', theoryid=162, use_cuts=False)
-    wds = l.check_dataset(name='NMC', theoryid=162, use_cuts=False, weight=100)
+    ds = l.check_dataset(name='NMC', theoryid=162, cuts=None)
+    wds = l.check_dataset(name='NMC', theoryid=162, cuts=None, weight=100)
     exp = ExperimentSpec('NMC Experiment', [ds])
     wexp = ExperimentSpec('Weighted', [wds])
     pdf = l.check_pdf("NNPDF31_nnlo_as_0118")

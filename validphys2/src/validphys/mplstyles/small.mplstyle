@@ -28,8 +28,6 @@ lines.markersize        : 4
 
 mathtext.default        : regular
 
-text.latex.unicode      : True
-
 xtick.labelsize         : small
 ytick.labelsize         : small
 xtick.top               : False

@@ -11,6 +11,7 @@ import sys
 import pathlib
 import functools
 import logging
+import numbers
 import re
 import tempfile
 import shutil
@@ -25,7 +26,8 @@ from reportengine import filefinder
 
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts,
-                            peek_commondata_metadata)
+                            peek_commondata_metadata, CutsPolicy,
+                            InternalCutsWrapper)
 from validphys import lhaindex
 import NNPDF as nnpath
 
@@ -160,7 +162,7 @@ def rebuild_commondata_without_cuts(
                 #And value, stat, *sys that we want to drop
                 #Do not use string join to keep up with the ugly format
                 #This should really be nan's, but the c++ streams that read this
-                #are rarher stupid, and I am not doing the insane thing.
+                #do not have the right interface.
                 #https://stackoverflow.com/questions/11420263/is-it-possible-to-read-infinity-or-nan-values-using-input-streams
                 zeros = '-0\t'*(2 + 2*nsys)
                 newfile.write(f'{zeros}\n')
@@ -216,16 +218,16 @@ class Loader(LoaderBase):
                         "are needed with `use_fitcommondata`")
                 #This is to not repeat all the error handling stuff
                 basedata = self.check_commondata(setname, sysnum=sysnum).datafile
-                cuts = self.check_cuts(setname, fit=fit)
+                cuts = self.check_fit_cuts(setname, fit=fit)
 
                 if fit not in self._old_commondata_fits:
                     self._old_commondata_fits.add(fit)
-                    log.warn(
+                    log.warning(
                         f"Found fit using old commondata export settings: "
                         f"'{fit}'. The commondata that are used in this run "
                         "will be updated now."
                         "Please consider re-uploading it.")
-                    log.warn(
+                    log.warning(
                         f"Points that do not pass the cuts are set to zero!")
 
                 log.info(f"Upgrading filtered commondata. Writing {newpath}")
@@ -305,7 +307,7 @@ class Loader(LoaderBase):
             msg = ("Could not find COMPOUND set '%s' for theory %d: %s" %
                    (setname, int(thid), e))
             raise CompoundNotFound(msg)
-        #This is a little bit stupid, but is the least amount of thinking...
+        #This is a little bit funny, but is the least amount of thinking...
         yaml_format = 'FK:\n' + re.sub('FK:', ' - ', txt)
         data = yaml.safe_load(yaml_format)
         #we have to split out 'FK_' the extension to get a name consistent
@@ -369,10 +371,12 @@ class Loader(LoaderBase):
                       sysnum=None,
                       theoryid,
                       cfac=(),
-                      use_cuts,
+                      cuts=CutsPolicy.INTERNAL,
                       use_fitcommondata=False,
                       fit=None,
-                      weight=1):
+                      weight=1,
+                      q2min=None,
+                      w2min=None):
 
         if not isinstance(theoryid, TheoryIDSpec):
             theoryid = self.check_theoryID(theoryid)
@@ -387,10 +391,20 @@ class Loader(LoaderBase):
             fkspec = self.check_fktable(theoryno, name, cfac)
             op = None
 
-        if use_cuts:
-            cuts = self.check_cuts(name, fit)
-        else:
-            cuts = None
+        #Note this is simply for convenience when scripting. The config will
+        #construct the actual Cuts object by itself
+        if isinstance(cuts, str):
+            cuts = CutsPolicy(cuts)
+        if isinstance(cuts, CutsPolicy):
+            if cuts is CutsPolicy.NOCUTS:
+                cuts = None
+            elif cuts is CutsPolicy.FROMFIT:
+                cuts = self.check_fit_cuts(name, fit)
+            elif cuts is CutsPolicy.INTERNAL:
+                full_ds = DataSetSpec(name=name, commondata=commondata,
+                           fkspecs=fkspec, thspec=theoryid, cuts=None,
+                           op=op, weight=weight)
+                cuts = self.check_internal_cuts(full_ds, q2min, w2min)
 
         return DataSetSpec(name=name, commondata=commondata,
                            fkspecs=fkspec, thspec=theoryid, cuts=cuts,
@@ -404,7 +418,7 @@ class Loader(LoaderBase):
     def get_pdf(self, name):
         return self.check_pdf(name).load()
 
-    def check_cuts(self, setname, fit):
+    def check_fit_cuts(self, setname, fit):
         if fit is None:
             raise TypeError("Must specify a fit to use the cuts.")
         if not isinstance(fit, FitSpec):
@@ -418,12 +432,14 @@ class Loader(LoaderBase):
             return None
         return Cuts(setname, p)
 
-
-    def get_cuts(self, setname, fit):
-        cuts = self.check_cuts(setname, fit)
-        if cuts:
-            return cuts.load()
-        return None
+    def check_internal_cuts(self, full_ds, q2min, w2min):
+        if full_ds.cuts is not None:
+            raise TypeError("full_ds must have empty cuts")
+        if not isinstance(q2min, numbers.Number):
+            raise TypeError("q2min must be a number")
+        if not isinstance(w2min, numbers.Number):
+            raise TypeError("w2min must be a number")
+        return InternalCutsWrapper(full_ds, q2min, w2min)
 
     def check_vp_output_file(self, filename, extra_paths=('.',)):
         """Find a file in the vp-cache folder, or (with higher priority) in
@@ -431,7 +447,7 @@ class Loader(LoaderBase):
         try:
             vpcache = self._vp_cache()
         except KeyError as e:
-            log.warn("Entry validphys_cache_path expected but not found "
+            log.warning("Entry validphys_cache_path expected but not found "
                      "in the nnprofile.")
         else:
             extra_paths = (*extra_paths, vpcache)
@@ -673,9 +689,10 @@ class RemoteLoader(LoaderBase):
 
 
         if lhaindex.isinstalled(fitname):
-            log.warn("The PDF corresponding to the downloaded fit '%s' "
-             "exists in the LHAPDF path."
-             " Will be erased and replaced with the new one.", fitname)
+            log.warning(
+                f"The PDF corresponding to the downloaded fit '{fitname}' "
+                "exists in the LHAPDF path."
+                " Will be erased and replaced with the new one.")
             p = pathlib.Path(lhaindex.finddir(fitname))
             if p.is_symlink():
                 p.unlink()
@@ -692,7 +709,7 @@ class RemoteLoader(LoaderBase):
         if gridpath.is_dir():
             p.symlink_to(gridpath, target_is_directory=True)
         else:
-            log.warn(f"Cannot find {gridpath}. Falling back to old behaviour")
+            log.warning(f"Cannot find {gridpath}. Falling back to old behaviour")
             p.symlink_to(gridpath_old, target_is_directory=True)
 
 
@@ -722,16 +739,52 @@ class RemoteLoader(LoaderBase):
                 return
 
         #It would be good to use the LHAPDF command line, except that it does
-        #stupid things like returning 0 exit status when it fails to download
+        #questionable things like returning 0 exit status when it fails to
+        #download.
+        _saved_exception = False
         if name in self.lhapdf_pdfs:
-            url = self.lhapdf_urls[0] + name + '.tar.gz'
-            download_and_extract(url, lhaindex.get_lha_datapath())
-        elif name in self.downloadable_fits:
-            self.download_fit(name)
-        elif name in self.remote_nnpdf_pdfs:
-            download_and_extract(self.remote_nnpdf_pdfs[name], lhaindex.get_lha_datapath())
+            try:
+                url = self.lhapdf_urls[0] + name + '.tar.gz'
+                #url = 'https://data.nnpdf.science/thisisatesttodelete/NNPDF31_nlo_as_0118.tar.gz'
+                #url = 'https://data.nnpdf.science/patata/NNPDF31_nlo_as_0118.tar.gz'
+                return download_and_extract(url, lhaindex.get_lha_datapath())
+            except shutil.ReadError as e:
+                _saved_exception = e
+                log.error(f"{e}. It seems the LHAPDF URLs aren't behaving, "
+                          f"attempting to find resource in other repositories")
+                pass
+            except requests.RequestException as e:
+                _saved_exception = e
+                log.error(f"There was a problem with the connection: {e}. "
+                          f"Attempting to find resource elsewhere.")
+                pass
+            except RemoteLoaderError as e:
+                _saved_exception = e
+                log.error(f"Failed to download resource: {e}. Attempting "
+                          f"to find it elsewhere.")
+                pass
+        if name in self.downloadable_fits:
+            try:
+                return self.download_fit(name)
+            except requests.RequestException as e:
+                _saved_exception = e
+                log.error(f"There was a problem with the connection: {e}. "
+                          f"Attempting to find resource elsewhere.")
+                pass
+            except RemoteLoaderError as e:
+                _saved_exception = e
+                log.error(f"Failed to download resource: {e}. Attempting "
+                          f"to find it elsewhere.")
+                pass
+        if name in self.remote_nnpdf_pdfs:
+            return download_and_extract(self.remote_nnpdf_pdfs[name], 
+                                        lhaindex.get_lha_datapath())
+        elif _saved_exception:
+            raise LoadFailedError(f"{_saved_exception}. The resource could not "
+                                  f"be found elsewhere.") from _saved_exception
         else:
-            raise PDFNotFound("PDF '%s' is neither an uploaded fit nor a LHAPDF set." % name)
+            raise PDFNotFound("PDF '%s' is neither an uploaded fit nor an "
+                              "LHAPDF set." % name)
 
     def download_theoryID(self, thid):
         thid = str(thid)

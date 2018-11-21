@@ -148,7 +148,7 @@ class PlotInfo:
                 #We might need to use reportengine.namespaces.resolve here
                 plot_params = plot_params.new_child(config_params['normalize'])
             if not 'dataset_label' in plot_params:
-                log.warn("'dataset_label' key not found in %s", file)
+                log.warning(f"'dataset_label' key not found in {file}")
                 plot_params['dataset_label'] = commondata.name
 
         else:
