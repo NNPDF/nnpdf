@@ -48,7 +48,9 @@ def alpha_eff(pdfs,xmin:numbers.Real=1e-6,xmax:numbers.Real=1e-3,npoints:int=200
     any_pdf, = pdfs
     pdfpath = nnpath.get_results_path()+any_pdf.name
     filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
-    Q=np.sqrt(filtermap['datacuts']['q2min'])
+
+    infomap = yaml.safe_load(open(pdfpath+'/nnfit/'+any_pdf.name+'.info'))
+    Q=infomap['QMin']
     basis=filtermap['fitting']['fitbasis']+'FitBasis'
 
     flavours=None
@@ -93,7 +95,8 @@ def beta_eff(pdfs,xmin:numbers.Real=0.6,xmax:numbers.Real=0.9,npoints:int=200,Q:
     any_pdf, = pdfs
     pdfpath = nnpath.get_results_path()+any_pdf.name
     filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
-    Q=np.sqrt(filtermap['datacuts']['q2min'])
+    infomap=yaml.safe_load(open(pdfpath+'/nnfit/'+any_pdf.name+'.info'))
+    Q=infomap['QMin']
     basis=filtermap['fitting']['fitbasis']+'FitBasis'
 
     flavours=None
@@ -169,7 +172,8 @@ def effective_exponents_table(pdf: PDF, x1_alpha: numbers.Real = 1e-6, x2_alpha:
     #Reading from the filter
     pdfpath = nnpath.get_results_path()+pdf.name
     filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
-    Q = np.sqrt(filtermap['datacuts']['q2min'])
+    infomap=yaml.safe_load(open(pdfpath+'/nnfit/'+pdf.name+'.info'))
+    Q=infomap['QMin']
     basis = filtermap['fitting']['fitbasis']+'FitBasis'
 
     flavours = None
@@ -252,9 +256,8 @@ def effective_exponents_table(pdf: PDF, x1_alpha: numbers.Real = 1e-6, x2_alpha:
         #                  others  : min(2x68% c.l. lower value evaluated at x=1e-6 and x=1e-3)
         # alpha_max = singlet/gluon: min(2 and the 2x68% c.l. upper value evaluated at x=1e-6)
         #                others    : min(2 and max(2x68% c.l. upper value evaluated at x=1e-6 and x=1e-3))
-        if basis.elementlabel(fl) == "\Sigma" or basis.elementlabel(fl) == "g":
-            new_min_bound = round(
-                alphamin_cv[j][0]-2*alphamin_sigdown[j][0], 3)
+        if fl == "\Sigma" or fl == "g":
+            new_min_bound = alphamin_cv[j][0]-2*alphamin_sigdown[j][0]
             new_max_bound = round(
                 min(2, alphamin_cv[j][0]+2*alphamin_sigup[j][0]), 3)
             alpha_line = [r"$\alpha$", prev_amin_bound,
@@ -296,7 +299,8 @@ x1_beta:numbers.Real=0.65,x2_beta:numbers.Real=0.95):
     #Reading from the filter
     pdfpath = nnpath.get_results_path()+pdf.name
     filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
-    Q=np.sqrt(filtermap['datacuts']['q2min'])
+    infomap=yaml.safe_load(open(pdfpath+'/nnfit/'+pdf.name+'.info'))
+    Q=infomap['QMin']
     basis=filtermap['fitting']['fitbasis']+'FitBasis'
 
     flavours=None
