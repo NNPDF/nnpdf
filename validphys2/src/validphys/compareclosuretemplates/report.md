@@ -1,4 +1,4 @@
-% Comparing closure test {@closure1 fit@} and {@closure2 fit@}.
+% Comparing closure test {@current fit@} and {@reference fit@}.
 
 Closures test estimators
 -----------------------
