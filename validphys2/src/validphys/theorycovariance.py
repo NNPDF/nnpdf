@@ -1133,8 +1133,11 @@ def theory_shift_test(evalue_cutoff, thx_covmat, shx_vector, thx_vector):
     matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
     # Finding eigenvalues and eigenvectors
     w, v = la.eigh(matrix)
-    w_nonzero = w[w>10**(-n)]
-    nonzero_locs = np.nonzero(w>10**(-n))[0]
+#    w2, v2 = la.eig(matrix)
+#    embed()
+    w_max = w[-1]
+    w_nonzero = w[w>0.01*w_max]
+    nonzero_locs = np.nonzero(w>0.01*w_max)[0]
     # ^ taking 0th element to extract list from tuple
     v_nonzero = []
     for loc in nonzero_locs:
@@ -1145,11 +1148,14 @@ def theory_shift_test(evalue_cutoff, thx_covmat, shx_vector, thx_vector):
     for i in range(len(projectors)):
         projected_evectors[i] = projectors[i]*v_nonzero[i]
     fmiss = f - np.sum(projected_evectors, axis=0)
-    return w_nonzero, v_nonzero, projectors, f, fmiss, n
+    return w_nonzero, v_nonzero, projectors, f, fmiss, n, w_max
 
 def cutoff(theory_shift_test):
-    n = theory_shift_test[5]
-    cutoff = 10**(-n)
+#    n = theory_shift_test[5]
+#    cutoff = 10**(-n)
+    w_max = theory_shift_test[6]
+    cutoff = 0.01*w_max
+#    print(f"cutoff = {cutoff}")
     return cutoff
 
 @table
@@ -1165,12 +1171,14 @@ def modrat(theory_shift_test):
     fmod = np.sqrt(np.sum(f**2))
     fmiss_mod = np.sqrt(np.sum(fmiss**2))
     modrat = fmiss_mod/fmod
+#    print(f"modrat = {modrat}")
     return modrat
 
 def maxrat(theory_shift_test):
     f = theory_shift_test[3]
     fmiss = theory_shift_test[4]
     maxrat = np.max(np.abs(fmiss))/np.max(np.abs(f))
+#    print(f"maxrat = {maxrat}")
     return maxrat
 
 def validation_theory_chi2(theory_shift_test):
@@ -1178,22 +1186,24 @@ def validation_theory_chi2(theory_shift_test):
     evals = theory_shift_test[0]
     ratio = projectors/np.sqrt(evals)
     th_chi2 = 1/len(evals)*np.sum(ratio**2)
+#    print(f"Theory chi2 = {th_chi2}")
     return th_chi2
 
 @figure
 def projector_eigenvalue_ratio(theory_shift_test):
     projectors = theory_shift_test[2]
     evals = theory_shift_test[0]
-    ratio = projectors/np.sqrt(evals)
+    ratio = np.abs(projectors/np.sqrt(evals))
     fig, (ax1, ax2, ax3) = plt.subplots(3, figsize=(5,5))
-    ax1.plot(projectors, 'o')
+    ax1.plot(np.abs(projectors), 'o')
     ax2.plot(np.sqrt(evals), 'o')
     ax3.plot(ratio, 'o', color="red")
     ax1.set_title(f"Subspace dimension = {len(evals)}", fontsize=10)
     ax1.set_xlabel("a", fontsize=20)
-    ax1.set_ylabel(r"$\delta_a$")
-    ax2.set_ylabel(r"$s_a$")
-    ax3.set_ylabel(r"$\delta_a$/$s_a$")
+    ax1.set_ylabel(r"|$\delta_a$|")
+    ax2.set_ylabel(r"|$s_a$|")
+    ax3.set_ylabel(r"|$\delta_a$/$s_a$|")
+#    print(f"Subspace dimension = {len(evals)}")
     return fig
 
 @figure
