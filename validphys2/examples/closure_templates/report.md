@@ -1,25 +1,23 @@
-%NNPDF Report for fit {@ closures fit @}
+%NNPDF Report for fit {@ closure fit @}
 
-{@ with closures::fitunderlyinglaw @}
+{@ with closure::fitunderlyinglaw @}
 
 Fit summary 
 ------------------
 {@ summarise_fits @}
 
-Closures test estimators
+Closure test estimators
 -----------------------
 ## $\Delta_{\chi^{2}}$ by experiment
 {@ plot_delta_chi2 @}
 ## Bias by experiment
 {@ plot_biases @}
 ## $\phi$ by experiment
-{@with fits@}
-{@plot_phi@}
-{@endwith@}
+{@closure plot_phi@}
 
 Dataset properties
 ------------------
-{@closures datasets_properties_table@}
+{@closure datasets_properties_table@}
 
 Distances
 ------------------
@@ -58,5 +56,11 @@ $\chi^2$ by dataset comparisons
 {@plot_fits_datasets_chi2@}
 ### Table
 {@fits_chi2_table(show_total=true)@}
+
+Experiment plots
+---------------
+{@with matched_datasets_from_dataspecs@}
+[Detailed plots for dataset ' {@dataset_name@} ']({@dataset_report report@})
+{@endwith@}
 
 {@endwith@}

@@ -5,26 +5,22 @@ meta:
     keywords: [Guilty]
     author: Lazy Person
 
-closures:
+closure:
     fit: {id: 071018-edi-001}
     pdf: {id: 071018-edi-001, label: "test closures"}
     theory:
       from_: fit
     theoryid:
       from_: theory
-    speclabel: "closures"
+    speclabel: "closure"
 
 fits:
-    - from_: closures
+    - from_: closure
 pdfs:
-    - from_: closures
+    - from_: closure
     - from_: Null
-theory:
-    from_: closures
-theoryid:
-    from_: closures
 
-use_cuts: True
+use_cuts: fromfit
 use_fitcommondata: True
 
 Q: 1.651
@@ -72,13 +68,13 @@ experiments:
 
 dataspecs:
   - theoryid:
-      from_: closures
+      from_: closure
     pdf:
-      from_: closures
+      from_: closure
     fit:
-      from_: closures
+      from_: closure
     speclabel:
-      from_: closures
+      from_: closure
    
 normalize:
   normalize_to: 1

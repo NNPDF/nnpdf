@@ -1,4 +1,4 @@
-%NNPDF Report for fit {@ closures fit @}
+%NNPDF Report for fit {@ closure fit @}
 # PDF plots
 
 ## PDF comparison
