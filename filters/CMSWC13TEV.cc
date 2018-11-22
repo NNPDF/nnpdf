@@ -65,6 +65,8 @@ void CMSWC13TEVFilter::ReadData()
       >> fFragmentationP >> fFragmentationM
       >> fMonteCarloP >> fMonteCarloM;
 
+      fData[i] = fData[i]*1000; // changing pb to fb for APPLgrid
+
       //Defining the kinematic variables
       fKin1[i] = (etamax + etamin)*0.5;    // eta
       fKin2[i] = MW2;                      // Mass W squared
@@ -131,7 +133,6 @@ void CMSWC13TEVFilter::ReadData()
       fSys[i][9].mult=stmp;
       fSys[i][9].type = MULT;
       fSys[i][9].name = "CORR";
-
 
       //Sec. Vtx.
       symmetriseErrors(fSecP,fSecM,&stmp,&dtmp);
