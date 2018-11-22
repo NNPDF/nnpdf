@@ -66,6 +66,7 @@ void CMSWC13TEVFilter::ReadData()
       >> fMonteCarloP >> fMonteCarloM;
 
       fData[i] = fData[i]*1000; // changing pb to fb for APPLgrid
+      fStat[i] = fStat[i]*1000; // changing pb to fb for APPLgrid
 
       //Defining the kinematic variables
       fKin1[i] = (etamax + etamin)*0.5;    // eta
