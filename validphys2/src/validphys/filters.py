@@ -14,8 +14,7 @@ log = logging.getLogger(__name__)
 
 # list all possible combocuts
 COMBOCUTS = (
-    'NNPDF31', 
-    'NNPDF40'
+    'NNPDF31'
     )
 
 
@@ -23,7 +22,7 @@ COMBOCUTS = (
 def check_combocuts(combocuts: str):
     """Check combocuts content"""
     check(combocuts in COMBOCUTS,
-          "Invalid combocut. Must be NNPDF31 or NNPDF40 (or implement it yourself).")
+          "Invalid combocut. Must be NNPDF31 (or implement it yourself).")
 
 
 @make_argcheck
@@ -149,23 +148,6 @@ def check_positivity(posdatasets):
     for pos in posdatasets:
         pos.load()
         log.info(f'{pos.name} checked.')
-
-
-def NNPDF40_combocuts(dataset, idat, theoryid, q2min, w2min):
-    """Applies cuts ... based on NNPDF3.1
-    CHANGE DESCRIPTION HERE
-    """
-    status = NNPDF31_combocuts(dataset, idat, theoryid, q2min, w2min)
-    if status:
-        # additional F2C cut in case of FONLL-C + IC
-        if dataset.GetProc(idat) == 'DIS_NCP_CH' and vfns == 'FONLL-B' and ic:
-            Q2cut1_f2c = 8
-            if Q2 <= Q2cut1_f2c:
-                return False
-        # APPLY YOUR CUSTOM CUTS HERE
-        # BY SETTING STATUS TO FALSE
-        pass
-    return status
 
 
 def NNPDF31_combocuts(dataset, idat, theoryid, q2min, w2min):
