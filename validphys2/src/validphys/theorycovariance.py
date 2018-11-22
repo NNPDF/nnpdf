@@ -26,8 +26,6 @@ from validphys.plotoptions import get_info
 from validphys import plotutils
 from validphys.checks import check_two_dataspecs
 
-from IPython import embed
-
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values,
@@ -211,7 +209,6 @@ def combine_by_type(each_dataset_results_bytheory, dataset_names):
     for dataset, name in zip(each_dataset_results_bytheory, dataset_names):
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
-        embed()
         proc_type = _process_lookup[name]
         ordered_names[proc_type].append(name)
         theories_by_process[proc_type].append(theory_centrals)
