@@ -79,7 +79,7 @@ void CMSWC13TEVFilter::ReadData()
       symmetriseErrors(fLumiP,fLumiM,&stmp,&dtmp);
       fSys[i][0].mult=stmp;
       fSys[i][0].type = MULT;
-      fSys[i][0].name = "CORR";
+      fSys[i][0].name = "CMSLUMI16";
 
       //Tracking
       symmetriseErrors(fTrackingP,fTrackingM,&stmp,&dtmp);
