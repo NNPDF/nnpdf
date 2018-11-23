@@ -1166,10 +1166,10 @@ def cutoff(theory_shift_test):
     return cutoff
 
 @table
-def theory_covmat_eigenvectors(theory_shift_test):
+def theory_covmat_eigenvalues(theory_shift_test):
     w_nonzero, v_nonzero, projectors = theory_shift_test[:3]
-    table = pd.DataFrame([w_nonzero, projectors, v_nonzero],
-         		index = ['eigenvalue', 'projector', 'eigenvector'])
+    table = pd.DataFrame([w_nonzero, projectors],
+         		index = ['eigenvalue', 'projector'])
     return table
 
 def modrat(theory_shift_test):
