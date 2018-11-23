@@ -1055,8 +1055,20 @@ def shift_to_theory_ratio(thx_corrmat, shx_corrmat):
 
 @figure
 def shift_to_theory_ratio_plot(shift_to_theory_ratio):
-    fig = plot_corrmat_heatmap(shift_to_theory_ratio,
-                               "Ratio of theory to shift correlation matrices")
+    matrix = shift_to_theory_ratio
+    bins = np.linspace(-1, 1, num=21)
+    digmatrix = np.digitize(matrix, bins)
+    symdigmatrix = np.zeros((len(digmatrix), len(digmatrix)))
+    for binnumber in range(len(bins)):
+        symdigmatrix[digmatrix==binnumber+1] = bins[binnumber]
+    fig, ax = plt.subplots(figsize=(15,15))
+    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r)
+    fig.colorbar(matrixplot)
+    ax.set_title("Ratio of theory to shift correlation matrices")
+    ticklocs, ticklabels = matrix_plot_labels(matrix)
+    plt.xticks(ticklocs, ticklabels, rotation=30, ha="right")
+    plt.gca().xaxis.tick_bottom()
+    plt.yticks(ticklocs, ticklabels)
     return fig
 
 @figure
@@ -1128,13 +1140,10 @@ def plot_thcorrmat_heatmap_custom_dataspecs(theory_corrmat_custom_dataspecs, the
     return fig
 
 
-def theory_shift_test(evalue_cutoff, thx_covmat, shx_vector, thx_vector):
-    n = evalue_cutoff
+def theory_shift_test(thx_covmat, shx_vector, thx_vector):
     matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
     # Finding eigenvalues and eigenvectors
     w, v = la.eigh(matrix)
-#    w2, v2 = la.eig(matrix)
-#    embed()
     w_max = w[-1]
     w_nonzero = w[w>0.01*w_max]
     nonzero_locs = np.nonzero(w>0.01*w_max)[0]
@@ -1148,12 +1157,10 @@ def theory_shift_test(evalue_cutoff, thx_covmat, shx_vector, thx_vector):
     for i in range(len(projectors)):
         projected_evectors[i] = projectors[i]*v_nonzero[i]
     fmiss = f - np.sum(projected_evectors, axis=0)
-    return w_nonzero, v_nonzero, projectors, f, fmiss, n, w_max
+    return w_nonzero, v_nonzero, projectors, f, fmiss, w_max
 
 def cutoff(theory_shift_test):
-#    n = theory_shift_test[5]
-#    cutoff = 10**(-n)
-    w_max = theory_shift_test[6]
+    w_max = theory_shift_test[5]
     cutoff = 0.01*w_max
 #    print(f"cutoff = {cutoff}")
     return cutoff
