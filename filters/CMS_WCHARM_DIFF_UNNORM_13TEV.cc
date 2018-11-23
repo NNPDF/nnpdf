@@ -6,9 +6,9 @@
 *   Reference: https://cds.cern.ch/record/2314570/files/SMP-17-014-pas.pdf
 */
 
-#include "CMSWC13TEV.h"
+#include "CMS_WCHARM_DIFF_UNNORM_13TEV.h"
 
-void CMSWC13TEVFilter::ReadData()
+void CMS_WCHARM_DIFF_UNNORM_13TEVFilter::ReadData()
 {
   // Opening file
   fstream f1;
