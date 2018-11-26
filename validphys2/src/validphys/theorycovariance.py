@@ -89,21 +89,19 @@ def make_scale_var_covmat(predictions):
     s = norm*sum(np.outer(d, d) for d in deltas)
     return s
 
-@table
-@_check_correct_theory_combination
-def theory_covmat(theoryids_experiments_central_values, experiments_index, theoryids, fivetheories:(str, type(None)) = None):
-    """Calculates the theory covariance matrix for scale variations.
-    The matrix is a dataframe indexed by experiments_index."""
-    s = make_scale_var_covmat(theoryids_experiments_central_values)
-    df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
-    return df
-
 @_check_correct_theory_combination
 def theory_covmat_no_table(theoryids_experiments_central_values_no_table, experiments_index, theoryids, fivetheories:(str, type(None)) = None):
-    """Duplicate of theory_covmat but without a table decorator."""
+    """Calculates the theory covariance matrix for scale variations.
+    The matrix is a dataframe indexed by experiments_index."""
     s = make_scale_var_covmat(theoryids_experiments_central_values_no_table)
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
+
+@table
+@_check_correct_theory_combination
+def theory_covmat(theory_covmat_no_table):
+    """Duplicate of theory_covmat_no_table but with a table decorator."""
+    return theory_covmat_no_table
 
 results_bytheoryids = collect(results,('theoryids',))
 each_dataset_results_bytheory = collect('results_bytheoryids',

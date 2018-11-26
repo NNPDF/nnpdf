@@ -179,8 +179,7 @@ def experiments_data(experiment_result_table):
 
 
 #TODO: Use collect to calculate results outside this
-@table
-def experiment_result_table(experiments, pdf, experiments_index):
+def experiment_result_table_no_table(experiments, pdf, experiments_index):
     """Generate a table containing the data central value, the central prediction,
     and the prediction for each PDF member."""
 
@@ -213,40 +212,12 @@ def experiment_result_table(experiments, pdf, experiments_index):
 
     return df
 
-def experiment_result_table_no_table(experiments, pdf, experiments_index):
-    """Duplicate of experiments_result_table but without a table decorator."""
-
-    result_records = []
-    for exp_index, experiment in enumerate(experiments):
-        loaded_exp = experiment.load()
-
-
-
-        data_result = DataResult(loaded_exp)
-        th_result = ThPredictionsResult.from_convolution(pdf, experiment,
-                                                         loaded_data=loaded_exp)
-
-
-        for index in range(len(data_result.central_value)):
-            replicas = (('rep_%05d'%(i+1), th_result._rawdata[index,i]) for
-                        i in range(th_result._rawdata.shape[1]))
-
-            result_records.append(OrderedDict([
-                                 ('data_central', data_result.central_value[index]),
-                                 ('theory_central', th_result.central_value[index]),
-                                  *replicas
-                                 ]))
-
-    if not result_records:
-        log.warning("Empty records for experiment results")
-        return pd.DataFrame()
-    df =  pd.DataFrame(result_records, columns=result_records[0].keys(),
-                       index=experiments_index)
-
-    return df
-
 @table
-def experiments_covmat(experiments, experiments_index, t0set):
+def experiment_result_table(experiment_result_table_no_table):
+    """Duplicate of experiments_result_table_no_table but with a table decorator."""
+    return experiment_result_table_no_table
+
+def experiments_covmat_no_table(experiments, experiments_index, t0set):
     """Export the covariance matrix for the experiments. It exports the full
     (symmetric) matrix, with the 3 first rows and columns being:
 
@@ -270,21 +241,10 @@ def experiments_covmat(experiments, experiments_index, t0set):
         df.loc[[name],[name]] = mat
     return df
 
-def experiments_covmat_no_table(experiments, experiments_index, t0set):
-    """Duplicate of experiments_covmat but without a table decorator."""
-    data = np.zeros((len(experiments_index),len(experiments_index)))
-    df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
-    for experiment in experiments:
-        name = experiment.name
-        loaded_exp = experiment.load()
-        if t0set:
-            #Copy data to avoid chaos
-            loaded_exp = type(loaded_exp)(loaded_exp)
-            log.debug("Setting T0 predictions for %s" % loaded_exp)
-            loaded_exp.SetT0(t0set.load_t0())
-        mat = loaded_exp.get_covmat()
-        df.loc[[name],[name]] = mat
-    return df
+@table
+def experiments_covmat(experiments_covmat_no_table):
+    """Duplicate of experiments_covmat_no_table but with a table decorator."""
+    return experiments_covmat_no_table
 
 @table
 def experiments_sqrtcovmat(experiments, experiments_index, t0set):
@@ -904,16 +864,18 @@ def theory_description(theoryid):
     """A table with the theory settings."""
     return pd.DataFrame(pd.Series(theoryid.get_description()), columns=[theoryid])
 
-def experiments_central_values(experiment_result_table):
+def experiments_central_values_no_table(experiment_result_table_no_table):
     """Returns a theoryid-dependent list of central theory predictions
     for a given experiment."""
-    central_theory_values = experiment_result_table["theory_central"]
+    central_theory_values = experiment_result_table_no_table["theory_central"]
     return central_theory_values
 
-def experiments_central_values_no_table(experiment_result_table_no_table):
-    """Duplicate of experiments_central_values but takes version
-    of experiment_result_table that does not output a table."""
-    central_theory_values = experiment_result_table_no_table["theory_central"]
+@table
+def experiments_central_values(experiment_result_table):
+    """Duplicate of experiments_central_values_no_table but takes
+    experiment_result_table rather than experiments_central_values_no_table,
+    and has a table decorator."""
+    central_theory_values = experiment_result_table["theory_central"]
     return central_theory_values
 
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
