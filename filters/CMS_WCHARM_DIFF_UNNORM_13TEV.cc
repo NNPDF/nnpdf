@@ -7,7 +7,7 @@
 *
 *   The raw data file is formatted as:
 *   eta_min - eta_max - differential cross section - statistical uncertainty - positive systematic (%) - negative systematic (%)
-*   The systematics are broken into positive and negative components to allow for asymemtric uncertainties 
+*   The systematics are broken into positive and negative components to allow for asymmetric uncertainties 
 *   The systematics are as follows:
 *   Luminosity, Tracking, Branching, Muons, Nsel determination, D*(2010)± kinematics,
 *   Bg normalization, p^T_miss, Pile Up, PDF, Secondary vertex, Fragmenation, Monte Carlo statistics
