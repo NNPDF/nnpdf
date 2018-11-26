@@ -5,13 +5,10 @@
 *   Intergrated luminosity  = 19.7 1/fb
 *   Reference: https://arxiv.org/pdf/1711.02143.pdf
 *
-*   NEED TO CHANGE THIS
 *   The raw data file is formatted as:
-*   eta_min - eta_max - differential cross section - statistical uncertainty - positive systematic (%) - negative systematic (%)
-*   The systematics are broken into positive and negative components to allow for asymmetric uncertainties 
+*   pT_min - pT_max - differential cross section - statistical uncertainty - systematic (%)
 *   The systematics are as follows:
-*   Luminosity, Tracking, Branching, Muons, Nsel determination, D*(2010)± kinematics,
-*   Bg normalization, p^T_miss, Pile Up, PDF, Secondary vertex, Fragmenation, Monte Carlo statistics
+*   Luminosity, Branching c->l, Branching b->l, D±, D*(2010)±, Pile up, Missing transverse energy
 */
  #include "CMS_ZCHARM_DIFF_UNNORM_8TEV.h"
  void CMS_ZCHARM_DIFF_UNNORM_8TEVFilter::ReadData()
