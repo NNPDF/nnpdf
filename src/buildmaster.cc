@@ -71,7 +71,7 @@
 #include "CMS_SINGLETOP_TCH_TOT_7TEV.h"
 #include "CMS_SINGLETOP_TCH_R_8TEV.h"
 #include "CMS_SINGLETOP_TCH_R_13TEV.h"
-#include "CMSZPCTOT12.h"
+#include "CMS_ZCHARM_DIFF_UNNORM_8TEV.h"
 
 
 /**
@@ -157,7 +157,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSZDIFF12Filter());
   target.push_back(new CMS1JET276TEVFilter());
   target.push_back(new CMSWMU8TEVFilter());
-  target.push_back(new CMSZPCTOT12Filter());
+  target.push_back(new CMS_ZCHARM_DIFF_UNNORM_8TEVFilter());
 
  // ************************* CMSwc ******************************
 
