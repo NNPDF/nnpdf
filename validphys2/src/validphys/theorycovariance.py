@@ -181,7 +181,12 @@ def process_lookup(commondata_experiments):
     d = {commondata.name: get_info(commondata).process_description
          for commondata in commondata_experiments}
     for key, value in d.items():
-        if "Drell-Yan" in value:
+        if "Deep Inelastic Scattering" in value:
+            if ("CHORUS" in key) or ("NTV" in key) or ("HERACOMBCC" in key):
+                d[key] = "DIS CC"
+            else:
+                d[key] = "DIS NC"
+        elif "Drell-Yan" in value:
             d[key] = "Drell-Yan"
         elif "Heavy Quarks" in value:
             d[key] = "Heavy Quarks"
