@@ -4,6 +4,13 @@
 *   Center of mass energy = 13 TeV
 *   Intergrated luminosity  = 35.7 1/fb
 *   Reference: https://cds.cern.ch/record/2314570/files/SMP-17-014-pas.pdf
+*
+*   The raw data file is formatted as:
+*   eta_min - eta_max - differential cross section - statistical uncertainty - positive systematic (%) - negative systematic (%)
+*   The systematics are broken into positive and negative components to allow for asymemtric uncertainties 
+*   The systematics are as follows:
+*   Luminosity, Tracking, Branching, Muons, Nsel determination, D*(2010)± kinematics,
+*   Bg normalization, p^T_miss, Pile Up, PDF, Secondary vertex, Fragmenation, Monte Carlo statistics
 */
 
 #include "CMS_WCHARM_DIFF_UNNORM_13TEV.h"
@@ -30,19 +37,7 @@ void CMS_WCHARM_DIFF_UNNORM_13TEVFilter::ReadData()
   double s = 13000;             //LHC at 13TeV
   double stmp, dtmp;
   //Systematics
-  double fLumiP, fLumiM;
-  double fTrackingP, fTrackingM;
-  double fBranchingP, fBranchingM;
-  double fMuonsP, fMuonsM;
-  double fNselP, fNselM;
-  double fKinematicsP, fKinematicsM;
-  double fNormalizationP, fNormalizationM;
-  double fPmissP, fPmissM;
-  double fPileUpP, fPileUpM;
-  double fPDFP, fPDFM;
-  double fSecP, fSecM;
-  double fFragmentationP, fFragmentationM;
-  double fMonteCarloP, fMonteCarloM;
+  double fSystematics[2*fNSys];
 
   for(int i=0; i<fNData;i++)
     {
@@ -50,20 +45,12 @@ void CMS_WCHARM_DIFF_UNNORM_13TEVFilter::ReadData()
       istringstream lstream(line);
 
       //Reading in an interpretation of each column
-      lstream >> etamin >> etamax >> fData[i] >> fStat[i]
-      >> fLumiP >> fLumiM
-      >> fTrackingP >> fTrackingM
-      >> fBranchingP >> fBranchingM
-      >> fMuonsP >> fMuonsM
-      >> fNselP >> fNselM
-      >> fKinematicsP >> fKinematicsM
-      >> fNormalizationP >> fNormalizationM
-      >> fPmissP >> fPmissM
-      >> fPileUpP >> fPileUpM
-      >> fPDFP >> fPDFM
-      >> fSecP >> fSecM
-      >> fFragmentationP >> fFragmentationM
-      >> fMonteCarloP >> fMonteCarloM;
+      lstream >> etamin >> etamax >> fData[i] >> fStat[i];
+      //Reading in the systematics
+      for(int k=0; k<2*fNSys;k++) // Factor of 2 because of +sys -sys format of rawdata
+      {
+        lstream >> fSystematics[k];
+      }      
 
       fData[i] = fData[i]*1000; // changing pb to fb for APPLgrid
       fStat[i] = fStat[i]*1000; // changing pb to fb for APPLgrid
@@ -73,91 +60,21 @@ void CMS_WCHARM_DIFF_UNNORM_13TEVFilter::ReadData()
       fKin2[i] = MW2;                      // Mass W squared
       fKin3[i] = s;                        // sqrt(s)
 
-      //Declaring the systematic uncertainties and symmetrising
-
-      //Luminosity
-      symmetriseErrors(fLumiP,fLumiM,&stmp,&dtmp);
-      fSys[i][0].mult=stmp;
-      fSys[i][0].type = MULT;
-      fSys[i][0].name = "CMSLUMI16";
-
-      //Tracking
-      symmetriseErrors(fTrackingP,fTrackingM,&stmp,&dtmp);
-      fSys[i][1].mult=stmp;
-      fSys[i][1].type = MULT;
-      fSys[i][1].name = "CORR";
-
-      //Branching
-      symmetriseErrors(fBranchingP,fBranchingM,&stmp,&dtmp);
-      fSys[i][2].mult=stmp;
-      fSys[i][2].type = MULT;
-      fSys[i][2].name = "CORR";
-
-      //Muons
-      symmetriseErrors(fMuonsP,fMuonsM,&stmp,&dtmp);
-      fSys[i][3].mult=stmp;
-      fSys[i][3].type = MULT;
-      fSys[i][3].name = "CORR";
-
-      //Nsel determination
-      symmetriseErrors(fNselP,fNselM,&stmp,&dtmp);
-      fSys[i][4].mult=stmp;
-      fSys[i][4].type = MULT;
-      fSys[i][4].name = "CORR";
-
-      //D* kinematics
-      symmetriseErrors(fKinematicsP,fKinematicsM,&stmp,&dtmp);
-      fSys[i][5].mult=stmp;
-      fSys[i][5].type = MULT;
-      fSys[i][5].name = "CORR";
-
-      //Bg normalization
-      symmetriseErrors(fNormalizationP,fNormalizationM,&stmp,&dtmp);
-      fSys[i][6].mult=stmp;
-      fSys[i][6].type = MULT;
-      fSys[i][6].name = "CORR";
-
-      //P_T^miss
-      symmetriseErrors(fPmissP,fPmissM,&stmp,&dtmp);
-      fSys[i][7].mult=stmp;
-      fSys[i][7].type = MULT;
-      fSys[i][7].name = "CORR";
-
-      //Pile up
-      symmetriseErrors(fPileUpP,fPileUpM,&stmp,&dtmp);
-      fSys[i][8].mult=stmp;
-      fSys[i][8].type = MULT;
-      fSys[i][8].name = "CORR";
-
-      //PDF
-      symmetriseErrors(fPDFP,fPDFM,&stmp,&dtmp);
-      fSys[i][9].mult=stmp;
-      fSys[i][9].type = MULT;
-      fSys[i][9].name = "CORR";
-
-      //Sec. Vtx.
-      symmetriseErrors(fSecP,fSecM,&stmp,&dtmp);
-      fSys[i][10].mult=stmp;
-      fSys[i][10].type = MULT;
-      fSys[i][10].name = "CORR";
-
-      //Sec. Vtx.
-      symmetriseErrors(fFragmentationP,fFragmentationM,&stmp,&dtmp);
-      fSys[i][11].mult=stmp;
-      fSys[i][11].type = MULT;
-      fSys[i][11].name = "CORR";
-
-      //Sec. Vtx.
-      symmetriseErrors(fMonteCarloP,fMonteCarloM,&stmp,&dtmp);
-      fSys[i][12].mult=stmp;
-      fSys[i][12].type = MULT;
-      fSys[i][12].name = "CORR";
-      
-      // Convert mutltiplicative uncertainties to additive
-      for (int l = 0; l < fNSys; l++)
-        {
-          fSys[i][l].add = fSys[i][l].mult*fData[i]*1e-2;
+      //Symmetrising the systematics
+      for(int m=0;m < 2*fNSys; m = m + 2)
+      {
+        symmetriseErrors(fSystematics[m],fSystematics[m+1],&stmp,&dtmp);
+        fSys[i][m/2].mult=stmp;
+        fSys[i][m/2].type = MULT;
+        if(m == 0){
+          fSys[i][0].name = "CMSLUMI16"; //We treat luminosity as a special case
+          }
+        else{
+          fSys[i][m/2].name = "CORR";
         }
+        //Add the additive uncertainties
+        fSys[i][m/2].add = fSys[i][m/2].mult*fData[i]*1e-2;
+      }
       
     }  
 
