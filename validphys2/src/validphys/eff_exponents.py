@@ -7,13 +7,21 @@ from __future__ import generator_stop
 import logging
 import warnings
 import numpy as np
+import pandas as pd
+import numbers
 
 from reportengine.figure import figuregen
+from reportengine.table  import table
 from reportengine.floatformatting import format_number
+from reportengine.compat import yaml
 
-from validphys.checks import make_argcheck, check_positive, check_pdf_normalize_to
-from validphys.pdfplots import BandPDFPlotter, PDFPlotter
-from validphys.pdfbases import check_basis
+from validphys.checks import check_scale, CheckError, make_argcheck, check_positive, check_pdf_normalize_to
+from validphys.plots import BandPDFPlotter
+from validphys.plots import PDFPlotter
+from validphys.pdfbases import (Basis, check_basis)
+from validphys.core     import PDF
+
+import NNPDF as nnpath
 
 import validphys.pdfgrids as pdfgrids
 
@@ -21,8 +29,8 @@ log = logging.getLogger(__name__)
 
 @check_positive('Q')
 @pdfgrids._check_limits
-@make_argcheck(check_basis)
-def alpha_eff(pdfs,xmin=1e-5,xmax=1e-3,Q=1.65,basis='evolution',flavours=None):
+#@make_argcheck(check_basis)
+def alpha_eff(pdfs,xmin:numbers.Real=1e-6,xmax:numbers.Real=1e-3,npoints:int=200,Q:numbers.Real=1.65):
     """Return a list of xplotting_grids containing the value of the effective
     exponent alpha at the specified values of x and flavour.
     alpha is relevant at small x, hence the linear scale.
@@ -35,12 +43,23 @@ def alpha_eff(pdfs,xmin=1e-5,xmax=1e-3,Q=1.65,basis='evolution',flavours=None):
 
     Q: The PDF scale in GeV.
     """
+    #Reading from the filter
+    #TODO: check that the pdfs given have the same basis, Q2min.
+    any_pdf, = pdfs
+    pdfpath = nnpath.get_results_path()+any_pdf.name
+    filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
+
+    infomap = yaml.safe_load(open(pdfpath+'/nnfit/'+any_pdf.name+'.info'))
+    Q=infomap['QMin']
+    basis=filtermap['fitting']['fitbasis']+'FitBasis'
+
+    flavours=None
     checked = check_basis(basis, flavours)
     basis = checked['basis']
     flavours = checked['flavours']
 
     alphaGrids=[]
-    xGrid = pdfgrids.xgrid(xmin, xmax,'log', 200)
+    xGrid = pdfgrids.xgrid(xmin, xmax,'log', npoints)
 
     for pdf in pdfs:
         pdfGrid = pdfgrids.xplotting_grid(pdf, Q, xgrid=xGrid, basis=basis,flavours=flavours)
@@ -57,8 +76,8 @@ def alpha_eff(pdfs,xmin=1e-5,xmax=1e-3,Q=1.65,basis='evolution',flavours=None):
 
 @check_positive('Q')
 @pdfgrids._check_limits
-@make_argcheck(check_basis)
-def beta_eff(pdfs,xmin=0.5,xmax=0.9,Q=1.65,basis='evolution',flavours=None):
+#@make_argcheck(check_basis)
+def beta_eff(pdfs,xmin:numbers.Real=0.6,xmax:numbers.Real=0.9,npoints:int=200,Q:numbers.Real=1.65):
     """Return a list of xplotting_grids containing the value of the effective
     exponent beta at the specified values of x and flavour.
     beta is relevant at large x, hence the linear scale.
@@ -71,12 +90,22 @@ def beta_eff(pdfs,xmin=0.5,xmax=0.9,Q=1.65,basis='evolution',flavours=None):
 
     Q: The PDF scale in GeV.
     """
+    #Reading from the filter
+    #TODO: check that the pdfs given have the same basis, Q2min.
+    any_pdf, = pdfs
+    pdfpath = nnpath.get_results_path()+any_pdf.name
+    filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
+    infomap=yaml.safe_load(open(pdfpath+'/nnfit/'+any_pdf.name+'.info'))
+    Q=infomap['QMin']
+    basis=filtermap['fitting']['fitbasis']+'FitBasis'
+
+    flavours=None
     checked = check_basis(basis, flavours)
     basis = checked['basis']
     flavours = checked['flavours']
 
     betaGrids=[]
-    xGrid = pdfgrids.xgrid(xmin, xmax,'linear', 200)
+    xGrid = pdfgrids.xgrid(xmin, xmax,'linear', npoints)
 
     for pdf in pdfs:
         pdfGrid = pdfgrids.xplotting_grid(pdf, Q, xgrid=xGrid, basis=basis,flavours=flavours)
@@ -134,3 +163,260 @@ def plot_alphaEff(pdfs, alpha_eff, normalize_to:(int,str,type(None))=None, ymin=
 def plot_betaEff(pdfs, beta_eff, normalize_to:(int,str,type(None))=None, ymin=None, ymax=None):
     """ Same as plot_alphaEff but for beta effective exponent """
     yield from ExponentBandPlotter('beta', pdfs, beta_eff, 'linear', normalize_to, ymin, ymax)
+
+@table
+def effective_exponents_table(pdf: PDF, x1_alpha: numbers.Real = 1e-6, x2_alpha: numbers.Real = 1e-3,
+                              x1_beta: numbers.Real = 0.65, x2_beta: numbers.Real = 0.95):
+    """Return a table with the effective exponents for the next fit"""
+
+    #Reading from the filter
+    pdfpath = nnpath.get_results_path()+pdf.name
+    filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
+    infomap=yaml.safe_load(open(pdfpath+'/nnfit/'+pdf.name+'.info'))
+    Q=infomap['QMin']
+    basis = filtermap['fitting']['fitbasis']+'FitBasis'
+
+    flavours = None
+    checked = check_basis(basis, flavours)
+    basis = checked['basis']
+    flavours = checked['flavours']
+
+    pdfs = [pdf]
+    alphamin_grids = alpha_eff(
+        pdfs, xmin=x1_alpha, xmax=x1_alpha, npoints=1, Q=Q)
+    alphamax_grids = alpha_eff(
+        pdfs, xmin=x2_alpha, xmax=x2_alpha, npoints=1, Q=Q)
+    betamin_grids = beta_eff(pdfs, xmin=x1_beta, xmax=x1_beta,
+                             npoints=1, Q=Q)
+    betamax_grids = beta_eff(pdfs, xmin=x2_beta, xmax=x2_beta,
+                             npoints=1, Q=Q)
+
+    eff_exp_data = []
+
+    alphamin_grid_values = alphamin_grids[0].grid_values
+    alphamax_grid_values = alphamax_grids[0].grid_values
+    betamin_grid_values = betamin_grids[0].grid_values
+    betamax_grid_values = betamax_grids[0].grid_values
+
+    alphamin_stats = pdf.stats_class(alphamin_grid_values)
+    alphamax_stats = pdf.stats_class(alphamax_grid_values)
+    betamin_stats = pdf.stats_class(betamin_grid_values)
+    betamax_stats = pdf.stats_class(betamax_grid_values)
+
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', RuntimeWarning)
+        alphamin_err68down, alphamin_err68up = alphamin_stats.errorbar68()
+        alphamax_err68down, alphamax_err68up = alphamax_stats.errorbar68()
+        betamin_err68down, betamin_err68up = betamin_stats.errorbar68()
+        betamax_err68down, betamax_err68up = betamax_stats.errorbar68()
+
+        alphamin_sigup = alphamin_err68up - alphamin_stats.central_value()
+        alphamax_sigup = alphamax_err68up - alphamax_stats.central_value()
+        betamin_sigup = betamin_err68up - betamin_stats.central_value()
+        betamax_sigup = betamax_err68up - betamax_stats.central_value()
+
+        alphamin_sigdown = -alphamin_err68down + alphamin_stats.central_value()
+        alphamax_sigdown = -alphamax_err68down + alphamax_stats.central_value()
+        betamin_sigdown = -betamin_err68down + betamin_stats.central_value()
+        betamax_sigdown = -betamax_err68down + betamax_stats.central_value()
+
+        alphamin_cv = alphamin_stats.central_value()
+        alphamax_cv = alphamax_stats.central_value()
+        betamin_cv = betamin_stats.central_value()
+        betamax_cv = betamax_stats.central_value()
+
+    flavours_label = []
+
+    for (j, fl) in enumerate(flavours):
+
+        prev_amin_bound = None
+        prev_amax_bound = None
+        prev_bmin_bound = None
+        prev_bmax_bound = None
+        YAMLlabel = ""
+        YAMLflaliases = {r'\Sigma': 'sng', 'V': 'v', 'T3': 't3',
+                         'V3': 'v3', 'T8': 't8', 'V8': 'v8', 'gluon': 'g', r'c^+': 'cp'}
+
+        #Matching the flavour between vp and the runcards
+        for k, ref_fl in enumerate(filtermap['fitting']['basis']):
+            if basis.elementlabel(fl) in YAMLflaliases.keys():
+                YAMLlabel = YAMLflaliases[basis.elementlabel(fl)]
+            else:
+                YAMLlabel = basis.elementlabel(fl)
+
+            if ref_fl['fl'] == YAMLlabel:
+                prev_amin_bound = filtermap['fitting']['basis'][k]['smallx'][0]
+                prev_amax_bound = filtermap['fitting']['basis'][k]['smallx'][1]
+                prev_bmin_bound = filtermap['fitting']['basis'][k]['largex'][0]
+                prev_bmax_bound = filtermap['fitting']['basis'][k]['largex'][1]
+
+        # the gluon/singlet case
+        #Defining the bounds
+        # alpha_min = singlet/gluon: the 2x68% c.l. lower value evaluated at x=1e-6.
+        #                  others  : min(2x68% c.l. lower value evaluated at x=1e-6 and x=1e-3)
+        # alpha_max = singlet/gluon: min(2 and the 2x68% c.l. upper value evaluated at x=1e-6)
+        #                others    : min(2 and max(2x68% c.l. upper value evaluated at x=1e-6 and x=1e-3))
+        if fl == "\Sigma" or fl == "g":
+            new_min_bound = alphamin_cv[j][0]-2*alphamin_sigdown[j][0]
+            new_max_bound = round(
+                min(2, alphamin_cv[j][0]+2*alphamin_sigup[j][0]), 3)
+            alpha_line = [r"$\alpha$", prev_amin_bound,
+                          prev_amax_bound, new_min_bound, new_max_bound]
+        else:
+            new_min_bound = round(
+                min(alphamin_cv[j][0]-2*alphamin_sigdown[j][0], alphamax_cv[j][0]-2*alphamax_sigdown[j][0]), 3)
+            new_max_bound = round(
+                min(2, max(alphamin_cv[j][0]+2*alphamin_sigup[j][0], alphamax_cv[j][0]+2*alphamax_sigup[j][0])), 3)
+            alpha_line = [r"$\alpha$", prev_amin_bound,
+                          prev_amax_bound, new_min_bound, new_max_bound]
+
+        # beta_min  =  max(0 and min(2x68% c.l. lower value evaluated at x=0.65 and x=0.95))
+        # beta_max  =  max(2x68% c.l. upper value evaluated at x=0.65 and x=0.95)
+        new_min_bound = round(
+            max(0, min(betamin_cv[j][0]-2*betamin_sigdown[j][0], betamax_cv[j][0]-2*betamax_sigdown[j][0])), 3)
+        new_max_bound = round(
+            max(betamin_cv[j][0]+2*betamin_sigup[j][0], betamax_cv[j][0]+2*betamax_sigup[j][0]), 3)
+        beta_line = [r"$\beta$", prev_bmin_bound,
+                     prev_bmax_bound, new_min_bound, new_max_bound]
+
+        eff_exp_data.append(alpha_line)
+        eff_exp_data.append(beta_line)
+        #flavours_label.append(f'${basis.elementlabel(fl)}$')
+        flavours_label.append(f'${fl}$')
+        flavours_label.append("")
+
+    eff_exp_columns = [r"$\alpha/\beta$", "prev Min",
+                       "prev Max", "next Min", "next Max"]
+    df = pd.DataFrame(eff_exp_data, index=flavours_label,
+                      columns=eff_exp_columns)
+    df.name = pdf.name
+    return df
+
+def next_effective_exponents_yaml(pdf:PDF,x1_alpha:numbers.Real=1e-6,x2_alpha:numbers.Real=1e-3,
+x1_beta:numbers.Real=0.65,x2_beta:numbers.Real=0.95):
+    """Return a table with the effective exponents for the next fit"""
+
+    #Reading from the filter
+    pdfpath = nnpath.get_results_path()+pdf.name
+    filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
+    infomap=yaml.safe_load(open(pdfpath+'/nnfit/'+pdf.name+'.info'))
+    Q=infomap['QMin']
+    basis=filtermap['fitting']['fitbasis']+'FitBasis'
+
+    flavours=None
+    checked = check_basis(basis, flavours)
+    basis = checked['basis']
+    flavours = checked['flavours']
+
+    pdfs=[pdf]
+    alphamin_grids = alpha_eff(
+        pdfs, xmin=x1_alpha, xmax=x1_alpha, npoints=1, Q=Q)
+    alphamax_grids = alpha_eff(
+        pdfs, xmin=x2_alpha, xmax=x2_alpha, npoints=1, Q=Q)
+    betamin_grids = beta_eff(pdfs, xmin=x1_beta, xmax=x1_beta,
+                             npoints=1, Q=Q)
+    betamax_grids = beta_eff(pdfs, xmin=x2_beta, xmax=x2_beta,
+                             npoints=1, Q=Q)
+
+    eff_exp_data = []
+
+    alphamin_grid_values = alphamin_grids[0].grid_values
+    alphamax_grid_values = alphamax_grids[0].grid_values
+    betamin_grid_values = betamin_grids[0].grid_values
+    betamax_grid_values = betamax_grids[0].grid_values
+
+    alphamin_stats = pdf.stats_class(alphamin_grid_values)
+    alphamax_stats = pdf.stats_class(alphamax_grid_values)
+    betamin_stats = pdf.stats_class(betamin_grid_values)
+    betamax_stats = pdf.stats_class(betamax_grid_values)
+
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', RuntimeWarning)
+        alphamin_err68down, alphamin_err68up = alphamin_stats.errorbar68()
+        alphamax_err68down, alphamax_err68up = alphamax_stats.errorbar68()
+        betamin_err68down, betamin_err68up = betamin_stats.errorbar68()
+        betamax_err68down, betamax_err68up = betamax_stats.errorbar68()
+
+        alphamin_sigup = alphamin_err68up - alphamin_stats.central_value()
+        alphamax_sigup = alphamax_err68up - alphamax_stats.central_value()
+        betamin_sigup = betamin_err68up - betamin_stats.central_value()
+        betamax_sigup = betamax_err68up - betamax_stats.central_value()
+
+        alphamin_sigdown = -alphamin_err68down + alphamin_stats.central_value()
+        alphamax_sigdown = -alphamax_err68down + alphamax_stats.central_value()
+        betamin_sigdown = -betamin_err68down + betamin_stats.central_value()
+        betamax_sigdown = -betamax_err68down + betamax_stats.central_value()
+
+        alphamin_cv = alphamin_stats.central_value()
+        alphamax_cv = alphamax_stats.central_value()
+        betamin_cv = betamin_stats.central_value()
+        betamax_cv = betamax_stats.central_value()
+
+    flavours_label=[]
+
+    #Put it in pdfbases.py!
+    YAMLflaliases={r'\Sigma':'sng', 'V':'v', 'T3':'t3', 'V3':'v3', 'T8':'t8', 'V8':'v8', 'gluon':'g', r'c^+':'cp'}
+
+    with open("output/NextEffExps.yaml", 'w') as out:
+        out.write("basis:\n")
+
+        for (j,fl) in enumerate(flavours):
+            #Defining the bounds
+            # alpha_min = singlet/gluon: the 2x68% c.l. lower value evaluated at x=1e-6.
+            #                  others  : min(2x68% c.l. lower value evaluated at x=1e-6 and x=1e-3)
+            # alpha_max = singlet/gluon: min(2 and the 2x68% c.l. upper value evaluated at x=1e-6)
+            #                others    : min(2 and max(2x68% c.l. upper value evaluated at x=1e-6 and x=1e-3))
+            # beta_min  =  max(0 and min(2x68% c.l. lower value evaluated at x=0.65 and x=0.95))
+            # beta_max  =  max(2x68% c.l. upper value evaluated at x=0.65 and x=0.95)
+            if basis.elementlabel(fl) == "\Sigma" or basis.elementlabel(fl) == "g":
+                new_min_bound = round(
+                    alphamin_cv[j][0]-2*alphamin_sigdown[j][0], 3)
+                new_max_bound = round(
+                    min(2, alphamin_cv[j][0]+2*alphamin_sigup[j][0]), 3)
+                alpha_line = [r"$\alpha$", new_min_bound, new_max_bound]
+            else:
+                new_min_bound = round(
+                    min(alphamin_cv[j][0]-2*alphamin_sigdown[j][0], alphamax_cv[j][0]-2*alphamax_sigdown[j][0]), 3)
+                new_max_bound = round(
+                    min(2, max(alphamin_cv[j][0]+2*alphamin_sigup[j][0], alphamax_cv[j][0]+2*alphamax_sigup[j][0])), 3)
+                alpha_line = [r"$\alpha$", new_min_bound, new_max_bound]
+
+            # beta_min  =  max(0 and min(2x68% c.l. lower value evaluated at x=0.65 and x=0.95))
+            # beta_max  =  max(2x68% c.l. upper value evaluated at x=0.65 and x=0.95)
+            new_min_bound = round(
+                max(0, min(betamin_cv[j][0]-2*betamin_sigdown[j][0], betamax_cv[j][0]-2*betamax_sigdown[j][0])), 3)
+            new_max_bound = round(
+                max(betamin_cv[j][0]+2*betamin_sigup[j][0], betamax_cv[j][0]+2*betamax_sigup[j][0]), 3)
+            beta_line = [r"$\beta$", new_min_bound, new_max_bound]
+
+            eff_exp_data.append(alpha_line)
+            eff_exp_data.append(beta_line)
+            #flavours_label.append(f'${basis.elementlabel(fl)}$')
+            flavours_label.append(f'${fl}$')
+            flavours_label.append("")
+
+            YAMLlabel=" "
+            if basis.elementlabel(fl) in YAMLflaliases.keys(): 
+                YAMLlabel= YAMLflaliases[basis.elementlabel(fl)]
+            else: 
+                YAMLlabel= basis.elementlabel(fl)
+            
+            for k, ref_fl in enumerate(filtermap['fitting']['basis']):
+                if basis.elementlabel(fl) in YAMLflaliases.keys():
+                    YAMLlabel = YAMLflaliases[basis.elementlabel(fl)]
+                else:
+                    YAMLlabel = basis.elementlabel(fl)
+
+                if ref_fl['fl'] == YAMLlabel:
+                    out.write(" - {")
+                    out.write("fl: "+YAMLlabel)
+                    out.write(", pos: "+filtermap['fitting']['basis'][k]['pos'])
+                    out.write(", mutsize: ["+str(filtermap['fitting']['basis'][k]['mutsize'][0])+"]")
+                    out.write(", mutprob: ["+str(filtermap['fitting']['basis'][k]['mutprob'][0])+"]")
+                    out.write(", smallx: ["+str(alpha_line[1])+","+str(alpha_line[2])+"]")
+                    out.write(", largex: ["+str(beta_line[1])+","+str(beta_line[2])+"]")
+                    out.write("")
+
+                    out.write("}\n")
+
+    pass

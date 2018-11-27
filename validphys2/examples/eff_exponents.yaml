@@ -3,7 +3,7 @@
 # b (beta) used to parametrize the PDF in the fit: pdf = x^{-a} (1-x)^b NN(x).
 alpha:
   ymin: 0
-  ymax: 1.5
+  ymax: 2.2
 
 beta:
   ymin: 0
@@ -22,7 +22,6 @@ template_text: |
   title: Effective exponents
   keywords: [eff_exp]
   ---
-
   Effective exponents plots
   -----------
   {@alpha plot_alphaEff@}
@@ -31,7 +30,7 @@ template_text: |
   {@with pdfs@}
   Effective exponents table for {@pdf@}
   -----------
-  {@new_effective_exponents_table@}
+  {@effective_exponents_table@}
   {@endwith@}
 
 actions_:
