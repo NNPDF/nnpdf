@@ -5,6 +5,7 @@
 {
 public: CMS_ZCHARM_DIFF_UNNORM_8TEVFilter():
   CommonData("CMS_ZCHARM_DIFF_UNNORM_8TEV") { ReadData(); }
- private:
+
+private:
   void ReadData();
 };

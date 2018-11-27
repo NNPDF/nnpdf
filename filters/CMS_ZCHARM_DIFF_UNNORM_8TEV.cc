@@ -36,11 +36,8 @@
       istringstream lstream(line);
       //Reading in an interpretation of each column
       lstream >> pTmin >> pTmax >> fData[i] >> fStat[i];
-
-      fData[i] = fData[i]*1000; // changing pb to fb for APPLgrid
-      fStat[i] = fStat[i]*1000; // changing pb to fb for APPLgrid
-      //Defining the kinematic variables
-      fKin1[i] = (pTmin + pTmax)*0.5;    // eta
+      
+      fKin1[i] = 0.5*(pTmin + pTmax);	   // pT
       fKin2[i] = MZ2;                      // Mass W squared
       fKin3[i] = s;                        // sqrt(s)
 
@@ -59,8 +56,8 @@
         //Add the additive uncertainties
         fSys[i][k].add = fSys[i][k].mult*fData[i]*1e-2;
       }      
-
       
     }  
-   f1.close();
+  
+    f1.close();
  }
