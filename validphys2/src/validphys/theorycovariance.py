@@ -173,17 +173,22 @@ commondata_experiments = collect('commondata', ['experiments', 'experiment'])
 def process_lookup(commondata_experiments):
     """Produces a dictionary with keys corresponding to dataset names
     and values corresponding to process types. Process types are
-    regrouped into the four categories 'Drell-Yan', 'Heavy Quarks', Jets'
-    and 'DIS'."""
+    regrouped into the five categories 'Drell-Yan', 'Heavy Quarks', Jets',
+    'DIS NC' and 'DIS CC'."""
     d = {commondata.name: get_info(commondata).process_description
          for commondata in commondata_experiments}
     for key, value in d.items():
-        if "Drell-Yan" in value:
+        if "Deep Inelastic Scattering" in value:
+            if ("CHORUS" in key) or ("NTV" in key) or ("HERACOMBCC" in key):
+                d[key] = "DIS CC"
+            else:
+                d[key] = "DIS NC"
+        elif "Drell-Yan" in value:
             d[key] = "Drell-Yan"
         elif "Heavy Quarks" in value:
             d[key] = "Heavy Quarks"
         elif "Jet" in value:
-            d[key] = "Jets"
+             d[key] = "Jets"
         else:
             pass
     return d
@@ -839,13 +844,30 @@ matched_dataspecs_dataset_prediction_shift = collect(
 
 #Not sure we want to export this, as it is 231 Mb...
 #@table
-def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift):
+def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
+                                  threshold:(float, type(None)) = None):
     """Priduce a matrix out of the outer product of
     ``dataspecs_dataset_prediction_shift``. The matrix will be a
     pandas DataFrame, indexed similarly to ``experiments_index``."""
     all_shifts = np.concatenate(
         [val.shifts for val in matched_dataspecs_dataset_prediction_shift])
     mat = np.outer(all_shifts, all_shifts)
+    if threshold != None:
+        for i, ival in enumerate(all_shifts):
+            for j, jval in enumerate(all_shifts):
+                if (ival!=0) and (jval!=0):
+                    if 1/threshold <= np.abs(ival/jval) <= threshold:
+                        pass
+                    else:
+                        mat[i][j] = 0
+                else:
+                    pass
+#    for i, ival in enumerate(all_shifts):
+#        for j, jval in enumerate(all_shifts):
+#            if (np.abs(ival) < 10**(-2)) or (np.abs(jval) < 10**(-2)):
+#                mat[i][j] = 0
+#            else:
+#                pass
     #build index
     expnames = np.concatenate([
         np.full(len(val.shifts), val.experiment_name, dtype=object)
@@ -944,7 +966,6 @@ def matched_datasets_shift_matrix_correlations(matched_datasets_shift_matrix):
         columns=matched_datasets_shift_matrix.columns,
         index=matched_datasets_shift_matrix.index)
     return corrmat
-
 
 @figure
 def plot_matched_datasets_shift_matrix_correlations(
@@ -1048,9 +1069,15 @@ shx_vector = collect('shift_vector', ['combined_shift_and_theory_dataspecs', 'sh
 thx_vector = collect('theory_vector', ['combined_shift_and_theory_dataspecs', 'theoryconfig'])
 
 
+def shift_matrix_threshold(threshold:(float, type(None)) = None):
+    """Returns the threshold for the difference in ratio between shift vector
+    elements outside which the shift matrix is set to 0"""
+    return threshold
+
 @table
 def shift_to_theory_ratio(thx_corrmat, shx_corrmat):
     ratio = thx_corrmat[0]/shx_corrmat[0]
+    ratio.fillna(0)
     return ratio
 
 @figure
@@ -1140,13 +1167,13 @@ def plot_thcorrmat_heatmap_custom_dataspecs(theory_corrmat_custom_dataspecs, the
     return fig
 
 
-def theory_shift_test(thx_covmat, shx_vector, thx_vector):
+def theory_shift_test(thx_covmat, shx_vector, thx_vector, evalue_cutoff:(float, type(None)) = None):
     matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
     # Finding eigenvalues and eigenvectors
     w, v = la.eigh(matrix)
     w_max = w[-1]
-    w_nonzero = w[w>0.01*w_max]
-    nonzero_locs = np.nonzero(w>0.01*w_max)[0]
+    w_nonzero = w[w>evalue_cutoff*w_max]
+    nonzero_locs = np.nonzero(w>evalue_cutoff*w_max)[0]
     # ^ taking 0th element to extract list from tuple
     v_nonzero = []
     for loc in nonzero_locs:
@@ -1159,9 +1186,9 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector):
     fmiss = f - np.sum(projected_evectors, axis=0)
     return w_nonzero, v_nonzero, projectors, f, fmiss, w_max
 
-def cutoff(theory_shift_test):
+def cutoff(theory_shift_test, evalue_cutoff:(float, type(None)) = None):
     w_max = theory_shift_test[5]
-    cutoff = 0.01*w_max
+    cutoff = evalue_cutoff*w_max
 #    print(f"cutoff = {cutoff}")
     return cutoff
 
