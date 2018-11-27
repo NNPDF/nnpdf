@@ -16,8 +16,8 @@ from reportengine.floatformatting import format_number
 from reportengine.compat import yaml
 
 from validphys.checks import check_scale, CheckError, make_argcheck, check_positive, check_pdf_normalize_to
-from validphys.plots import BandPDFPlotter
-from validphys.plots import PDFPlotter
+from validphys.pdfplots import BandPDFPlotter
+from validphys.pdfplots import PDFPlotter
 from validphys.pdfbases import (Basis, check_basis)
 from validphys.core     import PDF
 
