@@ -23,8 +23,19 @@
 {@endwith@}
 {@endwith@}
 
-## Effective preprocessing exponents
+## Effective preprocessing exponents Plots
 ### alpha exponent
 {@plot_alphaEff@}
 ### beta exponent
 {@plot_betaEff@}
+
+## Effective preprocessing exponents Table
+{@with pdfs@}
+### Effective exponents table for {@pdf@}
+{@effective_exponents_table@}
+{@endwith@}
+
+{@with pdfs@}
+### Next effective exponents table for {@pdf@}
+{@next_effective_exponents_yaml@}
+{@endwith@}
