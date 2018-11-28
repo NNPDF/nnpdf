@@ -845,16 +845,23 @@ matched_dataspecs_dataset_prediction_shift = collect(
 #Not sure we want to export this, as it is 231 Mb...
 #@table
 def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
+                                  matched_dataspecs_dataset_theory,
+                                  matched_dataspecs_results,
                                   threshold:(float, type(None)) = None):
-    """Priduce a matrix out of the outer product of
+    """Produce a matrix out of the outer product of
     ``dataspecs_dataset_prediction_shift``. The matrix will be a
-    pandas DataFrame, indexed similarly to ``experiments_index``."""
+    pandas DataFrame, indexed similarly to ``experiments_index``.
+    Note that this produces the normalised shift matrix, i.e. it is
+    computed from shifts normalised to central theory."""
     all_shifts = np.concatenate(
         [val.shifts for val in matched_dataspecs_dataset_prediction_shift])
-    mat = np.outer(all_shifts, all_shifts)
+    all_theory = np.concatenate(
+        [val.shifts for val in matched_dataspecs_dataset_theory])
+    norm_shifts = all_shifts/all_theory
+    mat = np.outer(norm_shifts, norm_shifts)
     if threshold != None:
-        for i, ival in enumerate(all_shifts):
-            for j, jval in enumerate(all_shifts):
+        for i, ival in enumerate(norm_shifts):
+            for j, jval in enumerate(norm_shifts):
                 if (ival!=0) and (jval!=0):
                     if 1/threshold <= np.abs(ival/jval) <= threshold:
                         pass
@@ -888,9 +895,13 @@ def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
 
     return pd.DataFrame(mat, columns=index, index=index)
 
-def shift_vector(matched_dataspecs_dataset_prediction_shift):
+def shift_vector(matched_dataspecs_dataset_prediction_shift,
+                 matched_dataspecs_dataset_theory):
     all_shifts = np.concatenate(
         [val.shifts for val in matched_dataspecs_dataset_prediction_shift])
+    all_theory = np.concatenate(
+        [val.shifts for val in matched_dataspecs_dataset_theory])
+    norm_shifts = all_shifts/all_theory
      #build index
     expnames = np.concatenate([
         np.full(len(val.shifts), val.experiment_name, dtype=object)
@@ -908,7 +919,7 @@ def shift_vector(matched_dataspecs_dataset_prediction_shift):
     index = pd.MultiIndex.from_arrays(
         [expnames, dsnames, point_indexes],
         names=["Experiment name", "Dataset name", "Point"])
-    return pd.DataFrame(all_shifts, index=index)
+    return pd.DataFrame(norm_shifts, index=index)
 
 def dataspecs_dataset_theory(matched_dataspecs_results, experiment_name, dataset_name):
     central, *others = matched_dataspecs_results
@@ -1178,7 +1189,7 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, evalue_cutoff:(float, 
     v_nonzero = []
     for loc in nonzero_locs:
         v_nonzero.append(v[:,loc])
-    f = (-shx_vector[0]/thx_vector[0]).values.T[0]
+    f = -shx_vector[0].values.T[0]
     projectors = np.sum(f*v_nonzero, axis=1)
     projected_evectors = np.zeros((len(projectors), (len(f))))
     for i in range(len(projectors)):
@@ -1243,7 +1254,7 @@ def projector_eigenvalue_ratio(theory_shift_test):
 @figure
 def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
     matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
-    fnorm = -shx_vector[0]/thx_vector[0]
+    fnorm = -shx_vector[0]
     sqrtdiags = np.sqrt(np.diag(matrix))
     fig, ax = plt.subplots(figsize=(20,10))
     ax.plot(sqrtdiags*100, '.-', label="Theory", color = "red")
