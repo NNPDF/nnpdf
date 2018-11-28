@@ -71,6 +71,20 @@ def _check_correct_theory_combination(theoryids, fivetheories):
         "Choice of input theories does not correspond to a valid "
         "prescription for theory covariance matrix calculation")
 
+@make_argcheck
+def _check_valid_shift_matrix_threshold_method(threshold:(int, float, None) = None,
+                                               method:(int, None) = None):
+    """Checks that a valid method 1 or 2 is chosen where a threshold for
+    removing elements of the shift correlation matrix has been specified"""
+    opts = {1,2}
+    if threshold != None:
+        check(method is not None, "A threshold for removing elements of the "
+               "shift correlation matrix has been specified but no choice of "
+               "method (1 or 2) was provided")
+        check(method in opts,
+              "Invalid choice of method for removing shift correlation matrix "
+              "elements. Please choose 1 or 2.")
+
 def make_scale_var_covmat(predictions):
     """Takes N theory predictions at different scales and applies N-pt scale
     variations to produce a covariance matrix."""
@@ -844,10 +858,11 @@ matched_dataspecs_dataset_prediction_shift = collect(
 
 #Not sure we want to export this, as it is 231 Mb...
 #@table
+@_check_valid_shift_matrix_threshold_method
 def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
                                   matched_dataspecs_dataset_theory,
-                                  matched_dataspecs_results,
-                                  threshold:(float, type(None)) = None):
+                                  threshold:(int, float, type(None)) = None,
+                                  method:(int, type(None)) = None):
     """Produce a matrix out of the outer product of
     ``dataspecs_dataset_prediction_shift``. The matrix will be a
     pandas DataFrame, indexed similarly to ``experiments_index``.
@@ -859,9 +874,14 @@ def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
         [val.shifts for val in matched_dataspecs_dataset_theory])
     norm_shifts = all_shifts/all_theory
     mat = np.outer(norm_shifts, norm_shifts)
-    if threshold != None:
-        for i, ival in enumerate(norm_shifts):
-            for j, jval in enumerate(norm_shifts):
+    for i, ival in enumerate(norm_shifts):
+        for j, jval in enumerate(norm_shifts):
+            if method == 1:
+                if (np.abs(ival) < threshold) or (np.abs(jval) < threshold):
+                    mat[i][j] = 0
+                else:
+                    pass
+            elif method == 2:
                 if (ival!=0) and (jval!=0):
                     if 1/threshold <= np.abs(ival/jval) <= threshold:
                         pass
@@ -869,12 +889,6 @@ def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
                         mat[i][j] = 0
                 else:
                     pass
-#    for i, ival in enumerate(all_shifts):
-#        for j, jval in enumerate(all_shifts):
-#            if (np.abs(ival) < 10**(-2)) or (np.abs(jval) < 10**(-2)):
-#                mat[i][j] = 0
-#            else:
-#                pass
     #build index
     expnames = np.concatenate([
         np.full(len(val.shifts), val.experiment_name, dtype=object)
@@ -1080,15 +1094,19 @@ shx_vector = collect('shift_vector', ['combined_shift_and_theory_dataspecs', 'sh
 thx_vector = collect('theory_vector', ['combined_shift_and_theory_dataspecs', 'theoryconfig'])
 
 
-def shift_matrix_threshold(threshold:(float, type(None)) = None):
+def shift_matrix_threshold(threshold:(int, float, type(None)) = None):
     """Returns the threshold for the difference in ratio between shift vector
     elements outside which the shift matrix is set to 0"""
     return threshold
 
+def shift_matrix_method(method:(int, type(None)) = None):
+    """Returns the choice of method used for setting the elements of the
+    shift covariance matrix to 0 """
+    return method
+
 @table
 def shift_to_theory_ratio(thx_corrmat, shx_corrmat):
-    ratio = thx_corrmat[0]/shx_corrmat[0]
-    ratio.fillna(0)
+    ratio = (thx_corrmat[0]/shx_corrmat[0]).fillna(0)
     return ratio
 
 @figure
@@ -1111,7 +1129,8 @@ def shift_to_theory_ratio_plot(shift_to_theory_ratio):
 
 @figure
 def shift_corrmat_plot(shx_corrmat):
-    fig = plot_corrmat_heatmap(shx_corrmat[0],
+    # removing nans and setting them to 0
+    fig = plot_corrmat_heatmap(shx_corrmat[0].fillna(0),
                                "Shift correlation matrix")
     return fig
 
@@ -1123,7 +1142,7 @@ def theory_corrmat_plot(thx_corrmat):
 
 @table
 def shift_corrmat_value_fractions(shx_corrmat):
-    mat = shx_corrmat[0].values
+    mat = shx_corrmat[0].fillna(0).values
     matsize = np.size(mat)
     fracplus = 100*np.size(np.where(mat>0))/(2*matsize)
     fracminus = 100*np.size(np.where(mat<0))/(2*matsize)
@@ -1151,7 +1170,8 @@ def theory_corrmat_value_fractions(thx_corrmat):
 
 @table
 def shift_theory_element_comparison(shx_corrmat, thx_corrmat):
-    mat = thx_corrmat[0].values/shx_corrmat[0].values
+    mat = thx_corrmat[0].values/shx_corrmat[0].fillna(0).values
+    mat = np.nan_to_num(mat)
     matsize = np.size(mat)
     fracplus = 100*np.size(np.where(mat>0))/(2*matsize)
     fracminus = 100*np.size(np.where(mat<0))/(2*matsize)
