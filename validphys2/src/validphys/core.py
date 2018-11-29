@@ -605,7 +605,7 @@ class MCStats(Stats):
     """Result obtained from a Monte Carlo sample"""
 
     def central_value(self):
-        return np.mean(self.data, axis=0)
+        return np.nanmean(self.data, axis=0)
 
     def std_error(self):
         return np.std(self.data, axis=0)

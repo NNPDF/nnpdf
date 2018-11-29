@@ -75,6 +75,8 @@ def alpha_eff(pdfs,
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', RuntimeWarning)
             alphaGrid_values = -np.log(abs(pdfGrid_values/xGrid))/np.log(xGrid)
+            alphaGrid_values[alphaGrid_values == -
+                             np.inf] = np.nan  # when PDF_i =0
         alphaGrid = pdfGrid._replace(grid_values=alphaGrid_values)
         alphaGrids.append(alphaGrid)
 
@@ -127,6 +129,8 @@ def beta_eff(pdfs,
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', RuntimeWarning)
             betaGrid_values = np.log(abs(pdfGrid_values/xGrid))/np.log(1-xGrid)
+            betaGrid_values[betaGrid_values == -
+                            np.inf] = np.nan  # when PDF_i =0
         betaGrid = pdfGrid._replace(grid_values=betaGrid_values)
         betaGrids.append(betaGrid)
 
