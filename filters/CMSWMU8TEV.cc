@@ -83,7 +83,7 @@ void CMSWMU8TEVFilter::ReadData()
       // Statistical covariance matrix
       fSys[i][l+fNData].add = statcor[i][l];
       fSys[i][l+fNData].mult = fSys[i][l+fNData].add*100/fData[i];
-      fSys[i][l+fNData].type = MULT;
+      fSys[i][l+fNData].type = ADD;
       fSys[i][l+fNData].name = "CORR";
     }
 
