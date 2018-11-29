@@ -72,7 +72,7 @@
 #include "CMS_SINGLETOP_TCH_R_8TEV.h"
 #include "CMS_SINGLETOP_TCH_R_13TEV.h"
 #include "CMS_ZCHARM_DIFF_UNNORM_8TEV.h"
-
+#include "CMS_WCHARM_DIFF_UNNORM_13TEV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -163,6 +163,7 @@ void InitCommonData(vector<CommonData*>& target)
 
   target.push_back(new CMSWCHARMTOTFilter());
   target.push_back(new CMSWCHARMRATFilter());
+  target.push_back(new CMS_WCHARM_DIFF_UNNORM_13TEVFilter());
 
   // ************************* D0 ******************************
 
