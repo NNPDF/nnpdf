@@ -551,7 +551,7 @@ matrix<double> read_total_covmat(const std::string filename)
 
   //! CHECKPOINT0: Check if the lines and columns of covmat matches.
   if (lines != columns)
-    throw EvaluationError("experiments", "Lines and Columns of covmat doesn't match.")
+    throw EvaluationError("experiments", "Lines and Columns of covmat doesn't match.");
 
         matrix<double>
             covmat(lines, lines);
@@ -572,7 +572,7 @@ matrix<double> read_total_covmat(const std::string filename)
     //! Extra check, in case the format changes
     //! CHECKPOINT1: Read the last character of the line, if it's alphabetical, throw an error.
     if (isalpha(line[line.size() - 1]))
-      throw EvaluationError("experiments", "The format of covmat has probably changed.")
+      throw EvaluationError("experiments", "The format of covmat has probably changed.");
 
           std::stringstream ss(line);
 
@@ -587,7 +587,7 @@ matrix<double> read_total_covmat(const std::string filename)
     {
       //! CHECKPOINT2: Throw an error if reading of a line element fails
       if (ss.fail())
-        throw EvaluationError("experiments", "Error while reading lines of the covmat.")
+        throw EvaluationError("experiments", "Error while reading lines of the covmat.");
 
             covmat(l, c) = entry;
       c++;
