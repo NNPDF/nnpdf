@@ -32,7 +32,8 @@ theoryids_experiments_central_values = collect(experiments_central_values,
                                                ('theoryids',))
 
 @make_argcheck
-def _check_correct_theory_combination(theoryids, fivetheories:(str, type(None)) = None):
+def _check_correct_theory_combination(theoryids,
+                                      fivetheories:(str, type(None)) = None):
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
     l = len(theoryids)
@@ -176,12 +177,17 @@ commondata_experiments = collect('commondata', ['experiments', 'experiment'])
 def process_lookup(commondata_experiments):
     """Produces a dictionary with keys corresponding to dataset names
     and values corresponding to process types. Process types are
-    regrouped into the four categories 'Drell-Yan', 'Heavy Quarks', Jets'
-    and 'DIS'."""
+    regrouped into the five categories 'Drell-Yan', 'Heavy Quarks', Jets',
+    'DIS NC' and 'DIS CC'."""
     d = {commondata.name: get_info(commondata).process_description
          for commondata in commondata_experiments}
     for key, value in d.items():
-        if "Drell-Yan" in value:
+        if "Deep Inelastic Scattering" in value:
+            if ("CHORUS" in key) or ("NTV" in key) or ("HERACOMBCC" in key):
+                d[key] = "DIS CC"
+            else:
+                d[key] = "DIS NC"
+        elif "Drell-Yan" in value:
             d[key] = "Drell-Yan"
         elif "Heavy Quarks" in value:
             d[key] = "Heavy Quarks"
@@ -259,7 +265,8 @@ def covmap(combine_by_type, dataset_names):
 
 @_check_correct_theory_combination
 def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
-                     fivetheories:(str, type(None)) = None):
+                     fivetheories:(str, type(None)) = None,
+                     seventheories:(str, type(None)) = None):
     """Produces the sub-matrices of the theory covariance matrix according
     to a point prescription which matches the number of input theories.
     If 5 theories are provided, a scheme 'bar' or 'nobar' must be
@@ -306,13 +313,20 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
             elif l==7:
                 if name1 == name2:
                     s = (1/3)*sum(np.outer(d, d) for d in deltas1)
-                else:
+                elif seventheories=='original':
                     s = (1/6)*(np.outer((deltas1[0]+ deltas1[4]),
                                (deltas2[0] + deltas2[4]))
                                + np.outer((deltas1[1]+ deltas1[5]),
                                           (deltas2[1] + deltas2[5]))
                                + np.outer((deltas1[2]+deltas1[3]), (
                                        deltas2[2]+ deltas2[3])))
+                else:
+                    s = (1/6)*(2*(np.outer(deltas1[0], deltas2[0])
+                                  + np.outer(deltas1[1], deltas2[1]))
+                             + (np.outer((deltas1[2] + deltas1[3]),
+                                         (deltas2[2] + deltas2[3]))
+                             + np.outer((deltas1[4] + deltas1[5]),
+                                        (deltas2[4] + deltas2[5]))))
                 start_locs = (start_proc[name1], start_proc[name2])
                 covmats[start_locs] = s
             elif l==9:
