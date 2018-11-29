@@ -176,12 +176,17 @@ commondata_experiments = collect('commondata', ['experiments', 'experiment'])
 def process_lookup(commondata_experiments):
     """Produces a dictionary with keys corresponding to dataset names
     and values corresponding to process types. Process types are
-    regrouped into the four categories 'Drell-Yan', 'Heavy Quarks', Jets'
-    and 'DIS'."""
+    regrouped into the five categories 'Drell-Yan', 'Heavy Quarks', Jets',
+    'DIS NC' and 'DIS CC'."""
     d = {commondata.name: get_info(commondata).process_description
          for commondata in commondata_experiments}
     for key, value in d.items():
-        if "Drell-Yan" in value:
+        if "Deep Inelastic Scattering" in value:
+            if ("CHORUS" in key) or ("NTV" in key) or ("HERACOMBCC" in key):
+                d[key] = "DIS CC"
+            else:
+                d[key] = "DIS NC"
+        elif "Drell-Yan" in value:
             d[key] = "Drell-Yan"
         elif "Heavy Quarks" in value:
             d[key] = "Heavy Quarks"
