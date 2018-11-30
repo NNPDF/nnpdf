@@ -250,25 +250,26 @@ def effective_exponents_table(pdf: PDF,
 
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', RuntimeWarning)
+
+        alphamin_cv = np.nanmean(alphamin_grid_values, axis=0)
+        alphamax_cv = np.nanmean(alphamax_grid_values, axis=0)
+        betamin_cv = np.nanmean(betamin_grid_values,axis =0)
+        betamax_cv = np.nanmean(betamax_grid_values, axis =0)
+
         alphamin_err68down, alphamin_err68up = alphamin_stats.errorbar68()
         alphamax_err68down, alphamax_err68up = alphamax_stats.errorbar68()
         betamin_err68down, betamin_err68up = betamin_stats.errorbar68()
         betamax_err68down, betamax_err68up = betamax_stats.errorbar68()
 
-        alphamin_sigup = alphamin_err68up - alphamin_stats.central_value()
-        alphamax_sigup = alphamax_err68up - alphamax_stats.central_value()
-        betamin_sigup = betamin_err68up - betamin_stats.central_value()
-        betamax_sigup = betamax_err68up - betamax_stats.central_value()
+        alphamin_sigup = alphamin_err68up - alphamin_cv
+        alphamax_sigup = alphamax_err68up - alphamax_cv
+        betamin_sigup = betamin_err68up - betamin_cv
+        betamax_sigup = betamax_err68up - betamax_cv
 
-        alphamin_sigdown = -alphamin_err68down + alphamin_stats.central_value()
-        alphamax_sigdown = -alphamax_err68down + alphamax_stats.central_value()
-        betamin_sigdown = -betamin_err68down + betamin_stats.central_value()
-        betamax_sigdown = -betamax_err68down + betamax_stats.central_value()
-
-        alphamin_cv = alphamin_stats.central_value()
-        alphamax_cv = alphamax_stats.central_value()
-        betamin_cv = betamin_stats.central_value()
-        betamax_cv = betamax_stats.central_value()
+        alphamin_sigdown = -alphamin_err68down + alphamin_cv
+        alphamax_sigdown = -alphamax_err68down + alphamax_cv
+        betamin_sigdown = -betamin_err68down + betamin_cv
+        betamax_sigdown = -betamax_err68down + betamax_cv
 
     flavours_label = []
 
