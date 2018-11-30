@@ -5,6 +5,7 @@
 {
 public: ATLAS_WCHARM_TOT_UNNORM_7TEVFilter():
   CommonData("ATLAS_WCHARM_TOT_UNNORM_7TEV") { ReadData(); }
- private:
+
+private:
   void ReadData();
 };
