@@ -56,6 +56,9 @@ namespace NNPDF
 
     void SetT0(const PDFSet&); //!<Set T0 Predictions for each dataset in place and update internal structures
 
+    void LoadRepCovMat(std::string filename); //!< Read in covmat for rep gen, generate covmat and sqrt
+    void LoadFitCovMat(std::string filename); //!< Read in covmat for fitting, generate covmat and sqrt
+
   private:
 
     Experiment();                               //disable default constructor
@@ -77,8 +80,6 @@ namespace NNPDF
 
     matrix<double> fRepCovMat;  //!< The total covmat for replica generation
     matrix<double> fSqrtRepCov; //!< The Cholesky decomposition of the total replica generation covmat
-    matrix<double> fFitCovMat;  //!< The total covmat for fitting
-    matrix<double> fSqrtFitCov; //!< The Cholesky decomposition of the total fitting covmat
 
     std::vector<double> fStat; //!< The statistical errors
     sysError **fSys;    //!< The syscor
@@ -93,9 +94,6 @@ namespace NNPDF
 
     void PullData();                  //!< Pull experimental data from datasets
     void GenCovMat();                 //!< Generate covmat and inverse
-
-    void LoadRepCovMat(std::string filename); //!< Read in covmat for rep gen, generate covmat and sqrt
-    void LoadFitCovMat(std::string filename); //!< Read in covmat for fitting, generate covmat and sqrt
 
   };
 

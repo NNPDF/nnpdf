@@ -72,8 +72,6 @@ fCovMat(exp.fCovMat),
 fSqrtCov(exp.fSqrtCov),
 fRepCovMat(exp.fRepCovMat),
 fSqrtRepCov(exp.fSqrtRepCov),
-fFitCovMat(exp.fFitCovMat),
-fSqrtFitCov(exp.fSqrtFitCov),
 fStat(NULL),
 fSys(NULL),
 fSetSysMap(NULL),
@@ -162,7 +160,7 @@ void Experiment::MakeReplica()
   // Compute the sampling covariance matrix with data CVs, no multiplicative error and no theory errors
   matrix<double> SamplingMatrix  = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fData, fStat, fSys, false, false);
   SamplingMatrix = ComputeSqrtMat(SamplingMatrix); // Take the sqrt of the sampling matrix
-  
+
   // generate procType array for ease of checking
   std::vector<std::string> proctype;
   for (int s = 0; s < GetNSet(); s++)
@@ -200,7 +198,7 @@ void Experiment::MakeReplica()
         xnor[i] = 1.0;
 
         for (int l = 0; l < fNSys; l++)
-        {     
+        {
           if (fSys[i][l].name.compare("THEORYCORR")==0) continue;   // Skip theoretical uncertainties
           if (fSys[i][l].name.compare("THEORYUNCORR")==0) continue; // Skip theoretical uncertainties
           if (fSys[i][l].name.compare("SKIP")==0) continue;         // Skip uncertainties
@@ -223,9 +221,9 @@ void Experiment::MakeReplica()
             }
           }
         }
-        
+
         artdata[i] = xnor[i] * artdata[i];
-        
+
       }
 
       // If it's not a closure test, check for positivity of artifical data
@@ -443,7 +441,7 @@ void Experiment::GenCovMat()
 {
   // Compute the Covariance matrix with t0 and NNPDF3.1 theory errors
   fCovMat  = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, true, true);
-  fSqrtCov = ComputeSqrtMat(fCovMat); 
+  fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 
 /*
@@ -550,8 +548,8 @@ void Experiment::LoadRepCovMat(string filename)
 */
 void Experiment::LoadFitCovMat(string filename)
 {
-  fFitCovMat = read_total_covmat(filename);
-  fSqrtFitCov = ComputeSqrtMat(fFitCovMat);
+  fCovMat = read_total_covmat(filename);
+  fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 
 void Experiment::ExportCovMat(string filename)

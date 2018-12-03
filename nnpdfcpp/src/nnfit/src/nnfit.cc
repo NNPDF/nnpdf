@@ -376,6 +376,13 @@ void LoadAllDataAndSplit(NNPDFSettings const& settings,
 
       auto exp = std::make_unique<Experiment>(datasets, settings.GetExpName(i));
 
+      // read covmat from file if specified in the runcard
+      if (settings.IsThUncertainties())
+        {
+          exp->LoadRepCovMat(""); //TODO: SET THE RIGHT PREFIX
+          exp->LoadFitCovMat(""); //TODO: SET THE RIGHT PREFIX
+        }
+
       // Apply MC shifts
       if (settings.Get("fitting","genrep").as<bool>())
         exp->MakeReplica();

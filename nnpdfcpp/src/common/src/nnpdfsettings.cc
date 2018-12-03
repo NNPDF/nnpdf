@@ -139,7 +139,8 @@ NNPDFSettings::NNPDFSettings(const string &folder):
   fPDFName(""),
   fResultsDir(""),
   fTheoryDir(""),
-  fGSLWork(NULL)
+  fGSLWork(NULL),
+  fThUncertainties(false)
 {
   // Read current PDF grid name from file.
   Splash();
@@ -186,9 +187,7 @@ NNPDFSettings::NNPDFSettings(const string &folder):
 
   // Check if theory uncertainties are used
   if (Exists("theorycovmatconfig","theoryids"))
-    fTHEORYUNC = true;
-  else
-    fTHEORYUNC = false;
+    fThUncertainties = true;
 
   // load theory map
   IndexDB db(get_data_path() + "/theory.db", "theoryIndex");
@@ -260,11 +259,6 @@ bool NNPDFSettings::Exists(const string &item) const
 bool NNPDFSettings::Exists(const string &node, const string &item) const
 {
   return !fConfig[node][item] ? false : true;
-}
-
-bool NNPDFSettings::ThUncUsed() const
-{
-  return fTHEORYUNC;
 }
 
 YAML::Node NNPDFSettings::GetPlotting(const string &item) const

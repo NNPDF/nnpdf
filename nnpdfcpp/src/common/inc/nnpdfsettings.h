@@ -78,7 +78,6 @@ struct PosSetInfo
 class NNPDFSettings
 {
 private:
-  bool fTHEORYUNC; //!< Bool to check if theory uncertainties are included
   string fFileName;
   string fPDFName;
   string fResultsDir;
@@ -102,6 +101,8 @@ private:
   YAML::Node fPlotting; //!< plotting config file
 
   map<string,string> fTheory;
+
+  bool fThUncertainties; //!< true if the fit uses an external runcard, false otherwise.
 
 public:
 
@@ -137,6 +138,7 @@ public:
   map<string,string> const& GetTheoryMap() const { return fTheory; }
   bool IsQED() const;
   bool IsIC()  const;
+  bool IsThUncertainties() const { return fThUncertainties; }
 
   gsl_integration_workspace *GetGSLWorkspace() const { return fGSLWork; } //!< GSL integration workspace
 
