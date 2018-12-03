@@ -80,7 +80,7 @@ namespace NNPDF
     matrix<double> fFitCovMat;  //!< The total covmat for fitting
     matrix<double> fSqrtFitCov; //!< The Cholesky decomposition of the total fitting covmat
 
-    double *fStat;       //!< The statistical errors
+    std::vector<double> fStat; //!< The statistical errors
     sysError **fSys;    //!< The syscor
     int **fSetSysMap;    //!< Map for ordering of systematics in datasets
 
