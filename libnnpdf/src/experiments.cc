@@ -70,8 +70,7 @@ fNData(exp.fNData),
 fNSys(exp.fNSys),
 fCovMat(exp.fCovMat),
 fSqrtCov(exp.fSqrtCov),
-fRepCovMat(exp.fRepCovMat),
-fSqrtRepCov(exp.fSqrtRepCov),
+fSamplingMatrix(exp.fSamplingMatrix),
 fStat(NULL),
 fSys(NULL),
 fSetSysMap(NULL),
@@ -158,8 +157,11 @@ void Experiment::MakeReplica()
   sysType rST[2] = {ADD,MULT};
 
   // Compute the sampling covariance matrix with data CVs, no multiplicative error and no theory errors
-  matrix<double> SamplingMatrix  = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fData, fStat, fSys, false, false);
-  SamplingMatrix = ComputeSqrtMat(SamplingMatrix); // Take the sqrt of the sampling matrix
+  if (fSamplingMatrix.size(0) == 0)
+  {
+    matrix<double> SM = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fData, fStat, fSys, false, false);
+    fSamplingMatrix = ComputeSqrtMat(SM); // Take the sqrt of the sampling matrix
+  }
 
   // generate procType array for ease of checking
   std::vector<std::string> proctype;
@@ -185,7 +187,7 @@ void Experiment::MakeReplica()
       vector<double> deviates(fNData, std::numeric_limits<double>::quiet_NaN());
       generate(deviates.begin(), deviates.end(),
                []()->double {return RandomGenerator::GetRNG()->GetRandomGausDev(1); } );
-      const vector<double> correlated_deviates = SamplingMatrix*deviates;
+      const vector<double> correlated_deviates = fSamplingMatrix*deviates;
 
       // Additive noise is generated directly from the covariance matrix
       vector<double> artdata(fData);
@@ -258,7 +260,6 @@ void Experiment::MakeReplica()
 
   // Now the fData is artificial
   fIsArtificial = true;
-  return;
 }
 
 void Experiment::SetT0(const PDFSet& pdf){
@@ -539,8 +540,7 @@ matrix<double> read_total_covmat(const std::string filename)
 */
 void Experiment::LoadRepCovMat(string filename)
 {
-  fRepCovMat = read_total_covmat(filename);
-  fSqrtRepCov = ComputeSqrtMat(fRepCovMat);
+  fSamplingMatrix = ComputeSqrtMat(read_total_covmat(filename));
 }
 
 /**
