@@ -218,7 +218,7 @@ class Loader(LoaderBase):
                         "are needed with `use_fitcommondata`")
                 #This is to not repeat all the error handling stuff
                 basedata = self.check_commondata(setname, sysnum=sysnum).datafile
-                cuts = self.check_cuts(setname, fit=fit)
+                cuts = self.check_fit_cuts(setname, fit=fit)
 
                 if fit not in self._old_commondata_fits:
                     self._old_commondata_fits.add(fit)
@@ -440,12 +440,6 @@ class Loader(LoaderBase):
         if not isinstance(w2min, numbers.Number):
             raise TypeError("w2min must be a number")
         return InternalCutsWrapper(full_ds, q2min, w2min)
-
-    def get_cuts(self, setname, fit):
-        cuts = self.check_cuts(setname, fit)
-        if cuts:
-            return cuts.load()
-        return None
 
     def check_vp_output_file(self, filename, extra_paths=('.',)):
         """Find a file in the vp-cache folder, or (with higher priority) in

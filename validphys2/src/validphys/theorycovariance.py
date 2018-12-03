@@ -91,6 +91,7 @@ def make_scale_var_covmat(predictions):
 
 @_check_correct_theory_combination
 def theory_covmat_no_table(theoryids_experiments_central_values_no_table, experiments_index, theoryids, fivetheories:(str, type(None)) = None):
+
     """Calculates the theory covariance matrix for scale variations.
     The matrix is a dataframe indexed by experiments_index."""
     s = make_scale_var_covmat(theoryids_experiments_central_values_no_table)
@@ -108,7 +109,8 @@ each_dataset_results_bytheory = collect('results_bytheoryids',
                                         ('experiments', 'experiment'))
 
 @_check_correct_theory_combination
-def theory_covmat_datasets(each_dataset_results_bytheory):
+def theory_covmat_datasets(each_dataset_results_bytheory,
+                           fivetheories:(str, type(None)) = None):
     """Produces an array of theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard. """
     dataset_covmats=[]
@@ -119,7 +121,8 @@ def theory_covmat_datasets(each_dataset_results_bytheory):
     return dataset_covmats
 
 @_check_correct_theory_combination
-def total_covmat_datasets(each_dataset_results_bytheory):
+def total_covmat_datasets(each_dataset_results_bytheory,
+                          fivetheories:(str, type(None)) = None):
     """Produces an array of total covariance matrices; the sum of experimental
     and scale-varied theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard.
@@ -134,7 +137,8 @@ def total_covmat_datasets(each_dataset_results_bytheory):
     return dataset_covmats
 
 @_check_correct_theory_combination
-def total_covmat_diagtheory_datasets(each_dataset_results_bytheory):
+def total_covmat_diagtheory_datasets(each_dataset_results_bytheory,
+                                     fivetheories:(str, type(None)) = None):
     """Same as total_covmat_theory_datasets but for diagonal theory only"""
     dataset_covmats=[]
     for dataset in each_dataset_results_bytheory:
@@ -159,7 +163,8 @@ def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
 experiments_results_theory = collect('experiments_results', ('theoryids',))
 
 @_check_correct_theory_combination
-def total_covmat_experiments(experiments_results_theory):
+def total_covmat_experiments(experiments_results_theory,
+                             fivetheories:(str, type(None)) = None):
     """Same as total_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
     exp_result_covmats = []
@@ -179,12 +184,17 @@ commondata_experiments = collect('commondata', ['experiments', 'experiment'])
 def process_lookup(commondata_experiments):
     """Produces a dictionary with keys corresponding to dataset names
     and values corresponding to process types. Process types are
-    regrouped into the four categories 'Drell-Yan', 'Heavy Quarks', Jets'
-    and 'DIS'."""
+    regrouped into the five categories 'Drell-Yan', 'Heavy Quarks', Jets',
+    'DIS NC' and 'DIS CC'."""
     d = {commondata.name: get_info(commondata).process_description
          for commondata in commondata_experiments}
     for key, value in d.items():
-        if "Drell-Yan" in value:
+        if "Deep Inelastic Scattering" in value:
+            if ("CHORUS" in key) or ("NTV" in key) or ("HERACOMBCC" in key):
+                d[key] = "DIS CC"
+            else:
+                d[key] = "DIS NC"
+        elif "Drell-Yan" in value:
             d[key] = "Drell-Yan"
         elif "Heavy Quarks" in value:
             d[key] = "Heavy Quarks"
@@ -351,7 +361,8 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     return df
 
 @_check_correct_theory_combination
-def total_covmat_diagtheory_experiments(experiments_results_theory):
+def total_covmat_diagtheory_experiments(experiments_results_theory,
+                                        fivetheories:(str, type(None)) = None):
     """Same as total_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
     exp_result_covmats = []
