@@ -365,7 +365,6 @@ def next_effective_exponents_yaml(pdf: PDF,
 
     flavours_label = []
 
-    #Put it in pdfbases.py!
     YAMLflaliases = {r'\Sigma': 'sng', 'V': 'v', 'T3': 't3',
                      'V3': 'v3', 'T8': 't8', 'V8': 'v8', 'gluon': 'g', r'c^+': 'cp'}
 
@@ -404,3 +403,58 @@ def next_effective_exponents_yaml(pdf: PDF,
                     out.write("}\n")
 
     pass
+
+
+def test_next_effective_exponents_yaml(pdf: PDF,
+                                       x1_alpha: numbers.Real = 1e-6,
+                                       x2_alpha: numbers.Real = 1e-3,
+                                       x1_beta: numbers.Real = 0.65,
+                                       x2_beta: numbers.Real = 0.95):
+    """Return a table with the effective exponents for the next fit"""
+
+    df_effexps = effective_exponents_table(pdf,
+                                           x1_alpha,
+                                           x2_alpha,
+                                           x1_beta,
+                                           x2_beta)
+    #Reading from the filter
+    import io
+
+    pdfpath = nnpath.get_results_path()+pdf.name
+    filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
+    infomap = yaml.safe_load(open(pdfpath+'/nnfit/'+pdf.name+'.info'))
+    Q = infomap['QMin']
+    basis = filtermap['fitting']['fitbasis']+'FitBasis'
+
+    flavours = None
+    checked = check_basis(basis, flavours)
+    basis = checked['basis']
+    flavours = checked['flavours']
+
+    flavours_label = []
+
+    #Put it in pdfbases.py!
+    YAMLflaliases = {r'\Sigma': 'sng', 'V': 'v', 'T3': 't3',
+                     'V3': 'v3', 'T8': 't8', 'V8': 'v8', 'gluon': 'g', r'c^+': 'cp'}
+    s = io.StringIO()
+    d = {}
+    for (j, fl) in enumerate(flavours):
+        YAMLlabel = " "
+        if basis.elementlabel(fl) in YAMLflaliases.keys():
+            YAMLlabel = YAMLflaliases[basis.elementlabel(fl)]
+        else:
+            YAMLlabel = basis.elementlabel(fl)
+
+        for k, ref_fl in enumerate(filtermap['fitting']['basis']):
+            if basis.elementlabel(fl) in YAMLflaliases.keys():
+                YAMLlabel = YAMLflaliases[basis.elementlabel(fl)]
+            else:
+                YAMLlabel = basis.elementlabel(fl)
+
+            if ref_fl['fl'] == YAMLlabel:
+                d = {'fl': YAMLlabel}
+                yaml.explicit_start = True
+                yaml.dump(d,s)
+
+
+    return s.getvalue()
