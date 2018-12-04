@@ -448,7 +448,6 @@ void Experiment::GenCovMat()
 /*
 * Reads in covariance matrix for an experiment from pandas dataframe
 */
-
 matrix<double> read_total_covmat(const std::string filename)
 {
   const int first_lines_to_skip = 4;   //experiment, dataset, id, header
@@ -511,7 +510,7 @@ matrix<double> read_total_covmat(const std::string filename)
     if (isalpha(line[line.size() - 1]))
       throw EvaluationError("experiments", "The format of covmat has probably changed.");
 
-          std::stringstream ss(line);
+    std::stringstream ss(line);
 
     // Skip the first columns
     for (int i = 0; i < first_columns_to_skip; ++i)
@@ -526,8 +525,8 @@ matrix<double> read_total_covmat(const std::string filename)
       if (ss.fail())
         throw EvaluationError("experiments", "Error while reading lines of the covmat.");
 
-            covmat(l, c) = entry;
-            c++;
+      covmat(l, c) = entry;
+      c++;
     } //columns loop
     l++;
   } //line loop
