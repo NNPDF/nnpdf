@@ -72,12 +72,12 @@ def _check_correct_theory_combination(theoryids, fivetheories):
         "prescription for theory covariance matrix calculation")
 
 @make_argcheck
-def _check_valid_shift_matrix_threshold_method(threshold:(int, float, None) = None,
+def _check_valid_shift_matrix_threshold_method(shift_threshold:(int, float, None) = None,
                                                method:(int, None) = None):
     """Checks that a valid method 1 or 2 is chosen where a threshold for
     removing elements of the shift correlation matrix has been specified"""
     opts = {1,2}
-    if threshold != None:
+    if shift_threshold != None:
         check(method is not None, "A threshold for removing elements of the "
                "shift correlation matrix has been specified but no choice of "
                "method (1 or 2) was provided")
@@ -861,7 +861,7 @@ matched_dataspecs_dataset_prediction_shift = collect(
 @_check_valid_shift_matrix_threshold_method
 def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
                                   matched_dataspecs_dataset_theory,
-                                  threshold:(int, float, type(None)) = None,
+                                  shift_threshold:(int, float, type(None)) = None,
                                   method:(int, type(None)) = None):
     """Produce a matrix out of the outer product of
     ``dataspecs_dataset_prediction_shift``. The matrix will be a
@@ -877,14 +877,19 @@ def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
     for i, ival in enumerate(norm_shifts):
         for j, jval in enumerate(norm_shifts):
             if method == 1:
-                if (np.abs(ival) < threshold) or (np.abs(jval) < threshold):
+                if (np.abs(ival) < shift_threshold) or (np.abs(jval) < shift_threshold):
                     mat[i][j] = 0
+                elif mat[i][j] > 0:
+                    mat[i][j] = 1
                 else:
-                    pass
+                    mat[i][j] = -1
             elif method == 2:
                 if (ival!=0) and (jval!=0):
-                    if 1/threshold <= np.abs(ival/jval) <= threshold:
-                        pass
+                    if 1/shift_threshold <= np.abs(ival/jval) <= shift_threshold:
+                        if mat[i][j] > 0:
+                            mat[i][j] = 1
+                        else:
+                            mat[i][j] = -1 
                     else:
                         mat[i][j] = 0
                 else:
@@ -1094,15 +1099,10 @@ shx_vector = collect('shift_vector', ['combined_shift_and_theory_dataspecs', 'sh
 thx_vector = collect('theory_vector', ['combined_shift_and_theory_dataspecs', 'theoryconfig'])
 
 
-def shift_matrix_threshold(threshold:(int, float, type(None)) = None):
-    """Returns the threshold for the difference in ratio between shift vector
-    elements outside which the shift matrix is set to 0"""
-    return threshold
-
-def shift_matrix_method(method:(int, type(None)) = None):
-    """Returns the choice of method used for setting the elements of the
-    shift covariance matrix to 0 """
-    return method
+def theory_matrix_threshold(theory_threshold:(int, float) = 0):
+    """Returns the threshold below which theory correlation elements are set to
+    zero when comparing to shift correlation matrix"""
+    return theory_threshold
 
 @table
 def shift_to_theory_ratio(thx_corrmat, shx_corrmat):
@@ -1112,11 +1112,12 @@ def shift_to_theory_ratio(thx_corrmat, shx_corrmat):
 @figure
 def shift_to_theory_ratio_plot(shift_to_theory_ratio):
     matrix = shift_to_theory_ratio
-    bins = np.linspace(-1, 1, num=21)
-    digmatrix = np.digitize(matrix, bins)
-    symdigmatrix = np.zeros((len(digmatrix), len(digmatrix)))
-    for binnumber in range(len(bins)):
-        symdigmatrix[digmatrix==binnumber+1] = bins[binnumber]
+    matrix[((matrix==np.inf) | (matrix==-np.inf))] = 0
+#    bins = np.linspace(-1, 1, num=21)
+#    digmatrix = np.digitize(matrix, bins)
+#    symdigmatrix = np.zeros((len(digmatrix), len(digmatrix)))
+#    for binnumber in range(len(bins)):
+#        symdigmatrix[digmatrix==binnumber+1] = bins[binnumber]
     fig, ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r)
     fig.colorbar(matrixplot)
@@ -1155,12 +1156,19 @@ def shift_corrmat_value_fractions(shx_corrmat):
     return table
 
 @table
-def theory_corrmat_value_fractions(thx_corrmat):
+def theory_corrmat_value_fractions(thx_corrmat,
+                                   theory_threshold:(int, float) = 0):
     mat = thx_corrmat[0].values
+    newmat = np.zeros((len(mat),len(mat)))
+    #coarse graining for comparison
+    newmat[mat>=theory_threshold]=1
+    newmat[mat<=-theory_threshold]=-1
+#    mask = ((mat!=-1) & (mat!=1))
+#    mat[mask]=0
     matsize = np.size(mat)
-    fracplus = 100*np.size(np.where(mat>0))/(2*matsize)
-    fracminus = 100*np.size(np.where(mat<0))/(2*matsize)
-    fraczero = 100*np.size(np.where(mat==0))/(2*matsize)
+    fracplus = 100*np.size(np.where(newmat>0))/(2*matsize)
+    fracminus = 100*np.size(np.where(newmat<0))/(2*matsize)
+    fraczero = 100*np.size(np.where(newmat==0))/(2*matsize)
     table = pd.DataFrame([fracplus, fracminus, fraczero],
                          index=[r'$\tilde{f}_{\rho=+1}$',
                                 r'$\tilde{f}_{\rho=-1}$',
@@ -1169,16 +1177,23 @@ def theory_corrmat_value_fractions(thx_corrmat):
     return table
 
 @table
-def shift_theory_element_comparison(shx_corrmat, thx_corrmat):
-    mat = thx_corrmat[0].values/shx_corrmat[0].fillna(0).values
-    mat = np.nan_to_num(mat)
-    matsize = np.size(mat)
-    fracplus = 100*np.size(np.where(mat>0))/(2*matsize)
-    fracminus = 100*np.size(np.where(mat<0))/(2*matsize)
-    table = pd.DataFrame([fracplus, fracminus],
+def shift_theory_element_comparison(shx_corrmat, thx_corrmat,
+                                    theory_threshold:(int, float) = 0):
+    #coarse graining for comparison
+    thmat = thx_corrmat[0].values
+    newthmat = np.zeros((len(thmat),len(thmat)))
+    newthmat[thmat>=theory_threshold]=1
+    newthmat[thmat<=-theory_threshold]=-1
+#    mask = ((thmat!=-1) & (thmat!=1))
+#    thmat[mask]=0
+    shmat = shx_corrmat[0].fillna(0).values
+    num_non_zero = np.size(np.where(shmat!=0))/2
+    fracsame = 100*np.size(np.where((shmat==newthmat) & (shmat!=0)))/(2*num_non_zero)
+    fracdiff = 100*np.size(np.where((shmat!=newthmat) & (shmat!=0)))/(2*num_non_zero)
+    table = pd.DataFrame([fracsame, fracdiff],
                          index=['same sign',
                                 'different signs'],
-                         columns = ["% of total entries"])
+                         columns = ["% of total entries (where shift matrix is non-zero)"])
     return table
 
 
