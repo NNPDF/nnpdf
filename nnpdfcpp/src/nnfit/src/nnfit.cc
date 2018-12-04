@@ -486,6 +486,10 @@ void TrainValidSplit(NNPDFSettings const& settings,
   vector<DataSet> trainingSets;
   vector<DataSet> validationSets;
 
+  vector<bool> trCovMatMask(0);
+  vector<bool> valCovMatMask(0);
+  int AccumulatedData = 0;
+
   int expValSize = 0; // size of validation experiment
 
   for (int s = 0; s < exp->GetNSet(); s++)
@@ -504,9 +508,32 @@ void TrainValidSplit(NNPDFSettings const& settings,
       const vector<int> trMaskset(mask.begin(), mask.begin() + trMax);
       const vector<int> valMaskset(mask.begin() + trMax, mask.end());
 
+      if (settings.IsThUncertainties())
+      {
+        /*
+        * Flag the points for training and validations
+        */
+
+        //initializing to zero
+        for (int i = 0; i < set.GetNData(); i++)
+        {
+          trCovMatMask.push_back(0);
+          valCovMatMask.push_back(0);
+        }
+
+        //Creating the boolean mask
+        for (int i = 0; i < trMaskset.size(); i++)
+          trCovMatMask.at(AccumulatedData + trMaskset.at(i)) = 1;
+        for (int i = 0; i < valMaskset.size(); i++)
+          valCovMatMask.at(AccumulatedData + valMaskset.at(i)) = 1;
+
+        //Accumulating Sets NData
+        AccumulatedData += set.GetNData();
+      }
+
       // Initializing new datasets
       trainingSets.push_back(DataSet(exp->GetSet(s), trMaskset));
-      if ((int) valMaskset.size() != 0)
+      if ((int)valMaskset.size() != 0)
       {
         validationSets.push_back(DataSet(exp->GetSet(s), valMaskset));
         expValSize += valMaskset.size();
@@ -519,4 +546,17 @@ void TrainValidSplit(NNPDFSettings const& settings,
   cout << Colour::FG_BLUE << "- Building Validation" << Colour::FG_DEFAULT << endl;
   if (expValSize != 0)
       val = new Experiment(*exp, validationSets);
+
+  // read covmat from file if specified in the runcard
+  if (settings.IsThUncertainties())
+  {
+    string RepCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_sampling_t0_experimentsplustheory_covmat.csv";
+    string FitCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_fitting_t0_experimentsplustheory_covmat.csv";
+
+    tr->LoadRepCovMat(RepCovMatPath, trCovMatMask);
+    tr->LoadFitCovMat(FitCovMatPath, trCovMatMask);
+
+    val->LoadRepCovMat(RepCovMatPath, valCovMatMask);
+    val->LoadFitCovMat(FitCovMatPath, valCovMatMask);
+  }
 }

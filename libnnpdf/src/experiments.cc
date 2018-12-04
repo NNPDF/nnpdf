@@ -448,7 +448,7 @@ void Experiment::GenCovMat()
 /*
 * Reads in covariance matrix for an experiment from pandas dataframe
 */
-matrix<double> read_total_covmat(const std::string filename)
+matrix<double> read_total_covmat(const std::string filename, std::vector<bool> bmask = std::vector<bool>(0))
 {
   const int first_lines_to_skip = 4;   //experiment, dataset, id, header
   const int first_columns_to_skip = 3; //experiment, dataset, id
@@ -478,9 +478,16 @@ matrix<double> read_total_covmat(const std::string filename)
         ss >> entry;
 
       while (ss >> entry)
+      {
+        if (!bmask.empty() && !bmask.at(columns))
+          continue;
         columns++;
+      }
     }
     ONCE = false;
+
+    if (!bmask.empty() && !bmask.at(lines))
+      continue;
 
     lines++;
   }
@@ -510,6 +517,9 @@ matrix<double> read_total_covmat(const std::string filename)
     if (isalpha(line[line.size() - 1]))
       throw EvaluationError("experiments", "The format of covmat has probably changed.");
 
+    if (!bmask.empty() && !bmask.at(l))
+      continue;
+
     std::stringstream ss(line);
 
     // Skip the first columns
@@ -525,6 +535,9 @@ matrix<double> read_total_covmat(const std::string filename)
       if (ss.fail())
         throw EvaluationError("experiments", "Error while reading lines of the covmat.");
 
+      if (!bmask.empty() && !bmask.at(c))
+        continue;
+
       covmat(l, c) = entry;
       c++;
     } //columns loop
@@ -537,17 +550,17 @@ matrix<double> read_total_covmat(const std::string filename)
 /**
 * Read in covariance matrix for replica generation from file, and generate covariance matrix and its square root
 */
-void Experiment::LoadRepCovMat(string filename)
+void Experiment::LoadRepCovMat(string filename, std::vector<bool> bmask)
 {
-  fSamplingMatrix = ComputeSqrtMat(read_total_covmat(filename));
+  fSamplingMatrix = ComputeSqrtMat(read_total_covmat(filename, bmask));
 }
 
 /**
 * Read in covariance matrix to be used in fit from file, and generate covariance matrix and its square root
 */
-void Experiment::LoadFitCovMat(string filename)
+void Experiment::LoadFitCovMat(string filename, std::vector<bool> bmask)
 {
-  fCovMat = read_total_covmat(filename);
+  fCovMat = read_total_covmat(filename, bmask);
   fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 
