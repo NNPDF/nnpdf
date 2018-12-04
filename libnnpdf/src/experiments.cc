@@ -490,8 +490,7 @@ matrix<double> read_total_covmat(const std::string filename)
   if (lines != columns)
     throw EvaluationError("experiments", "Lines and Columns of covmat doesn't match.");
 
-        matrix<double>
-            covmat(lines, lines);
+  matrix<double> covmat(lines, lines);
 
   //====READ CovMat into matrix object
   // Skip the first lines
@@ -502,9 +501,10 @@ matrix<double> read_total_covmat(const std::string filename)
   for (int i = 0; i < first_lines_to_skip; ++i)
     std::getline(file, line);
 
-  int l = 0, c = 0;
+  int l = 0;
   while (std::getline(file, line)) //Read a line
   {
+    int c = 0;
     double entry;
     //! Extra check, in case the format changes
     //! CHECKPOINT1: Read the last character of the line, if it's alphabetical, throw an error.
@@ -527,7 +527,7 @@ matrix<double> read_total_covmat(const std::string filename)
         throw EvaluationError("experiments", "Error while reading lines of the covmat.");
 
             covmat(l, c) = entry;
-      c++;
+            c++;
     } //columns loop
     l++;
   } //line loop
