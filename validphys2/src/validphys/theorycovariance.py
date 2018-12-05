@@ -1213,13 +1213,18 @@ def plot_thcorrmat_heatmap_custom_dataspecs(theory_corrmat_custom_dataspecs, the
     return fig
 
 
-def theory_shift_test(thx_covmat, shx_vector, thx_vector, evalue_cutoff:(float, type(None)) = None):
+def theory_shift_test(thx_covmat, shx_vector, thx_vector, num_evals:(int, type(None)) = None,
+		     evalue_cutoff:(float, type(None)) = None):
     matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
     # Finding eigenvalues and eigenvectors
     w, v = la.eigh(matrix)
     w_max = w[-1]
-    w_nonzero = w[w>evalue_cutoff*w_max]
-    nonzero_locs = np.nonzero(w>evalue_cutoff*w_max)[0]
+    if num_evals is not None:
+        w_nonzero = w[-num_evals:]
+        nonzero_locs = range(len(w)-num_evals, len(w))
+    else:
+        w_nonzero = w[w>evalue_cutoff*w_max]
+        nonzero_locs = np.nonzero(w>evalue_cutoff*w_max)[0]
     # ^ taking 0th element to extract list from tuple
     v_nonzero = []
     for loc in nonzero_locs:
@@ -1251,7 +1256,7 @@ def modrat(theory_shift_test):
     fmod = np.sqrt(np.sum(f**2))
     fmiss_mod = np.sqrt(np.sum(fmiss**2))
     modrat = fmiss_mod/fmod
-#    print(f"modrat = {modrat}")
+    print(f"modrat = {modrat}")
     return modrat
 
 def maxrat(theory_shift_test):
@@ -1266,7 +1271,7 @@ def validation_theory_chi2(theory_shift_test):
     evals = theory_shift_test[0]
     ratio = projectors/np.sqrt(evals)
     th_chi2 = 1/len(evals)*np.sum(ratio**2)
-#    print(f"Theory chi2 = {th_chi2}")
+    print(f"Theory chi2 = {th_chi2}")
     return th_chi2
 
 @figure
@@ -1283,7 +1288,7 @@ def projector_eigenvalue_ratio(theory_shift_test):
     ax1.set_ylabel(r"|$\delta_a$|")
     ax2.set_ylabel(r"|$s_a$|")
     ax3.set_ylabel(r"|$\delta_a$/$s_a$|")
-#    print(f"Subspace dimension = {len(evals)}")
+    print(f"Subspace dimension = {len(evals)}")
     return fig
 
 @figure
