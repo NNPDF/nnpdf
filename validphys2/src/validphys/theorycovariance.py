@@ -1228,7 +1228,8 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, num_evals:(int, type(N
     # ^ taking 0th element to extract list from tuple
     v_nonzero = []
     for loc in nonzero_locs:
-        v_nonzero.append(v[:,loc])
+        if loc >=0:
+            v_nonzero.append(v[:,loc])
     f = -shx_vector[0].values.T[0]
     projectors = np.sum(f*v_nonzero, axis=1)
     projected_evectors = np.zeros((len(projectors), (len(f))))
