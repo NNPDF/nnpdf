@@ -1237,10 +1237,16 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, num_evals:(int, type(N
     fmiss = f - np.sum(projected_evectors, axis=0)
     return w_nonzero, v_nonzero, projectors, f, fmiss, w_max
 
-def cutoff(theory_shift_test, evalue_cutoff:(float, type(None)) = None):
+def cutoff(theory_shift_test, num_evals:(int, type(None)) = None,
+           evalue_cutoff:(float, type(None)) = None):
     w_max = theory_shift_test[5]
-    cutoff = evalue_cutoff*w_max
-#    print(f"cutoff = {cutoff}")
+    if num_evals is not None:
+        cutoff = f"{num_evals} largest eigenvalues were selected"
+    elif evalue_cutoff is not None:
+        cutoff = evalue_cutoff*w_max
+    else:
+        cutoff = "No cutoff was specified"
+    print(f"cutoff = {cutoff}")
     return cutoff
 
 @table
