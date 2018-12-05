@@ -22,8 +22,8 @@ void ATLAS_WCHARM_TOT_UNNORM_7TEVFilter::ReadData()
   f1.open(datafileWP.str().c_str(), ios::in);
   if (f1.fail()) 
   {
-      cerr << "Error opening data file " << datafileWP.str() << endl;
-      exit(-1);
+    cerr << "Error opening data file " << datafileWP.str() << endl;
+    exit(-1);
   }
 
   stringstream datafileWM("");
@@ -32,10 +32,10 @@ void ATLAS_WCHARM_TOT_UNNORM_7TEVFilter::ReadData()
   f2.open(datafileWM.str().c_str(), ios::in);
   if (f2.fail()) 
   {
-      cerr << "Error opening data file " << datafileWM.str() << endl;
-      exit(-1);
+    cerr << "Error opening data file " << datafileWM.str() << endl;
+    exit(-1);
   }
-  
+
   //Starting filter
   string line;
   double etamin, etamax;          //pT ranges
