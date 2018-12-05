@@ -307,6 +307,15 @@ int main(int argc, char **argv)
         auto exp = std::make_unique<Experiment>(datasets, settings.GetExpName(i));
         vector<real> theory(exp->GetNData());
 
+        if (settings.IsThUncertainties())
+        {
+          string RepCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_sampling_t0_experimentsplustheory_covmat.csv";
+          string FitCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_fitting_t0_experimentsplustheory_covmat.csv";
+
+          exp->LoadRepCovMat(RepCovMatPath);
+          exp->LoadFitCovMat(FitCovMatPath);
+        }
+
         Convolute(fitset.get(),exp.get(),theory.data());
         NNPDF::ComputeChi2(exp.get(),1,theory.data(),&chi2);
 
