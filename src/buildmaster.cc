@@ -72,7 +72,7 @@
 #include "CMS_SINGLETOP_TCH_R_8TEV.h"
 #include "CMS_SINGLETOP_TCH_R_13TEV.h"
 #include "CMS_WCHARM_DIFF_UNNORM_13TEV.h"
-#include "ATLAS_WCHARM_TOT_UNNORM_7TEV"
+#include "ATLAS_WCHARM_TOT_UNNORM_7TEV.h"
 /**
  * \param argv the filename containing the configuration
  */
@@ -121,7 +121,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASWZTOT13TEV81PBFilter());
   //
   target.push_back(new ATLASZPT7TEVFilter());
-  target.push_back(new ATLAS_WCHARM_TOT_UNNORM_7TEV());
+  target.push_back(new ATLAS_WCHARM_TOT_UNNORM_7TEVFilter());
   target.push_back(new ATLASZPT8TEVYDISTFilter());
   //  target.push_back(new ATLASZPT8TEVYDISTNORMFilter());
   target.push_back(new ATLASZPT8TEVMDISTFilter());
