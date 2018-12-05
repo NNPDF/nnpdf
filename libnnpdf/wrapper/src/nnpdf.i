@@ -19,7 +19,7 @@
 
 %include "std_string.i"
 %include "std_vector.i"
-%include "std_map.i" 
+%include "std_map.i"
 
 %include "include/numpy.i"
 
@@ -201,14 +201,14 @@ void get_sigma(NNPDF::real **data, int* n){
 }
 
 void get_flmap(int **data, int* n){
-  int len = $self->GetNonZero();
+  int len = $self->IsHadronic() ? 2*$self->GetNonZero() : $self->GetNonZero();
   int* result = (int*) malloc(sizeof(int)*len);
   int* flmap = $self->GetFlmap();
   std::copy(flmap, flmap+len, result);
   *data = result;
-  *n = len;    
+  *n = len;
 }
- 
+
 }
 
 /* Dataset */
