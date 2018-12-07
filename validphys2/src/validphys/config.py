@@ -32,7 +32,7 @@ from validphys.gridvalues import LUMI_CHANNELS
 
 from validphys.paramfits.config import ParamfitsConfig
 
-from validphys.theorycovariance import experimentsplustheory_covmat
+from validphys.theorycovariance import experimentsplustheory_covmat_custom
 
 log = logging.getLogger(__name__)
 
@@ -664,12 +664,12 @@ class CoreConfig(configparser.Config):
 
     @configparser.explicit_node
     def produce_sampling_covmat(self):
-        sampling_covmat = experimentsplustheory_covmat
+        sampling_covmat = experimentsplustheory_covmat_custom
         return sampling_covmat
 
     @configparser.explicit_node
     def produce_fitting_covmat(self):
-        fitting_covmat = experimentsplustheory_covmat
+        fitting_covmat = experimentsplustheory_covmat_custom
         return fitting_covmat
 
     def produce_additionalerrors(self, dataset):
