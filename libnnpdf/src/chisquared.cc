@@ -85,7 +85,7 @@ namespace NNPDF
     std::vector<double> stat_error(ndat, 0);
     for (int i=0; i<ndat; i++)
         stat_error[i] = cd.GetStat(i);
-    return ComputeCovMat_basic(ndat, nsys, sqrt_weights, t0, stat_error, cd.GetSysErrors(), true, false);
+    return ComputeCovMat_basic(ndat, nsys, sqrt_weights, t0, stat_error, cd.GetSysErrors(), true, true);
   }
 
   matrix<double> ComputeSqrtMat(matrix<double> const& inmatrix)
