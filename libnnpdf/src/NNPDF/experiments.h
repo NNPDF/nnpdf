@@ -56,8 +56,8 @@ namespace NNPDF
 
     void SetT0(const PDFSet&); //!<Set T0 Predictions for each dataset in place and update internal structures
 
-    void LoadRepCovMat(std::string filename, std::vector<bool> bmask = std::vector<bool>(0)); //!< Read in covmat for rep gen, generate covmat and sqrt
-    void LoadFitCovMat(std::string filename, std::vector<bool> bmask = std::vector<bool>(0));    //!< Read in covmat for fitting, generate covmat and sqrt
+    void LoadRepCovMat(std::string filename, std::vector<int> bmask = {}); //!< Read in covmat for rep gen, generate covmat and sqrt
+    void LoadFitCovMat(std::string filename, std::vector<int> bmask = {});    //!< Read in covmat for fitting, generate covmat and sqrt
 
   private:
 

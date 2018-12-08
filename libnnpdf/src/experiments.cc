@@ -448,101 +448,59 @@ void Experiment::GenCovMat()
 /*
 * Reads in covariance matrix for an experiment from pandas dataframe
 */
-matrix<double> read_total_covmat(const std::string filename, std::vector<bool> bmask = std::vector<bool>(0))
+matrix<double> read_total_covmat(int ndata, const std::string filename, std::vector<int> bmask = {})
 {
-  const int first_lines_to_skip = 4;   //experiment, dataset, id, header
-  const int first_columns_to_skip = 3; //experiment, dataset, id
-
+  // open file
   ifstream file(filename.c_str());
 
   if (!file.good())
     throw FileError("experiments", "Cannot read covariance matrix file from " + filename);
 
   string line;
+  const int first_lines_to_skip = 4;   //experiment, dataset, id, header
+  const int first_columns_to_skip = 3; //experiment, dataset, id
 
-  //====Initialise CovMat (get lines and columns from txt file)
-  int lines = 0, columns = 0;
-  bool ONCE = true;
-  // Skip the first lines
-  for (int i = 0; i < first_lines_to_skip; ++i)
-    std::getline(file, line);
-  while (std::getline(file, line))
-  {
-    std::stringstream ss(line);
-    string entry;
-
-    if (ONCE)
+  int file_matrix_size = ndata;
+  if (!bmask.empty())
     {
-      // Skip the first columns
-      for (int i = 0; i < first_columns_to_skip; ++i)
-        ss >> entry;
-
-      while (ss >> entry)
-      {
-        if (!bmask.empty() && !bmask.at(columns))
-          continue;
-        columns++;
-      }
+      if(std::accumulate(bmask.begin(), bmask.end(), 0) != ndata)
+        throw RuntimeException("read_total_covmat", "wrong mask size.");
+      file_matrix_size = bmask.size();
     }
-    ONCE = false;
 
-    if (!bmask.empty() && !bmask.at(lines))
-      continue;
-
-    lines++;
-  }
-
-  //! CHECKPOINT0: Check if the lines and columns of covmat matches.
-  if (lines != columns)
-    throw EvaluationError("experiments", "Lines and Columns of covmat doesn't match.");
-
-  matrix<double> covmat(lines, lines);
-
-  //====READ CovMat into matrix object
-  // Skip the first lines
-  file.close();
-  file.clear();
-  file.open(filename.c_str());
+  matrix<double> covmat(ndata, ndata);
 
   for (int i = 0; i < first_lines_to_skip; ++i)
     std::getline(file, line);
 
-  int l = 0;
-  while (std::getline(file, line)) //Read a line
-  {
-    int c = 0;
-    double entry;
-    //! Extra check, in case the format changes
-    //! CHECKPOINT1: Read the last character of the line, if it's alphabetical, throw an error.
-    if (isalpha(line[line.size() - 1]))
-      throw EvaluationError("experiments", "The format of covmat has probably changed.");
-
-    if (!bmask.empty() && !bmask.at(l))
-      continue;
-
-    std::stringstream ss(line);
-
-    // Skip the first columns
-    for (int i = 0; i < first_columns_to_skip; ++i)
+  int ix = 0;
+  for (int idat = 0; idat < file_matrix_size; idat++)
     {
-      string entry;
-      ss >> entry;
+      getline(file, line);
+      if (bmask.empty())
+        {
+          auto row = split(line);
+          for (int jdat = 0; jdat < file_matrix_size; jdat++)
+            covmat(idat, jdat) = stod(row[first_columns_to_skip + jdat]);
+        }
+      else
+        {
+          if (bmask[idat] == 1)
+            {
+              int jx = 0;
+              auto row = split(line);
+              for (int jdat = 0; jdat < file_matrix_size; jdat++)
+                {
+                  if (bmask[jdat] == 1)
+                    {
+                      covmat(ix, jx) = stod(row[first_columns_to_skip + jdat]);
+                      jx++;
+                    }
+                }
+              ix++;
+            }
+        }
     }
-
-    while (ss >> entry || !ss.eof())
-    {
-      //! CHECKPOINT2: Throw an error if reading of a line element fails
-      if (ss.fail())
-        throw EvaluationError("experiments", "Error while reading lines of the covmat.");
-
-      if (!bmask.empty() && !bmask.at(c))
-        continue;
-
-      covmat(l, c) = entry;
-      c++;
-    } //columns loop
-    l++;
-  } //line loop
 
   return covmat;
 }
@@ -550,17 +508,17 @@ matrix<double> read_total_covmat(const std::string filename, std::vector<bool> b
 /**
 * Read in covariance matrix for replica generation from file, and generate covariance matrix and its square root
 */
-void Experiment::LoadRepCovMat(string filename, std::vector<bool> bmask)
+void Experiment::LoadRepCovMat(string filename, std::vector<int> bmask)
 {
-  fSamplingMatrix = ComputeSqrtMat(read_total_covmat(filename, bmask));
+  fSamplingMatrix = ComputeSqrtMat(read_total_covmat(fNData, filename, bmask));
 }
 
 /**
 * Read in covariance matrix to be used in fit from file, and generate covariance matrix and its square root
 */
-void Experiment::LoadFitCovMat(string filename, std::vector<bool> bmask)
+void Experiment::LoadFitCovMat(string filename, std::vector<int> bmask)
 {
-  fCovMat = read_total_covmat(filename, bmask);
+  fCovMat = read_total_covmat(fNData, filename, bmask);
   fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 

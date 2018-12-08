@@ -309,8 +309,8 @@ int main(int argc, char **argv)
 
         if (settings.IsThUncertainties())
         {
-          string RepCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_sampling_t0_experimentsplustheory_covmat.csv";
-          string FitCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_fitting_t0_experimentsplustheory_covmat.csv";
+          string RepCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_sampling_t0_experimentsplustheory_covmat_custom.csv";
+          string FitCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_fitting_t0_experimentsplustheory_covmat_custom.csv";
 
           exp->LoadRepCovMat(RepCovMatPath);
           exp->LoadFitCovMat(FitCovMatPath);
@@ -388,8 +388,8 @@ void LoadAllDataAndSplit(NNPDFSettings const& settings,
       // read covmat from file if specified in the runcard
       if (settings.IsThUncertainties())
         {
-          string RepCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_sampling_t0_experimentsplustheory_covmat.csv";
-          string FitCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_fitting_t0_experimentsplustheory_covmat.csv";
+          string RepCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_sampling_t0_experimentsplustheory_covmat_custom.csv";
+          string FitCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_fitting_t0_experimentsplustheory_covmat_custom.csv";
 
           exp->LoadRepCovMat(RepCovMatPath);
           exp->LoadFitCovMat(FitCovMatPath);
@@ -495,8 +495,8 @@ void TrainValidSplit(NNPDFSettings const& settings,
   vector<DataSet> trainingSets;
   vector<DataSet> validationSets;
 
-  vector<bool> trCovMatMask(0);
-  vector<bool> valCovMatMask(0);
+  vector<int> trCovMatMask(0);
+  vector<int> valCovMatMask(0);
   int AccumulatedData = 0;
 
   int expValSize = 0; // size of validation experiment
@@ -559,8 +559,8 @@ void TrainValidSplit(NNPDFSettings const& settings,
   // read covmat from file if specified in the runcard
   if (settings.IsThUncertainties())
   {
-    string RepCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_sampling_t0_experimentsplustheory_covmat.csv";
-    string FitCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_fitting_t0_experimentsplustheory_covmat.csv";
+    string RepCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_sampling_t0_experimentsplustheory_covmat_custom.csv";
+    string FitCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_fitting_t0_experimentsplustheory_covmat_custom.csv";
 
     tr->LoadRepCovMat(RepCovMatPath, trCovMatMask);
     tr->LoadFitCovMat(FitCovMatPath, trCovMatMask);
