@@ -11,7 +11,6 @@ import inspect
 import numbers
 import copy
 
-from IPython import embed
 from os import listdir
 from re import match
 
@@ -686,7 +685,6 @@ class CoreConfig(configparser.Config):
                     else:
                         systematics.append(info[1:])
                 infile.close()
-        embed()
         return 0
 
     def parse_speclabel(self, label:(str, type(None))):
