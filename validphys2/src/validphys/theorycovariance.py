@@ -39,7 +39,7 @@ def _check_correct_theory_combination(theoryids,
     l = len(theoryids)
     check(l in {3, 5, 7, 9},
           "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
-    opts = {'bar', 'nobar'}
+    opts = {'bar', 'nobar', 'linear'}
     xifs = [theoryid.get_description()['XIF'] for theoryid in theoryids]
     xirs = [theoryid.get_description()['XIR'] for theoryid in theoryids]
     if l == 3:
@@ -48,12 +48,12 @@ def _check_correct_theory_combination(theoryids,
     elif l == 5:
         check(
             fivetheories is not None,
-            "For five input theories a prescription bar or nobar for "
-            "the flag fivetheories must be specified.")
+            "For five input theories a prescription bar, nobar or linear "
+            "for the flag fivetheories must be specified.")
         check(fivetheories in opts,
               "Invalid choice of prescription for 5 points", fivetheories,
               opts)
-        if fivetheories == "nobar":
+        if fivetheories == "nobar" or "linear":
             correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0]
             correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5]
         else:
@@ -293,20 +293,31 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
                 start_locs = (start_proc[name1], start_proc[name2])
                 covmats[start_locs] = s
             elif l==5:
-                if name1 == name2:
-                    s = 0.5*sum(np.outer(d, d) for d in deltas1)
-            # 5 point --------------------------------------------------------------------
-                elif fivetheories=='nobar':
-                    s = 0.5*(np.outer(deltas1[0], deltas2[0]) + np.outer(
-                                             deltas1[1], deltas2[1])) + 0.25*(
-                        np.outer((deltas1[2] + deltas1[3]),
-                                 (deltas2[2] + deltas2[3])))
-             # 5bar-point -----------------------------------------------------------------
+             # Zahari's proposal for the theoretical covariance matrix --------------------
+                if fivetheories=='linear':
+                    if name1 == name2:
+                        s = 0.25*(np.outer(deltas1[0], deltas2[0]) - np.outer(deltas1[0], deltas2[1])
+                            - np.outer(deltas1[1], deltas2[0]) + np.outer(deltas1[1], deltas2[1])
+                            + np.outer(deltas1[2], deltas2[2]) - np.outer(deltas1[2], deltas2[3])
+                            - np.outer(deltas1[3], deltas2[2]) + np.outer(deltas1[3], deltas2[3]))
+                    else:
+                        s = 0.25*(np.outer(deltas1[0], deltas2[0]) - np.outer(deltas1[0], deltas2[1])
+                            - np.outer(deltas1[1], deltas2[0]) + np.outer(deltas1[1], deltas2[1]))
                 else:
-                    s = 0.25*(np.outer((deltas1[0]+deltas1[2]),
-                                        (deltas2[0]+deltas2[2]))
-                               + np.outer((deltas1[1]+deltas1[3]),
-                                          (deltas2[1]+deltas2[3])))
+                    if name1 == name2:
+                        s = 0.5*sum(np.outer(d, d) for d in deltas1)
+             # 5 point --------------------------------------------------------------------
+                    elif fivetheories=='nobar':
+                        s = 0.5*(np.outer(deltas1[0], deltas2[0]) + np.outer(
+                                               deltas1[1], deltas2[1])) + 0.25*(
+                            np.outer((deltas1[2] + deltas1[3]),
+                                    (deltas2[2] + deltas2[3])))
+             # 5bar-point -----------------------------------------------------------------
+                    else:
+                        s = 0.25*(np.outer((deltas1[0]+deltas1[2]),
+                                            (deltas2[0]+deltas2[2]))
+                                + np.outer((deltas1[1]+deltas1[3]),
+                                            (deltas2[1]+deltas2[3])))
              #  -----------------------------------------------------------------
                 start_locs = (start_proc[name1], start_proc[name2])
                 covmats[start_locs] = s
