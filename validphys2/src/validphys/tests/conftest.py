@@ -23,7 +23,7 @@ def tmp(tmpdir):
 @pytest.fixture(scope='module')
 def data():
     l = Loader()
-    names = ['NMC', 'ATLASTTBARTOT']
+    names = ['NMC', 'ATLASTTBARTOT', 'CMSZDIFF12']
     ds = [l.check_dataset(name=x, theoryid=162, cuts=None) for x in names]
     exps = [ExperimentSpec(x.name, [x]) for x in ds]
     pdf = l.check_pdf("NNPDF31_nnlo_as_0118")
