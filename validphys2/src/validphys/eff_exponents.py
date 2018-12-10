@@ -9,6 +9,7 @@ import warnings
 import numpy as np
 import pandas as pd
 import numbers
+import collections
 
 from reportengine.figure import figuregen
 from reportengine.table import table
@@ -435,9 +436,9 @@ def test_next_effective_exponents_yaml(pdf: PDF,
 
     #Put it in pdfbases.py!
     YAMLflaliases = {r'\Sigma': 'sng', 'V': 'v', 'T3': 't3',
-                     'V3': 'v3', 'T8': 't8', 'V8': 'v8', 'gluon': 'g', r'c^+': 'cp'}
+                     'V3': 'v3', 'T8': 't8', 'V8': 'v8', 'g': 'g', r'c^+': 'cp'}
     s = io.StringIO()
-    d = {}
+    inputs=[]
     for (j, fl) in enumerate(flavours):
         YAMLlabel = " "
         if basis.elementlabel(fl) in YAMLflaliases.keys():
@@ -452,9 +453,18 @@ def test_next_effective_exponents_yaml(pdf: PDF,
                 YAMLlabel = basis.elementlabel(fl)
 
             if ref_fl['fl'] == YAMLlabel:
-                d = {'fl': YAMLlabel}
-                yaml.explicit_start = True
-                yaml.dump(d,s)
+                pos = filtermap['fitting']['basis'][k]['pos']
+                mutsize = "["+str(filtermap['fitting']['basis'][k]['mutsize'][0])+"]"
+                mutprob = "["+str(filtermap['fitting']['basis'][k]['mutprob'][0])+"]"
+                smallx = "["+str(df_effexps.iat[2*j, 3])+", "+str(df_effexps.iat[2*j, 4])+"]"
+                largex = "["+str(df_effexps.iat[2*j+1, 3])+", "+str(df_effexps.iat[2*j+1, 4])+"]"
+                d = {'fl': YAMLlabel, 'pos': pos, 'mutsize': mutsize,
+                     'mutprob': mutprob, 'smallx': smallx, 'largex': largex}
+
+                inputs.append(d)
+
+    # yaml.RoundTripDumper #default_flow_style=False
+    yaml.dump(inputs, s)
 
 
     return s.getvalue()
