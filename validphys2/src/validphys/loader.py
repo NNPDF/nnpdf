@@ -23,6 +23,7 @@ import mimetypes
 import requests
 from reportengine.compat import yaml
 from reportengine import filefinder
+import sqlite3
 
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts,
@@ -282,11 +283,9 @@ class Loader(LoaderBase):
         return TheoryIDSpec(theoryID, theopath)
 
     def check_theoryinfo(self, theoryID: int):
-        """ Looks in the datapath for the theory.db and returns dict of theory info
-        repeats `TheoryIDSpec.get_description()` but doesn't require fit to be downloaded.
+        """ Looks in the datapath for the theory.db and returns a dictionary of theory info for the
+        theory number specified by `theoryID`.
         """
-        # TODO: is sqlite3 still an implementation detail?
-        import sqlite3
         dbpath = self.datapath/'theory.db'
         if not dbpath.exists():
             raise TheoryDataBaseNotFound(f"could not find theory.db. File not found at {dbpath}")
@@ -299,7 +298,7 @@ class Loader(LoaderBase):
             res = cursor.execute(query)
             val = res.fetchone()
             if not val:
-                raise KeyError("ID %s not in the database."%self.id)
+                raise TheoryNotFound(f"ID {theoryID} not found in database.")
             return dict([(k[0], v) for k, v in zip(res.description, val)])
 
     def get_commondata(self, setname, sysnum):
