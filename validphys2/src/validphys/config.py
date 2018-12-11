@@ -663,12 +663,12 @@ class CoreConfig(configparser.Config):
 
     @configparser.explicit_node
     def produce_sampling_covmat(self):
-        sampling_covmat = experimentsplustheory_covmat_custom
+        sampling_covmat = theory_covmat_custom
         return sampling_covmat
 
     @configparser.explicit_node
     def produce_fitting_covmat(self):
-        fitting_covmat = experimentsplustheory_covmat_custom
+        fitting_covmat = theory_covmat_custom
         return fitting_covmat
 
     def produce_additionalerrors(self, dataset):
