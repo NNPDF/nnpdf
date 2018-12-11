@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import numbers
 import collections
+import matplotlib.pyplot as plt
 
 from reportengine.figure import figuregen
 from reportengine.table import table
@@ -19,8 +20,10 @@ from reportengine.compat import yaml
 from validphys.checks import check_scale, CheckError, make_argcheck, check_positive, check_pdf_normalize_to
 from validphys.pdfplots import BandPDFPlotter
 from validphys.pdfplots import PDFPlotter
+from validphys.pdfplots import FlavourState
 from validphys.pdfbases import (Basis, check_basis)
 from validphys.core import PDF
+from validphys import plotutils
 
 import NNPDF as nnpath
 
@@ -156,6 +159,65 @@ class PreprocessingPlotter(PDFPlotter):
             return "Ratio to {}".format(self.normalize_pdf.label)
         else:
             return fr"$\{self.exponent}_e$ for ${parton_name}$"
+    
+    def __call__(self,):
+        if not self.xplotting_grids:
+            return
+
+        basis = self.firstgrid.basis
+
+        for flindex, fl in enumerate(self.firstgrid.flavours):
+            fig, ax = plt.subplots()
+            parton_name = basis.elementlabel(fl)
+            flstate = FlavourState(flindex=flindex, fl=fl, fig=fig, ax=ax,
+                                   parton_name=parton_name)
+            self.setup_flavour(flstate)
+            ax.set_title(self.get_title(parton_name))
+
+            all_vals = []
+            dfs=[]
+            for pdf, grid in zip(self.pdfs, self.xplotting_grids):
+                limits = self.draw(pdf, grid, flstate)
+                if limits is not None:
+                    all_vals.append(np.atleast_2d(limits))
+                #here, by default x1_alpha=1e-6,x2_alpha=1e-3,x1_beta=0.65,x2_beta=0.95
+                dfs.append(effective_exponents_table(pdf))
+
+            
+            #Note these two lines do not conmute!
+            ax.set_xscale(self.xscale)
+            plotutils.frame_center(
+                ax, self.firstgrid.xgrid, np.concatenate(all_vals))
+            if (self.ymin is not None):
+                ax.set_ylim(ymin=self.ymin)
+            if (self.ymax is not None):
+                ax.set_ylim(ymax=self.ymax)
+
+            ax.set_xlabel('$x$')
+            ax.set_xlim(self.firstgrid.xgrid[0])
+
+            ax.set_ylabel(self.get_ylabel(parton_name))
+
+            ax.set_axisbelow(True)
+            
+            for df in dfs:
+                if self.exponent == 'alpha':
+                    #prev
+                    ax.axhline(df.iat[2*flindex, 1], linestyle='--')
+                    ax.axhline(df.iat[2*flindex, 2], linestyle='--')
+                    #next
+                    ax.axhline(df.iat[2*flindex, 3])
+                    ax.axhline(df.iat[2*flindex, 4])
+                elif self.exponent == 'beta':
+                    #prev
+                    ax.axhline(df.iat[2*flindex+1, 1], linestyle='--')
+                    ax.axhline(df.iat[2*flindex+1, 2], linestyle='--')
+                    #next
+                    ax.axhline(df.iat[2*flindex+1, 3])
+                    ax.axhline(df.iat[2*flindex+1, 4])
+                    
+            self.legend(flstate)
+            yield fig, parton_name
 
 
 class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter):
@@ -439,6 +501,7 @@ def test_next_effective_exponents_yaml(pdf: PDF,
                      'V3': 'v3', 'T8': 't8', 'V8': 'v8', 'g': 'g', r'c^+': 'cp'}
     s = io.StringIO()
     inputs=[]
+    ds={}
     for (j, fl) in enumerate(flavours):
         YAMLlabel = " "
         if basis.elementlabel(fl) in YAMLflaliases.keys():
@@ -458,6 +521,7 @@ def test_next_effective_exponents_yaml(pdf: PDF,
                 mutprob = "["+str(filtermap['fitting']['basis'][k]['mutprob'][0])+"]"
                 smallx = "["+str(df_effexps.iat[2*j, 3])+", "+str(df_effexps.iat[2*j, 4])+"]"
                 largex = "["+str(df_effexps.iat[2*j+1, 3])+", "+str(df_effexps.iat[2*j+1, 4])+"]"
+
                 d = {'fl': YAMLlabel, 'pos': pos, 'mutsize': mutsize,
                      'mutprob': mutprob, 'smallx': smallx, 'largex': largex}
 
