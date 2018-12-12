@@ -155,13 +155,7 @@ void Experiment::MakeReplica()
   double *rand  = new double[fNSys];
   double *xnor  = new double[fNData];
   sysType rST[2] = {ADD,MULT};
-
-  // Compute the sampling covariance matrix with data CVs, no multiplicative error and no theory errors
-  if (fSamplingMatrix.size(0) == 0)
-  {
-    matrix<double> SM = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fData, fStat, fSys, false, false);
-    fSamplingMatrix = ComputeSqrtMat(SM); // Take the sqrt of the sampling matrix
-  }
+  
 
   // generate procType array for ease of checking
   std::vector<std::string> proctype;
@@ -183,20 +177,28 @@ void Experiment::MakeReplica()
           fSys[i][l].type = fSys[0][l].type;
       }
 
-      // Generate normal deviates
-      vector<double> deviates(fNData, std::numeric_limits<double>::quiet_NaN());
-      generate(deviates.begin(), deviates.end(),
-               []()->double {return RandomGenerator::GetRNG()->GetRandomGausDev(1); } );
-      const vector<double> correlated_deviates = fSamplingMatrix*deviates;
-
-      // Additive noise is generated directly from the covariance matrix
       vector<double> artdata(fData);
-      for (int i=0; i<fNData; i++)
-          artdata[i] += correlated_deviates[i];
 
-      // For the multiplicative noise is generated according to the old implementation
+      // If there is a theory covarince matrix generate normal deviates
+      if (fSamplingMatrix.size(0) != 0)
+      {
+        vector<double> deviates(fNData, std::numeric_limits<double>::quiet_NaN());
+        generate(deviates.begin(), deviates.end(),
+                 []()->double {return RandomGenerator::GetRNG()->GetRandomGausDev(1); } );
+        const vector<double> correlated_deviates = fSamplingMatrix*deviates;
+     
+        // Generate additive theory noise directly from the covariance matrix
+        for (int i=0; i<fNData; i++)
+            artdata[i] += correlated_deviates[i];
+      }
+
+      // Generation of the experimental noise
       for (int i = 0; i < fNData; i++) // should rearrange to update set-by-set -- nh
       {
+
+        double xstat = rng->GetRandomGausDev(1.0)*fStat[i];         //Noise from statistical uncertainty
+
+        double xadd = 0;
         xnor[i] = 1.0;
 
         for (int l = 0; l < fNSys; l++)
@@ -208,7 +210,7 @@ void Experiment::MakeReplica()
           {
             switch (fSys[i][l].type)
             {
-              case ADD: break;
+              case ADD: xadd += rng->GetRandomGausDev(1.0)*fSys[i][l].add; break;
               case MULT: xnor[i] *= (1.0 + rng->GetRandomGausDev(1.0)*fSys[i][l].mult*1e-2); break;
               case UNSET: throw RuntimeException("Experiment::MakeReplica", "UNSET systype encountered");
             }
@@ -217,14 +219,14 @@ void Experiment::MakeReplica()
           {
             switch (fSys[i][l].type)
             {
-              case ADD: break;
+              case ADD: xadd += rand[l]*fSys[i][l].add; break;
               case MULT: xnor[i] *= (1.0 + rand[l]*fSys[i][l].mult*1e-2); break;
               case UNSET: throw RuntimeException("Experiment::MakeReplica", "UNSET systype encountered");
             }
           }
         }
 
-        artdata[i] = xnor[i] * artdata[i];
+        artdata[i] = xnor[i] * ( artdata[i] + xadd + xstat );
 
       }
 
