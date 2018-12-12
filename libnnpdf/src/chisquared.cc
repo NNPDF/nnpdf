@@ -5,6 +5,7 @@
 // Authors: Nathan Hartland,  n.p.hartland@ed.ac.uk
 //          Stefano Carrazza, stefano.carrazza@mi.infn.it
 
+#include <math.h>      
 #include "NNPDF/exceptions.h"
 #include "NNPDF/chisquared.h"
 #include "gsl/gsl_matrix.h"
@@ -113,6 +114,46 @@ namespace NNPDF
 
     return sqrtmat;
   }
+
+
+  matrix<double> ComputeSqrtMatSVD(matrix<double> const& inmatrix)
+  {
+    const size_t n = inmatrix.size(0);
+    if (n <= 0)
+      throw LengthError("SVD","attempting a decomposition of an empty matrix!");
+
+    gsl_matrix_const_view inmatrix_view = gsl_matrix_const_view_array(inmatrix.data(), n, n);
+    const gsl_matrix *inmatrix_gsl = &(inmatrix_view.matrix);
+
+    // Copy the input matrix 
+    matrix<double> A(n,n);
+    gsl_matrix_view A_view = gsl_matrix_view_array(A.data(), n, n);
+    gsl_matrix *A_gsl = &(A_view.matrix);
+
+    const int copy = gsl_matrix_memcpy (A_gsl, inmatrix_gsl);
+    if (copy != 0 ) throw RuntimeException("SVD", "Error encountered in gsl matrix copy");
+    
+    // Define the objects required by the SVD function
+    gsl_matrix *V = gsl_matrix_calloc (n, n);
+    gsl_vector *S = gsl_vector_calloc (n);
+    gsl_vector *w = gsl_vector_calloc (n);
+    
+    const int decomp = gsl_linalg_SV_decomp(A_gsl, V, S, w);
+    if (decomp != 0 ) throw RuntimeException("SVD", "Error encountered in gsl decomposition");
+
+    for ( int i = 0; i < n; i++ )
+      for ( int j = 0; j < n; j++ )
+        A(i,j) = gsl_matrix_get(A_gsl, i,j)*sqrt( gsl_vector_get(S,j) );
+
+    gsl_matrix_free(V);
+    gsl_vector_free(S);
+    gsl_vector_free(w);
+
+    return A;
+
+  }
+
+
 
   // TODO to sort this out, need to make data and theory vectors
   void ComputeChi2_basic(int const nDat, int const nMem,
