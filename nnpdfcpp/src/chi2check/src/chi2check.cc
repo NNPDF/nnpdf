@@ -93,8 +93,8 @@ int main(int argc, char **argv)
         auto exp = new Experiment(datasets, settings.GetExpName(i));
         if (settings.IsThUncertainties())
         {
-          string RepCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_sampling_t0_experimentsplustheory_covmat_custom.csv";
-          string FitCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_fitting_t0_experimentsplustheory_covmat_custom.csv";
+          string RepCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_sampling_t0_theory_covmat_custom.csv";
+          string FitCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_fitting_t0_theory_covmat_custom.csv";
 
           exp->LoadRepCovMat(RepCovMatPath);
           exp->LoadFitCovMat(FitCovMatPath);
