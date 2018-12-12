@@ -2,12 +2,12 @@
 # The effective exponents are used to find the exponents a (alpha) and
 # b (beta) used to parametrize the PDF in the fit: pdf = x^{-a} (1-x)^b NN(x).
 alpha:
-  ymin: 0
-  ymax: 2.2
+  ytop: 0
+  ybottom: 2.2
 
 beta:
-  ymin: 0
-  ymax: 5
+  ytop: 0
+  ybottom: 5
 
 pdfs:
   - 170120-008
@@ -26,12 +26,18 @@ template_text: |
   -----------
   {@alpha plot_alphaEff@}
   {@beta plot_betaEff@}
-
+  -----------
   {@with pdfs@}
+  
   Effective exponents table for {@pdf@}
   -----------
   {@effective_exponents_table@}
+
+  Effective exponents yaml-card for {@pdf@}
+  -----------
+  ```yaml
   {@test_next_effective_exponents_yaml@}
+  ```
   {@endwith@}
 
 actions_:
