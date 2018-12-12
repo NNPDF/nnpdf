@@ -342,6 +342,7 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
                 covmats[start_locs] = s
     return covmats
 
+@table
 def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     """Takes the individual sub-covmats between each two processes and assembles
     them into a full covmat. Then reshuffles the order from ordering by process

@@ -54,7 +54,7 @@ def make_table_comp(loader_func):
 def test_expcovmat(data):
     pdf, exps = data
     eindex = results.experiments_index(exps)
-    mat = results.experiments_covmat(exps, eindex, t0set=None)
+    mat = results.experiments_covmat_no_table(exps, eindex, t0set=None)
     cd1 = exps[0].datasets[0].commondata.load()
     cd2 = exps[1].datasets[0].commondata.load()
     othermat1 = NNPDF.ComputeCovMat(cd1, cd1.get_cv())
@@ -67,7 +67,7 @@ def test_expcovmat(data):
 def test_t0covmat(data):
     pdf, exps = data
     eindex = results.experiments_index(exps)
-    return results.experiments_covmat(exps, eindex, pdf)
+    return results.experiments_covmat_no_table(exps, eindex, pdf)
 
 @make_table_comp(parse_exp_mat)
 def test_expsqrtcovmat(data):

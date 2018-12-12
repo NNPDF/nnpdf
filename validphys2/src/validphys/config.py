@@ -31,7 +31,7 @@ from validphys.gridvalues import LUMI_CHANNELS
 
 from validphys.paramfits.config import ParamfitsConfig
 
-from validphys.theorycovariance import experimentsplustheory_covmat_custom
+from validphys.theorycovariance import theory_covmat_custom
 
 log = logging.getLogger(__name__)
 
