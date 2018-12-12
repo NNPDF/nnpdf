@@ -203,17 +203,19 @@ class PreprocessingPlotter(PDFPlotter):
             for df in dfs:
                 if self.exponent == 'alpha':
                     #prev
-                    ax.axhline(df.iat[2*flindex, 1], linestyle='--')
+                    ax.axhline(df.iat[2*flindex, 1],
+                               linestyle='--', label='prev')
                     ax.axhline(df.iat[2*flindex, 2], linestyle='--')
                     #next
-                    ax.axhline(df.iat[2*flindex, 3])
+                    ax.axhline(df.iat[2*flindex, 3], label='next')
                     ax.axhline(df.iat[2*flindex, 4])
                 elif self.exponent == 'beta':
                     #prev
-                    ax.axhline(df.iat[2*flindex+1, 1], linestyle='--')
+                    ax.axhline(df.iat[2*flindex+1, 1],
+                               linestyle='--', label='prev')
                     ax.axhline(df.iat[2*flindex+1, 2], linestyle='--')
                     #next
-                    ax.axhline(df.iat[2*flindex+1, 3])
+                    ax.axhline(df.iat[2*flindex+1, 3], label='next')
                     ax.axhline(df.iat[2*flindex+1, 4])
                     
             self.legend(flstate)
