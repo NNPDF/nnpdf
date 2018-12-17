@@ -118,7 +118,7 @@ def test_replicachi2data(data, chi2data):
     pdf, exps = data
     return results.perreplica_chi2_table(exps, chi2data)
 
-@make_table_comp(load_perreplica_chi2_table)
-def test_datasetchi2(data, dataset_chi2data):
+@make_table_comp(sane_load)
+def test_datasetchi2(data, chi2data, dataset_chi2data):
     pdf, exps = data
-    return results.perreplica_chi2_table(exps, dataset_chi2data)
+    return results.experiments_chi2_table(exps, pdf, chi2data, dataset_chi2data)
