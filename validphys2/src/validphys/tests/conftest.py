@@ -41,10 +41,18 @@ def dataset_t0_convolution_results(data):
     return [results.results(x, pdf, t0set=pdf) for x in ds]
 
 @pytest.fixture(scope='module')
-def dataset_convolution_results(data):
-    pdf, exps = data
-    ds = [x.datasets[0] for x in exps]
-    return [results.results(x, pdf, pdf) for x in ds]
+def single_exp_data():
+    l = Loader()
+    names = ['NMC', 'ATLASTTBARTOT', 'CMSZDIFF12']
+    ds = [l.check_dataset(name=x, theoryid=162, cuts=None) for x in names]
+    exp = ExperimentSpec('pseudo experiment', ds)
+    pdf = l.check_pdf("NNPDF31_nnlo_as_0118")
+    return pdf, exp
+
+@pytest.fixture(scope='module')
+def dataset_convolution_results(single_exp_data):
+    pdf, exp = single_exp_data
+    return [results.results(ds, pdf, pdf) for ds in exp.datasets]
 
 @pytest.fixture(scope='module')
 def dataset_chi2data(dataset_convolution_results):

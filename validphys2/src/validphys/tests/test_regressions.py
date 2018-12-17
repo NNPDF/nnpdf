@@ -18,7 +18,7 @@ from reportengine.table import savetable
 import NNPDF
 from validphys import results
 from validphys.tableloader import (parse_exp_mat, load_perreplica_chi2_table,
-                                   sane_load)
+                                   sane_load, load_fits_chi2_table)
 
 
 
@@ -118,7 +118,7 @@ def test_replicachi2data(data, chi2data):
     pdf, exps = data
     return results.perreplica_chi2_table(exps, chi2data)
 
-@make_table_comp(sane_load)
-def test_datasetchi2(data, chi2data, dataset_chi2data):
-    pdf, exps = data
-    return results.experiments_chi2_table(exps, pdf, chi2data, dataset_chi2data)
+@make_table_comp(load_fits_chi2_table)
+def test_datasetchi2(single_exp_data, dataset_chi2data):
+    _, exp = single_exp_data
+    return results.fits_datasets_chi2_table(['test'], [[exp]], dataset_chi2data)
