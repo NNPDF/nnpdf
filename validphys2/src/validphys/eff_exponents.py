@@ -416,7 +416,7 @@ def next_effective_exponents_yaml(pdf: PDF,
                                   x2_alpha: numbers.Real = 1e-3,
                                   x1_beta: numbers.Real = 0.65,
                                   x2_beta: numbers.Real = 0.95):
-    """-Returns a table in yaml format called NextEffExps.yaml in output
+    """-Returns a table in yaml format called NextEffExps.yaml
        -Prints the yaml table in the report"""
 
     df_effexps = effective_exponents_table(pdf,
@@ -441,7 +441,7 @@ def next_effective_exponents_yaml(pdf: PDF,
     s = io.StringIO()
     inputs = []
 
-    with open("output/NextEffExps.yaml", 'w') as out:
+    with open("NextEffExps.yaml", 'w') as out:
         out.write("basis:\n")
 
         for (j, fl) in enumerate(flavours):
