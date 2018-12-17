@@ -84,14 +84,10 @@ def test_t0sqrtcovmat(data):
 
 @make_table_comp(sane_load)
 def test_predictions(convolution_results):
-    #data1, th1 = convolution_results[0]
-    #data2, th2 = convolution_results[1]
     ths = []
     for convolution_result in convolution_results:
         dt, th = convolution_result
         ths.append(th._rawdata.astype(float))
-    #th1_values = th1._rawdata.astype(float)
-    #th2_values = th2._rawdata.astype(float)
     th = np.concatenate(ths)
     return pd.DataFrame(th,
         columns=map(str,
@@ -99,11 +95,6 @@ def test_predictions(convolution_results):
 
 @make_table_comp(sane_load)
 def test_dataset_t0_predictions(dataset_t0_convolution_results):
-    #data1, th1 = dataset_t0_convolution_results[0]
-    #data2, th2 = dataset_t0_convolution_results[1]
-    #th1_values = th1._rawdata.astype(float)
-    #th2_values = th2._rawdata.astype(float)
-    #th = np.concatenate((th1_values, th2_values))
     ths = []
     for convolution_result in dataset_t0_convolution_results:
         dt, th = convolution_result
@@ -115,11 +106,6 @@ def test_dataset_t0_predictions(dataset_t0_convolution_results):
 
 @make_table_comp(sane_load)
 def test_cv(convolution_results):
-    # TODO: Old tests were bugged, left in for comparison
-    #data1, th1 = convolution_results[0]
-    #data2, th2 = convolution_results[1]
-    #data1_values = data1.central_value
-    #data2_values = data1.central_value
     cvs = []
     for convolution_result in convolution_results:
         dt, _ = convolution_result
@@ -132,3 +118,7 @@ def test_replicachi2data(data, chi2data):
     pdf, exps = data
     return results.perreplica_chi2_table(exps, chi2data)
 
+@make_table_comp(load_perreplica_chi2_table)
+def test_datasetchi2(data, dataset_chi2data):
+    pdf, exps = data
+    return results.perreplica_chi2_table(exps, dataset_chi2data)

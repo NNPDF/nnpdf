@@ -41,6 +41,16 @@ def dataset_t0_convolution_results(data):
     return [results.results(x, pdf, t0set=pdf) for x in ds]
 
 @pytest.fixture(scope='module')
+def dataset_convolution_results(data):
+    pdf, exps = data
+    ds = [x.datasets[0] for x in exps]
+    return [results.results(x, pdf, pdf) for x in ds]
+
+@pytest.fixture(scope='module')
+def dataset_chi2data(dataset_convolution_results):
+    return [results.abs_chi2_data(r) for r in dataset_convolution_results]
+
+@pytest.fixture(scope='module')
 def chi2data(convolution_results):
     return [results.abs_chi2_data_experiment(r) for r in convolution_results]
 
