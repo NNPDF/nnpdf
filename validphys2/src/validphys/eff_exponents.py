@@ -14,7 +14,7 @@ import NNPDF as nnpath
 
 from reportengine.figure import figuregen
 from reportengine.table import table
-from reportengine.floatformatting import format_number
+from reportengine.floatformatting import format_number, significant_digits
 from reportengine.compat import yaml
 
 from validphys.checks import check_positive, check_pdf_normalize_to
@@ -441,47 +441,32 @@ def next_effective_exponents_yaml(pdf: PDF,
     s = io.StringIO()
     inputs = []
 
-    with open("NextEffExps.yaml", 'w') as out:
-        out.write("basis:\n")
+    def fmt(x): return float(significant_digits(x, 4))
 
-        for (j, fl) in enumerate(flavours):
+    for (j, fl) in enumerate(flavours):
 
-            YAMLlabel = " "
+        YAMLlabel = " "
+        if basis.elementlabel(fl) in YAMLflaliases.keys():
+            YAMLlabel = YAMLflaliases[basis.elementlabel(fl)]
+        else:
+            YAMLlabel = basis.elementlabel(fl)
+
+        for k, ref_fl in enumerate(filtermap['fitting']['basis']):
             if basis.elementlabel(fl) in YAMLflaliases.keys():
                 YAMLlabel = YAMLflaliases[basis.elementlabel(fl)]
             else:
                 YAMLlabel = basis.elementlabel(fl)
 
-            for k, ref_fl in enumerate(filtermap['fitting']['basis']):
-                if basis.elementlabel(fl) in YAMLflaliases.keys():
-                    YAMLlabel = YAMLflaliases[basis.elementlabel(fl)]
-                else:
-                    YAMLlabel = basis.elementlabel(fl)
+            if ref_fl['fl'] == YAMLlabel:
+                pos = [filtermap['fitting']['basis'][k]['pos']]
+                mutsize = [int(filtermap['fitting']['basis'][k]['mutsize'][0])]
+                mutprob = [int(filtermap['fitting']['basis'][k]['mutprob'][0])]
+                smallx = [float(fmt(df_effexps.iat[2*j, 3])), float(fmt(df_effexps.iat[2*j, 4]))]
+                largex = [float(fmt(df_effexps.iat[2*j+1, 3])), float(fmt(df_effexps.iat[2*j+1, 4]))]
 
-                if ref_fl['fl'] == YAMLlabel:
-                    pos = filtermap['fitting']['basis'][k]['pos']
-                    mutsize = "["+str(filtermap['fitting']
-                                      ['basis'][k]['mutsize'][0])+"]"
-                    mutprob = "["+str(filtermap['fitting']
-                                      ['basis'][k]['mutprob'][0])+"]"
-                    smallx = "["+str(df_effexps.iat[2*j, 3])+", " + \
-                        str(df_effexps.iat[2*j, 4])+"]"
-                    largex = "["+str(df_effexps.iat[2*j+1, 3]) + \
-                        ", "+str(df_effexps.iat[2*j+1, 4])+"]"
-
-                    out.write(" - {")
-                    out.write("fl: "+YAMLlabel)
-                    out.write(", pos: "+pos)
-                    out.write(", mutsize: "+mutsize)
-                    out.write(", mutprob: "+mutprob)
-                    out.write(", smallx: "+smallx)
-                    out.write(", largex: "+largex)
-                    out.write("")
-                    out.write("}\n")
-
-                    d = {'fl': YAMLlabel, 'pos': pos, 'mutsize': mutsize,
-                         'mutprob': mutprob, 'smallx': smallx, 'largex': largex}
-                    inputs.append(d)
+                d = {'fl': YAMLlabel, 'pos': pos, 'mutsize': mutsize,
+                        'mutprob': mutprob, 'smallx': smallx, 'largex': largex}
+                inputs.append(d)
 
     yaml.dump(inputs, s)
 
