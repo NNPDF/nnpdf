@@ -6,26 +6,23 @@ from __future__ import generator_stop
 
 import logging
 import warnings
+import numbers
 import numpy as np
 import pandas as pd
-import numbers
-import collections
 import matplotlib.pyplot as plt
+import NNPDF as nnpath
 
 from reportengine.figure import figuregen
 from reportengine.table import table
 from reportengine.floatformatting import format_number
 from reportengine.compat import yaml
 
-from validphys.checks import check_scale, CheckError, make_argcheck, check_positive, check_pdf_normalize_to
-from validphys.pdfplots import BandPDFPlotter
-from validphys.pdfplots import PDFPlotter
-from validphys.pdfplots import FlavourState
-from validphys.pdfbases import (Basis, check_basis)
+from validphys.checks import check_positive, check_pdf_normalize_to
+from validphys.pdfplots import BandPDFPlotter, PDFPlotter, FlavourState
+from validphys.pdfbases import check_basis
 from validphys.core import PDF
 from validphys import plotutils
 
-import NNPDF as nnpath
 
 import validphys.pdfgrids as pdfgrids
 
@@ -34,7 +31,6 @@ log = logging.getLogger(__name__)
 
 @check_positive('Q')
 @pdfgrids._check_limits
-#@make_argcheck(check_basis)
 def alpha_eff(pdfs,
               xmin: numbers.Real = 1e-6,
               xmax: numbers.Real = 1e-3,
@@ -52,12 +48,12 @@ def alpha_eff(pdfs,
 
     Q: The PDF scale in GeV.
     """
-    #Reading from the filter
-    #TODO: check that the pdfs given have the same basis, Q2min.
-    any_pdf, = pdfs
+    #Loading the filter map of the fit/PDF
+    any_pdf = pdfs[0]
     pdfpath = nnpath.get_results_path()+any_pdf.name
     filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
 
+    #Extracting initial scale from the theory info
     infomap = yaml.safe_load(open(pdfpath+'/nnfit/'+any_pdf.name+'.info'))
     Q = infomap['QMin']
     basis = filtermap['fitting']['fitbasis']+'FitBasis'
@@ -89,7 +85,6 @@ def alpha_eff(pdfs,
 
 @check_positive('Q')
 @pdfgrids._check_limits
-#@make_argcheck(check_basis)
 def beta_eff(pdfs,
              xmin: numbers.Real = 0.6,
              xmax: numbers.Real = 0.9,
@@ -107,11 +102,12 @@ def beta_eff(pdfs,
 
     Q: The PDF scale in GeV.
     """
-    #Reading from the filter
-    #TODO: check that the pdfs given have the same basis, Q2min.
-    any_pdf, = pdfs
+    #Loading the filter map of the fit/PDF
+    any_pdf = pdfs[0]
     pdfpath = nnpath.get_results_path()+any_pdf.name
     filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
+
+    #Extracting initial scale from the theory info
     infomap = yaml.safe_load(open(pdfpath+'/nnfit/'+any_pdf.name+'.info'))
     Q = infomap['QMin']
     basis = filtermap['fitting']['fitbasis']+'FitBasis'
@@ -159,7 +155,7 @@ class PreprocessingPlotter(PDFPlotter):
             return "Ratio to {}".format(self.normalize_pdf.label)
         else:
             return fr"$\{self.exponent}_e$ for ${parton_name}$"
-    
+
     def __call__(self,):
         if not self.xplotting_grids:
             return
@@ -171,11 +167,12 @@ class PreprocessingPlotter(PDFPlotter):
             parton_name = basis.elementlabel(fl)
             flstate = FlavourState(flindex=flindex, fl=fl, fig=fig, ax=ax,
                                    parton_name=parton_name)
+
             self.setup_flavour(flstate)
             ax.set_title(self.get_title(parton_name))
 
             all_vals = []
-            dfs=[]
+            dfs = []
             for pdf, grid in zip(self.pdfs, self.xplotting_grids):
                 limits = self.draw(pdf, grid, flstate)
                 if limits is not None:
@@ -183,7 +180,6 @@ class PreprocessingPlotter(PDFPlotter):
                 #here, by default x1_alpha=1e-6,x2_alpha=1e-3,x1_beta=0.65,x2_beta=0.95
                 dfs.append(effective_exponents_table(pdf))
 
-            
             #Note these two lines do not conmute!
             ax.set_xscale(self.xscale)
             plotutils.frame_center(
@@ -199,16 +195,18 @@ class PreprocessingPlotter(PDFPlotter):
             ax.set_ylabel(self.get_ylabel(parton_name))
 
             ax.set_axisbelow(True)
-            
+
             for df in dfs:
                 if self.exponent == 'alpha':
                     #prev
                     ax.axhline(df.iat[2*flindex, 1],
                                linestyle='--', label='prev')
+                    #self.labels.append('prev')
                     ax.axhline(df.iat[2*flindex, 2], linestyle='--')
                     #next
                     ax.axhline(df.iat[2*flindex, 3], label='next')
                     ax.axhline(df.iat[2*flindex, 4])
+
                 elif self.exponent == 'beta':
                     #prev
                     ax.axhline(df.iat[2*flindex+1, 1],
@@ -217,8 +215,9 @@ class PreprocessingPlotter(PDFPlotter):
                     #next
                     ax.axhline(df.iat[2*flindex+1, 3], label='next')
                     ax.axhline(df.iat[2*flindex+1, 4])
-                    
+
             self.legend(flstate)
+
             yield fig, parton_name
 
 
@@ -267,7 +266,7 @@ def effective_exponents_table(pdf: PDF,
                               x2_alpha: numbers.Real = 1e-3,
                               x1_beta: numbers.Real = 0.65,
                               x2_beta: numbers.Real = 0.95):
-    """Return a table with the effective exponents for the next fit"""
+    """Returns a table with the effective exponents for the next fit"""
 
     #Reading from the filter
     pdfpath = nnpath.get_results_path()+pdf.name
@@ -318,8 +317,8 @@ def effective_exponents_table(pdf: PDF,
 
         alphamin_cv = np.nanmean(alphamin_grid_values, axis=0)
         alphamax_cv = np.nanmean(alphamax_grid_values, axis=0)
-        betamin_cv = np.nanmean(betamin_grid_values,axis =0)
-        betamax_cv = np.nanmean(betamax_grid_values, axis =0)
+        betamin_cv = np.nanmean(betamin_grid_values, axis=0)
+        betamax_cv = np.nanmean(betamax_grid_values, axis=0)
 
         alphamin_err68down, alphamin_err68up = alphamin_stats.errorbar68()
         alphamax_err68down, alphamax_err68up = alphamax_stats.errorbar68()
@@ -367,7 +366,7 @@ def effective_exponents_table(pdf: PDF,
         #                  others  : min(2x68% c.l. lower value evaluated at x=1e-6 and x=1e-3)
         # alpha_max = singlet/gluon: min(2 and the 2x68% c.l. upper value evaluated at x=1e-6)
         #                others    : min(2 and max(2x68% c.l. upper value evaluated at x=1e-6 and x=1e-3))
-        if fl == "\Sigma" or fl == "g":
+        if fl == r'\Sigma' or fl == "g":
             new_min_bound = alphamin_cv[j][0]-2*alphamin_sigdown[j][0]
             new_max_bound = round(
                 min(2, alphamin_cv[j][0]+2*alphamin_sigup[j][0]), 3)
@@ -375,18 +374,26 @@ def effective_exponents_table(pdf: PDF,
                           prev_amax_bound, new_min_bound, new_max_bound]
         else:
             new_min_bound = round(
-                min(alphamin_cv[j][0]-2*alphamin_sigdown[j][0], alphamax_cv[j][0]-2*alphamax_sigdown[j][0]), 3)
+                min(alphamin_cv[j][0]-2*alphamin_sigdown[j][0],
+                    alphamax_cv[j][0]-2*alphamax_sigdown[j][0]), 3)
             new_max_bound = round(
-                min(2, max(alphamin_cv[j][0]+2*alphamin_sigup[j][0], alphamax_cv[j][0]+2*alphamax_sigup[j][0])), 3)
+                min(2, max(alphamin_cv[j][0]+2*alphamin_sigup[j][0],
+                           alphamax_cv[j][0]+2*alphamax_sigup[j][0])), 3)
+
             alpha_line = [r"$\alpha$", prev_amin_bound,
                           prev_amax_bound, new_min_bound, new_max_bound]
 
         # beta_min  =  max(0 and min(2x68% c.l. lower value evaluated at x=0.65 and x=0.95))
         # beta_max  =  max(2x68% c.l. upper value evaluated at x=0.65 and x=0.95)
         new_min_bound = round(
-            max(0, min(betamin_cv[j][0]-2*betamin_sigdown[j][0], betamax_cv[j][0]-2*betamax_sigdown[j][0])), 3)
+            max(0,
+                min(betamin_cv[j][0]-2*betamin_sigdown[j][0],
+                    betamax_cv[j][0]-2*betamax_sigdown[j][0])), 3)
+
         new_max_bound = round(
-            max(betamin_cv[j][0]+2*betamin_sigup[j][0], betamax_cv[j][0]+2*betamax_sigup[j][0]), 3)
+            max(betamin_cv[j][0]+2*betamin_sigup[j][0],
+                betamax_cv[j][0]+2*betamax_sigup[j][0]), 3)
+
         beta_line = [r"$\beta$", prev_bmin_bound,
                      prev_bmax_bound, new_min_bound, new_max_bound]
 
@@ -409,7 +416,8 @@ def next_effective_exponents_yaml(pdf: PDF,
                                   x2_alpha: numbers.Real = 1e-3,
                                   x1_beta: numbers.Real = 0.65,
                                   x2_beta: numbers.Real = 0.95):
-    """Return a table with the effective exponents for the next fit"""
+    """-Returns a table in yaml format called NextEffExps.yaml in output
+       -Prints the yaml table in the report"""
 
     df_effexps = effective_exponents_table(pdf,
                                            x1_alpha,
@@ -419,8 +427,6 @@ def next_effective_exponents_yaml(pdf: PDF,
     #Reading from the filter
     pdfpath = nnpath.get_results_path()+pdf.name
     filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
-    infomap = yaml.safe_load(open(pdfpath+'/nnfit/'+pdf.name+'.info'))
-    Q = infomap['QMin']
     basis = filtermap['fitting']['fitbasis']+'FitBasis'
 
     flavours = None
@@ -428,10 +434,12 @@ def next_effective_exponents_yaml(pdf: PDF,
     basis = checked['basis']
     flavours = checked['flavours']
 
-    flavours_label = []
-
     YAMLflaliases = {r'\Sigma': 'sng', 'V': 'v', 'T3': 't3',
-                     'V3': 'v3', 'T8': 't8', 'V8': 'v8', 'gluon': 'g', r'c^+': 'cp'}
+                     'V3': 'v3', 'T8': 't8', 'V8': 'v8', 'g': 'g', r'c^+': 'cp'}
+
+    import io
+    s = io.StringIO()
+    inputs = []
 
     with open("output/NextEffExps.yaml", 'w') as out:
         out.write("basis:\n")
@@ -451,86 +459,30 @@ def next_effective_exponents_yaml(pdf: PDF,
                     YAMLlabel = basis.elementlabel(fl)
 
                 if ref_fl['fl'] == YAMLlabel:
+                    pos = filtermap['fitting']['basis'][k]['pos']
+                    mutsize = "["+str(filtermap['fitting']
+                                      ['basis'][k]['mutsize'][0])+"]"
+                    mutprob = "["+str(filtermap['fitting']
+                                      ['basis'][k]['mutprob'][0])+"]"
+                    smallx = "["+str(df_effexps.iat[2*j, 3])+", " + \
+                        str(df_effexps.iat[2*j, 4])+"]"
+                    largex = "["+str(df_effexps.iat[2*j+1, 3]) + \
+                        ", "+str(df_effexps.iat[2*j+1, 4])+"]"
+
                     out.write(" - {")
                     out.write("fl: "+YAMLlabel)
-                    out.write(
-                        ", pos: "+filtermap['fitting']['basis'][k]['pos'])
-                    out.write(
-                        ", mutsize: ["+str(filtermap['fitting']['basis'][k]['mutsize'][0])+"]")
-                    out.write(
-                        ", mutprob: ["+str(filtermap['fitting']['basis'][k]['mutprob'][0])+"]")
-                    out.write(
-                        ", smallx: ["+str(df_effexps.iat[2*j, 3])+","+str(df_effexps.iat[2*j, 4])+"]")
-                    out.write(
-                        ", largex: ["+str(df_effexps.iat[2*j+1, 3])+","+str(df_effexps.iat[2*j+1, 4])+"]")
+                    out.write(", pos: "+pos)
+                    out.write(", mutsize: "+mutsize)
+                    out.write(", mutprob: "+mutprob)
+                    out.write(", smallx: "+smallx)
+                    out.write(", largex: "+largex)
                     out.write("")
-
                     out.write("}\n")
 
-    pass
+                    d = {'fl': YAMLlabel, 'pos': pos, 'mutsize': mutsize,
+                         'mutprob': mutprob, 'smallx': smallx, 'largex': largex}
+                    inputs.append(d)
 
-
-def test_next_effective_exponents_yaml(pdf: PDF,
-                                       x1_alpha: numbers.Real = 1e-6,
-                                       x2_alpha: numbers.Real = 1e-3,
-                                       x1_beta: numbers.Real = 0.65,
-                                       x2_beta: numbers.Real = 0.95):
-    """Return a table with the effective exponents for the next fit"""
-
-    df_effexps = effective_exponents_table(pdf,
-                                           x1_alpha,
-                                           x2_alpha,
-                                           x1_beta,
-                                           x2_beta)
-    #Reading from the filter
-    import io
-
-    pdfpath = nnpath.get_results_path()+pdf.name
-    filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
-    infomap = yaml.safe_load(open(pdfpath+'/nnfit/'+pdf.name+'.info'))
-    Q = infomap['QMin']
-    basis = filtermap['fitting']['fitbasis']+'FitBasis'
-
-    flavours = None
-    checked = check_basis(basis, flavours)
-    basis = checked['basis']
-    flavours = checked['flavours']
-
-    flavours_label = []
-
-    #Put it in pdfbases.py!
-    YAMLflaliases = {r'\Sigma': 'sng', 'V': 'v', 'T3': 't3',
-                     'V3': 'v3', 'T8': 't8', 'V8': 'v8', 'g': 'g', r'c^+': 'cp'}
-    s = io.StringIO()
-    inputs=[]
-    ds={}
-    for (j, fl) in enumerate(flavours):
-        YAMLlabel = " "
-        if basis.elementlabel(fl) in YAMLflaliases.keys():
-            YAMLlabel = YAMLflaliases[basis.elementlabel(fl)]
-        else:
-            YAMLlabel = basis.elementlabel(fl)
-
-        for k, ref_fl in enumerate(filtermap['fitting']['basis']):
-            if basis.elementlabel(fl) in YAMLflaliases.keys():
-                YAMLlabel = YAMLflaliases[basis.elementlabel(fl)]
-            else:
-                YAMLlabel = basis.elementlabel(fl)
-
-            if ref_fl['fl'] == YAMLlabel:
-                pos = filtermap['fitting']['basis'][k]['pos']
-                mutsize = "["+str(filtermap['fitting']['basis'][k]['mutsize'][0])+"]"
-                mutprob = "["+str(filtermap['fitting']['basis'][k]['mutprob'][0])+"]"
-                smallx = "["+str(df_effexps.iat[2*j, 3])+", "+str(df_effexps.iat[2*j, 4])+"]"
-                largex = "["+str(df_effexps.iat[2*j+1, 3])+", "+str(df_effexps.iat[2*j+1, 4])+"]"
-
-                d = {'fl': YAMLlabel, 'pos': pos, 'mutsize': mutsize,
-                     'mutprob': mutprob, 'smallx': smallx, 'largex': largex}
-
-                inputs.append(d)
-
-    # yaml.RoundTripDumper #default_flow_style=False
     yaml.dump(inputs, s)
-
 
     return s.getvalue()
