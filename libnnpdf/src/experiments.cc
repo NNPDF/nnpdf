@@ -155,8 +155,14 @@ void Experiment::MakeReplica()
   double *rand  = new double[fNSys];
   double *xnor  = new double[fNData];
   sysType rST[2] = {ADD,MULT};
-  
 
+  // Compute the sampling covariance matrix with data CVs, no multiplicative error and no theory errors
+  if (fSamplingMatrix.size(0) == 0)
+  {
+    matrix<double> SM = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fData, fStat, fSys, false, false, false, "", {});
+    fSamplingMatrix = ComputeSqrtMat(SM); // Take the sqrt of the sampling matrix
+  } 
+  
   // generate procType array for ease of checking
   std::vector<std::string> proctype;
   for (int s = 0; s < GetNSet(); s++)
@@ -177,28 +183,20 @@ void Experiment::MakeReplica()
           fSys[i][l].type = fSys[0][l].type;
       }
 
-      vector<double> artdata(fData);
-
-      // If there is a theory covarince matrix generate normal deviates
-      if (fSamplingMatrix.size(0) != 0)
-      {
-        vector<double> deviates(fNData, std::numeric_limits<double>::quiet_NaN());
-        generate(deviates.begin(), deviates.end(),
-                 []()->double {return RandomGenerator::GetRNG()->GetRandomGausDev(1); } );
-        const vector<double> correlated_deviates = fSamplingMatrix*deviates;
+      // Generate normal deviates      
+      vector<double> deviates(fNData, std::numeric_limits<double>::quiet_NaN());
+      generate(deviates.begin(), deviates.end(),
+               []()->double {return RandomGenerator::GetRNG()->GetRandomGausDev(1); } );
+      const vector<double> correlated_deviates = fSamplingMatrix*deviates;
      
-        // Generate additive theory noise directly from the covariance matrix
-        for (int i=0; i<fNData; i++)
-            artdata[i] += correlated_deviates[i];
-      }
-
+      // Generate additive theory noise directly from the covariance matrix
+      vector<double> artdata(fData);
+      for (int i=0; i<fNData; i++)
+          artdata[i] += correlated_deviates[i];
+      
       // Generation of the experimental noise
       for (int i = 0; i < fNData; i++) // should rearrange to update set-by-set -- nh
       {
-
-        double xstat = rng->GetRandomGausDev(1.0)*fStat[i];         //Noise from statistical uncertainty
-
-        double xadd = 0;
         xnor[i] = 1.0;
 
         for (int l = 0; l < fNSys; l++)
@@ -210,7 +208,7 @@ void Experiment::MakeReplica()
           {
             switch (fSys[i][l].type)
             {
-              case ADD: xadd += rng->GetRandomGausDev(1.0)*fSys[i][l].add; break;
+              case ADD: break;
               case MULT: xnor[i] *= (1.0 + rng->GetRandomGausDev(1.0)*fSys[i][l].mult*1e-2); break;
               case UNSET: throw RuntimeException("Experiment::MakeReplica", "UNSET systype encountered");
             }
@@ -219,14 +217,14 @@ void Experiment::MakeReplica()
           {
             switch (fSys[i][l].type)
             {
-              case ADD: xadd += rand[l]*fSys[i][l].add; break;
+              case ADD: break;
               case MULT: xnor[i] *= (1.0 + rand[l]*fSys[i][l].mult*1e-2); break;
               case UNSET: throw RuntimeException("Experiment::MakeReplica", "UNSET systype encountered");
             }
           }
         }
 
-        artdata[i] = xnor[i] * ( artdata[i] + xadd + xstat );
+        artdata[i] = xnor[i] * artdata[i];
 
       }
 
@@ -440,79 +438,22 @@ void Experiment::PullData()
 /**
  * Generate covariance matrix and inverse
  */
+
 void Experiment::GenCovMat()
 {
   // Compute the Covariance matrix with t0 and NNPDF3.1 theory errors
-  fCovMat  = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, true, true);
+  fCovMat  = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, true, true, false, " ", {});
   fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 
-/*
-* Reads in covariance matrix for an experiment from pandas dataframe
-*/
-matrix<double> read_total_covmat(int ndata, const std::string filename, std::vector<int> bmask = {})
-{
-  // open file
-  ifstream file(filename.c_str());
-
-  if (!file.good())
-    throw FileError("experiments", "Cannot read covariance matrix file from " + filename);
-
-  string line;
-  const int first_lines_to_skip = 4;   //experiment, dataset, id, header
-  const int first_columns_to_skip = 3; //experiment, dataset, id
-
-  int file_matrix_size = ndata;
-  if (!bmask.empty())
-    {
-      if(std::accumulate(bmask.begin(), bmask.end(), 0) != ndata)
-        throw RuntimeException("read_total_covmat", "wrong mask size.");
-      file_matrix_size = bmask.size();
-    }
-
-  matrix<double> covmat(ndata, ndata);
-
-  for (int i = 0; i < first_lines_to_skip; ++i)
-    std::getline(file, line);
-
-  int ix = 0;
-  for (int idat = 0; idat < file_matrix_size; idat++)
-    {
-      getline(file, line);
-      if (bmask.empty())
-        {
-          auto row = split(line);
-          for (int jdat = 0; jdat < file_matrix_size; jdat++)
-            covmat(idat, jdat) = stod(row[first_columns_to_skip + jdat]);
-        }
-      else
-        {
-          if (bmask[idat] == 1)
-            {
-              int jx = 0;
-              auto row = split(line);
-              for (int jdat = 0; jdat < file_matrix_size; jdat++)
-                {
-                  if (bmask[jdat] == 1)
-                    {
-                      covmat(ix, jx) = stod(row[first_columns_to_skip + jdat]);
-                      jx++;
-                    }
-                }
-              ix++;
-            }
-        }
-    }
-
-  return covmat;
-}
 
 /**
 * Read in covariance matrix for replica generation from file, and generate covariance matrix and its square root
 */
 void Experiment::LoadRepCovMat(string filename, std::vector<int> bmask)
 {
-  fSamplingMatrix = ComputeSqrtMat(read_total_covmat(fNData, filename, bmask));
+  fSamplingMatrix = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, false, false, true, filename, bmask);
+  fSamplingMatrix = ComputeSqrtMat(fSamplingMatrix);
 }
 
 /**
@@ -520,7 +461,7 @@ void Experiment::LoadRepCovMat(string filename, std::vector<int> bmask)
 */
 void Experiment::LoadFitCovMat(string filename, std::vector<int> bmask)
 {
-  fCovMat = read_total_covmat(fNData, filename, bmask);
+  fCovMat = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, true, false, true, filename, bmask);
   fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 
