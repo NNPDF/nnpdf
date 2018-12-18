@@ -23,8 +23,10 @@ def tmp(tmpdir):
 @pytest.fixture(scope='module')
 def data():
     l = Loader()
-    names = ['NMC', 'ATLASTTBARTOT', 'CMSZDIFF12']
-    ds = [l.check_dataset(name=x, theoryid=162, cuts=None) for x in names]
+    dataset_inputs = [{'name': 'NMC'},
+                      {'name':'ATLASTTBARTOT', 'cfac':['QCD']},
+                      {'name':'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sysnum':10}]
+    ds = [l.check_dataset(**x, theoryid=162, cuts=None) for x in dataset_inputs]
     exps = [ExperimentSpec(x.name, [x]) for x in ds]
     pdf = l.check_pdf("NNPDF31_nnlo_as_0118")
     return pdf, exps
@@ -43,8 +45,10 @@ def dataset_t0_convolution_results(data):
 @pytest.fixture(scope='module')
 def single_exp_data():
     l = Loader()
-    names = ['NMC', 'ATLASTTBARTOT', 'CMSZDIFF12']
-    ds = [l.check_dataset(name=x, theoryid=162, cuts=None) for x in names]
+    dataset_inputs = [{'name': 'NMC'},
+                      {'name':'ATLASTTBARTOT', 'cfac':['QCD']},
+                      {'name':'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sysnum':10}]
+    ds = [l.check_dataset(**x, theoryid=162, cuts=None) for x in dataset_inputs]
     exp = ExperimentSpec('pseudo experiment', ds)
     pdf = l.check_pdf("NNPDF31_nnlo_as_0118")
     return pdf, exp
