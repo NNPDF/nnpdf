@@ -139,7 +139,7 @@ def beta_eff(pdfs,
 
 class PreprocessingPlotter(PDFPlotter):
     """ Class inherenting from BandPDFPlotter, has the same functionality
-    but with overloaded title and ylabel to take into account the effective
+    but with overbasismap title and ylabel to take into account the effective
     exponents names.
     """
 
@@ -437,37 +437,43 @@ def next_effective_exponents_yaml(pdf: PDF,
     YAMLflaliases = {r'\Sigma': 'sng', 'V': 'v', 'T3': 't3',
                      'V3': 'v3', 'T8': 't8', 'V8': 'v8', 'g': 'g', r'c^+': 'cp'}
 
-    import io
-    s = io.StringIO()
-    inputs = []
+    FittingBasisString = ""
+    with open(pdfpath+'/filter.yml', 'r') as filterfile:
+        for line in filterfile:
+            if ('fl: ') in line:
+                FittingBasisString += line
+    y = yaml.YAML()
+    basismap = y.load(FittingBasisString)
 
     def fmt(x): return float(significant_digits(x, 4))
-
+    
+    #load new eff_exp into old ones
     for (j, fl) in enumerate(flavours):
-
         YAMLlabel = " "
+        #match flavour format from pdfbases with the yaml format 
         if basis.elementlabel(fl) in YAMLflaliases.keys():
             YAMLlabel = YAMLflaliases[basis.elementlabel(fl)]
         else:
             YAMLlabel = basis.elementlabel(fl)
 
-        for k, ref_fl in enumerate(filtermap['fitting']['basis']):
+        #connect dataframe containing the next eff_exp to yaml card
+        for ref_fl in filtermap['fitting']['basis']:
             if basis.elementlabel(fl) in YAMLflaliases.keys():
                 YAMLlabel = YAMLflaliases[basis.elementlabel(fl)]
             else:
                 YAMLlabel = basis.elementlabel(fl)
 
             if ref_fl['fl'] == YAMLlabel:
-                pos = [filtermap['fitting']['basis'][k]['pos']]
-                mutsize = [int(filtermap['fitting']['basis'][k]['mutsize'][0])]
-                mutprob = [int(filtermap['fitting']['basis'][k]['mutprob'][0])]
                 smallx = [float(fmt(df_effexps.iat[2*j, 3])), float(fmt(df_effexps.iat[2*j, 4]))]
                 largex = [float(fmt(df_effexps.iat[2*j+1, 3])), float(fmt(df_effexps.iat[2*j+1, 4]))]
+                
+                for item in basismap:
+                    if item['fl'] == YAMLlabel:
+                        item['smallx'] = list(smallx)
+                        item['largex'] = list(largex)
 
-                d = {'fl': YAMLlabel, 'pos': pos, 'mutsize': mutsize,
-                        'mutprob': mutprob, 'smallx': smallx, 'largex': largex}
-                inputs.append(d)
-
-    yaml.dump(inputs, s)
+    import io
+    s = io.StringIO()
+    y.dump(basismap, s)
 
     return s.getvalue()
