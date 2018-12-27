@@ -47,7 +47,7 @@ void ATLAS_WCHARM_TOT_UNNORM_7TEVFilter::ReadData()
     istringstream lstream(line);
     //Reading in an interpretation of each column
     lstream >> pTmin >> pTmax >> fData[i] >> fStat[i];
-     fData[i] = fData[i]*1000; // changing pb to fb for APPLgrid
+    fData[i] = fData[i]*1000; // changing pb to fb for APPLgrid
     fStat[i] = fStat[i]*1000; // changing pb to fb for APPLgrid
     //Defining the kinematic variables
     fKin1[i] = (pTmin + pTmax)*0.5;    // eta
