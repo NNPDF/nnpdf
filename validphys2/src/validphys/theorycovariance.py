@@ -1222,9 +1222,20 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, num_evals:(int, type(N
     if num_evals is not None:
         w_nonzero = w[-num_evals:]
         nonzero_locs = range(len(w)-num_evals, len(w))
-    else:
+    elif evalue_cutoff is not None:
         w_nonzero = w[w>evalue_cutoff*w_max]
         nonzero_locs = np.nonzero(w>evalue_cutoff*w_max)[0]
+    else:
+   #     embed()
+        f_tmp = -shx_vector[0].values.T[0]
+        projectors_original = np.sum(f_tmp*v.T, axis=1)
+        ratio = np.abs(projectors_original/np.sqrt(np.abs(w)))
+        ratio_nonzero = ratio[ratio<3]
+        nonzero_locs = np.nonzero(ratio<3)[0]
+        w_nonzero = []
+        for loc in nonzero_locs:
+            if loc >=0:
+                w_nonzero.append(w[loc])
     # ^ taking 0th element to extract list from tuple
     v_nonzero = []
     for loc in nonzero_locs:
@@ -1253,7 +1264,7 @@ def cutoff(theory_shift_test, num_evals:(int, type(None)) = None,
 @table
 def theory_covmat_eigenvalues(theory_shift_test):
     w_nonzero, v_nonzero, projectors = theory_shift_test[:3]
-    table = pd.DataFrame([w_nonzero, projectors],
+    table = pd.DataFrame([np.ndarray.tolist(w_nonzero)[::-1], np.ndarray.tolist(projectors)][::-1],
          		index = ['eigenvalue', 'projector'])
     return table
 
@@ -1276,7 +1287,7 @@ def maxrat(theory_shift_test):
 def validation_theory_chi2(theory_shift_test):
     projectors = theory_shift_test[2]
     evals = theory_shift_test[0]
-    ratio = projectors/np.sqrt(evals)
+    ratio = projectors/np.sqrt(np.abs(evals))
     th_chi2 = 1/len(evals)*np.sum(ratio**2)
     print(f"Theory chi2 = {th_chi2}")
     return th_chi2
@@ -1285,7 +1296,13 @@ def validation_theory_chi2(theory_shift_test):
 def projector_eigenvalue_ratio(theory_shift_test):
     projectors = theory_shift_test[2]
     evals = theory_shift_test[0]
-    ratio = np.abs(projectors/np.sqrt(evals))
+    ratio = np.abs(projectors/np.sqrt(np.abs(evals)))
+    # Ordering eigenvalues and their projectors at random
+    randomise = np.arange(len(evals))
+    np.random.shuffle(randomise)
+    evals = np.asarray(evals)[randomise]
+    projectors = projectors[randomise]
+    ratio = ratio[randomise]
     fig, (ax1, ax2, ax3) = plt.subplots(3, figsize=(5,5))
     ax1.plot(np.abs(projectors), 'o')
     ax2.plot(np.sqrt(evals), 'o')
