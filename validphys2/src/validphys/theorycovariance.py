@@ -1263,8 +1263,11 @@ def cutoff(theory_shift_test, num_evals:(int, type(None)) = None,
 @table
 def theory_covmat_eigenvalues(theory_shift_test):
     w_nonzero, v_nonzero, projectors = theory_shift_test[:3]
-    table = pd.DataFrame([np.sqrt(np.abs(w_nonzero[::-1])), np.ndarray.tolist(projectors[::-1])],
-         		index = [r'$s_a$', r'$\delta_a$'])
+    s_scrambled = np.sqrt(np.abs(w_nonzero[::-1]))
+    projectors_scrambled = np.ndarray.tolist(projectors[::-1])
+    ratio_scrambled = projectors_scrambled/s_scrambled
+    table = pd.DataFrame([s_scrambled, projectors_scrambled, ratio_scrambled],
+         		index = [r'$s_a$', r'$\delta_a$', r'$\delta_a/s_a$'])
     return table
 
 def modrat(theory_shift_test):
