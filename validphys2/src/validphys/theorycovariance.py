@@ -1226,7 +1226,6 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, num_evals:(int, type(N
         w_nonzero = w[w>evalue_cutoff*w_max]
         nonzero_locs = np.nonzero(w>evalue_cutoff*w_max)[0]
     else:
-   #     embed()
         f_tmp = -shx_vector[0].values.T[0]
         projectors_original = np.sum(f_tmp*v.T, axis=1)
         ratio = np.abs(projectors_original/np.sqrt(np.abs(w)))
@@ -1264,8 +1263,8 @@ def cutoff(theory_shift_test, num_evals:(int, type(None)) = None,
 @table
 def theory_covmat_eigenvalues(theory_shift_test):
     w_nonzero, v_nonzero, projectors = theory_shift_test[:3]
-    table = pd.DataFrame([np.ndarray.tolist(w_nonzero)[::-1], np.ndarray.tolist(projectors)][::-1],
-         		index = ['eigenvalue', 'projector'])
+    table = pd.DataFrame([np.sqrt(np.abs(w_nonzero[::-1])), np.ndarray.tolist(projectors[::-1])],
+         		index = [r'$s_a$', r'$\delta_a$'])
     return table
 
 def modrat(theory_shift_test):
