@@ -1219,6 +1219,8 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, num_evals:(int, type(N
     # Finding eigenvalues and eigenvectors
     w, v = la.eigh(matrix)
     w_max = w[-1]
+    f = -shx_vector[0].values.T[0]
+    all_projectors = np.sum(f*v.T, axis=1)
     if num_evals is not None:
         w_nonzero = w[-num_evals:]
         nonzero_locs = range(len(w)-num_evals, len(w))
@@ -1226,9 +1228,9 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, num_evals:(int, type(N
         w_nonzero = w[w>evalue_cutoff*w_max]
         nonzero_locs = np.nonzero(w>evalue_cutoff*w_max)[0]
     else:
-        f_tmp = -shx_vector[0].values.T[0]
-        projectors_original = np.sum(f_tmp*v.T, axis=1)
-        ratio = np.abs(projectors_original/np.sqrt(np.abs(w)))
+  #      f_tmp = -shx_vector[0].values.T[0]
+  #      projectors_original = np.sum(f_tmp*v.T, axis=1)
+        ratio = np.abs(all_projectors/np.sqrt(np.abs(w)))
         ratio_nonzero = ratio[ratio<3]
         nonzero_locs = np.nonzero(ratio<3)[0]
         w_nonzero = []
@@ -1246,7 +1248,7 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, num_evals:(int, type(N
     for i in range(len(projectors)):
         projected_evectors[i] = projectors[i]*v_nonzero[i]
     fmiss = f - np.sum(projected_evectors, axis=0)
-    return w_nonzero, v_nonzero, projectors, f, fmiss, w_max
+    return w_nonzero, v_nonzero, projectors, f, fmiss, w_max, w, all_projectors
 
 def cutoff(theory_shift_test, num_evals:(int, type(None)) = None,
            evalue_cutoff:(float, type(None)) = None):
@@ -1256,7 +1258,7 @@ def cutoff(theory_shift_test, num_evals:(int, type(None)) = None,
     elif evalue_cutoff is not None:
         cutoff = evalue_cutoff*w_max
     else:
-        cutoff = "No cutoff was specified"
+        cutoff = "Keep eigenvalues satisfying $|\delta_a/s_a| <3$"
     print(f"cutoff = {cutoff}")
     return cutoff
 
@@ -1270,14 +1272,14 @@ def theory_covmat_eigenvalues(theory_shift_test):
          		index = [r'$s_a$', r'$\delta_a$', r'$\delta_a/s_a$'])
     return table
 
-def modrat(theory_shift_test):
+def efficiency(theory_shift_test):
     f = theory_shift_test[3]
     fmiss = theory_shift_test[4]
     fmod = np.sqrt(np.sum(f**2))
     fmiss_mod = np.sqrt(np.sum(fmiss**2))
-    modrat = fmiss_mod/fmod
-    print(f"modrat = {modrat}")
-    return modrat
+    efficiency = 1 - fmiss_mod/fmod
+    print(f"efficiency = {efficiency}")
+    return efficiency
 
 def maxrat(theory_shift_test):
     f = theory_shift_test[3]
@@ -1296,25 +1298,38 @@ def validation_theory_chi2(theory_shift_test):
 
 @figure
 def projector_eigenvalue_ratio(theory_shift_test):
-    projectors = theory_shift_test[2]
-    evals = theory_shift_test[0]
-    ratio = np.abs(projectors/np.sqrt(np.abs(evals)))
-    # Ordering eigenvalues and their projectors at random
-    randomise = np.arange(len(evals))
-    np.random.shuffle(randomise)
-    evals = np.asarray(evals)[randomise]
-    projectors = projectors[randomise]
-    ratio = ratio[randomise]
-    fig, (ax1, ax2, ax3) = plt.subplots(3, figsize=(5,5))
-    ax1.plot(np.abs(projectors), 'o')
-    ax2.plot(np.sqrt(evals), 'o')
-    ax3.plot(ratio, 'o', color="red")
-    ax1.set_title(f"Subspace dimension = {len(evals)}", fontsize=10)
+    surviving_evals = theory_shift_test[0]
+    all_projectors = theory_shift_test[7]
+    all_evals = theory_shift_test[6]
+    ratio = np.abs(all_projectors)/np.sqrt(np.abs(all_evals))
+    masked_evals = np.zeros((len(all_evals)))
+    for loc, eval in enumerate(all_evals):
+        if eval in surviving_evals:
+            masked_evals[loc] = eval
+  #  num_evals_ignored = len(all_evals)-len(surviving_evals)
+  #  # Ordering eigenvalues and their projectors at random
+  #  randomise = np.arange(len(evals))
+  #  np.random.shuffle(randomise)
+  #  evals = np.asarray(evals)[randomise]
+  #  projectors = projectors[randomise]
+  #  ratio = ratio[randomise]
+    fig, (ax1, ax2) = plt.subplots(2, figsize=(5,5))
+    ax1.plot(np.abs(all_projectors), 'o', label = r'|$\delta_a$|')
+    ax1.plot(np.sqrt(np.abs(all_evals)), 'o', label = r'$|s_a|$')
+    ax1.plot(np.sqrt(np.abs(masked_evals)), 'o', label = r'surviving $|s_a|$', color='k')
+    ax2.plot(ratio, 'o', color="red")
+    ax1.set_title(f"Number of surviving eigenvalues = {len(surviving_evals)}", fontsize=10)
     ax1.set_xlabel("a", fontsize=20)
-    ax1.set_ylabel(r"|$\delta_a$|")
-    ax2.set_ylabel(r"|$s_a$|")
-    ax3.set_ylabel(r"|$\delta_a$/$s_a$|")
-    print(f"Subspace dimension = {len(evals)}")
+    ax1.set_yscale('log')
+    ax2.set_yscale('log')
+#    ax1.set_ylim([all_evals[np.argmin(np.sqrt(np.abs(all_evals)))],
+#		all_evals[np.argmax(np.sqrt(np.abs(all_evals)))]])
+    ax1.legend()
+  #  ax1.axvline(x=num_evals_ignored, color='k')
+    ax2.axhline(y=3, color='k', label=r'|$\delta_a$/$s_a$| = 3')
+    ax2.legend()
+    ax2.set_ylabel(r"|$\delta_a$/$s_a$|")
+    print(f"Subspace dimension = {len(all_evals)}")
     return fig
 
 @figure
