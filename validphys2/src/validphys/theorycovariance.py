@@ -1224,7 +1224,6 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, num_evals:(int, type(N
     sort_indices = np.argsort(w)
     w = w[sort_indices]
     v = v[:, sort_indices]
-    embed()
     w_max = w[np.argmax(w)]
     f = -shx_vector[0].values.T[0]
     all_projectors = np.sum(f*v.T, axis=1)
@@ -1268,7 +1267,7 @@ def cutoff(theory_shift_test, num_evals:(int, type(None)) = None,
     elif evalue_cutoff is not None:
         cutoff = evalue_cutoff*w_max
     else:
-        cutoff = "Keep eigenvalues satisfying $|\delta_a/s_a| <3$"
+        cutoff = "Remove smallest 2 times number of negative eigenvalues"#"Keep eigenvalues satisfying $|\delta_a/s_a| <3$"
     print(f"cutoff = {cutoff}")
     return cutoff
 
