@@ -1218,7 +1218,14 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, num_evals:(int, type(N
     matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
     # Finding eigenvalues and eigenvectors
     w, v = la.eigh(matrix)
-    w_max = w[-1]
+    # Sorting real part of eigenvalues
+    w = np.real(w)
+    v = np.real(v)
+    sort_indices = np.argsort(w)
+    w = w[sort_indices]
+    v = v[:, sort_indices]
+    embed()
+    w_max = w[np.argmax(w)]
     f = -shx_vector[0].values.T[0]
     all_projectors = np.sum(f*v.T, axis=1)
     if num_evals is not None:
@@ -1230,9 +1237,12 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, num_evals:(int, type(N
     else:
   #      f_tmp = -shx_vector[0].values.T[0]
   #      projectors_original = np.sum(f_tmp*v.T, axis=1)
-        ratio = np.abs(all_projectors/np.sqrt(np.abs(w)))
-        ratio_nonzero = ratio[ratio<3]
-        nonzero_locs = np.nonzero(ratio<3)[0]
+  #      ratio = np.abs(all_projectors/np.sqrt(np.abs(w)))
+  #      ratio_nonzero = ratio[ratio<3]
+ #       embed()
+        num_neg_evals = len(w[w<0])
+        nonzero_locs = np.arange(2*num_neg_evals,len(w))
+   #     nonzero_locs = np.nonzero(ratio<3)[0]
         w_nonzero = []
         for loc in nonzero_locs:
             if loc >=0:
@@ -1265,10 +1275,10 @@ def cutoff(theory_shift_test, num_evals:(int, type(None)) = None,
 @table
 def theory_covmat_eigenvalues(theory_shift_test):
     w_nonzero, v_nonzero, projectors = theory_shift_test[:3]
-    s_scrambled = np.sqrt(np.abs(w_nonzero[::-1]))
-    projectors_scrambled = np.ndarray.tolist(projectors[::-1])
+    s_scrambled = np.sqrt(np.abs(w_nonzero))
+    projectors_scrambled = np.ndarray.tolist(projectors)
     ratio_scrambled = projectors_scrambled/s_scrambled
-    table = pd.DataFrame([s_scrambled, projectors_scrambled, ratio_scrambled],
+    table = pd.DataFrame([s_scrambled[::-1], projectors_scrambled[::-1], ratio_scrambled[::-1]],
          		index = [r'$s_a$', r'$\delta_a$', r'$\delta_a/s_a$'])
     return table
 
@@ -1298,9 +1308,9 @@ def validation_theory_chi2(theory_shift_test):
 
 @figure
 def projector_eigenvalue_ratio(theory_shift_test):
-    surviving_evals = theory_shift_test[0]
-    all_projectors = theory_shift_test[7]
-    all_evals = theory_shift_test[6]
+    surviving_evals = theory_shift_test[0][::-1]
+    all_projectors = theory_shift_test[7][::-1]
+    all_evals = theory_shift_test[6][::-1]
     ratio = np.abs(all_projectors)/np.sqrt(np.abs(all_evals))
     masked_evals = np.zeros((len(all_evals)))
     for loc, eval in enumerate(all_evals):
