@@ -978,6 +978,31 @@ def dataspecs_dataset_alltheory(matched_dataspecs_results, experiment_name, data
 
 matched_dataspecs_dataset_alltheory = collect('dataspecs_dataset_alltheory', ['dataspecs'])
 
+def alltheory_vector(matched_dataspecs_dataset_alltheory, matched_dataspecs_dataset_theory):
+    all_theory = np.concatenate(
+        [val.shifts for val in matched_dataspecs_dataset_alltheory], axis=1)
+    expnames = np.concatenate([
+        np.full(len(val.shifts),
+        val.experiment_name, dtype=object)
+        for val in matched_dataspecs_dataset_theory
+    ])
+    dsnames = np.concatenate([
+        np.full(len(val.shifts), 
+        val.dataset_name, dtype=object)
+        for val in matched_dataspecs_dataset_theory
+    ])
+    point_indexes = np.concatenate([
+        np.arange(len(val.shifts))
+        for val in matched_dataspecs_dataset_theory
+    ])
+    index = pd.MultiIndex.from_arrays(
+        [expnames, dsnames, point_indexes],
+        names=["Experiment name", "Dataset name", "Point"])
+    theory_vectors = []
+    for theoryvector in all_theory:
+        theory_vectors.append(pd.DataFrame(theoryvector, index=index))
+    return theory_vectors
+
 
 @figure
 def plot_matched_datasets_shift_matrix(matched_datasets_shift_matrix):
@@ -1098,6 +1123,7 @@ shx_vector = collect('shift_vector', ['combined_shift_and_theory_dataspecs', 'sh
 
 thx_vector = collect('theory_vector', ['combined_shift_and_theory_dataspecs', 'theoryconfig'])
 
+allthx_vector = collect('alltheory_vector', ['combined_shift_and_theory_dataspecs', 'theoryconfig'])
 
 def theory_matrix_threshold(theory_threshold:(int, float) = 0):
     """Returns the threshold below which theory correlation elements are set to
@@ -1212,10 +1238,27 @@ def plot_thcorrmat_heatmap_custom_dataspecs(theory_corrmat_custom_dataspecs, the
                                f"Theory correlation matrix for {l} points")
     return fig
 
+def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector):
+    orig_matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
+    # constructing shift vectors
+    scalevartheory_vectors = allthx_vector[0]
+    projected_matrix = np.zeros((len(scalevartheory_vectors), len(scalevartheory_vectors)))
+    for i, shift1 in enumerate(scalevartheory_vectors):
+        for j, shift2 in enumerate(scalevartheory_vectors):
+            projected_matrix[i][j] = np.dot(shift1.T, np.dot(orig_matrix, shift2))/np.sqrt(
+                                     np.dot(shift1.T, shift1) * np.dot(shift2.T, shift2))
+    w_projected, v_projected = la.eigh(projected_matrix)
+    embed()
+    return w_projected, v_projected
 
-def theory_shift_test(thx_covmat, shx_vector, thx_vector, num_evals:(int, type(None)) = None,
+
+
+def theory_shift_test(thx_covmat, shx_vector, thx_vector,
+                     num_evals:(int, type(None)) = None,
 		     evalue_cutoff:(float, type(None)) = None):
     matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
+    matrix.to_csv(r'BCDMS9ptcovmat.txt', header=None, index=None, sep=' ', mode='a')
+#    np.savetxt(r'BCDMS3ptcovmat.txt', matrix.values, fmt='%d')
     # Finding eigenvalues and eigenvectors
     w, v = la.eigh(matrix)
     # Sorting real part of eigenvalues
@@ -1236,12 +1279,12 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, num_evals:(int, type(N
     else:
   #      f_tmp = -shx_vector[0].values.T[0]
   #      projectors_original = np.sum(f_tmp*v.T, axis=1)
-  #      ratio = np.abs(all_projectors/np.sqrt(np.abs(w)))
-  #      ratio_nonzero = ratio[ratio<3]
- #       embed()
-        num_neg_evals = len(w[w<0])
-        nonzero_locs = np.arange(2*num_neg_evals,len(w))
-   #     nonzero_locs = np.nonzero(ratio<3)[0]
+        ratio = np.abs(all_projectors/np.sqrt(np.abs(w)))
+        ratio_nonzero = ratio[ratio<3]
+        embed()
+  #      num_neg_evals = len(w[w<0])
+  #      nonzero_locs = np.arange(2*num_neg_evals,len(w))
+        nonzero_locs = np.nonzero(ratio<3)[0]
         w_nonzero = []
         for loc in nonzero_locs:
             if loc >=0:
@@ -1267,7 +1310,7 @@ def cutoff(theory_shift_test, num_evals:(int, type(None)) = None,
     elif evalue_cutoff is not None:
         cutoff = evalue_cutoff*w_max
     else:
-        cutoff = "Remove smallest 2 times number of negative eigenvalues"#"Keep eigenvalues satisfying $|\delta_a/s_a| <3$"
+        cutoff = "Keep eigenvalues satisfying $|\delta_a/s_a| <3$"
     print(f"cutoff = {cutoff}")
     return cutoff
 
