@@ -889,7 +889,7 @@ def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
                         if mat[i][j] > 0:
                             mat[i][j] = 1
                         else:
-                            mat[i][j] = -1 
+                            mat[i][j] = -1
                     else:
                         mat[i][j] = 0
                 else:
@@ -987,7 +987,7 @@ def alltheory_vector(matched_dataspecs_dataset_alltheory, matched_dataspecs_data
         for val in matched_dataspecs_dataset_theory
     ])
     dsnames = np.concatenate([
-        np.full(len(val.shifts), 
+        np.full(len(val.shifts),
         val.dataset_name, dtype=object)
         for val in matched_dataspecs_dataset_theory
     ])
@@ -1242,11 +1242,24 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector):
     orig_matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
     # constructing shift vectors
     scalevartheory_vectors = allthx_vector[0]
-    projected_matrix = np.zeros((len(scalevartheory_vectors), len(scalevartheory_vectors)))
-    for i, shift1 in enumerate(scalevartheory_vectors):
-        for j, shift2 in enumerate(scalevartheory_vectors):
-            projected_matrix[i][j] = np.dot(shift1.T, np.dot(orig_matrix, shift2))/np.sqrt(
-                                     np.dot(shift1.T, shift1) * np.dot(shift2.T, shift2))
+    deltas = [scalevarvector - thx_vector[0] for scalevarvector in allthx_vector[0]]
+    # iteratively orthogonalising deltas
+  #  embed()
+    moddeltas = [np.abs(delta) for delta in deltas]
+    ys = [delta/moddelta for delta, moddelta in zip(deltas, moddeltas)]
+    for i in range(len(deltas)):
+        if i == 1:
+            xdash = deltas[i] - [y*np.dot(y.T, deltas[i])[0]
+                                      for y in ys[:i]][0]
+            ys[i] = xdash/np.abs(xdash)
+    projected_matrix = np.zeros((len(scalevartheory_vectors),
+                                 len(scalevartheory_vectors)))
+    for i, y1 in enumerate(ys):
+        for j, y2 in enumerate(ys):
+            projected_matrix[i][j] = np.dot(y1.T,
+                                     np.dot(orig_matrix, y2)) /np.sqrt(
+                                     np.dot(y1.T, y1) *
+                                     np.dot(y2.T, y2))
     w_projected, v_projected = la.eigh(projected_matrix)
     embed()
     return w_projected, v_projected
@@ -1257,8 +1270,7 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector,
                      num_evals:(int, type(None)) = None,
 		     evalue_cutoff:(float, type(None)) = None):
     matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
-    matrix.to_csv(r'BCDMS9ptcovmat.txt', header=None, index=None, sep=' ', mode='a')
-#    np.savetxt(r'BCDMS3ptcovmat.txt', matrix.values, fmt='%d')
+#    matrix.to_csv(r'BCDMS9ptcovmat.txt', header=None, index=None, sep=' ', mode='a')
     # Finding eigenvalues and eigenvectors
     w, v = la.eigh(matrix)
     # Sorting real part of eigenvalues
@@ -1277,14 +1289,15 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector,
         w_nonzero = w[w>evalue_cutoff*w_max]
         nonzero_locs = np.nonzero(w>evalue_cutoff*w_max)[0]
     else:
+        mod_larg_neg_eval = np.abs(w[0])
+        nonzero_locs = np.nonzero(w>10*mod_larg_neg_eval)[0]
   #      f_tmp = -shx_vector[0].values.T[0]
   #      projectors_original = np.sum(f_tmp*v.T, axis=1)
         ratio = np.abs(all_projectors/np.sqrt(np.abs(w)))
         ratio_nonzero = ratio[ratio<3]
-        embed()
   #      num_neg_evals = len(w[w<0])
   #      nonzero_locs = np.arange(2*num_neg_evals,len(w))
-        nonzero_locs = np.nonzero(ratio<3)[0]
+  #      nonzero_locs = np.nonzero(ratio<3)[0]
         w_nonzero = []
         for loc in nonzero_locs:
             if loc >=0:
@@ -1310,7 +1323,7 @@ def cutoff(theory_shift_test, num_evals:(int, type(None)) = None,
     elif evalue_cutoff is not None:
         cutoff = evalue_cutoff*w_max
     else:
-        cutoff = "Keep eigenvalues satisfying $|\delta_a/s_a| <3$"
+        cutoff = "10 times modulus of largest 'negative' eigenvalue"
     print(f"cutoff = {cutoff}")
     return cutoff
 
