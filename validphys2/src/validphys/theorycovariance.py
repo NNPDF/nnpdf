@@ -1239,23 +1239,16 @@ def plot_thcorrmat_heatmap_custom_dataspecs(theory_corrmat_custom_dataspecs, the
     return fig
 
 def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector):
-    orig_matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
+    orig_matrix = thx_covmat[0]#/(np.outer(thx_vector[0], thx_vector[0]))
     # constructing shift vectors
     scalevartheory_vectors = allthx_vector[0]
-    deltas = [scalevarvector - thx_vector[0] for scalevarvector in allthx_vector[0]]
+    deltas = [thx_vector[0] - scalevarvector for scalevarvector in allthx_vector[0]]
     # iteratively orthogonalising deltas
-  #  embed()
- #   moddeltas = [np.abs(delta) for delta in deltas]
     ys = [delta/np.linalg.norm(delta) for delta in deltas]
     xdash = deltas[1] - ys[0]*np.dot(ys[0].T, deltas[1])[0]
     ys[1] = xdash/np.linalg.norm(xdash)
-#    for i in range(len(deltas)):
-#        if i == 1:
-#            xdash = deltas[i] - [y*np.dot(y.T, deltas[i])[0]
-#                                      for y in ys[:i]][0]
-#            ys[i] = xdash/np.abs(xdash)
-    projected_matrix = np.zeros((len(scalevartheory_vectors),
-                                 len(scalevartheory_vectors)))
+    projected_matrix = np.zeros((len(ys),
+                                 len(ys)))
     for i, y1 in enumerate(ys):
         for j, y2 in enumerate(ys):
             projected_matrix[i][j] = np.dot(y1.T,
