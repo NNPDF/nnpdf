@@ -1245,21 +1245,21 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector):
     deltas = [scalevarvector - thx_vector[0] for scalevarvector in allthx_vector[0]]
     # iteratively orthogonalising deltas
   #  embed()
-    moddeltas = [np.abs(delta) for delta in deltas]
-    ys = [delta/moddelta for delta, moddelta in zip(deltas, moddeltas)]
-    for i in range(len(deltas)):
-        if i == 1:
-            xdash = deltas[i] - [y*np.dot(y.T, deltas[i])[0]
-                                      for y in ys[:i]][0]
-            ys[i] = xdash/np.abs(xdash)
+ #   moddeltas = [np.abs(delta) for delta in deltas]
+    ys = [delta/np.linalg.norm(delta) for delta in deltas]
+    xdash = deltas[1] - ys[0]*np.dot(ys[0].T, deltas[1])[0]
+    ys[1] = xdash/np.linalg.norm(xdash)
+#    for i in range(len(deltas)):
+#        if i == 1:
+#            xdash = deltas[i] - [y*np.dot(y.T, deltas[i])[0]
+#                                      for y in ys[:i]][0]
+#            ys[i] = xdash/np.abs(xdash)
     projected_matrix = np.zeros((len(scalevartheory_vectors),
                                  len(scalevartheory_vectors)))
     for i, y1 in enumerate(ys):
         for j, y2 in enumerate(ys):
             projected_matrix[i][j] = np.dot(y1.T,
-                                     np.dot(orig_matrix, y2)) /np.sqrt(
-                                     np.dot(y1.T, y1) *
-                                     np.dot(y2.T, y2))
+                                     np.dot(orig_matrix, y2))
     w_projected, v_projected = la.eigh(projected_matrix)
     embed()
     return w_projected, v_projected
