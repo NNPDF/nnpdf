@@ -1330,7 +1330,7 @@ def cutoff(theory_shift_test, num_evals:(int, type(None)) = None,
     elif evalue_cutoff is not None:
         cutoff = evalue_cutoff*w_max
     else:
-        cutoff = "10 times modulus of largest 'negative' eigenvalue"
+        cutoff = "No cut-off. Non-zero eigenvalues found by method of projecting covariance matrix into subspace of data space."
     print(f"cutoff = {cutoff}")
     return cutoff
 
