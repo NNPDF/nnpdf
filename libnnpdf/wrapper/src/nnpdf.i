@@ -19,7 +19,7 @@
 
 %include "std_string.i"
 %include "std_vector.i"
-%include "std_map.i" 
+%include "std_map.i"
 
 %include "include/numpy.i"
 
@@ -168,12 +168,48 @@ void grid_values(
 
 /* FKtable stuff */
 
+%apply (double** ARGOUTVIEWM_ARRAY1, int* DIM1) {(double** data, int* n)}
+%apply (NNPDF::real** ARGOUTVIEWM_ARRAY1, int* DIM1) {(NNPDF::real** data, int* n)}
+%apply (int** ARGOUTVIEWM_ARRAY1, int* DIM1) {(int** data, int* n)}
+
 %include "NNPDF/fastkernel.h"
 %template (vector_fktable_p) std::vector<NNPDF::FKTable*>;
 %ignore NNPDF::swap;
 %ignore NNPDF::FKSet::operator=;
 %ignore NNPDF::FKSet::FKSet(FKSet &&);
 %include "NNPDF/fkset.h"
+
+
+%extend NNPDF::FKTable{
+
+void get_xgrid(double **data, int* n){
+  int len = $self->GetNx();
+  double* result = (double*) malloc(sizeof(double)*len);
+  double* xgrid = $self->GetXGrid();
+  std::copy(xgrid, xgrid+len, result);
+  *data = result;
+  *n = len;
+}
+
+void get_sigma(NNPDF::real **data, int* n){
+  int len = $self->GetDSz()*$self->GetNData();
+  NNPDF::real* result = (decltype(result)) malloc(sizeof(*result)*len);
+  NNPDF::real* sigma = $self->GetSigma();
+  std::copy(sigma, sigma+len, result);
+  *data = result;
+  *n = len;
+}
+
+void get_flmap(int **data, int* n){
+  int len = $self->IsHadronic() ? 2*$self->GetNonZero() : $self->GetNonZero();
+  int* result = (int*) malloc(sizeof(int)*len);
+  int* flmap = $self->GetFlmap();
+  std::copy(flmap, flmap+len, result);
+  *data = result;
+  *n = len;
+}
+
+}
 
 /* Dataset */
 
