@@ -1247,25 +1247,16 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector):
     ys = [delta/np.linalg.norm(delta) for delta in deltas]
     xdash = deltas[1] - ys[0]*np.dot(ys[0].T, deltas[1])[0]
     ys[1] = xdash/np.linalg.norm(xdash)
-    projected_matrix = np.zeros((len(ys),
-                                 len(ys)))
-    for i, y1 in enumerate(ys):
-        for j, y2 in enumerate(ys):
-            projected_matrix[i][j] = np.dot(y1.T,
-                                     np.dot(orig_matrix, y2))
-    w_projected, v_projected = la.eigh(projected_matrix)
-    embed()
-    return w_projected, v_projected
+    P = np.column_stack(ys)
+    projected_matrix = np.dot(P.T, np.dot(orig_matrix, P))
+    w, v_projected = la.eigh(projected_matrix)
+    v = np.dot(P, v_projected)
+    return w, v
 
-
-
-def theory_shift_test(thx_covmat, shx_vector, thx_vector,
+def theory_shift_test(shx_vector, thx_vector, evals_nonzero_basis,
                      num_evals:(int, type(None)) = None,
 		     evalue_cutoff:(float, type(None)) = None):
-    matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
-#    matrix.to_csv(r'BCDMS9ptcovmat.txt', header=None, index=None, sep=' ', mode='a')
-    # Finding eigenvalues and eigenvectors
-    w, v = la.eigh(matrix)
+    w, v = evals_nonzero_basis
     # Sorting real part of eigenvalues
     w = np.real(w)
     v = np.real(v)
@@ -1275,37 +1266,34 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector,
     w_max = w[np.argmax(w)]
     f = -shx_vector[0].values.T[0]
     all_projectors = np.sum(f*v.T, axis=1)
-    if num_evals is not None:
-        w_nonzero = w[-num_evals:]
-        nonzero_locs = range(len(w)-num_evals, len(w))
-    elif evalue_cutoff is not None:
-        w_nonzero = w[w>evalue_cutoff*w_max]
-        nonzero_locs = np.nonzero(w>evalue_cutoff*w_max)[0]
-    else:
-        mod_larg_neg_eval = np.abs(w[0])
+#    if num_evals is not None:
+#        w_nonzero = w[-num_evals:]
+#        nonzero_locs = range(len(w)-num_evals, len(w))
+#    elif evalue_cutoff is not None:
+#        w_nonzero = w[w>evalue_cutoff*w_max]
+#        nonzero_locs = np.nonzero(w>evalue_cutoff*w_max)[0]
+#    else:
+#        mod_larg_neg_eval = np.abs(w[0])
         nonzero_locs = np.nonzero(w>10*mod_larg_neg_eval)[0]
-  #      f_tmp = -shx_vector[0].values.T[0]
-  #      projectors_original = np.sum(f_tmp*v.T, axis=1)
-        ratio = np.abs(all_projectors/np.sqrt(np.abs(w)))
-        ratio_nonzero = ratio[ratio<3]
-  #      num_neg_evals = len(w[w<0])
-  #      nonzero_locs = np.arange(2*num_neg_evals,len(w))
-  #      nonzero_locs = np.nonzero(ratio<3)[0]
-        w_nonzero = []
-        for loc in nonzero_locs:
-            if loc >=0:
-                w_nonzero.append(w[loc])
+##        ratio = np.abs(all_projectors/np.sqrt(np.abs(w)))
+#        ratio_nonzero = ratio[ratio<3]
+#        w_nonzero = []
+#        for loc in nonzero_locs:
+#            if loc >=0:
+#                w_nonzero.append(w[loc])
     # ^ taking 0th element to extract list from tuple
+    nonzero_locs = range(len(w))
+    w_nonzero = w[nonzero_locs]
     v_nonzero = []
     for loc in nonzero_locs:
         if loc >=0:
             v_nonzero.append(v[:,loc])
-    f = -shx_vector[0].values.T[0]
     projectors = np.sum(f*v_nonzero, axis=1)
     projected_evectors = np.zeros((len(projectors), (len(f))))
     for i in range(len(projectors)):
         projected_evectors[i] = projectors[i]*v_nonzero[i]
     fmiss = f - np.sum(projected_evectors, axis=0)
+    embed()
     return w_nonzero, v_nonzero, projectors, f, fmiss, w_max, w, all_projectors
 
 def cutoff(theory_shift_test, num_evals:(int, type(None)) = None,
