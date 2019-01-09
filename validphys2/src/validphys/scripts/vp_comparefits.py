@@ -10,7 +10,7 @@ from reportengine.compat import yaml
 from reportengine.colors import t
 
 from validphys.app import App
-from validphys import comparefittemplates
+from validphys import comparefittemplates, compareclosuretemplates
 
 log = logging.getLogger(__name__)
 
@@ -50,7 +50,7 @@ class CompareFitApp(App):
             default=None,
             nargs='?',
             help="The fit to compare with")
-        #These are not really positional, but it here they show up before others.
+        #These are not really positional, but if here they show up before others.
         parser.add_argument(
             '--title', help="The title that will be indexed with the report.")
         parser.add_argument('--author', help="The author of the report.")
@@ -60,6 +60,11 @@ class CompareFitApp(App):
             '-i',
             '--interactive',
             help="Ask interactively for the missing data",
+            action='store_true')
+        parser.add_argument(
+            '-c',
+            '--closure',
+            help="Use the closure comparison template.",
             action='store_true')
 
     def try_complete_args(self):
@@ -122,7 +127,12 @@ class CompareFitApp(App):
         # This is needed because the environment wants to know how to resolve
         # the relative paths to find the templates. Best to have the template
         # look as much as possible as a runcard passed from the command line
-        args['config_yml'] = comparefittemplates.template_path
+        if not args['closure']:
+            args['config_yml'] = comparefittemplates.template_path
+        else:
+            #This doesn't print anything
+            log.info(f"using closure test template.")
+            args['config_yml'] = compareclosuretemplates.template_path
         return args
 
     def complete_mapping(self):

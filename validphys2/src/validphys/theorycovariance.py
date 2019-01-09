@@ -34,13 +34,14 @@ theoryids_experiments_central_values = collect(experiments_central_values,
                                                ('theoryids',))
 
 @make_argcheck
-def _check_correct_theory_combination(theoryids, fivetheories):
+def _check_correct_theory_combination(theoryids,
+                                      fivetheories:(str, type(None)) = None):
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
     l = len(theoryids)
     check(l in {3, 5, 7, 9},
           "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
-    opts = {'bar', 'nobar'}
+    opts = {'bar', 'nobar', 'linear'}
     xifs = [theoryid.get_description()['XIF'] for theoryid in theoryids]
     xirs = [theoryid.get_description()['XIR'] for theoryid in theoryids]
     if l == 3:
@@ -49,12 +50,12 @@ def _check_correct_theory_combination(theoryids, fivetheories):
     elif l == 5:
         check(
             fivetheories is not None,
-            "For five input theories a prescription bar or nobar for "
-            "the flag fivetheories must be specified.")
+            "For five input theories a prescription bar, nobar or linear "
+            "for the flag fivetheories must be specified.")
         check(fivetheories in opts,
               "Invalid choice of prescription for 5 points", fivetheories,
               opts)
-        if fivetheories == "nobar":
+        if fivetheories == "nobar" or "linear":
             correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0]
             correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5]
         else:
@@ -104,7 +105,8 @@ def make_scale_var_covmat(predictions):
 
 @table
 @_check_correct_theory_combination
-def theory_covmat(theoryids_experiments_central_values, experiments_index, theoryids):
+def theory_covmat(theoryids_experiments_central_values, experiments_index, theoryids,
+                  fivetheories:(str, type(None)) = None):
     """Calculates the theory covariance matrix for scale variations.
     The matrix is a dataframe indexed by experiments_index."""
     s = make_scale_var_covmat(theoryids_experiments_central_values)
@@ -116,7 +118,8 @@ each_dataset_results_bytheory = collect('results_bytheoryids',
                                         ('experiments', 'experiment'))
 
 @_check_correct_theory_combination
-def theory_covmat_datasets(each_dataset_results_bytheory):
+def theory_covmat_datasets(each_dataset_results_bytheory,
+                           fivetheories:(str, type(None)) = None):
     """Produces an array of theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard. """
     dataset_covmats=[]
@@ -127,7 +130,8 @@ def theory_covmat_datasets(each_dataset_results_bytheory):
     return dataset_covmats
 
 @_check_correct_theory_combination
-def total_covmat_datasets(each_dataset_results_bytheory):
+def total_covmat_datasets(each_dataset_results_bytheory,
+                          fivetheories:(str, type(None)) = None):
     """Produces an array of total covariance matrices; the sum of experimental
     and scale-varied theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard.
@@ -142,7 +146,8 @@ def total_covmat_datasets(each_dataset_results_bytheory):
     return dataset_covmats
 
 @_check_correct_theory_combination
-def total_covmat_diagtheory_datasets(each_dataset_results_bytheory):
+def total_covmat_diagtheory_datasets(each_dataset_results_bytheory,
+                                     fivetheories:(str, type(None)) = None):
     """Same as total_covmat_theory_datasets but for diagonal theory only"""
     dataset_covmats=[]
     for dataset in each_dataset_results_bytheory:
@@ -167,7 +172,8 @@ def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
 experiments_results_theory = collect('experiments_results', ('theoryids',))
 
 @_check_correct_theory_combination
-def total_covmat_experiments(experiments_results_theory):
+def total_covmat_experiments(experiments_results_theory,
+                             fivetheories:(str, type(None)) = None):
     """Same as total_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
     exp_result_covmats = []
@@ -275,7 +281,8 @@ def covmap(combine_by_type, dataset_names):
 
 @_check_correct_theory_combination
 def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
-                     fivetheories:(str, type(None)) = None):
+                     fivetheories:(str, type(None)) = None,
+                     seventheories:(str, type(None)) = None):
     """Produces the sub-matrices of the theory covariance matrix according
     to a point prescription which matches the number of input theories.
     If 5 theories are provided, a scheme 'bar' or 'nobar' must be
@@ -302,33 +309,51 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
                 start_locs = (start_proc[name1], start_proc[name2])
                 covmats[start_locs] = s
             elif l==5:
-                if name1 == name2:
-                    s = 0.5*sum(np.outer(d, d) for d in deltas1)
-            # 5 point --------------------------------------------------------------------
-                elif fivetheories=='nobar':
-                    s = 0.5*(np.outer(deltas1[0], deltas2[0]) + np.outer(
-                                             deltas1[1], deltas2[1])) + 0.25*(
-                        np.outer((deltas1[2] + deltas1[3]),
-                                 (deltas2[2] + deltas2[3])))
-             # 5bar-point -----------------------------------------------------------------
+             # Zahari's proposal for the theoretical covariance matrix --------------------
+                if fivetheories=='linear':
+                    if name1 == name2:
+                        s = 0.25*(np.outer(deltas1[0], deltas2[0]) - np.outer(deltas1[0], deltas2[1])
+                            - np.outer(deltas1[1], deltas2[0]) + np.outer(deltas1[1], deltas2[1])
+                            + np.outer(deltas1[2], deltas2[2]) - np.outer(deltas1[2], deltas2[3])
+                            - np.outer(deltas1[3], deltas2[2]) + np.outer(deltas1[3], deltas2[3]))
+                    else:
+                        s = 0.25*(np.outer(deltas1[0], deltas2[0]) - np.outer(deltas1[0], deltas2[1])
+                            - np.outer(deltas1[1], deltas2[0]) + np.outer(deltas1[1], deltas2[1]))
                 else:
-                    s = 0.25*(np.outer((deltas1[0]+deltas1[2]),
-                                        (deltas2[0]+deltas2[2]))
-                               + np.outer((deltas1[1]+deltas1[3]),
-                                          (deltas2[1]+deltas2[3])))
+                    if name1 == name2:
+                        s = 0.5*sum(np.outer(d, d) for d in deltas1)
+             # 5 point --------------------------------------------------------------------
+                    elif fivetheories=='nobar':
+                        s = 0.5*(np.outer(deltas1[0], deltas2[0]) + np.outer(
+                                               deltas1[1], deltas2[1])) + 0.25*(
+                            np.outer((deltas1[2] + deltas1[3]),
+                                    (deltas2[2] + deltas2[3])))
+             # 5bar-point -----------------------------------------------------------------
+                    else:
+                        s = 0.25*(np.outer((deltas1[0]+deltas1[2]),
+                                            (deltas2[0]+deltas2[2]))
+                                + np.outer((deltas1[1]+deltas1[3]),
+                                            (deltas2[1]+deltas2[3])))
              #  -----------------------------------------------------------------
                 start_locs = (start_proc[name1], start_proc[name2])
                 covmats[start_locs] = s
             elif l==7:
                 if name1 == name2:
                     s = (1/3)*sum(np.outer(d, d) for d in deltas1)
-                else:
+                elif seventheories=='original':
                     s = (1/6)*(np.outer((deltas1[0]+ deltas1[4]),
                                (deltas2[0] + deltas2[4]))
                                + np.outer((deltas1[1]+ deltas1[5]),
                                           (deltas2[1] + deltas2[5]))
                                + np.outer((deltas1[2]+deltas1[3]), (
                                        deltas2[2]+ deltas2[3])))
+                else:
+                    s = (1/6)*(2*(np.outer(deltas1[0], deltas2[0])
+                                  + np.outer(deltas1[1], deltas2[1]))
+                             + (np.outer((deltas1[2] + deltas1[3]),
+                                         (deltas2[2] + deltas2[3]))
+                             + np.outer((deltas1[4] + deltas1[5]),
+                                        (deltas2[4] + deltas2[5]))))
                 start_locs = (start_proc[name1], start_proc[name2])
                 covmats[start_locs] = s
             elif l==9:
@@ -364,7 +389,8 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     return df
 
 @_check_correct_theory_combination
-def total_covmat_diagtheory_experiments(experiments_results_theory):
+def total_covmat_diagtheory_experiments(experiments_results_theory,
+                                        fivetheories:(str, type(None)) = None):
     """Same as total_covmat_datasets but per experiment rather than
     per dataset. Needed for calculation of chi2 per experiment."""
     exp_result_covmats = []
