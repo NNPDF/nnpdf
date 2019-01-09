@@ -1300,7 +1300,6 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector,
     for loc in nonzero_locs:
         if loc >=0:
             v_nonzero.append(v[:,loc])
-    f = -shx_vector[0].values.T[0]
     projectors = np.sum(f*v_nonzero, axis=1)
     projected_evectors = np.zeros((len(projectors), (len(f))))
     for i in range(len(projectors)):
