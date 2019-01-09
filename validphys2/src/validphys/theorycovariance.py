@@ -1239,10 +1239,10 @@ def plot_thcorrmat_heatmap_custom_dataspecs(theory_corrmat_custom_dataspecs, the
     return fig
 
 def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector):
-    orig_matrix = thx_covmat[0]#/(np.outer(thx_vector[0], thx_vector[0]))
+    orig_matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
     # constructing shift vectors
     scalevartheory_vectors = allthx_vector[0]
-    deltas = [thx_vector[0] - scalevarvector for scalevarvector in allthx_vector[0]]
+    deltas = [(thx_vector[0] - scalevarvector)/thx_vector[0] for scalevarvector in allthx_vector[0]]
     # iteratively orthogonalising deltas
     ys = [delta/np.linalg.norm(delta) for delta in deltas]
     xdash = deltas[1] - ys[0]*np.dot(ys[0].T, deltas[1])[0]
