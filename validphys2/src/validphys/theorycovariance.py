@@ -1274,7 +1274,7 @@ def theory_shift_test(shx_vector, thx_vector, evals_nonzero_basis,
 #        nonzero_locs = np.nonzero(w>evalue_cutoff*w_max)[0]
 #    else:
 #        mod_larg_neg_eval = np.abs(w[0])
-        nonzero_locs = np.nonzero(w>10*mod_larg_neg_eval)[0]
+#        nonzero_locs = np.nonzero(w>10*mod_larg_neg_eval)[0]
 ##        ratio = np.abs(all_projectors/np.sqrt(np.abs(w)))
 #        ratio_nonzero = ratio[ratio<3]
 #        w_nonzero = []
