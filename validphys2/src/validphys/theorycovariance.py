@@ -1268,21 +1268,33 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector):
     orig_matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
     # constructing shift vectors
     scalevartheory_vectors = allthx_vector[0]
-    deltas = [(thx_vector[0] - scalevarvector)/thx_vector[0] for scalevarvector in allthx_vector[0]]
+    xs = [(thx_vector[0] - scalevarvector)/thx_vector[0] for scalevarvector in allthx_vector[0]]
     # iteratively orthogonalising deltas
-    ys = [delta/np.linalg.norm(delta) for delta in deltas]
-    xdash = deltas[1] - ys[0]*np.dot(ys[0].T, deltas[1])[0]
-    ys[1] = xdash/np.linalg.norm(xdash)
+    ys = [x/np.linalg.norm(x) for x in xs]
+    xdashs = [None]*len(ys)
+    for n, x in enumerate(xs):
+        sub_ys = ys[:n]
+        subtract_terms = [None]*len(sub_ys)
+        xlist = [x]*len(sub_ys)
+        for i in range(len(sub_ys)):
+            subtract_terms[i] = np.dot(sub_ys[i], np.dot(sub_ys[i].T, xlist[i]))
+        xdashs[n] = x - np.sum(subtract_terms, axis=0)
+        ys[n] = xdashs[n]/np.linalg.norm(xdashs[n])
+#    xdash = xs[1] - ys[0]*np.dot(ys[0].T, xs[1])[0]
+#    ys[1] = xdash/np.linalg.norm(xdash)
     P = np.column_stack(ys)
     projected_matrix = np.dot(P.T, np.dot(orig_matrix, P))
     w, v_projected = la.eigh(projected_matrix)
     v = np.dot(P, v_projected)
     return w, v
 
-def theory_shift_test(shx_vector, thx_vector, evals_nonzero_basis,
-                     num_evals:(int, type(None)) = None,
-		     evalue_cutoff:(float, type(None)) = None):
-    w, v = evals_nonzero_basis
+def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
+		     eigenvalue_cutoff:(bool, type(None)) = None):
+    if eigenvalue_cutoff == True:
+        matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
+        w, v = la.eigh(matrix)
+    else:
+        w, v = evals_nonzero_basis
     # Sorting real part of eigenvalues
     w = np.real(w)
     v = np.real(v)
@@ -1298,18 +1310,17 @@ def theory_shift_test(shx_vector, thx_vector, evals_nonzero_basis,
 #    elif evalue_cutoff is not None:
 #        w_nonzero = w[w>evalue_cutoff*w_max]
 #        nonzero_locs = np.nonzero(w>evalue_cutoff*w_max)[0]
-#    else:
-#        mod_larg_neg_eval = np.abs(w[0])
-#        nonzero_locs = np.nonzero(w>10*mod_larg_neg_eval)[0]
-##        ratio = np.abs(all_projectors/np.sqrt(np.abs(w)))
-#        ratio_nonzero = ratio[ratio<3]
-#        w_nonzero = []
-#        for loc in nonzero_locs:
-#            if loc >=0:
-#                w_nonzero.append(w[loc])
+    if eigenvalue_cutoff == True:
+        mod_larg_neg_eval = np.abs(w[0])
+        nonzero_locs = np.nonzero(w>10*mod_larg_neg_eval)[0]
+        w_nonzero = []
+        for loc in nonzero_locs:
+            if loc >=0:
+                w_nonzero.append(w[loc])
     # ^ taking 0th element to extract list from tuple
-    nonzero_locs = range(len(w))
-    w_nonzero = w[nonzero_locs]
+    else: 
+        nonzero_locs = range(len(w))
+        w_nonzero = w[nonzero_locs]
     v_nonzero = []
     for loc in nonzero_locs:
         if loc >=0:
@@ -1319,18 +1330,14 @@ def theory_shift_test(shx_vector, thx_vector, evals_nonzero_basis,
     for i in range(len(projectors)):
         projected_evectors[i] = projectors[i]*v_nonzero[i]
     fmiss = f - np.sum(projected_evectors, axis=0)
-    embed()
     return w_nonzero, v_nonzero, projectors, f, fmiss, w_max, w, all_projectors
 
-def cutoff(theory_shift_test, num_evals:(int, type(None)) = None,
-           evalue_cutoff:(float, type(None)) = None):
+def cutoff(theory_shift_test, eigenvalue_cutoff:(bool, type(None)) = None):
     w_max = theory_shift_test[5]
-    if num_evals is not None:
-        cutoff = f"{num_evals} largest eigenvalues were selected"
-    elif evalue_cutoff is not None:
-        cutoff = evalue_cutoff*w_max
-    else:
+    if eigenvalue_cutoff == True:
         cutoff = "10 times modulus of largest 'negative' eigenvalue"
+    else:
+        cutoff = "Eigenvalues determined by projection onto space of non-zero eigenvalues"
     print(f"cutoff = {cutoff}")
     return cutoff
 
