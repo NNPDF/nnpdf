@@ -4,6 +4,7 @@ Tools for computing and plotting effective exponents.
 """
 from __future__ import generator_stop
 
+import io
 import logging
 import warnings
 import numbers
@@ -472,7 +473,6 @@ def next_effective_exponents_yaml(pdf: PDF,
                         item['smallx'] = list(smallx)
                         item['largex'] = list(largex)
 
-    import io
     s = io.StringIO()
     y.dump(basismap, s)
 
