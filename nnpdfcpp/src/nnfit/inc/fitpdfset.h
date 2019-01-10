@@ -50,8 +50,6 @@ public:
   }
 
   void InitPDFSet() const;
-  void ExportPDF(int const& rep);  //!< Export LHAPDF grid
-  void ExportGrid(int const& rep); //!< Export initial-value pdf grid
   void ExportMeta(int const& rep, real const& erf_val, real const& erf_trn, real const& chi2, bool posVeto);
 
   bool ComputeIntegrals( int const& mem ); //!< Compute all associated integrals and sum rules
@@ -76,6 +74,8 @@ public:
   real GetPDF  (real const& x, real const& Q2, int const& n, int const& fl) const; //!< Get preprocessed Fit basis PDF
 
   real CalculateArcLength(int const& mem, int const& fl, real const& dampfact, real xmin = 1e-15, real xmax = 1.0) const;
+
+  real GetQ20() const { return fQ20; }
 
 private:
   FitPDFSet(NNPDFSettings const&, FitBasis*);
