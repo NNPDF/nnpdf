@@ -59,7 +59,7 @@ NNPDF::PDFSet(pdfname, size(), etype)
   else
     mkPDFs( fMemberPDFs );
 
-    get_logger() << pdfname<< " Initialised with " << fMembers<<" members and errorType "<<LHError<<std::endl;
+  get_logger() << pdfname<< " Initialised with " << fMembers<<" members and errorType "<<LHError<<std::endl;
 }
 
 LHAPDFSet::LHAPDFSet(const std::string & pdfname, const int &replica):
