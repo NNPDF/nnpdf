@@ -21,6 +21,7 @@ from validphys import checks
 from validphys.plotoptions import get_info
 from validphys import sumrules
 from validphys.results import phi_data
+from validphys.theorycovariance import chi2_impact
 
 #TODO: Add more stuff here as needed for postfit
 LITERAL_FILES = ['chi2exps.log']
@@ -141,6 +142,7 @@ def fit_summary(fit, replica_data, total_experiments_chi2data):
     ndata = total_experiments_chi2data.ndata
     central_chi2 = total_experiments_chi2data.central_result / ndata
     member_chi2 = total_experiments_chi2data.replica_result.error_members() / ndata
+    expplusth_chi2 = chi2_impact
 
     nite = [x.nite for x in replica_data]
     etrain = [x.training for x in replica_data]
@@ -150,7 +152,8 @@ def fit_summary(fit, replica_data, total_experiments_chi2data):
     phi_err = np.std(member_chi2)/(2.0*phi*np.sqrt(nrep))
 
     VET = ValueErrorTuple
-    data = OrderedDict( ((r"$\chi^2$",             f"{central_chi2:.5f}"),
+    data = OrderedDict( ((r"$\chi^2_{exp}$",       f"{central_chi2:.5f}"),
+                         (r"$\chi^2_{exp+th}$",    f"{expplusth_chi2}"),
                          (r"$<E_{\mathrm{trn}}>$", f"{VET(np.mean(etrain), np.std(etrain))}"),
                          (r"$<E_{\mathrm{val}}>$", f"{VET(np.mean(evalid), np.std(evalid))}"),
                          (r"$<TL>$",               f"{VET(np.mean(nite), np.std(nite))}"),
