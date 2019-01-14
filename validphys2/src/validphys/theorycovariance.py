@@ -26,6 +26,8 @@ from validphys.plotoptions import get_info
 from validphys import plotutils
 from validphys.checks import check_two_dataspecs
 
+from IPython import embed
+
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values,
@@ -174,28 +176,30 @@ commondata_experiments = collect('commondata', ['experiments', 'experiment'])
 # TODO: Improve how processes are assigned. Currently we group manually into
 # Drell-Yan, Heavy Quarks and Jets but adding more processes could break
 # this assignment
-def process_lookup(commondata_experiments):
+def _process_lookup(name, commondata_experiments=commondata_experiments):
     """Produces a dictionary with keys corresponding to dataset names
     and values corresponding to process types. Process types are
     regrouped into the five categories 'Drell-Yan', 'Heavy Quarks', Jets',
     'DIS NC' and 'DIS CC'."""
-    d = {commondata.name: get_info(commondata).process_description
-         for commondata in commondata_experiments}
-    for key, value in d.items():
-        if "Deep Inelastic Scattering" in value:
-            if ("CHORUS" in key) or ("NTV" in key) or ("HERACOMBCC" in key):
-                d[key] = "DIS CC"
-            else:
-                d[key] = "DIS NC"
-        elif "Drell-Yan" in value:
-            d[key] = "Drell-Yan"
-        elif "Heavy Quarks" in value:
-            d[key] = "Heavy Quarks"
-        elif "Jet" in value:
-            d[key] = "Jets"
+    commondata_dict = {commondata.name:
+                        get_info(commondata).process_description
+                        for commondata in commondata_experiments}
+    proc = get_info(commondata_dict[name]).process_description
+    embed()
+    if "Deep Inelastic Scattering" in proc:
+        if ("CHORUS" in name) or ("NTV" in name) or ("HERACOMBCC" in name):
+            proc = "DIS CC"
         else:
-            pass
-    return d
+            proc = "DIS NC"
+    elif "Drell-Yan" in name:
+        proc = "Drell-Yan"
+    elif "Heavy Quarks" in name:
+        proc = "Heavy Quarks"
+    elif "Jet" in name:
+        proc = "Jets"
+    else:
+        pass
+    return proc
 
 def dataset_names(commondata_experiments):
     """Returns a list of the names of the datasets, in the same order as
@@ -206,8 +210,7 @@ def dataset_names(commondata_experiments):
 ProcessInfo = namedtuple("ProcessInfo", ('theory', 'namelist', 'sizes'))
 
 
-def combine_by_type(process_lookup,
-                    each_dataset_results_bytheory, dataset_names):
+def combine_by_type(each_dataset_results_bytheory, dataset_names):
     """Groups the datasets according to processes and returns three objects:
     theories_by_process: the relevant theories grouped by process type
     ordered_names: dictionary with keys of process type and values being the
@@ -221,7 +224,7 @@ def combine_by_type(process_lookup,
     for dataset, name in zip(each_dataset_results_bytheory, dataset_names):
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
-        proc_type = process_lookup[name]
+        proc_type = _process_lookup(name)
         ordered_names[proc_type].append(name)
         theories_by_process[proc_type].append(theory_centrals)
     for key, item in theories_by_process.items():
