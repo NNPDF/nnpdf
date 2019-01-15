@@ -173,32 +173,62 @@ def total_covmat_experiments(experiments_results_theory,
 
 commondata_experiments = collect('commondata', ['experiments', 'experiment'])
 
-# TODO: Improve how processes are assigned. Currently we group manually into
-# Drell-Yan, Heavy Quarks and Jets but adding more processes could break
-# this assignment
-def _process_lookup(name, commondata_experiments=commondata_experiments):
+def _process_lookup(name):
     """Produces a dictionary with keys corresponding to dataset names
     and values corresponding to process types. Process types are
-    regrouped into the five categories 'Drell-Yan', 'Heavy Quarks', Jets',
+    regrouped into the five categories 'Drell-Yan', 'Top', Jets',
     'DIS NC' and 'DIS CC'."""
-    commondata_dict = {commondata.name:
-                        get_info(commondata).process_description
-                        for commondata in commondata_experiments}
-    proc = get_info(commondata_dict[name]).process_description
-    embed()
-    if "Deep Inelastic Scattering" in proc:
-        if ("CHORUS" in name) or ("NTV" in name) or ("HERACOMBCC" in name):
-            proc = "DIS CC"
-        else:
-            proc = "DIS NC"
-    elif "Drell-Yan" in name:
-        proc = "Drell-Yan"
-    elif "Heavy Quarks" in name:
-        proc = "Heavy Quarks"
-    elif "Jet" in name:
-        proc = "Jets"
-    else:
-        pass
+    process_dictionary = {	"ATLASZPT8TEVMDIST": 			"DY",
+				"ATLASZPT8TEVYDIST":			"DY",
+				"CMSZDIFF12":				"DY",
+				"ATLAS1JET11":				"JETS",
+				"CMSJETS11":				"JETS",
+				"CDFR2KT":				"JETS",
+				"CMSTOPDIFF8TEVTTRAPNORM":		"TOP",
+				"ATLASTOPDIFF8TEVTRAPNORM":		"TOP",
+				"ATLASTTBARTOT":			"TOP",
+				"CMSTTBARTOT":				"TOP",
+				"DYE605":				"DY",
+				"DYE886P":				"DY",
+				"DYE886R":				"DY",
+				"ATLASWZRAP36PB":			"DY",
+				"ATLASZHIGHMASS49FB":			"DY",
+				"ATLASLOMASSDY11EXT":			"DY",
+				"ATLASWZRAP11":				"DY",
+				"CMSWEASY840PB":			"DY",
+				"CMSWMASY47FB":				"DY",
+				"CMSDY2D11":				"DY",
+				"CMSWMU8TEV":				"DY",
+				"CMSWCHARMRAT":				"DY",
+				"LHCBZ940PB":				"DY",
+				"LHCBZEE2FB":				"DY",
+				"LHCBWZMU7TEV":				"DY",
+				"LHCBWZMU8TEV":				"DY",
+				"D0WEASY":				"DY",
+				"D0WMASY":				"DY",
+				"D0ZRAP":				"DY",
+				"CDFZRAP":				"DY",
+				"H1HERAF2B":				"DIS NC",
+				"HERACOMBCCEM":				"DIS CC",
+				"HERACOMBCCEP":				"DIS CC",
+				"HERACOMBNCEM":				"DIS NC",
+				"HERACOMBNCEP460":			"DIS NC",
+				"HERACOMBNCEP575":			"DIS NC",
+				"HERACOMBNCEP820":	 		"DIS NC",
+				"HERACOMBNCEP920":			"DIS NC",
+				"HERAF2CHARM":				"DIS NC",
+				"ZEUSHERAF2B":				"DIS NC",
+				"NMCPD":				"DIS NC",
+				"NMC":					"DIS NC",
+				"SLACP":				"DIS NC",
+				"SLACD":				"DIS NC",
+				"BCDMSP":				"DIS NC",
+				"BCDMSD":				"DIS NC",
+				"CHORUSNU":				"DIS CC",
+				"CHORUSNB":				"DIS CC",
+				"NTVNUDMN":				"DIS CC",
+				"NTVNBDMN":				"DIS CC"	}
+    proc = process_dictionary[name]
     return proc
 
 def dataset_names(commondata_experiments):
