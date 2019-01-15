@@ -673,6 +673,16 @@ class CoreConfig(configparser.Config):
         """
         return label
 
+    def produce_extracovmat(self, fit):
+        """Production rule which returns the theory covmat for a fit which used theory errors
+        otherwise returns None
+        """
+        try:
+            covmat = self.loader.check_extra_covmat(fit)
+        except:
+            covmat = None
+        return covmat
+
 class Config(report.Config, CoreConfig, ParamfitsConfig):
     """The effective configuration parser class."""
     pass

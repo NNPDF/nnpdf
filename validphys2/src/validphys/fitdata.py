@@ -119,9 +119,8 @@ def replica_data(fit, replica_paths):
     ('nite', 'training', 'validation', 'chi2', 'pos_status', 'arclenghts')"""
     return [load_fitinfo(path, fit.name) for path in replica_paths]
 
-
 @table
-def fit_summary(fit, replica_data, total_experiments_chi2data):
+def fit_summary(fit, replica_data, total_experiments_chi2data, extracovmat ,experiments_covmat, experiments_results):
     """ Summary table of fit properties
         - Central chi-squared
         - Average chi-squared
@@ -142,7 +141,10 @@ def fit_summary(fit, replica_data, total_experiments_chi2data):
     ndata = total_experiments_chi2data.ndata
     central_chi2 = total_experiments_chi2data.central_result / ndata
     member_chi2 = total_experiments_chi2data.replica_result.error_members() / ndata
-    expplusth_chi2 = chi2_impact
+    if isinstance(extracovmat, pd.DataFrame):
+        expplusth_chi2 = chi2_impact(extracovmat, experiments_covmat, experiments_results)
+    else:
+        expplusth_chi2 = central_chi2
 
     nite = [x.nite for x in replica_data]
     etrain = [x.training for x in replica_data]
@@ -153,7 +155,7 @@ def fit_summary(fit, replica_data, total_experiments_chi2data):
 
     VET = ValueErrorTuple
     data = OrderedDict( ((r"$\chi^2_{exp}$",       f"{central_chi2:.5f}"),
-                         (r"$\chi^2_{exp+th}$",    f"{expplusth_chi2}"),
+                         (r"$\chi^2_{exp+th}$",    f"{expplusth_chi2:.5f}"),
                          (r"$<E_{\mathrm{trn}}>$", f"{VET(np.mean(etrain), np.std(etrain))}"),
                          (r"$<E_{\mathrm{val}}>$", f"{VET(np.mean(evalid), np.std(evalid))}"),
                          (r"$<TL>$",               f"{VET(np.mean(nite), np.std(nite))}"),

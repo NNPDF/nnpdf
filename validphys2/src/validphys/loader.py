@@ -30,6 +30,7 @@ from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             peek_commondata_metadata, CutsPolicy,
                             InternalCutsWrapper)
 from validphys import lhaindex
+from validphys.tableloader import parse_exp_mat
 import NNPDF as nnpath
 
 
@@ -60,6 +61,8 @@ class CutsNotFound(LoadFailedError): pass
 class PDFNotFound(LoadFailedError): pass
 
 class RemoteLoaderError(LoaderError): pass
+
+class TheoryCovMatNotFound(LoaderError): pass
 
 class LoaderBase:
 
@@ -300,6 +303,15 @@ class Loader(LoaderBase):
             if not val:
                 raise TheoryNotFound(f"ID {theoryID} not found in database.")
             return dict([(k[0], v) for k, v in zip(res.description, val)])
+
+    def check_extra_covmat(self, fit):
+        """inelegant solution which loads the theory covmat from a fit results folder"""
+        th_cov_path = os.path.join(fit.path, 'tables',
+            'datacuts_theory_theorycovmatconfig_fitting_t0_theory_covmat_custom.csv')
+        if not os.path.exists(th_cov_path):
+            raise TheoryCovMatNotFound(
+                f"Theory covmat file not found in results folder, expected at: {th_cov_path}")
+        return parse_exp_mat(th_cov_path)
 
     def get_commondata(self, setname, sysnum):
         """Get a Commondata from the set name and number."""
