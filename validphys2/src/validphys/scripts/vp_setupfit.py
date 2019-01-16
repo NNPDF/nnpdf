@@ -44,8 +44,6 @@ SETUPFIT_FIXED_CONFIG = dict(
         'datacuts check_t0pdfset',
         'theory check_positivity',
         'Nocuts::datacuts::closuretest::theory::fitting filter',
-        'datacuts::theory::theorycovmatconfig::sampling_t0 sampling_covmat',
-        'datacuts::theory::theorycovmatconfig::fitting_t0 fitting_covmat',
     ])
 
 SETUPFIT_PROVIDERS = ['validphys.filters',
@@ -125,6 +123,9 @@ class SetupFitConfig(Config):
         if not isinstance(file_content, dict):
             raise ConfigError(f"Expecting input runcard to be a mapping, "
                               f"not '{type(file_content)}'.")
+        if file_content.get('theorycovmatconfig') is not None:
+            SETUPFIT_FIXED_CONFIG['actions_'].append('datacuts::theory::theorycovmatconfig::sampling_t0 sampling_covmat')
+            SETUPFIT_FIXED_CONFIG['actions_'].append('datacuts::theory::theorycovmatconfig::fitting_t0 fitting_covmat')
         file_content.update(SETUPFIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 
