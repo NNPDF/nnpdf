@@ -56,7 +56,7 @@ namespace NNPDF
     auto ThCovMat = NNPDF::matrix<double>(ndat, ndat);
     
     if(th_cov_matrix)
-      ThCovMat = read_total_covmat(ndat, filename, bmask);
+      ThCovMat = read_theory_covmat(ndat, filename, bmask);
     
 
     for (int i = 0; i < ndat; i++)
@@ -227,7 +227,7 @@ namespace NNPDF
 /*
 * Reads in covariance matrix for an experiment from pandas dataframe
 */
-  matrix<double> read_total_covmat(int ndata, const std::string filename, std::vector<int> bmask = {})
+  matrix<double> read_theory_covmat(int ndata, const std::string filename, std::vector<int> bmask = {})
   {
     // open file
     ifstream file(filename.c_str());
@@ -243,7 +243,7 @@ namespace NNPDF
     if (!bmask.empty())
     {
         if(std::accumulate(bmask.begin(), bmask.end(), 0) != ndata)
-          throw RuntimeException("read_total_covmat", "wrong mask size.");
+          throw RuntimeException("read_theory_covmat", "wrong mask size.");
         file_matrix_size = bmask.size();
     }
 

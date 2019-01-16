@@ -31,7 +31,7 @@ namespace NNPDF{
                                double weight=1.);
   matrix<double> ComputeSqrtMat(matrix<double> const& inmatrix);
   matrix<double> ComputeSqrtMatSVD(matrix<double> const& inmatrix);
-  matrix<double> read_total_covmat(int ndata, const std::string filename, std::vector<int> bmask);
+  matrix<double> read_theory_covmat(int ndata, const std::string filename, std::vector<int> bmask);
 
   void ComputeChi2_basic(int const nDat, int const nMem,
                    const double* data, matrix<double> const& L,
