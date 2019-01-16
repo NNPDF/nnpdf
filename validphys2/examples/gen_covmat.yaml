@@ -1,0 +1,33 @@
+meta:
+   author: Cameron Voisey
+   keywords: [theory uncertainties, scale variations]
+   title: NLO 3-point variations
+
+default_theory:
+   - theoryid: 163
+
+theoryids:
+   - 163
+   - 180
+   - 173
+
+use_cuts: "fromfit"
+fit: 180421-lr-nlo-central_global
+
+fivetheories: nobar
+
+pdf:
+  from_: fit
+
+experiments:
+  - experiment: NMC
+    datasets:
+      - dataset: NMCPD
+      - dataset: NMC
+  - experiment: BCDMS
+    datasets:
+      - dataset: BCDMSP
+      - dataset: BCDMSD
+
+actions_:
+  - default_theory theory_covmat

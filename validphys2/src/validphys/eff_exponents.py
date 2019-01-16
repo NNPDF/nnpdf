@@ -13,6 +13,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import NNPDF as nnpath
 
+from reportengine import collect
 from reportengine.figure import figuregen
 from reportengine.table import table
 from reportengine.floatformatting import format_number, significant_digits
@@ -262,7 +263,7 @@ def plot_betaEff(pdfs,
 
 
 @table
-def effective_exponents_table(pdf: PDF,
+def effective_exponents_table_internal(pdf: PDF,
                               x1_alpha: numbers.Real = 1e-6,
                               x2_alpha: numbers.Real = 1e-3,
                               x1_beta: numbers.Real = 0.65,
@@ -412,7 +413,10 @@ def effective_exponents_table(pdf: PDF,
     return df
 
 
-def next_effective_exponents_yaml(pdf: PDF,
+effective_exponents_table = collect(
+    'effective_exponents_table_internal', ['fitpdf'])
+
+def next_effective_exponents_yaml_internal(pdf: PDF,
                                   x1_alpha: numbers.Real = 1e-6,
                                   x2_alpha: numbers.Real = 1e-3,
                                   x1_beta: numbers.Real = 0.65,
@@ -420,7 +424,7 @@ def next_effective_exponents_yaml(pdf: PDF,
     """-Returns a table in yaml format called NextEffExps.yaml
        -Prints the yaml table in the report"""
 
-    df_effexps = effective_exponents_table(pdf,
+    df_effexps = effective_exponents_table_internal(pdf,
                                            x1_alpha,
                                            x2_alpha,
                                            x1_beta,
@@ -477,3 +481,7 @@ def next_effective_exponents_yaml(pdf: PDF,
     y.dump(basismap, s)
 
     return s.getvalue()
+
+
+next_effective_exponents_yaml = collect(
+    'next_effective_exponents_yaml_internal', ['fitpdf'])

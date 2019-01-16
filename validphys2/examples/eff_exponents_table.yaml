@@ -8,8 +8,8 @@ alpha:
 beta:
   ytop: 0
   ybottom: 5
-
-pdfs:
+  
+fits:
   - 170120-008
 
 meta:
@@ -22,18 +22,13 @@ template_text: |
   title: Effective exponents
   keywords: [eff_exp]
   ---
-  Effective exponents plots
-  -----------
-  {@alpha plot_alphaEff@}
-  {@beta plot_betaEff@}
-  -----------
-  {@with pdfs@}
+  {@with fits@}
   
-  Effective exponents table for {@pdf@}
+  Effective exponents table for {@fit@}
   -----------
-  {@effective_exponents_table@}
+  {@fitpdf effective_exponents_table@}
 
-  Effective exponents yaml-card for {@pdf@}
+  Effective exponents yaml-card for {@fit@}
   -----------
   ```yaml
   {@next_effective_exponents_yaml@}
