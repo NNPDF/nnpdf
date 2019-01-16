@@ -5,12 +5,32 @@
 // Authors: Nathan Hartland,  n.p.hartland@ed.ac.uk
 //          Stefano Carrazza, stefano.carrazza@mi.infn.it
 
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <cstdlib>
+#include <sstream>
+#include <iomanip>
+#include <cmath>
+#include <numeric>
+#include <algorithm>
 #include <math.h>      
-#include "NNPDF/exceptions.h"
+
+#include "NNPDF/experiments.h"
 #include "NNPDF/chisquared.h"
+#include "NNPDF/pdfset.h"
+#include "NNPDF/dataset.h"
+#include "NNPDF/thpredictions.h"
+#include "NNPDF/utils.h"
+#include "NNPDF/randomgenerator.h"
+#include "NNPDF/exceptions.h"
+
+
 #include "gsl/gsl_matrix.h"
 #include "gsl/gsl_linalg.h"
 
+using namespace std;
 namespace NNPDF
 {
 
@@ -24,12 +44,21 @@ namespace NNPDF
                                      std::vector<double> const& stat_error,
                                      sysError** const systematic_errors,
                                      bool const mult_errors,
-                                     bool const use_theory_errors)
+                                     bool const use_theory_errors,
+                                     bool const th_cov_matrix,
+                                     std::string filename,
+                                     std::vector<int> bmask)
   {
     if (central_values.size() != stat_error.size())
       throw LengthError("ComputeCovMat_basic","mismatch in points between central_values and stat_error!");
 
     auto CovMat = NNPDF::matrix<double>(ndat, ndat);
+    auto ThCovMat = NNPDF::matrix<double>(ndat, ndat);
+    
+    if(th_cov_matrix)
+      ThCovMat = read_total_covmat(ndat, filename, bmask);
+    
+
     for (int i = 0; i < ndat; i++)
     {
       for (int j = 0; j < ndat; j++)
@@ -64,6 +93,8 @@ namespace NNPDF
 
         // Covariance matrix entry
         CovMat(i, j) = (sig + signor*central_values[i]*central_values[j]*1e-4);
+        if(th_cov_matrix) CovMat(i, j) += ThCovMat(i, j);
+          
         // Covariance matrix weight
         CovMat(i, j) /= sqrt_weights[i]*sqrt_weights[j];
       }
@@ -77,7 +108,11 @@ namespace NNPDF
    * This should be deprecated in favour of a version of `Experiment` that does not contain an FK table.
    * CommonData should be considered only as an I/O class with all logic belonging to `Experiment`.
    */
-  matrix<double> ComputeCovMat(CommonData const& cd, std::vector<double> const& t0, double weight)
+  matrix<double> ComputeCovMat(CommonData const& cd, std::vector<double> const& t0,
+                               const bool th_cov_matrix, 
+                               std::string filename,
+                               std::vector<int> bmask,
+                               double weight)
   {
     const int ndat = cd.GetNData();
     const int nsys = cd.GetNSys();
@@ -86,7 +121,7 @@ namespace NNPDF
     std::vector<double> stat_error(ndat, 0);
     for (int i=0; i<ndat; i++)
         stat_error[i] = cd.GetStat(i);
-    return ComputeCovMat_basic(ndat, nsys, sqrt_weights, t0, stat_error, cd.GetSysErrors(), true, false);
+    return ComputeCovMat_basic(ndat, nsys, sqrt_weights, t0, stat_error, cd.GetSysErrors(), true, false, th_cov_matrix, filename, bmask);
   }
 
   matrix<double> ComputeSqrtMat(matrix<double> const& inmatrix)
@@ -187,4 +222,66 @@ namespace NNPDF
 
   template void ComputeChi2<Experiment>(const Experiment* set, int const& nMem, real *const& theory, real *chi2);
   template void ComputeChi2<DataSet>(const DataSet* set, int const& nMem, real *const& theory, real *chi2);
+
+
+/*
+* Reads in covariance matrix for an experiment from pandas dataframe
+*/
+  matrix<double> read_total_covmat(int ndata, const std::string filename, std::vector<int> bmask = {})
+  {
+    // open file
+    ifstream file(filename.c_str());
+
+    if (!file.good())
+      throw FileError("experiments", "Cannot read covariance matrix file from " + filename);
+
+    string line;
+    const int first_lines_to_skip = 4;   //experiment, dataset, id, header
+    const int first_columns_to_skip = 3; //experiment, dataset, id
+
+    int file_matrix_size = ndata;
+    if (!bmask.empty())
+    {
+        if(std::accumulate(bmask.begin(), bmask.end(), 0) != ndata)
+          throw RuntimeException("read_total_covmat", "wrong mask size.");
+        file_matrix_size = bmask.size();
+    }
+
+    matrix<double> covmat(ndata, ndata);
+
+    for (int i = 0; i < first_lines_to_skip; ++i)
+      std::getline(file, line);
+
+    int ix = 0;
+    for (int idat = 0; idat < file_matrix_size; idat++)
+    {
+        getline(file, line);
+        if (bmask.empty())
+        {
+            auto row = split(line);
+            for (int jdat = 0; jdat < file_matrix_size; jdat++)
+              covmat(idat, jdat) = stod(row[first_columns_to_skip + jdat]);
+        }
+        else
+        {
+            if (bmask[idat] == 1)
+            {
+                int jx = 0;
+                auto row = split(line);
+                for (int jdat = 0; jdat < file_matrix_size; jdat++)
+                {
+                    if (bmask[jdat] == 1)
+                    {
+                        covmat(ix, jx) = stod(row[first_columns_to_skip + jdat]);
+                        jx++;
+                    }
+                }
+                ix++;
+            }
+        }
+    }
+
+    return covmat;
+  }
+
 }
