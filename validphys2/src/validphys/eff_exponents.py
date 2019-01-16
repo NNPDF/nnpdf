@@ -56,7 +56,7 @@ def alpha_eff(pdfs,
     filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
 
     #Extracting initial scale from the theory info
-    infomap = yaml.safe_load(open(pdfpath+'/nnfit/'+any_pdf.name+'.info'))
+    infomap = yaml.safe_load(open(any_pdf.infopath))
     Q = infomap['QMin']
     basis = filtermap['fitting']['fitbasis']+'FitBasis'
 
@@ -110,7 +110,7 @@ def beta_eff(pdfs,
     filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
 
     #Extracting initial scale from the theory info
-    infomap = yaml.safe_load(open(pdfpath+'/nnfit/'+any_pdf.name+'.info'))
+    infomap = yaml.safe_load(open(any_pdf.infopath))
     Q = infomap['QMin']
     basis = filtermap['fitting']['fitbasis']+'FitBasis'
 
@@ -273,7 +273,7 @@ def effective_exponents_table_internal(fit: FitSpec, pdf:PDF,
     #Reading from the filter
     fitpath = str(fit.path)
     filtermap = yaml.safe_load(open(fitpath+'/filter.yml'))
-    infomap = yaml.safe_load(open(fitpath+'/nnfit/'+pdf.name+'.info'))
+    infomap = yaml.safe_load(open(pdf.infopath))
     Q = infomap['QMin']
     basis = filtermap['fitting']['fitbasis']+'FitBasis'
 
