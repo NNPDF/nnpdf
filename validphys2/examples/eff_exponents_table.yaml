@@ -26,7 +26,7 @@ template_text: |
   
   Effective exponents table for {@fit@}
   -----------
-  {@fitpdf effective_exponents_table@}
+  {@effective_exponents_table@}
 
   Effective exponents yaml-card for {@fit@}
   -----------
