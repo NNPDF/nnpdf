@@ -411,9 +411,9 @@ namespace NNPDF
     if ( fNonZero <= 0 )
       throw RangeError("FKTable::FKTable","Number of nonzero flavours is set to: " + std::to_string(fNonZero) );
 
-      get_logger() << fNData << " Data Points "
-      << fNx << " X points "
-      << fNonZero << " active flavours"<<std::endl;
+    get_logger() << fNData << " Data Points "
+                 << fNx << " X points "
+                 << fNonZero << " active flavours"<<std::endl;
 
 
     // Zero sigma array -> also zeros pad quantities
