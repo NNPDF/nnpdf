@@ -22,7 +22,7 @@ from reportengine.compat import yaml
 from validphys.checks import check_positive, check_pdf_normalize_to
 from validphys.pdfplots import BandPDFPlotter, PDFPlotter, FlavourState
 from validphys.pdfbases import check_basis
-from validphys.core import PDF
+from validphys.core import PDF, FitSpec
 from validphys import plotutils
 
 
@@ -263,7 +263,7 @@ def plot_betaEff(pdfs,
 
 
 @table
-def effective_exponents_table_internal(pdf: PDF,
+def effective_exponents_table_internal(fit: FitSpec, pdf:PDF,
                               x1_alpha: numbers.Real = 1e-6,
                               x2_alpha: numbers.Real = 1e-3,
                               x1_beta: numbers.Real = 0.65,
@@ -271,9 +271,9 @@ def effective_exponents_table_internal(pdf: PDF,
     """Returns a table with the effective exponents for the next fit"""
 
     #Reading from the filter
-    pdfpath = nnpath.get_results_path()+pdf.name
-    filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
-    infomap = yaml.safe_load(open(pdfpath+'/nnfit/'+pdf.name+'.info'))
+    fitpath = str(fit.path)
+    filtermap = yaml.safe_load(open(fitpath+'/filter.yml'))
+    infomap = yaml.safe_load(open(fitpath+'/nnfit/'+pdf.name+'.info'))
     Q = infomap['QMin']
     basis = filtermap['fitting']['fitbasis']+'FitBasis'
 
@@ -416,7 +416,7 @@ def effective_exponents_table_internal(pdf: PDF,
 effective_exponents_table = collect(
     'effective_exponents_table_internal', ['fitpdf'])
 
-def next_effective_exponents_yaml_internal(pdf: PDF,
+def next_effective_exponents_yaml_internal(fit: FitSpec, pdf: PDF,
                                   x1_alpha: numbers.Real = 1e-6,
                                   x2_alpha: numbers.Real = 1e-3,
                                   x1_beta: numbers.Real = 0.65,
@@ -424,14 +424,14 @@ def next_effective_exponents_yaml_internal(pdf: PDF,
     """-Returns a table in yaml format called NextEffExps.yaml
        -Prints the yaml table in the report"""
 
-    df_effexps = effective_exponents_table_internal(pdf,
+    df_effexps = effective_exponents_table_internal(fit,pdf,
                                            x1_alpha,
                                            x2_alpha,
                                            x1_beta,
                                            x2_beta)
     #Reading from the filter
-    pdfpath = nnpath.get_results_path()+pdf.name
-    filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
+    fitpath = str(fit.path)
+    filtermap = yaml.safe_load(open(fitpath+'/filter.yml'))
     basis = filtermap['fitting']['fitbasis']+'FitBasis'
 
     flavours = None
@@ -443,7 +443,7 @@ def next_effective_exponents_yaml_internal(pdf: PDF,
                      'V3': 'v3', 'T8': 't8', 'V8': 'v8', 'g': 'g', r'c^+': 'cp'}
 
     FittingBasisString = ""
-    with open(pdfpath+'/filter.yml', 'r') as filterfile:
+    with open(fitpath+'/filter.yml', 'r') as filterfile:
         for line in filterfile:
             if ('fl: ') in line:
                 FittingBasisString += line
