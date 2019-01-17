@@ -50,7 +50,7 @@ Minimizer::~Minimizer()
  * @param pdf the fit pdf set
  * @param exps the experiment vector
  */
-void Minimizer::Init(FitPDFSet* pdf, vector<Experiment*> const& exps, vector<PositivitySet> const&)
+void Minimizer::Init(FitPDFSet*, vector<Experiment*> const&, vector<PositivitySet> const&)
 {
   return;
 }
@@ -379,15 +379,15 @@ CMAESParam::CMAESParam(size_t const& _n, size_t const& _lambda):
 
   // Initialise w prime vector
   vector<double> wpr(lambda, 0);
-  for (int i=0; i<lambda; i++)
+  for (int i=0; i< (int) lambda; i++)
     wpr[i] = log( (lambda + 1.0) / 2.0) - log(i+1);
 
   // Calculate weight sums
   double psumwgt = 0.0;   double nsumwgt = 0.0;
   double psumwgtsqr = 0.0;   double nsumwgtsqr = 0.0;
-  for (int i=0; i<lambda; i++)
-    if (i < mu) {psumwgt += wpr[i]; psumwgtsqr += wpr[i]*wpr[i]; }
-    else        {nsumwgt += wpr[i]; nsumwgtsqr += wpr[i]*wpr[i]; }
+  for (int i=0; i< (int) lambda; i++)
+    if (i < (int) mu) {psumwgt += wpr[i]; psumwgtsqr += wpr[i]*wpr[i]; }
+    else              {nsumwgt += wpr[i]; nsumwgtsqr += wpr[i]*wpr[i]; }
 
   mu_eff = psumwgt*psumwgt/psumwgtsqr;
   const double mu_eff_minus = nsumwgt*nsumwgt/nsumwgtsqr;
@@ -404,7 +404,7 @@ CMAESParam::CMAESParam(size_t const& _n, size_t const& _lambda):
 
   double sumwgtpos = 0.0;
   double sumwgtneg = 0.0;
-  for (int i=0; i<lambda; i++)
+  for (int i=0; i < (int) lambda; i++)
     if (wpr[i] > 0) sumwgtpos += wpr[i];
     else sumwgtneg += fabs(wpr[i]);
 
@@ -418,7 +418,7 @@ CMAESParam::CMAESParam(size_t const& _n, size_t const& _lambda):
 
   // ********************************** Normalising weights  ****************************************
 
-  for (int i=0; i<lambda; i++)
+  for (int i=0; i < (int) lambda; i++)
     wgts[i] = wpr[i]*( wpr[i] > 0 ? 1.0/sumwgtpos:alpha_min/sumwgtneg);
 
 
@@ -459,9 +459,9 @@ fC(0)
 CMAESMinimizer::~CMAESMinimizer()
 {
   std::stringstream outcov;
-  for (int i=0; i<fNTparam; i++)
+  for (int i=0; i < (int) fNTparam; i++)
   {
-    for (int j=0; j<fNTparam; j++)
+    for (int j=0; j < (int) fNTparam; j++)
       outcov << gsl_matrix_get(fC,i,j) <<" ";
     outcov << std::endl;
   }
@@ -496,7 +496,6 @@ void CMAESMinimizer::ComputeEigensystem()
     // Compute condition number
     double min, max;
     gsl_vector_minmax (E, &min, &max);
-    const double K = max/min;
 
     // Initialise D, invD
     for (size_t i=0; i<fNTparam; i++)
@@ -522,7 +521,7 @@ void CMAESMinimizer::ComputeEigensystem()
 void CMAESMinimizer::Init(FitPDFSet* pdf, vector<Experiment*> const&, vector<PositivitySet> const&)
 {
   fNTparam = 0;
-  for (size_t i=0; i<fSettings.GetNFL(); i++)
+  for (size_t i=0; i < (size_t) fSettings.GetNFL(); i++)
     fNTparam += pdf->GetBestFit()[i]->GetNParameters();
 
   // GSL vectors/matrices
@@ -557,7 +556,7 @@ void CMAESMinimizer::Iterate(FitPDFSet* pdf, vector<Experiment*> const& exps, ve
   vector<double> erf_srt(fChi2Mem, fChi2Mem + fCMAES->lambda);
   vector<size_t> irank_map(fCMAES->lambda,0); // Weight-ordered map to members (index is i)
   std::sort(erf_srt.begin(), erf_srt.end());
-  for (int i=0; i<fCMAES->lambda; i++)
+  for (int i=0; i < (int) fCMAES->lambda; i++)
     irank_map[std::distance(erf_srt.begin(), std::find(erf_srt.begin(), erf_srt.end(), fChi2Mem[i]))] = i;
 
   // Compute weighted shift and set new mean
@@ -609,7 +608,7 @@ gsl_vector* CMAESMinimizer::Recombination(FitPDFSet* pdf, vector<size_t> const& 
 
   // Compute average step
   gsl_vector* yavg = gsl_vector_calloc(fCMAES->n);
-  for (int i=0; i<fCMAES->mu; i++)
+  for (int i=0; i < (int) fCMAES->mu; i++)
     gsl_blas_daxpy (fCMAES->wgts[i], yvals[irank_map[i]], yavg);
 
   // Compute new average
@@ -665,7 +664,7 @@ void CMAESMinimizer::CMA( FitPDFSet* pdf, vector<size_t> const& irank_map, std::
   gsl_blas_dger (fCMAES->c1, fpc, fpc, fC); // Rank-1 update
 
   // Rank-mu update
-  for (int i=0; i<fCMAES->lambda; i++)
+  for (int i=0; i < (int) fCMAES->lambda; i++)
   {
     const gsl_vector* yval = yvals[irank_map[i]];
     double wo = fCMAES->wgts[i];

@@ -54,8 +54,7 @@ void TrainValidSplit(const NNPDFSettings &settings, Experiment* const& exp, Expe
 
 
 // Add chi^2 results to fit log
-void LogChi2(NNPDFSettings const& settings,
-             const FitPDFSet* pdf,
+void LogChi2(const FitPDFSet* pdf,
              vector<PositivitySet> const& pos,
              vector<Experiment*> const& train,
              vector<Experiment*> const& valid);

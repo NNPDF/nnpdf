@@ -104,7 +104,7 @@ FKSet LoadFK(NNPDFSettings const& settings,
 
           // load cfactors
           vector<string> cfactors;
-          for (int i = 0; i<settings.GetSetInfo(setname).tCFactors.size(); i++)
+          for (int i = 0; i < (int) settings.GetSetInfo(setname).tCFactors.size(); i++)
           {
             const string cname = settings.GetSetInfo(setname).tCFactors[i];
             const string fname = sline[1].substr(3,sline[1].length());
@@ -135,7 +135,7 @@ FKSet LoadFK(NNPDFSettings const& settings,
 
     // load cfactors
     vector<string> cfactors;
-    for (int i = 0; i<settings.GetSetInfo(setname).tCFactors.size(); i++)
+    for (int i = 0; i < (int) settings.GetSetInfo(setname).tCFactors.size(); i++)
     {
       const string cname = settings.GetSetInfo(setname).tCFactors[i];
       cfactors.push_back(get_data_path() + "/" + theoryDir + "/cfactor/CF_"+cname+"_" + setname + ".dat");

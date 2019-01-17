@@ -100,13 +100,5 @@ closuretest:
   printpdf4gen: false # To print info on PDFs during minimization
 
 ############################################################
-lhagrid:
-  nx  : 150
-  xmin: 1e-9
-  xmed: 0.1
-  xmax: 1.0
-  nq  : 50
-  qmax: 1e5
-
-############################################################
 debug: false
+
