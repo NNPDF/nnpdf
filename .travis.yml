@@ -7,9 +7,9 @@ git:
     depth: 1000
 
 os:
-    - osx
-      osx_image: xcode6.4
-    - linux
+  - osx
+  - linux
+osx_image: xcode6.4
 
 env:
   global:
