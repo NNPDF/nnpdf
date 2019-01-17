@@ -10,6 +10,7 @@ import functools
 import inspect
 import numbers
 import copy
+import os
 
 from collections import ChainMap
 from collections.abc import Mapping, Sequence
@@ -229,6 +230,22 @@ class CoreConfig(configparser.Config):
             _, fitting = self.parse_from_('fit', 'fitting', write=False)
         basis = fitting['fitbasis']
         return {'pdf': pdf, 'basis':basis}
+
+    def produce_fitthcovmat(self, fit, rc_useth=False):
+        if isinstance(rc_useth, str):
+            if os.path.exists(rc_useth):
+                pass
+            else:
+                raise DataNotFoundError(
+                    f"No file found at {rc_useth}. If specifying a path `rc_useth` should be set to"
+                    f"point at a valid thcovmat file"
+                )
+        if isinstance(rc_useth, bool) and rc_useth:
+            rc_useth = fit.path / 'tables' / 'datacuts_theory_theorycovmatconfig_fitting_t0_theory_covmat_custom.csv'
+            if not os.path.exists(rc_useth):
+                rc_useth = False
+        return rc_useth
+
 
     @element_of('dataset_inputs')
     def parse_dataset_input(self, dataset:Mapping):

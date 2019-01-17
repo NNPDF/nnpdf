@@ -61,8 +61,10 @@ class StatsResult(Result):
 
 class DataResult(NNPDFDataResult):
 
-    def __init__(self, dataobj):
+    def __init__(self, dataobj, use_thcovmat=False):
         super().__init__(dataobj)
+        if use_thcovmat:
+            dataobj.LoadFitCovMat(str(use_thcovmat), [])
         self._covmat = dataobj.get_covmat()
         self._sqrtcovmat = dataobj.get_sqrtcovmat()
 
@@ -368,7 +370,7 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
     return df
 
 
-def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None):
+def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None, thcovmat=False):
     """Tuple of data and theory results for a single pdf.
     The theory is specified as part of the dataset.
     An experiment is also allowed.
@@ -382,12 +384,12 @@ def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None):
         log.debug("Setting T0 predictions for %s" % dataset)
         data.SetT0(t0set.load_t0())
 
-    return DataResult(data), ThPredictionsResult.from_convolution(pdf, dataset,
+    return DataResult(data, use_thcovmat=thcovmat), ThPredictionsResult.from_convolution(pdf, dataset,
                                                  loaded_data=data)
 
-def experiment_results(experiment, pdf:PDF, t0set:(PDF, type(None))=None):
+def experiment_results(experiment, pdf:PDF, t0set:(PDF, type(None))=None, fitthcovmat=False):
     """Like `results` but for a whole experiment"""
-    return results(experiment, pdf, t0set)
+    return results(experiment, pdf, t0set, thcovmat=fitthcovmat)
 
 #It's better to duplicate a few lines than to complicate the logic of
 #``results`` to support this.
