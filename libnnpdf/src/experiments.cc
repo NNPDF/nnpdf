@@ -461,7 +461,7 @@ void Experiment::LoadRepCovMat(string filename, std::vector<int> bmask)
 */
 void Experiment::LoadFitCovMat(string filename, std::vector<int> bmask)
 {
-  fCovMat = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, true, false, true, filename, bmask);
+  fCovMat = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, true, true, true, filename, bmask);
   fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 
