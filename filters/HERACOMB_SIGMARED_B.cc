@@ -43,13 +43,15 @@ void HERACOMB_SIGMARED_BFilter::ReadData()
     {
       getline(f1,line);
       istringstream lstream(line);
-      lstream >> fKin2[i];                               //Q2 [GeV2]
-      lstream >> fKin1[i];                               //x
-      double sqrts = 318.0;                              //centre-of-mass energy [GeV]
-      fKin3[i] = fKin2[i] / fKin1[i] / (sqrts*sqrts);    //inelasticity
-      lstream >> fData[i];                               //observable
+      lstream >> fKin2[i];                                //Q2 [GeV2]
+      lstream >> fKin1[i];                                //x
+      double sqrts = 318.0;                               //centre-of-mass energy [GeV]
+      fKin3[i] = fKin2[i] / fKin1[i] / (sqrts*sqrts);     //inelasticity
+      lstream >> fData[i];                                //observable
       double stat, uncorr;
       lstream >> stat >> uncorr;
+      stat   *= fData[i]*1e-2;
+      uncorr *= fData[i]*1e-2;
       fStat[i] = pow(stat*stat+uncorr*uncorr,0.5);        //total uncorrelated error
       for(int l=0; l<fNSys; l++)
 	{
