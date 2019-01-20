@@ -369,7 +369,7 @@ def cut_mask(cuts):
 class DataSetSpec(TupleComp):
 
     def __init__(self, *, name, commondata, fkspecs, thspec, cuts,
-                 frac=None, op=None, weight=1):
+                 frac=1, op=None, weight=1):
         self.name = name
         self.commondata = commondata
 
@@ -379,8 +379,6 @@ class DataSetSpec(TupleComp):
         self.thspec = thspec
 
         self.cuts = cuts
-        if frac is None:
-            frac = 1.0
         self.frac = frac
 
         #Do this way (instead of setting op='NULL' in the signature)

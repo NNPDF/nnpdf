@@ -393,7 +393,7 @@ class Loader(LoaderBase):
                       sysnum=None,
                       theoryid,
                       cfac=(),
-                      frac=None, # Toma ZK ;-)
+                      frac=1,
                       cuts=CutsPolicy.INTERNAL,
                       use_fitcommondata=False,
                       fit=None,
