@@ -240,7 +240,11 @@ class CoreConfig(configparser.Config):
 
         sysnum = dataset.get('sys')
         cfac = dataset.get('cfac', tuple())
-        frac = dataset.get('frac')
+        frac = dataset.get('frac', 1)
+        if  not isinstance(frac, numbers.Real):
+            raise ConfigError(f"'frac' must be a number, not '{frac}'")
+        if frac < 0 or frac > 1:
+            raise ConfigError(f"'frac' must be between 0 and 1 not '{frac}'")
         weight = dataset.get('weight', 1)
         if  not isinstance(weight, numbers.Real):
             raise ConfigError(f"'weight' must be a number, not '{weight}'")
