@@ -1,0 +1,33 @@
+#!/bin/bash
+# Parse input so there is no trailing forward slash
+ORIGINAL=$1
+FINAL=$2
+
+if [[ "$1" == */  ]]; then
+	ORIGINAL=$(echo -n $1 | head -c -1)
+fi
+
+if [[ "$2" == */  ]]; then
+	FINAL=$(echo -n $2 | head -c -1)
+fi
+
+# Rename original folder
+mv $ORIGINAL $FINAL
+
+# Check if nnfit has been performed and rename replicas
+if [ -d "$FINAL/nnfit" ]; then
+	mv $FINAL/nnfit/*.info $FINAL/nnfit/$FINAL.info
+	for d in $PWD/$FINAL/nnfit/*/ ; do 
+		cd $d
+		ls | sed "s/$ORIGINAL\(.*\)/mv & $FINAL\1/"  | sh 2> /dev/null
+	done
+fi
+
+cd ../../../
+
+# Check if postfit has been performed and rename
+if [ -d "$FINAL/postfit" ]; then
+	mv $FINAL/postfit/$ORIGINAL $FINAL/postfit/$FINAL
+	sed -i -e "s/$ORIGINAL/$FINAL/g" $FINAL/postfit/postfit.log
+fi
+
