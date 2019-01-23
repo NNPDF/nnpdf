@@ -393,6 +393,7 @@ class Loader(LoaderBase):
                       sysnum=None,
                       theoryid,
                       cfac=(),
+                      frac=1,
                       cuts=CutsPolicy.INTERNAL,
                       use_fitcommondata=False,
                       fit=None,
@@ -425,12 +426,12 @@ class Loader(LoaderBase):
             elif cuts is CutsPolicy.INTERNAL:
                 full_ds = DataSetSpec(name=name, commondata=commondata,
                            fkspecs=fkspec, thspec=theoryid, cuts=None,
-                           op=op, weight=weight)
+                           frac=frac, op=op, weight=weight)
                 cuts = self.check_internal_cuts(full_ds, q2min, w2min)
 
         return DataSetSpec(name=name, commondata=commondata,
                            fkspecs=fkspec, thspec=theoryid, cuts=cuts,
-                           op=op, weight=weight)
+                           frac=frac, op=op, weight=weight)
 
     def check_pdf(self, name):
         if lhaindex.isinstalled(name):
