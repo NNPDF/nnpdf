@@ -16,15 +16,15 @@ from reportengine.figure import figure
 from reportengine.table import table
 
 from validphys import plotutils
-from validphys.theorycovariance import abs_chi2_data_theory_experiment, abs_chi2_data_theory_dataset
+from validphys.theorycovariance.construction import abs_chi2_data_theory_experiment, abs_chi2_data_theory_dataset
 
 from validphys.results import experiments_covmat, experiments_normcovmat, experiments_corrmat
 from validphys.results import experiments_chi2_table
 
-from validphys.theorycovariance import theory_block_diag_covmat, theory_normblockcovmat, theory_covmat_custom, theory_normcovmat_custom
-from validphys.theorycovariance import theory_blockcorrmat, theory_corrmat_custom
-from validphys.theorycovariance import experimentsplusblocktheory_normcovmat, experimentsplustheory_normcovmat_custom
-from validphys.theorycovariance import experimentsplusblocktheory_corrmat, experimentsplustheory_corrmat_custom
+from validphys.theorycovariance.construction import theory_block_diag_covmat, theory_normblockcovmat, theory_covmat_custom, theory_normcovmat_custom
+from validphys.theorycovariance.construction import theory_blockcorrmat, theory_corrmat_custom
+from validphys.theorycovariance.construction import experimentsplusblocktheory_normcovmat, experimentsplustheory_normcovmat_custom
+from validphys.theorycovariance.construction import experimentsplusblocktheory_corrmat, experimentsplustheory_corrmat_custom
 
 log = logging.getLogger(__name__)
 

@@ -21,9 +21,9 @@ from reportengine import collect
 
 from validphys.results import results
 from validphys.checks import check_two_dataspecs
-from validphys.theorycovariance import process_lookup, combine_by_type, process_starting_points
-from validphys.theorycovariance import covmap, covs_pt_prescrip, theory_covmat_custom
-from validphys.theorycovariance_output import matrix_plot_labels
+from validphys.theorycovariance.construction import process_lookup, combine_by_type, process_starting_points
+from validphys.theorycovariance.construction import covmap, covs_pt_prescrip, theory_covmat_custom
+from validphys.theorycovariance.output import matrix_plot_labels
 
 log = logging.getLogger(__name__)
 
