@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-theorycovariance.py
-Tools for constructing and studying theory covariance matrices.
+construction.py
+Tools for constructing theory covariance matrices and computing their chi2s.
 """
 from __future__ import generator_stop
 

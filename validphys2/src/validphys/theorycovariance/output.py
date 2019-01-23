@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-theorycovariance_output.py
+output.py
 Basic tools for plotting theory covariance matrices and their properties.
 """
 from __future__ import generator_stop

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-theorycovariance_tests.py
+tests.py
 Tools for testing theory covariance matrices and their properties.
 """
 from __future__ import generator_stop
