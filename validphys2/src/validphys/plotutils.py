@@ -319,11 +319,11 @@ def barplot(values, collabels, datalabels, orientation='auto'):
         thisx = x+delta
         barfunc(thisx, row, width, label=datalabel)
         for xp,v in zip(thisx,row):
-
-            ax.annotate(f'{format_number(v,3)}', xy=xytext(xp,v),
-                         textcoords='offset points',
-                        size='small', wrap=True, **get_pos(v)
-                       )
+            if False not in np.isfinite([xp, v]):
+                ax.annotate(f'{format_number(v,3)}', xy=xytext(xp,v),
+                            textcoords='offset points',
+                            size='small', wrap=True, **get_pos(v)
+                            )
 
 
     infolim(x[0]+deltas[0] - width/2, x[-1]+deltas[-1]+width/2)
