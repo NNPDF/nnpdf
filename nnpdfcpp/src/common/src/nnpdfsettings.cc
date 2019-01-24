@@ -186,7 +186,7 @@ NNPDFSettings::NNPDFSettings(const string &folder):
   fTheoryDir = td.str();
 
   // Check if theory uncertainties are used
-  if (Exists("theorycovmatconfig","theoryids"))
+  if (Exists("theorycovmatconfig"))
     fThUncertainties = true;
 
   // load theory map
