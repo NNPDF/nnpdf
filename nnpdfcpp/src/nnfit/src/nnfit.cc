@@ -514,8 +514,11 @@ void TrainValidSplit(NNPDFSettings const& settings,
       for (int i = 0; i < set.GetNData(); i++) mask.push_back(i);
       RandomGenerator::GetRNG()->ShuffleVector(mask);
 
-      const vector<int> trMaskset(mask.begin(), mask.begin() + trMax);
-      const vector<int> valMaskset(mask.begin() + trMax, mask.end());
+      vector<int> trMaskset(mask.begin(), mask.begin() + trMax);
+      vector<int> valMaskset(mask.begin() + trMax, mask.end());
+
+      std::sort(trMaskset.begin(), trMaskset.end());
+      std::sort(valMaskset.begin(), valMaskset.end());
 
       if (settings.IsThUncertainties())
       {
