@@ -37,7 +37,9 @@ def alpha_eff(pdfs,
               xmin: numbers.Real = 1e-6,
               xmax: numbers.Real = 1e-3,
               npoints: int = 200,
-              Q: numbers.Real = 1.65):
+              Q: numbers.Real = 1.65,
+              basis = None,
+              flavours = None):
     """Return a list of xplotting_grids containing the value of the effective
     exponent alpha at the specified values of x and flavour.
     alpha is relevant at small x, hence the linear scale.
@@ -51,15 +53,6 @@ def alpha_eff(pdfs,
     Q: The PDF scale in GeV.
     """
     #Loading the filter map of the fit/PDF
-    any_pdf = pdfs[0]
-    pdfpath = nnpath.get_results_path()+any_pdf.name
-    filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
-
-    #Extracting initial scale from the theory info
-    infomap = yaml.safe_load(open(any_pdf.infopath))
-    Q = infomap['QMin']
-    basis = filtermap['fitting']['fitbasis']+'FitBasis'
-
     flavours = None
     checked = check_basis(basis, flavours)
     basis = checked['basis']
@@ -91,7 +84,9 @@ def beta_eff(pdfs,
              xmin: numbers.Real = 0.6,
              xmax: numbers.Real = 0.9,
              npoints: int = 200,
-             Q: numbers.Real = 1.65):
+             Q: numbers.Real = 1.65,
+             basis=None,
+             flavours=None):
     """Return a list of xplotting_grids containing the value of the effective
     exponent beta at the specified values of x and flavour.
     beta is relevant at large x, hence the linear scale.
@@ -104,17 +99,6 @@ def beta_eff(pdfs,
 
     Q: The PDF scale in GeV.
     """
-    #Loading the filter map of the fit/PDF
-    any_pdf = pdfs[0]
-    pdfpath = nnpath.get_results_path()+any_pdf.name
-    filtermap = yaml.safe_load(open(pdfpath+'/filter.yml'))
-
-    #Extracting initial scale from the theory info
-    infomap = yaml.safe_load(open(any_pdf.infopath))
-    Q = infomap['QMin']
-    basis = filtermap['fitting']['fitbasis']+'FitBasis'
-
-    flavours = None
     checked = check_basis(basis, flavours)
     basis = checked['basis']
     flavours = checked['flavours']
@@ -263,11 +247,11 @@ def plot_betaEff(pdfs,
 
 
 @table
-def effective_exponents_table_internal(fit: FitSpec, pdf:PDF,
-                              x1_alpha: numbers.Real = 1e-6,
-                              x2_alpha: numbers.Real = 1e-3,
-                              x1_beta: numbers.Real = 0.65,
-                              x2_beta: numbers.Real = 0.95):
+def effective_exponents_table_internal(fit: FitSpec, pdf: PDF,
+                                       x1_alpha: numbers.Real = 1e-6,
+                                       x2_alpha: numbers.Real = 1e-3,
+                                       x1_beta: numbers.Real = 0.65,
+                                       x2_beta: numbers.Real = 0.95):
     """Returns a table with the effective exponents for the next fit"""
 
     #Reading from the filter
@@ -287,20 +271,28 @@ def effective_exponents_table_internal(fit: FitSpec, pdf:PDF,
                                xmin=x1_alpha,
                                xmax=x1_alpha,
                                npoints=1,
-                               Q=Q)
+                               Q=Q,
+                               basis=basis,
+                               flavours=flavours)
     alphamax_grids = alpha_eff(pdfs,
                                xmin=x2_alpha,
                                xmax=x2_alpha,
                                npoints=1,
-                               Q=Q)
+                               Q=Q,
+                               basis=basis,
+                               flavours=flavours)
     betamin_grids = beta_eff(pdfs,
                              xmin=x1_beta,
                              xmax=x1_beta,
-                             npoints=1, Q=Q)
+                             npoints=1, Q=Q,
+                             basis=basis,
+                             flavours=flavours)
     betamax_grids = beta_eff(pdfs,
                              xmin=x2_beta,
                              xmax=x2_beta,
-                             npoints=1, Q=Q)
+                             npoints=1, Q=Q,
+                             basis=basis,
+                             flavours=flavours)
 
     eff_exp_data = []
 
@@ -416,19 +408,20 @@ def effective_exponents_table_internal(fit: FitSpec, pdf:PDF,
 effective_exponents_table = collect(
     'effective_exponents_table_internal', ['fitpdf'])
 
+
 def next_effective_exponents_yaml_internal(fit: FitSpec, pdf: PDF,
-                                  x1_alpha: numbers.Real = 1e-6,
-                                  x2_alpha: numbers.Real = 1e-3,
-                                  x1_beta: numbers.Real = 0.65,
-                                  x2_beta: numbers.Real = 0.95):
+                                           x1_alpha: numbers.Real = 1e-6,
+                                           x2_alpha: numbers.Real = 1e-3,
+                                           x1_beta: numbers.Real = 0.65,
+                                           x2_beta: numbers.Real = 0.95):
     """-Returns a table in yaml format called NextEffExps.yaml
        -Prints the yaml table in the report"""
 
-    df_effexps = effective_exponents_table_internal(fit,pdf,
-                                           x1_alpha,
-                                           x2_alpha,
-                                           x1_beta,
-                                           x2_beta)
+    df_effexps = effective_exponents_table_internal(fit, pdf,
+                                                    x1_alpha,
+                                                    x2_alpha,
+                                                    x1_beta,
+                                                    x2_beta)
     #Reading from the filter
     fitpath = str(fit.path)
     filtermap = yaml.safe_load(open(fitpath+'/filter.yml'))
@@ -451,11 +444,11 @@ def next_effective_exponents_yaml_internal(fit: FitSpec, pdf: PDF,
     basismap = y.load(FittingBasisString)
 
     def fmt(x): return float(significant_digits(x, 4))
-    
+
     #load new eff_exp into old ones
     for (j, fl) in enumerate(flavours):
         YAMLlabel = " "
-        #match flavour format from pdfbases with the yaml format 
+        #match flavour format from pdfbases with the yaml format
         if basis.elementlabel(fl) in YAMLflaliases.keys():
             YAMLlabel = YAMLflaliases[basis.elementlabel(fl)]
         else:
@@ -469,9 +462,11 @@ def next_effective_exponents_yaml_internal(fit: FitSpec, pdf: PDF,
                 YAMLlabel = basis.elementlabel(fl)
 
             if ref_fl['fl'] == YAMLlabel:
-                smallx = [float(fmt(df_effexps.iat[2*j, 3])), float(fmt(df_effexps.iat[2*j, 4]))]
-                largex = [float(fmt(df_effexps.iat[2*j+1, 3])), float(fmt(df_effexps.iat[2*j+1, 4]))]
-                
+                smallx = [float(fmt(df_effexps.iat[2*j, 3])),
+                          float(fmt(df_effexps.iat[2*j, 4]))]
+                largex = [float(fmt(df_effexps.iat[2*j+1, 3])),
+                          float(fmt(df_effexps.iat[2*j+1, 4]))]
+
                 for item in basismap:
                     if item['fl'] == YAMLlabel:
                         item['smallx'] = list(smallx)

@@ -25,7 +25,6 @@ template_text: |
   Effective exponents plots
   -----------
   {@alpha plot_alphaEff@}
-  {@beta plot_betaEff@}
   -----------
 
 actions_:
