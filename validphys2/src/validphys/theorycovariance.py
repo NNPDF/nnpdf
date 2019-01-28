@@ -26,8 +26,6 @@ from validphys.plotoptions import get_info
 from validphys import plotutils
 from validphys.checks import check_two_dataspecs
 
-from IPython import embed
-
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values,
