@@ -30,8 +30,6 @@ from validphys.paramfits.config import ParamfitsConfig
 
 log = logging.getLogger(__name__)
 
-from IPython import embed
-
 class Environment(Environment):
     """Container for information to be filled at run time"""
 
