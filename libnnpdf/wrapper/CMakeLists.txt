@@ -7,15 +7,24 @@ execute_process(
     import numpy as np
     print(np.get_include())"
     OUTPUT_VARIABLE NUMPY_INCLUDE
+	RESULT_VARIABLE ret
   OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+if(NOT ret EQUAL "0")
+	message(FATAL_ERROR "numpy not found")
+endif()
 
 execute_process(
   COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
     from distutils.sysconfig import get_python_lib;
     print(get_python_lib())"
     OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
+	RESULT_VARIABLE ret
   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+if(NOT ret EQUAL "0")
+	message(FATAL_ERROR "Could not get python compiler info")
+endif()
 
 execute_process(
   COMMAND "${PYTHON_EXECUTABLE}" -c "if True:
@@ -24,7 +33,12 @@ execute_process(
     cc, _, flags = lcom.partition(\" \");
     print(flags)"
     OUTPUT_VARIABLE PYTHON_EXTENSION_LINKFLAGS
+	RESULT_VARIABLE ret
   OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+if(NOT ret EQUAL "0")
+	message(FATAL_ERROR "Could not get python sysconfig info")
+endif()
 
 include(${SWIG_USE_FILE})
 include_directories(${NUMPY_INCLUDE})
