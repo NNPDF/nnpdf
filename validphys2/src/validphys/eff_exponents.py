@@ -129,8 +129,9 @@ class PreprocessingPlotter(PDFPlotter):
     exponents names.
     """
 
-    def __init__(self, exponent, *args,  **kwargs):
+    def __init__(self, exponent, fits, *args,  **kwargs):
         self.exponent = exponent
+        self.fits = fits
         super().__init__(*args, **kwargs)
 
     def get_title(self, parton_name):
@@ -158,13 +159,6 @@ class PreprocessingPlotter(PDFPlotter):
             ax.set_title(self.get_title(parton_name))
 
             all_vals = []
-            dfs = []
-            for pdf, grid in zip(self.pdfs, self.xplotting_grids):
-                limits = self.draw(pdf, grid, flstate)
-                if limits is not None:
-                    all_vals.append(np.atleast_2d(limits))
-                #here, by default x1_alpha=1e-6,x2_alpha=1e-3,x1_beta=0.65,x2_beta=0.95
-                dfs.append(effective_exponents_table(pdf))
 
             #Note these two lines do not conmute!
             ax.set_xscale(self.xscale)
@@ -181,26 +175,35 @@ class PreprocessingPlotter(PDFPlotter):
             ax.set_ylabel(self.get_ylabel(parton_name))
 
             ax.set_axisbelow(True)
+            
+            if (self.fits != None):
+                dfs = []
+                for fit, pdf, grid in zip(self.fits, self.pdfs, self.xplotting_grids):
+                    limits = self.draw(pdf, grid, flstate)
+                    if limits is not None:
+                        all_vals.append(np.atleast_2d(limits))
+                    #here, by default x1_alpha=1e-6,x2_alpha=1e-3,x1_beta=0.65,x2_beta=0.95
+                    dfs.append(effective_exponents_table_internal(fit, pdf))
 
-            for df in dfs:
-                if self.exponent == 'alpha':
-                    #prev
-                    ax.axhline(df.iat[2*flindex, 1],
-                               linestyle='--', label='prev')
-                    #self.labels.append('prev')
-                    ax.axhline(df.iat[2*flindex, 2], linestyle='--')
-                    #next
-                    ax.axhline(df.iat[2*flindex, 3], label='next')
-                    ax.axhline(df.iat[2*flindex, 4])
+                for df in dfs:
+                    if self.exponent == 'alpha':
+                        #prev
+                        ax.axhline(df.iat[2*flindex, 1],
+                                linestyle='--', label='prev')
+                        #self.labels.append('prev')
+                        ax.axhline(df.iat[2*flindex, 2], linestyle='--')
+                        #next
+                        ax.axhline(df.iat[2*flindex, 3], label='next')
+                        ax.axhline(df.iat[2*flindex, 4])
 
-                elif self.exponent == 'beta':
-                    #prev
-                    ax.axhline(df.iat[2*flindex+1, 1],
-                               linestyle='--', label='prev')
-                    ax.axhline(df.iat[2*flindex+1, 2], linestyle='--')
-                    #next
-                    ax.axhline(df.iat[2*flindex+1, 3], label='next')
-                    ax.axhline(df.iat[2*flindex+1, 4])
+                    elif self.exponent == 'beta':
+                        #prev
+                        ax.axhline(df.iat[2*flindex+1, 1],
+                                linestyle='--', label='prev')
+                        ax.axhline(df.iat[2*flindex+1, 2], linestyle='--')
+                        #next
+                        ax.axhline(df.iat[2*flindex+1, 3], label='next')
+                        ax.axhline(df.iat[2*flindex+1, 4])
 
             self.legend(flstate)
 
@@ -213,7 +216,7 @@ class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter):
 
 @figuregen
 @check_pdf_normalize_to
-def plot_alphaEff(pdfs,
+def plot_alphaEff_internal(fits, pdfs,
                   alpha_eff,
                   normalize_to: (int, str, type(None)) = None,
                   ybottom=None,
@@ -232,19 +235,25 @@ def plot_alphaEff(pdfs,
     xscale: One of the matplotlib allowed scales. If undefined, it will be
     set based on the scale in xgrid, which should be used instead.
     """
-    yield from ExponentBandPlotter('alpha', pdfs, alpha_eff, 'log', normalize_to, ybottom, ytop)
+    yield from ExponentBandPlotter('alpha', fits, pdfs, alpha_eff, 'log', normalize_to, ybottom, ytop)
 
+
+plot_alphaEff = collect(
+    'plot_alphaEff_internal', ['fits', 'fitpdf'])
 
 @figuregen
 @check_pdf_normalize_to
-def plot_betaEff(pdfs,
+def plot_betaEff_internal(fits, pdfs,
                  beta_eff,
                  normalize_to: (int, str, type(None)) = None,
                  ybottom=None,
                  ytop=None):
     """ Same as plot_alphaEff but for beta effective exponent """
-    yield from ExponentBandPlotter('beta', pdfs, beta_eff, 'linear', normalize_to, ybottom, ytop)
+    yield from ExponentBandPlotter('beta', fits, pdfs, beta_eff, 'linear', normalize_to, ybottom, ytop)
 
+
+plot_betaEff = collect(
+    'plot_betaEff_internal', ['fits','fitpdf'])
 
 @table
 def effective_exponents_table_internal(fit: FitSpec, pdf: PDF,
