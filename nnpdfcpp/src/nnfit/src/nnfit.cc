@@ -229,6 +229,16 @@ int main(int argc, char **argv)
         if (state == FIT_ABRT)
           break;
 
+        if (i % 10 == 0)
+        {
+          // Export fit results to an initial scale grid
+          std::string basefile = settings.GetResultsDirectory() + "/nnfit/";
+          std::string gridfile = basefile + "replica_" + std::to_string(replica) + "/"
+                           + settings.GetPDFName() + "_" + std::to_string(i) + ".exportgrid";
+          ExportGrid eg_temp = ExportGrid(*fitset, 0, replica, fitset->GetQ20());
+          eg_temp.Write(gridfile);
+        }
+
         minim->Iterate(fitset.get(), training, pos);
 
         if (stop->Stop(fitset.get(), training, validation, pos)) break;
