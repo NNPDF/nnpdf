@@ -138,8 +138,15 @@ def register(p):
     #Use the timestamp for sorting and the string for displaying
     timestamp = p.stat().st_mtime
     date = datetime.date.fromtimestamp(timestamp).isoformat()
-    if not title:
+    if not title or not isinstance(title, str):
         title = "Validphys output (untitled)"
+
+    if isinstance(tags, str):
+        tags = [tags]
+    if not isinstance(tags, list):
+        tags = []
+    if not isinstance(author, str):
+        author = "<INVALID AUTHOR>"
 
     titlelink = '<a href="%s">%s</a>' % (url, title)
 
