@@ -318,8 +318,9 @@ def barplot(values, collabels, datalabels, orientation='auto'):
     for row, delta, datalabel in zip(values, deltas, datalabels):
         thisx = x+delta
         barfunc(thisx, row, width, label=datalabel)
-        for xp,v in zip(thisx,row):
-            if False not in np.isfinite([xp, v]):
+        for xp, v in zip(thisx, row):
+            #Don't add annotation if either coord is NaN (https://github.com/NNPDF/nnpdf/issues/363)
+            if np.all(np.isfinite([xp, v])):
                 ax.annotate(f'{format_number(v,3)}', xy=xytext(xp,v),
                             textcoords='offset points',
                             size='small', wrap=True, **get_pos(v)
