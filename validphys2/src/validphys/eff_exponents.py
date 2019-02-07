@@ -21,7 +21,7 @@ from reportengine.compat import yaml
 
 from validphys.checks import check_positive, check_pdf_normalize_to
 from validphys.pdfplots import BandPDFPlotter, PDFPlotter, FlavourState
-from validphys.pdfbases import check_basis
+from validphys.pdfbases import check_basis, Basis
 from validphys.core import PDF, FitSpec
 from validphys import plotutils
 
@@ -38,7 +38,7 @@ def alpha_eff(pdf: PDF,
               xmax: numbers.Real = 1e-3,
               npoints: int = 200,
               Q: numbers.Real = 1.65,
-              basis = None,
+              basis:(str, Basis)='flavour',
               flavours = None):
     """Return a list of xplotting_grids containing the value of the effective
     exponent alpha at the specified values of x and flavour.
@@ -53,7 +53,6 @@ def alpha_eff(pdf: PDF,
     Q: The PDF scale in GeV.
     """
     #Loading the filter map of the fit/PDF
-    flavours = None
     checked = check_basis(basis, flavours)
     basis = checked['basis']
     flavours = checked['flavours']
@@ -76,20 +75,14 @@ def alpha_eff(pdf: PDF,
 
     return alphaGrid  # .grid_values
 
-
-alpha_eff_pdfs = collect('alpha_eff', ['pdfs'])
-alpha_eff_fit = collect('alpha_eff', ['fitpdf'])
-alpha_eff_fits = collect('alpha_eff_fit', ['fits'])
-
-
 @check_positive('Q')
 @pdfgrids._check_limits
-def beta_eff(pdfs,
+def beta_eff(pdf,
              xmin: numbers.Real = 0.6,
              xmax: numbers.Real = 0.9,
              npoints: int = 200,
              Q: numbers.Real = 1.65,
-             basis=None,
+             basis:(str, Basis)='flavour',
              flavours=None):
     """Return a list of xplotting_grids containing the value of the effective
     exponent beta at the specified values of x and flavour.
@@ -107,24 +100,22 @@ def beta_eff(pdfs,
     basis = checked['basis']
     flavours = checked['flavours']
 
-    betaGrids = []
     xGrid = pdfgrids.xgrid(xmin, xmax, 'linear', npoints)
 
-    for pdf in pdfs:
-        pdfGrid = pdfgrids.xplotting_grid(
-            pdf, Q, xgrid=xGrid, basis=basis, flavours=flavours)
-        pdfGrid_values = pdfGrid.grid_values
-        # NOTE: without this I get "setting an array element with a sequence"
-        xGrid = pdfGrid.xgrid
-        with warnings.catch_warnings():
-            warnings.simplefilter('ignore', RuntimeWarning)
-            betaGrid_values = np.log(abs(pdfGrid_values/xGrid))/np.log(1-xGrid)
-            betaGrid_values[betaGrid_values == -
-                            np.inf] = np.nan  # when PDF_i =0
-        betaGrid = pdfGrid._replace(grid_values=betaGrid_values)
-        betaGrids.append(betaGrid)
 
-    return betaGrids  # .grid_values
+    pdfGrid = pdfgrids.xplotting_grid(
+        pdf, Q, xgrid=xGrid, basis=basis, flavours=flavours)
+    pdfGrid_values = pdfGrid.grid_values
+    # NOTE: without this I get "setting an array element with a sequence"
+    xGrid = pdfGrid.xgrid
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', RuntimeWarning)
+        betaGrid_values = np.log(abs(pdfGrid_values/xGrid))/np.log(1-xGrid)
+        betaGrid_values[betaGrid_values == -
+                        np.inf] = np.nan  # when PDF_i =0
+    betaGrid = pdfGrid._replace(grid_values=betaGrid_values)
+
+    return betaGrid  # .grid_values
 
 
 class PreprocessingPlotter(PDFPlotter):
@@ -164,22 +155,6 @@ class PreprocessingPlotter(PDFPlotter):
 
             all_vals = []
 
-            #Note these two lines do not conmute!
-            ax.set_xscale(self.xscale)
-            plotutils.frame_center(
-                ax, self.firstgrid.xgrid, np.concatenate(all_vals))
-            if (self.ymin is not None):
-                ax.set_ylim(ymin=self.ymin)
-            if (self.ymax is not None):
-                ax.set_ylim(ymax=self.ymax)
-
-            ax.set_xlabel('$x$')
-            ax.set_xlim(self.firstgrid.xgrid[0])
-
-            ax.set_ylabel(self.get_ylabel(parton_name))
-
-            ax.set_axisbelow(True)
-            
             if (self.fits != None):
                 dfs = []
                 for fit, pdf, grid in zip(self.fits, self.pdfs, self.xplotting_grids):
@@ -209,6 +184,22 @@ class PreprocessingPlotter(PDFPlotter):
                         ax.axhline(df.iat[2*flindex+1, 3], label='next')
                         ax.axhline(df.iat[2*flindex+1, 4])
 
+            #Note these two lines do not conmute!
+            ax.set_xscale(self.xscale)
+            plotutils.frame_center(
+                ax, self.firstgrid.xgrid, np.concatenate(all_vals))
+            if (self.ymin is not None):
+                ax.set_ylim(ymin=self.ymin)
+            if (self.ymax is not None):
+                ax.set_ylim(ymax=self.ymax)
+
+            ax.set_xlabel('$x$')
+            ax.set_xlim(self.firstgrid.xgrid[0])
+
+            ax.set_ylabel(self.get_ylabel(parton_name))
+
+            ax.set_axisbelow(True)
+
             self.legend(flstate)
 
             yield fig, parton_name
@@ -217,11 +208,12 @@ class PreprocessingPlotter(PDFPlotter):
 class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter):
     pass
 
+alpha_eff_pdfs = collect('alpha_eff', ['pdfs'])
 
 @figuregen
 @check_pdf_normalize_to
 def plot_alphaEff_internal(fits, pdfs,
-                  alpha_eff,
+                  alpha_eff_pdfs,
                   normalize_to: (int, str, type(None)) = None,
                   ybottom=None,
                   ytop=None):
@@ -239,16 +231,16 @@ def plot_alphaEff_internal(fits, pdfs,
     xscale: One of the matplotlib allowed scales. If undefined, it will be
     set based on the scale in xgrid, which should be used instead.
     """
-    yield from ExponentBandPlotter('alpha', fits, pdfs, alpha_eff, 'log', normalize_to, ybottom, ytop)
+    yield from ExponentBandPlotter(
+        'alpha', fits, pdfs, alpha_eff_pdfs, 'log', normalize_to, ybottom, ytop)
 
-
+alpha_eff_fits = collect('alpha_eff', ['fits', 'fitpdf',])
+#TODO: change check_pdf_normalize_to to handle None and not expect pdfs
 @figuregen
-@check_pdf_normalize_to
-def plot_alphaEff(fits, fits_pdf,
-                           alpha_eff_fits,
-                           normalize_to: (int, str, type(None)) = None,
-                           ybottom=None,
-                           ytop=None):
+#@check_pdf_normalize_to
+def plot_alphaEff(
+    fits, fits_pdf, alpha_eff_fits,
+    normalize_to: (int, str, type(None)) = None, ybottom=None, ytop=None):
     """Plot the central value and the uncertainty of a list of effective
     exponents as a function of x for a given value of Q. If normalize_to
     is given, plot the ratios to the corresponding alpha effective.
@@ -263,21 +255,27 @@ def plot_alphaEff(fits, fits_pdf,
     xscale: One of the matplotlib allowed scales. If undefined, it will be
     set based on the scale in xgrid, which should be used instead.
     """
-    return plot_alphaEff_internal(fits=fits, pdfs=fits_pdf, alpha_eff=alpha_eff_fits )
+    return plot_alphaEff_internal(fits, fits_pdf, alpha_eff_fits, normalize_to, ybottom, ytop)
+
+beta_eff_pdfs = collect('beta_eff', ('pdfs'))
 
 @figuregen  
 @check_pdf_normalize_to
-def plot_betaEff_internal(fits, pdfs,
-                 beta_eff,
-                 normalize_to: (int, str, type(None)) = None,
-                 ybottom=None,
-                 ytop=None):
-    """ Same as plot_alphaEff but for beta effective exponent """
-    yield from ExponentBandPlotter('beta', fits, pdfs, beta_eff, 'linear', normalize_to, ybottom, ytop)
+def plot_betaEff_internal(
+    fits, pdfs, beta_eff_pdfs, normalize_to: (int, str, type(None)) = None, ybottom=None, ytop=None):
+    """ Same as plot_alphaEff_internal but for beta effective exponent """
+    yield from ExponentBandPlotter('beta', fits, pdfs, beta_eff_pdfs, 'linear', normalize_to, ybottom, ytop)
 
+beta_eff_fits = collect('beta_eff', ('fits', 'fitpdf'))
 
-plot_betaEff = collect(
-    'plot_betaEff_internal', ['fits_pdf'])
+#TODO: change check_pdf_normalize_to to handle None and not expect pdfs
+@figuregen
+#@check_pdf_normalize_to
+def plot_betaEff(
+    fits, fits_pdf, beta_eff_fits,
+    normalize_to: (int, str, type(None)) = None, ybottom=None, ytop=None):
+    """ Same as plot_alphaEff but for beta effective exponents """
+    return plot_betaEff_internal(fits, fits_pdf, beta_eff_fits, normalize_to, ybottom, ytop)
 
 @table
 def effective_exponents_table_internal(fit: FitSpec, pdf: PDF,
@@ -299,28 +297,27 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF,
     basis = checked['basis']
     flavours = checked['flavours']
 
-    pdfs = [pdf]
-    alphamin_grids = alpha_eff(pdfs,
+    alphamin_grids = alpha_eff(pdf,
                                xmin=x1_alpha,
                                xmax=x1_alpha,
                                npoints=1,
                                Q=Q,
                                basis=basis,
                                flavours=flavours)
-    alphamax_grids = alpha_eff(pdfs,
+    alphamax_grids = alpha_eff(pdf,
                                xmin=x2_alpha,
                                xmax=x2_alpha,
                                npoints=1,
                                Q=Q,
                                basis=basis,
                                flavours=flavours)
-    betamin_grids = beta_eff(pdfs,
+    betamin_grids = beta_eff(pdf,
                              xmin=x1_beta,
                              xmax=x1_beta,
                              npoints=1, Q=Q,
                              basis=basis,
                              flavours=flavours)
-    betamax_grids = beta_eff(pdfs,
+    betamax_grids = beta_eff(pdf,
                              xmin=x2_beta,
                              xmax=x2_beta,
                              npoints=1, Q=Q,
@@ -329,10 +326,10 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF,
 
     eff_exp_data = []
 
-    alphamin_grid_values = alphamin_grids[0].grid_values
-    alphamax_grid_values = alphamax_grids[0].grid_values
-    betamin_grid_values = betamin_grids[0].grid_values
-    betamax_grid_values = betamax_grids[0].grid_values
+    alphamin_grid_values = alphamin_grids.grid_values
+    alphamax_grid_values = alphamax_grids.grid_values
+    betamin_grid_values = betamin_grids.grid_values
+    betamax_grid_values = betamax_grids.grid_values
 
     alphamin_stats = pdf.stats_class(alphamin_grid_values)
     alphamax_stats = pdf.stats_class(alphamax_grid_values)
