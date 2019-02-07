@@ -1,4 +1,4 @@
-# File has been edited to replace all instances of '-' with '0.0' and to separate asymmetric uncertainties into separate blocks
+# File has been edited to replace all instances of '-' with '0.0' and to separate asymmetric uncertainties into separate blocks (with order + variation first, then -)
 # Row headers have also been made comments and moved to end of lines
 *dataset:
 *location: Table 15
@@ -20,10 +20,10 @@
 9.0 ; 6.4 ; 7.5 ; 5.0 ; # Data statistical
 5.9 ; 4.8 ; 4.9 ; 3.2 ; # Monte Carlo statistical
 0.0 ; 0.0 ; 1.1 ; 1.0 ; # Background normalization
-+1.6 , -1.5 ; -0.5 , +2.3 ; +1.4 , -1.5 ; 0.0 ; # JES ETA intercalibration
-1.2 ; 0.0 ; -1.6 , +1.6 ; 1.0 ; # Jet energy resolution
++1.6 , -1.5 ; +2.3 , -0.5 ; +1.4 , -1.5 ; 0.0 ; # JES ETA intercalibration
+1.2 ; 0.0 ; +1.6 , -1.6 ; 1.0 ; # Jet energy resolution
 1.7 ; 1.8 ; 0.0 ; 2.3 ; # PDF
--9.0 , +9.8 ; -2.8 , +3.0 ; 0.0 ; +4.8 , -5.2 ; # TOP X generator + parton shower
++9.8 , -9.0 ; +3.0 , -2.8 ; 0.0 ; +4.8 , -5.2 ; # TOP X generator + parton shower
 0.0 ; 0.0 ; 0.0 ; 1.5 ; # TOP X scale variation
 11 ; 6.3 ; 6.2 ; 6.9 ; # Total systematic 11
 15 ; 9.0 ; 9.7 ; 8.5 ; # Total
