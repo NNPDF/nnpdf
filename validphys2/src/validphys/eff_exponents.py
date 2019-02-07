@@ -33,7 +33,7 @@ log = logging.getLogger(__name__)
 
 @check_positive('Q')
 @pdfgrids._check_limits
-def alpha_eff(pdfs,
+def alpha_eff(pdf: PDF,
               xmin: numbers.Real = 1e-6,
               xmax: numbers.Real = 1e-3,
               npoints: int = 200,
@@ -58,24 +58,28 @@ def alpha_eff(pdfs,
     basis = checked['basis']
     flavours = checked['flavours']
 
-    alphaGrids = []
+
     xGrid = pdfgrids.xgrid(xmin, xmax, 'log', npoints)
 
-    for pdf in pdfs:
-        pdfGrid = pdfgrids.xplotting_grid(
-            pdf, Q, xgrid=xGrid, basis=basis, flavours=flavours)
-        pdfGrid_values = pdfGrid.grid_values
-        # NOTE: without this I get "setting an array element with a sequence"
-        xGrid = pdfGrid.xgrid
-        with warnings.catch_warnings():
-            warnings.simplefilter('ignore', RuntimeWarning)
-            alphaGrid_values = -np.log(abs(pdfGrid_values/xGrid))/np.log(xGrid)
-            alphaGrid_values[alphaGrid_values == -
-                             np.inf] = np.nan  # when PDF_i =0
-        alphaGrid = pdfGrid._replace(grid_values=alphaGrid_values)
-        alphaGrids.append(alphaGrid)
+    pdfGrid = pdfgrids.xplotting_grid(
+        pdf, Q, xgrid=xGrid, basis=basis, flavours=flavours)
+    pdfGrid_values = pdfGrid.grid_values
+    # NOTE: without this I get "setting an array element with a sequence"
+    xGrid = pdfGrid.xgrid
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', RuntimeWarning)
+        alphaGrid_values = -np.log(abs(pdfGrid_values/xGrid))/np.log(xGrid)
+        alphaGrid_values[alphaGrid_values == -
+                        np.inf] = np.nan  # when PDF_i =0
+    alphaGrid = pdfGrid._replace(grid_values=alphaGrid_values)
 
-    return alphaGrids  # .grid_values
+
+    return alphaGrid  # .grid_values
+
+
+alpha_eff_pdfs = collect('alpha_eff', ['pdfs'])
+alpha_eff_fit = collect('alpha_eff', ['fitpdf'])
+alpha_eff_fits = collect('alpha_eff_fit', ['fits'])
 
 
 @check_positive('Q')
@@ -238,10 +242,30 @@ def plot_alphaEff_internal(fits, pdfs,
     yield from ExponentBandPlotter('alpha', fits, pdfs, alpha_eff, 'log', normalize_to, ybottom, ytop)
 
 
-plot_alphaEff = collect(
-    'plot_alphaEff_internal', ['fits', 'fitpdf'])
-
 @figuregen
+@check_pdf_normalize_to
+def plot_alphaEff(fits, fits_pdf,
+                           alpha_eff_fits,
+                           normalize_to: (int, str, type(None)) = None,
+                           ybottom=None,
+                           ytop=None):
+    """Plot the central value and the uncertainty of a list of effective
+    exponents as a function of x for a given value of Q. If normalize_to
+    is given, plot the ratios to the corresponding alpha effective.
+    Otherwise, plot absolute values.
+    See the help for ``xplotting_grid`` for information on how to set basis,
+    flavours and x ranges. Yields one figure per PDF flavour.
+
+    normalize_to:  Either the name of one of the alpha effective or its
+    corresponding index in the list, starting from one, or None to plot
+    absolute values.
+
+    xscale: One of the matplotlib allowed scales. If undefined, it will be
+    set based on the scale in xgrid, which should be used instead.
+    """
+    return plot_alphaEff_internal(fits=fits, pdfs=fits_pdf, alpha_eff=alpha_eff_fits )
+
+@figuregen  
 @check_pdf_normalize_to
 def plot_betaEff_internal(fits, pdfs,
                  beta_eff,
@@ -253,7 +277,7 @@ def plot_betaEff_internal(fits, pdfs,
 
 
 plot_betaEff = collect(
-    'plot_betaEff_internal', ['fits','fitpdf'])
+    'plot_betaEff_internal', ['fits_pdf'])
 
 @table
 def effective_exponents_table_internal(fit: FitSpec, pdf: PDF,
