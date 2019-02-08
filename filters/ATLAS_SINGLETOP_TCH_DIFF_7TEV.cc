@@ -14,9 +14,9 @@
 void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
 {
   // Create streams to read data files
-  fstream f1, f2;
+  fstream f1, f2, f3;
 
-  // Data files
+  // Open data files
   stringstream datafile1("");
   string filename1;
   filename1 = "ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP";
@@ -32,7 +32,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
 
   stringstream datafile2("");
   string filename2;
-  filename2 = "ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_SYS_BREAKDOWN";
+  filename2 = "ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM_SYS_BREAKDOWN";
   datafile2 << dataPath()
            << "rawdata/" << filename1 << "/" << filename2 << ".data";
   f2.open(datafile2.str().c_str(), ios::in);
@@ -40,6 +40,55 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
   if (f1.fail())
   {
     cerr << "Error opening data file " << datafile2.str() << endl;
+    exit(-1);
+  }
+
+  // Open correlation matrix file
+  stringstream corrfile("");
+  string filename3;
+  filename3 = "ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM";
+  corrfile << dataPath()
+           << "rawdata/" << filename1 << "/" << filename3 << ".corr";
+  f2.open(corrfile.str().c_str(), ios::in);
+
+  if (f3.fail())
+  {
+    cerr << "Error opening data file " << corrfile.str() << endl;
+    exit(-1);
+  }
+
+  // Read statistical correlation matrix
+  // NEED TO CONVERT TO COVARIANCE MATRIX
+  string line;
+  
+  // Skip over first ten lines
+  for (int i=0; i<10; i++)
+  {
+    getline(f3,line);
+  }
+
+  double** corrmat = new double*[fNData];
+  for (int i=0; i<fNData; i++)
+  {
+    string unneeded_info;
+    corrmat[i] = new double[fNData];
+    getline(f3,line);
+    istringstream lstream(line);
+    lstream >> unneeded_info >> unneeded_info >> unneeded_info;
+    for (int j=0; j<fNData; j++)
+    {
+      lstream >> corrmat[i][j] >> unneeded_info;
+    }
+  }
+
+  // Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for (int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if (!genArtSys(fNData,covmat,syscor))
+  {
+    cerr << " in " << fSetName << endl;
     exit(-1);
   }
 
@@ -75,18 +124,20 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
     fKin3[i] = 7000; // Centre of mass energy in GeV
 
     lstream >> fData[i]; // Value of bin
-//    lstream >> unneeded_info;
-//    lstream >> fstat_percentage;
-//    fStat[i] = fstat_percentage*fData[i]/100; // Absolute statistical uncertainty
-//    lstream >> unneeded_info >> unneeded_info;
 
-//    lstream >> fSys[i][0].mult; // Percentage total systematic uncertainty
-//    fSys[i][0].add = fSys[i][0].mult*fData[i]/100; // Absolute total systematic uncertainty
-//    fSys[i][0].type = MULT;
-//    fSys[i][0].name = "CORR";
+    // Artificial systematics
+    for (int j=0; j<fNData; j++)
+    {
+      fSys[i][j].add = syscor[i][j];
+      fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+      fSys[i][j].type = "MULT";
+      fSys[i][j].name = "CORR";
+    }
+
   }
 
-  // Temporary - for testing
+  // Set statistical uncertainty to zero because we use artificial systematics
+  // Streamline by setting in above loop later
   for (int i=0; i<4; i++)
   {
     fStat[i] = 0;

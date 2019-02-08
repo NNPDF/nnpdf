@@ -1,4 +1,4 @@
 ndata:  	  4
-nsys:   	  7
+nsys:   	  11 # 7 normal systematics + 4 artificial systematics for correlated stat. uncert.
 setname:	  "ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM"
 proctype:	  "HQP_YQ"            
