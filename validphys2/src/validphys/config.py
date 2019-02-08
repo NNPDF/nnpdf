@@ -222,7 +222,13 @@ class CoreConfig(configparser.Config):
         underlyinglaw = self.parse_pdf(datacuts['fakepdf'])
         return {'pdf': underlyinglaw}
 
-
+    def produce_fitpdfandbasis(self, fit):
+        """ Set the PDF and basis from the fit config. """
+        with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
+            _, pdf = self.parse_from_('fit', 'pdf', write=False)
+            _, fitting = self.parse_from_('fit', 'fitting', write=False)
+        basis = fitting['fitbasis']+'FitBasis'
+        return {'pdf': pdf, 'basis':basis}
 
     @element_of('dataset_inputs')
     def parse_dataset_input(self, dataset:Mapping):
