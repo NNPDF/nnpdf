@@ -1,22 +1,11 @@
-/*
- * Differential distribution measurements in p_T and abs(y) of the top/antitop quark for single top production data from ATLAS at sqrt(s) = 7 TeV
- * Normalised and unnormalised distributions
- * Measurements are taken from a data set with an integrated luminosity of 4.59 1/fb
- *
- * Archived as: 1406.7844v2
- * DOI: https://doi.org/10.1103/PhysRevD.90.112006
- *
- * Data and correlation information taken from supplemental material of paper: https://journals.aps.org/prd/supplemental/10.1103/PhysRevD.90.112006
- */
-
 #include "ATLAS_SINGLETOP_TCH_DIFF_7TEV.h"
 
 void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
 {
   // Create streams to read data files
-  fstream f1, f2, f3;
+  fstream f1, f2;
 
-  // Open data files
+  // Data files
   stringstream datafile1("");
   string filename1;
   filename1 = "ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP";
@@ -43,23 +32,8 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
     exit(-1);
   }
 
-  // Open correlation matrix file
-  stringstream corrfile("");
-  string filename3;
-  filename3 = "ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM";
-  corrfile << dataPath()
-           << "rawdata/" << filename1 << "/" << filename3 << ".corr";
-  f2.open(corrfile.str().c_str(), ios::in);
-
-  if (f3.fail())
-  {
-    cerr << "Error opening data file " << corrfile.str() << endl;
-    exit(-1);
-  }
-
   // Start filter of data
   string line;
-  double fstat_additive[4] = {0, 0, 0, 0};
 
   // Skip over first ten lines
   for (int i=0; i<10; i++)
@@ -70,7 +44,6 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
   {
     double rap_top; // Rapidity of top quark
     double rap_top_high, rap_top_low; // Limits of bin
-    double fstat_percentage; // Percentage statistical uncertainty
     string unneeded_info;
 
     getline(f1,line);
@@ -90,59 +63,8 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
     fKin3[i] = 7000; // Centre of mass energy in GeV
 
     lstream >> fData[i]; // Value of bin
-    lstream >> unneeded_info >> fstat_percentage;
-    fstat_additive[i] = fstat_percentage*fData[i]/100;
 
-    // Set statistical uncertainty to zero because we use artificial systematics
-    fStat[i] = 0;
-  }
-
-  // Read statistical correlation matrix
-
-  // Skip over first ten lines
-  for (int i=0; i<10; i++)
-  {
-    getline(f3,line);
-  }
-
-  double** covmat = new double*[fNData];
-//  double corrmat_element;
-  for (int i=0; i<fNData; i++)
-  {
-    string unneeded_info;
-    covmat[i] = new double[fNData];
-    getline(f3,line);
-    istringstream lstream(line);
-    lstream >> unneeded_info >> unneeded_info >> unneeded_info;
-    for (int j=0; j<fNData; j++)
-    {
-      double corrmat_element;
-      lstream >> corrmat_element >> unneeded_info;
-      covmat[i][j] = corrmat_element * fstat_additive[i] * fstat_additive[j];
-    }
-  }
-
-  // Generate artificial systematics
-  double** syscor = new double*[fNData];
-  for (int i = 0; i < fNData; i++)
-    syscor[i] = new double[fNData];
-
-  if (!genArtSys(fNData,covmat,syscor))
-  {
-    cerr << " in " << fSetName << endl;
-    exit(-1);
-  }
-
-  // Artificial systematics
-  for (int i=0; i<fNData; i++)
-  {
-    for (int j=0; j<fNData; j++)
-      {
-        fSys[i][j].add = syscor[i][j];
-        fSys[i][j].mult = fSys[i][j].add*100/fData[i];
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
+    fStat[i] = 0; // Set stat. error to zero to avoid double counting when using artificial systematics
   }
 
   // Skip over first 20 lines (including stat. uncert.)
@@ -151,8 +73,19 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
     getline(f2,line);
   }
   
-//  double up, down, sigma, datshift;
+  double up, down, sigma, datshift;
   double shift[4] = {0, 0, 0, 0};
+
+  for (int i=0; i<4; i++)
+  {
+    for (int j=0; j<4; j++)
+    {
+      fSys[i][j].mult = 0;
+      fSys[i][j].add = 0;
+      fSys[i][j].type = MULT;
+      fSys[i][j].name = "CORR";
+    }
+  }
 
   for (int i=fNData; i<fNSys; i++)
   {
@@ -161,11 +94,10 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
     getline(f2,line);
     istringstream lstream(line);
 
-    if (i==(fNData+2))
+    if (i==fNData+2) // Deal with aysymmetric errors
     {
       for (int j=0; j<3; j++)
       {
-        double up, down, sigma, datshift;
         lstream >> up >> unneeded_info >> down >> unneeded_info;
         symmetriseErrors(up, down, &sigma, &datshift);
         fSys[j][i].mult = sigma;
@@ -174,19 +106,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
         fSys[j][i].name = "CORR";    
         shift[j] += datshift; 
       }
-     
-      double fsys;
-      lstream >> fsys >> unneeded_info;
-      fSys[3][i].mult = fsys;
+  
+      lstream >> fSys[3][i].mult >> unneeded_info;
       fSys[3][i].add = fSys[3][i].mult*fData[3]/100;
       fSys[3][i].type = MULT;
       fSys[3][i].name = "CORR";
     }
-    else if (i==(fNData+5))
+    else if (i==fNData+5) // Deal with asymmetric errors
     {
       for (int j=0; j<2; j++)
       {
-        double up, down, sigma, datshift;
         lstream >> up >> unneeded_info >> down >> unneeded_info;
         symmetriseErrors(up, down, &sigma, &datshift);
         fSys[j][i].mult = sigma;
@@ -196,14 +125,11 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
         shift[j] += datshift;
       }
 
-      double fsys;
-      lstream >> fsys >> unneeded_info;
-      fSys[2][i].mult = fsys;
+      lstream >> fSys[2][i].mult >> unneeded_info;
       fSys[2][i].add = fSys[2][i].mult*fData[2]/100;
       fSys[2][i].type = MULT;
       fSys[2][i].name = "CORR";
 
-      double up, down, sigma, datshift;
       lstream >> up >> unneeded_info >> down;
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[3][i].mult = sigma;
@@ -211,28 +137,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
       fSys[3][i].type = MULT;
       fSys[3][i].name = "CORR";
       shift[3] += datshift;
-    } 
+    }
     else
     {
-      double fsys1, fsys2, fsys3, fsys4;
-      lstream >> fsys1 >> unneeded_info >> fsys2 >> unneeded_info >> fsys3 >> unneeded_info >> fsys4 >> unneeded_info;
-      fSys[0][i].mult = fsys1;
-      fSys[1][i].mult = fsys2;
-      fSys[2][i].mult = fsys3;
-      fSys[3][i].mult = fsys4;
+      lstream >> fSys[0][i].mult >> unneeded_info >> fSys[1][i].mult >> unneeded_info >> fSys[2][i].mult >> unneeded_info >> fSys[3][i].mult >> unneeded_info;
       for (int j=0; j<4; j++)
       {
         fSys[j][i].add = fSys[j][i].mult*fData[j]/100;
         fSys[j][i].type = MULT;
         fSys[j][i].name = "CORR";
       }
-//      lstream >> fSys[0][i].mult >> unneeded_info >> fSys[1][i].mult >> unneeded_info >> fSys[2][i].mult >> unneeded_info >> fSys[3][i].mult >> unneeded_info;
-//      for (int j=0; j<4; j++)
-//      {
-//        fSys[j][i].add = fSys[j][i].mult*fData[j]/100;
-//        fSys[j][i].type = MULT;
-//        fSys[j][i].name = "CORR";
-//      }
     }
   }
 
