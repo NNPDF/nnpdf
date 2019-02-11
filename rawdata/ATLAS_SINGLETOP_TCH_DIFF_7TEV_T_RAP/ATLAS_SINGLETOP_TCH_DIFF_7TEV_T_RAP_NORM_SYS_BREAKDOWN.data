@@ -1,4 +1,4 @@
-# File has been edited to replace all instances of '-' with '0.0' and to separate asymmetric uncertainties into separate blocks (with order + variation first, then -)
+# File has been edited to replace all instances of '-' with '0.0' and to separate asymmetric uncertainties into separate blocks
 # Row headers have also been made comments and moved to end of lines
 *dataset:
 *location: Table 15

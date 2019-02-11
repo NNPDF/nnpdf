@@ -122,7 +122,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
     exit(-1);
   }
 
-  // Artificial systematics
+  // Assign artificial systematics
   for (int i=0; i<fNData; i++)
   {
     for (int j=0; j<fNData; j++)
@@ -134,6 +134,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
       }
   }
 
+  // Read file with systematic uncertainty breakdown
   // Skip over first 20 lines (including stat. uncert.)
   for (int i=0; i<20; i++)
   {
@@ -225,7 +226,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
       fSys[3][j].name = "CORR";
       shift[3] += datshift;
     }
-    else
+    else // Deal with lines that contain no asymmetric errors
     {
       lstream >> fSys[0][j].mult >> unneeded_info >> fSys[1][j].mult >> unneeded_info >> fSys[2][j].mult >> unneeded_info >> fSys[3][j].mult;
       for (int i=0; i<4; i++)
