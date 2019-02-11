@@ -69,11 +69,8 @@ namespace NNPDF
 
     // ****************   Update data values  ********************************
 
-    void   MakeArtificial(); //!< Make an artificial data replica
-
     void   UpdateData(double* newdat);                //!< Update data
     void   UpdateData(double* newdat, double* norm);  //!< Update with a rescaling - also rescales additive uncertainties
-    void   UpdateData(double* newdat, sysType* type); //!< Update data and systypes
 
     void SetArtificial( bool const& artificial) { fIsArtificial = artificial; }
 

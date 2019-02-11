@@ -23,6 +23,7 @@ import mimetypes
 import requests
 from reportengine.compat import yaml
 from reportengine import filefinder
+import sqlite3
 
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts,
@@ -49,6 +50,8 @@ class CfactorNotFound(LoadFailedError): pass
 class CompoundNotFound(LoadFailedError): pass
 
 class TheoryNotFound(LoadFailedError): pass
+
+class TheoryDataBaseNotFound(LoadFailedError): pass
 
 class FitNotFound(LoadFailedError): pass
 
@@ -218,7 +221,7 @@ class Loader(LoaderBase):
                         "are needed with `use_fitcommondata`")
                 #This is to not repeat all the error handling stuff
                 basedata = self.check_commondata(setname, sysnum=sysnum).datafile
-                cuts = self.check_cuts(setname, fit=fit)
+                cuts = self.check_fit_cuts(setname, fit=fit)
 
                 if fit not in self._old_commondata_fits:
                     self._old_commondata_fits.add(fit)
@@ -278,6 +281,25 @@ class Loader(LoaderBase):
             raise TheoryNotFound(("Could not find theory %s. "
                   "Folder '%s' not found") % (theoryID, theopath) )
         return TheoryIDSpec(theoryID, theopath)
+
+    def check_theoryinfo(self, theoryID: int):
+        """ Looks in the datapath for the theory.db and returns a dictionary of theory info for the
+        theory number specified by `theoryID`.
+        """
+        dbpath = self.datapath/'theory.db'
+        if not dbpath.exists():
+            raise TheoryDataBaseNotFound(f"could not find theory.db. File not found at {dbpath}")
+        #Note this still requires a string and not a path
+        conn = sqlite3.connect(str(dbpath))
+        with conn:
+            cursor = conn.cursor()
+            #int casting is intentional to avoid malformed querys.
+            query = f"SELECT * FROM TheoryIndex WHERE ID={int(theoryID)};"
+            res = cursor.execute(query)
+            val = res.fetchone()
+            if not val:
+                raise TheoryNotFound(f"ID {theoryID} not found in database.")
+            return dict([(k[0], v) for k, v in zip(res.description, val)])
 
     def get_commondata(self, setname, sysnum):
         """Get a Commondata from the set name and number."""
@@ -440,12 +462,6 @@ class Loader(LoaderBase):
         if not isinstance(w2min, numbers.Number):
             raise TypeError("w2min must be a number")
         return InternalCutsWrapper(full_ds, q2min, w2min)
-
-    def get_cuts(self, setname, fit):
-        cuts = self.check_cuts(setname, fit)
-        if cuts:
-            return cuts.load()
-        return None
 
     def check_vp_output_file(self, filename, extra_paths=('.',)):
         """Find a file in the vp-cache folder, or (with higher priority) in

@@ -231,9 +231,9 @@ def experiments_covmat(experiments, experiments_index, t0set):
         loaded_exp = experiment.load()
         if t0set:
             #Copy data to avoid chaos
-            data = type(loaded_exp)(loaded_exp)
+            loaded_exp = type(loaded_exp)(loaded_exp)
             log.debug("Setting T0 predictions for %s" % loaded_exp)
-            data.SetT0(t0set.load_t0())
+            loaded_exp.SetT0(t0set.load_t0())
         mat = loaded_exp.get_covmat()
         df.loc[[name],[name]] = mat
     return df
@@ -440,10 +440,6 @@ def abs_chi2_data(results):
 def abs_chi2_data_experiment(experiment_results):
     """Like `abs_chi2_data` but for a whole experiment"""
     return abs_chi2_data(experiment_results)
-
-def abs_chi2_data_experiment_theory(experiment_results, theory_covmat_dataset_3pt):
-    """Like `abs_chi2_data_theory` but for a whole experiment"""
-    return abs_chi2_data_theory(experiment_results, theory_covmat_dataset_3pt)
 
 def phi_data(abs_chi2_data):
     """Calculate phi using values returned by `abs_chi2_data`.
