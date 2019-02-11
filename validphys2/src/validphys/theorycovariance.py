@@ -25,6 +25,9 @@ from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys.plotoptions import get_info
 from validphys import plotutils
 from validphys.checks import check_two_dataspecs
+from validphys.loader import DataSetSpec
+
+from IPython import embed
 
 log = logging.getLogger(__name__)
 
@@ -112,6 +115,51 @@ def theory_covmat_datasets(each_dataset_results_bytheory,
         s = make_scale_var_covmat(theory_centrals)
         dataset_covmats.append(s)
     return dataset_covmats
+
+def additional_errors_covmat_datasets(dataset_names):
+    #commondata_experiments, each_dataset_results_bytheory
+    covmats = []
+    path = '../nnpdfcpp/data/commondata/'
+    embed()
+    for dataset in dataset_names:
+        #dloaded = DataSetSpec('dataset', [dataset]).load()
+        mask = dataset.cuts.load()
+        for f in listdir(path):
+            if match("DATA_TH_" + dataset.name + ".dat", f):
+                infile = open(path + f, "r")
+                systematics = []
+                for i, line in enumerate(infile):
+                    info = line.split()
+                    if i == 0:
+                        nsys = info[1]
+                    else:
+                        systematics.append(info[1])
+                infile.close()
+        for f in listdir(path + "systypes/"):
+            if match("SYSTYPE_TH_" + dataset.name + "_DEFAULT.dat", f):
+                infile = open(path + "systypes/" + f, "r")
+            for i, line in enumerate(infile):
+                if i == 0:
+                    pass
+                else:
+                    info = line.split()
+                    corr_type = info[1] # ADD vs MULT
+                    corr_name = info[2] # THEORYCORR vs THEORYUNCORR
+                infile.close()
+        systematics = np.asarray(systematics, dtype=float)
+        systematics = systematics[mask]
+        if corr_type == "ADD":
+            if corr_name == "THEORYCORR":
+                additional_errors_covmat_dataset = np.outer(systematics, systematics)
+            elif corr_name == "THEORYUNCORR":
+                additional_errors_covmat_dataset = np.diag(np.square(systematics))
+            else:
+                raise ConfigError("Error in Theory SysType files: only THEORYCORR and THEORYUNCORR correlation treatment expected.")
+        else:
+            raise ConfigError("Only additive additional theory errors are currently implemented.")
+        covmats.append(additional_errors_covmat_dataset)
+        embed()
+    return covmats
 
 @_check_correct_theory_combination
 def total_covmat_datasets(each_dataset_results_bytheory,
