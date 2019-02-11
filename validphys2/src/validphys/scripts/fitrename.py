@@ -42,11 +42,12 @@ def change_name(initial, final):
     os.chdir('../../')
     pass
 
-if args.result_path:
-    os.chdir(nnpath.get_results_path())
-    change_name(initial_fit_name, args.final)
-else:
-    os.chdir(initial_dir + '/..')
-    change_name(initial_fit_name, args.final)
+def main():
+    if args.result_path:
+        os.chdir(nnpath.get_results_path())
+        change_name(initial_fit_name, args.final)
+    else:
+        os.chdir(initial_dir + '/..')
+        change_name(initial_fit_name, args.final)
 
-os.system('mv {} {}'.format(initial_fit_name, args.final))
+    os.system('mv {} {}'.format(initial_fit_name, args.final))
