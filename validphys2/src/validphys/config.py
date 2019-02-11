@@ -11,6 +11,9 @@ import inspect
 import numbers
 import copy
 
+from os import listdir
+from re import match
+
 from collections import ChainMap
 from collections.abc import Mapping, Sequence
 
@@ -27,6 +30,8 @@ from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFound
 from validphys.gridvalues import LUMI_CHANNELS
 
 from validphys.paramfits.config import ParamfitsConfig
+
+from validphys.theorycovariance import theory_covmat_custom
 
 log = logging.getLogger(__name__)
 
@@ -663,6 +668,31 @@ class CoreConfig(configparser.Config):
     def produce_all_lumi_channels(self):
         return {'lumi_channels': self.parse_lumi_channels(list(LUMI_CHANNELS))}
 
+    @configparser.explicit_node
+    def produce_sampling_covmat(self):
+        sampling_covmat = theory_covmat_custom
+        return sampling_covmat
+
+    @configparser.explicit_node
+    def produce_fitting_covmat(self):
+        fitting_covmat = theory_covmat_custom
+        return fitting_covmat
+
+    def produce_additionalerrors(self, dataset):
+        mask = dataset.cuts.load()
+        path = '../nnpdfcpp/data/commondata/'
+        for f in listdir(path):
+            if match("DATA_TH_" + dataset.name + ".dat", f):
+                infile = open(path + f, "r")
+                systematics = []
+                for i, line in enumerate(infile):
+                    info = line.split()
+                    if i == 0:
+                        nsys = info[1]
+                    else:
+                        systematics.append(info[1:])
+                infile.close()
+        return 0
 
     def parse_speclabel(self, label:(str, type(None))):
         """A label for a dataspec. To be used in some plots"""
