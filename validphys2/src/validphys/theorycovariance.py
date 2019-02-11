@@ -119,41 +119,51 @@ def theory_covmat_datasets(each_dataset_results_bytheory,
         dataset_covmats.append(s)
     return dataset_covmats
 
-def additional_errors_covmat_datasets(cuts_experiments):
+def additional_errors_covmat_datasets(cuts_experiments, commondata_experiments):
     #commondata_experiments, each_dataset_results_bytheory
     covmats = []
    # path = cuts_experiments[0].path.parent.parent.parent.parent.parent /("data/commondata/")
     path = "/home/s1303034/Documents/nnpdfgit/nnpdf/nnpdfcpp/data/commondata/"
     for ds_cuts in cuts_experiments:
         mask = ds_cuts.load()
-        for f in listdir(path):
-            if match("DATA_TH_" + ds_cuts.name + ".dat", f):
-                infile = open(path + f, "r")
-                systematics = []
-                for i, line in enumerate(infile):
+        queryname = "DATA_TH_" + ds_cuts.name + ".dat"
+        if queryname not in listdir(path):
+            infile = open(path + "DATA_" + ds_cuts.name + ".dat", "r")
+            corr_type = "ADD"
+            corr_name = "ZEROS"
+            systematics = []
+            for i, line in enumerate(infile):
+                if i == 0:
+                    pass
+                else:
+                    systematics.append("0")
+            infile.close()
+        else:
+            infile = open(path + queryname, "r")
+            systematics = []
+            for i, line in enumerate(infile):
+                info = line.split()
+                if i == 0:
+                    nsys = info[1]
+                else:
+                    systematics.append(info[1])
+            infile.close()
+            sysstring = "SYSTYPE_TH_" + ds_cuts.name + "_DEFAULT.dat"
+            sysfile = open(path + "systypes/" + sysstring, "r")
+            for i, line in enumerate(sysfile):
+                if i == 0:
+                    pass
+                else:
                     info = line.split()
-                    if i == 0:
-                        nsys = info[1]
-                    else:
-                        systematics.append(info[1])
-                infile.close()
-        for f in listdir(path + "systypes/"):
-            if match("SYSTYPE_TH_" + ds_cuts.name + "_DEFAULT.dat", f):
-                infile = open(path + "systypes/" + f, "r")
-                for i, line in enumerate(infile):
-                    if i == 0:
-                        pass
-                    else:
-                        info = line.split()
-                        corr_type = info[1] # ADD vs MULT
-                        corr_name = info[2] # THEORYCORR vs THEORYUNCORR
-                infile.close()
+                    corr_type = info[1] # ADD vs MULT
+                    corr_name = info[2] # THEORYCORR vs THEORYUNCORR
+            sysfile.close()
         systematics = np.asarray(systematics, dtype=float)
         systematics = systematics[mask]
         if corr_type == "ADD":
             if corr_name == "THEORYCORR":
                 additional_errors_covmat_dataset = np.outer(systematics, systematics)
-            elif corr_name == "THEORYUNCORR":
+            elif (corr_name == "THEORYUNCORR") or (corr_name == "ZEROS"):
                 additional_errors_covmat_dataset = np.diag(np.square(systematics))
             else:
                 raise ConfigError("Error in Theory SysType files: only THEORYCORR and THEORYUNCORR correlation treatment expected.")
@@ -193,7 +203,7 @@ def total_covmat_diagtheory_datasets(each_dataset_results_bytheory,
         dataset_covmats.append(cov)
     return dataset_covmats
 
-
+@table
 def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
     """Takes the theory covariance matrices for individual datasets and
     returns a data frame with a block diagonal theory covariance matrix
@@ -817,12 +827,6 @@ def plot_blockcovdiff_heatmap(theory_block_diag_covmat, experiments_covmat):
           )/np.mean(experiments_covmat.values)
     fig = plot_covmat_heatmap(df,"(Theory + experiment)/mean(experiment)" +
                               "for block diagonal theory covmat by dataset")
-    return fig
-
-@figure
-def plot_additional_errors_covmat_heatmap(additional_errors_covmat, experiments_covmat):
-    df = (additional_errors_covmat + experiments_covmat)/np.mean(experiments_covmat)
-    fig = plot_covmat_heatmap(df, "(Additional errors + experiment) /mean(experiment)")
     return fig
 
 @figure
