@@ -14,6 +14,9 @@ import matplotlib.pyplot as plt
 from matplotlib import cm, colors as mcolors
 import pandas as pd
 
+from os import listdir
+from re import match
+
 from reportengine.figure import figure
 from reportengine.checks import make_argcheck, check
 from reportengine.table import table
@@ -116,16 +119,15 @@ def theory_covmat_datasets(each_dataset_results_bytheory,
         dataset_covmats.append(s)
     return dataset_covmats
 
-def additional_errors_covmat_datasets(dataset_names):
+def additional_errors_covmat_datasets(cuts_experiments):
     #commondata_experiments, each_dataset_results_bytheory
     covmats = []
-    path = '../nnpdfcpp/data/commondata/'
-    embed()
-    for dataset in dataset_names:
-        #dloaded = DataSetSpec('dataset', [dataset]).load()
-        mask = dataset.cuts.load()
+   # path = cuts_experiments[0].path.parent.parent.parent.parent.parent /("data/commondata/")
+    path = "/home/s1303034/Documents/nnpdfgit/nnpdf/nnpdfcpp/data/commondata/"
+    for ds_cuts in cuts_experiments:
+        mask = ds_cuts.load()
         for f in listdir(path):
-            if match("DATA_TH_" + dataset.name + ".dat", f):
+            if match("DATA_TH_" + ds_cuts.name + ".dat", f):
                 infile = open(path + f, "r")
                 systematics = []
                 for i, line in enumerate(infile):
@@ -136,15 +138,15 @@ def additional_errors_covmat_datasets(dataset_names):
                         systematics.append(info[1])
                 infile.close()
         for f in listdir(path + "systypes/"):
-            if match("SYSTYPE_TH_" + dataset.name + "_DEFAULT.dat", f):
+            if match("SYSTYPE_TH_" + ds_cuts.name + "_DEFAULT.dat", f):
                 infile = open(path + "systypes/" + f, "r")
-            for i, line in enumerate(infile):
-                if i == 0:
-                    pass
-                else:
-                    info = line.split()
-                    corr_type = info[1] # ADD vs MULT
-                    corr_name = info[2] # THEORYCORR vs THEORYUNCORR
+                for i, line in enumerate(infile):
+                    if i == 0:
+                        pass
+                    else:
+                        info = line.split()
+                        corr_type = info[1] # ADD vs MULT
+                        corr_name = info[2] # THEORYCORR vs THEORYUNCORR
                 infile.close()
         systematics = np.asarray(systematics, dtype=float)
         systematics = systematics[mask]
@@ -158,7 +160,6 @@ def additional_errors_covmat_datasets(dataset_names):
         else:
             raise ConfigError("Only additive additional theory errors are currently implemented.")
         covmats.append(additional_errors_covmat_dataset)
-        embed()
     return covmats
 
 @_check_correct_theory_combination
@@ -201,6 +202,12 @@ def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
 
+def additional_errors_covmat(additional_errors_covmat_datasets, experiments_index):
+    """Takes the additional theory error covariance matrices for individual 
+    datasets and returns a data frame with a block diagonal covariance matrix
+    by dataset """
+    return theory_block_diag_covmat(additional_errors_covmat_datasets, experiments_index)
+
 experiments_results_theory = collect('experiments_results', ('theoryids',))
 
 @_check_correct_theory_combination
@@ -218,6 +225,8 @@ def total_covmat_experiments(experiments_results_theory,
     return exp_result_covmats
 
 commondata_experiments = collect('commondata', ['experiments', 'experiment'])
+
+cuts_experiments = collect('cuts', ['experiments', 'experiment'])
 
 # TODO: Improve how processes are assigned. Currently we group manually into
 # Drell-Yan, Heavy Quarks and Jets but adding more processes could break
@@ -808,6 +817,12 @@ def plot_blockcovdiff_heatmap(theory_block_diag_covmat, experiments_covmat):
           )/np.mean(experiments_covmat.values)
     fig = plot_covmat_heatmap(df,"(Theory + experiment)/mean(experiment)" +
                               "for block diagonal theory covmat by dataset")
+    return fig
+
+@figure
+def plot_additional_errors_covmat_heatmap(additional_errors_covmat, experiments_covmat):
+    df = (additional_errors_covmat + experiments_covmat)/np.mean(experiments_covmat)
+    fig = plot_covmat_heatmap(df, "(Additional errors + experiment) /mean(experiment)")
     return fig
 
 @figure
