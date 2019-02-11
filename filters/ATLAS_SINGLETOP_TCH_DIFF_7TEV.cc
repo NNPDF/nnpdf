@@ -3,7 +3,7 @@
 void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
 {
   // Create streams to read data files
-  fstream f1, f2;
+  fstream f1, f2, f3;
 
   // Data files
   stringstream datafile1("");
@@ -32,18 +32,38 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
     exit(-1);
   }
 
+  // Open correlation matrix file
+  stringstream corrfile("");
+  string filename3;
+  filename3 = "ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM";
+  corrfile << dataPath()
+           << "rawdata/" << filename1 << "/" << filename3 << ".corr";
+  f3.open(corrfile.str().c_str(), ios::in);
+
+  if (f3.fail())
+  {
+    cerr << "Error opening data file " << corrfile.str() << endl;
+    exit(-1);
+  }
+
   // Start filter of data
   string line;
+
+  // Initialise array to store additive stat. uncerts.
+  double fstat_additive[4];
+// double fstat_additive[4] = {0, 0, 0, 0};
 
   // Skip over first ten lines
   for (int i=0; i<10; i++)
   {
     getline(f1,line);
   }
+  
   for (int i=0; i<fNData; i++)
   {
     double rap_top; // Rapidity of top quark
     double rap_top_high, rap_top_low; // Limits of bin
+    double fstat_percentage; // Percentage statistical uncertainty
     string unneeded_info;
 
     getline(f1,line);
@@ -63,8 +83,58 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
     fKin3[i] = 7000; // Centre of mass energy in GeV
 
     lstream >> fData[i]; // Value of bin
+    lstream >> unneeded_info >> fstat_percentage;
+    fstat_additive[i] = fstat_percentage*fData[i]/100;
 
     fStat[i] = 0; // Set stat. error to zero to avoid double counting when using artificial systematics
+  }
+
+  // Read statistical correlation matrix
+  // Skip over first ten lines
+  for (int i=0; i<10; i++)
+  {
+    getline(f3,line);
+  }
+
+  double** covmat = new double*[fNData];
+  double corrmat[fNData][fNData];
+  for (int i=0; i<fNData; i++)
+  {
+    string unneeded_info;
+    covmat[i] = new double[fNData];
+    getline(f3,line);
+    istringstream lstream(line);
+    lstream >> unneeded_info >> unneeded_info >> unneeded_info;
+    for (int j=0; j<fNData; j++)
+    {
+      lstream >> corrmat[i][j] >> unneeded_info;
+      covmat[i][j] = corrmat[i][j] * fstat_additive[i] * fstat_additive[j];
+      cout << corrmat[i][j] << "\t";
+      cout << covmat[i][j] << "\t";
+    }
+  }
+
+  // Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for (int i=0; i<fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if (!genArtSys(fNData,covmat,syscor))
+  {
+    cerr << " in " << fSetName << endl;
+    exit(-1);
+  }
+
+  // Artificial systematics
+  for (int i=0; i<fNData; i++)
+  {
+    for (int j=0; j<fNData; j++)
+      {
+        fSys[i][j].add = syscor[i][j];
+        fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+        fSys[i][j].type = MULT;
+        fSys[i][j].name = "CORR";
+      }
   }
 
   // Skip over first 20 lines (including stat. uncert.)
@@ -75,17 +145,6 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
   
   double sys1, sys2, up, down, sigma, datshift;
   double shift[4] = {0, 0, 0, 0};
-
-  for (int i=0; i<4; i++)
-  {
-    for (int j=0; j<4; j++)
-    {
-      fSys[i][j].mult = 0;
-      fSys[i][j].add = 0;
-      fSys[i][j].type = MULT;
-      fSys[i][j].name = "CORR";
-    }
-  }
 
   for (int i=fNData; i<fNSys; i++)
   {
