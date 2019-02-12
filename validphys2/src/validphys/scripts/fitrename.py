@@ -66,7 +66,7 @@ def main():
     else:
         os.chdir(initial_dir + '/..')
     if args.copy:
-        shutil.copytree(initial_fit_name, initial_fit_name + 'copy')
+        shutil.copytree(initial_fit_name, initial_fit_name + 'copy', symlinks=True)
 
     copied_fit = pathlib.Path(initial_fit_name + 'copy')
     fit = pathlib.Path(initial_fit_name)
