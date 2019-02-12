@@ -17,39 +17,13 @@ import contextlib
 
 from reportengine import app
 
-from validphys.config import Config, Environment
+from validphys import api
 from validphys import uploadutils
 from validphys import mplstyles
 
-
-providers = [
-             'validphys.results',
-             'validphys.pdfgrids',
-             'validphys.pdfplots',
-             'validphys.dataplots',
-             'validphys.fitdata',
-             'validphys.arclength',
-             'validphys.sumrules',
-             'validphys.reweighting',
-             'validphys.kinematics',
-             'validphys.correlations',
-             'validphys.chi2grids',
-             'validphys.eff_exponents',
-             'validphys.paramfits.dataops',
-             'validphys.paramfits.plots',
-             'validphys.theorycovariance',
-             'validphys.replica_selector',
-             'validphys.MCgen_checks',
-             'validphys.closure',
-             'reportengine.report'
-            ]
-
 log = logging.getLogger(__name__)
 
-class App(app.App):
-
-    environment_class = Environment
-    config_class = Config
+class App(api.API, app.App):
 
     critical_message = (
 """A critical error ocurred. This is likely due to one of the following reasons:
@@ -71,8 +45,8 @@ including the contents of the following file:
     def default_style(self):
         return os.fspath(mplstyles.smallstyle)
 
-    def __init__(self, name='validphys', providers=providers):
-        super().__init__(name, providers)
+    def __init__(self, name='validphys', providers=api.API.provider_names):
+        app.App.__init__(self, name, providers)
 
     @property
     def argparser(self):
