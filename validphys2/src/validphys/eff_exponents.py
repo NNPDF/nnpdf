@@ -30,15 +30,14 @@ import validphys.pdfgrids as pdfgrids
 
 log = logging.getLogger(__name__)
 
-
 @check_positive('Q')
 @pdfgrids._check_limits
-def alpha_eff(pdf: PDF,
+def alpha_eff(pdf: PDF, *,
               xmin: numbers.Real = 1e-6,
               xmax: numbers.Real = 1e-3,
               npoints: int = 200,
               Q: numbers.Real = 1.65,
-              basis:(str, Basis)='flavour',
+              basis:(str, Basis),
               flavours = None):
     """Return a list of xplotting_grids containing the value of the effective
     exponent alpha at the specified values of x and flavour.
@@ -77,12 +76,12 @@ def alpha_eff(pdf: PDF,
 
 @check_positive('Q')
 @pdfgrids._check_limits
-def beta_eff(pdf,
+def beta_eff(pdf, *,
              xmin: numbers.Real = 0.6,
              xmax: numbers.Real = 0.9,
              npoints: int = 200,
              Q: numbers.Real = 1.65,
-             basis:(str, Basis)='flavour',
+             basis:(str, Basis),
              flavours=None):
     """Return a list of xplotting_grids containing the value of the effective
     exponent beta at the specified values of x and flavour.
@@ -116,7 +115,6 @@ def beta_eff(pdf,
     betaGrid = pdfGrid._replace(grid_values=betaGrid_values)
 
     return betaGrid  # .grid_values
-
 
 class PreprocessingPlotter(PDFPlotter):
     """ Class inherenting from BandPDFPlotter, has the same functionality
@@ -208,7 +206,7 @@ class PreprocessingPlotter(PDFPlotter):
 class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter):
     pass
 
-alpha_eff_pdfs = collect('alpha_eff', ('pdfs'))
+alpha_eff_pdfs = collect('alpha_eff', ('pdfs',))
 
 @figuregen
 @check_pdf_normalize_to
@@ -234,7 +232,7 @@ def plot_alphaEff_internal(fits, pdfs,
     yield from ExponentBandPlotter(
         'alpha', fits, pdfs, alpha_eff_pdfs, 'log', normalize_to, ybottom, ytop)
 
-alpha_eff_fits = collect('alpha_eff', ('fits', 'fitpdfandbasis'))
+alpha_eff_fits = collect('alpha_eff', ('fits', 'fitpdfandbasis',))
 #TODO: change check_pdf_normalize_to to handle None and not expect pdfs
 @figuregen
 #@check_pdf_normalize_to
@@ -257,7 +255,7 @@ def plot_alphaEff(
     """
     return plot_alphaEff_internal(fits, fits_pdf, alpha_eff_fits, normalize_to, ybottom, ytop)
 
-beta_eff_pdfs = collect('beta_eff', ('pdfs'))
+beta_eff_pdfs = collect('beta_eff', ('pdfs',))
 
 @figuregen  
 @check_pdf_normalize_to
@@ -266,7 +264,7 @@ def plot_betaEff_internal(
     """ Same as plot_alphaEff_internal but for beta effective exponent """
     yield from ExponentBandPlotter('beta', fits, pdfs, beta_eff_pdfs, 'linear', normalize_to, ybottom, ytop)
 
-beta_eff_fits = collect('beta_eff', ('fits', 'fitpdfandbasis'))
+beta_eff_fits = collect('beta_eff', ('fits', 'fitpdfandbasis',))
 
 #TODO: change check_pdf_normalize_to to handle None and not expect pdfs
 @figuregen
@@ -436,7 +434,7 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF,
 
 
 effective_exponents_table = collect(
-    'effective_exponents_table_internal', ('fitpdf'))
+    'effective_exponents_table_internal', ('fitpdf',))
 
 
 def next_effective_exponents_yaml_internal(fit: FitSpec, pdf: PDF,
@@ -509,4 +507,4 @@ def next_effective_exponents_yaml_internal(fit: FitSpec, pdf: PDF,
 
 
 next_effective_exponents_yaml = collect(
-    'next_effective_exponents_yaml_internal', ['fitpdf'])
+    'next_effective_exponents_yaml_internal', ('fitpdf',))
