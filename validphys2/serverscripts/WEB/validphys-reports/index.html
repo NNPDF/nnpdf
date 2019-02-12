@@ -49,6 +49,9 @@ $(document).ready(function() {
 		return `<img class="lazy" src="thumbnails/loading.gif" data-original="${data}" width="150", height="100" />`;
 	};
 	const space_join = (data, type, row, meta) => {
+		if(typeof data === "string"){
+			return data;
+		}
 		return data.join(", ");
 	};
 	const columns = [null,
