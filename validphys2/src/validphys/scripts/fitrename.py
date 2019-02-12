@@ -2,13 +2,14 @@
 import NNPDF as nnpath 
 import argparse
 import os
-import pathlib
+import pathlib, shutil
 
 #Taking command line arguments
 parser = argparse.ArgumentParser(description = 'Script to rename fits')
 parser.add_argument('initial', help='Name of the fit to be changed')
 parser.add_argument('final', help='Desired new name of fit')
 parser.add_argument('-r', '--result_path', action='store_true', help='Use to change name of a fit in results path')
+parser.add_argument('-c', '--copy', action='store_true', help='Use to create a copy of the original fit')
 args = parser.parse_args()
 
 initial_dir = os.path.abspath(args.initial)
@@ -39,7 +40,8 @@ def change_name(initial, final):
     
     os.chdir('../postfit')
 
-    os.system('mv {} {}'.format(initial, final)) 
+    folder = pathlib.Path(initial)
+    folder.rename(final)
     os.system('sed -i -e "s/{}/{}/g" postfit.log'.format(initial, final))
 
     #Change symlinks
@@ -61,8 +63,17 @@ def change_name(initial, final):
 def main():
     if args.result_path:
         os.chdir(nnpath.get_results_path())
-        change_name(initial_fit_name, args.final)
     else:
         os.chdir(initial_dir + '/..')
+    if args.copy:
+        shutil.copytree(initial_fit_name, initial_fit_name + 'copy')
+
+    copied_fit = pathlib.Path(initial_fit_name + 'copy')
+    fit = pathlib.Path(initial_fit_name)
+    if copied_fit.exists():
         change_name(initial_fit_name, args.final)
-    os.system('mv {} {}'.format(initial_fit_name, args.final))
+        fit.rename(args.final)
+        copied_fit.rename(initial_fit_name)
+    else:    
+        change_name(initial_fit_name, args.final)
+        fit.rename(args.final)
