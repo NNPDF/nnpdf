@@ -22,24 +22,39 @@ def change_name(initial, final):
     """Function that takes initial fit name and final fit name
     and performs the renaming"""
     os.chdir(os.path.abspath(initial) + '/nnfit')
-
+    
     #Change .info filename
     os.system('mv {}.info {}.info'.format(initial, final))
     #Change replica names
     for item in os.listdir():
-        try:
+        q = pathlib.Path(item)
+        if q.is_dir():
             os.chdir(item)
             p = pathlib.Path('.')
             files = list(p.glob(initial_fit_name + '*'))
             for i in files:
                 i.rename(final + i.suffix)
             os.chdir('..')
-        except:
-            pass
+    
     os.chdir('../postfit')
+
     os.system('mv {} {}'.format(initial, final)) 
     os.system('sed -i -e "s/{}/{}/g" postfit.log'.format(initial, final))
-    os.chdir('../../')
+
+    #Change symlinks
+    os.chdir(final)
+    for item in os.listdir():
+        p = pathlib.Path(item)
+        if p.is_symlink():
+            replica = p.resolve().parent.name
+            pointer = f'../../nnfit/{replica}/{final}.dat' 
+            p.unlink()
+            p.symlink_to(pointer)
+            p.rename(p.name.replace(initial, final))
+        else:
+            p.rename(p.name.replace(initial, final))
+    os.chdir('../../../')
+
     pass
 
 def main():
@@ -49,5 +64,4 @@ def main():
     else:
         os.chdir(initial_dir + '/..')
         change_name(initial_fit_name, args.final)
-
     os.system('mv {} {}'.format(initial_fit_name, args.final))
