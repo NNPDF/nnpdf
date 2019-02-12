@@ -6,10 +6,9 @@ import pathlib
 
 #Taking command line arguments
 parser = argparse.ArgumentParser(description = 'Script to rename fits')
-group = parser.add_mutually_exclusive_group()
-group.add_argument('-r', '--result_path', action='store_true', help='Use to change name of a fit in results path')
 parser.add_argument('initial', help='Name of the fit to be changed')
 parser.add_argument('final', help='Desired new name of fit')
+parser.add_argument('-r', '--result_path', action='store_true', help='Use to change name of a fit in results path')
 args = parser.parse_args()
 
 initial_dir = os.path.abspath(args.initial)
@@ -24,7 +23,9 @@ def change_name(initial, final):
     os.chdir(os.path.abspath(initial) + '/nnfit')
     
     #Change .info filename
-    os.system('mv {}.info {}.info'.format(initial, final))
+    info_file = pathlib.Path(f'{initial_fit_name}.info')
+    info_file.rename(f'{final}.info')
+
     #Change replica names
     for item in os.listdir():
         q = pathlib.Path(item)
