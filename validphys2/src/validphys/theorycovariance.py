@@ -119,11 +119,12 @@ def theory_covmat_datasets(each_dataset_results_bytheory,
         dataset_covmats.append(s)
     return dataset_covmats
 
-def additional_errors_covmat_datasets(cuts_experiments, commondata_experiments):
+def additional_errors_covmat_datasets(cuts_experiments):
     #commondata_experiments, each_dataset_results_bytheory
     covmats = []
    # path = cuts_experiments[0].path.parent.parent.parent.parent.parent /("data/commondata/")
-    path = "/home/s1303034/Documents/nnpdfgit/nnpdf/nnpdfcpp/data/commondata/"
+   # path = "/home/s1303034/Documents/nnpdfgit/nnpdf/nnpdfcpp/data/commondata/"
+    path = "/Users/CameronVoisey/nnpdfgit/nnpdf/nnpdfcpp/data/commondata/"
     for ds_cuts in cuts_experiments:
         mask = ds_cuts.load()
         queryname = "DATA_TH_" + ds_cuts.name + ".dat"
@@ -212,11 +213,16 @@ def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
 
+@table
 def additional_errors_covmat(additional_errors_covmat_datasets, experiments_index):
     """Takes the additional theory error covariance matrices for individual 
     datasets and returns a data frame with a block diagonal covariance matrix
     by dataset """
     return theory_block_diag_covmat(additional_errors_covmat_datasets, experiments_index)
+
+@table
+def theory_plus_additional_errors_covmat(theory_covmat_custom, additional_errors_covmat):
+    return theory_covmat_custom + additional_errors_covmat
 
 experiments_results_theory = collect('experiments_results', ('theoryids',))
 
@@ -421,6 +427,7 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
                 covmats[start_locs] = s
     return covmats
 
+@table
 def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     """Takes the individual sub-covmats between each two processes and assembles
     them into a full covmat. Then reshuffles the order from ordering by process
