@@ -274,15 +274,15 @@ ThPredictions& ThPredictions::operator+=(const ThPredictions& o)
     std::cerr << "ThPredictions::operator+= Warning: Observable summation undefined for ErrorTypes other than Monte-Carlo" <<std::endl;
 
   // Increment predictions
- for (int i=0; i<fNpdf*fNData; i++)
-  fObs[i] += o.fObs[i];
-
+  for (int i=0; i<fNpdf*fNData; i++)
+    fObs[i] += o.fObs[i];
+  
   fTconv += o.fTconv;
   if (fPDFName.compare(o.fPDFName) != 0)
     {std::stringstream pdf; pdf << "(" << fPDFName <<"+"<<o.fPDFName << ")"; fPDFName = pdf.str();}
   if (fSetName.compare(o.fSetName) != 0)
     {std::stringstream set; set << "(" << fSetName <<"+"<<o.fSetName << ")"; fSetName = set.str();}
-
+  
   return *this;
 }
 
@@ -298,8 +298,8 @@ ThPredictions& ThPredictions::operator-=(const ThPredictions& o)
     std::cerr << "ThPredictions::operator-= Warning: Observable subtraction undefined for ErrorTypes other than Monte-Carlo" <<std::endl;
 
   // Increment predictions
- for (int i=0; i<fNpdf*fNData; i++)
-  fObs[i] -= o.fObs[i];
+  for (int i=0; i<fNpdf*fNData; i++)
+    fObs[i] -= o.fObs[i];
 
   fTconv += o.fTconv;
   if (fPDFName.compare(o.fPDFName) != 0)
@@ -322,8 +322,8 @@ ThPredictions& ThPredictions::operator/=(const ThPredictions& o)
     std::cerr << "ThPredictions::operator/= Warning: Observable division undefined for ErrorTypes other than Monte-Carlo" <<std::endl;
 
   // Increment predictions
- for (int i=0; i<fNpdf*fNData; i++)
-  fObs[i] /= o.fObs[i];
+  for (int i=0; i<fNpdf*fNData; i++)
+    fObs[i] /= o.fObs[i];
 
   fTconv += o.fTconv;
   if (fPDFName.compare(o.fPDFName) != 0)
@@ -346,8 +346,8 @@ ThPredictions& ThPredictions::operator*=(const ThPredictions& o)
     std::cerr << "ThPredictions::operator/= Warning: Observable multiplication undefined for ErrorTypes other than Monte-Carlo" <<std::endl;
 
   // Increment predictions
- for (int i=0; i<fNpdf*fNData; i++)
-  fObs[i] *= o.fObs[i];
+  for (int i=0; i<fNpdf*fNData; i++)
+    fObs[i] *= o.fObs[i];
 
   fTconv += o.fTconv;
   if (fPDFName.compare(o.fPDFName) != 0)

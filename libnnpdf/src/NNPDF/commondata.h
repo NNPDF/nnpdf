@@ -209,7 +209,7 @@ namespace NNPDF
     double        GetCorE(int i) const; //!< Return total correlated error for point i
 
     sysError const& GetSys(int i, int l) const { return fSys[i][l];} //!< Return lth systematic for point i
-    sysError** const GetSysErrors() const { return fSys;} //!< Return full systematic matrix
+    sysError** GetSysErrors() const { return fSys; } //!< Return full systematic matrix
 
     double* GetData() const { return fData; }; //!< Return whole data array
 

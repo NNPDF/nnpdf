@@ -98,4 +98,6 @@ namespace NNPDF
         // Verbosity
         static bool Verbose;
     };
+
+    void swap(ThPredictions& lhs, ThPredictions& rhs);
 }

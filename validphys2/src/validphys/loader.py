@@ -23,6 +23,7 @@ import mimetypes
 import requests
 from reportengine.compat import yaml
 from reportengine import filefinder
+import sqlite3
 
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts,
@@ -49,6 +50,8 @@ class CfactorNotFound(LoadFailedError): pass
 class CompoundNotFound(LoadFailedError): pass
 
 class TheoryNotFound(LoadFailedError): pass
+
+class TheoryDataBaseNotFound(LoadFailedError): pass
 
 class FitNotFound(LoadFailedError): pass
 
@@ -279,6 +282,25 @@ class Loader(LoaderBase):
                   "Folder '%s' not found") % (theoryID, theopath) )
         return TheoryIDSpec(theoryID, theopath)
 
+    def check_theoryinfo(self, theoryID: int):
+        """ Looks in the datapath for the theory.db and returns a dictionary of theory info for the
+        theory number specified by `theoryID`.
+        """
+        dbpath = self.datapath/'theory.db'
+        if not dbpath.exists():
+            raise TheoryDataBaseNotFound(f"could not find theory.db. File not found at {dbpath}")
+        #Note this still requires a string and not a path
+        conn = sqlite3.connect(str(dbpath))
+        with conn:
+            cursor = conn.cursor()
+            #int casting is intentional to avoid malformed querys.
+            query = f"SELECT * FROM TheoryIndex WHERE ID={int(theoryID)};"
+            res = cursor.execute(query)
+            val = res.fetchone()
+            if not val:
+                raise TheoryNotFound(f"ID {theoryID} not found in database.")
+            return dict([(k[0], v) for k, v in zip(res.description, val)])
+
     def get_commondata(self, setname, sysnum):
         """Get a Commondata from the set name and number."""
         cd = self.check_commondata(setname, sysnum)
@@ -371,6 +393,7 @@ class Loader(LoaderBase):
                       sysnum=None,
                       theoryid,
                       cfac=(),
+                      frac=1,
                       cuts=CutsPolicy.INTERNAL,
                       use_fitcommondata=False,
                       fit=None,
@@ -403,12 +426,12 @@ class Loader(LoaderBase):
             elif cuts is CutsPolicy.INTERNAL:
                 full_ds = DataSetSpec(name=name, commondata=commondata,
                            fkspecs=fkspec, thspec=theoryid, cuts=None,
-                           op=op, weight=weight)
+                           frac=frac, op=op, weight=weight)
                 cuts = self.check_internal_cuts(full_ds, q2min, w2min)
 
         return DataSetSpec(name=name, commondata=commondata,
                            fkspecs=fkspec, thspec=theoryid, cuts=cuts,
-                           op=op, weight=weight)
+                           frac=frac, op=op, weight=weight)
 
     def check_pdf(self, name):
         if lhaindex.isinstalled(name):

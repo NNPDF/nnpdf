@@ -441,10 +441,6 @@ def abs_chi2_data_experiment(experiment_results):
     """Like `abs_chi2_data` but for a whole experiment"""
     return abs_chi2_data(experiment_results)
 
-def abs_chi2_data_experiment_theory(experiment_results, theory_covmat_dataset_3pt):
-    """Like `abs_chi2_data_theory` but for a whole experiment"""
-    return abs_chi2_data_theory(experiment_results, theory_covmat_dataset_3pt)
-
 def phi_data(abs_chi2_data):
     """Calculate phi using values returned by `abs_chi2_data`.
 
