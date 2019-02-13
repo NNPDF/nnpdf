@@ -21,6 +21,9 @@ from reportengine.compat import yaml
 import validphys.lhaindex as lhaindex
 from validphys.lhio import write_replica, generate_replica0
 from validphys.core import PDF
+import NNPDF
+
+NNPATH = Path(NNPDF.get_results_path())
 
 FLID = {
     'TBAR':-6, 'BBAR':-5, 'CBAR':-4, 'SBAR':-3, 'UBAR':-2, 'DBAR':-1, 'GLUON':21,
@@ -97,7 +100,7 @@ def create_pdf(fitpath, gen):
             # move_info_file adds 1 to nreps to account for rep zero
             move_info_file(fitpath/"nnfit"/f, outpath, nreps)
         else:
-            a = exportgridtopanda(fitpath/f"nnfit/{f}/{fitname}_{gen}.exportgrid")
+            a = exportgridtopanda(fitpath/f"nnfit/{f}/{fitpath.name}_{gen}.exportgrid")
             #get original rep number from folder name to store in header
             rep = [int(s) for s in f.split("_") if s.isdigit()][0]
             preamble = f"PdfType: replica\nFormat: lhagrid1\nFromMCReplica: {rep}\n"
@@ -109,12 +112,18 @@ def create_pdf(fitpath, gen):
     pdf = PDF(f"{fitpath.name}_{gen}")
     generate_replica0(pdf)
 
-def create_runcard(runcardpath, fitpath, pdfs):
+def create_fit(fitpath, gen):
+    if isinstance(fitpath, str):
+        fitpath = Path(fitpath)
+    os.symlink(f"{fitpath.absolute()}", f"{NNPATH}/{fitpath.name}_{gen}")
+
+def create_runcard(runcardpath, fitpath, names):
     """Given a runcard and a list of PDFs, create a temporary runcard with pdfs filled from list"""
     with open(runcardpath, "r") as f:
         filtermap = yaml.safe_load(f)
     outpath = Path.joinpath(fitpath, "temp_lhapdf", "runcard.yaml")
-    filtermap["pdfs"] = pdfs
+    filtermap["pdfs"] = names
+    filtermap["fits"] = names
     with open(outpath, "w+") as f:
         yaml.safe_dump(filtermap, stream=f)
 
@@ -171,15 +180,24 @@ def main():
         except FileNotFoundError:
             pass
 
+        try:
+            os.unlink(f"{NNPATH}/{fitname}_{i}")
+            warning(f"fit with name {fitname}_{i} already exists in results folder, "
+                    f"attempting to delete.")
+        except FileNotFoundError:
+            pass
+
 
     os.mkdir(fitpath/"temp_lhapdf")
     for i in generations:
         create_pdf(fitpath, i)
-    pdfs = [fitname + f"_{i}" for i in generations]
-    create_runcard(Path(f"{args.runcardpath}"), fitpath, pdfs)
+        create_fit(fitpath, i)
+    names = [fitname + f"_{i}" for i in generations]
+    create_runcard(Path(f"{args.runcardpath}"), fitpath, names)
     os.system(f'validphys {fitpath/"temp_lhapdf/runcard.yaml"} {vpargstring}')
     for i in generations:
         os.unlink(f"{lhaindex.get_lha_paths()[0]}/{fitname}_{i}")
+        os.unlink(f"{NNPATH}/{fitname}_{i}")
     clean_temporary(fitpath)
 
 if __name__ == "__main__":
