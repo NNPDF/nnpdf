@@ -339,7 +339,7 @@ evolution = Basis.from_mapping({
     default_elements=(r'\Sigma', 'V', 'T3', 'V3', 'T8', 'V8', 'T15', 'gluon', )
 )
 
-NN31ICFitBasis = Basis.from_mapping({
+NN31IC = Basis.from_mapping({
     r'\Sigma': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 1, 'cbar': 1, 'b': 1, 'bbar': 1, 't': 1, 'tbar': 1},
     'g': {'g': 1},
 

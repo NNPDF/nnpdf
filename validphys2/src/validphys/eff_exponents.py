@@ -11,7 +11,6 @@ import numbers
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import NNPDF as nnpath
 
 from reportengine import collect
 from reportengine.figure import figuregen
@@ -19,7 +18,7 @@ from reportengine.table import table
 from reportengine.floatformatting import format_number, significant_digits
 from reportengine.compat import yaml
 
-from validphys.checks import check_positive, check_pdf_normalize_to
+from validphys.checks import check_positive, check_pdf_normalize_to, make_argcheck
 from validphys.pdfplots import BandPDFPlotter, PDFPlotter, FlavourState
 from validphys.pdfbases import check_basis, Basis
 from validphys.core import PDF, FitSpec
@@ -31,6 +30,7 @@ import validphys.pdfgrids as pdfgrids
 log = logging.getLogger(__name__)
 
 @check_positive('Q')
+@make_argcheck(check_basis)
 @pdfgrids._check_limits
 def alpha_eff(pdf: PDF, *,
               xmin: numbers.Real = 1e-6,
@@ -68,13 +68,12 @@ def alpha_eff(pdf: PDF, *,
         warnings.simplefilter('ignore', RuntimeWarning)
         alphaGrid_values = -np.log(abs(pdfGrid_values/xGrid))/np.log(xGrid)
         alphaGrid_values[alphaGrid_values == -
-                        np.inf] = np.nan  # when PDF_i =0
+                         np.inf] = np.nan  # when PDF_i =0
     alphaGrid = pdfGrid._replace(grid_values=alphaGrid_values)
-
-
-    return alphaGrid  # .grid_values
+    return alphaGrid
 
 @check_positive('Q')
+@make_argcheck(check_basis)
 @pdfgrids._check_limits
 def beta_eff(pdf, *,
              xmin: numbers.Real = 0.6,
@@ -160,7 +159,8 @@ class PreprocessingPlotter(PDFPlotter):
                     if limits is not None:
                         all_vals.append(np.atleast_2d(limits))
                     #here, by default x1_alpha=1e-6,x2_alpha=1e-3,x1_beta=0.65,x2_beta=0.95
-                    dfs.append(effective_exponents_table_internal(fit, pdf))
+                    #but also do we have to use the internal function??
+                    dfs.append(effective_exponents_table_internal(fit, pdf, basis=basis))
 
                 for df in dfs:
                     if self.exponent == 'alpha':
@@ -187,9 +187,9 @@ class PreprocessingPlotter(PDFPlotter):
             plotutils.frame_center(
                 ax, self.firstgrid.xgrid, np.concatenate(all_vals))
             if (self.ymin is not None):
-                ax.set_ylim(ymin=self.ymin)
+                ax.set_ylim(bottom=self.ymin)
             if (self.ymax is not None):
-                ax.set_ylim(ymax=self.ymax)
+                ax.set_ylim(top=self.ymax)
 
             ax.set_xlabel('$x$')
             ax.set_xlim(self.firstgrid.xgrid[0])
@@ -235,7 +235,6 @@ def plot_alphaEff_internal(fits, pdfs,
 alpha_eff_fits = collect('alpha_eff', ('fits', 'fitpdfandbasis',))
 #TODO: change check_pdf_normalize_to to handle None and not expect pdfs
 @figuregen
-#@check_pdf_normalize_to
 def plot_alphaEff(
     fits, fits_pdf, alpha_eff_fits,
     normalize_to: (int, str, type(None)) = None, ybottom=None, ytop=None):
@@ -268,7 +267,6 @@ beta_eff_fits = collect('beta_eff', ('fits', 'fitpdfandbasis',))
 
 #TODO: change check_pdf_normalize_to to handle None and not expect pdfs
 @figuregen
-#@check_pdf_normalize_to
 def plot_betaEff(
     fits, fits_pdf, beta_eff_fits,
     normalize_to: (int, str, type(None)) = None, ybottom=None, ytop=None):
@@ -276,11 +274,13 @@ def plot_betaEff(
     return plot_betaEff_internal(fits, fits_pdf, beta_eff_fits, normalize_to, ybottom, ytop)
 
 @table
-def effective_exponents_table_internal(fit: FitSpec, pdf: PDF,
+@make_argcheck(check_basis)
+def effective_exponents_table_internal(fit: FitSpec, pdf: PDF, *,
                                        x1_alpha: numbers.Real = 1e-6,
                                        x2_alpha: numbers.Real = 1e-3,
                                        x1_beta: numbers.Real = 0.65,
-                                       x2_beta: numbers.Real = 0.95):
+                                       x2_beta: numbers.Real = 0.95,
+                                       basis, flavours=None):
     """Returns a table with the effective exponents for the next fit"""
 
     #Reading from the filter
@@ -288,9 +288,7 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF,
     filtermap = yaml.safe_load(open(fitpath+'/filter.yml'))
     infomap = yaml.safe_load(open(pdf.infopath))
     Q = infomap['QMin']
-    basis = filtermap['fitting']['fitbasis']+'FitBasis'
 
-    flavours = None
     checked = check_basis(basis, flavours)
     basis = checked['basis']
     flavours = checked['flavours']
@@ -434,37 +432,28 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF,
 
 
 effective_exponents_table = collect(
-    'effective_exponents_table_internal', ('fitpdf',))
+    'effective_exponents_table_internal', ('fitpdfandbasis',))
 
 
-def next_effective_exponents_yaml_internal(fit: FitSpec, pdf: PDF,
-                                           x1_alpha: numbers.Real = 1e-6,
-                                           x2_alpha: numbers.Real = 1e-3,
-                                           x1_beta: numbers.Real = 0.65,
-                                           x2_beta: numbers.Real = 0.95):
+def next_effective_exponents_yaml(fit: FitSpec, effective_exponents_table):
     """-Returns a table in yaml format called NextEffExps.yaml
        -Prints the yaml table in the report"""
 
-    df_effexps = effective_exponents_table_internal(fit, pdf,
-                                                    x1_alpha,
-                                                    x2_alpha,
-                                                    x1_beta,
-                                                    x2_beta)
+    df_effexps = effective_exponents_table[0]
     #Reading from the filter
-    fitpath = str(fit.path)
-    filtermap = yaml.safe_load(open(fitpath+'/filter.yml'))
-    basis = filtermap['fitting']['fitbasis']+'FitBasis'
+    with open(fit.path/'filter.yml', 'r') as f:
+        filtermap = yaml.safe_load(f)
 
+    basis = filtermap['fitting']['fitbasis']
     flavours = None
     checked = check_basis(basis, flavours)
     basis = checked['basis']
     flavours = checked['flavours']
-
     YAMLflaliases = {r'\Sigma': 'sng', 'V': 'v', 'T3': 't3',
                      'V3': 'v3', 'T8': 't8', 'V8': 'v8', 'g': 'g', r'c^+': 'cp'}
 
     FittingBasisString = ""
-    with open(fitpath+'/filter.yml', 'r') as filterfile:
+    with open(fit.path/'filter.yml', 'r') as filterfile:
         for line in filterfile:
             if ('fl: ') in line:
                 FittingBasisString += line
@@ -502,9 +491,4 @@ def next_effective_exponents_yaml_internal(fit: FitSpec, pdf: PDF,
 
     s = io.StringIO()
     y.dump(basismap, s)
-
     return s.getvalue()
-
-
-next_effective_exponents_yaml = collect(
-    'next_effective_exponents_yaml_internal', ('fitpdf',))

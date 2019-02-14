@@ -227,7 +227,7 @@ class CoreConfig(configparser.Config):
         with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
             _, pdf = self.parse_from_('fit', 'pdf', write=False)
             _, fitting = self.parse_from_('fit', 'fitting', write=False)
-        basis = fitting['fitbasis']+'FitBasis'
+        basis = fitting['fitbasis']
         return {'pdf': pdf, 'basis':basis}
 
     @element_of('dataset_inputs')
