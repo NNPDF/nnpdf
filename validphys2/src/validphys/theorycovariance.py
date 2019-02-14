@@ -137,7 +137,8 @@ def total_covmat_diagtheory_datasets(each_dataset_results_bytheory,
     for dataset in each_dataset_results_bytheory:
         theory_centrals = [x[1].central_value for x in dataset]
         s = make_scale_var_covmat(theory_centrals)
-        s_diag = np.zeros((len(s),len(s)))
+        # Initialise array of zeros and set precision to same as FK tables
+        s_diag = np.zeros((len(s),len(s)), dtype=np.float32) 
         np.fill_diagonal(s_diag, np.diag(s))
         sigma = dataset[0][0].covmat
         cov = s_diag + sigma
@@ -360,8 +361,9 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     to ordering by experiment as listed in the runcard"""
     matlength = int(sum([len(covmat) for covmat in covs_pt_prescrip.values()]
                         )/int(np.sqrt(len(covs_pt_prescrip))))
-    mat = np.zeros((matlength,matlength))
-    cov_by_exp = np.zeros((matlength,matlength))
+    # Initialise arrays of zeros and set precision to same as FK tables
+    mat = np.zeros((matlength,matlength), dtype=np.float32)
+    cov_by_exp = np.zeros((matlength,matlength), dtype=np.float32)
     for locs in covs_pt_prescrip:
         cov = covs_pt_prescrip[locs]
         mat[locs[0]:(len(cov) + locs[0]),locs[1]:(len(cov.T)+locs[1])] = cov
@@ -381,7 +383,8 @@ def total_covmat_diagtheory_experiments(experiments_results_theory,
     for exp_result in zip(*experiments_results_theory):
         theory_centrals = [x[1].central_value for x in exp_result]
         s = make_scale_var_covmat(theory_centrals)
-        s_diag = np.zeros((len(s),len(s)))
+        # Initialise array of zeros and set precision to same as FK tables
+        s_diag = np.zeros((len(s),len(s)), dtype=np.float32)
         np.fill_diagonal(s_diag, np.diag(s))
         sigma = exp_result[0][0].covmat
         cov = s_diag + sigma
@@ -562,7 +565,8 @@ def chi2_impact_custom(theory_covmat_custom, experiments_covmat,
 def theory_diagcovmat(theory_covmat):
     """Returns theory covmat with only diagonal values"""
     s = theory_covmat.values
-    s_diag = np.zeros((len(s),len(s)))
+    # Initialise array of zeros and set precision to same as FK tables
+    s_diag = np.zeros((len(s),len(s)), dtype=np.float32)
     np.fill_diagonal(s_diag, np.diag(s))
     return s_diag
 
