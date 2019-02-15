@@ -21,42 +21,46 @@ initial_fit_name = os.path.basename(args.initial)
 def change_name(initial, final):
     """Function that takes initial fit name and final fit name
     and performs the renaming"""
-    os.chdir(os.path.abspath(initial) + '/nnfit')
-    
-    #Change .info filename
-    info_file = pathlib.Path(f'{initial_fit_name}.info')
-    info_file.rename(f'{final}.info')
+    os.chdir(os.path.abspath(initial))
+    nnfit = pathlib.Path('nnfit') 
+    if nnfit.exists():
+        os.chdir('nnfit')
+        #Change .info filename
+        info_file = pathlib.Path(f'{initial_fit_name}.info')
+        info_file.rename(f'{final}.info')
 
-    #Change replica names
-    for item in os.listdir():
-        q = pathlib.Path(item)
-        if q.is_dir():
-            os.chdir(item)
-            p = pathlib.Path('.')
-            files = list(p.glob(initial_fit_name + '*'))
-            for i in files:
-                i.rename(final + i.suffix)
-            os.chdir('..')
-    
-    os.chdir('../postfit')
+        #Change replica names
+        for item in os.listdir():
+            q = pathlib.Path(item)
+            if q.is_dir():
+                os.chdir(item)
+                p = pathlib.Path('.')
+                files = list(p.glob(initial_fit_name + '*'))
+                for i in files:
+                    i.rename(final + i.suffix)
+                os.chdir('..')
+        os.chdir('..')
 
-    folder = pathlib.Path(initial)
-    folder.rename(final)
-    os.system('sed -i -e "s/{}/{}/g" postfit.log'.format(initial, final))
+    postfit = pathlib.Path('postfit')
+    if postfit.exists():
+        os.chdir('postfit')
+        folder = pathlib.Path(initial)
+        folder.rename(final)
+        os.system('sed -i -e "s/{}/{}/g" postfit.log'.format(initial, final))
 
-    #Change symlinks
-    os.chdir(final)
-    for item in os.listdir():
-        p = pathlib.Path(item)
-        if p.is_symlink():
-            replica = p.resolve().parent.name
-            pointer = f'../../nnfit/{replica}/{final}.dat' 
-            p.unlink()
-            p.symlink_to(pointer)
-            p.rename(p.name.replace(initial, final))
-        else:
-            p.rename(p.name.replace(initial, final))
-    os.chdir('../../../')
+        #Change symlinks
+        os.chdir(final)
+        for item in os.listdir():
+            p = pathlib.Path(item)
+            if p.is_symlink():
+                replica = p.resolve().parent.name
+                pointer = f'../../nnfit/{replica}/{final}.dat' 
+                p.unlink()
+                p.symlink_to(pointer)
+                p.rename(p.name.replace(initial, final))
+            else:
+                p.rename(p.name.replace(initial, final))
+        os.chdir('../../..')
 
     pass
 
@@ -74,6 +78,6 @@ def main():
         change_name(initial_fit_name, args.final)
         fit.rename(args.final)
         copied_fit.rename(initial_fit_name)
-    else:    
+    else:   
         change_name(initial_fit_name, args.final)
         fit.rename(args.final)
