@@ -172,31 +172,63 @@ def total_covmat_experiments(experiments_results_theory,
 
 commondata_experiments = collect('commondata', ['experiments', 'experiment'])
 
-# TODO: Improve how processes are assigned. Currently we group manually into
-# Drell-Yan, Heavy Quarks and Jets but adding more processes could break
-# this assignment
-def process_lookup(commondata_experiments):
+def _process_lookup(name):
     """Produces a dictionary with keys corresponding to dataset names
     and values corresponding to process types. Process types are
-    regrouped into the five categories 'Drell-Yan', 'Heavy Quarks', Jets',
+    regrouped into the five categories 'Drell-Yan', 'Top', Jets',
     'DIS NC' and 'DIS CC'."""
-    d = {commondata.name: get_info(commondata).process_description
-         for commondata in commondata_experiments}
-    for key, value in d.items():
-        if "Deep Inelastic Scattering" in value:
-            if ("CHORUS" in key) or ("NTV" in key) or ("HERACOMBCC" in key):
-                d[key] = "DIS CC"
-            else:
-                d[key] = "DIS NC"
-        elif "Drell-Yan" in value:
-            d[key] = "Drell-Yan"
-        elif "Heavy Quarks" in value:
-            d[key] = "Heavy Quarks"
-        elif "Jet" in value:
-            d[key] = "Jets"
-        else:
-            pass
-    return d
+    process_dictionary = {	"ATLASZPT8TEVMDIST": 			"DY",
+				"ATLASZPT8TEVYDIST":			"DY",
+				"CMSZDIFF12":				"DY",
+				"ATLAS1JET11":				"JETS",
+				"CMSJETS11":				"JETS",
+				"CDFR2KT":				"JETS",
+				"CMSTOPDIFF8TEVTTRAPNORM":		"TOP",
+				"ATLASTOPDIFF8TEVTRAPNORM":		"TOP",
+				"ATLASTTBARTOT":			"TOP",
+				"CMSTTBARTOT":				"TOP",
+				"DYE605":				"DY",
+				"DYE886P":				"DY",
+				"DYE886R":				"DY",
+				"ATLASWZRAP36PB":			"DY",
+				"ATLASZHIGHMASS49FB":			"DY",
+				"ATLASLOMASSDY11EXT":			"DY",
+				"ATLASWZRAP11":				"DY",
+				"CMSWEASY840PB":			"DY",
+				"CMSWMASY47FB":				"DY",
+				"CMSDY2D11":				"DY",
+				"CMSWMU8TEV":				"DY",
+				"CMSWCHARMRAT":				"DY",
+				"LHCBZ940PB":				"DY",
+				"LHCBZEE2FB":				"DY",
+				"LHCBWZMU7TEV":				"DY",
+				"LHCBWZMU8TEV":				"DY",
+				"D0WEASY":				"DY",
+				"D0WMASY":				"DY",
+				"D0ZRAP":				"DY",
+				"CDFZRAP":				"DY",
+				"H1HERAF2B":				"DIS NC",
+				"HERACOMBCCEM":				"DIS CC",
+				"HERACOMBCCEP":				"DIS CC",
+				"HERACOMBNCEM":				"DIS NC",
+				"HERACOMBNCEP460":			"DIS NC",
+				"HERACOMBNCEP575":			"DIS NC",
+				"HERACOMBNCEP820":	 		"DIS NC",
+				"HERACOMBNCEP920":			"DIS NC",
+				"HERAF2CHARM":				"DIS NC",
+				"ZEUSHERAF2B":				"DIS NC",
+				"NMCPD":				"DIS NC",
+				"NMC":					"DIS NC",
+				"SLACP":				"DIS NC",
+				"SLACD":				"DIS NC",
+				"BCDMSP":				"DIS NC",
+				"BCDMSD":				"DIS NC",
+				"CHORUSNU":				"DIS CC",
+				"CHORUSNB":				"DIS CC",
+				"NTVNUDMN":				"DIS CC",
+				"NTVNBDMN":				"DIS CC"	}
+    proc = process_dictionary[name]
+    return proc
 
 def dataset_names(commondata_experiments):
     """Returns a list of the names of the datasets, in the same order as
@@ -207,8 +239,7 @@ def dataset_names(commondata_experiments):
 ProcessInfo = namedtuple("ProcessInfo", ('theory', 'namelist', 'sizes'))
 
 
-def combine_by_type(process_lookup,
-                    each_dataset_results_bytheory, dataset_names):
+def combine_by_type(each_dataset_results_bytheory, dataset_names):
     """Groups the datasets according to processes and returns three objects:
     theories_by_process: the relevant theories grouped by process type
     ordered_names: dictionary with keys of process type and values being the
@@ -222,7 +253,7 @@ def combine_by_type(process_lookup,
     for dataset, name in zip(each_dataset_results_bytheory, dataset_names):
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
-        proc_type = process_lookup[name]
+        proc_type = _process_lookup(name)
         ordered_names[proc_type].append(name)
         theories_by_process[proc_type].append(theory_centrals)
     for key, item in theories_by_process.items():
