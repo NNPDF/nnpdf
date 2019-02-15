@@ -17,23 +17,11 @@ meta:
     title: Effective Exponents
     keywords: [eff_exp]
 
-template_text: |
-  ---
-  title: Effective exponents
-  keywords: [eff_exp]
-  ---
-  {@with fits@}
-  
-  Effective exponents table for {@fit@}
-  -----------
-  {@effective_exponents_table@}
+runcard_report: 
+  meta: null
+  template: runcardreport.md
 
-  Effective exponents yaml-card for {@fit@}
-  -----------
-  ```yaml
-  {@next_effective_exponents_yaml@}
-  ```
-  {@endwith@}
+template: report.md
 
 actions_:
   - report(main=true)
