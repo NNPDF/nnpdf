@@ -16,8 +16,8 @@ initial_dir = os.path.abspath(args.initial)
 if args.initial[-1] == '/':
     args.initial = args.initial[:-1] 
     pass 
-
 initial_fit_name = os.path.basename(args.initial)
+
 def change_name(initial, final):
     """Function that takes initial fit name and final fit name
     and performs the renaming"""
@@ -75,9 +75,13 @@ def main():
     copied_fit = pathlib.Path(initial_fit_name + 'copy')
     fit = pathlib.Path(initial_fit_name)
     if copied_fit.exists():
+        if pathlib.Path(args.final).exists():
+            raise Exception("Requested fit name already exists")
         change_name(initial_fit_name, args.final)
         fit.rename(args.final)
         copied_fit.rename(initial_fit_name)
     else:   
+        if pathlib.Path(args.final).exists():
+            raise Exception("Requested fit name already exists")
         change_name(initial_fit_name, args.final)
         fit.rename(args.final)
