@@ -26,8 +26,6 @@ from validphys.plotoptions import get_info
 from validphys import plotutils
 from validphys.checks import check_two_dataspecs
 
-from IPython import embed
-
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values,
@@ -678,15 +676,12 @@ def experiments_chi2_table_diagtheory(experiments, pdf,
                                   abs_chi2_data_diagtheory_experiment,
                                   abs_chi2_data_diagtheory_dataset)
 
-def matrix_plot_labels(df, plot_labels:(str, type(None)) = None):
+def matrix_plot_labels(df):
     if len(df.index[0]) == 3:
         proclabels = [x[0] for x in df.index]
         dslabels = [x[1] for x in df.index]
         points = [x[2] for x in df.index]
-#        if plot_labels == "process":
         labels = proclabels
-#        else:
-#            labels = dslabels
     elif len(df.index[0]) == 2:
         dslabels = [x[0] for x in df.index]
         points = [x[1] for x in df.index]
@@ -864,20 +859,17 @@ def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat,
     """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory"""
     l = len(theoryids)
     data = np.abs(experiments_data)
-    df_theory = pd.DataFrame(theory_covmat_custom.values, index=dataset_index_byprocess,
-				columns=dataset_index_byprocess)
-    sqrtdiags1 = np.sqrt(np.diag(df_theory))/data
+    sqrtdiags1 = np.sqrt(np.diag(theory_covmat_custom))/data
+    sqrtdiags1 = pd.DataFrame(sqrtdiags1.values, index=dataset_index_byprocess)
     sqrtdiags1.sort_index(0,inplace=True)
 #    sqrtdiags1.sort_index(1,inplace=True)
-    df_experiment = pd.DataFrame(experiments_covmat.values, index=dataset_index_byprocess,
-					columns=dataset_index_byprocess)
-    sqrtdiags2 = np.sqrt(np.diag(df_experiment))/data
+    sqrtdiags2 = np.sqrt(np.diag(experiments_covmat))/data
+    sqrtdiags2 = pd.DataFrame(sqrtdiags2.values, index=dataset_index_byprocess)
     sqrtdiags2.sort_index(0,inplace=True)
-#    sqrtdiags2.sort_index(1,inplace=True)
-    df_total = df_theory + df_experiment
+    df_total = theory_covmat_custom + experiments_covmat
     sqrtdiags3 = np.sqrt(np.diag(df_total))/data
+    sqrtdiags3 = pd.DataFrame(sqrtdiags3.values, index=dataset_index_byprocess)
     sqrtdiags3.sort_index(0,inplace=True)
-#    sqrtdiags3.sort_index(1,inplace=True)
     fig,ax = plt.subplots(figsize=(20,10))
     ax.plot(sqrtdiags2.values, '.', label="Experiment", color="orange")
     ax.plot(sqrtdiags1.values, '.', label="Theory", color = "red")
@@ -905,10 +897,8 @@ def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat,
     b = (np.diag(la.inv(matrix_theory+matrix_experiment)))**(-0.5)/data
     df_a = pd.DataFrame(a, index=dataset_index_byprocess)
     df_a.sort_index(0,inplace=True)
-  #  df_a.sort_index(1,inplace=True)
     df_b = pd.DataFrame(b, index=dataset_index_byprocess)
     df_b.sort_index(0,inplace=True)
- #   df_b.sort_index(1,inplace=True)
     fig,ax = plt.subplots()
     ax.plot(df_a.values, '.', label="Experiment", color="orange")
     ax.plot(df_b.values, '.', label="Experiment + Theory", color="mediumseagreen")
