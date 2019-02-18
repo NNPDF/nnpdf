@@ -70,6 +70,19 @@ def _check_correct_theory_combination(theoryids,
         "Choice of input theories does not correspond to a valid "
         "prescription for theory covariance matrix calculation")
 
+def dataset_index_byprocess(experiments_index):
+    """Return an empy dataframe with index
+       per dataset per point, ordered by process"""
+    dsnames = []
+    ids = experiments_index.get_level_values("id")
+    for dsname in experiments_index.get_level_values("dataset"):
+        dsnames.append(dsname)
+    processnames = [_process_lookup(dsname) for dsname in dsnames]
+    experiments_index.droplevel(level="experiment")
+    newindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
+                                names = ("process", "dataset", "id"))
+    return newindex
+
 def make_scale_var_covmat(predictions):
     """Takes N theory predictions at different scales and applies N-pt scale
     variations to produce a covariance matrix."""
@@ -663,17 +676,27 @@ def experiments_chi2_table_diagtheory(experiments, pdf,
                                   abs_chi2_data_diagtheory_experiment,
                                   abs_chi2_data_diagtheory_dataset)
 
-def matrix_plot_labels(df):
-    explabels = [x[0] for x in df.columns]
-    points = [x[2] for x in df.columns]
-    unique_exp = []
-    unique_exp.append([explabels[0],points[0]])
-    for x in range(len(explabels)-1):
-        if explabels[x+1] != explabels[x]:
-            unique_exp.append([explabels[x+1],x+1])
-    ticklabels = [unique_exp[x][0] for x in range(len(unique_exp))]
-    startlocs = [unique_exp[x][1] for x in range(len(unique_exp))]
-    startlocs += [len(explabels)]
+def matrix_plot_labels(df, plot_by:(str, type(None)) = None):
+    if len(df.columns[0]) == 3:
+        proclabels = [x[0] for x in df.columns]
+        dslabels = [x[1] for x in df.columns]
+        points = [x[2] for x in df.columns]
+        if plot_by == "process":
+            labels = proclabels
+        else:
+            labels = dslabels
+    elif len(df.columns[0]) == 2:
+        dslabels = [x[0] for x in df.columns]
+        points = [x[1] for x in df.columns]
+        labels = dslabels 
+    unique_ds = []
+    unique_ds.append([labels[0],points[0]])
+    for x in range(len(labels)-1):
+        if labels[x+1] != labels[x]:
+            unique_ds.append([labels[x+1],x+1])
+    ticklabels = [unique_ds[x][0] for x in range(len(unique_ds))]
+    startlocs = [unique_ds[x][1] for x in range(len(unique_ds))]
+    startlocs += [len(labels)]
     ticklocs = [0 for x in range(len(startlocs)-1)]
     for i in range(len(startlocs)-1):
         ticklocs[i] = 0.5*(startlocs[i+1]+startlocs[i])
