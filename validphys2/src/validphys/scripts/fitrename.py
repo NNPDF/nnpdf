@@ -101,7 +101,7 @@ def main():
         error(f"Destination path {dest.absolute()} already exists.")
     if args.copy:
         with tempfile.TemporaryDirectory(dir=fitpath.parent) as tmp:
-            tmp = fitpath.with_name(tmp)
+            tmp = pathlib.Path(tmp)
             copied_fit = tmp/initial_fit_name
             shutil.copytree(fitpath, copied_fit, symlinks=True)
             newpath = change_name(copied_fit, args.final)
