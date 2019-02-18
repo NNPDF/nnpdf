@@ -1,87 +1,112 @@
 #!/usr/bin/env python
-import NNPDF as nnpath 
 import argparse
 import os
-import pathlib, shutil
+import pathlib
+import shutil
+import sys
+import tempfile
+
+import NNPDF as nnpath
 
 #Taking command line arguments
-parser = argparse.ArgumentParser(description = 'Script to rename fits')
-parser.add_argument('initial', help='Name of the fit to be changed')
-parser.add_argument('final', help='Desired new name of fit')
-parser.add_argument('-r', '--result_path', action='store_true', help='Use to change name of a fit in results path')
-parser.add_argument('-c', '--copy', action='store_true', help='Use to create a copy of the original fit')
-args = parser.parse_args()
+def process_args():
+    parser = argparse.ArgumentParser(description='Script to rename fits')
+    parser.add_argument('initial', help='Name of the fit to be changed')
+    parser.add_argument('final', help='Desired new name of fit')
+    parser.add_argument(
+        '-r',
+        '--result_path',
+        action='store_true',
+        help='Use to change name of a fit in results path')
+    parser.add_argument(
+        '-c',
+        '--copy',
+        action='store_true',
+        help='Use to create a copy of the original fit')
+    args = parser.parse_args()
+    return args
 
-initial_dir = os.path.abspath(args.initial)
-if args.initial[-1] == '/':
-    args.initial = args.initial[:-1] 
-    pass 
-initial_fit_name = os.path.basename(args.initial)
 
-def change_name(initial, final):
+def rename_pdf(pdf_folder, initial_fit_name, final_name):
+    for item in os.listdir(pdf_folder):
+        p = pdf_folder/item
+        if p.is_symlink():
+            replica = p.resolve().parent.name
+            pointer = f'../../nnfit/{replica}/{final_name}.dat'
+            p.unlink()
+            p.symlink_to(pointer)
+        newname = p.name.replace(initial_fit_name, final_name)
+        p.rename(p.with_name(newname))
+    pdf_folder.rename(pdf_folder.with_name(final_name))
+
+
+def rename_nnfit(nnfit_path, initial_fit_name, final_name):
+    info_file = nnfit_path/f'{initial_fit_name}.info'
+    info_file.rename(info_file.with_name(f'{final_name}.info'))
+    #Some older fits have the PDF here
+    pdf_folder = nnfit_path / initial_fit_name
+    if pdf_folder.is_dir():
+        rename_pdf(pdf_folder, initial_fit_name, final_name)
+    #Change replica names
+    for item in nnfit_path.glob('replica*'):
+        if item.is_dir():
+            files = item.glob(initial_fit_name + '*')
+            for i in files:
+                newname = i.name.replace(initial_fit_name, final_name)
+                i.rename(newname)
+
+
+def rename_postfit(postfit_path, initial_fit_name, final_name):
+    pdf_folder = postfit_path / initial_fit_name
+    rename_pdf(pdf_folder, initial_fit_name, final_name)
+    os.system(f'sed -i -e "s/{initial_fit_name}/{final_name}/g" {postfit_path/"postfit.log"}')
+
+def change_name(initial_path, final_name):
     """Function that takes initial fit name and final fit name
     and performs the renaming"""
-    os.chdir(os.path.abspath(initial))
-    nnfit = pathlib.Path('nnfit') 
+    initial_fit_name = initial_path.name
+    nnfit = initial_path/'nnfit'
     if nnfit.exists():
-        os.chdir('nnfit')
-        #Change .info filename
-        info_file = pathlib.Path(f'{initial_fit_name}.info')
-        info_file.rename(f'{final}.info')
-
-        #Change replica names
-        for item in os.listdir():
-            q = pathlib.Path(item)
-            if q.is_dir():
-                os.chdir(item)
-                p = pathlib.Path('.')
-                files = list(p.glob(initial_fit_name + '*'))
-                for i in files:
-                    i.rename(final + i.suffix)
-                os.chdir('..')
-        os.chdir('..')
-
-    postfit = pathlib.Path('postfit')
+        rename_nnfit(nnfit, initial_fit_name, final_name)
+    postfit = initial_path/'postfit'
     if postfit.exists():
-        os.chdir('postfit')
-        folder = pathlib.Path(initial)
-        folder.rename(final)
-        os.system('sed -i -e "s/{}/{}/g" postfit.log'.format(initial, final))
-
+        rename_postfit(postfit, initial_fit_name, final_name)
         #Change symlinks
-        os.chdir(final)
-        for item in os.listdir():
-            p = pathlib.Path(item)
-            if p.is_symlink():
-                replica = p.resolve().parent.name
-                pointer = f'../../nnfit/{replica}/{final}.dat' 
-                p.unlink()
-                p.symlink_to(pointer)
-                p.rename(p.name.replace(initial, final))
-            else:
-                p.rename(p.name.replace(initial, final))
-        os.chdir('../../..')
+    newpath = initial_path.with_name(final_name)
+    initial_path.rename(newpath)
+    return newpath
 
-    pass
+
+def error(msg):
+    #TODO: could do some fancier handling like colored logs or whatnot
+    sys.exit(f"ERROR: {msg}")
 
 def main():
+    args = process_args()
+    initial_dir = pathlib.Path(args.initial)
+    initial_fit_name = initial_dir.name
     if args.result_path:
-        os.chdir(nnpath.get_results_path())
+        if len(initial_dir.parts) != 1:
+            error("Enter a fit name and not a path with the -r option")
+        fitpath = pathlib.Path(nnpath.get_results_path())/initial_fit_name
     else:
-        os.chdir(initial_dir + '/..')
-    if args.copy:
-        shutil.copytree(initial_fit_name, initial_fit_name + 'copy', symlinks=True)
+        fitpath = initial_dir
+    if not fitpath.is_dir():
+        error(f"Could not find fit. Path '{fitpath.absolute()}' is not a directory.")
+    if not (fitpath/'filter.yml').exists():
+        error(f"Path {fitpath.absolute()} does not appear to be a fit. "
+                "File 'filter.yml' not found in the directory")
 
-    copied_fit = pathlib.Path(initial_fit_name + 'copy')
-    fit = pathlib.Path(initial_fit_name)
-    if copied_fit.exists():
-        if pathlib.Path(args.final).exists():
-            raise Exception("Requested fit name already exists")
-        change_name(initial_fit_name, args.final)
-        fit.rename(args.final)
-        copied_fit.rename(initial_fit_name)
-    else:   
-        if pathlib.Path(args.final).exists():
-            raise Exception("Requested fit name already exists")
-        change_name(initial_fit_name, args.final)
-        fit.rename(args.final)
+    dest = fitpath.with_name(args.final)
+    if dest.exists():
+        error(f"Destination path {dest.absolute()} already exists.")
+    if args.copy:
+        with tempfile.TemporaryDirectory(dir=fitpath.parent) as tmp:
+            tmp = fitpath.with_name(tmp)
+            copied_fit = tmp/initial_fit_name
+            shutil.copytree(fitpath, copied_fit, symlinks=True)
+            newpath = change_name(copied_fit, args.final)
+            newpath.rename(dest)
+
+    else:
+        change_name(fitpath, args.final)
