@@ -3,7 +3,6 @@ import argparse
 import os
 import pathlib
 import shutil
-import sys
 import tempfile
 
 import NNPDF as nnpath
@@ -75,10 +74,9 @@ def change_name(initial_path, final_name):
     initial_path.rename(newpath)
     return newpath
 
-
-def error(msg):
-    #TODO: could do some fancier handling like colored logs or whatnot
-    sys.exit(f"ERROR: {msg}")
+class FitExistsError(FileExistsError): pass
+class FitNotFoundError(FileNotFoundError): pass
+class InputError(SyntaxError): pass
 
 def main():
     args = process_args()
@@ -86,19 +84,19 @@ def main():
     initial_fit_name = initial_dir.name
     if args.result_path:
         if len(initial_dir.parts) != 1:
-            error("Enter a fit name and not a path with the -r option")
+            raise InputError("Enter a fit name and not a path with the -r option")
         fitpath = pathlib.Path(nnpath.get_results_path())/initial_fit_name
     else:
         fitpath = initial_dir
     if not fitpath.is_dir():
-        error(f"Could not find fit. Path '{fitpath.absolute()}' is not a directory.")
+        raise FitNotFoundError(f"Could not find fit. Path '{fitpath.absolute()}' is not a directory.")
     if not (fitpath/'filter.yml').exists():
-        error(f"Path {fitpath.absolute()} does not appear to be a fit. "
+        raise FitNotFoundError(f"Path {fitpath.absolute()} does not appear to be a fit. "
                 "File 'filter.yml' not found in the directory")
 
     dest = fitpath.with_name(args.final)
     if dest.exists():
-        error(f"Destination path {dest.absolute()} already exists.")
+        raise FitExistsError(f"Destination path {dest.absolute()} already exists.")
     if args.copy:
         with tempfile.TemporaryDirectory(dir=fitpath.parent) as tmp:
             tmp = pathlib.Path(tmp)
