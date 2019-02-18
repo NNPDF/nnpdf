@@ -53,7 +53,7 @@ def rename_nnfit(nnfit_path, initial_fit_name, final_name):
             files = item.glob(initial_fit_name + '*')
             for i in files:
                 newname = i.name.replace(initial_fit_name, final_name)
-                i.rename(newname)
+                i.rename(item/newname)
 
 
 def rename_postfit(postfit_path, initial_fit_name, final_name):
@@ -71,7 +71,6 @@ def change_name(initial_path, final_name):
     postfit = initial_path/'postfit'
     if postfit.exists():
         rename_postfit(postfit, initial_fit_name, final_name)
-        #Change symlinks
     newpath = initial_path.with_name(final_name)
     initial_path.rename(newpath)
     return newpath
