@@ -4,7 +4,9 @@ import os
 import pathlib
 import shutil
 import tempfile
+import sys
 
+from reportengine import colors
 import NNPDF as nnpath
 
 #Taking command line arguments
@@ -83,16 +85,28 @@ def main():
     initial_dir = pathlib.Path(args.initial)
     initial_fit_name = initial_dir.name
     if args.result_path:
-        if len(initial_dir.parts) != 1:
-            raise InputError("Enter a fit name and not a path with the -r option")
+        try:
+            if len(initial_dir.parts) != 1:
+                raise InputError("Enter a fit name and not a path with the -r option")
+        except InputError as e:
+            print(colors.color_exception(e.__class__, e, e.__traceback__))
+            sys.exit(1)
         fitpath = pathlib.Path(nnpath.get_results_path())/initial_fit_name
     else:
         fitpath = initial_dir
-    if not fitpath.is_dir():
-        raise FitNotFoundError(f"Could not find fit. Path '{fitpath.absolute()}' is not a directory.")
-    if not (fitpath/'filter.yml').exists():
-        raise FitNotFoundError(f"Path {fitpath.absolute()} does not appear to be a fit. "
-                "File 'filter.yml' not found in the directory")
+    try:
+        if not fitpath.is_dir():
+            raise FitNotFoundError(f"Could not find fit. Path '{fitpath.absolute()}' is not a directory.")
+    except FitNotFoundError as e:
+        print(colors.color_exception(e.__class__, e, e.__traceback__))
+        sys.exit(1)
+    try:
+        if not (fitpath/'filter.yml').exists():
+            raise FitNotFoundError(f"Path {fitpath.absolute()} does not appear to be a fit. "
+                    "File 'filter.yml' not found in the directory")
+    except FitNotFoundError as e:
+        print(colors.color_exception(e.__class__, e, e.__traceback__))
+        sys.exit(1)
 
     dest = fitpath.with_name(args.final)
     if dest.exists():
