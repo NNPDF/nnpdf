@@ -6,29 +6,29 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
   fstream f1, f2, f3;
 
   // Data files
-  stringstream datafile1("");
+  stringstream datafile("");
   string filename1;
   filename1 = "ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP";
-  datafile1 << dataPath()
+  datafile << dataPath()
            << "rawdata/" << filename1 << "/" << filename1 << ".data";
-  f1.open(datafile1.str().c_str(), ios::in);
+  f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail())
   {
-    cerr << "Error opening data file " << datafile1.str() << endl;
+    cerr << "Error opening data file " << datafile.str() << endl;
     exit(-1);
   }
 
-  stringstream datafile2("");
+  stringstream sysfile("");
   string filename2;
   filename2 = "ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM_SYS_BREAKDOWN";
-  datafile2 << dataPath()
-           << "rawdata/" << filename1 << "/" << filename2 << ".data";
-  f2.open(datafile2.str().c_str(), ios::in);
+  sysfile << dataPath()
+          << "rawdata/" << filename1 << "/" << filename2 << ".data";
+  f2.open(sysfile.str().c_str(), ios::in);
 
   if (f2.fail())
   {
-    cerr << "Error opening data file " << datafile2.str() << endl;
+    cerr << "Error opening data file " << sysfile.str() << endl;
     exit(-1);
   }
 
@@ -61,15 +61,15 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
   for (int i=0; i<fNData; i++)
   {
     double rap_top; // Rapidity of top quark
-    double rap_top_high, rap_top_low; // Limits of bin
+    double rap_top_low, rap_top_high; // Limits of bin
     double fstat_percentage; // Percentage statistical uncertainty
     string unneeded_info;
 
     getline(f1,line);
     istringstream lstream(line);
 
-    lstream >> rap_top_high >> unneeded_info >> rap_top_low;
-    rap_top = 0.5*(rap_top_high + rap_top_low);
+    lstream >> rap_top_low >> unneeded_info >> rap_top_high;
+    rap_top = 0.5*(rap_top_low + rap_top_high);
 
     // Skip over next eight elements of line
     for (int j=0; j<8; j++)
