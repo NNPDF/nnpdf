@@ -26,6 +26,8 @@ from validphys.plotoptions import get_info
 from validphys import plotutils
 from validphys.checks import check_two_dataspecs
 
+from IPython import embed
+
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values,
@@ -71,7 +73,7 @@ def _check_correct_theory_combination(theoryids,
         "prescription for theory covariance matrix calculation")
 
 def dataset_index_byprocess(experiments_index):
-    """Return an empy dataframe with index
+    """Return an empty dataframe with index
        per dataset per point, ordered by process"""
     dsnames = []
     ids = experiments_index.get_level_values("id")
@@ -677,17 +679,17 @@ def experiments_chi2_table_diagtheory(experiments, pdf,
                                   abs_chi2_data_diagtheory_dataset)
 
 def matrix_plot_labels(df, plot_labels:(str, type(None)) = None):
-    if len(df.columns[0]) == 3:
-        proclabels = [x[0] for x in df.columns]
-        dslabels = [x[1] for x in df.columns]
-        points = [x[2] for x in df.columns]
-        if plot_labels == "process":
-            labels = proclabels
-        else:
-            labels = dslabels
-    elif len(df.columns[0]) == 2:
-        dslabels = [x[0] for x in df.columns]
-        points = [x[1] for x in df.columns]
+    if len(df.index[0]) == 3:
+        proclabels = [x[0] for x in df.index]
+        dslabels = [x[1] for x in df.index]
+        points = [x[2] for x in df.index]
+#        if plot_labels == "process":
+        labels = proclabels
+#        else:
+#            labels = dslabels
+    elif len(df.index[0]) == 2:
+        dslabels = [x[0] for x in df.index]
+        points = [x[1] for x in df.index]
         labels = dslabels 
     unique_ds = []
     unique_ds.append([labels[0],points[0]])
@@ -708,6 +710,7 @@ def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
     df = pd.DataFrame(covmat.values, index=dataset_index_byprocess,
 			columns=dataset_index_byprocess)
     df.sort_index(0, inplace=True)
+    df.sort_index(1, inplace=True)
     matrix = df.values
     fig,ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(100*matrix,
@@ -730,6 +733,7 @@ def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
     df = pd.DataFrame(corrmat.values, index=dataset_index_byprocess,
 		 	columns=dataset_index_byprocess)
     df.sort_index(0, inplace=True)
+    df.sort_index(1, inplace=True)
     matrix = df.values
     fig, ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
@@ -742,97 +746,116 @@ def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
     return fig
 
 @figure
-def plot_normexpcovmat_heatmap(experiments_normcovmat):
+def plot_normexpcovmat_heatmap(experiments_normcovmat, dataset_index_byprocess):
     """Matrix plot of the experiment covariance matrix normalised to data."""
     fig = plot_covmat_heatmap(experiments_normcovmat,
-                              "Experiment covariance matrix")
+                              "Experiment covariance matrix",
+				dataset_index_byprocess)
     return fig
 
 @figure
-def plot_expcorrmat_heatmap(experiments_corrmat):
+def plot_expcorrmat_heatmap(experiments_corrmat, dataset_index_byprocess):
     """Matrix plot of the experiment correlation matrix"""
     fig = plot_corrmat_heatmap(experiments_corrmat,
-                               "Experiment correlation matrix")
+                               "Experiment correlation matrix",
+				dataset_index_byprocess)
     return fig
 
 @figure
-def plot_normthblockcovmat_heatmap(theory_normblockcovmat):
+def plot_normthblockcovmat_heatmap(theory_normblockcovmat, dataset_index_byprocess):
     """Matrix plot for block diagonal theory covariance matrix"""
     fig = plot_covmat_heatmap(theory_normblockcovmat,
-                              "Block diagonal theory covariance matrix by dataset")
+                              "Block diagonal theory covariance matrix by dataset",
+				dataset_index_byprocess)
     return fig
 
 @figure
-def plot_normthcovmat_heatmap_custom(theory_normcovmat_custom, theoryids):
+def plot_normthcovmat_heatmap_custom(theory_normcovmat_custom, theoryids,
+					dataset_index_byprocess):
     """Matrix plot for block diagonal theory covariance matrix by process type"""
     l = len(theoryids)
     fig = plot_covmat_heatmap(theory_normcovmat_custom,
-                              f"Theory covariance matrix for {l} points")
+                              f"Theory covariance matrix for {l} points",
+				dataset_index_byprocess)
     return fig
 
 @figure
-def plot_thblockcorrmat_heatmap(theory_blockcorrmat):
+def plot_thblockcorrmat_heatmap(theory_blockcorrmat, dataset_index_byprocess):
     """Matrix plot of the theory correlation matrix"""
     fig = plot_corrmat_heatmap(theory_blockcorrmat,
-                               "Theory correlation matrix block diagonal by dataset")
+                               "Theory correlation matrix block diagonal by dataset",
+				dataset_index_byprocess)
     return fig
 
 @figure
-def plot_thcorrmat_heatmap_custom(theory_corrmat_custom, theoryids):
+def plot_thcorrmat_heatmap_custom(theory_corrmat_custom, theoryids,
+					dataset_index_byprocess):
     """Matrix plot of the theory correlation matrix, correlations by process type"""
     l = len(theoryids)
     fig = plot_corrmat_heatmap(theory_corrmat_custom,
-                               f"Theory correlation matrix for {l} points")
+                               f"Theory correlation matrix for {l} points",
+				dataset_index_byprocess)
     return fig
 
 @figure
-def plot_normexpplusblockthcovmat_heatmap(experimentsplusblocktheory_normcovmat):
+def plot_normexpplusblockthcovmat_heatmap(experimentsplusblocktheory_normcovmat,
+						dataset_index_byprocess):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
     fig = plot_covmat_heatmap(experimentsplusblocktheory_normcovmat,
-                              "Experiment + theory (block diagonal by dataset) covariance matrix")
+                              "Experiment + theory (block diagonal by dataset) covariance matrix",
+	dataset_index_byprocess)
     return fig
 
 @figure
-def plot_normexpplusthcovmat_heatmap_custom(experimentsplustheory_normcovmat_custom, theoryids):
+def plot_normexpplusthcovmat_heatmap_custom(experimentsplustheory_normcovmat_custom, 
+					theoryids, dataset_index_byprocess):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
     l = len(theoryids)
     fig = plot_covmat_heatmap(experimentsplustheory_normcovmat_custom,
-                              f"Experiment + theory covariance matrix for {l} points")
+                              f"Experiment + theory covariance matrix for {l} points",
+				dataset_index_byprocess)
     return fig
 
 @figure
-def plot_expplusblockthcorrmat_heatmap(experimentsplusblocktheory_corrmat):
+def plot_expplusblockthcorrmat_heatmap(experimentsplusblocktheory_corrmat,
+					dataset_index_byprocess):
     """Matrix plot of the exp + theory correlation matrix"""
     fig = plot_corrmat_heatmap(experimentsplusblocktheory_corrmat,
-                               "Experiment + theory (block diagonal by dataset) correlation matrix")
+                               "Experiment + theory (block diagonal by dataset) correlation matrix",
+	dataset_index_byprocess)
     return fig
 
 @figure
-def plot_expplusthcorrmat_heatmap_custom(experimentsplustheory_corrmat_custom, theoryids):
+def plot_expplusthcorrmat_heatmap_custom(experimentsplustheory_corrmat_custom, 
+					theoryids, dataset_index_byprocess):
     """Matrix plot of the exp + theory correlation matrix"""
     l = len(theoryids)
     fig = plot_corrmat_heatmap(experimentsplustheory_corrmat_custom,
-                               f"Experiment + theory correlation matrix for {l} points")
+                               f"Experiment + theory correlation matrix for {l} points", dataset_index_byprocess)
     return fig
 
 @figure
-def plot_blockcovdiff_heatmap(theory_block_diag_covmat, experiments_covmat):
+def plot_blockcovdiff_heatmap(theory_block_diag_covmat, experiments_covmat,
+				dataset_index_byprocess):
     """Matrix plot (thcov + expcov)/expcov"""
     df = (theory_block_diag_covmat.as_matrix()+experiments_covmat.values
           )/np.mean(experiments_covmat.values)
     fig = plot_covmat_heatmap(df,"(Theory + experiment)/mean(experiment)" +
-                              "for block diagonal theory covmat by dataset")
+                              "for block diagonal theory covmat by dataset",
+				dataset_index_byprocess)
     return fig
 
 @figure
-def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat, theoryids):
+def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat, 
+				theoryids, dataset_index_byprocess):
     """Matrix plot (thcov + expcov)/expcov"""
     l = len(theoryids)
     df = (theory_covmat_custom+experiments_covmat
           )/np.mean(experiments_covmat.values)
     fig = plot_covmat_heatmap(df,
                               "(Theory + experiment)/mean(experiment)"
-                              + f"covariance matrices for {l} points")
+                              + f"covariance matrices for {l} points",
+				dataset_index_byprocess)
     return fig
 
 @figure
@@ -845,13 +868,16 @@ def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat,
 				columns=dataset_index_byprocess)
     sqrtdiags1 = np.sqrt(np.diag(df_theory))/data
     sqrtdiags1.sort_index(0,inplace=True)
+#    sqrtdiags1.sort_index(1,inplace=True)
     df_experiment = pd.DataFrame(experiments_covmat.values, index=dataset_index_byprocess,
 					columns=dataset_index_byprocess)
     sqrtdiags2 = np.sqrt(np.diag(df_experiment))/data
     sqrtdiags2.sort_index(0,inplace=True)
+#    sqrtdiags2.sort_index(1,inplace=True)
     df_total = df_theory + df_experiment
     sqrtdiags3 = np.sqrt(np.diag(df_total))/data
     sqrtdiags3.sort_index(0,inplace=True)
+#    sqrtdiags3.sort_index(1,inplace=True)
     fig,ax = plt.subplots(figsize=(20,10))
     ax.plot(sqrtdiags2.values, '.', label="Experiment", color="orange")
     ax.plot(sqrtdiags1.values, '.', label="Theory", color = "red")
@@ -879,8 +905,10 @@ def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat,
     b = (np.diag(la.inv(matrix_theory+matrix_experiment)))**(-0.5)/data
     df_a = pd.DataFrame(a, index=dataset_index_byprocess)
     df_a.sort_index(0,inplace=True)
+  #  df_a.sort_index(1,inplace=True)
     df_b = pd.DataFrame(b, index=dataset_index_byprocess)
     df_b.sort_index(0,inplace=True)
+ #   df_b.sort_index(1,inplace=True)
     fig,ax = plt.subplots()
     ax.plot(df_a.values, '.', label="Experiment", color="orange")
     ax.plot(df_b.values, '.', label="Experiment + Theory", color="mediumseagreen")
