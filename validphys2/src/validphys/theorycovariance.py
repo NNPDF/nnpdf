@@ -676,12 +676,12 @@ def experiments_chi2_table_diagtheory(experiments, pdf,
                                   abs_chi2_data_diagtheory_experiment,
                                   abs_chi2_data_diagtheory_dataset)
 
-def matrix_plot_labels(df, plot_by:(str, type(None)) = None):
+def matrix_plot_labels(df, plot_labels:(str, type(None)) = None):
     if len(df.columns[0]) == 3:
         proclabels = [x[0] for x in df.columns]
         dslabels = [x[1] for x in df.columns]
         points = [x[2] for x in df.columns]
-        if plot_by == "process":
+        if plot_labels == "process":
             labels = proclabels
         else:
             labels = dslabels
@@ -703,9 +703,11 @@ def matrix_plot_labels(df, plot_by:(str, type(None)) = None):
     return ticklocs, ticklabels
 
 @figure
-def plot_covmat_heatmap(covmat, title):
+def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
     """Matrix plot of a covariance matrix"""
-    df = covmat
+    df = pd.DataFrame(covmat.values, index=dataset_index_byprocess,
+			columns=dataset_index_byprocess)
+    df.sort_index(0, inplace=True)
     matrix = df.values
     fig,ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(100*matrix,
@@ -723,9 +725,11 @@ def plot_covmat_heatmap(covmat, title):
     return fig
 
 @figure
-def plot_corrmat_heatmap(corrmat, title):
+def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
     """Matrix plot of a correlation matrix"""
-    df = corrmat
+    df = pd.DataFrame(corrmat.values, index=dataset_index_byprocess,
+		 	columns=dataset_index_byprocess)
+    df.sort_index(0, inplace=True)
     matrix = df.values
     fig, ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
@@ -832,21 +836,27 @@ def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat, theory
     return fig
 
 @figure
-def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat, experiments_data, theoryids):
+def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat, 
+			experiments_data, theoryids, dataset_index_byprocess):
     """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory"""
     l = len(theoryids)
     data = np.abs(experiments_data)
-    df_theory = theory_covmat_custom
-    df_experiment = experiments_covmat
+    df_theory = pd.DataFrame(theory_covmat_custom.values, index=dataset_index_byprocess,
+				columns=dataset_index_byprocess)
+    sqrtdiags1 = np.sqrt(np.diag(df_theory))/data
+    sqrtdiags1.sort_index(0,inplace=True)
+    df_experiment = pd.DataFrame(experiments_covmat.values, index=dataset_index_byprocess,
+					columns=dataset_index_byprocess)
+    sqrtdiags2 = np.sqrt(np.diag(df_experiment))/data
+    sqrtdiags2.sort_index(0,inplace=True)
     df_total = df_theory + df_experiment
-    sqrtdiags1 = np.sqrt(np.diag(df_theory.values))
-    sqrtdiags2 = np.sqrt(np.diag(df_experiment.values))
-    sqrtdiags3 = np.sqrt(np.diag(df_total.values))
+    sqrtdiags3 = np.sqrt(np.diag(df_total))/data
+    sqrtdiags3.sort_index(0,inplace=True)
     fig,ax = plt.subplots(figsize=(20,10))
-    ax.plot((sqrtdiags2/data).values, '.', label="Experiment", color="orange")
-    ax.plot((sqrtdiags1/data).values, '.', label="Theory", color = "red")
-    ax.plot((sqrtdiags3/data).values, '.', label="Total", color = "blue")
-    ticklocs, ticklabels = matrix_plot_labels(df_experiment)
+    ax.plot(sqrtdiags2.values, '.', label="Experiment", color="orange")
+    ax.plot(sqrtdiags1.values, '.', label="Theory", color = "red")
+    ax.plot(sqrtdiags3.values, '.', label="Total", color = "blue")
+    ticklocs, ticklabels = matrix_plot_labels(sqrtdiags1)
     plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=6)
     ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{|D_i|}$")
     ax.set_ylim([0,0.5])
@@ -865,12 +875,16 @@ def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat,
     df_experiment = experiments_covmat
     matrix_theory = df_theory.values
     matrix_experiment = df_experiment.values
-    a = (np.diag(la.inv(matrix_experiment)))**(-0.5)
-    b = (np.diag(la.inv(matrix_theory+matrix_experiment)))**(-0.5)
+    a = (np.diag(la.inv(matrix_experiment)))**(-0.5)/data
+    b = (np.diag(la.inv(matrix_theory+matrix_experiment)))**(-0.5)/data
+    df_a = pd.DataFrame(a, index=dataset_index_byprocess)
+    df_a.sort_index(0,inplace=True)
+    df_b = pd.DataFrame(b, index=dataset_index_byprocess)
+    df_b.sort_index(0,inplace=True)
     fig,ax = plt.subplots()
-    ax.plot((a/data).values, '.', label="Experiment", color="orange")
-    ax.plot((b/data).values, '.', label="Experiment + Theory", color="mediumseagreen")
-    ticklocs, ticklabels = matrix_plot_labels(df_experiment)
+    ax.plot(df_a.values, '.', label="Experiment", color="orange")
+    ax.plot(df_b.values, '.', label="Experiment + Theory", color="mediumseagreen")
+    ticklocs, ticklabels = matrix_plot_labels(df_a)
     plt.xticks(ticklocs, ticklabels, rotation="vertical")
     ax.set_ylabel(r"$\frac{1}{D_i}\frac{1}{\sqrt{[cov^{-1}_]{ii}}}$")
     ax.set_title(f"Diagonal impact of adding theory covariance matrix for {l} points")
