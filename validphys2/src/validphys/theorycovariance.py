@@ -71,7 +71,7 @@ def _check_correct_theory_combination(theoryids,
         "prescription for theory covariance matrix calculation")
 
 def dataset_index_byprocess(experiments_index):
-    """Return an empty dataframe with index
+    """Return a multiindex with index
        per dataset per point, ordered by process"""
     dsnames = []
     ids = experiments_index.get_level_values("id")
@@ -677,6 +677,11 @@ def experiments_chi2_table_diagtheory(experiments, pdf,
                                   abs_chi2_data_diagtheory_dataset)
 
 def matrix_plot_labels(df):
+    """Returns the tick locations and labels based on a dataframe 
+    to be plotted. The dataframe is assumed to be multiindexed by
+    (process, dataset, points) or else (dataset, points). The tick
+    location is in the centre of the dataset, and labelling is by
+    the outermost index of the multiindex."""
     if len(df.index[0]) == 3:
         proclabels = [x[0] for x in df.index]
         dslabels = [x[1] for x in df.index]
