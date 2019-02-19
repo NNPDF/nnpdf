@@ -708,8 +708,8 @@ def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
     """Matrix plot of a covariance matrix"""
     df = pd.DataFrame(covmat.values, index=dataset_index_byprocess,
 			columns=dataset_index_byprocess)
-    df.sort_index(0, inplace=True, sort_remaining=True)
-    df.sort_index(1, inplace=True, sort_remaining=True)
+    df.sort_index(0, inplace=True)
+    df.sort_index(1, inplace=True)
     matrix = df.values
     fig,ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(100*matrix,
@@ -736,8 +736,8 @@ def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
     """Matrix plot of a correlation matrix"""
     df = pd.DataFrame(corrmat.values, index=dataset_index_byprocess,
 		 	columns=dataset_index_byprocess)
-    df.sort_index(0, inplace=True, sort_remaining=True)
-    df.sort_index(1, inplace=True, sort_remaining=True)
+    df.sort_index(0, inplace=True)
+    df.sort_index(1, inplace=True)
     matrix = df.values
     fig, ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
@@ -875,14 +875,14 @@ def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat,
     data = np.abs(experiments_data)
     sqrtdiags_th = np.sqrt(np.diag(theory_covmat_custom))/data
     sqrtdiags_th = pd.DataFrame(sqrtdiags_th.values, index=dataset_index_byprocess)
-    sqrtdiags_th.sort_index(0,inplace=True, sort_remaining=True)
+    sqrtdiags_th.sort_index(0,inplace=True)
     sqrtdiags_exp = np.sqrt(np.diag(experiments_covmat))/data
     sqrtdiags_exp = pd.DataFrame(sqrtdiags_exp.values, index=dataset_index_byprocess)
-    sqrtdiags_exp.sort_index(0,inplace=True, sort_remaining=True)
+    sqrtdiags_exp.sort_index(0,inplace=True)
     df_total = theory_covmat_custom + experiments_covmat
     sqrtdiags_tot = np.sqrt(np.diag(df_total))/data
     sqrtdiags_tot = pd.DataFrame(sqrtdiags_tot.values, index=dataset_index_byprocess)
-    sqrtdiags_tot.sort_index(0,inplace=True, sort_remaining=True)
+    sqrtdiags_tot.sort_index(0,inplace=True)
     fig,ax = plt.subplots(figsize=(20,10))
     ax.plot(sqrtdiags_exp.values, '.', label="Experiment", color="orange")
     ax.plot(sqrtdiags_th.values, '.', label="Theory", color = "red")
@@ -895,7 +895,7 @@ def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat,
     ax.set_ylim([0,0.5])
     ax.set_title(f"Square root of diagonal elements of covariances matrices for {l} points, "
                  + "normalised to absolute value of data",
-                 fontsize=25)
+                 fontsize=20)
     ax.legend(fontsize=20)
     ax.margins(x=0)
     return fig
@@ -910,9 +910,9 @@ def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat,
     inv_exp = (np.diag(la.inv(matrix_experiment)))**(-0.5)/experiments_data
     inv_tot = (np.diag(la.inv(matrix_theory+matrix_experiment)))**(-0.5)/experiments_data
     df_inv_exp = pd.DataFrame(inv_exp, index=dataset_index_byprocess)
-    df_inv_exp.sort_index(0,inplace=True, sort_remaining=True)
+    df_inv_exp.sort_index(0,inplace=True)
     df_inv_tot = pd.DataFrame(inv_tot, index=dataset_index_byprocess)
-    df_inv_tot.sort_index(0,inplace=True, sort_remaining=True)
+    df_inv_tot.sort_index(0,inplace=True)
     fig,ax = plt.subplots()
     ax.plot(df_inv_exp.values, '.', label="Experiment", color="orange")
     ax.plot(df_inv_tot.values, '.', label="Experiment + Theory", color="mediumseagreen")
@@ -922,7 +922,7 @@ def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat,
     ax.set_ylabel(r"$\frac{1}{D_i}\frac{1}{\sqrt{[cov^{-1}_]{ii}}}$", fontsize=30)
     ax.yaxis.set_tick_params(labelsize=20)
     ax.set_title(f"Diagonal impact of adding theory covariance matrix for {l} points",
-                 fontsize=25)
+                 fontsize=20)
     ax.legend(fontsize=20)
     ax.margins(x=0)
     return fig
