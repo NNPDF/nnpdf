@@ -830,7 +830,8 @@ def plot_expplusthcorrmat_heatmap_custom(experimentsplustheory_corrmat_custom,
     """Matrix plot of the exp + theory correlation matrix"""
     l = len(theoryids)
     fig = plot_corrmat_heatmap(experimentsplustheory_corrmat_custom,
-                               f"Experiment + theory correlation matrix for {l} points", dataset_index_byprocess)
+                               f"Experiment + theory correlation matrix for {l} points",
+                               dataset_index_byprocess)
     return fig
 
 @figure
@@ -891,13 +892,10 @@ def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat,
                          experiments_data, theoryids):
     """Plot ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5"""
     l = len(theoryids)
-    data = experiments_data
-    df_theory = theory_covmat_custom
-    df_experiment = experiments_covmat
-    matrix_theory = df_theory.values
-    matrix_experiment = df_experiment.values
-    inv_exp = (np.diag(la.inv(matrix_experiment)))**(-0.5)/data
-    inv_tot = (np.diag(la.inv(matrix_theory+matrix_experiment)))**(-0.5)/data
+    matrix_theory = theory_covmat_custom.values
+    matrix_experiment = experiments_covmat.values
+    inv_exp = (np.diag(la.inv(matrix_experiment)))**(-0.5)/experiments_data
+    inv_tot = (np.diag(la.inv(matrix_theory+matrix_experiment)))**(-0.5)/experiments_data
     df_inv_exp = pd.DataFrame(inv_exp, index=dataset_index_byprocess)
     df_inv_exp.sort_index(0,inplace=True)
     df_inv_tot = pd.DataFrame(inv_tot, index=dataset_index_byprocess)
