@@ -341,27 +341,28 @@ evolution = Basis.from_mapping({
 
 NN31IC = Basis.from_mapping(
     {
-    r'\Sigma': {
-        'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1,
-        'c': 1, 'cbar': 1, 'b': 1, 'bbar': 1, 't': 1, 'tbar': 1},
+        r'\Sigma': {
+            'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1,
+            'c': 1, 'cbar': 1, 'b': 1, 'bbar': 1, 't': 1, 'tbar': 1},
         'g': {'g': 1},
 
-    'V': {
-        'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1,
-        'c': 1, 'cbar': -1, 'b': 1, 'bbar': -1, 't': 1, 'tbar': -1},
+        'V': {
+            'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1,
+            'c': 1, 'cbar': -1, 'b': 1, 'bbar': -1, 't': 1, 'tbar': -1},
 
-    'V3': {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1},
-    'V8': {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': +2},
+        'V3': {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1},
+        'V8': {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': +2},
 
-    'T3': {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1},
-    'T8': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2},
+        'T3': {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1},
+        'T8': {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2},
 
-    r'c^+': {'c': 1, 'cbar': 1},
-    
-    'photon': {'photon': 1},
+        r'c^+': {'c': 1, 'cbar': 1},
+
+        'photon': {'photon': 1},
     },
     aliases={
-        'gluon': 'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma', 'cp': r'c^+'},
+        'gluon': 'g', 'singlet': r'\Sigma', 'sng': r'\Sigma', 'sigma': r'\Sigma', 'cp': r'c^+',
+        'v': 'V', 'v3': 'V3', 'v8': 'V8', 't3': 'T3', 't8': 'T8'},
     default_elements=(r'\Sigma', 'gluon', 'V', 'V3', 'V8', 'T3', 'T8', r'c^+', ))
 
 pdg = Basis.from_mapping({
@@ -373,4 +374,3 @@ r'\bar{u}': {'ubar':1},
 r'\bar{d}': {'dbar':1},
 'c': {'c':1},
 })
-

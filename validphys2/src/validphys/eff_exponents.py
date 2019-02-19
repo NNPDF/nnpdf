@@ -157,14 +157,13 @@ class PreprocessingPlotter(PDFPlotter):
 
             all_vals = []
 
-            if (self.fits != None):
+            if self.fits:
                 dfs = []
                 for fit, pdf, grid in zip(self.fits, self.pdfs, self.xplotting_grids):
                     limits = self.draw(pdf, grid, flstate)
                     if limits is not None:
                         all_vals.append(np.atleast_2d(limits))
                     #here, by default x1_alpha=1e-6,x2_alpha=1e-3,x1_beta=0.65,x2_beta=0.95
-                    #but also do we have to use the internal function??
                     dfs.append(effective_exponents_table_internal(fit, pdf, basis=basis))
 
                 for df in dfs:
@@ -191,9 +190,9 @@ class PreprocessingPlotter(PDFPlotter):
             ax.set_xscale(self.xscale)
             plotutils.frame_center(
                 ax, self.firstgrid.xgrid, np.concatenate(all_vals))
-            if (self.ymin is not None):
+            if self.ymin is not None:
                 ax.set_ylim(bottom=self.ymin)
-            if (self.ymax is not None):
+            if self.ymax is not None:
                 ax.set_ylim(top=self.ymax)
 
             ax.set_xlabel('$x$')
@@ -259,7 +258,7 @@ def plot_alphaEff(
 
 beta_eff_pdfs = collect('beta_eff', ('pdfs',))
 
-@figuregen  
+@figuregen
 @check_pdf_normalize_to
 def plot_betaEff_internal(
     fits, pdfs, beta_eff_pdfs,
@@ -302,7 +301,6 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF, *,
     """
 
     #Reading from the filter
-    fitpath = fit.path
     with open(fit.path/'filter.yml', 'r') as f:
         filtermap = yaml.safe_load(f)
     previous_exponents = filtermap['fitting']['basis']
@@ -366,7 +364,7 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF, *,
                 break
 
         # the gluon/singlet case
-        if fl == r'\Sigma' or fl == "g":
+        if fl in (r'\Sigma', "g"):
             new_alpha_bounds = [
                 alpha_cv[j, 0] - 2*alpha_sigdown[j, 0],
                 min(2, alpha_cv[j, 0] + 2*alpha_sigup[j, 0])]
@@ -393,11 +391,12 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF, *,
 
 effective_exponents_table = collect(
     'effective_exponents_table_internal', ('fitpdfandbasis',))
-
+fmt = lambda a: float(significant_digits(a, 4))
 
 def next_effective_exponents_yaml(fit: FitSpec, effective_exponents_table):
     """-Returns a table in yaml format called NextEffExps.yaml
-       -Prints the yaml table in the report"""
+       -Prints the yaml table in the report
+    """
 
     df_effexps = effective_exponents_table[0]
     #Reading from the filter
@@ -408,24 +407,33 @@ def next_effective_exponents_yaml(fit: FitSpec, effective_exponents_table):
     checked = check_basis(basis, None)
     basis = checked['basis']
     flavours = checked['flavours']
-    for (j, fl) in enumerate(flavours):
+
+
+    for fl in flavours:
         #connect dataframe containing the next eff_exp to yaml card
         for ref_fl in filtermap['fitting']['basis']:
-            if (
-                    ref_fl['fl'] == basis.elementlabel(fl).lower() or
-                    basis.aliases.get(ref_fl['fl']) == basis.elementlabel(fl)):
+            if basis.aliases.get(ref_fl['fl']) == basis.elementlabel(fl):
                 alphas = df_effexps.loc[(f'${fl}$', r'$\alpha$'), ['next Min', 'next Max']].values
                 betas = df_effexps.loc[(f'${fl}$', r'$\beta$'), ['next Min', 'next Max']].values
-                #TODO: Is this really necessary? we already rounded to 3 decimals
-                ref_fl['smallx'] = [float(f"{alpha:4g}") for alpha in alphas]
-                ref_fl['largex'] = [float(f"{beta:4g}") for beta in betas]
+                ref_fl['smallx'] = [fmt(alpha) for alpha in alphas]
+                ref_fl['largex'] = [fmt(beta) for beta in betas]
     s = io.StringIO()
     yaml.safe_dump(filtermap['fitting']['basis'], s)
     return s.getvalue()
 
 def next_effective_exponents_runcard(fit: FitSpec, effective_exponents_table):
-    """Stupid function which returns the fit runcard with the same formatting but the next
-    preprocessing exponents added and t0 iterated
+    """using `effective_exponents_table` this provider outputs the yaml runcard to run
+    a fit with identical input as the specified `fit` with the t0 and preprocessing iterated.
+
+    when declaring this provider in a report, it will be formatted correctly if wrapped in a code
+    block.
+
+    For example:
+    ```yaml
+    {@next_effective_exponents_runcard@}
+    ```
+
+    then the user should be able to simply copy and paste the outputted runcard.
     """
     df_effexps = effective_exponents_table[0]
     with open(fit.path/'filter.yml', 'r') as f:
@@ -444,18 +452,15 @@ def next_effective_exponents_runcard(fit: FitSpec, effective_exponents_table):
             if 'fl' in line and 'smallx' in line:
                 linedict = yaml.safe_load(line)[0]
                 for fl in flavours:
-                    #TODO: just add lower case versions to aliases?
-                    if (
-                    linedict['fl'] == basis.elementlabel(fl).lower() or
-                    basis.aliases.get(linedict['fl']) == basis.elementlabel(fl)):
+                    if basis.aliases.get(linedict['fl']) == basis.elementlabel(fl):
                         alphas = df_effexps.loc[
                             (f'${fl}$', r'$\alpha$'), ['next Min', 'next Max']].values
                         betas = df_effexps.loc[
                             (f'${fl}$', r'$\beta$'), ['next Min', 'next Max']].values
 
-                        linedict['smallx'] = [float(f"{alpha:4g}") for alpha in alphas]
-                        linedict['largex'] = [float(f"{beta:4g}") for beta in betas]
-                # yaml breaks the old style reports - fix that here
+                        linedict['smallx'] = [fmt(alpha) for alpha in alphas]
+                        linedict['largex'] = [fmt(beta) for beta in betas]
+                # yaml breaks the old style reports - fix that here for now
                 if isinstance(linedict['pos'], str):
                     if not warned:
                         log.warning("specifying off in runcard deprecated, changing to bool")
@@ -474,7 +479,7 @@ def next_effective_exponents_runcard(fit: FitSpec, effective_exponents_table):
             #iterate t0 whilst we're here
             elif 't0pdfset' in line:
                 leading_spaces = len(line) - len(line.lstrip(" "))
-                # remove any formatting here, not a disaster
+                # only replicate leading spaces here
                 outstring += leading_spaces*' ' + "t0pdfset: " + f"{fit.name}" + "\n"
             else:
                 outstring += line
