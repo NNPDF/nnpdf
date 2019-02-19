@@ -989,14 +989,17 @@ def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift):
     return pd.DataFrame(mat, columns=index, index=index)
 
 @figure
-def plot_matched_datasets_shift_matrix(matched_datasets_shift_matrix):
+def plot_matched_datasets_shift_matrix(matched_datasets_shift_matrix,
+                                       dataset_index_byprocess):
     """Heatmap plot of matched_datasets_shift_matrix"""
     return plot_covmat_heatmap(matched_datasets_shift_matrix,
-                               "Shift outer product matrix")
+                               "Shift outer product matrix",
+                               dataset_index_byprocess)
 
 @figure
 def plot_matched_datasets_shift_matrix_correlations(
-        matched_datasets_shift_matrix):
+        matched_datasets_shift_matrix,
+        dataset_index_byprocess):
     """Heatmap plot of the correlations of
     matched_datasets_shift_matrix. By construction these are
     zero or one."""
@@ -1008,4 +1011,5 @@ def plot_matched_datasets_shift_matrix_correlations(
         columns=matched_datasets_shift_matrix.columns,
         index=matched_datasets_shift_matrix.index)
     return plot_corrmat_heatmap(
-        corrmat, "Shift outer product normalized (correlation) matrix")
+        corrmat, "Shift outer product normalized (correlation) matrix",
+        dataset_index_byprocess)
