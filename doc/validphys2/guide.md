@@ -603,7 +603,7 @@ development environment for `nnpdf`.
 	buildmaster$ make
 	```
 
-[COMPILERS]: https://conda.io/docs/user-guide/tasks/build-packages/compiler-tools.html
+[COMPILERS]: https://conda.io/projects/conda-build/en/latest/source/resources/compiler-tools.html#compiler-packages
 
 #### Developing Python projects
 
