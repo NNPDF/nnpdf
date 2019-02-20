@@ -1,4 +1,16 @@
 #!/usr/bin/env python
+"""
+        fitrename - tool to rename fits
+
+        fitrename is a script which renames fits from the command line.
+        The path of the initial fit and requested final fit name are provided
+        as command line arguments. Optional flags can be used to request a
+        copy of the original fit or to rename a fit that is in the 
+        NNPDF results path.
+"""
+
+__authors__ = 'Shayan Iranipour, Zahari Kassabov, Michael Wilson'
+
 import argparse
 import os
 import pathlib
