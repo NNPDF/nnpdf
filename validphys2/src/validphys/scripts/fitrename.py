@@ -116,15 +116,16 @@ def main():
     if dest.exists():
         log.error(f"Destination path {dest.absolute()} already exists.")
         sys.exit(1)
-    if args.copy:
-        with tempfile.TemporaryDirectory(dir=fitpath.parent) as tmp:
-            tmp = pathlib.Path(tmp)
-            copied_fit = tmp/initial_fit_name
-            shutil.copytree(fitpath, copied_fit, symlinks=True)
+    with tempfile.TemporaryDirectory(dir=fitpath.parent) as tmp:
+        tmp = pathlib.Path(tmp)
+        copied_fit = tmp/initial_fit_name
+        shutil.copytree(fitpath, copied_fit, symlinks=True)
+        if args.copy:
             newpath = change_name(copied_fit, args.final)
             newpath.rename(dest)
             log.info("Renaming completed with copy")
-
-    else:
-        change_name(fitpath, args.final)
-        log.info("Renaming completed")
+        else:
+            newpath = change_name(copied_fit, args.final)
+            newpath.rename(dest)
+            shutil.rmtree(fitpath)
+            log.info("Renaming completed")
