@@ -8,15 +8,23 @@
         a copy of the original fit and also to change fits in the NNPDF
         results directory.
 """
+
 __authors__ = 'Shayan Iranipour, Zahari Kassabov, Michael Wilson'
+
 import argparse
 import os
 import pathlib
 import shutil
 import sys
 import tempfile
+import logging
 
 import NNPDF as nnpath
+from reportengine import colors
+
+log = logging.getLogger()
+log.setLevel(logging.DEBUG)
+log.addHandler(colors.ColorHandler())
 
 #Taking command line arguments
 def process_args():
@@ -96,19 +104,23 @@ def main():
     initial_fit_name = initial_dir.name
     if args.result_path:
         if len(initial_dir.parts) != 1:
-            error("Enter a fit name and not a path with the -r option")
+            log.error("Enter a fit name and not a path with the -r option")
+            sys.exit(1)
         fitpath = pathlib.Path(nnpath.get_results_path())/initial_fit_name
     else:
         fitpath = initial_dir
     if not fitpath.is_dir():
-        error(f"Could not find fit. Path '{fitpath.absolute()}' is not a directory.")
+        log.error(f"Could not find fit. Path '{fitpath.absolute()}' is not a directory.")
+        sys.exit(1)
     if not (fitpath/'filter.yml').exists():
-        error(f"Path {fitpath.absolute()} does not appear to be a fit. "
+        log.error(f"Path {fitpath.absolute()} does not appear to be a fit. "
                 "File 'filter.yml' not found in the directory")
+        sys.exit(1)
 
     dest = fitpath.with_name(args.final)
     if dest.exists():
-        error(f"Destination path {dest.absolute()} already exists.")
+        log.error(f"Destination path {dest.absolute()} already exists.")
+        sys.exit(1)
     if args.copy:
         with tempfile.TemporaryDirectory(dir=fitpath.parent) as tmp:
             tmp = pathlib.Path(tmp)
@@ -119,3 +131,4 @@ def main():
 
     else:
         change_name(fitpath, args.final)
+        log.info("Renaming completed")
