@@ -93,11 +93,6 @@ def change_name(initial_path, final_name):
     initial_path.rename(newpath)
     return newpath
 
-
-def error(msg):
-    #TODO: could do some fancier handling like colored logs or whatnot
-    sys.exit(f"ERROR: {msg}")
-
 def main():
     args = process_args()
     initial_dir = pathlib.Path(args.initial)
@@ -128,6 +123,7 @@ def main():
             shutil.copytree(fitpath, copied_fit, symlinks=True)
             newpath = change_name(copied_fit, args.final)
             newpath.rename(dest)
+            log.info("Renaming completed with copy")
 
     else:
         change_name(fitpath, args.final)
