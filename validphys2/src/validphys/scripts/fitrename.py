@@ -95,6 +95,9 @@ def change_name(initial_path, final_name):
 
 def main():
     args = process_args()
+    if args.final[-1] == '/':
+        args.final = args.final[:-1]
+
     initial_dir = pathlib.Path(args.initial)
     initial_fit_name = initial_dir.name
     if args.result_path:
