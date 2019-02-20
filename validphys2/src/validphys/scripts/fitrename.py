@@ -1,24 +1,11 @@
 #!/usr/bin/env python
-"""
-        fitrename - tool to rename fits
-
-        fitrename is a script which renames fits from the command line.
-        The path of the initial fit and requested final fit name are provided
-        as command line arguments. Optional flags can be used to request a
-        copy of the original fit or to rename a fit that is in the 
-        NNPDF results path.
-"""
-
-__authors__ = 'Shayan Iranipour, Zahari Kassabov, Michael Wilson'
-
 import argparse
 import os
 import pathlib
 import shutil
-import tempfile
 import sys
+import tempfile
 
-from reportengine import colors
 import NNPDF as nnpath
 
 #Taking command line arguments
@@ -88,41 +75,30 @@ def change_name(initial_path, final_name):
     initial_path.rename(newpath)
     return newpath
 
-class FitExistsError(FileExistsError): pass
-class FitNotFoundError(FileNotFoundError): pass
-class InputError(SyntaxError): pass
+
+def error(msg):
+    #TODO: could do some fancier handling like colored logs or whatnot
+    sys.exit(f"ERROR: {msg}")
 
 def main():
     args = process_args()
     initial_dir = pathlib.Path(args.initial)
     initial_fit_name = initial_dir.name
     if args.result_path:
-        try:
-            if len(initial_dir.parts) != 1:
-                raise InputError("Enter a fit name and not a path with the -r option")
-        except InputError as e:
-            print(colors.color_exception(e.__class__, e, e.__traceback__))
-            sys.exit(1)
+        if len(initial_dir.parts) != 1:
+            error("Enter a fit name and not a path with the -r option")
         fitpath = pathlib.Path(nnpath.get_results_path())/initial_fit_name
     else:
         fitpath = initial_dir
-    try:
-        if not fitpath.is_dir():
-            raise FitNotFoundError(f"Could not find fit. Path '{fitpath.absolute()}' is not a directory.")
-    except FitNotFoundError as e:
-        print(colors.color_exception(e.__class__, e, e.__traceback__))
-        sys.exit(1)
-    try:
-        if not (fitpath/'filter.yml').exists():
-            raise FitNotFoundError(f"Path {fitpath.absolute()} does not appear to be a fit. "
-                    "File 'filter.yml' not found in the directory")
-    except FitNotFoundError as e:
-        print(colors.color_exception(e.__class__, e, e.__traceback__))
-        sys.exit(1)
+    if not fitpath.is_dir():
+        error(f"Could not find fit. Path '{fitpath.absolute()}' is not a directory.")
+    if not (fitpath/'filter.yml').exists():
+        error(f"Path {fitpath.absolute()} does not appear to be a fit. "
+                "File 'filter.yml' not found in the directory")
 
     dest = fitpath.with_name(args.final)
     if dest.exists():
-        raise FitExistsError(f"Destination path {dest.absolute()} already exists.")
+        error(f"Destination path {dest.absolute()} already exists.")
     if args.copy:
         with tempfile.TemporaryDirectory(dir=fitpath.parent) as tmp:
             tmp = pathlib.Path(tmp)
