@@ -37,8 +37,8 @@ def alpha_eff(pdf: PDF, *,
               xmax: numbers.Real = 1e-3,
               npoints: int = 200,
               Q: numbers.Real = 1.65,
-              basis:(str, Basis),
-              flavours = None):
+              basis: (str, Basis),
+              flavours: (list, tuple, type(None)) = None):
     """Return a list of xplotting_grids containing the value of the effective
     exponent alpha at the specified values of x and flavour.
     alpha is relevant at small x, hence the linear scale.
@@ -82,8 +82,8 @@ def beta_eff(pdf, *,
              xmax: numbers.Real = 0.9,
              npoints: int = 200,
              Q: numbers.Real = 1.65,
-             basis:(str, Basis),
-             flavours=None):
+             basis: (str, Basis),
+             flavours: (list, tuple, type(None)) = None):
     """Return a list of xplotting_grids containing the value of the effective
     exponent beta at the specified values of x and flavour.
     beta is relevant at large x, hence the linear scale.
@@ -261,9 +261,9 @@ beta_eff_pdfs = collect('beta_eff', ('pdfs',))
 @figuregen
 @check_pdf_normalize_to
 def plot_betaEff_internal(
-    fits, pdfs, beta_eff_pdfs,
-    normalize_to: (int, str, type(None)) = None,
-    ybottom=None, ytop=None):
+        fits, pdfs, beta_eff_pdfs,
+        normalize_to: (int, str, type(None)) = None,
+        ybottom=None, ytop=None):
     """ Same as plot_alphaEff_internal but for beta effective exponent """
     yield from ExponentBandPlotter(
         'beta', fits, pdfs, beta_eff_pdfs, 'linear', normalize_to, ybottom, ytop)
@@ -272,9 +272,9 @@ beta_eff_fits = collect('beta_eff', ('fits', 'fitpdfandbasis',))
 
 @figuregen
 def plot_betaEff(
-    fits, fits_pdf, beta_eff_fits,
-    normalize_to: (int, str, type(None)) = None,
-    ybottom=None, ytop=None):
+        fits, fits_pdf, beta_eff_fits,
+        normalize_to: (int, str, type(None)) = None,
+        ybottom=None, ytop=None):
     """ Same as plot_alphaEff but for beta effective exponents """
     return plot_betaEff_internal(
         fits, fits_pdf, beta_eff_fits, normalize_to, ybottom, ytop)
@@ -286,7 +286,8 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF, *,
                                        x2_alpha: numbers.Real = 1e-3,
                                        x1_beta: numbers.Real = 0.65,
                                        x2_beta: numbers.Real = 0.95,
-                                       basis, flavours=None):
+                                       basis:(str, Basis),
+                                       flavours: (list, tuple, type(None)) = None):
     """Returns a table with the effective exponents for the next fit
 
     the bounds are calculated as follows:
@@ -312,20 +313,10 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF, *,
     basis = checked['basis']
     flavours = checked['flavours']
     # xplottinggrid annoyingly has endpoint=False so I have to call this more times than I want
-    alpha_effs = alpha_eff(pdf,
-                            xmin=x1_alpha,
-                            xmax=x2_alpha,
-                            npoints=2,
-                            Q=Qmin,
-                            basis=basis,
-                            flavours=flavours)
-    beta_effs = beta_eff(pdf,
-                          xmin=x1_beta,
-                          xmax=x2_beta,
-                          npoints=2,
-                          Q=Qmin,
-                          basis=basis,
-                          flavours=flavours)
+    alpha_effs = alpha_eff(
+        pdf, xmin=x1_alpha, xmax=x2_alpha, npoints=2, Q=Qmin, basis=basis, flavours=flavours)
+    beta_effs = beta_eff(
+        pdf, xmin=x1_beta, xmax=x2_beta, npoints=2, Q=Qmin, basis=basis, flavours=flavours)
 
     eff_exp_data = []
 
@@ -393,15 +384,26 @@ effective_exponents_table = collect(
     'effective_exponents_table_internal', ('fitpdfandbasis',))
 fmt = lambda a: float(significant_digits(a, 4))
 
-def next_effective_exponents_yaml(fit: FitSpec, effective_exponents_table):
+def next_effective_exponents_yaml(
+    fit: FitSpec, effective_exponents_table):
     """-Returns a table in yaml format called NextEffExps.yaml
        -Prints the yaml table in the report
+    using `effective_exponents_table` this provider outputs the yaml runcard to run
+    a fit with identical input as the specified `fit` with the t0 and preprocessing iterated.
+
+    This action must be used in a report and should be wrapped in a code block to be formatted
+    correctly, for example:
+
+    ```yaml
+    {@next_effective_exponents_runcard@}
+    ```
+
     """
 
     df_effexps = effective_exponents_table[0]
     #Reading from the filter
     with open(fit.path/'filter.yml', 'r') as f:
-        filtermap = yaml.safe_load(f)
+        filtermap = yaml.load(f, yaml.RoundTripLoader)
 
     basis = filtermap['fitting']['fitbasis']
     checked = check_basis(basis, None)
@@ -417,70 +419,10 @@ def next_effective_exponents_yaml(fit: FitSpec, effective_exponents_table):
                 betas = df_effexps.loc[(f'${fl}$', r'$\beta$'), ['next Min', 'next Max']].values
                 ref_fl['smallx'] = [fmt(alpha) for alpha in alphas]
                 ref_fl['largex'] = [fmt(beta) for beta in betas]
+
+    #iterate t0
+    filtermap['datacuts']['t0pdfset'] = fit.name
+
     s = io.StringIO()
-    yaml.safe_dump(filtermap['fitting']['basis'], s)
+    yaml.dump(filtermap, s, Dumper=yaml.RoundTripDumper)
     return s.getvalue()
-
-def next_effective_exponents_runcard(fit: FitSpec, effective_exponents_table):
-    """using `effective_exponents_table` this provider outputs the yaml runcard to run
-    a fit with identical input as the specified `fit` with the t0 and preprocessing iterated.
-
-    when declaring this provider in a report, it will be formatted correctly if wrapped in a code
-    block.
-
-    For example:
-    ```yaml
-    {@next_effective_exponents_runcard@}
-    ```
-
-    then the user should be able to simply copy and paste the outputted runcard.
-    """
-    df_effexps = effective_exponents_table[0]
-    with open(fit.path/'filter.yml', 'r') as f:
-        filtermap = yaml.safe_load(f)
-    basis = filtermap['fitting']['fitbasis']
-    # Get default flavours from basis
-    checked = check_basis(basis, None)
-    basis = checked['basis']
-    flavours = checked['flavours']
-    outstring = ""
-    warned = False
-    # Read the input filter.yml
-    with open(fit.path/'filter.yml', 'r') as f:
-        for line in f:
-            # Check for eff exp keys if so, then load as yaml
-            if 'fl' in line and 'smallx' in line:
-                linedict = yaml.safe_load(line)[0]
-                for fl in flavours:
-                    if basis.aliases.get(linedict['fl']) == basis.elementlabel(fl):
-                        alphas = df_effexps.loc[
-                            (f'${fl}$', r'$\alpha$'), ['next Min', 'next Max']].values
-                        betas = df_effexps.loc[
-                            (f'${fl}$', r'$\beta$'), ['next Min', 'next Max']].values
-
-                        linedict['smallx'] = [fmt(alpha) for alpha in alphas]
-                        linedict['largex'] = [fmt(beta) for beta in betas]
-                # yaml breaks the old style reports - fix that here for now
-                if isinstance(linedict['pos'], str):
-                    if not warned:
-                        log.warning("specifying off in runcard deprecated, changing to bool")
-                        warned = True
-                    if linedict['pos'] == 'off':
-                        linedict['pos'] = False
-                    else:
-                        linedict['pos'] = True
-                # create string with same format as output
-                leading_spaces = len(line) - len(line.lstrip(" "))
-                # use the yaml dump
-                # strip the final new line and then replace new line with comma seperation
-                s = yaml.safe_dump(linedict)
-                dictstring = s.rstrip('\n').replace('\n', ', ')
-                outstring += leading_spaces*' ' + "- { " + dictstring + " }" +"\n"
-            #iterate t0 whilst we're here
-            elif 't0pdfset' in line:
-                leading_spaces = len(line) - len(line.lstrip(" "))
-                # only replicate leading spaces here
-                outstring += leading_spaces*' ' + "t0pdfset: " + f"{fit.name}" + "\n"
-            else:
-                outstring += line
-    return outstring
