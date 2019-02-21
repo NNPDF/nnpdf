@@ -6,7 +6,9 @@ language: generic
 git:
     depth: 1000
 
-os: osx
+os:
+  - osx
+  - linux
 osx_image: xcode6.4
 
 env:
@@ -22,29 +24,76 @@ env:
 
 before_install:
     # Remove homebrew.
-    - brew remove --force  --ignore-dependencies $(brew list)
-    - brew cleanup -s
-    - rm -rf $(brew --cache)
+    - >
+     if [[ "$TRAVIS_OS_NAME" == "osx" ]];
+     then brew remove --force  --ignore-dependencies $(brew list);
+     fi
+    - >
+     if [[ "$TRAVIS_OS_NAME" == "osx" ]];
+     then brew cleanup -s;
+     fi
+    - >
+     if [[ "$TRAVIS_OS_NAME" == "osx" ]];
+     then rm -rf $(brew --cache);
+     fi
+    - >
+     if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+     then docker pull zaharid/conda-centos;
+     fi
+    - >
+     if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+     then docker run -itd --name build zaharid/conda-centos;
+     fi
+    - >
+     if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+     then docker cp ../nnpdf build:/;
+     fi
+    - >
+     if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+     then docker exec build bash -c "echo CONDA_PY=$CONDA_PY >> /root/.bashrc"  ;
+     fi
+    - >
+     if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+     then docker exec build bash -c "echo NETRC_FILE=$NETRC_FILE >> /root/.bashrc";
+     fi
+    - >
+     if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+     then docker exec build bash -c "echo ZIGZAH_SSH_KEY=$ZIGZAH_SSH_KEY >> /root/.bashrc"  ;
+     fi
+    - >
+     if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+     then docker exec build bash -c "echo CI_BUID_REF_NAME=$CI_BUID_REF_NAME >> /root/.bashrc";
+     fi
+    - >
+     if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+     then docker exec build bash -c "echo UPLOAD_NON_MASTER=$UPLOAD_NON_MASTER >> /root/.bashrc";
+     fi
 
 # Need to pin conda build to 3.8 because of:
 # https://github.com/conda/conda-build/issues/2841
 
 install:
-    - |
-      MINICONDA_URL="https://repo.continuum.io/miniconda"
-      MINICONDA_FILE="Miniconda3-latest-MacOSX-x86_64.sh"
-      curl -L -O "${MINICONDA_URL}/${MINICONDA_FILE}"
-      bash $MINICONDA_FILE -b
-      conda update --yes conda
-
-      source /Users/travis/miniconda3/bin/activate root
-      conda config --append channels conda-forge
-      conda config --add channels https://zigzah.com/static/conda-pkgs/
-      conda config --add channels https://zigzah.com/static/conda-pkgs-private/
-      conda config --set show_channel_urls true
-      conda install --yes conda-build
+    - >
+     if [[ "$TRAVIS_OS_NAME" == "osx" ]];
+     then MINICONDA_URL="https://repo.continuum.io/miniconda";
+     MINICONDA_FILE="Miniconda3-latest-MacOSX-x86_64.sh";
+     curl -L -O "${MINICONDA_URL}/${MINICONDA_FILE}";
+     bash $MINICONDA_FILE -b;
+     conda update --yes conda;
+     source /Users/travis/miniconda3/bin/activate root;
+     conda config --append channels conda-forge;
+     conda config --add channels https://zigzah.com/static/conda-pkgs/;
+     conda config --add channels https://zigzah.com/static/conda-pkgs-private/;
+     conda config --set show_channel_urls true;
+     conda install --yes conda-build;
+     fi
 
 script:
-    - ./.ciscripts/build-deploy-osx.sh
-
-
+    - >
+     if [[ "$TRAVIS_OS_NAME" == "osx" ]];
+     then ./.ciscripts/build-deploy-osx.sh;
+     fi
+    - >
+     if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+     then docker exec build bash -c "cd /nnpdf/; .ciscripts/build-deploy-linux.sh";
+     fi

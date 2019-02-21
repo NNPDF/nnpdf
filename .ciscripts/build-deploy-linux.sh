@@ -12,7 +12,7 @@ if [ $? != 0 ]; then
 	exit 1
 fi
 
-if [ "$CI_BUILD_REF_NAME" != 'master'  ] && [ "$UPLOAD_NON_MASTER" == false ]; 
+if [ "${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}" != 'master'  ] && [ "$UPLOAD_NON_MASTER" == false ]; 
 then
   	echo "
 Skiping upload because this is not master and you have not
