@@ -30,12 +30,7 @@
 {@plot_betaEff@}
 
 ## Effective preprocessing exponents Table
-{@with pdfs@}
-### Effective exponents table for {@pdf@}
+{@with fits@}
+### Next effective exponents table for {@fit@}
 {@effective_exponents_table@}
-{@endwith@}
-
-{@with pdfs@}
-### Next effective exponents table for {@pdf@}
-{@next_effective_exponents_yaml@}
 {@endwith@}
