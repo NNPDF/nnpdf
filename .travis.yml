@@ -39,7 +39,6 @@ before_install:
 # Need to pin conda build to 3.8 because of:
 # https://github.com/conda/conda-build/issues/2841
 
-
 install:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then MINICONDA_URL="https://repo.continuum.io/miniconda"; MINICONDA_FILE="Miniconda3-latest-MacOSX-x86_64.sh"; curl -L -O "${MINICONDA_URL}/${MINICONDA_FILE}"; bash $MINICONDA_FILE -b; conda update --yes conda; source /Users/travis/miniconda3/bin/activate root; conda config --append channels conda-forge; conda config --add channels https://zigzah.com/static/conda-pkgs/; conda config --add channels https://zigzah.com/static/conda-pkgs-private/; conda config --set show_channel_urls true; conda install --yes conda-build=3.8; fi
     
