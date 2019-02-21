@@ -25,8 +25,6 @@ from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys import plotutils
 from validphys.checks import check_two_dataspecs
 
-from IPython import embed
-
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values,
@@ -743,7 +741,7 @@ def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
     cbar.set_label(label="% of data", fontsize=20)
     cbar.ax.tick_params(labelsize=20)
     ax.set_title(title, fontsize=25)
-    ticklocs, ticklabels, startlocs = matrix_plot_labels(df)
+    ticklocs, ticklabels, startlocs = matrix_plot_labels(newdf)
     plt.xticks(ticklocs, ticklabels, rotation=30, ha="right", fontsize=20)
     plt.gca().xaxis.tick_bottom()
     plt.yticks(ticklocs, ticklabels, fontsize=20)
@@ -784,7 +782,7 @@ def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
     cbar=fig.colorbar(matrixplot)
     cbar.ax.tick_params(labelsize=20)
     ax.set_title(title, fontsize=25)
-    ticklocs, ticklabels, startlocs = matrix_plot_labels(df)
+    ticklocs, ticklabels, startlocs = matrix_plot_labels(newdf)
     plt.xticks(ticklocs, ticklabels, rotation=30, ha="right", fontsize=20)
     plt.gca().xaxis.tick_bottom()
     plt.yticks(ticklocs, ticklabels, fontsize=20)
@@ -913,16 +911,34 @@ def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat,
     """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory"""
     l = len(theoryids)
     data = np.abs(experiments_data)
+    procorder = ['DIS NC', 'DIS CC', 'DY', 'JETS', 'TOP']
+    dsorder = ['BCDMSP', 'BCDMSD', 'SLACP', 'SLACD', 'NMC', 'NMCPD',
+               'HERAF2CHARM', 'HERACOMBNCEP460', 'HERACOMBNCEP575',
+               'HERACOMBNCEP820', 'HERACOMBNCEP920', 'HERACOMBNCEM',
+               'CHORUSNU', 'CHORUSNB', 'NTVNUDMN', 'NTVNBDMN',
+               'HERACOMBCCEP', 'HERACOMBCCEM', 'CDFZRAP', 'D0ZRAP',
+               'D0WEASY', 'D0WMASY', 'ATLASWZRAP36PB', 'ATLASZHIGHMASS49FB',
+               'ATLASLOMASSDY11EXT', 'ATLASWZRAP11', 'ATLASZPT8TEVMDIST',
+               'ATLASZPT8TEVYDIST', 'CMSWEASY840PB', 'CMSWMASY47FB',
+               'CMSWCHARMRAT', 'CMSDY2D11', 'CMSWMU8TEV', 'LHCBZ940PB',
+               'LHCBZEE2FB', 'ATLAS1JET11', 'CMSJETS11', 'CDFR2KT',
+               'ATLASTTBARTOT', 'ATLASTOPDIFF8TEVTRAPNORM', 'CMSTTBARTOT',
+               'CMSTOPDIFF8TEVTTRAPNORM']
     sqrtdiags_th = np.sqrt(np.diag(theory_covmat_custom))/data
     sqrtdiags_th = pd.DataFrame(sqrtdiags_th.values, index=dataset_index_byprocess)
     sqrtdiags_th.sort_index(0,inplace=True)
+    oldindex = sqrtdiags_th.index.tolist()
+    newindex = sorted(oldindex, key=lambda r: (procorder.index(r[0]), dsorder.index(r[1]), r[2]))
+    sqrtdiags_th = sqrtdiags_th.reindex(newindex)
     sqrtdiags_exp = np.sqrt(np.diag(experiments_covmat))/data
     sqrtdiags_exp = pd.DataFrame(sqrtdiags_exp.values, index=dataset_index_byprocess)
     sqrtdiags_exp.sort_index(0,inplace=True)
+    sqrtdiags_exp = sqrtdiags_exp.reindex(newindex)
     df_total = theory_covmat_custom + experiments_covmat
     sqrtdiags_tot = np.sqrt(np.diag(df_total))/data
     sqrtdiags_tot = pd.DataFrame(sqrtdiags_tot.values, index=dataset_index_byprocess)
     sqrtdiags_tot.sort_index(0,inplace=True)
+    sqrtdiags_tot = sqrtdiags_tot.reindex(newindex)
     fig,ax = plt.subplots(figsize=(20,10))
     ax.plot(sqrtdiags_exp.values, '.', label="Experiment", color="orange")
     ax.plot(sqrtdiags_th.values, '.', label="Theory", color = "red")
@@ -945,14 +961,31 @@ def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat,
                          experiments_data, theoryids):
     """Plot ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5"""
     l = len(theoryids)
+    procorder = ['DIS NC', 'DIS CC', 'DY', 'JETS', 'TOP']
+    dsorder = ['BCDMSP', 'BCDMSD', 'SLACP', 'SLACD', 'NMC', 'NMCPD',
+               'HERAF2CHARM', 'HERACOMBNCEP460', 'HERACOMBNCEP575',
+               'HERACOMBNCEP820', 'HERACOMBNCEP920', 'HERACOMBNCEM',
+               'CHORUSNU', 'CHORUSNB', 'NTVNUDMN', 'NTVNBDMN',
+               'HERACOMBCCEP', 'HERACOMBCCEM', 'CDFZRAP', 'D0ZRAP',
+               'D0WEASY', 'D0WMASY', 'ATLASWZRAP36PB', 'ATLASZHIGHMASS49FB',
+               'ATLASLOMASSDY11EXT', 'ATLASWZRAP11', 'ATLASZPT8TEVMDIST',
+               'ATLASZPT8TEVYDIST', 'CMSWEASY840PB', 'CMSWMASY47FB',
+               'CMSWCHARMRAT', 'CMSDY2D11', 'CMSWMU8TEV', 'LHCBZ940PB',
+               'LHCBZEE2FB', 'ATLAS1JET11', 'CMSJETS11', 'CDFR2KT',
+               'ATLASTTBARTOT', 'ATLASTOPDIFF8TEVTRAPNORM', 'CMSTTBARTOT',
+               'CMSTOPDIFF8TEVTTRAPNORM']
     matrix_theory = theory_covmat_custom.values
     matrix_experiment = experiments_covmat.values
     inv_exp = (np.diag(la.inv(matrix_experiment)))**(-0.5)/experiments_data
     inv_tot = (np.diag(la.inv(matrix_theory+matrix_experiment)))**(-0.5)/experiments_data
     df_inv_exp = pd.DataFrame(inv_exp, index=dataset_index_byprocess)
     df_inv_exp.sort_index(0,inplace=True)
+    oldindex = df_inv_exp.index.tolist()
+    newindex = sorted(oldindex, key=lambda r: (procorder.index(r[0]), dsorder.index(r[1]), r[2]))
+    df_inv_exp = df_inv_exp.reindex(newindex)
     df_inv_tot = pd.DataFrame(inv_tot, index=dataset_index_byprocess)
     df_inv_tot.sort_index(0,inplace=True)
+    df_inv_tot = df_inv_tot.reindex(newindex)
     fig,ax = plt.subplots()
     ax.plot(df_inv_exp.values, '.', label="Experiment", color="orange")
     ax.plot(df_inv_tot.values, '.', label="Experiment + Theory", color="mediumseagreen")
