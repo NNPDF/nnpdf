@@ -703,7 +703,7 @@ def matrix_plot_labels(df):
     ticklocs = [0 for x in range(len(startlocs)-1)]
     for i in range(len(startlocs)-1):
         ticklocs[i] = 0.5*(startlocs[i+1]+startlocs[i])
-    return ticklocs, ticklabels
+    return ticklocs, ticklabels, startlocs
 
 @figure
 def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
@@ -739,12 +739,17 @@ def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
                             linscale=10,
                             vmin=-100*matrix.max(),
                             vmax=100*matrix.max()))
-    fig.colorbar(matrixplot, label="% of data")
-    ax.set_title(title)
-    ticklocs, ticklabels = matrix_plot_labels(newdf)
-    plt.xticks(ticklocs, ticklabels, rotation=30, ha="right")
+    cbar=fig.colorbar(matrixplot)
+    cbar.set_label(label="% of data", fontsize=20)
+    cbar.ax.tick_params(labelsize=20)
+    ax.set_title(title, fontsize=25)
+    ticklocs, ticklabels, startlocs = matrix_plot_labels(df)
+    plt.xticks(ticklocs, ticklabels, rotation=30, ha="right", fontsize=20)
     plt.gca().xaxis.tick_bottom()
-    plt.yticks(ticklocs, ticklabels)
+    plt.yticks(ticklocs, ticklabels, fontsize=20)
+    ax.vlines(startlocs, 0, len(matrix), linestyles='dashed')
+    ax.hlines(startlocs, 0, len(matrix), linestyles='dashed')
+    ax.margins(x=0, y=0)
     return fig
 
 @figure
@@ -776,12 +781,16 @@ def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
     matrix = newdf.values
     fig, ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
-    fig.colorbar(matrixplot)
-    ax.set_title(title)
-    ticklocs, ticklabels = matrix_plot_labels(newdf)
-    plt.xticks(ticklocs, ticklabels, rotation=30, ha="right")
+    cbar=fig.colorbar(matrixplot)
+    cbar.ax.tick_params(labelsize=20)
+    ax.set_title(title, fontsize=25)
+    ticklocs, ticklabels, startlocs = matrix_plot_labels(df)
+    plt.xticks(ticklocs, ticklabels, rotation=30, ha="right", fontsize=20)
     plt.gca().xaxis.tick_bottom()
-    plt.yticks(ticklocs, ticklabels)
+    plt.yticks(ticklocs, ticklabels, fontsize=20)
+    ax.vlines(startlocs, 0, len(matrix), linestyles='dashed')
+    ax.hlines(startlocs, 0, len(matrix), linestyles='dashed')
+    ax.margins(x=0, y=0)
     return fig
 
 @figure
@@ -918,13 +927,17 @@ def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat,
     ax.plot(sqrtdiags_exp.values, '.', label="Experiment", color="orange")
     ax.plot(sqrtdiags_th.values, '.', label="Theory", color = "red")
     ax.plot(sqrtdiags_tot.values, '.', label="Total", color = "blue")
-    ticklocs, ticklabels = matrix_plot_labels(sqrtdiags_th)
-    plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=6)
-    ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{|D_i|}$")
+    ticklocs, ticklabels, startlocs = matrix_plot_labels(sqrtdiags_th)
+    plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=20)
+    ax.vlines(startlocs, 0, len(data), linestyles='dashed')
+    ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{|D_i|}$", fontsize=30)
+    ax.yaxis.set_tick_params(labelsize=20)
     ax.set_ylim([0,0.5])
     ax.set_title(f"Square root of diagonal elements of covariances matrices for {l} points, "
-                 + "normalised to absolute value of data")
-    ax.legend()
+                 + "normalised to absolute value of data",
+                 fontsize=20)
+    ax.legend(fontsize=20)
+    ax.margins(x=0)
     return fig
 
 @figure
@@ -943,11 +956,15 @@ def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat,
     fig,ax = plt.subplots()
     ax.plot(df_inv_exp.values, '.', label="Experiment", color="orange")
     ax.plot(df_inv_tot.values, '.', label="Experiment + Theory", color="mediumseagreen")
-    ticklocs, ticklabels = matrix_plot_labels(df_inv_exp)
-    plt.xticks(ticklocs, ticklabels, rotation="vertical")
-    ax.set_ylabel(r"$\frac{1}{D_i}\frac{1}{\sqrt{[cov^{-1}_]{ii}}}$")
-    ax.set_title(f"Diagonal impact of adding theory covariance matrix for {l} points")
-    ax.legend()
+    ticklocs, ticklabels, startlocs = matrix_plot_labels(df_inv_exp)
+    plt.xticks(ticklocs, ticklabels, rotation="vertical", fontsize=20)
+    ax.vlines(startlocs, 0, len(matrix_theory), linestyles='dashed')
+    ax.set_ylabel(r"$\frac{1}{D_i}\frac{1}{\sqrt{[cov^{-1}_]{ii}}}$", fontsize=30)
+    ax.yaxis.set_tick_params(labelsize=20)
+    ax.set_title(f"Diagonal impact of adding theory covariance matrix for {l} points",
+                 fontsize=20)
+    ax.legend(fontsize=20)
+    ax.margins(x=0)
     return fig
 
 @figure
