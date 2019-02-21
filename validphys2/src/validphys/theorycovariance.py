@@ -25,6 +25,8 @@ from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys import plotutils
 from validphys.checks import check_two_dataspecs
 
+from IPython import embed
+
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values,
@@ -710,7 +712,26 @@ def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
 			columns=dataset_index_byprocess)
     df.sort_index(0, inplace=True)
     df.sort_index(1, inplace=True)
-    matrix = df.values
+    procorder = ['DIS NC', 'DIS CC', 'DY', 'JETS', 'TOP']
+    dsorder = ['BCDMSP', 'BCDMSD', 'SLACP', 'SLACD', 'NMC', 'NMCPD',
+               'HERAF2CHARM', 'HERACOMBNCEP460', 'HERACOMBNCEP575',
+               'HERACOMBNCEP820', 'HERACOMBNCEP920', 'HERACOMBNCEM',
+               'CHORUSNU', 'CHORUSNB', 'NTVNUDMN', 'NTVNBDMN',
+               'HERACOMBCCEP', 'HERACOMBCCEM', 'CDFZRAP', 'D0ZRAP',
+               'D0WEASY', 'D0WMASY', 'ATLASWZRAP36PB', 'ATLASZHIGHMASS49FB',
+               'ATLASLOMASSDY11EXT', 'ATLASWZRAP11', 'ATLASZPT8TEVMDIST',
+               'ATLASZPT8TEVYDIST', 'CMSWEASY840PB', 'CMSWMASY47FB',
+               'CMSWCHARMRAT', 'CMSDY2D11', 'CMSWMU8TEV', 'LHCBZ940PB',
+               'LHCBZEE2FB', 'ATLAS1JET11', 'CMSJETS11', 'CDFR2KT',
+               'ATLASTTBARTOT', 'ATLASTOPDIFF8TEVTRAPNORM', 'CMSTTBARTOT',
+               'CMSTOPDIFF8TEVTTRAPNORM']
+    oldindex = df.index.tolist()
+    newindex = sorted(oldindex, key=lambda r: (procorder.index(r[0]), dsorder.index(r[1]), r[2]))
+    # reindex index
+    newdf = df.reindex(newindex)
+    #reindex columns by transposing, reindexing, then transposing back
+    newdf = (newdf.T.reindex(newindex)).T
+    matrix = newdf.values
     fig,ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(100*matrix,
                             cmap=cm.Spectral_r,
@@ -720,7 +741,7 @@ def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
                             vmax=100*matrix.max()))
     fig.colorbar(matrixplot, label="% of data")
     ax.set_title(title)
-    ticklocs, ticklabels = matrix_plot_labels(df)
+    ticklocs, ticklabels = matrix_plot_labels(newdf)
     plt.xticks(ticklocs, ticklabels, rotation=30, ha="right")
     plt.gca().xaxis.tick_bottom()
     plt.yticks(ticklocs, ticklabels)
@@ -733,12 +754,31 @@ def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
 		 	columns=dataset_index_byprocess)
     df.sort_index(0, inplace=True)
     df.sort_index(1, inplace=True)
-    matrix = df.values
+    procorder = ['DIS NC', 'DIS CC', 'DY', 'JETS', 'TOP']
+    dsorder = ['BCDMSP', 'BCDMSD', 'SLACP', 'SLACD', 'NMC', 'NMCPD',
+               'HERAF2CHARM', 'HERACOMBNCEP460', 'HERACOMBNCEP575',
+               'HERACOMBNCEP820', 'HERACOMBNCEP920', 'HERACOMBNCEM',
+               'CHORUSNU', 'CHORUSNB', 'NTVNUDMN', 'NTVNBDMN',
+               'HERACOMBCCEP', 'HERACOMBCCEM', 'CDFZRAP', 'D0ZRAP',
+               'D0WEASY', 'D0WMASY', 'ATLASWZRAP36PB', 'ATLASZHIGHMASS49FB',
+               'ATLASLOMASSDY11EXT', 'ATLASWZRAP11', 'ATLASZPT8TEVMDIST',
+               'ATLASZPT8TEVYDIST', 'CMSWEASY840PB', 'CMSWMASY47FB',
+               'CMSWCHARMRAT', 'CMSDY2D11', 'CMSWMU8TEV', 'LHCBZ940PB',
+               'LHCBZEE2FB', 'ATLAS1JET11', 'CMSJETS11', 'CDFR2KT',
+               'ATLASTTBARTOT', 'ATLASTOPDIFF8TEVTRAPNORM', 'CMSTTBARTOT',
+               'CMSTOPDIFF8TEVTTRAPNORM']
+    oldindex = df.index.tolist()
+    newindex = sorted(oldindex, key=lambda r: (procorder.index(r[0]), dsorder.index(r[1]), r[2]))
+    # reindex index
+    newdf = df.reindex(newindex)
+    #reindex columns by transposing, reindexing, then transposing back
+    newdf = (newdf.T.reindex(newindex)).T
+    matrix = newdf.values
     fig, ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
     fig.colorbar(matrixplot)
     ax.set_title(title)
-    ticklocs, ticklabels = matrix_plot_labels(df)
+    ticklocs, ticklabels = matrix_plot_labels(newdf)
     plt.xticks(ticklocs, ticklabels, rotation=30, ha="right")
     plt.gca().xaxis.tick_bottom()
     plt.yticks(ticklocs, ticklabels)
