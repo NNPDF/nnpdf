@@ -2929,3 +2929,19 @@ done by looking at the image files inside the `figures` folder of each
 uploaded report (see the source of the script for more details). It is
 expected that the server redirects the requests for
 `vp.nnpdf.science/thumbnails` to this folder.
+
+Editing this guide
+------------------
+
+The source of this document can be found in the main NNPDF repository as the
+file `guide.md`, under
+
+```
+doc/validphys2
+```
+
+There is a Makefile which will build the HTML document (`pandoc` and `graphviz`
+are required), and `make rsync` will upload it to the server, if the user has
+sufficient permissions. Of course, changes to the guide should also be commited
+to the repository, and if necessary, discussed in a pull request.
+
