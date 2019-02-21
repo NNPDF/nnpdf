@@ -72,6 +72,8 @@
 #include "CMS_SINGLETOP_TCH_R_8TEV.h"
 #include "CMS_SINGLETOP_TCH_R_13TEV.h"
 #include "CMS_WCHARM_DIFF_UNNORM_13TEV.h"
+#include "HERACOMB_SIGMARED_C.h"
+#include "HERACOMB_SIGMARED_B.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -278,6 +280,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new HERACOMBNCEP575Filter());
   target.push_back(new HERACOMBNCEP820Filter());
   target.push_back(new HERACOMBNCEP920Filter());
+  target.push_back(new HERACOMB_SIGMARED_CFilter());
+  target.push_back(new HERACOMB_SIGMARED_BFilter());
 
   // ************************ ATLAS TTBAR DIFF 8 TeV  ***************
   target.push_back(new ATLASTOPDIFF8TEVTPTFilter());
