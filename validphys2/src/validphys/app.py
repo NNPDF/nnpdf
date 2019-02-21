@@ -2,9 +2,7 @@
 app.py
 
 Mainloop of the validphys application.  Here we define tailoted extensions to
-the reporthengine application (such as extra command line flags). Additionally
-the *provider modules* that serve as source to the validphys actions are
-declared here.
+the reporthengine application (such as extra command line flags).
 
 The entry point of the validphys application is the ``main`` funcion of this
 module.
@@ -45,7 +43,7 @@ including the contents of the following file:
     def default_style(self):
         return os.fspath(mplstyles.smallstyle)
 
-    def __init__(self, name='validphys', providers=api.API.provider_names):
+    def __init__(self, name='validphys', providers=api.providers):
         app.App.__init__(self, name, providers)
 
     @property
