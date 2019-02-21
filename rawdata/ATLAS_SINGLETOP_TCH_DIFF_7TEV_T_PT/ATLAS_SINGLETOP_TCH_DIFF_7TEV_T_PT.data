@@ -1,0 +1,16 @@
+*dataset:
+*location: Table 6 and Table 7
+*dscomment: Differential t-channel top-quark production cross sections and normalized differential t-channel top-quark production cross sections as functions of PT(TOP)
+*reackey: P P --> TOP X
+*obskey: DSIG/DPT
+*qual: RE : P P --> TOP X
+*qual: SQRT(S) IN GEV : 7000.0
+*yheader: D(SIG)/DPT(TOP) IN FB/GEV : (1/SIG)*D(SIG)/DPT(TOP) IN 10**-3/GEV
+*xheader: PT(TOP) 
+*data: x : y : y 
+ 0.0 TO 45.0 ; 440 +- 7.4 PCT (DSYS= 13.0 PCT); 9.2 +- 5.3 PCT (DSYS= +6.5 PCT , -7.7 PCT);
+ 45.0 TO 75.0 ; 370 +- 6.5 PCT (DSYS= 14.0 PCT); 7.8 +- 6.9 PCT (DSYS= 8.8 PCT);
+ 75.0 TO 110.0 ; 250 +- 7.7 PCT (DSYS= 13.0 PCT); 5.3 +- 8.0 PCT (DSYS= 13.0 PCT);
+ 110.0 TO 150.0 ; 133 +- 12.0 PCT (DSYS= 16.0 PCT); 2.8 +- 11.0 PCT (DSYS= 18.0 PCT);
+ 150.0 TO 500.0 ; 7.8 +- 16.0 PCT (DSYS= 19.0 PCT); 0.16 +- 15.0 PCT (DSYS= 16.0 PCT);
+*dataend:
