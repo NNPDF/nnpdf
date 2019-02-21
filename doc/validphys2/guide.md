@@ -2942,5 +2942,6 @@ doc/validphys2
 
 There is a Makefile which will build the HTML document (`pandoc` and `graphviz`
 are required), and `make rsync` will upload it to the server, if the user has
-sufficient permissions.
+sufficient permissions. Of course, changes to the guide should also be commited
+to the repository, and if necessary, discussed in a pull request.
 
