@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-        fitrename - command line tool to rename fits 
+        fitrename - command line tool to rename fits
 
         fitrename allows for command line renaming of fits.
         To do so, call fitrename with a path to the original fit and
@@ -112,7 +112,7 @@ def main():
         sys.exit(1)
     if not (fitpath/'filter.yml').exists():
         log.error(f"Path {fitpath.absolute()} does not appear to be a fit. "
-                "File 'filter.yml' not found in the directory")
+                  "File 'filter.yml' not found in the directory")
         sys.exit(1)
 
     dest = fitpath.with_name(args.final)
@@ -123,12 +123,10 @@ def main():
         tmp = pathlib.Path(tmp)
         copied_fit = tmp/initial_fit_name
         shutil.copytree(fitpath, copied_fit, symlinks=True)
+        newpath = change_name(copied_fit, args.final)
+        newpath.rename(dest)
         if args.copy:
-            newpath = change_name(copied_fit, args.final)
-            newpath.rename(dest)
             log.info("Renaming completed with copy")
         else:
-            newpath = change_name(copied_fit, args.final)
-            newpath.rename(dest)
             shutil.rmtree(fitpath)
             log.info("Renaming completed")
