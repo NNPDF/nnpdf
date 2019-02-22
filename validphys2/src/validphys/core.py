@@ -482,7 +482,7 @@ class ExperimentSpec(TupleComp, namespaces.NSList):
         #TODO: Can we do  better cooperative inherece trick than this?
         namespaces.NSList.__init__(self, dsinputs, nskey='dataset_input')
 
-    #@functools.lru_cache(maxsize=32)
+    @functools.lru_cache(maxsize=32)
     def load(self):
         sets = []
         for dataset in self.datasets:
