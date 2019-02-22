@@ -704,25 +704,13 @@ def matrix_plot_labels(df):
     return ticklocs, ticklabels, startlocs
 
 @figure
-def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
+def plot_covmat_heatmap(covmat, title, dataset_index_byprocess, plotting_order):
     """Matrix plot of a covariance matrix"""
+    procorder, dsorder=plotting_order
     df = pd.DataFrame(covmat.values, index=dataset_index_byprocess,
 			columns=dataset_index_byprocess)
     df.sort_index(0, inplace=True)
     df.sort_index(1, inplace=True)
-    procorder = ['DIS NC', 'DIS CC', 'DY', 'JETS', 'TOP']
-    dsorder = ['BCDMSP', 'BCDMSD', 'SLACP', 'SLACD', 'NMC', 'NMCPD',
-               'HERAF2CHARM', 'HERACOMBNCEP460', 'HERACOMBNCEP575',
-               'HERACOMBNCEP820', 'HERACOMBNCEP920', 'HERACOMBNCEM',
-               'CHORUSNU', 'CHORUSNB', 'NTVNUDMN', 'NTVNBDMN',
-               'HERACOMBCCEP', 'HERACOMBCCEM', 'CDFZRAP', 'D0ZRAP',
-               'D0WEASY', 'D0WMASY', 'ATLASWZRAP36PB', 'ATLASZHIGHMASS49FB',
-               'ATLASLOMASSDY11EXT', 'ATLASWZRAP11', 'ATLASZPT8TEVMDIST',
-               'ATLASZPT8TEVYDIST', 'CMSWEASY840PB', 'CMSWMASY47FB',
-               'CMSWCHARMRAT', 'CMSDY2D11', 'CMSWMU8TEV', 'LHCBZ940PB',
-               'LHCBZEE2FB', 'ATLAS1JET11', 'CMSJETS11', 'CDFR2KT',
-               'ATLASTTBARTOT', 'ATLASTOPDIFF8TEVTRAPNORM', 'CMSTTBARTOT',
-               'CMSTOPDIFF8TEVTTRAPNORM']
     oldindex = df.index.tolist()
     newindex = sorted(oldindex, key=lambda r: (procorder.index(r[0]), dsorder.index(r[1]), r[2]))
     # reindex index
@@ -750,15 +738,9 @@ def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
     ax.margins(x=0, y=0)
     return fig
 
-@figure
-def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
-    """Matrix plot of a correlation matrix"""
-    df = pd.DataFrame(corrmat.values, index=dataset_index_byprocess,
-		 	columns=dataset_index_byprocess)
-    df.sort_index(0, inplace=True)
-    df.sort_index(1, inplace=True)
-    procorder = ['DIS NC', 'DIS CC', 'DY', 'JETS', 'TOP']
-    dsorder = ['BCDMSP', 'BCDMSD', 'SLACP', 'SLACD', 'NMC', 'NMCPD',
+def plotting_order():
+    procorder = ('DIS NC', 'DIS CC', 'DY', 'JETS', 'TOP')
+    dsorder = ('BCDMSP', 'BCDMSD', 'SLACP', 'SLACD', 'NMC', 'NMCPD',
                'HERAF2CHARM', 'HERACOMBNCEP460', 'HERACOMBNCEP575',
                'HERACOMBNCEP820', 'HERACOMBNCEP920', 'HERACOMBNCEM',
                'CHORUSNU', 'CHORUSNB', 'NTVNUDMN', 'NTVNBDMN',
@@ -769,7 +751,17 @@ def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
                'CMSWCHARMRAT', 'CMSDY2D11', 'CMSWMU8TEV', 'LHCBZ940PB',
                'LHCBZEE2FB', 'ATLAS1JET11', 'CMSJETS11', 'CDFR2KT',
                'ATLASTTBARTOT', 'ATLASTOPDIFF8TEVTRAPNORM', 'CMSTTBARTOT',
-               'CMSTOPDIFF8TEVTTRAPNORM']
+               'CMSTOPDIFF8TEVTTRAPNORM')
+    return procorder, dsorder
+    
+@figure
+def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess, plotting_order):
+    """Matrix plot of a correlation matrix"""
+    procorder, dsorder=plotting_order
+    df = pd.DataFrame(corrmat.values, index=dataset_index_byprocess,
+		 	columns=dataset_index_byprocess)
+    df.sort_index(0, inplace=True)
+    df.sort_index(1, inplace=True)
     oldindex = df.index.tolist()
     newindex = sorted(oldindex, key=lambda r: (procorder.index(r[0]), dsorder.index(r[1]), r[2]))
     # reindex index
@@ -792,109 +784,117 @@ def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
     return fig
 
 @figure
-def plot_normexpcovmat_heatmap(experiments_normcovmat, dataset_index_byprocess):
+def plot_normexpcovmat_heatmap(experiments_normcovmat, dataset_index_byprocess,
+				plotting_order):
     """Matrix plot of the experiment covariance matrix normalised to data."""
     fig = plot_covmat_heatmap(experiments_normcovmat,
                               "Experiment covariance matrix",
-				dataset_index_byprocess)
+				dataset_index_byprocess, plotting_order)
     return fig
 
 @figure
-def plot_expcorrmat_heatmap(experiments_corrmat, dataset_index_byprocess):
+def plot_expcorrmat_heatmap(experiments_corrmat, dataset_index_byprocess,
+				plotting_order):
     """Matrix plot of the experiment correlation matrix"""
     fig = plot_corrmat_heatmap(experiments_corrmat,
                                "Experiment correlation matrix",
-				dataset_index_byprocess)
+				dataset_index_byprocess, plotting_order)
     return fig
 
 @figure
-def plot_normthblockcovmat_heatmap(theory_normblockcovmat, dataset_index_byprocess):
+def plot_normthblockcovmat_heatmap(theory_normblockcovmat, dataset_index_byprocess,
+					plotting_order):
     """Matrix plot for block diagonal theory covariance matrix"""
     fig = plot_covmat_heatmap(theory_normblockcovmat,
                               "Block diagonal theory covariance matrix by dataset",
-				dataset_index_byprocess)
+				dataset_index_byprocess, plotting_order)
     return fig
 
 @figure
 def plot_normthcovmat_heatmap_custom(theory_normcovmat_custom, theoryids,
-					dataset_index_byprocess):
+					dataset_index_byprocess, plotting_order):
     """Matrix plot for block diagonal theory covariance matrix by process type"""
     l = len(theoryids)
     fig = plot_covmat_heatmap(theory_normcovmat_custom,
                               f"Theory covariance matrix for {l} points",
-				dataset_index_byprocess)
+				dataset_index_byprocess, plotting_order)
     return fig
 
 @figure
-def plot_thblockcorrmat_heatmap(theory_blockcorrmat, dataset_index_byprocess):
+def plot_thblockcorrmat_heatmap(theory_blockcorrmat, dataset_index_byprocess,
+				plotting_order):
     """Matrix plot of the theory correlation matrix"""
     fig = plot_corrmat_heatmap(theory_blockcorrmat,
                                "Theory correlation matrix block diagonal by dataset",
-				dataset_index_byprocess)
+				dataset_index_byprocess, plotting_order)
     return fig
 
 @figure
 def plot_thcorrmat_heatmap_custom(theory_corrmat_custom, theoryids,
-					dataset_index_byprocess):
+					dataset_index_byprocess, plotting_order):
     """Matrix plot of the theory correlation matrix, correlations by process type"""
     l = len(theoryids)
     fig = plot_corrmat_heatmap(theory_corrmat_custom,
                                f"Theory correlation matrix for {l} points",
-				dataset_index_byprocess)
+				dataset_index_byprocess, plotting_order)
     return fig
 
 @figure
 def plot_normexpplusblockthcovmat_heatmap(experimentsplusblocktheory_normcovmat,
-						dataset_index_byprocess):
+						dataset_index_byprocess,
+						plotting_order):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
     fig = plot_covmat_heatmap(experimentsplusblocktheory_normcovmat,
                               "Experiment + theory (block diagonal by dataset) covariance matrix",
-	dataset_index_byprocess)
+	dataset_index_byprocess, plotting_order)
     return fig
 
 @figure
 def plot_normexpplusthcovmat_heatmap_custom(experimentsplustheory_normcovmat_custom,
-					theoryids, dataset_index_byprocess):
+					theoryids, dataset_index_byprocess, 
+					plotting_order):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
     l = len(theoryids)
     fig = plot_covmat_heatmap(experimentsplustheory_normcovmat_custom,
                               f"Experiment + theory covariance matrix for {l} points",
-				dataset_index_byprocess)
+				dataset_index_byprocess, plotting_order)
     return fig
 
 @figure
 def plot_expplusblockthcorrmat_heatmap(experimentsplusblocktheory_corrmat,
-					dataset_index_byprocess):
+					dataset_index_byprocess, plotting_order):
     """Matrix plot of the exp + theory correlation matrix"""
     fig = plot_corrmat_heatmap(experimentsplusblocktheory_corrmat,
                                "Experiment + theory (block diagonal by dataset) correlation matrix",
-	dataset_index_byprocess)
+	dataset_index_byprocess, plotting_order)
     return fig
 
 @figure
 def plot_expplusthcorrmat_heatmap_custom(experimentsplustheory_corrmat_custom,
-					theoryids, dataset_index_byprocess):
+					theoryids, dataset_index_byprocess,
+					plotting_order):
     """Matrix plot of the exp + theory correlation matrix"""
     l = len(theoryids)
     fig = plot_corrmat_heatmap(experimentsplustheory_corrmat_custom,
                                f"Experiment + theory correlation matrix for {l} points",
-                               dataset_index_byprocess)
+                               dataset_index_byprocess, plotting_order)
     return fig
 
 @figure
 def plot_blockcovdiff_heatmap(theory_block_diag_covmat, experiments_covmat,
-				dataset_index_byprocess):
+				dataset_index_byprocess, plotting_order):
     """Matrix plot (thcov + expcov)/expcov"""
     df = (theory_block_diag_covmat.as_matrix()+experiments_covmat.values
           )/np.mean(experiments_covmat.values)
     fig = plot_covmat_heatmap(df,"(Theory + experiment)/mean(experiment)" +
                               "for block diagonal theory covmat by dataset",
-				dataset_index_byprocess)
+				dataset_index_byprocess, plotting_order)
     return fig
 
 @figure
 def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat,
-				theoryids, dataset_index_byprocess):
+				theoryids, dataset_index_byprocess,
+				plotting_order):
     """Matrix plot (thcov + expcov)/expcov"""
     l = len(theoryids)
     df = (theory_covmat_custom+experiments_covmat
@@ -902,28 +902,17 @@ def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat,
     fig = plot_covmat_heatmap(df,
                               "(Theory + experiment)/mean(experiment)"
                               + f"covariance matrices for {l} points",
-				dataset_index_byprocess)
+				dataset_index_byprocess, plotting_order)
     return fig
 
 @figure
 def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat,
-			experiments_data, theoryids, dataset_index_byprocess):
+			experiments_data, theoryids, dataset_index_byprocess,
+			plotting_order):
     """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory"""
+    procorder, dsorder = plotting_order
     l = len(theoryids)
     data = np.abs(experiments_data)
-    procorder = ['DIS NC', 'DIS CC', 'DY', 'JETS', 'TOP']
-    dsorder = ['BCDMSP', 'BCDMSD', 'SLACP', 'SLACD', 'NMC', 'NMCPD',
-               'HERAF2CHARM', 'HERACOMBNCEP460', 'HERACOMBNCEP575',
-               'HERACOMBNCEP820', 'HERACOMBNCEP920', 'HERACOMBNCEM',
-               'CHORUSNU', 'CHORUSNB', 'NTVNUDMN', 'NTVNBDMN',
-               'HERACOMBCCEP', 'HERACOMBCCEM', 'CDFZRAP', 'D0ZRAP',
-               'D0WEASY', 'D0WMASY', 'ATLASWZRAP36PB', 'ATLASZHIGHMASS49FB',
-               'ATLASLOMASSDY11EXT', 'ATLASWZRAP11', 'ATLASZPT8TEVMDIST',
-               'ATLASZPT8TEVYDIST', 'CMSWEASY840PB', 'CMSWMASY47FB',
-               'CMSWCHARMRAT', 'CMSDY2D11', 'CMSWMU8TEV', 'LHCBZ940PB',
-               'LHCBZEE2FB', 'ATLAS1JET11', 'CMSJETS11', 'CDFR2KT',
-               'ATLASTTBARTOT', 'ATLASTOPDIFF8TEVTRAPNORM', 'CMSTTBARTOT',
-               'CMSTOPDIFF8TEVTTRAPNORM']
     sqrtdiags_th = np.sqrt(np.diag(theory_covmat_custom))/data
     sqrtdiags_th = pd.DataFrame(sqrtdiags_th.values, index=dataset_index_byprocess)
     sqrtdiags_th.sort_index(0,inplace=True)
@@ -958,22 +947,11 @@ def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat,
 
 @figure
 def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat,
-                         experiments_data, theoryids):
+                         experiments_data, theoryids,
+			plotting_order):
     """Plot ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5"""
+    procorder, dsorder = plotting_order
     l = len(theoryids)
-    procorder = ['DIS NC', 'DIS CC', 'DY', 'JETS', 'TOP']
-    dsorder = ['BCDMSP', 'BCDMSD', 'SLACP', 'SLACD', 'NMC', 'NMCPD',
-               'HERAF2CHARM', 'HERACOMBNCEP460', 'HERACOMBNCEP575',
-               'HERACOMBNCEP820', 'HERACOMBNCEP920', 'HERACOMBNCEM',
-               'CHORUSNU', 'CHORUSNB', 'NTVNUDMN', 'NTVNBDMN',
-               'HERACOMBCCEP', 'HERACOMBCCEM', 'CDFZRAP', 'D0ZRAP',
-               'D0WEASY', 'D0WMASY', 'ATLASWZRAP36PB', 'ATLASZHIGHMASS49FB',
-               'ATLASLOMASSDY11EXT', 'ATLASWZRAP11', 'ATLASZPT8TEVMDIST',
-               'ATLASZPT8TEVYDIST', 'CMSWEASY840PB', 'CMSWMASY47FB',
-               'CMSWCHARMRAT', 'CMSDY2D11', 'CMSWMU8TEV', 'LHCBZ940PB',
-               'LHCBZEE2FB', 'ATLAS1JET11', 'CMSJETS11', 'CDFR2KT',
-               'ATLASTTBARTOT', 'ATLASTOPDIFF8TEVTRAPNORM', 'CMSTTBARTOT',
-               'CMSTOPDIFF8TEVTTRAPNORM']
     matrix_theory = theory_covmat_custom.values
     matrix_experiment = experiments_covmat.values
     inv_exp = (np.diag(la.inv(matrix_experiment)))**(-0.5)/experiments_data
