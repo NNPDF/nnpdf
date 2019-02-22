@@ -64,7 +64,7 @@ class DataResult(NNPDFDataResult):
     def __init__(self, dataobj, use_thcovmat=False):
         super().__init__(dataobj)
         if use_thcovmat:
-            self._sqrtcovmat = dataobj.get_sqrtfitcovmat(str(use_thcovmat), [])
+            self._sqrtcovmat = dataobj.GetSqrtFitCovMat(str(use_thcovmat), [])
         else:
             self._sqrtcovmat = dataobj.get_sqrtcovmat()
         self._covmat = dataobj.get_covmat()

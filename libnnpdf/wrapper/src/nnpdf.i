@@ -304,22 +304,6 @@ void get_sqrtcovmat(double ** datamat, int* n, int* m){
     *m = *n = len;
 }
 
-void get_sqrtfitcovmat(
-                       double ** datamat,
-                       int* n, int* m,
-                       std::string filename,
-                       std::vector<int> bmask = {}
-                      )
-{
-    int len = $self->GetNData();
-    auto data = $self->GetSqrtFitCovMat(filename, bmask).data();
-    auto size = len*len;
-    auto result = (double*) malloc(sizeof(double)*size);
-    std::copy(data, data + size, result);
-    *datamat = result;
-    *m = *n = len;
-}
-
 void get_cv (double **cv, int* n){
     int len = $self->GetNData();
     auto result = (double*) malloc(sizeof(double)*len);
