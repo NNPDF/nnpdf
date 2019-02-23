@@ -428,6 +428,8 @@ class Loader(LoaderBase):
                            fkspecs=fkspec, thspec=theoryid, cuts=None,
                            frac=frac, op=op, weight=weight)
                 cuts = self.check_internal_cuts(full_ds, q2min, w2min)
+            elif cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE:
+                raise LoaderError(f"Intersection cuts not supported in loader calls.")
 
         return DataSetSpec(name=name, commondata=commondata,
                            fkspecs=fkspec, thspec=theoryid, cuts=cuts,

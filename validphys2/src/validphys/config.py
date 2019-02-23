@@ -323,6 +323,27 @@ class CoreConfig(configparser.Config):
                 use_fitcommondata=use_fitcommondata,
                 fit=fit)
             return self.loader.check_internal_cuts(full_ds, q2min, w2min)
+        elif use_cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE:
+            cut_list = []
+            _, nss = self.parse_from_(None, 'cuts_intersection_spec', write=False)
+            self._check_dataspecs_type(nss)
+            if not nss:
+                raise ConfigError("'cuts_intersection_spec' must contain at least one namespace.")
+
+
+            #This is a bit of a hack, but it is useful to allow to load cuts
+            #from theories that do not contain matched cfactors.
+            newdsinput = copy.copy(dataset_input)
+            newdsinput.cfac = ()
+            ns_cut_inputs = {'dataset_input': newdsinput,
+                             'use_cuts': CutsPolicy.INTERNAL}
+            for ns in nss:
+                with self.set_context(ns=self._curr_ns.new_child({**ns, **ns_cut_inputs})):
+                    _, nscuts = self.parse_from_(None, 'cuts', write=False)
+                    cut_list.append(nscuts)
+            ndata = cut_list[0].full_ds.commondata.ndata
+            return MatchedCuts(cut_list, ndata=ndata)
+
         raise TypeError("Wrong use_cuts")
 
 

@@ -315,11 +315,11 @@ class ExperimentInput(TupleComp):
     def __str__(self):
         return self.name
 
-#TODO: Not sure I like these
 class CutsPolicy(enum.Enum):
     INTERNAL = "internal"
     NOCUTS = "nocuts"
     FROMFIT = "fromfit"
+    FROM_CUT_INTERSECTION_NAMESPACE = "fromintersection"
 
 class Cuts(TupleComp):
     def __init__(self, name, path):
