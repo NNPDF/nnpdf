@@ -348,9 +348,9 @@ class InternalCutsWrapper(TupleComp):
 
 class MatchedCuts(TupleComp):
     def __init__(self, othercuts, ndata):
-        self.othercuts = othercuts
+        self.othercuts = tuple(othercuts)
         self.ndata = ndata
-        super().__init__(othercuts, ndata)
+        super().__init__(self.othercuts, self.ndata)
 
     def load(self):
         loaded =  [c.load() for c in self.othercuts if c]
