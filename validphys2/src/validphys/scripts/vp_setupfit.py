@@ -39,7 +39,7 @@ from reportengine import colors
 
 
 SETUPFIT_FIXED_CONFIG = dict(
-    Nocuts={'use_cuts': 'nocuts'},
+    Nocuts={'use_cuts': 'internal'},
     actions_=[
         'datacuts check_t0pdfset',
         'theory check_positivity',
