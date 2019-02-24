@@ -72,7 +72,7 @@ class SetupFitEnvironment(Environment):
 
         # check if results folder exists
         self.output_path = pathlib.Path(self.output_path).absolute()
-        if self.output_path.exists():
+        if self.output_path.is_dir():
             log.warning(f"Output folder exists: {self.output_path} Overwritting contents")
         else:
             if not re.fullmatch(r'[\w.\-]+', self.output_path.name):
@@ -86,6 +86,8 @@ class SetupFitEnvironment(Environment):
             shutil.copy2(self.config_yml, self.output_path / RUNCARD_COPY_FILENAME)
         except shutil.SameFileError:
             pass
+        except Exception as e:
+            raise EnvironmentError_(e) from e
 
         # create output folder
         self.filter_path = self.output_path / FILTER_OUTPUT_FOLDER
