@@ -10,7 +10,8 @@
 # This is a validphys-like app in disguise. It takes an nnfit runcard and adds
 # a fixed list of actions and some associated resourced to it so as to make it
 # a proper validphys runcard. These config options are defined in the
-# SETUPFIT_FIXED_CONFIG mapping below.
+# SETUPFIT_FIXED_CONFIG mapping below. Similarly, defult options are specified
+# in SETUPFIT_DEFAULTS.
 #
 # Extensions to the setup procedure can be implemented by adding suitable
 # actions_ to the mapping (making sure that they are executed in the right
@@ -39,12 +40,15 @@ from reportengine import colors
 
 
 SETUPFIT_FIXED_CONFIG = dict(
-    Nocuts={'use_cuts': 'internal'},
     actions_=[
         'datacuts check_t0pdfset',
         'theory check_positivity',
-        'Nocuts::datacuts::closuretest::theory::fitting filter',
+        'datacuts::closuretest::theory::fitting filter',
     ])
+
+SETUPFIT_DEFAULTS = dict(
+    use_cuts= 'internal',
+)
 
 SETUPFIT_PROVIDERS = ['validphys.filters',]
 
@@ -128,6 +132,8 @@ class SetupFitConfig(Config):
         if not isinstance(file_content, dict):
             raise ConfigError(f"Expecting input runcard to be a mapping, "
                               f"not '{type(file_content)}'.")
+        for k,v in SETUPFIT_DEFAULTS.items():
+            file_content.setdefault(k, v)
         file_content.update(SETUPFIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 
