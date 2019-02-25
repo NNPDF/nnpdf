@@ -66,10 +66,13 @@ class CompareFitApp(App):
             '--closure',
             help="Use the closure comparison template.",
             action='store_true')
+        parser.add_argument(
+            '--theory_cov',
+            help="Use theory cov mat for calculating statistical estimators.")
 
     def try_complete_args(self):
         args = self.args
-        argnames = ('base_fit', 'reference_fit', 'title', 'author', 'keywords')
+        argnames = ('base_fit', 'reference_fit', 'theory_cov', 'title', 'author', 'keywords')
         bad = [argname for argname in argnames if not args[argname]]
         if bad and not args['interactive']:
             sys.exit(f"The following arguments are required: {bad}")
@@ -122,6 +125,14 @@ class CompareFitApp(App):
             complete_in_thread=True)
         return [k.strip() for k in kwinp.split(',') if k]
 
+    def interactive_theory_cov(self):
+        completer = WordCompleter(["True", "False"])
+        res = prompt_toolkit.prompt(
+            "Use theory covariance matrix? ", completer=completer, default="False")
+        stringtobool = {"false":False, "true":True, "False":False, "True":True, "f":False, "t":True}
+        res = stringtobool.get(res, default=res)
+        return res
+
     def get_commandline_arguments(self, cmdline=None):
         args = super().get_commandline_arguments(cmdline)
         # This is needed because the environment wants to know how to resolve
@@ -167,6 +178,7 @@ class CompareFitApp(App):
             },
             'speclabel': 'Reference Fit'
         }
+        autosettings['rc_useth'] = args['theory_cov']
         return autosettings
 
 

@@ -14,7 +14,7 @@ import numpy as np
 import scipy.linalg as la
 import pandas as pd
 
-from NNPDF import ThPredictions, CommonData, Experiment
+from NNPDF import ThPredictions, CommonData, Experiment, DataSet
 from reportengine.checks import require_one, remove_outer, check_not_empty
 from reportengine.table import table
 from reportengine import collect
@@ -23,6 +23,7 @@ from validphys.checks import (check_cuts_considered, check_pdf_is_montecarlo,
                               check_speclabels_different, check_two_dataspecs)
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
 from validphys.calcutils import all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values
+from validphys.tableloader import parse_exp_mat
 
 log = logging.getLogger(__name__)
 
@@ -63,11 +64,20 @@ class DataResult(NNPDFDataResult):
 
     def __init__(self, dataobj, use_thcovmat=False):
         super().__init__(dataobj)
+        self._covmat = dataobj.get_covmat()
         if use_thcovmat:
-            self._sqrtcovmat = dataobj.GetSqrtFitCovMat(str(use_thcovmat), [])
+            if isinstance(dataobj, Experiment):
+                self._sqrtcovmat = dataobj.GetSqrtFitCovMat(str(use_thcovmat), [])
+            elif isinstance(dataobj, DataSet):
+                # TODO: Come up with a better internal way of doing this, at the very least
+                # Not loading the whole th cov mat each time
+                thcov = parse_exp_mat(use_thcovmat)
+                thcovslice = thcov.xs(
+                    dataobj.GetSetName(), level=1, axis=0).xs(
+                        dataobj.GetSetName(), level=1, axis=1).values
+                self._sqrtcovmat = np.linalg.cholesky(self._covmat + thcovslice)
         else:
             self._sqrtcovmat = dataobj.get_sqrtcovmat()
-        self._covmat = dataobj.get_covmat()
 
 
 
@@ -371,7 +381,7 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
     return df
 
 
-def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None, thcovmat=False):
+def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None, fitthcovmat=False):
     """Tuple of data and theory results for a single pdf.
     The theory is specified as part of the dataset.
     An experiment is also allowed.
@@ -385,12 +395,12 @@ def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None, thcovm
         log.debug("Setting T0 predictions for %s" % dataset)
         data.SetT0(t0set.load_t0())
 
-    return DataResult(data, use_thcovmat=thcovmat), ThPredictionsResult.from_convolution(pdf, dataset,
+    return DataResult(data, use_thcovmat=fitthcovmat), ThPredictionsResult.from_convolution(pdf, dataset,
                                                  loaded_data=data)
 
 def experiment_results(experiment, pdf:PDF, t0set:(PDF, type(None))=None, fitthcovmat=False):
     """Like `results` but for a whole experiment"""
-    return results(experiment, pdf, t0set, thcovmat=fitthcovmat)
+    return results(experiment, pdf, t0set, fitthcovmat=fitthcovmat)
 
 #It's better to duplicate a few lines than to complicate the logic of
 #``results`` to support this.
