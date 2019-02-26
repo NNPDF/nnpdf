@@ -126,12 +126,41 @@ class CompareFitApp(App):
         return [k.strip() for k in kwinp.split(',') if k]
 
     def interactive_theory_cov(self):
-        completer = WordCompleter(["True", "False"])
-        res = prompt_toolkit.prompt(
-            "Use theory covariance matrix? ", completer=completer, default="False")
-        stringtobool = {"false":False, "true":True, "False":False, "True":True, "f":False, "t":True}
-        res = stringtobool.get(res, default=res)
-        return res
+        """Interactively fill in the `rc_useth` runcard flag. Only booleans are permitted
+        at present, since the option to pass a path to `rc_useth` has a high possibility of
+        producing incorrect results or errors, and has very specific use cases.
+        """
+        Keys = prompt_toolkit.keys.Keys
+        merge_formatted_text = prompt_toolkit.formatted_text.merge_formatted_text
+        PromptSession = prompt_toolkit.shortcuts.PromptSession
+        bindings = prompt_toolkit.key_binding.key_bindings.KeyBindings()
+
+        @bindings.add('y')
+        @bindings.add('Y')
+        def yes(event):
+            session.default_buffer.text = 'y'
+            event.app.exit(result=True)
+
+        @bindings.add('n')
+        @bindings.add('N')
+        def no(event):
+            session.default_buffer.text = 'n'
+            event.app.exit(result=False)
+
+        @bindings.add(Keys.Any)
+        def nothing(event):
+            " Disallow inserting other text. "
+            pass
+
+        # Set default to No
+        bindings.add(Keys.Enter)(no)
+
+        message = ("Do you want to use the fitted covariance matrix (including theory covariance\n"
+                   "matrix) to calculate the statistical estimators? ")
+        yes_no_str = prompt_toolkit.HTML('[y/<b>N</b>]')
+        complete_message = merge_formatted_text([message, yes_no_str])
+        session = PromptSession(complete_message, key_bindings=bindings)
+        return session.prompt()
 
     def get_commandline_arguments(self, cmdline=None):
         args = super().get_commandline_arguments(cmdline)
