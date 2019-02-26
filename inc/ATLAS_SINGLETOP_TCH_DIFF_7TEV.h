@@ -27,3 +27,10 @@ public: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter():
 private:
   void ReadData();
 };
+
+class ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter: public CommonData {
+public: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter():
+  CommonData("ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP") { ReadData(); }
+private:
+  void ReadData();
+};
