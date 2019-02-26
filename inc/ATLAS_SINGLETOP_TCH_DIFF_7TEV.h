@@ -13,3 +13,10 @@ public: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter():
 private:
   void ReadData();
 };
+
+class ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter: public CommonData {
+public: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter():
+  CommonData("ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM") { ReadData(); }
+private:
+  void ReadData();
+};
