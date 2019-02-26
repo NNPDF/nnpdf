@@ -568,6 +568,29 @@ class TheoryIDSpec:
     def __str__(self):
         return f"Theory {self.id}"
 
+class ThCovMatSpec:
+    def __init__(self, path):
+        self.path = path
+
+    # maxsize relatively low here, expect single experiments so one load per dataspec
+    @functools.lru_cache(maxsize=8)
+    def load(self):
+        from validphys.tableloader import parse_exp_mat
+        self.data = parse_exp_mat(self.path)
+
+    def __getitem__(self, datasetname):
+        try:
+            section = self.data.xs(
+                datasetname, level=1, axis=0).xs(
+                    datasetname, level=1, axis=1).values
+            return section
+        except AttributeError:
+            log.error("Tried to access part of covariance matrix before loading it")
+            raise
+
+    def __str__(self):
+        return str(self.path)
+
 #TODO: Decide if we want methods or properties
 class Stats:
 

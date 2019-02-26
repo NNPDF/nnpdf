@@ -22,7 +22,7 @@ from reportengine.helputils import get_parser_type
 from reportengine import report
 
 from validphys.core import (ExperimentSpec, DataSetInput, ExperimentInput,
-                            CutsPolicy, MatchedCuts)
+                            CutsPolicy, MatchedCuts, ThCovMatSpec)
 from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFoundError,
                               PDFNotFound, FallbackLoader)
 from validphys.gridvalues import LUMI_CHANNELS
@@ -223,6 +223,7 @@ class CoreConfig(configparser.Config):
         underlyinglaw = self.parse_pdf(datacuts['fakepdf'])
         return {'pdf': underlyinglaw}
 
+
     def produce_fitpdfandbasis(self, fit):
         """ Set the PDF and basis from the fit config. """
         with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
@@ -230,22 +231,6 @@ class CoreConfig(configparser.Config):
             _, fitting = self.parse_from_('fit', 'fitting', write=False)
         basis = fitting['fitbasis']
         return {'pdf': pdf, 'basis':basis}
-
-    def produce_fitthcovmat(self, fit, rc_useth=False):
-        if isinstance(rc_useth, str):
-            if os.path.exists(rc_useth):
-                pass
-            else:
-                raise DataNotFoundError(
-                    f"No file found at {rc_useth}. If specifying a path `rc_useth` should be set to"
-                    f"point at a valid thcovmat file"
-                )
-        if isinstance(rc_useth, bool) and rc_useth:
-            rc_useth = fit.path / 'tables' / 'datacuts_theory_theorycovmatconfig_fitting_t0_theory_covmat_custom.csv'
-            if not os.path.exists(rc_useth):
-                rc_useth = False
-        return rc_useth
-
 
     @element_of('dataset_inputs')
     def parse_dataset_input(self, dataset:Mapping):
@@ -708,6 +693,27 @@ class CoreConfig(configparser.Config):
         #Set this to get the same filename regardless of the action.
         res.__name__ = 'theory_covmat'
         return res
+
+    def parse_theorycovmat(self, pathorbool):
+        if pathorbool:
+            return ThCovMatSpec(pathorbool)
+        else:
+            return False
+
+    def produce_fitthcovmat(self, fit, rc_useth=False):
+        if isinstance(rc_useth, str):
+            if os.path.exists(rc_useth):
+                pass
+            else:
+                raise DataNotFoundError(
+                    f"No file found at {rc_useth}. If specifying a path `rc_useth` should be set to"
+                    f"point at a valid thcovmat file"
+                )
+        if isinstance(rc_useth, bool) and rc_useth:
+            rc_useth = fit.path / 'tables' / 'datacuts_theory_theorycovmatconfig_fitting_t0_theory_covmat_custom.csv'
+            if not os.path.exists(rc_useth):
+                rc_useth = False
+        return self.parse_theorycovmat(rc_useth)
 
     def parse_speclabel(self, label:(str, type(None))):
         """A label for a dataspec. To be used in some plots"""
