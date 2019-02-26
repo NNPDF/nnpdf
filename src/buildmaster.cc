@@ -40,7 +40,6 @@
 #include "HERA1-C.h"
 #include "HERA2-C.h"
 #include "H1HERA2.h"
-#include "ZEUS2.h"
 #include "TOP.h"
 #include "CMSwc.h"
 #include "HERACOMB.h"
@@ -168,7 +167,6 @@ void InitCommonData(vector<CommonData*>& target)
   // ************************* D0 ******************************
 
   target.push_back(new D0ZRAPFilter());
-  target.push_back(new D0R2CONFilter());
   target.push_back(new D0WMASYFilter());
   target.push_back(new D0WEASYFilter());
 
@@ -257,14 +255,6 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMS_SINGLETOP_TCH_TOT_7TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_8TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_13TEVFilter());
-
-  // ************************* ZEUS ******************************
-
-  target.push_back(new Z06NCFilter());
-  target.push_back(new Z06CCFilter());
-
-  target.push_back(new ZEUSHERA2CCPFilter());
-  target.push_back(new ZEUSHERA2NCPFilter());
 
   //***************************F2B******************************
 
