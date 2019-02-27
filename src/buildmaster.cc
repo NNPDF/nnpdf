@@ -40,7 +40,6 @@
 #include "HERA1-C.h"
 #include "HERA2-C.h"
 #include "H1HERA2.h"
-#include "ZEUS2.h"
 #include "TOP.h"
 #include "CMSwc.h"
 #include "HERACOMB.h"
@@ -73,6 +72,8 @@
 #include "CMS_SINGLETOP_TCH_R_8TEV.h"
 #include "CMS_SINGLETOP_TCH_R_13TEV.h"
 #include "CMS_WCHARM_DIFF_UNNORM_13TEV.h"
+#include "HERACOMB_SIGMARED_C.h"
+#include "HERACOMB_SIGMARED_B.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -167,7 +168,6 @@ void InitCommonData(vector<CommonData*>& target)
   // ************************* D0 ******************************
 
   target.push_back(new D0ZRAPFilter());
-  target.push_back(new D0R2CONFilter());
   target.push_back(new D0WMASYFilter());
   target.push_back(new D0WEASYFilter());
 
@@ -261,14 +261,6 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMS_SINGLETOP_TCH_R_8TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_13TEVFilter());
 
-  // ************************* ZEUS ******************************
-
-  target.push_back(new Z06NCFilter());
-  target.push_back(new Z06CCFilter());
-
-  target.push_back(new ZEUSHERA2CCPFilter());
-  target.push_back(new ZEUSHERA2NCPFilter());
-
   //***************************F2B******************************
 
   target.push_back(new ZEUSF2BFilter());
@@ -283,6 +275,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new HERACOMBNCEP575Filter());
   target.push_back(new HERACOMBNCEP820Filter());
   target.push_back(new HERACOMBNCEP920Filter());
+  target.push_back(new HERACOMB_SIGMARED_CFilter());
+  target.push_back(new HERACOMB_SIGMARED_BFilter());
 
   // ************************ ATLAS TTBAR DIFF 8 TeV  ***************
   target.push_back(new ATLASTOPDIFF8TEVTPTFilter());

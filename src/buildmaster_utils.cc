@@ -28,7 +28,7 @@
 using namespace std;
 
 
-// Better error handling for YAML 
+// Better error handling for YAML
 template<class T>
 T fetchEntry(YAML::Node const& yml, string const& key)
 {
@@ -76,74 +76,17 @@ void Buildmaster::CommonData::SetStatisticalError( unsigned int index, double st
     fStat[index] = staterror;
 }
 
-template <typename T>
-T sign(T t)
-{
-  if (t < 0)
-    return T(-1);
-  else
-    return T(+1);
-}
-
-
-/**
- * Treatment of asymmetric errors
- *
- * Here we follow the approach used in the F2p paper
- * hep-ph/0501067 and given also in physics/0403086
- * which all the formulas refer to (in parenthesis the
- * equation number of the notes).
- *
- * The following are examples of all the possible combinations
- *
- * right     left      sigma     delta
- *
- *  1.2      -0.8        1        0.2
- * -1.2       0.8       -1       -0.2
- *  0.8      -1.2        1       -0.2
- * -0.8       1.2       -1        0.2
- *
- *  0.8      -1.2       -1.428     1
- *  1.2       0.8        1.428     1
- * -0.8      -1.2        1.428    -1
- * -1.2      -0.8       -1.428    -1
- *
- *   0        1.2       -0.6      0.6
- *   0       -1.2        0.6     -0.6
- *  1.2        0         0.6      0.6
- * -1.2        0        -0.6     -0.6
- *
- */
+// Given an asymmetric error [ \sigma + \Delta_+ - \Delta_- ] symmetrise according to physics/0403086
+// Note the signs are assumed to be included in the arguments of this function. That is
+// right = (+ \Delta_+)
+// left  = (- \Delta_-)
 void symmetriseErrors(double right, double left, double* sigma, double* delta)
 {
-  /* the new error is the average of the modulus of the right
-   and the left contributions - eq. 24 (2), this definition
-   changes if right and left sigma have the the same sign   */
-  *sigma = (fabs(right)+fabs(left))/2.0;
-  *sigma *= sign(right);
+  const double semi_diff = ( right + left ) / 2.0;
+  const double average   = ( right - left ) / 2.0;
 
-  /* the central value must be shifted by delta which is the
-   semidifference taken with sign - eq. 23 (3) this definition
-   is the same for any sign of the right and left contribution */
-  *delta = (right+left)/2.0;
-
-  if (right*left > 0)
-  {
-    // if right and left have the same sign eq. 24 is replaced by eq. 27 (4)
-    *sigma = (fabs(right)-fabs(left))/2.0;
-    *sigma = sqrt( (*sigma)*(*sigma) + 2*(*delta)*(*delta) );
-    *sigma *= sign(right);
-  }
-
-  if (right*left >= 0)
-  {
-    if (fabs(right) < fabs(left))
-    {
-      *sigma = -*sigma;
-      if (right == 0 && left < 0)
-        *sigma = -*sigma;
-    }
-  }
+  *delta = semi_diff;
+  *sigma = sqrt( average*average + 2*semi_diff*semi_diff );
 }
 
 /*
@@ -192,7 +135,7 @@ bool genArtSys(int ndata, const double* const* cov, double** artsys)
         cerr << "Error in getArtSys: Covariance matrix is not positive-semidefinite";
         return false;
       }
-  
+
   //Generate aritificial systematics
   for(int i = 0; i < ndata; i++)
     {
