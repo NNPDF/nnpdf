@@ -145,7 +145,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
   }
   
   double sys1, sys2, up, down, sigma, datshift;
-  double shift[4] = {0, 0, 0, 0};
+  double shift[fNData];
 
   for (int j=fNData; j<fNSys; j++)
   {
@@ -392,7 +392,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter::ReadData()
   }
   
   double sys1, sys2, up, down, sigma, datshift;
-  double shift[4] = {0, 0, 0, 0};
+  double shift[fNData];
 
   for (int j=fNData; j<fNSys; j++)
   {
@@ -435,7 +435,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter::ReadData()
     }
     else if (j==fNData+4) // Deal with asymmetric errors
     {
-      for (int i=0; i<4; i++)
+      for (int i=0; i<fNData; i++)
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
         if (sys1 < 0) {up=sys2; down=sys1;}
