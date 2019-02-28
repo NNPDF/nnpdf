@@ -4,7 +4,6 @@ Tools for computing and plotting effective exponents.
 """
 from __future__ import generator_stop
 
-import io
 import logging
 import warnings
 import numbers
@@ -422,7 +421,4 @@ def next_effective_exponents_yaml(
 
     #iterate t0
     filtermap['datacuts']['t0pdfset'] = fit.name
-
-    s = io.StringIO()
-    yaml.dump(filtermap, s, Dumper=yaml.RoundTripDumper)
-    return s.getvalue()
+    return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)
