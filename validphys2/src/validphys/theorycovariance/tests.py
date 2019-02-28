@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 """
 tests.py
 Tools for testing theory covariance matrices and their properties.
@@ -22,7 +22,8 @@ from reportengine import collect
 from validphys.results import results
 from validphys.checks import check_two_dataspecs
 from validphys.theorycovariance.construction import process_lookup, combine_by_type, process_starting_points
-from validphys.theorycovariance.construction import covmap, covs_pt_prescrip, theory_covmat_custom
+from validphys.theorycovariance.construction import commondata_experiments, each_dataset_results_bytheory, results_bytheoryids, experiments_results_theory, each_dataset_results,  dataset_names, theoryids_experiments_central_values, data_theory_diff
+from validphys.theorycovariance.construction import covmap, covs_pt_prescrip, theory_covmat_custom, total_covmat_experiments, chi2_impact_custom, chi2_diag_only, total_covmat_datasets, theory_diagcovmat, theory_covmat
 from validphys.theorycovariance.output import matrix_plot_labels
 
 log = logging.getLogger(__name__)
