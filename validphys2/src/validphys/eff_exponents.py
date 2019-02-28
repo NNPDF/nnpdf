@@ -377,7 +377,7 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF, *,
     df = pd.DataFrame(eff_exp_data, index=ind,
                       columns=eff_exp_columns)
     df.name = pdf.name
-    return df.round(decimals=3)
+    return df
 
 
 effective_exponents_table = collect(
