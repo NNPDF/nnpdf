@@ -13,6 +13,7 @@ import scipy.linalg as la
 import matplotlib.pyplot as plt
 from matplotlib import cm, colors as mcolors
 import pandas as pd
+from math import inf
 
 from reportengine.figure import figure
 from reportengine.checks import make_argcheck, check
@@ -711,7 +712,7 @@ def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
     df.sort_index(0, inplace=True)
     df.sort_index(1, inplace=True)
     oldindex = df.index.tolist()
-    newindex = sorted(oldindex, key=lambda r: (_procorder().index(r[0]), _dsorder().index(r[1]), r[2]))
+    newindex = sorted(oldindex, key=lambda r: _get_key(r))
     # reindex index
     newdf = df.reindex(newindex)
     #reindex columns by transposing, reindexing, then transposing back
@@ -755,7 +756,24 @@ def _dsorder():
                'ATLASTTBARTOT', 'ATLASTOPDIFF8TEVTRAPNORM', 'CMSTTBARTOT',
                'CMSTOPDIFF8TEVTTRAPNORM')
     return dsorder
-    
+
+def _get_key(element):
+    x1 = element[0]
+    y1 = element[1]
+    z1 = element[2] 
+    if x1 in _procorder():
+        x2 = _procorder().index(x1)
+    else:
+        x2 = inf
+    if y1 in _dsorder():
+        y2 = _dsorder().index(y1)
+    else: 
+        y2 = inf
+    z2 = z1
+    newelement = (x2, y2, z2)
+    return newelement
+
+
 @figure
 def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
     """Matrix plot of a correlation matrix"""
@@ -764,7 +782,7 @@ def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
     df.sort_index(0, inplace=True)
     df.sort_index(1, inplace=True)
     oldindex = df.index.tolist()
-    newindex = sorted(oldindex, key=lambda r: (_procorder().index(r[0]), _dsorder().index(r[1]), r[2]))
+    newindex = sorted(oldindex, key=lambda r: _get_key(r))
     # reindex index
     newdf = df.reindex(newindex)
     #reindex columns by transposing, reindexing, then transposing back
