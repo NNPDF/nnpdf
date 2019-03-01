@@ -926,7 +926,7 @@ def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat,
     sqrtdiags_th = pd.DataFrame(sqrtdiags_th.values, index=dataset_index_byprocess)
     sqrtdiags_th.sort_index(0,inplace=True)
     oldindex = sqrtdiags_th.index.tolist()
-    newindex = sorted(oldindex, key=lambda r: (_procorder().index(r[0]), _dsorder().index(r[1]), r[2]))
+    newindex = sorted(oldindex, key=lambda r: _get_key(r))
     sqrtdiags_th = sqrtdiags_th.reindex(newindex)
     sqrtdiags_exp = np.sqrt(np.diag(experiments_covmat))/data
     sqrtdiags_exp = pd.DataFrame(sqrtdiags_exp.values, index=dataset_index_byprocess)
@@ -966,7 +966,7 @@ def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat,
     df_inv_exp = pd.DataFrame(inv_exp, index=dataset_index_byprocess)
     df_inv_exp.sort_index(0,inplace=True)
     oldindex = df_inv_exp.index.tolist()
-    newindex = sorted(oldindex, key=lambda r: (_procorder().index(r[0]), _dsorder().index(r[1]), r[2]))
+    newindex = sorted(oldindex, key=lambda r: _get_key(r))
     df_inv_exp = df_inv_exp.reindex(newindex)
     df_inv_tot = pd.DataFrame(inv_tot, index=dataset_index_byprocess)
     df_inv_tot.sort_index(0,inplace=True)
