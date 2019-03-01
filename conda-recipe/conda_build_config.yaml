@@ -4,7 +4,6 @@ numpy:
     - 1.14
 
 pin_run_as_build:
-    numpy: x.x
     lhapdf: x.x.x
     apfel: x.x.x.x
     gsl: x.x.x

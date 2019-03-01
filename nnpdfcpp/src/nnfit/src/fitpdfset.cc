@@ -14,10 +14,10 @@
 #include <sstream>
 #include <iomanip>
 #include <array>
+#include <sys/stat.h>
 
 #include "fitpdfset.h"
 #include "nnpdfsettings.h"
-#include "apfelevol.h"
 #include <NNPDF/randomgenerator.h>
 #include <NNPDF/fastkernel.h>
 #include <NNPDF/exceptions.h>
@@ -49,7 +49,6 @@ fNIte(0),
 fbtype(NNPDFSettings::getFitBasisType(nnset.Get("fitting","fitbasis").as<string>()))
 {
   fMembers = 0; // copies
-  APFELSingleton::Initialize(nnset,this);
 }
 
 /**
@@ -253,41 +252,27 @@ void FitPDFSet::GetPDF(real const& x, real const& Q2, int const& n, real* pdf) c
   if (fabs(fQ20 - Q2) < EPSILON)
     {
       // Fetch fit basis PDFs
-      real* xvals = new real[2];
+      std::array<real, 2> xvals;
       xvals[0] = x;
       xvals[1] = log(x);
-      real* fitpdfs = nullptr;
+      std::vector<real> fitpdfs;
 
       if (fbtype == BASIS_LUX)
-	fitpdfs = new real[fNfl+1];
+        fitpdfs.resize(fNfl+1, 0);
       else
-	fitpdfs = new real[fNfl];
+        fitpdfs.resize(fNfl, 0);
 
       for (int i=0; i<fNfl; i++)
-        fPDFs[n][i]->Compute(xvals,&fitpdfs[i]);
+        fPDFs[n][i]->Compute(xvals.data(), &fitpdfs.data()[i]);
 
       // Preprocess
-      fFitBasis->Preprocess(x, fitpdfs, *fPreprocParam[n]);
+      fFitBasis->Preprocess(x, fitpdfs.data(), *fPreprocParam[n]);
 
       // Rotate to evolution basis
-      fFitBasis->BASIS2EVLN(fitpdfs,pdf);
-
-      delete[] xvals;
-      delete[] fitpdfs;
-    }
-  else if (APFELSingleton::isInstance())
-    {
-      real *lha = new real[14];
-      for (int i = 0; i < 14; i++) lha[i] = pdf[i] = 0.0;
-      APFELSingleton::xfxQ(x,sqrt(Q2),n,lha);
-      PDFSet::LHA2EVLN(lha,pdf);
-      delete[] lha;
+      fFitBasis->BASIS2EVLN(fitpdfs.data(), pdf);
     }
   else
-    {
-      cerr << Colour::FG_RED << "FitPDFSet::GetPDF error: evolving without APFEL singleton" << endl;
-      exit(-1);
-    }
+    throw RuntimeException("FitPDFSet::GetPDF", "Evolved PDFs not implemented for this function anymore");
 
   return;
 }
@@ -303,33 +288,25 @@ real FitPDFSet::GetPDF(real const& x, const real &Q2, int const& n, int const& f
   real pdf = 0;
   if (fabs(fQ20 - Q2) < EPSILON)
     {
-      real* xvals = new real[2];
-
+      std::array<real, 2> xvals;
       xvals[0] = x;
       xvals[1] = log(x);
-
-      int* transform = new int[fNfl];
-      fFitBasis->NetTransform(fl,fNfl,transform);
+      std::vector<int> transform(fNfl, 0);
+      fFitBasis->NetTransform(fl,fNfl,transform.data());
 
       for (int i = 0; i < fNfl; i++)
         if (transform[i])
         {
           real tmp = 0;
-          fPDFs[n][i]->Compute(xvals,&tmp);
+          fPDFs[n][i]->Compute(xvals.data(), &tmp);
           if(fFitBasis->GetPDFSqrPos(i)) tmp *= tmp;
           pdf+=transform[i]*tmp;
         }
 
       fFitBasis->Preprocess(x, fl, pdf, *fPreprocParam[n]);
-
-      delete[] xvals;
-      delete[] transform;
     }
   else
-    {
-      cerr << Colour::FG_RED << "FitPDFSet::GetPDF error: APFEL singleton not implemented for this function" << endl;
-      exit(-1);
-    }
+    throw RuntimeException("FitPDFSet::GetPDF", "Evolved PDFs not implemented for this function anymore");
 
   return pdf;
 }
@@ -399,252 +376,6 @@ void FitPDFSet::ExportMeta( int const& rep, real const& erf_val, real const& erf
         paramsdata << fBestFit[i]->GetParameters()[j] << endl;
     }
   write_to_file(paramsfile.str(), paramsdata.str());
-}
-
-/**
- * @brief Prototype LHGrid output
- * @param rep the replica
- * @param erf_val the validation error function
- * @param erf_trn the training error function
- * @param chi2 the chi2
- * Print to file a partial LHgrid for the current replica
- */
-void FitPDFSet::ExportPDF( int const& rep )
-{
-  // Preparing settings from APFELSingleton
-  cout << Colour::FG_BLUE <<"- Writing out LHAPDF grid: "<< fSettings.GetPDFName() << Colour::FG_DEFAULT << endl;
-
-  // if replica 1 print the header
-  const int nf = std::max(APFELSingleton::getNFpdf(),APFELSingleton::getNFas());
-  vector<double> xgrid = APFELSingleton::getX();
-  vector<vector<double> > q2grid = APFELSingleton::getQ2nodes();
-
-  if (rep==1)
-  {
-    // LHAPDF6 HEADER
-    stringstream infofile, infodata;
-    infofile << fSettings.GetResultsDirectory() << "/nnfit/" << fSettings.GetPDFName() <<".info";
-    infodata << "SetDesc: \"NNPDF x.x\"" << endl;
-    infodata << "SetIndex: " << endl;
-    infodata << "Authors: NNPDF Collaboration." << endl;
-    infodata << "Reference: arXiv:xxxx.xxxxxx" << endl;
-    infodata << "Format: lhagrid1" << endl;
-    infodata << "DataVersion: 1" << endl;
-    infodata << "NumMembers: REPLACE_NREP" << endl;
-    infodata << "Particle: 2212" << endl;
-    infodata << "Flavors: [";
-    for (int i = -nf; i <= nf; i++)
-      infodata << ((i == 0) ? 21 : i) << ((i == nf && !fSettings.IsQED()) ? "]\n" : ( (i == nf && fSettings.IsQED()) ? ", 22]\n" : ", "));
-    infodata << "OrderQCD: " << fSettings.GetTheory(APFEL::kPTO) << endl;
-    infodata << "FlavorScheme: variable" << endl;
-    infodata << "NumFlavors: " << nf << endl;
-    infodata << "ErrorType: replicas" << endl;
-    infodata.precision(7);
-    infodata << scientific;
-    infodata << "XMin: "<< APFELSingleton::getXmin() << endl;
-    infodata << "XMax: "<< APFELSingleton::getXmax() << endl;
-    infodata << "QMin: "<< APFELSingleton::getQmin() << endl;
-    infodata << "QMax: "<< APFELSingleton::getQmax() << endl;
-    infodata << "MZ: "  << APFELSingleton::getMZ() << endl;
-    infodata << "MUp: 0\nMDown: 0\nMStrange: 0" << std::endl;
-    infodata << "MCharm: "  << APFELSingleton::getMCharm() << endl;
-    infodata << "MBottom: " << APFELSingleton::getMBottom() << endl;
-    infodata << "MTop: "    << APFELSingleton::getMTop() << endl;
-    infodata << fixed << "AlphaS_MZ: " << APFELSingleton::getAlphas() << endl;
-    infodata << scientific;
-    infodata << "AlphaS_OrderQCD: " << fSettings.GetTheory(APFEL::kPTO) << endl;
-    infodata << "AlphaS_Type: ipol" << endl;
-
-    infodata << "AlphaS_Qs: [";
-    for (int s = 0; s < (int) q2grid.size(); s++)
-      for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-        infodata << sqrt(q2grid[s][iq]) << ((s == (int) q2grid.size()-1 && iq == (int) q2grid[s].size()-1) ? "]\n" : ", ");
-
-    infodata << "AlphaS_Vals: [";
-    for (int s = 0; s < (int) q2grid.size(); s++)
-      for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-        infodata << APFELSingleton::alphas(sqrt(q2grid[s][iq])) << ((s == (int) q2grid.size()-1 && iq == (int) q2grid[s].size()-1) ? "]\n" : ", ");
-
-    infodata << "AlphaS_Lambda4: 0.342207" << std::endl;
-    infodata << "AlphaS_Lambda5: 0.239" << std::endl;
-    write_to_file(infofile.str(), infodata.str());
-  }
-
-  // Performing DGLAP
-  cout << Colour::FG_BLUE << "- Solving DGLAP for LHAPDF grid..." << Colour::FG_DEFAULT << endl;
-  array<real, 14> pdf;
-  const int nx = xgrid.size();
-  vector<vector<array<real, 14> > > res(q2grid.size());
-
-  for (int s = 0; s < (int) q2grid.size(); s++)
-    for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-      for (int ix = 0; ix < nx; ix++)
-        {
-          array<real, 14> lha;
-          GetPDF(xgrid[ix], q2grid[s][iq], 0, pdf.data());
-          PDFSet::EVLN2LHA(pdf.data(), lha.data());
-          res[s].push_back(lha);
-        }
-
-  // print the replica
-  stringstream lhafile, lhadata;
-  lhafile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/" << fSettings.GetPDFName() <<".dat";
-  lhadata << scientific << setprecision(7);
-  lhadata << "PdfType: replica\nFormat: lhagrid1\nFromMCReplica: " << rep << "\n---" << std::endl;
-  for (int s = 0; s < (int) q2grid.size(); s++)
-     {
-       for (int ix = 0; ix < nx; ix++)
-         lhadata << xgrid[ix] << " ";
-       lhadata << std::endl;
-
-       for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-         lhadata << sqrt(q2grid[s][iq]) << " ";
-       lhadata << std::endl;
-
-       for (int i = -nf; i <= nf; i++)
-         if (i == 0) lhadata << 21 << " ";
-         else lhadata << i << " ";
-       if (fSettings.IsQED()) lhadata << 22 << " ";
-       lhadata << std::endl;
-
-       const int floffset = 6-nf;
-       for (int ix = 0; ix < nx; ix++)
-         for (int iq = 0; iq < (int) q2grid[s].size(); iq++)
-           {
-             lhadata << " ";
-             for (int fl = floffset; fl <= 12-floffset; fl++)
-               lhadata << setw(14) << res[s][ix + iq*nx][fl] << " ";
-             if (fSettings.IsQED()) lhadata << setw(14) << res[s][ix + iq*nx][PDFSet::PHT] << " ";
-             lhadata << std::endl;
-           }
-       lhadata << "---" << std::endl;
-     }
-  write_to_file(lhafile.str(), lhadata.str());
-
-  cout << Colour::FG_GREEN << "\n- LHAPDF successful writeout!" << Colour::FG_DEFAULT << endl << endl;
-}
-
-
-/**
- * @brief FitPDFSet::ExportGrid
- * @param rep the replica ID
- * Export initial scale PDF on a grid in x
- */
-void FitPDFSet::ExportGrid(int const& rep)
-{
-  // Largest x-grid admissible in APFEL
-  const vector<double> xgrid =
-    {
-      1.000000000000000e-09, 1.297084823439570e-09, 1.682429034742569e-09,
-      2.182253154205826e-09, 2.830567417398188e-09, 3.671485978929410e-09,
-      4.762228629353150e-09, 6.177014273761803e-09, 8.012111098984379e-09,
-      1.039238706072454e-08, 1.347980640738050e-08, 1.748445036917782e-08,
-      2.267881188811028e-08, 2.941633703008346e-08, 3.815547465958784e-08,
-      4.949087072321288e-08, 6.419382957083709e-08, 8.326479519868589e-08,
-      1.080014229938285e-07, 1.400868730811297e-07, 1.817043317937722e-07,
-      2.356855515453774e-07, 3.057035125953233e-07, 3.965223098417466e-07,
-      5.143212572365697e-07, 6.671152451366758e-07, 8.652999229731433e-07,
-      1.122358752414873e-06, 1.455779955476825e-06, 1.888245605146129e-06,
-      2.449173524549460e-06, 3.176716500287171e-06, 4.120354152327973e-06,
-      5.344252657520903e-06, 6.931618978063155e-06, 8.990342582381449e-06,
-      1.166030301122581e-05, 1.512283122887690e-05, 1.961295293492122e-05,
-      2.543522071345024e-05, 3.298416834359921e-05, 4.277070539720159e-05,
-      5.545612481058487e-05, 7.189583136325140e-05, 9.319542279796139e-05,
-      1.207823677313300e-04, 1.564972094665545e-04, 2.027089363284954e-04,
-      2.624597993319508e-04, 3.396452441689850e-04, 4.392344430004219e-04,
-      5.675356601045333e-04, 7.325076157255367e-04, 9.441121054524513e-04,
-      1.214693176869783e-03, 1.559353061182245e-03, 1.996274511413378e-03,
-      2.546914937365516e-03, 3.235975102131256e-03, 4.091034365095647e-03,
-      5.141759770839620e-03, 6.418650960623169e-03, 7.951379403063506e-03,
-      9.766899996240997e-03, 1.188761392513640e-02, 1.432989476439189e-02,
-      1.710322794602712e-02, 2.021007339250794e-02, 2.364639713695425e-02,
-      2.740269157283572e-02, 3.146525061324443e-02, 3.581748292824286e-02,
-      4.044110601633167e-02, 4.531713439738071e-02, 5.042663479500688e-02,
-      5.575126100843393e-02, 6.127360193905193e-02, 6.697738294982548e-02,
-      7.284755899865170e-02, 7.887033222927267e-02, 8.503311978014517e-02,
-      9.132449102786790e-02, 9.773408797837715e-02, 1.042525382086388e-01,
-      1.108713665472371e-01, 1.175829093728782e-01, 1.243802338015993e-01,
-      1.312570629450312e-01, 1.382077077072888e-01, 1.452270051356506e-01,
-      1.523102630659852e-01, 1.594532106521559e-01, 1.666519542939869e-01,
-      1.739029384555782e-01, 1.812029108733327e-01, 1.885488916790972e-01,
-      1.959381459991933e-01, 2.033681596297647e-01, 2.108366174291031e-01,
-      2.183413841065613e-01, 2.258804871240649e-01, 2.334521014595030e-01,
-      2.410545360116810e-01, 2.486862214527622e-01, 2.563456993587234e-01,
-      2.640316124686842e-01, 2.717426959427826e-01, 2.794777695041488e-01,
-      2.872357303648326e-01, 2.950155468476644e-01, 3.028162526268661e-01,
-      3.106369415195031e-01, 3.184767627680818e-01, 3.263349167616716e-01,
-      3.342106511491565e-01, 3.421032573036267e-01, 3.500120671016855e-01,
-      3.579364499855710e-01, 3.658758102796432e-01, 3.738295847359622e-01,
-      3.817972402864939e-01, 3.897782719819471e-01, 3.977722010992863e-01,
-      4.057785734023404e-01, 4.137969575406706e-01, 4.218269435745480e-01,
-      4.298681416141745e-01, 4.379201805632053e-01, 4.459827069569899e-01,
-      4.540553838875619e-01, 4.621378900076507e-01, 4.702299186071416e-01,
-      4.783311767556753e-01, 4.864413845060586e-01, 4.945602741533477e-01,
-      5.026875895451769e-01, 5.108230854390865e-01, 5.189665269032351e-01,
-      5.271176887569979e-01, 5.352763550484283e-01, 5.434423185656607e-01,
-      5.516153803797675e-01, 5.597953494166407e-01, 5.679820420558005e-01,
-      5.761752817540883e-01, 5.843748986924983e-01, 5.925807294444404e-01,
-      6.007926166639503e-01, 6.090104087923975e-01, 6.172339597824495e-01,
-      6.254631288380691e-01, 6.336977801694852e-01, 6.419377827620891e-01,
-      6.501830101583613e-01, 6.584333402519444e-01, 6.666886550930888e-01,
-      6.749488407047076e-01, 6.832137869083856e-01, 6.914833871596969e-01,
-      6.997575383922505e-01, 7.080361408699164e-01, 7.163190980467328e-01,
-      7.246063164340254e-01, 7.328977054742707e-01, 7.411931774214037e-01,
-      7.494926472270083e-01, 7.577960324322238e-01, 7.661032530649272e-01,
-      7.744142315419215e-01, 7.827288925758362e-01, 7.910471630864785e-01,
-      7.993689721163776e-01, 8.076942507502913e-01, 8.160229320384573e-01,
-      8.243549509233821e-01, 8.326902441699869e-01, 8.410287502988437e-01,
-      8.493704095226000e-01, 8.577151636849855e-01, 8.660629562026835e-01,
-      8.744137320097212e-01, 8.827674375042057e-01, 8.911240204974589e-01,
-      8.994834301652264e-01, 9.078456170010206e-01, 9.162105327713991e-01,
-      9.245781304731123e-01, 9.329483642920292e-01, 9.413211895637338e-01,
-      9.496965627357548e-01, 9.580744413312983e-01, 9.664547839144387e-01,
-      9.748375500567046e-01, 9.832227003049778e-01, 9.916101961506623e-01,
-      1.000000000000000e+00
-    };
-
-  stringstream gridfile, griddata;
-  gridfile << fSettings.GetResultsDirectory() << "/nnfit/replica_" << rep << "/" << fSettings.GetPDFName() <<".gridvalues";
-  cout << "- Printing grid to file: " << gridfile.str() <<endl;
-
-  griddata << scientific << setprecision(14);
-  griddata << "{" << std::endl
-           << "\"replica\": "<< rep << "," << std::endl
-           << "\"q20\": " << fQ20 << ","<<std::endl
-           << "\"xgrid\": ["<<xgrid[0];
-  for (size_t ix=1; ix < xgrid.size(); ix++)
-    griddata <<", "<< xgrid[ix];
-  griddata << "]," <<std::endl;
-
-  // Write out the contents of the xfxvals array to the LHgrid
-  vector<real*> pdf_grid;
-  for (auto x : xgrid)
-    {
-      real *pdf = new real[14]();
-      real *lha = new real[14]();
-      GetPDF(x, fQ20, 0, pdf);
-      PDFSet::EVLN2LHA(pdf, lha);
-      pdf_grid.push_back(lha);
-      delete[] pdf;
-    }
-
-  // Print pdf grid to file
-  for (int ipdf = 0; ipdf < 14; ipdf++)
-  {
-    griddata << "\""<<PDFSet::fl_labels[ipdf]<<"\": ["
-             << pdf_grid[0][ipdf];
-    for (size_t ix = 1; ix < pdf_grid.size(); ix++)
-        griddata << ", " << pdf_grid[ix][ipdf];
-    griddata << "]";
-    if (ipdf < 13) griddata << ",";
-    griddata << std::endl;
-  }
-
-  for (size_t ix=0; ix<pdf_grid.size(); ix++)
-    delete[] pdf_grid[ix];
-
-  griddata << "}" <<std::endl;
-  write_to_file(gridfile.str(), griddata.str());
 }
 
 /**

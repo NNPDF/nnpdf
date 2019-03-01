@@ -1,0 +1,6 @@
+		test	test
+		ndata	$\chi^2/ndata$
+experiment	dataset		
+pseudo experiment	NMC	292	88.23565726330355
+pseudo experiment	ATLASTTBARTOT	3	1.182827653385916
+pseudo experiment	CMSZDIFF12	50	22.498392134735585

@@ -242,6 +242,11 @@ class CoreConfig(configparser.Config):
 
         sysnum = dataset.get('sys')
         cfac = dataset.get('cfac', tuple())
+        frac = dataset.get('frac', 1)
+        if  not isinstance(frac, numbers.Real):
+            raise ConfigError(f"'frac' must be a number, not '{frac}'")
+        if frac < 0 or frac > 1:
+            raise ConfigError(f"'frac' must be between 0 and 1 not '{frac}'")
         weight = dataset.get('weight', 1)
         if  not isinstance(weight, numbers.Real):
             raise ConfigError(f"'weight' must be a number, not '{weight}'")
@@ -251,7 +256,7 @@ class CoreConfig(configparser.Config):
         for k in kdiff:
             #Abuse ConfigError to get the suggestions.
             log.warninig(ConfigError(f"Key '{k}' in dataset_input not known.", k, known_keys))
-        return DataSetInput(name=name, sys=sysnum, cfac=cfac,
+        return DataSetInput(name=name, sys=sysnum, cfac=cfac, frac=frac,
                 weight=weight)
 
     def parse_use_fitcommondata(self, do_use: bool):
@@ -338,6 +343,7 @@ class CoreConfig(configparser.Config):
         name = dataset_input.name
         sysnum = dataset_input.sys
         cfac = dataset_input.cfac
+        frac = dataset_input.frac
         weight = dataset_input.weight
 
         try:
@@ -347,6 +353,7 @@ class CoreConfig(configparser.Config):
                 theoryid=theoryid,
                 cfac=cfac,
                 cuts=cuts,
+                frac=frac,
                 use_fitcommondata=use_fitcommondata,
                 fit=fit,
                 weight=weight)

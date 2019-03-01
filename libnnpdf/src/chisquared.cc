@@ -121,7 +121,8 @@ namespace NNPDF
     std::vector<double> stat_error(ndat, 0);
     for (int i=0; i<ndat; i++)
         stat_error[i] = cd.GetStat(i);
-    return ComputeCovMat_basic(ndat, nsys, sqrt_weights, t0, stat_error, cd.GetSysErrors(), true, false, th_cov_matrix, filename, bmask);
+
+    return ComputeCovMat_basic(ndat, nsys, sqrt_weights, t0, stat_error, cd.GetSysErrors(), true, false, th_cov_matrix, filename, bmask);        
   }
 
   matrix<double> ComputeSqrtMat(matrix<double> const& inmatrix)
@@ -143,8 +144,8 @@ namespace NNPDF
     if (decomp != 0 ) throw RuntimeException("CholeskyDecomposition", "Error encountered in gsl decomposition");
     
     // Zero upper-diagonal part of matrix left by gsl 
-    for (int i = 0; i < n; i++)
-      for (int j = i + 1; j < n; j++)
+    for (int i = 0; i < (int) n; i++)
+      for (int j = i + 1; j < (int) n; j++)
         sqrtmat(i, j) = 0;
 
     return sqrtmat;

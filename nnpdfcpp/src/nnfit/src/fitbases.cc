@@ -2007,7 +2007,7 @@ FitBasis(nnset, "NoSumRuleBasis", 8)
  * \param param
  * \param status
  */
-void NoSumRuleBasis::ComputeParam(PDFSet* pdf, int mem, PreprocParam& param, bool &status) const
+void NoSumRuleBasis::ComputeParam(PDFSet*, int, PreprocParam& param, bool &) const
 {
   // Clear old normalisations
   for (int i=0; i<fNPDF; i++)
