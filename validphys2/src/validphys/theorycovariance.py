@@ -53,10 +53,10 @@ def _check_correct_theory_combination(theoryids,
         check(fivetheories in opts,
               "Invalid choice of prescription for 5 points", fivetheories,
               opts)
-        if fivetheories == "nobar" or "linear":
+        if fivetheories == "nobar":
             correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0]
             correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5]
-        else:
+        elif fivetheories == "bar":
             correct_xifs = [1.0, 2.0, 0.5, 2.0, 0.5]
             correct_xirs = [1.0, 2.0, 0.5, 0.5, 2.0]
     elif l == 7:
@@ -138,7 +138,7 @@ def total_covmat_diagtheory_datasets(each_dataset_results_bytheory,
         theory_centrals = [x[1].central_value for x in dataset]
         s = make_scale_var_covmat(theory_centrals)
         # Initialise array of zeros and set precision to same as FK tables
-        s_diag = np.zeros((len(s),len(s)), dtype=np.float32) 
+        s_diag = np.zeros((len(s),len(s)), dtype=np.float32)
         np.fill_diagonal(s_diag, np.diag(s))
         sigma = dataset[0][0].covmat
         cov = s_diag + sigma
@@ -246,7 +246,7 @@ def combine_by_type(each_dataset_results_bytheory, dataset_names):
                    corresponding list of names of datasets, in the order they
                    are appended to theories_by_process
     dataset_size:  dictionary with keys of dataset name and values being the
-                   number of points in that dataset"""
+                   number of in that dataset"""
     dataset_size = defaultdict(list)
     theories_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
@@ -736,9 +736,12 @@ def plot_normthblockcovmat_heatmap(theory_normblockcovmat):
     return fig
 
 @figure
-def plot_normthcovmat_heatmap_custom(theory_normcovmat_custom, theoryids):
+def plot_normthcovmat_heatmap_custom(theory_normcovmat_custom, theoryids,
+                                     fivetheories:(str, type(None))=None):
     """Matrix plot for block diagonal theory covariance matrix by process type"""
     l = len(theoryids)
+    if fivetheories == "bar":
+        l = r"$\bar{5}$"
     fig = plot_covmat_heatmap(theory_normcovmat_custom,
                               f"Theory covariance matrix for {l} points")
     return fig
@@ -751,9 +754,12 @@ def plot_thblockcorrmat_heatmap(theory_blockcorrmat):
     return fig
 
 @figure
-def plot_thcorrmat_heatmap_custom(theory_corrmat_custom, theoryids):
+def plot_thcorrmat_heatmap_custom(theory_corrmat_custom, theoryids,
+                                  fivetheories:(str, type(None))=None):
     """Matrix plot of the theory correlation matrix, correlations by process type"""
     l = len(theoryids)
+    if fivetheories == "bar":
+        l = r"$\bar{5}$"
     fig = plot_corrmat_heatmap(theory_corrmat_custom,
                                f"Theory correlation matrix for {l} points")
     return fig
@@ -766,9 +772,12 @@ def plot_normexpplusblockthcovmat_heatmap(experimentsplusblocktheory_normcovmat)
     return fig
 
 @figure
-def plot_normexpplusthcovmat_heatmap_custom(experimentsplustheory_normcovmat_custom, theoryids):
+def plot_normexpplusthcovmat_heatmap_custom(experimentsplustheory_normcovmat_custom, theoryids,
+                                            fivetheories:(str, type(None))=None):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
     l = len(theoryids)
+    if fivetheories == "bar":
+        l = r"$\bar{5}$"
     fig = plot_covmat_heatmap(experimentsplustheory_normcovmat_custom,
                               f"Experiment + theory covariance matrix for {l} points")
     return fig
@@ -781,9 +790,12 @@ def plot_expplusblockthcorrmat_heatmap(experimentsplusblocktheory_corrmat):
     return fig
 
 @figure
-def plot_expplusthcorrmat_heatmap_custom(experimentsplustheory_corrmat_custom, theoryids):
+def plot_expplusthcorrmat_heatmap_custom(experimentsplustheory_corrmat_custom, theoryids,
+                                         fivetheories:(str, type(None))=None):
     """Matrix plot of the exp + theory correlation matrix"""
     l = len(theoryids)
+    if fivetheories == "bar":
+        l = r"$\bar{5}$"
     fig = plot_corrmat_heatmap(experimentsplustheory_corrmat_custom,
                                f"Experiment + theory correlation matrix for {l} points")
     return fig
@@ -798,9 +810,12 @@ def plot_blockcovdiff_heatmap(theory_block_diag_covmat, experiments_covmat):
     return fig
 
 @figure
-def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat, theoryids):
+def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat, theoryids,
+                                fivetheories:(str, type(None))=None):
     """Matrix plot (thcov + expcov)/expcov"""
     l = len(theoryids)
+    if fivetheories == "bar":
+        l = r"$\bar{5}$"
     df = (theory_covmat_custom+experiments_covmat
           )/np.mean(experiments_covmat.values)
     fig = plot_covmat_heatmap(df,
@@ -809,9 +824,12 @@ def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat, theory
     return fig
 
 @figure
-def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat, experiments_data, theoryids):
+def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat, experiments_data, theoryids,
+                             fivetheories:(str, type(None))=None):
     """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory"""
     l = len(theoryids)
+    if fivetheories == "bar":
+        l = r"$\bar{5}$"
     data = np.abs(experiments_data)
     df_theory = theory_covmat_custom
     df_experiment = experiments_covmat
@@ -834,9 +852,12 @@ def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat, experimen
 
 @figure
 def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat,
-                         experiments_data, theoryids):
+                         experiments_data, theoryids,
+                         fivetheories:(str, type(None))=None):
     """Plot ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5"""
     l = len(theoryids)
+    if fivetheories == "bar":
+        l = r"$\bar{5}$"
     data = experiments_data
     df_theory = theory_covmat_custom
     df_experiment = experiments_covmat
