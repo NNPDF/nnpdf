@@ -13,15 +13,43 @@ import logging
 import contextlib
 
 
-from reportengine import app
+from reportengine import app, api
 
-from validphys import api
+from validphys.config import Environment, Config
 from validphys import uploadutils
 from validphys import mplstyles
 
 log = logging.getLogger(__name__)
 
-class App(api.API, app.App):
+providers = [
+    'validphys.results',
+    'validphys.pdfgrids',
+    'validphys.pdfplots',
+    'validphys.dataplots',
+    'validphys.fitdata',
+    'validphys.arclength',
+    'validphys.sumrules',
+    'validphys.reweighting',
+    'validphys.kinematics',
+    'validphys.correlations',
+    'validphys.chi2grids',
+    'validphys.eff_exponents',
+    'validphys.paramfits.dataops',
+    'validphys.paramfits.plots',
+    'validphys.theorycovariance',
+    'validphys.replica_selector',
+    'validphys.MCgen_checks',
+    'validphys.closure',
+    'reportengine.report']
+
+class API(api.API):
+    """Validphys Specfic api"""
+    config_class = Config
+    environment_class = Environment
+    def __init__(self, **kwargs):
+        super().__init__(providers=providers, **kwargs)
+
+class App(API, app.App):
 
     critical_message = (
 """A critical error ocurred. This is likely due to one of the following reasons:
@@ -43,7 +71,7 @@ including the contents of the following file:
     def default_style(self):
         return os.fspath(mplstyles.smallstyle)
 
-    def __init__(self, name='validphys', providers=api.providers):
+    def __init__(self, name='validphys', providers=providers):
         app.App.__init__(self, name, providers)
 
     @property
