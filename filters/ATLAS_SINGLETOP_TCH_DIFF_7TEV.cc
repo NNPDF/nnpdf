@@ -403,6 +403,230 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter::ReadData()
 
 //==================================================================
 
+// 3) Distribution differential in top quark transverse momentum
+void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
+{
+  // Create streams to read data files
+  fstream f1, f2;
+
+  // Data files
+  stringstream datafile("");
+  string filename1;
+  filename1 = "ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT";
+  datafile << dataPath()
+           << "rawdata/" << filename1 << "/" << filename1 << ".data";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail())
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
+
+  stringstream sysfile("");
+  string filename2;
+  filename2 = "ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORM_SYS_BREAKDOWN";
+  sysfile << dataPath()
+          << "rawdata/" << filename1 << "/" << filename2 << ".data";
+  f2.open(sysfile.str().c_str(), ios::in);
+
+  if (f2.fail())
+  {
+    cerr << "Error opening data file " << sysfile.str() << endl;
+    exit(-1);
+  }
+
+  // Start filter of data
+  string line;
+
+  // Skip over first ten lines
+  for (int i=0; i<10; i++)
+  {
+    getline(f1,line);
+  }
+  
+  for (int i=0; i<fNData; i++)
+  {
+    double pt_top; // Transverse momentum of top quark
+    double pt_top_high, pt_top_low; // Limits of bin
+    string unneeded_info;
+
+    getline(f1,line);
+    istringstream lstream(line);
+
+    lstream >> pt_top_low >> unneeded_info >> pt_top_high;
+    pt_top = 0.5*(pt_top_low + pt_top_high);
+
+    // Skip over next eight elements of line
+    for (int j=0; j<8; j++)
+    {
+      lstream >> unneeded_info;
+    }
+
+    fKin1[i] = pt_top;
+    fKin2[i] = Mt*Mt; // Top mass squared
+    fKin3[i] = 7000; // Centre of mass energy in GeV
+
+    lstream >> fData[i]; // Value of bin
+    // We do not read in stat. correlation matrix in this filter because it is not positive semi-definite
+    lstream >> unneeded_info >> fStat[i]; // Statistical (percentage) uncertainty
+  }
+
+  // Read file with systematic uncertainty breakdown
+  // Skip over first 20 lines (including stat. uncert.)
+  for (int i=0; i<20; i++)
+  {
+    getline(f2,line);
+  }
+  
+  double sys1, sys2, up, down, sigma, datshift;
+  double shift[5];
+
+  for (int j=0; j<fNSys; j++)
+  {
+    string unneeded_info;
+
+    getline(f2,line);
+    istringstream lstream(line);
+
+    if (j==2) // Deal with aysymmetric errors
+    {
+      for (int i=0; i<3; i++)
+      {
+        lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
+        if (sys1 < 0) {up=sys2; down=sys1;}
+        else {up=sys1; down=sys2;}
+        symmetriseErrors(up, down, &sigma, &datshift);
+        fSys[i][j].mult = sigma;
+        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
+        fSys[i][j].type = MULT;
+        fSys[i][j].name = "CORR";    
+        shift[i] += datshift;
+      }
+
+      lstream >> fSys[3][j].mult >> unneeded_info;
+      fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
+      fSys[3][j].type = MULT;
+      fSys[3][j].name = "CORR";
+
+      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
+      if (sys1 < 0) {up=sys2; down=sys1;}
+      else {up=sys1; down=sys2;}
+      symmetriseErrors(up, down, &sigma, &datshift);
+      fSys[4][j].mult = sigma;
+      fSys[4][j].add = fSys[4][j].mult*fData[4]/100;
+      fSys[4][j].type = MULT;
+      fSys[4][j].name = "CORR";
+      shift[4] += datshift;
+    }
+    else if (j==3) // Deal with asymmetric errors
+    {
+      for (int i=0; i<3; i++)
+      {
+        lstream >> fSys[i][j].mult >> unneeded_info;
+        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
+        fSys[i][j].type = MULT;
+        fSys[i][j].name = "CORR";
+      }
+ 
+      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
+      if (sys1 < 0) {up=sys2; down=sys1;}
+      else {up=sys1; down=sys2;}
+      symmetriseErrors(up, down, &sigma, &datshift);
+      fSys[3][j].mult = sigma;
+      fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
+      fSys[3][j].type = MULT;
+      fSys[3][j].name = "CORR";
+      shift[3] += datshift;
+
+      lstream >> fSys[4][j].mult;
+      fSys[4][j].add = fSys[4][j].mult*fData[4]/100;
+      fSys[4][j].type = MULT;
+      fSys[4][j].name = "CORR";
+    }
+    else if (j==6) // Deal with asymmetric errors
+    {
+      for (int i=0; i<2; i++)
+      {
+        lstream >> fSys[i][j].mult >> unneeded_info;
+        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
+        fSys[i][j].type = MULT;
+        fSys[i][j].name = "CORR";
+      }
+
+      for (int i=2; i<4; i++)
+      {
+        lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
+        if (sys1 < 0) {up=sys2; down=sys1;}
+        else {up=sys1; down=sys2;}
+        symmetriseErrors(up, down, &sigma, &datshift);
+        fSys[i][j].mult = sigma;
+        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
+        fSys[i][j].type = MULT;
+        fSys[i][j].name = "CORR";
+        shift[i] += datshift;
+      }
+
+      lstream >> fSys[4][j].mult >> unneeded_info;
+      fSys[4][j].add = fSys[4][j].mult*fData[4]/100;
+      fSys[4][j].type = MULT;
+      fSys[4][j].name = "CORR";
+    }
+    else if (j==7) // Deal with asymmetric errors
+    {
+      lstream >> fSys[0][j].mult >> unneeded_info;
+      fSys[0][j].add = fSys[0][j].mult*fData[0]/100;
+      fSys[0][j].type = MULT;
+      fSys[0][j].name = "CORR";
+
+      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
+      if (sys1 < 0) {up=sys2; down=sys1;}
+      else {up=sys1; down=sys2;}
+      symmetriseErrors(up, down, &sigma, &datshift);
+      fSys[1][j].mult = sigma;
+      fSys[1][j].add = fSys[1][j].mult*fData[1]/100;
+      fSys[1][j].type = MULT;
+      fSys[1][j].name = "CORR";
+      shift[1] += datshift;
+
+      lstream >> fSys[2][j].mult >> unneeded_info;
+      fSys[2][j].add = fSys[2][j].mult*fData[2]/100;
+      fSys[2][j].type = MULT;
+      fSys[2][j].name = "CORR";
+
+      for (int i=3; i<fNData; i++)
+      {
+        lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
+        if (sys1 < 0) {up=sys2; down=sys1;}
+        else {up=sys1; down=sys2;}
+        symmetriseErrors(up, down, &sigma, &datshift);
+        fSys[i][j].mult = sigma;
+        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
+        fSys[i][j].type = MULT;
+        fSys[i][j].name = "CORR";
+        shift[i] += datshift;
+      }
+    }
+    else // Deal with lines that contain no asymmetric errors
+    {
+      for (int i=0; i<fNData; i++)
+      {
+        lstream >> fSys[i][j].mult >> unneeded_info;
+        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
+        fSys[i][j].type = MULT;
+        fSys[i][j].name = "CORR";
+      }
+    }
+  }
+
+  for (int i=0; i<fNData; i++)
+  {
+    fData[i] *= (1.0 + shift[i]*0.01); // Shift of central value due to asymmetric errors
+  }
+}
+
+//==================================================================
+
 // 4) Distribution differential in antitop quark transverse momentum
 void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
 {
