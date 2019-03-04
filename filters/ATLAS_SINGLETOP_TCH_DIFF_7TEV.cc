@@ -472,7 +472,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter::ReadData()
 void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
 {
   // Create streams to read data files
-  fstream f1, f2, f3;
+  fstream f1, f2;
 
   // Data files
   stringstream datafile("");
@@ -501,25 +501,8 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
     exit(-1);
   }
 
-  // Open correlation matrix file
-  stringstream corrfile("");
-  string filename3;
-  filename3 = "ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORM";
-  corrfile << dataPath()
-           << "rawdata/" << filename1 << "/" << filename3 << ".corr";
-  f3.open(corrfile.str().c_str(), ios::in);
-
-  if (f3.fail())
-  {
-    cerr << "Error opening data file " << corrfile.str() << endl;
-    exit(-1);
-  }
-
   // Start filter of data
   string line;
-
-  // Initialise array to store additive stat. uncerts.
-  double fstat_additive[5];
 
   // Skip over first ten lines
   for (int i=0; i<10; i++)
@@ -531,7 +514,6 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
   {
     double pt_top; // Transverse momentum of top quark
     double pt_top_high, pt_top_low; // Limits of bin
-    double fstat_percentage; // Percentage statistical uncertainty
     string unneeded_info;
 
     getline(f1,line);
@@ -551,56 +533,8 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
     fKin3[i] = 7000; // Centre of mass energy in GeV
 
     lstream >> fData[i]; // Value of bin
-    lstream >> unneeded_info >> fstat_percentage;
-    fstat_additive[i] = fstat_percentage*fData[i]/100;
-
-    fStat[i] = 0; // Set stat. error to zero to avoid double counting when using artificial systematics
-  }
-
-  // Read statistical correlation matrix
-  // Skip over first ten lines
-  for (int i=0; i<10; i++)
-  {
-    getline(f3,line);
-  }
-
-  double** covmat = new double*[fNData];
-  double corrmat[fNData][fNData];
-  for (int i=0; i<fNData; i++)
-  {
-    string unneeded_info;
-    covmat[i] = new double[fNData];
-    getline(f3,line);
-    istringstream lstream(line);
-    lstream >> unneeded_info >> unneeded_info >> unneeded_info;
-    for (int j=0; j<fNData; j++)
-    {
-      lstream >> corrmat[i][j] >> unneeded_info;
-      covmat[i][j] = corrmat[i][j] * fstat_additive[i] * fstat_additive[j];
-    }
-  }
-
-  // Generate artificial systematics
-  double** syscor = new double*[fNData];
-  for (int i=0; i<fNData; i++)
-    syscor[i] = new double[fNData];
-
-  if (!genArtSys(fNData,covmat,syscor))
-  {
-    cerr << " in " << fSetName << endl;
-    exit(-1);
-  }
-
-  // Assign artificial systematics
-  for (int i=0; i<fNData; i++)
-  {
-    for (int j=0; j<fNData; j++)
-      {
-        fSys[i][j].add = syscor[i][j];
-        fSys[i][j].mult = fSys[i][j].add*100/fData[i];
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
+    // We do not read in stat. correlation matrix in this filter because it is not positive semi-definite
+    lstream >> unneeded_info >> fStat[i]; // Statistical (percentage) uncertainty
   }
 
   // Read file with systematic uncertainty breakdown
@@ -613,14 +547,14 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
   double sys1, sys2, up, down, sigma, datshift;
   double shift[5];
 
-  for (int j=fNData; j<fNSys; j++)
+  for (int j=0; j<fNSys; j++)
   {
     string unneeded_info;
 
     getline(f2,line);
     istringstream lstream(line);
 
-    if (j==fNData+2) // Deal with aysymmetric errors
+    if (j==2) // Deal with aysymmetric errors
     {
       for (int i=0; i<3; i++)
       {
@@ -650,7 +584,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
       fSys[4][j].name = "CORR";
       shift[4] += datshift;
     }
-    else if (j==fNData+3) // Deal with asymmetric errors
+    else if (j==3) // Deal with asymmetric errors
     {
       for (int i=0; i<3; i++)
       {
@@ -675,7 +609,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
       fSys[4][j].type = MULT;
       fSys[4][j].name = "CORR";
     }
-    else if (j==fNData+6) // Deal with asymmetric errors
+    else if (j==6) // Deal with asymmetric errors
     {
       for (int i=0; i<2; i++)
       {
@@ -703,7 +637,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
       fSys[4][j].type = MULT;
       fSys[4][j].name = "CORR";
     }
-    else if (j==fNData+7) // Deal with asymmetric errors
+    else if (j==7) // Deal with asymmetric errors
     {
       lstream >> fSys[0][j].mult >> unneeded_info;
       fSys[0][j].add = fSys[0][j].mult*fData[0]/100;
