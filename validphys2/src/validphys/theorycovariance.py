@@ -740,7 +740,7 @@ def plot_normthcovmat_heatmap_custom(theory_normcovmat_custom, theoryids,
                                      fivetheories:(str, type(None))=None):
     """Matrix plot for block diagonal theory covariance matrix by process type"""
     l = len(theoryids)
-    if fivetheories == "bar":
+    if (l==5) and (fivetheories == "bar"):
         l = r"$\bar{5}$"
     fig = plot_covmat_heatmap(theory_normcovmat_custom,
                               f"Theory covariance matrix for {l} points")
@@ -758,7 +758,7 @@ def plot_thcorrmat_heatmap_custom(theory_corrmat_custom, theoryids,
                                   fivetheories:(str, type(None))=None):
     """Matrix plot of the theory correlation matrix, correlations by process type"""
     l = len(theoryids)
-    if fivetheories == "bar":
+    if (l==5) and (fivetheories == "bar"):
         l = r"$\bar{5}$"
     fig = plot_corrmat_heatmap(theory_corrmat_custom,
                                f"Theory correlation matrix for {l} points")
@@ -776,7 +776,7 @@ def plot_normexpplusthcovmat_heatmap_custom(experimentsplustheory_normcovmat_cus
                                             fivetheories:(str, type(None))=None):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
     l = len(theoryids)
-    if fivetheories == "bar":
+    if (l==5) and (fivetheories == "bar"):
         l = r"$\bar{5}$"
     fig = plot_covmat_heatmap(experimentsplustheory_normcovmat_custom,
                               f"Experiment + theory covariance matrix for {l} points")
@@ -794,7 +794,7 @@ def plot_expplusthcorrmat_heatmap_custom(experimentsplustheory_corrmat_custom, t
                                          fivetheories:(str, type(None))=None):
     """Matrix plot of the exp + theory correlation matrix"""
     l = len(theoryids)
-    if fivetheories == "bar":
+    if (l==5) and (fivetheories == "bar"):
         l = r"$\bar{5}$"
     fig = plot_corrmat_heatmap(experimentsplustheory_corrmat_custom,
                                f"Experiment + theory correlation matrix for {l} points")
@@ -814,7 +814,7 @@ def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat, theory
                                 fivetheories:(str, type(None))=None):
     """Matrix plot (thcov + expcov)/expcov"""
     l = len(theoryids)
-    if fivetheories == "bar":
+    if (l==5) and (fivetheories == "bar"):
         l = r"$\bar{5}$"
     df = (theory_covmat_custom+experiments_covmat
           )/np.mean(experiments_covmat.values)
@@ -828,7 +828,7 @@ def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat, experimen
                              fivetheories:(str, type(None))=None):
     """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory"""
     l = len(theoryids)
-    if fivetheories == "bar":
+    if (l==5) and (fivetheories == "bar"):
         l = r"$\bar{5}$"
     data = np.abs(experiments_data)
     df_theory = theory_covmat_custom
@@ -856,7 +856,7 @@ def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat,
                          fivetheories:(str, type(None))=None):
     """Plot ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5"""
     l = len(theoryids)
-    if fivetheories == "bar":
+    if (l==5) and (fivetheories == "bar"):
         l = r"$\bar{5}$"
     data = experiments_data
     df_theory = theory_covmat_custom
