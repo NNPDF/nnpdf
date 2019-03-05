@@ -187,7 +187,7 @@ def process_lookup(commondata_experiments):
         elif "Heavy Quarks" in value:
             d[key] = "Heavy Quarks"
         elif "Jet" in value:
-             d[key] = "Jets"
+            d[key] = "Jets"
         else:
             pass
     return d
