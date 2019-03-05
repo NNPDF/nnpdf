@@ -146,97 +146,6 @@ double DataSet::GetSqrtCov(int i, int j) const
 }
 
 /**
- * @brief Dataset::MakeArtificial
- * Produces the shifts by using a MC sampling
- */
-void DataSet::MakeArtificial()
-{
-  std::cout << "-- Generating replica data for " << fSetName << std::endl;
-
-  double *rand  = new double[fNSys];
-  double *xnor  = new double[fNData];
-  double *artdata = new double[fNData];
-  sysType rST[2] = {ADD,MULT};
-
-  NNPDF::RandomGenerator* rng = NNPDF::RandomGenerator::GetRNG();
-
-  // Generate random systematics
-  for (int l = 0; l < fNSys; l++)
-  {
-    rand[l] = rng->GetRandomGausDev(1.0);
-    if (fSys[0][l].isRAND)
-      fSys[0][l].type = rST[rng->GetRandomUniform(2)];
-    for (int i = 1; i < fNData; i++)
-      fSys[i][l].type = fSys[0][l].type;
-  }
-
-  int genTries = 0; // Number of attempts at generation
-  bool genRep = false;
-  while ( genTries < 1E6 )
-  {
-
-    // Update the data
-    for (int i = 0; i < fNData; i++)
-    {
-      const double xstat = rng->GetRandomGausDev(1.0)*fStat[i];   //Noise from statistical uncertainty
-
-      double xadd = 0;
-      xnor[i] = 1.0;
-
-      for (int l = 0; l < fNSys; l++)
-      {
-        if (fSys[i][l].name.compare("THEORYCORR")==0) continue; // Skip theoretical uncertainties
-        if (fSys[i][l].name.compare("THEORYUNCORR")==0) continue; // Skip theoretical uncertainties
-        if (fSys[i][l].name.compare("SKIP")==0) continue; // Skip uncertainties
-        if (fSys[i][l].name.compare("UNCORR")==0)           // Noise from uncorrelated systematics
-        {
-          switch (fSys[i][l].type)
-          {
-            case ADD: xadd += rng->GetRandomGausDev(1.0)*fSys[i][l].add; break;
-            case MULT: xnor[i] *= (1.0 + rng->GetRandomGausDev(1.0)*fSys[i][l].mult*1e-2); break;
-            case UNSET: throw RuntimeException("DataSet::MakeArtificial", "UNSET systype encountered");
-          }
-        }
-        else                                              //Noise from correlated systematics
-        {
-          switch (fSys[i][l].type)
-          {
-            case ADD: xadd += rand[l]*fSys[i][l].add; break;
-            case MULT: xnor[i] *= (1.0 + rand[l]*fSys[i][l].mult*1e-2); break;
-            case UNSET: throw RuntimeException("DataSet::MakeArtificial", "UNSET systype encountered");
-          }
-        }
-      }
-
-      // Generate the artificial data
-      artdata[i] = xnor[i] * ( fData[i] + xadd + xstat );
-
-      // Only generates positive artificial data (except for closure tests)
-      if ( artdata[i] < 0 and fProc[i].find("ASY") != std::string::npos )
-        break;
-
-    }
-
-    // Stop when all the datapoints are positive
-    genRep = true;
-    break;
-  }
-
-  if (!genRep)
-    throw EvaluationError("DataSet::MakeArtificial", "Cannot generate positive datasets!");
-
-  // Update data in set
-  UpdateData(artdata);
-  fIsArtificial = true;
-
-  delete[] rand;
-  delete[] xnor;
-  delete[] artdata;
-
-  // Note DO NOT Regenerate covariance matrices
-}
-
-/**
  * Update data values - used by MakeArtificial and MakeReplica
  */
 void DataSet::UpdateData(double *newdata)      // Update data only
@@ -256,13 +165,4 @@ void DataSet::UpdateData(double *newdata, double* uncnorm)      // Update data o
     for (int l = 0; l < fNSys; l++)
       fSys[i][l].add *=  uncnorm[i];
   }
-}
-
-void DataSet::UpdateData(double *newdata, sysType *type)       // Update data and change systypes
-{
-  UpdateData(newdata);
-
-  for (int l = 0; l < fNSys; l++)
-    for (int i = 0; i < fNData; i++)
-      fSys[i][l].type = type[l];
 }

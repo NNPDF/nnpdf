@@ -245,7 +245,7 @@ std::string joinpath(const std::initializer_list<std::string> &list)
   {
   	std::vector<real> results;
     char *buffer = new char[input.size() + 1];
-    sprintf(buffer, input.c_str());
+    sprintf(buffer, "%s", input.c_str());
     char *token = strtok(buffer, " \t");
     while (token)
       {
@@ -260,7 +260,7 @@ std::string joinpath(const std::initializer_list<std::string> &list)
   {
     results.clear();
     char *buffer = new char[input.size() + 1];
-    sprintf(buffer, input.c_str());
+    sprintf(buffer, "%s", input.c_str());
     char *token = strtok(buffer, " \t");
     while (token)
       {

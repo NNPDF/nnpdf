@@ -9,6 +9,7 @@
 #pragma once
 
 #include "common.h"
+#include "NNPDF/exceptions.h"
 #include <vector>
 #include <string>
 #include <fstream>
@@ -25,7 +26,7 @@
  */
 
 namespace NNPDF
-{  
+{
 
   // This is all so we can call both joinpath({"a", "b", "c"}) which
   // requires a special treatment and auto v = vector<string>{"a", "b", "c"}; joinpath(v). See
@@ -167,6 +168,17 @@ namespace NNPDF
     size_t const& size(size_t dim) const { return _size[dim]; } //!< Returns the (row,col) size pair.
     T&       operator()(size_t i, size_t j)       { return _data[i*_size[1]+j]; }
     T const& operator()(size_t i, size_t j) const { return _data[i*_size[1]+j]; }
+
+    // There is no doubt a better way to do this
+    std::vector<T> operator*(std::vector<T> in) const {
+        if (_size[0] != in.size())
+            throw RangeError("matrix-vector product", "Mismatch of matrix and input vector dimension");
+        std::vector<T> out(_size[0],0);
+        for (size_t i=0; i<_size[0]; i++)
+            for (size_t j=0; j<_size[1]; j++)
+                out[i] += _data[i*_size[1]+j]*in[j];
+        return out;
+    }
 
     // Data access
     T *       data ()       {return _data.data();}  //!< Return the underlying buffer.

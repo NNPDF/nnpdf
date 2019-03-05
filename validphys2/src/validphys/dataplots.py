@@ -13,6 +13,7 @@ import numpy.linalg as la
 import matplotlib.pyplot as plt
 from matplotlib import cm, colors as mcolors, ticker as mticker
 import scipy.stats as stats
+import pandas as pd
 
 from reportengine.figure import figure, figuregen
 from reportengine.checks import make_check, CheckError, make_argcheck, check
@@ -509,7 +510,13 @@ def plot_fits_datasets_chi2(fits_datasets_chi2_table):
     """Generate a plot equivalent to ``plot_datasets_chi2`` using all the
     fitted datasets as input."""
     ind = fits_datasets_chi2_table.index.droplevel(0)
-    fig, ax = _plot_chis_df(fits_datasets_chi2_table.set_index(ind))
+    df = fits_datasets_chi2_table.set_index(ind)
+    cols = fits_datasets_chi2_table.columns.get_level_values(0).unique()
+    dfs = []
+    for col in cols:
+        dfs.append(df[col].dropna())
+    df_out = pd.concat(dfs, axis=1, keys=cols, sort=False)
+    fig, ax = _plot_chis_df(df_out)
     ax.set_title(r"$\chi^2$ for datasets")
     return fig
 

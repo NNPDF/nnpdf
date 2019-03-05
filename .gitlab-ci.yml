@@ -15,7 +15,7 @@ variables:
 job1:
     stage: build-deploy
     script:
-      - ".ciscripts/build-deploy.sh"
+      - ".ciscripts/build-deploy-linux.sh"
     variables:
         CONDA_PY: "36"
     artifacts:
@@ -23,7 +23,7 @@ job1:
 job2:
     stage: build-deploy
     script:
-      - ".ciscripts/build-deploy.sh"
+      - ".ciscripts/build-deploy-linux.sh"
     variables:
         CONDA_PY: "37"
     artifacts:

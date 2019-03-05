@@ -32,13 +32,14 @@ theoryids_experiments_central_values = collect(experiments_central_values,
                                                ('theoryids',))
 
 @make_argcheck
-def _check_correct_theory_combination(theoryids, fivetheories:(str, type(None)) = None):
+def _check_correct_theory_combination(theoryids,
+                                      fivetheories:(str, type(None)) = None):
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
     l = len(theoryids)
     check(l in {3, 5, 7, 9},
           "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
-    opts = {'bar', 'nobar'}
+    opts = {'bar', 'nobar', 'linear'}
     xifs = [theoryid.get_description()['XIF'] for theoryid in theoryids]
     xirs = [theoryid.get_description()['XIR'] for theoryid in theoryids]
     if l == 3:
@@ -47,12 +48,12 @@ def _check_correct_theory_combination(theoryids, fivetheories:(str, type(None)) 
     elif l == 5:
         check(
             fivetheories is not None,
-            "For five input theories a prescription bar or nobar for "
-            "the flag fivetheories must be specified.")
+            "For five input theories a prescription bar, nobar or linear "
+            "for the flag fivetheories must be specified.")
         check(fivetheories in opts,
               "Invalid choice of prescription for 5 points", fivetheories,
               opts)
-        if fivetheories == "nobar":
+        if fivetheories == "nobar" or "linear":
             correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0]
             correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5]
         else:
@@ -136,7 +137,8 @@ def total_covmat_diagtheory_datasets(each_dataset_results_bytheory,
     for dataset in each_dataset_results_bytheory:
         theory_centrals = [x[1].central_value for x in dataset]
         s = make_scale_var_covmat(theory_centrals)
-        s_diag = np.zeros((len(s),len(s)))
+        # Initialise array of zeros and set precision to same as FK tables
+        s_diag = np.zeros((len(s),len(s)), dtype=np.float32) 
         np.fill_diagonal(s_diag, np.diag(s))
         sigma = dataset[0][0].covmat
         cov = s_diag + sigma
@@ -170,26 +172,63 @@ def total_covmat_experiments(experiments_results_theory,
 
 commondata_experiments = collect('commondata', ['experiments', 'experiment'])
 
-# TODO: Improve how processes are assigned. Currently we group manually into
-# Drell-Yan, Heavy Quarks and Jets but adding more processes could break
-# this assignment
-def process_lookup(commondata_experiments):
+def _process_lookup(name):
     """Produces a dictionary with keys corresponding to dataset names
     and values corresponding to process types. Process types are
-    regrouped into the four categories 'Drell-Yan', 'Heavy Quarks', Jets'
-    and 'DIS'."""
-    d = {commondata.name: get_info(commondata).process_description
-         for commondata in commondata_experiments}
-    for key, value in d.items():
-        if "Drell-Yan" in value:
-            d[key] = "Drell-Yan"
-        elif "Heavy Quarks" in value:
-            d[key] = "Heavy Quarks"
-        elif "Jet" in value:
-            d[key] = "Jets"
-        else:
-            pass
-    return d
+    regrouped into the five categories 'Drell-Yan', 'Top', Jets',
+    'DIS NC' and 'DIS CC'."""
+    process_dictionary = {	"ATLASZPT8TEVMDIST": 			"DY",
+				"ATLASZPT8TEVYDIST":			"DY",
+				"CMSZDIFF12":				"DY",
+				"ATLAS1JET11":				"JETS",
+				"CMSJETS11":				"JETS",
+				"CDFR2KT":				"JETS",
+				"CMSTOPDIFF8TEVTTRAPNORM":		"TOP",
+				"ATLASTOPDIFF8TEVTRAPNORM":		"TOP",
+				"ATLASTTBARTOT":			"TOP",
+				"CMSTTBARTOT":				"TOP",
+				"DYE605":				"DY",
+				"DYE886P":				"DY",
+				"DYE886R":				"DY",
+				"ATLASWZRAP36PB":			"DY",
+				"ATLASZHIGHMASS49FB":			"DY",
+				"ATLASLOMASSDY11EXT":			"DY",
+				"ATLASWZRAP11":				"DY",
+				"CMSWEASY840PB":			"DY",
+				"CMSWMASY47FB":				"DY",
+				"CMSDY2D11":				"DY",
+				"CMSWMU8TEV":				"DY",
+				"CMSWCHARMRAT":				"DY",
+				"LHCBZ940PB":				"DY",
+				"LHCBZEE2FB":				"DY",
+				"LHCBWZMU7TEV":				"DY",
+				"LHCBWZMU8TEV":				"DY",
+				"D0WEASY":				"DY",
+				"D0WMASY":				"DY",
+				"D0ZRAP":				"DY",
+				"CDFZRAP":				"DY",
+				"H1HERAF2B":				"DIS NC",
+				"HERACOMBCCEM":				"DIS CC",
+				"HERACOMBCCEP":				"DIS CC",
+				"HERACOMBNCEM":				"DIS NC",
+				"HERACOMBNCEP460":			"DIS NC",
+				"HERACOMBNCEP575":			"DIS NC",
+				"HERACOMBNCEP820":	 		"DIS NC",
+				"HERACOMBNCEP920":			"DIS NC",
+				"HERAF2CHARM":				"DIS NC",
+				"ZEUSHERAF2B":				"DIS NC",
+				"NMCPD":				"DIS NC",
+				"NMC":					"DIS NC",
+				"SLACP":				"DIS NC",
+				"SLACD":				"DIS NC",
+				"BCDMSP":				"DIS NC",
+				"BCDMSD":				"DIS NC",
+				"CHORUSNU":				"DIS CC",
+				"CHORUSNB":				"DIS CC",
+				"NTVNUDMN":				"DIS CC",
+				"NTVNBDMN":				"DIS CC"	}
+    proc = process_dictionary[name]
+    return proc
 
 def dataset_names(commondata_experiments):
     """Returns a list of the names of the datasets, in the same order as
@@ -200,8 +239,7 @@ def dataset_names(commondata_experiments):
 ProcessInfo = namedtuple("ProcessInfo", ('theory', 'namelist', 'sizes'))
 
 
-def combine_by_type(process_lookup,
-                    each_dataset_results_bytheory, dataset_names):
+def combine_by_type(each_dataset_results_bytheory, dataset_names):
     """Groups the datasets according to processes and returns three objects:
     theories_by_process: the relevant theories grouped by process type
     ordered_names: dictionary with keys of process type and values being the
@@ -215,7 +253,7 @@ def combine_by_type(process_lookup,
     for dataset, name in zip(each_dataset_results_bytheory, dataset_names):
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
-        proc_type = process_lookup[name]
+        proc_type = _process_lookup(name)
         ordered_names[proc_type].append(name)
         theories_by_process[proc_type].append(theory_centrals)
     for key, item in theories_by_process.items():
@@ -259,7 +297,8 @@ def covmap(combine_by_type, dataset_names):
 
 @_check_correct_theory_combination
 def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
-                     fivetheories:(str, type(None)) = None):
+                     fivetheories:(str, type(None)) = None,
+                     seventheories:(str, type(None)) = None):
     """Produces the sub-matrices of the theory covariance matrix according
     to a point prescription which matches the number of input theories.
     If 5 theories are provided, a scheme 'bar' or 'nobar' must be
@@ -286,33 +325,51 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
                 start_locs = (start_proc[name1], start_proc[name2])
                 covmats[start_locs] = s
             elif l==5:
-                if name1 == name2:
-                    s = 0.5*sum(np.outer(d, d) for d in deltas1)
-            # 5 point --------------------------------------------------------------------
-                elif fivetheories=='nobar':
-                    s = 0.5*(np.outer(deltas1[0], deltas2[0]) + np.outer(
-                                             deltas1[1], deltas2[1])) + 0.25*(
-                        np.outer((deltas1[2] + deltas1[3]),
-                                 (deltas2[2] + deltas2[3])))
-             # 5bar-point -----------------------------------------------------------------
+             # Zahari's proposal for the theoretical covariance matrix --------------------
+                if fivetheories=='linear':
+                    if name1 == name2:
+                        s = 0.25*(np.outer(deltas1[0], deltas2[0]) - np.outer(deltas1[0], deltas2[1])
+                            - np.outer(deltas1[1], deltas2[0]) + np.outer(deltas1[1], deltas2[1])
+                            + np.outer(deltas1[2], deltas2[2]) - np.outer(deltas1[2], deltas2[3])
+                            - np.outer(deltas1[3], deltas2[2]) + np.outer(deltas1[3], deltas2[3]))
+                    else:
+                        s = 0.25*(np.outer(deltas1[0], deltas2[0]) - np.outer(deltas1[0], deltas2[1])
+                            - np.outer(deltas1[1], deltas2[0]) + np.outer(deltas1[1], deltas2[1]))
                 else:
-                    s = 0.25*(np.outer((deltas1[0]+deltas1[2]),
-                                        (deltas2[0]+deltas2[2]))
-                               + np.outer((deltas1[1]+deltas1[3]),
-                                          (deltas2[1]+deltas2[3])))
+                    if name1 == name2:
+                        s = 0.5*sum(np.outer(d, d) for d in deltas1)
+             # 5 point --------------------------------------------------------------------
+                    elif fivetheories=='nobar':
+                        s = 0.5*(np.outer(deltas1[0], deltas2[0]) + np.outer(
+                                               deltas1[1], deltas2[1])) + 0.25*(
+                            np.outer((deltas1[2] + deltas1[3]),
+                                    (deltas2[2] + deltas2[3])))
+             # 5bar-point -----------------------------------------------------------------
+                    else:
+                        s = 0.25*(np.outer((deltas1[0]+deltas1[2]),
+                                            (deltas2[0]+deltas2[2]))
+                                + np.outer((deltas1[1]+deltas1[3]),
+                                            (deltas2[1]+deltas2[3])))
              #  -----------------------------------------------------------------
                 start_locs = (start_proc[name1], start_proc[name2])
                 covmats[start_locs] = s
             elif l==7:
                 if name1 == name2:
                     s = (1/3)*sum(np.outer(d, d) for d in deltas1)
-                else:
+                elif seventheories=='original':
                     s = (1/6)*(np.outer((deltas1[0]+ deltas1[4]),
                                (deltas2[0] + deltas2[4]))
                                + np.outer((deltas1[1]+ deltas1[5]),
                                           (deltas2[1] + deltas2[5]))
                                + np.outer((deltas1[2]+deltas1[3]), (
                                        deltas2[2]+ deltas2[3])))
+                else:
+                    s = (1/6)*(2*(np.outer(deltas1[0], deltas2[0])
+                                  + np.outer(deltas1[1], deltas2[1]))
+                             + (np.outer((deltas1[2] + deltas1[3]),
+                                         (deltas2[2] + deltas2[3]))
+                             + np.outer((deltas1[4] + deltas1[5]),
+                                        (deltas2[4] + deltas2[5]))))
                 start_locs = (start_proc[name1], start_proc[name2])
                 covmats[start_locs] = s
             elif l==9:
@@ -335,8 +392,9 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     to ordering by experiment as listed in the runcard"""
     matlength = int(sum([len(covmat) for covmat in covs_pt_prescrip.values()]
                         )/int(np.sqrt(len(covs_pt_prescrip))))
-    mat = np.zeros((matlength,matlength))
-    cov_by_exp = np.zeros((matlength,matlength))
+    # Initialise arrays of zeros and set precision to same as FK tables
+    mat = np.zeros((matlength,matlength), dtype=np.float32)
+    cov_by_exp = np.zeros((matlength,matlength), dtype=np.float32)
     for locs in covs_pt_prescrip:
         cov = covs_pt_prescrip[locs]
         mat[locs[0]:(len(cov) + locs[0]),locs[1]:(len(cov.T)+locs[1])] = cov
@@ -356,7 +414,8 @@ def total_covmat_diagtheory_experiments(experiments_results_theory,
     for exp_result in zip(*experiments_results_theory):
         theory_centrals = [x[1].central_value for x in exp_result]
         s = make_scale_var_covmat(theory_centrals)
-        s_diag = np.zeros((len(s),len(s)))
+        # Initialise array of zeros and set precision to same as FK tables
+        s_diag = np.zeros((len(s),len(s)), dtype=np.float32)
         np.fill_diagonal(s_diag, np.diag(s))
         sigma = exp_result[0][0].covmat
         cov = s_diag + sigma
@@ -537,7 +596,8 @@ def chi2_impact_custom(theory_covmat_custom, experiments_covmat,
 def theory_diagcovmat(theory_covmat):
     """Returns theory covmat with only diagonal values"""
     s = theory_covmat.values
-    s_diag = np.zeros((len(s),len(s)))
+    # Initialise array of zeros and set precision to same as FK tables
+    s_diag = np.zeros((len(s),len(s)), dtype=np.float32)
     np.fill_diagonal(s_diag, np.diag(s))
     return s_diag
 
