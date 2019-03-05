@@ -315,11 +315,11 @@ class ExperimentInput(TupleComp):
     def __str__(self):
         return self.name
 
-#TODO: Not sure I like these
 class CutsPolicy(enum.Enum):
     INTERNAL = "internal"
     NOCUTS = "nocuts"
     FROMFIT = "fromfit"
+    FROM_CUT_INTERSECTION_NAMESPACE = "fromintersection"
 
 class Cuts(TupleComp):
     def __init__(self, name, path):
@@ -333,24 +333,25 @@ class Cuts(TupleComp):
         return np.atleast_1d(np.loadtxt(self.path, dtype=int))
 
 class InternalCutsWrapper(TupleComp):
-    def __init__(self, full_ds, q2min, w2min):
-        self.full_ds = full_ds
+    def __init__(self, commondata, theoryid, q2min, w2min):
+        self.commondata = commondata
+        self.theoryid = theoryid
         self.q2min = q2min
         self.w2min = w2min
-        super().__init__(full_ds, q2min, w2min)
+        super().__init__(commondata, q2min, w2min)
 
     def load(self):
         return np.atleast_1d(
             np.asarray(
-                filters.get_cuts_for_dataset(self.full_ds, self.q2min,
-                                             self.w2min),
+                filters.get_cuts_for_dataset(self.commondata, self.theoryid,
+                                             self.q2min, self.w2min),
                 dtype=int))
 
 class MatchedCuts(TupleComp):
     def __init__(self, othercuts, ndata):
-        self.othercuts = othercuts
+        self.othercuts = tuple(othercuts)
         self.ndata = ndata
-        super().__init__(othercuts, ndata)
+        super().__init__(self.othercuts, self.ndata)
 
     def load(self):
         loaded =  [c.load() for c in self.othercuts if c]

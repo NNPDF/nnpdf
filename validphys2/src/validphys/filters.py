@@ -51,82 +51,85 @@ def export_mask(path, mask):
 
 @check_combocuts
 @check_rngalgo
-@check_positive('q2min')
-@check_positive('w2min')
 @check_positive('errorsize')
 @check_nonnegative('filterseed')
 @check_nonnegative('seed')
 def filter(experiments, theoryid, filter_path,
-           q2min:numbers.Real, w2min:numbers.Real, fakedata: bool,
+           fakedata: bool,
            filterseed:int, rngalgo:int, seed:int, fakenoise:bool,
            errorsize:numbers.Real, combocuts, t0pdfset):
     """Apply filters to all datasets"""
     if not fakedata:
         log.info('Filtering real data.')
-        total_data, total_cut_data = _filter_real_data(filter_path, experiments, q2min, w2min)
+        total_data, total_cut_data = _filter_real_data(filter_path, experiments)
     else:
         log.info('Filtering closure-test data.')
         RandomGenerator.InitRNG(rngalgo, seed)
         RandomGenerator.GetRNG().SetSeed(filterseed)
-        total_data, total_cut_data = _filter_closure_data(filter_path, experiments, q2min, w2min,
+        total_data, total_cut_data = _filter_closure_data(filter_path, experiments,
                                                           t0pdfset, fakenoise, errorsize)
     log.info(f'Summary: {total_cut_data}/{total_data} datapoints passed kinematic cuts.')
 
 
-def _filter_real_data(filter_path, experiments, q2min, w2min):
+def _write_ds_cut_data(path, dataset):
+    make_dataset_dir(path)
+    all_dsndata = dataset.commondata.ndata
+    datamask = dataset.cuts.load()
+    if datamask is None:
+        filtered_dsndata = all_dsndata
+        log.info("All {all_ndata} points  in in {dataset.name} passed kinematic cuts.")
+    else:
+        filtered_dsndata = len(datamask)
+        log.info(f"{len(datamask)}/{all_dsndata} datapoints "
+                 f"in {dataset.name} passed kinematic cuts.")
+    # save to disk
+    if datamask is not None:
+        export_mask(path / f'FKMASK_{dataset.name}.dat', datamask)
+    return all_dsndata, filtered_dsndata
+
+
+def _filter_real_data(filter_path, experiments):
     """Filter real experimental data."""
     total_data_points = 0
     total_cut_data_points = 0
     for experiment in experiments:
         for dataset in experiment.datasets:
             path = filter_path / dataset.name
-            make_dataset_dir(path)
-            ds = dataset.load()
-            total_data_points += ds.GetNData()
-            datamask = get_cuts_for_dataset(dataset, q2min, w2min) # build data mask
-            log.info(f'{len(datamask)}/{ds.GetNData()} datapoints in {dataset.name} passed kinematic cuts.')
-            total_cut_data_points += len(datamask)
-            # save to disk
-            if len(datamask) != ds.GetNData():
-                export_mask(path / ('FKMASK_%s.dat' % dataset.name), datamask)
-                ds = DataSet(ds, datamask)
-            ds.Export(str(path))
+            nfull, ncut = _write_ds_cut_data(path, dataset)
+            total_data_points += nfull
+            total_cut_data_points += ncut
+            dataset.load().Export(str(path))
     return total_data_points, total_cut_data_points
 
 
-def _filter_closure_data(filter_path, experiments, q2min, w2min, fakepdfset, fakenoise, errorsize):
+def _filter_closure_data(filter_path, experiments, fakepdfset, fakenoise, errorsize):
     """Filter closure test data."""
     total_data_points = 0
     total_cut_data_points = 0
     fakeset = fakepdfset.load()
     # Load experiments
     for experiment in experiments:
-        uncut_exp = experiment.load()
-        uncut_exp.MakeClosure(fakeset, fakenoise)
+        #Don't want to save this in any cache since we are mutating it
+        loaded_exp = experiment.load.__wrapped__(experiment)
+        loaded_exp.MakeClosure(fakeset, fakenoise)
         for j, dataset in enumerate(experiment.datasets):
             path = filter_path / dataset.name
-            make_dataset_dir(path)
-            ds = uncut_exp.GetSet(j)
-            total_data_points += ds.GetNData()
-            datamask = get_cuts_for_dataset(dataset, q2min, w2min) # build data mask
-            log.info(f'{len(datamask)}/{ds.GetNData()} datapoints in {dataset.name} passed kinematic cuts.')
-            total_cut_data_points += len(datamask)
-            # save to disk
-            if len(datamask) != ds.GetNData():
-                export_mask(path / ('FKMASK_%s.dat' % dataset.name), datamask)
-                ds = DataSet(ds, datamask)
+            nfull, ncut = _write_ds_cut_data(path, dataset)
+            total_data_points += nfull
+            total_cut_data_points += ncut
+            loaded_ds = loaded_exp.GetSet(j)
             if errorsize != 1.0:
-                ds.RescaleErrors(errorsize)
-            ds.Export(str(path))
+                loaded_ds.RescaleErrors(errorsize)
+            loaded_ds.Export(str(path))
     return total_data_points, total_cut_data_points
 
 
-def get_cuts_for_dataset(dataset, q2min, w2min):
+def get_cuts_for_dataset(commondata, theoryid, q2min, w2min):
     """Return cut mask for dataset"""
     datamask = []
-    ds = dataset.load()
+    ds = commondata.load()
     for idat in range(ds.GetNData()):
-        if pass_kincuts(ds, idat, dataset.thspec, q2min, w2min):
+        if pass_kincuts(ds, idat, theoryid, q2min, w2min):
             datamask.append(idat)
     return datamask
 
