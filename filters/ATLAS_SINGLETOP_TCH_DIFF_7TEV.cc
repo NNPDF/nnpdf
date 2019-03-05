@@ -480,7 +480,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
   }
   
   double sys1, sys2, up, down, sigma, datshift;
-  double shift[5];
+  double shift[fNData];
 
   for (int j=0; j<fNSys; j++)
   {
@@ -509,7 +509,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
       fSys[3][j].type = MULT;
       fSys[3][j].name = "CORR";
 
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
+      lstream >> sys1 >> unneeded_info >> sys2;
       if (sys1 < 0) {up=sys2; down=sys1;}
       else {up=sys1; down=sys2;}
       symmetriseErrors(up, down, &sigma, &datshift);
@@ -567,7 +567,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
         shift[i] += datshift;
       }
 
-      lstream >> fSys[4][j].mult >> unneeded_info;
+      lstream >> fSys[4][j].mult;
       fSys[4][j].add = fSys[4][j].mult*fData[4]/100;
       fSys[4][j].type = MULT;
       fSys[4][j].name = "CORR";
