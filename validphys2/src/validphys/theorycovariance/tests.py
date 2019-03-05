@@ -14,17 +14,18 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 import pandas as pd
 
-from reportengine.checks import make_argcheck
+from reportengine.checks import make_argcheck, check
 from reportengine.figure import figure
 from reportengine.table import table
 from reportengine import collect
 
 from validphys.results import results
 from validphys.checks import check_two_dataspecs
-from validphys.theorycovariance.construction import process_lookup, combine_by_type, process_starting_points
+from validphys.theorycovariance.construction import combine_by_type, process_starting_points
+from validphys.theorycovariance.construction import theory_corrmat, process_lookup
 from validphys.theorycovariance.construction import commondata_experiments, each_dataset_results_bytheory, results_bytheoryids, experiments_results_theory, each_dataset_results,  dataset_names, theoryids_experiments_central_values, data_theory_diff
 from validphys.theorycovariance.construction import covmap, covs_pt_prescrip, theory_covmat_custom, total_covmat_experiments, chi2_impact_custom, chi2_diag_only, total_covmat_datasets, theory_diagcovmat, theory_covmat
-from validphys.theorycovariance.output import matrix_plot_labels
+from validphys.theorycovariance.output import matrix_plot_labels, plot_covmat_heatmap, plot_corrmat_heatmap
 
 log = logging.getLogger(__name__)
 
@@ -36,7 +37,7 @@ def _check_valid_shift_matrix_threshold_method(shift_threshold:(int, float, None
     """Checks that a valid method 1 or 2 is chosen where a threshold for
     removing elements of the shift correlation matrix has been specified"""
     opts = {1,2}
-    if shift_threshold != None:
+    if shift_threshold is not None:
         check(method is not None, "A threshold for removing elements of the "
                "shift correlation matrix has been specified but no choice of "
                "method (1 or 2) was provided")
@@ -500,7 +501,7 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
             if loc >=0:
                 w_nonzero.append(w[loc])
     # ^ taking 0th element to extract list from tuple
-    else: 
+    else:
         nonzero_locs = range(len(w))
         w_nonzero = w[nonzero_locs]
     v_nonzero = []
@@ -509,13 +510,12 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
             v_nonzero.append(v[:,loc])
     projectors = np.sum(f*v_nonzero, axis=1)
     projected_evectors = np.zeros((len(projectors), (len(f))))
-    for i in range(len(projectors)):
-        projected_evectors[i] = projectors[i]*v_nonzero[i]
+    for i, projector in enumerate(projectors):
+        projected_evectors[i] = projector*v_nonzero[i]
     fmiss = f - np.sum(projected_evectors, axis=0)
     return w_nonzero, v_nonzero, projectors, f, fmiss, w_max, w, all_projectors
 
-def cutoff(theory_shift_test, eigenvalue_cutoff:(bool, type(None)) = None):
-    w_max = theory_shift_test[5]
+def cutoff(eigenvalue_cutoff:(bool, type(None)) = None):
     if eigenvalue_cutoff == True:
         cutoff = "10 times modulus of largest 'negative' eigenvalue"
     else:
@@ -564,9 +564,9 @@ def projector_eigenvalue_ratio(theory_shift_test):
     all_evals = theory_shift_test[6][::-1]
     ratio = np.abs(all_projectors)/np.sqrt(np.abs(all_evals))
     masked_evals = np.zeros((len(all_evals)))
-    for loc, eval in enumerate(all_evals):
-        if eval in surviving_evals:
-            masked_evals[loc] = eval
+    for loc, evalue in enumerate(all_evals):
+        if evalue in surviving_evals:
+            masked_evals[loc] = evalue
   #  num_evals_ignored = len(all_evals)-len(surviving_evals)
   #  # Ordering eigenvalues and their projectors at random
   #  randomise = np.arange(len(evals))
