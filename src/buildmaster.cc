@@ -250,12 +250,13 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSTTBARTOT8TEVFilter());
   target.push_back(new CMSTTBARTOT13TEVFilter());
   target.push_back(new CMSTTBARTOTFilter());
-  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter());
   target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter());
   target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter());
   target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter());
   target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter());
   target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAPFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PTFilter());
   target.push_back(new ATLAS_SINGLETOP_TCH_R_7TEVFilter());
   target.push_back(new ATLAS_SINGLETOP_TCH_R_8TEVFilter());
   target.push_back(new ATLAS_SINGLETOP_TCH_R_13TEVFilter());
