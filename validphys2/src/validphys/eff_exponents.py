@@ -282,9 +282,7 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF, *,
     with open(fit.path/'filter.yml', 'r') as f:
         filtermap = yaml.safe_load(f)
     previous_exponents = filtermap['fitting']['basis']
-    with open(pdf.infopath) as f:
-        infomap = yaml.safe_load(f)
-    Qmin = infomap['QMin']
+    Qmin = pdf.Qmin
 
     checked = check_basis(basis, flavours)
     basis = checked['basis']
