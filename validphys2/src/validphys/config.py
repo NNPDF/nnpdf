@@ -694,26 +694,36 @@ class CoreConfig(configparser.Config):
         res.__name__ = 'theory_covmat'
         return res
 
-    def parse_theorycovmat(self, pathorbool):
-        if pathorbool:
-            return ThCovMatSpec(pathorbool)
+    def parse_theorycovmat(self, path):
+        if path:
+            return ThCovMatSpec(path)
         else:
             return False
 
-    def produce_fitthcovmat(self, fit, rc_useth=False):
-        if isinstance(rc_useth, str):
-            if os.path.exists(rc_useth):
-                pass
+    def produce_fitthcovmat(self, fit, use_theorycovmat=True):
+        """If True, returns the corresponding covariance matrix for the given fit if it exists. If
+        the fit doesn't have a theory covariance matrix then returns `False`. Alternatively if
+        a path is given then the covariance matrix from that location is used instead of the fit`s
+        covariance matrix.
+        """
+        if isinstance(use_theorycovmat, str):
+            if os.path.exists(use_theorycovmat):
+                log.warn("Using path to a covariance matrix, if the experiment specifications do "
+                         "not match between generation and use of covariance matrix then this "
+                         "will lead to incorrect results.")
             else:
-                raise DataNotFoundError(
-                    f"No file found at {rc_useth}. If specifying a path `rc_useth` should be set to"
-                    f"point at a valid thcovmat file"
+                raise ConfigError(
+                    f"No file found at {use_theorycovmat}. If specifying "
+                    "`use_theorycovmat: <path to covmat>` then <path to covmat> should point at a"
+                    "valid theory covariance matrix."
                 )
-        if isinstance(rc_useth, bool) and rc_useth:
-            rc_useth = fit.path / 'tables' / 'datacuts_theory_theorycovmatconfig_fitting_t0_theory_covmat_custom.csv'
-            if not os.path.exists(rc_useth):
-                rc_useth = False
-        return self.parse_theorycovmat(rc_useth)
+        if isinstance(use_theorycovmat, bool) and use_theorycovmat:
+            use_theorycovmat = (
+                fit.path/'tables'/
+                'datacuts_theory_theorycovmatconfig_fitting_t0_theory_covmat_custom.csv')
+            if not os.path.exists(use_theorycovmat):
+                use_theorycovmat = False
+        return self.parse_theorycovmat(use_theorycovmat)
 
     def parse_speclabel(self, label:(str, type(None))):
         """A label for a dataspec. To be used in some plots"""

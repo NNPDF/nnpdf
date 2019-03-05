@@ -21,7 +21,7 @@ from reportengine import collect
 
 from validphys.checks import (check_cuts_considered, check_pdf_is_montecarlo,
                               check_speclabels_different, check_two_dataspecs)
-from validphys.core import DataSetSpec, PDF, ExperimentSpec
+from validphys.core import DataSetSpec, PDF, ExperimentSpec, get_covmatblock
 from validphys.calcutils import all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values
 
 log = logging.getLogger(__name__)
@@ -68,7 +68,7 @@ class DataResult(NNPDFDataResult):
             if isinstance(dataobj, Experiment):
                 self._sqrtcovmat = dataobj.GetSqrtFitCovMat(str(thcovmat), [])
             else:
-                thcovslice = thcovmat[dataobj.GetSetName()]
+                thcovslice = get_covmatblock(thcovmat, dataobj.GetSetName())
                 self._sqrtcovmat = np.linalg.cholesky(self._covmat + thcovslice)
         else:
             self._sqrtcovmat = dataobj.get_sqrtcovmat()
@@ -393,8 +393,8 @@ def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None, fitthc
         log.debug("Setting T0 predictions for %s" % dataset)
         data.SetT0(t0set.load_t0())
 
-    return DataResult(data, thcovmat=fitthcovmat), ThPredictionsResult.from_convolution(pdf, dataset,
-                                                 loaded_data=data)
+    return (DataResult(data, thcovmat=fitthcovmat),
+            ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data))
 
 def experiment_results(experiment, pdf:PDF, t0set:(PDF, type(None))=None, fitthcovmat=False):
     """Like `results` but for a whole experiment"""
