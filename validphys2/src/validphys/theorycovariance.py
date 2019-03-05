@@ -8,12 +8,12 @@ from __future__ import generator_stop
 import logging
 
 from collections import defaultdict, namedtuple
+from math import inf
 import numpy as np
 import scipy.linalg as la
 import matplotlib.pyplot as plt
 from matplotlib import cm, colors as mcolors
 import pandas as pd
-from math import inf
 
 from reportengine.figure import figure
 from reportengine.checks import make_argcheck, check
@@ -712,7 +712,7 @@ def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
     df.sort_index(0, inplace=True)
     df.sort_index(1, inplace=True)
     oldindex = df.index.tolist()
-    newindex = sorted(oldindex, key=lambda r: _get_key(r))
+    newindex = sorted(oldindex, key=_get_key)
     # reindex index
     newdf = df.reindex(newindex)
     #reindex columns by transposing, reindexing, then transposing back
@@ -760,14 +760,14 @@ def _dsorder():
 def _get_key(element):
     x1 = element[0]
     y1 = element[1]
-    z1 = element[2] 
+    z1 = element[2]
     if x1 in _procorder():
         x2 = _procorder().index(x1)
     else:
         x2 = inf
     if y1 in _dsorder():
         y2 = _dsorder().index(y1)
-    else: 
+    else:
         y2 = inf
     z2 = z1
     newelement = (x2, y2, z2)
@@ -782,7 +782,7 @@ def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
     df.sort_index(0, inplace=True)
     df.sort_index(1, inplace=True)
     oldindex = df.index.tolist()
-    newindex = sorted(oldindex, key=lambda r: _get_key(r))
+    newindex = sorted(oldindex, key=_get_key)
     # reindex index
     newdf = df.reindex(newindex)
     #reindex columns by transposing, reindexing, then transposing back
@@ -926,7 +926,7 @@ def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat,
     sqrtdiags_th = pd.DataFrame(sqrtdiags_th.values, index=dataset_index_byprocess)
     sqrtdiags_th.sort_index(0,inplace=True)
     oldindex = sqrtdiags_th.index.tolist()
-    newindex = sorted(oldindex, key=lambda r: _get_key(r))
+    newindex = sorted(oldindex, key=_get_key)
     sqrtdiags_th = sqrtdiags_th.reindex(newindex)
     sqrtdiags_exp = np.sqrt(np.diag(experiments_covmat))/data
     sqrtdiags_exp = pd.DataFrame(sqrtdiags_exp.values, index=dataset_index_byprocess)
@@ -966,7 +966,7 @@ def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat,
     df_inv_exp = pd.DataFrame(inv_exp, index=dataset_index_byprocess)
     df_inv_exp.sort_index(0,inplace=True)
     oldindex = df_inv_exp.index.tolist()
-    newindex = sorted(oldindex, key=lambda r: _get_key(r))
+    newindex = sorted(oldindex, key=_get_key)
     df_inv_exp = df_inv_exp.reindex(newindex)
     df_inv_tot = pd.DataFrame(inv_tot, index=dataset_index_byprocess)
     df_inv_tot.sort_index(0,inplace=True)
