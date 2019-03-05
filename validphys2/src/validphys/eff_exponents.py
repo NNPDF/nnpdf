@@ -68,8 +68,7 @@ def alpha_eff(pdf: PDF, *,
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', RuntimeWarning)
         alphaGrid_values = -np.log(abs(pdfGrid_values/xGrid))/np.log(xGrid)
-        alphaGrid_values[alphaGrid_values == -
-                         np.inf] = np.nan  # when PDF_i =0
+        alphaGrid_values[alphaGrid_values == - np.inf] = np.nan  # when PDF_i =0
     alphaGrid = pdfGrid._replace(grid_values=alphaGrid_values)
     return alphaGrid
 
@@ -113,21 +112,18 @@ def beta_eff(pdf, *,
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', RuntimeWarning)
         betaGrid_values = np.log(abs(pdfGrid_values/xGrid))/np.log(1-xGrid)
-        betaGrid_values[betaGrid_values == -
-                        np.inf] = np.nan  # when PDF_i =0
+        betaGrid_values[betaGrid_values == -np.inf] = np.nan  # when PDF_i =0
     betaGrid = pdfGrid._replace(grid_values=betaGrid_values)
 
     return betaGrid  # .grid_values
 
 class PreprocessingPlotter(PDFPlotter):
-    """ Class inherenting from BandPDFPlotter, has the same functionality
-    but with overbasismap title and ylabel to take into account the effective
-    exponents names.
+    """ Class inherenting from BandPDFPlotter, changing title and ylabel to reflect the effective
+    exponent being plotted.
     """
 
-    def __init__(self, exponent, fits, *args,  **kwargs):
+    def __init__(self, exponent, *args,  **kwargs):
         self.exponent = exponent
-        self.fits = fits
         super().__init__(*args, **kwargs)
 
     def get_title(self, parton_name):
@@ -139,82 +135,65 @@ class PreprocessingPlotter(PDFPlotter):
         else:
             return fr"$\{self.exponent}_e$ for ${parton_name}$"
 
-    def __call__(self,):
-        if not self.xplotting_grids:
-            return
+def get_alpha_lines(effective_exponents_table):
+    """Given an effective_exponents_table returns a dictionary which for `prev` and `next` contains
+    the bounds of the alpha effective exponent for all flavours, used to plot horizontal lines on
+    the alpha effective exponent plots.
+    """
+    df = effective_exponents_table[0]
+    limits = {}
+    limits['prev'] = df.iloc[0::2, [0, 1]].values
+    limits['next'] = df.iloc[0::2, [2, 3]].values
+    return limits
 
-        basis = self.firstgrid.basis
+def get_beta_lines(effective_exponents_table):
+    """Same as `get_alpha_lines` but for beta"""
+    df = effective_exponents_table[0]
+    limits = {}
+    limits['prev'] = df.iloc[1::2, [0, 1]].values
+    limits['next'] = df.iloc[1::2, [2, 3]].values
+    return limits
 
-        for flindex, fl in enumerate(self.firstgrid.flavours):
-            fig, ax = plt.subplots()
-            parton_name = basis.elementlabel(fl)
-            flstate = FlavourState(flindex=flindex, fl=fl, fig=fig, ax=ax,
-                                   parton_name=parton_name)
-
-            self.setup_flavour(flstate)
-            ax.set_title(self.get_title(parton_name))
-
-            all_vals = []
-
-            if self.fits:
-                dfs = []
-                for fit, pdf, grid in zip(self.fits, self.pdfs, self.xplotting_grids):
-                    limits = self.draw(pdf, grid, flstate)
-                    if limits is not None:
-                        all_vals.append(np.atleast_2d(limits))
-                    #here, by default x1_alpha=1e-6,x2_alpha=1e-3,x1_beta=0.65,x2_beta=0.95
-                    dfs.append(effective_exponents_table_internal(fit, pdf, basis=basis))
-
-                for df in dfs:
-                    if self.exponent == 'alpha':
-                        #prev
-                        ax.axhline(df.iat[2*flindex, 0],
-                                linestyle='--', label='prev')
-                        #self.labels.append('prev')
-                        ax.axhline(df.iat[2*flindex, 1], linestyle='--')
-                        #next
-                        ax.axhline(df.iat[2*flindex, 2], label='next')
-                        ax.axhline(df.iat[2*flindex, 3])
-
-                    elif self.exponent == 'beta':
-                        #prev
-                        ax.axhline(df.iat[2*flindex+1, 0],
-                                linestyle='--', label='prev')
-                        ax.axhline(df.iat[2*flindex+1, 1], linestyle='--')
-                        #next
-                        ax.axhline(df.iat[2*flindex+1, 2], label='next')
-                        ax.axhline(df.iat[2*flindex+1, 3])
-
-            #Note these two lines do not conmute!
-            ax.set_xscale(self.xscale)
-            plotutils.frame_center(
-                ax, self.firstgrid.xgrid, np.concatenate(all_vals))
-            if self.ymin is not None:
-                ax.set_ylim(bottom=self.ymin)
-            if self.ymax is not None:
-                ax.set_ylim(top=self.ymax)
-
-            ax.set_xlabel('$x$')
-            ax.set_xlim(self.firstgrid.xgrid[0])
-
-            ax.set_ylabel(self.get_ylabel(parton_name))
-
-            ax.set_axisbelow(True)
-
-            self.legend(flstate)
-
-            yield fig, parton_name
-
+fits_alpha_lines = collect('get_alpha_lines', ('fits',))
+fits_beta_lines = collect('get_beta_lines', ('fits',))
 
 class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter):
-    pass
+    def __init__(self, hlines, exponent, fits, *args,  **kwargs):
+        super().__init__(exponent, *args,  **kwargs)
+        self.hlines = hlines
+        self.fits = fits
+
+    def draw(self, pdf, grid, flstate):
+        # Here we assume each pdf has a corresponding fit, which is true by construction.
+        errdown, errup = super().draw(pdf, grid, flstate)
+        pdf_index = self.pdfs.index(pdf)
+        hlines = self.hlines[pdf_index]
+        xmin, xmax = flstate.ax.get_xlim()
+        handle = flstate.ax.hlines(
+            hlines['prev'][flstate.flindex, :], xmin=xmin, xmax=xmax, linestyle='-.')
+        label = f'prev ({self.fits[pdf_index].name})'
+        flstate.handles.append(handle)
+        flstate.labels.append(label)
+
+        handle = flstate.ax.hlines(
+            hlines['next'][flstate.flindex, :], xmin=xmin, xmax=xmax, linestyle=':')
+        label = f'next ({self.fits[pdf_index].name})'
+        flstate.handles.append(handle)
+        flstate.labels.append(label)
+        # need to return xgrid shaped object but with hlines taken into account to get plots nice
+        new_errdown = min(
+            [*errdown, *hlines['next'][flstate.flindex, :], *hlines['prev'][flstate.flindex, :]])
+        new_errup = max(
+            [*errup, *hlines['next'][flstate.flindex, :], *hlines['prev'][flstate.flindex, :]])
+        return new_errdown*np.ones_like(errdown), new_errup*np.ones_like(errup)
+
 
 alpha_eff_pdfs = collect('alpha_eff', ('pdfs',))
 
 @figuregen
 @check_pdf_normalize_to
 def plot_alphaEff_internal(
-        fits, pdfs, alpha_eff_pdfs,
+        fits, pdfs, alpha_eff_pdfs, fits_alpha_lines,
         normalize_to: (int, str, type(None)) = None,
         ybottom=None, ytop=None):
     """Plot the central value and the uncertainty of a list of effective
@@ -229,13 +208,13 @@ def plot_alphaEff_internal(
     absolute values.
     """
     yield from ExponentBandPlotter(
-        'alpha', fits, pdfs, alpha_eff_pdfs, 'log', normalize_to, ybottom, ytop)
+        fits_alpha_lines, 'alpha', fits, pdfs, alpha_eff_pdfs, 'log', normalize_to, ybottom, ytop)
 
 alpha_eff_fits = collect('alpha_eff', ('fits', 'fitpdfandbasis',))
 
 @figuregen
 def plot_alphaEff(
-        fits, fits_pdf, alpha_eff_fits,
+        fits, fits_pdf, alpha_eff_fits, fits_alpha_lines,
         normalize_to: (int, str, type(None)) = None,
         ybottom=None, ytop=None):
     """Plot the central value and the uncertainty of a list of effective
@@ -253,30 +232,30 @@ def plot_alphaEff(
     set based on the scale in xgrid, which should be used instead.
     """
     return plot_alphaEff_internal(
-        fits, fits_pdf, alpha_eff_fits, normalize_to, ybottom, ytop)
+        fits, fits_pdf, alpha_eff_fits, fits_alpha_lines, normalize_to, ybottom, ytop)
 
 beta_eff_pdfs = collect('beta_eff', ('pdfs',))
 
 @figuregen
 @check_pdf_normalize_to
 def plot_betaEff_internal(
-        fits, pdfs, beta_eff_pdfs,
+        fits, pdfs, beta_eff_pdfs, fits_beta_lines,
         normalize_to: (int, str, type(None)) = None,
         ybottom=None, ytop=None):
     """ Same as plot_alphaEff_internal but for beta effective exponent """
     yield from ExponentBandPlotter(
-        'beta', fits, pdfs, beta_eff_pdfs, 'linear', normalize_to, ybottom, ytop)
+        fits_beta_lines, 'beta', fits, pdfs, beta_eff_pdfs, 'linear', normalize_to, ybottom, ytop)
 
 beta_eff_fits = collect('beta_eff', ('fits', 'fitpdfandbasis',))
 
 @figuregen
 def plot_betaEff(
-        fits, fits_pdf, beta_eff_fits,
+        fits, fits_pdf, beta_eff_fits, fits_beta_lines,
         normalize_to: (int, str, type(None)) = None,
         ybottom=None, ytop=None):
     """ Same as plot_alphaEff but for beta effective exponents """
     return plot_betaEff_internal(
-        fits, fits_pdf, beta_eff_fits, normalize_to, ybottom, ytop)
+        fits, fits_pdf, beta_eff_fits, fits_beta_lines, normalize_to, ybottom, ytop)
 
 @table
 @make_argcheck(check_basis)
@@ -289,15 +268,14 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF, *,
                                        flavours: (list, tuple, type(None)) = None):
     """Returns a table with the effective exponents for the next fit
 
-    the bounds are calculated as follows:
+    `x1_alpha`, `x2_alpha`, `x1_beta`, and `x2_beta` control where the effective exponents bounds
+    are evaluated. The are evaluated at the following:
 
-    alpha_min = singlet/gluon: the 2x68% c.l. lower value evaluated at x=1e-6.
-                     others  : min(2x68% c.l. lower value evaluated at x=1e-6 and x=1e-3)
-    alpha_max = singlet/gluon: min(2 and the 2x68% c.l. upper value evaluated at x=1e-6)
-                   others    : min(2 and max(2x68% c.l. upper value evaluated at x=1e-6 and x=1e-3))
+    alpha:
+     - singlet/gluon: `x1_alpha`.
+     - others: `x1_alpha` and `x2_alpha`)
 
-    beta_min  =  max(0 and min(2x68% c.l. lower value evaluated at x=0.65 and x=0.95))
-    beta_max  =  max(2x68% c.l. upper value evaluated at x=0.65 and x=0.95)
+    beta: `x1_beta`, and `x2_beta`
     """
 
     #Reading from the filter
@@ -339,19 +317,11 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF, *,
     alpha_sigdown = -alpha68[0] + alpha_cv
     beta_sigdown = -beta68[0] + beta_cv
     flavours_label = []
-
+    runcard_flavours = basis.to_known_elements([ref_fl['fl'] for ref_fl in previous_exponents]).tolist()
     for (j, fl) in enumerate(flavours):
 
-        prev_a_bounds = None
-        prev_b_bounds = None
-        #Matching the flavour between vp and the runcards
-        for ref_fl in previous_exponents:
-            if (
-                    ref_fl['fl'] == basis.elementlabel(fl).lower() or
-                    basis.aliases.get(ref_fl['fl']) == basis.elementlabel(fl)):
-                prev_a_bounds = ref_fl['smallx']
-                prev_b_bounds = ref_fl['largex']
-                break
+        prev_a_bounds = previous_exponents[runcard_flavours.index(fl)]['smallx']
+        prev_b_bounds = previous_exponents[runcard_flavours.index(fl)]['largex']
 
         # the gluon/singlet case
         if fl in (r'\Sigma', "g"):
@@ -403,22 +373,18 @@ def next_effective_exponents_yaml(
     #Reading from the filter
     with open(fit.path/'filter.yml', 'r') as f:
         filtermap = yaml.load(f, yaml.RoundTripLoader)
-
+    previous_exponents = filtermap['fitting']['basis']
     basis = filtermap['fitting']['fitbasis']
     checked = check_basis(basis, None)
     basis = checked['basis']
     flavours = checked['flavours']
 
-
+    runcard_flavours = basis.to_known_elements([ref_fl['fl'] for ref_fl in previous_exponents]).tolist()
     for fl in flavours:
-        #connect dataframe containing the next eff_exp to yaml card
-        for ref_fl in filtermap['fitting']['basis']:
-            if basis.aliases.get(ref_fl['fl']) == basis.elementlabel(fl):
-                alphas = df_effexps.loc[(f'${fl}$', r'$\alpha$'), ['next Min', 'next Max']].values
-                betas = df_effexps.loc[(f'${fl}$', r'$\beta$'), ['next Min', 'next Max']].values
-                ref_fl['smallx'] = [fmt(alpha) for alpha in alphas]
-                ref_fl['largex'] = [fmt(beta) for beta in betas]
-
+        alphas = df_effexps.loc[(f'${fl}$', r'$\alpha$'), ['next Min', 'next Max']].values
+        betas = df_effexps.loc[(f'${fl}$', r'$\beta$'), ['next Min', 'next Max']].values
+        previous_exponents[runcard_flavours.index(fl)]['smallx'] = [fmt(alpha) for alpha in alphas]
+        previous_exponents[runcard_flavours.index(fl)]['largex'] = [fmt(beta) for beta in betas]
     #iterate t0
     filtermap['datacuts']['t0pdfset'] = fit.name
     return yaml.dump(filtermap, Dumper=yaml.RoundTripDumper)
