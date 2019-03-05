@@ -739,10 +739,12 @@ def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
     return fig
 
 def _procorder():
+    """The plotting order of process types for covariance matrix plots"""
     procorder = ('DIS NC', 'DIS CC', 'DY', 'JETS', 'TOP')
     return procorder
 
 def _dsorder():
+    """The plotting order of datasets for covariance matrix plots"""
     dsorder = ('BCDMSP', 'BCDMSD', 'SLACP', 'SLACD', 'NMC', 'NMCPD',
                'HERAF2CHARM', 'HERACOMBNCEP460', 'HERACOMBNCEP575',
                'HERACOMBNCEP820', 'HERACOMBNCEP920', 'HERACOMBNCEM',
@@ -758,6 +760,9 @@ def _dsorder():
     return dsorder
 
 def _get_key(element):
+    """The key used to sort covariance matrix dataframes according to
+    the ordering of processes and datasets specified in _procorder and
+    _dsorder."""
     x1 = element[0]
     y1 = element[1]
     z1 = element[2]
