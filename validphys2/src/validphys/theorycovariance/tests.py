@@ -8,6 +8,7 @@ from __future__ import generator_stop
 import logging
 
 from collections import namedtuple
+from itertools import product
 import numpy as np
 import scipy.linalg as la
 import matplotlib.pyplot as plt
@@ -115,10 +116,10 @@ def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
                 else:
                     pass
     #build index
-    expnames = np.concatenate([
-        np.full(len(val.shifts), val.experiment_name, dtype=object)
-        for val in matched_dataspecs_dataset_prediction_shift
-    ])
+   # expnames = np.concatenate([
+   #     np.full(len(val.shifts), val.experiment_name, dtype=object)
+   #     for val in matched_dataspecs_dataset_prediction_shift
+   # ])
     dsnames = np.concatenate([
         np.full(len(val.shifts), val.dataset_name, dtype=object)
         for val in matched_dataspecs_dataset_prediction_shift
@@ -130,7 +131,7 @@ def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
 
     index = pd.MultiIndex.from_arrays(
         [expnames, dsnames, point_indexes],
-        names=["Experiment name", "Dataset name", "Point"])
+        names=["Dataset name", "Point"])
 
     return pd.DataFrame(mat, columns=index, index=index)
 
@@ -142,10 +143,10 @@ def shift_vector(matched_dataspecs_dataset_prediction_shift,
         [val.shifts for val in matched_dataspecs_dataset_theory])
     norm_shifts = all_shifts/all_theory
      #build index
-    expnames = np.concatenate([
-        np.full(len(val.shifts), val.experiment_name, dtype=object)
-        for val in matched_dataspecs_dataset_prediction_shift
-    ])
+ #   expnames = np.concatenate([
+ #       np.full(len(val.shifts), val.experiment_name, dtype=object)
+ #       for val in matched_dataspecs_dataset_prediction_shift
+ #   ])
     dsnames = np.concatenate([
         np.full(len(val.shifts), val.dataset_name, dtype=object)
         for val in matched_dataspecs_dataset_prediction_shift
@@ -157,7 +158,7 @@ def shift_vector(matched_dataspecs_dataset_prediction_shift,
 
     index = pd.MultiIndex.from_arrays(
         [expnames, dsnames, point_indexes],
-        names=["Experiment name", "Dataset name", "Point"])
+        names=["Dataset name", "Point"])
     return pd.DataFrame(norm_shifts, index=index)
 
 def dataspecs_dataset_theory(matched_dataspecs_results, experiment_name, dataset_name):
@@ -172,10 +173,10 @@ def theory_vector(matched_dataspecs_dataset_theory):
     all_theory = np.concatenate(
         [val.shifts for val in matched_dataspecs_dataset_theory])
      #build index
-    expnames = np.concatenate([
-        np.full(len(val.shifts), val.experiment_name, dtype=object)
-        for val in matched_dataspecs_dataset_theory
-    ])
+#    expnames = np.concatenate([
+#        np.full(len(val.shifts), val.experiment_name, dtype=object)
+#        for val in matched_dataspecs_dataset_theory
+#    ])
     dsnames = np.concatenate([
         np.full(len(val.shifts), val.dataset_name, dtype=object)
         for val in matched_dataspecs_dataset_theory
@@ -187,7 +188,7 @@ def theory_vector(matched_dataspecs_dataset_theory):
 
     index = pd.MultiIndex.from_arrays(
         [expnames, dsnames, point_indexes],
-        names=["Experiment name", "Dataset name", "Point"])
+        names=["Dataset name", "Point"])
     return pd.DataFrame(all_theory, index=index)
 
 def dataspecs_dataset_alltheory(matched_dataspecs_results, experiment_name, dataset_name):
@@ -201,11 +202,11 @@ matched_dataspecs_dataset_alltheory = collect('dataspecs_dataset_alltheory', ['d
 def alltheory_vector(matched_dataspecs_dataset_alltheory, matched_dataspecs_dataset_theory):
     all_theory = np.concatenate(
         [val.shifts for val in matched_dataspecs_dataset_alltheory], axis=1)
-    expnames = np.concatenate([
-        np.full(len(val.shifts),
-        val.experiment_name, dtype=object)
-        for val in matched_dataspecs_dataset_theory
-    ])
+#    expnames = np.concatenate([
+#        np.full(len(val.shifts),
+#        val.experiment_name, dtype=object)
+#        for val in matched_dataspecs_dataset_theory
+#    ])
     dsnames = np.concatenate([
         np.full(len(val.shifts),
         val.dataset_name, dtype=object)
@@ -217,7 +218,7 @@ def alltheory_vector(matched_dataspecs_dataset_alltheory, matched_dataspecs_data
     ])
     index = pd.MultiIndex.from_arrays(
         [expnames, dsnames, point_indexes],
-        names=["Experiment name", "Dataset name", "Point"])
+        names=["Dataset name", "Point"])
     theory_vectors = []
     for theoryvector in all_theory:
         theory_vectors.append(pd.DataFrame(theoryvector, index=index))
@@ -227,8 +228,7 @@ def alltheory_vector(matched_dataspecs_dataset_alltheory, matched_dataspecs_data
 @figure
 def plot_matched_datasets_shift_matrix(matched_datasets_shift_matrix):
     """Heatmap plot of matched_datasets_shift_matrix"""
-    return plot_covmat_heatmap(matched_datasets_shift_matrix,
-
+    return plot_covmat_heatmap(matched_datasets_shift_matrix, 
     "Shift outer product matrix")
 
 @table
@@ -303,10 +303,10 @@ def matched_experiments_index(matched_dataspecs_experiment_name,
     dsnames = matched_dataspecs_dataset_name
     lens = all_matched_data_lengths
     #build index
-    expnames = np.concatenate([
-        np.full(l, ename, dtype=object)
-        for (l, ename) in zip(lens, enames)
-    ])
+ #   expnames = np.concatenate([
+ #       np.full(l, ename, dtype=object)
+ #       for (l, ename) in zip(lens, enames)
+ #   ])
     dsnames = np.concatenate([
         np.full(l, dsname, dtype=object)
         for (l, dsname) in zip(lens, dsnames)
@@ -318,7 +318,7 @@ def matched_experiments_index(matched_dataspecs_experiment_name,
 
     index = pd.MultiIndex.from_arrays(
         [expnames, dsnames, point_indexes],
-        names=["Experiment name", "Dataset name", "Point"])
+        names=["Dataset name", "Point"])
     return index
 
 @table
@@ -359,11 +359,6 @@ def shift_to_theory_ratio(thx_corrmat, shx_corrmat):
 def shift_to_theory_ratio_plot(shift_to_theory_ratio):
     matrix = shift_to_theory_ratio
     matrix[((matrix==np.inf) | (matrix==-np.inf))] = 0
-#    bins = np.linspace(-1, 1, num=21)
-#    digmatrix = np.digitize(matrix, bins)
-#    symdigmatrix = np.zeros((len(digmatrix), len(digmatrix)))
-#    for binnumber in range(len(bins)):
-#        symdigmatrix[digmatrix==binnumber+1] = bins[binnumber]
     fig, ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r)
     fig.colorbar(matrixplot)
@@ -405,12 +400,11 @@ def shift_corrmat_value_fractions(shx_corrmat):
 def theory_corrmat_value_fractions(thx_corrmat,
                                    theory_threshold:(int, float) = 0):
     mat = thx_corrmat[0].values
-    newmat = np.zeros((len(mat),len(mat)))
+    # Initialise array of zeros and set precision to same as FK tables
+    newmat = np.zeros((len(mat),len(mat)), dtype=np.float32)
     #coarse graining for comparison
     newmat[mat>=theory_threshold]=1
     newmat[mat<=-theory_threshold]=-1
-#    mask = ((mat!=-1) & (mat!=1))
-#    mat[mask]=0
     matsize = np.size(mat)
     fracplus = 100*np.size(np.where(newmat>0))/(2*matsize)
     fracminus = 100*np.size(np.where(newmat<0))/(2*matsize)
@@ -427,11 +421,10 @@ def shift_theory_element_comparison(shx_corrmat, thx_corrmat,
                                     theory_threshold:(int, float) = 0):
     #coarse graining for comparison
     thmat = thx_corrmat[0].values
-    newthmat = np.zeros((len(thmat),len(thmat)))
+    # Initialise array of zeros and set precision to same as FK tables
+    newthmat = np.zeros((len(thmat),len(thmat)), dtype=np.float32)
     newthmat[thmat>=theory_threshold]=1
     newthmat[thmat<=-theory_threshold]=-1
-#    mask = ((thmat!=-1) & (thmat!=1))
-#    thmat[mask]=0
     shmat = shx_corrmat[0].fillna(0).values
     num_non_zero = np.size(np.where(shmat!=0))/2
     fracsame = 100*np.size(np.where((shmat==newthmat) & (shmat!=0)))/(2*num_non_zero)
@@ -458,28 +451,386 @@ def plot_thcorrmat_heatmap_custom_dataspecs(theory_corrmat_custom_dataspecs, the
                                f"Theory correlation matrix for {l} points")
     return fig
 
-def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector):
-    orig_matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
-    # constructing shift vectors
-    scalevartheory_vectors = allthx_vector[0]
-    xs = [(thx_vector[0] - scalevarvector)/thx_vector[0] for scalevarvector in allthx_vector[0]]
-    # iteratively orthogonalising deltas
-    ys = [x/np.linalg.norm(x) for x in xs]
-    xdashs = [None]*len(ys)
-    for n, x in enumerate(xs):
-        sub_ys = ys[:n]
-        subtract_terms = [None]*len(sub_ys)
-        xlist = [x]*len(sub_ys)
-        for i in range(len(sub_ys)):
-            subtract_terms[i] = np.dot(sub_ys[i], np.dot(sub_ys[i].T, xlist[i]))
-        xdashs[n] = x - np.sum(subtract_terms, axis=0)
-        ys[n] = xdashs[n]/np.linalg.norm(xdashs[n])
-#    xdash = xs[1] - ys[0]*np.dot(ys[0].T, xs[1])[0]
-#    ys[1] = xdash/np.linalg.norm(xdash)
-    P = np.column_stack(ys)
-    projected_matrix = np.dot(P.T, np.dot(orig_matrix, P))
-    w, v_projected = la.eigh(projected_matrix)
-    v = np.dot(P, v_projected)
+@_check_correct_theory_combination_theoryconfig
+def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
+                        collected_theoryids,
+                        fivetheories:(str, type(None)) = None,
+                        seventheories:(str, type(None)) = None,
+                        eigenvalue_cutoff:(bool, type(None)) = None,
+                        use_analytic:(bool, type(None)) = None):
+    def shuffle_list(l, shift):
+        i=0
+        newlist = l.copy()
+        while i <= (shift-1):
+            newlist.append(newlist.pop(0))
+            i = i + 1
+        return newlist
+    if eigenvalue_cutoff == True:
+        w = None
+        v = None
+    else:
+        orig_matrix = (thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0])))#.reorder_levels(['Dataset name',
+    									#'Experiment name',
+    									#'Point'])
+        # constructing shift vectors
+        diffs = [((thx_vector[0] - scalevarvector)/thx_vector[0])
+                                        for scalevarvector in allthx_vector[0]]
+        num_pts = len(diffs) + 1
+        indexlist = list(diffs[0].index.values)
+        procdict = {}
+        for index in indexlist:
+            name = index[0]
+            proc = _process_lookup(name)
+            if proc not in list(procdict.keys()):
+                procdict[proc] = [name]
+            elif name not in procdict[proc]:
+                procdict[proc].append(name)
+        # creating split diffs with processes separated
+        splitdiffs = []
+        for process, dslist in procdict.items():
+            alldatasets = [y for x in list(procdict.values()) for y in x]
+            otherdatasets = [x for x in alldatasets if x not in procdict[process]]
+            for diff in diffs:
+                splitdiff = diff.copy()
+                for ds in otherdatasets:
+                    splitdiff.loc[ds] = 0
+                splitdiffs.append(splitdiff)
+        num_procs = len(procdict)
+        if (num_pts == 3) and (num_procs == 2):
+            N = (1/4)
+            # defining key
+            pp1 = splitdiffs[0]
+            mm1 = splitdiffs[1]
+            pp2 = splitdiffs[2]
+            mm2 = splitdiffs[3]
+            ###################
+            xs = [pp1 + pp2, pp1 + mm2, mm1 + pp2, mm1 + mm2]
+        elif (num_pts == 5) and (num_procs == 2)  and (fivetheories == "nobar"):
+            N = (1/4)
+            # defining key
+            pz1 = splitdiffs[0]
+            mz1 = splitdiffs[1]
+            zp1 = splitdiffs[2]
+            zm1 = splitdiffs[3]
+            pz2 = splitdiffs[4]
+            mz2 = splitdiffs[5]
+            zp2 = splitdiffs[6]
+            zm2 = splitdiffs[7]
+            ###################
+            xs = [pz1 + pz2, pz1 + pz2, mz1 + mz2, mz1 + mz2,
+                  zp1 + zp2, zp1 + zm2, zm1 + zp2, zm1 + zm2 ]
+        elif (num_pts == 5) and (num_procs == 2) and (fivetheories == "bar"):
+            N = (1/4)
+            # defining key
+            pp1 = splitdiffs[0]
+            mm1 = splitdiffs[1]
+            pm1 = splitdiffs[2]
+            mp1 = splitdiffs[3]
+            pp2 = splitdiffs[4]
+            mm2 = splitdiffs[5]
+            pm2 = splitdiffs[6]
+            mp2 = splitdiffs[7]
+            ###################
+            xs = [pp1 + pp2, pp1 + pm2, mm1 + mp2, mm1 + mm2,
+                  pm1 + pp2, pm1 + pm2, mp1 + mp2, mp1 + mm2 ]
+        elif (num_pts == 7) and (num_procs == 2) and (seventheories != "original"):
+            N = (1/6)
+            # defining key
+            pz1 = splitdiffs[0]
+            mz1 = splitdiffs[1]
+            zp1 = splitdiffs[2]
+            zm1 = splitdiffs[3]
+            pp1 = splitdiffs[4]
+            mm1 = splitdiffs[5]
+            pz2 = splitdiffs[6]
+            mz2 = splitdiffs[7]
+            zp2 = splitdiffs[8]
+            zm2 = splitdiffs[9]
+            pp2 = splitdiffs[10]
+            mm2 = splitdiffs[11]
+            ####################
+            xs = [pz1 + pz2, mz1 + mz2, zp1 + zp2, zm1 + zp2, pp1 + pp2,
+                  mm1 + pp2, pz1 + pz2, mz1 + mz2, zp1 + zm2, zm1 + zm2,
+                  pp1 + mm2, mm1 + mm2]
+        elif (num_pts == 9) and (num_procs == 2):
+            N = (1/24)
+            # defining key
+            pz1 = splitdiffs[0]
+            mz1 = splitdiffs[1]
+            zp1 = splitdiffs[2]
+            zm1 = splitdiffs[3]
+            pp1 = splitdiffs[4]
+            mm1 = splitdiffs[5]
+            pm1 = splitdiffs[6]
+            mp1 = splitdiffs[7]
+            pz2 = splitdiffs[8]
+            mz2 = splitdiffs[9]
+            zp2 = splitdiffs[10]
+            zm2 = splitdiffs[11]
+            pp2 = splitdiffs[12]
+            mm2 = splitdiffs[13]
+            pm2 = splitdiffs[14]
+            mp2 = splitdiffs[15]
+            ####################
+            xs = [ pz1 + pz2, pz1 + pz2, pz1 + pp2, pz1 + pp2, pz1 + pm2, pz1 + pm2,
+    	           pp1 + pz2, pp1 + pz2, pp1 + pp2, pp1 + pp2, pp1 + pm2, pp1 + pm2,
+                   pm1 + pz2, pm1 + pz2, pm1 + pp2, pm1 + pp2, pm1 + pm2, pm1 + pm2,
+                   mz1 + mz2, mz1 + mz2, mz1 + mp2, mz1 + mp2, mz1 + mm2, mz1 + mm2,
+                   mp1 + mz2, mp1 + mz2, mp1 + mp2, mp1 + mp2, mp1 + mm2, mp1 + mm2,
+                   mm1 + mz2, mm1 + mz2, mm1 + mp2, mm1 + mp2, mm1 + mm2, mm1 + mm2,
+                   zm1 + zp2, zm1 + zp2, zm1 + zp2, zm1 + zm2, zm1 + zm2, zm1 + zm2,
+                   zp1 + zp2, zp1 + zp2, zp1 + zp2, zp1 + zm2, zp1 + zm2, zp1 + zm2]
+        elif (num_pts == 3) and (num_procs != 2):
+            if use_analytic == True:
+                xs = []
+                pps = splitdiffs[::(num_pts-1)]
+                mms = shuffle_list(splitdiffs,1)[::(num_pts-1)]
+                # the one vector with all pluses
+                xs.append(sum(pps))
+                # the p vectors with one minus
+                for procloc, mm in enumerate(mms):
+                    newvec = pps[0].copy()
+                    newvec.loc[:]=0
+                    subpps = pps.copy()
+                    del subpps[procloc]
+                    newvec = newvec + sum(subpps) + mm
+                    xs.append(newvec)
+            else:
+                xs = splitdiffs
+        elif (num_pts == 5) and (num_procs != 2) and (fivetheories == "nobar"):
+            pzs = splitdiffs[::(num_pts-1)]
+            mzs = shuffle_list(splitdiffs,1)[::(num_pts-1)]
+            zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
+            zms = shuffle_list(splitdiffs,3)[::(num_pts-1)]
+            xs = []
+            if use_analytic == True:
+                xs.append(sum(pzs))
+                xs.append(sum(mzs))
+                xs.append(sum(zps))
+                # the p vectors with one minus
+                for procloc, zm in enumerate(zms):
+                    newvec = zps[0].copy()
+                    newvec.loc[:] = 0
+                    subzps = zps.copy()
+                    del subzps[procloc]
+                    newvec = newvec + sum(subzps) + zm
+                    xs.append(newvec)
+            else:
+                # See Richard notes pg 20, first two vectors are just all the
+                #(+,0) and (-,0) elements respectively
+                xs.append(sum(pzs))
+                xs.append(sum(mzs))
+                # Generating the other 2^p vectors
+                loccombs = [p for p in product(range(2), repeat=num_procs)]
+                for loccomb in loccombs:
+                    newvec = pzs[0].copy()
+                    newvec.loc[:] = 0
+                    for index, entry in enumerate(loccomb):
+                        if entry == 0:
+                            newvec = newvec + zps[index]
+                        elif entry == 1:
+                            newvec = newvec + zms[index]
+                    xs.append(newvec)
+        elif (num_pts == 5) and (num_procs != 2) and (fivetheories == "bar"):
+            pps = splitdiffs[::(num_pts-1)]
+            mms = shuffle_list(splitdiffs,1)[::(num_pts-1)]
+            pms = shuffle_list(splitdiffs,2)[::(num_pts-1)]
+            mps = shuffle_list(splitdiffs,3)[::(num_pts-1)]
+            xs = []
+            if use_analytic == True:
+                xs.append(sum(pps))
+                xs.append(sum(mps))
+                # the 2p vectors with one minus
+                for procloc, pm in enumerate(pms):
+                    newvec = pms[0].copy()
+                    newvec.loc[:] = 0
+                    subpps = pps.copy()
+                    del subpps[procloc]
+                    newvec = newvec + sum(subpps) + pm
+                    xs.append(newvec)
+                for procloc, mm in enumerate(mms):
+                    newvec = mms[0].copy()
+                    newvec.loc[:] = 0
+                    submps = mps.copy()
+                    del submps[procloc]
+                    newvec = newvec + sum(submps) + mm
+                    xs.append(newvec)
+            else:
+                loccombs = [p for p in product(range(2), repeat=num_procs)]
+                for loccomb in loccombs:
+                    newvec = pps[0].copy()
+                    newvec.loc[:] = 0
+                    for index, entry in enumerate(loccomb):
+                        if entry == 0:
+                            newvec = newvec + pps[index]
+                        elif entry == 1:
+                            newvec = newvec + pms[index]
+                    xs.append(newvec)
+                for loccomb in loccombs:
+                    newvec = pps[0].copy()
+                    newvec.loc[:] = 0
+                    for index, entry in enumerate(loccomb):
+                        if entry == 0:
+                            newvec = newvec + mps[index]
+                        elif entry == 1:
+                            newvec = newvec + mms[index]
+                    xs.append(newvec)
+        elif (num_pts == 7) and (num_procs != 2) and (seventheories != "original"):
+            pzs = splitdiffs[::(num_pts-1)]
+            mzs = shuffle_list(splitdiffs,1)[::(num_pts-1)]
+            zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
+            zms = shuffle_list(splitdiffs,3)[::(num_pts-1)]
+            pps = shuffle_list(splitdiffs,4)[::(num_pts-1)]
+            mms = shuffle_list(splitdiffs,5)[::(num_pts-1)]
+            xs = []
+            if use_analytic == True:
+                # 3pt-like part
+                xs.append(sum(pps))
+                # the p vectors with one minus
+                for procloc, mm in enumerate(mms):
+                    newvec = pps[0].copy()
+                    newvec.loc[:]=0
+                    subpps = pps.copy()
+                    del subpps[procloc]
+                    newvec = newvec + sum(subpps) + mm
+                    xs.append(newvec)
+                # 5pt-like part
+                xs.append(sum(pzs))
+                xs.append(sum(mzs))
+                xs.append(sum(zps))
+                # the p vectors with one minus
+                for procloc, zm in enumerate(zms):
+                    newvec = zps[0].copy()
+                    newvec.loc[:] = 0
+                    subzps = zps.copy()
+                    del subzps[procloc]
+                    newvec = newvec + sum(subzps) + zm
+                    xs.append(newvec)
+            else:
+                # 3pt-like part
+                loccombs = [p for p in product(range(2), repeat=num_procs)]
+                for loccomb in loccombs:
+                    newvec = pzs[0].copy()
+                    newvec.loc[:] = 0
+                    for index, entry in enumerate(loccomb):
+                        if entry == 0:
+                            newvec = newvec + pps[index]
+                        elif entry == 1:
+                            newvec = newvec + mms[index]
+                    xs.append(newvec)
+                # 5pt-like part
+                xs.append(sum(pzs))
+                xs.append(sum(mzs))
+                # Generating the other 2^p vectors
+                loccombs = [p for p in product(range(2), repeat=num_procs)]
+                for loccomb in loccombs:
+                    newvec = pzs[0].copy()
+                    newvec.loc[:] = 0
+                    for index, entry in enumerate(loccomb):
+                        if entry == 0:
+                            newvec = newvec + zps[index]
+                        elif entry == 1:
+                            newvec = newvec + zms[index]
+                    xs.append(newvec)
+        elif (num_pts == 9) and (num_procs != 2):
+            pzs = splitdiffs[::(num_pts-1)]
+            mzs = shuffle_list(splitdiffs,1)[::(num_pts-1)]
+            zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
+            zms = shuffle_list(splitdiffs,3)[::(num_pts-1)]
+            pps = shuffle_list(splitdiffs,4)[::(num_pts-1)]
+            mms = shuffle_list(splitdiffs,5)[::(num_pts-1)]
+            pms = shuffle_list(splitdiffs,6)[::(num_pts-1)]
+            mps = shuffle_list(splitdiffs,7)[::(num_pts-1)]
+            xs = []
+            if use_analytic == True:
+                xs.append(sum(pps))
+                xs.append(sum(mps))
+                xs.append(sum(zps))
+                for procloc, zm in enumerate(zms):
+                    newvec = zps[0].copy()
+                    newvec.loc[:] = 0
+                    subzps = zps.copy()
+                    del subzps[procloc]
+                    newvec = newvec + sum(subzps) + zm
+                    xs.append(newvec)
+                for procloc, pm in enumerate(pms):
+                    newvec = pps[0].copy()
+                    newvec.loc[:] = 0
+                    subpps = pps.copy()
+                    del subpps[procloc]
+                    newvec = newvec + sum(subpps) + pm
+                    xs.append(newvec)
+                for procloc, mm in enumerate(mms):
+                    newvec = mps[0].copy()
+                    newvec.loc[:] = 0
+                    submps = mps.copy()
+                    del submps[procloc]
+                    newvec = newvec + sum(submps) + mm
+                    xs.append(newvec)
+                for procloc, pz in enumerate(pzs):
+                    newvec = pps[0].copy()
+                    newvec.loc[:] = 0
+                    subpps = pps.copy()
+                    del subpps[procloc]
+                    newvec = newvec + sum(subpps) + pz
+                    xs.append(newvec)
+                for procloc, mz in enumerate(mzs):
+                    newvec = mps[0].copy()
+                    newvec.loc[:] = 0
+                    submps = mps.copy()
+                    del submps[procloc]
+                    newvec = newvec + sum(submps) + mz
+                    xs.append(newvec)
+            else:
+                # Generating first 2^p vectors
+                loccombs = [p for p in product(range(2), repeat=num_procs)]
+                for loccomb in loccombs:
+                    newvec = pzs[0].copy()
+                    newvec.loc[:] = 0
+                    for index, entry in enumerate(loccomb):
+                        if entry == 0:
+                            newvec = newvec + zps[index]
+                        elif entry == 1:
+                            newvec = newvec + zms[index]
+                    xs.append(newvec)
+                loccombs2 = [p for p in product(range(3), repeat=num_procs)]
+                for loccomb2 in loccombs2:
+                    newvec = pzs[0].copy()
+                    newvec.loc[:] = 0
+                    for index, entry in enumerate(loccomb2):
+                        if entry == 0:
+                            newvec = newvec + pzs[index]
+                        elif entry == 1:
+                            newvec = newvec + pps[index]
+                        elif entry == 2:
+                            newvec = newvec + pms[index]
+                    xs.append(newvec)
+                for loccomb2 in loccombs2:
+                    newvec = pzs[0].copy()
+                    newvec.loc[:] = 0
+                    for index, entry in enumerate(loccomb2):
+                        if entry == 0:
+                            newvec = newvec + mzs[index]
+                        elif entry == 1:
+                            newvec = newvec + mps[index]
+                        elif entry == 2:
+                            newvec = newvec + mms[index]
+                    xs.append(newvec)
+        A = pd.concat(xs, axis=1)
+        if num_procs == 2:
+            covmat = N*A.dot(A.T)
+        else:
+            covmat = orig_matrix
+        ys = [x/np.linalg.norm(x) for x in xs]
+        for i in range(1, len(xs)):
+            for j in range(0,i):
+                ys[i] = ys[i] - (ys[i].T.dot(ys[j]))[0][0]*ys[j]/np.linalg.norm(ys[j])
+                ys[i] = ys[i]/np.linalg.norm(ys[i])
+        P = pd.concat(ys, axis=1)
+       # P = scipy.linalg.orth(A)
+        projected_matrix = (P.T).dot(covmat.dot(P))
+        w, v_projected = la.eigh(projected_matrix)
+        v = P.dot(v_projected)
     return w, v
 
 def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
@@ -498,12 +849,6 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
     w_max = w[np.argmax(w)]
     f = -shx_vector[0].values.T[0]
     all_projectors = np.sum(f*v.T, axis=1)
-#    if num_evals is not None:
-#        w_nonzero = w[-num_evals:]
-#        nonzero_locs = range(len(w)-num_evals, len(w))
-#    elif evalue_cutoff is not None:
-#        w_nonzero = w[w>evalue_cutoff*w_max]
-#        nonzero_locs = np.nonzero(w>evalue_cutoff*w_max)[0]
     if eigenvalue_cutoff == True:
         mod_larg_neg_eval = np.abs(w[0])
         nonzero_locs = np.nonzero(w>10*mod_larg_neg_eval)[0]
@@ -520,17 +865,21 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
         if loc >=0:
             v_nonzero.append(v[:,loc])
     projectors = np.sum(f*v_nonzero, axis=1)
-    projected_evectors = np.zeros((len(projectors), (len(f))))
-    for i, projector in enumerate(projectors):
-        projected_evectors[i] = projector*v_nonzero[i]
+    # Initialise array of zeros and set precision to same as FK tables
+    projected_evectors = np.zeros((len(projectors), (len(f))), dtype=np.float32)
+    for i in range(len(projectors)):
+        projected_evectors[i] = projectors[i]*v_nonzero[i]
     fmiss = f - np.sum(projected_evectors, axis=0)
     return w_nonzero, v_nonzero, projectors, f, fmiss, w_max, w, all_projectors
 
-def cutoff(eigenvalue_cutoff:(bool, type(None)) = None):
+def cutoff(theory_shift_test, eigenvalue_cutoff:(bool, type(None)) = None,
+           use_analytic:(bool, type(None)) = None):
     if eigenvalue_cutoff == True:
         cutoff = "10 times modulus of largest 'negative' eigenvalue"
     else:
-        cutoff = "Eigenvalues determined by projection onto space of non-zero eigenvalues"
+        cutoff = "Eigenvalues determined by projection onto space of non-zero eigenvalues."
+    if use_analytic == True:
+        cutoff = cutoff + "\n Linearly independent vectors determined analytically"
     print(f"cutoff = {cutoff}")
     return cutoff
 
@@ -541,7 +890,8 @@ def theory_covmat_eigenvalues(theory_shift_test):
     projectors_scrambled = np.ndarray.tolist(projectors)
     ratio_scrambled = projectors_scrambled/s_scrambled
     table = pd.DataFrame([s_scrambled[::-1], projectors_scrambled[::-1], ratio_scrambled[::-1]],
-         		index = [r'$s_a$', r'$\delta_a$', r'$\delta_a/s_a$'])
+         		index = [r'$s_a$', r'$\delta_a$', r'$\delta_a/s_a$'],
+                 columns = np.arange(1,len(s_scrambled)+1,1))
     return table
 
 def efficiency(theory_shift_test):
@@ -569,35 +919,45 @@ def validation_theory_chi2(theory_shift_test):
     return th_chi2
 
 @figure
-def projector_eigenvalue_ratio(theory_shift_test):
+def projector_eigenvalue_ratio(theory_shift_test,
+                               eigenvalue_cutoff:(bool, type(None)) = None,
+                               use_analytic:(bool, type(None)) = None):
     surviving_evals = theory_shift_test[0][::-1]
     all_projectors = theory_shift_test[7][::-1]
     all_evals = theory_shift_test[6][::-1]
+    fmiss = theory_shift_test[4]
+    fmiss_mod = np.sqrt(np.sum(fmiss**2))
     ratio = np.abs(all_projectors)/np.sqrt(np.abs(all_evals))
-    masked_evals = np.zeros((len(all_evals)))
-    for loc, evalue in enumerate(all_evals):
-        if evalue in surviving_evals:
-            masked_evals[loc] = evalue
-  #  num_evals_ignored = len(all_evals)-len(surviving_evals)
-  #  # Ordering eigenvalues and their projectors at random
-  #  randomise = np.arange(len(evals))
-  #  np.random.shuffle(randomise)
-  #  evals = np.asarray(evals)[randomise]
-  #  projectors = projectors[randomise]
-  #  ratio = ratio[randomise]
+    # Initialise array of zeros and set precision to same as FK tables
+    masked_evals = np.zeros((len(all_evals)), dtype=np.float32)
+    for loc, eval in enumerate(all_evals):
+        if eval in surviving_evals:
+            masked_evals[loc] = eval
+     # Ordering according to shift vector
+    mask = np.argsort(np.abs(all_projectors))[::-1]
+    all_evals = np.asarray(all_evals)[mask]
+    all_projectors = all_projectors[mask]
+    ratio = ratio[mask]
+    masked_evals = masked_evals[mask]
+    xvals = np.arange(1,len(masked_evals)+1,1)
     fig, (ax1, ax2) = plt.subplots(2, figsize=(5,5))
-    ax1.plot(np.abs(all_projectors), 'o', label = r'|$\delta_a$|')
-    ax1.plot(np.sqrt(np.abs(all_evals)), 'o', label = r'$|s_a|$')
-    ax1.plot(np.sqrt(np.abs(masked_evals)), 'o', label = r'surviving $|s_a|$', color='k')
-    ax2.plot(ratio, 'o', color="red")
-    ax1.set_title(f"Number of surviving eigenvalues = {len(surviving_evals)}", fontsize=10)
-    ax1.set_xlabel("a", fontsize=20)
+    ax1.plot(xvals, np.abs(all_projectors), 's', label = r'|$\delta_a$|')
+    ax1.plot(xvals, np.sqrt(np.abs(all_evals)), 'o', label = r'$|s_a|$')
+    if use_analytic == None:
+        ax1.plot(xvals, np.sqrt(np.abs(masked_evals)), 'o', label = r'surviving $|s_a|$', color='k')
+    ax1.plot(0, fmiss_mod, '*', label=r'$|\delta_{miss}|$', color='b')
+    ax2.plot(xvals,ratio, 'D', color="red")
+    ax2.plot(0,0, '.', color="w")
+    ax1.set_title(f"Number of eigenvalues = {len(surviving_evals)}", fontsize=10)
     ax1.set_yscale('log')
     ax2.set_yscale('log')
-#    ax1.set_ylim([all_evals[np.argmin(np.sqrt(np.abs(all_evals)))],
-#		all_evals[np.argmax(np.sqrt(np.abs(all_evals)))]])
+    if eigenvalue_cutoff == True:
+        ax1.set_xscale('log')
+        ax2.set_xscale('log')
     ax1.legend()
-  #  ax1.axvline(x=num_evals_ignored, color='k')
+    labels = [item.get_text() for item in ax1.get_xticklabels()]
+    ax1.set_xticklabels(labels)
+    ax2.set_xticklabels(labels)
     ax2.axhline(y=3, color='k', label=r'|$\delta_a$/$s_a$| = 3')
     ax2.legend()
     ax2.set_ylabel(r"|$\delta_a$/$s_a$|")
@@ -608,11 +968,56 @@ def projector_eigenvalue_ratio(theory_shift_test):
 def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
     matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
     fnorm = -shx_vector[0]
+    indexlist = list(matrix.index.values)
+    # adding process index for plotting
+    dsnames = []
+    processnames= []
+    ids = []
+    for index in indexlist:
+        name = index[0]
+        i = index[1]
+        dsnames.append(name)
+        ids.append(i)
+        proc = _process_lookup(name)
+        processnames.append(proc)
+    tripleindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
+                        names = ("process", "dataset", "id"))
+    matrix = pd.DataFrame(matrix.values, index=tripleindex, columns=tripleindex)
+    matrix.sort_index(0, inplace=True)
+    matrix.sort_index(1, inplace=True)
+    oldindex=matrix.index.tolist()
+    newindex = sorted(oldindex, key=_get_key)
+    matrix = matrix.reindex(newindex)
+    matrix = (matrix.T.reindex(newindex)).T
     sqrtdiags = np.sqrt(np.diag(matrix))
+    fnorm = pd.DataFrame(fnorm.values, index=tripleindex)
+    fnorm.sort_index(0, inplace=True)
+    fnorm = fnorm.reindex(newindex)
     fig, ax = plt.subplots(figsize=(20,10))
     ax.plot(sqrtdiags*100, '.-', label="Theory", color = "red")
+    ax.plot(-sqrtdiags*100, '.-', color = "red")
     ax.plot(fnorm.values*100, '.-', label="NNLO-NLO Shift", color = "black")
-    ticklocs, ticklabels = matrix_plot_labels(matrix)
+    ticklocs, ticklabels, startlocs = matrix_plot_labels(matrix)
+    plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=20)
+    ax.vlines(startlocs, -70, 70, linestyles='dashed')
+    ax.margins(x=0, y=0)
+    ax.set_ylabel("% of central theory", fontsize=20)
+    ax.legend(fontsize=20)
+    ax.yaxis.set_tick_params(labelsize=20)
+    return fig
+
+@figure
+def plot_shift_scaleavg_comparison(shx_vector, thx_vector,
+                                   allthx_vector, thx_covmat):
+    diffs = [((thx_vector[0] - scalevarvector)/thx_vector[0])
+                                        for scalevarvector in allthx_vector[0]]
+    diffsconcat = pd.concat(diffs, axis=1)
+    avgdiffs = diffsconcat.mean(axis=1)
+    fig, ax = plt.subplots(figsize=(20,10))
+    ax.plot(100*avgdiffs.values, '.-',
+            label=r"Average of $\Delta$s",color = "blue")
+    ax.plot(-100*shx_vector[0].values, '.-', label="NNLO-NLO shift", color = "black")
+    ticklocs, ticklabels, startlocs = matrix_plot_labels(thx_covmat[0])
     plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=20)
     ax.set_ylabel("% of central theory", fontsize=20)
     ax.legend(fontsize=20)
