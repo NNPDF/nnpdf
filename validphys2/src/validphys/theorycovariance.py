@@ -677,7 +677,8 @@ def experiments_chi2_table_diagtheory(experiments, pdf,
                                   abs_chi2_data_diagtheory_dataset)
 
 def matrix_plot_labels(df):
-    """Returns the tick locations and labels based on a dataframe
+    """Returns the tick locations and labels, and the starting 
+    point values for each category,  based on a dataframe
     to be plotted. The dataframe is assumed to be multiindexed by
     (process, dataset, points) or else (dataset, points). The tick
     location is in the centre of the dataset, and labelling is by
@@ -704,9 +705,14 @@ def matrix_plot_labels(df):
         ticklocs[i] = 0.5*(startlocs[i+1]+startlocs[i])
     return ticklocs, ticklabels, startlocs
 
-@figure
 def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
-    """Matrix plot of a covariance matrix"""
+    """Matrix plot of a covariance matrix. 
+    WARNING: Plotting is ordered by process and dataset in the custom
+    order given in _procorder and _dsorder. In order for this to work
+    the covmat provided MUST be indexed and ordered the same as 
+    experiments_covmat, that is by (exp, dataset, point) in the order
+    of experiments and datasets listed in the runcard. Otherwise the 
+    labels will not correspond to the correct points."""
     df = pd.DataFrame(covmat.values, index=dataset_index_byprocess,
 			columns=dataset_index_byprocess)
     df.sort_index(0, inplace=True)
@@ -738,14 +744,9 @@ def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
     ax.margins(x=0, y=0)
     return fig
 
-def _procorder():
-    """The plotting order of process types for covariance matrix plots"""
-    procorder = ('DIS NC', 'DIS CC', 'DY', 'JETS', 'TOP')
-    return procorder
+_procorder = ('DIS NC', 'DIS CC', 'DY', 'JETS', 'TOP')
 
-def _dsorder():
-    """The plotting order of datasets for covariance matrix plots"""
-    dsorder = ('BCDMSP', 'BCDMSD', 'SLACP', 'SLACD', 'NMC', 'NMCPD',
+_dsorder = (   'BCDMSP', 'BCDMSD', 'SLACP', 'SLACD', 'NMC', 'NMCPD',
                'HERAF2CHARM', 'HERACOMBNCEP460', 'HERACOMBNCEP575',
                'HERACOMBNCEP820', 'HERACOMBNCEP920', 'HERACOMBNCEM',
                'CHORUSNU', 'CHORUSNB', 'NTVNUDMN', 'NTVNBDMN',
@@ -757,23 +758,14 @@ def _dsorder():
                'LHCBZEE2FB', 'ATLAS1JET11', 'CMSJETS11', 'CDFR2KT',
                'ATLASTTBARTOT', 'ATLASTOPDIFF8TEVTRAPNORM', 'CMSTTBARTOT',
                'CMSTOPDIFF8TEVTTRAPNORM')
-    return dsorder
 
 def _get_key(element):
     """The key used to sort covariance matrix dataframes according to
     the ordering of processes and datasets specified in _procorder and
     _dsorder."""
-    x1 = element[0]
-    y1 = element[1]
-    z1 = element[2]
-    if x1 in _procorder():
-        x2 = _procorder().index(x1)
-    else:
-        x2 = inf
-    if y1 in _dsorder():
-        y2 = _dsorder().index(y1)
-    else:
-        y2 = inf
+    x1, y1, z1 = element
+    x2 = _procorder.index(x1) if x1 in _procorder else inf
+    y2 = _dsorder.index(y1) if y1 in _dsorder else inf
     z2 = z1
     newelement = (x2, y2, z2)
     return newelement
