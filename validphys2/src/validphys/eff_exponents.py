@@ -267,15 +267,17 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF, *,
                                        basis:(str, Basis),
                                        flavours: (list, tuple, type(None)) = None):
     """Returns a table with the effective exponents for the next fit
+    By default `x1_alpha = 1e-6`, `x2_alpha = 1e-3`, `x1_beta = 0.65`, and `x2_beta = 0.95`, but
+    different values can be specified in the runcard. The values control where the bounds of alpha
+    and beta are evaluated:
 
-    `x1_alpha`, `x2_alpha`, `x1_beta`, and `x2_beta` control where the effective exponents bounds
-    are evaluated. The are evaluated at the following:
-
-    alpha:
-     - singlet/gluon: `x1_alpha`.
-     - others: `x1_alpha` and `x2_alpha`)
-
-    beta: `x1_beta`, and `x2_beta`
+    alpha_min = singlet/gluon: the 2x68% c.l. lower value evaluated at x=`x1_alpha`
+    others  : min(2x68% c.l. lower value evaluated at x=`x1_alpha` and x=`x2_alpha`)
+    alpha_max = singlet/gluon: min(2 and the 2x68% c.l. upper value evaluated at x=`x1_alpha`)
+                   others    : min(2 and max(2x68% c.l. upper value
+                                   evaluated at x=`x1_alpha` and x=`x2_alpha`))
+    beta_min  =  max(0 and min(2x68% c.l. lower value evaluated at x=`x1_beta` and x=`x2_beta`))
+    beta_max  =  max(2x68% c.l. upper value evaluated at x=`x1_beta` and x=`x2_beta`)
     """
 
     #Reading from the filter
@@ -287,7 +289,7 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF, *,
     checked = check_basis(basis, flavours)
     basis = checked['basis']
     flavours = checked['flavours']
-    # xplottinggrid annoyingly has endpoint=False so I have to call this more times than I want
+
     alpha_effs = alpha_eff(
         pdf, xmin=x1_alpha, xmax=x2_alpha, npoints=2, Q=Qmin, basis=basis, flavours=flavours)
     beta_effs = beta_eff(
@@ -315,7 +317,8 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF, *,
     alpha_sigdown = -alpha68[0] + alpha_cv
     beta_sigdown = -beta68[0] + beta_cv
     flavours_label = []
-    runcard_flavours = basis.to_known_elements([ref_fl['fl'] for ref_fl in previous_exponents]).tolist()
+    runcard_flavours = basis.to_known_elements(
+        [ref_fl['fl'] for ref_fl in previous_exponents]).tolist()
     for (j, fl) in enumerate(flavours):
 
         prev_a_bounds = previous_exponents[runcard_flavours.index(fl)]['smallx']
@@ -351,8 +354,7 @@ effective_exponents_table = collect(
     'effective_exponents_table_internal', ('fitpdfandbasis',))
 fmt = lambda a: float(significant_digits(a, 4))
 
-def next_effective_exponents_yaml(
-    fit: FitSpec, effective_exponents_table):
+def next_effective_exponents_yaml(fit: FitSpec, effective_exponents_table):
     """-Returns a table in yaml format called NextEffExps.yaml
        -Prints the yaml table in the report
     using `effective_exponents_table` this provider outputs the yaml runcard to run
@@ -377,7 +379,8 @@ def next_effective_exponents_yaml(
     basis = checked['basis']
     flavours = checked['flavours']
 
-    runcard_flavours = basis.to_known_elements([ref_fl['fl'] for ref_fl in previous_exponents]).tolist()
+    runcard_flavours = basis.to_known_elements(
+        [ref_fl['fl'] for ref_fl in previous_exponents]).tolist()
     for fl in flavours:
         alphas = df_effexps.loc[(f'${fl}$', r'$\alpha$'), ['next Min', 'next Max']].values
         betas = df_effexps.loc[(f'${fl}$', r'$\beta$'), ['next Min', 'next Max']].values
