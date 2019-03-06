@@ -246,7 +246,7 @@ def combine_by_type(each_dataset_results_bytheory, dataset_names):
                    corresponding list of names of datasets, in the order they
                    are appended to theories_by_process
     dataset_size:  dictionary with keys of dataset name and values being the
-                   number of in that dataset"""
+                   number of points in that dataset"""
     dataset_size = defaultdict(list)
     theories_by_process = defaultdict(list)
     ordered_names = defaultdict(list)
