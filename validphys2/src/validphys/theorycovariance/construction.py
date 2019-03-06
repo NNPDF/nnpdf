@@ -27,7 +27,7 @@ theoryids_experiments_central_values = collect(experiments_central_values,
                                                ('theoryids',))
 
 @make_argcheck
-def _check_correct_theory_combination(theoryids,
+def _check_correct_theory_combination_internal(theoryids,
                                       fivetheories:(str, type(None)) = None):
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
@@ -64,6 +64,28 @@ def _check_correct_theory_combination(theoryids,
         xifs == correct_xifs and xirs == correct_xirs,
         "Choice of input theories does not correspond to a valid "
         "prescription for theory covariance matrix calculation")
+    
+collected_theoryids = collect('theoryids', ['theoryconfig',])
+
+_check_correct_theory_combination = make_argcheck(_check_correct_theory_combination_internal)
+
+def dataset_index_byprocess(experiments_index):
+    """Return a multiindex with index
+       per dataset per point, ordered by process"""
+    dsnames = []
+    ids = experiments_index.get_level_values("id")
+    for dsname in experiments_index.get_level_values("dataset"):
+        dsnames.append(dsname)
+    processnames = [_process_lookup(dsname) for dsname in dsnames]
+    experiments_index.droplevel(level="experiment")
+    newindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
+				names = ("process", "dataset", "id"))
+return newindex
+
+@make_argcheck
+def _check_correct_theory_combination_theoryconfig(collected_theoryids,
+						fivetheories:(str, type(None))=None):
+    _check_correct_theory_combination_internal(collected_theoryids[0], fivetheories)
 
 def make_scale_var_covmat(predictions):
     """Takes N theory predictions at different scales and applies N-pt scale
@@ -132,7 +154,8 @@ def total_covmat_diagtheory_datasets(each_dataset_results_bytheory,
     for dataset in each_dataset_results_bytheory:
         theory_centrals = [x[1].central_value for x in dataset]
         s = make_scale_var_covmat(theory_centrals)
-        s_diag = np.zeros((len(s),len(s)))
+        # Initialise array of zeros and set precision to same as FK tables
+        s_diag = np.zeros((len(s),len(s)), dtype=np.float32)
         np.fill_diagonal(s_diag, np.diag(s))
         sigma = dataset[0][0].covmat
         cov = s_diag + sigma
@@ -166,31 +189,63 @@ def total_covmat_experiments(experiments_results_theory,
 
 commondata_experiments = collect('commondata', ['experiments', 'experiment'])
 
-# TODO: Improve how processes are assigned. Currently we group manually into
-# Drell-Yan, Heavy Quarks and Jets but adding more processes could break
-# this assignment
-def process_lookup(commondata_experiments):
+def _process_lookup(name):
     """Produces a dictionary with keys corresponding to dataset names
     and values corresponding to process types. Process types are
-    regrouped into the five categories 'Drell-Yan', 'Heavy Quarks', Jets',
+    regrouped into the five categories 'Drell-Yan', 'Top', Jets',
     'DIS NC' and 'DIS CC'."""
-    d = {commondata.name: get_info(commondata).process_description
-         for commondata in commondata_experiments}
-    for key, value in d.items():
-        if "Deep Inelastic Scattering" in value:
-            if ("CHORUS" in key) or ("NTV" in key) or ("HERACOMBCC" in key):
-                d[key] = "DIS CC"
-            else:
-                d[key] = "DIS NC"
-        elif "Drell-Yan" in value:
-            d[key] = "Drell-Yan"
-        elif "Heavy Quarks" in value:
-            d[key] = "Heavy Quarks"
-        elif "Jet" in value:
-            d[key] = "Jets"
-        else:
-            pass
-    return d
+    process_dictionary = {	"ATLASZPT8TEVMDIST": 			"DY",
+				"ATLASZPT8TEVYDIST":			"DY",
+				"CMSZDIFF12":				"DY",
+				"ATLAS1JET11":				"JETS",
+				"CMSJETS11":				"JETS",
+				"CDFR2KT":				"JETS",
+				"CMSTOPDIFF8TEVTTRAPNORM":		"TOP",
+				"ATLASTOPDIFF8TEVTRAPNORM":		"TOP",
+				"ATLASTTBARTOT":			"TOP",
+				"CMSTTBARTOT":				"TOP",
+				"DYE605":				"DY",
+				"DYE886P":				"DY",
+				"DYE886R":				"DY",
+				"ATLASWZRAP36PB":			"DY",
+				"ATLASZHIGHMASS49FB":			"DY",
+				"ATLASLOMASSDY11EXT":			"DY",
+				"ATLASWZRAP11":				"DY",
+				"CMSWEASY840PB":			"DY",
+				"CMSWMASY47FB":				"DY",
+				"CMSDY2D11":				"DY",
+				"CMSWMU8TEV":				"DY",
+				"CMSWCHARMRAT":				"DY",
+				"LHCBZ940PB":				"DY",
+				"LHCBZEE2FB":				"DY",
+				"LHCBWZMU7TEV":				"DY",
+				"LHCBWZMU8TEV":				"DY",
+				"D0WEASY":				"DY",
+				"D0WMASY":				"DY",
+				"D0ZRAP":				"DY",
+				"CDFZRAP":				"DY",
+				"H1HERAF2B":				"DIS NC",
+				"HERACOMBCCEM":				"DIS CC",
+				"HERACOMBCCEP":				"DIS CC",
+				"HERACOMBNCEM":				"DIS NC",
+				"HERACOMBNCEP460":			"DIS NC",
+				"HERACOMBNCEP575":			"DIS NC",
+				"HERACOMBNCEP820":	 		"DIS NC",
+				"HERACOMBNCEP920":			"DIS NC",
+				"HERAF2CHARM":				"DIS NC",
+				"ZEUSHERAF2B":				"DIS NC",
+				"NMCPD":				"DIS NC",
+				"NMC":					"DIS NC",
+				"SLACP":				"DIS NC",
+				"SLACD":				"DIS NC",
+				"BCDMSP":				"DIS NC",
+				"BCDMSD":				"DIS NC",
+				"CHORUSNU":				"DIS CC",
+				"CHORUSNB":				"DIS CC",
+				"NTVNUDMN":				"DIS CC",
+				"NTVNBDMN":				"DIS CC"	}
+    proc = process_dictionary[name]
+return proc
 
 def dataset_names(commondata_experiments):
     """Returns a list of the names of the datasets, in the same order as
@@ -216,7 +271,7 @@ def combine_by_type(process_lookup,
     for dataset, name in zip(each_dataset_results_bytheory, dataset_names):
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
-        proc_type = process_lookup[name]
+        proc_type = _process_lookup[name]
         ordered_names[proc_type].append(name)
         theories_by_process[proc_type].append(theory_centrals)
     for key, item in theories_by_process.items():
@@ -355,7 +410,8 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     to ordering by experiment as listed in the runcard"""
     matlength = int(sum([len(covmat) for covmat in covs_pt_prescrip.values()]
                         )/int(np.sqrt(len(covs_pt_prescrip))))
-    mat = np.zeros((matlength,matlength))
+    # Initialise arrays of zeros and set precision to same as FK tables
+    mat = np.zeros((matlength,matlength), dtype=np.float32)
     cov_by_exp = np.zeros((matlength,matlength))
     for locs in covs_pt_prescrip:
         cov = covs_pt_prescrip[locs]
@@ -376,7 +432,8 @@ def total_covmat_diagtheory_experiments(experiments_results_theory,
     for exp_result in zip(*experiments_results_theory):
         theory_centrals = [x[1].central_value for x in exp_result]
         s = make_scale_var_covmat(theory_centrals)
-        s_diag = np.zeros((len(s),len(s)))
+        # Initialise array of zeros and set precision to same as FK tables
+        s_diag = np.zeros((len(s),len(s)), dtype=np.float32)
         np.fill_diagonal(s_diag, np.diag(s))
         sigma = exp_result[0][0].covmat
         cov = s_diag + sigma
