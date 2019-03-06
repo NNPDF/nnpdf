@@ -9,7 +9,6 @@ import warnings
 import numbers
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
 from reportengine import collect
 from reportengine.figure import figuregen
@@ -17,11 +16,10 @@ from reportengine.table import table
 from reportengine.floatformatting import format_number, significant_digits
 from reportengine.compat import yaml
 
-from validphys.checks import check_positive, check_pdf_normalize_to, make_argcheck
-from validphys.pdfplots import BandPDFPlotter, PDFPlotter, FlavourState
+from validphys.checks import check_positive, check_pdf_normalize_to, make_argcheck, check_xlimits
+from validphys.pdfplots import BandPDFPlotter, PDFPlotter
 from validphys.pdfbases import check_basis, Basis
 from validphys.core import PDF, FitSpec
-from validphys import plotutils
 
 
 import validphys.pdfgrids as pdfgrids
@@ -30,7 +28,7 @@ log = logging.getLogger(__name__)
 
 @check_positive('Q')
 @make_argcheck(check_basis)
-@pdfgrids._check_limits
+@check_xlimits
 def alpha_eff(pdf: PDF, *,
               xmin: numbers.Real = 1e-6,
               xmax: numbers.Real = 1e-3,
@@ -74,7 +72,7 @@ def alpha_eff(pdf: PDF, *,
 
 @check_positive('Q')
 @make_argcheck(check_basis)
-@pdfgrids._check_limits
+@check_xlimits
 def beta_eff(pdf, *,
              xmin: numbers.Real = 0.6,
              xmax: numbers.Real = 0.9,
@@ -284,7 +282,7 @@ def effective_exponents_table_internal(fit: FitSpec, pdf: PDF, *,
     with open(fit.path/'filter.yml', 'r') as f:
         filtermap = yaml.safe_load(f)
     previous_exponents = filtermap['fitting']['basis']
-    Qmin = pdf.Qmin
+    Qmin = pdf.QMin
 
     checked = check_basis(basis, flavours)
     basis = checked['basis']
