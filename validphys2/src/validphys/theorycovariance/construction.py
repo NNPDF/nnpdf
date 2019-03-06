@@ -80,7 +80,7 @@ def dataset_index_byprocess(experiments_index):
     experiments_index.droplevel(level="experiment")
     newindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
 				names = ("process", "dataset", "id"))
-return newindex
+    return newindex
 
 @make_argcheck
 def _check_correct_theory_combination_theoryconfig(collected_theoryids,
@@ -245,7 +245,7 @@ def _process_lookup(name):
 				"NTVNUDMN":				"DIS CC",
 				"NTVNBDMN":				"DIS CC"	}
     proc = process_dictionary[name]
-return proc
+    return proc
 
 def dataset_names(commondata_experiments):
     """Returns a list of the names of the datasets, in the same order as
@@ -256,8 +256,7 @@ def dataset_names(commondata_experiments):
 ProcessInfo = namedtuple("ProcessInfo", ('theory', 'namelist', 'sizes'))
 
 
-def combine_by_type(process_lookup,
-                    each_dataset_results_bytheory, dataset_names):
+def combine_by_type(each_dataset_results_bytheory, dataset_names):
     """Groups the datasets according to processes and returns three objects:
     theories_by_process: the relevant theories grouped by process type
     ordered_names: dictionary with keys of process type and values being the

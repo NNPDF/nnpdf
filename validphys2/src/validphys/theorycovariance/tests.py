@@ -25,7 +25,7 @@ from validphys.checks import check_two_dataspecs
 
 from validphys.theorycovariance.construction import _check_correct_theory_combination
 from validphys.theorycovariance.construction import combine_by_type, process_starting_points
-from validphys.theorycovariance.construction import theory_corrmat, process_lookup
+from validphys.theorycovariance.construction import theory_corrmat
 from validphys.theorycovariance.construction import commondata_experiments, results_bytheoryids
 from validphys.theorycovariance.construction import experiments_results_theory, data_theory_diff
 from validphys.theorycovariance.construction import theoryids_experiments_central_values
@@ -34,7 +34,7 @@ from validphys.theorycovariance.construction import each_dataset_results, datase
 from validphys.theorycovariance.construction import covmap, covs_pt_prescrip, theory_covmat_custom
 from validphys.theorycovariance.construction import chi2_impact_custom, chi2_diag_only
 from validphys.theorycovariance.construction import total_covmat_experiments, total_covmat_datasets
-from validphys.theorycovariance.construction import theory_diagcovmat, theory_covmat
+from validphys.theorycovariance.construction import theory_diagcovmat, theory_covmat, _check_correct_theory_combination_theoryconfig, collected_theoryids
 
 from validphys.theorycovariance.output import matrix_plot_labels
 from validphys.theorycovariance.output import plot_covmat_heatmap, plot_corrmat_heatmap
@@ -255,8 +255,8 @@ def plot_matched_datasets_shift_matrix_correlations(
 all_matched_results = collect('matched_dataspecs_results',
                               ['dataspecs'])
 
-def combine_by_type_dataspecs(process_lookup, all_matched_results, matched_dataspecs_dataset_name):
-    return combine_by_type(process_lookup, all_matched_results, matched_dataspecs_dataset_name)
+def combine_by_type_dataspecs(all_matched_results, matched_dataspecs_dataset_name):
+    return combine_by_type(all_matched_results, matched_dataspecs_dataset_name)
 
 datapsecs_theoryids = collect('theoryid', ['theoryconfig', 'original', 'dataspecs'])
 
