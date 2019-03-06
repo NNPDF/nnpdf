@@ -21,11 +21,22 @@ from reportengine import collect
 
 from validphys.results import results
 from validphys.checks import check_two_dataspecs
+
+from validphys.theorycovariance.construction import _check_correct_theory_combination
 from validphys.theorycovariance.construction import combine_by_type, process_starting_points
 from validphys.theorycovariance.construction import theory_corrmat, process_lookup
-from validphys.theorycovariance.construction import commondata_experiments, each_dataset_results_bytheory, results_bytheoryids, experiments_results_theory, each_dataset_results,  dataset_names, theoryids_experiments_central_values, data_theory_diff
-from validphys.theorycovariance.construction import covmap, covs_pt_prescrip, theory_covmat_custom, total_covmat_experiments, chi2_impact_custom, chi2_diag_only, total_covmat_datasets, theory_diagcovmat, theory_covmat
-from validphys.theorycovariance.output import matrix_plot_labels, plot_covmat_heatmap, plot_corrmat_heatmap
+from validphys.theorycovariance.construction import commondata_experiments, results_bytheoryids
+from validphys.theorycovariance.construction import experiments_results_theory, data_theory_diff
+from validphys.theorycovariance.construction import theoryids_experiments_central_values
+from validphys.theorycovariance.construction import each_dataset_results_bytheory
+from validphys.theorycovariance.construction import each_dataset_results, dataset_names
+from validphys.theorycovariance.construction import covmap, covs_pt_prescrip, theory_covmat_custom
+from validphys.theorycovariance.construction import chi2_impact_custom, chi2_diag_only
+from validphys.theorycovariance.construction import total_covmat_experiments, total_covmat_datasets
+from validphys.theorycovariance.construction import theory_diagcovmat, theory_covmat
+
+from validphys.theorycovariance.output import matrix_plot_labels
+from validphys.theorycovariance.output import plot_covmat_heatmap, plot_corrmat_heatmap
 
 log = logging.getLogger(__name__)
 
