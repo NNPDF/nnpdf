@@ -7,6 +7,8 @@ from __future__ import generator_stop
 
 import logging
 
+from math import inf
+import pandas as pd
 import numpy as np
 import scipy.linalg as la
 import matplotlib.pyplot as plt
@@ -49,9 +51,9 @@ def experiments_chi2_table_diagtheory(experiments, pdf,
     return experiments_chi2_table(experiments, pdf,
                                   abs_chi2_data_diagtheory_experiment,
                                   abs_chi2_data_diagtheory_dataset)
-  
+
 def matrix_plot_labels(df):
-    """Returns the tick locations and labels, and the starting 
+    """Returns the tick locations and labels, and the starting
     point values for each category,  based on a dataframe
     to be plotted. The dataframe is assumed to be multiindexed by
     (process, dataset, points) or else (dataset, points). The tick
@@ -80,12 +82,12 @@ def matrix_plot_labels(df):
     return ticklocs, ticklabels, startlocs
 
 def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
-    """Matrix plot of a covariance matrix. 
+    """Matrix plot of a covariance matrix.
     WARNING: Plotting is ordered by process and dataset in the custom
     order given in _procorder and _dsorder. In order for this to work
-    the covmat provided MUST be indexed and ordered the same as 
+    the covmat provided MUST be indexed and ordered the same as
     experiments_covmat, that is by (exp, dataset, point) in the order
-    of experiments and datasets listed in the runcard. Otherwise the 
+    of experiments and datasets listed in the runcard. Otherwise the
     labels will not correspond to the correct points."""
     df = pd.DataFrame(covmat.values, index=dataset_index_byprocess,
 			columns=dataset_index_byprocess)
@@ -117,7 +119,7 @@ def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
     ax.hlines(startlocs, 0, len(matrix), linestyles='dashed')
     ax.margins(x=0, y=0)
     return fig
-  
+
 _procorder = ('DIS NC', 'DIS CC', 'DY', 'JETS', 'TOP')
 
 _dsorder = (   'BCDMSP', 'BCDMSD', 'SLACP', 'SLACD', 'NMC', 'NMCPD',
@@ -143,7 +145,7 @@ def _get_key(element):
     z2 = z1
     newelement = (x2, y2, z2)
     return newelement
-  
+
 def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
     """Matrix plot of a correlation matrix"""
     df = pd.DataFrame(corrmat.values, index=dataset_index_byprocess,
@@ -284,7 +286,7 @@ def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat,
                               + f"covariance matrices for {l} points",
 				dataset_index_byprocess)
     return fig
-  
+
 @figure
 def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat,
 			experiments_data, theoryids, dataset_index_byprocess):

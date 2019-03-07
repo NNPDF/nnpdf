@@ -33,10 +33,10 @@ from validphys.theorycovariance.construction import each_dataset_results_bytheor
 from validphys.theorycovariance.construction import each_dataset_results, dataset_names
 from validphys.theorycovariance.construction import covmap, covs_pt_prescrip, theory_covmat_custom
 from validphys.theorycovariance.construction import chi2_impact_custom, chi2_diag_only
-from validphys.theorycovariance.construction import total_covmat_experiments, total_covmat_datasets
+from validphys.theorycovariance.construction import total_covmat_experiments, total_covmat_datasets, _process_lookup
 from validphys.theorycovariance.construction import theory_diagcovmat, theory_covmat, _check_correct_theory_combination_theoryconfig, collected_theoryids
 
-from validphys.theorycovariance.output import matrix_plot_labels
+from validphys.theorycovariance.output import matrix_plot_labels, _get_key
 from validphys.theorycovariance.output import plot_covmat_heatmap, plot_corrmat_heatmap
 
 log = logging.getLogger(__name__)
@@ -130,7 +130,7 @@ def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
     ])
 
     index = pd.MultiIndex.from_arrays(
-        [expnames, dsnames, point_indexes],
+        [dsnames, point_indexes],
         names=["Dataset name", "Point"])
 
     return pd.DataFrame(mat, columns=index, index=index)
@@ -157,7 +157,7 @@ def shift_vector(matched_dataspecs_dataset_prediction_shift,
     ])
 
     index = pd.MultiIndex.from_arrays(
-        [expnames, dsnames, point_indexes],
+        [dsnames, point_indexes],
         names=["Dataset name", "Point"])
     return pd.DataFrame(norm_shifts, index=index)
 
@@ -187,7 +187,7 @@ def theory_vector(matched_dataspecs_dataset_theory):
     ])
 
     index = pd.MultiIndex.from_arrays(
-        [expnames, dsnames, point_indexes],
+        [dsnames, point_indexes],
         names=["Dataset name", "Point"])
     return pd.DataFrame(all_theory, index=index)
 
@@ -217,7 +217,7 @@ def alltheory_vector(matched_dataspecs_dataset_alltheory, matched_dataspecs_data
         for val in matched_dataspecs_dataset_theory
     ])
     index = pd.MultiIndex.from_arrays(
-        [expnames, dsnames, point_indexes],
+        [dsnames, point_indexes],
         names=["Dataset name", "Point"])
     theory_vectors = []
     for theoryvector in all_theory:
@@ -228,7 +228,7 @@ def alltheory_vector(matched_dataspecs_dataset_alltheory, matched_dataspecs_data
 @figure
 def plot_matched_datasets_shift_matrix(matched_datasets_shift_matrix):
     """Heatmap plot of matched_datasets_shift_matrix"""
-    return plot_covmat_heatmap(matched_datasets_shift_matrix, 
+    return plot_covmat_heatmap(matched_datasets_shift_matrix,
     "Shift outer product matrix")
 
 @table
@@ -299,7 +299,7 @@ def matched_experiments_index(matched_dataspecs_experiment_name,
                               matched_dataspecs_dataset_name,
                               all_matched_data_lengths):
 
-    enames = matched_dataspecs_experiment_name
+  #  enames = matched_dataspecs_experiment_name
     dsnames = matched_dataspecs_dataset_name
     lens = all_matched_data_lengths
     #build index
@@ -317,7 +317,7 @@ def matched_experiments_index(matched_dataspecs_experiment_name,
     ])
 
     index = pd.MultiIndex.from_arrays(
-        [expnames, dsnames, point_indexes],
+        [dsnames, point_indexes],
         names=["Dataset name", "Point"])
     return index
 

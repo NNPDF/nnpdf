@@ -19,7 +19,6 @@ from reportengine import collect
 from validphys.results import experiments_central_values, results
 from validphys.results import Chi2Data
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
-from validphys.plotoptions import get_info
 
 log = logging.getLogger(__name__)
 
@@ -64,7 +63,7 @@ def _check_correct_theory_combination_internal(theoryids,
         xifs == correct_xifs and xirs == correct_xirs,
         "Choice of input theories does not correspond to a valid "
         "prescription for theory covariance matrix calculation")
-    
+
 collected_theoryids = collect('theoryids', ['theoryconfig',])
 
 _check_correct_theory_combination = make_argcheck(_check_correct_theory_combination_internal)
@@ -85,7 +84,7 @@ def dataset_index_byprocess(experiments_index):
 @make_argcheck
 def _check_correct_theory_combination_theoryconfig(collected_theoryids,
 						fivetheories:(str, type(None))=None):
-    _check_correct_theory_combination_internal(collected_theoryids[0], fivetheories)
+    _check_correct_theory_combination_internal(collected_theoryids[0])
 
 def make_scale_var_covmat(predictions):
     """Takes N theory predictions at different scales and applies N-pt scale
@@ -270,7 +269,7 @@ def combine_by_type(each_dataset_results_bytheory, dataset_names):
     for dataset, name in zip(each_dataset_results_bytheory, dataset_names):
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
-        proc_type = _process_lookup[name]
+        proc_type = _process_lookup(name)
         ordered_names[proc_type].append(name)
         theories_by_process[proc_type].append(theory_centrals)
     for key, item in theories_by_process.items():
