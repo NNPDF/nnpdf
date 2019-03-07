@@ -475,7 +475,7 @@ class CoreConfig(configparser.Config):
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, experiments = self.parse_from_(
                     None, 'experiments', write=False)
-                names = {(e.name, ds.name): (ds, dsin)
+                names = {(e.name, ds.name, _process_lookup(ds.name)): (ds, dsin)
                          for e in experiments
                          for ds, dsin in zip(e.datasets, e)}
                 all_names.append(names)
@@ -483,7 +483,7 @@ class CoreConfig(configparser.Config):
 
         res = []
         for k in used_set:
-            inres = {'experiment_name': k[0], 'dataset_name': k[1]}
+            inres = {'experiment_name': k[0], 'dataset_name': k[1], 'process': k[2]}
             #TODO: Should this have the same name?
             inner_spec_list = inres['dataspecs'] = []
             for ispec, spec in enumerate(dataspecs):
@@ -494,7 +494,7 @@ class CoreConfig(configparser.Config):
                 }, spec)
                 inner_spec_list.append(d)
             res.append(inres)
-        res.sort(key=lambda x: (x['experiment_name'], x['dataset_name']))
+        res.sort(key=lambda x: (x['process'], x['experiment_name']))
         return res
 
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
