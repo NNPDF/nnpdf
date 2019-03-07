@@ -54,7 +54,7 @@ def make_table_comp(loader_func):
 def test_expcovmat(data):
     pdf, exps = data
     eindex = results.experiments_index(exps)
-    mat = results.experiments_covmat(exps, eindex, t0set=None)
+    mat = results.experiments_covmat_no_table(exps, eindex, t0set=None)
     covmats = []
     for exp in exps:
         cd = exp.datasets[0].commondata.load()

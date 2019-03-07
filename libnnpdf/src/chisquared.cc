@@ -122,7 +122,7 @@ namespace NNPDF
     for (int i=0; i<ndat; i++)
         stat_error[i] = cd.GetStat(i);
 
-    return ComputeCovMat_basic(ndat, nsys, sqrt_weights, t0, stat_error, cd.GetSysErrors(), true, false, th_cov_matrix, filename, bmask);        
+    return ComputeCovMat_basic(ndat, nsys, sqrt_weights, t0, stat_error, cd.GetSysErrors(), true, true, th_cov_matrix, filename, bmask);
   }
 
   matrix<double> ComputeSqrtMat(matrix<double> const& inmatrix)
