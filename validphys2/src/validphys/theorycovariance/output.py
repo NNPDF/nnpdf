@@ -30,9 +30,10 @@ from validphys.theorycovariance.construction import theory_blockcorrmat, theory_
 from validphys.theorycovariance.construction import experimentsplusblocktheory_normcovmat
 from validphys.theorycovariance.construction import experimentsplustheory_normcovmat_custom
 from validphys.theorycovariance.construction import experimentsplusblocktheory_corrmat
-from validphys.theorycovariance.construction import experimentsplustheory_corrmat_custom
+from validphys.theorycovariance.construction import experimentsplustheory_corrmat_custom, dataset_index_byprocess
 
 log = logging.getLogger(__name__)
+
 
 @table
 def experiments_chi2_table_theory(experiments, pdf,
@@ -146,6 +147,7 @@ def _get_key(element):
     newelement = (x2, y2, z2)
     return newelement
 
+@figure
 def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
     """Matrix plot of a correlation matrix"""
     df = pd.DataFrame(corrmat.values, index=dataset_index_byprocess,

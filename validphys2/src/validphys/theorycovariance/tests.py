@@ -49,22 +49,22 @@ def _check_valid_shift_matrix_threshold_method(shift_threshold:(int, float, None
     """Checks that a valid method 1 or 2 is chosen where a threshold for
     removing elements of the shift correlation matrix has been specified"""
     opts = {1,2}
-    if shift_threshold is not None:
+    if shift_threshold != None:
         check(method is not None, "A threshold for removing elements of the "
                "shift correlation matrix has been specified but no choice of "
                "method (1 or 2) was provided")
         check(method in opts,
               "Invalid choice of method for removing shift correlation matrix "
-              "elements. Please choose 1 or 2.")
+"elements. Please choose 1 or 2.")
 
 LabeledShifts = namedtuple('LabeledShifts',
     ('experiment_name', 'dataset_name', 'shifts'))
+
 @check_two_dataspecs
 def dataspecs_dataset_prediction_shift(matched_dataspecs_results, experiment_name,
                                        dataset_name):
     """Compute the differnce in theory predictions between two dataspecs.
     This can be used in combination with `matched_datasets_from_dataspecs`
-
     It returns a ``LabeledShifts`` containing ``dataset_name``,
     ``experiment_name`` and``shifts``.
     """
@@ -116,10 +116,10 @@ def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
                 else:
                     pass
     #build index
-   # expnames = np.concatenate([
-   #     np.full(len(val.shifts), val.experiment_name, dtype=object)
-   #     for val in matched_dataspecs_dataset_prediction_shift
-   # ])
+  #  expnames = np.concatenate([
+  #      np.full(len(val.shifts), val.experiment_name, dtype=object)
+  #      for val in matched_dataspecs_dataset_prediction_shift
+  #  ])
     dsnames = np.concatenate([
         np.full(len(val.shifts), val.dataset_name, dtype=object)
         for val in matched_dataspecs_dataset_prediction_shift
@@ -173,10 +173,10 @@ def theory_vector(matched_dataspecs_dataset_theory):
     all_theory = np.concatenate(
         [val.shifts for val in matched_dataspecs_dataset_theory])
      #build index
-#    expnames = np.concatenate([
-#        np.full(len(val.shifts), val.experiment_name, dtype=object)
-#        for val in matched_dataspecs_dataset_theory
-#    ])
+ #   expnames = np.concatenate([
+ #       np.full(len(val.shifts), val.experiment_name, dtype=object)
+ #       for val in matched_dataspecs_dataset_theory
+ #   ])
     dsnames = np.concatenate([
         np.full(len(val.shifts), val.dataset_name, dtype=object)
         for val in matched_dataspecs_dataset_theory
@@ -202,11 +202,11 @@ matched_dataspecs_dataset_alltheory = collect('dataspecs_dataset_alltheory', ['d
 def alltheory_vector(matched_dataspecs_dataset_alltheory, matched_dataspecs_dataset_theory):
     all_theory = np.concatenate(
         [val.shifts for val in matched_dataspecs_dataset_alltheory], axis=1)
-#    expnames = np.concatenate([
-#        np.full(len(val.shifts),
-#        val.experiment_name, dtype=object)
-#        for val in matched_dataspecs_dataset_theory
-#    ])
+ #   expnames = np.concatenate([
+ #       np.full(len(val.shifts),
+ #       val.experiment_name, dtype=object)
+ #       for val in matched_dataspecs_dataset_theory
+ #   ])
     dsnames = np.concatenate([
         np.full(len(val.shifts),
         val.dataset_name, dtype=object)
@@ -229,7 +229,7 @@ def alltheory_vector(matched_dataspecs_dataset_alltheory, matched_dataspecs_data
 def plot_matched_datasets_shift_matrix(matched_datasets_shift_matrix):
     """Heatmap plot of matched_datasets_shift_matrix"""
     return plot_covmat_heatmap(matched_datasets_shift_matrix,
-    "Shift outer product matrix")
+	 "Shift outer product matrix")
 
 @table
 def matched_datasets_shift_matrix_correlations(matched_datasets_shift_matrix):
@@ -299,7 +299,7 @@ def matched_experiments_index(matched_dataspecs_experiment_name,
                               matched_dataspecs_dataset_name,
                               all_matched_data_lengths):
 
-  #  enames = matched_dataspecs_experiment_name
+    enames = matched_dataspecs_experiment_name
     dsnames = matched_dataspecs_dataset_name
     lens = all_matched_data_lengths
     #build index

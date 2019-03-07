@@ -25,7 +25,6 @@ log = logging.getLogger(__name__)
 theoryids_experiments_central_values = collect(experiments_central_values,
                                                ('theoryids',))
 
-@make_argcheck
 def _check_correct_theory_combination_internal(theoryids,
                                       fivetheories:(str, type(None)) = None):
     """Checks that a valid theory combination corresponding to an existing
@@ -64,9 +63,15 @@ def _check_correct_theory_combination_internal(theoryids,
         "Choice of input theories does not correspond to a valid "
         "prescription for theory covariance matrix calculation")
 
-collected_theoryids = collect('theoryids', ['theoryconfig',])
+collected_theoryids = collect('theoryids',
+			['theoryconfig',])
 
 _check_correct_theory_combination = make_argcheck(_check_correct_theory_combination_internal)
+
+@make_argcheck
+def _check_correct_theory_combination_theoryconfig(collected_theoryids,
+						fivetheories:(str, type(None))=None):
+    _check_correct_theory_combination_internal(collected_theoryids[0], fivetheories)
 
 def dataset_index_byprocess(experiments_index):
     """Return a multiindex with index
@@ -80,12 +85,6 @@ def dataset_index_byprocess(experiments_index):
     newindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
 				names = ("process", "dataset", "id"))
     return newindex
-
-@make_argcheck
-def _check_correct_theory_combination_theoryconfig(collected_theoryids,
-						fivetheories:(str, type(None))=None):
-    _check_correct_theory_combination_internal(collected_theoryids[0])
-
 def make_scale_var_covmat(predictions):
     """Takes N theory predictions at different scales and applies N-pt scale
     variations to produce a covariance matrix."""
@@ -410,7 +409,7 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
                         )/int(np.sqrt(len(covs_pt_prescrip))))
     # Initialise arrays of zeros and set precision to same as FK tables
     mat = np.zeros((matlength,matlength), dtype=np.float32)
-    cov_by_exp = np.zeros((matlength,matlength))
+    cov_by_exp = np.zeros((matlength,matlength), dtype=np.float32)
     for locs in covs_pt_prescrip:
         cov = covs_pt_prescrip[locs]
         mat[locs[0]:(len(cov) + locs[0]),locs[1]:(len(cov.T)+locs[1])] = cov
@@ -612,7 +611,8 @@ def chi2_impact_custom(theory_covmat_custom, experiments_covmat,
 def theory_diagcovmat(theory_covmat):
     """Returns theory covmat with only diagonal values"""
     s = theory_covmat.values
-    s_diag = np.zeros((len(s),len(s)))
+    # Initialise array of zeros and set precision to same as FK tables
+    s_diag = np.zeros((len(s),len(s)), dtype=np.float32)
     np.fill_diagonal(s_diag, np.diag(s))
     return s_diag
 
@@ -658,4 +658,4 @@ def abs_chi2_data_diagtheory_dataset(each_dataset_results,
                                      total_covmat_diagtheory_datasets):
     """ For a diagonal theory covmat """
     return abs_chi2_data_theory_dataset(each_dataset_results,
-                                        total_covmat_diagtheory_datasets)
+    total_covmat_diagtheory_datasets)
