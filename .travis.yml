@@ -68,6 +68,14 @@ before_install:
      if [[ "$TRAVIS_OS_NAME" == "linux" ]];
      then docker exec build bash -c "echo UPLOAD_NON_MASTER=$UPLOAD_NON_MASTER >> /root/.bashrc";
      fi
+    - >
+     if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+     then docker exec build bash -c "echo TRAVIS_BRANCH=$TRAVIS_BRANCH >> /root/.bashrc";
+     fi
+    - >
+     if [[ "$TRAVIS_OS_NAME" == "linux" ]];
+     then docker exec build bash -c "echo TRAVIS_PULL_REQUEST_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH >> /root/.bashrc";
+     fi
 
 # Need to pin conda build to 3.8 because of:
 # https://github.com/conda/conda-build/issues/2841
