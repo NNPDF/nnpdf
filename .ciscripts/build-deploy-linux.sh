@@ -1,11 +1,11 @@
-#/usr/bin/bash
+#!/usr/bin/bash
+#Find conda
+source ~/.bashrc
 set -e
 set -o pipefail
 set -u
 set -v
 
-#Find conda
-source ~/.bashrc
 #Set up netrc file for uploading/downloading
 echo "$NETRC_FILE" | base64 --decode > ~/.netrc
 
