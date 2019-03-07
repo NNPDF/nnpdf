@@ -1,3 +1,38 @@
+/*
+Differential cross section measurements of the single top and single antitop quark in the t-channel @LHC ATLAS 7 TeV
+
+LHC-ATLAS 7 TeV
+---------------
+
+Selected events contain one charged lepton, large missing transverse momentum, and two or three jets (L = 4.59 1/fb)
+Archived as: https://arxiv.org/pdf/1406.7844v2.pdf
+Published in: Physics Review D 90, 112006 (https://journals.aps.org/prd/abstract/10.1103/PhysRevD.90.112006)
+
+Eight distributions are implemented here. These are normalised and unnormalised distributions differential in:
+1) Top quark absolute rapidity
+2) Antitop quark absolute rapidity
+3) Top quark transverse momentum
+4) Antitop quark transverse momentum
+
+Description of raw data:
+Cross sections and percentage statistical uncertainties are taken from Tables VI and VII of the paper.
+The breakdowns of systematic uncertainties are taken from Tables IX-XVI of the paper.
+Statistical correlation matrices for calculating bin-wise correlations of the statistical uncertainties
+are taken from Figures 17 and 18 in the paper. HOWEVER, note that 17a and 17d, i.e. the matrices for the
+pT(t) and y(tbar) distributions, are not positive semidefinite so cannot be used in the code. The experementalists
+have been told about this, but while we wait for corrected matrices, bin-wise correlations are not computed for
+these two distributions. 
+
+Note that the data files can be found in the supplemental material here:
+https://journals.aps.org/prd/abstract/10.1103/PhysRevD.90.112006
+
+Notes:
+1) The number of systematic uncertainties considered in the code is distribution-dependent.
+2) All systematics are assumed to be multiplicative.
+3) All systematics are treated as CORR (i.e. correlated), except from the luminosity uncertainty for the
+unnormalised distributions which are treated as ATLASLUMI11 (i.e. ATLAS luminosity for the 2011 data set).
+*/
+
 #include "ATLAS_SINGLETOP_TCH_DIFF_7TEV.h"
 
 // A - NORMALISED distributions
