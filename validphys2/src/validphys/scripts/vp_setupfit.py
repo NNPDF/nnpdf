@@ -10,7 +10,8 @@
 # This is a validphys-like app in disguise. It takes an nnfit runcard and adds
 # a fixed list of actions and some associated resourced to it so as to make it
 # a proper validphys runcard. These config options are defined in the
-# SETUPFIT_FIXED_CONFIG mapping below.
+# SETUPFIT_FIXED_CONFIG mapping below. Similarly, defult options are specified
+# in SETUPFIT_DEFAULTS.
 #
 # Extensions to the setup procedure can be implemented by adding suitable
 # actions_ to the mapping (making sure that they are executed in the right
@@ -39,16 +40,21 @@ from reportengine import colors
 
 
 SETUPFIT_FIXED_CONFIG = dict(
-    Nocuts={'use_cuts': 'nocuts'},
     actions_=[
         'datacuts check_t0pdfset',
         'theory check_positivity',
-        'Nocuts::datacuts::closuretest::theory::fitting filter',
+        'datacuts::closuretest::theory::fitting filter',
     ])
 
 SETUPFIT_PROVIDERS = ['validphys.filters',
                       'validphys.theorycovariance',
                       'validphys.results',]
+
+SETUPFIT_DEFAULTS = dict(
+    use_cuts= 'internal',
+)
+
+
 
 log = logging.getLogger(__name__)
 
@@ -74,15 +80,23 @@ class SetupFitEnvironment(Environment):
 
         # check if results folder exists
         self.output_path = pathlib.Path(self.output_path).absolute()
-        if not re.fullmatch(r'[\w.\-]+', self.output_path.name):
-            raise SetupFitError("Invalid output folder name. Must be alphanumeric.")
 
-        super().init_output()
+        if self.output_path.is_dir():
+            log.warning(f"Output folder exists: {self.output_path} Overwritting contents")
+        else:
+            if not re.fullmatch(r'[\w.\-]+', self.output_path.name):
+                raise SetupFitError("Invalid output folder name. Must be alphanumeric.")
+            try:
+                self.output_path.mkdir()
+            except OSError as e:
+                raise EnvironmentError_(e) from e
 
         try:
             shutil.copy2(self.config_yml, self.output_path / RUNCARD_COPY_FILENAME)
         except shutil.SameFileError:
             pass
+        except Exception as e:
+            raise EnvironmentError_(e) from e
 
         # create output folder
         self.filter_path = self.output_path / FILTER_OUTPUT_FOLDER
@@ -126,6 +140,8 @@ class SetupFitConfig(Config):
         if file_content.get('theorycovmatconfig') is not None:
             SETUPFIT_FIXED_CONFIG['actions_'].append('datacuts::theory::theorycovmatconfig::sampling_t0 sampling_covmat')
             SETUPFIT_FIXED_CONFIG['actions_'].append('datacuts::theory::theorycovmatconfig::fitting_t0 fitting_covmat')
+        for k,v in SETUPFIT_DEFAULTS.items():
+            file_content.setdefault(k, v)
         file_content.update(SETUPFIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 
