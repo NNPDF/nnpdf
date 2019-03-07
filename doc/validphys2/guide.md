@@ -1572,7 +1572,7 @@ actually fit. Some data points are excluded for reasons such as the
 instability of the perturbative expansion in their corresponding
 kinematic regions.
 
-There are three possibilities for handling the experimental cuts
+There are four possibilities for handling the experimental cuts
 within validphys, which are controlled with the `use_cuts`
 configuration setting:
 
@@ -1594,7 +1594,15 @@ configuration setting:
   namespace from the fit. In this case, the cuts will normally
   coincide with the ones loaded with  the `fromfit` setting.
 
-The following example demonstrates the three options:
+`use_cuts: 'fromintersection'`
+  ~ Compute the internal cuts (as per `use_cuts: 'internal'`) after
+  within each namespace in a [namespace list](#multiple-inputs-and-namespaces) called
+  `cuts_intersection_spec` and take the intersection of the results as
+  the cuts for the given dataset. This is useful for example for
+  requiring the common subset of points that pass the cuts at NLO and
+  NNLO.
+
+The following example demonstrates these options:
 
 ```yaml
 meta:
@@ -1614,6 +1622,12 @@ theoryid:
 datacuts:
     from_: fit
 
+
+# Used for intersection cuts
+cuts_intersection_spec:
+    - theoryid: 52
+    - theoryid: 53
+
 dataset_input: {dataset: ATLAS1JET11}
 
 dataspecs:
@@ -1625,6 +1639,9 @@ dataspecs:
 
   - speclabel: "Internal cuts"
     use_cuts: "internal"
+
+  - speclabel: "Intersected cuts"
+    use_cuts: "fromintersection"
 
 template_text: |
     {@with fitpdf::datacuts@}
@@ -1643,14 +1660,13 @@ template_text: |
     {@endwith@}
 
 
-
 actions_:
     - report(main=True)
 ```
 
-Here we put together the three options in a [Data theory comparison]
-plot and then plot the χ² distribution for each one individually.
-With these settings the later two
+Here we put together the results with the different filtering policies
+in a [Data theory comparison] plot and then plot the χ² distribution
+for each one individually.  With these settings the later three
 [dataspecs](#general-data-specification-the-dataspec-api) give the
 same result.
 
