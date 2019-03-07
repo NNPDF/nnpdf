@@ -834,8 +834,6 @@ def plot_normthcovmat_heatmap_custom(theory_normcovmat_custom, theoryids,
             l = r"$\bar{5}$"
         elif fivetheories == "linear":
             l = "linear 5"
-        else:
-            pass
     fig = plot_covmat_heatmap(theory_normcovmat_custom,
                               f"Theory covariance matrix for {l} points",
 				dataset_index_byprocess)
@@ -860,8 +858,6 @@ def plot_thcorrmat_heatmap_custom(theory_corrmat_custom, theoryids,
             l = r"$\bar{5}$"
         elif fivetheories == "linear":
             l = "linear 5"
-        else:
-            pass
     fig = plot_corrmat_heatmap(theory_corrmat_custom,
                                f"Theory correlation matrix for {l} points",
 				dataset_index_byprocess)
@@ -889,8 +885,6 @@ def plot_normexpplusthcovmat_heatmap_custom(experimentsplustheory_normcovmat_cus
             l = r"$\bar{5}$"
         elif fivetheories == "linear":
             l = "linear 5"
-        else:
-            pass
     fig = plot_covmat_heatmap(experimentsplustheory_normcovmat_custom,
                               f"Experiment + theory covariance matrix for {l} points",
 				dataset_index_byprocess)
@@ -916,8 +910,6 @@ def plot_expplusthcorrmat_heatmap_custom(experimentsplustheory_corrmat_custom, t
             l = r"$\bar{5}$"
         elif fivetheories == "linear":
             l = "linear 5"
-        else:
-            pass
     fig = plot_corrmat_heatmap(experimentsplustheory_corrmat_custom,
                                f"Experiment + theory correlation matrix for {l} points",
                                dataset_index_byprocess)
@@ -947,8 +939,6 @@ def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat,
             l = r"$\bar{5}$"
         elif fivetheories == "linear":
             l = "linear 5"
-        else:
-            pass
     df = (theory_covmat_custom+experiments_covmat
           )/np.mean(experiments_covmat.values)
     fig = plot_covmat_heatmap(df,
@@ -970,8 +960,6 @@ def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat,
             l = r"$\bar{5}$"
         elif fivetheories == "linear":
             l = "linear 5"
-        else:
-            pass
     data = np.abs(experiments_data)
     sqrtdiags_th = np.sqrt(np.diag(theory_covmat_custom))/data
     sqrtdiags_th = pd.DataFrame(sqrtdiags_th.values, index=dataset_index_byprocess)
@@ -1016,8 +1004,6 @@ def plot_diag_cov_impact(theory_covmat_custom, experiments_covmat,
             l = r"$\bar{5}$"
         elif fivetheories == "linear":
             l = "linear 5"
-        else:
-            pass
     matrix_theory = theory_covmat_custom.values
     matrix_experiment = experiments_covmat.values
     inv_exp = (np.diag(la.inv(matrix_experiment)))**(-0.5)/experiments_data
