@@ -28,6 +28,8 @@ from validphys.gridvalues import LUMI_CHANNELS
 
 from validphys.paramfits.config import ParamfitsConfig
 
+from validphys.theorycovariance.construction import _process_lookup
+
 log = logging.getLogger(__name__)
 
 class Environment(Environment):
