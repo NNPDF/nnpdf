@@ -1,4 +1,8 @@
 #/usr/bin/bash
+set -e
+set -o pipefail
+set -u
+set -v
 
 #Find conda
 source ~/.bashrc
