@@ -29,8 +29,8 @@ cp /root/miniconda3/conda-bld/linux-64/*.tar.bz2 .
 
 echo "Uploading package to zigzah"
 KEY=$( mktemp )
-#This is defined in the Gitlab variables, under the Settings Menu.
-echo "$ZIGZAH_SSH_KEY" > "$KEY"
+#This is defined in the Travis environment variables.
+echo "$ZIGZAH_SSH_KEY" | base64 --decode > "$KEY"
 
 scp -i "$KEY" -o StrictHostKeyChecking=no\
     /root/miniconda3/conda-bld/linux-64/*.tar.bz2 \
