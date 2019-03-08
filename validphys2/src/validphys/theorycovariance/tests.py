@@ -469,7 +469,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
         w = None
         v = None
     else:
-        orig_matrix = (thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0])))#.reorder_levels(['Dataset name',
+        covmat = (thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0])))#.reorder_levels(['Dataset name',
     									#'Experiment name',
     									#'Point'])
         # constructing shift vectors
@@ -496,91 +496,8 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                     splitdiff.loc[ds] = 0
                 splitdiffs.append(splitdiff)
         num_procs = len(procdict)
-        if (num_pts == 3) and (num_procs == 2):
-            N = (1/4)
-            # defining key
-            pp1 = splitdiffs[0]
-            mm1 = splitdiffs[1]
-            pp2 = splitdiffs[2]
-            mm2 = splitdiffs[3]
-            ###################
-            xs = [pp1 + pp2, pp1 + mm2, mm1 + pp2, mm1 + mm2]
-        elif (num_pts == 5) and (num_procs == 2)  and (fivetheories == "nobar"):
-            N = (1/4)
-            # defining key
-            pz1 = splitdiffs[0]
-            mz1 = splitdiffs[1]
-            zp1 = splitdiffs[2]
-            zm1 = splitdiffs[3]
-            pz2 = splitdiffs[4]
-            mz2 = splitdiffs[5]
-            zp2 = splitdiffs[6]
-            zm2 = splitdiffs[7]
-            ###################
-            xs = [pz1 + pz2, pz1 + pz2, mz1 + mz2, mz1 + mz2,
-                  zp1 + zp2, zp1 + zm2, zm1 + zp2, zm1 + zm2 ]
-        elif (num_pts == 5) and (num_procs == 2) and (fivetheories == "bar"):
-            N = (1/4)
-            # defining key
-            pp1 = splitdiffs[0]
-            mm1 = splitdiffs[1]
-            pm1 = splitdiffs[2]
-            mp1 = splitdiffs[3]
-            pp2 = splitdiffs[4]
-            mm2 = splitdiffs[5]
-            pm2 = splitdiffs[6]
-            mp2 = splitdiffs[7]
-            ###################
-            xs = [pp1 + pp2, pp1 + pm2, mm1 + mp2, mm1 + mm2,
-                  pm1 + pp2, pm1 + pm2, mp1 + mp2, mp1 + mm2 ]
-        elif (num_pts == 7) and (num_procs == 2) and (seventheories != "original"):
-            N = (1/6)
-            # defining key
-            pz1 = splitdiffs[0]
-            mz1 = splitdiffs[1]
-            zp1 = splitdiffs[2]
-            zm1 = splitdiffs[3]
-            pp1 = splitdiffs[4]
-            mm1 = splitdiffs[5]
-            pz2 = splitdiffs[6]
-            mz2 = splitdiffs[7]
-            zp2 = splitdiffs[8]
-            zm2 = splitdiffs[9]
-            pp2 = splitdiffs[10]
-            mm2 = splitdiffs[11]
-            ####################
-            xs = [pz1 + pz2, mz1 + mz2, zp1 + zp2, zm1 + zp2, pp1 + pp2,
-                  mm1 + pp2, pz1 + pz2, mz1 + mz2, zp1 + zm2, zm1 + zm2,
-                  pp1 + mm2, mm1 + mm2]
-        elif (num_pts == 9) and (num_procs == 2):
-            N = (1/24)
-            # defining key
-            pz1 = splitdiffs[0]
-            mz1 = splitdiffs[1]
-            zp1 = splitdiffs[2]
-            zm1 = splitdiffs[3]
-            pp1 = splitdiffs[4]
-            mm1 = splitdiffs[5]
-            pm1 = splitdiffs[6]
-            mp1 = splitdiffs[7]
-            pz2 = splitdiffs[8]
-            mz2 = splitdiffs[9]
-            zp2 = splitdiffs[10]
-            zm2 = splitdiffs[11]
-            pp2 = splitdiffs[12]
-            mm2 = splitdiffs[13]
-            pm2 = splitdiffs[14]
-            mp2 = splitdiffs[15]
-            ####################
-            xs = [ pz1 + pz2, pz1 + pz2, pz1 + pp2, pz1 + pp2, pz1 + pm2, pz1 + pm2,
-    	           pp1 + pz2, pp1 + pz2, pp1 + pp2, pp1 + pp2, pp1 + pm2, pp1 + pm2,
-                   pm1 + pz2, pm1 + pz2, pm1 + pp2, pm1 + pp2, pm1 + pm2, pm1 + pm2,
-                   mz1 + mz2, mz1 + mz2, mz1 + mp2, mz1 + mp2, mz1 + mm2, mz1 + mm2,
-                   mp1 + mz2, mp1 + mz2, mp1 + mp2, mp1 + mp2, mp1 + mm2, mp1 + mm2,
-                   mm1 + mz2, mm1 + mz2, mm1 + mp2, mm1 + mp2, mm1 + mm2, mm1 + mm2,
-                   zm1 + zp2, zm1 + zp2, zm1 + zp2, zm1 + zm2, zm1 + zm2, zm1 + zm2,
-                   zp1 + zp2, zp1 + zp2, zp1 + zp2, zp1 + zm2, zp1 + zm2, zp1 + zm2]
-        elif (num_pts == 3) and (num_procs != 2):
+        # treating each prescription on a case-by-case basis
+        if (num_pts == 3):
             if use_analytic == True:
                 xs = []
                 pps = splitdiffs[::(num_pts-1)]
@@ -597,7 +514,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                     xs.append(newvec)
             else:
                 xs = splitdiffs
-        elif (num_pts == 5) and (num_procs != 2) and (fivetheories == "nobar"):
+        elif (num_pts == 5) and (fivetheories == "nobar"):
             pzs = splitdiffs[::(num_pts-1)]
             mzs = shuffle_list(splitdiffs,1)[::(num_pts-1)]
             zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
@@ -631,7 +548,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                         elif entry == 1:
                             newvec = newvec + zms[index]
                     xs.append(newvec)
-        elif (num_pts == 5) and (num_procs != 2) and (fivetheories == "bar"):
+        elif (num_pts == 5) and (fivetheories == "bar"):
             pps = splitdiffs[::(num_pts-1)]
             mms = shuffle_list(splitdiffs,1)[::(num_pts-1)]
             pms = shuffle_list(splitdiffs,2)[::(num_pts-1)]
@@ -675,7 +592,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                         elif entry == 1:
                             newvec = newvec + mms[index]
                     xs.append(newvec)
-        elif (num_pts == 7) and (num_procs != 2) and (seventheories != "original"):
+        elif (num_pts == 7) and (seventheories != "original"):
             pzs = splitdiffs[::(num_pts-1)]
             mzs = shuffle_list(splitdiffs,1)[::(num_pts-1)]
             zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
@@ -732,7 +649,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                         elif entry == 1:
                             newvec = newvec + zms[index]
                     xs.append(newvec)
-        elif (num_pts == 9) and (num_procs != 2):
+        elif (num_pts == 9):
             pzs = splitdiffs[::(num_pts-1)]
             mzs = shuffle_list(splitdiffs,1)[::(num_pts-1)]
             zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
@@ -816,18 +733,13 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                         elif entry == 2:
                             newvec = newvec + mms[index]
                     xs.append(newvec)
-        A = pd.concat(xs, axis=1)
-        if num_procs == 2:
-            covmat = N*A.dot(A.T)
-        else:
-            covmat = orig_matrix
+        # Orthonormalising vectors according to Gram-Schmidt
         ys = [x/np.linalg.norm(x) for x in xs]
         for i in range(1, len(xs)):
             for j in range(0,i):
                 ys[i] = ys[i] - (ys[i].T.dot(ys[j]))[0][0]*ys[j]/np.linalg.norm(ys[j])
                 ys[i] = ys[i]/np.linalg.norm(ys[i])
         P = pd.concat(ys, axis=1)
-       # P = scipy.linalg.orth(A)
         projected_matrix = (P.T).dot(covmat.dot(P))
         w, v_projected = la.eigh(projected_matrix)
         v = P.dot(v_projected)
