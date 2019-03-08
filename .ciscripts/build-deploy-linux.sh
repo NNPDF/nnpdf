@@ -6,6 +6,8 @@ set -o pipefail
 set -u
 set -v
 
+echo "$CONDA_PY"
+
 #Set up netrc file for uploading/downloading
 echo "$NETRC_FILE" | base64 --decode > ~/.netrc
 
