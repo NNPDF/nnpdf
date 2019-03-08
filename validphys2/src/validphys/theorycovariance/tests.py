@@ -672,7 +672,7 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
     projectors = np.sum(f*v_nonzero, axis=1)
     # Initialise array of zeros and set precision to same as FK tables
     projected_evectors = np.zeros((len(projectors), (len(f))), dtype=np.float32)
-    for i, projector in projectors:
+    for i, projector in enumerate(projectors):
         projected_evectors[i] = projector*v_nonzero[i]
     fmiss = f - np.sum(projected_evectors, axis=0)
     return w_nonzero, v_nonzero, projectors, f, fmiss, w_max, w, all_projectors
