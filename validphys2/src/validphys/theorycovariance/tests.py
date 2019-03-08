@@ -8,7 +8,6 @@ from __future__ import generator_stop
 import logging
 
 from collections import namedtuple
-from itertools import product
 import numpy as np
 import scipy.linalg as la
 import matplotlib.pyplot as plt
@@ -49,7 +48,7 @@ def _check_valid_shift_matrix_threshold_method(shift_threshold:(int, float, None
     """Checks that a valid method 1 or 2 is chosen where a threshold for
     removing elements of the shift correlation matrix has been specified"""
     opts = {1,2}
-    if shift_threshold != None:
+    if shift_threshold is not None:
         check(method is not None, "A threshold for removing elements of the "
                "shift correlation matrix has been specified but no choice of "
                "method (1 or 2) was provided")
@@ -363,7 +362,7 @@ def shift_to_theory_ratio_plot(shift_to_theory_ratio):
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r)
     fig.colorbar(matrixplot)
     ax.set_title("Ratio of theory to shift correlation matrices")
-    ticklocs, ticklabels = matrix_plot_labels(matrix)
+    ticklocs, ticklabels, startlocs = matrix_plot_labels(matrix)
     plt.xticks(ticklocs, ticklabels, rotation=30, ha="right")
     plt.gca().xaxis.tick_bottom()
     plt.yticks(ticklocs, ticklabels)
@@ -494,9 +493,8 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                 for ds in otherdatasets:
                     splitdiff.loc[ds] = 0
                 splitdiffs.append(splitdiff)
-        num_procs = len(procdict)
         # treating each prescription on a case-by-case basis
-        if (num_pts == 3):
+        if num_pts == 3:
             xs = []
             pps = splitdiffs[::(num_pts-1)]
             mms = shuffle_list(splitdiffs,1)[::(num_pts-1)]
@@ -580,7 +578,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                 del subzps[procloc]
                 newvec = newvec + sum(subzps) + zm
                 xs.append(newvec)
-        elif (num_pts == 9):
+        elif num_pts == 9:
             pzs = splitdiffs[::(num_pts-1)]
             mzs = shuffle_list(splitdiffs,1)[::(num_pts-1)]
             zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
@@ -674,8 +672,8 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
     projectors = np.sum(f*v_nonzero, axis=1)
     # Initialise array of zeros and set precision to same as FK tables
     projected_evectors = np.zeros((len(projectors), (len(f))), dtype=np.float32)
-    for i in range(len(projectors)):
-        projected_evectors[i] = projectors[i]*v_nonzero[i]
+    for i, projector in projectors:
+        projected_evectors[i] = projector*v_nonzero[i]
     fmiss = f - np.sum(projected_evectors, axis=0)
     return w_nonzero, v_nonzero, projectors, f, fmiss, w_max, w, all_projectors
 

@@ -30,7 +30,8 @@ from validphys.theorycovariance.construction import theory_blockcorrmat, theory_
 from validphys.theorycovariance.construction import experimentsplusblocktheory_normcovmat
 from validphys.theorycovariance.construction import experimentsplustheory_normcovmat_custom
 from validphys.theorycovariance.construction import experimentsplusblocktheory_corrmat
-from validphys.theorycovariance.construction import experimentsplustheory_corrmat_custom, dataset_index_byprocess
+from validphys.theorycovariance.construction import experimentsplustheory_corrmat_custom
+from validphys.theorycovariance.construction import dataset_index_byprocess
 
 log = logging.getLogger(__name__)
 

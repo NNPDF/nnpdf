@@ -343,13 +343,19 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
              # Zahari's proposal for the theoretical covariance matrix --------------------
                 if fivetheories=='linear':
                     if name1 == name2:
-                        s = 0.25*(np.outer(deltas1[0], deltas2[0]) - np.outer(deltas1[0], deltas2[1])
-                            - np.outer(deltas1[1], deltas2[0]) + np.outer(deltas1[1], deltas2[1])
-                            + np.outer(deltas1[2], deltas2[2]) - np.outer(deltas1[2], deltas2[3])
-                            - np.outer(deltas1[3], deltas2[2]) + np.outer(deltas1[3], deltas2[3]))
+                        s = 0.25*(np.outer(deltas1[0], deltas2[0])
+                            - np.outer(deltas1[0], deltas2[1])
+                            - np.outer(deltas1[1], deltas2[0])
+                            + np.outer(deltas1[1], deltas2[1])
+                            + np.outer(deltas1[2], deltas2[2])
+                            - np.outer(deltas1[2], deltas2[3])
+                            - np.outer(deltas1[3], deltas2[2])
+                            + np.outer(deltas1[3], deltas2[3]))
                     else:
-                        s = 0.25*(np.outer(deltas1[0], deltas2[0]) - np.outer(deltas1[0], deltas2[1])
-                            - np.outer(deltas1[1], deltas2[0]) + np.outer(deltas1[1], deltas2[1]))
+                        s = 0.25*(np.outer(deltas1[0], deltas2[0])
+                                - np.outer(deltas1[0], deltas2[1])
+                                - np.outer(deltas1[1], deltas2[0])
+                                + np.outer(deltas1[1], deltas2[1]))
                 else:
                     if name1 == name2:
                         s = 0.5*sum(np.outer(d, d) for d in deltas1)
