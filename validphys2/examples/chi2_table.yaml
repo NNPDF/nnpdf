@@ -1,6 +1,5 @@
-fit: NNPDF31_nlo_as_0118_1000
-#pdf: MMHT2014nlo68cl
-pdf: NNPDF31_nlo_as_0118
+fit: 160609-rce7f669-001-zk
+pdf: MMHT2014nlo68cl
 use_cuts: True
 actions_:
    - theory:

@@ -1,10 +1,12 @@
-fit: NNPDF31_nlo_as_0118_1000
+fits:
+    - {id: 171113-nh-001, label: "Fit one"}
+    - {id: 171113-nh-002, label: "Fit two"}
 
 use_cuts: True
 template_text: |
     ---
-    title: Fit summary table example
-    author: nh
+    title: Fit summary table example 
+    author: nh 
     keywords: [example]
     ---
 
