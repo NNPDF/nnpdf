@@ -876,8 +876,6 @@ def plot_normexpplusblockthcovmat_heatmap(experimentsplusblocktheory_normcovmat,
 def plot_normexpplusthcovmat_heatmap_custom(experimentsplustheory_normcovmat_custom, theoryids,
                                             dataset_index_byprocess,
                                             fivetheories:(str, type(None))=None):
-def plot_normexpplusthcovmat_heatmap_custom(experimentsplustheory_normcovmat_custom,
-					theoryids, dataset_index_byprocess):
     """Matrix plot of the exp + theory covariance matrix normalised to data"""
     l = len(theoryids)
     if l==5:
@@ -951,8 +949,6 @@ def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat,
 def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat, experiments_data, theoryids,
                              dataset_index_byprocess,
                              fivetheories:(str, type(None))=None):
-def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat,
-			experiments_data, theoryids, dataset_index_byprocess):
     """Plot of sqrt(cov_ii)/|data_i| for cov = exp, theory, exp+theory"""
     l = len(theoryids)
     if l==5:
