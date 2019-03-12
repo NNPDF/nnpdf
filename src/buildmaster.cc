@@ -256,6 +256,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PTFilter());
   target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORMFilter());
   target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORMFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT_NORMFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PT_NORMFilter());
   target.push_back(new ATLAS_SINGLETOP_TCH_R_7TEVFilter());
   target.push_back(new ATLAS_SINGLETOP_TCH_R_8TEVFilter());
   target.push_back(new ATLAS_SINGLETOP_TCH_R_13TEVFilter());
