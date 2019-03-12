@@ -1,6 +1,15 @@
 /*
- * NB: Not currently suitable for use in NNPDF4.0 because no systematics breakdown available.
- */
+NB: Not currently suitable for use in NNPDF4.0 because no systematics breakdown available.
+
+Differential cross section measurements of the single top and single antitop quark in the t-channel @LHC ATLAS 8 TeV
+
+LHC-ATLAS 8 TeV
+---------------
+
+Selected events contain exactly one electron or muon, exactly two jets (exactly one of which must be b-tagged), and E_T^{miss} > 30 GeV.
+Archived as: https://arxiv.org/pdf/1702.02859v3.pdf
+Published in: Eur. Phys. J. C 77 (2017) 531
+*/
 
 #include "ATLAS_SINGLETOP_TCH_DIFF_8TEV.h"
 
