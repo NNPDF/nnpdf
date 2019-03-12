@@ -928,8 +928,6 @@ def plot_blockcovdiff_heatmap(theory_block_diag_covmat, experiments_covmat,
 def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat, theoryids,
                                 dataset_index_byprocess,
                                 fivetheories:(str, type(None))=None):
-def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat,
-				theoryids, dataset_index_byprocess):
     """Matrix plot (thcov + expcov)/expcov"""
     l = len(theoryids)
     if l==5:
