@@ -9,6 +9,12 @@ LHC-ATLAS 8 TeV
 Selected events contain exactly one electron or muon, exactly two jets (exactly one of which must be b-tagged), and E_T^{miss} > 30 GeV.
 Archived as: https://arxiv.org/pdf/1702.02859v3.pdf
 Published in: Eur. Phys. J. C 77 (2017) 531
+
+Distributions are converted, where necessary, so that they have the following dimensions:
+Absolute transverse momentum: pb/GeV
+Absolute rapidity: pb
+Normalised transverse momentum: 1/GeV
+Normalised rapidity: -
 */
 
 #include "ATLAS_SINGLETOP_TCH_DIFF_8TEV.h"
@@ -211,6 +217,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT_NORMFilter::ReadData()
     lstream >> fData[i] >> stat;
     lstream >> sys1 >> sys2;
 
+    // Convert to 1/GeV
     fData[i] /= 1000;
     stat /= 1000;
     sys1 /= 1000;
@@ -286,6 +293,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PT_NORMFilter::ReadData()
     lstream >> fData[i] >> stat;
     lstream >> sys1 >> sys2;
 
+    // Convert to 1/GeV
     fData[i] /= 1000;
     stat /= 1000;
     sys1 /= 1000;
@@ -503,6 +511,12 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PTFilter::ReadData()
     lstream >> fData[i] >> stat;
     lstream >> sys1 >> sys2;
 
+    // Convert to pb/GeV
+    fData[i] /= 1000;
+    stat /= 1000;
+    sys1 /= 1000;
+    sys2 /= 1000;
+
     pt_top = 0.5*(pt_top_low + pt_top_high);
     fStat[i] = (stat/fData[i])*100; // Store statistical uncertainty as percentage value
 
@@ -572,6 +586,12 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PTFilter::ReadData()
     lstream >> pt_top_low >> pt_top_high;
     lstream >> fData[i] >> stat;
     lstream >> sys1 >> sys2;
+
+    // Convert to pb/GeV
+    fData[i] /= 1000;
+    stat /= 1000;
+    sys1 /= 1000;
+    sys2 /= 1000;
 
     pt_top = 0.5*(pt_top_low + pt_top_high);
     fStat[i] = (stat/fData[i])*100; // Store statistical uncertainty as percentage value
