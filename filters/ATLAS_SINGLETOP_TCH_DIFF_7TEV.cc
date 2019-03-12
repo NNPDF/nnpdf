@@ -1541,6 +1541,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter::ReadData()
     fKin3[i] = 7000; // Centre of mass energy in GeV
 
     lstream >> fData[i]; // Value of bin
+    fData[i] /= 1000; // Convert to fb/GeV
     lstream >> unneeded_info >> fstat_percentage;
     fstat_additive[i] = fstat_percentage*fData[i]/100;
 
@@ -1820,6 +1821,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PTFilter::ReadData()
     fKin3[i] = 7000; // Centre of mass energy in GeV
 
     lstream >> fData[i]; // Value of bin
+    fData[i] /= 1000; // Convert to fb/GeV
     lstream >> unneeded_info >> fstat_percentage;
     fstat_additive[i] = fstat_percentage*fData[i]/100;
 
