@@ -23,6 +23,12 @@ pT(t) and y(tbar) distributions, are not positive semidefinite so cannot be used
 have been told about this, but while we wait for corrected matrices, bin-wise correlations are not computed for
 these two distributions. 
 
+Distributions are converted, where necessary, so that they have the following dimensions:
+Absolute transverse momentum: pb/GeV
+Absolute rapidity: pb
+Normalised transverse momentum: 1/GeV
+Normalised rapidity: -
+
 Note that the data files can be found in the supplemental material here:
 https://journals.aps.org/prd/abstract/10.1103/PhysRevD.90.112006
 
@@ -502,6 +508,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
     fKin3[i] = 7000; // Centre of mass energy in GeV
 
     lstream >> fData[i]; // Value of bin
+    fData[i] /= 1000; // Convert to 1/GeV
     // We do not read in stat. correlation matrix in this filter because it is not positive semi-definite
     lstream >> unneeded_info >> fStat[i]; // Statistical (percentage) uncertainty
   }
@@ -744,6 +751,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
     fKin3[i] = 7000; // Centre of mass energy in GeV
 
     lstream >> fData[i]; // Value of bin
+    fData[i] /= 1000; // Convert to 1/GeV
     lstream >> unneeded_info >> fstat_percentage;
     fstat_additive[i] = fstat_percentage*fData[i]/100;
 
