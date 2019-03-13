@@ -99,7 +99,7 @@ def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
     newindex = sorted(oldindex, key=_get_key)
     # reindex index
     newdf = df.reindex(newindex)
-    #reindex columns by transposing, reindexing, then transposing back
+    # reindex columns by transposing, reindexing, then transposing back
     newdf = (newdf.T.reindex(newindex)).T
     matrix = newdf.values
     fig,ax = plt.subplots(figsize=(15,15))
@@ -159,7 +159,7 @@ def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
     newindex = sorted(oldindex, key=_get_key)
     # reindex index
     newdf = df.reindex(newindex)
-    #reindex columns by transposing, reindexing, then transposing back
+    # reindex columns by transposing, reindexing, then transposing back
     newdf = (newdf.T.reindex(newindex)).T
     matrix = newdf.values
     fig, ax = plt.subplots(figsize=(15,15))
