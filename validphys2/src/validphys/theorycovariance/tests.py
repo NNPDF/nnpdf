@@ -428,6 +428,11 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                         fivetheories:(str, type(None)) = None,
                         seventheories:(str, type(None)) = None,
                         eigenvalue_cutoff:(bool, type(None)) = None):
+    """Projects the theory covariance matrix from the data space into 
+    the basis of non-zero eigenvalues, dependent on point-prescription. 
+    Then returns the eigenvalues (w) and eigenvectors (v) 
+    in the data space."""
+
     def shuffle_list(l, shift):
         i=0
         newlist = l.copy()
@@ -435,17 +440,14 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
             newlist.append(newlist.pop(0))
             i = i + 1
         return newlist
-    if eigenvalue_cutoff == True:
-        w = None
-        v = None
-    else:
-        covmat = (thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0])))#.reorder_levels(['Dataset name',
-    									#'Experiment name',
-    									#'Point'])
-        # constructing shift vectors
+
+        covmat = (thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0])))
+        # constructing vectors of shifts due to scale variation
         diffs = [((thx_vector[0] - scalevarvector)/thx_vector[0])
                                         for scalevarvector in allthx_vector[0]]
+	# number of points in point prescription
         num_pts = len(diffs) + 1
+	# constructing dictionary of datasets in each process type
         indexlist = list(diffs[0].index.values)
         procdict = {}
         for index in indexlist:
@@ -455,7 +457,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                 procdict[proc] = [name]
             elif name not in procdict[proc]:
                 procdict[proc].append(name)
-        # creating split diffs with processes separated
+        # splitting up the scale-varied shift vectors into different spaces per process
         splitdiffs = []
         for process, dslist in procdict.items():
             alldatasets = [y for x in list(procdict.values()) for y in x]
@@ -465,14 +467,25 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                 for ds in otherdatasets:
                     splitdiff.loc[ds] = 0
                 splitdiffs.append(splitdiff)
+        # --------------------------------------------------
+        # CONSTRUCTING THE LINEARLY INDEPENDENT VECTORS 
         # treating each prescription on a case-by-case basis
+	# Notation:
+	# e.g. pp => (mu_0; mu_i) = (+;+)
+	#      mz => (mu_0; mu_i) = (-;0)
+	#      zp => (mu_0; mu_i) = (0;+) ...
+	# for a process i, 
+	# and total vectors are notated like
+	# (mu_0; mu_1, mu_2, ..., mu_p)
         if num_pts == 3:
+	    # N.B. mu_0 correlated with mu_i
             xs = []
             pps = splitdiffs[::(num_pts-1)]
             mms = shuffle_list(splitdiffs,1)[::(num_pts-1)]
-            # the one vector with all pluses
+            # Constructing (+, +, +, ...)
             xs.append(sum(pps))
-            # the p vectors with one minus
+            # Constructing the p vectors with one minus
+	    # (-, +, + ...) + cyclic
             for procloc, mm in enumerate(mms):
                 newvec = pps[0].copy()
                 newvec.loc[:]=0
@@ -486,10 +499,14 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
             zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
             zms = shuffle_list(splitdiffs,3)[::(num_pts-1)]
             xs = []
+	    # Constructing (+; 0, 0, 0 ...)
+	    #              (-; 0, 0, 0 ...)
+	    #              (0; +, +, + ...)
             xs.append(sum(pzs))
             xs.append(sum(mzs))
             xs.append(sum(zps))
-            # the p vectors with one minus
+            # Constructing the p vectors with one minus
+            # (0; -, +, + ...) + cyclic
             for procloc, zm in enumerate(zms):
                 newvec = zps[0].copy()
                 newvec.loc[:] = 0
@@ -503,9 +520,11 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
             pms = shuffle_list(splitdiffs,2)[::(num_pts-1)]
             mps = shuffle_list(splitdiffs,3)[::(num_pts-1)]
             xs = []
+	    # Constructing (+/-; +, + ...)
             xs.append(sum(pps))
             xs.append(sum(mps))
-            # the 2p vectors with one minus
+            # Constructing the 2p vectors with one minus
+	    # (+; -, +, + ...) + cyclic
             for procloc, pm in enumerate(pms):
                 newvec = pms[0].copy()
                 newvec.loc[:] = 0
@@ -513,6 +532,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                 del subpps[procloc]
                 newvec = newvec + sum(subpps) + pm
                 xs.append(newvec)
+	    # (-; -, +, + ...) + cyclic
             for procloc, mm in enumerate(mms):
                 newvec = mms[0].copy()
                 newvec.loc[:] = 0
@@ -528,9 +548,9 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
             pps = shuffle_list(splitdiffs,4)[::(num_pts-1)]
             mms = shuffle_list(splitdiffs,5)[::(num_pts-1)]
             xs = []
-            # 3pt-like part
+	    # 7pt is the sum of 3pts and 5pts
+            # 3pt-like part:
             xs.append(sum(pps))
-            # the p vectors with one minus
             for procloc, mm in enumerate(mms):
                 newvec = pps[0].copy()
                 newvec.loc[:]=0
@@ -538,11 +558,10 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                 del subpps[procloc]
                 newvec = newvec + sum(subpps) + mm
                 xs.append(newvec)
-            # 5pt-like part
+            # 5pt-like part:
             xs.append(sum(pzs))
             xs.append(sum(mzs))
             xs.append(sum(zps))
-            # the p vectors with one minus
             for procloc, zm in enumerate(zms):
                 newvec = zps[0].copy()
                 newvec.loc[:] = 0
@@ -560,9 +579,11 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
             pms = shuffle_list(splitdiffs,6)[::(num_pts-1)]
             mps = shuffle_list(splitdiffs,7)[::(num_pts-1)]
             xs = []
+	    # Constructing (+/-/0; +, +, ...)
             xs.append(sum(pps))
             xs.append(sum(mps))
             xs.append(sum(zps))
+	    # Constructing (+/-/0; -, +, + ...) + cyclic
             for procloc, zm in enumerate(zms):
                 newvec = zps[0].copy()
                 newvec.loc[:] = 0
@@ -584,6 +605,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                 del submps[procloc]
                 newvec = newvec + sum(submps) + mm
                 xs.append(newvec)
+	    # Constructing (+/-; 0, +, +, ...) + cyclic
             for procloc, pz in enumerate(pzs):
                 newvec = pps[0].copy()
                 newvec.loc[:] = 0
@@ -598,25 +620,28 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                 del submps[procloc]
                 newvec = newvec + sum(submps) + mz
                 xs.append(newvec)
+	# -------------------------------------------------
         # Orthonormalising vectors according to Gram-Schmidt
         ys = [x/np.linalg.norm(x) for x in xs]
         for i in range(1, len(xs)):
             for j in range(0,i):
                 ys[i] = ys[i] - (ys[i].T.dot(ys[j]))[0][0]*ys[j]/np.linalg.norm(ys[j])
                 ys[i] = ys[i]/np.linalg.norm(ys[i])
+	# Projecting covariance matrix onto subspace of non-zero eigenvalues
         P = pd.concat(ys, axis=1)
         projected_matrix = (P.T).dot(covmat.dot(P))
         w, v_projected = la.eigh(projected_matrix)
+	# Finding eigenvectors in data space
         v = P.dot(v_projected)
     return w, v
 
 def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
 		     eigenvalue_cutoff:(bool, type(None)) = None):
-    if eigenvalue_cutoff == True:
-        matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
-        w, v = la.eigh(matrix)
-    else:
-        w, v = evals_nonzero_basis
+    """Compares the NNLO-NLO shift, f, with the eigenvectors and eigenvalues of the
+    theory covariance matrix, and returns the component of the NNLO-NLO shift 
+    space which is missed by the covariance matrix space: fmiss, as well as the 
+    projections of the shift vector onto each of the eigenvectors: projectors."""
+    w, v = evals_nonzero_basis
     # Sorting real part of eigenvalues
     w = np.real(w)
     v = np.real(v)
@@ -624,43 +649,33 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
     w = w[sort_indices]
     v = v[:, sort_indices]
     w_max = w[np.argmax(w)]
+    # NNLO-NLO shift vector
     f = -shx_vector[0].values.T[0]
-    all_projectors = np.sum(f*v.T, axis=1)
-    if eigenvalue_cutoff == True:
-        mod_larg_neg_eval = np.abs(w[0])
-        nonzero_locs = np.nonzero(w>10*mod_larg_neg_eval)[0]
-        w_nonzero = []
-        for loc in nonzero_locs:
-            if loc >=0:
-                w_nonzero.append(w[loc])
-    # ^ taking 0th element to extract list from tuple
-    else:
-        nonzero_locs = range(len(w))
-        w_nonzero = w[nonzero_locs]
-    v_nonzero = []
-    for loc in nonzero_locs:
-        if loc >=0:
-            v_nonzero.append(v[:,loc])
-    projectors = np.sum(f*v_nonzero, axis=1)
+    # Projecting the shift vector onto each of the eigenvectors
+    projectors = np.sum(f*v.T, axis=1)
     # Initialise array of zeros and set precision to same as FK tables
     projected_evectors = np.zeros((len(projectors), (len(f))), dtype=np.float32)
     for i, projector in enumerate(projectors):
         projected_evectors[i] = projector*v_nonzero[i]
     fmiss = f - np.sum(projected_evectors, axis=0)
-    return w_nonzero, v_nonzero, projectors, f, fmiss, w_max, w, all_projectors
+    return w, v, projectors, f, fmiss
 
 @table
 def theory_covmat_eigenvalues(theory_shift_test):
-    w_nonzero, v_nonzero, projectors = theory_shift_test[:3]
-    s_scrambled = np.sqrt(np.abs(w_nonzero))
-    projectors_scrambled = np.ndarray.tolist(projectors)
-    ratio_scrambled = projectors_scrambled/s_scrambled
-    table = pd.DataFrame([s_scrambled[::-1], projectors_scrambled[::-1], ratio_scrambled[::-1]],
+    """Returns a table of s = sqrt(eigenvalue), the projector and
+    the ratio of the two, ordered by largest eigenvalue.""" 
+    w, v, projectors = theory_shift_test[:3]
+    s = np.sqrt(np.abs(w))
+    projectors = np.ndarray.tolist(projectors)
+    ratio= projectors/s
+    table = pd.DataFrame([s[::-1], projectors[::-1], ratio[::-1]],
          		index = [r'$s_a$', r'$\delta_a$', r'$\delta_a/s_a$'],
-                 columns = np.arange(1,len(s_scrambled)+1,1))
+                 columns = np.arange(1,len(s)+1,1))
     return table
 
 def efficiency(theory_shift_test):
+    """Returns (efficiency = 1 - fmiss/f) with which the theory 
+    covariance matrix encapsulates the NNLO-NLO shift."""
     f = theory_shift_test[3]
     fmiss = theory_shift_test[4]
     fmod = np.sqrt(np.sum(f**2))
@@ -669,14 +684,9 @@ def efficiency(theory_shift_test):
     print(f"efficiency = {efficiency}")
     return efficiency
 
-def maxrat(theory_shift_test):
-    f = theory_shift_test[3]
-    fmiss = theory_shift_test[4]
-    maxrat = np.max(np.abs(fmiss))/np.max(np.abs(f))
-#    print(f"maxrat = {maxrat}")
-    return maxrat
-
 def validation_theory_chi2(theory_shift_test):
+    """Returns the theory chi2 for comparing NNLO-NLO shift
+    with theory covariance matrix."""
     projectors = theory_shift_test[2]
     evals = theory_shift_test[0]
     ratio = projectors/np.sqrt(np.abs(evals))
@@ -687,36 +697,30 @@ def validation_theory_chi2(theory_shift_test):
 @figure
 def projector_eigenvalue_ratio(theory_shift_test,
                                eigenvalue_cutoff:(bool, type(None)) = None):
-    surviving_evals = theory_shift_test[0][::-1]
-    all_projectors = theory_shift_test[7][::-1]
-    all_evals = theory_shift_test[6][::-1]
+    """Produces a plot of the ratio between the projectors and the square roots
+    of the corresponding eigenvalues."""	
+    evals = theory_shift_test[0][::-1]
+    projectors = theory_shift_test[2][::-1]
     fmiss = theory_shift_test[4]
     fmiss_mod = np.sqrt(np.sum(fmiss**2))
-    ratio = np.abs(all_projectors)/np.sqrt(np.abs(all_evals))
+    ratio = np.abs(projectors)/np.sqrt(np.abs(evals))
     # Initialise array of zeros and set precision to same as FK tables
-    masked_evals = np.zeros((len(all_evals)), dtype=np.float32)
-    for loc, eval in enumerate(all_evals):
-        if eval in surviving_evals:
-            masked_evals[loc] = eval
-     # Ordering according to shift vector
-    mask = np.argsort(np.abs(all_projectors))[::-1]
-    all_evals = np.asarray(all_evals)[mask]
-    all_projectors = all_projectors[mask]
+    # Ordering according to shift vector
+    mask = np.argsort(np.abs(projectors))[::-1]
+    evals = np.asarray(evals)[mask]
+    projectors = projectors[mask]
     ratio = ratio[mask]
-    masked_evals = masked_evals[mask]
-    xvals = np.arange(1,len(masked_evals)+1,1)
+    xvals = np.arange(1,len(evals)+1,1)
+    # Plotting
     fig, (ax1, ax2) = plt.subplots(2, figsize=(5,5))
-    ax1.plot(xvals, np.abs(all_projectors), 's', label = r'|$\delta_a$|')
-    ax1.plot(xvals, np.sqrt(np.abs(all_evals)), 'o', label = r'$|s_a|$')
+    ax1.plot(xvals, np.abs(projectors), 's', label = r'|$\delta_a$|')
+    ax1.plot(xvals, np.sqrt(np.abs(evals)), 'o', label = r'$|s_a|$')
     ax1.plot(0, fmiss_mod, '*', label=r'$|\delta_{miss}|$', color='b')
     ax2.plot(xvals,ratio, 'D', color="red")
     ax2.plot(0,0, '.', color="w")
-    ax1.set_title(f"Number of eigenvalues = {len(surviving_evals)}", fontsize=10)
+    ax1.set_title(f"Number of eigenvalues = {len(evals)}", fontsize=10)
     ax1.set_yscale('log')
     ax2.set_yscale('log')
-    if eigenvalue_cutoff == True:
-        ax1.set_xscale('log')
-        ax2.set_xscale('log')
     ax1.legend()
     labels = [item.get_text() for item in ax1.get_xticklabels()]
     ax1.set_xticklabels(labels)
@@ -729,10 +733,12 @@ def projector_eigenvalue_ratio(theory_shift_test,
 
 @figure
 def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
+    """Produces a plot of a comparison between the NNLO-NLO shift and the
+    envelope given by the diagonal elements of the theory covariance matrix."""
     matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
     fnorm = -shx_vector[0]
     indexlist = list(matrix.index.values)
-    # adding process index for plotting
+    # adding process index for plotting, and reindexing matrices and vectors
     dsnames = []
     processnames= []
     ids = []
@@ -756,6 +762,7 @@ def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
     fnorm = pd.DataFrame(fnorm.values, index=tripleindex)
     fnorm.sort_index(0, inplace=True)
     fnorm = fnorm.reindex(newindex)
+    # Plotting	
     fig, ax = plt.subplots(figsize=(20,10))
     ax.plot(sqrtdiags*100, '.-', label="Theory", color = "red")
     ax.plot(-sqrtdiags*100, '.-', color = "red")
@@ -769,19 +776,3 @@ def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
     ax.yaxis.set_tick_params(labelsize=20)
     return fig
 
-@figure
-def plot_shift_scaleavg_comparison(shx_vector, thx_vector,
-                                   allthx_vector, thx_covmat):
-    diffs = [((thx_vector[0] - scalevarvector)/thx_vector[0])
-                                        for scalevarvector in allthx_vector[0]]
-    diffsconcat = pd.concat(diffs, axis=1)
-    avgdiffs = diffsconcat.mean(axis=1)
-    fig, ax = plt.subplots(figsize=(20,10))
-    ax.plot(100*avgdiffs.values, '.-',
-            label=r"Average of $\Delta$s",color = "blue")
-    ax.plot(-100*shx_vector[0].values, '.-', label="NNLO-NLO shift", color = "black")
-    ticklocs, ticklabels, startlocs = matrix_plot_labels(thx_covmat[0])
-    plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=20)
-    ax.set_ylabel("% of central theory", fontsize=20)
-    ax.legend(fontsize=20)
-    return fig
