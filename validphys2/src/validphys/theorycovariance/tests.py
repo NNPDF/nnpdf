@@ -274,8 +274,6 @@ def all_matched_data_lengths(all_matched_datasets):
 def matched_experiments_index(matched_dataspecs_experiment_name,
                               matched_dataspecs_dataset_name,
                               all_matched_data_lengths):
-
-    enames = matched_dataspecs_experiment_name
     dsnames = matched_dataspecs_dataset_name
     lens = all_matched_data_lengths
     dsnames = np.concatenate([
@@ -428,9 +426,9 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                         fivetheories:(str, type(None)) = None,
                         seventheories:(str, type(None)) = None,
                         eigenvalue_cutoff:(bool, type(None)) = None):
-    """Projects the theory covariance matrix from the data space into 
-    the basis of non-zero eigenvalues, dependent on point-prescription. 
-    Then returns the eigenvalues (w) and eigenvectors (v) 
+    """Projects the theory covariance matrix from the data space into
+    the basis of non-zero eigenvalues, dependent on point-prescription.
+    Then returns the eigenvalues (w) and eigenvectors (v)
     in the data space."""
 
     def shuffle_list(l, shift):
@@ -441,205 +439,205 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
             i = i + 1
         return newlist
 
-        covmat = (thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0])))
-        # constructing vectors of shifts due to scale variation
-        diffs = [((thx_vector[0] - scalevarvector)/thx_vector[0])
+    covmat = (thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0])))
+    # constructing vectors of shifts due to scale variation
+    diffs = [((thx_vector[0] - scalevarvector)/thx_vector[0])
                                         for scalevarvector in allthx_vector[0]]
 	# number of points in point prescription
-        num_pts = len(diffs) + 1
+    num_pts = len(diffs) + 1
 	# constructing dictionary of datasets in each process type
-        indexlist = list(diffs[0].index.values)
-        procdict = {}
-        for index in indexlist:
-            name = index[0]
-            proc = _process_lookup(name)
-            if proc not in list(procdict.keys()):
-                procdict[proc] = [name]
-            elif name not in procdict[proc]:
-                procdict[proc].append(name)
-        # splitting up the scale-varied shift vectors into different spaces per process
-        splitdiffs = []
-        for process, dslist in procdict.items():
-            alldatasets = [y for x in list(procdict.values()) for y in x]
-            otherdatasets = [x for x in alldatasets if x not in procdict[process]]
-            for diff in diffs:
-                splitdiff = diff.copy()
-                for ds in otherdatasets:
-                    splitdiff.loc[ds] = 0
-                splitdiffs.append(splitdiff)
-        # --------------------------------------------------
-        # CONSTRUCTING THE LINEARLY INDEPENDENT VECTORS 
-        # treating each prescription on a case-by-case basis
+    indexlist = list(diffs[0].index.values)
+    procdict = {}
+    for index in indexlist:
+        name = index[0]
+        proc = _process_lookup(name)
+        if proc not in list(procdict.keys()):
+            procdict[proc] = [name]
+        elif name not in procdict[proc]:
+            procdict[proc].append(name)
+    # splitting up the scale-varied shift vectors into different spaces per process
+    splitdiffs = []
+    for process, dslist in procdict.items():
+        alldatasets = [y for x in list(procdict.values()) for y in x]
+        otherdatasets = [x for x in alldatasets if x not in procdict[process]]
+        for diff in diffs:
+            splitdiff = diff.copy()
+            for ds in otherdatasets:
+                splitdiff.loc[ds] = 0
+            splitdiffs.append(splitdiff)
+    # --------------------------------------------------
+    # CONSTRUCTING THE LINEARLY INDEPENDENT VECTORS
+    # treating each prescription on a case-by-case basis
 	# Notation:
 	# e.g. pp => (mu_0; mu_i) = (+;+)
 	#      mz => (mu_0; mu_i) = (-;0)
 	#      zp => (mu_0; mu_i) = (0;+) ...
-	# for a process i, 
+	# for a process i,
 	# and total vectors are notated like
 	# (mu_0; mu_1, mu_2, ..., mu_p)
-        if num_pts == 3:
+    if num_pts == 3:
 	    # N.B. mu_0 correlated with mu_i
-            xs = []
-            pps = splitdiffs[::(num_pts-1)]
-            mms = shuffle_list(splitdiffs,1)[::(num_pts-1)]
-            # Constructing (+, +, +, ...)
-            xs.append(sum(pps))
-            # Constructing the p vectors with one minus
+        xs = []
+        pps = splitdiffs[::(num_pts-1)]
+        mms = shuffle_list(splitdiffs,1)[::(num_pts-1)]
+        # Constructing (+, +, +, ...)
+        xs.append(sum(pps))
+        # Constructing the p vectors with one minus
 	    # (-, +, + ...) + cyclic
-            for procloc, mm in enumerate(mms):
-                newvec = pps[0].copy()
-                newvec.loc[:]=0
-                subpps = pps.copy()
-                del subpps[procloc]
-                newvec = newvec + sum(subpps) + mm
-                xs.append(newvec)
-        elif (num_pts == 5) and (fivetheories == "nobar"):
-            pzs = splitdiffs[::(num_pts-1)]
-            mzs = shuffle_list(splitdiffs,1)[::(num_pts-1)]
-            zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
-            zms = shuffle_list(splitdiffs,3)[::(num_pts-1)]
-            xs = []
+        for procloc, mm in enumerate(mms):
+            newvec = pps[0].copy()
+            newvec.loc[:]=0
+            subpps = pps.copy()
+            del subpps[procloc]
+            newvec = newvec + sum(subpps) + mm
+            xs.append(newvec)
+    elif (num_pts == 5) and (fivetheories == "nobar"):
+        pzs = splitdiffs[::(num_pts-1)]
+        mzs = shuffle_list(splitdiffs,1)[::(num_pts-1)]
+        zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
+        zms = shuffle_list(splitdiffs,3)[::(num_pts-1)]
+        xs = []
 	    # Constructing (+; 0, 0, 0 ...)
 	    #              (-; 0, 0, 0 ...)
 	    #              (0; +, +, + ...)
-            xs.append(sum(pzs))
-            xs.append(sum(mzs))
-            xs.append(sum(zps))
-            # Constructing the p vectors with one minus
-            # (0; -, +, + ...) + cyclic
-            for procloc, zm in enumerate(zms):
-                newvec = zps[0].copy()
-                newvec.loc[:] = 0
-                subzps = zps.copy()
-                del subzps[procloc]
-                newvec = newvec + sum(subzps) + zm
-                xs.append(newvec)
-        elif (num_pts == 5) and (fivetheories == "bar"):
-            pps = splitdiffs[::(num_pts-1)]
-            mms = shuffle_list(splitdiffs,1)[::(num_pts-1)]
-            pms = shuffle_list(splitdiffs,2)[::(num_pts-1)]
-            mps = shuffle_list(splitdiffs,3)[::(num_pts-1)]
-            xs = []
+        xs.append(sum(pzs))
+        xs.append(sum(mzs))
+        xs.append(sum(zps))
+        # Constructing the p vectors with one minus
+        # (0; -, +, + ...) + cyclic
+        for procloc, zm in enumerate(zms):
+           newvec = zps[0].copy()
+           newvec.loc[:] = 0
+           subzps = zps.copy()
+           del subzps[procloc]
+           newvec = newvec + sum(subzps) + zm
+           xs.append(newvec)
+    elif (num_pts == 5) and (fivetheories == "bar"):
+        pps = splitdiffs[::(num_pts-1)]
+        mms = shuffle_list(splitdiffs,1)[::(num_pts-1)]
+        pms = shuffle_list(splitdiffs,2)[::(num_pts-1)]
+        mps = shuffle_list(splitdiffs,3)[::(num_pts-1)]
+        xs = []
 	    # Constructing (+/-; +, + ...)
-            xs.append(sum(pps))
-            xs.append(sum(mps))
-            # Constructing the 2p vectors with one minus
+        xs.append(sum(pps))
+        xs.append(sum(mps))
+        # Constructing the 2p vectors with one minus
 	    # (+; -, +, + ...) + cyclic
-            for procloc, pm in enumerate(pms):
-                newvec = pms[0].copy()
-                newvec.loc[:] = 0
-                subpps = pps.copy()
-                del subpps[procloc]
-                newvec = newvec + sum(subpps) + pm
-                xs.append(newvec)
+        for procloc, pm in enumerate(pms):
+            newvec = pms[0].copy()
+            newvec.loc[:] = 0
+            subpps = pps.copy()
+            del subpps[procloc]
+            newvec = newvec + sum(subpps) + pm
+            xs.append(newvec)
 	    # (-; -, +, + ...) + cyclic
-            for procloc, mm in enumerate(mms):
-                newvec = mms[0].copy()
-                newvec.loc[:] = 0
-                submps = mps.copy()
-                del submps[procloc]
-                newvec = newvec + sum(submps) + mm
-                xs.append(newvec)
-        elif (num_pts == 7) and (seventheories != "original"):
-            pzs = splitdiffs[::(num_pts-1)]
-            mzs = shuffle_list(splitdiffs,1)[::(num_pts-1)]
-            zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
-            zms = shuffle_list(splitdiffs,3)[::(num_pts-1)]
-            pps = shuffle_list(splitdiffs,4)[::(num_pts-1)]
-            mms = shuffle_list(splitdiffs,5)[::(num_pts-1)]
-            xs = []
+        for procloc, mm in enumerate(mms):
+            newvec = mms[0].copy()
+            newvec.loc[:] = 0
+            submps = mps.copy()
+            del submps[procloc]
+            newvec = newvec + sum(submps) + mm
+            xs.append(newvec)
+    elif (num_pts == 7) and (seventheories != "original"):
+        pzs = splitdiffs[::(num_pts-1)]
+        mzs = shuffle_list(splitdiffs,1)[::(num_pts-1)]
+        zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
+        zms = shuffle_list(splitdiffs,3)[::(num_pts-1)]
+        pps = shuffle_list(splitdiffs,4)[::(num_pts-1)]
+        mms = shuffle_list(splitdiffs,5)[::(num_pts-1)]
+        xs = []
 	    # 7pt is the sum of 3pts and 5pts
-            # 3pt-like part:
-            xs.append(sum(pps))
-            for procloc, mm in enumerate(mms):
-                newvec = pps[0].copy()
-                newvec.loc[:]=0
-                subpps = pps.copy()
-                del subpps[procloc]
-                newvec = newvec + sum(subpps) + mm
-                xs.append(newvec)
-            # 5pt-like part:
-            xs.append(sum(pzs))
-            xs.append(sum(mzs))
-            xs.append(sum(zps))
-            for procloc, zm in enumerate(zms):
-                newvec = zps[0].copy()
-                newvec.loc[:] = 0
-                subzps = zps.copy()
-                del subzps[procloc]
-                newvec = newvec + sum(subzps) + zm
-                xs.append(newvec)
-        elif num_pts == 9:
-            pzs = splitdiffs[::(num_pts-1)]
-            mzs = shuffle_list(splitdiffs,1)[::(num_pts-1)]
-            zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
-            zms = shuffle_list(splitdiffs,3)[::(num_pts-1)]
-            pps = shuffle_list(splitdiffs,4)[::(num_pts-1)]
-            mms = shuffle_list(splitdiffs,5)[::(num_pts-1)]
-            pms = shuffle_list(splitdiffs,6)[::(num_pts-1)]
-            mps = shuffle_list(splitdiffs,7)[::(num_pts-1)]
-            xs = []
+        # 3pt-like part:
+        xs.append(sum(pps))
+        for procloc, mm in enumerate(mms):
+            newvec = pps[0].copy()
+            newvec.loc[:]=0
+            subpps = pps.copy()
+            del subpps[procloc]
+            newvec = newvec + sum(subpps) + mm
+            xs.append(newvec)
+        # 5pt-like part:
+        xs.append(sum(pzs))
+        xs.append(sum(mzs))
+        xs.append(sum(zps))
+        for procloc, zm in enumerate(zms):
+            newvec = zps[0].copy()
+            newvec.loc[:] = 0
+            subzps = zps.copy()
+            del subzps[procloc]
+            newvec = newvec + sum(subzps) + zm
+            xs.append(newvec)
+    elif num_pts == 9:
+        pzs = splitdiffs[::(num_pts-1)]
+        mzs = shuffle_list(splitdiffs,1)[::(num_pts-1)]
+        zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
+        zms = shuffle_list(splitdiffs,3)[::(num_pts-1)]
+        pps = shuffle_list(splitdiffs,4)[::(num_pts-1)]
+        mms = shuffle_list(splitdiffs,5)[::(num_pts-1)]
+        pms = shuffle_list(splitdiffs,6)[::(num_pts-1)]
+        mps = shuffle_list(splitdiffs,7)[::(num_pts-1)]
+        xs = []
 	    # Constructing (+/-/0; +, +, ...)
-            xs.append(sum(pps))
-            xs.append(sum(mps))
-            xs.append(sum(zps))
+        xs.append(sum(pps))
+        xs.append(sum(mps))
+        xs.append(sum(zps))
 	    # Constructing (+/-/0; -, +, + ...) + cyclic
-            for procloc, zm in enumerate(zms):
-                newvec = zps[0].copy()
-                newvec.loc[:] = 0
-                subzps = zps.copy()
-                del subzps[procloc]
-                newvec = newvec + sum(subzps) + zm
-                xs.append(newvec)
-            for procloc, pm in enumerate(pms):
-                newvec = pps[0].copy()
-                newvec.loc[:] = 0
-                subpps = pps.copy()
-                del subpps[procloc]
-                newvec = newvec + sum(subpps) + pm
-                xs.append(newvec)
-            for procloc, mm in enumerate(mms):
-                newvec = mps[0].copy()
-                newvec.loc[:] = 0
-                submps = mps.copy()
-                del submps[procloc]
-                newvec = newvec + sum(submps) + mm
-                xs.append(newvec)
+        for procloc, zm in enumerate(zms):
+            newvec = zps[0].copy()
+            newvec.loc[:] = 0
+            subzps = zps.copy()
+            del subzps[procloc]
+            newvec = newvec + sum(subzps) + zm
+            xs.append(newvec)
+        for procloc, pm in enumerate(pms):
+            newvec = pps[0].copy()
+            newvec.loc[:] = 0
+            subpps = pps.copy()
+            del subpps[procloc]
+            newvec = newvec + sum(subpps) + pm
+            xs.append(newvec)
+        for procloc, mm in enumerate(mms):
+            newvec = mps[0].copy()
+            newvec.loc[:] = 0
+            submps = mps.copy()
+            del submps[procloc]
+            newvec = newvec + sum(submps) + mm
+            xs.append(newvec)
 	    # Constructing (+/-; 0, +, +, ...) + cyclic
-            for procloc, pz in enumerate(pzs):
-                newvec = pps[0].copy()
-                newvec.loc[:] = 0
-                subpps = pps.copy()
-                del subpps[procloc]
-                newvec = newvec + sum(subpps) + pz
-                xs.append(newvec)
-            for procloc, mz in enumerate(mzs):
-                newvec = mps[0].copy()
-                newvec.loc[:] = 0
-                submps = mps.copy()
-                del submps[procloc]
-                newvec = newvec + sum(submps) + mz
-                xs.append(newvec)
-	# -------------------------------------------------
-        # Orthonormalising vectors according to Gram-Schmidt
-        ys = [x/np.linalg.norm(x) for x in xs]
-        for i in range(1, len(xs)):
-            for j in range(0,i):
-                ys[i] = ys[i] - (ys[i].T.dot(ys[j]))[0][0]*ys[j]/np.linalg.norm(ys[j])
-                ys[i] = ys[i]/np.linalg.norm(ys[i])
+        for procloc, pz in enumerate(pzs):
+            newvec = pps[0].copy()
+            newvec.loc[:] = 0
+            subpps = pps.copy()
+            del subpps[procloc]
+            newvec = newvec + sum(subpps) + pz
+            xs.append(newvec)
+        for procloc, mz in enumerate(mzs):
+            newvec = mps[0].copy()
+            newvec.loc[:] = 0
+            submps = mps.copy()
+            del submps[procloc]
+            newvec = newvec + sum(submps) + mz
+            xs.append(newvec)
+	# ------------------------------------------------
+    # Orthonormalising vectors according to Gram-Schmidt
+    ys = [x/np.linalg.norm(x) for x in xs]
+    for i in range(1, len(xs)):
+        for j in range(0,i):
+            ys[i] = ys[i] - (ys[i].T.dot(ys[j]))[0][0]*ys[j]/np.linalg.norm(ys[j])
+            ys[i] = ys[i]/np.linalg.norm(ys[i])
 	# Projecting covariance matrix onto subspace of non-zero eigenvalues
-        P = pd.concat(ys, axis=1)
-        projected_matrix = (P.T).dot(covmat.dot(P))
-        w, v_projected = la.eigh(projected_matrix)
+    P = pd.concat(ys, axis=1)
+    projected_matrix = (P.T).dot(covmat.dot(P))
+    w, v_projected = la.eigh(projected_matrix)
 	# Finding eigenvectors in data space
-        v = P.dot(v_projected)
+    v = P.dot(v_projected)
     return w, v
 
 def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
 		     eigenvalue_cutoff:(bool, type(None)) = None):
     """Compares the NNLO-NLO shift, f, with the eigenvectors and eigenvalues of the
-    theory covariance matrix, and returns the component of the NNLO-NLO shift 
-    space which is missed by the covariance matrix space: fmiss, as well as the 
+    theory covariance matrix, and returns the component of the NNLO-NLO shift
+    space which is missed by the covariance matrix space: fmiss, as well as the
     projections of the shift vector onto each of the eigenvectors: projectors."""
     w, v = evals_nonzero_basis
     # Sorting real part of eigenvalues
@@ -648,7 +646,6 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
     sort_indices = np.argsort(w)
     w = w[sort_indices]
     v = v[:, sort_indices]
-    w_max = w[np.argmax(w)]
     # NNLO-NLO shift vector
     f = -shx_vector[0].values.T[0]
     # Projecting the shift vector onto each of the eigenvectors
@@ -656,14 +653,14 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
     # Initialise array of zeros and set precision to same as FK tables
     projected_evectors = np.zeros((len(projectors), (len(f))), dtype=np.float32)
     for i, projector in enumerate(projectors):
-        projected_evectors[i] = projector*v_nonzero[i]
+        projected_evectors[i] = projector*v[i]
     fmiss = f - np.sum(projected_evectors, axis=0)
     return w, v, projectors, f, fmiss
 
 @table
 def theory_covmat_eigenvalues(theory_shift_test):
     """Returns a table of s = sqrt(eigenvalue), the projector and
-    the ratio of the two, ordered by largest eigenvalue.""" 
+    the ratio of the two, ordered by largest eigenvalue."""
     w, v, projectors = theory_shift_test[:3]
     s = np.sqrt(np.abs(w))
     projectors = np.ndarray.tolist(projectors)
@@ -674,7 +671,7 @@ def theory_covmat_eigenvalues(theory_shift_test):
     return table
 
 def efficiency(theory_shift_test):
-    """Returns (efficiency = 1 - fmiss/f) with which the theory 
+    """Returns (efficiency = 1 - fmiss/f) with which the theory
     covariance matrix encapsulates the NNLO-NLO shift."""
     f = theory_shift_test[3]
     fmiss = theory_shift_test[4]
@@ -698,7 +695,7 @@ def validation_theory_chi2(theory_shift_test):
 def projector_eigenvalue_ratio(theory_shift_test,
                                eigenvalue_cutoff:(bool, type(None)) = None):
     """Produces a plot of the ratio between the projectors and the square roots
-    of the corresponding eigenvalues."""	
+    of the corresponding eigenvalues."""
     evals = theory_shift_test[0][::-1]
     projectors = theory_shift_test[2][::-1]
     fmiss = theory_shift_test[4]
@@ -728,7 +725,7 @@ def projector_eigenvalue_ratio(theory_shift_test,
     ax2.axhline(y=3, color='k', label=r'|$\delta_a$/$s_a$| = 3')
     ax2.legend()
     ax2.set_ylabel(r"|$\delta_a$/$s_a$|")
-    print(f"Subspace dimension = {len(all_evals)}")
+    print(f"Subspace dimension = {len(evals)}")
     return fig
 
 @figure
@@ -762,7 +759,7 @@ def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
     fnorm = pd.DataFrame(fnorm.values, index=tripleindex)
     fnorm.sort_index(0, inplace=True)
     fnorm = fnorm.reindex(newindex)
-    # Plotting	
+    # Plotting
     fig, ax = plt.subplots(figsize=(20,10))
     ax.plot(sqrtdiags*100, '.-', label="Theory", color = "red")
     ax.plot(-sqrtdiags*100, '.-', color = "red")
