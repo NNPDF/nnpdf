@@ -214,7 +214,7 @@ def _process_lookup(name):
 				"CMSDY2D11":				"DY",
 				"CMSWMU8TEV":				"DY",
 				"CMSWCHARMRAT":				"DY",
-                "CMSWCHARMTOT":             "DY",
+                		"CMSWCHARMTOT":				"DY",
 				"LHCBZ940PB":				"DY",
 				"LHCBZEE2FB":				"DY",
 				"LHCBWZMU7TEV":				"DY",

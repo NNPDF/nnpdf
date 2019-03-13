@@ -54,7 +54,7 @@ def _check_valid_shift_matrix_threshold_method(shift_threshold:(int, float, None
                "method (1 or 2) was provided")
         check(method in opts,
               "Invalid choice of method for removing shift correlation matrix "
-"elements. Please choose 1 or 2.")
+              "elements. Please choose 1 or 2.")
 
 LabeledShifts = namedtuple('LabeledShifts',
     ('experiment_name', 'dataset_name', 'shifts'))
@@ -62,10 +62,10 @@ LabeledShifts = namedtuple('LabeledShifts',
 @check_two_dataspecs
 def dataspecs_dataset_prediction_shift(matched_dataspecs_results, experiment_name,
                                        dataset_name):
-    """Compute the differnce in theory predictions between two dataspecs.
+    """Compute the difference in theory predictions between two dataspecs.
     This can be used in combination with `matched_datasets_from_dataspecs`
     It returns a ``LabeledShifts`` containing ``dataset_name``,
-    ``experiment_name`` and``shifts``.
+    ``experiment_name`` and ``shifts``.
     """
     r1, r2 = matched_dataspecs_results
     res =  r1[1].central_value - r2[1].central_value
@@ -659,8 +659,8 @@ def theory_covmat_eigenvalues(theory_shift_test):
     projectors = np.ndarray.tolist(projectors)
     ratio= projectors/s
     table = pd.DataFrame([s[::-1], projectors[::-1], ratio[::-1]],
-         		index = [r'$s_a$', r'$\delta_a$', r'$\delta_a/s_a$'],
-                 columns = np.arange(1,len(s)+1,1))
+         		 index = [r'$s_a$', r'$\delta_a$', r'$\delta_a/s_a$'],
+                         columns = np.arange(1,len(s)+1,1))
     return table
 
 def efficiency(theory_shift_test):
@@ -744,7 +744,7 @@ def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
     matrix = pd.DataFrame(matrix.values, index=tripleindex, columns=tripleindex)
     matrix.sort_index(0, inplace=True)
     matrix.sort_index(1, inplace=True)
-    oldindex=matrix.index.tolist()
+    oldindex = matrix.index.tolist()
     newindex = sorted(oldindex, key=_get_key)
     matrix = matrix.reindex(newindex)
     matrix = (matrix.T.reindex(newindex)).T
