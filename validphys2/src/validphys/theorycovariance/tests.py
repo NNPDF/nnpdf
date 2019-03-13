@@ -75,9 +75,6 @@ def dataspecs_dataset_prediction_shift(matched_dataspecs_results, experiment_nam
 matched_dataspecs_dataset_prediction_shift = collect(
     'dataspecs_dataset_prediction_shift', ['dataspecs'])
 
-
-#Not sure we want to export this, as it is 231 Mb...
-#@table
 @_check_valid_shift_matrix_threshold_method
 def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
                                   matched_dataspecs_dataset_theory,
@@ -114,11 +111,6 @@ def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
                         mat[i][j] = 0
                 else:
                     pass
-    #build index
-  #  expnames = np.concatenate([
-  #      np.full(len(val.shifts), val.experiment_name, dtype=object)
-  #      for val in matched_dataspecs_dataset_prediction_shift
-  #  ])
     dsnames = np.concatenate([
         np.full(len(val.shifts), val.dataset_name, dtype=object)
         for val in matched_dataspecs_dataset_prediction_shift
@@ -141,11 +133,6 @@ def shift_vector(matched_dataspecs_dataset_prediction_shift,
     all_theory = np.concatenate(
         [val.shifts for val in matched_dataspecs_dataset_theory])
     norm_shifts = all_shifts/all_theory
-     #build index
- #   expnames = np.concatenate([
- #       np.full(len(val.shifts), val.experiment_name, dtype=object)
- #       for val in matched_dataspecs_dataset_prediction_shift
- #   ])
     dsnames = np.concatenate([
         np.full(len(val.shifts), val.dataset_name, dtype=object)
         for val in matched_dataspecs_dataset_prediction_shift
@@ -171,11 +158,6 @@ matched_dataspecs_dataset_theory = collect('dataspecs_dataset_theory', ['dataspe
 def theory_vector(matched_dataspecs_dataset_theory):
     all_theory = np.concatenate(
         [val.shifts for val in matched_dataspecs_dataset_theory])
-     #build index
- #   expnames = np.concatenate([
- #       np.full(len(val.shifts), val.experiment_name, dtype=object)
- #       for val in matched_dataspecs_dataset_theory
- #   ])
     dsnames = np.concatenate([
         np.full(len(val.shifts), val.dataset_name, dtype=object)
         for val in matched_dataspecs_dataset_theory
@@ -201,11 +183,6 @@ matched_dataspecs_dataset_alltheory = collect('dataspecs_dataset_alltheory', ['d
 def alltheory_vector(matched_dataspecs_dataset_alltheory, matched_dataspecs_dataset_theory):
     all_theory = np.concatenate(
         [val.shifts for val in matched_dataspecs_dataset_alltheory], axis=1)
- #   expnames = np.concatenate([
- #       np.full(len(val.shifts),
- #       val.experiment_name, dtype=object)
- #       for val in matched_dataspecs_dataset_theory
- #   ])
     dsnames = np.concatenate([
         np.full(len(val.shifts),
         val.dataset_name, dtype=object)
@@ -301,11 +278,6 @@ def matched_experiments_index(matched_dataspecs_experiment_name,
     enames = matched_dataspecs_experiment_name
     dsnames = matched_dataspecs_dataset_name
     lens = all_matched_data_lengths
-    #build index
- #   expnames = np.concatenate([
- #       np.full(l, ename, dtype=object)
- #       for (l, ename) in zip(lens, enames)
- #   ])
     dsnames = np.concatenate([
         np.full(l, dsname, dtype=object)
         for (l, dsname) in zip(lens, dsnames)
