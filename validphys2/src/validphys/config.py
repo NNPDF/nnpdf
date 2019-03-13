@@ -688,6 +688,15 @@ class CoreConfig(configparser.Config):
         fitting_covmat = theory_covmat_custom
         return fitting_covmat
 
+    @configparser.explicit_node
+    def produce_theory_covmat(self):
+        @functools.wraps(theory_covmat_custom)
+        def res(*args, **kwargs):
+            return theory_covmat_custom(*args, **kwargs)
+        #Set this to get the same filename regardless of the action.
+        res.__name__ = 'theory_covmat'
+        return res
+
     def parse_speclabel(self, label:(str, type(None))):
         """A label for a dataspec. To be used in some plots"""
         return label

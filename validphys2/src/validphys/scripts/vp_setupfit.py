@@ -60,6 +60,7 @@ log = logging.getLogger(__name__)
 
 RUNCARD_COPY_FILENAME = "filter.yml"
 FILTER_OUTPUT_FOLDER = "filter"
+TABLE_OUTPUT_FOLDER = "tables"
 MD5_FILENAME = "md5"
 
 
@@ -101,6 +102,8 @@ class SetupFitEnvironment(Environment):
         # create output folder
         self.filter_path = self.output_path / FILTER_OUTPUT_FOLDER
         self.filter_path.mkdir(exist_ok=True)
+        self.table_folder = self.output_path / TABLE_OUTPUT_FOLDER
+        self.table_folder.mkdir(exist_ok=True)
 
     def save_md5(self):
         """Generate md5 key from file"""
@@ -138,8 +141,7 @@ class SetupFitConfig(Config):
             raise ConfigError(f"Expecting input runcard to be a mapping, "
                               f"not '{type(file_content)}'.")
         if file_content.get('theorycovmatconfig') is not None:
-            SETUPFIT_FIXED_CONFIG['actions_'].append('datacuts::theory::theorycovmatconfig::sampling_t0 sampling_covmat')
-            SETUPFIT_FIXED_CONFIG['actions_'].append('datacuts::theory::theorycovmatconfig::fitting_t0 fitting_covmat')
+            SETUPFIT_FIXED_CONFIG['actions_'].append('datacuts::theory::theorycovmatconfig theory_covmat')
         for k,v in SETUPFIT_DEFAULTS.items():
             file_content.setdefault(k, v)
         file_content.update(SETUPFIT_FIXED_CONFIG)

@@ -311,11 +311,10 @@ int main(int argc, char **argv)
 
         if (settings.IsThUncertainties())
         {
-          string RepCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_sampling_t0_theory_covmat_custom.csv";
-          string FitCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_fitting_t0_theory_covmat_custom.csv";
+          string ThCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_theory_covmat.csv";
 
-          exp->LoadRepCovMat(RepCovMatPath);
-          exp->LoadFitCovMat(FitCovMatPath);
+          exp->LoadRepCovMat(ThCovMatPath);
+          exp->LoadFitCovMat(ThCovMatPath);
         }
 
         Convolute(fitset.get(),exp.get(),theory.data());
@@ -406,11 +405,10 @@ void LoadAllDataAndSplit(NNPDFSettings const& settings,
       // read covmat from file if specified in the runcard
       if (settings.IsThUncertainties())
         {
-          string RepCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_sampling_t0_theory_covmat_custom.csv";
-          string FitCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_fitting_t0_theory_covmat_custom.csv";
+          string ThCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_theory_covmat.csv";
 
-          exp->LoadRepCovMat(RepCovMatPath);
-          exp->LoadFitCovMat(FitCovMatPath);
+          exp->LoadRepCovMat(ThCovMatPath);
+          exp->LoadFitCovMat(ThCovMatPath);
         }
   
       // Apply MC shifts
@@ -579,13 +577,12 @@ void TrainValidSplit(NNPDFSettings const& settings,
   // read covmat from file if specified in the runcard
   if (settings.IsThUncertainties())
   {
-    string RepCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_sampling_t0_theory_covmat_custom.csv";
-    string FitCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_fitting_t0_theory_covmat_custom.csv";
+    string ThCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_theory_covmat.csv";
 
-    tr->LoadRepCovMat(RepCovMatPath, trCovMatMask);
-    tr->LoadFitCovMat(FitCovMatPath, trCovMatMask);
+    tr->LoadRepCovMat(ThCovMatPath, trCovMatMask);
+    tr->LoadFitCovMat(ThCovMatPath, trCovMatMask);
 
-    val->LoadRepCovMat(RepCovMatPath, valCovMatMask);
-    val->LoadFitCovMat(FitCovMatPath, valCovMatMask);
+    val->LoadRepCovMat(ThCovMatPath, valCovMatMask);
+    val->LoadFitCovMat(ThCovMatPath, valCovMatMask);
   }
 }
