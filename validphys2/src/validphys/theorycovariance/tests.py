@@ -109,8 +109,6 @@ def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
                             mat[i][j] = -1
                     else:
                         mat[i][j] = 0
-                else:
-                    pass
     dsnames = np.concatenate([
         np.full(len(val.shifts), val.dataset_name, dtype=object)
         for val in matched_dataspecs_dataset_prediction_shift
