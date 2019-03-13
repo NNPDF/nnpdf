@@ -371,7 +371,7 @@ def theory_corrmat_value_fractions(thx_corrmat,
     mat = thx_corrmat[0].values
     # Initialise array of zeros and set precision to same as FK tables
     newmat = np.zeros((len(mat),len(mat)), dtype=np.float32)
-    #coarse graining for comparison
+    # coarse graining for comparison
     newmat[mat>=theory_threshold]=1
     newmat[mat<=-theory_threshold]=-1
     matsize = np.size(mat)
@@ -388,7 +388,7 @@ def theory_corrmat_value_fractions(thx_corrmat,
 @table
 def shift_theory_element_comparison(shx_corrmat, thx_corrmat,
                                     theory_threshold:(int, float) = 0):
-    #coarse graining for comparison
+    # coarse graining for comparison
     thmat = thx_corrmat[0].values
     # Initialise array of zeros and set precision to same as FK tables
     newthmat = np.zeros((len(thmat),len(thmat)), dtype=np.float32)

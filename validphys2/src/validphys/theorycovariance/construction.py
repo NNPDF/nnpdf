@@ -120,7 +120,7 @@ each_dataset_results_bytheory = collect('results_bytheoryids',
 def theory_covmat_datasets(each_dataset_results_bytheory,
                            fivetheories:(str, type(None)) = None):
     """Produces an array of theory covariance matrices. Each matrix corresponds
-    to a different dataset, which must be specified in the runcard. """
+    to a different dataset, which must be specified in the runcard."""
     dataset_covmats=[]
     for dataset in each_dataset_results_bytheory:
         theory_centrals = [x[1].central_value for x in dataset]
@@ -134,7 +134,7 @@ def total_covmat_datasets(each_dataset_results_bytheory,
     """Produces an array of total covariance matrices; the sum of experimental
     and scale-varied theory covariance matrices. Each matrix corresponds
     to a different dataset, which must be specified in the runcard.
-    These are needed for calculation of chi2 per dataset. """
+    These are needed for calculation of chi2 per dataset."""
     dataset_covmats=[]
     for dataset in each_dataset_results_bytheory:
         theory_centrals = [x[1].central_value for x in dataset]
@@ -601,7 +601,7 @@ def data_theory_diff(experiments_results):
 
 def chi2_block_impact(theory_block_diag_covmat, experiments_covmat,
                       experiments_results):
-    """ Returns total chi2 including theory cov mat """
+    """Returns total chi2 including theory cov mat"""
     chi2 = chi2_impact(theory_block_diag_covmat, experiments_covmat,
                        experiments_results)
     return chi2
@@ -609,7 +609,7 @@ def chi2_block_impact(theory_block_diag_covmat, experiments_covmat,
 
 def chi2_impact_custom(theory_covmat_custom, experiments_covmat,
                        experiments_results):
-    """ Returns total chi2 including theory cov mat """
+    """Returns total chi2 including theory cov mat"""
     chi2 = chi2_impact(theory_covmat_custom, experiments_covmat,
                        experiments_results)
     return chi2
@@ -623,7 +623,7 @@ def theory_diagcovmat(theory_covmat):
     return s_diag
 
 def chi2_diag_only(theory_diagcovmat, experiments_covmat, data_theory_diff):
-    """ Returns total chi2 including only diags of theory cov mat """
+    """Returns total chi2 including only diags of theory cov mat"""
     cov = theory_diagcovmat + experiments_covmat.values
     elements = np.dot(data_theory_diff.T,np.dot(la.inv(cov),data_theory_diff))
     chi2 = (1/len(data_theory_diff))*np.sum(elements)
@@ -632,7 +632,7 @@ def chi2_diag_only(theory_diagcovmat, experiments_covmat, data_theory_diff):
 each_dataset_results = collect(results, ('experiments', 'experiment'))
 
 def abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_datasets):
-    """ Returns an array of tuples (member_chi², central_chi², numpoints)
+    """Returns an array of tuples (member_chi², central_chi², numpoints)
     corresponding to each data set, where theory errors are included"""
     chi2data_array = []
     for datresults, covmat in zip(each_dataset_results, total_covmat_datasets):
@@ -644,7 +644,7 @@ def abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_datasets):
     return chi2data_array
 
 def abs_chi2_data_theory_experiment(experiments_results, total_covmat_experiments):
-    """ Like abs_chi2_data_theory_dataset but for experiments not datasets"""
+    """Like abs_chi2_data_theory_dataset but for experiments not datasets"""
     chi2data_array = []
     for expresults, covmat in zip(experiments_results, total_covmat_experiments):
         data_result, th_result = expresults
@@ -656,12 +656,12 @@ def abs_chi2_data_theory_experiment(experiments_results, total_covmat_experiment
 
 def abs_chi2_data_diagtheory_experiment(experiments_results,
                                         total_covmat_diagtheory_experiments):
-    """ For a diagonal theory covmat """
+    """For a diagonal theory covmat"""
     return abs_chi2_data_theory_experiment(experiments_results,
                                            total_covmat_diagtheory_experiments)
 
 def abs_chi2_data_diagtheory_dataset(each_dataset_results,
                                      total_covmat_diagtheory_datasets):
-    """ For a diagonal theory covmat """
+    """For a diagonal theory covmat"""
     return abs_chi2_data_theory_dataset(each_dataset_results,
     total_covmat_diagtheory_datasets)
