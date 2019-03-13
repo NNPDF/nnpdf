@@ -640,12 +640,7 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
     space which is missed by the covariance matrix space: fmiss, as well as the
     projections of the shift vector onto each of the eigenvectors: projectors."""
     w, v = evals_nonzero_basis
-    # Sorting real part of eigenvalues
-    w = np.real(w)
     v = np.real(v)
-    sort_indices = np.argsort(w)
-    w = w[sort_indices]
-    v = v[:, sort_indices]
     # NNLO-NLO shift vector
     f = -shx_vector[0].values.T[0]
     # Projecting the shift vector onto each of the eigenvectors
@@ -653,7 +648,7 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
     # Initialise array of zeros and set precision to same as FK tables
     projected_evectors = np.zeros((len(projectors), (len(f))), dtype=np.float32)
     for i, projector in enumerate(projectors):
-        projected_evectors[i] = projector*v[i]
+        projected_evectors[i] = projector*v[:,i]
     fmiss = f - np.sum(projected_evectors, axis=0)
     return w, v, projectors, f, fmiss
 
