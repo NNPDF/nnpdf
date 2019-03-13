@@ -141,7 +141,8 @@ class SetupFitConfig(Config):
             raise ConfigError(f"Expecting input runcard to be a mapping, "
                               f"not '{type(file_content)}'.")
         if file_content.get('theorycovmatconfig') is not None:
-            SETUPFIT_FIXED_CONFIG['actions_'].append('datacuts::theory::theorycovmatconfig theory_covmat')
+            SETUPFIT_FIXED_CONFIG['actions_'].append(
+                'datacuts::theory::theorycovmatconfig nnfit_theory_covmat')
         for k,v in SETUPFIT_DEFAULTS.items():
             file_content.setdefault(k, v)
         file_content.update(SETUPFIT_FIXED_CONFIG)

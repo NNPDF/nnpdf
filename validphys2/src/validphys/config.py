@@ -679,17 +679,7 @@ class CoreConfig(configparser.Config):
         return {'lumi_channels': self.parse_lumi_channels(list(LUMI_CHANNELS))}
 
     @configparser.explicit_node
-    def produce_sampling_covmat(self):
-        sampling_covmat = theory_covmat_custom
-        return sampling_covmat
-
-    @configparser.explicit_node
-    def produce_fitting_covmat(self):
-        fitting_covmat = theory_covmat_custom
-        return fitting_covmat
-
-    @configparser.explicit_node
-    def produce_theory_covmat(self):
+    def produce_nnfit_theory_covmat(self):
         @functools.wraps(theory_covmat_custom)
         def res(*args, **kwargs):
             return theory_covmat_custom(*args, **kwargs)
