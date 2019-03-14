@@ -11,32 +11,24 @@ from collections import namedtuple
 import numpy as np
 import scipy.linalg as la
 import matplotlib.pyplot as plt
-from matplotlib import cm
 import pandas as pd
 
-from reportengine.checks import make_argcheck, check
+from reportengine.checks import make_argcheck
 from reportengine.figure import figure
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.results import results
 from validphys.checks import check_two_dataspecs
 
 from validphys.theorycovariance.construction import _check_correct_theory_combination
 from validphys.theorycovariance.construction import combine_by_type, process_starting_points
 from validphys.theorycovariance.construction import theory_corrmat
-from validphys.theorycovariance.construction import commondata_experiments, results_bytheoryids
-from validphys.theorycovariance.construction import experiments_results_theory, data_theory_diff
-from validphys.theorycovariance.construction import theoryids_experiments_central_values
-from validphys.theorycovariance.construction import each_dataset_results_bytheory
-from validphys.theorycovariance.construction import each_dataset_results, dataset_names
 from validphys.theorycovariance.construction import covmap, covs_pt_prescrip, theory_covmat_custom
-from validphys.theorycovariance.construction import chi2_impact_custom, chi2_diag_only
-from validphys.theorycovariance.construction import total_covmat_experiments, total_covmat_datasets, _process_lookup
-from validphys.theorycovariance.construction import theory_diagcovmat, theory_covmat, _check_correct_theory_combination_theoryconfig, collected_theoryids
+from validphys.theorycovariance.construction import _process_lookup
+from validphys.theorycovariance.construction import _check_correct_theory_combination_theoryconfig
 
 from validphys.theorycovariance.output import matrix_plot_labels, _get_key
-from validphys.theorycovariance.output import plot_covmat_heatmap, plot_corrmat_heatmap
+from validphys.theorycovariance.output import plot_corrmat_heatmap
 
 log = logging.getLogger(__name__)
 
@@ -83,7 +75,7 @@ def shift_vector(matched_dataspecs_dataset_prediction_shift,
     return pd.DataFrame(norm_shifts, index=index)
 
 def dataspecs_dataset_theory(matched_dataspecs_results, experiment_name, dataset_name):
-    central, *others = matched_dataspecs_results
+    central = matched_dataspecs_results[0]
     res = central[1].central_value
     return LabeledShifts(dataset_name=dataset_name,
                          experiment_name=experiment_name, shifts=res)
@@ -108,7 +100,7 @@ def theory_vector(matched_dataspecs_dataset_theory):
     return pd.DataFrame(all_theory, index=index)
 
 def dataspecs_dataset_alltheory(matched_dataspecs_results, experiment_name, dataset_name):
-    central, *others = matched_dataspecs_results
+    others = matched_dataspecs_results[1:]
     res = [other[1].central_value for other in others]
     return LabeledShifts(dataset_name=dataset_name,
                          experiment_name=experiment_name, shifts=res)
@@ -178,8 +170,7 @@ def all_matched_data_lengths(all_matched_datasets):
         lens.append(rlist[0].load().GetNData())
     return lens
 
-def matched_experiments_index(matched_dataspecs_experiment_name,
-                              matched_dataspecs_dataset_name,
+def matched_experiments_index(matched_dataspecs_dataset_name,
                               all_matched_data_lengths):
     dsnames = matched_dataspecs_dataset_name
     lens = all_matched_data_lengths
@@ -245,8 +236,7 @@ def plot_thcorrmat_heatmap_custom_dataspecs(theory_corrmat_custom_dataspecs, the
 def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                         collected_theoryids,
                         fivetheories:(str, type(None)) = None,
-                        seventheories:(str, type(None)) = None,
-                        eigenvalue_cutoff:(bool, type(None)) = None):
+                        seventheories:(str, type(None)) = None):
     """Projects the theory covariance matrix from the data space into
     the basis of non-zero eigenvalues, dependent on point-prescription.
     Then returns the eigenvalues (w) and eigenvectors (v)
@@ -454,8 +444,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
     v = P.dot(v_projected)
     return w, v
 
-def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
-		     eigenvalue_cutoff:(bool, type(None)) = None):
+def theory_shift_test(shx_vector, evals_nonzero_basis):
     """Compares the NNLO-NLO shift, f, with the eigenvectors and eigenvalues of the
     theory covariance matrix, and returns the component of the NNLO-NLO shift
     space which is missed by the covariance matrix space: fmiss, as well as the
@@ -477,7 +466,8 @@ def theory_shift_test(thx_covmat, shx_vector, thx_vector, evals_nonzero_basis,
 def theory_covmat_eigenvalues(theory_shift_test):
     """Returns a table of s = sqrt(eigenvalue), the projector and
     the ratio of the two, ordered by largest eigenvalue."""
-    w, v, projectors = theory_shift_test[:3]
+    w = theory_shift_test[0]
+    projectors = theory_shift_test[2]
     s = np.sqrt(np.abs(w))
     projectors = np.ndarray.tolist(projectors)
     ratio= projectors/s
@@ -508,8 +498,7 @@ def validation_theory_chi2(theory_shift_test):
     return th_chi2
 
 @figure
-def projector_eigenvalue_ratio(theory_shift_test,
-                               eigenvalue_cutoff:(bool, type(None)) = None):
+def projector_eigenvalue_ratio(theory_shift_test):
     """Produces a plot of the ratio between the projectors and the square roots
     of the corresponding eigenvalues."""
     evals = theory_shift_test[0][::-1]

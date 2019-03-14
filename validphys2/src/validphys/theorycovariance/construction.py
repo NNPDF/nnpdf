@@ -8,7 +8,6 @@ from __future__ import generator_stop
 import logging
 
 from collections import defaultdict, namedtuple
-from math import inf
 import numpy as np
 import scipy.linalg as la
 import pandas as pd
