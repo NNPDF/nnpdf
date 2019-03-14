@@ -8,6 +8,7 @@ from __future__ import generator_stop
 import logging
 
 from collections import defaultdict, namedtuple
+from math import inf
 import numpy as np
 import scipy.linalg as la
 import pandas as pd
@@ -46,10 +47,10 @@ def _check_correct_theory_combination_internal(theoryids,
         check(fivetheories in opts,
               "Invalid choice of prescription for 5 points", fivetheories,
               opts)
-        if fivetheories == "nobar" or "linear":
+        if fivetheories in ("nobar", "linear"):
             correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0]
             correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5]
-        else:
+        elif fivetheories == "bar":
             correct_xifs = [1.0, 2.0, 0.5, 2.0, 0.5]
             correct_xirs = [1.0, 2.0, 0.5, 0.5, 2.0]
     elif l == 7:
@@ -85,6 +86,7 @@ def dataset_index_byprocess(experiments_index):
     newindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
 				names = ("process", "dataset", "id"))
     return newindex
+
 def make_scale_var_covmat(predictions):
     """Takes N theory predictions at different scales and applies N-pt scale
     variations to produce a covariance matrix."""
@@ -665,4 +667,5 @@ def abs_chi2_data_diagtheory_dataset(each_dataset_results,
                                      total_covmat_diagtheory_datasets):
     """For a diagonal theory covmat"""
     return abs_chi2_data_theory_dataset(each_dataset_results,
-    total_covmat_diagtheory_datasets)
+                                        total_covmat_diagtheory_datasets)
+

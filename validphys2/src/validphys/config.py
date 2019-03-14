@@ -222,7 +222,13 @@ class CoreConfig(configparser.Config):
         underlyinglaw = self.parse_pdf(datacuts['fakepdf'])
         return {'pdf': underlyinglaw}
 
-
+    def produce_fitpdfandbasis(self, fit):
+        """ Set the PDF and basis from the fit config. """
+        with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
+            _, pdf = self.parse_from_('fit', 'pdf', write=False)
+            _, fitting = self.parse_from_('fit', 'fitting', write=False)
+        basis = fitting['fitbasis']
+        return {'pdf': pdf, 'basis':basis}
 
     @element_of('dataset_inputs')
     def parse_dataset_input(self, dataset:Mapping):
@@ -240,6 +246,11 @@ class CoreConfig(configparser.Config):
 
         sysnum = dataset.get('sys')
         cfac = dataset.get('cfac', tuple())
+        frac = dataset.get('frac', 1)
+        if  not isinstance(frac, numbers.Real):
+            raise ConfigError(f"'frac' must be a number, not '{frac}'")
+        if frac < 0 or frac > 1:
+            raise ConfigError(f"'frac' must be between 0 and 1 not '{frac}'")
         weight = dataset.get('weight', 1)
         if  not isinstance(weight, numbers.Real):
             raise ConfigError(f"'weight' must be a number, not '{weight}'")
@@ -249,7 +260,7 @@ class CoreConfig(configparser.Config):
         for k in kdiff:
             #Abuse ConfigError to get the suggestions.
             log.warninig(ConfigError(f"Key '{k}' in dataset_input not known.", k, known_keys))
-        return DataSetInput(name=name, sys=sysnum, cfac=cfac,
+        return DataSetInput(name=name, sys=sysnum, cfac=cfac, frac=frac,
                 weight=weight)
 
     def parse_use_fitcommondata(self, do_use: bool):
@@ -280,13 +291,12 @@ class CoreConfig(configparser.Config):
 
     def produce_cuts(self,
                      *,
-                     dataset_input,
+                     commondata,
                      use_cuts,
                      fit=None,
                      q2min: (numbers.Number, type(None)) = None,
                      w2min: (numbers.Number, type(None)) = None,
-                     theoryid=None,
-                     use_fitcommondata=False):
+                     theoryid=None):
         """Obtain cuts for a given dataset input, based on the
         appropriate policy."""
         #TODO: Put this bit of logic into loader.check_cuts
@@ -298,7 +308,7 @@ class CoreConfig(configparser.Config):
                     "Setting 'use_cuts' to 'fromfit' requires "
                     "specifying a fit on which filter "
                     "has been executed, e.g.\nfit : NNPDF30_nlo_as_0118")
-            name = dataset_input.name
+            name = commondata.name
             try:
                 return self.loader.check_fit_cuts(name, fit)
             except LoadFailedError as e:
@@ -311,13 +321,23 @@ class CoreConfig(configparser.Config):
             if not theoryid:
                 raise ConfigError(
                     "thoeryid must be specified for internal cuts")
-            full_ds = self.produce_dataset(
-                dataset_input=dataset_input,
-                theoryid=theoryid,
-                cuts=None,
-                use_fitcommondata=use_fitcommondata,
-                fit=fit)
-            return self.loader.check_internal_cuts(full_ds, q2min, w2min)
+            return self.loader.check_internal_cuts(commondata, theoryid, q2min, w2min)
+        elif use_cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE:
+            cut_list = []
+            _, nss = self.parse_from_(None, 'cuts_intersection_spec', write=False)
+            self._check_dataspecs_type(nss)
+            if not nss:
+                raise ConfigError("'cuts_intersection_spec' must contain at least one namespace.")
+
+            ns_cut_inputs = {'commondata': commondata,
+                             'use_cuts': CutsPolicy.INTERNAL}
+            for ns in nss:
+                with self.set_context(ns=self._curr_ns.new_child({**ns, **ns_cut_inputs})):
+                    _, nscuts = self.parse_from_(None, 'cuts', write=False)
+                    cut_list.append(nscuts)
+            ndata = commondata.ndata
+            return MatchedCuts(cut_list, ndata=ndata)
+
         raise TypeError("Wrong use_cuts")
 
 
@@ -336,6 +356,7 @@ class CoreConfig(configparser.Config):
         name = dataset_input.name
         sysnum = dataset_input.sys
         cfac = dataset_input.cfac
+        frac = dataset_input.frac
         weight = dataset_input.weight
 
         try:
@@ -345,6 +366,7 @@ class CoreConfig(configparser.Config):
                 theoryid=theoryid,
                 cfac=cfac,
                 cuts=cuts,
+                frac=frac,
                 use_fitcommondata=use_fitcommondata,
                 fit=fit,
                 weight=weight)
@@ -386,15 +408,19 @@ class CoreConfig(configparser.Config):
                 "'experiment' and 'datasets', but %s is missing" % e)
 
         dsinputs = [self.parse_dataset_input(ds) for ds in datasets]
+        cds = [self.produce_commondata(
+                dataset_input=dsinp,
+                use_fitcommondata=use_fitcommondata,
+                fit=fit) for dsinp in dsinputs]
         cutinps = [
             self.produce_cuts(
-                dataset_input=dsinp,
+                commondata=cd,
                 use_cuts=use_cuts,
                 q2min=q2min,
                 w2min=w2min,
                 fit=fit,
                 theoryid=theoryid,
-                use_fitcommondata=use_fitcommondata) for dsinp in dsinputs
+                ) for cd in cds
         ]
 
         #autogenerated func, from elemet_of

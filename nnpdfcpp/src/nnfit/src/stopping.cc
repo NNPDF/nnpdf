@@ -28,9 +28,9 @@ fSettings(settings)
 
 }
 bool StoppingCriterion::Stop(FitPDFSet* pdf,
-                             vector<Experiment*>& train,
-                             vector<Experiment*>& valid,
-                             vector<PositivitySet>const& positivity)
+                             vector<Experiment*>& ,
+                             vector<Experiment*>& ,
+                             vector<PositivitySet>const& )
 {
   if (pdf->GetMembers() != 1)
   {

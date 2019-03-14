@@ -51,6 +51,12 @@ def check_can_save_grid(ns, **kwags):
                          "parameter is set to True:\n%s" %
                         (write_path, e))
 
+@make_argcheck
+def check_xlimits(xmax, xmin):
+    if not (0 <= xmin < xmax <= 1):
+        raise CheckError(f'xmin ({xmin}) and xmax ({xmax}) must satisfy \n'
+                         '0 <= xmin < xmax <= 1')
+
 @make_check
 def check_has_fitted_replicas(ns, **kwargs):
     name, path = ns['fit']

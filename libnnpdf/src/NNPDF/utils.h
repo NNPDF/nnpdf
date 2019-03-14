@@ -174,8 +174,8 @@ namespace NNPDF
         if (_size[0] != in.size())
             throw RangeError("matrix-vector product", "Mismatch of matrix and input vector dimension");
         std::vector<T> out(_size[0],0);
-        for (int i=0; i<_size[0]; i++)
-            for (int j=0; j<_size[1]; j++)
+        for (size_t i=0; i<_size[0]; i++)
+            for (size_t j=0; j<_size[1]; j++)
                 out[i] += _data[i*_size[1]+j]*in[j];
         return out;
     }

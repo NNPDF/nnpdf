@@ -603,7 +603,7 @@ development environment for `nnpdf`.
 	buildmaster$ make
 	```
 
-[COMPILERS]: https://conda.io/docs/user-guide/tasks/build-packages/compiler-tools.html
+[COMPILERS]: https://conda.io/projects/conda-build/en/latest/source/resources/compiler-tools.html#compiler-packages
 
 #### Developing Python projects
 
@@ -1572,7 +1572,7 @@ actually fit. Some data points are excluded for reasons such as the
 instability of the perturbative expansion in their corresponding
 kinematic regions.
 
-There are three possibilities for handling the experimental cuts
+There are four possibilities for handling the experimental cuts
 within validphys, which are controlled with the `use_cuts`
 configuration setting:
 
@@ -1594,7 +1594,15 @@ configuration setting:
   namespace from the fit. In this case, the cuts will normally
   coincide with the ones loaded with  the `fromfit` setting.
 
-The following example demonstrates the three options:
+`use_cuts: 'fromintersection'`
+  ~ Compute the internal cuts (as per `use_cuts: 'internal'`) after
+  within each namespace in a [namespace list](#multiple-inputs-and-namespaces) called
+  `cuts_intersection_spec` and take the intersection of the results as
+  the cuts for the given dataset. This is useful for example for
+  requiring the common subset of points that pass the cuts at NLO and
+  NNLO.
+
+The following example demonstrates these options:
 
 ```yaml
 meta:
@@ -1614,6 +1622,12 @@ theoryid:
 datacuts:
     from_: fit
 
+
+# Used for intersection cuts
+cuts_intersection_spec:
+    - theoryid: 52
+    - theoryid: 53
+
 dataset_input: {dataset: ATLAS1JET11}
 
 dataspecs:
@@ -1625,6 +1639,9 @@ dataspecs:
 
   - speclabel: "Internal cuts"
     use_cuts: "internal"
+
+  - speclabel: "Intersected cuts"
+    use_cuts: "fromintersection"
 
 template_text: |
     {@with fitpdf::datacuts@}
@@ -1643,14 +1660,13 @@ template_text: |
     {@endwith@}
 
 
-
 actions_:
     - report(main=True)
 ```
 
-Here we put together the three options in a [Data theory comparison]
-plot and then plot the χ² distribution for each one individually.
-With these settings the later two
+Here we put together the results with the different filtering policies
+in a [Data theory comparison] plot and then plot the χ² distribution
+for each one individually.  With these settings the later three
 [dataspecs](#general-data-specification-the-dataspec-api) give the
 same result.
 
@@ -1882,6 +1898,49 @@ runcard stored under `comparefittemplates/comparecard.yaml` in the
 source code. That runcard (and its associated templates) can be
 modified to improve the default comparison.
 
+### Fit renaming
+
+Fits can be renamed from the command line application `fitrename` that comes installed
+with validphys. Basic usage requires the user to enter the path to the fit along with the desired
+new name for the fit.
+
+For example, suppose one wishes to locally rename the fit `181109-si-nlo-central_DISonly`
+located in the current directory's parent. Then one can rename this fit to `new_name` using
+
+```
+$ fitrename ../181109-si-nlo-central_DISonly new_name
+```
+
+If the user wishes to retain a copy of the original fit, they can do so with the optional
+`-c` flag. For example:
+
+```
+$ fitrename -c ../181109-si-nlo-central_DISonly new_name
+```
+
+Will result in a fit named `181109-si-nlo-central_DISonly` and a copy named `new_name` in the 
+original directory.
+
+However, by default, fits that are download with `vp-get fit` will be located in the NNPDF results
+directory. This is usually located in `~/miniconda3/envs/<nnpdf env>/share/NNPDF/results`. Fits 
+located in this directory can be renamed with the `-r` flag. 
+
+As an example, suppose the fit `181109-si-nlo-central_DISonly` is located in the NNPDF results directory.
+It can be renamed, irrespective of the current working directory, using 
+
+```
+$ fitrename -r 181109-si-nlo-central_DISonly new_name
+```
+
+A copy of the original fit can be created in the results directory using the `-rc` flag. It is important to
+note if the `-r` flag is used, then the input fit should not be a path, but simply the fit name; otherwise an
+error is raised.
+
+In addition, errors will be raised if the input directory is not a valid fit (for example, if it is missing the
+`filter.yml` runcard) or if the requested new fit name already exists.
+
+If the user wishes to add their own, non-standard files, then it is advisable to avoid using the fit name in these
+files as the `fitrename` command will also rename these files.
 
 Parallel mode
 -------------
@@ -2929,3 +2988,19 @@ done by looking at the image files inside the `figures` folder of each
 uploaded report (see the source of the script for more details). It is
 expected that the server redirects the requests for
 `vp.nnpdf.science/thumbnails` to this folder.
+
+Editing this guide
+------------------
+
+The source of this document can be found in the main NNPDF repository as the
+file `guide.md`, under
+
+```
+doc/validphys2
+```
+
+There is a Makefile which will build the HTML document (`pandoc` and `graphviz`
+are required), and `make rsync` will upload it to the server, if the user has
+sufficient permissions. Of course, changes to the guide should also be commited
+to the repository, and if necessary, discussed in a pull request.
+

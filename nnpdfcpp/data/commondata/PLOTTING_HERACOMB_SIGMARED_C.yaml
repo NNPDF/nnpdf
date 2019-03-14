@@ -1,0 +1,14 @@
+dataset_label: "HERA comb. $\\sigma_{c\\bar c}^{\\rm red}$"
+x: k1
+y_label: '$10^{qbin} \sigma_{c\bar c}^{\rm red}(x,Q^2)$' 
+result_transform: qbinexp
+x_scale: log
+y_scale: log
+line_by:
+  - k2
+
+normalize:
+    y_scale: linear
+    line_by: []
+    figure_by:
+        - k2

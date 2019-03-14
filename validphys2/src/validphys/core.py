@@ -292,12 +292,13 @@ class CommonDataSpec(TupleComp):
 class DataSetInput(TupleComp):
     """Represents whatever the user enters in the YAML to specidy a
     dataset."""
-    def __init__(self, *, name, sys, cfac, weight):
+    def __init__(self, *, name, sys, cfac, frac, weight):
         self.name=name
         self.sys=sys
         self.cfac = cfac
+        self.frac = frac
         self.weight = weight
-        super().__init__(name, sys, cfac, weight)
+        super().__init__(name, sys, cfac, frac, weight)
 
     def __str__(self):
         return self.name
@@ -314,11 +315,11 @@ class ExperimentInput(TupleComp):
     def __str__(self):
         return self.name
 
-#TODO: Not sure I like these
 class CutsPolicy(enum.Enum):
     INTERNAL = "internal"
     NOCUTS = "nocuts"
     FROMFIT = "fromfit"
+    FROM_CUT_INTERSECTION_NAMESPACE = "fromintersection"
 
 class Cuts(TupleComp):
     def __init__(self, name, path):
@@ -332,24 +333,25 @@ class Cuts(TupleComp):
         return np.atleast_1d(np.loadtxt(self.path, dtype=int))
 
 class InternalCutsWrapper(TupleComp):
-    def __init__(self, full_ds, q2min, w2min):
-        self.full_ds = full_ds
+    def __init__(self, commondata, theoryid, q2min, w2min):
+        self.commondata = commondata
+        self.theoryid = theoryid
         self.q2min = q2min
         self.w2min = w2min
-        super().__init__(full_ds, q2min, w2min)
+        super().__init__(commondata, q2min, w2min)
 
     def load(self):
         return np.atleast_1d(
             np.asarray(
-                filters.get_cuts_for_dataset(self.full_ds, self.q2min,
-                                             self.w2min),
+                filters.get_cuts_for_dataset(self.commondata, self.theoryid,
+                                             self.q2min, self.w2min),
                 dtype=int))
 
 class MatchedCuts(TupleComp):
     def __init__(self, othercuts, ndata):
-        self.othercuts = othercuts
+        self.othercuts = tuple(othercuts)
         self.ndata = ndata
-        super().__init__(othercuts, ndata)
+        super().__init__(self.othercuts, self.ndata)
 
     def load(self):
         loaded =  [c.load() for c in self.othercuts if c]
@@ -368,7 +370,7 @@ def cut_mask(cuts):
 class DataSetSpec(TupleComp):
 
     def __init__(self, *, name, commondata, fkspecs, thspec, cuts,
-                 op=None, weight=1):
+                 frac=1, op=None, weight=1):
         self.name = name
         self.commondata = commondata
 
@@ -378,6 +380,7 @@ class DataSetSpec(TupleComp):
         self.thspec = thspec
 
         self.cuts = cuts
+        self.frac = frac
 
         #Do this way (instead of setting op='NULL' in the signature)
         #so we don't have to know the default everywhere
@@ -387,7 +390,7 @@ class DataSetSpec(TupleComp):
         self.weight = weight
 
         super().__init__(name, commondata, fkspecs, thspec, cuts,
-                         op, weight)
+                         frac, op, weight)
 
     @functools.lru_cache()
     def load(self):

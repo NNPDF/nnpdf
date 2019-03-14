@@ -318,12 +318,20 @@ def barplot(values, collabels, datalabels, orientation='auto'):
     for row, delta, datalabel in zip(values, deltas, datalabels):
         thisx = x+delta
         barfunc(thisx, row, width, label=datalabel)
-        for xp,v in zip(thisx,row):
-
-            ax.annotate(f'{format_number(v,3)}', xy=xytext(xp,v),
-                         textcoords='offset points',
-                        size='small', wrap=True, **get_pos(v)
-                       )
+        for xp, v in zip(thisx, row):
+            #NaN coords cause error (https://github.com/NNPDF/nnpdf/issues/363)
+            if np.all(np.isfinite([xp, v])):
+                ax.annotate(f'{format_number(v,3)}', xy=xytext(xp,v),
+                            textcoords='offset points',
+                            size='small', wrap=True, **get_pos(v)
+                            )
+            else:
+            #place label at zero for nan coordinate -> ensure `get_pos` is fed altered coords
+                new_pos = [val if np.isfinite(val) else 0 for val in [xp, v]]
+                ax.annotate(f'{format_number(v,3)}', xy=xytext(*new_pos),
+                            textcoords='offset points',
+                            size='small', wrap=True, **get_pos(new_pos[0])
+                            )
 
 
     infolim(x[0]+deltas[0] - width/2, x[-1]+deltas[-1]+width/2)

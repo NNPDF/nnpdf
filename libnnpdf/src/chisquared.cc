@@ -107,8 +107,8 @@ namespace NNPDF
     if (decomp != 0 ) throw RuntimeException("CholeskyDecomposition", "Error encountered in gsl decomposition");
     
     // Zero upper-diagonal part of matrix left by gsl 
-    for (int i = 0; i < n; i++)
-      for (int j = i + 1; j < n; j++)
+    for (int i = 0; i < (int) n; i++)
+      for (int j = i + 1; j < (int) n; j++)
         sqrtmat(i, j) = 0;
 
     return sqrtmat;
