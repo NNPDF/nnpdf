@@ -42,20 +42,6 @@ log = logging.getLogger(__name__)
 
 matched_dataspecs_results = collect('results', ['dataspecs'])
 
-@make_argcheck
-def _check_valid_shift_matrix_threshold_method(shift_threshold:(int, float, None) = None,
-                                               method:(int, None) = None):
-    """Checks that a valid method 1 or 2 is chosen where a threshold for
-    removing elements of the shift correlation matrix has been specified"""
-    opts = {1,2}
-    if shift_threshold is not None:
-        check(method is not None, "A threshold for removing elements of the "
-               "shift correlation matrix has been specified but no choice of "
-               "method (1 or 2) was provided")
-        check(method in opts,
-              "Invalid choice of method for removing shift correlation matrix "
-              "elements. Please choose 1 or 2.")
-
 LabeledShifts = namedtuple('LabeledShifts',
     ('experiment_name', 'dataset_name', 'shifts'))
 
@@ -74,55 +60,6 @@ def dataspecs_dataset_prediction_shift(matched_dataspecs_results, experiment_nam
 
 matched_dataspecs_dataset_prediction_shift = collect(
     'dataspecs_dataset_prediction_shift', ['dataspecs'])
-
-@_check_valid_shift_matrix_threshold_method
-def matched_datasets_shift_matrix(matched_dataspecs_dataset_prediction_shift,
-                                  matched_dataspecs_dataset_theory,
-                                  shift_threshold:(int, float, type(None)) = None,
-                                  method:(int, type(None)) = None):
-    """Produce a matrix out of the outer product of
-    ``dataspecs_dataset_prediction_shift``. The matrix will be a
-    pandas DataFrame, indexed similarly to ``experiments_index``.
-    Note that this produces the normalised shift matrix, i.e. it is
-    computed from shifts normalised to central theory."""
-    all_shifts = np.concatenate(
-        [val.shifts for val in matched_dataspecs_dataset_prediction_shift])
-    all_theory = np.concatenate(
-        [val.shifts for val in matched_dataspecs_dataset_theory])
-    norm_shifts = all_shifts/all_theory
-    mat = np.outer(norm_shifts, norm_shifts)
-    for i, ival in enumerate(norm_shifts):
-        for j, jval in enumerate(norm_shifts):
-            if method == 1:
-                if (np.abs(ival) < shift_threshold) or (np.abs(jval) < shift_threshold):
-                    mat[i][j] = 0
-                elif mat[i][j] > 0:
-                    mat[i][j] = 1
-                else:
-                    mat[i][j] = -1
-            elif method == 2:
-                if (ival!=0) and (jval!=0):
-                    if 1/shift_threshold <= np.abs(ival/jval) <= shift_threshold:
-                        if mat[i][j] > 0:
-                            mat[i][j] = 1
-                        else:
-                            mat[i][j] = -1
-                    else:
-                        mat[i][j] = 0
-    dsnames = np.concatenate([
-        np.full(len(val.shifts), val.dataset_name, dtype=object)
-        for val in matched_dataspecs_dataset_prediction_shift
-    ])
-    point_indexes = np.concatenate([
-        np.arange(len(val.shifts))
-        for val in matched_dataspecs_dataset_prediction_shift
-    ])
-
-    index = pd.MultiIndex.from_arrays(
-        [dsnames, point_indexes],
-        names=["Dataset name", "Point"])
-
-    return pd.DataFrame(mat, columns=index, index=index)
 
 def shift_vector(matched_dataspecs_dataset_prediction_shift,
                  matched_dataspecs_dataset_theory):
@@ -198,34 +135,6 @@ def alltheory_vector(matched_dataspecs_dataset_alltheory, matched_dataspecs_data
         theory_vectors.append(pd.DataFrame(theoryvector, index=index))
     return theory_vectors
 
-
-@figure
-def plot_matched_datasets_shift_matrix(matched_datasets_shift_matrix):
-    """Heatmap plot of matched_datasets_shift_matrix"""
-    return plot_covmat_heatmap(matched_datasets_shift_matrix,
-	 "Shift outer product matrix")
-
-@table
-def matched_datasets_shift_matrix_correlations(matched_datasets_shift_matrix):
-    mat = matched_datasets_shift_matrix.values
-    diag_minus_half = (np.diagonal(mat))**(-0.5)
-    corrmat = diag_minus_half[:, np.newaxis] * mat * diag_minus_half
-    corrmat = pd.DataFrame(
-        corrmat,
-        columns=matched_datasets_shift_matrix.columns,
-        index=matched_datasets_shift_matrix.index)
-    return corrmat
-
-@figure
-def plot_matched_datasets_shift_matrix_correlations(
-        matched_datasets_shift_matrix):
-    """Heatmap plot of the correlations of
-    matched_datasets_shift_matrix. By construction these are
-    zero or one."""
-    corrmat = matched_datasets_shift_matrix_correlations
-    return plot_corrmat_heatmap(
-        corrmat, "Shift outer product normalized (correlation) matrix")
-
 all_matched_results = collect('matched_dataspecs_results',
                               ['dataspecs'])
 
@@ -243,7 +152,7 @@ def _check_correct_theory_combination_dataspecs(datapsecs_theoryids,
     return _check_correct_theory_combination.__wrapped__(
         datapsecs_theoryids, fivetheories)
 
-#@_check_correct_theory_combination_dataspecs
+@_check_correct_theory_combination_dataspecs
 def covs_pt_prescrip_dataspecs(combine_by_type_dataspecs,
                       process_starting_points_dataspecs,
                       datapsecs_theoryids,
@@ -316,92 +225,6 @@ def theory_matrix_threshold(theory_threshold:(int, float) = 0):
     """Returns the threshold below which theory correlation elements are set to
     zero when comparing to shift correlation matrix"""
     return theory_threshold
-
-@table
-def shift_to_theory_ratio(thx_corrmat, shx_corrmat):
-    ratio = (thx_corrmat[0]/shx_corrmat[0]).fillna(0)
-    return ratio
-
-@figure
-def shift_to_theory_ratio_plot(shift_to_theory_ratio):
-    matrix = shift_to_theory_ratio
-    matrix[((matrix==np.inf) | (matrix==-np.inf))] = 0
-    fig, ax = plt.subplots(figsize=(15,15))
-    matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r)
-    fig.colorbar(matrixplot)
-    ax.set_title("Ratio of theory to shift correlation matrices")
-    ticklocs, ticklabels, startlocs = matrix_plot_labels(matrix)
-    plt.xticks(ticklocs, ticklabels, rotation=30, ha="right")
-    plt.gca().xaxis.tick_bottom()
-    plt.yticks(ticklocs, ticklabels)
-    return fig
-
-@figure
-def shift_corrmat_plot(shx_corrmat):
-    # removing nans and setting them to 0
-    fig = plot_corrmat_heatmap(shx_corrmat[0].fillna(0),
-                               "Shift correlation matrix")
-    return fig
-
-@figure
-def theory_corrmat_plot(thx_corrmat):
-    fig = plot_corrmat_heatmap(thx_corrmat[0],
-                               "Theory correlation matrix")
-    return fig
-
-@table
-def shift_corrmat_value_fractions(shx_corrmat):
-    mat = shx_corrmat[0].fillna(0).values
-    matsize = np.size(mat)
-    fracplus = 100*np.size(np.where(mat>0))/(2*matsize)
-    fracminus = 100*np.size(np.where(mat<0))/(2*matsize)
-    fraczero = 100*np.size(np.where(mat==0))/(2*matsize)
-    table = pd.DataFrame([fracplus, fracminus, fraczero],
-                         index=[r'$f_{\rho=+1}$',
-                                r'$f_{\rho=-1}$',
-                                r'$f_{\rho=0}$'],
-                         columns = ["% of total entries"])
-    return table
-
-@table
-def theory_corrmat_value_fractions(thx_corrmat,
-                                   theory_threshold:(int, float) = 0):
-    mat = thx_corrmat[0].values
-    # Initialise array of zeros and set precision to same as FK tables
-    newmat = np.zeros((len(mat),len(mat)), dtype=np.float32)
-    # coarse graining for comparison
-    newmat[mat>=theory_threshold]=1
-    newmat[mat<=-theory_threshold]=-1
-    matsize = np.size(mat)
-    fracplus = 100*np.size(np.where(newmat>0))/(2*matsize)
-    fracminus = 100*np.size(np.where(newmat<0))/(2*matsize)
-    fraczero = 100*np.size(np.where(newmat==0))/(2*matsize)
-    table = pd.DataFrame([fracplus, fracminus, fraczero],
-                         index=[r'$\tilde{f}_{\rho=+1}$',
-                                r'$\tilde{f}_{\rho=-1}$',
-                                r'$\tilde{f}_{\rho=0}$'],
-                         columns = ["% of total entries"])
-    return table
-
-@table
-def shift_theory_element_comparison(shx_corrmat, thx_corrmat,
-                                    theory_threshold:(int, float) = 0):
-    # coarse graining for comparison
-    thmat = thx_corrmat[0].values
-    # Initialise array of zeros and set precision to same as FK tables
-    newthmat = np.zeros((len(thmat),len(thmat)), dtype=np.float32)
-    newthmat[thmat>=theory_threshold]=1
-    newthmat[thmat<=-theory_threshold]=-1
-    shmat = shx_corrmat[0].fillna(0).values
-    num_non_zero = np.size(np.where(shmat!=0))/2
-    fracsame = 100*np.size(np.where((shmat==newthmat) & (shmat!=0)))/(2*num_non_zero)
-    fracdiff = 100*np.size(np.where((shmat!=newthmat) & (shmat!=0)))/(2*num_non_zero)
-    table = pd.DataFrame([fracsame, fracdiff],
-                         index=['same sign',
-                                'different signs'],
-                         columns = ["% of total entries (where shift matrix is non-zero)"])
-    return table
-
 
 @table
 def theory_corrmat_custom_dataspecs(theory_covmat_custom_dataspecs):
