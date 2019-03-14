@@ -148,7 +148,7 @@ def process_starting_points_dataspecs(combine_by_type_dataspecs):
 
 @make_argcheck
 def _check_correct_theory_combination_dataspecs(datapsecs_theoryids,
-                                                fivetheories):
+                                                fivetheories:(str, type(None)) = None):
     return _check_correct_theory_combination.__wrapped__(
         datapsecs_theoryids, fivetheories)
 
