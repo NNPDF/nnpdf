@@ -37,7 +37,7 @@ providers = [
              'validphys.eff_exponents',
              'validphys.paramfits.dataops',
              'validphys.paramfits.plots',
-             'validphys.theorycovariance',
+             'validphys.theorycovariance.construction',
              'validphys.theorycovariance.output',
              'validphys.theorycovariance.tests',
              'validphys.replica_selector',
