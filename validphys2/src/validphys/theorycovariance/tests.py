@@ -434,11 +434,11 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
             ys[i] = ys[i] - (ys[i].T.dot(ys[j]))[0][0]*ys[j]/np.linalg.norm(ys[j])
             ys[i] = ys[i]/np.linalg.norm(ys[i])
     # Projecting covariance matrix onto subspace of non-zero eigenvalues
-    P = pd.concat(ys, axis=1)
-    projected_matrix = (P.T).dot(covmat.dot(P))
+    p = pd.concat(ys, axis=1)
+    projected_matrix = (p.T).dot(covmat.dot(p))
     w, v_projected = la.eigh(projected_matrix)
     # Finding eigenvectors in data space
-    v = P.dot(v_projected)
+    v = p.dot(v_projected)
     return w, v
 
 def theory_shift_test(shx_vector, evals_nonzero_basis):
