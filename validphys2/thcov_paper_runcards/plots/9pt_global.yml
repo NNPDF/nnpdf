@@ -143,5 +143,6 @@ dataset_report:
    template_text: |
       ## Scale variations as a function of the kinematics for {@dataset_name@}
       {@plot_fancy_dataspecs@}
+
 actions_:
   - report(main=true)
