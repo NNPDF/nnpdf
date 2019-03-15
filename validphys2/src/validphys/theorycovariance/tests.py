@@ -574,3 +574,4 @@ def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
     ax.legend(fontsize=20)
     ax.yaxis.set_tick_params(labelsize=20)
     return fig
+
