@@ -1,7 +1,7 @@
 #!/bin/bash
 # This script takes scale variation errors for jet data and appends them to datafiles as an additional systematic
 
-SETS=(ATLAS1JET11 ATLASR04JETS2P76TEV ATLASR04JETS36PB CMS1JET276TEV CMSJETS11 CDFR2KT)
+SETS=(ATLAS1JET11 ATLASR04JETS2P76TEV ATLASR04JETS36PB CMS1JET276TEV CMSJETS11 CDFR2KT ATLAS1JET11_SF)
 DIRECTORY=.
 
 for s in "${SETS[@]}"; do
