@@ -68,7 +68,6 @@ def shift_vector(matched_dataspecs_dataset_prediction_shift,
         np.arange(len(val.shifts))
         for val in matched_dataspecs_dataset_prediction_shift
     ])
-
     index = pd.MultiIndex.from_arrays(
         [dsnames, point_indexes],
         names=["Dataset name", "Point"])
@@ -93,7 +92,6 @@ def theory_vector(matched_dataspecs_dataset_theory):
         np.arange(len(val.shifts))
         for val in matched_dataspecs_dataset_theory
     ])
-
     index = pd.MultiIndex.from_arrays(
         [dsnames, point_indexes],
         names=["Dataset name", "Point"])
@@ -133,24 +131,24 @@ all_matched_results = collect('matched_dataspecs_results',
 def combine_by_type_dataspecs(all_matched_results, matched_dataspecs_dataset_name):
     return combine_by_type(all_matched_results, matched_dataspecs_dataset_name)
 
-datapsecs_theoryids = collect('theoryid', ['theoryconfig', 'original', 'dataspecs'])
+dataspecs_theoryids = collect('theoryid', ['theoryconfig', 'original', 'dataspecs'])
 
 def process_starting_points_dataspecs(combine_by_type_dataspecs):
     return process_starting_points(combine_by_type_dataspecs)
 
 @make_argcheck
-def _check_correct_theory_combination_dataspecs(datapsecs_theoryids,
+def _check_correct_theory_combination_dataspecs(dataspecs_theoryids,
                                                 fivetheories:(str, type(None)) = None):
     return _check_correct_theory_combination.__wrapped__(
-        datapsecs_theoryids, fivetheories)
+        dataspecs_theoryids, fivetheories)
 
 @_check_correct_theory_combination_dataspecs
 def covs_pt_prescrip_dataspecs(combine_by_type_dataspecs,
-                      process_starting_points_dataspecs,
-                      datapsecs_theoryids,
-                      fivetheories: (str, type(None)) = None):
+                               process_starting_points_dataspecs,
+                               dataspecs_theoryids,
+                               fivetheories: (str, type(None)) = None):
     return covs_pt_prescrip(combine_by_type_dataspecs, process_starting_points_dataspecs,
-                            datapsecs_theoryids, fivetheories)
+                            dataspecs_theoryids, fivetheories)
 
 def covmap_dataspecs(combine_by_type_dataspecs, matched_dataspecs_dataset_name):
     return covmap(combine_by_type_dataspecs, matched_dataspecs_dataset_name)
@@ -182,7 +180,6 @@ def matched_experiments_index(matched_dataspecs_dataset_name,
         np.arange(l)
         for l in lens
     ])
-
     index = pd.MultiIndex.from_arrays(
         [dsnames, point_indexes],
         names=["Dataset name", "Point"])
@@ -190,7 +187,7 @@ def matched_experiments_index(matched_dataspecs_dataset_name,
 
 @table
 def theory_covmat_custom_dataspecs(covs_pt_prescrip_dataspecs, covmap_dataspecs,
-                          matched_experiments_index):
+                                   matched_experiments_index):
     return theory_covmat_custom(covs_pt_prescrip_dataspecs, covmap_dataspecs,
                                 matched_experiments_index)
 
@@ -201,10 +198,10 @@ shx_corrmat = collect('matched_datasets_shift_matrix_correlations',
                       ['combined_shift_and_theory_dataspecs', 'shiftconfig'])
 
 thx_covmat = collect('theory_covmat_custom_dataspecs',
-                      ['combined_shift_and_theory_dataspecs', 'theoryconfig'])
+                     ['combined_shift_and_theory_dataspecs', 'theoryconfig'])
 
 combined_dataspecs_results = collect('all_matched_results',
-                	['combined_shift_and_theory_dataspecs', 'theoryconfig'])
+                                     ['combined_shift_and_theory_dataspecs', 'theoryconfig'])
 
 shx_vector = collect('shift_vector', ['combined_shift_and_theory_dataspecs', 'shiftconfig'])
 
@@ -253,10 +250,10 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
     covmat = (thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0])))
     # constructing vectors of shifts due to scale variation
     diffs = [((thx_vector[0] - scalevarvector)/thx_vector[0])
-                                        for scalevarvector in allthx_vector[0]]
-	# number of points in point prescription
+             for scalevarvector in allthx_vector[0]]
+    # number of points in point prescription
     num_pts = len(diffs) + 1
-	# constructing dictionary of datasets in each process type
+    # constructing dictionary of datasets in each process type
     indexlist = list(diffs[0].index.values)
     procdict = {}
     for index in indexlist:
@@ -287,7 +284,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
 	# and total vectors are notated like
 	# (mu_0; mu_1, mu_2, ..., mu_p)
     if num_pts == 3:
-	    # N.B. mu_0 correlated with mu_i
+        # N.B. mu_0 correlated with mu_i
         xs = []
         pps = splitdiffs[::(num_pts-1)]
         mms = shuffle_list(splitdiffs,1)[::(num_pts-1)]
@@ -308,7 +305,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
         zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
         zms = shuffle_list(splitdiffs,3)[::(num_pts-1)]
         xs = []
-	    # Constructing (+; 0, 0, 0 ...)
+        # Constructing (+; 0, 0, 0 ...)
 	    #              (-; 0, 0, 0 ...)
 	    #              (0; +, +, + ...)
         xs.append(sum(pzs))
@@ -317,19 +314,19 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
         # Constructing the p vectors with one minus
         # (0; -, +, + ...) + cyclic
         for procloc, zm in enumerate(zms):
-           newvec = zps[0].copy()
-           newvec.loc[:] = 0
-           subzps = zps.copy()
-           del subzps[procloc]
-           newvec = newvec + sum(subzps) + zm
-           xs.append(newvec)
+            newvec = zps[0].copy()
+            newvec.loc[:] = 0
+            subzps = zps.copy()
+            del subzps[procloc]
+            newvec = newvec + sum(subzps) + zm
+            xs.append(newvec)
     elif (num_pts == 5) and (fivetheories == "bar"):
         pps = splitdiffs[::(num_pts-1)]
         mms = shuffle_list(splitdiffs,1)[::(num_pts-1)]
         pms = shuffle_list(splitdiffs,2)[::(num_pts-1)]
         mps = shuffle_list(splitdiffs,3)[::(num_pts-1)]
         xs = []
-	    # Constructing (+/-; +, + ...)
+        # Constructing (+/-; +, + ...)
         xs.append(sum(pps))
         xs.append(sum(mps))
         # Constructing the 2p vectors with one minus
@@ -341,7 +338,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
             del subpps[procloc]
             newvec = newvec + sum(subpps) + pm
             xs.append(newvec)
-	    # (-; -, +, + ...) + cyclic
+        # (-; -, +, + ...) + cyclic
         for procloc, mm in enumerate(mms):
             newvec = mms[0].copy()
             newvec.loc[:] = 0
@@ -357,7 +354,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
         pps = shuffle_list(splitdiffs,4)[::(num_pts-1)]
         mms = shuffle_list(splitdiffs,5)[::(num_pts-1)]
         xs = []
-	    # 7pt is the sum of 3pts and 5pts
+        # 7pt is the sum of 3pts and 5pts
         # 3pt-like part:
         xs.append(sum(pps))
         for procloc, mm in enumerate(mms):
@@ -388,11 +385,11 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
         pms = shuffle_list(splitdiffs,6)[::(num_pts-1)]
         mps = shuffle_list(splitdiffs,7)[::(num_pts-1)]
         xs = []
-	    # Constructing (+/-/0; +, +, ...)
+        # Constructing (+/-/0; +, +, ...)
         xs.append(sum(pps))
         xs.append(sum(mps))
         xs.append(sum(zps))
-	    # Constructing (+/-/0; -, +, + ...) + cyclic
+        # Constructing (+/-/0; -, +, + ...) + cyclic
         for procloc, zm in enumerate(zms):
             newvec = zps[0].copy()
             newvec.loc[:] = 0
@@ -414,7 +411,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
             del submps[procloc]
             newvec = newvec + sum(submps) + mm
             xs.append(newvec)
-	    # Constructing (+/-; 0, +, +, ...) + cyclic
+        # Constructing (+/-; 0, +, +, ...) + cyclic
         for procloc, pz in enumerate(pzs):
             newvec = pps[0].copy()
             newvec.loc[:] = 0
@@ -429,18 +426,18 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
             del submps[procloc]
             newvec = newvec + sum(submps) + mz
             xs.append(newvec)
-	# ------------------------------------------------
+    # ------------------------------------------------
     # Orthonormalising vectors according to Gram-Schmidt
     ys = [x/np.linalg.norm(x) for x in xs]
     for i in range(1, len(xs)):
         for j in range(0,i):
             ys[i] = ys[i] - (ys[i].T.dot(ys[j]))[0][0]*ys[j]/np.linalg.norm(ys[j])
             ys[i] = ys[i]/np.linalg.norm(ys[i])
-	# Projecting covariance matrix onto subspace of non-zero eigenvalues
+    # Projecting covariance matrix onto subspace of non-zero eigenvalues
     P = pd.concat(ys, axis=1)
     projected_matrix = (P.T).dot(covmat.dot(P))
     w, v_projected = la.eigh(projected_matrix)
-	# Finding eigenvectors in data space
+    # Finding eigenvectors in data space
     v = P.dot(v_projected)
     return w, v
 
@@ -472,7 +469,7 @@ def theory_covmat_eigenvalues(theory_shift_test):
     projectors = np.ndarray.tolist(projectors)
     ratio= projectors/s
     table = pd.DataFrame([s[::-1], projectors[::-1], ratio[::-1]],
-         		 index = [r'$s_a$', r'$\delta_a$', r'$\delta_a/s_a$'],
+                         index = [r'$s_a$', r'$\delta_a$', r'$\delta_a/s_a$'],
                          columns = np.arange(1,len(s)+1,1))
     return table
 
@@ -577,4 +574,3 @@ def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
     ax.legend(fontsize=20)
     ax.yaxis.set_tick_params(labelsize=20)
     return fig
-

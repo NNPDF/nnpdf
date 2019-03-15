@@ -26,7 +26,7 @@ theoryids_experiments_central_values = collect(experiments_central_values,
                                                ('theoryids',))
 
 def _check_correct_theory_combination_internal(theoryids,
-                                      fivetheories:(str, type(None)) = None):
+                                               fivetheories:(str, type(None)) = None):
     """Checks that a valid theory combination corresponding to an existing
     prescription has been inputted"""
     l = len(theoryids)
@@ -64,13 +64,13 @@ def _check_correct_theory_combination_internal(theoryids,
         "prescription for theory covariance matrix calculation")
 
 collected_theoryids = collect('theoryids',
-			['theoryconfig',])
+                              ['theoryconfig',])
 
 _check_correct_theory_combination = make_argcheck(_check_correct_theory_combination_internal)
 
 @make_argcheck
 def _check_correct_theory_combination_theoryconfig(collected_theoryids,
-						fivetheories:(str, type(None))=None):
+                                                   fivetheories:(str, type(None)) = None):
     _check_correct_theory_combination_internal(collected_theoryids[0], fivetheories)
 
 def dataset_index_byprocess(experiments_index):
@@ -83,7 +83,7 @@ def dataset_index_byprocess(experiments_index):
     processnames = [_process_lookup(dsname) for dsname in dsnames]
     experiments_index.droplevel(level="experiment")
     newindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
-				names = ("process", "dataset", "id"))
+                                         names = ("process", "dataset", "id"))
     return newindex
 
 def make_scale_var_covmat(predictions):
@@ -667,4 +667,3 @@ def abs_chi2_data_diagtheory_dataset(each_dataset_results,
     """For a diagonal theory covmat"""
     return abs_chi2_data_theory_dataset(each_dataset_results,
                                         total_covmat_diagtheory_datasets)
-

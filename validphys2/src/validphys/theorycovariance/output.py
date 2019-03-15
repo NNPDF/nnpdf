@@ -81,7 +81,7 @@ def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
     of experiments and datasets listed in the runcard. Otherwise the
     labels will not correspond to the correct points."""
     df = pd.DataFrame(covmat.values, index=dataset_index_byprocess,
-			columns=dataset_index_byprocess)
+                      columns=dataset_index_byprocess)
     df.sort_index(0, inplace=True)
     df.sort_index(1, inplace=True)
     oldindex = df.index.tolist()
@@ -234,7 +234,7 @@ def plot_normexpplusthcovmat_heatmap_custom(experimentsplustheory_normcovmat_cus
     l = len(theoryids)
     fig = plot_covmat_heatmap(experimentsplustheory_normcovmat_custom,
                               f"Experiment + theory covariance matrix for {l} points",
-				dataset_index_byprocess)
+                              dataset_index_byprocess)
     return fig
 
 @figure
@@ -262,9 +262,10 @@ def plot_blockcovdiff_heatmap(theory_block_diag_covmat, experiments_covmat,
     """Matrix plot (thcov + expcov)/expcov"""
     df = (theory_block_diag_covmat.as_matrix()+experiments_covmat.values
           )/np.mean(experiments_covmat.values)
-    fig = plot_covmat_heatmap(df,"(Theory + experiment)/mean(experiment)" +
+    fig = plot_covmat_heatmap(df,
+                              "(Theory + experiment)/mean(experiment)" +
                               "for block diagonal theory covmat by dataset",
-				dataset_index_byprocess)
+                              dataset_index_byprocess)
     return fig
 
 @figure
@@ -277,7 +278,7 @@ def plot_covdiff_heatmap_custom(theory_covmat_custom, experiments_covmat,
     fig = plot_covmat_heatmap(df,
                               "(Theory + experiment)/mean(experiment)"
                               + f"covariance matrices for {l} points",
-				dataset_index_byprocess)
+                              dataset_index_byprocess)
     return fig
 
 @figure
