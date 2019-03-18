@@ -38,6 +38,10 @@ RUN conda config --append channels conda-forge                                  
     conda config --set show_channel_urls true                                     && \
     conda install conda-build --yes
 
+RUN conda vp-get theoryID 163 && \
+    conda vp-get theoryID 180 && \
+    conda vp-get theoryID 173
+
 ENV CXXFLAGS -D_GLIBCXX_USE_CXX11_ABI=1
 
 ENTRYPOINT scl enable devtoolset-7 bash
