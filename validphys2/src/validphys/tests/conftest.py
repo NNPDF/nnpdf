@@ -6,12 +6,15 @@ Pytest fixtures.
 import pathlib
 
 import pytest
+from hypothesis import settings
 
 from validphys.loader import FallbackLoader as Loader
 from validphys.core import ExperimentSpec
 from validphys import results
 
-
+#Adding this here to change the time of deadline from default (200ms) to 1000ms
+settings.register_profile("extratime", deadline=1000)
+settings.load_profile("extratime")
 
 #Fortunately py.test works much like reportengine and providers are
 #connected by argument names.

@@ -10,7 +10,8 @@
 # This is a validphys-like app in disguise. It takes an nnfit runcard and adds
 # a fixed list of actions and some associated resourced to it so as to make it
 # a proper validphys runcard. These config options are defined in the
-# SETUPFIT_FIXED_CONFIG mapping below.
+# SETUPFIT_FIXED_CONFIG mapping below. Similarly, defult options are specified
+# in SETUPFIT_DEFAULTS.
 #
 # Extensions to the setup procedure can be implemented by adding suitable
 # actions_ to the mapping (making sure that they are executed in the right
@@ -39,12 +40,15 @@ from reportengine import colors
 
 
 SETUPFIT_FIXED_CONFIG = dict(
-    Nocuts={'use_cuts': 'nocuts'},
     actions_=[
         'datacuts check_t0pdfset',
         'theory check_positivity',
-        'Nocuts::datacuts::closuretest::theory::fitting filter',
+        'datacuts::closuretest::theory::fitting filter',
     ])
+
+SETUPFIT_DEFAULTS = dict(
+    use_cuts= 'internal',
+)
 
 SETUPFIT_PROVIDERS = ['validphys.filters',]
 
@@ -72,7 +76,7 @@ class SetupFitEnvironment(Environment):
 
         # check if results folder exists
         self.output_path = pathlib.Path(self.output_path).absolute()
-        if self.output_path.exists():
+        if self.output_path.is_dir():
             log.warning(f"Output folder exists: {self.output_path} Overwritting contents")
         else:
             if not re.fullmatch(r'[\w.\-]+', self.output_path.name):
@@ -86,6 +90,8 @@ class SetupFitEnvironment(Environment):
             shutil.copy2(self.config_yml, self.output_path / RUNCARD_COPY_FILENAME)
         except shutil.SameFileError:
             pass
+        except Exception as e:
+            raise EnvironmentError_(e) from e
 
         # create output folder
         self.filter_path = self.output_path / FILTER_OUTPUT_FOLDER
@@ -126,6 +132,8 @@ class SetupFitConfig(Config):
         if not isinstance(file_content, dict):
             raise ConfigError(f"Expecting input runcard to be a mapping, "
                               f"not '{type(file_content)}'.")
+        for k,v in SETUPFIT_DEFAULTS.items():
+            file_content.setdefault(k, v)
         file_content.update(SETUPFIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 

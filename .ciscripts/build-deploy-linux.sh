@@ -1,7 +1,11 @@
-#/usr/bin/bash
-
+#!/bin/bash
 #Find conda
 source ~/.bashrc
+set -e
+set -o pipefail
+set -u
+set -v
+
 #Set up netrc file for uploading/downloading
 echo "$NETRC_FILE" | base64 --decode > ~/.netrc
 
@@ -25,8 +29,8 @@ cp /root/miniconda3/conda-bld/linux-64/*.tar.bz2 .
 
 echo "Uploading package to zigzah"
 KEY=$( mktemp )
-#This is defined in the Gitlab variables, under the Settings Menu.
-echo "$ZIGZAH_SSH_KEY" > "$KEY"
+#This is defined in the Travis environment variables.
+echo "$ZIGZAH_SSH_KEY" | base64 --decode > "$KEY"
 
 scp -i "$KEY" -o StrictHostKeyChecking=no\
     /root/miniconda3/conda-bld/linux-64/*.tar.bz2 \

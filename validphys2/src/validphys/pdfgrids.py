@@ -14,7 +14,7 @@ from reportengine.checks import make_argcheck, CheckError, check_positive
 from validphys.core import PDF
 from validphys.gridvalues import (evaluate_luminosity)
 from validphys.pdfbases import (Basis, check_basis)
-from validphys.checks import check_pdf_normalize_to
+from validphys.checks import check_pdf_normalize_to, check_xlimits
 
 ScaleSpec = namedtuple('ScaleSpec', ('scale', 'values'))
 
@@ -24,15 +24,8 @@ def _check_scale(scale):
     if scale not in scales:
         raise CheckError(f'Unrecognized scale {scale}.', scale, scales)
 
-@make_argcheck
-def _check_limits(xmax, xmin):
-    if not (0 <= xmin < xmax <= 1):
-        raise CheckError(f'xmin ({xmin}) and xmax ({xmax}) must satisfy \n'
-                         '0 <= xmin < xmax <= 1')
-
-
 @_check_scale
-@_check_limits
+@check_xlimits
 @check_positive('npoints')
 def xgrid(xmin:numbers.Real=1e-5, xmax:numbers.Real=1,
           scale:str='log', npoints:int=200):
