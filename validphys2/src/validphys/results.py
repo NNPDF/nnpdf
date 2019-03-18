@@ -657,7 +657,7 @@ def fits_experiments_chi2_table(fits, fits_experiments, fits_experiment_chi2_dat
     True, the chi² will be shown divided by ndata.
     Otherwise they will be absolute."""
     dfs = []
-    cols = ('ndata', '$\chi^2/ndata$') if per_point_data else ('ndata', '$\chi^2$')
+    cols = ('ndata', r'$\chi^2/ndata$') if per_point_data else ('ndata', r'$\chi^2$')
     for fit, experiments, exps_chi2 in zip(fits, fits_experiments, fits_experiment_chi2_data):
         records = []
         for experiment, exp_chi2 in zip(experiments, exps_chi2):
@@ -703,7 +703,7 @@ def fits_datasets_chi2_table(fits, fits_experiments, fits_chi2_data,
 
     chi2_it = iter(fits_chi2_data)
 
-    cols = ('ndata', '$\chi^2/ndata$') if per_point_data else ('ndata', '$\chi^2$')
+    cols = ('ndata', r'$\chi^2/ndata$') if per_point_data else ('ndata', r'$\chi^2$')
 
     dfs = []
     for fit, experiments in zip(fits, fits_experiments):
