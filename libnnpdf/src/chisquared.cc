@@ -6,21 +6,15 @@
 //          Stefano Carrazza, stefano.carrazza@mi.infn.it
 
 #include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
 #include <cstdlib>
 #include <sstream>
 #include <iomanip>
 #include <cmath>
 #include <numeric>
-#include <algorithm>
 #include <math.h>      
 
-#include "NNPDF/experiments.h"
 #include "NNPDF/chisquared.h"
 #include "NNPDF/pdfset.h"
-#include "NNPDF/dataset.h"
 #include "NNPDF/thpredictions.h"
 #include "NNPDF/utils.h"
 #include "NNPDF/randomgenerator.h"
@@ -53,11 +47,6 @@ namespace NNPDF
       throw LengthError("ComputeCovMat_basic","mismatch in points between central_values and stat_error!");
 
     auto CovMat = NNPDF::matrix<double>(ndat, ndat);
-    auto ThCovMat = NNPDF::matrix<double>(ndat, ndat);
-    
-    if(th_cov_matrix)
-      ThCovMat = read_theory_covmat(ndat, filename, bmask);
-    
 
     for (int i = 0; i < ndat; i++)
     {
@@ -93,7 +82,12 @@ namespace NNPDF
 
         // Covariance matrix entry
         CovMat(i, j) = (sig + signor*central_values[i]*central_values[j]*1e-4);
-        if(th_cov_matrix) CovMat(i, j) += ThCovMat(i, j);
+        if(th_cov_matrix) 
+        {
+          auto ThCovMat = NNPDF::matrix<double>(ndat, ndat);
+          ThCovMat = read_theory_covmat(ndat, filename, bmask);
+          CovMat(i, j) += ThCovMat(i, j);
+        }
           
         // Covariance matrix weight
         CovMat(i, j) /= sqrt_weights[i]*sqrt_weights[j];
@@ -107,9 +101,11 @@ namespace NNPDF
    * Generate covariance matrix from CommonData and a t0 vector
    * This should be deprecated in favour of a version of `Experiment` that does not contain an FK table.
    * CommonData should be considered only as an I/O class with all logic belonging to `Experiment`.
+   *
+   * The covariance matris is created accounting for multiplicative and MC uncertainty by default.
    */
   matrix<double> ComputeCovMat(CommonData const& cd, std::vector<double> const& t0,
-                               const bool th_cov_matrix, 
+                               const bool th_cov_matrix,   // Specify whether or not the theory error should be used
                                std::string filename,
                                std::vector<int> bmask,
                                double weight)

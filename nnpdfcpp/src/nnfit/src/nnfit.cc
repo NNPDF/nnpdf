@@ -549,9 +549,9 @@ void TrainValidSplit(NNPDFSettings const& settings,
         }
 
         //Creating the boolean mask
-        for (int i = 0; i < trMaskset.size(); i++)
+        for (size_t i = 0; i < trMaskset.size(); i++)
           trCovMatMask.at(AccumulatedData + trMaskset.at(i)) = 1;
-        for (int i = 0; i < valMaskset.size(); i++)
+        for (size_t i = 0; i < valMaskset.size(); i++)
           valCovMatMask.at(AccumulatedData + valMaskset.at(i)) = 1;
 
         //Accumulating Sets NData

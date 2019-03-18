@@ -15,7 +15,6 @@
 #include <iomanip>
 #include <cmath>
 #include <numeric>
-#include <algorithm>
 
 #include "NNPDF/experiments.h"
 #include "NNPDF/chisquared.h"

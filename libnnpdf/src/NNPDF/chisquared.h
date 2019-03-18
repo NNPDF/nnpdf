@@ -18,9 +18,9 @@ namespace NNPDF{
                                      std::vector<double> const& central_values,
                                      std::vector<double> const& stat_error,
                                      sysError** const systematic_errors,
-                                     bool const mult_errors,
-                                     bool const use_theory_errors,
-                                     bool const th_cov_matrix,
+                                     bool const mult_errors,         // account for multiplicative uncertainties in building the CovMat
+                                     bool const use_theory_errors,   // account for MC uncertainties in building the CovMat
+                                     bool const th_cov_matrix,       // account for theoretical uncertainties in building the CovMat
                                      std::string filename,
                                      std::vector<int> bmask);
 
