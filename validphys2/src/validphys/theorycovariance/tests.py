@@ -55,6 +55,7 @@ matched_dataspecs_dataset_prediction_shift = collect(
 
 def shift_vector(matched_dataspecs_dataset_prediction_shift,
                  matched_dataspecs_dataset_theory):
+    """Returns a DataFrame of normalised shift vectors for matched dataspecs."""
     all_shifts = np.concatenate(
         [val.shifts for val in matched_dataspecs_dataset_prediction_shift])
     all_theory = np.concatenate(
@@ -74,6 +75,8 @@ def shift_vector(matched_dataspecs_dataset_prediction_shift,
     return pd.DataFrame(norm_shifts, index=index)
 
 def dataspecs_dataset_theory(matched_dataspecs_results, experiment_name, dataset_name):
+    """Returns a tuple of shifts grouped by data set and experiment
+    for matched dataspecs."""
     central = matched_dataspecs_results[0]
     res = central[1].central_value
     return LabeledShifts(dataset_name=dataset_name,
@@ -129,16 +132,19 @@ all_matched_results = collect('matched_dataspecs_results',
                               ['dataspecs'])
 
 def combine_by_type_dataspecs(all_matched_results, matched_dataspecs_dataset_name):
+    """Like combine_by_type but for matched dataspecs"""
     return combine_by_type(all_matched_results, matched_dataspecs_dataset_name)
 
 dataspecs_theoryids = collect('theoryid', ['theoryconfig', 'original', 'dataspecs'])
 
 def process_starting_points_dataspecs(combine_by_type_dataspecs):
+    """Like process_starting_points but for matched dataspecs."""
     return process_starting_points(combine_by_type_dataspecs)
 
 @make_argcheck
 def _check_correct_theory_combination_dataspecs(dataspecs_theoryids,
                                                 fivetheories:(str, type(None)) = None):
+    """Like _check_correct_theory_combination but for matched dataspecs."""
     return _check_correct_theory_combination.__wrapped__(
         dataspecs_theoryids, fivetheories)
 
@@ -147,10 +153,12 @@ def covs_pt_prescrip_dataspecs(combine_by_type_dataspecs,
                                process_starting_points_dataspecs,
                                dataspecs_theoryids,
                                fivetheories: (str, type(None)) = None):
+    """Like covs_pt_prescrip but for matched dataspecs."""
     return covs_pt_prescrip(combine_by_type_dataspecs, process_starting_points_dataspecs,
                             dataspecs_theoryids, fivetheories)
 
 def covmap_dataspecs(combine_by_type_dataspecs, matched_dataspecs_dataset_name):
+    """Like covmap but for matched dataspecs."""
     return covmap(combine_by_type_dataspecs, matched_dataspecs_dataset_name)
 
 matched_dataspecs_experiment_name = collect(
@@ -163,6 +171,7 @@ all_matched_datasets = collect('matched_cuts_datasets',
 
 
 def all_matched_data_lengths(all_matched_datasets):
+    """Returns a list of the data sets lengths."""
     lens = []
     for rlist in all_matched_datasets:
         lens.append(rlist[0].load().GetNData())
@@ -170,6 +179,8 @@ def all_matched_data_lengths(all_matched_datasets):
 
 def matched_experiments_index(matched_dataspecs_dataset_name,
                               all_matched_data_lengths):
+    """Returns MultiIndex composed of data set name and
+    starting point of data set."""
     dsnames = matched_dataspecs_dataset_name
     lens = all_matched_data_lengths
     dsnames = np.concatenate([
@@ -188,6 +199,7 @@ def matched_experiments_index(matched_dataspecs_dataset_name,
 @table
 def theory_covmat_custom_dataspecs(covs_pt_prescrip_dataspecs, covmap_dataspecs,
                                    matched_experiments_index):
+    """Like theory_covmat_custom but for matched dataspecs."""
     return theory_covmat_custom(covs_pt_prescrip_dataspecs, covmap_dataspecs,
                                 matched_experiments_index)
 
@@ -231,6 +243,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
     Then returns the eigenvalues (w) and eigenvectors (v)
     in the data space."""
 
+    # Function that moves list elements left by 'shift' entries
     def shuffle_list(l, shift):
         i=0
         newlist = l.copy()

@@ -52,7 +52,6 @@ def matrix_plot_labels(df):
     the outermost index of the multiindex."""
     if len(df.index[0]) == 3:
         proclabels = [x[0] for x in df.index]
-        dslabels = [x[1] for x in df.index]
         points = [x[2] for x in df.index]
         labels = proclabels
     elif len(df.index[0]) == 2:
