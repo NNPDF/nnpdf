@@ -47,6 +47,7 @@ namespace NNPDF
       throw LengthError("ComputeCovMat_basic","mismatch in points between central_values and stat_error!");
 
     auto CovMat = NNPDF::matrix<double>(ndat, ndat);
+    if(th_cov_matrix) auto ThCovMat = NNPDF::matrix<double>(ndat, ndat);
 
     for (int i = 0; i < ndat; i++)
     {
@@ -84,7 +85,6 @@ namespace NNPDF
         CovMat(i, j) = (sig + signor*central_values[i]*central_values[j]*1e-4);
         if(th_cov_matrix) 
         {
-          auto ThCovMat = NNPDF::matrix<double>(ndat, ndat);
           ThCovMat = read_theory_covmat(ndat, filename, bmask);
           CovMat(i, j) += ThCovMat(i, j);
         }
