@@ -221,14 +221,6 @@ def theory_corrmat_custom_dataspecs(theory_covmat_custom_dataspecs):
     mat = theory_corrmat(theory_covmat_custom_dataspecs)
     return mat
 
-@figure
-def plot_thcorrmat_heatmap_custom_dataspecs(theory_corrmat_custom_dataspecs, theoryids):
-    """Matrix plot of the theory correlation matrix, correlations by process type"""
-    l = len(theoryids)
-    fig = plot_corrmat_heatmap(theory_corrmat_custom_dataspecs,
-                               f"Theory correlation matrix for {l} points")
-    return fig
-
 @_check_correct_theory_combination_theoryconfig
 def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                         collected_theoryids,
@@ -265,7 +257,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
             procdict[proc].append(name)
     # splitting up the scale-varied shift vectors into different spaces per process
     splitdiffs = []
-    for process, dslist in procdict.items():
+    for process in procdict.keys():
         alldatasets = [y for x in list(procdict.values()) for y in x]
         otherdatasets = [x for x in alldatasets if x not in procdict[process]]
         for diff in diffs:
