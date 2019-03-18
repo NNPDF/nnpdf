@@ -28,7 +28,6 @@ from validphys.theorycovariance.construction import _process_lookup
 from validphys.theorycovariance.construction import _check_correct_theory_combination_theoryconfig
 
 from validphys.theorycovariance.output import matrix_plot_labels, _get_key
-from validphys.theorycovariance.output import plot_corrmat_heatmap
 
 log = logging.getLogger(__name__)
 
@@ -152,10 +151,11 @@ def _check_correct_theory_combination_dataspecs(dataspecs_theoryids,
 def covs_pt_prescrip_dataspecs(combine_by_type_dataspecs,
                                process_starting_points_dataspecs,
                                dataspecs_theoryids,
-                               fivetheories: (str, type(None)) = None):
+                               fivetheories: (str, type(None)) = None,
+                               seventheories: (str, type(None)) = None):
     """Like covs_pt_prescrip but for matched dataspecs."""
     return covs_pt_prescrip(combine_by_type_dataspecs, process_starting_points_dataspecs,
-                            dataspecs_theoryids, fivetheories)
+                            dataspecs_theoryids, fivetheories, seventheories)
 
 def covmap_dataspecs(combine_by_type_dataspecs, matched_dataspecs_dataset_name):
     """Like covmap but for matched dataspecs."""
