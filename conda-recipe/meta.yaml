@@ -42,7 +42,7 @@ requirements:
 test:
     requires:
         - hypothesis
-        - pytest <4 # See https://github.com/NNPDF/nnpdf/issues/335
+        - pytest
         - coverage
         #Build dependencies for catch tests
         - {{ compiler("cxx") }}
