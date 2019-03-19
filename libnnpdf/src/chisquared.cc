@@ -47,7 +47,6 @@ namespace NNPDF
       throw LengthError("ComputeCovMat_basic","mismatch in points between central_values and stat_error!");
 
     auto CovMat = NNPDF::matrix<double>(ndat, ndat);
-    if(th_cov_matrix) auto ThCovMat = NNPDF::matrix<double>(ndat, ndat);
 
     for (int i = 0; i < ndat; i++)
     {
@@ -83,14 +82,23 @@ namespace NNPDF
 
         // Covariance matrix entry
         CovMat(i, j) = (sig + signor*central_values[i]*central_values[j]*1e-4);
-        if(th_cov_matrix) 
-        {
-          ThCovMat = read_theory_covmat(ndat, filename, bmask);
-          CovMat(i, j) += ThCovMat(i, j);
-        }
-          
         // Covariance matrix weight
         CovMat(i, j) /= sqrt_weights[i]*sqrt_weights[j];
+      }
+    }
+
+    // Add theory uncertainty
+    if(th_cov_matrix) 
+    {
+      auto ThCovMat = NNPDF::matrix<double>(ndat, ndat);
+      ThCovMat = read_theory_covmat(ndat, filename, bmask);
+
+      for (int i = 0; i < ndat; i++)
+      {
+        for (int j = 0; j < ndat; j++) 
+        {
+          CovMat(i, j) += ThCovMat(i, j);
+        }   
       }
     }
 
