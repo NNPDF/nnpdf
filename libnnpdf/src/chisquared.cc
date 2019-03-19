@@ -90,9 +90,7 @@ namespace NNPDF
     // Add theory uncertainty
     if(th_cov_matrix) 
     {
-      auto ThCovMat = NNPDF::matrix<double>(ndat, ndat);
-      ThCovMat = read_theory_covmat(ndat, filename, bmask);
-
+      auto ThCovMat = read_theory_covmat(ndat, filename, bmask);
       for (int i = 0; i < ndat; i++)
       {
         for (int j = 0; j < ndat; j++) 

@@ -28,8 +28,6 @@ from validphys.gridvalues import LUMI_CHANNELS
 
 from validphys.paramfits.config import ParamfitsConfig
 
-from validphys.theorycovariance import theory_covmat_custom
-
 log = logging.getLogger(__name__)
 
 
@@ -680,6 +678,7 @@ class CoreConfig(configparser.Config):
 
     @configparser.explicit_node
     def produce_nnfit_theory_covmat(self):
+        from validphys.theorycovariance import theory_covmat_custom
         @functools.wraps(theory_covmat_custom)
         def res(*args, **kwargs):
             return theory_covmat_custom(*args, **kwargs)
