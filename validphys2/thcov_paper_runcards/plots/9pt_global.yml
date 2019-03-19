@@ -39,27 +39,8 @@ dataspecs:
 
 normalize_to: 1
 
-# Taken from runcard for theory covmat fit
-t0pdfset     : 180421-lr-nlo-central_global       # PDF set to generate t0 covmat
-q2min        : 13.96                # Q2 minimum
-w2min        : 12.5                # W2 minimum
-combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
-jetptcut_tev : 0                   # jet pt cut for tevatron
-jetptcut_lhc : 0                   # jet pt cut for lhc
-wptcut_lhc   : 30.0                # Minimum pT for W pT diff distributions
-jetycut_tev  : 1e30                # jet rap. cut for tevatron
-jetycut_lhc  : 1e30                # jet rap. cut for lhc
-dymasscut_min: 0                   # dy inv.mass. min cut
-dymasscut_max: 1e30                # dy inv.mass. max cut
-jetcfactcut  : 1e30                # jet cfact. cut
-
-use_cuts: "fromintersection"
-cuts_intersection_spec:
-   - theoryid: 163
-   - theoryid: 53
-
-#fit:
-#use_cuts: fromfit
+fit: 190302_ern_nlo_central_163_global
+use_cuts: "fromfit"
 
 pdf: NNPDF31_nlo_as_0118
 
@@ -112,8 +93,6 @@ experiments:
     datasets:
       - dataset: CMSWEASY840PB
       - dataset: CMSWMASY47FB
-      - dataset: CMSWCHARMRAT
-      - dataset: CMSWCHARMTOT # Not included in past
       - dataset: CMSDY2D11
       - dataset: CMSWMU8TEV
       - dataset: CMSZDIFF12 # Not included in past (because of [NRM])
@@ -129,7 +108,6 @@ experiments:
   - experiment: CDF
     datasets:
       - dataset: CDFZRAP
-      - dataset: CDFR2KT
   - experiment: D0
     datasets:
       - dataset: D0ZRAP

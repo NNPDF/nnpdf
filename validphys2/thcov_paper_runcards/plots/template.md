@@ -48,5 +48,5 @@ Impact of theory covariance matrix on $\chi^2$s
 Scale variations as a function of the kinematics
 ------------------------------------------------
 {@with matched_datasets_from_dataspecs@}
-   [Plots for dataset ' {@dataset_name@} ']({@dataset_report report@})
+   [Plots for {@dataset_name@}]({@dataset_report report@})
 {@endwith@}
