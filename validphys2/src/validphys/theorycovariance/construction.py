@@ -451,7 +451,7 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
                 else:
                     s = covmat_7pt(name1, name2, deltas1, deltas2)
             elif l==9:
-                    s = covmat_9pt(name1, name2, deltas1, deltas2)
+                s = covmat_9pt(name1, name2, deltas1, deltas2)
             start_locs = (start_proc[name1], start_proc[name2])
             covmats[start_locs] = s
     return covmats
