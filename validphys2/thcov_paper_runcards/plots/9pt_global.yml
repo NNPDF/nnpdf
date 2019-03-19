@@ -1,0 +1,148 @@
+meta:
+   author: Cameron Voisey
+   keywords: [theory uncertainties, 9-point]
+   title: NLO 9-point variations for 5 process types - DIS CC, DIS NC, DY, Top, Jets
+
+default_theory:
+   - theoryid: 163
+
+theoryids:
+   - 163
+   - 177
+   - 176
+   - 179
+   - 174
+   - 180
+   - 173
+   - 175
+   - 178
+
+dataspecs:
+        - theoryid: 163
+          speclabel: $(\xi_F,\xi_R)=(1,1)$
+        - theoryid: 177          
+          speclabel: $(\xi_F,\xi_R)=(2,1)$
+        - theoryid: 176
+          speclabel: $(\xi_F,\xi_R)=(0.5,1)$
+        - theoryid: 179
+          speclabel: $(\xi_F,\xi_R)=(1,2)$    
+        - theoryid: 174
+          speclabel: $(\xi_F,\xi_R)=(1,0.5)$
+        - theoryid: 180
+          speclabel: $(\xi_F,\xi_R)=(2,2)$ 
+        - theoryid: 173
+          speclabel: $(\xi_F,\xi_R)=(0.5,0.5)$
+        - theoryid: 175
+          speclabel: $(\xi_F,\xi_R)=(2,0.5)$
+        - theoryid: 178
+          speclabel: $(\xi_F,\xi_R)=(0.5,2)$
+
+normalize_to: 1
+
+# Taken from runcard for theory covmat fit
+t0pdfset     : 180421-lr-nlo-central_global       # PDF set to generate t0 covmat
+q2min        : 13.96                # Q2 minimum
+w2min        : 12.5                # W2 minimum
+combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
+jetptcut_tev : 0                   # jet pt cut for tevatron
+jetptcut_lhc : 0                   # jet pt cut for lhc
+wptcut_lhc   : 30.0                # Minimum pT for W pT diff distributions
+jetycut_tev  : 1e30                # jet rap. cut for tevatron
+jetycut_lhc  : 1e30                # jet rap. cut for lhc
+dymasscut_min: 0                   # dy inv.mass. min cut
+dymasscut_max: 1e30                # dy inv.mass. max cut
+jetcfactcut  : 1e30                # jet cfact. cut
+
+use_cuts: "fromintersection"
+cuts_intersection_spec:
+   - theoryid: 163
+   - theoryid: 53
+
+#fit:
+#use_cuts: fromfit
+
+pdf: NNPDF31_nlo_as_0118
+
+experiments:
+# Fixed target DIS
+  - experiment: NMC
+    datasets:
+      - dataset: NMCPD
+      - dataset: NMC
+  - experiment: SLAC
+    datasets:
+      - dataset: SLACP
+      - dataset: SLACD
+  - experiment: BCDMS
+    datasets:
+      - dataset: BCDMSP
+      - dataset: BCDMSD
+  - experiment: NTVDMN
+    datasets:
+      - dataset: NTVNUDMN
+      - dataset: NTVNBDMN
+  - experiment: CHORUS
+    datasets:
+      - dataset: CHORUSNU
+      - dataset: CHORUSNB
+  - experiment: HERAF2CHARM
+    datasets:
+      - dataset: HERAF2CHARM
+  - experiment: HERACOMB
+    datasets:
+      - dataset: HERACOMBNCEM 
+      - dataset: HERACOMBNCEP460
+      - dataset: HERACOMBNCEP575
+      - dataset: HERACOMBNCEP820
+      - dataset: HERACOMBNCEP920
+      - dataset: HERACOMBCCEM 
+      - dataset: HERACOMBCCEP 
+  - experiment: ATLAS
+    datasets:
+      - dataset: ATLASWZRAP36PB
+      - dataset: ATLASZHIGHMASS49FB
+      - dataset: ATLASLOMASSDY11EXT
+      - dataset: ATLASWZRAP11
+      - dataset: ATLAS1JET11
+      - dataset: ATLASZPT8TEVMDIST
+      - dataset: ATLASZPT8TEVYDIST
+      - dataset: ATLASTTBARTOT
+      - dataset: ATLASTOPDIFF8TEVTRAPNORM
+  - experiment: CMS
+    datasets:
+      - dataset: CMSWEASY840PB
+      - dataset: CMSWMASY47FB
+      - dataset: CMSWCHARMRAT
+      - dataset: CMSWCHARMTOT # Not included in past
+      - dataset: CMSDY2D11
+      - dataset: CMSWMU8TEV
+      - dataset: CMSZDIFF12 # Not included in past (because of [NRM])
+      - dataset: CMSJETS11
+      - dataset: CMSTTBARTOT
+      - dataset: CMSTOPDIFF8TEVTTRAPNORM
+  - experiment: LHCb
+    datasets:
+      - dataset: LHCBZ940PB
+      - dataset: LHCBZEE2FB
+      - dataset: LHCBWZMU7TEV # Not included in past (because of [NRM])
+      - dataset: LHCBWZMU8TEV # Not included in past (because of [NRM])
+  - experiment: CDF
+    datasets:
+      - dataset: CDFZRAP
+      - dataset: CDFR2KT
+  - experiment: D0
+    datasets:
+      - dataset: D0ZRAP
+      - dataset: D0WEASY
+      - dataset: D0WMASY
+
+template: template.md
+
+dataset_report:
+   meta: Null
+   template_text: |
+      ## Scale variations as a function of the kinematics for {@dataset_name@}
+      {@plot_fancy_dataspecs@}
+
+actions_:
+  - report(main=true)
