@@ -5,10 +5,7 @@ meta:
 
 theoryid: 52
 
-fit: NNPDF31_nlo_as_0118_1000
 pdf: NNPDF31_nlo_as_0118
-
-use_cuts: "fromfit"
 
 experiments:
 # Fixed target DIS
@@ -61,7 +58,6 @@ experiments:
     datasets:
       - dataset: CMSWEASY840PB
       - dataset: CMSWMASY47FB
-      - dataset: CMSWCHARMRAT
       - dataset: CMSDY2D11
       - dataset: CMSWMU8TEV
       - dataset: CMSZDIFF12
@@ -77,7 +73,6 @@ experiments:
   - experiment: CDF
     datasets:
       - dataset: CDFZRAP
-      - dataset: CDFR2KT
   - experiment: D0
     datasets:
       - dataset: D0ZRAP
@@ -86,17 +81,15 @@ experiments:
 
 shiftconfig:
 
+   use_cuts: fromfit
+   fit: 190302_ern_nlo_central_163_global
+
    theoryid: 52
-
-   fit: NNPDF31_nlo_as_0118_1000
-
-   use_cuts: 'fromfit'
 
    dataspecs:
        - theoryid: 52
          pdf: NNPDF31_nlo_as_0118
          speclabel: "NLO"
-         fit: NNPDF31_nlo_as_0118_1000
          experiments:
          # Fixed target DIS
              - experiment: NMC
@@ -148,8 +141,6 @@ shiftconfig:
                datasets:
                   - dataset: CMSWEASY840PB
                   - dataset: CMSWMASY47FB
-                  - dataset: CMSWCHARMRAT
-                  - dataset: CMSWCHARMTOT
                   - dataset: CMSDY2D11
                   - dataset: CMSWMU8TEV
                   - dataset: CMSZDIFF12
@@ -165,7 +156,6 @@ shiftconfig:
              - experiment: CDF
                datasets:
                   - dataset: CDFZRAP
-                  - dataset: CDFR2KT
              - experiment: D0
                datasets:
                   - dataset: D0ZRAP
@@ -174,7 +164,6 @@ shiftconfig:
        - theoryid: 53
          pdf: NNPDF31_nlo_as_0118
          speclabel: "NNLO"
-         fit: NNPDF31_nnlo_as_0118_1000
          experiments:
          # Fixed target DIS
              - experiment: NMC
@@ -226,8 +215,6 @@ shiftconfig:
                datasets:
                   - dataset: CMSWEASY840PB
                   - dataset: CMSWMASY47FB
-                  - dataset: CMSWCHARMRAT
-                  - dataset: CMSWCHARMTOT
                   - dataset: CMSDY2D11
                   - dataset: CMSWMU8TEV
                   - dataset: CMSZDIFF12
@@ -243,7 +230,6 @@ shiftconfig:
              - experiment: CDF
                datasets:
                   - dataset: CDFZRAP
-                  - dataset: CDFR2KT
              - experiment: D0
                datasets:
                   - dataset: D0ZRAP
@@ -265,24 +251,8 @@ theoryconfig:
 
    theoryid: 163
 
-   # Taken from runcard for theory covmat fit
-   t0pdfset     : 180421-lr-nlo-central_global       # PDF set to generate t0 covmat
-   q2min        : 13.96                # Q2 minimum
-   w2min        : 12.5                # W2 minimum
-   combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
-   jetptcut_tev : 0                   # jet pt cut for tevatron
-   jetptcut_lhc : 0                   # jet pt cut for lhc
-   wptcut_lhc   : 30.0                # Minimum pT for W pT diff distributions
-   jetycut_tev  : 1e30                # jet rap. cut for tevatron
-   jetycut_lhc  : 1e30                # jet rap. cut for lhc
-   dymasscut_min: 0                   # dy inv.mass. min cut
-   dymasscut_max: 1e30                # dy inv.mass. max cut
-   jetcfactcut  : 1e30                # jet cfact. cut
-
-   use_cuts: "fromintersection"
-   cuts_intersection_spec:
-      - theoryid: 163
-      - theoryid: 53
+   use_cuts: fromfit
+   fit: 190302_ern_nlo_central_163_global
 
    pdf: NNPDF31_nlo_as_0118
 
@@ -325,11 +295,6 @@ theoryconfig:
                       - dataset: HERACOMBNCEP920
                       - dataset: HERACOMBCCEM 
                       - dataset: HERACOMBCCEP 
-               # F2bottom data
-                 - experiment: F2BOTTOM
-                   datasets: 
-                      - dataset: H1HERAF2B
-                      - dataset: ZEUSHERAF2B
                  - experiment: ATLAS
                    datasets:
                       - dataset: ATLASWZRAP36PB
@@ -345,8 +310,6 @@ theoryconfig:
                    datasets:
                       - dataset: CMSWEASY840PB
                       - dataset: CMSWMASY47FB
-                      - dataset: CMSWCHARMRAT
-                      - dataset: CMSWCHARMTOT
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
                       - dataset: CMSZDIFF12
@@ -362,7 +325,6 @@ theoryconfig:
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
-                      - dataset: CDFR2KT
                  - experiment: D0
                    datasets:
                       - dataset: D0ZRAP
@@ -405,11 +367,6 @@ theoryconfig:
                       - dataset: HERACOMBNCEP920
                       - dataset: HERACOMBCCEM 
                       - dataset: HERACOMBCCEP 
-               # F2bottom data
-                 - experiment: F2BOTTOM
-                   datasets: 
-                      - dataset: H1HERAF2B
-                      - dataset: ZEUSHERAF2B
                  - experiment: ATLAS
                    datasets:
                       - dataset: ATLASWZRAP36PB
@@ -425,8 +382,6 @@ theoryconfig:
                    datasets:
                       - dataset: CMSWEASY840PB
                       - dataset: CMSWMASY47FB
-                      - dataset: CMSWCHARMRAT
-                      - dataset: CMSWCHARMTOT
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
                       - dataset: CMSZDIFF12
@@ -442,7 +397,6 @@ theoryconfig:
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
-                      - dataset: CDFR2KT
                  - experiment: D0
                    datasets:
                       - dataset: D0ZRAP
@@ -485,11 +439,6 @@ theoryconfig:
                       - dataset: HERACOMBNCEP920
                       - dataset: HERACOMBCCEM 
                       - dataset: HERACOMBCCEP 
-               # F2bottom data
-                 - experiment: F2BOTTOM
-                   datasets: 
-                      - dataset: H1HERAF2B
-                      - dataset: ZEUSHERAF2B
                  - experiment: ATLAS
                    datasets:
                       - dataset: ATLASWZRAP36PB
@@ -505,8 +454,6 @@ theoryconfig:
                    datasets:
                       - dataset: CMSWEASY840PB
                       - dataset: CMSWMASY47FB
-                      - dataset: CMSWCHARMRAT
-                      - dataset: CMSWCHARMTOT
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
                       - dataset: CMSZDIFF12
@@ -522,7 +469,6 @@ theoryconfig:
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
-                      - dataset: CDFR2KT
                  - experiment: D0
                    datasets:
                       - dataset: D0ZRAP
@@ -565,11 +511,6 @@ theoryconfig:
                       - dataset: HERACOMBNCEP920
                       - dataset: HERACOMBCCEM 
                       - dataset: HERACOMBCCEP 
-               # F2bottom data
-                 - experiment: F2BOTTOM
-                   datasets: 
-                      - dataset: H1HERAF2B
-                      - dataset: ZEUSHERAF2B
                  - experiment: ATLAS
                    datasets:
                       - dataset: ATLASWZRAP36PB
@@ -585,8 +526,6 @@ theoryconfig:
                    datasets:
                       - dataset: CMSWEASY840PB
                       - dataset: CMSWMASY47FB
-                      - dataset: CMSWCHARMRAT
-                      - dataset: CMSWCHARMTOT
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
                       - dataset: CMSZDIFF12
@@ -602,7 +541,6 @@ theoryconfig:
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
-                      - dataset: CDFR2KT
                  - experiment: D0
                    datasets:
                       - dataset: D0ZRAP
@@ -645,11 +583,6 @@ theoryconfig:
                       - dataset: HERACOMBNCEP920
                       - dataset: HERACOMBCCEM 
                       - dataset: HERACOMBCCEP 
-               # F2bottom data
-                 - experiment: F2BOTTOM
-                   datasets: 
-                      - dataset: H1HERAF2B
-                      - dataset: ZEUSHERAF2B
                  - experiment: ATLAS
                    datasets:
                       - dataset: ATLASWZRAP36PB
@@ -665,8 +598,6 @@ theoryconfig:
                    datasets:
                       - dataset: CMSWEASY840PB
                       - dataset: CMSWMASY47FB
-                      - dataset: CMSWCHARMRAT
-                      - dataset: CMSWCHARMTOT
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
                       - dataset: CMSZDIFF12
@@ -682,7 +613,6 @@ theoryconfig:
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
-                      - dataset: CDFR2KT
                  - experiment: D0
                    datasets:
                       - dataset: D0ZRAP
@@ -725,11 +655,6 @@ theoryconfig:
                       - dataset: HERACOMBNCEP920
                       - dataset: HERACOMBCCEM 
                       - dataset: HERACOMBCCEP 
-               # F2bottom data
-                 - experiment: F2BOTTOM
-                   datasets: 
-                      - dataset: H1HERAF2B
-                      - dataset: ZEUSHERAF2B
                  - experiment: ATLAS
                    datasets:
                       - dataset: ATLASWZRAP36PB
@@ -745,8 +670,6 @@ theoryconfig:
                    datasets:
                       - dataset: CMSWEASY840PB
                       - dataset: CMSWMASY47FB
-                      - dataset: CMSWCHARMRAT
-                      - dataset: CMSWCHARMTOT
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
                       - dataset: CMSZDIFF12
@@ -762,7 +685,6 @@ theoryconfig:
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
-                      - dataset: CDFR2KT
                  - experiment: D0
                    datasets:
                       - dataset: D0ZRAP
@@ -805,11 +727,6 @@ theoryconfig:
                       - dataset: HERACOMBNCEP920
                       - dataset: HERACOMBCCEM 
                       - dataset: HERACOMBCCEP 
-               # F2bottom data
-                 - experiment: F2BOTTOM
-                   datasets: 
-                      - dataset: H1HERAF2B
-                      - dataset: ZEUSHERAF2B
                  - experiment: ATLAS
                    datasets:
                       - dataset: ATLASWZRAP36PB
@@ -825,8 +742,6 @@ theoryconfig:
                    datasets:
                       - dataset: CMSWEASY840PB
                       - dataset: CMSWMASY47FB
-                      - dataset: CMSWCHARMRAT
-                      - dataset: CMSWCHARMTOT
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
                       - dataset: CMSZDIFF12
@@ -842,7 +757,6 @@ theoryconfig:
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
-                      - dataset: CDFR2KT
                  - experiment: D0
                    datasets:
                       - dataset: D0ZRAP
@@ -885,11 +799,6 @@ theoryconfig:
                       - dataset: HERACOMBNCEP920
                       - dataset: HERACOMBCCEM 
                       - dataset: HERACOMBCCEP 
-               # F2bottom data
-                 - experiment: F2BOTTOM
-                   datasets: 
-                      - dataset: H1HERAF2B
-                      - dataset: ZEUSHERAF2B
                  - experiment: ATLAS
                    datasets:
                       - dataset: ATLASWZRAP36PB
@@ -905,8 +814,6 @@ theoryconfig:
                    datasets:
                       - dataset: CMSWEASY840PB
                       - dataset: CMSWMASY47FB
-                      - dataset: CMSWCHARMRAT
-                      - dataset: CMSWCHARMTOT
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
                       - dataset: CMSZDIFF12
@@ -922,7 +829,6 @@ theoryconfig:
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
-                      - dataset: CDFR2KT
                  - experiment: D0
                    datasets:
                       - dataset: D0ZRAP
@@ -965,11 +871,6 @@ theoryconfig:
                       - dataset: HERACOMBNCEP920
                       - dataset: HERACOMBCCEM 
                       - dataset: HERACOMBCCEP 
-               # F2bottom data
-                 - experiment: F2BOTTOM
-                   datasets: 
-                      - dataset: H1HERAF2B
-                      - dataset: ZEUSHERAF2B
                  - experiment: ATLAS
                    datasets:
                       - dataset: ATLASWZRAP36PB
@@ -985,8 +886,6 @@ theoryconfig:
                    datasets:
                       - dataset: CMSWEASY840PB
                       - dataset: CMSWMASY47FB
-                      - dataset: CMSWCHARMRAT
-                      - dataset: CMSWCHARMTOT
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
                       - dataset: CMSZDIFF12
@@ -1002,7 +901,6 @@ theoryconfig:
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
-                      - dataset: CDFR2KT
                  - experiment: D0
                    datasets:
                       - dataset: D0ZRAP
