@@ -235,13 +235,13 @@ def theory_corrmat_custom_dataspecs(theory_covmat_custom_dataspecs):
 
 
 def _shuffle_list(l, shift):
-   """Function that moves list elements left by 'shift' entries"""
-   i=0
-   newlist = l.copy()
-   while i <= (shift-1):
-       newlist.append(newlist.pop(0))
-       i = i + 1
-   return newlist
+    """Function that moves list elements left by 'shift' entries"""
+    i=0
+    newlist = l.copy()
+    while i <= (shift-1):
+        newlist.append(newlist.pop(0))
+        i = i + 1
+    return newlist
 
 def vectors_3pt(splitdiffs):
     """Returns the linearly independent vectors for 3pt prescription"""
@@ -610,4 +610,3 @@ def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
     ax.legend(fontsize=20)
     ax.yaxis.set_tick_params(labelsize=20)
     return fig
-
