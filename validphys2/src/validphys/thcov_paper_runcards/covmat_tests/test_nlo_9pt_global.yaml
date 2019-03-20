@@ -60,7 +60,7 @@ experiments:
       - dataset: CMSWMASY47FB
       - dataset: CMSDY2D11
       - dataset: CMSWMU8TEV
-      - dataset: CMSZDIFF12
+      - { dataset: CMSZDIFF12, cfac: [NRM] }
       - dataset: CMSJETS11
       - dataset: CMSTTBARTOT
       - dataset: CMSTOPDIFF8TEVTTRAPNORM
@@ -68,8 +68,8 @@ experiments:
     datasets:
       - dataset: LHCBZ940PB
       - dataset: LHCBZEE2FB
-      - dataset: LHCBWZMU7TEV
-      - dataset: LHCBWZMU8TEV
+      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
   - experiment: CDF
     datasets:
       - dataset: CDFZRAP
@@ -143,7 +143,7 @@ shiftconfig:
                   - dataset: CMSWMASY47FB
                   - dataset: CMSDY2D11
                   - dataset: CMSWMU8TEV
-                  - dataset: CMSZDIFF12
+                  - { dataset: CMSZDIFF12, cfac: [NRM] }
                   - dataset: CMSJETS11
                   - dataset: CMSTTBARTOT
                   - dataset: CMSTOPDIFF8TEVTTRAPNORM
@@ -151,8 +151,8 @@ shiftconfig:
                datasets:
                   - dataset: LHCBZ940PB
                   - dataset: LHCBZEE2FB
-                  - dataset: LHCBWZMU7TEV
-                  - dataset: LHCBWZMU8TEV
+                  - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+                  - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
              - experiment: CDF
                datasets:
                   - dataset: CDFZRAP
@@ -217,7 +217,7 @@ shiftconfig:
                   - dataset: CMSWMASY47FB
                   - dataset: CMSDY2D11
                   - dataset: CMSWMU8TEV
-                  - dataset: CMSZDIFF12
+                  - { dataset: CMSZDIFF12, cfac: [NRM] }
                   - dataset: CMSJETS11
                   - dataset: CMSTTBARTOT
                   - dataset: CMSTOPDIFF8TEVTTRAPNORM
@@ -225,8 +225,8 @@ shiftconfig:
                datasets:
                   - dataset: LHCBZ940PB
                   - dataset: LHCBZEE2FB
-                  - dataset: LHCBWZMU7TEV
-                  - dataset: LHCBWZMU8TEV
+                  - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+                  - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
              - experiment: CDF
                datasets:
                   - dataset: CDFZRAP
@@ -312,7 +312,7 @@ theoryconfig:
                       - dataset: CMSWMASY47FB
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
-                      - dataset: CMSZDIFF12
+                      - { dataset: CMSZDIFF12, cfac: [NRM] }
                       - dataset: CMSJETS11
                       - dataset: CMSTTBARTOT
                       - dataset: CMSTOPDIFF8TEVTTRAPNORM
@@ -320,8 +320,8 @@ theoryconfig:
                    datasets:
                       - dataset: LHCBZ940PB
                       - dataset: LHCBZEE2FB
-                      - dataset: LHCBWZMU7TEV
-                      - dataset: LHCBWZMU8TEV
+                      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+                      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
@@ -384,7 +384,7 @@ theoryconfig:
                       - dataset: CMSWMASY47FB
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
-                      - dataset: CMSZDIFF12
+                      - { dataset: CMSZDIFF12, cfac: [NRM] }
                       - dataset: CMSJETS11
                       - dataset: CMSTTBARTOT
                       - dataset: CMSTOPDIFF8TEVTTRAPNORM
@@ -392,8 +392,8 @@ theoryconfig:
                    datasets:
                       - dataset: LHCBZ940PB
                       - dataset: LHCBZEE2FB
-                      - dataset: LHCBWZMU7TEV
-                      - dataset: LHCBWZMU8TEV
+                      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+                      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
@@ -456,7 +456,7 @@ theoryconfig:
                       - dataset: CMSWMASY47FB
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
-                      - dataset: CMSZDIFF12
+                      - { dataset: CMSZDIFF12, cfac: [NRM] }
                       - dataset: CMSJETS11
                       - dataset: CMSTTBARTOT
                       - dataset: CMSTOPDIFF8TEVTTRAPNORM
@@ -464,8 +464,8 @@ theoryconfig:
                    datasets:
                       - dataset: LHCBZ940PB
                       - dataset: LHCBZEE2FB
-                      - dataset: LHCBWZMU7TEV
-                      - dataset: LHCBWZMU8TEV
+                      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+                      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
@@ -528,7 +528,7 @@ theoryconfig:
                       - dataset: CMSWMASY47FB
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
-                      - dataset: CMSZDIFF12
+                      - { dataset: CMSZDIFF12, cfac: [NRM] }
                       - dataset: CMSJETS11
                       - dataset: CMSTTBARTOT
                       - dataset: CMSTOPDIFF8TEVTTRAPNORM
@@ -536,8 +536,8 @@ theoryconfig:
                    datasets:
                       - dataset: LHCBZ940PB
                       - dataset: LHCBZEE2FB
-                      - dataset: LHCBWZMU7TEV
-                      - dataset: LHCBWZMU8TEV
+                      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+                      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
@@ -600,7 +600,7 @@ theoryconfig:
                       - dataset: CMSWMASY47FB
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
-                      - dataset: CMSZDIFF12
+                      - { dataset: CMSZDIFF12, cfac: [NRM] }
                       - dataset: CMSJETS11
                       - dataset: CMSTTBARTOT
                       - dataset: CMSTOPDIFF8TEVTTRAPNORM
@@ -608,8 +608,8 @@ theoryconfig:
                    datasets:
                       - dataset: LHCBZ940PB
                       - dataset: LHCBZEE2FB
-                      - dataset: LHCBWZMU7TEV
-                      - dataset: LHCBWZMU8TEV
+                      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+                      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
@@ -672,7 +672,7 @@ theoryconfig:
                       - dataset: CMSWMASY47FB
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
-                      - dataset: CMSZDIFF12
+                      - { dataset: CMSZDIFF12, cfac: [NRM] }
                       - dataset: CMSJETS11
                       - dataset: CMSTTBARTOT
                       - dataset: CMSTOPDIFF8TEVTTRAPNORM
@@ -680,8 +680,8 @@ theoryconfig:
                    datasets:
                       - dataset: LHCBZ940PB
                       - dataset: LHCBZEE2FB
-                      - dataset: LHCBWZMU7TEV
-                      - dataset: LHCBWZMU8TEV
+                      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+                      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
@@ -744,7 +744,7 @@ theoryconfig:
                       - dataset: CMSWMASY47FB
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
-                      - dataset: CMSZDIFF12
+                      - { dataset: CMSZDIFF12, cfac: [NRM] }
                       - dataset: CMSJETS11
                       - dataset: CMSTTBARTOT
                       - dataset: CMSTOPDIFF8TEVTTRAPNORM
@@ -752,8 +752,8 @@ theoryconfig:
                    datasets:
                       - dataset: LHCBZ940PB
                       - dataset: LHCBZEE2FB
-                      - dataset: LHCBWZMU7TEV
-                      - dataset: LHCBWZMU8TEV
+                      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+                      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
@@ -816,7 +816,7 @@ theoryconfig:
                       - dataset: CMSWMASY47FB
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
-                      - dataset: CMSZDIFF12
+                      - { dataset: CMSZDIFF12, cfac: [NRM] }
                       - dataset: CMSJETS11
                       - dataset: CMSTTBARTOT
                       - dataset: CMSTOPDIFF8TEVTTRAPNORM
@@ -824,8 +824,8 @@ theoryconfig:
                    datasets:
                       - dataset: LHCBZ940PB
                       - dataset: LHCBZEE2FB
-                      - dataset: LHCBWZMU7TEV
-                      - dataset: LHCBWZMU8TEV
+                      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+                      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
@@ -888,7 +888,7 @@ theoryconfig:
                       - dataset: CMSWMASY47FB
                       - dataset: CMSDY2D11
                       - dataset: CMSWMU8TEV
-                      - dataset: CMSZDIFF12
+                      - { dataset: CMSZDIFF12, cfac: [NRM] }
                       - dataset: CMSJETS11
                       - dataset: CMSTTBARTOT
                       - dataset: CMSTOPDIFF8TEVTTRAPNORM
@@ -896,8 +896,8 @@ theoryconfig:
                    datasets:
                       - dataset: LHCBZ940PB
                       - dataset: LHCBZEE2FB
-                      - dataset: LHCBWZMU7TEV
-                      - dataset: LHCBWZMU8TEV
+                      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+                      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
                  - experiment: CDF
                    datasets:
                       - dataset: CDFZRAP
