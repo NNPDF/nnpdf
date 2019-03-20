@@ -105,8 +105,10 @@ def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
     plt.xticks(ticklocs, ticklabels, rotation=30, ha="right", fontsize=20)
     plt.gca().xaxis.tick_bottom()
     plt.yticks(ticklocs, ticklabels, fontsize=20)
-    ax.vlines(startlocs, 0, len(matrix), linestyles='dashed')
-    ax.hlines(startlocs, 0, len(matrix), linestyles='dashed')
+    # Shift startlocs elements 0.5 to left so lines are between indexes
+    startlocs_lines = [x-0.5 for x in startlocs]
+    ax.vlines(startlocs_lines, -0.5, len(matrix)-0.5, linestyles='dashed')
+    ax.hlines(startlocs_lines, -0.5, len(matrix)-0.5, linestyles='dashed')
     ax.margins(x=0, y=0)
     return fig
 
@@ -160,8 +162,10 @@ def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
     plt.xticks(ticklocs, ticklabels, rotation=30, ha="right", fontsize=20)
     plt.gca().xaxis.tick_bottom()
     plt.yticks(ticklocs, ticklabels, fontsize=20)
-    ax.vlines(startlocs, 0, len(matrix), linestyles='dashed')
-    ax.hlines(startlocs, 0, len(matrix), linestyles='dashed')
+    # Shift startlocs elements 0.5 to left so lines are between indexes
+    startlocs_lines = [x-0.5 for x in startlocs]
+    ax.vlines(startlocs_lines, -0.5, len(matrix)-0.5, linestyles='dashed')
+    ax.hlines(startlocs_lines, -0.5, len(matrix)-0.5, linestyles='dashed')
     ax.margins(x=0, y=0)
     return fig
 
@@ -307,7 +311,9 @@ def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat,
     ax.plot(sqrtdiags_tot.values, '.', label="Total", color = "blue")
     ticklocs, ticklabels, startlocs = matrix_plot_labels(sqrtdiags_th)
     plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=20)
-    ax.vlines(startlocs, 0, len(data), linestyles='dashed')
+    # Shift startlocs elements 0.5 to left so lines are between indexes
+    startlocs_lines = [x-0.5 for x in startlocs]
+    ax.vlines(startlocs_lines, 0, len(data), linestyles='dashed')
     ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{|D_i|}$", fontsize=30)
     ax.yaxis.set_tick_params(labelsize=20)
     ax.set_ylim([0,0.5])
