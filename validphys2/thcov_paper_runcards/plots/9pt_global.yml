@@ -45,7 +45,6 @@ use_cuts: "fromfit"
 pdf: NNPDF31_nlo_as_0118
 
 experiments:
-# Fixed target DIS
   - experiment: NMC
     datasets:
       - dataset: NMCPD
@@ -95,7 +94,7 @@ experiments:
       - dataset: CMSWMASY47FB
       - dataset: CMSDY2D11
       - dataset: CMSWMU8TEV
-      - dataset: CMSZDIFF12 # Not included in past (because of [NRM])
+      - { dataset: CMSZDIFF12, cfac: [NRM] }
       - dataset: CMSJETS11
       - dataset: CMSTTBARTOT
       - dataset: CMSTOPDIFF8TEVTTRAPNORM
@@ -103,8 +102,8 @@ experiments:
     datasets:
       - dataset: LHCBZ940PB
       - dataset: LHCBZEE2FB
-      - dataset: LHCBWZMU7TEV # Not included in past (because of [NRM])
-      - dataset: LHCBWZMU8TEV # Not included in past (because of [NRM])
+      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
   - experiment: CDF
     datasets:
       - dataset: CDFZRAP
