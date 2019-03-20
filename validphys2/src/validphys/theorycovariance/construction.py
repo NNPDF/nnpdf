@@ -312,6 +312,103 @@ def covmap(combine_by_type, dataset_names):
         start += process_info.sizes[dataset]
     return mapping
 
+def covmat_3pt(name1, name2, deltas1, deltas2):
+    """Returns theory covariance sub-matrix for 3pt prescription,
+    given two dataset names and collections of scale variation shifts"""
+    if name1 == name2:
+        s = 0.5*sum(np.outer(d, d) for d in deltas1)
+    else:
+        s = 0.25*(np.outer((deltas1[0]+deltas1[1]),
+                           (deltas2[0]+deltas2[1])))
+    return s
+
+def covmat_5pt_linear(name1, name2, deltas1, deltas2):
+    """Returns theory covariance sub-matrix for Zahari's 5pt
+    linear prescription, given two dataset names and collections
+    of scale variation shifts"""
+    if name1 == name2:
+        s = 0.25*(np.outer(deltas1[0], deltas2[0])
+                - np.outer(deltas1[0], deltas2[1])
+                - np.outer(deltas1[1], deltas2[0])
+                + np.outer(deltas1[1], deltas2[1])
+                + np.outer(deltas1[2], deltas2[2])
+                - np.outer(deltas1[2], deltas2[3])
+                - np.outer(deltas1[3], deltas2[2])
+                + np.outer(deltas1[3], deltas2[3]))
+    else:
+        s = 0.25*(np.outer(deltas1[0], deltas2[0])
+                - np.outer(deltas1[0], deltas2[1])
+                - np.outer(deltas1[1], deltas2[0])
+                + np.outer(deltas1[1], deltas2[1]))
+    return s
+
+def covmat_5pt(name1, name2, deltas1, deltas2):
+    """Returns theory covariance sub-matrix for 5pt prescription,
+    given two dataset names and collections of scale variation shifts"""
+    if name1 == name2:
+        s = 0.5*sum(np.outer(d, d) for d in deltas1)
+    else:
+        s = 0.5*(np.outer(deltas1[0], deltas2[0])
+                + np.outer(deltas1[1], deltas2[1])) + 0.25*(
+                np.outer((deltas1[2] + deltas1[3]),
+                (deltas2[2] + deltas2[3])))
+    return s
+
+def covmat_5barpt(name1, name2, deltas1, deltas2):
+    """Returns theory covariance sub-matrix for 5barpt prescription,
+    given two dataset names and collections of scale variation shifts"""
+    if name1 == name2:
+        s = 0.5*sum(np.outer(d, d) for d in deltas1)
+    else:
+        s = 0.25*(np.outer((deltas1[0]+deltas1[2]),
+                           (deltas2[0]+deltas2[2]))
+            + np.outer((deltas1[1]+deltas1[3]),
+                       (deltas2[1]+deltas2[3])))
+    return s
+
+def covmat_7pt_orig(name1, name2, deltas1, deltas2):
+    """Returns theory covariance sub-matrix for original 7pt prescription,
+    now deprecated but kept for posterity,
+    given two dataset names and collections of scale variation shifts"""
+    if name1 == name2:
+        s = (1/3)*sum(np.outer(d, d) for d in deltas1)
+    else:
+        s = (1/6)*(np.outer((deltas1[0]+ deltas1[4]),
+                   (deltas2[0] + deltas2[4]))
+            + np.outer((deltas1[1]+ deltas1[5]),
+                       (deltas2[1] + deltas2[5]))
+            + np.outer((deltas1[2]+deltas1[3]), (
+                    deltas2[2]+ deltas2[3])))
+    return s
+
+def covmat_7pt(name1, name2, deltas1, deltas2):
+    """Returns theory covariance sub-matrix for 7pt prescription (Gavin),
+    given two dataset names and collections of scale variation shifts"""
+    if name1 == name2:
+        s = (1/3)*sum(np.outer(d, d) for d in deltas1)
+    else:
+        s = (1/6)*(2*(np.outer(deltas1[0], deltas2[0])
+        + np.outer(deltas1[1], deltas2[1]))
+        + (np.outer((deltas1[2] + deltas1[3]),
+                    (deltas2[2] + deltas2[3]))
+                + np.outer((deltas1[4] + deltas1[5]),
+                           (deltas2[4] + deltas2[5]))))
+    return s
+
+def covmat_9pt(name1, name2, deltas1, deltas2):
+    """Returns theory covariance sub-matrix for 9pt prescription,
+    given two dataset names and collections of scale variation shifts"""
+    if name1 == name2:
+        s = 0.25*sum(np.outer(d, d) for d in deltas1)
+    else:
+        s = (1/12)*(np.outer((deltas1[0]+deltas1[4]+deltas1[6]),
+                    (deltas2[0]+deltas2[4]+deltas2[6]))
+                + np.outer((deltas1[1]+deltas1[5]+deltas1[7]),
+                           (deltas2[1]+deltas2[5]+deltas2[7]))) + (1/8)*(
+                           np.outer((deltas1[2]+deltas1[3]),
+                                    (deltas2[2]+deltas2[3])))
+    return s
+
 @_check_correct_theory_combination
 def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
                      fivetheories:(str, type(None)) = None,
@@ -325,8 +422,8 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
     processes are the same relative to when they are different."""
     l = len(theoryids)
     start_proc = process_starting_points
-    covmats = defaultdict(list)
     process_info = combine_by_type
+    covmats = defaultdict(list)
     for name1 in process_info.theory:
         for name2 in process_info.theory:
             central1, *others1 = process_info.theory[name1]
@@ -334,79 +431,29 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
             central2, *others2 = process_info.theory[name2]
             deltas2 = list((other - central2 for other in others2))
             if l==3:
-                if name1 == name2:
-                    s = 0.5*sum(np.outer(d, d) for d in deltas1)
-                else:
-                    s = 0.25*(np.outer((deltas1[0]+deltas1[1]),
-                                       (deltas2[0]+deltas2[1])))
-                start_locs = (start_proc[name1], start_proc[name2])
-                covmats[start_locs] = s
+                s = covmat_3pt(name1, name2, deltas1, deltas2)
             elif l==5:
-             # Zahari's proposal for the theoretical covariance matrix --------------------
+             # Zahari's proposal for the theoretical covariance matrix --------------
                 if fivetheories=='linear':
-                    if name1 == name2:
-                        s = 0.25*(np.outer(deltas1[0], deltas2[0])
-                            - np.outer(deltas1[0], deltas2[1])
-                            - np.outer(deltas1[1], deltas2[0])
-                            + np.outer(deltas1[1], deltas2[1])
-                            + np.outer(deltas1[2], deltas2[2])
-                            - np.outer(deltas1[2], deltas2[3])
-                            - np.outer(deltas1[3], deltas2[2])
-                            + np.outer(deltas1[3], deltas2[3]))
-                    else:
-                        s = 0.25*(np.outer(deltas1[0], deltas2[0])
-                                - np.outer(deltas1[0], deltas2[1])
-                                - np.outer(deltas1[1], deltas2[0])
-                                + np.outer(deltas1[1], deltas2[1]))
+                    s = covmat_5pt_linear(name1, name2, deltas1, deltas2)
+             # 5 point --------------------------------------------------------------
+                elif fivetheories=='nobar':
+                    s = covmat_5pt(name1, name2, deltas1, deltas2)
+             # 5bar-point -----------------------------------------------------------
                 else:
-                    if name1 == name2:
-                        s = 0.5*sum(np.outer(d, d) for d in deltas1)
-             # 5 point --------------------------------------------------------------------
-                    elif fivetheories=='nobar':
-                        s = 0.5*(np.outer(deltas1[0], deltas2[0]) + np.outer(
-                                               deltas1[1], deltas2[1])) + 0.25*(
-                            np.outer((deltas1[2] + deltas1[3]),
-                                    (deltas2[2] + deltas2[3])))
-             # 5bar-point -----------------------------------------------------------------
-                    else:
-                        s = 0.25*(np.outer((deltas1[0]+deltas1[2]),
-                                            (deltas2[0]+deltas2[2]))
-                                + np.outer((deltas1[1]+deltas1[3]),
-                                            (deltas2[1]+deltas2[3])))
-             #  -----------------------------------------------------------------
-                start_locs = (start_proc[name1], start_proc[name2])
-                covmats[start_locs] = s
+                    s = covmat_5barpt(name1, name2, deltas1, deltas2)
+             #  ---------------------------------------------------------------------
             elif l==7:
-                if name1 == name2:
-                    s = (1/3)*sum(np.outer(d, d) for d in deltas1)
-                elif seventheories=='original':
-                    s = (1/6)*(np.outer((deltas1[0]+ deltas1[4]),
-                               (deltas2[0] + deltas2[4]))
-                               + np.outer((deltas1[1]+ deltas1[5]),
-                                          (deltas2[1] + deltas2[5]))
-                               + np.outer((deltas1[2]+deltas1[3]), (
-                                       deltas2[2]+ deltas2[3])))
+             # Outdated 7pts implementation: left for posterity ---------------------
+                if seventheories=='original':
+                    s = covmat_7pt_orig(name1, name2, deltas1, deltas2)
+             # 7pt (Gavin) ----------------------------------------------------------
                 else:
-                    s = (1/6)*(2*(np.outer(deltas1[0], deltas2[0])
-                                  + np.outer(deltas1[1], deltas2[1]))
-                             + (np.outer((deltas1[2] + deltas1[3]),
-                                         (deltas2[2] + deltas2[3]))
-                             + np.outer((deltas1[4] + deltas1[5]),
-                                        (deltas2[4] + deltas2[5]))))
-                start_locs = (start_proc[name1], start_proc[name2])
-                covmats[start_locs] = s
+                    s = covmat_7pt(name1, name2, deltas1, deltas2)
             elif l==9:
-                if name1 == name2:
-                    s = 0.25*sum(np.outer(d, d) for d in deltas1)
-                else:
-                    s = (1/12)*(np.outer((deltas1[0]+deltas1[4]+deltas1[6]),
-                                         (deltas2[0]+deltas2[4]+deltas2[6]))
-                                + np.outer((deltas1[1]+deltas1[5]+deltas1[7]),
-                                           (deltas2[1]+deltas2[5]+deltas2[7]))) + (1/8)*(
-                                           np.outer((deltas1[2]+deltas1[3]),
-                                            (deltas2[2]+deltas2[3])))
-                start_locs = (start_proc[name1], start_proc[name2])
-                covmats[start_locs] = s
+                s = covmat_9pt(name1, name2, deltas1, deltas2)
+            start_locs = (start_proc[name1], start_proc[name2])
+            covmats[start_locs] = s
     return covmats
 
 def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):

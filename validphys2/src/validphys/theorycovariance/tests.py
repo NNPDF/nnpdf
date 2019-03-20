@@ -233,6 +233,179 @@ def theory_corrmat_custom_dataspecs(theory_covmat_custom_dataspecs):
     mat = theory_corrmat(theory_covmat_custom_dataspecs)
     return mat
 
+
+def _shuffle_list(l, shift):
+    """Function that moves list elements left by 'shift' entries"""
+    i=0
+    newlist = l.copy()
+    while i <= (shift-1):
+        newlist.append(newlist.pop(0))
+        i = i + 1
+    return newlist
+
+def vectors_3pt(splitdiffs):
+    """Returns the linearly independent vectors for 3pt prescription"""
+    # N.B. mu_0 correlated with mu_i
+    xs = []
+    num_pts = 3
+    pps = splitdiffs[::(num_pts-1)]
+    mms = _shuffle_list(splitdiffs,1)[::(num_pts-1)]
+    # Constructing (+, +, +, ...)
+    xs.append(sum(pps))
+    # Constructing the p vectors with one minus
+	# (-, +, + ...) + cyclic
+    for procloc, mm in enumerate(mms):
+        newvec = pps[0].copy()
+        newvec.loc[:]=0
+        subpps = pps.copy()
+        del subpps[procloc]
+        newvec = newvec + sum(subpps) + mm
+        xs.append(newvec)
+    return xs
+
+def vectors_5pt(splitdiffs):
+    """Returns the linearly independent vectors for 5pt prescription"""
+    num_pts = 5
+    pzs = splitdiffs[::(num_pts-1)]
+    mzs = _shuffle_list(splitdiffs,1)[::(num_pts-1)]
+    zps = _shuffle_list(splitdiffs,2)[::(num_pts-1)]
+    zms = _shuffle_list(splitdiffs,3)[::(num_pts-1)]
+    xs = []
+    # Constructing (+; 0, 0, 0 ...)
+	#              (-; 0, 0, 0 ...)
+	#              (0; +, +, + ...)
+    xs.append(sum(pzs))
+    xs.append(sum(mzs))
+    xs.append(sum(zps))
+    # Constructing the p vectors with one minus
+    # (0; -, +, + ...) + cyclic
+    for procloc, zm in enumerate(zms):
+        newvec = zps[0].copy()
+        newvec.loc[:] = 0
+        subzps = zps.copy()
+        del subzps[procloc]
+        newvec = newvec + sum(subzps) + zm
+        xs.append(newvec)
+    return xs
+
+def vectors_5barpt(splitdiffs):
+    """Returns the linearly independent vectors for 5barpt prescription"""
+    num_pts = 5
+    pps = splitdiffs[::(num_pts-1)]
+    mms = _shuffle_list(splitdiffs,1)[::(num_pts-1)]
+    pms = _shuffle_list(splitdiffs,2)[::(num_pts-1)]
+    mps = _shuffle_list(splitdiffs,3)[::(num_pts-1)]
+    xs = []
+    # Constructing (+/-; +, + ...)
+    xs.append(sum(pps))
+    xs.append(sum(mps))
+    # Constructing the 2p vectors with one minus
+	# (+; -, +, + ...) + cyclic
+    for procloc, pm in enumerate(pms):
+        newvec = pms[0].copy()
+        newvec.loc[:] = 0
+        subpps = pps.copy()
+        del subpps[procloc]
+        newvec = newvec + sum(subpps) + pm
+        xs.append(newvec)
+     # (-; -, +, + ...) + cyclic
+    for procloc, mm in enumerate(mms):
+        newvec = mms[0].copy()
+        newvec.loc[:] = 0
+        submps = mps.copy()
+        del submps[procloc]
+        newvec = newvec + sum(submps) + mm
+        xs.append(newvec)
+    return xs
+
+def vectors_7pt(splitdiffs):
+    """Returns the linearly independent vectors for 7pt prescription"""
+    num_pts = 7
+    pzs = splitdiffs[::(num_pts-1)]
+    mzs = _shuffle_list(splitdiffs,1)[::(num_pts-1)]
+    zps = _shuffle_list(splitdiffs,2)[::(num_pts-1)]
+    zms = _shuffle_list(splitdiffs,3)[::(num_pts-1)]
+    pps = _shuffle_list(splitdiffs,4)[::(num_pts-1)]
+    mms = _shuffle_list(splitdiffs,5)[::(num_pts-1)]
+    xs = []
+    # 7pt is the sum of 3pts and 5pts
+    # 3pt-like part:
+    xs.append(sum(pps))
+    for procloc, mm in enumerate(mms):
+        newvec = pps[0].copy()
+        newvec.loc[:]=0
+        subpps = pps.copy()
+        del subpps[procloc]
+        newvec = newvec + sum(subpps) + mm
+        xs.append(newvec)
+    # 5pt-like part:
+    xs.append(sum(pzs))
+    xs.append(sum(mzs))
+    xs.append(sum(zps))
+    for procloc, zm in enumerate(zms):
+        newvec = zps[0].copy()
+        newvec.loc[:] = 0
+        subzps = zps.copy()
+        del subzps[procloc]
+        newvec = newvec + sum(subzps) + zm
+        xs.append(newvec)
+    return xs
+
+def vectors_9pt(splitdiffs):
+    """Returns the linearly independent vectors for 9pt prescription"""
+    num_pts = 9
+    pzs = splitdiffs[::(num_pts-1)]
+    mzs = _shuffle_list(splitdiffs,1)[::(num_pts-1)]
+    zps = _shuffle_list(splitdiffs,2)[::(num_pts-1)]
+    zms = _shuffle_list(splitdiffs,3)[::(num_pts-1)]
+    pps = _shuffle_list(splitdiffs,4)[::(num_pts-1)]
+    mms = _shuffle_list(splitdiffs,5)[::(num_pts-1)]
+    pms = _shuffle_list(splitdiffs,6)[::(num_pts-1)]
+    mps = _shuffle_list(splitdiffs,7)[::(num_pts-1)]
+    xs = []
+    # Constructing (+/-/0; +, +, ...)
+    xs.append(sum(pps))
+    xs.append(sum(mps))
+    xs.append(sum(zps))
+    # Constructing (+/-/0; -, +, + ...) + cyclic
+    for procloc, zm in enumerate(zms):
+        newvec = zps[0].copy()
+        newvec.loc[:] = 0
+        subzps = zps.copy()
+        del subzps[procloc]
+        newvec = newvec + sum(subzps) + zm
+        xs.append(newvec)
+    for procloc, pm in enumerate(pms):
+        newvec = pps[0].copy()
+        newvec.loc[:] = 0
+        subpps = pps.copy()
+        del subpps[procloc]
+        newvec = newvec + sum(subpps) + pm
+        xs.append(newvec)
+    for procloc, mm in enumerate(mms):
+        newvec = mps[0].copy()
+        newvec.loc[:] = 0
+        submps = mps.copy()
+        del submps[procloc]
+        newvec = newvec + sum(submps) + mm
+        xs.append(newvec)
+    # Constructing (+/-; 0, +, +, ...) + cyclic
+    for procloc, pz in enumerate(pzs):
+        newvec = pps[0].copy()
+        newvec.loc[:] = 0
+        subpps = pps.copy()
+        del subpps[procloc]
+        newvec = newvec + sum(subpps) + pz
+        xs.append(newvec)
+    for procloc, mz in enumerate(mzs):
+        newvec = mps[0].copy()
+        newvec.loc[:] = 0
+        submps = mps.copy()
+        del submps[procloc]
+        newvec = newvec + sum(submps) + mz
+        xs.append(newvec)
+    return xs
+
 @_check_correct_theory_combination_theoryconfig
 def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                         collected_theoryids,
@@ -242,15 +415,6 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
     the basis of non-zero eigenvalues, dependent on point-prescription.
     Then returns the eigenvalues (w) and eigenvectors (v)
     in the data space."""
-
-    # Function that moves list elements left by 'shift' entries
-    def shuffle_list(l, shift):
-        i=0
-        newlist = l.copy()
-        while i <= (shift-1):
-            newlist.append(newlist.pop(0))
-            i = i + 1
-        return newlist
 
     covmat = (thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0])))
     # constructing vectors of shifts due to scale variation
@@ -289,148 +453,15 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
 	# and total vectors are notated like
 	# (mu_0; mu_1, mu_2, ..., mu_p)
     if num_pts == 3:
-        # N.B. mu_0 correlated with mu_i
-        xs = []
-        pps = splitdiffs[::(num_pts-1)]
-        mms = shuffle_list(splitdiffs,1)[::(num_pts-1)]
-        # Constructing (+, +, +, ...)
-        xs.append(sum(pps))
-        # Constructing the p vectors with one minus
-	    # (-, +, + ...) + cyclic
-        for procloc, mm in enumerate(mms):
-            newvec = pps[0].copy()
-            newvec.loc[:]=0
-            subpps = pps.copy()
-            del subpps[procloc]
-            newvec = newvec + sum(subpps) + mm
-            xs.append(newvec)
+        xs = vectors_3pt(splitdiffs)
     elif (num_pts == 5) and (fivetheories == "nobar"):
-        pzs = splitdiffs[::(num_pts-1)]
-        mzs = shuffle_list(splitdiffs,1)[::(num_pts-1)]
-        zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
-        zms = shuffle_list(splitdiffs,3)[::(num_pts-1)]
-        xs = []
-        # Constructing (+; 0, 0, 0 ...)
-	    #              (-; 0, 0, 0 ...)
-	    #              (0; +, +, + ...)
-        xs.append(sum(pzs))
-        xs.append(sum(mzs))
-        xs.append(sum(zps))
-        # Constructing the p vectors with one minus
-        # (0; -, +, + ...) + cyclic
-        for procloc, zm in enumerate(zms):
-            newvec = zps[0].copy()
-            newvec.loc[:] = 0
-            subzps = zps.copy()
-            del subzps[procloc]
-            newvec = newvec + sum(subzps) + zm
-            xs.append(newvec)
+        xs = vectors_5pt(splitdiffs)
     elif (num_pts == 5) and (fivetheories == "bar"):
-        pps = splitdiffs[::(num_pts-1)]
-        mms = shuffle_list(splitdiffs,1)[::(num_pts-1)]
-        pms = shuffle_list(splitdiffs,2)[::(num_pts-1)]
-        mps = shuffle_list(splitdiffs,3)[::(num_pts-1)]
-        xs = []
-        # Constructing (+/-; +, + ...)
-        xs.append(sum(pps))
-        xs.append(sum(mps))
-        # Constructing the 2p vectors with one minus
-	    # (+; -, +, + ...) + cyclic
-        for procloc, pm in enumerate(pms):
-            newvec = pms[0].copy()
-            newvec.loc[:] = 0
-            subpps = pps.copy()
-            del subpps[procloc]
-            newvec = newvec + sum(subpps) + pm
-            xs.append(newvec)
-        # (-; -, +, + ...) + cyclic
-        for procloc, mm in enumerate(mms):
-            newvec = mms[0].copy()
-            newvec.loc[:] = 0
-            submps = mps.copy()
-            del submps[procloc]
-            newvec = newvec + sum(submps) + mm
-            xs.append(newvec)
+        xs = vectors_5barpt(splitdiffs)
     elif (num_pts == 7) and (seventheories != "original"):
-        pzs = splitdiffs[::(num_pts-1)]
-        mzs = shuffle_list(splitdiffs,1)[::(num_pts-1)]
-        zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
-        zms = shuffle_list(splitdiffs,3)[::(num_pts-1)]
-        pps = shuffle_list(splitdiffs,4)[::(num_pts-1)]
-        mms = shuffle_list(splitdiffs,5)[::(num_pts-1)]
-        xs = []
-        # 7pt is the sum of 3pts and 5pts
-        # 3pt-like part:
-        xs.append(sum(pps))
-        for procloc, mm in enumerate(mms):
-            newvec = pps[0].copy()
-            newvec.loc[:]=0
-            subpps = pps.copy()
-            del subpps[procloc]
-            newvec = newvec + sum(subpps) + mm
-            xs.append(newvec)
-        # 5pt-like part:
-        xs.append(sum(pzs))
-        xs.append(sum(mzs))
-        xs.append(sum(zps))
-        for procloc, zm in enumerate(zms):
-            newvec = zps[0].copy()
-            newvec.loc[:] = 0
-            subzps = zps.copy()
-            del subzps[procloc]
-            newvec = newvec + sum(subzps) + zm
-            xs.append(newvec)
+        xs = vectors_7pt(splitdiffs)
     elif num_pts == 9:
-        pzs = splitdiffs[::(num_pts-1)]
-        mzs = shuffle_list(splitdiffs,1)[::(num_pts-1)]
-        zps = shuffle_list(splitdiffs,2)[::(num_pts-1)]
-        zms = shuffle_list(splitdiffs,3)[::(num_pts-1)]
-        pps = shuffle_list(splitdiffs,4)[::(num_pts-1)]
-        mms = shuffle_list(splitdiffs,5)[::(num_pts-1)]
-        pms = shuffle_list(splitdiffs,6)[::(num_pts-1)]
-        mps = shuffle_list(splitdiffs,7)[::(num_pts-1)]
-        xs = []
-        # Constructing (+/-/0; +, +, ...)
-        xs.append(sum(pps))
-        xs.append(sum(mps))
-        xs.append(sum(zps))
-        # Constructing (+/-/0; -, +, + ...) + cyclic
-        for procloc, zm in enumerate(zms):
-            newvec = zps[0].copy()
-            newvec.loc[:] = 0
-            subzps = zps.copy()
-            del subzps[procloc]
-            newvec = newvec + sum(subzps) + zm
-            xs.append(newvec)
-        for procloc, pm in enumerate(pms):
-            newvec = pps[0].copy()
-            newvec.loc[:] = 0
-            subpps = pps.copy()
-            del subpps[procloc]
-            newvec = newvec + sum(subpps) + pm
-            xs.append(newvec)
-        for procloc, mm in enumerate(mms):
-            newvec = mps[0].copy()
-            newvec.loc[:] = 0
-            submps = mps.copy()
-            del submps[procloc]
-            newvec = newvec + sum(submps) + mm
-            xs.append(newvec)
-        # Constructing (+/-; 0, +, +, ...) + cyclic
-        for procloc, pz in enumerate(pzs):
-            newvec = pps[0].copy()
-            newvec.loc[:] = 0
-            subpps = pps.copy()
-            del subpps[procloc]
-            newvec = newvec + sum(subpps) + pz
-            xs.append(newvec)
-        for procloc, mz in enumerate(mzs):
-            newvec = mps[0].copy()
-            newvec.loc[:] = 0
-            submps = mps.copy()
-            del submps[procloc]
-            newvec = newvec + sum(submps) + mz
-            xs.append(newvec)
+        xs = vectors_9pt(splitdiffs)
     # ------------------------------------------------
     # Orthonormalising vectors according to Gram-Schmidt
     ys = [x/np.linalg.norm(x) for x in xs]
@@ -579,4 +610,3 @@ def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
     ax.legend(fontsize=20)
     ax.yaxis.set_tick_params(labelsize=20)
     return fig
-
