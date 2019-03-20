@@ -113,7 +113,6 @@ public:
   void SetPlotFile(string const&);
 
   // Get methods
-  bool ThUncUsed() const;
   YAML::Node Get(const string& item) const;
   YAML::Node Get(const string& node, const string& item) const;
   YAML::Node GetPlotting(const string& item) const;
