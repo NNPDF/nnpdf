@@ -8,6 +8,7 @@ import functools
 import tarfile
 
 import numpy as np
+import pandas as pd
 
 
 class BadFKTableError(Exception):
@@ -98,7 +99,10 @@ def _parse_xgrid(buf):
 # be fast.
 # We assume it is going to be the last section.
 def _parse_fast_kernel(f):
-    return np.loadtxt(f)
+    # Note that we need the slower whitespace here because it turns out
+    # that there are fktables where space and tab are used as separators
+    # within the same table.
+    return pd.read_csv(f, sep=r'\s+', header=None, index_col=(0,1,2))
 
 
 def _parse_header(lineno, header):
