@@ -11,12 +11,21 @@ import dataclasses
 import numpy as np
 import pandas as pd
 
+
 @dataclasses.dataclass(frozen=True)
 class GridInfo:
     setname: str
     hadronic: bool
     ndata: int
     nx: int
+
+@dataclasses.dataclass(eq=False)
+class FKTableData:
+    hadronic: bool
+    Q0: float
+    xgrid: np.array
+    sigma: pd.DataFrame
+    metadata: dict = dataclasses.field(default_factory=dict, repr=False)
 
 class BadFKTableError(Exception):
     """Exception raised when an FKTable cannot be parsed correctly"""
@@ -47,6 +56,9 @@ def open_fkpath(path):
 
 def _is_header_line(line):
     return line.startswith((b'_', b'{'))
+
+def _bytes_to_bool(x):
+    return bool(int(x))
 
 def _parse_fk_options(line_and_stream, value_parsers=None):
     """Parse a sequence of lines of the form
@@ -130,7 +142,7 @@ def _parse_gridinfo(line_and_stream):
     d, l, h = _parse_fk_options(
         line_and_stream,
         value_parsers={
-            "HADRONIC": lambda x: bool(int(x)),
+            "HADRONIC": _bytes_to_bool,
             "NDATA": int,
             "NX": int
         })
@@ -152,13 +164,70 @@ def _parse_header(lineno, header):
     return header[0:1], header_name.decode()
 
 
+def _build_sigma(lineno, f, res):
+    gi = res["GridInfo"]
+    fm = res["FlavourMap"]
+    table = (
+        _parse_hadronic_fast_kernel(f) if gi.hadronic else _parse_dis_fast_kernel(f)
+    )
+    # Filter out empty flavour indices
+    table = table.loc[:, fm.ravel()]
+    return table
+
 _KNOWN_SEGMENTS = {
     "GridDesc": _parse_string,
     "VersionInfo": _parse_fk_options,
     "GridInfo": _parse_gridinfo,
     "FlavourMap": _parse_flavour_map,
     "xGrid": _parse_xgrid,
+    "TheoryInfo": functools.partial(
+        _parse_fk_options,
+        value_parsers={
+            "ID": int,
+            "PTO": int,
+            "DAMP": _bytes_to_bool,
+            "IC": _bytes_to_bool,
+            "XIR": float,
+            "XIF": float,
+            "NfFF": int,
+            "MaxNfAs": int,
+            "MaxNfPdf": int,
+            "Q0": float,
+            "alphas": float,
+            "Qref": float,
+            "QED": _bytes_to_bool,
+            "alphaqed": float,
+            "Qedref": float,
+            "SxRes": _bytes_to_bool,
+            "mc": float,
+            "Qmc": float,
+            "kcThr": float,
+            "mb": float,
+            "Qmb": float,
+            "kbThr": float,
+            "mt": float,
+            "Qmt": float,
+            "ktThr": float,
+            "MZ": float,
+            "MW": float,
+            "GF": float,
+            "SIN2TW": float,
+            "TMC": _bytes_to_bool,
+            "MP": float,
+            "global_nx": int,
+            "EScaleVar": _bytes_to_bool,
+        },
+    ),
 }
+
+def _check_required_sections(res, lineno):
+    """Check that we have found all the required sections by the time we
+    reach 'FastKernel'"""
+    for section in _KNOWN_SEGMENTS:
+        if section not in res:
+            raise BadFKTableError(
+                f"{section} must come before 'FastKernel' section at {lineno}"
+            )
 
 def parse_fktable(f):
     line_and_stream = enumerate(f, start=1)
@@ -167,19 +236,14 @@ def parse_fktable(f):
     while True:
         marker, header_name = _parse_header(lineno, header)
         if header_name == "FastKernel":
-            try:
-                gi = res["GridInfo"]
-            except KeyError:
-                raise BadFKTableError(
-                    "'GridInfo' section must come before 'FastKernel' section "
-                    f"at {lineno}"
-                ) from None
-            res["FastKernel"] = (
-                _parse_hadronic_fast_kernel(f)
-                if gi.hadronic
-                else _parse_dis_fast_kernel(f)
+            _check_required_sections(res, lineno)
+            Q0 = res['TheoryInfo']['Q0']
+            sigma = _build_sigma(lineno, f, res)
+            hadronic = res['GridInfo'].hadronic
+            xgrid = res.pop('xGrid')
+            return FKTableData(
+                sigma=sigma, Q0=Q0, metadata=res, hadronic=hadronic, xgrid=xgrid
             )
-            return res
         elif header_name in _KNOWN_SEGMENTS:
             parser = _KNOWN_SEGMENTS[header_name]
         elif marker == b'{':
