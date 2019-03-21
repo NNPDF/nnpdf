@@ -1,16 +1,16 @@
 #!/bin/bash
 #Find conda
-#source ~/.bashrc
-#set -e
-#set -o pipefail
-#set -u
-#set -v
+source ~/.bashrc
+set -e
+set -o pipefail
+set -u
+set -v
 
 #Set up netrc file for uploading/downloading
 echo "$NETRC_FILE" | base64 --decode > ~/.netrc
 
 #Build package
-conda build -q conda-recipe
+CONDA_PY=$CONDA_PY conda build -q conda-recipe
 if [ $? != 0 ]; then
 	echo failed to build
 	exit 1
