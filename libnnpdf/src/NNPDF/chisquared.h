@@ -18,11 +18,19 @@ namespace NNPDF{
                                      std::vector<double> const& central_values,
                                      std::vector<double> const& stat_error,
                                      sysError** const systematic_errors,
-                                     bool const mult_errors,
-                                     bool const use_theory_errors);
+                                     bool const mult_errors,         // account for multiplicative uncertainties in building the CovMat
+                                     bool const use_theory_errors,   // account for MC uncertainties in building the CovMat
+                                     bool const th_cov_matrix,       // account for theoretical uncertainties in building the CovMat
+                                     std::string filename,
+                                     std::vector<int> bmask);
 
-  matrix<double> ComputeCovMat(CommonData const& cd, std::vector<double> const& t0, double weight=1.);
+  matrix<double> ComputeCovMat(CommonData const& cd, std::vector<double> const& t0,
+                               const bool th_cov_matrix = false, 
+                               std::string filename = "",
+                               std::vector<int> bmask = {},
+                               double weight=1.);
   matrix<double> ComputeSqrtMat(matrix<double> const& inmatrix);
+  matrix<double> read_theory_covmat(int ndata, const std::string filename, std::vector<int> bmask);
 
   void ComputeChi2_basic(int const nDat, int const nMem,
                    const double* data, matrix<double> const& L,

@@ -102,6 +102,8 @@ private:
 
   map<string,string> fTheory;
 
+  bool fThUncertainties; //!< true if the fit uses an external runcard, false otherwise.
+
 public:
 
   NNPDFSettings(const string& folder); //!< The constructor
@@ -135,6 +137,7 @@ public:
   map<string,string> const& GetTheoryMap() const { return fTheory; }
   bool IsQED() const;
   bool IsIC()  const;
+  bool IsThUncertainties() const { return fThUncertainties; }
 
   gsl_integration_workspace *GetGSLWorkspace() const { return fGSLWork; } //!< GSL integration workspace
 

@@ -179,8 +179,7 @@ def experiments_data(experiment_result_table):
 
 
 #TODO: Use collect to calculate results outside this
-@table
-def experiment_result_table(experiments, pdf, experiments_index):
+def experiment_result_table_no_table(experiments, pdf, experiments_index):
     """Generate a table containing the data central value, the central prediction,
     and the prediction for each PDF member."""
 
@@ -214,7 +213,11 @@ def experiment_result_table(experiments, pdf, experiments_index):
     return df
 
 @table
-def experiments_covmat(experiments, experiments_index, t0set):
+def experiment_result_table(experiment_result_table_no_table):
+    """Duplicate of experiments_result_table_no_table but with a table decorator."""
+    return experiment_result_table_no_table
+
+def experiments_covmat_no_table(experiments, experiments_index, t0set):
     """Export the covariance matrix for the experiments. It exports the full
     (symmetric) matrix, with the 3 first rows and columns being:
 
@@ -237,6 +240,11 @@ def experiments_covmat(experiments, experiments_index, t0set):
         mat = loaded_exp.get_covmat()
         df.loc[[name],[name]] = mat
     return df
+
+@table
+def experiments_covmat(experiments_covmat_no_table):
+    """Duplicate of experiments_covmat_no_table but with a table decorator."""
+    return experiments_covmat_no_table
 
 @table
 def experiments_sqrtcovmat(experiments, experiments_index, t0set):
@@ -852,9 +860,17 @@ def theory_description(theoryid):
     """A table with the theory settings."""
     return pd.DataFrame(pd.Series(theoryid.get_description()), columns=[theoryid])
 
-def experiments_central_values(experiment_result_table):
+def experiments_central_values_no_table(experiment_result_table_no_table):
     """Returns a theoryid-dependent list of central theory predictions
     for a given experiment."""
+    central_theory_values = experiment_result_table_no_table["theory_central"]
+    return central_theory_values
+
+@table
+def experiments_central_values(experiment_result_table):
+    """Duplicate of experiments_central_values_no_table but takes
+    experiment_result_table rather than experiments_central_values_no_table,
+    and has a table decorator."""
     central_theory_values = experiment_result_table["theory_central"]
     return central_theory_values
 

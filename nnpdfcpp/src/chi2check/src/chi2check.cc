@@ -90,7 +90,16 @@ int main(int argc, char **argv)
             if (settings.GetPlotting("uset0").as<bool>()) MakeT0Predictions(T0Set,datasets[j]);
           }
 
-        exps.push_back(new Experiment(datasets, settings.GetExpName(i)));
+        auto exp = new Experiment(datasets, settings.GetExpName(i));
+        if (settings.IsThUncertainties())
+        {
+          string ThCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_theory_covmat.csv";
+
+          exp->LoadRepCovMat(ThCovMatPath);
+          exp->LoadFitCovMat(ThCovMatPath);
+        }
+
+        exps.push_back(exp);
       }
 
       if (T0Set) delete T0Set;

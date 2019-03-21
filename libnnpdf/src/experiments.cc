@@ -69,6 +69,7 @@ fNData(exp.fNData),
 fNSys(exp.fNSys),
 fCovMat(exp.fCovMat),
 fSqrtCov(exp.fSqrtCov),
+fSamplingMatrix(exp.fSamplingMatrix),
 fSys(NULL),
 fSetSysMap(NULL),
 fIsArtificial(exp.fIsArtificial),
@@ -154,8 +155,11 @@ void Experiment::MakeReplica()
   sysType rST[2] = {ADD,MULT};
 
   // Compute the sampling covariance matrix with data CVs, no multiplicative error and no theory errors
-  matrix<double> SamplingMatrix  = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fData, fStat, fSys, false, false);
-  SamplingMatrix = ComputeSqrtMat(SamplingMatrix); // Take the sqrt of the sampling matrix
+  if (fSamplingMatrix.size(0) == 0)
+  {
+    matrix<double> SM = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fData, fStat, fSys, false, false, false, "", {});
+    fSamplingMatrix = ComputeSqrtMat(SM); // Take the sqrt of the sampling matrix
+  } 
   
   // generate procType array for ease of checking
   std::vector<std::string> proctype;
@@ -177,24 +181,24 @@ void Experiment::MakeReplica()
           fSys[i][l].type = fSys[0][l].type;
       }
 
-      // Generate normal deviates
+      // Generate normal deviates      
       vector<double> deviates(fNData, std::numeric_limits<double>::quiet_NaN());
       generate(deviates.begin(), deviates.end(),
                []()->double {return RandomGenerator::GetRNG()->GetRandomGausDev(1); } );
-      const vector<double> correlated_deviates = SamplingMatrix*deviates;
-
-      // Additive noise is generated directly from the covariance matrix
+      const vector<double> correlated_deviates = fSamplingMatrix*deviates;
+     
+      // Generate additive theory noise directly from the covariance matrix
       vector<double> artdata(fData);
       for (int i=0; i<fNData; i++)
           artdata[i] += correlated_deviates[i];
-
-      // For the multiplicative noise is generated according to the old implementation
+      
+      // Generation of the experimental noise
       for (int i = 0; i < fNData; i++) // should rearrange to update set-by-set -- nh
       {
         xnor[i] = 1.0;
 
         for (int l = 0; l < fNSys; l++)
-        {     
+        {
           if (fSys[i][l].name.compare("THEORYCORR")==0) continue;   // Skip theoretical uncertainties
           if (fSys[i][l].name.compare("THEORYUNCORR")==0) continue; // Skip theoretical uncertainties
           if (fSys[i][l].name.compare("SKIP")==0) continue;         // Skip uncertainties
@@ -217,9 +221,9 @@ void Experiment::MakeReplica()
             }
           }
         }
-        
+
         artdata[i] = xnor[i] * artdata[i];
-        
+
       }
 
       // If it's not a closure test, check for positivity of artifical data
@@ -254,7 +258,6 @@ void Experiment::MakeReplica()
 
   // Now the fData is artificial
   fIsArtificial = true;
-  return;
 }
 
 void Experiment::SetT0(const PDFSet& pdf){
@@ -433,11 +436,31 @@ void Experiment::PullData()
 /**
  * Generate covariance matrix and inverse
  */
+
 void Experiment::GenCovMat()
 {
   // Compute the Covariance matrix with t0 and NNPDF3.1 theory errors
-  fCovMat  = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, true, true);
-  fSqrtCov = ComputeSqrtMat(fCovMat); 
+  fCovMat  = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, true, true, false, " ", {});
+  fSqrtCov = ComputeSqrtMat(fCovMat);
+}
+
+
+/**
+* Read in covariance matrix for replica generation from file, and generate covariance matrix and its square root
+*/
+void Experiment::LoadRepCovMat(string filename, std::vector<int> bmask)
+{
+  fSamplingMatrix = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, false, false, true, filename, bmask);
+  fSamplingMatrix = ComputeSqrtMat(fSamplingMatrix);
+}
+
+/**
+* Read in covariance matrix to be used in fit from file, and generate covariance matrix and its square root
+*/
+void Experiment::LoadFitCovMat(string filename, std::vector<int> bmask)
+{
+  fCovMat = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, true, true, true, filename, bmask);
+  fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 
 void Experiment::ExportCovMat(string filename)

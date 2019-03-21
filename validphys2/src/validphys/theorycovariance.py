@@ -20,7 +20,7 @@ from reportengine.checks import make_argcheck, check
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.results import experiments_central_values, results
+from validphys.results import experiments_central_values, experiments_central_values_no_table, results
 from validphys.results import Chi2Data, experiments_chi2_table
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys import plotutils
@@ -29,6 +29,9 @@ from validphys.checks import check_two_dataspecs
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values,
+                                               ('theoryids',))
+
+theoryids_experiments_central_values_no_table = collect(experiments_central_values_no_table,
                                                ('theoryids',))
 
 @make_argcheck
@@ -100,15 +103,20 @@ def make_scale_var_covmat(predictions):
     s = norm*sum(np.outer(d, d) for d in deltas)
     return s
 
-@table
 @_check_correct_theory_combination
-def theory_covmat(theoryids_experiments_central_values, experiments_index, theoryids,
-                  fivetheories:(str, type(None)) = None):
+def theory_covmat_no_table(theoryids_experiments_central_values_no_table, experiments_index, theoryids, fivetheories:(str, type(None)) = None):
+
     """Calculates the theory covariance matrix for scale variations.
     The matrix is a dataframe indexed by experiments_index."""
-    s = make_scale_var_covmat(theoryids_experiments_central_values)
+    s = make_scale_var_covmat(theoryids_experiments_central_values_no_table)
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
+
+@table
+@_check_correct_theory_combination
+def theory_covmat(theory_covmat_no_table):
+    """Duplicate of theory_covmat_no_table but with a table decorator."""
+    return theory_covmat_no_table
 
 results_bytheoryids = collect(results,('theoryids',))
 each_dataset_results_bytheory = collect('results_bytheoryids',
@@ -399,6 +407,7 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
                 covmats[start_locs] = s
     return covmats
 
+@table
 def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     """Takes the individual sub-covmats between each two processes and assembles
     them into a full covmat. Then reshuffles the order from ordering by process
@@ -486,10 +495,10 @@ def theory_normcovmat_custom(theory_covmat_custom, experiments_data):
     return mat
 
 @table
-def experimentsplustheory_covmat(experiments_covmat, theory_covmat):
+def experimentsplustheory_covmat(experiments_covmat_no_table, theory_covmat_no_table):
     """Calculates the experiment + theory covariance matrix for
     scale variations."""
-    df = experiments_covmat + theory_covmat
+    df = experiments_covmat_no_table + theory_covmat_no_table
     return df
 
 @table

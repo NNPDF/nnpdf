@@ -682,6 +682,15 @@ class CoreConfig(configparser.Config):
     def produce_all_lumi_channels(self):
         return {'lumi_channels': self.parse_lumi_channels(list(LUMI_CHANNELS))}
 
+    @configparser.explicit_node
+    def produce_nnfit_theory_covmat(self):
+        from validphys.theorycovariance import theory_covmat_custom
+        @functools.wraps(theory_covmat_custom)
+        def res(*args, **kwargs):
+            return theory_covmat_custom(*args, **kwargs)
+        #Set this to get the same filename regardless of the action.
+        res.__name__ = 'theory_covmat'
+        return res
 
     def parse_speclabel(self, label:(str, type(None))):
         """A label for a dataspec. To be used in some plots"""
