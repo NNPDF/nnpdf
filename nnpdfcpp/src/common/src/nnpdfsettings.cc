@@ -193,9 +193,9 @@ NNPDFSettings::NNPDFSettings(const string &folder):
     fThUncertainties = true;
 
     // Check where theory uncertainties should be used 
-    if (Get("theorycovmatconfig","sampling").as<bool>())
+    if (Get("theorycovmatconfig","use_thcovmat_in_sampling").as<bool>())
      fThCovSampling = true;
-    if (Get("theorycovmatconfig","fitting").as<bool>())
+    if (Get("theorycovmatconfig","use_thcovmat_in_fitting").as<bool>())
      fThCovFitting = true;
   }
 
