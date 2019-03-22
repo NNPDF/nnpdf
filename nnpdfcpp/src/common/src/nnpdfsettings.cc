@@ -140,7 +140,9 @@ NNPDFSettings::NNPDFSettings(const string &folder):
   fResultsDir(""),
   fTheoryDir(""),
   fGSLWork(NULL),
-  fThUncertainties(false)
+  fThUncertainties(false),
+  fThCovSampling(false),
+  fThCovFitting(false)
 {
   // Read current PDF grid name from file.
   Splash();
@@ -187,7 +189,15 @@ NNPDFSettings::NNPDFSettings(const string &folder):
 
   // Check if theory uncertainties are used
   if (Exists("theorycovmatconfig"))
+  {
     fThUncertainties = true;
+
+    // Check where theory uncertainties should be used 
+    if (Get("sampling").as<bool>())
+     fThCovSampling = true;
+    if (Get("fitting").as<bool>())
+     fThCovFitting = true;
+  }
 
   // load theory map
   IndexDB db(get_data_path() + "/theory.db", "theoryIndex");

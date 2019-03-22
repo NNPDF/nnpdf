@@ -448,18 +448,18 @@ void Experiment::GenCovMat()
 /**
 * Read in covariance matrix for replica generation from file, and generate covariance matrix and its square root
 */
-void Experiment::LoadRepCovMat(string filename, std::vector<int> bmask)
+void Experiment::LoadRepCovMat(string filename, bool ThUnc, std::vector<int> bmask)
 {
-  fSamplingMatrix = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, false, false, true, filename, bmask);
+  fSamplingMatrix = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, false, false, ThUnc, filename, bmask);
   fSamplingMatrix = ComputeSqrtMat(fSamplingMatrix);
 }
 
 /**
 * Read in covariance matrix to be used in fit from file, and generate covariance matrix and its square root
 */
-void Experiment::LoadFitCovMat(string filename, std::vector<int> bmask)
+void Experiment::LoadFitCovMat(string filename, bool ThUnc, std::vector<int> bmask)
 {
-  fCovMat = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, true, true, true, filename, bmask);
+  fCovMat = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, true, true, ThUnc, filename, bmask);
   fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 

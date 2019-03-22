@@ -313,8 +313,8 @@ int main(int argc, char **argv)
         {
           string ThCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_theory_covmat.csv";
 
-          exp->LoadRepCovMat(ThCovMatPath);
-          exp->LoadFitCovMat(ThCovMatPath);
+          exp->LoadRepCovMat(ThCovMatPath, settings.IsThCovSampling());
+          exp->LoadFitCovMat(ThCovMatPath, settings.IsThCovFitting());
         }
 
         Convolute(fitset.get(),exp.get(),theory.data());
@@ -407,8 +407,8 @@ void LoadAllDataAndSplit(NNPDFSettings const& settings,
         {
           string ThCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_theory_covmat.csv";
 
-          exp->LoadRepCovMat(ThCovMatPath);
-          exp->LoadFitCovMat(ThCovMatPath);
+          exp->LoadRepCovMat(ThCovMatPath, settings.IsThCovSampling());
+          exp->LoadFitCovMat(ThCovMatPath, settings.IsThCovFitting());
         }
   
       // Apply MC shifts
@@ -579,10 +579,10 @@ void TrainValidSplit(NNPDFSettings const& settings,
   {
     string ThCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_theory_covmat.csv";
 
-    tr->LoadRepCovMat(ThCovMatPath, trCovMatMask);
-    tr->LoadFitCovMat(ThCovMatPath, trCovMatMask);
+    tr->LoadRepCovMat(ThCovMatPath, settings.IsThCovSampling(), trCovMatMask);
+    tr->LoadFitCovMat(ThCovMatPath, settings.IsThCovFitting(), trCovMatMask);
 
-    val->LoadRepCovMat(ThCovMatPath, valCovMatMask);
-    val->LoadFitCovMat(ThCovMatPath, valCovMatMask);
+    val->LoadRepCovMat(ThCovMatPath, settings.IsThCovSampling(), valCovMatMask);
+    val->LoadFitCovMat(ThCovMatPath, settings.IsThCovFitting(), valCovMatMask);
   }
 }

@@ -95,8 +95,8 @@ int main(int argc, char **argv)
         {
           string ThCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_theory_covmat.csv";
 
-          exp->LoadRepCovMat(ThCovMatPath);
-          exp->LoadFitCovMat(ThCovMatPath);
+          exp->LoadRepCovMat(ThCovMatPath, settings.IsThCovSampling());
+          exp->LoadFitCovMat(ThCovMatPath, settings.IsThCovFitting());
         }
 
         exps.push_back(exp);
