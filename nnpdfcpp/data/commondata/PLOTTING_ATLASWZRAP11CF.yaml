@@ -20,3 +20,5 @@ extra_labels:
        '$Z_{peak}$', '$Z_{high}$', '$Z_{high}$', '$Z_{high}$',
        '$Z_{high}$', '$Z_{high}$', '$Z_{high}$']
 
+
+experiment: "ATLAS"
