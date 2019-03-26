@@ -1,7 +1,19 @@
 """
 fkparser.py
 
-Parse FKtables and CFactors into useful datastructures.
+Parse FKtables and CFactors into useful datastructures.  This module include
+some functionality to process FKTables and cfactors. Most users will be
+interested in using the high level interface ``loaf_fktable``. Given an
+``FKTableSpec``, it returns an instance of ``FHTableData``, an object with the
+required information to compute a convolution, with the CFactors applied.
+
+.. code-block:: python
+
+    from validphys.fkparser import load_fktable
+    from validphys.loader import Loader
+    l = Loader()
+    fk = l.check_fktable(setname="ATLASTTBARTOT", theoryID=53, cfac=('QCD',))
+    res = load_fktable(fk)
 """
 import io
 import functools
@@ -14,6 +26,7 @@ import pandas as pd
 
 @dataclasses.dataclass(frozen=True)
 class GridInfo:
+    """Class containig the basic properties of an FKTable grid."""
     setname: str
     hadronic: bool
     ndata: int
@@ -21,6 +34,39 @@ class GridInfo:
 
 @dataclasses.dataclass(eq=False)
 class FKTableData:
+    """
+    Data contained in an FKTable
+
+    Parameters
+    ----------
+
+    hadronic : bool
+        Whether an hadronic (two PDFs) or a DIS (one PDF) convolution is needed.
+
+    Q0 : float
+        The scale at which the PDFs should be evaluated (in GeV).
+
+    ndata : int
+        The number of data points in the grid.
+
+    xgrid : array, shape (nx)
+        The points in x at which the PDFs should be evaluated.
+
+    sigma : DataFrame
+        For hadronic data, the columns are the indexes in the ``NfxNf`` list of
+        possible flavour combinations of two PDFs.  The MultiIndex contains
+        three keys, the data index, an index into ``xgrid`` for the first PDF
+        and an idex into ``xgrid`` for the second PDF, indicatinf the points in
+        ``x`` where the PDF should be evaluated.
+
+        For DIS data, the columns are indexes in the ``Nf`` list of flavours.
+        The MultiIndex contains two keys, the data index and an index into
+        ``xgrid`` indicating the points in ``x`` where the PDF should be
+        evaluated.
+
+    metadata : dict
+        Other information contained in the FKTable.
+    """
     hadronic: bool
     Q0: float
     ndata: int
@@ -30,6 +76,22 @@ class FKTableData:
 
 @dataclasses.dataclass(eq=False)
 class CFactorData:
+    """
+    Data contained in a CFactor
+
+    Parameters
+    ----------
+
+    description : str
+        Information on how the data was obtained.
+
+    central_value : array, shape(ndata)
+        The value of the cfactor for each data point.
+
+    uncertainty : array, shape(ndata)
+        The absolute uncerainty on the cfactor if available. Otherwise a list
+        of zeros.
+    """
     description: str
     central_value: np.array
     uncertainty: np.array
@@ -257,6 +319,8 @@ def _check_required_sections(res, lineno):
             )
 
 def parse_fktable(f):
+    """Parse an open byte stream into an FKTableData. Raise a BaadFKTableError
+    if problems are encountered."""
     line_and_stream = enumerate(f, start=1)
     res = {}
     lineno, header = next(line_and_stream)
@@ -296,7 +360,8 @@ def parse_fktable(f):
 
 
 def parse_cfactor(f):
-    """Parse an open byte stream into a ``CFactorData"""
+    """Parse an open byte stream into a ``CFactorData``. Raise a
+    BadCFactorError if problems are encontered."""
     stars = f.readline()
     if not stars.startswith(b'*'):
         raise BadCFactorError("First line should start with '*'.")
