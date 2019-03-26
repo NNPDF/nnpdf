@@ -15,3 +15,5 @@ normalize:
     y_scale: linear
     figure_by:
         - k1
+
+experiment: "ATLAS"
