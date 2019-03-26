@@ -56,15 +56,9 @@ namespace NNPDF
 
     void SetT0(const PDFSet&); //!<Set T0 Predictions for each dataset in place and update internal structures
 
-<<<<<<< HEAD
     void LoadRepCovMat(std::string filename, bool ThUnc, std::vector<int> bmask = {}); //!< Read in covmat for rep gen, generate covmat and sqrt
     void LoadFitCovMat(std::string filename, bool ThUnc, std::vector<int> bmask = {}); //!< Read in covmat for fitting, generate covmat and sqrt
-    matrix<double> const& GetSqrtFitCovMat(std::string filename, std::vector<int> bmask = {}); //temporary external function for calc sqrtcovmat with th error
-=======
-    void LoadRepCovMat(std::string filename, std::vector<int> bmask = {}); //!< Read in covmat for rep gen, generate covmat and sqrt
-    void LoadFitCovMat(std::string filename, std::vector<int> bmask = {});    //!< Read in covmat for fitting, generate covmat and sqrt
     matrix<double> GetSqrtFitCovMat(std::string filename, std::vector<int> bmask = {}); //temporary external function for calc sqrtcovmat with th error
->>>>>>> changed implementation to use correct typings and not need any editing of swig interface file
 
   private:
 

@@ -719,8 +719,8 @@ class CoreConfig(configparser.Config):
                 )
         if isinstance(use_theorycovmat, bool) and use_theorycovmat:
             use_theorycovmat = (
-                fit.path/'tables'/
-                'datacuts_theory_theorycovmatconfig_fitting_t0_theory_covmat_custom.csv')
+                fit.path/'tables'/'datacuts_theory_theorycovmatconfig_theory_covmat.csv')
+
             if not os.path.exists(use_theorycovmat):
                 use_theorycovmat = False
         return self.parse_theorycovmat(use_theorycovmat)
