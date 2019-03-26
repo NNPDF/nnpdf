@@ -9,3 +9,5 @@ kinematics_override: jet_sqrt_scale
 
 line_by:
     - k1
+
+experiment: "CDF"
