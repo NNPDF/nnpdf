@@ -64,11 +64,28 @@ def get_info(data, *, normalize=False, cuts=None, use_plotfiles=True):
 
 
 class PlotInfo:
-    def __init__(self, kinlabels,dataset_label,* ,x=None ,extra_labels=None, func_labels=None,
-                 figure_by=None, line_by=None, kinematics_override=None,
-                 result_transform=None, y_label=None, x_label=None,
-                 x_scale=None, y_scale=None, process_description='-', **kwargs):
+    def __init__(
+        self,
+        kinlabels,
+        dataset_label,
+        *,
+        experiment,
+        x=None,
+        extra_labels=None,
+        func_labels=None,
+        figure_by=None,
+        line_by=None,
+        kinematics_override=None,
+        result_transform=None,
+        y_label=None,
+        x_label=None,
+        x_scale=None,
+        y_scale=None,
+        process_description='-',
+        **kwargs,
+    ):
         self.kinlabels = kinlabels
+        self.experiment = experiment
         if x is None:
             x = 'idat'
         self.x = x
