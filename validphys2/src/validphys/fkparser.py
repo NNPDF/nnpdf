@@ -1,7 +1,7 @@
 """
 fkparser.py
 
-Parse FKtables into useful datastructures
+Parse FKtables and CFactors into useful datastructures.
 """
 import io
 import functools
@@ -23,18 +23,45 @@ class GridInfo:
 class FKTableData:
     hadronic: bool
     Q0: float
+    ndata: int
     xgrid: np.array
     sigma: pd.DataFrame
     metadata: dict = dataclasses.field(default_factory=dict, repr=False)
+
+@dataclasses.dataclass(eq=False)
+class CFactorData:
+    description: str
+    central_value: np.array
+    uncertainty: np.array
+
+class BadCFactorError(Exception):
+    """Exception raised when an CFactor cannot be parsed correctly"""
+
 
 class BadFKTableError(Exception):
     """Exception raised when an FKTable cannot be parsed correctly"""
 
 def load_fktable(spec):
-    """Load the data corresponding to a FKSpec object"""
+    """Load the data corresponding to a FKSpec object. The cfactors
+    will be applied to the grid."""
     with open_fkpath(spec.fkpath) as handle:
-        return parse_fktable(handle)
+        tabledata = parse_fktable(handle)
+    if not spec.cfactors:
+        return tabledata
 
+    ndata = tabledata.ndata
+    cfprod = np.ones(ndata)
+    for cf in spec.cfactors:
+        with open(cf, "rb") as f:
+            cfdata = parse_cfactor(f)
+        if len(cfdata.central_value) != ndata:
+            raise BadCFactorError(
+                "Length of cfactor data does not match the length of the fktable."
+            )
+        cfprod *= cfdata.central_value
+    # TODO: Find a way to do this in place
+    tabledata.sigma = tabledata.sigma.multiply(pd.Series(cfprod), axis=0, level=0)
+    return tabledata
 
 def _get_compressed_buffer(path):
     archive = tarfile.open(path)
@@ -240,9 +267,15 @@ def parse_fktable(f):
             Q0 = res['TheoryInfo']['Q0']
             sigma = _build_sigma(lineno, f, res)
             hadronic = res['GridInfo'].hadronic
+            ndata = res['GridInfo'].ndata
             xgrid = res.pop('xGrid')
             return FKTableData(
-                sigma=sigma, Q0=Q0, metadata=res, hadronic=hadronic, xgrid=xgrid
+                sigma=sigma,
+                ndata=ndata,
+                Q0=Q0,
+                metadata=res,
+                hadronic=hadronic,
+                xgrid=xgrid,
             )
         elif header_name in _KNOWN_SEGMENTS:
             parser = _KNOWN_SEGMENTS[header_name]
@@ -255,6 +288,30 @@ def parse_fktable(f):
         try:
             out, lineno, header = parser(line_and_stream)
         except Exception as e:
-            #Note that the old lineno is the one we want
-            raise BadFKTableError(f"Failed processing header {header_name} on line {lineno}") from e
+            # Note that the old lineno is the one we want
+            raise BadFKTableError(
+                f"Failed processing header {header_name} on line {lineno}"
+            ) from e
         res[header_name] = out
+
+
+def parse_cfactor(f):
+    """Parse an open byte stream into a ``CFactorData"""
+    stars = f.readline()
+    if not stars.startswith(b'*'):
+        raise BadCFactorError("First line should start with '*'.")
+    descbytes = io.BytesIO()
+    for line in f:
+        if line.startswith(b'*'):
+            break
+        descbytes.write(line)
+    description = descbytes.getvalue().decode()
+    try:
+        data = np.loadtxt(f)
+    except Exception as e:
+        raise BadCFactorError(e) from e
+    central_value = data[:, 0]
+    uncertainty = data[:, 1]
+    return CFactorData(
+        description=description, central_value=central_value, uncertainty=uncertainty
+    )
