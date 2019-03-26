@@ -5,3 +5,4 @@ y_label: '$d\sigma_{W}/dp_T$'
 #x_label: 'W $|p_T|$'
 
 kinematics_override: ewk_pt_sqrt_scale
+experiment: "ATLAS"

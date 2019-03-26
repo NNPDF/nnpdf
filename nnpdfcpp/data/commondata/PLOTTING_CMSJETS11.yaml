@@ -15,3 +15,5 @@ normalize:
 
 line_by:
     - k1
+
+experiment: "CMS"

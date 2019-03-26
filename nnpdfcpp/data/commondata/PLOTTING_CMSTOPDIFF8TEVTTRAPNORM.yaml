@@ -5,3 +5,4 @@ figure_by:
   - k2 
 
 kinematics_override:  hqp_yqq_sqrt_scale
+experiment: "CMS"

@@ -254,6 +254,9 @@ class PlotConfigParser(Config):
     def parse_data_reference(self, ref:str):
         return ref
 
+    def parse_experiment(self, exp:str):
+        return exp
+
 
 def kitable(commondata, info):
     if isinstance(commondata, (DataSetSpec, CommonDataSpec)):
