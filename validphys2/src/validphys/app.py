@@ -42,14 +42,9 @@ providers = [
     'validphys.closure',
     'reportengine.report']
 
-class API(api.API):
-    """Validphys Specfic api"""
-    config_class = Config
-    environment_class = Environment
-    def __init__(self, **kwargs):
-        super().__init__(providers=providers, **kwargs)
+API = api.API(providers, Config, Environment)
 
-class App(API, app.App):
+class App(api.API, app.App):
 
     critical_message = (
 """A critical error ocurred. This is likely due to one of the following reasons:
@@ -72,6 +67,7 @@ including the contents of the following file:
         return os.fspath(mplstyles.smallstyle)
 
     def __init__(self, name='validphys', providers=providers):
+        api.API.__init__(self, providers, Config, Environment)
         app.App.__init__(self, name, providers)
 
     @property
