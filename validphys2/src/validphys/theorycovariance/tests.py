@@ -604,7 +604,9 @@ def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
     ax.plot(fnorm.values*100, '.-', label="NNLO-NLO Shift", color = "black")
     ticklocs, ticklabels, startlocs = matrix_plot_labels(matrix)
     plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=20)
-    ax.vlines(startlocs, -70, 70, linestyles='dashed')
+    # Shift startlocs elements 0.5 to left so lines are between indexes
+    startlocs_lines = [x-0.5 for x in startlocs]
+    ax.vlines(startlocs_lines, -70, 70, linestyles='dashed')
     ax.margins(x=0, y=0)
     ax.set_ylabel("% of central theory", fontsize=20)
     ax.legend(fontsize=20)
