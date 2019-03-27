@@ -714,15 +714,22 @@ class CoreConfig(configparser.Config):
             else:
                 raise ConfigError(
                     f"No file found at {use_theorycovmat}. If specifying "
-                    "`use_theorycovmat: <path to covmat>` then <path to covmat> should point at a"
-                    "valid theory covariance matrix."
-                )
+                    "`use_theorycovmat: <path to covmat>` then <path to covmat> should point at a "
+                    "valid theory covariance matrix.")
         if isinstance(use_theorycovmat, bool) and use_theorycovmat:
-            use_theorycovmat = (
-                fit.path/'tables'/'datacuts_theory_theorycovmatconfig_theory_covmat.csv')
-
-            if not os.path.exists(use_theorycovmat):
+            try:
+                use_theorycovmat = fit.as_input()['theorycovmatconfig']['use_thcovmat_in_fitting']
+            except KeyError:
+                #assume covmat wasn't used and fill in key accordingly
                 use_theorycovmat = False
+            #Now set as expected path and check it exists
+            if use_theorycovmat:
+                use_theorycovmat = (
+                    fit.path/'tables'/'datacuts_theory_theorycovmatconfig_theory_covmat.csv')
+                if not os.path.exists(use_theorycovmat):
+                    raise ConfigError(
+                        "Fit appeared to use theory covmat in fit but the file was not at the "
+                        f"usual location: {use_theorycovmat}.")
         return self.parse_theorycovmat(use_theorycovmat)
 
     def parse_speclabel(self, label:(str, type(None))):
