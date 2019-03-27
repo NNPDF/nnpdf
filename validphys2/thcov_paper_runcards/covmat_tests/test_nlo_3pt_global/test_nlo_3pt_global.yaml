@@ -1,0 +1,485 @@
+meta:
+    title: Theory shift validation test, 3 point, global
+    author: Rosalyn Pearson
+    keywords: [test, theory uncertainties, eigenvalues, 3 point]
+
+theoryid: 52
+
+pdf: NNPDF31_nlo_as_0118
+
+experiments:
+# Fixed target DIS
+  - experiment: NMC
+    datasets:
+      - dataset: NMCPD
+      - dataset: NMC
+  - experiment: SLAC
+    datasets:
+      - dataset: SLACP
+      - dataset: SLACD
+  - experiment: BCDMS
+    datasets:
+      - dataset: BCDMSP
+      - dataset: BCDMSD
+  - experiment: NTVDMN
+    datasets:
+      - dataset: NTVNUDMN
+      - dataset: NTVNBDMN
+  - experiment: CHORUS
+    datasets:
+      - dataset: CHORUSNU
+      - dataset: CHORUSNB
+# Combined HERA charm production cross-sections
+  - experiment: HERAF2CHARM
+    datasets:
+      - dataset: HERAF2CHARM
+# HERA data
+  - experiment: HERACOMB
+    datasets:
+      - dataset: HERACOMBNCEM 
+      - dataset: HERACOMBNCEP460
+      - dataset: HERACOMBNCEP575
+      - dataset: HERACOMBNCEP820
+      - dataset: HERACOMBNCEP920
+      - dataset: HERACOMBCCEM 
+      - dataset: HERACOMBCCEP 
+  - experiment: ATLAS
+    datasets:
+      - dataset: ATLASWZRAP36PB
+      - dataset: ATLASZHIGHMASS49FB
+      - dataset: ATLASLOMASSDY11EXT
+      - dataset: ATLASWZRAP11
+      - dataset: ATLAS1JET11
+      - dataset: ATLASZPT8TEVMDIST
+      - dataset: ATLASZPT8TEVYDIST
+      - dataset: ATLASTTBARTOT
+      - dataset: ATLASTOPDIFF8TEVTRAPNORM
+  - experiment: CMS
+    datasets:
+      - dataset: CMSWEASY840PB
+      - dataset: CMSWMASY47FB
+      - dataset: CMSDY2D11
+      - dataset: CMSWMU8TEV
+      - { dataset: CMSZDIFF12, cfac: [NRM] }
+      - dataset: CMSJETS11
+      - dataset: CMSTTBARTOT
+      - dataset: CMSTOPDIFF8TEVTTRAPNORM
+  - experiment: LHCb
+    datasets:
+      - dataset: LHCBZ940PB
+      - dataset: LHCBZEE2FB
+      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
+  - experiment: CDF
+    datasets:
+      - dataset: CDFZRAP
+  - experiment: D0
+    datasets:
+      - dataset: D0ZRAP
+      - dataset: D0WEASY
+      - dataset: D0WMASY
+
+shiftconfig:
+
+   use_cuts: fromfit
+   fit: 190302_ern_nlo_central_163_global
+
+   theoryid: 52
+
+   dataspecs:
+       - theoryid: 52
+         pdf: NNPDF31_nlo_as_0118
+         speclabel: "NLO"
+         experiments:
+         # Fixed target DIS
+             - experiment: NMC
+               datasets:
+                  - dataset: NMCPD
+                  - dataset: NMC
+             - experiment: SLAC
+               datasets:
+                  - dataset: SLACP
+                  - dataset: SLACD
+             - experiment: BCDMS
+               datasets:
+                  - dataset: BCDMSP
+                  - dataset: BCDMSD
+             - experiment: NTVDMN
+               datasets:
+                  - dataset: NTVNUDMN
+                  - dataset: NTVNBDMN
+             - experiment: CHORUS
+               datasets:
+                  - dataset: CHORUSNU
+                  - dataset: CHORUSNB
+           # Combined HERA charm production cross-sections
+             - experiment: HERAF2CHARM
+               datasets:
+                  - dataset: HERAF2CHARM
+           # HERA data
+             - experiment: HERACOMB
+               datasets:
+                  - dataset: HERACOMBNCEM 
+                  - dataset: HERACOMBNCEP460
+                  - dataset: HERACOMBNCEP575
+                  - dataset: HERACOMBNCEP820
+                  - dataset: HERACOMBNCEP920
+                  - dataset: HERACOMBCCEM 
+                  - dataset: HERACOMBCCEP 
+             - experiment: ATLAS
+               datasets:
+                  - dataset: ATLASWZRAP36PB
+                  - dataset: ATLASZHIGHMASS49FB
+                  - dataset: ATLASLOMASSDY11EXT
+                  - dataset: ATLASWZRAP11
+                  - dataset: ATLAS1JET11
+                  - dataset: ATLASZPT8TEVMDIST
+                  - dataset: ATLASZPT8TEVYDIST
+                  - dataset: ATLASTTBARTOT
+                  - dataset: ATLASTOPDIFF8TEVTRAPNORM
+             - experiment: CMS
+               datasets:
+                  - dataset: CMSWEASY840PB
+                  - dataset: CMSWMASY47FB
+                  - dataset: CMSDY2D11
+                  - dataset: CMSWMU8TEV
+                  - { dataset: CMSZDIFF12, cfac: [NRM] }
+                  - dataset: CMSJETS11
+                  - dataset: CMSTTBARTOT
+                  - dataset: CMSTOPDIFF8TEVTTRAPNORM
+             - experiment: LHCb
+               datasets:
+                  - dataset: LHCBZ940PB
+                  - dataset: LHCBZEE2FB
+                  - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+                  - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
+             - experiment: CDF
+               datasets:
+                  - dataset: CDFZRAP
+             - experiment: D0
+               datasets:
+                  - dataset: D0ZRAP
+                  - dataset: D0WEASY
+                  - dataset: D0WMASY
+       - theoryid: 53
+         pdf: NNPDF31_nlo_as_0118
+         speclabel: "NNLO"
+         experiments:
+         # Fixed target DIS
+             - experiment: NMC
+               datasets:
+                  - dataset: NMCPD
+                  - dataset: NMC
+             - experiment: SLAC
+               datasets:
+                  - dataset: SLACP
+                  - dataset: SLACD
+             - experiment: BCDMS
+               datasets:
+                  - dataset: BCDMSP
+                  - dataset: BCDMSD
+             - experiment: NTVDMN
+               datasets:
+                  - dataset: NTVNUDMN
+                  - dataset: NTVNBDMN
+             - experiment: CHORUS
+               datasets:
+                  - dataset: CHORUSNU
+                  - dataset: CHORUSNB
+           # Combined HERA charm production cross-sections
+             - experiment: HERAF2CHARM
+               datasets:
+                  - dataset: HERAF2CHARM
+           # HERA data
+             - experiment: HERACOMB
+               datasets:
+                  - dataset: HERACOMBNCEM 
+                  - dataset: HERACOMBNCEP460
+                  - dataset: HERACOMBNCEP575
+                  - dataset: HERACOMBNCEP820
+                  - dataset: HERACOMBNCEP920
+                  - dataset: HERACOMBCCEM 
+                  - dataset: HERACOMBCCEP 
+             - experiment: ATLAS
+               datasets:
+                  - dataset: ATLASWZRAP36PB
+                  - dataset: ATLASZHIGHMASS49FB
+                  - dataset: ATLASLOMASSDY11EXT
+                  - dataset: ATLASWZRAP11
+                  - dataset: ATLAS1JET11
+                  - dataset: ATLASZPT8TEVMDIST
+                  - dataset: ATLASZPT8TEVYDIST
+                  - dataset: ATLASTTBARTOT
+                  - dataset: ATLASTOPDIFF8TEVTRAPNORM
+             - experiment: CMS
+               datasets:
+                  - dataset: CMSWEASY840PB
+                  - dataset: CMSWMASY47FB
+                  - dataset: CMSDY2D11
+                  - dataset: CMSWMU8TEV
+                  - { dataset: CMSZDIFF12, cfac: [NRM] }
+                  - dataset: CMSJETS11
+                  - dataset: CMSTTBARTOT
+                  - dataset: CMSTOPDIFF8TEVTTRAPNORM
+             - experiment: LHCb
+               datasets:
+                  - dataset: LHCBZ940PB
+                  - dataset: LHCBZEE2FB
+                  - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+                  - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
+             - experiment: CDF
+               datasets:
+                  - dataset: CDFZRAP
+             - experiment: D0
+               datasets:
+                  - dataset: D0ZRAP
+                  - dataset: D0WEASY
+                  - dataset: D0WMASY
+
+theoryconfig:
+
+   theoryids:
+      - 163
+      - 180
+      - 173
+
+   theoryid: 163
+
+   use_cuts: fromfit
+   fit: 190302_ern_nlo_central_163_global
+
+   pdf: NNPDF31_nlo_as_0118
+
+   dataspecs:
+           - theoryid: 163
+             speclabel: $(\xi_F,\xi_R)=(1,1)$
+             experiments:
+         # Fixed target DIS
+                 - experiment: NMC
+                   datasets:
+                      - dataset: NMCPD
+                      - dataset: NMC
+                 - experiment: SLAC
+                   datasets:
+                      - dataset: SLACP
+                      - dataset: SLACD
+                 - experiment: BCDMS
+                   datasets:
+                      - dataset: BCDMSP
+                      - dataset: BCDMSD
+                 - experiment: NTVDMN
+                   datasets:
+                      - dataset: NTVNUDMN
+                      - dataset: NTVNBDMN
+                 - experiment: CHORUS
+                   datasets:
+                      - dataset: CHORUSNU
+                      - dataset: CHORUSNB
+               # Combined HERA charm production cross-sections
+                 - experiment: HERAF2CHARM
+                   datasets:
+                      - dataset: HERAF2CHARM
+               # HERA data
+                 - experiment: HERACOMB
+                   datasets:
+                      - dataset: HERACOMBNCEM 
+                      - dataset: HERACOMBNCEP460
+                      - dataset: HERACOMBNCEP575
+                      - dataset: HERACOMBNCEP820
+                      - dataset: HERACOMBNCEP920
+                      - dataset: HERACOMBCCEM 
+                      - dataset: HERACOMBCCEP 
+                 - experiment: ATLAS
+                   datasets:
+                      - dataset: ATLASWZRAP36PB
+                      - dataset: ATLASZHIGHMASS49FB
+                      - dataset: ATLASLOMASSDY11EXT
+                      - dataset: ATLASWZRAP11
+                      - dataset: ATLAS1JET11
+                      - dataset: ATLASZPT8TEVMDIST
+                      - dataset: ATLASZPT8TEVYDIST
+                      - dataset: ATLASTTBARTOT
+                      - dataset: ATLASTOPDIFF8TEVTRAPNORM
+                 - experiment: CMS
+                   datasets:
+                      - dataset: CMSWEASY840PB
+                      - dataset: CMSWMASY47FB
+                      - dataset: CMSDY2D11
+                      - dataset: CMSWMU8TEV
+                      - { dataset: CMSZDIFF12, cfac: [NRM] }
+                      - dataset: CMSJETS11
+                      - dataset: CMSTTBARTOT
+                      - dataset: CMSTOPDIFF8TEVTTRAPNORM
+                 - experiment: LHCb
+                   datasets:
+                      - dataset: LHCBZ940PB
+                      - dataset: LHCBZEE2FB
+                      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+                      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
+                 - experiment: CDF
+                   datasets:
+                      - dataset: CDFZRAP
+                 - experiment: D0
+                   datasets:
+                      - dataset: D0ZRAP
+                      - dataset: D0WEASY
+                      - dataset: D0WMASY
+           - theoryid: 180
+             speclabel: $(\xi_F,\xi_R)=(2,2)$
+             experiments:
+                 - experiment: NMC
+                   datasets:
+                      - dataset: NMCPD
+                      - dataset: NMC
+                 - experiment: SLAC
+                   datasets:
+                      - dataset: SLACP
+                      - dataset: SLACD
+                 - experiment: BCDMS
+                   datasets:
+                      - dataset: BCDMSP
+                      - dataset: BCDMSD
+                 - experiment: NTVDMN
+                   datasets:
+                      - dataset: NTVNUDMN
+                      - dataset: NTVNBDMN
+                 - experiment: CHORUS
+                   datasets:
+                      - dataset: CHORUSNU
+                      - dataset: CHORUSNB
+               # Combined HERA charm production cross-sections
+                 - experiment: HERAF2CHARM
+                   datasets:
+                      - dataset: HERAF2CHARM
+               # HERA data
+                 - experiment: HERACOMB
+                   datasets:
+                      - dataset: HERACOMBNCEM 
+                      - dataset: HERACOMBNCEP460
+                      - dataset: HERACOMBNCEP575
+                      - dataset: HERACOMBNCEP820
+                      - dataset: HERACOMBNCEP920
+                      - dataset: HERACOMBCCEM 
+                      - dataset: HERACOMBCCEP 
+                 - experiment: ATLAS
+                   datasets:
+                      - dataset: ATLASWZRAP36PB
+                      - dataset: ATLASZHIGHMASS49FB
+                      - dataset: ATLASLOMASSDY11EXT
+                      - dataset: ATLASWZRAP11
+                      - dataset: ATLAS1JET11
+                      - dataset: ATLASZPT8TEVMDIST
+                      - dataset: ATLASZPT8TEVYDIST
+                      - dataset: ATLASTTBARTOT
+                      - dataset: ATLASTOPDIFF8TEVTRAPNORM
+                 - experiment: CMS
+                   datasets:
+                      - dataset: CMSWEASY840PB
+                      - dataset: CMSWMASY47FB
+                      - dataset: CMSDY2D11
+                      - dataset: CMSWMU8TEV
+                      - { dataset: CMSZDIFF12, cfac: [NRM] }
+                      - dataset: CMSJETS11
+                      - dataset: CMSTTBARTOT
+                      - dataset: CMSTOPDIFF8TEVTTRAPNORM
+                 - experiment: LHCb
+                   datasets:
+                      - dataset: LHCBZ940PB
+                      - dataset: LHCBZEE2FB
+                      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+                      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
+                 - experiment: CDF
+                   datasets:
+                      - dataset: CDFZRAP
+                 - experiment: D0
+                   datasets:
+                      - dataset: D0ZRAP
+                      - dataset: D0WEASY
+                      - dataset: D0WMASY
+           - theoryid: 173
+             speclabel: $(\xi_F,\xi_R)=(0.5,0.5)$
+             experiments:
+                 - experiment: NMC
+                   datasets:
+                      - dataset: NMCPD
+                      - dataset: NMC
+                 - experiment: SLAC
+                   datasets:
+                      - dataset: SLACP
+                      - dataset: SLACD
+                 - experiment: BCDMS
+                   datasets:
+                      - dataset: BCDMSP
+                      - dataset: BCDMSD
+                 - experiment: NTVDMN
+                   datasets:
+                      - dataset: NTVNUDMN
+                      - dataset: NTVNBDMN
+                 - experiment: CHORUS
+                   datasets:
+                      - dataset: CHORUSNU
+                      - dataset: CHORUSNB
+               # Combined HERA charm production cross-sections
+                 - experiment: HERAF2CHARM
+                   datasets:
+                      - dataset: HERAF2CHARM
+               # HERA data
+                 - experiment: HERACOMB
+                   datasets:
+                      - dataset: HERACOMBNCEM 
+                      - dataset: HERACOMBNCEP460
+                      - dataset: HERACOMBNCEP575
+                      - dataset: HERACOMBNCEP820
+                      - dataset: HERACOMBNCEP920
+                      - dataset: HERACOMBCCEM 
+                      - dataset: HERACOMBCCEP 
+                 - experiment: ATLAS
+                   datasets:
+                      - dataset: ATLASWZRAP36PB
+                      - dataset: ATLASZHIGHMASS49FB
+                      - dataset: ATLASLOMASSDY11EXT
+                      - dataset: ATLASWZRAP11
+                      - dataset: ATLAS1JET11
+                      - dataset: ATLASZPT8TEVMDIST
+                      - dataset: ATLASZPT8TEVYDIST
+                      - dataset: ATLASTTBARTOT
+                      - dataset: ATLASTOPDIFF8TEVTRAPNORM
+                 - experiment: CMS
+                   datasets:
+                      - dataset: CMSWEASY840PB
+                      - dataset: CMSWMASY47FB
+                      - dataset: CMSDY2D11
+                      - dataset: CMSWMU8TEV
+                      - { dataset: CMSZDIFF12, cfac: [NRM] }
+                      - dataset: CMSJETS11
+                      - dataset: CMSTTBARTOT
+                      - dataset: CMSTOPDIFF8TEVTTRAPNORM
+                 - experiment: LHCb
+                   datasets:
+                      - dataset: LHCBZ940PB
+                      - dataset: LHCBZEE2FB
+                      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+                      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
+                 - experiment: CDF
+                   datasets:
+                      - dataset: CDFZRAP
+                 - experiment: D0
+                   datasets:
+                      - dataset: D0ZRAP
+                      - dataset: D0WEASY
+                      - dataset: D0WMASY
+
+template: template_test.md
+
+dataset_report:
+   meta: Null
+   template_text: |
+      ## Testing 3pt NLO global covariance matrix against NNLO-NLO shift
+actions_:
+  - report(main=true, mathjax=True)
+
+
+
+    
+
+
