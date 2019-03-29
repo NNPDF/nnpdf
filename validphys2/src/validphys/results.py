@@ -143,29 +143,22 @@ class PositivityResult(StatsResult):
         return self.stats.data
 
 def experiments_index(experiments):
-    """Return an empy dataframe with index
-       per experiment per dataset per point"""
+    """Return a pandas.MultiIndex with levels for
+       experiment, dataset and point respectively"""
     records = []
-    for exp_index, experiment in enumerate(experiments):
-        loaded_exp = experiment.load()
-        set_lens = [len(loaded_exp.GetSet(i)) for i in
-                    range(len(experiment.datasets))]
-        #TODO: This code is very ugly and slow...
-        cum_sum = [sum(set_lens[:i+1]) for i in range(len(set_lens))]
-        curr_ds_domain = iter(enumerate(cum_sum))
-        index_offset = 0
-        ds_id, curr_ds_len = next(curr_ds_domain)
-        for index in range(cum_sum[-1]):
-            if index >= curr_ds_len:
-                index_offset = curr_ds_len
-                ds_id, curr_ds_len = next(curr_ds_domain)
-            dataset = experiment.datasets[ds_id]
-
-            records.append(OrderedDict([
-                                 ('experiment', str(experiment.name)),
-                                 ('dataset', str(dataset.name)),
-                                 ('id', index - index_offset),
-                                  ]))
+    for experiment in experiments:
+        for dataset in experiment.datasets:
+            if dataset.cuts:
+                ndata = len(dataset.cuts.load())
+            else:
+                #No cuts - use all data
+                ndata = dataset.commondata.ndata
+            for idat in range(ndata):
+                records.append(
+                    OrderedDict(
+                        [('experiment', str(experiment.name)),
+                         ('dataset', str(dataset.name)),
+                         ('id', idat),]))
 
     columns = ['experiment', 'dataset', 'id']
     df = pd.DataFrame(records, columns=columns)
