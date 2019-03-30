@@ -155,7 +155,7 @@ def experiments_index(experiments):
                 ndata = dataset.commondata.ndata
             for idat in range(ndata):
                 records.append(
-                    OrderedDict(
+                    dict(
                         [('experiment', str(experiment.name)),
                          ('dataset', str(dataset.name)),
                          ('id', idat),]))
