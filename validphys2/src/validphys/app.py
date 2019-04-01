@@ -61,6 +61,7 @@ including the contents of the following file:
 %s
 """
     )
+    environment_class = Environment
 
     @property
     def default_style(self):
