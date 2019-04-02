@@ -21,7 +21,9 @@ def get_remote_keywords():
     root = loader.Loader().nnprofile['reports_root_url']
     url = urljoin(root, 'index.json')
     try:
-        keyobjs= requests.get(url).json()['keywords']
+        resp = requests.get(url)
+        resp.raise_for_status()
+        keyobjs  = resp.json()['keywords']
         l = [k[0] for k in keyobjs]
     except requests.RequestException:
         l = []
