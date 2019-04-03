@@ -708,9 +708,9 @@ class CoreConfig(configparser.Config):
         """
         if isinstance(use_theorycovmat, str):
             if os.path.exists(use_theorycovmat):
-                log.warn("Using path to a covariance matrix, if the experiment specifications do "
-                         "not match between generation and use of covariance matrix then this "
-                         "will lead to incorrect results.")
+                log.warning("Using path to a covariance matrix, if the experiment specifications "
+                            "do not match between generation and use of covariance matrix then "
+                            "this will lead to incorrect results.")
             else:
                 raise ConfigError(
                     f"No file found at {use_theorycovmat}. If specifying "
