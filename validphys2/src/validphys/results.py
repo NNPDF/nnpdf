@@ -22,7 +22,8 @@ from reportengine import collect
 from validphys.checks import (check_cuts_considered, check_pdf_is_montecarlo,
                               check_speclabels_different, check_two_dataspecs)
 from validphys.core import DataSetSpec, PDF, ExperimentSpec, ThCovMatSpec
-from validphys.calcutils import all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values
+from validphys.calcutils import (all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values,
+                                 get_df_block)
 
 log = logging.getLogger(__name__)
 
@@ -56,16 +57,6 @@ class StatsResult(Result):
     def std_error(self):
         return self.stats.std_error()
 
-
-def get_covmatblock(covmat: pd.DataFrame, datasetname: str):
-    """Given a loaded ThCovMatSpec object, returns the diagonal block of the covariance matrix for
-    a given dataset
-    """
-    section = covmat.xs(
-        datasetname, level=1, axis=0).xs(
-            datasetname, level=1, axis=1).values
-    return section
-
 class DataResult(NNPDFDataResult):
 
     def __init__(self, dataobj, thcovmat=False):
@@ -74,7 +65,7 @@ class DataResult(NNPDFDataResult):
         if isinstance(thcovmat, ThCovMatSpec):
             self._sqrtcovmat = dataobj.GetSqrtFitCovMat(str(thcovmat), [])
         elif isinstance(thcovmat, pd.DataFrame):
-            thcovslice = get_covmatblock(thcovmat, dataobj.GetSetName())
+            thcovslice = get_df_block(thcovmat, dataobj.GetSetName())
             self._sqrtcovmat = np.linalg.cholesky(self._covmat + thcovslice)
         else:
             self._sqrtcovmat = dataobj.get_sqrtcovmat()

@@ -7,6 +7,7 @@ higher level functions in results.py
 from typing import Callable
 import numpy as np
 import scipy.linalg as la
+import pandas as pd
 
 def calc_chi2(sqrtcov, diffs):
     """Elementary function to compute the chi², given a Cholesky decomposed
@@ -134,5 +135,17 @@ def bootstrap_values(data, nresamples, *, boot_seed:int=None,
     else:
         return apply_func(bootstrap_data, *args)
 
+def get_df_block(matrix: pd.DataFrame, key: str, level=1):
+    """Given a pandas dataframe whose index and column keys match, and data represents a symmetric
+    matrix returns a diagonal block of this matrix corresponding to `matrix`[key`, key`] as a numpy
+    array
 
+    addtitionally, the user can specify the `level` of the key for which the cross section is being
+    taken, by default it is set to 1 which corresponds to the dataset level of a theory covariance
+    matrix
+    """
+    block = matrix.xs(
+        key, level=level, axis=0).xs(
+            key, level=level, axis=1).values
+    return block
 
