@@ -377,6 +377,12 @@ def plot_pdfvardistances(pdfs, variance_distance_grids, *,
 
 
 class BandPDFPlotter(PDFPlotter):
+    def __init__(self, *args,  line_only_pdfs=None ,**kwargs):
+        if line_only_pdfs is None:
+            line_only_pdfs = []
+        self.line_only_pdfs = line_only_pdfs
+        super().__init__( *args, **kwargs)
+
     def setup_flavour(self, flstate):
         flstate.handles=[]
         flstate.labels=[]
@@ -400,13 +406,18 @@ class BandPDFPlotter(PDFPlotter):
             warnings.simplefilter('ignore', RuntimeWarning)
             err68down, err68up = stats.errorbar68()
 
+        #http://stackoverflow.com/questions/5195466/matplotlib-does-not-display-hatching-when-rendering-to-pdf
+        hatch = next(hatchit)
         color = next_prop['color']
-        ax.plot(xgrid, cv, color=color)
+        cvline, = ax.plot(xgrid, cv, color=color)
+        if pdf.name in self.line_only_pdfs:
+            labels.append(pdf.label)
+            handles.append(cvline)
+            return [cv, cv]
         alpha = 0.5
         ax.fill_between(xgrid, err68up, err68down, color=color, alpha=alpha,
                         zorder=1)
-        #http://stackoverflow.com/questions/5195466/matplotlib-does-not-display-hatching-when-rendering-to-pdf
-        hatch = next(hatchit)
+
         ax.fill_between(xgrid, err68up, err68down, facecolor='None', alpha=alpha,
                         edgecolor=color,
                         hatch=hatch,
@@ -438,9 +449,16 @@ class BandPDFPlotter(PDFPlotter):
 
 @figuregen
 @check_pdf_normalize_to
-@check_scale('xscale', allow_none=True)
-def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
-                      normalize_to:(int,str,type(None))=None,ymin=None,ymax=None):
+@check_scale("xscale", allow_none=True)
+def plot_pdfs(
+    pdfs,
+    xplotting_grids,
+    xscale: (str, type(None)) = None,
+    normalize_to: (int, str, type(None)) = None,
+    ymin=None,
+    ymax=None,
+    line_only_pdfs: (list, type(None)) = None,
+):
     """Plot the central value and the uncertainty of a list of pdfs as a
     function of x for a given value of Q. If normalize_to is given, plot the
     ratios to the corresponding PDF. Otherwise, plot absolute values.
@@ -454,8 +472,15 @@ def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     set based on the scale in xgrid, which should be used instead.
 
     """
-    yield from BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to, ymin, ymax)
-
+    yield from BandPDFPlotter(
+        pdfs,
+        xplotting_grids,
+        xscale,
+        normalize_to,
+        ymin,
+        ymax,
+        line_only_pdfs=line_only_pdfs,
+    )
 
 class FlavoursPlotter(AllFlavoursPlotter, BandPDFPlotter):
     def get_title(self, parton_name):
