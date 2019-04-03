@@ -576,23 +576,10 @@ class ThCovMatSpec:
     # maxsize relatively low here, expect single experiments so one load per dataspec
     @functools.lru_cache(maxsize=8)
     def load(self):
-        self.data = parse_exp_mat(self.path)
+        return parse_exp_mat(self.path)
 
     def __str__(self):
         return str(self.path)
-
-def get_covmatblock(covmat: ThCovMatSpec, datasetname: str):
-    """Given a loaded ThCovMatSpec object, returns the diagonal block of the covariance matrix for
-    a given dataset
-    """
-    try:
-        section = covmat.data.xs(
-            datasetname, level=1, axis=0).xs(
-                datasetname, level=1, axis=1).values
-        return section
-    except AttributeError:
-        log.error("Tried to access part of covariance matrix before loading it")
-        raise
 
 #TODO: Decide if we want methods or properties
 class Stats:

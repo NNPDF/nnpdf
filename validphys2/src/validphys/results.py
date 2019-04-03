@@ -21,7 +21,7 @@ from reportengine import collect
 
 from validphys.checks import (check_cuts_considered, check_pdf_is_montecarlo,
                               check_speclabels_different, check_two_dataspecs)
-from validphys.core import DataSetSpec, PDF, ExperimentSpec, get_covmatblock
+from validphys.core import DataSetSpec, PDF, ExperimentSpec, ThCovMatSpec
 from validphys.calcutils import all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values
 
 log = logging.getLogger(__name__)
@@ -57,22 +57,27 @@ class StatsResult(Result):
         return self.stats.std_error()
 
 
-
+def get_covmatblock(covmat: pd.DataFrame, datasetname: str):
+    """Given a loaded ThCovMatSpec object, returns the diagonal block of the covariance matrix for
+    a given dataset
+    """
+    section = covmat.xs(
+        datasetname, level=1, axis=0).xs(
+            datasetname, level=1, axis=1).values
+    return section
 
 class DataResult(NNPDFDataResult):
 
     def __init__(self, dataobj, thcovmat=False):
         super().__init__(dataobj)
         self._covmat = dataobj.get_covmat()
-        if thcovmat:
-            if isinstance(dataobj, Experiment):
-                self._sqrtcovmat = dataobj.GetSqrtFitCovMat(str(thcovmat), [])
-            else:
-                thcovslice = get_covmatblock(thcovmat, dataobj.GetSetName())
-                self._sqrtcovmat = np.linalg.cholesky(self._covmat + thcovslice)
+        if isinstance(thcovmat, ThCovMatSpec):
+            self._sqrtcovmat = dataobj.GetSqrtFitCovMat(str(thcovmat), [])
+        elif isinstance(thcovmat, pd.DataFrame):
+            thcovslice = get_covmatblock(thcovmat, dataobj.GetSetName())
+            self._sqrtcovmat = np.linalg.cholesky(self._covmat + thcovslice)
         else:
             self._sqrtcovmat = dataobj.get_sqrtcovmat()
-
 
 
     @property
@@ -385,7 +390,7 @@ def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None, fitthc
 
     # only need to load thcov if specified and if dataset
     if fitthcovmat and isinstance(dataset, DataSetSpec):
-        fitthcovmat.load()
+        fitthcovmat = fitthcovmat.load()
 
     if t0set:
         #Copy data to avoid chaos
