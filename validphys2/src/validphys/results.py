@@ -65,7 +65,7 @@ class DataResult(NNPDFDataResult):
         if isinstance(thcovmat, ThCovMatSpec):
             self._sqrtcovmat = dataobj.GetSqrtFitCovMat(str(thcovmat), [])
         elif isinstance(thcovmat, pd.DataFrame):
-            thcovslice = get_df_block(thcovmat, dataobj.GetSetName())
+            thcovslice = get_df_block(thcovmat, dataobj.GetSetName(), level=1)
             self._sqrtcovmat = np.linalg.cholesky(self._covmat + thcovslice)
         else:
             self._sqrtcovmat = dataobj.get_sqrtcovmat()

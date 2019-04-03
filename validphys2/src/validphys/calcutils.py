@@ -135,7 +135,7 @@ def bootstrap_values(data, nresamples, *, boot_seed:int=None,
     else:
         return apply_func(bootstrap_data, *args)
 
-def get_df_block(matrix: pd.DataFrame, key: str, level=1):
+def get_df_block(matrix: pd.DataFrame, key: str, level):
     """Given a pandas dataframe whose index and column keys match, and data represents a symmetric
     matrix returns a diagonal block of this matrix corresponding to `matrix`[key`, key`] as a numpy
     array

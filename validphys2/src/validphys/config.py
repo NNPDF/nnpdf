@@ -223,7 +223,6 @@ class CoreConfig(configparser.Config):
         underlyinglaw = self.parse_pdf(datacuts['fakepdf'])
         return {'pdf': underlyinglaw}
 
-
     def produce_fitpdfandbasis(self, fit):
         """ Set the PDF and basis from the fit config. """
         with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
@@ -694,12 +693,6 @@ class CoreConfig(configparser.Config):
         res.__name__ = 'theory_covmat'
         return res
 
-    def parse_theorycovmat(self, path):
-        if path:
-            return ThCovMatSpec(path)
-        else:
-            return False
-
     def produce_fitthcovmat(self, fit, use_theorycovmat=True):
         """If True, returns the corresponding covariance matrix for the given fit if it exists. If
         the fit doesn't have a theory covariance matrix then returns `False`. Alternatively if
@@ -711,12 +704,13 @@ class CoreConfig(configparser.Config):
                 log.warning("Using path to a covariance matrix, if the experiment specifications "
                             "do not match between generation and use of covariance matrix then "
                             "this will lead to incorrect results.")
+                use_theorycovmat = ThCovMatSpec(use_theorycovmat)
             else:
                 raise ConfigError(
                     f"No file found at {use_theorycovmat}. If specifying "
                     "`use_theorycovmat: <path to covmat>` then <path to covmat> should point at a "
                     "valid theory covariance matrix.")
-        if isinstance(use_theorycovmat, bool) and use_theorycovmat:
+        elif isinstance(use_theorycovmat, bool) and use_theorycovmat:
             try:
                 use_theorycovmat = fit.as_input()['theorycovmatconfig']['use_thcovmat_in_fitting']
             except KeyError:
@@ -730,7 +724,12 @@ class CoreConfig(configparser.Config):
                     raise ConfigError(
                         "Fit appeared to use theory covmat in fit but the file was not at the "
                         f"usual location: {use_theorycovmat}.")
-        return self.parse_theorycovmat(use_theorycovmat)
+                use_theorycovmat = ThCovMatSpec(use_theorycovmat)
+        else:
+            raise ConfigError(
+                "use_theorycovmat should either be a bool or a path to a valid "
+                "theory covariance matrix CSV")
+        return use_theorycovmat
 
     def parse_speclabel(self, label:(str, type(None))):
         """A label for a dataspec. To be used in some plots"""
