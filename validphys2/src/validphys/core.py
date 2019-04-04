@@ -31,6 +31,7 @@ from NNPDF import (LHAPDFSet,
 #TODO: There is a bit of a circular dependency between filters.py and this.
 #Maybe move the cuts logic to its own module?
 from validphys import lhaindex, filters
+from validphys.tableloader import parse_exp_mat
 
 log = logging.getLogger(__name__)
 
@@ -567,6 +568,18 @@ class TheoryIDSpec:
 
     def __str__(self):
         return f"Theory {self.id}"
+
+class ThCovMatSpec:
+    def __init__(self, path):
+        self.path = path
+
+    # maxsize relatively low here, expect single experiments so one load per dataspec
+    @functools.lru_cache(maxsize=8)
+    def load(self):
+        return parse_exp_mat(self.path)
+
+    def __str__(self):
+        return str(self.path)
 
 #TODO: Decide if we want methods or properties
 class Stats:
