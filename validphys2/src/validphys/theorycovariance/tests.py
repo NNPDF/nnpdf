@@ -410,7 +410,8 @@ def vectors_9pt(splitdiffs):
 def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                         collected_theoryids,
                         fivetheories:(str, type(None)) = None,
-                        seventheories:(str, type(None)) = None):
+                        seventheories:(str, type(None)) = None,
+                        orthonormalisation:(str, type(None))=None):
     """Projects the theory covariance matrix from the data space into
     the basis of non-zero eigenvalues, dependent on point-prescription.
     Then returns the eigenvalues (w) and eigenvectors (v)
@@ -464,25 +465,37 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
         xs = vectors_9pt(splitdiffs)
     # ------------------------------------------------
     # Orthonormalising vectors according to Gram-Schmidt
-    ys = [x/np.linalg.norm(x) for x in xs]
-    for i in range(1, len(xs)):
-        for j in range(0,i):
-            ys[i] = ys[i] - (ys[i].T.dot(ys[j]))[0][0]*ys[j]/np.linalg.norm(ys[j])
-            ys[i] = ys[i]/np.linalg.norm(ys[i])
+    if orthonormalisation == "gs":
+        ys = [x/np.linalg.norm(x) for x in xs]
+        for i in range(1, len(xs)):
+            for j in range(0,i):
+                ys[i] = ys[i] - (ys[i].T.dot(ys[j]))[0][0]*ys[j]/np.linalg.norm(ys[j])
+                ys[i] = ys[i]/np.linalg.norm(ys[i])
+        p = pd.concat(ys, axis=1)
+    elif orthonormalisation == "svd":
+        xsmatrix = pd.concat(xs, axis=1)
+        p = la.orth(xsmatrix)
+    elif orthonormalisation == "qr":
+        xsmatrix = pd.concat(xs, axis=1)
+        p  = np.linalg.qr(xsmatrix)[0]
     # Projecting covariance matrix onto subspace of non-zero eigenvalues
-    p = pd.concat(ys, axis=1)
     projected_matrix = (p.T).dot(covmat.dot(p))
+    cond_num = np.linalg.cond(projected_matrix)
     w, v_projected = la.eigh(projected_matrix)
     # Finding eigenvectors in data space
     v = p.dot(v_projected)
-    return w, v
+    return w, v, cond_num
+
+def projected_condition_num(evals_nonzero_basis):
+    cond_num = evals_nonzero_basis[2]
+    return cond_num
 
 def theory_shift_test(shx_vector, evals_nonzero_basis):
     """Compares the NNLO-NLO shift, f, with the eigenvectors and eigenvalues of the
     theory covariance matrix, and returns the component of the NNLO-NLO shift
     space which is missed by the covariance matrix space: fmiss, as well as the
     projections of the shift vector onto each of the eigenvectors: projectors."""
-    w, v = evals_nonzero_basis
+    w, v = evals_nonzero_basis[:2]
     v = np.real(v)
     # NNLO-NLO shift vector
     f = -shx_vector[0].values.T[0]
