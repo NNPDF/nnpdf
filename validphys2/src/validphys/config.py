@@ -29,6 +29,8 @@ from validphys.gridvalues import LUMI_CHANNELS
 
 from validphys.paramfits.config import ParamfitsConfig
 
+from validphys.plotoptions import get_info
+
 log = logging.getLogger(__name__)
 
 
@@ -743,6 +745,34 @@ class CoreConfig(configparser.Config):
         {@endwith@}
         """
         return label
+
+    def produce_experiments_from_plotting(self, fit):
+        """Used to produce experiments from the fit, where each experiment is a group of datasets
+        according to the plotting info
+        """
+        #TODO: consider this an implimentation detail
+        from reportengine.namespaces import NSList
+
+        with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
+            _, experiments = self.parse_from_('fit', 'experiments', write=False)
+
+        flat = (ds for exp in experiments for ds in exp.datasets)
+        metaexps = [get_info(ds).experiment for ds in flat]
+        res = {}
+        for exp in experiments:
+            for dsinput, ds in zip(exp.dsinputs, exp.datasets):
+                metaexp = get_info(ds).experiment
+                if metaexp in res:
+                    res[metaexp].append(ds)
+                else:
+                    res[metaexp] = [ds]
+        exps = []
+        for exp in res:
+            exps.append(ExperimentSpec(exp, res[exp]))
+
+        experiments = NSList(exps, nskey='experiment')
+        return {'experiments': experiments}
+
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):
     """The effective configuration parser class."""

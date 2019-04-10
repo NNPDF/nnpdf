@@ -65,7 +65,13 @@ class DataResult(NNPDFDataResult):
         if isinstance(thcovmat, ThCovMatSpec):
             self._sqrtcovmat = dataobj.GetSqrtFitCovMat(str(thcovmat), [])
         elif isinstance(thcovmat, pd.DataFrame):
-            thcovslice = get_df_block(thcovmat, dataobj.GetSetName(), level=1)
+            if isinstance(dataobj, Experiment):
+                level = 0
+                name = dataobj.GetExpName()
+            else:
+                level = 1
+                name = dataobj.GetSetName()
+            thcovslice = get_df_block(thcovmat, name, level=level)
             self._sqrtcovmat = np.linalg.cholesky(self._covmat + thcovslice)
         else:
             self._sqrtcovmat = dataobj.get_sqrtcovmat()
@@ -364,7 +370,7 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
     return df
 
 
-def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None, fitthcovmat=False):
+def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None, fixup_fitthcovmat=False):
     """Tuple of data and theory results for a single pdf.
     The theory is specified as part of the dataset.
     An experiment is also allowed.
@@ -372,9 +378,6 @@ def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None, fitthc
 
     data = dataset.load()
 
-    # only need to load thcov if specified and if dataset
-    if fitthcovmat and isinstance(dataset, DataSetSpec):
-        fitthcovmat = fitthcovmat.load()
 
     if t0set:
         #Copy data to avoid chaos
@@ -382,12 +385,12 @@ def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None, fitthc
         log.debug("Setting T0 predictions for %s" % dataset)
         data.SetT0(t0set.load_t0())
 
-    return (DataResult(data, thcovmat=fitthcovmat),
+    return (DataResult(data, thcovmat=fixup_fitthcovmat),
             ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data))
 
-def experiment_results(experiment, pdf:PDF, t0set:(PDF, type(None))=None, fitthcovmat=False):
+def experiment_results(experiment, pdf:PDF, t0set:(PDF, type(None))=None, fixup_fitthcovmat=False):
     """Like `results` but for a whole experiment"""
-    return results(experiment, pdf, t0set, fitthcovmat=fitthcovmat)
+    return results(experiment, pdf, t0set, fixup_fitthcovmat=fixup_fitthcovmat)
 
 #It's better to duplicate a few lines than to complicate the logic of
 #``results`` to support this.
@@ -916,3 +919,23 @@ dataspecs_dataset = collect('dataset', ('dataspecs',))
 dataspecs_commondata = collect('commondata', ('dataspecs',))
 dataspecs_pdf = collect('pdf', ('dataspecs',))
 dataspecs_fit = collect('fit', ('dataspecs',))
+
+def fixup_fitthcovmat(fitthcovmat, experiments=None):
+    """If both `fitthcovmat` and `experiments` exist then change the level 1 keys of `fitthcovmat`
+    to match `experiments`
+    """
+    if fitthcovmat:
+        loaded_covmat = fitthcovmat.load()
+        if experiments:
+            exp_names = np.array(loaded_covmat.index.get_level_values(0), copy=True)
+            ds_names = loaded_covmat.index.get_level_values(1)
+            ds_index = loaded_covmat.index.get_level_values(2)
+            for exp in experiments:
+                for ds in exp.datasets:
+                    choose = np.where(ds_names == ds.name)
+                    exp_names[choose] = exp.name
+            new_index = pd.MultiIndex.from_arrays([exp_names, ds_names, ds_index])
+            loaded_covmat = pd.DataFrame(loaded_covmat.values, index=new_index, columns=new_index)
+        return loaded_covmat
+    else:
+        return fitthcovmat
