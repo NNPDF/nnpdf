@@ -200,8 +200,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
       for (int i=0; i<3; i++)
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0) {up=sys2; down=sys1;}
-        else {up=sys1; down=sys2;}
+        if (sys1 < 0) 
+        {
+          up=sys2;
+          down=sys1;
+        }
+        else
+        {
+          up=sys1;
+          down=sys2;
+        }
         symmetriseErrors(up, down, &sigma, &datshift);
         fSys[i][j].mult = sigma;
         fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
@@ -226,8 +234,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
       }
 
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[2][j].mult = sigma;
       fSys[2][j].add = fSys[2][j].mult*fData[2]/100;
@@ -245,8 +261,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
       for (int i=0; i<2; i++)
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0) {up=sys2; down=sys1;}
-        else {up=sys1; down=sys2;}
+        if (sys1 < 0)
+        {
+          up=sys2;
+          down=sys1;
+        }
+        else
+        {
+          up=sys1;
+          down=sys2;
+        }
         symmetriseErrors(up, down, &sigma, &datshift);
         fSys[i][j].mult = sigma;
         fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
@@ -261,8 +285,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
       fSys[2][j].name = "CORR";
 
       lstream >> sys1 >> unneeded_info >> sys2;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[3][j].mult = sigma;
       fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
@@ -384,8 +416,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter::ReadData()
       fSys[0][j].name = "CORR";
 
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[1][j].mult = sigma;
       fSys[1][j].add = fSys[1][j].mult*fData[1]/100;
@@ -399,8 +439,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter::ReadData()
       fSys[2][j].name = "CORR";
 
       lstream >> sys1 >> unneeded_info >> sys2;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[3][j].mult = sigma;
       fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
@@ -413,8 +461,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter::ReadData()
       for (int i=0; i<fNData; i++)
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0) {up=sys2; down=sys1;}
-        else {up=sys1; down=sys2;}
+        if (sys1 < 0)
+        {
+          up=sys2;
+          down=sys1;
+        }
+        else
+        {
+          up=sys1;
+          down=sys2;
+        }
         symmetriseErrors(up, down, &sigma, &datshift);
         fSys[i][j].mult = sigma;
         fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
@@ -535,8 +591,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
       for (int i=0; i<3; i++)
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0) {up=sys2; down=sys1;}
-        else {up=sys1; down=sys2;}
+        if (sys1 < 0)
+        {
+          up=sys2;
+          down=sys1;
+        }
+        else
+        {
+          up=sys1;
+          down=sys2;
+        }
         symmetriseErrors(up, down, &sigma, &datshift);
         fSys[i][j].mult = sigma;
         fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
@@ -551,8 +615,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
       fSys[3][j].name = "CORR";
 
       lstream >> sys1 >> unneeded_info >> sys2;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[4][j].mult = sigma;
       fSys[4][j].add = fSys[4][j].mult*fData[4]/100;
@@ -571,8 +643,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
       }
  
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[3][j].mult = sigma;
       fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
@@ -598,8 +678,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
       for (int i=2; i<4; i++)
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0) {up=sys2; down=sys1;}
-        else {up=sys1; down=sys2;}
+        if (sys1 < 0)
+        {
+          up=sys2;
+          down=sys1;
+        }
+        else
+        {
+          up=sys1;
+          down=sys2;
+        }
         symmetriseErrors(up, down, &sigma, &datshift);
         fSys[i][j].mult = sigma;
         fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
@@ -621,8 +709,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
       fSys[0][j].name = "CORR";
 
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[1][j].mult = sigma;
       fSys[1][j].add = fSys[1][j].mult*fData[1]/100;
@@ -638,8 +734,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
       for (int i=3; i<fNData; i++)
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0) {up=sys2; down=sys1;}
-        else {up=sys1; down=sys2;}
+        if (sys1 < 0)
+        {
+          up=sys2;
+          down=sys1;
+        }
+        else
+        {
+          up=sys1;
+          down=sys2;
+        }
         symmetriseErrors(up, down, &sigma, &datshift);
         fSys[i][j].mult = sigma;
         fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
@@ -826,8 +930,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
       for (int i=0; i<(fNData-1); i++)
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0) {up=sys2; down=sys1;}
-        else {up=sys1; down=sys2;}
+        if (sys1 < 0)
+        {
+          up=sys2;
+          down=sys1;
+        }
+        else
+        {
+          up=sys1;
+          down=sys2;
+        }
         symmetriseErrors(up, down, &sigma, &datshift);
         fSys[i][j].mult = sigma;
         fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
@@ -852,8 +964,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
       }
 
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[2][j].mult = sigma;
       fSys[2][j].add = fSys[2][j].mult*fData[2]/100;
@@ -867,8 +987,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
       fSys[3][j].name = "CORR";
 
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[4][j].mult = sigma;
       fSys[4][j].add = fSys[4][j].mult*fData[4]/100;
@@ -887,8 +1015,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
       }
 
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[4][j].mult = sigma;
       fSys[4][j].add = fSys[4][j].mult*fData[4]/100;
@@ -899,8 +1035,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
     else if (j==fNData+5) // Deal with asymmetric errors
     {
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[0][j].mult = sigma;
       fSys[0][j].add = fSys[0][j].mult*fData[0]/100;
@@ -919,8 +1063,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
       for (int i=3; i<fNData; i++)
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0) {up=sys2; down=sys1;}
-        else {up=sys1; down=sys2;}
+        if (sys1 < 0)
+        {
+          up=sys2;
+          down=sys1;
+        }
+        else
+        {
+          up=sys1;
+          down=sys2;
+        }
         symmetriseErrors(up, down, &sigma, &datshift);
         fSys[i][j].mult = sigma;
         fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
@@ -934,8 +1086,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
       for (int i=0; i<fNData; i++)
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0) {up=sys2; down=sys1;}
-        else {up=sys1; down=sys2;}
+        if (sys1 < 0)
+        {
+          up=sys2;
+          down=sys1;
+        }
+        else
+        {
+          up=sys1;
+          down=sys2;
+        }
         symmetriseErrors(up, down, &sigma, &datshift);
         fSys[i][j].mult = sigma;
         fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
@@ -952,8 +1112,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
       fSys[0][j].name = "CORR";
 
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[1][j].mult = sigma;
       fSys[1][j].add = fSys[1][j].mult*fData[1]/100;
@@ -967,8 +1135,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
       fSys[2][j].name = "CORR";
 
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[3][j].mult = sigma;
       fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
@@ -1152,8 +1328,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter::ReadData()
     if (j==fNData+2 || j==fNData+3) // Deal with aysymmetric errors
     {
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[0][j].mult = sigma;
       fSys[0][j].add = fSys[0][j].mult*fData[0]/100;
@@ -1167,8 +1351,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter::ReadData()
       fSys[1][j].name = "CORR";
 
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[2][j].mult = sigma;
       fSys[2][j].add = fSys[2][j].mult*fData[2]/100;
@@ -1184,8 +1376,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter::ReadData()
     else if (j==fNData+10) // Deal with asymmetric errors
     {
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[0][j].mult = sigma;
       fSys[0][j].add = fSys[0][j].mult*fData[0]/100;
@@ -1385,8 +1585,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAPFilter::ReadData()
       fSys[0][j].name = "CORR";
 
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[1][j].mult = sigma;
       fSys[1][j].add = fSys[1][j].mult*fData[1]/100;
@@ -1400,8 +1608,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAPFilter::ReadData()
       fSys[2][j].name = "CORR";
 
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[3][j].mult = sigma;
       fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
@@ -1417,8 +1633,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAPFilter::ReadData()
       fSys[0][j].name = "CORR";
 
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[1][j].mult = sigma;
       fSys[1][j].add = fSys[1][j].mult*fData[1]/100;
@@ -1621,8 +1845,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter::ReadData()
       for (int i=1; i<3; i++)
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0) {up=sys2; down=sys1;}
-        else {up=sys1; down=sys2;}
+        if (sys1 < 0)
+        {
+          up=sys2;
+          down=sys1;
+        }
+        else
+        {
+          up=sys1;
+          down=sys2;
+        }
         symmetriseErrors(up, down, &sigma, &datshift);
         fSys[i][j].mult = sigma;
         fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
@@ -1637,8 +1869,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter::ReadData()
       fSys[3][j].name = "CORR";
 
       lstream >> sys1 >> unneeded_info >> sys2;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[4][j].mult = sigma;
       fSys[4][j].add = fSys[4][j].mult*fData[4]/100;
@@ -1654,8 +1894,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter::ReadData()
       fSys[0][j].name = "CORR";
 
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[1][j].mult = sigma;
       fSys[1][j].add = fSys[1][j].mult*fData[1]/100;
@@ -1684,8 +1932,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter::ReadData()
       for (int i=2; i<fNData; i++)
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0) {up=sys2; down=sys1;}
-        else {up=sys1; down=sys2;}
+        if (sys1 < 0)
+        {
+          up=sys2;
+          down=sys1;
+        }
+        else
+        {
+          up=sys1;
+          down=sys2;
+        }
         symmetriseErrors(up, down, &sigma, &datshift);
         fSys[i][j].mult = sigma;
         fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
@@ -1705,8 +1961,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter::ReadData()
       }
 
       lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
+      if (sys1 < 0)
+      {
+        up=sys2;
+        down=sys1;
+      }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
       symmetriseErrors(up, down, &sigma, &datshift);
       fSys[4][j].mult = sigma;
       fSys[4][j].add = fSys[4][j].mult*fData[4]/100;
@@ -1896,8 +2160,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PTFilter::ReadData()
       for (int i=0; i<(fNData-1); i++)
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0) {up=sys2; down=sys1;}
-        else {up=sys1; down=sys2;}
+        if (sys1 < 0)
+        {
+          up=sys2;
+          down=sys1;
+        }
+        else
+        {
+          up=sys1;
+          down=sys2;
+        }
         symmetriseErrors(up, down, &sigma, &datshift);
         fSys[i][j].mult = sigma;
         fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
