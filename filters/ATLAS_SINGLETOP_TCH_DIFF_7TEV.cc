@@ -94,7 +94,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
   string line;
 
   // Initialise array to store additive stat. uncerts.
-  double fstat_additive[fNData];
+  std::vector<double> fstat_additive(fNData);
 
   // Skip over first ten lines
   for (int i=0; i<10; i++)
@@ -823,7 +823,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
   string line;
 
   // Initialise array to store additive stat. uncerts.
-  double fstat_additive[fNData];
+  std::vector<double> fstat_additive(fNData);
 
   // Skip over first ten lines
   for (int i=0; i<10; i++)
@@ -1230,7 +1230,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter::ReadData()
   string line;
 
   // Initialise array to store additive stat. uncerts.
-  double fstat_additive[fNData];
+  std::vector<double> fstat_additive(fNData);
 
   // Skip over first ten lines
   for (int i=0; i<10; i++)
@@ -1482,7 +1482,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAPFilter::ReadData()
   string line;
 
   // Initialise array to store additive stat. uncerts.
-  double fstat_additive[fNData];
+  std::vector<double> fstat_additive(fNData);
 
   // Skip over first ten lines
   for (int i=0; i<10; i++)
@@ -1739,7 +1739,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter::ReadData()
   string line;
 
   // Initialise array to store additive stat. uncerts.
-  double fstat_additive[fNData];
+  std::vector<double> fstat_additive(fNData);
 
   // Skip over first ten lines
   for (int i=0; i<10; i++)
@@ -2059,7 +2059,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PTFilter::ReadData()
   string line;
 
   // Initialise array to store additive stat. uncerts.
-  double fstat_additive[fNData];
+  std::vector<double> fstat_additive(fNData);
 
   // Skip over first ten lines
   for (int i=0; i<10; i++)
