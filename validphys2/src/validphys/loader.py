@@ -188,14 +188,17 @@ class Loader(LoaderBase):
         theory_token  = 'theory_'
         return {folder.name[len(theory_token):]
                 for folder in self.datapath.glob(theory_token+'*')}
-
     @property
     @functools.lru_cache()
     def available_datasets(self):
 
         data_str = "DATA_"
-        return {file.stem[len(data_str):] for
-                file in self.commondata_folder.glob(data_str+"*.dat")}
+        # We filter out the positivity sets here
+        return {
+            file.stem[len(data_str) :]
+            for file in self.commondata_folder.glob(f'{data_str}*.dat')
+            if not file.stem.startswith(f"{data_str}POS")
+        }
 
     @property
     @functools.lru_cache()
