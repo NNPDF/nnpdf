@@ -21,8 +21,9 @@ from reportengine import collect
 
 from validphys.checks import (check_cuts_considered, check_pdf_is_montecarlo,
                               check_speclabels_different, check_two_dataspecs)
-from validphys.core import DataSetSpec, PDF, ExperimentSpec
-from validphys.calcutils import all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values
+from validphys.core import DataSetSpec, PDF, ExperimentSpec, ThCovMatSpec
+from validphys.calcutils import (all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values,
+                                 get_df_block)
 
 log = logging.getLogger(__name__)
 
@@ -56,16 +57,18 @@ class StatsResult(Result):
     def std_error(self):
         return self.stats.std_error()
 
-
-
-
 class DataResult(NNPDFDataResult):
 
-    def __init__(self, dataobj):
+    def __init__(self, dataobj, thcovmat=False):
         super().__init__(dataobj)
         self._covmat = dataobj.get_covmat()
-        self._sqrtcovmat = dataobj.get_sqrtcovmat()
-
+        if isinstance(thcovmat, ThCovMatSpec):
+            self._sqrtcovmat = dataobj.GetSqrtFitCovMat(str(thcovmat), [])
+        elif isinstance(thcovmat, pd.DataFrame):
+            thcovslice = get_df_block(thcovmat, dataobj.GetSetName(), level=1)
+            self._sqrtcovmat = np.linalg.cholesky(self._covmat + thcovslice)
+        else:
+            self._sqrtcovmat = dataobj.get_sqrtcovmat()
 
 
     @property
@@ -143,29 +146,22 @@ class PositivityResult(StatsResult):
         return self.stats.data
 
 def experiments_index(experiments):
-    """Return an empy dataframe with index
-       per experiment per dataset per point"""
+    """Return a pandas.MultiIndex with levels for
+       experiment, dataset and point respectively"""
     records = []
-    for exp_index, experiment in enumerate(experiments):
-        loaded_exp = experiment.load()
-        set_lens = [len(loaded_exp.GetSet(i)) for i in
-                    range(len(experiment.datasets))]
-        #TODO: This code is very ugly and slow...
-        cum_sum = [sum(set_lens[:i+1]) for i in range(len(set_lens))]
-        curr_ds_domain = iter(enumerate(cum_sum))
-        index_offset = 0
-        ds_id, curr_ds_len = next(curr_ds_domain)
-        for index in range(cum_sum[-1]):
-            if index >= curr_ds_len:
-                index_offset = curr_ds_len
-                ds_id, curr_ds_len = next(curr_ds_domain)
-            dataset = experiment.datasets[ds_id]
-
-            records.append(OrderedDict([
-                                 ('experiment', str(experiment.name)),
-                                 ('dataset', str(dataset.name)),
-                                 ('id', index - index_offset),
-                                  ]))
+    for experiment in experiments:
+        for dataset in experiment.datasets:
+            if dataset.cuts:
+                ndata = len(dataset.cuts.load())
+            else:
+                #No cuts - use all data
+                ndata = dataset.commondata.ndata
+            for idat in range(ndata):
+                records.append(
+                    dict(
+                        [('experiment', str(experiment.name)),
+                         ('dataset', str(dataset.name)),
+                         ('id', idat),]))
 
     columns = ['experiment', 'dataset', 'id']
     df = pd.DataFrame(records, columns=columns)
@@ -368,7 +364,7 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
     return df
 
 
-def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None):
+def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None, fitthcovmat=False):
     """Tuple of data and theory results for a single pdf.
     The theory is specified as part of the dataset.
     An experiment is also allowed.
@@ -376,18 +372,22 @@ def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None):
 
     data = dataset.load()
 
+    # only need to load thcov if specified and if dataset
+    if fitthcovmat and isinstance(dataset, DataSetSpec):
+        fitthcovmat = fitthcovmat.load()
+
     if t0set:
         #Copy data to avoid chaos
         data = type(data)(data)
         log.debug("Setting T0 predictions for %s" % dataset)
         data.SetT0(t0set.load_t0())
 
-    return DataResult(data), ThPredictionsResult.from_convolution(pdf, dataset,
-                                                 loaded_data=data)
+    return (DataResult(data, thcovmat=fitthcovmat),
+            ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data))
 
-def experiment_results(experiment, pdf:PDF, t0set:(PDF, type(None))=None):
+def experiment_results(experiment, pdf:PDF, t0set:(PDF, type(None))=None, fitthcovmat=False):
     """Like `results` but for a whole experiment"""
-    return results(experiment, pdf, t0set)
+    return results(experiment, pdf, t0set, fitthcovmat=fitthcovmat)
 
 #It's better to duplicate a few lines than to complicate the logic of
 #``results`` to support this.
