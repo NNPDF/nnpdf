@@ -186,7 +186,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
   }
   
   double sys1, sys2, up, down, sigma, datshift;
-  double shift[fNData];
+  std::vector<double> shift(fNData);
 
   for (int j=fNData; j<fNSys; j++)
   {
@@ -399,7 +399,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter::ReadData()
   }
   
   double sys1, sys2, up, down, sigma, datshift;
-  double shift[fNData];
+  std::vector<double> shift(fNData);
 
   for (int j=0; j<fNSys; j++)
   {
@@ -577,7 +577,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
   }
   
   double sys1, sys2, up, down, sigma, datshift;
-  double shift[fNData];
+  std::vector<double> shift(fNData);
 
   for (int j=0; j<fNSys; j++)
   {
@@ -916,7 +916,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
   }
   
   double sys1, sys2, up, down, sigma, datshift;
-  double shift[fNData];
+  std::vector<double> shift(fNData);
 
   for (int j=fNData; j<fNSys; j++)
   {
@@ -1316,7 +1316,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter::ReadData()
   }
   
   double sys1, sys2, up, down, sigma, datshift;
-  double shift[fNData];
+  std::vector<double> shift(fNData);
 
   for (int j=fNData; j<fNSys; j++)
   {
@@ -1568,7 +1568,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAPFilter::ReadData()
   }
   
   double sys1, sys2, up, down, sigma, datshift;
-  double shift[fNData];
+  std::vector<double> shift(fNData);
 
   for (int j=fNData; j<fNSys; j++)
   {
@@ -1826,7 +1826,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter::ReadData()
   }
   
   double sys1, sys2, up, down, sigma, datshift;
-  double shift[fNData];
+  std::vector<double> shift(fNData);
 
   for (int j=fNData; j<fNSys; j++)
   {
@@ -2146,7 +2146,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PTFilter::ReadData()
   }
   
   double sys1, sys2, up, down, sigma, datshift;
-  double shift[fNData];
+  std::vector<double> shift(fNData);
 
   for (int j=fNData; j<fNSys; j++)
   {
