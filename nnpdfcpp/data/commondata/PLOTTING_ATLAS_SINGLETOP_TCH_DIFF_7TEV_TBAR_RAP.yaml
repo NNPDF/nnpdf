@@ -1,6 +1,6 @@
 dataset_label: "ATLAS single antitop $p^T_{t}$"
 x: k1
-y_label: '$d\sigma_{\bar t}/dp_{y_{\bar t}}$ (fb)'
+y_label: '$d\sigma_{\bar t}/dp_{y_{\bar t}}$ (pb)'
 figure_by:
   - k3
 
