@@ -401,6 +401,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter::ReadData()
     lstream >> fData[i]; // Value of bin
     // We do not read in stat. correlation matrix in this filter because it is not positive semi-definite
     lstream >> unneeded_info >> fStat[i]; // Statistical (percentage) uncertainty
+    fStat[i] = fStat[i]*fData[i]/100.;
   }
 
   // Read file with systematic uncertainty breakdown
@@ -579,6 +580,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
     fData[i] /= 1000; // Convert to 1/GeV
     // We do not read in stat. correlation matrix in this filter because it is not positive semi-definite
     lstream >> unneeded_info >> fStat[i]; // Statistical (percentage) uncertainty
+    fStat[i] = fStat[i]*fData[i]/100.;
   }
 
   // Read file with systematic uncertainty breakdown
