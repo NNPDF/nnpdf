@@ -319,6 +319,17 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
   {
     fData[i] *= (1.0 + shift[i]*0.01); // Shift of central value due to asymmetric errors
   }
+
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
 }
 
 //==================================================================
@@ -1174,6 +1185,17 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
   {
     fData[i] *= (1.0 + shift[i]*0.01); // Shift of central value due to asymmetric errors
   }
+
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
 }
 
 //==================================================================
@@ -1428,6 +1450,17 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter::ReadData()
   {
     fData[i] *= (1.0 + shift[i]*0.01); // Shift of central value due to asymmetric errors
   }
+
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
 }
 
 //==================================================================
@@ -1685,6 +1718,17 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAPFilter::ReadData()
   {
     fData[i] *= (1.0 + shift[i]*0.01); // Shift of central value due to asymmetric errors
   }
+
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
 }
 
 //==================================================================
@@ -2005,6 +2049,17 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter::ReadData()
   {
     fData[i] *= (1.0 + shift[i]*0.01); // Shift of central value due to asymmetric errors
   }
+
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
 }
 
 //==================================================================
@@ -2238,4 +2293,15 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PTFilter::ReadData()
   {
     fData[i] *= (1.0 + shift[i]*0.01); // Shift of central value due to asymmetric errors
   }
+
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
 }
