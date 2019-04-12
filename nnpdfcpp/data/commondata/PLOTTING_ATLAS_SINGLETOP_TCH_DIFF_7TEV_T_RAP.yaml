@@ -1,0 +1,7 @@
+dataset_label: "ATLAS single top $y_{t}$"
+x: k1
+y_label: '$d\sigma_t/dp_{y_t}$ (fb)'
+figure_by:
+  - k3
+
+experiment: "ATLAS"

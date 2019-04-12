@@ -1,0 +1,7 @@
+dataset_label: "ATLAS single antitop $p^T_{t}$"
+x: k1
+y_label: '$d\sigma_{\bar t}/dp^T_{\bar t}$ (fb/GeV)'
+figure_by:
+  - k3
+
+experiment: "ATLAS"

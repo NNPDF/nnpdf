@@ -1,0 +1,7 @@
+dataset_label: "ATLAS single top $p^T_{t}$"
+x: k1
+y_label: '$d\sigma_t/dp^T_t$ (fb/GeV)'
+figure_by:
+  - k3
+
+experiment: "ATLAS"
