@@ -411,7 +411,8 @@ def experiment_results(experiment, pdf:PDF, experiment_covariance_matrix,
 #It's better to duplicate a few lines than to complicate the logic of
 #``results`` to support this.
 #TODO: The above comment doesn't make sense after adding T0. Deprecate this
-def pdf_results(dataset:(DataSetSpec,  ExperimentSpec), pdfs:Sequence, t0set:(PDF, type(None))):
+def pdf_results(dataset:(DataSetSpec,  ExperimentSpec), pdfs:Sequence, covariance_matrix:tuple,
+                t0set:(PDF, type(None))):
     """Return a list of results, the first for the data and the rest for
     each of the PDFs."""
 
@@ -430,11 +431,12 @@ def pdf_results(dataset:(DataSetSpec,  ExperimentSpec), pdfs:Sequence, t0set:(PD
         th_results.append(th_result)
 
 
-    return (DataResult(data), *th_results)
+    return (DataResult(data, *covariance_matrix), *th_results)
 
 @require_one('pdfs', 'pdf')
 @remove_outer('pdfs', 'pdf')
 def one_or_more_results(dataset:(DataSetSpec, ExperimentSpec),
+                        covariance_matrix: tuple,
                         pdfs:(type(None), Sequence)=None,
                         pdf:(type(None), PDF)=None,
                         t0set:(PDF, type(None))=None):
@@ -443,9 +445,9 @@ def one_or_more_results(dataset:(DataSetSpec, ExperimentSpec),
     Which of the two is selected intelligently depending on the namespace,
     when executing as an action."""
     if pdf:
-        return results(dataset, pdf, t0set)
+        return results(dataset, pdf, covariance_matrix, t0set)
     else:
-        return pdf_results(dataset, pdfs, t0set)
+        return pdf_results(dataset, pdfs, covariance_matrix, t0set)
     raise ValueError("Either 'pdf' or 'pdfs' is required")
 
 
