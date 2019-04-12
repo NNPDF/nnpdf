@@ -33,7 +33,7 @@ Training validation
 
 $\chi^2$ by experiment
 ----------------------
-{@plot_fits_experiments_chi2@}
+{@plot_fits_exp_by_plotting_chi2@}
 
 $\chi^2$ by dataset comparisons
 -------------------------------
@@ -44,10 +44,7 @@ $\chi^2$ by dataset comparisons
 
 $\phi$ by experiment
 --------------------
-{@with dataspecs@}
-### {@fit@}
-{@plot_phi@}
-{@endwith@}
+{@plot_phi_fits_exp_by_plotting@}
 
 Experiment plots
 ---------------

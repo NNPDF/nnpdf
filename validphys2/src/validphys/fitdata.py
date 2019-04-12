@@ -146,7 +146,7 @@ def fit_summary(fit, replica_data, total_experiments_chi2data):
     etrain = [x.training for x in replica_data]
     evalid = [x.validation for x in replica_data]
 
-    phi = phi_data(total_experiments_chi2data)
+    phi, _ = phi_data(total_experiments_chi2data)
     phi_err = np.std(member_chi2)/(2.0*phi*np.sqrt(nrep))
 
     VET = ValueErrorTuple

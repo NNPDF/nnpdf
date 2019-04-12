@@ -748,7 +748,7 @@ class CoreConfig(configparser.Config):
 
     def produce_experiments_from_plotting(self, fit):
         """Used to produce experiments from the fit, where each experiment is a group of datasets
-        according to the plotting info
+        according to the experiment key in the plotting info file
         """
         #TODO: consider this an implimentation detail
         from reportengine.namespaces import NSList
@@ -772,6 +772,18 @@ class CoreConfig(configparser.Config):
 
         experiments = NSList(exps, nskey='experiment')
         return {'experiments': experiments}
+
+    def produce_experiments_from_plotting_withcontext(self, fit):
+        """produces experiments similarly to `experiments_from_plotting` but also sets fitcontext
+        (pdf and theoryid)
+        """
+        _, pdf         = self.parse_from_('fit', 'pdf', write=False)
+        _, theory      = self.parse_from_('fit', 'theory', write=False)
+        thid = theory['theoryid']
+        with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
+            experiments = self.produce_experiments_from_plotting(fit)['experiments']
+        return {'pdf': pdf, 'theoryid':thid, 'experiments': experiments}
+
 
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):

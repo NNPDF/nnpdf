@@ -59,22 +59,10 @@ class StatsResult(Result):
 
 class DataResult(NNPDFDataResult):
 
-    def __init__(self, dataobj, thcovmat=False):
+    def __init__(self, dataobj, covmat, sqrtcovmat):
         super().__init__(dataobj)
-        self._covmat = dataobj.get_covmat()
-        if isinstance(thcovmat, ThCovMatSpec):
-            self._sqrtcovmat = dataobj.GetSqrtFitCovMat(str(thcovmat), [])
-        elif isinstance(thcovmat, pd.DataFrame):
-            if isinstance(dataobj, Experiment):
-                level = 0
-                name = dataobj.GetExpName()
-            else:
-                level = 1
-                name = dataobj.GetSetName()
-            thcovslice = get_df_block(thcovmat, name, level=level)
-            self._sqrtcovmat = np.linalg.cholesky(self._covmat + thcovslice)
-        else:
-            self._sqrtcovmat = dataobj.get_sqrtcovmat()
+        self._covmat = covmat
+        self._sqrtcovmat = sqrtcovmat
 
 
     @property
@@ -369,13 +357,40 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
 
     return df
 
+#TODO: Add check here that dataset appears in fitthcovmat (if true) and that cuts match
+def covariance_matrix(dataset:DataSetSpec, fitthcovmat):
+    """Returns a tuple of Covariance matrix and sqrt covariance matrix for the given dataset
+    which includes theory contribution from scale variations if `use_theorycovmat` is True and
+    an appropriate fit from which the covariance matrix will be loaded is given
+    """
+    loaded_data = dataset.load()
+    if fitthcovmat:
+        loaded_thcov = fitthcovmat.load()
+        covmat = get_df_block(loaded_thcov, dataset.name, level=1) + loaded_data.get_covmat()
+        sqrtcovmat = np.linalg.cholesky(covmat)
+    else:
+        covmat = loaded_data.get_covmat()
+        sqrtcovmat = loaded_data.get_sqrtcovmat()
+    return covmat, sqrtcovmat
 
-def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None, fixup_fitthcovmat=False):
+def experiment_covariance_matrix(experiment: ExperimentSpec, fitthcovmat):
+    loaded_data = experiment.load()
+    if fitthcovmat:
+        loaded_thcov = fitthcovmat.load()
+        ds_names = loaded_thcov.index.get_level_values(1)
+        indices = np.in1d(ds_names, [ds.name for ds in experiment.datasets]).nonzero()[0]
+        covmat = loaded_thcov.iloc[indices, indices].values + loaded_data.get_covmat()
+        sqrtcovmat = np.linalg.cholesky(covmat)
+    else:
+        covmat = loaded_data.get_covmat()
+        sqrtcovmat = loaded_data.get_sqrtcovmat()
+    return covmat, sqrtcovmat
+
+def results(dataset:(DataSetSpec), pdf:PDF, covariance_matrix, t0set:(PDF, type(None))=None):
     """Tuple of data and theory results for a single pdf.
     The theory is specified as part of the dataset.
     An experiment is also allowed.
     (as a result of the C++ code layout)."""
-
     data = dataset.load()
 
 
@@ -385,12 +400,13 @@ def results(dataset:(DataSetSpec), pdf:PDF, t0set:(PDF, type(None))=None, fixup_
         log.debug("Setting T0 predictions for %s" % dataset)
         data.SetT0(t0set.load_t0())
 
-    return (DataResult(data, thcovmat=fixup_fitthcovmat),
+    return (DataResult(data, *covariance_matrix),
             ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data))
 
-def experiment_results(experiment, pdf:PDF, t0set:(PDF, type(None))=None, fixup_fitthcovmat=False):
+def experiment_results(experiment, pdf:PDF, experiment_covariance_matrix,
+                       t0set:(PDF, type(None))=None):
     """Like `results` but for a whole experiment"""
-    return results(experiment, pdf, t0set, fixup_fitthcovmat=fixup_fitthcovmat)
+    return results(experiment, pdf, experiment_covariance_matrix, t0set)
 
 #It's better to duplicate a few lines than to complicate the logic of
 #``results`` to support this.
@@ -455,11 +471,13 @@ def abs_chi2_data_experiment(experiment_results):
 def phi_data(abs_chi2_data):
     """Calculate phi using values returned by `abs_chi2_data`.
 
+    Returns tuple of (phi, numpoints)
+
     For more information on how phi is calculated see Eq.(24) in
     1410.8849
     """
     alldata, central, npoints = abs_chi2_data
-    return np.sqrt((alldata.data.mean() - central)/npoints)
+    return (np.sqrt((alldata.data.mean() - central)/npoints), npoints)
 
 def phi_data_experiment(abs_chi2_data_experiment):
     """Like `phi_data` but for whole experiment"""
@@ -656,7 +674,40 @@ def dataset_chi2_table(chi2_stats, dataset):
     """Show the chi² estimators for a given dataset"""
     return pd.DataFrame(chi2_stats, index=[dataset.name])
 
+fits_exp_from_plotting_chi2 = collect(
+    'experiments_chi2', ('fits', 'experiments_from_plotting_withcontext',))
+fits_exp_from_plotting = collect(
+    'experiments', ('fits', 'experiments_from_plotting_withcontext',))
 
+@table
+def fits_exp_by_plotting_chi2_table(fits, fits_exp_from_plotting, fits_exp_from_plotting_chi2,
+                                    per_point_data:bool=True):
+    """For every fit, returns the chi2 and number of data points per experiment, where experiment is
+    a collection of datasets grouped according to the experiment key in the plotting info file
+    """
+    dfs = []
+    cols = ('ndata', r'$\chi^2/ndata$') if per_point_data else ('ndata', r'$\chi^2$')
+    for fit, experiments, exps_chi2 in zip(fits, fits_exp_from_plotting, fits_exp_from_plotting_chi2):
+        records = []
+        for experiment, exp_chi2 in zip(experiments, exps_chi2):
+            mean_chi2 = exp_chi2.central_result.mean()
+            npoints = exp_chi2.ndata
+            records.append(dict(
+                experiment=str(experiment),
+                npoints=npoints,
+                mean_chi2 = mean_chi2
+
+            ))
+        df = pd.DataFrame.from_records(records,
+                 columns=('experiment', 'npoints', 'mean_chi2'),
+                 index = ('experiment', )
+             )
+        if per_point_data:
+            df['mean_chi2'] /= df['npoints']
+        df.columns = pd.MultiIndex.from_product(([str(fit)], cols))
+        dfs.append(df)
+    res =  pd.concat(dfs, axis=1)
+    return res
 
 #TODO: Possibly get rid of the per_point_data parameter and have separate
 #actions for absolute and relative tables.
@@ -691,6 +742,35 @@ def fits_experiments_chi2_table(fits, fits_experiments, fits_experiment_chi2_dat
     res =  pd.concat(dfs, axis=1)
     return res
 
+fits_exp_by_plotting_phi = collect(
+    'experiments_phi', ('fits', 'experiments_from_plotting_withcontext'))
+
+@table
+def fits_phi_table(fits, fits_exp_from_plotting, fits_exp_by_plotting_phi):
+    """For every fit, returns phi and number of data points per experiment, where experiment is
+    a collection of datasets grouped according to the experiment key in the plotting info file
+    """
+    dfs = []
+    cols = ('ndata', r'$\phi$')
+    for fit, experiments, exps_phi in zip(fits, fits_exp_from_plotting, fits_exp_by_plotting_phi):
+        records = []
+        for experiment, (exp_phi, npoints) in zip(experiments, exps_phi):
+            npoints = npoints
+            records.append(dict(
+                experiment=str(experiment),
+                npoints=npoints,
+                phi = exp_phi
+
+            ))
+        df = pd.DataFrame.from_records(records,
+                 columns=('experiment', 'npoints', 'phi'),
+                 index = ('experiment', )
+             )
+        df.columns = pd.MultiIndex.from_product(([str(fit)], cols))
+        dfs.append(df)
+    res =  pd.concat(dfs, axis=1)
+    return res
+
 @table
 @check_speclabels_different
 def dataspecs_experiments_chi2_table(dataspecs_speclabel, dataspecs_experiments,
@@ -704,20 +784,20 @@ def dataspecs_experiments_chi2_table(dataspecs_speclabel, dataspecs_experiments,
 
 
 @table
-def fits_datasets_chi2_table(fits, fits_experiments, fits_chi2_data,
+def fits_datasets_chi2_table(fits, fits_exp_from_plotting, fits_chi2_data,
                              per_point_data:bool=True):
     """A table with the chi2 for each included dataset in the fits, computed
     with the theory corresponding to the fit. The result are indexed in two
-    levels by experiment and dataset.  If points_per_data is True,
-    the chi² will be shown divided by ndata.
-    Otherwise they will be absolute."""
+    levels by experiment and dataset, where experiment is the grouping of datasets according to the
+    `experiment` key in the plotting info file.  If points_per_data is True, the chi² will be shown
+    divided by ndata. Otherwise they will be absolute."""
 
     chi2_it = iter(fits_chi2_data)
 
     cols = ('ndata', r'$\chi^2/ndata$') if per_point_data else ('ndata', r'$\chi^2$')
 
     dfs = []
-    for fit, experiments in zip(fits, fits_experiments):
+    for fit, experiments in zip(fits, fits_exp_from_plotting):
         records = []
         for experiment in experiments:
             for dataset, chi2 in zip(experiment.datasets, chi2_it):
@@ -755,15 +835,16 @@ def dataspecs_datasets_chi2_table(dataspecs_speclabel, dataspecs_experiments,
 def fits_chi2_table(
         fits_experiments_chi2_table,
         fits_datasets_chi2_table,
+        fits_exp_by_plotting_chi2_table,
         show_total:bool=False):
     """Show the chi² of each and number of points of each dataset and experiment
-    of each fit,
-    computed with the theory corresponding to the fit. Dataset that are not
-    included in some fit appear as "Not Fitted". This is itended for display
-    purposes."""
-    lvs = fits_experiments_chi2_table.index
+    of each fit, where experiment is a group of datasets according to the `experiment` key in
+    the plotting info file, computed with the theory corresponding to the fit. Dataset that are not
+    included in some fit appear as `NaN`
+    """
+    lvs = fits_exp_by_plotting_chi2_table.index
     expanded_index = pd.MultiIndex.from_product((lvs, ["Total"]))
-    edf = fits_experiments_chi2_table.set_index(expanded_index)
+    edf = fits_exp_by_plotting_chi2_table.set_index(expanded_index)
     ddf = fits_datasets_chi2_table
     dfs = []
     #TODO: Better way to do the merge preserving the order?
@@ -883,7 +964,6 @@ each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
 experiments_results = collect(experiment_results, ('experiments',))
 
 experiments_phi = collect(phi_data_experiment, ('experiments',))
-experiments_pdfs_phi = collect('experiments_phi', ('pdfs',))
 
 pdfs_total_chi2 = collect(total_experiments_chi2, ('pdfs',))
 
@@ -919,23 +999,3 @@ dataspecs_dataset = collect('dataset', ('dataspecs',))
 dataspecs_commondata = collect('commondata', ('dataspecs',))
 dataspecs_pdf = collect('pdf', ('dataspecs',))
 dataspecs_fit = collect('fit', ('dataspecs',))
-
-def fixup_fitthcovmat(fitthcovmat, experiments=None):
-    """If both `fitthcovmat` and `experiments` exist then change the level 1 keys of `fitthcovmat`
-    to match `experiments`
-    """
-    if fitthcovmat:
-        loaded_covmat = fitthcovmat.load()
-        if experiments:
-            exp_names = np.array(loaded_covmat.index.get_level_values(0), copy=True)
-            ds_names = loaded_covmat.index.get_level_values(1)
-            ds_index = loaded_covmat.index.get_level_values(2)
-            for exp in experiments:
-                for ds in exp.datasets:
-                    choose = np.where(ds_names == ds.name)
-                    exp_names[choose] = exp.name
-            new_index = pd.MultiIndex.from_arrays([exp_names, ds_names, ds_index])
-            loaded_covmat = pd.DataFrame(loaded_covmat.values, index=new_index, columns=new_index)
-        return loaded_covmat
-    else:
-        return fitthcovmat
