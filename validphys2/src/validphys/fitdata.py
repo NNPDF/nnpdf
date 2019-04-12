@@ -165,6 +165,9 @@ collected_fit_summaries = collect('fit_summary', ('fits', 'fitcontext'))
 def summarise_fits(collected_fit_summaries):
     """ Produces a table of basic comparisons between fits, includes
     all the fields used in fit_summary """
+    log.warning("Using `collected_fit_summaries` which collects over `experiments` defined in fit "
+                "can affect construction of total covariance matrix, this will be deprecated "
+                "and should be changed to collect over `data` when that keyword is implemented")
     return pd.concat(collected_fit_summaries, axis=1)
 
 

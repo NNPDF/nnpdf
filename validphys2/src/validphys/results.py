@@ -830,10 +830,13 @@ def dataspecs_datasets_chi2_table(dataspecs_speclabel, dataspecs_experiments,
                                     dataspecs_chi2_data, per_point_data=per_point_data)
 
 
+#NOTE: This will need to be changed to work with `data` when that gets added
+fits_total_chi2_data = collect('total_experiments_chi2data', ('fits', 'fitcontext'))
+
 #TODO: Decide what to do with the horrible totals code.
 @table
 def fits_chi2_table(
-        fits_experiments_chi2_table,
+        fits_total_chi2_data,
         fits_datasets_chi2_table,
         fits_exp_by_plotting_chi2_table,
         show_total:bool=False):
@@ -851,15 +854,17 @@ def fits_chi2_table(
     for lv in lvs:
         dfs.append(pd.concat((edf.loc[lv],ddf.loc[lv]), copy=False, axis=0))
     if show_total:
-        total_points = fits_experiments_chi2_table.iloc[:, 0::2].sum().values
-        total_chi = (fits_experiments_chi2_table.iloc[:, 0::2].values *
-                     fits_experiments_chi2_table.iloc[:,1::2].values).sum(axis=0)
+        log.warning("Using `fits_total_chi2_data` which collects over `experiments` defined in fit "
+                    "can affect construction of total covariance matrix, this will be deprecated "
+                    "and should be changed to collect over `data` when that keyword is implemented")
+        total_points = np.array([total_chi2_data.ndata for total_chi2_data in fits_total_chi2_data])
+        total_chi = np.array([total_chi2_data.central_result for total_chi2_data in fits_total_chi2_data])
         total_chi /= total_points
         row = np.zeros(len(total_points)*2)
         row[::2] = total_points
         row[1::2] = total_chi
         df = pd.DataFrame(np.atleast_2d(row),
-                          columns=fits_experiments_chi2_table.columns,
+                          columns=fits_exp_by_plotting_chi2_table.columns,
                           index=['Total'])
         dfs.append(df)
         keys = [*lvs, 'Total']
@@ -974,15 +979,13 @@ experiments_bootstrap_chi2_central = collect(bootstrap_chi2_central_experiment,
 
 #These are convenient ways to iterate and extract varios data from fits
 fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))
-fits_experiment_chi2_data = collect('experiments_chi2', ('fits', 'fitcontext'))
+
 fits_total_chi2 = collect('total_experiments_chi2', ('fits', 'fitcontext'))
 
 fits_total_chi2_for_experiments = collect('total_experiment_chi2',
                                           ('fits', 'fittheoryandpdf',
                                            'expspec', 'experiment'))
 
-
-fits_experiments = collect('experiments', ('fits', 'fitcontext'))
 fits_pdf = collect('pdf', ('fits', 'fitpdf'))
 
 #Dataspec is so
