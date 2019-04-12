@@ -1,6 +1,6 @@
-dataset_label: "ATLAS single top $y_{t}$"
+dataset_label: "ATLAS single top $|y_t|$"
 x: k1
-y_label: '$d\sigma_t/dp_{y_t}$ (pb)'
+y_label: '$d\sigma_t/d|y_t|$ (pb)'
 figure_by:
   - k3
 
