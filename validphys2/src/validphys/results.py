@@ -358,12 +358,21 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
     return df
 
 #TODO: Add check here that dataset appears in fitthcovmat (if true) and that cuts match
-def covariance_matrix(dataset:DataSetSpec, fitthcovmat):
+def covariance_matrix(dataset:DataSetSpec, fitthcovmat, t0set:(PDF, type(None))=None):
     """Returns a tuple of Covariance matrix and sqrt covariance matrix for the given dataset
     which includes theory contribution from scale variations if `use_theorycovmat` is True and
     an appropriate fit from which the covariance matrix will be loaded is given
+
+    if t0set is specified then t0 predictions will be used to construct the covariance matrix.
     """
     loaded_data = dataset.load()
+
+    if t0set:
+        #Copy data to avoid chaos
+        loaded_data = type(loaded_data)(loaded_data)
+        log.debug("Setting T0 predictions for %s" % dataset)
+        loaded_data.SetT0(t0set.load_t0())
+
     if fitthcovmat:
         loaded_thcov = fitthcovmat.load()
         covmat = get_df_block(loaded_thcov, dataset.name, level=1) + loaded_data.get_covmat()
@@ -373,8 +382,16 @@ def covariance_matrix(dataset:DataSetSpec, fitthcovmat):
         sqrtcovmat = loaded_data.get_sqrtcovmat()
     return covmat, sqrtcovmat
 
-def experiment_covariance_matrix(experiment: ExperimentSpec, fitthcovmat):
+def experiment_covariance_matrix(experiment: ExperimentSpec, fitthcovmat, t0set:(PDF, type(None))=None):
+    """Like `covariance_matrix` except for an experiment"""
     loaded_data = experiment.load()
+
+    if t0set:
+        #Copy data to avoid chaos
+        loaded_data = type(loaded_data)(loaded_data)
+        log.debug("Setting T0 predictions for %s" % experiment)
+        loaded_data.SetT0(t0set.load_t0())
+
     if fitthcovmat:
         loaded_thcov = fitthcovmat.load()
         ds_names = loaded_thcov.index.get_level_values(1)
@@ -386,44 +403,27 @@ def experiment_covariance_matrix(experiment: ExperimentSpec, fitthcovmat):
         sqrtcovmat = loaded_data.get_sqrtcovmat()
     return covmat, sqrtcovmat
 
-def results(dataset:(DataSetSpec), pdf:PDF, covariance_matrix, t0set:(PDF, type(None))=None):
+def results(dataset:(DataSetSpec), pdf:PDF, covariance_matrix):
     """Tuple of data and theory results for a single pdf.
     The theory is specified as part of the dataset.
     An experiment is also allowed.
     (as a result of the C++ code layout)."""
     data = dataset.load()
-
-
-    if t0set:
-        #Copy data to avoid chaos
-        data = type(data)(data)
-        log.debug("Setting T0 predictions for %s" % dataset)
-        data.SetT0(t0set.load_t0())
-
     return (DataResult(data, *covariance_matrix),
             ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data))
 
-def experiment_results(experiment, pdf:PDF, experiment_covariance_matrix,
-                       t0set:(PDF, type(None))=None):
+def experiment_results(experiment, pdf:PDF, experiment_covariance_matrix):
     """Like `results` but for a whole experiment"""
-    return results(experiment, pdf, experiment_covariance_matrix, t0set)
+    return results(experiment, pdf, experiment_covariance_matrix)
 
 #It's better to duplicate a few lines than to complicate the logic of
 #``results`` to support this.
 #TODO: The above comment doesn't make sense after adding T0. Deprecate this
-def pdf_results(dataset:(DataSetSpec,  ExperimentSpec), pdfs:Sequence, covariance_matrix:tuple,
-                t0set:(PDF, type(None))):
+def pdf_results(dataset:(DataSetSpec,  ExperimentSpec), pdfs:Sequence, covariance_matrix:tuple):
     """Return a list of results, the first for the data and the rest for
     each of the PDFs."""
 
     data = dataset.load()
-
-    if t0set:
-        #Copy data to avoid chaos
-        data = type(data)(data)
-        log.debug("Setting T0 predictions for %s" % dataset)
-        data.SetT0(t0set.load_t0())
-
     th_results = []
     for pdf in pdfs:
         th_result = ThPredictionsResult.from_convolution(pdf, dataset,
@@ -438,16 +438,15 @@ def pdf_results(dataset:(DataSetSpec,  ExperimentSpec), pdfs:Sequence, covarianc
 def one_or_more_results(dataset:(DataSetSpec, ExperimentSpec),
                         covariance_matrix: tuple,
                         pdfs:(type(None), Sequence)=None,
-                        pdf:(type(None), PDF)=None,
-                        t0set:(PDF, type(None))=None):
+                        pdf:(type(None), PDF)=None):
     """Generate a list of results, where the first element is the data values,
     and the next is either the prediction for pdf or for each of the pdfs.
     Which of the two is selected intelligently depending on the namespace,
     when executing as an action."""
     if pdf:
-        return results(dataset, pdf, covariance_matrix, t0set)
+        return results(dataset, pdf, covariance_matrix)
     else:
-        return pdf_results(dataset, pdfs, covariance_matrix, t0set)
+        return pdf_results(dataset, pdfs, covariance_matrix)
     raise ValueError("Either 'pdf' or 'pdfs' is required")
 
 
