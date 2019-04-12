@@ -61,11 +61,11 @@ def plot_phi(experiments, experiments_phi):
     return fig
 
 @figure
-def plot_phi_fits_exp_by_plotting(fits_phi_table):
+def plot_fits_experiments_phi(fits_experiments_phi_table):
     """Plots a set of bars for each fit, each bar represents the value of phi for the corresponding
     experiment, where the experiment is a group of datasets according to the `experiment` key in
-    the plotting info file"""
-    fig, ax = _plot_chis_df(fits_phi_table)
+    the PLOTTING info file"""
+    fig, ax = _plot_chis_df(fits_experiments_phi_table)
     ax.set_title(r"$\phi$ for each experiment")
     return fig
 
@@ -528,16 +528,6 @@ def plot_fits_experiments_chi2(fits_experiments_chi2_table):
     """Generate a plot equivalent to ``plot_experiments_chi2`` using all the
     fitted experiments as input."""
     fig, ax = _plot_chis_df(fits_experiments_chi2_table)
-    ax.set_title(r"$\chi^2$ for experiments")
-    return fig
-
-@figure
-def plot_fits_exp_by_plotting_chi2(fits_exp_by_plotting_chi2_table):
-    """Generate a plot equivalent to ``plot_experiments_chi2`` using all fits
-    and grouping datasets into experiments according to the `experiment` key defined in the
-    plotting file.
-    """
-    fig, ax = _plot_chis_df(fits_exp_by_plotting_chi2_table)
     ax.set_title(r"$\chi^2$ for experiments")
     return fig
 

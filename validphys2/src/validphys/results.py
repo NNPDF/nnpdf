@@ -674,40 +674,10 @@ def dataset_chi2_table(chi2_stats, dataset):
     """Show the chi² estimators for a given dataset"""
     return pd.DataFrame(chi2_stats, index=[dataset.name])
 
-fits_exp_from_plotting_chi2 = collect(
+fits_experiment_chi2_data = collect(
     'experiments_chi2', ('fits', 'experiments_from_plotting_withcontext',))
-fits_exp_from_plotting = collect(
+fits_experiments = collect(
     'experiments', ('fits', 'experiments_from_plotting_withcontext',))
-
-@table
-def fits_exp_by_plotting_chi2_table(fits, fits_exp_from_plotting, fits_exp_from_plotting_chi2,
-                                    per_point_data:bool=True):
-    """For every fit, returns the chi2 and number of data points per experiment, where experiment is
-    a collection of datasets grouped according to the experiment key in the plotting info file
-    """
-    dfs = []
-    cols = ('ndata', r'$\chi^2/ndata$') if per_point_data else ('ndata', r'$\chi^2$')
-    for fit, experiments, exps_chi2 in zip(fits, fits_exp_from_plotting, fits_exp_from_plotting_chi2):
-        records = []
-        for experiment, exp_chi2 in zip(experiments, exps_chi2):
-            mean_chi2 = exp_chi2.central_result.mean()
-            npoints = exp_chi2.ndata
-            records.append(dict(
-                experiment=str(experiment),
-                npoints=npoints,
-                mean_chi2 = mean_chi2
-
-            ))
-        df = pd.DataFrame.from_records(records,
-                 columns=('experiment', 'npoints', 'mean_chi2'),
-                 index = ('experiment', )
-             )
-        if per_point_data:
-            df['mean_chi2'] /= df['npoints']
-        df.columns = pd.MultiIndex.from_product(([str(fit)], cols))
-        dfs.append(df)
-    res =  pd.concat(dfs, axis=1)
-    return res
 
 #TODO: Possibly get rid of the per_point_data parameter and have separate
 #actions for absolute and relative tables.
@@ -742,17 +712,17 @@ def fits_experiments_chi2_table(fits, fits_experiments, fits_experiment_chi2_dat
     res =  pd.concat(dfs, axis=1)
     return res
 
-fits_exp_by_plotting_phi = collect(
+fits_experiments_phi = collect(
     'experiments_phi', ('fits', 'experiments_from_plotting_withcontext'))
 
 @table
-def fits_phi_table(fits, fits_exp_from_plotting, fits_exp_by_plotting_phi):
+def fits_experiments_phi_table(fits, fits_experiments, fits_experiments_phi):
     """For every fit, returns phi and number of data points per experiment, where experiment is
-    a collection of datasets grouped according to the experiment key in the plotting info file
+    a collection of datasets grouped according to the experiment key in the PLOTTING info file
     """
     dfs = []
     cols = ('ndata', r'$\phi$')
-    for fit, experiments, exps_phi in zip(fits, fits_exp_from_plotting, fits_exp_by_plotting_phi):
+    for fit, experiments, exps_phi in zip(fits, fits_experiments, fits_experiments_phi):
         records = []
         for experiment, (exp_phi, npoints) in zip(experiments, exps_phi):
             npoints = npoints
@@ -784,12 +754,12 @@ def dataspecs_experiments_chi2_table(dataspecs_speclabel, dataspecs_experiments,
 
 
 @table
-def fits_datasets_chi2_table(fits, fits_exp_from_plotting, fits_chi2_data,
+def fits_datasets_chi2_table(fits, fits_experiments, fits_chi2_data,
                              per_point_data:bool=True):
     """A table with the chi2 for each included dataset in the fits, computed
     with the theory corresponding to the fit. The result are indexed in two
     levels by experiment and dataset, where experiment is the grouping of datasets according to the
-    `experiment` key in the plotting info file.  If points_per_data is True, the chi² will be shown
+    `experiment` key in the PLOTTING info file.  If points_per_data is True, the chi² will be shown
     divided by ndata. Otherwise they will be absolute."""
 
     chi2_it = iter(fits_chi2_data)
@@ -797,7 +767,7 @@ def fits_datasets_chi2_table(fits, fits_exp_from_plotting, fits_chi2_data,
     cols = ('ndata', r'$\chi^2/ndata$') if per_point_data else ('ndata', r'$\chi^2$')
 
     dfs = []
-    for fit, experiments in zip(fits, fits_exp_from_plotting):
+    for fit, experiments in zip(fits, fits_experiments):
         records = []
         for experiment in experiments:
             for dataset, chi2 in zip(experiment.datasets, chi2_it):
@@ -838,16 +808,16 @@ fits_total_chi2_data = collect('total_experiments_chi2data', ('fits', 'fitcontex
 def fits_chi2_table(
         fits_total_chi2_data,
         fits_datasets_chi2_table,
-        fits_exp_by_plotting_chi2_table,
+        fits_experiments_chi2_table,
         show_total:bool=False):
     """Show the chi² of each and number of points of each dataset and experiment
     of each fit, where experiment is a group of datasets according to the `experiment` key in
-    the plotting info file, computed with the theory corresponding to the fit. Dataset that are not
+    the PLOTTING info file, computed with the theory corresponding to the fit. Dataset that are not
     included in some fit appear as `NaN`
     """
-    lvs = fits_exp_by_plotting_chi2_table.index
+    lvs = fits_experiments_chi2_table.index
     expanded_index = pd.MultiIndex.from_product((lvs, ["Total"]))
-    edf = fits_exp_by_plotting_chi2_table.set_index(expanded_index)
+    edf = fits_experiments_chi2_table.set_index(expanded_index)
     ddf = fits_datasets_chi2_table
     dfs = []
     #TODO: Better way to do the merge preserving the order?
@@ -864,7 +834,7 @@ def fits_chi2_table(
         row[::2] = total_points
         row[1::2] = total_chi
         df = pd.DataFrame(np.atleast_2d(row),
-                          columns=fits_exp_by_plotting_chi2_table.columns,
+                          columns=fits_experiments_chi2_table.columns,
                           index=['Total'])
         dfs.append(df)
         keys = [*lvs, 'Total']
