@@ -40,6 +40,7 @@ unnormalised distributions which are treated as ATLASLUMI11 (i.e. ATLAS luminosi
 */
 
 #include "ATLAS_SINGLETOP_TCH_DIFF_7TEV.h"
+#include "NNPDF/utils.h"
 
 // A - NORMALISED distributions
 
@@ -140,7 +141,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
   }
 
   double** covmat = new double*[fNData];
-  double corrmat[fNData][fNData];
+  NNPDF::matrix<double> corrmat(fNData, fNData);
   for (int i=0; i<fNData; i++)
   {
     string unneeded_info;
@@ -150,8 +151,8 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
     lstream >> unneeded_info >> unneeded_info >> unneeded_info;
     for (int j=0; j<fNData; j++)
     {
-      lstream >> corrmat[i][j] >> unneeded_info;
-      covmat[i][j] = corrmat[i][j] * fstat_additive[i] * fstat_additive[j];
+      lstream >> corrmat(i,j) >> unneeded_info;
+      covmat[i][j] = corrmat(i,j) * fstat_additive[i] * fstat_additive[j];
     }
   }
 
@@ -870,7 +871,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
   }
 
   double** covmat = new double*[fNData];
-  double corrmat[fNData][fNData];
+  NNPDF::matrix<double> corrmat(fNData, fNData);
   for (int i=0; i<fNData; i++)
   {
     string unneeded_info;
@@ -880,8 +881,8 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
     lstream >> unneeded_info >> unneeded_info >> unneeded_info;
     for (int j=0; j<fNData; j++)
     {
-      lstream >> corrmat[i][j] >> unneeded_info;
-      covmat[i][j] = corrmat[i][j] * fstat_additive[i] * fstat_additive[j];
+      lstream >> corrmat(i,j) >> unneeded_info;
+      covmat[i][j] = corrmat(i,j) * fstat_additive[i] * fstat_additive[j];
     }
   }
 
@@ -1270,7 +1271,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter::ReadData()
   }
 
   double** covmat = new double*[fNData];
-  double corrmat[fNData][fNData];
+  NNPDF::matrix<double> corrmat(fNData, fNData);
   for (int i=0; i<fNData; i++)
   {
     string unneeded_info;
@@ -1280,8 +1281,8 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter::ReadData()
     lstream >> unneeded_info >> unneeded_info >> unneeded_info;
     for (int j=0; j<fNData; j++)
     {
-      lstream >> corrmat[i][j] >> unneeded_info;
-      covmat[i][j] = corrmat[i][j] * fstat_additive[i] * fstat_additive[j];
+      lstream >> corrmat(i,j) >> unneeded_info;
+      covmat[i][j] = corrmat(i,j) * fstat_additive[i] * fstat_additive[j];
     }
   }
 
@@ -1522,7 +1523,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAPFilter::ReadData()
   }
 
   double** covmat = new double*[fNData];
-  double corrmat[fNData][fNData];
+  NNPDF::matrix<double> corrmat(fNData, fNData);
   for (int i=0; i<fNData; i++)
   {
     string unneeded_info;
@@ -1532,8 +1533,8 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAPFilter::ReadData()
     lstream >> unneeded_info >> unneeded_info >> unneeded_info;
     for (int j=0; j<fNData; j++)
     {
-      lstream >> corrmat[i][j] >> unneeded_info;
-      covmat[i][j] = corrmat[i][j] * fstat_additive[i] * fstat_additive[j];
+      lstream >> corrmat(i,j) >> unneeded_info;
+      covmat[i][j] = corrmat(i,j) * fstat_additive[i] * fstat_additive[j];
     }
   }
 
@@ -1780,7 +1781,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter::ReadData()
   }
 
   double** covmat = new double*[fNData];
-  double corrmat[fNData][fNData];
+  NNPDF::matrix<double> corrmat(fNData, fNData);
   for (int i=0; i<fNData; i++)
   {
     string unneeded_info;
@@ -1790,8 +1791,8 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter::ReadData()
     lstream >> unneeded_info >> unneeded_info >> unneeded_info;
     for (int j=0; j<fNData; j++)
     {
-      lstream >> corrmat[i][j] >> unneeded_info;
-      covmat[i][j] = corrmat[i][j] * fstat_additive[i] * fstat_additive[j];
+      lstream >> corrmat(i,j) >> unneeded_info;
+      covmat[i][j] = corrmat(i,j) * fstat_additive[i] * fstat_additive[j];
     }
   }
 
@@ -2100,7 +2101,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PTFilter::ReadData()
   }
 
   double** covmat = new double*[fNData];
-  double corrmat[fNData][fNData];
+  NNPDF::matrix<double> corrmat(fNData, fNData);
   for (int i=0; i<fNData; i++)
   {
     string unneeded_info;
@@ -2110,8 +2111,8 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PTFilter::ReadData()
     lstream >> unneeded_info >> unneeded_info >> unneeded_info;
     for (int j=0; j<fNData; j++)
     {
-      lstream >> corrmat[i][j] >> unneeded_info;
-      covmat[i][j] = corrmat[i][j] * fstat_additive[i] * fstat_additive[j];
+      lstream >> corrmat(i,j) >> unneeded_info;
+      covmat[i][j] = corrmat(i,j) * fstat_additive[i] * fstat_additive[j];
     }
   }
 
