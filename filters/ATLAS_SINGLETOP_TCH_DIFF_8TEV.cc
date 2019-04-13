@@ -55,7 +55,6 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORMFilter::ReadData()
   {
     double rap_top; // Rapidity of top quark
     double rap_top_low, rap_top_high; // Limits of bin
-    double stat; // Absolute statistical uncertainty
     double sys1, sys2; // Systematic uncertainties from file
     double sys1_mult, sys2_mult; // Multiplicative systematic uncertainties
     double up, down, sigma, datshift; // Arguments of symmetriseErrors
@@ -64,17 +63,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORMFilter::ReadData()
     istringstream lstream(line);
 
     lstream >> rap_top_low >> rap_top_high;
-    lstream >> fData[i] >> stat;
+    lstream >> fData[i] >> fStat[i];
     lstream >> sys1 >> sys2;
 
     fData[i] /= 1000;
-    stat /= 1000;
+    fStat[i] /= 1000;
     sys1 /= 1000;
     sys2 /= 1000;
 
     rap_top = 0.5*(rap_top_low + rap_top_high);
-    fStat[i] = (stat/fData[i])*100; // Store statistical uncertainty as percentage value
-
+    
     fKin1[i] = rap_top;
     fKin2[i] = Mt*Mt; // Top mass squared
     fKin3[i] = 8000; // Centre of mass energy in GeV
@@ -130,7 +128,6 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORMFilter::ReadData()
   {
     double rap_top; // Rapidity of top quark
     double rap_top_low, rap_top_high; // Limits of bin
-    double stat; // Absolute statistical uncertainty
     double sys1, sys2; // Systematic uncertainties from file
     double sys1_mult, sys2_mult; // Multiplicative systematic uncertainties
     double up, down, sigma, datshift; // Arguments of symmetriseErrors
@@ -139,16 +136,15 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORMFilter::ReadData()
     istringstream lstream(line);
 
     lstream >> rap_top_low >> rap_top_high;
-    lstream >> fData[i] >> stat;
+    lstream >> fData[i] >> fStat[i];
     lstream >> sys1 >> sys2;
 
     fData[i] /= 1000;
-    stat /= 1000;
+    fStat[i] /= 1000;
     sys1 /= 1000;
     sys2 /= 1000;
 
     rap_top = 0.5*(rap_top_low + rap_top_high);
-    fStat[i] = (stat/fData[i])*100; // Store statistical uncertainty as percentage value
 
     fKin1[i] = rap_top;
     fKin2[i] = Mt*Mt; // Top mass squared
@@ -205,7 +201,6 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT_NORMFilter::ReadData()
   {
     double pt_top; // Transverse momentum of top quark
     double pt_top_low, pt_top_high; // Limits of bin
-    double stat; // Absolute statistical uncertainty
     double sys1, sys2; // Systematic uncertainties from file
     double sys1_mult, sys2_mult; // Multiplicative systematic uncertainties
     double up, down, sigma, datshift; // Arguments of symmetriseErrors
@@ -214,17 +209,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT_NORMFilter::ReadData()
     istringstream lstream(line);
 
     lstream >> pt_top_low >> pt_top_high;
-    lstream >> fData[i] >> stat;
+    lstream >> fData[i] >> fStat[i];
     lstream >> sys1 >> sys2;
 
     // Convert to 1/GeV
     fData[i] /= 1000;
-    stat /= 1000;
+    fStat[i] /= 1000;
     sys1 /= 1000;
     sys2 /= 1000;
 
     pt_top = 0.5*(pt_top_low + pt_top_high);
-    fStat[i] = (stat/fData[i])*100; // Store statistical uncertainty as percentage value
 
     fKin1[i] = pt_top;
     fKin2[i] = Mt*Mt; // Top mass squared
@@ -281,7 +275,6 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PT_NORMFilter::ReadData()
   {
     double pt_top; // Transverse momentum of top quark
     double pt_top_low, pt_top_high; // Limits of bin
-    double stat; // Absolute statistical uncertainty
     double sys1, sys2; // Systematic uncertainties from file
     double sys1_mult, sys2_mult; // Multiplicative systematic uncertainties
     double up, down, sigma, datshift; // Arguments of symmetriseErrors
@@ -290,17 +283,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PT_NORMFilter::ReadData()
     istringstream lstream(line);
 
     lstream >> pt_top_low >> pt_top_high;
-    lstream >> fData[i] >> stat;
+    lstream >> fData[i] >> fStat[i];
     lstream >> sys1 >> sys2;
 
     // Convert to 1/GeV
     fData[i] /= 1000;
-    stat /= 1000;
+    fStat[i] /= 1000;
     sys1 /= 1000;
     sys2 /= 1000;
 
     pt_top = 0.5*(pt_top_low + pt_top_high);
-    fStat[i] = (stat/fData[i])*100; // Store statistical uncertainty as percentage value
 
     fKin1[i] = pt_top;
     fKin2[i] = Mt*Mt; // Top mass squared
@@ -359,7 +351,6 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAPFilter::ReadData()
   {
     double rap_top; // Rapidity of top quark
     double rap_top_low, rap_top_high; // Limits of bin
-    double stat; // Absolute statistical uncertainty
     double sys1, sys2; // Systematic uncertainties from file
     double sys1_mult, sys2_mult; // Multiplicative systematic uncertainties
     double up, down, sigma, datshift; // Arguments of symmetriseErrors
@@ -368,11 +359,10 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAPFilter::ReadData()
     istringstream lstream(line);
 
     lstream >> rap_top_low >> rap_top_high;
-    lstream >> fData[i] >> stat;
+    lstream >> fData[i] >> fStat[i];
     lstream >> sys1 >> sys2;
 
     rap_top = 0.5*(rap_top_low + rap_top_high);
-    fStat[i] = (stat/fData[i])*100; // Store statistical uncertainty as percentage value
 
     fKin1[i] = rap_top;
     fKin2[i] = Mt*Mt; // Top mass squared
@@ -429,7 +419,6 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAPFilter::ReadData()
   {
     double rap_top; // Rapidity of top quark
     double rap_top_low, rap_top_high; // Limits of bin
-    double stat; // Absolute statistical uncertainty
     double sys1, sys2; // Systematic uncertainties from file
     double sys1_mult, sys2_mult; // Multiplicative systematic uncertainties
     double up, down, sigma, datshift; // Arguments of symmetriseErrors
@@ -438,11 +427,10 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAPFilter::ReadData()
     istringstream lstream(line);
 
     lstream >> rap_top_low >> rap_top_high;
-    lstream >> fData[i] >> stat;
+    lstream >> fData[i] >> fStat[i];
     lstream >> sys1 >> sys2;
 
     rap_top = 0.5*(rap_top_low + rap_top_high);
-    fStat[i] = (stat/fData[i])*100; // Store statistical uncertainty as percentage value
 
     fKin1[i] = rap_top;
     fKin2[i] = Mt*Mt; // Top mass squared
@@ -499,7 +487,6 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PTFilter::ReadData()
   {
     double pt_top; // Transverse momentum of top quark
     double pt_top_low, pt_top_high; // Limits of bin
-    double stat; // Absolute statistical uncertainty
     double sys1, sys2; // Systematic uncertainties from file
     double sys1_mult, sys2_mult; // Multiplicative systematic uncertainties
     double up, down, sigma, datshift; // Arguments of symmetriseErrors
@@ -508,17 +495,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PTFilter::ReadData()
     istringstream lstream(line);
 
     lstream >> pt_top_low >> pt_top_high;
-    lstream >> fData[i] >> stat;
+    lstream >> fData[i] >> fStat[i];
     lstream >> sys1 >> sys2;
 
     // Convert to pb/GeV
     fData[i] /= 1000;
-    stat /= 1000;
+    fStat[i] /= 1000;
     sys1 /= 1000;
     sys2 /= 1000;
 
     pt_top = 0.5*(pt_top_low + pt_top_high);
-    fStat[i] = (stat/fData[i])*100; // Store statistical uncertainty as percentage value
 
     fKin1[i] = pt_top;
     fKin2[i] = Mt*Mt; // Top mass squared
@@ -575,7 +561,6 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PTFilter::ReadData()
   {
     double pt_top; // Transverse momentum of top quark
     double pt_top_low, pt_top_high; // Limits of bin
-    double stat; // Absolute statistical uncertainty
     double sys1, sys2; // Systematic uncertainties from file
     double sys1_mult, sys2_mult; // Multiplicative systematic uncertainties
     double up, down, sigma, datshift; // Arguments of symmetriseErrors
@@ -584,17 +569,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PTFilter::ReadData()
     istringstream lstream(line);
 
     lstream >> pt_top_low >> pt_top_high;
-    lstream >> fData[i] >> stat;
+    lstream >> fData[i] >> fStat[i];
     lstream >> sys1 >> sys2;
 
     // Convert to pb/GeV
     fData[i] /= 1000;
-    stat /= 1000;
+    fStat[i] /= 1000;
     sys1 /= 1000;
     sys2 /= 1000;
 
     pt_top = 0.5*(pt_top_low + pt_top_high);
-    fStat[i] = (stat/fData[i])*100; // Store statistical uncertainty as percentage value
 
     fKin1[i] = pt_top;
     fKin2[i] = Mt*Mt; // Top mass squared
