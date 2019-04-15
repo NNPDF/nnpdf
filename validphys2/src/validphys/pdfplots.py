@@ -24,6 +24,7 @@ from validphys.core import MCStats
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.utils import scale_from_grid
 from validphys.checks import check_pdf_normalize_to, check_scale, check_have_two_pdfs
+from validphys.checks import check_pdfs_noband
 
 log = logging.getLogger(__name__)
 
@@ -449,6 +450,7 @@ class BandPDFPlotter(PDFPlotter):
 
 @figuregen
 @check_pdf_normalize_to
+@check_pdfs_noband
 @check_scale("xscale", allow_none=True)
 def plot_pdfs(
     pdfs,

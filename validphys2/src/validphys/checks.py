@@ -138,6 +138,41 @@ def check_pdf_normalize_to(pdfs, normalize_to):
 
     raise RuntimeError("Should not be here")
 
+@make_argcheck
+def check_pdfs_noband(pdfs, pdfs_noband):
+    """Allows pdfs_noband to be specified as a list of PDF IDs or a list of
+    PDF indexes (starting from one)."""
+
+    msg = ("pdfs_noband should be a list of PDF IDs or a list of PDF indexes "
+           "(starting from one)")
+
+    if pdfs_noband is None:
+        return
+
+    names = [pdf.name for pdf in pdfs]
+    # A list to which PDF IDs can be added, when the PDF is specified by either
+    # its PDF ID (i.e. a string) or an index (i.e. an int)
+    pdfs_noband_combined = []
+
+    for pdf_noband in pdfs_noband:
+        if isinstance(pdf_noband, int):
+            # Convert PDF index to list index (i.e. starting from zero)
+            pdf_noband -= 1
+            pdfs_noband_combined.append(names[pdf_noband])
+            if not pdf_noband < len(names) or pdf_noband < 0:
+                raise CheckError(msg)
+
+        if isinstance(pdf_noband, str):
+            try:
+                pdfs_noband_combined.append(names[names.index(pdf_noband)])
+            except ValueError:
+                    raise CheckError(msg, pdf_noband, alternatives=names)
+
+    if len(pdfs_noband_combined) == 0:
+        raise RuntimeError("Should not be here")
+
+    return {'pdfs_noband': pdfs_noband_combined}
+
 
 def _check_list_different(l, name):
     strs = [str(item) for item in l]
