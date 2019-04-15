@@ -411,7 +411,8 @@ class BandPDFPlotter(PDFPlotter):
         hatch = next(hatchit)
         color = next_prop['color']
         cvline, = ax.plot(xgrid, cv, color=color)
-        if pdf.name in self.pdfs_noband:
+        names = [pdf.name for pdf in self.pdfs_noband]
+        if pdf.name in names:
             labels.append(pdf.label)
             handles.append(cvline)
             return [cv, cv]
