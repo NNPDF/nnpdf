@@ -473,6 +473,11 @@ def plot_pdfs(
     xscale: One of the matplotlib allowed scales. If undefined, it will be
     set based on the scale in xgrid, which should be used instead.
 
+    pdfs_noband: A list of PDFs to plot without error bands, i.e. only the
+    central values of these PDFs will be plotted. The list can be formed of
+    strings, corresponding to PDF IDs, integers (starting from one),
+    corresponding to the index of the PDF in the list of PDFs, or a mixture
+    of both.
     """
     yield from BandPDFPlotter(
         pdfs,
