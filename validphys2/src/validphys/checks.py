@@ -155,6 +155,7 @@ def check_pdfs_noband(pdfs, pdfs_noband):
     pdfs_noband_combined = []
 
     for pdf_noband in pdfs_noband:
+
         if isinstance(pdf_noband, int):
             # Convert PDF index to list index (i.e. starting from zero)
             pdf_noband -= 1
@@ -164,13 +165,18 @@ def check_pdfs_noband(pdfs, pdfs_noband):
             if not pdf_noband < len(names) or pdf_noband < 0:
                 raise CheckError(msg)
 
-        if isinstance(pdf_noband, str):
+        elif isinstance(pdf_noband, str):
             try:
                 for pdf in pdfs:
                     if pdf.name == pdf_noband:
                         pdfs_noband_combined.append(pdf)
             except ValueError:
                     raise CheckError(msg, pdf_noband, alternatives=names)
+
+        else:
+            raise RuntimeError("pdf_noband must be a list of strings "
+            "(PDF IDs) or a list of integers (PDF indexes).")
+
 
     return {'pdfs_noband': pdfs_noband_combined}
 
