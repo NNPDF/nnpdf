@@ -358,7 +358,7 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
     return df
 
 #TODO: Add check here that dataset appears in fitthcovmat (if true) and that cuts match
-def covariance_matrix(dataset:DataSetSpec, fitthcovmat, t0set:(PDF, type(None))=None):
+def covariance_matrix(dataset:DataSetSpec, fitthcovmat, t0set:(PDF, type(None)) = None):
     """Returns a tuple of Covariance matrix and sqrt covariance matrix for the given dataset
     which includes theory contribution from scale variations if `use_theorycovmat` is True and
     an appropriate fit from which the covariance matrix will be loaded is given
@@ -382,7 +382,8 @@ def covariance_matrix(dataset:DataSetSpec, fitthcovmat, t0set:(PDF, type(None))=
         sqrtcovmat = loaded_data.get_sqrtcovmat()
     return covmat, sqrtcovmat
 
-def experiment_covariance_matrix(experiment: ExperimentSpec, fitthcovmat, t0set:(PDF, type(None))=None):
+def experiment_covariance_matrix(
+    experiment: ExperimentSpec, fitthcovmat, t0set:(PDF, type(None)) = None):
     """Like `covariance_matrix` except for an experiment"""
     loaded_data = experiment.load()
 
@@ -680,10 +681,20 @@ fits_experiment_chi2_data = collect(
 fits_experiments = collect(
     'experiments', ('fits', 'experiments_from_plotting_withcontext',))
 
+def fit_label(fit, fitthcovmat):
+    if fitthcovmat:
+        label = str(fit) + " (exp + th)"
+    else:
+        label = str(fit)
+    return label
+
+fits_label = collect('fit_label', ('fits',))
+
+
 #TODO: Possibly get rid of the per_point_data parameter and have separate
 #actions for absolute and relative tables.
 @table
-def fits_experiments_chi2_table(fits, fits_experiments, fits_experiment_chi2_data,
+def fits_experiments_chi2_table(fits_label, fits_experiments, fits_experiment_chi2_data,
                                 per_point_data:bool=True):
     """A table with the chi2 for each included experiment in the fits,
     computed with the theory corresponding to each fit.  If points_per_data is
@@ -691,7 +702,7 @@ def fits_experiments_chi2_table(fits, fits_experiments, fits_experiment_chi2_dat
     Otherwise they will be absolute."""
     dfs = []
     cols = ('ndata', r'$\chi^2/ndata$') if per_point_data else ('ndata', r'$\chi^2$')
-    for fit, experiments, exps_chi2 in zip(fits, fits_experiments, fits_experiment_chi2_data):
+    for label, experiments, exps_chi2 in zip(fits_label, fits_experiments, fits_experiment_chi2_data):
         records = []
         for experiment, exp_chi2 in zip(experiments, exps_chi2):
             mean_chi2 = exp_chi2.central_result.mean()
@@ -708,7 +719,7 @@ def fits_experiments_chi2_table(fits, fits_experiments, fits_experiment_chi2_dat
              )
         if per_point_data:
             df['mean_chi2'] /= df['npoints']
-        df.columns = pd.MultiIndex.from_product(([str(fit)], cols))
+        df.columns = pd.MultiIndex.from_product(([label], cols))
         dfs.append(df)
     res =  pd.concat(dfs, axis=1)
     return res
@@ -717,13 +728,13 @@ fits_experiments_phi = collect(
     'experiments_phi', ('fits', 'experiments_from_plotting_withcontext'))
 
 @table
-def fits_experiments_phi_table(fits, fits_experiments, fits_experiments_phi):
+def fits_experiments_phi_table(fits_label, fits_experiments, fits_experiments_phi):
     """For every fit, returns phi and number of data points per experiment, where experiment is
     a collection of datasets grouped according to the experiment key in the PLOTTING info file
     """
     dfs = []
     cols = ('ndata', r'$\phi$')
-    for fit, experiments, exps_phi in zip(fits, fits_experiments, fits_experiments_phi):
+    for label, experiments, exps_phi in zip(fits_label, fits_experiments, fits_experiments_phi):
         records = []
         for experiment, (exp_phi, npoints) in zip(experiments, exps_phi):
             npoints = npoints
@@ -737,7 +748,7 @@ def fits_experiments_phi_table(fits, fits_experiments, fits_experiments_phi):
                  columns=('experiment', 'npoints', 'phi'),
                  index = ('experiment', )
              )
-        df.columns = pd.MultiIndex.from_product(([str(fit)], cols))
+        df.columns = pd.MultiIndex.from_product(([label], cols))
         dfs.append(df)
     res =  pd.concat(dfs, axis=1)
     return res
@@ -755,7 +766,7 @@ def dataspecs_experiments_chi2_table(dataspecs_speclabel, dataspecs_experiments,
 
 
 @table
-def fits_datasets_chi2_table(fits, fits_experiments, fits_chi2_data,
+def fits_datasets_chi2_table(fits_label, fits_experiments, fits_chi2_data,
                              per_point_data:bool=True):
     """A table with the chi2 for each included dataset in the fits, computed
     with the theory corresponding to the fit. The result are indexed in two
@@ -768,7 +779,7 @@ def fits_datasets_chi2_table(fits, fits_experiments, fits_chi2_data,
     cols = ('ndata', r'$\chi^2/ndata$') if per_point_data else ('ndata', r'$\chi^2$')
 
     dfs = []
-    for fit, experiments in zip(fits, fits_experiments):
+    for label, experiments in zip(fits_label, fits_experiments):
         records = []
         for experiment in experiments:
             for dataset, chi2 in zip(experiment.datasets, chi2_it):
@@ -788,7 +799,7 @@ def fits_datasets_chi2_table(fits, fits_experiments, fits_chi2_data,
              )
         if per_point_data:
             df['mean_chi2'] /= df['npoints']
-        df.columns = pd.MultiIndex.from_product(([str(fit)], cols))
+        df.columns = pd.MultiIndex.from_product(([label], cols))
         dfs.append(df)
     return pd.concat(dfs, axis=1)
 

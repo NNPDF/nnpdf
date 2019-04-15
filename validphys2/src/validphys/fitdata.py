@@ -120,7 +120,7 @@ def replica_data(fit, replica_paths):
 
 
 @table
-def fit_summary(fit, replica_data, total_experiments_chi2data):
+def fit_summary(fit_label, replica_data, total_experiments_chi2data):
     """ Summary table of fit properties
         - Central chi-squared
         - Average chi-squared
@@ -157,7 +157,7 @@ def fit_summary(fit, replica_data, total_experiments_chi2data):
                          (r"$<\chi^2>$", f"{VET(np.mean(member_chi2), np.std(member_chi2))}"),
                          (r"$\phi$",     f"{VET(phi, phi_err)}")))
 
-    return pd.Series(data, index=data.keys(), name=fit.name)
+    return pd.Series(data, index=data.keys(), name=fit_label)
 
 
 collected_fit_summaries = collect('fit_summary', ('fits', 'fitcontext'))
