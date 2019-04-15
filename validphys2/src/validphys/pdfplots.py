@@ -377,10 +377,10 @@ def plot_pdfvardistances(pdfs, variance_distance_grids, *,
 
 
 class BandPDFPlotter(PDFPlotter):
-    def __init__(self, *args,  line_only_pdfs=None ,**kwargs):
-        if line_only_pdfs is None:
-            line_only_pdfs = []
-        self.line_only_pdfs = line_only_pdfs
+    def __init__(self, *args,  pdfs_noband=None ,**kwargs):
+        if pdfs_noband is None:
+            pdfs_noband = []
+        self.pdfs_noband = pdfs_noband
         super().__init__( *args, **kwargs)
 
     def setup_flavour(self, flstate):
@@ -410,7 +410,7 @@ class BandPDFPlotter(PDFPlotter):
         hatch = next(hatchit)
         color = next_prop['color']
         cvline, = ax.plot(xgrid, cv, color=color)
-        if pdf.name in self.line_only_pdfs:
+        if pdf.name in self.pdfs_noband:
             labels.append(pdf.label)
             handles.append(cvline)
             return [cv, cv]
@@ -457,7 +457,7 @@ def plot_pdfs(
     normalize_to: (int, str, type(None)) = None,
     ymin=None,
     ymax=None,
-    line_only_pdfs: (list, type(None)) = None,
+    pdfs_noband: (list, type(None)) = None,
 ):
     """Plot the central value and the uncertainty of a list of pdfs as a
     function of x for a given value of Q. If normalize_to is given, plot the
@@ -479,7 +479,7 @@ def plot_pdfs(
         normalize_to,
         ymin,
         ymax,
-        line_only_pdfs=line_only_pdfs,
+        pdfs_noband=pdfs_noband,
     )
 
 class FlavoursPlotter(AllFlavoursPlotter, BandPDFPlotter):
