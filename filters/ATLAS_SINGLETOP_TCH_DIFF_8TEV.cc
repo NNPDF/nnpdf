@@ -80,8 +80,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORMFilter::ReadData()
     // Check whether numbers in file are percentage or absolute
     sys1_mult = (sys1/fData[i])*100;
     sys2_mult = (sys2/fData[i])*100;
-    if (sys1_mult < 0) {up=sys2_mult; down=sys1_mult;}
-    else {up=sys1_mult; down=sys2_mult;}
+    if (sys1_mult < 0)
+    {
+      up=sys2_mult;
+      down=sys1_mult;
+    }
+    else
+    {
+      up=sys1_mult;
+      down=sys2_mult;
+    }
     symmetriseErrors(up, down, &sigma, &datshift);
     fSys[i][0].mult = sigma;
     fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
@@ -153,8 +161,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORMFilter::ReadData()
     // Check whether numbers in file are percentage or absolute
     sys1_mult = (sys1/fData[i])*100;
     sys2_mult = (sys2/fData[i])*100;
-    if (sys1_mult < 0) {up=sys2_mult; down=sys1_mult;}
-    else {up=sys1_mult; down=sys2_mult;}
+    if (sys1_mult < 0)
+    {
+      up=sys2_mult;
+      down=sys1_mult;
+    }
+    else
+    {
+      up=sys1_mult;
+      down=sys2_mult;
+    }
     symmetriseErrors(up, down, &sigma, &datshift);
     fSys[i][0].mult = sigma;
     fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
@@ -227,8 +243,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT_NORMFilter::ReadData()
     // Check whether numbers in file are percentage or absolute
     sys1_mult = (sys1/fData[i])*100;
     sys2_mult = (sys2/fData[i])*100;
-    if (sys1_mult < 0) {up=sys2_mult; down=sys1_mult;}
-    else {up=sys1_mult; down=sys2_mult;}
+    if (sys1_mult < 0)
+    {
+      up=sys2_mult;
+      down=sys1_mult;
+    }
+    else
+    {
+      up=sys1_mult;
+      down=sys2_mult;
+    }
     symmetriseErrors(up, down, &sigma, &datshift);
     fSys[i][0].mult = sigma;
     fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
@@ -301,8 +325,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PT_NORMFilter::ReadData()
     // Check whether numbers in file are percentage or absolute
     sys1_mult = (sys1/fData[i])*100;
     sys2_mult = (sys2/fData[i])*100;
-    if (sys1_mult < 0) {up=sys2_mult; down=sys1_mult;}
-    else {up=sys1_mult; down=sys2_mult;}
+    if (sys1_mult < 0)
+    {
+      up=sys2_mult;
+      down=sys1_mult;
+    }
+    else
+    {
+      up=sys1_mult;
+      down=sys2_mult;
+    }
     symmetriseErrors(up, down, &sigma, &datshift);
     fSys[i][0].mult = sigma;
     fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
@@ -371,8 +403,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAPFilter::ReadData()
     // Check whether numbers in file are percentage or absolute
     sys1_mult = (sys1/fData[i])*100;
     sys2_mult = (sys2/fData[i])*100;
-    if (sys1_mult < 0) {up=sys2_mult; down=sys1_mult;}
-    else {up=sys1_mult; down=sys2_mult;}
+    if (sys1_mult < 0)
+    {
+      up=sys2_mult;
+      down=sys1_mult;
+    }
+    else
+    {
+      up=sys1_mult;
+      down=sys2_mult;
+    }
     symmetriseErrors(up, down, &sigma, &datshift);
     fSys[i][0].mult = sigma;
     fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
@@ -439,8 +479,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAPFilter::ReadData()
     // Check whether numbers in file are percentage or absolute
     sys1_mult = (sys1/fData[i])*100;
     sys2_mult = (sys2/fData[i])*100;
-    if (sys1_mult < 0) {up=sys2_mult; down=sys1_mult;}
-    else {up=sys1_mult; down=sys2_mult;}
+    if (sys1_mult < 0)
+    {
+      up=sys2_mult;
+      down=sys1_mult;
+    }
+    else
+    {
+      up=sys1_mult;
+      down=sys2_mult;
+    }
     symmetriseErrors(up, down, &sigma, &datshift);
     fSys[i][0].mult = sigma;
     fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
@@ -513,8 +561,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PTFilter::ReadData()
     // Check whether numbers in file are percentage or absolute
     sys1_mult = (sys1/fData[i])*100;
     sys2_mult = (sys2/fData[i])*100;
-    if (sys1_mult < 0) {up=sys2_mult; down=sys1_mult;}
-    else {up=sys1_mult; down=sys2_mult;}
+    if (sys1_mult < 0)
+    {
+      up=sys2_mult;
+      down=sys1_mult;
+    }
+    else
+    {
+      up=sys1_mult;
+      down=sys2_mult;
+    }
     symmetriseErrors(up, down, &sigma, &datshift);
     fSys[i][0].mult = sigma;
     fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
@@ -587,8 +643,16 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PTFilter::ReadData()
     // Check whether numbers in file are percentage or absolute
     sys1_mult = (sys1/fData[i])*100;
     sys2_mult = (sys2/fData[i])*100;
-    if (sys1_mult < 0) {up=sys2_mult; down=sys1_mult;}
-    else {up=sys1_mult; down=sys2_mult;}
+    if (sys1_mult < 0)
+    {
+      up=sys2_mult;
+      down=sys1_mult;
+    }
+    else
+    {
+      up=sys1_mult;
+      down=sys2_mult;
+    }
     symmetriseErrors(up, down, &sigma, &datshift);
     fSys[i][0].mult = sigma;
     fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
