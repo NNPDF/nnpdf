@@ -168,9 +168,6 @@ def check_pdfs_noband(pdfs, pdfs_noband):
             except ValueError:
                     raise CheckError(msg, pdf_noband, alternatives=names)
 
-    if len(pdfs_noband_combined) == 0:
-        raise RuntimeError("Should not be here")
-
     return {'pdfs_noband': pdfs_noband_combined}
 
 
