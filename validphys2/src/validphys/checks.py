@@ -174,7 +174,7 @@ def check_pdfs_noband(pdfs, pdfs_noband):
                     raise CheckError(msg, pdf_noband, alternatives=names)
 
         else:
-            raise RuntimeError("pdf_noband must be a list of strings "
+            raise CheckError("pdf_noband must be a list of strings "
             "(PDF IDs) or a list of integers (PDF indexes).")
 
 
