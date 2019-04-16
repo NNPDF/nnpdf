@@ -143,8 +143,10 @@ def check_pdfs_noband(pdfs, pdfs_noband):
     """Allows pdfs_noband to be specified as a list of PDF IDs or a list of
     PDF indexes (starting from one)."""
 
-    msg = ("pdfs_noband should be a list of PDF IDs or a list of PDF indexes "
-           "(starting from one)")
+    msg = ("pdfs_noband should be a list of PDF IDs (strings) or a list of "
+           "PDF indexes (integers, starting from one)")
+    msg_range = ("At least one of your pdf_noband indexes is out of range. "
+                 "Note that pdf_noband indexing starts at 1, not 0.")
 
     if pdfs_noband is None:
         return
@@ -155,15 +157,14 @@ def check_pdfs_noband(pdfs, pdfs_noband):
     pdfs_noband_combined = []
 
     for pdf_noband in pdfs_noband:
-
         if isinstance(pdf_noband, int):
+            if not pdf_noband <= len(names) or pdf_noband < 0:
+                raise CheckError(msg_range)
             # Convert PDF index to list index (i.e. starting from zero)
             pdf_noband -= 1
             for pdf in pdfs:
                 if pdf.name == names[pdf_noband]:
                     pdfs_noband_combined.append(pdf)
-            if not pdf_noband < len(names) or pdf_noband < 0:
-                raise CheckError(msg)
 
         elif isinstance(pdf_noband, str):
             try:
@@ -174,8 +175,7 @@ def check_pdfs_noband(pdfs, pdfs_noband):
                     raise CheckError(msg, pdf_noband, alternatives=names)
 
         else:
-            raise CheckError("pdf_noband must be a list of strings "
-            "(PDF IDs) or a list of integers (PDF indexes).")
+            raise CheckError(msg)
 
 
     return {'pdfs_noband': pdfs_noband_combined}
