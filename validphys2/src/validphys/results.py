@@ -20,7 +20,9 @@ from reportengine.table import table
 from reportengine import collect
 
 from validphys.checks import (check_cuts_considered, check_pdf_is_montecarlo,
-                              check_speclabels_different, check_two_dataspecs)
+                              check_speclabels_different, check_two_dataspecs,
+                              check_dataset_cuts_match_theorycovmat,
+                              check_experiment_cuts_match_theorycovmat)
 from validphys.core import DataSetSpec, PDF, ExperimentSpec, ThCovMatSpec
 from validphys.calcutils import (all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values,
                                  get_df_block)
@@ -358,6 +360,7 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
     return df
 
 #TODO: Add check here that dataset appears in fitthcovmat (if true) and that cuts match
+@check_dataset_cuts_match_theorycovmat
 def covariance_matrix(dataset:DataSetSpec, fitthcovmat, t0set:(PDF, type(None)) = None):
     """Returns a tuple of Covariance matrix and sqrt covariance matrix for the given dataset
     which includes theory contribution from scale variations if `use_theorycovmat` is True and
@@ -382,8 +385,9 @@ def covariance_matrix(dataset:DataSetSpec, fitthcovmat, t0set:(PDF, type(None)) 
         sqrtcovmat = loaded_data.get_sqrtcovmat()
     return covmat, sqrtcovmat
 
+@check_experiment_cuts_match_theorycovmat
 def experiment_covariance_matrix(
-    experiment: ExperimentSpec, fitthcovmat, t0set:(PDF, type(None)) = None):
+        experiment: ExperimentSpec, fitthcovmat, t0set:(PDF, type(None)) = None):
     """Like `covariance_matrix` except for an experiment"""
     loaded_data = experiment.load()
 
@@ -405,7 +409,11 @@ def experiment_covariance_matrix(
     return covmat, sqrtcovmat
 
 def results(dataset:(DataSetSpec), pdf:PDF, covariance_matrix):
-    """Tuple of data and theory results for a single pdf.
+    """Tuple of data and theory results for a single pdf. The data will have an associated
+    covariance matrix, which can include a contribution from the theory covariance matrix which
+    is constructed from scale variation. The inclusion of this covariance matrix by default is used
+    where available, however this behaviour can be modified with the flag `use_theorycovmat`.
+
     The theory is specified as part of the dataset.
     An experiment is also allowed.
     (as a result of the C++ code layout)."""

@@ -4,6 +4,10 @@ Fit summary
 ------------------
 {@ summarise_fits @}
 
+Theory Covariance Summary
+-------------------------
+{@summarise_theory_covmat_fits@}
+
 Dataset properties
 ------------------
 {@current datasets_properties_table@}
