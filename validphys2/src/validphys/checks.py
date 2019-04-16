@@ -162,17 +162,14 @@ def check_pdfs_noband(pdfs, pdfs_noband):
                 raise CheckError(msg_range)
             # Convert PDF index to list index (i.e. starting from zero)
             pdf_noband -= 1
-            for pdf in pdfs:
-                if pdf.name == names[pdf_noband]:
-                    pdfs_noband_combined.append(pdf)
+            pdfs_noband_combined.append(pdfs[pdf_noband])
 
         elif isinstance(pdf_noband, str):
             try:
-                for pdf in pdfs:
-                    if pdf.name == pdf_noband:
-                        pdfs_noband_combined.append(pdf)
+                pdf_index = names.index(pdf_noband)
+                pdfs_noband_combined.append(pdfs[pdf_index])
             except ValueError:
-                    raise CheckError(msg, pdf_noband, alternatives=names)
+                raise CheckError(msg, pdf_noband, alternatives=names)
 
         else:
             raise CheckError(msg)
