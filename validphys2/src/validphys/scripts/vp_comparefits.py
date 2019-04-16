@@ -127,9 +127,7 @@ class CompareFitApp(App):
         return [k.strip() for k in kwinp.split(',') if k]
 
     def interactive_theory_cov(self):
-        """Interactively fill in the `use_theorycovmat` runcard flag. Only booleans are permitted
-        at present, since the option to pass a path to `use_theorycovmat` has a high possibility of
-        producing incorrect results or errors, and has very specific use cases.
+        """Interactively fill in the `use_thcovmat_if_present` runcard flag. Which is True by default
         """
         message = ("Do you want to use the fitted covariance matrix (including theory covariance\n"
                    "matrix) to calculate the statistical estimators? ")
@@ -180,7 +178,7 @@ class CompareFitApp(App):
             },
             'speclabel': 'Reference Fit'
         }
-        autosettings['use_theorycovmat'] = args['theory_cov']
+        autosettings['use_thcovmat_if_present'] = args['theory_cov']
         return autosettings
 
 
