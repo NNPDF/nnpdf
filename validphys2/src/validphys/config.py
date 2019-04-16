@@ -703,14 +703,15 @@ class CoreConfig(configparser.Config):
         if not use_theorycovmat:
             pass
         elif not fit:
-            log.warning("use_theorycovmat was true but no fit was specified, theory covariance "
-                        "matrix will not be used in any statstical estimators")
-            use_theorycovmat = False
+            raise ConfigError("`use_theorycovmat` was true but no `fit` was specified.")
         elif use_theorycovmat and fit:
             try:
                 use_theorycovmat = fit.as_input()['theorycovmatconfig']['use_thcovmat_in_fitting']
             except KeyError:
-                #assume covmat wasn't used and fill in key accordingly
+                #assume covmat wasn't used and fill in key accordingly but warn user
+                log.warning("use_theorycovmat was true but the flag `use_thcovmat_in_fitting` "
+                            f"didn't exist in the runcard for {fit.name}. Theory covariance "
+                            "matrix will not be used in any statistical estimators.")
                 use_theorycovmat = False
             #Now set as expected path and check it exists
             if use_theorycovmat:
