@@ -9,8 +9,9 @@ to `validphys.app` which allows for declaritive input, a simple example of this 
 ```
 from validphys.app import API
 
-fig = API.plot_pdf(pdf="NNPDF31_nlo_as_0118", Q=2)
-fig.show()
+figs = API.plot_pdfs(pdfs=["NNPDF31_nlo_as_0118"], Q=2)
+for f, _ in figs:
+    f.show()
 ```
 
 The user doesn't need to know exactly how to load the PDF, create the relevant grid to be plotted
@@ -84,7 +85,7 @@ If a figure is created using the api, as with the first example:
 ```
 from validphys.app import API
 
-fig = API.plot_pdf(pdf="NNPDF31_nlo_as_0118", Q=2)
+fig = API.some_plot(...)
 fig.show()
 ```
 
@@ -98,7 +99,21 @@ from validphys import mplstyles
 matplotlib.style.use(str(mplstyles.smallstyle))
 ```
 
-also consider using `fig.tight_layout()` which reportengine uses before saving figures.
+also consider using `fig.tight_layout()` which reportengine uses before saving figures. For the
+example used earlier we would then have
+
+```
+import matplotlib
+from validphys import mplstyles
+matplotlib.style.use(str(mplstyles.smallstyle))
+
+from validphys.app import API
+
+figs = API.plot_pdfs(pdfs=["NNPDF31_nlo_as_0118"], Q=2)
+for f, _ in figs:
+    f.tight_layout()
+    f.show()
+```
 
 ## Mixing declaritive input with custom resources (NOTE: Experimental)
 
