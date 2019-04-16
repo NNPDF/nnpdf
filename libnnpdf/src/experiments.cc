@@ -463,6 +463,13 @@ void Experiment::LoadFitCovMat(string filename, bool ThUnc, std::vector<int> bma
   fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 
+matrix<double> Experiment::GetSqrtFitCovMat(string filename, std::vector<int> bmask)
+{
+  matrix<double> const CovMat = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fT0Pred, fStat, fSys, true, true, true, filename, bmask);
+  matrix<double> SqrtCovMat = ComputeSqrtMat(CovMat);
+  return SqrtCovMat;
+}
+
 void Experiment::ExportCovMat(string filename)
 {
   ofstream outCovMat(filename.c_str());
