@@ -1,0 +1,16 @@
+*dataset:
+*location: Fig. 18b
+*dscomment: Statistical correlation matrices for the normalized differential cross section as a function of PT(TOPBAR)
+*reackey: P P --> TOPBAR X
+*obskey: DSIG/DPT
+*qual: RE : P P --> TOPBAR X
+*qual: SQRT(S) IN GEV : 7000.0
+*yheader: 0.0 TO 45.0 : 45.0 TO 75.0 : 75.0 TO 110.0 : 110.0 TO 150.0 : 150.0 TO 500.0
+*xheader: PT(TOPBAR) 
+*data: x : y : y : y : y : y 
+ 0.0 TO 45.0; 1.00 ; -0.42 ; -0.55 ; -0.24 ; -0.30 ;
+ 45.0 TO 75.0; -0.42 ; 1.00 ; -0.13 ; -0.22 ; -0.29 ;
+ 75.0 TO 110.0; -0.55 ; -0.13 ; 1.00 ; 0.24 ; -0.18 ;
+ 110.0 TO 150.0; -0.24 ; -0.22 ; 0.24 ; 1.00 ; -0.07 ;
+ 150.0 TO 500.0; -0.30 ; -0.29 ; -0.18 ; -0.07 ; 1.00 ;
+*dataend:
