@@ -166,13 +166,23 @@ def total_covmat_diagtheory_datasets(each_dataset_results_bytheory,
         dataset_covmats.append(cov)
     return dataset_covmats
 
-
+@table
 def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
     """Takes the theory covariance matrices for individual datasets and
     returns a data frame with a block diagonal theory covariance matrix
     by dataset"""
     s  = la.block_diag(*theory_covmat_datasets)
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
+    return df
+
+@table
+def theory_diagonal_covmat(theory_covmat,experiments_index):
+    """Returns theory covmat with only diagonal values"""
+    s = theory_covmat.values
+    # Initialise array of zeros and set precision to same as FK tables
+    s_diag = np.zeros((len(s),len(s)), dtype=np.float32)
+    np.fill_diagonal(s_diag, np.diag(s))
+    df = pd.DataFrame(s_diag, index=experiments_index, columns=experiments_index)
     return df
 
 experiments_results_theory = collect('experiments_results', ('theoryids',))
