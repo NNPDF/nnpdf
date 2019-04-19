@@ -150,7 +150,7 @@ def check_positivity(posdatasets):
 
 def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
     """Applies cuts as in C++ for NNPDF3.1 combo cuts.
-    This function replicas the c++ code but should be upgraded as
+    This function replicas the C++ code but should be upgraded as
     discussed several times.
     """
     pto = theoryid.get_description().get('PTO')
@@ -162,34 +162,26 @@ def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
         return dataset.GetKinematics(idat, 0) < 0.3
 
     if dataset.GetSetName() in ('LHCBWZMU8TEV', 'LHCBWZMU7TEV'):
-        if pto == 2:
-            return dataset.GetKinematics(idat, 0) >= 2.25
+        return dataset.GetKinematics(idat, 0) >= 2.25 if pto == 2 else False
 
     if dataset.GetSetName() in ('D0WMASY', 'D0WEASY'):
-        if pto == 2:
-            return dataset.GetData(idat) >= 0.03
+        return dataset.GetData(idat) >= 0.03 if pto == 2 else False
 
     if dataset.GetSetName() == 'ATLASZPT7TEV':
         pt = np.sqrt(dataset.GetKinematics(idat, 1))
-        if pt < 30 or pt > 500:
-            return False
-        return True
+        return 30 <= pt <= 500
 
     if dataset.GetSetName() == 'ATLASZPT8TEVMDIST':
         return dataset.GetKinematics(idat, 0) >= 30
 
     if dataset.GetSetName() == 'ATLASZPT8TEVYDIST':
         pt = np.sqrt(dataset.GetKinematics(idat, 1))
-        if pt < 30 or pt > 150:
-            return False
-        return True
+        return 30 <= pt <= 150
 
     if dataset.GetSetName() == 'CMSZDIFF12':
         pt = np.sqrt(dataset.GetKinematics(idat, 1))
         y = dataset.GetKinematics(idat, 0)
-        if pt < 30 or pt > 170 or y > 1.6:
-            return False
-        return True
+        return 30 <= pt <= 170 and y <= 1.6
 
     if dataset.GetSetName() == 'ATLASWPT31PB':
         return dataset.GetKinematics(idat, 0) > 30
@@ -210,30 +202,16 @@ def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
         maxY = 0.663
 
         if dataset.GetSetName() in ('CMSDY2D11', 'CMSDY2D12'):
-            if pto == 0 or pto == 1:
-                if pTmv > maxCMSDY2Dminv or pTmv < minCMSDY2Dminv or y > maxCMSDY2Dy:
-                    return False
-            if pto == 2:
-                if pTmv > maxCMSDY2Dminv or y > maxCMSDY2Dy:
-                    return False
-            return True
+            return minCMSDY2Dminv <= pTmv <= maxCMSDY2Dminv and y <= maxCMSDY2Dy if pto in [0, 1] else pTmv <= maxCMSDY2Dminv and y <= maxCMSDY2Dy if pto == 2 else False
 
         if dataset.GetSetName() in ('ATLASZHIGHMASS49FB', 'LHCBLOWMASS37PB'):
-            if pTmv > maxCMSDY2Dminv:
-                return False
-            return True
+            return pTmv <= maxCMSDY2Dminv
 
         if dataset.GetSetName() == 'ATLASLOMASSDY11':
-            if pto == 0 or pto == 1:
-                if idat < 6:
-                    return False
-            return True
+            return not (pto in [0, 1] and idat < 6)
 
         if dataset.GetSetName() == 'ATLASLOMASSDY11EXT':
-            if pto == 0 or pto == 1:
-                if idat < 2:
-                    return False
-            return True
+            return not (pto in [0, 1] and idat < 2)
 
         # new cuts for the fixed target DY
         if dataset.GetSetName() in ('DYE886P', 'DYE605'):
@@ -243,9 +221,7 @@ def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
             tau = invM2 / sqrts**2
             ymax = -0.5 * np.log(tau)
 
-            if tau > maxTau or np.fabs(rapidity / ymax) > maxY:
-                return False
-            return True
+            return tau <= maxTau and np.fabs(rapidity / ymax) <= maxY
 
     # DIS cuts
     if dataset.GetProc(idat)[0:3] == 'DIS':
@@ -276,6 +252,6 @@ def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
         # additional F2C cut in case of FONLL-C + IC
         if dataset.GetProc(idat) == 'DIS_NCP_CH' and vfns == 'FONLL-C' and ic:
             Q2cut1_f2c = 8
-            if Q2 <= Q2cut1_f2c:
-                return False
+            return Q2 > Q2cut1_f2c
+
     return True
