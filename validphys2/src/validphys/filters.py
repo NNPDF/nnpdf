@@ -208,10 +208,10 @@ def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
             return pTmv <= maxCMSDY2Dminv
 
         if dataset.GetSetName() == 'ATLASLOMASSDY11':
-            return not (pto in [0, 1] and idat < 6)
+            return pto not in [0, 1] and idat >= 6
 
         if dataset.GetSetName() == 'ATLASLOMASSDY11EXT':
-            return not (pto in [0, 1] and idat < 2)
+            return pto not in [0, 1] and idat >= 2
 
         # new cuts for the fixed target DY
         if dataset.GetSetName() in ('DYE886P', 'DYE605'):
