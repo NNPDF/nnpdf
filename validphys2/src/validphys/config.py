@@ -696,11 +696,10 @@ class CoreConfig(configparser.Config):
         return res
 
     def produce_fitthcovmat(
-            self, use_thcovmat_if_present: bool = True, fit: (str, type(None)) = None):
+            self, use_thcovmat_if_present: bool = False, fit: (str, type(None)) = None):
         """If a `fit` is specified and `use_thcovmat_if_present` is `True` then returns the
         corresponding covariance matrix for the given fit if it exists. If the fit doesn't have a
-        theory covariance matrix then returns `False`. If no fit is specified then returns the user
-        must manually set `use_thcovmat_if_present` to be False, or provide an appropriate fit.
+        theory covariance matrix then returns `False`.
         """
         if not isinstance(use_thcovmat_if_present, bool):
             raise ConfigError("use_thcovmat_if_present should be a boolean, by default it is True")
