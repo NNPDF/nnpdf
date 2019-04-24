@@ -14,3 +14,5 @@ extra_labels:
         - W
         - W
         - Z
+
+experiment: "ATLAS"

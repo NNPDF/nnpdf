@@ -10,6 +10,7 @@ import functools
 import inspect
 import numbers
 import copy
+import os
 
 from collections import ChainMap
 from collections.abc import Mapping, Sequence
@@ -21,7 +22,7 @@ from reportengine.helputils import get_parser_type
 from reportengine import report
 
 from validphys.core import (ExperimentSpec, DataSetInput, ExperimentInput,
-                            CutsPolicy, MatchedCuts)
+                            CutsPolicy, MatchedCuts, ThCovMatSpec)
 from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFoundError,
                               PDFNotFound, FallbackLoader)
 from validphys.gridvalues import LUMI_CHANNELS
@@ -682,6 +683,53 @@ class CoreConfig(configparser.Config):
     def produce_all_lumi_channels(self):
         return {'lumi_channels': self.parse_lumi_channels(list(LUMI_CHANNELS))}
 
+    @configparser.explicit_node
+    def produce_nnfit_theory_covmat(self, use_thcovmat_in_sampling:bool, use_thcovmat_in_fitting:bool):
+        from validphys.theorycovariance import theory_covmat_custom
+        @functools.wraps(theory_covmat_custom)
+        def res(*args, **kwargs):
+            return theory_covmat_custom(*args, **kwargs)
+        #Set this to get the same filename regardless of the action.
+        res.__name__ = 'theory_covmat'
+        return res
+
+    def produce_fitthcovmat(self, fit, use_theorycovmat=True):
+        """If True, returns the corresponding covariance matrix for the given fit if it exists. If
+        the fit doesn't have a theory covariance matrix then returns `False`. Alternatively if
+        a path is given then the covariance matrix from that location is used instead of the fit`s
+        covariance matrix.
+        """
+        if isinstance(use_theorycovmat, str):
+            if os.path.exists(use_theorycovmat):
+                log.warning("Using path to a covariance matrix, if the experiment specifications "
+                            "do not match between generation and use of covariance matrix then "
+                            "this will lead to incorrect results.")
+                use_theorycovmat = ThCovMatSpec(use_theorycovmat)
+            else:
+                raise ConfigError(
+                    f"No file found at {use_theorycovmat}. If specifying "
+                    "`use_theorycovmat: <path to covmat>` then <path to covmat> should point at a "
+                    "valid theory covariance matrix.")
+        elif isinstance(use_theorycovmat, bool) and use_theorycovmat:
+            try:
+                use_theorycovmat = fit.as_input()['theorycovmatconfig']['use_thcovmat_in_fitting']
+            except KeyError:
+                #assume covmat wasn't used and fill in key accordingly
+                use_theorycovmat = False
+            #Now set as expected path and check it exists
+            if use_theorycovmat:
+                use_theorycovmat = (
+                    fit.path/'tables'/'datacuts_theory_theorycovmatconfig_theory_covmat.csv')
+                if not os.path.exists(use_theorycovmat):
+                    raise ConfigError(
+                        "Fit appeared to use theory covmat in fit but the file was not at the "
+                        f"usual location: {use_theorycovmat}.")
+                use_theorycovmat = ThCovMatSpec(use_theorycovmat)
+        else:
+            raise ConfigError(
+                "use_theorycovmat should either be a bool or a path to a valid "
+                "theory covariance matrix CSV")
+        return use_theorycovmat
 
     def parse_speclabel(self, label:(str, type(None))):
         """A label for a dataspec. To be used in some plots"""

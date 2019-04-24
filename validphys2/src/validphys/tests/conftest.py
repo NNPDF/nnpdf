@@ -6,12 +6,15 @@ Pytest fixtures.
 import pathlib
 
 import pytest
+from hypothesis import settings
 
 from validphys.loader import FallbackLoader as Loader
 from validphys.core import ExperimentSpec
 from validphys import results
 
-
+#Adding this here to change the time of deadline from default (200ms) to 1000ms
+settings.register_profile("extratime", deadline=1000)
+settings.load_profile("extratime")
 
 #Fortunately py.test works much like reportengine and providers are
 #connected by argument names.
@@ -31,10 +34,13 @@ def data():
     pdf = l.check_pdf("NNPDF31_nnlo_as_0118")
     return pdf, exps
 
-@pytest.fixture(scope='module')
-def convolution_results(data):
+def convolution_results_implement(data):
     pdf, exps = data
     return [results.experiment_results(exp, pdf, pdf) for exp in exps]
+
+@pytest.fixture(scope='module')
+def convolution_results(data):
+    return convolution_results_implement(data)
 
 @pytest.fixture
 def dataset_t0_convolution_results(data):
@@ -62,9 +68,12 @@ def dataset_convolution_results(single_exp_data):
 def dataset_chi2data(dataset_convolution_results):
     return [results.abs_chi2_data(r) for r in dataset_convolution_results]
 
+def chi2data_implement(convolution_results):
+    return [results.abs_chi2_data_experiment(r) for r in convolution_results]
+
 @pytest.fixture(scope='module')
 def chi2data(convolution_results):
-    return [results.abs_chi2_data_experiment(r) for r in convolution_results]
+    return chi2data_implement(convolution_results)
 
 @pytest.fixture(scope='module')
 def weighted_data():
@@ -79,8 +88,8 @@ def weighted_data():
 
 @pytest.fixture(scope='module')
 def convolution_results_with_weights(weighted_data):
-    return convolution_results(weighted_data)
+    return convolution_results_implement(weighted_data)
 
 @pytest.fixture(scope='module')
 def weighted_chi2data(convolution_results_with_weights):
-    return chi2data(convolution_results_with_weights)
+    return chi2data_implement(convolution_results_with_weights)

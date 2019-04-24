@@ -16,3 +16,5 @@ normalize:
     figure_by:
         - k1
         - k3
+
+experiment: "BCDMS"

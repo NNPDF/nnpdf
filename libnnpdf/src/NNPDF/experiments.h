@@ -56,6 +56,10 @@ namespace NNPDF
 
     void SetT0(const PDFSet&); //!<Set T0 Predictions for each dataset in place and update internal structures
 
+    void LoadRepCovMat(std::string filename, bool ThUnc, std::vector<int> bmask = {}); //!< Read in covmat for rep gen, generate covmat and sqrt
+    void LoadFitCovMat(std::string filename, bool ThUnc, std::vector<int> bmask = {}); //!< Read in covmat for fitting, generate covmat and sqrt
+    matrix<double> GetSqrtFitCovMat(std::string filename, std::vector<int> bmask = {}); //temporary external function for calc sqrtcovmat with th error
+
   private:
 
     Experiment();                               //disable default constructor
@@ -74,10 +78,10 @@ namespace NNPDF
 
     matrix<double> fCovMat;    //!< The covariance matrix
     matrix<double> fSqrtCov;   //!< The Cholesky decomposition of the covariance matrix
+    matrix<double> fSamplingMatrix; //!< The Cholesky decomposition of the total replica generation covmat
 
     std::vector<double> fStat; //!< The statistical errors
-    sysError **fSys;           //!< The syscor
-
+    sysError **fSys;    //!< The syscor
     int **fSetSysMap;    //!< Map for ordering of systematics in datasets
 
     bool fIsArtificial; //!< The artificial flag

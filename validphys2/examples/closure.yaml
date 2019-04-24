@@ -192,7 +192,7 @@ positivity:
     - { dataset: POSDYUD,   poslambda: 1e5 }
     - { dataset: POSDYUDB,   poslambda: 1e5 }
     - { dataset: POSDYUBDB,   poslambda: 1e5 }
-    - { dataset: HIGGSPOS, poslambda: 1e13 }
+    - { dataset: POSHIGGS, poslambda: 1e13 }
 
 ############################################################
 closuretest:
