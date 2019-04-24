@@ -121,6 +121,7 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TPTFilter::ReadData()
       for(int j=0; j<fNData; j++)
 	{
 	  fSys[i][j].add  = syscor[i][j];
+	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
 	  fSys[i][j].type = ADD; // Should this be MULT? e.g see CMSTTBARDIFF13TEV2
 	  fSys[i][j].name = "CORR";
 	}

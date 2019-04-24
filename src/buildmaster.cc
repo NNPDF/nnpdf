@@ -60,6 +60,7 @@
 #include "ATLASTTBARTOT13TEV.h"
 #include "CMSTTBARTOT5TEV.h"
 #include "CMSTTBARTOT7TEV.h"
+#include "CMS_TTB_DIFF_13TEV_2016_LJ.h"
 #include "CMSTTBARTOT8TEV.h"
 #include "CMSTTBARTOT13TEV.h"
 #include "CMSWMU8TEV.h"
@@ -273,6 +274,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMS_SINGLETOP_TCH_TOT_7TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_8TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_13TEVFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TPTFilter());
 
   //***************************F2B******************************
 
