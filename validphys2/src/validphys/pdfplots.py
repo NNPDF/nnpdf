@@ -24,6 +24,7 @@ from validphys.core import MCStats
 from validphys.gridvalues import LUMI_CHANNELS
 from validphys.utils import scale_from_grid
 from validphys.checks import check_pdf_normalize_to, check_scale, check_have_two_pdfs
+from validphys.checks import check_pdfs_noband
 
 log = logging.getLogger(__name__)
 
@@ -377,6 +378,12 @@ def plot_pdfvardistances(pdfs, variance_distance_grids, *,
 
 
 class BandPDFPlotter(PDFPlotter):
+    def __init__(self, *args,  pdfs_noband=None ,**kwargs):
+        if pdfs_noband is None:
+            pdfs_noband = []
+        self.pdfs_noband = pdfs_noband
+        super().__init__( *args, **kwargs)
+
     def setup_flavour(self, flstate):
         flstate.handles=[]
         flstate.labels=[]
@@ -400,13 +407,18 @@ class BandPDFPlotter(PDFPlotter):
             warnings.simplefilter('ignore', RuntimeWarning)
             err68down, err68up = stats.errorbar68()
 
+        #http://stackoverflow.com/questions/5195466/matplotlib-does-not-display-hatching-when-rendering-to-pdf
+        hatch = next(hatchit)
         color = next_prop['color']
-        ax.plot(xgrid, cv, color=color)
+        cvline, = ax.plot(xgrid, cv, color=color)
+        if pdf in self.pdfs_noband:
+            labels.append(pdf.label)
+            handles.append(cvline)
+            return [cv, cv]
         alpha = 0.5
         ax.fill_between(xgrid, err68up, err68down, color=color, alpha=alpha,
                         zorder=1)
-        #http://stackoverflow.com/questions/5195466/matplotlib-does-not-display-hatching-when-rendering-to-pdf
-        hatch = next(hatchit)
+
         ax.fill_between(xgrid, err68up, err68down, facecolor='None', alpha=alpha,
                         edgecolor=color,
                         hatch=hatch,
@@ -438,9 +450,17 @@ class BandPDFPlotter(PDFPlotter):
 
 @figuregen
 @check_pdf_normalize_to
-@check_scale('xscale', allow_none=True)
-def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
-                      normalize_to:(int,str,type(None))=None,ymin=None,ymax=None):
+@check_pdfs_noband
+@check_scale("xscale", allow_none=True)
+def plot_pdfs(
+    pdfs,
+    xplotting_grids,
+    xscale: (str, type(None)) = None,
+    normalize_to: (int, str, type(None)) = None,
+    ymin=None,
+    ymax=None,
+    pdfs_noband: (list, type(None)) = None,
+):
     """Plot the central value and the uncertainty of a list of pdfs as a
     function of x for a given value of Q. If normalize_to is given, plot the
     ratios to the corresponding PDF. Otherwise, plot absolute values.
@@ -453,9 +473,21 @@ def plot_pdfs(pdfs, xplotting_grids, xscale:(str,type(None))=None,
     xscale: One of the matplotlib allowed scales. If undefined, it will be
     set based on the scale in xgrid, which should be used instead.
 
+    pdfs_noband: A list of PDFs to plot without error bands, i.e. only the
+    central values of these PDFs will be plotted. The list can be formed of
+    strings, corresponding to PDF IDs, integers (starting from one),
+    corresponding to the index of the PDF in the list of PDFs, or a mixture
+    of both.
     """
-    yield from BandPDFPlotter(pdfs, xplotting_grids, xscale, normalize_to, ymin, ymax)
-
+    yield from BandPDFPlotter(
+        pdfs,
+        xplotting_grids,
+        xscale,
+        normalize_to,
+        ymin,
+        ymax,
+        pdfs_noband=pdfs_noband,
+    )
 
 class FlavoursPlotter(AllFlavoursPlotter, BandPDFPlotter):
     def get_title(self, parton_name):

@@ -693,43 +693,40 @@ class CoreConfig(configparser.Config):
         res.__name__ = 'theory_covmat'
         return res
 
-    def produce_fitthcovmat(self, fit, use_theorycovmat=True):
-        """If True, returns the corresponding covariance matrix for the given fit if it exists. If
-        the fit doesn't have a theory covariance matrix then returns `False`. Alternatively if
-        a path is given then the covariance matrix from that location is used instead of the fit`s
-        covariance matrix.
+    def produce_fitthcovmat(
+            self, use_thcovmat_if_present: bool = True, fit: (str, type(None)) = None):
+        """If a `fit` is specified and `use_thcovmat_if_present` is `True` then returns the
+        corresponding covariance matrix for the given fit if it exists. If the fit doesn't have a
+        theory covariance matrix then returns `False`. If no fit is specified then returns the user
+        must manually set `use_thcovmat_if_present` to be False, or provide an appropriate fit.
         """
-        if isinstance(use_theorycovmat, str):
-            if os.path.exists(use_theorycovmat):
-                log.warning("Using path to a covariance matrix, if the experiment specifications "
-                            "do not match between generation and use of covariance matrix then "
-                            "this will lead to incorrect results.")
-                use_theorycovmat = ThCovMatSpec(use_theorycovmat)
-            else:
-                raise ConfigError(
-                    f"No file found at {use_theorycovmat}. If specifying "
-                    "`use_theorycovmat: <path to covmat>` then <path to covmat> should point at a "
-                    "valid theory covariance matrix.")
-        elif isinstance(use_theorycovmat, bool) and use_theorycovmat:
+        if not isinstance(use_thcovmat_if_present, bool):
+            raise ConfigError("use_thcovmat_if_present should be a boolean, by default it is True")
+
+        if use_thcovmat_if_present and not fit:
+            raise ConfigError("`use_thcovmat_if_present` was true but no `fit` was specified.")
+
+        if use_thcovmat_if_present and fit:
             try:
-                use_theorycovmat = fit.as_input()['theorycovmatconfig']['use_thcovmat_in_fitting']
+                use_thcovmat_if_present = fit.as_input()[
+                    'theorycovmatconfig']['use_thcovmat_in_fitting']
             except KeyError:
-                #assume covmat wasn't used and fill in key accordingly
-                use_theorycovmat = False
+                #assume covmat wasn't used and fill in key accordingly but warn user
+                log.warning("use_thcovmat_if_present was true but the flag "
+                            "`use_thcovmat_in_fitting` didn't exist in the runcard for "
+                            f"{fit.name}. Theory covariance matrix will not be used "
+                            "in any statistical estimators.")
+                use_thcovmat_if_present = False
             #Now set as expected path and check it exists
-            if use_theorycovmat:
-                use_theorycovmat = (
+            if use_thcovmat_if_present:
+                use_thcovmat_if_present = (
                     fit.path/'tables'/'datacuts_theory_theorycovmatconfig_theory_covmat.csv')
-                if not os.path.exists(use_theorycovmat):
+                if not os.path.exists(use_thcovmat_if_present):
                     raise ConfigError(
                         "Fit appeared to use theory covmat in fit but the file was not at the "
-                        f"usual location: {use_theorycovmat}.")
-                use_theorycovmat = ThCovMatSpec(use_theorycovmat)
-        else:
-            raise ConfigError(
-                "use_theorycovmat should either be a bool or a path to a valid "
-                "theory covariance matrix CSV")
-        return use_theorycovmat
+                        f"usual location: {use_thcovmat_if_present}.")
+                use_thcovmat_if_present = ThCovMatSpec(use_thcovmat_if_present)
+        return use_thcovmat_if_present
 
     def parse_speclabel(self, label:(str, type(None))):
         """A label for a dataspec. To be used in some plots"""
