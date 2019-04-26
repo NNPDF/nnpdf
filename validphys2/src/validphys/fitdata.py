@@ -165,9 +165,6 @@ collected_fit_summaries = collect('fit_summary', ('fits', 'fitcontext'))
 def summarise_fits(collected_fit_summaries):
     """ Produces a table of basic comparisons between fits, includes
     all the fields used in fit_summary """
-    log.warning("Using `collected_fit_summaries` which collects over `experiments` defined in fit "
-                "can affect construction of total covariance matrix, this will be deprecated "
-                "and should be changed to collect over `data` when that keyword is implemented")
     return pd.concat(collected_fit_summaries, axis=1)
 
 
@@ -309,7 +306,7 @@ def fit_theory_covmat_summary(fit, fitthcovmat):
         config = {'use_thcovmat_in_sampling': False, 'use_thcovmat_in_fitting': False}
     sampling = config.get('use_thcovmat_in_sampling', False)
     fitting = config.get('use_thcovmat_in_fitting', False)
-    report = (True if fitthcovmat else False)
+    report = bool(fitthcovmat)
     df = pd.DataFrame(
         [sampling, fitting, report],
         columns=[fit.name],

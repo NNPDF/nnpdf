@@ -702,7 +702,7 @@ class CoreConfig(configparser.Config):
         theory covariance matrix then returns `False`.
         """
         if not isinstance(use_thcovmat_if_present, bool):
-            raise ConfigError("use_thcovmat_if_present should be a boolean, by default it is True")
+            raise ConfigError("use_thcovmat_if_present should be a boolean, by default it is False")
 
         if use_thcovmat_if_present and not fit:
             raise ConfigError("`use_thcovmat_if_present` was true but no `fit` was specified.")
@@ -717,17 +717,19 @@ class CoreConfig(configparser.Config):
                             "`use_thcovmat_in_fitting` didn't exist in the runcard for "
                             f"{fit.name}. Theory covariance matrix will not be used "
                             "in any statistical estimators.")
-                use_thcovmat_if_present = False
+                fit_theory_covmat = None
             #Now set as expected path and check it exists
             if use_thcovmat_if_present:
-                use_thcovmat_if_present = (
+                covmat_path = (
                     fit.path/'tables'/'datacuts_theory_theorycovmatconfig_theory_covmat.csv')
-                if not os.path.exists(use_thcovmat_if_present):
+                if not os.path.exists(covmat_path):
                     raise ConfigError(
                         "Fit appeared to use theory covmat in fit but the file was not at the "
-                        f"usual location: {use_thcovmat_if_present}.")
-                use_thcovmat_if_present = ThCovMatSpec(use_thcovmat_if_present)
-        return use_thcovmat_if_present
+                        f"usual location: {covmat_path}.")
+                fit_theory_covmat = ThCovMatSpec(covmat_path)
+        else:
+            fit_theory_covmat = None
+        return fit_theory_covmat
 
     def parse_speclabel(self, label:(str, type(None))):
         """A label for a dataspec. To be used in some plots"""

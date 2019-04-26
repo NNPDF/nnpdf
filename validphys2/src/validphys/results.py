@@ -689,28 +689,33 @@ fits_experiment_chi2_data = collect(
 fits_experiments = collect(
     'experiments', ('fits', 'experiments_from_plotting_withcontext',))
 
-def fit_label(fit, fitthcovmat):
+def fit_name_with_covmat_label(fit, fitthcovmat):
+    """If theory covariance matrix is being used to calculate statistical estimators for the `fit`
+    then appends (exp + th) onto the fit name for use in legends and column headers to help the user
+    see what covariance matrix was used to produce the plot or table they are looking at.
+    """
     if fitthcovmat:
         label = str(fit) + " (exp + th)"
     else:
         label = str(fit)
     return label
 
-fits_label = collect('fit_label', ('fits',))
+fits_name_with_covmat_label = collect('fit_name_with_covmat_label', ('fits',))
 
 
 #TODO: Possibly get rid of the per_point_data parameter and have separate
 #actions for absolute and relative tables.
 @table
-def fits_experiments_chi2_table(fits_label, fits_experiments, fits_experiment_chi2_data,
-                                per_point_data:bool=True):
+def fits_experiments_chi2_table(fits_name_with_covmat_label, fits_experiments,
+                                fits_experiment_chi2_data, per_point_data:bool=True):
     """A table with the chi2 for each included experiment in the fits,
     computed with the theory corresponding to each fit.  If points_per_data is
     True, the chi² will be shown divided by ndata.
     Otherwise they will be absolute."""
     dfs = []
     cols = ('ndata', r'$\chi^2/ndata$') if per_point_data else ('ndata', r'$\chi^2$')
-    for label, experiments, exps_chi2 in zip(fits_label, fits_experiments, fits_experiment_chi2_data):
+    for label, experiments, exps_chi2 in zip(
+            fits_name_with_covmat_label, fits_experiments, fits_experiment_chi2_data):
         records = []
         for experiment, exp_chi2 in zip(experiments, exps_chi2):
             mean_chi2 = exp_chi2.central_result.mean()
@@ -736,13 +741,14 @@ fits_experiments_phi = collect(
     'experiments_phi', ('fits', 'experiments_from_plotting_withcontext'))
 
 @table
-def fits_experiments_phi_table(fits_label, fits_experiments, fits_experiments_phi):
+def fits_experiments_phi_table(fits_name_with_covmat_label, fits_experiments, fits_experiments_phi):
     """For every fit, returns phi and number of data points per experiment, where experiment is
     a collection of datasets grouped according to the experiment key in the PLOTTING info file
     """
     dfs = []
     cols = ('ndata', r'$\phi$')
-    for label, experiments, exps_phi in zip(fits_label, fits_experiments, fits_experiments_phi):
+    for label, experiments, exps_phi in zip(
+            fits_name_with_covmat_label, fits_experiments, fits_experiments_phi):
         records = []
         for experiment, (exp_phi, npoints) in zip(experiments, exps_phi):
             npoints = npoints
@@ -774,7 +780,7 @@ def dataspecs_experiments_chi2_table(dataspecs_speclabel, dataspecs_experiments,
 
 
 @table
-def fits_datasets_chi2_table(fits_label, fits_experiments, fits_chi2_data,
+def fits_datasets_chi2_table(fits_name_with_covmat_label, fits_experiments, fits_chi2_data,
                              per_point_data:bool=True):
     """A table with the chi2 for each included dataset in the fits, computed
     with the theory corresponding to the fit. The result are indexed in two
@@ -787,7 +793,7 @@ def fits_datasets_chi2_table(fits_label, fits_experiments, fits_chi2_data,
     cols = ('ndata', r'$\chi^2/ndata$') if per_point_data else ('ndata', r'$\chi^2$')
 
     dfs = []
-    for label, experiments in zip(fits_label, fits_experiments):
+    for label, experiments in zip(fits_name_with_covmat_label, fits_experiments):
         records = []
         for experiment in experiments:
             for dataset, chi2 in zip(experiment.datasets, chi2_it):
@@ -844,11 +850,10 @@ def fits_chi2_table(
     for lv in lvs:
         dfs.append(pd.concat((edf.loc[lv],ddf.loc[lv]), copy=False, axis=0))
     if show_total:
-        log.warning("Using `fits_total_chi2_data` which collects over `experiments` defined in fit "
-                    "can affect construction of total covariance matrix, this will be deprecated "
-                    "and should be changed to collect over `data` when that keyword is implemented")
-        total_points = np.array([total_chi2_data.ndata for total_chi2_data in fits_total_chi2_data])
-        total_chi = np.array([total_chi2_data.central_result for total_chi2_data in fits_total_chi2_data])
+        total_points = np.array(
+            [total_chi2_data.ndata for total_chi2_data in fits_total_chi2_data])
+        total_chi = np.array(
+            [total_chi2_data.central_result for total_chi2_data in fits_total_chi2_data])
         total_chi /= total_points
         row = np.zeros(len(total_points)*2)
         row[::2] = total_points
