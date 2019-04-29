@@ -709,7 +709,7 @@ class CoreConfig(configparser.Config):
 
         if use_thcovmat_if_present and fit:
             try:
-                use_thcovmat_if_present = fit.as_input()[
+                thcovmat_present = fit.as_input()[
                     'theorycovmatconfig']['use_thcovmat_in_fitting']
             except KeyError:
                 #assume covmat wasn't used and fill in key accordingly but warn user
@@ -717,16 +717,18 @@ class CoreConfig(configparser.Config):
                             "`use_thcovmat_in_fitting` didn't exist in the runcard for "
                             f"{fit.name}. Theory covariance matrix will not be used "
                             "in any statistical estimators.")
-                fit_theory_covmat = None
-            #Now set as expected path and check it exists
-            if use_thcovmat_if_present:
-                covmat_path = (
-                    fit.path/'tables'/'datacuts_theory_theorycovmatconfig_theory_covmat.csv')
-                if not os.path.exists(covmat_path):
-                    raise ConfigError(
-                        "Fit appeared to use theory covmat in fit but the file was not at the "
-                        f"usual location: {covmat_path}.")
-                fit_theory_covmat = ThCovMatSpec(covmat_path)
+                thcovmat_present = False
+
+
+        if use_thcovmat_if_present and thcovmat_present:
+            # Expected path of covmat hardcoded
+            covmat_path = (
+                fit.path/'tables'/'datacuts_theory_theorycovmatconfig_theory_covmat.csv')
+            if not os.path.exists(covmat_path):
+                raise ConfigError(
+                    "Fit appeared to use theory covmat in fit but the file was not at the "
+                    f"usual location: {covmat_path}.")
+            fit_theory_covmat = ThCovMatSpec(covmat_path)
         else:
             fit_theory_covmat = None
         return fit_theory_covmat
