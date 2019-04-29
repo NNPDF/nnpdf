@@ -84,6 +84,8 @@ def dataspecs_dataset_theory(matched_dataspecs_results, experiment_name, dataset
 matched_dataspecs_dataset_theory = collect('dataspecs_dataset_theory', ['dataspecs'])
 
 def theory_vector(matched_dataspecs_dataset_theory):
+    """Returns a DataFrame of the central theory vector for
+    matched dataspecs."""
     all_theory = np.concatenate(
         [val.shifts for val in matched_dataspecs_dataset_theory])
     dsnames = np.concatenate([
@@ -100,6 +102,9 @@ def theory_vector(matched_dataspecs_dataset_theory):
     return pd.DataFrame(all_theory, index=index)
 
 def dataspecs_dataset_alltheory(matched_dataspecs_results, experiment_name, dataset_name):
+    """Returns a LabeledShifts tuple corresponding to the theory
+    vectors for all the scale varied theories (not the central one),
+    grouped by data set and experiment for matched dataspecs."""
     others = matched_dataspecs_results[1:]
     res = [other[1].central_value for other in others]
     return LabeledShifts(dataset_name=dataset_name,
@@ -108,6 +113,8 @@ def dataspecs_dataset_alltheory(matched_dataspecs_results, experiment_name, data
 matched_dataspecs_dataset_alltheory = collect('dataspecs_dataset_alltheory', ['dataspecs'])
 
 def alltheory_vector(matched_dataspecs_dataset_alltheory, matched_dataspecs_dataset_theory):
+    """Returns a DataFrame with the theory vectors for matched
+    dataspecs for the scale-varied theories (not the central one)."""
     all_theory = np.concatenate(
         [val.shifts for val in matched_dataspecs_dataset_alltheory], axis=1)
     dsnames = np.concatenate([
@@ -254,12 +261,22 @@ def vectors_3pt(splitdiffs):
     xs.append(sum(pps))
     # Constructing the p vectors with one minus
 	# (-, +, + ...) + cyclic
+    # for each process i:
     for procloc, mm in enumerate(mms):
+    # Start with a copy of one (+,+) vector for dataframe structure
         newvec = pps[0].copy()
+    # Set all elements to 0 so the dataframe is empty
         newvec.loc[:]=0
+    # Copy the set of vectors [(+,+)_1, (+,+)_2, ...],
+    # i.e. one vector for each process type
         subpps = pps.copy()
+    # Delete (+,+)_i from the list
         del subpps[procloc]
+    # Now add the corresponding (-,-)_i vector to all the other
+    # (+,+) vectors
+    # This gives one "(-, +, + ...) & cyclic" vector
         newvec = newvec + sum(subpps) + mm
+    # Append this vector to the list of vectors
         xs.append(newvec)
     return xs
 
@@ -368,6 +385,7 @@ def vectors_9pt(splitdiffs):
     xs.append(sum(mps))
     xs.append(sum(zps))
     # Constructing (+/-/0; -, +, + ...) + cyclic
+    # -- Constructing (0; -, +, + ...) + cyclic
     for procloc, zm in enumerate(zms):
         newvec = zps[0].copy()
         newvec.loc[:] = 0
@@ -375,6 +393,7 @@ def vectors_9pt(splitdiffs):
         del subzps[procloc]
         newvec = newvec + sum(subzps) + zm
         xs.append(newvec)
+    # -- Constructing (+; -, +, + ...) + cyclic
     for procloc, pm in enumerate(pms):
         newvec = pps[0].copy()
         newvec.loc[:] = 0
@@ -382,6 +401,7 @@ def vectors_9pt(splitdiffs):
         del subpps[procloc]
         newvec = newvec + sum(subpps) + pm
         xs.append(newvec)
+    # -- Constructing (-; -, +, + ...) + cyclic
     for procloc, mm in enumerate(mms):
         newvec = mps[0].copy()
         newvec.loc[:] = 0
@@ -390,6 +410,7 @@ def vectors_9pt(splitdiffs):
         newvec = newvec + sum(submps) + mm
         xs.append(newvec)
     # Constructing (+/-; 0, +, +, ...) + cyclic
+    # -- Constructing (+; 0, +, + ...) + cyclic
     for procloc, pz in enumerate(pzs):
         newvec = pps[0].copy()
         newvec.loc[:] = 0
@@ -397,6 +418,7 @@ def vectors_9pt(splitdiffs):
         del subpps[procloc]
         newvec = newvec + sum(subpps) + pz
         xs.append(newvec)
+    # -- Constructing (-; 0, +, + ...) + cyclic
     for procloc, mz in enumerate(mzs):
         newvec = mps[0].copy()
         newvec.loc[:] = 0
