@@ -437,7 +437,11 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
     """Projects the theory covariance matrix from the data space into
     the basis of non-zero eigenvalues, dependent on point-prescription.
     Then returns the eigenvalues (w) and eigenvectors (v)
-    in the data space."""
+    in the data space. There are three methods to linearly
+    orthonormalise the basis vectors for the covariance matrix,
+    and the choice must be specified using the "orthonormalisation"
+    flag in the runcard. The choices are: gs, the Gram-Schmidt
+    method; qr, QR decomposition; svd, singular value decomposition."""
 
     covmat = (thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0])))
     # constructing vectors of shifts due to scale variation
@@ -494,9 +498,11 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
                 ys[i] = ys[i] - (ys[i].T.dot(ys[j]))[0][0]*ys[j]/np.linalg.norm(ys[j])
                 ys[i] = ys[i]/np.linalg.norm(ys[i])
         p = pd.concat(ys, axis=1)
+    # Orthonormalising vectors according to singular value decomposition
     elif orthonormalisation == "svd":
         xsmatrix = pd.concat(xs, axis=1)
         p = la.orth(xsmatrix)
+    # Orthonormalising vectors according to QR decomposition
     elif orthonormalisation == "qr":
         xsmatrix = pd.concat(xs, axis=1)
         p  = np.linalg.qr(xsmatrix)[0]
