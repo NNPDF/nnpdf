@@ -2,9 +2,13 @@
 
 ## Introduction
 
-The API increases the usability of the `validphys2`/`reportengine` machinery in a development
-setting such as a Jupyter notebook. The API class uses the `reportengine.resourcebuilder` similarly
-to `validphys.app` which allows for declaritive input, a simple example of this would be:
+
+The API functionality allows the `validphys`/`reportengine` machinery to be
+readily leveraged in a development setting such as a Jupyter notebook. Any
+action available to `validphys` can be invoked by Python code, with the same
+parameters as a runcard.
+
+For example:
 
 ```python
 from validphys.app import API
@@ -14,16 +18,26 @@ for f, _ in figs:
     f.show()
 ```
 
-The user doesn't need to know exactly how to load the PDF, create the relevant grid to be plotted
-and then pass that to the plotting function, this is all handled by the `resourcebuilder`.
+The `API` object provides a high level interface to the validphys code.  Note
+that the user doesn't need to know exactly how to load the PDF, create the
+relevant grid to be plotted and then pass that to the plotting function, this is
+all handled by the underlying code of `reportengine`. This abstraction provides
+a convenient way to explore the functionality of `validphys` (or any other
+`reportengine` application) as well as to develop further functionality for
+`validphys` itself.
+
+All the actions available to `validphys` are translated into methods of the `API`
+object. The arguments are the same as the parameters that the validphys runcard
+would need to evaluate the action.
 
 ## Generic Example
 
+An important use case of this functionality is the development
 Consider that you wanted to develop a provider which depends on some expensive providers, defined
-somewhere in the validphys modules we have:
+somewhere in the `validphys` modules,
 
 ```python
-def expensive_prover1(pdf:PDF, Q, theoryid, ...):
+def expensive_provider1(pdf:PDF, Q, theoryid):
     ...
 
 def expensive_provider2(experiments, ...):
@@ -31,20 +45,20 @@ def expensive_provider2(experiments, ...):
 
 ```
 
-Now in a notebook you can do the following:
+Now in a notebook we can do
 
 ```python
 from validphys.app import API
 
-expensive1 = API.expesive_provider1(pdf="NNPDF31_nlo_as_0118", Q=100, theoryid=52, ...)
+expensive1 = API.expesnive_provider1(pdf="NNPDF31_nlo_as_0118", Q=100, theoryid=52)
 expensive2 = API.expensive_provider2(experiments={"from_": "fit"}, fit="NNPDF31_nlo_as_0118")
 
 ```
 
-In a seperate notebook cell we can then define and test our new function
+We can then define and test our new function (e.g. in a separate notebook cell),
 
 ```python
-def developing_provider(expensive_prover1, expensive_prover2):
+def developing_provider(expensive_provider1, expensive_provider2):
     ...
 
 test_output = developing_provider(expensive1, expensive2)
@@ -53,7 +67,7 @@ test_output = developing_provider(expensive1, expensive2)
 `expensive1` and `expensive2` have already been evaluated using the validphys machinery, and we just
 had to declare the `validphys2` runcard inputs in order to use those providers. The output of these
 expensive function is now saved. So for the remainder of our notebook session we don't need to
-re-run the expensive providers everytime we wish to change something with our `developing_provider`.
+re-run the expensive providers every time we wish to change something with our `developing_provider`.
 Clearly this massively reduces the time to develop and test the new provider since, the expensive
 providers which the new `developing_provider` depends on are cached for the rest of the jupyter
 session.
@@ -74,11 +88,11 @@ expensive2 = API.expensive_provider2(**input2)
 ```
 
 The `input2` dictionary is visually almost identical the corresponding `validphys2` runcard, we just
-need to be careful the seperate items with commas, that all dict keys are strings and that
+need to be careful the separate items with commas, that all dict keys are strings and that
 the typing is correct for the various inputs, we can always look up the appropriate typing by using
 the `validphys --help` functionality.
 
-## Creating figures in the validphys style
+## Creating figures in the `validphys` style
 
 If a figure is created using the api, as with the first example:
 
@@ -89,8 +103,8 @@ fig = API.some_plot(...)
 fig.show()
 ```
 
-you might notice that the style of the plot is very different to those produce by validphys. If you
-want to use the same style as validphys then consider using the following commands at the top of
+you might notice that the style of the plot is very different to those produce by `validphys`. If you
+want to use the same style as `validphys` then consider using the following commands at the top of
 your script or notebook:
 
 ```python
@@ -115,9 +129,9 @@ for f, _ in figs:
     f.show()
 ```
 
-## Mixing declaritive input with custom resources (NOTE: Experimental)
+## Mixing declarative input with custom resources (NOTE: Experimental)
 
-For some actions it is possible to mix declaritive input with custom resources.
+For some actions it is possible to mix declarative input with custom resources.
 
 Take for example `xplotting_grid`, which minimally requires us to specify
 `pdf`, `Q`. We see from `validphys --help xplotting_grid` that it depends on the provider `xgrid`
@@ -133,6 +147,6 @@ pdf_grid = API.xplotting_grid(pdf="NNPDF31_nlo_as_0118", Q=2, xgrid=new_xgrid)
 
 ```
 
-The API offers flexibility to mix declaritive inputs such as `pdf=<name of pdf>` with python objects
+The API offers flexibility to mix declarative inputs such as `pdf=<name of pdf>` with python objects
 `xgrid=(<string>, <numpy.ndarray>)`, note that this is very dependent on the provider in question
 and is not guaranteed to work all the time.
