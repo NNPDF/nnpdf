@@ -6,7 +6,7 @@ The API increases the usability of the `validphys2`/`reportengine` machinery in 
 setting such as a Jupyter notebook. The API class uses the `reportengine.resourcebuilder` similarly
 to `validphys.app` which allows for declaritive input, a simple example of this would be:
 
-```
+```python
 from validphys.app import API
 
 figs = API.plot_pdfs(pdfs=["NNPDF31_nlo_as_0118"], Q=2)
@@ -22,7 +22,7 @@ and then pass that to the plotting function, this is all handled by the `resourc
 Consider that you wanted to develop a provider which depends on some expensive providers, defined
 somewhere in the validphys modules we have:
 
-```
+```python
 def expensive_prover1(pdf:PDF, Q, theoryid, ...):
     ...
 
@@ -33,7 +33,7 @@ def expensive_provider2(experiments, ...):
 
 Now in a notebook you can do the following:
 
-```
+```python
 from validphys.app import API
 
 expensive1 = API.expesive_provider1(pdf="NNPDF31_nlo_as_0118", Q=100, theoryid=52, ...)
@@ -43,7 +43,7 @@ expensive2 = API.expensive_provider2(experiments={"from_": "fit"}, fit="NNPDF31_
 
 In a seperate notebook cell we can then define and test our new function
 
-```
+```python
 def developing_provider(expensive_prover1, expensive_prover2):
     ...
 
@@ -63,7 +63,7 @@ the input is exactly the same as a `validphys2` runcard. The runcards are in a `
 is then parsed as a `dict`. If it seems more intuitive one can utilise this when declaring the
 inputs for the API providers, for example:
 
-```
+```python
 input2 = {
     "experiments": {
         "from_": "fit"
@@ -82,7 +82,7 @@ the `validphys --help` functionality.
 
 If a figure is created using the api, as with the first example:
 
-```
+```python
 from validphys.app import API
 
 fig = API.some_plot(...)
@@ -93,7 +93,7 @@ you might notice that the style of the plot is very different to those produce b
 want to use the same style as validphys then consider using the following commands at the top of
 your script or notebook:
 
-```
+```python
 import matplotlib
 from validphys import mplstyles
 matplotlib.style.use(str(mplstyles.smallstyle))
@@ -102,7 +102,7 @@ matplotlib.style.use(str(mplstyles.smallstyle))
 also consider using `fig.tight_layout()` which reportengine uses before saving figures. For the
 example used earlier we would then have
 
-```
+```python
 import matplotlib
 from validphys import mplstyles
 matplotlib.style.use(str(mplstyles.smallstyle))
@@ -124,7 +124,7 @@ Take for example `xplotting_grid`, which minimally requires us to specify
 which in turn returns a tuple of `(scale, x_array)`. Using the API we could specify our own custom
 xgrid input, but then rely on the API to collect the other relevant resources, for example:
 
-```
+```python
 import numpy as np
 from validphys.app import API
 
