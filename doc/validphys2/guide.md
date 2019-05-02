@@ -2966,6 +2966,18 @@ be in the same format that Pandoc would have used to write them when
 way is setting the `main` flag of a report, as described in [Uploading
 the result].
 
+Additionally information from the mailing list is added to the index
+page. Specifically we query the list for links to validphys reports
+and add links to the emails next to the entries of the reports that
+are mentioned. This is achieved with the `index-email.py` script. It
+needs some authentication credentials to access the mailing list. The
+password is stored in a file called `EMAIL_BOT_PASSWORD`, which is not
+tracked by git. The script outputs two files in the root folder,
+`email_mentions.json` which should be used by other applications (such
+as the report indexer) and `seen_emails_cache.pkl`, which is there to
+avoid downloading emails that are already indexes. These files need to
+be deleted when the format of the index is updated. Currently this
+script needs to be run manually or as a `cron` job.
 
 The report index uses the
 [DataTables](https://datatables.net/) JS library. It provides
