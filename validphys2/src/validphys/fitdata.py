@@ -264,11 +264,11 @@ def test_for_same_cuts(fits, match_datasets_by_name):
         if first.cuts:
             c1 = first.cuts.load()
         else:
-            c1 = ['Allpass']
+            c1 = np.arange(first.commondata.ndata)
         if second.cuts:
             c2 = second.cuts.load()
         else:
-            c2 = ['Allpass']
+            c2 = np.arange(second.commondata.ndata)
         if not np.array_equal(c1, c2):
             msg = "Cuts for %s are not the same:\n%s:\n%s\n\n%s:\n%s" % (ds, first_fit, c1, second_fit, c2)
             log.info(msg)

@@ -47,3 +47,5 @@ extra_labels:
   3,3,3,3,3,3,3,3,3,3,
   3,3
   ]
+
+experiment: "HERACOMB"
