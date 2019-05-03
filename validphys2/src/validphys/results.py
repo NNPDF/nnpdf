@@ -210,17 +210,19 @@ def experiment_result_table(experiment_result_table_no_table):
     return experiment_result_table_no_table
 
 @table
-def experiment_result_table_68cl(experiment_result_table_no_table):
-    """Like experiment_result_table but instead of giving the theory prediction
-    for each replica, instead gives the upper and lower bounds of the 68 CL
+def experiment_result_table_68cl(experiment_result_table_no_table: pd.DataFrame, pdf: PDF):
+    """Generate a table containing the data central value, the central prediction,
+    and 68% confidence level bounds of the prediction.
     """
     df = experiment_result_table_no_table
-    # replica data is every columns after central values
-    replica_data = df.iloc[:, 2:].values
-    confidence_level = np.percentile(
-        replica_data, [16, 84], axis=1).T
+    # replica data is every columns after central values, transpose for stats class
+    replica_data = df.iloc[:, 2:].values.T
+    # Use pdf stats class but reshape output to have each row as a data point
+    stats = [level.reshape(-1, 1) for level in pdf.stats_class(replica_data).errorbar68()]
+    # concatenate for dataframe construction
+    stats_array = np.concatenate(stats, axis=1)
     df_cl = pd.DataFrame(
-        confidence_level,
+        stats_array,
         index=df.index,
         columns=['theory_lower', 'theory_upper'])
     res = pd.concat([df.iloc[:, :2], df_cl], axis=1)
