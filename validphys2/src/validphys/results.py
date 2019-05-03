@@ -206,8 +206,25 @@ def experiment_result_table_no_table(experiments, pdf, experiments_index):
 
 @table
 def experiment_result_table(experiment_result_table_no_table):
-    """Duplicate of experiments_result_table_no_table but with a table decorator."""
+    """Duplicate of experiment_result_table_no_table but with a table decorator."""
     return experiment_result_table_no_table
+
+@table
+def experiment_result_table_68cl(experiment_result_table_no_table):
+    """Like experiment_result_table but instead of giving the theory prediction
+    for each replica, instead gives the upper and lower bounds of the 68 CL
+    """
+    df = experiment_result_table_no_table
+    # replica data is every columns after central values
+    replica_data = df.iloc[:, 2:].values
+    confidence_level = np.percentile(
+        replica_data, [16, 84], axis=1).T
+    df_cl = pd.DataFrame(
+        confidence_level,
+        index=df.index,
+        columns=['theory_lower', 'theory_upper'])
+    res = pd.concat([df.iloc[:, :2], df_cl], axis=1)
+    return res
 
 def experiments_covmat_no_table(experiments, experiments_index, t0set):
     """Export the covariance matrix for the experiments. It exports the full
