@@ -2,7 +2,9 @@
 app.py
 
 Mainloop of the validphys application.  Here we define tailoted extensions to
-the reporthengine application (such as extra command line flags).
+the reporthengine application (such as extra command line flags). Additionally
+the *provider modules* that serve as source to the validphys actions are
+declared here.
 
 The entry point of the validphys application is the ``main`` funcion of this
 module.
@@ -15,11 +17,10 @@ import contextlib
 
 from reportengine import app, api
 
-from validphys.config import Environment, Config
+from validphys.config import Config, Environment
 from validphys import uploadutils
 from validphys import mplstyles
 
-log = logging.getLogger(__name__)
 
 providers = [
     'validphys.results',
@@ -42,9 +43,14 @@ providers = [
     'validphys.closure',
     'reportengine.report']
 
+log = logging.getLogger(__name__)
+
 API = api.API(providers, Config, Environment)
 
-class App(api.API, app.App):
+class App(app.App):
+
+    environment_class = Environment
+    config_class = Config
 
     critical_message = (
 """A critical error ocurred. This is likely due to one of the following reasons:
@@ -61,15 +67,13 @@ including the contents of the following file:
 %s
 """
     )
-    environment_class = Environment
 
     @property
     def default_style(self):
         return os.fspath(mplstyles.smallstyle)
 
     def __init__(self, name='validphys', providers=providers):
-        api.API.__init__(self, providers, Config, Environment)
-        app.App.__init__(self, name, providers)
+        super().__init__(name, providers)
 
     @property
     def argparser(self):
