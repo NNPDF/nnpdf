@@ -1,0 +1,19 @@
+#: table_doi: 10.17182/hepdata.89307.v1/t91
+#: name: Table 91
+#: description: Measured normalised differential cross section at parton level as a function of $m_{t\bar{t}}$.
+#: data_file: d046-x01-y01.yaml
+#: keyword reactions: P P --> TOP TOPBAR X
+#: keyword observables: SIG
+#: keyword phrases: Top | Differential Cross Section | Proton-Proton Scattering | Top Production
+#: keyword cmenergies: 13000.0
+#: RE,,,P P --> TOP TOPBAR X
+#: SQRT(S) [GEV],,,13000.0
+$m_{t\bar{t}}$ [GEV],$m_{t\bar{t}}$ [GEV] LOW,$m_{t\bar{t}}$ [GEV] HIGH,\frac{1}{\sigma}\frac{d\sigma}{dX} [PB/GEV],stat +,stat -,sys +,sys -
+340.0,300,380,0.00198085,3.60102e-05,-3.60102e-05,0.000180426,-0.000180426
+425.0,380,470,0.00399172,4.86766e-05,-4.86766e-05,0.000183176,-0.000183176
+545.0,470,620,0.00200949,2.27056e-05,-2.27056e-05,5.71544e-05,-5.71544e-05
+720.0,620,820,0.000636295,1.08039e-05,-1.08039e-05,3.55165e-05,-3.55165e-05
+960.0,820,1100,0.000143808,4.13759e-06,-4.13759e-06,1.05488e-05,-1.05488e-05
+1300.0,1100,1500,2.71952e-05,1.05664e-06,-1.05664e-06,2.05962e-06,-2.05962e-06
+2000.0,1500,2500,2.45043e-06,2.396e-07,-2.396e-07,4.64361e-07,-4.64361e-07
+
