@@ -359,7 +359,7 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
 
     return df
 
-#TODO: Add check here that dataset appears in fitthcovmat (if true) and that cuts match
+
 @check_dataset_cuts_match_theorycovmat
 def covariance_matrix(dataset:DataSetSpec, fitthcovmat, t0set:(PDF, type(None)) = None):
     """Returns a tuple of Covariance matrix and sqrt covariance matrix for the given dataset
@@ -685,9 +685,9 @@ def dataset_chi2_table(chi2_stats, dataset):
     return pd.DataFrame(chi2_stats, index=[dataset.name])
 
 fits_experiment_chi2_data = collect(
-    'experiments_chi2', ('fits', 'experiments_from_plotting_withcontext',))
+    'experiments_chi2', ('fits', 'fit_context_groupby_experiment',))
 fits_experiments = collect(
-    'experiments', ('fits', 'experiments_from_plotting_withcontext',))
+    'experiments', ('fits', 'fit_context_groupby_experiment',))
 
 def fit_name_with_covmat_label(fit, fitthcovmat):
     """If theory covariance matrix is being used to calculate statistical estimators for the `fit`
@@ -738,7 +738,7 @@ def fits_experiments_chi2_table(fits_name_with_covmat_label, fits_experiments,
     return res
 
 fits_experiments_phi = collect(
-    'experiments_phi', ('fits', 'experiments_from_plotting_withcontext'))
+    'experiments_phi', ('fits', 'fit_context_groupby_experiment'))
 
 @table
 def fits_experiments_phi_table(fits_name_with_covmat_label, fits_experiments, fits_experiments_phi):

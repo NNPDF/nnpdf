@@ -1944,21 +1944,23 @@ files as the `fitrename` command will also rename these files.
 
 ### Fits with a Theory Covariance Matrix
 
-Fits can be ran with a contribution to the covarince matrix obtained from performing scale
-variations. `validphys` also has flags which control the how whether the covariance matrix used to
-calculate statistical estimators should include a contribution from the theory covariance matrix.
-Getting the various flags that control these behaviours correct in both fit and `validphys` runcards
-is critical to getting sensible results. Examples with explanation will be provided here to
-demonstrate how to run a fit with a theory covariance matrix and then use the various `validphys`
-analysis tools on the fit.
+Fits can be ran with a contribution to the covarince matrix obtained from
+performing scale variations. `validphys` also has flags which control the how
+whether the covariance matrix used to calculate statistical estimators should
+include a contribution from the theory covariance matrix. Getting the various
+flags that control these behaviours correct in both fit and `validphys` runcards
+is critical to getting sensible results. Examples with explanation will be
+provided here to demonstrate how to run a fit with a theory covariance matrix
+and then use the various `validphys` analysis tools on the fit.
 
 #### Running a fit with Theory Covariance Matrix
 
-In order to run a fit with a theory covariance the user must first specify that `datasets` are all
-part of the same `experiment`. An example of how this is done in practise is provided with the
-`experiments` section of a DIS only fit runcard:
+In order to run a fit with a theory covariance the user must first specify that
+`datasets` are all part of the same `experiment`. An example of how this is done
+in practise is provided with the `experiments` section of a DIS only fit
+runcard:
 
-```
+```yaml
 experiments:
 - experiment: BIGEXP
   datasets:
@@ -1982,29 +1984,32 @@ experiments:
   - {dataset: HERAF2CHARM, frac: 0.5}
 ```
 
-The `datasets` must be part of the same single `experiment` for the theory covariance matrix which
-is generated when the user runs `vp-setupfit` to be compatible with the fitting infrastructure.
+The `datasets` must be part of the same single `experiment` for the theory
+covariance matrix which is generated when the user runs `vp-setupfit` to be
+compatible with the fitting infrastructure.
 
-The next step is to specify the `theorycovmatconfig`. This namespace controls which point prescription
-is used to generate the theory covariance matrix, and whether the theory covariance matrix
-will be used in the sampling of the pseudodata, the fitting of the data or both.
+The next step is to specify the `theorycovmatconfig`. This namespace controls
+which point prescription is used to generate the theory covariance matrix, and
+whether the theory covariance matrix will be used in the sampling of the
+pseudodata, the fitting of the data or both.
 
-The different prescriptions for scale variation are 3-point, 5-point, 5bar-point, 7-point and
-9-point, depending on which presciption the user decides to use, they must provide the correct
-number and combination of `theoryids`. In addition to this if 5 or 5bar is being used then the user
-must specify which of these prescriptions to use with the `fivetheories` flag. There are also two
-options for the 7-point presciption, the default is 'Gavin's' prescription but the user can also
-specify `seventheories: original`.
+The different prescriptions for scale variation are 3-point, 5-point,
+5bar-point, 7-point and 9-point, depending on which presciption the user decides
+to use, they must provide the correct number and combination of `theoryids`. In
+addition to this if 5 or 5bar is being used then the user must specify which of
+these prescriptions to use with the `fivetheories` flag. There are also two
+options for the 7-point presciption, the default is 'Gavin's' prescription but
+the user can also specify `seventheories: original`.
 
-The various configuration options might seem overwhelming, so for each of the presciptions the
-appropriate `theoryids` and additional flags required are provided below, ready to be pasted into a report
-runcard.
+The various configuration options might seem overwhelming, so for each of the
+presciptions the appropriate `theoryids` and additional flags required are
+provided below, ready to be pasted into a report runcard.
 
 ---------------------------------------------------------------------
 
 ##### 3-point
 
-```
+```yaml
 theorycovmatconfig:
   theoryids:
   - 163
@@ -2015,7 +2020,7 @@ theorycovmatconfig:
 
 ##### 5-point
 
-```
+```yaml
 theorycovmatconfig:
   theoryids:
   - 163
@@ -2029,7 +2034,7 @@ theorycovmatconfig:
 
 ##### 5bar-point
 
-```
+```yaml
 theorycovmatconfig:
   theoryids:
   - 163
@@ -2043,7 +2048,7 @@ theorycovmatconfig:
 
 ##### 7-point original
 
-```
+```yaml
 theorycovmatconfig:
   theoryids:
   - 163
@@ -2058,7 +2063,7 @@ theorycovmatconfig:
 
 ##### 7-point Gavin (default)
 
-```
+```yaml
 theorycovmatconfig:
   theoryids:
   - 163
@@ -2073,7 +2078,7 @@ theorycovmatconfig:
 
 ##### 9-point
 
-```
+```yaml
 theorycovmatconfig:
   theoryids:
   - 163
@@ -2089,19 +2094,21 @@ theorycovmatconfig:
 
 ---------------------------------------------------------------------
 
-Once the user has correctly specified the `theoryids` and additional flags for their chosen
-prescription then the user must specify which PDF will be used to generate the theory 'points' required
-to construct the theory covariance matrix. The user must additionally specify where the theory covariance is to be used. The theory
-covariance can be used to sample the pseudodata by setting `use_thcovmat_in_sampling: true`,
-likewise the theory covariance can be included in covariance matrix used in the fit by specifying
+Once the user has correctly specified the `theoryids` and additional flags for
+their chosen prescription then the user must specify which PDF will be used to
+generate the theory 'points' required to construct the theory covariance matrix.
+The user must additionally specify where the theory covariance is to be used.
+The theory covariance can be used to sample the pseudodata by setting
+`use_thcovmat_in_sampling: true`, likewise the theory covariance can be included
+in covariance matrix used in the fit by specifying
 `use_thcovmat_in_fitting: true`.
 
-Combining all of the above information, if one wanted to run a fit using the theory covariance,
-calculated using the 9-point prescription, in both the fitting and sampling with
-`NNPDF31_nlo_as_0118` used to generate the covariance matrix then the complete `theorycovmatconfig`
-would be:
+Combining all of the above information, if one wanted to run a fit using the
+theory covariance, calculated using the 9-point prescription, in both the
+fitting and sampling with `NNPDF31_nlo_as_0118` used to generate the
+covariance matrix then the complete `theorycovmatconfig` would be:
 
-```
+```yaml
 theorycovmatconfig:
   theoryids:
   - 163
@@ -2120,17 +2127,19 @@ theorycovmatconfig:
 
 #### Using `validphys` statistical estimators with theory covariance
 
-Once a fit has been ran with the theory covariance, it is necessary to use the theory covariance
-matrix in estimators such as calculating the chi² in order to get meaningful values. This behaviour
-is controlled by the flag `use_thcovmat_if_present`, which by default the flag is set to `False`.
+Once a fit has been ran with the theory covariance, it is necessary to use the
+theory covariance matrix in estimators such as calculating the chi² in order to
+get meaningful values. This behaviour is controlled by the flag
+`use_thcovmat_if_present`, which by default the flag is set to `False`.
 
-If the user specifies `use_thcovmat_if_present: True` then they must also specify a corresponding
-`fit`. The configuration file for that `fit` will be read. If `use_thcovmat_in_fitting: True` then
-validphys will locate the theory covariance matrix used during the fit and add it to the
-experimental covariance matrix, for use in statistical estimators such as chi². A simple example of
-this would be
+If the user specifies `use_thcovmat_if_present: True` then they must also
+specify a corresponding `fit`. The configuration file for that `fit` will be
+read. If `use_thcovmat_in_fitting: True` then validphys will locate the theory
+covariance matrix used during the fit and add it to the experimental
+covariance matrix, for use in statistical estimators such as chi². A simple
+example of this would be
 
-```
+```yaml
 dataset_input: {dataset: HERAF2CHARM}
 
 use_thcovmat_if_present: True
@@ -2153,18 +2162,18 @@ actions_:
 ```
 
 It should be noted that any `dataset_input` specified in the same runcard that
-`use_thcovmat_if_present: True` must have been fitted in the corresponding `fit`. If the
-corresponding fit has `use_thcovmat_if_present: False` then the user will be warned and there will
-be no contribution from the theory covariance matrix used in calculating statistical estimators for
-that runcard.
+`use_thcovmat_if_present: True` must have been fitted in the corresponding
+`fit`. If the corresponding fit has `use_thcovmat_if_present: False` then the
+user will be warned and there will be no contribution from the theory covariance
+matrix used in calculating statistical estimators for that runcard.
 
-Finally, the `use_thcovmat_if_present` flag can be specified at runtime when using the
-`vp-comparefits` application. The user **must** either specify the commandline flag `--thcovmat_if_present`
-or `--no-thcovmat_if_present` which set `use_thcovmat_if_present` to `True` or `False` respectively.
+When using the `vp-comparefits` application, the user **must** either specify
+the commandline flag `--thcovmat_if_present` or `--no-thcovmat_if_present`
+which set `use_thcovmat_if_present` to `True` or `False` respectively.
 
-If the user uses the interactive mode, `vp-comparefits -i`, then they will be prompted to select
-whether or not to use the theory covariance matrix, if available, in the report if they have
-not already specified on the command line.
+If the user uses the interactive mode, `vp-comparefits -i`, then they will be
+prompted to select whether or not to use the theory covariance matrix, if
+available, in the report if they have not already specified on the command line.
 
 Parallel mode
 -------------
