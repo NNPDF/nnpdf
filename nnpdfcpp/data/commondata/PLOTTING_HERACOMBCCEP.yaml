@@ -12,3 +12,5 @@ normalize:
     line_by: []
     figure_by:
         - k2
+
+experiment: "HERACOMB"

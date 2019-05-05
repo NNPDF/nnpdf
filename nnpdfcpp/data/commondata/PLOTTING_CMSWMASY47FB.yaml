@@ -2,3 +2,4 @@ dataset_label: "CMS $W$ asymmetry 4.7 fb"
 x: k1
 y_label: '$dA_{\mu}/dy$' 
 #x_label: 'Boson rapidity $|y|$'
+experiment: "CMS"

@@ -75,7 +75,7 @@ DataSet::~DataSet()
  */
 void DataSet::GenCovMat() const
 {
-  fCovMat = ComputeCovMat(*this, fT0Pred, fWeight);
+  fCovMat = ComputeCovMat(*this, fT0Pred, false, " ", {}, fWeight);
   fSqrtCov = ComputeSqrtMat(fCovMat);
 }
 

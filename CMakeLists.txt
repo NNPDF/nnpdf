@@ -75,6 +75,13 @@ if (LHAPDF_CONFIG)
     OUTPUT_VARIABLE LHAPDF_LIBRARIES
   )
   set(LHAPDF_LIBRARIES ${LHAPDF_LIBRARIES} CACHE STRING INTERNAL)
+  #This is to stop the LHAPDF specific warnings from spamming the output
+  exec_program(${LHAPDF_CONFIG}
+    ARGS --incdir
+    OUTPUT_VARIABLE LHAPDF_INCLUDES
+  )
+  set(LHAPDF_INCLUDES ${LHAPDF_INCLUDES} CACHE STRING INTERNAL)
+  include_directories(SYSTEM ${LHAPDF_INCLUDES})
 endif(LHAPDF_CONFIG)
 
 # APFEL

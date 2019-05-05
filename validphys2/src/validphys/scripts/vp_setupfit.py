@@ -46,16 +46,21 @@ SETUPFIT_FIXED_CONFIG = dict(
         'datacuts::closuretest::theory::fitting filter',
     ])
 
+SETUPFIT_PROVIDERS = ['validphys.filters',
+                      'validphys.theorycovariance',
+                      'validphys.results',]
+
 SETUPFIT_DEFAULTS = dict(
     use_cuts= 'internal',
 )
 
-SETUPFIT_PROVIDERS = ['validphys.filters',]
+
 
 log = logging.getLogger(__name__)
 
 RUNCARD_COPY_FILENAME = "filter.yml"
 FILTER_OUTPUT_FOLDER = "filter"
+TABLE_OUTPUT_FOLDER = "tables"
 MD5_FILENAME = "md5"
 
 
@@ -76,6 +81,7 @@ class SetupFitEnvironment(Environment):
 
         # check if results folder exists
         self.output_path = pathlib.Path(self.output_path).absolute()
+
         if self.output_path.is_dir():
             log.warning(f"Output folder exists: {self.output_path} Overwritting contents")
         else:
@@ -96,6 +102,8 @@ class SetupFitEnvironment(Environment):
         # create output folder
         self.filter_path = self.output_path / FILTER_OUTPUT_FOLDER
         self.filter_path.mkdir(exist_ok=True)
+        self.table_folder = self.output_path / TABLE_OUTPUT_FOLDER
+        self.table_folder.mkdir(exist_ok=True)
 
     def save_md5(self):
         """Generate md5 key from file"""
@@ -132,6 +140,9 @@ class SetupFitConfig(Config):
         if not isinstance(file_content, dict):
             raise ConfigError(f"Expecting input runcard to be a mapping, "
                               f"not '{type(file_content)}'.")
+        if file_content.get('theorycovmatconfig') is not None:
+            SETUPFIT_FIXED_CONFIG['actions_'].append(
+                'datacuts::theory::theorycovmatconfig nnfit_theory_covmat')
         for k,v in SETUPFIT_DEFAULTS.items():
             file_content.setdefault(k, v)
         file_content.update(SETUPFIT_FIXED_CONFIG)
