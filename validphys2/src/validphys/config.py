@@ -29,7 +29,7 @@ from validphys.gridvalues import LUMI_CHANNELS
 
 from validphys.paramfits.config import ParamfitsConfig
 
-from validphys.theorycovariance.construction import _process_lookup
+from validphys.theorycovariance.theorycovarianceutils import process_lookup
 
 log = logging.getLogger(__name__)
 
@@ -504,7 +504,7 @@ class CoreConfig(configparser.Config):
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, experiments = self.parse_from_(
                     None, 'experiments', write=False)
-                names = {(e.name, ds.name, _process_lookup(ds.name)): (ds, dsin)
+                names = {(e.name, ds.name, process_lookup(ds.name)): (ds, dsin)
                          for e in experiments
                          for ds, dsin in zip(e.datasets, e)}
                 all_names.append(names)

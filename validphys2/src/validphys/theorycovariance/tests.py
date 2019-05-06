@@ -20,14 +20,13 @@ from reportengine import collect
 
 from validphys.checks import check_two_dataspecs
 
-from validphys.theorycovariance.construction import _check_correct_theory_combination
 from validphys.theorycovariance.construction import combine_by_type, process_starting_points
 from validphys.theorycovariance.construction import theory_corrmat
 from validphys.theorycovariance.construction import covmap, covs_pt_prescrip, theory_covmat_custom
-from validphys.theorycovariance.construction import _process_lookup
-from validphys.theorycovariance.construction import _check_correct_theory_combination_theoryconfig
 
 from validphys.theorycovariance.output import matrix_plot_labels, _get_key
+from validphys.theorycovariance.theorycovarianceutils import process_lookup, check_correct_theory_combination_theoryconfig
+from validphys.theorycovariance.theorycovarianceutils import check_correct_theory_combination_dataspecs
 
 log = logging.getLogger(__name__)
 
@@ -147,14 +146,8 @@ def process_starting_points_dataspecs(combine_by_type_dataspecs):
     """Like process_starting_points but for matched dataspecs."""
     return process_starting_points(combine_by_type_dataspecs)
 
-@make_argcheck
-def _check_correct_theory_combination_dataspecs(dataspecs_theoryids,
-                                                fivetheories:(str, type(None)) = None):
-    """Like _check_correct_theory_combination but for matched dataspecs."""
-    return _check_correct_theory_combination.__wrapped__(
-        dataspecs_theoryids, fivetheories)
 
-@_check_correct_theory_combination_dataspecs
+@check_correct_theory_combination_dataspecs
 def covs_pt_prescrip_dataspecs(combine_by_type_dataspecs,
                                process_starting_points_dataspecs,
                                dataspecs_theoryids,
@@ -428,8 +421,9 @@ def vectors_9pt(splitdiffs):
         xs.append(newvec)
     return xs
 
-@_check_correct_theory_combination_theoryconfig
+@check_correct_theory_combination_theoryconfig
 def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
+                        collected_theoryids,
                         fivetheories:(str, type(None)) = None,
                         seventheories:(str, type(None)) = None,
                         orthonormalisation:(str, type(None))=None):
@@ -455,7 +449,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
     procdict = {}
     for index in indexlist:
         name = index[0]
-        proc = _process_lookup(name)
+        proc = process_lookup(name)
         if proc not in list(procdict.keys()):
             procdict[proc] = [name]
         elif name not in procdict[proc]:
@@ -624,7 +618,7 @@ def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
         i = index[1]
         dsnames.append(name)
         ids.append(i)
-        proc = _process_lookup(name)
+        proc = process_lookup(name)
         processnames.append(proc)
     tripleindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
                         names = ("process", "dataset", "id"))
