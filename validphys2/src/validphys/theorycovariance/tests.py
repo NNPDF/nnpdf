@@ -561,9 +561,7 @@ def efficiency(theory_shift_test):
     fmod = np.sqrt(np.sum(f**2))
     fmiss_mod = np.sqrt(np.sum(fmiss**2))
     fs_mod = np.sqrt(np.sum(fs**2))
-    efficiency1 = 1 - fmiss_mod/fmod
-    efficiency2 = fs_mod/fmod
-    efficiency = (efficiency1, efficiency2)
+    efficiency = 1 - fmiss_mod/fmod
     print(f"efficiency = {efficiency}")
     return efficiency
 
