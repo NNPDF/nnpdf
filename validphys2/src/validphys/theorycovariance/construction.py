@@ -16,13 +16,16 @@ from reportengine.checks import make_argcheck, check
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.results import experiments_central_values, results
+from validphys.results import experiments_central_values, experiments_central_values_no_table, results
 from validphys.results import Chi2Data
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values,
+                                               ('theoryids',))
+
+theoryids_experiments_central_values_no_table = collect(experiments_central_values_no_table,
                                                ('theoryids',))
 
 def _check_correct_theory_combination_internal(theoryids,

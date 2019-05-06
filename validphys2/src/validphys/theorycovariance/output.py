@@ -97,7 +97,7 @@ def plot_covmat_heatmap(covmat, title, dataset_index_byprocess):
                             linscale=10,
                             vmin=-100*matrix.max(),
                             vmax=100*matrix.max()))
-    cbar=fig.colorbar(matrixplot)
+    cbar=fig.colorbar(matrixplot, fraction=0.046, pad=0.04)
     cbar.set_label(label="% of data", fontsize=20)
     cbar.ax.tick_params(labelsize=20)
     ax.set_title(title, fontsize=25)
@@ -155,7 +155,7 @@ def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
     matrix = newdf.values
     fig, ax = plt.subplots(figsize=(15,15))
     matrixplot = ax.matshow(matrix, cmap=cm.Spectral_r, vmin=-1, vmax=1)
-    cbar=fig.colorbar(matrixplot)
+    cbar=fig.colorbar(matrixplot, fraction=0.046, pad=0.04)
     cbar.ax.tick_params(labelsize=20)
     ax.set_title(title, fontsize=25)
     ticklocs, ticklabels, startlocs = matrix_plot_labels(newdf)
@@ -173,7 +173,7 @@ def plot_corrmat_heatmap(corrmat, title, dataset_index_byprocess):
 def plot_normexpcovmat_heatmap(experiments_normcovmat, dataset_index_byprocess):
     """Matrix plot of the experiment covariance matrix normalised to data."""
     fig = plot_covmat_heatmap(experiments_normcovmat,
-                              "Experiment covariance matrix",
+                              "Experimental Covariance Matrix",
 				dataset_index_byprocess)
     return fig
 
@@ -181,7 +181,7 @@ def plot_normexpcovmat_heatmap(experiments_normcovmat, dataset_index_byprocess):
 def plot_expcorrmat_heatmap(experiments_corrmat, dataset_index_byprocess):
     """Matrix plot of the experiment correlation matrix"""
     fig = plot_corrmat_heatmap(experiments_corrmat,
-                               "Experiment correlation matrix",
+                               "Experimental Correlation Matrix",
 				dataset_index_byprocess)
     return fig
 
@@ -205,7 +205,7 @@ def plot_normthcovmat_heatmap_custom(theory_normcovmat_custom, theoryids,
         elif fivetheories == "linear":
             l = "linear 5"
     fig = plot_covmat_heatmap(theory_normcovmat_custom,
-                              f"Theory covariance matrix for {l} points",
+                              f"Theory Covariance matrix ({l} pt)",
 				dataset_index_byprocess)
     return fig
 
@@ -229,7 +229,7 @@ def plot_thcorrmat_heatmap_custom(theory_corrmat_custom, theoryids,
         elif fivetheories == "linear":
             l = "linear 5"
     fig = plot_corrmat_heatmap(theory_corrmat_custom,
-                               f"Theory correlation matrix for {l} points",
+                               f"Theory Correlation matrix ({l} pt)",
 				dataset_index_byprocess)
     return fig
 
@@ -254,7 +254,7 @@ def plot_normexpplusthcovmat_heatmap_custom(experimentsplustheory_normcovmat_cus
         elif fivetheories == "linear":
             l = "linear 5"
     fig = plot_covmat_heatmap(experimentsplustheory_normcovmat_custom,
-                              f"Experiment + theory covariance matrix for {l} points",
+                              f"Experimental + Theory Covariance Matrix ({l} pt)",
                               dataset_index_byprocess)
     return fig
 
@@ -279,7 +279,7 @@ def plot_expplusthcorrmat_heatmap_custom(experimentsplustheory_corrmat_custom,
         elif fivetheories == "linear":
             l = "linear 5"
     fig = plot_corrmat_heatmap(experimentsplustheory_corrmat_custom,
-                               f"Experiment + theory correlation matrix for {l} points",
+                               f"Experimental + Theory Correlation Matrix ({l} pt)",
                                dataset_index_byprocess)
     return fig
 
@@ -353,7 +353,7 @@ def plot_diag_cov_comparison(theory_covmat_custom, experiments_covmat,
     ax.set_ylabel(r"$\frac{\sqrt{cov_{ii}}}{|D_i|}$", fontsize=30)
     ax.yaxis.set_tick_params(labelsize=20)
     ax.set_ylim([0,0.5])
-    ax.set_title(f"Square root of diagonal elements of covariances matrices for {l} points, "
+    ax.set_title(f"Square root of diagonal elements of covariance matrices ({l} pt), "
                  + "normalised to absolute value of data",
                  fontsize=20)
     ax.legend(fontsize=20)

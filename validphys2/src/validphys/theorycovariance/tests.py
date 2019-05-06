@@ -555,9 +555,13 @@ def efficiency(theory_shift_test):
     covariance matrix encapsulates the NNLO-NLO shift."""
     f = theory_shift_test[3]
     fmiss = theory_shift_test[4]
+    fs = f - fmiss
     fmod = np.sqrt(np.sum(f**2))
     fmiss_mod = np.sqrt(np.sum(fmiss**2))
-    efficiency = 1 - fmiss_mod/fmod
+    fs_mod = np.sqrt(np.sum(fs**2))
+    efficiency1 = 1 - fmiss_mod/fmod
+    efficiency2 = fs_mod/fmod
+    efficiency = (efficiency1, efficiency2)
     print(f"efficiency = {efficiency}")
     return efficiency
 
