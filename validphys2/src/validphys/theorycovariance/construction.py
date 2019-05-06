@@ -17,7 +17,7 @@ from reportengine.table import table
 from reportengine import collect
 
 from validphys.results import experiments_central_values, experiments_central_values_no_table, results
-from validphys.results import Chi2Data
+from validphys.results import Chi2Data, experiments_chi2_table
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 
 log = logging.getLogger(__name__)
@@ -223,7 +223,7 @@ def _process_lookup(name):
 				"CMSDY2D11":				"DY",
 				"CMSWMU8TEV":				"DY",
 				"CMSWCHARMRAT":				"DY",
-                		"CMSWCHARMTOT":				"DY",
+                		"CMSWCHARMsTOT":				"DY",
 				"LHCBZ940PB":				"DY",
 				"LHCBZEE2FB":				"DY",
 				"LHCBWZMU7TEV":				"DY",

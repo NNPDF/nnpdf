@@ -441,7 +441,9 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
     orthonormalise the basis vectors for the covariance matrix,
     and the choice must be specified using the "orthonormalisation"
     flag in the runcard. The choices are: gs, the Gram-Schmidt
-    method; qr, QR decomposition; svd, singular value decomposition."""
+    method; qr, QR decomposition; svd, singular value decomposition.
+    QR is the method which should be used as standard; the others 
+    exist for testing purposes."""
 
     covmat = (thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0])))
     # constructing vectors of shifts due to scale variation
