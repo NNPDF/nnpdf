@@ -16,8 +16,8 @@ from reportengine.checks import make_argcheck, check
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.results import experiments_central_values, experiments_central_values_no_table, results
-from validphys.results import Chi2Data, experiments_chi2_table
+from validphys.results import experiments_central_values, experiments_central_values_no_table
+from validphys.results import Chi2Data, results
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 
 log = logging.getLogger(__name__)
@@ -107,7 +107,9 @@ def make_scale_var_covmat(predictions):
     return s
 
 @_check_correct_theory_combination
-def theory_covmat_no_table(theoryids_experiments_central_values_no_table, experiments_index, theoryids, fivetheories:(str, type(None)) = None):
+def theory_covmat_no_table(theoryids_experiments_central_values_no_table,
+                           experiments_index, theoryids,
+                           fivetheories:(str, type(None)) = None):
 
     """Calculates the theory covariance matrix for scale variations.
     The matrix is a dataframe indexed by experiments_index."""

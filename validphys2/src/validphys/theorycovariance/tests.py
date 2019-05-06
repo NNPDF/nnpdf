@@ -430,7 +430,6 @@ def vectors_9pt(splitdiffs):
 
 @_check_correct_theory_combination_theoryconfig
 def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
-                        collected_theoryids,
                         fivetheories:(str, type(None)) = None,
                         seventheories:(str, type(None)) = None,
                         orthonormalisation:(str, type(None))=None):
@@ -442,7 +441,7 @@ def evals_nonzero_basis(allthx_vector, thx_covmat, thx_vector,
     and the choice must be specified using the "orthonormalisation"
     flag in the runcard. The choices are: gs, the Gram-Schmidt
     method; qr, QR decomposition; svd, singular value decomposition.
-    QR is the method which should be used as standard; the others 
+    QR is the method which should be used as standard; the others
     exist for testing purposes."""
 
     covmat = (thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0])))
@@ -557,13 +556,9 @@ def efficiency(theory_shift_test):
     covariance matrix encapsulates the NNLO-NLO shift."""
     f = theory_shift_test[3]
     fmiss = theory_shift_test[4]
-    fs = f - fmiss
     fmod = np.sqrt(np.sum(f**2))
     fmiss_mod = np.sqrt(np.sum(fmiss**2))
-    fs_mod = np.sqrt(np.sum(fs**2))
-    efficiency1 = 1 - fmiss_mod/fmod
-    efficiency2 = fs_mod/fmod
-    efficiency = (efficiency1, efficiency2)
+    efficiency = 1 - fmiss_mod/fmod
     print(f"efficiency = {efficiency}")
     return efficiency
 

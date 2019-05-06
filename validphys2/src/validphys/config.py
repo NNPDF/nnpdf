@@ -701,7 +701,7 @@ class CoreConfig(configparser.Config):
 
     @configparser.explicit_node
     def produce_nnfit_theory_covmat(self, use_thcovmat_in_sampling:bool, use_thcovmat_in_fitting:bool):
-        from validphys.theorycovariance import theory_covmat_custom
+        from validphys.theorycovariance.construction import theory_covmat_custom
         @functools.wraps(theory_covmat_custom)
         def res(*args, **kwargs):
             return theory_covmat_custom(*args, **kwargs)
