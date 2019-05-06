@@ -117,7 +117,7 @@ def theory_covmat_no_table(theoryids_experiments_central_values_no_table, experi
 
 @table
 @_check_correct_theory_combination
-def theory_covmat(theory_covmat_no_table):
+def theory_covmat(theory_covmat_no_table, fivetheories:(str, type(None)) = None):
     """Duplicate of theory_covmat_no_table but with a table decorator."""
     return theory_covmat_no_table
 
