@@ -104,6 +104,37 @@ def check_cuts_considered(use_cuts):
 
 
 @make_argcheck
+def check_dataset_cuts_match_theorycovmat(dataset, fitthcovmat):
+    if fitthcovmat:
+        ds_index = fitthcovmat.load().index.get_level_values(1)
+        ncovmat = (ds_index == dataset.name).sum()
+
+        cuts = dataset.cuts
+        if cuts:
+            ndata = len(dataset.cuts.load())
+        else:
+            ndata = dataset.commondata.ndata
+        check(ndata == ncovmat)
+
+
+@make_argcheck
+def check_experiment_cuts_match_theorycovmat(
+        experiment, fitthcovmat):
+    for dataset in experiment.datasets:
+        if fitthcovmat:
+            ds_index = fitthcovmat.load().index.get_level_values(1)
+            ncovmat = (ds_index == dataset.name).sum()
+
+            cuts = dataset.cuts
+            if cuts:
+                ndata = len(dataset.cuts.load())
+            else:
+                ndata = dataset.commondata.ndata
+            check(ndata == ncovmat)
+
+
+
+@make_argcheck
 def check_have_two_pdfs(pdfs):
     check(len(pdfs) == 2,'Expecting exactly two pdfs.')
 

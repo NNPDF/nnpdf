@@ -54,21 +54,19 @@ def plot_phi(experiments, experiments_phi):
 
     See `phi_data` for information on how phi is calculated
     """
-    phi = experiments_phi
+    phi = [exp_phi for (exp_phi, npoints) in experiments_phi]
     xticks = [experiment.name for experiment in experiments]
     fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=[r'$\phi$'])
     ax.set_title(r"$\phi$ for each experiment")
     return fig
 
 @figure
-def plot_phi_pdfs(experiments, pdfs, experiments_pdfs_phi):
-    """Like `plot_phi` but plots a set of bars for each PDF input"""
-    phi = experiments_pdfs_phi
-    phi_labels = [pdf.name for pdf in pdfs]
-    xticks = [experiment.name for experiment in experiments]
-    fig, ax = plotutils.barplot(phi, collabels=xticks, datalabels=phi_labels)
+def plot_fits_experiments_phi(fits_experiments_phi_table):
+    """Plots a set of bars for each fit, each bar represents the value of phi for the corresponding
+    experiment, where the experiment is a group of datasets according to the `experiment` key in
+    the PLOTTING info file"""
+    fig, ax = _plot_chis_df(fits_experiments_phi_table)
     ax.set_title(r"$\phi$ for each experiment")
-    ax.legend()
     return fig
 
 @figure
