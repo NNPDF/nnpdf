@@ -3159,6 +3159,24 @@ a string in Pandoc Markdown describing your object. Raw HTML is
 also allowed (although that decreases the compatibility, e.g. if we
 decide to output LaTeX instead of HTML in the future).
 
+Python static checks and code style
+-----------------------------------
+
+We use [Pylint](https://www.pylint.org/) to provide static checking (e.g.
+finding basic errors that a compiler would catch in compiled languages) such as
+uses of unknown variable names, as well as to provide basic guidelines on the
+structure of the code (e.g. avoid functions that are too complicated). Because
+Pylint is way too pendantic by default, we limit the checks to only those
+considered useful. The `.pylintrc` file at the top level configures Pylint to
+only mind those checks. Most Python IDEs and editors have some kind of support
+for pylint. It is strongly recommended to configure the editor to show the
+problematic pieces of code proactively.
+
+New code should use the [Black](https://black.readthedocs.io/en/stable/) tool to
+format the code. This tool should not be used to aggressively reformat existing
+files.
+
+
 Example pull request
 --------------------
 
