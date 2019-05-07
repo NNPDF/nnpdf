@@ -38,10 +38,10 @@ log = logging.getLogger(__name__)
 class Environment(Environment):
     """Container for information to be filled at run time"""
 
-    def __init__(self,*, datapath=None, resultspath=None, this_folder, net=True,
+    def __init__(self,*, datapath=None, resultspath=None, this_folder=None, net=True,
                  upload=False, **kwargs):
-
-        self.this_folder = pathlib.Path(this_folder)
+        if this_folder:
+            self.this_folder = pathlib.Path(this_folder)
 
         if net:
             loader_class = FallbackLoader

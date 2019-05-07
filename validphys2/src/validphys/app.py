@@ -15,7 +15,7 @@ import logging
 import contextlib
 
 
-from reportengine import app
+from reportengine import app, api
 
 from validphys.config import Config, Environment
 from validphys import uploadutils
@@ -23,28 +23,29 @@ from validphys import mplstyles
 
 
 providers = [
-             'validphys.results',
-             'validphys.pdfgrids',
-             'validphys.pdfplots',
-             'validphys.dataplots',
-             'validphys.fitdata',
-             'validphys.arclength',
-             'validphys.sumrules',
-             'validphys.reweighting',
-             'validphys.kinematics',
-             'validphys.correlations',
-             'validphys.chi2grids',
-             'validphys.eff_exponents',
-             'validphys.paramfits.dataops',
-             'validphys.paramfits.plots',
-             'validphys.theorycovariance',
-             'validphys.replica_selector',
-             'validphys.MCgen_checks',
-             'validphys.closure',
-             'reportengine.report'
-            ]
+    'validphys.results',
+    'validphys.pdfgrids',
+    'validphys.pdfplots',
+    'validphys.dataplots',
+    'validphys.fitdata',
+    'validphys.arclength',
+    'validphys.sumrules',
+    'validphys.reweighting',
+    'validphys.kinematics',
+    'validphys.correlations',
+    'validphys.chi2grids',
+    'validphys.eff_exponents',
+    'validphys.paramfits.dataops',
+    'validphys.paramfits.plots',
+    'validphys.theorycovariance',
+    'validphys.replica_selector',
+    'validphys.MCgen_checks',
+    'validphys.closure',
+    'reportengine.report']
 
 log = logging.getLogger(__name__)
+
+API = api.API(providers, Config, Environment)
 
 class App(app.App):
 
