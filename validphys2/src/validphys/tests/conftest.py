@@ -36,7 +36,9 @@ def data():
 
 def convolution_results_implement(data):
     pdf, exps = data
-    return [results.experiment_results(exp, pdf, pdf) for exp in exps]
+    #no theory covmat here
+    covs = [results.experiment_covariance_matrix(exp, False, pdf) for exp in exps]
+    return [results.experiment_results(exp, pdf, cov) for exp, cov in zip(exps, covs)]
 
 @pytest.fixture(scope='module')
 def convolution_results(data):
@@ -46,7 +48,8 @@ def convolution_results(data):
 def dataset_t0_convolution_results(data):
     pdf, exps = data
     ds = [x.datasets[0] for x in exps]
-    return [results.results(x, pdf, t0set=pdf) for x in ds]
+    covs = [results.covariance_matrix(x, False, pdf) for x in ds]
+    return [results.results(x, pdf, cov) for x, cov in zip(ds, covs)]
 
 @pytest.fixture(scope='module')
 def single_exp_data():
@@ -62,7 +65,8 @@ def single_exp_data():
 @pytest.fixture(scope='module')
 def dataset_convolution_results(single_exp_data):
     pdf, exp = single_exp_data
-    return [results.results(ds, pdf, pdf) for ds in exp.datasets]
+    covs = [results.covariance_matrix(ds, False, pdf) for ds in exp.datasets]
+    return [results.results(ds, pdf, cov) for ds, cov in zip(exp.datasets, covs)]
 
 @pytest.fixture(scope='module')
 def dataset_chi2data(dataset_convolution_results):

@@ -74,14 +74,14 @@ pdf_report:
 
 template: report.md
 
-experiments:
-    from_: fit
 
 positivity:
       from_: fit
 
 dataspecs:
-  - theoryid:
+  - experiments:
+      from_: fit
+    theoryid:
       from_: current
     pdf:
       from_: current
@@ -91,7 +91,9 @@ dataspecs:
       from_: current
 
 
-  - theoryid:
+  - experiments:
+      from_: fit
+    theoryid:
       from_: reference
     pdf:
       from_: reference

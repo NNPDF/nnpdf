@@ -30,16 +30,17 @@ from validphys.gridvalues import LUMI_CHANNELS
 from validphys.paramfits.config import ParamfitsConfig
 
 from validphys.theorycovariance.theorycovarianceutils import process_lookup
+from validphys.plotoptions import get_info
 
 log = logging.getLogger(__name__)
 
 class Environment(Environment):
     """Container for information to be filled at run time"""
 
-    def __init__(self,*, datapath=None, resultspath=None, this_folder, net=True,
+    def __init__(self,*, datapath=None, resultspath=None, this_folder=None, net=True,
                  upload=False, **kwargs):
-
-        self.this_folder = pathlib.Path(this_folder)
+        if this_folder:
+            self.this_folder = pathlib.Path(this_folder)
 
         if net:
             loader_class = FallbackLoader
@@ -710,21 +711,20 @@ class CoreConfig(configparser.Config):
         return res
 
     def produce_fitthcovmat(
-            self, use_thcovmat_if_present: bool = True, fit: (str, type(None)) = None):
+            self, use_thcovmat_if_present: bool = False, fit: (str, type(None)) = None):
         """If a `fit` is specified and `use_thcovmat_if_present` is `True` then returns the
         corresponding covariance matrix for the given fit if it exists. If the fit doesn't have a
-        theory covariance matrix then returns `False`. If no fit is specified then returns the user
-        must manually set `use_thcovmat_if_present` to be False, or provide an appropriate fit.
+        theory covariance matrix then returns `False`.
         """
         if not isinstance(use_thcovmat_if_present, bool):
-            raise ConfigError("use_thcovmat_if_present should be a boolean, by default it is True")
+            raise ConfigError("use_thcovmat_if_present should be a boolean, by default it is False")
 
         if use_thcovmat_if_present and not fit:
             raise ConfigError("`use_thcovmat_if_present` was true but no `fit` was specified.")
 
         if use_thcovmat_if_present and fit:
             try:
-                use_thcovmat_if_present = fit.as_input()[
+                thcovmat_present = fit.as_input()[
                     'theorycovmatconfig']['use_thcovmat_in_fitting']
             except KeyError:
                 #assume covmat wasn't used and fill in key accordingly but warn user
@@ -732,17 +732,21 @@ class CoreConfig(configparser.Config):
                             "`use_thcovmat_in_fitting` didn't exist in the runcard for "
                             f"{fit.name}. Theory covariance matrix will not be used "
                             "in any statistical estimators.")
-                use_thcovmat_if_present = False
-            #Now set as expected path and check it exists
-            if use_thcovmat_if_present:
-                use_thcovmat_if_present = (
-                    fit.path/'tables'/'datacuts_theory_theorycovmatconfig_theory_covmat.csv')
-                if not os.path.exists(use_thcovmat_if_present):
-                    raise ConfigError(
-                        "Fit appeared to use theory covmat in fit but the file was not at the "
-                        f"usual location: {use_thcovmat_if_present}.")
-                use_thcovmat_if_present = ThCovMatSpec(use_thcovmat_if_present)
-        return use_thcovmat_if_present
+                thcovmat_present = False
+
+
+        if use_thcovmat_if_present and thcovmat_present:
+            # Expected path of covmat hardcoded
+            covmat_path = (
+                fit.path/'tables'/'datacuts_theory_theorycovmatconfig_theory_covmat.csv')
+            if not os.path.exists(covmat_path):
+                raise ConfigError(
+                    "Fit appeared to use theory covmat in fit but the file was not at the "
+                    f"usual location: {covmat_path}.")
+            fit_theory_covmat = ThCovMatSpec(covmat_path)
+        else:
+            fit_theory_covmat = None
+        return fit_theory_covmat
 
     def parse_speclabel(self, label:(str, type(None))):
         """A label for a dataspec. To be used in some plots"""
@@ -759,6 +763,48 @@ class CoreConfig(configparser.Config):
         {@endwith@}
         """
         return label
+
+    def produce_fit_data_groupby_experiment(self, fit):
+        """Used to produce data from the fit grouped into experiments,
+        where each experiment is a group of datasets according to the experiment
+        key in the plotting info file.
+        """
+        #TODO: consider this an implimentation detail
+        from reportengine.namespaces import NSList
+
+        with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
+            _, experiments = self.parse_from_('fit', 'experiments', write=False)
+
+        flat = (ds for exp in experiments for ds in exp.datasets)
+        metaexps = [get_info(ds).experiment for ds in flat]
+        res = {}
+        for exp in experiments:
+            for dsinput, ds in zip(exp.dsinputs, exp.datasets):
+                metaexp = get_info(ds).experiment
+                if metaexp in res:
+                    res[metaexp].append(ds)
+                else:
+                    res[metaexp] = [ds]
+        exps = []
+        for exp in res:
+            exps.append(ExperimentSpec(exp, res[exp]))
+
+        experiments = NSList(exps, nskey='experiment')
+        return {'experiments': experiments}
+
+    def produce_fit_context_groupby_experiment(self, fit):
+        """produces experiments similarly to `fit_data_groupby_experiment`
+        but also sets fitcontext (pdf and theoryid)
+        """
+        _, pdf         = self.parse_from_('fit', 'pdf', write=False)
+        _, theory      = self.parse_from_('fit', 'theory', write=False)
+        thid = theory['theoryid']
+        with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
+            experiments = self.produce_fit_data_groupby_experiment(
+                fit)['experiments']
+        return {'pdf': pdf, 'theoryid':thid, 'experiments': experiments}
+
+
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):
     """The effective configuration parser class."""

@@ -4,6 +4,10 @@ Fit summary
 ------------------
 {@ summarise_fits @}
 
+Theory Covariance Summary
+-------------------------
+{@summarise_theory_covmat_fits@}
+
 Dataset properties
 ------------------
 {@current datasets_properties_table@}
@@ -44,10 +48,7 @@ $\chi^2$ by dataset comparisons
 
 $\phi$ by experiment
 --------------------
-{@with dataspecs@}
-### {@fit@}
-{@plot_phi@}
-{@endwith@}
+{@plot_fits_experiments_phi@}
 
 Experiment plots
 ---------------
