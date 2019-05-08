@@ -550,9 +550,10 @@ def efficiency(theory_shift_test):
     covariance matrix encapsulates the NNLO-NLO shift."""
     f = theory_shift_test[3]
     fmiss = theory_shift_test[4]
+    fs = f - fmiss
     fmod = np.sqrt(np.sum(f**2))
-    fmiss_mod = np.sqrt(np.sum(fmiss**2))
-    efficiency = 1 - fmiss_mod/fmod
+    fs_mod = np.sqrt(np.sum(fs**2))
+    efficiency = fs_mod/fmod
     print(f"efficiency = {efficiency}")
     return efficiency
 
@@ -565,6 +566,18 @@ def validation_theory_chi2(theory_shift_test):
     th_chi2 = 1/len(evals)*np.sum(ratio**2)
     print(f"Theory chi2 = {th_chi2}")
     return th_chi2
+
+def costheta(theory_shift_test):
+    """Returns the cosine of the angle between the NNLO-NLO
+    shift vector and the component of this which is captured
+    by the theory covariance matrix"""
+    f = theory_shift_test[3]
+    fmiss = theory_shift_test[4]
+    fs = f - fmiss
+    fmod = np.sqrt(np.sum(f**2))
+    fs_mod = np.sqrt(np.sum(fs**2))
+    costheta = f@fs/(fmod*fs_mod)
+    return costheta
 
 @figure
 def projector_eigenvalue_ratio(theory_shift_test):
