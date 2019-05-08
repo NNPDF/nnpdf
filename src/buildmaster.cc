@@ -159,6 +159,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSZDIFF12Filter());
   target.push_back(new CMS1JET276TEVFilter());
   target.push_back(new CMSWMU8TEVFilter());
+  target.push_back(new CMS_1JET_8TEVFilter());
 
  // ************************* CMSwc ******************************
 

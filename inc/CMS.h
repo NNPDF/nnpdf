@@ -52,3 +52,11 @@ private:
   void ReadData();
 };
 
+class CMS_1JET_8TEVFilter: public CommonData
+{ public: CMS_1JET_8TEVFilter():
+  CommonData("CMS_1JET_8TEV") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
