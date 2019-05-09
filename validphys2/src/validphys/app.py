@@ -23,25 +23,28 @@ from validphys import mplstyles
 
 
 providers = [
-    'validphys.results',
-    'validphys.pdfgrids',
-    'validphys.pdfplots',
-    'validphys.dataplots',
-    'validphys.fitdata',
-    'validphys.arclength',
-    'validphys.sumrules',
-    'validphys.reweighting',
-    'validphys.kinematics',
-    'validphys.correlations',
-    'validphys.chi2grids',
-    'validphys.eff_exponents',
-    'validphys.paramfits.dataops',
-    'validphys.paramfits.plots',
-    'validphys.theorycovariance',
-    'validphys.replica_selector',
-    'validphys.MCgen_checks',
-    'validphys.closure',
-    'reportengine.report']
+             'validphys.results',
+             'validphys.pdfgrids',
+             'validphys.pdfplots',
+             'validphys.dataplots',
+             'validphys.fitdata',
+             'validphys.arclength',
+             'validphys.sumrules',
+             'validphys.reweighting',
+             'validphys.kinematics',
+             'validphys.correlations',
+             'validphys.chi2grids',
+             'validphys.eff_exponents',
+             'validphys.paramfits.dataops',
+             'validphys.paramfits.plots',
+             'validphys.theorycovariance.construction',
+             'validphys.theorycovariance.output',
+             'validphys.theorycovariance.tests',
+             'validphys.replica_selector',
+             'validphys.MCgen_checks',
+             'validphys.closure',
+             'reportengine.report'
+            ]
 
 log = logging.getLogger(__name__)
 
