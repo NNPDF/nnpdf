@@ -579,6 +579,10 @@ def costheta(theory_shift_test):
     costheta = f@fs/(fmod*fs_mod)
     return costheta
 
+def theta(costheta):
+    th = np.arccos(costheta)
+    return th
+
 @figure
 def projector_eigenvalue_ratio(theory_shift_test):
     """Produces a plot of the ratio between the projectors and the square roots
@@ -609,7 +613,7 @@ def projector_eigenvalue_ratio(theory_shift_test):
     labels = [item.get_text() for item in ax1.get_xticklabels()]
     ax1.set_xticklabels(labels)
     ax2.set_xticklabels(labels)
-    ax2.axhline(y=3, color='k', label=r'|$\delta_a$/$s_a$| = 3')
+    ax2.axhline(y=1, color='k', label=r'|$\delta_a$/$s_a$| = 1')
     ax2.legend()
     ax2.set_ylabel(r"|$\delta_a$/$s_a$|")
     print(f"Subspace dimension = {len(evals)}")
