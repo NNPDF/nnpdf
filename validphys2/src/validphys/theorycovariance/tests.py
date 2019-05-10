@@ -567,8 +567,8 @@ def validation_theory_chi2(theory_shift_test):
     print(f"Theory chi2 = {th_chi2}")
     return th_chi2
 
-def costheta(theory_shift_test):
-    """Returns the cosine of the angle between the NNLO-NLO
+def theta(costheta):
+    """Returns the angle between the NNLO-NLO
     shift vector and the component of this which is captured
     by the theory covariance matrix"""
     f = theory_shift_test[3]
@@ -577,9 +577,6 @@ def costheta(theory_shift_test):
     fmod = np.sqrt(np.sum(f**2))
     fs_mod = np.sqrt(np.sum(fs**2))
     costheta = f@fs/(fmod*fs_mod)
-    return costheta
-
-def theta(costheta):
     th = np.arccos(costheta)
     return th
 
