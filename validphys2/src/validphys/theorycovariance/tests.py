@@ -567,8 +567,8 @@ def validation_theory_chi2(theory_shift_test):
     print(f"Theory chi2 = {th_chi2}")
     return th_chi2
 
-def costheta(theory_shift_test):
-    """Returns the cosine of the angle between the NNLO-NLO
+def theta(costheta):
+    """Returns the angle between the NNLO-NLO
     shift vector and the component of this which is captured
     by the theory covariance matrix"""
     f = theory_shift_test[3]
@@ -577,7 +577,8 @@ def costheta(theory_shift_test):
     fmod = np.sqrt(np.sum(f**2))
     fs_mod = np.sqrt(np.sum(fs**2))
     costheta = f@fs/(fmod*fs_mod)
-    return costheta
+    th = np.arccos(costheta)
+    return th
 
 @figure
 def projector_eigenvalue_ratio(theory_shift_test):
@@ -609,7 +610,7 @@ def projector_eigenvalue_ratio(theory_shift_test):
     labels = [item.get_text() for item in ax1.get_xticklabels()]
     ax1.set_xticklabels(labels)
     ax2.set_xticklabels(labels)
-    ax2.axhline(y=3, color='k', label=r'|$\delta_a$/$s_a$| = 3')
+    ax2.axhline(y=1, color='k', label=r'|$\delta_a$/$s_a$| = 1')
     ax2.legend()
     ax2.set_ylabel(r"|$\delta_a$/$s_a$|")
     print(f"Subspace dimension = {len(evals)}")
