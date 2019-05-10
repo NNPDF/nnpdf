@@ -10,3 +10,5 @@ data_reference: Arneodo:1996qe
 #y_scale: log
 figure_by:
   - k1
+
+experiment: "NMC"

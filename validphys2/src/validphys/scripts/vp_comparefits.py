@@ -11,6 +11,7 @@ from reportengine.colors import t
 
 from validphys.app import App
 from validphys import comparefittemplates, compareclosuretemplates
+from validphys.promptutils import confirm
 
 log = logging.getLogger(__name__)
 
@@ -66,11 +67,31 @@ class CompareFitApp(App):
             '--closure',
             help="Use the closure comparison template.",
             action='store_true')
+#        parser.add_argument(
+#            '--use_thcovmat_if_present',
+#            help="Use theory cov mat for calculating statistical estimators.",
+#            action='store_true')
+        parser.add_argument(
+            '--thcovmat_if_present',
+            dest='thcovmat_if_present',
+            action='store_true',
+            help="Use theory cov mat for calculating statistical estimators if available.")
+        parser.add_argument(
+            '--no-thcovmat_if_present',
+            dest='thcovmat_if_present',
+            action='store_false',
+            help="Do not use theory cov mat for calculating statistical estimators.")
+        parser.set_defaults(thcovmat_if_present=None)
 
     def try_complete_args(self):
         args = self.args
-        argnames = ('base_fit', 'reference_fit', 'title', 'author', 'keywords')
-        bad = [argname for argname in argnames if not args[argname]]
+        argnames = (
+            'base_fit', 'reference_fit', 'title', 'author', 'keywords')
+        boolnames = (
+            'thcovmat_if_present',)
+        badargs = [argname for argname in argnames if not args[argname]]
+        badbools = [bname for bname in boolnames if args[bname] is None]
+        bad = badargs + badbools
         if bad and not args['interactive']:
             sys.exit(f"The following arguments are required: {bad}")
         try:
@@ -80,7 +101,7 @@ class CompareFitApp(App):
             raise KeyboardInterrupt()
         texts = '\n'.join(
             f'    {argname.replace("_", " ").capitalize()}: {args[argname]}'
-            for argname in argnames)
+            for argname in [*argnames, *boolnames])
         log.info(f"Starting NNPDF fit comparison:\n{texts}")
 
     def interactive_base_fit(self):
@@ -121,6 +142,13 @@ class CompareFitApp(App):
             completer=WordCompleter(words=KeywordsWithCache()),
             complete_in_thread=True)
         return [k.strip() for k in kwinp.split(',') if k]
+
+    def interactive_thcovmat_if_present(self):
+        """Interactively fill in the `use_thcovmat_if_present` runcard flag. Which is True by default
+        """
+        message = ("Do you want to use the theory covariance matrix, if available,\n"
+                   "to calculate the statistical estimators? ")
+        return confirm(message, default=True)
 
     def get_commandline_arguments(self, cmdline=None):
         args = super().get_commandline_arguments(cmdline)
@@ -167,6 +195,7 @@ class CompareFitApp(App):
             },
             'speclabel': 'Reference Fit'
         }
+        autosettings['use_thcovmat_if_present'] = args['thcovmat_if_present']
         return autosettings
 
 

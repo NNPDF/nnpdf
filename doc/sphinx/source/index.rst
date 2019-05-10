@@ -12,6 +12,7 @@ Welcome to NNPDF's documentation!
 
    usage/installation
    usage/runafit
+   usage/api
 
 Indices and tables
 ==================

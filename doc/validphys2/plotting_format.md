@@ -1,8 +1,10 @@
 %NNPDF plottng format
 %Zahari Kassabov
 
-A "plotting file" determines how the predictions for given dataset
-should be represented on a plot. The plotting files should be
+A *plotting file* defines a set of options that are used for analysis
+and representation purposes, particularly to determine how datasets
+should be represented in plots and how  should they be grouped
+together according to various criteria. The plotting files should be
 considered part of the implementation of the dataset, and should be
 read by various tools that want to sensibly represent the data.
 
@@ -276,11 +278,28 @@ unique value of the key `Boson` (which is defined explicitly as an
 `extra_label`), but only one plots with the three bosons split across
 different lines will be produced in absolute value plots.
 
+## Metadata keys
+
+Plotting files are also used to define metada related to the various
+datasets. These keys include:
+
+  - `experiment` (string): The experiment which produced the experimental data.
+  - `process_description` (string): A description of the physical process
+  associated to the dataset. This would typically be defined in the
+  `PLOTTINTYPE` files.
+  - `data_reference` (string): a LaTex key corresponding to the
+  reference of the experimental paper.
+  - `theory_reference` (string): a LaTeX key corresponding to the
+  codes used to compute the theory predictions.
+
 # Example
 
 A complete example (all keys are optional) looks like this:
 
 ```yaml
+
+dataset_label: "Some hypothetical dataset"
+experiment: ATLAS
 x: k3
 x_scale: log
 kinematics_override: dummy_transform #defined in transforms.py

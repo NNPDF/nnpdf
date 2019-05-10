@@ -34,16 +34,22 @@ def data():
     pdf = l.check_pdf("NNPDF31_nnlo_as_0118")
     return pdf, exps
 
+def convolution_results_implement(data):
+    pdf, exps = data
+    #no theory covmat here
+    covs = [results.experiment_covariance_matrix(exp, False, pdf) for exp in exps]
+    return [results.experiment_results(exp, pdf, cov) for exp, cov in zip(exps, covs)]
+
 @pytest.fixture(scope='module')
 def convolution_results(data):
-    pdf, exps = data
-    return [results.experiment_results(exp, pdf, pdf) for exp in exps]
+    return convolution_results_implement(data)
 
 @pytest.fixture
 def dataset_t0_convolution_results(data):
     pdf, exps = data
     ds = [x.datasets[0] for x in exps]
-    return [results.results(x, pdf, t0set=pdf) for x in ds]
+    covs = [results.covariance_matrix(x, False, pdf) for x in ds]
+    return [results.results(x, pdf, cov) for x, cov in zip(ds, covs)]
 
 @pytest.fixture(scope='module')
 def single_exp_data():
@@ -59,15 +65,19 @@ def single_exp_data():
 @pytest.fixture(scope='module')
 def dataset_convolution_results(single_exp_data):
     pdf, exp = single_exp_data
-    return [results.results(ds, pdf, pdf) for ds in exp.datasets]
+    covs = [results.covariance_matrix(ds, False, pdf) for ds in exp.datasets]
+    return [results.results(ds, pdf, cov) for ds, cov in zip(exp.datasets, covs)]
 
 @pytest.fixture(scope='module')
 def dataset_chi2data(dataset_convolution_results):
     return [results.abs_chi2_data(r) for r in dataset_convolution_results]
 
+def chi2data_implement(convolution_results):
+    return [results.abs_chi2_data_experiment(r) for r in convolution_results]
+
 @pytest.fixture(scope='module')
 def chi2data(convolution_results):
-    return [results.abs_chi2_data_experiment(r) for r in convolution_results]
+    return chi2data_implement(convolution_results)
 
 @pytest.fixture(scope='module')
 def weighted_data():
@@ -82,8 +92,8 @@ def weighted_data():
 
 @pytest.fixture(scope='module')
 def convolution_results_with_weights(weighted_data):
-    return convolution_results(weighted_data)
+    return convolution_results_implement(weighted_data)
 
 @pytest.fixture(scope='module')
 def weighted_chi2data(convolution_results_with_weights):
-    return chi2data(convolution_results_with_weights)
+    return chi2data_implement(convolution_results_with_weights)

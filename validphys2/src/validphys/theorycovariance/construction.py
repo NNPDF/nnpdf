@@ -12,66 +12,25 @@ import numpy as np
 import scipy.linalg as la
 import pandas as pd
 
-from reportengine.checks import make_argcheck, check
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.results import experiments_central_values, results
-from validphys.results import Chi2Data
+from validphys.results import experiments_central_values, experiments_central_values_no_table
+from validphys.results import Chi2Data, results
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
+from validphys.theorycovariance.theorycovarianceutils import process_lookup, check_correct_theory_combination
+
 
 log = logging.getLogger(__name__)
 
 theoryids_experiments_central_values = collect(experiments_central_values,
                                                ('theoryids',))
 
-def _check_correct_theory_combination_internal(theoryids,
-                                               fivetheories:(str, type(None)) = None):
-    """Checks that a valid theory combination corresponding to an existing
-    prescription has been inputted"""
-    l = len(theoryids)
-    check(l in {3, 5, 7, 9},
-          "Expecting exactly 3, 5, 7 or 9 theories, but got {l}.")
-    opts = {'bar', 'nobar', 'linear'}
-    xifs = [theoryid.get_description()['XIF'] for theoryid in theoryids]
-    xirs = [theoryid.get_description()['XIR'] for theoryid in theoryids]
-    if l == 3:
-        correct_xifs = [1.0, 2.0, 0.5]
-        correct_xirs = [1.0, 2.0, 0.5]
-    elif l == 5:
-        check(
-            fivetheories is not None,
-            "For five input theories a prescription bar, nobar or linear "
-            "for the flag fivetheories must be specified.")
-        check(fivetheories in opts,
-              "Invalid choice of prescription for 5 points", fivetheories,
-              opts)
-        if fivetheories in ("nobar", "linear"):
-            correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0]
-            correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5]
-        elif fivetheories == "bar":
-            correct_xifs = [1.0, 2.0, 0.5, 2.0, 0.5]
-            correct_xirs = [1.0, 2.0, 0.5, 0.5, 2.0]
-    elif l == 7:
-        correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5]
-        correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
-    else:
-        correct_xifs = [1.0, 2.0, 0.5, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5]
-        correct_xirs = [1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 0.5, 0.5, 2.0]
-    check(
-        xifs == correct_xifs and xirs == correct_xirs,
-        "Choice of input theories does not correspond to a valid "
-        "prescription for theory covariance matrix calculation")
+theoryids_experiments_central_values_no_table = collect(experiments_central_values_no_table,
+                                               ('theoryids',))
 
 collected_theoryids = collect('theoryids',
                               ['theoryconfig',])
-
-_check_correct_theory_combination = make_argcheck(_check_correct_theory_combination_internal)
-
-@make_argcheck
-def _check_correct_theory_combination_theoryconfig(collected_theoryids,
-                                                   fivetheories:(str, type(None)) = None):
-    _check_correct_theory_combination_internal(collected_theoryids[0], fivetheories)
 
 def dataset_index_byprocess(experiments_index):
     """Return a multiindex with index
@@ -80,7 +39,7 @@ def dataset_index_byprocess(experiments_index):
     ids = experiments_index.get_level_values("id")
     for dsname in experiments_index.get_level_values("dataset"):
         dsnames.append(dsname)
-    processnames = [_process_lookup(dsname) for dsname in dsnames]
+    processnames = [process_lookup(dsname) for dsname in dsnames]
     experiments_index.droplevel(level="experiment")
     newindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
                                          names = ("process", "dataset", "id"))
@@ -103,21 +62,28 @@ def make_scale_var_covmat(predictions):
     s = norm*sum(np.outer(d, d) for d in deltas)
     return s
 
-@table
-@_check_correct_theory_combination
-def theory_covmat(theoryids_experiments_central_values, experiments_index, theoryids,
-                  fivetheories:(str, type(None)) = None):
+@check_correct_theory_combination
+def theory_covmat_no_table(theoryids_experiments_central_values_no_table,
+                           experiments_index, theoryids,
+                           fivetheories:(str, type(None)) = None):
+
     """Calculates the theory covariance matrix for scale variations.
     The matrix is a dataframe indexed by experiments_index."""
-    s = make_scale_var_covmat(theoryids_experiments_central_values)
+    s = make_scale_var_covmat(theoryids_experiments_central_values_no_table)
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
     return df
+
+@table
+@check_correct_theory_combination
+def theory_covmat(theory_covmat_no_table, fivetheories:(str, type(None)) = None):
+    """Duplicate of theory_covmat_no_table but with a table decorator."""
+    return theory_covmat_no_table
 
 results_bytheoryids = collect(results,('theoryids',))
 each_dataset_results_bytheory = collect('results_bytheoryids',
                                         ('experiments', 'experiment'))
 
-@_check_correct_theory_combination
+@check_correct_theory_combination
 def theory_covmat_datasets(each_dataset_results_bytheory,
                            fivetheories:(str, type(None)) = None):
     """Produces an array of theory covariance matrices. Each matrix corresponds
@@ -129,7 +95,7 @@ def theory_covmat_datasets(each_dataset_results_bytheory,
         dataset_covmats.append(s)
     return dataset_covmats
 
-@_check_correct_theory_combination
+@check_correct_theory_combination
 def total_covmat_datasets(each_dataset_results_bytheory,
                           fivetheories:(str, type(None)) = None):
     """Produces an array of total covariance matrices; the sum of experimental
@@ -145,7 +111,7 @@ def total_covmat_datasets(each_dataset_results_bytheory,
         dataset_covmats.append(cov)
     return dataset_covmats
 
-@_check_correct_theory_combination
+@check_correct_theory_combination
 def total_covmat_diagtheory_datasets(each_dataset_results_bytheory,
                                      fivetheories:(str, type(None)) = None):
     """Same as total_covmat_theory_datasets but for diagonal theory only"""
@@ -172,7 +138,7 @@ def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
 
 experiments_results_theory = collect('experiments_results', ('theoryids',))
 
-@_check_correct_theory_combination
+@check_correct_theory_combination
 def total_covmat_experiments(experiments_results_theory,
                              fivetheories:(str, type(None)) = None):
     """Same as total_covmat_datasets but per experiment rather than
@@ -187,65 +153,6 @@ def total_covmat_experiments(experiments_results_theory,
     return exp_result_covmats
 
 commondata_experiments = collect('commondata', ['experiments', 'experiment'])
-
-def _process_lookup(name):
-    """Produces a dictionary with keys corresponding to dataset names
-    and values corresponding to process types. Process types are
-    regrouped into the five categories 'Drell-Yan', 'Top', Jets',
-    'DIS NC' and 'DIS CC'."""
-    process_dictionary = {	"ATLASZPT8TEVMDIST": 			"DY",
-				"ATLASZPT8TEVYDIST":			"DY",
-				"CMSZDIFF12":				"DY",
-				"ATLAS1JET11":				"JETS",
-				"CMSJETS11":				"JETS",
-				"CDFR2KT":				"JETS",
-				"CMSTOPDIFF8TEVTTRAPNORM":		"TOP",
-				"ATLASTOPDIFF8TEVTRAPNORM":		"TOP",
-				"ATLASTTBARTOT":			"TOP",
-				"CMSTTBARTOT":				"TOP",
-				"DYE605":				"DY",
-				"DYE886P":				"DY",
-				"DYE886R":				"DY",
-				"ATLASWZRAP36PB":			"DY",
-				"ATLASZHIGHMASS49FB":			"DY",
-				"ATLASLOMASSDY11EXT":			"DY",
-				"ATLASWZRAP11":				"DY",
-				"CMSWEASY840PB":			"DY",
-				"CMSWMASY47FB":				"DY",
-				"CMSDY2D11":				"DY",
-				"CMSWMU8TEV":				"DY",
-				"CMSWCHARMRAT":				"DY",
-                		"CMSWCHARMTOT":				"DY",
-				"LHCBZ940PB":				"DY",
-				"LHCBZEE2FB":				"DY",
-				"LHCBWZMU7TEV":				"DY",
-				"LHCBWZMU8TEV":				"DY",
-				"D0WEASY":				"DY",
-				"D0WMASY":				"DY",
-				"D0ZRAP":				"DY",
-				"CDFZRAP":				"DY",
-				"H1HERAF2B":				"DIS NC",
-				"HERACOMBCCEM":				"DIS CC",
-				"HERACOMBCCEP":				"DIS CC",
-				"HERACOMBNCEM":				"DIS NC",
-				"HERACOMBNCEP460":			"DIS NC",
-				"HERACOMBNCEP575":			"DIS NC",
-				"HERACOMBNCEP820":	 		"DIS NC",
-				"HERACOMBNCEP920":			"DIS NC",
-				"HERAF2CHARM":				"DIS NC",
-				"ZEUSHERAF2B":				"DIS NC",
-				"NMCPD":				"DIS NC",
-				"NMC":					"DIS NC",
-				"SLACP":				"DIS NC",
-				"SLACD":				"DIS NC",
-				"BCDMSP":				"DIS NC",
-				"BCDMSD":				"DIS NC",
-				"CHORUSNU":				"DIS CC",
-				"CHORUSNB":				"DIS CC",
-				"NTVNUDMN":				"DIS CC",
-				"NTVNBDMN":				"DIS CC"	}
-    proc = process_dictionary[name]
-    return proc
 
 def dataset_names(commondata_experiments):
     """Returns a list of the names of the datasets, in the same order as
@@ -270,7 +177,7 @@ def combine_by_type(each_dataset_results_bytheory, dataset_names):
     for dataset, name in zip(each_dataset_results_bytheory, dataset_names):
         theory_centrals = [x[1].central_value for x in dataset]
         dataset_size[name] = len(theory_centrals[0])
-        proc_type = _process_lookup(name)
+        proc_type = process_lookup(name)
         ordered_names[proc_type].append(name)
         theories_by_process[proc_type].append(theory_centrals)
     for key, item in theories_by_process.items():
@@ -409,7 +316,7 @@ def covmat_9pt(name1, name2, deltas1, deltas2):
                                     (deltas2[2]+deltas2[3])))
     return s
 
-@_check_correct_theory_combination
+@check_correct_theory_combination
 def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
                      fivetheories:(str, type(None)) = None,
                      seventheories:(str, type(None)) = None):
@@ -456,6 +363,7 @@ def covs_pt_prescrip(combine_by_type, process_starting_points, theoryids,
             covmats[start_locs] = s
     return covmats
 
+@table
 def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     """Takes the individual sub-covmats between each two processes and assembles
     them into a full covmat. Then reshuffles the order from ordering by process
@@ -475,7 +383,7 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
                       columns=experiments_index)
     return df
 
-@_check_correct_theory_combination
+@check_correct_theory_combination
 def total_covmat_diagtheory_experiments(experiments_results_theory,
                                         fivetheories:(str, type(None)) = None):
     """Same as total_covmat_datasets but per experiment rather than
@@ -543,10 +451,10 @@ def theory_normcovmat_custom(theory_covmat_custom, experiments_data):
     return mat
 
 @table
-def experimentsplustheory_covmat(experiments_covmat, theory_covmat):
+def experimentsplustheory_covmat(experiments_covmat_no_table, theory_covmat_no_table):
     """Calculates the experiment + theory covariance matrix for
     scale variations."""
-    df = experiments_covmat + theory_covmat
+    df = experiments_covmat_no_table + theory_covmat_no_table
     return df
 
 @table

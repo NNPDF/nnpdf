@@ -9,3 +9,5 @@ data_reference: Whitlow:1991uw
 y_scale: symlog
 line_by:
   - k1
+
+experiment: "SLAC"

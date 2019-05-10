@@ -5,3 +5,5 @@ figure_by:
   - k1
 
 kinematics_override: jet_sqrt_scale
+
+experiment: "ATLAS"
