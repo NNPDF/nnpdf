@@ -683,11 +683,9 @@ class CoreConfig(configparser.Config):
     def produce_all_lumi_channels(self):
         return {'lumi_channels': self.parse_lumi_channels(list(LUMI_CHANNELS))}
 
-    
     @configparser.explicit_node
     def produce_nnfit_theory_covmat(self, use_thcovmat_in_sampling:bool, use_thcovmat_in_fitting:bool,
                                     thcovmat_type:str):
-
         if thcovmat_type not in ('full','blockdiagonal', 'diagonal'):
          raise ConfigError("thcovmat_type has to be one in 'full', 'blockdiagonal','diagonal'")
 
