@@ -28,6 +28,8 @@ from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFound
 from validphys.gridvalues import LUMI_CHANNELS
 
 from validphys.paramfits.config import ParamfitsConfig
+from validphys import theorycovariance
+
 
 log = logging.getLogger(__name__)
 
@@ -687,19 +689,16 @@ class CoreConfig(configparser.Config):
     def produce_nnfit_theory_covmat(self, use_thcovmat_in_sampling:bool, use_thcovmat_in_fitting:bool,
                                     thcovmat_type:str='full'):
         valid_type = {'full','blockdiagonal','diagonal'}
-        if thcovmat_type not in (valid_type):
-         raise ConfigError(ConfigError(f"Invalid thcovmat_type setting: '{valid_type}'.",
-                              thcovmat_type, valid_type))
+        if thcovmat_type not in valid_type:
+         raise ConfigError(f"Invalid thcovmat_type setting: '{valid_type}'.",
+                              thcovmat_type, valid_type)
 
         if thcovmat_type == 'full': 
-          from validphys.theorycovariance import theory_covmat_custom
-          f = theory_covmat_custom
+          f = theorycovariance.theory_covmat_custom
         if thcovmat_type == 'diagonal': 
-          from validphys.theorycovariance import theory_diagonal_covmat
-          f = theory_diagonal_covmat
+          f = theorycovariance.theory_diagonal_covmat
         if thcovmat_type == 'blockdiagonal': 
-          from validphys.theorycovariance import theory_block_diag_covmat 
-          f = theory_block_diag_covmat
+          f = theorycovariance.theory_block_diag_covmat
           
         @functools.wraps(f)
         def res(*args, **kwargs):
