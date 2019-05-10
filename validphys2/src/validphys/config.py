@@ -685,28 +685,26 @@ class CoreConfig(configparser.Config):
 
     @configparser.explicit_node
     def produce_nnfit_theory_covmat(self, use_thcovmat_in_sampling:bool, use_thcovmat_in_fitting:bool,
-                                    thcovmat_type:str):
-        if thcovmat_type not in ('full','blockdiagonal', 'diagonal'):
-         raise ConfigError("thcovmat_type has to be one in 'full', 'blockdiagonal','diagonal'")
+                                    thcovmat_type:str='full'):
+        valid_type = {'full','blockdiagonal','diagonal'}
+        if thcovmat_type not in (valid_type):
+         raise ConfigError(ConfigError(f"Invalid thcovmat_type setting: '{valid_type}'.",
+                              thcovmat_type, valid_type))
 
-        if thcovmat_type == 'full':
-         from validphys.theorycovariance import theory_covmat_custom
-         @functools.wraps(theory_covmat_custom)
-         def res(*args, **kwargs):
-             return theory_covmat_custom(*args, **kwargs)
-
-        if thcovmat_type == 'blockdiagonal':
-         from validphys.theorycovariance import theory_block_diag_covmat
-         @functools.wraps(theory_block_diag_covmat)
-         def res(*args, **kwargs):
-             return theory_block_diag_covmat(*args, **kwargs)
-
-        if thcovmat_type == 'diagonal':
-         from validphys.theorycovariance import theory_diagonal_covmat
-         @functools.wraps(theory_diagonal_covmat)
-         def res(*args, **kwargs):
-             return theory_diagonal_covmat(*args, **kwargs)
+        if thcovmat_type == 'full': 
+          from validphys.theorycovariance import theory_covmat_custom
+          f = theory_covmat_custom
+        if thcovmat_type == 'diagonal': 
+          from validphys.theorycovariance import theory_diagonal_covmat
+          f = theory_diagonal_covmat
+        if thcovmat_type == 'blockdiagonal': 
+          from validphys.theorycovariance import theory_block_diag_covmat 
+          f = theory_block_diag_covmat
           
+        @functools.wraps(f)
+        def res(*args, **kwargs):
+           return f(*args, **kwargs)
+
         #Set this to get the same filename regardless of the action.
         res.__name__ = 'theory_covmat'
         return res
