@@ -1,6 +1,6 @@
 dataset_label: "CMS $t\\bar{t}$ rapidity $p^T_t$"
 x: k1
-y_label: '$d\sigma_{t\bar{t}}/dp^T_t$ (fb/GeV)'
+y_label: '$(1/\sigma_{t\bar{t}})d\sigma_{t\bar{t}}/dp^T_t$ (1/GeV)'
 figure_by:
   - k2 
 
