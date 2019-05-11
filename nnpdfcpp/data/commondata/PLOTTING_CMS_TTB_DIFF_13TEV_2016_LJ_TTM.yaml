@@ -1,7 +1,7 @@
-dataset_label: "CMS $t\\bar{t}$ rapidity $m_{t\\bar{t}}$"
+dataset_label: "CMS $t\\bar{t}$ absolute $m_{t\\bar{t}}$"
 x: k1
 y_label: '$d\sigma_{t\bar{t}}/dm_{t\bar{t}}$ (fb/GeV)'
 figure_by:
-  - k2 
+  - k3 
 
 experiment: "CMS"
