@@ -120,7 +120,7 @@ def replica_data(fit, replica_paths):
 
 
 @table
-def fit_summary(fit, replica_data, total_experiments_chi2data):
+def fit_summary(fit_name_with_covmat_label, replica_data, total_experiments_chi2data):
     """ Summary table of fit properties
         - Central chi-squared
         - Average chi-squared
@@ -146,7 +146,7 @@ def fit_summary(fit, replica_data, total_experiments_chi2data):
     etrain = [x.training for x in replica_data]
     evalid = [x.validation for x in replica_data]
 
-    phi = phi_data(total_experiments_chi2data)
+    phi, _ = phi_data(total_experiments_chi2data)
     phi_err = np.std(member_chi2)/(2.0*phi*np.sqrt(nrep))
 
     VET = ValueErrorTuple
@@ -157,7 +157,7 @@ def fit_summary(fit, replica_data, total_experiments_chi2data):
                          (r"$<\chi^2>$", f"{VET(np.mean(member_chi2), np.std(member_chi2))}"),
                          (r"$\phi$",     f"{VET(phi, phi_err)}")))
 
-    return pd.Series(data, index=data.keys(), name=fit.name)
+    return pd.Series(data, index=data.keys(), name=fit_name_with_covmat_label)
 
 
 collected_fit_summaries = collect('fit_summary', ('fits', 'fitcontext'))
@@ -294,6 +294,32 @@ def print_different_cuts(fits, test_for_same_cuts):
 
 
     return res.getvalue()
+
+def fit_theory_covmat_summary(fit, fitthcovmat):
+    """returns a table with a single column for the `fit`, with three rows
+    indicating if the theory covariance matrix was used in the 'sampling' of the pseudodata,
+    the 'fitting', and the 'validphys statistical estimators' in the current namespace for that fit.
+    """
+    try:
+        config = fit.as_input()['theorycovmatconfig']
+    except KeyError:
+        config = {'use_thcovmat_in_sampling': False, 'use_thcovmat_in_fitting': False}
+    sampling = config.get('use_thcovmat_in_sampling', False)
+    fitting = config.get('use_thcovmat_in_fitting', False)
+    report = bool(fitthcovmat)
+    df = pd.DataFrame(
+        [sampling, fitting, report],
+        columns=[fit.name],
+        index=['sampling', 'fitting', 'validphys statistical estimators'])
+    return df
+
+fits_theory_covmat_summary = collect('fit_theory_covmat_summary', ('fits',))
+
+@table
+def summarise_theory_covmat_fits(fits_theory_covmat_summary):
+    """Collects the theory covmat summary for all fits and concatenates them into a single table"""
+    return pd.concat(fits_theory_covmat_summary, axis=1)
+
 
 def _get_fitted_index(pdf, i):
     """Return the nnfit index for the replcia i"""

@@ -23,7 +23,8 @@ import numpy as np
 ROOT = '/home/nnpdf/WEB/validphys-reports'
 ROOT_URL = 'https://vp.nnpdf.science/'
 OUT = '/home/nnpdf/WEB/validphys-reports/index.json'
-THUMBNAILS =  '/home/nnpdf/WEB/thumbnails/'
+THUMBNAILS = '/home/nnpdf/WEB/thumbnails/'
+EMAIL_MENTIONS_FILE = 'email_mentions.json'
 
 EMPTY = '-'
 
@@ -130,7 +131,7 @@ def handle_thumbnail(p):
             return thumbnail_tag(name)
     return None
 
-def register(p):
+def register(p, emails):
     path_meta = meta_from_path(p)
     title, author, tags = path_meta['title'], path_meta['author'], path_meta['keywords']
     url = ROOT_URL + p.name
@@ -148,19 +149,33 @@ def register(p):
     if not isinstance(author, str):
         author = "<INVALID AUTHOR>"
 
-    titlelink = '<a href="%s">%s</a>' % (url, title)
+    emaillinks = ' '.join(
+        f'<a href="{url}", title="{title}">📧</a>' for (url, title) in emails
+    )
+
+    titlelink = f'<a href="{url}">{title}</a> {emaillinks}'
 
     thumbnail = handle_thumbnail(p)
 
     return (titlelink, author, [date, timestamp], tags, thumbnail)
 
+
+def get_all_emails():
+    try:
+        with open(EMAIL_MENTIONS_FILE) as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+
+
 def make_index():
     root_path = pathlib.Path(ROOT)
+    emails = get_all_emails()
     data = []
     keywords = defaultdict(TagProps)
     for p in root_path.iterdir():
         if p.is_dir():
-            res = register(p)
+            res = register(p, emails.get(p.name, []))
             data.append(res)
             newkeywords = res[3]
             timestamp = res[2][1]
