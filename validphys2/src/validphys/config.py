@@ -10,6 +10,7 @@ import functools
 import inspect
 import numbers
 import copy
+import os
 
 from collections import ChainMap
 from collections.abc import Mapping, Sequence
@@ -21,24 +22,25 @@ from reportengine.helputils import get_parser_type
 from reportengine import report
 
 from validphys.core import (ExperimentSpec, DataSetInput, ExperimentInput,
-                            CutsPolicy, MatchedCuts)
+                            CutsPolicy, MatchedCuts, ThCovMatSpec)
 from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFoundError,
                               PDFNotFound, FallbackLoader)
 from validphys.gridvalues import LUMI_CHANNELS
 
 from validphys.paramfits.config import ParamfitsConfig
 
+from validphys.theorycovariance.theorycovarianceutils import process_lookup
+from validphys.plotoptions import get_info
+
 log = logging.getLogger(__name__)
-
-
 
 class Environment(Environment):
     """Container for information to be filled at run time"""
 
-    def __init__(self,*, datapath=None, resultspath=None, this_folder, net=True,
+    def __init__(self,*, datapath=None, resultspath=None, this_folder=None, net=True,
                  upload=False, **kwargs):
-
-        self.this_folder = pathlib.Path(this_folder)
+        if this_folder:
+            self.this_folder = pathlib.Path(this_folder)
 
         if net:
             loader_class = FallbackLoader
@@ -503,7 +505,7 @@ class CoreConfig(configparser.Config):
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 _, experiments = self.parse_from_(
                     None, 'experiments', write=False)
-                names = {(e.name, ds.name): (ds, dsin)
+                names = {(e.name, ds.name, process_lookup(ds.name)): (ds, dsin)
                          for e in experiments
                          for ds, dsin in zip(e.datasets, e)}
                 all_names.append(names)
@@ -511,7 +513,7 @@ class CoreConfig(configparser.Config):
 
         res = []
         for k in used_set:
-            inres = {'experiment_name': k[0], 'dataset_name': k[1]}
+            inres = {'experiment_name': k[0], 'dataset_name': k[1], 'process': k[2]}
             #TODO: Should this have the same name?
             inner_spec_list = inres['dataspecs'] = []
             for ispec, spec in enumerate(dataspecs):
@@ -522,7 +524,7 @@ class CoreConfig(configparser.Config):
                 }, spec)
                 inner_spec_list.append(d)
             res.append(inres)
-        res.sort(key=lambda x: (x['experiment_name'], x['dataset_name']))
+        res.sort(key=lambda x: (x['process'], x['experiment_name']))
         return res
 
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
@@ -591,6 +593,22 @@ class CoreConfig(configparser.Config):
             newds.cuts = matched_cuts
             res.append(ChainMap({'dataset': newds}, spec))
         return res
+
+    def produce_combined_shift_and_theory_dataspecs(self, theoryconfig, shiftconfig):
+        total_dataspecs = theoryconfig["dataspecs"] + shiftconfig["dataspecs"]
+        matched_datasets = self.produce_matched_datasets_from_dataspecs(total_dataspecs)
+        for ns in matched_datasets:
+            ns["dataspecs"] = self.produce_dataspecs_with_matched_cuts(ns["dataspecs"])
+        new_theoryconfig = []
+        new_shiftconfig = []
+        len_th = len(theoryconfig['dataspecs'])
+        for s in matched_datasets:
+            new_theoryconfig.append(ChainMap({"dataspecs": s['dataspecs'][:len_th]}, s))
+            new_shiftconfig.append(ChainMap({"dataspecs": s['dataspecs'][len_th:]}, s))
+        return {
+            "shiftconfig": {"dataspecs": new_shiftconfig, "original": shiftconfig},
+            "theoryconfig": {"dataspecs": new_theoryconfig, "original": theoryconfig}
+        }
 
 
     #TODO: Worth it to do some black magic to not pass params explicitly?
@@ -682,6 +700,53 @@ class CoreConfig(configparser.Config):
     def produce_all_lumi_channels(self):
         return {'lumi_channels': self.parse_lumi_channels(list(LUMI_CHANNELS))}
 
+    @configparser.explicit_node
+    def produce_nnfit_theory_covmat(self, use_thcovmat_in_sampling:bool, use_thcovmat_in_fitting:bool):
+        from validphys.theorycovariance.construction import theory_covmat_custom
+        @functools.wraps(theory_covmat_custom)
+        def res(*args, **kwargs):
+            return theory_covmat_custom(*args, **kwargs)
+        #Set this to get the same filename regardless of the action.
+        res.__name__ = 'theory_covmat'
+        return res
+
+    def produce_fitthcovmat(
+            self, use_thcovmat_if_present: bool = False, fit: (str, type(None)) = None):
+        """If a `fit` is specified and `use_thcovmat_if_present` is `True` then returns the
+        corresponding covariance matrix for the given fit if it exists. If the fit doesn't have a
+        theory covariance matrix then returns `False`.
+        """
+        if not isinstance(use_thcovmat_if_present, bool):
+            raise ConfigError("use_thcovmat_if_present should be a boolean, by default it is False")
+
+        if use_thcovmat_if_present and not fit:
+            raise ConfigError("`use_thcovmat_if_present` was true but no `fit` was specified.")
+
+        if use_thcovmat_if_present and fit:
+            try:
+                thcovmat_present = fit.as_input()[
+                    'theorycovmatconfig']['use_thcovmat_in_fitting']
+            except KeyError:
+                #assume covmat wasn't used and fill in key accordingly but warn user
+                log.warning("use_thcovmat_if_present was true but the flag "
+                            "`use_thcovmat_in_fitting` didn't exist in the runcard for "
+                            f"{fit.name}. Theory covariance matrix will not be used "
+                            "in any statistical estimators.")
+                thcovmat_present = False
+
+
+        if use_thcovmat_if_present and thcovmat_present:
+            # Expected path of covmat hardcoded
+            covmat_path = (
+                fit.path/'tables'/'datacuts_theory_theorycovmatconfig_theory_covmat.csv')
+            if not os.path.exists(covmat_path):
+                raise ConfigError(
+                    "Fit appeared to use theory covmat in fit but the file was not at the "
+                    f"usual location: {covmat_path}.")
+            fit_theory_covmat = ThCovMatSpec(covmat_path)
+        else:
+            fit_theory_covmat = None
+        return fit_theory_covmat
 
     def parse_speclabel(self, label:(str, type(None))):
         """A label for a dataspec. To be used in some plots"""
@@ -698,6 +763,48 @@ class CoreConfig(configparser.Config):
         {@endwith@}
         """
         return label
+
+    def produce_fit_data_groupby_experiment(self, fit):
+        """Used to produce data from the fit grouped into experiments,
+        where each experiment is a group of datasets according to the experiment
+        key in the plotting info file.
+        """
+        #TODO: consider this an implimentation detail
+        from reportengine.namespaces import NSList
+
+        with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
+            _, experiments = self.parse_from_('fit', 'experiments', write=False)
+
+        flat = (ds for exp in experiments for ds in exp.datasets)
+        metaexps = [get_info(ds).experiment for ds in flat]
+        res = {}
+        for exp in experiments:
+            for dsinput, ds in zip(exp.dsinputs, exp.datasets):
+                metaexp = get_info(ds).experiment
+                if metaexp in res:
+                    res[metaexp].append(ds)
+                else:
+                    res[metaexp] = [ds]
+        exps = []
+        for exp in res:
+            exps.append(ExperimentSpec(exp, res[exp]))
+
+        experiments = NSList(exps, nskey='experiment')
+        return {'experiments': experiments}
+
+    def produce_fit_context_groupby_experiment(self, fit):
+        """produces experiments similarly to `fit_data_groupby_experiment`
+        but also sets fitcontext (pdf and theoryid)
+        """
+        _, pdf         = self.parse_from_('fit', 'pdf', write=False)
+        _, theory      = self.parse_from_('fit', 'theory', write=False)
+        thid = theory['theoryid']
+        with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
+            experiments = self.produce_fit_data_groupby_experiment(
+                fit)['experiments']
+        return {'pdf': pdf, 'theoryid':thid, 'experiments': experiments}
+
+
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):
     """The effective configuration parser class."""

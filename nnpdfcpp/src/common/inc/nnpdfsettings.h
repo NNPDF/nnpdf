@@ -102,6 +102,10 @@ private:
 
   map<string,string> fTheory;
 
+  bool fThUncertainties; //!< true if the fit uses an external runcard, false otherwise.
+  bool fThCovSampling;   // true if the theory covariance matrix is included in the replicas generation
+  bool fThCovFitting;    // true if the theroy covariance matrix is included in the fitting chi2
+
 public:
 
   NNPDFSettings(const string& folder); //!< The constructor
@@ -135,6 +139,9 @@ public:
   map<string,string> const& GetTheoryMap() const { return fTheory; }
   bool IsQED() const;
   bool IsIC()  const;
+  bool IsThUncertainties() const { return fThUncertainties; }
+  bool IsThCovSampling()   const { return fThCovSampling; }
+  bool IsThCovFitting()    const { return fThCovFitting; }
 
   gsl_integration_workspace *GetGSLWorkspace() const { return fGSLWork; } //!< GSL integration workspace
 

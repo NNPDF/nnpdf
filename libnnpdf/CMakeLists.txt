@@ -26,7 +26,10 @@ configure_file(
 # add preprocessor flag
 add_definitions(-DDEFAULT_NNPDF_PROFILE_PATH="${prefix}/share/NNPDF/nnprofile.yaml")
 
-include_directories(src/NNPDF src ${GSL_INCLUDE_DIRS} ${YAML_INCLUDE_DIRS})
+# Note that BEFORE is important here: Otherwise we might be reading
+# the headers from a previous installation.
+include_directories(BEFORE src/NNPDF src)
+include_directories(${GSL_INCLUDE_DIRS} ${YAML_INCLUDE_DIRS})
 FILE(GLOB_RECURSE Headers "src/NNPDF/*.h")
 add_library(nnpdf SHARED src/common.cc
                          src/commondata.cc

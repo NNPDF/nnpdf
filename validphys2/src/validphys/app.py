@@ -15,7 +15,7 @@ import logging
 import contextlib
 
 
-from reportengine import app
+from reportengine import app, api
 
 from validphys.config import Config, Environment
 from validphys import uploadutils
@@ -37,7 +37,9 @@ providers = [
              'validphys.eff_exponents',
              'validphys.paramfits.dataops',
              'validphys.paramfits.plots',
-             'validphys.theorycovariance',
+             'validphys.theorycovariance.construction',
+             'validphys.theorycovariance.output',
+             'validphys.theorycovariance.tests',
              'validphys.replica_selector',
              'validphys.MCgen_checks',
              'validphys.closure',
@@ -45,6 +47,8 @@ providers = [
             ]
 
 log = logging.getLogger(__name__)
+
+API = api.API(providers, Config, Environment)
 
 class App(app.App):
 
