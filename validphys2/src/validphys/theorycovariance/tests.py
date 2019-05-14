@@ -567,7 +567,7 @@ def validation_theory_chi2(theory_shift_test):
     print(f"Theory chi2 = {th_chi2}")
     return th_chi2
 
-def theta(costheta):
+def theta(theory_shift_test):
     """Returns the angle between the NNLO-NLO
     shift vector and the component of this which is captured
     by the theory covariance matrix"""
