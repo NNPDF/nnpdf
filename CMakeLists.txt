@@ -23,6 +23,10 @@ find_package(PkgConfig REQUIRED)
 pkg_search_module(GSL REQUIRED gsl)
 pkg_search_module(YAML REQUIRED yaml-cpp)
 pkg_search_module(NNPDF REQUIRED nnpdf)
+# linux complains if I don't have these
+pkg_search_module(SQLITE REQUIRED sqlite3)
+pkg_search_module(LHAPDF REQUIRED lhapdf)
+pkg_search_module(LIBARCHIVE REQUIRED libarchive)
 
 set(DEFAULT_CXX_OPTIONS "-Wall -Wextra -march=nocona -mtune=haswell -fvisibility-inlines-hidden -fmessage-length=0 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe")
 
@@ -36,6 +40,9 @@ add_executable(buildmaster src/buildmaster.cc
                        src/common.cc
                        src/buildmaster_utils.cc)
   include_directories(src inc)
-  target_link_libraries(buildmaster ${NNPDF} ${NNPDF_LDFLAGS} ${YAML_LDFLAGS} ${GSL_LDFLAGS})
+  target_link_libraries(buildmaster
+                                ${NNPDF_LDFLAGS} ${YAML_LDFLAGS}
+                                ${GSL_LDFLAGS} ${SQLITE_LDFLAGS}
+                                ${LHAPDF_LDFLAGS} ${LIBARCHIVE_LDFLAGS})
   install(TARGETS buildmaster DESTINATION bin
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)

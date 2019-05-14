@@ -8,11 +8,21 @@ version in the NNPDF CommonData format.
 
 `buildmaster` depends on:
 
+Run:
+
 - NNPDF/nnpdf
 - yaml-cpp
 - gsl
 
-(Note that both yaml-cpp and gsl are also dependencies of NNPDF/nnpdf).
+Build:
+
+- cmake > 3.0.2
+- sqlite3
+- libarchive
+- LHAPDF
+
+(Note that yaml-cpp, gsl, cmake, sqlite3, libarchive and LHAPDF are also
+dependencies of NNPDF/nnpdf).
 
 In order to compile
 
