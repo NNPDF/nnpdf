@@ -14,12 +14,19 @@ version in the NNPDF CommonData format.
 
 (Note that both yaml-cpp and gsl are also dependencies of NNPDF/nnpdf).
 
-In order to compile just type `make`.
+In order to compile
+
+```
+$ mkdir bld
+$ cd bld
+$ cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
+$ make -j && make install
+```
 
 ## Running the code
 
 In order to generate a master copy of all experimental data run the
-`buildmaster` program. This program will create for each dataset:
+`buildmaster` program whilst in the root of this directory. This program will create for each dataset:
 - DATA_[setname].dat are generated and placed in the results folder
 - SYSTYPE_[setname]_DEFAULT.dat are generated and placed in results/systypes
 After generating these files the user can copy them to the `nnpdfcpp/data/commondata` folder.
