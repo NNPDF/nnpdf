@@ -620,7 +620,7 @@ def projector_eigenvalue_ratio(theory_shift_test):
 def shift_diag_cov_comparison(allthx_vector, shx_vector, thx_covmat, thx_vector):
     """Produces a plot of a comparison between the NNLO-NLO shift and the
     envelope given by the diagonal elements of the theory covariance matrix."""
-    l = len(allthx_vector[0])
+    l = len(allthx_vector[0]) + 1
     matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
     fnorm = -shx_vector[0]
     indexlist = list(matrix.index.values)
@@ -659,7 +659,7 @@ def shift_diag_cov_comparison(allthx_vector, shx_vector, thx_covmat, thx_vector)
     startlocs_lines = [x-0.5 for x in startlocs]
     ax.vlines(startlocs_lines, -70, 70, linestyles='dashed')
     ax.margins(x=0, y=0)
-    ax.set_ylabel(r"% wrt central theory T_i^{(0)}", fontsize=20)
+    ax.set_ylabel(r"% wrt central theory $T_i^{(0)}$", fontsize=20)
     ax.set_ylim(-35, 35)
     ax.legend(fontsize=20)
     ax.yaxis.set_tick_params(labelsize=20)
