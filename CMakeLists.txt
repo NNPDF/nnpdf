@@ -4,6 +4,7 @@ SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 SET(CMAKE_INSTALL_RPATH "$ENV{CONDA_PREFIX}/lib")
 
 # Set a default build type if none was specified
+
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   message(STATUS "Setting build type to 'Release' as none was specified.")
   set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
@@ -19,19 +20,29 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # check for dependencies
+
 find_package(PkgConfig REQUIRED)
 pkg_search_module(GSL REQUIRED gsl)
 pkg_search_module(YAML REQUIRED yaml-cpp)
 pkg_search_module(NNPDF REQUIRED nnpdf)
-# linux complains if I don't have these
+
+# linux complains if we don't explicitly link these
+
 pkg_search_module(SQLITE REQUIRED sqlite3)
 pkg_search_module(LHAPDF REQUIRED lhapdf)
 pkg_search_module(LIBARCHIVE REQUIRED libarchive)
 
 set(DEFAULT_CXX_OPTIONS "-Wall -Wextra -march=nocona -mtune=haswell -fvisibility-inlines-hidden -fmessage-length=0 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe")
 
-set(CMAKE_CXX_FLAGS "${DEFAULT_CXX_OPTIONS} ${GSL_CFLAGS} ${YAML_CFLAGS}" CACHE STRING "compile flags" FORCE)
+# Get rid of annoying semi colon in pkg_config output - slightly hacky way
+# https://stackoverflow.com/a/35458217
+
+string(REPLACE ";" " " NNPDF_CFLAGS "${NNPDF_CFLAGS}")
+
+set(CMAKE_CXX_FLAGS "${DEFAULT_CXX_OPTIONS} ${NNPDF_CFLAGS} ${GSL_CFLAGS} ${YAML_CFLAGS}" CACHE STRING "compile flags" FORCE)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "linker flags" FORCE)
+
+# slightly hacky solution to adding all filter files
 
 AUX_SOURCE_DIRECTORY(filters FILTER_SRC)
 
