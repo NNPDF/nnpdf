@@ -604,7 +604,7 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORMFilter::ReadData()
 	  fSys[i][j].add  = syscor[i][j];
 	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
 	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "CORR";
+	  fSys[i][j].name = "UNCORR";
 	}
     }
 
@@ -717,7 +717,7 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TRAPNORMFilter::ReadData()
 	  fSys[i][j].add  = syscor[i][j];
 	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
 	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "CORR";
+	  fSys[i][j].name = "UNCORR";
 	}
     }
 
@@ -830,7 +830,7 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TTMNORMFilter::ReadData()
 	  fSys[i][j].add  = syscor[i][j];
 	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
 	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "CORR";
+	  fSys[i][j].name = "UNCORR";
 	}
     }
 
@@ -943,7 +943,7 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPNORMFilter::ReadData()
 	  fSys[i][j].add  = syscor[i][j];
 	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
 	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "CORR";
+	  fSys[i][j].name = "UNCORR";
 	}
     }
 
