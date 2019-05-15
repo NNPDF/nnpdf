@@ -11,6 +11,7 @@ from collections import namedtuple
 import numpy as np
 import scipy.linalg as la
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 import pandas as pd
 
 from reportengine.checks import make_argcheck
@@ -614,6 +615,46 @@ def projector_eigenvalue_ratio(theory_shift_test):
     ax2.legend()
     ax2.set_ylabel(r"|$\delta_a$/$s_a$|")
     print(f"Subspace dimension = {len(evals)}")
+    return fig
+
+@figure
+def eigenvector_plot(evals_nonzero_basis, shx_vector):
+    """Produces a plot of the eigenvectors for the
+    projected matrix, transformed back to the data space."""
+    evals = evals_nonzero_basis[0][::-1]
+    evecs = evals_nonzero_basis[1].T[::-1]
+    f = shx_vector[0]
+    indexlist = list(f.index.values)
+    # adding process index for plotting, and reindexing matrices and vectors
+    dsnames = []
+    processnames= []
+    ids = []
+    for index in indexlist:
+        name = index[0]
+        i = index[1]
+        dsnames.append(name)
+        ids.append(i)
+        proc = process_lookup(name)
+        processnames.append(proc)
+    tripleindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
+                        names = ("process", "dataset", "id"))
+    fig, axes = plt.subplots(nrows=len(evecs), figsize=(10, 2*len(evecs)))
+    fig.subplots_adjust(hspace=0.8)
+    fig.title('Non-zero Eigenvectors')
+    for ax, evec, eval in zip(axes.flatten(), evecs, evals):
+        evec = pd.DataFrame(evec, index=tripleindex)
+        evec.sort_index(0, inplace=True)
+        oldindex = evec.index.tolist()
+        newindex = sorted(oldindex, key=_get_key)
+        evec = evec.reindex(newindex)
+        ax.plot(evec.values)
+        ax.text(5, evec.max()/2, f'eigenvalue = {eval}')
+        ticklocs, ticklabels, startlocs = matrix_plot_labels(evec)
+        # Shift startlocs elements 0.5 to left so lines are between indexes
+        startlocs_lines = [x-0.5 for x in startlocs]
+        ax.vlines(startlocs_lines, evec.min(), evec.max(), linestyles='dashed')
+        ax.margins(x=0, y=0)
+        ax.xticks(ticklocs, ticklabels, rotation=45, fontsize=10)
     return fig
 
 @figure
