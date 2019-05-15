@@ -169,33 +169,21 @@ def experiments_data(experiment_result_table):
     data_central_values = experiment_result_table["data_central"]
     return data_central_values
 
-
-#TODO: Use collect to calculate results outside this
-def experiment_result_table_no_table(experiments, pdf, experiments_index):
+def experiment_result_table_no_table(experiments_results, experiments_index):
     """Generate a table containing the data central value, the central prediction,
     and the prediction for each PDF member."""
-
     result_records = []
-    for exp_index, experiment in enumerate(experiments):
-        loaded_exp = experiment.load()
+    for experiment_results in experiments_results:
+        dt, th = experiment_results
+        for index, (dt_central, th_central) in enumerate(zip(dt.central_value, th.central_value)):
+            replicas = (('rep_%05d'%(i+1), th_rep) for
+                        i, th_rep in enumerate(th._rawdata[index, :]))
 
-
-
-        data_result = DataResult(loaded_exp)
-        th_result = ThPredictionsResult.from_convolution(pdf, experiment,
-                                                         loaded_data=loaded_exp)
-
-
-        for index in range(len(data_result.central_value)):
-            replicas = (('rep_%05d'%(i+1), th_result._rawdata[index,i]) for
-                        i in range(th_result._rawdata.shape[1]))
-
-            result_records.append(OrderedDict([
-                                 ('data_central', data_result.central_value[index]),
-                                 ('theory_central', th_result.central_value[index]),
+            result_records.append(dict([
+                                 ('data_central', dt_central),
+                                 ('theory_central', th_central),
                                   *replicas
                                  ]))
-
     if not result_records:
         log.warning("Empty records for experiment results")
         return pd.DataFrame()
