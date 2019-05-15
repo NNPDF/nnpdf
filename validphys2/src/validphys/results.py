@@ -216,7 +216,11 @@ def experiment_result_table_68cl(experiment_result_table_no_table: pd.DataFrame,
     res = pd.concat([df.iloc[:, :2], df_cl], axis=1)
     return res
 
-def experiments_covmat_no_table(experiments, experiments_index, t0set):
+experiments_covariance_matrix = collect('experiment_covariance_matrix', ('experiments',))
+
+
+def experiments_covmat_no_table(
+        experiments, experiments_index, experiments_covariance_matrix):
     """Export the covariance matrix for the experiments. It exports the full
     (symmetric) matrix, with the 3 first rows and columns being:
 
@@ -228,15 +232,10 @@ def experiments_covmat_no_table(experiments, experiments_index, t0set):
     """
     data = np.zeros((len(experiments_index),len(experiments_index)))
     df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
-    for experiment in experiments:
+    for experiment, experiment_covmat in zip(
+            experiments, experiments_covariance_matrix):
         name = experiment.name
-        loaded_exp = experiment.load()
-        if t0set:
-            #Copy data to avoid chaos
-            loaded_exp = type(loaded_exp)(loaded_exp)
-            log.debug("Setting T0 predictions for %s" % loaded_exp)
-            loaded_exp.SetT0(t0set.load_t0())
-        mat = loaded_exp.get_covmat()
+        mat, _ = experiment_covmat
         df.loc[[name],[name]] = mat
     return df
 
@@ -246,45 +245,37 @@ def experiments_covmat(experiments_covmat_no_table):
     return experiments_covmat_no_table
 
 @table
-def experiments_sqrtcovmat(experiments, experiments_index, t0set):
+def experiments_sqrtcovmat(
+        experiments, experiments_index, experiments_covariance_matrix):
     """Like experiments_covmat, but dump the lower triangular part of the
     Cholesky decomposition as used in the fit. The upper part indices are set
     to zero.
     """
     data = np.zeros((len(experiments_index),len(experiments_index)))
     df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
-    for experiment in experiments:
+    for experiment, experiment_covmat in zip(
+            experiments, experiments_covariance_matrix):
         name = experiment.name
-        loaded_exp = experiment.load()
-        if t0set:
-            #Copy data to avoid chaos
-            data = type(loaded_exp)(loaded_exp)
-            log.debug("Setting T0 predictions for %s" % loaded_exp)
-            data.SetT0(t0set.load_t0())
-        mat = loaded_exp.get_sqrtcovmat()
+        _, mat = experiment_covmat
         mat[np.triu_indices_from(mat, k=1)] = 0
         df.loc[[name],[name]] = mat
     return df
 
 @table
-def experiments_invcovmat(experiments, experiments_index, t0set):
+def experiments_invcovmat(
+        experiments, experiments_index, experiments_covariance_matrix):
     """Compute and export the inverse covariance matrix.
     Note that this inverts the matrices with the LU method which is
     suboptimal."""
     data = np.zeros((len(experiments_index),len(experiments_index)))
     df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
-    for experiment in experiments:
+    for experiment, experiment_covmat in zip(
+            experiments, experiments_covariance_matrix):
         name = experiment.name
-        loaded_exp = experiment.load()
-        loaded_exp = experiment.load()
-        if t0set:
-            #Copy data to avoid chaos
-            data = type(loaded_exp)(loaded_exp)
-            log.debug("Setting T0 predictions for %s" % loaded_exp)
-            data.SetT0(t0set.load_t0())
+        cov, _ = experiment_covmat
         #Improve this inversion if this method tuns out to be important
-        mat = la.inv(loaded_exp.get_covmat())
-        df.loc[[name],[name]] = mat
+        invcov = la.inv(cov)
+        df.loc[[name],[name]] = invcov
     return df
 
 
