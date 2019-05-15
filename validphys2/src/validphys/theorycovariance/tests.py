@@ -640,7 +640,7 @@ def eigenvector_plot(evals_nonzero_basis, shx_vector):
                         names = ("process", "dataset", "id"))
     fig, axes = plt.subplots(nrows=len(evecs), figsize=(10, 2*len(evecs)))
     fig.subplots_adjust(hspace=0.8)
-    fig.title('Non-zero Eigenvectors')
+    fig.suptitle('Non-zero Eigenvectors')
     for ax, evec, eval in zip(axes.flatten(), evecs, evals):
         evec = pd.DataFrame(evec, index=tripleindex)
         evec.sort_index(0, inplace=True)
