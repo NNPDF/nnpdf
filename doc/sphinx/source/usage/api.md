@@ -11,7 +11,7 @@ parameters as a runcard.
 For example:
 
 ```python
-from validphys.app import API
+from validphys.api import API
 
 figs = API.plot_pdfs(pdfs=["NNPDF31_nlo_as_0118"], Q=2)
 for f, _ in figs:
@@ -48,7 +48,7 @@ def expensive_provider2(experiments, ...):
 Now in a notebook we can do
 
 ```python
-from validphys.app import API
+from validphys.api import API
 
 expensive1 = API.expesnive_provider1(pdf="NNPDF31_nlo_as_0118", Q=100, theoryid=52)
 expensive2 = API.expensive_provider2(experiments={"from_": "fit"}, fit="NNPDF31_nlo_as_0118")
@@ -97,7 +97,7 @@ the `validphys --help` functionality.
 If a figure is created using the api, as with the first example:
 
 ```python
-from validphys.app import API
+from validphys.api import API
 
 fig = API.some_plot(...)
 fig.show()
@@ -121,7 +121,7 @@ import matplotlib
 from validphys import mplstyles
 matplotlib.style.use(str(mplstyles.smallstyle))
 
-from validphys.app import API
+from validphys.api import API
 
 figs = API.plot_pdfs(pdfs=["NNPDF31_nlo_as_0118"], Q=2)
 for f, _ in figs:
@@ -140,7 +140,7 @@ xgrid input, but then rely on the API to collect the other relevant resources, f
 
 ```python
 import numpy as np
-from validphys.app import API
+from validphys.api import API
 
 new_xgrid = ("linear", np.array([0.1, 0.2])
 pdf_grid = API.xplotting_grid(pdf="NNPDF31_nlo_as_0118", Q=2, xgrid=new_xgrid)
