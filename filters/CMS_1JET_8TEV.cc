@@ -72,18 +72,18 @@ void CMS_1JET_8TEVFilter::ReadData()
   int artsys[] = {37, 37, 36, 32, 25, 18};  //number of artificial systematics for each bin
   double stat[fNData];   
 
-  int realsys = 27;  // number of real systematics
-  int n = 0;         // count total number of datapoints
+  int realsys = 27;         //number of real systematics
+  int n = 0;                //count total number of datapoints
+  const double fac = 1e7; //multiply the statistic times 1e7 to get invertibe covariance matrices
 
 
   for(int bin=0; bin < nbins; bin++ )
   {
 
-    cout << " bin  " << bin << " ------ " << endl;   
     string data_file = "/CMS_8TeV_jets_Ybin" + to_string(bin+1) + ".dat";
     string cov_file =  "/CMS_8TeV_jets_Ybin" + to_string(bin+1) + "___CMS_8TeV_jets_Ybin" + to_string(bin+1) + ".dat";
 
-    // data files
+    //data files
     stringstream DataFile("");
     DataFile << dataPath() << "rawdata/" << fSetName << data_file;
     rS.open(DataFile.str().c_str(), ios::in);
@@ -136,23 +136,23 @@ void CMS_1JET_8TEVFilter::ReadData()
 
       //the sys read from the file are already in relative percentage values	  
       symmetriseErrors(right,left,&stmp,&dtmp);
-	  
-      fSys[i][0].type = MULT;   //IS THIS CORRECT??
+
+      fSys[i][0].type = ADD;   
       fSys[i][0].name = "CORR";
       fSys[i][0].mult = stmp;
       fSys[i][0].add  = fSys[i][0].mult*fData[i]/100;
 
       shift += dtmp;
+      
 
       //read statistic
       lstream >> stat[i];
+      stat[i] *= fac;
       fStat[i] = 0; 
-      //cout << fData[i] << " " << stat[i] << endl;
 
       //read the systematics 
       for(int j=1; j<realsys -1; j++)
       {
-
 	  double sys1, sys2, right, left;
 	  double stmp, dtmp;
 
@@ -164,7 +164,7 @@ void CMS_1JET_8TEVFilter::ReadData()
 	  //the sys read from the file are already in relative percentage values
 	  symmetriseErrors(right,left,&stmp,&dtmp);
 	  
-	  fSys[i][j].type = MULT;   //IS THIS CORRECT??
+	  fSys[i][j].type = ADD;   //IS THIS CORRECT??
 	  fSys[i][j].name = "CORR";
 	  fSys[i][j].mult = stmp;
 	  fSys[i][j].add  = fSys[i][j].mult*fData[i]/100;
@@ -172,25 +172,25 @@ void CMS_1JET_8TEVFilter::ReadData()
 	  shift += dtmp;
       }
 
-      fData[i]*=(1.0 + shift*0.01); //Shift from asymmetric errors
-
-      // Lumi uncertainty
+      fData[i]*=(1.0 + shift*0.01);
+      
+      //Lumi uncertainty
       lstream >> fSys[i][realsys -1].add;  
       fSys[i][realsys -1].mult = fSys[i][realsys -1].add/fData[i]*1e2;
       fSys[i][realsys -1].type = MULT;
       fSys[i][realsys -1].name = "CMSLUMI12";
     }
        
-    // Defining covariance matrix for the specific bin
+    //Defining covariance matrix for the specific bin
     double** covmat = new double*[artsys[bin]];
     for (int i = 0; i < artsys[bin]; i++) 
       covmat[i] = new double[artsys[bin]];
 
-    // Reading Covariance Matrix
+    //Reading Covariance Matrix
     for (int i = 0; i < 16; i++)
       getline(rCorr,line);
      
-    for (int i = 0; i < artsys[bin]; i++){ 
+    for (int i = 0; i < artsys[bin]; i++){    
       for (int j = 0; j < artsys[bin]; j++) { 
         getline(rCorr,line);                       
         rCorr >> dum >> dum >> dum >> dum;
@@ -200,17 +200,7 @@ void CMS_1JET_8TEVFilter::ReadData()
       getline(rCorr,line);                       
     }
 
-    /*
-    //print the cov mat to debug
-    for (int i = 0; i < artsys[bin]; i++){ 
-      for (int j = 0; j < artsys[bin]; j++) {    
-        cout << covmat[i][j] << " ";
-      }
-      cout << endl;
-    }
-    */
-
-    // Generate artificial systematics
+    //Generate artificial systematics
     double** syscor = new double*[artsys[bin]];
     for(int i = 0; i < artsys[bin]; i++)
       syscor[i] = new double[artsys[bin]];
@@ -221,27 +211,40 @@ void CMS_1JET_8TEVFilter::ReadData()
        exit(-1);
     }
 
+    //the first 9 points of each bin do not have any artificial systematic
+    for (int i = n; i < n + 9; i++)
+    {
+      for (int l = realsys; l < fNSys; l++)  
+      {
+        fSys[i][l].add  = 1e-4;
+        fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
+        fSys[i][l].type = MULT;  
+        fSys[i][l].name = "CORR";
+      }
+    }
+
     // Copy the artificial systematics in the fSys matrix
-    for (int i = n; i < n + artsys[bin]; i++)
+    for (int i = n+9; i < n + ndata[bin]; i++)
     {
       for (int l = realsys; l < realsys + artsys[bin]; l++)  
       {
-        fSys[i][l].add  = syscor[i-n][l-realsys];
+        fSys[i][l].add  = syscor[i-n-9][l-realsys]/fac;
         fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
         fSys[i][l].type = MULT;  
         fSys[i][l].name = "CORR";
       }
 
-      // Put the remaining systematics to ~1e-3
+      // Put the remaining systematics to 1e-4
       for (int l = realsys + artsys[bin]; l < fNSys; l++)
       {
-        fSys[i][l].add  = 1e-3;
+        fSys[i][l].add  = 1e-4;
         fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
         fSys[i][l].type = MULT;  
         fSys[i][l].name = "CORR";
       }
     }     
 
+    
     for(int i = 0; i < artsys[bin]; i++) 
      delete[] syscor[i];
     delete[] syscor;
