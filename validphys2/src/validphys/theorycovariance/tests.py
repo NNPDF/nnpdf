@@ -654,7 +654,7 @@ def eigenvector_plot(evals_nonzero_basis, shx_vector):
         startlocs_lines = [x-0.5 for x in startlocs]
         ax.vlines(startlocs_lines, evec.min(), evec.max(), linestyles='dashed')
         ax.margins(x=0, y=0)
-    fig.xticks(ticklocs, ticklabels, rotation=45, fontsize=10)
+        plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=10)
     return fig
 
 @figure
