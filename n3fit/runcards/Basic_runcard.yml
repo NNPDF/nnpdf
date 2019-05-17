@@ -1,0 +1,149 @@
+#
+# Configuration file for NNPDF++
+#
+
+############################################################
+description: NNPDF3.1 NLO fitted charm global dataset
+
+############################################################
+# frac: training fraction
+# ewk: apply ewk k-factors
+# sys: systematics treatment (see systypes)
+experiments:
+  - experiment: ALL
+    datasets:
+      - { dataset: SLACP, frac: 0.5}
+      - { dataset: NMCPD, frac: 0.5 }      
+
+############################################################
+datacuts:
+  t0pdfset     : NNPDF31_nlo_as_0118 # PDF set to generate t0 covmat
+  q2min        : 3.49                # Q2 minimum
+  w2min        : 12.5                # W2 minimum
+  combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
+  jetptcut_tev : 0                   # jet pt cut for tevatron
+  jetptcut_lhc : 0                   # jet pt cut for lhc
+  wptcut_lhc   : 30.0                # Minimum pT for W pT diff distributions
+  jetycut_tev  : 1e30                # jet rap. cut for tevatron
+  jetycut_lhc  : 1e30                # jet rap. cut for lhc
+  dymasscut_min: 0                   # dy inv.mass. min cut
+  dymasscut_max: 1e30                # dy inv.mass. max cut
+  jetcfactcut  : 1e30                # jet cfact. cut
+
+############################################################
+theory:
+  theoryid: 53        # database id
+
+###########################################################
+hyperscan:
+    stopping:
+        min_epochs: 5e2
+        max_epochs: 40e2
+        min_patience: 0.10
+        max_patience: 0.40
+    positivity:
+        min_multiplier: 1.00000001
+        max_multiplier: 1.00000002
+        min_initial:
+        max_initial:
+    optimizer:
+        names: 'ALL' # Use all implemented optimizers
+        min_lr: 0.0005
+        max_lr: 0.5
+    architecture:
+        initializers: 'ALL'
+        max_drop: 0.15
+        n_layers: [2,3,4]
+        min_units: 5
+        max_units: 50
+        activations: ['sigmoid', 'tanh']
+
+
+############################################################
+fitting:
+  genrep   : on    # on = generate MC replicas, off = use real data
+  trvlseed: 1
+  nnseed: 2
+  mcseed: 3  
+  epochs: 900
+  # CHANGE THE FOLLOWING OPTIONS
+  save: off
+  savefile: 'weights.hd5'
+  load: off
+  loadfile: 'weights.hd5'
+  plot: off
+
+  parameters: # This defines the parameter dictionary that is passed to the Model Trainer
+    nodes_per_layer: [15, 10, 8]
+    activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
+    initializer: 'glorot_normal'
+    learning_rate: 0.01
+    optimizer: 'RMSprop'
+    epochs: 900
+    pos_multiplier: 1.05
+    pos_initial:  # believe the pos_lambda below 
+    stopping_patience: 0.30 # percentage of the number of epochs
+    layer_type: 'dense'
+    dropout: 0.0
+
+  # NN23(QED) = sng=0,g=1,v=2,t3=3,ds=4,sp=5,sm=6,(pht=7)
+  # EVOL(QED) = sng=0,g=1,v=2,v3=3,v8=4,t3=5,t8=6,(pht=7)
+  # EVOLS(QED)= sng=0,g=1,v=2,v8=4,t3=4,t8=5,ds=6,(pht=7)
+  # FLVR(QED) = g=0, u=1, ubar=2, d=3, dbar=4, s=5, sbar=6, (pht=7)
+  fitbasis: NN31IC # EVOL (7), EVOLQED (8), etc.
+  basis:
+      # remeber to change the name of PDF accordingly with fitbasis
+      # pos: on for NN squared
+      # mutsize: mutation size
+      # mutprob: mutation probability
+      # smallx, largex: preprocessing ranges
+      - { fl: sng, pos: off, mutsize: [15], mutprob: [0.05], smallx: [1.05,1.19], largex: [1.47,2.70] }
+      - { fl: g,   pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.94,1.25], largex: [0.11,5.87] }
+      - { fl: v,   pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.54,0.75], largex: [1.15,2.76] }
+      - { fl: v3,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.21,0.57], largex: [1.35,3.08] }
+      - { fl: v8,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.52,0.76], largex: [0.77,3.56] }
+      - { fl: t3,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [-0.37,1.52], largex: [1.74,3.39] }
+      - { fl: t8,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.56,1.29], largex: [1.45,3.03] }
+      - { fl: cp,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.12,1.19], largex: [1.83,6.70] }
+
+############################################################
+stopping:
+  stopmethod: LOOKBACK  # Stopping method
+  lbdelta   : 0         # Delta for look-back stopping
+  mingen    : 0         # Minimum number of generations
+  window    : 500       # Window for moving average
+  minchi2   : 3.5       # Minimum chi2 
+  minchi2exp: 6.0       # Minimum chi2 for experiments
+  nsmear    : 200       # Smear for stopping
+  deltasm   : 200       # Delta smear for stopping
+  rv        : 2         # Ratio for validation stopping
+  rt        : 0.5       # Ratio for training stopping
+  epsilon   : 1e-6      # Gradient epsilon  
+
+############################################################
+positivity:
+  posdatasets:
+    - { dataset: POSF2U,   poslambda: 1e6 }  # Positivity Lagrange Multiplier
+
+############################################################
+closuretest:
+  filterseed  : 0   # Random seed to be used in filtering data partitions
+  fakedata    : off # on = to use FAKEPDF to generate pseudo-data
+  fakepdf     : MSTW2008nlo68cl # Theory input for pseudo-data
+  errorsize   : 1.0 # uncertainties rescaling
+  fakenoise   : off # on = to add random fluctuations to pseudo-data
+  rancutprob  : 1.0 # Fraction of data to be included in the fit
+  rancutmethod: 0   # Method to select rancutprob data fraction
+  rancuttrnval: off # 0(1) to output training(valiation) chi2 in report
+  printpdf4gen: off # To print info on PDFs during minimization
+
+############################################################
+lhagrid:
+  nx  : 150
+  xmin: 1e-9
+  xmed: 0.1
+  xmax: 1.0
+  nq  : 50
+  qmax: 1e5
+
+############################################################
