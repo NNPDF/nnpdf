@@ -11,7 +11,7 @@ from collections import namedtuple
 import numpy as np
 import scipy.linalg as la
 import matplotlib.pyplot as plt
-from matplotlib.ticker import MaxNLocator
+import matplotlib.patches as mpatches
 import pandas as pd
 
 from reportengine.checks import make_argcheck
@@ -638,23 +638,31 @@ def eigenvector_plot(evals_nonzero_basis, shx_vector):
         processnames.append(proc)
     tripleindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
                         names = ("process", "dataset", "id"))
+    f = pd.DataFrame(f.values, index=tripleindex)
+    f.sort_index(0, inplace=True)
+    oldindex = f.index.tolist()
+    newindex = sorted(oldindex, key=_get_key)
+    f = f.reindex(newindex)
     fig, axes = plt.subplots(nrows=len(evecs), figsize=(10, 2*len(evecs)))
     fig.subplots_adjust(hspace=0.8)
-    fig.suptitle('Non-zero Eigenvectors')
     for ax, evec, eval in zip(axes.flatten(), evecs, evals):
         evec = pd.DataFrame(evec, index=tripleindex)
-        evec.sort_index(0, inplace=True)
-        oldindex = evec.index.tolist()
-        newindex = sorted(oldindex, key=_get_key)
         evec = evec.reindex(newindex)
-        ax.plot(evec.values)
-        ax.text(5, evec.max()/2, f'eigenvalue = {eval}')
+        ax.plot(-f.values, color="k", label="NNLO-NLO shift")
+        ax.plot(evec.values, label="Eigenvector")
         ticklocs, ticklabels, startlocs = matrix_plot_labels(evec)
         # Shift startlocs elements 0.5 to left so lines are between indexes
         startlocs_lines = [x-0.5 for x in startlocs]
-        ax.vlines(startlocs_lines, evec.min(), evec.max(), linestyles='dashed')
+        ax.vlines(startlocs_lines, ax.get_ylim()[0],
+                  ax.get_ylim()[1], linestyles='dashed')
         ax.margins(x=0, y=0)
-        plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=10)
+        # Adding eigenvalue to legend
+        extraString = f'Eigenvalue = {eval}'
+        handles, labels = ax.get_legend_handles_labels()
+        handles.append(mpatches.Patch(color='none', label=extraString))
+        ax.legend(handles=handles)
+        ax.set_xticks(ticklocs)
+        ax.set_xticklabels(ticklabels, rotation=45, fontsize=10)
     return fig
 
 @figure
