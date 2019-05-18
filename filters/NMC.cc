@@ -134,7 +134,7 @@ void NMCFilter::ReadData()
 
   // Loop over COM energies
   int idat = 0;
-  for (int icom = 0; icom < energies.size(); icom++)
+  for (int icom = 0; icom < (int) energies.size(); icom++)
   {
      const std::string filename = rawdata_path +  "nmc_p"+energies[icom]+".data";
      ifstream datafile(filename);

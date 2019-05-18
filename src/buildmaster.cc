@@ -79,7 +79,7 @@
 /**
  * \param argv the filename containing the configuration
  */
-int main(int argc, char **argv)
+int main(int, char**)
 {
   cout << "\n ***********************************\n";
   cout <<   " *  Welcome to NNPDF++ BuildMaster *\n";
