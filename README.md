@@ -24,19 +24,20 @@ Build:
 (Note that yaml-cpp, gsl, cmake, sqlite3, libarchive and LHAPDF are also
 dependencies of NNPDF/nnpdf).
 
-In order to compile
+In order to compile, it is recommended to create a fresh build directory
 
 ```
 $ mkdir bld
 $ cd bld
-$ cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
+$ cmake ..
 $ make -j && make install
 ```
 
 ## Running the code
 
 In order to generate a master copy of all experimental data run the
-`buildmaster` program whilst in the root of this directory. This program will create for each dataset:
+`buildmaster` program which by default will be installed in the root of this repository.
+This program will create for each dataset:
 - DATA_[setname].dat are generated and placed in the results folder
 - SYSTYPE_[setname]_DEFAULT.dat are generated and placed in results/systypes
 After generating these files the user can copy them to the `nnpdfcpp/data/commondata` folder.
