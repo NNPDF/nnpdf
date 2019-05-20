@@ -1,6 +1,5 @@
 import hyperopt as hyper
 import numpy as np
-import pdb
 
 from backends import MetaModel, MetaLayer
 
@@ -21,7 +20,7 @@ class HyperScanner:
     def __init__(self, parameters):
         """
         Takes as input a dictionary of parameters
-        and saves it 
+        and saves it
         """
         self.parameters = parameters
         self.keys = parameters.keys()
@@ -41,14 +40,16 @@ class HyperScanner:
                 if isinstance(value, dict):
                     self.update_dict(value)
 
-    def _update_param(self, key, value, hyperopt = True, dkeys = []):
+    def _update_param(self, key, value, hyperopt = True, dkeys = None):
+        if dkeys is None:
+            dkeys = []
         if key not in self.keys:
             raise Exception("Trying to update a parameter that was not declared in the dictionary: {0}. HyperScanner @ _update_param".format(key))
         if hyperopt:
             self.hyper_keys.add(key)
             print("Adding the key {0} with the following value: {1}".format(key, value))
             # Add possible extra keys
-            [self.dict_keys.add(nk) for nk in dkeys]
+            _ = [self.dict_keys.add(nk) for nk in dkeys]
         self.parameters[key] = value
 
     # Calling the functions below turn parameters of the dictionary into hyperparameter scans
@@ -72,7 +73,7 @@ class HyperScanner:
         self._update_param(epochs_key, epochs)
         self._update_param(stopping_key, stopping_patience)
 
-    def optimizer(self, names = ['RMSprop'], min_lr = 0.0005, max_lr = 0.5):
+    def optimizer(self, names = None, min_lr = 0.0005, max_lr = 0.5):
         # But this might be a conditional thing and not all of the possible options be dictionaries
         """
         This function look at the optimizers implemented in MetaModel and adds the learning rate to (only)
@@ -80,6 +81,9 @@ class HyperScanner:
             - optimizer
             - learning rate
         """
+        if names is None:
+            names = ['RMSprop']
+
         opt_key = 'optimizer'
         lr_key = 'learning_rate'
 
@@ -101,7 +105,7 @@ class HyperScanner:
             args = optimizer_dict[opt_name][1]
             if 'lr' in args.keys():
                 choices.append( {
-                    opt_key: opt_name, 
+                    opt_key: opt_name,
                     lr_key: lr_choice,
                     } )
             else:
@@ -109,7 +113,7 @@ class HyperScanner:
 
         opt_val = hyper.hp.choice(opt_key, choices)
         # Tell the HyperScanner this key might contain a dictionary to store it separately
-        self._update_param(opt_key, opt_val, dkeys = [opt_key]) 
+        self._update_param(opt_key, opt_val, dkeys = [opt_key])
 
     def positivity(self, min_multiplier = 1.01, max_multiplier = 1.3, min_initial=0.5, max_initial=100):
         """
@@ -132,8 +136,9 @@ class HyperScanner:
             ini_val = hyper.hp.loguniform(ini_key, min_initial, max_initial)
             self._update_param(ini_key, ini_val)
 
-    def NN_architecture(self, n_layers = [1, 2, 5], max_units = 50, min_units = 5, activations = ['sigmoid', 'tanh'], initializers = ['glorot_normal'],
-            layer_types = ['dense'], max_drop = 0.0):
+    def NN_architecture(self, n_layers = None, max_units = 50, min_units = 5,
+            activations = None, initializers = None,
+            layer_types = None, max_drop = 0.0):
         """
         Uses all the given information to generate the parameters for the NN
             - nodes_per_layer
@@ -142,12 +147,21 @@ class HyperScanner:
             - layer_type
             - dropout
         """
+        if activations is None:
+            activations = ['sigmoid', 'tanh']
+        if initializer is None:
+            initializer = ['glorot_normal']
+        if n_layers is None:
+            n_layers = [1, 2, 5]
+        if layer_types is None:
+            layer_types = ['dense']
         # Do we want to fix or generate dinamically the units? for now let's fix
         # there will be time for more sofisticated functions
 
         act_key = 'activation_per_layer'
-        nodes_key = 'nodes_per_layer' # the information contained in the variable is indeed the number of nodes per layer e.g. [5,10,30]
-                                        # but the information the user will be interested in is how many layers are there... 
+        nodes_key = 'nodes_per_layer'
+        # the information contained in the variable is indeed the number of nodes per layer e.g. [5,10,30]
+        # but the information the user will be interested in is how many layers are there...
 
         # Generate the possible activation choices
         act_choices = []
@@ -162,7 +176,7 @@ class HyperScanner:
         nodes_choices = []
         for n in n_layers:
             units = []
-            for i in range(n): 
+            for i in range(n):
                 # We can even play games as lowering the maximum as the number of layers grows
                 units_label = 'nl{1}:-{0}/{1}'.format(i, n)
                 units.append(hyper.hp.quniform(units_label, min_units, max_units, 5))
