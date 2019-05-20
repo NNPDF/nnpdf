@@ -4,20 +4,17 @@
     Script to plot the hyperopt scans
 """
 
+import os
+import json
+import warnings
+import re
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-import itertools
-import os
-import json
-import warnings
 warnings.simplefilter(action = 'ignore', category = FutureWarning)
-
-from pdb import set_trace
-
-import re
 regex_op = re.compile(r'[^\w^\.]+')
 regex_not_op = re.compile(r'[\w\.]+')
 
@@ -90,7 +87,7 @@ def optimizer_parse(trial, dict_out):
         lr = None
     ini = trial['misc']['space_vals'][keywords['initializer']]
     dropout_rate = trial['misc']['space_vals'][keywords['dropout']]
-    
+
 
     dict_out[keywords['optimizer']] = name
     dict_out[keywords['lr']] = lr
@@ -159,7 +156,7 @@ def stat_parser(trial, dict_out, threshold = 1e3, val_f = 0.5, **kwargs):
     """
     Parser the stats information of the trial, the losses, the failures, etc
     """
-    test_f = 1.0 - val_f 
+    test_f = 1.0 - val_f
     validation_loss = trial['result'][keywords['vl']]
     testing_loss = trial['result'][keywords['tl']]
     loss = validation_loss*val_f + testing_loss*test_f
@@ -182,7 +179,7 @@ def stat_parser(trial, dict_out, threshold = 1e3, val_f = 0.5, **kwargs):
     dict_out[keywords['good']] = ok
     dict_out[keywords['loss']] = loss
     dict_out[keywords['vl']] = validation_loss
-    dict_out[keywords['tl']] = testing_loss 
+    dict_out[keywords['tl']] = testing_loss
 
 
 def filter_by_string(data_dict, filter_string):
@@ -207,7 +204,8 @@ def filter_by_string(data_dict, filter_string):
 
     operator = regex_op.findall(filter_string)[0]
 
-    if operator == "=": operator = "=="
+    if operator == "=":
+        operator = "=="
     operators = ["!=", "==", ">", "<"]
     if operator not in operators:
         raise Exception("Filter string not valid, operator not recognized {0}".format(filter_string))
@@ -221,7 +219,7 @@ def filter_by_string(data_dict, filter_string):
         return eval(check_str.format(val_check, operator, filter_val))
     except:
         return False
-     
+
 
 # General parsing
 def trial_parser(trial, filter_me = None, **kwargs):
@@ -255,7 +253,7 @@ def filter_trials(input_trials, **kwargs):
     """
     Applies the search algorithm to all the different trials to find the true best model
     """
-    # First step is to fill in two different 
+    # First step is to fill in two different
     failed_trials = []
     ok_trials = []
 
@@ -319,7 +317,9 @@ def plot_scans(df, best_df, outfile):
             ordering_true, best_x = order_axis(df, best_df, key=key)
             ax = sns.violinplot(x=key, y=loss_k, data=df, ax=ax, palette="Set2",cut=0.0, order= ordering_true)
             ax = sns.stripplot(x=key, y=loss_k, data=df, ax=ax, color="gray", order=ordering_true, alpha=0.4)
-        elif mode == 4: # The nodes per layer is a special case because we want to know to which total number of layers they correspond
+        elif mode == 4:
+            # The nodes per layer is a special case because we want to know to
+            # which total number of layers they correspond
             ordering_true, _ = order_axis(df, best_df, key=keywords['nl'])
             best_x = best_df.get(key)
             for l in ordering_true:
@@ -348,7 +348,7 @@ def draw_histogram(dataframe, key, plotable = 'loss', columns = 2):
     plt.show()
 
 
-def print_stats(dataframe, 
+def print_stats(dataframe,
         stats_keys = ['optimizer', 'nl', 'initializer', 'activation'],
         n_combinations = 2, verbose = True, return_early = False,
         how_many_to_kill = 2, remove_by_key = False, save_n_best = 10,
@@ -361,7 +361,7 @@ def print_stats(dataframe,
     # Ok, at this point I have a dataframe with all the content from the json.
     # if filters or changes on the threshold for the loss are active, the dataframe would
     # already be filtered and all information ready
- 
+
     def read_key(key):
         if key in keywords.keys():
             key_name = keywords[key]
@@ -391,10 +391,10 @@ def print_stats(dataframe,
     keys_lv_0 = kclean(['optimizer', 'number_of_layers'])
     keys_lv_1 = kclean(['epochs', 'stopping_patience', 'activation'])
     keys_lv_2 = kclean(['p_mul', 'p_ini', 'learning_rate'])
-    
+
     keys_for_removal = keys_lv_0 + keys_lv_1
 
-    key_info_full = gen_key_info(dataframe, keys_for_removal) 
+    key_info_full = gen_key_info(dataframe, keys_for_removal)
     hypalg = HyperAlgorithm(key_info = key_info_full)
     trim_dataframe = hypalg.remove_failing(dataframe)
     key_info_trim = gen_key_info(trim_dataframe, keys_for_removal)
@@ -444,12 +444,14 @@ def print_stats(dataframe,
             key_info_lv1 = gen_key_info(item_1, keys_lv_1)
             falg = HyperAlgorithm(key_info = key_info_lv1)
             n1 = len(key_info_lv1)
-            trim_slice = falg.remove_failing(item_1, n_combinations = n1, fail_threshold = 'median', verbose = False)
+            trim_slice = falg.remove_failing(item_1, n_combinations = n1,
+                    fail_threshold = 'median', verbose = False)
             # Now do the same with the level 2, remove the worst half
             key_info_lv2 = gen_key_info(trim_slice, keys_lv_2)
             falg = HyperAlgorithm(key_info = key_info_lv2)
             n2 = len(key_info_lv2)
-            final_slice = falg.remove_failing(trim_slice, n_combinations = n2, fail_threshold = 'median', verbose = False)
+            final_slice = falg.remove_failing(trim_slice, n_combinations = n2,
+                    fail_threshold = 'median', verbose = False)
             # Now print the ranges
             print_ranges = keys_lv_1 + keys_lv_2
             print("""
@@ -469,7 +471,7 @@ For {0} = {1}
     # Now, for each key we need to get all the possible options
 
     key_info = gen_key_info(dataframe)
-    # Now that we have all the options we need to go in priority order 
+    # Now that we have all the options we need to go in priority order
 
 
 
@@ -496,7 +498,7 @@ For {0} = {1}
             print(key_name)
             trim_slice = hypalg.remove_failing(trim_slice, key = key_name, fail_threshold = 0.0)
         hypalg.print_ranges(trim_slice, dataframe_original = f_slice)
-            
+
 
     set_trace()
 
@@ -639,13 +641,13 @@ def generate_scan_report_from_file(replica_path, json_name = "tries.json", inclu
     if histogram:
         draw_histogram(dataframe, histogram)
 
-        
+
 
     # Plot the plot
     fileout = f'{replica_path}/scan.pdf'
     plot_scans(dataframe, best_trial, fileout)
     print("Plot saved at {0}".format(fileout))
-    
+
 
 if __name__ == "__main__":
     from argparse import ArgumentParser

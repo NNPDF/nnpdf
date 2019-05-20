@@ -1,7 +1,5 @@
 import itertools
 import numpy as np
-from pdb import set_trace
-
 
 class HyperAlgorithm():
 
@@ -25,7 +23,7 @@ class HyperAlgorithm():
 
         self.how_many_to_kill = how_many_to_kill
 
-        # Some variables are not discrete, find them 
+        # Some variables are not discrete, find them
         update_dict = {}
         for key, values in key_info.items():
             try: # Remove nan if there are
@@ -65,7 +63,8 @@ class HyperAlgorithm():
     def __verbose_elimination(self, md, printout = True):
         """
         Show a log of everything that is being eliminated
-        if there is only one item in the dictionary, it also removes it from the combination list just to avoid looking at useless combinations
+        if there is only one item in the dictionary,
+        it also removes it from the combination list just to avoid looking at useless combinations
         """
         combination = md['combination']
         str_list = []
@@ -80,9 +79,7 @@ class HyperAlgorithm():
             print(string, **kwargs)
 
     def __compute_reward(self, md):
-        """
-        Computes a reward function from the information we have 
-        """
+        """ Computes a reward function from the information we have """
         frate = md['f_rate']
         ngood = md['n_good']
         ntotal = md['n_total']
@@ -93,7 +90,7 @@ class HyperAlgorithm():
         rate_good = ngood/ntotal*100.0
 
         # The reward can be negative
-        reward = (50.0 - frate)/100.0 
+        reward = (50.0 - frate)/100.0
         reward -= dstd/rate_good # the less spread the better
         # Finally scale it with the total number of points
         weight_points = 1.0 + ntotal/self.biggest_total
@@ -104,8 +101,8 @@ class HyperAlgorithm():
     def print_ranges(self, dataframe, keys = None, dataframe_original = None):
         """
         Receives a dataframe and a number of keys and prints the surviving keys and ranges
-
-        If dataframe_original is given, will also print (for discrete values) how many of each have survived from the total
+        If dataframe_original is given, will also print (for discrete values)
+        how many of each have survived from the total
         """
         # First get the keys we are printing
         keys = self.key_info.keys()
@@ -135,11 +132,7 @@ class HyperAlgorithm():
                 reward = md['reward']
                 list_str.append( "         Reward: {1:.3f}: {0} ".format(val, reward) )
             print("\n".join(list_str))
-        return 
-
-            
-
-        
+        return
 
         for key in keys:
             df_slice = dataframe[key]
@@ -154,7 +147,8 @@ class HyperAlgorithm():
                     news = df_slice.value_counts()
                     string = " values: "
                     for val in values:
-                        string  += "{0} ({1}/{2} {3:2.0f}%), ".format(val, news[val], originals[val], news[val]/originals[val]*100.0 )
+                        string  += "{0} ({1}/{2} {3:2.0f}%), ".format(val,
+                                        news[val], originals[val], news[val]/originals[val]*100.0)
                     string = string[:-2]
                 else:
                     string = " values: {0}".format(values)
@@ -199,7 +193,6 @@ class HyperAlgorithm():
         keys_info must be a dictionary {key1 : value1, key2, value2 ...}
         """
         df_slice = dataframe
-        check = False
         for key, value in keys_info.items():
             # First check whether for this slice the values for this key are something different from NaN
             key_column = df_slice[key]
@@ -218,7 +211,6 @@ class HyperAlgorithm():
         """
         Get all combinations of n elements for the keys and values given in the dictionary key_info:
         { 'key' : [possible values] }, if key_info is None, the dictionary used to initialize the class will be used
-
         Returns a list of dictionaries such that:
         [
         {'key1' : val1-1, 'key2', val2-1 ... },
@@ -234,7 +226,7 @@ class HyperAlgorithm():
         if single_key:
             single_options = key_info[single_key]
             key_info = {single_key : single_options}
-        
+
         key_combinations = itertools.combinations(key_info, n)
         all_combinations = []
         for keys in key_combinations:
@@ -249,7 +241,7 @@ class HyperAlgorithm():
 
     def study_combination(self, dataframe, combination):
         """
-        Given a dataframe and a dictionary of {key1 : value1, key2: value2} 
+        Given a dataframe and a dictionary of {key1 : value1, key2: value2}
         returns a dictionary with a number of stats for that combination
         """
         df_slice = self.get_slice(dataframe, combination)
@@ -261,7 +253,7 @@ class HyperAlgorithm():
 
     def __sort_to_survive(self, info_dict, how_many_to_save):
         """
-        Receives a list of dictionaries with an entry called reward, returns the 
+        Receives a list of dictionaries with an entry called reward, returns the
         'n' best
         """
         sorted_by_reward = sorted(info_dict, key = lambda i: i['reward'])
@@ -280,7 +272,7 @@ class HyperAlgorithm():
 
     def __sort_to_kill(self, info_dict, by_key = False, how_many_to_kill = None):
         """
-        Receives a list of dictionaries with an entry called reward, returns the 
+        Receives a list of dictionaries with an entry called reward, returns the
         'n' worst ones.
         If by key is True, returns the 'n' worst for each set of keys
         """
@@ -318,7 +310,7 @@ class HyperAlgorithm():
 
         for combination in combinations:
             md = self.study_combination(dataframe, combination)
-            if md['skip']: 
+            if md['skip']:
                 continue
             reward = md['reward']
             if fail_threshold == 'median':
@@ -338,7 +330,8 @@ class HyperAlgorithm():
                 print("Eliminated {0} with reward: {1}".format(i['combination'], i['reward']))
         return new_dataframe
 
-    def check_wrapper_weaklings_killer(self, dataframe, n_combinations = 1, key = None, verbose = False, kill_threshold = None):
+    def check_wrapper_weaklings_killer(self, dataframe, n_combinations = 1, 
+            key = None, verbose = False, kill_threshold = None):
         """
         It starts killing the entry with the worst reward and won't stop until all remaining entries
         for the given number of combinations, have a positive reward
@@ -384,7 +377,8 @@ class HyperAlgorithm():
         self.__verbose_elimination(victim)
 
         # 4 - Keep on murdering
-        return self.check_wrapper_weaklings_killer(new_dataframe, n_combinations, key = key, kill_threshold = kill_threshold)
+        return self.check_wrapper_weaklings_killer(new_dataframe, n_combinations,
+                key = key, kill_threshold = kill_threshold)
 
     def check_wrapper(self, dataframe, n_combinations, kill = False, save_n_best = None):
         """
@@ -404,7 +398,7 @@ class HyperAlgorithm():
 
         # 1 - Get all possible combinations of the keys
         combinations = self.get_combinations(n_combinations)
-        lines_to_print = [] 
+        lines_to_print = []
         siz = 0
         # 2 - Now run for all possible combinations and parse the information
         hit_list = []
@@ -414,14 +408,13 @@ class HyperAlgorithm():
             if md['skip']:
                 continue
             reward = md['reward']
-            ntotal = md['n_total']
             if reward <= self.threshold_reward:
                 # Don't bother with this point, kill it later
                 hit_list.append(md)
             else:
                 md['keys'] = tuple(sorted((combination.keys())))
                 info_dict.append(md)
-                comb_str, fail_str, f_rate = get_str(combination, md)
+                comb_str, fail_str, _ = get_str(combination, md)
                 if len(comb_str) > siz:
                     siz = len(comb_str)
                 lines_to_print.append( (comb_str, fail_str, reward) )
