@@ -82,14 +82,14 @@ fitting:
   nnseed: 2
   mcseed: 3  
   epochs: 20000
-  save: off
+  save: False
   savefile: 'weights.hd5'
-  load: off
+  load: False
   loadfile: 'weights.hd5'
-  plot: off
+  plot: False
 
   seed     : 9453862133528      # set the seed for the random generator
-  genrep   : on     # on = generate MC replicas, off = use real data
+  genrep   : True     # on = generate MC replicas, off = use real data
   rngalgo  : 0      # 0 = ranlux, 1 = cmrg, see randomgenerator.cc
   fitmethod: NGA    # Minimization algorithm
   nmutants : 80     # Number of mutants for replica
@@ -116,18 +116,18 @@ fitting:
   fitbasis: NN31IC # EVOL (7), EVOLQED (8), etc.
   basis:
       # remeber to change the name of PDF accordingly with fitbasis
-      # pos: on for NN squared
+      # pos: True for NN squared
       # mutsize: mutation size
       # mutprob: mutation probability
       # smallx, largex: preprocessing ranges
-      - { fl: sng, pos: off, mutsize: [15], mutprob: [0.05], smallx: [1.04,1.20], largex: [1.45,2.64] }
-      - { fl: g,   pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.82,1.31], largex: [0.20,6.17] }
-      - { fl: v,   pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.51,0.71], largex: [1.24,2.80] }
-      - { fl: v3,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.23,0.63], largex: [1.02,3.14] }
-      - { fl: v8,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.53,0.75], largex: [0.70,3.31] }
-      - { fl: t3,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [-0.45,1.41], largex: [1.78,3.21] }
-      - { fl: t8,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [0.49,1.32], largex: [1.42,3.13] }
-      - { fl: cp,  pos: off, mutsize: [15], mutprob: [0.05], smallx: [-0.07,1.13], largex: [1.73,7.37] }
+      - { fl: sng, pos: False, mutsize: [15], mutprob: [0.05], smallx: [1.04,1.20], largex: [1.45,2.64] }
+      - { fl: g,   pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.82,1.31], largex: [0.20,6.17] }
+      - { fl: v,   pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.51,0.71], largex: [1.24,2.80] }
+      - { fl: v3,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.23,0.63], largex: [1.02,3.14] }
+      - { fl: v8,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.53,0.75], largex: [0.70,3.31] }
+      - { fl: t3,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [-0.45,1.41], largex: [1.78,3.21] }
+      - { fl: t8,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [0.49,1.32], largex: [1.42,3.13] }
+      - { fl: cp,  pos: False, mutsize: [15], mutprob: [0.05], smallx: [-0.07,1.13], largex: [1.73,7.37] }
 
 ############################################################
 stopping:
@@ -157,14 +157,14 @@ positivity:
 ############################################################
 closuretest:
   filterseed  : 0   # Random seed to be used in filtering data partitions
-  fakedata    : off # on = to use FAKEPDF to generate pseudo-data
+  fakedata    : False # on = to use FAKEPDF to generate pseudo-data
   fakepdf     : MSTW2008nlo68cl # Theory input for pseudo-data
   errorsize   : 1.0 # uncertainties rescaling
-  fakenoise   : off # on = to add random fluctuations to pseudo-data
+  fakenoise   : False # on = to add random fluctuations to pseudo-data
   rancutprob  : 1.0 # Fraction of data to be included in the fit
   rancutmethod: 0   # Method to select rancutprob data fraction
-  rancuttrnval: off # 0(1) to output training(valiation) chi2 in report
-  printpdf4gen: off # To print info on PDFs during minimization
+  rancuttrnval: False # 0(1) to output training(valiation) chi2 in report
+  printpdf4gen: False # To print info on PDFs during minimization
 
 ############################################################
 lhagrid:
@@ -176,4 +176,4 @@ lhagrid:
   qmax: 1e5
 
 ############################################################
-debug: off
+debug: False
