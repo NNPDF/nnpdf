@@ -6,7 +6,9 @@ class xDivide(MetaLayer):
     By default: dimension = 8 dividing the entries corresponding to v, v3, v8
     """
 
-    def __init__(self, output_dim = 8, div_list = [2,3,4], size = 1000, **kwargs):
+    def __init__(self, output_dim = 8, div_list = None, size = 1000, **kwargs):
+        if div_list is None:
+            div_list = [2,3,4]
         self.output_dim = output_dim
         self.div_list = div_list
         self.one = self.tensor_ones( (size, 1) )
@@ -32,7 +34,9 @@ class xMultiply(MetaLayer):
     By default: dimension = 8 multiply all entries but v, v3, v8
     """
 
-    def __init__(self, output_dim = 8, div_list = [2,3,4], size = 1000, **kwargs):
+    def __init__(self, output_dim = 8, div_list = None, size = 1000, **kwargs):
+        if div_list is None:
+            div_list = [2,3,4]
         self.output_dim = output_dim
         self.div_list = div_list
         self.one = self.tensor_ones( (size, 1) )
@@ -90,7 +94,7 @@ class MSR_Normalization(MetaLayer):
         pdf_sr = self.concatenate([
             self.one, # photon
             self.one, # sigma
-            (self.one - x[0])/x[1], # g 
+            (self.one - x[0])/x[1], # g
             self.three/x[2], # v
             self.one/x[3], # v3
             self.three/x[4], # v8

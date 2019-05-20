@@ -1,12 +1,11 @@
 """
     Library of function for reading  NNPDF objects
 """
-import numpy as np
-from pdb import set_trace
 import hashlib
 import copy
+import numpy as np
 
-from NNPDF import FKTable, DataSet, FKSet, CommonData, RandomGenerator
+from NNPDF import RandomGenerator
 from validphys.core import ExperimentSpec as vp_Exp
 from validphys.core import DataSetSpec as vp_Dataset
 
@@ -22,14 +21,14 @@ def make_tr_val_mask(datasets, exp_name, seed):
         ndata = dataset_dict['ndata']
         frac = dataset_dict['frac']
         trmax = int(frac*ndata)
-        mask = np.concatenate([np.ones(trmax, dtype=np.bool), 
+        mask = np.concatenate([np.ones(trmax, dtype=np.bool),
                                 np.zeros(ndata-trmax, dtype=np.bool)])
         np.random.shuffle(mask)
         trmask_partial.append(mask)
-        vlmask_partial.append(mask == False)            
+        vlmask_partial.append(mask == False)
     trmask = np.concatenate(trmask_partial)
-    vlmask = np.concatenate(vlmask_partial)        
-    
+    vlmask = np.concatenate(vlmask_partial)
+
     return trmask, vlmask
 
 def fk_parser(fk, is_hadronic = False):
@@ -112,7 +111,7 @@ def common_data_reader_dataset(dataset_c, dataset_spec):
     how_many = dataset_c.GetNSigma()
     dict_fktables = []
     for i in range(how_many):
-        fktable = dataset_c.GetFK(i) 
+        fktable = dataset_c.GetFK(i)
         dict_fktables.append(fk_parser(fktable, dataset_c.IsHadronic()))
 
     dataset_dict = {
@@ -135,7 +134,7 @@ def common_data_reader_experiment(experiment_c, experiment_spec):
 
 
 
-def common_data_reader(spec, t0pdfset, replica_seeds = [], trval_seeds = [0]):
+def common_data_reader(spec, t0pdfset, replica_seeds = None, trval_seeds = None):
     """
     Wrapper to read the information from validphys object
     This function receives either a validphyis experiment or dataset objects
@@ -146,11 +145,16 @@ def common_data_reader(spec, t0pdfset, replica_seeds = [], trval_seeds = [0]):
         - ndata: number of data points
         - experiment: True/False, is it an experiment?
     """
+    if replica_seeds is None:
+        replica_seeds = []
+    if trval_seeds is None:
+        trval_seeds = [0]
     # TODO
     # This whole thing would be much more clear / streamlined if
     #   - The c experiment/dataset object had all the required information for the fit
     #       (i.e., there is a swig conversion for everything, right now missing the operator)
-    #   - The python object stored the load within the spec when doing spec.load() this way it would not be necessary to load twice
+    #   - The python object stored the load within the spec when doing spec.load()
+    #                                   this way it would not be necessary to load twice
     #   - The python object had all necessary information (same as point 1 but inverted)
 
     spec_c = spec.load()
@@ -197,12 +201,12 @@ def common_data_reader(spec, t0pdfset, replica_seeds = [], trval_seeds = [0]):
         covmat_tr = covmat[tr_mask].T[tr_mask]
         ndata_tr = np.count_nonzero(tr_mask)
         expdata_tr = expdata[tr_mask].reshape(1, ndata_tr)
-        invcovmat_tr = np.linalg.inv(covmat_tr) 
+        invcovmat_tr = np.linalg.inv(covmat_tr)
 
         covmat_vl = covmat[vl_mask].T[vl_mask]
         ndata_vl = np.count_nonzero(vl_mask)
         expdata_vl = expdata[vl_mask].reshape(1, ndata_vl)
-        invcovmat_vl = np.linalg.inv(covmat_vl) 
+        invcovmat_vl = np.linalg.inv(covmat_vl)
 
         dict_out = {
                 'datasets' : datasets,

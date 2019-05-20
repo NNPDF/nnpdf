@@ -4,7 +4,6 @@ from keras.layers import Lambda as keras_Lambda
 from keras.layers import multiply as keras_multiply
 
 from keras.layers import Input
-from keras.models import Model
 from keras import backend as K
 
 def numpy_to_input(numpy_array):
@@ -108,4 +107,3 @@ def op_smn(o_list, **kwargs):
     numer = op_add( o_list[:2] )
     denom = op_add( o_list[2:] )
     return op_ratio( [numer, denom], **kwargs )
-    

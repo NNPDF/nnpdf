@@ -6,7 +6,6 @@
     pdfNN_layer_generator:
         Generates the PDF NN layer to be fitted
 """
-
 from layers import DIS
 from layers import DY
 from layers import Mask
@@ -14,20 +13,19 @@ from layers import Preprocessing, Rotation
 
 from backends import operations
 from backends import losses
-from backends import MetaModel, MetaLayer
+from backends import MetaLayer
 from backends import base_layer_selector, concatenate, Lambda
 
-import numpy as np
-import pdb
 
-def observable_generator(spec_dict, positivity_initial = None, positivity_multiplier = 1.05, verbose = False, positivity_steps = 300):
+def observable_generator(spec_dict, positivity_initial = None, positivity_multiplier = 1.05,
+        verbose = False, positivity_steps = 300):
     """
-    Receives a spec object (can be either a dataset or an experiment) 
+    Receives a spec object (can be either a dataset or an experiment)
     Takes some optional arguments:
         positivity_initial: if given, set this number as the positivity multiplier for epoch 1
         positivity_multiplier: how much the positivity increases every 100 steps
-        positivity_steps: if positivity_initial is not given, computes the initial by assuming we want, after 
-                            100*positivity_steps epochs, to have the lambda of the runcard
+        positivity_steps: if positivity_initial is not given, computes the initial by assuming we want,
+                          after 100**positivity_steps epochs, to have the lambda of the runcard
     returns a tuple with:
     (input_layer, obs_layer, loss function, exp_data)
         - input_layer: list of input layers
@@ -142,12 +140,16 @@ def observable_generator(spec_dict, positivity_initial = None, positivity_multip
 
 
 def pdfNN_layer_generator(inp = 2,
-        nodes = [15, 8], activations = ['tanh', 'linear'], initializer_name = 'glorot_normal', layer_type = 'dense',
+        nodes = None, activations = None, initializer_name = 'glorot_normal', layer_type = 'dense',
         flav_info = None, out = 14, seed = None, dropout = 0.0):
     """
     Generates a NN that takes as input the xgrid value and outputs the basis of 14 PDFs
     fk tables use
     """
+    if nodes is None:
+        nodes = [15,8]
+    if activations is None:
+        activations = ['tanh', 'linear']
     # Safety check
     ln = len(nodes)
     la = len(activations)
@@ -161,7 +163,7 @@ def pdfNN_layer_generator(inp = 2,
     # If dropout == 0, don't add dropout layer
     if dropout == 0.0:
         dropme = -99
-    else: # Add the dropout to the second to last layer 
+    else: # Add the dropout to the second to last layer
         dropme = ln-2
 
     # Layer generation
@@ -174,7 +176,7 @@ def pdfNN_layer_generator(inp = 2,
         init = MetaLayer.select_initializer(initializer_name, seed=seed+i)
 
         arguments = {'kernel_initializer' : init, 'units' : int(units), 'activation' : activation,
-                        'input_shape' : (pre,),  
+                        'input_shape' : (pre,),
                         }
         # Arguments that are not used by a given layer are just dropped
         tmpl = base_layer_selector(layer_type, **arguments)

@@ -4,37 +4,37 @@
     Extension of the backend Model class containing some wrappers in order to absorb other
     backend-dependent calls
 """
+import numpy as np
 from keras.models import Model
 from keras.layers import Input
 import keras.optimizers as Kopt
 import keras.backend as K
-import numpy as np
 
 
-class MetaModel(Model): 
+class MetaModel(Model):
     """
     The goal of this class is to absorb all keras dependent code
     """
 
     # Define in this dictionary new optimizers as well as the arguments they accept (with default values if needed be)
     optimizers = {
-            'RMSprop'  : ( 
-                Kopt.RMSprop, {'lr': 0.01} 
+            'RMSprop'  : (
+                Kopt.RMSprop, {'lr': 0.01}
                 ),
-            'Adam'     : ( 
+            'Adam'     : (
                 Kopt.Adam, {'lr' : 0.01}
                 ),
             'Adagrad'  : (
                 Kopt.Adagrad, {} ),
-            'Adadelta' : ( 
+            'Adadelta' : (
                 Kopt.Adadelta, {} ),
             'Adamax'   : (
                 Kopt.Adamax, {} ),
             'Nadam'    : (
                 Kopt.Nadam, {} ),
             'Amsgrad'  : (
-                Kopt.Adam, {'lr' : 0.01, 'amsgrad' : True } 
-                ), 
+                Kopt.Adam, {'lr' : 0.01, 'amsgrad' : True }
+                ),
            }
 
     def __init__(self, input_tensors, output_tensors, extra_tensors = None):
@@ -79,7 +79,7 @@ class MetaModel(Model):
         else:
             return x
 
-    def compile(self, optimizer_name = 'RMSprop', learning_rate = 0.05, loss = None):
+    def compile(self, optimizer_name = 'RMSprop', learning_rate = 0.05, loss = None, **kwargs):
         """
         Compile the model given:
             - Optimizer
@@ -100,4 +100,4 @@ class MetaModel(Model):
         opt_args['clipnorm'] = 1.0
         opt = opt_function(**opt_args)
 
-        super (MetaModel, self).compile(optimizer = opt, loss = loss)
+        super (MetaModel, self).compile(optimizer = opt, loss = loss, **kwargs)

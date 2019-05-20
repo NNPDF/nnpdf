@@ -35,4 +35,3 @@ def clear_backend_state(debug):
                                 inter_op_parallelism_threads=8)
         sess = K.tf.Session(graph=K.tf.get_default_graph(), config=session_conf)
         K.set_session(sess)
-        

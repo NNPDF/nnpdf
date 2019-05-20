@@ -4,7 +4,7 @@
     Custom hyperopt trial object for persistent file storage
 """
 import json
-from hyperopt import Trials, base, space_eval
+from hyperopt import Trials, space_eval
 
 def space_eval_trial(space, trial):
     for_eval = {}

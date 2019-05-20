@@ -5,7 +5,7 @@
     'name of the layer' : ( Layer_class, {dictionary of arguments: defaults} )
 """
 
-from keras.layers import Dense, concatenate, Lambda, LSTM, Dropout
+from keras.layers import Dense, Lambda, LSTM, Dropout, concatenate
 from keras.backend import expand_dims
 
 
@@ -15,7 +15,7 @@ def LSTM_modified(**kwargs):
     """
 
     the_lstm = LSTM(**kwargs)
-    ExpandDim = Lambda( 
+    ExpandDim = Lambda(
             lambda x: expand_dims(x, axis = -1)
         )
     def ReshapedLSTM(input_tensor):
@@ -28,7 +28,7 @@ def LSTM_modified(**kwargs):
 
 
 layers = {
-        'dense' : (Dense, { 
+        'dense' : (Dense, {
             'input_shape' : (1,),
             'kernel_initializer' : 'glorot_normal',
             'units' : 5,
@@ -39,7 +39,7 @@ layers = {
             'units' : 5,
             'activation' : 'sigmoid',
             }),
-        'dropout' : (Dropout, { 
+        'dropout' : (Dropout, {
             'rate' : 0.0,
             }),
         }

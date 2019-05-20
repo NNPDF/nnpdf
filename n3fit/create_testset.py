@@ -1,5 +1,5 @@
-import numpy as np
 import os
+import numpy as np
 
 from reportengine.compat import yaml
 
@@ -36,7 +36,7 @@ def test_runcard(runcard_file, datasets_out):
         else:
             runcard_exp.remove(experiment)
 
-    # Generate the new runcard 
+    # Generate the new runcard
     # TODO: maybe there is a proper report-enginy way of doing this
     runcard_exp.append(test_experiment)
     new_runcard = "TEST-{0}".format(os.path.basename(runcard_file))
@@ -48,7 +48,7 @@ def test_runcard(runcard_file, datasets_out):
     print("\n > You can find your new runcard at {0}/{1}\n".format(os.getcwd(), new_runcard))
 
 def create_testset(experiments, runcard_file = "runcards/NNPDF31_nlo_as_0118.yml"):
-    """ 
+    """
         This function gets the list of experiment and goes through the datasets
         reading their experiment type and range in x
         Depending on these, chooses the ones to leave out for testing
@@ -100,7 +100,7 @@ def create_testset(experiments, runcard_file = "runcards/NNPDF31_nlo_as_0118.yml
             datasets_out.append(data_out['name'])
             all_experiments[dataset['exp']] -= 1
 
-    if len(datasets_out) == 0:
+    if not datasets_out:
         print("No redundant datasets were found")
     else:
         test_runcard(runcard_file, datasets_out)
