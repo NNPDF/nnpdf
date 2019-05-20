@@ -18,8 +18,8 @@ warnings.simplefilter(action = 'ignore', category = FutureWarning)
 from pdb import set_trace
 
 import re
-regex_op = re.compile("[^\w^\.]+")
-regex_not_op = re.compile("[\w\.]+")
+regex_op = re.compile(r'[^\w^\.]+')
+regex_not_op = re.compile(r'[\w\.]+')
 
 keywords = {
         'id' : 'iteration',
