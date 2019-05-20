@@ -149,8 +149,8 @@ class HyperScanner:
         """
         if activations is None:
             activations = ['sigmoid', 'tanh']
-        if initializer is None:
-            initializer = ['glorot_normal']
+        if initializers is None:
+            initializers = ['glorot_normal']
         if n_layers is None:
             n_layers = [1, 2, 5]
         if layer_types is None:
