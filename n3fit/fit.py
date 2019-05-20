@@ -3,18 +3,18 @@
 """
 
 # Backend-independent imports
-import numpy as np
 import sys
 import logging
 import os.path
-from pdb import set_trace
+import numpy as np
 
 log = logging.getLogger(__name__)
 
 # Action to be called by validphys
-def fit( fitting, # All information defining the NN should come here in the "parameters" dict
+# All information defining the NN should come here in the "parameters" dict
+def fit( fitting,
         experiments, t0set, replica, replica_path, output_path,
-        theoryid, posdatasets, hyperscan = None, 
+        theoryid, posdatasets, hyperscan = None,
         hyperopt = None, debug = False,
         create_test_card = None):
 
@@ -46,11 +46,11 @@ def fit( fitting, # All information defining the NN should come here in the "par
     else:
         status_ok = "ok"
 
-    # Loading t0set from LHAPDF 
+    # Loading t0set from LHAPDF
     if t0set is not None:
         t0pdfset = t0set.load_t0()
 
-    # First set the seed variables for 
+    # First set the seed variables for
     # - Tr/Vl split
     # - Neural Network initialization
     # - Replica generation
@@ -115,7 +115,7 @@ def fit( fitting, # All information defining the NN should come here in the "par
                 pass_status = status_ok,
                 log = log, debug = debug)
 
-        # Check whether we want to load weights from a file (maybe from a previous run) 
+        # Check whether we want to load weights from a file (maybe from a previous run)
         # check whether the file exists, otherwise set it to none
         # reading the data up will be done by the model_trainer
         if fitting.get('load'):
@@ -133,13 +133,13 @@ def fit( fitting, # All information defining the NN should come here in the "par
         # Read up the parameters of the NN from the runcard
         parameters = fitting.get('parameters')
 
-        ####################################################################### 
-        # ### Hyperopt
-        # If hyperopt is active the parameters of NN will be substituted by the
-        # hyoperoptimizable variables.
-        # Hyperopt will run for --hyperopt number of iterations before leaving
-        # this block
-        ####################################################################### 
+        ########################################################################
+        # ### Hyperopt                                                         #
+        # If hyperopt is active the parameters of NN will be substituted by the#
+        # hyoperoptimizable variables.                                         #
+        # Hyperopt will run for --hyperopt number of iterations before leaving #
+        # this block                                                           #
+        ########################################################################
         if hyperopt:
             from HyperScanner import HyperScanner
 
@@ -181,21 +181,21 @@ def fit( fitting, # All information defining the NN should come here in the "par
             # Now update the parameters with the ones found by the scan
             true_best = hyper.space_eval(parameters, best)
             the_scanner.update_dict(true_best)
-            params = the_scanner.dict()
+            parameters = the_scanner.dict()
             print("##################")
             print("Best model found: ")
             for k, i in true_best.items():
                 print(" {0} : {1} ".format(k,i))
         ####################################################################### end of hyperopt
 
-        # Ensure hyperopt is off 
-        the_model_trainer.set_hyperopt(on = False) 
+        # Ensure hyperopt is off
+        the_model_trainer.set_hyperopt(on = False)
 
-        ########################################################################### 
-        # ### Fit
-        # This function performs the actual fit, it reads all the parameters in the 
-        # "parameters" dictionary, uses them to generate the NN and trains the net
-        ###########################################################################
+        #############################################################################
+        # ### Fit                                                                   #
+        # This function performs the actual fit, it reads all the parameters in the #
+        # "parameters" dictionary, uses them to generate the NN and trains the net  #
+        #############################################################################
         result = pdf_gen_and_train_function(parameters)
 
         # After the fit is run we get a 'result' dictionary with the following items:
@@ -237,9 +237,10 @@ def fit( fitting, # All information defining the NN should come here in the "par
             result = modelito.predict(x = None, steps = 1)
             return result
         # export PDF grid to file
-        storefit(pdf_function, replica_number, replica_path_set, output_path.stem, theoryid.get_description().get('Q0')**2,
-                validation_object.epoch_of_the_stop, 
-                validation_object.loss(), validation_object.tr_loss(), true_chi2, arc_lengths, allchi2_lines, preproc_lines, validation_object.positivity_pass())
+        storefit(pdf_function, replica_number, replica_path_set, output_path.stem,
+                theoryid.get_description().get('Q0')**2, validation_object.epoch_of_the_stop,
+                validation_object.loss(), validation_object.tr_loss(), true_chi2,
+                arc_lengths, allchi2_lines, preproc_lines, validation_object.positivity_pass())
 
 
     # Save the weights to some file

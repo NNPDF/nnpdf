@@ -8,7 +8,6 @@ import re
 import shutil
 import pathlib
 import logging
-import hashlib
 import warnings
 import argparse
 
@@ -114,7 +113,7 @@ class N3FitApp(App):
     config_class = N3FitConfig
 
     def __init__(self):
-        super(N3FitApp, self).__init__(name='n3fit', 
+        super(N3FitApp, self).__init__(name='n3fit',
                                        providers=N3FIT_PROVIDERS)
 
     @property
@@ -156,7 +155,6 @@ class N3FitApp(App):
                 replicas = list(range(replica, self.args['replica_range']+1))
             else:
                 replicas = [replica]
-            from pdb import set_trace
             self.environment.replica = replicas
             self.environment.hyperopt = self.args['hyperopt']
             if self.args['create_test_card']:

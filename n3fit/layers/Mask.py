@@ -21,5 +21,3 @@ class Mask(MetaLayer):
 
     def call(self, prediction_in):
         return self.boolean_mask(self.kernel*prediction_in, self.mask)
-
-

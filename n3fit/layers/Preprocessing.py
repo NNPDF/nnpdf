@@ -1,5 +1,4 @@
 from backends import MetaLayer
-import numpy as np
 
 BASIS_SIZE = 8
 class Preprocessing(MetaLayer):
@@ -71,7 +70,7 @@ class Rotation(MetaLayer):
         pdf_raw_list = [
             0*x[0], # photon
             x[0], # sigma
-            x[1], # g 
+            x[1], # g
             x[2], # v
             x[3], # v3
             x[4], # v8
@@ -86,4 +85,3 @@ class Rotation(MetaLayer):
         ]
         pdf = self.concatenate( pdf_raw_list, target_shape = (self.output_dim, -1) )
         return self.transpose(pdf)
-

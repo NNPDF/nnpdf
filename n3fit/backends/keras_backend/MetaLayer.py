@@ -1,30 +1,28 @@
 """
-    The class MetaLayer is an extension of the backend Layer class 
+    The class MetaLayer is an extension of the backend Layer class
     with a number of methods and helpers to facilitate writing new custom layers
     in such a way that the new custom layer don't need to rely in anything backend-dependent
 
-    In other words, if you want to implement a new layer and need functions not included in this
-    MetaLayer it is better to add a new method which is just a call to the relevant backend-dependent function
+    In other words, if you want to implement a new layer and need functions not included here
+    it is better to add a new method which is just a call to the relevant backend-dependent function
     For instance: np_to_tensor is just a call to K.constant
 """
 
 
 from keras import backend as K
-
 from keras.engine.topology import Layer
-
 from keras.initializers import Constant, RandomUniform, glorot_normal, glorot_uniform
-
 from keras.constraints import MinMaxNorm
-
-from keras.layers import Input
-
-import numpy as np
-
 
 class MetaLayer(Layer):
     """
     This metalayer function must contain all backend-dependent functions
+
+    In order to write a custom Keras layer you usually need to override:
+        - __init__
+        - build
+        - call
+        - output_shape
     """
 
     # Define in this dictionary new initializers as well as the arguments they accept (with default values if needed be)
@@ -45,16 +43,13 @@ class MetaLayer(Layer):
         constraint: one of the constraints from this class (actually, any keras constraints)
         """
         kernel = self.add_weight(
-            name = name, 
+            name = name,
             shape = kernel_shape,
             initializer = initializer,
             trainable = trainable,
             constraint = constraint,
             )
         return kernel
-
-    def build(self, input_shape):
-        super (MetaLayer, self).build(input_shape)
 
     # Implemented initializers
     @staticmethod
@@ -84,8 +79,8 @@ class MetaLayer(Layer):
 
     # Implemented constraint
     def constraint_MinMaxWeight(self, min_value, max_value):
-        """ Small override to the MinMaxNorm Keras class to not look at the 
-        absolute value 
+        """
+        Small override to the MinMaxNorm Keras class to not look at the absolute value
         This version looks at the sum instead of at the norm
         """
         class MinMaxWeight(MinMaxNorm):
@@ -116,8 +111,10 @@ class MetaLayer(Layer):
 
     def many_replication(self, grid, replications, axis = 0, **kwargs):
         """
-        Generates a tensor with one extra dimension which is a repetition of "grid" n times along the given axis
-        frm keras documentation: If x has shape (s1, s2, s3) and axis is 1, the output will have shape (s1, s2 * rep, s3)
+        Generates a tensor with one extra dimension:
+            a repetition of "grid" n times along the given axis
+        from keras documentation:
+        If x has shape (s1, s2, s3) and axis is 1, the output will have shape (s1, s2 * rep, s3)
         """
         return K.repeat_elements(grid, rep = replications, axis = axis, **kwargs)
 
@@ -134,9 +131,9 @@ class MetaLayer(Layer):
         return K.tf.tensordot(tensor_x, tensor_y, axes = axes, **kwargs)
 
     def transpose(self, tensor, **kwargs):
-        """ 
+        """
         Transpose a tensor
-        """ 
+        """
         return K.transpose(tensor, **kwargs)
 
     def boolean_mask(self, tensor, mask, axis = None, **kwargs):
@@ -148,7 +145,6 @@ class MetaLayer(Layer):
     def concatenate(self, tensor_list, axis = -1, target_shape = None):
         """
         Concatenates a list of numbers or tenosr into a bigger tensor
-        
         If the target shape is given, the output is reshaped to said shape
         """
         concatenated_tensor = K.concatenate(tensor_list, axis = axis)
@@ -165,6 +161,3 @@ class MetaLayer(Layer):
         does the permutation: axis_0 -> axis_1, axis_1 -> axis_0, axis_2 -> axis_2
         """
         return K.permute_dimensions( tensor, permutation , **kwargs)
-    
-    
-

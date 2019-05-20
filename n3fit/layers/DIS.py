@@ -1,5 +1,5 @@
-from layers.Observable import Observable
 import numpy as np
+from layers.Observable import Observable
 
 class DIS(Observable):
     def gen_basis(self, basis):

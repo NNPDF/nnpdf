@@ -2,7 +2,6 @@
     Functions to imposem the Momentum sum rule on the PDFs
 """
 import numpy as np
-import pdb
 
 from layers import xDivide, MSR_Normalization, xIntegrator, xMultiply
 from backends import operations
@@ -10,7 +9,7 @@ from backends import MetaModel
 
 def gen_integration_input(nx):
     """
-    Generates a np.array (shaped (nx,1)) of nx elements where the 
+    Generates a np.array (shaped (nx,1)) of nx elements where the
     nx/2 first elements are a logspace between 0 and 0.1
     and the rest a linspace from 0.1 to 0
     """
@@ -24,15 +23,14 @@ def gen_integration_input(nx):
     for i in range(1,nx):
         spacing.append( np.abs(xgrid[i-1]-xgrid[i]) )
     spacing.append(0.0)
-    
+
     weights = []
     for i in range(nx):
         weights.append( (spacing[i]+spacing[i+1])/2.0 )
     weights_array = np.array(weights).reshape(nx, 1)
 
     return xgrid, weights_array
-    
-    
+
 def msr_impose(fit_layer, final_pdf_layer, verbose = False):
     """
     This function receives:
@@ -50,21 +48,21 @@ def msr_impose(fit_layer, final_pdf_layer, verbose = False):
     #    for that we need to multiply several flavours with 1/x
     division_by_x = xDivide(size = nx)
     def pdf_integrand(x):
-        res = operations.op_multiply([ 
-                division_by_x(x), fit_layer(x) 
+        res = operations.op_multiply([
+                division_by_x(x), fit_layer(x)
                 ])
         return res
 
     # 3. Now create the integration layer (the layer that will simply integrate, given some weight
     integrator = xIntegrator(weights_array, input_shape = (nx,))
-    
+
     # 4. Now create the normalization by selecting the right integrations
     normalizer = MSR_Normalization(input_shape = (8,))
-   
+
     # 5. Make the xgrid numpy array into a backend input layer so it can be given
     xgrid_input = operations.numpy_to_input(xgrid)
     normalization = normalizer(
-            integrator( 
+            integrator(
                 pdf_integrand(xgrid_input)
             )
         )
@@ -73,12 +71,12 @@ def msr_impose(fit_layer, final_pdf_layer, verbose = False):
         return operations.op_multiply_dim( [final_pdf_layer(x), normalization] )
 
     if verbose:
-        only_int = integrator(pdf_integrand(xgrid_input))
-        modelito = MetaModel(xgrid_input, only_int)
-        result = modelito.predict(x = None, steps = 1)
+#         only_int = integrator(pdf_integrand(xgrid_input))
+#         modelito = MetaModel(xgrid_input, only_int)
+#         result = modelito.predict(x = None, steps = 1)
 
         print(" > > Generating model for the inyection layer which imposes MSR")
-        check_integration(ultimate_pdf, xgrid_input)
+        check_integration(ultimate_pdf, xgrid_input, verbose = True)
 
     # Save a reference to xgrid in ultimate_pdf, very useful for debugging
     ultimate_pdf.ref_xgrid = xgrid_input
@@ -92,8 +90,8 @@ def check_integration(ultimate_pdf, integration_input, verbose = False):
 
     multiplier = xDivide(size = nx, output_dim = 14, div_list = range(3,9))
     def pdf_integrand(x):
-        res = operations.op_multiply([ 
-                multiplier(x), ultimate_pdf(x) 
+        res = operations.op_multiply([
+                multiplier(x), ultimate_pdf(x)
                 ])
         return res
 
@@ -109,7 +107,7 @@ def check_integration(ultimate_pdf, integration_input, verbose = False):
     v = result_integrated[3]
     v3 = result_integrated[4]
     v8 = result_integrated[5]
-    print(""" 
+    print("""
      > > > Int from 0 to 1 of:
     x*g(x) + x*sigma(x) = {0}
     v                   = {1}
@@ -153,6 +151,3 @@ def compute_arclength(fitbasis_layer, verbose = False):
         v8    = {4}""".format(*arc_lengths[:5]))
 
     return arc_lengths
-
-
-

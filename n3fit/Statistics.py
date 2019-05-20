@@ -25,12 +25,12 @@ class Stat_Info:
         self.vl_data = vl_data
 
         self.stop_now = False
-        self.nan_found = False 
+        self.nan_found = False
         self.stopping_epochs = stopping_epochs
         self.stopping_degree = 0
         self.total_epochs = total_epochs
         self.epoch_of_the_stop = total_epochs
-        self.dont_stop = False
+        self.dont_stop = dont_stop
         self.total_epochs = total_epochs
         self.not_reloaded = True
         self.save_all_each = save_all_each
@@ -38,10 +38,9 @@ class Stat_Info:
         # Threshold for positivity
         self.threshold_positivity = threshold_positivity
 
-
         # Best model stats
         self.threshold = chi2_threshold
-  
+
         # Number of points per experiment
         self.ndata_tr = max(ndata_dict['total_tr'], 1)
         self.ndata_vl = max(ndata_dict['total_vl'], 1)
@@ -108,7 +107,8 @@ class Stat_Info:
             vl_list = []
 
         # If validation dont include all experiments, there is something wrong in the modle
-        # and since evaluate returns a list with no names, it is impossible to know which experiment corresponds to which chi2
+        # and since evaluate returns a list with no names,
+        # it is impossible to know which experiment corresponds to which chi2
         if len(vl_list) != len(self.exp_names):
             vl_list = [0.0 for i in self.exp_names]
 
@@ -121,7 +121,7 @@ class Stat_Info:
         return total, vl_dict
 
     def _parse_training(self, training_info):
-        """ Receives an object containing the training chi2 and parses it 
+        """ Receives an object containing the training chi2 and parses it
         in the form of a { 'experiment' : chi2 } dictionary, where chi2
         is already normalised to the number of points per experiment """
         try:
@@ -144,11 +144,11 @@ class Stat_Info:
 
     def monitor_chi2(self, training_info, epoch):
         """ Function to be called at the end of every epoch.
-        Stores the total chi2 of the training set as well as the 
+        Stores the total chi2 of the training set as well as the
         total chi2 of the validation set.
         If the training chi2 is below a certain threshold,
-        stores the state of the model which gave the minimum chi2 
-        as well as the epoch in which occurred 
+        stores the state of the model which gave the minimum chi2
+        as well as the epoch in which occurred
         If the epoch is a multiple of save_all_each then we also save the per-exp chi2
 
         Returns True if the run seems ok and False if a NaN is found
@@ -156,7 +156,7 @@ class Stat_Info:
         vl_chi2, all_vl = self._compute_validation()
         tr_chi2, all_tr = self._parse_training(training_info)
 
-        if tr_chi2 != tr_chi2:
+        if np.isnan(tr_chi2):
             print(" > NaN found, stopping activated")
             self.stop_now = True
             self.nan_found = True
@@ -209,7 +209,7 @@ class Stat_Info:
             self.vl_model.set_weights(self.w_best_chi2)
 
     def good_stop(self):
-        """ Returns true if and only if the stopping criteria was actually fulfilled 
+        """ Returns true if and only if the stopping criteria was actually fulfilled
         and we didnt stop by error/nan """
         return self.positivity and not self.nan_found
 
@@ -274,10 +274,6 @@ class Stat_Info:
 
     # Str functions
     def positivity_pass(self):
-        try:
-            print(" \n\n> > > > > Saved history: {0}\n\n\n".format(self.saved_history.history))
-        except:
-            pass
         if self.positivity:
             return "POS_PASS"
         else:

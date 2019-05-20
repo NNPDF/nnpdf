@@ -2,20 +2,19 @@
     ModelTrainer Class:
 
     This class provides a wrapper around the fitting code and the generation of the Neural Network
-    When the "hyperparametizable"* function is called with a dictionary of parameters, it generates a NN
-    and subsequentially performs a fit.
+    When the "hyperparametizable"* function is called with a dictionary of parameters,
+    it generates a NN and subsequentially performs a fit.
 
-    The motivation behind this class is to minimise the amount of redundant calls of each hyperopt run,
-    in particular this allows to completely reset the NN at the beginning of each iteration reusing some
-    of the previous work.
+    The motivation behind this class is minimising the amount of redundant calls of each hyperopt
+    run, in particular this allows to completely reset the NN at the beginning of each iteration
+    reusing some of the previous work.
 
     *called in this way because it accept a dictionary of parameters which defines the Neural Network
 """
-from backends import MetaModel, clear_backend_state
 import model_gen
 import constrains
-import statistics
-from pdb import set_trace
+import Statistics
+from backends import MetaModel, clear_backend_state
 
 # If an experiment matches this name, it will not be included int he training
 TESTNAME = 'TEST'
@@ -24,7 +23,7 @@ test_multiplier = 0.5
 validation_multiplier = 0.5
 
 class ModelTrainer:
-    def __init__(self, exp_info, pos_info, flavinfo, nnseed, 
+    def __init__(self, exp_info, pos_info, flavinfo, nnseed,
             pass_status = 'ok', failed_status = 'fail',
             log = None, debug = False):
         """
@@ -94,7 +93,8 @@ class ModelTrainer:
             self.no_validation = True
             new_dict = {}
             for key, item in self.ndata_dict.items():
-                if key.endswith("_vl"): continue
+                if key.endswith("_vl"):
+                    continue
                 new_dict[key + "_vl"] = item
             self.ndata_dict.update(new_dict)
             self.validation['expdata'] = self.training['expdata']
@@ -105,28 +105,29 @@ class ModelTrainer:
         """ If a model_file is set the training model will try to get the weights form here """
         self.model_file = model_file
 
-    def set_hyperopt(self, on, keys = []):
+    def set_hyperopt(self, on, keys = None):
         """ Set hyperopt options on and off (mostly suppresses some printing) """
+        if keys is None:
+            keys = []
         self.hyperkeys = keys
-        if on: 
+        if on:
             self.print_summary = False
             self.mode_hyperopt = True
         else:
             self.print_summary = True
             self.mode_hyperopt = False
 
-
-    ##########################################################################
-    # # Internal functions
-    # Never to be called from the dark and cold outside world
-    ##########################################################################
+    ###########################################################################
+    # # Internal functions                                                    #
+    # Never to be called from the dark and cold outside world                 #
+    ###########################################################################
     def _fill_the_dictionaries(self):
         """
         This function fills the following dictionaries with fixed information,
             - training: data for the fit
             - validation: data which for the stopping
             - experimental: 'true' data, only used for reporting purposes
-            - ndata_dict: a dictionary containing 'name of experiment' : Number Of Point
+            - ndata_dict: a dictionary containing 'name of experiment' : Number Of Points
 
         the fixed information (i.e., non dependant on the parameters of the fit) is:
             - experimental data (expdata)
@@ -159,7 +160,7 @@ class ModelTrainer:
 
         for pos_dict in self.pos_info:
             self.training['expdata'].append( pos_dict['expdata'] )
-            self.ndata_dict[pos_dict['name']] = pos_dict['ndata'] 
+            self.ndata_dict[pos_dict['name']] = pos_dict['ndata']
             self.training['posdatasets'].append(pos_dict['name'])
 
         self.ndata_dict['total_tr'] = self.training['ndata']
@@ -170,7 +171,7 @@ class ModelTrainer:
         """
         Fills the three dictionaries with the 'model' entry
             Note: before entering this function the dictionaries contain a list of inputs
-                  and a list of outputs, but they are not connected. 
+                  and a list of outputs, but they are not connected.
                   This function connects inputs with outputs by injecting the PDF
 
         Compiles the validation and experimental models with fakes optimizers and learning rate
@@ -222,7 +223,8 @@ class ModelTrainer:
             self.training[key] = []
             self.validation[key] = []
             self.experimental[key] = []
-            if self.test_dict: self.test_dict[key] = []
+            if self.test_dict:
+                self.test_dict[key] = []
 
     def _pdf_injection(self, olist):
         """
@@ -232,17 +234,17 @@ class ModelTrainer:
         return [o(self.layer_pdf) for o in olist]
 
 
-    ###########################################################################
-    # # Parametizable functions                                             
-    #                                                                       
-    # The functions defined in this block accept a 'params' dictionary which
-    # defines the fit and the behaviours of the Neural Networks
-    #
-    # These are all called by the function hyperparamizable below
-    # i.e., the most important function is hyperparametizable, which is a
-    # wrapper around all of these
-    ###########################################################################
-    def _generate_observables(self, params):                                  
+    ############################################################################
+    # # Parametizable functions                                                #
+    #                                                                          #
+    # The functions defined in this block accept a 'params' dictionary which   #
+    # defines the fit and the behaviours of the Neural Networks                #
+    #                                                                          #
+    # These are all called by the function hyperparamizable below              #
+    # i.e., the most important function is hyperparametizable, which is a      #
+    # wrapper around all of these                                              #
+    ############################################################################
+    def _generate_observables(self, params):
         """
         This functions fills the 3 dictionaries (training, validation, experimental)
         with the output layers and the loss functions
@@ -257,7 +259,7 @@ class ModelTrainer:
         self._reset_observables()
         self.log_info("Generating layers")
 
-        # two parameters are used here which might go to the hyperopt 
+        # two parameters are used here which might go to the hyperopt
         pos_multiplier = params['pos_multiplier'] # how much to increase the positivity penalty each 100 epochs
         pos_initial = params['pos_initial']
 
@@ -274,7 +276,7 @@ class ModelTrainer:
             if exp_dict['name'] == TESTNAME and self.test_dict:
                 # If this is the test set, fill the dictionary and stop here
                 self.test_dict['output'].append( exp_layer['output'] )
-                self.test_dict['losses'].append( exp_layer['loss'] ) 
+                self.test_dict['losses'].append( exp_layer['loss'] )
                 continue
 
             # Now save the observable layer, the losses and the experimental data
@@ -290,7 +292,7 @@ class ModelTrainer:
         for pos_dict in self.pos_info:
             if not self.mode_hyperopt:
                 self.log_info("Generating positivity penalty for {0}".format(pos_dict['name']))
-            pos_layer = model_gen.observable_generator(pos_dict, 
+            pos_layer = model_gen.observable_generator(pos_dict,
                     positivity_initial = pos_initial, positivity_multiplier = pos_multiplier
                     )
             # The input list is still common
@@ -313,7 +315,7 @@ class ModelTrainer:
         Defines the internal variable layer_pdf
         this layer takes any input (x) and returns the pdf value for that x
 
-        if the sumrule is being imposed, it also updates input_list with the 
+        if the sumrule is being imposed, it also updates input_list with the
         integrator_input tensor used to calculate the sumrule
 
         Returns: (layers, integrator_input)
@@ -380,7 +382,7 @@ class ModelTrainer:
         Trains the NN for the number of epochs given using
         validation_object as the stopping criteria
 
-        Every 100 epochs the positivitiy will be updated with 
+        Every 100 epochs the positivitiy will be updated with
         self.training['pos_multiplier']
         """
         training_model = self.training['model']
@@ -411,8 +413,8 @@ class ModelTrainer:
 
     def _hyperopt_override(self, params):
         # I love the smell of napalm in the morning
-        for key in self.hyperkeys:
-            item = params[key]
+        for hyperkey in self.hyperkeys:
+            item = params[hyperkey]
             if isinstance(item, dict):
                 for key, value in item.items():
                     params[key] = value
@@ -442,23 +444,25 @@ class ModelTrainer:
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         self._generate_observables(params)
 
-        # Generate the pdf layer 
+        # Generate the pdf layer
         layers, integrator_input = self._generate_pdf(params)
 
         # Model generation
         self._model_generation()
 
         # Generate the validation_object
-        # this object golds statistical information about the fit and it can be used to perform stopping 
+        # this object golds statistical information about the fit and it can be used to perform stopping
         epochs = int(params['epochs'])
         stopping_patience = params['stopping_patience']
         stopping_epochs = epochs*stopping_patience
 
-        # If the tr/vl splitting is == 1, there will be no points in the validation so we should use the training as the splitting
+        # If the tr/vl splitting is == 1, there will be no points in the validation so we use the training as val
         if self.no_validation:
-            validation_object = statistics.Stat_Info(self.training['model'], self.training['expdata'], self.ndata_dict, total_epochs = epochs, stopping_epochs = stopping_epochs)
+            validation_object = Statistics.Stat_Info( self.training['model'], self.training['expdata'],
+                    self.ndata_dict, total_epochs = epochs, stopping_epochs = stopping_epochs )
         else:
-            validation_object = statistics.Stat_Info(self.validation['model'], self.validation['expdata'], self.ndata_dict, total_epochs = epochs, stopping_epochs = stopping_epochs)
+            validation_object = Statistics.Stat_Info(self.validation['model'], self.validation['expdata'],
+                    self.ndata_dict, total_epochs = epochs, stopping_epochs = stopping_epochs )
 
         # Compile the training['model'] with the given parameters
         self._model_compilation(params)
@@ -482,7 +486,7 @@ class ModelTrainer:
 
         # Compute the testing loss if it was given
         if self.test_dict:
-            # Generate the 'true' chi2 with the experimental model but only for models that were stopped 
+            # Generate the 'true' chi2 with the experimental model but only for models that were stopped
             target_model = self.test_dict['model']
             target_data = self.test_dict['expdata']
             out_final = target_model.evaluate( x = None, y = target_data, verbose = False, batch_size = 1)
@@ -503,7 +507,7 @@ class ModelTrainer:
             arc_lengths = None
 
         dict_out = {
-                'loss' : final_loss, 
+                'loss' : final_loss,
                 'status' : passed,
                 'arc_lengths' : arc_lengths,
                 'training_loss' : validation_object.tr_loss(),
