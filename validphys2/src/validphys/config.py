@@ -701,11 +701,27 @@ class CoreConfig(configparser.Config):
         return {'lumi_channels': self.parse_lumi_channels(list(LUMI_CHANNELS))}
 
     @configparser.explicit_node
-    def produce_nnfit_theory_covmat(self, use_thcovmat_in_sampling:bool, use_thcovmat_in_fitting:bool):
+    def produce_nnfit_theory_covmat(self, use_thcovmat_in_sampling:bool, use_thcovmat_in_fitting:bool,
+                                    thcovmat_type:str='full'):
+        valid_type = {'full','blockdiagonal','diagonal'}
+        if thcovmat_type not in valid_type:
+         raise ConfigError(f"Invalid thcovmat_type setting: '{valid_type}'.",
+                              thcovmat_type, valid_type)
+
         from validphys.theorycovariance.construction import theory_covmat_custom
-        @functools.wraps(theory_covmat_custom)
+        from validphys.theorycovariance.construction import theory_diagonal_covmat
+        from validphys.theorycovariance.construction import theory_block_diag_covmat
+
+        if thcovmat_type == 'full':
+           f = theory_covmat_custom
+        if thcovmat_type == 'diagonal':
+           f = theory_diagonal_covmat
+        if thcovmat_type == 'blockdiagonal': 
+           f = theory_block_diag_covmat
+         
+        @functools.wraps(f)
         def res(*args, **kwargs):
-            return theory_covmat_custom(*args, **kwargs)
+            return f(*args, **kwargs)
         #Set this to get the same filename regardless of the action.
         res.__name__ = 'theory_covmat'
         return res
