@@ -9,9 +9,10 @@ from NNPDF import RandomGenerator
 from validphys.core import ExperimentSpec as vp_Exp
 from validphys.core import DataSetSpec as vp_Dataset
 
+
 def make_tr_val_mask(datasets, exp_name, seed):
     # Set the seed for the experiment
-    nameseed = int(hashlib.sha256(exp_name.encode()).hexdigest(), 16) % 10**8
+    nameseed = int(hashlib.sha256(exp_name.encode()).hexdigest(), 16) % 10 ** 8
     nameseed += seed
     np.random.seed(nameseed)
 
@@ -31,7 +32,8 @@ def make_tr_val_mask(datasets, exp_name, seed):
 
     return trmask, vlmask
 
-def fk_parser(fk, is_hadronic = False):
+
+def fk_parser(fk, is_hadronic=False):
     """
     Input: fktable object
     Output:
@@ -42,7 +44,7 @@ def fk_parser(fk, is_hadronic = False):
 
     # Dimensional information
     nonzero = fk.GetNonZero()
-    ndata =  fk.GetNData()
+    ndata = fk.GetNData()
     nx = fk.GetTx()
 
     # Basis of active flavours
@@ -66,27 +68,27 @@ def fk_parser(fk, is_hadronic = False):
     l = len(fktable_flat)
     # get the padding
     pad_position = fk.GetDSz()
-    pad_size = fk.GetDSz() - nx*nonzero
+    pad_size = fk.GetDSz() - nx * nonzero
     # remove the padding
     if pad_size > 0:
         mask = np.ones(l, dtype=bool)
-        for i in range(1, int(l/pad_position) + 1 ):
-            marker = pad_position*i
-            mask[ marker-pad_size : marker ] = False
+        for i in range(1, int(l / pad_position) + 1):
+            marker = pad_position * i
+            mask[marker - pad_size : marker] = False
         fktable_array = fktable_flat[mask]
     else:
         fktable_array = fktable_flat
     # reshape
-    fktable = fktable_array.reshape( shape_out )
+    fktable = fktable_array.reshape(shape_out)
 
     dict_out = {
-        'ndata' : ndata,
-        'nbasis': nbasis,
-        'nonzero': nbasis,
-        'basis' : basis,
-        'nx' : nx,
-        'xgrid': xgrid,
-        'fktable' : fktable,
+        "ndata": ndata,
+        "nbasis": nbasis,
+        "nonzero": nbasis,
+        "basis": basis,
+        "nx": nx,
+        "xgrid": xgrid,
+        "fktable": fktable,
     }
     return dict_out
 
@@ -115,13 +117,13 @@ def common_data_reader_dataset(dataset_c, dataset_spec):
         dict_fktables.append(fk_parser(fktable, dataset_c.IsHadronic()))
 
     dataset_dict = {
-            'fktables' : dict_fktables ,
-            'hadronic' : dataset_c.IsHadronic(),
-            'operation' : dataset_spec.op,
-            'name' : dataset_c.GetSetName(),
-            'frac' : dataset_spec.frac,
-            'ndata' : dataset_c.GetNData()
-            }
+        "fktables": dict_fktables,
+        "hadronic": dataset_c.IsHadronic(),
+        "operation": dataset_spec.op,
+        "name": dataset_c.GetSetName(),
+        "frac": dataset_spec.frac,
+        "ndata": dataset_c.GetNData(),
+    }
 
     return [dataset_dict]
 
@@ -133,8 +135,7 @@ def common_data_reader_experiment(experiment_c, experiment_spec):
     return parsed_datasets
 
 
-
-def common_data_reader(spec, t0pdfset, replica_seeds = None, trval_seeds = None):
+def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
     """
     Wrapper to read the information from validphys object
     This function receives either a validphyis experiment or dataset objects
@@ -161,25 +162,24 @@ def common_data_reader(spec, t0pdfset, replica_seeds = None, trval_seeds = None)
     ndata = spec_c.GetNData()
     expdata_true = spec_c.get_cv().reshape(1, ndata)
     spec_c.SetT0(t0pdfset)
-    base_mcseed = int(hashlib.sha256(str(spec).encode()).hexdigest(), 16) % 10**8
+    base_mcseed = int(hashlib.sha256(str(spec).encode()).hexdigest(), 16) % 10 ** 8
 
     if replica_seeds:
         all_expdatas = []
     else:
         all_expdatas = [expdata_true.reshape(ndata)]
 
-
     for replica_seed in replica_seeds:
         spec_replica = copy.deepcopy(spec)
-        spec_replica_c = spec_replica.load() # I might need the t0 set here as well
+        spec_replica_c = spec_replica.load()  # I might need the t0 set here as well
 
         # Replica generation
         mcseed = base_mcseed + replica_seed
         RandomGenerator.InitRNG(0, mcseed)
         spec_replica_c.MakeReplica()
-        all_expdatas.append( spec_replica_c.get_cv() )
+        all_expdatas.append(spec_replica_c.get_cv())
 
-    #spec_c = spec_replica_c
+    # spec_c = spec_replica_c
 
     if isinstance(spec, vp_Exp):
         datasets = common_data_reader_experiment(spec_c, spec)
@@ -230,31 +230,34 @@ def common_data_reader(spec, t0pdfset, replica_seeds = None, trval_seeds = None)
 
     return all_dict_out
 
+
 def positivity_reader(pos_spec):
     pos_c = pos_spec.load()
     ndata = pos_c.GetNData()
 
     parsed_set = [fk_parser(pos_c, pos_c.IsHadronic())]
 
-    pos_sets = [{
-            'fktables' : parsed_set,
-            'hadronic' : pos_c.IsHadronic(),
-            'operation' : 'NULL',
-            'name' : pos_spec.name,
-            'frac' : 1.0,
-            'ndata' : ndata,
-            }]
+    pos_sets = [
+        {
+            "fktables": parsed_set,
+            "hadronic": pos_c.IsHadronic(),
+            "operation": "NULL",
+            "name": pos_spec.name,
+            "frac": 1.0,
+            "ndata": ndata,
+        }
+    ]
 
     positivity_factor = pos_spec.poslambda
 
     dict_out = {
-            'datasets' : pos_sets,
-            'trmask' : np.ones(ndata, dtype = np.bool),
-            'name' : pos_spec.name,
-            'expdata' : np.zeros( (1,ndata) ),
-            'ndata' : ndata,
-            'positivity' : True,
-            'lambda' : positivity_factor
-            }
+        "datasets": pos_sets,
+        "trmask": np.ones(ndata, dtype=np.bool),
+        "name": pos_spec.name,
+        "expdata": np.zeros((1, ndata)),
+        "ndata": ndata,
+        "positivity": True,
+        "lambda": positivity_factor,
+    }
 
     return dict_out

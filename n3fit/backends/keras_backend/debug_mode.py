@@ -1,4 +1,4 @@
-def set_initial_state(debug = False, seed = 13):
+def set_initial_state(debug=False, seed=13):
     """
     Setting the initial state for debugging can be very tricky
     This is the only way of getting reproducible results for keras-tensorflow
@@ -13,7 +13,7 @@ def set_initial_state(debug = False, seed = 13):
     import random as rn
 
     np.random.seed(seed)
-    use_seed = np.random.randint(0, pow(2,31))
+    use_seed = np.random.randint(0, pow(2, 31))
     rn.seed(use_seed)
 
     from keras import backend as K
@@ -25,10 +25,12 @@ def set_initial_state(debug = False, seed = 13):
 
     return 0
 
+
 def clear_backend_state(debug):
     if not debug:
         print("Clearing session")
         from keras import backend as K
+
         K.clear_session()
         # Don't open threads that you are not going to eat
         session_conf = K.tf.ConfigProto(intra_op_parallelism_threads=2,
