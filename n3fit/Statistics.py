@@ -1,11 +1,20 @@
 import numpy as np
 from matplotlib import pyplot as pl
 
-class Stat_Info:
 
-    def __init__(self, vl_model, vl_data, ndata_dict, threshold_positivity = 1e-6,
-            chi2_threshold = 3.0, save_all_each = 100, total_epochs = 0,
-            stopping_epochs = 7000, dont_stop = False):
+class Stat_Info:
+    def __init__(
+        self,
+        vl_model,
+        vl_data,
+        ndata_dict,
+        threshold_positivity=1e-6,
+        chi2_threshold=3.0,
+        save_all_each=100,
+        total_epochs=0,
+        stopping_epochs=7000,
+        dont_stop=False,
+    ):
         """
         To instantiate the Stats_Info object we need:
             - vl_model: The validation  model, which has the same PDF layer as the training model
@@ -19,7 +28,7 @@ class Stat_Info:
                 if the chi2 doesnt go below the minimum after stopping_epochs, we stop
             - dont_stop: dont_stop anyway
 
-        """ # TODO: this function has outgrown its initial scope and some refactoring is needed
+        """  # TODO: this function has outgrown its initial scope and some refactoring is needed
 
         self.vl_model = vl_model
         self.vl_data = vl_data
@@ -42,12 +51,12 @@ class Stat_Info:
         self.threshold = chi2_threshold
 
         # Number of points per experiment
-        self.ndata_tr = max(ndata_dict['total_tr'], 1)
-        self.ndata_vl = max(ndata_dict['total_vl'], 1)
+        self.ndata_tr = max(ndata_dict["total_tr"], 1)
+        self.ndata_vl = max(ndata_dict["total_vl"], 1)
         self.ndata_dict = ndata_dict
         self.exp_names = []
         for i in ndata_dict.keys():
-            if i.endswith('_vl') or i.startswith(('POS', 'total', 'ALL')):
+            if i.endswith("_vl") or i.startswith(("POS", "total", "ALL")):
                 continue
             self.exp_names.append(i)
 
@@ -72,10 +81,10 @@ class Stat_Info:
         for exp in self.exp_names:
             self.all_tr_chi2[exp] = []
             self.all_vl_chi2[exp] = []
-        self.all_tr_chi2['Total'] = []
-        self.all_vl_chi2['Total'] = []
+        self.all_tr_chi2["Total"] = []
+        self.all_vl_chi2["Total"] = []
 
-    def reset(self, stopping_epochs = None):
+    def reset(self, stopping_epochs=None):
         """
         Sometimes it might be necessary to reset the statistics
         This only require resetting some of the variables and not all
@@ -89,7 +98,6 @@ class Stat_Info:
         if stopping_epochs:
             self.stopping_epochs = stopping_epochs
 
-
     def _compute_validation(self):
         """ Evaluates the validation model
         vl_list: a list of chi2, where the first element is the sum of all others
@@ -97,7 +105,7 @@ class Stat_Info:
 
         Returns the list already normalised to the number of points
         """
-        vl_list = self.vl_model.evaluate(x = None, y = self.vl_data, verbose = False, batch_size = 1)
+        vl_list = self.vl_model.evaluate(x=None, y=self.vl_data, verbose=False, batch_size=1)
         vl_dict = {}
         try:
             total = vl_list[0] / self.ndata_vl
@@ -112,7 +120,6 @@ class Stat_Info:
         if len(vl_list) != len(self.exp_names):
             vl_list = [0.0 for i in self.exp_names]
 
-
         # This loop relies on the information that comes through the input dictionaries to be accurate
         # It also relies in the ordered dictionaries introduced at some point in python 3.6/7
         for chi2, exp in zip(vl_list, self.exp_names):
@@ -126,21 +133,19 @@ class Stat_Info:
         is already normalised to the number of points per experiment """
         try:
             hobj = training_info.history
-        except AttributeError: # So it works whether we pass the out our the out.history
+        except AttributeError:  # So it works whether we pass the out our the out.history
             hobj = training_info
 
         # Since the history object can have more than one loss (if epochs != 1) but it is always a list
         # Save them as the mean
 
-        total = np.mean(hobj['loss']) / self.ndata_tr
+        total = np.mean(hobj["loss"]) / self.ndata_tr
         tr_chi2 = {}
         for exp in self.exp_names:
             chi2 = np.mean(hobj[exp + "_loss"]) / self.ndata_dict[exp]
             tr_chi2[exp] = chi2
 
         return total, tr_chi2
-
-
 
     def monitor_chi2(self, training_info, epoch):
         """ Function to be called at the end of every epoch.
@@ -166,7 +171,7 @@ class Stat_Info:
                 self.best_chi2 = 1e10
             return False
 
-        if vl_chi2 == 0.0: # If there is no masking, training and validation are the same thing
+        if vl_chi2 == 0.0:  # If there is no masking, training and validation are the same thing
             vl_chi2 = tr_chi2
             all_vl = all_tr
 
@@ -187,23 +192,23 @@ class Stat_Info:
             elif not self.w_best_chi2:
                 self.stopping_degree = 0
 
-        if (epoch+1) % 100 == 0:
+        if (epoch + 1) % 100 == 0:
             self.all_epochs.append(epoch + 1)
             for exp in self.exp_names:
                 self.all_tr_chi2[exp].append(all_tr[exp])
                 self.all_vl_chi2[exp].append(all_vl[exp])
-            self.all_tr_chi2['Total'].append(tr_chi2)
-            self.all_vl_chi2['Total'].append(vl_chi2)
+            self.all_tr_chi2["Total"].append(tr_chi2)
+            self.all_vl_chi2["Total"].append(vl_chi2)
             self.print_current_stats()
 
         if self.stopping_degree > self.stopping_epochs:
             self.stop_now = True
             self.epoch_of_the_stop = epoch
-            self.reload_model(force = True)
+            self.reload_model(force=True)
 
         return True
 
-    def reload_model(self, force = False):
+    def reload_model(self, force=False):
         if (self.not_reloaded or force) and self.w_best_chi2:
             self.not_reloaded = False
             self.vl_model.set_weights(self.w_best_chi2)
@@ -232,7 +237,7 @@ class Stat_Info:
         """
         epoch = self.all_epochs[-1]
         epochs = self.total_epochs
-        total = self.all_tr_chi2['Total'][-1]
+        total = self.all_tr_chi2["Total"][-1]
         total_str = "\nAt epoch {0}/{1}, total loss: {2}".format(epoch, epochs, total)
 
         partials = ""
@@ -243,23 +248,22 @@ class Stat_Info:
         if partials:
             print(" > Partial losses: " + partials)
 
-        total_vl = self.all_vl_chi2['Total'][-1]
+        total_vl = self.all_vl_chi2["Total"][-1]
         print(" > Validation loss at this point: {0}".format(total_vl))
 
     def plot(self):
         print("Plotting validation loss")
-        pl.plot(self.epochs, self.tr_chi2, label = 'Training')
-        pl.plot(self.epochs, self.vl_chi2, label = 'Validation')
+        pl.plot(self.epochs, self.tr_chi2, label="Training")
+        pl.plot(self.epochs, self.vl_chi2, label="Validation")
         pl.legend()
         pl.show()
-
 
     def check_positivity(self, training_info):
         """ Checks whether positivity passes """
         chi2 = 0.0
         try:
             hobj = training_info.history
-        except AttributeError: # So it works whether we pass the out our the out.history
+        except AttributeError:  # So it works whether we pass the out our the out.history
             hobj = training_info
 
         for key, item in hobj.items():
@@ -271,7 +275,6 @@ class Stat_Info:
         else:
             return True
 
-
     # Str functions
     def positivity_pass(self):
         if self.positivity:
@@ -280,12 +283,12 @@ class Stat_Info:
             return "POS_VETO"
 
     def preproc_str(self):
-        preprocessing = self.vl_model.get_layer('pdf_prepro')
+        preprocessing = self.vl_model.get_layer("pdf_prepro")
         alphabeta = preprocessing.get_weights()
         file_list = ["Alpha Beta"]
         for i in range(0, len(alphabeta), 2):
-            file_list.append( "\n{0} {1}".format(alphabeta[i][0], alphabeta[i+1][0]))
-        file_list.append('\n')
+            file_list.append("\n{0} {1}".format(alphabeta[i][0], alphabeta[i + 1][0]))
+        file_list.append("\n")
         return file_list
 
     def chi2exps_str(self):
@@ -297,8 +300,8 @@ class Stat_Info:
                 tr = self.all_tr_chi2[exp][i]
                 vl = self.all_vl_chi2[exp][i]
                 strout += "\n{0}: {1} {2}".format(exp, tr, vl)
-            tr = self.all_tr_chi2['Total'][i]
-            vl = self.all_vl_chi2['Total'][i]
+            tr = self.all_tr_chi2["Total"][i]
+            vl = self.all_vl_chi2["Total"][i]
             strout += "\nTotal: training = {0} validation = {1}\n".format(tr, vl)
             file_list.append(strout)
         return file_list

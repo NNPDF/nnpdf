@@ -6,6 +6,7 @@
 import json
 from hyperopt import Trials, space_eval
 
+
 def space_eval_trial(space, trial):
     for_eval = {}
     for k, v in trial["misc"]["vals"].items():
@@ -20,6 +21,7 @@ class FileTrials(Trials):
     """
     Stores trial results on the fly.
     """
+
     def __init__(self, replica_path, log=None, parameters=None, exp_key=None, refresh=True):
         self._store_trial = False
         self._json_file = "{0}/tries.json".format(replica_path)
@@ -35,14 +37,14 @@ class FileTrials(Trials):
 
         # write json to disk
         if self._store_trial:
-            self.log_info(f'Storing scan in {self._json_file}')
+            self.log_info(f"Storing scan in {self._json_file}")
             local_trials = []
             for idx, t in enumerate(self._dynamic_trials):
                 local_trials.append(t)
-                local_trials[idx]['misc']['space_vals'] = space_eval_trial(self._parameters, t)
+                local_trials[idx]["misc"]["space_vals"] = space_eval_trial(self._parameters, t)
 
             all_to_str = json.dumps(local_trials, default=str)
-            with open(self._json_file, 'w') as f:
+            with open(self._json_file, "w") as f:
                 f.write(all_to_str)
 
     def new_trial_ids(self, N):

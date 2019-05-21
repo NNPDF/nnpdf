@@ -37,7 +37,7 @@ class MetaModel(Model):
                 ),
            }
 
-    def __init__(self, input_tensors, output_tensors, extra_tensors = None):
+    def __init__(self, input_tensors, output_tensors, extra_tensors=None):
         """
         This class behaves as keras.models.Model with some add-ons:
 
@@ -60,14 +60,14 @@ class MetaModel(Model):
                 inputs = []
                 if isinstance(ii, list):
                     for i in ii:
-                        inputs.append( self._np_to_input(i) )
+                        inputs.append(self._np_to_input(i))
                 else:
-                    inputs = [ self._np_to_input(ii) ]
+                    inputs = [self._np_to_input(ii)]
                 o_tensor = oo(*inputs)
                 input_list += inputs
                 output_list.append(o_tensor)
 
-        super (MetaModel, self).__init__( input_list, output_list )
+        super(MetaModel, self).__init__(input_list, output_list)
 
     def _np_to_input(self, x):
         """
@@ -75,11 +75,11 @@ class MetaModel(Model):
         """
         if isinstance(x, np.ndarray):
             tensor = K.constant(x)
-            return Input( tensor = tensor )
+            return Input(tensor=tensor)
         else:
             return x
 
-    def compile(self, optimizer_name = 'RMSprop', learning_rate = 0.05, loss = None, **kwargs):
+    def compile(self, optimizer_name="RMSprop", learning_rate=0.05, loss=None, **kwargs):
         """
         Compile the model given:
             - Optimizer
@@ -89,15 +89,15 @@ class MetaModel(Model):
         try:
             opt_tuple = self.optimizers[optimizer_name]
         except KeyError:
-            raise Exception(f'[MetaModel.compile] Optimizer not found {optimizer_name}')
+            raise Exception(f"[MetaModel.compile] Optimizer not found {optimizer_name}")
 
         opt_function = opt_tuple[0]
         opt_args = opt_tuple[1]
 
-        if 'lr' in opt_args.keys():
-            opt_args['lr'] = learning_rate
+        if "lr" in opt_args.keys():
+            opt_args["lr"] = learning_rate
 
-        opt_args['clipnorm'] = 1.0
+        opt_args["clipnorm"] = 1.0
         opt = opt_function(**opt_args)
 
-        super (MetaModel, self).compile(optimizer = opt, loss = loss, **kwargs)
+        super(MetaModel, self).compile(optimizer=opt, loss=loss, **kwargs)

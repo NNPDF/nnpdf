@@ -24,6 +24,7 @@ def LSTM_modified(**kwargs):
             return the_lstm(reshaped)
         else:
             return the_lstm(input_tensor)
+
     return ReshapedLSTM
 
 
@@ -59,4 +60,4 @@ def base_layer_selector(layer_name, **kwargs):
         if key in layer_args.keys():
             layer_args[key] = value
 
-    return layer_class( **layer_args )
+    return layer_class(**layer_args)

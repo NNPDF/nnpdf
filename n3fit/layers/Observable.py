@@ -1,6 +1,7 @@
 import sys
 from backends import MetaLayer
 
+
 class Observable(MetaLayer):
     """
     This class is the parent of the DIS and DY convolutions.
@@ -13,7 +14,8 @@ class Observable(MetaLayer):
                      fktables and pdfs
         - call: this is what does the actual operation
     """
-    def __init__(self, output_dim, fktable, basis = None, nfl = 14, **kwargs):
+
+    def __init__(self, output_dim, fktable, basis=None, nfl=14, **kwargs):
         self.nfl = nfl
 
         self.output_dim = output_dim
@@ -23,7 +25,6 @@ class Observable(MetaLayer):
         self.gen_basis(basis)
 
         super(MetaLayer, self).__init__(**kwargs)
-
 
     def compute_output_shape(self, input_shape):
         return (self.output_dim, None)
