@@ -524,7 +524,7 @@ class CoreConfig(configparser.Config):
                 }, spec)
                 inner_spec_list.append(d)
             res.append(inres)
-        res.sort(key=lambda x: (x['process'], x['experiment_name']))
+        res.sort(key=lambda x: (x['process'], x['experiment_name'], x['dataset_name']))
         return res
 
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
