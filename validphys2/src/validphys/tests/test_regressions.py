@@ -51,10 +51,11 @@ def make_table_comp(loader_func):
     return decorator
 
 @make_table_comp(parse_exp_mat)
-def test_expcovmat(data):
-    pdf, exps = data
+def test_expcovmat(data, exps_covariance_matrices):
+    _, exps = data
     eindex = results.experiments_index(exps)
-    mat = results.experiments_covmat_no_table(exps, eindex, t0set=None)
+    mat = results.experiments_covmat_no_table(
+        exps, eindex, exps_covariance_matrices)
     covmats = []
     for exp in exps:
         cd = exp.datasets[0].commondata.load()
@@ -64,22 +65,23 @@ def test_expcovmat(data):
     return mat
 
 @make_table_comp(parse_exp_mat)
-def test_t0covmat(data):
-    pdf, exps = data
+def test_t0covmat(data, t0_exps_covariance_matrices):
+    _, exps = data
     eindex = results.experiments_index(exps)
-    return results.experiments_covmat_no_table(exps, eindex, pdf)
+    return results.experiments_covmat_no_table(
+        exps, eindex, t0_exps_covariance_matrices)
 
 @make_table_comp(parse_exp_mat)
-def test_expsqrtcovmat(data):
-    pdf, exps = data
+def test_expsqrtcovmat(data, exps_covariance_matrices):
+    _, exps = data
     eindex = results.experiments_index(exps)
-    return results.experiments_sqrtcovmat(exps, eindex, t0set=None)
+    return results.experiments_sqrtcovmat(exps, eindex, exps_covariance_matrices)
 
 @make_table_comp(parse_exp_mat)
-def test_t0sqrtcovmat(data):
-    pdf, exps = data
+def test_t0sqrtcovmat(data, t0_exps_covariance_matrices):
+    _, exps = data
     eindex = results.experiments_index(exps)
-    return results.experiments_sqrtcovmat(exps, eindex, pdf)
+    return results.experiments_sqrtcovmat(exps, eindex, t0_exps_covariance_matrices)
 
 
 @make_table_comp(sane_load)
