@@ -483,19 +483,20 @@ class CoreConfig(configparser.Config):
         """Take an arbitrary list of mappings called dataspecs and
         return a new list of mappings called dataspecs constructed as follows.
 
-        From each of the original datasepcs, resolve the key `experiments` and
-        all the dataset therein.
+        From each of the original datasepcs, resolve the key `process`, and
+        all the experiments and datasets therein.
 
         Compute the intersection of the dataset names, and for each element in
         the intersection construct a mapping with the follwing keys:
-
+            
+            - process : A string with the common process name.
             - experiment_name : A string with the common experiment name.
             - dataset_name : A string with the common dataset name.
-            - datasepcs : A list of mappinngs matching the original
-              "datasepcs". Each mapping contains:
+            - dataspecs : A list of mappinngs matching the original
+              "dataspecs". Each mapping contains:
                 * dataset: A dataset with the name data_set name and the
                 properties (cuts, theory, etc) corresponding to the original
-                datasepec.
+                dataspec.
                 * dataset_input: The input line used to build dataset.
                 * All the other keys in the original dataspec.
         """
