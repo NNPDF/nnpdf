@@ -18,6 +18,7 @@ from reportengine.checks import make_argcheck
 from reportengine.figure import figure
 from reportengine.table import table
 from reportengine import collect
+from reportengine import floatformatting
 
 from validphys.checks import check_two_dataspecs
 
@@ -646,6 +647,7 @@ def eigenvector_plot(evals_nonzero_basis, shx_vector):
     fig, axes = plt.subplots(nrows=len(evecs), figsize=(10, 2*len(evecs)))
     fig.subplots_adjust(hspace=0.8)
     for ax, evec, eval in zip(axes.flatten(), evecs, evals):
+        eval_3sf = floatformatting.significant_digits(eval.item(), 3)
         evec = pd.DataFrame(evec, index=tripleindex)
         evec = evec.reindex(newindex)
         ax.plot(-f.values, color="k", label="NNLO-NLO shift")
@@ -657,7 +659,7 @@ def eigenvector_plot(evals_nonzero_basis, shx_vector):
                   ax.get_ylim()[1], linestyles='dashed')
         ax.margins(x=0, y=0)
         # Adding eigenvalue to legend
-        extraString = f'Eigenvalue = {eval}'
+        extraString = f'Eigenvalue = {eval_3sf}'
         handles, labels = ax.get_legend_handles_labels()
         handles.append(mpatches.Patch(color='none', label=extraString))
         ax.legend(handles=handles)
