@@ -4,7 +4,7 @@ matplotlib.use('agg')
 
 import pytest
 
-from validphys.app import API
+from validphys.api import API
 
 @pytest.mark.mpl_image_compare
 def test_plotpdfs():
