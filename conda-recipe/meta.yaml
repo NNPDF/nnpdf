@@ -44,6 +44,7 @@ test:
         - hypothesis
         - pytest
         - coverage
+        - pytest-mpl
         #Build dependencies for catch tests
         - {{ compiler("cxx") }}
         - {{ compiler("c") }}
