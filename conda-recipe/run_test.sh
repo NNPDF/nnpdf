@@ -4,7 +4,7 @@ set -v
 set -e
 
 #Python tests for the installed validphys package
-pytest --pyargs validphys
+pytest --pyargs --mpl validphys
 
 mkdir bldtest
 cd bldtest
