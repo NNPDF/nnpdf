@@ -3159,34 +3159,121 @@ a string in Pandoc Markdown describing your object. Raw HTML is
 also allowed (although that decreases the compatibility, e.g. if we
 decide to output LaTeX instead of HTML in the future).
 
-Python static checks and code style
------------------------------------
+Server configuration
+====================
 
-We use [Pylint](https://www.pylint.org/) to provide static checking (e.g.
-finding basic errors that a compiler would catch in compiled languages) such as
-uses of unknown variable names, as well as to provide basic guidelines on the
-structure of the code (e.g. avoid functions that are too complicated). Because
-Pylint is way too pendantic by default, we limit the checks to only those
-considered useful. The `.pylintrc` file at the top level configures Pylint to
-only mind those checks. Most Python IDEs and editors have some kind of support
-for pylint. It is strongly recommended to configure the editor to show the
-problematic pieces of code proactively.
+Overview
+--------
 
-New code should use the [Black](https://black.readthedocs.io/en/stable/) tool to
-format the code. This tool should not be used to aggressively reformat existing
-files.
+The NNPDF server is a virtual machine (VM) maintained by 
+the Centro Calcolo at the physics department of the 
+University of Milan. The machine has 2 CPUs, 4GB of RAM, 
+1 TB of disk and it is running CentOS7.
 
+The full disk is backed up every week by the Centro Calcolo.
+We perform every Sunday a `rsync` from the `/home/nnpdf` folder
+to the `nnpdf@lxplus` account at CERN.
 
-Example pull request
---------------------
+URLs
+----
 
-You may find instructive to go though this pull request that
-implements arc-length computation:
+The URLs served by this VM are:
 
-<https://github.com/NNPDF/validphys2/pull/64>
+- [https://data.nnpdf.science](https://data.nnpdf.science): with 
+nnpdf data such as pdf fits, releases, reports, etc.
+- [https://vp.nnpdf.science](https://vp.nnpdf.science): with the
+validphys reports.
+- [https://wiki.nnpdf.science](https://wiki.nnpdf.science): with
+the github wiki version.
 
-It demonstrates how to leverage existing functionality to perform new
-computations and then present those as plots and tables.
+Access
+------
+
+The access to the server is provided by ssh/vp-upload with the 
+following restrictions:
+
+- `ssh` access to `root` is forbidden.
+- there is a shared `nnpdf` user with low previleges. In order to login 
+the user must send his public ssh key (usually in `~/.ssh/id_rsa.pub`) to SC.
+The `nnpdf` is not allowed to login with password.
+
+The `nnpdf` user shares a common `/home/nnpdf` folder 
+where all NNPDF material is stored. Public access to data is 
+available for all files in the `/home/nnpdf/WEB` folder. The 
+validphys reports are stored in `/home/nnpdf/WEB/validphys-reports` 
+and the wiki in `/home/nnpdf/WEB/wiki`.
+
+Web server
+----------
+
+Instead of using `apache` we are using `nginx` as a lightware and simpler web
+server engine. The `nginx` initial configuration depends on the linux distribution
+in use. Usually debian packages provide a ready-to-go version where 
+the `/etc/nginx/nginx.conf` is already set to work with server blocks (subdomain). 
+
+Other distributions like CentOS7 requires more gymnastics, here some tricks:
+
+- make sure the `/home/nnpdf` folder can be accessed by the `nginx` user
+- folders served by `nginx` must have permission 755
+- create 2 folders in `/etc/nginx`: `sites-available` and `sites-enabled`.
+- in the `/etc/nginx/nginx.conf` file indicate the new include path with `include /etc/nginx/sites-enabled/*;` and remove all location statements.
+- for each server block create a new file in `/etc/nginx/sites-available` and build a symbolic link in `/etc/nginx/sites-enabled`.
+- remember to perform a `sudo service nginx restart` or `sudo nginx -s reload` to update the server block configuration.
+
+Finally, here an example of `nginx` configuration for the `vp.nnpdf.science` server block without ssl encryption:
+```
+server {
+    listen  80;
+    listen [::]:80;
+    server_name vp.nnpdf.science;
+    
+    root /home/nnpdf/WEB/validphys-reports;
+    location / {
+      try_files $uri $uri/ =404;
+	    auth_basic "Restricted";
+	    auth_basic_user_file /home/nnpdf/WEB/validphys-reports/.htpasswd;
+    }
+
+    location /thumbnails {
+    	alias /home/nnpdf/WEB/thumbnails;
+	    try_files $uri $uri/ =404;
+	    auth_basic "Restricted";
+      auth_basic_user_file /home/nnpdf/WEB/validphys-reports/.htpasswd;
+    }
+}
+```
+
+SSL encryption
+--------------
+
+SSL encription is provided by [Let's Encrypt](https://letsencrypt.org).
+The certificates are created using the `certbot` program with the `nginx` module.
+
+In order to create new ssl certificates, first prepare the `nginx` server block 
+configuration file and then run the interactive command:
+```
+sudo certbot --nginx -d <domain>
+```
+This will ask you several questions, including if you would like to automatically
+update the `nginx` server block file. We fully recommend this approach.
+
+The certificate is automatically renewed by a [cron job](#cron-jobs).
+
+Cron jobs
+---------
+
+The following cron jobs are registered for the `nnpdf` user:
+
+- every 4h run the `index-email.py` script.
+- at every reboot run `index-reports.py` and `index-fits.py`
+
+The following cron jobs are registered for the `root` user:
+
+- perform backup of `/home/nnpdf` in lxplus every Saturday at noon.
+- perform a certbot renew every Monday.
+- reboot every Sunday at 6am (in order to use new kernels).
+- perform system update every day.
+
 
 Web Scripts
 -----------
@@ -3251,6 +3338,35 @@ done by looking at the image files inside the `figures` folder of each
 uploaded report (see the source of the script for more details). It is
 expected that the server redirects the requests for
 `vp.nnpdf.science/thumbnails` to this folder.
+
+Python static checks and code style
+-----------------------------------
+
+We use [Pylint](https://www.pylint.org/) to provide static checking (e.g.
+finding basic errors that a compiler would catch in compiled languages) such as
+uses of unknown variable names, as well as to provide basic guidelines on the
+structure of the code (e.g. avoid functions that are too complicated). Because
+Pylint is way too pendantic by default, we limit the checks to only those
+considered useful. The `.pylintrc` file at the top level configures Pylint to
+only mind those checks. Most Python IDEs and editors have some kind of support
+for pylint. It is strongly recommended to configure the editor to show the
+problematic pieces of code proactively.
+
+New code should use the [Black](https://black.readthedocs.io/en/stable/) tool to
+format the code. This tool should not be used to aggressively reformat existing
+files.
+
+
+Example pull request
+--------------------
+
+You may find instructive to go though this pull request that
+implements arc-length computation:
+
+<https://github.com/NNPDF/validphys2/pull/64>
+
+It demonstrates how to leverage existing functionality to perform new
+computations and then present those as plots and tables.
 
 Editing this guide
 ------------------
