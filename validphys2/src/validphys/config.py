@@ -703,6 +703,11 @@ class CoreConfig(configparser.Config):
     @configparser.explicit_node
     def produce_nnfit_theory_covmat(self, use_thcovmat_in_sampling:bool, use_thcovmat_in_fitting:bool,
                                     thcovmat_type:str='full'):
+        """
+        Return the theory covariance matrix used in the fit.
+        By default it is set to be the full one, the user can
+        set it to be block-diagonal or diagonal 
+        """
         valid_type = {'full','blockdiagonal','diagonal'}
         if thcovmat_type not in valid_type:
          raise ConfigError(f"Invalid thcovmat_type setting: '{valid_type}'.",
