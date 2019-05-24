@@ -137,9 +137,9 @@ def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
     return df
 
 @table
-def theory_diagonal_covmat(theory_block_diag_covmat,experiments_index):
+def theory_diagonal_covmat(theory_covmat_singleprocess_no_table,experiments_index):
     """Returns theory covmat with only diagonal values"""
-    s = theory_block_diag_covmat.values
+    s = theory_covmat_singleprocess_no_table.values
     # Initialise array of zeros and set precision to same as FK tables
     s_diag = np.zeros((len(s),len(s)), dtype=np.float32)
     np.fill_diagonal(s_diag, np.diag(s))
