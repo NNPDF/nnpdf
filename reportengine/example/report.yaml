@@ -1,0 +1,30 @@
+# report.yaml
+#
+# This examples demostrates how to generate reports.
+#
+# The template will be parsed and verified before any expensive
+# computation takes place.
+#
+# The {@with <specification>@}/{@endwith@} tags allow to loop over the
+# two algorithms substituting the corresponding inputs implicitly.
+algorithms:
+    - random_forest
+    - gp
+
+template_text: |
+    % IRIS dataset with some shuffled labels
+    % Zahari Kassabov
+    Hamming loss
+    ===========
+    {@hamming_loss_table@}
+    ROC curves
+    ==========
+    {@with algorithms@}
+    {@algorithm@}
+    ------------
+    {@plot_roc@}
+    {@endwith@}
+
+actions_:
+    - - report:
+           main: True

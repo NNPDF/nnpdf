@@ -1,0 +1,1 @@
+from . resourcebuilder import collect
