@@ -3218,6 +3218,34 @@ The URLs served by this VM are:
     the github wiki version.
   - <https://packages.nnpdf.science/>: The `conda` binary packages.
 
+The domain is hosted by [Namecheap](www.namecheap.com), which also manages the
+DNS entries. For each subdomain there is an A record always pointing to the same
+server IP, currently 159.149.47.24. The subdomains are then handled as described
+in [Web server]. For example, a DNS query for `packages.nnpdf.science` returns
+
+```
+ $ dig packages.nnpdf.science
+
+; <<>> DiG 9.11.3-1ubuntu1.7-Ubuntu <<>> packages.nnpdf.science
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 26766
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;packages.nnpdf.science.		IN	A
+
+;; ANSWER SECTION:
+packages.nnpdf.science.	1799	IN	A	159.149.47.24
+
+;; Query time: 170 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53)
+;; WHEN: Tue May 28 14:26:53 BST 2019
+;; MSG SIZE  rcvd: 67
+```
+
 Access
 ------
 
