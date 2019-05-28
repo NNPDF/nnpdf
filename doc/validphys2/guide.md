@@ -3185,6 +3185,7 @@ nnpdf data such as pdf fits, releases, reports, etc.
 validphys reports.
 - [https://wiki.nnpdf.science](https://wiki.nnpdf.science): with
 the github wiki version.
+- <https://packages.nnpdf.science/>: The conda binary packages.
 
 Access
 ------
@@ -3202,6 +3203,12 @@ where all NNPDF material is stored. Public access to data is
 available for all files in the `/home/nnpdf/WEB` folder. The 
 validphys reports are stored in `/home/nnpdf/WEB/validphys-reports` 
 and the wiki in `/home/nnpdf/WEB/wiki`.
+
+The  [`conda` packages](#installing)  are automatically uploaded to the server
+by the Continous Integration service (Travis), through an user called `dummy`
+which has further reduction in privileges (it uses the [`rssh`
+shell](https://linux.die.net/man/1/rssh)) and it is only allowed to run the
+`scp` command.
 
 Web server
 ----------
@@ -3265,7 +3272,13 @@ Cron jobs
 The following cron jobs are registered for the `nnpdf` user:
 
 - every 4h run the `index-email.py` script.
-- at every reboot run `index-reports.py` and `index-fits.py`
+- at every reboot run `index-reports.py`, `index-fits.py`,
+	`index-packahes-public.sh` and `index-packages-private.sh`, which monitor
+  contiguously the respective folders and create indexes that can be used by
+  various applications. The first two are homegrown scripts (see [Web Scripts])
+  and the later two use
+  [`conda-index`](https://docs.conda.io/projects/conda-build/en/latest/resources/commands/conda-index.html).
+
 
 The following cron jobs are registered for the `root` user:
 
