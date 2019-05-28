@@ -3291,6 +3291,7 @@ Other distributions like CentOS7 requires more gymnastics, here some tricks:
 - for each server block create a new file in `/etc/nginx/sites-available` and build a symbolic link in `/etc/nginx/sites-enabled`.
 - remember to perform a `sudo service nginx restart` or `sudo nginx -s reload` to update the server block configuration.
 
+
 Finally, here an example of `nginx` configuration for the `vp.nnpdf.science` server block without ssl encryption:
 ```
 server {
@@ -3313,6 +3314,13 @@ server {
     }
 }
 ```
+
+Some URLs are password protected using the HTTP `basic_auth` mechanism. This is
+implemented by setting the corresponding configuration in nginx, as shown above
+(specifically with the `auth_basic` and `auth_basic_user_file` keys). The
+`.htpasswd` files mentioned in the configuration are generated with the
+`htpasswd` tool.
+
 
 SSL encryption
 --------------
