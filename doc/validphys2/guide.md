@@ -3267,7 +3267,11 @@ The  [`conda` packages](#installing)  are automatically uploaded to the server
 by the Continous Integration service (Travis), through an user called `dummy`
 which has further reduction in privileges (it uses the [`rssh`
 shell](https://linux.die.net/man/1/rssh)) and it is only allowed to run the
-`scp` command. The packages are stored in `/home/nnpdf/packages`.
+`scp` command. An accepted private key is stored securely in the [Travis
+configuration](https://travis-ci.com/NNPDF/nnpdf) under the `NNPDF_SSH_KEY`
+variable. It is encoded using `base64` because Travis does not easily accept
+multiline variables. To use it, do something like `echo "$NNPDF_SSH_KEY" |
+base64 --decode`. The packages are uploaded to `/home/nnpdf/packages`.
 
 Web server
 ----------
