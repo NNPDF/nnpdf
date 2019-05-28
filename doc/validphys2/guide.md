@@ -3272,10 +3272,11 @@ shell](https://linux.die.net/man/1/rssh)) and it is only allowed to run the
 Web server
 ----------
 
-Instead of using `apache` we are using `nginx` as a lightware and simpler web
-server engine. The `nginx` initial configuration depends on the linux distribution
-in use. Usually debian packages provide a ready-to-go version where 
-the `/etc/nginx/nginx.conf` is already set to work with server blocks (subdomain). 
+We are using `nginx` as a lightware and simple web server engine. The
+`nginx` initial configuration depends on the linux distribution in
+use. Usually debian packages provide a ready-to-go version where the
+`/etc/nginx/nginx.conf` is already set to work with server blocks
+(subdomains).
 
 Other distributions like CentOS7 requires more gymnastics, here some tricks:
 
