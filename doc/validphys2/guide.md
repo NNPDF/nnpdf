@@ -3179,36 +3179,36 @@ URLs
 
 The URLs served by this VM are:
 
-- [https://data.nnpdf.science](https://data.nnpdf.science): with 
-nnpdf data such as pdf fits, releases, reports, etc.
-- [https://vp.nnpdf.science](https://vp.nnpdf.science): with the
-validphys reports.
-- [https://wiki.nnpdf.science](https://wiki.nnpdf.science): with
-the github wiki version.
-- <https://packages.nnpdf.science/>: The conda binary packages.
+  - <https://data.nnpdf.science>: contain **public**
+    NNPDF data such as PDF fits, releases etc.
+  - <https://vp.nnpdf.science>: contains the
+    `validphys` reports.
+  - <https://wiki.nnpdf.science>: with
+    the github wiki version.
+  - <https://packages.nnpdf.science/>: The `conda` binary packages.
 
 Access
 ------
 
-The access to the server is provided by ssh/vp-upload with the 
-following restrictions:
+The access to the server is provided by
+`ssh`/[`vp-upload`](#uploading-the-result) with the following restrictions:
 
 - `ssh` access to `root` is forbidden.
-- there is a shared `nnpdf` user with low previleges. In order to login 
+- there is a shared `nnpdf` user with low privileges. In order to login 
 the user must send his public ssh key (usually in `~/.ssh/id_rsa.pub`) to SC.
 The `nnpdf` is not allowed to login with password.
 
 The `nnpdf` user shares a common `/home/nnpdf` folder 
 where all NNPDF material is stored. Public access to data is 
 available for all files in the `/home/nnpdf/WEB` folder. The 
-validphys reports are stored in `/home/nnpdf/WEB/validphys-reports` 
+`validphys` reports are stored in `/home/nnpdf/WEB/validphys-reports` 
 and the wiki in `/home/nnpdf/WEB/wiki`.
 
 The  [`conda` packages](#installing)  are automatically uploaded to the server
 by the Continous Integration service (Travis), through an user called `dummy`
 which has further reduction in privileges (it uses the [`rssh`
 shell](https://linux.die.net/man/1/rssh)) and it is only allowed to run the
-`scp` command.
+`scp` command. The packages are stored in `/home/nnpdf/packages`.
 
 Web server
 ----------
@@ -3271,7 +3271,7 @@ Cron jobs
 
 The following cron jobs are registered for the `nnpdf` user:
 
-- every 4h run the `index-email.py` script.
+- every day at 4 AM run the `index-email.py` script.
 - at every reboot run `index-reports.py`, `index-fits.py`,
 	`index-packahes-public.sh` and `index-packages-private.sh`, which monitor
   contiguously the respective folders and create indexes that can be used by
