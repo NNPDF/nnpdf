@@ -17,7 +17,7 @@ from reportengine.table import savetable
 
 import NNPDF
 from validphys import results
-from validphys import theorycovariance as tc
+import validphys.theorycovariance.construction as tc
 from validphys.tableloader import (parse_exp_mat, load_perreplica_chi2_table,
                                    sane_load, load_fits_chi2_table)
 
@@ -89,15 +89,17 @@ def test_theorycovmat(theory_data):
     pdf, exps_by_theoryid, exps_central_theory, theoryids = theory_data
     eindex = results.experiments_index(exps_central_theory)
 
-    data_theory_centrals_1 = [results.experiment_results(exp, pdf) for exp in exps_by_theoryid[0]]
-    data_theory_centrals_2 = [results.experiment_results(exp, pdf) for exp in exps_by_theoryid[1]]
+    covs_1 = [results.experiment_covariance_matrix(exp, False, pdf) for exp in exps_by_theoryid[0]]
+    covs_2 = [results.experiment_covariance_matrix(exp, False, pdf) for exp in exps_by_theoryid[1]]
+    
+    data_theory_centrals_1 = [results.experiment_results(exp, pdf, cov) for exp, cov in zip(exps_by_theoryid[0], covs_1)]
+    data_theory_centrals_2 = [results.experiment_results(exp, pdf, cov) for exp, cov in zip(exps_by_theoryid[1], covs_2)]
     each_dataset_results_bytheory = [data_theory_centrals_1, data_theory_centrals_2]
 
     commondata_experiments = [ds.commondata for exp in exps_by_theoryid for ds in exp[0].datasets]
 
     dataset_names = tc.dataset_names(commondata_experiments)
-    process_lookup = tc.process_lookup(commondata_experiments)
-    combine_by_type = tc.combine_by_type(process_lookup, each_dataset_results_bytheory, dataset_names)
+    combine_by_type = tc.combine_by_type(each_dataset_results_bytheory, dataset_names)
     covmap = tc.covmap(combine_by_type, dataset_names)
     process_starting_points = tc.process_starting_points(combine_by_type)
     covs_pt_prescrip = tc.covs_pt_prescrip(combine_by_type, process_starting_points, theoryids)
