@@ -371,8 +371,8 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     matlength = int(sum([len(covmat) for covmat in covs_pt_prescrip.values()]
                         )/int(np.sqrt(len(covs_pt_prescrip))))
     # Initialise arrays of zeros and set precision to same as FK tables
-    mat = np.zeros((matlength,matlength), dtype=np.float32)
-    cov_by_exp = np.zeros((matlength,matlength), dtype=np.float32)
+    mat = np.zeros((matlength,matlength), dtype=np.float64)
+    cov_by_exp = np.zeros((matlength,matlength), dtype=np.float64)
     for locs in covs_pt_prescrip:
         cov = covs_pt_prescrip[locs]
         mat[locs[0]:(len(cov) + locs[0]),locs[1]:(len(cov.T)+locs[1])] = cov
