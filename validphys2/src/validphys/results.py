@@ -169,33 +169,21 @@ def experiments_data(experiment_result_table):
     data_central_values = experiment_result_table["data_central"]
     return data_central_values
 
-
-#TODO: Use collect to calculate results outside this
-def experiment_result_table_no_table(experiments, pdf, experiments_index):
+def experiment_result_table_no_table(experiments_results, experiments_index):
     """Generate a table containing the data central value, the central prediction,
     and the prediction for each PDF member."""
-
     result_records = []
-    for exp_index, experiment in enumerate(experiments):
-        loaded_exp = experiment.load()
+    for experiment_results in experiments_results:
+        dt, th = experiment_results
+        for index, (dt_central, th_central) in enumerate(zip(dt.central_value, th.central_value)):
+            replicas = (('rep_%05d'%(i+1), th_rep) for
+                        i, th_rep in enumerate(th._rawdata[index, :]))
 
-
-
-        data_result = DataResult(loaded_exp)
-        th_result = ThPredictionsResult.from_convolution(pdf, experiment,
-                                                         loaded_data=loaded_exp)
-
-
-        for index in range(len(data_result.central_value)):
-            replicas = (('rep_%05d'%(i+1), th_result._rawdata[index,i]) for
-                        i in range(th_result._rawdata.shape[1]))
-
-            result_records.append(OrderedDict([
-                                 ('data_central', data_result.central_value[index]),
-                                 ('theory_central', th_result.central_value[index]),
+            result_records.append(dict([
+                                 ('data_central', dt_central),
+                                 ('theory_central', th_central),
                                   *replicas
                                  ]))
-
     if not result_records:
         log.warning("Empty records for experiment results")
         return pd.DataFrame()
@@ -206,10 +194,33 @@ def experiment_result_table_no_table(experiments, pdf, experiments_index):
 
 @table
 def experiment_result_table(experiment_result_table_no_table):
-    """Duplicate of experiments_result_table_no_table but with a table decorator."""
+    """Duplicate of experiment_result_table_no_table but with a table decorator."""
     return experiment_result_table_no_table
 
-def experiments_covmat_no_table(experiments, experiments_index, t0set):
+@table
+def experiment_result_table_68cl(experiment_result_table_no_table: pd.DataFrame, pdf: PDF):
+    """Generate a table containing the data central value, the central prediction,
+    and 68% confidence level bounds of the prediction.
+    """
+    df = experiment_result_table_no_table
+    # replica data is every columns after central values, transpose for stats class
+    replica_data = df.iloc[:, 2:].values.T
+    # Use pdf stats class but reshape output to have each row as a data point
+    stats = [level.reshape(-1, 1) for level in pdf.stats_class(replica_data).errorbar68()]
+    # concatenate for dataframe construction
+    stats_array = np.concatenate(stats, axis=1)
+    df_cl = pd.DataFrame(
+        stats_array,
+        index=df.index,
+        columns=['theory_lower', 'theory_upper'])
+    res = pd.concat([df.iloc[:, :2], df_cl], axis=1)
+    return res
+
+experiments_covariance_matrix = collect('experiment_covariance_matrix', ('experiments',))
+
+
+def experiments_covmat_no_table(
+        experiments, experiments_index, experiments_covariance_matrix):
     """Export the covariance matrix for the experiments. It exports the full
     (symmetric) matrix, with the 3 first rows and columns being:
 
@@ -221,15 +232,10 @@ def experiments_covmat_no_table(experiments, experiments_index, t0set):
     """
     data = np.zeros((len(experiments_index),len(experiments_index)))
     df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
-    for experiment in experiments:
+    for experiment, experiment_covmat in zip(
+            experiments, experiments_covariance_matrix):
         name = experiment.name
-        loaded_exp = experiment.load()
-        if t0set:
-            #Copy data to avoid chaos
-            loaded_exp = type(loaded_exp)(loaded_exp)
-            log.debug("Setting T0 predictions for %s" % loaded_exp)
-            loaded_exp.SetT0(t0set.load_t0())
-        mat = loaded_exp.get_covmat()
+        mat, _ = experiment_covmat
         df.loc[[name],[name]] = mat
     return df
 
@@ -239,45 +245,37 @@ def experiments_covmat(experiments_covmat_no_table):
     return experiments_covmat_no_table
 
 @table
-def experiments_sqrtcovmat(experiments, experiments_index, t0set):
+def experiments_sqrtcovmat(
+        experiments, experiments_index, experiments_covariance_matrix):
     """Like experiments_covmat, but dump the lower triangular part of the
     Cholesky decomposition as used in the fit. The upper part indices are set
     to zero.
     """
     data = np.zeros((len(experiments_index),len(experiments_index)))
     df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
-    for experiment in experiments:
+    for experiment, experiment_covmat in zip(
+            experiments, experiments_covariance_matrix):
         name = experiment.name
-        loaded_exp = experiment.load()
-        if t0set:
-            #Copy data to avoid chaos
-            data = type(loaded_exp)(loaded_exp)
-            log.debug("Setting T0 predictions for %s" % loaded_exp)
-            data.SetT0(t0set.load_t0())
-        mat = loaded_exp.get_sqrtcovmat()
+        _, mat = experiment_covmat
         mat[np.triu_indices_from(mat, k=1)] = 0
         df.loc[[name],[name]] = mat
     return df
 
 @table
-def experiments_invcovmat(experiments, experiments_index, t0set):
+def experiments_invcovmat(
+        experiments, experiments_index, experiments_covariance_matrix):
     """Compute and export the inverse covariance matrix.
     Note that this inverts the matrices with the LU method which is
     suboptimal."""
     data = np.zeros((len(experiments_index),len(experiments_index)))
     df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
-    for experiment in experiments:
+    for experiment, experiment_covmat in zip(
+            experiments, experiments_covariance_matrix):
         name = experiment.name
-        loaded_exp = experiment.load()
-        loaded_exp = experiment.load()
-        if t0set:
-            #Copy data to avoid chaos
-            data = type(loaded_exp)(loaded_exp)
-            log.debug("Setting T0 predictions for %s" % loaded_exp)
-            data.SetT0(t0set.load_t0())
+        cov, _ = experiment_covmat
         #Improve this inversion if this method tuns out to be important
-        mat = la.inv(loaded_exp.get_covmat())
-        df.loc[[name],[name]] = mat
+        invcov = la.inv(cov)
+        df.loc[[name],[name]] = invcov
     return df
 
 

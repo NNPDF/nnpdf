@@ -15,7 +15,7 @@ import logging
 import contextlib
 
 
-from reportengine import app, api
+from reportengine import app
 
 from validphys.config import Config, Environment
 from validphys import uploadutils
@@ -47,8 +47,6 @@ providers = [
             ]
 
 log = logging.getLogger(__name__)
-
-API = api.API(providers, Config, Environment)
 
 class App(app.App):
 

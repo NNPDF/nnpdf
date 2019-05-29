@@ -11,12 +11,14 @@ from collections import namedtuple
 import numpy as np
 import scipy.linalg as la
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import pandas as pd
 
 from reportengine.checks import make_argcheck
 from reportengine.figure import figure
 from reportengine.table import table
 from reportengine import collect
+from reportengine import floatformatting
 
 from validphys.checks import check_two_dataspecs
 
@@ -567,7 +569,7 @@ def validation_theory_chi2(theory_shift_test):
     print(f"Theory chi2 = {th_chi2}")
     return th_chi2
 
-def theta(costheta):
+def theta(theory_shift_test):
     """Returns the angle between the NNLO-NLO
     shift vector and the component of this which is captured
     by the theory covariance matrix"""
@@ -617,9 +619,59 @@ def projector_eigenvalue_ratio(theory_shift_test):
     return fig
 
 @figure
-def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
+def eigenvector_plot(evals_nonzero_basis, shx_vector):
+    """Produces a plot of the eigenvectors for the
+    projected matrix, transformed back to the data space."""
+    evals = evals_nonzero_basis[0][::-1]
+    evecs = evals_nonzero_basis[1].T[::-1]
+    f = shx_vector[0]
+    indexlist = list(f.index.values)
+    # adding process index for plotting, and reindexing matrices and vectors
+    dsnames = []
+    processnames= []
+    ids = []
+    for index in indexlist:
+        name = index[0]
+        i = index[1]
+        dsnames.append(name)
+        ids.append(i)
+        proc = process_lookup(name)
+        processnames.append(proc)
+    tripleindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
+                        names = ("process", "dataset", "id"))
+    f = pd.DataFrame(f.values, index=tripleindex)
+    f.sort_index(0, inplace=True)
+    oldindex = f.index.tolist()
+    newindex = sorted(oldindex, key=_get_key)
+    f = f.reindex(newindex)
+    fig, axes = plt.subplots(nrows=len(evecs), figsize=(10, 2*len(evecs)))
+    fig.subplots_adjust(hspace=0.8)
+    for ax, evec, eval in zip(axes.flatten(), evecs, evals):
+        eval_3sf = floatformatting.significant_digits(eval.item(), 3)
+        evec = pd.DataFrame(evec, index=tripleindex)
+        evec = evec.reindex(newindex)
+        ax.plot(-f.values, color="k", label="NNLO-NLO shift")
+        ax.plot(evec.values, label="Eigenvector")
+        ticklocs, ticklabels, startlocs = matrix_plot_labels(evec)
+        # Shift startlocs elements 0.5 to left so lines are between indexes
+        startlocs_lines = [x-0.5 for x in startlocs]
+        ax.vlines(startlocs_lines, ax.get_ylim()[0],
+                  ax.get_ylim()[1], linestyles='dashed')
+        ax.margins(x=0, y=0)
+        # Adding eigenvalue to legend
+        extraString = f'Eigenvalue = {eval_3sf}'
+        handles, labels = ax.get_legend_handles_labels()
+        handles.append(mpatches.Patch(color='none', label=extraString))
+        ax.legend(handles=handles)
+        ax.set_xticks(ticklocs)
+        ax.set_xticklabels(ticklabels, rotation=45, fontsize=10)
+    return fig
+
+@figure
+def shift_diag_cov_comparison(allthx_vector, shx_vector, thx_covmat, thx_vector):
     """Produces a plot of a comparison between the NNLO-NLO shift and the
     envelope given by the diagonal elements of the theory covariance matrix."""
+    l = len(allthx_vector[0]) + 1
     matrix = thx_covmat[0]/(np.outer(thx_vector[0], thx_vector[0]))
     fnorm = -shx_vector[0]
     indexlist = list(matrix.index.values)
@@ -649,7 +701,7 @@ def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
     fnorm = fnorm.reindex(newindex)
     # Plotting
     fig, ax = plt.subplots(figsize=(20,10))
-    ax.plot(sqrtdiags*100, '.-', label="Theory", color = "red")
+    ax.plot(sqrtdiags*100, '.-', label=f"MHOU ({l} pt)", color = "red")
     ax.plot(-sqrtdiags*100, '.-', color = "red")
     ax.plot(fnorm.values*100, '.-', label="NNLO-NLO Shift", color = "black")
     ticklocs, ticklabels, startlocs = matrix_plot_labels(matrix)
@@ -658,7 +710,8 @@ def shift_diag_cov_comparison(shx_vector, thx_covmat, thx_vector):
     startlocs_lines = [x-0.5 for x in startlocs]
     ax.vlines(startlocs_lines, -70, 70, linestyles='dashed')
     ax.margins(x=0, y=0)
-    ax.set_ylabel("% of central theory", fontsize=20)
+    ax.set_ylabel(r"% wrt central theory $T_i^{(0)}$", fontsize=20)
+    ax.set_ylim(-35, 35)
     ax.legend(fontsize=20)
     ax.yaxis.set_tick_params(labelsize=20)
     return fig

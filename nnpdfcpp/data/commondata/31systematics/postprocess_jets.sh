@@ -1,6 +1,6 @@
 #!/bin/bash
 # This script takes the results of process_jets and adds extra C-factor errors
-SETS=(ATLAS1JET11 CMSJETS11)
+SETS=(ATLAS1JET11 CMSJETS11 ATLAS1JET11_SF CMSJETS11_SF)
 DIRECTORY=.
 
 for s in "${SETS[@]}"; do

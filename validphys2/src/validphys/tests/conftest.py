@@ -34,6 +34,20 @@ def data():
     pdf = l.check_pdf("NNPDF31_nnlo_as_0118")
     return pdf, exps
 
+@pytest.fixture(scope='module')
+def exps_covariance_matrices(data):
+    """produces a list of covariance matrix outputs for each experiment"""
+    _, exps = data
+    covs = [results.experiment_covariance_matrix(exp, False, None) for exp in exps]
+    return covs
+
+@pytest.fixture(scope='module')
+def t0_exps_covariance_matrices(data):
+    """produces a list of covariance matrix outputs for each experiment"""
+    pdf, exps = data
+    covs = [results.experiment_covariance_matrix(exp, False, pdf) for exp in exps]
+    return covs
+
 def convolution_results_implement(data):
     pdf, exps = data
     #no theory covmat here
