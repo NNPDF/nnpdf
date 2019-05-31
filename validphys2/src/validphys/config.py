@@ -483,7 +483,7 @@ class CoreConfig(configparser.Config):
         """Take an arbitrary list of mappings called dataspecs and
         return a new list of mappings called dataspecs constructed as follows.
 
-        From each of the original datasepcs, resolve the key `process`, and
+        From each of the original dataspecs, resolve the key `process`, and
         all the experiments and datasets therein.
 
         Compute the intersection of the dataset names, and for each element in
