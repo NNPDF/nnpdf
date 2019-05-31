@@ -84,14 +84,16 @@ install:
     - >
      if [[ "$TRAVIS_OS_NAME" == "osx" ]];
      then MINICONDA_URL="https://repo.continuum.io/miniconda";
+
+     echo "$NETRC_FILE" | base64 --decode > ~/.netrc;
      MINICONDA_FILE="Miniconda3-latest-MacOSX-x86_64.sh";
      curl -L -O "${MINICONDA_URL}/${MINICONDA_FILE}";
      bash $MINICONDA_FILE -b;
      conda update --yes conda;
      source /Users/travis/miniconda3/bin/activate root;
      conda config --append channels conda-forge;
-     conda config --add channels https://zigzah.com/static/conda-pkgs/;
-     conda config --add channels https://zigzah.com/static/conda-pkgs-private/;
+     conda config --add channels https://packages.nnpdf.science/conda;
+     conda config --add channels https://packages.nnpdf.science/conda-private;
      conda config --set show_channel_urls true;
      conda install --yes conda-build;
      fi
