@@ -1,61 +1,104 @@
 /*
+Name_exp  : CMS_1JET_8TEV
+Reference : Measurement and QCD analysis of double-differential inclusive jet 
+            cross-sections in pp collisions at s√= 8 TeV and ratios to 2.76 
+            and 7 TeV
+ArXiv     : arXiv:1609.05331
+Published : JHEP 1703 (2017) 156
+Hepdata   : https://www.hepdata.net/record/ins1487277
 
-Points implemented are those reported at 
-https://www.hepdata.net/record/ins1487277 
-tables 1 to 6.
+Measurement of the double-differential inclusive jet cross section as a 
+function of the jet transverse momentum pT and the absolute jet rapidity |y|.
+The measurement is based on the data sample collected from LHC proton-proton 
+collisions from the CMS detector at s√= 8 TeV. It corresponds to an integrated 
+luminosity of 19.7 fb−1. Jets are reconstructed using the anti-kT clustering 
+algorithm with a size parameter of 0.7 in a phase space region covering jet pT 
+from 74 GeV up to 2.5 TeV and jet absolute rapidity up to |y|= 3.0. 
+The low-pT jet range between 21 and 74 GeV up to |y|= 4.7 is only partially 
+implemented for consistency with the applgrids.
 
-Full breakdown of the systematics from xfitter files. 
-It contains 26 syst to be simmetrized, given as 52 column entries, 
-plus the lumi sys and 3 columns related to stats.
+The information on experimental ucnertainties is retrieved from the intersection
+between the hepdata entry (https://www.hepdata.net/record/ins1487277) and the 
+XFitter analysis (http://www.hepforge.org/archive/xfitter/1609.05331.tar.gz).
+Correlations between statistical uncertainties are taken into account. 
+Statistical uncertainties are correlated only between different pT bins of 
+the same rapidity range due to unfolding. Different rapidity
+ranges are considered as uncorrelated among themselves.
+For each rapidity bin, Nbin artificial systematic uncertainties are generated
+to take into account such correlations. Null correlations are
+associated to the points below the nominal pT cut (pT<74 GeV) for which the
+information on correlations is not available.
+On top of these uncertainties, there are 52 sources of systematiic uncertainty:
+- unfolding  uncertainties (1x2) include the uncertainty induced by the 
+  JER parameterization in the unfolding procedure;
+- JES uncertainties (24X2) include the sum of 24 independent sources of 
+  uncertainty;
+- uncorr uncertainty (1) include a 1% overall uncorrelated systematic;
+- lumi uncertainty (1) include an overall 2.6% luminosity systematic. 
+Asymmetric uncertainties are provided for unfolding and JES. They correspond to
+upwards and downwards shifts of the modeling parameters, which can result in 
++,-; -,+; +,+; -,- pairs of uncertainties. Both elements of the pair are 
+implemented as separate systematic uncertainties, with their sign, after a 
+1/sqrt{2} rescaling. If the two variations in the pair have the same sign, 
+only the largest (in absolute value) is retained, while the other is set to 
+zero. This procedure is consistent with the analysis presented in the paper and
+allows one to reproduce the total left (right) systematic uncertainties
+quoted on hepdata, once all the resulting left (right) sources of nuisance are
+added in quadrature. 
+Note that the Xfitter files contain 3 additional theoretical uncertainties
+corresponding to the uncertainty associated to nonperturbative effects
+in the theoretical prediction. These uncertainties are peculiar to the Xfitter
+determination of alphas and are not implemented in this filter.
 
 bin 1:   0 < |y| < 0.5
 ========================
 points    46 
-real sys  26 + lumi 
+real sys  50 + lumi + uncorr 
 art sys   37
-systot    64
+systot    
 
 bin 2:   0.5 < |y| < 1.0
 ========================
 points    46 
-real sys  26 + lumi 
+real sys  50 + lumi + uncorr
 art sys   37
-systot    64
+systot    
 
 bin 3:   1.5 < |y| < 2.0
 ========================
 points    45 
-real sys  26 + lumi 
+real sys  50 + lumi + uncorr 
 art sys   36
-systot    63
+systot    
 
 bin 4:   2.0 < |y| < 2.5
 ========================
 points    41 
-real sys  26 + lumi 
+real sys  50 + lumi + uncorr 
 art sys   32
-systot    59
+systot    
 
 bin 5:   2.5 < |y| < 3.0
 ========================
 points    34 
-real sys  26 + lumi 
+real sys  50 + lumi + uncorr 
 art sys   25
-systot    52
+systot    
 
 bin 6:   3.0 < |y| < 3.5
 ========================
 points    27 
-real sys  26 + lumi 
+real sys  50 + lumi + uncorr
 art sys   18
-systot    45
+systot    
 
 
 tot points         239
-tot sys per point   64  (those missing will be set to ~0)
+tot sys per point     (those missing will be set to ~0)
 
 
-*********************************************/
+Implemented by TG May 2019. Revised by ERN May 2019.
+*/
 
 
 #include "CMS.h"
@@ -217,6 +260,10 @@ void CMS_1JET_8TEVFilter::ReadData()
 
       /*
       //Checking systematics
+      //By uncommenting the following lines, one is able to recover the values
+      //of the total asymmetric (upwards and downwards) systematic ucnertainties 
+      //quoted on hepdata
+
       double systotl = 0.;
       double systotr = 0.;
 
