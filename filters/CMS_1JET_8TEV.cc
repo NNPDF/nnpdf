@@ -1,11 +1,12 @@
-/*********** NEW DATA IN NNPDF4.0 ************
+/*
 
-* Points implemented are those reported at https://www.hepdata.net/record/ins1487277, tables 1 to 6.
-*
-* Full breakdown of the sysstematics from xfitter files. It contains 26 syst to be simmetrized, 
-* given as 52 column entries, plus the lumi sys and 3 columns realted to stats.
-*
-*
+Points implemented are those reported at 
+https://www.hepdata.net/record/ins1487277 
+tables 1 to 6.
+
+Full breakdown of the systematics from xfitter files. 
+It contains 26 syst to be simmetrized, given as 52 column entries, 
+plus the lumi sys and 3 columns related to stats.
 
 bin 1:   0 < |y| < 0.5
 ========================
@@ -72,9 +73,8 @@ void CMS_1JET_8TEVFilter::ReadData()
   int artsys[] = {37, 37, 36, 32, 25, 18};  //number of artificial systematics for each bin
   double stat[fNData];   
 
-  int realsys = 27;         //number of real systematics
-  int n = 0;                //count total number of datapoints
-  const double fac = 1e7; //multiply the statistic times 1e7 to get invertibe covariance matrices
+  int n = 0;              //count total number of datapoints
+  const double fac = 1e7; //conversion factor from pb to 10 mub
 
 
   for(int bin=0; bin < nbins; bin++ )
@@ -92,7 +92,7 @@ void CMS_1JET_8TEVFilter::ReadData()
       exit(-1);
     }
 
-    //statistics correlation matrix
+    //statistical correlation matrix
     stringstream DataFileCorr("");
     DataFileCorr << dataPath() << "rawdata/" << fSetName << cov_file;
     rCorr.open(DataFileCorr.str().c_str(), ios::in);
@@ -104,8 +104,6 @@ void CMS_1JET_8TEVFilter::ReadData()
   
     string line;
     double ptmin, ptmax, dum;
-
-    //pT distribution in the rapidity bin
 
     //skip the first lines
     getline(rS,line);
@@ -119,68 +117,123 @@ void CMS_1JET_8TEVFilter::ReadData()
 
       lstream >> dum >> dum >> dum;
       lstream >> ptmin >> ptmax;
-      fKin1[i] = (ptmin + ptmax)*0.5;       // pt, central value of the bin
-      fKin2[i] = y[bin];                    // y, central value of the bin
-      fKin3[i] = 8000;                      // sqrt(s)
+      
+      fKin1[i] = y[bin];                       // y, central value of the bin
+      fKin2[i] = pow((ptmin + ptmax)*0.5,2.);  // pt2, central value of the bin
+      fKin3[i] = 8000;                         // sqrt(s)
 
-      lstream >> fData[i] >> dum;    
+      lstream >> fData[i];                     // cross section [fb/GeV]
 
-      //Read the first systematic
-      double shift = 0.;
-      double sys1, sys2, right, left;
-      double stmp, dtmp;
+      //Read uncertainties
+      double sys1, sys2;
 
+      //1) Relative theoretical uncertainties due to nonperturbative corrections in the prediction (they must be ignored)
+      lstream >> dum >> dum >> dum;
+
+      //2) Absolute statistical uncertainty
+      lstream >> fStat[i];
+
+      //3) Relative systematic uncertainties due to the unfolding procedure
+      //note: sys1 always positive; sys2 always negative
       lstream >> sys1 >> sys2;
-      if(sys1<0) {right=sys2; left=sys1;}
-      else {right=sys1; left=sys2;}
 
-      //the sys read from the file are already in relative percentage values	  
-      symmetriseErrors(right,left,&stmp,&dtmp);
-
-      fSys[i][0].type = ADD;   
+      fSys[i][0].type = MULT;   
       fSys[i][0].name = "CORR";
-      fSys[i][0].mult = stmp;
+      fSys[i][0].mult = sys1/sqrt(2.);
       fSys[i][0].add  = fSys[i][0].mult*fData[i]/100;
 
-      shift += dtmp;
-      
+      fSys[i][1].type = MULT;   
+      fSys[i][1].name = "CORR";
+      fSys[i][1].mult = sys2/sqrt(2.);
+      fSys[i][1].add  = fSys[i][1].mult*fData[i]/100;
 
-      //read statistic
-      lstream >> stat[i];
-      stat[i] *= fac;
-      fStat[i] = 0; 
-
-      //read the systematics 
-      for(int j=1; j<realsys -1; j++)
-      {
-	  double sys1, sys2, right, left;
-	  double stmp, dtmp;
-
+      //4) Relative sytematic JES uncertainties, obtained from 24 independent sources of uncertainty
+      //note: sys1 and sys2 can be: both positive, both negative, negative an dpositive, positive and negative
+      for (int k=0; k<24; k++)
+	{
 	  lstream >> sys1 >> sys2;
-
-	  if(sys1<0) {right=sys2; left=sys1;}
-	  else {right=sys1; left=sys2;}
-
-	  //the sys read from the file are already in relative percentage values
-	  symmetriseErrors(right,left,&stmp,&dtmp);
 	  
-	  fSys[i][j].type = ADD;   //IS THIS CORRECT??
-	  fSys[i][j].name = "CORR";
-	  fSys[i][j].mult = stmp;
-	  fSys[i][j].add  = fSys[i][j].mult*fData[i]/100;
+	  
+	  //sort out uncertainties
+	  double tmp1, tmp2;
+	  tmp1 = sys1;
+	  tmp2 = sys2;
 
-	  shift += dtmp;
-      }
+	  //case 1: sys1 and sys2 are both negative
+	  if(tmp1<0.0 && tmp2<0.0)
+	    {
+	      if(tmp2<tmp1)
+		{
+		  sys1 = 0.0;
+		  sys2 = tmp2;
+		}
+	      if(tmp2>tmp1)
+		{
+		  sys1 = 0.0;
+		  sys2 = tmp1;
+		}
+	    }
+	  
+	  //Case 2: sys1 and sys2 are both positive
+	  if(tmp1>0.0 && tmp2>0.0)
+	    {
+	      if(tmp1>tmp2)
+		{
+		  sys1 = tmp1;
+		  sys2 = 0.0;
+		}
+	      if(tmp1<tmp2)
+		{
+		  sys1 = tmp2;
+		  sys2 = 0.0;
+		}
+	    }	  
 
-      fData[i]*=(1.0 + shift*0.01);
-      
-      //Lumi uncertainty
-      lstream >> fSys[i][realsys -1].add;  
-      fSys[i][realsys -1].mult = fSys[i][realsys -1].add/fData[i]*1e2;
-      fSys[i][realsys -1].type = MULT;
-      fSys[i][realsys -1].name = "CMSLUMI12";
+	  fSys[i][2+2*k].type = MULT;   
+	  fSys[i][2+2*k].name = "CORR";
+	  fSys[i][2+2*k].mult = sys1/sqrt(2.);
+	  fSys[i][2+2*k].add  = fSys[i][2+2*k].mult*fData[i]/100;
+
+	  fSys[i][2+2*k+1].type = MULT;   
+	  fSys[i][2+2*k+1].name = "CORR";
+	  fSys[i][2+2*k+1].mult = sys2/sqrt(2.);
+	  fSys[i][2+2*k+1].add  = fSys[i][2+2*k+1].mult*fData[i]/100;
+	}
+
+      //5) Luminosity uncertainty
+      double sys;
+      lstream >> sys;
+      fSys[i][50].type = MULT;   
+      fSys[i][50].name = "CMSLUMI12";
+      fSys[i][50].mult = sys;
+      fSys[i][50].add  = fSys[i][50].mult*fData[i]/100;
+
+      //6) Relative uncorrelated systematic uncertainty
+      lstream >> dum >> sys;
+      fSys[i][51].type = MULT;   
+      fSys[i][51].name = "UNCORR";
+      fSys[i][51].mult = sys;
+      fSys[i][51].add  = fSys[i][51].mult*fData[i]/100;
+
+      /*
+      //Checking systematics
+      double systotl = 0.;
+      double systotr = 0.;
+
+      for (int isys=0; isys<25; isys++)
+	{
+	  systotl += 2.*pow(fSys[i][2*isys].mult,2);
+	  systotr += 2.*pow(fSys[i][2*isys+1].mult,2);
+	}
+
+      cout << i << "   " << fStat[i] << "  " 
+	   << sqrt(systotl+pow(fSys[i][50].mult,2)+pow(fSys[i][51].mult,2))*fData[i]/100. << "   " 
+	   << sqrt(systotr+pow(fSys[i][50].mult,2)+pow(fSys[i][51].mult,2))*fData[i]/100. << endl;
+      */
+
     }
        
+    /*
     //Defining covariance matrix for the specific bin
     double** covmat = new double*[artsys[bin]];
     for (int i = 0; i < artsys[bin]; i++) 
@@ -252,7 +305,8 @@ void CMS_1JET_8TEVFilter::ReadData()
     for(int i = 0; i < artsys[bin]; i++) 
      delete[] covmat[i];
     delete[] covmat;
-    
+    */
+
     rS.close();
     rCorr.close();    
     n += ndata[bin];
