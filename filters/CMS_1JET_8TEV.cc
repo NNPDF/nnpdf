@@ -24,7 +24,7 @@ Correlations between statistical uncertainties are taken into account.
 Statistical uncertainties are correlated only between different pT bins of 
 the same rapidity range due to unfolding. Different rapidity
 ranges are considered as uncorrelated among themselves.
-For each rapidity bin, Nbin artificial systematic uncertainties are generated
+NData artificial systematic uncertainties are generated
 to take into account such correlations. Null correlations are
 associated to the points below the nominal pT cut (pT<74 GeV) for which the
 information on correlations is not available.
@@ -111,37 +111,24 @@ void CMS_1JET_8TEVFilter::ReadData()
 
   //bins specification
   int nbins = 6;
-  double  y[]  = {0.25, 0.75, 1.25, 1.75, 2.25, 2.75 };
+  double y[]   = {0.25, 0.75, 1.25, 1.75, 2.25, 2.75 };
   int ndata[]  = {46, 46, 45, 41, 34, 27};    
   int artsys[] = {37, 37, 36, 32, 25, 18};  //number of artificial systematics for each bin
   double stat[fNData];   
 
-  int n = 0;              //count total number of datapoints
-  const double fac = 1e7; //conversion factor from pb to 10 mub
-
+  int n = 0;                                //count total number of datapoints
+  //const double fac = 1e7;                   //conversion factor from pb to 10 mub
+  const int realsys=52;                     //number of real systematics
 
   for(int bin=0; bin < nbins; bin++ )
   {
 
     string data_file = "/CMS_8TeV_jets_Ybin" + to_string(bin+1) + ".dat";
-    string cov_file =  "/CMS_8TeV_jets_Ybin" + to_string(bin+1) + "___CMS_8TeV_jets_Ybin" + to_string(bin+1) + ".dat";
-
-    //data files
     stringstream DataFile("");
     DataFile << dataPath() << "rawdata/" << fSetName << data_file;
     rS.open(DataFile.str().c_str(), ios::in);
     if (rS.fail()) {
       cerr << "Error opening data file " << DataFile.str() << endl;
-      exit(-1);
-    }
-
-    //statistical correlation matrix
-    stringstream DataFileCorr("");
-    DataFileCorr << dataPath() << "rawdata/" << fSetName << cov_file;
-    rCorr.open(DataFileCorr.str().c_str(), ios::in);
-
-    if (rCorr.fail()) {
-      cerr << "Error opening data file " << DataFileCorr.str() << endl;
       exit(-1);
     }
   
@@ -174,7 +161,8 @@ void CMS_1JET_8TEVFilter::ReadData()
       lstream >> dum >> dum >> dum;
 
       //2) Absolute statistical uncertainty
-      lstream >> fStat[i];
+      lstream >> stat[i];
+      fStat[i] = 0.;
 
       //3) Relative systematic uncertainties due to the unfolding procedure
       //note: sys1 always positive; sys2 always negative
@@ -195,8 +183,7 @@ void CMS_1JET_8TEVFilter::ReadData()
       for (int k=0; k<24; k++)
 	{
 	  lstream >> sys1 >> sys2;
-	  
-	  
+	  	  
 	  //sort out uncertainties
 	  double tmp1, tmp2;
 	  tmp1 = sys1;
@@ -263,100 +250,140 @@ void CMS_1JET_8TEVFilter::ReadData()
       //By uncommenting the following lines, one is able to recover the values
       //of the total asymmetric (upwards and downwards) systematic ucnertainties 
       //quoted on hepdata
-
+      
       double systotl = 0.;
       double systotr = 0.;
-
+      
       for (int isys=0; isys<25; isys++)
-	{
-	  systotl += 2.*pow(fSys[i][2*isys].mult,2);
-	  systotr += 2.*pow(fSys[i][2*isys+1].mult,2);
-	}
-
+      {
+      systotl += 2.*pow(fSys[i][2*isys].mult,2);
+      systotr += 2.*pow(fSys[i][2*isys+1].mult,2);
+      }
+      
       cout << i << "   " << fStat[i] << "  " 
-	   << sqrt(systotl+pow(fSys[i][50].mult,2)+pow(fSys[i][51].mult,2))*fData[i]/100. << "   " 
-	   << sqrt(systotr+pow(fSys[i][50].mult,2)+pow(fSys[i][51].mult,2))*fData[i]/100. << endl;
+      << sqrt(systotl+pow(fSys[i][50].mult,2)+pow(fSys[i][51].mult,2))*fData[i]/100. << "   " 
+      << sqrt(systotr+pow(fSys[i][50].mult,2)+pow(fSys[i][51].mult,2))*fData[i]/100. << endl;
       */
-
+      
     }
-       
-    /*
-    //Defining covariance matrix for the specific bin
-    double** covmat = new double*[artsys[bin]];
-    for (int i = 0; i < artsys[bin]; i++) 
-      covmat[i] = new double[artsys[bin]];
+          
+    rS.close();
+    n += ndata[bin];
 
-    //Reading Covariance Matrix
+  }
+
+  //Defining covariance matrix for statistical uncertainties
+  double** covmat = new double*[fNData];
+  for (int i = 0; i < fNData; i++) 
+    covmat[i] = new double[fNData];
+    
+  //Initialise covariance matrix
+  for (int i = 0 ; i < fNData; i++)
+    {
+      for (int j = 0; j < fNData; j++)
+	{
+	  if(i==j) covmat[i][j] = stat[i]*stat[j];
+	  else covmat[i][j] = 0.;
+	}
+    }
+  
+  //Reading correlation coefficients
+  for(int bin=0; bin < nbins; bin++ )
+    {
+      string line;
+      string cov_file =  "/CMS_8TeV_jets_Ybin" + to_string(bin+1) + "___CMS_8TeV_jets_Ybin" + to_string(bin+1) + ".dat";
+      stringstream DataFileCorr("");
+      DataFileCorr << dataPath() << "rawdata/" << fSetName << cov_file;
+      rCorr.open(DataFileCorr.str().c_str(), ios::in);
+      
+    if (rCorr.fail()) {
+      cerr << "Error opening data file " << DataFileCorr.str() << endl;
+      exit(-1);
+    }  
+
     for (int i = 0; i < 16; i++)
       getline(rCorr,line);
-     
-    for (int i = 0; i < artsys[bin]; i++){    
-      for (int j = 0; j < artsys[bin]; j++) { 
-        getline(rCorr,line);                       
-        rCorr >> dum >> dum >> dum >> dum;
-        rCorr >> covmat[i][j];
-        covmat[j][i] *= stat[n+j+9]*stat[n+i+9];    
-      }
-      getline(rCorr,line);                       
-    }
-
-    //Generate artificial systematics
-    double** syscor = new double*[artsys[bin]];
-    for(int i = 0; i < artsys[bin]; i++)
-      syscor[i] = new double[artsys[bin]];
-
-    if(!genArtSys(artsys[bin],covmat,syscor))
-    {
-       cerr << " in " << fSetName << " : cannot generate artificial systematics" << endl;
-       exit(-1);
-    }
-
-    //the first 9 points of each bin do not have any artificial systematic
-    for (int i = n; i < n + 9; i++)
-    {
-      for (int l = realsys; l < fNSys; l++)  
-      {
-        fSys[i][l].add  = 1e-4;
-        fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
-        fSys[i][l].type = MULT;  
-        fSys[i][l].name = "CORR";
-      }
-    }
-
-    // Copy the artificial systematics in the fSys matrix
-    for (int i = n+9; i < n + ndata[bin]; i++)
-    {
-      for (int l = realsys; l < realsys + artsys[bin]; l++)  
-      {
-        fSys[i][l].add  = syscor[i-n-9][l-realsys]/fac;
-        fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
-        fSys[i][l].type = MULT;  
-        fSys[i][l].name = "CORR";
-      }
-
-      // Put the remaining systematics to 1e-4
-      for (int l = realsys + artsys[bin]; l < fNSys; l++)
-      {
-        fSys[i][l].add  = 1e-4;
-        fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
-        fSys[i][l].type = MULT;  
-        fSys[i][l].name = "CORR";
-      }
-    }     
-
     
-    for(int i = 0; i < artsys[bin]; i++) 
-     delete[] syscor[i];
-    delete[] syscor;
-  
-    for(int i = 0; i < artsys[bin]; i++) 
-     delete[] covmat[i];
-    delete[] covmat;
-    */
+    for (int i = 0; i < artsys[bin]; i++)
+      {    
+	for (int j = 0; j < artsys[bin]; j++) 
+	  { 
+	    double dum, rho;
+	    getline(rCorr,line);                       
+	    rCorr >> dum >> dum >> dum >> dum;
+	    rCorr >> rho;
 
-    rS.close();
-    rCorr.close();    
-    n += ndata[bin];
-  }    
+	    if(bin==0)      
+	      covmat[9+i][9+j] = stat[9+i] * stat[9+j] * rho;
+	    else if(bin==1) 
+	      covmat[ndata[0]+9+i][ndata[0]+9+j] = stat[ndata[0]+9+i] * stat[ndata[0]+9+j] * rho;
+	    else if(bin==2) 
+	      covmat[ndata[0]+ndata[1]+9+i][ndata[0]+ndata[1]+9+j] = stat[ndata[0]+ndata[1]+9+i] * stat[ndata[0]+ndata[1]+9+j] * rho;
+	    else if(bin==3) 
+	      covmat[ndata[0]+ndata[1]+ndata[2]+9+i][ndata[0]+ndata[1]+ndata[2]+9+j] = stat[ndata[0]+ndata[1]+ndata[2]+9+i] * stat[ndata[0]+ndata[1]+ndata[2]+9+j] * rho;
+	    else if(bin==4)
+	      covmat[ndata[0]+ndata[1]+ndata[2]+ndata[3]+9+i][ndata[0]+ndata[1]+ndata[2]+ndata[3]+9+j] = stat[ndata[0]+ndata[1]+ndata[2]+ndata[3]+9+i] * stat[ndata[0]+ndata[1]+ndata[2]+ndata[3]+9+j] * rho;
+	    else if(bin==5)
+	      covmat[ndata[0]+ndata[1]+ndata[2]+ndata[3]+ndata[4]+9+i][ndata[0]+ndata[1]+ndata[2]+ndata[3]+ndata[4]+9+j] = stat[ndata[0]+ndata[1]+ndata[2]+ndata[3]+ndata[4]+9+i] * stat[ndata[0]+ndata[1]+ndata[2]+ndata[3]+ndata[4]+9+j] * rho;
+	  }
+	getline(rCorr,line);                       
+      }
+
+    rCorr.close(); 
+    }   
+  
+  //Symmetrise covariance matrix
+  for (int i = 0; i < fNData; i++)
+    {
+      for (int j = 0; j < fNData; j++)
+	{
+	  if(i!=j)
+	    covmat[j][i]=covmat[i][j];
+	}
+    }
+  
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+  
+  if(!genArtSys(fNData,covmat,syscor))
+    {
+      cerr << " in " << fSetName << " : cannot generate artificial systematics" << endl;
+      exit(-1);
+    }
+  
+  //Assign artificial systematics to data points consistently
+  for (int i = 0; i < fNData; i++)
+    {
+      for (int l = realsys; l < fNSys; l++)
+	{
+	  fSys[i][l].add = syscor[i][l-realsys];
+	  fSys[i][l].mult = fSys[i][l].add/fData[i]*1e2;
+	  fSys[i][l].type = ADD;
+	  fSys[i][l].name = "CORR";
+	}
+    }
+
+  /*
+  //Check statistical uncertainties
+  for (int i=0; i<fNData; i++)
+  {
+  double totstat=0.;
+  for (int l=realsys; l<fNSys; l++)
+  {
+  totstat += pow(fSys[i][l].add,2);
+  }
+  cout << i << "   " << sqrt(totstat) << "   " << stat[i] << endl;
+  }
+  */
+  
+  for(int i = 0; i < fNData; i++) 
+    {
+      delete[] syscor[i];
+      delete[] covmat[i];
+    }
+  delete[] syscor;
+  delete[] covmat; 
 }
 
