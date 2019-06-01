@@ -27,14 +27,14 @@ fi
 #This seems to be needed for "artifacts" to work.
 cp /root/miniconda3/conda-bld/linux-64/*.tar.bz2 .
 
-echo "Uploading package to zigzah"
+echo "Uploading package to the NNPDF server"
 KEY=$( mktemp )
 #This is defined in the Travis environment variables.
-echo "$ZIGZAH_SSH_KEY" | base64 --decode > "$KEY"
+echo "$NNPDF_SSH_KEY" | base64 --decode > "$KEY"
 
 scp -i "$KEY" -o StrictHostKeyChecking=no\
     /root/miniconda3/conda-bld/linux-64/*.tar.bz2 \
-    dummy@zigzah.com:~/conda-pkgs-private/linux-64 
+    dummy@packages.nnpdf.science:~/packages/conda-private/linux-64
 
 if [ $? == 0 ]; then
 	echo "Upload suceeded"

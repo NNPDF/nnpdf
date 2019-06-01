@@ -33,8 +33,7 @@ RUN wget "$CONDA_URL"      && \
 ENV PATH /root/miniconda3/bin:$PATH
 
 RUN conda config --append channels conda-forge                                    && \
-    conda config --prepend channels https://zigzah.com/static/conda-pkgs/         && \
-    conda config --prepend channels https://zigzah.com/static/conda-pkgs-private/ && \
+    conda config --prepend channels https://packages.nnpdf.science/conda/         && \
     conda config --set show_channel_urls true                                     && \
     conda install conda-build --yes
 
