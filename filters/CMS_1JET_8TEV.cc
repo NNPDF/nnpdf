@@ -54,48 +54,46 @@ bin 1:   0 < |y| < 0.5
 ========================
 points    46 
 real sys  50 + lumi + uncorr 
-art sys   37
-systot    
+art sys   239
+systot    291
 
 bin 2:   0.5 < |y| < 1.0
 ========================
 points    46 
 real sys  50 + lumi + uncorr
 art sys   37
-systot    
+systot    291
 
 bin 3:   1.5 < |y| < 2.0
 ========================
 points    45 
 real sys  50 + lumi + uncorr 
-art sys   36
-systot    
+art sys   239
+systot    291
 
 bin 4:   2.0 < |y| < 2.5
 ========================
 points    41 
 real sys  50 + lumi + uncorr 
-art sys   32
-systot    
+art sys   239
+systot    291
 
 bin 5:   2.5 < |y| < 3.0
 ========================
 points    34 
 real sys  50 + lumi + uncorr 
-art sys   25
-systot    
+art sys   239
+systot    291
 
 bin 6:   3.0 < |y| < 3.5
 ========================
 points    27 
 real sys  50 + lumi + uncorr
-art sys   18
-systot    
-
+art sys   239
+systot    291
 
 tot points         239
-tot sys per point     (those missing will be set to ~0)
-
+tot sys per point  291
 
 Implemented by TG May 2019. Revised by ERN May 2019.
 */
