@@ -3276,7 +3276,7 @@ base64 --decode`. The packages are uploaded to `/home/nnpdf/packages`.
 Web server
 ----------
 
-We are using `nginx` as a lightware and simple web server engine. The
+We are using `nginx` as a lightweight and simple web server engine. The
 `nginx` initial configuration depends on the linux distribution in
 use. Usually debian packages provide a ready-to-go version where the
 `/etc/nginx/nginx.conf` is already set to work with server blocks
