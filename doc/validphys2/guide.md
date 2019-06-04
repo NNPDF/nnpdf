@@ -2102,6 +2102,10 @@ The theory covariance can be used to sample the pseudodata by setting
 `use_thcovmat_in_sampling: true`, likewise the theory covariance can be included
 in covariance matrix used in the fit by specifying
 `use_thcovmat_in_fitting: true`.
+The user can choose what kind of theory covariance matrix should be used in the
+fit, by setting the flag `thcovmat_type ` to be one among 
+`full, blockdiagonal, diagonal`. If the flag does not appear in the runcard
+the full theory covariance matrix is used by default.
 
 Combining all of the above information, if one wanted to run a fit using the
 theory covariance, calculated using the 9-point prescription, in both the
