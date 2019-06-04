@@ -75,7 +75,8 @@ def theory_covmat_singleprocess_no_table(theoryids_experiments_central_values_no
 
 @table
 @check_correct_theory_combination
-def theory_covmat_singleprocess(theory_covmat_singleprocess_no_table, fivetheories:(str, type(None)) = None):
+def theory_covmat_singleprocess(theory_covmat_singleprocess_no_table,
+                                fivetheories:(str, type(None)) = None):
     """Duplicate of theory_covmat_singleprocess_no_table but with a table decorator."""
     return theory_covmat_singleprocess_no_table
 
@@ -461,7 +462,7 @@ def theory_normcovmat_custom(theory_covmat_custom, experiments_data):
     return mat
 
 @table
-def experimentsplustheory_covmat_singleprocess(experiments_covmat_no_table, 
+def experimentsplustheory_covmat_singleprocess(experiments_covmat_no_table,
                                                theory_covmat_singleprocess_no_table):
     """Calculates the experiment + theory covariance matrix for
     scale variations."""
@@ -485,7 +486,7 @@ def experimentsplustheory_covmat_custom(experiments_covmat,
     return df
 
 @table
-def experimentsplustheory_normcovmat_singleprocess(experiments_covmat, 
+def experimentsplustheory_normcovmat_singleprocess(experiments_covmat,
                                      theory_covmat_singleprocess,
                                      experiments_data):
     """Calculates the experiment + theory covariance matrix for scale
@@ -520,7 +521,7 @@ def experimentsplustheory_normcovmat_custom(experiments_covmat,
 
     return mat
 @table
-def experimentsplustheory_corrmat_singleprocess(experiments_covmat, 
+def experimentsplustheory_corrmat_singleprocess(experiments_covmat,
                                                 theory_covmat_singleprocess):
     """Calculates the correlation matrix for the experimental
     plus theory covariance matrices."""
