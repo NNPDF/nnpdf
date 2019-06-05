@@ -23,7 +23,7 @@ from reportengine import floatformatting
 from validphys.checks import check_two_dataspecs
 
 from validphys.theorycovariance.construction import combine_by_type, process_starting_points
-from validphys.theorycovariance.construction import theory_corrmat
+from validphys.theorycovariance.construction import theory_corrmat_singleprocess
 from validphys.theorycovariance.construction import covmap, covs_pt_prescrip, theory_covmat_custom
 
 from validphys.theorycovariance.output import matrix_plot_labels, _get_key
@@ -232,7 +232,7 @@ def theory_matrix_threshold(theory_threshold:(int, float) = 0):
 def theory_corrmat_custom_dataspecs(theory_covmat_custom_dataspecs):
     """Calculates the theory correlation matrix for scale variations
     with variations by process type"""
-    mat = theory_corrmat(theory_covmat_custom_dataspecs)
+    mat = theory_corrmat_singleprocess(theory_covmat_custom_dataspecs)
     return mat
 
 
