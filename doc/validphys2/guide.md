@@ -3194,6 +3194,70 @@ It demonstrates how to leverage existing functionality to perform new
 computations and then present those as plots and tables.
 
 
+Matplotlib Image Comparison Tests
+---------------------------------
+
+It is possible to create tests which perform an image comparison between a
+generated plot and a preexisting baseline plot. Clearly this allows one to check
+consistency in figure generation. The procedure for setting up a new image
+comparison test will be explained here.
+
+Before beginning you will need to ensure that you have the tests dependencies,
+which can be checked in `nnpdf/conda-recipe/meta.yml`, they are:
+
+- hypothesis
+- pytest
+- coverage
+- pytest-mpl
+
+the next step is to write the test function. It is highly recommended to use the
+validphys API for this, both to simplify the code and to make it agnostic to the
+structure of backend providers - provided that they produce the same results. See
+for example a function which tests the `plot_pdfs` provider:
+
+```python
+@pytest.mark.mpl_image_compare
+def test_plotpdfs():
+    pdfs = ['NNPDF31_nnlo_as_0118']
+    Q = 10
+    flavours = ['g']
+    #plot_pdfs returns a generator with (figure, name_hint)
+    return next(API.plot_pdfs(pdfs=pdfs, Q=Q, flavours=flavours))[0]
+```
+
+we see that the function needs to return a valid matplotlib figure, and should
+be decorated with `@pytest.mark.mpl_image_compare`.
+
+Now the baseline figure needs to be generated, this can be achieved by running
+
+```
+pytest -k <name of file containing test function> --mpl-generate-path=baseline
+```
+
+which will generated a PNG of the figure in the `src/validphys/tests/baseline`
+directory. It is recommended to put all baseline plots in this directory so that
+they are automatically installed, and so will be in the correct location when
+the CI runs the test suite.
+
+Now that the baseline figure exists you can check that your test works:
+
+```
+pytest -k <name of file containing test function> --mpl
+```
+
+Also you can check that the test has been added to the full test suite:
+
+```
+pytest --pyargs --mpl validphys
+```
+
+just note that if you do not put the `--mpl` flag then the test will just check
+that the function runs without error, and won't check that the output matches to
+baseline.
+
+The new test is now ready to be reviewed and potentially merged into the master
+branch of the code.
+
 Server configuration
 ====================
 
