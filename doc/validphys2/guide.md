@@ -596,11 +596,12 @@ development environment for `nnpdf`.
 
  5. Use the result. For example, we can now compile `buildmaster`
 	linking with the `libnnpdf` library we just created. Since the
-	conda environment is all set and `buildmaster` doesn't install,
-	not additional configuration is necessary:
+	conda environment is all set and `buildmaster` installs in a fixed location
+  by default, no additional configuration is necessary:
 	```
-	buildmaster$ make clean
-	buildmaster$ make
+	buildmaster$ mkdir bld && cd bld
+	buildmaster/bld$ cmake ..
+	buildmaster/bld$ make -j && make install
 	```
 
 [COMPILERS]: https://conda.io/projects/conda-build/en/latest/source/resources/compiler-tools.html#compiler-packages
