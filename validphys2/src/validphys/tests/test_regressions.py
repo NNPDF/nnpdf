@@ -77,20 +77,24 @@ def test_t0sqrtcovmat(data_witht0_config):
 
 @make_table_comp(sane_load)
 def test_predictions(data_config):
-    #TODO: change the baseline to just be the `experiment_result_table`
+    # TODO: ideally we would change the baseline to just be corresponding columns
+    # of `experiment_result_table`, however sane_load expects just a single level
+    # of column and index - if we use a different format like parquet this could
+    # be changed.
     exp_res_tab = API.experiment_result_table_no_table(**data_config)
     th = exp_res_tab.iloc[:, 2:].values
     return pd.DataFrame(th, columns=map(str, range(th.shape[1])))
 
 @make_table_comp(sane_load)
 def test_dataset_t0_predictions(data_witht0_config):
-    #TODO: same as above
+    # TODO: As in `test_predictions`
     exp_res_tab = API.experiment_result_table_no_table(**data_witht0_config)
     th = exp_res_tab.iloc[:, 2:].values
     return pd.DataFrame(th, columns=map(str, range(th.shape[1])))
 
 @make_table_comp(sane_load)
 def test_cv(data_config):
+    # TODO: As in `test_predictions`
     exp_res_tab = API.experiment_result_table_no_table(**data_config)
     data_values = exp_res_tab.iloc[:, 0].values[:, np.newaxis]
     return pd.DataFrame(data_values, columns=['CV'])
