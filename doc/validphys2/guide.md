@@ -3199,18 +3199,12 @@ Matplotlib Image Comparison Tests
 
 It is possible to create tests which perform an image comparison between a
 generated plot and a preexisting baseline plot. Clearly this allows one to check
-consistency in figure generation. The procedure for setting up a new image
-comparison test will be explained here.
+consistency in figure generation.
 
 Before beginning you will need to ensure that you have the tests dependencies,
-which can be checked in `nnpdf/conda-recipe/meta.yml`, they are:
+which can be checked in `nnpdf/conda-recipe/meta.yml`.
 
-- hypothesis
-- pytest
-- coverage
-- pytest-mpl
-
-the next step is to write the test function. It is highly recommended to use the
+The next step is to write the test function. It is highly recommended to use the
 validphys API for this, both to simplify the code and to make it agnostic to the
 structure of backend providers - provided that they produce the same results. See
 for example a function which tests the `plot_pdfs` provider:
@@ -3254,9 +3248,6 @@ pytest --pyargs --mpl validphys
 just note that if you do not put the `--mpl` flag then the test will just check
 that the function runs without error, and won't check that the output matches to
 baseline.
-
-The new test is now ready to be reviewed and potentially merged into the master
-branch of the code.
 
 Server configuration
 ====================
