@@ -23,90 +23,68 @@ def tmp(tmpdir):
     """A tempdir that is manipulated like pathlib Paths"""
     return pathlib.Path(tmpdir)
 
-@pytest.fixture(scope='module')
-def data_config():
-    experiment_list = [
-        {
-            'experiment': 'NMC',
-            'datasets': [{'dataset': 'NMC'}]},
-        {
-            'experiment': 'ATLASTTBARTOT',
-            'datasets': [{'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']}]},
-        {
-            'experiment': 'CMSZDIFF12',
-            'datasets': [{'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}]}
-        ]
-    config_dict = dict(
-        pdf="NNPDF31_nnlo_as_0118",
+# Here define the default config items like the PDF, theory and experiment specs
+
+EXPERIMENTS = [
+    {
+        'experiment': 'NMC',
+        'datasets': [{'dataset': 'NMC'}]},
+    {
+        'experiment': 'ATLASTTBARTOT',
+        'datasets': [{'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']}]},
+    {
+        'experiment': 'CMSZDIFF12',
+        'datasets': [{'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}]}
+    ]
+
+SINGLE_EXP = [
+    {
+        'experiment': 'pseudo experiment',
+        'datasets': [
+            {'dataset': 'NMC'},
+            {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
+            {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}]}]
+
+WEIGHTED_DATA = [
+    {
+        'experiment': 'NMC Experiment',
+        'datasets': [{'dataset': 'NMC'}]},
+    {
+        'experiment': 'Weighted',
+        'datasets': [{'dataset': 'NMC', 'weight': 100}]},
+    ]
+
+PDF = "NNPDF31_nnlo_as_0118"
+THEORYID = 162
+
+base_config = dict(
+        pdf=PDF,
         use_cuts='nocuts',
-        experiments=experiment_list,
-        theoryid=162,
-        use_t0=False,
+        experiments=EXPERIMENTS,
+        theoryid=THEORYID,
         use_fitthcovmat=False
     )
-    return config_dict
+
+@pytest.fixture(scope='module')
+def data_config():
+    return base_config
 
 @pytest.fixture(scope='module')
 def data_witht0_config():
-    experiment_list = [
-        {
-            'experiment': 'NMC',
-            'datasets': [{'dataset': 'NMC'}]},
-        {
-            'experiment': 'ATLASTTBARTOT',
-            'datasets': [{'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']}]},
-        {
-            'experiment': 'CMSZDIFF12',
-            'datasets': [{'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}]}
-        ]
     config_dict = dict(
-        pdf="NNPDF31_nnlo_as_0118",
-        use_cuts='nocuts',
-        experiments=experiment_list,
-        theoryid=162,
+        **base_config,
         use_t0=True,
-        t0pdfset="NNPDF31_nnlo_as_0118",
-        use_fitthcovmat=False
-    )
+        t0pdfset=PDF)
     return config_dict
 
 @pytest.fixture(scope='module')
-def data_singleexp_witht0_config():
-    experiment_list = [
-        {
-            'experiment': 'pseudo experiment',
-            'datasets': [
-                {'dataset': 'NMC'},
-                {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
-                {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}]}]
-    config_dict = dict(
-        pdf="NNPDF31_nnlo_as_0118",
-        use_cuts='nocuts',
-        experiments=experiment_list,
-        theoryid=162,
-        use_t0=True,
-        t0pdfset="NNPDF31_nnlo_as_0118",
-        use_fitthcovmat=False
-    )
+def data_singleexp_witht0_config(data_witht0_config):
+    config_dict = dict(data_witht0_config)
+    config_dict.update({'experiments': SINGLE_EXP})
     return config_dict
 
 @pytest.fixture(scope='module')
-def weighted_data_witht0_config():
-    experiment_list = [
-        {
-            'experiment': 'NMC Experiment',
-            'datasets': [{'dataset': 'NMC'}]},
-        {
-            'experiment': 'Weighted',
-            'datasets': [{'dataset': 'NMC', 'weight': 100}]},
-        ]
-    config_dict = dict(
-        pdf="NNPDF31_nnlo_as_0118",
-        use_cuts='nocuts',
-        experiments=experiment_list,
-        theoryid=162,
-        use_t0=True,
-        t0pdfset="NNPDF31_nnlo_as_0118",
-        use_fitthcovmat=False
-    )
+def weighted_data_witht0_config(data_witht0_config):
+    config_dict = dict(data_witht0_config)
+    config_dict.update({'experiments': WEIGHTED_DATA})
     return config_dict
