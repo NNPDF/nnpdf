@@ -278,6 +278,10 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TRAPNORMFilter());
   target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTMNORMFilter());
   target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTRAPNORMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TPTFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TRAPFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTRAPFilter());
 
   //***************************F2B******************************
 
