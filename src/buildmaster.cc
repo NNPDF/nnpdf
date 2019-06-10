@@ -80,7 +80,7 @@
 /**
  * \param argv the filename containing the configuration
  */
-int main(int argc, char **argv)
+int main(int, char**)
 {
   cout << "\n ***********************************\n";
   cout <<   " *  Welcome to NNPDF++ BuildMaster *\n";
@@ -274,6 +274,10 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMS_SINGLETOP_TCH_TOT_7TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_8TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_13TEVFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TPTFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TRAPFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTRAPFilter());
   target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TPTNORMFilter());
   target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TRAPNORMFilter());
   target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTMNORMFilter());

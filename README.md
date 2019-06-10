@@ -8,18 +8,36 @@ version in the NNPDF CommonData format.
 
 `buildmaster` depends on:
 
+Run:
+
 - NNPDF/nnpdf
 - yaml-cpp
 - gsl
 
-(Note that both yaml-cpp and gsl are also dependencies of NNPDF/nnpdf).
+Build:
 
-In order to compile just type `make`.
+- cmake > 3.0.2
+- sqlite3
+- libarchive
+- LHAPDF
+
+(Note that yaml-cpp, gsl, cmake, sqlite3, libarchive and LHAPDF are also
+dependencies of NNPDF/nnpdf).
+
+In order to compile, it is recommended to create a fresh build directory
+
+```
+$ mkdir bld
+$ cd bld
+$ cmake ..
+$ make -j && make install
+```
 
 ## Running the code
 
 In order to generate a master copy of all experimental data run the
-`buildmaster` program. This program will create for each dataset:
+`buildmaster` program which by default will be installed in the root of this repository.
+This program will create for each dataset:
 - DATA_[setname].dat are generated and placed in the results folder
 - SYSTYPE_[setname]_DEFAULT.dat are generated and placed in results/systypes
 After generating these files the user can copy them to the `nnpdfcpp/data/commondata` folder.

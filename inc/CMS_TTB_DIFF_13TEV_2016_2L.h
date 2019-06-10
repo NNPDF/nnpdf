@@ -47,3 +47,41 @@ class CMS_TTB_DIFF_13TEV_2016_2L_TTRAPNORMFilter: public CommonData
  private:
   void ReadData();
 };
+
+//Unnormalised distributions
+
+class CMS_TTB_DIFF_13TEV_2016_2L_TPTFilter: public CommonData
+{
+ public: CMS_TTB_DIFF_13TEV_2016_2L_TPTFilter():
+  CommonData("CMS_TTB_DIFF_13TEV_2016_2L_TPT") { ReadData(); }
+
+ private:
+  void ReadData();
+};
+
+class CMS_TTB_DIFF_13TEV_2016_2L_TRAPFilter: public CommonData
+{
+ public: CMS_TTB_DIFF_13TEV_2016_2L_TRAPFilter():
+  CommonData("CMS_TTB_DIFF_13TEV_2016_2L_TRAP") { ReadData(); }
+
+ private:
+  void ReadData();
+};
+
+class CMS_TTB_DIFF_13TEV_2016_2L_TTMFilter: public CommonData
+{
+ public: CMS_TTB_DIFF_13TEV_2016_2L_TTMFilter():
+  CommonData("CMS_TTB_DIFF_13TEV_2016_2L_TTM") { ReadData(); }
+
+ private:
+  void ReadData();
+};
+
+class CMS_TTB_DIFF_13TEV_2016_2L_TTRAPFilter: public CommonData
+{
+ public: CMS_TTB_DIFF_13TEV_2016_2L_TTRAPFilter():
+  CommonData("CMS_TTB_DIFF_13TEV_2016_2L_TTRAP") { ReadData(); }
+
+ private:
+  void ReadData();
+};
