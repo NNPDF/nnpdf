@@ -7,6 +7,8 @@ updates.
 import pathlib
 import logging
 import functools
+import pytest
+import sys
 
 import numpy as np
 import scipy.linalg as la
@@ -84,6 +86,7 @@ def test_t0sqrtcovmat(data, t0_exps_covariance_matrices):
     eindex = results.experiments_index(exps)
     return results.experiments_sqrtcovmat(exps, eindex, t0_exps_covariance_matrices)
 
+@pytest.mark.skipif(sys.platform == 'darwin', reason="Travis disk space limit")
 @make_table_comp(parse_exp_mat)
 def test_theorycovmat(theory_data):
     pdf, exps_by_theoryid, exps_central_theory, theoryids = theory_data
