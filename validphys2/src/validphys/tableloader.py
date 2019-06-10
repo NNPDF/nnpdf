@@ -38,6 +38,10 @@ def parse_exp_mat(filename):
     fixup_header(df, 2, int)
     return df
 
+def parse_exp_mat_float32(filename):
+    """Parse a dump of a matrix like experiments_covmat in float32."""
+    return parse_exp_mat(filename).astype(np.float32)
+
 load_experiments_covmat = parse_exp_mat
 load_experiments_invcovmat = parse_exp_mat
 

@@ -20,7 +20,7 @@ from reportengine.table import savetable
 import NNPDF
 from validphys import results
 import validphys.theorycovariance.construction as tc
-from validphys.tableloader import (parse_exp_mat, load_perreplica_chi2_table,
+from validphys.tableloader import (parse_exp_mat, parse_exp_mat_float32, load_perreplica_chi2_table,
                                    sane_load, load_fits_chi2_table)
 
 
@@ -87,7 +87,7 @@ def test_t0sqrtcovmat(data, t0_exps_covariance_matrices):
     return results.experiments_sqrtcovmat(exps, eindex, t0_exps_covariance_matrices)
 
 @pytest.mark.skipif(sys.platform == 'darwin', reason="Travis disk space limit")
-@make_table_comp(parse_exp_mat)
+@make_table_comp(parse_exp_mat_float32)
 def test_theorycovmat(theory_data):
     pdf, exps_by_theoryid, exps_central_theory, theoryids = theory_data
     eindex = results.experiments_index(exps_central_theory)
