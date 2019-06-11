@@ -15,6 +15,7 @@ import inspect
 import logging
 
 import numpy as np
+import pandas as pd
 
 from reportengine import namespaces
 from reportengine.baseexceptions import AsInputError
@@ -247,6 +248,27 @@ def peek_commondata_metadata(commondatafilename):
                               get_kinlabel_key(process_type_str))
 
 
+def load_dataset(datafile):
+    """Reads commondata file for dataset_name and returns a panda DataFrame with:
+        entry   process kin1    kin2    kin3    data    stat    \
+            sys.add.0   sys.mult.0 .... sys.add.N   sys.mult.N
+    """
+    # read raw commondata file
+    table = pd.read_csv(datafile, sep=r'\s+', skiprows=1, header=None)
+
+    # remove NaNs
+    # TODO: replace commondata files with bad formatting
+    table.dropna(axis='columns', inplace=True)
+
+    # build header
+    header = ['entry', 'process', 'kin1', 'kin2', 'kin3', 'data', 'stat']
+    for i in range((table.shape[1]-len(header))//2):
+        header += [f'sys.add.{i+1}', f'sys.mult.{i+1}']
+    table.columns = header
+    table.set_index('entry', inplace=True)
+    return table
+
+
 class CommonDataSpec(TupleComp):
     def __init__(self, datafile, sysfile, plotfiles, name=None, metadata=None):
         self.datafile = datafile
@@ -281,9 +303,10 @@ class CommonDataSpec(TupleComp):
         return iter((self.datafile, self.sysfile, self.plotfiles))
 
     @functools.lru_cache()
-    def load(self)->CommonData:
+    def load(self):
         #TODO: Use better path handling in python 3.6
-        return CommonData.ReadFile(str(self.datafile), str(self.sysfile))
+        #return CommonData.ReadFile(str(self.datafile), str(self.sysfile))
+        return load_dataset(self.datafile)
 
     @property
     def plot_kinlabels(self):
@@ -698,71 +721,3 @@ class Filter:
 
     def __str__(self):
         return '%s: %s' % (self.label, self.indexes)
-
-
-###############################################
-## EXPERIMENTAL API
-###############################################
-from validphys import loader
-import pandas as pd
-
-
-def load_dataset(dataset_name, commondata_folder):
-    """Reads commondata file for dataset_name and returns a panda DataFrame with:
-        dataset_point   process kin1    kin2    kin3    data    stat    \
-            sys.add.0   sys.mult.0 .... sys.add.N   sys.mult.N
-    """
-    # read raw commondata file
-    dataset_file = commondata_folder / f'DATA_{dataset_name}.dat'
-    table = pd.read_csv(dataset_file, sep=r'\s+', skiprows=1, header=None)
-
-    # remove NaNs
-    # TODO: replace commondata files with bad formatting
-    table.dropna(axis='columns', inplace=True)
-
-    # build header
-    header = ['dataset_point', 'process', 'kin1', 'kin2', 'kin3', 'data', 'stat']
-    for i in range((table.shape[1]-len(header))//2):
-        header += [f'sys.add.{i+1}', f'sys.mult.{i+1}']
-    table.columns = header
-
-    # replace datapoint column
-    table['dataset_point'] = f'{dataset_name}_' + table['dataset_point'].astype(str)
-
-    return table
-
-
-def load_experiment(experiment_name, dataset_list, commondata_folder):
-    """Computes and returns a dictionary entry with:
-        {
-            'experiment': experiment_name,
-            'datasets': [<list of pandas DataFrames from load_dataset>]
-        }
-    """
-    exps = {'experiment': experiment_name, 'datasets': []}
-    for ds in dataset_list:
-        data_str = ds['dataset']
-        table = load_dataset(data_str, commondata_folder)
-        table['experiment_name'] = experiment_name
-        exps['datasets'].append(table)
-    return exps
-
-
-class ExperimentAPI:
-    """Basic API for data and theory access"""
-
-    def __init__(self, experiments_list=None):
-        """Takes input flags and perform basic loading operations.
-        Arguments are optional, no link to commondata or theory is
-        required when loading data.
-        """
-        self.experiments = None
-        self.loader = loader.Loader()
-        if experiments_list:
-            self.experiments = self._load_experiments(experiments_list)
-
-    def _load_experiments(self, experiments_list):
-        """Returns list of experiment dictionnaries."""
-        return [load_experiment(exp['experiment'], exp['datasets'],
-                self.loader.commondata_folder) for exp in experiments_list]
-
