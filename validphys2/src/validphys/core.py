@@ -714,7 +714,7 @@ def load_dataset(dataset_name, commondata_folder):
     """
     # read raw commondata file
     dataset_file = commondata_folder / f'DATA_{dataset_name}.dat'
-    table = pd.read_csv(dataset_file, sep=r'\s+|\t', skiprows=1, header=None, engine='python')
+    table = pd.read_csv(dataset_file, sep=r'\s+', skiprows=1, header=None)
 
     # remove NaNs
     # TODO: replace commondata files with bad formatting
