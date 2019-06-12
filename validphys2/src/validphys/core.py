@@ -305,7 +305,6 @@ class CommonDataSpec(TupleComp):
     @functools.lru_cache()
     def load(self):
         #TODO: Use better path handling in python 3.6
-        #return CommonData.ReadFile(str(self.datafile), str(self.sysfile))
         return load_dataset(self.datafile)
 
     @property
