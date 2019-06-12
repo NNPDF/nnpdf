@@ -777,6 +777,28 @@ def dataspecs_experiments_chi2_table(dataspecs_speclabel, dataspecs_experiments,
                                        per_point_data=per_point_data)
 
 
+"""
+fits_experiments_chi2_table(fits_name_with_covmat_label, fits_experiments,
+                                fits_experiment_chi2_data, per_point_data:bool=True)
+"""
+
+fits_processes_chi2_data = collect(
+    'experiments_chi2', ('fits', 'fit_context_groupby_process',))
+fits_processes = collect(
+    'experiments', ('fits', 'fit_context_groupby_process',))
+
+@table
+def fits_processes_chi2_table(fits_name_with_covmat_label, fits_processes, fits_processes_chi2_data, per_point_data:bool=True):
+    return fits_experiments_chi2_table(
+        fits_name_with_covmat_label, fits_processes, fits_processes_chi2_data, per_point_data)
+
+fits_processes_phi = collect(
+    'experiments_phi', ('fits', 'fit_context_groupby_process'))
+
+@table
+def fits_processes_phi_table(fits_name_with_covmat_label, fits_processes, fits_processes_phi):
+    return fits_experiments_phi_table(fits_name_with_covmat_label, fits_processes, fits_processes_phi)
+
 @table
 def fits_datasets_chi2_table(fits_name_with_covmat_label, fits_experiments, fits_chi2_data,
                              per_point_data:bool=True):

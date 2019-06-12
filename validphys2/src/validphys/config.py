@@ -868,7 +868,43 @@ class CoreConfig(configparser.Config):
                 "correctly?")
         return grouping
 
+    def produce_fit_data_groupby_process(self, fit):
+        """Used to produce data from the fit grouped into processes,
+        where each experiment is a group of datasets according to the experiment
+        key in the plotting info file.
+        """
+        #TODO: consider this an implimentation detail
+        from reportengine.namespaces import NSList
 
+        with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
+            _, experiments = self.parse_from_('fit', 'experiments', write=False)
+
+        res = {}
+        for exp in experiments:
+            for dsinput, ds in zip(exp.dsinputs, exp.datasets):
+                metaexp = process_lookup(ds.name)
+                if metaexp in res:
+                    res[metaexp].append(ds)
+                else:
+                    res[metaexp] = [ds]
+        exps = []
+        for exp in res:
+            exps.append(ExperimentSpec(exp, res[exp]))
+
+        experiments = NSList(exps, nskey='experiment')
+        return {'experiments': experiments}
+
+    def produce_fit_context_groupby_process(self, fit):
+        """produces experiments similarly to `fit_data_groupby_process`
+        but also sets fitcontext (pdf and theoryid)
+        """
+        _, pdf         = self.parse_from_('fit', 'pdf', write=False)
+        _, theory      = self.parse_from_('fit', 'theory', write=False)
+        thid = theory['theoryid']
+        with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
+            experiments = self.produce_fit_data_groupby_process(
+                fit)['experiments']
+        return {'pdf': pdf, 'theoryid':thid, 'experiments': experiments}
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):
     """The effective configuration parser class."""
