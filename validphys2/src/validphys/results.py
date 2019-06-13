@@ -776,28 +776,38 @@ def dataspecs_experiments_chi2_table(dataspecs_speclabel, dataspecs_experiments,
                                        dataspecs_experiment_chi2_data,
                                        per_point_data=per_point_data)
 
-
-"""
-fits_experiments_chi2_table(fits_name_with_covmat_label, fits_experiments,
-                                fits_experiment_chi2_data, per_point_data:bool=True)
-"""
-
-fits_processes_chi2_data = collect(
-    'experiments_chi2', ('fits', 'fit_context_groupby_process',))
-fits_processes = collect(
-    'experiments', ('fits', 'fit_context_groupby_process',))
+fits_custom_chi2_data = collect(
+    'experiments_chi2', ('fits', 'fitcontext_groupby_custom',))
+fits_custom_groups = collect(
+    'experiments', ('fits', 'fitcontext_groupby_custom',))
 
 @table
-def fits_processes_chi2_table(fits_name_with_covmat_label, fits_processes, fits_processes_chi2_data, per_point_data:bool=True):
+def fits_custom_chi2_table(
+        fits_name_with_covmat_label, fits_custom_groups,
+        fits_custom_chi2_data, per_point_data:bool=True):
+    """A table with the chi2 for the data specified in the fit runcard,
+    computed with the theory corresponding to each fit. The data grouping can
+    be controlled in the runcard by the flag `groupby` which by default is set
+    to `experiment` but can for example be `process`
+
+    If points_per_data is True, the chi² will be shown divided by ndata.
+    Otherwise they will be absolute.
+    """
     return fits_experiments_chi2_table(
-        fits_name_with_covmat_label, fits_processes, fits_processes_chi2_data, per_point_data)
+        fits_name_with_covmat_label, fits_custom_groups,
+        fits_custom_chi2_data, per_point_data)
 
-fits_processes_phi = collect(
-    'experiments_phi', ('fits', 'fit_context_groupby_process'))
+fits_custom_phi = collect(
+    'experiments_phi', ('fits', 'fitcontext_groupby_custom'))
 
 @table
-def fits_processes_phi_table(fits_name_with_covmat_label, fits_processes, fits_processes_phi):
-    return fits_experiments_phi_table(fits_name_with_covmat_label, fits_processes, fits_processes_phi)
+def fits_custom_phi_table(
+        fits_name_with_covmat_label, fits_custom_groups, fits_custom_phi):
+    """For every fit, returns phi and number of data points per custom group:
+    a collection of datasets grouped according to the `groupby` key in the
+    runcard. By default `groupby` is set to `experiment`"""
+    return fits_experiments_phi_table(
+        fits_name_with_covmat_label, fits_custom_groups, fits_custom_phi)
 
 @table
 def fits_datasets_chi2_table(fits_name_with_covmat_label, fits_experiments, fits_chi2_data,

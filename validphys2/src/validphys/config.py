@@ -12,7 +12,7 @@ import numbers
 import copy
 import os
 
-from collections import ChainMap
+from collections import ChainMap, defaultdict
 from collections.abc import Mapping, Sequence
 
 from reportengine import configparser
@@ -868,43 +868,53 @@ class CoreConfig(configparser.Config):
                 "correctly?")
         return grouping
 
-    def produce_fit_data_groupby_process(self, fit):
+
+    def group_data_by_process(self, data_list):
         """Used to produce data from the fit grouped into processes,
         where each experiment is a group of datasets according to the experiment
         key in the plotting info file.
         """
-        #TODO: consider this an implimentation detail
-        from reportengine.namespaces import NSList
-
-        with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
-            _, experiments = self.parse_from_('fit', 'experiments', write=False)
-
-        res = {}
-        for exp in experiments:
-            for dsinput, ds in zip(exp.dsinputs, exp.datasets):
+        res = defaultdict(list)
+        for exp in data_list:
+            for _, ds in zip(exp.dsinputs, exp.datasets):
                 metaexp = process_lookup(ds.name)
-                if metaexp in res:
-                    res[metaexp].append(ds)
-                else:
-                    res[metaexp] = [ds]
+                res[metaexp].append(ds)
         exps = []
         for exp in res:
             exps.append(ExperimentSpec(exp, res[exp]))
+        return exps
 
-        experiments = NSList(exps, nskey='experiment')
-        return {'experiments': experiments}
+    def group_data_by_experiment(self, data_list):
+        """Used to produce data from the fit grouped into processes,
+        where each experiment is a group of datasets according to the experiment
+        key in the plotting info file.
+        """
+        res = defaultdict(list)
+        for exp in data_list:
+            for _, ds in zip(exp.dsinputs, exp.datasets):
+                metaexp = get_info(ds).experiment
+                res[metaexp].append(ds)
+        exps = []
+        for exp in res:
+            exps.append(ExperimentSpec(exp, res[exp]))
+        return exps
 
-    def produce_fit_context_groupby_process(self, fit):
+    def produce_fitcontext_groupby_custom(self, fitcontext, groupby='experiment'):
         """produces experiments similarly to `fit_data_groupby_process`
         but also sets fitcontext (pdf and theoryid)
         """
-        _, pdf         = self.parse_from_('fit', 'pdf', write=False)
-        _, theory      = self.parse_from_('fit', 'theory', write=False)
-        thid = theory['theoryid']
-        with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
-            experiments = self.produce_fit_data_groupby_process(
-                fit)['experiments']
-        return {'pdf': pdf, 'theoryid':thid, 'experiments': experiments}
+        #TODO: consider this an implimentation detail
+        from reportengine.namespaces import NSList
+        try:
+            group_func = getattr(self, f"group_data_by_{groupby}")
+        except AttributeError:
+            raise ConfigError(
+                f"data cannot be grouped by `{groupby}`"
+                " did you spell it correctly?")
+        fitcontext['experiments'] = NSList(
+            group_func(fitcontext['experiments']),
+            nskey='experiment')
+        return fitcontext
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):
     """The effective configuration parser class."""
