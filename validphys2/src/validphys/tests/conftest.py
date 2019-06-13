@@ -8,10 +8,6 @@ import pathlib
 import pytest
 from hypothesis import settings
 
-from validphys.loader import FallbackLoader as Loader
-from validphys.core import ExperimentSpec
-from validphys import results
-
 #Adding this here to change the time of deadline from default (200ms) to 1000ms
 settings.register_profile("extratime", deadline=1000)
 settings.load_profile("extratime")
@@ -23,91 +19,68 @@ def tmp(tmpdir):
     """A tempdir that is manipulated like pathlib Paths"""
     return pathlib.Path(tmpdir)
 
-@pytest.fixture(scope='module')
-def data():
-    l = Loader()
-    dataset_inputs = [{'name': 'NMC'},
-                      {'name':'ATLASTTBARTOT', 'cfac':['QCD']},
-                      {'name':'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sysnum':10}]
-    ds = [l.check_dataset(**x, theoryid=162, cuts=None) for x in dataset_inputs]
-    exps = [ExperimentSpec(x.name, [x]) for x in ds]
-    pdf = l.check_pdf("NNPDF31_nnlo_as_0118")
-    return pdf, exps
+# Here define the default config items like the PDF, theory and experiment specs
+
+EXPERIMENTS = [
+    {
+        'experiment': 'NMC',
+        'datasets': [{'dataset': 'NMC'}]},
+    {
+        'experiment': 'ATLASTTBARTOT',
+        'datasets': [{'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']}]},
+    {
+        'experiment': 'CMSZDIFF12',
+        'datasets': [{'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}]}
+    ]
+
+SINGLE_EXP = [
+    {
+        'experiment': 'pseudo experiment',
+        'datasets': [
+            {'dataset': 'NMC'},
+            {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
+            {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}]}]
+
+WEIGHTED_DATA = [
+    {
+        'experiment': 'NMC Experiment',
+        'datasets': [{'dataset': 'NMC'}]},
+    {
+        'experiment': 'Weighted',
+        'datasets': [{'dataset': 'NMC', 'weight': 100}]},
+    ]
+
+PDF = "NNPDF31_nnlo_as_0118"
+THEORYID = 162
+
+base_config = dict(
+        pdf=PDF,
+        use_cuts='nocuts',
+        experiments=EXPERIMENTS,
+        theoryid=THEORYID,
+        use_fitthcovmat=False
+    )
 
 @pytest.fixture(scope='module')
-def exps_covariance_matrices(data):
-    """produces a list of covariance matrix outputs for each experiment"""
-    _, exps = data
-    covs = [results.experiment_covariance_matrix(exp, False, None) for exp in exps]
-    return covs
+def data_config():
+    return base_config
 
 @pytest.fixture(scope='module')
-def t0_exps_covariance_matrices(data):
-    """produces a list of covariance matrix outputs for each experiment"""
-    pdf, exps = data
-    covs = [results.experiment_covariance_matrix(exp, False, pdf) for exp in exps]
-    return covs
-
-def convolution_results_implement(data):
-    pdf, exps = data
-    #no theory covmat here
-    covs = [results.experiment_covariance_matrix(exp, False, pdf) for exp in exps]
-    return [results.experiment_results(exp, pdf, cov) for exp, cov in zip(exps, covs)]
+def data_witht0_config():
+    config_dict = dict(
+        **base_config,
+        use_t0=True,
+        t0pdfset=PDF)
+    return config_dict
 
 @pytest.fixture(scope='module')
-def convolution_results(data):
-    return convolution_results_implement(data)
-
-@pytest.fixture
-def dataset_t0_convolution_results(data):
-    pdf, exps = data
-    ds = [x.datasets[0] for x in exps]
-    covs = [results.covariance_matrix(x, False, pdf) for x in ds]
-    return [results.results(x, pdf, cov) for x, cov in zip(ds, covs)]
+def data_singleexp_witht0_config(data_witht0_config):
+    config_dict = dict(data_witht0_config)
+    config_dict.update({'experiments': SINGLE_EXP})
+    return config_dict
 
 @pytest.fixture(scope='module')
-def single_exp_data():
-    l = Loader()
-    dataset_inputs = [{'name': 'NMC'},
-                      {'name':'ATLASTTBARTOT', 'cfac':['QCD']},
-                      {'name':'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sysnum':10}]
-    ds = [l.check_dataset(**x, theoryid=162, cuts=None) for x in dataset_inputs]
-    exp = ExperimentSpec('pseudo experiment', ds)
-    pdf = l.check_pdf("NNPDF31_nnlo_as_0118")
-    return pdf, exp
-
-@pytest.fixture(scope='module')
-def dataset_convolution_results(single_exp_data):
-    pdf, exp = single_exp_data
-    covs = [results.covariance_matrix(ds, False, pdf) for ds in exp.datasets]
-    return [results.results(ds, pdf, cov) for ds, cov in zip(exp.datasets, covs)]
-
-@pytest.fixture(scope='module')
-def dataset_chi2data(dataset_convolution_results):
-    return [results.abs_chi2_data(r) for r in dataset_convolution_results]
-
-def chi2data_implement(convolution_results):
-    return [results.abs_chi2_data_experiment(r) for r in convolution_results]
-
-@pytest.fixture(scope='module')
-def chi2data(convolution_results):
-    return chi2data_implement(convolution_results)
-
-@pytest.fixture(scope='module')
-def weighted_data():
-    l = Loader()
-    ds = l.check_dataset(name='NMC', theoryid=162, cuts=None)
-    wds = l.check_dataset(name='NMC', theoryid=162, cuts=None, weight=100)
-    exp = ExperimentSpec('NMC Experiment', [ds])
-    wexp = ExperimentSpec('Weighted', [wds])
-    pdf = l.check_pdf("NNPDF31_nnlo_as_0118")
-    exps = [exp, wexp]
-    return pdf, exps
-
-@pytest.fixture(scope='module')
-def convolution_results_with_weights(weighted_data):
-    return convolution_results_implement(weighted_data)
-
-@pytest.fixture(scope='module')
-def weighted_chi2data(convolution_results_with_weights):
-    return chi2data_implement(convolution_results_with_weights)
+def weighted_data_witht0_config(data_witht0_config):
+    config_dict = dict(data_witht0_config)
+    config_dict.update({'experiments': WEIGHTED_DATA})
+    return config_dict
