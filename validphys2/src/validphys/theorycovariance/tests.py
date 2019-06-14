@@ -668,6 +668,51 @@ def eigenvector_plot(evals_nonzero_basis, shx_vector):
     return fig
 
 @figure
+def deltamiss_plot(theory_shift_test, allthx_vector, evals_nonzero_basis, shx_vector):
+    """Produces a plot of the missing component of the
+    shift vector, transformed back to the data space."""
+    l = len(allthx_vector[0]) + 1
+    f = - shx_vector[0]
+    fmiss = theory_shift_test[4]
+    indexlist = list(f.index.values)
+    # adding process index for plotting, and reindexing matrices and vectors
+    dsnames = []
+    processnames= []
+    ids = []
+    for index in indexlist:
+        name = index[0]
+        i = index[1]
+        dsnames.append(name)
+        ids.append(i)
+        proc = process_lookup(name)
+        processnames.append(proc)
+    tripleindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
+                        names = ("process", "dataset", "id"))
+    f = pd.DataFrame(f.values, index=tripleindex)
+    f.sort_index(0, inplace=True)
+    oldindex = f.index.tolist()
+    newindex = sorted(oldindex, key=_get_key)
+    f = f.reindex(newindex)
+    fmiss = pd.DataFrame(fmiss, index=tripleindex)
+    fmiss.sort_index(0, inplace=True)
+    fmiss = fmiss.reindex(newindex)
+    # Plotting
+    fig, ax = plt.subplots(figsize=(20,10))
+    ax.plot(f.values*100, '.-', label="NNLO-NLO Shift", color = "black")
+    ax.plot(fmiss.values*100, '.-', label=r"$\delta_{miss}$" + f" ({l} pt)", color = "blue")
+    ticklocs, ticklabels, startlocs = matrix_plot_labels(f)
+    plt.xticks(ticklocs, ticklabels, rotation=45, fontsize=20)
+    # Shift startlocs elements 0.5 to left so lines are between indexes
+    startlocs_lines = [x-0.5 for x in startlocs]
+    ax.vlines(startlocs_lines, -70, 70, linestyles='dashed')
+    ax.margins(x=0, y=0)
+    ax.set_ylabel(r"% wrt central theory $T_i^{(0)}$", fontsize=20)
+    ax.set_ylim(-20, 20)
+    ax.legend(fontsize=20)
+    ax.yaxis.set_tick_params(labelsize=20)
+    return fig
+
+@figure
 def shift_diag_cov_comparison(allthx_vector, shx_vector, thx_covmat, thx_vector):
     """Produces a plot of a comparison between the NNLO-NLO shift and the
     envelope given by the diagonal elements of the theory covariance matrix."""
