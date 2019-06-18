@@ -63,7 +63,7 @@ def make_scale_var_covmat(predictions):
     return s
 
 @check_correct_theory_combination
-def theory_covmat_no_table(theoryids_experiments_central_values_no_table,
+def theory_covmat_singleprocess_no_table(theoryids_experiments_central_values_no_table,
                            experiments_index, theoryids,
                            fivetheories:(str, type(None)) = None):
 
@@ -75,9 +75,10 @@ def theory_covmat_no_table(theoryids_experiments_central_values_no_table,
 
 @table
 @check_correct_theory_combination
-def theory_covmat(theory_covmat_no_table, fivetheories:(str, type(None)) = None):
-    """Duplicate of theory_covmat_no_table but with a table decorator."""
-    return theory_covmat_no_table
+def theory_covmat_singleprocess(theory_covmat_singleprocess_no_table,
+                                fivetheories:(str, type(None)) = None):
+    """Duplicate of theory_covmat_singleprocess_no_table but with a table decorator."""
+    return theory_covmat_singleprocess_no_table
 
 results_bytheoryids = collect(results,('theoryids',))
 each_dataset_results_bytheory = collect('results_bytheoryids',
@@ -127,13 +128,23 @@ def total_covmat_diagtheory_datasets(each_dataset_results_bytheory,
         dataset_covmats.append(cov)
     return dataset_covmats
 
-
+@table
 def theory_block_diag_covmat(theory_covmat_datasets, experiments_index):
     """Takes the theory covariance matrices for individual datasets and
     returns a data frame with a block diagonal theory covariance matrix
     by dataset"""
     s  = la.block_diag(*theory_covmat_datasets)
     df = pd.DataFrame(s, index=experiments_index, columns=experiments_index)
+    return df
+
+@table
+def theory_diagonal_covmat(theory_covmat_singleprocess_no_table,experiments_index):
+    """Returns theory covmat with only diagonal values"""
+    s = theory_covmat_singleprocess_no_table.values
+    # Initialise array of zeros and set precision to same as FK tables
+    s_diag = np.zeros((len(s),len(s)), dtype=np.float32)
+    np.fill_diagonal(s_diag, np.diag(s))
+    df = pd.DataFrame(s_diag, index=experiments_index, columns=experiments_index)
     return df
 
 experiments_results_theory = collect('experiments_results', ('theoryids',))
@@ -401,9 +412,9 @@ def total_covmat_diagtheory_experiments(experiments_results_theory,
     return exp_result_covmats
 
 @table
-def theory_corrmat(theory_covmat):
+def theory_corrmat_singleprocess(theory_covmat_singleprocess):
     """Calculates the theory correlation matrix for scale variations."""
-    df = theory_covmat
+    df = theory_covmat_singleprocess
     covmat = df.values
     diag_minus_half = (np.diagonal(covmat))**(-0.5)
     mat = diag_minus_half[:,np.newaxis]*df*diag_minus_half
@@ -413,21 +424,21 @@ def theory_corrmat(theory_covmat):
 def theory_blockcorrmat(theory_block_diag_covmat):
     """Calculates the theory correlation matrix for scale variations
     with block diagonal entries by dataset only"""
-    mat = theory_corrmat(theory_block_diag_covmat)
+    mat = theory_corrmat_singleprocess(theory_block_diag_covmat)
     return mat
 
 @table
 def theory_corrmat_custom(theory_covmat_custom):
     """Calculates the theory correlation matrix for scale variations
     with variations by process type"""
-    mat = theory_corrmat(theory_covmat_custom)
+    mat = theory_corrmat_singleprocess(theory_covmat_custom)
     return mat
 
 @table
-def theory_normcovmat(theory_covmat, experiments_data):
+def theory_normcovmat_singleprocess(theory_covmat_singleprocess, experiments_data):
     """Calculates the theory covariance matrix for scale variations normalised
     to data."""
-    df = theory_covmat
+    df = theory_covmat_singleprocess
     experiments_data_array = np.array(experiments_data)
     mat = df/np.outer(experiments_data_array, experiments_data_array)
     return mat
@@ -451,10 +462,11 @@ def theory_normcovmat_custom(theory_covmat_custom, experiments_data):
     return mat
 
 @table
-def experimentsplustheory_covmat(experiments_covmat_no_table, theory_covmat_no_table):
+def experimentsplustheory_covmat_singleprocess(experiments_covmat_no_table,
+                                               theory_covmat_singleprocess_no_table):
     """Calculates the experiment + theory covariance matrix for
     scale variations."""
-    df = experiments_covmat_no_table + theory_covmat_no_table
+    df = experiments_covmat_no_table + theory_covmat_singleprocess_no_table
     return df
 
 @table
@@ -474,11 +486,12 @@ def experimentsplustheory_covmat_custom(experiments_covmat,
     return df
 
 @table
-def experimentsplustheory_normcovmat(experiments_covmat, theory_covmat,
+def experimentsplustheory_normcovmat_singleprocess(experiments_covmat,
+                                     theory_covmat_singleprocess,
                                      experiments_data):
     """Calculates the experiment + theory covariance matrix for scale
        variations normalised to data."""
-    df = experiments_covmat + theory_covmat
+    df = experiments_covmat + theory_covmat_singleprocess
     experiments_data_array = np.array(experiments_data)
     mat = df/np.outer(experiments_data_array, experiments_data_array)
     return mat
@@ -508,11 +521,12 @@ def experimentsplustheory_normcovmat_custom(experiments_covmat,
 
     return mat
 @table
-def experimentsplustheory_corrmat(experiments_covmat, theory_covmat):
+def experimentsplustheory_corrmat_singleprocess(experiments_covmat,
+                                                theory_covmat_singleprocess):
     """Calculates the correlation matrix for the experimental
     plus theory covariance matrices."""
-    total_df = experiments_covmat + theory_covmat
-    total_cov = (experiments_covmat + theory_covmat).values
+    total_df = experiments_covmat + theory_covmat_singleprocess
+    total_cov = (experiments_covmat + theory_covmat_singleprocess).values
     diag_minus_half = (np.diagonal(total_cov))**(-0.5)
     corrmat = diag_minus_half[:,np.newaxis]*total_df*diag_minus_half
     return corrmat
@@ -522,7 +536,7 @@ def experimentsplusblocktheory_corrmat(experiments_covmat,
                                        theory_block_diag_covmat):
     """Calculates the correlation matrix for the experimental
     plus theory covariance matrices, block diagonal by dataset."""
-    corrmat = experimentsplustheory_corrmat(experiments_covmat,
+    corrmat = experimentsplustheory_corrmat_singleprocess(experiments_covmat,
                                             theory_block_diag_covmat)
     return corrmat
 
@@ -531,11 +545,11 @@ def experimentsplustheory_corrmat_custom(experiments_covmat,
                                          theory_covmat_custom):
     """Calculates the correlation matrix for the experimental
     plus theory covariance matrices, correlations by prescription."""
-    corrmat = experimentsplustheory_corrmat(experiments_covmat,
+    corrmat = experimentsplustheory_corrmat_singleprocess(experiments_covmat,
                                             theory_covmat_custom)
     return corrmat
 
-def chi2_impact(theory_covmat, experiments_covmat, experiments_results):
+def chi2_impact(theory_covmat_singleprocess, experiments_covmat, experiments_results):
     """Returns total chi2 including theory cov mat"""
     dataresults, theoryresults = zip(*experiments_results)
     dat_central_list = [x.central_value for x in dataresults]
@@ -543,7 +557,7 @@ def chi2_impact(theory_covmat, experiments_covmat, experiments_results):
     dat_central = np.concatenate(dat_central_list)
     th_central  = np.concatenate([x for x in th_central_list])
     central_diff = dat_central - th_central
-    cov = theory_covmat.values + experiments_covmat.values
+    cov = theory_covmat_singleprocess.values + experiments_covmat.values
     return calc_chi2(la.cholesky(cov, lower=True), central_diff)/len(central_diff)
 
 def data_theory_diff(experiments_results):
@@ -571,9 +585,9 @@ def chi2_impact_custom(theory_covmat_custom, experiments_covmat,
                        experiments_results)
     return chi2
 
-def theory_diagcovmat(theory_covmat):
+def theory_diagcovmat(theory_covmat_singleprocess):
     """Returns theory covmat with only diagonal values"""
-    s = theory_covmat.values
+    s = theory_covmat_singleprocess.values
     # Initialise array of zeros and set precision to same as FK tables
     s_diag = np.zeros((len(s),len(s)), dtype=np.float32)
     np.fill_diagonal(s_diag, np.diag(s))

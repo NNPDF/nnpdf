@@ -596,11 +596,12 @@ development environment for `nnpdf`.
 
  5. Use the result. For example, we can now compile `buildmaster`
 	linking with the `libnnpdf` library we just created. Since the
-	conda environment is all set and `buildmaster` doesn't install,
-	not additional configuration is necessary:
+	conda environment is all set and `buildmaster` installs in a fixed location
+  by default, no additional configuration is necessary:
 	```
-	buildmaster$ make clean
-	buildmaster$ make
+	buildmaster$ mkdir bld && cd bld
+	buildmaster/bld$ cmake ..
+	buildmaster/bld$ make -j && make install
 	```
 
 [COMPILERS]: https://conda.io/projects/conda-build/en/latest/source/resources/compiler-tools.html#compiler-packages
@@ -2102,6 +2103,10 @@ The theory covariance can be used to sample the pseudodata by setting
 `use_thcovmat_in_sampling: true`, likewise the theory covariance can be included
 in covariance matrix used in the fit by specifying
 `use_thcovmat_in_fitting: true`.
+The user can choose what kind of theory covariance matrix should be used in the
+fit, by setting the flag `thcovmat_type ` to be one among 
+`full, blockdiagonal, diagonal`. If the flag does not appear in the runcard
+the full theory covariance matrix is used by default.
 
 Combining all of the above information, if one wanted to run a fit using the
 theory covariance, calculated using the 9-point prescription, in both the
@@ -3159,6 +3164,7 @@ a string in Pandoc Markdown describing your object. Raw HTML is
 also allowed (although that decreases the compatibility, e.g. if we
 decide to output LaTeX instead of HTML in the future).
 
+
 Python static checks and code style
 -----------------------------------
 
@@ -3187,6 +3193,232 @@ implements arc-length computation:
 
 It demonstrates how to leverage existing functionality to perform new
 computations and then present those as plots and tables.
+
+
+Matplotlib Image Comparison Tests
+---------------------------------
+
+It is possible to create tests which perform an image comparison between a
+generated plot and a preexisting baseline plot. Clearly this allows one to check
+consistency in figure generation.
+
+Before beginning you will need to ensure that you have the tests dependencies,
+which can be checked in `nnpdf/conda-recipe/meta.yml`.
+
+The next step is to write the test function. It is highly recommended to use the
+validphys API for this, both to simplify the code and to make it agnostic to the
+structure of backend providers - provided that they produce the same results. See
+for example a function which tests the `plot_pdfs` provider:
+
+```python
+@pytest.mark.mpl_image_compare
+def test_plotpdfs():
+    pdfs = ['NNPDF31_nnlo_as_0118']
+    Q = 10
+    flavours = ['g']
+    #plot_pdfs returns a generator with (figure, name_hint)
+    return next(API.plot_pdfs(pdfs=pdfs, Q=Q, flavours=flavours))[0]
+```
+
+we see that the function needs to return a valid matplotlib figure, and should
+be decorated with `@pytest.mark.mpl_image_compare`.
+
+Now the baseline figure needs to be generated, this can be achieved by running
+
+```
+pytest -k <name of file containing test function> --mpl-generate-path=baseline
+```
+
+which will generated a PNG of the figure in the `src/validphys/tests/baseline`
+directory. It is recommended to put all baseline plots in this directory so that
+they are automatically installed, and so will be in the correct location when
+the CI runs the test suite.
+
+Now that the baseline figure exists you can check that your test works:
+
+```
+pytest -k <name of file containing test function> --mpl
+```
+
+Also you can check that the test has been added to the full test suite:
+
+```
+pytest --pyargs --mpl validphys
+```
+
+just note that if you do not put the `--mpl` flag then the test will just check
+that the function runs without error, and won't check that the output matches to
+baseline.
+
+Server configuration
+====================
+
+Overview
+--------
+
+The NNPDF server is a virtual machine (VM) maintained by 
+the Centro Calcolo at the physics department of the 
+University of Milan. The machine has 2 CPUs, 4GB of RAM, 
+1 TB of disk and it is running CentOS7.
+
+The full disk is backed up every week by the Centro Calcolo.
+We perform every Sunday a `rsync` from the `/home/nnpdf` folder
+to the `nnpdf@lxplus` account at CERN.
+
+URLs
+----
+
+The URLs served by this VM are:
+
+  - <https://data.nnpdf.science>: contain **public**
+    NNPDF data such as PDF fits, releases etc.
+  - <https://vp.nnpdf.science>: contains the
+    `validphys` reports.
+  - <https://wiki.nnpdf.science>: with
+    the github wiki version.
+  - <https://packages.nnpdf.science/>: The `conda` binary packages.
+
+The domain is hosted by [Namecheap](www.namecheap.com), which also manages the
+DNS entries. For each subdomain there is an A record always pointing to the same
+server IP, currently 159.149.47.24. The subdomains are then handled as described
+in [Web server]. For example, a DNS query for `packages.nnpdf.science` returns
+
+```
+ $ dig packages.nnpdf.science
+
+; <<>> DiG 9.11.3-1ubuntu1.7-Ubuntu <<>> packages.nnpdf.science
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 26766
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;packages.nnpdf.science.		IN	A
+
+;; ANSWER SECTION:
+packages.nnpdf.science.	1799	IN	A	159.149.47.24
+
+;; Query time: 170 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53)
+;; WHEN: Tue May 28 14:26:53 BST 2019
+;; MSG SIZE  rcvd: 67
+```
+
+Access
+------
+
+The access to the server is provided by
+`ssh`/[`vp-upload`](#uploading-the-result) with the following restrictions:
+
+- `ssh` access to `root` is forbidden.
+- there is a shared `nnpdf` user with low privileges. In order to login 
+the user must send his public ssh key (usually in `~/.ssh/id_rsa.pub`) to SC.
+The `nnpdf` is not allowed to login with password.
+
+The `nnpdf` user shares a common `/home/nnpdf` folder 
+where all NNPDF material is stored. Public access to data is 
+available for all files in the `/home/nnpdf/WEB` folder. The 
+`validphys` reports are stored in `/home/nnpdf/WEB/validphys-reports` 
+and the wiki in `/home/nnpdf/WEB/wiki`.
+
+The  [`conda` packages](#installing)  are automatically uploaded to the server
+by the Continous Integration service (Travis), through an user called `dummy`
+which has further reduction in privileges (it uses the [`rssh`
+shell](https://linux.die.net/man/1/rssh)) and it is only allowed to run the
+`scp` command. An accepted private key is stored securely in the [Travis
+configuration](https://travis-ci.com/NNPDF/nnpdf) under the `NNPDF_SSH_KEY`
+variable. It is encoded using `base64` because Travis does not easily accept
+multiline variables. To use it, do something like `echo "$NNPDF_SSH_KEY" |
+base64 --decode`. The packages are uploaded to `/home/nnpdf/packages`.
+
+Web server
+----------
+
+We are using `nginx` as a lightweight and simple web server engine. The
+`nginx` initial configuration depends on the linux distribution in
+use. Usually debian packages provide a ready-to-go version where the
+`/etc/nginx/nginx.conf` is already set to work with server blocks
+(subdomains).
+
+Other distributions like CentOS7 requires more gymnastics, here some tricks:
+
+- make sure the `/home/nnpdf` folder can be accessed by the `nginx` user
+- folders served by `nginx` must have permission 755
+- create 2 folders in `/etc/nginx`: `sites-available` and `sites-enabled`.
+- in the `/etc/nginx/nginx.conf` file indicate the new include path with `include /etc/nginx/sites-enabled/*;` and remove all location statements.
+- for each server block create a new file in `/etc/nginx/sites-available` and build a symbolic link in `/etc/nginx/sites-enabled`.
+- remember to perform a `sudo service nginx restart` or `sudo nginx -s reload` to update the server block configuration.
+
+
+Finally, here an example of `nginx` configuration for the `vp.nnpdf.science` server block without ssl encryption:
+```
+server {
+    listen  80;
+    listen [::]:80;
+    server_name vp.nnpdf.science;
+    
+    root /home/nnpdf/WEB/validphys-reports;
+    location / {
+      try_files $uri $uri/ =404;
+	    auth_basic "Restricted";
+	    auth_basic_user_file /home/nnpdf/WEB/validphys-reports/.htpasswd;
+    }
+
+    location /thumbnails {
+    	alias /home/nnpdf/WEB/thumbnails;
+	    try_files $uri $uri/ =404;
+	    auth_basic "Restricted";
+      auth_basic_user_file /home/nnpdf/WEB/validphys-reports/.htpasswd;
+    }
+}
+```
+
+Some URLs are password protected using the HTTP `basic_auth` mechanism. This is
+implemented by setting the corresponding configuration in nginx, as shown above
+(specifically with the `auth_basic` and `auth_basic_user_file` keys). The
+`.htpasswd` files mentioned in the configuration are generated with the
+`htpasswd` tool.
+
+
+SSL encryption
+--------------
+
+SSL encription is provided by [Let's Encrypt](https://letsencrypt.org).
+The certificates are created using the `certbot` program with the `nginx` module.
+
+In order to create new ssl certificates, first prepare the `nginx` server block 
+configuration file and then run the interactive command:
+```
+sudo certbot --nginx -d <domain>
+```
+This will ask you several questions, including if you would like to automatically
+update the `nginx` server block file. We fully recommend this approach.
+
+The certificate is automatically renewed by a [cron job](#cron-jobs).
+
+Cron jobs
+---------
+
+The following cron jobs are registered for the `nnpdf` user:
+
+- every day at 4 AM run the `index-email.py` script.
+- at every reboot run `index-reports.py`, `index-fits.py`,
+	`index-packahes-public.sh` and `index-packages-private.sh`, which monitor
+  contiguously the respective folders and create indexes that can be used by
+  various applications. The first two are homegrown scripts (see [Web Scripts])
+  and the later two use
+  [`conda-index`](https://docs.conda.io/projects/conda-build/en/latest/resources/commands/conda-index.html).
+
+
+The following cron jobs are registered for the `root` user:
+
+- perform backup of `/home/nnpdf` in lxplus every Saturday at noon.
+- perform a certbot renew every Monday.
+- reboot every Sunday at 6am (in order to use new kernels).
+- perform system update every day.
+
 
 Web Scripts
 -----------
@@ -3253,7 +3485,7 @@ expected that the server redirects the requests for
 `vp.nnpdf.science/thumbnails` to this folder.
 
 Editing this guide
-------------------
+==================
 
 The source of this document can be found in the main NNPDF repository as the
 file `guide.md`, under
