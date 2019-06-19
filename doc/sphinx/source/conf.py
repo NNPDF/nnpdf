@@ -197,8 +197,3 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
-
-# Add the Markdown parser to the source_parsers configuration variable in your Sphinx configuration file:
-# source_parsers = {
-   # '.md': 'recommonmark.parser.CommonMarkParser',
-# }
