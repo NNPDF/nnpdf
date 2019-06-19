@@ -19,7 +19,7 @@ set the UPLOAD_NON_MASTER variable."
 	exit 0
 fi
 
-echo "Uploading package to zigzah"
+echo "Uploading package to nnpdf"
 #Idiotic mac mktemp
 KEY=$( mktemp  "${TMPDIR:-/tmp}/key.XXXXXXXXX" )
 #This is defined in the Gitlab variables, under the Settings Menu.

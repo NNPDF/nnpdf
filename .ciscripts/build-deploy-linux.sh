@@ -27,7 +27,7 @@ fi
 #This seems to be needed for "artifacts" to work.
 cp /root/miniconda3/conda-bld/linux-64/*.tar.bz2 .
 
-echo "Uploading package to zigzah"
+echo "Uploading package to nnpdf"
 KEY=$( mktemp )
 #This is defined in the Travis environment variables.
 echo "$ZIGZAH_SSH_KEY" | base64 --decode > "$KEY"
