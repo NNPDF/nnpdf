@@ -100,7 +100,6 @@ Implemented by TG May 2019. Revised by ERN May 2019.
 
 
 #include "CMS.h"
-#include "NNPDF/utils.h"
 
 void CMS_1JET_8TEVFilter::ReadData()
 {
@@ -271,13 +270,11 @@ void CMS_1JET_8TEVFilter::ReadData()
 
   }
 
-  
   //Defining covariance matrix for statistical uncertainties
   double** covmat = new double*[fNData];
   for (int i = 0; i < fNData; i++) 
     covmat[i] = new double[fNData];
-  
-    
+      
   //Initialise covariance matrix
   for (int i = 0 ; i < fNData; i++)
     {
