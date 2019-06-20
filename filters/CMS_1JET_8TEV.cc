@@ -100,6 +100,7 @@ Implemented by TG May 2019. Revised by ERN May 2019.
 
 
 #include "CMS.h"
+#include "NNPDF/utils.h"
 
 void CMS_1JET_8TEVFilter::ReadData()
 {
@@ -109,10 +110,10 @@ void CMS_1JET_8TEVFilter::ReadData()
 
   //bins specification
   int nbins = 6;
-  double y[]   = {0.25, 0.75, 1.25, 1.75, 2.25, 2.75 };
-  int ndata[]  = {46, 46, 45, 41, 34, 27};    
-  int artsys[] = {37, 37, 36, 32, 25, 18};  //number of artificial systematics for each bin
-  double stat[fNData];   
+  std::vector<double> y = {0.25, 0.75, 1.25, 1.75, 2.25, 2.75};
+  std::vector<int> ndata  = {46, 46, 45, 41, 34, 27};    
+  std::vector<int> artsys = {37, 37, 36, 32, 25, 18};  //number of artificial systematics for each bin
+  std::vector<double> stat(fNData);   
 
   int n = 0;                                //count total number of datapoints
   //const double fac = 1e7;                   //conversion factor from pb to 10 mub
@@ -270,10 +271,12 @@ void CMS_1JET_8TEVFilter::ReadData()
 
   }
 
+  
   //Defining covariance matrix for statistical uncertainties
   double** covmat = new double*[fNData];
   for (int i = 0; i < fNData; i++) 
     covmat[i] = new double[fNData];
+  
     
   //Initialise covariance matrix
   for (int i = 0 ; i < fNData; i++)
@@ -382,6 +385,7 @@ void CMS_1JET_8TEVFilter::ReadData()
       delete[] covmat[i];
     }
   delete[] syscor;
-  delete[] covmat; 
+  delete[] covmat;
+  
 }
 
