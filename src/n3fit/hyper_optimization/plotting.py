@@ -582,7 +582,7 @@ For {0} = {1}
             )
         key_info[key_name] = possible_values
 
-    from n3fit.HyperAlgorithm import HyperAlgorithm
+    from n3fit.hyper_optimization.HyperAlgorithm import HyperAlgorithm
 
     hyperalg = HyperAlgorithm(
         key_info=key_info, fail_threshold=65, how_many_to_kill=how_many_to_kill, remove_by_key=remove_by_key
@@ -652,8 +652,7 @@ def generate_scan_report_from_file(
     plot_scans(dataframe, best_trial, fileout)
     print("Plot saved at {0}".format(fileout))
 
-
-if __name__ == "__main__":
+def main():
     from argparse import ArgumentParser
     import glob
 
@@ -696,3 +695,7 @@ if __name__ == "__main__":
             remove_by_key=args.remove_by_key,
             save_n_best=args.save_n_best,
         )
+
+
+if __name__ == "__main__":
+    main()

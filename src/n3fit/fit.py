@@ -29,7 +29,7 @@ def fit(
 
     # Call the script to generate a runcard with a test-set and immediately exit
     if create_test_card:
-        from n3fit.create_testset import create_testset
+        from n3fit.hyper_optimization.create_testset import create_testset
 
         create_testset(experiments, runcard_file=create_test_card)
         return 0
@@ -46,14 +46,14 @@ def fit(
     # All potentially backend dependent imports should come inside the fit function
     # so they can eventually be set from the runcard
     from n3fit.ModelTrainer import ModelTrainer
-    from n3fit.writer import storefit
+    from n3fit.io.writer import storefit
     from n3fit.backends import MetaModel
-    import n3fit.reader as reader
+    import n3fit.io.reader as reader
     import n3fit.constrains as constrains
 
     if hyperopt:
         import hyperopt as hyper
-        import n3fit.filetrials as filetrials
+        import n3fit.hyper_optimization.filetrials as filetrials
 
         status_ok = hyper.STATUS_OK
     else:
@@ -154,7 +154,7 @@ def fit(
         # this block                                                           #
         ########################################################################
         if hyperopt:
-            from n3fit.HyperScanner import HyperScanner
+            from n3fit.hyper_optimization.HyperScanner import HyperScanner
 
             the_scanner = HyperScanner(parameters)
 
