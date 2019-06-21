@@ -12,7 +12,7 @@
     *called in this way because it accept a dictionary of parameters which defines the Neural Network
 """
 import n3fit.model_gen as model_gen
-import n3fit.constrains as constrains
+import n3fit.constraints as constraints
 import n3fit.Statistics as Statistics
 from n3fit.backends import MetaModel, clear_backend_state
 
@@ -334,7 +334,7 @@ class ModelTrainer:
         if self.impose_sumrule:
             # Impose the sumrule
             # Inyect here momentum sum rule, effecively modifying layer_pdf
-            layer_pdf, integrator_input = constrains.msr_impose(layers["fitbasis"], layer_pdf)
+            layer_pdf, integrator_input = constraints.msr_impose(layers["fitbasis"], layer_pdf)
             self.input_list.append(integrator_input)
 
         self.layer_pdf = layer_pdf
@@ -490,7 +490,7 @@ class ModelTrainer:
             final_loss = validation_multiplier * validation_loss
             final_loss += test_multiplier * testing_loss
             final_loss /= test_multiplier + validation_multiplier
-            arc_lengths = constrains.compute_arclength(layers["fitbasis"], verbose=False)
+            arc_lengths = constraints.compute_arclength(layers["fitbasis"], verbose=False)
         else:
             final_loss = experimental_loss
             arc_lengths = None

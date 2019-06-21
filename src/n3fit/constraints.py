@@ -1,5 +1,5 @@
 """
-    Functions to imposem the Momentum sum rule on the PDFs
+    The constraint module include functions to impose the momentum sum rules on the PDFs
 """
 import numpy as np
 

@@ -49,7 +49,7 @@ def fit(
     from n3fit.io.writer import storefit
     from n3fit.backends import MetaModel
     import n3fit.io.reader as reader
-    import n3fit.constrains as constrains
+    import n3fit.constraints as constraints
 
     if hyperopt:
         import hyperopt as hyper
@@ -236,7 +236,7 @@ def fit(
         )
 
         # Compute the arclengths
-        arc_lengths = constrains.compute_arclength(layers["fitbasis"], verbose=True)
+        arc_lengths = constraints.compute_arclength(layers["fitbasis"], verbose=True)
         # Construct the chi2exp file
         allchi2_lines = validation_object.chi2exps_str()
         # Construct the preproc file
@@ -279,4 +279,4 @@ def fit(
         validation_object.plot()
 
     # print out the integration of the sum rule in case we want to check it's not broken
-    # constrains.check_integration(layer_pdf, integrator_input)
+    # constraints.check_integration(layer_pdf, integrator_input)
