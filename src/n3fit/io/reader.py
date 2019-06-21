@@ -11,6 +11,18 @@ from validphys.core import DataSetSpec as vp_Dataset
 
 
 def make_tr_val_mask(datasets, exp_name, seed):
+    """
+    Generates the training and validation masks for a given experiment
+
+    # Arguments:
+        - `datasets`: list of datasets corresponding to one experiment
+        - `exp_name`: name of the experiment
+        - `seed` : seed for the random tr/vl split
+
+    # Return
+        - `trmask`: numpy boolean array 
+        - `vlmask`: not trmask
+    """
     # Set the seed for the experiment
     nameseed = int(hashlib.sha256(exp_name.encode()).hexdigest(), 16) % 10 ** 8
     nameseed += seed
@@ -35,11 +47,16 @@ def make_tr_val_mask(datasets, exp_name, seed):
 
 def fk_parser(fk, is_hadronic=False):
     """
-    Input: fktable object
-    Output:
-        - dictionary with information about the fktable:
-            {'xgrid', 'nx', 'ndata', 'basis', 'fktable'}
-        - fktable: numpy array representation of the fktable reshaped to be of shape (n datapoints, n flavours, n x)
+    # Arguments:
+        - `fk`: fktable object
+    
+    # Return:
+        - `dict_out`: dictionary with all information about the fktable
+            - 'xgrid'
+            - 'nx'
+            - 'ndata'
+            - 'basis'
+            - 'fktable'
     """
 
     # Dimensional information
@@ -94,20 +111,26 @@ def fk_parser(fk, is_hadronic=False):
 
 
 def common_data_reader_dataset(dataset_c, dataset_spec):
-    """ Import fktable, common data and experimental data for the given data_name
-    Returns a (len 0 list of) dictionary with:
-        - dataset: full dataset object from which all data has been extracted
-        - hadronic: is hadronic?
-        - operation: operation to perform on the fktables below
-        - fktables : a list of dictionaries with the following items
-            - ndata: number of data points
-            - nonzero/nbasis: number of PDF entries which are non zero
-            - basis: array containing the information of the non-zero PDF entries
-            - nx: number of points in the xgrid (1-D), i.e., for hadronic the total number is nx * nx
-            - xgrid: grid of x points
-            - fktable: 3/4-D array of shape (ndata, nonzero, nx, (nx))
+    """
+    Import fktable, common data and experimental data for the given data_name
 
-    If the flag return_raw is set to true, returns the dataset_dict direcly
+    # Arguments:
+        - `dataset_c`: c representation of the dataset object
+        - `dataset_spec`: python representation of the dataset object
+
+    #Returns:
+        - `[dataset_dict]`: a (len 1 list of) dictionary with:
+            - dataset: full dataset object from which all data has been extracted
+            - hadronic: is hadronic?
+            - operation: operation to perform on the fktables below
+            - fktables : a list of dictionaries with the following items
+                - ndata: number of data points
+                - nonzero/nbasis: number of PDF entries which are non zero
+                - basis: array containing the information of the non-zero PDF entries
+                - nx: number of points in the xgrid (1-D), i.e., for hadronic the total number is nx * nx
+                - xgrid: grid of x points
+                - fktable: 3/4-D array of shape (ndata, nonzero, nx, (nx))
+
     instead of the dictionary object that model_gen needs
     """
     how_many = dataset_c.GetNSigma()
@@ -139,12 +162,28 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
     """
     Wrapper to read the information from validphys object
     This function receives either a validphyis experiment or dataset objects
-    andSreturns a dictionary with:
-        - datasets: list of dtaset dictionaries
-        - invcovmat: inverse of the covariant matrix
-        - expdata: experimental data (len(expdata) = ndata)
-        - ndata: number of data points
-        - experiment: True/False, is it an experiment?
+
+    # Returns:
+        - `all_dict_out`: a dictionary containing all the information of the experiment/dataset
+        for training, validation and experimental
+                'datasets' : list of the datasets contained in the experiment
+                'name' : name of the experiment
+                'expdata_true' : non-replica data
+                'invcovmat_true' : inverse of the covmat (non-replica)
+
+                'trmask' : mask for the training data
+                'invcovmat' : inverse of the covmat for the training data
+                'ndata' : number of datapoints for the training data
+                'expdata' : experimental data (replica'd) for training
+
+                'vlmask' : (same as above for validation)
+                'invcovmat_vl' : (same as above for validation)
+                'ndata_vl' : (same as above for validation)
+                'expdata_vl' :  (same as above for validation)
+                
+                'positivity' : bool - is this a positivity set?
+
+
     """
     if replica_seeds is None:
         replica_seeds = []
@@ -232,6 +271,9 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
 
 
 def positivity_reader(pos_spec):
+    """
+    Specific reader for positivity sets
+    """
     pos_c = pos_spec.load()
     ndata = pos_c.GetNData()
 

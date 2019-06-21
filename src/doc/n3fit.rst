@@ -18,7 +18,7 @@ Submodules
 
    n3fit.ModelTrainer
    n3fit.Statistics
-   n3fit.constrains
+   n3fit.constraints
    n3fit.fit
    n3fit.model_gen
    n3fit.n3fit

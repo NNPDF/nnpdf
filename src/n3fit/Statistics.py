@@ -3,6 +3,22 @@ from matplotlib import pyplot as pl
 
 
 class Stat_Info:
+    """
+    To instantiate the Stats_Info object we need:
+        - `vl_model`: The validation  model, which has the same PDF layer as the training model
+        - `vl_data`: The validation exp data to compare to
+        - `ndata_dict`: A dictionary with the number of points of each experiment in the format:
+            `exp`: npoints in the training model for experiment exp
+            `exp_vl` : npoints in the training model for experiment exp
+        - `chi2_threshold`: at which training chi do we start checking for a stopping point?
+        - `save_all_each`: in which interval should we save all chi2 per experiment?
+        - `stopping_epochs`: after a growth in chi2 occurs, we activate the stopping monitor
+            if the chi2 doesnt go below the minimum after stopping_epochs, we stop
+        - `dont_stop`: don't care about early stopping
+
+    # TODO: this function has outgrown its initial scope and some refactoring is needed
+    """
+
     def __init__(
         self,
         vl_model,
@@ -15,20 +31,7 @@ class Stat_Info:
         stopping_epochs=7000,
         dont_stop=False,
     ):
-        """
-        To instantiate the Stats_Info object we need:
-            - vl_model: The validation  model, which has the same PDF layer as the training model
-            - vl_data: The validation exp data to compare to
-            - ndata_dict: A dictionary with the number of points of each experiment in the format:
-                exp: npoints in the training model for experiment exp
-                exp_vl : npoints in the training model for experiment exp
-            - chi2_threshold: at which training chi do we start checking for a stopping point?
-            - save_all_each: in which interval should we save all chi2 per experiment?
-            - stopping_epochs: after a growth in chi2 occurs, we activate the stopping monitor
-                if the chi2 doesnt go below the minimum after stopping_epochs, we stop
-            - dont_stop: dont_stop anyway
 
-        """  # TODO: this function has outgrown its initial scope and some refactoring is needed
 
         self.vl_model = vl_model
         self.vl_data = vl_data

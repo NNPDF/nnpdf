@@ -2,6 +2,7 @@
     ModelTrainer Class:
 
     This class provides a wrapper around the fitting code and the generation of the Neural Network
+
     When the "hyperparametizable"* function is called with a dictionary of parameters,
     it generates a NN and subsequentially performs a fit.
 
@@ -9,7 +10,7 @@
     run, in particular this allows to completely reset the NN at the beginning of each iteration
     reusing some of the previous work.
 
-    *called in this way because it accept a dictionary of parameters which defines the Neural Network
+    *called in this way because it accept a dictionary of hyper-parameters which defines the Neural Network
 """
 import n3fit.model_gen as model_gen
 import n3fit.constraints as constraints
@@ -22,18 +23,18 @@ TESTNAME = "TEST"
 test_multiplier = 0.5
 validation_multiplier = 0.5
 
-
 class ModelTrainer:
     def __init__(
         self, exp_info, pos_info, flavinfo, nnseed, pass_status="ok", failed_status="fail", log=None, debug=False
     ):
         """
-        - exp_info: list of dictionaries containing experiments
-        - pos_info: list of dictionaries containing positivity sets
-        - flavinfo: the object returned by fitting['basis']
-        - nnseed: the seed used to initialise the Neural Network, will be passed to model_gen
-        - log: if given, printing will be done to log.info
-        - debug: flag to activate some debug options
+        # Arguments:
+            - `exp_info`: list of dictionaries containing experiments
+            - `pos_info`: list of dictionaries containing positivity sets
+            - `flavinfo`: the object returned by fitting['basis']
+            - `nnseed`: the seed used to initialise the Neural Network, will be passed to model_gen
+            - `log`: if given, printing will be done to log.info
+            - `debug`: flag to activate some debug options
         """
 
         # Save all input information
@@ -106,15 +107,19 @@ class ModelTrainer:
     def _fill_the_dictionaries(self):
         """
         This function fills the following dictionaries with fixed information,
-            - training: data for the fit
-            - validation: data which for the stopping
-            - experimental: 'true' data, only used for reporting purposes
-            - ndata_dict: a dictionary containing 'name of experiment' : Number Of Points
+            -`training`: data for the fit
+            -`validation`: data which for the stopping
+            -`experimental`: 'true' data, only used for reporting purposes
+            -`ndata_dict`: a dictionary containing 'name of experiment' : Number Of Points
 
-        the fixed information (i.e., non dependant on the parameters of the fit) is:
-            - experimental data (expdata)
-            - names of the experiment (name)
-            - number of experimental points (ndata)
+        Note: the dictionaries will be used at different stages filled with information that will be cleaned at every 
+        hyperopt iteration. If not running hyperopt, the fixed-nonfixed thing makes no difference.
+
+        The fixed information (i.e., non dependant on the parameters of the fit) contained in those dictionaries:
+            - `expdata`: experimental data 
+            - `name`: names of the experiment 
+            - `ndata`: number of experimental points 
+
         """
         for exp_dict in self.exp_info:
             if exp_dict["name"] == TESTNAME:
@@ -151,10 +156,11 @@ class ModelTrainer:
 
     def _model_generation(self):
         """
-        Fills the three dictionaries with the 'model' entry
-            Note: before entering this function the dictionaries contain a list of inputs
-                  and a list of outputs, but they are not connected.
-                  This function connects inputs with outputs by injecting the PDF
+        Fills the three dictionaries (`training`, `validation`, `experimental`) with the `model` entry
+
+        *Note*: before entering this function the dictionaries contain a list of inputs
+            and a list of outputs, but they are not connected.
+            This function connects inputs with outputs by injecting the PDF
 
         Compiles the validation and experimental models with fakes optimizers and learning rate
         as they are never trained, but this is needed by some backends in order to run evaluate on them
@@ -194,10 +200,10 @@ class ModelTrainer:
 
     def _reset_observables(self):
         """
-        Resets the 'output' and 'losses' entries of all 3 dictionaries,
+        Resets the 'output' and 'losses' entries of all 3 dictionaries, (`training`, `validation`, `experimental`) 
         as well as the input_list
         this is necessary as these can either depend on the parametrization of the NN
-        or be obliterated when the backend state is reset
+        or be obliterated when/if the backend state is reset
         """
         self.input_list = []
         for key in ["output", "losses"]:
@@ -231,8 +237,8 @@ class ModelTrainer:
         It also fill the list of input tensors (input_list)
 
         Parameters accepted:
-            - pos_multiplier: the multiplier to be applied to the positivity
-            - pos_initial: the initial value for the positivity
+            - `pos_multiplier`: the multiplier to be applied to the positivity
+            - `pos_initial`: the initial value for the positivity
         """
 
         # First reset the dictionaries
@@ -284,11 +290,6 @@ class ModelTrainer:
         # Save the positivity multiplier into the training dictionary as it will be used during training
         self.training["pos_multiplier"] = pos_multiplier
 
-        # If there is no validation, overwrite the values of validation with the values of training
-
-    #         if self.no_validation:
-    #             self.validation['losses'] = self.training['losses']
-    #             self.validation['output'] = self.training['output']
 
     def _generate_pdf(self, params):
         """
@@ -298,17 +299,18 @@ class ModelTrainer:
         if the sumrule is being imposed, it also updates input_list with the
         integrator_input tensor used to calculate the sumrule
 
-        Returns: (layers, integrator_input)
-            layers: a list of layers
-            integrator_input: input used to compute the  sumrule
+        # Returns: (layers, integrator_input)
+            `layers`: a list of layers
+            `integrator_input`: input used to compute the  sumrule
         both are being used at the moment for reporting purposes at the end of the fit
 
         Parameters accepted:
-            - nodes_per_layer
-            - activation_per_layer
-            - initializer
-            - layer_type
-            - dropout
+            - `nodes_per_layer`
+            - `activation_per_layer`
+            - `initializer`
+            - `layer_type`
+            - `dropout`
+        see model_gen.pdfNN_layer_generator for more information
         """
         self.log_info("Generating PDF layer")
 
@@ -346,8 +348,9 @@ class ModelTrainer:
         Compiles the model with the data given in params
 
         Parameters accepted:
-            - learning_rate
-            - optimizer
+            - `learning_rate`
+            - `optimizer`
+        Optimizers accepted are backend-dependent
         """
         training_model = self.training["model"]
         loss_list = self.training["losses"]
@@ -392,6 +395,7 @@ class ModelTrainer:
             return self.failed_status
 
     def _hyperopt_override(self, params):
+        """ Unrolls complicated hyperopt structures into very simple dictionaries"""
         # I love the smell of napalm in the morning
         for hyperkey in self.hyperkeys:
             item = params[hyperkey]
@@ -401,13 +405,17 @@ class ModelTrainer:
 
     def hyperparametizable(self, params):
         """
-        Wrapper around all the functions defining the fit
+        Wrapper around all the functions defining the fit. 
+
+        After the ModelTrainer class has been instantiated only a call to this function, with a `params` dictionary
+        is necessary to generate the whole PDF model and perform a fit.
 
         This is a necessary step for hyperopt to work
 
-        Parameters used here:
-            - epochs: maximum number of iterations for the fit to run
-            - stopping_patience: patience of the stopper after finding a new minimum
+        Parameters used only here:
+            - `epochs`: maximum number of iterations for the fit to run
+            - `stopping_patience`: patience of the stopper after finding a new minimum
+        All other parameters are passed to the corresponding functions
         """
 
         # Reset the internal state of the backend

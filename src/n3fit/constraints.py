@@ -36,7 +36,7 @@ def gen_integration_input(nx):
 def msr_impose(fit_layer, final_pdf_layer, verbose=False):
     """
     This function receives:
-        - pdf_fit: the 8-basis layer of PDF which we fit
+        - fit_layer: the 8-basis layer of PDF which we fit
         - final_layer: the 14-basis which is fed to the fktable
     It uses pdf_fit to compute the sum rule and returns a modified version of the final_pdf layer
     with a normalisation by which the sum rule is imposed
@@ -82,6 +82,10 @@ def msr_impose(fit_layer, final_pdf_layer, verbose=False):
 
 
 def check_integration(ultimate_pdf, integration_input, verbose=False):
+    """
+    Naive integrator for quick checks.
+    Receives the final PDF layer, computes the 4 MSR and prints out the result
+    """
     nx = int(1e4)
     xgrid, weights_array = gen_integration_input(nx)
     xgrid_input = operations.numpy_to_input(xgrid)

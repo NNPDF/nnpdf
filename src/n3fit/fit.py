@@ -26,6 +26,9 @@ def fit(
     debug=False,
     create_test_card=None,
 ):
+    """ 
+        This action will (upon having read a validcard) process a full PDF fit for a given replica.
+    """
 
     # Call the script to generate a runcard with a test-set and immediately exit
     if create_test_card:

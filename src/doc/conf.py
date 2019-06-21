@@ -18,11 +18,13 @@
 # -- Project information -----------------------------------------------------
 
 project = 'n3fit'
-copyright = '2019, Author'
-author = 'Author'
+copyright = '2019, JCM'
+author = 'JCM'
 
 
 # -- General configuration ---------------------------------------------------
+autodoc_member_order = 'bysource'
+autodoc_default_flags = ['members', 'private-members', 'show-inheritance']
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -31,7 +33,12 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     'sphinx.ext.todo',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.githubpages',
 ]
+
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -54,7 +61,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'sphinxdoc'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

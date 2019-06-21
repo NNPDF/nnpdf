@@ -1,10 +1,11 @@
 """
-    Library of functions to generate the NN objects
+    Library of functions which generate the NN objects
 
-    observable_generator:
-        Generates the output layers
-    pdfNN_layer_generator:
-        Generates the PDF NN layer to be fitted
+    Contains:
+        # observable_generator:
+            Generates the output layers
+        # pdfNN_layer_generator:
+            Generates the PDF NN layer to be fitted
 """
 from n3fit.layers import DIS
 from n3fit.layers import DY
@@ -21,18 +22,25 @@ def observable_generator(
     spec_dict, positivity_initial=None, positivity_multiplier=1.05, verbose=False, positivity_steps=300
 ):
     """
-    Receives a spec object (can be either a dataset or an experiment)
-    Takes some optional arguments:
-        positivity_initial: if given, set this number as the positivity multiplier for epoch 1
-        positivity_multiplier: how much the positivity increases every 100 steps
-        positivity_steps: if positivity_initial is not given, computes the initial by assuming we want,
+    This function generates the observable generator.
+    It loads the fktable in the convolution layer (hadronic or DIS) and prepares the loss function.
+    If the dataset is a positivity dataset acts in consequence.
+
+    # Arguments:
+        - `spec_dict`: a dictionary-like object containing the information of the observable
+        - `positivity_initial`: if given, set this number as the positivity multiplier for epoch 1
+        - `positivity_multiplier`: how much the positivity increases every 100 steps
+        - `positivity_steps`: if positivity_initial is not given, computes the initial by assuming we want,
                           after 100**positivity_steps epochs, to have the lambda of the runcard
-    returns a tuple with:
-    (input_layer, obs_layer, loss function, exp_data)
-        - input_layer: list of input layers
-        - obs_layer: one single output layer
-        - loss_function: one single loss function
-        - exp_data: one single set of true data to compare to
+
+    # Returns: a dictionary with:
+        - `inputs`: input layer
+        - `output`: output layer (unmasked)
+        - `loss` : loss function (unmasked)
+        - `output_tr`: output layer (training)
+        - `loss_tr` : loss function (training)
+        - `output_vl`: output layer (validation)
+        - `loss_vl` : loss function (validation)
     """
     spec_name = spec_dict["name"]
     model_inputs = []
@@ -146,8 +154,28 @@ def pdfNN_layer_generator(
     dropout=0.0,
 ):
     """
-    Generates a NN that takes as input the xgrid value and outputs the basis of 14 PDFs
-    fk tables use
+    Generates the PDF model which takes as input a point in x (from 0 to 1) and outputs a basis of 14 PDFs.
+    It generates the preprocessing of the x into a set (x, log(x)), the arbitrary NN to fit the form of the PDF
+    and the preprocessing factors.
+
+    # Arguments:
+        - `inp`: dimension of the xgrid. If inp=2, turns the x point into a (x, log(x)) pair
+        - `nodes' : list of the number of nodes per layer of the PDF NN. Default: [15,8]
+        - `activation`: list of activation functions to apply to each layer. Default: ["tanh", "linear"]
+                        if the number of activation function does not match the number of layers, it will add
+                        copies of the first activation function found
+        - `initializer_name`: selects the initializer of the weights of the NN. Default: glorot_normal
+        - `layer_type`: selects the type of architecture of the NN. Default: dense
+        - `flav_info`: dictionary containing the information about each PDF (basis dictionary in the runcard)
+                       to be used by Preprocessing
+        - `out`: number of output flavours of the model
+        - `seed`: seed to initialize the NN
+        - `dropout`: rate of dropout layer by layer
+
+    # Returns:
+        - `layer_pdf`: a function which, upon calling it with a tensor, will connect all PDF layers and output a tensor of size (batch_size, `out`)
+        - `dict_layers`: a dictionary containing some of the intermediate layers (necessary for debugging and to compute intermediate quantities)
+
     """
     if nodes is None:
         nodes = [15, 8]
@@ -157,8 +185,8 @@ def pdfNN_layer_generator(
     ln = len(nodes)
     la = len(activations)
     if ln > la:
-        activations = (ln - la) * ["tanh"] + activations
-        print("Did not received enough activation functions, appending copies of the first activation foudn")
+        activations = (ln - la) * activations[0] + activations
+        print("Did not received enough activation functions, appending copies of the first activation foound")
     elif la > ln:
         activations = activations[-ln:]
         print("Received more activations than layers, using only the last ones")
