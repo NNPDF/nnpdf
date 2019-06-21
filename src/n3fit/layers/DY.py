@@ -3,6 +3,9 @@ from n3fit.layers.Observable import Observable
 
 
 class DY(Observable):
+    """
+    Computes the convolution of two PDFs and one fktable
+    """
     def gen_basis(self, basis):
         basis_to_pairs = basis.reshape(-1, 2)
         self.basis = basis_to_pairs
