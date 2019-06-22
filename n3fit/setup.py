@@ -3,8 +3,8 @@ from setuptools import setup, find_packages
 setup(
         name="n3fit",
         version="0.9",
-        package_dir = {'':'src/'},
-        packages=find_packages('src'),
+        package_dir = {'':'.'},
+        packages=find_packages('.'),
 
         entry_points = {'console_scripts':
             ['n3fit = n3fit.n3fit:main',

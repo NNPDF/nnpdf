@@ -24,7 +24,6 @@ requirements:
     run:
         - tensorflow
         - keras
-        - ruamel.yaml
         - hyperopt
         - seaborn
         - lhapdf
