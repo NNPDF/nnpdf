@@ -4,9 +4,15 @@ from n3fit.backends import MetaLayer
 
 class Mask(MetaLayer):
     """
-    Mask is a layer used to apply both a boolean mask and a multiplier
-    """
+        This layers applies a boolean mask to a rank-1 input tensor.
 
+        Its most common use is the training/validation split.
+        The mask admit a multiplier for all outputs
+
+        # Arguments:
+            - `bool_mask`: numpy array with the boolean mask to be applied
+            - `c`: constant multiplier for every output
+    """
     def __init__(self, bool_mask, c=1.0, **kwargs):
         self.output_dim = np.count_nonzero(bool_mask)
         self.mask = bool_mask

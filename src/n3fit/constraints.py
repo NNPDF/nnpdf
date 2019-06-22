@@ -35,13 +35,12 @@ def gen_integration_input(nx):
 
 def msr_impose(fit_layer, final_pdf_layer, verbose=False):
     """
-    This function receives:
-        - fit_layer: the 8-basis layer of PDF which we fit
-        - final_layer: the 14-basis which is fed to the fktable
-    It uses pdf_fit to compute the sum rule and returns a modified version of the final_pdf layer
-    with a normalisation by which the sum rule is imposed
+        This function receives:
+            - fit_layer: the 8-basis layer of PDF which we fit
+            - final_layer: the 14-basis which is fed to the fktable
+        It uses pdf_fit to compute the sum rule and returns a modified version of the final_pdf layer
+        with a normalisation by which the sum rule is imposed
     """
-
     # 1. Generate the fake input which will be used to integrate
     nx = int(2e3)
     xgrid, weights_array = gen_integration_input(nx)

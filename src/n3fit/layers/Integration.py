@@ -1,18 +1,19 @@
 from n3fit.backends import MetaLayer
 
-
 class xDivide(MetaLayer):
     """
-    Divide the pdf by x
-    By default: dimension = 8 dividing the entries corresponding to v, v3, v8
-    """
+        Divide the pdf by x
+        By default: dimension = 8 dividing the entries corresponding to v, v3, v8
 
-    def __init__(self, output_dim=8, div_list=None, size=1000, **kwargs):
+        # Arguments:
+            - `output_dim`: dimension of the pdf
+            - `div_list`: list of indices to be divided by X (by default [2,3,4]; [v, v3, v8]
+    """
+    def __init__(self, output_dim=8, div_list=None, **kwargs):
         if div_list is None:
             div_list = [2, 3, 4]
         self.output_dim = output_dim
         self.div_list = div_list
-        self.one = self.tensor_ones((size, 1))
         super(MetaLayer, self).__init__(**kwargs)
 
     def compute_output_shape(self, input_shape):
@@ -20,11 +21,12 @@ class xDivide(MetaLayer):
 
     def call(self, x):
         out_array = []
+        one = self.tensor_ones_like(x)
         for i in range(self.output_dim):
             if i in self.div_list:
-                res = self.one / x
+                res = one / x
             else:
-                res = self.one
+                res = one
             out_array.append(res)
         out_tensor = self.concatenate(out_array, axis=1)
         return out_tensor
@@ -32,16 +34,19 @@ class xDivide(MetaLayer):
 
 class xMultiply(MetaLayer):
     """
-    Multiply the pdf by x
-    By default: dimension = 8 multiply all entries but v, v3, v8
+        Multiply the pdf by x
+        By default: dimension = 8 multiply all entries but v, v3, v8
+
+        # Arguments:
+            - `output_dim`: dimension of the pdf
+            - `mul_list`: list of indices *not* to multiply by X (by default [2,3,4]; [v, v3, v8]
     """
 
-    def __init__(self, output_dim=8, div_list=None, size=1000, **kwargs):
+    def __init__(self, output_dim=8, mul_list=None, **kwargs):
         if div_list is None:
             div_list = [2, 3, 4]
         self.output_dim = output_dim
         self.div_list = div_list
-        self.one = self.tensor_ones((size, 1))
         super(MetaLayer, self).__init__(**kwargs)
 
     def compute_output_shape(self, input_shape):
@@ -49,11 +54,12 @@ class xMultiply(MetaLayer):
 
     def call(self, x):
         out_array = []
+        one = self.tensor_ones_like(x)
         for i in range(self.output_dim):
-            if i in self.div_list:
-                res = self.one
+            if i in self.mul_list:
+                res = one
             else:
-                res = self.one * x
+                res = one * x
             out_array.append(res)
         out_tensor = self.concatenate(out_array, axis=1)
         return out_tensor
@@ -75,15 +81,19 @@ class xIntegrator(MetaLayer):
         return (self.output_dim,)
 
     def call(self, x):
+        """
+            Receives as input a rank-2 tensor `x` (xpoints, flavours)
+            and returns a summation on the first index (xpoints) of tensor `x`, weighted by the
+            weights of the grid (in the most common case, 1/grid_points)
+        """
         xx = x * self.grid_weights
         return self.sum(xx, axis=0)
 
 
 class MSR_Normalization(MetaLayer):
     """
-    Applies the normalisation so that the PDF output fullfills the sum rules
+        Applies the normalisation so that the PDF output fullfills the sum rules
     """
-
     def __init__(self, output_dim=14, **kwargs):
         self.output_dim = output_dim
         self.one = self.tensor_ones((1, 1))
@@ -93,8 +103,11 @@ class MSR_Normalization(MetaLayer):
     def compute_output_shape(self, input_shape):
         return (self.output_dim,)
 
-    def call(self, integrated):
-        x = integrated
+    def call(self, x):
+        """
+            Receives as input a tensor with the value of the MSR for each PDF
+            and returns a rank-1 tensor with the normalization factor A_i of each flavour
+        """
         pdf_sr = self.concatenate(
             [
                 self.one,  # photon

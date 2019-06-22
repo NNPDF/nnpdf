@@ -1,9 +1,22 @@
 from n3fit.backends import MetaLayer
-
 BASIS_SIZE = 8
 
-
 class Preprocessing(MetaLayer):
+    """
+        Applies preprocessing to the PDF.
+
+        This layer generates a factor (1-x)^beta*x^(1-alpha) where both beta and alpha 
+        are parameters to be fitted.
+
+        Both beta and alpha are initialized uniformly within the ranges allowed in the runcard and
+        then they are only allowed to move between those two values (with a hard wall in each side)
+
+        # Arguments:
+            - `output_dim`: size of the fitbasis
+            - `trainable`: bool, whether beta and alpha should be fixed
+            - `flav_info`: dictionary containg the information with the limits of alpha and beta
+            - `seed`: seed for the initializer of the random alpha, beta values
+    """
     def __init__(self, output_dim=BASIS_SIZE, trainable=True, flav_info=None, seed=0, **kwargs):
         self.output_dim = output_dim
         self.trainable = trainable
@@ -58,6 +71,10 @@ class Preprocessing(MetaLayer):
 
 
 class Rotation(MetaLayer):
+    """
+        Applies a transformation from the dimension-8 fit basis
+        to the dimension-14 evolution basis
+    """
     def __init__(self, output_dim=14, **kwargs):
         self.output_dim = output_dim
         super(MetaLayer, self).__init__(**kwargs, name="evolution")

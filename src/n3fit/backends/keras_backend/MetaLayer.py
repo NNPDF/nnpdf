@@ -105,13 +105,18 @@ class MetaLayer(Layer):
         Generates a tensor of ones of the given shape
         """
         return K.ones(shape, **kwargs)
+    def tensor_ones_like(self, tensor, **kwargs):
+        """
+        Generates a tensor of ones of the same shape as the input tensor
+        """
+        return K.ones_like(tensor, **kwargs)
 
     def many_replication(self, grid, replications, axis=0, **kwargs):
         """
-        Generates a tensor with one extra dimension:
-            a repetition of "grid" n times along the given axis
-        from keras documentation:
-        If x has shape (s1, s2, s3) and axis is 1, the output will have shape (s1, s2 * rep, s3)
+            Generates a tensor with one extra dimension:
+                a repetition of "grid" n times along the given axis
+            from keras documentation:
+            If x has shape (s1, s2, s3) and axis is 1, the output will have shape (s1, s2 * rep, s3)
         """
         return K.repeat_elements(grid, rep=replications, axis=axis, **kwargs)
 
