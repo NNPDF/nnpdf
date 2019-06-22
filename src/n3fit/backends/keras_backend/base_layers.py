@@ -13,11 +13,9 @@ def LSTM_modified(**kwargs):
     """
     LSTM asks for a sample X timestep X features kind of thing so we need to reshape the input
     """
-
     the_lstm = LSTM(**kwargs)
-    ExpandDim = Lambda(
-            lambda x: expand_dims(x, axis = -1)
-        )
+    ExpandDim = Lambda(lambda x: expand_dims(x, axis=-1))
+
     def ReshapedLSTM(input_tensor):
         if len(input_tensor.shape) == 2:
             reshaped = ExpandDim(input_tensor)
@@ -29,29 +27,41 @@ def LSTM_modified(**kwargs):
 
 
 layers = {
-        'dense' : (Dense, {
-            'input_shape' : (1,),
-            'kernel_initializer' : 'glorot_normal',
-            'units' : 5,
-            'activation' : 'sigmoid',
-            }),
-        'LSTM' : (LSTM_modified, {
-            'kernel_initializer' : 'glorot_normal',
-            'units' : 5,
-            'activation' : 'sigmoid',
-            }),
-        'dropout' : (Dropout, {
-            'rate' : 0.0,
-            }),
-        }
-
+    "dense": (
+        Dense,
+        {
+            "input_shape": (1,),
+            "kernel_initializer": "glorot_normal",
+            "units": 5,
+            "activation": "sigmoid",
+        },
+    ),
+    "LSTM": (
+        LSTM_modified,
+        {"kernel_initializer": "glorot_normal", "units": 5, "activation": "sigmoid"},
+    ),
+    "dropout": (Dropout, {"rate": 0.0}),
+}
 
 
 def base_layer_selector(layer_name, **kwargs):
+    """
+        Given a layer name, looks for it in the `layers` dictionary and returns an instance.
+
+        The layer dictionary defines a number of defaults but they can be overwritten/enhanced through kwargs
+
+        # Arguments:
+            - `layer_name`: str with the name of the layer
+            - `**kwargs`: extra optional arguments to pass to the layer (beyond their defaults)
+    """
     try:
         layer_tuple = layers[layer_name]
     except KeyError:
-        raise Exception("Layer not implemented in keras_backend/base_layers.py: {0}".format(layer_name))
+        raise Exception(
+            "Layer not implemented in keras_backend/base_layers.py: {0}".format(
+                layer_name
+            )
+        )
 
     layer_class = layer_tuple[0]
     layer_args = layer_tuple[1]

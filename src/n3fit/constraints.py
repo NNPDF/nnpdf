@@ -47,7 +47,7 @@ def msr_impose(fit_layer, final_pdf_layer, verbose=False):
 
     # 2. Prepare the pdf for integration
     #    for that we need to multiply several flavours with 1/x
-    division_by_x = xDivide(size=nx)
+    division_by_x = xDivide()
 
     def pdf_integrand(x):
         res = operations.op_multiply([division_by_x(x), fit_layer(x)])
@@ -89,7 +89,7 @@ def check_integration(ultimate_pdf, integration_input, verbose=False):
     xgrid, weights_array = gen_integration_input(nx)
     xgrid_input = operations.numpy_to_input(xgrid)
 
-    multiplier = xDivide(size=nx, output_dim=14, div_list=range(3, 9))
+    multiplier = xDivide(output_dim=14, div_list=range(3, 9))
 
     def pdf_integrand(x):
         res = operations.op_multiply([multiplier(x), ultimate_pdf(x)])
@@ -125,7 +125,7 @@ def compute_arclength(fitbasis_layer, verbose=False):
     """
     nx = int(1e6)
     xgrid, weights_array = gen_integration_input(nx)
-    multiplier = xMultiply(size=nx)
+    multiplier = xMultiply()
     xgrid_input = operations.numpy_to_input(xgrid)
     eps = xgrid[0] / 2.0
     xgrid_input_prime = operations.numpy_to_input(xgrid - eps)

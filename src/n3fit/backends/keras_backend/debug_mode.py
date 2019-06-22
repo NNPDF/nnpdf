@@ -26,7 +26,12 @@ def set_initial_state(debug=False, seed=13):
     return 0
 
 
-def clear_backend_state(debug):
+def clear_backend_state(debug = False):
+    """
+        Clears the state of the backend and opens a new session.
+
+        If `debug` flag is true don't clear the state or do anything
+    """
     if not debug:
         print("Clearing session")
         from keras import backend as K

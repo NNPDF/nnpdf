@@ -14,6 +14,7 @@ experiments:
     datasets:
       - { dataset: SLACP, frac: 0.5}
       - { dataset: NMCPD, frac: 0.5 }      
+      - { dataset: CMSJETS11,     frac: 0.5, sys: 10 }
 
 ############################################################
 datacuts:
