@@ -1,4 +1,4 @@
-from backends import MetaLayer
+from n3fit.backends import MetaLayer
 
 BASIS_SIZE = 8
 

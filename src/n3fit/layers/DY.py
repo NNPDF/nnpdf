@@ -1,5 +1,5 @@
 import numpy as np
-from layers.Observable import Observable
+from n3fit.layers.Observable import Observable
 
 
 class DY(Observable):

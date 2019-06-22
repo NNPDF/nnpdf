@@ -582,7 +582,7 @@ For {0} = {1}
             )
         key_info[key_name] = possible_values
 
-    from HyperAlgorithm import HyperAlgorithm
+    from n3fit.HyperAlgorithm import HyperAlgorithm
 
     hyperalg = HyperAlgorithm(
         key_info=key_info, fail_threshold=65, how_many_to_kill=how_many_to_kill, remove_by_key=remove_by_key

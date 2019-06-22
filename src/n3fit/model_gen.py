@@ -6,15 +6,15 @@
     pdfNN_layer_generator:
         Generates the PDF NN layer to be fitted
 """
-from layers import DIS
-from layers import DY
-from layers import Mask
-from layers import Preprocessing, Rotation
+from n3fit.layers import DIS
+from n3fit.layers import DY
+from n3fit.layers import Mask
+from n3fit.layers import Preprocessing, Rotation
 
-from backends import operations
-from backends import losses
-from backends import MetaLayer
-from backends import base_layer_selector, concatenate, Lambda
+from n3fit.backends import operations
+from n3fit.backends import losses
+from n3fit.backends import MetaLayer
+from n3fit.backends import base_layer_selector, concatenate, Lambda
 
 
 def observable_generator(

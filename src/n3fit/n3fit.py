@@ -24,7 +24,7 @@ N3FIT_FIXED_CONFIG = dict(
     actions_ = ['datacuts::theory fit']
 )
 
-N3FIT_PROVIDERS = ["fit"]
+N3FIT_PROVIDERS = ["n3fit.fit"]
 
 log = logging.getLogger(__name__)
 
@@ -169,7 +169,9 @@ class N3FitApp(App):
             print(colors.color_exception(e.__class__, e, e.__traceback__), file=sys.stderr)
             sys.exit(1)
 
-
-if __name__ == "__main__":
+def main():
     a = N3FitApp()
     a.main()
+
+if __name__ == "__main__":
+    main()

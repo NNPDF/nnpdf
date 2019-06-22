@@ -1,5 +1,5 @@
 import numpy as np
-from backends import MetaLayer
+from n3fit.backends import MetaLayer
 
 
 class Mask(MetaLayer):

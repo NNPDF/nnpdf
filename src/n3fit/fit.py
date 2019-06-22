@@ -29,7 +29,7 @@ def fit(
 
     # Call the script to generate a runcard with a test-set and immediately exit
     if create_test_card:
-        from create_testset import create_testset
+        from n3fit.create_testset import create_testset
 
         create_testset(experiments, runcard_file=create_test_card)
         return 0
@@ -38,22 +38,22 @@ def fit(
     if debug:
         # If debug is active, fix the initial state this should make the run reproducible
         # (important to avoid non-deterministic multithread or hidden states)
-        from backends import set_initial_state
+        from n3fit.backends import set_initial_state
 
         set_initial_state(debug=debug)
     ###############
 
     # All potentially backend dependent imports should come inside the fit function
     # so they can eventually be set from the runcard
-    from ModelTrainer import ModelTrainer
-    from writer import storefit
-    from backends import MetaModel
-    import reader
-    import constrains
+    from n3fit.ModelTrainer import ModelTrainer
+    from n3fit.writer import storefit
+    from n3fit.backends import MetaModel
+    import n3fit.reader as reader
+    import n3fit.constrains as constrains
 
     if hyperopt:
         import hyperopt as hyper
-        import filetrials
+        import n3fit.filetrials as filetrials
 
         status_ok = hyper.STATUS_OK
     else:
@@ -154,7 +154,7 @@ def fit(
         # this block                                                           #
         ########################################################################
         if hyperopt:
-            from HyperScanner import HyperScanner
+            from n3fit.HyperScanner import HyperScanner
 
             the_scanner = HyperScanner(parameters)
 

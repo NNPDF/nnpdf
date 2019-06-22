@@ -3,9 +3,9 @@
 """
 import numpy as np
 
-from layers import xDivide, MSR_Normalization, xIntegrator, xMultiply
-from backends import operations
-from backends import MetaModel
+from n3fit.layers import xDivide, MSR_Normalization, xIntegrator, xMultiply
+from n3fit.backends import operations
+from n3fit.backends import MetaModel
 
 
 def gen_integration_input(nx):

@@ -1,5 +1,5 @@
 import sys
-from backends import MetaLayer
+from n3fit.backends import MetaLayer
 
 
 class Observable(MetaLayer):

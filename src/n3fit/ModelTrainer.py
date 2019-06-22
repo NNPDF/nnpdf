@@ -11,10 +11,10 @@
 
     *called in this way because it accept a dictionary of parameters which defines the Neural Network
 """
-import model_gen
-import constrains
-import Statistics
-from backends import MetaModel, clear_backend_state
+import n3fit.model_gen as model_gen
+import n3fit.constrains as constrains
+import n3fit.Statistics as Statistics
+from n3fit.backends import MetaModel, clear_backend_state
 
 # If an experiment matches this name, it will not be included int he training
 TESTNAME = "TEST"

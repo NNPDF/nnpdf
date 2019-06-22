@@ -1,5 +1,5 @@
-from ruamel import yaml
 import numpy as np
+from reportengine.compat import yaml
 
 def evln2lha(evln):
     # evln Basis {"PHT","SNG","GLU","VAL","V03","V08","V15","V24","V35","T03","T08","T15","T24","T35"};

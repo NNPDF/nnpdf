@@ -1,7 +1,7 @@
 import hyperopt as hyper
 import numpy as np
 
-from backends import MetaModel, MetaLayer
+from n3fit.backends import MetaModel, MetaLayer
 
 
 class HyperScanner:

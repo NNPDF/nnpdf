@@ -21,7 +21,7 @@ def test_runcard(runcard_file, datasets_out):
         data_tests.append({"dataset": dataset, "frac": 1.0})  # TODO copy the dictionary from the runcard instead
 
     # Create a test experiment
-    from ModelTrainer import TESTNAME
+    from n3fit.ModelTrainer import TESTNAME
     test_experiment = {
             'experiment' : TESTNAME,
             'datasets' : data_tests
