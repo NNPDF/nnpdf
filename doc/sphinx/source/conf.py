@@ -12,21 +12,20 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import sys
 
+sys.path.insert(0, "~/nnpdfgit/nnpdf/validphys2/src/validphys")
 
 # -- Project information -----------------------------------------------------
 
-project = u'NNPDF'
-copyright = u'2018, SI & MU'
-author = u'SI & MU'
+project = 'NNPDF'
+copyright = '2019, SI & MU'
+author = 'SI & MU'
 
 # The short X.Y version
-version = u''
+version = ''
 # The full version, including alpha/beta/rc tags
-release = u'0.0'
+release = ''
 
 
 # -- General configuration ---------------------------------------------------
@@ -39,21 +38,28 @@ release = u'0.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
+    'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
+    'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages',
+    'recommonmark',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['~/sphinx/sphinxtemplates']
+templates_path = ['_templates']
 
-# T e suffix(es) of source filenames.
+# The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-source_suffix = ['.rst', '.md']
-#source_suffix = '.rst'
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.txt': 'markdown',
+    '.md': 'markdown',
+}
 
 # The master toctree document.
 master_doc = 'index'
@@ -90,7 +96,7 @@ html_theme = 'sphinxdoc'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['~/sphinx/sphinxstatic']
+html_static_path = ['_static']
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -106,7 +112,7 @@ html_static_path = ['~/sphinx/sphinxstatic']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'NNPDFdoc'
+htmlhelp_basename = 'NNPDFDocumentationdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -133,8 +139,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'NNPDF.tex', u'NNPDF Documentation',
-     u'SI \\& MU', 'manual'),
+    (master_doc, 'NNPDFDocumentation.tex', 'NNPDF Documentation Documentation',
+     'SI \\& MU', 'manual'),
 ]
 
 
@@ -143,7 +149,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'nnpdf', u'NNPDF Documentation',
+    (master_doc, 'nnpdfdocumentation', 'NNPDF Documentation Documentation',
      [author], 1)
 ]
 
@@ -154,8 +160,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'NNPDF', u'NNPDF Documentation',
-     author, 'NNPDF', 'One line description of project.',
+    (master_doc, 'NNPDFDocumentation', 'NNPDF Documentation Documentation',
+     author, 'NNPDFDocumentation', 'One line description of project.',
      'Miscellaneous'),
 ]
 
@@ -189,8 +195,3 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
-
-# Add the Markdown parser to the source_parsers configuration variable in your Sphinx configuration file:
-source_parsers = {
-   '.md': 'recommonmark.parser.CommonMarkParser',
-}

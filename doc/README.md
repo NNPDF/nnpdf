@@ -1,6 +1,7 @@
 # NNPDF code and standards documentation
 Here we store documentation (user / developer guides) and specifications
-(for cuts / data formats) for the NNPDF code.
+(for cuts / data formats) for the NNPDF code. To generate the sphinx documentation,
+navigate to the `sphinx/` directory and execute the command `make html`.
 
 ### Currently documented
 - [Validphys2 guide](https://data.nnpdf.science/validphys-docs/guide.html)
