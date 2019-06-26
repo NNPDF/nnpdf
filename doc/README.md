@@ -57,7 +57,7 @@ Indices and tables
 * :ref:`search`
 ```
 ### Useful Markdown and Restructured Text Tools
-Various [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) and [restructured text](http://docutils.sourceforge.net/docs/user/rst/quickref.html) cheatsheets exist online. For example, $\LaTeX$ style inline maths can be entered in markdown by simply using `$\frac{1}{2}$` giving $\frac{1}{2}$. Newline maths can be added using `$$\frac{1}{2}$$` on a newline, which gives
+Various [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) and [restructured text](http://docutils.sourceforge.net/docs/user/rst/quickref.html) cheatsheets exist online. For example block maths can be added using `$$\frac{1}{2}$$` on a newline, which gives
 $$\frac{1}{2}$$
 
 Similarly, in restructured text, a $\LaTeX$ block can be generated using
@@ -72,7 +72,7 @@ while inline maths is generated using
 ```
 :math:`\frac{1}{2}`
 ```
-with attention being brought to the backticks.
+with attention being brought to the backticks. Note: the markdown intepreter being used here does not support inline maths, so if formula dense documentation is being implemented, it is advised to use restructured text instead.
 
 One can cross reference various parts of their markdown file using `anchors`, which provide clickable pieces of text which transport the reader to a particular part of the document.
 
