@@ -17,6 +17,6 @@ help:
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
 	@if test $@ != "clean"; then \
-		sphinx-apidoc -o ./source/usage/modules ../../validphys2/src/validphys/ ; \
+		sphinx-apidoc -o ./source/modules/validphys ../../validphys2/src/validphys/ ; \
 	fi
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
