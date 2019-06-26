@@ -20,7 +20,7 @@ To do that, you have to edit `mcfm-bridge-0.0.34-nnpdf/src/mcfm_interface.cxx` b
     - `strcpy(gridFiles[0],"_yZ.root");` this dictates the name of the output grid. In our example `LHCBZ13TEV_yZ.root`.
     - `nObsBins[0] = 17;` the number of bins.
     - `static const double _y[18]` the breakdown of binning.
-    - `obsBins[0] = { _y };` the type of observable.
+    - `obsBins[0] = { _y };` append the observable.
 
     **example:**
     ```
