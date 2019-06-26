@@ -10,7 +10,7 @@ NNPDF documentation
    :maxdepth: 2
 
    get-started/index
-
+   vp/index
 
 Indices and tables
 ==================
