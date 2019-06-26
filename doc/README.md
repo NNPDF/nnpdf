@@ -9,6 +9,10 @@ The NNPDF documentation is produced by the [sphinx](http://www.sphinx-doc.org/en
 navigate to the `sphinx/` directory and execute the command `make html`. This produces the documentation in the `build/index/`
 directory. The `index.html` can be viewed with any appropriate browser.
 
+Note: it may be required to install `recommonmark` to interpret markdown. To do so, simply run 
+```
+pip install recommonmark
+```
 ### Adding to the Documentation
 New documentation can be added in markdown (`.md` or `.txt` suffices) or restructured text (`.rst` suffix) formats. To add a new section to the documentation, create an appropriately named directory in the `sphinx/source/` directory. 
 Inside the new directory, add all relevant documentation in the markdown or restructured text formats. In addition to these files, create an `index.rst` file containing:
@@ -79,7 +83,41 @@ Lorem ipsum dolor sit amet <a name="label"</a> consectetur adipiscing elit, sed 
 
 we can then jump to `label` from an arbitrary point in the text by using `[text](#label)`
 
+As an example, clicking [this](#top) will take the reader to the top of the page.
+
+This was done by having the following lines of code:
+
+```
 For example, clicking [this](#top) will take the reader to the top of the page.
+```
+as well as
+```
+# NNPDF code and standards documentation <a name="top"></a>
+```
+at the top of this file. Similarly for restructured text:
+```
+    .. _my-reference-label:
+
+    Section to cross-reference
+    --------------------------
+
+    This is the text of the section.
+
+    It refers to the section itself, see :ref:`my-reference-label`.
+```
+
+### Adding indices for modules
+Sphinx has the capability of automatically documenting any python package. It produces these under the `index` and `module index` sections. The functions and modules are documented using their corresponding docstrings.
+
+To add a new module to document, add a new line in `sphinx/Makefile` under:
+```
+%: Makefile
+	@if test $@ != "clean"; then \
+		sphinx-apidoc -o ./source/modules/validphys ../../validphys2/src/validphys/ ; \
+        sphinx-apidoc -o ./source/modules/<MODULE-NAME> <PATH-TO-MODULE>  ;\
+	fi
+
+```
 ### Currently documented
 - [Validphys2 guide](https://data.nnpdf.science/validphys-docs/guide.html)
 - [Data format specifications](./data/data_layout.pdf)
