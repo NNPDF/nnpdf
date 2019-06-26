@@ -1,6 +1,6 @@
 ## Simple and stupid makefile
 
-NNPDFSRC=../../
+NNPDFSRC=../../../
 INCLUDES=`pkg-config nnpdf --cflags` `pkg-config gsl --cflags` `apfel-config --cxxflags` `pkg-config yaml-cpp --cflags`
 LIBS=`pkg-config nnpdf --libs` `pkg-config gsl --libs` `apfel-config --ldflags` `pkg-config yaml-cpp --libs`
 
