@@ -10,7 +10,11 @@ NNPDF documentation
    :maxdepth: 2
 
    get-started/index
+   theory/index
    vp/index
+   code/index
+   tutorials/index
+   QA/index
 
 Indices and tables
 ==================
