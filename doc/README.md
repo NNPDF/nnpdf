@@ -112,9 +112,9 @@ Sphinx has the capability of automatically documenting any python package. It pr
 To add a new module to document, add a new line in `sphinx/Makefile` under:
 ```
 %: Makefile
-	@if test $@ != "clean"; then \
-		sphinx-apidoc -o ./source/modules/validphys ../../validphys2/src/validphys/ ; \
-        sphinx-apidoc -o ./source/modules/<MODULE-NAME> <PATH-TO-MODULE>  ;\
+	@if test $@ != "clean"; then 
+            sphinx-apidoc -o ./source/modules/validphys ../../validphys2/src/validphys/ ; \
+            sphinx-apidoc -o ./source/modules/<MODULE-NAME> <PATH-TO-MODULE>  ;\
 	fi
 
 ```
