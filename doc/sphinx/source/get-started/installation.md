@@ -1,5 +1,3 @@
-# 
-
 ## Installation using conda
 
 ### Adding RSA key to Github

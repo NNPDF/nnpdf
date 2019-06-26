@@ -9,9 +9,7 @@ NNPDF documentation
 .. toctree::
    :maxdepth: 2
 
-   get-started/header.md
-   get-started/installation.md
-   get-started/installation-source.md
+   get-started/index
 
 
 Indices and tables
