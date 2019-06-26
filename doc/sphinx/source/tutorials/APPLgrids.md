@@ -65,16 +65,16 @@ and edit the later according to the information in the paper, e.g the kinematic 
 
 
 ## Generation
-**To change according to the conda installation via conda**
+**/!\ To change according to the conda installation via conda /!\ **
+
+You need to `make` again mcfm-bridge after editing `mcfm_interface.cxx`:
 ```
 cd external/mcfm-bridge-0.0.34-nnpdf
-./configure --prefix=/some/path/to/installation
-make -j
 make install
 
 cd external/MCFM-6.8
 make -j
-./runmcfm <InputCard.Dat>
-./runmcfm <InputCard.Dat>
+./runmcfm <InputCard.Dat> #once to create the grids
+./runmcfm <InputCard.Dat> #once to fill them
 ```
 ## Run MCFM-6.8
