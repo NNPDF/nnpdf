@@ -5,3 +5,4 @@ Tutorials
    :maxdepth: 1
 
    ./runafit.md
+   ./APPLgrids.md
