@@ -5,3 +5,4 @@ Code
    :maxdepth: 1
 
    ./dummy.md
+   ./buildmaster.md
