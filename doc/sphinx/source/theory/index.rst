@@ -11,3 +11,4 @@ Theory
 
    ./collinear
    ./dglap
+   ./theoryparamsinfo
