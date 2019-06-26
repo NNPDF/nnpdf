@@ -6,3 +6,4 @@ Theory
 
    ./collinear
    ./dglap
+   ./FastInterface
