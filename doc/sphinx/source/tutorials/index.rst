@@ -6,7 +6,8 @@ Tutorials
 
    ./runafit.md
    ./buildmaster.md
+   ./APPLgrids.md
 
 =======
-   ./APPLgrids.md
+
 
