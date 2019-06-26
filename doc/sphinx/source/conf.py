@@ -11,10 +11,11 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-import sys
-
-sys.path.insert(0, "~/nnpdfgit/nnpdf/validphys2/src/validphys")
+# #
+# import sys
+# 
+# sys.path.insert(0, "../../validphys2/src/validphys")
+# sys.path.insert(0, "../../n3fit/n3fit/")
 
 # -- Project information -----------------------------------------------------
 
