@@ -2,14 +2,18 @@
 include_directories(${PROJECT_SOURCE_DIR}/nnpdfcpp/src/common/inc)
 include_directories(${PROJECT_SOURCE_DIR}/nnpdfcpp/src/nnfit/inc)
 include_directories(${PROJECT_SOURCE_DIR}/n3fit/evolven3fit)
+include_directories(${PROJECT_SOURCE_DIR}/libnnpdf/src/)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/binaries)
 
+configure_file(
+  "${PROJECT_SOURCE_DIR}/libnnpdf/src/NNPDF/common.h.in"
+  "${PROJECT_SOURCE_DIR}/libnnpdf/src/NNPDF/common.h"
+  )
 
-# And the whole of libnnpdf
-# I am 100% sure there is a better way
-# but I care 0% about it atm
+# To whom it may concern
+#   I am 100% sure there is a better way of doing all of it 
+#   but I care 0% about it atm
 set(NNPDF_LDFLAGS "-L${PROJECT_BINARY_DIR}/libnnpdf/ -lnnpdf")
-
 
 # Add files to the make
 add_executable(evolven3fit ${PROJECT_SOURCE_DIR}/n3fit/evolven3fit/evolven3fit.cc
@@ -18,12 +22,12 @@ add_executable(evolven3fit ${PROJECT_SOURCE_DIR}/n3fit/evolven3fit/evolven3fit.c
         ${PROJECT_SOURCE_DIR}/nnpdfcpp/src/common/src/exportgrid.cc
         ${PROJECT_SOURCE_DIR}/nnpdfcpp/src/nnfit/src/evolgrid.cc )
 
-
 # Set all flags
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${NNPDF_LDFLAGS} ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${APFEL_LIBRARIES} ${YAML_LDFLAGS}")
+
 # I am pretty sure this should not be a thing
 string(REPLACE ";" " " CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
-
+target_link_libraries(evolven3fit nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
 
 install(TARGETS evolven3fit DESTINATION bin
         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ
