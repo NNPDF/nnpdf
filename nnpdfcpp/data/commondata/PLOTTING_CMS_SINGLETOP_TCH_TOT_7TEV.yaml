@@ -1,3 +1,4 @@
 dataset_label: "CMS single top $\\sigma_{t}+\\sigma_{\\bar{t}}$ 7 TeV"
 
 experiment: "CMS"
+process: TOP

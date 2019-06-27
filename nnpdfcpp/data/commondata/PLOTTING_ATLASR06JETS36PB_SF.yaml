@@ -11,3 +11,5 @@ line_by:
     - k1
 
 experiment: "ATLAS"
+
+process: JETS

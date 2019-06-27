@@ -22,3 +22,5 @@ extra_labels:
 
 
 experiment: "ATLAS"
+
+process: DY

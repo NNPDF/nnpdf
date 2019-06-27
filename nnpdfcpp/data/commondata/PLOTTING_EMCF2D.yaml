@@ -8,3 +8,5 @@ x_scale: log
 
 
 experiment: "EMC"
+
+process: DIS NC

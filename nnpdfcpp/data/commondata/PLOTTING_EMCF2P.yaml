@@ -39,3 +39,5 @@ extra_labels:
     ]
 
 experiment: "EMC"
+
+process: DIS NC

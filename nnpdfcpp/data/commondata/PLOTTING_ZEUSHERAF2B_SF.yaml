@@ -12,3 +12,4 @@ normalize:
     y_scale: linear
 
 experiment: "F2BOTTOM"
+process: DIS NC

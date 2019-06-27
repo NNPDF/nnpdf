@@ -6,3 +6,5 @@ y_label: '$d\sigma_{W}/dp_T$'
 
 kinematics_override: ewk_pt_sqrt_scale
 experiment: "ATLAS"
+
+process: DY
