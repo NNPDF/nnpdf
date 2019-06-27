@@ -22,5 +22,5 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 .PHONY: rsync
-rsync:
+rsync: html
 	rsync -avzr ./build/html/ nnpdf@vp.nnpdf.science:WEB/sphinx-docs/
