@@ -18,3 +18,5 @@ normalize:
         - k1
 
 experiment: "NMC"
+
+process: DIS NC

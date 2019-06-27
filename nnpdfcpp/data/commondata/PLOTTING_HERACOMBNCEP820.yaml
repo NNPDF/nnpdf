@@ -33,3 +33,5 @@ extra_labels:
   ]
 
 experiment: "HERACOMB"
+
+process: DIS NC

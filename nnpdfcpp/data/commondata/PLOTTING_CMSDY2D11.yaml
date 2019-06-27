@@ -5,3 +5,5 @@ figure_by:
   - k2 
 
 experiment: "CMS"
+
+process: DY

@@ -5,3 +5,5 @@ y_scale: log
 kinematics_override: dyp_sqrt_scale
 
 experiment: "ATLAS"
+
+process: DY

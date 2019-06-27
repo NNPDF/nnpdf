@@ -12,3 +12,5 @@ figure_by:
   - k1
 
 experiment: "NMC"
+
+process: DIS NC

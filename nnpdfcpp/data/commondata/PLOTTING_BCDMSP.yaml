@@ -18,3 +18,5 @@ normalize:
         - k3
 
 experiment: "BCDMS"
+
+process: DIS NC

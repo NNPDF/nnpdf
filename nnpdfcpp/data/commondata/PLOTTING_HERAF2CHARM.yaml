@@ -14,3 +14,5 @@ normalize:
         - k2
 
 experiment: "HERAF2CHARM"
+
+process: DIS NC

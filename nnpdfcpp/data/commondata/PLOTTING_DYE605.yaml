@@ -8,3 +8,5 @@ kinematics_override: dyp_sqrt_scale
 line_by:
     - k1
 experiment: "DYE605"
+
+process: DY
