@@ -20,3 +20,7 @@ help:
 		sphinx-apidoc -o ./source/modules/validphys ../../validphys2/src/validphys/ ; \
 	fi
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+.PHONY: rsync
+rsync:
+	rsync -avzr ./build/html/ nnpdf@vp.nnpdf.science:WEB/sphinx-docs/
