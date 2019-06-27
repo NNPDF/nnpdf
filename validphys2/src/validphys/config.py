@@ -30,7 +30,7 @@ from validphys.gridvalues import LUMI_CHANNELS
 from validphys.paramfits.config import ParamfitsConfig
 
 from validphys.theorycovariance.theorycovarianceutils import process_lookup
-from validphys.plotoptions import get_info
+from validphys.plotoptions import group_data_by_info
 
 log = logging.getLogger(__name__)
 
@@ -905,14 +905,15 @@ class CoreConfig(configparser.Config):
         """
         #TODO: consider this an implimentation detail
         from reportengine.namespaces import NSList
+        flat_ds = [ds for exp in fitcontext['experiments'] for ds in exp.datasets]
         try:
-            group_func = getattr(self, f"group_data_by_{groupby}")
+            exp_lst = group_data_by_info(flat_ds, groupby)
         except AttributeError:
             raise ConfigError(
-                f"data cannot be grouped by `{groupby}`"
-                " did you spell it correctly?")
+                f"data cannot be grouped by `{groupby}` since the key doesn't "
+                "exist in the PLOTTING file, did you spell it correctly?")
         fitcontext['experiments'] = NSList(
-            group_func(fitcontext['experiments']),
+            exp_lst,
             nskey='experiment')
         return fitcontext
 

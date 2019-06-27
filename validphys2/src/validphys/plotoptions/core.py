@@ -5,16 +5,17 @@ Created on Fri Mar 11 19:27:44 2016
 @author: Zahari Kassabov
 """
 import logging
+import numbers
+from collections import defaultdict
 
 import numpy as np
 import pandas as pd
-import numbers
 
 from reportengine.floatformatting import format_number
 from reportengine.configparser import Config, ConfigError, named_element_of
 from reportengine.utils import get_functions, ChainMap
 
-from validphys.core import CommonDataSpec, DataSetSpec, Cuts
+from validphys.core import CommonDataSpec, DataSetSpec, Cuts, ExperimentSpec
 from validphys.plotoptions.utils import apply_to_all_columns, get_subclasses
 from validphys.plotoptions import labelers, kintransforms, resulttransforms
 
@@ -329,3 +330,13 @@ def get_xq2map(kintable, info):
     (usually obtained by calling ``kitable``) using machinery specified in
     ``info``"""
     return apply_to_all_columns(kintable, info.kinematics_override.xq2map)
+
+def group_data_by_info(data_list, key):
+    res = defaultdict(list)
+    for ds in data_list:
+        metaexp = getattr(get_info(ds), key)
+        res[metaexp].append(ds)
+    exps = []
+    for exp in res:
+        exps.append(ExperimentSpec(exp, res[exp]))
+    return exps
