@@ -106,6 +106,8 @@ at the top of this file. Similarly for restructured text:
     It refers to the section itself, see :ref:`my-reference-label`.
 ```
 
+In addition, one can link to other pages within the documentation by `[text](<relative-path-to-md-or-rst-file>.<extension>)`.
+
 ### Adding indices for modules
 Sphinx has the capability of automatically documenting any python package. It produces these under the `index` and `module index` sections. The functions and modules are documented using their corresponding docstrings.
 
