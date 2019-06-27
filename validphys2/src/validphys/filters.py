@@ -6,10 +6,14 @@ Filters for NNPDF fits
 import logging
 import numbers
 import numpy as np
+from sympy.parsing.sympy_parser import parse_expr
+
+import validphys.loader
+import validphys.plotoptions.core as core
 
 from NNPDF import DataSet, RandomGenerator
 from reportengine.checks import make_argcheck, check, check_positive, make_check
-
+from reportengine.compat import yaml
 log = logging.getLogger(__name__)
 
 
@@ -148,110 +152,22 @@ def check_positivity(posdatasets):
         log.info(f'{pos.name} checked.')
 
 
-def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
+def pass_kincuts(dataset:str, filters:str, theoryid:int):
     """Applies cuts as in C++ for NNPDF3.1 combo cuts.
     This function replicas the C++ code but should be upgraded as
     discussed several times.
     """
-    pto = theoryid.get_description().get('PTO')
-    vfns = theoryid.get_description().get('FNS')
-    ic = theoryid.get_description().get('IC')
+    l = validphys.loader.Loader()
 
-    if dataset.GetSetName() == 'ATLAS1JET11':
-        # allow only first rapidity bin of ATLAS1JET11
-        return dataset.GetKinematics(idat, 0) < 0.3
+    ds = l.check_dataset(dataset, theoryid=theoryid, cuts="nocuts")
+    cd = l.check_commondata(dataset)
+    plot_info = core.get_info(cd)
 
-    if dataset.GetSetName() in ('LHCBWZMU8TEV', 'LHCBWZMU7TEV'):
-        return dataset.GetKinematics(idat, 0) >= 2.25 if pto == 2 else False
+    with open(filters, 'r') as f:
+        try:
+            rule_dict = yaml.safe_load(f)
+        except yaml.YAMLError as e:
+            print(e)
 
-    if dataset.GetSetName() in ('D0WMASY', 'D0WEASY'):
-        return dataset.GetData(idat) >= 0.03 if pto == 2 else False
-
-    if dataset.GetSetName() == 'ATLASZPT7TEV':
-        pt = np.sqrt(dataset.GetKinematics(idat, 1))
-        return 30 <= pt <= 500
-
-    if dataset.GetSetName() == 'ATLASZPT8TEVMDIST':
-        return dataset.GetKinematics(idat, 0) >= 30
-
-    if dataset.GetSetName() == 'ATLASZPT8TEVYDIST':
-        pt = np.sqrt(dataset.GetKinematics(idat, 1))
-        return 30 <= pt <= 150
-
-    if dataset.GetSetName() == 'CMSZDIFF12':
-        pt = np.sqrt(dataset.GetKinematics(idat, 1))
-        y = dataset.GetKinematics(idat, 0)
-        return 30 <= pt <= 170 and y <= 1.6
-
-    if dataset.GetSetName() == 'ATLASWPT31PB':
-        return dataset.GetKinematics(idat, 0) > 30
-
-    if dataset.GetSetName() == 'CMS_1JET_8TEV':
-        return dataset.GetKinematics(idat, 1) > 5476 #GeV2
-
-    if dataset.GetProc(idat)[0:3] in ('EWK', 'DYP'):
-        # building rapidity and pT or Mll
-        y = dataset.GetKinematics(idat, 0)
-        pTmv = np.sqrt(dataset.GetKinematics(idat, 1))
-
-        # generalized cuts
-        maxCMSDY2Dy = 2.2
-        maxCMSDY2Dminv = 200.0
-        minCMSDY2Dminv = 30.0
-        maxTau = 0.080
-        maxY = 0.663
-
-        if dataset.GetSetName() in ('CMSDY2D11', 'CMSDY2D12'):
-            return minCMSDY2Dminv <= pTmv <= maxCMSDY2Dminv and y <= maxCMSDY2Dy if pto in [0, 1] else pTmv <= maxCMSDY2Dminv and y <= maxCMSDY2Dy if pto == 2 else False
-
-        if dataset.GetSetName() in ('ATLASZHIGHMASS49FB', 'LHCBLOWMASS37PB'):
-            return pTmv <= maxCMSDY2Dminv
-
-        if dataset.GetSetName() == 'ATLASLOMASSDY11':
-            return pto not in [0, 1] and idat >= 6
-
-        if dataset.GetSetName() == 'ATLASLOMASSDY11EXT':
-            return pto not in [0, 1] and idat >= 2
-
-        # new cuts for the fixed target DY
-        if dataset.GetSetName() in ('DYE886P', 'DYE605'):
-            rapidity = dataset.GetKinematics(idat, 0)
-            invM2 = dataset.GetKinematics(idat, 1)
-            sqrts = dataset.GetKinematics(idat, 2)
-            tau = invM2 / sqrts**2
-            ymax = -0.5 * np.log(tau)
-
-            return tau <= maxTau and np.fabs(rapidity / ymax) <= maxY
-
-    # DIS cuts
-    if dataset.GetProc(idat)[0:3] == 'DIS':
-        # load kinematics
-        x = dataset.GetKinematics(idat, 0)
-        Q2 = dataset.GetKinematics(idat, 1)
-        W2 = Q2 * (1 - x) / x
-
-        # basic cuts
-        if W2 <= w2min or Q2 <= q2min:
-            return False
-
-        if dataset.GetSetName() in ('EMCF2P', 'EMCF2D'):
-            return x > 0.1
-
-        # additional F2C cuts in case of FONLL-A
-        if dataset.GetProc(idat) == 'DIS_NCP_CH' and vfns == 'FONLL-A':
-            Q2cut1_f2c = 4
-            Q2cut2_f2c = 10
-            xcut_f2c = 1e-3
-
-            if Q2 <= Q2cut1_f2c: # cut if Q2 <= 4
-                return False
-
-            if Q2 <= Q2cut2_f2c and x <= xcut_f2c: # cut if Q2 <= 10 and x <= 10 ^ -3
-                return False
-
-        # additional F2C cut in case of FONLL-C + IC
-        if dataset.GetProc(idat) == 'DIS_NCP_CH' and vfns == 'FONLL-C' and ic:
-            Q2cut1_f2c = 8
-            return Q2 > Q2cut1_f2c
-
+    rules = [parse_expr(i["filters"]) for i in rule_dict]
     return True
