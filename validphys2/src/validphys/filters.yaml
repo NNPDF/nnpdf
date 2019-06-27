@@ -1,0 +1,31 @@
+- process_type: DIS
+  #W2 is an "extra label" in the vp plotting notation
+  #w2min is loaded from input::datacuts.
+  reason: "Non perturbative effects at low W²"
+  filter: "W2 < w2min"
+
+- process_type: DIS
+  reason: "Non perturbative effects at low Q²"
+  filter: "Q2  < q2min"
+
+- dataset: EMCF2P
+  reason: "????"
+  filter: "x<=0.1"
+
+
+- dataset: EMCF2D
+  reason: "?????"
+  filter: "x<=0.1"
+
+- process_type: "DIS_NCP_CH"
+  VFNS: "FONLL-A"
+  reason: "?????"
+  #Q2cut1_f2c loaded from constants.yaml
+  filter: "Q2 < Q2cut1_f2c"
+
+
+- process_type: "DIS_NCP_CH"
+  reason: "?????"
+  VFNS: "FONLL-A"
+  filter: " Q2 <= Q2cut2_f2c && x <= xcut_f2c "
+
