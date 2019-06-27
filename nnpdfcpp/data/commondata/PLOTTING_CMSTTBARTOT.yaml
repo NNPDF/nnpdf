@@ -2,4 +2,4 @@ dataset_label: "CMS $\\sigma_{tt}^{\\rm tot}$"
 
 experiment: "CMS"
 
-process: TOP
+nnpdf31_process: TOP

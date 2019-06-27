@@ -40,4 +40,4 @@ extra_labels:
 
 experiment: "EMC"
 
-process: DIS NC
+nnpdf31_process: DIS NC

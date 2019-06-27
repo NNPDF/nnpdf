@@ -18,4 +18,4 @@ normalize:
 
 experiment: "NTVDMN"
 
-process: DIS CC
+nnpdf31_process: DIS CC

@@ -11,4 +11,4 @@ line_by:
     - k1
 experiment: "CDF"
 
-process: JETS
+nnpdf31_process: JETS

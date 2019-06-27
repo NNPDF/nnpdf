@@ -12,4 +12,4 @@ line_by:
 
 experiment: "SLAC"
 
-process: DIS NC
+nnpdf31_process: DIS NC

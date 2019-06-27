@@ -11,4 +11,4 @@ line_by:
     - k1
 experiment: "ATLAS"
 
-process: JETS
+nnpdf31_process: JETS

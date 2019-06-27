@@ -6,4 +6,4 @@ kinematics_override: dyp_sqrt_scale
 
 experiment: "ATLAS"
 
-process: DY
+nnpdf31_process: DY

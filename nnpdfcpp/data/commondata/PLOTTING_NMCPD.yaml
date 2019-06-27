@@ -13,4 +13,4 @@ figure_by:
 
 experiment: "NMC"
 
-process: DIS NC
+nnpdf31_process: DIS NC

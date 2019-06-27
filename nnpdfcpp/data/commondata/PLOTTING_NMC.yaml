@@ -2,7 +2,7 @@ dataset_label: "NMC $p$"
 x: k2
 y_label: '$10^{i}F_2(x,Q^2)$'
 result_transform: qbindis
-kinematics_override: nmc_process
+kinematics_override: nmc_nnpdf31_process
 data_reference: "Arneodo:1996kd"
 
 y_scale: linear
@@ -19,4 +19,4 @@ normalize:
 
 experiment: "NMC"
 
-process: DIS NC
+nnpdf31_process: DIS NC

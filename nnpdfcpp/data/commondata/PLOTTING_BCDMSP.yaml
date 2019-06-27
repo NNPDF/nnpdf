@@ -19,4 +19,4 @@ normalize:
 
 experiment: "BCDMS"
 
-process: DIS NC
+nnpdf31_process: DIS NC

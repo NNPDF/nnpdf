@@ -15,4 +15,4 @@ normalize:
 
 experiment: "HERAF2CHARM"
 
-process: DIS NC
+nnpdf31_process: DIS NC

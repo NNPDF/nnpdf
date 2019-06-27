@@ -10,4 +10,4 @@ figure_by:
   - k2
 experiment: "HERACOMB"
 
-process: DIS NC
+nnpdf31_process: DIS NC

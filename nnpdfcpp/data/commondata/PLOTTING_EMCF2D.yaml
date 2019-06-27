@@ -9,4 +9,4 @@ x_scale: log
 
 experiment: "EMC"
 
-process: DIS NC
+nnpdf31_process: DIS NC

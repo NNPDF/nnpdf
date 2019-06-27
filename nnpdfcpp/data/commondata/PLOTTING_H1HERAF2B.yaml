@@ -14,4 +14,4 @@ line_by:
 
 experiment: "F2BOTTOM"
 
-process: DIS NC
+nnpdf31_process: DIS NC

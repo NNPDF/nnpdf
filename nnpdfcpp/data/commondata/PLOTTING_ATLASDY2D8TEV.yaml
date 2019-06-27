@@ -2,4 +2,4 @@ dataset_label: "ATLAS DY 2D 8 TeV"
 
 experiment: "ATLAS"
 
-process: DY
+nnpdf31_process: DY

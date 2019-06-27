@@ -13,4 +13,4 @@ normalize:
 
 experiment: "F2BOTTOM"
 
-process: DIS NC
+nnpdf31_process: DIS NC

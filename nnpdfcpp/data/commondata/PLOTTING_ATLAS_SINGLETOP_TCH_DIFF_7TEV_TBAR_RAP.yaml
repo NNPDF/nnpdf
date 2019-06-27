@@ -5,4 +5,4 @@ figure_by:
   - k3
 
 experiment: "ATLAS"
-process: TOP
+nnpdf31_process: TOP

@@ -44,4 +44,4 @@ extra_labels:
 
 experiment: "HERACOMB"
 
-process: DIS NC
+nnpdf31_process: DIS NC
