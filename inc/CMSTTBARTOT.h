@@ -18,7 +18,7 @@
 class CMSTTBARTOTFilter: public CommonData
 {
 public: CMSTTBARTOTFilter():
-  CommonData("CMSTTBARTOT") { ReadData(); }
+  CommonData("CMSTTBARTOT_SF") { ReadData(); }
 
 private:
   void ReadData();

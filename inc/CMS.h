@@ -38,7 +38,7 @@ private:
 
 class CMSJETS11Filter: public CommonData
 { public: CMSJETS11Filter():
-  CommonData("CMSJETS11") { ReadData(); }
+  CommonData("CMSJETS11_SF") { ReadData(); }
 
 private:
   void ReadData();
@@ -46,7 +46,7 @@ private:
 
 class CMS1JET276TEVFilter: public CommonData
 { public: CMS1JET276TEVFilter():
-  CommonData("CMS1JET276TEV") { ReadData(); }
+  CommonData("CMS1JET276TEV_SF") { ReadData(); }
 
 private:
   void ReadData();

@@ -12,7 +12,7 @@
 
 class ATLASPHT12Filter: public CommonData
 { public: ATLASPHT12Filter():
-  CommonData("ATLASPHT12") { ReadData(); }
+  CommonData("ATLASPHT12_SF") { ReadData(); }
 
 private:
   void ReadData();

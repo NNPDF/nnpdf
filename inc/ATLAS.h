@@ -54,12 +54,12 @@ private:
 
 class ATLASR04JETS36PBFilter: public ATLAS2010JETSFilter
 { public: ATLASR04JETS36PBFilter():
-  ATLAS2010JETSFilter("ATLASR04JETS36PB") { }
+  ATLAS2010JETSFilter("ATLASR04JETS36PB_SF") { }
 };
 
 class ATLASR06JETS36PBFilter: public ATLAS2010JETSFilter
 { public: ATLASR06JETS36PBFilter():
-  ATLAS2010JETSFilter("ATLASR06JETS36PB") {  }
+  ATLAS2010JETSFilter("ATLASR06JETS36PB_SF") {  }
 };
 
 // In principle, this also has an analogous R=0.6 dataset,
@@ -67,7 +67,7 @@ class ATLASR06JETS36PBFilter: public ATLAS2010JETSFilter
 // As it is not used in practice, I removed the buildmaster for R=0.6.
 class ATLASR04JETS2P76TEVFilter: public CommonData
 { public: ATLASR04JETS2P76TEVFilter():
-  CommonData("ATLASR04JETS2P76TEV") { ReadData(); }
+  CommonData("ATLASR04JETS2P76TEV_SF") { ReadData(); }
 
 private:
   void ReadData();
