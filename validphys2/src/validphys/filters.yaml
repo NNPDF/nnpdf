@@ -27,5 +27,5 @@
 - process_type: "DIS_NCP_CH"
   reason: "?????"
   VFNS: "FONLL-A"
-  filter: " Q2 <= Q2cut2_f2c && x <= xcut_f2c "
+  filter: "(Q2 <= Q2cut2_f2c) & (x <= xcut_f2c)"
 
