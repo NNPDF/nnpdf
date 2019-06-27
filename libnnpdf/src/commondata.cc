@@ -53,6 +53,31 @@ namespace NNPDF
     { "SIA" ,       {"$z$", "$Q^2 (GeV^2)$", "$y$"}}
   };
 
+  const CommonData::kinMap CommonData::kinLabel = {
+    { "DIS",        {"x","Q2","y"}},
+    { "DYP",        {"y","M2","sqrts"}},
+    { "JET",        {"eta","p_T2","sqrts"}},
+    { "PHT",        {"eta_gamma","E_{T,gamma}2","sqrts"}},
+    { "INC",        {"0","mu2","sqrts"}},
+    { "EWK_RAP",    {"eta/y","M2","sqrts"}},
+    { "EWK_PT",     {"p_T","M2","sqrts"}},
+    { "EWK_PTRAP",  {"eta/y","p_T2","sqrts"}},
+    { "EWK_MLL",    {"M_ll","M_ll2","sqrts"}},
+    { "EWJ_RAP",    {"eta/y","M2","sqrts"}},
+    { "EWJ_PT",     {"p_T","M2","sqrt(s)"}},
+    { "EWJ_PTRAP",  {"eta/y","p_T2","sqrts"}},
+    { "EWJ_JRAP",   {"eta/y","M2","sqrts"}},
+    { "EWJ_JPT",    {"p_T","M2","sqrts"}},
+    { "EWJ_MLL",    {"M_ll","M_ll2","sqrts"}},
+    { "HQP_YQQ",    {"yQQ","mu2","sqrts"}},
+    { "HQP_MQQ",    {"MQQ","mu2","sqrts"}},
+    { "HQP_PTQQ",   {"p_TQQ","mu2","sqrts"}},
+    { "HQP_YQ",     {"yQ","mu2","sqrts"}},
+    { "HQP_PTQ",    {"p_TQ","mu2","sqrts"}},
+    { "HIG_RAP",    {"y","M_H2","sqrts"}},
+    { "SIA" ,       {"z", "Q2", "y"}}
+  };
+
 
   // Generate a dataInfo struct given a target filename
   dataInfo genInfoStruct(std::string const& targetfile, std::string const& sysfile)
