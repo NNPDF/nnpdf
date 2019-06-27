@@ -82,10 +82,12 @@ class PlotInfo:
         x_scale=None,
         y_scale=None,
         process_description='-',
+        nnpdf31_process=None,
         **kwargs,
     ):
         self.kinlabels = kinlabels
         self.experiment = experiment
+        self.nnpdf31_process = nnpdf31_process
         if x is None:
             x = 'idat'
         self.x = x
@@ -273,6 +275,10 @@ class PlotConfigParser(Config):
 
     def parse_experiment(self, exp:str):
         return exp
+
+    def parse_nnpdf31_process(self, proc:str):
+        return proc
+
 
 
 def kitable(commondata, info):
