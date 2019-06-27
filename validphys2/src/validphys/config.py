@@ -868,37 +868,6 @@ class CoreConfig(configparser.Config):
                 "correctly?")
         return grouping
 
-
-    def group_data_by_process(self, data_list):
-        """Used to produce data from the fit grouped into processes,
-        where each experiment is a group of datasets according to the experiment
-        key in the plotting info file.
-        """
-        res = defaultdict(list)
-        for exp in data_list:
-            for _, ds in zip(exp.dsinputs, exp.datasets):
-                metaexp = process_lookup(ds.name)
-                res[metaexp].append(ds)
-        exps = []
-        for exp in res:
-            exps.append(ExperimentSpec(exp, res[exp]))
-        return exps
-
-    def group_data_by_experiment(self, data_list):
-        """Used to produce data from the fit grouped into processes,
-        where each experiment is a group of datasets according to the experiment
-        key in the plotting info file.
-        """
-        res = defaultdict(list)
-        for exp in data_list:
-            for _, ds in zip(exp.dsinputs, exp.datasets):
-                metaexp = get_info(ds).experiment
-                res[metaexp].append(ds)
-        exps = []
-        for exp in res:
-            exps.append(ExperimentSpec(exp, res[exp]))
-        return exps
-
     def produce_fitcontext_groupby_custom(self, fitcontext, groupby='experiment'):
         """produces experiments similarly to `fit_data_groupby_process`
         but also sets fitcontext (pdf and theoryid)
