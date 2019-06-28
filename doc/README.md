@@ -9,7 +9,8 @@ The NNPDF documentation is produced by the [sphinx](http://www.sphinx-doc.org/en
 navigate to the `sphinx/` directory and execute the command `make html`. This produces the documentation in the `build/index/`
 directory. The `index.html` can be viewed with any appropriate browser.
 
-Note: it may be required to install `recommonmark` to interpret markdown. To do so, simply run 
+It is required to install `recommonmark` to interpret markdown. To add the dependencies to your environment, run
+
 ```
 conda install sphinx recommonmark
 ```
