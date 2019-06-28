@@ -11,7 +11,7 @@ directory. The `index.html` can be viewed with any appropriate browser.
 
 Note: it may be required to install `recommonmark` to interpret markdown. To do so, simply run 
 ```
-pip install recommonmark
+conda install sphinx recommonmark
 ```
 ### Adding to the Documentation
 New documentation can be added in markdown (`.md` or `.txt` suffices) or restructured text (`.rst` suffix) formats. To add a new section to the documentation, create an appropriately named directory in the `sphinx/source/` directory. 
