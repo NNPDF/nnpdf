@@ -281,6 +281,8 @@ def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
 
 class Rule:
     def __init__(self, initial_data, defaults:dict=None):
+        self.dataset = None
+        self.process_type = None
         for key in initial_data:
             setattr(self, key, initial_data[key])
 
@@ -295,7 +297,7 @@ class Rule:
     def __call__(self, dataset, idat):
         if (dataset.GetSetName() != self.dataset or
             dataset.GetProc(idat) != self.process_type):
-            return False #Return false if the rule doesn't apply to this datapoint
+            return False #Return True if the rule doesn't apply to this datapoint
 
         self.kinematics = [i for i in [dataset.GetKineamtics(0, j) for j in range(3)]]
         self.kinematics_dict = dict(zip(self.kinematics, [0, 1, 2]))
@@ -303,11 +305,15 @@ class Rule:
 
         
 
-def pass_kincuts_new(dataset:str, idat:int, theoryid:int, filters:str="cuts/filters.yaml", defaults:str="cuts/defaults.yaml"):
+def pass_kincuts_new(dataset, idat:int, theoryid:int, filters:str="cuts/filters.yaml", defaults:str="cuts/defaults.yaml"):
     """Applies cuts as in C++ for NNPDF3.1 combo cuts.
     This function replicas the C++ code but should be upgraded as
     discussed several times.
     """
+    from validphys.loader import Loader
+    l = Loader()
+    dataset = l.check_dataset(dataset, theoryid=theoryid, cuts="nocuts")
+    dataset = dataset.commondata.load()
     with open(filters, 'r') as rules_stream, open(defaults, 'r') as defaults_stream:
         try:
             rules = yaml.safe_load(rules_stream)
@@ -316,5 +322,7 @@ def pass_kincuts_new(dataset:str, idat:int, theoryid:int, filters:str="cuts/filt
             print(e)
 
     rules = [Rule(i, defaults=defaults) for i in rules]
-    return rules
-    return True
+    
+    cuts = [i(dataset, idat) for i in rules]
+
+    return not any(cuts)
