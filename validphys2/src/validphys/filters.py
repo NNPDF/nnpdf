@@ -6,9 +6,10 @@ Filters for NNPDF fits
 import logging
 import numbers
 import numpy as np
+import sympy as sp
 from sympy.parsing.sympy_parser import parse_expr
 
-from NNPDF import DataSet, RandomGenerator
+from NNPDF import DataSet, RandomGenerator, CommonData
 from reportengine.checks import make_argcheck, check, check_positive, make_check
 from reportengine.compat import yaml
 
@@ -278,28 +279,42 @@ def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
                 return False
     return True
 
-def pass_kincuts_new(dataset:str, idat:int, theoryid:int, filters:str):
+class Rule:
+    def __init__(self, initial_data, defaults:dict=None):
+        for key in initial_data:
+            setattr(self, key, initial_data[key])
+
+        if not hasattr(self, 'rule'):
+            raise AttributeError("No rule defined.")
+        else:
+            self.rule = parse_expr(self.rule)
+
+        self.defaults = defaults
+        self.variables= CommonData.kinLabel[self.process_type]
+
+    def __call__(self, dataset, idat):
+        if (dataset.GetSetName() != self.dataset or
+            dataset.GetProc(idat) != self.process_type):
+            return False #Return false if the rule doesn't apply to this datapoint
+
+        self.kinematics = [i for i in [dataset.GetKineamtics(0, j) for j in range(3)]]
+        self.kinematics_dict = dict(zip(self.kinematics, [0, 1, 2]))
+        return self.rule.subs({**self.kinematics_dict, **self.defaults})
+
+        
+
+def pass_kincuts_new(dataset:str, idat:int, theoryid:int, filters:str="cuts/filters.yaml", defaults:str="cuts/defaults.yaml"):
     """Applies cuts as in C++ for NNPDF3.1 combo cuts.
     This function replicas the C++ code but should be upgraded as
     discussed several times.
     """
-    import validphys.loader
-    import validphys.plotoptions.core as core
-    from NNPDF import CommonData
-
-    l = validphys.loader.Loader()
-
-    ds = l.check_dataset(dataset, theoryid=theoryid, cuts="nocuts")
-    cd = l.check_commondata(dataset)
-
-    kinematics = CommonData.kinLabel[cd.process_type]
-    print(kinematics)
-    with open(filters, 'r') as stream:
+    with open(filters, 'r') as rules_stream, open(defaults, 'r') as defaults_stream:
         try:
-            rule_dict = yaml.safe_load(stream)
+            rules = yaml.safe_load(rules_stream)
+            defaults = yaml.safe_load(defaults_stream)
         except yaml.YAMLError as e:
             print(e)
 
-    rules = [parse_expr(i["filter"]) for i in rule_dict]
+    rules = [Rule(i, defaults=defaults) for i in rules]
     return rules
     return True
