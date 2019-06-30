@@ -291,29 +291,36 @@ class Rule:
         else:
             self.rule = parse_expr(self.rule)
 
+        if self.dataset is None and self.process_type is None:
+            raise AttributeError("Please define either a process type or dataset.")
+
         self.defaults = defaults
-        self.variables= CommonData.kinLabel[self.process_type]
+        self.variables = CommonData.kinLabel[self.process_type]
 
     def __call__(self, dataset, idat):
+        # If this rule applies, we return True
+
+        # Check if filter applies for this datapoint
         if (dataset.GetSetName() != self.dataset or
             dataset.GetProc(idat) != self.process_type):
-            return False #Return True if the rule doesn't apply to this datapoint
+            return False #Return False if the rule doesn't apply to this datapoint
 
         self.kinematics = [i for i in [dataset.GetKineamtics(0, j) for j in range(3)]]
-        self.kinematics_dict = dict(zip(self.kinematics, [0, 1, 2]))
+        self.kinematics_dict = dict(zip(self.variables, self.kinematics))
+        # Will return True if inequality is satisfied
         return self.rule.subs({**self.kinematics_dict, **self.defaults})
 
         
 
 def pass_kincuts_new(dataset, idat:int, theoryid:int, filters:str="cuts/filters.yaml", defaults:str="cuts/defaults.yaml"):
-    """Applies cuts as in C++ for NNPDF3.1 combo cuts.
-    This function replicas the C++ code but should be upgraded as
-    discussed several times.
-    """
+    #TODO: Add docstring
+
     from validphys.loader import Loader
+
     l = Loader()
     dataset = l.check_dataset(dataset, theoryid=theoryid, cuts="nocuts")
     dataset = dataset.commondata.load()
+
     with open(filters, 'r') as rules_stream, open(defaults, 'r') as defaults_stream:
         try:
             rules = yaml.safe_load(rules_stream)
