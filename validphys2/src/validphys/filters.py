@@ -281,6 +281,7 @@ def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
 
 class Rule:
     def __init__(self, initial_data, defaults:dict=None):
+        #TODO: define process_type if only dataset is given
         self.dataset = None
         self.process_type = None
         for key in initial_data:
