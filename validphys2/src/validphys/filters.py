@@ -280,8 +280,7 @@ def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
     return True
 
 class Rule:
-    def __init__(self, initial_data, defaults:dict=None):
-        #TODO: define process_type if only dataset is given
+    def __init__(self, initial_data, defaults: dict=None):
         self.dataset = None
         self.process_type = None
         for key in initial_data:
@@ -294,6 +293,12 @@ class Rule:
 
         if self.dataset is None and self.process_type is None:
             raise AttributeError("Please define either a process type or dataset.")
+
+        if self.process_type is None:
+            from validphys.loader import Loader
+            l = Loader()
+            cd = l.check_commondata(self.dataset)
+            self.process_type = cd.process_type
 
         self.defaults = defaults
         self.variables = CommonData.kinLabel[self.process_type]
@@ -313,7 +318,7 @@ class Rule:
 
         
 
-def pass_kincuts_new(dataset, idat:int, theoryid:int, filters:str="cuts/filters.yaml", defaults:str="cuts/defaults.yaml"):
+def pass_kincuts_new(dataset, idat: int, theoryid: int, filters: str="cuts/filters.yaml", defaults: str="cuts/defaults.yaml"): 
     #TODO: Add docstring
 
     from validphys.loader import Loader
