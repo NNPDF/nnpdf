@@ -9,8 +9,8 @@ git:
 os:
   - osx
   - linux
-#This seems redundant for now since we download the SDK from server
-#osx_image: xcode6.4
+#Latest Mac image
+osx_image: xcode10.2
 
 env:
   global:
