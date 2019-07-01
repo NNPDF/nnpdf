@@ -194,6 +194,9 @@ def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
     if dataset.GetSetName() == 'ATLASWPT31PB':
         return dataset.GetKinematics(idat, 0) > 30
 
+    if dataset.GetSetName() == 'CMS_1JET_8TEV':
+        return dataset.GetKinematics(idat, 1) > 5476 #GeV2
+
     if dataset.GetProc(idat)[0:3] in ('EWK', 'DYP'):
         # building rapidity and pT or Mll
         y = dataset.GetKinematics(idat, 0)

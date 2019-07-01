@@ -1,0 +1,19 @@
+dataset_label: "CMS jets 8 TeV"
+x: k2
+
+y_label: '$10^{3*qbin} d\sigma/dp_Td|y|$ [pb/GeV]' 
+y_scale: log
+x_scale: log
+result_transform: qbinjets
+kinematics_override: jet_sqrt_scale
+
+normalize:
+    y_scale: linear
+    line_by: []
+    figure_by:
+        - k1
+
+line_by:
+    - k1
+
+experiment: "CMS"
