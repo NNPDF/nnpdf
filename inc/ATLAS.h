@@ -88,3 +88,11 @@ class ATLASWPT31PBFilter: public CommonData
 private:
   void ReadData();
 };
+
+class ATLAS_1JET_8TEV_R06Filter: public CommonData
+{ public: ATLAS_1JET_8TEV_R06Filter():
+  CommonData("ATLAS_1JET_8TEV_R06") { ReadData(); }
+
+private:
+  void ReadData();
+};
