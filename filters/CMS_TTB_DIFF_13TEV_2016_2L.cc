@@ -962,4 +962,3 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TTRAPFilter::ReadData()
   f2.close();
 
 }
->>>>>>> 9125b8963deeaacbb71b4329ea2a4421da298b6c
