@@ -331,8 +331,8 @@ def pass_kincuts_new(dataset, idat: int, theoryid: int, filters: str="cuts/filte
         try:
             rules = yaml.safe_load(rules_stream)
             defaults = yaml.safe_load(defaults_stream)
-        except yaml.YAMLError as e:
-            print(e)
+        except yaml.YAMLError as exception:
+            print(exception)
 
     rules = [Rule(i, defaults=defaults) for i in rules]
     
