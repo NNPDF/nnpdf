@@ -61,7 +61,13 @@ def process_lookup(name):
     """Produces a dictionary with keys corresponding to dataset names
     and values corresponding to process types. Process types are
     regrouped into the five categories 'Drell-Yan', 'Top', Jets',
-    'DIS NC' and 'DIS CC'."""
+    'DIS NC' and 'DIS CC'.
+
+
+    The implementation relies on hardcoding the process type for
+    each dataset internally. If a dataset is not registered,
+    'UNKNOWN' is returned.
+    """
     process_dictionary = {	"ATLASZPT8TEVMDIST": 			"DY",
 				"ATLASZPT8TEVYDIST":			"DY",
 				"CMSZDIFF12":				"DY",
@@ -112,5 +118,5 @@ def process_lookup(name):
 				"CHORUSNB":				"DIS CC",
 				"NTVNUDMN":				"DIS CC",
 				"NTVNBDMN":				"DIS CC"	}
-    proc = process_dictionary[name]
+    proc = process_dictionary.get(name, 'UNKNOWN')
     return proc
