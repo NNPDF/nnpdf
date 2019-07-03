@@ -1,4 +1,4 @@
-dataset_label: "ATLAS jets 8 TeV"
+dataset_label: "ATLAS jets 8 TeV, R=0.6"
 x: k2
 
 y_label: '$10^{3*qbin} d\sigma/dp_Td|y|$ [pb/GeV]' 
