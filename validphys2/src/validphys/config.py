@@ -852,6 +852,22 @@ class CoreConfig(configparser.Config):
                 fit)['experiments']
         return {'pdf': pdf, 'theoryid':thid, 'experiments': experiments}
 
+    def produce_all_commondata(self):
+        """produces all commondata using the loader function """
+        ds_names = self.loader.available_datasets
+        ds_inputs = [self.parse_dataset_input({'dataset': ds}) for ds in ds_names]
+        cd_out = [self.produce_commondata(dataset_input=ds_input) for ds_input in ds_inputs]
+        return cd_out
+
+    def parse_groupby(self, grouping: str):
+        """parses the groupby key and checks it is an allowed grouping"""
+        #TODO: think if better way to do this properly
+        if grouping not in ['experiment', 'nnpdf31_process']:
+            raise ConfigError(
+                f"Grouping not available: {grouping}, did you spell it "
+                "correctly?")
+        return grouping
+
 
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):

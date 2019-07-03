@@ -119,6 +119,18 @@ def all_kinlimits_table(all_kinlimits, use_kinoverride:bool=True):
 
     return table
 
+@table
+def all_commondata_grouping(all_commondata, groupby):
+    """Return a table with the grouping specified
+    by `groupby` key for each dataset for all available commondata.
+    """
+    records = []
+    for cd in all_commondata:
+        records.append({'dataset': str(cd), groupby: getattr(plotoptions.get_info(cd), groupby)})
+    df = pd.DataFrame.from_records(records, index='dataset')
+    # sort first by grouping alphabetically and then dataset name
+    return df.sort_values([groupby, 'dataset'])
+
 def total_fitted_points(all_kinlimits_table)->int:
     """Print the total number of fitted points in a given set of experiments"""
     tb = all_kinlimits_table
