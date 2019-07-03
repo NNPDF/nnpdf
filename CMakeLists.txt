@@ -41,6 +41,7 @@ option(ENABLE_TESTS "Enable unit test" OFF)
 option(ENABLE_ASAN "Enable ASAN" OFF)
 option(ENABLE_DEAD_STRIP "Enable use of flag `-dead_strip-dylibs`" OFF)
 option(VP_DEV "validphys in developer mode" ON)
+option(N3_DEV "n3fit in developer mode" ON)
 set(PROFILE_PREFIX "" CACHE STRING "Where you store the 'data' folder. Default empty uses CMAKE_INSTALL_PREFIX/share/NNPDF.")
 
 if (PROFILE_PREFIX)
@@ -143,9 +144,19 @@ add_subdirectory(libnnpdf)
 # nnpdfcpp configuration
 add_subdirectory(nnpdfcpp)
 
+# evolven3fit
+add_subdirectory(n3fit/evolven3fit)
+
 # install validphys2
 if(VP_DEV)
   install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install -e ${PROJECT_SOURCE_DIR}/validphys2)")
 else(VP_DEV)
   install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps --ignore-installed ${PROJECT_SOURCE_DIR}/validphys2)")
 endif(VP_DEV)
+
+# install n3fit
+if(N3_DEV)
+    install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install -e ${PROJECT_SOURCE_DIR}/n3fit)")
+else(N3_DEV)
+    install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps --ignore-installed ${PROJECT_SOURCE_DIR}/n3fit)")
+endif(N3_DEV)
