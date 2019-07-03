@@ -1,5 +1,5 @@
 package:
-    name: nnpdf
+    name: n3pdf
     version: "{{ GIT_DESCRIBE_TAG }}.{{ GIT_DESCRIBE_NUMBER }}+{{ GIT_DESCRIBE_HASH }}"
 
 source:
@@ -22,6 +22,10 @@ requirements:
         - python
         - numpy
     run:
+        - tensorflow
+        - keras
+        - hyperopt
+        - seaborn
         - lhapdf
         - sqlite
         - gsl
