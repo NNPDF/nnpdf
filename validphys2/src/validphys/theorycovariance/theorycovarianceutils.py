@@ -3,7 +3,11 @@ theorycovariance.py
 
 Low level utilities for theorycovariance module
 """
+import logging
+
 from reportengine.checks import make_argcheck, check
+log = logging.getLogger(__name__)
+
 
 def check_correct_theory_combination_internal(theoryids,
                                                fivetheories:(str, type(None)) = None):
@@ -118,5 +122,9 @@ def process_lookup(name):
 				"CHORUSNB":				"DIS CC",
 				"NTVNUDMN":				"DIS CC",
 				"NTVNBDMN":				"DIS CC"	}
-    proc = process_dictionary.get(name, 'UNKNOWN')
+
+    proc = process_dictionary.get(name)
+    if not proc:
+        log.warn(f'Unknown process type for dataset {name}')
+        return 'UNKNOWN'
     return proc
