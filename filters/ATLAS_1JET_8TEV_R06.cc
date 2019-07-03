@@ -6,7 +6,7 @@ ArXiv     : arXiv:1706.03192
 Published : JHEP09(2017)020
 Hepdata   : https://www.hepdata.net/record/ins1604271
 
-Inclusive jet production cross-sections are measured in proton–proton collisions at a centreof-mass
+Inclusive jet production cross-sections are measured in proton–proton collisions at a centre of-mass
 energy of √s = 8 TeV recorded by the ATLAS experiment at the Large Hadron Collider
 at CERN. The total integrated luminosity of the analysed data set amounts to 20.2 fb−1.
 Double-differential cross-sections are measured for jets defined by the anti-kt
@@ -88,7 +88,7 @@ void ATLAS_1JET_8TEV_R06Filter::ReadData()
     }
   
     string line;
-    double ptmin, ptmax, dum;    
+    double pt, dum;    
 
     for (int i = n; i < n + ndata[bin]; i++)
     {
@@ -96,22 +96,21 @@ void ATLAS_1JET_8TEV_R06Filter::ReadData()
       getline(rS,line);                     
       istringstream lstream(line);          
 
-      lstream >> dum;
-      lstream >> ptmin >> ptmax;
+      lstream >> pt;
+      lstream >> dum >> dum;
       
-      fKin1[i] = y[bin];                       // y, central value of the bin
-      fKin2[i] = pow((ptmin + ptmax)*0.5,2.);  // pt2, central value of the bin
-      fKin3[i] = 8000;                         // sqrt(s)
+      fKin1[i] = y[bin];           // y, central value of the bin
+      fKin2[i] = pow(pt,2.);       // pt2, central value of the bin
+      fKin3[i] = 8000;             // sqrt(s)
 
-      lstream >> fData[i];                     // cross section [fb/GeV]
+      lstream >> fData[i];         // cross section [fb/GeV]
 
       //Read uncertainties
       double sys1, sys2;
 
       //1) Stat
       lstream >> sys1 >> sys2;
-      fStat[i] = 0.;                    // the sys in hepdata already account for stat (right?)
-
+      fStat[i] = sys1;               
 
       //2) Systematics
       //note: sys1 and sys2 can be: both positive, both negative, negative and positive, positive and negative
@@ -169,11 +168,9 @@ void ATLAS_1JET_8TEV_R06Filter::ReadData()
       //5) Luminosity uncertainty
       lstream >> sys1 >> sys2;
       fSys[i][658].type = MULT;   
-      fSys[i][658].name = "CMSLUMI12";         // put the right name
+      fSys[i][658].name = "ATLASLUMI12";   
       fSys[i][658].add = sys1;
       fSys[i][658].mult  = fSys[i][658].add*100/fData[i];
-
-
     }
           
     rS.close();
