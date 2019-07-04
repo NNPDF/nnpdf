@@ -169,13 +169,13 @@ class ExponentBandPlotter(BandPDFPlotter, PreprocessingPlotter):
         xmin, xmax = flstate.ax.get_xlim()
         handle = flstate.ax.hlines(
             hlines['prev'][flstate.flindex, :], xmin=xmin, xmax=xmax, linestyle='-.')
-        label = f'prev ({self.fits[pdf_index].name})'
+        label = f'prev ({self.fits[pdf_index].label})'
         flstate.handles.append(handle)
         flstate.labels.append(label)
 
         handle = flstate.ax.hlines(
             hlines['next'][flstate.flindex, :], xmin=xmin, xmax=xmax, linestyle=':')
-        label = f'next ({self.fits[pdf_index].name})'
+        label = f'next ({self.fits[pdf_index].label})'
         flstate.handles.append(handle)
         flstate.labels.append(label)
         # need to return xgrid shaped object but with hlines taken into account to get plots nice
