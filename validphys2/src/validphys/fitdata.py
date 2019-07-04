@@ -309,7 +309,7 @@ def fit_theory_covmat_summary(fit, fitthcovmat):
     report = bool(fitthcovmat)
     df = pd.DataFrame(
         [sampling, fitting, report],
-        columns=[fit.name],
+        columns=[fit.label],
         index=['sampling', 'fitting', 'validphys statistical estimators'])
     return df
 

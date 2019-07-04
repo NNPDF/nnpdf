@@ -114,7 +114,7 @@ def plot_delta_chi2(delta_chi2_bootstrap, fits, use_fitcommondata):
     on delta chi2 see `delta_chi2_bootstrap`
     """
     delta_chi2 = delta_chi2_bootstrap.T
-    labels= [fit.name for fit in fits]
+    labels= [fit.label for fit in fits]
     fig, ax = plt.subplots()
     for i, label in enumerate(labels):
         ax.hist(delta_chi2[:, i], alpha=0.3, label=label, zorder=100)
