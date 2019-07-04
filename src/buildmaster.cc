@@ -321,7 +321,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSTOPDIFF8TEVTTPTNORMFilter());
   target.push_back(new CMSTOPDIFF8TEVTTMNORMFilter());
 
-    // ************************ LHeC + FCC pseudo-data ***************
+  // ************************ LHeC + FCC pseudo-data ***************
   target.push_back(new LHeCFilter());
   target.push_back(new FCCFilter());
   target.push_back(new LHeCCCFilter());
