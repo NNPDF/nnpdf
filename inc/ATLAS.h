@@ -89,6 +89,10 @@ private:
   void ReadData();
 };
 
+class ATLAS_1JET_8TEV_R06Filter: public CommonData
+{ public: ATLAS_1JET_8TEV_R06Filter():
+  CommonData("ATLAS_1JET_8TEV_R06") { ReadData(); }
+
 class ATLAS_1JET_8TEV_R04Filter: public CommonData
 { public: ATLAS_1JET_8TEV_R04Filter():
   CommonData("ATLAS_1JET_8TEV_R04") { ReadData(); }
