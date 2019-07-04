@@ -237,7 +237,7 @@ def chi2filtered_index(fit, replica_data, nsigma_cut:float):
         newchis = chis[indexes]
 
     log.info("%s: Mean ̉χ² was %.2f, and the threshold is %.2f. Discarded %d "
-    "replicas out of %d. Now the mean is %.2f.", fit.name, oldmean, limit,
+    "replicas out of %d. Now the mean is %.2f.", fit.label, oldmean, limit,
     len(chis) - len(indexes), len(chis), np.mean(newchis))
 
     label = '$\chi^2$ Filter: %.2f'%nsigma_cut

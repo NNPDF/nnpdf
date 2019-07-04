@@ -509,6 +509,7 @@ class FitSpec(TupleComp):
     def __init__(self, name, path):
         self.name = name
         self.path = path
+        self.label = name
         super().__init__(name, path)
 
     def __iter__(self):
@@ -518,17 +519,17 @@ class FitSpec(TupleComp):
     @functools.lru_cache()
     def as_input(self):
         p = self.path/'filter.yml'
-        log.debug('Reading input from fit configuration %s' % (p,))
+        log.debug('Reading input from fit configuration %s' , p)
         try:
             with p.open() as f:
                 d = yaml.safe_load(f)
         except (yaml.YAMLError, FileNotFoundError) as e:
             raise AsInputError(str(e)) from e
-        d['pdf'] = self.name
+        d['pdf'] = {'id': self.name, 'label': self.label}
         return d
 
     def __str__(self):
-        return self.name
+        return self.label
 
     __slots__ = ('label','name', 'path')
 
