@@ -132,6 +132,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASPHT15Filter());
   target.push_back(new ATLASPHT12Filter());
   target.push_back(new ATLAS_1JET_8TEV_R06Filter());
+  target.push_back(new ATLAS_1JET_8TEV_R04Filter());
+  
   // ************************* BCDMS ******************************
 
   target.push_back(new BCDMSPFilter());
