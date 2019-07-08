@@ -329,6 +329,8 @@ class ModelTrainer:
         initializer = params["initializer"]
         layer_type = params["layer_type"]
         dropout = params["dropout"]
+        regularizer = params.get('regularizer', None)
+        regularizer_args = params.get('regularizer_args', {})
 
         # Generate the NN layers
         layer_pdf, layers = model_gen.pdfNN_layer_generator(
@@ -339,6 +341,8 @@ class ModelTrainer:
             seed=self.NNseed,
             initializer_name=initializer,
             dropout=dropout,
+            regularizer=regularizer,
+            regularizer_args=regularizer_args
         )
 
         integrator_input = None
