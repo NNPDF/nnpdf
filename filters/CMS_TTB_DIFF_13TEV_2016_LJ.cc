@@ -33,6 +33,14 @@ https://www.hepdata.net/record/ins1663958
 3N) TABS 219-220 HepData; Fig 16, TAB 6 1803.08856
 4N) TABS 223-224 HepData; Fig 16, TAB 4 1803.08856
 
+NOTES:
+The Normalised distributions are normalised to themselves and so the final bin
+is a linear combination of the other bins. For the normalised distributions here
+the meta file was changed to set NData: N_bins - 1 and then the loop which reads
+the covmat was edited to loop over i for i<(N_bins - 1) and for j<N_bins and then
+only read the line into the covmat if j<(N_bins - 1). That way the rawdata lines
+which correspond to j==N_bins are skipped.
+
 */
 
 #include "CMS_TTB_DIFF_13TEV_2016_LJ.h"
@@ -688,19 +696,24 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TRAPNORMFilter::ReadData()
     }
 
   //Create covmat of correct dimensions
+  // NOTE: fNData is set to N_bins - 1 so we need to loop with j<fNData+1 but
+  // only fill in covmat if j<fNData so last bins are skipped.
   double** covmat = new double*[fNData];
   for(int i=0; i<fNData; i++)
     {
       covmat[i] = new double[fNData];
 
-      for(int j=0; j<fNData; j++)
+      for(int j=0; j<(fNData+1); j++)
 	{
 	  double row, col;
 	  char comma;
 
 	  getline(f2,line);
-	  istringstream lstream(line);
-	  lstream >> row >> comma >> col >> comma  >> covmat[i][j];
+    if(j<fNData)
+     {
+       istringstream lstream(line);
+	     lstream >> row >> comma >> col >> comma  >> covmat[i][j];
+     }
 	}
     }
 
@@ -722,7 +735,7 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TRAPNORMFilter::ReadData()
 	  fSys[i][j].add  = syscor[i][j];
 	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
 	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "UNCORR";
+	  fSys[i][j].name = "CORR";
 	}
     }
 
@@ -801,19 +814,24 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TTMNORMFilter::ReadData()
     }
 
   //Create covmat of correct dimensions
+  // NOTE: fNData is set to N_bins - 1 so we need to loop with j<fNData+1 but
+  // only fill in covmat if j<fNData so last bins are skipped.
   double** covmat = new double*[fNData];
   for(int i=0; i<fNData; i++)
     {
       covmat[i] = new double[fNData];
 
-      for(int j=0; j<fNData; j++)
+      for(int j=0; j<(fNData+1); j++)
 	{
 	  double row, col;
 	  char comma;
 
 	  getline(f2,line);
-	  istringstream lstream(line);
-	  lstream >> row >> comma >> col >> comma  >> covmat[i][j];
+    if(j<fNData)
+     {
+       istringstream lstream(line);
+	     lstream >> row >> comma >> col >> comma  >> covmat[i][j];
+     }
 	}
     }
 
@@ -835,7 +853,7 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TTMNORMFilter::ReadData()
 	  fSys[i][j].add  = syscor[i][j];
 	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
 	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "UNCORR";
+	  fSys[i][j].name = "CORR";
 	}
     }
 
@@ -914,19 +932,24 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPNORMFilter::ReadData()
     }
 
   //Create covmat of correct dimensions
+  // NOTE: fNData is set to N_bins - 1 so we need to loop with j<fNData+1 but
+  // only fill in covmat if j<fNData so last bins are skipped.
   double** covmat = new double*[fNData];
   for(int i=0; i<fNData; i++)
     {
       covmat[i] = new double[fNData];
 
-      for(int j=0; j<fNData; j++)
+      for(int j=0; j<(fNData+1); j++)
 	{
 	  double row, col;
 	  char comma;
 
 	  getline(f2,line);
-	  istringstream lstream(line);
-	  lstream >> row >> comma >> col >> comma  >> covmat[i][j];
+    if(j<fNData)
+     {
+       istringstream lstream(line);
+	     lstream >> row >> comma >> col >> comma  >> covmat[i][j];
+     }
 	}
     }
 
@@ -948,7 +971,7 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPNORMFilter::ReadData()
 	  fSys[i][j].add  = syscor[i][j];
 	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
 	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "UNCORR";
+	  fSys[i][j].name = "CORR";
 	}
     }
 
