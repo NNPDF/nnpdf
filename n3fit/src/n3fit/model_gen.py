@@ -10,12 +10,13 @@
 from n3fit.layers import DIS
 from n3fit.layers import DY
 from n3fit.layers import Mask
+from n3fit.layers import ObsRotation
 from n3fit.layers import Preprocessing, Rotation
 
 from n3fit.backends import operations
 from n3fit.backends import losses
 from n3fit.backends import MetaLayer
-from n3fit.backends import base_layer_selector, concatenate, Lambda
+from n3fit.backends import base_layer_selector, regularizer_selector, concatenate, Lambda
 
 
 def observable_generator(
@@ -113,21 +114,35 @@ def observable_generator(
     out_tr_mask = Mask(bool_mask=spec_dict["trmask"], name=spec_name)
     out_vl_mask = Mask(bool_mask=spec_dict["vlmask"], name=spec_name + "_val")
 
-    def out_tr(pdf_layer):
-        return out_tr_mask(final_obs(pdf_layer))
+    if spec_dict.get('data_transformation') is not None:
+        obsrot = ObsRotation(spec_dict.get('data_transformation'))
+        def out_tr(pdf_layer):
+            return out_tr_mask(obsrot(final_obs(pdf_layer)))
 
-    def out_vl(pdf_layer):
-        return out_vl_mask(final_obs(pdf_layer))
+        def out_vl(pdf_layer):
+            return out_vl_mask(obsrot(final_obs(pdf_layer)))
+
+        invcovmat_tr = spec_dict["invcovmat"]
+        loss_tr = losses.l_diaginvcovmat(invcovmat_tr)
+
+        invcovmat_vl = spec_dict["invcovmat_vl"]
+        loss_vl = losses.l_diaginvcovmat(invcovmat_vl)
+    else:
+        def out_tr(pdf_layer):
+            return out_tr_mask(final_obs(pdf_layer))
+
+        def out_vl(pdf_layer):
+            return out_vl_mask(final_obs(pdf_layer))
+
+        invcovmat_tr = spec_dict["invcovmat"]
+        loss_tr = losses.l_invcovmat(invcovmat_tr)
+
+        invcovmat_vl = spec_dict["invcovmat_vl"]
+        loss_vl = losses.l_invcovmat(invcovmat_vl)
 
     # Generate the loss function as usual
     invcovmat = spec_dict["invcovmat_true"]
     loss = losses.l_invcovmat(invcovmat)
-
-    invcovmat_tr = spec_dict["invcovmat"]
-    loss_tr = losses.l_invcovmat(invcovmat_tr)
-
-    invcovmat_vl = spec_dict["invcovmat_vl"]
-    loss_vl = losses.l_invcovmat(invcovmat_vl)
 
     layer_info = {
         "inputs": model_inputs,

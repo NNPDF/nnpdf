@@ -32,3 +32,16 @@ def l_positivity(alpha=1e-7):
         return K.sum(loss)
 
     return true_loss
+
+def l_diaginvcovmat(diaginvcovmat_np):
+    """
+    Returns a loss function such that:
+    L = sum_{i} (yt - yp)_{i} invcovmat_{ii} (yt - yp)_{i}
+    diaginvcovmat_np should be 1d
+    """
+    invcovmat = K.constant(diaginvcovmat_np)
+
+    def true_loss(y_true, y_pred):
+        tmp = y_true - y_pred
+        return K.tf.tensordot(invcovmat, K.transpose(tmp*tmp), axes=1)
+    return true_loss

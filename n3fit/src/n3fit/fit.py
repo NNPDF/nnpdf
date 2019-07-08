@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
-def fit(
+def performfit(
     fitting,
     experiments,
     t0set,
@@ -131,10 +131,17 @@ def fit(
     # (experimental data, covariance matrix, replicas, etc, tr/val split)
     ##############################################################################
     all_exp_infos = [[] for _ in replica]
+    if not fitting.get('genrep'):
+        log.info("Not generating MC noise")
+    if fitting.get('diagonal_basis'):
+        log.info("working in diagonal basis")
+
     # First loop over the experiments
     for exp in experiments:
         log.info("Loading experiment: {0}".format(exp))
-        all_exp_dicts = reader.common_data_reader(exp, t0pdfset, replica_seeds=mcseeds, trval_seeds=trvalseeds)
+        all_exp_dicts = reader.common_data_reader(
+            exp, t0pdfset, replica_seeds=mcseeds, trval_seeds=trvalseeds,
+            rotate_diagonal=fitting.get('diagonal_basis'), generate_mc_noise=fitting.get('genrep'))
         for i, exp_dict in enumerate(all_exp_dicts):
             all_exp_infos[i].append(exp_dict)
 

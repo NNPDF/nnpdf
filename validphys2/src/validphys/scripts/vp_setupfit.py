@@ -104,6 +104,15 @@ class SetupFitEnvironment(Environment):
         self.filter_path.mkdir(exist_ok=True)
         self.table_folder = self.output_path / TABLE_OUTPUT_FOLDER
         self.table_folder.mkdir(exist_ok=True)
+        try:
+            (self.results_path/self.output_path.name).symlink_to(
+                self.output_path, target_is_directory=True)
+        except FileExistsError as e:
+            raise EnvironmentError_(
+                "Symlink to results folder couldn't be made because "
+                f"{self.results_path/self.output_path.name} already exists. "
+                "Either delete that folder or rename the filter file so that "
+                "the fit has a uniqe name")
 
     def save_md5(self):
         """Generate md5 key from file"""

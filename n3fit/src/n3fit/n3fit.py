@@ -21,7 +21,7 @@ from reportengine.compat import yaml
 N3FIT_FIXED_CONFIG = dict(
     use_cuts = 'internal',
     use_t0 = True,
-    actions_ = ['datacuts::theory fit']
+    actions_ = ['datacuts::theory performfit']
 )
 
 N3FIT_PROVIDERS = ["n3fit.fit"]
@@ -33,7 +33,6 @@ RUNCARD_COPY_FILENAME = "filter.yml"
 
 class N3FitError(Exception):
     """Exception raised when n3fit cannot succeed and knows why"""
-
     pass
 
 
@@ -50,12 +49,12 @@ class N3FitEnvironment(Environment):
 
         # check if results folder exists
         self.output_path = pathlib.Path(self.output_path).absolute()
-        if not self.output_path.exists():
+        if not (self.output_path/"nnfit").exists():
             if not re.fullmatch(r"[\w.\-]+", self.output_path.name):
                 raise N3FitError("Invalid output folder name. Must be alphanumeric.")
             try:
-                self.output_path.mkdir()
-                pathlib.Path(self.output_path / "nnfit").mkdir()
+                self.output_path.mkdir(exist_ok=True)
+                (self.output_path /"nnfit").mkdir()
             except OSError as e:
                 raise EnvironmentError_(e) from e
 
@@ -104,6 +103,13 @@ class N3FitConfig(Config):
             raise ConfigError(f"Failed to parse yaml file: {e}")
         if not isinstance(file_content, dict):
             raise ConfigError(f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'.")
+        # TODO: Perhaps we should just update runcard to take flag use_fitcommondata??
+        # Runcard could really do with updating but would need more work with vp-setupfit
+        if file_content['closuretest'].get('fakedata'):
+            log.warning("using filtered closure data")
+            file_content.update(dict(
+                use_fitcommondata = True,
+                fit = pathlib.Path(o.name).stem))
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 
