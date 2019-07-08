@@ -48,7 +48,7 @@ which correspond to j==N_bins are skipped.
 //U - UNNORMALISED distributions
 
 //1U) Distribution differential in top quark transverse momentum
-void  CMS_TTB_DIFF_13TEV_2016_LJ_TPTFilter::ReadData()
+void CMS_TTB_DIFF_13TEV_2016_LJ_TPTFilter::ReadData()
 {
   //Opening files
   fstream f1, f2;
@@ -56,114 +56,113 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TPTFilter::ReadData()
   //Data values
   stringstream datafile("");
   datafile << dataPath()
-	   << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TPT/HEPData-ins1663958-v2-Table_182.csv";
+           << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TPT/HEPData-ins1663958-v2-Table_182.csv";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail())
-    {
-      cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-    }
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
 
   //Covariance matrix
   stringstream covfile("");
   covfile << dataPath()
-	  << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TPT/HEPData-ins1663958-v2-Table_183.csv";
+          << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TPT/HEPData-ins1663958-v2-Table_183.csv";
   f2.open(covfile.str().c_str(), ios::in);
 
   if (f2.fail())
-    {
-      cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-    }
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
 
   //Read central values
   string line;
-  for(int i=0; i<11; i++)
-    {
-      getline(f1,line);
-    }
+  for (int i = 0; i < 11; i++)
+  {
+    getline(f1, line);
+  }
 
-  for(int i=0; i<fNData; i++)
-    {
-      double pt_top, dud;
-      char comma;
+  for (int i = 0; i < fNData; i++)
+  {
+    double pt_top, dud;
+    char comma;
 
-      getline(f1,line);
-      istringstream lstream(line);
-      lstream >> pt_top >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> fData[i] >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> dud;
+    getline(f1, line);
+    istringstream lstream(line);
+    lstream >> pt_top >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> fData[i] >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> dud;
 
-      fKin1[i] = pt_top;  //pTt
-      fKin2[i] = Mt*Mt;
-      fKin3[i] = 13000;  //sqrt(s) [GeV]
-      fStat[i] = 0.;
-    }
+    fKin1[i] = pt_top; //pTt
+    fKin2[i] = Mt * Mt;
+    fKin3[i] = 13000; //sqrt(s) [GeV]
+    fStat[i] = 0.;
+  }
 
   //Read covariance matrix
-  for(int i=0; i<11; i++)
-    {
-      getline(f2,line);
-    }
+  for (int i = 0; i < 11; i++)
+  {
+    getline(f2, line);
+  }
 
   //Create covmat of correct dimensions
-  double** covmat = new double*[fNData];
-  for(int i=0; i<fNData; i++)
+  double **covmat = new double *[fNData];
+  for (int i = 0; i < fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+
+    for (int j = 0; j < fNData; j++)
     {
-      covmat[i] = new double[fNData];
+      double row, col;
+      char comma;
 
-      for(int j=0; j<fNData; j++)
-	{
-	  double row, col;
-	  char comma;
-
-	  getline(f2,line);
-	  istringstream lstream(line);
-	  lstream >> row >> comma >> col >> comma  >> covmat[i][j];
-	}
+      getline(f2, line);
+      istringstream lstream(line);
+      lstream >> row >> comma >> col >> comma >> covmat[i][j];
     }
+  }
 
   //Generate artificial systematics
-  double** syscor = new double*[fNData];
-  for(int i = 0; i < fNData; i++)
+  double **syscor = new double *[fNData];
+  for (int i = 0; i < fNData; i++)
     syscor[i] = new double[fNData];
 
-  if(!genArtSys(fNData,covmat,syscor))
-    {
-      cerr << " in " << fSetName << endl;
-      exit(-1);
-    }
+  if (!genArtSys(fNData, covmat, syscor))
+  {
+    cerr << " in " << fSetName << endl;
+    exit(-1);
+  }
 
-  for(int i=0; i<fNData; i++)
+  for (int i = 0; i < fNData; i++)
+  {
+    for (int j = 0; j < fNData; j++)
     {
-      for(int j=0; j<fNData; j++)
-	{
-	  fSys[i][j].add  = syscor[i][j];
-	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
-	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "CORR";
-	}
+      fSys[i][j].add = syscor[i][j];
+      fSys[i][j].mult = fSys[i][j].add * 1e2 / fData[i];
+      fSys[i][j].type = ADD;
+      fSys[i][j].name = "CORR";
     }
+  }
 
-  delete [] covmat;
-  delete [] syscor;
+  delete[] covmat;
+  delete[] syscor;
 
   f1.close();
   f2.close();
-
 }
 
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 
 //2U) Distribution differential in top quark rapidity
-void  CMS_TTB_DIFF_13TEV_2016_LJ_TRAPFilter::ReadData()
+void CMS_TTB_DIFF_13TEV_2016_LJ_TRAPFilter::ReadData()
 {
   //Opening files
   fstream f1, f2;
@@ -171,107 +170,106 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TRAPFilter::ReadData()
   //Data values
   stringstream datafile("");
   datafile << dataPath()
-	   << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TRAP/HEPData-ins1663958-v2-Table_184.csv";
+           << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TRAP/HEPData-ins1663958-v2-Table_184.csv";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail())
-    {
-      cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-    }
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
 
   //Covariance matrix
   stringstream covfile("");
   covfile << dataPath()
-	  << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TRAP/HEPData-ins1663958-v2-Table_185.csv";
+          << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TRAP/HEPData-ins1663958-v2-Table_185.csv";
   f2.open(covfile.str().c_str(), ios::in);
 
   if (f2.fail())
-    {
-      cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-    }
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
 
   //Read central values
   string line;
-  for(int i=0; i<11; i++)
-    {
-      getline(f1,line);
-    }
+  for (int i = 0; i < 11; i++)
+  {
+    getline(f1, line);
+  }
 
-  for(int i=0; i<fNData; i++)
-    {
-      double y_top, dud;
-      char comma;
+  for (int i = 0; i < fNData; i++)
+  {
+    double y_top, dud;
+    char comma;
 
-      getline(f1,line);
-      istringstream lstream(line);
-      lstream >> y_top >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> fData[i] >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> dud;
+    getline(f1, line);
+    istringstream lstream(line);
+    lstream >> y_top >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> fData[i] >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> dud;
 
-      fKin1[i] = y_top;  //top rapidity
-      fKin2[i] = Mt*Mt;
-      fKin3[i] = 13000;  //sqrt(s) [GeV]
-      fStat[i] = 0.;
-    }
+    fKin1[i] = y_top; //top rapidity
+    fKin2[i] = Mt * Mt;
+    fKin3[i] = 13000; //sqrt(s) [GeV]
+    fStat[i] = 0.;
+  }
 
   //Read covariance matrix
-  for(int i=0; i<11; i++)
-    {
-      getline(f2,line);
-    }
+  for (int i = 0; i < 11; i++)
+  {
+    getline(f2, line);
+  }
 
   //Create covmat of correct dimensions
-  double** covmat = new double*[fNData];
-  for(int i=0; i<fNData; i++)
+  double **covmat = new double *[fNData];
+  for (int i = 0; i < fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+
+    for (int j = 0; j < fNData; j++)
     {
-      covmat[i] = new double[fNData];
+      double row, col;
+      char comma;
 
-      for(int j=0; j<fNData; j++)
-	{
-	  double row, col;
-	  char comma;
-
-	  getline(f2,line);
-	  istringstream lstream(line);
-	  lstream >> row >> comma >> col >> comma  >> covmat[i][j];
-	}
+      getline(f2, line);
+      istringstream lstream(line);
+      lstream >> row >> comma >> col >> comma >> covmat[i][j];
     }
+  }
 
   //Generate artificial systematics
-  double** syscor = new double*[fNData];
-  for(int i = 0; i < fNData; i++)
+  double **syscor = new double *[fNData];
+  for (int i = 0; i < fNData; i++)
     syscor[i] = new double[fNData];
 
-  if(!genArtSys(fNData,covmat,syscor))
-    {
-      cerr << " in " << fSetName << endl;
-      exit(-1);
-    }
+  if (!genArtSys(fNData, covmat, syscor))
+  {
+    cerr << " in " << fSetName << endl;
+    exit(-1);
+  }
 
-  for(int i=0; i<fNData; i++)
+  for (int i = 0; i < fNData; i++)
+  {
+    for (int j = 0; j < fNData; j++)
     {
-      for(int j=0; j<fNData; j++)
-	{
-	  fSys[i][j].add  = syscor[i][j];
-	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
-	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "CORR";
-	}
+      fSys[i][j].add = syscor[i][j];
+      fSys[i][j].mult = fSys[i][j].add * 1e2 / fData[i];
+      fSys[i][j].type = ADD;
+      fSys[i][j].name = "CORR";
     }
+  }
 
-  delete [] covmat;
-  delete [] syscor;
+  delete[] covmat;
+  delete[] syscor;
 
   f1.close();
   f2.close();
-
 }
 
 //////////////////////////////////////////////////////////////////
@@ -279,7 +277,7 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TRAPFilter::ReadData()
 
 //3U) Distribution differential in top pair invariant mass
 
-void  CMS_TTB_DIFF_13TEV_2016_LJ_TTMFilter::ReadData()
+void CMS_TTB_DIFF_13TEV_2016_LJ_TTMFilter::ReadData()
 {
   //Opening files
   fstream f1, f2;
@@ -287,107 +285,106 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TTMFilter::ReadData()
   //Data values
   stringstream datafile("");
   datafile << dataPath()
-	   << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TTM/HEPData-ins1663958-v2-Table_186.csv";
+           << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TTM/HEPData-ins1663958-v2-Table_186.csv";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail())
-    {
-      cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-    }
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
 
   //Covariance matrix
   stringstream covfile("");
   covfile << dataPath()
-	  << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TTM/HEPData-ins1663958-v2-Table_187.csv";
+          << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TTM/HEPData-ins1663958-v2-Table_187.csv";
   f2.open(covfile.str().c_str(), ios::in);
 
   if (f2.fail())
-    {
-      cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-    }
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
 
   //Read central values
   string line;
-  for(int i=0; i<11; i++)
-    {
-      getline(f1,line);
-    }
+  for (int i = 0; i < 11; i++)
+  {
+    getline(f1, line);
+  }
 
-  for(int i=0; i<fNData; i++)
-    {
-      double m_tt, dud;
-      char comma;
+  for (int i = 0; i < fNData; i++)
+  {
+    double m_tt, dud;
+    char comma;
 
-      getline(f1,line);
-      istringstream lstream(line);
-      lstream >> m_tt >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> fData[i] >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> dud;
+    getline(f1, line);
+    istringstream lstream(line);
+    lstream >> m_tt >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> fData[i] >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> dud;
 
-      fKin1[i] = m_tt;  //M tt
-      fKin2[i] = Mt*Mt;
-      fKin3[i] = 13000;  //sqrt(s) [GeV]
-      fStat[i] = 0.;
-    }
+    fKin1[i] = m_tt; //M tt
+    fKin2[i] = Mt * Mt;
+    fKin3[i] = 13000; //sqrt(s) [GeV]
+    fStat[i] = 0.;
+  }
 
   //Read covariance matrix
-  for(int i=0; i<11; i++)
-    {
-      getline(f2,line);
-    }
+  for (int i = 0; i < 11; i++)
+  {
+    getline(f2, line);
+  }
 
   //Create covmat of correct dimensions
-  double** covmat = new double*[fNData];
-  for(int i=0; i<fNData; i++)
+  double **covmat = new double *[fNData];
+  for (int i = 0; i < fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+
+    for (int j = 0; j < fNData; j++)
     {
-      covmat[i] = new double[fNData];
+      double row, col;
+      char comma;
 
-      for(int j=0; j<fNData; j++)
-	{
-	  double row, col;
-	  char comma;
-
-	  getline(f2,line);
-	  istringstream lstream(line);
-	  lstream >> row >> comma >> col >> comma  >> covmat[i][j];
-	}
+      getline(f2, line);
+      istringstream lstream(line);
+      lstream >> row >> comma >> col >> comma >> covmat[i][j];
     }
+  }
 
   //Generate artificial systematics
-  double** syscor = new double*[fNData];
-  for(int i = 0; i < fNData; i++)
+  double **syscor = new double *[fNData];
+  for (int i = 0; i < fNData; i++)
     syscor[i] = new double[fNData];
 
-  if(!genArtSys(fNData,covmat,syscor))
-    {
-      cerr << " in " << fSetName << endl;
-      exit(-1);
-    }
+  if (!genArtSys(fNData, covmat, syscor))
+  {
+    cerr << " in " << fSetName << endl;
+    exit(-1);
+  }
 
-  for(int i=0; i<fNData; i++)
+  for (int i = 0; i < fNData; i++)
+  {
+    for (int j = 0; j < fNData; j++)
     {
-      for(int j=0; j<fNData; j++)
-	{
-	  fSys[i][j].add  = syscor[i][j];
-	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
-	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "CORR";
-	}
+      fSys[i][j].add = syscor[i][j];
+      fSys[i][j].mult = fSys[i][j].add * 1e2 / fData[i];
+      fSys[i][j].type = ADD;
+      fSys[i][j].name = "CORR";
     }
+  }
 
-  delete [] covmat;
-  delete [] syscor;
+  delete[] covmat;
+  delete[] syscor;
 
   f1.close();
   f2.close();
-
 }
 
 //////////////////////////////////////////////////////////////////
@@ -395,7 +392,7 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TTMFilter::ReadData()
 
 //4U) Distribution differential in top pair rapidity
 
-void  CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPFilter::ReadData()
+void CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPFilter::ReadData()
 {
   //Opening files
   fstream f1, f2;
@@ -403,107 +400,106 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPFilter::ReadData()
   //Data values
   stringstream datafile("");
   datafile << dataPath()
-	   << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TTRAP/HEPData-ins1663958-v2-Table_190.csv";
+           << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TTRAP/HEPData-ins1663958-v2-Table_190.csv";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail())
-    {
-      cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-    }
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
 
   //Covariance matrix
   stringstream covfile("");
   covfile << dataPath()
-	  << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TTRAP/HEPData-ins1663958-v2-Table_191.csv";
+          << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TTRAP/HEPData-ins1663958-v2-Table_191.csv";
   f2.open(covfile.str().c_str(), ios::in);
 
   if (f2.fail())
-    {
-      cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-    }
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
 
   //Read central values
   string line;
-  for(int i=0; i<11; i++)
-    {
-      getline(f1,line);
-    }
+  for (int i = 0; i < 11; i++)
+  {
+    getline(f1, line);
+  }
 
-  for(int i=0; i<fNData; i++)
-    {
-      double y_tt, dud;
-      char comma;
+  for (int i = 0; i < fNData; i++)
+  {
+    double y_tt, dud;
+    char comma;
 
-      getline(f1,line);
-      istringstream lstream(line);
-      lstream >> y_tt >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> fData[i] >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> dud;
+    getline(f1, line);
+    istringstream lstream(line);
+    lstream >> y_tt >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> fData[i] >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> dud;
 
-      fKin1[i] = y_tt; //rapidity tt
-      fKin2[i] = Mt*Mt;
-      fKin3[i] = 13000;  //sqrt(s) [GeV]
-      fStat[i] = 0.;
-    }
+    fKin1[i] = y_tt; //rapidity tt
+    fKin2[i] = Mt * Mt;
+    fKin3[i] = 13000; //sqrt(s) [GeV]
+    fStat[i] = 0.;
+  }
 
   //Read covariance matrix
-  for(int i=0; i<11; i++)
-    {
-      getline(f2,line);
-    }
+  for (int i = 0; i < 11; i++)
+  {
+    getline(f2, line);
+  }
 
   //Create covmat of correct dimensions
-  double** covmat = new double*[fNData];
-  for(int i=0; i<fNData; i++)
+  double **covmat = new double *[fNData];
+  for (int i = 0; i < fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+
+    for (int j = 0; j < fNData; j++)
     {
-      covmat[i] = new double[fNData];
+      double row, col;
+      char comma;
 
-      for(int j=0; j<fNData; j++)
-	{
-	  double row, col;
-	  char comma;
-
-	  getline(f2,line);
-	  istringstream lstream(line);
-	  lstream >> row >> comma >> col >> comma  >> covmat[i][j];
-	}
+      getline(f2, line);
+      istringstream lstream(line);
+      lstream >> row >> comma >> col >> comma >> covmat[i][j];
     }
+  }
 
   //Generate artificial systematics
-  double** syscor = new double*[fNData];
-  for(int i = 0; i < fNData; i++)
+  double **syscor = new double *[fNData];
+  for (int i = 0; i < fNData; i++)
     syscor[i] = new double[fNData];
 
-  if(!genArtSys(fNData,covmat,syscor))
-    {
-      cerr << " in " << fSetName << endl;
-      exit(-1);
-    }
+  if (!genArtSys(fNData, covmat, syscor))
+  {
+    cerr << " in " << fSetName << endl;
+    exit(-1);
+  }
 
-  for(int i=0; i<fNData; i++)
+  for (int i = 0; i < fNData; i++)
+  {
+    for (int j = 0; j < fNData; j++)
     {
-      for(int j=0; j<fNData; j++)
-	{
-	  fSys[i][j].add  = syscor[i][j];
-	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
-	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "CORR";
-	}
+      fSys[i][j].add = syscor[i][j];
+      fSys[i][j].mult = fSys[i][j].add * 1e2 / fData[i];
+      fSys[i][j].type = ADD;
+      fSys[i][j].name = "CORR";
     }
+  }
 
-  delete [] covmat;
-  delete [] syscor;
+  delete[] covmat;
+  delete[] syscor;
 
   f1.close();
   f2.close();
-
 }
 
 //////////////////////////////////////////////////////////////////
@@ -513,7 +509,7 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPFilter::ReadData()
 
 //1N) Distribution differential in top transverse momentum
 
-void  CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORMFilter::ReadData()
+void CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORMFilter::ReadData()
 {
   //Opening files
   fstream f1, f2;
@@ -521,117 +517,116 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORMFilter::ReadData()
   //Data values
   stringstream datafile("");
   datafile << dataPath()
-	   << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORM/HEPData-ins1663958-v2-Table_215.csv";
+           << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORM/HEPData-ins1663958-v2-Table_215.csv";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail())
-    {
-      cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-    }
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
 
   //Covariance matrix
   stringstream covfile("");
   covfile << dataPath()
-	  << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORM/HEPData-ins1663958-v2-Table_216.csv";
+          << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORM/HEPData-ins1663958-v2-Table_216.csv";
   f2.open(covfile.str().c_str(), ios::in);
 
   if (f2.fail())
-    {
-      cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-    }
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
 
   //Read central values
   string line;
-  for(int i=0; i<11; i++)
-    {
-      getline(f1,line);
-    }
+  for (int i = 0; i < 11; i++)
+  {
+    getline(f1, line);
+  }
 
-  for(int i=0; i<fNData; i++)
-    {
-      double pt_top, dud;
-      char comma;
+  for (int i = 0; i < fNData; i++)
+  {
+    double pt_top, dud;
+    char comma;
 
-      getline(f1,line);
-      istringstream lstream(line);
-      lstream >> pt_top >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> fData[i] >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> dud;
+    getline(f1, line);
+    istringstream lstream(line);
+    lstream >> pt_top >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> fData[i] >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> dud;
 
-      fKin1[i] = pt_top;  //pTt
-      fKin2[i] = Mt*Mt;
-      fKin3[i] = 13000;  //sqrt(s) [GeV]
-      fStat[i] = 0.;
-    }
+    fKin1[i] = pt_top; //pTt
+    fKin2[i] = Mt * Mt;
+    fKin3[i] = 13000; //sqrt(s) [GeV]
+    fStat[i] = 0.;
+  }
 
   //Read covariance matrix
-  for(int i=0; i<11; i++)
-    {
-      getline(f2,line);
-    }
+  for (int i = 0; i < 11; i++)
+  {
+    getline(f2, line);
+  }
 
   //Create covmat of correct dimensions
   // NOTE: fNData is set to N_bins - 1 so we need to loop with j<fNData+1 but
   // only fill in covmat if j<fNData so last bins are skipped.
-  double** covmat = new double*[fNData];
-  for(int i=0; i<fNData; i++)
+  double **covmat = new double *[fNData];
+  for (int i = 0; i < fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+
+    for (int j = 0; j < (fNData + 1); j++)
     {
-      covmat[i] = new double[fNData];
+      double row, col;
+      char comma;
 
-      for(int j=0; j<(fNData+1); j++)
-	{
-	  double row, col;
-	  char comma;
-
-	  getline(f2,line);
-    if(j<fNData)
-     {
-       istringstream lstream(line);
-	     lstream >> row >> comma >> col >> comma  >> covmat[i][j];
-     }
-	}
+      getline(f2, line);
+      if (j < fNData)
+      {
+        istringstream lstream(line);
+        lstream >> row >> comma >> col >> comma >> covmat[i][j];
+      }
     }
+  }
 
   //Generate artificial systematics
-  double** syscor = new double*[fNData];
-  for(int i = 0; i < fNData; i++)
+  double **syscor = new double *[fNData];
+  for (int i = 0; i < fNData; i++)
     syscor[i] = new double[fNData];
 
-  if(!genArtSys(fNData,covmat,syscor))
-    {
-      cerr << " in " << fSetName << endl;
-      exit(-1);
-    }
+  if (!genArtSys(fNData, covmat, syscor))
+  {
+    cerr << " in " << fSetName << endl;
+    exit(-1);
+  }
 
-  for(int i=0; i<fNData; i++)
+  for (int i = 0; i < fNData; i++)
+  {
+    for (int j = 0; j < fNData; j++)
     {
-      for(int j=0; j<fNData; j++)
-	{
-	  fSys[i][j].add  = syscor[i][j];
-	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
-	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "CORR";
-	}
+      fSys[i][j].add = syscor[i][j];
+      fSys[i][j].mult = fSys[i][j].add * 1e2 / fData[i];
+      fSys[i][j].type = ADD;
+      fSys[i][j].name = "CORR";
     }
+  }
 
-  delete [] covmat;
-  delete [] syscor;
+  delete[] covmat;
+  delete[] syscor;
 
   f1.close();
   f2.close();
-
 }
 
 //2N) Distribution differential in top rapidity
 
-void  CMS_TTB_DIFF_13TEV_2016_LJ_TRAPNORMFilter::ReadData()
+void CMS_TTB_DIFF_13TEV_2016_LJ_TRAPNORMFilter::ReadData()
 {
   //Opening files
   fstream f1, f2;
@@ -639,117 +634,116 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TRAPNORMFilter::ReadData()
   //Data values
   stringstream datafile("");
   datafile << dataPath()
-	   << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TRAPNORM/HEPData-ins1663958-v2-Table_217.csv";
+           << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TRAPNORM/HEPData-ins1663958-v2-Table_217.csv";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail())
-    {
-      cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-    }
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
 
   //Covariance matrix
   stringstream covfile("");
   covfile << dataPath()
-	  << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TRAPNORM/HEPData-ins1663958-v2-Table_218.csv";
+          << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TRAPNORM/HEPData-ins1663958-v2-Table_218.csv";
   f2.open(covfile.str().c_str(), ios::in);
 
   if (f2.fail())
-    {
-      cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-    }
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
 
   //Read central values
   string line;
-  for(int i=0; i<11; i++)
-    {
-      getline(f1,line);
-    }
+  for (int i = 0; i < 11; i++)
+  {
+    getline(f1, line);
+  }
 
-  for(int i=0; i<fNData; i++)
-    {
-      double y_top, dud;
-      char comma;
+  for (int i = 0; i < fNData; i++)
+  {
+    double y_top, dud;
+    char comma;
 
-      getline(f1,line);
-      istringstream lstream(line);
-      lstream >> y_top >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> fData[i] >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> dud;
+    getline(f1, line);
+    istringstream lstream(line);
+    lstream >> y_top >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> fData[i] >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> dud;
 
-      fKin1[i] = y_top;  //top rapidity
-      fKin2[i] = Mt*Mt;
-      fKin3[i] = 13000;  //sqrt(s) [GeV]
-      fStat[i] = 0.;
-    }
+    fKin1[i] = y_top; //top rapidity
+    fKin2[i] = Mt * Mt;
+    fKin3[i] = 13000; //sqrt(s) [GeV]
+    fStat[i] = 0.;
+  }
 
   //Read covariance matrix
-  for(int i=0; i<11; i++)
-    {
-      getline(f2,line);
-    }
+  for (int i = 0; i < 11; i++)
+  {
+    getline(f2, line);
+  }
 
   //Create covmat of correct dimensions
   // NOTE: fNData is set to N_bins - 1 so we need to loop with j<fNData+1 but
   // only fill in covmat if j<fNData so last bins are skipped.
-  double** covmat = new double*[fNData];
-  for(int i=0; i<fNData; i++)
+  double **covmat = new double *[fNData];
+  for (int i = 0; i < fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+
+    for (int j = 0; j < (fNData + 1); j++)
     {
-      covmat[i] = new double[fNData];
+      double row, col;
+      char comma;
 
-      for(int j=0; j<(fNData+1); j++)
-	{
-	  double row, col;
-	  char comma;
-
-	  getline(f2,line);
-    if(j<fNData)
-     {
-       istringstream lstream(line);
-	     lstream >> row >> comma >> col >> comma  >> covmat[i][j];
-     }
-	}
+      getline(f2, line);
+      if (j < fNData)
+      {
+        istringstream lstream(line);
+        lstream >> row >> comma >> col >> comma >> covmat[i][j];
+      }
     }
+  }
 
   //Generate artificial systematics
-  double** syscor = new double*[fNData];
-  for(int i = 0; i < fNData; i++)
+  double **syscor = new double *[fNData];
+  for (int i = 0; i < fNData; i++)
     syscor[i] = new double[fNData];
 
-  if(!genArtSys(fNData,covmat,syscor))
-    {
-      cerr << " in " << fSetName << endl;
-      exit(-1);
-    }
+  if (!genArtSys(fNData, covmat, syscor))
+  {
+    cerr << " in " << fSetName << endl;
+    exit(-1);
+  }
 
-  for(int i=0; i<fNData; i++)
+  for (int i = 0; i < fNData; i++)
+  {
+    for (int j = 0; j < fNData; j++)
     {
-      for(int j=0; j<fNData; j++)
-	{
-	  fSys[i][j].add  = syscor[i][j];
-	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
-	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "CORR";
-	}
+      fSys[i][j].add = syscor[i][j];
+      fSys[i][j].mult = fSys[i][j].add * 1e2 / fData[i];
+      fSys[i][j].type = ADD;
+      fSys[i][j].name = "CORR";
     }
+  }
 
-  delete [] covmat;
-  delete [] syscor;
+  delete[] covmat;
+  delete[] syscor;
 
   f1.close();
   f2.close();
-
 }
 
 //3N) Distribution differential in top pair invariant mass
 
-void  CMS_TTB_DIFF_13TEV_2016_LJ_TTMNORMFilter::ReadData()
+void CMS_TTB_DIFF_13TEV_2016_LJ_TTMNORMFilter::ReadData()
 {
   //Opening files
   fstream f1, f2;
@@ -757,117 +751,116 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TTMNORMFilter::ReadData()
   //Data values
   stringstream datafile("");
   datafile << dataPath()
-	   << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TTMNORM/HEPData-ins1663958-v2-Table_219.csv";
+           << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TTMNORM/HEPData-ins1663958-v2-Table_219.csv";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail())
-    {
-      cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-    }
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
 
   //Covariance matrix
   stringstream covfile("");
   covfile << dataPath()
-	  << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TTMNORM/HEPData-ins1663958-v2-Table_220.csv";
+          << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TTMNORM/HEPData-ins1663958-v2-Table_220.csv";
   f2.open(covfile.str().c_str(), ios::in);
 
   if (f2.fail())
-    {
-      cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-    }
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
 
   //Read central values
   string line;
-  for(int i=0; i<11; i++)
-    {
-      getline(f1,line);
-    }
+  for (int i = 0; i < 11; i++)
+  {
+    getline(f1, line);
+  }
 
-  for(int i=0; i<fNData; i++)
-    {
-      double m_tt, dud;
-      char comma;
+  for (int i = 0; i < fNData; i++)
+  {
+    double m_tt, dud;
+    char comma;
 
-      getline(f1,line);
-      istringstream lstream(line);
-      lstream >> m_tt >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> fData[i] >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> dud;
+    getline(f1, line);
+    istringstream lstream(line);
+    lstream >> m_tt >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> fData[i] >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> dud;
 
-      fKin1[i] = m_tt;  //M tt
-      fKin2[i] = Mt*Mt;
-      fKin3[i] = 13000;  //sqrt(s) [GeV]
-      fStat[i] = 0.;
-    }
+    fKin1[i] = m_tt; //M tt
+    fKin2[i] = Mt * Mt;
+    fKin3[i] = 13000; //sqrt(s) [GeV]
+    fStat[i] = 0.;
+  }
 
   //Read covariance matrix
-  for(int i=0; i<11; i++)
-    {
-      getline(f2,line);
-    }
+  for (int i = 0; i < 11; i++)
+  {
+    getline(f2, line);
+  }
 
   //Create covmat of correct dimensions
   // NOTE: fNData is set to N_bins - 1 so we need to loop with j<fNData+1 but
   // only fill in covmat if j<fNData so last bins are skipped.
-  double** covmat = new double*[fNData];
-  for(int i=0; i<fNData; i++)
+  double **covmat = new double *[fNData];
+  for (int i = 0; i < fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+
+    for (int j = 0; j < (fNData + 1); j++)
     {
-      covmat[i] = new double[fNData];
+      double row, col;
+      char comma;
 
-      for(int j=0; j<(fNData+1); j++)
-	{
-	  double row, col;
-	  char comma;
-
-	  getline(f2,line);
-    if(j<fNData)
-     {
-       istringstream lstream(line);
-	     lstream >> row >> comma >> col >> comma  >> covmat[i][j];
-     }
-	}
+      getline(f2, line);
+      if (j < fNData)
+      {
+        istringstream lstream(line);
+        lstream >> row >> comma >> col >> comma >> covmat[i][j];
+      }
     }
+  }
 
   //Generate artificial systematics
-  double** syscor = new double*[fNData];
-  for(int i = 0; i < fNData; i++)
+  double **syscor = new double *[fNData];
+  for (int i = 0; i < fNData; i++)
     syscor[i] = new double[fNData];
 
-  if(!genArtSys(fNData,covmat,syscor))
-    {
-      cerr << " in " << fSetName << endl;
-      exit(-1);
-    }
+  if (!genArtSys(fNData, covmat, syscor))
+  {
+    cerr << " in " << fSetName << endl;
+    exit(-1);
+  }
 
-  for(int i=0; i<fNData; i++)
+  for (int i = 0; i < fNData; i++)
+  {
+    for (int j = 0; j < fNData; j++)
     {
-      for(int j=0; j<fNData; j++)
-	{
-	  fSys[i][j].add  = syscor[i][j];
-	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
-	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "CORR";
-	}
+      fSys[i][j].add = syscor[i][j];
+      fSys[i][j].mult = fSys[i][j].add * 1e2 / fData[i];
+      fSys[i][j].type = ADD;
+      fSys[i][j].name = "CORR";
     }
+  }
 
-  delete [] covmat;
-  delete [] syscor;
+  delete[] covmat;
+  delete[] syscor;
 
   f1.close();
   f2.close();
-
 }
 
 //4N) Distribution differential in top pair rapidity
 
-void  CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPNORMFilter::ReadData()
+void CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPNORMFilter::ReadData()
 {
   //Opening files
   fstream f1, f2;
@@ -875,110 +868,109 @@ void  CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPNORMFilter::ReadData()
   //Data values
   stringstream datafile("");
   datafile << dataPath()
-	   << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPNORM/HEPData-ins1663958-v2-Table_223.csv";
+           << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPNORM/HEPData-ins1663958-v2-Table_223.csv";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail())
-    {
-      cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-    }
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
 
   //Covariance matrix
   stringstream covfile("");
   covfile << dataPath()
-	  << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPNORM/HEPData-ins1663958-v2-Table_224.csv";
+          << "rawdata/CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPNORM/HEPData-ins1663958-v2-Table_224.csv";
   f2.open(covfile.str().c_str(), ios::in);
 
   if (f2.fail())
-    {
-      cerr << "Error opening data file " << datafile.str() << endl;
-      exit(-1);
-    }
+  {
+    cerr << "Error opening data file " << datafile.str() << endl;
+    exit(-1);
+  }
 
   //Read central values
   string line;
-  for(int i=0; i<11; i++)
-    {
-      getline(f1,line);
-    }
+  for (int i = 0; i < 11; i++)
+  {
+    getline(f1, line);
+  }
 
-  for(int i=0; i<fNData; i++)
-    {
-      double y_tt, dud;
-      char comma;
+  for (int i = 0; i < fNData; i++)
+  {
+    double y_tt, dud;
+    char comma;
 
-      getline(f1,line);
-      istringstream lstream(line);
-      lstream >> y_tt >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> fData[i] >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> dud >> comma
-	      >> dud;
+    getline(f1, line);
+    istringstream lstream(line);
+    lstream >> y_tt >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> fData[i] >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> dud >> comma
+            >> dud;
 
-      fKin1[i] = y_tt;  //rapidity tt
-      fKin2[i] = Mt*Mt;
-      fKin3[i] = 13000;  //sqrt(s) [GeV]
-      fStat[i] = 0.;
-    }
+    fKin1[i] = y_tt; //rapidity tt
+    fKin2[i] = Mt * Mt;
+    fKin3[i] = 13000; //sqrt(s) [GeV]
+    fStat[i] = 0.;
+  }
 
   //Read covariance matrix
-  for(int i=0; i<11; i++)
-    {
-      getline(f2,line);
-    }
+  for (int i = 0; i < 11; i++)
+  {
+    getline(f2, line);
+  }
 
   //Create covmat of correct dimensions
   // NOTE: fNData is set to N_bins - 1 so we need to loop with j<fNData+1 but
   // only fill in covmat if j<fNData so last bins are skipped.
-  double** covmat = new double*[fNData];
-  for(int i=0; i<fNData; i++)
+  double **covmat = new double *[fNData];
+  for (int i = 0; i < fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+
+    for (int j = 0; j < (fNData + 1); j++)
     {
-      covmat[i] = new double[fNData];
+      double row, col;
+      char comma;
 
-      for(int j=0; j<(fNData+1); j++)
-	{
-	  double row, col;
-	  char comma;
-
-	  getline(f2,line);
-    if(j<fNData)
-     {
-       istringstream lstream(line);
-	     lstream >> row >> comma >> col >> comma  >> covmat[i][j];
-     }
-	}
+      getline(f2, line);
+      if (j < fNData)
+      {
+        istringstream lstream(line);
+        lstream >> row >> comma >> col >> comma >> covmat[i][j];
+      }
     }
+  }
 
   //Generate artificial systematics
-  double** syscor = new double*[fNData];
-  for(int i = 0; i < fNData; i++)
+  double **syscor = new double *[fNData];
+  for (int i = 0; i < fNData; i++)
     syscor[i] = new double[fNData];
 
-  if(!genArtSys(fNData,covmat,syscor))
-    {
-      cerr << " in " << fSetName << endl;
-      exit(-1);
-    }
+  if (!genArtSys(fNData, covmat, syscor))
+  {
+    cerr << " in " << fSetName << endl;
+    exit(-1);
+  }
 
-  for(int i=0; i<fNData; i++)
+  for (int i = 0; i < fNData; i++)
+  {
+    for (int j = 0; j < fNData; j++)
     {
-      for(int j=0; j<fNData; j++)
-	{
-	  fSys[i][j].add  = syscor[i][j];
-	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
-	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "CORR";
-	}
+      fSys[i][j].add = syscor[i][j];
+      fSys[i][j].mult = fSys[i][j].add * 1e2 / fData[i];
+      fSys[i][j].type = ADD;
+      fSys[i][j].name = "CORR";
     }
+  }
 
-  delete [] covmat;
-  delete [] syscor;
+  delete[] covmat;
+  delete[] syscor;
 
   f1.close();
   f2.close();
-
 }
