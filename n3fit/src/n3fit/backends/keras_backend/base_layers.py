@@ -5,7 +5,7 @@
     'name of the layer' : ( Layer_class, {dictionary of arguments: defaults} )
 """
 
-from keras.layers import Dense, Lambda, LSTM, Dropout
+from keras.layers import Dense, Lambda, LSTM, Dropout, concatenate
 from keras.backend import expand_dims
 
 
@@ -56,12 +56,12 @@ def base_layer_selector(layer_name, **kwargs):
     """
     try:
         layer_tuple = layers[layer_name]
-    except KeyError:
-        raise Exception(
+    except KeyError as e:
+        raise NotImplementedError(
             "Layer not implemented in keras_backend/base_layers.py: {0}".format(
                 layer_name
             )
-        )
+        ) from e
 
     layer_class = layer_tuple[0]
     layer_args = layer_tuple[1]

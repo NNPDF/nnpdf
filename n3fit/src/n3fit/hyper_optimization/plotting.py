@@ -189,7 +189,7 @@ def filter_by_string(data_dict, filter_string):
     """
     match = regex_not_op.findall(filter_string)
     if len(match) < 2:
-        raise Exception("Filter str is not correct: {0}".format(filter_string))
+        raise ValueError("Filter str is not correct: {0}".format(filter_string))
     filter_key = match[0]
     filter_val = match[1]
 
@@ -206,7 +206,7 @@ def filter_by_string(data_dict, filter_string):
         operator = "=="
     operators = ["!=", "==", ">", "<"]
     if operator not in operators:
-        raise Exception("Filter string not valid, operator not recognized {0}".format(filter_string))
+        raise NotImplementedError("Filter string not valid, operator not recognized {0}".format(filter_string))
 
     # This I know it is not ok:
     if isinstance(val_check, str) and isinstance(filter_val, str):

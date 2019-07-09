@@ -60,8 +60,8 @@ class MetaLayer(Layer):
         """
         try:
             ini_tuple = MetaLayer.initializers[ini_name]
-        except KeyError:
-            raise Exception(f"[MetaLayer.select_initializer] Optimizer not found {ini_name}")
+        except KeyError as e:
+            raise NotImplementedError(f"[MetaLayer.select_initializer] initializer not implemented: {ini_name}") from e
 
         ini_class = ini_tuple[0]
         ini_args = ini_tuple[1]

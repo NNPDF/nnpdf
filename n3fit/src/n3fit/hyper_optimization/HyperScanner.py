@@ -45,7 +45,7 @@ class HyperScanner:
         if dkeys is None:
             dkeys = []
         if key not in self.keys:
-            raise Exception(
+            raise ValueError(
                 "Trying to update a parameter that was not declared in the dictionary: {0}. HyperScanner @ _update_param".format(
                     key
                 )
@@ -104,7 +104,7 @@ class HyperScanner:
         for opt_name in names:
             if opt_name not in optimizer_dict.keys():
                 # Do we want an early crash or just drop the optimizer silently? We'll see...
-                raise Exception("HyperScanner: Optimizer {0} not implemented in MetaModel.py".format(opt_name))
+                raise NotImplementedError("HyperScanner: Optimizer {0} not implemented in MetaModel.py".format(opt_name))
 
             args = optimizer_dict[opt_name][1]
             if "lr" in args.keys():
@@ -206,7 +206,7 @@ class HyperScanner:
         for ini_name in initializers:
             if ini_name not in imp_init_names:
                 # Do we want an early crash or just drop the optimizer silently? We'll see...
-                raise Exception("HyperScanner: Initializer {0} not implemented in MetaLayer.py".format(ini_name))
+                raise NotImplementedError("HyperScanner: Initializer {0} not implemented in MetaLayer.py".format(ini_name))
             # For now we are going to use always all initializers and with default values
             ini_choices.append(ini_name)
 

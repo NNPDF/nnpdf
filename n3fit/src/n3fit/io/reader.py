@@ -236,9 +236,7 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
     elif isinstance(spec, vp_Dataset):
         datasets = common_data_reader_dataset(spec_c, spec)
     else:
-        print("reader.py: common_data_reader, didn't understood spec type")
-        print(type(spec))
-        raise Exception("Wrong datatype in reader.py")
+        raise ValueError("reader.py: common_data_reader, didn't understood spec type: {0}".format(type(spec)))
 
     exp_name = spec.name
     covmat = spec_c.get_covmat()
