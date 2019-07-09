@@ -3,8 +3,8 @@ from n3fit.layers.Observable import Observable
 
 
 class DIS(Observable):
-    """ 
-        The DIS class receives a list of active flavours and a fktable 
+    """
+        The DIS class receives a list of active flavours and a fktable
         and prepares a layer that performs the convolution of said fktable with
         the incoming pdf.
     """

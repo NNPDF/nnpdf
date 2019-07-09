@@ -1,29 +1,39 @@
 """
-    ModelTrainer Class:
+    The ModelTrainer class is the true driver around the n3fit code
 
-    This class provides a wrapper around the fitting code and the generation of the Neural Network
+    This class is initialized with all information about the NN, inputs and outputs.
+    The construction of the NN and the fitting is performed at the same time when the 
+    hyperparametizable method of the function is called.
 
-    When the "hyperparametizable"* function is called with a dictionary of parameters,
-    it generates a NN and subsequentially performs a fit.
-
-    The motivation behind this class is minimising the amount of redundant calls of each hyperopt
-    run, in particular this allows to completely reset the NN at the beginning of each iteration
-    reusing some of the previous work.
-
-    *called in this way because it accept a dictionary of hyper-parameters which defines the Neural Network
+    This allows to use hyperscanning libraries, that need to change the parameters of the network
+    between iterations while at the same time keeping the amount of redundant calls to a minimum
 """
 import n3fit.model_gen as model_gen
-import n3fit.constraints as constraints
+import n3fit.msr as msr_constraints
 import n3fit.Statistics as Statistics
 from n3fit.backends import MetaModel, clear_backend_state
 
 # If an experiment matches this name, it will not be included int he training
 TESTNAME = "TEST"
 # Weights for the hyperopt cost function
-test_multiplier = 0.5
-validation_multiplier = 0.5
+TEST_MULTIPLIER = 0.5
+VALIDATION_MULTIPLIER = 0.5
 
 class ModelTrainer:
+    """
+        ModelTrainer Class:
+
+        This class provides a wrapper around the fitting code and the generation of the Neural Network
+
+        When the "hyperparametizable"* function is called with a dictionary of parameters,
+        it generates a NN and subsequentially performs a fit.
+
+        The motivation behind this class is minimising the amount of redundant calls of each hyperopt
+        run, in particular this allows to completely reset the NN at the beginning of each iteration
+        reusing some of the previous work.
+
+        *called in this way because it accept a dictionary of hyper-parameters which defines the Neural Network
+    """
     def __init__(
         self, exp_info, pos_info, flavinfo, nnseed, pass_status="ok", failed_status="fail", log=None, debug=False
     ):
@@ -112,14 +122,13 @@ class ModelTrainer:
             -`experimental`: 'true' data, only used for reporting purposes
             -`ndata_dict`: a dictionary containing 'name of experiment' : Number Of Points
 
-        Note: the dictionaries will be used at different stages filled with information that will be cleaned at every 
+        Note: the dictionaries will be used at different stages filled with information that will be cleaned at every
         hyperopt iteration. If not running hyperopt, the fixed-nonfixed thing makes no difference.
 
         The fixed information (i.e., non dependant on the parameters of the fit) contained in those dictionaries:
-            - `expdata`: experimental data 
-            - `name`: names of the experiment 
-            - `ndata`: number of experimental points 
-
+            - `expdata`: experimental data
+            - `name`: names of the experiment
+            - `ndata`: number of experimental points
         """
         for exp_dict in self.exp_info:
             if exp_dict["name"] == TESTNAME:
@@ -200,7 +209,7 @@ class ModelTrainer:
 
     def _reset_observables(self):
         """
-        Resets the 'output' and 'losses' entries of all 3 dictionaries, (`training`, `validation`, `experimental`) 
+        Resets the 'output' and 'losses' entries of all 3 dictionaries, (`training`, `validation`, `experimental`)
         as well as the input_list
         this is necessary as these can either depend on the parametrization of the NN
         or be obliterated when/if the backend state is reset
@@ -336,7 +345,7 @@ class ModelTrainer:
         if self.impose_sumrule:
             # Impose the sumrule
             # Inyect here momentum sum rule, effecively modifying layer_pdf
-            layer_pdf, integrator_input = constraints.msr_impose(layers["fitbasis"], layer_pdf)
+            layer_pdf, integrator_input = msr_constraints.msr_impose(layers["fitbasis"], layer_pdf)
             self.input_list.append(integrator_input)
 
         self.layer_pdf = layer_pdf
@@ -405,7 +414,7 @@ class ModelTrainer:
 
     def hyperparametizable(self, params):
         """
-        Wrapper around all the functions defining the fit. 
+        Wrapper around all the functions defining the fit.
 
         After the ModelTrainer class has been instantiated only a call to this function, with a `params` dictionary
         is necessary to generate the whole PDF model and perform a fit.
@@ -495,10 +504,10 @@ class ModelTrainer:
             testing_loss = 0.0
 
         if self.mode_hyperopt:
-            final_loss = validation_multiplier * validation_loss
-            final_loss += test_multiplier * testing_loss
-            final_loss /= test_multiplier + validation_multiplier
-            arc_lengths = constraints.compute_arclength(layers["fitbasis"], verbose=False)
+            final_loss = VALIDATION_MULTIPLIER * validation_loss
+            final_loss += TEST_MULTIPLIER * testing_loss
+            final_loss /= TEST_MULTIPLIER + VALIDATION_MULTIPLIER
+            arc_lengths = msr_constraints.compute_arclength(layers["fitbasis"], verbose=False)
         else:
             final_loss = experimental_loss
             arc_lengths = None

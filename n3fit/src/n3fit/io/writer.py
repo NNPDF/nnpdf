@@ -1,3 +1,10 @@
+"""
+    Module containing functions dedicated to the write down of the output of n3fit
+
+    The goal is to generate the same folder/file structure as the old nnfit code
+    so previously active scripts can still work.
+"""
+
 import numpy as np
 from reportengine.compat import yaml
 

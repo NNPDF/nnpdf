@@ -26,8 +26,36 @@ def fit(
     debug=False,
     create_test_card=None,
 ):
-    """ 
+    """
         This action will (upon having read a validcard) process a full PDF fit for a given replica.
+
+        The input to this function is provided by validphys and defined in the runcards or commandline arguments.
+
+        The workflow of this controller is as follows:
+        1. Using the replica number and the seeds defined in the runcard, generates a seed for everything
+        2. Read up all datasets from the given experiments and create the necessary replicas
+            2.1 Read up also the positivity sets
+        3. Generate a ModelTrainer object which hold all information to create the NN and perform a fit
+            (at this point no NN object has been generated)
+            3.1 (if hyperopt) generates the hyperopt scanning dictionary taking as a base the fitting dictionary
+                              and the hyperscan dictionary defined in the runcard
+        4. Pass the dictionary of parameters to ModelTrainer for the NN to be generated and the fit performed
+            4.1 (if hyperopt) Loop over point 4 for `hyperopt` number of times
+        5. Once the fit is finished, output the PDF grid and accompanying files
+
+        # Arguments:
+            - `fitting`: dictionary with the hyperparameters of the fit
+            - `experiments`: vp list of experiments to be included in the fit
+            - `t0set`: t0set name
+            - `replica`: a list of replica numbers to run over (tipycally just one)
+            - `replica_path`: path to the output of this run
+            - `output_path`: name of the fit
+            - `theorid`: theory id number
+            - `posdatasets` : list of positivity datasets
+            - `hyperscan`: dictionary containing the details of the hyperscan
+            - `hyperopt`: if given, number of hyperopt iterations to run
+            - `debug`: activate some debug options
+            - `create_test_card`: read the runcard and output a new runcard with a test-set defined
     """
 
     # Call the script to generate a runcard with a test-set and immediately exit
@@ -52,7 +80,7 @@ def fit(
     from n3fit.io.writer import storefit
     from n3fit.backends import MetaModel
     import n3fit.io.reader as reader
-    import n3fit.constraints as constraints
+    import n3fit.msr as msr_constraints
 
     if hyperopt:
         import hyperopt as hyper
@@ -239,7 +267,7 @@ def fit(
         )
 
         # Compute the arclengths
-        arc_lengths = constraints.compute_arclength(layers["fitbasis"], verbose=True)
+        arc_lengths = msr_constraints.compute_arclength(layers["fitbasis"], verbose=True)
         # Construct the chi2exp file
         allchi2_lines = validation_object.chi2exps_str()
         # Construct the preproc file
@@ -282,4 +310,4 @@ def fit(
         validation_object.plot()
 
     # print out the integration of the sum rule in case we want to check it's not broken
-    # constraints.check_integration(layer_pdf, integrator_input)
+    # msr_constraints.check_integration(layer_pdf, integrator_input)

@@ -1,8 +1,8 @@
-import sys
 from n3fit.backends import MetaLayer
+from abc import abstractmethod, ABC
 
 
-class Observable(MetaLayer):
+class Observable(MetaLayer, ABC):
     """
         This class is the parent of the DIS and DY convolutions.
         All backend-dependent code necessary for the convolutions
@@ -36,10 +36,10 @@ class Observable(MetaLayer):
         return (self.output_dim, None)
 
     # Overridables
+    @abstractmethod
     def gen_basis(self, basis):
-        print("{0} must implement the method gen_basis".format(self))
-        sys.exit(-1)
+        pass
 
+    @abstractmethod
     def call(self, pdf_in):
-        print("{0} must implement the method gen_basis".format(self))
-        sys.exit(-1)
+        pass

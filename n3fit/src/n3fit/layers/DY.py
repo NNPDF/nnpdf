@@ -7,8 +7,8 @@ class DY(Observable):
     Computes the convolution of two PDFs (the same one twice) and one fktable
     """
     def gen_basis(self, basis):
-        """ 
-        Receives an array of combinations and make it into an array of 2-tuples 
+        """
+        Receives an array of combinations and make it into an array of 2-tuples
 
         # Arguments:
                 - `basis`: array of combinations in the form
@@ -24,7 +24,7 @@ class DY(Observable):
 
             First uses the basis of active combinations to generate a luminosity tensor
             with only some flavours active.
-            
+
             The concatenate function returns a rank-3 tensor (combination_index, xgrid, xgrid)
             which can in turn be contracted with the rank-4 fktable.
 
@@ -42,12 +42,14 @@ class DY(Observable):
         for i, j in self.basis:
             lumi_fun.append(self.tensor_product(pdfT[i], pdfT[j], axes=0))
 
-        pdfXpdf = self.concatenate(lumi_fun, axis=0, target_shape=(self.basis_size, self.xgrid_size, self.xgrid_size))
+        pdf_X_pdf = self.concatenate(lumi_fun, axis=0, target_shape=(self.basis_size, self.xgrid_size, self.xgrid_size))
 
-        result = self.tensor_product(self.fktable, pdfXpdf, axes=3)
+        result = self.tensor_product(self.fktable, pdf_X_pdf, axes=3)
         return result
 
 
+# Another example on how to performt the DY convolution
+# this code is equivalent to the previos one, with a slightly greater cost
 class DY_mask(Observable):
     def gen_basis(self, basis):
         if basis is not None:

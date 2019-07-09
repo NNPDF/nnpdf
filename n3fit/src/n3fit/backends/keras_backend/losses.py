@@ -1,3 +1,7 @@
+"""
+    Module containing a list of loss functions availables to the fitting code
+"""
+
 import keras.backend as K
 
 

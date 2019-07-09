@@ -5,7 +5,7 @@
     'name of the layer' : ( Layer_class, {dictionary of arguments: defaults} )
 """
 
-from keras.layers import Dense, Lambda, LSTM, Dropout, concatenate
+from keras.layers import Dense, Lambda, LSTM, Dropout
 from keras.backend import expand_dims
 
 

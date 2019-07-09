@@ -191,7 +191,7 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
                 'invcovmat_vl' : (same as above for validation)
                 'ndata_vl' : (same as above for validation)
                 'expdata_vl' :  (same as above for validation)
- 
+
                 'positivity' : bool - is this a positivity set?
 
 
