@@ -12,7 +12,6 @@
 from keras import backend as K
 from keras.engine.topology import Layer
 from keras.initializers import Constant, RandomUniform, glorot_normal, glorot_uniform
-from keras.constraints import MinMaxNorm
 
 
 class MetaLayer(Layer):
@@ -73,24 +72,7 @@ class MetaLayer(Layer):
                 ini_args[key] = value
         return ini_class(**ini_args)
 
-    # Implemented constraint
-    def constraint_MinMaxWeight(self, min_value, max_value):
-        """
-        Small override to the MinMaxNorm Keras class to not look at the absolute value
-        This version looks at the sum instead of at the norm
-        """
-
-        class MinMaxWeight(MinMaxNorm):
-            def __init__(self, **kwargs):
-                super(MinMaxWeight, self).__init__(**kwargs)
-
-            def __call__(self, w):
-                norms = K.sum(w, axis=self.axis, keepdims=True)
-                desired = self.rate * K.clip(norms, self.min_value, self.max_value) + (1 - self.rate) * norms
-                w *= desired / (K.epsilon() + norms)
-                return w
-
-        return MinMaxWeight(min_value=min_value, max_value=max_value)
+ 
 
     # Make numpy array into a tensor
     def np_to_tensor(self, np_array, **kwargs):

@@ -20,7 +20,7 @@ def make_tr_val_mask(datasets, exp_name, seed):
         - `seed` : seed for the random tr/vl split
 
     # Return
-        - `trmask`: numpy boolean array 
+        - `trmask`: numpy boolean array
         - `vlmask`: not trmask
     """
     # Set the seed for the experiment
@@ -49,7 +49,7 @@ def fk_parser(fk, is_hadronic=False):
     """
     # Arguments:
         - `fk`: fktable object
-    
+
     # Return:
         - `dict_out`: dictionary with all information about the fktable
             - 'xgrid'
@@ -152,6 +152,17 @@ def common_data_reader_dataset(dataset_c, dataset_spec):
 
 
 def common_data_reader_experiment(experiment_c, experiment_spec):
+    """
+        Wrapper around the experiments. Loop over all datasets in an experiment,
+        calls common_data_reader on them and return a list with the content.
+
+        # Arguments:
+            - `experiment_c`: c representation of the experiment object
+            - `experiment_spec`: python representation of the experiment object
+
+        # Returns:
+            - `[parsed_datasets]`: a list of dictionaries output from `common_data_reader_dataset`
+    """
     parsed_datasets = []
     for dataset_c, dataset_spec in zip(experiment_c.DataSets(), experiment_spec.datasets):
         parsed_datasets += common_data_reader_dataset(dataset_c, dataset_spec)
@@ -180,7 +191,7 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
                 'invcovmat_vl' : (same as above for validation)
                 'ndata_vl' : (same as above for validation)
                 'expdata_vl' :  (same as above for validation)
-                
+ 
                 'positivity' : bool - is this a positivity set?
 
 

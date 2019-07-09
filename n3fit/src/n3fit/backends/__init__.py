@@ -4,5 +4,6 @@ from n3fit.backends.keras_backend.MetaModel import MetaModel
 from n3fit.backends.keras_backend.base_layers import concatenate, Lambda, base_layer_selector
 from n3fit.backends.keras_backend import losses
 from n3fit.backends.keras_backend import operations
+from n3fit.backends.keras_backend import constraints
 
 print("Using Keras backend")

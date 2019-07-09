@@ -1,4 +1,5 @@
 from n3fit.backends import MetaLayer
+from n3fit.backends import constraints
 BASIS_SIZE = 8
 
 class Preprocessing(MetaLayer):
@@ -43,10 +44,10 @@ class Preprocessing(MetaLayer):
             lm = limits[0]
             lp = limits[1]
             init = MetaLayer.select_initializer("random_uniform", minval=lm, maxval=lp, seed=self.seed + i)
-            const = self.constraint_MinMaxWeight(min_value=lm, max_value=lp)
+            weight_constraint = constraints.MinMaxWeight(lm, lp)
 
             nw = self.builder_helper(
-                name=name, kernel_shape=(1,), initializer=init, trainable=self.trainable, constraint=const
+                name=name, kernel_shape=(1,), initializer=init, trainable=self.trainable, constraint=weight_constraint
             )
 
             self.kernel.append(nw)
