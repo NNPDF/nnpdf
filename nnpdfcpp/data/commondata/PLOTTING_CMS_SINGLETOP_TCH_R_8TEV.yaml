@@ -1,4 +1,4 @@
 dataset_label: "CMS single top $R_{t}$ 8 TeV"
 
 experiment: "CMS"
-nnpdf31_process: TOP
+nnpdf31_process: SINGLETOP
