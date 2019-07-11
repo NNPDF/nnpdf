@@ -13,6 +13,9 @@ import n3fit.msr as msr_constraints
 import n3fit.Statistics as Statistics
 from n3fit.backends import MetaModel, clear_backend_state
 
+import logging
+log = logging.getLogger(__name__)
+
 # If an experiment matches this name, it will not be included int he training
 TESTNAME = "TEST"
 # Weights for the hyperopt cost function
@@ -61,13 +64,6 @@ class ModelTrainer:
         self.mode_hyperopt = False
         self.model_file = None
         self.impose_sumrule = True
-
-        # Set the log_info function
-        if log:
-            self.log_info = log.info
-        else:
-            self.log_info = print
-        self.log = log
 
         # Initialize the pdf layer
         self.layer_pdf = None
@@ -174,7 +170,7 @@ class ModelTrainer:
         Compiles the validation and experimental models with fakes optimizers and learning rate
         as they are never trained, but this is needed by some backends in order to run evaluate on them
         """
-        self.log_info("Generating the Model")
+        log.info("Generating the Model")
 
         input_list = self.input_list
         # Create the training, validation and true (data w/o replica) models:
@@ -252,7 +248,7 @@ class ModelTrainer:
 
         # First reset the dictionaries
         self._reset_observables()
-        self.log_info("Generating layers")
+        log.info("Generating layers")
 
         # two parameters are used here which might go to the hyperopt
         pos_multiplier = params["pos_multiplier"]  # how much to increase the positivity penalty each 100 epochs
@@ -261,7 +257,7 @@ class ModelTrainer:
         # Now we need to loop over all dictionaries (First exp_info, then pos_info)
         for exp_dict in self.exp_info:
             if not self.mode_hyperopt:
-                self.log_info("Generating layers for experiment {0}".format(exp_dict["name"]))
+                log.info("Generating layers for experiment {0}".format(exp_dict["name"]))
 
             exp_layer = model_gen.observable_generator(exp_dict)
 
@@ -286,7 +282,7 @@ class ModelTrainer:
         # Finally generate the positivity penalty
         for pos_dict in self.pos_info:
             if not self.mode_hyperopt:
-                self.log_info("Generating positivity penalty for {0}".format(pos_dict["name"]))
+                log.info("Generating positivity penalty for {0}".format(pos_dict["name"]))
             pos_layer = model_gen.observable_generator(
                 pos_dict, positivity_initial=pos_initial, positivity_multiplier=pos_multiplier
             )
@@ -321,7 +317,7 @@ class ModelTrainer:
             - `dropout`
         see model_gen.pdfNN_layer_generator for more information
         """
-        self.log_info("Generating PDF layer")
+        log.info("Generating PDF layer")
 
         # Set the parameters of the NN
         nodes_per_layer = params["nodes_per_layer"]
@@ -433,9 +429,9 @@ class ModelTrainer:
 
         # When doing hyperopt some entries in the params dictionary can bring with them overriding arguments
         if self.mode_hyperopt:
-            self.log_info("Performing hyperparameter scan")
+            log.info("Performing hyperparameter scan")
             for key in self.hyperkeys:
-                self.log_info(" > > Testing {0} = {1}".format(key, params[key]))
+                log.info(" > > Testing {0} = {1}".format(key, params[key]))
             self._hyperopt_override(params)
 
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
