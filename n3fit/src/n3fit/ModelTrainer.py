@@ -90,9 +90,14 @@ class ModelTrainer:
         else:
             self.no_validation = False
 
-    def set_model_file(self, model_file):
+    @property
+    def model_file(self):
         """ If a model_file is set the training model will try to get the weights form here """
-        self.model_file = model_file
+        return self.__model_file
+
+    @model_file.setter
+    def model_file(self, model_file):
+        self.__model_file = model_file
 
     def set_hyperopt(self, on, keys=None):
         """ Set hyperopt options on and off (mostly suppresses some printing) """

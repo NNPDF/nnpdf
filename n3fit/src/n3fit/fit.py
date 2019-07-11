@@ -167,7 +167,7 @@ def fit(
                 log.warning(" > Model file {0} could not be found".format(model_file))
                 model_file = None
             else:
-                the_model_trainer.set_model_file(model_file)
+                the_model_trainer.model_file = model_file
 
         # This is just to give a descriptive name to the fit function
         pdf_gen_and_train_function = the_model_trainer.hyperparametizable
