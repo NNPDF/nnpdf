@@ -108,7 +108,7 @@ class Stat_Info:
 
         Returns the list already normalised to the number of points
         """
-        vl_list = self.vl_model.evaluate(x=None, y=None, verbose=False)
+        vl_list = self.vl_model.evaluate(verbose=False)
         vl_dict = {}
         try:
             total = vl_list[0] / self.ndata_vl

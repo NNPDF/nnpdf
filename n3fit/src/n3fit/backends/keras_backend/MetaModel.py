@@ -36,27 +36,36 @@ class MetaModel(Model):
                 ),
            }
 
-    # TODO: Ideally both fit and evaluate would know whether this model
-    # was compiled with input/output tensors already defined and will generate
-    # the necessary arguments.
-    # In other words, it should not be necessary for the .fit() .evaluate() functions
-    # called elsewhere to do x = None, y = None, this should already be known!
-    # TODO 2: when doing that, clean the surroundings of wherever the fit and
-    # evaluate functions are called
-    def fit(self,**kwargs):
-        return super().fit(steps_per_epoch = 1, **kwargs, )
+    def fit(self, epochs = 1, **kwargs):
+        if self.data_set:
+            return super().fit(x = None, y = None, steps_per_epoch = 1, batch_size = None,  epochs = epochs,  **kwargs )
+        else:
+            return super().fit(epochs = epochs, **kwargs )
     def evaluate(self, **kwargs):
-        return super().evaluate(steps = 1, **kwargs)
+        if self.data_set:
+            return super().evaluate(x = None, y = None, steps = 1, **kwargs)
+        else:
+            return super().evaluate()
 
-    def __init__(self, input_tensors, output_tensors, extra_tensors=None):
+    def __init__(self, input_tensors, output_tensors, extra_tensors=None, **kwargs):
         """
-        This class behaves as keras.models.Model with some add-ons:
+        This class behaves as keras.models.Model with the add on of extra_tensors.
 
-        if extra_tensors are given, they should come in the combination
-        (input: np.array, output_layer: function) so that they can be fed to keras as output_layer(*input)
+        It is assumed here and elsewhere that the input_tensors are indeed tensors and
+        not placeholders.
+        The usage of placeholders will work as long as nothing outside of the ordinary is done
+        i.e., it will work in that this class inherits from keras Model but all the add-ons
+        of this class assume the inputs are tensors.
+        
+        The outputs however can be freely fixed (useful when fitting to known data)
 
-        This function will turn all inputs into keras tensors
+        if extra_tensors are given, they should come in a list of tuples such that: 
+            (input: np.array, output_layer: function)
+        so that they can be fed to keras as output_layer(*input)
+        The inputs of the extra_tensors will be turned into keras inputs.
         """
+        self.data_set = None
+
         input_list = input_tensors
         output_list = output_tensors
 
@@ -64,6 +73,7 @@ class MetaModel(Model):
             input_list = [input_list]
         if not isinstance(output_list, list):
             output_list = [output_list]
+
 
         # Add extra tensors
         if extra_tensors is not None:
@@ -78,7 +88,7 @@ class MetaModel(Model):
                 input_list += inputs
                 output_list.append(o_tensor)
 
-        super(MetaModel, self).__init__(input_list, output_list)
+        super(MetaModel, self).__init__(input_list, output_list, **kwargs)
 
     def compile(self, optimizer_name="RMSprop", learning_rate=0.05, loss=None, target_output = None, **kwargs):
         """
@@ -109,5 +119,8 @@ class MetaModel(Model):
 
         opt_args["clipnorm"] = 1.0
         opt = opt_function(**opt_args)
+
+        if target_output is not None:
+            self.data_set = True
 
         super(MetaModel, self).compile(optimizer=opt, loss=loss, target_tensors = target_output,**kwargs)

@@ -376,7 +376,7 @@ class ModelTrainer:
         pos_multiplier = self.training["pos_multiplier"]
         # Train the model for the number of epochs given
         for epoch in range(epochs):
-            out = training_model.fit(x=None, y=None, epochs=1, verbose=False, shuffle=False)
+            out = training_model.fit(verbose=False)
             passes = validation_object.monitor_chi2(out, epoch)
 
             if validation_object.stop_here():
@@ -483,7 +483,7 @@ class ModelTrainer:
         validation_loss = validation_object.loss()
 
         # Compute experimental loss
-        exp_final = self.experimental["model"].evaluate(x=None, y=None)
+        exp_final = self.experimental["model"].evaluate()
         try:
             experimental_loss = exp_final[0] / self.experimental["ndata"]
         except IndexError:
@@ -493,7 +493,7 @@ class ModelTrainer:
         if self.test_dict:
             # Generate the 'true' chi2 with the experimental model but only for models that were stopped
             target_model = self.test_dict["model"]
-            out_final = target_model.evaluate(x=None, y=None, verbose=False)
+            out_final = target_model.evaluate(verbose = False)
             try:
                 testing_loss = out_final[0] / self.test_dict["ndata"]
             except IndexError:
