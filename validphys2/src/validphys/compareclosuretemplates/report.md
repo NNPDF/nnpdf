@@ -1,5 +1,13 @@
 % Comparing closure test {@current fit@} and {@reference fit@}.
 
+Fit summary
+-----------
+{@ summarise_fits @}
+
+Underlying PDF Summary
+----------------------
+{@ summarise_closure_underlying_pdfs @}
+
 Closures test estimators
 -----------------------
 ## $\Delta_{\chi^{2}}$
