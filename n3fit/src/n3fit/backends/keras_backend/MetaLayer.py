@@ -61,7 +61,9 @@ class MetaLayer(Layer):
         try:
             ini_tuple = MetaLayer.initializers[ini_name]
         except KeyError as e:
-            raise NotImplementedError(f"[MetaLayer.select_initializer] initializer not implemented: {ini_name}") from e
+            raise NotImplementedError(
+                f"[MetaLayer.select_initializer] initializer not implemented: {ini_name}"
+            ) from e
 
         ini_class = ini_tuple[0]
         ini_args = ini_tuple[1]
@@ -71,8 +73,6 @@ class MetaLayer(Layer):
             if key in ini_args.keys():
                 ini_args[key] = value
         return ini_class(**ini_args)
-
- 
 
     # Make numpy array into a tensor
     def np_to_tensor(self, np_array, **kwargs):
@@ -87,6 +87,7 @@ class MetaLayer(Layer):
         Generates a tensor of ones of the given shape
         """
         return K.ones(shape, **kwargs)
+
     def tensor_ones_like(self, tensor, **kwargs):
         """
         Generates a tensor of ones of the same shape as the input tensor

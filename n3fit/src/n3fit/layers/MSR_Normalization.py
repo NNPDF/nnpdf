@@ -1,9 +1,11 @@
 from n3fit.backends import MetaLayer
 
+
 class MSR_Normalization(MetaLayer):
     """
         Applies the normalisation so that the PDF output fullfills the sum rules
     """
+
     def __init__(self, output_dim=14, **kwargs):
         self.output_dim = output_dim
         self.one = self.tensor_ones((1, 1))

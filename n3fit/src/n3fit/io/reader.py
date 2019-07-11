@@ -31,11 +31,12 @@ def make_tr_val_mask(datasets, exp_name, seed):
     trmask_partial = []
     vlmask_partial = []
     for dataset_dict in datasets:
-        ndata = dataset_dict['ndata']
-        frac = dataset_dict['frac']
-        trmax = int(frac*ndata)
-        mask = np.concatenate([np.ones(trmax, dtype=np.bool),
-                                np.zeros(ndata-trmax, dtype=np.bool)])
+        ndata = dataset_dict["ndata"]
+        frac = dataset_dict["frac"]
+        trmax = int(frac * ndata)
+        mask = np.concatenate(
+            [np.ones(trmax, dtype=np.bool), np.zeros(ndata - trmax, dtype=np.bool)]
+        )
         np.random.shuffle(mask)
         trmask_partial.append(mask)
         vlmask_partial.append(mask == False)
@@ -164,7 +165,9 @@ def common_data_reader_experiment(experiment_c, experiment_spec):
             - `[parsed_datasets]`: a list of dictionaries output from `common_data_reader_dataset`
     """
     parsed_datasets = []
-    for dataset_c, dataset_spec in zip(experiment_c.DataSets(), experiment_spec.datasets):
+    for dataset_c, dataset_spec in zip(
+        experiment_c.DataSets(), experiment_spec.datasets
+    ):
         parsed_datasets += common_data_reader_dataset(dataset_c, dataset_spec)
     return parsed_datasets
 
@@ -236,7 +239,11 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
     elif isinstance(spec, vp_Dataset):
         datasets = common_data_reader_dataset(spec_c, spec)
     else:
-        raise ValueError("reader.py: common_data_reader, didn't understood spec type: {0}".format(type(spec)))
+        raise ValueError(
+            "reader.py: common_data_reader, didn't understood spec type: {0}".format(
+                type(spec)
+            )
+        )
 
     exp_name = spec.name
     covmat = spec_c.get_covmat()
@@ -257,23 +264,20 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
         invcovmat_vl = np.linalg.inv(covmat_vl)
 
         dict_out = {
-                'datasets' : datasets,
-                'name' : exp_name,
-                'expdata_true' : expdata_true,
-                'invcovmat_true' : np.linalg.inv(covmat),
-
-                'trmask' : tr_mask,
-                'invcovmat' : invcovmat_tr,
-                'ndata' : ndata_tr,
-                'expdata' : expdata_tr,
-
-                'vlmask' : vl_mask,
-                'invcovmat_vl' : invcovmat_vl,
-                'ndata_vl' : ndata_vl,
-                'expdata_vl' : expdata_vl,
-
-                'positivity' : False,
-                }
+            "datasets": datasets,
+            "name": exp_name,
+            "expdata_true": expdata_true,
+            "invcovmat_true": np.linalg.inv(covmat),
+            "trmask": tr_mask,
+            "invcovmat": invcovmat_tr,
+            "ndata": ndata_tr,
+            "expdata": expdata_tr,
+            "vlmask": vl_mask,
+            "invcovmat_vl": invcovmat_vl,
+            "ndata_vl": ndata_vl,
+            "expdata_vl": expdata_vl,
+            "positivity": False,
+        }
         all_dict_out.append(dict_out)
 
     return all_dict_out

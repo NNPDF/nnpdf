@@ -89,7 +89,9 @@ class MetaModel(Model):
         try:
             opt_tuple = self.optimizers[optimizer_name]
         except KeyError as e:
-            raise NotImplementedError(f"[MetaModel.select_initializer] optimizer not implemented: {optimizer_name}") from e
+            raise NotImplementedError(
+                f"[MetaModel.select_initializer] optimizer not implemented: {optimizer_name}"
+            ) from e
 
         opt_function = opt_tuple[0]
         opt_args = opt_tuple[1]

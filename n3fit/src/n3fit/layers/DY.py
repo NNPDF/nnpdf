@@ -6,6 +6,7 @@ class DY(Observable):
     """
     Computes the convolution of two PDFs (the same one twice) and one fktable
     """
+
     def gen_basis(self, basis):
         """
         Receives an array of combinations and make it into an array of 2-tuples

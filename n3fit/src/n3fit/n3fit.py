@@ -169,9 +169,11 @@ class N3FitApp(App):
             print(colors.color_exception(e.__class__, e, e.__traceback__), file=sys.stderr)
             sys.exit(1)
 
+
 def main():
     a = N3FitApp()
     a.main()
+
 
 if __name__ == "__main__":
     main()

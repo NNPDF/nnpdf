@@ -154,10 +154,8 @@ def fit(
         # Generate a ModelTrainer object
         # this object holds all necessary information to train a PDF (still no information about the NN)
         the_model_trainer = ModelTrainer(
-                exp_info, pos_info,
-                fitting['basis'], nnseed,
-                pass_status = status_ok,
-                debug = debug)
+            exp_info, pos_info, fitting["basis"], nnseed, pass_status=status_ok, debug=debug
+        )
 
         # Check whether we want to load weights from a file (maybe from a previous run)
         # check whether the file exists, otherwise set it to none

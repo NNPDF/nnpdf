@@ -58,9 +58,7 @@ def base_layer_selector(layer_name, **kwargs):
         layer_tuple = layers[layer_name]
     except KeyError as e:
         raise NotImplementedError(
-            "Layer not implemented in keras_backend/base_layers.py: {0}".format(
-                layer_name
-            )
+            "Layer not implemented in keras_backend/base_layers.py: {0}".format(layer_name)
         ) from e
 
     layer_class = layer_tuple[0]

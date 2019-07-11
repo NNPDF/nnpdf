@@ -1,6 +1,8 @@
 from n3fit.backends import MetaLayer
 from n3fit.backends import constraints
+
 BASIS_SIZE = 8
+
 
 class Preprocessing(MetaLayer):
     """
@@ -18,6 +20,7 @@ class Preprocessing(MetaLayer):
             - `flav_info`: dictionary containg the information with the limits of alpha and beta
             - `seed`: seed for the initializer of the random alpha, beta values
     """
+
     def __init__(self, output_dim=BASIS_SIZE, trainable=True, flav_info=None, seed=0, **kwargs):
         self.output_dim = output_dim
         self.trainable = trainable

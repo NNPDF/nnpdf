@@ -1,10 +1,12 @@
 from n3fit.backends import MetaLayer
 
+
 class Rotation(MetaLayer):
     """
         Applies a transformation from the dimension-8 fit basis
         to the dimension-14 evolution basis
     """
+
     def __init__(self, output_dim=14, **kwargs):
         self.output_dim = output_dim
         super(MetaLayer, self).__init__(**kwargs, name="evolution")

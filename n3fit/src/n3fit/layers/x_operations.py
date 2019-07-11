@@ -13,6 +13,7 @@
 
 from n3fit.backends import MetaLayer
 
+
 class xDivide(MetaLayer):
     """
         Divide the pdf by x
@@ -22,6 +23,7 @@ class xDivide(MetaLayer):
             - `output_dim`: dimension of the pdf
             - `div_list`: list of indices to be divided by X (by default [2,3,4]; [v, v3, v8]
     """
+
     def __init__(self, output_dim=8, div_list=None, **kwargs):
         if div_list is None:
             div_list = [2, 3, 4]

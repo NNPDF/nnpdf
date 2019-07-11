@@ -8,6 +8,7 @@ class DIS(Observable):
         and prepares a layer that performs the convolution of said fktable with
         the incoming pdf.
     """
+
     def gen_basis(self, basis):
         """
             Receives a list of active flavours and generates a boolean mask

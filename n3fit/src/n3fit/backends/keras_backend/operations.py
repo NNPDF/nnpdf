@@ -21,6 +21,7 @@ from keras import backend as K
 def numpy_to_input(numpy_array):
     return Input(tensor=K.constant(numpy_array))
 
+
 def c_to_py_fun(op_name, name, default="ADD"):
     """
     Map between the NNPDF operations and the operations defined in this file
@@ -58,7 +59,11 @@ def op_multiply_dim(o_list, **kwargs):
     as the normal keras multiply don't accept it (but somewhow it does accept it doing it like this)
     """
     if len(o_list) != 2:
-        raise ValueError("The number of observables is incorrect, operations.py:op_multiply_dim, expected 2, received {0}".format(len(o_list)))
+        raise ValueError(
+            "The number of observables is incorrect, operations.py:op_multiply_dim, expected 2, received {0}".format(
+                len(o_list)
+            )
+        )
     create_operation = keras_Lambda(lambda inputs: inputs[0] * inputs[1])
     return create_operation(o_list)
 
@@ -96,7 +101,11 @@ def op_ratio(o_list, **kwargs):
     Take the ratio of two observables
     """
     if len(o_list) != 2:
-        raise ValueError("The number of observables is incorrect, operations.py:op_ratio, expected 2, received {0}".format(len(o_list)))
+        raise ValueError(
+            "The number of observables is incorrect, operations.py:op_ratio, expected 2, received {0}".format(
+                len(o_list)
+            )
+        )
 
     division_layer = keras_Lambda(lambda inputs: inputs[0] / inputs[1], **kwargs)
     return division_layer(o_list)
@@ -107,7 +116,11 @@ def op_asy(o_list, **kwargs):
     Perform the asymmetry operation on two observables
     """
     if len(o_list) != 2:
-        raise ValueError("The number of observables is incorrect, operations.py:op_asy, expected 2, received {0}".format(len(o_list)))
+        raise ValueError(
+            "The number of observables is incorrect, operations.py:op_asy, expected 2, received {0}".format(
+                len(o_list)
+            )
+        )
 
     subtraction = keras_subtract(o_list)
     addition = op_add(o_list)
@@ -119,7 +132,11 @@ def op_smn(o_list, **kwargs):
     Normalised sum
     """
     if len(o_list) != 4:
-        raise ValueError("The number of observables is incorrect, operations.py:op_smn, expected 4, received {0}".format(len(o_list)))
+        raise ValueError(
+            "The number of observables is incorrect, operations.py:op_smn, expected 4, received {0}".format(
+                len(o_list)
+            )
+        )
     numer = op_add(o_list[:2])
     denom = op_add(o_list[2:])
     return op_ratio([numer, denom], **kwargs)

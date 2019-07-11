@@ -14,6 +14,7 @@ import n3fit.Statistics as Statistics
 from n3fit.backends import MetaModel, clear_backend_state
 
 import logging
+
 log = logging.getLogger(__name__)
 
 # If an experiment matches this name, it will not be included int he training
@@ -21,6 +22,7 @@ TESTNAME = "TEST"
 # Weights for the hyperopt cost function
 TEST_MULTIPLIER = 0.5
 VALIDATION_MULTIPLIER = 0.5
+
 
 class ModelTrainer:
     """
@@ -37,9 +39,8 @@ class ModelTrainer:
 
         *called in this way because it accept a dictionary of hyper-parameters which defines the Neural Network
     """
-    def __init__(
-        self, exp_info, pos_info, flavinfo, nnseed, pass_status="ok", failed_status="fail", debug=False
-    ):
+
+    def __init__(self, exp_info, pos_info, flavinfo, nnseed, pass_status="ok", failed_status="fail", debug=False):
         """
         # Arguments:
             - `exp_info`: list of dictionaries containing experiments
@@ -293,7 +294,6 @@ class ModelTrainer:
             self.training["losses"].append(pos_layer["loss_tr"])
         # Save the positivity multiplier into the training dictionary as it will be used during training
         self.training["pos_multiplier"] = pos_multiplier
-
 
     def _generate_pdf(self, params):
         """
