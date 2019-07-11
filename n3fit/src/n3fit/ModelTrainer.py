@@ -78,6 +78,11 @@ class ModelTrainer:
         self.training = {"output": [], "expdata": [], "losses": [], "ndata": 0, "model": None, "posdatasets": []}
         self.validation = {"output": [], "expdata": [], "losses": [], "ndata": 0, "model": None}
         self.experimental = {"output": [], "expdata": [], "losses": [], "ndata": 0, "model": None}
+        self.list_of_models_dicts = [
+                self.training,
+                self.validation,
+                self.experimental
+                ]
 
         self.test_dict = None
         self._fill_the_dictionaries()
@@ -144,6 +149,7 @@ class ModelTrainer:
                     "ndata": exp_dict["ndata"] + exp_dict["ndata_vl"],
                     "model": None,
                 }
+                self.list_of_models_dicts.append(self.test_dict)
                 continue
             self.training["expdata"].append(exp_dict["expdata"])
             self.validation["expdata"].append(exp_dict["expdata_vl"])
@@ -182,35 +188,22 @@ class ModelTrainer:
         log.info("Generating the Model")
 
         input_list = self.input_list
-        # Create the training, validation and true (data w/o replica) models:
-        tr_model = MetaModel(input_list, self._pdf_injection(self.training["output"]))
-        vl_model = MetaModel(input_list, self._pdf_injection(self.validation["output"]))
-        true_model = MetaModel(input_list, self._pdf_injection(self.experimental["output"]))
+
+        # Loop over all the dictionary models and create the trainig, validation, true (data w/o replica) models:
+        # note: if test_dict exists, it will also create a model for it
+
+        for model_dict in self.list_of_models_dicts:
+            model_dict["model"]  = MetaModel(input_list, self._pdf_injection(model_dict["output"]))
 
         if self.model_file:
             # If a model file is given, load the weights from there
             # note: even though the load corresponds to the training model only, the layer_pdf is shared
             # and so it should affect all models
-            tr_model.load_weights(self.model_file)
+            self.training["model"].load_weights(self.model_file)
 
         if self.print_summary:
-            tr_model.summary()
+            self.training["model"].summary()
 
-        fake_opt = "RMSprop"
-        fake_lr = 0.01
-        # Compile true and validation with fake lr/optimizer
-        vl_model.compile(optimizer_name=fake_opt, learning_rate=fake_lr, loss=self.validation["losses"])
-        true_model.compile(optimizer_name=fake_opt, learning_rate=fake_lr, loss=self.experimental["losses"])
-
-        if self.test_dict:
-            # If a test_dict was given, create and compile also the test model
-            test_model = MetaModel(input_list, self._pdf_injection(self.test_dict["output"]))
-            test_model.compile(optimizer_name=fake_opt, learning_rate=fake_lr, loss=self.test_dict["losses"])
-            self.test_dict["model"] = test_model
-
-        self.training["model"] = tr_model
-        self.validation["model"] = vl_model
-        self.experimental["model"] = true_model
 
     def _reset_observables(self):
         """
@@ -356,10 +349,19 @@ class ModelTrainer:
             - `optimizer`
         Optimizers accepted are backend-dependent
         """
-        training_model = self.training["model"]
-        loss_list = self.training["losses"]
 
-        training_model.compile(optimizer_name=optimizer, learning_rate=learning_rate, loss=loss_list)
+        # Compile all different models
+        for model_dict in self.list_of_models_dicts:
+            model = model_dict["model"]
+            losses = model_dict["losses"]
+            data = model_dict["expdata"]
+            model.compile(
+                    optimizer_name = optimizer,
+                    learning_rate = learning_rate,
+                    loss = losses,
+                    target_output = data,
+                    )
+
 
     def _train_and_fit(self, validation_object, epochs):
         """
@@ -374,7 +376,7 @@ class ModelTrainer:
         pos_multiplier = self.training["pos_multiplier"]
         # Train the model for the number of epochs given
         for epoch in range(epochs):
-            out = training_model.fit(x=None, y=exp_list, epochs=1, verbose=False, shuffle=False)
+            out = training_model.fit(x=None, y=None, epochs=1, verbose=False, shuffle=False)
             passes = validation_object.monitor_chi2(out, epoch)
 
             if validation_object.stop_here():
@@ -481,7 +483,7 @@ class ModelTrainer:
         validation_loss = validation_object.loss()
 
         # Compute experimental loss
-        exp_final = self.experimental["model"].evaluate(x=None, y=self.experimental["expdata"], batch_size=1)
+        exp_final = self.experimental["model"].evaluate(x=None, y=None)
         try:
             experimental_loss = exp_final[0] / self.experimental["ndata"]
         except IndexError:
@@ -491,8 +493,7 @@ class ModelTrainer:
         if self.test_dict:
             # Generate the 'true' chi2 with the experimental model but only for models that were stopped
             target_model = self.test_dict["model"]
-            target_data = self.test_dict["expdata"]
-            out_final = target_model.evaluate(x=None, y=target_data, verbose=False, batch_size=1)
+            out_final = target_model.evaluate(x=None, y=None, verbose=False)
             try:
                 testing_loss = out_final[0] / self.test_dict["ndata"]
             except IndexError:

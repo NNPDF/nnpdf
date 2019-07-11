@@ -4,11 +4,10 @@
     Extension of the backend Model class containing some wrappers in order to absorb other
     backend-dependent calls
 """
-import numpy as np
 from keras.models import Model
-from keras.layers import Input
 import keras.optimizers as Kopt
-import keras.backend as K
+
+from n3fit.backends.keras_backend.operations import numpy_to_tensor, numpy_to_input
 
 
 class MetaModel(Model):
@@ -37,6 +36,18 @@ class MetaModel(Model):
                 ),
            }
 
+    # TODO: Ideally both fit and evaluate would know whether this model
+    # was compiled with input/output tensors already defined and will generate
+    # the necessary arguments.
+    # In other words, it should not be necessary for the .fit() .evaluate() functions
+    # called elsewhere to do x = None, y = None, this should already be known!
+    # TODO 2: when doing that, clean the surroundings of wherever the fit and
+    # evaluate functions are called
+    def fit(self,**kwargs):
+        return super().fit(steps_per_epoch = 1, **kwargs, )
+    def evaluate(self, **kwargs):
+        return super().evaluate(steps = 1, **kwargs)
+
     def __init__(self, input_tensors, output_tensors, extra_tensors=None):
         """
         This class behaves as keras.models.Model with some add-ons:
@@ -60,31 +71,28 @@ class MetaModel(Model):
                 inputs = []
                 if isinstance(ii, list):
                     for i in ii:
-                        inputs.append(self._np_to_input(i))
+                        inputs.append(numpy_to_input(i))
                 else:
-                    inputs = [self._np_to_input(ii)]
+                    inputs = [numpy_to_input(ii)]
                 o_tensor = oo(*inputs)
                 input_list += inputs
                 output_list.append(o_tensor)
 
         super(MetaModel, self).__init__(input_list, output_list)
 
-    def _np_to_input(self, x):
+    def compile(self, optimizer_name="RMSprop", learning_rate=0.05, loss=None, target_output = None, **kwargs):
         """
-        If x is a numpy array, make it into a numpy tensor
-        """
-        if isinstance(x, np.ndarray):
-            tensor = K.constant(x)
-            return Input(tensor=tensor)
-        else:
-            return x
+        Compile the model given an optimizer and a list of loss functions.
+        The optimizer must be one of those implemented in the `optimizer` attribute of this class.
 
-    def compile(self, optimizer_name="RMSprop", learning_rate=0.05, loss=None, **kwargs):
-        """
-        Compile the model given:
-            - Optimizer
-            - Learning Rate
-            - List of loss functions
+        Optionally a learning rate and a list of target outpout can be defined.
+
+        # Arguments:
+            - `optimizer_name`: string defining the optimizer to be used
+            - `learning_rate`: learning rate of of the optimizer (if accepted as an argument, if not it will be ignored)
+            - `loss` : list of loss functions to be pass to the model
+            - `target_output`: list of outputs to compare the results to during fitting/evaluation
+                               if given further calls to fit/evaluate must be done with y = None.
         """
         try:
             opt_tuple = self.optimizers[optimizer_name]
@@ -102,4 +110,4 @@ class MetaModel(Model):
         opt_args["clipnorm"] = 1.0
         opt = opt_function(**opt_args)
 
-        super(MetaModel, self).compile(optimizer=opt, loss=loss, **kwargs)
+        super(MetaModel, self).compile(optimizer=opt, loss=loss, target_tensors = target_output,**kwargs)
