@@ -71,7 +71,7 @@ def fit(
         # (important to avoid non-deterministic multithread or hidden states)
         from n3fit.backends import set_initial_state
 
-        set_initial_state(debug=debug)
+        set_initial_state()
     ###############
 
     # All potentially backend dependent imports should come inside the fit function
@@ -157,7 +157,7 @@ def fit(
                 exp_info, pos_info,
                 fitting['basis'], nnseed,
                 pass_status = status_ok,
-                log = log, debug = debug)
+                debug = debug)
 
         # Check whether we want to load weights from a file (maybe from a previous run)
         # check whether the file exists, otherwise set it to none

@@ -38,7 +38,7 @@ class ModelTrainer:
         *called in this way because it accept a dictionary of hyper-parameters which defines the Neural Network
     """
     def __init__(
-        self, exp_info, pos_info, flavinfo, nnseed, pass_status="ok", failed_status="fail", log=None, debug=False
+        self, exp_info, pos_info, flavinfo, nnseed, pass_status="ok", failed_status="fail", debug=False
     ):
         """
         # Arguments:
@@ -46,7 +46,6 @@ class ModelTrainer:
             - `pos_info`: list of dictionaries containing positivity sets
             - `flavinfo`: the object returned by fitting['basis']
             - `nnseed`: the seed used to initialise the Neural Network, will be passed to model_gen
-            - `log`: if given, printing will be done to log.info
             - `debug`: flag to activate some debug options
         """
 
@@ -425,7 +424,8 @@ class ModelTrainer:
 
         # Reset the internal state of the backend
         print("")
-        clear_backend_state(self.debug)
+        if self.debug:
+            clear_backend_state()
 
         # When doing hyperopt some entries in the params dictionary can bring with them overriding arguments
         if self.mode_hyperopt:

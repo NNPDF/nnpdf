@@ -72,7 +72,7 @@ def msr_impose(fit_layer, final_pdf_layer, verbose=False):
         #         result = modelito.predict(x = None, steps = 1)
 
         print(" > > Generating model for the inyection layer which imposes MSR")
-        check_integration(ultimate_pdf, xgrid_input, verbose=True)
+        check_integration(ultimate_pdf, xgrid_input)
 
     # Save a reference to xgrid in ultimate_pdf, very useful for debugging
     ultimate_pdf.ref_xgrid = xgrid_input
@@ -80,10 +80,12 @@ def msr_impose(fit_layer, final_pdf_layer, verbose=False):
     return ultimate_pdf, xgrid_input
 
 
-def check_integration(ultimate_pdf, integration_input, verbose=False):
+def check_integration(ultimate_pdf, integration_input):
     """
     Naive integrator for quick checks.
     Receives the final PDF layer, computes the 4 MSR and prints out the result
+
+    Called only (for debugging purposes) by msr_impose above
     """
     nx = int(1e4)
     xgrid, weights_array = gen_integration_input(nx)
@@ -96,8 +98,7 @@ def check_integration(ultimate_pdf, integration_input, verbose=False):
         return res
 
     modelito = MetaModel([xgrid_input, integration_input], pdf_integrand(xgrid_input))
-    if verbose:
-        modelito.summary()
+    modelito.summary()
     result = modelito.predict(x=None, steps=1)
 
     result_weighted = result * weights_array
