@@ -320,6 +320,24 @@ def summarise_theory_covmat_fits(fits_theory_covmat_summary):
     """Collects the theory covmat summary for all fits and concatenates them into a single table"""
     return pd.concat(fits_theory_covmat_summary, axis=1)
 
+def fit_underlying_pdfs_summary(fit, fitunderlyinglaw):
+    """Returns a table with a single column for the `fit` with a row indication
+    the PDF used to generate the data and the t0 pdf
+    """
+    t0name = fit.as_input()['datacuts']['t0pdfset']
+    df = pd.DataFrame(
+        [str(fitunderlyinglaw['pdf']), t0name],
+        columns=[fit.label],
+        index=['underlying PDF', 't0 PDF'])
+    return df
+
+fits_underlying_pdfs_summary = collect('fit_underlying_pdfs_summary', ('fits',))
+
+@table
+def summarise_closure_underlying_pdfs(fits_underlying_pdfs_summary):
+    """Collects the underlying pdfs for all fits and concatenates them into a single table"""
+    return pd.concat(fits_underlying_pdfs_summary, axis=1)
+
 
 def _get_fitted_index(pdf, i):
     """Return the nnfit index for the replcia i"""
