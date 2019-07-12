@@ -424,7 +424,7 @@ class ModelTrainer:
 
         # Reset the internal state of the backend
         print("")
-        if self.debug:
+        if not self.debug:
             clear_backend_state()
 
         # When doing hyperopt some entries in the params dictionary can bring with them overriding arguments
