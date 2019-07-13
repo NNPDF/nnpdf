@@ -42,10 +42,26 @@ class MetaModel(Model):
         else:
             return super().fit(epochs = epochs, **kwargs )
     def evaluate(self, **kwargs):
+        """
+            Performs keras.evaluate and returns a list of the loss function for each of the outputs of the system
+
+            In Keras the first element of the list is the total loss (sum of all other elements) but, if there
+            is only one output it returns a float instead. 
+            In order to fix this inconsistent behaviour when there is only one output we copy it twice into a list
+            so that it behaves the same for 1 and n > 1 elements.
+
+            # Returns:
+                - `loss_list`: a list with al the losses of the system
+        """
+        # TODO: make it into a dictionary of {'output_layer_name' : loss} so it looks more similar to the output of .fit
         if self.data_set:
-            return super().evaluate(x = None, y = None, steps = 1, **kwargs)
+            result = super().evaluate(x = None, y = None, steps = 1, **kwargs)
         else:
-            return super().evaluate()
+            result = super().evaluate()
+        if isinstance(result, float):
+            return [result, result]
+        else:
+            return result
 
     def __init__(self, input_tensors, output_tensors, extra_tensors=None, **kwargs):
         """
