@@ -95,12 +95,12 @@ class Stopping:
         self.stopping_patience = stopping_patience
         self.stopping_degree = 0
         self.count = 0
+        self.partial_log = -1
 
         # Initialize the parameters of the fit
         self.total_epochs = total_epochs
         self.epoch_of_the_stop = total_epochs
         self.best_chi2 = INITIAL_CHI2
-        self.training_chi2 = INITIAL_CHI2
 
         # Initialize stats
         self.reset_stats()
@@ -109,19 +109,29 @@ class Stopping:
         self.history_maker = HistoryMaker(self, save_each) # how evil is this?
 
 
+    # In order to get the validation and training loss we return the loss of the best epoch
+    # the reason we do this is the HistoryMaker, the easiest and cleanest way of rewinding history
+    # is to go back to the epoch in which the weights for that point in history were saved
     @property
     def loss(self):
         return self.best_chi2
+    @loss.getter
+    def loss(self):
+        return self.validation_losses[self.e_best_chi2]
+
     @property
     def tr_loss(self):
-        return self.training_chi2
+        return self.__tr_loss
+    @tr_loss.getter
+    def tr_loss(self):
+        return self.training_losses[self.e_best_chi2]
 
     def reset_stats(self):
         self.training_losses = []
         self.validation_losses = []
         self.file_list = []
         self.w_best_chi2 = None
-        self.e_best_chi2 = 0
+        self.e_best_chi2 = -1
 
     def history_loop(self):
         if self.history_maker.history_active():
@@ -188,8 +198,6 @@ class Stopping:
             if vl_chi2 < self.best_chi2:
                 # we found a better validation loss! Reset All
                 self.best_chi2 = vl_chi2
-                # Save the training chi2 for this point
-                self.training_chi2 = tr_chi2
                 # Save extra info
                 self.stopping_degree = 0
                 self.e_best_chi2 = epoch
@@ -198,13 +206,13 @@ class Stopping:
                 # Now activate the counter
                 self.count = 1
 
-        # Call the history maker, if it was not active this call will do nothing
-        self.history_maker.save(epoch)
-
         # If we are asked, print stats and save logs
         if print_stats:
             self.save_chi2_log(epoch, all_tr, all_vl)
             self.print_current_stats(all_tr)
+
+        # Call the history maker, if it was not active this call will do nothing
+        self.history_maker.save(epoch)
 
         # If your patience has ended, prepare for stop
         if self.stopping_degree > self.stopping_patience:
@@ -303,8 +311,7 @@ Total: training = {2} validation = {3}
         self.file_list.append(strout)
 
     def chi2exps_str(self):
-        # TODO: check the epoch of the stop / the epoch of the best chi2 and return only that part
-        return self.file_list
+        return self.file_list[:self.partial_log]
 
 class Validation:
     """
@@ -436,8 +443,9 @@ class HistoryMaker:
         if save_here == 0:
             weights_best = self.stopping_object.w_best_chi2
             epoch_best = self.stopping_object.e_best_chi2
+            size_log = len(self.stopping_object.file_list)
             self.all_history.append(
-                    (epoch, epoch_best, weights_best)
+                    (epoch, epoch_best, weights_best, size_log)
                     )
 
     def reload(self, index):
@@ -447,6 +455,7 @@ class HistoryMaker:
         self.stopping_object.epoch_of_the_stop = info[0]
         self.stopping_object.e_best_chi2 = info[1]
         self.stopping_object.w_best_chi2 = info[2]
+        self.stopping_object.partial_log = info[3] 
         self.stopping_object.reload_model()
 
     def history_active(self):

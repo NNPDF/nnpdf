@@ -529,6 +529,7 @@ class ModelTrainer:
         dict_out["layers"] = layers
         dict_out["integrator_input"] = integrator_input
         dict_out["validation_object"] = validation_object
+        dict_out["experimental"] = self.experimental
         dict_out["training"] = self.training
 
         return dict_out
