@@ -3,7 +3,6 @@
 """
 
 # TODO
-#   - Save the chi2 logs in a better way
 #   - Does it make sense to use Keras callbacks or we want to actually avoid it?
 #           Extra: do we want to implement the callback as part of the .fit function?
 #   - Save the animations
@@ -116,6 +115,7 @@ class Stopping:
     def reset_stats(self):
         self.training_losses = []
         self.validation_losses = []
+        self.file_list = []
         self.w_best_chi2 = None
         self.e_best_chi2 = 0
 
@@ -168,7 +168,7 @@ class Stopping:
             return False
 
         # Step 2. Read the validation loss (if there is no validation loss it will correspond to the training)
-        vl_chi2, _ = self.validation.loss
+        vl_chi2, all_vl = self.validation.loss
 
         # Step 3. Store all information about the run
         self.save_stats(tr_chi2, vl_chi2)
@@ -188,8 +188,9 @@ class Stopping:
                 # Now activate the counter
                 self.count = 1
 
-        # If it makes sense, print states
+        # If we are asked, print stats and save logs
         if print_stats:
+            self.save_chi2_log(epoch, all_tr, all_vl)
             self.print_current_stats(all_tr)
 
         # If your patience has ended, prepare for stop
@@ -275,14 +276,21 @@ class Stopping:
     def positivity_pass(self):
         return self.positivity()
 
-    def chi2exps_str(self):
-        file_list = []
-        for epoch in range(0, len(self.training_losses), 100):
-            strout = "\nEpoch: {0}".format(epoch)
-            strout += "\nTotal: training = {0} validation = {1}\n".format(self.training_losses[epoch], self.validation_losses[epoch])
-            file_list.append(strout)
-        return file_list
+    def save_chi2_log(self, epoch, all_tr, all_vl):
+        data = ""
+        # Note: here it is assumed the validation exp set is always a subset of the training exp set
+        for exp, tr_loss in all_tr.items():
+            vl_loss = all_vl.get(exp, 0.0)
+            data += "\n{0}: {1} {2}".format(exp, tr_loss, vl_loss)
+        strout = """
+Epoch: {0}
+{1}
+Total: training = {2} validation = {3}
+""".format(epoch, data, self.training_losses[-1], self.validation_losses[-1])
+        self.file_list.append(strout)
 
+    def chi2exps_str(self):
+        return self.file_list
 
 class Validation:
     """
