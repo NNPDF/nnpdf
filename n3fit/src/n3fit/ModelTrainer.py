@@ -10,8 +10,8 @@
 """
 import n3fit.model_gen as model_gen
 import n3fit.msr as msr_constraints
-import n3fit.Statistics as Statistics
 from n3fit.backends import MetaModel, clear_backend_state
+from n3fit.stopping import Stopping
 
 import logging
 
@@ -377,17 +377,20 @@ class ModelTrainer:
         # Train the model for the number of epochs given
         for epoch in range(epochs):
             out = training_model.fit(verbose=False)
-            passes = validation_object.monitor_chi2(out, epoch)
-
-            if validation_object.stop_here():
-                break
+            print_stats = False
 
             if (epoch + 1) % 100 == 0:
+                print_stats = True
                 for pos_ds in self.training["posdatasets"]:
                     name = pos_ds
                     curr_w = training_model.get_layer(name).get_weights()
                     new_w = [curr_w[0] * pos_multiplier]
                     training_model.get_layer(name).set_weights(new_w)
+
+            passes = validation_object.monitor_chi2(out, epoch, print_stats = print_stats)
+
+            if validation_object.stop_here():
+                break
 
         # Report a "good" training only if there was no NaNs and there was at least a point which passed positivity
         if passes and validation_object.positivity:
@@ -452,23 +455,13 @@ class ModelTrainer:
         stopping_patience = params["stopping_patience"]
         stopping_epochs = epochs * stopping_patience
 
-        # If the tr/vl splitting is == 1, there will be no points in the validation so we use the training as val
-        if self.no_validation:
-            validation_object = Statistics.Stat_Info(
-                self.training["model"],
-                self.training["expdata"],
-                self.ndata_dict,
-                total_epochs=epochs,
-                stopping_epochs=stopping_epochs,
-            )
-        else:
-            validation_object = Statistics.Stat_Info(
+        # TODO: what to do when there is no validation
+        validation_object = Stopping(
                 self.validation["model"],
-                self.validation["expdata"],
                 self.ndata_dict,
-                total_epochs=epochs,
-                stopping_epochs=stopping_epochs,
-            )
+                total_epochs = epochs,
+                stopping_patience = stopping_epochs,
+                )
 
         # Compile the training['model'] with the given parameters
         self._model_compilation(params['learning_rate'], params['optimizer'])
@@ -476,11 +469,8 @@ class ModelTrainer:
         ### Training loop
         passed = self._train_and_fit(validation_object, epochs)
 
-        # After training has completed, reload the best_model found during training
-        validation_object.reload_model()
-
         # Compute validation loss
-        validation_loss = validation_object.loss()
+        validation_loss = validation_object.loss
 
         # Compute experimental loss
         exp_final = self.experimental["model"].evaluate()
@@ -514,7 +504,7 @@ class ModelTrainer:
             "loss": final_loss,
             "status": passed,
             "arc_lengths": arc_lengths,
-            "training_loss": validation_object.tr_loss(),
+            "training_loss": validation_object.tr_loss,
             "validation_loss": validation_loss,
             "experimental_loss": experimental_loss,
             "testing_loss": testing_loss,

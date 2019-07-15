@@ -257,7 +257,7 @@ def fit(
                 Positivity state: {4}
                 """.format(
                 validation_object.epoch_of_the_stop,
-                validation_object.loss(),
+                validation_object.loss,
                 validation_object.e_best_chi2,
                 validation_object.stopping_degree,
                 validation_object.positivity_pass(),
@@ -269,7 +269,7 @@ def fit(
         # Construct the chi2exp file
         allchi2_lines = validation_object.chi2exps_str()
         # Construct the preproc file
-        preproc_lines = validation_object.preproc_str()
+        preproc_lines = "" # TODO decide how to fill up this in a sensible way
 
         # Creates a PDF model for export grid
         def pdf_function(export_xgrid):
@@ -288,8 +288,8 @@ def fit(
             output_path.stem,
             theoryid.get_description().get("Q0") ** 2,
             validation_object.epoch_of_the_stop,
-            validation_object.loss(),
-            validation_object.tr_loss(),
+            validation_object.loss,
+            validation_object.tr_loss,
             true_chi2,
             arc_lengths,
             allchi2_lines,

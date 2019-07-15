@@ -3,16 +3,13 @@
 """
 
 # TODO
-#   - Priorty one: make sure the interface of the Stopping class that Model Training is using makes
-#       sense
-#   - Reproduce previous results
-# 
 #   - Save the chi2 logs in a better way
 #   - Decide what to do when we do not have any validation
+#   - Does it make sense to use Keras callbacks or we want to actually avoid it?
+#           Extra: do we want to implement the callback as part of the .fit function?
 #   - Save the animations
 
 import numpy as np
-from ipdb import set_trace
 
 import logging
 
@@ -23,6 +20,10 @@ log = logging.getLogger(__name__)
 TERRIBLE_CHI2 = 1e10
 INITIAL_CHI2 = 1e9
 
+# Pass/veto keys
+POS_OK = "POS_PASS"
+POS_BAD = "POS_VETO"
+
 def parse_ndata(ndata_dict):
     """ 
     Parses the ndata dictionary into training a validation
@@ -32,9 +33,9 @@ def parse_ndata(ndata_dict):
     tr_ndata = {}
     vl_ndata = {}
     for key, npoints in ndata_dict.items():
-        if key.startswith(("ALL", "POS")):
+        if key.lower().startswith(("pos", "total")):
             continue
-        if key.endswith("_vl"):
+        if key.lower().endswith("_vl"):
             vl_ndata[key] = npoints
         else:
             tr_ndata[key] = npoints
@@ -67,7 +68,6 @@ class Stopping:
         dont_stop=False,
     ):
 
-        set_trace()
         # Parse the data dictionary
         self.ndata_tr_dict, vl_ndata = parse_ndata(ndata_dict)
 
@@ -78,21 +78,32 @@ class Stopping:
         # Initialize internal (useful) variables
         self.stop_now = False
         self.nan_found = False
+        self.dont_stop = dont_stop
         self.stopping_patience = stopping_patience
         self.stopping_degree = 0
+        self.count = 0
 
         # Initialize the parameters of the fit
         self.total_epochs = total_epochs
         self.epoch_of_the_stop = total_epochs
         self.best_chi2 = INITIAL_CHI2
+        self.training_chi2 = INITIAL_CHI2
 
         # Initialize stats
         self.reset_stats()
 
+    @property
+    def loss(self):
+        return self.best_chi2
+    @property
+    def tr_loss(self):
+        return self.training_chi2
 
     def reset_stats(self):
         self.training_losses = []
         self.validation_losses = []
+        self.w_best_chi2 = None
+        self.e_best_chi2 = 0
 
     def save_stats(self, tr_loss, vl_loss):
         """ 
@@ -105,7 +116,7 @@ class Stopping:
         self.training_losses.append(tr_loss)
         self.validation_losses.append(vl_loss)
 
-    def monitor_stop(self, training_info, epoch):
+    def monitor_chi2(self, training_info, epoch, print_stats = False):
         """
         Function to be called at the end of every epoch.
         Stores the total chi2 of the training set as well as the
@@ -125,7 +136,7 @@ class Stopping:
             - `pass_ok`: true/false according to the status of the run
         """
         # Step 0. Count the event, worst case scenario we have to reset to 0
-        self.stopping_degree += 1
+        self.stopping_degree += self.count
 
         # Step 1. Check whether the run was ok
         tr_chi2, all_tr = self._parse_training(training_info)
@@ -144,6 +155,7 @@ class Stopping:
 
         # Step 2. If there is no validation, it makes no sense to ask for validation
         # TODO deal with this special case
+        vl_chi2, _ = self.validation.loss
 
         # Step 3. Store all information about the run
         self.save_stats(tr_chi2, vl_chi2)
@@ -151,11 +163,21 @@ class Stopping:
         # Step 4. Check whether positivity passes, if it doesn't ignore the point
         if self.positivity.check_positivity(training_info):
             if vl_chi2 < self.best_chi2:
-                # we found a better validation loss! ResetA
+                # we found a better validation loss! Reset All
                 self.best_chi2 = vl_chi2
+                # Save the training chi2 for this point
+                self.training_chi2 = tr_chi2
+                # Save extra info
                 self.stopping_degree = 0
+                self.e_best_chi2 = epoch
                 self.best_history = training_info
                 self.save_model()
+                # Now activate the counter
+                self.count = 1
+
+        # If it makes sense, print states
+        if print_stats:
+            self.print_current_stats(all_tr)
 
         # If your patience has ended, prepare for stop
         if self.stopping_degree > self.stopping_patience:
@@ -180,7 +202,7 @@ class Stopping:
         """
             Prints the last validation and training loss saved
         """
-        epoch = len(self.training_loss)
+        epoch = len(self.training_losses)
         loss = self.training_losses[-1]
         vl_loss = self.validation_losses[-1]
         total_str = "\nAt epoch {0}/{1}, total loss: {2}".format(
@@ -224,12 +246,29 @@ class Stopping:
         tr_chi2 = {}
         total_points = 0
         for exp_name, npoints in self.ndata_tr_dict.items():
-            chi2 = np.mean(hobj[exp + "_loss"]) / npoints
+            chi2 = np.mean(hobj[exp_name + "_loss"]) / npoints
             tr_chi2[exp_name] = chi2
             total_points = npoints
 
         total = np.mean(hobj["loss"]) / total_points
         return total, tr_chi2
+
+    def stop_here(self):
+        if self.dont_stop:
+            return False
+        else:
+            return self.stop_now
+
+    def positivity_pass(self):
+        return self.positivity()
+
+    def chi2exps_str(self):
+        file_list = []
+        for epoch in range(0, len(self.training_losses), 100):
+            strout = "\nEpoch: {0}".format(epoch)
+            strout += "\nTotal: training = {0} validation = {1}\n".format(self.training_losses[epoch], self.validation_losses[epoch])
+            file_list.append(strout)
+        return file_list
 
 
 class Validation:
@@ -273,7 +312,7 @@ class Validation:
         total_points = 0
         for loss, (exp_name, npoints) in zip(loss_list[1:], self.ndata_dict.items()):
             vl_dict[exp_name] = loss / npoints
-            total_points += 0
+            total_points += npoints
 
         total_loss = loss_list[0] / total_points
 
@@ -291,6 +330,13 @@ class Validation:
     def weights(self):
         return self.model.get_weights()
 
+    @property
+    def loss(self):
+        return self.__loss
+    @loss.getter
+    def loss(self):
+        return self._compute_validation_loss()
+        
 
 class Positivity:
     """
@@ -307,6 +353,7 @@ class Positivity:
 
     def __init__(self, threshold):
         self.threshold = threshold
+        self.positivity = False
 
     def check_positivity(self, history_object, pos_key="POS"):
         """
@@ -318,9 +365,20 @@ class Positivity:
         """
         positivity_loss = 0.0
         for key, item in history_object.items():
-            if key.startwith(pos_key):
-                positivity_loss += item
+            if key.startswith(pos_key):
+                positivity_loss += item[-1]
         if positivity_loss > self.threshold:
-            return False
+            self.positivity = False
         else:
-            return True
+            self.positivity = True
+        return self.positivity
+
+    def __call__(self):
+        if self.positivity:
+            return POS_OK
+        else:
+            return POS_BAD
+
+
+
+

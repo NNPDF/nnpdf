@@ -37,10 +37,19 @@ class MetaModel(Model):
            }
 
     def fit(self, epochs = 1, **kwargs):
+        """
+            Performs forward (and backwards) propagation for the model for a given number of epochs.
+            If the model was compiled with input and output data, there is no need for giving them in this function
+
+            # Returns:
+                - `history`: a dictionary of all the output layers of the model mapped to their partial loss
+                             the partial loss containing one element for each epoch 
+        """
         if self.data_set:
-            return super().fit(x = None, y = None, steps_per_epoch = 1, batch_size = None,  epochs = epochs,  **kwargs )
+            history = super().fit(x = None, y = None, steps_per_epoch = 1, batch_size = None,  epochs = epochs,  **kwargs )
         else:
-            return super().fit(epochs = epochs, **kwargs )
+            history = super().fit(epochs = epochs, **kwargs )
+        return history.history
     def evaluate(self, **kwargs):
         """
             Performs keras.evaluate and returns a list of the loss function for each of the outputs of the system
