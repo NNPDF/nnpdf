@@ -6,7 +6,47 @@
 """
 
 import numpy as np
+import os
 from reportengine.compat import yaml
+from n3fit.msr import compute_arclength
+
+
+class WriterWrapper:
+    def __init__(self, pdf_function, validation_object, fitbasis_layer, q2):
+        self.pdf_function = pdf_function
+        self.validation_object = validation_object
+        self.fitbasis = fitbasis_layer
+        self.q2 = q2
+
+    def write_data(self, replica_number, replica_path_set, output_path, true_chi2):
+        # Compute the arclengths
+        arc_lengths = compute_arclength(self.fitbasis)
+        # Construct the chi2exp file
+        allchi2_lines = self.validation_object.chi2exps_str()
+        # Construct the preproc file
+        preproc_lines = "" # TODO decide how to fill up this in a sensible way
+
+        # Check the directory exist, if it doesn't, generate it
+        os.makedirs(replica_path_set, exist_ok = True)
+
+        # export PDF grid to file
+        storefit(
+            self.pdf_function,
+            replica_number,
+            replica_path_set,
+            output_path,
+            self.q2,
+            self.validation_object.epoch_of_the_stop,
+            self.validation_object.loss,
+            self.validation_object.tr_loss,
+            true_chi2,
+            arc_lengths,
+            allchi2_lines,
+            preproc_lines,
+            self.validation_object.positivity_pass(),
+        )
+
+    
 
 def evln2lha(evln):
     # evln Basis {"PHT","SNG","GLU","VAL","V03","V08","V15","V24","V35","T03","T08","T15","T24","T35"};

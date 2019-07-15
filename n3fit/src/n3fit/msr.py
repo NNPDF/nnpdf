@@ -7,6 +7,8 @@ from n3fit.layers import xDivide, MSR_Normalization, xIntegrator, xMultiply
 from n3fit.backends import operations
 from n3fit.backends import MetaModel
 
+import logging
+log = logging.getLogger(__name__)
 
 def gen_integration_input(nx):
     """
@@ -120,7 +122,7 @@ def check_integration(ultimate_pdf, integration_input):
     )
 
 
-def compute_arclength(fitbasis_layer, verbose=False):
+def compute_arclength(fitbasis_layer):
     """
     Given the layer with the fit basis computes the arc length
     """
@@ -145,8 +147,7 @@ def compute_arclength(fitbasis_layer, verbose=False):
     f_of_x = np.sqrt(1.0 + derivatives_sq)
     arc_lengths = np.sum(f_of_x * weights_array, axis=0)
 
-    if verbose:
-        print(
+    log.debug(
             """
         > > > Arc length:
         sigma = {0}

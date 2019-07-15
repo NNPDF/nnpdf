@@ -40,7 +40,7 @@ class ModelTrainer:
         *called in this way because it accept a dictionary of hyper-parameters which defines the Neural Network
     """
 
-    def __init__(self, exp_info, pos_info, flavinfo, nnseed, pass_status="ok", failed_status="fail", debug=False):
+    def __init__(self, exp_info, pos_info, flavinfo, nnseed, pass_status="ok", failed_status="fail", debug=False, save_history_each = False):
         """
         # Arguments:
             - `exp_info`: list of dictionaries containing experiments
@@ -62,6 +62,7 @@ class ModelTrainer:
         self.pass_status = pass_status
         self.failed_status = failed_status
         self.debug = debug
+        self.save_history_each = save_history_each
 
         # Initialise internal variables which define behaviour
         self.print_summary = True
@@ -466,6 +467,7 @@ class ModelTrainer:
                 self.ndata_dict,
                 total_epochs = epochs,
                 stopping_patience = stopping_epochs,
+                save_each = self.save_history_each
                 )
 
         # Compile the training['model'] with the given parameters

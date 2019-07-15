@@ -77,7 +77,7 @@ def fit(
     # All potentially backend dependent imports should come inside the fit function
     # so they can eventually be set from the runcard
     from n3fit.ModelTrainer import ModelTrainer
-    from n3fit.io.writer import storefit
+    from n3fit.io.writer import WriterWrapper 
     from n3fit.backends import MetaModel
     import n3fit.io.reader as reader
     import n3fit.msr as msr_constraints
@@ -154,7 +154,7 @@ def fit(
         # Generate a ModelTrainer object
         # this object holds all necessary information to train a PDF (still no information about the NN)
         the_model_trainer = ModelTrainer(
-            exp_info, pos_info, fitting["basis"], nnseed, pass_status=status_ok, debug=debug
+            exp_info, pos_info, fitting["basis"], nnseed, pass_status=status_ok, debug=debug, save_history_each = fitting["save_history_each"]
         )
 
         # Check whether we want to load weights from a file (maybe from a previous run)
@@ -264,13 +264,6 @@ def fit(
             )
         )
 
-        # Compute the arclengths
-        arc_lengths = msr_constraints.compute_arclength(layers["fitbasis"], verbose=True)
-        # Construct the chi2exp file
-        allchi2_lines = validation_object.chi2exps_str()
-        # Construct the preproc file
-        preproc_lines = "" # TODO decide how to fill up this in a sensible way
-
         # Creates a PDF model for export grid
         def pdf_function(export_xgrid):
             """
@@ -280,22 +273,21 @@ def fit(
             result = modelito.predict(x=None, steps=1)
             return result
 
-        # export PDF grid to file
-        storefit(
-            pdf_function,
-            replica_number,
-            replica_path_set,
-            output_path.stem,
-            theoryid.get_description().get("Q0") ** 2,
-            validation_object.epoch_of_the_stop,
-            validation_object.loss,
-            validation_object.tr_loss,
-            true_chi2,
-            arc_lengths,
-            allchi2_lines,
-            preproc_lines,
-            validation_object.positivity_pass(),
-        )
+        # Generate the writer wrapper
+        writer_wrapper = WriterWrapper(pdf_function, validation_object, layers['fitbasis'], theoryid.get_description().get("Q0") ** 2)
+
+        # Now write the data down
+        writer_wrapper.write_data(replica_number, replica_path_set, output_path.stem, true_chi2)
+        # TODO recompute true chi2!!!!
+
+        # If the history is active, loop over it writing down the data to different paths
+        for i in validation_object.history_loop():
+            new_path = output_path.stem + "/history_step_{0}/replica_{1}".format(i, replica_number)
+            writer_wrapper.write_data(replica_number, new_path, output_path.stem, true_chi2)
+            
+        # So every time we want to capture output_path.stem and addd a history_step_X 
+        # parallel to the nnfit folder
+
 
     # Save the weights to some file
     if fitting.get("save"):

@@ -10,7 +10,6 @@
 import numpy as np
 
 import logging
-
 log = logging.getLogger(__name__)
 
 # Put a very big number here so that we for sure discard this run
@@ -79,6 +78,7 @@ class Stopping:
         total_epochs=0,
         stopping_patience=7000,
         dont_stop=False,
+        save_each=None,
     ):
 
         # Parse the data dictionary
@@ -105,6 +105,10 @@ class Stopping:
         # Initialize stats
         self.reset_stats()
 
+        # Initialize the animation saver
+        self.history_maker = HistoryMaker(self, save_each) # how evil is this?
+
+
     @property
     def loss(self):
         return self.best_chi2
@@ -118,6 +122,12 @@ class Stopping:
         self.file_list = []
         self.w_best_chi2 = None
         self.e_best_chi2 = 0
+
+    def history_loop(self):
+        if self.history_maker.history_active():
+            return self.history_maker.loop()
+        else:
+            return []
 
     def save_stats(self, tr_loss, vl_loss):
         """ 
@@ -188,6 +198,9 @@ class Stopping:
                 # Now activate the counter
                 self.count = 1
 
+        # Call the history maker, if it was not active this call will do nothing
+        self.history_maker.save(epoch)
+
         # If we are asked, print stats and save logs
         if print_stats:
             self.save_chi2_log(epoch, all_tr, all_vl)
@@ -209,7 +222,7 @@ class Stopping:
         """
             Reload the weights of the NN onto the validation model
         """
-        if self.w_best_chi2 and (self.not_reload or force):
+        if self.w_best_chi2:
             self.validation.weights = self.w_best_chi2
 
     def print_current_stats(self, all_tr):
@@ -286,10 +299,11 @@ class Stopping:
 Epoch: {0}
 {1}
 Total: training = {2} validation = {3}
-""".format(epoch, data, self.training_losses[-1], self.validation_losses[-1])
+""".format(epoch + 1, data, self.training_losses[-1], self.validation_losses[-1])
         self.file_list.append(strout)
 
     def chi2exps_str(self):
+        # TODO: check the epoch of the stop / the epoch of the best chi2 and return only that part
         return self.file_list
 
 class Validation:
@@ -399,5 +413,50 @@ class Positivity:
             return POS_BAD
 
 
+class HistoryMaker:
+    """
+    """
 
+    def __init__(self, stopping_object, save_each = 1000):
+        self.save_each = save_each 
+        self.all_history = []
+        self.stopping_object = stopping_object
 
+    @property
+    def len_history(self):
+        return self.__len_history
+    @len_history.getter
+    def len_history(self):
+        return len(self.all_history)
+
+    def save(self, epoch):
+        if not self.save_each:
+            return 
+        save_here = (epoch + 1) % self.save_each
+        if save_here == 0:
+            weights_best = self.stopping_object.w_best_chi2
+            epoch_best = self.stopping_object.e_best_chi2
+            self.all_history.append(
+                    (epoch, epoch_best, weights_best)
+                    )
+
+    def reload(self, index):
+        if not self.save_each:
+            return
+        info = self.all_history[index]
+        self.stopping_object.epoch_of_the_stop = info[0]
+        self.stopping_object.e_best_chi2 = info[1]
+        self.stopping_object.w_best_chi2 = info[2]
+        self.stopping_object.reload_model()
+
+    def history_active(self):
+        if self.save_each:
+            return True 
+        else:
+            return False 
+
+    def loop(self):
+        for i in range(self.len_history):
+            log.info("Reloading step {0}".format(i))
+            self.reload(i)
+            yield i
