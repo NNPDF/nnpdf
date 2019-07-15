@@ -4,7 +4,6 @@
 
 # TODO
 #   - Save the chi2 logs in a better way
-#   - Decide what to do when we do not have any validation
 #   - Does it make sense to use Keras callbacks or we want to actually avoid it?
 #           Extra: do we want to implement the callback as part of the .fit function?
 #   - Save the animations
@@ -28,22 +27,37 @@ def parse_ndata(ndata_dict):
     """ 
     Parses the ndata dictionary into training a validation
     dictionaries
-    Ignores entries for 'ALL' and positivity sets
+
+    Ignores entires for "total" and positivity sets.
+
+    # Return:
+        - `tr_ndata`: dictionary of {'exp' : ndata}
+        - `vl_ndata`: dictionary of {'exp' : ndata}
+
+    Note: if the total number of validation points remain at 0
+    it is understood there is no validation and the output vl_data will also point to tr_ndata
     """
     tr_ndata = {}
     vl_ndata = {}
+    val_points = 0
     for key, npoints in ndata_dict.items():
         if key.lower().startswith(("pos", "total")):
             continue
         if key.lower().endswith("_vl"):
             vl_ndata[key] = npoints
+            val_points += npoints
         else:
             tr_ndata[key] = npoints
+    if npoints == 0:
+        vl_ndata = tr_ndata
     return tr_ndata, vl_ndata
 
 class Stopping:
     """
         Driver of the stopping algorithm
+
+        Note, if the total number of points in the validation dictionary is None, it is assumed
+        the validation_model actually corresponds to the training model.
 
         # Arguments:
             - `validation_model`: the model with the validation mask applied (and compiled with the validation data and covmat)
@@ -153,8 +167,7 @@ class Stopping:
                 self.best_chi2 = TERRIBLE_CHI2
             return False
 
-        # Step 2. If there is no validation, it makes no sense to ask for validation
-        # TODO deal with this special case
+        # Step 2. Read the validation loss (if there is no validation loss it will correspond to the training)
         vl_chi2, _ = self.validation.loss
 
         # Step 3. Store all information about the run
@@ -298,8 +311,6 @@ class Validation:
         # Returns:
             - `total_loss`: total vale for the validation loss 
             - `vl_dict`: dictionary containing a map of experiment names and loss 
-
-
         """
         # The variable vl_list is a list of all losses of the model, where the first element
         # is sum of all other elements

@@ -80,7 +80,6 @@ class ModelTrainer:
         self.experimental = {"output": [], "expdata": [], "losses": [], "ndata": 0, "model": None}
         self.list_of_models_dicts = [
                 self.training,
-                self.validation,
                 self.experimental
                 ]
 
@@ -97,7 +96,9 @@ class ModelTrainer:
             self.ndata_dict.update(new_dict)
             self.validation["expdata"] = self.training["expdata"]
         else:
+            # Consider the validation only if there is validation (of course)
             self.no_validation = False
+            self.list_of_models_dicts.append(self.validation)
 
     @property
     def model_file(self):
@@ -455,9 +456,13 @@ class ModelTrainer:
         stopping_patience = params["stopping_patience"]
         stopping_epochs = epochs * stopping_patience
 
-        # TODO: what to do when there is no validation
+        if self.no_validation:
+            validation_model = self.training["model"]
+        else:
+            validation_model = self.validation["model"]
+
         validation_object = Stopping(
-                self.validation["model"],
+                validation_model,
                 self.ndata_dict,
                 total_epochs = epochs,
                 stopping_patience = stopping_epochs,
