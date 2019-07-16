@@ -405,7 +405,14 @@ class ModelTrainer:
         self.training["pos_multiplier"] = pos_multiplier
 
     def _generate_pdf(
-        self, nodes_per_layer, activation_per_layer, initializer, layer_type, dropout
+        self,
+        nodes_per_layer,
+        activation_per_layer,
+        initializer,
+        layer_type,
+        dropout,
+        regularizer,
+        regularizer_args,
     ):
         """
         Defines the internal variable layer_pdf
@@ -440,6 +447,8 @@ class ModelTrainer:
             seed=self.NNseed,
             initializer_name=initializer,
             dropout=dropout,
+            regularizer=regularizer,
+            regularizer_args=regularizer_args
         )
 
         integrator_input = None
@@ -623,6 +632,8 @@ class ModelTrainer:
             params["initializer"],
             params["layer_type"],
             params["dropout"],
+            params.get('regularizer', None), # regularizer args optional
+            params.get('regularizer_args', {})
         )
 
         # Model generation
