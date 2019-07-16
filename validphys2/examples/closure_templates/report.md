@@ -15,7 +15,7 @@ Closure test estimators
 ## $\Delta_{\chi^{2}}$
 {@ plot_delta_chi2 @}
 ## Bias by experiment
-{@ plot_biases @}
+{@ plot_fits_bootstrap_bias @}
 ## $\phi$ by experiment
 {@closure plot_phi@}
 

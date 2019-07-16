@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Functions and Plots relating to Closure Test 
+Functions and Plots relating to Closure Test
 Statistical Estimators.
 """
 
@@ -9,7 +9,6 @@ import logging
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib import cm, colors as mcolors, ticker as mticker
 
 from reportengine.figure import figure
 from reportengine.checks import make_argcheck
@@ -17,8 +16,10 @@ from reportengine.table import table
 from reportengine import collect
 
 from validphys.results import experiment_results, total_experiments_chi2data
+from validphys.dataplots import plot_phi_scatter_dataspecs
+from validphys.checks import check_pdf_is_montecarlo
 from validphys import plotutils
-from validphys.calcutils import calc_chi2
+from validphys.calcutils import calc_chi2, bootstrap_values
 
 log = logging.getLogger(__name__)
 
@@ -75,6 +76,34 @@ def plot_biases(biases_table):
     ax.set_title("Biases for experiments")
     ax.legend()
     return fig
+
+@check_pdf_is_montecarlo
+def bootstrap_bias_experiment(
+        experiment_results, exp_result_underlying, bootstrap_samples=500):
+    """Bootstrap `bias_experiment` across replicas"""
+    dt_ct, th_ct = experiment_results
+    _, th_ul = exp_result_underlying[0]
+    th_ct_boot_cv = bootstrap_values(th_ct._rawdata, bootstrap_samples)
+    boot_diffs = th_ct_boot_cv - th_ul.central_value[:, np.newaxis]
+    boot_bias = calc_chi2(dt_ct.sqrtcovmat, boot_diffs)/len(dt_ct)
+    return boot_bias
+
+experiments_bootstrap_bias = collect('bootstrap_bias_experiment', ('experiments',))
+fits_experiments_bootstrap_bias = collect('experiments_bootstrap_bias', ('fits', 'fitcontext',))
+
+@figure
+def plot_fits_bootstrap_bias(
+    fits_experiments_bootstrap_bias, fits_name_with_covmat_label, fits_experiments):
+    """Plot the bias for each experiment for all `fits` as a scatter point with an error bar,
+    where the error bar is given by bootstrapping the bias across replicas
+
+    The number of bootstrap samples can be controlled by the parameter `bootstrap_samples`
+    """
+    # plot_phi_scatter_dataspecs gets an input of the same type and gives what we want
+    fig = plot_phi_scatter_dataspecs(
+        fits_experiments, fits_name_with_covmat_label, fits_experiments_bootstrap_bias)
+    return fig
+
 
 fits_exps_bootstrap_chi2_central = collect('experiments_bootstrap_chi2_central',
                                            ('fits', 'fitcontext',))
