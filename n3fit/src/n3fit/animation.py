@@ -1,69 +1,48 @@
 #!/usr/bin/env python3
-import lhapdf
+
 import matplotlib
-
 matplotlib.use("TkAgg")
-import matplotlib.pyplot as plt
-
-# plt.rcParams['animation.ffmpeg_path'] = '/usr/local/bin/ffmpeg'
-import matplotlib.animation as animation
-import sys
-import os
+import glob, os
 import numpy as np
 
+import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+import matplotlib.animation as mpanimation
 
 from reportengine.compat import yaml
 
-from ipdb import set_trace
+import logging
+
+log = logging.getLogger(__name__)
+
+ALL_PARTICLES = [
+        (2, "c", ),
+        (3, "s"),
+        (4, "u"),
+        (5, "d"),
+        (6, "g"),
+        (7, "anti_d"),
+        (8, "anti_u"),
+        (9, "anti_s"),
+        (10, "anti_c"),
+        ]
+
+POS_PASS = "POS_PASS"
 
 
-# Monte Carlo Particle Numbering Scheme
-particle_names = {
-    1: "u",
-    2: "d",
-    3: "s",
-    4: "c",
-    5: "b",
-    6: "t",
-    21: "g",
-    -1: "anti_u",
-    -2: "anti_d",
-    -3: "anti_s",
-    -4: "anti_c",
-    -5: "anti_b",
-    -6: "anti_t",
-}
-
-
-def get_particle_index(par_number):
-    if par_number < -6 or (par_number > 6 and par_number != 21) or par_number == 0:
-        print(
-            """Error: wrong number for the particle
-        {0}""".format(
-                particles
-            )
-        )
-        sys.exit()
-    gluon = 6
-    if par_number == 21:
-        return gluon
-    else:
-        return par_number + gluon
-
-
-def aparse():
+def parse_arguments():
+    """ Wrapper around ArgumentParser """
     from argparse import ArgumentParser
 
     parser = ArgumentParser()
 
     # Main arguments
-    parser.add_argument("name_of_fit", type=str)
+    parser.add_argument("name_of_fit", help="Folder where to find the history_step_i members", type=str)
 
+    # Optional arguments
     parser.add_argument("-s", "--steps", type=int, default=200)
     parser.add_argument("-b", "--begin_point", type=int, default=1)
     parser.add_argument("-r", "--replicas", type=int, default=20)
-    parser.add_argument("-p", "--particle", type=int, default=[21], nargs="+")
     parser.add_argument("-e", "--epochs_per_step", type=int, default=200)
     parser.add_argument("-f", "--frame_separation", type=int, default=200, help="Separation in ms between frames")
     parser.add_argument("-m", "--how_many", type=int, default=25)
@@ -74,27 +53,45 @@ def aparse():
 
 
 class AnimationObject:
-    def __init__(
-        self, xgrid, step_data, line, ax, particle, begin_point=1, log_scale=False, alpha=0.4, color="indianred"
-    ):
-        self.xgrid = xgrid
-        self.step_data = step_data
+    """
+    Class containing all information to generate the animations
 
+    This class provides a `.function` method which can be passed to
+    `matplotlib.animation.FuncAnimation`
+    """
+    def __init__(self, xgrid, step_data, how_many, frame_separation, begin_point=1, alpha=0.4, color="indianred"):
         self.begin_point = begin_point - 1
-        self.ax = ax
-        self.line = line
-        self.particle = particle
-        self.particle_index = get_particle_index(particle)
-
+        self.xgrid = xgrid
         self.alpha = alpha
         self.color = color
+        self.step_data = step_data
+        self.how_many = how_many
+        self.frame_separation = frame_separation
+
+    def define_plot(self, line, ax, particle_tuple, log_scale=False):
+        """ 
+        """
+        self.ax = ax
+        self.line = line
+        self.particle_index = particle_tuple[0]
+        self.particle = particle_tuple[1]
         self.log = log_scale
+        self.set_name()
+
+    def set_name(self):
+        plt.xlabel("$x$")
+        if "anti" in self.particle:
+            parname = self.particle.replace("anti_","")
+            plt.ylabel(r"$x\bar{" + parname + "}(x)$")
+        else:
+            plt.ylabel(r"$x" + self.particle + "(x)$")
 
     def set_title(self, epoch):
-        if self.particle > 0:
-            self.ax.set_title(r"${0}$ epoch: {1}".format(particle_names[self.particle], epoch))
+        if "anti" in self.particle:
+            parname = self.particle.replace("anti_","")
+            self.ax.set_title(r"$\bar{{{0}}}$ epoch: {1}".format(parname, epoch))
         else:
-            self.ax.set_title(r"$\bar{{{0}}}$ epoch: {1}".format(particle_names[-self.particle], epoch))
+            self.ax.set_title(r"${0}$ epoch: {1}".format(self.particle, epoch))
 
     def initialization(self):
         self.line.set_data([], [])
@@ -126,32 +123,84 @@ class AnimationObject:
         return (self.line,)
 
 
+def plot_this(particle_tuple, animator, log_scale=False):
+    # First create the figure
+    fig = plt.figure()
+    ax = plt.axes()
+    plot_line, = ax.plot([], [])
+    particle = particle_tuple[0]
+    particle_name = particle_tuple[1]
+    # TODO: Define the axis depending on the particle we are targetting
+    if log_scale:
+        min_x = 1e-5
+        max_x = 1.0
+        min_y = -0.05
+        max_y = 1.0
+    else:
+        min_x = 0.0
+        max_x = 1.0
+        min_y = -0.05
+        max_y = 1.0
+    ax.axis( [min_x, max_x, min_y, max_y] )
+
+    animator.define_plot(plot_line, ax, particle_tuple, log_scale=log_scale)
+
+    anim = mpanimation.FuncAnimation(
+        fig,
+        animator.function,
+        frames=animator.how_many,
+        init_func=animator.initialization,
+        interval=animator.frame_separation,
+    )
+
+    if log_scale:
+        log_string = "log"
+    else:
+        log_string = ""
+
+    title = "{0}_{1}_{2}.gif".format("animation", particle_name, log_string)
+    anim.save(title, writer="pillow")
+    print("\n > {0} saved\n".format(title))
+
+
+def fake_postfit(chi2s, keep=50):
+    ave_chi2 = np.average(chi2s)
+    order_chi2 = sorted(chi2s, key=lambda x: np.abs(x - ave_chi2))
+    # Keep the `keep` best
+    throw = order_chi2[keep:]
+    # For each one we throw, find what is its index number
+    # and it to the kill list
+    remove_list = [chi2s.index(t) for t in throw]
+    return remove_list
+
+
 def main(arguments):
-
     directory = arguments.name_of_fit
-
-    steps = arguments.steps
-    begin_point = arguments.begin_point
     replicas = arguments.replicas
-    particles = arguments.particle
-    epochs_per_step = arguments.epochs_per_step
+    steps = arguments.steps
 
-    for p in particles:
-        # Safety check
-        _ = get_particle_index(p)
-
-    # Now instead of using LHAPDF let us read the replicas by ourselves
     basename = directory + "/history_step_{0}/replica_{1}/" + directory
-    # define the names of the interesting files\
-    info_file = basename + ".fitinfo"
-    grid_file = basename + ".exportgrid"
+    # define the names of the interesting files
+    info_file_template = basename + ".fitinfo"
+    grid_file_template = basename + ".exportgrid"
 
-    xgrid = []
-    all_steps_info = []
+    # If steps or replicas are not set, try to find out how many there are by yourself
+    if steps == -1:
+        steps = len(glob.glob(basename.format("*", 1) + "*"))
+    if replicas:
+        replicas = len(glob.glob(basename.format(0, "*") + "*"))
+
     remove_indices = []
-    for step in range(steps, 0, -1):  # Loop over steps
-        print("Entering on step {0}".format(step))
-        all_pdfs = []
+    indices_removed = False
+    xgrid = None
+    all_steps_info = []
+    # Step 0. Loop over all steps from end to start
+    #   The reason we start from the end is because we will use the last step to
+    #   see which replicas are useless and remove them, so that all subsequents
+    #   iterations of the loop are faster
+    for step in range(steps, 0, -1):
+        log.info(f"Entering step {step}")
+        all_pdfs = []  # List of all PDFs for this step
         all_tr_chi2 = []
         all_vl_chi2 = []
         all_ex_chi2 = []
@@ -159,68 +208,74 @@ def main(arguments):
         for replica in range(1, replicas + 1):  # Loop over replicas
             if replica in remove_indices:
                 continue
+
             # Read the information of the replica
-            set_trace()
-            info = info_file.format(step, replica)
+            info_filename = info_file_template.format(step, replica)
             # If the replica is not there, skip
-            if not os.path.isfile(info):
+            # this can happen for some steps and not others
+            if not os.path.isfile(info_filename):
                 continue
-            with open(info, "r") as filein:
-                line_str = next(filein)
-                line = line_str.split()
-                pos_pass = line[4]
-                if pos_pass != "POS_PASS":
+            with open(info_filename, "r") as info_file:
+                # Step 1. Check whether positivity passes
+                first_line = next(info_file).split()
+                pos_check = first_line[4]
+                if pos_check != POS_PASS:
+                    # If positivity does not pass, all steps before this one
+                    # wont pass either so add to the ignore list
+                    remove_indices.append(replica)
                     continue
-                all_vl_chi2.append(float(line[1]))
-                all_tr_chi2.append(float(line[2]))
-                all_ex_chi2.append(float(line[3]))
-            # Read the exportgrid file
-            grid = grid_file.format(step, replica)
-            if not os.path.isfile(grid):
+                all_vl_chi2.append(float(first_line[1]))
+                all_tr_chi2.append(float(first_line[2]))
+                all_ex_chi2.append(float(first_line[3]))
+
+            # Read the grid file
+            grid_filename = grid_file_template.format(step, replica)
+            if not os.path.isfile(grid_filename):
                 continue
-            with open(grid, "r") as filegrid:
-                data = yaml.safe_load(filegrid)
-            if not xgrid:  # We only need to load the xgrid once
+            with open(grid_filename, "r") as grid_file:
+                data = yaml.safe_load(grid_file)
+            # We only need to save the grid once because it is always the same
+            if not xgrid:
                 xgrid = data["xgrid"]
-            # Save the complete PDF for now for each replica
-            #             pdfgrid = np.array(data['pdfgrid'])[:,get_particle_index(particle)]
+            # Save the PDF data
             pdfgrid = np.array(data["pdfgrid"])
             all_pdfs.append(pdfgrid)
-        # Check whether any of the replicas contained data for this run
+
+        # Did we get ANY pdf for this step?
         if not all_pdfs:
-            print("No data found for step {0}".format(step))
+            log.info(f"No data found for step {step}")
             continue
-        if not remove_indices:
-            use_chi2 = all_vl_chi2
-            # Now do a fake postfit looking at the chi2
-            ave_c2 = np.average(use_chi2)
-            order = sorted(use_chi2, key=lambda x: np.abs(x - ave_c2))
-            # Keep only the 25 best
-            throw = order[arguments.how_many :]
-            for t in throw:
-                ind = use_chi2.index(t)
-                remove_indices.append(ind)
+
+        # If this is the first time we get to this point, remove indices
+        # for doing this we are going to perform a fake postfit
+        if not indices_removed:
+            indices_removed = True
+            to_remove = fake_postfit(all_vl_chi2, keep=arguments.how_many)
+            # Now remove the information for the ignored replicas
+            # as it wil mess with the average for this one
+            for ind in to_remove:
                 all_ex_chi2.pop(ind)
                 all_vl_chi2.pop(ind)
                 all_tr_chi2.pop(ind)
                 all_pdfs.pop(ind)
-            print(" > Skipping replicas {0}".format(remove_indices))
+                remove_indices.append(ind)
+            log.info(" > Skipping replicas: {0}".format(remove_indices))
 
-        # Find the central replica
-        np_all_pdf = np.array(all_pdfs)
-        central_replica = np.average(np_all_pdf, axis=0)
+        # Now, with the information we have, find the central replica
+        np_all_pdfs = np.array(all_pdfs)
+        central_replica = np.average(np_all_pdfs, axis=0)
 
-        # Get the average chi2
+        # Get the avg chi2
         ave_ex_c2 = np.average(all_ex_chi2)
         ave_tr_c2 = np.average(all_tr_chi2)
         ave_vl_c2 = np.average(all_vl_chi2)
 
-        # Now save the information for this step
-        min_values = np.min(np_all_pdf, axis=0)
-        max_values = np.max(np_all_pdf, axis=0)
+        # Get the envelope
+        min_values = np.min(np_all_pdfs, axis=0)
+        max_values = np.max(np_all_pdfs, axis=0)
 
         data_dict = {
-            "epochs": step * epochs_per_step,
+            "epochs": step * arguments.epochs_per_step,
             "central": central_replica,
             "miny": min_values,
             "maxy": max_values,
@@ -231,80 +286,17 @@ def main(arguments):
         }
         all_steps_info.append(data_dict)
 
-    # Now we have all information, we have to plot
     how_many = len(all_steps_info)
-    all_steps_info.reverse()
+    all_steps_info.reverse()  # so that the first one corresponds to step 1
 
-    # Now create a subfunction with all plot routines
-    def plot_this(particle, log_scale=False):
-        # Create the figure
-        fig = plt.figure()
-        ax = plt.axes()
-        plot_line, = ax.plot([], [])
+    # Now generate an Animation Object which can be passed down to the plotting function
+    animator = AnimationObject(xgrid, all_steps_info, how_many, arguments.frame_separation)
 
-        # Define the axis depending on the particle we are targetting
-        if log_scale:
-            if particle == -1 or particle == -2:
-                ax.axis([1e-5, 1, -0.05, 0.65])
-            elif particle == -3:
-                ax.axis([1e-5, 1, -0.3, 0.4])
-            elif particle == 1:
-                ax.axis([1e-5, 1, -0.05, 0.65])
-            elif particle == 2:
-                ax.axis([1e-5, 1, -0.01, 0.80])
-            elif particle == 3:
-                ax.axis([1e-5, 1, -0.3, 0.4])
-            elif particle == 4:
-                ax.axis([1e-5, 1, -0.005, 0.04])
-            else:
-                ax.axis([1e-5, 1, -0.05, 3.2])
-        else:
-            if particle == -1 or particle == -2:
-                ax.axis([0, 1, -0.05, 0.16])
-            elif particle == -3:
-                ax.axis([0, 1, -0.011, 0.2])
-            elif particle == 1:
-                ax.axis([0, 1, -0.05, 0.5])
-            elif particle == 2:
-                ax.axis([0, 1, -0.01, 0.80])
-            elif particle == 3:
-                ax.axis([0, 1, -0.01, 0.07])
-            elif particle == 4:
-                ax.axis([0, 1, -0.005, 0.035])
-            else:
-                ax.axis([0, 1, -0.05, 1.5])
-
-        plt.xlabel("$x$")
-        if particle > 0:
-            plt.ylabel(r"$x" + particle_names[particle] + "(x)$")
-        else:
-            plt.ylabel(r"$x\bar{" + particle_names[-particle] + "}(x)$")
-
-        # First generate the AnimationObject that carries all necessary information
-        animation_object = AnimationObject(xgrid, all_steps_info, plot_line, ax, particle, log_scale=log_scale)
-
-        anim = animation.FuncAnimation(
-            fig,
-            animation_object.function,
-            frames=how_many,
-            init_func=animation_object.initialization,
-            interval=arguments.frame_separation,
-        )
-        if log_scale:
-            log_string = "log"
-        else:
-            log_string = ""
-        title = "{0}_{1}_{2}.gif".format(directory, particle_names[particle], log_string)
-        anim.save(title, writer="pillow")
-        print("\n > {0} saved\n".format(title))
-
-    for particle in particles:
-        plot_this(particle, log_scale=False)
-        plot_this(particle, log_scale=True)
+    for particle_tuple in ALL_PARTICLES:
+        plot_this(particle_tuple, animator, log_scale = False)
+        plot_this(particle_tuple, animator, log_scale = True)
 
 
 if __name__ == "__main__":
-
-    args = aparse()
-
+    args = parse_arguments()
     main(args)

@@ -205,7 +205,7 @@ def fit(
             the_scanner.NN_architecture(**architecture_options)
 
             # Tell the trainer we are doing hyperopt
-            the_model_trainer.set_hyperopt(on=True, keys=the_scanner.hyper_keys)
+            the_model_trainer.set_hyperopt(True, keys=the_scanner.hyper_keys)
 
             # Generate Trials object
             trials = filetrials.FileTrials(replica_path_set, log=log, parameters=parameters)
@@ -236,7 +236,7 @@ def fit(
         ####################################################################### end of hyperopt
 
         # Ensure hyperopt is off
-        the_model_trainer.set_hyperopt(on=False)
+        the_model_trainer.set_hyperopt(False)
 
         #############################################################################
         # ### Fit                                                                   #

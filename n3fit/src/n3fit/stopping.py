@@ -448,7 +448,7 @@ class Positivity:
 
     def __init__(self, threshold):
         self.threshold = threshold
-        self.positivity = False
+        self.positivity_ever_passed = False
 
     def check_positivity(self, history_object, pos_key="POS"):
         """
@@ -463,13 +463,13 @@ class Positivity:
             if key.startswith(pos_key):
                 positivity_loss += item[-1]
         if positivity_loss > self.threshold:
-            self.positivity = False
+            return False
         else:
-            self.positivity = True
-        return self.positivity
+            self.positivity_ever_passed = True
+            return True
 
     def __call__(self):
-        if self.positivity:
+        if self.positivity_ever_passed:
             return POS_OK
         else:
             return POS_BAD
