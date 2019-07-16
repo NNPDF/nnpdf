@@ -172,7 +172,7 @@ def common_data_reader_experiment(experiment_c, experiment_spec):
     return parsed_datasets
 
 
-def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
+def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None, generate_mc_noise=True):
     """
     Wrapper to read the information from validphys object
     This function receives either a validphyis experiment or dataset objects
@@ -229,7 +229,8 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
         # Replica generation
         mcseed = base_mcseed + replica_seed
         RandomGenerator.InitRNG(0, mcseed)
-        spec_replica_c.MakeReplica()
+        if generate_mc_noise:
+            spec_replica_c.MakeReplica()
         all_expdatas.append(spec_replica_c.get_cv())
 
     # spec_c = spec_replica_c

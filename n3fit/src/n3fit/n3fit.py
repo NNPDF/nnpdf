@@ -14,6 +14,7 @@ import argparse
 from validphys.app import App
 from validphys.config import Environment, Config
 from validphys.config import EnvironmentError_, ConfigError
+from validphys.core import FitSpec
 from reportengine import colors
 from reportengine.compat import yaml
 
@@ -21,7 +22,7 @@ from reportengine.compat import yaml
 N3FIT_FIXED_CONFIG = dict(
     use_cuts = 'internal',
     use_t0 = True,
-    actions_ = ['datacuts::theory fit']
+    actions_ = ['datacuts::theory performfit']
 )
 
 N3FIT_PROVIDERS = ["n3fit.fit"]
@@ -50,12 +51,12 @@ class N3FitEnvironment(Environment):
 
         # check if results folder exists
         self.output_path = pathlib.Path(self.output_path).absolute()
-        if not self.output_path.exists():
+        if not (self.output_path/"nnfit").exists():
             if not re.fullmatch(r"[\w.\-]+", self.output_path.name):
                 raise N3FitError("Invalid output folder name. Must be alphanumeric.")
             try:
-                self.output_path.mkdir()
-                pathlib.Path(self.output_path / "nnfit").mkdir()
+                self.output_path.mkdir(exist_ok=True)
+                (self.output_path /"nnfit").mkdir()
             except OSError as e:
                 raise EnvironmentError_(e) from e
 
@@ -104,8 +105,39 @@ class N3FitConfig(Config):
             raise ConfigError(f"Failed to parse yaml file: {e}")
         if not isinstance(file_content, dict):
             raise ConfigError(f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'.")
+
+        if file_content['closuretest'].get('fakedata'):
+            log.warning("using filtered closure data")
+            opath = pathlib.Path(o.name)
+            fitfolder = opath.parent.absolute()/opath.stem
+            if not fitfolder.is_dir():
+                raise ConfigError(
+                    f"Could not find fit directory at {fitfolder} "
+                    f"to load commondata from. Did you run filter on the "
+                    "runcard and is the resulting directory in the same "
+                    "directory as the fit runcard?")
+            # make fit an absolute path the directory containing filtered data
+            # assuming in same location as the runcard
+            file_content.update(dict(
+                use_fitcommondata = True,
+                fit = fitfolder))
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
+
+    def parse_fit(self, fitpath: pathlib.Path):
+        """Overload the default parse fit function to instead use a fit folder
+        from a specified location. Used for reading commondata from a filtered
+        closure test runcard.
+
+        The user should run vp-setupfit on the closure test runcard, this will
+        generate the pseudo data to be used in the fit. The resulting directory
+        should be created in the same directory as the fit runcard. For example
+
+        <directory containing fit runcard>$ ls -F
+        fitname.yml    fitname/
+        """
+        return FitSpec(fitpath.name, fitpath)
+
 
 
 class N3FitApp(App):
