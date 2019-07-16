@@ -2,7 +2,7 @@
     The ModelTrainer class is the true driver around the n3fit code
 
     This class is initialized with all information about the NN, inputs and outputs.
-    The construction of the NN and the fitting is performed at the same time when the 
+    The construction of the NN and the fitting is performed at the same time when the
     hyperparametizable method of the function is called.
 
     This allows to use hyperscanning libraries, that need to change the parameters of the network
@@ -40,7 +40,17 @@ class ModelTrainer:
         *called in this way because it accept a dictionary of hyper-parameters which defines the Neural Network
     """
 
-    def __init__(self, exp_info, pos_info, flavinfo, nnseed, pass_status="ok", failed_status="fail", debug=False, save_history_each = False):
+    def __init__(
+        self,
+        exp_info,
+        pos_info,
+        flavinfo,
+        nnseed,
+        pass_status="ok",
+        failed_status="fail",
+        debug=False,
+        save_history_each=False,
+    ):
         """
         # Arguments:
             - `exp_info`: list of dictionaries containing experiments
@@ -79,10 +89,7 @@ class ModelTrainer:
         self.training = {"output": [], "expdata": [], "losses": [], "ndata": 0, "model": None, "posdatasets": []}
         self.validation = {"output": [], "expdata": [], "losses": [], "ndata": 0, "model": None}
         self.experimental = {"output": [], "expdata": [], "losses": [], "ndata": 0, "model": None}
-        self.list_of_models_dicts = [
-                self.training,
-                self.experimental
-                ]
+        self.list_of_models_dicts = [self.training, self.experimental]
 
         self.test_dict = None
         self._fill_the_dictionaries()
@@ -110,12 +117,12 @@ class ModelTrainer:
     def model_file(self, model_file):
         self.__model_file = model_file
 
-    def set_hyperopt(self, on, keys=None):
+    def set_hyperopt(self, hyperopt_on, keys=None):
         """ Set hyperopt options on and off (mostly suppresses some printing) """
         if keys is None:
             keys = []
         self.hyperkeys = keys
-        if on:
+        if hyperopt_on:
             self.print_summary = False
             self.mode_hyperopt = True
         else:
@@ -195,7 +202,7 @@ class ModelTrainer:
         # note: if test_dict exists, it will also create a model for it
 
         for model_dict in self.list_of_models_dicts:
-            model_dict["model"]  = MetaModel(input_list, self._pdf_injection(model_dict["output"]))
+            model_dict["model"] = MetaModel(input_list, self._pdf_injection(model_dict["output"]))
 
         if self.model_file:
             # If a model file is given, load the weights from there
@@ -205,7 +212,6 @@ class ModelTrainer:
 
         if self.print_summary:
             self.training["model"].summary()
-
 
     def _reset_observables(self):
         """
@@ -374,7 +380,6 @@ class ModelTrainer:
         self.training['pos_multiplier']
         """
         training_model = self.training["model"]
-        exp_list = self.training["expdata"]
         pos_multiplier = self.training["pos_multiplier"]
         # Train the model for the number of epochs given
         for epoch in range(epochs):
@@ -389,7 +394,7 @@ class ModelTrainer:
                     new_w = [curr_w[0] * pos_multiplier]
                     training_model.get_layer(name).set_weights(new_w)
 
-            passes = validation_object.monitor_chi2(out, epoch, print_stats = print_stats)
+            passes = validation_object.monitor_chi2(out, epoch, print_stats=print_stats)
 
             if validation_object.stop_here():
                 break
@@ -463,12 +468,12 @@ class ModelTrainer:
             validation_model = self.validation["model"]
 
         validation_object = Stopping(
-                validation_model,
-                self.ndata_dict,
-                total_epochs = epochs,
-                stopping_patience = stopping_epochs,
-                save_each = self.save_history_each
-                )
+            validation_model,
+            self.ndata_dict,
+            total_epochs=epochs,
+            stopping_patience=stopping_epochs,
+            save_each=self.save_history_each,
+        )
 
         # Compile the training['model'] with the given parameters
         self._model_compilation(params['learning_rate'], params['optimizer'])
@@ -490,7 +495,7 @@ class ModelTrainer:
         if self.test_dict:
             # Generate the 'true' chi2 with the experimental model but only for models that were stopped
             target_model = self.test_dict["model"]
-            out_final = target_model.evaluate(verbose = False)
+            out_final = target_model.evaluate(verbose=False)
             try:
                 testing_loss = out_final[0] / self.test_dict["ndata"]
             except IndexError:
@@ -502,7 +507,7 @@ class ModelTrainer:
             final_loss = VALIDATION_MULTIPLIER * validation_loss
             final_loss += TEST_MULTIPLIER * testing_loss
             final_loss /= TEST_MULTIPLIER + VALIDATION_MULTIPLIER
-            arc_lengths = msr_constraints.compute_arclength(layers["fitbasis"], verbose=False)
+            arc_lengths = msr_constraints.compute_arclength(layers["fitbasis"])
         else:
             final_loss = experimental_loss
             arc_lengths = None

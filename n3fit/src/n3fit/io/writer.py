@@ -24,10 +24,10 @@ class WriterWrapper:
         # Construct the chi2exp file
         allchi2_lines = self.validation_object.chi2exps_str()
         # Construct the preproc file
-        preproc_lines = "" # TODO decide how to fill up this in a sensible way
+        preproc_lines = ""  # TODO decide how to fill up this in a sensible way
 
         # Check the directory exist, if it doesn't, generate it
-        os.makedirs(replica_path_set, exist_ok = True)
+        os.makedirs(replica_path_set, exist_ok=True)
 
         # export PDF grid to file
         storefit(
@@ -46,7 +46,6 @@ class WriterWrapper:
             self.validation_object.positivity_pass(),
         )
 
-    
 
 def evln2lha(evln):
     # evln Basis {"PHT","SNG","GLU","VAL","V03","V08","V15","V24","V35","T03","T08","T15","T24","T35"};
@@ -106,8 +105,21 @@ def evln2lha(evln):
     return lha
 
 
-def storefit(pdf_function, replica, replica_path, fitname, q20, nite, erf_vl, erf_tr, chi2,
-        arc_lengths, all_chi2_lines, all_preproc_lines, pos_state):
+def storefit(
+    pdf_function,
+    replica,
+    replica_path,
+    fitname,
+    q20,
+    nite,
+    erf_vl,
+    erf_tr,
+    chi2,
+    arc_lengths,
+    all_chi2_lines,
+    all_preproc_lines,
+    pos_state,
+):
     """
     One-trick function which generates all output in the NNPDF format so that all other scripts can still be used.
 
@@ -133,35 +145,34 @@ def storefit(pdf_function, replica, replica_path, fitname, q20, nite, erf_vl, er
     lha = evln2lha(result.T).T
 
     data = {
-	    'replica' : replica,
-	    'q20' : q20,
-	    'xgrid': xgrid.T.tolist()[0],
-	    'labels': ['TBAR', 'BBAR', 'CBAR', 'SBAR', 'UBAR', 'DBAR', 'GLUON', 'D', 'U', 'S', 'C', 'B', 'T', 'PHT'],
-	    'pdfgrid': lha.tolist()
+        "replica": replica,
+        "q20": q20,
+        "xgrid": xgrid.T.tolist()[0],
+        "labels": ["TBAR", "BBAR", "CBAR", "SBAR", "UBAR", "DBAR", "GLUON", "D", "U", "S", "C", "B", "T", "PHT"],
+        "pdfgrid": lha.tolist(),
     }
 
-    with open(f'{replica_path}/{fitname}.exportgrid', 'w') as fs:
+    with open(f"{replica_path}/{fitname}.exportgrid", "w") as fs:
         yaml.dump(data, fs)
 
-
     # create empty files to make postfit happy
-    emptyfiles =  ['chi2exps.log', f'{fitname}.params',  f'{fitname}.sumrules']
+    emptyfiles = ["chi2exps.log", f"{fitname}.params", f"{fitname}.sumrules"]
     for fs in emptyfiles:
-        open(f'{replica_path}/{fs}', 'a').close()
+        open(f"{replica_path}/{fs}", "a").close()
 
     # Write chi2exp
-    with open(f'{replica_path}/chi2exps.log', 'w') as fs:
+    with open(f"{replica_path}/chi2exps.log", "w") as fs:
         for line in all_chi2_lines:
             fs.write(line)
 
     # Write preproc information
-    with open(f'{replica_path}/{fitname}.preproc','w') as fs:
+    with open(f"{replica_path}/{fitname}.preproc", "w") as fs:
         for line in all_preproc_lines:
             fs.write(line)
 
     # create info file
     arc_strings = [str(i) for i in arc_lengths]
-    arc_line = ' '.join(arc_strings)
-    with open(f'{replica_path}/{fitname}.fitinfo', 'w') as fs:
-        fs.write(f'{nite} {erf_vl} {erf_tr} {chi2} {pos_state}\n')
+    arc_line = " ".join(arc_strings)
+    with open(f"{replica_path}/{fitname}.fitinfo", "w") as fs:
+        fs.write(f"{nite} {erf_vl} {erf_tr} {chi2} {pos_state}\n")
         fs.write(arc_line)

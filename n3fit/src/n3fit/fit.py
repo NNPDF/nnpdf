@@ -77,10 +77,9 @@ def fit(
     # All potentially backend dependent imports should come inside the fit function
     # so they can eventually be set from the runcard
     from n3fit.ModelTrainer import ModelTrainer
-    from n3fit.io.writer import WriterWrapper 
+    from n3fit.io.writer import WriterWrapper
     from n3fit.backends import MetaModel
     import n3fit.io.reader as reader
-    import n3fit.msr as msr_constraints
 
     if hyperopt:
         import hyperopt as hyper
@@ -154,7 +153,13 @@ def fit(
         # Generate a ModelTrainer object
         # this object holds all necessary information to train a PDF (still no information about the NN)
         the_model_trainer = ModelTrainer(
-            exp_info, pos_info, fitting["basis"], nnseed, pass_status=status_ok, debug=debug, save_history_each = fitting["save_history_each"]
+            exp_info,
+            pos_info,
+            fitting["basis"],
+            nnseed,
+            pass_status=status_ok,
+            debug=debug,
+            save_history_each=fitting.get("save_history_each"),
         )
 
         # Check whether we want to load weights from a file (maybe from a previous run)
@@ -274,7 +279,9 @@ def fit(
             return result
 
         # Generate the writer wrapper
-        writer_wrapper = WriterWrapper(pdf_function, validation_object, layers['fitbasis'], theoryid.get_description().get("Q0") ** 2)
+        writer_wrapper = WriterWrapper(
+            pdf_function, validation_object, layers["fitbasis"], theoryid.get_description().get("Q0") ** 2
+        )
 
         # Now write the data down
         writer_wrapper.write_data(replica_number, replica_path_set, output_path.stem, true_chi2)
@@ -286,10 +293,9 @@ def fit(
             # We need to recompute the experimental chi2 for this point
             exp_chi2 = result["experimental"]["model"].evaluate()[0] / result["experimental"]["ndata"]
             writer_wrapper.write_data(replica_number, new_path, output_path.stem, exp_chi2)
-            
-        # So every time we want to capture output_path.stem and addd a history_step_X 
-        # parallel to the nnfit folder
 
+        # So every time we want to capture output_path.stem and addd a history_step_X
+        # parallel to the nnfit folder
 
     # Save the weights to some file
     if fitting.get("save"):
@@ -302,4 +308,5 @@ def fit(
         validation_object.plot()
 
     # print out the integration of the sum rule in case we want to check it's not broken
+#     import n3fit.msr as msr_constraints
     # msr_constraints.check_integration(layer_pdf, integrator_input)

@@ -8,7 +8,9 @@ from n3fit.backends import operations
 from n3fit.backends import MetaModel
 
 import logging
+
 log = logging.getLogger(__name__)
+
 
 def gen_integration_input(nx):
     """
@@ -148,15 +150,15 @@ def compute_arclength(fitbasis_layer):
     arc_lengths = np.sum(f_of_x * weights_array, axis=0)
 
     log.debug(
-            """
+        """
         > > > Arc length:
         sigma = {0}
         g     = {1}
         v     = {2}
         v3    = {3}
         v8    = {4}""".format(
-                *arc_lengths[:5]
-            )
+            *arc_lengths[:5]
         )
+    )
 
     return arc_lengths

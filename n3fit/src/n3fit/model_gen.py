@@ -19,7 +19,7 @@ from n3fit.backends import base_layer_selector, concatenate, Lambda
 
 
 def observable_generator(
-    spec_dict, positivity_initial=None, positivity_multiplier=1.05, verbose=False, positivity_steps=300
+    spec_dict, positivity_initial=None, positivity_multiplier=1.05, positivity_steps=300
 ):
     """
     This function generates the observable generator.
