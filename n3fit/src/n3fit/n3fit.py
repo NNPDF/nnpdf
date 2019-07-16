@@ -14,6 +14,7 @@ import argparse
 from validphys.app import App
 from validphys.config import Environment, Config
 from validphys.config import EnvironmentError_, ConfigError
+from validphys.core import FitSpec
 from reportengine import colors
 from reportengine.compat import yaml
 
@@ -103,15 +104,39 @@ class N3FitConfig(Config):
             raise ConfigError(f"Failed to parse yaml file: {e}")
         if not isinstance(file_content, dict):
             raise ConfigError(f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'.")
-        # TODO: Perhaps we should just update runcard to take flag use_fitcommondata??
-        # Runcard could really do with updating but would need more work with vp-setupfit
+
         if file_content['closuretest'].get('fakedata'):
             log.warning("using filtered closure data")
+            opath = pathlib.Path(o.name)
+            fitfolder = opath.parent.absolute()/opath.stem
+            if not fitfolder.is_dir():
+                raise ConfigError(
+                    f"Could not find fit directory at {fitfolder} "
+                    f"to load commondata from. Did you run filter on the "
+                    "runcard and is the resulting directory in the same "
+                    "directory as the fit runcard?")
+            # make fit an absolute path the directory containing filtered data
+            # assuming in same location as the runcard
             file_content.update(dict(
                 use_fitcommondata = True,
-                fit = pathlib.Path(o.name).stem))
+                fit = fitfolder))
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
+
+    def parse_fit(self, fitpath: pathlib.Path):
+        """Overload the default parse fit function to instead use a fit folder
+        from a specified location. Used for reading commondata from a filtered
+        closure test runcard.
+
+        The user should run vp-setupfit on the closure test runcard, this will
+        generate the pseudo data to be used in the fit. The resulting directory
+        should be created in the same directory as the fit runcard. For example
+
+        <directory containing fit runcard>$ ls -F
+        fitname.yml    fitname/
+        """
+        return FitSpec(fitpath.name, fitpath)
+
 
 
 class N3FitApp(App):
