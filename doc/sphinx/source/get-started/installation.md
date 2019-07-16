@@ -72,4 +72,27 @@ This will provide functioning C++ and Python executables.
 
 This will avoid symlinking the existing LHAPDF configuration, which may be corrupted or incompatible. You should make sure only the grid folders are transferred if you copy or move instead.
 
+Details about conda configurations can be found here.
 
+**~/.condarc**
+
+		channels:
+		 - https://packages.nnpdf.science/conda-private
+	         - https://packages.nnpdf.science/conda
+		 - defaults
+	         - conda-forge
+
+Note: The NNPDF packages were previous hosted in a different location (zigzah.com). You must remove these channels and use nnpdf.science instead.
+
+The private packages  are password protected (with http basic_auth). In order for conda to be able access them, a ~/.netrc file needs to contain the password. It is also convenient to add the validphys password in order to be able to programmatically access the validphys server. This is used by some validphys tools.
+
+**~/.nertc**
+
+		machine packages.nnpdf.science
+    		login nnpdf
+    		password machinist-proton-saddling
+ 
+ 
+machine vp.nnpdf.science
+    login nnpdf
+    password nnpdfserver!
