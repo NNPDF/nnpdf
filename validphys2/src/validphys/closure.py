@@ -5,6 +5,7 @@ Statistical Estimators.
 """
 
 import logging
+from collections import namedtuple
 
 import numpy as np
 import pandas as pd
@@ -25,6 +26,8 @@ log = logging.getLogger(__name__)
 
 exp_result_underlying = collect(experiment_results, ('fitunderlyinglaw',))
 
+BiasData = namedtuple('BiasData', ('bias', 'ndata'))
+
 def bias_experiment(experiment_results,
                     exp_result_underlying):
     """Calculates the bias for a given fit and experiment. The bias is the chi2
@@ -36,25 +39,37 @@ def bias_experiment(experiment_results,
     _, th_ul = exp_result_underlying[0]
     central_diff = th_ct.central_value - th_ul.central_value
     bias_out = calc_chi2(dt_ct.sqrtcovmat, central_diff)/len(dt_ct)
-    return bias_out
+    return BiasData(bias_out, len(dt_ct))
 
 experiments_bias = collect('bias_experiment', ('experiments',))
 fits_experiments_bias = collect('experiments_bias', ('fits', 'fitcontext',))
 
 @table
-def biases_table(fits_experiments, fits_experiments_bias, fits):
+def biases_table(
+        fits_experiments, fits_experiments_bias, fits, show_total:bool=False):
     """Creates a table with fits as the columns and the experiments from both
     fits as the row index.
     """
     col = ['bias']
     dfs = []
     for fit, experiments, biases in zip(fits, fits_experiments, fits_experiments_bias):
+        total= 0
+        total_points= 0
         records = []
         for biasres, experiment in zip(biases, experiments):
             records.append(dict(
                     experiment=str(experiment),
-                    bias=biasres
+                    bias=biasres.bias
             ))
+            if show_total:
+                total += biasres.bias*biasres.ndata
+                total_points += biasres.ndata
+        if show_total:
+            total /= total_points
+            records.append(dict(
+                    experiment="Total",
+                    bias=total))
+
         df = pd.DataFrame.from_records(records,
                  columns=('experiment','bias'),
                  index = ('experiment')
@@ -107,7 +122,8 @@ def plot_fits_bootstrap_bias(
 
 fits_exps_bootstrap_chi2_central = collect('experiments_bootstrap_chi2_central',
                                            ('fits', 'fitcontext',))
-fits_chi2_t0_pseudodata = collect(total_experiments_chi2data, ('fits', 'fitinputcontext', 'fitunderlyinglaw'))
+fits_chi2_t0_pseudodata = collect(
+    total_experiments_chi2data, ('fits', 'fitinputcontext', 'fitunderlyinglaw'))
 
 def delta_chi2_bootstrap(fits_chi2_t0_pseudodata,
                          fits_exps_bootstrap_chi2_central):

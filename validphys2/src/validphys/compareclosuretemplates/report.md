@@ -12,7 +12,16 @@ Closures test estimators
 -----------------------
 ## $\Delta_{\chi^{2}}$
 {@ plot_delta_chi2 @}
+
+
 ## Bias by experiment
+### Scatter Plot
 {@ plot_fits_bootstrap_bias @}
+### Table
+{@ biases_table(show_total=True) @}
+
 ## $\phi$ by experiment
+### Scatter Plot
 {@ plot_phi_scatter_dataspecs @}
+### Table
+{@ fits_experiments_phi_table @}
