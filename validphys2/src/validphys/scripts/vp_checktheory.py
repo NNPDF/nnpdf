@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 """
 A script which utilises the validphys loader method `check_theoryinfo` to allow
-user to quickly print table to terminal, leveraging the panda dataframe pretty
-printing.
+user to quickly print table to terminal.
 
 By default the table is just printed however the table can also be saved by
 specifying an output folder with the command line option `-o`.
@@ -20,6 +19,7 @@ from reportengine import colors
 from reportengine.table import savetable
 
 from validphys.loader import Loader
+from validphys.config import ConfigError
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -37,29 +37,22 @@ def main():
     parser = argparse.ArgumentParser(description='Script to check theory info')
     parser.add_argument(
         'theoryid', help='Numeric identifier of theory to look up info of', type=int)
-    parser.add_argument('-o','--output',
-                        help="Output folder for theory info table",
-                        default=None)
+    parser.add_argument('--dumptable', '-d',
+                        help=(
+                            "Boolen flag which causes table to be dumped to CSV"
+                            " file in current working directory, with name "
+                            "theory_<theoryid>_info.csv"),
+                        action='store_true')
     args = parser.parse_args()
     df = theory_info_table(args.theoryid)
 
-    if args.output is not None:
-        outpath = pathlib.Path(args.output)
+    if args.dumptable:
+        outpath = pathlib.Path(f"theory_{args.theoryid}_info.csv")
+        if outpath.is_file():
+            raise ConfigError(
+                f"The file `theory_{args.theoryid}_info.csv` already exists in "
+                "your current working directory.")
         log.info(
-            f"Saving info table to {outpath.absolute()}/theory_{args.theoryid}"
-            "_info.csv")
-        if outpath.is_dir():
-            log.warning(
-                f"Saving info table to {outpath.absolute()}/theory_"
-                f"{args.theoryid}_info.csv already exists, attempting to override")
-        try:
-            outpath.mkdir(exist_ok=True)
-        except FileExistsError:
-            log.error(
-                "A file already exists with the same name as the output folder "
-                "please delete this file or choose a different name"
-            )
-            raise
-        savetable(df, outpath/f"theory_{args.theoryid}_info.csv")
-
+            f"Saving info table to theory_{args.theoryid}_info.csv")
+        savetable(df, outpath)
     print(df)

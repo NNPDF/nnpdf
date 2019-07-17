@@ -68,14 +68,15 @@ global_nx                                                  0
 EScaleVar                                                  1
 ```
 
-Sometimes the pretty printing of pandas cuts the output to fit in the terminal
-nicely, for example with the CKM matrix elements above. If you want to see the
-full output, or just keep a permanent record of the table then you can specify
-an output directory, in which the table will be saved - with a sensible name:
+Sometimes the printing cuts the output to fit in the terminal
+for example with the CKM matrix elements above. If you want to see the
+full output, or just keep a permanent record of the table then you can use the
+flag --dumptable which will save a copy of the table in your current working
+directory:
 
 ```
-$ vp-checktheory 53 -o example_directory
-[INFO]: Saving info table to /Users/michael/nnpdfgit/nnpdf/example_directory/theory_53_info.csv
+$ vp-checktheory 53 --dumptable
+[INFO]: Saving info table to theory_53_info.csv
                                           Info for theory 53
 ID                                                        53
 PTO                                                        2
@@ -116,9 +117,6 @@ MP                                                     0.938
 Comments                               NNPDF3.1 NNLO central
 global_nx                                                  0
 EScaleVar                                                  1
-$ ls example_directory/
+$ ls
 theory_53_info.csv
 ```
-
-if the output folder already exists, the script will warn the user and then save
-the table to it anyway.
