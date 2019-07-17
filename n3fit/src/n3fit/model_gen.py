@@ -184,12 +184,8 @@ def pdfNN_layer_generator(
     # Safety check
     ln = len(nodes)
     la = len(activations)
-    if ln > la:
-        activations = (ln - la) * activations[0] + activations
-        print("Did not received enough activation functions, appending copies of the first activation foound")
-    elif la > ln:
-        activations = activations[-ln:]
-        print("Received more activations than layers, using only the last ones")
+    if ln != la:
+        raise ValueError("Number of activation functions does not match number of layers @ model_gen.py")
 
     # If dropout == 0, don't add dropout layer
     if dropout == 0.0:

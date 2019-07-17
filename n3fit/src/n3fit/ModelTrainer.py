@@ -47,6 +47,10 @@ class ModelTrainer:
             - `pos_info`: list of dictionaries containing positivity sets
             - `flavinfo`: the object returned by fitting['basis']
             - `nnseed`: the seed used to initialise the Neural Network, will be passed to model_gen
+            - `pass_status`: flag to signal a good run
+            - `failed_status`: flag to signal a bad run
+            - `pass_status`: flag to signal a good run
+            - `failed_status`: flag to signal a bad run
             - `debug`: flag to activate some debug options
         """
 
@@ -240,24 +244,20 @@ class ModelTrainer:
     # i.e., the most important function is hyperparametizable, which is a      #
     # wrapper around all of these                                              #
     ############################################################################
-    def _generate_observables(self, params):
+    def _generate_observables(self, pos_multiplier, pos_initial):
         """
         This functions fills the 3 dictionaries (training, validation, experimental)
         with the output layers and the loss functions
         It also fill the list of input tensors (input_list)
 
         Parameters accepted:
-            - `pos_multiplier`: the multiplier to be applied to the positivity
+            - `pos_multiplier`: the multiplier to be applied to the positivity each 100 epochs
             - `pos_initial`: the initial value for the positivity
         """
 
         # First reset the dictionaries
         self._reset_observables()
         log.info("Generating layers")
-
-        # two parameters are used here which might go to the hyperopt
-        pos_multiplier = params["pos_multiplier"]  # how much to increase the positivity penalty each 100 epochs
-        pos_initial = params["pos_initial"]
 
         # Now we need to loop over all dictionaries (First exp_info, then pos_info)
         for exp_dict in self.exp_info:
@@ -300,7 +300,7 @@ class ModelTrainer:
         # Save the positivity multiplier into the training dictionary as it will be used during training
         self.training["pos_multiplier"] = pos_multiplier
 
-    def _generate_pdf(self, params):
+    def _generate_pdf(self, nodes_per_layer, activation_per_layer, initializer, layer_type, dropout):
         """
         Defines the internal variable layer_pdf
         this layer takes any input (x) and returns the pdf value for that x
@@ -324,11 +324,6 @@ class ModelTrainer:
         log.info("Generating PDF layer")
 
         # Set the parameters of the NN
-        nodes_per_layer = params["nodes_per_layer"]
-        activation_per_layer = params["activation_per_layer"]
-        initializer = params["initializer"]
-        layer_type = params["layer_type"]
-        dropout = params["dropout"]
 
         # Generate the NN layers
         layer_pdf, layers = model_gen.pdfNN_layer_generator(
@@ -352,7 +347,7 @@ class ModelTrainer:
 
         return layers, integrator_input
 
-    def _model_compilation(self, params):
+    def _model_compilation(self, learning_rate, optimizer):
         """
         Compiles the model with the data given in params
 
@@ -364,12 +359,7 @@ class ModelTrainer:
         training_model = self.training["model"]
         loss_list = self.training["losses"]
 
-        # Before compilation, set all parameters as given in the params dictionary
-        learning_rate = params["learning_rate"]
-        # Choose the optimizer, compile the net and print summary
-        opt_name = params["optimizer"]
-
-        training_model.compile(optimizer_name=opt_name, learning_rate=learning_rate, loss=loss_list)
+        training_model.compile(optimizer_name=optimizer, learning_rate=learning_rate, loss=loss_list)
 
     def _train_and_fit(self, validation_object, epochs):
         """
@@ -440,10 +430,16 @@ class ModelTrainer:
             self._hyperopt_override(params)
 
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
-        self._generate_observables(params)
+        self._generate_observables(params['pos_multiplier'], params['pos_initial'])
 
         # Generate the pdf layer
-        layers, integrator_input = self._generate_pdf(params)
+        layers, integrator_input = self._generate_pdf(
+                params["nodes_per_layer"],
+                params["activation_per_layer"],
+                params["initializer"],
+                params["layer_type"],
+                params["dropout"]
+                )
 
         # Model generation
         self._model_generation()
@@ -473,7 +469,7 @@ class ModelTrainer:
             )
 
         # Compile the training['model'] with the given parameters
-        self._model_compilation(params)
+        self._model_compilation(params['learning_rate'], params['optimizer'])
 
         ### Training loop
         passed = self._train_and_fit(validation_object, epochs)
