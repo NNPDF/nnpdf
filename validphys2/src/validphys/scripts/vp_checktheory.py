@@ -13,14 +13,14 @@ __authors__ = 'Michael Wilson, Zahari Kassabov'
 import argparse
 import logging
 import pathlib
+import sys
 
 from pandas import DataFrame
 
 from reportengine import colors
 from reportengine.table import savetable
 
-from validphys.loader import Loader
-from validphys.config import ConfigError
+from validphys.loader import Loader, TheoryNotFound
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -45,18 +45,24 @@ def main():
                             "theory_<theoryid>_info.csv"),
                         action='store_true')
     args = parser.parse_args()
-    df = theory_info_table(args.theoryid)
+    try:
+        df = theory_info_table(args.theoryid)
+    except TheoryNotFound as e:
+        log.error(e)
+        sys.exit(1)
 
+    print(df)
     if args.dumptable:
         outpath = pathlib.Path(f"theory_{args.theoryid}_info.csv")
-        if outpath.is_file():
-            raise ConfigError(
+        if outpath.exists():
+            log.error(
                 f"The file `theory_{args.theoryid}_info.csv` already exists in "
                 "your current working directory.")
+            sys.exit(1)
         log.info(
             f"Saving info table to theory_{args.theoryid}_info.csv")
         savetable(df, outpath)
-    print(df)
+
 
 if __name__ == "__main__":
     main()
