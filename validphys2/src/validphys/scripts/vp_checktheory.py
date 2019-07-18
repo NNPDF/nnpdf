@@ -26,24 +26,32 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 log.addHandler(colors.ColorHandler())
 
+
 def theory_info_table(theoryid):
     res_dict = Loader().check_theoryinfo(theoryid)
     res_df = DataFrame(
         list(res_dict.values()),
         index=res_dict.keys(),
-        columns=[f'Info for theory {theoryid}'])
+        columns=[f'Info for theory {theoryid}'],
+    )
     return res_df
+
 
 def main():
     parser = argparse.ArgumentParser(description='Script to check theory info')
     parser.add_argument(
-        'theoryid', help='Numeric identifier of theory to look up info of', type=int)
-    parser.add_argument('--dumptable', '-d',
-                        help=(
-                            "Boolen flag which causes table to be dumped to CSV"
-                            " file in current working directory, with name "
-                            "theory_<theoryid>_info.csv"),
-                        action='store_true')
+        'theoryid', help='Numeric identifier of theory to look up info of', type=int
+    )
+    parser.add_argument(
+        '--dumptable',
+        '-d',
+        help=(
+            "Boolen flag which causes table to be dumped to CSV"
+            " file in current working directory, with name "
+            "theory_<theoryid>_info.csv"
+        ),
+        action='store_true',
+    )
     args = parser.parse_args()
     try:
         df = theory_info_table(args.theoryid)
@@ -57,10 +65,10 @@ def main():
         if outpath.exists():
             log.error(
                 f"The file `theory_{args.theoryid}_info.csv` already exists in "
-                "your current working directory.")
+                "your current working directory."
+            )
             sys.exit(1)
-        log.info(
-            f"Saving info table to theory_{args.theoryid}_info.csv")
+        log.info(f"Saving info table to theory_{args.theoryid}_info.csv")
         savetable(df, outpath)
 
 
