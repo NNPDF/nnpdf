@@ -111,11 +111,11 @@ class ModelTrainer:
     @property
     def model_file(self):
         """ If a model_file is set the training model will try to get the weights form here """
-        return self.__model_file
+        return self._model_file
 
     @model_file.setter
     def model_file(self, model_file):
-        self.__model_file = model_file
+        self._model_file = model_file
 
     def set_hyperopt(self, hyperopt_on, keys=None):
         """ Set hyperopt options on and off (mostly suppresses some printing) """
@@ -516,7 +516,7 @@ class ModelTrainer:
             "loss": final_loss,
             "status": passed,
             "arc_lengths": arc_lengths,
-            "training_loss": validation_object.tr_loss,
+            "training_loss": validation_object.tr_loss(),
             "validation_loss": validation_loss,
             "experimental_loss": experimental_loss,
             "testing_loss": testing_loss,

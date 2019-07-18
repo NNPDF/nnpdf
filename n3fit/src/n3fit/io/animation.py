@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-
+import glob
+import os
+import numpy as np
 import matplotlib
 matplotlib.use("TkAgg")
-import glob, os
-import numpy as np
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -40,11 +40,11 @@ def parse_arguments():
     parser.add_argument("name_of_fit", help="Folder where to find the history_step_i members", type=str)
 
     # Optional arguments
-    parser.add_argument("-s", "--steps", type=int, default=200)
-    parser.add_argument("-b", "--begin_point", type=int, default=1)
-    parser.add_argument("-r", "--replicas", type=int, default=20)
-    parser.add_argument("-e", "--epochs_per_step", type=int, default=200)
+    parser.add_argument("-e", "--epochs_per_step", type=int, default=200, help="How many epochs separate the steps. Necessary for a correct printout")
     parser.add_argument("-f", "--frame_separation", type=int, default=200, help="Separation in ms between frames")
+    parser.add_argument("-b", "--begin_point", type=int, default=1)
+#     parser.add_argument("-s", "--steps", type=int, default=200)
+#     parser.add_argument("-r", "--replicas", type=int, default=20)
     parser.add_argument("-m", "--how_many", type=int, default=25)
 
     args = parser.parse_args()
@@ -58,8 +58,19 @@ class AnimationObject:
 
     This class provides a `.function` method which can be passed to
     `matplotlib.animation.FuncAnimation`
+
+    # Arguments:
+        - `xgrid`: points in x
+        - `step_data`: list of dictionaries containing the information to plot for each step of the animation
+        - `how_many`: how many steps to paint
+        - `frame_separation`: how many seconds to wait between frames
+        - `begin_point`: at which step do we start
+        - `alpha` : how transparent should the envelope be
+        - `color` : which color to paint the lines
     """
     def __init__(self, xgrid, step_data, how_many, frame_separation, begin_point=1, alpha=0.4, color="indianred"):
+        if len(step_data) < how_many: # Actually here we need to check begin_point as well
+            raise ValueError("The number of frames to paint {0} is bigger than the number of steps provided {1}".format(how_many, len(step_data)))
         self.begin_point = begin_point - 1
         self.xgrid = xgrid
         self.alpha = alpha
@@ -69,7 +80,9 @@ class AnimationObject:
         self.frame_separation = frame_separation
 
     def define_plot(self, line, ax, particle_tuple, log_scale=False):
-        """ 
+        """
+        After creating the plot with matplotlib, save the axes and the particle information into this function
+        before passing it to the animator
         """
         self.ax = ax
         self.line = line
@@ -79,6 +92,7 @@ class AnimationObject:
         self.set_name()
 
     def set_name(self):
+        """ Sets the labels of the plot """
         plt.xlabel("$x$")
         if "anti" in self.particle:
             parname = self.particle.replace("anti_","")
@@ -87,6 +101,7 @@ class AnimationObject:
             plt.ylabel(r"$x" + self.particle + "(x)$")
 
     def set_title(self, epoch):
+        """ Sets the title of the plot """
         if "anti" in self.particle:
             parname = self.particle.replace("anti_","")
             self.ax.set_title(r"$\bar{{{0}}}$ epoch: {1}".format(parname, epoch))
@@ -94,10 +109,24 @@ class AnimationObject:
             self.ax.set_title(r"${0}$ epoch: {1}".format(self.particle, epoch))
 
     def initialization(self):
+        """
+        Initialization function that will be passed to the FuncAnimation matplotlib class
+        """
         self.line.set_data([], [])
         return (self.line,)
 
     def function(self, j):
+        """
+        Function to be passed to FuncAnimation.
+        FuncAnimation will iteratively call this function passing a different index each time, it is the 
+        job of this class to figure out what are we exactly plotting each time.
+
+        This function gets the corresponding element from the `step_data` attribute and paints the central value
+        and the envelope.
+
+        # Arguments:
+            `j` : index
+        """
         i = j + self.begin_point
         step_dict = self.step_data[i]
         epochs = step_dict["epochs"]
@@ -124,11 +153,22 @@ class AnimationObject:
 
 
 def plot_this(particle_tuple, animator, log_scale=False):
+    """
+    Wrapper around FuncAnimation.
+    This function first generates the figure and the axis,
+    then register the figure with the instance of AnimationObject `animator`
+    generates the animation and finnaly writes a `.gif` file.
+
+    # Arguments:
+        - `particle_tuple`: a tuple (1, 'd') with the index of the particle 
+                            in the PDF grid array and the name of the particle
+        - `animator`: instance of AnimationObject
+        - `log_scale`: if true, select a logarithmic scale in the x axis
+    """
     # First create the figure
     fig = plt.figure()
     ax = plt.axes()
     plot_line, = ax.plot([], [])
-    particle = particle_tuple[0]
     particle_name = particle_tuple[1]
     # TODO: Define the axis depending on the particle we are targetting
     if log_scale:
@@ -164,6 +204,16 @@ def plot_this(particle_tuple, animator, log_scale=False):
 
 
 def fake_postfit(chi2s, keep=50):
+    """
+    Very naive and simple post-fit analysis to remove the worst replicas 
+
+    # Arguments:
+        - chi2s: list of chi2s (one per replica)
+        - keep: how many replicas to keep
+
+    # Returns:
+        - `remove_list`: a list of the replicas which should be ignored 
+    """
     ave_chi2 = np.average(chi2s)
     order_chi2 = sorted(chi2s, key=lambda x: np.abs(x - ave_chi2))
     # Keep the `keep` best
@@ -174,21 +224,32 @@ def fake_postfit(chi2s, keep=50):
     return remove_list
 
 
-def main(arguments):
+def main():
+    """
+    Driver of the animation.py code
+
+    1. Looks on the directory for how many replicas and steps we have 
+    2. Start reading all the steps (from the last one) and parse the .fitinfo and the exportgrid files
+        2.1 For the last step, do a small statistical analysis to see which replicas to ignore
+        2.2 Rinse and repeat for all steps (as we eliminate more and more replicas it gets faster with time)
+    3. Create the central replica by taking the average and the envelop by taking the maximals
+    4. Fill up a list of dictionaries (one per step) containing the central replica and the envelope for each step
+    5. Create an animation object with the list of dictionaries and reserve
+    6. Call the plotting function for each parton, once for the linear scale and once for log scale
+
+    The final result will be two .gif files for each particle
+    """
+    arguments = parse_arguments()
     directory = arguments.name_of_fit
-    replicas = arguments.replicas
-    steps = arguments.steps
 
     basename = directory + "/history_step_{0}/replica_{1}/" + directory
     # define the names of the interesting files
     info_file_template = basename + ".fitinfo"
     grid_file_template = basename + ".exportgrid"
 
-    # If steps or replicas are not set, try to find out how many there are by yourself
-    if steps == -1:
-        steps = len(glob.glob(basename.format("*", 1) + "*"))
-    if replicas:
-        replicas = len(glob.glob(basename.format(0, "*") + "*"))
+    # Try to find how many steps and replicas do we have
+    steps = len(glob.glob(basename.format("*", 1) + "*"))
+    replicas = len(glob.glob(basename.format(0, "*") + "*"))
 
     remove_indices = []
     indices_removed = False
@@ -298,5 +359,4 @@ def main(arguments):
 
 
 if __name__ == "__main__":
-    args = parse_arguments()
-    main(args)
+    main()

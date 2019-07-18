@@ -6,9 +6,8 @@
 #   - Does it make sense to use Keras callbacks or we want to actually avoid it?
 #           Extra: do we want to implement the callback as part of the .fit function?
 
-import numpy as np
-
 import logging
+import numpy as np
 
 log = logging.getLogger(__name__)
 
@@ -103,6 +102,7 @@ class Stopping:
         # Initialize the parameters of the fit
         self.total_epochs = total_epochs
         self.epoch_of_the_stop = total_epochs
+        self.training_chi2 = INITIAL_CHI2
         self.best_chi2 = INITIAL_CHI2
 
         # Initialize stats
@@ -130,12 +130,6 @@ class Stopping:
         else:
             return self.best_chi2
 
-    @property
-    def tr_loss(self):
-        """ Training loss """
-        return self.__tr_loss
-
-    @tr_loss.getter
     def tr_loss(self):
         """
         If there is a best epoch (`e_best_chi2`) defined, will return the training loss at that point
@@ -214,7 +208,7 @@ class Stopping:
             return False
 
         # Step 2. Read the validation loss (if there is no validation loss it will correspond to the training)
-        vl_chi2, all_vl = self.validation.loss
+        vl_chi2, all_vl = self.validation.loss()
 
         # Step 3. Store all information about the run
         self.save_stats(tr_chi2, vl_chi2)
@@ -407,7 +401,7 @@ class Validation:
     @property
     def weights(self):
         """ Weights of the NN """
-        return self.__weights
+        return self.model.weights
 
     @weights.setter
     def weights(self, weights):
@@ -419,12 +413,6 @@ class Validation:
         """ Returns the weights of the validation model """
         return self.model.get_weights()
 
-    @property
-    def loss(self):
-        """ Validation loss """
-        return self.__loss
-
-    @loss.getter
     def loss(self):
         """
         Returns a tuple with the validation loss and a
@@ -491,12 +479,6 @@ class HistoryMaker:
         self.all_history = []
         self.stopping_object = stopping_object
 
-    @property
-    def len_history(self):
-        """ Number of history steps saved """
-        return self.__len_history
-
-    @len_history.getter
     def len_history(self):
         """ Returns the number of history steps saved """
         return len(self.all_history)
@@ -545,7 +527,7 @@ class HistoryMaker:
         Before returning each one of the indices will reload the corresponding point
         in history
         """
-        for i in range(self.len_history):
+        for i in range(self.len_history()):
             log.info("Reloading step {0}".format(i))
             self.reload(i)
             yield i

@@ -38,7 +38,7 @@ class WriterWrapper:
             self.q2,
             self.validation_object.epoch_of_the_stop,
             self.validation_object.loss,
-            self.validation_object.tr_loss,
+            self.validation_object.tr_loss(),
             true_chi2,
             arc_lengths,
             allchi2_lines,
