@@ -3,8 +3,9 @@
 A script which utilises the validphys loader method `check_theoryinfo` to allow
 user to quickly print table to terminal.
 
-By default the table is just printed however the table can also be saved by
-specifying an output folder with the command line option `-o`.
+By default the table is just printed however the table can also be saved to
+a CSV file with the name theory_<theoryid>_info.csv by using the command line
+option `-d`, which stands for `--dumptable`.
 """
 
 __authors__ = 'Michael Wilson, Zahari Kassabov'
@@ -56,3 +57,6 @@ def main():
             f"Saving info table to theory_{args.theoryid}_info.csv")
         savetable(df, outpath)
     print(df)
+
+if __name__ == "__main__":
+    main()
