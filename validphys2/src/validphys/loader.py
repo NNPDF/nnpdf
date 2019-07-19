@@ -484,6 +484,40 @@ class Loader(LoaderBase):
             raise LoaderError(e) from e
         return path/name
 
+    def check_fit_data(self, fit):
+        """Taking the fit as input returns the data specification in that fit
+        if the fit uses the old style `experiments` key then expands as a flat
+        list of dataset inputs
+        """
+        if fit is None:
+            raise TypeError("Must specify a fit to use the cuts.")
+        if not isinstance(fit, FitSpec):
+            fit = self.check_fit(fit)
+        fitconfig = fit.as_input()
+        if 'data' not in fitconfig.keys() and 'experiments' in fitconfig.keys():
+            log.warning(
+                f"{fit} uses the deprecated `experiment` key, converting to `data`")
+            data = []
+            # This is a bit hacky but having a flat list data which has
+            # mappings with {'dataset':} is causing conflict with production rule
+            for experiment in fitconfig['experiments']:
+                for dsinput in experiment['datasets']:
+                    dsinput['name'] = dsinput.pop('dataset')
+                    data.append(dsinput)
+        if 'data' in fitconfig.keys():
+            return fitconfig['data']
+        #TODO: make new error?
+        raise DataNotFoundError("data specification couldn't be obtained from fit")
+
+    def check_dataset_defaults(self, name, theoryID):
+        #TODO: implement defaults here
+        # First use theoryid and self.check_theory_info() to get PTO
+        # next get defaults from meta file
+        # defaults probably is minimally {'frac':1.0} could be
+        # { 'frac': 0.5, 'cfac'{'NLO':None, 'NNLO':some} }
+        # use PTO with cfac and otherwise return DataSetInput() with defaults filled
+        raise NotImplementedError
+
 
 #http://stackoverflow.com/a/15645088/1007990
 def _download_and_show(response, stream):
