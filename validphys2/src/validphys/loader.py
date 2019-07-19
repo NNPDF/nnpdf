@@ -499,14 +499,19 @@ class Loader(LoaderBase):
         if 'data' not in fitconfig.keys() and 'experiments' in fitconfig.keys():
             log.warning(
                 f"{fit} uses the deprecated `experiment` key, converting to `data`")
-            data = [
-                dsinput
-                for experiment in fitconfig['experiments']
-                for dsinput in experiment['datasets']]
+            data = []
+            # This is a bit hacky but having a flat list data which has
+            # mappings with {'dataset':} is causing conflict with production rule
+            for experiment in fitconfig['experiments']:
+                for dsinput in experiment['datasets']:
+                    # Don't mutate the dataset
+                    dsinput = dict(dsinput)
+                    dsinput['name'] = dsinput.pop('dataset')
+                    data.append(dsinput)
             return data
         if 'data' in fitconfig.keys():
             return fitconfig['data']
-        raise FitDataNotFound("`data` specification couldn't be obtained from fit")
+        raise FitDataNotFound("data specification couldn't be obtained from fit")
 
     def check_dataset_defaults(self, name, theoryID):
         #TODO: implement defaults here
