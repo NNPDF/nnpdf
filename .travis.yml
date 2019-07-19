@@ -17,7 +17,7 @@ env:
     - CONDAPATH="/Users/travis/miniconda3"
     - OUTPUT_ARCH=osx-64
     - OUTPUT_CHANNEL=conda-private
-    - UPLOAD_NON_MASTER="true"
+    - UPLOAD_NON_MASTER="false"
     - CONDA_BUILD_SYSROOT="${CONDAPATH}/MacOSX10.9.sdk"
 
   matrix:
