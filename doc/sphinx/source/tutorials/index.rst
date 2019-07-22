@@ -7,6 +7,7 @@ Tutorials
    ./runafit.md
    ./buildmaster.md
    ./APPLgrids.md
+   ./datthcomp.md
    ./conda.md
 
 =======
