@@ -279,7 +279,7 @@ def performfit(
         )
 
         # Creates a PDF model for export grid
-        def pdf_function(export_xgrid):
+        def pdf_function(export_xgrid, integrator_grid = integrator_input, my_layer_pdf = layer_pdf):
             """
             Receives an array, returns the result of the PDF for said array
             """

@@ -14,7 +14,7 @@ you can do so by simply modifying the wrappers to point somewhere else
 """
 # TODO: make this part of Report Engine
 # in principle Report Engine would be reading everything from the runcard and then providing
-# basically a list of strings or similar to ModelTrainer, which would in turn make them into 
+# basically a list of strings or similar to ModelTrainer, which would in turn make them into
 # the keras/tensorflow/whatever objects it needs.
 # If the --hpyeropt flag is active, then report engine should return a sampler from the hyperopt dict
 # basically returning the wrapper functions defined below (but instead of simply calling the hyperopt ones
@@ -36,9 +36,13 @@ log = logging.getLogger(__name__)
 def hp_uniform(key, lower_end, higher_end):
     """ Sample uniformly between lower_end and higher_end """
     return hyperopt.hp.uniform(key, lower_end, higher_end)
+
+
 def hp_quniform(key, lower_end, higher_end, step_size):
     """ Like uniform but admits a step_size """
     return hyperopt.hp.quniform(key, lower_end, higher_end, step_size)
+
+
 def hp_loguniform(key, lower_end, higher_end):
     """
     Sample from lower_end to higher_end lograithmically.
@@ -50,9 +54,12 @@ def hp_loguniform(key, lower_end, higher_end):
     log_lower_end = np.log(lower_end)
     log_higher_end = np.log(higher_end)
     return hyperopt.hp.loguniform(key, log_lower_end, log_higher_end)
+
+
 def hp_choice(key, choices):
     """ Sample from the list `choices` """
     return hyperopt.hp.choice(key, choices)
+
 
 class HyperScanner:
     """
@@ -77,7 +84,8 @@ class HyperScanner:
                 - min_epochs, max_epochs
                 - min_patience, max_patience
     """
-    def __init__(self, parameters, sampling_dict, steps = 5):
+
+    def __init__(self, parameters, sampling_dict, steps=5):
         self.parameter_keys = parameters.keys()
         self.parameters = copy.deepcopy(parameters)
         self.steps = steps
@@ -105,7 +113,11 @@ class HyperScanner:
             return
 
         if key not in self.parameter_keys:
-            raise ValueError("Trying to update a parameter not declared in the `parameters` dictionary: {0} @ HyperScanner._update_param".format(key))
+            raise ValueError(
+                "Trying to update a parameter not declared in the `parameters` dictionary: {0} @ HyperScanner._update_param".format(
+                    key
+                )
+            )
 
         self.hyper_keys.add(key)
         log.info("Adding key {0} with value {1}".format(key, sampler))
@@ -124,8 +136,8 @@ class HyperScanner:
         stopping_key = "stopping_patience"
 
         # Compute the step size
-        epoch_step_size = (max_epochs-min_epochs)/self.steps
-        patience_step_size = (max_patience-min_patience)/self.steps
+        epoch_step_size = (max_epochs - min_epochs) / self.steps
+        patience_step_size = (max_patience - min_patience) / self.steps
 
         # Generate the samplers
         epochs = hp_quniform(epochs_key, min_epochs, max_epochs, epoch_step_size)
@@ -134,7 +146,6 @@ class HyperScanner:
         # Update the parameters ditionary
         self._update_param(epochs_key, epochs)
         self._update_param(stopping_key, stopping_patience)
-
 
     def optimizer(self, names=None, min_lr=0.0005, max_lr=0.5):
         """
@@ -149,7 +160,7 @@ class HyperScanner:
         for hyperopt it will look as
             {optimizer: [ (optimizer1, sampler(lr)), (optimzier2, sampler(lr)), (optimizer3, )]
         """
-        if names is None: # Nothing to do here
+        if names is None:  # Nothing to do here
             return
 
         opt_key = "optimizer"
@@ -166,7 +177,9 @@ class HyperScanner:
         choices = []
         for opt_name in names:
             if opt_name not in optimizer_dict.keys():
-                raise NotImplementedError("HyperScanner: Optimizer {0} not implemented in MetaModel.py".format(opt_name))
+                raise NotImplementedError(
+                    "HyperScanner: Optimizer {0} not implemented in MetaModel.py".format(opt_name)
+                )
 
             # Check whether this optimizer takes the learning rate
             # if it does the choice should be a dictionary with both the optimizer and the learning rate
@@ -182,7 +195,6 @@ class HyperScanner:
 
         # Tell the HyperScanner this key might contain a dictionary so we save the extra keys
         self._update_param(opt_key, opt_val)
-
 
     def positivity(self, min_multiplier=1.01, max_multiplier=1.3, min_initial=0.5, max_initial=100):
         """
@@ -202,7 +214,16 @@ class HyperScanner:
         self._update_param(mul_key, mul_val)
         self._update_param(ini_key, ini_val)
 
-    def architecture(self, initializers=None, max_drop=0.0, n_layers=None, min_units=15, max_units=25, activations=None, layer_types=None):
+    def architecture(
+        self,
+        initializers=None,
+        max_drop=0.0,
+        n_layers=None,
+        min_units=15,
+        max_units=25,
+        activations=None,
+        layer_types=None,
+    ):
         """
         Modifies the following entries of the `parameters` dictionary:
             - `initializer`
@@ -225,18 +246,20 @@ class HyperScanner:
         # Generate all possible activation choices
         activation_choices = []
         for afun in activations:
-            def activation_str(n_of_layers):
+
+            def activation_str(n_of_layers, fun_name = afun):
                 """
                 This function returns an array where the activation function
                 `afun` is repeated as many times as hidden layers we have
                 """
-                acts = [afun]*(n_of_layers-1)
+                acts = [fun_name] * (n_of_layers - 1)
                 acts.append("linear")
                 return acts
+
             activation_choices.append(activation_str)
 
         # Generate the number of nodes per layer
-        unit_step = (max_units-min_units)/self.steps
+        unit_step = (max_units - min_units) / self.steps
         # this is strongly coupled with the total number of layers
         # so we will generate a list of layers to choose from
         # where each layer will be defined by an uniform sampler (the number of nodes)
@@ -244,7 +267,7 @@ class HyperScanner:
         for n in n_layers:
             units = []
             for i in range(n):
-                units_label = "nl{0}:-{1}/{0}".format(n,i)
+                units_label = "nl{0}:-{1}/{0}".format(n, i)
                 units_sampler = hp_quniform(units_label, min_units, max_units, unit_step)
                 units.append(units_sampler)
             # The last layer will always have 8 nodes
@@ -260,7 +283,9 @@ class HyperScanner:
         ini_choices = []
         for ini_name in initializers:
             if ini_name not in imp_init_names:
-                raise NotImplementedError("HyperScanner: Initializer {0} not implemented in MetaLayer.py".format(ini_name))
+                raise NotImplementedError(
+                    "HyperScanner: Initializer {0} not implemented in MetaLayer.py".format(ini_name)
+                )
             # For now we are going to use always all initializers and with default values
             ini_choices.append(ini_name)
 
