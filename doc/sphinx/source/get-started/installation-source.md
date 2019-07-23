@@ -27,7 +27,7 @@ If you intend to work on the NNPDF code, then building from source is the recomm
 
 5. We now need to make the installation prefix point to our `nnpdf-dev` environment, this can be done using:
 
-		$CONDA_PREFIX==~/miniconda3/envs/nnpdf-dev/
+		$CONDA_PREFIX=~/miniconda3/envs/nnpdf-dev/
 
 	this assumes `miniconda3` is installed in the default place which is the home directory.
 
