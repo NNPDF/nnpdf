@@ -1,7 +1,50 @@
-import hyperopt as hyper
-import numpy as np
+"""
+The HyperScanner class is basically a dictionary containing all parameters,
+the functions defined as hp_ (from hyperspace)
 
+The goal of this module is to read all parameters in the `hyperopt` section of the runcard
+and modify the parameter dictionary so that now it is filled with the `hyperop` sampler objects
+
+The idea behind the wrappers if that if you ever want to use another hyperoptimization library, assuming
+that it also takes just
+    - a function
+    - a dictionary of spaces of parameters
+you can do so by simply modifying the wrappers to point somewhere else
+(and, of course the function in the fitting action that calls the miniimization).
+"""
+# TODO: make this part of Report Engine
+# in principle Report Engine would be reading everything from the runcard and then providing
+# basically a list of strings or similar to ModelTrainer, which would in turn make them into 
+# the keras/tensorflow/whatever objects it needs.
+# If the --hpyeropt flag is active, then report engine should return a sampler from the hyperopt dict
+# basically returning the wrapper functions defined below (but instead of simply calling the hyperopt ones
+# having done some checks on them)
+# even more, depending on the syntax of the fitting part of the runcard, it should do one thing or another
+# but the design of this needs someone who is actually good at UX
+
+import hyperopt
+import numpy as np
 from n3fit.backends import MetaModel, MetaLayer
+
+# These are just wrapper around some hyperopt's sampling expresions defined in here
+# https://github.com/hyperopt/hyperopt/wiki/FMin#21-parameter-expressions
+# with a bit of extra documentation for the ones that are not obvious
+def hp_uniform(key, lower_end, higher_end):
+    """ Sample uniformly between lower_end and higher_end """
+    return hyperopt.hp.uniform(key, lower_end, higher_end)
+def hp_quniform(key, lower_end, higher_end, step_size):
+    """ Like uniform but admits a step_size """
+    return hyperopt.hp.quniform(key, lower_end, higher_end, step_size)
+def hp_loguniform(key, lower_end, higher_end):
+    """
+    Sample from lower_end to higher_end lograithmically.
+    Note that it is different from numpy's logspace in that it takes the
+    lower and higher boundaries, not the value of the exponent
+    """
+    return hyperopt.hp.loguniform(key, lower_end, higher_end)
+def hp_choice(key, choices):
+    """ Sample from the list `choices` """
+    return hyperopt.hp.choice(key, choices)
 
 
 class HyperScanner:
@@ -71,8 +114,8 @@ class HyperScanner:
         if min_epochs < epoch_step:
             epoch_step = min_epochs
 
-        epochs = hyper.hp.quniform(epochs_key, min_epochs, max_epochs, min_epochs)
-        stopping_patience = hyper.hp.quniform(stopping_key, min_patience, max_patience, 0.05)
+        epochs = hp_quniform(epochs_key, min_epochs, max_epochs, min_epochs)
+        stopping_patience = hp_quniform(stopping_key, min_patience, max_patience, 0.05)
 
         self._update_param(epochs_key, epochs)
         self._update_param(stopping_key, stopping_patience)
@@ -96,7 +139,7 @@ class HyperScanner:
 
         min_lr_exp = np.log(min_lr)
         max_lr_exp = np.log(max_lr)
-        lr_choice = hyper.hp.loguniform(lr_key, min_lr_exp, max_lr_exp)
+        lr_choice = hp_loguniform(lr_key, min_lr_exp, max_lr_exp)
 
         if names == "ALL":
             names = optimizer_dict.keys()
@@ -112,7 +155,7 @@ class HyperScanner:
             else:
                 choices.append(opt_name)
 
-        opt_val = hyper.hp.choice(opt_key, choices)
+        opt_val = hp_choice(opt_key, choices)
         # Tell the HyperScanner this key might contain a dictionary to store it separately
         self._update_param(opt_key, opt_val, dkeys=[opt_key])
 
@@ -128,13 +171,13 @@ class HyperScanner:
         else:
             ini_key = "pos_initial"
 
-        mul_val = hyper.hp.uniform(mul_key, min_multiplier, max_multiplier)
+        mul_val = hp_uniform(mul_key, min_multiplier, max_multiplier)
         self._update_param(mul_key, mul_val)
 
         if ini_key:
             min_initial = np.log(min_initial)
             max_initial = np.log(max_initial)
-            ini_val = hyper.hp.loguniform(ini_key, min_initial, max_initial)
+            ini_val = hp_loguniform(ini_key, min_initial, max_initial)
             self._update_param(ini_key, ini_val)
 
     def NN_architecture(
@@ -173,12 +216,14 @@ class HyperScanner:
 
         # Generate the possible activation choices
         act_choices = []
+        # Generate a function that will returns as many copies of the str as the number of layers
+        # and a linear one at the end
         for afun in activations:
-            # Just generate an array with as many copies of the str as the maximum number of layers
-            cop = [afun] * n_layers[-1]
-            # And append a linear at the end
-            cop.append("linear")
-            act_choices.append(cop)
+            def activation_str(nla):
+                cop = [afun]*(nla-1)
+                cop.append("linear")
+                return cop
+            act_choices.append(activation_str)
 
         nodes_choices = []
         for n in n_layers:
@@ -186,14 +231,14 @@ class HyperScanner:
             for i in range(n):
                 # We can even play games as lowering the maximum as the number of layers grows
                 units_label = "nl{1}:-{0}/{1}".format(i, n)
-                units.append(hyper.hp.quniform(units_label, min_units, max_units, 5))
+                units.append(hp_quniform(units_label, min_units, max_units, 5))
 
             # And then the last one is a dense with 8 units
             units.append(8)
             nodes_choices.append(units)
 
-        act_functions = hyper.hp.choice(act_key, act_choices)
-        nodes = hyper.hp.choice(nodes_key, nodes_choices)
+        act_functions = hp_choice(act_key, act_choices)
+        nodes = hp_choice(nodes_key, nodes_choices)
 
         # Now let's select the initializers looking at the ones implemented in MetaLayer
         ini_key = "initializer"
@@ -210,19 +255,19 @@ class HyperScanner:
             # For now we are going to use always all initializers and with default values
             ini_choices.append(ini_name)
 
-        ini_choice = hyper.hp.choice(ini_key, ini_choices)
+        ini_choice = hp_choice(ini_key, ini_choices)
 
         # Finally select the layer types
         if layer_types:
             layer_key = "layer_type"
-            layer_choices = hyper.hp.choice(layer_key, layer_types)
+            layer_choices = hp_choice(layer_key, layer_types)
             self._update_param(layer_key, layer_choices)
 
         # And add the dropout parameter
         drop_key = "dropout"
         n_drops = 3
         drop_step = max_drop / n_drops
-        drop_val = hyper.hp.quniform(drop_key, 0.0, max_drop, drop_step)
+        drop_val = hp_quniform(drop_key, 0.0, max_drop, drop_step)
 
         self._update_param(act_key, act_functions)
         self._update_param(nodes_key, nodes)

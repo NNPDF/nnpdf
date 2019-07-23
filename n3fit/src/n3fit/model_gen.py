@@ -350,6 +350,8 @@ def pdfNN_layer_generator(
     """
     if nodes is None:
         nodes = [15, 8]
+    ln = len(nodes)
+
     if activations is None:
         activations = ["tanh", "linear"]
     # Safety check

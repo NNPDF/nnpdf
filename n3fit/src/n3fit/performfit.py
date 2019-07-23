@@ -205,7 +205,7 @@ def performfit(
         # this block                                                           #
         ########################################################################
         if hyperopt:
-            from n3fit.hyper_optimization.HyperScanner import HyperScanner
+            from n3fit.hyper_optimization.hyper_scan import HyperScanner
 
             the_scanner = HyperScanner(parameters)
 
@@ -225,9 +225,7 @@ def performfit(
             the_model_trainer.set_hyperopt(True, keys=the_scanner.hyper_keys)
 
             # Generate Trials object
-            trials = filetrials.FileTrials(
-                replica_path_set, log=log, parameters=parameters
-            )
+            trials = filetrials.FileTrials(replica_path_set, parameters=parameters)
 
             # Perform the scan
             try:
@@ -236,6 +234,7 @@ def performfit(
                     space=the_scanner.dict(),
                     algo=hyper.tpe.suggest,
                     max_evals=hyperopt,
+                    show_progressbar=False,
                     trials=trials,
                 )
             except ValueError as e:
