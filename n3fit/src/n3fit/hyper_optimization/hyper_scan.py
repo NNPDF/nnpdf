@@ -22,9 +22,13 @@ you can do so by simply modifying the wrappers to point somewhere else
 # even more, depending on the syntax of the fitting part of the runcard, it should do one thing or another
 # but the design of this needs someone who is actually good at UX
 
+import copy
 import hyperopt
 import numpy as np
 from n3fit.backends import MetaModel, MetaLayer
+import logging
+
+log = logging.getLogger(__name__)
 
 # These are just wrapper around some hyperopt's sampling expresions defined in here
 # https://github.com/hyperopt/hyperopt/wiki/FMin#21-parameter-expressions
@@ -41,11 +45,14 @@ def hp_loguniform(key, lower_end, higher_end):
     Note that it is different from numpy's logspace in that it takes the
     lower and higher boundaries, not the value of the exponent
     """
-    return hyperopt.hp.loguniform(key, lower_end, higher_end)
+    if lower_end is None or higher_end is None:
+        return None
+    log_lower_end = np.log(lower_end)
+    log_higher_end = np.log(higher_end)
+    return hyperopt.hp.loguniform(key, log_lower_end, log_higher_end)
 def hp_choice(key, choices):
     """ Sample from the list `choices` """
     return hyperopt.hp.choice(key, choices)
-
 
 class HyperScanner:
     """
@@ -53,195 +60,198 @@ class HyperScanner:
     It takes cares of known correlation between parameters by tying them together
     It also provides methods for updating the parameter dictionaries after using hyperopt
 
-    It manages:
-        stopping
-        optimizer
-        positivity
+    It takes as inpujt the dictionaries defining the NN/fit and the hyperparameter scan
+    from the NNPDF runcard and substitutes in `parameters` samplers according to the
+    `hyper_scan` dictionary.
 
-        NN architecture (WIP)
+
+    # Arguments:
+        - `parameters`: the `fitting[parameters]` dictionary of the NNPDF runcard
+        - `sampling_dict`: the `hyperscan` dictionary of the NNPDF runcard defining
+                           the search space of the scan
+        - `steps`: when taking discrete steps between two parameters, number of steps
+                   to take
+
+    # Parameters accepted by `sampling_dict`:
+        - `stopping`:
+                - min_epochs, max_epochs
+                - min_patience, max_patience
     """
+    def __init__(self, parameters, sampling_dict, steps = 5):
+        self.parameter_keys = parameters.keys()
+        self.parameters = copy.deepcopy(parameters)
+        self.steps = steps
 
-    def __init__(self, parameters):
-        """
-        Takes as input a dictionary of parameters
-        and saves it
-        """
-        self.parameters = parameters
-        self.keys = parameters.keys()
         self.hyper_keys = set([])
-        self.dict_keys = set([])
+
+        self.stopping(**(sampling_dict.get("stopping")))
+        self.optimizer(**(sampling_dict.get("optimizer")))
+        self.positivity(**(sampling_dict.get("positivity")))
+        self.architecture(**(sampling_dict.get("architecture")))
 
     def dict(self):
         return self.parameters
 
-    def update_dict(self, newdict):
-        self.parameters.update(newdict)
-        # Since some hyperparameters were made in the form of dictionaries, we need to "sviluppare" them
-        for key in self.dict_keys:
-            if key in newdict.keys():
-                value = newdict[key]
-                # But this might be a conditional thing and not all of the possible options be dictionaries
-                if isinstance(value, dict):
-                    self.update_dict(value)
+    def _update_param(self, key, sampler):
+        """
+        Checks whether the key exists in the parameter dictionary and
+        updates the dictionary with the given sampler
 
-    def _update_param(self, key, value, hyperopt=True, dkeys=None):
-        if dkeys is None:
-            dkeys = []
-        if key not in self.keys:
-            raise ValueError(
-                "Trying to update a parameter that was not declared in the dictionary: {0}. HyperScanner @ _update_param".format(
-                    key
-                )
-            )
-        if hyperopt:
-            self.hyper_keys.add(key)
-            print("Adding the key {0} with the following value: {1}".format(key, value))
-            # Add possible extra keys
-            _ = [self.dict_keys.add(nk) for nk in dkeys]
-        self.parameters[key] = value
+        # Arguments:
+            - `key`: key to update
+            - `sampler`: sampler which will be used instead of the original value
+        """
+        if key is None or sampler is None:
+            return
 
-    # Calling the functions below turn parameters of the dictionary into hyperparameter scans
+        if key not in self.parameter_keys:
+            raise ValueError("Trying to update a parameter not declared in the `parameters` dictionary: {0} @ HyperScanner._update_param".format(key))
+
+        self.hyper_keys.add(key)
+        log.info("Adding key {0} with value {1}".format(key, sampler))
+
+        self.parameters[key] = sampler
+
     def stopping(self, min_epochs=5e3, max_epochs=30e3, min_patience=0.10, max_patience=0.3):
         """
-        Modifies the following entries of the parameter dictionary:
-            - epochs
-            - stopping_patience
+        Modifies the following entries of the `parameters` dictionary:
+            - `epochs`
+            - `stopping_patience`
+
+        Takes `self.steps` between the min and maximum values given
         """
         epochs_key = "epochs"
         stopping_key = "stopping_patience"
 
-        epoch_step = (max_epochs - min_epochs) / 4
-        if min_epochs < epoch_step:
-            epoch_step = min_epochs
+        # Compute the step size
+        epoch_step_size = (max_epochs-min_epochs)/self.steps
+        patience_step_size = (max_patience-min_patience)/self.steps
 
-        epochs = hp_quniform(epochs_key, min_epochs, max_epochs, min_epochs)
-        stopping_patience = hp_quniform(stopping_key, min_patience, max_patience, 0.05)
+        # Generate the samplers
+        epochs = hp_quniform(epochs_key, min_epochs, max_epochs, epoch_step_size)
+        stopping_patience = hp_quniform(stopping_key, min_patience, max_patience, patience_step_size)
 
+        # Update the parameters ditionary
         self._update_param(epochs_key, epochs)
         self._update_param(stopping_key, stopping_patience)
 
+
     def optimizer(self, names=None, min_lr=0.0005, max_lr=0.5):
-        # But this might be a conditional thing and not all of the possible options be dictionaries
         """
         This function look at the optimizers implemented in MetaModel and adds the learning rate to (only)
         those who use it. The special keyword "ALL" will make it use all optimizers implemented
-            - optimizer
-            - learning rate
+            - `optimizer`
+            - `learning rate`
+
+        Since the learning rate is a parameter that depends on the optimizer, the final result is a
+        recursive dictionary such that even though the ModelTrainer will receive
+            {optimizer: sampler(optimizer), learning rate: sampler(lr)}
+        for hyperopt it will look as
+            {optimizer: [ (optimizer1, sampler(lr)), (optimzier2, sampler(lr)), (optimizer3, )]
         """
-        if names is None:
-            names = ["RMSprop"]
+        if names is None: # Nothing to do here
+            return
 
         opt_key = "optimizer"
         lr_key = "learning_rate"
 
+        # Check which optimizers are we using
         optimizer_dict = MetaModel.optimizers
-        choices = []
-
-        min_lr_exp = np.log(min_lr)
-        max_lr_exp = np.log(max_lr)
-        lr_choice = hp_loguniform(lr_key, min_lr_exp, max_lr_exp)
-
         if names == "ALL":
             names = optimizer_dict.keys()
 
+        # Set a logarithmic sampling for the learning rate
+        lr_choice = hp_loguniform(lr_key, min_lr, max_lr)
+
+        choices = []
         for opt_name in names:
             if opt_name not in optimizer_dict.keys():
-                # Do we want an early crash or just drop the optimizer silently? We'll see...
                 raise NotImplementedError("HyperScanner: Optimizer {0} not implemented in MetaModel.py".format(opt_name))
 
+            # Check whether this optimizer takes the learning rate
+            # if it does the choice should be a dictionary with both the optimizer and the learning rate
+            # otherwise just the optimizer name (dictionary not needed)
             args = optimizer_dict[opt_name][1]
             if "lr" in args.keys():
                 choices.append({opt_key: opt_name, lr_key: lr_choice})
             else:
                 choices.append(opt_name)
 
+        # Make the list of options into a list sampler
         opt_val = hp_choice(opt_key, choices)
-        # Tell the HyperScanner this key might contain a dictionary to store it separately
-        self._update_param(opt_key, opt_val, dkeys=[opt_key])
+
+        # Tell the HyperScanner this key might contain a dictionary so we save the extra keys
+        self._update_param(opt_key, opt_val)
+
 
     def positivity(self, min_multiplier=1.01, max_multiplier=1.3, min_initial=0.5, max_initial=100):
         """
-        Modifies
+        Modifies the following entries of the `parameters` dictionary:
             - pos_multiplier
             - pos_initial
+        Sampling between maximum and minimum is uniform for the multiplier and loguniform for the initial
         """
         mul_key = "pos_multiplier"
-        if not min_initial and not max_initial:
-            ini_key = None
-        else:
-            ini_key = "pos_initial"
+        ini_key = "pos_initial"
 
+        # Create the samplers
         mul_val = hp_uniform(mul_key, min_multiplier, max_multiplier)
+        ini_val = hp_loguniform(ini_key, min_initial, max_initial)
+
+        # Update the dictionaries
         self._update_param(mul_key, mul_val)
+        self._update_param(ini_key, ini_val)
 
-        if ini_key:
-            min_initial = np.log(min_initial)
-            max_initial = np.log(max_initial)
-            ini_val = hp_loguniform(ini_key, min_initial, max_initial)
-            self._update_param(ini_key, ini_val)
-
-    def NN_architecture(
-        self,
-        n_layers=None,
-        max_units=50,
-        min_units=5,
-        activations=None,
-        initializers=None,
-        layer_types=None,
-        max_drop=0.0,
-    ):
+    def architecture(self, initializers=None, max_drop=0.0, n_layers=None, min_units=15, max_units=25, activations=None, layer_types=None):
         """
-        Uses all the given information to generate the parameters for the NN
-            - nodes_per_layer
-            - activation_per_layer
-            - initializer
-            - layer_type
-            - dropout
+        Modifies the following entries of the `parameters` dictionary:
+            - `initializer`
+            - `dropout`
+            - `nodes_per_layer`
+            - `activation_per_layer`
+            - `layer_type`
         """
         if activations is None:
-            activations = ["sigmoid", "tanh"]
+            activations = []
         if initializers is None:
-            initializers = ["glorot_normal"]
+            initializers = []
         if n_layers is None:
-            n_layers = [1, 2, 5]
-        if layer_types is None:
-            layer_types = ["dense"]
-        # Do we want to fix or generate dinamically the units? for now let's fix
-        # there will be time for more sofisticated functions
+            n_layers = []
 
-        act_key = "activation_per_layer"
+        activation_key = "activation_per_layer"
         nodes_key = "nodes_per_layer"
-        # the information contained in the variable is indeed the number of nodes per layer e.g. [5,10,30]
-        # but the information the user will be interested in is how many layers are there...
+        ini_key = "initializer"
 
-        # Generate the possible activation choices
-        act_choices = []
-        # Generate a function that will returns as many copies of the str as the number of layers
-        # and a linear one at the end
+        # Generate all possible activation choices
+        activation_choices = []
         for afun in activations:
-            def activation_str(nla):
-                cop = [afun]*(nla-1)
-                cop.append("linear")
-                return cop
-            act_choices.append(activation_str)
+            def activation_str(n_of_layers):
+                """
+                This function returns an array where the activation function
+                `afun` is repeated as many times as hidden layers we have
+                """
+                acts = [afun]*(n_of_layers-1)
+                acts.append("linear")
+                return acts
+            activation_choices.append(activation_str)
 
+        # Generate the number of nodes per layer
+        unit_step = (max_units-min_units)/self.steps
+        # this is strongly coupled with the total number of layers
+        # so we will generate a list of layers to choose from
+        # where each layer will be defined by an uniform sampler (the number of nodes)
         nodes_choices = []
         for n in n_layers:
             units = []
             for i in range(n):
-                # We can even play games as lowering the maximum as the number of layers grows
-                units_label = "nl{1}:-{0}/{1}".format(i, n)
-                units.append(hp_quniform(units_label, min_units, max_units, 5))
-
-            # And then the last one is a dense with 8 units
+                units_label = "nl{0}:-{1}/{0}".format(n,i)
+                units_sampler = hp_quniform(units_label, min_units, max_units, unit_step)
+                units.append(units_sampler)
+            # The last layer will always have 8 nodes
             units.append(8)
             nodes_choices.append(units)
 
-        act_functions = hp_choice(act_key, act_choices)
-        nodes = hp_choice(nodes_key, nodes_choices)
-
-        # Now let's select the initializers looking at the ones implemented in MetaLayer
-        ini_key = "initializer"
+        # For the initializer we need to check for the ones implemented in MetaLayer
         imp_inits = MetaLayer.initializers
         imp_init_names = imp_inits.keys()
         if initializers == "ALL":
@@ -250,26 +260,28 @@ class HyperScanner:
         ini_choices = []
         for ini_name in initializers:
             if ini_name not in imp_init_names:
-                # Do we want an early crash or just drop the optimizer silently? We'll see...
                 raise NotImplementedError("HyperScanner: Initializer {0} not implemented in MetaLayer.py".format(ini_name))
             # For now we are going to use always all initializers and with default values
             ini_choices.append(ini_name)
 
-        ini_choice = hp_choice(ini_key, ini_choices)
+        # Finally select the dropout rate, starting point always at 0
+        drop_key = "dropout"
+        drop_step = max_drop / self.steps
 
-        # Finally select the layer types
+        # Create the samplers
+        act_functions = hp_choice(activation_key, activation_choices)
+        nodes = hp_choice(nodes_key, nodes_choices)
+        ini_choice = hp_choice(ini_key, ini_choices)
+        drop_val = hp_quniform(drop_key, 0.0, max_drop, drop_step)
+
+        # Finally select the layer types (not very well tested for now)
         if layer_types:
             layer_key = "layer_type"
             layer_choices = hp_choice(layer_key, layer_types)
             self._update_param(layer_key, layer_choices)
 
-        # And add the dropout parameter
-        drop_key = "dropout"
-        n_drops = 3
-        drop_step = max_drop / n_drops
-        drop_val = hp_quniform(drop_key, 0.0, max_drop, drop_step)
-
-        self._update_param(act_key, act_functions)
+        # And update the dictionary
+        self._update_param(activation_key, act_functions)
         self._update_param(nodes_key, nodes)
         self._update_param(ini_key, ini_choice)
         self._update_param(drop_key, drop_val)

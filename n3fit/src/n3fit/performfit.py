@@ -207,19 +207,7 @@ def performfit(
         if hyperopt:
             from n3fit.hyper_optimization.hyper_scan import HyperScanner
 
-            the_scanner = HyperScanner(parameters)
-
-            stopping_options = hyperscan.get("stopping")
-            positivity_options = hyperscan.get("positivity")
-            optimizer_options = hyperscan.get("optimizer")
-            architecture_options = hyperscan.get("architecture")
-
-            # Enable scanner for certain parameters
-            the_scanner.stopping(**stopping_options)
-            the_scanner.positivity(**positivity_options)
-            the_scanner.optimizer(**optimizer_options)
-            # Enable scanner for specific architectures
-            the_scanner.NN_architecture(**architecture_options)
+            the_scanner = HyperScanner(parameters, hyperscan)
 
             # Tell the trainer we are doing hyperopt
             the_model_trainer.set_hyperopt(True, keys=the_scanner.hyper_keys)
@@ -245,12 +233,14 @@ def performfit(
 
             # Now update the parameters with the ones found by the scan
             true_best = hyper.space_eval(parameters, best)
-            the_scanner.update_dict(true_best)
-            parameters = the_scanner.dict()
             print("##################")
             print("Best model found: ")
             for k, i in true_best.items():
                 print(f" {k} : {i} ")
+
+            # In general after we do the hyperoptimization we do not care about the fit
+            # so just let this die here
+            break
         ####################################################################### end of hyperopt
 
         # Ensure hyperopt is off
