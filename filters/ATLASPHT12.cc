@@ -86,7 +86,7 @@ void ATLASPHT12Filter::ReadData() {
   fstream cent, fwd1, fwd2;
 
   stringstream datafileCNTR("");
-  datafileCNTR << dataPath() << "rawdata/ATLASPHT12/eta_bin1.dat";
+  datafileCNTR << dataPath() << "rawdata/ATLASPHT12_SF/eta_bin1.dat";
   cent.open(datafileCNTR.str().c_str(), ios::in);
 
   if (cent.fail()) {
@@ -95,7 +95,7 @@ void ATLASPHT12Filter::ReadData() {
   }
 
   stringstream datafileFWD1("");
-  datafileFWD1 << dataPath() << "rawdata/ATLASPHT12/eta_bin2.dat";
+  datafileFWD1 << dataPath() << "rawdata/ATLASPHT12_SF/eta_bin2.dat";
   fwd1.open(datafileFWD1.str().c_str(), ios::in);
 
   if (fwd1.fail()) {
@@ -104,7 +104,7 @@ void ATLASPHT12Filter::ReadData() {
   }
 
   stringstream datafileFWD2("");
-  datafileFWD2 << dataPath() << "rawdata/ATLASPHT12/eta_bin3.dat";
+  datafileFWD2 << dataPath() << "rawdata/ATLASPHT12_SF/eta_bin3.dat";
   fwd2.open(datafileFWD2.str().c_str(), ios::in);
 
   if (fwd2.fail()) {

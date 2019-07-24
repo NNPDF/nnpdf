@@ -80,7 +80,7 @@
 /**
  * \param argv the filename containing the configuration
  */
-int main(int argc, char **argv)
+int main(int, char**)
 {
   cout << "\n ***********************************\n";
   cout <<   " *  Welcome to NNPDF++ BuildMaster *\n";
@@ -132,6 +132,9 @@ void InitCommonData(vector<CommonData*>& target)
 
   target.push_back(new ATLASPHT15Filter());
   target.push_back(new ATLASPHT12Filter());
+  target.push_back(new ATLAS_1JET_8TEV_R06Filter());
+  target.push_back(new ATLAS_1JET_8TEV_R04Filter());
+  
   // ************************* BCDMS ******************************
 
   target.push_back(new BCDMSPFilter());
@@ -160,6 +163,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSZDIFF12Filter());
   target.push_back(new CMS1JET276TEVFilter());
   target.push_back(new CMSWMU8TEVFilter());
+  target.push_back(new CMS_1JET_8TEVFilter());
 
  // ************************* CMSwc ******************************
 
@@ -326,7 +330,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSTOPDIFF8TEVTTPTNORMFilter());
   target.push_back(new CMSTOPDIFF8TEVTTMNORMFilter());
 
-    // ************************ LHeC + FCC pseudo-data ***************
+  // ************************ LHeC + FCC pseudo-data ***************
   target.push_back(new LHeCFilter());
   target.push_back(new FCCFilter());
   target.push_back(new LHeCCCFilter());

@@ -130,7 +130,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
     lstream >> unneeded_info >> fstat_percentage;
     fstat_additive[i] = fstat_percentage*fData[i]/100;
 
-    fStat[i] = 0; // Set stat. error to zero to avoid double counting when using artificial systematics
+    fStat[i] = 1e-10; // Set stat. error to zero to avoid double counting when using artificial systematics
   }
 
   // Read statistical correlation matrix
@@ -873,7 +873,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
     lstream >> unneeded_info >> fstat_percentage;
     fstat_additive[i] = fstat_percentage*fData[i]/100;
 
-    fStat[i] = 0; // Set stat. error to zero to avoid double counting when using artificial systematics
+    fStat[i] = 1e-10; // Set stat. error to zero to avoid double counting when using artificial systematics
   }
 
   // Read statistical correlation matrix
@@ -1284,7 +1284,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter::ReadData()
     lstream >> unneeded_info >> fstat_percentage;
     fstat_additive[i] = fstat_percentage*fData[i]/100;
 
-    fStat[i] = 0; // Set stat. error to zero to avoid double counting when using artificial systematics
+    fStat[i] = 1e-10; // Set stat. error to zero to avoid double counting when using artificial systematics
   }
 
   // Read statistical correlation matrix
@@ -1547,7 +1547,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAPFilter::ReadData()
     lstream >> unneeded_info >> fstat_percentage;
     fstat_additive[i] = fstat_percentage*fData[i]/100;
 
-    fStat[i] = 0; // Set stat. error to zero to avoid double counting when using artificial systematics
+    fStat[i] = 1e-10; // Set stat. error to zero to avoid double counting when using artificial systematics
   }
 
   // Read statistical correlation matrix
@@ -1816,7 +1816,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter::ReadData()
     lstream >> unneeded_info >> fstat_percentage;
     fstat_additive[i] = fstat_percentage*fData[i]/100;
 
-    fStat[i] = 0; // Set stat. error to zero to avoid double counting when using artificial systematics
+    fStat[i] = 1e-10; // Set stat. error to zero to avoid double counting when using artificial systematics
   }
 
   // Read statistical correlation matrix
@@ -2147,7 +2147,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PTFilter::ReadData()
     lstream >> unneeded_info >> fstat_percentage;
     fstat_additive[i] = fstat_percentage*fData[i]/100;
 
-    fStat[i] = 0; // Set stat. error to zero to avoid double counting when using artificial systematics
+    fStat[i] = 1e-10; // Set stat. error to zero to avoid double counting when using artificial systematics
   }
 
   // Read statistical correlation matrix

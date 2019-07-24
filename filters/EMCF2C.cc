@@ -24,6 +24,7 @@ void EMCF2CFilter::ReadData()
     exit(-1);
   }
 
+  /*
   // Starting filter
   double syscor[fNData][fNSys];
 
@@ -32,7 +33,7 @@ void EMCF2CFilter::ReadData()
     for (int l = 0; l < fNSys; l++)
       syscor[i][l] = 0.0;
   }
-
+  */
 
 /*
   // Reading data

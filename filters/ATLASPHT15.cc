@@ -28,7 +28,7 @@ void ATLASPHT15Filter::ReadData()
 
 
   stringstream datafileCNTR("");
-  datafileCNTR << dataPath() << "rawdata/ATLASPHT15/ATLASPHT15ETGCTR.data";
+  datafileCNTR << dataPath() << "rawdata/ATLASPHT15_SF/ATLASPHT15ETGCTR.data";
   cent.open(datafileCNTR.str().c_str(), ios::in);
 
   if (cent.fail()) {
@@ -37,7 +37,7 @@ void ATLASPHT15Filter::ReadData()
   }
 
   stringstream datafileFWD1("");
-  datafileFWD1 << dataPath() << "rawdata/ATLASPHT15/ATLASPHT15ETGFWD1.data";
+  datafileFWD1 << dataPath() << "rawdata/ATLASPHT15_SF/ATLASPHT15ETGFWD1.data";
   fwd1.open(datafileFWD1.str().c_str(), ios::in);
 
   if (fwd1.fail()) {
@@ -47,7 +47,7 @@ void ATLASPHT15Filter::ReadData()
 
 
   stringstream datafileFWD2("");
-  datafileFWD2 << dataPath() << "rawdata/ATLASPHT15/ATLASPHT15ETGFWD2.data";
+  datafileFWD2 << dataPath() << "rawdata/ATLASPHT15_SF/ATLASPHT15ETGFWD2.data";
   fwd2.open(datafileFWD2.str().c_str(), ios::in);
 
   if (fwd2.fail()) {
@@ -55,7 +55,7 @@ void ATLASPHT15Filter::ReadData()
     exit(-1);
   }
  stringstream datafileFWD3("");
-  datafileFWD3 << dataPath() << "rawdata/ATLASPHT15/ATLASPHT15ETGFWD3.data";
+  datafileFWD3 << dataPath() << "rawdata/ATLASPHT15_SF/ATLASPHT15ETGFWD3.data";
   fwd3.open(datafileFWD3.str().c_str(), ios::in);
 
   if (fwd3.fail()) {

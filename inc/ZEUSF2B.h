@@ -14,7 +14,7 @@
 class ZEUSF2BFilter: public CommonData
 {
 public: ZEUSF2BFilter():
-  CommonData("ZEUSHERAF2B") { ReadData(); }
+  CommonData("ZEUSHERAF2B_SF") { ReadData(); }
 
 private:
   void ReadData();
