@@ -1,8 +1,4 @@
 dataset_label: "ATLAS jets 8 TeV, R=0.6"
-<<<<<<< HEAD
-
-=======
->>>>>>> Added relevant files for ATLAS inclusive jets at 8 TeV
 x: k2
 
 y_label: '$10^{3*qbin} d\sigma/dp_Td|y|$ [pb/GeV]' 
