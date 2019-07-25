@@ -35,11 +35,19 @@ log = logging.getLogger(__name__)
 # with a bit of extra documentation for the ones that are not obvious
 def hp_uniform(key, lower_end, higher_end):
     """ Sample uniformly between lower_end and higher_end """
+    if lower_end is None or higher_end is None:
+        return None
     return hyperopt.hp.uniform(key, lower_end, higher_end)
 
 
-def hp_quniform(key, lower_end, higher_end, step_size):
+def hp_quniform(key, lower_end, higher_end, step_size = None, steps = None):
     """ Like uniform but admits a step_size """
+    if lower_end is None or higher_end is None:
+        return None
+    if not step_size:
+        step_size = lower_end
+    if steps:
+        step_size = (higher_end-lower_end)/steps
     return hyperopt.hp.quniform(key, lower_end, higher_end, step_size)
 
 
@@ -58,6 +66,8 @@ def hp_loguniform(key, lower_end, higher_end):
 
 def hp_choice(key, choices):
     """ Sample from the list `choices` """
+    if not choices:
+        return None
     return hyperopt.hp.choice(key, choices)
 
 
@@ -92,10 +102,21 @@ class HyperScanner:
 
         self.hyper_keys = set([])
 
-        self.stopping(**(sampling_dict.get("stopping")))
-        self.optimizer(**(sampling_dict.get("optimizer")))
-        self.positivity(**(sampling_dict.get("positivity")))
-        self.architecture(**(sampling_dict.get("architecture")))
+        stopping_dict = sampling_dict.get("stopping")
+        optimizer_dict = sampling_dict.get("optimizer")
+        positivity_dict = sampling_dict.get("positivity")
+        nn_dict = sampling_dict.get("architecture")
+
+        self.stopping(min_epochs = stopping_dict.get("min_epochs"), max_epochs = stopping_dict.get("max_epochs"),
+                      min_patience = stopping_dict.get("min_patience"), max_patience = stopping_dict.get("max_patience"))
+        self.optimizer(names = optimizer_dict.get("names"),
+                       min_lr = optimizer_dict.get("min_lr"), max_lr = optimizer_dict.get("max_lr"))
+        self.positivity(min_multiplier = stopping_dict.get("min_multiplier"), max_multiplier = stopping_dict.get("max_multiplier"),
+                        min_initial = stopping_dict.get("min_initial"), max_initial = stopping_dict.get("max_initial"))
+        self.architecture(initializers = nn_dict.get("initializer"), activations = nn_dict.get("activations"),
+                          max_drop = nn_dict.get("max_drop"), n_layers = nn_dict.get("n_layers"),
+                          min_units = nn_dict.get("min_units"), max_units = nn_dict.get("max_units"),
+                          layer_types = nn_dict.get("layer_types"))
 
     def dict(self):
         return self.parameters
@@ -135,13 +156,9 @@ class HyperScanner:
         epochs_key = "epochs"
         stopping_key = "stopping_patience"
 
-        # Compute the step size
-        epoch_step_size = (max_epochs - min_epochs) / self.steps
-        patience_step_size = (max_patience - min_patience) / self.steps
-
         # Generate the samplers
-        epochs = hp_quniform(epochs_key, min_epochs, max_epochs, epoch_step_size)
-        stopping_patience = hp_quniform(stopping_key, min_patience, max_patience, patience_step_size)
+        epochs = hp_quniform(epochs_key, min_epochs, max_epochs, steps = self.steps)
+        stopping_patience = hp_quniform(stopping_key, min_patience, max_patience, self.steps)
 
         # Update the parameters ditionary
         self._update_param(epochs_key, epochs)
@@ -217,11 +234,11 @@ class HyperScanner:
     def architecture(
         self,
         initializers=None,
+        activations=None,
         max_drop=0.0,
         n_layers=None,
         min_units=15,
         max_units=25,
-        activations=None,
         layer_types=None,
     ):
         """
@@ -236,8 +253,14 @@ class HyperScanner:
             activations = []
         if initializers is None:
             initializers = []
+        if layer_types is None:
+            layer_types = []
         if n_layers is None:
             n_layers = []
+        else:
+            if min_units is None or max_units is None:
+                raise ValueError("A max/min number of units must always be defined if the number of layers is to be sampled"
+                                 "i.e., make sure you add the keywords 'min_units' and 'max_units' to the 'architecutre' dict")
 
         activation_key = "activation_per_layer"
         nodes_key = "nodes_per_layer"
@@ -258,8 +281,6 @@ class HyperScanner:
 
             activation_choices.append(activation_str)
 
-        # Generate the number of nodes per layer
-        unit_step = (max_units - min_units) / self.steps
         # this is strongly coupled with the total number of layers
         # so we will generate a list of layers to choose from
         # where each layer will be defined by an uniform sampler (the number of nodes)
@@ -268,7 +289,7 @@ class HyperScanner:
             units = []
             for i in range(n):
                 units_label = "nl{0}:-{1}/{0}".format(n, i)
-                units_sampler = hp_quniform(units_label, min_units, max_units, unit_step)
+                units_sampler = hp_quniform(units_label, min_units, max_units, steps = self.steps)
                 units.append(units_sampler)
             # The last layer will always have 8 nodes
             units.append(8)
@@ -291,19 +312,17 @@ class HyperScanner:
 
         # Finally select the dropout rate, starting point always at 0
         drop_key = "dropout"
-        drop_step = max_drop / self.steps
 
         # Create the samplers
         act_functions = hp_choice(activation_key, activation_choices)
         nodes = hp_choice(nodes_key, nodes_choices)
         ini_choice = hp_choice(ini_key, ini_choices)
-        drop_val = hp_quniform(drop_key, 0.0, max_drop, drop_step)
+        drop_val = hp_quniform(drop_key, 0.0, max_drop, steps = self.steps)
 
         # Finally select the layer types (not very well tested for now)
-        if layer_types:
-            layer_key = "layer_type"
-            layer_choices = hp_choice(layer_key, layer_types)
-            self._update_param(layer_key, layer_choices)
+        layer_key = "layer_type"
+        layer_choices = hp_choice(layer_key, layer_types)
+        self._update_param(layer_key, layer_choices)
 
         # And update the dictionary
         self._update_param(activation_key, act_functions)
