@@ -170,7 +170,7 @@ def parse_architecture(trial):
     dict_out = {}
     nodes_per_layer = trial["misc"]["space_vals"][keywords["nodes"]]
     nl = len(nodes_per_layer) - 1
-    activation_name = trial["misc"]["space_vals"][keywords["activation"]][0]
+    activation_name = trial["misc"]["space_vals"][keywords["activation"]]
     architecture = trial["misc"]["space_vals"][keywords["architecture"]]
 
     dict_out[keywords["nodes"]] = nodes_per_layer
