@@ -71,6 +71,27 @@ def hp_choice(key, choices):
     return hyperopt.hp.choice(key, choices)
 
 
+class ActivationStr:
+    """
+    Upon call this class returns an array where the activation function
+    `fun_name` repeated as many times as hidden layers we have
+
+    # Arguments:
+        - `fun_name`: name of the activation function
+    """
+    def __init__(self, fun_name):
+        self.function_name = fun_name
+
+    def __str__(self):
+        return self.function_name
+
+    def __call__(self, n_of_layers):
+        acts = [self.function_name] * (n_of_layers-1)
+        acts.append("linear")
+        return acts
+
+
+
 class HyperScanner:
     """
     The HyperScanner generates a dictionary of parameters for scanning
@@ -269,16 +290,7 @@ class HyperScanner:
         # Generate all possible activation choices
         activation_choices = []
         for afun in activations:
-
-            def activation_str(n_of_layers, fun_name = afun):
-                """
-                This function returns an array where the activation function
-                `afun` is repeated as many times as hidden layers we have
-                """
-                acts = [fun_name] * (n_of_layers - 1)
-                acts.append("linear")
-                return acts
-
+            activation_str = ActivationStr(afun)
             activation_choices.append(activation_str)
 
         # this is strongly coupled with the total number of layers
