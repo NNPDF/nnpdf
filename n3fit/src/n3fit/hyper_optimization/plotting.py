@@ -403,8 +403,8 @@ def plot_scans(df, best_df, outfile):
 def main():
     args = parse_args()
 
-    # Prepare the filter
-    filter_function = filter_by_string(args.filter)
+    # Prepare the filter(s)
+    filter_functions = [filter_by_string(filter_me) for filter_me in args.filter]
 
     search_str = "{0}/nnfit/replica_*/tries.json".format(args.folder)
     all_json = glob.glob(search_str)
@@ -431,10 +431,11 @@ def main():
                 continue
 
         # Now filter out the ones we don't want
-        filtered_dictionaries = filter(filter_function, dictionaries)
+        for filter_function in filter_functions:
+            dictionaries = filter(filter_function, dictionaries)
 
         # Now fill a pandas dataframe with the survivors
-        dataframe_raw = pd.DataFrame(filtered_dictionaries)
+        dataframe_raw = pd.DataFrame(dictionaries)
 
         # By default we don't want failures
         if args.include_failures:
