@@ -130,8 +130,7 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TPTNORMFilter::ReadData()
 
   if(!genArtSys(fNData,covmat,syscor))
     {
-      cerr << " in " << fSetName << endl;
-      exit(-1);
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
     }
 
   for(int i=0; i<fNData; i++)
@@ -145,8 +144,18 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TPTNORMFilter::ReadData()
 	}
     }
 
-  delete [] covmat;
-  delete [] syscor;
+
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
+
 
   f1.close();
   f2.close();
@@ -246,8 +255,7 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TRAPNORMFilter::ReadData()
 
   if(!genArtSys(fNData,covmat,syscor))
     {
-      cerr << " in " << fSetName << endl;
-      exit(-1);
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
     }
 
   for(int i=0; i<fNData; i++)
@@ -261,8 +269,16 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TRAPNORMFilter::ReadData()
 	}
     }
 
-  delete [] covmat;
-  delete [] syscor;
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
 
   f1.close();
   f2.close();
@@ -362,8 +378,7 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TTMNORMFilter::ReadData()
 
   if(!genArtSys(fNData,covmat,syscor))
     {
-      cerr << " in " << fSetName << endl;
-      exit(-1);
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
     }
 
   for(int i=0; i<fNData; i++)
@@ -377,8 +392,16 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TTMNORMFilter::ReadData()
 	}
     }
 
-  delete [] covmat;
-  delete [] syscor;
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
 
   f1.close();
   f2.close();
@@ -478,8 +501,7 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TTRAPNORMFilter::ReadData()
 
   if(!genArtSys(fNData,covmat,syscor))
     {
-      cerr << " in " << fSetName << endl;
-      exit(-1);
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
     }
 
   for(int i=0; i<fNData; i++)
@@ -493,8 +515,16 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TTRAPNORMFilter::ReadData()
 	}
     }
 
-  delete [] covmat;
-  delete [] syscor;
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
 
   f1.close();
   f2.close();
@@ -592,8 +622,7 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TPTFilter::ReadData()
 
   if(!genArtSys(fNData,covmat,syscor))
     {
-      cerr << " in " << fSetName << endl;
-      exit(-1);
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
     }
 
   for(int i=0; i<fNData; i++)
@@ -607,8 +636,16 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TPTFilter::ReadData()
 	}
     }
 
-  delete [] covmat;
-  delete [] syscor;
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
 
   f1.close();
   f2.close();
@@ -708,8 +745,7 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TRAPFilter::ReadData()
 
   if(!genArtSys(fNData,covmat,syscor))
     {
-      cerr << " in " << fSetName << endl;
-      exit(-1);
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
     }
 
   for(int i=0; i<fNData; i++)
@@ -723,8 +759,16 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TRAPFilter::ReadData()
 	}
     }
 
-  delete [] covmat;
-  delete [] syscor;
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
 
   f1.close();
   f2.close();
@@ -824,8 +868,7 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TTMFilter::ReadData()
 
   if(!genArtSys(fNData,covmat,syscor))
     {
-      cerr << " in " << fSetName << endl;
-      exit(-1);
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
     }
 
   for(int i=0; i<fNData; i++)
@@ -839,8 +882,16 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TTMFilter::ReadData()
 	}
     }
 
-  delete [] covmat;
-  delete [] syscor;
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
 
   f1.close();
   f2.close();
@@ -940,8 +991,7 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TTRAPFilter::ReadData()
 
   if(!genArtSys(fNData,covmat,syscor))
     {
-      cerr << " in " << fSetName << endl;
-      exit(-1);
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
     }
 
   for(int i=0; i<fNData; i++)
@@ -955,8 +1005,16 @@ void  CMS_TTB_DIFF_13TEV_2016_2L_TTRAPFilter::ReadData()
 	}
     }
 
-  delete [] covmat;
-  delete [] syscor;
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
 
   f1.close();
   f2.close();
