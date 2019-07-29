@@ -10,7 +10,7 @@ import logging
 log = logging.getLogger(__name__)
 
 # Note: the plan would be to do a PR in hyperopt's main repository
-# because these are things generinc and useful enough that should be
+# because these are things generic and useful enough that should be
 # in hyperopt by default. But for now it will stay here.
 
 

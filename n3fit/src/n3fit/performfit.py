@@ -213,7 +213,7 @@ def performfit(
             the_model_trainer.set_hyperopt(True, keys=the_scanner.hyper_keys)
 
             # Generate Trials object
-            trials = filetrials.FileTrials(replica_path_set, parameters=parameters)
+            trials = filetrials.FileTrials(replica_path_set, parameters=the_scanner.dict())
 
             # Perform the scan
             try:
