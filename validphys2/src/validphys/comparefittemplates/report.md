@@ -1,7 +1,14 @@
-%NNPDF Report for fit {@ current fit @}
+%NNPDF Report for fit {@ current fit_id @}
 
-Fit summary 
-------------------
+Fit summary
+------------
+
+We are comparing:
+
+  - {@ current fit @} (`{@ current fit_id @}`): {@ current description @}
+  - {@ reference fit @} (`{@ reference fit_id @}`): {@ reference description @}
+
+
 {@ summarise_fits @}
 
 Theory Covariance Summary
