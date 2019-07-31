@@ -78,6 +78,9 @@ template: report.md
 positivity:
       from_: fit
 
+description:
+    from_: fit
+
 dataspecs:
   - experiments:
       from_: fit

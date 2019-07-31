@@ -689,6 +689,9 @@ class CoreConfig(configparser.Config):
         """Return a string containing the PDF's LHAPDF ID"""
         return pdf.name
 
+    def produce_fit_id(self, fit) -> str:
+        """Return a string containing the ID of the fit"""
+        return fit.name
 
     @element_of('lumi_channels')
     def parse_lumi_channel(self, ch:str):
