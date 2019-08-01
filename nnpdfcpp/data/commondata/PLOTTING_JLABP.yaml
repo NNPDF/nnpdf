@@ -6,7 +6,16 @@ kinematics_override: dis_sqrt_scale
 data_reference: Malace:2009kw
 
 #x_scale: log
+#y_scale: symlog
 y_scale: symlog
+
+
+normalize:
+    y_scale: linear
+    line_by: []
+    figure_by:
+        - k1
+
 line_by:
   - k1
 
