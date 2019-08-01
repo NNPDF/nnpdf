@@ -32,7 +32,7 @@ from NNPDF import (LHAPDFSet,
 #Maybe move the cuts logic to its own module?
 from validphys import lhaindex, filters
 from validphys.tableloader import parse_exp_mat
-from validphys.theoryinfoutils import fetch_theory
+from validphys.theorydbutils import fetch_theory
 
 log = logging.getLogger(__name__)
 

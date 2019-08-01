@@ -23,14 +23,12 @@ import mimetypes
 import requests
 from reportengine.compat import yaml
 from reportengine import filefinder
-import sqlite3
 
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             PositivitySetSpec, DataSetSpec, PDF, Cuts,
                             peek_commondata_metadata, CutsPolicy,
                             InternalCutsWrapper)
 from validphys import lhaindex
-from validphys.theoryinfoutils import fetch_theory, fetch_all
 import NNPDF as nnpath
 
 
@@ -292,22 +290,14 @@ class Loader(LoaderBase):
                   "Folder '%s' not found") % (theoryID, theopath) )
         return TheoryIDSpec(theoryID, theopath)
 
-    def check_theoryinfo(self, theoryID: int):
-        """ Looks in the datapath for the theory.db and returns a dictionary of theory info for the
-        theory number specified by `theoryID`.
+    @property
+    def theorydb_file(self):
+        """Checks theory db file exists and returns path to it
         """
         dbpath = self.datapath/'theory.db'
-        if not dbpath.exists():
+        if not dbpath.is_file():
             raise TheoryDataBaseNotFound(f"could not find theory.db. File not found at {dbpath}")
-        return fetch_theory(dbpath, theoryID)
-
-    def check_alltheoryinfo(self):
-        """Looks in the datapath for theory.db and returns DataFrame with all theory info
-        """
-        dbpath = self.datapath/'theory.db'
-        if not dbpath.exists():
-            raise TheoryDataBaseNotFound(f"could not find theory.db. File not found at {dbpath}")
-        return fetch_all(dbpath)
+        return dbpath
 
     def get_commondata(self, setname, sysnum):
         """Get a Commondata from the set name and number."""

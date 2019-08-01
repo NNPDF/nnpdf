@@ -15,37 +15,27 @@ import logging
 import pathlib
 import sys
 
-from pandas import DataFrame
-
 from reportengine import colors
 from reportengine.table import savetable
 
 from validphys.loader import Loader
-from validphys.theoryinfoutils import TheoryNotFoundInDatabase
+from validphys.theorydbutils import TheoryNotFoundInDatabase
+from validphys.theoryinfo import theory_info_table
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 log.addHandler(colors.ColorHandler())
 
-
-def theory_info_table(theoryid):
-    res_dict = Loader().check_theoryinfo(theoryid)
-    res_df = DataFrame(
-        list(res_dict.values()),
-        index=res_dict.keys(),
-        columns=[f'Info for theory {theoryid}'],
-    )
-    return res_df
-
+DBPATH = Loader().theorydb_file
 
 def main():
     parser = argparse.ArgumentParser(description='Script to check theory info')
     parser.add_argument(
         'theoryid',
         help=(
-            "Numeric identifier of theory to look up info of, "
-            "can also be set to `all` to look up all theory info"
-        )
+            "Numeric identifier of theory to look up info of"
+        ),
+        type=int
     )
     parser.add_argument(
         '--dumptable',
@@ -58,18 +48,12 @@ def main():
         action='store_true',
     )
     args = parser.parse_args()
-    if args.theoryid == 'all':
-        df = Loader().check_alltheoryinfo()
-    else:
-        try:
-            th_id = int(args.theoryid)
-            df = theory_info_table(th_id)
-        except ValueError as e:
-            log.error("theoryid should either be an integer or 'all'")
-            sys.exit(1)
-        except TheoryNotFoundInDatabase as e:
-            log.error(e)
-            sys.exit(1)
+
+    try:
+        df = theory_info_table(DBPATH ,args.theoryid)
+    except TheoryNotFoundInDatabase as e:
+        log.error(e)
+        sys.exit(1)
     print(df)
     if args.dumptable:
         outpath = pathlib.Path(f"theory_{args.theoryid}_info.csv")

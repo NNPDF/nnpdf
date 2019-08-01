@@ -597,6 +597,10 @@ class CoreConfig(configparser.Config):
             res.append(ChainMap({'dataset': newds}, spec))
         return res
 
+    def produce_theory_database(self):
+        """Produces path to the theory.db file"""
+        return self.loader.theorydb_file
+
     def produce_combined_shift_and_theory_dataspecs(self, theoryconfig, shiftconfig):
         total_dataspecs = theoryconfig["dataspecs"] + shiftconfig["dataspecs"]
         matched_datasets = self.produce_matched_datasets_from_dataspecs(total_dataspecs)
