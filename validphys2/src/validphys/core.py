@@ -32,6 +32,7 @@ from NNPDF import (LHAPDFSet,
 #Maybe move the cuts logic to its own module?
 from validphys import lhaindex, filters
 from validphys.tableloader import parse_exp_mat
+from validphys.theoryinfoutils import fetch_theory
 
 log = logging.getLogger(__name__)
 
@@ -545,22 +546,8 @@ class TheoryIDSpec:
         yield self.path
 
     def get_description(self):
-        #I'd be happier if we consider sqlite3 an implementation detail
-        #to be changed eventually. Depend on it as little as possible.
-        import sqlite3
         dbpath = self.path.parent/'theory.db'
-        #Note this still requires a string and not a path
-        conn = sqlite3.connect(str(dbpath))
-        with conn:
-            cursor = conn.cursor()
-            #int casting is intentional to avoid malformed querys.
-            query = "SELECT * FROM TheoryIndex WHERE ID=%d;"%int(self.id)
-            res = cursor.execute(query)
-            val = res.fetchone()
-            if not val:
-                raise KeyError("ID %s not in the database."%self.id)
-            return OrderedDict(((k[0],v) for k,v in zip(res.description, val)))
-
+        return fetch_theory(dbpath, self.id)
 
     __slots__ = ('id', 'path')
 

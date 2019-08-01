@@ -20,7 +20,8 @@ from pandas import DataFrame
 from reportengine import colors
 from reportengine.table import savetable
 
-from validphys.loader import Loader, TheoryNotFound
+from validphys.loader import Loader
+from validphys.theoryinfoutils import TheoryNotFoundInDatabase
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -40,7 +41,11 @@ def theory_info_table(theoryid):
 def main():
     parser = argparse.ArgumentParser(description='Script to check theory info')
     parser.add_argument(
-        'theoryid', help='Numeric identifier of theory to look up info of', type=int
+        'theoryid',
+        help=(
+            "Numeric identifier of theory to look up info of, "
+            "can also be set to `all` to look up all theory info"
+        )
     )
     parser.add_argument(
         '--dumptable',
@@ -53,12 +58,18 @@ def main():
         action='store_true',
     )
     args = parser.parse_args()
-    try:
-        df = theory_info_table(args.theoryid)
-    except TheoryNotFound as e:
-        log.error(e)
-        sys.exit(1)
-
+    if args.theoryid == 'all':
+        df = Loader().check_alltheoryinfo()
+    else:
+        try:
+            th_id = int(args.theoryid)
+            df = theory_info_table(th_id)
+        except ValueError as e:
+            log.error("theoryid should either be an integer or 'all'")
+            sys.exit(1)
+        except TheoryNotFoundInDatabase as e:
+            log.error(e)
+            sys.exit(1)
     print(df)
     if args.dumptable:
         outpath = pathlib.Path(f"theory_{args.theoryid}_info.csv")

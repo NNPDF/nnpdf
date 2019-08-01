@@ -30,6 +30,7 @@ from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
                             peek_commondata_metadata, CutsPolicy,
                             InternalCutsWrapper)
 from validphys import lhaindex
+from validphys.theoryinfoutils import fetch_theory, fetch_all
 import NNPDF as nnpath
 
 
@@ -298,17 +299,15 @@ class Loader(LoaderBase):
         dbpath = self.datapath/'theory.db'
         if not dbpath.exists():
             raise TheoryDataBaseNotFound(f"could not find theory.db. File not found at {dbpath}")
-        #Note this still requires a string and not a path
-        conn = sqlite3.connect(str(dbpath))
-        with conn:
-            cursor = conn.cursor()
-            #int casting is intentional to avoid malformed querys.
-            query = f"SELECT * FROM TheoryIndex WHERE ID={int(theoryID)};"
-            res = cursor.execute(query)
-            val = res.fetchone()
-            if not val:
-                raise TheoryNotFound(f"ID {theoryID} not found in database.")
-            return dict([(k[0], v) for k, v in zip(res.description, val)])
+        return fetch_theory(dbpath, theoryID)
+
+    def check_alltheoryinfo(self):
+        """Looks in the datapath for theory.db and returns DataFrame with all theory info
+        """
+        dbpath = self.datapath/'theory.db'
+        if not dbpath.exists():
+            raise TheoryDataBaseNotFound(f"could not find theory.db. File not found at {dbpath}")
+        return fetch_all(dbpath)
 
     def get_commondata(self, setname, sysnum):
         """Get a Commondata from the set name and number."""
