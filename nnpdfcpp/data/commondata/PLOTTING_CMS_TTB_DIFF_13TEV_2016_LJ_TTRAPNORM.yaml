@@ -6,3 +6,5 @@ figure_by:
   - k3 
 
 experiment: "CMS"
+
+nnpdf31_process: TOP

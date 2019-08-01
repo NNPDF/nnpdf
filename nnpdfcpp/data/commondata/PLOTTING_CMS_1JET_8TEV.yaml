@@ -17,3 +17,4 @@ line_by:
     - k1
 
 experiment: "CMS"
+nnpdf31_process: JETS

@@ -82,7 +82,7 @@ class PlotInfo:
         x_scale=None,
         y_scale=None,
         process_description='-',
-        nnpdf31_process=None,
+        nnpdf31_process,
         **kwargs,
     ):
         self.kinlabels = kinlabels
