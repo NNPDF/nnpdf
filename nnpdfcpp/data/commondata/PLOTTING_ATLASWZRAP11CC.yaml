@@ -28,3 +28,5 @@ extra_labels:
 
 
 experiment: "ATLAS"
+
+nnpdf31_process: DY
