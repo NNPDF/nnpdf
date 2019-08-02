@@ -105,38 +105,35 @@ class N3FitConfig(Config):
             raise ConfigError(f"Failed to parse yaml file: {e}")
         if not isinstance(file_content, dict):
             raise ConfigError(f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'.")
-
-        if file_content['closuretest'].get('fakedata'):
-            log.warning("using filtered closure data")
-            opath = pathlib.Path(o.name)
-            fitfolder = opath.parent.absolute()/opath.stem
-            if not fitfolder.is_dir():
-                raise ConfigError(
-                    f"Could not find fit directory at {fitfolder} "
-                    f"to load commondata from. Did you run filter on the "
-                    "runcard and is the resulting directory in the same "
-                    "directory as the fit runcard?")
-            # make fit an absolute path the directory containing filtered data
-            # assuming in same location as the runcard
-            file_content.update(dict(
-                use_fitcommondata = True,
-                fit = fitfolder))
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
 
-    def parse_fit(self, fitpath: pathlib.Path):
-        """Overload the default parse fit function to instead use a fit folder
-        from a specified location. Used for reading commondata from a filtered
-        closure test runcard.
-
-        The user should run vp-setupfit on the closure test runcard, this will
-        generate the pseudo data to be used in the fit. The resulting directory
-        should be created in the same directory as the fit runcard. For example
-
-        <directory containing fit runcard>$ ls -F
-        fitname.yml    fitname/
+    def produce_fit(self):
+        """Produces a FitSpec which points at the current fit, to load
+        fit_commondata from.
         """
+        fitpath = self.environment.output_path
         return FitSpec(fitpath.name, fitpath)
+
+    def parse_closuretest(self, closurespec:dict):
+        """Parses the `closuretest` dictionary from the runcard, if
+        the fakedata key is True then checks that filter has been ran
+        """
+        if closurespec['fakedata']:
+            log.warning("using filtered closure data")
+            if not (self.environment.output_path/'filter').is_dir():
+                raise ConfigError(
+                    f"Could not find filter result at "
+                    f"{self.environment.output_path/'filter'} "
+                    f"to load commondata from. Did you run filter on the "
+                    "runcard?")
+        return closurespec
+
+    def produce_use_fitcommondata(self, closuretest):
+        """Produces the `use_fitcommondata` key from the `closuretest` dictionary
+        """
+        return closuretest['fakedata']
+
 
 
 
