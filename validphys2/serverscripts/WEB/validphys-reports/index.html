@@ -143,7 +143,21 @@ $(document).ready(function() {
 
     );
 
-	$('#global_wrapper .dataTables_filter input').focus();
+	let global_inp = document.querySelector('#global_wrapper .dataTables_filter input');
+	global_inp.focus();
+	let email_btn = document.createElement('input');
+	email_btn.setAttribute('type', 'button');
+	email_btn.setAttribute('value', '📧');
+	email_btn.setAttribute('name', '📧');
+	email_btn.setAttribute('title', "Show only reports sent to mailing list");
+	email_btn.onclick = function(event){
+		global_inp.value = global_inp.value + " 📧 ";
+		global_inp.focus();
+		global_inp.dispatchEvent(new Event('change'));
+		global_table.search(global_inp.value).draw();
+	}
+	global_inp.parentNode.appendChild(email_btn);
+
 	document.getElementById("tagfilt").oninput = function(event){
 		window.location.hash = event.target.value;
 		global_table.draw();
