@@ -63,6 +63,7 @@
 #include "CMS_TTB_DIFF_13TEV_2016_LJ.h"
 #include "CMSTTBARTOT8TEV.h"
 #include "CMSTTBARTOT13TEV.h"
+#include "CMS_TTB_DIFF_13TEV_2016_2L.h"
 #include "CMSWMU8TEV.h"
 #include "FutureColliders.h"
 #include "ATLAS_SINGLETOP_TCH_DIFF_8TEV.h"
@@ -278,14 +279,6 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMS_SINGLETOP_TCH_TOT_7TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_8TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_13TEVFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TPTFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TRAPFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTMFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORMFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TRAPNORMFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTMNORMFilter());
-  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPNORMFilter());
 
   //***************************F2B******************************
 
@@ -317,7 +310,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASTOPDIFF8TEVTTPTNORMFilter());
   target.push_back(new ATLASTOPDIFF8TEVTTMNORMFilter());
 
-  // ************************ CMS TTBAR DIFF 8 TeV  ***************
+  // ************************ CMS TTBAR DIFF TeV  ***************
   target.push_back(new CMSTOPDIFF8TEVTPTFilter());
   target.push_back(new CMSTOPDIFF8TEVTRAPFilter());
   target.push_back(new CMSTOPDIFF8TEVTTRAPFilter());
@@ -329,6 +322,24 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSTOPDIFF8TEVTTRAPNORMFilter());
   target.push_back(new CMSTOPDIFF8TEVTTPTNORMFilter());
   target.push_back(new CMSTOPDIFF8TEVTTMNORMFilter());
+  
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TPTFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TRAPFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTRAPFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TPTNORMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TRAPNORMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTMNORMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTRAPNORMFilter());
+  
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TPTFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TRAPFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TRAPNORMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTMNORMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPNORMFilter());
 
   // ************************ LHeC + FCC pseudo-data ***************
   target.push_back(new LHeCFilter());
