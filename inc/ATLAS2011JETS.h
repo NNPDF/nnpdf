@@ -15,7 +15,7 @@
 
 class ATLAS1JET11Filter: public CommonData
 { public: ATLAS1JET11Filter():
-  CommonData("ATLAS1JET11") { ReadData(); }
+  CommonData("ATLAS1JET11_SF") { ReadData(); }
 
 private:
   void ReadData();
