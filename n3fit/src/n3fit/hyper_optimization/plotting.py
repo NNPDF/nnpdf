@@ -431,7 +431,7 @@ def main():
 
         # Now filter out the ones we don't want
         for filter_function in filter_functions:
-            dictionaries = filter(filter_function, dictionaries)
+            dictionaries = list(filter(filter_function, dictionaries))
 
         # Now fill a pandas dataframe with the survivors
         dataframe_raw = pd.DataFrame(dictionaries)

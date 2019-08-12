@@ -6,13 +6,17 @@
 import sys
 import logging
 import os.path
-import time
 import numpy as np
+from reportengine.checks import make_argcheck, CheckError
 
 log = logging.getLogger(__name__)
 
+@make_argcheck
+def check_consistent_hyperscan_options(hyperopt, hyperscan):
+    if hyperopt is not None and hyperscan is None:
+        raise CheckError("hyperscan needs to be defined when performing hyperopt")
 
-# Action to be called by validphys
+# Action to be called by valid phys
 # All information defining the NN should come here in the "parameters" dict
 def performfit(
     fitting,
