@@ -36,7 +36,6 @@ import seaborn as sns
 
 regex_op = re.compile(r"[^\w^\.]+")
 regex_not_op = re.compile(r"[\w\.]+")
-matplotlib.use("TkAgg")
 
 # ...
 keywords = {
@@ -99,7 +98,7 @@ def parse_args():
         type=float,
         default=1e3,
     )
-    parser.add_argument("-f", "--filter", help="Add the filter key=value to the dataframe", nargs="+")
+    parser.add_argument("-f", "--filter", help="Add the filter key=value to the dataframe", nargs="+", default = ())
     parser.add_argument(
         "-c", "--combine", help="If more than one replica folder is found, combine all trials", action="store_true"
     )
