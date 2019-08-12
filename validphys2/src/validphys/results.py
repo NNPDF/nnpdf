@@ -6,7 +6,8 @@ Tools to obtain theory predictions and basic statistical estimators.
 """
 from __future__ import generator_stop
 
-from collections import OrderedDict, namedtuple, Sequence
+from collections import OrderedDict, namedtuple
+from collections.abc import Sequence
 import itertools
 import logging
 

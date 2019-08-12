@@ -6,20 +6,16 @@ Tools to check the pseudo-data MC generation.
 """
 from __future__ import generator_stop
 
-from collections import OrderedDict, namedtuple, Sequence
 import itertools
 import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
-import scipy.linalg as la
 import pandas as pd
 
-from NNPDF import CommonData, Experiment
-from reportengine.checks import require_one, remove_outer, check_not_empty
+from NNPDF import Experiment
 from reportengine.table import table
 from reportengine.figure import figure
-from reportengine import collect
 
 log = logging.getLogger(__name__)
 
