@@ -581,28 +581,6 @@ def experiments_chi2_table(experiments, pdf, experiments_chi2,
             records.append(stats)
     return pd.DataFrame(records)
 
-@table
-def correlate_bad_experiments(experiments, replica_data, pdf):
-    """Generate a table for each replica with entries
-    ("Replica_mean_chi2", "Worst_dataset","Worst_dataset_chi2")."""
-    datasets = [ds for exp in experiments for ds in exp.datasets]
-    mchi2 = [0.5*(val.training + val.validation) for val in replica_data]
-
-    chs = [_chs_per_replica(abs_chi2_data(results(ds, pdf))) for ds in datasets]
-    worst_indexes = np.argmax(chs, axis=0)
-    mchi2 = np.mean(chs, axis=0)
-    print(worst_indexes)
-    worst_values = np.max(chs, axis=0)
-    worst_ds = [datasets[i].name for i in worst_indexes]
-    v = np.array([mchi2, worst_ds, worst_values])
-    print(v)
-    df = pd.DataFrame(v.T,
-                      index=np.arange(1, len(pdf)),
-                      columns=["Replica_mean_chi2", "Worst_dataset",
-                      "Worst_dataset_chi2"])
-    df.sort_values(df.columns[0], inplace=True, ascending=False)
-    return df
-
 @check_cuts_considered
 @table
 def closure_shifts(experiments_index, fit, use_cuts, experiments):
