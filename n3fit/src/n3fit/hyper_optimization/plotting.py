@@ -429,9 +429,14 @@ def main():
             else:
                 continue
 
-        # Now filter out the ones we don't want
-        for filter_function in filter_functions:
-            dictionaries = list(filter(filter_function, dictionaries))
+        # Now filter out the ones we don't want by passing every dictionary in the list
+        # through all filters
+        if filter_functions:
+            valid_dictionaries = []
+            for dictionary in dictionaries:
+                if all(f(dictionary) for f in filter_functions):
+                    valid_dictionaries.append(dictionary)
+            dictionaries = valid_dictionaries
 
         # Now fill a pandas dataframe with the survivors
         dataframe_raw = pd.DataFrame(dictionaries)
