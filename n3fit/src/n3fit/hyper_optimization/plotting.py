@@ -34,6 +34,8 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 
+from n3fit.hyper_optimization.hyper_algorithm import autofilter_dataframe
+
 regex_op = re.compile(r"[^\w^\.]+")
 regex_not_op = re.compile(r"[\w\.]+")
 
@@ -76,7 +78,6 @@ plotting_keys = [
     (keywords["tl"], 0),
 ]
 
-
 def parse_args():
     """ Wrapper around argumentparser """
     parser = ArgumentParser()
@@ -102,6 +103,8 @@ def parse_args():
     parser.add_argument(
         "-c", "--combine", help="If more than one replica folder is found, combine all trials", action="store_true"
     )
+    # Autofiltering
+    parser.add_argument("--autofilter", help = "Given a number of keys, perform an autofilter (removing combinations of elements with worse rewards", nargs = "+")
     args = parser.parse_args()
     return args
 
@@ -438,7 +441,7 @@ def main():
                     valid_dictionaries.append(dictionary)
             dictionaries = valid_dictionaries
 
-        # Now fill a pandas dataframe with the survivors
+        # Now fill a pandas dataframe with the survivors of the filters
         dataframe_raw = pd.DataFrame(dictionaries)
 
         # By default we don't want failures
@@ -446,6 +449,11 @@ def main():
             dataframe = dataframe_raw
         else:
             dataframe = dataframe_raw[dataframe_raw["good"]]
+
+        # If autofilter is active, apply it!
+        if args.autofilter:
+            name_keys = [keywords.get(i, i) for i in args.autofilter]
+            autofilter_dataframe(dataframe, name_keys)
 
         # Now select the best one
         best_idx = dataframe.loss.idxmin()
