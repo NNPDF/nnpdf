@@ -1,9 +1,12 @@
 """
     This module contains functions dedicated to process the json dictionaries
 """
-
 import itertools
 import numpy as np
+from collections import namedtuple
+
+MinMax = namedtuple("MinMax", "min max")
+
 
 fail_threshold = 75
 fail_reward = -100
@@ -36,12 +39,43 @@ def compute_reward(mdict, biggest_ntotal):
     combination_weight = 1.0 + n_total/biggest_ntotal
     return reward*combination_weight
 
+def bin_generator(values, max_n = 10):
+    """
+    Receives a list of values. If there are more than `max_n` of them
+    and they are numeric, create `max_n` bins.
+    If they are already discrete values or there are less than `max_n` options,
+    output the same input
+
+    # Arguments:
+        - `values`: list of possible values
+        - `maximum`: maximum number of allowed different values
+
+    # Returns:
+        - `new_vals`: list of tuples with (initial, end) value of the bin
+    """
+    lval = len(values)
+    if lval <= max_n:
+        return values
+    if not all(isinstance(i,(int,float)) for i in values):
+        return values
+    values.sort()
+    new_vals = []
+    step = int(lval/max_n)
+    for i in range(0, lval-step, step):
+        ini = values[i]
+        fin = values[i+step]
+        new_vals.append( MinMax(ini, fin) )
+    return new_vals
+
 def parse_keys(dataframe, keys):
     """
     Receives a dataframe and a set of keys
     Looks into the dataframe to read the possible values of the keys
 
     Returns a dictionary { 'key' : [possible values] },
+
+    If the values are not discrete then we need to bin it
+    let's do this for anything with two many numerical values
 
     # Arguments:
         - `dataframe`: a pandas dataframe
@@ -55,11 +89,12 @@ def parse_keys(dataframe, keys):
         # Get all values
         all_possible_values = dataframe[key_name]
         # Remove nans and duplicates
-        removed_duplicates = sorted(list(set(all_possible_values)))
-        removed_nans = filter(lambda x: x == x, removed_duplicates)
+        removed_duplicates = set(all_possible_values)
+        removed_nans = sorted(list(filter(lambda x: x == x, removed_duplicates)))
         # If there's anything left, add it to the dictionary
         if removed_nans:
-            key_info[key_name] = removed_nans
+            # But bin it first in case we find a continous variable
+            key_info[key_name] = bin_generator(removed_nans)
     return key_info
 
 def get_combinations(key_info, n):
@@ -114,8 +149,16 @@ def get_slice(dataframe, query_dict):
         # Check whether for this slice the values are not NaN
         if len(key_column.dropna()) == 0 and len(key_column) != 0:
             return None
-        # TODO with continuous keys we don't have specific values!
-        df_slice = df_slice[key_column == value]
+        # We need to act differently in the case of continous values we discretized before
+        # The way we have to check whether something was continous is to check whether the value
+        # is an instance of the class MinMax we created at the top of this file
+        if isinstance(value, MinMax):
+            minim = value.min
+            maxim = value.max
+            tmp = df_slice[key_column >= minim]
+            df_slice = tmp[key_column <= maxim]
+        else:
+            df_slice = df_slice[key_column == value]
     return df_slice
 
 def process_slice(df_slice):
@@ -230,7 +273,6 @@ def autofilter_dataframe(dataframe, keys,  n_to_combine = 2, n_to_kill = 2, thre
     combinations = get_combinations(key_info, n_to_combine)
     # Step 2: run through all possible combinations and compute stats
     result_list = []
-    hit_list = []
     biggest_ntotal = 1
     for combination in combinations:
         processed_dict = study_combination(dataframe, combination)
@@ -240,16 +282,16 @@ def autofilter_dataframe(dataframe, keys,  n_to_combine = 2, n_to_kill = 2, thre
             biggest_ntotal = processed_dict["n_total"]
         result_list.append(processed_dict)
     # Step 3: compute reward
+    n_to_remove = n_to_kill
     for processed_dict in result_list:
         reward = compute_reward(processed_dict, biggest_ntotal)
-        if reward < fail_reward:
-            hit_list.append(combination)
+        if reward == fail_reward:
+            n_to_remove += 1
         processed_dict["reward"] = reward
     # Step 4: Order the results by reward
     result_list.sort(key = lambda i: i["reward"])
     # Step 5: Add the n-last to the list of combinations to remove
-    n_removal = len(hit_list) + n_to_kill
-    hit_list += result_list[-n_removal:]
+    hit_list = result_list[:n_to_remove]
     for i in hit_list:
         print("Removing {0} with reward {1}".format(i['combination'], i['reward']))
     # Step 6: remove the bad guys from the dataframe

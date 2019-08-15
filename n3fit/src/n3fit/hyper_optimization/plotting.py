@@ -444,16 +444,19 @@ def main():
         # Now fill a pandas dataframe with the survivors of the filters
         dataframe_raw = pd.DataFrame(dictionaries)
 
+        # If autofilter is active, apply it!
+        if args.autofilter:
+            name_keys = [keywords.get(i, i) for i in args.autofilter]
+            dataframe_raw = autofilter_dataframe(dataframe_raw, name_keys)
+
+        import sys
+        sys.exit()
+
         # By default we don't want failures
         if args.include_failures:
             dataframe = dataframe_raw
         else:
             dataframe = dataframe_raw[dataframe_raw["good"]]
-
-        # If autofilter is active, apply it!
-        if args.autofilter:
-            name_keys = [keywords.get(i, i) for i in args.autofilter]
-            autofilter_dataframe(dataframe, name_keys)
 
         # Now select the best one
         best_idx = dataframe.loss.idxmin()
