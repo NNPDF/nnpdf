@@ -22,18 +22,21 @@
     -if: if given, the flags include failing runs
     -c: if given, combine all the replicas as if it were one big json file
 """
-
 from argparse import ArgumentParser
-import glob
-import json
 import os
 import re
-import matplotlib.pyplot as plt
-import pandas as pd
+import glob
+import json
+import logging
 import numpy as np
+import pandas as pd
 import seaborn as sns
-
+import matplotlib.pyplot as plt
 from n3fit.hyper_optimization.hyper_algorithm import autofilter_dataframe
+
+logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
+log = logging.getLogger(__name__)
+
 
 regex_op = re.compile(r"[^\w^\.]+")
 regex_not_op = re.compile(r"[\w\.]+")
@@ -109,6 +112,7 @@ def parse_args():
         help="Given a number of keys, perform an autofilter (removing combinations of elements with worse rewards",
         nargs="+",
     )
+    parser.add_argument("--debug", help="Print debug information", action="store_true")
     args = parser.parse_args()
     return args
 
@@ -408,6 +412,9 @@ def plot_scans(df, best_df, outfile):
 
 def main():
     args = parse_args()
+    if args.debug:
+        root_log = logging.getLogger()
+        root_log.setLevel(logging.DEBUG)
 
     # Prepare the filter(s)
     filter_functions = [filter_by_string(filter_me) for filter_me in args.filter]
@@ -451,7 +458,14 @@ def main():
         # If autofilter is active, apply it!
         if args.autofilter:
             name_keys = [keywords.get(i, i) for i in args.autofilter]
-            dataframe_raw = autofilter_dataframe(dataframe_raw, name_keys)
+            # First, for each key we are filtering in remove the worst
+            # this will already remove a good chunk of trials
+            for key in name_keys:
+                dataframe_raw = autofilter_dataframe(dataframe_raw, [key], n_to_combine=1, n_to_kill=1)
+            how_many = len(name_keys)
+            # Now remove the 2 worst for each combination from 2 to how_many
+            for i in range(2, how_many + 1):
+                dataframe_raw = autofilter_dataframe(dataframe_raw, name_keys, n_to_combine=i, n_to_kill=2)
 
         # By default we don't want failures
         if args.include_failures:

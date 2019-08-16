@@ -2,16 +2,20 @@
     This module contains functions dedicated to process the json dictionaries
 """
 import itertools
-import numpy as np
 from collections import namedtuple
+import logging
+
+log = logging.getLogger(__name__)
 
 MinMax = namedtuple("MinMax", "min max")
 
-
+# Arbitrary parameters that we need to think about
 fail_threshold = 75
 fail_reward = -100
-key_good = "good"
-key_loss = "loss"
+loss_threshold = 2.5  # Anything below this is as good as a failure
+
+KEY_GOOD = "good"
+KEY_LOSS = "loss"
 
 
 def compute_reward(mdict, biggest_ntotal):
@@ -20,24 +24,37 @@ def compute_reward(mdict, biggest_ntotal):
 
     If the fail rate for this combination is above the fail threshold, rewards is -100
 
-    The formula for the reward function is:
-        rwd = combination_weight*( (0.5-fail_rate) - dispersion/good_rate )
+    The formula below for the reward takes into account:
+        - The rate of ok fits that have a loss below the loss_threshold
+        - The rate of fits that failed
+        - The std deviation
+        - How far away is the median from the best loss
+        - How far away are median and average
     """
-    # Check the fail rate
+    # Check the fail rate to see whether this combination is useles
     fail_rate = mdict["fail_rate"]
     if fail_rate > fail_threshold:
         return fail_reward
-    # Compute the good rate
+    # Compute from the points that are not explicitly failures
+    # the ones that are truly good
+    true_good = mdict["true_good"]
     n_good = mdict["n_good"]
     n_total = mdict["n_total"]
-    rate_good = n_good / n_total * 100.0
-    # Compute the dispersion
-    dispersion = mdict["median"] - mdict["best_loss"]
-    # And with all of this, compute a reward function
-    reward = (50.0 - fail_rate) / 100.0
-    reward -= dispersion / rate_good  # The less spread the better
-    # Finally scale it with the total number of points
+    rate_good = true_good / n_good * 100.0
+    # Punish the combination which the dispersion
+    median = mdict["median"]
+    avg = mdict["avg"]
+    std = mdict["std"]
+    dispersion = abs(avg - median) + std / 2.0 + (median - mdict["best_loss"])
+    # Compute and weight the outliers
     combination_weight = 1.0 + n_total / biggest_ntotal
+    # The most important thing is the true_good_rate
+    reward = rate_good / 100.0
+    # Punish a bit using the failure rate, but not that much
+    reward -= fail_rate / 400.0
+    # and punish further using the dispersion
+    reward -= dispersion
+    # Finally scale it with the total number of points
     return reward * combination_weight
 
 
@@ -186,23 +203,31 @@ def process_slice(df_slice):
     else:
         proc_dict = {"skip": False}
     # Get the good values
-    good = df_slice[df_slice[key_good]]
+    good = df_slice[df_slice[KEY_GOOD]]
     # Get raw stats
     n_good = len(good)
     n_failed = n_total - n_good
     fail_rate = n_failed / n_total * 100.0
     # Now get the distribution of the (good) losses
-    good_losses = good[key_loss]
+    good_losses = good[KEY_LOSS]
     best_loss = good_losses.min()
     std_dev = good_losses.std()
     median = good_losses.median()
+    avg = good_losses.mean()
+    # Check how many points are under the loss_threshold
+    true_good = 0
+    for i in good_losses:
+        true_good += int(i < loss_threshold)
+
     # Fill the dictionary
     proc_dict["n_failed"] = n_failed
     proc_dict["n_good"] = n_good
     proc_dict["n_total"] = n_total
     proc_dict["fail_rate"] = fail_rate
     proc_dict["best_loss"] = best_loss
+    proc_dict["true_good"] = true_good
     proc_dict["std"] = std_dev
+    proc_dict["avg"] = avg
     proc_dict["median"] = median
     return proc_dict
 
@@ -254,7 +279,7 @@ def dataframe_removal(dataframe, hit_list):
     return new_dataframe
 
 
-def autofilter_dataframe(dataframe, keys, n_to_combine=2, n_to_kill=2, threshold=-50):
+def autofilter_dataframe(dataframe, keys, n_to_combine=1, n_to_kill=1, threshold=-1):
     """
     Receives a dataframe and a list of keys.
     Creates combinations of `n_to_combine` keys and computes the reward
@@ -292,6 +317,7 @@ def autofilter_dataframe(dataframe, keys, n_to_combine=2, n_to_kill=2, threshold
     n_to_remove = n_to_kill
     for processed_dict in result_list:
         reward = compute_reward(processed_dict, biggest_ntotal)
+        log.debug("Combination %s, reward %f" % (processed_dict["combination"], reward))
         if reward <= threshold:
             n_to_remove += 1
         processed_dict["reward"] = reward
@@ -300,7 +326,7 @@ def autofilter_dataframe(dataframe, keys, n_to_combine=2, n_to_kill=2, threshold
     # Step 5: Add the n-last to the list of combinations to remove
     hit_list = result_list[:n_to_remove]
     for i in hit_list:
-        print("Removing {0} with reward {1}".format(i["combination"], i["reward"]))
+        log.info("Removing {0} with reward {1}".format(i["combination"], i["reward"]))
     # Step 6: remove the bad guys from the dataframe
     new_dataframe = dataframe_removal(dataframe, hit_list)
     return new_dataframe
