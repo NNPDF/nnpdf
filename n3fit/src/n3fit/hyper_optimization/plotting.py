@@ -28,7 +28,6 @@ import glob
 import json
 import os
 import re
-import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -78,6 +77,7 @@ plotting_keys = [
     (keywords["tl"], 0),
 ]
 
+
 def parse_args():
     """ Wrapper around argumentparser """
     parser = ArgumentParser()
@@ -99,12 +99,16 @@ def parse_args():
         type=float,
         default=1e3,
     )
-    parser.add_argument("-f", "--filter", help="Add the filter key=value to the dataframe", nargs="+", default = ())
+    parser.add_argument("-f", "--filter", help="Add the filter key=value to the dataframe", nargs="+", default=())
     parser.add_argument(
         "-c", "--combine", help="If more than one replica folder is found, combine all trials", action="store_true"
     )
     # Autofiltering
-    parser.add_argument("--autofilter", help = "Given a number of keys, perform an autofilter (removing combinations of elements with worse rewards", nargs = "+")
+    parser.add_argument(
+        "--autofilter",
+        help="Given a number of keys, perform an autofilter (removing combinations of elements with worse rewards",
+        nargs="+",
+    )
     args = parser.parse_args()
     return args
 
@@ -326,7 +330,7 @@ def filter_by_string(filter_string):
             check_str = '"{0}"{1}"{2}"'
         else:
             check_str = "{0}{1}{2}"
-        try: # this whole thing is a bit naughty...
+        try:  # this whole thing is a bit naughty...
             return eval(check_str.format(val_check, operator, filter_val))
         except:
             return False
@@ -448,9 +452,6 @@ def main():
         if args.autofilter:
             name_keys = [keywords.get(i, i) for i in args.autofilter]
             dataframe_raw = autofilter_dataframe(dataframe_raw, name_keys)
-
-        import sys
-        sys.exit()
 
         # By default we don't want failures
         if args.include_failures:
