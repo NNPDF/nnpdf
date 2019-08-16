@@ -25,6 +25,7 @@
 from argparse import ArgumentParser
 import os
 import re
+import sys
 import glob
 import json
 import logging
@@ -32,7 +33,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from n3fit.hyper_optimization.hyper_algorithm import autofilter_dataframe
+from n3fit.hyper_optimization.hyper_algorithm import autofilter_dataframe, parse_keys
 
 logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
@@ -49,7 +50,7 @@ keywords = {
     "initializer": "initializer",
     "dropout": "dropout",
     "nodes": "nodes_per_layer",
-    "max_layers": 4,
+    "max_layers": 4, # TODO: this should be dinamically choosen
     "nl": "number_of_layers",
     "activation": "activation_per_layer",
     "architecture": "layer_type",
@@ -64,8 +65,9 @@ keywords = {
     "loss": "loss",
 }
 
+NODES = (keywords["nodes"], 4)
 # 0 = normal scatter plot, 1 = violin, 2 = log
-plotting_keys = [
+DEFAULT_PLOTTING_KEYS = [
     (keywords["id"], 0),
     (keywords["optimizer"], 1),
     (keywords["lr"], 2, [2e-4, 4e-1]),
@@ -78,6 +80,7 @@ plotting_keys = [
     (keywords["activation"], 1),
     (keywords["dropout"], 0),
     (keywords["tl"], 0),
+    NODES,
 ]
 
 
@@ -112,6 +115,10 @@ def parse_args():
         help="Given a number of keys, perform an autofilter (removing combinations of elements with worse rewards",
         nargs="+",
     )
+    # Plotting options
+    parser.add_argument(
+        "-p", "--keys_to_plot",
+        help="Choose which keys to plot (they must be part of the DEFAULT_PLOTTING_KEYS dicttionary, use the special key -p HELP)", nargs="+")
     parser.add_argument("--debug", help="Print debug information", action="store_true")
     args = parser.parse_args()
     return args
@@ -354,7 +361,7 @@ def order_axis(df, bestdf, key):
     return ordering_true, best_x
 
 
-def plot_scans(df, best_df, outfile):
+def plot_scans(df, best_df, outfile, plotting_keys):
     """
     This function plots all trials in a nice multiplot
     """
@@ -366,13 +373,9 @@ def plot_scans(df, best_df, outfile):
     with pd.option_context("display.max_rows", None, "display.max_columns", None):
         print(best_df)
 
-    # Append extra keys for the number of possible layers
-    for i in range(keywords["max_layers"]):
-        plotting_keys.append(("layer_{0}".format(i + 1), 4))
-
     # Create a grid of plots
     nplots = len(plotting_keys)
-    _, axs = plt.subplots(4, nplots // 4, sharey=True, figsize=(30, 30))
+    _, axs = plt.subplots(int(np.ceil(nplots/4)), min(4, nplots), sharey=True, figsize=(30, 30))
 
     # Set the quantity we will be plotting in the y axis
     loss_k = keywords["loss"]
@@ -479,9 +482,37 @@ def main():
         # Make into a dataframe and transpose or the plotting code will complain
         best_trial = best_trial_series.to_frame().T
 
+        if not args.keys_to_plot:
+            plotting_keys = DEFAULT_PLOTTING_KEYS
+            # Append extra keys for the number of possible layers
+            for i in range(keywords["max_layers"]):
+                plotting_keys.append(("layer_{0}".format(i + 1), 4))
+        elif args.keys_to_plot == ["HELP"]:
+            print("The available plotting keys are: ")
+            for i in DEFAULT_PLOTTING_KEYS:
+                print(i[0])
+            sys.exit()
+        else:
+            # Run through the default plotting keys and see which ones do we keep
+            keys_parsed = [keywords.get(i, i) for i in args.keys_to_plot]
+            plotting_keys = []
+            for i in DEFAULT_PLOTTING_KEYS:
+                if i[0] in keys_parsed:
+                    plotting_keys.append(i)
+
+        # If NODES is within the plotting keys, substitute it by the number of nodes
+        # per layer
+        if NODES in plotting_keys:
+            plotting_keys.remove(NODES)
+            # Get the possible numbers of layers from the dataframe
+            layers_info = parse_keys(dataframe, [keywords["nl"]])
+            possible_layers = layers_info[keywords["nl"]]
+            for i in possible_layers:
+                plotting_keys.append(("layer_{0}".format(i), 4))
+
         # A script gotta plot what a script gotta plot
         fileout = "{0}/scan.pdf".format(replica_path)
-        plot_scans(dataframe, best_trial, fileout)
+        plot_scans(dataframe, best_trial, fileout, plotting_keys)
         print("Plot saved at {0}".format(fileout))
 
 
