@@ -4,6 +4,7 @@
 import itertools
 from collections import namedtuple
 import logging
+import pandas as pd
 
 log = logging.getLogger(__name__)
 
@@ -58,20 +59,22 @@ def compute_reward(mdict, biggest_ntotal):
     return reward * combination_weight
 
 
-def bin_generator(values, max_n=10):
+def bin_generator(df_values, max_n=10):
     """
-    Receives a list of values. If there are more than `max_n` of them
+    Receives a dataframe with a list of unique values
+    . If there are more than `max_n` of them
     and they are numeric, create `max_n` bins.
     If they are already discrete values or there are less than `max_n` options,
     output the same input
 
     # Arguments:
-        - `values`: list of possible values
+        - `df_values`: dataframe with unique values
         - `maximum`: maximum number of allowed different values
 
     # Returns:
         - `new_vals`: list of tuples with (initial, end) value of the bin
     """
+    values = df_values.get_values()
     lval = len(values)
     if lval <= max_n:
         return values
@@ -85,6 +88,11 @@ def bin_generator(values, max_n=10):
         fin = values[i + step]
         new_vals.append(MinMax(ini, fin))
     return new_vals
+# TODO this is much slower, try to understand why
+#     bins = pd.cut(df_values, max_n, include_lowest=True)
+#     # we can just pass bins and check for that...
+#     new_vals = [MinMax(i.left, i.right) for i in bins]
+#     return new_vals
 
 
 def parse_keys(dataframe, keys):
@@ -106,15 +114,12 @@ def parse_keys(dataframe, keys):
     """
     key_info = {}
     for key_name in keys:
-        # Get all values
-        all_possible_values = dataframe[key_name]
-        # Remove nans and duplicates
-        removed_duplicates = set(all_possible_values)
-        removed_nans = sorted(list(filter(lambda x: x == x, removed_duplicates)))
+        # Remove duplicates and nans
+        all_possible_values = dataframe[key_name].dropna().drop_duplicates()
         # If there's anything left, add it to the dictionary
-        if removed_nans:
+        if not all_possible_values.empty:
             # But bin it first in case we find a continous variable
-            key_info[key_name] = bin_generator(removed_nans)
+            key_info[key_name] = bin_generator(all_possible_values)
     return key_info
 
 
