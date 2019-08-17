@@ -120,14 +120,26 @@ def parse_keys(dataframe, keys):
 
 def get_combinations(key_info, ncomb):
     """
-    Get all combinations of ncomb elements for the keys and values given in the dictionary key_info:
-    { 'key' : [possible values] }, if key_info is None, the dictionary used to initialize the class will be used
-    Returns a list of dictionaries such that:
+    Given a dictionary mapping keys to iterables of possible values (`key_info`),
+    return a list of the product of all possible mappings of a subset of `ncomb`
+    keys to single values out of the corresponding possible values, for all such subsets.
+
+    For instance,
+    key_info = {
+        'key1' : [val1-1, val1-2, ...],
+        'key2' : [val2-1, val2-2, ...],
+        }
+    ncomb = 2
+
+    will return a list of dictionaries:
     [
     {'key1' : val1-1, 'key2', val2-1 ... },
+    {'key1' : val1-1, 'key2', val2-2 ... },
     {'key1' : val1-2, 'key2', val2-1 ... },
-    ...
+    {'key1' : val1-2, 'key2', val2-2 ... },
     ]
+
+    Get all combinations of ncomb elements for the keys and values given in the dictionary key_info:
 
     # Arguments:
         - `key_info`: dictionary with the possible values for each key

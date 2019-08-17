@@ -42,8 +42,9 @@ log = logging.getLogger(__name__)
 regex_op = re.compile(r"[^\w^\.]+")
 regex_not_op = re.compile(r"[\w\.]+")
 
-# ...
-keywords = {
+# A mapping between the names the fields have in the json file
+# and more user-friendly names 
+KEYWORDS = {
     "id": "iteration",
     "optimizer": "optimizer",
     "lr": "learning_rate",
@@ -65,21 +66,21 @@ keywords = {
     "loss": "loss",
 }
 
-NODES = (keywords["nodes"], 4)
+NODES = (KEYWORDS["nodes"], 4)
 # 0 = normal scatter plot, 1 = violin, 2 = log
 DEFAULT_PLOTTING_KEYS = [
-    (keywords["id"], 0),
-    (keywords["optimizer"], 1),
-    (keywords["lr"], 2, [2e-4, 4e-1]),
-    (keywords["initializer"], 1),
-    (keywords["epochs"], 0),
-    (keywords["ste"], 0),
-    (keywords["stp"], 0),
-    (keywords["p_mul"], 0),
-    (keywords["nl"], 1),
-    (keywords["activation"], 1),
-    (keywords["dropout"], 0),
-    (keywords["tl"], 0),
+    (KEYWORDS["id"], 0),
+    (KEYWORDS["optimizer"], 1),
+    (KEYWORDS["lr"], 2, [2e-4, 4e-1]),
+    (KEYWORDS["initializer"], 1),
+    (KEYWORDS["epochs"], 0),
+    (KEYWORDS["ste"], 0),
+    (KEYWORDS["stp"], 0),
+    (KEYWORDS["p_mul"], 0),
+    (KEYWORDS["nl"], 1),
+    (KEYWORDS["activation"], 1),
+    (KEYWORDS["dropout"], 0),
+    (KEYWORDS["tl"], 0),
     NODES,
 ]
 
@@ -134,17 +135,17 @@ def parse_optimizer(trial):
     learning_rate (if it exists)
     """
     dict_out = {}
-    opt = trial["misc"]["space_vals"][keywords["optimizer"]]
+    opt = trial["misc"]["space_vals"][KEYWORDS["optimizer"]]
     if isinstance(opt, dict):
         # If this is a dictionary then the optimizer contains extra
         # information (normaly the learning rate)
-        name = opt[keywords["optimizer"]]
-        lr = opt[keywords["lr"]]
+        name = opt[KEYWORDS["optimizer"]]
+        lr = opt[KEYWORDS["lr"]]
     else:
         name = opt
         lr = None
-    dict_out[keywords["optimizer"]] = name
-    dict_out[keywords["lr"]] = lr
+    dict_out[KEYWORDS["optimizer"]] = name
+    dict_out[KEYWORDS["lr"]] = lr
     return dict_out
 
 
@@ -158,17 +159,17 @@ def parse_stopping(trial):
     pos_multiplier
     """
     dict_out = {}
-    epochs = trial["misc"]["space_vals"][keywords["epochs"]]
-    patience = trial["misc"]["space_vals"][keywords["stp"]]
+    epochs = trial["misc"]["space_vals"][KEYWORDS["epochs"]]
+    patience = trial["misc"]["space_vals"][KEYWORDS["stp"]]
     stop_ep = patience * epochs
-    positivity_initial = trial["misc"]["space_vals"][keywords["p_ini"]]
-    positivity_multiplier = trial["misc"]["space_vals"][keywords["p_mul"]]
+    positivity_initial = trial["misc"]["space_vals"][KEYWORDS["p_ini"]]
+    positivity_multiplier = trial["misc"]["space_vals"][KEYWORDS["p_mul"]]
 
-    dict_out[keywords["epochs"]] = epochs
-    dict_out[keywords["stp"]] = patience
-    dict_out[keywords["ste"]] = stop_ep
-    dict_out[keywords["p_ini"]] = positivity_initial
-    dict_out[keywords["p_mul"]] = positivity_multiplier
+    dict_out[KEYWORDS["epochs"]] = epochs
+    dict_out[KEYWORDS["stp"]] = patience
+    dict_out[KEYWORDS["ste"]] = stop_ep
+    dict_out[KEYWORDS["p_ini"]] = positivity_initial
+    dict_out[KEYWORDS["p_mul"]] = positivity_multiplier
     return dict_out
 
 
@@ -185,32 +186,32 @@ def parse_architecture(trial):
     initializer
     """
     dict_out = {}
-    nodes_per_layer = trial["misc"]["space_vals"][keywords["nodes"]]
+    nodes_per_layer = trial["misc"]["space_vals"][KEYWORDS["nodes"]]
     nl = len(nodes_per_layer) - 1
-    activation_name = trial["misc"]["space_vals"][keywords["activation"]]
-    architecture = trial["misc"]["space_vals"][keywords["architecture"]]
+    activation_name = trial["misc"]["space_vals"][KEYWORDS["activation"]]
+    architecture = trial["misc"]["space_vals"][KEYWORDS["architecture"]]
 
-    dict_out[keywords["nodes"]] = nodes_per_layer
-    dict_out[keywords["nl"]] = nl
-    dict_out[keywords["activation"]] = activation_name
-    dict_out[keywords["architecture"]] = architecture
+    dict_out[KEYWORDS["nodes"]] = nodes_per_layer
+    dict_out[KEYWORDS["nl"]] = nl
+    dict_out[KEYWORDS["activation"]] = activation_name
+    dict_out[KEYWORDS["architecture"]] = architecture
 
     # In principle we might be checking any number of layers,
     # so it is important to make sure that the maximum number of layers
     # (which will be used at plotting time) is correct
-    if nl > keywords["max_layers"]:
-        keywords["max_layers"] = nl
+    if nl > KEYWORDS["max_layers"]:
+        KEYWORDS["max_layers"] = nl
 
-    for i in range(keywords["max_layers"]):
+    for i in range(KEYWORDS["max_layers"]):
         dict_out["layer_{0}".format(i + 1)] = None
 
     for i, nodes in enumerate(nodes_per_layer[:-1]):
         dict_out["layer_{0}".format(i + 1)] = nodes
 
-    ini = trial["misc"]["space_vals"][keywords["initializer"]]
-    dropout_rate = trial["misc"]["space_vals"][keywords["dropout"]]
-    dict_out[keywords["initializer"]] = ini
-    dict_out[keywords["dropout"]] = dropout_rate
+    ini = trial["misc"]["space_vals"][KEYWORDS["initializer"]]
+    dropout_rate = trial["misc"]["space_vals"][KEYWORDS["dropout"]]
+    dict_out[KEYWORDS["initializer"]] = ini
+    dict_out[KEYWORDS["dropout"]] = dropout_rate
     return dict_out
 
 
@@ -223,14 +224,14 @@ def parse_statistics(trial):
     status of the run
     """
     dict_out = {}
-    validation_loss = trial["result"][keywords["vl"]]
-    testing_loss = trial["result"][keywords["tl"]]
+    validation_loss = trial["result"][KEYWORDS["vl"]]
+    testing_loss = trial["result"][KEYWORDS["tl"]]
     # was this a ok run?
     ok = bool(trial["result"]["status"] == "ok")
 
-    dict_out[keywords["good"]] = ok
-    dict_out[keywords["vl"]] = validation_loss
-    dict_out[keywords["tl"]] = testing_loss
+    dict_out[KEYWORDS["good"]] = ok
+    dict_out[KEYWORDS["vl"]] = validation_loss
+    dict_out[KEYWORDS["tl"]] = testing_loss
     return dict_out
 
 
@@ -257,8 +258,8 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold):
     Read a trial dictionary and compute the true loss and decide whether the run passes or not
     """
     test_f = 1.0 - validation_multiplier
-    val_loss = trial_dict[keywords["vl"]]
-    test_loss = trial_dict[keywords["tl"]]
+    val_loss = trial_dict[KEYWORDS["vl"]]
+    test_loss = trial_dict[KEYWORDS["tl"]]
     loss = val_loss * validation_multiplier + test_loss * test_f
 
     if loss > fail_threshold or val_loss > fail_threshold or test_loss > fail_threshold:
@@ -297,7 +298,7 @@ def generate_dictionary(
         if trial_dict is None:
             continue
         evaluate_trial(trial_dict, val_multiplier, fail_threshold)
-        trial_dict[keywords["id"]] = index
+        trial_dict[KEYWORDS["id"]] = index
         all_trials.append(trial_dict)
     return all_trials
 
@@ -306,8 +307,15 @@ def filter_by_string(filter_string):
     """
     Receives a data_dict (a parsed trial) and a filter string, returns True if the trial passes the filter
 
-    filter string must have the format: key[]string
-    where [] can be any of !=, =, >, <
+    filter string must have the format: key<operator>string
+    where <operator> can be any of !=, =, >, <
+
+    # Arguments:
+        - `filter_string`: the expresion to evaluate
+
+    # Returns:
+        - `filter_function`: a function that takes a data_dict and
+                             returns true if the condition in `filter_string` passes
     """
 
     def filter_function(data_dict):
@@ -321,8 +329,7 @@ def filter_by_string(filter_string):
         filter_key = match[0]
         filter_val = match[1]
 
-        if filter_key in keywords.keys():
-            filter_key = keywords[filter_key]
+        filter_key = KEYWORDS.get(filter_key, filter_key)
 
         val_check = data_dict[filter_key]
         if val_check is None:  # NaN means it does not apply
@@ -378,7 +385,7 @@ def plot_scans(df, best_df, outfile, plotting_keys):
     _, axs = plt.subplots(int(np.ceil(nplots/4)), min(4, nplots), sharey=True, figsize=(30, 30))
 
     # Set the quantity we will be plotting in the y axis
-    loss_k = keywords["loss"]
+    loss_k = KEYWORDS["loss"]
 
     for ax, key_tuple in zip(axs.reshape(-1), plotting_keys):
         key = key_tuple[0]
@@ -397,10 +404,10 @@ def plot_scans(df, best_df, outfile, plotting_keys):
         elif mode == 4:
             # The nodes per layer is a special case because we want to know to
             # which total number of layers they correspond
-            ordering_true, _ = order_axis(df, best_df, key=keywords["nl"])
+            ordering_true, _ = order_axis(df, best_df, key=KEYWORDS["nl"])
             best_x = best_df.get(key)
             for l in ordering_true:
-                plot_data = df[df[keywords["nl"]] == l]
+                plot_data = df[df[KEYWORDS["nl"]] == l]
                 label = "layers = {0}".format(l)
                 ax = sns.scatterplot(x=key, y=loss_k, data=plot_data, ax=ax, label=label)
             ax.legend()
@@ -460,7 +467,7 @@ def main():
 
         # If autofilter is active, apply it!
         if args.autofilter:
-            name_keys = [keywords.get(i, i) for i in args.autofilter]
+            name_keys = [KEYWORDS.get(i, i) for i in args.autofilter]
             # First, for each key we are filtering in remove the worst
             # this will already remove a good chunk of trials
             for key in name_keys:
@@ -485,7 +492,7 @@ def main():
         if not args.keys_to_plot:
             plotting_keys = DEFAULT_PLOTTING_KEYS
             # Append extra keys for the number of possible layers
-            for i in range(keywords["max_layers"]):
+            for i in range(KEYWORDS["max_layers"]):
                 plotting_keys.append(("layer_{0}".format(i + 1), 4))
         elif args.keys_to_plot == ["HELP"]:
             print("The available plotting keys are: ")
@@ -494,7 +501,7 @@ def main():
             sys.exit()
         else:
             # Run through the default plotting keys and see which ones do we keep
-            keys_parsed = [keywords.get(i, i) for i in args.keys_to_plot]
+            keys_parsed = [KEYWORDS.get(i, i) for i in args.keys_to_plot]
             plotting_keys = []
             for i in DEFAULT_PLOTTING_KEYS:
                 if i[0] in keys_parsed:
@@ -505,8 +512,8 @@ def main():
         if NODES in plotting_keys:
             plotting_keys.remove(NODES)
             # Get the possible numbers of layers from the dataframe
-            layers_info = parse_keys(dataframe, [keywords["nl"]])
-            possible_layers = layers_info[keywords["nl"]]
+            layers_info = parse_keys(dataframe, [KEYWORDS["nl"]])
+            possible_layers = layers_info[KEYWORDS["nl"]]
             for i in possible_layers:
                 plotting_keys.append(("layer_{0}".format(i), 4))
 

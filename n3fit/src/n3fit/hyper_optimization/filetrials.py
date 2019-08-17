@@ -54,7 +54,7 @@ class FileTrials(Trials):
         self._store_trial = False
         self._json_file = "{0}/tries.json".format(replica_path)
         self._parameters = parameters
-        super(FileTrials, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def refresh(self):
         """
@@ -62,7 +62,7 @@ class FileTrials(Trials):
         save things in the database. We are are overloading it in order to also write
         to a json file with every single trial.
         """
-        super(FileTrials, self).refresh()
+        super().refresh()
 
         # write json to disk
         if self._store_trial:
@@ -80,8 +80,8 @@ class FileTrials(Trials):
     # database twice
     def new_trial_ids(self, N):
         self._store_trial = False
-        return super(FileTrials, self).new_trial_ids(N)
+        return super().new_trial_ids(N)
 
     def new_trial_docs(self, tids, specs, results, miscs):
         self._store_trial = True
-        return super(FileTrials, self).new_trial_docs(tids, specs, results, miscs)
+        return super().new_trial_docs(tids, specs, results, miscs)
