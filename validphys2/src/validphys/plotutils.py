@@ -16,6 +16,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.scale as mscale
 import matplotlib.patches as mpatches
+import matplotlib.collections as mcollections
 from matplotlib  import transforms
 from matplotlib.markers import MarkerStyle
 
@@ -388,40 +389,74 @@ def plot_horizontal_errorbars(cvs, errors, categorylabels, datalabels=None,
     return fig, ax
 
 @ax_or_gca
-def kde_plot(a, height=.05, axis="x", ax=None, **kwargs):
-   """Plot datapoints in an array as sticks on an axis.
-   Parameters
-   ----------
-   a : vector
-      1D array of observations.
-   height : scalar, optional
-      Height of ticks as proportion of the axis.
-   axis : {'x' | 'y'}, optional
-      Axis to draw rugplot on.
-   ax : matplotlib axes, optional
-      Axes to draw plot into; otherwise grabs current axes.
-   kwargs : key, value pairings
-      Other keyword arguments are passed to ``axvline`` or ``axhline``.
-   Returns
-   -------
-   ax : matplotlib axes
-      The Axes object with the plot on it.
-   """
-   a = np.asarray(a)
-   vertical = kwargs.pop("vertical", axis == "y")
-   func = ax.axhline if vertical else ax.axvline
-   kwargs.setdefault("linewidth", 1)
-   label = kwargs.pop('label', None)
-   if not 'color' in kwargs:
-       next_prop = next(ax._get_lines.prop_cycler)
-       kwargs['color'] = next_prop['color']
+def kde_plot(
+    a, height=0.05, ax=None, label=None, color=None, max_rugs=100000, **kwargs
+):
+    """Plot a Kernel Density Estimate of a 1D array, togther with all of the
+    individual occurrences (*rugplot*).
 
-   for pt in a:
-      func(pt, 0, height, **kwargs)
+    Parameters
+    ----------
+    a : vector
+       1D array of observations.
+    height : scalar, optional
+       Height of ticks as proportion of the axis.
+    ax : matplotlib axes, optional
+       Axes to draw plot into; otherwise grabs current axes.
+    label: string, optional
+       The label for the legend (note that you have to generate the legend yourself).
+    color: optional
+       A matplotlib color specification, used for both the KDE and the rugplot. If not given,
+       the next in the underlying axis cycle will be consumed and used.
+    max_rugs: integer, optional
+       The maximum number of points that will be displayed individually.
+    kwargs : key, value pairings
+       Other keyword arguments are passed to the underlying LineCollection.
 
-   kde_plot = stats.gaussian_kde(a, bw_method='silverman')
-   kde_x = np.linspace(*expand_margin(min(a),max(a), 1.3),100)
-   ax.plot(kde_x, kde_plot(kde_x), label=label, color=kwargs['color'])
-   ax.set_ylim(ymin=0)
+    Returns
+    -------
+    ax : matplotlib axes
+       The Axes object with the plot on it.
 
-   return ax
+    Example
+    -------
+
+    >>> import numpy as np
+    >>> import matplotlib.pyplot as plt
+    >>> dist = np.random.norm(size=100)
+    >>> kde_plot(dist)
+    >>> plt.show()
+    """
+
+    a = np.asarray(a).ravel()
+    kwargs.setdefault("linewidth", 1)
+    if color is None:
+        next_prop = next(ax._get_lines.prop_cycler)
+        color = next_prop["color"]
+    kde_func = stats.gaussian_kde(a, bw_method="silverman")
+    kde_x = np.linspace(*expand_margin(np.min(a), np.max(a), 1.3), 100)
+    ax.plot(kde_x, kde_func(kde_x), label=label, color=color)
+    if len(a) > max_rugs:
+        segment_data = np.random.choice(a, max_rugs, replace=False)
+    else:
+        segment_data = a
+    # Define segments by a pair of points (data, 0) and (data, height).
+    # Bug in pylint
+    # pylint: disable=too-many-function-args
+    segments = np.c_[
+        segment_data,
+        np.zeros_like(segment_data),
+        segment_data,
+        np.full_like(segment_data, height),
+    ].reshape(-1, 2, 2)
+    rugs = mcollections.LineCollection(
+        segments,
+        # Make the x coordinate refer to the data but the y (the height
+        # relative to the plot height.
+        transform=transforms.blended_transform_factory(ax.transData, ax.transAxes),
+        color=color,
+        **kwargs
+    )
+    ax.add_collection(rugs)
+    ax.set_ylim(ymin=0)
+    return ax
