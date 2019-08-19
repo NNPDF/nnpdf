@@ -2,13 +2,10 @@
     This module contains functions dedicated to process the json dictionaries
 """
 import itertools
-from collections import namedtuple
 import logging
 import pandas as pd
 
 log = logging.getLogger(__name__)
-
-MinMax = namedtuple("MinMax", "min max")
 
 # Arbitrary parameters that we need to think about
 fail_threshold = 75
@@ -80,19 +77,8 @@ def bin_generator(df_values, max_n=10):
         return values
     if not all(isinstance(i, (int, float)) for i in values):
         return values
-    values.sort()
-    new_vals = []
-    step = int(lval / max_n)
-    for i in range(0, lval - step, step):
-        ini = values[i]
-        fin = values[i + step]
-        new_vals.append(MinMax(ini, fin))
-    return new_vals
-# TODO this is much slower, try to understand why
-#     bins = pd.cut(df_values, max_n, include_lowest=True)
-#     # we can just pass bins and check for that...
-#     new_vals = [MinMax(i.left, i.right) for i in bins]
-#     return new_vals
+    bins = pd.cut(values, max_n, include_lowest=True)
+    return bins.categories
 
 
 def parse_keys(dataframe, keys):
@@ -190,12 +176,10 @@ def get_slice(dataframe, query_dict):
             return None
         # We need to act differently in the case of continous values we discretized before
         # The way we have to check whether something was continous is to check whether the value
-        # is an instance of the class MinMax we created at the top of this file
-        if isinstance(value, MinMax):
-            minim = value.min
-            maxim = value.max
-            tmp = df_slice[key_column >= minim]
-            df_slice = tmp[key_column <= maxim]
+        # is now a pandas interval
+        if isinstance(value, pd.Interval):
+            mask = [i in value for i in key_column]
+            df_slice = df_slice[mask]
         else:
             df_slice = df_slice[key_column == value]
     return df_slice
