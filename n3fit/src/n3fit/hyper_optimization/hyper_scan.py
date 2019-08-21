@@ -26,6 +26,7 @@ import copy
 import hyperopt
 import numpy as np
 from n3fit.backends import MetaModel, MetaLayer
+import n3fit.hyper_optimization.filetrials as filetrials
 import logging
 
 log = logging.getLogger(__name__)
@@ -69,6 +70,44 @@ def hp_choice(key, choices):
     if not choices:
         return None
     return hyperopt.hp.choice(key, choices)
+
+
+# Wrapper for the hyperscanning
+def hyper_scan_wrapper(replica_path_set, model_trainer, parameters, hyperscan_dict, max_evals = 1):
+    """
+    This function receives a `ModelTrainer` object as well as a dictionary of parameters (`parameters`) and a dictionary defining the
+    space to search (`hyperscan_dict`) and performs `max_evals` evaluations of the function trying to find the best model.
+
+    The return value of this function is a dictionary containing a dictionary similar to `parameters` with the best model found.
+    It will also write a json file with the information of all separate trials inside the replica_path_set directory.
+
+    # Arguments:
+        - `replica_path_set`: folder where to create json file with info about all trials
+        - `model_trainer`: a ModelTrainer object
+        - `parameters`: a dictionary of parameters to pass to hyperparametizable
+        - `hyperscan_dict`: dictionary definining the sampling
+        - `max_evals`: how many runs of hyperopt to run
+    """
+    # Create a HyperScanner object
+    the_scanner = HyperScanner(parameters, hyperscan_dict)
+    # Tell the trainer we are doing hpyeropt
+    model_trainer.set_hyperopt(True, keys=the_scanner.hyper_keys, status_ok = hyperopt.STATUS_OK)
+    # Generate the trials object
+    trials = filetrials.FileTrials(replica_path_set, parameters=the_scanner.dict())
+
+    # Perform the scan
+    best = hyperopt.fmin(
+        fn=model_trainer.hyperparametizable,
+        space=the_scanner.dict(),
+        algo=hyperopt.tpe.suggest,
+        max_evals=max_evals,
+        show_progressbar=False,
+        trials=trials,
+    )
+    true_best = hyperopt.space_eval(parameters, best)
+    return true_best
+
+###
 
 
 class ActivationStr:
@@ -179,7 +218,7 @@ class HyperScanner:
 
         # Generate the samplers
         epochs = hp_quniform(epochs_key, min_epochs, max_epochs, steps = self.steps)
-        stopping_patience = hp_quniform(stopping_key, min_patience, max_patience, self.steps)
+        stopping_patience = hp_quniform(stopping_key, min_patience, max_patience, steps = self.steps)
 
         # Update the parameters ditionary
         self._update_param(epochs_key, epochs)

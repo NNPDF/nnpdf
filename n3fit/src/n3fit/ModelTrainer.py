@@ -133,8 +133,9 @@ class ModelTrainer:
     def model_file(self, model_file):
         self._model_file = model_file
 
-    def set_hyperopt(self, hyperopt_on, keys=None):
+    def set_hyperopt(self, hyperopt_on, keys=None, status_ok="ok"):
         """ Set hyperopt options on and off (mostly suppresses some printing) """
+        self.pass_status = status_ok
         if keys is None:
             keys = []
         self.hyperkeys = keys

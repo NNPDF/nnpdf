@@ -92,14 +92,6 @@ def performfit(
     from n3fit.backends import MetaModel
     import n3fit.io.reader as reader
 
-    if hyperopt:
-        import hyperopt as hyper
-        import n3fit.hyper_optimization.filetrials as filetrials
-
-        status_ok = hyper.STATUS_OK
-    else:
-        status_ok = "ok"
-
     # Loading t0set from LHAPDF
     if t0set is not None:
         t0pdfset = t0set.load_t0()
@@ -175,7 +167,6 @@ def performfit(
             pos_info,
             fitting["basis"],
             nnseed,
-            pass_status=status_ok,
             debug=debug,
             save_weights_each=fitting.get("save_weights_each"),
         )
@@ -209,34 +200,8 @@ def performfit(
         # this block                                                           #
         ########################################################################
         if hyperopt:
-            from n3fit.hyper_optimization.hyper_scan import HyperScanner
-
-            the_scanner = HyperScanner(parameters, hyperscan)
-
-            # Tell the trainer we are doing hyperopt
-            the_model_trainer.set_hyperopt(True, keys=the_scanner.hyper_keys)
-
-            # Generate Trials object
-            trials = filetrials.FileTrials(replica_path_set, parameters=the_scanner.dict())
-
-            # Perform the scan
-            try:
-                best = hyper.fmin(
-                    fn=pdf_gen_and_train_function,
-                    space=the_scanner.dict(),
-                    algo=hyper.tpe.suggest,
-                    max_evals=hyperopt,
-                    show_progressbar=False,
-                    trials=trials,
-                )
-            except ValueError as e:
-                print("Error from hyperopt because no best model was found")
-                print("@fit.py, setting the best trial to empty dict")
-                print(f"Exception: {e}")
-                sys.exit(0)
-
-            # Now update the parameters with the ones found by the scan
-            true_best = hyper.space_eval(parameters, best)
+            from n3fit.hyper_optimization.hyper_scan import hyper_scan_wrapper
+            true_best = hyper_scan_wrapper(replica_path_set, the_model_trainer, parameters, hyperscan, max_evals=hyperopt)
             print("##################")
             print("Best model found: ")
             for k, i in true_best.items():
