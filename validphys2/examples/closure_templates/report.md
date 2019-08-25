@@ -14,6 +14,8 @@ Closures test estimators
 -----------------------
 ## $\Delta_{\chi^{2}}$
 {@ plot_delta_chi2 @}
+### By experiment
+{@ delta_chi2_table @}
 
 ## Bias by experiment
 ### Scatter Plot

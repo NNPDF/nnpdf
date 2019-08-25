@@ -167,3 +167,52 @@ def plot_delta_chi2(delta_chi2_bootstrap, fits, use_fitcommondata):
     l = ax.legend()
     l.set_zorder(1000)
     return fig
+
+fits_exps_noise = collect(
+    'experiments_chi2', ('fits', 'fitinputcontext', 'fitunderlyinglaw')
+)
+fits_exps_chi2 = collect(
+    'experiments_chi2', ('fits', 'fitcontext',)
+)
+#Want this to account for TEST set
+fit_specified_experiments = collect(
+    'experiments', ('fits',)
+)
+
+@table
+@check_use_fitcommondata
+def delta_chi2_table(
+    fits_exps_chi2,
+    fits_exps_noise,
+    fits_name_with_covmat_label,
+    fit_specified_experiments):
+    """Calculated delta chi2 per experiment and put in table
+    Here delta chi2 is just normalised by ndata and is equal to
+
+    delta_chi2 = (chi2(T[<f>], D_1) - chi2(T[f_in], D_1))/ndata
+    """
+    dfs = []
+    cols = ('ndata', r'$\Delta_{chi^2}$ (normalised by ndata)')
+    for label, experiments, exps_chi2, exps_noise in zip(
+            fits_name_with_covmat_label,
+            fit_specified_experiments,
+            fits_exps_chi2,
+            fits_exps_noise):
+        records = []
+        for experiment, exp_chi2, exp_noise in zip(experiments, exps_chi2, exps_noise):
+            delta_chi2 = (exp_chi2.central_result - exp_noise.central_result)/exp_chi2.ndata
+            npoints = exp_chi2.ndata
+            records.append(dict(
+                experiment=str(experiment),
+                npoints=npoints,
+                delta_chi2 = delta_chi2
+
+            ))
+        df = pd.DataFrame.from_records(records,
+                 columns=('experiment', 'npoints', 'delta_chi2'),
+                 index = ('experiment', )
+             )
+        df.columns = pd.MultiIndex.from_product(([label], cols))
+        dfs.append(df)
+    res =  pd.concat(dfs, axis=1)
+    return res
