@@ -176,7 +176,7 @@ fits_exps_chi2 = collect(
 )
 #Want this to account for TEST set
 fit_specified_experiments = collect(
-    'experiments', ('fits',)
+    'experiments', ('fits', 'fitcontext',)
 )
 
 @table
