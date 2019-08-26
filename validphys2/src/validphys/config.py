@@ -881,7 +881,7 @@ class CoreConfig(configparser.Config):
             raise ConfigError(
                 f"data cannot be grouped by `{groupby}` since the key doesn't "
                 "exist in the PLOTTING file, did you spell it correctly?")
-        fitcontext['experiments'] = NSList(
+        fitcontext['groups'] = NSList(
             exp_lst,
             nskey='experiment')
         return fitcontext

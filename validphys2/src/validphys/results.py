@@ -776,10 +776,11 @@ def dataspecs_experiments_chi2_table(dataspecs_speclabel, dataspecs_experiments,
                                        dataspecs_experiment_chi2_data,
                                        per_point_data=per_point_data)
 
+groups_chi2 = collect(abs_chi2_data_experiment, ('groups',))
 fits_custom_chi2_data = collect(
-    'experiments_chi2', ('fits', 'fitcontext_groupby_custom',))
+    'groups_chi2', ('fits', 'fitcontext_groupby_custom',))
 fits_custom_groups = collect(
-    'experiments', ('fits', 'fitcontext_groupby_custom',))
+    'groups', ('fits', 'fitcontext_groupby_custom',))
 
 @table
 def fits_custom_chi2_table(
@@ -797,8 +798,9 @@ def fits_custom_chi2_table(
         fits_name_with_covmat_label, fits_custom_groups,
         fits_custom_chi2_data, per_point_data)
 
+groups_phi = collect(phi_data_experiment, ('groups',))
 fits_custom_phi = collect(
-    'experiments_phi', ('fits', 'fitcontext_groupby_custom'))
+    'groups_phi', ('fits', 'fitcontext_groupby_custom'))
 
 @table
 def fits_custom_phi_table(
