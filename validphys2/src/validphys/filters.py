@@ -280,13 +280,13 @@ def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
     return True
 
 class Rule:
-    def __init__(self, initial_data, defaults: dict=None):
+    def __init__(self, initial_data, defaults: dict = None):
         self.dataset = None
         self.process_type = None
         for key in initial_data:
             setattr(self, key, initial_data[key])
 
-        if not hasattr(self, 'rule'):
+        if not hasattr(self, "rule"):
             raise AttributeError("No rule defined.")
         self.rule = parse_expr(self.rule)
 
@@ -295,6 +295,7 @@ class Rule:
 
         if self.process_type is None:
             from validphys.loader import Loader
+
             l = Loader()
             cd = l.check_commondata(self.dataset)
             self.process_type = cd.process_type
@@ -313,18 +314,18 @@ class Rule:
 
         self.kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
         self.kinematics_dict = dict(zip(self.variables, self.kinematics))
+
         # Will return True if inequality is satisfied
-        print(self.rule)
-        print(self.kinematics_dict)
-        print(self.defaults)
         return self.rule.subs({**self.kinematics_dict, **self.defaults})
 
-def pass_kincuts_new(dataset,
-                     idat: int,
-                     theoryid: int,
-                     filters: str="cuts/filters.yaml",
-                     defaults: str="cuts/defaults.yaml"):
-    #TODO: Add docstring
+def pass_kincuts_new(
+    dataset,
+    idat: int,
+    theoryid: int,
+    filters: str = "cuts/filters.yaml",
+    defaults: str = "cuts/defaults.yaml"
+):
+    # TODO: Add docstring
 
     from validphys.loader import Loader
 
@@ -332,7 +333,7 @@ def pass_kincuts_new(dataset,
     dataset = l.check_dataset(dataset, theoryid=theoryid, cuts="nocuts")
     dataset = dataset.commondata.load()
 
-    with open(filters, 'r') as rules_stream, open(defaults, 'r') as defaults_stream:
+    with open(filters, "r") as rules_stream, open(defaults, "r") as defaults_stream:
         try:
             rules = yaml.safe_load(rules_stream)
             defaults = yaml.safe_load(defaults_stream)
