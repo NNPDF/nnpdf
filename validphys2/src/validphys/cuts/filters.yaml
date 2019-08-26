@@ -1,12 +1,16 @@
-- process_type: DIS
-  #W2 is an "extra label" in the vp plotting notation
-  #w2min is loaded from input::datacuts.
-  reason: "Non perturbative effects at low W²"
-  rule: "W2 < w2min"
+#- process_type: DIS
+  ##W2 is an "extra label" in the vp plotting notation
+  ##w2min is loaded from input::datacuts.
+  #reason: "Non perturbative effects at low W²"
+  #rule: "W2 < w2min"
+
+- dataset: ATLAS1JET11
+  reason: "Because I wanted to"
+  rule: eta < 0.3
 
 - process_type: DIS
   reason: "Non perturbative effects at low Q²"
-  rule: "Q2  < q2min"
+  rule: "Q2 < q2min"
 
 #- dataset: EMCF2P
   #reason: "????"
