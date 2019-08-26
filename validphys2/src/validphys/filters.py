@@ -288,8 +288,7 @@ class Rule:
 
         if not hasattr(self, 'rule'):
             raise AttributeError("No rule defined.")
-        else:
-            self.rule = parse_expr(self.rule)
+        self.rule = parse_expr(self.rule)
 
         if self.dataset is None and self.process_type is None:
             raise AttributeError("Please define either a process type or dataset.")
@@ -307,18 +306,24 @@ class Rule:
         # If this rule applies, we return True
 
         # Check if filter applies for this datapoint
-        if (dataset.GetSetName() != self.dataset or
-            dataset.GetProc(idat) != self.process_type):
-            return False #Return False if the rule doesn't apply to this datapoint
+        # Return False if the rule doesn't apply to this datapoint
+        if (dataset.GetSetName() != self.dataset and
+            dataset.GetProc(idat)[:3] != self.process_type):
+            return False
 
-        self.kinematics = [i for i in [dataset.GetKineamtics(0, j) for j in range(3)]]
+        self.kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
         self.kinematics_dict = dict(zip(self.variables, self.kinematics))
         # Will return True if inequality is satisfied
+        print(self.rule)
+        print(self.kinematics_dict)
+        print(self.defaults)
         return self.rule.subs({**self.kinematics_dict, **self.defaults})
 
-        
-
-def pass_kincuts_new(dataset, idat: int, theoryid: int, filters: str="cuts/filters.yaml", defaults: str="cuts/defaults.yaml"): 
+def pass_kincuts_new(dataset,
+                     idat: int,
+                     theoryid: int,
+                     filters: str="cuts/filters.yaml",
+                     defaults: str="cuts/defaults.yaml"):
     #TODO: Add docstring
 
     from validphys.loader import Loader
@@ -335,7 +340,7 @@ def pass_kincuts_new(dataset, idat: int, theoryid: int, filters: str="cuts/filte
             print(exception)
 
     rules = [Rule(i, defaults=defaults) for i in rules]
-    
-    cuts = [i(dataset, idat) for i in rules]
+
+    cuts = [rule(dataset, idat) for rule in rules]
 
     return not any(cuts)
