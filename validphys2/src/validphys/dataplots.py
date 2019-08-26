@@ -559,7 +559,7 @@ def plot_training_validation(fit, replica_data, replica_filters=None):
         _scatter_marked(ax, training,valid, replica_filters, zorder=90)
         ax.legend().set_zorder(10000)
 
-    ax.set_title(getattr(fit, 'label', fit.name))
+    ax.set_title(fit.label)
 
     ax.set_xlabel(r'$\chi^2/N_{dat}$ train')
     ax.set_ylabel(r'$\chi^2/N_{dat}$ valid')
@@ -589,8 +589,7 @@ def plot_trainvaliddist(fit, replica_data):
     ax.plot(x, kde_mean(x), label="Mean")
 
     ax.set_xlabel(r"$\chi^2/N_{dat}$")
-    ax.set_title("KDE of the fit distributions for %s" % getattr(fit,
-                                                                 'label', fit.name))
+    ax.set_title(f"KDE of the fit distributions for {fit.label}")
 
     ax.set_ylim(0, None)
     ax.legend()

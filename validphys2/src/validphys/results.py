@@ -23,7 +23,7 @@ from validphys.checks import (check_cuts_considered, check_pdf_is_montecarlo,
                               check_speclabels_different, check_two_dataspecs,
                               check_dataset_cuts_match_theorycovmat,
                               check_experiment_cuts_match_theorycovmat)
-from validphys.core import DataSetSpec, PDF, ExperimentSpec, ThCovMatSpec
+from validphys.core import DataSetSpec, PDF, ExperimentSpec
 from validphys.calcutils import (all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values,
                                  get_df_block)
 
@@ -826,6 +826,7 @@ def dataspecs_datasets_chi2_table(dataspecs_speclabel, dataspecs_experiments,
 
 #NOTE: This will need to be changed to work with `data` when that gets added
 fits_total_chi2_data = collect('total_experiments_chi2data', ('fits', 'fitcontext'))
+dataspecs_total_chi2_data = collect('total_experiments_chi2data', ('dataspecs',))
 
 #TODO: Decide what to do with the horrible totals code.
 @table
@@ -840,7 +841,8 @@ def fits_chi2_table(
     included in some fit appear as `NaN`
     """
     lvs = fits_experiments_chi2_table.index
-    expanded_index = pd.MultiIndex.from_product((lvs, ["Total"]))
+    #The explicit call to list is because pandas gets confused otherwise
+    expanded_index = pd.MultiIndex.from_product((list(lvs), ["Total"]))
     edf = fits_experiments_chi2_table.set_index(expanded_index)
     ddf = fits_datasets_chi2_table
     dfs = []
@@ -869,12 +871,18 @@ def fits_chi2_table(
 
 @table
 def dataspecs_chi2_table(
-        dataspecs_experiments_chi2_table,
-        dataspecs_datasets_chi2_table,
-        show_total:bool=False):
+    dataspecs_total_chi2_data,
+    dataspecs_datasets_chi2_table,
+    dataspecs_experiments_chi2_table,
+    show_total: bool = False,
+):
     """Same as fits_chi2_table but for an arbitrary list of dataspecs"""
-    return fits_chi2_table(dataspecs_experiments_chi2_table,
-                           dataspecs_datasets_chi2_table, show_total)
+    return fits_chi2_table(
+        dataspecs_total_chi2_data,
+        dataspecs_datasets_chi2_table,
+        dataspecs_experiments_chi2_table,
+        show_total,
+    )
 
 
 @table

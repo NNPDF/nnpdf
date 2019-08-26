@@ -17,3 +17,5 @@ normalize:
         - k1
 
 experiment: "CHORUS"
+
+nnpdf31_process: DIS CC

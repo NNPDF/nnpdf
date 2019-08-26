@@ -8,8 +8,8 @@ import pathlib
 import pytest
 from hypothesis import settings
 
-#Adding this here to change the time of deadline from default (200ms) to 1000ms
-settings.register_profile("extratime", deadline=1000)
+# Adding this here to change the time of deadline from default (200ms) to 1500ms
+settings.register_profile("extratime", deadline=1500)
 settings.load_profile("extratime")
 
 #Fortunately py.test works much like reportengine and providers are

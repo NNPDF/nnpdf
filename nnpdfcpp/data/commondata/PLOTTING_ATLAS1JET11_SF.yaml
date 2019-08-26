@@ -17,3 +17,5 @@ normalize:
         - k1
 
 experiment: "ATLAS"
+
+nnpdf31_process: JETS

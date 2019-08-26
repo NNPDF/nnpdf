@@ -9,7 +9,8 @@ git:
 os:
   - osx
   - linux
-osx_image: xcode6.4
+#Latest Mac image
+osx_image: xcode10.2
 
 env:
   global:
@@ -17,6 +18,7 @@ env:
     - OUTPUT_ARCH=osx-64
     - OUTPUT_CHANNEL=conda-private
     - UPLOAD_NON_MASTER="false"
+    - CONDA_BUILD_SYSROOT="${CONDAPATH}/MacOSX10.9.sdk"
 
   matrix:
     - CONDA_PY=36
@@ -90,6 +92,8 @@ install:
      curl -L -O "${MINICONDA_URL}/${MINICONDA_FILE}";
      bash $MINICONDA_FILE -b;
      conda update --yes conda;
+     curl -L -O https://data.nnpdf.science/MacOSX10.9.sdk.tar.xz;
+     tar xfz MacOSX10.9.sdk.tar.xz -C "${CONDAPATH}";
      source /Users/travis/miniconda3/bin/activate root;
      conda config --append channels conda-forge;
      conda config --add channels https://packages.nnpdf.science/conda;

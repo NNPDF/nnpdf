@@ -14,3 +14,5 @@ normalize:
         - k2
 
 experiment: "HERACOMB"
+
+nnpdf31_process: DIS CC

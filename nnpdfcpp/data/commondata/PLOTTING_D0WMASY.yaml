@@ -3,3 +3,5 @@ x: k1
 y_label: '$dA_{\mu}/dy$' 
 #x_label: 'Boson rapidity $|y|$'
 experiment: "D0"
+
+nnpdf31_process: DY
