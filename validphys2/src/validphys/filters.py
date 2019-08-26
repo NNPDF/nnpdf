@@ -315,6 +315,8 @@ class Rule:
         self.kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
         self.kinematics_dict = dict(zip(self.variables, self.kinematics))
 
+        print(self.kinematics_dict)
+        print(self.defaults)
         # Will return True if inequality is satisfied
         return self.rule.subs({**self.kinematics_dict, **self.defaults})
 
@@ -340,8 +342,6 @@ def pass_kincuts_new(
         except yaml.YAMLError as exception:
             print(exception)
 
-    rules = [Rule(i, defaults=defaults) for i in rules]
-
-    cuts = [rule(dataset, idat) for rule in rules]
+    cuts = [rule(dataset, idat) for rule in [Rule(i, defaults=defaults) for i in rules]]
 
     return not any(cuts)
