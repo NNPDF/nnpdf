@@ -765,7 +765,9 @@ def eigenvector_plot(evals_nonzero_basis, shx_vector):
 def deltamiss_plot(theory_shift_test, allthx_vector, evals_nonzero_basis, shx_vector):
     """Produces a plot of the missing component of the
     shift vector, transformed back to the data space."""
+    # Define l, which is the number of points in the point prescription being used
     l = len(allthx_vector[0]) + 1
+    # Minus sign changes it from NLO-NNLO shift to NNLO-NLO shift (convention)
     f = -shx_vector[0]
     fmiss = theory_shift_test[4]
     indexlist = list(f.index.values)
@@ -780,6 +782,7 @@ def deltamiss_plot(theory_shift_test, allthx_vector, evals_nonzero_basis, shx_ve
         ids.append(i)
         proc = process_lookup(name)
         processnames.append(proc)
+    # Index and reindex f and fmiss
     tripleindex = pd.MultiIndex.from_arrays(
         [processnames, dsnames, ids], names=("process", "dataset", "id")
     )
