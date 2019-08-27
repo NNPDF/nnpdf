@@ -332,11 +332,17 @@ def get_xq2map(kintable, info):
     return apply_to_all_columns(kintable, info.kinematics_override.xq2map)
 
 def group_data_by_info(data_list, key):
-    res = defaultdict(list)
-    for ds in data_list:
+    """Takes a flat list of (dataset, dsinput) tuples and constructs
+    groups data by a key in the PLOTTING file.
+    """
+    exps_datasets = defaultdict(list)
+    exps_dsinputs = defaultdict(list)
+    for ds, dsinput in data_list:
         metaexp = getattr(get_info(ds), key)
-        res[metaexp].append(ds)
+        exps_datasets[metaexp].append(ds)
+        exps_dsinputs[metaexp].append(dsinput)
     exps = []
-    for exp in res:
-        exps.append(ExperimentSpec(exp, res[exp]))
+    for exp in exps_datasets:
+        exps.append(
+            ExperimentSpec(exp, exps_datasets[exp], dsinputs=exps_dsinputs[exp]))
     return exps

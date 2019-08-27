@@ -48,7 +48,7 @@ Training validation
 
 $\chi^2$ by experiment
 ----------------------
-{@plot_fits_experiments_chi2@}
+{@plot_fits_custom_chi2@}
 
 $\chi^2$ by dataset comparisons
 -------------------------------

@@ -61,11 +61,10 @@ def plot_phi(experiments, experiments_phi):
     return fig
 
 @figure
-def plot_fits_experiments_phi(fits_experiments_phi_table):
+def plot_fits_custom_phi(fits_custom_phi_table):
     """Plots a set of bars for each fit, each bar represents the value of phi for the corresponding
-    experiment, where the experiment is a group of datasets according to the `experiment` key in
-    the PLOTTING info file"""
-    fig, ax = _plot_chis_df(fits_experiments_phi_table)
+    group of datasets, which are grouped according to the `groupby` key"""
+    fig, ax = _plot_chis_df(fits_custom_phi_table)
     ax.set_title(r"$\phi$ for each experiment")
     return fig
 
@@ -524,17 +523,17 @@ def plot_dataspecs_datasets_chi2(dataspecs_datasets_chi2_table):
     return plot_fits_datasets_chi2(dataspecs_datasets_chi2_table)
 
 @figure
-def plot_fits_experiments_chi2(fits_experiments_chi2_table):
+def plot_fits_custom_chi2(fits_custom_chi2_table):
     """Generate a plot equivalent to ``plot_experiments_chi2`` using all the
-    fitted experiments as input."""
-    fig, ax = _plot_chis_df(fits_experiments_chi2_table)
+    fitted datasets as input, grouped according to `groupby`"""
+    fig, ax = _plot_chis_df(fits_custom_chi2_table)
     ax.set_title(r"$\chi^2$ for experiments")
     return fig
 
 @figure
 def plot_dataspecs_experiments_chi2(dataspecs_experiments_chi2_table):
-    """Same as plot_fits_experiments_chi2 but for arbitrary dataspecs"""
-    return plot_fits_experiments_chi2(dataspecs_experiments_chi2_table)
+    """Same as plot_fits_custom_chi2 but for arbitrary dataspecs"""
+    return plot_fits_custom_chi2(dataspecs_experiments_chi2_table)
 
 @figure
 def plot_training_length(replica_data, fit):

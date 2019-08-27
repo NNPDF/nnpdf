@@ -8,7 +8,7 @@ use_cuts: True
 
 template_text: |
     {@fits_chi2_table@}
-    {@plot_fits_experiments_chi2@}
+    {@plot_fits_custom_chi2@}
     {@plot_fits_datasets_chi2@}
 
 actions_:

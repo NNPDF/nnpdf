@@ -30,7 +30,7 @@ from validphys.gridvalues import LUMI_CHANNELS
 from validphys.paramfits.config import ParamfitsConfig
 
 from validphys.theorycovariance.theorycovarianceutils import process_lookup
-from validphys.plotoptions import group_data_by_info
+from validphys.plotoptions import group_data_by_info, get_info
 
 log = logging.getLogger(__name__)
 
@@ -874,13 +874,17 @@ class CoreConfig(configparser.Config):
         """
         #TODO: consider this an implimentation detail
         from reportengine.namespaces import NSList
-        flat_ds = [ds for exp in fitcontext['experiments'] for ds in exp.datasets]
+        flat_ds = [
+            (ds, dsinput) for exp in fitcontext['experiments']
+            for ds, dsinput in zip(exp.datasets, exp.dsinputs)]
         try:
             exp_lst = group_data_by_info(flat_ds, groupby)
         except AttributeError:
             raise ConfigError(
                 f"data cannot be grouped by `{groupby}` since the key doesn't "
                 "exist in the PLOTTING file, did you spell it correctly?")
+        # We still need to set nskey as experiment because it's what
+        # `abs_chi2_data_experiment` expects
         fitcontext['groups'] = NSList(
             exp_lst,
             nskey='experiment')
