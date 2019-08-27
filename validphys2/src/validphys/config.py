@@ -30,7 +30,7 @@ from validphys.gridvalues import LUMI_CHANNELS
 from validphys.paramfits.config import ParamfitsConfig
 
 from validphys.theorycovariance.theorycovarianceutils import process_lookup
-from validphys.plotoptions import group_data_by_info, get_info
+from validphys.plotoptions import group_data_by_info
 
 log = logging.getLogger(__name__)
 
@@ -811,46 +811,6 @@ class CoreConfig(configparser.Config):
         {@endwith@}
         """
         return label
-
-    def produce_fit_data_groupby_experiment(self, fit):
-        """Used to produce data from the fit grouped into experiments,
-        where each experiment is a group of datasets according to the experiment
-        key in the plotting info file.
-        """
-        #TODO: consider this an implimentation detail
-        from reportengine.namespaces import NSList
-
-        with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
-            _, experiments = self.parse_from_('fit', 'experiments', write=False)
-
-        flat = (ds for exp in experiments for ds in exp.datasets)
-        metaexps = [get_info(ds).experiment for ds in flat]
-        res = {}
-        for exp in experiments:
-            for dsinput, ds in zip(exp.dsinputs, exp.datasets):
-                metaexp = get_info(ds).experiment
-                if metaexp in res:
-                    res[metaexp].append(ds)
-                else:
-                    res[metaexp] = [ds]
-        exps = []
-        for exp in res:
-            exps.append(ExperimentSpec(exp, res[exp]))
-
-        experiments = NSList(exps, nskey='experiment')
-        return {'experiments': experiments}
-
-    def produce_fit_context_groupby_experiment(self, fit):
-        """produces experiments similarly to `fit_data_groupby_experiment`
-        but also sets fitcontext (pdf and theoryid)
-        """
-        _, pdf         = self.parse_from_('fit', 'pdf', write=False)
-        _, theory      = self.parse_from_('fit', 'theory', write=False)
-        thid = theory['theoryid']
-        with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
-            experiments = self.produce_fit_data_groupby_experiment(
-                fit)['experiments']
-        return {'pdf': pdf, 'theoryid':thid, 'experiments': experiments}
 
     def produce_all_commondata(self):
         """produces all commondata using the loader function """
