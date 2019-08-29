@@ -6,7 +6,59 @@
 
 - dataset: ATLAS1JET11
   reason: "Because I wanted to"
-  rule: eta < 0.3
+  rule: "eta < 0.3"
+
+- dataset: LHCBWZMU8TEV
+  rule: "pto = 2 & eta/y >= 2.25"
+
+- dataset: LHCBWZMU7TEV
+  rule: "pto = 2 & eta/y >= 2.25"
+
+- dataset: D0WMASY
+  rule: "pto = 2 & eta/y >= 0.03"
+
+- dataset: D0WEASY
+  rule: "pto = 2 & eta/y >= 0.03"
+
+- dataset: ATLASZPT7TEV
+  rule: "p_T2 < 30**2 | p_T2 > 500**2"
+
+- dataset: ATLASZPT8TEVMDIST
+  rule: "p_T >= 30"
+
+- dataset: ATLASZPT8TEVYDIST
+  rule: "p_T2 < 30**2 | p_T2 > 150**2"
+
+- dataset: CMSZDIFF12
+  rule: "p_T2 < 30**2 | p_T2 > 170**2 | eta/y > 1.6"
+
+- dataset: ATLASWPT31PB
+  rule: "p_T > 30"
+
+# TODO: Fix this set
+# - dataset: CMS_1JET_8TEV
+#   rule: 
+
+- dataset: CMSDY2D11
+  rule: 
+      # TODO: Change 0 to LO, 1 to NLO etc.
+      "((pto = 0) | (pto = 1)) &
+       ((M2**0.5 > maxCMSDY2Dminv) | (M2**0.5 < minCMSDY2Dminv) | (eta/y > maxCMSDY2Dy))"
+
+- dataset: CMSDY2D11
+  rule: 
+      "(pto = 2) &
+       ((M2**0.5) > maxCMSDY2Dminv | eta/y > maxCMSDY2Dy)"
+
+- dataset: CMSDY2D12
+  rule: 
+      "(pto = 0 | pto = 1) &
+       ((M2**0.5) > maxCMSDY2Dminv | (M2**0.5) < minCMSDY2Dminv | eta/y > maxCMSDY2Dy)"
+
+- dataset: CMSDY2D12
+  rule: 
+      "(pto = 2) &
+       ((M2**0.5) > maxCMSDY2Dminv | eta/y > maxCMSDY2Dy)"
 
 - process_type: DIS
   reason: "Non perturbative effects at low Q²"
