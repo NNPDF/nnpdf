@@ -23,11 +23,11 @@ add_executable(evolven3fit ${PROJECT_SOURCE_DIR}/n3fit/evolven3fit/evolven3fit.c
         ${PROJECT_SOURCE_DIR}/nnpdfcpp/src/nnfit/src/evolgrid.cc )
 
 # Set all flags
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${NNPDF_LDFLAGS} ${LHAPDF_LIBRARIES} ${GSL_LDFLAGS} ${APFEL_LIBRARIES} ${YAML_LDFLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${NNPDF_LDFLAGS} ${GSL_LDFLAGS} ${APFEL_LIBRARIES} ${YAML_LDFLAGS}")
 
 # I am pretty sure this should not be a thing
 string(REPLACE ";" " " CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
-target_link_libraries(evolven3fit nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
+target_link_libraries(evolven3fit nnpdf ${YAML_LDFLAGS} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
 
 install(TARGETS evolven3fit DESTINATION bin
         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ
