@@ -7,7 +7,9 @@ import logging
 import numbers
 import numpy as np
 import sympy as sp
-from sympy.parsing.sympy_parser import parse_expr
+from sympy.parsing.sympy_parser import (parse_expr,
+                                        standard_transformations,
+                                        convert_equals_signs)
 
 from NNPDF import DataSet, RandomGenerator, CommonData
 from reportengine.checks import make_argcheck, check, check_positive, make_check
@@ -291,7 +293,8 @@ class Rule:
 
         if not hasattr(self, "rule"):
             raise AttributeError("No rule defined.")
-        self.rule = parse_expr(self.rule)
+        self.rule = parse_expr(self.rule, 
+                               transformations=standard_transformations + (convert_equals_signs,))
 
         if self.dataset is None and self.process_type is None:
             raise AttributeError("Please define either a process type or dataset.")

@@ -1,2 +1,9 @@
 w2min: 5
 q2min: 10
+
+# generalized cuts
+maxCMSDY2Dy: 2.2
+maxCMSDY2Dminv: 200.0
+minCMSDY2Dminv: 30.0
+maxTau: 0.080
+maxY: 0.663 
