@@ -389,55 +389,62 @@ def plot_horizontal_errorbars(cvs, errors, categorylabels, datalabels=None,
     return fig, ax
 
 @ax_or_gca
-def kde_plot(
-    a, height=0.05, ax=None, label=None, color=None, max_rugs=100000, **kwargs
-):
-    """Plot a Kernel Density Estimate of a 1D array, togther with all of the
-    individual occurrences (*rugplot*).
+def kde_plot(a, height=0.05, ax=None, label=None, color=None, max_marks=100000):
+    """Plot a Kernel Density Estimate of a 1D array, togther with individual
+    occurrences .
+
+    This plot provides a quick visualizaton of the distribution of one
+    dimensional data in a more complete way than an histogram would.  It
+    produces both a `Kernel Density Estimate (KDE)
+    <https://en.wikipedia.org/wiki/Kernel_density_estimation>`_ and individual
+    occurences of the data (`rug plot
+    <https://en.wikipedia.org/wiki/Rug_plot>`_). The KDE uses a Gaussian Kernel
+    with the Silverman rule to select the bandwidth (this is the optimal choice
+    if the input data is Gaussian). The individual ocurrences are displayed as
+    marks along the bottom axis. For performance reasons, and to avoid
+    cluttering the plot, a maximum of ``max_marks`` marks are displayed; if the
+    length of the data is bigger, a random sample of ``max_marks`` is taken.
 
     Parameters
     ----------
-    a : vector
+    a: vector
        1D array of observations.
-    height : scalar, optional
-       Height of ticks as proportion of the axis.
-    ax : matplotlib axes, optional
+    height: scalar, optional
+       Height of marks in the rug plot as proportion of the axis height.
+    ax: matplotlib axes, optional
        Axes to draw plot into; otherwise grabs current axes.
     label: string, optional
        The label for the legend (note that you have to generate the legend yourself).
     color: optional
        A matplotlib color specification, used for both the KDE and the rugplot. If not given,
        the next in the underlying axis cycle will be consumed and used.
-    max_rugs: integer, optional
+    max_marks: integer, optional
        The maximum number of points that will be displayed individually.
-    kwargs : key, value pairings
-       Other keyword arguments are passed to the underlying LineCollection.
 
     Returns
     -------
-    ax : matplotlib axes
-       The Axes object with the plot on it.
+    ax: matplotlib axes
+       The Axes object with the plot on it, allowing further customization.
 
     Example
     -------
 
     >>> import numpy as np
     >>> import matplotlib.pyplot as plt
-    >>> dist = np.random.norm(size=100)
+    >>> dist = np.random.normal(size=100)
     >>> kde_plot(dist)
     >>> plt.show()
     """
 
     a = np.asarray(a).ravel()
-    kwargs.setdefault("linewidth", 1)
     if color is None:
         next_prop = next(ax._get_lines.prop_cycler)
         color = next_prop["color"]
     kde_func = stats.gaussian_kde(a, bw_method="silverman")
     kde_x = np.linspace(*expand_margin(np.min(a), np.max(a), 1.3), 100)
     ax.plot(kde_x, kde_func(kde_x), label=label, color=color)
-    if len(a) > max_rugs:
-        segment_data = np.random.choice(a, max_rugs, replace=False)
+    if len(a) > max_marks:
+        segment_data = np.random.choice(a, max_marks, replace=False)
     else:
         segment_data = a
     # Define segments by a pair of points (data, 0) and (data, height).
@@ -453,9 +460,9 @@ def kde_plot(
         segments,
         # Make the x coordinate refer to the data but the y (the height
         # relative to the plot height.
+        # https://matplotlib.org/tutorials/advanced/transforms_tutorial.html?highlight=transforms%20blended_transform_factory#blended-transformations
         transform=transforms.blended_transform_factory(ax.transData, ax.transAxes),
         color=color,
-        **kwargs
     )
     ax.add_collection(rugs)
     ax.set_ylim(ymin=0)
