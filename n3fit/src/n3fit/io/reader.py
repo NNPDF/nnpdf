@@ -8,6 +8,7 @@ import numpy as np
 from NNPDF import RandomGenerator
 from validphys.core import ExperimentSpec as vp_Exp
 from validphys.core import DataSetSpec as vp_Dataset
+from validphys.calcutils import regularize_covmat
 
 
 def make_tr_val_mask(datasets, exp_name, seed):
@@ -247,6 +248,8 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
 
     exp_name = spec.name
     covmat = spec_c.get_covmat()
+    # Regularize the covmat with cond_num_threshold=500
+    covmat = regularize_covmat(covmat, cond_num_threshold=500)
 
     # Now it is time to build the masks for the training validation split
     all_dict_out = []
