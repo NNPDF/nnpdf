@@ -1,30 +1,71 @@
 ## Implementing a new experiment in buildmaster
 
-To implement a new experiment in buildmaster the first thing to do is to find the relevant experimental information, 
-and collect the corresponding files in 
+Buildmaster is the project that allows the user to generate the ``DATA`` and
+``SYSTYPE`` files that contain, respectively, the experimental data and the 
+information pertaining to the treatment of systematic errors.
+Data made available by experimental collaborations comes in a variety of 
+formats: for use in a fitting code, this data must be converted into a
+common format, that contains all the required information for use in PDF 
+fitting. Such a conversion is realised by the buildmaster project according to 
+the layout described in
 ```
-rawdata/<exp>
-```
-exp being the name of the new dataset.
-Usually the data are delivered on 
-```
-https://www.hepdata.net/ 
-```
-some time after the paper about the relevant measure has been published.
-The experimental information is usually available in different file types, like for example yaml, yoda, root, csv... 
-the best option is usually to find a plane text format, which can then be easily read using a c++ code.
-The specif layout of the files containing the experimental information changhes depending on the experiment under consideration.
-Sometimes the data have to be obtained directly from the paper.
+nnpdf/doc/data/data_layout.pdf
+``` 
+The user is strongly encouraged to go through that note with care,
+in order to familiarise himself with the features of the experimental data,
+in general, and the nomenclature of the ``NNPDF`` code, in particular.
+ 
+To implement a new experiment in buildmaster the first thing to do is to 
+find the relevant experimental information. As mentioned above, this can come 
+in a variety of formats. Usually, this is made available from the `hepdata
+repository<https://www.hepdata.net/>`_ as soon as the corresponding preprint 
+is accepted for publication.
+Additional useful resources are the public pages of the (LHC)
+experimental collaborations:
+- `ATLAS<https://twiki.cern.ch/twiki/bin/view/AtlasPublic>`_.
+- `CMS<http://cms.web.cern.ch/news/cms-physics-results>`_.
+- `LHCb<http://lhcbproject.web.cern.ch/lhcbproject/Publications/LHCbProjectPublic/Summary_all.html>`_.
 
-For each dataset a metadata file has to be created in the yaml format, with the following structure
+A careful reading of the experimental paper is strongly recommended to 
+understand the information provided, in particular concerning the origin
+and the treatment of uncertainties.
 
+Once the details of the experimental measurement are clear, one should assign
+the corresponding experiment a name. Such a name must follow the convention
+```
+<name_exp>_<name_obs>_[<extra_info>]
+```
+where <name_exp> is the name of the experiment in full (e.g. ATLAS, CMS,
+LHCB, ...), <name_obs> is the name of the observable (e.g. 1JET, SINGLETOP,
+1JET, ...), and [<extra_info>] (optional) is a set of strings, separated by
+underscore, that encapsulate additional information needed to univocally
+identify the measurement (e.g. the c.m. energy, the final state, 
+the luminosity, the jet radius, ...).
+
+The experimental information retrieved from the above must be 
+collected (ideally with minimal editing and in plain text format) 
+in a new directory 
+```
+buildmaster/rawdata/<name_exp>_<name_obs>_[<extra_info>]
+```
+A metadata file has to be created in the ``.yaml`` format as
+```
+buildmaster/meta/<name_exp>_<name_obs>_[<extra_info>].yaml
+```
+with the following structure
 ```
 ndata:    <number of datapoints>
 nsys:     <number of systematic errors>
-setname:  <setname in double quotes, i.e "ATLAS1JET11">
-proctype: <process type> (see nnpdf/nnpdfcpp/doc) in double quotes i.e "JET")
-
+setname:  <setname in double quotes, i.e. "<name_exp>_<name_obs>_[<extra_info>]">
+proctype: <process type> in double quotes)
 ```
+A list of the available process types can be found in Sect.3.1 of
+```
+nnpdf/doc/data/data_layout.pdf
+``` 
+If the process type corresponding to the experiment under consideration is not
+contained in that list, a new process type should be defined and implemented.
+
 Then the user has to create the header for a new class with the dataset name in /inc
 
 ```
