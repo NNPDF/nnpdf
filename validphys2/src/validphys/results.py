@@ -444,6 +444,11 @@ def covariance_matrix(
         )
     return covmat
 
+datasets_covariance_matrix = collect(
+    'covariance_matrix',
+    ('experiments', 'experiment',)
+)
+
 def sqrt_covariance_matrix(covariance_matrix: np.array):
     """Returns the lower-triangular Cholesky factor `covariance_matrix`
 

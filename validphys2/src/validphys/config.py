@@ -870,7 +870,10 @@ class CoreConfig(configparser.Config):
 
     def parse_perform_covmat_reg(self, do_reg: bool):
         """Parse the `regularize_covmat` key from runcard"""
-        log.info("Regularizing covariance matrices")
+        if do_reg:
+            log.info("Regularizing covariance matrices")
+        else:
+            log.info("Not regularizing covariance matrices")
         return do_reg
 
 
