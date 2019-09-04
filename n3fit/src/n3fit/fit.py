@@ -15,6 +15,7 @@ log = logging.getLogger(__name__)
 def fit(
     fitting,
     experiments,
+    experiments_covariance_matrix,
     t0set,
     replica,
     replica_path,
@@ -132,9 +133,9 @@ def fit(
     ##############################################################################
     all_exp_infos = [[] for _ in replica]
     # First loop over the experiments
-    for exp in experiments:
+    for exp, exp_cov in zip(experiments, experiments_covariance_matrix):
         log.info("Loading experiment: {0}".format(exp))
-        all_exp_dicts = reader.common_data_reader(exp, t0pdfset, replica_seeds=mcseeds, trval_seeds=trvalseeds)
+        all_exp_dicts = reader.common_data_reader(exp, exp_cov, t0pdfset, replica_seeds=mcseeds, trval_seeds=trvalseeds)
         for i, exp_dict in enumerate(all_exp_dicts):
             all_exp_infos[i].append(exp_dict)
 

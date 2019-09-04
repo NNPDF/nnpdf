@@ -868,6 +868,10 @@ class CoreConfig(configparser.Config):
                 "correctly?")
         return grouping
 
+    def parse_perform_covmat_reg(self, do_reg: bool):
+        """Parse the `regularize_covmat` key from runcard"""
+        log.info("Regularizing covariance matrices")
+        return do_reg
 
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):

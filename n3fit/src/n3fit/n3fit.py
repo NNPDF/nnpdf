@@ -24,7 +24,7 @@ N3FIT_FIXED_CONFIG = dict(
     actions_ = ['datacuts::theory fit']
 )
 
-N3FIT_PROVIDERS = ["n3fit.fit"]
+N3FIT_PROVIDERS = ["n3fit.fit", "validphys.results"]
 
 log = logging.getLogger(__name__)
 

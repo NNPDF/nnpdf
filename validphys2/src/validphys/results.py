@@ -24,8 +24,9 @@ from validphys.checks import (check_cuts_considered, check_pdf_is_montecarlo,
                               check_dataset_cuts_match_theorycovmat,
                               check_experiment_cuts_match_theorycovmat)
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
-from validphys.calcutils import (all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values,
-                                 get_df_block)
+from validphys.calcutils import (
+    all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values,
+    get_df_block, regularize_covmat)
 
 log = logging.getLogger(__name__)
 
@@ -361,7 +362,12 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
 
 
 @check_dataset_cuts_match_theorycovmat
-def covariance_matrix(dataset:DataSetSpec, fitthcovmat, t0set:(PDF, type(None)) = None):
+def covariance_matrix(
+    dataset:DataSetSpec,
+    fitthcovmat,
+    t0set:(PDF, type(None)) = None,
+    perform_covmat_reg=False,
+    condition_number_threshold=500):
     """Returns the covariance matrix for a given `dataset`. By default the
     data central values will be used to calculate the multiplicative contributions
     to the covariance matrix.
@@ -373,11 +379,20 @@ def covariance_matrix(dataset:DataSetSpec, fitthcovmat, t0set:(PDF, type(None)) 
     More information on the t0 procedure can be found here:
     https://arxiv.org/abs/0912.2276
 
-    Additionally the user can specify `use_fit_thcovmat_if_present` to be True
+    The user can specify `use_fit_thcovmat_if_present` to be True
     and provide a corresponding `fit`. If the theory covmat was used in the
     corresponding `fit` and the specfied `dataset` was used in the fit then
     the theory covariance matrix for this `dataset` will be added in quadrature
     to the experimental covariance matrix.
+
+    Covariance matrix can be regularized according to
+    `calcutils.regularize_covmat` if the user specifies `perform_covmat_reg` to
+    be true. This algorithm sets a minimum threshold for eigenvalues that the
+    corresponding correlation matrix can have to be:
+
+    max(eigenvalue)/condition_number_threshold
+
+    by default condition_number_threshold is set to 500
 
     Parameters
     ----------
@@ -388,6 +403,10 @@ def covariance_matrix(dataset:DataSetSpec, fitthcovmat, t0set:(PDF, type(None)) 
         covariance matrix was used in the corresponding fit
     t0set: None or PDF
         None if `use_t0` is False or a PDF parsed from `t0pdfset` runcard key
+    perform_covmat_reg: bool
+        whether or not to regularize the covariance matrix
+    condition_number_threshold: number
+        threshold used to regularize covariance matrix
 
     Returns
     -------
@@ -418,6 +437,11 @@ def covariance_matrix(dataset:DataSetSpec, fitthcovmat, t0set:(PDF, type(None)) 
     if fitthcovmat:
         loaded_thcov = fitthcovmat.load()
         covmat += get_df_block(loaded_thcov, dataset.name, level=1)
+    if perform_covmat_reg:
+        covmat = regularize_covmat(
+            covmat,
+            cond_num_threshold=condition_number_threshold
+        )
     return covmat
 
 def sqrt_covariance_matrix(covariance_matrix: np.array):
@@ -451,7 +475,11 @@ def sqrt_covariance_matrix(covariance_matrix: np.array):
 
 @check_experiment_cuts_match_theorycovmat
 def experiment_covariance_matrix(
-        experiment: ExperimentSpec, fitthcovmat, t0set:(PDF, type(None)) = None):
+        experiment: ExperimentSpec,
+        fitthcovmat,
+        t0set:(PDF, type(None)) = None,
+        perform_covmat_reg=False,
+        condition_number_threshold=500):
     """Like `covariance_matrix` except for an experiment"""
     loaded_data = experiment.load()
 
@@ -468,6 +496,11 @@ def experiment_covariance_matrix(
         ds_names = loaded_thcov.index.get_level_values(1)
         indices = np.in1d(ds_names, [ds.name for ds in experiment.datasets]).nonzero()[0]
         covmat += loaded_thcov.iloc[indices, indices].values
+    if perform_covmat_reg:
+        covmat = regularize_covmat(
+            covmat,
+            cond_num_threshold=condition_number_threshold
+        )
     return covmat
 
 def experiment_sqrt_covariance_matrix(experiment_covariance_matrix):

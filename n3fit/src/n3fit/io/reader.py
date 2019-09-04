@@ -173,7 +173,7 @@ def common_data_reader_experiment(experiment_c, experiment_spec):
     return parsed_datasets
 
 
-def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
+def common_data_reader(spec, covmat, t0pdfset, replica_seeds=None, trval_seeds=None):
     """
     Wrapper to read the information from validphys object
     This function receives either a validphyis experiment or dataset objects
@@ -247,9 +247,6 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
         )
 
     exp_name = spec.name
-    covmat = spec_c.get_covmat()
-    # Regularize the covmat with cond_num_threshold=500
-    covmat = regularize_covmat(covmat, cond_num_threshold=500)
 
     # Now it is time to build the masks for the training validation split
     all_dict_out = []
