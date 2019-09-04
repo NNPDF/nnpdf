@@ -173,7 +173,7 @@ def common_data_reader_experiment(experiment_c, experiment_spec):
     return parsed_datasets
 
 
-def common_data_reader(spec, covmat, t0pdfset, replica_seeds=None, trval_seeds=None):
+def common_data_reader(spec, covmat, replica_seeds=None, trval_seeds=None):
     """
     Wrapper to read the information from validphys object
     This function receives either a validphyis experiment or dataset objects
@@ -215,7 +215,6 @@ def common_data_reader(spec, covmat, t0pdfset, replica_seeds=None, trval_seeds=N
     spec_c = spec.load()
     ndata = spec_c.GetNData()
     expdata_true = spec_c.get_cv().reshape(1, ndata)
-    spec_c.SetT0(t0pdfset)
     base_mcseed = int(hashlib.sha256(str(spec).encode()).hexdigest(), 16) % 10 ** 8
 
     if replica_seeds:
