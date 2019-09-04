@@ -1,6 +1,5 @@
-# Installation
-
 ## Installation using conda
+
 ### Adding RSA key to Github
 
 To clone the NNPDF Github repositories, you must add a public RSA key to Github.
@@ -16,7 +15,7 @@ To clone the NNPDF Github repositories, you must add a public RSA key to Github.
 
 * Generating an RSA key
 
-	If no RSA key exists use the command 
+	If no RSA key exists use the command
 
 		ssh-keygen
 
@@ -30,7 +29,7 @@ To clone the NNPDF Github repositories, you must add a public RSA key to Github.
 
 	and copying the output.
 
-	The public RSA key must be pasted to Github [here](https://github.com/settings/keys) and clicking on the 'New SSH key' button. Enter an appropriate title and paste the RSA Key. 
+	The public RSA key must be pasted to Github [here](https://github.com/settings/keys) and clicking on the 'New SSH key' button. Enter an appropriate title and paste the RSA Key.
 
 ### Obtain the helper script
 
@@ -41,7 +40,7 @@ A helper script exists to aid the configuration. To obtain it use:
 		git clone git@github.com:NNPDF/binary-bootstrap.git
 
 * Execute the script
-	
+
 		./binary-bootstrap/bootstrap.sh
 
 	The script will ask you for the password of the NNPDF private repository, which can be found [here](https://www.wiki.ed.ac.uk/pages/viewpage.action?pageId=292165461)
@@ -77,16 +76,16 @@ This will avoid symlinking the existing LHAPDF configuration, which may be corru
 If you intend to work on the NNPDF code, then building from source is the recommended installation procedure. However, you can still use conda to get all the dependecies and setup the validphys and C++ development environment. Further information is available in the [vp-guide](https://data.nnpdf.science/validphys-docs/guide.html#development-installs). Note that the `binary-bootstrap.sh` should be downloaded and run as explained above, if the user has not already done so.
 
 1. Create an NNPDF developer environment `nnpdf-dev` and install all relevant dependencies using
-		
-		conda create -n nnpdf-dev 
+
+		conda create -n nnpdf-dev
 		conda activate nnpdf-dev
 		conda install --only-deps nnpdf
 
 	Note that the user should be in the conda environment `nnpdf-dev` whenever they wish to work on NNPDF code. The conda environment can be exited using `conda deactivate`.
 
 2. Install the appropriate C++ compilers using
-		
-		conda install gxx_linux-64 
+
+		conda install gxx_linux-64
 
 	macOS users should replace `gxx_linux-64` with `clangxx_osx-64`.
 
@@ -103,18 +102,25 @@ If you intend to work on the NNPDF code, then building from source is the recomm
 
 		$CONDA_PREFIX=~/miniconda3/envs/nnpdf-dev/
 
-	this assumes `miniconda3` is installed in the default place which is the home directory.
+**~/.condarc**
 
-6. Navigate to the `nnpdf` directory obtained from the Github repository and create a folder called `conda-bld` by
-		
-		nnpdf$ mkdir conda-bld
-		nnpdf$ cd conda-bld
+		channels:
+		 - https://packages.nnpdf.science/conda-private
+	         - https://packages.nnpdf.science/conda
+		 - defaults
+	         - conda-forge
 
-	Note that it is important that for the following step to be executed while the user is in the `nnpdf-dev` conda environment. The project can be built using:
+Note: The NNPDF packages were previous hosted in a different location (zigzah.com). You must remove these channels and use nnpdf.science instead.
 
-		nnpdf/conda-bld$ cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
+The private packages  are password protected (with http basic_auth). In order for conda to be able access them, a ~/.netrc file needs to contain the password. It is also convenient to add the validphys password in order to be able to programmatically access the validphys server. This is used by some validphys tools.
 
-7. When the user wishes to work on the NNPDF code, they should do so in, for example, `'/nnpdfgit/nnpdf/libnnpdf'`. To compile the code navigate to the `conda-bld` directory created above and run
+**~/.nertc**
 
-		make
-		make install
+		machine packages.nnpdf.science
+    		login nnpdf
+    		password machinist-proton-saddling
+
+
+machine vp.nnpdf.science
+    login nnpdf
+    password nnpdfserver!
