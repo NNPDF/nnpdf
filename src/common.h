@@ -11,6 +11,7 @@
 const double MW = 80.398;
 const double MZ = 91.1876;
 const double Mt = 173.3;
+const double MH = 125.5;
 
 #include <NNPDF/common.h>
 using NNPDF::real;
