@@ -302,7 +302,7 @@ class Stopping:
         for exp_name, npoints in self.ndata_tr_dict.items():
             chi2 = np.mean(hobj[exp_name + "_loss"]) / npoints
             tr_chi2[exp_name] = chi2
-            total_points = npoints
+            total_points += npoints
 
         total = np.mean(hobj["loss"]) / total_points
         return total, tr_chi2
