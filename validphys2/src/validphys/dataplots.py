@@ -6,7 +6,8 @@ from __future__ import generator_stop
 
 import logging
 import itertools
-from collections import defaultdict, Sequence
+from collections import defaultdict
+from collections.abc import Sequence
 
 import numpy as np
 import numpy.linalg as la
