@@ -299,13 +299,19 @@ class Stopping:
         # This value is only used for printing output purposes so should not have any significance
         tr_chi2 = {}
         total_points = 0
+        total_loss = 0
         for exp_name, npoints in self.ndata_tr_dict.items():
-            chi2 = np.mean(hobj[exp_name + "_loss"]) / npoints
-            tr_chi2[exp_name] = chi2
+            loss = np.mean(hobj[exp_name + "_loss"]) 
+            tr_chi2[exp_name] = loss / npoints
             total_points += npoints
+            total_loss += loss
 
-        total = np.mean(hobj["loss"]) / total_points
-        return total, tr_chi2
+        # By taking the loss from the history object we would be saving the total loss
+        # including positivity sets and (if added/enabled) regularizsers
+        # instead we want to restrict ourselves to the loss coming from experiments
+        # total_loss = np.mean(hobj["loss"]) / total_points
+        total_loss /= total_points
+        return total_loss, tr_chi2
 
     def stop_here(self):
         """ Returns the stopping status unless dont_stop is true, then returns False """
@@ -370,6 +376,9 @@ class Validation:
         self.model = model
         self.verbose = verbose
         self.ndata_dict = ndata_dict
+        # If there are extra losses they will appear at the end of the list, so we want to restrict
+        # ourselves to the chi2, which means we want to go up to the number of exp. with validation
+        self.n_val_exp = len(ndata_dict)
 
     def _compute_validation_loss(self):
         """
@@ -387,14 +396,16 @@ class Validation:
 
         # This loop relies on the information that comes through the input dict to be accurate
         # because since (at the moment) the list that evaluate returns has no names, we need to
-        # assume they come in the correct order
+        # assume they come in the correct order (same order as the traiing losses)
         vl_dict = {}
         total_points = 0
-        for loss, (exp_name, npoints) in zip(loss_list[1:], self.ndata_dict.items()):
+        total_loss = 0
+        for loss, (exp_name, npoints) in zip(loss_list[1:1+self.n_val_exp], self.ndata_dict.items()):
             vl_dict[exp_name] = loss / npoints
+            total_loss += loss
             total_points += npoints
 
-        total_loss = loss_list[0] / total_points
+        total_loss /= total_points
 
         return total_loss, vl_dict
 
