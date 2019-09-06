@@ -18,6 +18,7 @@ help:
 %: Makefile
 	@if test $@ != "clean"; then \
 		sphinx-apidoc -o ./source/modules/validphys ../../validphys2/src/validphys/ ; \
+		sphinx-apidoc -o ./source/modules/n3fit-code ../../n3fit/src/n3fit/ ; \
 	fi
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
