@@ -42,15 +42,3 @@ else
 	echo "Conda package upload failed"
 	exit 1
 fi
-
-#Upload documentation to travis
-scp -r -i "$KEY" -o StrictHostKeyChecking=no\
-    doc/sphinx/build/html/* \
-    dummy@packages.nnpdf.science:~/sphinx-docs/
-
-if [ $? == 0 ]; then
-	echo "Documentation upload suceeded"
-else
-	echo "Documentation upload failed"
-	exit 1
-fi

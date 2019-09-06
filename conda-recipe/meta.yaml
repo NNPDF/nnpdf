@@ -44,6 +44,8 @@ requirements:
         - pandas =0.23
         - requests
         - prompt_toolkit =2
+        - sphinx # for the documentation
+        - recommonmark
 
 test:
     requires:
