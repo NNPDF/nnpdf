@@ -12,8 +12,6 @@ requirements:
         - swig ==3.0.10
         - cmake
         - pkg-config
-        - sphinx
-        - recommonmark
     host:
         - lhapdf      # with python3.6 wrapper
         - sqlite
