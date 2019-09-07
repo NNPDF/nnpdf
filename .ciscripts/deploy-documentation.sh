@@ -10,7 +10,7 @@ set -v
 echo "$NETRC_FILE" | base64 --decode > ~/.netrc
 
 # build documentation
-conda install sphinx recommonmark --yes
+conda install sphinx recommonmark sphinx_rtd_theme --yes
 cd doc/sphinx
 make html
 
