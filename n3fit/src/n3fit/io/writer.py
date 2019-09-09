@@ -10,6 +10,24 @@ import numpy as np
 from reportengine.compat import yaml
 from n3fit.msr import compute_arclength
 
+def time_diff(tag, end, start):
+    """
+    Receives two tuples with the CPU time and the Wall time and computes the tieme difference
+    time_tuple = (cpu_time, wall_time)
+    Returns a string with the CPU time and the wall_time
+
+    # Argument:
+        - `tag`: string with the description of the event-
+        - `end`: tuple with the ending cpu and wall times
+        - `start`: tuple with the starting cpu and wall times
+    
+    # Return:
+        - `time_str`: string wich <tag> <cpu_time> <wall_time>
+    """
+    cpu_diff = end[0] - start[0]
+    wall_diff = end[1] - start[1]
+    return f"{tag} {cpu_diff} {wall_diff}"
+
 def parse_times(timing_dictionary):
     """
         Receives a dictionary containing timestamp for the different points in the fit and 
@@ -24,22 +42,21 @@ def parse_times(timing_dictionary):
         # Returns:
             - `time_string`: string to be written to a file
     """
-    time_list = ["Reason (s)"]
+    time_list = ["Reason CPU-seconds Wall-seconds"]
     # First compute the total time
     start_time = timing_dictionary["start"]
     if "end" in timing_dictionary:
         end_time = timing_dictionary["end"]
     else:
-        end_time = time.process_time()
-    total_time = end_time - start_time
-    time_list.append("Total {0}".format(total_time))
+        end_time = (time.process_time(), time.time())
+    time_list.append( time_diff("Total", end_time, start_time) )
     # Compute the time it took to load the data
     data_loaded = timing_dictionary["data_loaded"]
-    time_list.append("DataLoad {0}".format(data_loaded - start_time))
+    time_list.append( time_diff("DataLoad", data_loaded, start_time) )
     # Compute the time it took for the fit
     fit_start = timing_dictionary["replica_set"]
     fit_end = timing_dictionary["replica_fitted"]
-    time_list.append("FitTime {0}".format(fit_end - fit_start))
+    time_list.append( time_diff("FitTime", fit_end, fit_start) )
     return "\n".join(time_list)
 class WriterWrapper:
     def __init__(self, replica_number, pdf_function, stopping_object, fitbasis_layer, q2):

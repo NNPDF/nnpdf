@@ -11,6 +11,11 @@ import numpy as np
 
 log = logging.getLogger(__name__)
 
+def get_time():
+    cpu_time = time.process_time()
+    wall_time = time.time()
+    return cpu_time, wall_time
+
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
 def fit(
@@ -78,7 +83,7 @@ def fit(
     ###############
 
     timings = {}
-    timings["start"] = time.process_time()
+    timings["start"] = get_time()
 
     # All potentially backend dependent imports should come inside the fit function
     # so they can eventually be set from the runcard
@@ -156,7 +161,7 @@ def fit(
 
     # Note: In the basic scenario we are only running for one replica and thus this loop is only
     # run once and all_exp_infos is a list of just than one element
-    timings["data_loaded"] = time.process_time()
+    timings["data_loaded"] = get_time()
     for replica_number, exp_info, nnseed in zip(replica, all_exp_infos, nnseeds):
         replica_path_set = replica_path / f"replica_{replica_number}"
         log.info("Starting replica fit %s", replica_number)
@@ -190,7 +195,7 @@ def fit(
 
         # Read up the parameters of the NN from the runcard
         parameters = fitting.get("parameters")
-        timings["replica_set"] = time.process_time()
+        timings["replica_set"] = get_time()
 
         ########################################################################
         # ### Hyperopt                                                         #
@@ -258,7 +263,7 @@ def fit(
         # "parameters" dictionary, uses them to generate the NN and trains the net  #
         #############################################################################
         result = pdf_gen_and_train_function(parameters)
-        timings["replica_fitted"] = time.process_time()
+        timings["replica_fitted"] = get_time()
 
         # After the fit is run we get a 'result' dictionary with the following items:
         stopping_object = result["stopping_object"]
