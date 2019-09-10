@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import sys
-from os import path
 
 from importlib import import_module
+from os import path
 
 from reportengine.utils import get_providers
 from validphys.app import providers
