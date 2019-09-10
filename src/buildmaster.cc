@@ -77,6 +77,8 @@
 #include "CMS_WCHARM_DIFF_UNNORM_13TEV.h"
 #include "HERACOMB_SIGMARED_C.h"
 #include "HERACOMB_SIGMARED_B.h"
+#include "ATLAS_hW_hbb_13TeV.h"
+#include "ATLAS_hZ_hbb_13TeV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -351,5 +353,9 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new LHeC160CCEMFilter());
   target.push_back(new LHeC760NCEMFilter());
   target.push_back(new LHeC760CCEMFilter());
+
+  // *********************** HIGGS **********************************
+  target.push_back(new ATLAS_hW_hbb_13TeVFilter());
+  target.push_back(new ATLAS_hZ_hbb_13TeVFilter());
 
 }
