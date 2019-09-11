@@ -85,7 +85,9 @@ int main(int argc, char **argv)
   // load theory from db
   std::map<string,string> theory_map;
   NNPDF::IndexDB db(get_data_path() + "/theory.db", "theoryIndex");
-  db.ExtractMap(theory_id, APFEL::kValues, theory_map);
+  auto keys = APFEL::kValues;
+  keys.push_back("EScaleVar");
+  db.ExtractMap(theory_id, keys, theory_map);
 
   // create output folder
   CreateResultsFolder(settings, theory_id);
@@ -111,7 +113,7 @@ int main(int argc, char **argv)
         break;
     }
   cout << "- Detected " << nrep << " replicas (contiguous)." << endl;
-  
+
   if (nrep == 0)
       throw NNPDF::RuntimeException("main", "nrep = 0, check replica folder/files.");
 
