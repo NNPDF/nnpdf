@@ -61,6 +61,8 @@ class PDFNotFound(LoadFailedError): pass
 
 class RemoteLoaderError(LoaderError): pass
 
+class InconsistentMetaDataError(LoaderError): pass
+
 class LoaderBase:
 
     def __init__(self, datapath=None, resultspath=None):
@@ -273,7 +275,11 @@ class Loader(LoaderBase):
             for p in tp:
                 if p.exists():
                     plotfiles.append(p)
-
+        if setname != metadata.name:
+            raise InconsistentMetaDataError(
+                f"The name found in the CommonData file, {metadata.name}, did "
+                f"not match the dataset name, {setname}."
+            )
         return CommonDataSpec(datafile, sysfile, plotfiles, name=setname, metadata=metadata)
 
     @functools.lru_cache()
