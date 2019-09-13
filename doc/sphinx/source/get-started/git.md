@@ -1,6 +1,6 @@
-# Git and GitHub
+# Git, GitHub and GitLab
 
-*Author: Cameron Voisey, 12/10/2019*
+*Author: Cameron Voisey, 13/10/2019*
 
 ## Git
 
@@ -8,13 +8,13 @@
 
 ### Learning Git
 
-Using Git can be slightly confusing at first, but by mastering a few basic commands you will be able to do most of the tasks that you need to do day-to-day. Git also has the advantage that it is probably the most popular version control system out there at the moment, so any time you in learning Git is most likely useful for projects outside of NNPDF. Many online tutorials and guides exist for learning Git, but two that I know of are a quick one [here](http://rogerdudler.github.io/git-guide/) and a more in depth one at [codecademy](https://www.codecademy.com/learn/learn-git).
+Using Git can be slightly confusing at first, but by mastering a few basic commands you will be able to do most of the tasks that you need to do day-to-day. Git also has the advantage that at the moment it is probably the most popular version control system out there, so any time you in invest in learning Git will most likely be useful for projects outside of NNPDF. Many online tutorials and guides exist for learning Git, but here are two that I have used before: a [quick guide](http://rogerdudler.github.io/git-guide/) and a more in depth [tutorial(https://www.codecademy.com/learn/learn-git).
 
 ## GitHub and GitLab
 
 The NNPDF code is stored on two Git-supporting servers:
 
-* [GitHub](https://github.com/), which is a private code development platform that allows its users to view code on the web, propose changes to the code, and discuss and review code. NNPDF has access to unlimited free private repositories on GitHub and [Git Large File Storage](https://git-lfs.github.com/) support. Several guides to using GitHub can be found on their [website](https://guides.github.com/).
+* [GitHub](https://github.com/), which is a private code development platform that allows its users to view code on the web, propose changes to the code, and discuss and review code. NNPDF has access to unlimited free private repositories on GitHub as well as [Git Large File Storage](https://git-lfs.github.com/) and [Travis](https://travis-ci.com/) support. Several guides to using GitHub can be found on their [website](https://guides.github.com/).
 
 * [GitLab](https://gitlab.cern.ch/NNPDF) at CERN, where a mirror copy of the GitHub repositories are backed up. Note that GitLab was originally used by NNPDF instead of GitHub, but problems were encountered since the number of users without CERN accounts is limited and these users cannot make use of the advanced tools that GitLab offers.
 
@@ -36,8 +36,8 @@ GitHub provides the following workflow:
 
 * Users can create Projects and Milestones for each project.
 
-* For each project users can open Issues, which can be used to request bug fixes, new features, new documentation, or simply to facilitate a general discussion. The user can then assign one or more people to help deal with the Issue. Issues should be opened in the revelant repository. For example, for a something that is related to validphys, one should open an Issue in nnpdf, while for something that is related to data implementation, one should open an Issue in buildmaster. Example Issues can be found [here](https://github.com/NNPDF/nnpdf/issues).
+* For each project users can open issues, which can be used to request bug fixes, new features, new documentation, or simply to facilitate a general discussion. The user can then assign one or more people to help deal with the issue. Issues should be opened in the revelant repository. For example, for something that is related to validphys, one should open an issue in [nnpdf](https://github.com/NNPDF/nnpdf), while for something that is related to data implementation, one should open an issue in [buildmaster](https://github.com/NNPDF/buildmaster). Example issues can be found [here](https://github.com/NNPDF/nnpdf/issues).
 
-* When it is clear how to deal with an Issue, a [Branch](https://github.com/NNPDF/nnpdf/branches) can be opened where a user can implement the requested feature.
+* When it is clear how an issue should be dealt with, a [branch](https://github.com/NNPDF/nnpdf/branches) can be opened where a user can implement the requested feature.
 
-* Once a feature is ready to be considered for merging into the master version of the code, a [Pull Request](https://github.com/NNPDF/nnpdf/pulls) can be opened. At least two code reviewers must then be assigned, after which the code will be reviewed and discussed. The modification will then be accepted or rejected. Further general informaton on Pull Requests can found [here](https://help.github.com/en/articles/about-pull-requests).
+* Once a feature is ready to be considered for merging into the master version of the code, a [pull request](https://github.com/NNPDF/nnpdf/pulls) (PR) can be opened. At least two code reviewers must then be assigned, after which the code will be reviewed and discussed. The modification will then be accepted or rejected. Further general informaton on PRs can found [here](https://help.github.com/en/articles/about-pull-requests).
