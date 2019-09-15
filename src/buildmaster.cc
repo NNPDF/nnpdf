@@ -79,6 +79,9 @@
 #include "HERACOMB_SIGMARED_B.h"
 #include "ATLAS_hW_hbb_13TeV.h"
 #include "ATLAS_hZ_hbb_13TeV.h"
+#include "CMS_2JET_7TEV.h"
+#include "ATLAS_2JET_7TEV_R04.h"
+#include "ATLAS_2JET_7TEV_R06.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -135,8 +138,10 @@ void InitCommonData(vector<CommonData*>& target)
 
   target.push_back(new ATLASPHT15Filter());
   target.push_back(new ATLASPHT12Filter());
-  target.push_back(new ATLAS_1JET_8TEV_R06Filter());
   target.push_back(new ATLAS_1JET_8TEV_R04Filter());
+  target.push_back(new ATLAS_1JET_8TEV_R06Filter());
+  target.push_back(new ATLAS_2JET_7TEV_R04Filter());
+  target.push_back(new ATLAS_2JET_7TEV_R06Filter()); 
   
   // ************************* BCDMS ******************************
 
@@ -167,6 +172,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMS1JET276TEVFilter());
   target.push_back(new CMSWMU8TEVFilter());
   target.push_back(new CMS_1JET_8TEVFilter());
+  target.push_back(new CMS_2JET_7TEVFilter());
 
  // ************************* CMSwc ******************************
 
