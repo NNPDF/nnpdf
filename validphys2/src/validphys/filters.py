@@ -7,9 +7,6 @@ import logging
 import numbers
 import numpy as np
 import sympy as sp
-from sympy.parsing.sympy_parser import (parse_expr,
-                                        standard_transformations,
-                                        convert_equals_signs)
 
 from NNPDF import DataSet, RandomGenerator, CommonData
 from reportengine.checks import make_argcheck, check, check_positive, make_check
