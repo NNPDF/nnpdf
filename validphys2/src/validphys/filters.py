@@ -127,11 +127,9 @@ def _filter_closure_data(filter_path, experiments, fakepdfset, fakenoise, errors
 
 def get_cuts_for_dataset(commondata, theoryid, q2min, w2min):
     """Return cut mask for dataset"""
-    datamask = []
     ds = commondata.load()
-    for idat in range(ds.GetNData()):
-        if pass_kincuts(ds, idat, theoryid, q2min, w2min):
-            datamask.append(idat)
+    datamask = [idat for idat in range(ds.GetNData())
+                if pass_kincuts(ds, idat, theoryid, q2min, w2min)]
     return datamask
 
 
