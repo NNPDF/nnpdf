@@ -282,7 +282,7 @@ def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
     return True
 
 class Rule:
-    def __init__(self, initial_data, defaults: dict = None):
+    def __init__(self, initial_data: dict, defaults: dict):
         self.dataset = None
         self.process_type = None
         for key in initial_data:
@@ -290,8 +290,6 @@ class Rule:
 
         if not hasattr(self, "rule"):
             raise AttributeError("No rule defined.")
-        self.rule = parse_expr(self.rule, 
-                               transformations=standard_transformations + (convert_equals_signs,))
 
         if self.dataset is None and self.process_type is None:
             raise AttributeError("Please define either a process type or dataset.")
@@ -307,7 +305,7 @@ class Rule:
         self.variables = CommonData.kinLabel[self.process_type]
 
     def __call__(self, dataset, idat):
-        # If this rule applies, we return True
+        """If this rule applies, we return True"""
 
         # Check if filter applies for this datapoint
         # Return False if the rule doesn't apply to this datapoint
@@ -317,11 +315,10 @@ class Rule:
 
         self.kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
         self.kinematics_dict = dict(zip(self.variables, self.kinematics))
-
-        print(self.kinematics_dict)
-        print(self.defaults)
+        
         # Will return True if inequality is satisfied
-        return self.rule.subs({**self.kinematics_dict, **self.defaults})
+        return eval(self.rule, {**self.defaults, **self.kinematics_dict})
+
 
 def pass_kincuts_new(
     dataset,
@@ -345,6 +342,6 @@ def pass_kincuts_new(
         except yaml.YAMLError as exception:
             print(exception)
 
-    cuts = [rule(dataset, idat) for rule in [Rule(i, defaults=defaults) for i in rules]]
+    cuts = [rule(dataset, idat) for rule in [Rule(i, defaults) for i in rules]]
 
     return not any(cuts)
