@@ -341,6 +341,6 @@ def pass_kincuts_new(
         except yaml.YAMLError as exception:
             print(exception)
 
-    cuts = [rule(dataset, idat) for rule in [Rule(i, defaults) for i in rules]]
+    cuts = [rule(dataset, idat) for rule in (Rule(i, defaults) for i in rules)]
 
     return not any(cuts)
