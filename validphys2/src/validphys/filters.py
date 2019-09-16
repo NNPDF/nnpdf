@@ -321,6 +321,10 @@ def pass_kincuts_new(
     dataset,
     idat: int,
     theoryid: int,
+    # TODO: check how to handle these arguments. Not needed currently
+    q2min: float,
+    w2min: float,
+    *,
     filters: str = "cuts/filters.yaml",
     defaults: str = "cuts/defaults.yaml"
 ):
