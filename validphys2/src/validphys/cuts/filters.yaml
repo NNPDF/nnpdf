@@ -9,16 +9,16 @@
   rule: "eta < 0.3"
 
 - dataset: LHCBWZMU8TEV
-  rule: "pto = 2 and eta/y >= 2.25"
+  rule: "pto = 2 and etay >= 2.25"
 
 - dataset: LHCBWZMU7TEV
-  rule: "pto = 2 and eta/y >= 2.25"
+  rule: "pto = 2 and etay >= 2.25"
 
 - dataset: D0WMASY
-  rule: "pto = 2 and eta/y >= 0.03"
+  rule: "pto = 2 and etay >= 0.03"
 
 - dataset: D0WEASY
-  rule: "pto = 2 and eta/y >= 0.03"
+  rule: "pto = 2 and etay >= 0.03"
 
 - dataset: ATLASZPT7TEV
   rule: "p_T2 < 30**2 and p_T2 > 500**2"
@@ -30,7 +30,7 @@
   rule: "p_T2 < 30**2 and p_T2 > 150**2"
 
 - dataset: CMSZDIFF12
-  rule: "p_T2 < 30**2 and p_T2 > 170**2 and eta/y > 1.6"
+  rule: "p_T2 < 30**2 and p_T2 > 170**2 and etay > 1.6"
 
 - dataset: ATLASWPT31PB
   rule: "p_T > 30"
