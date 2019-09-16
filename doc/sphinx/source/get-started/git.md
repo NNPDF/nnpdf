@@ -63,7 +63,7 @@ GitHub provides the following workflow:
 
 * For each project users can open issues, which can be used to request bug fixes, new features, new
 documentation, or simply to facilitate a general discussion. The user can then assign one or more
-people to help deal with the issue. Issues should be opened in the revelant repository. For
+people to help deal with the issue. Issues should be opened in the relevant repository. For
 example, for something that is related to validphys, one should open an issue in
 [nnpdf](https://github.com/NNPDF/nnpdf), while for something that is related to data
 implementation, one should open an issue in [buildmaster](https://github.com/NNPDF/buildmaster).
@@ -76,5 +76,5 @@ requested feature.
 * Once a feature is ready to be considered for merging into the master version of the code, a [pull
 request](https://github.com/NNPDF/nnpdf/pulls) (PR) can be opened. At least two code reviewers
 must then be assigned, after which the code will be reviewed and discussed. The modification will
-then be accepted or rejected. Further general informaton on PRs can found
+then be accepted or rejected. Further general information on PRs can found
 [here](https://help.github.com/en/articles/about-pull-requests).

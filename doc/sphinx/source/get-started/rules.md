@@ -11,7 +11,7 @@ address? If the reason for the PR has already been detailed in an issue, then th
 linked in the PR.
 
 * The PR should contain documentation describing the new features, if applicable. This obviously
-does not apply if the PR is itself proposing an addition or an alteration to the documenation.
+does not apply if the PR is itself proposing an addition or an alteration to the documentation.
 
 * If the PR is fixing a bug, information should be given such that a reviewer can reproduce the bug.
 

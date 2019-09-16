@@ -18,7 +18,7 @@ introductory section of the [vp-guide](./../vp/introduction.md).
 
 ## PDF set storage and interpolation
 
-[LHAPDF](https://lhapdf.hepforge.org/) is a C++ library that evaluates PDFs by intepolating the
+[LHAPDF](https://lhapdf.hepforge.org/) is a C++ library that evaluates PDFs by interpolating the
 discretised PDF 'grids' that PDF collaborations produce. It also gives its users access to proton
 and nuclear PDF sets from a variety of PDF collaborations, including NNPDF, MMHT and CTEQ. A list
 of all currently available PDF sets can be found on their
@@ -64,13 +64,13 @@ settings within observable calculations a posteriori. Most importantly, the user
 set used, but they can also alter the renormalisation scale, factorisation scale and the strong
 coupling constant. Without APPLgrids, such changes would usually require a full rerun of the code,
 which is very time consuming. Moreover, these features are crucial for PDF fits, where hard cross
-sections must be convoluted with different PDFs on the fly many times. APPLgrid works for hadron
+sections must be convolved with different PDFs on the fly many times. APPLgrid works for hadron
 collider processes up to NLO in QCD, although work is ongoing to also include NLO electroweak
 corrections in the APPLgrid format. In addition to the standard version of APPLgrid, a modified
 version of APPLgrid exists which includes photon channels. This is known as APPLgridphoton. To
 learn how to generate APPLgrids, please see the tutorial [here](../tutorials/APPLgrids.md).
 
-APFELcomb generates FK tables for NNPDF fits. You can read about the mechnism behind APFELcomb
+APFELcomb generates FK tables for NNPDF fits. You can read about the mechanism behind APFELcomb
 [here](https://arxiv.org/abs/1605.02070) and find more information about the theory behind FK tables
 in the [Theory section](../Theory/FastInterface.rst).
 
@@ -107,10 +107,10 @@ calculating (differential) cross sections for the Drell-Yan production of lepton
 in QCD.
 
 [NLOjet++](http://www.desy.de/~znagy/Site/NLOJet++.html) is a programme that can compute cross
-sections for a variety of processes up to NLO. The processes include electon-positron annihilation,
+sections for a variety of processes up to NLO. The processes include electron-positron annihilation,
 deep-inelastic scattering (DIS), photoproduction in electron-proton collisions, and a variety of
 processes in hadron-hadron collisions.
 
 [Top++](http://www.precision.hep.phy.cam.ac.uk/top-plus-plus/) is a programme for computing top
-quark pair production inclusive cross sections at NNLO in QCD with soft gluon resummation inluded
+quark pair production inclusive cross sections at NNLO in QCD with soft gluon resummation included
 up to next-to-next-to-leading log (NNLL).
