@@ -218,6 +218,61 @@ def experiment_result_table_68cl(experiment_result_table_no_table: pd.DataFrame,
     res = pd.concat([df.iloc[:, :2], df_cl], axis=1)
     return res
 
+@table
+def perexperiment_pdferr_chi2_table(experiments, experiment_result_table_no_table, experiments_covariance_matrix):
+    """ Generates a table containing the following data for each experiment:
+        - chi2 total taking into account pdf uncertainty
+
+        This action gets all theoretical predictions (for all replicas) and computes a cov. matrix of the th. prediction
+        which are then added to the experimental covariance matrix as independent errors.
+        The result is then used to compute a chi2 per experiment which has taken into account the pdf errors.
+
+
+        # Input:
+            - `experiments`: a list of experiment specs
+            - `experiment_result_table_no_table`: table with exp. data and  th. predictions for all replicas
+            - `experiments_covariance_matrix`: list of all experimental covariance matrices
+            - `perreplica_chi2_table`: list with the chi2 per replica per experiment
+
+        # Return:
+            - `out_df`: a dataframe where for each experiment we have the chi2 taking into account pdf uncertainty and the chi2 per replica
+    """
+    # Parse all data we are interested in from the dataframes
+    df = experiment_result_table_no_table
+    experim_data = df.iloc[:,0].T
+    central_pred = df.iloc[:,1].T
+    replica_pred = df.iloc[:,2:].T
+    cov_mats = experiments_covariance_matrix
+    pdf_chi2 = []
+    names = []
+    total_n = 0
+    # Loop over all experiments
+    for exp, (exp_cov_mat, _) in zip(experiments, cov_mats):
+        exp_name = exp.name
+        # Get the central predictions and data
+        y = experim_data[exp_name].to_numpy()
+        o = central_pred[exp_name].to_numpy()
+        n = len(y)
+        # Get the covariance matrix of the predictions
+        pred_cov_mat = replica_pred[exp_name].cov().to_numpy()
+        # Compute the new covariance matrix
+        new_covmat = exp_cov_mat + pred_cov_mat
+        inv_covmat = np.linalg.inv(new_covmat)
+        # Compute the chi2
+        tmp = y-o
+        right_dot = np.dot(inv_covmat, tmp)
+        chi_un = np.dot(tmp, right_dot)
+        chi2 = chi_un / n
+        total_n += n
+        # Save everything
+        pdf_chi2.append({
+            'pdf_chi2' : chi2,
+            })
+        names.append(exp_name)
+    out_df = pd.DataFrame(pdf_chi2, index = names)
+    return out_df
+
+
 experiments_covariance_matrix = collect('experiment_covariance_matrix', ('experiments',))
 
 
