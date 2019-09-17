@@ -9,7 +9,7 @@ Hepdata:   https://www.hepdata.net/record/ins1208923
 
 
 There are two breakdowns of uncertainties assosciated with this dataset:
-stat and sys correlations
+stat and sys correlations.
   
 Sources of sys uncertainties: 
 1) Jet Energy Scale (JET): 14 Asymmetric uncertainties correlated across all 
@@ -27,14 +27,16 @@ Sources of sys uncertainties:
    accross all mass and rapidity bins and all CMS datasets at 7 TeV, hence the 
    keyword (CMSLUMI11).
   
-3) Unfolding uncertainty: This asymmetric is correlated across all rapidity 
-   and mass bins (CORR)
+3) Unfolding uncertainty: this asymmetric is correlated across all rapidity 
+   and mass bins (CORR).
   
-4) Bin-by-Bin uncertainty: This is a symmetric uncertainty fully uncorrelated 
-   accross bins of mass and rapidity (UNCORR)
-  
-Finally, the NonPerturbative corrections are not included in this dataset, 
-since it's a source of theoretical uncertainty.
+4) Bin-by-Bin uncertainty: this is a symmetric uncertainty fully uncorrelated 
+   accross bins of mass and rapidity (UNCORR).
+
+5) NP uncertainty: this is a set of two asymmetric (theoretical) uncertainties
+   that take into account nonperturbative corrections. They are SKIP in the 
+   default implementation.
+
  */
 
 #include "CMS_2JET_7TEV.h"
@@ -176,13 +178,13 @@ void CMS_2JET_7TEVFilter::ReadData()
             fSys[index][nsys-3].name = "UNCORR";
 
 	    //Nonperturbative (theoretical) uncertainty (NP)
-	    fSys[index][nsys-2].add  = (npcorr_le - 1.)*fData[index] / sqrt(2);
-	    fSys[index][nsys-2].mult = fSys[index][nsys-2].add/fData[index] *100.;
+	    fSys[index][nsys-2].mult  = (npcorr_le - 1.)*fData[index]*100 / sqrt(2);
+	    fSys[index][nsys-2].add = fSys[index][nsys-2].mult*fData[index]/100.;
             fSys[index][nsys-2].type = MULT;
             fSys[index][nsys-2].name = "SKIP";
 
-	    fSys[index][nsys-1].add  = (npcorr_ri - 1.)*fData[index] / sqrt(2);
-	    fSys[index][nsys-1].mult = fSys[index][nsys-2].add/fData[index] *100.;
+	    fSys[index][nsys-1].mult  = (npcorr_ri - 1.)*fData[index]*100 / sqrt(2);
+	    fSys[index][nsys-1].add = fSys[index][nsys-2].add*fData[index]/100.;
             fSys[index][nsys-1].type = MULT;
             fSys[index][nsys-1].name = "SKIP";
 	    
