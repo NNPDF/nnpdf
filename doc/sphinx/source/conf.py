@@ -13,6 +13,9 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 # import sys
+#
+#
+from recommonmark.transform import AutoStructify
 
 # -- Project information -----------------------------------------------------
 
@@ -44,11 +47,17 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
+    # To generate section headings,
+    # particularly in markdown. See
+    # https://recommonmark.readthedocs.io/en/latest/#linking-to-headings-in-other-files
+    'sphinx.ext.autosectionlabel',
     'recommonmark',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
+
+# Markdown configuration
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -58,6 +67,10 @@ source_suffix = {
     '.txt': 'markdown',
     '.md': 'markdown',
 }
+
+autosectionlabel_prefix_document = True
+# Allow to embed rst syntax in  markdown files.
+enable_eval_rst = True
 
 # The master toctree document.
 master_doc = 'index'
@@ -193,3 +206,13 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+# Adapted this from
+# https://github.com/readthedocs/recommonmark/blob/ddd56e7717e9745f11300059e4268e204138a6b1/docs/conf.py
+# app setup hook
+def setup(app):
+    app.add_config_value('recommonmark_config', {
+        #'url_resolver': lambda url: github_doc_root + url,
+        'enable_eval_rst': True,
+    }, True)
+    app.add_transform(AutoStructify)
