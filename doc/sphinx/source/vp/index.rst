@@ -1,3 +1,4 @@
+.. _vp-index:
 vp-guide
 ========
 
