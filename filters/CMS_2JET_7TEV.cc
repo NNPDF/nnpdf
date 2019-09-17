@@ -136,7 +136,7 @@ void CMS_2JET_7TEVFilter::ReadData()
 
             // filling corr uncertainties
             f1 >> tmp >> tmp >> tmp >> tmp >> tmp; //skiping 5 entries including rescale quantities (unused)
-            //Here asymetric uncertainties are treated Left and Right as independent source of systematics
+            //Here asymmetric uncertainties are treated Left and Right as independent sources of systematics
             //We also read here the luminosity because it's intercalated in the columns of the covmat
             for (int isys = 0; isys < nJECsys; isys++)
             {

@@ -15,7 +15,7 @@ clustering algorithm for values of the jet radius parameter of 0.4, in a phase
 space region covering dijet mass up to 5 TeV and absolute rapidity up to 
 |y|= 3.0.
 
-The information on the experimental unceratainty is retrieved from hepdata.
+The information on the experimental uncertainty is retrieved from hepdata.
 Correlations between statistical uncertainties are taken into account.
 Systematics uncertainties are fully corrrelated in dijet mass and rapidity,
 statistical uncertainties are correlated only between different dijet mass bins 
