@@ -178,12 +178,12 @@ void CMS_2JET_7TEVFilter::ReadData()
             fSys[index][nsys-3].name = "UNCORR";
 
 	    //Nonperturbative (theoretical) uncertainty (NP)
-	    fSys[index][nsys-2].mult  = (npcorr_le - 1.)*fData[index]*100 / sqrt(2);
+	    fSys[index][nsys-2].mult  = (npcorr_le - 1.)*100 / sqrt(2);
 	    fSys[index][nsys-2].add = fSys[index][nsys-2].mult*fData[index]/100.;
             fSys[index][nsys-2].type = MULT;
             fSys[index][nsys-2].name = "SKIP";
 
-	    fSys[index][nsys-1].mult  = (npcorr_ri - 1.)*fData[index]*100 / sqrt(2);
+	    fSys[index][nsys-1].mult  = (npcorr_ri - 1.)*100 / sqrt(2);
 	    fSys[index][nsys-1].add = fSys[index][nsys-2].add*fData[index]/100.;
             fSys[index][nsys-1].type = MULT;
             fSys[index][nsys-1].name = "SKIP";
