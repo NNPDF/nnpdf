@@ -31,8 +31,8 @@
 30    MULT    CORR
 31    MULT    CORR
 32    MULT    UNCORR
-33    MULT    SKIP
-34    MULT    SKIP
+33    MULT    CORR
+34    MULT    CORR
 35    ADD    CORR
 36    ADD    CORR
 37    ADD    CORR
