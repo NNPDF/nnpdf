@@ -147,7 +147,6 @@ void CMS_2JET_7TEVFilter::ReadData()
             {
                 f1 >> sys;
                 fSys[index][isys].mult = sys / sqrt(2); //systematics are in %
-		fSys[index][isys].add  = fSys[index][isys].mult/100*fData[index];
                 fSys[index][isys].type = MULT;
                 fSys[index][isys].name = "CORR";
             }
@@ -155,19 +154,16 @@ void CMS_2JET_7TEVFilter::ReadData()
             //lumi error (corr)
             f1>>sysm>>sysp;
             fSys[index][nJECsys].mult = sysp;
-	    fSys[index][nJECsys].add  = fSys[index][nJECsys].mult/100*fData[index];
             fSys[index][nJECsys].type = MULT;
             fSys[index][nJECsys].name = "CMSLUMI11";
 
             //Unfolding (corr)
             f1>>sysm>>sysp;
             fSys[index][nJECsys + 1].mult = sysm / sqrt(2); //in percent
-	    fSys[index][nJECsys + 1].add  = fSys[index][nJECsys + 1].mult/100*fData[index];
             fSys[index][nJECsys + 1].type = MULT;
             fSys[index][nJECsys + 1].name = "CORR";
 
             fSys[index][nJECsys + 2].mult = sysp / sqrt(2); //in percent
-	    fSys[index][nJECsys + 2].add  = fSys[index][nJECsys + 2].mult/100*fData[index];
             fSys[index][nJECsys + 2].type = MULT;
             fSys[index][nJECsys + 2].name = "CORR";
 
@@ -178,13 +174,11 @@ void CMS_2JET_7TEVFilter::ReadData()
             fSys[index][nsys-3].name = "UNCORR";
 
 	    //Nonperturbative (theoretical) uncertainty (NP)
-	    fSys[index][nsys-2].mult  = (npcorr_le - 1.)*100 / sqrt(2);
-	    fSys[index][nsys-2].add = fSys[index][nsys-2].mult*fData[index]/100.;
+	    fSys[index][nsys-2].mult  = (npcorr_le - 1.) / sqrt(2);
             fSys[index][nsys-2].type = MULT;
             fSys[index][nsys-2].name = "SKIP";
 
-	    fSys[index][nsys-1].mult  = (npcorr_ri - 1.)*100 / sqrt(2);
-	    fSys[index][nsys-1].add = fSys[index][nsys-2].add*fData[index]/100.;
+	    fSys[index][nsys-1].mult  = (npcorr_ri - 1.) / sqrt(2);
             fSys[index][nsys-1].type = MULT;
             fSys[index][nsys-1].name = "SKIP";
 	    
