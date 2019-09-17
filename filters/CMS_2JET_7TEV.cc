@@ -76,6 +76,7 @@ void CMS_2JET_7TEVFilter::ReadData()
     nsys+=2; //Unfolding
     nsys+=1; //Lumi
     nsys+=1; //Bin-By-Bin
+    nsys+=2; //Nonperturbative
     //total of 32
     const int nbins = 5;
     const int bins[] = {13, 12, 11, 10, 8};
@@ -134,14 +135,17 @@ void CMS_2JET_7TEVFilter::ReadData()
             fKin1[index] = etas[iy];      // dijet rapidity
             fKin3[index] = S;             // sqrt{s}
 
+
+	    double npcorr_le, npcorr_ri;
             // filling corr uncertainties
-            f1 >> tmp >> tmp >> tmp >> tmp >> tmp; //skiping 5 entries including rescale quantities (unused)
+            f1 >> tmp >> tmp >> tmp >> npcorr_le >> npcorr_ri; //skiping 5 entries including rescale quantities (unused)
             //Here asymmetric uncertainties are treated Left and Right as independent sources of systematics
             //We also read here the luminosity because it's intercalated in the columns of the covmat
             for (int isys = 0; isys < nJECsys; isys++)
             {
                 f1 >> sys;
                 fSys[index][isys].mult = sys / sqrt(2); //systematics are in %
+		fSys[index][isys].add  = fSys[index][isys].mult/100*fData[index];
                 fSys[index][isys].type = MULT;
                 fSys[index][isys].name = "CORR";
             }
@@ -149,26 +153,39 @@ void CMS_2JET_7TEVFilter::ReadData()
             //lumi error (corr)
             f1>>sysm>>sysp;
             fSys[index][nJECsys].mult = sysp;
+	    fSys[index][nJECsys].add  = fSys[index][nJECsys].mult/100*fData[index];
             fSys[index][nJECsys].type = MULT;
             fSys[index][nJECsys].name = "CMSLUMI11";
 
             //Unfolding (corr)
             f1>>sysm>>sysp;
             fSys[index][nJECsys + 1].mult = sysm / sqrt(2); //in percent
+	    fSys[index][nJECsys + 1].add  = fSys[index][nJECsys + 1].mult/100*fData[index];
             fSys[index][nJECsys + 1].type = MULT;
             fSys[index][nJECsys + 1].name = "CORR";
 
             fSys[index][nJECsys + 2].mult = sysp / sqrt(2); //in percent
+	    fSys[index][nJECsys + 2].add  = fSys[index][nJECsys + 2].mult/100*fData[index];
             fSys[index][nJECsys + 2].type = MULT;
             fSys[index][nJECsys + 2].name = "CORR";
 
             //Bin-By-Bin (unc)
             f1>>sysm>>sysp;
-            fSys[index][nsys-1].mult = sysp; //in percent
-            fSys[index][nsys-1].type = MULT;
-            fSys[index][nsys-1].name = "UNCORR";
+            fSys[index][nsys-3].mult = sysp; //in percent
+            fSys[index][nsys-3].type = MULT;
+            fSys[index][nsys-3].name = "UNCORR";
 
-            
+	    //Nonperturbative (theoretical) uncertainty (NP)
+	    fSys[index][nsys-2].add  = (npcorr_le - 1.)*fData[index] / sqrt(2);
+	    fSys[index][nsys-2].mult = fSys[index][nsys-2].add/fData[index] *100.;
+            fSys[index][nsys-2].type = MULT;
+            fSys[index][nsys-2].name = "SKIP";
+
+	    fSys[index][nsys-1].add  = (npcorr_ri - 1.)*fData[index] / sqrt(2);
+	    fSys[index][nsys-1].mult = fSys[index][nsys-2].add/fData[index] *100.;
+            fSys[index][nsys-1].type = MULT;
+            fSys[index][nsys-1].name = "SKIP";
+	    
             // converting values to percent and filling .add values
             for (int l = 0; l < nsys; l++)
             {
