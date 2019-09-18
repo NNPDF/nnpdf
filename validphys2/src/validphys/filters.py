@@ -316,10 +316,10 @@ class Rule:
         # Return False if the rule doesn't apply to this datapoint
         if (dataset.GetSetName() != self.dataset and
             dataset.GetProc(idat)[:3] != self.process_type):
-            return False
+            return
 
         if hasattr(self, "VFNS") and self.VFNS != vfns:
-            return False
+            return
 
         self.kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
         self.kinematics_dict = dict(zip(self.variables, self.kinematics))
@@ -350,8 +350,8 @@ def pass_kincuts(
             print(exception)
         
     for rule in (Rule(initial_data=i, theoryid=theoryid, defaults=defaults) for i in rules):
-        if not rule(dataset, idat):
-            return False
-
+        rule_result = rule(dataset, idat)
+        if rule_result is not None:
+            return rule_result
 
     return True
