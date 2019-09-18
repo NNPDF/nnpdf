@@ -7,3 +7,6 @@ maxCMSDY2Dminv: 200.0
 minCMSDY2Dminv: 30.0
 maxTau: 0.080
 maxY: 0.663 
+Q2cut1_f2c: 4
+Q2cut2_f2c: 10
+xcut_f2c: 1e-3
