@@ -82,6 +82,7 @@
 #include "CMS_2JET_7TEV.h"
 #include "ATLAS_2JET_7TEV_R04.h"
 #include "ATLAS_2JET_7TEV_R06.h"
+#include "CMS_2JET_3D_8TEV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -173,6 +174,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSWMU8TEVFilter());
   target.push_back(new CMS_1JET_8TEVFilter());
   target.push_back(new CMS_2JET_7TEVFilter());
+  target.push_back(new CMS_2JET_3D_8TEVFilter());
 
  // ************************* CMSwc ******************************
 
