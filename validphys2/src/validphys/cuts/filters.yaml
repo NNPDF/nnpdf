@@ -36,8 +36,7 @@
   rule: "p_T > 30"
 
 # TODO: Fix this one
-- dataset: CMS_1JET_8TEV
-  rule: "5"
+# - dataset: CMS_1JET_8TEV
 
 - dataset: CMSDY2D11
   rule: >-
@@ -66,11 +65,9 @@
   rule: "False if (pto in (0, 1) and idat < 2) else True"
 
 # TODO: fix these 2
-- dataset: DYE886P
-  rule: "5"
+# - dataset: DYE886P
 
-- dataset: DYE605
-  rule: "5"
+# - dataset: DYE605
 
 - process_type: DIS
   rule: "Q2 <= q2min or Q2 * (1 - x) / x <= w2min"
