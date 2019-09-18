@@ -315,7 +315,12 @@ class Rule:
         # Check if filter applies for this datapoint
         # Return False if the rule doesn't apply to this datapoint
         if (dataset.GetSetName() != self.dataset and
-            dataset.GetProc(idat)[:3] != self.process_type):
+            dataset.GetProc(idat)[:3] != self.process_type[:3]):
+            return
+
+        #Handle the generalised DIS cut
+        if (self.process_type == "DIS" and
+            dataset.GetProc(idat)[:3] != "DIS"):
             return
 
         if hasattr(self, "VFNS") and self.VFNS != vfns:
@@ -348,8 +353,7 @@ def pass_kincuts(
         
     for rule in (Rule(initial_data=i, theoryid=theoryid, defaults=defaults) for i in rules):
         rule_result = rule(dataset, idat)
-        if rule_result is not None:
-            if rule_result == False:
-                return False
+        if rule_result is not None and rule_result == False:
+            return False
 
     return True
