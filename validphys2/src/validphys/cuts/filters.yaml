@@ -27,33 +27,33 @@
   rule: "p_T >= 30"
 
 - dataset: ATLASZPT8TEVYDIST
-  rule: "p_T2 < 30**2 and p_T2 > 150**2"
+  rule: "False if (p_T2 < 30**2 and p_T2 > 150**2) else True"
 
 - dataset: CMSZDIFF12
-  rule: "p_T2 < 30**2 and p_T2 > 170**2 and etay > 1.6"
+  rule: "False if (p_T2 < 30**2 or p_T2 > 170**2 or etay > 1.6) else True"
 
 - dataset: ATLASWPT31PB
   rule: "p_T > 30"
 
-# TODO: Fix this one
 # - dataset: CMS_1JET_8TEV
+#   rule: ""
 
 - dataset: CMSDY2D11
   rule: >-
-    False if (((pto == 0 and pto == 1) and 
+    False if ((pto in (0, 1) and 
     (pTmv > maxCMSDY2Dminv or pTmv < minCMSDY2Dminv or y > maxCMSDY2Dy))
     or ((pto == 2) and (pTmv > maxCMSDY2Dminv or y > maxCMSDY2Dy)))
     else True
 
 - dataset: CMSDY2D12
   rule: >-
-    False if (((pto == 0 and pto == 1) and 
+    False if ((pto in (0, 1) and 
     (pTmv > maxCMSDY2Dminv or pTmv < minCMSDY2Dminv or y > maxCMSDY2Dy))
     or ((pto == 2) and (pTmv > maxCMSDY2Dminv or y > maxCMSDY2Dy)))
     else True
 
 - dataset: ATLASZHIGHMASS49FB
-  rule: "pTmv <= maxCMSDY2Dminv"
+  rule: "False if pTmv > maxCMSDY2Dminv else True"
 
 # - dataset: LHCBLOWMASS37PB
 #   rule: "pTmv <= maxCMSDY2Dminv"
@@ -81,8 +81,8 @@
 - process_type: DIS_NCP_CH
   VFNS: FONLL-A
   rule: >-
-    False if Q2 <= Q2cut1_f2c or
-    (Q2 <= Q2cut2_f2c and x <= xcut_f2c)
+    False if (Q2 <= Q2cut1_f2c or
+    (Q2 <= Q2cut2_f2c and x <= xcut_f2c))
     else True
   
 - process_type: DIS_NCP_CH
