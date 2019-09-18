@@ -37,7 +37,7 @@
 
 # TODO: Fix this one
 - dataset: CMS_1JET_8TEV
-  rule: ""
+  rule: "5"
 
 - dataset: CMSDY2D11
   rule: >-
@@ -56,36 +56,38 @@
 - dataset: ATLASZHIGHMASS49FB
   rule: "pTmv <= maxCMSDY2Dminv"
 
-- dataset: LHCBLOWMASS37PB
-  rule: "pTmv <= maxCMSDY2Dminv"
+# - dataset: LHCBLOWMASS37PB
+#   rule: "pTmv <= maxCMSDY2Dminv"
 
-- dataset: ATLASLOMASSDY11
-  rule: "False if (pto == 0 or pto == 1) and idat < 6 else True"
+# - dataset: ATLASLOMASSDY11
+#   rule: "False if (pto == 0 or pto == 1) and idat < 6 else True"
 
 - dataset: ATLASLOMASSDY11EXT
   rule: "False if (pto in (0, 1) and idat < 2) else True"
 
+# TODO: fix these 2
+- dataset: DYE886P
+  rule: "5"
 
+- dataset: DYE605
+  rule: "5"
 
+- process_type: DIS
+  rule: "Q2 <= q2min or Q2 * (1 - x) / x <= w2min"
 
-#- dataset: EMCF2P
-  #reason: "????"
-  #rule: "x<=0.1"
+- dataset: EMCF2P
+  rule: "x > 0.1"
 
+- dataset: EMCF2D
+  rule: "x > 0.1"
 
-#- dataset: EMCF2D
-  #reason: "?????"
-  #rule: "x<=0.1"
-
-#- process_type: "DIS_NCP_CH"
-  #VFNS: "FONLL-A"
-  #reason: "?????"
-  ##Q2cut1_f2c loaded from constants.yaml
-  #rule: "Q2 < Q2cut1_f2c"
-
-
-#- process_type: "DIS_NCP_CH"
-  #reason: "?????"
-  #VFNS: "FONLL-A"
-  #rule: "(Q2 <= Q2cut2_f2c) & (x <= xcut_f2c)"
-
+- process_type: DIS_NCP_CH
+  VFNS: FONLL-A
+  rule: >-
+    False if Q2 <= Q2cut1_f2c or
+    (Q2 <= Q2cut2_f2c and x <= xcut_f2c)
+    else True
+  
+- process_type: DIS_NCP_CH
+  VFNS: FONLL-C
+  rule: "False if (Q2 <= 8 and ic) else True"
