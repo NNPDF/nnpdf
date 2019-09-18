@@ -151,7 +151,7 @@ def fit(
     # Note: In the basic scenario we are only running for one replica and thus this loop is only
     # run once and all_exp_infos is a list of just than one element
     for replica_number, exp_info, nnseed in zip(replica, all_exp_infos, nnseeds):
-        replica_path_set = replica_path / "replica_{0}".format(replica_number)
+        replica_path_set = replica_path / f"replica_{replica_number}"
         log.info("Starting replica fit %s", replica_number)
 
         # Generate a ModelTrainer object
@@ -171,7 +171,7 @@ def fit(
         # reading the data up will be done by the model_trainer
         if fitting.get("load"):
             model_file = fitting.get("loadfile")
-            log.info(" > Loading the weights from previous training from {0}", model_file)
+            log.info(" > Loading the weights from previous training from %s", model_file)
             if not os.path.isfile(model_file):
                 log.warning(" > Model file %s could not be found", model_file)
                 model_file = None
@@ -228,7 +228,7 @@ def fit(
             except ValueError as e:
                 print("Error from hyperopt because no best model was found")
                 print("@fit.py, setting the best trial to empty dict")
-                print("Exception: {0}".format(e))
+                print(f"Exception: {e}")
                 sys.exit(0)
 
             # Now update the parameters with the ones found by the scan
@@ -238,7 +238,7 @@ def fit(
             print("##################")
             print("Best model found: ")
             for k, i in true_best.items():
-                print(" {0} : {1} ".format(k, i))
+                print(f" {k} : {i} ")
         ####################################################################### end of hyperopt
 
         # Ensure hyperopt is off
@@ -301,9 +301,7 @@ def fit(
         # If the history is active, loop over it writing down the data to different paths
         for i in validation_object.history_loop():
             # Each step of the loop reloads a different point in history
-            new_path = output_path.stem + "/history_step_{0}/replica_{1}".format(
-                i, replica_number
-            )
+            new_path = output_path.stem + f"/history_step_{i}/replica_{replica_number}"
             # We need to recompute the experimental chi2 for this point
             exp_chi2 = (
                 result["experimental"]["model"].evaluate()[0]

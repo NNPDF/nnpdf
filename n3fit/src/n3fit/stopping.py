@@ -266,19 +266,16 @@ class Stopping:
         epoch = len(self.training_losses)
         loss = self.training_losses[-1]
         vl_loss = self.validation_losses[-1]
-        total_str = "\nAt epoch {0}/{1}, total loss: {2}".format(
-            epoch, self.total_epochs, loss
-        )
+        total_str = f"At epoch {epoch}/{self.total_epochs}, total loss: {loss}\n"
 
-        partials = ""
+        partials = []
         for experiment, chi2 in all_tr.items():
-            partials += "{0}: {1:.3f}".format(experiment, chi2)
+            partials.append(f"{experiment}: {chi2:.3f}")
+        total_str += ", ".join(partials)
 
-        print(total_str)
-        if partials:
-            print(partials)
+        total_str += f"\nValidation loss at this point: {vl_loss}"
+        log.info(total_str)
 
-        print(" > Validation loss at this point: {0}".format(vl_loss))
 
     def _parse_training(self, training_info):
         """
@@ -346,16 +343,18 @@ class Stopping:
         # Note: here it is assumed the validation exp set is always a subset of the training exp set
         data_list = []
         for exp, tr_loss in all_tr.items():
-            data_str = "{0}: {1} {2}".format(exp, tr_loss, all_vl.get(exp, 0.0))
+            vl_loss = all_vl.get(exp, 0.0)
+            data_str = f"{exp}: {tr_loss} {vl_loss}"
             data_list.append(data_str)
         data = "\n".join(data_list)
-        strout = """
-Epoch: {0}
-{1}
-Total: training = {2} validation = {3}
-""".format(
-            epoch + 1, data, self.training_losses[-1], self.validation_losses[-1]
-        )
+        epoch_index = epoch + 1
+        total_tr_loss = self.training_losses[-1]
+        total_vl_loss = self.validation_losses[-1]
+        strout = f"""
+Epoch: {epoch_index}
+{data}
+Total: training = {total_tr_loss} validation = {total_vl_loss}
+"""
         self.file_list.append(strout)
 
     def chi2exps_str(self):
