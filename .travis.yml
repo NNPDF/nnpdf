@@ -111,3 +111,10 @@ script:
      if [[ "$TRAVIS_OS_NAME" == "linux" ]];
      then docker exec build bash -c "cd /nnpdf/; .ciscripts/build-deploy-linux.sh";
      fi
+
+jobs:
+  include:
+    - stage: sphinx
+      os: linux
+      if: branch = master
+      script: docker exec build bash -c "cd /nnpdf/; .ciscripts/deploy-documentation.sh";

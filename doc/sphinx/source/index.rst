@@ -13,6 +13,7 @@ NNPDF documentation
    theory/index
    vp/index
    code/index
+   serverconf/index
    tutorials/index
    QA/index
 

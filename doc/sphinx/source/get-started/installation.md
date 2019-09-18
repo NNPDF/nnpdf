@@ -1,3 +1,6 @@
+```eval_rst
+.. _conda:
+```
 ## Installation using conda
 
 ### Adding RSA key to Github
