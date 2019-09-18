@@ -1,13 +1,13 @@
 """
     The constraint module include functions to impose the momentum sum rules on the PDFs
 """
+import logging
 import numpy as np
 
 from n3fit.layers import xDivide, MSR_Normalization, xIntegrator, xMultiply
 from n3fit.backends import operations
 from n3fit.backends import MetaModel
 
-import logging
 
 log = logging.getLogger(__name__)
 
@@ -42,8 +42,8 @@ def msr_impose(fit_layer, final_pdf_layer, verbose=False):
         This function receives:
             - fit_layer: the 8-basis layer of PDF which we fit
             - final_layer: the 14-basis which is fed to the fktable
-        It uses pdf_fit to compute the sum rule and returns a modified version of the final_pdf layer
-        with a normalisation by which the sum rule is imposed
+        It uses pdf_fit to compute the sum rule and returns a modified version of
+        the final_pdf layer with a normalisation by which the sum rule is imposed
     """
     # 1. Generate the fake input which will be used to integrate
     nx = int(2e3)
@@ -124,27 +124,49 @@ def check_integration(ultimate_pdf, integration_input):
     )
 
 
-def compute_arclength(fitbasis_layer):
+def layer_to_integrand(layer, xgrid, eps):
+    """
+    Given a layer (f) and a grid in x
+    return a Model corresponding to x*(f(x)-f(x-eps))
+
+    # Arguments:
+        - `layer`: layer to make into an integrand
+        - `xgrid`: grid in x (numpy array)
+        - `eps`: shift on x
+
+    # Returns:
+        - `modelito`: model corresponding to x*(f(x)-f(x-eps))
+    """
+    # Generate the input layers
+    xgrid_input = operations.numpy_to_input(xgrid)
+    xgrid_input_prime = operations.numpy_to_input(xgrid - eps)
+    f1 = layer(xgrid_input)
+    f2 = layer(xgrid_input_prime)
+    layer_diff = operations.op_subtract([f2, f1])
+    # Generate a multiplier layer
+    multiplier = xMultiply()
+    # Generate the output layer
+    output = operations.op_multiply([multiplier(xgrid_input), layer_diff])
+    modelito = MetaModel([xgrid_input, xgrid_input_prime], output)
+    return modelito
+
+
+def compute_arclength(fitbasis_layer, nx=int(1e3)):
     """
     Given the layer with the fit basis computes the arc length
+
+    # Arguments:
+        - `fitbasis_layer`: reference to the fit basis layer
+        - `nx`: number of point for the integration grid
     """
-    nx = int(1e6)
+    # Generate the input layers for the xgrid and the weight
     xgrid, weights_array = gen_integration_input(nx)
-    multiplier = xMultiply()
-    xgrid_input = operations.numpy_to_input(xgrid)
     eps = xgrid[0] / 2.0
-    xgrid_input_prime = operations.numpy_to_input(xgrid - eps)
-
-    def integrand(xgrid_input, xgrid_input_prime):
-        f1 = fitbasis_layer(xgrid_input)
-        f2 = fitbasis_layer(xgrid_input_prime)
-        pdfprime = operations.op_subtract([f2, f1])
-
-        res = operations.op_multiply([multiplier(xgrid_input), pdfprime])
-        return res
-
-    modelito = MetaModel([xgrid_input, xgrid_input_prime], integrand(xgrid_input, xgrid_input_prime))
+    # Generate the model to integrate
+    modelito = layer_to_integrand(fitbasis_layer, xgrid, eps)
+    # Compute the derivatie
     derivatives = modelito.predict(x=None, steps=1) / eps
+    # Integrates the result
     derivatives_sq = pow(derivatives, 2)
     f_of_x = np.sqrt(1.0 + derivatives_sq)
     arc_lengths = np.sum(f_of_x * weights_array, axis=0)
