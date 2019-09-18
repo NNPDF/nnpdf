@@ -279,7 +279,8 @@ def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
     return True
 
 class Rule:
-    def __init__(self, initial_data: dict, defaults: dict):
+    def __init__(self, theoryid, initial_data: dict, defaults: dict):
+        self.theoryid = theoryid
         self.dataset = None
         self.process_type = None
         for key in initial_data:
@@ -303,6 +304,9 @@ class Rule:
 
     def __call__(self, dataset, idat):
         """If this rule applies, we return True"""
+        pto = self.theoryid.get_description().get('PTO')
+        vfns = self.theoryid.get_description().get('FNS')
+        ic = self.theoryid.get_description().get('IC')
 
         # Check if filter applies for this datapoint
         # Return False if the rule doesn't apply to this datapoint
@@ -312,7 +316,7 @@ class Rule:
 
         self.kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
         self.kinematics_dict = dict(zip(self.variables, self.kinematics))
-        
+
         # Will return True if inequality is satisfied
         return eval(self.rule, {**self.defaults, **self.kinematics_dict})
 
@@ -343,6 +347,6 @@ def pass_kincuts_new(
         except yaml.YAMLError as exception:
             print(exception)
 
-    cuts = [rule(dataset, idat) for rule in (Rule(i, defaults) for i in rules)]
+    cuts = [rule(dataset, idat) for rule in (Rule(i, theoryid=theoryid, defaults) for i in rules)]
 
     return not any(cuts)
