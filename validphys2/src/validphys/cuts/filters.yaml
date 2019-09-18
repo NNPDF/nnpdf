@@ -69,7 +69,7 @@
 
 # - dataset: DYE605
 
-- process_type: DIS
+- process_type: DIS_ALL
   rule: "False if Q2 <= q2min or Q2 * (1 - x) / x <= w2min else True"
 
 - dataset: EMCF2P
