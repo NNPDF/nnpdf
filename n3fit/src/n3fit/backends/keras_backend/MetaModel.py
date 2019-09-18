@@ -7,7 +7,7 @@
 from keras.models import Model
 import keras.optimizers as Kopt
 
-from n3fit.backends.keras_backend.operations import numpy_to_tensor, numpy_to_input
+from n3fit.backends.keras_backend.operations import numpy_to_input
 
 
 class MetaModel(Model):
@@ -15,26 +15,17 @@ class MetaModel(Model):
     The goal of this class is to absorb all keras dependent code
     """
 
-    # Define in this dictionary new optimizers as well as the arguments they accept (with default values if needed be)
+    # Define in this dictionary new optimizers as well as the arguments they accept
+    # (with default values if needed be)
     optimizers = {
-            'RMSprop'  : (
-                Kopt.RMSprop, {'lr': 0.01}
-                ),
-            'Adam'     : (
-                Kopt.Adam, {'lr' : 0.01}
-                ),
-            'Adagrad'  : (
-                Kopt.Adagrad, {} ),
-            'Adadelta' : (
-                Kopt.Adadelta, {} ),
-            'Adamax'   : (
-                Kopt.Adamax, {} ),
-            'Nadam'    : (
-                Kopt.Nadam, {} ),
-            'Amsgrad'  : (
-                Kopt.Adam, {'lr' : 0.01, 'amsgrad' : True }
-                ),
-           }
+        "RMSprop": (Kopt.RMSprop, {"lr": 0.01}),
+        "Adam": (Kopt.Adam, {"lr": 0.01}),
+        "Adagrad": (Kopt.Adagrad, {}),
+        "Adadelta": (Kopt.Adadelta, {}),
+        "Adamax": (Kopt.Adamax, {}),
+        "Nadam": (Kopt.Nadam, {}),
+        "Amsgrad": (Kopt.Adam, {"lr": 0.01, "amsgrad": True}),
+    }
 
     def __init__(self, input_tensors, output_tensors, extra_tensors=None, **kwargs):
         """
@@ -45,10 +36,10 @@ class MetaModel(Model):
         The usage of placeholders will work as long as nothing outside of the ordinary is done
         i.e., it will work in that this class inherits from keras Model but all the add-ons
         of this class assume the inputs are tensors.
-        
+
         The outputs however can be freely fixed (useful when fitting to known data)
 
-        if extra_tensors are given, they should come in a list of tuples such that: 
+        if extra_tensors are given, they should come in a list of tuples such that:
             (input: np.array, output_layer: function)
         so that they can be fed to keras as output_layer(*input)
         The inputs of the extra_tensors will be turned into keras inputs.
@@ -62,7 +53,6 @@ class MetaModel(Model):
             input_list = [input_list]
         if not isinstance(output_list, list):
             output_list = [output_list]
-
 
         # Add extra tensors
         if extra_tensors is not None:
@@ -79,35 +69,41 @@ class MetaModel(Model):
 
         super(MetaModel, self).__init__(input_list, output_list, **kwargs)
 
-    def fit(self, epochs = 1, **kwargs):
+    def fit(self, epochs=1, **kwargs):
         """
-            Performs forward (and backwards) propagation for the model for a given number of epochs.
-            If the model was compiled with input and output data, there is no need for giving them in this function
+        Performs forward (and backwards) propagation for the model for a given number of epochs.
+        If the model was compiled with input and output data,
+            there is no need for giving them in this function
 
-            # Returns:
-                - `history`: a dictionary of all the output layers of the model mapped to their partial loss
-                             the partial loss containing one element for each epoch 
+        # Returns:
+            - `history`: a dictionary of all the output layers of the model
+                         each mapped to their partial loss
+                        the partial loss containing one element for each epoch
         """
         if self.has_dataset:
-            history = super().fit(x = None, y = None, steps_per_epoch = 1, batch_size = None,  epochs = epochs,  **kwargs )
+            history = super().fit(
+                x=None, y=None, steps_per_epoch=1, batch_size=None, epochs=epochs, **kwargs
+            )
         else:
-            history = super().fit(epochs = epochs, **kwargs )
+            history = super().fit(epochs=epochs, **kwargs)
         return history.history
+
     def evaluate(self, **kwargs):
         """
-            Performs keras.evaluate and returns a list of the loss function for each of the outputs of the system
+        Performs keras.evaluate and returns a list of the loss function for each of the outputs
 
-            In Keras the first element of the list is the total loss (sum of all other elements) but, if there
-            is only one output it returns a float instead. 
-            In order to fix this inconsistent behaviour when there is only one output we copy it twice into a list
-            so that it behaves the same for 1 and n > 1 elements.
+        In Keras the first element of the list is the total loss (sum of all other elements)
+        but, if there is only one output it returns a float instead.
+        In order to fix this inconsistent behaviour,
+        when there is only one output we copy it twice into a list so it behaves the same
 
-            # Returns:
-                - `loss_list`: a list with al the losses of the system
+        # Returns:
+            - `loss_list`: a list with al the losses of the system
         """
-        # TODO: make it into a dictionary of {'output_layer_name' : loss} so it looks more similar to the output of .fit
+        # TODO: make it into a dictionary of {'output_layer_name' : loss}
+        #                          so it looks more similar to the output of .fit
         if self.has_dataset:
-            result = super().evaluate(x = None, y = None, steps = 1, **kwargs)
+            result = super().evaluate(x=None, y=None, steps=1, **kwargs)
         else:
             result = super().evaluate()
         if isinstance(result, float):
@@ -115,9 +111,9 @@ class MetaModel(Model):
         else:
             return result
 
-
-
-    def compile(self, optimizer_name="RMSprop", learning_rate=0.05, loss=None, target_output = None, **kwargs):
+    def compile(
+        self, optimizer_name="RMSprop", learning_rate=0.05, loss=None, target_output=None, **kwargs
+    ):
         """
         Compile the model given an optimizer and a list of loss functions.
         The optimizer must be one of those implemented in the `optimizer` attribute of this class.
@@ -157,4 +153,6 @@ class MetaModel(Model):
         if target_output is not None:
             self.has_dataset = True
 
-        super(MetaModel, self).compile(optimizer=opt, loss=loss, target_tensors = target_output,**kwargs)
+        super(MetaModel, self).compile(
+            optimizer=opt, loss=loss, target_tensors=target_output, **kwargs
+        )

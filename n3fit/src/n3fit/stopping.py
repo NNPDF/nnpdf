@@ -125,7 +125,7 @@ class Stopping:
     @loss.getter
     def loss(self):
         """
-        If there is a best epoch (`e_best_chi2`) defined, will return the validation loss at that point
+        If there is a best epoch (`e_best_chi2`) defined, returns the validation loss at that point
         otherwise return the value saved as best_chi2
         """
         if self.e_best_chi2:
@@ -135,7 +135,7 @@ class Stopping:
 
     def tr_loss(self):
         """
-        If there is a best epoch (`e_best_chi2`) defined, will return the training loss at that point
+        If there is a best epoch (`e_best_chi2`) defined, returns the training loss at that point
         otherwise returns the last training loss saved
         """
         if self.e_best_chi2:
@@ -210,7 +210,8 @@ class Stopping:
                 self.best_chi2 = TERRIBLE_CHI2
             return False
 
-        # Step 2. Read the validation loss (if there is no validation loss it will correspond to the training)
+        # Step 2. Read the validation loss
+        #         (if there is no validation loss it will correspond to the training)
         vl_chi2, all_vl = self.validation.loss()
 
         # Step 3. Store all information about the run
@@ -265,7 +266,9 @@ class Stopping:
         epoch = len(self.training_losses)
         loss = self.training_losses[-1]
         vl_loss = self.validation_losses[-1]
-        total_str = "\nAt epoch {0}/{1}, total loss: {2}".format(epoch, self.total_epochs, loss)
+        total_str = "\nAt epoch {0}/{1}, total loss: {2}".format(
+            epoch, self.total_epochs, loss
+        )
 
         partials = ""
         for experiment, chi2 in all_tr.items():
@@ -305,7 +308,7 @@ class Stopping:
         total_points = 0
         total_loss = 0
         for exp_name, npoints in self.ndata_tr_dict.items():
-            loss = np.mean(hobj[exp_name + "_loss"]) 
+            loss = np.mean(hobj[exp_name + "_loss"])
             tr_chi2[exp_name] = loss / npoints
             total_points += npoints
             total_loss += loss
@@ -344,7 +347,7 @@ class Stopping:
         data_list = []
         for exp, tr_loss in all_tr.items():
             data_str = "{0}: {1} {2}".format(exp, tr_loss, all_vl.get(exp, 0.0))
-            data_list.append( data_str )
+            data_list.append(data_str)
         data = "\n".join(data_list)
         strout = """
 Epoch: {0}
@@ -374,7 +377,8 @@ class Validation:
         same dataset being included in the fitting.
 
         # Arguments:
-            - `model`: the model with the validation mask applied (and compiled with the validation data and covmat)
+            - `model`: the model with the validation mask applied
+                       (and compiled with the validation data and covmat)
     """
 
     def __init__(self, model, ndata_dict, verbose=False):
@@ -405,7 +409,9 @@ class Validation:
         vl_dict = {}
         total_points = 0
         total_loss = 0
-        for loss, (exp_name, npoints) in zip(loss_list[1:1+self.n_val_exp], self.ndata_dict.items()):
+        for loss, (exp_name, npoints) in zip(
+            loss_list[1 : 1 + self.n_val_exp], self.ndata_dict.items()
+        ):
             vl_dict[exp_name] = loss / npoints
             total_loss += loss
             total_points += npoints
@@ -533,6 +539,6 @@ class HistoryMaker:
         in history
         """
         for i in range(self.len_history()):
-            log.info("Reloading step {0}".format(i))
+            log.info("Reloading step %d", i)
             self.reload(i)
             yield i

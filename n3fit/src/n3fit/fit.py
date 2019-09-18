@@ -29,17 +29,19 @@ def fit(
     """
         This action will (upon having read a validcard) process a full PDF fit for a given replica.
 
-        The input to this function is provided by validphys and defined in the runcards or commandline arguments.
+        The input to this function is provided by validphys
+        and/or defined in the runcards or commandline arguments.
 
         The workflow of this controller is as follows:
-        1. Using the replica number and the seeds defined in the runcard, generates a seed for everything
+        1. Generates seeds using the replica number and the seeds defined in the runcard,
         2. Read up all datasets from the given experiments and create the necessary replicas
             2.1 Read up also the positivity sets
-        3. Generate a ModelTrainer object which hold all information to create the NN and perform a fit
+        3. Generate a ModelTrainer object holding information to create the NN and perform a fit
             (at this point no NN object has been generated)
-            3.1 (if hyperopt) generates the hyperopt scanning dictionary taking as a base the fitting dictionary
-                              and the hyperscan dictionary defined in the runcard
-        4. Pass the dictionary of parameters to ModelTrainer for the NN to be generated and the fit performed
+            3.1 (if hyperopt) generates the hyperopt scanning dictionary
+                    taking as a base the fitting dictionary  and the runcard's hyperscan dictionary
+        4. Pass the dictionary of parameters to ModelTrainer
+                                        for the NN to be generated and the fit performed
             4.1 (if hyperopt) Loop over point 4 for `hyperopt` number of times
         5. Once the fit is finished, output the PDF grid and accompanying files
 
@@ -132,15 +134,17 @@ def fit(
     all_exp_infos = [[] for _ in replica]
     # First loop over the experiments
     for exp in experiments:
-        log.info("Loading experiment: {0}".format(exp))
-        all_exp_dicts = reader.common_data_reader(exp, t0pdfset, replica_seeds=mcseeds, trval_seeds=trvalseeds)
+        log.info("Loading experiment: %s", exp)
+        all_exp_dicts = reader.common_data_reader(
+            exp, t0pdfset, replica_seeds=mcseeds, trval_seeds=trvalseeds
+        )
         for i, exp_dict in enumerate(all_exp_dicts):
             all_exp_infos[i].append(exp_dict)
 
     # Now read all the positivity datasets
     pos_info = []
     for pos_set in posdatasets:
-        log.info("Loading positivity dataset {0}".format(pos_set))
+        log.info("Loading positivity dataset %s", pos_set)
         pos_dict = reader.positivity_reader(pos_set)
         pos_info.append(pos_dict)
 
@@ -148,10 +152,10 @@ def fit(
     # run once and all_exp_infos is a list of just than one element
     for replica_number, exp_info, nnseed in zip(replica, all_exp_infos, nnseeds):
         replica_path_set = replica_path / "replica_{0}".format(replica_number)
-        log.info("Starting replica fit {0}".format(replica_number))
+        log.info("Starting replica fit %s", replica_number)
 
         # Generate a ModelTrainer object
-        # this object holds all necessary information to train a PDF (still no information about the NN)
+        # this object holds all necessary information to train a PDF (up to the NN definition)
         the_model_trainer = ModelTrainer(
             exp_info,
             pos_info,
@@ -167,9 +171,9 @@ def fit(
         # reading the data up will be done by the model_trainer
         if fitting.get("load"):
             model_file = fitting.get("loadfile")
-            log.info(" > Loading the weights from previous training from {0}".format(model_file))
+            log.info(" > Loading the weights from previous training from {0}", model_file)
             if not os.path.isfile(model_file):
-                log.warning(" > Model file {0} could not be found".format(model_file))
+                log.warning(" > Model file %s could not be found", model_file)
                 model_file = None
             else:
                 the_model_trainer.model_file = model_file
@@ -208,7 +212,9 @@ def fit(
             the_model_trainer.set_hyperopt(True, keys=the_scanner.hyper_keys)
 
             # Generate Trials object
-            trials = filetrials.FileTrials(replica_path_set, log=log, parameters=parameters)
+            trials = filetrials.FileTrials(
+                replica_path_set, log=log, parameters=parameters
+            )
 
             # Perform the scan
             try:
@@ -252,7 +258,7 @@ def fit(
         integrator_input = result["integrator_input"]
         true_chi2 = result["loss"]
         training = result["training"]
-        log.info("Total exp chi2: {0}".format(true_chi2))
+        log.info("Total exp chi2: %s", true_chi2)
 
         # Where has the stopping point happened (this is only for debugging purposes)
         print(
@@ -274,13 +280,19 @@ def fit(
             """
             Receives an array, returns the result of the PDF for said array
             """
-            modelito = MetaModel([integrator_input], [], extra_tensors=[(export_xgrid, layer_pdf)])
+            modelito = MetaModel(
+                [integrator_input], [], extra_tensors=[(export_xgrid, layer_pdf)]
+            )
             result = modelito.predict(x=None, steps=1)
             return result
 
         # Generate the writer wrapper
         writer_wrapper = WriterWrapper(
-            replica_number, pdf_function, validation_object, layers["fitbasis"], theoryid.get_description().get("Q0") ** 2
+            replica_number,
+            pdf_function,
+            validation_object,
+            layers["fitbasis"],
+            theoryid.get_description().get("Q0") ** 2,
         )
 
         # Now write the data down
@@ -289,9 +301,14 @@ def fit(
         # If the history is active, loop over it writing down the data to different paths
         for i in validation_object.history_loop():
             # Each step of the loop reloads a different point in history
-            new_path = output_path.stem + "/history_step_{0}/replica_{1}".format(i, replica_number)
+            new_path = output_path.stem + "/history_step_{0}/replica_{1}".format(
+                i, replica_number
+            )
             # We need to recompute the experimental chi2 for this point
-            exp_chi2 = result["experimental"]["model"].evaluate()[0] / result["experimental"]["ndata"]
+            exp_chi2 = (
+                result["experimental"]["model"].evaluate()[0]
+                / result["experimental"]["ndata"]
+            )
             writer_wrapper.write_data(new_path, output_path.stem, exp_chi2)
 
         # So every time we want to capture output_path.stem and addd a history_step_X
@@ -300,7 +317,7 @@ def fit(
     # Save the weights to some file
     if fitting.get("save"):
         model_file = fitting.get("savefile")
-        log.info(" > Saving the weights for future in {0}".format(model_file))
+        log.info(" > Saving the weights for future in %s", model_file)
         training["model"].save_weights(model_file)
 
     # Plot the validation and the training losses
@@ -308,5 +325,7 @@ def fit(
         validation_object.plot()
 
     # print out the integration of the sum rule in case we want to check it's not broken
+
+
 #     import n3fit.msr as msr_constraints
-    # msr_constraints.check_integration(layer_pdf, integrator_input)
+# msr_constraints.check_integration(layer_pdf, integrator_input)

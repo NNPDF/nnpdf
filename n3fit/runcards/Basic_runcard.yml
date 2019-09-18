@@ -80,7 +80,7 @@ fitting:
     initializer: 'glorot_normal'
     learning_rate: 0.01
     optimizer: 'RMSprop'
-    epochs: 90
+    epochs: 900
     pos_multiplier: 1.05
     pos_initial:  # believe the pos_lambda below 
     stopping_patience: 0.30 # percentage of the number of epochs

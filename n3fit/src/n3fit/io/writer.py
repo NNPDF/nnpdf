@@ -5,8 +5,8 @@
     so previously active scripts can still work.
 """
 
-import numpy as np
 import os
+import numpy as np
 from reportengine.compat import yaml
 from n3fit.msr import compute_arclength
 
@@ -70,8 +70,10 @@ class WriterWrapper:
 
 
 def evln2lha(evln):
-    # evln Basis {"PHT","SNG","GLU","VAL","V03","V08","V15","V24","V35","T03","T08","T15","T24","T35"};
-    # lha Basis: {"TBAR","BBAR","CBAR","SBAR","UBAR","DBAR","GLUON","D","U","S","C","B","T","PHT"}
+    # evln Basis
+    # {"PHT","SNG","GLU","VAL","V03","V08","V15","V24","V35","T03","T08","T15","T24","T35"};
+    # lha Basis:
+    # {"TBAR","BBAR","CBAR","SBAR","UBAR","DBAR","GLUON","D","U","S","C","B","T","PHT"}
     lha = np.zeros(evln.shape)
     lha[13] = evln[0]
 
@@ -143,10 +145,12 @@ def storefit(
     pos_state,
 ):
     """
-    One-trick function which generates all output in the NNPDF format so that all other scripts can still be used.
+    One-trick function which generates all output in the NNPDF format
+    so that all other scripts can still be used.
 
     # Argument:
-        - `pdf_function`: PDF function (usually the .predict method of a model) that receives as input a point in x and returns an array of 14 flavours
+        - `pdf_function`: PDF function (usually the .predict method of a model)
+                        that receives as input a point in x and returns an array of 14 flavours
         - `replica` : the replica index
         - `replica_path` : path for this replica
         - `fitname` : name of the fit
