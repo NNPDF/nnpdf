@@ -59,7 +59,7 @@ Implemented by TG July 2019.
 */
 
 
-#include "ATLAS.h"
+#include "ATLAS_1JET_8TEV_R06.h"
 
 void ATLAS_1JET_8TEV_R06Filter::ReadData()
 {

@@ -99,7 +99,7 @@ Implemented by TG May 2019. Revised by ERN May 2019.
 */
 
 
-#include "CMS.h"
+#include "CMS_1JET_8TEV.h"
 
 void CMS_1JET_8TEVFilter::ReadData()
 {
