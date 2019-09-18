@@ -6,13 +6,13 @@
 
 - dataset: ATLAS1JET11
   reason: "Because I wanted to"
-  rule: "eta < 0.3"
+  rule: "True if eta < 0.3 else False"
 
 - dataset: LHCBWZMU8TEV
-  rule: "pto == 2 and etay >= 2.25"
+  rule: "True if pto == 2 and etay >= 2.25 else False"
 
 - dataset: LHCBWZMU7TEV
-  rule: "pto == 2 and etay >= 2.25"
+  rule: "True if pto == 2 and etay >= 2.25 else False"
 
 - dataset: D0WMASY
   rule: "pto == 2 and etay >= 0.03"
@@ -21,7 +21,7 @@
   rule: "pto == 2 and etay >= 0.03"
 
 - dataset: ATLASZPT7TEV
-  rule: "p_T2 < 30**2 and p_T2 > 500**2"
+  rule: "False if (p_T2 < 30**2 or p_T2 > 500**2) else True"
 
 - dataset: ATLASZPT8TEVMDIST
   rule: "p_T >= 30"
