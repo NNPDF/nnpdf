@@ -329,6 +329,13 @@ class Rule:
 
 
 path = "/home/shayan/nnpdfgit/nnpdf/validphys2/src/validphys/"
+with open(path+"cuts/filters.yaml", "r") as rules_stream,\
+     open(path+"cuts/defaults.yaml", "r") as defaults_stream:
+    try:
+        rules = yaml.safe_load(rules_stream)
+        defaults = yaml.safe_load(defaults_stream)
+    except yaml.YAMLError as exception:
+        print(exception)
 def pass_kincuts(
     dataset,
     idat: int,
@@ -336,18 +343,8 @@ def pass_kincuts(
     # TODO: check how to handle these arguments. Not needed currently
     q2min: float,
     w2min: float,
-    *,
-    filters: str = path+"cuts/filters.yaml",
-    defaults: str = path+"cuts/defaults.yaml"
 ):
     # TODO: Add docstring
-
-    with open(filters, "r") as rules_stream, open(defaults, "r") as defaults_stream:
-        try:
-            rules = yaml.safe_load(rules_stream)
-            defaults = yaml.safe_load(defaults_stream)
-        except yaml.YAMLError as exception:
-            print(exception)
         
     for rule in (Rule(initial_data=i, theoryid=theoryid, defaults=defaults) for i in rules):
         rule_result = rule(dataset, idat)
