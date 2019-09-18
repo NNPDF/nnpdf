@@ -349,6 +349,7 @@ def pass_kincuts(
     for rule in (Rule(initial_data=i, theoryid=theoryid, defaults=defaults) for i in rules):
         rule_result = rule(dataset, idat)
         if rule_result is not None:
-            return rule_result
+            if rule_result == False:
+                return False
 
     return True
