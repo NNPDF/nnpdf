@@ -9,16 +9,16 @@
   rule: "eta < 0.3"
 
 - dataset: LHCBWZMU8TEV
-  rule: "pto = 2 and etay >= 2.25"
+  rule: "pto == 2 and etay >= 2.25"
 
 - dataset: LHCBWZMU7TEV
-  rule: "pto = 2 and etay >= 2.25"
+  rule: "pto == 2 and etay >= 2.25"
 
 - dataset: D0WMASY
-  rule: "pto = 2 and etay >= 0.03"
+  rule: "pto == 2 and etay >= 0.03"
 
 - dataset: D0WEASY
-  rule: "pto = 2 and etay >= 0.03"
+  rule: "pto == 2 and etay >= 0.03"
 
 - dataset: ATLASZPT7TEV
   rule: "p_T2 < 30**2 and p_T2 > 500**2"
@@ -34,6 +34,39 @@
 
 - dataset: ATLASWPT31PB
   rule: "p_T > 30"
+
+# TODO: Fix this one
+- dataset: CMS_1JET_8TEV
+  rule: ""
+
+- dataset: CMSDY2D11
+  rule: >-
+    False if (((pto == 0 and pto == 1) and 
+    (pTmv > maxCMSDY2Dminv or pTmv < minCMSDY2Dminv or y > maxCMSDY2Dy))
+    or ((pto == 2) and (pTmv > maxCMSDY2Dminv or y > maxCMSDY2Dy)))
+    else True
+
+- dataset: CMSDY2D12
+  rule: >-
+    False if (((pto == 0 and pto == 1) and 
+    (pTmv > maxCMSDY2Dminv or pTmv < minCMSDY2Dminv or y > maxCMSDY2Dy))
+    or ((pto == 2) and (pTmv > maxCMSDY2Dminv or y > maxCMSDY2Dy)))
+    else True
+
+- dataset: ATLASZHIGHMASS49FB
+  rule: "pTmv <= maxCMSDY2Dminv"
+
+- dataset: LHCBLOWMASS37PB
+  rule: "pTmv <= maxCMSDY2Dminv"
+
+- dataset: ATLASLOMASSDY11
+  rule: "False if (pto == 0 or pto == 1) and idat < 6 else True"
+
+- dataset: ATLASLOMASSDY11EXT
+  rule: "False if (pto in (0, 1) and idat < 2) else True"
+
+
+
 
 #- dataset: EMCF2P
   #reason: "????"
