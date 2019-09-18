@@ -36,42 +36,6 @@ class MetaModel(Model):
                 ),
            }
 
-    def fit(self, epochs = 1, **kwargs):
-        """
-            Performs forward (and backwards) propagation for the model for a given number of epochs.
-            If the model was compiled with input and output data, there is no need for giving them in this function
-
-            # Returns:
-                - `history`: a dictionary of all the output layers of the model mapped to their partial loss
-                             the partial loss containing one element for each epoch 
-        """
-        if self.data_set:
-            history = super().fit(x = None, y = None, steps_per_epoch = 1, batch_size = None,  epochs = epochs,  **kwargs )
-        else:
-            history = super().fit(epochs = epochs, **kwargs )
-        return history.history
-    def evaluate(self, **kwargs):
-        """
-            Performs keras.evaluate and returns a list of the loss function for each of the outputs of the system
-
-            In Keras the first element of the list is the total loss (sum of all other elements) but, if there
-            is only one output it returns a float instead. 
-            In order to fix this inconsistent behaviour when there is only one output we copy it twice into a list
-            so that it behaves the same for 1 and n > 1 elements.
-
-            # Returns:
-                - `loss_list`: a list with al the losses of the system
-        """
-        # TODO: make it into a dictionary of {'output_layer_name' : loss} so it looks more similar to the output of .fit
-        if self.data_set:
-            result = super().evaluate(x = None, y = None, steps = 1, **kwargs)
-        else:
-            result = super().evaluate()
-        if isinstance(result, float):
-            return [result, result]
-        else:
-            return result
-
     def __init__(self, input_tensors, output_tensors, extra_tensors=None, **kwargs):
         """
         This class behaves as keras.models.Model with the add on of extra_tensors.
@@ -89,7 +53,7 @@ class MetaModel(Model):
         so that they can be fed to keras as output_layer(*input)
         The inputs of the extra_tensors will be turned into keras inputs.
         """
-        self.data_set = None
+        self.has_dataset = False
 
         input_list = input_tensors
         output_list = output_tensors
@@ -115,16 +79,61 @@ class MetaModel(Model):
 
         super(MetaModel, self).__init__(input_list, output_list, **kwargs)
 
+    def fit(self, epochs = 1, **kwargs):
+        """
+            Performs forward (and backwards) propagation for the model for a given number of epochs.
+            If the model was compiled with input and output data, there is no need for giving them in this function
+
+            # Returns:
+                - `history`: a dictionary of all the output layers of the model mapped to their partial loss
+                             the partial loss containing one element for each epoch 
+        """
+        if self.has_dataset:
+            history = super().fit(x = None, y = None, steps_per_epoch = 1, batch_size = None,  epochs = epochs,  **kwargs )
+        else:
+            history = super().fit(epochs = epochs, **kwargs )
+        return history.history
+    def evaluate(self, **kwargs):
+        """
+            Performs keras.evaluate and returns a list of the loss function for each of the outputs of the system
+
+            In Keras the first element of the list is the total loss (sum of all other elements) but, if there
+            is only one output it returns a float instead. 
+            In order to fix this inconsistent behaviour when there is only one output we copy it twice into a list
+            so that it behaves the same for 1 and n > 1 elements.
+
+            # Returns:
+                - `loss_list`: a list with al the losses of the system
+        """
+        # TODO: make it into a dictionary of {'output_layer_name' : loss} so it looks more similar to the output of .fit
+        if self.has_dataset:
+            result = super().evaluate(x = None, y = None, steps = 1, **kwargs)
+        else:
+            result = super().evaluate()
+        if isinstance(result, float):
+            return [result, result]
+        else:
+            return result
+
+
+
     def compile(self, optimizer_name="RMSprop", learning_rate=0.05, loss=None, target_output = None, **kwargs):
         """
         Compile the model given an optimizer and a list of loss functions.
         The optimizer must be one of those implemented in the `optimizer` attribute of this class.
 
-        Optionally a learning rate and a list of target outpout can be defined.
+        Options:
+            - A learning rate and a list of target outpout can be defined.
+                These will be passed down to the optimizer.
+            - A `target_output` can be defined. If done in this way
+                (for instance because we know the target data will be the same for the whole fit)
+                the data will be compiled together with the model and won't be necessary to
+                input it again in .fit()
 
         # Arguments:
             - `optimizer_name`: string defining the optimizer to be used
-            - `learning_rate`: learning rate of of the optimizer (if accepted as an argument, if not it will be ignored)
+            - `learning_rate`: learning rate of of the optimizer
+                                (if accepted as an argument, if not it will be ignored)
             - `loss` : list of loss functions to be pass to the model
             - `target_output`: list of outputs to compare the results to during fitting/evaluation
                                if given further calls to fit/evaluate must be done with y = None.
@@ -146,6 +155,6 @@ class MetaModel(Model):
         opt = opt_function(**opt_args)
 
         if target_output is not None:
-            self.data_set = True
+            self.has_dataset = True
 
         super(MetaModel, self).compile(optimizer=opt, loss=loss, target_tensors = target_output,**kwargs)

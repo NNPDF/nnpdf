@@ -62,6 +62,7 @@ class ModelTrainer:
             - `pass_status`: flag to signal a good run
             - `failed_status`: flag to signal a bad run
             - `debug`: flag to activate some debug options
+            - `save_history_each`: if set, save the state of the fit every `save_history_each` epochs
         """
 
         # Save all input information
@@ -135,16 +136,18 @@ class ModelTrainer:
     ###########################################################################
     def _fill_the_dictionaries(self):
         """
-        This function fills the following dictionaries with fixed information,
+        This function fills the following dictionaries
             -`training`: data for the fit
             -`validation`: data which for the stopping
             -`experimental`: 'true' data, only used for reporting purposes
             -`ndata_dict`: a dictionary containing 'name of experiment' : Number Of Points
+        with fixed information.
 
-        Note: the dictionaries will be used at different stages filled with information that will be cleaned at every
-        hyperopt iteration. If not running hyperopt, the fixed-nonfixed thing makes no difference.
+        Fixed information: information which will not change between different runs of the code.
+        This information does not depend on the parameters of the fit at any stage
+        and so it will remain unchanged between different runs of the hyperoptimizer.
 
-        The fixed information (i.e., non dependant on the parameters of the fit) contained in those dictionaries:
+        The aforementioned information corresponds to:
             - `expdata`: experimental data
             - `name`: names of the experiment
             - `ndata`: number of experimental points

@@ -12,13 +12,35 @@ from n3fit.msr import compute_arclength
 
 
 class WriterWrapper:
-    def __init__(self, pdf_function, validation_object, fitbasis_layer, q2):
+    def __init__(self, replica_number, pdf_function, validation_object, fitbasis_layer, q2):
+        """
+        Initializes the writer for one given replica. This is decoupled from the writing
+        of the fit in order to fix some of the variables which would be, in principle,
+        be shared by several different history objects.
+
+        # Arguments:
+            - `replica_number`: index of the replica
+            - `pdf_function`: function to evaluate with a grid in x to generate a pdf
+            - `validation_object`: a stopping.Validation object
+            - `fitbasis_layer`: the layer corresponding to the fitbasis, necessary to
+                                compute the arclength
+            - `q2`: q^2 of the fit
+        """
+        self.replica_number = replica_number
         self.pdf_function = pdf_function
         self.validation_object = validation_object
         self.fitbasis = fitbasis_layer
         self.q2 = q2
 
-    def write_data(self, replica_number, replica_path_set, output_path, true_chi2):
+    def write_data(self, replica_path_set, fitname, true_chi2):
+        """
+        Wrapper around the `storefit` function.
+
+        # Argument:
+            - `replica_path_set`: path for the replica
+            - `fitname`: name of the fit
+            - `true_chi2`: chi2 of the replica to the central experimental data
+        """
         # Compute the arclengths
         arc_lengths = compute_arclength(self.fitbasis)
         # Construct the chi2exp file
@@ -32,9 +54,9 @@ class WriterWrapper:
         # export PDF grid to file
         storefit(
             self.pdf_function,
-            replica_number,
+            self.replica_number,
             replica_path_set,
-            output_path,
+            fitname,
             self.q2,
             self.validation_object.epoch_of_the_stop,
             self.validation_object.loss,

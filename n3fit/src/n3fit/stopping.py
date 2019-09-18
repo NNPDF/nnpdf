@@ -23,10 +23,10 @@ POS_BAD = "POS_VETO"
 
 def parse_ndata(ndata_dict):
     """
-    Parses the ndata dictionary into training a validation
+    Parses the ndata dictionary into training and validation
     dictionaries
 
-    Ignores entires for "total" and positivity sets.
+    Ignores entries for "total" and positivity sets.
 
     # Return:
         - `tr_ndata`: dictionary of {'exp' : ndata}
@@ -91,6 +91,7 @@ class Stopping:
         self.positivity = Positivity(threshold_positivity)
 
         # Initialize internal (useful) variables
+        self.save_history = False
         self.stop_now = False
         self.nan_found = False
         self.dont_stop = dont_stop
@@ -109,7 +110,9 @@ class Stopping:
         self.reset_stats()
 
         # Initialize the animation saver
-        self.history_maker = HistoryMaker(self, save_each)  # how evil is this?
+        if save_each:
+            self.history_maker = HistoryMaker(self, save_each)  # how evil is this?
+            self.save_history = True
 
     # In order to get the validation and training loss we return the loss of the best epoch
     # the reason we do this is the HistoryMaker, the easiest and cleanest way of rewinding history
@@ -152,10 +155,10 @@ class Stopping:
         """
         Loop over the history object
         If history is active will return an iterable object ranging from 0 to n_steps saved
-        Each iteration of the loop will reload the corresponding point in history (weights and chi2s)
+        Each iteration of the loop reloads the corresponding point in history (weights and chi2s)
         """
-        if self.history_maker.history_active():
-            return self.history_maker.loop()
+        if self.save_history:
+            return self.history_maker
         else:
             return []
 
@@ -182,7 +185,7 @@ class Stopping:
 
         Returns True if the run seems ok and False if a NaN is found
 
-        # ArgumentS:
+        # Arguments:
             - `training_info`: the output of a .fit() run
             - `epoch`: the index of the epoch
 
@@ -232,7 +235,8 @@ class Stopping:
             self.print_current_stats(all_tr)
 
         # Call the history maker, if it was not active this call will do nothing
-        self.history_maker.save(epoch)
+        if self.save_history:
+            self.history_maker.save(epoch)
 
         # If your patience has ended, prepare for stop
         if self.stopping_degree > self.stopping_patience:
@@ -336,11 +340,12 @@ class Stopping:
             - `all_tr`: dictionary of experiment names and their corresponding chi2 (training)
             - `all_vl`: dictionary of experiment names and their corresponding chi2 (validation)
         """
-        data = ""
         # Note: here it is assumed the validation exp set is always a subset of the training exp set
+        data_list = []
         for exp, tr_loss in all_tr.items():
-            vl_loss = all_vl.get(exp, 0.0)
-            data += "\n{0}: {1} {2}".format(exp, tr_loss, vl_loss)
+            data_str = "{0}: {1} {2}".format(exp, tr_loss, all_vl.get(exp, 0.0))
+            data_list.append( data_str )
+        data = "\n".join(data_list)
         strout = """
 Epoch: {0}
 {1}
@@ -411,18 +416,13 @@ class Validation:
 
     @property
     def weights(self):
-        """ Weights of the NN """
-        return self.model.weights
+        """ Returns the weights of the validation model """
+        return self.model.get_weights()
 
     @weights.setter
     def weights(self, weights):
         """  Sets the weights on the validation model """
         self.model.set_weights(weights)
-
-    @weights.getter
-    def weights(self):
-        """ Returns the weights of the validation model """
-        return self.model.get_weights()
 
     def loss(self):
         """
@@ -518,8 +518,6 @@ class HistoryMaker:
         # Argument:
             - `index`: the index of the history element ot reload
         """
-        if not self.save_each:
-            return
         info = self.all_history[index]
         self.stopping_object.epoch_of_the_stop = info[0]
         self.stopping_object.e_best_chi2 = info[1]
@@ -527,11 +525,7 @@ class HistoryMaker:
         self.stopping_object.partial_log = info[3]
         self.stopping_object.reload_model()
 
-    def history_active(self):
-        """ Returns true if the HistoryMaker is active """
-        return bool(self.save_each)
-
-    def loop(self):
+    def __iter__(self):
         """
         Loop over the history objects. Returns an iterable following the index of the
         models stored.

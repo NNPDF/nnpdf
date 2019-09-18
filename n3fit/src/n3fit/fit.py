@@ -280,11 +280,11 @@ def fit(
 
         # Generate the writer wrapper
         writer_wrapper = WriterWrapper(
-            pdf_function, validation_object, layers["fitbasis"], theoryid.get_description().get("Q0") ** 2
+            replica_number, pdf_function, validation_object, layers["fitbasis"], theoryid.get_description().get("Q0") ** 2
         )
 
         # Now write the data down
-        writer_wrapper.write_data(replica_number, replica_path_set, output_path.stem, true_chi2)
+        writer_wrapper.write_data(replica_path_set, output_path.stem, true_chi2)
 
         # If the history is active, loop over it writing down the data to different paths
         for i in validation_object.history_loop():
@@ -292,7 +292,7 @@ def fit(
             new_path = output_path.stem + "/history_step_{0}/replica_{1}".format(i, replica_number)
             # We need to recompute the experimental chi2 for this point
             exp_chi2 = result["experimental"]["model"].evaluate()[0] / result["experimental"]["ndata"]
-            writer_wrapper.write_data(replica_number, new_path, output_path.stem, exp_chi2)
+            writer_wrapper.write_data(new_path, output_path.stem, exp_chi2)
 
         # So every time we want to capture output_path.stem and addd a history_step_X
         # parallel to the nnfit folder
