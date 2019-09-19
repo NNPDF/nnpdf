@@ -17,15 +17,14 @@ from validphys.config import EnvironmentError_, ConfigError
 from reportengine import colors
 from reportengine.compat import yaml
 
-# Set use_t0 true here for backwards compatibility. Causes fit covmats to
-# use t0 prescription
+
 N3FIT_FIXED_CONFIG = dict(
     use_cuts = 'internal',
     use_t0 = True,
     actions_ = ['datacuts::theory fit']
 )
 
-N3FIT_PROVIDERS = ["n3fit.fit", "validphys.results"]
+N3FIT_PROVIDERS = ["n3fit.fit"]
 
 log = logging.getLogger(__name__)
 

@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 def fit(
     fitting,
     experiments,
-    experiments_covariance_matrix,
+    t0set,
     replica,
     replica_path,
     output_path,
@@ -46,9 +46,8 @@ def fit(
         # Arguments:
             - `fitting`: dictionary with the hyperparameters of the fit
             - `experiments`: vp list of experiments to be included in the fit
-            - `experiments_covariance_matrix`: covariance matrices collected
-                                               over experiments
-            - `replica`: a list of replica numbers to run over (typically just one)
+            - `t0set`: t0set name
+            - `replica`: a list of replica numbers to run over (tipycally just one)
             - `replica_path`: path to the output of this run
             - `output_path`: name of the fit
             - `theorid`: theory id number
@@ -91,6 +90,10 @@ def fit(
     else:
         status_ok = "ok"
 
+    # Loading t0set from LHAPDF
+    if t0set is not None:
+        t0pdfset = t0set.load_t0()
+
     # First set the seed variables for
     # - Tr/Vl split
     # - Neural Network initialization
@@ -129,9 +132,9 @@ def fit(
     ##############################################################################
     all_exp_infos = [[] for _ in replica]
     # First loop over the experiments
-    for exp, exp_cov in zip(experiments, experiments_covariance_matrix):
+    for exp in experiments:
         log.info("Loading experiment: {0}".format(exp))
-        all_exp_dicts = reader.common_data_reader(exp, exp_cov, replica_seeds=mcseeds, trval_seeds=trvalseeds)
+        all_exp_dicts = reader.common_data_reader(exp, t0pdfset, replica_seeds=mcseeds, trval_seeds=trvalseeds)
         for i, exp_dict in enumerate(all_exp_dicts):
             all_exp_infos[i].append(exp_dict)
 
