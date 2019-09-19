@@ -127,3 +127,12 @@ EScaleVar                                                  1
 $ ls
 theory_53_info.csv
 ```
+
+user can also parse the `theoryid` from a fit
+
+```
+$vp-checktheory --fit FIT
+```
+
+where `FIT` is a valid fit name. If the fit cannot be found locally, the script
+will attempt to download it.
