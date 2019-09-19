@@ -146,138 +146,6 @@ def check_positivity(posdatasets):
         pos.load()
         log.info(f'{pos.name} checked.')
 
-def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
-    """Applies cuts as in C++ for NNPDF3.1 combo cuts.
-    This function replicas the c++ code but should be upgraded as
-    discussed several times.
-    """
-    pto = theoryid.get_description().get('PTO')
-    vfns = theoryid.get_description().get('FNS')
-    ic = theoryid.get_description().get('IC')
-
-    if dataset.GetSetName() == 'ATLAS1JET11':
-        # allow only first rapidity bin of ATLAS1JET11
-        return dataset.GetKinematics(idat, 0) < 0.3
-
-    if dataset.GetSetName() in ('LHCBWZMU8TEV', 'LHCBWZMU7TEV'):
-        if pto == 2:
-            return dataset.GetKinematics(idat, 0) >= 2.25
-
-    if dataset.GetSetName() in ('D0WMASY', 'D0WEASY'):
-        if pto == 2:
-            return dataset.GetData(idat) >= 0.03
-
-    if dataset.GetSetName() == 'ATLASZPT7TEV':
-        pt = np.sqrt(dataset.GetKinematics(idat, 1))
-        if pt < 30 or pt > 500:
-            return False
-        return True
-
-    if dataset.GetSetName() == 'ATLASZPT8TEVMDIST':
-        return dataset.GetKinematics(idat, 0) >= 30
-
-    if dataset.GetSetName() == 'ATLASZPT8TEVYDIST':
-        pt = np.sqrt(dataset.GetKinematics(idat, 1))
-        if pt < 30 or pt > 150:
-            return False
-        return True
-
-    if dataset.GetSetName() == 'CMSZDIFF12':
-        pt = np.sqrt(dataset.GetKinematics(idat, 1))
-        y = dataset.GetKinematics(idat, 0)
-        if pt < 30 or pt > 170 or y > 1.6:
-            return False
-        return True
-
-    if dataset.GetSetName() == 'ATLASWPT31PB':
-        return dataset.GetKinematics(idat, 0) > 30
-
-    if dataset.GetSetName() == 'CMS_1JET_8TEV':
-        return dataset.GetKinematics(idat, 1) > 5476 #GeV2
-
-    if dataset.GetProc(idat)[0:3] in ('EWK', 'DYP'):
-        # building rapidity and pT or Mll
-        y = dataset.GetKinematics(idat, 0)
-        pTmv = np.sqrt(dataset.GetKinematics(idat, 1))
-
-        # generalized cuts
-        maxCMSDY2Dy = 2.2
-        maxCMSDY2Dminv = 200.0
-        minCMSDY2Dminv = 30.0
-        maxTau = 0.080
-        maxY = 0.663
-
-        if dataset.GetSetName() in ('CMSDY2D11', 'CMSDY2D12'):
-            if pto == 0 or pto == 1:
-                if pTmv > maxCMSDY2Dminv or pTmv < minCMSDY2Dminv or y > maxCMSDY2Dy:
-                    return False
-            if pto == 2:
-                if pTmv > maxCMSDY2Dminv or y > maxCMSDY2Dy:
-                    return False
-            return True
-
-        if dataset.GetSetName() in ('ATLASZHIGHMASS49FB', 'LHCBLOWMASS37PB'):
-            if pTmv > maxCMSDY2Dminv:
-                return False
-            return True
-
-        if dataset.GetSetName() == 'ATLASLOMASSDY11':
-            if pto == 0 or pto == 1:
-                if idat < 6:
-                    return False
-            return True
-
-        if dataset.GetSetName() == 'ATLASLOMASSDY11EXT':
-            if pto == 0 or pto == 1:
-                if idat < 2:
-                    return False
-            return True
-
-        # new cuts for the fixed target DY
-        if dataset.GetSetName() in ('DYE886P', 'DYE605'):
-            rapidity = dataset.GetKinematics(idat, 0)
-            invM2 = dataset.GetKinematics(idat, 1)
-            sqrts = dataset.GetKinematics(idat, 2)
-            tau = invM2 / sqrts**2
-            ymax = -0.5 * np.log(tau)
-
-            if tau > maxTau or np.fabs(rapidity / ymax) > maxY:
-                return False
-            return True
-
-    # DIS cuts
-    if dataset.GetProc(idat)[0:3] == 'DIS':
-        # load kinematics
-        x = dataset.GetKinematics(idat, 0)
-        Q2 = dataset.GetKinematics(idat, 1)
-        W2 = Q2 * (1 - x) / x
-
-        # basic cuts
-        if W2 <= w2min or Q2 <= q2min:
-            return False
-
-        if dataset.GetSetName() in ('EMCF2P', 'EMCF2D'):
-            return x > 0.1
-
-        # additional F2C cuts in case of FONLL-A
-        if dataset.GetProc(idat) == 'DIS_NCP_CH' and vfns == 'FONLL-A':
-            Q2cut1_f2c = 4
-            Q2cut2_f2c = 10
-            xcut_f2c = 1e-3
-
-            if Q2 <= Q2cut1_f2c: # cut if Q2 <= 4
-                return False
-
-            if Q2 <= Q2cut2_f2c and x <= xcut_f2c: # cut if Q2 <= 10 and x <= 10 ^ -3
-                return False
-
-        # additional F2C cut in case of FONLL-C + IC
-        if dataset.GetProc(idat) == 'DIS_NCP_CH' and vfns == 'FONLL-C' and ic:
-            Q2cut1_f2c = 8
-            if Q2 <= Q2cut1_f2c:
-                return False
-    return True
-
 class Rule:
     def __init__(self, *, theoryid, initial_data: dict, defaults: dict):
         self.theoryid = theoryid
@@ -339,7 +207,7 @@ with open(path+"cuts/filters.yaml", "r") as rules_stream,\
         defaults = yaml.safe_load(defaults_stream)
     except yaml.YAMLError as exception:
         print(exception)
-def pass_kincuts_new(
+def pass_kincuts(
     dataset,
     idat: int,
     theoryid,
