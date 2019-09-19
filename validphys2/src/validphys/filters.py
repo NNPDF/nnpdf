@@ -196,15 +196,15 @@ class Rule:
         if hasattr(self, "VFNS") and self.VFNS != vfns:
             return
 
-        locals().update(self._get_local_variables())
+        custom_vars = self._get_local_variables()
         # Will return True if inequality is satisfied
-        return eval(self.rule, globals(), {**locals(), **self.defaults, **self.kinematics_dict})
+        return eval(self.rule, globals(), {**locals(), **self.defaults, **self.kinematics_dict, **custom_vars})
 
     def _get_local_variables(self) -> dict:
         local_variables = {}
         if hasattr(self, "local_variables"):
             for key, value in self.local_variables.items():
-                exec(key + "=" + str(value), globals().update(self.kinematics_dict), local_variables)
+                exec(key + "=" + str(value), {**globals(), **self.kinematics_dict}, local_variables)
         return local_variables
 
 
