@@ -182,6 +182,7 @@ class Rule:
         ic = self.theoryid.get_description().get('IC')
         central_value = dataset.GetData(idat)
         self._set_kinematics_dict(dataset, idat)
+        # TODO: check why division by zero happens
         try:
             self._set_local_variables_dict(dataset, idat)
         except ZeroDivisionError:

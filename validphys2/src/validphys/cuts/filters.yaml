@@ -27,7 +27,7 @@
   rule: "p_T >= 30"
 
 - dataset: ATLASZPT8TEVYDIST
-  rule: "False if (p_T2 < 30**2 and p_T2 > 150**2) else True"
+  rule: "False if (p_T2 < 30**2 or p_T2 > 150**2) else True"
 
 - dataset: CMSZDIFF12
   rule: "False if (p_T2 < 30**2 or p_T2 > 170**2 or etay > 1.6) else True"
