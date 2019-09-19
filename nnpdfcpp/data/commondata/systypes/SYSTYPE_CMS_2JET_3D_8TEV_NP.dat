@@ -27,8 +27,8 @@
 26    MULT    CORR
 27    MULT    CORR
 28    MULT    CORR
-29    MULT    SKIP
-30    MULT    SKIP
+29    MULT    CORR
+30    MULT    CORR
 31    ADD    CORR
 32    ADD    CORR
 33    ADD    CORR
