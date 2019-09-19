@@ -24,7 +24,7 @@ from reportengine import report
 from validphys.core import (ExperimentSpec, DataSetInput, ExperimentInput,
                             CutsPolicy, MatchedCuts, ThCovMatSpec)
 from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFoundError,
-                              PDFNotFound, FallbackLoader)
+                              PDFNotFound, FallbackLoader, InconsistentMetaDataError)
 from validphys.gridvalues import LUMI_CHANNELS
 
 from validphys.paramfits.config import ParamfitsConfig
@@ -289,6 +289,8 @@ class CoreConfig(configparser.Config):
             raise ConfigError(str(e), name,
                               self.loader.available_datasets) from e
         except LoadFailedError as e:
+            raise ConfigError(e) from e
+        except InconsistentMetaDataError as e:
             raise ConfigError(e) from e
 
     def produce_cuts(self,

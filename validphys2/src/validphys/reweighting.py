@@ -20,7 +20,6 @@ from reportengine.table import table
 from reportengine.figure import figure
 
 from validphys.core import PDF, Filter
-from validphys.results import abs_chi2_data, results
 from validphys import checks
 from validphys.lhio import new_pdf_from_indexes
 from validphys.pdfoutput import pdfset
@@ -33,13 +32,18 @@ __all__ = ('chi2_data_for_reweighting_experiments', 'make_unweighted_pdf',
            'plot_p_alpha', 'reweighting_stats', 'unweighted_index',
            'make_pdf_from_filtered_outliers')
 
-#TODO: implement this using reportengine expand when available
-#use_t0 is to request that parameter to be set explicitly
+
+chi2_data_for_reweighting_experiments_inner = collect(
+    'abs_chi2_data_experiment', ['reweighting_experiments']
+)
+
+# This is to add checks and to request that use_t0 is set explicitly
+# pylint: disable=unused-argument
 @checks.check_pdf_is_montecarlo
-def chi2_data_for_reweighting_experiments(reweighting_experiments, pdf, use_t0,
-                                          t0set=None):
-    """Like chi2data, but for reweighting experiments."""
-    return [abs_chi2_data(results(exp,pdf,t0set,)) for exp in reweighting_experiments]
+def chi2_data_for_reweighting_experiments(
+    chi2_data_for_reweighting_experiments_inner, use_t0
+):
+    return chi2_data_for_reweighting_experiments_inner
 
 
 def nnpdf_weights_numerator(chi2_data_for_reweighting_experiments):

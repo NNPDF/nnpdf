@@ -98,11 +98,11 @@ vector<int> convert_pids_to_indexes(vector<int> const& pids)
   {
     if (fl == 21)
       indexes.push_back(6);
-    else if (fl == 22) 
+    else if (fl == 22)
       indexes.push_back(14);
     else
       indexes.push_back(fl+6);
-  }   
+  }
   return indexes;
 }
 
@@ -121,6 +121,10 @@ EvolveGrid::EvolveGrid(vector<ExportGrid> const& initialscale_grid,
 
   // Initialize APFEL
   APFEL::SetParam(theory);
+
+  // reset ren/fac to 1 if EScaleVar is 0
+  if (!stoi(theory.at("EScaleVar")))
+    APFEL::SetRenFacRatio(1.0);
 
   // Fetch initial-scale x-grid
   APFEL::SetNumberOfGrids(1);
@@ -232,7 +236,7 @@ vector<stringstream> EvolveGrid::WriteLHAFile() const
             stream << sqrt(q2val) << " ";
           stream << std::endl;
 
-          // Print out final-state PIDs          
+          // Print out final-state PIDs
           for (auto fl: pids)
             stream << fl << " ";
           stream << std::endl;
@@ -281,7 +285,7 @@ vector<stringstream> EvolveGrid::WriteLHAFile() const
                 // New line in LHAgrid
                 stream << " ";
                 for(auto if_out: convert_pids_to_indexes(pids))
-                {                    
+                {
                     double evolved_pdf = 0;
                     for(int if_in = 0; if_in < 14; if_in++)
                       for(int ix_in = 0; ix_in < (int) xg.size(); ix_in++) // ix_in = ix_out
