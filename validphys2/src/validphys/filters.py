@@ -180,6 +180,7 @@ class Rule:
         pto = self.theoryid.get_description().get('PTO')
         vfns = self.theoryid.get_description().get('FNS')
         ic = self.theoryid.get_description().get('IC')
+        central_value = dataset.GetData(idat)
 
         self.kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
         self.kinematics_dict = dict(zip(self.variables, self.kinematics))
