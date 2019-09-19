@@ -18,7 +18,8 @@ moment it is probably the most popular version control system out there, so any 
 in learning Git will most likely be useful for projects outside of NNPDF. Many online tutorials and
 guides exist for learning Git, but here are two that I have used before: a [quick
 guide](http://rogerdudler.github.io/git-guide/) and a more in depth
-[tutorial](https://www.codecademy.com/learn/learn-git).
+[tutorial](https://www.codecademy.com/learn/learn-git). The [official
+documentation](https://git-scm.com/docs) might be useful as well.
 
 ## GitHub and GitLab
 
@@ -43,16 +44,16 @@ send you an invitation. Once you have accepted the invitation, you can access th
 [https://github.com/NNPDF](https://github.com/NNPDF).
 
 In order to work on the NNPDF code, you will need to be able to push code to the NNPDF repositories.
-To be able to do this, your ssh keys should be installed in one of GitHub or GitLab. In particular:
+To be able to do this, your SSH keys should be installed in one of GitHub or GitLab. In particular:
 
-* You should add your valid ssh key(s) to your GitHub account. You can do this by following the
+* You should add your valid SSH key(s) to your GitHub account. You can do this by following the
 instructions [here](https://help.github.com/en/articles/adding-a-new-ssh-key-to-your-github-account).
 
 * If you have a valid CERN account, you should
 [login](https://login.cern.ch/adfs/ls/?SAMLRequest=fZFdT8IwFIb%2Fyu56NbqOQaDZliwQExI0BtQLb8xZKdDYtbPnzI9%2F74ZRMTHcNu%2FznLfn5AiNbWXV0dFt9EunkaIKUQcy3i28w67RYavDq1H6frMu2JGoRcn5wZCFeqR0cCN15F2PIIdewwcjV2BtDeqZRcteaRwMvl%2Fa%2BoNxPzDs9sgtchatlgV7mkE2niqAWGTzWZyJtI5huhOxqOvJTCsxVknWRxE7vXJI4KhgaSLmcTKPRXonpnKSyMnskUUPfanT3HSUsOi9sQ7lUK9gXXDSAxqUDhqNkpTcVtdr2QclfP%2F%2FHGkvM23w5JW3rMyHtDy1C%2BX%2F28r5eSb%2FOsFN71wtb7016iOqrPVvi6CBdMEodJpFVz40QJdbDC9mF%2B9PUUkBHBrtiPHya%2BTfQ5ef)
-and add the public ssh key(s) from your computer.
+and add the public SSH key(s) from your computer.
 
-* If you do not have a valid CERN account, you should send your public ssh key(s) to Stefano
+* If you do not have a valid CERN account, you should send your public SSH key(s) to Stefano
 Carrazza and he will add them for you.
 
 ### GitHub development workflow
