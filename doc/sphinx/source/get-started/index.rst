@@ -6,3 +6,6 @@ Getting Started
 
    ./installation
    ./installation-source
+   ./git
+   ./rules
+   ./tools
