@@ -181,13 +181,11 @@ class Rule:
 
         self.kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
         self.kinematics_dict = dict(zip(self.variables, self.kinematics))
-        locals().update(self._get_local_variables())
 
         # Handle the generalised DIS cut
         if (self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] == "DIS"):
-            return eval(self.rule, {**self.defaults, **self.kinematics_dict})
+            return eval(self.rule, globals(), {**self.defaults, **self.kinematics_dict})
 
-        # potential BUG: check this
         if (dataset.GetSetName() != self.dataset and
             dataset.GetProc(idat) != self.process_type):
             return
@@ -195,6 +193,7 @@ class Rule:
         if hasattr(self, "VFNS") and self.VFNS != vfns:
             return
 
+        locals().update(self._get_local_variables())
         # Will return True if inequality is satisfied
         return eval(self.rule, globals(), {**locals(), **self.defaults, **self.kinematics_dict})
 
