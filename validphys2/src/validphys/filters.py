@@ -181,13 +181,15 @@ class Rule:
         vfns = self.theoryid.get_description().get('FNS')
         ic = self.theoryid.get_description().get('IC')
         central_value = dataset.GetData(idat)
-
-        self.kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
-        self.kinematics_dict = dict(zip(self.variables, self.kinematics))
+        self._set_kinematics_dict(dataset, idat)
+        try:
+            self._set_local_variables_dict(dataset, idat)
+        except ZeroDivisionError:
+            pass
 
         # Handle the generalised DIS cut
         if (self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] == "DIS"):
-            return eval(self.rule, globals(), {**locals(), **self.defaults, **self.kinematics_dict})
+            return eval(self.rule, globals(), {**locals(), **self.defaults, **self.kinematics_dict, **self.local_variables_dict})
 
         if (dataset.GetSetName() != self.dataset and
             dataset.GetProc(idat) != self.process_type):
@@ -196,17 +198,22 @@ class Rule:
         if hasattr(self, "VFNS") and self.VFNS != vfns:
             return
 
-        custom_vars = self._get_local_variables()
         # Will return True if inequality is satisfied
-        return eval(self.rule, globals(), {**locals(), **self.defaults, **self.kinematics_dict, **custom_vars})
+        return eval(self.rule, globals(), {**locals(), **self.defaults, **self.kinematics_dict, **self.local_variables_dict})
 
-    def _get_local_variables(self) -> dict:
+    def _set_kinematics_dict(self, dataset, idat) -> dict:
+        kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
+        self.kinematics_dict = dict(zip(self.variables, kinematics))
+
+    def _set_local_variables_dict(self, dataset, idat) -> dict:
         local_variables = {}
+        if not hasattr(self, "kinematics_dict"):
+            self._set_kinematics_dict(dataset, idat)
+
         if hasattr(self, "local_variables"):
             for key, value in self.local_variables.items():
                 exec(key + "=" + str(value), {**globals(), **self.kinematics_dict}, local_variables)
-        return local_variables
-
+        self.local_variables_dict = local_variables
 
 path = "/home/shayan/nnpdfgit/nnpdf/validphys2/src/validphys/"
 with open(path+"cuts/filters.yaml", "r") as rules_stream,\
@@ -220,10 +227,14 @@ with open(path+"cuts/filters.yaml", "r") as rules_stream,\
 # TODO: check how to handle these arguments. Not needed currently
 def pass_kincuts(dataset, idat: int, theoryid, q2min: float, w2min: float):
     # TODO: Add docstring
-        
+
     for rule in (Rule(initial_data=i, theoryid=theoryid, defaults=defaults) for i in rules):
-        rule_result = rule(dataset, idat)
-        if rule_result is not None and rule_result == False:
-            return False
+        try:
+            rule_result = rule(dataset, idat)
+            if rule_result is not None and rule_result == False:
+                return False
+        except Exception as e:
+            print(e)
+            return rule
 
     return True
