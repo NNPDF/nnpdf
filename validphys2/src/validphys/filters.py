@@ -175,13 +175,13 @@ class Rule:
             self.variables = CommonData.kinLabel[self.process_type]
 
     def __call__(self, dataset, idat):
-        """If this rule applies, we return True"""
         pto = self.theoryid.get_description().get('PTO')
         vfns = self.theoryid.get_description().get('FNS')
         ic = self.theoryid.get_description().get('IC')
 
         self.kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
         self.kinematics_dict = dict(zip(self.variables, self.kinematics))
+        locals().update(self._get_local_variables())
 
         # Handle the generalised DIS cut
         if (self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] == "DIS"):
@@ -196,7 +196,14 @@ class Rule:
             return
 
         # Will return True if inequality is satisfied
-        return eval(self.rule, {**locals(), **self.defaults, **self.kinematics_dict})
+        return eval(self.rule, globals(), {**locals(), **self.defaults, **self.kinematics_dict})
+
+    def _get_local_variables(self) -> dict:
+        local_variables = {}
+        if hasattr(self, "local_variables"):
+            for key, value in self.local_variables.items():
+                exec(key + "=" + str(value), globals().update(self.kinematics_dict), local_variables)
+        return local_variables
 
 
 path = "/home/shayan/nnpdfgit/nnpdf/validphys2/src/validphys/"
