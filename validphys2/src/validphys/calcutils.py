@@ -214,5 +214,5 @@ def regularize_covmat(covmat: np.array, cond_num_threshold=500):
     corr = (covmat/d)/d[:, np.newaxis]
     e_val, e_vec = la.eigh(corr)
     new_e_val = np.clip(e_val, a_min=max(e_val)/cond_num_threshold, a_max=None)
-    new_corr = e_vec@(np.diag(new_e_val)@e_vec.T)
+    new_corr = (new_e_val*e_vec)@e_vec.T
     return (new_corr*d)*d[:, np.newaxis]

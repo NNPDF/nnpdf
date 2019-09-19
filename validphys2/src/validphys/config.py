@@ -872,8 +872,6 @@ class CoreConfig(configparser.Config):
         """Parse the `regularize_covmat` key from runcard"""
         if do_reg:
             log.info("Regularizing covariance matrices")
-        else:
-            log.info("Not regularizing covariance matrices")
         return do_reg
 
 
