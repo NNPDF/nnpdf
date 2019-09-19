@@ -160,19 +160,21 @@ class Rule:
         if self.dataset is None and self.process_type is None:
             raise AttributeError("Please define either a process type or dataset.")
 
-        # BUG: check this
         if self.process_type is None:
             from validphys.loader import Loader
-
             l = Loader()
             cd = l.check_commondata(self.dataset)
-            self.process_type = cd.process_type
+            if cd.process_type[:3] == "DIS":
+                self.variables = CommonData.kinLabel["DIS"]
+            else:
+                self.variables = CommonData.kinLabel[cd.process_type]
+        else:
+            if self.process_type[:3] == "DIS":
+                self.variables = CommonData.kinLabel["DIS"]
+            else:
+                self.variables = CommonData.kinLabel[self.process_type]
 
         self.defaults = defaults
-        if self.process_type[:3] == "DIS":
-            self.variables = CommonData.kinLabel["DIS"]
-        else:
-            self.variables = CommonData.kinLabel[self.process_type]
 
     def __call__(self, dataset, idat):
         pto = self.theoryid.get_description().get('PTO')
@@ -213,14 +215,9 @@ with open(path+"cuts/filters.yaml", "r") as rules_stream,\
         defaults = yaml.safe_load(defaults_stream)
     except yaml.YAMLError as exception:
         print(exception)
-def pass_kincuts(
-    dataset,
-    idat: int,
-    theoryid,
-    # TODO: check how to handle these arguments. Not needed currently
-    q2min: float,
-    w2min: float,
-):
+    
+# TODO: check how to handle these arguments. Not needed currently
+def pass_kincuts(dataset, idat: int, theoryid, q2min: float, w2min: float):
     # TODO: Add docstring
         
     for rule in (Rule(initial_data=i, theoryid=theoryid, defaults=defaults) for i in rules):
