@@ -41,19 +41,25 @@
 - dataset: CMSDY2D11
   rule: >-
     False if ((pto in (0, 1) and 
-    (pTmv > maxCMSDY2Dminv or pTmv < minCMSDY2Dminv or y > maxCMSDY2Dy))
-    or ((pto == 2) and (pTmv > maxCMSDY2Dminv or y > maxCMSDY2Dy)))
+    (pTmv > maxCMSDY2Dminv or pTmv < minCMSDY2Dminv or etay > maxCMSDY2Dy))
+    or ((pto == 2) and (pTmv > maxCMSDY2Dminv or etay > maxCMSDY2Dy)))
     else True
+  local_variables:
+    pTmv: M2**0.5
 
 - dataset: CMSDY2D12
   rule: >-
     False if ((pto in (0, 1) and 
-    (pTmv > maxCMSDY2Dminv or pTmv < minCMSDY2Dminv or y > maxCMSDY2Dy))
-    or ((pto == 2) and (pTmv > maxCMSDY2Dminv or y > maxCMSDY2Dy)))
+    (pTmv > maxCMSDY2Dminv or pTmv < minCMSDY2Dminv or etay > maxCMSDY2Dy))
+    or ((pto == 2) and (pTmv > maxCMSDY2Dminv or etay > maxCMSDY2Dy)))
     else True
+  local_variables:
+    pTmv: M2**0.5
 
 - dataset: ATLASZHIGHMASS49FB
   rule: "pTmv <= maxCMSDY2Dminv"
+  local_variables:
+    pTmv: (M_ll2)**0.5
 
 # - dataset: LHCBLOWMASS37PB
 #   rule: "pTmv <= maxCMSDY2Dminv"
@@ -80,7 +86,9 @@
 
 - process_type: DIS_ALL
   reason: Generalised cut for all DIS processes
-  rule: "False if Q2 <= q2min or Q2 * (1 - x) / x <= w2min else True"
+  rule: "False if Q2 <= q2min or w2 <= w2min else True"
+  local_variables:
+    w2: Q2 * (1 - x) / x
 
 - dataset: EMCF2P
   rule: "x > 0.1"
