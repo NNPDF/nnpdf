@@ -1,5 +1,13 @@
 """
-    Module containing the classes related to the stopping alogirhtm
+    Module containing the classes related to the stopping alogirthm
+
+    In this module there are three Classes:
+    - FitHistory: this class contains the information necessary
+            in order to reset the state of the fit to the point
+            in which the history was saved.
+    - Stopping: this class monitors the chi2 of the validation
+            and training sets and decides when to stop
+    - Positivity: Decides whether a given point fullfills the positivity conditions
 """
 
 # TODO
@@ -10,6 +18,9 @@ import logging
 import numpy as np
 
 log = logging.getLogger(__name__)
+
+# Keyname of the positivity sets
+POSITIVITY_KEY = "POS"
 
 # Put a very big number here so that we for sure discard this run
 # AND we have a clear marker that something went wrong, not just a bad fit
@@ -454,13 +465,16 @@ class Positivity:
         self.threshold = threshold
         self.positivity_ever_passed = False
 
-    def check_positivity(self, history_object, pos_key="POS"):
+    def check_positivity(self, history_object, pos_key=POSITIVITY_KEY):
         """
             This function receives a history object and look for entries
-            with the keyname: POS_something
+            with the keyname: pos_key_something
 
-            A `history_object` is a dictionary of entries in the form
-                {'name' : loss}
+
+            # Arguments:
+                - `history_object`: a dictionary of entries in the form
+                    {'name': loss}, output of a MetaModel .fit()
+                - `pos_key`: `key that searchs for the positivity`
         """
         positivity_loss = 0.0
         for key, item in history_object.items():
