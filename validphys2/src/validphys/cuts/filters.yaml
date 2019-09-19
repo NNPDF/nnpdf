@@ -55,11 +55,11 @@
 - dataset: ATLASZHIGHMASS49FB
   rule: "pTmv <= maxCMSDY2Dminv"
 
-- dataset: LHCBLOWMASS37PB
-  rule: "pTmv <= maxCMSDY2Dminv"
+# - dataset: LHCBLOWMASS37PB
+#   rule: "pTmv <= maxCMSDY2Dminv"
 
-- dataset: ATLASLOMASSDY11
-  rule: "False if (pto in (0, 1) and idat < 6) else True"
+# - dataset: ATLASLOMASSDY11
+#   rule: "False if (pto in (0, 1) and idat < 6) else True"
 
 - dataset: ATLASLOMASSDY11EXT
   rule: "False if (pto in (0, 1) and idat < 2) else True"
