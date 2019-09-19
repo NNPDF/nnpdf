@@ -312,20 +312,20 @@ class Rule:
         vfns = self.theoryid.get_description().get('FNS')
         ic = self.theoryid.get_description().get('IC')
 
+        self.kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
+        self.kinematics_dict = dict(zip(self.variables, self.kinematics))
+
+        # Handle the generalised DIS cut
+        if (self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] == "DIS"):
+            return eval(self.rule, {**self.defaults, **self.kinematics_dict})
+
         # potential BUG: check this
         if (dataset.GetSetName() != self.dataset and
-            dataset.GetProc(idat)[:3] != self.process_type[:3]):
+            dataset.GetProc(idat) != self.process_type):
             return
-
-        #Handle the generalised DIS cut
-        if (self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] != "DIS"):
-            return eval(self.rule, {**self.defaults, **self.kinematics_dict})
 
         if hasattr(self, "VFNS") and self.VFNS != vfns:
             return
-
-        self.kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
-        self.kinematics_dict = dict(zip(self.variables, self.kinematics))
 
         # Will return True if inequality is satisfied
         return eval(self.rule, {**self.defaults, **self.kinematics_dict})
