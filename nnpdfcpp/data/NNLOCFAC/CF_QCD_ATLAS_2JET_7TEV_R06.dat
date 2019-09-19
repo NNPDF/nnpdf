@@ -2,7 +2,7 @@
 SetName: CF_ATLAS_2JET_7TEV_R06
 Author: Emanuele R. Nocera enocera@nikhef.nl
 Date: Sep 2019
-CodesUsed: K-factors provided by j. Pires et al
+CodesUsed: K-factors provided by J. Pires et al.
 TheoryInput: NNPDF3.1 with alphas(MZ)=0.118
 PDFset: NNPDF31_nnlo_as_0118
 Warnings: 
