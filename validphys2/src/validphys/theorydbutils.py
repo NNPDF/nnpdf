@@ -27,7 +27,7 @@ def make_query(query: str, dbpath: Path):
     Returns
     -------
     res: sqlite3.Cursor
-        an sqlite cursor with query executed
+        an sqlite cursor with relevant data saved
 
     Example
     -------
@@ -35,16 +35,15 @@ def make_query(query: str, dbpath: Path):
     >>> from validphys.theorydbutils import make_query
     >>> query = "SELECT * FROM TheoryIndex WHERE ID=53;"
     >>> dbpath = p("./nnpdfcpp/data/theory.db")
-    >>> res = make_query(quer, dbpath)
+    >>> res = make_query(query, dbpath)
     >>> val = res.fetchone()
-    >>> theory_info_dict = dict[(k[0], v) for k, v in zip(res.description, val)]
+    >>> theory_info_dict = {k[0]: v for k, v in zip(res.description, val)}
 
     See Also
     --------
-    sqlite3: https://docs.python.org/2/library/sqlite3.html
+    sqlite3: https://docs.python.org/3/library/sqlite3.html
     """
-    #Note this still requires a string and not a path
-    conn = sqlite3.connect(str(dbpath))
+    conn = sqlite3.connect(dbpath)
     with conn:
         cursor = conn.cursor()
         res = cursor.execute(query)
@@ -72,7 +71,7 @@ def fetch_theory(theory_database: Path, theoryID: int):
     val = res.fetchone()
     if not val:
         raise TheoryNotFoundInDatabase(f"ID {theoryID} not found in database.")
-    return dict([(k[0], v) for k, v in zip(res.description, val)])
+    return {k[0]: v for k, v in zip(res.description, val)}
 
 def fetch_all(theory_database: Path):
     """Looks in the theory database and returns a dataframe with theory info

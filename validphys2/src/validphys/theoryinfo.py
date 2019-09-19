@@ -35,35 +35,32 @@ def all_theory_info_table(theory_database):
     return fetch_all(theory_database)
 
 @table
-def theory_info_table(theory_database, theoryID):
-    """fetches theory info for given `theoryID` constructs DataFrame from it
+def theory_info_table(theory_database, theory_db_id):
+    """fetches theory info for given `theory_db_id` constructs DataFrame from it
 
     Parameters
     ----------
-    theoryID: int
+    theory_db_id: int
         numeric identifier of theory to be queried. Can be specified at the
         runcard level.
-
-        NOTE: this parameter differs from the runcard key `theoryid`
-        (case sensitive) and doesn't require the user to have the theory locally
 
     Returns
     -------
     theory_info_table: pd.Dataframe
-        dataframe filled with theory info for specified `theoryID`
+        dataframe filled with theory info for specified `theory_db_id`
 
     Example
     -------
     >>> from validphys.api import API
-    >>> df = API.theory_info_table(theoryID=53)
+    >>> df = API.theory_info_table(theory_db_id=53)
     >>> df.loc['Comments']
     Info for theory 53    NNPDF3.1 NNLO central
     Name: Comments, dtype: object
     """
-    res_dict = fetch_theory(theory_database, theoryID)
+    res_dict = fetch_theory(theory_database, theory_db_id)
     res_df = DataFrame(
         list(res_dict.values()),
         index=res_dict.keys(),
-        columns=[f'Info for theory {theoryID}'],
+        columns=[f'Info for theory {theory_db_id}'],
     )
     return res_df

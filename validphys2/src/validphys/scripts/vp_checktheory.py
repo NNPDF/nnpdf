@@ -69,16 +69,6 @@ def main():
         ),
         type=int
     )
-    parser.add_argument(
-        '--dumptable',
-        '-d',
-        help=(
-            "Boolen flag which causes table to be dumped to CSV"
-            " file in current working directory, with name "
-            "theory_<theoryid>_info.csv"
-        ),
-        action='store_true',
-    )
     group.add_argument(
         '--fit',
         type=str,
@@ -88,6 +78,16 @@ def main():
             "supplying theoryid on command line"
         ),
         default=None
+    )
+    parser.add_argument(
+        '--dumptable',
+        '-d',
+        help=(
+            "Boolen flag which causes table to be dumped to CSV"
+            " file in current working directory, with name "
+            "theory_<theoryid>_info.csv"
+        ),
+        action='store_true',
     )
     args = parser.parse_args()
     # get theoryid from command line or --fit
