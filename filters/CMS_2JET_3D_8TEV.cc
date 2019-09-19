@@ -41,6 +41,12 @@ since the integrated luminosity is the same for the two dataset 19.7 fb−1)
 - JES uncertainties (24);
 All these uncertainties are provided as already symmetrised.
 
+NP UNCERTAINTIES
+Nonperturbative (theoretical) corrections are implemented in the form of a
+set of two additional correlated uncertainties (left and right) determined as
+the difference between the central data point and the datapoint rescaled by the
+correction factor (+- its error) provided by the experimentalists.
+
 bin 1:   
 0.0 < ys < 1.0
 0.0 < yb < 1.0
@@ -124,7 +130,7 @@ void CMS_2JET_3D_8TEVFilter::ReadData()
 {
 
   //opening files
-  fstream rS, rCorr;
+  fstream rS, rNP, rCorr;
 
   //bins specification
   int nbins = 6;
@@ -139,10 +145,11 @@ void CMS_2JET_3D_8TEVFilter::ReadData()
   
   int n = 0;                                //count total number of datapoints
   //const double fac = 1e7;                   //conversion factor from pb to 10 mub
-  const int realsys=28;                     //number of real systematics
+  const int realsys=30;                     //number of real systematics
 
   for(int bin=0; bin < nbins; bin++ ) {
     
+    //Data file
     string data_file = "/CMS_2JET_3D_Ybin" + to_string(bin+1) + ".dat";
     stringstream DataFile("");
     DataFile << dataPath() << "rawdata/" << fSetName << data_file;
@@ -151,22 +158,33 @@ void CMS_2JET_3D_8TEVFilter::ReadData()
       cerr << "Error opening data file " << DataFile.str() << endl;
       exit(-1);
     }
-    
-    string line;
+
+    //NP corrections file
+    string NP_file = "/ew_np_corrections/Table" + to_string(bin+19) + ".csv";
+    stringstream NPFile("");
+    NPFile << dataPath() << "rawdata/" << fSetName << NP_file;
+    rNP.open(NPFile.str().c_str(), ios::in);
+    if (rNP.fail()) {
+      cerr << "Error opening data file " << NPFile.str() << endl;
+      exit(-1);
+    }
+
+    string line, lineNP;
     double ptavg, ptavg_low, ptavg_high;
     
     double dum; //dummy variable
     
     //skip the first lines
     //In HepData .csv these lines are 12
-    for (int i = 0; i < 12; i++)  
+    for (int i = 0; i < 12; i++) {
       getline(rS,line);
-
+      getline(rNP,lineNP);
+    }
+    
     for (int i = n; i < n + ndata[bin]; i++) {
 
-      getline(rS,line);         
-      istringstream lstream(line);          
-      
+      getline(rS,line);
+      istringstream lstream(line);
       lstream >> ptavg >> ptavg_low >> ptavg_high;
 
       //---------------------------------------------------------
@@ -228,8 +246,34 @@ void CMS_2JET_3D_8TEVFilter::ReadData()
       }
 
     }
+
+    for (int i = n; i < n + ndata[bin]; i++) {
+
+      getline(rNP,lineNP);
+      istringstream lstream(lineNP);
+      double np_corr, np_corr_erp, np_corr_erm;
+      char comma, perc;
+
+      lstream >> ptavg        >> comma 
+	      >> ptavg_low    >> comma
+	      >> ptavg_high   >> comma
+	      >> np_corr      >> comma
+	      >> np_corr_erp >> perc >> comma
+	      >> np_corr_erm >> perc;
+
+      fSys[i][28].mult = (np_corr*(1. + np_corr_erp/100.) - 1)/sqrt(2.)*100.;
+      fSys[i][28].add  = fSys[i][0].mult*fData[i]/100;
+      fSys[i][28].type = MULT;   
+      fSys[i][28].name = "SKIP";
+      fSys[i][29].mult = (np_corr*(1. + np_corr_erm/100.) - 1)/sqrt(2.)*100.;	
+      fSys[i][29].add  = fSys[i][1].mult*fData[i]/100;
+      fSys[i][29].type = MULT;   
+      fSys[i][29].name = "SKIP";
+
+    }
       
     rS.close();
+    rNP.close();
     n += ndata[bin];
   }
   

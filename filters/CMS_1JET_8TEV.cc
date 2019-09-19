@@ -45,10 +45,10 @@ zero. This procedure is consistent with the analysis presented in the paper and
 allows one to reproduce the total left (right) systematic uncertainties
 quoted on hepdata, once all the resulting left (right) sources of nuisance are
 added in quadrature. 
-Note that the Xfitter files contain 3 additional theoretical uncertainties
-corresponding to the uncertainty associated to nonperturbative effects
-in the theoretical prediction. These uncertainties are peculiar to the Xfitter
-determination of alphas and are not implemented in this filter.
+Note that the Xfitter files contain additional nonperturbative corrections
+(a rescaling factor with its left and right error). These are implemented as an
+extra systematic ucnertainty determined as the difference between the measured
+data and the data rescaled by the provided factor (including its uncertainty).
 
 bin 1:   0 < |y| < 0.5
 ========================
