@@ -196,7 +196,7 @@ class Rule:
             return
 
         # Will return True if inequality is satisfied
-        return eval(self.rule, {**self.defaults, **self.kinematics_dict})
+        return eval(self.rule, {**locals(), **self.defaults, **self.kinematics_dict})
 
 
 path = "/home/shayan/nnpdfgit/nnpdf/validphys2/src/validphys/"
