@@ -187,7 +187,7 @@ class Rule:
 
         # Handle the generalised DIS cut
         if (self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] == "DIS"):
-            return eval(self.rule, globals(), {**self.defaults, **self.kinematics_dict})
+            return eval(self.rule, globals(), {**locals(), **self.defaults, **self.kinematics_dict})
 
         if (dataset.GetSetName() != self.dataset and
             dataset.GetProc(idat) != self.process_type):
