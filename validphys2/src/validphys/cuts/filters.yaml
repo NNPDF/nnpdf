@@ -53,23 +53,33 @@
     else True
 
 - dataset: ATLASZHIGHMASS49FB
-  rule: "False if pTmv > maxCMSDY2Dminv else True"
+  rule: "pTmv <= maxCMSDY2Dminv"
 
-# - dataset: LHCBLOWMASS37PB
-#   rule: "pTmv <= maxCMSDY2Dminv"
+- dataset: LHCBLOWMASS37PB
+  rule: "pTmv <= maxCMSDY2Dminv"
 
-# - dataset: ATLASLOMASSDY11
-#   rule: "False if (pto == 0 or pto == 1) and idat < 6 else True"
+- dataset: ATLASLOMASSDY11
+  rule: "False if (pto in (0, 1) and idat < 6) else True"
 
 - dataset: ATLASLOMASSDY11EXT
   rule: "False if (pto in (0, 1) and idat < 2) else True"
 
-# TODO: fix these 2
-# - dataset: DYE886P
+- dataset: DYE886P
+  process_type: DYP
+  local_variables:
+    tau: M2 / sqrts**2
+    ymax: -0.5 * np.log(tau)
+  rule: "False if tau > maxTau or np.fabs(y/ymax) > maxY else True"
 
-# - dataset: DYE605
+- dataset: DYE605
+  process_type: DYP
+  local_variables:
+    tau: M2 / sqrts**2
+    ymax: -0.5 * np.log(tau)
+  rule: "False if tau > maxTau or np.fabs(y/ymax) > maxY else True"
 
 - process_type: DIS_ALL
+  reason: Generalised cut for all DIS processes
   rule: "False if Q2 <= q2min or Q2 * (1 - x) / x <= w2min else True"
 
 - dataset: EMCF2P
