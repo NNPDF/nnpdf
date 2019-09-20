@@ -12,14 +12,6 @@ variables:
   GIT_DEPTH: 1000
 
 ## Run the configure and make tests
-job1:
-    stage: build-deploy
-    script:
-      - ".ciscripts/build-deploy-linux.sh"
-    variables:
-        CONDA_PY: "36"
-    artifacts:
-        untracked: True
 job2:
     stage: build-deploy
     script:

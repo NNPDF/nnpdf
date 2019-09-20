@@ -21,7 +21,6 @@ env:
     - CONDA_BUILD_SYSROOT="${CONDAPATH}/MacOSX10.9.sdk"
 
   matrix:
-    - CONDA_PY=36
     - CONDA_PY=37
 
 before_install:
