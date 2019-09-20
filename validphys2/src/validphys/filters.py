@@ -6,6 +6,7 @@ Filters for NNPDF fits
 import logging
 import numbers
 import numpy as np
+import os
 
 from NNPDF import DataSet, RandomGenerator, CommonData
 from reportengine.checks import make_argcheck, check, check_positive, make_check
@@ -216,9 +217,10 @@ class Rule:
                 exec(key + "=" + str(value), {**globals(), **self.kinematics_dict}, local_variables)
         self.local_variables_dict = local_variables
 
-path = "/home/shayan/nnpdfgit/nnpdf/validphys2/src/validphys/"
-with open(path+"cuts/filters.yaml", "r") as rules_stream,\
-     open(path+"cuts/defaults.yaml", "r") as defaults_stream:
+# path = "/home/shayan/nnpdfgit/nnpdf/validphys2/src/validphys/"
+path = os.path.dirname(os.path.realpath(__file__))
+with open(path+"/cuts/filters.yaml", "r") as rules_stream,\
+     open(path+"/cuts/defaults.yaml", "r") as defaults_stream:
     try:
         rules = yaml.safe_load(rules_stream)
         defaults = yaml.safe_load(defaults_stream)
