@@ -10,7 +10,10 @@ set -v
 echo "$NETRC_FILE" | base64 --decode > ~/.netrc
 
 # build documentation
-conda install sphinx recommonmark sphinx_rtd_theme nnpdf --yes
+conda config --add channels https://packages.nnpdf.science/conda;
+conda config --add channels https://packages.nnpdf.science/conda-private;
+conda config --set show_channel_urls true;
+conda install nnpdf --yes
 cd doc/sphinx
 make html
 
