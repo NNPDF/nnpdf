@@ -32,7 +32,7 @@ namespace NNPDF
     { "DIS",        {"$x$","$Q^2 (GeV^2)$","$y$"}},
     { "DYP",        {"$y$","$M^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
     { "JET",        {"$\\eta$","$p_T^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
-    { "DIJET",      {"$\\m_{1,2}","\\eta_{1,2}","$\\sqrt{s}"}},
+    { "DIJET",      {"\\eta","$\\m_{1,2} (GeV)","$\\sqrt{s} (GeV)"}},
     { "PHT",        {"$\\eta_\\gamma$","$E_{T,\\gamma}^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
     { "INC",        {"$0$","$\\mu^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
     { "EWK_RAP",    {"$\\eta/y$","$M^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},

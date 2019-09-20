@@ -52,6 +52,7 @@ The kinematic labels are:
          'HQP_YQQ': ('$y^{QQ}$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
          'INC': ('$0$', '$\\mu^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
          'JET': ('$\\eta$', '$p_T^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
+         'DIJET': ('$\\eta$', '$m_{12} (GeV)$', '$\\sqrt{s} (GeV)$'),
          'PHT': ('$\\eta_\\gamma$', '$E_{T,\\gamma}^2 (GeV^2)$', '$\\sqrt{s} (GeV)$'),
          'SIA': ('$z$', '$Q^2 (GeV^2)$', '$y$')}
 
@@ -142,6 +143,21 @@ class dyp_sqrt_scale(SqrtScaleMixin, DYXQ2MapMixin):
 class jet_sqrt_scale(SqrtScaleMixin,JETXQ2MapMixin):
     def new_labels(self, *old_labels):
         return ('$|y|$', '$p_T$ (GeV)', r'$\sqrt{s} (GeV)$')
+
+class dijet_sqrt_scale(SqrtScaleMixin,JETXQ2MapMixin):
+    def new_labels(self, *old_labels):
+        return ('$|y|$', '$m_{12}$ (GeV)', r'$\sqrt{s} (GeV)$')
+
+class dijet_sqrt_scale_ATLAS(SqrtScaleMixin,JETXQ2MapMixin):
+    def __call__(self, k1, k2, k3):
+        return k1, k2, k3
+
+    def new_labels(self, *old_labels):
+        return ('$|y^*|$', '$m_{12}$ (TeV)', r'$\sqrt{s} (GeV)$')
+
+class dijet_CMS_3D(SqrtScaleMixin,JETXQ2MapMixin):
+    def new_labels(self, *old_labels):
+        return ('$|y^*|$', '$p_{T,avg}$ (GeV)', r'$|y_b|$')
 
 class dis_sqrt_scale(DISXQ2MapMixin):
     def __call__(self, k1, k2, k3):
