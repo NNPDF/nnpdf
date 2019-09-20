@@ -116,5 +116,5 @@ jobs:
   include:
     - stage: sphinx
       os: linux
-      #if: branch = master
+      if: branch = master
       script: docker exec build bash -c "cd /nnpdf/; .ciscripts/deploy-documentation.sh";
