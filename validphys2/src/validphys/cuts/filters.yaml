@@ -9,10 +9,10 @@
   rule: "eta < 0.3"
 
 - dataset: LHCBWZMU8TEV
-  rule: "pto == 2 and etay >= 2.25"
+  rule: "etay >= 2.25 if pto == 2 else True"
 
 - dataset: LHCBWZMU7TEV
-  rule: "pto == 2 and etay >= 2.25"
+  rule: "etay >= 2.25 if pto == 2 else True"
 
 - dataset: D0WMASY
   rule: "central_value >= 0.03 if pto == 2 else True"
