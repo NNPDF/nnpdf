@@ -11,7 +11,8 @@ import sqlite3
 
 import pandas as pd
 
-class TheoryNotFoundInDatabase(Exception): pass
+class TheoryNotFoundInDatabase(Exception):
+    pass
 
 def make_query(query: str, dbpath: Path):
     """Base level function which executes a `query` given the path to a sqlite3
@@ -43,7 +44,9 @@ def make_query(query: str, dbpath: Path):
     --------
     sqlite3: https://docs.python.org/3/library/sqlite3.html
     """
-    conn = sqlite3.connect(dbpath)
+    # python 3.6 still requires path as string, but 3.7 onwards can take
+    # pathlib.Path. This could be changed if we stop supporting 3.6
+    conn = sqlite3.connect(str(dbpath))
     with conn:
         cursor = conn.cursor()
         res = cursor.execute(query)
