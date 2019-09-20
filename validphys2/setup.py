@@ -26,6 +26,7 @@ setup(name= "validphys",
                         'vp-setupfit = validphys.scripts.vp_setupfit:main',
                         'vp-comparefits = validphys.scripts.vp_comparefits:main',
                         'fitrename = validphys.scripts.fitrename:main',
+                        'vp-checktheory = validphys.scripts.vp_checktheory:main'
                     ]},
       package_dir = {'': 'src'},
       packages = find_packages('src'),
