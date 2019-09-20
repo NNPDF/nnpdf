@@ -176,11 +176,14 @@ class Rule:
                 self.variables = CommonData.kinLabel[self.process_type]
 
         self.defaults = defaults
+        self.pto = self.theoryid.get_description().get('PTO')
+        self.vfns = self.theoryid.get_description().get('FNS')
+        self.ic = self.theoryid.get_description().get('IC')
 
     def __call__(self, dataset, idat):
-        pto = self.theoryid.get_description().get('PTO')
-        vfns = self.theoryid.get_description().get('FNS')
-        ic = self.theoryid.get_description().get('IC')
+        pto = self.pto
+        vfns = self.vfns
+        ic = self.ic
         central_value = dataset.GetData(idat)
         self._set_kinematics_dict(dataset, idat)
         # TODO: check why division by zero happens
