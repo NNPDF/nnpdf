@@ -42,6 +42,9 @@ requirements:
         - pandas =0.23
         - requests
         - prompt_toolkit =2
+        - sphinx # documentation
+        - recommonmark
+        - sphinx_rtd_theme
 
 test:
     requires:

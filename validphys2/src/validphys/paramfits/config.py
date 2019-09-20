@@ -1,6 +1,8 @@
-
+"""
+Configuration class for the paramfits module
+"""
 import re
-from collections import Mapping, Sequence, ChainMap
+from collections.abc import Mapping, Sequence
 
 from reportengine.configparser import Config, ConfigError, element_of
 

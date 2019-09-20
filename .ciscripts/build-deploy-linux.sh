@@ -16,7 +16,7 @@ if [ $? != 0 ]; then
 	exit 1
 fi
 
-if [ "${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}" != 'master'  ] && [ "$UPLOAD_NON_MASTER" == false ]; 
+if [ "${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}" != 'master'  ] && [ "$UPLOAD_NON_MASTER" == false ];
 then
   	echo "
 Skiping upload because this is not master and you have not
@@ -37,8 +37,8 @@ scp -i "$KEY" -o StrictHostKeyChecking=no\
     dummy@packages.nnpdf.science:~/packages/conda-private/linux-64
 
 if [ $? == 0 ]; then
-	echo "Upload suceeded"
+	echo "Conda package upload suceeded"
 else
-	echo "Upload failed"
+	echo "Conda package upload failed"
 	exit 1
 fi

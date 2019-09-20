@@ -1,3 +1,3 @@
 .PHONY: all
 all:
-	rsync -avz --exclude 'Makefile' .  nnpdf:
+	git ls-files | rsync -avz --exclude 'Makefile' --exclude '.gitignore'  --files-from=- . nnpdf:
