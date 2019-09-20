@@ -1,3 +1,6 @@
+```eval_rst
+.. _server:
+```
 Server configuration
 ====================
 
