@@ -19,9 +19,6 @@ import numpy as np
 
 log = logging.getLogger(__name__)
 
-# Keyname of the positivity sets
-POSITIVITY_KEY = "POS"
-
 # Put a very big number here so that we for sure discard this run
 # AND we have a clear marker that something went wrong, not just a bad fit
 TERRIBLE_CHI2 = 1e10
@@ -31,36 +28,37 @@ INITIAL_CHI2 = 1e9
 POS_OK = "POS_PASS"
 POS_BAD = "POS_VETO"
 
-
-def parse_ndata(ndata_dict):
+def parse_ndata(all_data):
     """
-    Parses the ndata dictionary into training and validation
-    dictionaries
-
-    Ignores entries for "total" and positivity sets.
+    Parses the list of dictionaries received from ModelTrainer
+    into a dictionary containing only the name of the experiments
+    together with the number of points.
 
     # Return:
         - `tr_ndata`: dictionary of {'exp' : ndata}
         - `vl_ndata`: dictionary of {'exp' : ndata}
+        - `pos_set`: list of the names of the positivity sets
 
-    Note: if the total number of validation points remain at 0
-    it is understood there is no validation and the output vl_data will also point to tr_ndata
+    Note: if there is no validation (total number of val points == 0)
+    then vl_ndata will point to tr_ndata
     """
-    tr_ndata = {}
-    vl_ndata = {}
-    val_points = 0
-    for key, npoints in ndata_dict.items():
-        if key.lower().startswith(("pos", "total")):
-            continue
-        if key.lower().endswith("_vl"):
-            vl_ndata[key] = npoints
-            val_points += npoints
-        else:
-            tr_ndata[key] = npoints
-    if val_points == 0:
-        vl_ndata = tr_ndata
-    return tr_ndata, vl_ndata
-
+    tr_ndata_dict = {}
+    vl_ndata_dict = {}
+    pos_set = []
+    for dictionary in all_data:
+        exp_name = dictionary["name"]
+        if dictionary.get("count_chi2"):
+            tr_ndata = dictionary["ndata"]
+            vl_ndata = dictionary["ndata_vl"]
+            if tr_ndata:
+                tr_ndata_dict[exp_name] = tr_ndata
+            if vl_ndata:
+                vl_ndata_dict[exp_name] = vl_ndata
+        if dictionary.get("positivity"):
+            pos_set.append(exp_name)
+    if not vl_ndata_dict:
+        vl_ndata_dict = tr_ndata_dict
+    return tr_ndata_dict, vl_ndata_dict, pos_set
 
 class Stopping:
     """
@@ -72,10 +70,8 @@ class Stopping:
         # Arguments:
             - `validation_model`: the model with the validation mask applied
                                   (and compiled with the validation data and covmat)
-            - `ndata_dict`: a dictionary with the number of points of each experiment in the format:
-                `exp`: npoints in the training model data
-                `exp_vl`: npoints in the validation model data
-                This dictionary is used to print the loss normalized to the number of points
+            - `all_data_dict`: list containg all dictionaries containing all information about
+                              the experiments/validation/regularizers/etc to be parsed by Stopping
             - `threshold_positivity`: maximum value allowed for the sum of all positivity losses
             - `total_epochs`: total number of epochs
             - `stopping_patience`: how many epochs to wait for the validation loss to improve
@@ -86,7 +82,7 @@ class Stopping:
     def __init__(
         self,
         validation_model,
-        ndata_dict,
+        all_data_dicts,
         threshold_positivity=1e-6,
         total_epochs=0,
         stopping_patience=7000,
@@ -95,7 +91,7 @@ class Stopping:
     ):
 
         # Parse the data dictionary
-        self.ndata_tr_dict, vl_ndata = parse_ndata(ndata_dict)
+        self.ndata_tr_dict, vl_ndata, self.pos_sets = parse_ndata(all_data_dicts)
 
         # Save the validation and positivity objects
         self.validation = Validation(validation_model, vl_ndata)
@@ -229,7 +225,7 @@ class Stopping:
         self.save_stats(tr_chi2, vl_chi2)
 
         # Step 4. Check whether positivity passes, if it doesn't ignore the point
-        if self.positivity.check_positivity(training_info):
+        if self.positivity.check_positivity(training_info, self.pos_sets):
             if vl_chi2 < self.best_chi2:
                 # we found a better validation loss! Reset All
                 self.best_chi2 = vl_chi2
@@ -465,7 +461,7 @@ class Positivity:
         self.threshold = threshold
         self.positivity_ever_passed = False
 
-    def check_positivity(self, history_object, pos_key=POSITIVITY_KEY):
+    def check_positivity(self, history_object, positivity_sets):
         """
             This function receives a history object and look for entries
             with the keyname: pos_key_something
@@ -477,9 +473,9 @@ class Positivity:
                 - `pos_key`: `key that searchs for the positivity`
         """
         positivity_loss = 0.0
-        for key, item in history_object.items():
-            if key.startswith(pos_key):
-                positivity_loss += item[-1]
+        for key in positivity_sets:
+            key_loss = f"{key}_loss"
+            positivity_loss = history_object[key_loss][-1]
         if positivity_loss > self.threshold:
             return False
         else:

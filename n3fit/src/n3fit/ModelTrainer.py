@@ -69,6 +69,7 @@ class ModelTrainer:
         # Save all input information
         self.exp_info = exp_info
         self.pos_info = pos_info
+        self.all_info = exp_info + pos_info
         self.flavinfo = flavinfo
         self.NNseed = nnseed
         self.pass_status = pass_status
@@ -87,7 +88,6 @@ class ModelTrainer:
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
-        self.ndata_dict = {}
         self.training = {
             "output": [],
             "expdata": [],
@@ -160,7 +160,6 @@ class ModelTrainer:
             -`training`: data for the fit
             -`validation`: data which for the stopping
             -`experimental`: 'true' data, only used for reporting purposes
-            -`ndata_dict`: a dictionary containing 'name of experiment' : Number Of Points
         with fixed information.
 
         Fixed information: information which will not change between different runs of the code.
@@ -190,21 +189,13 @@ class ModelTrainer:
             nd_tr = exp_dict["ndata"]
             nd_vl = exp_dict["ndata_vl"]
 
-            self.ndata_dict[exp_dict["name"]] = nd_tr
-            self.ndata_dict[exp_dict["name"] + "_vl"] = nd_vl
-
             self.training["ndata"] += nd_tr
             self.validation["ndata"] += nd_vl
             self.experimental["ndata"] += nd_tr + nd_vl
 
         for pos_dict in self.pos_info:
             self.training["expdata"].append(pos_dict["expdata"])
-            self.ndata_dict[pos_dict["name"]] = pos_dict["ndata"]
             self.training["posdatasets"].append(pos_dict["name"])
-
-        self.ndata_dict["total_tr"] = self.training["ndata"]
-        self.ndata_dict["total_vl"] = self.validation["ndata"]
-        self.ndata_dict["total"] = self.experimental["ndata"]
 
     def _model_generation(self):
         """
@@ -508,7 +499,7 @@ class ModelTrainer:
 
         validation_object = Stopping(
             validation_model,
-            self.ndata_dict,
+            self.all_info,
             total_epochs=epochs,
             stopping_patience=stopping_epochs,
             save_each=self.save_history_each,
