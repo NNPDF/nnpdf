@@ -8,4 +8,5 @@ vp-guide
    ./introduction.md
    ./design.md
    ./api.md
+   ./upload.md
    ./theorycov.rst

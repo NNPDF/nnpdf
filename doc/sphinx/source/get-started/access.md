@@ -21,6 +21,9 @@ In order to gain access, you need to set up a GitHub account and ask Stefano
 Carrazza or Zahari Kassabov to include you in the list of members of the GitHub
 organization.
 
+```eval_rst
+.. _mail:
+```
 ## Mailing list
 
 Emails are sent to a [mailing
@@ -48,8 +51,9 @@ an HTTP password. The relevant credentials are
 [here](https://www.wiki.ed.ac.uk/pages/viewpage.action?pageId=292165461) (for
 which you need access to the [wiki](#edinburgh-wiki), or else to ask someone).
 
-Write access (such as to upload reports) is provided by SSH. You need to send
-your public key to Stefano Carrazza or Zahari Kassabov.
+Write access (such as to [upload reports](upload)) is provided by SSH.
+You need to send your public key to Stefano Carrazza or Zahari
+Kassabov.
 
 
 ## Edinburgh wiki
