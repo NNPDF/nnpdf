@@ -146,7 +146,7 @@ code markers in markdown:
 
 
 	```eval_rst
-	.. _my-reference-label
+	.. _my-reference-label:
 	```
 
 Labels can be linked to from anywhere using  the syntax
