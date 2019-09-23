@@ -102,7 +102,7 @@ $APPL_PATH/<setname>/<applgrid>
 ```
 where `APPL_PATH` is defined in Makefile.am, `<setname>` is the corresponding 
 `COMMONDATA` set name specified in the grids table (that should match the name
-used in the [buildmaster](file:///home/noceral/Documents/nnpdfgit/nnpdf/doc/sphinx/build/html/tutorials/buildmaster.html) implementation), and `<applgrid>` 
+used in the [buildmaster](../tutorials/buildmaster.md) implementation), and `<applgrid>` 
 is specified in the field described above.
 
 ### Implementing a new DIS or DYP subgrid 

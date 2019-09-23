@@ -26,7 +26,7 @@ and data files from
 * [applgrids](github.com/NNPDF/applgrids)
 
 There are various ways of generating the latter, as explained in [How to 
-generate applgrids](file:///home/noceral/Documents/nnpdfgit/nnpdf/doc/sphinx/build/html/tutorials/APPLgrids.html).
+generate applgrids](../tutorials/APPLgrids.md).
 
 Once the above libraries and data files are set up, the APFELcomb project can be
 compield as follows
@@ -55,4 +55,4 @@ is not stored in the repository, but it is built from the sqlite dump at
 `db/apfelcomb.dat`. This is done automatically by the APFELcomb makefile.
 Detailed instructions to generate/implement `FK` tables for individual 
 experiments and/or a compelte theory are provided in 
-[How to generate/implement FK tables](file:///home/noceral/Documents/nnpdfgit/nnpdf/doc/sphinx/build/html/tutorials/apfelcomb.html).
+[How to generate/implement FK tables](../tutorials/apfelcomb.md).
