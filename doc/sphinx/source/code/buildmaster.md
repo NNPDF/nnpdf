@@ -37,6 +37,6 @@ nnpdf/nnpdfcpp/data/commondata/systypes/
 ```
 Whenever a new data set is implemented, the buildmaster project should be
 updated accordingly. Detailed instructions on how to do so are provided in 
-the tutorial [Implementing a new experiment in buildmaster](file:///home/noceral/Documents/nnpdfgit/nnpdf/doc/sphinx/build/html/tutorials/buildmaster.html).
+the tutorial [Implementing a new experiment in buildmaster](../tutorials/buildmaster.md).
 
 
