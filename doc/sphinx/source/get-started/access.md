@@ -75,6 +75,6 @@ In order to gain access, you need to ask Luigi del Debbio.
     uploaded there should we be unable to use it in the future for any reason.
     Unlike emails and git repositories, no local copy of the archive is easily
     available.  It is **HIGHLY DISCOURAGED** to upload anything to the wiki that you care
-    about losing at some point.  Instead, upload the relevant data to the NNPDF
+    about losing at some point.  Instead, :ref:`upload <upload>` the relevant data to the NNPDF
     server and post links on the wiki if you are asked to do so.
 ```

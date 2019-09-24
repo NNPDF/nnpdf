@@ -14,14 +14,14 @@ The files in this repository are backed up to two locations, indexed and cross
 referenced with the [mailing list](mail). The HTTP access to the files is
 password protected.
 
-The uploading system is designed to integrated with `validphys`. Reports,
+The uploading system is designed to be integrated with `validphys`. Reports,
 hopefully filled with the [appropriate metadata](#metadata) in the runcard, can
 be [uploaded directly](#uploading-directly-from-validphys), or after they have
 been completed using the [`vp-upload` script](#the-vp-upload-script). Arbitrary
 files can be uploaded using the [`wiki-upload` script](#the-wiki-upload-script),
-which will interactively ask the user to fill the metadata. In either case an
-URL will be returned that allows to see the result in a browser, and to share
-them.
+which will interactively ask the user to fill in the metadata. In either case an
+URL will be returned with the location of the resource accessible with a web
+browser.
 
 In order to be able to upload files, the user must have a valid SSH key
 installed in the NNPDF server [access](../get-started/access), and the `rsync`
@@ -35,12 +35,12 @@ Currently the following information is used to index the results:
   - `author` (string)
   - `keywords` (list of strings)
 
-The first two are self explicative, and `keywords` is a list of tags used to
+The first two are self explanatory, and `keywords` is a list of tags used to
 categorize the result, such as *ATLAS jets* or *nn31final*. You can see more
-examples in the [webpage](https://vp.nnpdf.science). Keywords are use in various
-ways to aid the discoverability of the result, and so it is important to set them
-properly. Some keywords may be used to display the report in a prominent place
-of the index page.
+examples in the [webpage](https://vp.nnpdf.science). Keywords are used in
+various ways to aid the discoverability of the result, and so it is important to
+set them properly. Some keywords may be used to display the report in a
+prominent place of the index page.
 
 For `validphys` runcards, this data is read from a `meta` mapping declared in
 the runcard. For example
@@ -64,7 +64,7 @@ several years after they are uploaded.
   - Always fill appropriately the metadata fields for anything you upload.
 
   - Fill the author field with a complete form of your name, e.g. *Zahari
-	Kassabov* rather than *ZK*, and use always the same name.
+	Kassabov* rather than *ZK*, and always use the same name.
 
   - Add keywords that are relevant to the result you are uploading. Use existing
     tags if possible.
@@ -122,13 +122,13 @@ it will fail early if it cannot be established.
 The `vp-upload` script
 ----------------------
 
-The `vp-upload` script upload completed results to the NNPDF server, such as
+The `vp-upload` script uploads completed results to the NNPDF server, such as
 reports and fits. To upload a completed `validphys` report, use
 ```
 vp-upload <output folder>
 ```
 The output folder is expected to contain the [metadata](#metadata) (e.g. in the
-form of a `meta.yaml` file). It it doesn't exist or you want to upload and index
+form of a `meta.yaml` file). If it doesn't exist or you want to upload and index
 arbitrary files, use the [`wiki-upload` command](#the-wiki-upload-script).
 
 ```eval_rst
@@ -152,15 +152,16 @@ command](download).
 The `wiki-upload` script
 ------------------------
 
-The `wiki-upload` script is a more interactive counterpart to `vp-upload`, that
-allows to upload arbitrary files that do not have metadata attached. It will ask
-the user to fill the metadata fields before uploading the result. The usage is
+The `wiki-upload` script is a more interactive counterpart to `vp-upload`. It
+allows uploading arbitrary files that do not have metadata attached. It will
+construct the metadata by asking the user to fill it in before uploading the
+result. The usage is
 
 ```
 wiki-upload <file or folder>
 ```
 This will cause the user to be prompted for the various metadata fields and the
-file or folder to be uploaded to the sever, together with a generated
+file or folder to be uploaded to the server, together with a generated
 `meta.yaml` file used for indexing.
 
 ```eval_rst
