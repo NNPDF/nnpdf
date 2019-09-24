@@ -261,7 +261,7 @@ class CoreConfig(configparser.Config):
         kdiff = dataset.keys() - known_keys
         for k in kdiff:
             #Abuse ConfigError to get the suggestions.
-            log.warninig(ConfigError(f"Key '{k}' in dataset_input not known.", k, known_keys))
+            log.warning(ConfigError(f"Key '{k}' in dataset_input not known.", k, known_keys))
         return DataSetInput(name=name, sys=sysnum, cfac=cfac, frac=frac,
                 weight=weight)
 
