@@ -60,6 +60,108 @@ def parse_ndata(all_data):
         vl_ndata_dict = tr_ndata_dict
     return tr_ndata_dict, vl_ndata_dict, pos_set
 
+class FitState:
+    """
+        Holds the state of the fit for a given point in history
+    """
+    def __init__(self, all_tr_chi2, all_vl_chi2, training_info):
+        self.all_tr_chi2 = all_tr_chi2
+        self.all_vl_chi2 = all_vl_chi2
+        self.training_info = training_info
+        # These two variables are only filled for specific points
+        # in order to save precious memory, and only when we are
+        # saving the fit history each X number of epoch
+        self.weights = None
+        self.best_epoch = 0
+
+    @property
+    def vl_chi2(self):
+        return self.all_vl_chi2["total"]
+
+    @property
+    def tr_chi2(self):
+        return self.all_tr_chi2["total"]
+
+    def __str__(self):
+        return f"chi2: tr={self.tr_chi2} vl={self.vl_chi2}"
+
+    def save_history(self, weights, best_epoch):
+        self.weights = weights
+        self.best_epoch = best_epoch
+
+class FitHistory:
+    """
+        List of FitState items.
+        It also keeps track of which epoch produced the best fit and the associated weights
+    """
+    def __init__(self, validation_model, save_each = None):
+        self.final_epoch = 0
+        self.best_epoch = -1
+        self.weights = None
+        self.history = []
+        self.reloadable_history = []
+        self.validation_model = validation_model
+        self.save_each = save_each
+        self.terrible = False
+
+    @property
+    def best_state(self):
+        if self.best_epoch < 0:
+            return None
+        else:
+            index = self.best_epoch
+            best_state = self.history[index]
+            return best_state
+
+    def best_vl(self):
+        if self.terrible:
+            return TERRIBLE_CHI2
+        if self.best_state:
+            return self.best_state.vl_chi2
+        else:
+            return INITIAL_CHI2
+
+    def best_tr(self):
+        if self.best_state:
+            return self.best_state.tr_chi2
+        else:
+            return self.history[-1].tr_chi2
+
+    def save(self, fitstate, epoch):
+        self.final_epoch = epoch
+        self.history.append(fitstate)
+        if self.save_each:
+            save_here = (epoch + 1) % self.save_each
+            if save_here == 0:
+                fitstate.save_history(self.weights, self.best_epoch)
+                self.reloadable_history.append(fitstate)
+
+    def new_best(self, epoch):
+        self.best_epoch = epoch
+        self.weights = self.validation_model.weights
+
+    def reload(self):
+        if self.weights:
+            self.validation_model.weights = self.weights
+        else:
+            # If there was no model at this point, this was
+            # a terrible run, mark it as such
+            self.terrible = True
+
+
+    def __iter__(self):
+        for i, fitstate in enumerate(self.reloadable_history):
+            log.info("Reloading step %d", i)
+            self.weights = fitstate.weights
+            self.best_epoch = fitstate.best_epoch
+            self.final_epoch = (i+1)*self.save_each
+            # TODO reload the log also so we have a partial log of chi2
+            self.reload()
+            yield i
+
+
+
+
 class Stopping:
     """
         Driver of the stopping algorithm
@@ -89,13 +191,12 @@ class Stopping:
         dont_stop=False,
         save_each=None,
     ):
-
-        # Parse the data dictionary
-        self.ndata_tr_dict, vl_ndata, self.pos_sets = parse_ndata(all_data_dicts)
+        # Parse from the 
+        self.ndata_tr_dict, vl_ndata, pos_sets = parse_ndata(all_data_dicts)
 
         # Save the validation and positivity objects
         self.validation = Validation(validation_model, vl_ndata)
-        self.positivity = Positivity(threshold_positivity)
+        self.positivity = Positivity(threshold_positivity, pos_sets)
 
         # Initialize internal (useful) variables
         self.save_history = False
@@ -112,43 +213,28 @@ class Stopping:
         self.epoch_of_the_stop = total_epochs
         self.training_chi2 = INITIAL_CHI2
         self.best_chi2 = INITIAL_CHI2
+        self.history = FitHistory(self.validation)
 
         # Initialize stats
         self.reset_stats()
-
-        # Initialize the animation saver
-        if save_each:
-            self.history_maker = HistoryMaker(self, save_each)  # how evil is this?
-            self.save_history = True
 
     # In order to get the validation and training loss we return the loss of the best epoch
     # the reason we do this is the HistoryMaker, the easiest and cleanest way of rewinding history
     # is to go back to the epoch in which the weights for that point in history were saved
     @property
-    def loss(self):
+    def vl_loss(self):
         """ Validation loss """
-        return self.best_chi2
+        return self.history.best_vl()
 
-    @loss.getter
-    def loss(self):
-        """
-        If there is a best epoch (`e_best_chi2`) defined, returns the validation loss at that point
-        otherwise return the value saved as best_chi2
-        """
-        if self.e_best_chi2:
-            return self.validation_losses[self.e_best_chi2]
-        else:
-            return self.best_chi2
-
+    @property
     def tr_loss(self):
-        """
-        If there is a best epoch (`e_best_chi2`) defined, returns the training loss at that point
-        otherwise returns the last training loss saved
-        """
-        if self.e_best_chi2:
-            return self.training_losses[self.e_best_chi2]
-        else:
-            return self.training_losses[-1]
+        """ Training loss """
+        return self.history.best_tr()
+
+    @property
+    def e_best_chi2(self):
+        """ Epoch of the best chi2 """
+        return self.history.best_epoch
 
     def reset_stats(self):
         """ Reset statistical information """
@@ -156,7 +242,6 @@ class Stopping:
         self.validation_losses = []
         self.file_list = []
         self.w_best_chi2 = None
-        self.e_best_chi2 = 0
 
     def history_loop(self):
         """
@@ -165,20 +250,9 @@ class Stopping:
         Each iteration of the loop reloads the corresponding point in history (weights and chi2s)
         """
         if self.save_history:
-            return self.history_maker
+            return self.history
         else:
             return []
-
-    def save_stats(self, tr_loss, vl_loss):
-        """
-        Saves the training and validation losses each epoch
-
-        # Argument:
-         - `tr_loss`: training loss
-         - `vl_loss`: validation loss
-        """
-        self.training_losses.append(tr_loss)
-        self.validation_losses.append(vl_loss)
 
     def monitor_chi2(self, training_info, epoch, print_stats=False):
         """
@@ -199,10 +273,8 @@ class Stopping:
         # Returns:
             - `pass_ok`: true/false according to the status of the run
         """
-        # Step 0. Count the event, worst case scenario we have to reset to 0
-        self.stopping_degree += self.count
-
-        # Step 1. Check whether the run was ok
+        # Step 1. Preprocess the event, count it towards the stopping degree
+        #         parse the training information and check whether it is a good point
         tr_chi2, all_tr = self._parse_training(training_info)
 
         if np.isnan(tr_chi2):
@@ -211,77 +283,90 @@ class Stopping:
             self.nan_found = True
             self.epoch_of_the_stop = epoch
             # If we had a good model at any point, reload
-            if self.w_best_chi2:
-                self.reload_model()
-            else:  # else, make sure the loss is marked as terrible
-                self.best_chi2 = TERRIBLE_CHI2
+            self.history.reload()
             return False
 
-        # Step 2. Read the validation loss
-        #         (if there is no validation loss it will correspond to the training)
+        self.stopping_degree += self.count
+
+        # Step 2. Check the validation loss at this point
         vl_chi2, all_vl = self.validation.loss()
 
-        # Step 3. Store all information about the run
-        self.save_stats(tr_chi2, vl_chi2)
+        # Step 3. Store information about the run
+        fitstate = FitState(all_tr, all_vl, training_info)
+        self.history.save(fitstate, epoch)
 
-        # Step 4. Check whether positivity passes, if it doesn't ignore the point
-        if self.positivity.check_positivity(training_info, self.pos_sets):
-            if vl_chi2 < self.best_chi2:
-                # we found a better validation loss! Reset All
-                self.best_chi2 = vl_chi2
-                # Save extra info
+        # Step 4. Check whether this is a better fit
+        #         this means improving vl_chi2 and passing positivity
+        if self.positivity(fitstate):
+            if vl_chi2 < self.history.best_vl():
+                # Set the new best
+                self.history.new_best(epoch)
+                # Save stopping info
                 self.stopping_degree = 0
-                self.e_best_chi2 = epoch
-                self.best_history = training_info
-                self.save_model()
-                # Now activate the counter
+                # Initialize the counter
                 self.count = 1
 
         # If we are asked, print stats and save logs
         if print_stats:
-            self.save_chi2_log(epoch, all_tr, all_vl)
-            self.print_current_stats(all_tr)
-
-        # Call the history maker, if it was not active this call will do nothing
-        if self.save_history:
-            self.history_maker.save(epoch)
+            self.save_chi2_log(epoch, fitstate)
+            self.print_current_stats(epoch, fitstate)
 
         # If your patience has ended, prepare for stop
         if self.stopping_degree > self.stopping_patience:
             self.stop_now = True
             self.epoch_of_the_stop = epoch
-            self.reload_model()
+            self.history.reload()
         return True
 
-    def save_model(self):
-        """
-            Saves the weights of the NN for the validation model
-        """
-        self.w_best_chi2 = self.validation.weights
-
-    def reload_model(self):
-        """
-            Reload the weights of the NN onto the validation model
-        """
-        if self.w_best_chi2:
-            self.validation.weights = self.w_best_chi2
-
-    def print_current_stats(self, all_tr):
+    def print_current_stats(self, epoch, fitstate):
         """
             Prints the last validation and training loss saved
         """
-        epoch = len(self.training_losses)
-        loss = self.training_losses[-1]
-        vl_loss = self.validation_losses[-1]
-        total_str = f"At epoch {epoch}/{self.total_epochs}, total loss: {loss}\n"
+        epoch_index = epoch + 1
+        tr_loss = fitstate.tr_chi2
+        vl_loss = fitstate.vl_chi2
+        total_str = f"At epoch {epoch_index}/{self.total_epochs}, total loss: {tr_loss}\n"
 
         partials = []
-        for experiment, chi2 in all_tr.items():
+        for experiment in self.ndata_tr_dict:
+            chi2 = fitstate.all_tr_chi2[experiment]
             partials.append(f"{experiment}: {chi2:.3f}")
         total_str += ", ".join(partials)
 
         total_str += f"\nValidation loss at this point: {vl_loss}"
         log.info(total_str)
+
+    def save_chi2_log(self, epoch, fitstate):
+        # TODO remove this function as it is 100% useless
+        """
+        For each call save a string in a list with the information of the real current chi2
+        (i.e., pays no attention to validation or positivity)
+        This is used to generate a log file so that the evolution of the chi2 per experiment
+        for the fit can be observed.
+
+        # Arguments:
+            - `epoch`: the current epoch
+            - `all_tr`: dictionary of experiment names and their corresponding chi2 (training)
+            - `all_vl`: dictionary of experiment names and their corresponding chi2 (validation)
+        """
+        all_tr = fitstate.all_tr_chi2
+        all_vl = fitstate.all_vl_chi2
+        # Note: here it is assumed the validation exp set is always a subset of the training exp set
+        data_list = []
+        for exp, tr_loss in all_tr.items():
+            vl_loss = all_vl.get(exp, 0.0)
+            data_str = f"{exp}: {tr_loss} {vl_loss}"
+            data_list.append(data_str)
+        data = "\n".join(data_list)
+        epoch_index = epoch + 1
+        total_tr_loss = fitstate.tr_chi2
+        total_vl_loss = fitstate.vl_chi2
+        strout = f"""
+Epoch: {epoch_index}
+{data}
+Total: training = {total_tr_loss} validation = {total_vl_loss}
+"""
+        self.file_list.append(strout)
 
 
     def _parse_training(self, training_info):
@@ -322,6 +407,7 @@ class Stopping:
         # instead we want to restrict ourselves to the loss coming from experiments
         # total_loss = np.mean(hobj["loss"]) / total_points
         total_loss /= total_points
+        tr_chi2["total"] = total_loss
         return total_loss, tr_chi2
 
     def stop_here(self):
@@ -333,36 +419,10 @@ class Stopping:
 
     def positivity_pass(self):
         """ Checks whether the positivity loss is below the requested threshold """
-        return self.positivity()
-
-    def save_chi2_log(self, epoch, all_tr, all_vl):
-        """
-        For each call save a string in a list with the information of the real current chi2
-        (i.e., pays no attention to validation or positivity)
-        This is used to generate a log file so that the evolution of the chi2 per experiment
-        for the fit can be observed.
-
-        # Arguments:
-            - `epoch`: the current epoch
-            - `all_tr`: dictionary of experiment names and their corresponding chi2 (training)
-            - `all_vl`: dictionary of experiment names and their corresponding chi2 (validation)
-        """
-        # Note: here it is assumed the validation exp set is always a subset of the training exp set
-        data_list = []
-        for exp, tr_loss in all_tr.items():
-            vl_loss = all_vl.get(exp, 0.0)
-            data_str = f"{exp}: {tr_loss} {vl_loss}"
-            data_list.append(data_str)
-        data = "\n".join(data_list)
-        epoch_index = epoch + 1
-        total_tr_loss = self.training_losses[-1]
-        total_vl_loss = self.validation_losses[-1]
-        strout = f"""
-Epoch: {epoch_index}
-{data}
-Total: training = {total_tr_loss} validation = {total_vl_loss}
-"""
-        self.file_list.append(strout)
+        if self.positivity(self.history.best_state):
+            return POS_OK
+        else:
+            return POS_BAD
 
     def chi2exps_str(self):
         """
@@ -423,6 +483,7 @@ class Validation:
             total_points += npoints
 
         total_loss /= total_points
+        vl_dict["total"] = total_loss
 
         return total_loss, vl_dict
 
@@ -457,11 +518,12 @@ class Positivity:
             - `threshold_positivity`: maximum value allowed for the sum of all positivity losses
     """
 
-    def __init__(self, threshold):
+    def __init__(self, threshold, positivity_sets):
         self.threshold = threshold
         self.positivity_ever_passed = False
+        self.positivity_sets = positivity_sets
 
-    def check_positivity(self, history_object, positivity_sets):
+    def check_positivity(self, history_object):
         """
             This function receives a history object and look for entries
             with the keyname: pos_key_something
@@ -473,7 +535,7 @@ class Positivity:
                 - `pos_key`: `key that searchs for the positivity`
         """
         positivity_loss = 0.0
-        for key in positivity_sets:
+        for key in self.positivity_sets:
             key_loss = f"{key}_loss"
             positivity_loss = history_object[key_loss][-1]
         if positivity_loss > self.threshold:
@@ -482,72 +544,9 @@ class Positivity:
             self.positivity_ever_passed = True
             return True
 
-    def __call__(self):
-        if self.positivity_ever_passed:
-            return POS_OK
-        else:
-            return POS_BAD
-
-
-class HistoryMaker:
-    """
-    Class used to save, reload and loop over history
-    This can be used to save checkpoints during the fit and reload them
-    as needed.
-
-    # Arguments:
-        - `stopping_object`: an instance of the `Stopping` class
-        - `save_each`: each how many epochs do we want to save history
-    """
-
-    def __init__(self, stopping_object, save_each=1000):
-        self.save_each = save_each
-        self.all_history = []
-        self.stopping_object = stopping_object
-
-    def len_history(self):
-        """ Returns the number of history steps saved """
-        return len(self.all_history)
-
-    def save(self, epoch):
+    def __call__(self, fitstate):
         """
-        Save the information necessary to reload back the whole model as if we had
-        stopped at exactly this epoch
-
-        # Argument:
-            - `epoch`: the current epoch
+            Checks whether a given FitState object
+            passes the positivity requirement
         """
-        if not self.save_each:
-            return
-        save_here = (epoch + 1) % self.save_each
-        if save_here == 0:
-            weights_best = self.stopping_object.w_best_chi2
-            epoch_best = self.stopping_object.e_best_chi2
-            size_log = len(self.stopping_object.file_list)
-            self.all_history.append((epoch, epoch_best, weights_best, size_log))
-
-    def reload(self, index):
-        """
-        Reload one of the model saved in the HistoryMaker
-
-        # Argument:
-            - `index`: the index of the history element ot reload
-        """
-        info = self.all_history[index]
-        self.stopping_object.epoch_of_the_stop = info[0]
-        self.stopping_object.e_best_chi2 = info[1]
-        self.stopping_object.w_best_chi2 = info[2]
-        self.stopping_object.partial_log = info[3]
-        self.stopping_object.reload_model()
-
-    def __iter__(self):
-        """
-        Loop over the history objects. Returns an iterable following the index of the
-        models stored.
-        Before returning each one of the indices will reload the corresponding point
-        in history
-        """
-        for i in range(self.len_history()):
-            log.info("Reloading step %d", i)
-            self.reload(i)
-            yield i
+        return self.check_positivity(fitstate.training_info)

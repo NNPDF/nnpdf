@@ -268,7 +268,7 @@ def fit(
                 Positivity state: {4}
                 """.format(
                 validation_object.epoch_of_the_stop,
-                validation_object.loss,
+                validation_object.vl_loss,
                 validation_object.e_best_chi2,
                 validation_object.stopping_degree,
                 validation_object.positivity_pass(),

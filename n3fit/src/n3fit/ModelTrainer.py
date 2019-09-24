@@ -512,7 +512,7 @@ class ModelTrainer:
         passed = self._train_and_fit(validation_object, epochs)
 
         # Compute validation loss
-        validation_loss = validation_object.loss
+        validation_loss = validation_object.vl_loss
 
         # Compute experimental loss
         exp_final = self.experimental["model"].evaluate()
@@ -547,7 +547,7 @@ class ModelTrainer:
             "loss": final_loss,
             "status": passed,
             "arc_lengths": arc_lengths,
-            "training_loss": validation_object.tr_loss(),
+            "training_loss": validation_object.tr_loss,
             "validation_loss": validation_loss,
             "experimental_loss": experimental_loss,
             "testing_loss": testing_loss,
