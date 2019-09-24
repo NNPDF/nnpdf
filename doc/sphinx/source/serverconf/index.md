@@ -35,7 +35,7 @@ Access
 ### User access
 
 The access to the server is provided by
-`ssh`/[`vp-upload`](#uploading-the-result) with the following restrictions:
+`ssh`/[`vp-upload`](upload) with the following restrictions:
 
 - `ssh` access to `root` is forbidden.
 - there is a shared `nnpdf` user with low privileges. In order to login 
@@ -63,6 +63,9 @@ not easily accept multiline variables. To use it, do something like `echo
 
 
 
+```eval_rst
+.. _web-scripts:
+```
 Web Scripts
 -----------
 
