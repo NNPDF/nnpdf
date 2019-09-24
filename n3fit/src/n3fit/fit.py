@@ -299,9 +299,9 @@ def fit(
         writer_wrapper.write_data(replica_path_set, output_path.name, true_chi2)
 
         # If the history is active, loop over it writing down the data to different paths
-        for i in validation_object.history_loop():
+        for step in validation_object.history:
             # Each step of the loop reloads a different point in history
-            new_path = output_path / f"history_step_{i}/replica_{replica_number}"
+            new_path = output_path / f"history_step_{step}/replica_{replica_number}"
             # We need to recompute the experimental chi2 for this point
             exp_chi2 = (
                 result["experimental"]["model"].evaluate()[0]
