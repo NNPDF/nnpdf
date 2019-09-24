@@ -1,10 +1,13 @@
 """
     Module containing the classes related to the stopping alogirthm
 
-    In this module there are three Classes:
+    In this module there are four Classes:
+    - FitState: this class contains the information of the fit
+            for a given point in history
     - FitHistory: this class contains the information necessary
             in order to reset the state of the fit to the point
             in which the history was saved.
+            i.e., a list of FitStates
     - Stopping: this class monitors the chi2 of the validation
             and training sets and decides when to stop
     - Positivity: Decides whether a given point fullfills the positivity conditions
@@ -127,7 +130,7 @@ class FitHistory:
         self.save_each = save_each
         # Initialize variables for the history
         self.weights = None
-        self.best_epoch = -1
+        self._best_epoch = -1
         self.final_epoch = 0
         self.history = []
         self.terrible = False
@@ -135,6 +138,16 @@ class FitHistory:
         self.reloadable_history = []
 
     @property
+    def best_epoch(self):
+        """ Epoch of the best fit """
+        return self._best_epoch
+
+    @best_epoch.setter
+    def best_epoch(self, epoch):
+        """ Saves the current weight """
+        self.weights = self.validation_model.weights
+        self._best_epoch = epoch
+
     def best_state(self):
         """ Return the FitState object corresponding to the best fit """
         if self.best_epoch < 0:
@@ -150,16 +163,18 @@ class FitHistory:
         if there was a problem, returns `TERRIBLE_CHI2` """
         if self.terrible:
             return TERRIBLE_CHI2
-        if self.best_state:
-            return self.best_state.vl_chi2
+        best_state = self.best_state()
+        if best_state:
+            return best_state.vl_chi2
         else:
             return INITIAL_CHI2
 
     def best_tr(self):
         """ Returns the training chi2 of the best fit
         if there are no best fit, returns the last one """
-        if self.best_state:
-            return self.best_state.tr_chi2
+        best_state = self.best_state()
+        if best_state:
+            return best_state.tr_chi2
         else:
             return self.history[-1].tr_chi2
 
@@ -179,15 +194,6 @@ class FitHistory:
             if save_here == 0:
                 fitstate.save_history(self.weights, self.best_epoch)
                 self.reloadable_history.append(fitstate)
-
-    def new_best(self, epoch):
-        """ Saves the current weights and updates the `best_epoch`
-
-        # Arguments:
-            - `epoch`: new best epoch of the fit
-        """
-        self.best_epoch = epoch
-        self.weights = self.validation_model.weights
 
     def reload(self):
         """ Reloads the best fit weights into the model """
@@ -256,9 +262,6 @@ class Stopping:
         self.count = 0
         self.total_epochs = total_epochs
 
-    # In order to get the validation and training loss we return the loss of the best epoch
-    # the reason we do this is the HistoryMaker, the easiest and cleanest way of rewinding history
-    # is to go back to the epoch in which the weights for that point in history were saved
     @property
     def vl_loss(self):
         """ Validation loss """
@@ -325,7 +328,7 @@ class Stopping:
         if self.positivity(fitstate):
             if vl_chi2 < self.history.best_vl():
                 # Set the new best
-                self.history.new_best(epoch)
+                self.history.best_epoch = epoch
                 # Save stopping info
                 self.stopping_degree = 0
                 # Initialize the counter
@@ -399,7 +402,9 @@ class Stopping:
         return total_loss, tr_chi2
 
     def stop_here(self):
-        """ Returns the stopping status unless dont_stop is true, then returns False """
+        """ Returns the stopping status
+        If `dont_stop` is set returns always False (i.e., never stop)
+        """
         if self.dont_stop:
             return False
         else:
@@ -407,7 +412,7 @@ class Stopping:
 
     def positivity_pass(self):
         """ Checks whether the positivity loss is below the requested threshold """
-        if self.positivity(self.history.best_state):
+        if self.positivity(self.history.best_state()):
             return POS_OK
         else:
             return POS_BAD
@@ -472,6 +477,9 @@ class Validation:
         self.n_val_exp = len(ndata_dict)
 
     def _compute_validation_loss(self):
+        # TODO: most of the functionality of this function is equal to that of _parse_training
+        #       and has no need for self.stuff BUT it is necessary to deal with the TODO at the
+        #       beginning of the file first
         """
         Evaluates the validation model and returns a tuple (`total_loss`, `vl_dict`)
         with the information for the validation loss by experimenet normalized to the
@@ -536,7 +544,6 @@ class Positivity:
 
     def __init__(self, threshold, positivity_sets):
         self.threshold = threshold
-        self.positivity_ever_passed = False
         self.positivity_sets = positivity_sets
 
     def check_positivity(self, history_object):
@@ -557,7 +564,6 @@ class Positivity:
         if positivity_loss > self.threshold:
             return False
         else:
-            self.positivity_ever_passed = True
             return True
 
     def __call__(self, fitstate):
