@@ -1,0 +1,28 @@
+pdfs:
+    - id:  160502-r82cacd2-jr-001
+      label: Baseline
+
+    - id: 160502-r82cacd2-jr-008
+      label: HERA+LHCb
+
+    - id: 160603-r654e559-jr-003
+      label: baseline+LHCb and Tev legacy
+
+fit: 160603-r654e559-jr-003
+theoryids:
+    - 52
+    - 53
+use_cuts : nocuts
+
+experiments:
+  - experiment: LHCb
+    datasets:
+      - { dataset: LHCBWZMU7TEV, cfac: [NRM] }
+      - { dataset: LHCBWZMU8TEV, cfac: [NRM] }
+
+  - experiment: ATLAS
+    datasets:
+      - { dataset: ATLASWZRAP36PB}
+
+actions_:
+ - theoryids::pdfs::experiments::experiment plot_fancy
