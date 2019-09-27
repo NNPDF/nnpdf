@@ -4,6 +4,11 @@
 
 Fit summary 
 ------------------
+
+We are looking at:
+
+  - {@ closure fit @} (`{@ closure fit_id @}`): {@ closure description @}
+
 {@ summarise_fits @}
 
 Underlying PDF Summary

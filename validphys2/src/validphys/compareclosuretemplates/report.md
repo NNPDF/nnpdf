@@ -2,6 +2,12 @@
 
 Fit summary
 -----------
+
+We are comparing:
+
+  - {@ current fit @} (`{@ current fit_id @}`): {@ current description @}
+  - {@ reference fit @} (`{@ reference fit_id @}`): {@ reference description @}
+
 {@ summarise_fits @}
 
 Underlying PDF Summary
