@@ -90,7 +90,7 @@ class FitState:
         self.weights = None
         self.best_epoch = 0
 
-    def save_history(self, weights, best_epoch):
+    def register_weigths(self, weights, best_epoch):
         """ Save the current best weights and best_epoch of the fit """
         self.weights = weights
         self.best_epoch = best_epoch
@@ -122,19 +122,19 @@ class FitHistory:
         # Arguments:
             - `validation_model`: a reference to a Validaton object
                     this is necessary at the moment in order to save the weights
-            - `save_each`: if given it will save a snapshot of the fit every  `save_each` epochs
+            - `save_weights_each`: if given,
+                    it will save a snapshot of the fit every  `save_weights_each` epochs
     """
 
-    def __init__(self, validation_model, save_each=None):
-        self.validation_model = validation_model
-        self.save_each = save_each
+    def __init__(self, validation_model, save_weights_each=None):
+        self._validation_model = validation_model
+        self._save_weights_each = save_weights_each
         # Initialize variables for the history
-        self.weights = None
-        self._best_epoch = -1
-        self.final_epoch = 0
-        self.history = []
-        self.terrible = False
-        # Initialize variables fort he snapshots
+        self._weights = None
+        self._best_epoch = None
+        self._history = []
+        self.final_epoch = None
+        # Initialize variables for the snapshots
         self.reloadable_history = []
 
     @property
@@ -145,23 +145,27 @@ class FitHistory:
     @best_epoch.setter
     def best_epoch(self, epoch):
         """ Saves the current weight """
-        self.weights = self.validation_model.weights
+        self._weights = self._validation_model.weights
         self._best_epoch = epoch
+
+    def get_state(self, epoch):
+        """ Get the FitState of the system for a given epoch """
+        return self._history[epoch]
 
     def best_state(self):
         """ Return the FitState object corresponding to the best fit """
-        if self.best_epoch < 0:
+        if self.best_epoch is None:
             return None
         else:
             index = self.best_epoch
-            best_state = self.history[index]
+            best_state = self._history[index]
             return best_state
 
     def best_vl(self):
         """ Returns the chi2 of the best fit
         if there was no best fit returns `INITIAL_CHI2`
         if there was a problem, returns `TERRIBLE_CHI2` """
-        if self.terrible:
+        if not self._weights:
             return TERRIBLE_CHI2
         best_state = self.best_state()
         if best_state:
@@ -176,11 +180,11 @@ class FitHistory:
         if best_state:
             return best_state.tr_chi2
         else:
-            return self.history[-1].tr_chi2
+            return self._history[self.final_epoch].tr_chi2
 
-    def save(self, fitstate, epoch):
+    def register(self, fitstate, epoch):
         """ Save a new fitstate and updates the current final epoch
-        Every `save_each` (if set) saves a snapshot of the current best fit into
+        Every `save_weights_each` (if set) saves a snapshot of the current best fit into
         the fitstate
 
         # Arguments:
@@ -188,34 +192,32 @@ class FitHistory:
             - `epoch`: the current epoch of the fit
         """
         self.final_epoch = epoch
-        self.history.append(fitstate)
-        if self.save_each:
-            save_here = (epoch + 1) % self.save_each
+        self._history.append(fitstate)
+        if self._save_weights_each:
+            save_here = (epoch + 1) % self._save_weights_each
             if save_here == 0:
-                fitstate.save_history(self.weights, self.best_epoch)
+                fitstate.register_weigths(self._weights, self.best_epoch)
                 self.reloadable_history.append(fitstate)
 
-    def reload(self):
-        """ Reloads the best fit weights into the model """
-        if self.weights:
-            self.validation_model.weights = self.weights
-        else:
-            # If there was no model at this point, this was
-            # a terrible run, mark it as such
-            self.terrible = True
+    def reload(self, weights = None):
+        """ Reloads the best fit weights into the model
+        if there are models to be reloaded
+        A set of weights can be enforced as an optional argument
+        """
+        if weights is None:
+            weights = self._weights
+        if weights:
+            self._validation_model.weights = weights
 
-    def __iter__(self):
-        """ Iterate over the fitstate members which have weights
-        saved on them.
-        Rewind the FitHistory object to that point in the fit """
-        for i, fitstate in enumerate(self.reloadable_history):
-            log.info("Reloading step %d", i)
-            self.weights = fitstate.weights
-            self.best_epoch = fitstate.best_epoch
-            self.final_epoch = (i + 1) * self.save_each
-            self.reload()
-            yield i
-
+    def rewind(self, step):
+        """ Rewind the FitHistory object to the step `step` in the fit
+        """
+        fitstate = self.reloadable_history[step]
+        historic_weights = fitstate.weights
+        self.reload(weights = historic_weights)
+        self.best_epoch = fitstate.best_epoch
+        self.final_epoch = (step + 1) * self._save_weights_each - 1
+        # -1 because we are saving the epochs starting at 0
 
 class Stopping:
     """
@@ -233,7 +235,7 @@ class Stopping:
             - `total_epochs`: total number of epochs
             - `stopping_patience`: how many epochs to wait for the validation loss to improve
             - `dont_stop`: dont care about early stopping
-            - `save_each`: every how many epochs to save a snapshot of the fit
+            - `save_weights_each`: every how many epochs to save a snapshot of the fit
     """
 
     def __init__(
@@ -244,15 +246,15 @@ class Stopping:
         total_epochs=0,
         stopping_patience=7000,
         dont_stop=False,
-        save_each=None,
+        save_weights_each=None,
     ):
         # Parse the training, validation and positivity sets from all the input dictionaries
-        self.tr_ndata, vl_ndata, pos_sets = parse_ndata(all_data_dicts)
+        self._tr_ndata, vl_ndata, pos_sets = parse_ndata(all_data_dicts)
 
         # Create the Validation, Positivity and History objects
         self.validation = Validation(validation_model, vl_ndata)
         self.positivity = Positivity(threshold_positivity, pos_sets)
-        self.history = FitHistory(self.validation, save_each=save_each)
+        self.history = FitHistory(self.validation, save_weights_each=save_weights_each)
 
         # Initialize internal variables for the stopping
         self.dont_stop = dont_stop
@@ -319,7 +321,7 @@ class Stopping:
 
         # Step 3. Store information about the run and print stats if asked
         fitstate = FitState(all_tr, all_vl, training_info)
-        self.history.save(fitstate, epoch)
+        self.history.register(fitstate, epoch)
         if print_stats:
             self.print_current_stats(epoch, fitstate)
 
@@ -352,7 +354,7 @@ class Stopping:
         )
 
         partials = []
-        for experiment in self.tr_ndata:
+        for experiment in self._tr_ndata:
             chi2 = fitstate.all_tr_chi2[experiment]
             partials.append(f"{experiment}: {chi2:.3f}")
         total_str += ", ".join(partials)
@@ -387,7 +389,7 @@ class Stopping:
         tr_chi2 = {}
         total_points = 0
         total_loss = 0
-        for exp_name, npoints in self.tr_ndata.items():
+        for exp_name, npoints in self._tr_ndata.items():
             loss = np.mean(hobj[exp_name + "_loss"])
             tr_chi2[exp_name] = loss / npoints
             total_points += npoints
@@ -411,8 +413,11 @@ class Stopping:
             return self.stop_now
 
     def positivity_pass(self):
-        """ Checks whether the positivity loss is below the requested threshold """
-        if self.positivity(self.history.best_state()):
+        """ Checks whether the positivity loss is below the requested threshold
+        If there is no best state, the positivity (obv) cannot pass
+        """
+        best_state = self.history.best_state()
+        if best_state is not None and self.positivity(best_state):
             return POS_OK
         else:
             return POS_BAD
@@ -431,12 +436,12 @@ class Stopping:
         final_epoch = self.history.final_epoch
         file_list = []
         for i in range(log_each - 1, final_epoch + 1, log_each):
-            fitstate = self.history.history[i]
+            fitstate = self.history.get_state(i)
             all_tr = fitstate.all_tr_chi2
             all_vl = fitstate.all_vl_chi2
             # Here it is assumed the validation exp set is always a subset of the training exp set
             data_list = []
-            for exp in self.tr_ndata:
+            for exp in self._tr_ndata:
                 tr_loss = all_tr[exp]
                 vl_loss = all_vl.get(exp, 0.0)
                 data_str = f"{exp}: {tr_loss} {vl_loss}"
@@ -477,7 +482,7 @@ class Validation:
         self.n_val_exp = len(ndata_dict)
 
     def _compute_validation_loss(self):
-        # TODO: most of the functionality of this function is equal to that of _parse_training
+        # TODO: most of the functionality of this function is equal to that of parse_training
         #       and has no need for self.stuff BUT it is necessary to deal with the TODO at the
         #       beginning of the file first
         """

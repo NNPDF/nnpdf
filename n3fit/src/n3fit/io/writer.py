@@ -12,7 +12,7 @@ from n3fit.msr import compute_arclength
 
 
 class WriterWrapper:
-    def __init__(self, replica_number, pdf_function, validation_object, fitbasis_layer, q2):
+    def __init__(self, replica_number, pdf_function, stopping_object, fitbasis_layer, q2):
         """
         Initializes the writer for one given replica. This is decoupled from the writing
         of the fit in order to fix some of the variables which would be, in principle,
@@ -21,14 +21,14 @@ class WriterWrapper:
         # Arguments:
             - `replica_number`: index of the replica
             - `pdf_function`: function to evaluate with a grid in x to generate a pdf
-            - `validation_object`: a stopping.Validation object
+            - `stopping_object`: a stopping.Validation object
             - `fitbasis_layer`: the layer corresponding to the fitbasis, necessary to
                                 compute the arclength
             - `q2`: q^2 of the fit
         """
         self.replica_number = replica_number
         self.pdf_function = pdf_function
-        self.validation_object = validation_object
+        self.stopping_object = stopping_object
         self.fitbasis = fitbasis_layer
         self.q2 = q2
 
@@ -44,7 +44,7 @@ class WriterWrapper:
         # Compute the arclengths
         arc_lengths = compute_arclength(self.fitbasis)
         # Construct the chi2exp file
-        allchi2_lines = self.validation_object.chi2exps_str()
+        allchi2_lines = self.stopping_object.chi2exps_str()
         # Construct the preproc file
         preproc_lines = ""  # TODO decide how to fill up this in a sensible way
 
@@ -58,14 +58,14 @@ class WriterWrapper:
             replica_path_set,
             fitname,
             self.q2,
-            self.validation_object.epoch_of_the_stop,
-            self.validation_object.vl_loss,
-            self.validation_object.tr_loss,
+            self.stopping_object.epoch_of_the_stop,
+            self.stopping_object.vl_loss,
+            self.stopping_object.tr_loss,
             true_chi2,
             arc_lengths,
             allchi2_lines,
             preproc_lines,
-            self.validation_object.positivity_pass(),
+            self.stopping_object.positivity_pass(),
         )
 
 

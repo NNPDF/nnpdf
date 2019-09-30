@@ -49,7 +49,7 @@ class ModelTrainer:
         pass_status="ok",
         failed_status="fail",
         debug=False,
-        save_history_each=False,
+        save_weights_each=False,
     ):
         """
         # Arguments:
@@ -62,8 +62,8 @@ class ModelTrainer:
             - `pass_status`: flag to signal a good run
             - `failed_status`: flag to signal a bad run
             - `debug`: flag to activate some debug options
-            - `save_history_each`: if set, save the state of the fit
-                                    every `save_history_each` epochs
+            - `save_weights_each`: if set, save the state of the fit
+                                    every `save_weights_each` epochs
         """
 
         # Save all input information
@@ -75,7 +75,7 @@ class ModelTrainer:
         self.pass_status = pass_status
         self.failed_status = failed_status
         self.debug = debug
-        self.save_history_each = save_history_each
+        self.save_weights_each = save_weights_each
 
         # Initialise internal variables which define behaviour
         self.print_summary = True
@@ -116,13 +116,8 @@ class ModelTrainer:
         self._fill_the_dictionaries()
 
         if self.validation["ndata"] == 0:
+            # If there is no validation, the validation chi2 = training chi2
             self.no_validation = True
-            new_dict = {}
-            for key, item in self.ndata_dict.items():
-                if key.endswith("_vl"):
-                    continue
-                new_dict[key + "_vl"] = item
-            self.ndata_dict.update(new_dict)
             self.validation["expdata"] = self.training["expdata"]
         else:
             # Consider the validation only if there is validation (of course)
@@ -397,10 +392,10 @@ class ModelTrainer:
                 target_output=data,
             )
 
-    def _train_and_fit(self, validation_object, epochs):
+    def _train_and_fit(self, stopping_object, epochs):
         """
         Trains the NN for the number of epochs given using
-        validation_object as the stopping criteria
+        stopping_object as the stopping criteria
 
         Every 100 epochs the positivitiy will be updated with
         self.training['pos_multiplier']
@@ -420,14 +415,14 @@ class ModelTrainer:
                     new_w = [curr_w[0] * pos_multiplier]
                     training_model.get_layer(name).set_weights(new_w)
 
-            passes = validation_object.monitor_chi2(out, epoch, print_stats=print_stats)
+            passes = stopping_object.monitor_chi2(out, epoch, print_stats=print_stats)
 
-            if validation_object.stop_here():
+            if stopping_object.stop_here():
                 break
 
         # Report a "good" training only if there was no NaNs
         # and if there was at least a point which passed positivity
-        if passes and validation_object.positivity:
+        if passes and stopping_object.positivity:
             return self.pass_status
         else:
             return self.failed_status
@@ -485,7 +480,7 @@ class ModelTrainer:
         # Model generation
         self._model_generation()
 
-        # Generate the validation_object
+        # Generate the stopping_object
         # this object holds statistical information about the fit
         # it can be used to perform stopping
         epochs = int(params["epochs"])
@@ -497,22 +492,22 @@ class ModelTrainer:
         else:
             validation_model = self.validation["model"]
 
-        validation_object = Stopping(
+        stopping_object = Stopping(
             validation_model,
             self.all_info,
             total_epochs=epochs,
             stopping_patience=stopping_epochs,
-            save_each=self.save_history_each,
+            save_weights_each=self.save_weights_each,
         )
 
         # Compile the training['model'] with the given parameters
         self._model_compilation(params["learning_rate"], params["optimizer"])
 
         ### Training loop
-        passed = self._train_and_fit(validation_object, epochs)
+        passed = self._train_and_fit(stopping_object, epochs)
 
         # Compute validation loss
-        validation_loss = validation_object.vl_loss
+        validation_loss = stopping_object.vl_loss
 
         # Compute experimental loss
         exp_final = self.experimental["model"].evaluate()
@@ -547,7 +542,7 @@ class ModelTrainer:
             "loss": final_loss,
             "status": passed,
             "arc_lengths": arc_lengths,
-            "training_loss": validation_object.tr_loss,
+            "training_loss": stopping_object.tr_loss,
             "validation_loss": validation_loss,
             "experimental_loss": experimental_loss,
             "testing_loss": testing_loss,
@@ -564,7 +559,7 @@ class ModelTrainer:
         dict_out["layer_pdf"] = self.layer_pdf
         dict_out["layers"] = layers
         dict_out["integrator_input"] = integrator_input
-        dict_out["validation_object"] = validation_object
+        dict_out["stopping_object"] = stopping_object
         dict_out["experimental"] = self.experimental
         dict_out["training"] = self.training
 

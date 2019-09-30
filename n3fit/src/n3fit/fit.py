@@ -163,7 +163,7 @@ def fit(
             nnseed,
             pass_status=status_ok,
             debug=debug,
-            save_history_each=fitting.get("save_history_each"),
+            save_weights_each=fitting.get("save_weights_each"),
         )
 
         # Check whether we want to load weights from a file (maybe from a previous run)
@@ -252,7 +252,7 @@ def fit(
         result = pdf_gen_and_train_function(parameters)
 
         # After the fit is run we get a 'result' dictionary with the following items:
-        validation_object = result["validation_object"]
+        stopping_object = result["stopping_object"]
         layer_pdf = result["layer_pdf"]
         layers = result["layers"]
         integrator_input = result["integrator_input"]
@@ -267,11 +267,11 @@ def fit(
                 which it got at {2}. Stopping degree {3}
                 Positivity state: {4}
                 """.format(
-                validation_object.epoch_of_the_stop,
-                validation_object.vl_loss,
-                validation_object.e_best_chi2,
-                validation_object.stopping_degree,
-                validation_object.positivity_pass(),
+                stopping_object.epoch_of_the_stop,
+                stopping_object.vl_loss,
+                stopping_object.e_best_chi2,
+                stopping_object.stopping_degree,
+                stopping_object.positivity_pass(),
             )
         )
 
@@ -290,7 +290,7 @@ def fit(
         writer_wrapper = WriterWrapper(
             replica_number,
             pdf_function,
-            validation_object,
+            stopping_object,
             layers["fitbasis"],
             theoryid.get_description().get("Q0") ** 2,
         )
@@ -298,9 +298,10 @@ def fit(
         # Now write the data down
         writer_wrapper.write_data(replica_path_set, output_path.name, true_chi2)
 
-        # If the history is active, loop over it writing down the data to different paths
-        for step in validation_object.history:
-            # Each step of the loop reloads a different point in history
+        # If the history of weights is active then loop over it
+        # rewind the state back to every step and write down the results
+        for step in range(len(stopping_object.history.reloadable_history)):
+            stopping_object.history.rewind(step)
             new_path = output_path / f"history_step_{step}/replica_{replica_number}"
             # We need to recompute the experimental chi2 for this point
             exp_chi2 = (
@@ -318,12 +319,6 @@ def fit(
         log.info(" > Saving the weights for future in %s", model_file)
         training["model"].save_weights(model_file)
 
-    # Plot the validation and the training losses
-    if fitting.get("plot"):
-        validation_object.plot()
-
     # print out the integration of the sum rule in case we want to check it's not broken
-
-
 #     import n3fit.msr as msr_constraints
 # msr_constraints.check_integration(layer_pdf, integrator_input)
