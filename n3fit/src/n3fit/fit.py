@@ -307,6 +307,7 @@ def fit(
             stopping_object,
             layers["fitbasis"],
             theoryid.get_description().get("Q0") ** 2,
+            timings,
         )
 
         # Now write the data down
