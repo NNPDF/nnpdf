@@ -1,11 +1,11 @@
-dataset_label: "CMS jets 8 TeV"
+dataset_label: "CMS dijets 7 TeV"
 x: k2
 
-y_label: '$10^{3*qbin} d^2\sigma/dp_Tdy$ [pb/GeV]' 
+y_label: '$10^{3*qbin} d^2\sigma/dm_{12}dy$ [pb/GeV]' 
 y_scale: log
 x_scale: log
 result_transform: qbinjets
-kinematics_override: jet_sqrt_scale
+kinematics_override: dijet_sqrt_scale
 
 normalize:
     y_scale: linear
@@ -17,4 +17,4 @@ line_by:
     - k1
 
 experiment: "CMS"
-nnpdf31_process: JETS
+nnpdf31_process: DIJET
