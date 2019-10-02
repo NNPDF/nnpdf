@@ -15,6 +15,7 @@ NNPDF documentation
    code/index
    serverconf/index
    tutorials/index
+   sphinx_documentation/index
    QA/index
 
 Indices and tables
