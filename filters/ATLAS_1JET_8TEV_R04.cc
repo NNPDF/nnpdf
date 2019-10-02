@@ -40,7 +40,7 @@ tot points         171
 tot sys per point  639
 Implemented by TG July 2019. 
 */
-#include "ATLAS.h"
+#include "ATLAS_1JET_8TEV_R04.h"
 
 void ATLAS_1JET_8TEV_R04Filter::ReadData()
 {

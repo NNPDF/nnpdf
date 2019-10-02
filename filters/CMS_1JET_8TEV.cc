@@ -45,10 +45,10 @@ zero. This procedure is consistent with the analysis presented in the paper and
 allows one to reproduce the total left (right) systematic uncertainties
 quoted on hepdata, once all the resulting left (right) sources of nuisance are
 added in quadrature. 
-Note that the Xfitter files contain 3 additional theoretical uncertainties
-corresponding to the uncertainty associated to nonperturbative effects
-in the theoretical prediction. These uncertainties are peculiar to the Xfitter
-determination of alphas and are not implemented in this filter.
+Note that the Xfitter files contain additional nonperturbative corrections
+(a rescaling factor with its left and right error). These are implemented as an
+extra systematic ucnertainty determined as the difference between the measured
+data and the data rescaled by the provided factor (including its uncertainty).
 
 bin 1:   0 < |y| < 0.5
 ========================
@@ -99,7 +99,7 @@ Implemented by TG May 2019. Revised by ERN May 2019.
 */
 
 
-#include "CMS.h"
+#include "CMS_1JET_8TEV.h"
 
 void CMS_1JET_8TEVFilter::ReadData()
 {
@@ -115,8 +115,8 @@ void CMS_1JET_8TEVFilter::ReadData()
   std::vector<double> stat(fNData);   
 
   int n = 0;                                //count total number of datapoints
-  //const double fac = 1e7;                   //conversion factor from pb to 10 mub
-  const int realsys=52;                     //number of real systematics
+  //const double fac = 1e7;                 //conversion factor from pb to 10 mub
+  const int realsys=54;                     //number of real systematics (including NP theoretical uncertainties)
 
   for(int bin=0; bin < nbins; bin++ )
   {
@@ -155,8 +155,18 @@ void CMS_1JET_8TEVFilter::ReadData()
       //Read uncertainties
       double sys1, sys2;
 
-      //1) Relative theoretical uncertainties due to nonperturbative corrections in the prediction (they must be ignored)
-      lstream >> dum >> dum >> dum;
+      //1) Relative theoretical uncertainties due to nonperturbative corrections in the prediction
+      double np_corr, np_corr_erp, np_corr_erm;
+      lstream >> np_corr >> np_corr_erp >> np_corr_erm;
+
+      fSys[i][0].mult = (np_corr*(1. + np_corr_erp/100.) - 1)/sqrt(2.)*100.;
+      fSys[i][0].add  = fSys[i][0].mult*fData[i]/100;
+      fSys[i][0].type = MULT;   
+      fSys[i][0].name = "SKIP";
+      fSys[i][1].mult = (np_corr*(1. + np_corr_erm/100.) - 1)/sqrt(2.)*100.;	
+      fSys[i][1].add  = fSys[i][1].mult*fData[i]/100;
+      fSys[i][1].type = MULT;   
+      fSys[i][1].name = "SKIP";
 
       //2) Absolute statistical uncertainty
       lstream >> stat[i];
@@ -166,15 +176,15 @@ void CMS_1JET_8TEVFilter::ReadData()
       //note: sys1 always positive; sys2 always negative
       lstream >> sys1 >> sys2;
 
-      fSys[i][0].type = MULT;   
-      fSys[i][0].name = "CORR";
-      fSys[i][0].mult = sys1/sqrt(2.);
-      fSys[i][0].add  = fSys[i][0].mult*fData[i]/100;
+      fSys[i][2].type = MULT;   
+      fSys[i][2].name = "CORR";
+      fSys[i][2].mult = sys1/sqrt(2.);
+      fSys[i][2].add  = fSys[i][0].mult*fData[i]/100;
 
-      fSys[i][1].type = MULT;   
-      fSys[i][1].name = "CORR";
-      fSys[i][1].mult = sys2/sqrt(2.);
-      fSys[i][1].add  = fSys[i][1].mult*fData[i]/100;
+      fSys[i][3].type = MULT;   
+      fSys[i][3].name = "CORR";
+      fSys[i][3].mult = sys2/sqrt(2.);
+      fSys[i][3].add  = fSys[i][1].mult*fData[i]/100;
 
       //4) Relative sytematic JES uncertainties, obtained from 24 independent sources of uncertainty
       //note: sys1 and sys2 can be: both positive, both negative, negative an dpositive, positive and negative
@@ -217,31 +227,31 @@ void CMS_1JET_8TEVFilter::ReadData()
 		}
 	    }	  
 
-	  fSys[i][2+2*k].type = MULT;   
-	  fSys[i][2+2*k].name = "CORR";
-	  fSys[i][2+2*k].mult = sys1/sqrt(2.);
-	  fSys[i][2+2*k].add  = fSys[i][2+2*k].mult*fData[i]/100;
+	  fSys[i][4+2*k].type = MULT;   
+	  fSys[i][4+2*k].name = "CORR";
+	  fSys[i][4+2*k].mult = sys1/sqrt(2.);
+	  fSys[i][4+2*k].add  = fSys[i][2+2*k].mult*fData[i]/100;
 
-	  fSys[i][2+2*k+1].type = MULT;   
-	  fSys[i][2+2*k+1].name = "CORR";
-	  fSys[i][2+2*k+1].mult = sys2/sqrt(2.);
-	  fSys[i][2+2*k+1].add  = fSys[i][2+2*k+1].mult*fData[i]/100;
+	  fSys[i][4+2*k+1].type = MULT;   
+	  fSys[i][4+2*k+1].name = "CORR";
+	  fSys[i][4+2*k+1].mult = sys2/sqrt(2.);
+	  fSys[i][4+2*k+1].add  = fSys[i][2+2*k+1].mult*fData[i]/100;
 	}
 
       //5) Luminosity uncertainty
       double sys;
       lstream >> sys;
-      fSys[i][50].type = MULT;   
-      fSys[i][50].name = "CMSLUMI12";
-      fSys[i][50].mult = sys;
-      fSys[i][50].add  = fSys[i][50].mult*fData[i]/100;
+      fSys[i][52].type = MULT;   
+      fSys[i][52].name = "CMSLUMI12";
+      fSys[i][52].mult = sys;
+      fSys[i][52].add  = fSys[i][50].mult*fData[i]/100;
 
       //6) Relative uncorrelated systematic uncertainty
       lstream >> dum >> sys;
-      fSys[i][51].type = MULT;   
-      fSys[i][51].name = "UNCORR";
-      fSys[i][51].mult = sys;
-      fSys[i][51].add  = fSys[i][51].mult*fData[i]/100;
+      fSys[i][53].type = MULT;   
+      fSys[i][53].name = "UNCORR";
+      fSys[i][53].mult = sys;
+      fSys[i][53].add  = fSys[i][51].mult*fData[i]/100;
 
       /*
       //Checking systematics
