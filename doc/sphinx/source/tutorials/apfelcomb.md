@@ -24,8 +24,12 @@ The generation of each subgrid can by achieved with the following command
 ./apfel_comb <source=app/dis/dyp> <subgrid id> <theory id>
 ```
 where `<app/dis/dyp>` specifies whether the subgrid is in the APP, DIS or 
-DYP subgrid categories in the database (`db/apfelcomb.dat`), `<subgrid id>` 
-is the corresponding ID in that database (visible in the `disp\_grids` script) 
+DYP subgrid categories in the database (`db/apfelcomb.dat`), where:
+- APP: refers to applgrids, partonic cross sections produced externally by a MonteCarlo generator.
+- DIS: Deep Inelastic Scatting, coefficient fucnctions computed by `APFEL`.
+- DYP: Drell-Yan, partonic cross sections computed by `APFEL`.
+
+`<subgrid id>` is the corresponding ID in that database (visible in the `disp\_grids` script) 
 and `<theory id>` specifies the desired NNPDF theory index (the entry in 
 nnpdf/nnpdfcpp/data/theory.db). As an example:
 ```Shell
