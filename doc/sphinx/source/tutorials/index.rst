@@ -9,6 +9,7 @@ Tutorials
    ./APPLgrids.md
    ./apfelcomb.md
    ./datthcomp.md
+   ./closureestimators.md
    ./conda.md
 
 =======
