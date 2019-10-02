@@ -127,7 +127,8 @@ int main(int argc, char **argv)
   initialscale_grids[0].SetPDFgrid(rep0pgrid);
 
   string infofile = fit_path + "/evolvefit/theory_" + std::to_string(theory_id)
-                  + "-" + settings.GetPDFName() + "/" + settings.GetPDFName() + ".info";
+                  + "-" + settings.GetPDFName() + "/" + "theory_" + std::to_string(theory_id)
+                  + "-" + settings.GetPDFName() + ".info";
   auto dglapg = EvolveGrid(initialscale_grids, theory_map);
   dglapg.WriteInfoFile(infofile, initialscale_grids.size());
 
@@ -138,7 +139,8 @@ int main(int argc, char **argv)
       replica_file << fit_path
                    << "/evolvefit/theory_" << theory_id
                    << "-" << settings.GetPDFName()
-                   << "/" << settings.GetPDFName() << "_"
+                   << "/" << "theory_" << theory_id
+                   << "-" << settings.GetPDFName() << "_"
                    << std::setfill('0') << std::setw(4) << i << ".dat";
       write_to_file(replica_file.str(), outstream[i].str());
     }
