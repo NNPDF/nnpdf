@@ -12,64 +12,6 @@ import numpy as np
 from reportengine.compat import yaml
 from n3fit.msr import compute_arclength
 
-def time_diff(end, start):
-    """
-    Receives two tuples with the CPU time and the Wall time and
-    returns a tuple with the time difference
-    time_tuple = (cpu_time, wall_time)
-
-    # Argument:
-        - `end`: tuple with the ending cpu and wall times
-        - `start`: tuple with the starting cpu and wall times
-
-    # Return:
-        - `cpu_diff`: difference in cpu time
-        - `wall_diff`: difference for the walltime
-    """
-    cpu_diff = end[0] - start[0]
-    wall_diff = end[1] - start[1]
-    return cpu_diff, wall_diff
-
-def parse_times(timing_dictionary):
-    """
-        Receives a dictionary containing timestamps for the different
-        points in the fit and parses it to form a json-dumpable dictionary
-        in the following form:
-
-        { 'walltime' : { 'event' : time },
-          'cputime'  : { 'event' : time },
-          'raw'      : originial `timing_dictionary`
-          }
-
-        # Arguments:
-            - `timing_dictionary`: dictionary with timestamps
-
-        # Returns:
-            - `out_dict`: dumplable dictionary
-    """
-    out_dict = {'walltime' : {}, 'cputime' : {}, 'raw' : timing_dictionary}
-    def fill_dict(tag, cputime, walltime):
-        out_dict['walltime'][tag] = cputime
-        out_dict['cputime'][tag] = walltime 
-    # First compute the total timings
-    start_time = timing_dictionary["start"]
-    if "end" in timing_dictionary:
-        end_time = timing_dictionary["end"]
-    else:
-        end_time = (time.process_time(), time.time())
-    ct, wt = time_diff(end_time, start_time)
-    fill_dict('total', ct, wt)
-    # Compute the time it took to load the data
-    data_loaded = timing_dictionary["data_loaded"]
-    ct, wt = time_diff(data_loaded, start_time)
-    fill_dict("DataLoad", ct, wt)
-    # Compute the time it took for the fit
-    fit_start = timing_dictionary["replica_set"]
-    fit_end = timing_dictionary["replica_fitted"]
-    ct, wt = time_diff(fit_end, fit_start)
-    fill_dict("FitTime", ct, wt)
-    return out_dict
-
 class WriterWrapper:
     def __init__(self, replica_number, pdf_function, stopping_object, fitbasis_layer, q2, timings):
         """
@@ -91,7 +33,7 @@ class WriterWrapper:
         self.stopping_object = stopping_object
         self.fitbasis = fitbasis_layer
         self.q2 = q2
-        self.timings = parse_times(timings)
+        self.timings = timings 
 
     def write_data(self, replica_path_set, fitname, true_chi2):
         """

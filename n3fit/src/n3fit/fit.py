@@ -11,10 +11,6 @@ import numpy as np
 
 log = logging.getLogger(__name__)
 
-def get_time():
-    cpu_time = time.process_time()
-    wall_time = time.time()
-    return cpu_time, wall_time
 
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
@@ -82,15 +78,15 @@ def fit(
         set_initial_state()
     ###############
 
-    timings = {}
-    timings["start"] = get_time()
-
+    from n3fit.stopwatch import StopWatch
+    stopwatch = StopWatch()
     # All potentially backend dependent imports should come inside the fit function
     # so they can eventually be set from the runcard
     from n3fit.ModelTrainer import ModelTrainer
     from n3fit.io.writer import WriterWrapper
     from n3fit.backends import MetaModel
     import n3fit.io.reader as reader
+
 
     if hyperopt:
         import hyperopt as hyper
@@ -161,7 +157,7 @@ def fit(
 
     # Note: In the basic scenario we are only running for one replica and thus this loop is only
     # run once and all_exp_infos is a list of just than one element
-    timings["data_loaded"] = get_time()
+    stopwatch.register_times("data_loaded")
     for replica_number, exp_info, nnseed in zip(replica, all_exp_infos, nnseeds):
         replica_path_set = replica_path / f"replica_{replica_number}"
         log.info("Starting replica fit %s", replica_number)
@@ -195,7 +191,7 @@ def fit(
 
         # Read up the parameters of the NN from the runcard
         parameters = fitting.get("parameters")
-        timings["replica_set"] = get_time()
+        stopwatch.register_times("replica_set")
 
         ########################################################################
         # ### Hyperopt                                                         #
@@ -263,7 +259,7 @@ def fit(
         # "parameters" dictionary, uses them to generate the NN and trains the net  #
         #############################################################################
         result = pdf_gen_and_train_function(parameters)
-        timings["replica_fitted"] = get_time()
+        stopwatch.register_ref("replica_fitted", "replica_set")
 
         # After the fit is run we get a 'result' dictionary with the following items:
         stopping_object = result["stopping_object"]
@@ -307,7 +303,7 @@ def fit(
             stopping_object,
             layers["fitbasis"],
             theoryid.get_description().get("Q0") ** 2,
-            timings,
+            stopwatch.stop(),
         )
 
         # Now write the data down
