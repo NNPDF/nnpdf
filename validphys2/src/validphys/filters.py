@@ -232,6 +232,7 @@ with open(path/"cuts/filters.yaml", "r") as rules_stream,\
 # TODO: check how to handle these arguments. Not needed currently
 def pass_kincuts(dataset, idat: int, theoryid, q2min: float, w2min: float):
     # TODO: Add docstring
+    # TODO: Broadcast with numpy using cd.get_cv()
 
     for rule in (Rule(initial_data=i, theoryid=theoryid, defaults=defaults) for i in rules):
         try:
