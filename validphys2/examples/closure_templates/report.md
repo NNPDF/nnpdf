@@ -17,11 +17,6 @@ Underlying PDF Summary
 
 Closures test estimators
 -----------------------
-## $\Delta_{\chi^{2}}$
-{@ plot_delta_chi2 @}
-### By experiment
-{@ delta_chi2_table @}
-
 ## Bias by experiment
 ### Scatter Plot
 {@ plot_fits_bootstrap_bias @}
@@ -33,6 +28,11 @@ Closures test estimators
 {@ plot_phi_scatter_dataspecs @}
 ### Table
 {@ fits_experiments_phi_table @}
+
+## $\Delta_{\chi^{2}}$
+{@ plot_delta_chi2 @}
+### By experiment
+{@ delta_chi2_table @}
 
 Dataset properties
 ------------------

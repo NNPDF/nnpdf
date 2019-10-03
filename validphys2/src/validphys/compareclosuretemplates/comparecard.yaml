@@ -39,6 +39,9 @@ template: report.md
 experiments:
     from_: fit
 
+description:
+    from_: fit
+
 dataspecs:
   - fit:
       from_: current
