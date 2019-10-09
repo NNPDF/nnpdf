@@ -467,6 +467,28 @@ class CoreConfig(configparser.Config):
         return {'experiment':self.parse_experiment(experiment_input.as_dict(),
                 theoryid=theoryid, use_cuts=use_cuts, fit=fit)}
 
+    @configparser.explicit_node
+    def produce_covariance_matrix(self, use_pdferr: bool = False):
+        """Modifies which action is used as covariance_matrix depending on
+        the flag `use_pdferr`
+        """
+        from validphys import results
+        if use_pdferr:
+            return results.pdferr_plus_data_covmat
+        else:
+            return results.data_covmat
+
+    @configparser.explicit_node
+    def produce_experiment_covariance_matrix(self, use_pdferr: bool = False):
+        """Modifies which action is used as experiment_covariance_matrix
+        depending on the flag `use_pdferr`
+        """
+        from validphys import results
+        if use_pdferr:
+            return results.pdferr_plus_experiment_covmat
+        else:
+            return results.experiment_covmat
+
     #TODO: Do this better and elsewhere
     @staticmethod
     def _check_dataspecs_type(dataspecs):

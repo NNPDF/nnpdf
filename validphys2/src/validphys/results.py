@@ -418,7 +418,7 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
 
 
 @check_dataset_cuts_match_theorycovmat
-def covariance_matrix(
+def data_covmat(
     dataset:DataSetSpec,
     fitthcovmat,
     t0set:(PDF, type(None)) = None,
@@ -500,12 +500,63 @@ def covariance_matrix(
         )
     return covmat
 
+@check_pdf_is_montecarlo
+def pdferr_plus_data_covmat(dataset, pdf, data_covmat):
+    """For a given `dataset`, returns the sum of the covariance matrix given by
+    `data_covmat` and the PDF error: a covariance matrix estimated from the
+    replica theory predictions from a given monte carlo `pdf`
+
+    if `use_pdferr` is True then this action will be used to produce covariance
+    matrix used for all subsequent actions
+
+    Parameters
+    ----------
+    dataset: DataSetSpec
+        object parsed from the `dataset_input` runcard key
+    pdf: PDF
+        monte carlo pdf used to estimate PDF error
+    data_covmat: np.array
+        experimental covariance matrix
+
+    Returns
+    -------
+    covariance_matrix: np.array
+        sum of the experimental and pdf error as a numpy array
+
+    Examples
+    --------
+
+    `use_pdferr` makes this action be used for `covariance_matrix`
+
+    >>> from validphys.api import API
+    >>> inp = {
+            'dataset_input': {'ATLASTTBARTOT'},
+            'theoryid': 52,
+            'pdf': 'NNPDF31_nlo_as_0118',
+            'use_cuts': 'no_cuts'
+        }
+    >>> a = API.covariance_matrix(**inp, use_pdferr=True)
+    >>> b = API.pdferr_plus_data_covmat(**inp)
+    >>> np.all(c == b)
+    True
+
+    See Also
+    --------
+    data_covmat: Standard experimental covariance matrix
+    """
+    loaded_data = dataset.load()
+    th = ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=loaded_data)
+    pdf_cov = np.cov(th._rawdata, rowvar=True)
+    return pdf_cov + data_covmat
+
+
+
 datasets_covariance_matrix = collect(
     'covariance_matrix',
     ('experiments', 'experiment',)
 )
 
-def sqrt_covariance_matrix(covariance_matrix: np.array):
+def sqrt_covariance_matrix(covariance_matrix):
     """Returns the lower-triangular Cholesky factor `covariance_matrix`
 
     Parameters
@@ -535,13 +586,13 @@ def sqrt_covariance_matrix(covariance_matrix: np.array):
     return la.cholesky(covariance_matrix, lower=True)
 
 @check_experiment_cuts_match_theorycovmat
-def experiment_covariance_matrix(
+def experiment_covmat(
         experiment: ExperimentSpec,
         fitthcovmat,
         t0set:(PDF, type(None)) = None,
         perform_covmat_reg=False,
         condition_number_threshold=500):
-    """Like `covariance_matrix` except for an experiment"""
+    """Like `data_covmat` except for an experiment"""
     loaded_data = experiment.load()
 
     if t0set:
@@ -563,6 +614,11 @@ def experiment_covariance_matrix(
             cond_num_threshold=condition_number_threshold
         )
     return covmat
+
+def pdferr_plus_experiment_covmat(experiment, pdf, experiment_covmat):
+    """Like `pdferr_plus_data_covmat` except for an experiment"""
+    # do checks get performed here?
+    return pdferr_plus_data_covmat(experiment, pdf, experiment_covmat)
 
 def experiment_sqrt_covariance_matrix(experiment_covariance_matrix):
     """Like `sqrt_covariance_matrix` but for an experiment"""
