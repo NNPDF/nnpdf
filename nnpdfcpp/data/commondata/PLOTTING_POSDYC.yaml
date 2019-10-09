@@ -1,0 +1,6 @@
+dataset_label: "positivity dataset"
+x: k2
+
+experiment: "POSDYC"
+
+nnpdf31_process: DY
