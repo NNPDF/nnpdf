@@ -5,12 +5,75 @@
     so previously active scripts can still work.
 """
 
+import os
 import numpy as np
 from reportengine.compat import yaml
+from n3fit.msr import compute_arclength
+
+
+class WriterWrapper:
+    def __init__(self, replica_number, pdf_function, stopping_object, fitbasis_layer, q2):
+        """
+        Initializes the writer for one given replica. This is decoupled from the writing
+        of the fit in order to fix some of the variables which would be, in principle,
+        be shared by several different history objects.
+
+        # Arguments:
+            - `replica_number`: index of the replica
+            - `pdf_function`: function to evaluate with a grid in x to generate a pdf
+            - `stopping_object`: a stopping.Validation object
+            - `fitbasis_layer`: the layer corresponding to the fitbasis, necessary to
+                                compute the arclength
+            - `q2`: q^2 of the fit
+        """
+        self.replica_number = replica_number
+        self.pdf_function = pdf_function
+        self.stopping_object = stopping_object
+        self.fitbasis = fitbasis_layer
+        self.q2 = q2
+
+    def write_data(self, replica_path_set, fitname, true_chi2):
+        """
+        Wrapper around the `storefit` function.
+
+        # Argument:
+            - `replica_path_set`: path for the replica
+            - `fitname`: name of the fit
+            - `true_chi2`: chi2 of the replica to the central experimental data
+        """
+        # Compute the arclengths
+        arc_lengths = compute_arclength(self.fitbasis)
+        # Construct the chi2exp file
+        allchi2_lines = self.stopping_object.chi2exps_str()
+        # Construct the preproc file
+        preproc_lines = ""  # TODO decide how to fill up this in a sensible way
+
+        # Check the directory exist, if it doesn't, generate it
+        os.makedirs(replica_path_set, exist_ok=True)
+
+        # export PDF grid to file
+        storefit(
+            self.pdf_function,
+            self.replica_number,
+            replica_path_set,
+            fitname,
+            self.q2,
+            self.stopping_object.epoch_of_the_stop,
+            self.stopping_object.vl_loss,
+            self.stopping_object.tr_loss,
+            true_chi2,
+            arc_lengths,
+            allchi2_lines,
+            preproc_lines,
+            self.stopping_object.positivity_pass(),
+        )
+
 
 def evln2lha(evln):
-    # evln Basis {"PHT","SNG","GLU","VAL","V03","V08","V15","V24","V35","T03","T08","T15","T24","T35"};
-    # lha Basis: {"TBAR","BBAR","CBAR","SBAR","UBAR","DBAR","GLUON","D","U","S","C","B","T","PHT"}
+    # evln Basis
+    # {"PHT","SNG","GLU","VAL","V03","V08","V15","V24","V35","T03","T08","T15","T24","T35"};
+    # lha Basis:
+    # {"TBAR","BBAR","CBAR","SBAR","UBAR","DBAR","GLUON","D","U","S","C","B","T","PHT"}
     lha = np.zeros(evln.shape)
     lha[13] = evln[0]
 
@@ -66,13 +129,28 @@ def evln2lha(evln):
     return lha
 
 
-def storefit(pdf_function, replica, replica_path, fitname, q20, nite, erf_vl, erf_tr, chi2,
-        arc_lengths, all_chi2_lines, all_preproc_lines, pos_state):
+def storefit(
+    pdf_function,
+    replica,
+    replica_path,
+    fitname,
+    q20,
+    nite,
+    erf_vl,
+    erf_tr,
+    chi2,
+    arc_lengths,
+    all_chi2_lines,
+    all_preproc_lines,
+    pos_state,
+):
     """
-    One-trick function which generates all output in the NNPDF format so that all other scripts can still be used.
+    One-trick function which generates all output in the NNPDF format
+    so that all other scripts can still be used.
 
     # Argument:
-        - `pdf_function`: PDF function (usually the .predict method of a model) that receives as input a point in x and returns an array of 14 flavours
+        - `pdf_function`: PDF function (usually the .predict method of a model)
+                        that receives as input a point in x and returns an array of 14 flavours
         - `replica` : the replica index
         - `replica_path` : path for this replica
         - `fitname` : name of the fit
@@ -93,35 +171,34 @@ def storefit(pdf_function, replica, replica_path, fitname, q20, nite, erf_vl, er
     lha = evln2lha(result.T).T
 
     data = {
-	    'replica' : replica,
-	    'q20' : q20,
-	    'xgrid': xgrid.T.tolist()[0],
-	    'labels': ['TBAR', 'BBAR', 'CBAR', 'SBAR', 'UBAR', 'DBAR', 'GLUON', 'D', 'U', 'S', 'C', 'B', 'T', 'PHT'],
-	    'pdfgrid': lha.tolist()
+        "replica": replica,
+        "q20": q20,
+        "xgrid": xgrid.T.tolist()[0],
+        "labels": ["TBAR", "BBAR", "CBAR", "SBAR", "UBAR", "DBAR", "GLUON", "D", "U", "S", "C", "B", "T", "PHT"],
+        "pdfgrid": lha.tolist(),
     }
 
-    with open(f'{replica_path}/{fitname}.exportgrid', 'w') as fs:
+    with open(f"{replica_path}/{fitname}.exportgrid", "w") as fs:
         yaml.dump(data, fs)
 
-
     # create empty files to make postfit happy
-    emptyfiles =  ['chi2exps.log', f'{fitname}.params',  f'{fitname}.sumrules']
+    emptyfiles = ["chi2exps.log", f"{fitname}.params", f"{fitname}.sumrules"]
     for fs in emptyfiles:
-        open(f'{replica_path}/{fs}', 'a').close()
+        open(f"{replica_path}/{fs}", "a").close()
 
     # Write chi2exp
-    with open(f'{replica_path}/chi2exps.log', 'w') as fs:
+    with open(f"{replica_path}/chi2exps.log", "w") as fs:
         for line in all_chi2_lines:
             fs.write(line)
 
     # Write preproc information
-    with open(f'{replica_path}/{fitname}.preproc','w') as fs:
+    with open(f"{replica_path}/{fitname}.preproc", "w") as fs:
         for line in all_preproc_lines:
             fs.write(line)
 
     # create info file
     arc_strings = [str(i) for i in arc_lengths]
-    arc_line = ' '.join(arc_strings)
-    with open(f'{replica_path}/{fitname}.fitinfo', 'w') as fs:
-        fs.write(f'{nite} {erf_vl} {erf_tr} {chi2} {pos_state}\n')
+    arc_line = " ".join(arc_strings)
+    with open(f"{replica_path}/{fitname}.fitinfo", "w") as fs:
+        fs.write(f"{nite} {erf_vl} {erf_tr} {chi2} {pos_state}\n")
         fs.write(arc_line)
