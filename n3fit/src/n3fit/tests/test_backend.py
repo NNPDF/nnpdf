@@ -4,22 +4,28 @@
 """
 import operator
 import numpy as np
-from keras import backend as K
 from n3fit.backends import operations as op
+from n3fit.backends import losses
 
+# General parameters
 DIM = 7
+THRESHOLD = 1e-6
+
+# Arrays to be used during testing
 ARR1 = np.random.rand(DIM)
 ARR2 = np.random.rand(DIM)
 ARR3 = np.random.rand(DIM+1, DIM)
+C = np.random.rand(DIM, DIM)
+INVCOVMAT = np.linalg.inv(C@C.T)
+
+# Backend-tensors to be used during testing
 T1 = op.numpy_to_tensor(ARR1)
 T2 = op.numpy_to_tensor(ARR2)
 T3 = op.numpy_to_tensor(ARR3)
-THRESHOLD = 1e-6
 
 def are_equal(result, reference, threshold = THRESHOLD):
-    res = K.eval(result)
-    total = res-reference
-    assert np.sum(total) < threshold
+    res = op.evaluate(result)
+    assert np.allclose(res, reference, atol=threshold)
 
 def numpy_check(backend_op, python_op, mode = 0):
     if mode == 0:
@@ -35,6 +41,7 @@ def numpy_check(backend_op, python_op, mode = 0):
     reference = python_op(*arrays)
     are_equal(result, reference)
 
+# Tests operations
 def test_op_multiply():
     numpy_check(op.op_multiply, operator.mul)
 
@@ -63,8 +70,27 @@ def test_op_smn():
     reference = (ARR1+ARR2)/(ARR1+ARR1)
     are_equal(result, reference)
 
+# Tests loss functions
+def test_l_invcovmat():
+    loss_f = losses.l_invcovmat(INVCOVMAT)
+    result = loss_f(T1, T2)
+    y = ARR1-ARR2
+    tmp = np.dot(INVCOVMAT, y)
+    reference = np.dot(y, tmp)
+    are_equal(result, reference)
 
-if __name__ == "__main__":
-    import ipdb
-    ipdb.set_trace()
-
+def test_l_positivity():
+    alpha = 1e-7
+    loss_f = losses.l_positivity(alpha = alpha)
+    result = loss_f(0.0, T1)
+    def elu_sum(yarr_in):
+        yarr = -yarr_in
+        res = 0.0
+        for y in yarr:
+            if y > 0:
+                res += y
+            else:
+                res += alpha*(np.exp(y)-1)
+        return res
+    reference = elu_sum(ARR1)
+    are_equal(result, reference)

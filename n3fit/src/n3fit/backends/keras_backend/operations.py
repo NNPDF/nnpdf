@@ -1,12 +1,12 @@
 """
     This module containg a list of useful operations translated in the keras language
-    
-    The main goal was (is) to implement the NNPDF operations on fktable in the keras
-    language (hence the mapping `c_to_py_fun`)
 
-    All operations accept as an input an iterable of keras layers with
-    the same output_shape (usually the output of an Observable layer)
-    and return a keras operation with, again, the same output shape.
+    All operations accept as input an iterable of keras layers or tensors
+    and (when necessary) keyword arguments.
+    The return operation is always a keras layer (or tensor)
+
+    This includes an implementation of the NNPDF operations on fktable in the keras
+    language (hence the mapping `c_to_py_fun`)
 """
 
 from keras.layers import add as keras_add
