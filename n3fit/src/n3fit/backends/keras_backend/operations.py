@@ -36,6 +36,9 @@ def numpy_to_input(numpy_array):
     else:
         return numpy_array
 
+def evaluate(tensor):
+    """ Evaluate input tensor using the backend """
+    return K.eval(tensor)
 
 def c_to_py_fun(op_name, name, default="ADD"):
     """
