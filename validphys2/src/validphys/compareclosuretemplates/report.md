@@ -17,13 +17,19 @@ Underlying PDF Summary
 Closures test estimators
 -----------------------
 ## Bias by experiment
-### Scatter Plot
+### Plot
+
+Errorbars from performing bootstrap sample upon replicas
+
 {@ plot_fits_bootstrap_bias @}
 ### Table
 {@ biases_table(show_total=True) @}
 
 ## $\phi$ by experiment
-### Scatter Plot
+### Plot
+
+Errorbars from performing bootstrap sample upon replicas
+
 {@ plot_phi_scatter_dataspecs @}
 ### Table
 {@ fits_experiments_phi_table @}

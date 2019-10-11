@@ -88,7 +88,7 @@ def plot_biases(biases_table):
                         collabels=biases_table.index.values,
                         datalabels=biases_table.columns.droplevel(1).values
               )
-    ax.set_title("Biases for experiments")
+    ax.set_title("Biases per experiment for each fit")
     ax.legend()
     return fig
 
@@ -117,6 +117,8 @@ def plot_fits_bootstrap_bias(
     # plot_phi_scatter_dataspecs gets an input of the same type and gives what we want
     fig = plot_phi_scatter_dataspecs(
         fits_experiments, fits_name_with_covmat_label, fits_experiments_bootstrap_bias)
+    ax = fig.gca()
+    ax.set_title("Bias for each fit with errorbars from bootstrap")
     return fig
 
 
@@ -166,6 +168,7 @@ def plot_delta_chi2(delta_chi2_bootstrap, fits, use_fitcommondata):
     plt.xlabel(r'$\Delta_{\chi^{2}}$')
     l = ax.legend()
     l.set_zorder(1000)
+    ax.set_title(r'Total $\Delta_{\chi^{2}}$ for each fit')
     return fig
 
 fits_exps_noise = collect(
