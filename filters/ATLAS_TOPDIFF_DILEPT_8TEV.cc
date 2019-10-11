@@ -156,5 +156,621 @@ void  ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORMFilter::ReadData()
 
 }
 
+// -------------------------------------------------------------------
+
+//2) Distribution differential in top quark pair transverse momentum
+void  ATLAS_TOPDIFF_DILEPT_8TEV_TTPTNORMFilter::ReadData()
+{
+  //Opening files
+  fstream f1, f2;
+
+  //Central values and statistical uncertainties
+  stringstream datafile("");
+  datafile << dataPath() 
+	   << "rawdata/ATLAS_TOPDIFF_DILEPT_8TEV_TTPTNORM/tab5.txt";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/ATLAS_TOPDIFF_DILEPT_8TEV_TTPTNORM/tab17.txt";
+  f2.open(covfile.str().c_str(), ios::in);
+
+  if (f2.fail()) 
+    {
+      cerr << "Error opening covariance matrix file " << datafile.str() << endl;
+      exit(-1);
+    }
+  
+
+  //Read central values 
+  string line;
+  for(int i=0; i<8; i++)
+    {
+      getline(f1,line);
+    }
+
+  for(int i=0; i<fNData; i++)
+    {
+      getline(f1,line);
+      istringstream lstream(line);
+      double adum;
+      double pttt;
+      lstream >> pttt;
+      lstream >> adum;
+      lstream >> adum;
+      
+      fKin1[i] = pttt;   
+      fKin2[i] = Mt*Mt;       
+      fKin3[i] = 8000;     //sqrt(s)
+      fStat[i] = 0;
+      
+      lstream >> fData[i]; //normalized differential distribution
+
+      for(int j=0; j<4; j++)
+	{
+	  lstream >> adum;
+	}
+    }
+
+  //Read covariance matrix
+  for(int i=0; i<9; i++)
+    {
+      getline(f2,line);
+    }
+
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f2,line);
+    istringstream lstream(line);
+    double adum;
+    lstream >> adum >> adum >> adum;
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
 
 
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+    {
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
+    }
+
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = syscor[i][j];
+	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
+
+
+  f1.close();
+  f2.close();
+
+}
+
+// -------------------------------------------------------------------
+
+//1) Distribution differential in top quark pair rapidity
+void  ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORMFilter::ReadData()
+{
+  //Opening files
+  fstream f1, f2;
+
+  //Central values and statistical uncertainties
+  stringstream datafile("");
+  datafile << dataPath() 
+	   << "rawdata/ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM/tab6.txt";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM/tab18.txt";
+  f2.open(covfile.str().c_str(), ios::in);
+
+  if (f2.fail()) 
+    {
+      cerr << "Error opening covariance matrix file " << datafile.str() << endl;
+      exit(-1);
+    }
+  
+
+  //Read central values 
+  string line;
+  for(int i=0; i<8; i++)
+    {
+      getline(f1,line);
+    }
+
+  for(int i=0; i<fNData; i++)
+    {
+      getline(f1,line);
+      istringstream lstream(line);
+      double adum;
+      double raptt;
+      lstream >> raptt;
+      lstream >> adum;
+      lstream >> adum;
+      
+      fKin1[i] = raptt;   
+      fKin2[i] = Mt*Mt;       
+      fKin3[i] = 8000;     //sqrt(s)
+      fStat[i] = 0;
+      
+      lstream >> fData[i]; //normalized differential distribution
+
+      for(int j=0; j<4; j++)
+	{
+	  lstream >> adum;
+	}
+    }
+
+  //Read covariance matrix
+  for(int i=0; i<9; i++)
+    {
+      getline(f2,line);
+    }
+
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f2,line);
+    istringstream lstream(line);
+    double adum;
+    lstream >> adum >> adum >> adum;
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+    {
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
+    }
+
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = syscor[i][j];
+	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
+
+
+  f1.close();
+  f2.close();
+
+}
+
+// -------------------------------------------------------------------
+
+//U - UNNORMALISED distributions
+
+//1) Distribution differential in top quark pair invariant mass
+void  ATLAS_TOPDIFF_DILEPT_8TEV_TTMFilter::ReadData()
+{
+  //Opening files
+  fstream f1, f2;
+
+  //Central values and statistical uncertainties
+  stringstream datafile("");
+  datafile << dataPath() 
+	   << "rawdata/ATLAS_TOPDIFF_DILEPT_8TEV_TTM/tab10.txt";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/ATLAS_TOPDIFF_DILEPT_8TEV_TTM/tab22.txt";
+  f2.open(covfile.str().c_str(), ios::in);
+
+  if (f2.fail()) 
+    {
+      cerr << "Error opening covariance matrix file " << datafile.str() << endl;
+      exit(-1);
+    }
+  
+
+  //Read central values 
+  string line;
+  for(int i=0; i<8; i++)
+    {
+      getline(f1,line);
+    }
+
+  for(int i=0; i<fNData; i++)
+    {
+      getline(f1,line);
+      istringstream lstream(line);
+      double adum;
+      double mtt;
+      lstream >> mtt;
+      lstream >> adum;
+      lstream >> adum;
+      
+      fKin1[i] = mtt;   
+      fKin2[i] = Mt*Mt;       
+      fKin3[i] = 8000;     //sqrt(s)
+      fStat[i] = 0;
+      
+      lstream >> fData[i]; 
+
+      for(int j=0; j<4; j++)
+	{
+	  lstream >> adum;
+	}
+    }
+
+  //Read covariance matrix
+  for(int i=0; i<9; i++)
+    {
+      getline(f2,line);
+    }
+
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f2,line);
+    istringstream lstream(line);
+    double adum;
+    lstream >> adum >> adum >> adum;
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+    {
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
+    }
+
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = syscor[i][j];
+	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
+
+
+  f1.close();
+  f2.close();
+
+}
+
+// -------------------------------------------------------------------
+
+//2) Distribution differential in top quark pair transverse momentum
+void  ATLAS_TOPDIFF_DILEPT_8TEV_TTPTFilter::ReadData()
+{
+  //Opening files
+  fstream f1, f2;
+
+  //Central values and statistical uncertainties
+  stringstream datafile("");
+  datafile << dataPath() 
+	   << "rawdata/ATLAS_TOPDIFF_DILEPT_8TEV_TTPT/tab11.txt";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/ATLAS_TOPDIFF_DILEPT_8TEV_TTPT/tab23.txt";
+  f2.open(covfile.str().c_str(), ios::in);
+
+  if (f2.fail()) 
+    {
+      cerr << "Error opening covariance matrix file " << datafile.str() << endl;
+      exit(-1);
+    }
+  
+
+  //Read central values 
+  string line;
+  for(int i=0; i<8; i++)
+    {
+      getline(f1,line);
+    }
+
+  for(int i=0; i<fNData; i++)
+    {
+      getline(f1,line);
+      istringstream lstream(line);
+      double adum;
+      double pttt;
+      lstream >> pttt;
+      lstream >> adum;
+      lstream >> adum;
+      
+      fKin1[i] = pttt;   
+      fKin2[i] = Mt*Mt;       
+      fKin3[i] = 8000;     //sqrt(s)
+      fStat[i] = 0;
+      
+      lstream >> fData[i]; 
+
+      for(int j=0; j<4; j++)
+	{
+	  lstream >> adum;
+	}
+    }
+
+  //Read covariance matrix
+  for(int i=0; i<9; i++)
+    {
+      getline(f2,line);
+    }
+
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f2,line);
+    istringstream lstream(line);
+    double adum;
+    lstream >> adum >> adum >> adum;
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+    {
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
+    }
+
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = syscor[i][j];
+	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
+
+
+  f1.close();
+  f2.close();
+
+}
+
+// -------------------------------------------------------------------
+
+//1) Distribution differential in top quark pair rapidity
+void  ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPFilter::ReadData()
+{
+  //Opening files
+  fstream f1, f2;
+
+  //Central values and statistical uncertainties
+  stringstream datafile("");
+  datafile << dataPath() 
+	   << "rawdata/ATLAS_TOPDIFF_DILEPT_8TEV_TTRAP/tab12.txt";
+  f1.open(datafile.str().c_str(), ios::in);
+
+  if (f1.fail()) 
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+
+  //Covariance matrix
+  stringstream covfile("");
+  covfile << dataPath()
+	  << "rawdata/ATLAS_TOPDIFF_DILEPT_8TEV_TTRAP/tab24.txt";
+  f2.open(covfile.str().c_str(), ios::in);
+
+  if (f2.fail()) 
+    {
+      cerr << "Error opening covariance matrix file " << datafile.str() << endl;
+      exit(-1);
+    }
+  
+
+  //Read central values 
+  string line;
+  for(int i=0; i<8; i++)
+    {
+      getline(f1,line);
+    }
+
+  for(int i=0; i<fNData; i++)
+    {
+      getline(f1,line);
+      istringstream lstream(line);
+      double adum;
+      double raptt;
+      lstream >> raptt;
+      lstream >> adum;
+      lstream >> adum;
+      
+      fKin1[i] = raptt;   
+      fKin2[i] = Mt*Mt;       
+      fKin3[i] = 8000;     //sqrt(s)
+      fStat[i] = 0;
+      
+      lstream >> fData[i]; 
+
+      for(int j=0; j<4; j++)
+	{
+	  lstream >> adum;
+	}
+    }
+
+  //Read covariance matrix
+  for(int i=0; i<9; i++)
+    {
+      getline(f2,line);
+    }
+
+  double** covmat = new double*[fNData];
+  for(int i=0; i<fNData; i++)
+  {
+    covmat[i] = new double[fNData];
+    getline(f2,line);
+    istringstream lstream(line);
+    double adum;
+    lstream >> adum >> adum >> adum;
+    for(int j=0; j<fNData; j++)
+    {
+      lstream >> covmat[i][j];
+    }
+  }
+
+
+  //Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for(int i = 0; i < fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if(!genArtSys(fNData,covmat,syscor))
+    {
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
+    }
+
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = syscor[i][j];
+	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
+
+
+  f1.close();
+  f2.close();
+
+}
+
+// -------------------------------------------------------------------
