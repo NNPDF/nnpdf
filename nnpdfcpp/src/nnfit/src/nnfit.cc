@@ -358,12 +358,6 @@ int main(int argc, char **argv)
       std::string replica_file = basefile + "replica_" + std::to_string(replica) + "/"
                                + settings.GetPDFName() + ".dat";
 
-      const vector<ExportGrid> egrid = {eg};
-      auto dglapg = EvolveGrid(egrid, settings.GetTheoryMap());
-      dglapg.WriteInfoFile(infofile);
-      const auto outstream = dglapg.WriteLHAFile();
-      write_to_file(replica_file, outstream[0].str());
-
       // Export Logs
       LogManager::ExportLogs();
 
@@ -410,7 +404,7 @@ void LoadAllDataAndSplit(NNPDFSettings const& settings,
           exp->LoadRepCovMat(ThCovMatPath, settings.IsThCovSampling());
           exp->LoadFitCovMat(ThCovMatPath, settings.IsThCovFitting());
         }
-  
+
       // Apply MC shifts
       if (settings.Get("fitting","genrep").as<bool>())
         exp->MakeReplica();

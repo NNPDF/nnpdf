@@ -23,7 +23,6 @@ endif(COMPILE_filter)
 option(COMPILE_nnfit "Compile nnfit program." ON)
 if (COMPILE_nnfit)
   add_executable(nnfit nnfit/src/nnfit.cc
-                       nnfit/src/evolgrid.cc
                        nnfit/src/fastaddchi2.cc
                        nnfit/src/fitbases.cc
                        nnfit/src/fitpdfset.cc
@@ -31,7 +30,7 @@ if (COMPILE_nnfit)
                        nnfit/src/pdfbasis.cc
                        nnfit/src/stopping.cc)
   include_directories(nnfit/inc)
-  target_link_libraries(nnfit common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
+  target_link_libraries(nnfit common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${GSL_LDFLAGS})
   install(TARGETS nnfit DESTINATION bin
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_nnfit)
@@ -58,7 +57,7 @@ endif(COMPILE_chi2check)
 #    )
 #  # validphys
 #  option(COMPILE_validphys "Compile validphys program." OFF)
-#  if (COMPILE_validphys)  
+#  if (COMPILE_validphys)
 #    add_executable(validphys validphys/src/validphys.cc
 #      validphys/src/plotdata.cc
 #      validphys/src/plotutils.cc)
@@ -78,7 +77,7 @@ if (COMPILE_revolve)
   add_executable(revolve revolve/src/revolve.cc)
   target_link_libraries(revolve common nnpdf ${LHAPDF_LIBRARIES} ${YAML_LDFLAGS} ${ROOT_LIBRARIES} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
   install(TARGETS revolve DESTINATION bin
-          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_revolve)
 
 # revolvenet
@@ -90,7 +89,7 @@ if (COMPILE_evolvefit)
   include_directories(evolvefit/inc nnfit/inc)
   target_link_libraries(evolvefit common nnpdf ${YAML_LDFLAGS} ${APFEL_LIBRARIES} ${GSL_LDFLAGS})
   install(TARGETS evolvefit DESTINATION bin
-          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endif(COMPILE_evolvefit)
 
 # libfiatlux
@@ -114,5 +113,5 @@ if (FIATLUX_CONFIG)
           PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
   endif(COMPILE_fiatlux)
 else(FIATLUX_CONFIG)
-  message(WARNING "libfiatlux not found: fiatlux compilation is disabled, install libfiatlux and rerun cmake to enable the fiatlux compilation")  
+  message(WARNING "libfiatlux not found: fiatlux compilation is disabled, install libfiatlux and rerun cmake to enable the fiatlux compilation")
 endif(FIATLUX_CONFIG)
