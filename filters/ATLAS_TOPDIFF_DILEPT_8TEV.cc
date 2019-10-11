@@ -73,7 +73,6 @@ void  ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORMFilter::ReadData()
       getline(f1,line);
     }
 
-  int idum;
   for(int i=0; i<fNData; i++)
     {
       getline(f1,line);
@@ -88,7 +87,7 @@ void  ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORMFilter::ReadData()
       lstream >> adum;
       lstream >> adum;
       
-      fKin1[i] = pt_top;   //P_T^(top)
+      fKin1[i] = mtt;   
       fKin2[i] = Mt*Mt;       
       fKin3[i] = 8000;     //sqrt(s)
       
@@ -103,14 +102,14 @@ void  ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORMFilter::ReadData()
   //Read covariance matrix
   for(int i=0; i<9; i++)
     {
-      getline(f3,line);
+      getline(f2,line);
     }
 
   double** covmat = new double*[fNData];
   for(int i=0; i<fNData; i++)
   {
     covmat[i] = new double[fNData];
-    getline(f3,line);
+    getline(f2,line);
     istringstream lstream(line);
     double adum;
     lstream >> adum >> adum >> adum;

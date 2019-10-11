@@ -13,56 +13,56 @@
 // ******************************************************
 
 //Normalised distributions
-class ATLAS_TOPDIFF_8TEV_DILEPT_TTPTNORMFilter: public CommonData
+class ATLAS_TOPDIFF_DILEPT_8TEV_TTPTNORMFilter: public CommonData
 {
-public: ATLAS_TOPDIFF_8TEV_DILEPT_TTPTNORMFilter():
-  CommonData("ATLAS_TOPDIFF_8TEV_DILEPT_TTPTNORM") { ReadData(); }
+public: ATLAS_TOPDIFF_DILEPT_8TEV_TTPTNORMFilter():
+  CommonData("ATLAS_TOPDIFF_DILEPT_8TEV_TTPTNORM") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class ATLAS_TOPDIFF_8TEV_DILEPT_TTRAPNORMFilter: public CommonData
+class ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORMFilter: public CommonData
 {
-public: ATLAS_TOPDIFF_8TEV_DILEPT_TTRAPNORMFilter():
-  CommonData("ATLAS_TOPDIFF_8TEV_DILEPT_TTRAPNORM") { ReadData(); }
+public: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORMFilter():
+  CommonData("ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class ATLAS_TOPDIFF_8TEV_DILEPT_TTMNORMFilter: public CommonData
+class ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORMFilter: public CommonData
 {
-public: ATLAS_TOPDIFF_8TEV_DILEPT_TTMNORMFilter():
-  CommonData("ATLAS_TOPDIFF_8TEV_DILEPT_TTMNORM") { ReadData(); }
+public: ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORMFilter():
+  CommonData("ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORM") { ReadData(); }
 
 private:
   void ReadData();
 };
 
 //Unnormalised distributions
-class ATLAS_TOPDIFF_8TEV_DILEPT_TTPTFilter: public CommonData
+class ATLAS_TOPDIFF_DILEPT_8TEV_TTPTFilter: public CommonData
 {
-public: ATLAS_TOPDIFF_8TEV_DILEPT_TTPTFilter():
-  CommonData("ATLAS_TOPDIFF_8TEV_DILEPT_TTPT") { ReadData(); }
+public: ATLAS_TOPDIFF_DILEPT_8TEV_TTPTFilter():
+  CommonData("ATLAS_TOPDIFF_DILEPT_8TEV_TTPT") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class ATLAS_TOPDIFF_8TEV_DILEPT_TTRAPFilter: public CommonData
+class ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPFilter: public CommonData
 {
-public: ATLAS_TOPDIFF_8TEV_DILEPT_TTRAPFilter():
-  CommonData("ATLAS_TOPDIFF_8TEV_DILEPT_TTRAP") { ReadData(); }
+public: ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPFilter():
+  CommonData("ATLAS_TOPDIFF_DILEPT_8TEV_TTRAP") { ReadData(); }
 
 private:
   void ReadData();
 };
 
-class ATLAS_TOPDIFF_8TEV_DILEPT_TTMFilter: public CommonData
+class ATLAS_TOPDIFF_DILEPT_8TEV_TTMFilter: public CommonData
 {
-public: ATLAS_TOPDIFF_8TEV_DILEPT_TTMFilter():
-  CommonData("ATLAS_TOPDIFF_8TEV_DILEPT_TTM") { ReadData(); }
+public: ATLAS_TOPDIFF_DILEPT_8TEV_TTMFilter():
+  CommonData("ATLAS_TOPDIFF_DILEPT_8TEV_TTM") { ReadData(); }
 
 private:
   void ReadData();
