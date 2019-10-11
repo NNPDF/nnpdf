@@ -99,9 +99,9 @@ vector<int> convert_pids_to_indexes(vector<int> const& pids)
     if (fl == 21)
       indexes.push_back(6);
     else if (fl == 22)
-      indexes.push_back(14);
+      indexes.push_back(0);
     else
-      indexes.push_back(fl+6);
+      indexes.push_back(fl+7);
   }
   return indexes;
 }
@@ -267,7 +267,7 @@ vector<stringstream> EvolveGrid::WriteLHAFile() const
                 for( int ix_in = 0; ix_in  < (int) xg.size(); ix_in++ ) // This can be optimised, should start from ix_in = ix_out and above
                   {
                      const int index = ix_in + if_in*xg.size() + if_out*xg.size()*14 + ix_out*xg.size()*14*14 + iq*xg.size()*xg.size()*14*14;
-                     evol_op[index] = APFEL::ExternalEvolutionMatrixPh2Ph(if_out-6, if_in-6, ix_out, ix_in);
+                     evol_op[index] = APFEL::ExternalEvolutionMatrixPh2Ph(if_out-7, if_in-7, ix_out, ix_in);
                   }
         }
 
