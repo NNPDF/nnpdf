@@ -66,7 +66,7 @@ void  ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORMFilter::ReadData()
     }
   
 
-  //Read central values and statistical uncertainty
+  //Read central values 
   string line;
   for(int i=0; i<8; i++)
     {
@@ -78,10 +78,6 @@ void  ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORMFilter::ReadData()
       getline(f1,line);
       istringstream lstream(line);
       double adum;
-      for(int j=0; j<5; j++)
-      	{
-	  lstream >> adum;
-	}
       double mtt;
       lstream >> mtt;
       lstream >> adum;
@@ -90,6 +86,7 @@ void  ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORMFilter::ReadData()
       fKin1[i] = mtt;   
       fKin2[i] = Mt*Mt;       
       fKin3[i] = 8000;     //sqrt(s)
+      fStat[i] = 0;
       
       lstream >> fData[i]; //normalized differential distribution
 
