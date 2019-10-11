@@ -1,0 +1,18 @@
+Path: /HepData/9211/d17-x1-y1
+Full covariance matrix of the normalized $t\bar t$ differential cross-sections for $t\bar t$ system transverse momentum $p_{T, t\bar t}$ at $\sqrt{s}$ = 8 TeV. The elements of the covariance matrix are in units of 10$^{-6}$ GeV$^{-2}$
+Location: Table 10 in Auxiliary Material
+PT_TTBAR : 0.0 - 30.0 GeV : 30.0 - 70.0 GeV : 70.0 - 120.0 GeV : 120.0 - 180.0 GeV : 180.0 - 250.0 GeV : 250.0 - 350.0 GeV : 350.0 - 1000.0 GeV
+RE : P P --> TOP TOPBAR X
+SQRT(S) : 8000.0 GeV
+x : PT_TTBAR IN GEV
+y : $cov\left(\frac{1}{\sigma} \frac{d\sigma}{dp_{T, t\bar{t}}}\right) \left[\rm 10^{-6}{\rm GeV}^{-2} \, \right]$
+xdesc	x	xlow	xhigh	y	y	y	y	y	y	y	
+	15.0	0.0	30.0	0.9502527	-0.0156004	0.03443318	0.01991218	0.01067857	0.004204386	2.43425E-4
+	50.0	30.0	70.0	-0.0156004	0.05197469	0.01484319	-0.004190392	-2.366786E-4	5.63564E-4	4.094239E-5
+	95.0	70.0	120.0	0.03443318	0.01484319	0.09400185	0.01401904	0.002817764	0.001299045	8.669536E-5
+	150.0	120.0	180.0	0.01991218	-0.004190392	0.01401904	0.01727219	0.001963982	2.447522E-4	2.859023E-5
+	215.0	180.0	250.0	0.01067857	-2.366786E-4	0.002817764	0.001963982	0.002798542	2.494406E-4	6.256321E-6
+	300.0	250.0	350.0	0.004204386	5.63564E-4	0.001299045	2.447522E-4	2.494406E-4	4.581363E-4	3.836994E-6
+	675.0	350.0	1000.0	2.43425E-4	4.094239E-5	8.669536E-5	2.859023E-5	6.256321E-6	3.836994E-6	2.875864E-6
+
+
