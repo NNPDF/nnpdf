@@ -1,0 +1,62 @@
+#: table_doi: 10.17182/hepdata.80076.v1/t84
+#: name: Table 84
+#: description: NNLO/NLO k-factors determined with NNLO Njetti for the differential cross sections for the production of W<sup>+</sup> bosons and W<sup>-</sup> bosons as a function of the W p<sub>T</sub> for events with N<sub> jets</sub> &ge; 1. These numbers were obtained with code described in Phys. Rev. Lett. 115 (2015) 062002 [arXiv:1504.02131].
+#: data_file: data84.yaml
+#: keyword reactions: P P --> W JET(S) X
+#: keyword observables: NNLO/NLO
+#: keyword phrases: Inclusive | NNLO/NLO k-factor | Cross Section | Proton-Proton Scattering | W Production | Jet Production
+#: keyword cmenergies: 8000.0
+#: ABS(YRAP(JET)),,,< 4.4
+#: PT(JET) [GEV],,,> 30
+#: SQRT(S) [GEV],,,8000.0
+#: RE,,,P P --> W JET(S) X
+#: NNLO/NLO k-factor for cross section,,,W+ production
+#: ABS(ETARAP(ELECTRON)),,,< 2.5
+#: PT(LEPTON) [GEV],,,> 25
+#: ABS(YRAP(LEADJET)),,,< 2.5
+$p_T^\text{W}\text{ [GeV]}$,$p_T^\text{W}\text{ [GeV]}$ LOW,$p_T^\text{W}\text{ [GeV]}$ HIGH,$k_{NNLO/NLO}^{W^+}(p_T^\text{W})$
+12.5,0.0,25.0,1.33
+37.5,25.0,50.0,0.92
+62.5,50.0,75.0,1.06
+87.5,75.0,100.0,1.1
+112.5,100.0,125.0,1.1
+137.5,125.0,150.0,1.1
+162.5,150.0,175.0,1.1
+187.5,175.0,200.0,1.11
+225.0,200.0,250.0,1.09
+275.0,250.0,300.0,1.08
+325.0,300.0,350.0,1.09
+375.0,350.0,400.0,1.08
+425.0,400.0,450.0,1.09
+475.0,450.0,500.0,1.06
+550.0,500.0,600.0,1.11
+700.0,600.0,800.0,1.1
+1150.0,800.0,1500.0,1.07
+
+#: ABS(YRAP(JET)),,,< 4.4
+#: PT(JET) [GEV],,,> 30
+#: SQRT(S) [GEV],,,8000.0
+#: RE,,,P P --> W JET(S) X
+#: NNLO/NLO k-factor for cross section,,,W- production
+#: ABS(ETARAP(ELECTRON)),,,< 2.5
+#: PT(LEPTON) [GEV],,,> 25
+#: ABS(YRAP(LEADJET)),,,< 2.5
+$p_T^\text{W}\text{ [GeV]}$,$p_T^\text{W}\text{ [GeV]}$ LOW,$p_T^\text{W}\text{ [GeV]}$ HIGH,$k_{NNLO/NLO}^{W^-}(p_T^\text{W})$
+12.5,0.0,25.0,1.33
+37.5,25.0,50.0,0.91
+62.5,50.0,75.0,1.06
+87.5,75.0,100.0,1.1
+112.5,100.0,125.0,1.11
+137.5,125.0,150.0,1.11
+162.5,150.0,175.0,1.11
+187.5,175.0,200.0,1.1
+225.0,200.0,250.0,1.11
+275.0,250.0,300.0,1.11
+325.0,300.0,350.0,1.1
+375.0,350.0,400.0,1.08
+425.0,400.0,450.0,1.12
+475.0,450.0,500.0,0.81
+550.0,500.0,600.0,1.02
+700.0,600.0,800.0,1.1
+1150.0,800.0,1500.0,1.13
+
