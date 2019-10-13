@@ -86,6 +86,7 @@
 #include "ATLAS_2JET_7TEV_R04.h"
 #include "ATLAS_2JET_7TEV_R06.h"
 #include "CMS_2JET_3D_8TEV.h"
+#include "ATLAS_WJET_8TEV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -146,6 +147,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLAS_1JET_8TEV_R06Filter());
   target.push_back(new ATLAS_2JET_7TEV_R04Filter());
   target.push_back(new ATLAS_2JET_7TEV_R06Filter()); 
+  target.push_back(new ATLAS_WP_JET_8TEV_HTFilter()); 
   
   // ************************* BCDMS ******************************
 
