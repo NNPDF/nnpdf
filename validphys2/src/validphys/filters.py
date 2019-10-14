@@ -227,12 +227,12 @@ def get_cuts_for_dataset(commondata, theoryid, q2min, w2min):
     pto = theoryid.get_description().get('PTO')
     ic = theoryid.get_description().get('IC')
     vfns = theoryid.get_description().get('VFNS')
-
+    rule_list = [Rule(initial_data=i, defaults=defaults,
+                          pto=pto, vfns=vfns, ic=ic) for i in rules]
     mask = []
     for idat in range(dataset.GetNData()):
         broken = False
-        for rule in (Rule(initial_data=i, defaults=defaults,
-                          pto=pto, vfns=vfns, ic=ic) for i in rules):
+        for rule in rule_list:
             try:
                 rule_result = rule(dataset, idat)
                 if rule_result is not None and rule_result == False:
