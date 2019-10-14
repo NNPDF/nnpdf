@@ -344,8 +344,7 @@ class InternalCutsWrapper(TupleComp):
     def load(self):
         return np.atleast_1d(
             np.asarray(
-                filters.get_cuts_for_dataset(self.commondata, self.theoryid,
-                                             self.q2min, self.w2min),
+                filters.get_cuts_for_dataset(self.commondata, self.theoryid),
                 dtype=int))
 
 class MatchedCuts(TupleComp):
