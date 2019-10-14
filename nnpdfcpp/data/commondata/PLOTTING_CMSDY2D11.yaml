@@ -5,3 +5,5 @@ figure_by:
   - k2 
 
 experiment: "CMS"
+
+nnpdf31_process: DY

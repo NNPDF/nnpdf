@@ -32,6 +32,7 @@ namespace NNPDF
     { "DIS",        {"$x$","$Q^2 (GeV^2)$","$y$"}},
     { "DYP",        {"$y$","$M^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
     { "JET",        {"$\\eta$","$p_T^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
+    { "DIJET",      {"\\eta","$\\m_{1,2} (GeV)","$\\sqrt{s} (GeV)"}},
     { "PHT",        {"$\\eta_\\gamma$","$E_{T,\\gamma}^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
     { "INC",        {"$0$","$\\mu^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
     { "EWK_RAP",    {"$\\eta/y$","$M^2 (GeV^2)$","$\\sqrt{s} (GeV)$"}},
@@ -310,11 +311,12 @@ namespace NNPDF
   // Verify that the process type is one of allowed processes
   void CommonData::VerifyProc(std::string const& proc)
   {
-    const int nProc = 17;
+    const int nProc = 18;
     const std::string validProc[nProc] = {
       "DIS",
       "DYP",
       "JET",
+      "DIJET",
       "PHT",
       "INC",
       "EWK_RAP",

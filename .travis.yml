@@ -21,7 +21,6 @@ env:
     - CONDA_BUILD_SYSROOT="${CONDAPATH}/MacOSX10.9.sdk"
 
   matrix:
-    - CONDA_PY=36
     - CONDA_PY=37
 
 before_install:
@@ -111,3 +110,10 @@ script:
      if [[ "$TRAVIS_OS_NAME" == "linux" ]];
      then docker exec build bash -c "cd /nnpdf/; .ciscripts/build-deploy-linux.sh";
      fi
+
+jobs:
+  include:
+    - stage: sphinx
+      os: linux
+      if: branch = master
+      script: docker exec build bash -c "cd /nnpdf/; .ciscripts/deploy-documentation.sh";

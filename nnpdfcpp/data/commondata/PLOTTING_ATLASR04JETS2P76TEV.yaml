@@ -10,3 +10,5 @@ kinematics_override: jet_sqrt_scale
 line_by:
     - k1
 experiment: "ATLAS"
+
+nnpdf31_process: JETS

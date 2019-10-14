@@ -17,9 +17,24 @@ from keras.layers import multiply as keras_multiply
 from keras.layers import Input
 from keras import backend as K
 
+import numpy as np
+
+def numpy_to_tensor(ival):
+    """
+        Make the input into a tensor
+    """
+    return K.constant(ival)
 
 def numpy_to_input(numpy_array):
-    return Input(tensor=K.constant(numpy_array))
+    """
+        If x is a numpy array, make it into a numpy tensor
+        if not just returns the input unchanged
+    """
+    if isinstance(numpy_array, np.ndarray):
+        tensor = K.constant(numpy_array)
+        return Input(tensor=tensor)
+    else:
+        return numpy_array
 
 
 def c_to_py_fun(op_name, name, default="ADD"):

@@ -3,7 +3,8 @@ arclength.py
 
 Module for the computation and presentation of arclengths.
 """
-from collections import namedtuple, Sequence
+from collections import namedtuple
+from collections.abc import Sequence
 import numbers
 
 import numpy as np

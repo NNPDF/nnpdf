@@ -1,6 +1,6 @@
-291
-1    MULT    CORR
-2    MULT    CORR
+293
+1    MULT    SKIP
+2    MULT    SKIP
 3    MULT    CORR
 4    MULT    CORR
 5    MULT    CORR
@@ -49,10 +49,10 @@
 48    MULT    CORR
 49    MULT    CORR
 50    MULT    CORR
-51    MULT    CMSLUMI12
-52    MULT    UNCORR
-53    ADD    CORR
-54    ADD    CORR
+51    MULT    CORR
+52    MULT    CORR
+53    MULT    CMSLUMI12
+54    MULT    UNCORR
 55    ADD    CORR
 56    ADD    CORR
 57    ADD    CORR
@@ -290,3 +290,5 @@
 289    ADD    CORR
 290    ADD    CORR
 291    ADD    CORR
+292    ADD    CORR
+293    ADD    CORR

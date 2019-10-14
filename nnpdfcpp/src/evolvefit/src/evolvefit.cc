@@ -85,7 +85,9 @@ int main(int argc, char **argv)
   // load theory from db
   std::map<string,string> theory_map;
   NNPDF::IndexDB db(get_data_path() + "/theory.db", "theoryIndex");
-  db.ExtractMap(theory_id, APFEL::kValues, theory_map);
+  auto keys = APFEL::kValues;
+  keys.push_back("EScaleVar");
+  db.ExtractMap(theory_id, keys, theory_map);
 
   // create output folder
   CreateResultsFolder(settings, theory_id);
@@ -111,7 +113,7 @@ int main(int argc, char **argv)
         break;
     }
   cout << "- Detected " << nrep << " replicas (contiguous)." << endl;
-  
+
   if (nrep == 0)
       throw NNPDF::RuntimeException("main", "nrep = 0, check replica folder/files.");
 
@@ -125,7 +127,8 @@ int main(int argc, char **argv)
   initialscale_grids[0].SetPDFgrid(rep0pgrid);
 
   string infofile = fit_path + "/evolvefit/theory_" + std::to_string(theory_id)
-                  + "-" + settings.GetPDFName() + "/" + settings.GetPDFName() + ".info";
+                  + "-" + settings.GetPDFName() + "/" + "theory_" + std::to_string(theory_id)
+                  + "-" + settings.GetPDFName() + ".info";
   auto dglapg = EvolveGrid(initialscale_grids, theory_map);
   dglapg.WriteInfoFile(infofile, initialscale_grids.size());
 
@@ -136,7 +139,8 @@ int main(int argc, char **argv)
       replica_file << fit_path
                    << "/evolvefit/theory_" << theory_id
                    << "-" << settings.GetPDFName()
-                   << "/" << settings.GetPDFName() << "_"
+                   << "/" << "theory_" << theory_id
+                   << "-" << settings.GetPDFName() << "_"
                    << std::setfill('0') << std::setw(4) << i << ".dat";
       write_to_file(replica_file.str(), outstream[i].str());
     }

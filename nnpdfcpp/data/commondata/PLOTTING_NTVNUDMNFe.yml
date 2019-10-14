@@ -17,3 +17,5 @@ normalize:
         - k1
 
 experiment: "NTVDMN"
+
+nnpdf31_process: DIS CC

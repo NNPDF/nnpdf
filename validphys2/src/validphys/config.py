@@ -24,7 +24,7 @@ from reportengine import report
 from validphys.core import (ExperimentSpec, DataSetInput, ExperimentInput,
                             CutsPolicy, MatchedCuts, ThCovMatSpec)
 from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFoundError,
-                              PDFNotFound, FallbackLoader)
+                              PDFNotFound, FallbackLoader, InconsistentMetaDataError)
 from validphys.gridvalues import LUMI_CHANNELS
 
 from validphys.paramfits.config import ParamfitsConfig
@@ -261,7 +261,7 @@ class CoreConfig(configparser.Config):
         kdiff = dataset.keys() - known_keys
         for k in kdiff:
             #Abuse ConfigError to get the suggestions.
-            log.warninig(ConfigError(f"Key '{k}' in dataset_input not known.", k, known_keys))
+            log.warning(ConfigError(f"Key '{k}' in dataset_input not known.", k, known_keys))
         return DataSetInput(name=name, sys=sysnum, cfac=cfac, frac=frac,
                 weight=weight)
 
@@ -289,6 +289,8 @@ class CoreConfig(configparser.Config):
             raise ConfigError(str(e), name,
                               self.loader.available_datasets) from e
         except LoadFailedError as e:
+            raise ConfigError(e) from e
+        except InconsistentMetaDataError as e:
             raise ConfigError(e) from e
 
     def produce_cuts(self,
@@ -595,6 +597,10 @@ class CoreConfig(configparser.Config):
             res.append(ChainMap({'dataset': newds}, spec))
         return res
 
+    def produce_theory_database(self):
+        """Produces path to the theory.db file"""
+        return self.loader.theorydb_file
+
     def produce_combined_shift_and_theory_dataspecs(self, theoryconfig, shiftconfig):
         total_dataspecs = theoryconfig["dataspecs"] + shiftconfig["dataspecs"]
         matched_datasets = self.produce_matched_datasets_from_dataspecs(total_dataspecs)
@@ -852,6 +858,27 @@ class CoreConfig(configparser.Config):
                 fit)['experiments']
         return {'pdf': pdf, 'theoryid':thid, 'experiments': experiments}
 
+    def produce_all_commondata(self):
+        """produces all commondata using the loader function """
+        ds_names = self.loader.available_datasets
+        ds_inputs = [self.parse_dataset_input({'dataset': ds}) for ds in ds_names]
+        cd_out = [self.produce_commondata(dataset_input=ds_input) for ds_input in ds_inputs]
+        return cd_out
+
+    def parse_groupby(self, grouping: str):
+        """parses the groupby key and checks it is an allowed grouping"""
+        #TODO: think if better way to do this properly
+        if grouping not in ['experiment', 'nnpdf31_process']:
+            raise ConfigError(
+                f"Grouping not available: {grouping}, did you spell it "
+                "correctly?")
+        return grouping
+
+    def parse_perform_covmat_reg(self, do_reg: bool):
+        """Parse the `regularize_covmat` key from runcard"""
+        if do_reg:
+            log.info("Regularizing covariance matrices")
+        return do_reg
 
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):

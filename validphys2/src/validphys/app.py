@@ -43,6 +43,7 @@ providers = [
              'validphys.replica_selector',
              'validphys.MCgen_checks',
              'validphys.closure',
+             'validphys.theoryinfo',
              'reportengine.report'
             ]
 

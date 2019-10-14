@@ -8,11 +8,14 @@ NNPDF documentation
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-   usage/installation
-   usage/runafit
-   usage/api
+   get-started/index
+   theory/index
+   vp/index
+   code/index
+   serverconf/index
+   tutorials/index
+   QA/index
 
 Indices and tables
 ==================
