@@ -144,6 +144,7 @@ class Rule:
 
     A rule object is created for each rule in ./cuts/filters.yaml
     """
+
     def __init__(self, *, initial_data: dict, defaults: dict, vfns, ic, pto):
         self.dataset = None
         self.process_type = None
@@ -158,6 +159,7 @@ class Rule:
 
         if self.process_type is None:
             from validphys.loader import Loader
+
             l = Loader()
             cd = l.check_commondata(self.dataset)
             if cd.process_type[:3] == "DIS":
@@ -188,8 +190,17 @@ class Rule:
             pass
 
         # Handle the generalised DIS cut
-        if (self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] == "DIS"):
-            return eval(self.rule, globals(), {**locals(), **self.defaults, **self.kinematics_dict, **self.local_variables_dict})
+        if self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] == "DIS":
+            return eval(
+                self.rule,
+                globals(),
+                {
+                    **locals(),
+                    **self.defaults,
+                    **self.kinematics_dict,
+                    **self.local_variables_dict,
+                },
+            )
 
         if (dataset.GetSetName() != self.dataset and
             dataset.GetProc(idat) != self.process_type):
@@ -198,8 +209,18 @@ class Rule:
         if hasattr(self, "VFNS") and self.VFNS != vfns:
             return
 
-        # Will return True if inequality is satisfied
-        return eval(self.rule, globals(), {**locals(), **self.defaults, **self.kinematics_dict, **self.local_variables_dict})
+        # Will return True if datapoint passes through the filter
+        return eval(
+            self.rule,
+            globals(),
+            {
+                **locals(),
+                **self.defaults,
+                **self.kinematics_dict,
+                **self.local_variables_dict,
+            },
+        )
+
 
     def _set_kinematics_dict(self, dataset, idat) -> dict:
         kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
