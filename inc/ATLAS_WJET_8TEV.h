@@ -10,10 +10,10 @@
 
 #include "buildmaster_utils.h"
 
-class ATLAS_WP_JET_8TEV_HTFilter : public CommonData
+class ATLAS_WP_JET_8TEV_PTFilter : public CommonData
 {
 public:
-  ATLAS_WP_JET_8TEV_HTFilter() : CommonData("ATLAS_WP_JET_8TEV_HT") { ReadData(); }
+  ATLAS_WP_JET_8TEV_PTFilter() : CommonData("ATLAS_WP_JET_8TEV_PT") { ReadData(); }
 
 private:
   void ReadData();
