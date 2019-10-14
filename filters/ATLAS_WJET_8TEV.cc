@@ -4,14 +4,14 @@ write here a description of the data set
 
 #include "ATLAS_WJET_8TEV.h"
 
-//Distribution differential in HT
+//Distribution differential in PT
 
 void ATLAS_WP_JET_8TEV_PTFilter::ReadData()
 {
   fstream f1;
   stringstream datafile("");
   datafile << dataPath()
-	   << "rawdata/ATLAS_WJET_8TEV/HEPData-ins1635273-v1-Table_8.csv";
+	   << "rawdata/ATLAS_WJET_8TEV/HEPData-ins1635273-v1-Table_13.csv";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail())
