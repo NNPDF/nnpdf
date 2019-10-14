@@ -269,7 +269,7 @@ def get_cuts_for_dataset(commondata, theoryid, q2min, w2min) -> list:
     >>> from validphys.loader import Loader
     >>> l = Loader()
     >>> ds = l.check_dataset("NMC", theoryid=53, cuts="nocuts")
-    >>> theory = theory = l.check_theoryID(53)
+    >>> theory = l.check_theoryID(53)
     >>> get_cuts_for_dataset(ds, theory)
     """
     dataset = commondata.load()
