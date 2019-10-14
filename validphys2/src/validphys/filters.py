@@ -126,14 +126,6 @@ def _filter_closure_data(filter_path, experiments, fakepdfset, fakenoise, errors
     return total_data_points, total_cut_data_points
 
 
-def get_cuts_for_dataset(commondata, theoryid, q2min, w2min):
-    """Return cut mask for dataset"""
-    ds = commondata.load()
-    datamask = [idat for idat in range(ds.GetNData())
-                if pass_kincuts(ds, idat, theoryid, q2min, w2min)]
-    return datamask
-
-
 def check_t0pdfset(t0pdfset):
     """T0 pdf check"""
     t0pdfset.load()
@@ -227,22 +219,30 @@ with open(path/"cuts/filters.yaml", "r") as rules_stream,\
         defaults = yaml.safe_load(defaults_stream)
     except yaml.YAMLError as exception:
         print(exception)
-    
-# TODO: check how to handle these arguments. Not needed currently
-def pass_kincuts(dataset, idat: int, theoryid, q2min: float, w2min: float):
+
+def get_cuts_for_dataset(commondata, theoryid, q2min, w2min):
     # TODO: Add docstring
     # TODO: Broadcast with numpy using cd.get_cv()
+    dataset = commondata.load()
     pto = theoryid.get_description().get('PTO')
     ic = theoryid.get_description().get('IC')
     vfns = theoryid.get_description().get('VFNS')
-    for rule in (Rule(initial_data=i, defaults=defaults,
-                      pto=pto, vfns=vfns, ic=ic) for i in rules):
-        try:
-            rule_result = rule(dataset, idat)
-            if rule_result is not None and rule_result == False:
-                return False
-        except Exception as e:
-            print(e)
-            return rule
 
-    return True
+    mask = []
+    for idat in range(dataset.GetNData()):
+        broken = False
+        for rule in (Rule(initial_data=i, defaults=defaults,
+                          pto=pto, vfns=vfns, ic=ic) for i in rules):
+            try:
+                rule_result = rule(dataset, idat)
+                if rule_result is not None and rule_result == False:
+                    broken = True
+                    break
+            except Exception as e:
+                print(e)
+                return rule
+
+        if not broken:
+            mask.append(idat)
+
+    return mask
