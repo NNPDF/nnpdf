@@ -148,8 +148,7 @@ def check_positivity(posdatasets):
         log.info(f'{pos.name} checked.')
 
 class Rule:
-    def __init__(self, *, theoryid, initial_data: dict, defaults: dict):
-        self.theoryid = theoryid
+    def __init__(self, *, initial_data: dict, defaults: dict, vfns, ic, pto):
         self.dataset = None
         self.process_type = None
         for key in initial_data:
@@ -176,9 +175,9 @@ class Rule:
                 self.variables = CommonData.kinLabel[self.process_type]
 
         self.defaults = defaults
-        self.pto = self.theoryid.get_description().get('PTO')
-        self.vfns = self.theoryid.get_description().get('FNS')
-        self.ic = self.theoryid.get_description().get('IC')
+        self.pto = pto
+        self.vfns = vfns
+        self.ic = ic
 
     def __call__(self, dataset, idat):
         pto = self.pto
@@ -233,8 +232,11 @@ with open(path/"cuts/filters.yaml", "r") as rules_stream,\
 def pass_kincuts(dataset, idat: int, theoryid, q2min: float, w2min: float):
     # TODO: Add docstring
     # TODO: Broadcast with numpy using cd.get_cv()
-
-    for rule in (Rule(initial_data=i, theoryid=theoryid, defaults=defaults) for i in rules):
+    pto = theoryid.get_description().get('PTO')
+    ic = theoryid.get_description().get('IC')
+    vfns = theoryid.get_description().get('VFNS')
+    for rule in (Rule(initial_data=i, defaults=defaults,
+                      pto=pto, vfns=vfns, ic=ic) for i in rules):
         try:
             rule_result = rule(dataset, idat)
             if rule_result is not None and rule_result == False:
