@@ -245,9 +245,7 @@ with open(path/"cuts/filters.yaml", "r") as rules_stream,\
     except yaml.YAMLError as exception:
         print(exception)
 
-def get_cuts_for_dataset(commondata, theoryid, q2min, w2min) -> list:
-    # TODO: remove q2min and w2min from function variables
-
+def get_cuts_for_dataset(commondata, theoryid) -> list:
     """Function to generate a list containing the index
     of all experimental points that passed kinematic
     cut rules stored in ./cuts/filters.yaml
