@@ -140,6 +140,10 @@ def check_positivity(posdatasets):
         log.info(f'{pos.name} checked.')
 
 class Rule:
+    """Rule object to be used to generate cuts mask.
+
+    A rule object is created for each rule in ./cuts/filters.yaml
+    """
     def __init__(self, *, initial_data: dict, defaults: dict, vfns, ic, pto):
         self.dataset = None
         self.process_type = None
@@ -220,15 +224,41 @@ with open(path/"cuts/filters.yaml", "r") as rules_stream,\
     except yaml.YAMLError as exception:
         print(exception)
 
-def get_cuts_for_dataset(commondata, theoryid, q2min, w2min):
-    # TODO: Add docstring
-    # TODO: Broadcast with numpy using cd.get_cv()
+def get_cuts_for_dataset(commondata, theoryid, q2min, w2min) -> list:
+    # TODO: remove q2min and w2min from function variables
+
+    """Function to generate a list containing the index
+    of all experimental points that passed kinematic
+    cut rules stored in ./cuts/filters.yaml
+
+
+    Parameters
+    ----------
+    commondata: NNPDF commondata object
+    theoryid: NNPDF theoryID object
+
+    Returns
+    -------
+    mask: list
+        List object containing index of all passed experimental
+        values
+
+    Example
+    -------
+    >>> from validphys.loader import Loader
+    >>> l = Loader()
+    >>> ds = l.check_dataset("NMC", theoryid=53, cuts="nocuts")
+    >>> theory = theory = l.check_theoryID(53)
+    >>> get_cuts_for_dataset(ds, theory)
+    """
     dataset = commondata.load()
     pto = theoryid.get_description().get('PTO')
     ic = theoryid.get_description().get('IC')
     vfns = theoryid.get_description().get('VFNS')
+
     rule_list = [Rule(initial_data=i, defaults=defaults,
-                          pto=pto, vfns=vfns, ic=ic) for i in rules]
+                      pto=pto, vfns=vfns, ic=ic) for i in rules]
+
     mask = []
     for idat in range(dataset.GetNData()):
         broken = False
