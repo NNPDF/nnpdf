@@ -46,6 +46,9 @@
     else True
   local_variables:
     pTmv: M2**0.5
+    maxCMSDY2Dy: 2.2
+    maxCMSDY2Dminv: 200.0
+    minCMSDY2Dminv: 30.0
 
 - dataset: CMSDY2D12
   rule: >-
@@ -55,6 +58,9 @@
     else True
   local_variables:
     pTmv: M2**0.5
+    maxCMSDY2Dy: 2.2
+    maxCMSDY2Dminv: 200.0
+    minCMSDY2Dminv: 30.0
 
 - dataset: ATLASZHIGHMASS49FB
   rule: "pTmv <= maxCMSDY2Dminv"
@@ -75,6 +81,8 @@
   local_variables:
     tau: M2 / sqrts**2
     ymax: -0.5 * np.log(tau)
+    maxTau: 0.080
+    maxY: 0.663
   rule: "False if tau > maxTau or np.fabs(y/ymax) > maxY else True"
 
 - dataset: DYE605
@@ -82,6 +90,8 @@
   local_variables:
     tau: M2 / sqrts**2
     ymax: -0.5 * np.log(tau)
+    maxTau: 0.080
+    maxY: 0.663
   rule: "False if tau > maxTau or np.fabs(y/ymax) > maxY else True"
 
 - process_type: DIS_ALL
@@ -102,6 +112,10 @@
     False if (Q2 <= Q2cut1_f2c or
     (Q2 <= Q2cut2_f2c and x <= xcut_f2c))
     else True
+  local_variables:
+    Q2cut1_f2c: 4
+    Q2cut2_f2c: 10
+    xcut_f2c: 1e-3
   
 - process_type: DIS_NCP_CH
   VFNS: FONLL-C
