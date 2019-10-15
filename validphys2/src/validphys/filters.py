@@ -254,7 +254,7 @@ def get_cuts_for_dataset(commondata, theoryid) -> list:
 
     Parameters
     ----------
-    commondata: NNPDF commondata object
+    commondata: NNPDF CommonData spec
     theoryid: NNPDF theoryID object
 
     Returns
@@ -267,9 +267,9 @@ def get_cuts_for_dataset(commondata, theoryid) -> list:
     -------
     >>> from validphys.loader import Loader
     >>> l = Loader()
-    >>> ds = l.check_dataset("NMC", theoryid=53, cuts="nocuts")
+    >>> cd = l.check_commondata("NMC")
     >>> theory = l.check_theoryID(53)
-    >>> get_cuts_for_dataset(ds, theory)
+    >>> get_cuts_for_dataset(cd, theory)
     """
     dataset = commondata.load()
 
