@@ -172,6 +172,7 @@ class Rule:
             else:
                 self.variables = CommonData.kinLabel[self.process_type]
 
+        self.rule = compile(self.rule, "rule", "eval")
         self.defaults = defaults
         self.pto = pto
         self.vfns = vfns
