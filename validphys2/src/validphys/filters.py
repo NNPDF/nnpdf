@@ -271,9 +271,9 @@ def get_cuts_for_dataset(commondata, theoryid) -> list:
     >>> get_cuts_for_dataset(ds, theory)
     """
     dataset = commondata.load()
-    pto = theoryid.get_description().get('PTO')
-    ic = theoryid.get_description().get('IC')
-    vfns = theoryid.get_description().get('VFNS')
+
+    theoryid_dict = theoryid.get_description()
+    pto, ic, vfns = map(theoryid_dict.get, ["PTO", "IC", "VFNS"])
 
     rule_list = [Rule(initial_data=i, defaults=defaults,
                       pto=pto, vfns=vfns, ic=ic) for i in rules]
