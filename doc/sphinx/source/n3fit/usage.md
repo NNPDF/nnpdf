@@ -1,7 +1,7 @@
 `n3fit` usage guide
 ===================
 
-The `n3fit` is designed to maintain a close compatibility with the former `nnfit` code.
+The `n3fit` is designed to maintain close compatibility with the former `nnfit` code.
 
 From a practical point of view the user should perform the steps documented above in order to obtain a complete PDF fit:
 
