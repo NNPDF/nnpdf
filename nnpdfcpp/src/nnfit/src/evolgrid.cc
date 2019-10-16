@@ -97,7 +97,7 @@ vector<int> convert_pids_to_indexes(vector<int> const& pids)
   for (auto fl: pids)
   {
     if (fl == 21)
-      indexes.push_back(6);
+      indexes.push_back(7);
     else if (fl == 22)
       indexes.push_back(0);
     else
