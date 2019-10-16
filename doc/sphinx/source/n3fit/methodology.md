@@ -3,14 +3,14 @@ Methodology overview
 
 The goal of this document is to summarise from a conceptual point of view the main points which are different in comparison to the latest NNPDF (i.e. [NNPDF3.1](https://arxiv.org/abs/1706.00428)) methodology.
 
-``` warning:: The default implementation of the concepts presented here are implemented with Keras and Tensorflow. The n3fit code inherits its features, so in this document we avoid the discussion of specific details which can be found in the [Keras Documentation](https://keras.io/)
+``` warning:: The default implementation of the concepts presented here are implemented with Keras and Tensorflow. The n3fit code inherits its features, so in this document we avoid the discussion of specific details which can be found in the Keras Documentation
 ```
 
 
 ``` note:: The final setup used in n3fit fits can be extracted from the runcards stored in nnpdf/n3fit/runcards.
 ```
 
-This document contains a more specific discussion about the choices currently implemented in the `n3fit` package and discussed for the first time in [hep-ph/1907.05075](https://arxiv.org/abs/1907.05075).
+This document contains a more specific discussion about the choices currently implemented in the `n3fit` package and discussed for the first time in [hep-ph/1907.05075](https://arxiv.org/abs/1907.05075). The Keras documentation can be found [here](https://keras.io/).
 
 **Table of contents:**
 - [Introduction](#introduction)
