@@ -36,6 +36,7 @@ setup(name= "validphys",
             'tests/regressions': ['*'],
             'comparefit': ['*'],
             'tests/baseline': ['*'],
+            'cuts/': ['*'],
        },
       zip_safe = False,
       classifiers=[
