@@ -36,8 +36,8 @@ namespace NNPDF
         };
 
         // LHA-style flavour basis
-        enum {TBAR,BBAR,CBAR,SBAR,UBAR,DBAR,GLUON,D,U,S,C,B,T,PHT};
-        const std::array<std::string, 14> fl_labels = {{"TBAR","BBAR","CBAR","SBAR","UBAR","DBAR","GLUON","D","U","S","C","B","T","PHT"}};
+        enum {PHT,TBAR,BBAR,CBAR,SBAR,UBAR,DBAR,GLUON,D,U,S,C,B,T};
+        const std::array<std::string, 14> fl_labels = {{"PHT","TBAR","BBAR","CBAR","SBAR","UBAR","DBAR","GLUON","D","U","S","C","B","T"}};
 
         // NNPDF-style EVLN basis
         enum evlnBasis {  EVLN_GAM, EVLN_SNG, EVLN_GLU, EVLN_VAL, EVLN_V3,
