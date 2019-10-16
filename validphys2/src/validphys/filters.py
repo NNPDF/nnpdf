@@ -203,6 +203,9 @@ class Rule:
                 },
             )
 
+        # We return None if the rule doesn't apply. This
+        # is different to the case where the rule does apply,
+        # but the point was cut out by the rule.
         if (dataset.GetSetName() != self.dataset and
             dataset.GetProc(idat) != self.process_type):
             return
