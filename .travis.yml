@@ -98,7 +98,7 @@ install:
      conda config --add channels https://packages.nnpdf.science/conda;
      conda config --add channels https://packages.nnpdf.science/conda-private;
      conda config --set show_channel_urls true;
-     conda install --yes conda-build;
+     conda install --yes conda-build=3.18.9;
      fi
 
 script:
