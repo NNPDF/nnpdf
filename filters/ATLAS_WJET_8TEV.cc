@@ -45,54 +45,87 @@ void ATLAS_WP_JET_8TEV_PTFilter::ReadData()
 
       for (int j=0; j<(fNSys+1)/2-4; j++)
 	{
-	  lstream >> sysL[j] >> comma >> sysR[j] >> comma;
+	  lstream >> sysR[j] >> comma >> sysL[j] >> comma;
 
-	  cout << sysL[j] << "   " << sysR[j] << endl;
+	  sysR[j] /= sqrt(2.);
+	  sysL[j] /= sqrt(2.);
 
-	  sysL[j] = sysL[j]/sqrt(2);
-	  sysR[j] = sysR[j]/sqrt(2);
-
-	  if(sysL[j]<0 && sysR[j]<0)
+	  double tmp1, tmp2;
+	  tmp1=sysR[j];
+	  tmp2=sysL[j];
+	  /*	  
+	  //Case 1: sysL and sysR are both negative
+	  if(tmp1<0 && tmp2<0)
 	    {
-	      cout << "same sign" << endl;
-	    }
-	  if(sysL[j]>0 && sysR[j]>0)
-	    {
-	      cout << "same sign" << endl;
+	      if(tmp2<tmp1 || tmp2==tmp1)
+		{
+		  sysR[j] = 0.0;
+		  sysL[j] = tmp2;
+		}
+	      if(tmp2>tmp1)
+		{
+		  sysR[j] = 0.0;
+		  sysL[j] = tmp1;
+		}
 	    }
 
-	  fSys[i][2*j].add = sysL[j];
+	  //Case 2: sysL and sysR are both positive
+	  if(tmp1>0.0 && tmp2>0.0)
+	    {
+	      if(tmp1>tmp2 || tmp1==tmp2)
+		{
+		  sysR[j] = tmp1;
+		  sysL[j] = 0.0;
+		}
+	      if(tmp1<tmp2)
+		{
+		  sysR[j] = tmp2;
+		  sysL[j] = 0.0;
+		}
+	    }
+	  
+	  //Case3: sys1 is negative and sys2 is positive
+	  if(tmp1<0.0 && tmp2>0.0)
+	    {
+	      sys1[idat][isys] = tmp2;
+	      sys2[idat][isys] = tmp1;
+	    }
+	  */	  
+
+	  fSys[i][2*j].add = sysR[j];
 	  fSys[i][2*j].mult = fSys[i][2*j].add*1e2/fData[i];
 	  fSys[i][2*j].type = MULT;
 	  fSys[i][2*j].name = "ATLASWJ";
+	  //fSys[i][2*j].name = "CORR";
 	  
-	  fSys[i][2*j+1].add = sysR[j];
+	  fSys[i][2*j+1].add = sysL[j];
 	  fSys[i][2*j+1].mult = fSys[i][2*j+1].add*1e2/fData[i];
 	  fSys[i][2*j+1].type = MULT;
 	  fSys[i][2*j+1].name = "ATLASWJ";
+	  //fSys[i][2*j+1].name = "CORR";
 
 	}
 
       lstream >> lumi     >> comma
 	      >> ddum     >> comma
-	      >> sysL[51] >> comma 
-	      >> sysR[51] >> comma
-	      >> sysL[52] >> comma 
-	      >> sysR[52] >> comma
-	      >> sysL[53] >> comma 
-	      >> sysR[53] >> comma;
+	      >> sysR[51] >> comma 
+	      >> sysL[51] >> comma
+	      >> sysR[52] >> comma 
+	      >> sysL[52] >> comma
+	      >> sysR[53] >> comma 
+	      >> sysL[53] >> comma;
       
       fSys[i][100].add = lumi;
       fSys[i][100].mult = fSys[i][100].add*1e2/fData[i];
       fSys[i][100].type = MULT;
       fSys[i][100].name = "ATLASLUMI12"; 
 
-      fSys[i][101].add = sysL[51]/sqrt(2);
-      fSys[i][102].add = sysR[51]/sqrt(2);
-      fSys[i][103].add = sysL[52]/sqrt(2);
-      fSys[i][104].add = sysR[52]/sqrt(2);
-      fSys[i][105].add = sysL[53]/sqrt(2);
-      fSys[i][106].add = sysR[53]/sqrt(2);
+      fSys[i][101].add = sysR[51]/sqrt(2);
+      fSys[i][102].add = sysL[51]/sqrt(2);
+      fSys[i][103].add = sysR[52]/sqrt(2);
+      fSys[i][104].add = sysL[52]/sqrt(2);
+      fSys[i][105].add = sysR[53]/sqrt(2);
+      fSys[i][106].add = sysL[53]/sqrt(2);
       
       for(int j=101; j<fNSys; j++)
 	{
@@ -100,6 +133,9 @@ void ATLAS_WP_JET_8TEV_PTFilter::ReadData()
 	  fSys[i][j].type = MULT;
 	  fSys[i][j].name = "UNCORR"; 
 	}
+
+      fSys[i][96].name  = "UNCORR";
+      fSys[i][97].name  = "UNCORR";
 
     }
 
