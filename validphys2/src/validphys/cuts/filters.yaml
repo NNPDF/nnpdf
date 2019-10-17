@@ -21,16 +21,16 @@
   rule: "central_value >= 0.03 if pto == 2 else True"
 
 - dataset: ATLASZPT7TEV
-  rule: "not (p_T2 < 30**2 or p_T2 > 500**2)"
+  rule: "p_T2 >= 30**2 and p_T2 <= 500**2"
 
 - dataset: ATLASZPT8TEVMDIST
   rule: "p_T >= 30"
 
 - dataset: ATLASZPT8TEVYDIST
-  rule: "not (p_T2 < 30**2 or p_T2 > 150**2)"
+  rule: "p_T2 >= 30**2 and p_T2 <= 150**2"
 
 - dataset: CMSZDIFF12
-  rule: "not (p_T2 < 30**2 or p_T2 > 170**2 or etay > 1.6)"
+  rule: "p_T2 >= 30**2 and p_T2 <= 170**2 and etay <= 1.6"
 
 - dataset: ATLASWPT31PB
   rule: "p_T > 30"
@@ -40,9 +40,9 @@
 
 - dataset: CMSDY2D11
   rule: >-
-    not ((pto in (0, 1) and 
-    (pTmv > maxCMSDY2Dminv or pTmv < minCMSDY2Dminv or etay > maxCMSDY2Dy))
-    or ((pto == 2) and (pTmv > maxCMSDY2Dminv or etay > maxCMSDY2Dy)))
+    ((pto not in (0, 1) or 
+    (pTmv <= maxCMSDY2Dminv and pTmv >= minCMSDY2Dminv and etay <= maxCMSDY2Dy))
+    and ((pto != 2) or (pTmv <= maxCMSDY2Dminv and etay <= maxCMSDY2Dy)))
   local_variables:
     pTmv: M2**0.5
     maxCMSDY2Dy: 2.2
@@ -51,9 +51,9 @@
 
 - dataset: CMSDY2D12
   rule: >-
-    not ((pto in (0, 1) and 
-    (pTmv > maxCMSDY2Dminv or pTmv < minCMSDY2Dminv or etay > maxCMSDY2Dy))
-    or ((pto == 2) and (pTmv > maxCMSDY2Dminv or etay > maxCMSDY2Dy)))
+    ((pto not in (0, 1) or 
+    (pTmv <= maxCMSDY2Dminv and pTmv >= minCMSDY2Dminv and etay <= maxCMSDY2Dy))
+    and ((pto != 2) or (pTmv <= maxCMSDY2Dminv and etay <= maxCMSDY2Dy)))
   local_variables:
     pTmv: M2**0.5
     maxCMSDY2Dy: 2.2
@@ -73,7 +73,7 @@
 #   rule: "False if (pto in (0, 1) and idat < 6) else True"
 
 - dataset: ATLASLOMASSDY11EXT
-  rule: "not (pto in (0, 1) and idat < 2)"
+  rule: "pto not in (0, 1) or idat >= 2"
 
 - dataset: DYE886P
   process_type: DYP
@@ -82,7 +82,7 @@
     ymax: -0.5 * np.log(tau)
     maxTau: 0.080
     maxY: 0.663
-  rule: "not (tau > maxTau or np.fabs(y/ymax) > maxY)"
+  rule: "tau <= maxTau and np.fabs(y/ymax) <= maxY"
 
 - dataset: DYE605
   process_type: DYP
@@ -91,11 +91,11 @@
     ymax: -0.5 * np.log(tau)
     maxTau: 0.080
     maxY: 0.663
-  rule: "not (tau > maxTau or np.fabs(y/ymax) > maxY)"
+  rule: "tau <= maxTau and np.fabs(y/ymax) <= maxY"
 
 - process_type: DIS_ALL
   reason: Generalised cut for all DIS processes
-  rule: "not (Q2 <= q2min or w2 <= w2min)"
+  rule: "Q2 > q2min and w2 > w2min"
   local_variables:
     w2: Q2 * (1 - x) / x
 
@@ -108,8 +108,8 @@
 - process_type: DIS_NCP_CH
   VFNS: FONLL-A
   rule: >-
-    not (Q2 <= Q2cut1_f2c or
-    (Q2 <= Q2cut2_f2c and x <= xcut_f2c))
+    Q2 > Q2cut1_f2c and
+    (Q2 > Q2cut2_f2c or x > xcut_f2c)
   local_variables:
     Q2cut1_f2c: 4
     Q2cut2_f2c: 10
@@ -117,4 +117,4 @@
   
 - process_type: DIS_NCP_CH
   VFNS: FONLL-C
-  rule: "not (Q2 <= 8 and ic)"
+  rule: "Q2 > 8 or not ic"
