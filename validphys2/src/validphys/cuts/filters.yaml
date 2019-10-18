@@ -79,10 +79,10 @@
   process_type: DYP
   local_variables:
     tau: M2 / sqrts**2
-    ymax: -0.5 * np.log(tau)
+    y0: -0.5 * np.log(tau)
     maxTau: 0.080
     maxY: 0.663
-  rule: "tau <= maxTau and np.fabs(y/ymax) <= maxY"
+  rule: "tau <= maxTau and np.fabs(y/y0) <= maxY"
 
 - dataset: DYE605
   process_type: DYP
