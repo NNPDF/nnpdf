@@ -209,8 +209,6 @@ class Rule:
         self.theory_ic = ic
 
     def __call__(self, dataset, idat):
-        pto = self.theory_pto
-        vfns = self.theory_vfns
         ic = self.theory_ic
         central_value = dataset.GetData(idat)
         self._set_kinematics_dict(dataset, idat)
@@ -221,7 +219,7 @@ class Rule:
             pass
 
         if hasattr(self, "PTO"):
-            if pto not in self.PTO:
+            if self.theory_pto not in self.PTO:
                 return
         # Handle the generalised DIS cut
         if self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] == "DIS":
@@ -243,7 +241,7 @@ class Rule:
             dataset.GetProc(idat) != self.process_type):
             return
 
-        if hasattr(self, "VFNS") and self.VFNS != vfns:
+        if hasattr(self, "VFNS") and self.VFNS != self.theory_vfns:
             return
 
         # Will return True if datapoint passes through the filter
