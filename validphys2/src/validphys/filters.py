@@ -7,6 +7,7 @@ import logging
 import numbers
 import numpy as np
 import pathlib
+import re
 
 from NNPDF import DataSet, RandomGenerator, CommonData
 from reportengine.checks import make_argcheck, check, check_positive, make_check
@@ -149,11 +150,11 @@ class PerturbativeOrder:
         self.parse()
 
     def parse(self):
-        order = ''.join([i for i in self.string if i in "0123456789"])
-        if order == '':
+        order = re.search(r'N(\d.*?)LO', self.string)
+        if order is None:
             self.numeric_pto = self.string.count("N")
         else:
-            self.numeric_pto = int(order)
+            self.numeric_pto = int(order.group(1))
 
         if self.string[-1] in "!+-":
             self.operator = self.string[-1]
