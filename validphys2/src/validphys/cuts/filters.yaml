@@ -9,7 +9,13 @@
   rule: "eta < 0.3"
 
 - dataset: LHCBWZMU8TEV
-  rule: "etay >= 2.25 if pto == 2 else True"
+  # Only evaluate rule if PTO matches
+  PTO: NNLO
+  rule: "etay >= 2.25"
+
+- dataset: LHCBWZMU8TEV
+  PTO: NLO
+  rule: "True"
 
 - dataset: LHCBWZMU7TEV
   rule: "etay >= 2.25 if pto == 2 else True"
