@@ -229,7 +229,7 @@ class Rule:
         if self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] == "DIS":
             return eval(
                 self.rule,
-                globals(),
+                numpy_functions,
                 {
                     **locals(),
                     **self.defaults,
@@ -251,7 +251,7 @@ class Rule:
         # Will return True if datapoint passes through the filter
         return eval(
             self.rule,
-            globals(),
+            numpy_functions,
             {
                 **locals(),
                 **self.defaults,
@@ -271,7 +271,7 @@ class Rule:
 
         if hasattr(self, "local_variables"):
             for key, value in self.local_variables.items():
-                exec(key + "=" + str(value), {**globals(), **self.kinematics_dict}, local_variables)
+                exec(key + "=" + str(value), {**numpy_functions, **self.kinematics_dict}, local_variables)
         self.local_variables_dict = local_variables
 
 path = pathlib.Path(__file__).resolve().parent
@@ -282,6 +282,8 @@ with open(path/"cuts/filters.yaml", "r") as rules_stream,\
         defaults = yaml.safe_load(defaults_stream)
     except yaml.YAMLError as exception:
         print(exception)
+
+numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs, "np": np}
 
 def get_cuts_for_dataset(commondata, theoryid) -> list:
     """Function to generate a list containing the index
