@@ -149,7 +149,11 @@ class PerturbativeOrder:
         self.parse()
 
     def parse(self):
-        self.numeric_pto = self.string.count("N")
+        order = ''.join([i for i in self.string if i in "0123456789"])
+        if order == '':
+            self.numeric_pto = self.string.count("N")
+        else:
+            self.numeric_pto = int(order)
 
         if self.string[-1] in "!+-":
             self.operator = self.string[-1]
