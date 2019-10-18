@@ -171,17 +171,16 @@ class Rule:
                 self.variables = CommonData.kinLabel["DIS"]
             else:
                 self.variables = CommonData.kinLabel[self.process_type]
-
         self.rule = compile(self.rule, "rule", "eval")
         self.defaults = defaults
-        self.pto = pto
-        self.vfns = vfns
-        self.ic = ic
+        self.theory_pto = pto
+        self.theory_vfns = vfns
+        self.theory_ic = ic
 
     def __call__(self, dataset, idat):
-        pto = self.pto
-        vfns = self.vfns
-        ic = self.ic
+        pto = self.theory_pto
+        vfns = self.theory_vfns
+        ic = self.theory_ic
         central_value = dataset.GetData(idat)
         self._set_kinematics_dict(dataset, idat)
         # TODO: check why division by zero happens
@@ -210,6 +209,9 @@ class Rule:
             dataset.GetProc(idat) != self.process_type):
             return
 
+        if self.perturbative_order() is not None:
+            return False
+
         if hasattr(self, "VFNS") and self.VFNS != vfns:
             return
 
@@ -225,6 +227,15 @@ class Rule:
             },
         )
 
+    def perturbative_order(self):
+        if hasattr(self, "PTO"):
+            # Converting acronym to a numeric value
+            if isinstance(self.PTO, str):
+                self.PTO = self.PTO.count("N")
+            if self.theory_pto != self.PTO:
+                return False
+        # Return None if rule doesn't apply
+        return
 
     def _set_kinematics_dict(self, dataset, idat) -> dict:
         kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
