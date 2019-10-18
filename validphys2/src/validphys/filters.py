@@ -171,6 +171,12 @@ class Rule:
                 self.variables = CommonData.kinLabel["DIS"]
             else:
                 self.variables = CommonData.kinLabel[self.process_type]
+
+        if hasattr(self, "PTO"):
+            # Converting acronym to a numeric value
+            if isinstance(self.PTO, str):
+                self.PTO = self.PTO.count("N")
+
         self.rule = compile(self.rule, "rule", "eval")
         self.defaults = defaults
         self.theory_pto = pto
@@ -188,6 +194,10 @@ class Rule:
             self._set_local_variables_dict(dataset, idat)
         except ZeroDivisionError:
             pass
+
+        if hasattr(self, "PTO"):
+            if self.theory_pto != self.PTO:
+                return
 
         # Handle the generalised DIS cut
         if self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] == "DIS":
@@ -209,9 +219,6 @@ class Rule:
             dataset.GetProc(idat) != self.process_type):
             return
 
-        if self.perturbative_order() is not None:
-            return False
-
         if hasattr(self, "VFNS") and self.VFNS != vfns:
             return
 
@@ -226,16 +233,6 @@ class Rule:
                 **self.local_variables_dict,
             },
         )
-
-    def perturbative_order(self):
-        if hasattr(self, "PTO"):
-            # Converting acronym to a numeric value
-            if isinstance(self.PTO, str):
-                self.PTO = self.PTO.count("N")
-            if self.theory_pto != self.PTO:
-                return False
-        # Return None if rule doesn't apply
-        return
 
     def _set_kinematics_dict(self, dataset, idat) -> dict:
         kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
