@@ -14,17 +14,34 @@
   rule: "etay >= 2.25"
 
 - dataset: LHCBWZMU8TEV
-  PTO: NLO
+  # The exclamation mark denotes any
+  # PTO that is not NNLO
+  PTO: NNLO!
   rule: "True"
 
 - dataset: LHCBWZMU7TEV
-  rule: "etay >= 2.25 if pto == 2 else True"
+  PTO: NNLO
+  rule: "etay >= 2.25"
+
+- dataset: LHCBWZMU7TEV
+  PTO: NNLO!
+  rule: "True"
 
 - dataset: D0WMASY
-  rule: "central_value >= 0.03 if pto == 2 else True"
+  PTO: NNLO
+  rule: "central_value >= 0.03"
+
+- dataset: D0WMASY
+  PTO: NNLO!
+  rule: "True"
 
 - dataset: D0WEASY
-  rule: "central_value >= 0.03 if pto == 2 else True"
+  PTO: NNLO
+  rule: "central_value >= 0.03"
+
+- dataset: D0WEASY
+  PTO: NNLO!
+  rule: "True"
 
 - dataset: ATLASZPT7TEV
   rule: "p_T2 >= 30**2 and p_T2 <= 500**2"
@@ -79,7 +96,8 @@
 #   rule: "False if (pto in (0, 1) and idat < 6) else True"
 
 - dataset: ATLASLOMASSDY11EXT
-  rule: "pto not in (0, 1) or idat >= 2"
+  PTO: NNLO-
+  rule: "idat >= 2"
 
 - dataset: DYE886P
   process_type: DYP
