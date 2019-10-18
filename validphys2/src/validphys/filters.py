@@ -144,12 +144,46 @@ class PerturbativeOrder:
     """Class that conveniently handles
     perturbative order declarations for use
     within the Rule class filter.
+
+
+    Parameters
+    ----------
+    string: str
+        A string in the format of NNLO or equivalently N2LO.
+        This can be followed by one of ! + - or none.
+
+        The syntax allows for rules to be executed only if the perturbative
+        order is within a given range. The following enumerates all 4 cases
+        as an example:
+
+        NNLO+ only execute the following rule if the pto is 2 or greater
+        NNLO- only execute the following rule if the pto is strictly less than 2
+        NNLO! only execute the following rule if the pto is strictly not 2
+        NNLO only execute the following rule if the pto is exactly 2
+
+    Example
+    -------
+    >>> from validphys.filters import PerturbativeOrder
+    >>> pto = PerturbativeOrder("NNLO+")
+    >>> pto.numeric_pto
+    2
+    >>> 1 in pto
+    False
+    >>> 2 in pto
+    True
+    >>> 3 in pto
+    True
     """
+
     def __init__(self, string):
         self.string = string.upper()
         self.parse()
 
     def parse(self):
+        # Change an input like NNNLO or N3LO
+        # to a numerical value for the pto.
+        # In this example, we assign
+        # self.numeric_pto to be 3.
         order = re.search(r'N(\d.*?)LO', self.string)
         if order is None:
             self.numeric_pto = self.string.count("N")
@@ -175,6 +209,30 @@ class Rule:
     """Rule object to be used to generate cuts mask.
 
     A rule object is created for each rule in ./cuts/filters.yaml
+
+
+    Parameters
+    ----------
+    initial_data: dict
+        A dictionary containing all the information regarding the rule.
+        This contains the name of the dataset the rule to applies to
+        and/or the process type the rule applies to. Additionally, the
+        rule itself is defined, alongside the reason the rule is used.
+        Finally, the user can optionally define their own custom local
+        variables.
+
+        By default these are defined in cuts/filters.yaml
+    defaults: dict
+        A dictionary containing default values to be used globally in
+        all rules.
+
+        By default these are defined in cuts/defaults.yaml
+    vfns: int
+        Variable Flavour Number Scheme defined by the theory
+    ic: int
+        Defined by the theory
+    pto: int
+        Perturbative order defined by the theory
     """
 
     def __init__(self, *, initial_data: dict, defaults: dict, vfns, ic, pto):
