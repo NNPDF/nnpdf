@@ -62,10 +62,25 @@
 #   rule: ""
 
 - dataset: CMSDY2D11
-  rule: >-
-    ((pto not in (0, 1) or 
-    (pTmv <= maxCMSDY2Dminv and pTmv >= minCMSDY2Dminv and etay <= maxCMSDY2Dy))
-    and ((pto != 2) or (pTmv <= maxCMSDY2Dminv and etay <= maxCMSDY2Dy)))
+  PTO: NNLO-
+  rule: pTmv <= maxCMSDY2Dminv and pTmv >= minCMSDY2Dminv and etay <= maxCMSDY2Dy
+  local_variables:
+    pTmv: M2**0.5
+    maxCMSDY2Dy: 2.2
+    maxCMSDY2Dminv: 200.0
+    minCMSDY2Dminv: 30.0
+
+- dataset: CMSDY2D11
+  PTO: NNLO
+  rule: pTmv <= maxCMSDY2Dminv and etay <= maxCMSDY2Dy
+  local_variables:
+    pTmv: M2**0.5
+    maxCMSDY2Dy: 2.2
+    maxCMSDY2Dminv: 200.0
+
+- dataset: CMSDY2D12
+  PTO: NNLO-
+  rule: pTmv <= maxCMSDY2Dminv and pTmv >= minCMSDY2Dminv and etay <= maxCMSDY2Dy
   local_variables:
     pTmv: M2**0.5
     maxCMSDY2Dy: 2.2
@@ -73,15 +88,12 @@
     minCMSDY2Dminv: 30.0
 
 - dataset: CMSDY2D12
-  rule: >-
-    ((pto not in (0, 1) or 
-    (pTmv <= maxCMSDY2Dminv and pTmv >= minCMSDY2Dminv and etay <= maxCMSDY2Dy))
-    and ((pto != 2) or (pTmv <= maxCMSDY2Dminv and etay <= maxCMSDY2Dy)))
+  PTO: NNLO
+  rule: pTmv <= maxCMSDY2Dminv and etay <= maxCMSDY2Dy
   local_variables:
     pTmv: M2**0.5
     maxCMSDY2Dy: 2.2
     maxCMSDY2Dminv: 200.0
-    minCMSDY2Dminv: 30.0
 
 - dataset: ATLASZHIGHMASS49FB
   rule: "pTmv <= maxCMSDY2Dminv"

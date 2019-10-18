@@ -223,7 +223,6 @@ class Rule:
         if hasattr(self, "PTO"):
             if pto not in self.PTO:
                 return
-
         # Handle the generalised DIS cut
         if self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] == "DIS":
             return eval(
