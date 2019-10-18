@@ -140,6 +140,10 @@ def check_positivity(posdatasets):
         log.info(f'{pos.name} checked.')
 
 class PerturbativeOrder:
+    """Class that conveniently handles
+    perturbative order declarations for use
+    within the Rule class filter.
+    """
     def __init__(self, string):
         self.string = string.upper()
         self.parse()
