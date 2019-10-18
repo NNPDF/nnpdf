@@ -139,6 +139,29 @@ def check_positivity(posdatasets):
         pos.load()
         log.info(f'{pos.name} checked.')
 
+class PerturbativeOrder:
+    def __init__(self, string):
+        self.string = string.upper()
+        self.parse()
+
+    def parse(self):
+        self.numeric_pto = self.string.count("N")
+
+        if self.string[-1] in "!+-":
+            self.operator = self.string[-1]
+        else:
+            self.operator = None
+
+    def __contains__(self, i):
+        if self.operator == "!":
+            return i != self.numeric_pto
+        elif self.operator == "+":
+            return i >= self.numeric_pto
+        elif self.operator == "-":
+            return i < self.numeric_pto
+        else:
+            return i == self.numeric_pto
+
 class Rule:
     """Rule object to be used to generate cuts mask.
 
@@ -173,9 +196,7 @@ class Rule:
                 self.variables = CommonData.kinLabel[self.process_type]
 
         if hasattr(self, "PTO"):
-            # Converting acronym to a numeric value
-            if isinstance(self.PTO, str):
-                self.PTO = self.PTO.count("N")
+            self.PTO = PerturbativeOrder(self.PTO)
 
         self.rule = compile(self.rule, "rule", "eval")
         self.defaults = defaults
@@ -196,7 +217,7 @@ class Rule:
             pass
 
         if hasattr(self, "PTO"):
-            if self.theory_pto != self.PTO:
+            if pto not in self.PTO:
                 return
 
         # Handle the generalised DIS cut
