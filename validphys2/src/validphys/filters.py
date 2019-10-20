@@ -281,9 +281,6 @@ class Rule:
         except ZeroDivisionError:
             pass
 
-        if hasattr(self, "PTO"):
-            if self.theory_pto not in self.PTO:
-                return
         # Handle the generalised DIS cut
         if self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] == "DIS":
             return eval(
@@ -306,6 +303,10 @@ class Rule:
 
         if hasattr(self, "VFNS") and self.VFNS != self.theory_vfns:
             return
+
+        if hasattr(self, "PTO"):
+            if self.theory_pto not in self.PTO:
+                return
 
         # Will return True if datapoint passes through the filter
         return eval(
