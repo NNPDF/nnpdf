@@ -63,46 +63,46 @@
 
 - dataset: CMSDY2D11
   PTO: NNLO-
-  rule: pTmv <= maxCMSDY2Dminv and pTmv >= minCMSDY2Dminv and etay <= maxCMSDY2Dy
+  rule: pT <= max_pT and pT >= min_pT and etay <= max_rapidity
   local_variables:
-    pTmv: M2**0.5
-    maxCMSDY2Dy: 2.2
-    maxCMSDY2Dminv: 200.0
-    minCMSDY2Dminv: 30.0
+    pT: M2**0.5
+    max_rapidity: 2.2
+    max_pT: 200.0
+    min_pT: 30.0
 
 - dataset: CMSDY2D11
   PTO: NNLO
-  rule: pTmv <= maxCMSDY2Dminv and etay <= maxCMSDY2Dy
+  rule: pT <= max_pT and etay <= max_rapidity
   local_variables:
-    pTmv: M2**0.5
-    maxCMSDY2Dy: 2.2
-    maxCMSDY2Dminv: 200.0
+    pT: M2**0.5
+    max_rapidity: 2.2
+    max_pT: 200.0
 
 - dataset: CMSDY2D12
   PTO: NNLO-
-  rule: pTmv <= maxCMSDY2Dminv and pTmv >= minCMSDY2Dminv and etay <= maxCMSDY2Dy
+  rule: pT <= max_pT and pT >= min_pT and etay <= max_rapidity
   local_variables:
-    pTmv: M2**0.5
-    maxCMSDY2Dy: 2.2
-    maxCMSDY2Dminv: 200.0
-    minCMSDY2Dminv: 30.0
+    pT: M2**0.5
+    max_rapidity: 2.2
+    max_pT: 200.0
+    min_pT: 30.0
 
 - dataset: CMSDY2D12
   PTO: NNLO
-  rule: pTmv <= maxCMSDY2Dminv and etay <= maxCMSDY2Dy
+  rule: pT <= max_pT and etay <= max_rapidity
   local_variables:
-    pTmv: M2**0.5
-    maxCMSDY2Dy: 2.2
-    maxCMSDY2Dminv: 200.0
+    pT: M2**0.5
+    max_rapidity: 2.2
+    max_pT: 200.0
 
 - dataset: ATLASZHIGHMASS49FB
-  rule: "pTmv <= maxCMSDY2Dminv"
+  rule: pT <= max_pT
   local_variables:
-    pTmv: (M_ll2)**0.5
-    maxCMSDY2Dminv: 200.0
+    pT: (M_ll2)**0.5
+    max_pT: 200.0
 
 # - dataset: LHCBLOWMASS37PB
-#   rule: "pTmv <= maxCMSDY2Dminv"
+#   rule: "pT <= maxCMSDY2Dminv"
 
 # - dataset: ATLASLOMASSDY11
 #   rule: "False if (pto in (0, 1) and idat < 6) else True"
