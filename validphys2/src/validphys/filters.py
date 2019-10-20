@@ -372,7 +372,7 @@ def get_cuts_for_dataset(commondata, theoryid) -> list:
     dataset = commondata.load()
 
     theoryid_dict = theoryid.get_description()
-    pto, ic, vfns = map(theoryid_dict.get, ["PTO", "IC", "VFNS"])
+    pto, ic, vfns = map(theoryid_dict.get, ["PTO", "IC", "FNS"])
 
     if "rule_list" not in globals():
         global rule_list
