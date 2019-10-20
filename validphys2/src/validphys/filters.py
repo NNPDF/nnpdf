@@ -301,6 +301,9 @@ class Rule:
             dataset.GetProc(idat) != self.process_type):
             return
 
+        if hasattr(self, "IC") and self.IC != self.theory_ic:
+            return
+
         if hasattr(self, "VFNS") and self.VFNS != self.theory_vfns:
             return
 

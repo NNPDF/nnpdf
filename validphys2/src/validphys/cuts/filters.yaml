@@ -153,4 +153,5 @@
   
 - process_type: DIS_NCP_CH
   VFNS: FONLL-C
-  rule: "Q2 > 8 or not ic"
+  IC: True
+  rule: "Q2 > 8"
