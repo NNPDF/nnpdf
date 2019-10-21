@@ -272,7 +272,6 @@ class Rule:
         self.theory_ic = ic
 
     def __call__(self, dataset, idat):
-        ic = self.theory_ic
         central_value = dataset.GetData(idat)
         self._set_kinematics_dict(dataset, idat)
         # TODO: check why division by zero happens
