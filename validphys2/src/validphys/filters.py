@@ -184,16 +184,15 @@ class PerturbativeOrder:
         # to a numerical value for the pto.
         # In this example, we assign
         # self.numeric_pto to be 3.
-        order = re.search(r'N(\d.*?)LO', self.string)
-        if order is None:
-            self.numeric_pto = self.string.count("N")
+        exp = re.compile(
+                r'(N(?P<nnumber>\d+)|(?P<multiplens>N*))LO(?P<operator>[\+\-\!])?'
+                ).fullmatch(self.string)
+        if exp.group("multiplens") is None:
+            self.numeric_pto = int(exp.group("nnumber"))
         else:
-            self.numeric_pto = int(order.group(1))
+            self.numeric_pto = len(exp.group("multiplens"))
 
-        if self.string[-1] in "!+-":
-            self.operator = self.string[-1]
-        else:
-            self.operator = None
+        self.operator = exp.group("operator")
 
     def __contains__(self, i):
         if self.operator == "!":
