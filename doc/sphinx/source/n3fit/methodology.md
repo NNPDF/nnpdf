@@ -47,7 +47,7 @@ In the following table we list some of the differences between both codes:
 +--------------------+---------------------------------+-------------------------------------+
 | Stopping           | lookback                        | **patience**                        |
 +--------------------+---------------------------------+-------------------------------------+
-| Positivity         | penalty and threshold           | penalty, **no threshold tolerance** |
+| Positivity         | penalty and threshold           | **dynamic penalty, PDF must fulfill positivity** |
 +--------------------+---------------------------------+-------------------------------------+
 | Postfit            | 4-sigma chi2 and arclenght      | same as nnfit                       |
 +--------------------+---------------------------------+-------------------------------------+
@@ -87,7 +87,9 @@ The network initialization relies on modern deep learning techniques such as glo
 Optimizer
 ---------
 
-In `n3fit` the genetic algorithm optimizer is replaced by modern stochastic gradient descent algorithms such as RMS propagation, Adam, Adagrad, among others provided by [Keras](https://keras.io/). The development approach adopted in `n3fit` includes the abstraction of the optimization algorithm thus the user has the possibility to extend it with new strategies.
+In `n3fit` the genetic algorithm optimizer is replaced by modern stochastic gradient descent algorithms such as RMS propagation, Adam, Adagrad, among others provided by [Keras](https://keras.io/). 
+The development approach adopted in `n3fit` includes the abstraction of the optimization algorithm thus the user has the possibility to extend it with new strategies.
+By default all algorithms provided by Keras are available, other algorithms can be used by implementing them in the appropiate backend.
 
 Following the gradient descent approach the training is performed in iteration steps where:
 - for each data point the neural network is evaluated (forward propagation)
@@ -110,7 +112,10 @@ Stopping algorithm
 ``` image:: figures/stopping.png
 ```
 
-Following the diagram presented in the figure above, we then train the network until the validation stops improving. From that point onwards, and to avoid false positives, we enable a patience algorithm which waits for a number of iterations before actually considering the fit finished. This strategy avoids long fits by terminating the fitting at early stages thanks to the patience tolerance.
+Following the diagram presented in the figure above, we then train the network until the validation stops improving. 
+From that point onwards, and to avoid false positives, we enable a patience algorithm.
+This algorithm consists on waiting for a number of iterations before actually considering the fit finished.
+This strategy avoids long fits by terminating the fitting at early stages thanks to the patience tolerance.
 
 If the patience is set to a ratio 1.0 (i.e., wait until all epochs are finished) this algorithm is equal to that used in `nnfit`.
 
@@ -124,7 +129,11 @@ Positivity
 
 In NNPDF3.1 there were a number of datasets added in order to constraint positivity based on DIS and fixed-target Drell-Yan processes. A similar technology and methodology is implemented in `n3fit` based on a penalty term controlled by a **positivity multiplier**.
 
-The main difference to `nnfit` is that in `n3fit` a hard threshold is set such that no replicas generating negative values for the positivity sets are generated. In few words, the `nnfit` code tolerates negative predictions within a specific boundary defined in the runcard with the `poslambda` key.
+The main difference to `nnfit` is that in `n3fit` a hard threshold is set such that no replicas generating negative values for the positivity sets are generated.
+In few words, the `nnfit` code tolerates negative predictions within a specific boundary defined in the runcard with the `poslambda` key.
+In `n3fit` however the fit will not stop until the replica passes all positivity constraints.
+
+Note as well that the positivity penalty in `n3fit` grows dynamically with the fit to facilitate quick training at early stages of the fit.
 
 ``` important:: The positivity multiplier is a hyper-parameter of the fit which require specific fine tuning.
 ```
