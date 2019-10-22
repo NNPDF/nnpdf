@@ -30,31 +30,31 @@ The `n3fit` code is designed in python and one of its main goals is to replace t
 In the following table we list some of the differences between both codes:
 
 ```eval_rst
-+--------------------+---------------------------------+-------------------------------------+
-| Component          | nnfit                           | n3fit                               |
-+====================+=================================+=====================================+
-| Random numbers     | single seed                     | multi seed                          |
-+--------------------+---------------------------------+-------------------------------------+
-| Data management    | libnnpdf                        | same as nnfit                       |
-+--------------------+---------------------------------+-------------------------------------+
-| Neural net         | fixed architecture, per flavour |**single net, flexible architecture**|
-+--------------------+---------------------------------+-------------------------------------+
-| Preprocessing      | random fixed                    | **fitted in range**                 |
-+--------------------+---------------------------------+-------------------------------------+
-| Integration        | a posteriori per iteration      | **buildin in the model**            |
-+--------------------+---------------------------------+-------------------------------------+
-| Optimizer          | genetic optimizer               | **gradient descent**                |
-+--------------------+---------------------------------+-------------------------------------+
-| Stopping           | lookback                        | **patience**                        |
-+--------------------+---------------------------------+-------------------------------------+
++--------------------+---------------------------------+--------------------------------------------------+
+| Component          | nnfit                           | n3fit                                            |
++====================+=================================+==================================================+
+| Random numbers     | single seed                     | multi seed                                       |
++--------------------+---------------------------------+--------------------------------------------------+
+| Data management    | libnnpdf                        | same as nnfit                                    |
++--------------------+---------------------------------+--------------------------------------------------+
+| Neural net         | fixed architecture, per flavour |**single net, flexible architecture**             |
++--------------------+---------------------------------+--------------------------------------------------+
+| Preprocessing      | random fixed                    | **fitted in range**                              |
++--------------------+---------------------------------+--------------------------------------------------+
+| Integration        | a posteriori per iteration      | **buildin in the model**                         |
++--------------------+---------------------------------+--------------------------------------------------+
+| Optimizer          | genetic optimizer               | **gradient descent**                             |
++--------------------+---------------------------------+--------------------------------------------------+
+| Stopping           | lookback                        | **patience**                                     |
++--------------------+---------------------------------+--------------------------------------------------+
 | Positivity         | penalty and threshold           | **dynamic penalty, PDF must fulfill positivity** |
-+--------------------+---------------------------------+-------------------------------------+
-| Postfit            | 4-sigma chi2 and arclenght      | same as nnfit                       |
-+--------------------+---------------------------------+-------------------------------------+
-| Fine tuning        | manual                          | **semi-automatic**                  |
-+--------------------+---------------------------------+-------------------------------------+
-| Model selection    | closure test                    | closure test, **hyper optimization**|
-+--------------------+---------------------------------+-------------------------------------+
++--------------------+---------------------------------+--------------------------------------------------+
+| Postfit            | 4-sigma chi2 and arclenght      | same as nnfit                                    |
++--------------------+---------------------------------+--------------------------------------------------+
+| Fine tuning        | manual                          | **semi-automatic**                               |
++--------------------+---------------------------------+--------------------------------------------------+
+| Model selection    | closure test                    | closure test, **hyper optimization**             |
++--------------------+---------------------------------+--------------------------------------------------+
 ```
 
 In `nnfit` there is a single `seed` variable stored in the fit runcard which is used to initialize an instance of the `RandomGenerator` class which provides random numbers sequentially. The `nnfit` user has no independent control over the random number sequences used for the neural network initialization, the training-validation split and the MC replica generation. On the other hand, in `n3fit` we introduce 3 new seed variables in the fit runcard: `trvlseed` for the random numbers used in training-validation, `nnseed` for the neural network initialization and `mcseed` which controls the MC replica generation.
@@ -87,7 +87,7 @@ The network initialization relies on modern deep learning techniques such as glo
 Optimizer
 ---------
 
-In `n3fit` the genetic algorithm optimizer is replaced by modern stochastic gradient descent algorithms such as RMS propagation, Adam, Adagrad, among others provided by [Keras](https://keras.io/). 
+In `n3fit` the genetic algorithm optimizer is replaced by modern stochastic gradient descent algorithms such as RMS propagation, Adam, Adagrad, among others provided by [Keras](https://keras.io/).
 The development approach adopted in `n3fit` includes the abstraction of the optimization algorithm thus the user has the possibility to extend it with new strategies.
 By default all algorithms provided by Keras are available, other algorithms can be used by implementing them in the appropiate backend.
 
@@ -112,7 +112,7 @@ Stopping algorithm
 ``` image:: figures/stopping.png
 ```
 
-Following the diagram presented in the figure above, we then train the network until the validation stops improving. 
+Following the diagram presented in the figure above, we then train the network until the validation stops improving.
 From that point onwards, and to avoid false positives, we enable a patience algorithm.
 This algorithm consists on waiting for a number of iterations before actually considering the fit finished.
 This strategy avoids long fits by terminating the fitting at early stages thanks to the patience tolerance.
