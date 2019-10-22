@@ -33,7 +33,7 @@ In the following table we list some of the differences between both codes:
 +--------------------+---------------------------------+-------------------------------------+
 | Component          | nnfit                           | n3fit                               |
 +====================+=================================+=====================================+
-| MC data generation | single seed                     | multi seed                          |
+| Random numbers     | single seed                     | multi seed                          |
 +--------------------+---------------------------------+-------------------------------------+
 | Data management    | libnnpdf                        | same as nnfit                       |
 +--------------------+---------------------------------+-------------------------------------+
@@ -47,7 +47,7 @@ In the following table we list some of the differences between both codes:
 +--------------------+---------------------------------+-------------------------------------+
 | Stopping           | lookback                        | **patience**                        |
 +--------------------+---------------------------------+-------------------------------------+
-| Positivity         | penalty and threshold           | penalty, **PDF must be positive**   |
+| Positivity         | penalty and threshold           | penalty, **no threshold tolerance** |
 +--------------------+---------------------------------+-------------------------------------+
 | Postfit            | 4-sigma chi2 and arclenght      | same as nnfit                       |
 +--------------------+---------------------------------+-------------------------------------+
@@ -56,6 +56,8 @@ In the following table we list some of the differences between both codes:
 | Model selection    | closure test                    | closure test, **hyper optimization**|
 +--------------------+---------------------------------+-------------------------------------+
 ```
+
+In `nnfit` there is a single `seed` variable stored in the fit runcard which is used to initialize an instance of the `RandomGenerator` class which provides random numbers sequentially. The `nnfit` user has no independent control over the random number sequences used for the neural network initialization, the training-validation split and the MC replica generation. On the other hand, in `n3fit` we introduce 3 new seed variables in the fit runcard: `trvlseed` for the random numbers used in training-validation, `nnseed` for the neural network initialization and `mcseed` which controls the MC replica generation.
 
 
 ``` note:: In the next sections we focus on the n3fit specifics marked in **bold**.
@@ -68,12 +70,12 @@ The main advantage of using a modern deep learning backend such as Keras/Tensorf
 
 The current `n3fit` code supports sequential dense networks with custom number of layers, nodes, activation functions and initializers from [Keras](https://keras.io/).
 
-A big difference in comparison to `nnfit` is the number of neural networks involved in the fit. Here we use a **single neural network** model which maps the input (x, log x) to 8 outputs, nominally they correspond exactly the 8 PDF flavours defined in NNPDF3.1. The choice of using a single model is justified by the interest in preserving cross-correlations between flavours.
+A big difference in comparison to `nnfit` is the number of neural networks involved in the fit. Here we use a **single neural network** model which maps the input (x, log x) to 8 outputs, nominally they correspond exactly the 8 PDF flavours defined in NNPDF3.1. The choice of using a single model is justified by the interest in preserving cross-correlations between flavours in terms of synapses by improving the training efficiency.
 
 ``` image:: figures/nn.png
 ```
 
-Preprocessing has been modified from fixed random range selection to fitted preprocessing in a **bounded range** (via gradient clipping). The preprocessing ranges are the same from NNPDF3.1.
+Preprocessing has been modified from fixed random range selection to fitted preprocessing in a **bounded range** by constraining the exponents to have the norm between a lower bound and an upper bound. The preprocessing ranges are the same used in NNPDF3.1 and thus based on the evolution basis with intrinsic charm.
 
 The momentum sum rules are implemented as a **neural network layer** which computes the normalization coefficients for each flavour as a sum over a fixed grid of x points. The number and density of points in x is selected in such way that the final quality of the integrals are at least permille level in comparison to 1D integration algorithms.
 
@@ -85,7 +87,7 @@ The network initialization relies on modern deep learning techniques such as glo
 Optimizer
 ---------
 
-In `n3fit` the genetic algorithm optimizer is replaced by modern stochastic gradient descent algorithms such as RMS propagation, Adam, Adagrad, among others provided by [Keras](https://keras.io/).
+In `n3fit` the genetic algorithm optimizer is replaced by modern stochastic gradient descent algorithms such as RMS propagation, Adam, Adagrad, among others provided by [Keras](https://keras.io/). The development approach adopted in `n3fit` includes the abstraction of the optimization algorithm thus the user has the possibility to extend it with new strategies.
 
 Following the gradient descent approach the training is performed in iteration steps where:
 - for each data point the neural network is evaluated (forward propagation)
@@ -108,7 +110,7 @@ Stopping algorithm
 ``` image:: figures/stopping.png
 ```
 
-Following the diagram presented in the figure above, we then train the network until the validation stops improving. From that point onwards, and to avoid false positives, we enable a patience algorithm which waits for a number of iterations before actually considering the fit finished.
+Following the diagram presented in the figure above, we then train the network until the validation stops improving. From that point onwards, and to avoid false positives, we enable a patience algorithm which waits for a number of iterations before actually considering the fit finished. This strategy avoids long fits by terminating the fitting at early stages thanks to the patience tolerance.
 
 If the patience is set to a ratio 1.0 (i.e., wait until all epochs are finished) this algorithm is equal to that used in `nnfit`.
 
@@ -122,7 +124,7 @@ Positivity
 
 In NNPDF3.1 there were a number of datasets added in order to constraint positivity based on DIS and fixed-target Drell-Yan processes. A similar technology and methodology is implemented in `n3fit` based on a penalty term controlled by a **positivity multiplier**.
 
-The main difference to `nnfit` is that in `n3fit` a hard threshold is set such that no replicas generating negative values for the positivity sets are generated.
+The main difference to `nnfit` is that in `n3fit` a hard threshold is set such that no replicas generating negative values for the positivity sets are generated. In few words, the `nnfit` code tolerates negative predictions within a specific boundary defined in the runcard with the `poslambda` key.
 
 ``` important:: The positivity multiplier is a hyper-parameter of the fit which require specific fine tuning.
 ```
@@ -130,7 +132,7 @@ The main difference to `nnfit` is that in `n3fit` a hard threshold is set such t
 Hyperoptimization algorithm
 ---------------------------
 
-The main advantanges of the points presented above consists in the possibility to test several models in a fraction of time in comparison to the `nnfit` framework.
+The main advantages of the points presented above consists in the possibility to test several models in a fraction of time in comparison to the `nnfit` framework.
 
 This is of key importance for a proper hyper-parameter scan where everything is potentially interconnected.
 
