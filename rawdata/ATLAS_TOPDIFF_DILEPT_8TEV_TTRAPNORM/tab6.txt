@@ -1,0 +1,15 @@
+Path: /HepData/9211/d6-x1-y1
+Parton-level normalized $t\bar t$ differential cross-sections for the $t\bar t$ system absolute rapidity $|y_{t\bar t}|$ at $\sqrt{s}$ = 8 TeV. The uncertainties quoted in the second column represent the statistical and systematic uncertainties added in quadrature
+Location: Table 5
+RE : P P --> TOP TOPBAR X
+SQRT(S) : 8000.0 GeV
+x : ABSY_TTBAR
+y : 1/SIG*DSIG/DABSY_TTBAR
+xdesc	x	xlow	xhigh	y	dy+	dy-	dy+	dy-	
+	0.2	0.0	0.4	0.821	+0.010673	-0.010673	+0.018062	-0.018062
+	0.6000000000000001	0.4	0.8	0.721	+0.009373	-0.009373	+0.015141	-0.015141
+	1.0	0.8	1.2	0.499	+0.007984	-0.007984	+0.00998	-0.00998
+	1.6	1.2	2.0	0.206	+0.004944	-0.004944	+0.003913999999999999	-0.003913999999999999
+	2.4	2.0	2.8	0.0226	+0.0018758000000000002	-0.0018758000000000002	+0.0022374	-0.0022374
+
+
