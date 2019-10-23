@@ -1,0 +1,25 @@
+********************************************************************************
+SetName: CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM
+Author: Emanuele Nocera enocera@nikhef.nl
+Date 03/2019
+CodesUsed: FastNLO tables provided by Alex Mitov
+TheoryInput: Fixed muR=muF=HT/4, mt=173.3 GeV, as(MZ)=0.118
+PDFset: NNPDF31_nnlo_as_0118
+Warnings: must be replaced with mt=172.5 when the computation becomes available
+********************************************************************************
+1.07368	0.00000
+1.07213	0.00000
+1.07366	0.00000
+1.07281	0.00000
+1.05135	0.00000
+1.05037	0.00000
+1.05318	0.00000
+1.06248	0.00000
+1.05797	0.00000
+1.06249	0.00000
+1.06712	0.00000	
+1.08660	0.00000
+1.06760	0.00000
+1.07609	0.00000
+1.09017	0.00000
+1.12829	0.00000
