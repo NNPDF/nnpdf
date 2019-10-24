@@ -6,12 +6,14 @@ Filters for NNPDF fits
 import logging
 import numbers
 import numpy as np
-import pathlib
 import re
+
+from importlib.resources import read_binary
 
 from NNPDF import DataSet, RandomGenerator, CommonData
 from reportengine.checks import make_argcheck, check, check_positive, make_check
 from reportengine.compat import yaml
+import validphys.cuts
 
 log = logging.getLogger(__name__)
 
@@ -335,14 +337,8 @@ class Rule:
                 exec(key + "=" + str(value), {**numpy_functions, **self.kinematics_dict}, local_variables)
         self.local_variables_dict = local_variables
 
-path = pathlib.Path(__file__).resolve().parent
-with open(path/"cuts/filters.yaml", "r") as rules_stream,\
-     open(path/"cuts/defaults.yaml", "r") as defaults_stream:
-    try:
-        rules = yaml.safe_load(rules_stream)
-        defaults = yaml.safe_load(defaults_stream)
-    except yaml.YAMLError as exception:
-        print(exception)
+rules = yaml.safe_load(read_binary(validphys.cuts, "filters.yaml"))
+defaults = yaml.safe_load(read_binary(validphys.cuts, "defaults.yaml"))
 
 numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs, "np": np}
 
