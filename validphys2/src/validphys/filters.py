@@ -3,6 +3,7 @@
 Filters for NNPDF fits
 """
 
+import functools
 import logging
 import numbers
 import numpy as np
@@ -342,6 +343,11 @@ defaults = yaml.safe_load(read_binary(validphys.cuts, "defaults.yaml"))
 
 numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs, "np": np}
 
+@functools.lru_cache()
+def get_rule(index, pto, vfns, ic):
+    return Rule(initial_data=rules[index], defaults=defaults,
+                pto=pto, vfns=vfns, ic=ic)
+
 def get_cuts_for_dataset(commondata, theoryid) -> list:
     """Function to generate a list containing the index
     of all experimental points that passed kinematic
@@ -372,15 +378,11 @@ def get_cuts_for_dataset(commondata, theoryid) -> list:
     theoryid_dict = theoryid.get_description()
     pto, ic, vfns = map(theoryid_dict.get, ["PTO", "IC", "FNS"])
 
-    if "rule_list" not in globals():
-        global rule_list
-        rule_list = [Rule(initial_data=i, defaults=defaults,
-                          pto=pto, vfns=vfns, ic=ic) for i in rules]
-
     mask = []
     for idat in range(dataset.GetNData()):
         broken = False
-        for rule in rule_list:
+        for i in range(len(rules)):
+            rule = get_rule(i, pto, vfns, ic)
             try:
                 rule_result = rule(dataset, idat)
                 if rule_result is not None and rule_result == False:
