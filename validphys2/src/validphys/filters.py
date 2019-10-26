@@ -237,7 +237,7 @@ class Rule:
         Perturbative order defined by the theory
     """
 
-    def __init__(self, *, initial_data: dict, defaults: dict, vfns, ic, pto):
+    def __init__(self, *, initial_data: dict, defaults: dict, theory_parameters: tuple):
         self.dataset = None
         self.process_type = None
         for key in initial_data:
@@ -270,9 +270,7 @@ class Rule:
         self.rule_string = self.rule
         self.rule = compile(self.rule, "rule", "eval")
         self.defaults = defaults
-        self.theory_pto = pto
-        self.theory_vfns = vfns
-        self.theory_ic = ic
+        self.theory_params = theory_parameters
 
     def __call__(self, dataset, idat):
         central_value = dataset.GetData(idat)
@@ -345,9 +343,16 @@ defaults = yaml.safe_load(read_binary(validphys.cuts, "defaults.yaml"))
 numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs, "np": np}
 
 @functools.lru_cache()
-def get_rule(index, pto, vfns, ic):
-    return Rule(initial_data=rules[index], defaults=defaults,
-                pto=pto, vfns=vfns, ic=ic)
+def get_rule(index, theory_parameters):
+    return Rule(
+        initial_data=rules[index],
+        defaults=defaults,
+        theory_parameters=theory_parameters,
+    )
+
+@functools.lru_cache()
+def get_theory_parameters(theoryid):
+    return tuple(theoryid.get_description().items())
 
 def get_cuts_for_dataset(commondata, theoryid) -> list:
     """Function to generate a list containing the index
@@ -376,14 +381,13 @@ def get_cuts_for_dataset(commondata, theoryid) -> list:
     """
     dataset = commondata.load()
 
-    theoryid_dict = theoryid.get_description()
-    pto, ic, vfns = map(theoryid_dict.get, ["PTO", "IC", "FNS"])
+    theoryid_params = get_theory_parameters(theoryid)
 
     mask = []
     for idat in range(dataset.GetNData()):
         broken = False
         for i in range(len(rules)):
-            rule = get_rule(i, pto, vfns, ic)
+            rule = get_rule(i, theoryid_params)
             try:
                 rule_result = rule(dataset, idat)
                 if rule_result is not None and rule_result == False:
