@@ -142,7 +142,7 @@
   rule: "x > 0.1"
 
 - process_type: DIS_NCP_CH
-  VFNS: FONLL-A
+  FNS: FONLL-A
   local_variables:
     Q2cut1_f2c: 4
     Q2cut2_f2c: 10
@@ -152,6 +152,6 @@
     (Q2 > Q2cut2_f2c or x > xcut_f2c)
   
 - process_type: DIS_NCP_CH
-  VFNS: FONLL-C
+  FNS: FONLL-C
   IC: True
   rule: "Q2 > 8"
