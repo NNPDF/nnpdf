@@ -302,14 +302,11 @@ class Rule:
             dataset.GetProc(idat) != self.process_type):
             return None
 
-        if hasattr(self, "IC") and self.IC != self.theory_ic:
-            return None
-
-        if hasattr(self, "VFNS") and self.VFNS != self.theory_vfns:
-            return None
-
-        if hasattr(self, "PTO"):
-            if self.theory_pto not in self.PTO:
+        for parameter in self.theory_params:
+            if parameter[0] == "PTO" and hasattr(self, "PTO"):
+                if parameter[1] not in self.PTO:
+                    return None
+            elif hasattr(self, parameter[0]) and (getattr(self, parameter[0]) != parameter[1]):
                 return None
 
         # Will return True if datapoint passes through the filter
