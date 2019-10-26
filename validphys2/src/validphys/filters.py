@@ -300,17 +300,17 @@ class Rule:
         # but the point was cut out by the rule.
         if (dataset.GetSetName() != self.dataset and
             dataset.GetProc(idat) != self.process_type):
-            return
+            return None
 
         if hasattr(self, "IC") and self.IC != self.theory_ic:
-            return
+            return None
 
         if hasattr(self, "VFNS") and self.VFNS != self.theory_vfns:
-            return
+            return None
 
         if hasattr(self, "PTO"):
             if self.theory_pto not in self.PTO:
-                return
+                return None
 
         # Will return True if datapoint passes through the filter
         return eval(
