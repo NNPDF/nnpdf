@@ -267,6 +267,7 @@ class Rule:
         if hasattr(self, "PTO"):
             self.PTO = PerturbativeOrder(self.PTO)
 
+        self.rule_string = self.rule
         self.rule = compile(self.rule, "rule", "eval")
         self.defaults = defaults
         self.theory_pto = pto
@@ -320,6 +321,9 @@ class Rule:
                 **self.local_variables_dict,
             },
         )
+
+    def __repr__(self):
+        return self.rule_string
 
     def _set_kinematics_dict(self, dataset, idat) -> dict:
         kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
