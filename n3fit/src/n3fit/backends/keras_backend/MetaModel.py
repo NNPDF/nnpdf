@@ -4,7 +4,7 @@
     Extension of the backend Model class containing some wrappers in order to absorb other
     backend-dependent calls
 """
-from keras.models import Model
+from keras.models import Model, Sequential
 import keras.optimizers as Kopt
 
 from n3fit.backends.keras_backend.operations import numpy_to_input
@@ -66,6 +66,10 @@ class MetaModel(Model):
                 o_tensor = oo(*inputs)
                 input_list += inputs
                 output_list.append(o_tensor)
+
+        self.all_inputs = input_list
+        self.all_outputs = output_list
+        self.internal_models = {}
 
         super(MetaModel, self).__init__(input_list, output_list, **kwargs)
 
@@ -156,3 +160,23 @@ class MetaModel(Model):
         super(MetaModel, self).compile(
             optimizer=opt, loss=loss, target_tensors=target_output, **kwargs
         )
+
+    def multiply_weights(self, key, layer_names, multiplier):
+        """ Multiply all weights for the given layers by some scalar
+
+        Parameters
+        ----------
+            layer_names: list of names of the layers to update weights
+            multiplier: scalar number to multiply the weights with
+        """
+        internal_model = self.internal_models.get(key)
+        if not internal_model:
+            # Create an internal model to access the weights of the
+            # layer we want to update
+            # is this a bug or a feature?
+            layers = [self.get_layer(i) for i in layer_names]
+            internal_model = Sequential(layers)
+            self.internal_models[key] = internal_model
+        current_weights = internal_model.get_weights()
+        new_weights = [i*multiplier for i in current_weights]
+        internal_model.set_weights(new_weights)

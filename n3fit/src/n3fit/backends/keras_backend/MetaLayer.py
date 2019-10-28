@@ -8,7 +8,7 @@
     For instance: np_to_tensor is just a call to K.constant
 """
 
-
+import tensorflow as tf
 from keras import backend as K
 from keras.engine.topology import Layer
 from keras.initializers import Constant, RandomUniform, glorot_normal, glorot_uniform
@@ -113,7 +113,7 @@ class MetaLayer(Layer):
         """
         Computes the tensordot product between tensor_x and tensor_y
         """
-        return K.tf.tensordot(tensor_x, tensor_y, axes=axes, **kwargs)
+        return tf.tensordot(tensor_x, tensor_y, axes=axes, **kwargs)
 
     def transpose(self, tensor, **kwargs):
         """
@@ -125,7 +125,7 @@ class MetaLayer(Layer):
         """
         Applies boolean mask to a tensor
         """
-        return K.tf.boolean_mask(tensor, mask, axis=axis, **kwargs)
+        return tf.boolean_mask(tensor, mask, axis=axis, **kwargs)
 
     def concatenate(self, tensor_list, axis=-1, target_shape=None):
         """

@@ -409,11 +409,7 @@ class ModelTrainer:
 
             if (epoch + 1) % 100 == 0:
                 print_stats = True
-                for pos_ds in self.training["posdatasets"]:
-                    name = pos_ds
-                    curr_w = training_model.get_layer(name).get_weights()
-                    new_w = [curr_w[0] * pos_multiplier]
-                    training_model.get_layer(name).set_weights(new_w)
+                training_model.multiply_weights('pos', self.training["posdatasets"], pos_multiplier)
 
             passes = stopping_object.monitor_chi2(out, epoch, print_stats=print_stats)
 
