@@ -30,7 +30,7 @@ def set_initial_state(seed=13):
                                 inter_op_parallelism_threads=1)
     tf.compat.v1.set_random_seed(use_seed)
     sess = tf.compat.v1.Session(graph=tf.compat.v1.get_default_graph(), config=session_conf)
-    #K.set_session(sess)
+    tf.compat.v1.keras.backend.set_session(sess)
 
     return 0
 
@@ -49,4 +49,4 @@ def clear_backend_state():
     session_conf = tf.compat.v1.ConfigProto(intra_op_parallelism_threads=2,
                             inter_op_parallelism_threads=8)
     sess = tf.compat.v1.Session(graph=tf.compat.v1.get_default_graph(), config=session_conf)
-    #K.set_session(sess)
+    tf.compat.v1.keras.backend.set_session(sess)
