@@ -4,6 +4,7 @@
 
 import numpy as np
 import random as rn
+import tensorflow as tf
 from keras import backend as K
 
 
@@ -25,11 +26,11 @@ def set_initial_state(seed=13):
     # Clear the state of keras in case anyone used it before
     K.clear_session()
 
-    session_conf = K.tf.ConfigProto(intra_op_parallelism_threads=1,
+    session_conf = tf.compat.v1.ConfigProto(intra_op_parallelism_threads=1,
                                 inter_op_parallelism_threads=1)
-    K.tf.set_random_seed(use_seed)
-    sess = K.tf.Session(graph=K.tf.get_default_graph(), config=session_conf)
-    K.set_session(sess)
+    tf.compat.v1.set_random_seed(use_seed)
+    sess = tf.compat.v1.Session(graph=tf.compat.v1.get_default_graph(), config=session_conf)
+    #K.set_session(sess)
 
     return 0
 
@@ -45,7 +46,7 @@ def clear_backend_state():
 
     K.clear_session()
     # Don't open threads that you are not going to eat
-    session_conf = K.tf.ConfigProto(intra_op_parallelism_threads=2,
+    session_conf = tf.compat.v1.ConfigProto(intra_op_parallelism_threads=2,
                             inter_op_parallelism_threads=8)
-    sess = K.tf.Session(graph=K.tf.get_default_graph(), config=session_conf)
-    K.set_session(sess)
+    sess = tf.compat.v1.Session(graph=tf.compat.v1.get_default_graph(), config=session_conf)
+    #K.set_session(sess)
