@@ -118,9 +118,12 @@ Each subgrid entry has the following fields:
 - **fktarget**	- The name of the FK table this subgrid belongs to
 - **operators** - A list of operators to handle certain special cases (see Subgrid operators).
 For DIS there is one additional field:
-- **process**	- The process string of the observable (e.g DIS\_F2P, see DIS Processes in APFEL)
+- **process**	- The process string of the observable (e.g DIS\_F2P, see DIS Processes in APFEL below)
 
 ### DIS Processes in APFEL
+
+For DIS processes and since the coefficient functions are computed solely with APFEL, one needs to specify the process of the observable, in `dis_subgrids` following `APFEL`'s nomenclature.
+The list of processes below can be found in `apfel/src/DIS/FKObservables.f` in the headers corresponding to the different observables called.
 
 **Deep Inelastic Scattering Structure Functions**:
 - DIS_F2L: [EM] Light structure function F2light (electron-proton)
