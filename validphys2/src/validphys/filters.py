@@ -6,10 +6,10 @@ Filters for NNPDF fits
 import functools
 import logging
 import numbers
-import numpy as np
 import re
-
 from importlib.resources import read_binary
+
+import numpy as np
 
 from NNPDF import DataSet, RandomGenerator, CommonData
 from reportengine.checks import make_argcheck, check, check_positive, make_check
