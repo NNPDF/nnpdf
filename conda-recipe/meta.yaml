@@ -23,7 +23,7 @@ requirements:
         - numpy
     run:
         - tensorflow
-        - keras
+        - keras >= 2.3 # 2.2.4 is not compatible with tf 2.0 while tf 2.0 only forces 2.2.4 ...
         - hyperopt
         - seaborn
         - lhapdf
