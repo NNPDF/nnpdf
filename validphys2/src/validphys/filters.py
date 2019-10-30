@@ -287,7 +287,7 @@ class Rule:
                 self.rule,
                 numpy_functions,
                 {
-                    **locals(),
+                    **{"idat": idat, "central_value": central_value},
                     **self.defaults,
                     **self.kinematics_dict,
                     **self.local_variables_dict,
@@ -313,7 +313,7 @@ class Rule:
             self.rule,
             numpy_functions,
             {
-                **locals(),
+                **{"idat": idat, "central_value": central_value},
                 **self.defaults,
                 **self.kinematics_dict,
                 **self.local_variables_dict,
