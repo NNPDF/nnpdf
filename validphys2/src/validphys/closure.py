@@ -121,6 +121,70 @@ def plot_fits_bootstrap_bias(
     ax.set_title("Bias for each fit with errorbars from bootstrap")
     return fig
 
+@table
+def fits_bootstrap_bias_table(
+    fits_experiments_bootstrap_bias,
+    fits_name_with_covmat_label,
+    fits_experiments,
+):
+    """Produce a table with bias for each experiment for each fit, along with
+    variance calculated from doing a bootstrap sample
+    """
+    col = ['bias', 'bias std. dev.']
+    dfs = []
+    for fit, experiments, biases in zip(
+            fits_name_with_covmat_label,
+            fits_experiments,
+            fits_experiments_bootstrap_bias,
+            ):
+        records = []
+        for biasres, experiment in zip(biases, experiments):
+            records.append(dict(
+                    experiment=str(experiment),
+                    bias=biasres.mean(),
+                    bias_std=biasres.std()
+            ))
+        df = pd.DataFrame.from_records(records,
+                 columns=('experiment','bias', 'bias_std'),
+                 index = ('experiment')
+             )
+        df.columns = pd.MultiIndex.from_product(([str(fit)], col))
+        dfs.append(df)
+    return pd.concat(dfs, axis=1, sort=True)
+
+
+fits_bs_phi_exps = collect('experiments_bootstrap_phi', ('fits', 'fitcontext'))
+
+@table
+def fits_bootstrap_phi_table(
+    fits_bs_phi_exps,
+    fits_name_with_covmat_label,
+    fits_experiments,
+):
+    """Produce a table with variance
+    """
+    col = ['variance', 'variance std. dev.']
+    dfs = []
+    for fit, experiments, phis in zip(
+            fits_name_with_covmat_label,
+            fits_experiments,
+            fits_bs_phi_exps,
+            ):
+        records = []
+        for phires, experiment in zip(phis, experiments):
+            varres = phires**2
+            records.append(dict(
+                    experiment=str(experiment),
+                    variance=varres.mean(),
+                    variance_std=varres.std()
+            ))
+        df = pd.DataFrame.from_records(records,
+                 columns=('experiment','variance', 'variance_std'),
+                 index = ('experiment')
+             )
+        df.columns = pd.MultiIndex.from_product(([str(fit)], col))
+        dfs.append(df)
+    return pd.concat(dfs, axis=1, sort=True)
 
 fits_exps_bootstrap_chi2_central = collect('experiments_bootstrap_chi2_central',
                                            ('fits', 'fitcontext',))
