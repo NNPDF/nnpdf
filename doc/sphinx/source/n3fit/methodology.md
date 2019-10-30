@@ -33,7 +33,7 @@ In the following table we list some of the differences between both codes:
 +--------------------+---------------------------------+--------------------------------------------------+
 | Component          | nnfit                           | n3fit                                            |
 +====================+=================================+==================================================+
-| Random numbers     | single seed                     | multi seed                                       |
+| Random numbers     | main seed, closure filter seed  | multi seed                                       |
 +--------------------+---------------------------------+--------------------------------------------------+
 | Data management    | libnnpdf                        | same as nnfit                                    |
 +--------------------+---------------------------------+--------------------------------------------------+
@@ -70,7 +70,7 @@ The main advantage of using a modern deep learning backend such as Keras/Tensorf
 
 The current `n3fit` code supports sequential dense networks with custom number of layers, nodes, activation functions and initializers from [Keras](https://keras.io/).
 
-A big difference in comparison to `nnfit` is the number of neural networks involved in the fit. Here we use a **single neural network** model which maps the input (x, log x) to 8 outputs, nominally they correspond exactly the 8 PDF flavours defined in NNPDF3.1. The choice of using a single model is justified by the interest in preserving cross-correlations between flavours in terms of synapses by improving the training efficiency.
+A big difference in comparison to `nnfit` is the number of neural networks involved in the fit. Here we use a **single neural network** model which maps the input (x, log x) to 8 outputs, nominally they correspond exactly the 8 PDF flavours defined in NNPDF3.1.
 
 ``` image:: figures/nn.png
 ```
