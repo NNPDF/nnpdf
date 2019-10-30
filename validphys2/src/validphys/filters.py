@@ -11,7 +11,7 @@ from importlib.resources import read_binary
 
 import numpy as np
 
-from NNPDF import DataSet, RandomGenerator, CommonData
+from NNPDF import RandomGenerator, CommonData
 from reportengine.checks import make_argcheck, check, check_positive, make_check
 from reportengine.compat import yaml
 import validphys.cuts
@@ -390,7 +390,7 @@ def get_cuts_for_dataset(commondata, theoryid) -> list:
             rule = get_rule(i, theoryid_params)
             try:
                 rule_result = rule(dataset, idat)
-                if rule_result is not None and rule_result == False:
+                if rule_result is not None and not rule_result:
                     broken = True
                     break
             except Exception as e:
