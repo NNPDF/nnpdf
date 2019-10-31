@@ -388,14 +388,10 @@ def get_cuts_for_dataset(commondata, theoryid) -> list:
         broken = False
         for i in range(len(rules)):
             rule = get_rule(i, theoryid_params)
-            try:
-                rule_result = rule(dataset, idat)
-                if rule_result is not None and not rule_result:
-                    broken = True
-                    break
-            except Exception as e:
-                print(e)
-                return rule
+            rule_result = rule(dataset, idat)
+            if rule_result is not None and not rule_result:
+                broken = True
+                break
 
         if not broken:
             mask.append(idat)
