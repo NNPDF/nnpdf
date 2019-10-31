@@ -334,7 +334,7 @@ class Rule:
 
         if hasattr(self, "local_variables"):
             for key, value in self.local_variables.items():
-                exec(key + "=" + str(value), {**numpy_functions, **self.kinematics_dict}, local_variables)
+                local_variables[key] = eval(str(value), {**numpy_functions, **self.kinematics_dict, **local_variables})
         self.local_variables_dict = local_variables
 
 rules = yaml.safe_load(read_binary(validphys.cuts, "filters.yaml"))
