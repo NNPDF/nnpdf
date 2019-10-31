@@ -51,7 +51,7 @@ fitting:
     nodes_per_layer: [15, 10, 8]
     activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
     initializer: 'glorot_normal'
-    learning_rate: 0.01
+    learning_rate: 0.00001
     optimizer: 'RMSprop'
     epochs: 900
     pos_multiplier: 1.05

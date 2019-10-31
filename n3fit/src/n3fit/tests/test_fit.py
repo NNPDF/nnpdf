@@ -17,6 +17,7 @@ import pathlib
 import logging
 import tempfile
 import subprocess as sp
+from numpy.testing import assert_almost_equal
 
 log = logging.getLogger(__name__)
 REGRESSION_FOLDER = pathlib.Path().absolute() / "regressions"
@@ -29,18 +30,28 @@ REPLICA = "1"
 def load_data(path):
     """ Loads the info file of the fit into a list """
     info_file = path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.fitinfo"
-    f = open(info_file, "r")
-    info = f.readlines()
-    f.close()
-    return info
+    with open(info_file, "r") as f:
+        info = f.read()
+        return info.split()
+
+def compare_two(val1, val2, precision = 6):
+    """ Compares value 1 and value 2 attending to their type """
+    try:
+        num_1 = float(val1)
+        num_2 = float(val2)
+        assert_almost_equal(num_1, num_2, decimal = precision)
+    except ValueError:
+        assert val1 == val2
 
 
 def compare_lines(set1, set2):
-    """ Returns true if set1 and set2 are equal """
-    return set1 == set2
+    """ Returns true if the lines within set1 and set2 are the same
+    The numbers are compared up to `precision`
+    """
+    for val1, val2 in zip(set1, set2):
+        compare_two(val1, val2)
 
-
-def dont_test_fit():
+def test_fit():
     # create a /tmp folder
     tmp_name = tempfile.mkdtemp(prefix="nnpdf-")
     tmp_path = pathlib.Path(tmp_name)
@@ -54,4 +65,4 @@ def dont_test_fit():
     new_fitinfo = load_data(tmp_path)
     old_fitinfo = load_data(REGRESSION_FOLDER)
     # compare to the previous .fitinfo file
-    assert compare_lines(new_fitinfo, old_fitinfo)
+    compare_lines(new_fitinfo, old_fitinfo)
