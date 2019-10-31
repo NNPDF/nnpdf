@@ -12,15 +12,17 @@ description: n3fit regression test
 # ewk: apply ewk k-factors
 # sys: systematics treatment (see systypes)
 experiments:
-  - experiment: ALL
+  - experiment: NMC
     datasets:
+      - { dataset: NMC, frac: 0.5 }      
       - { dataset: SLACP, frac: 0.5}
-      - { dataset: NMCPD, frac: 0.5 }      
-      - { dataset: CMSJETS11, frac: 0.5, sys: 10 }
+  - experiment: CMSZDIFF12
+    datasets:
+    - { dataset: CMSZDIFF12, frac: 0.5, cfac: ['QCD'], sys: 10 }
 
 ############################################################
 datacuts:
-  t0pdfset     : NNPDF31_nlo_as_0118 # PDF set to generate t0 covmat
+  use_t0 : False
   q2min        : 3.49                # Q2 minimum
   w2min        : 12.5                # W2 minimum
   combocuts    : NNPDF31             # NNPDF3.0 final kin. cuts
@@ -35,32 +37,7 @@ datacuts:
 
 ############################################################
 theory:
-  theoryid: 53        # database id
-
-###########################################################
-hyperscan:
-    stopping:
-        min_epochs: 5e2
-        max_epochs: 40e2
-        min_patience: 0.10
-        max_patience: 0.40
-    positivity:
-        min_multiplier: 1.00000001
-        max_multiplier: 1.00000002
-        min_initial:
-        max_initial:
-    optimizer:
-        names: 'ALL' # Use all implemented optimizers
-        min_lr: 0.0005
-        max_lr: 0.5
-    architecture:
-        initializers: 'ALL'
-        max_drop: 0.15
-        n_layers: [2,3,4]
-        min_units: 5
-        max_units: 50
-        activations: ['sigmoid', 'tanh']
-
+  theoryid: 162        # database id
 
 ############################################################
 fitting:
@@ -68,7 +45,7 @@ fitting:
   trvlseed: 1
   nnseed: 2
   mcseed: 3  
-  epochs: 200
+  epochs: 900
 
   parameters: # This defines the parameter dictionary that is passed to the Model Trainer
     nodes_per_layer: [15, 10, 8]
@@ -78,7 +55,7 @@ fitting:
     optimizer: 'RMSprop'
     epochs: 900
     pos_multiplier: 1.05
-    pos_initial:  # believe the pos_lambda below 
+    pos_initial: 1.5
     stopping_patience: 0.30 # percentage of the number of epochs
     layer_type: 'dense'
     dropout: 0.0
@@ -122,18 +99,6 @@ positivity:
   posdatasets:
     - { dataset: POSF2U,   poslambda: 1e6 }  # Positivity Lagrange Multiplier
     - { dataset: POSDYC    , poslambda: 1e5 }
-
-############################################################
-closuretest:
-  filterseed  : 0   # Random seed to be used in filtering data partitions
-  fakedata    : False # on = to use FAKEPDF to generate pseudo-data
-  fakepdf     : MSTW2008nlo68cl # Theory input for pseudo-data
-  errorsize   : 1.0 # uncertainties rescaling
-  fakenoise   : False # on = to add random fluctuations to pseudo-data
-  rancutprob  : 1.0 # Fraction of data to be included in the fit
-  rancutmethod: 0   # Method to select rancutprob data fraction
-  rancuttrnval: False # 0(1) to output training(valiation) chi2 in report
-  printpdf4gen: False # To print info on PDFs during minimization
 
 ############################################################
 lhagrid:
