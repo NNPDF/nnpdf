@@ -354,14 +354,19 @@ def get_theory_parameters(theoryid):
 
 @functools.lru_cache()
 def get_files(filters, defaults) -> tuple:
-    if filters is None and defaults is None:
+    if filters is None:
         rules = yaml.safe_load(read_binary(validphys.cuts, "filters.yaml"))
-        defaults = yaml.safe_load(read_binary(validphys.cuts, "defaults.yaml"))
     else:
-        with open(filters, 'r') as filters_stream, open(defaults, 'r') as defaults_stream:
+        with open(filters, 'r') as filters_stream:
             rules = yaml.safe_load(filters_stream)
-            defaults = yaml.safe_load(defaults_stream)
-    return rules, defaults
+
+    if defaults is None:
+        default_values = yaml.safe_load(read_binary(validphys.cuts, "defaults.yaml"))
+    else:
+        with open(defaults, 'r') as defaults_stream:
+            default_values = yaml.safe_load(defaults_stream)
+
+    return rules, default_values
 
 def get_cuts_for_dataset(commondata, theoryid, filters=None, defaults=None) -> list:
     """Function to generate a list containing the index
