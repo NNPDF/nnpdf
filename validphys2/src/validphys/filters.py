@@ -337,16 +337,14 @@ class Rule:
                 local_variables[key] = eval(str(value), {**numpy_functions, **self.kinematics_dict, **local_variables})
         self.local_variables_dict = local_variables
 
-rules = yaml.safe_load(read_binary(validphys.cuts, "filters.yaml"))
-defaults = yaml.safe_load(read_binary(validphys.cuts, "defaults.yaml"))
-
 numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs, "np": np}
 
 @functools.lru_cache()
-def get_rule(index, theory_parameters):
+def get_rule(index, theory_parameters, filters, defaults):
+    filter_rules, default_values = get_files(filters=filters, defaults=defaults)
     return Rule(
-        initial_data=rules[index],
-        defaults=defaults,
+        initial_data=filter_rules[index],
+        defaults=default_values,
         theory_parameters=theory_parameters,
     )
 
@@ -354,7 +352,18 @@ def get_rule(index, theory_parameters):
 def get_theory_parameters(theoryid):
     return tuple(theoryid.get_description().items())
 
-def get_cuts_for_dataset(commondata, theoryid) -> list:
+@functools.lru_cache()
+def get_files(filters, defaults) -> tuple:
+    if filters is None and defaults is None:
+        rules = yaml.safe_load(read_binary(validphys.cuts, "filters.yaml"))
+        defaults = yaml.safe_load(read_binary(validphys.cuts, "defaults.yaml"))
+    else:
+        with open(filters, 'r') as filters_stream, open(defaults, 'r') as defaults_stream:
+            rules = yaml.safe_load(filters_stream)
+            defaults = yaml.safe_load(defaults_stream)
+    return rules, defaults
+
+def get_cuts_for_dataset(commondata, theoryid, filters=None, defaults=None) -> list:
     """Function to generate a list containing the index
     of all experimental points that passed kinematic
     cut rules stored in ./cuts/filters.yaml
@@ -382,12 +391,13 @@ def get_cuts_for_dataset(commondata, theoryid) -> list:
     dataset = commondata.load()
 
     theoryid_params = get_theory_parameters(theoryid)
+    num_rules = len(get_files(filters, defaults)[0])
 
     mask = []
     for idat in range(dataset.GetNData()):
         broken = False
-        for i in range(len(rules)):
-            rule = get_rule(i, theoryid_params)
+        for i in range(num_rules):
+            rule = get_rule(i, theoryid_params, filters=filters, defaults=defaults)
             rule_result = rule(dataset, idat)
             if rule_result is not None and not rule_result:
                 broken = True
