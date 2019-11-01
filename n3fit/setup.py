@@ -6,6 +6,7 @@ setup(
         package_dir = {'':'src'},
         packages=find_packages('src'),
         package_data = {
+            '':['*.fitinfo'],
             'tests/regressions': ['*'],
         },
 

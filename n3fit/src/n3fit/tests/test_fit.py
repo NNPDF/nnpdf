@@ -28,9 +28,8 @@ EXE = "n3fit"
 REPLICA = "1"
 
 
-def load_data(path):
+def load_data(info_file):
     """ Loads the info file of the fit into a list """
-    info_file = path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.fitinfo"
     with open(info_file, "r") as f:
         info = f.read()
         return info.split()
@@ -56,7 +55,7 @@ def compare_lines(set1, set2):
 
 def test_fit():
     # read up the old info file
-    old_fitinfo = load_data(REGRESSION_FOLDER)
+    old_fitinfo = load_data(REGRESSION_FOLDER / f"{QUICKNAME}.fitinfo")
     # create a /tmp folder
     tmp_name = tempfile.mkdtemp(prefix="nnpdf-")
     tmp_path = pathlib.Path(tmp_name)
@@ -67,6 +66,7 @@ def test_fit():
     run_command = [EXE, QUICKCARD, REPLICA]
     sp.run(run_command)
     # read up the .fitinfo files
-    new_fitinfo = load_data(tmp_path)
+    full_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.fitinfo"
+    new_fitinfo = load_data(full_path)
     # compare to the previous .fitinfo file
     compare_lines(new_fitinfo, old_fitinfo)
