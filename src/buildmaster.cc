@@ -325,11 +325,9 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASTOPDIFF8TEVTTMNORMFilter());
 
   target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTMFilter());
-  target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTPTFilter());
   target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPFilter());
 
   target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORMFilter());
-  target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTPTNORMFilter());
   target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORMFilter());
 
   // ************************ CMS TTBAR DIFF TeV  ***************
