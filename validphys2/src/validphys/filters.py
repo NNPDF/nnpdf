@@ -207,7 +207,10 @@ class PerturbativeOrder:
         else:
             return i == self.numeric_pto
 
-class Rule:
+class BaseRule:
+    numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs, "np": np}
+
+class Rule(BaseRule):
     """Rule object to be used to generate cuts mask.
 
     A rule object is created for each rule in ./cuts/filters.yaml
@@ -285,7 +288,7 @@ class Rule:
         if self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] == "DIS":
             return eval(
                 self.rule,
-                numpy_functions,
+                self.numpy_functions,
                 {
                     **{"idat": idat, "central_value": central_value},
                     **self.defaults,
@@ -311,7 +314,7 @@ class Rule:
         # Will return True if datapoint passes through the filter
         return eval(
             self.rule,
-            numpy_functions,
+            self.numpy_functions,
             {
                 **{"idat": idat, "central_value": central_value},
                 **self.defaults,
@@ -334,10 +337,8 @@ class Rule:
 
         if hasattr(self, "local_variables"):
             for key, value in self.local_variables.items():
-                local_variables[key] = eval(str(value), {**numpy_functions, **self.kinematics_dict, **local_variables})
+                local_variables[key] = eval(str(value), {**self.numpy_functions, **self.kinematics_dict, **local_variables})
         self.local_variables_dict = local_variables
-
-numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs, "np": np}
 
 @functools.lru_cache()
 def get_rule(index, theory_parameters, filters, defaults):
