@@ -35,9 +35,6 @@ U: unnormalised
 1U) TABS 10, 22 HepData
 2U) TABS 12, 24 HepData
 
-Missing lumi : 1.9%
-
-
 */
  
 #include "ATLAS_TOPDIFF_DILEPT_8TEV.h"
@@ -391,12 +388,18 @@ void  ATLAS_TOPDIFF_DILEPT_8TEV_TTMFilter::ReadData()
       for(int j=0; j<fNData; j++)
 	{
 	  fSys[i][j].add  = syscor[i][j];
-	  fSys[i][j].mult  = fSys[i][j].add*1e2/fData[i];
+	  fSys[i][j].mult = fSys[i][j].add*1e2/fData[i];
 	  fSys[i][j].type = ADD;
 	  fSys[i][j].name = "CORR";
 	}
-    }
 
+      //Luminosity uncertainty
+      fSys[i][6].mult = 1.9;  //%
+      fSys[i][6].add  = fSys[i][6].mult/100.*fData[i];
+      fSys[i][6].type = MULT;
+      fSys[i][6].name = "ATLASLUMI12";
+
+    }
 
   // Clean-up
   for (int i=0; i<fNData; i++)
@@ -518,6 +521,13 @@ void  ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPFilter::ReadData()
 	  fSys[i][j].type = ADD;
 	  fSys[i][j].name = "CORR";
 	}
+
+      //Luminosity uncertainty
+      fSys[i][5].mult = 1.9;  //%
+      fSys[i][5].add  = fSys[i][5].mult/100.*fData[i];
+      fSys[i][5].type = MULT;
+      fSys[i][5].name = "ATLASLUMI12";
+
     }
 
 
