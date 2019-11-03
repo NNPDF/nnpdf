@@ -1,38 +1,104 @@
 /*
-write here a description of the data set
+Name_exp : ATLAS_WJET_8TEV
+Reference: Measurement of differential cross sections and 𝑊+/𝑊−
+           cross-section ratios for 𝑊 boson production in association 
+           with jets at 𝑠√=8 TeV with the ATLAS detector
+ArXiv    : arxiv:1711.03296
+Published: JHEP 1805 (2018) 077
+Hepdata  : https://hepdata.net/record/ins1635273
+
+measurement of the W boson production cross section and the W+/W- cross-section ratio, both in 
+association with jets, in proton–proton collisions at s=sqrt{8} TeV with the ATLAS experiment at the 
+Large Hadron Collider. The measurement is performed in final states containing one electron and missing 
+transverse momentum using data corresponding to an integrated luminosity of 20.2 fb-1. 
+Differential cross sections for events with at least one or two jets are presented for a range of 
+observables, including jet transverse momenta and the transverse momentum of the W boson.
+The differential cross sections of positively and negatively charged W bosons are measured separately.
+
+Four distributions are considered in the following:
+1) W+ + jet, distribution differential in the transverse momentum of the W boson;
+2) W- + jet, distribution differential in the transverse momentum of the W boson;
+3) W+ + jet, distribution differential in the transverse momentum of the leading jet;
+4) W- + jet, distribution differential in the transverse momentum of the leading jet;
+
+The information on experimental uncertainties is retrieved from the hepdata entry. Each source of 
+systematic uncertainty (except unfolding uncertainties) is assumed to be bin-by-bin correlated 
+within each distribution and between W+ and W- production within the same distribution. A statistical 
+correlation matrix is implemented to account for correlations of the statistical uncertainty within
+each distribution. Non perturbative corrections (optional) are implemented as an extracorrelated source 
+of systematic uncertainty that deweights the data.
 */
 
 #include "ATLAS_WJET_8TEV.h"
 
-//Distribution differential in PT
+//1)W+ distribution differential in the transverse momentum of the W boson
 
 void ATLAS_WP_JET_8TEV_PTFilter::ReadData()
 {
   fstream f1;
-  stringstream datafile("");
-  datafile << dataPath()
+  fstream f2;
+  fstream f3;
+
+  //Full breakdown of statistical uncertainties
+  stringstream datafile_sys("");
+  datafile_sys << dataPath()
 	   << "rawdata/ATLAS_WJET_8TEV/HEPData-ins1635273-v1-Table_13.csv";
-  f1.open(datafile.str().c_str(), ios::in);
+  f1.open(datafile_sys.str().c_str(), ios::in);
 
   if (f1.fail())
     {
-      cerr << "Error opening data file " << datafile.str() << endl;
+      cerr << "Error opening data file " << datafile_sys.str() << endl;
       exit(-1);
     }
 
-  //Read results
+  //Correlation matrix of statistical ucnertainties
+  stringstream datafile_stat("");
+  datafile_stat << dataPath()
+		<< "rawdata/ATLAS_WJET_8TEV/HEPData-ins1635273-v1-Table_14.csv";
+
+  f2.open(datafile_stat.str().c_str(), ios::in);
+
+  if (f2.fail())
+    {
+      cerr << "Error opening data file " << datafile_stat.str() << endl;
+      exit(-1);
+    }
+
+  //Non-perturbative corrections
+  stringstream datafile_np("");
+  datafile_np << dataPath()
+		<< "rawdata/ATLAS_WJET_8TEV/HEPData-ins1635273-v1-Table_67.csv";
+
+  f3.open(datafile_np.str().c_str(), ios::in);
+
+  if (f3.fail())
+    {
+      cerr << "Error opening data file " << datafile_np.str() << endl;
+      exit(-1);
+    }
+
+  //Read central value
   string line;
   for(int i=0; i<16; i++)
     {
       getline(f1,line);
+      getline(f2,line);
+      getline(f3,line);
     }
+
+  double** corrmat = new double*[fNData];
+  double** syscor  = new double*[fNData];
+  double** sysR    = new double*[fNData];
+  double** sysL    = new double*[fNData];
+  double npcorr[fNData];
+  const int nrealsys = 54;
+  double ddum;
+  char comma;
 
   for(int i=0; i<fNData; i++)
     {
       getline(f1,line);
       istringstream lstream(line);
-      double ddum, sysL[fNSys/2], sysR[fNSys/2], lumi;
-      char comma;
       lstream >> fKin1[i] >> comma
 	      >> ddum     >> comma
 	      >> ddum     >> comma
@@ -43,29 +109,89 @@ void ATLAS_WP_JET_8TEV_PTFilter::ReadData()
       fKin2[i] = 0;
       fKin3[i] = 8000; //GeV
 
-      for (int j=0; j<(fNSys+1)/2-4; j++)
-	{
-	  lstream >> sysR[j] >> comma >> sysL[j] >> comma;
+      sysR[i]    = new double[nrealsys];
+      sysL[i]    = new double[nrealsys];
 
-	  sysR[j] /= sqrt(2.);
-	  sysL[j] /= sqrt(2.);
+      for(int k=0; k<nrealsys; k++)
+	{ 
+	  lstream >> sysR[i][k] >> comma >> sysL[i][k] >> comma;
+	}
+
+      corrmat[i] = new double[fNData];
+      syscor[i]  = new double[fNData];
+
+      for(int j=0; j<fNData; j++)
+	{
+	  getline(f2,line);
+	  istringstream istream(line);
+	  istream >> ddum >> comma
+		  >> ddum >> comma
+		  >> ddum >> comma
+		  >> ddum >> comma
+		  >> ddum >> comma
+		  >> ddum >> comma
+		  >> corrmat[i][j];
+	}
+
+      getline(f3,line);
+      istringstream kstream(line);
+      kstream >> ddum >> comma
+	      >> ddum >> comma
+	      >> npcorr[i];
+
+    }
+
+  //Generate artificial systematics
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  corrmat[i][j] *= fStat[i]*fStat[j];
+	}
+    }
+  
+  if(!genArtSys(fNData,corrmat,syscor))
+    {
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
+    }
+
+  for(int i=0; i<fNData; i++)
+    {
+      fStat[i]=0.;
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = syscor[i][j];
+	  fSys[i][j].mult = fSys[i][j].add*1e2/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+  //Real systematics (correlated across bins and W=/W- distributions)
+  for(int i=0; i<fNData; i++)
+    {
+      
+      for(int k=0; k<50; k++)
+	{
+	  sysR[i][k] /= sqrt(2.);
+	  sysL[i][k] /= sqrt(2.);
 
 	  double tmp1, tmp2;
-	  tmp1=sysR[j];
-	  tmp2=sysL[j];
-	  /*	  
+	  tmp1=sysR[i][k];
+	  tmp2=sysL[i][k];
+	  
 	  //Case 1: sysL and sysR are both negative
 	  if(tmp1<0 && tmp2<0)
 	    {
 	      if(tmp2<tmp1 || tmp2==tmp1)
 		{
-		  sysR[j] = 0.0;
-		  sysL[j] = tmp2;
+		  sysR[i][k] = 0.0;
+		  sysL[i][k] = tmp2;
 		}
 	      if(tmp2>tmp1)
 		{
-		  sysR[j] = 0.0;
-		  sysL[j] = tmp1;
+		  sysR[i][k] = 0.0;
+		  sysL[i][k] = tmp1;
 		}
 	    }
 
@@ -74,72 +200,1101 @@ void ATLAS_WP_JET_8TEV_PTFilter::ReadData()
 	    {
 	      if(tmp1>tmp2 || tmp1==tmp2)
 		{
-		  sysR[j] = tmp1;
-		  sysL[j] = 0.0;
+		  sysR[i][k] = tmp1;
+		  sysL[i][k] = 0.0;
 		}
 	      if(tmp1<tmp2)
 		{
-		  sysR[j] = tmp2;
-		  sysL[j] = 0.0;
+		  sysR[i][k] = tmp2;
+		  sysL[i][k] = 0.0;
+		}
+	    }
+
+	  //Case3: sys1 is negative and sys2 is positive
+	  if(tmp1<0.0 && tmp2>0.0)
+	    {
+	      sysR[i][k] = tmp2;
+	      sysL[i][k] = tmp1;
+	    }
+	  
+	  fSys[i][2*k+fNData].add = sysR[i][k];
+	  fSys[i][2*k+fNData].mult = fSys[i][2*k+fNData].add*1e2/fData[i];
+	  fSys[i][2*k+fNData].type = MULT;
+	  ostringstream sysnameR;
+	  sysnameR << "ATLASWJ" << 2*k;
+	  fSys[i][2*k+fNData].name = sysnameR.str();
+	  
+	  fSys[i][2*k+1+fNData].add = sysL[i][k];
+	  fSys[i][2*k+1+fNData].mult = fSys[i][2*k+1+fNData].add*1e2/fData[i];
+	  fSys[i][2*k+1+fNData].type = MULT;
+	  ostringstream sysnameL;
+	  sysnameL << "ATLASWJ" << 2*k+1;
+	  fSys[i][2*k+1+fNData].name = sysnameL.str();
+
+	}
+
+      //Luminosity uncertainty
+      fSys[i][2*50+fNData].add  = sysR[i][50];
+      fSys[i][2*50+fNData].mult = fSys[i][2*50+fNData].add*1e2/fData[i];
+      fSys[i][2*50+fNData].type = MULT;
+      fSys[i][2*50+fNData].name = "ATLASLUMI12";
+
+      //Uncorrelated unfolding uncertainties
+      for(int k=51; k<nrealsys; k++)
+	{
+	  sysR[i][k] /= sqrt(2.);
+	  sysL[i][k] /= sqrt(2.);
+	  
+	  double tmp1, tmp2;
+	  tmp1=sysR[i][k];
+	  tmp2=sysL[i][k];
+	  
+	  //Case 1: sysL and sysR are both negative
+	  if(tmp1<0 && tmp2<0)
+	    {
+	      if(tmp2<tmp1 || tmp2==tmp1)
+		{
+		  sysR[i][k] = 0.0;
+		  sysL[i][k] = tmp2;
+		}
+	      if(tmp2>tmp1)
+		{
+		  sysR[i][k] = 0.0;
+		  sysL[i][k] = tmp1;
+		}
+	    }
+
+	  //Case 2: sysL and sysR are both positive
+	  if(tmp1>0.0 && tmp2>0.0)
+	    {
+	      if(tmp1>tmp2 || tmp1==tmp2)
+		{
+		  sysR[i][k] = tmp1;
+		  sysL[i][k] = 0.0;
+		}
+	      if(tmp1<tmp2)
+		{
+		  sysR[i][k] = tmp2;
+		  sysL[i][k] = 0.0;
 		}
 	    }
 	  
 	  //Case3: sys1 is negative and sys2 is positive
 	  if(tmp1<0.0 && tmp2>0.0)
 	    {
-	      sys1[idat][isys] = tmp2;
-	      sys2[idat][isys] = tmp1;
+	      sysR[i][k] = tmp2;
+	      sysL[i][k] = tmp1;
 	    }
-	  */	  
-
-	  fSys[i][2*j].add = sysR[j];
-	  fSys[i][2*j].mult = fSys[i][2*j].add*1e2/fData[i];
-	  fSys[i][2*j].type = MULT;
-	  fSys[i][2*j].name = "ATLASWJ";
-	  //fSys[i][2*j].name = "CORR";
+	  	  
+	  fSys[i][2*k+fNData-1].add  = sysR[i][k];
+	  fSys[i][2*k+fNData-1].mult = fSys[i][2*k+fNData-1].add*1e2/fData[i];
+	  fSys[i][2*k+fNData-1].type = MULT;
+	  fSys[i][2*k+fNData-1].name = "UNCORR";
 	  
-	  fSys[i][2*j+1].add = sysL[j];
-	  fSys[i][2*j+1].mult = fSys[i][2*j+1].add*1e2/fData[i];
-	  fSys[i][2*j+1].type = MULT;
-	  fSys[i][2*j+1].name = "ATLASWJ";
-	  //fSys[i][2*j+1].name = "CORR";
-
+	  fSys[i][2*k+fNData].add  = sysL[i][k];
+	  fSys[i][2*k+fNData].mult = fSys[i][2*k+fNData].add*1e2/fData[i];
+	  fSys[i][2*k+fNData].type = MULT;
+	  fSys[i][2*k+fNData].name = "UNCORR";
 	}
-
-      lstream >> lumi     >> comma
-	      >> ddum     >> comma
-	      >> sysR[51] >> comma 
-	      >> sysL[51] >> comma
-	      >> sysR[52] >> comma 
-	      >> sysL[52] >> comma
-	      >> sysR[53] >> comma 
-	      >> sysL[53] >> comma;
       
-      fSys[i][100].add = lumi;
-      fSys[i][100].mult = fSys[i][100].add*1e2/fData[i];
-      fSys[i][100].type = MULT;
-      fSys[i][100].name = "ATLASLUMI12"; 
-
-      fSys[i][101].add = sysR[51]/sqrt(2);
-      fSys[i][102].add = sysL[51]/sqrt(2);
-      fSys[i][103].add = sysR[52]/sqrt(2);
-      fSys[i][104].add = sysL[52]/sqrt(2);
-      fSys[i][105].add = sysR[53]/sqrt(2);
-      fSys[i][106].add = sysL[53]/sqrt(2);
-      
-      for(int j=101; j<fNSys; j++)
-	{
-	  fSys[i][j].mult = fSys[i][j].add*1e2/fData[i];
-	  fSys[i][j].type = MULT;
-	  fSys[i][j].name = "UNCORR"; 
-	}
-
-      fSys[i][96].name  = "UNCORR";
-      fSys[i][97].name  = "UNCORR";
+      //Non-perturbative corrections
+      fSys[i][123].add  = npcorr[i] - fData[i];
+      fSys[i][123].mult = fSys[i][123].add*1e2/fData[i];
+      fSys[i][123].type = MULT;
+      fSys[i][123].name = "SKIP";
 
     }
 
+ // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+  
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] corrmat[i];
+
+  delete[] corrmat;
+
+  for(int i=0; i<fNData; i++)
+    delete[] sysR[i];
+
+  delete[] sysR;
+
+  for(int i=0; i<fNData; i++)
+    delete[] sysL[i];
+
+  delete[] sysL;
+  
   f1.close();
+  f2.close();
 
 } 
+
+//2)W- distribution differential in the transverse momentum of the W boson
+
+void ATLAS_WM_JET_8TEV_PTFilter::ReadData()
+{
+  fstream f1;
+  fstream f2;
+  fstream f3;
+
+  //Full breakdown of statistical uncertainties
+  stringstream datafile_sys("");
+  datafile_sys << dataPath()
+	   << "rawdata/ATLAS_WJET_8TEV/HEPData-ins1635273-v1-Table_13.csv";
+  f1.open(datafile_sys.str().c_str(), ios::in);
+
+  if (f1.fail())
+    {
+      cerr << "Error opening data file " << datafile_sys.str() << endl;
+      exit(-1);
+    }
+
+  //Correlation matrix of statistical ucnertainties
+  stringstream datafile_stat("");
+  datafile_stat << dataPath()
+		<< "rawdata/ATLAS_WJET_8TEV/HEPData-ins1635273-v1-Table_15.csv";
+
+  f2.open(datafile_stat.str().c_str(), ios::in);
+
+  if (f2.fail())
+    {
+      cerr << "Error opening data file " << datafile_stat.str() << endl;
+      exit(-1);
+    }
+
+  //Non-perturbative corrections
+  stringstream datafile_np("");
+  datafile_np << dataPath()
+		<< "rawdata/ATLAS_WJET_8TEV/HEPData-ins1635273-v1-Table_67.csv";
+
+  f3.open(datafile_np.str().c_str(), ios::in);
+
+  if (f3.fail())
+    {
+      cerr << "Error opening data file " << datafile_np.str() << endl;
+      exit(-1);
+    }
+
+  //Read central value
+  string line;
+  for(int i=0; i<41; i++)
+    {
+      getline(f1,line);
+    }
+
+  for(int i=0; i<16; i++)
+    {
+      getline(f2,line);
+    }
+
+  for(int i=0; i<42; i++)
+    {
+      getline(f3,line);
+    }
+
+  double** corrmat = new double*[fNData];
+  double** syscor  = new double*[fNData];
+  double** sysR    = new double*[fNData];
+  double** sysL    = new double*[fNData];
+  double npcorr[fNData];
+  const int nrealsys = 54;
+  double ddum;
+  char comma;
+
+  for(int i=0; i<fNData; i++)
+    {
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> fKin1[i] >> comma
+	      >> ddum     >> comma
+	      >> ddum     >> comma
+	      >> fData[i] >> comma
+	      >> fStat[i] >> comma
+	      >> ddum     >> comma;
+
+      fKin2[i] = 0;
+      fKin3[i] = 8000; //GeV
+
+      sysR[i]    = new double[nrealsys];
+      sysL[i]    = new double[nrealsys];
+
+      for(int k=0; k<nrealsys; k++)
+	{ 
+	  lstream >> sysR[i][k] >> comma >> sysL[i][k] >> comma;
+	}
+
+      corrmat[i] = new double[fNData];
+      syscor[i]  = new double[fNData];
+
+      for(int j=0; j<fNData; j++)
+	{
+	  getline(f2,line);
+	  istringstream istream(line);
+	  istream >> ddum >> comma
+		  >> ddum >> comma
+		  >> ddum >> comma
+		  >> ddum >> comma
+		  >> ddum >> comma
+		  >> ddum >> comma
+		  >> corrmat[i][j];
+	}
+
+      getline(f3,line);
+      istringstream kstream(line);
+      kstream >> ddum >> comma
+	      >> ddum >> comma
+	      >> npcorr[i];
+
+    }
+
+  //Generate artificial systematics
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  corrmat[i][j] *= fStat[i]*fStat[j];
+	}
+    }
+  
+  if(!genArtSys(fNData,corrmat,syscor))
+    {
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
+    }
+
+  for(int i=0; i<fNData; i++)
+    {
+      fStat[i]=0.;
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = syscor[i][j];
+	  fSys[i][j].mult = fSys[i][j].add*1e2/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+  //Real systematics (correlated across bins and W=/W- distributions)
+  for(int i=0; i<fNData; i++)
+    {
+      
+      for(int k=0; k<50; k++)
+	{
+	  sysR[i][k] /= sqrt(2.);
+	  sysL[i][k] /= sqrt(2.);
+
+	  double tmp1, tmp2;
+	  tmp1=sysR[i][k];
+	  tmp2=sysL[i][k];
+	  
+	  //Case 1: sysL and sysR are both negative
+	  if(tmp1<0 && tmp2<0)
+	    {
+	      if(tmp2<tmp1 || tmp2==tmp1)
+		{
+		  sysR[i][k] = 0.0;
+		  sysL[i][k] = tmp2;
+		}
+	      if(tmp2>tmp1)
+		{
+		  sysR[i][k] = 0.0;
+		  sysL[i][k] = tmp1;
+		}
+	    }
+
+	  //Case 2: sysL and sysR are both positive
+	  if(tmp1>0.0 && tmp2>0.0)
+	    {
+	      if(tmp1>tmp2 || tmp1==tmp2)
+		{
+		  sysR[i][k] = tmp1;
+		  sysL[i][k] = 0.0;
+		}
+	      if(tmp1<tmp2)
+		{
+		  sysR[i][k] = tmp2;
+		  sysL[i][k] = 0.0;
+		}
+	    }
+
+	  //Case3: sys1 is negative and sys2 is positive
+	  if(tmp1<0.0 && tmp2>0.0)
+	    {
+	      sysR[i][k] = tmp2;
+	      sysL[i][k] = tmp1;
+	    }
+	  
+	  fSys[i][2*k+fNData].add = sysR[i][k];
+	  fSys[i][2*k+fNData].mult = fSys[i][2*k+fNData].add*1e2/fData[i];
+	  fSys[i][2*k+fNData].type = MULT;
+	  ostringstream sysnameR;
+	  sysnameR << "ATLASWJ" << 2*k;
+	  fSys[i][2*k+fNData].name = sysnameR.str();
+	  
+	  fSys[i][2*k+1+fNData].add = sysL[i][k];
+	  fSys[i][2*k+1+fNData].mult = fSys[i][2*k+1+fNData].add*1e2/fData[i];
+	  fSys[i][2*k+1+fNData].type = MULT;
+	  ostringstream sysnameL;
+	  sysnameL << "ATLASWJ" << 2*k+1;
+	  fSys[i][2*k+1+fNData].name = sysnameL.str();
+
+	}
+
+      //Luminosity uncertainty
+      fSys[i][2*50+fNData].add  = sysR[i][50];
+      fSys[i][2*50+fNData].mult = fSys[i][2*50+fNData].add*1e2/fData[i];
+      fSys[i][2*50+fNData].type = MULT;
+      fSys[i][2*50+fNData].name = "ATLASLUMI12";
+
+      //Uncorrelated unfolding uncertainties
+      for(int k=51; k<nrealsys; k++)
+	{
+	  sysR[i][k] /= sqrt(2.);
+	  sysL[i][k] /= sqrt(2.);
+	  
+	  double tmp1, tmp2;
+	  tmp1=sysR[i][k];
+	  tmp2=sysL[i][k];
+	  
+	  //Case 1: sysL and sysR are both negative
+	  if(tmp1<0 && tmp2<0)
+	    {
+	      if(tmp2<tmp1 || tmp2==tmp1)
+		{
+		  sysR[i][k] = 0.0;
+		  sysL[i][k] = tmp2;
+		}
+	      if(tmp2>tmp1)
+		{
+		  sysR[i][k] = 0.0;
+		  sysL[i][k] = tmp1;
+		}
+	    }
+
+	  //Case 2: sysL and sysR are both positive
+	  if(tmp1>0.0 && tmp2>0.0)
+	    {
+	      if(tmp1>tmp2 || tmp1==tmp2)
+		{
+		  sysR[i][k] = tmp1;
+		  sysL[i][k] = 0.0;
+		}
+	      if(tmp1<tmp2)
+		{
+		  sysR[i][k] = tmp2;
+		  sysL[i][k] = 0.0;
+		}
+	    }
+	  
+	  //Case3: sys1 is negative and sys2 is positive
+	  if(tmp1<0.0 && tmp2>0.0)
+	    {
+	      sysR[i][k] = tmp2;
+	      sysL[i][k] = tmp1;
+	    }
+	  	  
+	  fSys[i][2*k+fNData-1].add  = sysR[i][k];
+	  fSys[i][2*k+fNData-1].mult = fSys[i][2*k+fNData-1].add*1e2/fData[i];
+	  fSys[i][2*k+fNData-1].type = MULT;
+	  fSys[i][2*k+fNData-1].name = "UNCORR";
+	  
+	  fSys[i][2*k+fNData].add  = sysL[i][k];
+	  fSys[i][2*k+fNData].mult = fSys[i][2*k+fNData].add*1e2/fData[i];
+	  fSys[i][2*k+fNData].type = MULT;
+	  fSys[i][2*k+fNData].name = "UNCORR";
+	}
+      
+      //Non-perturbative corrections
+      fSys[i][123].add  = npcorr[i] - fData[i];
+      fSys[i][123].mult = fSys[i][123].add*1e2/fData[i];
+      fSys[i][123].type = MULT;
+      fSys[i][123].name = "SKIP";
+
+    }
+
+ // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+  
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] corrmat[i];
+
+  delete[] corrmat;
+
+  for(int i=0; i<fNData; i++)
+    delete[] sysR[i];
+
+  delete[] sysR;
+
+  for(int i=0; i<fNData; i++)
+    delete[] sysL[i];
+
+  delete[] sysL;
+  
+  f1.close();
+  f2.close();
+
+} 
+
+//3)W+ distribution differential in the transverse momentum of the leading jet
+
+void ATLAS_WP_JET_8TEV_PTJFilter::ReadData()
+{
+  fstream f1;
+  fstream f2;
+  fstream f3;
+
+  //Full breakdown of statistical uncertainties
+  stringstream datafile_sys("");
+  datafile_sys << dataPath()
+	   << "rawdata/ATLAS_WJET_8TEV/HEPData-ins1635273-v1-Table_18.csv";
+  f1.open(datafile_sys.str().c_str(), ios::in);
+
+  if (f1.fail())
+    {
+      cerr << "Error opening data file " << datafile_sys.str() << endl;
+      exit(-1);
+    }
+
+  //Correlation matrix of statistical ucnertainties
+  stringstream datafile_stat("");
+  datafile_stat << dataPath()
+		<< "rawdata/ATLAS_WJET_8TEV/HEPData-ins1635273-v1-Table_19.csv";
+
+  f2.open(datafile_stat.str().c_str(), ios::in);
+
+  if (f2.fail())
+    {
+      cerr << "Error opening data file " << datafile_stat.str() << endl;
+      exit(-1);
+    }
+
+  //Non-perturbative corrections
+  stringstream datafile_np("");
+  datafile_np << dataPath()
+	      << "rawdata/ATLAS_WJET_8TEV/HEPData-ins1635273-v1-Table_69.csv";
+
+  f3.open(datafile_np.str().c_str(), ios::in);
+
+  if (f3.fail())
+    {
+      cerr << "Error opening data file " << datafile_np.str() << endl;
+      exit(-1);
+    }
+
+  //Read central value
+  string line;
+  for(int i=0; i<16; i++)
+    {
+      getline(f1,line);
+      getline(f2,line);
+      getline(f3,line);
+    }
+
+  double** corrmat = new double*[fNData];
+  double** syscor  = new double*[fNData];
+  double** sysR    = new double*[fNData];
+  double** sysL    = new double*[fNData];
+  double npcorr[fNData];
+  const int nrealsys = 54;
+  double ddum;
+  char comma;
+
+  for(int i=0; i<fNData; i++)
+    {
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> fKin1[i] >> comma
+	      >> ddum     >> comma
+	      >> ddum     >> comma
+	      >> fData[i] >> comma
+	      >> fStat[i] >> comma
+	      >> ddum     >> comma;
+
+      fKin2[i] = 0;
+      fKin3[i] = 8000; //GeV
+
+      sysR[i]    = new double[nrealsys];
+      sysL[i]    = new double[nrealsys];
+
+      for(int k=0; k<nrealsys; k++)
+	{ 
+	  lstream >> sysR[i][k] >> comma >> sysL[i][k] >> comma;
+	}
+
+      corrmat[i] = new double[fNData];
+      syscor[i]  = new double[fNData];
+
+      for(int j=0; j<fNData; j++)
+	{
+	  getline(f2,line);
+	  istringstream istream(line);
+	  istream >> ddum >> comma
+		  >> ddum >> comma
+		  >> ddum >> comma
+		  >> ddum >> comma
+		  >> ddum >> comma
+		  >> ddum >> comma
+		  >> corrmat[i][j];
+	}
+
+      getline(f3,line);
+      istringstream kstream(line);
+      kstream >> ddum >> comma
+	      >> ddum >> comma
+	      >> npcorr[i];
+
+    }
+
+  //Generate artificial systematics
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  corrmat[i][j] *= fStat[i]*fStat[j];
+	}
+    }
+  
+  if(!genArtSys(fNData,corrmat,syscor))
+    {
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
+    }
+
+  for(int i=0; i<fNData; i++)
+    {
+      fStat[i]=0.;
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = syscor[i][j];
+	  fSys[i][j].mult = fSys[i][j].add*1e2/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+  //Real systematics (correlated across bins and W=/W- distributions)
+  for(int i=0; i<fNData; i++)
+    {
+      
+      for(int k=0; k<50; k++)
+	{
+	  sysR[i][k] /= sqrt(2.);
+	  sysL[i][k] /= sqrt(2.);
+
+	  double tmp1, tmp2;
+	  tmp1=sysR[i][k];
+	  tmp2=sysL[i][k];
+	  
+	  //Case 1: sysL and sysR are both negative
+	  if(tmp1<0 && tmp2<0)
+	    {
+	      if(tmp2<tmp1 || tmp2==tmp1)
+		{
+		  sysR[i][k] = 0.0;
+		  sysL[i][k] = tmp2;
+		}
+	      if(tmp2>tmp1)
+		{
+		  sysR[i][k] = 0.0;
+		  sysL[i][k] = tmp1;
+		}
+	    }
+
+	  //Case 2: sysL and sysR are both positive
+	  if(tmp1>0.0 && tmp2>0.0)
+	    {
+	      if(tmp1>tmp2 || tmp1==tmp2)
+		{
+		  sysR[i][k] = tmp1;
+		  sysL[i][k] = 0.0;
+		}
+	      if(tmp1<tmp2)
+		{
+		  sysR[i][k] = tmp2;
+		  sysL[i][k] = 0.0;
+		}
+	    }
+
+	  //Case3: sys1 is negative and sys2 is positive
+	  if(tmp1<0.0 && tmp2>0.0)
+	    {
+	      sysR[i][k] = tmp2;
+	      sysL[i][k] = tmp1;
+	    }
+	  
+	  fSys[i][2*k+fNData].add = sysR[i][k];
+	  fSys[i][2*k+fNData].mult = fSys[i][2*k+fNData].add*1e2/fData[i];
+	  fSys[i][2*k+fNData].type = MULT;
+	  ostringstream sysnameR;
+	  sysnameR << "ATLASWJ" << 2*k;
+	  fSys[i][2*k+fNData].name = sysnameR.str();
+	  
+	  fSys[i][2*k+1+fNData].add = sysL[i][k];
+	  fSys[i][2*k+1+fNData].mult = fSys[i][2*k+1+fNData].add*1e2/fData[i];
+	  fSys[i][2*k+1+fNData].type = MULT;
+	  ostringstream sysnameL;
+	  sysnameL << "ATLASWJ" << 2*k+1;
+	  fSys[i][2*k+1+fNData].name = sysnameL.str();
+
+	}
+
+      //Luminosity uncertainty
+      fSys[i][2*50+fNData].add  = sysR[i][50];
+      fSys[i][2*50+fNData].mult = fSys[i][2*50+fNData].add*1e2/fData[i];
+      fSys[i][2*50+fNData].type = MULT;
+      fSys[i][2*50+fNData].name = "ATLASLUMI12";
+
+      //Uncorrelated unfolding uncertainties
+      for(int k=51; k<nrealsys; k++)
+	{
+	  sysR[i][k] /= sqrt(2.);
+	  sysL[i][k] /= sqrt(2.);
+	  
+	  double tmp1, tmp2;
+	  tmp1=sysR[i][k];
+	  tmp2=sysL[i][k];
+	  
+	  //Case 1: sysL and sysR are both negative
+	  if(tmp1<0 && tmp2<0)
+	    {
+	      if(tmp2<tmp1 || tmp2==tmp1)
+		{
+		  sysR[i][k] = 0.0;
+		  sysL[i][k] = tmp2;
+		}
+	      if(tmp2>tmp1)
+		{
+		  sysR[i][k] = 0.0;
+		  sysL[i][k] = tmp1;
+		}
+	    }
+
+	  //Case 2: sysL and sysR are both positive
+	  if(tmp1>0.0 && tmp2>0.0)
+	    {
+	      if(tmp1>tmp2 || tmp1==tmp2)
+		{
+		  sysR[i][k] = tmp1;
+		  sysL[i][k] = 0.0;
+		}
+	      if(tmp1<tmp2)
+		{
+		  sysR[i][k] = tmp2;
+		  sysL[i][k] = 0.0;
+		}
+	    }
+	  
+	  //Case3: sys1 is negative and sys2 is positive
+	  if(tmp1<0.0 && tmp2>0.0)
+	    {
+	      sysR[i][k] = tmp2;
+	      sysL[i][k] = tmp1;
+	    }
+	  	  
+	  fSys[i][2*k+fNData-1].add  = sysR[i][k];
+	  fSys[i][2*k+fNData-1].mult = fSys[i][2*k+fNData-1].add*1e2/fData[i];
+	  fSys[i][2*k+fNData-1].type = MULT;
+	  fSys[i][2*k+fNData-1].name = "UNCORR";
+	  
+	  fSys[i][2*k+fNData].add  = sysL[i][k];
+	  fSys[i][2*k+fNData].mult = fSys[i][2*k+fNData].add*1e2/fData[i];
+	  fSys[i][2*k+fNData].type = MULT;
+	  fSys[i][2*k+fNData].name = "UNCORR";
+	}
+      
+      //Non-perturbative corrections
+      fSys[i][129].add  = npcorr[i] - fData[i];
+      fSys[i][129].mult = fSys[i][123].add*1e2/fData[i];
+      fSys[i][129].type = MULT;
+      fSys[i][129].name = "SKIP";
+
+    }
+
+ // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+  
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] corrmat[i];
+
+  delete[] corrmat;
+
+  for(int i=0; i<fNData; i++)
+    delete[] sysR[i];
+
+  delete[] sysR;
+
+  for(int i=0; i<fNData; i++)
+    delete[] sysL[i];
+
+  delete[] sysL;
+  
+  f1.close();
+  f2.close();
+
+} 
+
+//4)W- distribution differential in the transverse momentum of the leading jet
+
+void ATLAS_WM_JET_8TEV_PTJFilter::ReadData()
+{
+  fstream f1;
+  fstream f2;
+  fstream f3;
+
+  //Full breakdown of statistical uncertainties
+  stringstream datafile_sys("");
+  datafile_sys << dataPath()
+	   << "rawdata/ATLAS_WJET_8TEV/HEPData-ins1635273-v1-Table_18.csv";
+  f1.open(datafile_sys.str().c_str(), ios::in);
+
+  if (f1.fail())
+    {
+      cerr << "Error opening data file " << datafile_sys.str() << endl;
+      exit(-1);
+    }
+
+  //Correlation matrix of statistical ucnertainties
+  stringstream datafile_stat("");
+  datafile_stat << dataPath()
+		<< "rawdata/ATLAS_WJET_8TEV/HEPData-ins1635273-v1-Table_20.csv";
+
+  f2.open(datafile_stat.str().c_str(), ios::in);
+
+  if (f2.fail())
+    {
+      cerr << "Error opening data file " << datafile_stat.str() << endl;
+      exit(-1);
+    }
+
+  //Non-perturbative corrections
+  stringstream datafile_np("");
+  datafile_np << dataPath()
+		<< "rawdata/ATLAS_WJET_8TEV/HEPData-ins1635273-v1-Table_69.csv";
+
+  f3.open(datafile_np.str().c_str(), ios::in);
+
+  if (f3.fail())
+    {
+      cerr << "Error opening data file " << datafile_np.str() << endl;
+      exit(-1);
+    }
+
+  //Read central value
+  string line;
+  for(int i=0; i<47; i++)
+    {
+      getline(f1,line);
+    }
+
+  for(int i=0; i<16; i++)
+    {
+      getline(f2,line);
+    }
+
+  for(int i=0; i<48; i++)
+    {
+      getline(f3,line);
+    }
+
+  double** corrmat = new double*[fNData];
+  double** syscor  = new double*[fNData];
+  double** sysR    = new double*[fNData];
+  double** sysL    = new double*[fNData];
+  double npcorr[fNData];
+  const int nrealsys = 54;
+  double ddum;
+  char comma;
+
+  for(int i=0; i<fNData; i++)
+    {
+      getline(f1,line);
+      istringstream lstream(line);
+      lstream >> fKin1[i] >> comma
+	      >> ddum     >> comma
+	      >> ddum     >> comma
+	      >> fData[i] >> comma
+	      >> fStat[i] >> comma
+	      >> ddum     >> comma;
+
+      fKin2[i] = 0;
+      fKin3[i] = 8000; //GeV
+
+      sysR[i]    = new double[nrealsys];
+      sysL[i]    = new double[nrealsys];
+
+      for(int k=0; k<nrealsys; k++)
+	{ 
+	  lstream >> sysR[i][k] >> comma >> sysL[i][k] >> comma;
+	}
+
+      corrmat[i] = new double[fNData];
+      syscor[i]  = new double[fNData];
+
+      for(int j=0; j<fNData; j++)
+	{
+	  getline(f2,line);
+	  istringstream istream(line);
+	  istream >> ddum >> comma
+		  >> ddum >> comma
+		  >> ddum >> comma
+		  >> ddum >> comma
+		  >> ddum >> comma
+		  >> ddum >> comma
+		  >> corrmat[i][j];
+	}
+
+      getline(f3,line);
+      istringstream kstream(line);
+      kstream >> ddum >> comma
+	      >> ddum >> comma
+	      >> npcorr[i];
+
+    }
+
+  //Generate artificial systematics
+  for(int i=0; i<fNData; i++)
+    {
+      for(int j=0; j<fNData; j++)
+	{
+	  corrmat[i][j] *= fStat[i]*fStat[j];
+	}
+    }
+  
+  if(!genArtSys(fNData,corrmat,syscor))
+    {
+      throw runtime_error("Couldn't generate artificial systematics for " + fSetName);
+    }
+
+  for(int i=0; i<fNData; i++)
+    {
+      fStat[i]=0.;
+      for(int j=0; j<fNData; j++)
+	{
+	  fSys[i][j].add  = syscor[i][j];
+	  fSys[i][j].mult = fSys[i][j].add*1e2/fData[i];
+	  fSys[i][j].type = ADD;
+	  fSys[i][j].name = "CORR";
+	}
+    }
+
+  //Real systematics (correlated across bins and W=/W- distributions)
+  for(int i=0; i<fNData; i++)
+    {
+      
+      for(int k=0; k<50; k++)
+	{
+	  sysR[i][k] /= sqrt(2.);
+	  sysL[i][k] /= sqrt(2.);
+
+	  double tmp1, tmp2;
+	  tmp1=sysR[i][k];
+	  tmp2=sysL[i][k];
+	  
+	  //Case 1: sysL and sysR are both negative
+	  if(tmp1<0 && tmp2<0)
+	    {
+	      if(tmp2<tmp1 || tmp2==tmp1)
+		{
+		  sysR[i][k] = 0.0;
+		  sysL[i][k] = tmp2;
+		}
+	      if(tmp2>tmp1)
+		{
+		  sysR[i][k] = 0.0;
+		  sysL[i][k] = tmp1;
+		}
+	    }
+
+	  //Case 2: sysL and sysR are both positive
+	  if(tmp1>0.0 && tmp2>0.0)
+	    {
+	      if(tmp1>tmp2 || tmp1==tmp2)
+		{
+		  sysR[i][k] = tmp1;
+		  sysL[i][k] = 0.0;
+		}
+	      if(tmp1<tmp2)
+		{
+		  sysR[i][k] = tmp2;
+		  sysL[i][k] = 0.0;
+		}
+	    }
+
+	  //Case3: sys1 is negative and sys2 is positive
+	  if(tmp1<0.0 && tmp2>0.0)
+	    {
+	      sysR[i][k] = tmp2;
+	      sysL[i][k] = tmp1;
+	    }
+	  
+	  fSys[i][2*k+fNData].add = sysR[i][k];
+	  fSys[i][2*k+fNData].mult = fSys[i][2*k+fNData].add*1e2/fData[i];
+	  fSys[i][2*k+fNData].type = MULT;
+	  ostringstream sysnameR;
+	  sysnameR << "ATLASWJ" << 2*k;
+	  fSys[i][2*k+fNData].name = sysnameR.str();
+	  
+	  fSys[i][2*k+1+fNData].add = sysL[i][k];
+	  fSys[i][2*k+1+fNData].mult = fSys[i][2*k+1+fNData].add*1e2/fData[i];
+	  fSys[i][2*k+1+fNData].type = MULT;
+	  ostringstream sysnameL;
+	  sysnameL << "ATLASWJ" << 2*k+1;
+	  fSys[i][2*k+1+fNData].name = sysnameL.str();
+
+	}
+
+      //Luminosity uncertainty
+      fSys[i][2*50+fNData].add  = sysR[i][50];
+      fSys[i][2*50+fNData].mult = fSys[i][2*50+fNData].add*1e2/fData[i];
+      fSys[i][2*50+fNData].type = MULT;
+      fSys[i][2*50+fNData].name = "ATLASLUMI12";
+
+      //Uncorrelated unfolding uncertainties
+      for(int k=51; k<nrealsys; k++)
+	{
+	  sysR[i][k] /= sqrt(2.);
+	  sysL[i][k] /= sqrt(2.);
+	  
+	  double tmp1, tmp2;
+	  tmp1=sysR[i][k];
+	  tmp2=sysL[i][k];
+	  
+	  //Case 1: sysL and sysR are both negative
+	  if(tmp1<0 && tmp2<0)
+	    {
+	      if(tmp2<tmp1 || tmp2==tmp1)
+		{
+		  sysR[i][k] = 0.0;
+		  sysL[i][k] = tmp2;
+		}
+	      if(tmp2>tmp1)
+		{
+		  sysR[i][k] = 0.0;
+		  sysL[i][k] = tmp1;
+		}
+	    }
+
+	  //Case 2: sysL and sysR are both positive
+	  if(tmp1>0.0 && tmp2>0.0)
+	    {
+	      if(tmp1>tmp2 || tmp1==tmp2)
+		{
+		  sysR[i][k] = tmp1;
+		  sysL[i][k] = 0.0;
+		}
+	      if(tmp1<tmp2)
+		{
+		  sysR[i][k] = tmp2;
+		  sysL[i][k] = 0.0;
+		}
+	    }
+	  
+	  //Case3: sys1 is negative and sys2 is positive
+	  if(tmp1<0.0 && tmp2>0.0)
+	    {
+	      sysR[i][k] = tmp2;
+	      sysL[i][k] = tmp1;
+	    }
+	  	  
+	  fSys[i][2*k+fNData-1].add  = sysR[i][k];
+	  fSys[i][2*k+fNData-1].mult = fSys[i][2*k+fNData-1].add*1e2/fData[i];
+	  fSys[i][2*k+fNData-1].type = MULT;
+	  fSys[i][2*k+fNData-1].name = "UNCORR";
+	  
+	  fSys[i][2*k+fNData].add  = sysL[i][k];
+	  fSys[i][2*k+fNData].mult = fSys[i][2*k+fNData].add*1e2/fData[i];
+	  fSys[i][2*k+fNData].type = MULT;
+	  fSys[i][2*k+fNData].name = "UNCORR";
+	}
+      
+      //Non-perturbative corrections
+      fSys[i][129].add  = npcorr[i] - fData[i];
+      fSys[i][129].mult = fSys[i][123].add*1e2/fData[i];
+      fSys[i][129].type = MULT;
+      fSys[i][129].name = "SKIP";
+
+    }
+
+ // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+  
+  delete[] syscor;
+
+  for(int i=0; i<fNData; i++)
+    delete[] corrmat[i];
+
+  delete[] corrmat;
+
+  for(int i=0; i<fNData; i++)
+    delete[] sysR[i];
+
+  delete[] sysR;
+
+  for(int i=0; i<fNData; i++)
+    delete[] sysL[i];
+
+  delete[] sysL;
+  
+  f1.close();
+  f2.close();
+
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
