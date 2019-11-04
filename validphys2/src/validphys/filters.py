@@ -11,7 +11,7 @@ from importlib.resources import read_binary
 
 import numpy as np
 
-from NNPDF import RandomGenerator, CommonData
+from NNPDF import CommonData, RandomGenerator
 from reportengine.checks import make_argcheck, check, check_positive, make_check
 from reportengine.compat import yaml
 import validphys.cuts
