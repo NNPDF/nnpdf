@@ -11,7 +11,7 @@ import inspect
 import numbers
 import copy
 import os
-from importlib.resources import read_binary
+from importlib.resources import read_text
 
 from collections import ChainMap
 from collections.abc import Mapping, Sequence
@@ -894,7 +894,7 @@ class CoreConfig(configparser.Config):
 
         theory_parameters = tuple(theoryid.get_description().items())
         if filter_rules is None:
-           filter_rules = yaml.safe_load(read_binary(validphys.cuts, "filters.yaml"))
+           filter_rules = yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
 
         rule_list = [
             Rule(initial_data=i, defaults=defaults, theory_parameters=theory_parameters)
@@ -908,7 +908,7 @@ class CoreConfig(configparser.Config):
 
     def produce_defaults(self, filter_defaults=None):
         if filter_defaults is None:
-           filter_defaults = yaml.safe_load(read_binary(validphys.cuts, "defaults.yaml"))
+           filter_defaults = yaml.safe_load(read_text(validphys.cuts, "defaults.yaml"))
 
         return filter_defaults
 
