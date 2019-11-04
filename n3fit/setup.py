@@ -5,8 +5,9 @@ setup(
         version="0.9",
         package_dir = {'':'src'},
         packages=find_packages('src'),
+        zip_safe=False,
         package_data = {
-            '':['*.fitinfo'],
+            '':['*.fitinfo', '*.yml'],
             'tests/regressions': ['*'],
         },
 

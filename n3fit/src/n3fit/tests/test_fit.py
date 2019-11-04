@@ -23,7 +23,7 @@ log = logging.getLogger(__name__)
 REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 QUICKNAME = "quickcard"
 QUICKCARD = f"{QUICKNAME}.yml"
-QUICKPATH = pathlib.Path(__file__).with_name(QUICKCARD)
+QUICKPATH = REGRESSION_FOLDER / QUICKCARD
 EXE = "n3fit"
 REPLICA = "1"
 
@@ -53,7 +53,7 @@ def compare_lines(set1, set2):
         compare_two(val1, val2)
 
 
-def test_fit():
+def test_performfit():
     # read up the old info file
     old_fitinfo = load_data(REGRESSION_FOLDER / f"{QUICKNAME}.fitinfo")
     # create a /tmp folder
@@ -63,8 +63,9 @@ def test_fit():
     shutil.copy(QUICKPATH, tmp_path)
     os.chdir(tmp_path)
     # run the fit
-    run_command = [EXE, QUICKCARD, REPLICA]
-    sp.run(run_command)
+    run_command = ["bash", "-c", f"{EXE} {QUICKCARD} {REPLICA}"]
+    print("run {0}".format(run_command))
+    sp.run(f"{EXE} {QUICKCARD} {REPLICA}", shell=True)
     # read up the .fitinfo files
     full_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.fitinfo"
     new_fitinfo = load_data(full_path)
