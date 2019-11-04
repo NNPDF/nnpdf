@@ -145,6 +145,7 @@ void ATLAS_WP_JET_8TEV_PTFilter::ReadData()
       istringstream kstream(line);
       kstream >> ddum >> comma
 	      >> ddum >> comma
+	      >> ddum >> comma
 	      >> npcorr[i];
 
     }
@@ -453,6 +454,7 @@ void ATLAS_WM_JET_8TEV_PTFilter::ReadData()
       istringstream kstream(line);
       kstream >> ddum >> comma
 	      >> ddum >> comma
+	      >> ddum >> comma
 	      >> npcorr[i];
 
     }
@@ -752,6 +754,7 @@ void ATLAS_WP_JET_8TEV_PTJFilter::ReadData()
       getline(f3,line);
       istringstream kstream(line);
       kstream >> ddum >> comma
+	      >> ddum >> comma
 	      >> ddum >> comma
 	      >> npcorr[i];
 
@@ -1060,6 +1063,7 @@ void ATLAS_WM_JET_8TEV_PTJFilter::ReadData()
       getline(f3,line);
       istringstream kstream(line);
       kstream >> ddum >> comma
+	      >> ddum >> comma
 	      >> ddum >> comma
 	      >> npcorr[i];
 
