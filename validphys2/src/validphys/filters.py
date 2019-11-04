@@ -3,7 +3,6 @@
 Filters for NNPDF fits
 """
 
-import functools
 import logging
 import numbers
 import re
