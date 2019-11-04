@@ -7,26 +7,34 @@ ArXiv    : arxiv:1711.03296
 Published: JHEP 1805 (2018) 077
 Hepdata  : https://hepdata.net/record/ins1635273
 
-measurement of the W boson production cross section and the W+/W- cross-section ratio, both in 
-association with jets, in proton–proton collisions at s=sqrt{8} TeV with the ATLAS experiment at the 
-Large Hadron Collider. The measurement is performed in final states containing one electron and missing 
-transverse momentum using data corresponding to an integrated luminosity of 20.2 fb-1. 
-Differential cross sections for events with at least one or two jets are presented for a range of 
-observables, including jet transverse momenta and the transverse momentum of the W boson.
-The differential cross sections of positively and negatively charged W bosons are measured separately.
+measurement of the W boson production cross section and the W+/W- cross-section 
+ratio, both in association with jets, in proton–proton collisions at s=sqrt{8} 
+TeV with the ATLAS experiment at the Large Hadron Collider. The measurement is 
+performed in final states containing one electron and missing transverse 
+momentum using data corresponding to an integrated luminosity of 20.2 fb-1. 
+Differential cross sections for events with at least one or two jets are 
+presented for a range of observables, including jet transverse momenta 
+and the transverse momentum of the W boson. The differential cross sections of 
+positively and negatively charged W bosons are measured separately.
 
 Four distributions are considered in the following:
-1) W+ + jet, distribution differential in the transverse momentum of the W boson;
-2) W- + jet, distribution differential in the transverse momentum of the W boson;
-3) W+ + jet, distribution differential in the transverse momentum of the leading jet;
-4) W- + jet, distribution differential in the transverse momentum of the leading jet;
+1) W+ + jet, distribution differential in the transverse momentum 
+   of the W boson;
+2) W- + jet, distribution differential in the transverse momentum 
+   of the W boson;
+3) W+ + jet, distribution differential in the transverse momentum 
+   of the leading jet;
+4) W- + jet, distribution differential in the transverse momentum 
+   of the leading jet;
 
-The information on experimental uncertainties is retrieved from the hepdata entry. Each source of 
-systematic uncertainty (except unfolding uncertainties) is assumed to be bin-by-bin correlated 
-within each distribution and between W+ and W- production within the same distribution. A statistical 
-correlation matrix is implemented to account for correlations of the statistical uncertainty within
-each distribution. Non perturbative corrections (optional) are implemented as an extracorrelated source 
-of systematic uncertainty that deweights the data.
+The information on experimental uncertainties is retrieved from the hepdata 
+entry. Each source of systematic uncertainty (except unfolding uncertainties) 
+is assumed to be bin-by-bin correlated within each distribution and between W+ 
+and W- production within the same distribution. A statistical correlation 
+matrix is implemented to account for correlations of the statistical 
+uncertainty within each distribution. Non perturbative corrections (optional) 
+are implemented as an extracorrelated source of systematic uncertainty that 
+deweights the data.
 */
 
 #include "ATLAS_WJET_8TEV.h"
@@ -298,10 +306,10 @@ void ATLAS_WP_JET_8TEV_PTFilter::ReadData()
 	}
       
       //Non-perturbative corrections
-      fSys[i][123].add  = npcorr[i] - fData[i];
+      fSys[i][123].add  = fData[i]*(1. - npcorr[i]);
       fSys[i][123].mult = fSys[i][123].add*1e2/fData[i];
       fSys[i][123].type = MULT;
-      fSys[i][123].name = "SKIP";
+      fSys[i][123].name = "CORR";
 
     }
 
@@ -606,10 +614,10 @@ void ATLAS_WM_JET_8TEV_PTFilter::ReadData()
 	}
       
       //Non-perturbative corrections
-      fSys[i][123].add  = npcorr[i] - fData[i];
+      fSys[i][123].add  = fData[i]*(1. - npcorr[i]);
       fSys[i][123].mult = fSys[i][123].add*1e2/fData[i];
       fSys[i][123].type = MULT;
-      fSys[i][123].name = "SKIP";
+      fSys[i][123].name = "CORR";
 
     }
 
@@ -906,10 +914,10 @@ void ATLAS_WP_JET_8TEV_PTJFilter::ReadData()
 	}
       
       //Non-perturbative corrections
-      fSys[i][129].add  = npcorr[i] - fData[i];
+      fSys[i][129].add  = fData[i]*(1. - npcorr[i]);
       fSys[i][129].mult = fSys[i][123].add*1e2/fData[i];
       fSys[i][129].type = MULT;
-      fSys[i][129].name = "SKIP";
+      fSys[i][129].name = "CORR";
 
     }
 
@@ -1214,10 +1222,10 @@ void ATLAS_WM_JET_8TEV_PTJFilter::ReadData()
 	}
       
       //Non-perturbative corrections
-      fSys[i][129].add  = npcorr[i] - fData[i];
+      fSys[i][129].add  = fData[i]*(1. - npcorr[i]);
       fSys[i][129].mult = fSys[i][123].add*1e2/fData[i];
       fSys[i][129].type = MULT;
-      fSys[i][129].name = "SKIP";
+      fSys[i][129].name = "CORR";
 
     }
 
