@@ -63,7 +63,7 @@ def filter(experiments, theoryid, filter_path,
            fakedata: bool,
            filterseed:int, rngalgo:int, seed:int, fakenoise:bool,
            errorsize:numbers.Real, combocuts, t0pdfset,
-           new_rules, new_defaults):
+           rules, defaults):
     """Apply filters to all datasets"""
     if not fakedata:
         log.info('Filtering real data.')
@@ -352,7 +352,9 @@ def get_rule(index, theory_parameters, filters, defaults):
 def get_theory_parameters(theoryid):
     return tuple(theoryid.get_description().items())
 
-def get_cuts_for_dataset(commondata, theoryid, new_rules, new_defaults) -> list:
+def get_cuts_for_dataset(commondata, theoryid, rules, defaults) -> list:
+    print(rules)
+    print(defaults)
     """Function to generate a list containing the index
     of all experimental points that passed kinematic
     cut rules stored in ./cuts/filters.yaml
@@ -384,7 +386,7 @@ def get_cuts_for_dataset(commondata, theoryid, new_rules, new_defaults) -> list:
     mask = []
     for idat in range(dataset.GetNData()):
         broken = False
-        for i in range(len(new_rules)):
+        for i in range(len(rules)):
             rule = get_rule(i, theoryid_params, filters=filters, defaults=defaults)
             rule_result = rule(dataset, idat)
             if rule_result is not None and not rule_result:
