@@ -63,7 +63,8 @@ def export_mask(path, mask):
 def filter(experiments, theoryid, filter_path,
            fakedata: bool,
            filterseed:int, rngalgo:int, seed:int, fakenoise:bool,
-           errorsize:numbers.Real, combocuts, t0pdfset):
+           errorsize:numbers.Real, combocuts, t0pdfset,
+           new_filters, new_defaults):
     """Apply filters to all datasets"""
     if not fakedata:
         log.info('Filtering real data.')

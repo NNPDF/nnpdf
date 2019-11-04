@@ -880,6 +880,18 @@ class CoreConfig(configparser.Config):
             log.info("Regularizing covariance matrices")
         return do_reg
 
+    def parse_filter_rules(self, filter_rules: (list, type(None))):
+        return filter_rules
+
+    def produce_new_filters(self, filter_rules=None):
+        return filter_rules
+
+    def parse_filter_defaults(self, filter_defaults: (list, type(None))):
+        return filter_defaults
+
+    def produce_new_defaults(self, filter_defaults=None):
+        return filter_defaults
+
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):
     """The effective configuration parser class."""
