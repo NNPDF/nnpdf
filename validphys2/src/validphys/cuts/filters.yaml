@@ -1,9 +1,3 @@
-#- process_type: DIS
-  ##W2 is an "extra label" in the vp plotting notation
-  ##w2min is loaded from input::datacuts.
-  #reason: "Non perturbative effects at low W²"
-  #rule: "W2 < w2min"
-
 - dataset: ATLAS1JET11
   reason: |
     We keep only the first rapidity bin since the chi2 to the whole set of
