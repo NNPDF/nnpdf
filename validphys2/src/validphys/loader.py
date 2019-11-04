@@ -388,6 +388,8 @@ class Loader(LoaderBase):
     def check_dataset(self,
                       name,
                       *,
+                      new_rules,
+                      new_defaults,
                       sysnum=None,
                       theoryid,
                       cfac=(),
@@ -395,9 +397,7 @@ class Loader(LoaderBase):
                       cuts=CutsPolicy.INTERNAL,
                       use_fitcommondata=False,
                       fit=None,
-                      weight=1,
-                      q2min=None,
-                      w2min=None):
+                      weight=1):
 
         if not isinstance(theoryid, TheoryIDSpec):
             theoryid = self.check_theoryID(theoryid)
@@ -422,7 +422,7 @@ class Loader(LoaderBase):
             elif cuts is CutsPolicy.FROMFIT:
                 cuts = self.check_fit_cuts(name, fit)
             elif cuts is CutsPolicy.INTERNAL:
-                cuts = self.check_internal_cuts(commondata, theoryid, q2min, w2min)
+                cuts = self.check_internal_cuts(commondata, theoryid, new_rules, new_defaults)
             elif cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE:
                 raise LoaderError(f"Intersection cuts not supported in loader calls.")
 
@@ -452,12 +452,8 @@ class Loader(LoaderBase):
             return None
         return Cuts(setname, p)
 
-    def check_internal_cuts(self, commondata, theoryid, q2min, w2min):
-        if not isinstance(q2min, numbers.Number):
-            raise TypeError("q2min must be a number")
-        if not isinstance(w2min, numbers.Number):
-            raise TypeError("w2min must be a number")
-        return InternalCutsWrapper(commondata, theoryid, q2min, w2min)
+    def check_internal_cuts(self, commondata, theoryid, new_rules, new_defaults):
+        return InternalCutsWrapper(commondata, theoryid, new_rules, new_defaults)
 
     def check_vp_output_file(self, filename, extra_paths=('.',)):
         """Find a file in the vp-cache folder, or (with higher priority) in
