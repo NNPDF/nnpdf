@@ -11,16 +11,19 @@ import inspect
 import numbers
 import copy
 import os
+from importlib.resources import read_binary
 
 from collections import ChainMap
 from collections.abc import Mapping, Sequence
 
 from reportengine import configparser
 from reportengine.environment import Environment, EnvironmentError_
+from reportengine.compat import yaml
 from reportengine.configparser import ConfigError, element_of, _parse_func
 from reportengine.helputils import get_parser_type
 from reportengine import report
 
+import validphys.cuts
 from validphys.core import (ExperimentSpec, DataSetInput, ExperimentInput,
                             CutsPolicy, MatchedCuts, ThCovMatSpec)
 from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFoundError,
@@ -884,12 +887,20 @@ class CoreConfig(configparser.Config):
         return filter_rules
 
     def produce_new_filters(self, filter_rules=None):
+        from validphys.filters import Rule
+        if filter_rules is None:
+           filter_rules = yaml.safe_load(read_binary(validphys.cuts, "filters.yaml"))
+
         return filter_rules
 
     def parse_filter_defaults(self, filter_defaults: (list, type(None))):
         return filter_defaults
 
     def produce_new_defaults(self, filter_defaults=None):
+        if filter_defaults is None:
+           filter_defaults = yaml.safe_load(read_binary(validphys.cuts, "defaults.yaml"))
+
+        print(filter_defaults)
         return filter_defaults
 
 
