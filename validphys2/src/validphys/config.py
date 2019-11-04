@@ -889,13 +889,19 @@ class CoreConfig(configparser.Config):
     def parse_filter_rules(self, filter_rules: (list, type(None))):
         return filter_rules
 
-    def produce_rules(self, filter_rules=None):
+    def produce_rules(self, theoryid, defaults, filter_rules=None):
         from validphys.filters import Rule
 
+        theory_parameters = tuple(theoryid.get_description().items())
         if filter_rules is None:
            filter_rules = yaml.safe_load(read_binary(validphys.cuts, "filters.yaml"))
 
-        return filter_rules
+        rule_list = [
+            Rule(initial_data=i, defaults=defaults, theory_parameters=theory_parameters)
+            for i in filter_rules
+        ]
+
+        return rule_list
 
     def parse_filter_defaults(self, filter_defaults: (list, type(None))):
         return filter_defaults

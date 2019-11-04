@@ -339,22 +339,7 @@ class Rule:
                 local_variables[key] = eval(str(value), {**self.numpy_functions, **self.kinematics_dict, **local_variables})
         self.local_variables_dict = local_variables
 
-@functools.lru_cache()
-def get_rule(index, theory_parameters, filters, defaults):
-    filter_rules, default_values = get_files(filters=filters, defaults=defaults)
-    return Rule(
-        initial_data=filter_rules[index],
-        defaults=default_values,
-        theory_parameters=theory_parameters,
-    )
-
-@functools.lru_cache()
-def get_theory_parameters(theoryid):
-    return tuple(theoryid.get_description().items())
-
 def get_cuts_for_dataset(commondata, theoryid, rules, defaults) -> list:
-    print(rules)
-    print(defaults)
     """Function to generate a list containing the index
     of all experimental points that passed kinematic
     cut rules stored in ./cuts/filters.yaml
@@ -381,13 +366,10 @@ def get_cuts_for_dataset(commondata, theoryid, rules, defaults) -> list:
     """
     dataset = commondata.load()
 
-    theoryid_params = get_theory_parameters(theoryid)
-
     mask = []
     for idat in range(dataset.GetNData()):
         broken = False
-        for i in range(len(rules)):
-            rule = get_rule(i, theoryid_params, filters=filters, defaults=defaults)
+        for rule in rules:
             rule_result = rule(dataset, idat)
             if rule_result is not None and not rule_result:
                 broken = True
