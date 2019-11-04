@@ -207,10 +207,7 @@ class PerturbativeOrder:
         else:
             return i == self.numeric_pto
 
-class BaseRule:
-    numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs, "np": np}
-
-class Rule(BaseRule):
+class Rule:
     """Rule object to be used to generate cuts mask.
 
     A rule object is created for each rule in ./cuts/filters.yaml
@@ -274,6 +271,8 @@ class Rule(BaseRule):
         self.rule = compile(self.rule, "rule", "eval")
         self.defaults = defaults
         self.theory_params = theory_parameters
+
+        self.numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs, "np": np}
 
     def __call__(self, dataset, idat):
         central_value = dataset.GetData(idat)
