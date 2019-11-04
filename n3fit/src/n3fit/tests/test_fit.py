@@ -63,8 +63,7 @@ def test_performfit():
     shutil.copy(QUICKPATH, tmp_path)
     os.chdir(tmp_path)
     # run the fit
-    run_command = ["bash", "-c", f"{EXE} {QUICKCARD} {REPLICA}"]
-    print("run {0}".format(run_command))
+    os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
     sp.run(f"{EXE} {QUICKCARD} {REPLICA}", shell=True)
     # read up the .fitinfo files
     full_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.fitinfo"
