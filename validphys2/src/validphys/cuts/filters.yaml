@@ -91,7 +91,7 @@
 
 - dataset: CMSZDIFF12
   reason: |
-    removes the last rapidity bin, where we cannot provide a decent 
+    removes the last rapidity bin, where we cannot provide a decent
     description due to unknown reasons.
   rule: "etay <= 1.6"
 
