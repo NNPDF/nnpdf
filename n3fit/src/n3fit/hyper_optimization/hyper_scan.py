@@ -5,8 +5,8 @@ the functions defined as hp_ (from hyperspace)
 The goal of this module is to read all parameters in the `hyperopt` section of the runcard
 and modify the parameter dictionary so that now it is filled with the `hyperop` sampler objects
 
-The idea behind the wrappers if that if you ever want to use another hyperoptimization library, assuming
-that it also takes just
+The idea behind the wrappers if that if you ever want to use
+another hyperoptimization library, assuming that it also takes just
     - a function
     - a dictionary of spaces of parameters
 you can do so by simply modifying the wrappers to point somewhere else
@@ -16,11 +16,11 @@ you can do so by simply modifying the wrappers to point somewhere else
 # in principle Report Engine would be reading everything from the runcard and then providing
 # basically a list of strings or similar to ModelTrainer, which would in turn make them into
 # the keras/tensorflow/whatever objects it needs.
-# If the --hpyeropt flag is active, then report engine should return a sampler from the hyperopt dict
-# basically returning the wrapper functions defined below (but instead of simply calling the hyperopt ones
-# having done some checks on them)
-# even more, depending on the syntax of the fitting part of the runcard, it should do one thing or another
-# but the design of this needs someone who is actually good at UX
+# If the --hpyeropt flag is active, then report engine should return a sampler from the dict
+# basically returning the wrapper functions defined below
+# (but instead of simply calling the hyperopt ones having done some checks on them)
+# even more, depending on the syntax of the fitting part of the runcard,
+# it should do one thing or another but the design of this needs someone who is actually good at UX
 
 import copy
 import hyperopt
@@ -41,14 +41,14 @@ def hp_uniform(key, lower_end, higher_end):
     return hyperopt.hp.uniform(key, lower_end, higher_end)
 
 
-def hp_quniform(key, lower_end, higher_end, step_size = None, steps = None):
+def hp_quniform(key, lower_end, higher_end, step_size=None, steps=None):
     """ Like uniform but admits a step_size """
     if lower_end is None or higher_end is None:
         return None
     if not step_size:
         step_size = lower_end
     if steps:
-        step_size = (higher_end-lower_end)/steps
+        step_size = (higher_end - lower_end) / steps
     return hyperopt.hp.quniform(key, lower_end, higher_end, step_size)
 
 
@@ -73,7 +73,9 @@ def hp_choice(key, choices):
 
 
 # Wrapper for the hyperscanning
-def hyper_scan_wrapper(replica_path_set, model_trainer, parameters, hyperscan_dict, max_evals = 1):
+def hyper_scan_wrapper(
+    replica_path_set, model_trainer, parameters, hyperscan_dict, max_evals=1
+):
     """
     This function receives a `ModelTrainer` object as well as a dictionary of parameters (`parameters`) and a dictionary defining the
     space to search (`hyperscan_dict`) and performs `max_evals` evaluations of the function trying to find the best model.
@@ -91,7 +93,9 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, parameters, hyperscan_di
     # Create a HyperScanner object
     the_scanner = HyperScanner(parameters, hyperscan_dict)
     # Tell the trainer we are doing hpyeropt
-    model_trainer.set_hyperopt(True, keys=the_scanner.hyper_keys, status_ok = hyperopt.STATUS_OK)
+    model_trainer.set_hyperopt(
+        True, keys=the_scanner.hyper_keys, status_ok=hyperopt.STATUS_OK
+    )
     # Generate the trials object
     trials = filetrials.FileTrials(replica_path_set, parameters=the_scanner.dict())
 
@@ -107,6 +111,7 @@ def hyper_scan_wrapper(replica_path_set, model_trainer, parameters, hyperscan_di
     true_best = hyperopt.space_eval(parameters, best)
     return true_best
 
+
 ###
 
 
@@ -118,6 +123,7 @@ class ActivationStr:
     # Arguments:
         - `fun_name`: name of the activation function
     """
+
     def __init__(self, fun_name):
         self.function_name = fun_name
 
@@ -125,10 +131,9 @@ class ActivationStr:
         return self.function_name
 
     def __call__(self, n_of_layers):
-        acts = [self.function_name] * (n_of_layers-1)
+        acts = [self.function_name] * (n_of_layers - 1)
         acts.append("linear")
         return acts
-
 
 
 class HyperScanner:
@@ -167,16 +172,32 @@ class HyperScanner:
         positivity_dict = sampling_dict.get("positivity")
         nn_dict = sampling_dict.get("architecture")
 
-        self.stopping(min_epochs = stopping_dict.get("min_epochs"), max_epochs = stopping_dict.get("max_epochs"),
-                      min_patience = stopping_dict.get("min_patience"), max_patience = stopping_dict.get("max_patience"))
-        self.optimizer(names = optimizer_dict.get("names"),
-                       min_lr = optimizer_dict.get("min_lr"), max_lr = optimizer_dict.get("max_lr"))
-        self.positivity(min_multiplier = stopping_dict.get("min_multiplier"), max_multiplier = stopping_dict.get("max_multiplier"),
-                        min_initial = stopping_dict.get("min_initial"), max_initial = stopping_dict.get("max_initial"))
-        self.architecture(initializers = nn_dict.get("initializer"), activations = nn_dict.get("activations"),
-                          max_drop = nn_dict.get("max_drop"), n_layers = nn_dict.get("n_layers"),
-                          min_units = nn_dict.get("min_units"), max_units = nn_dict.get("max_units"),
-                          layer_types = nn_dict.get("layer_types"))
+        self.stopping(
+            min_epochs=stopping_dict.get("min_epochs"),
+            max_epochs=stopping_dict.get("max_epochs"),
+            min_patience=stopping_dict.get("min_patience"),
+            max_patience=stopping_dict.get("max_patience"),
+        )
+        self.optimizer(
+            names=optimizer_dict.get("names"),
+            min_lr=optimizer_dict.get("min_lr"),
+            max_lr=optimizer_dict.get("max_lr"),
+        )
+        self.positivity(
+            min_multiplier=stopping_dict.get("min_multiplier"),
+            max_multiplier=stopping_dict.get("max_multiplier"),
+            min_initial=stopping_dict.get("min_initial"),
+            max_initial=stopping_dict.get("max_initial"),
+        )
+        self.architecture(
+            initializers=nn_dict.get("initializer"),
+            activations=nn_dict.get("activations"),
+            max_drop=nn_dict.get("max_drop"),
+            n_layers=nn_dict.get("n_layers"),
+            min_units=nn_dict.get("min_units"),
+            max_units=nn_dict.get("max_units"),
+            layer_types=nn_dict.get("layer_types"),
+        )
 
     def dict(self):
         return self.parameters
@@ -205,7 +226,9 @@ class HyperScanner:
 
         self.parameters[key] = sampler
 
-    def stopping(self, min_epochs=5e3, max_epochs=30e3, min_patience=0.10, max_patience=0.3):
+    def stopping(
+        self, min_epochs=5e3, max_epochs=30e3, min_patience=0.10, max_patience=0.3
+    ):
         """
         Modifies the following entries of the `parameters` dictionary:
             - `epochs`
@@ -217,8 +240,10 @@ class HyperScanner:
         stopping_key = "stopping_patience"
 
         # Generate the samplers
-        epochs = hp_quniform(epochs_key, min_epochs, max_epochs, steps = self.steps)
-        stopping_patience = hp_quniform(stopping_key, min_patience, max_patience, steps = self.steps)
+        epochs = hp_quniform(epochs_key, min_epochs, max_epochs, steps=self.steps)
+        stopping_patience = hp_quniform(
+            stopping_key, min_patience, max_patience, steps=self.steps
+        )
 
         # Update the parameters ditionary
         self._update_param(epochs_key, epochs)
@@ -255,7 +280,9 @@ class HyperScanner:
         for opt_name in names:
             if opt_name not in optimizer_dict.keys():
                 raise NotImplementedError(
-                    "HyperScanner: Optimizer {0} not implemented in MetaModel.py".format(opt_name)
+                    "HyperScanner: Optimizer {0} not implemented in MetaModel.py".format(
+                        opt_name
+                    )
                 )
 
             # Check whether this optimizer takes the learning rate
@@ -273,7 +300,9 @@ class HyperScanner:
         # Tell the HyperScanner this key might contain a dictionary so we save the extra keys
         self._update_param(opt_key, opt_val)
 
-    def positivity(self, min_multiplier=1.01, max_multiplier=1.3, min_initial=0.5, max_initial=100):
+    def positivity(
+        self, min_multiplier=1.01, max_multiplier=1.3, min_initial=0.5, max_initial=100
+    ):
         """
         Modifies the following entries of the `parameters` dictionary:
             - pos_multiplier
@@ -319,8 +348,10 @@ class HyperScanner:
             n_layers = []
         else:
             if min_units is None or max_units is None:
-                raise ValueError("A max/min number of units must always be defined if the number of layers is to be sampled"
-                                 "i.e., make sure you add the keywords 'min_units' and 'max_units' to the 'architecutre' dict")
+                raise ValueError(
+                    "A max/min number of units must always be defined if the number of layers is to be sampled"
+                    "i.e., make sure you add the keywords 'min_units' and 'max_units' to the 'architecutre' dict"
+                )
 
         activation_key = "activation_per_layer"
         nodes_key = "nodes_per_layer"
@@ -340,7 +371,9 @@ class HyperScanner:
             units = []
             for i in range(n):
                 units_label = "nl{0}:-{1}/{0}".format(n, i)
-                units_sampler = hp_quniform(units_label, min_units, max_units, steps = self.steps)
+                units_sampler = hp_quniform(
+                    units_label, min_units, max_units, steps=self.steps
+                )
                 units.append(units_sampler)
             # The last layer will always have 8 nodes
             units.append(8)
@@ -356,7 +389,9 @@ class HyperScanner:
         for ini_name in initializers:
             if ini_name not in imp_init_names:
                 raise NotImplementedError(
-                    "HyperScanner: Initializer {0} not implemented in MetaLayer.py".format(ini_name)
+                    "HyperScanner: Initializer {0} not implemented in MetaLayer.py".format(
+                        ini_name
+                    )
                 )
             # For now we are going to use always all initializers and with default values
             ini_choices.append(ini_name)
@@ -368,7 +403,7 @@ class HyperScanner:
         act_functions = hp_choice(activation_key, activation_choices)
         nodes = hp_choice(nodes_key, nodes_choices)
         ini_choice = hp_choice(ini_key, ini_choices)
-        drop_val = hp_quniform(drop_key, 0.0, max_drop, steps = self.steps)
+        drop_val = hp_quniform(drop_key, 0.0, max_drop, steps=self.steps)
 
         # Finally select the layer types (not very well tested for now)
         layer_key = "layer_type"

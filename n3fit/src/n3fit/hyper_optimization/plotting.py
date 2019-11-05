@@ -43,7 +43,7 @@ regex_op = re.compile(r"[^\w^\.]+")
 regex_not_op = re.compile(r"[\w\.]+")
 
 # A mapping between the names the fields have in the json file
-# and more user-friendly names 
+# and more user-friendly names
 KEYWORDS = {
     "id": "iteration",
     "optimizer": "optimizer",
@@ -51,7 +51,7 @@ KEYWORDS = {
     "initializer": "initializer",
     "dropout": "dropout",
     "nodes": "nodes_per_layer",
-    "max_layers": 4, # TODO: this should be dinamically choosen
+    "max_layers": 4,  # TODO: this should be dinamically choosen
     "nl": "number_of_layers",
     "activation": "activation_per_layer",
     "architecture": "layer_type",
@@ -97,7 +97,10 @@ def parse_args():
         default=0.5,
     )
     parser.add_argument(
-        "-if", "--include_failures", help="Flag to include failed runs in  the plots", action="store_true"
+        "-if",
+        "--include_failures",
+        help="Flag to include failed runs in  the plots",
+        action="store_true",
     )
     parser.add_argument(
         "-t",
@@ -106,9 +109,18 @@ def parse_args():
         type=float,
         default=1e3,
     )
-    parser.add_argument("-f", "--filter", help="Add the filter key=value to the dataframe", nargs="+", default=())
     parser.add_argument(
-        "-c", "--combine", help="If more than one replica folder is found, combine all trials", action="store_true"
+        "-f",
+        "--filter",
+        help="Add the filter key=value to the dataframe",
+        nargs="+",
+        default=(),
+    )
+    parser.add_argument(
+        "-c",
+        "--combine",
+        help="If more than one replica folder is found, combine all trials",
+        action="store_true",
     )
     # Autofiltering
     parser.add_argument(
@@ -118,8 +130,11 @@ def parse_args():
     )
     # Plotting options
     parser.add_argument(
-        "-p", "--keys_to_plot",
-        help="Choose which keys to plot (they must be part of the DEFAULT_PLOTTING_KEYS dicttionary, use the special key -p HELP)", nargs="+")
+        "-p",
+        "--keys_to_plot",
+        help="Choose which keys to plot (they must be part of the DEFAULT_PLOTTING_KEYS dicttionary, use the special key -p HELP)",
+        nargs="+",
+    )
     parser.add_argument("--debug", help="Print debug information", action="store_true")
     args = parser.parse_args()
     return args
@@ -264,14 +279,18 @@ def evaluate_trial(trial_dict, validation_multiplier, fail_threshold):
 
     if loss > fail_threshold or val_loss > fail_threshold or test_loss > fail_threshold:
         trial_dict["good"] = False
-        # Set the loss an order of magnitude above the actual result so it shows obviously on the plots
+        # Set the loss an order of magnitude above the result so it shows obviously on the plots
         loss *= 10
 
     trial_dict["loss"] = loss
 
 
 def generate_dictionary(
-    replica_path, json_name="tries.json", starting_index=0, val_multiplier=0.5, fail_threshold=10.0
+    replica_path,
+    json_name="tries.json",
+    starting_index=0,
+    val_multiplier=0.5,
+    fail_threshold=10.0,
 ):
     """
         Reads a json file and returns a list of dictionaries
@@ -305,7 +324,8 @@ def generate_dictionary(
 
 def filter_by_string(filter_string):
     """
-    Receives a data_dict (a parsed trial) and a filter string, returns True if the trial passes the filter
+    Receives a data_dict (a parsed trial) and a filter string,
+    returns True if the trial passes the filter
 
     filter string must have the format: key<operator>string
     where <operator> can be any of !=, =, >, <
@@ -341,7 +361,11 @@ def filter_by_string(filter_string):
             operator = "=="
         operators = ["!=", "==", ">", "<"]
         if operator not in operators:
-            raise NotImplementedError("Filter string not valid, operator not recognized {0}".format(filter_string))
+            raise NotImplementedError(
+                "Filter string not valid, operator not recognized {0}".format(
+                    filter_string
+                )
+            )
 
         # This I know it is not ok:
         if isinstance(val_check, str) and isinstance(filter_val, str):
@@ -350,7 +374,7 @@ def filter_by_string(filter_string):
             check_str = "{0}{1}{2}"
         try:  # this whole thing is a bit naughty...
             return eval(check_str.format(val_check, operator, filter_val))
-        except:
+        except:  # if whatever happens within eval fails, just return False
             return False
 
     return filter_function
@@ -382,7 +406,9 @@ def plot_scans(df, best_df, outfile, plotting_keys):
 
     # Create a grid of plots
     nplots = len(plotting_keys)
-    _, axs = plt.subplots(int(np.ceil(nplots/4)), min(4, nplots), sharey=True, figsize=(30, 30))
+    _, axs = plt.subplots(
+        int(np.ceil(nplots / 4)), min(4, nplots), sharey=True, figsize=(30, 30)
+    )
 
     # Set the quantity we will be plotting in the y axis
     loss_k = KEYWORDS["loss"]
@@ -399,8 +425,24 @@ def plot_scans(df, best_df, outfile, plotting_keys):
                 ax.set_xlim(key_tuple[2])
         elif mode == 1:
             ordering_true, best_x = order_axis(df, best_df, key=key)
-            ax = sns.violinplot(x=key, y=loss_k, data=df, ax=ax, palette="Set2", cut=0.0, order=ordering_true)
-            ax = sns.stripplot(x=key, y=loss_k, data=df, ax=ax, color="gray", order=ordering_true, alpha=0.4)
+            ax = sns.violinplot(
+                x=key,
+                y=loss_k,
+                data=df,
+                ax=ax,
+                palette="Set2",
+                cut=0.0,
+                order=ordering_true,
+            )
+            ax = sns.stripplot(
+                x=key,
+                y=loss_k,
+                data=df,
+                ax=ax,
+                color="gray",
+                order=ordering_true,
+                alpha=0.4,
+            )
         elif mode == 4:
             # The nodes per layer is a special case because we want to know to
             # which total number of layers they correspond
@@ -409,11 +451,15 @@ def plot_scans(df, best_df, outfile, plotting_keys):
             for l in ordering_true:
                 plot_data = df[df[KEYWORDS["nl"]] == l]
                 label = "layers = {0}".format(l)
-                ax = sns.scatterplot(x=key, y=loss_k, data=plot_data, ax=ax, label=label)
+                ax = sns.scatterplot(
+                    x=key, y=loss_k, data=plot_data, ax=ax, label=label
+                )
             ax.legend()
 
         # Finally plot the "best" one, which will be first
-        ax = sns.scatterplot(x=best_x, y=best_df.get(loss_k), ax=ax, color="orange", marker="s")
+        ax = sns.scatterplot(
+            x=best_x, y=best_df.get(loss_k), ax=ax, color="orange", marker="s"
+        )
         ax.set_ylabel("Loss")
         ax.set_xlabel(key)
 
@@ -443,7 +489,8 @@ def main():
             fail_threshold=args.threshold,
         )
 
-        # Check if we are playing combinations, if we do keep reading json until we consume all of them
+        # Check if we are playing combinations,
+        # if we do keep reading json until we consume all of them
         if args.combine:
             starting_index += len(dictionaries)
             all_replicas += dictionaries
@@ -471,11 +518,15 @@ def main():
             # First, for each key we are filtering in remove the worst
             # this will already remove a good chunk of trials
             for key in name_keys:
-                dataframe_raw = autofilter_dataframe(dataframe_raw, [key], n_to_combine=1, n_to_kill=1)
+                dataframe_raw = autofilter_dataframe(
+                    dataframe_raw, [key], n_to_combine=1, n_to_kill=1
+                )
             how_many = len(name_keys)
             # Now remove the 2 worst for each combination from 2 to how_many
             for i in range(2, how_many + 1):
-                dataframe_raw = autofilter_dataframe(dataframe_raw, name_keys, n_to_combine=i, n_to_kill=2)
+                dataframe_raw = autofilter_dataframe(
+                    dataframe_raw, name_keys, n_to_combine=i, n_to_kill=2
+                )
 
         # By default we don't want failures
         if args.include_failures:

@@ -171,8 +171,8 @@ def get_slice(dataframe, query_dict):
     df_slice = dataframe
     for key, value in query_dict.items():
         key_column = df_slice[key]
-        # Check whether for this slice the values are not NaN
-        if len(key_column.dropna()) == 0 and len(key_column) != 0:
+        # Check whether all values of this slice are NaN
+        if not key_column.empty and key_column.dropna().empty:
             return None
         # We need to act differently in the case of continous values we discretized before
         # The way we have to check whether something was continous is to check whether the value
@@ -318,7 +318,7 @@ def autofilter_dataframe(dataframe, keys, n_to_combine=1, n_to_kill=1, threshold
     n_to_remove = n_to_kill
     for processed_dict in result_list:
         reward = compute_reward(processed_dict, biggest_ntotal)
-        log.debug("Combination %s, reward %f" % (processed_dict["combination"], reward))
+        log.debug("Combination %s, reward %f", processed_dict["combination"], reward)
         if reward <= threshold:
             n_to_remove += 1
         processed_dict["reward"] = reward
@@ -327,7 +327,7 @@ def autofilter_dataframe(dataframe, keys, n_to_combine=1, n_to_kill=1, threshold
     # Step 5: Add the n-last to the list of combinations to remove
     hit_list = result_list[:n_to_remove]
     for i in hit_list:
-        log.info("Removing {0} with reward {1}".format(i["combination"], i["reward"]))
+        log.info("Removing %s with reward %f", i["combination"], i["reward"])
     # Step 6: remove the bad guys from the dataframe
     new_dataframe = dataframe_removal(dataframe, hit_list)
     return new_dataframe

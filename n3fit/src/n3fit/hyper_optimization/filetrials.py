@@ -3,9 +3,8 @@
     in the form of a json file within the nnfit folder
 """
 import json
-from hyperopt import Trials, space_eval
-
 import logging
+from hyperopt import Trials, space_eval
 
 log = logging.getLogger(__name__)
 
@@ -33,11 +32,11 @@ def space_eval_trial(space, trial):
         A dictionary containing the values of all the parameters in a human-readable format
     """
     for_eval = {}
-    for k, v in trial["misc"]["vals"].items():
-        if len(v) == 0:
-            for_eval[k] = None
+    for key, values in trial["misc"]["vals"].items():
+        if values:
+            for_eval[key] = values[0]
         else:
-            for_eval[k] = v[0]
+            for_eval[key] = None
     return space_eval(space, for_eval)
 
 
@@ -66,11 +65,13 @@ class FileTrials(Trials):
 
         # write json to disk
         if self._store_trial:
-            log.info(f"Storing scan in {self._json_file}")
+            log.info("Storing scan in %s", self._json_file)
             local_trials = []
             for idx, t in enumerate(self._dynamic_trials):
                 local_trials.append(t)
-                local_trials[idx]["misc"]["space_vals"] = space_eval_trial(self._parameters, t)
+                local_trials[idx]["misc"]["space_vals"] = space_eval_trial(
+                    self._parameters, t
+                )
 
             all_to_str = json.dumps(local_trials, default=str)
             with open(self._json_file, "w") as f:

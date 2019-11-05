@@ -6,7 +6,8 @@ from reportengine.compat import yaml
 
 def test_runcard(runcard_file, datasets_out):
     """
-        Given a runcard and a set of datasets, generate a TEST-runcard where the datasets in datasets_out are removed
+        Given a runcard and a set of datasets, generate a TEST-runcard
+        where the datasets in datasets_out are removed
         from the training and put together as a new experiment called TEST
     """
     # Load the input runcard as a dictionary
@@ -18,18 +19,20 @@ def test_runcard(runcard_file, datasets_out):
     # Generate the list of datasets which are to be left out
     data_tests = []
     for dataset in datasets_out:
-        data_tests.append({"dataset": dataset, "frac": 1.0})  # TODO copy the dictionary from the runcard instead
+        data_tests.append(
+            {"dataset": dataset, "frac": 1.0}
+        )  # TODO copy the dictionary from the runcard instead
 
     # Create a test experiment
     from n3fit.ModelTrainer import TESTNAME
-    test_experiment = {
-            'experiment' : TESTNAME,
-            'datasets' : data_tests
-            }
+
+    test_experiment = {"experiment": TESTNAME, "datasets": data_tests}
 
     # Now drop experiments and datasets that are being used for training
     for experiment in runcard_exp:
-        datasets = list(filter(lambda x: x["dataset"] not in datasets_out, experiment["datasets"]))
+        datasets = list(
+            filter(lambda x: x["dataset"] not in datasets_out, experiment["datasets"])
+        )
         if datasets:
             experiment["datasets"] = datasets
         else:
@@ -40,10 +43,20 @@ def test_runcard(runcard_file, datasets_out):
     runcard_exp.append(test_experiment)
     new_runcard = "TEST-{0}".format(os.path.basename(runcard_file))
     no = open(new_runcard, "w")
-    yaml.round_trip_dump(runcard_dict, no, explicit_start=True, explicit_end=True, default_flow_style=True)
+    yaml.round_trip_dump(
+        runcard_dict,
+        no,
+        explicit_start=True,
+        explicit_end=True,
+        default_flow_style=True,
+    )
     no.close()
 
-    print("\n > You can find your new runcard at {0}/{1}\n".format(os.getcwd(), new_runcard))
+    print(
+        "\n > You can find your new runcard at {0}/{1}\n".format(
+            os.getcwd(), new_runcard
+        )
+    )
 
 
 def create_testset(experiments, runcard_file="runcards/NNPDF31_nlo_as_0118.yml"):
@@ -66,17 +79,19 @@ def create_testset(experiments, runcard_file="runcards/NNPDF31_nlo_as_0118.yml")
             xmin = np.min(xgrid)
             xmax = np.max(xgrid)
             data_dict = {
-                    'name' : str(dataset),
-                    'xmin' : xmin,
-                    'xmax' : xmax,
-                    'exp' : str(exp),
-                    }
+                "name": str(dataset),
+                "xmin": xmin,
+                "xmax": xmax,
+                "exp": str(exp),
+            }
             if proc_type in dataset_by_proc.keys():
                 dataset_by_proc[proc_type].append(data_dict)
             else:
                 dataset_by_proc[proc_type] = [data_dict]
 
-    select_min = False  # If true selects the datasets with the smallest min(x), recommended: False
+    select_min = (
+        False
+    )  # If true selects the datasets with the smallest min(x), recommended: False
 
     # 2) Now for every process type with more than one dataset, leave out the smallest
     datasets_out = []
@@ -95,7 +110,11 @@ def create_testset(experiments, runcard_file="runcards/NNPDF31_nlo_as_0118.yml")
                     if xm > xmax:
                         xmax = xm
                         data_out = dataset
-            print("For {0} we find {1} datasets, leaving one out: {2}".format(proc_type, l, data_out))
+            print(
+                "For {0} we find {1} datasets, leaving one out: {2}".format(
+                    proc_type, l, data_out
+                )
+            )
             datasets_out.append(data_out["name"])
             all_experiments[dataset["exp"]] -= 1
 

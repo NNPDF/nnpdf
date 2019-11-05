@@ -11,6 +11,7 @@ from reportengine.checks import make_argcheck, CheckError
 
 log = logging.getLogger(__name__)
 
+
 @make_argcheck
 def check_consistent_hyperscan_options(hyperopt, hyperscan):
     if hyperopt is not None and hyperscan is None:
@@ -201,7 +202,14 @@ def performfit(
         ########################################################################
         if hyperopt:
             from n3fit.hyper_optimization.hyper_scan import hyper_scan_wrapper
-            true_best = hyper_scan_wrapper(replica_path_set, the_model_trainer, parameters, hyperscan, max_evals=hyperopt)
+
+            true_best = hyper_scan_wrapper(
+                replica_path_set,
+                the_model_trainer,
+                parameters,
+                hyperscan,
+                max_evals=hyperopt,
+            )
             print("##################")
             print("Best model found: ")
             for k, i in true_best.items():
@@ -248,7 +256,9 @@ def performfit(
         )
 
         # Creates a PDF model for export grid
-        def pdf_function(export_xgrid, integrator_grid = integrator_input, my_layer_pdf = layer_pdf):
+        def pdf_function(
+            export_xgrid, integrator_grid=integrator_input, my_layer_pdf=layer_pdf
+        ):
             """
             Receives an array, returns the result of the PDF for said array
             """
