@@ -903,7 +903,7 @@ class CoreConfig(configparser.Config):
 
         return rule_list
 
-    def parse_filter_defaults(self, filter_defaults: (list, type(None))):
+    def parse_filter_defaults(self, filter_defaults: (dict, type(None))):
         return filter_defaults
 
     def produce_defaults(self, filter_defaults=None):
