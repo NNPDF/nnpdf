@@ -16,25 +16,18 @@ class Preprocessing(MetaLayer):
 
         Parameters
         ----------
-            `output_dim`: size of the fitbasis
-            `flav_info`: list of dicts containing the information 
-                about the fitting of the preprocessing
+            `output_dim`: int
+                size of the fitbasis
+            `flav_info`: list
+                list of dicts containing the information about the fitting of the preprocessing
                 This corresponds to the `fitting::basis` parameter in the nnpdf runcard.
                 The dicts can contain the following fields:
                     `smallx`: range of alpha
                     `largex`: range of beta
                     `trainable`: whether these alpha-beta should be trained during the fit
                                 (defaults to true)
-            `seed`: seed for the initializer of the random alpha and beta values
-
-
-
-
-        # Arguments:
-            - `output_dim`: size of the fitbasis
-            - `trainable`: bool, whether beta and alpha should be fixed
-            - `flav_info`: dictionary containg the information with the limits of alpha and beta
-            - `seed`: seed for the initializer of the random alpha, beta values
+            `seed`: int
+                seed for the initializer of the random alpha and beta values
     """
 
     def __init__(
@@ -52,12 +45,26 @@ class Preprocessing(MetaLayer):
         self.seed = seed
         self.initializer = initializer
         self.kernel = []
-        super(MetaLayer, self).__init__(**kwargs)
+        # super(MetaLayer, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def compute_output_shape(self, input_shape):
         return (input_shape[0], self.output_dim)
 
     def generate_weight(self, weight_name, kind, dictionary):
+        """
+        Generates weights according to the flavour dictionary and adds them
+        to the kernel list of the class
+
+        Parameters
+        ----------
+            `weight_name`: str
+                name to be given to the generated weight
+            `kind`: str
+                where to find the limits of the weight in the dictionary
+            `dictionary`: dict
+                dictionary defining the weight, usually one entry from `flav_info`
+        """
         limits = dictionary[kind]
         ldo = limits[0]
         lup = limits[1]
@@ -93,7 +100,8 @@ class Preprocessing(MetaLayer):
 
         super(Preprocessing, self).build(input_shape)
 
-    def call(self, x):
+    def call(self, inputs, **kwargs):
+        x = inputs
         pdf_raw = self.concatenate(
             [
                 x ** (1 - self.kernel[0][0]) * (1 - x) ** self.kernel[1][0],  # sigma
