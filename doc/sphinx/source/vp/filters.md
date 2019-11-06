@@ -266,26 +266,21 @@ The `rule` itself is then self-explanatory, notice however, it is written in val
 `Python` syntax. Finally, the reason for the rule is given which is to cut datapoints
 which are affected by electroweak corrections.
 
-A particularly odd looking rule is the following:
+As a final example consider the following rule:
 ```yaml
-- dataset: LHCBWZMU7TEV
-  reason: Do not include any NNLO points due to large K-factors.
-  PTO: NNLO!
-  rule: "True"
+- process_type: DIS_NCP_CH
+  reason: |
+    Missing higher order corrections to Delta F_IC, the piece that needs
+    to be added to the FONLL-C calculation in the case of fitted charm.
+  FNS: FONLL-C
+  IC: True
+  rule: "Q2 > 8"
 ```
-Again, this rule only applies to `LHCBWZMU7TEV`. We have used `PTO: NNLO!` which,
-as per above, implies that the `rule` is evaluated if the theory input is not `NNLO`.
-The rule however, simply reads `"True"`.
+Instead of this rule applying to one particular dataset, we see it is applicable to all
+datasets that have process type `DIS_NCP_CH`. The reason for the rule is rather involved
+and so `yaml`'s multiline string syntax is used.
 
-The reason for this is that it indiscriminately discards all NNLO points. So it firsts
-checks that the theory is not NNLO. If the PTO is not NNLO it then `eval`s `"True"`
-which of course returns `True` and so the datapoint is kept. Recall that a datapoint is discarded
-only if the rule returns `False`.
+Finally, the user wishes for the `rule` to be evaluated **only if** the theory input has
+the FONNL-C flavour number scheme and if the theory uses intrinsic charm. The rule itself
+is trivial.
 
-```eval_rst
-.. important::
-  Note that the the quotation marks are important here. Had we used :code:`rule: True`, then the filter 
-  would raise an exception since the :code:`rule` would be read in as a :code:`bool` value which is not a valid input 
-  for :code:`eval`. The rule **must** be of type :code:`str`.
-```
-We see from the `reason` that *all* NNLO points have to be discarded since the K-factors are too large.
