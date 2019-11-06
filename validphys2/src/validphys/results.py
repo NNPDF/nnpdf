@@ -541,10 +541,10 @@ def pdferr_plus_data_covmat(dataset, pdf, data_covmat):
 
     >>> from validphys.api import API
     >>> inp = {
-            'dataset_input': {'ATLASTTBARTOT'},
-            'theoryid': 52,
+            'dataset_input': {'dataset' : 'ATLASTTBARTOT'},
+            'theoryid': 53,
             'pdf': 'NNPDF31_nlo_as_0118',
-            'use_cuts': 'no_cuts'
+            'use_cuts': 'nocuts'
         }
     >>> a = API.covariance_matrix(**inp, use_pdferr=True)
     >>> b = API.pdferr_plus_data_covmat(**inp)
