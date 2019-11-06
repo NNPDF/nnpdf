@@ -86,6 +86,8 @@
 #include "ATLAS_2JET_7TEV_R04.h"
 #include "ATLAS_2JET_7TEV_R06.h"
 #include "CMS_2JET_3D_8TEV.h"
+#include "CMS_TTBAR_2D_DIFF_NORM.h"
+#include "CMS_TTBAR_2D_DIFF.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -292,6 +294,12 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMS_SINGLETOP_TCH_TOT_7TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_8TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_13TEVFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_PT_TRAP_NORMFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TRAP_NORMFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TTRAP_NORMFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_PT_TRAPFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TRAPFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TTRAPFilter());
 
   //***************************F2B******************************
 
