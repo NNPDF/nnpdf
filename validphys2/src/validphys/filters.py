@@ -357,11 +357,19 @@ def get_cuts_for_dataset(commondata, rules, defaults) -> list:
 
     Example
     -------
+    >>> from importlib.resources import read_text
+    >>> from reportengine.compat import yaml
+    >>> from validphys.filters import get_cuts_for_dataset, Rule
     >>> from validphys.loader import Loader
+    >>> import validphys.cuts
     >>> l = Loader()
     >>> cd = l.check_commondata("NMC")
+    >>> filter_defaults = yaml.safe_load(read_text(validphys.cuts, "defaults.yaml")) 
+    >>> filter_rules = yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
     >>> theory = l.check_theoryID(53)
-    >>> get_cuts_for_dataset(cd, theory)
+    >>> params = tuple(theory.get_description().items())
+    >>> rule_list = [Rule(initial_data=i, defaults=filter_defaults, theory_parameters=params) for i in filter_rules]
+    >>> get_cuts_for_dataset(cd, rules=rule_list, defaults=filter_defaults)
     """
     dataset = commondata.load()
 
