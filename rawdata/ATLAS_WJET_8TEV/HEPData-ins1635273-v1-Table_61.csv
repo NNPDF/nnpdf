@@ -1,0 +1,73 @@
+#: table_doi: 10.17182/hepdata.80076.v1/t61
+#: name: Table 61
+#: description: List of experimentally considered systematic uncertainties for the W+jets cross section measurement
+#: data_file: data61.yaml
+#: keyword reactions: P P --> W JET(S) X
+#: keyword observables: SIG
+#: keyword phrases: Inclusive | Systematics List | Cross Section | Proton-Proton Scattering | W Production | Jet Production
+#: keyword cmenergies: 8000.0
+#: ABS(YRAP(JET)),< 4.4
+#: PT(JET) [GEV],> 30
+#: Cross section,Description
+#: SQRT(S) [GEV],8000.0
+#: RE,P P --> W JET(S) X
+#: ABS(ETARAP(ELECTRON)),< 2.5
+#: PT(LEPTON) [GEV],> 25
+#: ABS(YRAP(LEADJET)),< 2.5
+Systematics label,Systematics List
+Stat,Data statistics
+JetScaleEff1,JES Effective component 1
+JetScaleEff2,JES Effective component 2
+JetScaleEff3,JES Effective component 3
+JetScaleEff4,JES Effective component 4
+JetScaleEff5,JES Effective component 5
+JetScaleEff6,JES Effective component 6
+JetScaleEta1,JES eta-intercalibation modelling
+JetScaleEta2,JES eta-intercalibation statistics+method
+JetScaleHighPt,JES High p_{T} single particle
+JetScaleMC,JES MC non-closure
+JetScalePileup1,JES N_{PV}-dependent pileup
+JetScalePileup2,JES mu-dependent pileup
+JetScalePileup3,JES p_{T}-dependent pileup
+JetScalePileup4,JES rho-dependent pileup
+JetScaleFlav1Known,JES Known flavor composition
+JetScaleFlav2,JES Flavor response
+JetScaleBjet,JES b-Jet energy scale
+JetScalepunchT,JES Punch-through
+JetResolution10,Jet energy resolution
+JetSFBeff,b-Jet tag-efficiency scale factor
+JetSFCeff,c-Jet tag-efficiency scale factor
+JetSFLmistag,Light-jet mis-tag scale factor
+JetSFHighPt,Flavor-tag scale factor extrapolation
+JetJVFcut,Jet jet vertex fraction cut
+ElScaleR12,Electron energy scale R12 component
+ElScaleZee,Electron energy scale Z->ee component
+ElScalePS,Electron energy scale PS component
+ElResolution,Electron energy resolution
+ElSFReco,Electron Reconstruction scale factor
+ElSFId,Electron Identification scale factor
+ElSFTrigger,Electron Trigger scale factor
+ElSFIso,Electron Isolation scale factor
+ElSFChargeMisID,Electron charge mis-identification scale factor
+METScale,E_{T}^{miss} track-based soft term energy scale
+METResLong,E_{T}^{miss} track-based soft term energy resolution (longitudinal to p_{T}^{hard})
+METResTrans,E_{T}^{miss} track-based soft term energy resolution (transverse to p_{T}^{hard})
+PileupWeight,Pileup weight
+QCDlowRange,Multijet background: Lower fit range
+QCDhighRange,Multijet background: Higher fit range
+QCDvarIso,Multijet background: Anti-isolation in Multijet-CR
+QCDvarElID,Multijet background: Reverted el-ID in Multijet-CR
+QCDfitUncert,Multijet background: Statistical fit uncertainty
+QCDotherGen,Multijet background: W+jets MC generator
+QCDfitRebin,Multijet background: Fit binning
+XsecZ,Z cross section: 5%
+XsecTop,Top cross section: 6.8%
+XsecDibos,Diboson cross section: 7%
+BkgTtbarNorm,ttbar normalization
+BkgMCstat,Statistical uncertainty in N_{bkg}
+WHFmodel,W+heavy flavor jet modelling
+LumiUncert,Luminosity uncert. 1.9%
+UnfoldMCstat,Limited MC statistics in Unfolding
+UnfoldOtherGen,Unfolding W+jets MC generator
+UnfoldReweight,Unfolding Bias to data
+

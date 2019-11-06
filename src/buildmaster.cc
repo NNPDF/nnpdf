@@ -87,6 +87,7 @@
 #include "ATLAS_2JET_7TEV_R04.h"
 #include "ATLAS_2JET_7TEV_R06.h"
 #include "CMS_2JET_3D_8TEV.h"
+#include "ATLAS_WJET_8TEV.h"
 #include "CMS_TTBAR_2D_DIFF_NORM.h"
 #include "CMS_TTBAR_2D_DIFF.h"
 
@@ -149,6 +150,10 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLAS_1JET_8TEV_R06Filter());
   target.push_back(new ATLAS_2JET_7TEV_R04Filter());
   target.push_back(new ATLAS_2JET_7TEV_R06Filter()); 
+  target.push_back(new ATLAS_WP_JET_8TEV_PTFilter()); 
+  target.push_back(new ATLAS_WM_JET_8TEV_PTFilter());
+  target.push_back(new ATLAS_WP_JET_8TEV_PTJFilter()); 
+  target.push_back(new ATLAS_WM_JET_8TEV_PTJFilter());
   
   // ************************* BCDMS ******************************
 
