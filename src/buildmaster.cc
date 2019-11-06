@@ -44,6 +44,7 @@
 #include "CMSwc.h"
 #include "HERACOMB.h"
 #include "ATLASTOPDIFF.h"
+#include "ATLAS_TOPDIFF_DILEPT_8TEV.h"
 #include "CMSTOPDIFF.h"
 #include "EMCF2C.h"
 #include "EMC.h"
@@ -87,6 +88,8 @@
 #include "ATLAS_2JET_7TEV_R06.h"
 #include "CMS_2JET_3D_8TEV.h"
 #include "ATLAS_WJET_8TEV.h"
+#include "CMS_TTBAR_2D_DIFF_NORM.h"
+#include "CMS_TTBAR_2D_DIFF.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -297,6 +300,12 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMS_SINGLETOP_TCH_TOT_7TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_8TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_13TEVFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_PT_TRAP_NORMFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TRAP_NORMFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TTRAP_NORMFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_PT_TRAPFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TRAPFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TTRAPFilter());
 
   //***************************F2B******************************
 
@@ -327,6 +336,12 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASTOPDIFF8TEVTTRAPNORMFilter());
   target.push_back(new ATLASTOPDIFF8TEVTTPTNORMFilter());
   target.push_back(new ATLASTOPDIFF8TEVTTMNORMFilter());
+
+  target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTMFilter());
+  target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPFilter());
+
+  target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORMFilter());
+  target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORMFilter());
 
   // ************************ CMS TTBAR DIFF TeV  ***************
   target.push_back(new CMSTOPDIFF8TEVTPTFilter());
