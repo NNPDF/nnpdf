@@ -216,6 +216,15 @@ filter_defaults:
 ```
 As in the case of the rules, this overwrites the original defaults and does not append to them.
 
+```eval_rst
+.. attention::
+  To ensure backwards compatibility with old style runcards, if :code:`q2min` and :code:`w2min` are defined
+  under the :code:`datacuts` namespace within the runcard, these values are read in and override the default
+  values. However, if this overriding occurs, a warning is displayed in standard output.
+```
+
+
+
 # Examples
 
 Consider the following filter from the `filters.yaml` file:
