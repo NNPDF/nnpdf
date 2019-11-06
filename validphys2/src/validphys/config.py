@@ -906,9 +906,25 @@ class CoreConfig(configparser.Config):
     def parse_filter_defaults(self, filter_defaults: (dict, type(None))):
         return filter_defaults
 
-    def produce_defaults(self, filter_defaults=None):
-        if filter_defaults is None:
-           filter_defaults = yaml.safe_load(read_text(validphys.cuts, "defaults.yaml"))
+    def produce_defaults(self, q2min=None, w2min=None, filter_defaults={}):
+        if q2min is not None and "q2min" in filter_defaults and q2min != filter_defaults["q2min"]:
+            raise RuntimeError("q2min defined multiple times with different values")
+        if w2min is not None and "w2min" in filter_defaults and w2min != filter_defaults["w2min"]:
+            raise RuntimeError("w2min defined multiple times with different values")
+
+        if not filter_defaults:
+            filter_defaults = yaml.safe_load(read_text(validphys.cuts, "defaults.yaml"))
+            defaults_loaded = True
+        else:
+            defaults_loaded = False
+
+        if q2min is not None and defaults_loaded:
+            log.warning("Using q2min from runcard")
+            filter_defaults["q2min"] = q2min
+
+        if w2min is not None and defaults_loaded:
+            log.warning("Using w2min from runcard")
+            filter_defaults["w2min"] = w2min
 
         return filter_defaults
 
