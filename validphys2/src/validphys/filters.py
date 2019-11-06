@@ -338,7 +338,7 @@ class Rule:
                 local_variables[key] = eval(str(value), {**self.numpy_functions, **self.kinematics_dict, **local_variables})
         self.local_variables_dict = local_variables
 
-def get_cuts_for_dataset(commondata, theoryid, rules, defaults) -> list:
+def get_cuts_for_dataset(commondata, rules, defaults) -> list:
     """Function to generate a list containing the index
     of all experimental points that passed kinematic
     cut rules stored in ./cuts/filters.yaml

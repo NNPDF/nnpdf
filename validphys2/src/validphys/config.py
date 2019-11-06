@@ -324,7 +324,7 @@ class CoreConfig(configparser.Config):
             if not theoryid:
                 raise ConfigError(
                     "theoryid must be specified for internal cuts")
-            return self.loader.check_internal_cuts(commondata, theoryid, rules, defaults)
+            return self.loader.check_internal_cuts(commondata, rules, defaults)
         elif use_cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE:
             cut_list = []
             _, nss = self.parse_from_(None, 'cuts_intersection_spec', write=False)
