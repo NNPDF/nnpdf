@@ -64,6 +64,8 @@ def test_performfit():
     os.chdir(tmp_path)
     # run the fit
     os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
+    # The flag KMP_DUPLICATE_LIB_OK is necessary to avoid some errors
+    # related to the linking of OMP in travis when running under MacOS
     sp.run(f"{EXE} {QUICKCARD} {REPLICA}", shell=True)
     # read up the .fitinfo files
     full_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.fitinfo"
