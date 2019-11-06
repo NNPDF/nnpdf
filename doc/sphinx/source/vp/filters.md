@@ -9,11 +9,12 @@ which we know small-x resummation or electroweak corrections are important.
 These effects are problematic since we know them to be important, but we cannot
 account for them.
 
-In this light, we produce cuts of the data, by preferentially filtering data
+In this light, we produce cuts of the data, by filtering data
 points which we know are free of the above and other problems.
 
-In `validphys 2`, the cuts are handled by the `validphys.filters` module in 
-conjuction with `vp-setupfit` which reads in the fit runcard.
+In `validphys 2`, the cuts are handled by the `validphys.filters` alongside filter
+definitions and defaults found within `validphys.cuts`.
+.
 
 # Cuts as declarative filters
 
@@ -70,8 +71,8 @@ If by the time all the rules have been evaluated and we have yet to return `Fals
 the datapoint passes and it is kept.
 
 In addition, the user can add any theory parameter they wish. For example, one could
-add `PTO: NNLO` which means to evaluate the rule only if the theory is NNLO.
-One can see a full list of possible theory parameters using:
+add `PTO: NNLO` which means to evaluate the rule only if the theory is NNLO. These are
+discussed further [here](#PTO). One can see a full list of possible theory parameters using:
 
 ```ipython
 In [1]: from validphys.loader import Loader                                        
@@ -140,8 +141,8 @@ The following would not
   they are defined.
 ```
 
-### Theory parameters and perturbative orders
-
+### Theory parameters and perturbative orders 
+<a name="PTO"></a>
 There are particular situations in which we only want to evaluate a rule if the theory
 input for the PDF matches certain conditions. For example, it may be the case we only
 keep the datapoint provided the theory includes intrinsic charm or is evaluated at NNLO.
