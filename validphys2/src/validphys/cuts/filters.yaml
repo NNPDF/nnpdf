@@ -15,13 +15,6 @@
   PTO: NNLO
   rule: "etay >= 2.25"
 
-- dataset: LHCBWZMU8TEV
-  reason: Do not include any NNLO points due to large K-factors.
-  # The exclamation mark denotes any
-  # PTO that is not NNLO
-  PTO: NNLO!
-  rule: "True"
-
 - dataset: LHCBWZMU7TEV
   reason: |
     The first two bins in rapidity have unnaturally large K-factors which we
@@ -29,11 +22,6 @@
     these points at NNLO.
   PTO: NNLO
   rule: "etay >= 2.25"
-
-- dataset: LHCBWZMU7TEV
-  reason: Do not include any NNLO points due to large K-factors.
-  PTO: NNLO!
-  rule: "True"
 
 - dataset: D0WMASY
   reason: |
@@ -43,11 +31,6 @@
   PTO: NNLO
   rule: "fabs(central_value) >= 0.03"
 
-- dataset: D0WMASY
-  reason: Do not include any NNLO points due to large K-factors.
-  PTO: NNLO!
-  rule: "True"
-
 - dataset: D0WEASY
   reason: |
     Calculation of the NNLO K-factor at the precision required for data points
@@ -55,11 +38,6 @@
     at NNLO for which the value of the asymmetry is not too small.
   PTO: NNLO
   rule: "central_value >= 0.03"
-
-- dataset: D0WEASY
-  reason: Do not include any NNLO points due to large K-factors.
-  PTO: NNLO!
-  rule: "True"
 
 - dataset: ATLASZPT7TEV
   reason: Avoid the region where resummation effects become important.
