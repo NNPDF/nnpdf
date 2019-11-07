@@ -219,9 +219,7 @@ def experiment_result_table_68cl(experiment_result_table_no_table: pd.DataFrame,
     return res
 
 @table
-def perexperiment_pdferr_chi2_table(
-        experiments, experiment_result_table_no_table, experiments_covariance_matrix
-        ):
+def perexperiment_pdferr_chi2_table(experiments, experiments_results):
     """ Generates a table containing the following data for each experiment:
         - chi2 total taking into account pdf uncertainty
 
@@ -249,37 +247,25 @@ def perexperiment_pdferr_chi2_table(
                 a dataframe where for each experiment we have the chi2 taking into account
                 pdf uncertainty and the chi2 per replica
     """
-    # Parse all data we are interested in from the dataframes
-    df = experiment_result_table_no_table
-    experim_data = df.iloc[:,0].T
-    central_pred = df.iloc[:,1].T
-    replica_pred = df.iloc[:,2:].T
+    #TODO: redo the docstring
+    #TODO: ensure pdferr=True
+    # Loop over all experiments
     pdf_chi2 = []
     names = []
     total_n = 0
-    # Loop over all experiments
-    for exp, exp_cov_mat in zip(experiments, experiments_covariance_matrix):
-        exp_name = exp.name
-        # Get the central predictions and data
-        y = experim_data[exp_name].to_numpy()
-        o = central_pred[exp_name].to_numpy()
-        n = len(y)
-        # Get the covariance matrix of the predictions
-        pred_cov_mat = replica_pred[exp_name].cov().to_numpy()
-        # Compute the new covariance matrix
-        new_covmat = exp_cov_mat + pred_cov_mat
-        inv_covmat = np.linalg.inv(new_covmat)
-        # Compute the chi2
-        tmp = y-o
-        right_dot = np.dot(inv_covmat, tmp)
-        chi_un = np.dot(tmp, right_dot)
-        chi2 = chi_un / n
+    for exp, (data, theory) in zip(experiments, experiments_results):
+        covmat = data.covmat
+        experimental_data = data.central_value
+        predictions = theory.central_value
+        sqrt_total_cov = la.cholesky(covmat, lower = True)
+        n = len(predictions)
+        chi2 = calc_chi2(sqrt_total_cov, experimental_data - predictions)/n
         total_n += n
         # Save everything
         pdf_chi2.append({
             'pdf_chi2' : chi2,
             })
-        names.append(exp_name)
+        names.append(exp.name)
     out_df = pd.DataFrame(pdf_chi2, index = names)
     return out_df
 
