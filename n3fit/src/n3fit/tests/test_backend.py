@@ -108,6 +108,8 @@ def test_l_positivity():
     result = loss_f(0.0, T1)
 
     def elu_sum(yarr_in):
+        """ Applies Exponential Linear Unit
+        to an array and sums it up """
         yarr = -yarr_in
         res = 0.0
         for y in yarr:
