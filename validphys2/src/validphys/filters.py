@@ -275,32 +275,20 @@ class Rule:
 
     def __call__(self, dataset, idat):
         central_value = dataset.GetData(idat)
-        self._set_kinematics_dict(dataset, idat)
-        # TODO: check why division by zero happens
-        try:
-            self._set_local_variables_dict(dataset, idat)
-        except ZeroDivisionError:
-            pass
-
-        # Handle the generalised DIS cut
-        if self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] == "DIS":
-            return eval(
-                self.rule,
-                self.numpy_functions,
-                {
-                    **{"idat": idat, "central_value": central_value},
-                    **self.defaults,
-                    **self.kinematics_dict,
-                    **self.local_variables_dict,
-                },
-            )
-
         # We return None if the rule doesn't apply. This
         # is different to the case where the rule does apply,
         # but the point was cut out by the rule.
         if (dataset.GetSetName() != self.dataset and
-            dataset.GetProc(idat) != self.process_type):
+            dataset.GetProc(idat) != self.process_type and
+            self.process_type != "DIS_ALL"):
             return None
+
+        # Handle the generalised DIS cut
+        if self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] != "DIS":
+            return None
+
+        self._set_kinematics_dict(dataset, idat)
+        self._set_local_variables_dict(dataset, idat)
 
         for parameter in self.theory_params:
             if parameter[0] == "PTO" and hasattr(self, "PTO"):
