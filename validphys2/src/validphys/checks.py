@@ -237,3 +237,7 @@ def check_speclabels_different(dataspecs_speclabel):
 def check_two_dataspecs(dataspecs):
     l = len(dataspecs)
     check(l == 2, f"Expecting exactly 2 dataspecs, not {l}")
+
+@make_argcheck
+def check_pdferr(use_pdferr):
+    check(use_pdferr, "The flag use_pdferr must be explicitly set to True")

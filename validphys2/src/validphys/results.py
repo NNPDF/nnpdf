@@ -23,7 +23,8 @@ from reportengine import collect
 from validphys.checks import (check_cuts_considered, check_pdf_is_montecarlo,
                               check_speclabels_different, check_two_dataspecs,
                               check_dataset_cuts_match_theorycovmat,
-                              check_experiment_cuts_match_theorycovmat)
+                              check_experiment_cuts_match_theorycovmat,
+                              check_pdferr)
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
 from validphys.calcutils import (
     all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values,
@@ -219,6 +220,7 @@ def experiment_result_table_68cl(experiment_result_table_no_table: pd.DataFrame,
     return res
 
 @table
+@check_pdferr
 def perexperiment_pdferr_chi2_table(experiments, experiments_results):
     """ Generates a table containing the following data for each experiment:
         - chi2 total taking into account pdf uncertainty
@@ -234,12 +236,9 @@ def perexperiment_pdferr_chi2_table(experiments, experiments_results):
         ----------
             `experiments`
                 a list of experiment specs
-            `experiment_result_table_no_table`
+            `experiments_results`
                 table with exp. data and  th. predictions for all replicas
-            `experiments_covariance_matrix`
-                list of all experimental covariance matrices
-            `perreplica_chi2_table`
-                list with the chi2 per replica per experiment
+                includes the covariance matrix with the PDF errors included
 
         Returns
         -------
@@ -247,8 +246,6 @@ def perexperiment_pdferr_chi2_table(experiments, experiments_results):
                 a dataframe where for each experiment we have the chi2 taking into account
                 pdf uncertainty and the chi2 per replica
     """
-    #TODO: redo the docstring
-    #TODO: ensure pdferr=True
     # Loop over all experiments
     pdf_chi2 = []
     names = []
