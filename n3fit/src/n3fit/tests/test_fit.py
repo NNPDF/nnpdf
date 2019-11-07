@@ -65,8 +65,7 @@ def test_performfit():
     new_environment = {"KMP_DUPLICATE_LIB_OK": "TRUE", **os.environ}
     # The flag KMP_DUPLICATE_LIB_OK is necessary to avoid some errors
     # related to the linking of OMP in travis when running under MacOS
-    proc = sp.run(f"{EXE} {QUICKCARD} {REPLICA}", shell=True, env=new_environment, cwd = tmp_path)
-    assert proc.returncode == 0
+    sp.run(f"{EXE} {QUICKCARD} {REPLICA}".split(), env=new_environment, cwd = tmp_path, check = True)
     # read up the .fitinfo files
     full_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.fitinfo"
     new_fitinfo = load_data(full_path)
