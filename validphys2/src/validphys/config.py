@@ -887,9 +887,12 @@ class CoreConfig(configparser.Config):
         return do_reg
 
     def parse_filter_rules(self, filter_rules: (list, type(None))):
+        """A list of filter rules. See https://docs.nnpdf.science/vp/filters.html
+        for details on the syntax"""
         return filter_rules
 
     def produce_rules(self, theoryid, defaults, filter_rules=None):
+        """Produce filter rules based on the user defined input and defaults."""
         from validphys.filters import Rule
 
         theory_parameters = tuple(theoryid.get_description().items())
@@ -904,9 +907,17 @@ class CoreConfig(configparser.Config):
         return rule_list
 
     def parse_filter_defaults(self, filter_defaults: (dict, type(None))):
+        """A mapping containing the default kinematic limits to be used when
+        filtering data (when using internal cuts).
+        Currently these limits are ``q2min`` and ``w2min``.
+        """
         return filter_defaults
 
     def produce_defaults(self, q2min=None, w2min=None, filter_defaults={}):
+        """Produce default values for folters taking into account both the
+        values of ``q2min`` and ` `w2min`` defined at namespace
+        level and those inside a ``filter_defaults`` mapping.
+        """
         if q2min is not None and "q2min" in filter_defaults and q2min != filter_defaults["q2min"]:
             raise ConfigError("q2min defined multiple times with different values")
         if w2min is not None and "w2min" in filter_defaults and w2min != filter_defaults["w2min"]:
