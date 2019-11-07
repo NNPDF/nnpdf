@@ -219,9 +219,38 @@ def experiment_result_table_68cl(experiment_result_table_no_table: pd.DataFrame,
     res = pd.concat([df.iloc[:, :2], df_cl], axis=1)
     return res
 
+
+@check_pdferr
+def experiment_pdferr_chi2(experiment_results):
+    """
+        Parameters
+        ----------
+            `experiments`
+                a list of experiment specs
+            `experiments_results`
+                table with exp. data and  th. predictions for all replicas
+                the covariance matrix includes pdf uncertainties
+        Returns
+        -------
+            `chi2`
+                chi2 of the experiment taking into account the pdf error
+                normalized to the total number of points
+    """
+    data, theory = experiment_results
+    covmat = data.covmat
+    experimental_data = data.central_value
+    predictions = theory.central_value
+    sqrt_total_cov = la.cholesky(covmat, lower = True)
+    n = len(predictions)
+    chi2 = calc_chi2(sqrt_total_cov, experimental_data - predictions)/n
+    return chi2
+
+experiments_pdferr_chi2 = collect('experiment_pdferr_chi2', ('experiments',))
+
+
 @table
 @check_pdferr
-def perexperiment_pdferr_chi2_table(experiments, experiments_results):
+def perexperiment_pdferr_chi2_table(experiments, experiments_pdferr_chi2):
     """ Generates a table containing the following data for each experiment:
         - chi2 total taking into account pdf uncertainty
 
@@ -236,9 +265,9 @@ def perexperiment_pdferr_chi2_table(experiments, experiments_results):
         ----------
             `experiments`
                 a list of experiment specs
-            `experiments_results`
-                table with exp. data and  th. predictions for all replicas
-                includes the covariance matrix with the PDF errors included
+            `experiments_pdferr_chi2`
+                a list of the chi2 of the experiments taking into account
+                the covariance matrix due to the pdf uncertainties
 
         Returns
         -------
@@ -246,24 +275,8 @@ def perexperiment_pdferr_chi2_table(experiments, experiments_results):
                 a dataframe where for each experiment we have the chi2 taking into account
                 pdf uncertainty and the chi2 per replica
     """
-    # Loop over all experiments
-    pdf_chi2 = []
-    names = []
-    total_n = 0
-    for exp, (data, theory) in zip(experiments, experiments_results):
-        covmat = data.covmat
-        experimental_data = data.central_value
-        predictions = theory.central_value
-        sqrt_total_cov = la.cholesky(covmat, lower = True)
-        n = len(predictions)
-        chi2 = calc_chi2(sqrt_total_cov, experimental_data - predictions)/n
-        total_n += n
-        # Save everything
-        pdf_chi2.append({
-            'pdf_chi2' : chi2,
-            })
-        names.append(exp.name)
-    out_df = pd.DataFrame(pdf_chi2, index = names)
+    exp_names = [exp.name for exp in experiments]
+    out_df = pd.DataFrame({'pdf_chi2' : experiments_pdferr_chi2}, index = exp_names)
     return out_df
 
 
