@@ -61,12 +61,12 @@ def test_performfit():
     tmp_path = pathlib.Path(tmp_name)
     # cp runcard to tmp folder
     shutil.copy(QUICKPATH, tmp_path)
-    os.chdir(tmp_path)
     # run the fit
-    os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
+    new_environment = {"KMP_DUPLICATE_LIB_OK": "TRUE", **os.environ}
     # The flag KMP_DUPLICATE_LIB_OK is necessary to avoid some errors
     # related to the linking of OMP in travis when running under MacOS
-    sp.run(f"{EXE} {QUICKCARD} {REPLICA}", shell=True)
+    proc = sp.run(f"{EXE} {QUICKCARD} {REPLICA}", shell=True, env=new_environment, cwd = tmp_path)
+    assert proc.returncode == 0
     # read up the .fitinfo files
     full_path = tmp_path / f"{QUICKNAME}/nnfit/replica_{REPLICA}/{QUICKNAME}.fitinfo"
     new_fitinfo = load_data(full_path)
