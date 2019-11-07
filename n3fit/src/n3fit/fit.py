@@ -94,6 +94,8 @@ def fit(
     # Loading t0set from LHAPDF
     if t0set is not None:
         t0pdfset = t0set.load_t0()
+    else:
+        t0pdfset = None
 
     # First set the seed variables for
     # - Tr/Vl split
