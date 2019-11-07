@@ -32,6 +32,25 @@ class StopWatch:
         self.reference_list = []
         self.register_times(self.start_key)
 
+    def get_times(self, tag=None):
+        """ Return a tuple with the `tag` time of the watch
+        defaults to the starting time
+
+        Parameters
+        ----------
+            `tag`
+                if none, defaults to start_key
+
+        Returns
+        -------
+            (tag cpu time, tag wall time)
+        """
+        if tag is None:
+            tag = self.start_key
+        start_cpu = self._cputimes[tag]
+        start_wall = self._walltimes[tag]
+        return (start_cpu, start_wall)
+
     def register_times(self, tag):
         """ Register an event named `tag` """
         cputime, walltime = get_time()
@@ -41,7 +60,8 @@ class StopWatch:
     def stop(self):
         """ Stops the stopwatch and create the output dictionary
 
-        # Returns:
+        Returns
+        -------
             - `dict_out`: a dictionary containing two dictionaries
                 with all relatives cpu and walltimes
         """
