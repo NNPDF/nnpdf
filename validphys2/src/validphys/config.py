@@ -914,7 +914,7 @@ class CoreConfig(configparser.Config):
         return filter_defaults
 
     def produce_defaults(self, q2min=None, w2min=None, filter_defaults={}):
-        """Produce default values for folters taking into account both the
+        """Produce default values for filters taking into account both the
         values of ``q2min`` and ` `w2min`` defined at namespace
         level and those inside a ``filter_defaults`` mapping.
         """
