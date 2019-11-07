@@ -255,9 +255,18 @@ class Rule:
         Defined by the theory
     pto: int
         Perturbative order defined by the theory
+    loader: validphys.loader.Loader, optional
+        A loader instance used to retrieve the datasets.
     """
 
-    def __init__(self, *, initial_data: dict, defaults: dict, theory_parameters: tuple):
+    def __init__(
+        self,
+        *,
+        initial_data: dict,
+        defaults: dict,
+        theory_parameters: tuple,
+        loader=None,
+    ):
         self.dataset = None
         self.process_type = None
         for key in initial_data:
@@ -267,16 +276,21 @@ class Rule:
             raise MissingRuleAttribute("No rule defined.")
 
         if self.dataset is None and self.process_type is None:
-            raise MissingRuleAttribute("Please define either a process type or dataset.")
+            raise MissingRuleAttribute(
+                "Please define either a process type or dataset."
+            )
 
         if self.process_type is None:
             from validphys.loader import Loader, LoaderError
 
-            l = Loader()
+            if loader is None:
+                loader = Loader()
             try:
-                cd = l.check_commondata(self.dataset)
+                cd = loader.check_commondata(self.dataset)
             except LoaderError as e:
-                raise RuleProcessingError(f"Could not find dataset {seld.dataset}") from e
+                raise RuleProcessingError(
+                    f"Could not find dataset {seld.dataset}"
+                ) from e
             if cd.process_type[:3] == "DIS":
                 self.variables = CommonData.kinLabel["DIS"]
             else:
@@ -297,11 +311,18 @@ class Rule:
         try:
             self.rule = compile(self.rule, "rule", "eval")
         except Exception as e:
-            raise RuleProcessingError(f"Could not process rule {self.rule!r}: {e}") from e
+            raise RuleProcessingError(
+                f"Could not process rule {self.rule!r}: {e}"
+            ) from e
         self.defaults = defaults
         self.theory_params = theory_parameters
 
-        self.numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs, "np": np}
+        self.numpy_functions = {
+            "sqrt": np.sqrt,
+            "log": np.log,
+            "fabs": np.fabs,
+            "np": np,
+        }
 
     def __call__(self, dataset, idat):
         central_value = dataset.GetData(idat)

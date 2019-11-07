@@ -905,6 +905,7 @@ class CoreConfig(configparser.Config):
                     initial_data=i,
                     defaults=defaults,
                     theory_parameters=theory_parameters,
+                    loader=self.loader
                 )
                 for i in filter_rules
             ]
