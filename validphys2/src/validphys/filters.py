@@ -6,6 +6,7 @@ Filters for NNPDF fits
 import logging
 import numbers
 import re
+from collections.abc import Mapping
 
 import numpy as np
 
@@ -259,6 +260,8 @@ class Rule:
         A loader instance used to retrieve the datasets.
     """
 
+    numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs}
+
     def __init__(
         self,
         *,
@@ -289,7 +292,7 @@ class Rule:
                 cd = loader.check_commondata(self.dataset)
             except LoaderError as e:
                 raise RuleProcessingError(
-                    f"Could not find dataset {seld.dataset}"
+                    f"Could not find dataset {self.dataset}"
                 ) from e
             if cd.process_type[:3] == "DIS":
                 self.variables = CommonData.kinLabel["DIS"]
@@ -301,28 +304,47 @@ class Rule:
             else:
                 self.variables = CommonData.kinLabel[self.process_type]
 
+        if hasattr(self, "local_variables"):
+            if not isinstance(self.local_variables, Mapping):
+                raise RuleProcessingError(
+                    f"Expecting local_variables to be a Mapping, not {type(self.local_variables)}."
+                )
+        else:
+            self.local_variables = {}
+
         if hasattr(self, "PTO"):
+            if not isinstance(self.PTO, str):
+                raise RuleProcessingError(
+                    f"Expecting PTO to be a string, not {type(self.PTO)}."
+                )
             try:
                 self.PTO = PerturbativeOrder(self.PTO)
             except BadPerturbativeOrder as e:
                 raise RuleProcessingError(e) from e
 
         self.rule_string = self.rule
+        self.defaults = defaults
+        self.theory_params = theory_parameters
         try:
             self.rule = compile(self.rule, "rule", "eval")
         except Exception as e:
             raise RuleProcessingError(
-                f"Could not process rule {self.rule!r}: {e}"
+                f"Could not process rule {self.rule_string!r}: {e}"
             ) from e
-        self.defaults = defaults
-        self.theory_params = theory_parameters
-
-        self.numpy_functions = {
-            "sqrt": np.sqrt,
-            "log": np.log,
-            "fabs": np.fabs,
-            "np": np,
+        ns = {
+            *self.numpy_functions,
+            *self.defaults,
+            *self.local_variables,
+            *self.variables,
+            "idat",
+            "central_value",
         }
+        for name in self.rule.co_names:
+            if not name in ns:
+                raise RuleProcessingError(
+                    f"Could not process rule {self.rule_string!r}: Unknown name {name!r}"
+                )
+
 
     def __call__(self, dataset, idat):
         central_value = dataset.GetData(idat)
