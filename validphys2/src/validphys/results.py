@@ -249,10 +249,17 @@ def perexperiment_pdferr_chi2_table(experiments, experiments_chi2):
     """
     exp_names = [exp.name for exp in experiments]
     experiments_pdferr_chi2 = []
+    total_chi2 = 0.0
+    total_n = 0
     for chi2data in experiments_chi2:
         chi2 = chi2data.central_result
         n = chi2data.ndata
         experiments_pdferr_chi2.append(chi2/n)
+        total_chi2 += chi2
+        total_n += n
+    total = total_chi2 / total_n
+    exp_names.append("Total")
+    experiments_pdferr_chi2.append(total)
     out_df = pd.DataFrame({'pdf_chi2' : experiments_pdferr_chi2}, index = exp_names)
     return out_df
 
