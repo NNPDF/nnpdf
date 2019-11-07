@@ -16,6 +16,21 @@ import validphys.cuts
 
 log = logging.getLogger(__name__)
 
+class RuleProcessingError(Exception):
+    """Exception raised when we couldn't process a rule."""
+
+
+class BadPerturbativeOrder(ValueError):
+    """Exception raised when the perturbative order string is not
+    recognized."""
+
+
+class MissingRuleAttribute(RuleProcessingError, AttributeError):
+    """Exception raised when a rule is missing required attributes."""
+
+class FatalRuleError(Exception):
+    """Exception raised when a rule application failed at runtime."""
+
 
 @make_argcheck
 def check_combocuts(combocuts: str):
@@ -163,6 +178,8 @@ class PerturbativeOrder:
         NNLO! only execute the following rule if the pto is strictly not 2
         NNLO only execute the following rule if the pto is exactly 2
 
+        Any unrecognized string will raise a BadPerturbativeOrder exception.
+
     Example
     -------
     >>> from validphys.filters import PerturbativeOrder
@@ -187,8 +204,12 @@ class PerturbativeOrder:
         # In this example, we assign
         # self.numeric_pto to be 3.
         exp = re.compile(
-                r'(N(?P<nnumber>\d+)|(?P<multiplens>N*))LO(?P<operator>[\+\-\!])?'
-                ).fullmatch(self.string)
+            r"(N(?P<nnumber>\d+)|(?P<multiplens>N*))LO(?P<operator>[\+\-\!])?"
+        ).fullmatch(self.string)
+        if not exp:
+            raise BadPerturbativeOrder(
+                f"String {self.string!r} does not represent a valid perturbative order specfication."
+            )
         if exp.group("multiplens") is None:
             self.numeric_pto = int(exp.group("nnumber"))
         else:
@@ -243,16 +264,19 @@ class Rule:
             setattr(self, key, initial_data[key])
 
         if not hasattr(self, "rule"):
-            raise AttributeError("No rule defined.")
+            raise MissingRuleAttribute("No rule defined.")
 
         if self.dataset is None and self.process_type is None:
-            raise AttributeError("Please define either a process type or dataset.")
+            raise MissingRuleAttribute("Please define either a process type or dataset.")
 
         if self.process_type is None:
-            from validphys.loader import Loader
+            from validphys.loader import Loader, LoaderError
 
             l = Loader()
-            cd = l.check_commondata(self.dataset)
+            try:
+                cd = l.check_commondata(self.dataset)
+            except LoaderError as e:
+                raise RuleProcessingError(f"Could not find dataset {seld.dataset}") from e
             if cd.process_type[:3] == "DIS":
                 self.variables = CommonData.kinLabel["DIS"]
             else:
@@ -264,10 +288,16 @@ class Rule:
                 self.variables = CommonData.kinLabel[self.process_type]
 
         if hasattr(self, "PTO"):
-            self.PTO = PerturbativeOrder(self.PTO)
+            try:
+                self.PTO = PerturbativeOrder(self.PTO)
+            except BadPerturbativeOrder as e:
+                raise RuleProcessingError(e) from e
 
         self.rule_string = self.rule
-        self.rule = compile(self.rule, "rule", "eval")
+        try:
+            self.rule = compile(self.rule, "rule", "eval")
+        except Exception as e:
+            raise RuleProcessingError(f"Could not process rule {self.rule!r}: {e}") from e
         self.defaults = defaults
         self.theory_params = theory_parameters
 
@@ -298,16 +328,19 @@ class Rule:
                 return None
 
         # Will return True if datapoint passes through the filter
-        return eval(
-            self.rule,
-            self.numpy_functions,
-            {
-                **{"idat": idat, "central_value": central_value},
-                **self.defaults,
-                **self.kinematics_dict,
-                **self.local_variables_dict,
-            },
-        )
+        try:
+            return eval(
+                self.rule,
+                self.numpy_functions,
+                {
+                    **{"idat": idat, "central_value": central_value},
+                    **self.defaults,
+                    **self.kinematics_dict,
+                    **self.local_variables_dict,
+                },
+            )
+        except Exception as e:
+            raise FatalRuleError(f"Error when applyin rule {self.rule_string!r}: {e}") from e
 
     def __repr__(self):
         return self.rule_string
@@ -323,7 +356,10 @@ class Rule:
 
         if hasattr(self, "local_variables"):
             for key, value in self.local_variables.items():
-                local_variables[key] = eval(str(value), {**self.numpy_functions, **self.kinematics_dict, **local_variables})
+                local_variables[key] = eval(
+                    str(value),
+                    {**self.numpy_functions, **self.kinematics_dict, **local_variables},
+                )
         self.local_variables_dict = local_variables
 
 def get_cuts_for_dataset(commondata, rules, defaults) -> list:

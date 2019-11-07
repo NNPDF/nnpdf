@@ -893,16 +893,23 @@ class CoreConfig(configparser.Config):
 
     def produce_rules(self, theoryid, defaults, filter_rules=None):
         """Produce filter rules based on the user defined input and defaults."""
-        from validphys.filters import Rule
+        from validphys.filters import Rule, RuleProcessingError
 
         theory_parameters = tuple(theoryid.get_description().items())
         if filter_rules is None:
-           filter_rules = yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
+            filter_rules = yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
 
-        rule_list = [
-            Rule(initial_data=i, defaults=defaults, theory_parameters=theory_parameters)
-            for i in filter_rules
-        ]
+        try:
+            rule_list = [
+                Rule(
+                    initial_data=i,
+                    defaults=defaults,
+                    theory_parameters=theory_parameters,
+                )
+                for i in filter_rules
+            ]
+        except RuleProcessingError as e:
+            raise ConfigError(e) from e
 
         return rule_list
 
