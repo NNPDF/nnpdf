@@ -220,37 +220,9 @@ def experiment_result_table_68cl(experiment_result_table_no_table: pd.DataFrame,
     return res
 
 
-@check_pdferr
-def experiment_pdferr_chi2(experiment_results):
-    """
-        Parameters
-        ----------
-            `experiments`
-                a list of experiment specs
-            `experiments_results`
-                table with exp. data and  th. predictions for all replicas
-                the covariance matrix includes pdf uncertainties
-        Returns
-        -------
-            `chi2`
-                chi2 of the experiment taking into account the pdf error
-                normalized to the total number of points
-    """
-    data, theory = experiment_results
-    covmat = data.covmat
-    experimental_data = data.central_value
-    predictions = theory.central_value
-    sqrt_total_cov = la.cholesky(covmat, lower = True)
-    n = len(predictions)
-    chi2 = calc_chi2(sqrt_total_cov, experimental_data - predictions)/n
-    return chi2
-
-experiments_pdferr_chi2 = collect('experiment_pdferr_chi2', ('experiments',))
-
-
 @table
 @check_pdferr
-def perexperiment_pdferr_chi2_table(experiments, experiments_pdferr_chi2):
+def perexperiment_pdferr_chi2_table(experiments, experiments_chi2):
     """ Generates a table containing the following data for each experiment:
         - chi2 total taking into account pdf uncertainty
 
@@ -265,7 +237,7 @@ def perexperiment_pdferr_chi2_table(experiments, experiments_pdferr_chi2):
         ----------
             `experiments`
                 a list of experiment specs
-            `experiments_pdferr_chi2`
+            `experiments_chi2`
                 a list of the chi2 of the experiments taking into account
                 the covariance matrix due to the pdf uncertainties
 
@@ -276,6 +248,11 @@ def perexperiment_pdferr_chi2_table(experiments, experiments_pdferr_chi2):
                 pdf uncertainty and the chi2 per replica
     """
     exp_names = [exp.name for exp in experiments]
+    experiments_pdferr_chi2 = []
+    for chi2data in experiments_chi2:
+        chi2 = chi2data.central_result
+        n = chi2data.ndata
+        experiments_pdferr_chi2.append(chi2/n)
     out_df = pd.DataFrame({'pdf_chi2' : experiments_pdferr_chi2}, index = exp_names)
     return out_df
 
