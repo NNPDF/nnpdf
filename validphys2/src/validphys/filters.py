@@ -409,7 +409,7 @@ class Rule:
         return dict(zip(self.variables, kinematics))
 
     def _make_point_namespace(self, dataset, idat) -> dict:
-        """Return a dictionary with kinametics and local
+        """Return a dictionary with kinemetics and local
         variables evaluated for each point"""
         ns = self._make_kinematics_dict(dataset, idat)
 
