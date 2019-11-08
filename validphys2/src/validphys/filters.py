@@ -272,6 +272,7 @@ class Rule:
     ):
         self.dataset = None
         self.process_type = None
+        self._local_variables_code = {}
         for key in initial_data:
             setattr(self, key, initial_data[key])
 
@@ -325,20 +326,35 @@ class Rule:
         self.rule_string = self.rule
         self.defaults = defaults
         self.theory_params = theory_parameters
+        ns = {
+            *self.numpy_functions,
+            *self.defaults,
+            *self.variables,
+            "idat",
+            "central_value",
+        }
+        for k, v in self.local_variables.items():
+            try:
+                self._local_variables_code[k] = lcode = compile(
+                    str(v), f"local variable {k}", "eval"
+                )
+            except Exception as e:
+                raise RuleProcessingError(
+                    f"Could not process local variable {k!r} ({v!r}): {e}"
+                ) from e
+            for name in lcode.co_names:
+                if name not in ns:
+                    raise RuleProcessingError(
+                        f"Could not process local variable {k!r}: Unknown name {name!r}"
+                    )
+            ns.add(k)
+
         try:
             self.rule = compile(self.rule, "rule", "eval")
         except Exception as e:
             raise RuleProcessingError(
                 f"Could not process rule {self.rule_string!r}: {e}"
             ) from e
-        ns = {
-            *self.numpy_functions,
-            *self.defaults,
-            *self.local_variables,
-            *self.variables,
-            "idat",
-            "central_value",
-        }
         for name in self.rule.co_names:
             if not name in ns:
                 raise RuleProcessingError(
@@ -401,8 +417,8 @@ class Rule:
         variables evaluated for each point"""
         ns = self._make_kinematics_dict(dataset, idat)
 
-        for key, value in self.local_variables.items():
-            ns[key] = eval(str(value), {**self.numpy_functions, **ns, **ns})
+        for key, value in self._local_variables_code.items():
+            ns[key] = eval(value, {**self.numpy_functions, **ns, **ns})
         return ns
 
 def get_cuts_for_dataset(commondata, rules, defaults) -> list:
