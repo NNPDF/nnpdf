@@ -73,16 +73,8 @@ the datapoint passes and it is kept.
 In addition, the user can add any theory parameter they wish. For example, one could
 add `PTO: NNLO` which means to evaluate the rule only if the theory is NNLO. These are
 discussed further [here](#PTO). One can see a full list of possible theory parameters using:
+`vp-checktheory <theory id>`
 
-```ipython
-In [1]: from validphys.loader import Loader                                        
-
-In [2]: l = Loader()                                                               
-
-In [3]: theory = l.check_theoryID(53)                                              
-
-In [4]: theory.get_description()  
-````
 
 ```eval_rst
 
