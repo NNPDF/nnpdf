@@ -176,6 +176,7 @@ class ModelTrainer:
                     "ndata": exp_dict["ndata"] + exp_dict["ndata_vl"],
                     "model": None,
                 }
+                exp_dict["count_chi2"] = False
                 self.list_of_models_dicts.append(self.test_dict)
                 continue
             self.training["expdata"].append(exp_dict["expdata"])

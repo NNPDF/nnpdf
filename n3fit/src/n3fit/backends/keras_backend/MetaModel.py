@@ -233,6 +233,9 @@ class MetaModel(Model):
         if target_output is not None:
             self.has_dataset = True
 
+        if not isinstance(target_output, list):
+            target_output = [target_output]
+
         super(MetaModel, self).compile(
             optimizer=opt, loss=loss, target_tensors=target_output, **kwargs
         )

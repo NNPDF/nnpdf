@@ -43,12 +43,13 @@ def test_runcard(runcard_file, datasets_out):
     runcard_exp.append(test_experiment)
     new_runcard = "TEST-{0}".format(os.path.basename(runcard_file))
     no = open(new_runcard, "w")
-    yaml.round_trip_dump(
+    yaml.dump(
         runcard_dict,
         no,
         explicit_start=True,
         explicit_end=True,
-        default_flow_style=True,
+	indent=True,
+
     )
     no.close()
 
