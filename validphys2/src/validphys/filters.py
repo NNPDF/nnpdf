@@ -455,12 +455,11 @@ def get_cuts_for_dataset(commondata, rules, defaults) -> list:
     -------
     >>> from validphys.filters import get_cuts_for_dataset, Rule, default_filter_settings, default_filter_rules_input
     >>> from validphys.loader import Loader
-    >>> import validphys.cuts
     >>> l = Loader()
     >>> cd = l.check_commondata("NMC")
     >>> theory = l.check_theoryID(53)
     >>> filter_defaults = default_filter_settings()
-    >>> params = tuple(theory.get_description().items())
+    >>> params = theory.get_description()
     >>> rule_list = [Rule(initial_data=i, defaults=filter_defaults, theory_parameters=params) for i in default_filter_rules_input()]
     >>> get_cuts_for_dataset(cd, rules=rule_list, defaults=filter_defaults)
     """
