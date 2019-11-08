@@ -11,19 +11,16 @@ import inspect
 import numbers
 import copy
 import os
-from importlib.resources import read_text
 
 from collections import ChainMap
 from collections.abc import Mapping, Sequence
 
 from reportengine import configparser
 from reportengine.environment import Environment, EnvironmentError_
-from reportengine.compat import yaml
 from reportengine.configparser import ConfigError, element_of, _parse_func
 from reportengine.helputils import get_parser_type
 from reportengine import report
 
-import validphys.cuts
 from validphys.core import (ExperimentSpec, DataSetInput, ExperimentInput,
                             CutsPolicy, MatchedCuts, ThCovMatSpec)
 from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFoundError,
@@ -893,11 +890,11 @@ class CoreConfig(configparser.Config):
 
     def produce_rules(self, theoryid, defaults, filter_rules=None):
         """Produce filter rules based on the user defined input and defaults."""
-        from validphys.filters import Rule, RuleProcessingError
+        from validphys.filters import Rule, RuleProcessingError, default_filter_rules_input
 
         theory_parameters = tuple(theoryid.get_description().items())
         if filter_rules is None:
-            filter_rules = yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
+            filter_rules = default_filter_rules_input()
 
         try:
             rule_list = [
@@ -926,13 +923,14 @@ class CoreConfig(configparser.Config):
         values of ``q2min`` and ` `w2min`` defined at namespace
         level and those inside a ``filter_defaults`` mapping.
         """
+        from validphys.filters import default_filter_settings
         if q2min is not None and "q2min" in filter_defaults and q2min != filter_defaults["q2min"]:
             raise ConfigError("q2min defined multiple times with different values")
         if w2min is not None and "w2min" in filter_defaults and w2min != filter_defaults["w2min"]:
             raise ConfigError("w2min defined multiple times with different values")
 
         if not filter_defaults:
-            filter_defaults = yaml.safe_load(read_text(validphys.cuts, "defaults.yaml"))
+            filter_defaults = default_filter_settings()
             defaults_loaded = True
         else:
             defaults_loaded = False

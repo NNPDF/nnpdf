@@ -7,6 +7,7 @@ import logging
 import numbers
 import re
 from collections.abc import Mapping
+from importlib.resources import read_text
 
 import numpy as np
 
@@ -29,16 +30,32 @@ class BadPerturbativeOrder(ValueError):
 class MissingRuleAttribute(RuleProcessingError, AttributeError):
     """Exception raised when a rule is missing required attributes."""
 
+
 class FatalRuleError(Exception):
     """Exception raised when a rule application failed at runtime."""
+
+
+def default_filter_settings():
+    """Return a dictionary with the default hardcoded filter settings.
+    These are defined in ``defaults.yaml`` in the ``validphys.cuts`` module.
+    """
+    return yaml.safe_load(read_text(validphys.cuts, "defaults.yaml"))
+
+
+def default_filter_rules_input():
+    """Return a dictionary with the input settings.
+    These are defined in ``filters.yaml`` in the ``validphys.cuts`` module.
+    """
+    return yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
 
 
 @make_argcheck
 def check_combocuts(combocuts: str):
     """Check combocuts content"""
-    check(combocuts == 'NNPDF31',
-          "Invalid combocut. Must be NNPDF31 (or implement it yourself).")
-
+    check(
+        combocuts == "NNPDF31",
+        "Invalid combocut. Must be NNPDF31 (or implement it yourself).",
+    )
 
 @make_argcheck
 def check_rngalgo(rngalgo: int):
@@ -438,16 +455,15 @@ def get_cuts_for_dataset(commondata, rules, defaults) -> list:
     -------
     >>> from importlib.resources import read_text
     >>> from reportengine.compat import yaml
-    >>> from validphys.filters import get_cuts_for_dataset, Rule
+    >>> from validphys.filters import get_cuts_for_dataset, Rule, default_filter_settings, default_filter_rules_input
     >>> from validphys.loader import Loader
     >>> import validphys.cuts
     >>> l = Loader()
     >>> cd = l.check_commondata("NMC")
-    >>> filter_defaults = yaml.safe_load(read_text(validphys.cuts, "defaults.yaml")) 
-    >>> filter_rules = yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
     >>> theory = l.check_theoryID(53)
+    >>> filter_defaults = default_filter_settings()
     >>> params = tuple(theory.get_description().items())
-    >>> rule_list = [Rule(initial_data=i, defaults=filter_defaults, theory_parameters=params) for i in filter_rules]
+    >>> rule_list = [Rule(initial_data=i, defaults=filter_defaults, theory_parameters=params) for i in default_filter_rules_input()]
     >>> get_cuts_for_dataset(cd, rules=rule_list, defaults=filter_defaults)
     """
     dataset = commondata.load()
