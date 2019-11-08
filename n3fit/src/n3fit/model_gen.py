@@ -265,7 +265,7 @@ def pdfNN_layer_generator(
             "basis_size": int(basis_size)
         }
 
-        if i == len(activations)-1:
+        if i == len(activations)-1 and layer_type == "dense_per_flavour":
             # TODO: obviously this is for debugging
             arguments['concatenate_now'] = True
             arguments['units'] = 1
