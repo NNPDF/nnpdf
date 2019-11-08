@@ -1,6 +1,6 @@
 import pytest
 
-from validphys.loader import Loader
+from validphys.loader import FallbackLoader as Loader
 from validphys.filters import (
     Rule,
     RuleProcessingError,
@@ -30,7 +30,7 @@ bad_rules = [
     {'dataset': 'NMC', 'local_variables': {'z': 'v+1', 'v': '10'}, 'rule': 'z > 10'},
 ]
 
-#Note: Don't change the order here. In this way it tests all cases.
+# Note: Don't change the order here. In this way it tests all cases.
 good_rules = [
     {'process_type': 'DIS_ALL', 'PTO': 'N3LO', 'rule': 'x < 1e-2'},
     {'process_type': 'DIS_ALL', 'IC': 'False', 'rule': 'x < 1e-2'},
