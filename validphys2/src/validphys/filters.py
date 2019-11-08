@@ -250,12 +250,8 @@ class Rule:
         all rules.
 
         By default these are defined in cuts/defaults.yaml
-    vfns: int
-        Variable Flavour Number Scheme defined by the theory
-    ic: int
-        Defined by the theory
-    pto: int
-        Perturbative order defined by the theory
+    theory_parameters:
+        Tuple of tuples containing pairs of (theory_parameter, value)
     loader: validphys.loader.Loader, optional
         A loader instance used to retrieve the datasets.
     """
