@@ -268,7 +268,7 @@ class Rule:
 
         By default these are defined in cuts/defaults.yaml
     theory_parameters:
-        Tuple of tuples containing pairs of (theory_parameter, value)
+        Dict containing pairs of (theory_parameter, value)
     loader: validphys.loader.Loader, optional
         A loader instance used to retrieve the datasets.
     """
@@ -280,7 +280,7 @@ class Rule:
         *,
         initial_data: dict,
         defaults: dict,
-        theory_parameters: tuple,
+        theory_parameters: dict,
         loader=None,
     ):
         self.dataset = None
@@ -392,12 +392,12 @@ class Rule:
             return None
 
         ns = self._make_point_namespace(dataset, idat)
-        for parameter in self.theory_params:
-            if parameter[0] == "PTO" and hasattr(self, "PTO"):
-                if parameter[1] not in self.PTO:
+        for k, v in self.theory_params.items():
+            if k == "PTO" and hasattr(self, "PTO"):
+                if v not in self.PTO:
                     return None
-            elif hasattr(self, parameter[0]) and (
-                getattr(self, parameter[0]) != parameter[1]
+            elif hasattr(self, k) and (
+                getattr(self, k) != v
             ):
                 return None
 

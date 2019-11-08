@@ -892,7 +892,8 @@ class CoreConfig(configparser.Config):
         """Produce filter rules based on the user defined input and defaults."""
         from validphys.filters import Rule, RuleProcessingError, default_filter_rules_input
 
-        theory_parameters = tuple(theoryid.get_description().items())
+        theory_parameters = theoryid.get_description()
+
         if filter_rules is None:
             filter_rules = default_filter_rules_input()
 
