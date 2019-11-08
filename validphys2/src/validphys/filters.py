@@ -443,7 +443,8 @@ def get_cuts_for_dataset(commondata, rules) -> list:
     Parameters
     ----------
     commondata: NNPDF CommonData spec
-    theoryid: NNPDF theoryID object
+    rules: List[Rule]
+        A list of Rule objects specifying the filters.
 
     Returns
     -------
@@ -453,14 +454,16 @@ def get_cuts_for_dataset(commondata, rules) -> list:
 
     Example
     -------
-    >>> from validphys.filters import get_cuts_for_dataset, Rule, default_filter_settings, default_filter_rules_input
+    >>> from validphys.filters import (get_cuts_for_dataset, Rule,
+    ...     default_filter_settings, default_filter_rules_input)
     >>> from validphys.loader import Loader
     >>> l = Loader()
     >>> cd = l.check_commondata("NMC")
     >>> theory = l.check_theoryID(53)
     >>> filter_defaults = default_filter_settings()
     >>> params = theory.get_description()
-    >>> rule_list = [Rule(initial_data=i, defaults=filter_defaults, theory_parameters=params) for i in default_filter_rules_input()]
+    >>> rule_list = [Rule(initial_data=i, defaults=filter_defaults, theory_parameters=params)
+    ...     for i in default_filter_rules_input()]
     >>> get_cuts_for_dataset(cd, rules=rule_list)
     """
     dataset = commondata.load()
