@@ -453,8 +453,6 @@ def get_cuts_for_dataset(commondata, rules, defaults) -> list:
 
     Example
     -------
-    >>> from importlib.resources import read_text
-    >>> from reportengine.compat import yaml
     >>> from validphys.filters import get_cuts_for_dataset, Rule, default_filter_settings, default_filter_rules_input
     >>> from validphys.loader import Loader
     >>> import validphys.cuts
