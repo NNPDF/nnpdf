@@ -412,12 +412,12 @@ class Rule:
                     **ns,
                 },
             )
-        except Exception as e:
+        except Exception as e: # pragma: no cover
             raise FatalRuleError(
                 f"Error when applying rule {self.rule_string!r}: {e}"
             ) from e
 
-    def __repr__(self):
+    def __repr__(self): # pragma: no cover
         return self.rule_string
 
     def _make_kinematics_dict(self, dataset, idat) -> dict:
