@@ -388,7 +388,7 @@ class Loader(LoaderBase):
     def check_dataset(self,
                       name,
                       *,
-                      rules,
+                      rules=None,
                       sysnum=None,
                       theoryid,
                       cfac=(),
