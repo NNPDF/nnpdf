@@ -461,7 +461,7 @@ def get_cuts_for_dataset(commondata, rules) -> list:
     >>> filter_defaults = default_filter_settings()
     >>> params = theory.get_description()
     >>> rule_list = [Rule(initial_data=i, defaults=filter_defaults, theory_parameters=params) for i in default_filter_rules_input()]
-    >>> get_cuts_for_dataset(cd, rules=rule_list, defaults=filter_defaults)
+    >>> get_cuts_for_dataset(cd, rules=rule_list)
     """
     dataset = commondata.load()
 
