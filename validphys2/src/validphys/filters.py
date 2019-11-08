@@ -351,23 +351,25 @@ class Rule:
         # We return None if the rule doesn't apply. This
         # is different to the case where the rule does apply,
         # but the point was cut out by the rule.
-        if (dataset.GetSetName() != self.dataset and
-            dataset.GetProc(idat) != self.process_type and
-            self.process_type != "DIS_ALL"):
+        if (
+            dataset.GetSetName() != self.dataset
+            and dataset.GetProc(idat) != self.process_type
+            and self.process_type != "DIS_ALL"
+        ):
             return None
 
         # Handle the generalised DIS cut
         if self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] != "DIS":
             return None
 
-        self._set_kinematics_dict(dataset, idat)
-        self._set_local_variables_dict(dataset, idat)
-
+        ns = self._make_point_namespace(dataset, idat)
         for parameter in self.theory_params:
             if parameter[0] == "PTO" and hasattr(self, "PTO"):
                 if parameter[1] not in self.PTO:
                     return None
-            elif hasattr(self, parameter[0]) and (getattr(self, parameter[0]) != parameter[1]):
+            elif hasattr(self, parameter[0]) and (
+                getattr(self, parameter[0]) != parameter[1]
+            ):
                 return None
 
         # Will return True if datapoint passes through the filter
@@ -378,32 +380,30 @@ class Rule:
                 {
                     **{"idat": idat, "central_value": central_value},
                     **self.defaults,
-                    **self.kinematics_dict,
-                    **self.local_variables_dict,
+                    **ns,
                 },
             )
         except Exception as e:
-            raise FatalRuleError(f"Error when applyin rule {self.rule_string!r}: {e}") from e
+            raise FatalRuleError(
+                f"Error when applying rule {self.rule_string!r}: {e}"
+            ) from e
 
     def __repr__(self):
         return self.rule_string
 
-    def _set_kinematics_dict(self, dataset, idat) -> dict:
+    def _make_kinematics_dict(self, dataset, idat) -> dict:
+        """Fill in a dictionary with the kinematics for each point"""
         kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
-        self.kinematics_dict = dict(zip(self.variables, kinematics))
+        return dict(zip(self.variables, kinematics))
 
-    def _set_local_variables_dict(self, dataset, idat) -> dict:
-        local_variables = {}
-        if not hasattr(self, "kinematics_dict"):
-            self._set_kinematics_dict(dataset, idat)
+    def _make_point_namespace(self, dataset, idat) -> dict:
+        """Return a dictionary with kinametics and local
+        variables evaluated for each point"""
+        ns = self._make_kinematics_dict(dataset, idat)
 
-        if hasattr(self, "local_variables"):
-            for key, value in self.local_variables.items():
-                local_variables[key] = eval(
-                    str(value),
-                    {**self.numpy_functions, **self.kinematics_dict, **local_variables},
-                )
-        self.local_variables_dict = local_variables
+        for key, value in self.local_variables.items():
+            ns[key] = eval(str(value), {**self.numpy_functions, **ns, **ns})
+        return ns
 
 def get_cuts_for_dataset(commondata, rules, defaults) -> list:
     """Function to generate a list containing the index
