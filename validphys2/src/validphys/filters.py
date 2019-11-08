@@ -369,7 +369,7 @@ class Rule:
                 f"Could not process rule {self.rule_string!r}: {e}"
             ) from e
         for name in self.rule.co_names:
-            if not name in ns:
+            if name not in ns:
                 raise RuleProcessingError(
                     f"Could not process rule {self.rule_string!r}: Unknown name {name!r}"
                 )
@@ -426,12 +426,12 @@ class Rule:
         return dict(zip(self.variables, kinematics))
 
     def _make_point_namespace(self, dataset, idat) -> dict:
-        """Return a dictionary with kinemetics and local
+        """Return a dictionary with kinematics and local
         variables evaluated for each point"""
         ns = self._make_kinematics_dict(dataset, idat)
 
         for key, value in self._local_variables_code.items():
-            ns[key] = eval(value, {**self.numpy_functions, **ns, **ns})
+            ns[key] = eval(value, {**self.numpy_functions, **ns})
         return ns
 
 def get_cuts_for_dataset(commondata, rules, defaults) -> list:
