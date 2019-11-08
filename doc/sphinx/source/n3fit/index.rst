@@ -7,3 +7,4 @@ n3fit
    introduction
    methodology
    usage
+   runcard_detailed

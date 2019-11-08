@@ -15,6 +15,7 @@ This document contains a more specific discussion about the choices currently im
 **Table of contents:**
 - [Introduction](#introduction)
 - [Neural network architecture](#neural-network-architecture)
+- [Preprocessing](#preprocessing)
 - [Optimizer](#optimizer)
 - [Stopping](#stopping-algorithm)
 - [Positivity](#positivity)
@@ -73,14 +74,20 @@ A big difference in comparison to `nnfit` is the number of neural networks invol
 ``` image:: figures/nn.png
 ```
 
-Preprocessing has been modified from fixed random range selection to fitted preprocessing in a **bounded range** (via gradient clipping). The preprocessing ranges are the same from NNPDF3.1.
-
 The momentum sum rules are implemented as a **neural network layer** which computes the normalization coefficients for each flavour as a sum over a fixed grid of x points. The number and density of points in x is selected in such way that the final quality of the integrals are at least permille level in comparison to 1D integration algorithms.
 
 The network initialization relies on modern deep learning techniques such as glorot uniform and normal (see [Keras initializers](https://keras.io/initializers/)), which have demonstrated to provide a faster convergence to the solution.
 
 ``` important:: Parameters like the number of layers, nodes, activation functions are hyper-paramters that require tuning.
 ```
+
+Preprocessing
+-------------
+Preprocessing has been modified from fixed random range selection to fitted preprocessing in a **bounded range** (via gradient clipping). The preprocessing ranges are defined in the  the same from NNPDF3.1 and are defined in the `fitting:basis` parameter in the nnpdf runcard.
+
+
+The old behaviour, in which the preprocessing is fixed randomly at the beginning of the fit, can be recovered by setting the `trainable` flag to false. See the [detailed runcard guide](runcard_detailed.html#preprocessing) for more information on how to define the preprocessing.
+
 
 Optimizer
 ---------
