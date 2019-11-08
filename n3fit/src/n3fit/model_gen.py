@@ -20,27 +20,34 @@ from n3fit.backends import base_layer_selector, concatenate, Lambda
 
 def observable_generator(
     spec_dict, positivity_initial=None, positivity_multiplier=1.05, positivity_steps=300
-):
+):  # pylint: disable=too-many-locals
     """
     This function generates the observable generator.
     It loads the fktable in the convolution layer (hadronic or DIS) and prepares the loss function.
     If the dataset is a positivity dataset acts in consequence.
 
-    # Arguments:
-        - `spec_dict`: a dictionary-like object containing the information of the observable
-        - `positivity_initial`: if given, set this number as the positivity multiplier for epoch 1
-        - `positivity_multiplier`: how much the positivity increases every 100 steps
-        - `positivity_steps`: if positivity_initial is not given, computes the initial by assuming we want,
-                          after 100**positivity_steps epochs, to have the lambda of the runcard
+    Parameters
+    ----------
+        `spec_dict`
+            a dictionary-like object containing the information of the observable
+        `positivity_initial`
+            if given, set this number as the positivity multiplier for epoch 1
+        `positivity_multiplier`
+            how much the positivity increases every 100 steps
+        `positivity_steps`
+            if positivity_initial is not given, computes the initial by assuming we want,
+            after 100**positivity_steps epochs, to have the lambda of the runcard
 
-    # Returns: a dictionary with:
-        - `inputs`: input layer
-        - `output`: output layer (unmasked)
-        - `loss` : loss function (unmasked)
-        - `output_tr`: output layer (training)
-        - `loss_tr` : loss function (training)
-        - `output_vl`: output layer (validation)
-        - `loss_vl` : loss function (validation)
+    Returns
+    ------
+        'layer_info` a dictionary with:
+            - `inputs`: input layer
+            - `output`: output layer (unmasked)
+            - `loss` : loss function (unmasked)
+            - `output_tr`: output layer (training)
+            - `loss_tr` : loss function (training)
+            - `output_vl`: output layer (validation)
+            - `loss_vl` : loss function (validation)
     """
     spec_name = spec_dict["name"]
     model_inputs = []
@@ -50,7 +57,7 @@ def observable_generator(
     for dataset_dict in spec_dict["datasets"]:
         dataname = dataset_dict["name"]
 
-        # Choose which kind of observable are we dealing with, since this will define the convolution
+        # Choose which kind of observable are we dealing with, since this defines the convolution
         if dataset_dict["hadronic"]:
             Obs_Layer = DY
         else:
@@ -80,7 +87,8 @@ def observable_generator(
 
         # Add the inputs to the lists of inputs of the model
         model_inputs += input_list
-        # Append the combination of observable and the operation to be applied to the list of model_obs
+        # Append a combination of the operation to be applied (op) to the list
+        # and the list of observable to which we want to applied the op
         model_obs.append((op, obs_list))
 
     def final_obs(pdf_layer):
@@ -105,12 +113,12 @@ def observable_generator(
             bool_mask=spec_dict["trmask"], c=initial_lambda, name=spec_name
         )
 
-        def out_tr(pdf_layer):
+        def out_tr_positivity(pdf_layer):
             return out_tr_mask(final_obs(pdf_layer))
 
         layer_info = {
             "inputs": model_inputs,
-            "output_tr": out_tr,
+            "output_tr": out_tr_positivity,
             "loss_tr": losses.l_positivity(),
         }
         return layer_info
@@ -158,30 +166,46 @@ def pdfNN_layer_generator(
     out=14,
     seed=None,
     dropout=0.0,
-):
+):  # pylint: disable=too-many-locals
     """
-    Generates the PDF model which takes as input a point in x (from 0 to 1) and outputs a basis of 14 PDFs.
-    It generates the preprocessing of the x into a set (x, log(x)), the arbitrary NN to fit the form of the PDF
+    Generates the PDF model which takes as input a point in x (from 0 to 1)
+    and outputs a basis of 14 PDFs.
+    It generates the preprocessing of the x into a set (x, log(x)),
+    the arbitrary NN to fit the form of the PDF
     and the preprocessing factors.
 
-    # Arguments:
-        - `inp`: dimension of the xgrid. If inp=2, turns the x point into a (x, log(x)) pair
-        - `nodes' : list of the number of nodes per layer of the PDF NN. Default: [15,8]
-        - `activation`: list of activation functions to apply to each layer. Default: ["tanh", "linear"]
-                        if the number of activation function does not match the number of layers, it will add
-                        copies of the first activation function found
-        - `initializer_name`: selects the initializer of the weights of the NN. Default: glorot_normal
-        - `layer_type`: selects the type of architecture of the NN. Default: dense
-        - `flav_info`: dictionary containing the information about each PDF (basis dictionary in the runcard)
-                       to be used by Preprocessing
-        - `out`: number of output flavours of the model
-        - `seed`: seed to initialize the NN
-        - `dropout`: rate of dropout layer by layer
+    Parameters
+    ----------
+        `inp`
+            dimension of the xgrid. If inp=2, turns the x point into a (x, log(x)) pair
+        `nodes'
+            list of the number of nodes per layer of the PDF NN. Default: [15,8]
+        `activation`
+            list of activation functions to apply to each layer. Default: ["tanh", "linear"]
+            if the number of activation function does not match the number of layers, it will add
+            copies of the first activation function found
+        `initializer_name`
+            selects the initializer of the weights of the NN. Default: glorot_normal
+        `layer_type`
+            selects the type of architecture of the NN. Default: dense
+        `flav_info`
+            dictionary containing the information about each PDF (basis dictionary in the runcard)
+            to be used by Preprocessing
+        `out`
+            number of output flavours of the model
+        `seed`
+            seed to initialize the NN
+        `dropout`
+            rate of dropout layer by layer
 
-    # Returns:
-        - `layer_pdf`: a function which, upon calling it with a tensor, will connect all PDF layers and output a tensor of size (batch_size, `out`)
-        - `dict_layers`: a dictionary containing some of the intermediate layers (necessary for debugging and to compute intermediate quantities)
-
+    Returns
+    -------
+        `layer_pdf`
+            a function which, upon calling it with a tensor,
+            will connect all PDF layers and output a tensor of size (batch_size, `out`)
+        `dict_layers`
+            a dictionary containing some of the intermediate layers
+            (necessary for debugging and to compute intermediate quantities)
     """
     if nodes is None:
         nodes = [15, 8]
