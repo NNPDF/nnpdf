@@ -174,6 +174,18 @@ def pdfNN_layer_generator(
     the arbitrary NN to fit the form of the PDF
     and the preprocessing factors.
 
+    `layer_type` defines the architecture of the Neural Network, currently
+    the following two options are implemented:
+        - `dense`
+            it will generate a densely connected networks where all nodes of layer n
+            are connected with all nodes of layer n+1 (and n-1), the output layer is
+            of the size of the last item in the `nodes` list (usually 8)
+        - `dense_per_flavour`
+            similar to `dense` but the nodes are disconnected in a per-flavour basis
+            This means at the end of the PDF (and before the preprocessing)
+            we have 8 (or whatever number) nodes just as before, but from the input
+            to the output the nodes are disconnected
+
     Parameters
     ----------
         `inp`
@@ -225,39 +237,78 @@ def pdfNN_layer_generator(
     else:  # Add the dropout to the second to last layer
         dropme = ln - 2
 
-    # Layer generation
-    dl = []
-    pre = inp
-    for i, (units, activation) in enumerate(zip(nodes, activations)):
-        if i == dropme and i != 0:
-            dl.append(base_layer_selector("dropout", rate=dropout))
 
+    # Define the basis size, in case we are using a layer type that takes into
+    # account the final basis size
+    # TODO: this should be defined by the choice of basis
+    basis_size = nodes[-1]
+
+
+    # Generation of the PDF NN
+    # The input is always either (x) or the pair (x, logx)
+    list_of_pdf_layers = []
+    nodes_in = inp
+    for i, (nodes_out, activation) in enumerate(zip(nodes, activations)):
+        # If we have dropout set up, adding a dropout layer to the list
+        if i == dropme and i != 0:
+            list_of_pdf_layers.append(base_layer_selector("dropout", rate=dropout))
+
+        # Select an initializer
         init = MetaLayer.select_initializer(initializer_name, seed=seed + i)
 
+        # Define the arguments defining the layer
         arguments = {
             "kernel_initializer": init,
-            "units": int(units),
+            "units": int(nodes_out),
             "activation": activation,
-            "input_shape": (pre,),
+            "input_shape": (nodes_in,),
+            "basis_size": int(basis_size)
         }
+
+        if i == len(activations)-1:
+            # TODO: obviously this is for debugging
+            arguments['concatenate_now'] = True
+            arguments['units'] = 1
+
         # Arguments that are not used by a given layer are just dropped
-        tmpl = base_layer_selector(layer_type, **arguments)
+        tmp_layer = base_layer_selector(layer_type, **arguments)
 
-        dl.append(tmpl)
-        pre = int(units)
+        list_of_pdf_layers.append(tmp_layer)
+        nodes_in = int(nodes_out)
 
+    # If the input is of type (x, logx)
+    # create a x --> (x, logx) layer to preppend to everything
     if inp == 2:
         add_log = Lambda(lambda x: concatenate([x, operations.op_log(x)], axis=1))
 
     def dense_me(x):
         if inp == 1:
-            curr_fun = dl[0](x)
+            curr_fun = list_of_pdf_layers[0](x)
         else:
-            curr_fun = dl[0](add_log(x))
+            curr_fun = list_of_pdf_layers[0](add_log(x))
 
-        for dense_layer in dl[1:]:
+        for dense_layer in list_of_pdf_layers[1:]:
             curr_fun = dense_layer(curr_fun)
         return curr_fun
+
+#     import keras.backend as K
+#     from keras.layers import Input
+#     from keras.models import Model
+#     import numpy as np
+#     arr = np.random.rand(1,40)
+#     inp = Input(tensor = K.constant(arr))
+#     out = dense_me(inp)
+#     modelito = Model(inp, out)
+#     modelito.summary()
+# 
+#     import ipdb
+#     ipdb.set_trace()
+
+
+
+
+
+
 
     # Preprocessing layer (will be multiplied to the last of the denses)
     preproseed = seed + ln
@@ -266,7 +317,7 @@ def pdfNN_layer_generator(
     )
 
     # Evolution layer
-    layer_evln = Rotation(input_shape=(pre,), output_dim=out)
+    layer_evln = Rotation(input_shape=(nodes_in,), output_dim=out)
 
     # Generate multiplier layer
     # multiplier = Multiply(name = "MultiplyPreproc")

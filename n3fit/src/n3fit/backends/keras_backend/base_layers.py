@@ -25,6 +25,38 @@ def LSTM_modified(**kwargs):
 
     return ReshapedLSTM
 
+def dense_per_flavour(basis_size = 8, concatenate_now = False, **dense_kwargs):
+    """
+    """
+
+    # Need to generate a Dense layer per element of basis_size
+    dense_basis = [base_layer_selector("dense", **dense_kwargs) for i in range(basis_size)]
+
+    def apply_dense(xinput):
+        """
+        The input can be one single layer of a list of layer.
+        If a single layer is given, all denses will "eat" it
+        If, instead, a list of layers is given it should a) be of `basis_size`
+        b) each dense of the basis will apply to only one of the layers
+        """
+        if isinstance(xinput, list): # TODO I'm not sure whether tensors will ever look as a duck
+            if len(xinput) != basis_size:
+                raise ValueError("You are evil")
+            results = []
+            for input_layer, den in zip(xinput, dense_basis):
+                results.append(den(input_layer))
+        else:
+            results = [den(xinput) for den in dense_basis]
+
+        # If we are in the last one, we need to concatenate
+        if concatenate_now:
+            output_layer = concatenate(results)
+            return output_layer
+        else:
+            return results
+
+    return apply_dense
+
 
 layers = {
     "dense": (
@@ -34,6 +66,17 @@ layers = {
             "kernel_initializer": "glorot_normal",
             "units": 5,
             "activation": "sigmoid",
+        },
+    ),
+    "dense_per_flavour" : (
+        dense_per_flavour,
+        {
+            "input_shape": (1,),
+            "kernel_initializer": "glorot_normal",
+            "units": 5,
+            "activation": "sigmoid",
+            "basis_size" : 8,
+            "concatenate_now" : False,
         },
     ),
     "LSTM": (
@@ -48,11 +91,15 @@ def base_layer_selector(layer_name, **kwargs):
     """
         Given a layer name, looks for it in the `layers` dictionary and returns an instance.
 
-        The layer dictionary defines a number of defaults but they can be overwritten/enhanced through kwargs
+        The layer dictionary defines a number of defaults
+        but they can be overwritten/enhanced through kwargs
 
-        # Arguments:
-            - `layer_name`: str with the name of the layer
-            - `**kwargs`: extra optional arguments to pass to the layer (beyond their defaults)
+        Parameters 
+        ----------
+            `layer_name
+                str with the name of the layer
+            `**kwargs`
+                extra optional arguments to pass to the layer (beyond their defaults)
     """
     try:
         layer_tuple = layers[layer_name]
