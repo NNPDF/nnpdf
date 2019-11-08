@@ -277,8 +277,8 @@ class Rule:
 
     def __init__(
         self,
-        *,
         initial_data: dict,
+        *,
         defaults: dict,
         theory_parameters: dict,
         loader=None,

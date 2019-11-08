@@ -882,13 +882,16 @@ class CoreConfig(configparser.Config):
         for details on the syntax"""
         return filter_rules
 
-    def produce_rules(self, theoryid, defaults, filter_rules=None):
+    def produce_rules(self, theoryid, use_cuts, defaults, filter_rules=None):
         """Produce filter rules based on the user defined input and defaults."""
         from validphys.filters import Rule, RuleProcessingError, default_filter_rules_input
 
         theory_parameters = theoryid.get_description()
 
         if filter_rules is None:
+            #Don't bother loading the rules if we are not using them.
+            if use_cuts is not CutsPolicy.INTERNAL:
+                return None
             filter_rules = default_filter_rules_input()
 
         try:
