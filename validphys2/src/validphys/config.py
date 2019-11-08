@@ -298,7 +298,6 @@ class CoreConfig(configparser.Config):
                      commondata,
                      use_cuts,
                      rules,
-                     defaults,
                      fit=None,
                      theoryid=None):
         """Obtain cuts for a given dataset input, based on the
@@ -321,7 +320,7 @@ class CoreConfig(configparser.Config):
             if not theoryid:
                 raise ConfigError(
                     "theoryid must be specified for internal cuts")
-            return self.loader.check_internal_cuts(commondata, rules, defaults)
+            return self.loader.check_internal_cuts(commondata, rules)
         elif use_cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE:
             cut_list = []
             _, nss = self.parse_from_(None, 'cuts_intersection_spec', write=False)
@@ -344,7 +343,6 @@ class CoreConfig(configparser.Config):
     def produce_dataset(self,
                         *,
                         rules,
-                        defaults,
                         dataset_input,
                         theoryid,
                         cuts,
@@ -364,7 +362,6 @@ class CoreConfig(configparser.Config):
         try:
             ds = self.loader.check_dataset(
                 rules=rules,
-                defaults=defaults,
                 name=name,
                 sysnum=sysnum,
                 theoryid=theoryid,
@@ -397,7 +394,6 @@ class CoreConfig(configparser.Config):
             theoryid,
             use_cuts,
             rules,
-            defaults,
             fit=None,
             check_plotting: bool = False,
             use_fitcommondata=False,
@@ -420,7 +416,6 @@ class CoreConfig(configparser.Config):
         cutinps = [
             self.produce_cuts(
                 rules=rules,
-                defaults=defaults,
                 commondata=cd,
                 use_cuts=use_cuts,
                 fit=fit,
@@ -432,7 +427,6 @@ class CoreConfig(configparser.Config):
         datasets = [
             self.produce_dataset(
                 rules=rules,
-                defaults=defaults,
                 dataset_input=dsinp,
                 theoryid=theoryid,
                 cuts=cuts,

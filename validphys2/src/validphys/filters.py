@@ -434,7 +434,7 @@ class Rule:
             ns[key] = eval(value, {**self.numpy_functions, **ns})
         return ns
 
-def get_cuts_for_dataset(commondata, rules, defaults) -> list:
+def get_cuts_for_dataset(commondata, rules) -> list:
     """Function to generate a list containing the index
     of all experimental points that passed kinematic
     cut rules stored in ./cuts/filters.yaml

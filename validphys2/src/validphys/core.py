@@ -335,16 +335,15 @@ class Cuts(TupleComp):
         return np.atleast_1d(np.loadtxt(self.path, dtype=int))
 
 class InternalCutsWrapper(TupleComp):
-    def __init__(self, commondata, rules, defaults):
+    def __init__(self, commondata, rules):
         self.rules = rules
-        self.defaults = defaults
         self.commondata = commondata
         super().__init__(commondata)
 
     def load(self):
         return np.atleast_1d(
             np.asarray(
-                filters.get_cuts_for_dataset(self.commondata, self.rules, self.defaults),
+                filters.get_cuts_for_dataset(self.commondata, self.rules),
                 dtype=int))
 
 class MatchedCuts(TupleComp):

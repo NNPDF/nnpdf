@@ -389,7 +389,6 @@ class Loader(LoaderBase):
                       name,
                       *,
                       rules,
-                      defaults,
                       sysnum=None,
                       theoryid,
                       cfac=(),
@@ -422,7 +421,7 @@ class Loader(LoaderBase):
             elif cuts is CutsPolicy.FROMFIT:
                 cuts = self.check_fit_cuts(name, fit)
             elif cuts is CutsPolicy.INTERNAL:
-                cuts = self.check_internal_cuts(commondata, theoryid, rules, defaults)
+                cuts = self.check_internal_cuts(commondata, rules)
             elif cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE:
                 raise LoaderError(f"Intersection cuts not supported in loader calls.")
 
@@ -452,8 +451,8 @@ class Loader(LoaderBase):
             return None
         return Cuts(setname, p)
 
-    def check_internal_cuts(self, commondata, rules, defaults):
-        return InternalCutsWrapper(commondata, rules, defaults)
+    def check_internal_cuts(self, commondata, rules):
+        return InternalCutsWrapper(commondata, rules)
 
     def check_vp_output_file(self, filename, extra_paths=('.',)):
         """Find a file in the vp-cache folder, or (with higher priority) in
