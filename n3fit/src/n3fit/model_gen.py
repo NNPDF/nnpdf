@@ -101,12 +101,18 @@ def observable_generator(
             initial_lambda = max_lambda / pow(positivity_multiplier, positivity_steps)
         else:
             initial_lambda = positivity_initial
-        out_tr_mask = Mask(bool_mask=spec_dict["trmask"], c=initial_lambda, name=spec_name)
+        out_tr_mask = Mask(
+            bool_mask=spec_dict["trmask"], c=initial_lambda, name=spec_name
+        )
 
         def out_tr(pdf_layer):
             return out_tr_mask(final_obs(pdf_layer))
 
-        layer_info = {"inputs": model_inputs, "output_tr": out_tr, "loss_tr": losses.l_positivity()}
+        layer_info = {
+            "inputs": model_inputs,
+            "output_tr": out_tr,
+            "loss_tr": losses.l_positivity(),
+        }
         return layer_info
 
     # Now generate the mask layers to be applied to training and validation
@@ -185,7 +191,9 @@ def pdfNN_layer_generator(
     ln = len(nodes)
     la = len(activations)
     if ln != la:
-        raise ValueError("Number of activation functions does not match number of layers @ model_gen.py")
+        raise ValueError(
+            "Number of activation functions does not match number of layers @ model_gen.py"
+        )
 
     # If dropout == 0, don't add dropout layer
     if dropout == 0.0:
@@ -202,7 +210,12 @@ def pdfNN_layer_generator(
 
         init = MetaLayer.select_initializer(initializer_name, seed=seed + i)
 
-        arguments = {"kernel_initializer": init, "units": int(units), "activation": activation, "input_shape": (pre,)}
+        arguments = {
+            "kernel_initializer": init,
+            "units": int(units),
+            "activation": activation,
+            "input_shape": (pre,),
+        }
         # Arguments that are not used by a given layer are just dropped
         tmpl = base_layer_selector(layer_type, **arguments)
 
@@ -224,7 +237,9 @@ def pdfNN_layer_generator(
 
     # Preprocessing layer (will be multiplied to the last of the denses)
     preproseed = seed + ln
-    layer_preproc = Preprocessing(input_shape=(1,), name="pdf_prepro", flav_info=flav_info, seed=preproseed)
+    layer_preproc = Preprocessing(
+        input_shape=(1,), name="pdf_prepro", flav_info=flav_info, seed=preproseed
+    )
 
     # Evolution layer
     layer_evln = Rotation(input_shape=(pre,), output_dim=out)
