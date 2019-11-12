@@ -184,10 +184,10 @@ class HyperScanner:
             max_lr=optimizer_dict.get("max_lr"),
         )
         self.positivity(
-            min_multiplier=stopping_dict.get("min_multiplier"),
-            max_multiplier=stopping_dict.get("max_multiplier"),
-            min_initial=stopping_dict.get("min_initial"),
-            max_initial=stopping_dict.get("max_initial"),
+            min_multiplier=positivity_dict.get("min_multiplier"),
+            max_multiplier=positivity_dict.get("max_multiplier"),
+            min_initial=positivity_dict.get("min_initial"),
+            max_initial=positivity_dict.get("max_initial"),
         )
         self.architecture(
             initializers=nn_dict.get("initializer"),
