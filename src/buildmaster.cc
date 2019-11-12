@@ -80,6 +80,7 @@
 #include "HERACOMB_SIGMARED_B.h"
 #include "ATLAS_hW_hbb_13TeV.h"
 #include "ATLAS_hZ_hbb_13TeV.h"
+#include "ATLASCMS_hxsec_RunI.h"
 #include "CMS_1JET_8TEV.h"
 #include "ATLAS_1JET_8TEV_R04.h"
 #include "ATLAS_1JET_8TEV_R06.h"
@@ -388,5 +389,6 @@ void InitCommonData(vector<CommonData*>& target)
   // *********************** HIGGS **********************************
   target.push_back(new ATLAS_hW_hbb_13TeVFilter());
   target.push_back(new ATLAS_hZ_hbb_13TeVFilter());
+  target.push_back(new ATLASCMS_hxsec_RunIFilter());
 
 }
