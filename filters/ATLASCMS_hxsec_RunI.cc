@@ -1,5 +1,51 @@
 /*
-Some description of the experiment
+References: 
+1) For the first 20 signal strenghts
+   [arXiv:1606.02266]
+   Measurements of the Higgs boson production and decay rates and constraints 
+   on its couplings from a combined ATLAS and CMS analysis of the LHC pp 
+   collision data at √s = 7 and 8 TeV
+   JHEP 1608 (2016) 045
+   https://hepdata.net/record/ins1468068
+2) For the last 2 signal strengths
+   [arXiv:1507.04548]
+   Measurements of the Higgs boson production and decay rates and coupling 
+   strengths using pp collision data at √s = 7 and 8 TeV in the ATLAS experiment
+   Eur.Phys.J. C76 (2016) no.1, 6
+
+Best fit values of $\sigma_i \cdot \mathrm{B}^f$ relative to their SM 
+prediction for each specific channel $i \to H\to f$, as obtained from the 
+generic parameterisation with 23 parameters for the combination of the ATLAS 
+and CMS measurements, using the $\sqrt{s}$=7 and 8 TeV data. 
+The order of the signal strengths is as follows
+ggF gamma gamma
+    Z Z
+    W W
+    tau tau
+VBF gamma gamma
+    Z Z
+    W W
+    tau tau
+Wh  gamma gamma
+    W W
+    tau tau
+    b b
+Zh  gamma gamma
+    W W
+    tau tau
+    b b
+tth gamma gamma
+    W W
+    tau tau
+    b b
+pp  Z gamm
+    mu mu
+The results are implemented their breakdown into statistical and systematic 
+components. The missing values are either not measured with a meaningful 
+precision and therefore not quoted, in the case of the $H\to ZZ$ decay channel 
+for the $WH$, $ZH$, and $ttH$ production processes, or not measured at all and 
+therefore fixed to their corresponding SM predictions, in the case of the 
+$H\to bb$ decay mode for the $gg\mathrm{F}$ and VBF production processes.
 */
 #include "ATLASCMS_hxsec_RunI.h"
 
