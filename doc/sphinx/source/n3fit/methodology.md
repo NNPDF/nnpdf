@@ -15,6 +15,7 @@ This document contains a more specific discussion about the choices currently im
 **Table of contents:**
 - [Introduction](#introduction)
 - [Neural network architecture](#neural-network-architecture)
+- [Preprocessing](#preprocessing)
 - [Optimizer](#optimizer)
 - [Stopping](#stopping-algorithm)
 - [Positivity](#positivity)
@@ -83,6 +84,14 @@ The network initialization relies on modern deep learning techniques such as glo
 
 ``` important:: Parameters like the number of layers, nodes, activation functions are hyper-paramters that require tuning.
 ```
+
+Preprocessing
+-------------
+Preprocessing has been modified from fixed random range selection to fitted preprocessing in a **bounded range** (via gradient clipping). The preprocessing ranges are defined in the  the same from NNPDF3.1 and are defined in the `fitting:basis` parameter in the nnpdf runcard.
+
+
+The old behaviour, in which the preprocessing is fixed randomly at the beginning of the fit, can be recovered by setting the `trainable` flag to false. See the [detailed runcard guide](runcard_detailed.html#preprocessing) for more information on how to define the preprocessing.
+
 
 Optimizer
 ---------

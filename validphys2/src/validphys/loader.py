@@ -385,9 +385,26 @@ class Loader(LoaderBase):
                    "'{p}' must be a folder").format(**locals())
         raise FitNotFound(msg)
 
+    def check_default_filter_rules(self, theoryid, defaults=None):
+        # avoid circular import
+        from validphys.filters import (
+            default_filter_settings,
+            default_filter_rules_input,
+            Rule,
+        )
+
+        th_params = theoryid.get_description()
+        if defaults is None:
+            defaults = default_filter_settings()
+        return [
+            Rule(inp, defaults=defaults, theory_parameters=th_params, loader=self)
+            for inp in default_filter_rules_input()
+        ]
+
     def check_dataset(self,
                       name,
                       *,
+                      rules=None,
                       sysnum=None,
                       theoryid,
                       cfac=(),
@@ -395,9 +412,7 @@ class Loader(LoaderBase):
                       cuts=CutsPolicy.INTERNAL,
                       use_fitcommondata=False,
                       fit=None,
-                      weight=1,
-                      q2min=None,
-                      w2min=None):
+                      weight=1):
 
         if not isinstance(theoryid, TheoryIDSpec):
             theoryid = self.check_theoryID(theoryid)
@@ -422,7 +437,9 @@ class Loader(LoaderBase):
             elif cuts is CutsPolicy.FROMFIT:
                 cuts = self.check_fit_cuts(name, fit)
             elif cuts is CutsPolicy.INTERNAL:
-                cuts = self.check_internal_cuts(commondata, theoryid, q2min, w2min)
+                if rules is None:
+                    rules = self.check_default_filter_rules(theoryid)
+                cuts = self.check_internal_cuts(commondata, rules)
             elif cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE:
                 raise LoaderError(f"Intersection cuts not supported in loader calls.")
 
@@ -452,12 +469,8 @@ class Loader(LoaderBase):
             return None
         return Cuts(setname, p)
 
-    def check_internal_cuts(self, commondata, theoryid, q2min, w2min):
-        if not isinstance(q2min, numbers.Number):
-            raise TypeError("q2min must be a number")
-        if not isinstance(w2min, numbers.Number):
-            raise TypeError("w2min must be a number")
-        return InternalCutsWrapper(commondata, theoryid, q2min, w2min)
+    def check_internal_cuts(self, commondata, rules):
+        return InternalCutsWrapper(commondata, rules)
 
     def check_vp_output_file(self, filename, extra_paths=('.',)):
         """Find a file in the vp-cache folder, or (with higher priority) in
