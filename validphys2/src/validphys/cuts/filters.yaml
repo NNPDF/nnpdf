@@ -104,7 +104,7 @@
     for which the asymmetry is small is unfeasible. So we can only fit points
     at NNLO for which the value of the asymmetry is not too small.
   PTO: NNLO
-  rule: "central_value >= 0.03"
+  rule: "fabs(central_value) >= 0.03"
 
 - dataset: ATLASZPT7TEV
   reason: Avoid the region where resummation effects become important.
