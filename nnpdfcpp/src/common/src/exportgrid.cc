@@ -96,7 +96,7 @@ ExportGrid::ExportGrid(PDFSet const& pdf,
     fRep(irep),
     fQ20(Q20),
     fXgrid(export_xgrid),
-    fLabels(pdf.fl_labels),
+    fLabels(pdf.fl_labels()),
     fPDFgrid()
 {
     // Populate initial scale x-grid
@@ -127,11 +127,27 @@ ExportGrid::ExportGrid(YAML::Node input):
     fXgrid(input["xgrid"].as<vector<double>>()),
     fLabels(input["labels"].as<array<string,14>>()),
     fPDFgrid()
-{  
+{
     for (auto xfx : input["pdfgrid"])
-        fPDFgrid.push_back(xfx.as<array<double,14>>());
+    {
+        std::array<double, 14> input = xfx.as<array<double,14>>();
+        if (fLabels != PDFSet::fl_labels())
+        {
+            std::array<double, 14> output;
+            for (size_t fl1 = 0; fl1 < PDFSet::fl_labels().size(); fl1++)
+                for (size_t fl2 = 0; fl2 < fLabels.size(); fl2++)
+                    if (PDFSet::fl_labels()[fl1] == fLabels[fl2])
+                    {
+                        output[fl1] = input[fl2];
+                        break;
+                    }
+            fPDFgrid.push_back(output);
+        }
+        else
+            fPDFgrid.push_back(input);
+    }
     if (fPDFgrid.size() != fXgrid.size())
-        throw RuntimeException("ExportGrid::ExportGrid", "Mismatch in x-grid and number of PDFgrid entries");        
+        throw RuntimeException("ExportGrid::ExportGrid", "Mismatch in x-grid and number of PDFgrid entries");
 }
 
 // Because yaml-cpp doesn't like scientific notation
