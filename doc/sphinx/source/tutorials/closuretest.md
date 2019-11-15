@@ -9,7 +9,7 @@ which aim to validate different components of the fitting toolchain.
 For more detailed information on the conception of closure tests, see the
 [NNPDF3.0 paper](https://arxiv.org/abs/1410.8849).
 
-each closure test defines a `fakepdf` in the runcard, which will be referred to
+Each closure test defines a `fakepdf` in the runcard, which will be referred to
 here as the underlying law. For the purpose of the closure test it can be thought
 of as being a proxy for the true PDF.
 
@@ -20,7 +20,7 @@ There are three levels of closure test:
     - no MC noise is added on top of the central data, each replica is fitting
     the same set of data
 2. level 1
-    - central pseudodata is shifted by some level 1 noise $\eta$ which is drawn
+    - central pseudodata is shifted by some level 1 noise η which is drawn
     from the experimental covariance matrix and represents
     'real' central values provided by experimentalists which do not sit exactly
     on the underlying law but are consistent with it according to their own
@@ -30,7 +30,7 @@ There are three levels of closure test:
     the spread on replicas can be thought of as the spread due to this split
     in addition to any methodological uncertainty
 3. level 2
-    - central pseudodata is shifted by level 1 noise $\eta$
+    - central pseudodata is shifted by level 1 noise η
     - MC noise is added on top of the level 1 shift
     - level 2 is a proxy of a real fit, where the underlying law is known
 
@@ -40,7 +40,7 @@ methodology is extracting this from shifted data, using closure test estimators.
 The main obvious disadvantage is that a pre-existing PDF may not be a suitable
 proxy for the underlying law.
 
-## Running a closure test with C++ tools
+## Preparing the closure test runcard
 
 To run a closure test we require a standard fit runcard. The main section
 which controls closure test specific behaviour can be found under `closuretest`.
@@ -59,13 +59,13 @@ closuretest:
   printpdf4gen: False # To print info on PDFs during minimization
 ```
 
-setting `fakedata` to `True` will cause closure test pseudodata to be generated
+Setting `fakedata` to `True` will cause closure test pseudodata to be generated
 and subsequently fitted. The PDf which the pseudodata will be generated from
 is specified by the `fakepdf` key. It is strongly advised to set the `fakepdf`
 and `t0pdfset`, found under `datacuts` to be the same PDF, unless specifically
 testing the impact of the t0 procedure.
 
-The `fakenoise` key specifies whether or not the level 1 shift $\eta$ will be
+The `fakenoise` key specifies whether or not the level 1 shift η will be
 add to the pseudodata during the filtering step, this is require for
 **both** level 1 and level 2 closure tests.
 
@@ -101,7 +101,7 @@ datacuts:
   ...
 ```
 
-finally we need to specify whether or not MC replicas will be generated in the
+Finally we need to specify whether or not MC replicas will be generated in the
 fit, differentiating between a level 1 and level 2 closure test. This can be achieved
 by setting `genrep` under `fitting` to be `True`
 
@@ -112,16 +112,22 @@ fitting:
   ...
 ```
 
-typically this flag will already be set to `True` since this is the default
+Typically this flag will already be set to `True` since this is the default
 option when running a standard NNPDF fit
 
-The process of running the closure test is then the same as [running a
-standard fit](./runafit.md).
+## Running a closure test
 
-## Running a closure test with `n3fit`
+### With `nnfit`
+
+The process of running the closure test is the same as [running a
+standard fit](./runafit.md), simply filter the runcard and run `nnfit` on the
+filter results
+
+### With `n3fit`
 
 Running a closure test with `n3fit` will require valid `n3fit` runcard, with
-the closure test settings modified as shown in the section above. The difference
+the closure test settings modified as shown
+[above](#preparing-the-closure-test-runcard). The difference
 between running a closure fit in `n3fit` and a standard fit is that the user is
 required to run `vp-setupfit` on the runcard before running `n3fit`. This is
 because the filtering of the data is required to generate the pseudodata central
@@ -132,5 +138,5 @@ $ vp-setupfit fitname.yml
 $ n3fit fitname.yml <replica_number>
 ```
 
-you will still need to evolve the fit and run `postfit` as with a standard
-`n3fit`.
+You will still need to evolve the fit and run `postfit` as with a standard
+`n3fit`, for more details [click here](../n3fit/usage.md).

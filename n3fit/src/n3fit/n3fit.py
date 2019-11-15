@@ -123,9 +123,9 @@ class N3FitConfig(Config):
             log.warning("using filtered closure data")
             if not (self.environment.output_path/'filter').is_dir():
                 raise ConfigError(
-                    f"Could not find filter result at "
+                    "Could not find filter result at "
                     f"{self.environment.output_path/'filter'} "
-                    f"to load commondata from. Did you run filter on the "
+                    "to load commondata from. Did you run filter on the "
                     "runcard?")
         return closurespec
 
