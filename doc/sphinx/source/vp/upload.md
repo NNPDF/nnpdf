@@ -27,6 +27,9 @@ In order to be able to upload files, the user must have a valid SSH key
 installed in the NNPDF server [access](../get-started/access), and the `rsync`
 command must be present.
 
+Several settings relevant to uploading files are configured in [profile
+files](nnprofile).
+
 ## Metadata
 
 Currently the following information is used to index the results:
