@@ -91,6 +91,7 @@
 #include "ATLAS_WJET_8TEV.h"
 #include "CMS_TTBAR_2D_DIFF_NORM.h"
 #include "CMS_TTBAR_2D_DIFF.h"
+#include "ATLAS_TTB_DIFF_8TEV_LJ.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -307,6 +308,10 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMS_TTBAR_2D_DIFF_PT_TRAPFilter());
   target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TRAPFilter());
   target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TTRAPFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TPTFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TRAPFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTRAPFilter());
+  //target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTMFilter());
 
   //***************************F2B******************************
 
