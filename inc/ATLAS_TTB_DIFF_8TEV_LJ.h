@@ -49,6 +49,52 @@ private:
   void ReadData();
 };
 
+//Normalised distributions
+class ATLAS_TTB_DIFF_8TEV_LJ_TPTNORMFilter : public CommonData
+{
+public: ATLAS_TTB_DIFF_8TEV_LJ_TPTNORMFilter():
+  CommonData("ATLAS_TTB_DIFF_8TEV_LJ_TPTNORM") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORMFilter : public CommonData
+{
+public: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORMFilter():
+  CommonData("ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORMFilter : public CommonData
+{
+public: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORMFilter():
+  CommonData("ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class ATLAS_TTB_DIFF_8TEV_LJ_TTMNORMFilter : public CommonData
+{
+public: ATLAS_TTB_DIFF_8TEV_LJ_TTMNORMFilter():
+  CommonData("ATLAS_TTB_DIFF_8TEV_LJ_TTMNORM") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+
+
+
+
+
+
+
+
+
 // ******************************************************
 // ******************************************************
 

@@ -311,7 +311,11 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TPTFilter());
   target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TRAPFilter());
   target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTRAPFilter());
-  //target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTMFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTMFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TPTNORMFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORMFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORMFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTMNORMFilter());
 
   //***************************F2B******************************
 
