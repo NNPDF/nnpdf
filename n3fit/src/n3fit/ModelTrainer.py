@@ -435,7 +435,7 @@ class ModelTrainer:
     def evaluate(self, stopping_object):
         """ Returns the training, validation and experimental chi2 """
         train_chi2 = stopping_object.evaluate_training(self.training["model"])
-        val_chi2 = stopping_object.validation.loss()
+        val_chi2, _ = stopping_object.validation.loss()
         exp_chi2 = self.experimental["model"].evaluate()["loss"] / self.experimental["ndata"]
         return train_chi2, val_chi2, exp_chi2
 

@@ -79,6 +79,7 @@ def fit(
     ###############
 
     from n3fit.stopwatch import StopWatch
+
     stopwatch = StopWatch()
     # All potentially backend dependent imports should come inside the fit function
     # so they can eventually be set from the runcard
@@ -86,7 +87,6 @@ def fit(
     from n3fit.io.writer import WriterWrapper
     from n3fit.backends import MetaModel
     import n3fit.io.reader as reader
-
 
     if hyperopt:
         import hyperopt as hyper
@@ -179,7 +179,9 @@ def fit(
         # reading the data up will be done by the model_trainer
         if fitting.get("load"):
             model_file = fitting.get("loadfile")
-            log.info(" > Loading the weights from previous training from %s", model_file)
+            log.info(
+                " > Loading the weights from previous training from %s", model_file
+            )
             if not os.path.isfile(model_file):
                 log.warning(" > Model file %s could not be found", model_file)
                 model_file = None
@@ -308,7 +310,9 @@ def fit(
 
         # Now write the data down
         training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
-        writer_wrapper.write_data(replica_path_set, output_path.name, true_chi2)
+        writer_wrapper.write_data(
+            replica_path_set, output_path.name, training_chi2, val_chi2, true_chi2
+        )
 
         # If the history of weights is active then loop over it
         # rewind the state back to every step and write down the results
@@ -316,8 +320,12 @@ def fit(
             stopping_object.history.rewind(step)
             new_path = output_path / f"history_step_{step}/replica_{replica_number}"
             # We need to recompute the experimental chi2 for this point
-            training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
-            writer_wrapper.write_data(new_path, output_path.name, exp_chi2)
+            training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(
+                stopping_object
+            )
+            writer_wrapper.write_data(
+                new_path, output_path.name, training_chi2, val_chi2, exp_chi2
+            )
 
         # So every time we want to capture output_path.name and addd a history_step_X
         # parallel to the nnfit folder
