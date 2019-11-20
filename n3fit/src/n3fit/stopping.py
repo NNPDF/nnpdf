@@ -15,7 +15,6 @@
 
 # TODO for TF 2.0
 #   - Save a proper reference to the part of the NN we want to store instead of the whole model
-#   - Make the return state from .fit and .evaluate consistent instead of relaying on keras
 
 import logging
 import numpy as np
@@ -63,6 +62,49 @@ def parse_ndata(all_data):
     if not vl_ndata_dict:
         vl_ndata_dict = tr_ndata_dict
     return tr_ndata_dict, vl_ndata_dict, pos_set
+
+def parse_losses(history_object, data, suffix = "loss"):
+    """
+    Receives an object containing the chi2
+    Usually a history object, but it can come in the form of a dictionary.
+
+    It loops over the dictionary and uses the npoints_data dictionary to
+    normalize the chi2 and return backs a tuple (`total`, `tr_chi2`)
+
+    # Arguments:
+        - `training_info`: history object
+        - `data`: dictionary with the name of the experiment to take into account
+                  and the number of datapoints of the experiment
+
+    # Returns:
+        - `total` : total value for the training loss
+        - `dict_chi2`: dictionary of {'expname' : loss }
+    """
+    try:
+        hobj = history_object.history
+    except AttributeError:  # So it works whether we pass the out our the out.history
+        hobj = history_object
+
+    # In the general case epochs = 1.
+    # In case that we are doing more than 1 epoch, take the average to smooth out
+    # fluctuations.
+    # This value is only used for printing output purposes so should not have any significance
+    dict_chi2 = {}
+    total_points = 0
+    total_loss = 0
+    for exp_name, npoints in data.items():
+        loss = np.mean(hobj[exp_name + f"_{suffix}"])
+        dict_chi2[exp_name] = loss / npoints
+        total_points += npoints
+        total_loss += loss
+
+    # By taking the loss from the history object we would be saving the total loss
+    # including positivity sets and (if added/enabled) regularizsers
+    # instead we want to restrict ourselves to the loss coming from experiments
+    # total_loss = np.mean(hobj["loss"]) / total_points
+    total_loss /= total_points
+    dict_chi2["total"] = total_loss
+    return total_loss, dict_chi2
 
 
 class FitState:
@@ -284,6 +326,24 @@ class Stopping:
         """ Epoch in which the fit is stopped """
         return self.history.final_epoch + 1
 
+    def evaluate_training(self, training_model):
+        """ Given the training model, returns a tuple
+        with the training chi2
+
+        Parameters
+        ----------
+            `training_model`
+                an object implementing the evaluate function
+
+        Returns
+        -------
+            `tr_chi2`
+                chi2 of the given `training_model`
+        """
+        training_info = training_model.evaluate()
+        tr_chi2, _ = parse_losses(training_info, self._tr_ndata)
+        return tr_chi2
+
     def monitor_chi2(self, training_info, epoch, print_stats=False):
         """
         Function to be called at the end of every epoch.
@@ -305,7 +365,7 @@ class Stopping:
         """
         # Step 1. Preprocess the event, count it towards the stopping degree
         #         parse the training information and check whether it is a good point
-        tr_chi2, all_tr = self._parse_training(training_info)
+        tr_chi2, all_tr = parse_losses(training_info, self._tr_ndata)
 
         if np.isnan(tr_chi2):
             log.warning(" > NaN found, stopping activated")
@@ -361,47 +421,6 @@ class Stopping:
 
         total_str += f"\nValidation loss at this point: {vl_loss}"
         log.info(total_str)
-
-    def _parse_training(self, training_info):
-        """
-        Receives an object containg the training chi2.
-        Usually a history object, but it can come in the form of a dictionary.
-
-        It loops over the dictionary and uses the npoints_data dictionary to
-        normalize the chi2 and return backs a tuple (`total`, `tr_chi2`)
-
-        # Arguments:
-            - `training_info`: history object
-
-        # Returns:
-            - `total` : total value for the training loss
-            - `tr_chi2`: dictionary of {'expname' : loss }
-        """
-        try:
-            hobj = training_info.history
-        except AttributeError:  # So it works whether we pass the out our the out.history
-            hobj = training_info
-
-        # In the general case epochs = 1.
-        # In case that we are doing more than 1 epoch, take the average to smooth out
-        # fluctuations.
-        # This value is only used for printing output purposes so should not have any significance
-        tr_chi2 = {}
-        total_points = 0
-        total_loss = 0
-        for exp_name, npoints in self._tr_ndata.items():
-            loss = np.mean(hobj[exp_name + "_loss"])
-            tr_chi2[exp_name] = loss / npoints
-            total_points += npoints
-            total_loss += loss
-
-        # By taking the loss from the history object we would be saving the total loss
-        # including positivity sets and (if added/enabled) regularizsers
-        # instead we want to restrict ourselves to the loss coming from experiments
-        # total_loss = np.mean(hobj["loss"]) / total_points
-        total_loss /= total_points
-        tr_chi2["total"] = total_loss
-        return total_loss, tr_chi2
 
     def stop_here(self):
         """ Returns the stopping status
@@ -477,8 +496,6 @@ class Validation:
         self.model = model
         self.verbose = verbose
         self.ndata_dict = ndata_dict
-        # If there are extra losses they will appear at the end of the list, so we want to restrict
-        # ourselves to the chi2, which means we want to go up to the number of exp. with validation
         self.n_val_exp = len(ndata_dict)
 
     def _compute_validation_loss(self):
@@ -494,27 +511,8 @@ class Validation:
             - `total_loss`: total vale for the validation loss
             - `vl_dict`: dictionary containing a map of experiment names and loss
         """
-        # The variable vl_list is a list of all losses of the model, where the first element
-        # is sum of all other elements
-        loss_list = self.model.evaluate(verbose=self.verbose)
-
-        # This loop relies on the information that comes through the input dict to be accurate
-        # because since (at the moment) the list that evaluate returns has no names, we need to
-        # assume they come in the correct order (same order as the traiing losses)
-        vl_dict = {}
-        total_points = 0
-        total_loss = 0
-        for loss, (exp_name, npoints) in zip(
-            loss_list[1 : 1 + self.n_val_exp], self.ndata_dict.items()
-        ):
-            vl_dict[exp_name] = loss / npoints
-            total_loss += loss
-            total_points += npoints
-
-        total_loss /= total_points
-        vl_dict["total"] = total_loss
-
-        return total_loss, vl_dict
+        loss_dict = self.model.evaluate(verbose=self.verbose)
+        return parse_losses(loss_dict, self.ndata_dict, suffix = "val_loss")
 
     @property
     def weights(self):

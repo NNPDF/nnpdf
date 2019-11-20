@@ -307,6 +307,7 @@ def fit(
         )
 
         # Now write the data down
+        training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
         writer_wrapper.write_data(replica_path_set, output_path.name, true_chi2)
 
         # If the history of weights is active then loop over it
@@ -315,10 +316,7 @@ def fit(
             stopping_object.history.rewind(step)
             new_path = output_path / f"history_step_{step}/replica_{replica_number}"
             # We need to recompute the experimental chi2 for this point
-            exp_chi2 = (
-                result["experimental"]["model"].evaluate()[0]
-                / result["experimental"]["ndata"]
-            )
+            training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
             writer_wrapper.write_data(new_path, output_path.name, exp_chi2)
 
         # So every time we want to capture output_path.name and addd a history_step_X

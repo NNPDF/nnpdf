@@ -432,6 +432,13 @@ class ModelTrainer:
                 for key, value in item.items():
                     params[key] = value
 
+    def evaluate(self, stopping_object):
+        """ Returns the training, validation and experimental chi2 """
+        train_chi2 = stopping_object.evaluate_training(self.training["model"])
+        val_chi2 = stopping_object.validation.loss()
+        exp_chi2 = self.experimental["model"].evaluate()["loss"] / self.experimental["ndata"]
+        return train_chi2, val_chi2, exp_chi2
+
     def hyperparametizable(self, params):
         """
         Wrapper around all the functions defining the fit.
@@ -506,22 +513,14 @@ class ModelTrainer:
         validation_loss = stopping_object.vl_loss
 
         # Compute experimental loss
-        exp_final = self.experimental["model"].evaluate()
-        try:
-            experimental_loss = exp_final[0] / self.experimental["ndata"]
-        except IndexError:
-            experimental_loss = exp_final / self.experimental["ndata"]
+        experimental_loss = self.experimental["model"].evaluate()["loss"] / self.experimental["ndata"]
 
         # Compute the testing loss if it was given
         if self.test_dict:
             # Generate the 'true' chi2 with the experimental model
             # but only for models that were stopped
             target_model = self.test_dict["model"]
-            out_final = target_model.evaluate(verbose=False)
-            try:
-                testing_loss = out_final[0] / self.test_dict["ndata"]
-            except IndexError:
-                testing_loss = out_final / self.test_dict["ndata"]
+            testing_loss = target_model.evaluate(verbose=False)["loss"] / self.test_dict["ndata"]
         else:
             testing_loss = 0.0
 

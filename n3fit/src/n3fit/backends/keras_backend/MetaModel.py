@@ -102,18 +102,25 @@ class MetaModel(Model):
         when there is only one output we copy it twice into a list so it behaves the same
 
         # Returns:
-            - `loss_list`: a list with al the losses of the system
+            - `loss_dict`: a dictionary with al the losses of the system
         """
-        # TODO: make it into a dictionary of {'output_layer_name' : loss}
-        #                          so it looks more similar to the output of .fit
         if self.has_dataset:
             result = super().evaluate(x=None, y=None, steps=1, **kwargs)
         else:
-            result = super().evaluate()
+            result = super().evaluate(**kwargs)
+
+        # Get the name of all losses
+        metricas = self.metrics_names
         if isinstance(result, float):
-            return [result, result]
-        else:
-            return result
+            # If there is only one we have to game it
+            result = [result, result]
+            # Get the name of the last layer before the loss
+            last_name = self.layers[-1].name
+            metricas.append(f"{last_name}_loss")
+
+        # Now make it into a dictionary
+        loss_dict = dict(zip(metricas, result))
+        return loss_dict
 
     def compile(
         self, optimizer_name="RMSprop", learning_rate=0.05, loss=None, target_output=None, **kwargs
