@@ -99,10 +99,11 @@ class MetaModel(Model):
         In Keras the first element of the list is the total loss (sum of all other elements)
         but, if there is only one output it returns a float instead.
         In order to fix this inconsistent behaviour,
-        when there is only one output we copy it twice into a list so it behaves the same
+        when there is only one output we copy it twice into a list so it behaves the same as fit
 
         # Returns:
-            - `loss_dict`: a dictionary with al the losses of the system
+            - `loss_dict`: a dictionary with all the output layers of the model
+                            each mapped to the partial loss
         """
         if self.has_dataset:
             result = super().evaluate(x=None, y=None, steps=1, **kwargs)
@@ -118,7 +119,7 @@ class MetaModel(Model):
             last_name = self.layers[-1].name
             metricas.append(f"{last_name}_loss")
 
-        # Now make it into a dictionary
+        # Now make it into a dictionary so it looks like the history object
         loss_dict = dict(zip(metricas, result))
         return loss_dict
 

@@ -12,27 +12,30 @@ import numpy as np
 from reportengine.compat import yaml
 from n3fit.msr import compute_arclength
 
+
 class WriterWrapper:
-    def __init__(self, replica_number, pdf_function, stopping_object, fitbasis_layer, q2, timings):
+    def __init__(
+        self, replica_number, pdf_function, stopping_object, fitbasis_layer, q2, timings
+    ):
         """
         Initializes the writer for one given replica. This is decoupled from the writing
         of the fit in order to fix some of the variables which would be, in principle,
         be shared by several different history objects.
 
         Parameters
-	----------
+        ----------
             `replica_number`
                 index of the replica
             `pdf_function`
-		function to evaluate with a grid in x to generate a pdf
+                function to evaluate with a grid in x to generate a pdf
             `stopping_object`
-		a stopping.Validation object
+                a stopping.Validation object
             `fitbasis_layer`
-		the layer corresponding to the fitbasis, necessary to compute the arclength
+                the layer corresponding to the fitbasis, necessary to compute the arclength
             `q2`
-		q^2 of the fit
+                q^2 of the fit
             `timings`
-		dictionary of the timing of the different events that happened
+                dictionary of the timing of the different events that happened
         """
         self.replica_number = replica_number
         self.pdf_function = pdf_function
@@ -46,17 +49,17 @@ class WriterWrapper:
         Wrapper around the `storefit` function.
 
         Parameters
-	----------
+        ----------
             `replica_path_set`
-		path for the replica
+                path for the replica
             `fitname`
-		name of the fit
+                name of the fit
             `tr_chi2`
-		training chi2
+                training chi2
             `vl_chi2`
-		validation chi2
+                validation chi2
             `true_chi2`
-	        chi2 of the replica to the central experimental data
+                chi2 of the replica to the central experimental data
         """
         # Compute the arclengths
         arc_lengths = compute_arclength(self.fitbasis)
@@ -240,4 +243,4 @@ def storefit(
 
     # create .time file
     with open(f"{replica_path}/{fitname}.time", "w") as fs:
-        json.dump(timings, fs, indent = 2)
+        json.dump(timings, fs, indent=2)

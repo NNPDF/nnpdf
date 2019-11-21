@@ -433,7 +433,22 @@ class ModelTrainer:
                     params[key] = value
 
     def evaluate(self, stopping_object):
-        """ Returns the training, validation and experimental chi2 """
+        """ Returns the training, validation and experimental chi2
+        Needs to receive a `stopping_object` in order to select the part of the
+        training and the validation which are actually `chi2` and not part of the penalty
+
+        Parameters
+        ----------
+            `stopping_object`
+                A Stopping intance which will have associated a validation model and the
+                list of output layers that should contribute to the training chi2
+
+        Returns
+        -------
+            `train_chi2`: chi2 of the trainining set
+            `val_chi2` : chi2 of the validation set
+            `exp_chi2`: chi2 of the experimental data (without replica or tr/vl split)
+        """
         train_chi2 = stopping_object.evaluate_training(self.training["model"])
         val_chi2, _ = stopping_object.validation.loss()
         exp_chi2 = self.experimental["model"].evaluate()["loss"] / self.experimental["ndata"]

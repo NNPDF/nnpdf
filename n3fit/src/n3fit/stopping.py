@@ -499,9 +499,6 @@ class Validation:
         self.n_val_exp = len(ndata_dict)
 
     def _compute_validation_loss(self):
-        # TODO: most of the functionality of this function is equal to that of parse_training
-        #       and has no need for self.stuff BUT it is necessary to deal with the TODO at the
-        #       beginning of the file first
         """
         Evaluates the validation model and returns a tuple (`total_loss`, `vl_dict`)
         with the information for the validation loss by experimenet normalized to the
