@@ -42,7 +42,7 @@ providers = [
              'validphys.theorycovariance.tests',
              'validphys.replica_selector',
              'validphys.MCgen_checks',
-             'validphys.closure',
+             'validphys.closuretest',
              'validphys.theoryinfo',
              'reportengine.report'
             ]

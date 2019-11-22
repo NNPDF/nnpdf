@@ -23,18 +23,22 @@ Errorbars from performing bootstrap sample upon replicas
 
 {@ plot_fits_bootstrap_bias @}
 ### Table
-{@ biases_table(show_total=True) @}
+{@ fits_bootstrap_bias_table @}
 
-## $\phi$ by experiment
+## variance by experiment
 ### Plot
 
 Errorbars from performing bootstrap sample upon replicas
 
-{@ plot_phi_scatter_dataspecs @}
+{@ plot_fits_bootstrap_variance @}
 ### Table
-{@ fits_experiments_phi_table @}
+{@ fits_bootstrap_variance_table @}
 
 ## $\Delta_{\chi^{2}}$
 {@ plot_delta_chi2 @}
 ### By experiment
 {@ delta_chi2_table @}
+
+PDF plots
+---------
+[Detailed plots]({@current::fitunderlyinglaw::pdf_report report@})
