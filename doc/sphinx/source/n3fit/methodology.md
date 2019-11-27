@@ -69,7 +69,7 @@ Neural network architecture
 
 The main advantage of using a modern deep learning backend such as Keras/Tensorflow consists in the possibility to change the neural network architecture quickly as the developer is not forced to fine tune the code in order to achieve efficient memory management and PDF convolution performance.
 
-The current `n3fit` code supports sequential dense networks with custom number of layers, nodes, activation functions and initializers from [Keras](https://keras.io/).
+The current `n3fit` code supports feed-forward multilayer perceptron neural networks (also known as sequential dense networks in ML code frameworks) with custom number of layers, nodes, activation functions and initializers from [Keras](https://keras.io/).
 
 A big difference in comparison to `nnfit` is the number of neural networks involved in the fit. Here we use a **single neural network** model which maps the input (x, log x) to 8 outputs, nominally they correspond exactly the 8 PDF flavours defined in NNPDF3.1.
 
@@ -78,7 +78,7 @@ A big difference in comparison to `nnfit` is the number of neural networks invol
 
 Preprocessing has been modified from fixed random range selection to fitted preprocessing in a **bounded range** by constraining the exponents to have the norm between a lower bound and an upper bound. The preprocessing ranges are the same used in NNPDF3.1 and thus based on the evolution basis with intrinsic charm.
 
-The momentum sum rules are implemented as a **neural network layer** which computes the normalization coefficients for each flavour as a sum over a fixed grid of x points. The number and density of points in x is selected in such way that the final quality of the integrals are at least permille level in comparison to 1D integration algorithms.
+The momentum sum rules are implemented as a **neural network layer** which computes the normalization coefficients for each flavour. This layer approximates the integral with a sum over a fixed grid of points in x. This approach guarantees that the model will always be normalized, even if the network parameters are changed, and therefore the gradient descent updates are performed correctly. The number and density of points in x is selected in such way that the final quality of the integrals are at least permille level in comparison to 1D integration algorithms.
 
 The network initialization relies on modern deep learning techniques such as glorot uniform and normal (see [Keras initializers](https://keras.io/initializers/)), which have demonstrated to provide a faster convergence to the solution.
 
@@ -87,7 +87,7 @@ The network initialization relies on modern deep learning techniques such as glo
 
 Preprocessing
 -------------
-Preprocessing has been modified from fixed random range selection to fitted preprocessing in a **bounded range** (via gradient clipping). The preprocessing ranges are defined in the  the same from NNPDF3.1 and are defined in the `fitting:basis` parameter in the nnpdf runcard.
+Preprocessing has been modified from fixed random range selection to fitted preprocessing in a **bounded range**. The preprocessing ranges are defined in the  the same from NNPDF3.1 and are defined in the `fitting:basis` parameter in the nnpdf runcard.
 
 
 The old behaviour, in which the preprocessing is fixed randomly at the beginning of the fit, can be recovered by setting the `trainable` flag to false. See the [detailed runcard guide](runcard_detailed.html#preprocessing) for more information on how to define the preprocessing.
