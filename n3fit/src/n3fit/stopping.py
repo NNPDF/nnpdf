@@ -60,7 +60,7 @@ def parse_ndata(all_data):
         if dictionary.get("positivity"):
             pos_set.append(exp_name)
     if not vl_ndata_dict:
-        vl_ndata_dict = tr_ndata_dict
+        vl_ndata_dict = None
     return tr_ndata_dict, vl_ndata_dict, pos_set
 
 def parse_losses(history_object, data, suffix = "loss"):
@@ -294,7 +294,10 @@ class Stopping:
         self._tr_ndata, vl_ndata, pos_sets = parse_ndata(all_data_dicts)
 
         # Create the Validation, Positivity and History objects
-        self.validation = Validation(validation_model, vl_ndata)
+        if vl_ndata is None:
+            self.validation = Validation(validation_model, self._tr_ndata, no_validation = True)
+        else:
+            self.validation = Validation(validation_model, vl_ndata)
         self.positivity = Positivity(threshold_positivity, pos_sets)
         self.history = FitHistory(self.validation, save_weights_each=save_weights_each)
 
@@ -492,11 +495,15 @@ class Validation:
                        (and compiled with the validation data and covmat)
     """
 
-    def __init__(self, model, ndata_dict, verbose=False):
+    def __init__(self, model, ndata_dict, verbose=False, no_validation = False):
         self.model = model
         self.verbose = verbose
         self.ndata_dict = ndata_dict
         self.n_val_exp = len(ndata_dict)
+        if no_validation:
+            self.suffix = "loss"
+        else:
+            self.suffix = "val_loss"
 
     def _compute_validation_loss(self):
         """
@@ -509,7 +516,7 @@ class Validation:
             - `vl_dict`: dictionary containing a map of experiment names and loss
         """
         loss_dict = self.model.evaluate(verbose=self.verbose)
-        return parse_losses(loss_dict, self.ndata_dict, suffix = "val_loss")
+        return parse_losses(loss_dict, self.ndata_dict, suffix = self.suffix)
 
     @property
     def weights(self):
