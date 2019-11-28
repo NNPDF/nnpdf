@@ -51,7 +51,7 @@ class WriterWrapper:
         Parameters
         ----------
             `replica_path_set`
-                path for the replica
+                full path for the replica, ex: `${PWD}/runcard_name/nnfit/replica_1`
             `fitname`
                 name of the fit
             `tr_chi2`

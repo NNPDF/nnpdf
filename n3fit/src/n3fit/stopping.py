@@ -2,6 +2,7 @@
     Module containing the classes related to the stopping alogirthm
 
     In this module there are four Classes:
+
     - FitState: this class contains the information of the fit
             for a given point in history
     - FitHistory: this class contains the information necessary
@@ -11,6 +12,22 @@
     - Stopping: this class monitors the chi2 of the validation
             and training sets and decides when to stop
     - Positivity: Decides whether a given point fullfills the positivity conditions
+    - Validation: Controls the NNPDF cross-validation algorithm
+
+    Note:
+        There are situations in which the validation set is empty, in those cases
+    the training set is used as validation set.
+    This implies several changes in the behaviour of this class as the training chi2 will
+    now be monitored for stability.
+        In order to parse the set of loss functions coming from the backend::MetaModel,
+    the function `parse_losses` relies on the fact that they are all suffixed with `_loss`
+    the validation case, instead, is suffixed with `val_loss`. In the particular casse in
+    which both training and validation model correspond to the same backend::MetaModel only
+    the `_loss` suffix can be found. This is taken into account by the class `Stopping`
+    which will tell `Validation` that no validation set was found and that the training is to
+    be used instead.
+
+
 """
 
 # TODO for TF 2.0
@@ -37,10 +54,13 @@ def parse_ndata(all_data):
     into a dictionary containing only the name of the experiments
     together with the number of points.
 
-    # Return:
-        - `tr_ndata`: dictionary of {'exp' : ndata}
-        - `vl_ndata`: dictionary of {'exp' : ndata}
-        - `pos_set`: list of the names of the positivity sets
+    Returns
+    -------
+        `tr_ndata`
+            dictionary of {'exp' : ndata}
+        `vl_ndata`
+            dictionary of {'exp' : ndata}
+        `pos_set`: list of the names of the positivity sets
 
     Note: if there is no validation (total number of val points == 0)
     then vl_ndata will point to tr_ndata
@@ -63,7 +83,8 @@ def parse_ndata(all_data):
         vl_ndata_dict = None
     return tr_ndata_dict, vl_ndata_dict, pos_set
 
-def parse_losses(history_object, data, suffix = "loss"):
+
+def parse_losses(history_object, data, suffix="loss"):
     """
     Receives an object containing the chi2
     Usually a history object, but it can come in the form of a dictionary.
@@ -71,14 +92,20 @@ def parse_losses(history_object, data, suffix = "loss"):
     It loops over the dictionary and uses the npoints_data dictionary to
     normalize the chi2 and return backs a tuple (`total`, `tr_chi2`)
 
-    # Arguments:
-        - `training_info`: history object
-        - `data`: dictionary with the name of the experiment to take into account
-                  and the number of datapoints of the experiment
+    Parameters
+    ----------
+        `training_info`
+            history object
+        `data`
+            dictionary with the name of the experiment to take into account
+            and the number of datapoints of the experiment
 
-    # Returns:
-        - `total` : total value for the training loss
-        - `dict_chi2`: dictionary of {'expname' : loss }
+    Returns
+    -------
+        `total`
+            total value for the training loss
+        `dict_chi2`
+            dictionary of {'expname' : loss }
     """
     try:
         hobj = history_object.history
@@ -115,11 +142,15 @@ class FitState:
         to a specific point in time if we are interested on reloading
         (otherwise the relevant variables stay empty to save memory)
 
-        # Arguments:
-            - `all_tr_chi2`: all chi2 from training sets
-            - `all_vl_chi2`: all chi2 from validation sets
-            - `training_info`: return state from NN training
-                        can include positivity sets, penalties, etc
+        Parameters
+        ----------
+            `all_tr_chi2`
+                all chi2 from training sets
+            `all_vl_chi2`
+                all chi2 from validation sets
+            `training_info`
+                return state from NN training
+                can include positivity sets, penalties, etc
     """
 
     def __init__(self, all_tr_chi2, all_vl_chi2, training_info):
@@ -161,11 +192,13 @@ class FitHistory:
         When iterated it will rewind the fit to each of the point in history
         that have been saved.
 
-        # Arguments:
-            - `validation_model`: a reference to a Validaton object
-                    this is necessary at the moment in order to save the weights
-            - `save_weights_each`: if given,
-                    it will save a snapshot of the fit every  `save_weights_each` epochs
+        Parameters
+        ----------
+            `validation_model`
+                a reference to a Validaton object
+                this is necessary at the moment in order to save the weights
+            `save_weights_each`
+                if given, it will save a snapshot of the fit every  `save_weights_each` epochs
     """
 
     def __init__(self, validation_model, save_weights_each=None):
@@ -229,9 +262,12 @@ class FitHistory:
         Every `save_weights_each` (if set) saves a snapshot of the current best fit into
         the fitstate
 
-        # Arguments:
-            - `fitstate`: a fitstate object to save
-            - `epoch`: the current epoch of the fit
+        Parameters
+        ----------
+            `fitstate`
+                a fitstate object to save
+            `epoch`
+                the current epoch of the fit
         """
         self.final_epoch = epoch
         self._history.append(fitstate)
@@ -241,7 +277,7 @@ class FitHistory:
                 fitstate.register_weigths(self._weights, self.best_epoch)
                 self.reloadable_history.append(fitstate)
 
-    def reload(self, weights = None):
+    def reload(self, weights=None):
         """ Reloads the best fit weights into the model
         if there are models to be reloaded
         A set of weights can be enforced as an optional argument
@@ -256,10 +292,11 @@ class FitHistory:
         """
         fitstate = self.reloadable_history[step]
         historic_weights = fitstate.weights
-        self.reload(weights = historic_weights)
+        self.reload(weights=historic_weights)
         self.best_epoch = fitstate.best_epoch
         self.final_epoch = (step + 1) * self._save_weights_each - 1
         # -1 because we are saving the epochs starting at 0
+
 
 class Stopping:
     """
@@ -268,16 +305,24 @@ class Stopping:
         Note, if the total number of points in the validation dictionary is None, it is assumed
         the validation_model actually corresponds to the training model.
 
-        # Arguments:
-            - `validation_model`: the model with the validation mask applied
-                                  (and compiled with the validation data and covmat)
-            - `all_data_dict`: list containg all dictionaries containing all information about
-                              the experiments/validation/regularizers/etc to be parsed by Stopping
-            - `threshold_positivity`: maximum value allowed for the sum of all positivity losses
-            - `total_epochs`: total number of epochs
-            - `stopping_patience`: how many epochs to wait for the validation loss to improve
-            - `dont_stop`: dont care about early stopping
-            - `save_weights_each`: every how many epochs to save a snapshot of the fit
+        Parameters
+        ----------
+            `validation_model`
+                the model with the validation mask applied
+                (and compiled with the validation data and covmat)
+            `all_data_dict`
+                list containg all dictionaries containing all information about
+                the experiments/validation/regularizers/etc to be parsed by Stopping
+            `threshold_positivity`
+                maximum value allowed for the sum of all positivity losses
+            `total_epochs`
+                total number of epochs
+            `stopping_patience`
+                how many epochs to wait for the validation loss to improve
+            `dont_stop`
+                dont care about early stopping
+            `save_weights_each`
+                every how many epochs to save a snapshot of the fit
     """
 
     def __init__(
@@ -295,7 +340,9 @@ class Stopping:
 
         # Create the Validation, Positivity and History objects
         if vl_ndata is None:
-            self.validation = Validation(validation_model, self._tr_ndata, no_validation = True)
+            self.validation = Validation(
+                validation_model, self._tr_ndata, no_validation=True
+            )
         else:
             self.validation = Validation(validation_model, vl_ndata)
         self.positivity = Positivity(threshold_positivity, pos_sets)
@@ -359,12 +406,17 @@ class Stopping:
 
         Returns True if the run seems ok and False if a NaN is found
 
-        # Arguments:
-            - `training_info`: the output of a .fit() run
-            - `epoch`: the index of the epoch
+        Parameters
+        ----------
+            `training_info`
+                the output of a .fit() run
+            `epoch`
+                the index of the epoch
 
-        # Returns:
-            - `pass_ok`: true/false according to the status of the run
+        Returns
+        -------
+            `pass_ok`
+                true/false according to the status of the run
         """
         # Step 1. Preprocess the event, count it towards the stopping degree
         #         parse the training information and check whether it is a good point
@@ -449,11 +501,15 @@ class Stopping:
         Returns a list of log-string with the status of the fit
         every `log_each` epochs
 
-        # Arguments:
-            - `log_each`: every how many epochs to print the log
+        Parameters
+        ----------
+            `log_each`
+                every how many epochs to print the log
 
-        # Returns:
-            - `file_list`: a list of string to be printed as `chi2exps.log`
+        Returns
+        -------
+            `file_list`
+                a list of string to be printed as `chi2exps.log`
         """
         final_epoch = self.history.final_epoch
         file_list = []
@@ -490,12 +546,14 @@ class Validation:
         In general for any points considered here there will accompanying points from the
         same dataset being included in the fitting.
 
-        # Arguments:
-            - `model`: the model with the validation mask applied
-                       (and compiled with the validation data and covmat)
+        Parameters
+        ----------
+            `model`
+                the model with the validation mask applied
+                (and compiled with the validation data and covmat)
     """
 
-    def __init__(self, model, ndata_dict, verbose=False, no_validation = False):
+    def __init__(self, model, ndata_dict, verbose=False, no_validation=False):
         self.model = model
         self.verbose = verbose
         self.ndata_dict = ndata_dict
@@ -511,12 +569,15 @@ class Validation:
         with the information for the validation loss by experimenet normalized to the
         number of points of each experiment
 
-        # Returns:
-            - `total_loss`: total vale for the validation loss
-            - `vl_dict`: dictionary containing a map of experiment names and loss
+        Returns
+        -------
+            `total_loss`
+                total vale for the validation loss
+            `vl_dict`
+                dictionary containing a map of experiment names and loss
         """
         loss_dict = self.model.evaluate(verbose=self.verbose)
-        return parse_losses(loss_dict, self.ndata_dict, suffix = self.suffix)
+        return parse_losses(loss_dict, self.ndata_dict, suffix=self.suffix)
 
     @property
     def weights(self):
@@ -545,8 +606,10 @@ class Positivity:
         If the sum of all positivity sets losses is above a certain value the model is
         not accepted and the training continues.
 
-        # Arguments:
-            - `threshold_positivity`: maximum value allowed for the sum of all positivity losses
+        Parameters
+        ----------
+            `threshold_positivity`
+                maximum value allowed for the sum of all positivity losses
     """
 
     def __init__(self, threshold, positivity_sets):
@@ -559,10 +622,12 @@ class Positivity:
             with the keyname: pos_key_something
 
 
-            # Arguments:
-                - `history_object`: a dictionary of entries in the form
-                    {'name': loss}, output of a MetaModel .fit()
-                - `pos_key`: `key that searchs for the positivity`
+            Parameters
+            ----------
+                `history_object`
+                    dictionary of entries in the form  {'name': loss}, output of a MetaModel .fit()
+                `pos_key`
+                    `key that searchs for the positivity`
         """
         positivity_loss = 0.0
         for key in self.positivity_sets:
