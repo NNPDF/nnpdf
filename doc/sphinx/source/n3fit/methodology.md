@@ -150,13 +150,19 @@ Note as well that the positivity penalty in `n3fit` grows dynamically with the f
 Hyperoptimization algorithm
 ---------------------------
 
+### Idea
+
 The main advantages of the points presented above consists in the possibility to test several models in a fraction of time in comparison to the `nnfit` framework.
 
 This is of key importance for a proper hyper-parameter scan where everything is potentially interconnected.
 
+### Implementation
+
 The hyperparameter scan capabilities are implemented using the hyperopt framework which systematically scans over a selection of parameter using Bayesian optimization and measures model performance to select the best architecture. The hyperopt library implements the tree-structured of Parzen estimator which is a robust sequential model based optimization approach ([SMBO](https://en.wikipedia.org/wiki/Hyperparameter_optimization)).
 
 We optimize on a combination of the best validation loss and stability of the fits. In other words, we select the architecture which produces the lowest validation loss after we trim those combinations which are deemed to be unstable.
+
+### Interpretation
 
 While performing the hyperparameter scan we found that optimizing only looking at the validation loss produced results which would usually be considered overfitted: very low training and validation chi2 and complex replica patterns. Thanks to the high performance of the `n3fit` procedure the usual cross-validation algorithm used in the NNPDF framework was not enough to prevent overlearning for all architectures.
 
