@@ -15,6 +15,7 @@ NNPDF documentation
    n3fit/index
    code/index
    serverconf/index
+   ci/index
    tutorials/index
    QA/index
 
