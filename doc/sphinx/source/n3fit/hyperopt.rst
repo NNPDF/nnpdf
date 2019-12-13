@@ -34,4 +34,18 @@ In order to eliminate architectures that allowed overlearning we proceed by incl
     L_{hyperopt} = \frac{1}{2} (L_{validation} + L_{testing})
 
 
-With this procedure we are able to find combinations of hyperparameters which produce good fits for which we are confident no obvious overfitting can be generated.
+With this procedure we are able to find combinations of hyperparameters which produce good fits for which we are confident no obvious overfitting can be generated. 
+
+The hyperoptimization procedure performed in `hep-ph/1907.05075 <https://arxiv.org/abs/1907.05075>`_ used the following group of datasets as the testing set:
+
+* NMC
+* BCDMSP
+* BCDMSD
+* HERACOMBNCEP460
+* H1HERAF2B
+* D0ZRap
+* CDFR2KT
+* D0WMASY
+* ATLASZHIGHMASS49FB
+* CMSZDIFF12
+* ATLASTTBARTOT
