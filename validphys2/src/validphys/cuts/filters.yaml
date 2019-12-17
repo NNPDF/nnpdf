@@ -14,6 +14,13 @@
     for the NNLO jet project.
   rule: eta < 0.3
 
+- dataset: CMS_1JET_8TEV
+  reason: |
+    We keep only the bins with pTjet>74 GeV because fixed-order theory does
+    not provide a good description of the data for smalle values of the	jet
+    transverse momentum.
+  rule: "p_T2 >= 5476"
+
 - dataset: LHCBWZMU8TEV
   reason: |
     The first two bins in rapidity have unnaturally large K-factors which we
