@@ -109,18 +109,18 @@ def parse_losses(history_object, data, suffix="loss"):
     """
     try:
         hobj = history_object.history
-    except AttributeError:  # So it works whether we pass the out our the out.history
+    except AttributeError:  # So it works whether we pass the out or the out.history
         hobj = history_object
 
     # In the general case epochs = 1.
-    # In case that we are doing more than 1 epoch, take the average to smooth out
-    # fluctuations.
+    # In case that we are doing more than 1 epoch, take the last result as it is the result
+    # the model is in at the moment
     # This value is only used for printing output purposes so should not have any significance
     dict_chi2 = {}
     total_points = 0
     total_loss = 0
     for exp_name, npoints in data.items():
-        loss = np.mean(hobj[exp_name + f"_{suffix}"])
+        loss = np.take(hobj[exp_name + f"_{suffix}"], -1)
         dict_chi2[exp_name] = loss / npoints
         total_points += npoints
         total_loss += loss
@@ -619,8 +619,10 @@ class Positivity:
     def check_positivity(self, history_object):
         """
             This function receives a history object and look for entries
-            with the keyname: pos_key_something
+            with the keyname: pos_key_{posdataset_name}
 
+            If the sum of all the positivity loss don't surpass a certain
+            threshold it returns True, otherwise returns False
 
             Parameters
             ----------
@@ -633,7 +635,10 @@ class Positivity:
         for key in self.positivity_sets:
             key_loss = f"{key}_loss"
             # If we are taking the avg when checking the output, we should do so here as well
-            positivity_loss = np.mean(history_object[key_loss])
+            positivity_loss += np.take(history_object[key_loss], -1)
+            with open("/tmp/test.txt", 'a') as f:
+                f.write("\n")
+                f.write(str(positivity_loss))
         if positivity_loss > self.threshold:
             return False
         else:
