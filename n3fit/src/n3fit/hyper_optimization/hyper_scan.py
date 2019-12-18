@@ -172,32 +172,36 @@ class HyperScanner:
         positivity_dict = sampling_dict.get("positivity")
         nn_dict = sampling_dict.get("architecture")
 
-        self.stopping(
-            min_epochs=stopping_dict.get("min_epochs"),
-            max_epochs=stopping_dict.get("max_epochs"),
-            min_patience=stopping_dict.get("min_patience"),
-            max_patience=stopping_dict.get("max_patience"),
-        )
-        self.optimizer(
-            names=optimizer_dict.get("names"),
-            min_lr=optimizer_dict.get("min_lr"),
-            max_lr=optimizer_dict.get("max_lr"),
-        )
-        self.positivity(
-            min_multiplier=positivity_dict.get("min_multiplier"),
-            max_multiplier=positivity_dict.get("max_multiplier"),
-            min_initial=positivity_dict.get("min_initial"),
-            max_initial=positivity_dict.get("max_initial"),
-        )
-        self.architecture(
-            initializers=nn_dict.get("initializer"),
-            activations=nn_dict.get("activations"),
-            max_drop=nn_dict.get("max_drop"),
-            n_layers=nn_dict.get("n_layers"),
-            min_units=nn_dict.get("min_units"),
-            max_units=nn_dict.get("max_units"),
-            layer_types=nn_dict.get("layer_types"),
-        )
+        if stopping_dict:
+            self.stopping(
+                min_epochs=stopping_dict.get("min_epochs"),
+                max_epochs=stopping_dict.get("max_epochs"),
+                min_patience=stopping_dict.get("min_patience"),
+                max_patience=stopping_dict.get("max_patience"),
+            )
+        if optimizer_dict:
+            self.optimizer(
+                names=optimizer_dict.get("names"),
+                min_lr=optimizer_dict.get("min_lr"),
+                max_lr=optimizer_dict.get("max_lr"),
+            )
+        if positivity_dict:
+            self.positivity(
+                min_multiplier=positivity_dict.get("min_multiplier"),
+                max_multiplier=positivity_dict.get("max_multiplier"),
+                min_initial=positivity_dict.get("min_initial"),
+                max_initial=positivity_dict.get("max_initial"),
+            )
+        if nn_dict:
+            self.architecture(
+                initializers=nn_dict.get("initializer"),
+                activations=nn_dict.get("activations"),
+                max_drop=nn_dict.get("max_drop"),
+                n_layers=nn_dict.get("n_layers"),
+                min_units=nn_dict.get("min_units"),
+                max_units=nn_dict.get("max_units"),
+                layer_types=nn_dict.get("layer_types"),
+            )
 
     def dict(self):
         return self.parameters

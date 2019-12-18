@@ -571,7 +571,8 @@ def main():
         # A script gotta plot what a script gotta plot
         fileout = "{0}/scan.pdf".format(replica_path)
         plot_scans(dataframe, best_trial, fileout, plotting_keys)
-        print("Plot saved at {0}".format(fileout))
+        curdir = os.getcwd()
+        print(f"Plot saved at {curdir}/{fileout}")
 
 
 if __name__ == "__main__":
