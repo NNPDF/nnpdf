@@ -632,7 +632,8 @@ class Positivity:
         positivity_loss = 0.0
         for key in self.positivity_sets:
             key_loss = f"{key}_loss"
-            positivity_loss = history_object[key_loss][-1]
+            # If we are taking the avg when checking the output, we should do so here as well
+            positivity_loss = np.mean(history_object[key_loss])
         if positivity_loss > self.threshold:
             return False
         else:
