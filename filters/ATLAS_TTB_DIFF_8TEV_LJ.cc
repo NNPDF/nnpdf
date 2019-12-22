@@ -78,6 +78,14 @@ void statcorrs(int dist, string norm, double** extrasys)
       totdata += ndat[i]; 
     }
 
+  for(int i=0; i<totdata; i++)
+    {
+      for(int j=0; j<totdata; j++)
+	{
+	  extrasys[i][j] = 0.;
+	}
+    }
+
   //Tabcorr numbering for covariance matrix blocks
   string** tabcorr = new string*[ndist];
   for(int i=0; i<ndist; i++)
@@ -139,6 +147,7 @@ void statcorrs(int dist, string norm, double** extrasys)
 
   //Read statistical uncertainty
   double* stat = new double[totdata];
+  double* data = new double[totdata];
   int p=0;
 
   for(int idist=0; idist<ndist; idist++)
@@ -162,8 +171,6 @@ void statcorrs(int dist, string norm, double** extrasys)
 	{
 	  getline(f3,qline);
 	}
-    
-      double* data = new double[totdata];
 	  
       for(int j=0; j<ndat[idist]; j++)
 	{
@@ -177,9 +184,6 @@ void statcorrs(int dist, string norm, double** extrasys)
 		  >> ddum      >> comma
 		  >> data[j+p] >> comma
 		  >> stat[j+p] >> comma;
-
-	  stat[j+p] = stat[j+p]/100.*data[j+p];
-	  
 	}
       
       p += ndat[idist];
@@ -260,7 +264,7 @@ void statcorrs(int dist, string norm, double** extrasys)
 			  >> idum >> comma
 			  >> corrcoeff[i+n][j+m];
 		  
-		  corrcoeff[i+n][j+m] *= stat[i+n]*stat[j+m];
+		  corrcoeff[i+n][j+m] = corrcoeff[i+n][j+m]*stat[i+n]*data[i+n]*stat[j+m]*data[j+m]/100./100.;
 		  
 		}
 
@@ -427,15 +431,18 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TPTFilter::ReadData()
 	  if(j<realsys-1)
 
 	    {
+	      ostringstream sysnameup, sysnamedo;
 	      fSys[i][2*j].mult = sysR;
 	      fSys[i][2*j].add  = fSys[i][2*j].mult*fData[i]/100;
 	      fSys[i][2*j].type = MULT;
-	      fSys[i][2*j].name = "SYSCOR";
+	      sysnameup << "SYSCORR" << 2*j;
+	      fSys[i][2*j].name = sysnameup.str();
 	      
 	      fSys[i][2*j+1].mult = sysR;
 	      fSys[i][2*j+1].add  = fSys[i][2*j+1].mult*fData[i]/100;
 	      fSys[i][2*j+1].type = MULT;
-	      fSys[i][2*j+1].name = "SYSCOR";  
+	      sysnamedo << "SYSCORR" << 2*j+1;
+	      fSys[i][2*j+1].name = sysnamedo.str();  
 	    }
 	  else
 	    {
@@ -455,7 +462,9 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TPTFilter::ReadData()
 	  fSys[i][j].add = extrasys[i][j-2*realsys+1];
 	  fSys[i][j].mult = fSys[i][j].add/fData[i]*100.;
 	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "STATCOR";
+	  ostringstream sysname;
+	  sysname << "STATCORR" << j;
+	  fSys[i][j].name = sysname.str();
 	  
 	}
     
@@ -572,15 +581,18 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TRAPFilter::ReadData()
 	  if(j<realsys-1)
 
 	    {
+	      ostringstream sysnameup, sysnamedo;
 	      fSys[i][2*j].mult = sysR;
 	      fSys[i][2*j].add  = fSys[i][2*j].mult*fData[i]/100;
 	      fSys[i][2*j].type = MULT;
-	      fSys[i][2*j].name = "SYSCOR";
+	      sysnameup << "SYSCORR" << 2*j;
+	      fSys[i][2*j].name = sysnameup.str();
 	      
 	      fSys[i][2*j+1].mult = sysR;
 	      fSys[i][2*j+1].add  = fSys[i][2*j+1].mult*fData[i]/100;
 	      fSys[i][2*j+1].type = MULT;
-	      fSys[i][2*j+1].name = "SYSCOR";  
+	      sysnamedo << "SYSCORR" << 2*j+1;
+	      fSys[i][2*j+1].name = sysnamedo.str(); 
 	    }
 	  else
 	    {
@@ -600,7 +612,9 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TRAPFilter::ReadData()
 	  fSys[i][j].add = extrasys[i][j-2*realsys+1];
 	  fSys[i][j].mult = fSys[i][j].add/fData[i]*100.;
 	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "STATCOR";
+	  ostringstream sysname;
+	  sysname << "STATCORR" << j;
+	  fSys[i][j].name = sysname.str();
 	  
 	}
     
@@ -717,15 +731,18 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTRAPFilter::ReadData()
 	  if(j<realsys-1)
 
 	    {
+	      ostringstream sysnameup, sysnamedo;
 	      fSys[i][2*j].mult = sysR;
 	      fSys[i][2*j].add  = fSys[i][2*j].mult*fData[i]/100;
 	      fSys[i][2*j].type = MULT;
-	      fSys[i][2*j].name = "SYSCOR";
+	      sysnameup << "SYSCORR" << 2*j;
+	      fSys[i][2*j].name = sysnameup.str();
 	      
 	      fSys[i][2*j+1].mult = sysR;
 	      fSys[i][2*j+1].add  = fSys[i][2*j+1].mult*fData[i]/100;
 	      fSys[i][2*j+1].type = MULT;
-	      fSys[i][2*j+1].name = "SYSCOR";  
+	      sysnamedo << "SYSCORR" << 2*j+1;
+	      fSys[i][2*j+1].name = sysnamedo.str(); 
 	    }
 	  else
 	    {
@@ -745,7 +762,9 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTRAPFilter::ReadData()
 	  fSys[i][j].add = extrasys[i][j-2*realsys+1];
 	  fSys[i][j].mult = fSys[i][j].add/fData[i]*100.;
 	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "STATCOR";
+	  ostringstream sysname;
+	  sysname << "STATCORR" << j;
+	  fSys[i][j].name = sysname.str();
 	  
 	}
     
@@ -862,15 +881,18 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTMFilter::ReadData()
 	  if(j<realsys-1)
 
 	    {
+	      ostringstream sysnameup, sysnamedo;
 	      fSys[i][2*j].mult = sysR;
 	      fSys[i][2*j].add  = fSys[i][2*j].mult*fData[i]/100;
 	      fSys[i][2*j].type = MULT;
-	      fSys[i][2*j].name = "SYSCOR";
+	      sysnameup << "SYSCORR" << 2*j;
+	      fSys[i][2*j].name = sysnameup.str();
 	      
 	      fSys[i][2*j+1].mult = sysR;
 	      fSys[i][2*j+1].add  = fSys[i][2*j+1].mult*fData[i]/100;
 	      fSys[i][2*j+1].type = MULT;
-	      fSys[i][2*j+1].name = "SYSCOR";  
+	      sysnamedo << "SYSCORR" << 2*j+1;
+	      fSys[i][2*j+1].name = sysnamedo.str(); 
 	    }
 	  else
 	    {
@@ -890,7 +912,9 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTMFilter::ReadData()
 	  fSys[i][j].add = extrasys[i][j-2*realsys+1];
 	  fSys[i][j].mult = fSys[i][j].add/fData[i]*100.;
 	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "STATCOR";
+	  ostringstream sysname;
+	  sysname << "STATCORR" << j;
+	  fSys[i][j].name = sysname.str();
 	  
 	}
     
@@ -1006,15 +1030,18 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TPTNORMFilter::ReadData()
 	  sysR = sysR/sqrt(2.);
 	  sysL = sysL/sqrt(2.);
 	  
+	  ostringstream sysnameup, sysnamedo;
 	  fSys[i][2*j].mult = sysR;
 	  fSys[i][2*j].add  = fSys[i][2*j].mult*fData[i]/100;
 	  fSys[i][2*j].type = MULT;
-	  fSys[i][2*j].name = "SYSCOR";
+	  sysnameup << "SYSCORR" << 2*j;
+	  fSys[i][2*j].name = sysnameup.str();
 	  
 	  fSys[i][2*j+1].mult = sysR;
 	  fSys[i][2*j+1].add  = fSys[i][2*j+1].mult*fData[i]/100;
 	  fSys[i][2*j+1].type = MULT;
-	  fSys[i][2*j+1].name = "SYSCOR";  
+	  sysnamedo << "SYSCORR" << 2*j+1;
+	  fSys[i][2*j+1].name = sysnamedo.str();
 	    
 	}
       
@@ -1026,7 +1053,9 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TPTNORMFilter::ReadData()
 	  fSys[i][j].add = extrasys[i][j-2*realsys+1];
 	  fSys[i][j].mult = fSys[i][j].add/fData[i]*100.;
 	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "STATCOR";
+	  ostringstream sysname;
+	  sysname << "STATCORR" << j;
+	  fSys[i][j].name = sysname.str();
 	  
 	}
     
@@ -1140,17 +1169,19 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORMFilter::ReadData()
 	  sysR = sysR/sqrt(2.);
 	  sysL = sysL/sqrt(2.);
 	  
+	  ostringstream sysnameup, sysnamedo;
 	  fSys[i][2*j].mult = sysR;
 	  fSys[i][2*j].add  = fSys[i][2*j].mult*fData[i]/100;
 	  fSys[i][2*j].type = MULT;
-	  fSys[i][2*j].name = "SYSCOR";
+	  sysnameup << "SYSCORR" << 2*j;
+	  fSys[i][2*j].name = sysnameup.str();
 	  
 	  fSys[i][2*j+1].mult = sysR;
 	  fSys[i][2*j+1].add  = fSys[i][2*j+1].mult*fData[i]/100;
 	  fSys[i][2*j+1].type = MULT;
-	  fSys[i][2*j+1].name = "SYSCOR";  
-	  
-	  
+	  sysnamedo << "SYSCORR" << 2*j+1;
+	  fSys[i][2*j+1].name = sysnamedo.str();
+	  	  
 	}
       
       //Define artificial systematics
@@ -1161,7 +1192,9 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORMFilter::ReadData()
 	  fSys[i][j].add = extrasys[i][j-2*realsys+1];
 	  fSys[i][j].mult = fSys[i][j].add/fData[i]*100.;
 	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "STATCOR";
+	  ostringstream sysname;
+	  sysname << "STATCORR" << j;
+	  fSys[i][j].name = sysname.str();
 	  
 	}
       
@@ -1275,15 +1308,18 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORMFilter::ReadData()
 	  sysR = sysR/sqrt(2.);
 	  sysL = sysL/sqrt(2.);
 
+	  ostringstream sysnameup, sysnamedo;
 	  fSys[i][2*j].mult = sysR;
 	  fSys[i][2*j].add  = fSys[i][2*j].mult*fData[i]/100;
 	  fSys[i][2*j].type = MULT;
-	  fSys[i][2*j].name = "SYSCOR";
+	  sysnameup << "SYSCORR" << 2*j;
+	  fSys[i][2*j].name = sysnameup.str();
 	  
 	  fSys[i][2*j+1].mult = sysR;
 	  fSys[i][2*j+1].add  = fSys[i][2*j+1].mult*fData[i]/100;
 	  fSys[i][2*j+1].type = MULT;
-	  fSys[i][2*j+1].name = "SYSCOR";  
+	  sysnamedo << "SYSCORR" << 2*j+1;
+	  fSys[i][2*j+1].name = sysnamedo.str();
 	  
 	}
       
@@ -1295,7 +1331,9 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORMFilter::ReadData()
 	  fSys[i][j].add = extrasys[i][j-2*realsys+1];
 	  fSys[i][j].mult = fSys[i][j].add/fData[i]*100.;
 	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "STATCOR";
+	  ostringstream sysname;
+	  sysname << "STATCORR" << j;
+	  fSys[i][j].name = sysname.str();
 	  
 	}
     
@@ -1409,15 +1447,18 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTMNORMFilter::ReadData()
 	  sysR = sysR/sqrt(2.);
 	  sysL = sysL/sqrt(2.);
 	  
+	  ostringstream sysnameup, sysnamedo;
 	  fSys[i][2*j].mult = sysR;
 	  fSys[i][2*j].add  = fSys[i][2*j].mult*fData[i]/100;
 	  fSys[i][2*j].type = MULT;
-	  fSys[i][2*j].name = "SYSCOR";
+	  sysnameup << "SYSCORR" << 2*j;
+	  fSys[i][2*j].name = sysnameup.str();
 	  
 	  fSys[i][2*j+1].mult = sysR;
 	  fSys[i][2*j+1].add  = fSys[i][2*j+1].mult*fData[i]/100;
 	  fSys[i][2*j+1].type = MULT;
-	  fSys[i][2*j+1].name = "SYSCOR";  
+	  sysnamedo << "SYSCORR" << 2*j+1;
+	  fSys[i][2*j+1].name = sysnamedo.str();    
 	  
 	}
       
@@ -1429,7 +1470,9 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTMNORMFilter::ReadData()
 	  fSys[i][j].add = extrasys[i][j-2*realsys+1];
 	  fSys[i][j].mult = fSys[i][j].add/fData[i]*100.;
 	  fSys[i][j].type = ADD;
-	  fSys[i][j].name = "STATCOR";
+	  ostringstream sysname;
+	  sysname << "STATCORR" << j;
+	  fSys[i][j].name = sysname.str();
 	  
 	}
       
