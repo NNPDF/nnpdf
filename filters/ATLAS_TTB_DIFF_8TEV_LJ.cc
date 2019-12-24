@@ -67,7 +67,7 @@ Notes:
 #include "ATLAS_TTB_DIFF_8TEV_LJ.h"
 #include <iomanip>
 
-//Function that construct and decomposes the global covariance matrix of statistical correlations
+//Function that constructs and decomposes the global covariance matrix of statistical correlations
 void statcorrs(int dist, string norm, double** extrasys) 
 {
   int ndist=4;
@@ -438,7 +438,7 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TPTFilter::ReadData()
 	      sysnameup << "SYSCORR" << 2*j;
 	      fSys[i][2*j].name = sysnameup.str();
 	      
-	      fSys[i][2*j+1].mult = sysR;
+	      fSys[i][2*j+1].mult = sysL;
 	      fSys[i][2*j+1].add  = fSys[i][2*j+1].mult*fData[i]/100;
 	      fSys[i][2*j+1].type = MULT;
 	      sysnamedo << "SYSCORR" << 2*j+1;
@@ -588,7 +588,7 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TRAPFilter::ReadData()
 	      sysnameup << "SYSCORR" << 2*j;
 	      fSys[i][2*j].name = sysnameup.str();
 	      
-	      fSys[i][2*j+1].mult = sysR;
+	      fSys[i][2*j+1].mult = sysL;
 	      fSys[i][2*j+1].add  = fSys[i][2*j+1].mult*fData[i]/100;
 	      fSys[i][2*j+1].type = MULT;
 	      sysnamedo << "SYSCORR" << 2*j+1;
@@ -738,7 +738,7 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTRAPFilter::ReadData()
 	      sysnameup << "SYSCORR" << 2*j;
 	      fSys[i][2*j].name = sysnameup.str();
 	      
-	      fSys[i][2*j+1].mult = sysR;
+	      fSys[i][2*j+1].mult = sysL;
 	      fSys[i][2*j+1].add  = fSys[i][2*j+1].mult*fData[i]/100;
 	      fSys[i][2*j+1].type = MULT;
 	      sysnamedo << "SYSCORR" << 2*j+1;
@@ -888,7 +888,7 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTMFilter::ReadData()
 	      sysnameup << "SYSCORR" << 2*j;
 	      fSys[i][2*j].name = sysnameup.str();
 	      
-	      fSys[i][2*j+1].mult = sysR;
+	      fSys[i][2*j+1].mult = sysL;
 	      fSys[i][2*j+1].add  = fSys[i][2*j+1].mult*fData[i]/100;
 	      fSys[i][2*j+1].type = MULT;
 	      sysnamedo << "SYSCORR" << 2*j+1;
@@ -1037,7 +1037,7 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TPTNORMFilter::ReadData()
 	  sysnameup << "SYSCORR" << 2*j;
 	  fSys[i][2*j].name = sysnameup.str();
 	  
-	  fSys[i][2*j+1].mult = sysR;
+	  fSys[i][2*j+1].mult = sysL;
 	  fSys[i][2*j+1].add  = fSys[i][2*j+1].mult*fData[i]/100;
 	  fSys[i][2*j+1].type = MULT;
 	  sysnamedo << "SYSCORR" << 2*j+1;
@@ -1176,7 +1176,7 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORMFilter::ReadData()
 	  sysnameup << "SYSCORR" << 2*j;
 	  fSys[i][2*j].name = sysnameup.str();
 	  
-	  fSys[i][2*j+1].mult = sysR;
+	  fSys[i][2*j+1].mult = sysL;
 	  fSys[i][2*j+1].add  = fSys[i][2*j+1].mult*fData[i]/100;
 	  fSys[i][2*j+1].type = MULT;
 	  sysnamedo << "SYSCORR" << 2*j+1;
@@ -1188,7 +1188,7 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORMFilter::ReadData()
       for(int j=2*realsys-1; j<fNSys; j++)
 	{
 	  
-	  statcorrs(1,"ABS",extrasys);
+	  statcorrs(1,"NORM",extrasys);
 	  fSys[i][j].add = extrasys[i][j-2*realsys+1];
 	  fSys[i][j].mult = fSys[i][j].add/fData[i]*100.;
 	  fSys[i][j].type = ADD;
@@ -1315,7 +1315,7 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORMFilter::ReadData()
 	  sysnameup << "SYSCORR" << 2*j;
 	  fSys[i][2*j].name = sysnameup.str();
 	  
-	  fSys[i][2*j+1].mult = sysR;
+	  fSys[i][2*j+1].mult = sysL;
 	  fSys[i][2*j+1].add  = fSys[i][2*j+1].mult*fData[i]/100;
 	  fSys[i][2*j+1].type = MULT;
 	  sysnamedo << "SYSCORR" << 2*j+1;
@@ -1327,7 +1327,7 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORMFilter::ReadData()
       for(int j=2*realsys-1; j<fNSys; j++)
 	{
 
-	  statcorrs(2,"ABS",extrasys);
+	  statcorrs(2,"NORM",extrasys);
 	  fSys[i][j].add = extrasys[i][j-2*realsys+1];
 	  fSys[i][j].mult = fSys[i][j].add/fData[i]*100.;
 	  fSys[i][j].type = ADD;
@@ -1454,7 +1454,7 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTMNORMFilter::ReadData()
 	  sysnameup << "SYSCORR" << 2*j;
 	  fSys[i][2*j].name = sysnameup.str();
 	  
-	  fSys[i][2*j+1].mult = sysR;
+	  fSys[i][2*j+1].mult = sysL;
 	  fSys[i][2*j+1].add  = fSys[i][2*j+1].mult*fData[i]/100;
 	  fSys[i][2*j+1].type = MULT;
 	  sysnamedo << "SYSCORR" << 2*j+1;
@@ -1466,7 +1466,7 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTMNORMFilter::ReadData()
       for(int j=2*realsys-1; j<fNSys; j++)
 	{
 	  
-	  statcorrs(3,"ABS",extrasys);
+	  statcorrs(3,"NORM",extrasys);
 	  fSys[i][j].add = extrasys[i][j-2*realsys+1];
 	  fSys[i][j].mult = fSys[i][j].add/fData[i]*100.;
 	  fSys[i][j].type = ADD;
