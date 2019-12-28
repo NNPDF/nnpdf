@@ -92,6 +92,8 @@ def process_lookup(name):
                                 "ATLAS_2JET_7TEV_R04":                  "DIJET",
                                 "ATLAS_2JET_7TEV_R06":                  "DIJET",
                                 "ATLASTTBARTOT":			"TOP",
+                                "ATLASTTBARTOT7TEV":			"TOP",
+                                "ATLASTTBARTOT13TEV":			"TOP",
                                 "ATLASTOPDIFF8TEVTRAPNORM":		"TOP",
                                 "ATLAS_TOPDIFF_DILEPT_8TEV_TTM":        "TOP",
                                 "ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORM":    "TOP",
