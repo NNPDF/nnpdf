@@ -2,6 +2,7 @@
     Module containing a list of loss functions availables to the fitting code
 """
 
+import tensorflow as tf
 import keras.backend as K
 
 
@@ -15,8 +16,8 @@ def l_invcovmat(invcovmat_np):
     def true_loss(y_true, y_pred):
         # (yt - yp) * covmat * (yt - yp)
         tmp = y_true - y_pred
-        right_dot = K.tf.tensordot(invcovmat, K.transpose(tmp), axes=1)
-        return K.tf.tensordot(tmp, right_dot, axes=1)
+        right_dot = tf.tensordot(invcovmat, K.transpose(tmp), axes=1)
+        return tf.tensordot(tmp, right_dot, axes=1)
 
     return true_loss
 

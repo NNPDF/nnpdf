@@ -10,6 +10,10 @@ kinematics_override: jet_sqrt_scale
 line_by:
     - k1
 
+normalize:
+    figure_by:
+        - k1
+
 experiment: "CMS"
 
 nnpdf31_process: JETS

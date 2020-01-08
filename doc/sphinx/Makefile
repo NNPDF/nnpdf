@@ -17,10 +17,14 @@ help:
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
 	@if test $@ != "clean"; then \
-		sphinx-apidoc -o ./source/modules/validphys ../../validphys2/src/validphys/ ; \
+		sphinx-apidoc -o ./$(SOURCEDIR)/modules/validphys ../../validphys2/src/validphys/ ; \
+		sphinx-apidoc -o ./$(SOURCEDIR)/modules/n3fit-code ../../n3fit/src/n3fit/ ; \
 	fi
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 .PHONY: rsync
 rsync: html
-	rsync -avzr ./build/html/ nnpdf@vp.nnpdf.science:WEB/sphinx-docs/
+	rsync -avzr ./$(BUILD)/html/ nnpdf@vp.nnpdf.science:WEB/sphinx-docs/
+
+view: html
+	$(BROWSER) $(BUILDDIR)/html/index.html

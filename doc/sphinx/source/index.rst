@@ -12,6 +12,7 @@ NNPDF documentation
    get-started/index
    theory/index
    vp/index
+   n3fit/index
    code/index
    serverconf/index
    tutorials/index

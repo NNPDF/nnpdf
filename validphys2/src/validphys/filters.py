@@ -5,20 +5,57 @@ Filters for NNPDF fits
 
 import logging
 import numbers
+import re
+from collections.abc import Mapping
+from importlib.resources import read_text
+
 import numpy as np
 
-from NNPDF import DataSet, RandomGenerator
+from NNPDF import CommonData, RandomGenerator
 from reportengine.checks import make_argcheck, check, check_positive, make_check
+from reportengine.compat import yaml
+import validphys.cuts
 
 log = logging.getLogger(__name__)
+
+class RuleProcessingError(Exception):
+    """Exception raised when we couldn't process a rule."""
+
+
+class BadPerturbativeOrder(ValueError):
+    """Exception raised when the perturbative order string is not
+    recognized."""
+
+
+class MissingRuleAttribute(RuleProcessingError, AttributeError):
+    """Exception raised when a rule is missing required attributes."""
+
+
+class FatalRuleError(Exception):
+    """Exception raised when a rule application failed at runtime."""
+
+
+def default_filter_settings():
+    """Return a dictionary with the default hardcoded filter settings.
+    These are defined in ``defaults.yaml`` in the ``validphys.cuts`` module.
+    """
+    return yaml.safe_load(read_text(validphys.cuts, "defaults.yaml"))
+
+
+def default_filter_rules_input():
+    """Return a dictionary with the input settings.
+    These are defined in ``filters.yaml`` in the ``validphys.cuts`` module.
+    """
+    return yaml.safe_load(read_text(validphys.cuts, "filters.yaml"))
 
 
 @make_argcheck
 def check_combocuts(combocuts: str):
     """Check combocuts content"""
-    check(combocuts == 'NNPDF31',
-          "Invalid combocut. Must be NNPDF31 (or implement it yourself).")
-
+    check(
+        combocuts == "NNPDF31",
+        "Invalid combocut. Must be NNPDF31 (or implement it yourself).",
+    )
 
 @make_argcheck
 def check_rngalgo(rngalgo: int):
@@ -57,7 +94,8 @@ def export_mask(path, mask):
 def filter(experiments, theoryid, filter_path,
            fakedata: bool,
            filterseed:int, rngalgo:int, seed:int, fakenoise:bool,
-           errorsize:numbers.Real, combocuts, t0pdfset):
+           errorsize:numbers.Real, combocuts, t0pdfset,
+           rules, defaults):
     """Apply filters to all datasets"""
     if not fakedata:
         log.info('Filtering real data.')
@@ -124,16 +162,6 @@ def _filter_closure_data(filter_path, experiments, fakepdfset, fakenoise, errors
     return total_data_points, total_cut_data_points
 
 
-def get_cuts_for_dataset(commondata, theoryid, q2min, w2min):
-    """Return cut mask for dataset"""
-    datamask = []
-    ds = commondata.load()
-    for idat in range(ds.GetNData()):
-        if pass_kincuts(ds, idat, theoryid, q2min, w2min):
-            datamask.append(idat)
-    return datamask
-
-
 def check_t0pdfset(t0pdfset):
     """T0 pdf check"""
     t0pdfset.load()
@@ -147,135 +175,309 @@ def check_positivity(posdatasets):
         pos.load()
         log.info(f'{pos.name} checked.')
 
+class PerturbativeOrder:
+    """Class that conveniently handles
+    perturbative order declarations for use
+    within the Rule class filter.
 
-def pass_kincuts(dataset, idat, theoryid, q2min, w2min):
-    """Applies cuts as in C++ for NNPDF3.1 combo cuts.
-    This function replicas the c++ code but should be upgraded as
-    discussed several times.
+
+    Parameters
+    ----------
+    string: str
+        A string in the format of NNLO or equivalently N2LO.
+        This can be followed by one of ! + - or none.
+
+        The syntax allows for rules to be executed only if the perturbative
+        order is within a given range. The following enumerates all 4 cases
+        as an example:
+
+        NNLO+ only execute the following rule if the pto is 2 or greater
+        NNLO- only execute the following rule if the pto is strictly less than 2
+        NNLO! only execute the following rule if the pto is strictly not 2
+        NNLO only execute the following rule if the pto is exactly 2
+
+        Any unrecognized string will raise a BadPerturbativeOrder exception.
+
+    Example
+    -------
+    >>> from validphys.filters import PerturbativeOrder
+    >>> pto = PerturbativeOrder("NNLO+")
+    >>> pto.numeric_pto
+    2
+    >>> 1 in pto
+    False
+    >>> 2 in pto
+    True
+    >>> 3 in pto
+    True
     """
-    pto = theoryid.get_description().get('PTO')
-    vfns = theoryid.get_description().get('FNS')
-    ic = theoryid.get_description().get('IC')
 
-    if dataset.GetSetName() == 'ATLAS1JET11':
-        # allow only first rapidity bin of ATLAS1JET11
-        return dataset.GetKinematics(idat, 0) < 0.3
+    def __init__(self, string):
+        self.string = string.upper()
+        self.parse()
 
-    if dataset.GetSetName() in ('LHCBWZMU8TEV', 'LHCBWZMU7TEV'):
-        if pto == 2:
-            return dataset.GetKinematics(idat, 0) >= 2.25
+    def parse(self):
+        # Change an input like NNNLO or N3LO
+        # to a numerical value for the pto.
+        # In this example, we assign
+        # self.numeric_pto to be 3.
+        exp = re.compile(
+            r"(N(?P<nnumber>\d+)|(?P<multiplens>N*))LO(?P<operator>[\+\-\!])?"
+        ).fullmatch(self.string)
+        if not exp:
+            raise BadPerturbativeOrder(
+                f"String {self.string!r} does not represent a valid perturbative order specfication."
+            )
+        if exp.group("multiplens") is None:
+            self.numeric_pto = int(exp.group("nnumber"))
+        else:
+            self.numeric_pto = len(exp.group("multiplens"))
 
-    if dataset.GetSetName() in ('D0WMASY', 'D0WEASY'):
-        if pto == 2:
-            return dataset.GetData(idat) >= 0.03
+        self.operator = exp.group("operator")
 
-    if dataset.GetSetName() == 'ATLASZPT7TEV':
-        pt = np.sqrt(dataset.GetKinematics(idat, 1))
-        if pt < 30 or pt > 500:
-            return False
-        return True
+    def __contains__(self, i):
+        if self.operator == "!":
+            return i != self.numeric_pto
+        elif self.operator == "+":
+            return i >= self.numeric_pto
+        elif self.operator == "-":
+            return i < self.numeric_pto
+        else:
+            return i == self.numeric_pto
 
-    if dataset.GetSetName() == 'ATLASZPT8TEVMDIST':
-        return dataset.GetKinematics(idat, 0) >= 30
+class Rule:
+    """Rule object to be used to generate cuts mask.
 
-    if dataset.GetSetName() == 'ATLASZPT8TEVYDIST':
-        pt = np.sqrt(dataset.GetKinematics(idat, 1))
-        if pt < 30 or pt > 150:
-            return False
-        return True
+    A rule object is created for each rule in ./cuts/filters.yaml
 
-    if dataset.GetSetName() == 'CMSZDIFF12':
-        pt = np.sqrt(dataset.GetKinematics(idat, 1))
-        y = dataset.GetKinematics(idat, 0)
-        if pt < 30 or pt > 170 or y > 1.6:
-            return False
-        return True
 
-    if dataset.GetSetName() == 'ATLASWPT31PB':
-        return dataset.GetKinematics(idat, 0) > 30
+    Parameters
+    ----------
+    initial_data: dict
+        A dictionary containing all the information regarding the rule.
+        This contains the name of the dataset the rule to applies to
+        and/or the process type the rule applies to. Additionally, the
+        rule itself is defined, alongside the reason the rule is used.
+        Finally, the user can optionally define their own custom local
+        variables.
 
-    if dataset.GetSetName() == 'CMS_1JET_8TEV':
-        return dataset.GetKinematics(idat, 1) > 5476 #GeV2
+        By default these are defined in cuts/filters.yaml
+    defaults: dict
+        A dictionary containing default values to be used globally in
+        all rules.
 
-    if dataset.GetProc(idat)[0:3] in ('EWK', 'DYP'):
-        # building rapidity and pT or Mll
-        y = dataset.GetKinematics(idat, 0)
-        pTmv = np.sqrt(dataset.GetKinematics(idat, 1))
+        By default these are defined in cuts/defaults.yaml
+    theory_parameters:
+        Dict containing pairs of (theory_parameter, value)
+    loader: validphys.loader.Loader, optional
+        A loader instance used to retrieve the datasets.
+    """
 
-        # generalized cuts
-        maxCMSDY2Dy = 2.2
-        maxCMSDY2Dminv = 200.0
-        minCMSDY2Dminv = 30.0
-        maxTau = 0.080
-        maxY = 0.663
+    numpy_functions = {"sqrt": np.sqrt, "log": np.log, "fabs": np.fabs}
 
-        if dataset.GetSetName() in ('CMSDY2D11', 'CMSDY2D12'):
-            if pto == 0 or pto == 1:
-                if pTmv > maxCMSDY2Dminv or pTmv < minCMSDY2Dminv or y > maxCMSDY2Dy:
-                    return False
-            if pto == 2:
-                if pTmv > maxCMSDY2Dminv or y > maxCMSDY2Dy:
-                    return False
-            return True
+    def __init__(
+        self,
+        initial_data: dict,
+        *,
+        defaults: dict,
+        theory_parameters: dict,
+        loader=None,
+    ):
+        self.dataset = None
+        self.process_type = None
+        self._local_variables_code = {}
+        for key in initial_data:
+            setattr(self, key, initial_data[key])
 
-        if dataset.GetSetName() in ('ATLASZHIGHMASS49FB', 'LHCBLOWMASS37PB'):
-            if pTmv > maxCMSDY2Dminv:
-                return False
-            return True
+        if not hasattr(self, "rule"):
+            raise MissingRuleAttribute("No rule defined.")
 
-        if dataset.GetSetName() == 'ATLASLOMASSDY11':
-            if pto == 0 or pto == 1:
-                if idat < 6:
-                    return False
-            return True
+        if self.dataset is None and self.process_type is None:
+            raise MissingRuleAttribute(
+                "Please define either a process type or dataset."
+            )
 
-        if dataset.GetSetName() == 'ATLASLOMASSDY11EXT':
-            if pto == 0 or pto == 1:
-                if idat < 2:
-                    return False
-            return True
+        if self.process_type is None:
+            from validphys.loader import Loader, LoaderError
 
-        # new cuts for the fixed target DY
-        if dataset.GetSetName() in ('DYE886P', 'DYE605'):
-            rapidity = dataset.GetKinematics(idat, 0)
-            invM2 = dataset.GetKinematics(idat, 1)
-            sqrts = dataset.GetKinematics(idat, 2)
-            tau = invM2 / sqrts**2
-            ymax = -0.5 * np.log(tau)
+            if loader is None:
+                loader = Loader()
+            try:
+                cd = loader.check_commondata(self.dataset)
+            except LoaderError as e:
+                raise RuleProcessingError(
+                    f"Could not find dataset {self.dataset}"
+                ) from e
+            if cd.process_type[:3] == "DIS":
+                self.variables = CommonData.kinLabel["DIS"]
+            else:
+                self.variables = CommonData.kinLabel[cd.process_type]
+        else:
+            if self.process_type[:3] == "DIS":
+                self.variables = CommonData.kinLabel["DIS"]
+            else:
+                self.variables = CommonData.kinLabel[self.process_type]
 
-            if tau > maxTau or np.fabs(rapidity / ymax) > maxY:
-                return False
-            return True
+        if hasattr(self, "local_variables"):
+            if not isinstance(self.local_variables, Mapping):
+                raise RuleProcessingError(
+                    f"Expecting local_variables to be a Mapping, not {type(self.local_variables)}."
+                )
+        else:
+            self.local_variables = {}
 
-    # DIS cuts
-    if dataset.GetProc(idat)[0:3] == 'DIS':
-        # load kinematics
-        x = dataset.GetKinematics(idat, 0)
-        Q2 = dataset.GetKinematics(idat, 1)
-        W2 = Q2 * (1 - x) / x
+        if hasattr(self, "PTO"):
+            if not isinstance(self.PTO, str):
+                raise RuleProcessingError(
+                    f"Expecting PTO to be a string, not {type(self.PTO)}."
+                )
+            try:
+                self.PTO = PerturbativeOrder(self.PTO)
+            except BadPerturbativeOrder as e:
+                raise RuleProcessingError(e) from e
 
-        # basic cuts
-        if W2 <= w2min or Q2 <= q2min:
-            return False
+        self.rule_string = self.rule
+        self.defaults = defaults
+        self.theory_params = theory_parameters
+        ns = {
+            *self.numpy_functions,
+            *self.defaults,
+            *self.variables,
+            "idat",
+            "central_value",
+        }
+        for k, v in self.local_variables.items():
+            try:
+                self._local_variables_code[k] = lcode = compile(
+                    str(v), f"local variable {k}", "eval"
+                )
+            except Exception as e:
+                raise RuleProcessingError(
+                    f"Could not process local variable {k!r} ({v!r}): {e}"
+                ) from e
+            for name in lcode.co_names:
+                if name not in ns:
+                    raise RuleProcessingError(
+                        f"Could not process local variable {k!r}: Unknown name {name!r}"
+                    )
+            ns.add(k)
 
-        if dataset.GetSetName() in ('EMCF2P', 'EMCF2D'):
-            return x > 0.1
+        try:
+            self.rule = compile(self.rule, "rule", "eval")
+        except Exception as e:
+            raise RuleProcessingError(
+                f"Could not process rule {self.rule_string!r}: {e}"
+            ) from e
+        for name in self.rule.co_names:
+            if name not in ns:
+                raise RuleProcessingError(
+                    f"Could not process rule {self.rule_string!r}: Unknown name {name!r}"
+                )
 
-        # additional F2C cuts in case of FONLL-A
-        if dataset.GetProc(idat) == 'DIS_NCP_CH' and vfns == 'FONLL-A':
-            Q2cut1_f2c = 4
-            Q2cut2_f2c = 10
-            xcut_f2c = 1e-3
 
-            if Q2 <= Q2cut1_f2c: # cut if Q2 <= 4
-                return False
+    def __call__(self, dataset, idat):
+        central_value = dataset.GetData(idat)
+        # We return None if the rule doesn't apply. This
+        # is different to the case where the rule does apply,
+        # but the point was cut out by the rule.
+        if (
+            dataset.GetSetName() != self.dataset
+            and dataset.GetProc(idat) != self.process_type
+            and self.process_type != "DIS_ALL"
+        ):
+            return None
 
-            if Q2 <= Q2cut2_f2c and x <= xcut_f2c: # cut if Q2 <= 10 and x <= 10 ^ -3
-                return False
+        # Handle the generalised DIS cut
+        if self.process_type == "DIS_ALL" and dataset.GetProc(idat)[:3] != "DIS":
+            return None
 
-        # additional F2C cut in case of FONLL-C + IC
-        if dataset.GetProc(idat) == 'DIS_NCP_CH' and vfns == 'FONLL-C' and ic:
-            Q2cut1_f2c = 8
-            if Q2 <= Q2cut1_f2c:
-                return False
-    return True
+        ns = self._make_point_namespace(dataset, idat)
+        for k, v in self.theory_params.items():
+            if k == "PTO" and hasattr(self, "PTO"):
+                if v not in self.PTO:
+                    return None
+            elif hasattr(self, k) and (
+                getattr(self, k) != v
+            ):
+                return None
+
+        # Will return True if datapoint passes through the filter
+        try:
+            return eval(
+                self.rule,
+                self.numpy_functions,
+                {
+                    **{"idat": idat, "central_value": central_value},
+                    **self.defaults,
+                    **ns,
+                },
+            )
+        except Exception as e: # pragma: no cover
+            raise FatalRuleError(
+                f"Error when applying rule {self.rule_string!r}: {e}"
+            ) from e
+
+    def __repr__(self): # pragma: no cover
+        return self.rule_string
+
+    def _make_kinematics_dict(self, dataset, idat) -> dict:
+        """Fill in a dictionary with the kinematics for each point"""
+        kinematics = [dataset.GetKinematics(idat, j) for j in range(3)]
+        return dict(zip(self.variables, kinematics))
+
+    def _make_point_namespace(self, dataset, idat) -> dict:
+        """Return a dictionary with kinematics and local
+        variables evaluated for each point"""
+        ns = self._make_kinematics_dict(dataset, idat)
+
+        for key, value in self._local_variables_code.items():
+            ns[key] = eval(value, {**self.numpy_functions, **ns})
+        return ns
+
+def get_cuts_for_dataset(commondata, rules) -> list:
+    """Function to generate a list containing the index
+    of all experimental points that passed kinematic
+    cut rules stored in ./cuts/filters.yaml
+
+
+    Parameters
+    ----------
+    commondata: NNPDF CommonData spec
+    rules: List[Rule]
+        A list of Rule objects specifying the filters.
+
+    Returns
+    -------
+    mask: list
+        List object containing index of all passed experimental
+        values
+
+    Example
+    -------
+    >>> from validphys.filters import (get_cuts_for_dataset, Rule,
+    ...     default_filter_settings, default_filter_rules_input)
+    >>> from validphys.loader import Loader
+    >>> l = Loader()
+    >>> cd = l.check_commondata("NMC")
+    >>> theory = l.check_theoryID(53)
+    >>> filter_defaults = default_filter_settings()
+    >>> params = theory.get_description()
+    >>> rule_list = [Rule(initial_data=i, defaults=filter_defaults, theory_parameters=params)
+    ...     for i in default_filter_rules_input()]
+    >>> get_cuts_for_dataset(cd, rules=rule_list)
+    """
+    dataset = commondata.load()
+
+    mask = []
+    for idat in range(dataset.GetNData()):
+        broken = False
+        for rule in rules:
+            rule_result = rule(dataset, idat)
+            if rule_result is not None and not rule_result:
+                broken = True
+                break
+
+        if not broken:
+            mask.append(idat)
+
+    return mask
