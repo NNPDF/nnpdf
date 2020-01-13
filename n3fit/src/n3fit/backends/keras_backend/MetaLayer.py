@@ -33,7 +33,9 @@ class MetaLayer(Layer):
     }
 
     # Building function
-    def builder_helper(self, name, kernel_shape, initializer, trainable=True, constraint=None):
+    def builder_helper(
+        self, name, kernel_shape, initializer, trainable=True, constraint=None
+    ):
         """
         Creates a kernel that should be saved as an attribute of the caller class
         name: name of the kernel
@@ -43,7 +45,11 @@ class MetaLayer(Layer):
         constraint: one of the constraints from this class (actually, any keras constraints)
         """
         kernel = self.add_weight(
-            name=name, shape=kernel_shape, initializer=initializer, trainable=trainable, constraint=constraint
+            name=name,
+            shape=kernel_shape,
+            initializer=initializer,
+            trainable=trainable,
+            constraint=constraint,
         )
         return kernel
 

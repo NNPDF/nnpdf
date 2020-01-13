@@ -5,7 +5,7 @@
     'name of the layer' : ( Layer_class, {dictionary of arguments: defaults} )
 """
 
-from keras.layers import Dense, Lambda, LSTM, Dropout, concatenate
+from keras.layers import Dense, Lambda, LSTM, Dropout, Concatenate, concatenate
 from keras.backend import expand_dims
 
 
@@ -25,35 +25,53 @@ def LSTM_modified(**kwargs):
 
     return ReshapedLSTM
 
-def dense_per_flavour(basis_size = 8, concatenate_now = False, **dense_kwargs):
-    """
-    """
 
-    # Need to generate a Dense layer per element of basis_size
-    dense_basis = [base_layer_selector("dense", **dense_kwargs) for i in range(basis_size)]
+def dense_per_flavour(basis_size=8, kernel_initializer="glorot_normal", **dense_kwargs):
+    """
+    Generates a list of layers which can take as an input either one single layer
+    or a list of the same size
+    If taking one single layer, this one single layer will be the input of every layer in the list.
+    If taking a list of layer of the same size, each layer on the list will take
+    as input the layer on the input list in the same position.
+
+    Note that, if the initializer is seeded, it should be a list where the seed is different
+    for each element.
+
+    i.e., if `basis_size` is 3 and is taking as input one layer A the output will be:
+        [B1(A), B2(A), B3(A)]
+    if taking, instead, a list [A1, A2, A3] the output will be:
+        [B1(A1), B2(A2), B3(A3)]
+    """
+    if isinstance(kernel_initializer, str):
+        kernel_initializer = basis_size * [kernel_initializer]
+
+    # Need to generate a list of dense layers
+    dense_basis = [
+        base_layer_selector("dense", kernel_initializer=initializer, **dense_kwargs)
+        for initializer in kernel_initializer
+    ]
 
     def apply_dense(xinput):
         """
-        The input can be one single layer of a list of layer.
-        If a single layer is given, all denses will "eat" it
-        If, instead, a list of layers is given it should a) be of `basis_size`
-        b) each dense of the basis will apply to only one of the layers
-        """
-        if isinstance(xinput, list): # TODO I'm not sure whether tensors will ever look as a duck
-            if len(xinput) != basis_size:
-                raise ValueError("You are evil")
-            results = []
-            for input_layer, den in zip(xinput, dense_basis):
-                results.append(den(input_layer))
-        else:
-            results = [den(xinput) for den in dense_basis]
+        The input can be either one single layer or a list of layers of
+        length `basis_size`
 
-        # If we are in the last one, we need to concatenate
-        if concatenate_now:
-            output_layer = concatenate(results)
-            return output_layer
+        If taking one single layer, this one single layer will be the input of every
+        layer in the list.
+        If taking a list of layer of the same size, each layer on the list will take
+        as input the layer on the input list in the same position.
+        """
+        if isinstance(xinput, (list, tuple)):
+            if len(xinput) != basis_size:
+                raise ValueError(
+                    f"""The input of the dense_per_flavour and the basis_size
+doesn't match, got a list of length {len(xinput)} for a basis_size of {basis_size}"""
+                )
+            results = [dens(ilayer) for dens, ilayer in zip(dense_basis, xinput)]
         else:
-            return results
+            results = [dens(xinput) for dens in dense_basis]
+
+        return results
 
     return apply_dense
 
@@ -68,15 +86,14 @@ layers = {
             "activation": "sigmoid",
         },
     ),
-    "dense_per_flavour" : (
+    "dense_per_flavour": (
         dense_per_flavour,
         {
             "input_shape": (1,),
             "kernel_initializer": "glorot_normal",
             "units": 5,
             "activation": "sigmoid",
-            "basis_size" : 8,
-            "concatenate_now" : False,
+            "basis_size": 8,
         },
     ),
     "LSTM": (
@@ -84,6 +101,7 @@ layers = {
         {"kernel_initializer": "glorot_normal", "units": 5, "activation": "sigmoid"},
     ),
     "dropout": (Dropout, {"rate": 0.0}),
+    "concatenate": (Concatenate, {}),
 }
 
 
@@ -94,7 +112,7 @@ def base_layer_selector(layer_name, **kwargs):
         The layer dictionary defines a number of defaults
         but they can be overwritten/enhanced through kwargs
 
-        Parameters 
+        Parameters
         ----------
             `layer_name
                 str with the name of the layer
@@ -105,7 +123,9 @@ def base_layer_selector(layer_name, **kwargs):
         layer_tuple = layers[layer_name]
     except KeyError as e:
         raise NotImplementedError(
-            "Layer not implemented in keras_backend/base_layers.py: {0}".format(layer_name)
+            "Layer not implemented in keras_backend/base_layers.py: {0}".format(
+                layer_name
+            )
         ) from e
 
     layer_class = layer_tuple[0]
