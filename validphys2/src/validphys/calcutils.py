@@ -149,31 +149,20 @@ def get_df_block(matrix: pd.DataFrame, key: str, level):
             key, level=level, axis=1).values
     return block
 
-def regularize_covmat(covmat: np.array, cond_num_threshold=500):
+def regularize_covmat(covmat: np.array, norm_threshold=3):
     """Given a covariance matrix, performs a regularization on
-    the corresponding correlation matrix and uses that to return a new
-    regularized covariance matrix:
-
-    corr_ij = cov_ij / (sigma_i * sigma_j)
-
-    where sigma_i = sqrt(diag(cov)_i). The correlation
-    matrix is then regularized by clipping the smallest eigenvalues to a
-    minimum acceptable values given by
-
-    max(eigenvalues of corr_ij)/cond_num_threshold
-
-    finally the process to get a correlation matrix from a covariance matrix
-    is inverted
-
-    new_cov_ij = (regularized corr)_ij * sigma_i * sigma_j
+    the sqrt covariance matrix, A, according to `regularize_l2`. The l2 norm of
+    the inverse of the correlation matrix calculated from `covmat` is set to be
+    less than or equal to `norm_threshold`. If the input covmat already fulfills
+    this criterion it is left untouched.
 
     Parameters
     ----------
     covmat : array
         a covariance matrix which is to be regularized.
-    cond_num_threshold : float
+    norm_threshold : float
         The acceptable condition number of the correlation matrix, by default
-        set to 500.
+        set to 3.
 
     Returns
     -------
@@ -181,38 +170,79 @@ def regularize_covmat(covmat: np.array, cond_num_threshold=500):
         A new covariance matrix which has been regularized according to
         prescription above.
 
-    Notes
-    -----
-    (regularized corr)_ij is not technically a correlation matrix since it might
-    not have 1s on the diagonal.
-
-    TODO: is `regularized corr` the nearest matrix with condition number of
-    `cond_num_threshold` according to frob dist?
-
-    Examples
-    --------
-
-    >>> from validphys.calcutils import regularize_covmat
-    >>> import numpy as np
-    >>> import scipy.linalg as la
-    >>> np.random.seed(0)
-    >>> s = np.random.rand(3,3)
-    >>> cov = s@s.T
-    >>> cov
-    array([[1.17601578, 0.99135397, 1.45880096],
-       [0.99135397, 0.89356028, 1.23866193],
-       [1.45880096, 1.23866193, 1.91538757]])
-    >>> new_cov = regularize_covmat(cov, 100)
-    >>> new_cov
-    array([[1.18115619, 0.98945605, 1.45496881],
-       [0.98945605, 0.89426102, 1.24007682],
-       [1.45496881, 1.24007682, 1.9182444 ]])
-    >>> print(np.linalg.norm(new_cov-cov))
-    0.008697992044783345
     """
-    d = np.sqrt(np.diag(covmat))
-    corr = (covmat/d)/d[:, np.newaxis]
+    d = np.sqrt(np.diag(covmat))[:, np.newaxis]
+    corr = covmat / d / d.T
     e_val, e_vec = la.eigh(corr)
-    new_e_val = np.clip(e_val, a_min=max(e_val)/cond_num_threshold, a_max=None)
-    new_corr = (new_e_val*e_vec)@e_vec.T
-    return (new_corr*d)*d[:, np.newaxis]
+    if 1 / e_val[0] <= norm_threshold:
+        return covmat
+    new_e_val = np.clip(e_val, a_min=1/norm_threshold, a_max=None)
+    return ((e_vec * new_e_val) @ e_vec.T) * d * d.T
+
+def regularize_singular_values(s, sqrt_threshold):
+    """Clip from below an of singular values sorted in decreasing order so that
+    the Frobenius-L2 condition number (see  :func:`fro_l2_cond`) of the
+    corresponding matrix is not bigger than `norm_threshold`.
+
+    Parameters
+    ----------
+    s : 1d array
+        Sorted singular calues as returnd by linalg.svd.
+    noorm_threshold : float
+        The value of the threshold
+
+    Returns
+    -------
+    snew : array
+       The values of `s` clipped from below, so that `:func:`fro_l2_cond`(s) <=
+       `norm_threshold`.
+    """
+    if 1 / s[-1] <= sqrt_threshold:
+        return s
+
+    return np.clip(s, a_min=1/sqrt_threshold, a_max=None)
+
+
+def regularize_l2(sqrtcov, sqrt_threshold):
+    r"""Return a regularized version of `sqrtcov`.
+
+    Given `sqrtcov` an (N, nsys) matrix, such as it's
+    gram matrix is the covariance matrix (`covmat = sqrtcov@sqrtcov.T`), first
+    decompose it like ``sqrtcov = D@A``, where `D` is a positive diagonal matrix
+    of standard deviations and `A` is the "square root" of the correlation
+    matrix, ``corrmat = A@A.T``. Then produce a new version of `A` which removes
+    the unstable behaviour and ensable a new square root covariance matrix,
+    which is returned.
+
+    The stability condition is controlled by `threshold`. It is
+
+    .. math::
+
+        \left\Vert A+ \right\Vert_L2
+        \leq \frac{1}{threshold}
+
+    A+ is the pseudoinverse of A, `sqrt_threshold` roughly corresponds to the
+    sqrt of the maximimum relative uncertainty in any systematic.
+
+    Parameters
+    ----------
+
+    sqrtcov : 2d array
+        An (N, nsys) matrix specifying the uncertainties.
+    sqrt_threshold : float
+        The tolerance for the regularization.
+
+    Returns
+    -------
+
+    newsqrtcov : 2d array
+        A regularized version of `sqrtcov`.
+    """
+
+    d = np.sqrt(np.sum(sqrtcov ** 2, axis=1))[:, np.newaxis]
+    sqrtcorr = sqrtcov / d
+    u, s, vt = la.svd(sqrtcorr, full_matrices=False)
+    if 1 / s[-1] <= sqrt_threshold:
+        return sqrtcov
+    snew = regularize_singular_values(s, sqrt_threshold)
+    return u * (snew * d) @ vt

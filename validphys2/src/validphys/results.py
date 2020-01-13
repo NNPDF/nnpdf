@@ -368,7 +368,7 @@ def covariance_matrix(
     fitthcovmat,
     t0set:(PDF, type(None)) = None,
     perform_covmat_reg=False,
-    condition_number_threshold=500):
+    norm_threshold=3):
     """Returns the covariance matrix for a given `dataset`. By default the
     data central values will be used to calculate the multiplicative contributions
     to the covariance matrix.
@@ -391,9 +391,10 @@ def covariance_matrix(
     be true. This algorithm sets a minimum threshold for eigenvalues that the
     corresponding correlation matrix can have to be:
 
-    max(eigenvalue)/condition_number_threshold
+    1/norm_threshold
 
-    by default condition_number_threshold is set to 500
+    which has the effect of limiting the L2 norm of the inverse of the correlation
+    matrix. By default norm_threshold is set to 3.
 
     Parameters
     ----------
@@ -406,7 +407,7 @@ def covariance_matrix(
         None if `use_t0` is False or a PDF parsed from `t0pdfset` runcard key
     perform_covmat_reg: bool
         whether or not to regularize the covariance matrix
-    condition_number_threshold: number
+    norm_threshold: number
         threshold used to regularize covariance matrix
 
     Returns
@@ -441,7 +442,7 @@ def covariance_matrix(
     if perform_covmat_reg:
         covmat = regularize_covmat(
             covmat,
-            cond_num_threshold=condition_number_threshold
+            norm_threshold=norm_threshold
         )
     return covmat
 
@@ -485,7 +486,7 @@ def experiment_covariance_matrix(
         fitthcovmat,
         t0set:(PDF, type(None)) = None,
         perform_covmat_reg=False,
-        condition_number_threshold=500):
+        norm_threshold=3):
     """Like `covariance_matrix` except for an experiment"""
     loaded_data = experiment.load()
 
@@ -505,7 +506,7 @@ def experiment_covariance_matrix(
     if perform_covmat_reg:
         covmat = regularize_covmat(
             covmat,
-            cond_num_threshold=condition_number_threshold
+            norm_threshold=norm_threshold
         )
     return covmat
 
