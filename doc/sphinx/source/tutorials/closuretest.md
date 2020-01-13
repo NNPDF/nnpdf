@@ -50,7 +50,7 @@ Before you've made any changes, a typical `closuretest` section will be as follo
 closuretest:
   filterseed  : 0   # Random seed to be used in filtering data partitions
   fakedata    : False
-  fakepdf     : MSTW2008nlo68cl
+  fakepdf     : MMHT2014nnlo68cl
   errorsize   : 1.0 # uncertainties rescaling
   fakenoise   : False
   rancutprob  : 1.0 # Fraction of data to be included in the fit
@@ -75,7 +75,7 @@ An example of a typical level 1 or level 2 `closuretest` specification is given
 closuretest:
   filterseed  : 0   # Random seed to be used in filtering data partitions
   fakedata    : True
-  fakepdf     : MSTW2008nlo68cl
+  fakepdf     : MMHT2014nnlo68cl
   errorsize   : 1.0 # uncertainties rescaling
   fakenoise   : True
   rancutprob  : 1.0 # Fraction of data to be included in the fit
@@ -97,7 +97,7 @@ we would choose that the t0 set was the same as the underlying law:
 
 ```yaml
 datacuts:
-  t0pdfset     : MSTW2008nlo68cl # PDF set to generate t0 covmat
+  t0pdfset     : MMHT2014nnlo68cl # PDF set to generate t0 covmat
   ...
 ```
 
@@ -112,8 +112,52 @@ fitting:
   ...
 ```
 
-Typically this flag will already be set to `True` since this is the default
-option when running a standard NNPDF fit
+### Summary for each level of closure test
+
+See below for the keys which specify each level of closure test, other keys
+can be chosen by user
+
+#### Level 0
+
+```yaml
+fitting:
+  ...
+  genrep   : False
+  ...
+closuretest:
+  ...
+  fakedata    : True
+  fakenoise   : False
+  ...
+```
+
+#### Level 1
+
+```yaml
+fitting:
+  ...
+  genrep   : False
+  ...
+closuretest:
+  ...
+  fakedata    : True
+  fakenoise   : True
+  ...
+```
+
+#### Level 0
+
+```yaml
+fitting:
+  ...
+  genrep   : True
+  ...
+closuretest:
+  ...
+  fakedata    : True
+  fakenoise   : True
+  ...
+```
 
 ## Running a closure test
 
@@ -139,4 +183,4 @@ $ n3fit fitname.yml <replica_number>
 ```
 
 You will still need to evolve the fit and run `postfit` as with a standard
-`n3fit`, for more details [click here](../n3fit/usage.md).
+[`n3fit`](../n3fit/usage.md).

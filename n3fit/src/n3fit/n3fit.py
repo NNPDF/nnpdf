@@ -22,7 +22,7 @@ from reportengine.compat import yaml
 N3FIT_FIXED_CONFIG = dict(
     use_cuts = 'internal',
     use_t0 = True,
-    actions_ = ['datacuts::theory performfit']
+    actions_ = ['datacuts::theory::closuretest performfit']
 )
 
 N3FIT_PROVIDERS = ["n3fit.performfit"]
@@ -51,7 +51,7 @@ class N3FitEnvironment(Environment):
 
         # check if results folder exists
         self.output_path = pathlib.Path(self.output_path).absolute()
-        if not (self.output_path/"nnfit").exists():
+        if not (self.output_path/"nnfit").is_dir():
             if not re.fullmatch(r"[\w.\-]+", self.output_path.name):
                 raise N3FitError("Invalid output folder name. Must be alphanumeric.")
             try:
@@ -115,11 +115,11 @@ class N3FitConfig(Config):
         fitpath = self.environment.output_path
         return FitSpec(fitpath.name, fitpath)
 
-    def parse_closuretest(self, closurespec:dict):
-        """Parses the `closuretest` dictionary from the runcard, if
-        the fakedata key is True then checks that filter has been ran
+    def parse_fakedata(self, fakedata: bool):
+        """Parses the `fakedata` key from the closuretest namespace, if True then
+        use generated closure test in fit
         """
-        if closurespec['fakedata']:
+        if fakedata:
             log.warning("using filtered closure data")
             if not (self.environment.output_path/'filter').is_dir():
                 raise ConfigError(
@@ -127,12 +127,13 @@ class N3FitConfig(Config):
                     f"{self.environment.output_path/'filter'} "
                     "to load commondata from. Did you run filter on the "
                     "runcard?")
-        return closurespec
+        return fakedata
 
-    def produce_use_fitcommondata(self, closuretest):
-        """Produces the `use_fitcommondata` key from the `closuretest` dictionary
+    def produce_use_fitcommondata(self, fakedata):
+        """Produces the `use_fitcommondata` key from the `fakedata` key in
+        `closuretest` namespace
         """
-        return closuretest['fakedata']
+        return fakedata
 
 
 
