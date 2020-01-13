@@ -158,10 +158,15 @@ def observable_generator(
 
 # Network generation functions
 def generate_dense_network(
-    nodes_in, nodes, activations, initializer_name, seed=0, dropout_rate=0.0
+    nodes_in,
+    nodes,
+    activations,
+    initializer_name="glorot_normal",
+    seed=0,
+    dropout_rate=0.0,
 ):
     """
-    generates a dense network
+    Generates a dense network
 
     the dropout rate, if selected, is set
     for the next to last layer (i.e., the last layer of the dense network before getting to
@@ -197,7 +202,7 @@ def generate_dense_network(
 
 
 def generate_dense_per_flavour_network(
-    nodes_in, nodes, activations, initializer_name, seed=0, basis_size=8
+    nodes_in, nodes, activations, initializer_name="glorot_normal", seed=0, basis_size=8
 ):
     """
     For each flavour generates a dense network of the chosen size
@@ -228,6 +233,7 @@ def generate_dense_per_flavour_network(
             "units": nodes_out,
             "activation": activation,
             "input_shape": (nodes_in,),
+            "basis_size": basis_size,
         }
 
         layer = base_layer_selector("dense_per_flavour", **arguments)
@@ -388,19 +394,6 @@ def pdfNN_layer_generator(
         for dense_layer in list_of_pdf_layers[1:]:
             curr_fun = dense_layer(curr_fun)
         return curr_fun
-
-    #     import keras.backend as K
-    #     from keras.layers import Input
-    #     from keras.models import Model
-    #     import numpy as np
-    #     arr = np.random.rand(1,40)
-    #     inp = Input(tensor = K.constant(arr))
-    #     out = dense_me(inp)
-    #     modelito = Model(inp, out)
-    #     modelito.summary()
-    #
-    #     import ipdb
-    #     ipdb.set_trace()
 
     # Preprocessing layer (will be multiplied to the last of the denses)
     preproseed = seed + number_of_layers
