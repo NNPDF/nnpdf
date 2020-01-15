@@ -487,7 +487,7 @@ class CoreConfig(configparser.Config):
 
         Compute the intersection of the dataset names, and for each element in
         the intersection construct a mapping with the follwing keys:
-            
+
             - process : A string with the common process name.
             - experiment_name : A string with the common experiment name.
             - dataset_name : A string with the common dataset name.
@@ -712,6 +712,7 @@ class CoreConfig(configparser.Config):
         self,
         use_thcovmat_in_sampling: bool,
         use_thcovmat_in_fitting: bool,
+        use_higher_twist_uncertainties: bool = False,
         thcovmat_type: str = "full",
     ):
         """
@@ -734,24 +735,29 @@ class CoreConfig(configparser.Config):
             The covariance matrix is computed using
             ``theory_block_diag_covmat``.
         """
-        valid_type = {"full", "blockdiagonal", "diagonal"}
-        if thcovmat_type not in valid_type:
-            raise ConfigError(
-                f"Invalid thcovmat_type setting: '{valid_type}'.",
-                thcovmat_type,
-                valid_type,
-            )
+        #valid_type = {"full", "blockdiagonal", "diagonal"}
+        #if thcovmat_type not in valid_type:
+        #    raise ConfigError(
+        #        f"Invalid thcovmat_type setting: '{valid_type}'.",
+         #       thcovmat_type,
+        #        valid_type,
+         #   )
 
-        from validphys.theorycovariance.construction import theory_covmat_custom
-        from validphys.theorycovariance.construction import theory_diagonal_covmat
-        from validphys.theorycovariance.construction import theory_block_diag_covmat
+        #from validphys.theorycovariance.construction import theory_covmat_custom
+        #from validphys.theorycovariance.construction import theory_diagonal_covmat
+        #from validphys.theorycovariance.construction import theory_block_diag_covmat
 
-        if thcovmat_type == "full":
-            f = theory_covmat_custom
-        if thcovmat_type == "diagonal":
-            f = theory_diagonal_covmat
-        if thcovmat_type == "blockdiagonal":
-            f = theory_block_diag_covmat
+        #if thcovmat_type == "full":
+        #    f = theory_covmat_custom
+        #if thcovmat_type == "diagonal":
+        #    f = theory_diagonal_covmat
+        #if thcovmat_type == "blockdiagonal":
+        #    f = theory_block_diag_covmat
+
+        if use_higher_twist_uncertainties is True:
+            from validphys.theorycovariance.construction import higher_twist_covmat
+            f = higher_twist_covmat
+
 
         @functools.wraps(f)
         def res(*args, **kwargs):
@@ -762,7 +768,8 @@ class CoreConfig(configparser.Config):
         return res
 
     def produce_fitthcovmat(
-            self, use_thcovmat_if_present: bool = False, fit: (str, type(None)) = None):
+            self, use_thcovmat_if_present: bool = False, fit: (str, type(None)) = None,
+            include_hterrors: bool = False):
         """If a `fit` is specified and `use_thcovmat_if_present` is `True` then returns the
         corresponding covariance matrix for the given fit if it exists. If the fit doesn't have a
         theory covariance matrix then returns `False`.
@@ -797,6 +804,7 @@ class CoreConfig(configparser.Config):
             fit_theory_covmat = ThCovMatSpec(covmat_path)
         else:
             fit_theory_covmat = None
+
         return fit_theory_covmat
 
     def parse_speclabel(self, label:(str, type(None))):

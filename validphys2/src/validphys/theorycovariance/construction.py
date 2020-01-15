@@ -15,11 +15,10 @@ import pandas as pd
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.results import experiments_central_values, experiments_central_values_no_table
+from validphys.results import experiments_central_values, experiments_central_values_no_table, experiment_covariance_matrix, experiments_results
 from validphys.results import Chi2Data, results
 from validphys.calcutils import calc_chi2, all_chi2_theory, central_chi2_theory
 from validphys.theorycovariance.theorycovarianceutils import process_lookup, check_correct_theory_combination
-
 
 log = logging.getLogger(__name__)
 
@@ -393,6 +392,47 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     df = pd.DataFrame(cov_by_exp, index=experiments_index,
                       columns=experiments_index)
     return df
+
+@table
+def higher_twist_covmat(experiments):
+    """Reads the higher twist covariance matrix from file and applies cuts
+    to match experiment covaraince matrix"""
+    htcovmat = pd.read_csv(
+            f"/home/s1303034/Documents/higher_twist/htcovmat_total.csv",
+            index_col=[0,1,2], header=[0,1,2])
+    htcovmat = pd.DataFrame(htcovmat.values,
+                            index=htcovmat.index,
+                            columns=htcovmat.index)
+    # Reordering HT covmat to match exp order in runcard
+    dslist = []
+    for exp in experiments:
+        for ds in exp.datasets:
+            dslist.append(ds.name)
+    htcovmat = htcovmat.reindex(dslist, level="dataset")
+    htcovmat = ((htcovmat.T).reindex(dslist, level="dataset")).T
+    ndata = 0
+    cuts_list = []
+    indextuples = []
+    for exp in experiments:
+        for ds in exp.datasets:
+            print(ds.name)
+            uncutlength = len(htcovmat.xs(ds.name, level=1))
+            cuts = ds.cuts
+            if cuts is None:
+                cuts_list.append(np.arange(ndata, ndata+uncutlength))
+            else:
+                cuts_list.append(ndata+cuts.load())
+            ndata += uncutlength
+            print(len(cuts.load()))
+            # Creating new index
+            for i in range(len(cuts.load())):
+                indextuples.append((exp.name, ds.name, i))
+    newindex = pd.MultiIndex.from_tuples(indextuples, names=["experiment", "dataset", "index"], sortorder=0)
+    total_cuts = np.concatenate(cuts_list, axis=0)
+    cut_covmat = htcovmat.values[:, total_cuts][total_cuts, :]
+    cut_df = pd.DataFrame(cut_covmat, index=newindex,
+                          columns=newindex)
+    return cut_df
 
 @check_correct_theory_combination
 def total_covmat_diagtheory_experiments(experiments_results_theory,
