@@ -1069,6 +1069,44 @@ def experiments_central_values(experiment_result_table):
     central_theory_values = experiment_result_table["theory_central"]
     return central_theory_values
 
+dataspecs_each_dataset_chi2 = collect("each_dataset_chi2", ("dataspecs",))
+each_dataset = collect("dataset", ("experiments", "experiment"))
+dataspecs_each_dataset = collect("each_dataset", ("dataspecs",))
+
+@table
+@check_speclabels_different
+def dataspecs_dataset_chi2_difference_table(
+    dataspecs_each_dataset, dataspecs_each_dataset_chi2, dataspecs_speclabel):
+    """Returns a table with difference between the chi2 and the expected chi2 in
+    units of the expected chi2 standard deviation, given by
+
+        chi2_diff = (\chi2 - N)/sqrt(2N)
+
+    for each dataset for each dataspec.
+
+    """
+    dfs = []
+    cols = [r"$(\chi^2 - N)/\sqrt{2N}$"]
+    for label, datasets, chi2s in zip(
+        dataspecs_speclabel, dataspecs_each_dataset, dataspecs_each_dataset_chi2):
+        records = []
+        for dataset, chi2 in zip(datasets, chi2s):
+            ndata = chi2.ndata
+
+            records.append(dict(
+                dataset=str(dataset),
+                chi2_stat = (chi2.central_result.mean() - ndata)/np.sqrt(2*ndata)
+            ))
+
+
+        df = pd.DataFrame.from_records(records,
+                 columns=("dataset", "chi2_stat"),
+                 index = ("dataset",)
+             )
+        df.columns = pd.MultiIndex.from_product(([label], cols))
+        dfs.append(df)
+    return pd.concat(dfs, axis=1)
+
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
 
