@@ -422,24 +422,6 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter::ReadData()
       fSys[2][j].add = fSys[2][j].mult*fData[2]/100;
       fSys[2][j].type = MULT;
       fSys[2][j].name = "CORR";
-
-      lstream >> sys1 >> unneeded_info >> sys2;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[3][j].mult = sigma;
-      fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
-      fSys[3][j].type = MULT;
-      fSys[3][j].name = "CORR";    
-      shift[3] += datshift;
     }
     else if (j==4) // Deal with asymmetric errors
     {
@@ -599,24 +581,6 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
       fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
       fSys[3][j].type = MULT;
       fSys[3][j].name = "CORR";
-
-      lstream >> sys1 >> unneeded_info >> sys2;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[4][j].mult = sigma;
-      fSys[4][j].add = fSys[4][j].mult*fData[4]/100;
-      fSys[4][j].type = MULT;
-      fSys[4][j].name = "CORR";
-      shift[4] += datshift;
     }
     else if (j==3) // Deal with asymmetric errors
     {
@@ -645,11 +609,6 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
       fSys[3][j].type = MULT;
       fSys[3][j].name = "CORR";
       shift[3] += datshift;
-
-      lstream >> fSys[4][j].mult;
-      fSys[4][j].add = fSys[4][j].mult*fData[4]/100;
-      fSys[4][j].type = MULT;
-      fSys[4][j].name = "CORR";
     }
     else if (j==6) // Deal with asymmetric errors
     {
@@ -681,11 +640,6 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
         fSys[i][j].name = "CORR";
         shift[i] += datshift;
       }
-
-      lstream >> fSys[4][j].mult;
-      fSys[4][j].add = fSys[4][j].mult*fData[4]/100;
-      fSys[4][j].type = MULT;
-      fSys[4][j].name = "CORR";
     }
     else if (j==7) // Deal with asymmetric errors
     {
@@ -717,26 +671,23 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
       fSys[2][j].type = MULT;
       fSys[2][j].name = "CORR";
 
-      for (int i=3; i<fNData; i++)
+      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
+      if (sys1 < 0)
       {
-        lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0)
-        {
-          up=sys2;
-          down=sys1;
-        }
-        else
-        {
-          up=sys1;
-          down=sys2;
-        }
-        symmetriseErrors(up, down, &sigma, &datshift);
-        fSys[i][j].mult = sigma;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-        shift[i] += datshift;
+        up=sys2;
+        down=sys1;
       }
+      else
+      {
+        up=sys1;
+        down=sys2;
+      }
+      symmetriseErrors(up, down, &sigma, &datshift);
+      fSys[3][j].mult = sigma;
+      fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
+      fSys[3][j].type = MULT;
+      fSys[3][j].name = "CORR";
+      shift[3] += datshift;
     }
     else // Deal with lines that contain no asymmetric errors
     {
