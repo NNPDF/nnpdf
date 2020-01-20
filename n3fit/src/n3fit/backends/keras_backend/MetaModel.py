@@ -92,7 +92,22 @@ class MetaModel(Model):
             history = super().fit(epochs=epochs, **kwargs)
         return history.history
 
-    def evaluate(self, **kwargs):
+    def fit_evaluate(self, *args, **kwargs):
+        result = self.evaluate(*args, **kwargs)
+        # get the name of all losses
+        metricas = self.metrics_names
+        if isinstance(result, float):
+            # if there is only one we have to game it
+            result = [result, result]
+            # get the name of the last layer before the loss
+            last_name = self.layers[-1].name
+            metricas.append(f"{last_name}_loss")
+
+        # now make it into a dictionary so it looks like the history object
+        loss_dict = dict(zip(metricas, result))
+        return loss_dict
+
+    def evaluate(self, x = None, y = None, **kwargs):
         """
         Performs keras.evaluate and returns a list of the loss function for each of the outputs
 
@@ -106,22 +121,11 @@ class MetaModel(Model):
                             each mapped to the partial loss
         """
         if self.has_dataset:
+            # Ensure that no x or y were passed
             result = super().evaluate(x=None, y=None, steps=1, **kwargs)
         else:
-            result = super().evaluate(**kwargs)
-
-        # Get the name of all losses
-        metricas = self.metrics_names
-        if isinstance(result, float):
-            # If there is only one we have to game it
-            result = [result, result]
-            # Get the name of the last layer before the loss
-            last_name = self.layers[-1].name
-            metricas.append(f"{last_name}_loss")
-
-        # Now make it into a dictionary so it looks like the history object
-        loss_dict = dict(zip(metricas, result))
-        return loss_dict
+            result = super().evaluate(x = x, y = y, **kwargs)
+        return result
 
     def compile(
         self, optimizer_name="RMSprop", learning_rate=0.05, loss=None, target_output=None, **kwargs
@@ -160,7 +164,11 @@ class MetaModel(Model):
             opt_args["lr"] = learning_rate
 
         opt_args["clipnorm"] = 1.0
-        opt = opt_function(**opt_args)
+        if isinstance(opt_function, str):
+			# This allows for quickly drawing new optimizers that Keras might implement
+            opt = opt_function
+        else:
+            opt = opt_function(**opt_args)
 
         if target_output is not None:
             self.has_dataset = True

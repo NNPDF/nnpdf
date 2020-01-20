@@ -390,7 +390,7 @@ class Stopping:
             `tr_chi2`
                 chi2 of the given `training_model`
         """
-        training_info = training_model.evaluate()
+        training_info = training_model.fit_evaluate()
         tr_chi2, _ = parse_losses(training_info, self._tr_ndata)
         return tr_chi2
 
@@ -576,7 +576,7 @@ class Validation:
             `vl_dict`
                 dictionary containing a map of experiment names and loss
         """
-        loss_dict = self.model.evaluate(verbose=self.verbose)
+        loss_dict = self.model.fit_evaluate(verbose=self.verbose)
         return parse_losses(loss_dict, self.ndata_dict, suffix=self.suffix)
 
     @property
