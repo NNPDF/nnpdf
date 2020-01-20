@@ -394,7 +394,7 @@ def theory_covmat_custom(covs_pt_prescrip, covmap, experiments_index):
     return df
 
 @table
-def higher_twist_covmat(experiments):
+def higher_twist_covmat(experiments, experiments_index):
     """Reads the higher twist covariance matrix from file and applies cuts
     to match experiment covaraince matrix"""
     htcovmat = pd.read_csv(
@@ -415,24 +415,48 @@ def higher_twist_covmat(experiments):
     indextuples = []
     for exp in experiments:
         for ds in exp.datasets:
-            print(ds.name)
-            uncutlength = len(htcovmat.xs(ds.name, level=1))
-            cuts = ds.cuts
-            if cuts is None:
-                cuts_list.append(np.arange(ndata, ndata+uncutlength))
-            else:
-                cuts_list.append(ndata+cuts.load())
-            ndata += uncutlength
-            print(len(cuts.load()))
-            # Creating new index
-            for i in range(len(cuts.load())):
-                indextuples.append((exp.name, ds.name, i))
+            if ds.name in htcovmat.index.get_level_values(1):
+                print(ds.name)
+                uncutlength = len(htcovmat.xs(ds.name, level=1))
+                cuts = ds.cuts
+                if cuts is None:
+                    cuts_list.append(np.arange(ndata, ndata+uncutlength))
+                else:
+                    cuts_list.append(ndata+cuts.load())
+                ndata += uncutlength
+                print(len(cuts.load()))
+                # Creating new index
+                for i in range(len(cuts.load())):
+                    indextuples.append((exp.name, ds.name, float(i)))
     newindex = pd.MultiIndex.from_tuples(indextuples, names=["experiment", "dataset", "index"], sortorder=0)
     total_cuts = np.concatenate(cuts_list, axis=0)
     cut_covmat = htcovmat.values[:, total_cuts][total_cuts, :]
     cut_df = pd.DataFrame(cut_covmat, index=newindex,
                           columns=newindex)
-    return cut_df
+    # Make dimensions match those of exp covmat. First make empty df of
+    # exp covmat dimensions
+    empty_df = pd.DataFrame(0, index=experiments_index, columns=experiments_index)
+    covmats = []
+    for ds1 in dslist:
+        for ds2 in dslist:
+            if (ds1 in newindex.unique(level=1)) and (ds2 in newindex.unique(level=1)):
+                covmat = cut_df.xs(ds1,level=1, drop_level=False).T.xs(ds2, level=1, drop_level=False).T
+            else:
+                covmat = empty_df.xs(ds1,level=1, drop_level=False).T.xs(ds2, level=1, drop_level=False).T
+            covmats.append(covmat)
+    chunks = []
+    for x in range(0, len(covmats), len(dslist)):
+        chunk = covmats[x:x+len(dslist)]
+        chunks.append(chunk)
+    strips = []
+    for chunk in chunks:
+        strip = pd.concat(chunk, axis=1)
+        strips.append(strip.T)
+    strips.reverse()
+    full_df = pd.concat(strips, axis=1)
+    full_df = full_df.reindex(experiments_index)
+    full_df = ((full_df.T).reindex(experiments_index)).T
+    return full_df
 
 @check_correct_theory_combination
 def total_covmat_diagtheory_experiments(experiments_results_theory,
