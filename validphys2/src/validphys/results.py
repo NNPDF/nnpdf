@@ -1077,8 +1077,8 @@ dataspecs_each_dataset = collect("each_dataset", ("dataspecs",))
 @check_speclabels_different
 def dataspecs_dataset_chi2_difference_table(
     dataspecs_each_dataset, dataspecs_each_dataset_chi2, dataspecs_speclabel):
-    """Returns a table with difference between the chi2 and the expected chi2 in
-    units of the expected chi2 standard deviation, given by
+    r"""Returns a table with difference between the chi2 and the expected chi2
+    in units of the expected chi2 standard deviation, given by
 
         chi2_diff = (\chi2 - N)/sqrt(2N)
 
@@ -1100,12 +1100,66 @@ def dataspecs_dataset_chi2_difference_table(
 
 
         df = pd.DataFrame.from_records(records,
-                 columns=("dataset", "chi2_stat"),
-                 index = ("dataset",)
-             )
+                columns=("dataset", "chi2_stat"),
+                index = ("dataset",)
+            )
         df.columns = pd.MultiIndex.from_product(([label], cols))
         dfs.append(df)
     return pd.concat(dfs, axis=1)
+
+datasets_covmat_no_reg = collect(
+    "covariance_matrix", ("experiments", "experiment", "no_covmat_reg"))
+datasets_covmat_reg = collect(
+    "covariance_matrix", ("experiments", "experiment", "do_covmat_reg"))
+
+@table
+def datasets_covariance_matrix_differences_table(
+    each_dataset, datasets_covmat_no_reg, datasets_covmat_reg):
+    """For each dataset calculate and tabulate two max differences upon
+    regularization given a value for `norm_threshold`:
+
+    - max relative difference to the diagonal of the covariance matrix (%)
+    - max absolute difference to the correlation matrix of each covmat
+
+    """
+    records = []
+    for ds, reg, noreg in zip(
+        each_dataset, datasets_covmat_reg, datasets_covmat_no_reg):
+        cov_diag_rel_diff = np.diag(reg)/np.diag(noreg)
+        d_reg = np.sqrt(np.diag(reg))
+        d_noreg = np.sqrt(np.diag(noreg))
+        corr_reg = reg/d_reg[:, np.newaxis]/d_reg[np.newaxis, :]
+        corr_noreg = noreg/d_noreg[:, np.newaxis]/d_noreg[np.newaxis, :]
+        corr_abs_diff = abs(corr_reg - corr_noreg)
+        records.append(dict(
+                dataset=str(ds),
+                covdiff= np.max(abs(cov_diag_rel_diff- 1))*100, #make percentage
+                corrdiff=np.max(corr_abs_diff)
+            ))
+    df = pd.DataFrame.from_records(records,
+        columns=("dataset", "covdiff", "corrdiff"),
+        index = ("dataset",)
+        )
+    df.columns = ["Variance rel. diff. (%)", "Correlation max abs. diff."]
+    return df
+
+dataspecs_covmat_diff_tables = collect(
+    "datasets_covariance_matrix_differences_table", ("dataspecs",))
+
+@check_speclabels_different
+@table
+def dataspecs_datasets_covmat_differences_table(
+    dataspecs_speclabel, dataspecs_covmat_diff_tables
+):
+    """For each dataspec calculate and tabulate the two covmat differences
+    described in `datasets_covariance_matrix_differences_table`
+    (max relative difference in variane and max absolute correlation difference)
+
+    """
+    df = pd.concat( dataspecs_covmat_diff_tables, axis=1)
+    cols = ["Variance rel. diff. (%)", "Correlation max abs. diff."]
+    df.columns = pd.MultiIndex.from_product((dataspecs_speclabel, cols))
+    return df
 
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))

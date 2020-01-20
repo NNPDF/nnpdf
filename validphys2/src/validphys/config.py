@@ -877,6 +877,15 @@ class CoreConfig(configparser.Config):
             log.info("Regularizing covariance matrices")
         return do_reg
 
+    def parse_norm_threshold(self, val: numbers.Number):
+        return val
+
+    def produce_do_covmat_reg(self, norm_threshold):
+        return {"perform_covmat_reg": True, "norm_threshold": norm_threshold}
+
+    def produce_no_covmat_reg(self):
+        return {"perform_covmat_reg": False}
+
     def parse_filter_rules(self, filter_rules: (list, type(None))):
         """A list of filter rules. See https://docs.nnpdf.science/vp/filters.html
         for details on the syntax"""
