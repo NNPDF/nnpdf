@@ -165,7 +165,9 @@ closuretest:
 
 The process of running the closure test is the same as [running a
 standard fit](./runafit.md), simply filter the runcard and run `nnfit` on the
-filter results
+filter results. Before uploading the fit, it is helpful if you rebuild the
+filtered closure data by running `rebuild-data <fit output directory>`. It is
+vital that the data is not rebuilt until all replicas have finished running.
 
 ### With `n3fit`
 
@@ -175,10 +177,13 @@ the closure test settings modified as shown
 between running a closure fit in `n3fit` and a standard fit is that the user is
 required to run `vp-setupfit` on the runcard before running `n3fit`. This is
 because the filtering of the data is required to generate the pseudodata central
-values. The typical workflow is then
+values. The filtered data should then be rebuilt before the fit, so there is no
+risk of the fit crashing due to multiple replicas rebuilding the data
+simultaneously. The workflow is as follows:
 
 ```bash
 $ vp-setupfit fitname.yml
+$ rebuild-data fitname
 $ n3fit fitname.yml <replica_number>
 ```
 
