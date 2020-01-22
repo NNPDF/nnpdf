@@ -73,14 +73,14 @@ class MetaModel(Model):
 
         super(MetaModel, self).__init__(input_list, output_list, **kwargs)
 
-    def fit(self, epochs=1, **kwargs):
+    def perform_fit(self, epochs=1, **kwargs):
         """
         Performs forward (and backwards) propagation for the model for a given number of epochs.
         If the model was compiled with input and output data, they will not be passed through
 
         Returns
         -------
-            `loss_dict`: dictionary
+            `loss_dict`: dict
                 a dictionary with all partial losses of the model
         """
         if self.has_dataset:
@@ -92,23 +92,24 @@ class MetaModel(Model):
         loss_dict = history.history
         return loss_dict
 
-    def fit_evaluate(self, *args, **kwargs):
+    def compute_losses(self, *args, **kwargs):
         """
         Performs keras.evaluate and returns a dictionary containing the loss function for
         each of the outputs.
 
         This function acts as wrapper around Keras' evaluate and uses the information from
-        the Keras' metric in order to return some information. Instead, the Keras' evaluate
-        method returns either a list (with no information about which loss corresponds to
+        the Keras' metric in order to return information on the losses in an unified format.
+
+        Instead, the Keras' evaluate method returns either a list (with no information about which loss corresponds to
         which output) or a float (if there is a single output).
 
-        This function aims to having an output compatible with the fit history object.
+        This function is compatible with the dict output by the fit history object.
 
         Any parameters passed to this function will be directly passed down to Keras.
 
         Returns
         -------
-            `loss_dict`: dictionary
+            `loss_dict`: dict
                 a dictionary with all partial losses of the model
         """
         result = self.evaluate(*args, **kwargs)
@@ -127,9 +128,10 @@ class MetaModel(Model):
 
     def evaluate(self, x = None, y = None, **kwargs):
         """
-        Wrapper around Keras' evaluate in order to capture the `input` and `output`
-        which will not be passed down to Keras if the model was compiled already with
-        the dataset.
+        Wrapper around evaluate to take into account the case in which the data is already known
+        at the time of `.compile`.
+        In this case the number of steps must be always specified and the input of x and y must
+        be set to `None`.
         """
         if self.has_dataset:
             # Ensure that no x or y were passed
@@ -202,7 +204,7 @@ class MetaModel(Model):
             `layer_names`: list
                 list of names of the layers to update weights
             `multiplier`: float
-                scalar number to multiply the weights with
+                scalar number to multiply the weights by
         """
         internal_model = self.internal_models.get(key)
         if not internal_model:
