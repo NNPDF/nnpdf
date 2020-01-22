@@ -73,10 +73,18 @@ class MetaModel(Model):
 
         super(MetaModel, self).__init__(input_list, output_list, **kwargs)
 
-    def perform_fit(self, epochs=1, **kwargs):
+    def perform_fit(self, x=None, y=None, steps_per_epoch=1, **kwargs):
         """
         Performs forward (and backwards) propagation for the model for a given number of epochs.
-        If the model was compiled with input and output data, they will not be passed through
+
+        The output of this function consists on a dictionary that maps the names of the metrics
+        of the model (the loss functions) to the partial losses.
+
+        If the model was compiled with input and output data, they will not be passed through.
+        In this case by default the number of `steps_per_epoch` will be set to 1
+
+        ex:
+            {'loss': [100], 'dataset_a_loss1' : [67], 'dataset_2_loss': [33]}
 
         Returns
         -------
@@ -84,11 +92,15 @@ class MetaModel(Model):
                 a dictionary with all partial losses of the model
         """
         if self.has_dataset:
+            if x is not None or y is not None:
+                raise ValueError(
+                    "The model was compiled together with input and output but the information was passed again to the fit function"
+                )
             history = super().fit(
-                x=None, y=None, steps_per_epoch=1, batch_size=None, epochs=epochs, **kwargs
+                x=None, y=None, steps_per_epoch=steps_per_epoch, **kwargs,
             )
         else:
-            history = super().fit(epochs=epochs, **kwargs)
+            history = super().fit(x=x, y=y, steps_per_epoch=steps_per_epoch, **kwargs)
         loss_dict = history.history
         return loss_dict
 
@@ -126,7 +138,7 @@ class MetaModel(Model):
         loss_dict = dict(zip(metricas, result))
         return loss_dict
 
-    def evaluate(self, x = None, y = None, **kwargs):
+    def evaluate(self, x=None, y=None, **kwargs):
         """
         Wrapper around evaluate to take into account the case in which the data is already known
         at the time of `.compile`.
@@ -137,11 +149,16 @@ class MetaModel(Model):
             # Ensure that no x or y were passed
             result = super().evaluate(x=None, y=None, steps=1, **kwargs)
         else:
-            result = super().evaluate(x = x, y = y, **kwargs)
+            result = super().evaluate(x=x, y=y, **kwargs)
         return result
 
     def compile(
-        self, optimizer_name="RMSprop", learning_rate=0.05, loss=None, target_output=None, **kwargs
+        self,
+        optimizer_name="RMSprop",
+        learning_rate=0.05,
+        loss=None,
+        target_output=None,
+        **kwargs,
     ):
         """
         Compile the model given an optimizer and a list of loss functions.
@@ -184,7 +201,7 @@ class MetaModel(Model):
         opt_args["clipnorm"] = 1.0
 
         if isinstance(opt_function, str):
-	    # This allows for quickly drawing new optimizers that Keras might implement
+            # This allows for quickly drawing new optimizers that Keras might implement
             opt = opt_function
         else:
             opt = opt_function(**opt_args)
@@ -215,5 +232,5 @@ class MetaModel(Model):
             internal_model = Sequential(layers)
             self.internal_models[key] = internal_model
         current_weights = internal_model.get_weights()
-        new_weights = [i*multiplier for i in current_weights]
+        new_weights = [i * multiplier for i in current_weights]
         internal_model.set_weights(new_weights)
