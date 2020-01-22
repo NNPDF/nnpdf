@@ -199,12 +199,7 @@ class MetaModel(Model):
             opt_args["lr"] = learning_rate
 
         opt_args["clipnorm"] = 1.0
-
-        if isinstance(opt_function, str):
-            # This allows for quickly drawing new optimizers that Keras might implement
-            opt = opt_function
-        else:
-            opt = opt_function(**opt_args)
+        opt = opt_function(**opt_args)
 
         if target_output is not None:
             self.has_dataset = True
