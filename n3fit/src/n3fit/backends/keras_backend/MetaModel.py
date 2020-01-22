@@ -76,13 +76,12 @@ class MetaModel(Model):
     def fit(self, epochs=1, **kwargs):
         """
         Performs forward (and backwards) propagation for the model for a given number of epochs.
-        If the model was compiled with input and output data,
-            there is no need for giving them in this function
+        If the model was compiled with input and output data, they will not be passed through
 
-        # Returns:
-            - `history`: a dictionary of all the output layers of the model
-                         each mapped to their partial loss
-                        the partial loss containing one element for each epoch
+        Returns
+        -------
+            `loss_dict`: dictionary
+                a dictionary with all partial losses of the model
         """
         if self.has_dataset:
             history = super().fit(
@@ -90,7 +89,8 @@ class MetaModel(Model):
             )
         else:
             history = super().fit(epochs=epochs, **kwargs)
-        return history.history
+        loss_dict = history.history
+        return loss_dict
 
     def fit_evaluate(self, *args, **kwargs):
         """
@@ -153,13 +153,18 @@ class MetaModel(Model):
                 the data will be compiled together with the model and won't be necessary to
                 input it again in .fit()
 
-        # Arguments:
-            - `optimizer_name`: string defining the optimizer to be used
-            - `learning_rate`: learning rate of of the optimizer
-                                (if accepted as an argument, if not it will be ignored)
-            - `loss` : list of loss functions to be pass to the model
-            - `target_output`: list of outputs to compare the results to during fitting/evaluation
-                               if given further calls to fit/evaluate must be done with y = None.
+        Parameters
+        ----------
+            `optimizer_name`: str
+                string defining the optimizer to be used
+            `learning_rate`: float
+                learning rate of of the optimizer
+                (if accepted as an argument, if not it will be ignored)
+            `loss` : list
+                list of loss functions to be pass to the model
+            `target_output`: list
+                list of outputs to compare the results to during fitting/evaluation
+                if given further calls to fit/evaluate must be done with y = None.
         """
         try:
             opt_tuple = self.optimizers[optimizer_name]
@@ -194,8 +199,10 @@ class MetaModel(Model):
 
         Parameters
         ----------
-            layer_names: list of names of the layers to update weights
-            multiplier: scalar number to multiply the weights with
+            `layer_names`: list
+                list of names of the layers to update weights
+            `multiplier`: float
+                scalar number to multiply the weights with
         """
         internal_model = self.internal_models.get(key)
         if not internal_model:
