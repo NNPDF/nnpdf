@@ -93,6 +93,24 @@ class MetaModel(Model):
         return history.history
 
     def fit_evaluate(self, *args, **kwargs):
+        """
+        Performs keras.evaluate and returns a dictionary containing the loss function for
+        each of the outputs.
+
+        This function acts as wrapper around Keras' evaluate and uses the information from
+        the Keras' metric in order to return some information. Instead, the Keras' evaluate
+        method returns either a list (with no information about which loss corresponds to
+        which output) or a float (if there is a single output).
+
+        This function aims to having an output compatible with the fit history object.
+
+        Any parameters passed to this function will be directly passed down to Keras.
+
+        Returns
+        -------
+            `loss_dict`: dictionary
+                a dictionary with all partial losses of the model
+        """
         result = self.evaluate(*args, **kwargs)
         # get the name of all losses
         metricas = self.metrics_names
@@ -109,16 +127,9 @@ class MetaModel(Model):
 
     def evaluate(self, x = None, y = None, **kwargs):
         """
-        Performs keras.evaluate and returns a list of the loss function for each of the outputs
-
-        In Keras the first element of the list is the total loss (sum of all other elements)
-        but, if there is only one output it returns a float instead.
-        In order to fix this inconsistent behaviour,
-        when there is only one output we copy it twice into a list so it behaves the same as fit
-
-        # Returns:
-            - `loss_dict`: a dictionary with all the output layers of the model
-                            each mapped to the partial loss
+        Wrapper around Keras' evaluate in order to capture the `input` and `output`
+        which will not be passed down to Keras if the model was compiled already with
+        the dataset.
         """
         if self.has_dataset:
             # Ensure that no x or y were passed
@@ -164,8 +175,9 @@ class MetaModel(Model):
             opt_args["lr"] = learning_rate
 
         opt_args["clipnorm"] = 1.0
+
         if isinstance(opt_function, str):
-			# This allows for quickly drawing new optimizers that Keras might implement
+	    # This allows for quickly drawing new optimizers that Keras might implement
             opt = opt_function
         else:
             opt = opt_function(**opt_args)
