@@ -181,7 +181,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
       {
         fSys[i][j].add = syscor[i][j];
         fSys[i][j].mult = fSys[i][j].add*100/fData[i];
-        fSys[i][j].type = MULT;
+        fSys[i][j].type = ADD;
         fSys[i][j].name = "CORR";
       }
   }
@@ -443,7 +443,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter::ReadData()
       {
         fSys[i][j].add = syscor[i][j];
         fSys[i][j].mult = fSys[i][j].add*100/fData[i];
-        fSys[i][j].type = MULT;
+        fSys[i][j].type = ADD;
         fSys[i][j].name = "CORR";
       }
   }
@@ -680,7 +680,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
       {
         fSys[i][j].add = syscor[i][j];
         fSys[i][j].mult = fSys[i][j].add*100/fData[i];
-        fSys[i][j].type = MULT;
+        fSys[i][j].type = ADD;
         fSys[i][j].name = "CORR";
       }
   }
@@ -999,7 +999,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
       {
         fSys[i][j].add = syscor[i][j];
         fSys[i][j].mult = fSys[i][j].add*100/fData[i];
-        fSys[i][j].type = MULT;
+        fSys[i][j].type = ADD;
         fSys[i][j].name = "CORR";
       }
   }
@@ -1351,7 +1351,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter::ReadData()
       {
         fSys[i][j].add = syscor[i][j];
         fSys[i][j].mult = fSys[i][j].add*100/fData[i];
-        fSys[i][j].type = MULT;
+        fSys[i][j].type = ADD;
         fSys[i][j].name = "CORR";
       }
   }
@@ -1614,7 +1614,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAPFilter::ReadData()
       {
         fSys[i][j].add = syscor[i][j];
         fSys[i][j].mult = fSys[i][j].add*100/fData[i];
-        fSys[i][j].type = MULT;
+        fSys[i][j].type = ADD;
         fSys[i][j].name = "CORR";
       }
   }
@@ -1883,7 +1883,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter::ReadData()
       {
         fSys[i][j].add = syscor[i][j];
         fSys[i][j].mult = fSys[i][j].add*100/fData[i];
-        fSys[i][j].type = MULT;
+        fSys[i][j].type = ADD;
         fSys[i][j].name = "CORR";
       }
   }
@@ -2214,7 +2214,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PTFilter::ReadData()
       {
         fSys[i][j].add = syscor[i][j];
         fSys[i][j].mult = fSys[i][j].add*100/fData[i];
-        fSys[i][j].type = MULT;
+        fSys[i][j].type = ADD;
         fSys[i][j].name = "CORR";
       }
   }
