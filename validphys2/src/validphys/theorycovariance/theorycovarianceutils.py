@@ -78,7 +78,7 @@ def process_lookup(name):
                                 "ATLAS_ATLAS_WM_JET_8TEV_PT":           "DY",
                                 "ATLAS_ATLAS_WP_JET_8TEV_PT":           "DY",
                                 "ATLAS_ATLAS_WM_JET_8TEV_PTJ":          "DY",
-                                "ATLAS_ATLAS_WP_JET_8TEV_PTJ":          "DY",                               
+                                "ATLAS_ATLAS_WP_JET_8TEV_PTJ":          "DY",
 				"ATLAS1JET11":				"JETS",
                                 "ATLAS1JET11_NEW_SCALE":                "JETS",
 				"CMSJETS11":				"JETS",
