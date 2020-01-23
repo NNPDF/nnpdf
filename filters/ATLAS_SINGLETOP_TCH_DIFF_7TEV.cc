@@ -112,9 +112,9 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
   
   for (int i=0; i<fNData; i++)
   {
-    double rap_top; // Rapidity of top quark
+    double rap_top;                   // Rapidity of top quark
     double rap_top_low, rap_top_high; // Limits of bin
-    double fstat_percentage; // Percentage statistical uncertainty
+    double fstat_percentage;          // Percentage statistical uncertainty
     string unneeded_info;
 
     getline(f1,line);
@@ -131,13 +131,13 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
 
     fKin1[i] = rap_top;
     fKin2[i] = Mt*Mt; // Top mass squared
-    fKin3[i] = 7000; // Centre of mass energy in GeV
+    fKin3[i] = 7000;  // Centre of mass energy in GeV
 
     lstream >> fData[i]; // Value of bin
     lstream >> unneeded_info >> fstat_percentage;
     fstat_additive[i] = fstat_percentage*fData[i]/100;
 
-    fStat[i] = 1e-10; // Set stat. error to zero to avoid double counting when using artificial systematics
+    fStat[i] = 1e-10; // Set stat. error to zero to avoid double counting
   }
 
   // Read statistical correlation matrix
@@ -179,7 +179,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
   {
     for (int j=0; j<fNData; j++)
       {
-        fSys[i][j].add = syscor[i][j];
+        fSys[i][j].add  = syscor[i][j];
         fSys[i][j].mult = fSys[i][j].add*100/fData[i];
         fSys[i][j].type = ADD;
         fSys[i][j].name = "CORR";
@@ -193,121 +193,49 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
     getline(f2,line);
   }
   
-  double sys1, sys2, up, down, sigma, datshift;
-  std::vector<double> shift(fNData);
+  double sys1, sys2;
+  const int realsys=7;
 
-  for (int j=fNData; j<fNSys; j++)
+  for (int j=0; j<realsys; j++)
   {
     string unneeded_info;
 
     getline(f2,line);
     istringstream lstream(line);
 
-    if (j==fNData+2) // Deal with aysymmetric errors
-    {
-      for (int i=0; i<3; i++)
+    for(int i=0; i<fNData; i++)
       {
-        lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0) 
-        {
-          up=sys2;
-          down=sys1;
-        }
-        else
-        {
-          up=sys1;
-          down=sys2;
-        }
-        symmetriseErrors(up, down, &sigma, &datshift);
-        fSys[i][j].mult = sigma;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";    
-        shift[i] += datshift; 
-      }
-    }
-    else if (j==fNData+3) // Deal with asymmetric errors
-    {
-      for (int i=0; i<2; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
+	lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
 
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[2][j].mult = sigma;
-      fSys[2][j].add = fSys[2][j].mult*fData[2]/100;
-      fSys[2][j].type = MULT;
-      fSys[2][j].name = "CORR";
-      shift[2] += datshift;
-    }
-    else if (j==fNData+5) // Deal with asymmetric errors
-    {
-      for (int i=0; i<2; i++)
-      {
-        lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0)
-        {
-          up=sys2;
-          down=sys1;
-        }
-        else
-        {
-          up=sys1;
-          down=sys2;
-        }
-        symmetriseErrors(up, down, &sigma, &datshift);
-        fSys[i][j].mult = sigma;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-        shift[i] += datshift;
-      }
+	if(sys1<0. && sys2<0.)
+	  sys2=0;
+	else if(sys1>0. && sys2>0.)
+	  sys1=0.;
+	
+	sys1=sys1/sqrt(2.);
+	sys2=sys2/sqrt(2.);
 
-      lstream >> fSys[2][j].mult >> unneeded_info;
-      fSys[2][j].add = fSys[2][j].mult*fData[2]/100;
-      fSys[2][j].type = MULT;
-      fSys[2][j].name = "CORR";
-    }
-    else // Deal with lines that contain no asymmetric errors
-    {
-      for (int i=0; i<fNData; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
+        fSys[i][fNData+2*j].mult = sys1;
+        fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+        fSys[i][fNData+2*j].type = MULT;
+        fSys[i][fNData+2*j].name = "CORR"; 
+
+        fSys[i][fNData+2*j+1].mult = sys2;
+        fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[fNData+2*j+1]/100;
+        fSys[i][fNData+2*j+1].type = MULT;
+        fSys[i][fNData+2*j+1].name = "CORR"; 
       }
-    }
-  }
-
-  for (int i=0; i<fNData; i++)
-  {
-    fData[i] *= (1.0 + shift[i]*0.01); // Shift of central value due to asymmetric errors
-  }
-
+  }   
+  
   // Clean-up
   for (int i=0; i<fNData; i++)
     delete[] syscor[i];
-
+  
   delete[] syscor;
-
+  
   for(int i=0; i<fNData; i++)
     delete[] covmat[i];
-
+  
   delete[] covmat;
 }
 
@@ -455,85 +383,39 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter::ReadData()
     getline(f2,line);
   }
   
-  double sys1, sys2, up, down, sigma, datshift;
-  std::vector<double> shift(fNData);
+  double sys1, sys2;
+  const int realsys=6;
 
-  for (int j=fNData; j<fNSys; j++)
+  for (int j=0; j<realsys; j++)
   {
     string unneeded_info;
 
     getline(f2,line);
     istringstream lstream(line);
 
-    if (j==fNData+2) // Deal with aysymmetric errors
-    {
-      lstream >> fSys[0][j].mult >> unneeded_info;
-      fSys[0][j].add = fSys[0][j].mult*fData[0]/100;
-      fSys[0][j].type = MULT;
-      fSys[0][j].name = "CORR";
+    for(int i=0; i<fNData; i++)
+      {
+	lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
 
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[1][j].mult = sigma;
-      fSys[1][j].add = fSys[1][j].mult*fData[1]/100;
-      fSys[1][j].type = MULT;
-      fSys[1][j].name = "CORR";    
-      shift[1] += datshift; 
-  
-      lstream >> fSys[2][j].mult >> unneeded_info;
-      fSys[2][j].add = fSys[2][j].mult*fData[2]/100;
-      fSys[2][j].type = MULT;
-      fSys[2][j].name = "CORR";
-    }
-    else if (j==fNData+4) // Deal with asymmetric errors
-    {
-      for (int i=0; i<fNData; i++)
-      {
-        lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0)
-        {
-          up=sys2;
-          down=sys1;
-        }
-        else
-        {
-          up=sys1;
-          down=sys2;
-        }
-        symmetriseErrors(up, down, &sigma, &datshift);
-        fSys[i][j].mult = sigma;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";    
-        shift[i] += datshift; 
-      }
-    }
-    else // Deal with lines that contain no asymmetric errors
-    {
-      for (int i=0; i<fNData; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
-    }
-  }
+	if(sys1<0. && sys2<0.)
+	  sys2=0;
+	else if(sys1>0. && sys2>0.)
+	  sys1=0.;
+	
+	sys1=sys1/sqrt(2.);
+	sys2=sys2/sqrt(2.);
 
-  for (int i=0; i<fNData; i++)
-  {
-    fData[i] *= (1.0 + shift[i]*0.01); // Shift of central value due to asymmetric errors
-  }
+        fSys[i][fNData+2*j].mult = sys1;
+        fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+        fSys[i][fNData+2*j].type = MULT;
+        fSys[i][fNData+2*j].name = "CORR"; 
+
+        fSys[i][fNData+2*j+1].mult = sys2;
+        fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[fNData+2*j+1]/100;
+        fSys[i][fNData+2*j+1].type = MULT;
+        fSys[i][fNData+2*j+1].name = "CORR"; 
+      }
+  }  
 
   // Clean-up
   for (int i=0; i<fNData; i++)
@@ -692,166 +574,39 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
     getline(f2,line);
   }
   
-  double sys1, sys2, up, down, sigma, datshift;
-  std::vector<double> shift(fNData);
+  double sys1, sys2;
 
-  for (int j=fNData; j<fNSys; j++)
+  const int realsys=9;
+
+  for (int j=0; j<realsys; j++)
   {
     string unneeded_info;
 
     getline(f2,line);
     istringstream lstream(line);
 
-    if (j==fNData+2) // Deal with aysymmetric errors
-    {
-      for (int i=0; i<3; i++)
+    for(int i=0; i<fNData; i++)
       {
-        lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0)
-        {
-          up=sys2;
-          down=sys1;
-        }
-        else
-        {
-          up=sys1;
-          down=sys2;
-        }
-        symmetriseErrors(up, down, &sigma, &datshift);
-        fSys[i][j].mult = sigma;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";    
-        shift[i] += datshift;
-      }
+	lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
 
-      lstream >> fSys[3][j].mult >> unneeded_info;
-      fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
-      fSys[3][j].type = MULT;
-      fSys[3][j].name = "CORR";
-    }
-    else if (j==fNData+3) // Deal with asymmetric errors
-    {
-      for (int i=0; i<3; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
- 
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[3][j].mult = sigma;
-      fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
-      fSys[3][j].type = MULT;
-      fSys[3][j].name = "CORR";
-      shift[3] += datshift;
-    }
-    else if (j==fNData+6) // Deal with asymmetric errors
-    {
-      for (int i=0; i<2; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
+	if(sys1<0. && sys2<0.)
+	  sys2=0;
+	else if(sys1>0. && sys2>0.)
+	  sys1=0.;
+	
+	sys1=sys1/sqrt(2.);
+	sys2=sys2/sqrt(2.);
 
-      for (int i=2; i<4; i++)
-      {
-        lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0)
-        {
-          up=sys2;
-          down=sys1;
-        }
-        else
-        {
-          up=sys1;
-          down=sys2;
-        }
-        symmetriseErrors(up, down, &sigma, &datshift);
-        fSys[i][j].mult = sigma;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-        shift[i] += datshift;
-      }
-    }
-    else if (j==fNData+7) // Deal with asymmetric errors
-    {
-      lstream >> fSys[0][j].mult >> unneeded_info;
-      fSys[0][j].add = fSys[0][j].mult*fData[0]/100;
-      fSys[0][j].type = MULT;
-      fSys[0][j].name = "CORR";
+        fSys[i][fNData+2*j].mult = sys1;
+        fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+        fSys[i][fNData+2*j].type = MULT;
+        fSys[i][fNData+2*j].name = "CORR"; 
 
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
+        fSys[i][fNData+2*j+1].mult = sys2;
+        fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[fNData+2*j+1]/100;
+        fSys[i][fNData+2*j+1].type = MULT;
+        fSys[i][fNData+2*j+1].name = "CORR"; 
       }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[1][j].mult = sigma;
-      fSys[1][j].add = fSys[1][j].mult*fData[1]/100;
-      fSys[1][j].type = MULT;
-      fSys[1][j].name = "CORR";
-      shift[1] += datshift;
-
-      lstream >> fSys[2][j].mult >> unneeded_info;
-      fSys[2][j].add = fSys[2][j].mult*fData[2]/100;
-      fSys[2][j].type = MULT;
-      fSys[2][j].name = "CORR";
-
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[3][j].mult = sigma;
-      fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
-      fSys[3][j].type = MULT;
-      fSys[3][j].name = "CORR";
-      shift[3] += datshift;
-    }
-    else // Deal with lines that contain no asymmetric errors
-    {
-      for (int i=0; i<fNData; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
-    }
-  }
-
-  for (int i=0; i<fNData; i++)
-  {
-    fData[i] *= (1.0 + shift[i]*0.01); // Shift of central value due to asymmetric errors
   }
 
   // Clean-up
@@ -1012,203 +767,37 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
   }
   
   double sys1, sys2, up, down, sigma, datshift;
-  std::vector<double> shift(fNData);
+  const int realsys=10;
 
-  for (int j=fNData; j<fNSys; j++)
+  for (int j=0; j<realsys; j++)
   {
     string unneeded_info;
 
     getline(f2,line);
     istringstream lstream(line);
 
-    if (j==fNData+2) // Deal with aysymmetric errors
-    {
-      for (int i=0; i<fNData; i++)
+    for(int i=0; i<fNData; i++)
       {
-        lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0)
-        {
-          up=sys2;
-          down=sys1;
-        }
-        else
-        {
-          up=sys1;
-          down=sys2;
-        }
-        symmetriseErrors(up, down, &sigma, &datshift);
-        fSys[i][j].mult = sigma;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";    
-        shift[i] += datshift; 
-      }
-    }
-    else if (j==fNData+3) // Deal with asymmetric errors
-    {
-      for (int i=0; i<2; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
+	lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
 
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[2][j].mult = sigma;
-      fSys[2][j].add = fSys[2][j].mult*fData[2]/100;
-      fSys[2][j].type = MULT;
-      fSys[2][j].name = "CORR";    
-      shift[2] += datshift;
+	if(sys1<0. && sys2<0.)
+	  sys2=0;
+	else if(sys1>0. && sys2>0.)
+	  sys1=0.;
+	
+	sys1=sys1/sqrt(2.);
+	sys2=sys2/sqrt(2.);
 
-      lstream >> fSys[3][j].mult >> unneeded_info;
-      fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
-      fSys[3][j].type = MULT;
-      fSys[3][j].name = "CORR";
-    }
-    else if (j==fNData+5) // Deal with asymmetric errors
-    {
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[0][j].mult = sigma;
-      fSys[0][j].add = fSys[0][j].mult*fData[0]/100;
-      fSys[0][j].type = MULT;
-      fSys[0][j].name = "CORR";    
-      shift[0] += datshift;
+        fSys[i][fNData+2*j].mult = sys1;
+        fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+        fSys[i][fNData+2*j].type = MULT;
+        fSys[i][fNData+2*j].name = "CORR"; 
 
-      for (int i=1; i<3; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
+        fSys[i][fNData+2*j+1].mult = sys2;
+        fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[fNData+2*j+1]/100;
+        fSys[i][fNData+2*j+1].type = MULT;
+        fSys[i][fNData+2*j+1].name = "CORR"; 
       }
-
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[3][j].mult = sigma;
-      fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
-      fSys[3][j].type = MULT;
-      fSys[3][j].name = "CORR";    
-      shift[3] += datshift;
-    }
-    else if (j==fNData+7) // Deal with asymmetric errors
-    {
-      for (int i=0; i<fNData; i++)
-      {
-        lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0)
-        {
-          up=sys2;
-          down=sys1;
-        }
-        else
-        {
-          up=sys1;
-          down=sys2;
-        }
-        symmetriseErrors(up, down, &sigma, &datshift);
-        fSys[i][j].mult = sigma;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";    
-        shift[i] += datshift; 
-      }
-    }
-    else if (j==fNData+8) // Deal with asymmetric errors
-    {
-      lstream >> fSys[0][j].mult >> unneeded_info;
-      fSys[0][j].add = fSys[0][j].mult*fData[0]/100;
-      fSys[0][j].type = MULT;
-      fSys[0][j].name = "CORR";
-
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[1][j].mult = sigma;
-      fSys[1][j].add = fSys[1][j].mult*fData[1]/100;
-      fSys[1][j].type = MULT;
-      fSys[1][j].name = "CORR";    
-      shift[1] += datshift;
-
-      lstream >> fSys[2][j].mult >> unneeded_info;
-      fSys[2][j].add = fSys[2][j].mult*fData[2]/100;
-      fSys[2][j].type = MULT;
-      fSys[2][j].name = "CORR";
-
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[3][j].mult = sigma;
-      fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
-      fSys[3][j].type = MULT;
-      fSys[3][j].name = "CORR";    
-      shift[3] += datshift;
-    }
-    else // Deal with lines that contain no asymmetric errors
-    {
-      for (int i=0; i<fNData; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
-    }
-  }
-
-  for (int i=0; i<fNData; i++)
-  {
-    fData[i] *= (1.0 + shift[i]*0.01); // Shift of central value due to asymmetric errors
   }
 
   // Clean-up
@@ -1363,117 +952,48 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter::ReadData()
     getline(f2,line);
   }
   
-  double sys1, sys2, up, down, sigma, datshift;
-  std::vector<double> shift(fNData);
+  double sys1, sys2;
+  const int realsys=13;
 
-  for (int j=fNData; j<fNSys; j++)
+  for (int j=0; j<realsys; j++)
   {
     string unneeded_info;
 
     getline(f2,line);
     istringstream lstream(line);
 
-    if (j==fNData+2 || j==fNData+3) // Deal with aysymmetric errors
-    {
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
+    for(int i=0; i<fNData; i++)
       {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[0][j].mult = sigma;
-      fSys[0][j].add = fSys[0][j].mult*fData[0]/100;
-      fSys[0][j].type = MULT;
-      fSys[0][j].name = "CORR";    
-      shift[0] += datshift;
+	lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
 
-      lstream >> fSys[1][j].mult >> unneeded_info;
-      fSys[1][j].add = fSys[1][j].mult*fData[1]/100;
-      fSys[1][j].type = MULT;
-      fSys[1][j].name = "CORR";
+	if(sys1<0. && sys2<0.)
+	  sys2=0;
+	else if(sys1>0. && sys2>0.)
+	  sys1=0.;
+	
+	sys1=sys1/sqrt(2.);
+	sys2=sys2/sqrt(2.);
 
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
+	if(j!=realsys-1)
+	  {
+	    fSys[i][fNData+2*j].mult = sys1;
+	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+	    fSys[i][fNData+2*j].type = MULT;
+	    fSys[i][fNData+2*j].name = "CORR"; 
+	    
+	    fSys[i][fNData+2*j+1].mult = sys2;
+	    fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[fNData+2*j+1]/100;
+	    fSys[i][fNData+2*j+1].type = MULT;
+	    fSys[i][fNData+2*j+1].name = "CORR"; 
+	  }
+	else //Luminosity uncertainty
+	  {
+	    fSys[i][fNData+2*j].mult = sys2*sqrt(2.);
+	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+	    fSys[i][fNData+2*j].type = MULT;
+	    fSys[i][fNData+2*j].name = "ATLASLUMI11"; 
+	  }
       }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[2][j].mult = sigma;
-      fSys[2][j].add = fSys[2][j].mult*fData[2]/100;
-      fSys[2][j].type = MULT;
-      fSys[2][j].name = "CORR";    
-      shift[2] += datshift;
-
-      lstream >> fSys[3][j].mult >> unneeded_info;
-      fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
-      fSys[3][j].type = MULT;
-      fSys[3][j].name = "CORR";
-    }
-    else if (j==fNData+10) // Deal with asymmetric errors
-    {
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[0][j].mult = sigma;
-      fSys[0][j].add = fSys[0][j].mult*fData[0]/100;
-      fSys[0][j].type = MULT;
-      fSys[0][j].name = "CORR";    
-      shift[0] += datshift;
-
-      for (int i=1; i<fNData; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
-    }
-    else if (j==fNData+12) // Deal with luminosity uncertainties
-    {
-      for (int i=0; i<fNData; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "ATLASLUMI11";
-      }
-    }
-    else // Deal with lines that contain no asymmetric errors
-    {
-      for (int i=0; i<fNData; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
-    }
-  }
-
-  for (int i=0; i<fNData; i++)
-  {
-    fData[i] *= (1.0 + shift[i]*0.01); // Shift of central value due to asymmetric errors
   }
 
   // Clean-up
@@ -1626,122 +1146,48 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAPFilter::ReadData()
     getline(f2,line);
   }
   
-  double sys1, sys2, up, down, sigma, datshift;
-  std::vector<double> shift(fNData);
+  double sys1, sys2;
+  const int realsys=11;
 
-  for (int j=fNData; j<fNSys; j++)
+  for (int j=0; j<realsys; j++)
   {
     string unneeded_info;
 
     getline(f2,line);
     istringstream lstream(line);
 
-    if (j==fNData+2) // Deal with aysymmetric errors
-    {
-      lstream >> fSys[0][j].mult >> unneeded_info;
-      fSys[0][j].add = fSys[0][j].mult*fData[0]/100;
-      fSys[0][j].type = MULT;
-      fSys[0][j].name = "CORR";
+    for(int i=0; i<fNData; i++)
+      {
+	lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
 
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[1][j].mult = sigma;
-      fSys[1][j].add = fSys[1][j].mult*fData[1]/100;
-      fSys[1][j].type = MULT;
-      fSys[1][j].name = "CORR";    
-      shift[1] += datshift;
+	if(sys1<0. && sys2<0.)
+	  sys2=0;
+	else if(sys1>0. && sys2>0.)
+	  sys1=0.;
+	
+	sys1=sys1/sqrt(2.);
+	sys2=sys2/sqrt(2.);
 
-      lstream >> fSys[2][j].mult >> unneeded_info;
-      fSys[2][j].add = fSys[2][j].mult*fData[2]/100;
-      fSys[2][j].type = MULT;
-      fSys[2][j].name = "CORR";
-
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
+	if(j!=realsys-1)
+	  {
+	    fSys[i][fNData+2*j].mult = sys1;
+	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+	    fSys[i][fNData+2*j].type = MULT;
+	    fSys[i][fNData+2*j].name = "CORR"; 
+	    
+	    fSys[i][fNData+2*j+1].mult = sys2;
+	    fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[fNData+2*j+1]/100;
+	    fSys[i][fNData+2*j+1].type = MULT;
+	    fSys[i][fNData+2*j+1].name = "CORR"; 
+	  }
+	else //Luminosity uncertainty
+	  {
+	    fSys[i][fNData+2*j].mult = sys2*sqrt(2.);
+	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+	    fSys[i][fNData+2*j].type = MULT;
+	    fSys[i][fNData+2*j].name = "ATLASLUMI11"; 
+	  }
       }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[3][j].mult = sigma;
-      fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
-      fSys[3][j].type = MULT;
-      fSys[3][j].name = "CORR";    
-      shift[3] += datshift;
-    }
-    else if (j==fNData+8) // Deal with asymmetric errors
-    {
-      lstream >> fSys[0][j].mult >> unneeded_info;
-      fSys[0][j].add = fSys[0][j].mult*fData[0]/100;
-      fSys[0][j].type = MULT;
-      fSys[0][j].name = "CORR";
-
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[1][j].mult = sigma;
-      fSys[1][j].add = fSys[1][j].mult*fData[1]/100;
-      fSys[1][j].type = MULT;
-      fSys[1][j].name = "CORR";    
-      shift[1] += datshift;
-
-      for (int i=2; i<fNData; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
-    }
-    else if (j==fNData+10) // Deal with luminosity uncertainties
-    {
-      for (int i=0; i<fNData; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "ATLASLUMI11";
-      }
-    }
-    else // Deal with lines that contain no asymmetric errors
-    {
-      for (int i=0; i<fNData; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
-    }
-  }
-
-  for (int i=0; i<fNData; i++)
-  {
-    fData[i] *= (1.0 + shift[i]*0.01); // Shift of central value due to asymmetric errors
   }
 
   // Clean-up
@@ -1895,184 +1341,48 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter::ReadData()
     getline(f2,line);
   }
   
-  double sys1, sys2, up, down, sigma, datshift;
-  std::vector<double> shift(fNData);
+  double sys1, sys2;
+  const int realsys=14;
 
-  for (int j=fNData; j<fNSys; j++)
+  for (int j=0; j<realsys; j++)
   {
     string unneeded_info;
 
     getline(f2,line);
     istringstream lstream(line);
 
-    if (j==fNData+2) // Deal with aysymmetric errors
-    {
-      lstream >> fSys[0][j].mult >> unneeded_info;
-      fSys[0][j].add = fSys[0][j].mult*fData[0]/100;
-      fSys[0][j].type = MULT;
-      fSys[0][j].name = "CORR";
+    for(int i=0; i<fNData; i++)
+      {
+	lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
 
-      for (int i=1; i<3; i++)
-      {
-        lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0)
-        {
-          up=sys2;
-          down=sys1;
-        }
-        else
-        {
-          up=sys1;
-          down=sys2;
-        }
-        symmetriseErrors(up, down, &sigma, &datshift);
-        fSys[i][j].mult = sigma;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";    
-        shift[i] += datshift; 
-      }
+	if(sys1<0. && sys2<0.)
+	  sys2=0;
+	else if(sys1>0. && sys2>0.)
+	  sys1=0.;
+	
+	sys1=sys1/sqrt(2.);
+	sys2=sys2/sqrt(2.);
 
-      lstream >> fSys[3][j].mult >> unneeded_info;
-      fSys[3][j].add = fSys[3][j].mult*fData[3]/100;
-      fSys[3][j].type = MULT;
-      fSys[3][j].name = "CORR";
-
-      lstream >> sys1 >> unneeded_info >> sys2;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
+	if(j!=realsys-1)
+	  {
+	    fSys[i][fNData+2*j].mult = sys1;
+	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+	    fSys[i][fNData+2*j].type = MULT;
+	    fSys[i][fNData+2*j].name = "CORR"; 
+	    
+	    fSys[i][fNData+2*j+1].mult = sys2;
+	    fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[fNData+2*j+1]/100;
+	    fSys[i][fNData+2*j+1].type = MULT;
+	    fSys[i][fNData+2*j+1].name = "CORR"; 
+	  }
+	else //Luminosity uncertainty
+	  {
+	    fSys[i][fNData+2*j].mult = sys2*sqrt(2.);
+	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+	    fSys[i][fNData+2*j].type = MULT;
+	    fSys[i][fNData+2*j].name = "ATLASLUMI11"; 
+	  }
       }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[4][j].mult = sigma;
-      fSys[4][j].add = fSys[4][j].mult*fData[4]/100;
-      fSys[4][j].type = MULT;
-      fSys[4][j].name = "CORR";    
-      shift[4] += datshift; 
-    }
-    else if (j==fNData+3) // Deal with aysymmetric errors
-    {
-      lstream >> fSys[0][j].mult >> unneeded_info;
-      fSys[0][j].add = fSys[0][j].mult*fData[0]/100;
-      fSys[0][j].type = MULT;
-      fSys[0][j].name = "CORR";
-
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[1][j].mult = sigma;
-      fSys[1][j].add = fSys[1][j].mult*fData[1]/100;
-      fSys[1][j].type = MULT;
-      fSys[1][j].name = "CORR";    
-      shift[1] += datshift; 
-
-      for (int i=2; i<fNData; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
-    }
-    else if (j==fNData+10) // Deal with asymmetric errors
-    {
-      for (int i=0; i<2; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
-
-      for (int i=2; i<fNData; i++)
-      {
-        lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0)
-        {
-          up=sys2;
-          down=sys1;
-        }
-        else
-        {
-          up=sys1;
-          down=sys2;
-        }
-        symmetriseErrors(up, down, &sigma, &datshift);
-        fSys[i][j].mult = sigma;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";    
-        shift[i] += datshift;
-      }
-    }
-    else if (j==fNData+11) // Deal with asymmetric errors
-    {
-      for (int i=0; i<(fNData-1); i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
-
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0)
-      {
-        up=sys2;
-        down=sys1;
-      }
-      else
-      {
-        up=sys1;
-        down=sys2;
-      }
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[4][j].mult = sigma;
-      fSys[4][j].add = fSys[4][j].mult*fData[4]/100;
-      fSys[4][j].type = MULT;
-      fSys[4][j].name = "CORR";    
-      shift[4] += datshift;
-    }
-    else if (j==fNData+13) // Deal with luminosity uncertainties
-    {
-      for (int i=0; i<fNData; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "ATLASLUMI11";
-      }
-    }
-    else // Deal with lines that contain no asymmetric errors
-    {
-      for (int i=0; i<fNData; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
-    }
-  }
-
-  for (int i=0; i<fNData; i++)
-  {
-    fData[i] *= (1.0 + shift[i]*0.01); // Shift of central value due to asymmetric errors
   }
 
   // Clean-up
@@ -2226,97 +1536,48 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PTFilter::ReadData()
     getline(f2,line);
   }
   
-  double sys1, sys2, up, down, sigma, datshift;
-  std::vector<double> shift(fNData);
+  double sys1, sys2;
+  const int realsys=12;
 
-  for (int j=fNData; j<fNSys; j++)
+  for (int j=0; j<realsys; j++)
   {
     string unneeded_info;
 
     getline(f2,line);
     istringstream lstream(line);
 
-    if (j==fNData+2) // Deal with aysymmetric errors
-    {
-      for (int i=0; i<(fNData-1); i++)
+    for(int i=0; i<fNData; i++)
       {
-        lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-        if (sys1 < 0)
-        {
-          up=sys2;
-          down=sys1;
-        }
-        else
-        {
-          up=sys1;
-          down=sys2;
-        }
-        symmetriseErrors(up, down, &sigma, &datshift);
-        fSys[i][j].mult = sigma;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";    
-        shift[i] += datshift; 
-      }
+	lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
 
-      lstream >> fSys[4][j].mult >> unneeded_info;
-      fSys[4][j].add = fSys[4][j].mult*fData[4]/100;
-      fSys[4][j].type = MULT;
-      fSys[4][j].name = "CORR";
-    }
-    else if (j==fNData+8) // Deal with asymmetric errors
-    {
-      for (int i=0; i<2; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
+	if(sys1<0. && sys2<0.)
+	  sys2=0;
+	else if(sys1>0. && sys2>0.)
+	  sys1=0.;
+	
+	sys1=sys1/sqrt(2.);
+	sys2=sys2/sqrt(2.);
 
-      lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
-      if (sys1 < 0) {up=sys2; down=sys1;}
-      else {up=sys1; down=sys2;}
-      symmetriseErrors(up, down, &sigma, &datshift);
-      fSys[2][j].mult = sigma;
-      fSys[2][j].add = fSys[2][j].mult*fData[2]/100;
-      fSys[2][j].type = MULT;
-      fSys[2][j].name = "CORR";    
-      shift[2] += datshift;
-
-      for (int i=3; i<fNData; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
+	if(j!=realsys-1)
+	  {
+	    fSys[i][fNData+2*j].mult = sys1;
+	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+	    fSys[i][fNData+2*j].type = MULT;
+	    fSys[i][fNData+2*j].name = "CORR"; 
+	    
+	    fSys[i][fNData+2*j+1].mult = sys2;
+	    fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[fNData+2*j+1]/100;
+	    fSys[i][fNData+2*j+1].type = MULT;
+	    fSys[i][fNData+2*j+1].name = "CORR"; 
+	  }
+	else //Luminosity uncertainty
+	  {
+	    fSys[i][fNData+2*j].mult = sys2*sqrt(2.);
+	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+	    fSys[i][fNData+2*j].type = MULT;
+	    fSys[i][fNData+2*j].name = "ATLASLUMI11"; 
+	  }
       }
-    }
-    else if (j==fNData+11) // Deal with luminosity uncertainties
-    {
-      for (int i=0; i<fNData; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "ATLASLUMI11";
-      }
-    }
-    else // Deal with lines that contain no asymmetric errors
-    {
-      for (int i=0; i<fNData; i++)
-      {
-        lstream >> fSys[i][j].mult >> unneeded_info;
-        fSys[i][j].add = fSys[i][j].mult*fData[i]/100;
-        fSys[i][j].type = MULT;
-        fSys[i][j].name = "CORR";
-      }
-    }
-  }
-
-  for (int i=0; i<fNData; i++)
-  {
-    fData[i] *= (1.0 + shift[i]*0.01); // Shift of central value due to asymmetric errors
   }
 
   // Clean-up
