@@ -126,3 +126,65 @@ def plot_xi_1sigma(xi_1sigma, Q, xscale):
         ax.set_xscale(xscale)
         ax.legend()
         yield fig
+
+def xi_pdfgrid_proxy(
+    proxy_pdf:PDF, Q:(float,int), basis:(str, Basis)='flavour',
+    flavours:(list, tuple, type(None))=None):
+    return xi_pdfgrid(proxy_pdf, Q, basis, flavours)
+
+def xi_pdfgrid_replicas(
+    replica_pdf:PDF, Q:(float,int), basis:(str, Basis)='flavour',
+    flavours:(list, tuple, type(None))=None):
+    return xi_pdfgrid(replica_pdf, Q, basis, flavours)
+
+@table
+def xi_1sigma_proxy(xi_pdfgrid_replicas, underlying_xi_pdfgrid, xi_pdfgrid_proxy):
+    fit_replica_grids = xi_pdfgrid_replicas.grid_values
+    fit_central_grids = fit_replica_grids.mean(axis=0, keepdims=True)
+
+    law_grid = underlying_xi_pdfgrid[0].grid_values[0][np.newaxis, ...]
+    proxy_grid = xi_pdfgrid_proxy.grid_values
+
+    central_diff = law_grid - proxy_grid
+    sigma_diff = fit_replica_grids - fit_central_grids
+
+    variance = ((sigma_diff)**2).mean(axis=0, keepdims=True)
+    sigma = np.sqrt(variance)
+
+    indicator = np.array(abs(central_diff) < sigma, dtype=float) #fit, flav, x
+    flavs = pd.Index([
+        underlying_xi_pdfgrid[0].basis.elementlabel(fl)
+        for fl in underlying_xi_pdfgrid[0].flavours],
+        name="flavour"
+    )
+    xgridindex = pd.Index(underlying_xi_pdfgrid[0].xgrid, name="x")
+    df = pd.DataFrame(
+        indicator.mean(axis=0),
+        index=flavs,
+        columns=xgridindex,
+    )
+    return df
+
+@figuregen
+@check_scale('xscale', allow_none=True)
+def plot_xi_1sigma_proxy(xi_1sigma_proxy, Q, xscale):
+    yield from plot_xi_1sigma(xi_1sigma_proxy, Q, xscale)
+
+@figuregen
+@check_scale('xscale', allow_none=True)
+def plot_xi_1sigma_comparison(xi_1sigma_proxy, xi_1sigma, Q, xscale):
+    x = xi_1sigma.columns.values
+    xi_data = xi_1sigma.values
+    xi_proxy = xi_1sigma_proxy.values
+    for i, fl in enumerate(xi_1sigma.index.values):
+        fig, ax = plt.subplots()
+        ax.plot(x, xi_data[i, :], '*', label=r"multiple fits $\xi_{1\sigma}$ = "+f"{xi_data[i, :].mean()}")
+        ax.plot(x, xi_proxy[i, :], '*', label=r"single rep proxy $\xi_{1\sigma}$ = "+f"{xi_proxy[i, :].mean()}")
+        ax.axhline(0.68, linestyle=":", color="k", label="expected value")
+        ax.set_ylim([0, 1])
+        ax.set_title(r"$\xi_{1\sigma}$"+f" for Q={Q}, ${fl}$ PDF.")
+        ax.set_xlabel("x")
+        ax.set_ylabel(r"$\xi_{1\sigma}$")
+        ax.set_xscale(xscale)
+        ax.legend()
+        yield fig

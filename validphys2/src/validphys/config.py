@@ -943,6 +943,11 @@ class CoreConfig(configparser.Config):
 
         return filter_defaults
 
+    def parse_proxy_pdf(self, proxy_name):
+        return self.parse_pdf(proxy_name)
+
+    def parse_replica_pdf(self, name):
+        return self.parse_pdf(name)
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):
     """The effective configuration parser class."""
