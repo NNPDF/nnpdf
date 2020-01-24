@@ -404,7 +404,7 @@ class ModelTrainer:
         pos_multiplier = self.training["pos_multiplier"]
         # Train the model for the number of epochs given
         for epoch in range(epochs):
-            out = training_model.fit(verbose=False)
+            out = training_model.perform_fit(verbose=False)
             print_stats = False
 
             if (epoch + 1) % 100 == 0:
@@ -451,7 +451,7 @@ class ModelTrainer:
         # training and the validation which are actually `chi2` and not part of the penalty
         train_chi2 = stopping_object.evaluate_training(self.training["model"])
         val_chi2, _ = stopping_object.validation.loss()
-        exp_chi2 = self.experimental["model"].evaluate()["loss"] / self.experimental["ndata"]
+        exp_chi2 = self.experimental["model"].compute_losses()["loss"] / self.experimental["ndata"]
         return train_chi2, val_chi2, exp_chi2
 
     def hyperparametizable(self, params):
@@ -528,14 +528,14 @@ class ModelTrainer:
         validation_loss = stopping_object.vl_loss
 
         # Compute experimental loss
-        experimental_loss = self.experimental["model"].evaluate()["loss"] / self.experimental["ndata"]
+        experimental_loss = self.experimental["model"].compute_losses()["loss"] / self.experimental["ndata"]
 
         # Compute the testing loss if it was given
         if self.test_dict:
             # Generate the 'true' chi2 with the experimental model
             # but only for models that were stopped
             target_model = self.test_dict["model"]
-            testing_loss = target_model.evaluate(verbose=False)["loss"] / self.test_dict["ndata"]
+            testing_loss = target_model.compute_losses(verbose=False)["loss"] / self.test_dict["ndata"]
         else:
             testing_loss = 0.0
 
