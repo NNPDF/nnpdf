@@ -220,50 +220,6 @@ def experiment_result_table_68cl(experiment_result_table_no_table: pd.DataFrame,
     return res
 
 
-@table
-@check_pdferr
-def perexperiment_pdferr_chi2_table(experiments, experiments_chi2):
-    """ Generates a table containing the following data for each experiment:
-        - chi2 total taking into account pdf uncertainty
-
-        This action gets all theoretical predictions (for all replicas) and computes a cov.
-        matrix of the th. prediction
-        which are then added to the experimental covariance matrix as independent errors.
-        The result is then used to compute a chi2 per experiment which has taken into account
-        the pdf errors.
-
-
-        Parameters
-        ----------
-            `experiments`
-                a list of experiment specs
-            `experiments_chi2`
-                a list of the chi2 of the experiments taking into account
-                the covariance matrix due to the pdf uncertainties
-
-        Returns
-        -------
-            `out_df`
-                a dataframe where for each experiment we have the chi2 taking into account
-                pdf uncertainty and the chi2 per replica
-    """
-    exp_names = [exp.name for exp in experiments]
-    experiments_pdferr_chi2 = []
-    total_chi2 = 0.0
-    total_n = 0
-    for chi2data in experiments_chi2:
-        chi2 = chi2data.central_result
-        n = chi2data.ndata
-        experiments_pdferr_chi2.append(chi2/n)
-        total_chi2 += chi2
-        total_n += n
-    total = total_chi2 / total_n
-    exp_names.append("Total")
-    experiments_pdferr_chi2.append(total)
-    out_df = pd.DataFrame({'pdf_chi2' : experiments_pdferr_chi2}, index = exp_names)
-    return out_df
-
-
 experiments_covariance_matrix = collect('experiment_covariance_matrix', ('experiments',))
 
 
