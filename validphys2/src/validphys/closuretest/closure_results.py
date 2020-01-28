@@ -6,7 +6,11 @@ underlying actions to calculate closure test estimators plus some table actions
 from collections import namedtuple
 
 import numpy as np
+import scipy.linalg as la
 import pandas as pd
+
+from reportengine import collect
+from reportengine.table import table
 
 from validphys.calcutils import calc_chi2, bootstrap_values
 from validphys.checks import check_pdf_is_montecarlo
@@ -16,9 +20,10 @@ from validphys.closuretest.closure_checks import (
     check_fits_areclosures,
     check_fits_same_filterseed,
     check_fits_underlying_law_match,
+    check_t0_used,
+    check_t0pdfset_matches_law
 )
-from reportengine import collect
-from reportengine.table import table
+
 
 
 BiasData = namedtuple("BiasData", ("bias", "ndata"))
@@ -395,3 +400,33 @@ fits_underlying_pdfs_summary = collect("fit_underlying_pdfs_summary", ("fits",))
 def summarise_closure_underlying_pdfs(fits_underlying_pdfs_summary):
     """Collects the underlying pdfs for all fits and concatenates them into a single table"""
     return pd.concat(fits_underlying_pdfs_summary, axis=1)
+
+@check_fit_isclosure
+@check_use_fitcommondata
+def central_diff_logistic_experiment(experiment_results, underlying_results, fit, use_fitcommondata, do_diagonal=True):
+    """xi in dataspace
+    """
+    dt_ct, th_ct = experiment_results
+    e_val, e_vec = la.eigh(dt_ct.covmat)
+
+    (_, th_ul), = underlying_results
+    central_diff = th_ct.central_value - th_ul.central_value
+    var_diff_sqrt = (th_ct._rawdata - th_ct.central_value[:, np.newaxis])
+    if do_diagonal:
+        var_diff_sqrt = e_vec.T@var_diff_sqrt
+        central_diff = e_vec.T@central_diff
+
+    var_diff = (var_diff_sqrt)**2
+    sigma = np.sqrt(var_diff.mean(axis=1))
+    in_1_sigma = np.array(abs(central_diff) < sigma, dtype=int)
+    return in_1_sigma
+
+@check_fit_isclosure
+@check_t0_used
+@check_t0pdfset_matches_law
+def variance_experiment(experiments_results, fit, t0pdfset, use_t0):
+    dt, th = experiments_results
+    diff = th._rawdata.mean(axis=1, keepdims=True) - th._rawdata
+    chi2_rep = calc_chi2(dt.sqrtcovmat, diff)
+    variance_unnormalised = chi2_rep.mean()
+    return variance_unnormalised

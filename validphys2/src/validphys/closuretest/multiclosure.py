@@ -6,12 +6,14 @@ averaged across multiple fits or a single replica proxy fit
 """
 
 import numpy as np
+import scipy.linalg as la
+from scipy.special import erf
 import pandas as pd
 import matplotlib.pyplot as plt
 
 from reportengine import collect
 from reportengine.table import table
-from reportengine.figure import figuregen
+from reportengine.figure import figuregen, figure
 from reportengine.checks import make_argcheck
 
 from validphys.pdfgrids import xplotting_grid, check_basis
@@ -32,10 +34,10 @@ exps_expected_bias = collect("expected_bias", ("experiments",))
 
 fits_phi_experiment = collect("phi_data_experiment", ("fits", "fitcontext"))
 
-def expected_variance(fits_phi_experiment):
-    var_centrals = [
-        phi[0]**2 * phi[1] for phi in fits_phi_experiment]
-    var_mean = np.mean(var_centrals)
+fits_variance_experiment = collect("variance_experiment", ("fits", "fitcontext"))
+
+def expected_variance(fits_variance_experiment):
+    var_mean = np.mean(fits_variance_experiment)
     return var_mean
 
 exps_expected_var = collect("expected_variance", ("experiments",))
@@ -65,6 +67,18 @@ def experiments_bias_variance_ratio(
     df.columns = ["bias/variance"]
     return df
 
+@table
+def sqrt_experiments_bias_variance_ratio(experiments_bias_variance_ratio):
+    df_in = experiments_bias_variance_ratio
+    return pd.DataFrame(np.sqrt(df_in.values), index=df_in.index, columns=["sqrt(bias/variance)"])
+
+@table
+def expected_xi_from_bias_variance(sqrt_experiments_bias_variance_ratio):
+    df_in = sqrt_experiments_bias_variance_ratio
+    n_sigma_in_variance = 1/df_in.values
+    res = erf(n_sigma_in_variance/np.sqrt(2))
+    return pd.DataFrame(res, index=df_in.index, columns=[r"$\xi$ from ratio"])
+
 @make_argcheck(check_basis)
 def histogram_pdfgrid(
     pdf:PDF, Q:(float,int), basis:(str, Basis)='flavour',
@@ -83,8 +97,8 @@ def xi_pdfgrid(
     return xplotting_grid(
         pdf, Q, xgrid=xgrid, basis=basis, flavours=flavours)
 
-fits_xi_pdfgrid = collect("xi_pdfgrid", ("fits", "fitpdf"))
-underlying_xi_pdfgrid = collect("xi_pdfgrid", ("fitunderlyinglaw",))
+fits_xi_pdfgrid = collect("pdf_bias_grid", ("fits", "fitpdf"))
+underlying_xi_pdfgrid = collect("pdf_bias_grid", ("fitunderlyinglaw",))
 
 @table
 def xi_1sigma(fits_xi_pdfgrid, underlying_xi_pdfgrid):
@@ -188,3 +202,124 @@ def plot_xi_1sigma_comparison(xi_1sigma_proxy, xi_1sigma, Q, xscale):
         ax.set_xscale(xscale)
         ax.legend()
         yield fig
+
+@make_argcheck(check_basis)
+def pdf_bias_grid(
+    pdf:PDF, Q:(float,int), basis:(str, Basis)='flavour',
+    flavours:(list, tuple, type(None))=None,
+    logspace_lims=(-5, -1),
+    logspace_num=3,
+    linspace_lims=(0.1, 1),
+    linspace_num=3):
+    xgrid_log = np.logspace(*logspace_lims, num=logspace_num, endpoint=False)
+    xgrid_lin = np.linspace(*linspace_lims, num=linspace_num, endpoint=False)
+    xgrid = np.concatenate((xgrid_log, xgrid_lin), axis=0)
+    return xplotting_grid(
+        pdf, Q, xgrid=xgrid, basis=basis, flavours=flavours)
+
+fits_pdf_bias_grid = collect("pdf_bias_grid", ("fits", "fitpdf"))
+underlying_pdf_bias_grid = collect("pdf_bias_grid", ("fitunderlyinglaw",))
+
+def multifits_flavours_covmat(fits_pdf_bias_grid):
+    fits_replica_grids = np.array([xpg.grid_values for xpg in fits_pdf_bias_grid])
+    fits_central_grids = fits_replica_grids.mean(axis=0, keepdims=True)
+    diffs = np.concatenate((fits_central_grids - fits_replica_grids), axis=0) # superreps, flav, x
+    covs = []
+    for fli in range(diffs.shape[1]): # loop over fl index
+        covs.append(np.cov(diffs[:, fli, :], rowvar=False))
+    return covs
+
+
+def multifits_flavours_bias_variance(
+    fits_pdf_bias_grid, underlying_pdf_bias_grid, multifits_flavours_covmat):
+    fits_replica_grids = np.array([xpg.grid_values for xpg in fits_pdf_bias_grid])
+    fits_central_grids = fits_replica_grids.mean(axis=1, keepdims=True)
+    underlying_grid = underlying_pdf_bias_grid[0].grid_values[0][np.newaxis, np.newaxis, ...]
+    flavours_invs = np.array([la.inv(cov) for cov in multifits_flavours_covmat])
+
+    bias_diff = (fits_central_grids - underlying_grid)[:, 0, ...] #fit, flav, x
+    var_diff = fits_central_grids - fits_replica_grids # fit, rep, flav, x
+
+    bias_xM = (bias_diff[..., np.newaxis] * flavours_invs[np.newaxis, ...]) #fit, flav, x, x
+    bias = (bias_xM * bias_diff[:, :, np.newaxis, :]).sum(axis=(-2, -1)) #fit, flav
+    expected_bias = np.mean(bias, axis=0)
+
+    var_xM = (var_diff[..., np.newaxis] * flavours_invs[np.newaxis, np.newaxis, ...]) #fit, rep, flav, x, x
+    var = (var_xM * var_diff[:, :, :, np.newaxis, :]).sum(axis=(-2, -1)).mean(axis=1) # fit, flav
+    expected_var = np.mean(var, axis=0)
+
+    return expected_bias/expected_var
+
+def multifits_total_covmat(fits_pdf_bias_grid):
+    fits_replica_grids = np.array([xpg.grid_values for xpg in fits_pdf_bias_grid])
+    fits_central_grids = fits_replica_grids.mean(axis=0, keepdims=True)
+    diffs = np.concatenate((fits_central_grids - fits_replica_grids), axis=0) # superreps, flav, x
+    diffs_total = diffs.reshape(-1, diffs.shape[1]*diffs.shape[2]) # superreps, (flav * x)
+    return np.cov(diffs_total, rowvar=False)
+
+def multifits_total_pdf_bias_variance(
+    multifits_total_covmat, fits_pdf_bias_grid, underlying_pdf_bias_grid):
+    underlying_grid = underlying_pdf_bias_grid[0].grid_values[0][np.newaxis, np.newaxis, ...]
+    flavx = underlying_grid.shape[2] * underlying_grid.shape[3]
+    underlying_grid = underlying_grid.reshape(1, 1, flavx)
+    fits_replica_grids = np.array([xpg.grid_values.reshape(-1, flavx) for xpg in fits_pdf_bias_grid])
+    fits_central_grids = fits_replica_grids.mean(axis=1, keepdims=True)
+
+    bias_diff = (fits_central_grids - underlying_grid)[:, 0, :] #fit, (flav*x)
+    var_diff = fits_central_grids - fits_replica_grids # fit, rep, (flav*x)
+    total_inv = la.inv(multifits_total_covmat) # flav*x, flav*x
+
+    bias_xM = (bias_diff[..., np.newaxis] * total_inv[np.newaxis, ...]) #fit, flav*x, flav*x
+    bias = (bias_xM * bias_diff[:, np.newaxis, :]).sum(axis=(-2, -1))/flavx #fit
+    expected_bias = np.mean(bias, axis=0)
+
+    var_xM = (var_diff[..., np.newaxis] * total_inv[np.newaxis, np.newaxis, ...]) #fit, rep, flav*x
+    var = (var_xM * var_diff[:, :, np.newaxis, :]).sum(axis=(-2, -1)).mean(axis=1)/flavx # fit
+    expected_var = np.mean(var, axis=0)
+
+    return expected_bias/expected_var
+
+@table
+def multifits_pdf_bias_variance_table(
+    multifits_total_pdf_bias_variance,
+    multifits_flavours_bias_variance,
+    underlying_pdf_bias_grid
+):
+    flavids = underlying_pdf_bias_grid[0].flavours
+    basis = underlying_pdf_bias_grid[0].basis
+    records = []
+    for flid, ratio in zip(flavids, multifits_flavours_bias_variance):
+        records.append(dict(
+            flavour=f"${basis.elementlabel(flid)}$",
+            ratio=ratio
+        ))
+    records.append(dict(
+        flavour="total",
+        ratio=multifits_total_pdf_bias_variance
+    ))
+    df = pd.DataFrame.from_records(records, index="flavour", columns=("flavour", "ratio"))
+    df.columns = ("bias/variance",)
+    return df
+
+
+fits_central_diff_logistic_experiment = collect("central_diff_logistic_experiment", ("fits", "fitcontext"))
+
+def data_xi_experiment(fits_central_diff_logistic_experiment):
+    fits_logistic = np.array(fits_central_diff_logistic_experiment)
+    return fits_logistic.mean(axis=0) # average across fits
+
+@figure
+def plot_data_xi_experiment(data_xi_experiment, experiment):
+    fig, ax = plt.subplots()
+    ax.plot(
+        data_xi_experiment,
+        "*",
+        label=r"$\xi_{1\sigma}$ = "+f"{data_xi_experiment.mean()}, from multifits"
+    )
+    ax.axhline(0.68, linestyle=":", color="k", label=r"$1\sigma$ "+"expected value")
+    ax.axhline(0.95, linestyle=":", color="k", label=r"$2\sigma$ "+"expected value")
+    ax.set_ylim((0, 1))
+    ax.set_xlabel("datapoint index")
+    ax.set_title(r"$\xi_{1\sigma}$ for "+str(experiment))
+    ax.legend()
+    return fig

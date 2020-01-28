@@ -51,3 +51,15 @@ def check_fits_areclosures(fits):
     for fit in fits:
         if not fit.as_input()["closuretest"]["fakedata"]:
             raise CheckError(f"Specified fit: {fit}, is not a closure test")
+
+@make_argcheck
+def check_t0_used(use_t0):
+    if not use_t0:
+        raise CheckError("use_t0 must be true")
+
+@make_argcheck
+def check_t0pdfset_matches_law(t0pdfset, fit):
+    t0_from_fit = fit.as_input()['closuretest']['fakepdf']
+    if not str(t0pdfset) == t0_from_fit:
+        raise CheckError(
+            f"Underlying pdf: {t0_from_fit}, does not match t0pdfset: {t0pdfset}")
