@@ -2,10 +2,10 @@
 rebuild_data.py
 
 A script for rebuilding the filtered closure data into the format validphys/n3fit
-expect. Run this script on a closure fit either before running n3fit to avoid
+expect. Run this script on a closure fit before running n3fit to avoid
 crashes due to multiple replicas attempting to rebuild filtered data at same time
 
-Also this script can be used after running a closure fit with nnfit, and will
+This script should also be used after running a closure fit with nnfit, and will
 eradicate the need for the data to be rebuilt by validphys when used in analysis.
 
 Example
@@ -25,6 +25,7 @@ If running a closure test with nnfit DO NOT run scipt until after all replicas
 have finished.
 
 """
+# TODO: deprecate this whole scipt!
 
 import logging
 import argparse
@@ -35,13 +36,9 @@ from validphys.app import providers
 from validphys.config import Environment
 from n3fit.n3fit import N3FitConfig
 
-log = logging.getLogger(__name__)
+log = logging.getLogger()
 log.setLevel(logging.INFO)
 log.addHandler(colors.ColorHandler())
-
-loader_log = logging.getLogger('validphys.loader')
-loader_log.setLevel(logging.INFO)
-loader_log.addHandler(colors.ColorHandler())
 
 # We want to have the Config from n3fit to accept a fit as a directory
 
@@ -69,7 +66,10 @@ def main():
     )
     args = parser.parse_args()
     API = api.API(providers, N3FitConfig, Environment, output=args.fit)
-    exps = API.experiments(**REBUILD_CONFIG)
+    # NOTE: this will trigger validphys.loader.rebuild_commondata_without_cuts
+    # which creates new files with cut data points padded with zeros,
+    # strictly for use with closure fits! Does crazy things!
+    API.experiments(**REBUILD_CONFIG)
 
 if __name__ == "__main__":
     main()
