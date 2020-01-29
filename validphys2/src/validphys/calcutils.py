@@ -150,11 +150,11 @@ def get_df_block(matrix: pd.DataFrame, key: str, level):
     return block
 
 def regularize_covmat(covmat: np.array, norm_threshold=3):
-    """Given a covariance matrix, performs a regularization on
-    the sqrt covariance matrix, A, according to `regularize_l2`. The l2 norm of
+    """Given a covariance matrix, performs a regularization which is equivalent
+    to performing `regularize_l2` on the sqrt of `covmat`: the l2 norm of
     the inverse of the correlation matrix calculated from `covmat` is set to be
     less than or equal to `norm_threshold`. If the input covmat already fulfills
-    this criterion it is left untouched.
+    this criterion it is returned.
 
     Parameters
     ----------
@@ -176,35 +176,10 @@ def regularize_covmat(covmat: np.array, norm_threshold=3):
     d = np.sqrt(np.diag(covmat))[:, np.newaxis]
     corr = covmat / d / d.T
     e_val, e_vec = la.eigh(corr)
-    if 1 / e_val[0] <= sqr_threshold:
+    if 1 / e_val[0] <= sqr_threshold: # eigh gives eigenvals in ascending order
         return covmat
     new_e_val = np.clip(e_val, a_min=1/sqr_threshold, a_max=None)
     return ((e_vec * new_e_val) @ e_vec.T) * d * d.T
-
-def regularize_singular_values(s, norm_threshold):
-    """Clip from below an array of singular values sorted in decreasing order so
-    that the L2 norm of the corresponding inverse matrix is not bigger than
-    `norm_threshold` i.e
-
-        1/s[-1] <= norm_threshold
-
-    Parameters
-    ----------
-    s : 1d array
-        Sorted singular calues as returnd by linalg.svd.
-    norm_threshold : float
-        The value of the threshold
-
-    Returns
-    -------
-    snew : array
-       The values of `s` clipped from below
-    """
-    if 1 / s[-1] <= norm_threshold:
-        return s
-
-    return np.clip(s, a_min=1/norm_threshold, a_max=None)
-
 
 def regularize_l2(sqrtcov, norm_threshold):
     r"""Return a regularized version of `sqrtcov`.
@@ -217,12 +192,12 @@ def regularize_l2(sqrtcov, norm_threshold):
     the unstable behaviour and assemble a new square root covariance matrix,
     which is returned.
 
-    The stability condition is controlled by `threshold`. It is
+    The stability condition is controlled by `norm_threshold`. It is
 
     .. math::
 
         \left\Vert A+ \right\Vert_L2
-        \leq \frac{1}{threshold}
+        \leq \frac{1}{norm_threshold}
 
     A+ is the pseudoinverse of A, `norm_threshold` roughly corresponds to the
     sqrt of the maximimum relative uncertainty in any systematic.
@@ -247,5 +222,5 @@ def regularize_l2(sqrtcov, norm_threshold):
     u, s, vt = la.svd(sqrtcorr, full_matrices=False)
     if 1 / s[-1] <= norm_threshold:
         return sqrtcov
-    snew = regularize_singular_values(s, norm_threshold)
+    snew = np.clip(s, a_min=1/norm_threshold, a_max=None)
     return u * (snew * d) @ vt

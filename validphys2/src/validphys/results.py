@@ -391,7 +391,7 @@ def covariance_matrix(
     be true. This algorithm sets a minimum threshold for eigenvalues that the
     corresponding correlation matrix can have to be:
 
-    1/norm_threshold
+    1/(norm_threshold)^2
 
     which has the effect of limiting the L2 norm of the inverse of the correlation
     matrix. By default norm_threshold is set to 3.
@@ -1153,11 +1153,11 @@ def dataspecs_datasets_covmat_differences_table(
 ):
     """For each dataspec calculate and tabulate the two covmat differences
     described in `datasets_covariance_matrix_differences_table`
-    (max relative difference in variane and max absolute correlation difference)
+    (max relative difference in variance and max absolute correlation difference)
 
     """
     df = pd.concat( dataspecs_covmat_diff_tables, axis=1)
-    cols = ["Variance rel. diff. (%)", "Correlation max abs. diff."]
+    cols = df.columns.get_level_values(0).unique()
     df.columns = pd.MultiIndex.from_product((dataspecs_speclabel, cols))
     return df
 
