@@ -1,4 +1,4 @@
-## How to generate/implement FK tables
+# How to generate and implement FK tables
 
 APFELcomb is the project that allows the user to generate `FK` tables.
 These are lookup tables that contain the relevant information to compute 
@@ -13,7 +13,7 @@ The user is strongly encouraged to go through that note with care, in order to
 familiarise himself with the features and the structure of the APFELcomb
 project.
 
-# Generate a FK table
+## Generate a FK table
 Each `FK` table is generated piecewise in one or more `subgrids`. The `subgrids`
 implemented in APFELcomb can be displayed by running the script
 ```
@@ -54,7 +54,7 @@ complete `FK` table. The resulting final `FK` table should be stored at
 $RESULTS_PATH/theory_<theory id>/fastkernel/FK_<setname>.dat.
 ```
 
-# Implement a new FK table
+## Implement a new FK table
 Whenever a new dataset is implemented, it should be accompanied by the 
 corresponding `FK` table. To implement a new `FK` table, one must first add
 a corresponding entry into the apfelcomb database (by editing the 
