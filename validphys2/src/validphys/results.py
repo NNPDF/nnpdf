@@ -20,10 +20,15 @@ from reportengine.checks import require_one, remove_outer, check_not_empty
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.checks import (check_cuts_considered, check_pdf_is_montecarlo,
-                              check_speclabels_different, check_two_dataspecs,
-                              check_dataset_cuts_match_theorycovmat,
-                              check_experiment_cuts_match_theorycovmat)
+from validphys.checks import (
+    check_cuts_considered,
+    check_pdf_is_montecarlo,
+    check_speclabels_different,
+    check_two_dataspecs,
+    check_dataset_cuts_match_theorycovmat,
+    check_experiment_cuts_match_theorycovmat,
+    check_norm_threshold,
+)
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
 from validphys.calcutils import (
     all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values,
@@ -367,8 +372,7 @@ def covariance_matrix(
     dataset:DataSetSpec,
     fitthcovmat,
     t0set:(PDF, type(None)) = None,
-    perform_covmat_reg=False,
-    norm_threshold=3):
+    norm_threshold=None):
     """Returns the covariance matrix for a given `dataset`. By default the
     data central values will be used to calculate the multiplicative contributions
     to the covariance matrix.
@@ -387,14 +391,15 @@ def covariance_matrix(
     to the experimental covariance matrix.
 
     Covariance matrix can be regularized according to
-    `calcutils.regularize_covmat` if the user specifies `perform_covmat_reg` to
-    be true. This algorithm sets a minimum threshold for eigenvalues that the
-    corresponding correlation matrix can have to be:
+    `calcutils.regularize_covmat` if the user specifies `norm_threshold. This
+    algorithm sets a minimum threshold for eigenvalues that the corresponding
+    correlation matrix can have to be:
 
     1/(norm_threshold)^2
 
     which has the effect of limiting the L2 norm of the inverse of the correlation
-    matrix. By default norm_threshold is set to 3.
+    matrix. By default norm_threshold is None, to which means no regularization
+    is performed.
 
     Parameters
     ----------
@@ -439,7 +444,7 @@ def covariance_matrix(
     if fitthcovmat:
         loaded_thcov = fitthcovmat.load()
         covmat += get_df_block(loaded_thcov, dataset.name, level=1)
-    if perform_covmat_reg:
+    if norm_threshold is not None:
         covmat = regularize_covmat(
             covmat,
             norm_threshold=norm_threshold
@@ -485,8 +490,7 @@ def experiment_covariance_matrix(
         experiment: ExperimentSpec,
         fitthcovmat,
         t0set:(PDF, type(None)) = None,
-        perform_covmat_reg=False,
-        norm_threshold=3):
+        norm_threshold=None):
     """Like `covariance_matrix` except for an experiment"""
     loaded_data = experiment.load()
 
@@ -503,7 +507,7 @@ def experiment_covariance_matrix(
         ds_names = loaded_thcov.index.get_level_values(1)
         indices = np.in1d(ds_names, [ds.name for ds in experiment.datasets]).nonzero()[0]
         covmat += loaded_thcov.iloc[indices, indices].values
-    if perform_covmat_reg:
+    if norm_threshold is not None:
         covmat = regularize_covmat(
             covmat,
             norm_threshold=norm_threshold
@@ -1110,11 +1114,12 @@ def dataspecs_dataset_chi2_difference_table(
 datasets_covmat_no_reg = collect(
     "covariance_matrix", ("experiments", "experiment", "no_covmat_reg"))
 datasets_covmat_reg = collect(
-    "covariance_matrix", ("experiments", "experiment", "do_covmat_reg"))
+    "covariance_matrix", ("experiments", "experiment",))
 
 @table
+@check_norm_threshold
 def datasets_covariance_matrix_differences_table(
-    each_dataset, datasets_covmat_no_reg, datasets_covmat_reg):
+    each_dataset, datasets_covmat_no_reg, datasets_covmat_reg, norm_threshold):
     """For each dataset calculate and tabulate two max differences upon
     regularization given a value for `norm_threshold`:
 
