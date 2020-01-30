@@ -92,6 +92,7 @@
 #include "CMS_TTBAR_2D_DIFF_NORM.h"
 #include "CMS_TTBAR_2D_DIFF.h"
 #include "ATLAS_TTB_DIFF_8TEV_LJ.h"
+#include "ATLAS_Z_3D_8TEV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -400,4 +401,6 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLAS_hZ_hbb_13TeVFilter());
   target.push_back(new ATLASCMS_hxsec_RunIFilter());
 
+  // *********************** ATLAS Z (8 TeV) 3D **********************************
+  target.push_back(new ATLAS_Z_3D_8TEVFilter());
 }
