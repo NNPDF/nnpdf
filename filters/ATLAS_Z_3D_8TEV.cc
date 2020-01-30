@@ -28,8 +28,6 @@ void ATLAS_Z_3D_8TEVFilter::ReadData()
 
     const double convfac = 1000.; // Must multiply from pb to fb
     const int ncorrsys = 331;
-    double MZ2 = pow(MZ, 2.0);
-    double s = 8000;
 
     int ndata = 581;
     stringstream datafile("");
@@ -45,10 +43,14 @@ void ATLAS_Z_3D_8TEVFilter::ReadData()
 
     string line;
 
-    double totsys[ndata];
     double cosTheta, rap, mass, dum;
     double sys;
-    int idat = 0;
+
+    // skip 14 header lines
+    for (int i = 0; i < 14; i++)
+    {
+        getline(f, line);
+    }
 
     for (int i = 0; i < ndata; i++)
     {
@@ -57,7 +59,7 @@ void ATLAS_Z_3D_8TEVFilter::ReadData()
 
         lstream >> cosTheta >> dum >> dum;
         fKin1[i] = cosTheta;
-
+        
         lstream >> dum >> rap >> dum;
         fKin2[i] = rap;
 
@@ -66,14 +68,14 @@ void ATLAS_Z_3D_8TEVFilter::ReadData()
 
         cout << "********** WARNING: Converting pb to fb to match ApplGrid output ********" << endl;
         lstream >> fData[i];
-        fData[i]*=convfac;
+        fData[i] *= convfac;
 
         //Statistical uncertainty
         lstream >> fStat[i] >> dum;
         fStat[i] *= convfac;
 
         //Correlated uncertainty
-        for (int isys = 0; i < ncorrsys; i++)
+        for (int isys = 0; isys < ncorrsys; isys++)
         {
             lstream >> sys >> dum;
             fSys[i][isys].type = ADD;
@@ -84,16 +86,16 @@ void ATLAS_Z_3D_8TEVFilter::ReadData()
 
         //Uncorrelated uncertainty
         lstream >> sys >> dum;
-        fSys[i][ncorrsys + 1].type = MULT;
-        fSys[i][ncorrsys + 1].name = "UNCORR";
-        fSys[i][ncorrsys + 1].mult = sys; // in percent
-        fSys[i][ncorrsys + 1].add = fSys[i][ncorrsys + 1].mult * fData[i] / 100;
+        fSys[i][ncorrsys].type = MULT;
+        fSys[i][ncorrsys].name = "UNCORR";
+        fSys[i][ncorrsys].mult = sys * convfac;
+        fSys[i][ncorrsys].add = fSys[i][ncorrsys].mult * fData[i] / 100;
 
         //Luminosity uncertainty
-        fSys[i][ncorrsys + 2].type = MULT;
-        fSys[i][ncorrsys + 2].name = "ATLASLUMI17";
-        fSys[i][ncorrsys + 2].mult = 1.8; // in percent
-        fSys[i][ncorrsys + 2].add = fSys[i][132].mult * fData[i] / 100;
+        fSys[i][ncorrsys + 1].type = MULT;
+        fSys[i][ncorrsys + 1].name = "ATLASLUMI17";
+        fSys[i][ncorrsys + 1].mult = 1.8; // in percent
+        fSys[i][ncorrsys + 1].add = fSys[i][ncorrsys + 1].mult * fData[i] / 100;
     }
     f.close();
 }
