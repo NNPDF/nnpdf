@@ -20,15 +20,15 @@ There are three levels of closure test:
     - no MC noise is added on top of the central data, each replica is fitting
     the same set of data
 2. level 1
-    - central pseudodata is shifted by some level 1 noise η which is drawn
+    - central pseudodata is shifted by some noise η which is drawn
     from the experimental covariance matrix and represents
     'real' central values provided by experimentalists which do not sit exactly
     on the underlying law but are consistent with it according to their own
     uncertainty
-    - no MC noise is added, each replica has the same level 1 data. There is
-    however a difference in the training/validation split used for stopping,
-    the spread on replicas can be thought of as the spread due to this split
-    in addition to any methodological uncertainty
+    - no MC noise is added, each replica fits a subset of the same shifted data.
+    There is however a difference in the training/validation split used for
+    stopping, the spread on replicas can be thought of as the spread due to this
+    split in addition to any methodological uncertainty.
 3. level 2
     - central pseudodata is shifted by level 1 noise η
     - MC noise is added on top of the level 1 shift
@@ -84,13 +84,13 @@ closuretest:
   printpdf4gen: False # To print info on PDFs during minimization
 ```
 Note that it is *critical* that two closure tests which are to be compared have
-the same `filterseed` and were both ran during a time where no major changes were
-made to data generation, since fits with different level 1 noise produce different
-closure test estimators see this
-[report](https://vp.nnpdf.science/mbcTUd6-TQmQFvaGd37bkg==/) for example
-(two level 2 closure tests with identical settings apart from `filterseed`).
-Note that setting `filterseed` to 0 will use the default seed for that
-RNG algorithm.
+the same `filterseed`. They should also both have been run during a time where
+no major changes were made to data generation. This is because fits with
+different level 1 noise produce different closure test estimators. See for
+example a [report](https://vp.nnpdf.science/mbcTUd6-TQmQFvaGd37bkg==/)
+comparing two level 2 closure tests with identical settings apart from
+`filterseed`. Note that setting `filterseed` to 0 will use the default seed for
+the selected `fitting::rngalgo`.
 
 There are still some relevant settings to the closure test. For the above example
 we would choose that the t0 set was the same as the underlying law:

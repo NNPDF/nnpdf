@@ -1,5 +1,5 @@
 """
-rebuild_data.py
+vp_rebuild_data.py
 
 A script for rebuilding the filtered closure data into the format validphys/n3fit
 expect. Run this script on a closure fit before running n3fit to avoid
@@ -11,18 +11,18 @@ eradicate the need for the data to be rebuilt by validphys when used in analysis
 Example
 -------
 
-If running a closure test with n3fit, simply run script on a filtered closure
-fit output directory:
+If running a closure test with n3fit, simply run this script on a filtered
+closure fit output directory:
 
 ```
 $ vp-setupfit fit_name.yaml
-$ rebuild-data fit_name
+$ vp-rebuild-data fit_name
 ```
 
 and the data is good to go.
 
-If running a closure test with nnfit DO NOT run scipt until after all replicas
-have finished.
+If running a closure test with nnfit DO NOT run this script until after all
+replicas have finished.
 
 """
 # TODO: deprecate this whole scipt!
