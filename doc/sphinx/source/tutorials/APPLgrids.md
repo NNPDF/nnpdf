@@ -8,7 +8,7 @@ partonic cross sections are pre-computed, typically by means of a Monte Carlo
 generator matched to fixed-order accuracy, in the form of look-up tables.
 Some of the most common multi-purpose Monte Carlo generators are `MCFM`,
 `SHERPA` and `madgraph5`; `NLOjet++` is customarily used for inclusive (multi)
-jet observables. Two default formats exist for look-up tables: `APPLgrids` and
+jet observables. Two default formats exist for look-up tables: `APPLgrid` and
 `FastNLO`. Here we explain how grids in either of these formats can be 
 generated from Monte Carlo runs for a range of hadronic processes.
 
@@ -22,7 +22,41 @@ generators (with the appropriate interface): [MCFM](https://mcfm.fnal.gov/)
 (with [amcfast](https://amcfast.hepforge.org/)), 
 and [SHERPA](https://sherpa-team.gitlab.io/) 
 (with [mcgrid](https://mcgrid.hepforge.org/)).
-Each of these methods is discussed as follows.
+Common to each of these methods is a series of dependencies (in parenthesis 
+versions that have been tested):
+
+* [ROOT](https://root.cern.ch/) (5.34 onwards)
+* [LHAPDF](https://lhapdf.hepforge.org/) (6.2.1 onwards)
+* [APPLgrid](https://applgrid.hepforge.org/) (applgridphoton, 
+  from external/applgridphoton)
+* [FastJet](http://fastjet.fr/) (3.3.1 onwards, from external/fastjet-3.3.1)
+
+If the user is able to run the nnpdf code, LHAPDF should already be available 
+on his system. Likewise, if he is able to run apfelcomb, ROOT and APPLgrid 
+should already be available. FastJet can be installed from the 
+external/fastjet-3.3.1 folder in the usual way as
+```
+./configure --prefix=/fastjet/intallation/path
+make 
+make install
+```
+
+If the user is installing these programs with conda, he can set the 
+installation path by using
+```
+./configure --prefix=$CONDA_PREFIX
+```
+the user might need to run
+```
+autoreconf -i
+```
+before the usual configuration/build/installation chain.
+
+Once these dependencies are set up, the user can produce the APPLgrid tables 
+for the process of his interest according to one of the methods introduced 
+above. The choice of the method usually depends on the observable involved, 
+for which one Monte Carlo can be more suited than another (because it is 
+faster or more flexible). Each of these methods is discussed as follows.
 
 ### MCFM + mcfm-bridge
 The default version of MCFM used in NNPDF is MCFM-6.8. The source code is 
@@ -107,7 +141,7 @@ dictate the following information:
         }
     ```
 
-In both functions, theh variable `glabel` denotes the observable, and it
+In both functions, the variable `glabel` denotes the observable, and it
 should correspond to the name given to the data set.
 
 Once the mcfm_interface has been modified with the information 
@@ -142,3 +176,291 @@ which must in turn be consistent with the name of the implemented data set.
 Note that the script must be run twice: the first run (usually with low
 statistics) initialises the grid; the second run (usually with as much 
 statistics as required to match the desired precision) fills the grid.
+
+### MadGraph5\_aMC@NLO + amcfast
+
+The default versions of MG5\_aMC used in NNPDF is v2.6.3.2. It does not
+need to be installed, because installation is performed automatically at
+the time of the generation of a given process. MG5_aMC is usually run from the 
+```
+external/MG5_aMC_v2_6_3_2/bin
+```
+folder. Note that python 2(.6 or .7) is required. MG5_aMC does not work with 
+python3. Before the first run, the mg5_configuration.txt file in the 
+```
+external/MG5_aMC_v2_6_3_2/input 
+```
+folder must be edited. In particular, please make sure to uncomment the following 
+lines:
+
+* text_editor = <your_preferred_text_editor> (e.g. emacs, gedit, ...)
+* web_browser = <your_preferred_web_browser> (e.g. firefox, chrome, ...)
+* eps_viewer = <your_preferred_eps_viewer> (e.g. gv, ...)
+* lhapdf = lhapdf-config
+* fastjet = fastjet-config
+* applgrid = applgrid-config
+* amcfast = amcfast-config
+
+The recommended version of aMCfast is v2.0.0: it can be installed from the 
+```
+external/amcfast-2.0.0 
+```
+folder in the usual way as
+```
+./configure --prefix=<install-dir>
+make
+make install
+```
+
+MG5_aMC can be easily run interactively. 
+
+**example**
+
+In the external/MG5_aMC_v2_6_3_2/bin folder run
+```
+python2.7 mg5_aMC
+```
+First, one has to generate the process of interest. For example, in the case of 
+W^+ boson production (including NLO QCD corrections), one should type
+```
+generate p p > w+ [QCD]
+```
+If one did not want to include NLO QCD corrections and instead only wanted the 
+LO generation, they could type
+```
+generate p p > w+ [LOonly]
+```
+Once the process has been generated, one needs to output it to some folder. 
+For instance
+```
+output amcfast_test
+```
+This will dump the relevant code to run the process into the folder "amcfast_test".
+Note that the name of the output folder can be omitted. In this case the code 
+chooses some default name, typically PROC*. If you are using MG5_aMC for the first 
+time, you will receive the following message
+
+        Which one do you want to install? (this needs to be done only once)
+        1. cuttools  (OPP) [0711.3596]   : will be installed (required)
+        2. iregi     (TIR) [1405.0301]   : will be installed (required)
+        3. ninja     (OPP) [1403.1229]   : will be installed (recommended)
+        4. collier   (TIR) [1604.06792]  : will be installed (recommended)
+        5. golem     (TIR) [0807.0605]   : do not install
+        You can:
+        -> hit 'enter' to proceed
+        -> type a number to cycle its options
+        -> enter the following command:
+        {tool_name} [install|noinstall|{prefixed_installation_path}]
+        If you are unsure about what this question means, just type enter to proceed. [300s to answer]         
+
+Please type *1 [enter] 2 [enter] 3 [enter] 4 [enter] [enter]* and wait. Now we can run the process through
+
+        launch
+
+We will get the following message:
+
+        1. Type of perturbative computation               order = NLO         
+        2. No MC@[N]LO matching / event generation  fixed_order = OFF         
+        3. Shower the generated events                   shower = HERWIG6     
+        4. Decay onshell particles                      madspin = OFF         
+        5. Add weights to events for new hypp.         reweight = OFF  
+        6. Run MadAnalysis5 on the events generated madanalysis = Not Avail.
+
+This means that by default the code runs in the NLO + parton shower mode. The aMCfast interface works only in the fixed-order mode, therefore we need to deactivate the parton shower. This is easily done by typing *2*. This way we get the message:
+
+        1. Type of perturbative computation               order = NLO         
+        2. No MC@[N]LO matching / event generation  fixed_order = ON          
+        3. Shower the generated events                   shower = OFF       ⇐  ̶H̶E̶R̶W̶I̶G̶6̶ ̶
+        4. Decay onshell particles                      madspin = OFF         
+        5. Add weights to events for new hypp.         reweight = OFF         
+        6. Run MadAnalysis5 on the events generated madanalysis = Not Avail.
+
+which confirms that we are about to run MadGraph5_aMC@NLO in the fixed-order mode at NLO. Press *[enter]* and go ahead. Now we get this message:
+
+        /------------------------------------------------------------\
+        |  1. param      : param_card.dat                            |
+        |  2. run        : run_card.dat                              |
+        |  3. FO_analyse : FO_analyse_card.dat                       |
+        \------------------------------------------------------------/
+
+We first need to edit the parameter card file to make sure that the values of all the physical parameters are correct. Please do so by typing *1*.
+
+We then need to edit the run card, typing *2*. To produce grids we cannot use the MG5_aMC internal PDFs. We use instead LHAPDF. To do so, we just set in the run card:
+
+        lhapdf = pdlabel ! PDF set
+
+We then need to specify the identification number of the PDF member that we want to use for the run. For example, for NNPDF31_nnlo_as_0118
+
+        303400 = lhaid ! if pdlabel=lhapdf, this is the lhapdf number
+
+The identification numbers for other PDF sets can be found at the [LHAPDF website](https://lhapdf.hepforge.org/pdfsets.html). We can now save and close the run card and edit the fixed-order analysis card by typing *3*. Here we have to specify the analysis file that will be used during the run. Assuming to have written an analysis file named "analysis_td_pp_V.f", which is supposed to be in the amcfast_test/FixedOrderAnalysis/folder, we need to set in the fixed-order analysis card:
+
+        FO_ANALYSE = analysis_td_template.o
+
+Of course, the way how the analysis file is written must be consistent with the analysis format specified in the fixed-order analysis card itself. In particular, we can set:
+
+        FO_ANALYSIS_FORMAT = topdrawer        
+
+However, the way how the interpolation grids are filled is independent of the analysis format. Note that in amcfast_test/FixedOrderAnalysis you will be able to find an array of different analysis template cards that are designed for different types of analysis. For example, "analysis_HwU_pp_lplm.f" is in the "histogram with uncertainties" format (hence the "HwU") and it is designed for the analysis of opposite sign charged leptons (hence the "lplm", which stands for "lepton plus lepton minus").
+
+We can finally save and close the fixed-order analysis card and start the run by giving *[enter]*. The run should finish successfully, without the generation of any APPLgrid.
+
+We now need to repeat the procedure enabling the generation of the grids. To do so, we have to run again the code giving:
+
+        launch amcfast_test
+
+A new run starts and the same messages shown above will be displayed. For this second run, the idea is to set up an empty grid that will eventually be filled up. In practice, this is done by doing a preliminary "low statistics" run that allows the code to optimize the interpolation grids based on the particular observables defined in the analysis file. Such an optimization acts on the predefined input grids, trimming them in such a way to exclude the unused grid nodes. The parameters of the input grids (number of nodes of the x-space and Q-space grid, interpolation orders, etc.) before the optimization can be set by the user in the analysis file. To perform this preparatory run, we edit the run card and set:
+
+        1 = iappl ! aMCfast switch (0=OFF, 1=prepare APPLgrids, 2=fill grids)
+
+Since at this stage the interpolation grids are not filled up, there is no need for a high accuracy, thus something like:
+
+        0.01 = req_acc_FO
+
+in the run card is enough. The run should end successfully. An (empty) APPLgrid should be available in amcfast_test/Events/run_02/.
+
+We now need to fill the grid. To do so, we have to run the code again with:
+
+        launch -o
+
+where the option "-o" ensures that the code restarts the run from the (integration) grids generated in the previous run. A new run starts and the same messages shown above will be displayed. For this run, we need to edit the run card and set:
+
+        2 = iappl ! aMCfast switch (0=OFF, 1=prepare APPLgrids, 2=fill grids)
+
+In addition, we might want to increase the accuracy of the integration by setting, for example:
+
+        0.001 = req_acc_FO
+
+This will finally lead to the production of the final interpolation grids which should be found in the "amcfast_test/Events/run_03/" folder. The names of the grids are "aMCfast_obs_0.root", "aMCfast_obs_1.root", "aMCfast_obs_2.root", etc. and there should be as many as the observables defined in the analysis file and the numbering follows the definition order.
+
+You can quit MG5_aMC by typing
+
+        exit
+
+
+
+
+### SHERPA+mcgrid
+
+
+
+
+
+##FastNLO
+Similar to the `applgrids` introduced in [How to generate APPLgrids](APPLgrids.md), `fastNLO tables` are the partonic cross sections needed to compute hadronic observables (proton-proton collisions).
+These QCD-perturbative components are generated by `Monte-Carlo` simulation and tabulated in `.dat` format.
+`MCFM-6.8` is used to generate a variety of non-jet processes in NNPDF, therefore `fastNLO` interfaced with `nlojet` are used for the jet ones.
+
+## Installing fastNLO
+To install the whole interface, one needs the following packages:
+- `LHAPDF.6.2.3` is a general purpose python/C++ interpolator, used for evaluating PDFs from discretised data files.
+- `hoppet-1.1.5` is a Higher Order Perturbative Parton Evolution Toolkit
+- `FastJet-3.1.3` is a library containing all definition of jet algorithms and library invoked by NLOJet.
+- `NLOJet-4.1.3-patched` is the equivalent of `MCFM-6.8`, the MC generator.
+- `fastnlo-toolkit 2585` is a kit that allows to manipulate fastnlo tables.
+- `fastnlo_interface_nlojet-2.3.1 (pre-2411)` is the equivalent of `mcfm-bridge-0.0.34-nnpdf`.
+check: https://fastnlo.hepforge.org
+
+Please follow the order to install the packages correctly.
+
+### Setting up your conda env
+
+Start by creating an environement:
+```
+conda create fastnlo
+conda activate fastnlo
+```
+
+Note: Before following the manual installation of the packages, try the following:
+```
+conda install fastnlo
+```
+or 
+```
+conda install fastjet
+```
+
+### Installing `LHAPDF.6.2.3`
+Note: for now, `conda install LHAPDF` although it installs `LHAPDF.6.2.3` but doesn't work with the rest of the softwares
+```
+wget https://lhapdf.hepforge.org/downloads/?f=LHAPDF-6.2.3.tar.gz
+tar -xzvf LHAPDF-6.2.3.tar.gz
+./configure --prefix=$CONDA_PREFIX
+make && make install
+``` 
+
+### Installing `FastJet-3.1.3`
+``` 
+wget https://fastnlo.hepforge.org/code/other/fastjet-3.1.3.tar.gz
+tar -zxvf fastjet-3.1.3.tar.gz 
+./configure --prefix=$CONDA_PREFIX --bindir=$CONDA_PREFIX/bin --enable-shared --enable-allplugins 
+make -j 4 && make test && make install 
+```
+
+### Installing `NLOJet-4.1.3-patched`
+```
+wget https://fastnlo.hepforge.org/code/other/nlojet++-4.1.3-patched.tar.gz 
+./configure --prefix=$CONDA_PREFIX 
+make -j 4 && make install 
+```
+
+### Installing `fastnlo-toolkit 2585`
+``` 
+wget https://fastnlo.hepforge.org/code/v23/fastnlo_toolkit-2.3.1-2585.tar.gz 
+tar -zxvf fastnlo_toolkit-2.3.1-2585.tar.gz 
+./configure --prefix=$CONDA_PREFIX 
+make -j 4  && make install 
+```
+
+### Installing `hoppet-1.1.5`
+`hoppet-1.1.5` can be found in the `NNPDF/external`, to install it:
+```
+cd external/hoppet/hoppet-1.1.5
+./configure --prefix=$CONDA_PREFIX 
+make -j 4 && make install 
+```
+
+### Installing `fastnlo_interface_nlojet-2.3.1 (pre-2411)`
+ ```
+ ./configure --prefix=$CONDA_PREFIX --with-hoppet  
+ make -j 4 && make install  
+ ```
+
+## Producing `fastNLO` tables
+
+Similar to the implementation of bins in `mcfm-bridge-0.0.34-nnpdf`, one needs to do the same in `fastnlo_interface_nlojet-2.3.1`:
+1. go to `fastnlo_interface_nlojet-2.3.1/interface/hadron/`.
+2. Edit a new .cc file corresponding to a new analysis, e.g CMS_2JET_7TEV.cc (see JETS branch in `NNPDF/external`).
+3. look first at `InclusiveNJets_new.cc` to learn about the code.
+  
+Two files are actually needed: the `.cc` file and the `steering` file: 
+- One needs to change the .cc file only in three cases: define observable, variable not defined, or change scale choice. Note: edit accordingly the Makefile.in in fastnlo_interface_nlojet-2.3.1/interface and compile again the interface
+- As for the steering file: this is where all the kinematic cuts and binning are defined
+  
+Once the `.cc` file and the `steering` file are set, you need to run twice (similarly to mcfm):
+
+- 1st:
+```
+bin/nlojet++ --calculate -cnlo --max-event=100000000 -n taskname [-s randomseed]
+             -u lib/fastnlo_interface_nlojet/libInclusiveJets.la
+```
+
+- 2nd:
+loop over 100 born jobs and 500 nlo jobs 1 billion events each (each job between 5 and 10 hours)
+```
+bin/nlojet++ --calculate -c[born|nlo] [--max-event=nnnnnnn] [-n taskname] [-s randomseed]
+             -u lib/fastnlo_interface_nlojet/libInclusiveJets.la
+```
+
+Notes regarding the run:
+- for benchmarking purposes use only born for 100 jobs 1 billion each)
+- taskname to be iterated over.
+- randomseed to be iterated over
+
+Notes regarding the output:
+- store fastNLO tables in NNPDF/applgrids (after combining them)
+- git pull master to get the new applgrids with fastnlo tables and recombiple apfelcomb
+
+Notes regarding the scale choice:
+- For inclusive jet: the factorization scale is relevant : H_T is more suited than p_T where (NNLO-NLO)_H_T < (NNLO-NLO)_p_T
+- For dijets: it’s not as relevant.
