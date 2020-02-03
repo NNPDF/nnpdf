@@ -766,7 +766,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
     getline(f2,line);
   }
   
-  double sys1, sys2, up, down, sigma, datshift;
+  double sys1, sys2;
   const int realsys=10;
 
   for (int j=0; j<realsys; j++)
