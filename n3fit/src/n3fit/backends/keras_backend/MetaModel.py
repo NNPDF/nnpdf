@@ -6,11 +6,13 @@
 """
 from keras.models import Model, Sequential
 import keras.optimizers as Kopt
+from evolutionary_keras.models import EvolModel
+import evolutionary_keras.optimizers as EvolOpt
 
 from n3fit.backends.keras_backend.operations import numpy_to_input
 
 
-class MetaModel(Model):
+class MetaModel(EvolModel):
     """
     The goal of this class is to absorb all keras dependent code
     """
@@ -25,6 +27,8 @@ class MetaModel(Model):
         "Adamax": (Kopt.Adamax, {}),
         "Nadam": (Kopt.Nadam, {}),
         "Amsgrad": (Kopt.Adam, {"lr": 0.01, "amsgrad": True}),
+        "NGA": (EvolOpt.GA, {}),
+        "CMA": (EvolOpt.CMA, {})
     }
 
     def __init__(self, input_tensors, output_tensors, extra_tensors=None, **kwargs):
