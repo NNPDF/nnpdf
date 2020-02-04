@@ -98,11 +98,13 @@ fitting:
 
   parameters: # This defines the parameter dictionary that is passed to the Model Trainer
     nodes_per_layer: [2, 5, 3, 8]
-    activation_per_layer: ['sigmoid', 'sigmoid', 'linear']
+    activation_per_layer: ['sigmoid', 'sigmoid', 'sigmoid', 'linear']
     initializer: 'random_uniform'
     learning_rate: 0.01
     optimizer: 'NGA'
-    epochs: 40000
+    epochs: 30000
+    population_size:  80
+    mutation_rate: 0.05
     pos_multiplier: 1.0
     pos_initial: 1e6 # believe the pos_lambda above
     stopping_patience: 1.0 # percentage of the number of epochs
