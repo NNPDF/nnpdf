@@ -44,7 +44,12 @@ def plot_delta_chi2(delta_chi2_bootstrap, fits):
 def errorbar_figure_from_table(df):
     """Given a table with even columns as central values as odd columns as errors
     plot an errorbar plot"""
-    fig, ax = plotutils.plot_horizontal_errorbars(df.values[:, ::2].T, df.values[:, 1::2].T, df.index.values, df.columns.unique(0), xlim=0)
+    fig, ax = plotutils.plot_horizontal_errorbars(
+        df.values[:, ::2].T,
+        df.values[:, 1::2].T,
+        df.index.values,
+        df.columns.unique(0),
+        xlim=0)
     return fig, ax
 
 @figure
