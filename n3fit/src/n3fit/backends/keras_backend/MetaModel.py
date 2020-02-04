@@ -7,7 +7,7 @@
 from keras.models import Model, Sequential
 import keras.optimizers as Kopt
 from evolutionary_keras.models import EvolModel
-import evolutionary_keras.optimizers as EvolOpt
+import evolutionary_keras.optimizers as Evolutionary_optimizers
 
 from n3fit.backends.keras_backend.operations import numpy_to_input
 
@@ -27,8 +27,8 @@ class MetaModel(EvolModel):
         "Adamax": (Kopt.Adamax, {}),
         "Nadam": (Kopt.Nadam, {}),
         "Amsgrad": (Kopt.Adam, {"lr": 0.01, "amsgrad": True}),
-        "NGA": (EvolOpt.GA, {}),
-        "CMA": (EvolOpt.CMA, {})
+        "NGA": (Evolutionary_optimizers.NGA, {}),
+        "CMA": (Evolutionary_optimizers.CMA, {})
     }
 
     def __init__(self, input_tensors, output_tensors, extra_tensors=None, **kwargs):
