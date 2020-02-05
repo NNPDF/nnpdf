@@ -141,10 +141,11 @@ void  LHCB_WENU_8TEVFilter::ReadData()
   //Reading Covariance Matrix
   for (int i = 0; i < 4; i++) getline(fCorr,line);
 
-  for (int i = 0; i < fNData; i++){  
-    for (int j = 0; j < fNData; j++) {    
+  for (int i = 0; i < fNData; i++){ 
+    for (int j = 0; j < i+1; j++) {    
       fCorr >> covmat[j][i];
-      covmat[j][i]=covmat[j][i]*totsys[j]*totsys[i];    
+      covmat[j][i]=covmat[j][i]*totsys[j]*totsys[i];
+      covmat[i][j]=covmat[j][i];      
     }
   }
 
@@ -153,7 +154,6 @@ void  LHCB_WENU_8TEVFilter::ReadData()
   for(int i = 0; i < fNData; i++)
     syscor[i] = new double[fNData];
 
-  //This function take as input syscor and the covmat, and it decomposes the covmat of the statistic into the single statistic uncertainties
   if(!genArtSys(fNData,covmat,syscor))
    {
      cerr << " in " << fSetName << " : cannot generate artificial systematics" << endl;
@@ -180,8 +180,7 @@ void  LHCB_WENU_8TEVFilter::ReadData()
 
   for(int i = 0; i < fNData; i++) 
     delete[] syscor[i];
-  delete[] syscor;
-     
+  delete[] syscor;     
 }
 
 
