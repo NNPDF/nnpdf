@@ -249,6 +249,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new LHCBZEE2FBFilter());
   target.push_back(new LHCBWZMU7TEVFilter());
   target.push_back(new LHCBWZMU8TEVFilter());
+  target.push_back(new LHCB_WENU_8TEVFilter());
 
   // ************************* NMC ******************************
 
