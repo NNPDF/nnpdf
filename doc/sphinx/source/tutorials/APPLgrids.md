@@ -1,4 +1,4 @@
-# How to generate APPLgrid and fastNLO tables
+# How to generate APPLgrid and FastNLO tables
 
 Theoretical predictions for hadronic observables are obtained by convolving
 the PDFs, evolved to the scale of each observable, with partonic cross sections.
