@@ -398,7 +398,7 @@ def higher_twist_covmat(experiments, experiments_index):
     """Reads the higher twist covariance matrix from file and applies cuts
     to match experiment covaraince matrix"""
     htcovmat = pd.read_csv(
-            f"/home/s1303034/Documents/higher_twist/htcovmat_total.csv",
+            f"/exports/csce/eddie/ph/groups/nnpdf/Users/rosalyn/Documents/fits/htcovmat_total.csv",
             index_col=[0,1,2], header=[0,1,2])
     htcovmat = pd.DataFrame(htcovmat.values,
                             index=htcovmat.index,
