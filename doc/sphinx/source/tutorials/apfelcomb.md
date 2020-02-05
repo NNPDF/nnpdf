@@ -4,7 +4,9 @@ APFELcomb is the project that allows the user to generate `FK` tables.
 These are lookup tables that contain the relevant information to compute 
 theoretical predicitons in the NNPDF framework. Broadly speaking, this is 
 achieved by taking DGLAP evolution kernels from ``APFEL`` and combining them 
-with interpolated parton-level observable kernels of various forms.
+with interpolated parton-level observable kernels in the APPLgrid or
+FastNLO format 
+(see [How to generate APPLgrid and fastNLO tables](../tutorials/APPLgrids.md)).
 The various data formats used in APFELcomb are described in 
 ```
 nnpdf/nnpdfcpp/data/doc/data_layout.pdf
@@ -79,9 +81,9 @@ elements and disables target-mass corrections.
 Once this entry is complete, one must move on to adding entries in the 
 corresponding subgrid table.
 
-### Implementing a new APPLgrid subgrid 
+### Implementing a new APPLgrid/FastNLO subgrid 
 
-To add a new APPLgrid-based subgrid, one must add a corresponding entry into 
+To add a new APPLgrid- or FastNLO--based subgrid, one must add a corresponding entry into 
 the `app\_subgrids` table of the apfelcomb database. One entry should be added 
 for each APPLgrid making up the final target `FK` table.
 The entries have the following fields:
@@ -261,7 +263,7 @@ done by running `db/generate_database.sh`.
 
 Several helper scripts are provided to make using APFELcomb easier 
 (particularly when generating a full set of FK tables for a particular theory).
-- `scripts/disp_grids.py` displays a full list of APPLgrid, DIS or DYP subgrids 
+- `scripts/disp_grids.py` displays a full list of APPLgrid/FastNLO, DIS or DYP subgrids 
 implemented in APFELcomb.
 - `run_allgrids.py [theoryID] [job script]` scans the results directory and 
 submits jobs for all missing subgrids for the specified theory.

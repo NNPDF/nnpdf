@@ -7,7 +7,7 @@ while the PDF parameters are optimised. To make it fast, accurate and precise,
 partonic cross sections are pre-computed, typically by means of a Monte Carlo 
 generator matched to fixed-order accuracy, in the form of look-up tables.
 Some of the most common multi-purpose Monte Carlo generators are `MCFM`,
-`SHERPA` and `madgraph5`; `NLOjet++` is customarily used for inclusive (multi)
+`madgraph5` and `SHERPA`; `NLOjet++` is customarily used for inclusive (multi)
 jet observables. Two default formats exist for look-up tables: `APPLgrid` and
 `FastNLO`. Here we explain how grids in either of these formats can be 
 generated from Monte Carlo runs for a range of hadronic processes.
@@ -27,9 +27,11 @@ versions that have been tested):
 
 * [ROOT](https://root.cern.ch/) (5.34 onwards)
 * [LHAPDF](https://lhapdf.hepforge.org/) (6.2.1 onwards)
+* [FastJet](http://fastjet.fr/) (3.3.1 onwards, from external/fastjet-3.3.1)
+
+The APPLgird source code is
 * [APPLgrid](https://applgrid.hepforge.org/) (applgridphoton, 
   from external/applgridphoton)
-* [FastJet](http://fastjet.fr/) (3.3.1 onwards, from external/fastjet-3.3.1)
 
 If the user is able to run the nnpdf code, LHAPDF should already be available 
 on his system. Likewise, if he is able to run apfelcomb, ROOT and APPLgrid 
@@ -52,11 +54,12 @@ autoreconf -i
 ```
 before the usual configuration/build/installation chain.
 
-Once these dependencies are set up, the user can produce the APPLgrid tables 
+Once these programs are set up, the user can produce the APPLgrid tables 
 for the process of his interest according to one of the methods introduced 
 above. The choice of the method usually depends on the observable involved, 
 for which one Monte Carlo can be more suited than another (because it is 
-faster or more flexible). Each of these methods is discussed as follows.
+faster or more flexible). The details of each of these methods are discussed 
+below.
 
 ### MCFM + mcfm-bridge
 The default version of MCFM used in NNPDF is MCFM-6.8. The source code is 
@@ -86,10 +89,11 @@ extra if clause specific to the new observable:
 
 In the function `void book_grid()` one should dictate the following information:
 - type of process: `mcfmwp` (`mcfmwm`) for positive (negative) W-boson 
-  production; `mcfm-wpc` (`mcfm-wmc`) for positive (negative W_boson production
+  production; `mcfm-wpc` (`mcfm-wmc`) for positive (negative) W_boson production
   in association with a charm quark; `mcfm-z` for Z-boson production; and 
   `mcfm-TT` for top pair production. Additional processes are not supported
-  by default, but can in principle be implemented by modyfying `APPLgrid`;
+  by default, but they can in principle be implemented by modyfying the APPLgird
+  code (see the APPLgrid [manual](https://applgrid.hepforge.org/) for details);
 - `q2Low`, `q2Up`, `nQ2bins` and `qorder`: the binning information for the grid 
    constructor;
 - `Ngrids`: the number of grids generated, for example, if the cross section 
@@ -97,7 +101,7 @@ In the function `void book_grid()` one should dictate the following information:
    three grids corresponding to var2, each containing 10 bins of var1;
 - `strcpy(gridFiles[0],"_yZ.root")`: the name of the output grid;
 - `nObsBins[0]`: the number of bins;
-- `static const double _y[18]` the breakdown of binning;
+- `static const double _y[<nbins>+1]` the binning edge breakdown;
 - `obsBins[0] = { _y };` append the observable.
 
     **example:**
@@ -144,15 +148,16 @@ dictate the following information:
 In both functions, the variable `glabel` denotes the observable, and it
 should correspond to the name given to the data set.
 
-Once the mcfm_interface has been modified with the information 
+Once the mcfm interface has been modified with the information 
 specified above, it should be configured, built and installed. To this purpose,
-one should run the usual chain
+one should run the usual chain (in the external/mcfm-bridge-0.0.34-nnpdf
+direcotry)
 ```
 ./configure --prefix=<install-dir>
 make
 make install
 ```
-The `MCFM-6.8` software has to be built again with the value of the LDFLAGS 
+After that, the MCFM-6.8 software has to be built again with the value of the LDFLAGS 
 environment variable properly set so that the mcfm-bridge code is linked.
 In the MCFM-6.8 directory, this can be realised as follows:
 ```
@@ -179,7 +184,7 @@ statistics as required to match the desired precision) fills the grid.
 
 ### MadGraph5\_aMC@NLO + amcfast
 
-The default versions of MG5\_aMC used in NNPDF is v2.6.3.2. It does not
+The default version of MG5\_aMC used in NNPDF is v2.6.3.2. It does not
 need to be installed, because installation is performed automatically at
 the time of the generation of a given process. MG5_aMC is usually run from the 
 ```
@@ -354,7 +359,7 @@ is also available. The code is provided as a plugin of the
 [Rivet](https://rivet.hepforge.org/) analysis program, allowing standard
 [Rivet analyses](https://rivet.hepforge.org/analyses/) to be modified to 
 produce APPLgrid tables. Therefore, on top of the dependencies outlined above, 
-mcgrid also requires the isntallation of Rivet (v2.2.0 or later). It is
+mcgrid also requires the installation of Rivet (v2.2.0 or later). It is
 recommended to install Rivet using the bootstrap script as described on their 
 [Getting Started](https://rivet.hepforge.org/trac/wiki/GettingStarted) page.
 MCgrid can then be installed in the usual way, by doing
@@ -364,10 +369,10 @@ make
 make install
 ```
 To use the MCgrid tools, there are various modifications that must be made to 
-the Rivet analyses to enable the package. DEtails can be found in the 
+the Rivet analyses to enable the package. Details can be found in the 
 MCgrid user's manual provided with the source files. Once MCgrid is 
 sucessfully installed and analysis files are correctly tweaked,
-Sherpa can be run in the usual way twice. As for the other methods, 
+SHERPA can be run in the usual way twice. As for the other methods, 
 the first time APPLgird tables are initialied; the second time they are filled.
 
 **example**
@@ -377,8 +382,8 @@ Several examples are provided from the MCgrid
 In particular, `CDF_2009_S8383952` is the modified Rivet analysis with the 
 MCgrid tools enabled. It projects out the Z-boson rapidity in Drell-Yan 
 production with a Tevatron-like beam setup. This analysis comes with a
-Sherpa runcard that includes the modified Rivet analysis. 
-An APPLgrid table can be easily generate as follows
+SHERPA runcard that includes the modified Rivet analysis. 
+An APPLgrid table can be easily generated as follows
 ```
 cd CDF_2009_S8383952
 make plugin-...
@@ -402,14 +407,15 @@ following pieces of code:
 - [Hoppet](https://hoppet.hepforge.org/) (1.2.0, form external/hoppet)
 - [FastJet](http://fastjet.fr/) (3.3.1 onwards, from external/fastjet-3.3.1)
 - [NLOjet++](http://www.desy.de/~znagy/Site/NLOJet++.html) (4.1.3-patched
-   from [this link](https://fastnlo.hepforge.org/code/other/nlojet++-4.1.3-patched.tar.gz)
-These packages should be installed in their order as follows.
-Start by creating an environement:
+   from [this link](https://fastnlo.hepforge.org/code/other/nlojet++-4.1.3-patched.tar.gz))
+
+A conda recipe is available to build most of othese packages.
+To use this, start by creating an environement:
 ```
 conda create fastnlo
 conda activate fastnlo
 ```
-Before following the manual installation of the packages, try the following:
+and try
 ```
 conda install fastnlo
 ```
@@ -417,27 +423,28 @@ or
 ```
 conda install fastjet
 ```
-Install LHAPDF
+If this does not work, the user can install each package at a time. 
+- Install LHAPDF
 ```
 wget https://lhapdf.hepforge.org/downloads/?f=LHAPDF-6.2.3.tar.gz
 tar -xzvf LHAPDF-6.2.3.tar.gz
 ./configure --prefix=$CONDA_PREFIX
 make && make install
 ```
-Install Hoppet
+- Install Hoppet
 ```
 cd external/hoppet/hoppet-1.1.5
 ./configure --prefix=$CONDA_PREFIX 
 make -j && make install
 ``` 
-Install FastJet
+- Install FastJet
 ``` 
 wget https://fastnlo.hepforge.org/code/other/fastjet-3.1.3.tar.gz
 tar -zxvf fastjet-3.1.3.tar.gz 
 ./configure --prefix=$CONDA_PREFIX --bindir=$CONDA_PREFIX/bin --enable-shared --enable-allplugins 
 make && make test && make install 
 ```
-Install NLOJet++
+- Install NLOJet++
 ```
 wget https://fastnlo.hepforge.org/code/other/nlojet++-4.1.3-patched.tar.gz 
 ./configure --prefix=$CONDA_PREFIX 
@@ -447,10 +454,10 @@ If the above is successful, one can install the FastNLO packages, specifically
 - [fastnlo-toolkit](https://fastnlo.hepforge.org/code/v23/fastnlo_toolkit-2.3.1-2585.tar.gz) (2585)
 - [fastnlo_interface](https://fastnlo.hepforge.org/code/v23/fastnlo_interface_nlojet-2.3.1pre-2411.tar.gz) (2.3.1, pre2411)
 The first package is a kit that allows one to manipulate look-up tables in the
-FastNLo format; the second package is the interface between NLOjet++ and 
-a fastNLo table.
+FastNLO format; the second package is the interface between NLOjet++ and 
+a fastNLO table.
 
-To installing fastnlo-toolkit, do the following
+To install fastnlo-toolkit, do the following
 ``` 
 wget https://fastnlo.hepforge.org/code/v23/fastnlo_toolkit-2.3.1-2585.tar.gz 
 tar -zxvf fastnlo_toolkit-2.3.1-2585.tar.gz 
@@ -464,7 +471,7 @@ To install the fastlo interface do the following
 ```
 The code should now be set up to compute FastNLO tables. In order to do so, 
 please follow these steps.
-1. Go to fastnlo_interface_nlojet-2.3.1/interface/hadron/.
+1. Go to the fastnlo_interface_nlojet-2.3.1/interface/hadron/ folder.
 2. Edit a new .cc file corresponding to a new analysis, 
    e.g. CMS_2JET_7TEV.cc (for further exampels, see external/Jets/src_files).
    It might be useful to look first at `InclusiveNJets_new.cc` and comments
@@ -472,7 +479,7 @@ please follow these steps.
    contains, for instance, the definition of the observable, the kinematic
    variables and the scale choice. It must therefore be adapted to the case
    of relevance and, if needed, additional definitions, not included in the
-   tempalte files, must be implemented. The Makefile.in in 
+   template files, must be implemented. The Makefile.in in 
    ```
    fastnlo_interface_nlojet-2.3.1/interface 
    ```
@@ -481,14 +488,17 @@ please follow these steps.
    created.
 3. Add a steering file containing the details of the analysis (target,
    centre-of-mass energy, kinematic binning, etc.). Examples are provided in 
-   external/Jets/steering_files).
+   the external/Jets/steering_files folder.
 
 NLOjet++ can be run in the usual way, but twice.
 The first time, at NLO with a low number of events, to initialise the tables
-(typically 100000000)
+(typically a billion of events)
 ```
-nlojet++ --calculate -cnlo --max-event=100000000 -n taskname [-s randomseed] -u lib/fastnlo_interface_nlojet/libInclusiveJets.la
+nlojet++ --calculate -cnlo --max-event=100000000 -n taskname [-s randomseed] -u lib/fastnlo_interface_nlojet/<proc_name>.la
 ```
+where `taskname` is a name chosen by the user to denote the specific run,
+`randomseed` is a (large) integer number and `proc_name` is the same name used
+for the .cc file.
 The second time, both at LO and NLO with a number of events sufficiently high
 to match the required precision, to fill the tables
 ```
@@ -497,7 +507,7 @@ nlojet++ --calculate -c[born|nlo] [--max-event=nnnnnnn] [-n taskname] [-s random
 To maximise statstics in a reasonable amount of time, it is customary to run in 
 parallel several jobs (with different random seeds), typically 100
 LO runs and 500 NLO runs with 1 billion events each, and combine them.
-The combination can be easily achieved by running hte built-in function
+The combination can be easily achieved by running the built-in function
 fnlo-tk-merge.
 
 
