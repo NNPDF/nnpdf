@@ -7,8 +7,8 @@ while the PDF parameters are optimised. To make it fast, accurate and precise,
 partonic cross sections are pre-computed, typically by means of a Monte Carlo 
 generator matched to fixed-order accuracy, in the form of look-up tables.
 Some of the most common multi-purpose Monte Carlo generators are `MCFM`,
-`madgraph5` and `SHERPA`; `NLOjet++` is customarily used for inclusive (multi)
-jet observables. Two default formats exist for look-up tables: `APPLgrid` and
+`madgraph5` and `SHERPA`; `NLOjet++` is customarily used for inclusive (multi-)jet
+observables. Two default formats exist for look-up tables: `APPLgrid` and
 `FastNLO`. Here we explain how grids in either of these formats can be 
 generated from Monte Carlo runs for a range of hadronic processes.
 
@@ -34,7 +34,7 @@ The APPLgird source code is
   from external/applgridphoton)
 
 If the user is able to run the nnpdf code, LHAPDF should already be available 
-on his system. Likewise, if he is able to run apfelcomb, ROOT and APPLgrid 
+on their system. Likewise, if they are able to run apfelcomb, ROOT and APPLgrid
 should already be available. FastJet can be installed from the 
 external/fastjet-3.3.1 folder in the usual way as
 ```
@@ -89,7 +89,7 @@ extra if clause specific to the new observable:
 
 In the function `void book_grid()` one should dictate the following information:
 - type of process: `mcfmwp` (`mcfmwm`) for positive (negative) W-boson 
-  production; `mcfm-wpc` (`mcfm-wmc`) for positive (negative) W_boson production
+  production; `mcfm-wpc` (`mcfm-wmc`) for positive (negative) W-boson production
   in association with a charm quark; `mcfm-z` for Z-boson production; and 
   `mcfm-TT` for top pair production. Additional processes are not supported
   by default, but they can in principle be implemented by modyfying the APPLgird
@@ -217,7 +217,7 @@ make
 make install
 ```
 
-MG5_aMC can be easily run interactively. 
+MG5_aMC can easily be run interactively.
 
 **example**
 
@@ -302,7 +302,7 @@ The identification numbers for other PDF sets can be found at the [LHAPDF websit
 
         FO_ANALYSE = analysis_td_template.o
 
-Of course, the way how the analysis file is written must be consistent with the analysis format specified in the fixed-order analysis card itself. In particular, we can set:
+Of course, the way in which the analysis file is written must be consistent with the analysis format specified in the fixed-order analysis card itself. In particular, we can set:
 
         FO_ANALYSIS_FORMAT = topdrawer        
 
@@ -372,7 +372,7 @@ To use the MCgrid tools, there are various modifications that must be made to
 the Rivet analyses to enable the package. Details can be found in the 
 MCgrid user's manual provided with the source files. Once MCgrid is 
 sucessfully installed and analysis files are correctly tweaked,
-SHERPA can be run in the usual way twice. As for the other methods, 
+SHERPA can be run in the usual way twice. As with the other methods,
 the first time APPLgird tables are initialied; the second time they are filled.
 
 **example**
@@ -383,7 +383,7 @@ In particular, `CDF_2009_S8383952` is the modified Rivet analysis with the
 MCgrid tools enabled. It projects out the Z-boson rapidity in Drell-Yan 
 production with a Tevatron-like beam setup. This analysis comes with a
 SHERPA runcard that includes the modified Rivet analysis. 
-An APPLgrid table can be easily generated as follows
+An APPLgrid table can easily be generated as follows
 ```
 cd CDF_2009_S8383952
 make plugin-...
@@ -399,7 +399,7 @@ The [FastNLO](https://fastnlo.hepforge.org/) project provides computer code to
 create and evaluate fast interpolation tables of pre-computed coefficients in 
 perturbation theory for observables in hadron-induced processes. It is 
 mainly interfaced to [NLOjet++](http://www.desy.de/~znagy/Site/NLOJet++.html), 
-a Monte Carlo generator dedicated to the computation of inclusive (multi)-jet 
+a Monte Carlo generator dedicated to the computation of inclusive (multi-)jet
 observables which are usually not optimised in the alternative multi-purpose 
 Monte Carlo generators described above. The FastNLO code depends on the 
 following pieces of code:
@@ -409,8 +409,8 @@ following pieces of code:
 - [NLOjet++](http://www.desy.de/~znagy/Site/NLOJet++.html) (4.1.3-patched
    from [this link](https://fastnlo.hepforge.org/code/other/nlojet++-4.1.3-patched.tar.gz))
 
-A conda recipe is available to build most of othese packages.
-To use this, start by creating an environement:
+A conda recipe is available to build most of these packages.
+To use this, start by creating an environment:
 ```
 conda create fastnlo
 conda activate fastnlo
@@ -453,6 +453,7 @@ make && make install
 If the above is successful, one can install the FastNLO packages, specifically
 - [fastnlo-toolkit](https://fastnlo.hepforge.org/code/v23/fastnlo_toolkit-2.3.1-2585.tar.gz) (2585)
 - [fastnlo_interface](https://fastnlo.hepforge.org/code/v23/fastnlo_interface_nlojet-2.3.1pre-2411.tar.gz) (2.3.1, pre2411)
+
 The first package is a kit that allows one to manipulate look-up tables in the
 FastNLO format; the second package is the interface between NLOjet++ and 
 a fastNLO table.
@@ -464,7 +465,7 @@ tar -zxvf fastnlo_toolkit-2.3.1-2585.tar.gz
 ./configure --prefix=$CONDA_PREFIX 
 make -j  && make install 
 ```
-To install the fastlo interface do the following
+To install the fastnlo interface do the following
 ```
  ./configure --prefix=$CONDA_PREFIX --with-hoppet  
  make -j && make install  
@@ -473,7 +474,7 @@ The code should now be set up to compute FastNLO tables. In order to do so,
 please follow these steps.
 1. Go to the fastnlo_interface_nlojet-2.3.1/interface/hadron/ folder.
 2. Edit a new .cc file corresponding to a new analysis, 
-   e.g. CMS_2JET_7TEV.cc (for further exampels, see external/Jets/src_files).
+   e.g. CMS_2JET_7TEV.cc (for further examples, see external/Jets/src_files).
    It might be useful to look first at `InclusiveNJets_new.cc` and comments
    therein to figure out the meaning of the various functions. The .cc file
    contains, for instance, the definition of the observable, the kinematic
@@ -492,7 +493,7 @@ please follow these steps.
 
 NLOjet++ can be run in the usual way, but twice.
 The first time, at NLO with a low number of events, to initialise the tables
-(typically a billion of events)
+(typically a billion events)
 ```
 nlojet++ --calculate -cnlo --max-event=100000000 -n taskname [-s randomseed] -u lib/fastnlo_interface_nlojet/<proc_name>.la
 ```
@@ -504,8 +505,8 @@ to match the required precision, to fill the tables
 ```
 nlojet++ --calculate -c[born|nlo] [--max-event=nnnnnnn] [-n taskname] [-s randomseed] -u lib/fastnlo_interface_nlojet/libInclusiveJets.la
 ```
-To maximise statstics in a reasonable amount of time, it is customary to run in 
-parallel several jobs (with different random seeds), typically 100
+To maximise statistics in a reasonable amount of time, it is customary to run
+several jobs in parallel (with different random seeds), typically 100
 LO runs and 500 NLO runs with 1 billion events each, and combine them.
 The combination can be easily achieved by running the built-in function
 fnlo-tk-merge.

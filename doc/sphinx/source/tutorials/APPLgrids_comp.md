@@ -45,7 +45,7 @@ between a FastNLO table and a PDF set. This function can be run as
 ```
 fnlo-tk-cppread NAME_OF_FASTNLO.dat PDF_SET <options>
 ```
-where `options` denote additional arguments that select the PF member and the
+where `options` denote additional arguments that select the PDF member and the
 scale of the FastNLO grid (see the FastNLO 
 [manual](https://fastnlo.hepforge.org/) for details).
 
@@ -54,7 +54,7 @@ must be sufficiently high to make it negligible in comparison to the data
 and/or theoretical uncertainties. Such a precision depends on the number of 
 Monte Carlo events generated for each process, and must be checked case by case.
 In order to increase the Monte Carlo statistics in a reasonable amount of time, 
-it is customary to run different APPLgrid/FastNLo tables for the same process
+it is customary to run different APPLgrid/FastNLO tables for the same process
 starting from a different seed. The ensuing tables can then be combined with
 appropriate built-in functions:
 - for APPLgrid
@@ -73,8 +73,8 @@ see the [APPlgrid](https://applgrid.hepforge.org/) and
 Once the APPLgrid and/or FastNLO tables have been generated, they must be stored
 in
 ```
-applgirds
+applgrids
 ```
-where a folder that matches the name of the dataset used in the `buildmaster` 
+in a folder that matches the name of the dataset used in the `buildmaster`
 implementation. Each folder contains a specific README file with the summary 
-information about the grid origin and usage.
+information about the grid's origin and usage.
