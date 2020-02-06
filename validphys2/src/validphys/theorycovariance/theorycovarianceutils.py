@@ -72,6 +72,7 @@ def process_lookup(name):
     each dataset internally. If a dataset is not registered,
     'UNKNOWN' is returned.
     """
+    
     process_dictionary = {	"ATLASZPT8TEVMDIST": 			"DY",
 				"ATLASZPT8TEVYDIST":			"DY",
 				"CMSZDIFF12":				"DY",
@@ -82,18 +83,7 @@ def process_lookup(name):
                                 "ATLASTTBARTOT7TEV":			"TOP",
                                 "ATLASTTBARTOT13TEV":			"TOP",
                                 "ATLASTOPDIFF8TEVTRAPNORM":		"TOP",
-                                "ATLAS_TOPDIFF_DILEPT_8TEV_TTM":        "TOP",
-                                "ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORM":    "TOP",
-                                "ATLAS_TOPDIFF_DILEPT_8TEV_TTRAP":      "TOP",
-                                "ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM":  "TOP",
-                                "ATLAS_TTB_DIFF_8TEV_LJ_TPT":           "TOP",
-                                "ATLAS_TTB_DIFF_8TEV_LJ_TPTNORM":       "TOP",
-                                "ATLAS_TTB_DIFF_8TEV_LJ_TRAP":          "TOP",
-                                "ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM":      "TOP",
-                                "ATLAS_TTB_DIFF_8TEV_LJ_TTRAP":         "TOP",
-                                "ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM":     "TOP",
-                                "ATLAS_TTB_DIFF_8TEV_LJ_TTM":           "TOP",
-                                "ATLAS_TTB_DIFF_8TEV_LJ_TTMNORM":       "TOP",
+                               
 				"CMSTTBARTOT":				"TOP",
                                 "CMSTTBARTOT5TEV":                      "TOP",
                                 "CMSTOPDIFF8TEVTTRAPNORM":		"TOP",

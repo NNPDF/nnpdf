@@ -73,50 +73,92 @@ class MetaModel(Model):
 
         super(MetaModel, self).__init__(input_list, output_list, **kwargs)
 
-    def fit(self, epochs=1, **kwargs):
+    def perform_fit(self, x=None, y=None, steps_per_epoch=1, **kwargs):
         """
         Performs forward (and backwards) propagation for the model for a given number of epochs.
-        If the model was compiled with input and output data,
-            there is no need for giving them in this function
 
-        # Returns:
-            - `history`: a dictionary of all the output layers of the model
-                         each mapped to their partial loss
-                        the partial loss containing one element for each epoch
+        The output of this function consists on a dictionary that maps the names of the metrics
+        of the model (the loss functions) to the partial losses.
+
+        If the model was compiled with input and output data, they will not be passed through.
+        In this case by default the number of `steps_per_epoch` will be set to 1
+
+        ex:
+            {'loss': [100], 'dataset_a_loss1' : [67], 'dataset_2_loss': [33]}
+
+        Returns
+        -------
+            `loss_dict`: dict
+                a dictionary with all partial losses of the model
         """
         if self.has_dataset:
+            if x is not None or y is not None:
+                raise ValueError(
+                    "The model was compiled together with input and output but the information was passed again to the fit function"
+                )
             history = super().fit(
-                x=None, y=None, steps_per_epoch=1, batch_size=None, epochs=epochs, **kwargs
+                x=None, y=None, steps_per_epoch=steps_per_epoch, **kwargs,
             )
         else:
-            history = super().fit(epochs=epochs, **kwargs)
-        return history.history
+            history = super().fit(x=x, y=y, steps_per_epoch=steps_per_epoch, **kwargs)
+        loss_dict = history.history
+        return loss_dict
 
-    def evaluate(self, **kwargs):
+    def compute_losses(self, *args, **kwargs):
         """
-        Performs keras.evaluate and returns a list of the loss function for each of the outputs
+        Performs keras.evaluate and returns a dictionary containing the loss function for
+        each of the outputs.
 
-        In Keras the first element of the list is the total loss (sum of all other elements)
-        but, if there is only one output it returns a float instead.
-        In order to fix this inconsistent behaviour,
-        when there is only one output we copy it twice into a list so it behaves the same
+        This function acts as wrapper around Keras' evaluate and uses the information from
+        the Keras' metric in order to return information on the losses in an unified format.
 
-        # Returns:
-            - `loss_list`: a list with al the losses of the system
+        Instead, the Keras' evaluate method returns either a list (with no information about which loss corresponds to
+        which output) or a float (if there is a single output).
+
+        This function is compatible with the dict output by the fit history object.
+
+        Any parameters passed to this function will be directly passed down to Keras.
+
+        Returns
+        -------
+            `loss_dict`: dict
+                a dictionary with all partial losses of the model
         """
-        # TODO: make it into a dictionary of {'output_layer_name' : loss}
-        #                          so it looks more similar to the output of .fit
+        result = self.evaluate(*args, **kwargs)
+        # get the name of all losses
+        metricas = self.metrics_names
+        if isinstance(result, float):
+            # if there is only one we have to game it
+            result = [result, result]
+            # get the name of the last layer before the loss
+            last_name = self.layers[-1].name
+            metricas.append(f"{last_name}_loss")
+
+        # now make it into a dictionary so it looks like the history object
+        loss_dict = dict(zip(metricas, result))
+        return loss_dict
+
+    def evaluate(self, x=None, y=None, **kwargs):
+        """
+        Wrapper around evaluate to take into account the case in which the data is already known
+        at the time of `.compile`.
+        In this case the number of steps must be always specified and the input of x and y must
+        be set to `None`.
+        """
         if self.has_dataset:
+            # Ensure that no x or y were passed
             result = super().evaluate(x=None, y=None, steps=1, **kwargs)
         else:
-            result = super().evaluate()
-        if isinstance(result, float):
-            return [result, result]
-        else:
-            return result
+            result = super().evaluate(x=x, y=y, **kwargs)
+        return result
 
     def compile(
-        self, optimizer_name="RMSprop", learning_rate=0.05, loss=None, target_output=None, **kwargs
+        self,
+        optimizer_name="RMSprop",
+        learning_rate=0.05,
+        loss=None,
+        target_output=None,
+        **kwargs,
     ):
         """
         Compile the model given an optimizer and a list of loss functions.
@@ -130,13 +172,18 @@ class MetaModel(Model):
                 the data will be compiled together with the model and won't be necessary to
                 input it again in .fit()
 
-        # Arguments:
-            - `optimizer_name`: string defining the optimizer to be used
-            - `learning_rate`: learning rate of of the optimizer
-                                (if accepted as an argument, if not it will be ignored)
-            - `loss` : list of loss functions to be pass to the model
-            - `target_output`: list of outputs to compare the results to during fitting/evaluation
-                               if given further calls to fit/evaluate must be done with y = None.
+        Parameters
+        ----------
+            `optimizer_name`: str
+                string defining the optimizer to be used
+            `learning_rate`: float
+                learning rate of of the optimizer
+                (if accepted as an argument, if not it will be ignored)
+            `loss` : list
+                list of loss functions to be pass to the model
+            `target_output`: list
+                list of outputs to compare the results to during fitting/evaluation
+                if given further calls to fit/evaluate must be done with y = None.
         """
         try:
             opt_tuple = self.optimizers[optimizer_name]
@@ -166,8 +213,10 @@ class MetaModel(Model):
 
         Parameters
         ----------
-            layer_names: list of names of the layers to update weights
-            multiplier: scalar number to multiply the weights with
+            `layer_names`: list
+                list of names of the layers to update weights
+            `multiplier`: float
+                scalar number to multiply the weights by
         """
         internal_model = self.internal_models.get(key)
         if not internal_model:
@@ -178,5 +227,5 @@ class MetaModel(Model):
             internal_model = Sequential(layers)
             self.internal_models[key] = internal_model
         current_weights = internal_model.get_weights()
-        new_weights = [i*multiplier for i in current_weights]
+        new_weights = [i * multiplier for i in current_weights]
         internal_model.set_weights(new_weights)

@@ -41,3 +41,18 @@ Setting the ``trainable`` flag to ``False`` is equivalent to recovering the old 
             - { fl: t3,  smallx: [-0.37,1.52], largex: [1.74,3.39] }
             - { fl: t8,  smallx: [0.56,1.29], largex: [1.45,3.03] }
             - { fl: cp,  smallx: [0.12,1.19], largex: [1.83,6.70] }
+
+Training / Validation split
+---------------------------
+The fraction of events that are considered for the training and validation sets is defined by the ``frac`` key in the ``experiment:dataset`` parameter of the nnpdf runcard. A fraction of ``X`` means that ``X`` of the event will go into the training set while ``1-X`` will enter the validation set for that dataset.
+
+.. code-block:: yml
+
+    experiments:
+    - experiment: ALL
+        datasets:
+        - { dataset: SLACP, frac: 0.8}
+        - { dataset: NMCPD, frac: 0.8 }      
+        - { dataset: CMSJETS11,     frac: 0.8, sys: 10 }
+
+It is possible to run a fit with no validation set by setting the fraction to ``1.0``, in this case the training set will be used as validation set.
