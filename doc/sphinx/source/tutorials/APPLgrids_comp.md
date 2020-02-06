@@ -24,7 +24,7 @@ make
 ```
 or, if using conda in an environment where the user already has `cern-root` 
 and `applgrid`) by doing
-```bash
+```text
 conda install meson
 mkdir bld
 cd bld
@@ -65,7 +65,7 @@ applgrid-combine
 ```
 fnlo-tk-merge
 ```
-see the [APPlgrid](https://applgrid.hepforge.org/) and 
+see the [APPLgrid](https://applgrid.hepforge.org/) and 
 [FastNLO](https://fastnlo.hepforge.org/) documentation for further details.
 
 ## Storage

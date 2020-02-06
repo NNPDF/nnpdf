@@ -37,7 +37,7 @@ If the user is able to run the nnpdf code, LHAPDF should already be available
 on their system. Likewise, if they are able to run apfelcomb, ROOT and APPLgrid
 should already be available. FastJet can be installed from the 
 external/fastjet-3.3.1 folder in the usual way as
-```
+```text
 ./configure --prefix=<install-dir>
 make 
 make install
@@ -66,12 +66,12 @@ below.
 The default version of MG5\_aMC used in NNPDF is v2.6.3.2. It does not
 need to be installed, because installation is performed automatically at
 the time of the generation of a given process. MG5_aMC is usually run from the 
-```
+```text
 external/MG5_aMC_v2_6_3_2/bin
 ```
 folder. Note that python 2(.6 or .7) is required. MG5_aMC does not work with 
 python3. Before the first run, the mg5_configuration.txt file in the 
-```
+```text
 external/MG5_aMC_v2_6_3_2/input 
 ```
 folder must be edited. In particular, please make sure to uncomment the following 
@@ -90,7 +90,7 @@ The recommended version of aMCfast is v2.0.0: it can be installed from the
 external/amcfast-2.0.0 
 ```
 folder in the usual way as
-```
+```text
 ./configure --prefix=<install-dir>
 make
 make install
@@ -124,6 +124,7 @@ Note that the name of the output folder can be omitted. In this case the code
 chooses some default name, typically PROC*. If you are using MG5_aMC for the first 
 time, you will receive the following message
 
+
         Which one do you want to install? (this needs to be done only once)
         1. cuttools  (OPP) [0711.3596]   : will be installed (required)
         2. iregi     (TIR) [1405.0301]   : will be installed (required)
@@ -137,27 +138,32 @@ time, you will receive the following message
         {tool_name} [install|noinstall|{prefixed_installation_path}]
         If you are unsure about what this question means, just type enter to proceed. [300s to answer]         
 
+
 Please type *1 [enter] 2 [enter] 3 [enter] 4 [enter] [enter]* and wait. Now we can run the process through
 
         launch
 
 We will get the following message:
 
+```text
         1. Type of perturbative computation               order = NLO         
         2. No MC@[N]LO matching / event generation  fixed_order = OFF         
         3. Shower the generated events                   shower = HERWIG6     
         4. Decay onshell particles                      madspin = OFF         
         5. Add weights to events for new hypp.         reweight = OFF  
         6. Run MadAnalysis5 on the events generated madanalysis = Not Avail.
+```
 
 This means that by default the code runs in the NLO + parton shower mode. The aMCfast interface works only in the fixed-order mode, therefore we need to deactivate the parton shower. This is easily done by typing *2*. This way we get the message:
 
+```text
         1. Type of perturbative computation               order = NLO         
         2. No MC@[N]LO matching / event generation  fixed_order = ON          
         3. Shower the generated events                   shower = OFF       ⇐  ̶H̶E̶R̶W̶I̶G̶6̶ ̶
         4. Decay onshell particles                      madspin = OFF         
         5. Add weights to events for new hypp.         reweight = OFF         
         6. Run MadAnalysis5 on the events generated madanalysis = Not Avail.
+```
 
 which confirms that we are about to run MadGraph5_aMC@NLO in the fixed-order mode at NLO. Press *[enter]* and go ahead. Now we get this message:
 
@@ -311,8 +317,8 @@ should correspond to the name given to the data set.
 Once the mcfm interface has been modified with the information 
 specified above, it should be configured, built and installed. To this purpose,
 one should run the usual chain (in the external/mcfm-bridge-0.0.34-nnpdf
-direcotry)
-```
+directory)
+```text
 ./configure --prefix=<install-dir>
 make
 make install
@@ -320,7 +326,7 @@ make install
 After that, the MCFM-6.8 software has to be built again with the value of the LDFLAGS 
 environment variable properly set so that the mcfm-bridge code is linked.
 In the MCFM-6.8 directory, this can be realised as follows:
-```
+```text
 export LDFLAGS="mcfmbridge-config --ldflags" 
 make
 ```
@@ -363,7 +369,7 @@ mcgrid also requires the installation of Rivet (v2.2.0 or later). It is
 recommended to install Rivet using the bootstrap script as described on their 
 [Getting Started](https://rivet.hepforge.org/trac/wiki/GettingStarted) page.
 MCgrid can then be installed in the usual way, by doing
-```
+```text
 ./configure --prefix=<install-dir> --enable-rivet=<rivet-install-dir> --enable-hepmc2=<hepmc2-install-dir>
 make
 make install
@@ -494,7 +500,7 @@ please follow these steps.
 NLOjet++ can be run in the usual way, but twice.
 The first time, at NLO with a low number of events, to initialise the tables
 (typically a billion events)
-```
+```text
 nlojet++ --calculate -cnlo --max-event=100000000 -n taskname [-s randomseed] -u lib/fastnlo_interface_nlojet/<proc_name>.la
 ```
 where `taskname` is a name chosen by the user to denote the specific run,
@@ -502,7 +508,7 @@ where `taskname` is a name chosen by the user to denote the specific run,
 for the .cc file.
 The second time, both at LO and NLO with a number of events sufficiently high
 to match the required precision, to fill the tables
-```
+```text
 nlojet++ --calculate -c[born|nlo] [--max-event=nnnnnnn] [-n taskname] [-s randomseed] -u lib/fastnlo_interface_nlojet/libInclusiveJets.la
 ```
 To maximise statistics in a reasonable amount of time, it is customary to run
