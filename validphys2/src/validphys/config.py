@@ -224,6 +224,74 @@ class CoreConfig(configparser.Config):
         underlyinglaw = self.parse_pdf(datacuts['fakepdf'])
         return {'pdf': underlyinglaw}
 
+    def produce_multiclosure_underlyinglaw(self, fits):
+        """Produce the underlying law for a set of fits. This allows a single t0
+        like covariance matrix to be loaded for all fits, for use with
+        statistical estimators on multiple closure fits. If the fits don't all
+        have the same underlying law then an error is raised, offending fit is
+        identified.
+        """
+        # could use comprehension here but more useful to find offending fit
+        laws = set()
+        for fit in fits:
+            try:
+                closuretest_spec = fit.as_input()["closuretest"]
+            except KeyError as e:
+                raise ConfigError(
+                    f"fit: {fit} does not have a `closuretest` namespace in "
+                    "runcard"
+                ) from e
+            try:
+                laws.add(closuretest_spec["fakepdf"])
+            except KeyError as e:
+                raise ConfigError(
+                    f"fit: {fit} does not have `fakepdf` specified in the "
+                    "closuretest namespace in runcard."
+                ) from e
+
+        if len(laws) != 1:
+            raise ConfigError(
+                "Did not find unique underlying law from fits, "
+                f"instead found: {laws}"
+            )
+        return self.parse_pdf(laws.pop())
+
+    @configparser.explicit_node
+    def produce_closure_test_covmat(self, use_multiclosure_covmat: bool = False):
+        """runcard flag determining whether to use standard covmats or
+        multiclosure covariance matrix in closure test estimators
+        """
+        if use_multiclosure_covmat:
+            from validphys import closuretest
+            return closuretest.multiclosure_covmat
+        else:
+            from validphys import results
+            return results.covariance_matrix
+
+    @configparser.explicit_node
+    def produce_experiment_closure_test_covmat(
+        self, use_multiclosure_covmat: bool = False
+    ):
+        """runcard flag determining whether to use standard covmats or
+        multiclosure covariance matrix in closure test estimators
+        """
+        if use_multiclosure_covmat:
+            from validphys import closuretest
+            return closuretest.experiment_multiclosure_covmat
+        else:
+            from validphys import results
+            return results.experiment_covariance_matrix
+
+    def produce_fitunderlyinglaw_as_t0set(self, fit):
+        """Gets the underlying law PDF from fit config file and set it as
+        the `t0set`. This can be used to keep the covariance matrix constant
+        across multiple closure fits and for calculating closure test estimators
+        outside of the datasets used in the fit.
+        """
+        underlying_dict = self.produce_fitunderlyinglaw(fit)
+        return dict(t0set=underlying_dict["pdf"])
+
+
     def produce_fitpdfandbasis(self, fit):
         """ Set the PDF and basis from the fit config. """
         with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):

@@ -7,319 +7,386 @@ averaged across multiple fits or a single replica proxy fit
 
 import numpy as np
 import scipy.linalg as la
-from scipy.special import erf
+import scipy.special as special
 import pandas as pd
 import matplotlib.pyplot as plt
 
 from reportengine import collect
 from reportengine.table import table
-from reportengine.figure import figuregen, figure
-from reportengine.checks import make_argcheck
+from reportengine.figure import figure
 
-from validphys.pdfgrids import xplotting_grid, check_basis
-from validphys.pdfbases import Basis
-from validphys.core import PDF
-from validphys.checks import check_scale
+from validphys.results import ThPredictionsResult
+from validphys.calcutils import calc_chi2
+from validphys.core import DataSetSpec, Experiment
 
-fits_bias_experiment = collect("bias_experiment", ("fits", "fitcontext"))
+def internal_multiclosure_dataset_loader(
+    dataset, fits_pdf, multiclosure_underlyinglaw):
+    """internal function for loading multiple theory predictions for a given
+    experiment, a single covariance matrix using underlying law as t0pdf for use
+    with multiclosure statistical estimators. Avoiding memory issues from caching
+    experiment load
 
-def expected_bias(fits_bias_experiment):
-    bias_centrals = [
-        biasdata.bias*biasdata.ndata for biasdata in fits_bias_experiment]
-    #ndata = fits_bias_experiment[0].ndata # ndata should be same for all fits
-    bias_mean = np.mean(bias_centrals)
-    return bias_mean
+    Returns
+    -------
+    multiclosure_results: tuple
+        a tuple of length 4 containing all necessary dependencies of multiclosure
+        statistical estimators in order:
 
-exps_expected_bias = collect("expected_bias", ("experiments",))
+            closure fits theory predictions,
+            underlying law theory predictions,
+            covariance matrix, 
+            sqrt covariance matrix
 
-fits_phi_experiment = collect("phi_data_experiment", ("fits", "fitcontext"))
+    TODO: deprecate this at some point
+    """
+    if isinstance(dataset, DataSetSpec):
+        data = dataset.load() #just use internal loader
+    else:
+        # it's an experiment, so copy loading of ExperimentSpec.core without
+        # caching
+        sets = []
+        for ds in dataset.datasets:
+            loaded_data = ds.load()
+            sets.append(loaded_data)
+        data = Experiment(sets, dataset.name)
 
-fits_variance_experiment = collect("variance_experiment", ("fits", "fitcontext"))
+    fits_dataset_predictions = [
+        ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data)
+        for pdf in fits_pdf
+    ]
+    fits_underlying_predictions = ThPredictionsResult.from_convolution(
+        multiclosure_underlyinglaw, dataset, loaded_data=data)
 
-def expected_variance(fits_variance_experiment):
-    var_mean = np.mean(fits_variance_experiment)
-    return var_mean
+    # copy data to make t0 cov
+    loaded_data = type(data)(data)
+    loaded_data.SetT0(multiclosure_underlyinglaw.load_t0())
+    covmat = loaded_data.get_covmat()
+    sqrt_covmat = la.cholesky(covmat, lower=True)
+    # TODO: support covmat reg and theory covariance matrix
+    # possibly make this a named tuple
+    return (
+        fits_dataset_predictions,
+        fits_underlying_predictions,
+        covmat,
+        sqrt_covmat
+    )
 
-exps_expected_var = collect("expected_variance", ("experiments",))
+def internal_multiclosure_experiment_loader(
+    experiment, fits_pdf, multiclosure_underlyinglaw
+):
+    """Like `internal_multiclosure_dataset_loader` except for an experiment"""
+    return internal_multiclosure_dataset_loader(
+        experiment, fits_pdf, multiclosure_underlyinglaw)
+
+def expected_bias_dataset(
+    internal_multiclosure_dataset_loader):
+    """For a set of closure fits, calculate the mean bias across fits for
+    a dataset, bias is the chi2 between central prediction and underlying law.
+    For more information on bias, see closuretest.bias_dataset.
+
+    The fits should each have the same underlying law and t0pdf, but have
+    different filterseeds, so that the level 1 shift is different.
+
+    """
+    closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
+    centrals = np.asarray(
+        [th.central_value for th in closures_th]
+    )
+    # place bins on first axis
+    diffs = (
+        law_th.central_value[:, np.newaxis] -
+        centrals.T
+    )
+    biases = calc_chi2(
+        sqrtcov, diffs)
+    return np.mean(biases), len(law_th)
+
+def expected_variance_dataset(internal_multiclosure_dataset_loader):
+    """Given multiple closure fits, calculate the mean variance across fits
+    for a given dataset, variance is the spread of replicas in units of the
+    covariance, for more information see closuretest.variance_dataset
+
+    As with expected_bias_dataset, the fits should each have the same underlying
+    law and t0pdf, but have different filterseeds.
+
+    """
+    closures_th, law_th, _, sqrtcov = internal_multiclosure_dataset_loader
+    # object is fits, bins, replicas
+    reps = np.asarray([th._rawdata for th in closures_th])
+    variances = []
+    # this seems slow but breaks for datasets with single data point otherwise
+    for i in range(reps.shape[0]):
+        diffs = reps[i, :, :] - reps[i, :, :].mean(axis=1, keepdims=True)
+        variances.append(np.mean(calc_chi2(sqrtcov, diffs)))
+    # assume all data same length
+    return np.mean(variances), len(law_th)
+
+def expected_bias_experiment(internal_multiclosure_experiment_loader):
+    """Like expected_bias_dataset but for whole experiment"""
+    return expected_bias_dataset(internal_multiclosure_experiment_loader)
+
+def expected_variance_experiment(internal_multiclosure_experiment_loader):
+    """Like expected_variance_dataset but for whole experiment"""
+    return expected_variance_dataset(internal_multiclosure_experiment_loader)
+
+datasets_expected_bias = collect(
+    "expected_bias_dataset", ("experiments", "experiment")
+)
+datasets_expected_variance = collect(
+    "expected_variance_dataset", ("experiments", "experiment")
+)
+
+#TODO: check that this hasn't been implemented somewhere else at point of merge
+experiments_datasets = collect("dataset", ("experiments", "experiment"))
+
+@table
+def datasets_bias_variance_ratio(
+    datasets_expected_bias, datasets_expected_variance, experiments_datasets
+):
+    """For each dataset calculate the expected bias and expected variance
+    across fits
+
+        ratio = expected bias / expected variance
+
+    and tabulate the results.
+
+    This gives an idea of how faithful uncertainties are for a set of
+    datasets.
+
+    """
+    records = []
+    for ds, (bias, ndata), (var, _) in zip(
+        experiments_datasets, datasets_expected_bias, datasets_expected_variance
+    ):
+        records.append(dict(
+            dataset=str(ds),
+            ndata=ndata,
+            ratio=bias/var
+        ))
+    df = pd.DataFrame.from_records(
+        records,
+        index="dataset",
+        columns=("dataset", "ndata", "ratio")
+    )
+    df.columns = ["ndata", "bias/variance"]
+    return df
+
+experiments_expected_bias = collect(
+    "expected_bias_experiment", ("experiments",)
+)
+experiments_expected_variance = collect(
+    "expected_variance_experiment", ("experiments",)
+)
 
 @table
 def experiments_bias_variance_ratio(
-    exps_expected_bias, exps_expected_var, experiments,):
-    records = []
-    bias_tot = 0
-    var_tot = 0
-    for exp, bias, var in zip(experiments, exps_expected_bias, exps_expected_var):
-        records.append(dict(
-            experiment=str(exp),
-            ratio=bias/var
-        ))
-        bias_tot += bias
-        var_tot += var
-    records.append(dict(
-            experiment="total",
-            ratio=bias_tot/var_tot
-    ))
-    df = pd.DataFrame.from_records(
-        records,
-        index="experiment",
-        columns=("experiment", "ratio")
-    )
-    df.columns = ["bias/variance"]
+    experiments_expected_bias, experiments_expected_variance, experiments):
+    """Like datasets_bias_variance_ratio except for each experiment. Also
+    calculate and tabulate
+
+        total expected bias / total expected variance.
+
+    """
+    # don't reinvent wheel
+    df_in = datasets_bias_variance_ratio(
+        experiments_expected_bias, experiments_expected_variance, experiments)
+
+    bias_tot = np.sum([bias for (bias, _) in experiments_expected_bias])
+    var_tot = np.sum([var for (var, _) in experiments_expected_variance])
+    ntotal = np.sum(df_in['ndata'].values)
+
+    tot_df = pd.DataFrame(
+        [[ntotal, bias_tot/var_tot]], index=["Total"], columns=df_in.columns)
+    df = pd.concat((df_in, tot_df), axis=0)
+
+    df.index.rename("experiment", inplace=True) # give index appropriate name
     return df
+
+@table
+def sqrt_datasets_bias_variance_ratio(datasets_bias_variance_ratio):
+    """For each of the tabulated bias/variance from
+    `datasets_bias_variance_ratio` take the sqrt, which gives an idea of how
+    faithful the uncertainties are in units of the standard deviation.
+
+    """
+    df_in = datasets_bias_variance_ratio
+    vals = np.array(df_in.values) # copy just in case
+    vals[:, 1] = np.sqrt(vals[:, 1])
+    return pd.DataFrame(
+        vals,
+        index=df_in.index,
+        columns=["ndata", "sqrt(bias/variance)"]
+    )
 
 @table
 def sqrt_experiments_bias_variance_ratio(experiments_bias_variance_ratio):
-    df_in = experiments_bias_variance_ratio
-    return pd.DataFrame(np.sqrt(df_in.values), index=df_in.index, columns=["sqrt(bias/variance)"])
+    """Like sqrt_datasets_bias_variance_ratio except for each experiment
+    """
+    return sqrt_datasets_bias_variance_ratio(experiments_bias_variance_ratio)
+
+@table
+def total_bias_variance_ratio(
+    experiments_bias_variance_ratio, datasets_bias_variance_ratio, experiments):
+    """Combine datasets_bias_variance_ratio and experiments_bias_variance_ratio
+    into single table with multiindex of experiment and dataset
+    """
+    exps_df_in = experiments_bias_variance_ratio.iloc[:-1] # Handle total seperate
+    lvs = exps_df_in.index
+    #The explicit call to list is because pandas gets confused otherwise
+    expanded_index = pd.MultiIndex.from_product(
+        (list(lvs), ["Total"]),
+    )
+    exp_df = exps_df_in.set_index(expanded_index)
+
+    dset_index = pd.MultiIndex.from_arrays(
+        [
+            [str(experiment) for experiment in experiments for ds in experiment.datasets],
+            datasets_bias_variance_ratio.index.values
+        ],
+    )
+    ds_df = datasets_bias_variance_ratio.set_index(dset_index)
+    dfs = []
+    for lv in lvs:
+        dfs.append(
+            pd.concat((exp_df.loc[lv], ds_df.loc[lv]), copy=False, axis=0))
+    total_df = pd.DataFrame(
+        experiments_bias_variance_ratio.iloc[[-1]].values,
+        columns=exp_df.columns,
+        index=['Total'],
+    )
+    dfs.append(total_df)
+    keys = [*lvs, 'Total']
+    res = pd.concat(dfs, axis=0, keys=keys)
+    return res
 
 @table
 def expected_xi_from_bias_variance(sqrt_experiments_bias_variance_ratio):
+    """Given the `sqrt_experiments_bias_variance_ratio` calculate a predicted
+    value of xi_{1 sigma} for each experiment. The predicted value is based of
+    the assumption that the difference between replica and central prediction
+    and the difference between central prediction and underlying prediction are
+    both gaussians centered on zero.
+
+    For example, if sqrt(expected bias/expected variance) is 0.5, then we would
+    expect xi_{1 sigma} to be given by performing integral of the distribution
+    of
+
+        diffs = (central - underlying predictions)
+
+    over the domain defined by the variance. In this case the sqrt(variance) is
+    twice as large as the sqrt(bias) which is the same as integrating a normal
+    distribution mean = 0, std = 1 over the interval [-2, 2], given by
+
+        integral = erf(2/sqrt(2))
+
+    where erf is the error function.
+
+    In general the equations is
+
+        integral = erf(sqrt(variance / (2*bias)))
+
+    """
     df_in = sqrt_experiments_bias_variance_ratio
-    n_sigma_in_variance = 1/df_in.values
-    res = erf(n_sigma_in_variance/np.sqrt(2))
-    return pd.DataFrame(res, index=df_in.index, columns=[r"$\xi$ from ratio"])
+    n_sigma_in_variance = 1/df_in.values[:, -1, np.newaxis]
+    # pylint can't find erf here, disable error in this function
+    #pylint: disable=no-member
+    estimated_integral = special.erf(n_sigma_in_variance/np.sqrt(2))
+    return pd.DataFrame(
+        np.concatenate((df_in.values[:, 0, np.newaxis], estimated_integral), axis=1),
+        index=df_in.index,
+        columns=["ndata", r"$\xi \,$ from ratio"]
+    )
 
-@make_argcheck(check_basis)
-def histogram_pdfgrid(
-    pdf:PDF, Q:(float,int), basis:(str, Basis)='flavour',
-    flavours:(list, tuple, type(None))=None):
-    xgrid = np.array([0.05, 0.1, 0.2]) # internal grid, defined in 3.0 paper
-    return xplotting_grid(
-        pdf, Q, xgrid=xgrid, basis=basis, flavours=flavours)
+def dataset_xi(
+    internal_multiclosure_dataset_loader):
+    r"""For a given dataset calculate sigma, the RMS difference between
+    replica predictions and central predictions, and delta, the difference
+    between the central prediction and the underlying prediction.
 
-@make_argcheck(check_basis)
-def xi_pdfgrid(
-    pdf:PDF, Q:(float,int), basis:(str, Basis)='flavour',
-    flavours:(list, tuple, type(None))=None):
-    xgrid_log = np.logspace(-5, -1, num=10, endpoint=False)
-    xgrid_lin = np.linspace(0.1, 1, num=10, endpoint=False)
-    xgrid = np.concatenate((xgrid_log, xgrid_lin), axis=0)
-    return xplotting_grid(
-        pdf, Q, xgrid=xgrid, basis=basis, flavours=flavours)
+    The differences are calculated in the basis which would diagonalise the
+    dataset's covariance matrix.
 
-fits_xi_pdfgrid = collect("pdf_bias_grid", ("fits", "fitpdf"))
-underlying_xi_pdfgrid = collect("pdf_bias_grid", ("fitunderlyinglaw",))
+    Then the Indictor function is evaluated for elementwise for sigma and delta
+
+        I_{[-\sigma_j, \sigma_j]}(\delta_j)
+
+    which is 1 when |\delta_j| < \sigma_j and 0 otherwise. Finally, take the
+    mean across fits
+
+    """
+    closures_th, law_th, covmat, _ = internal_multiclosure_dataset_loader
+    replicas = np.asarray([th._rawdata for th in closures_th])
+    centrals = np.mean(replicas, axis=-1)
+    underlying = law_th.central_value
+
+    _, e_vec = la.eigh(covmat)
+
+    central_diff = centrals - underlying[np.newaxis, :]
+    var_diff_sqrt = (centrals[:, :, np.newaxis] - replicas)
+
+    # project into basis which diagonalises covariance matrix
+    var_diff_sqrt = e_vec.T @ var_diff_sqrt.transpose(2, 1, 0)
+    central_diff = e_vec.T @ central_diff.T
+
+    var_diff = (var_diff_sqrt)**2
+    sigma = np.sqrt(var_diff.mean(axis=0)) # sigma is always positive
+    in_1_sigma = np.array(abs(central_diff) < sigma, dtype=int)
+    # mean across fits
+    return in_1_sigma.mean(axis=1)
+
+def experiment_xi(internal_multiclosure_experiment_loader):
+    """Like dataset_xi but for whole experiment"""
+    return dataset_xi(internal_multiclosure_experiment_loader)
+
+experiments_xi_measured = collect("experiment_xi", ("experiments",))
 
 @table
-def xi_1sigma(fits_xi_pdfgrid, underlying_xi_pdfgrid):
-    fit_replica_grids = np.array([xpg.grid_values for xpg in fits_xi_pdfgrid])
-    fit_central_grids = fit_replica_grids.mean(axis=1, keepdims=True)
-    law_grid = underlying_xi_pdfgrid[0].grid_values[0][np.newaxis, np.newaxis, ...]
-    #print(law_grid.shape, fit_replica_grids.shape, fit_central_grids.shape)
-    central_diff = law_grid - fit_central_grids
-    sigma_diff = fit_replica_grids - fit_central_grids
-    variance = ((sigma_diff)**2).mean(axis=1, keepdims=True)#.mean(axis=0)
-    sigma = np.sqrt(variance)
-    indicator = np.array(abs(central_diff) < sigma, dtype=float) #fit, 1, flav, x
-    flavs = pd.Index([
-        underlying_xi_pdfgrid[0].basis.elementlabel(fl)
-        for fl in underlying_xi_pdfgrid[0].flavours],
-        name="flavour"
-    )
-    xgridindex = pd.Index(underlying_xi_pdfgrid[0].xgrid, name="x")
-    df = pd.DataFrame(
-        indicator.mean(axis=0)[0, ...],
-        index=flavs,
-        columns=xgridindex,
-    )
-    return df
+def fits_measured_xi(experiments_xi_measured, experiments):
+    r"""Tabulate the measure value of \xi_{1\sigma} for each experiment, as
+    calculated by experiment_xi, note that the mean is taken across directions
+    of the covariance matrix
 
-@figuregen
-@check_scale('xscale', allow_none=True)
-def plot_xi_1sigma(xi_1sigma, Q, xscale):
-    x = xi_1sigma.columns.values
-    xi_data = xi_1sigma.values
-    for i, fl in enumerate(xi_1sigma.index.values):
-        fig, ax = plt.subplots()
-        ax.plot(x, xi_data[i, :], '*', label=r"$\xi_{1\sigma}$ = "+f"{xi_data[i, :].mean()}")
-        ax.axhline(0.68, linestyle=":", color="k", label="expected value")
-        ax.set_ylim([0, 1])
-        ax.set_title(r"$\xi_{1\sigma}$"+f" for Q={Q}, ${fl}$ PDF.")
-        ax.set_xlabel("x")
-        ax.set_ylabel(r"$\xi_{1\sigma}$")
-        ax.set_xscale(xscale)
-        ax.legend()
-        yield fig
-
-def xi_pdfgrid_proxy(
-    proxy_pdf:PDF, Q:(float,int), basis:(str, Basis)='flavour',
-    flavours:(list, tuple, type(None))=None):
-    return xi_pdfgrid(proxy_pdf, Q, basis, flavours)
-
-def xi_pdfgrid_replicas(
-    replica_pdf:PDF, Q:(float,int), basis:(str, Basis)='flavour',
-    flavours:(list, tuple, type(None))=None):
-    return xi_pdfgrid(replica_pdf, Q, basis, flavours)
-
-@table
-def xi_1sigma_proxy(xi_pdfgrid_replicas, underlying_xi_pdfgrid, xi_pdfgrid_proxy):
-    fit_replica_grids = xi_pdfgrid_replicas.grid_values
-    fit_central_grids = fit_replica_grids.mean(axis=0, keepdims=True)
-
-    law_grid = underlying_xi_pdfgrid[0].grid_values[0][np.newaxis, ...]
-    proxy_grid = xi_pdfgrid_proxy.grid_values
-
-    central_diff = law_grid - proxy_grid
-    sigma_diff = fit_replica_grids - fit_central_grids
-
-    variance = ((sigma_diff)**2).mean(axis=0, keepdims=True)
-    sigma = np.sqrt(variance)
-
-    indicator = np.array(abs(central_diff) < sigma, dtype=float) #fit, flav, x
-    flavs = pd.Index([
-        underlying_xi_pdfgrid[0].basis.elementlabel(fl)
-        for fl in underlying_xi_pdfgrid[0].flavours],
-        name="flavour"
-    )
-    xgridindex = pd.Index(underlying_xi_pdfgrid[0].xgrid, name="x")
-    df = pd.DataFrame(
-        indicator.mean(axis=0),
-        index=flavs,
-        columns=xgridindex,
-    )
-    return df
-
-@figuregen
-@check_scale('xscale', allow_none=True)
-def plot_xi_1sigma_proxy(xi_1sigma_proxy, Q, xscale):
-    yield from plot_xi_1sigma(xi_1sigma_proxy, Q, xscale)
-
-@figuregen
-@check_scale('xscale', allow_none=True)
-def plot_xi_1sigma_comparison(xi_1sigma_proxy, xi_1sigma, Q, xscale):
-    x = xi_1sigma.columns.values
-    xi_data = xi_1sigma.values
-    xi_proxy = xi_1sigma_proxy.values
-    for i, fl in enumerate(xi_1sigma.index.values):
-        fig, ax = plt.subplots()
-        ax.plot(x, xi_data[i, :], '*', label=r"multiple fits $\xi_{1\sigma}$ = "+f"{xi_data[i, :].mean()}")
-        ax.plot(x, xi_proxy[i, :], '*', label=r"single rep proxy $\xi_{1\sigma}$ = "+f"{xi_proxy[i, :].mean()}")
-        ax.axhline(0.68, linestyle=":", color="k", label="expected value")
-        ax.set_ylim([0, 1])
-        ax.set_title(r"$\xi_{1\sigma}$"+f" for Q={Q}, ${fl}$ PDF.")
-        ax.set_xlabel("x")
-        ax.set_ylabel(r"$\xi_{1\sigma}$")
-        ax.set_xscale(xscale)
-        ax.legend()
-        yield fig
-
-@make_argcheck(check_basis)
-def pdf_bias_grid(
-    pdf:PDF, Q:(float,int), basis:(str, Basis)='flavour',
-    flavours:(list, tuple, type(None))=None,
-    logspace_lims=(-5, -1),
-    logspace_num=3,
-    linspace_lims=(0.1, 1),
-    linspace_num=3):
-    xgrid_log = np.logspace(*logspace_lims, num=logspace_num, endpoint=False)
-    xgrid_lin = np.linspace(*linspace_lims, num=linspace_num, endpoint=False)
-    xgrid = np.concatenate((xgrid_log, xgrid_lin), axis=0)
-    return xplotting_grid(
-        pdf, Q, xgrid=xgrid, basis=basis, flavours=flavours)
-
-fits_pdf_bias_grid = collect("pdf_bias_grid", ("fits", "fitpdf"))
-underlying_pdf_bias_grid = collect("pdf_bias_grid", ("fitunderlyinglaw",))
-
-def multifits_flavours_covmat(fits_pdf_bias_grid):
-    fits_replica_grids = np.array([xpg.grid_values for xpg in fits_pdf_bias_grid])
-    fits_central_grids = fits_replica_grids.mean(axis=0, keepdims=True)
-    diffs = np.concatenate((fits_central_grids - fits_replica_grids), axis=0) # superreps, flav, x
-    covs = []
-    for fli in range(diffs.shape[1]): # loop over fl index
-        covs.append(np.cov(diffs[:, fli, :], rowvar=False))
-    return covs
-
-
-def multifits_flavours_bias_variance(
-    fits_pdf_bias_grid, underlying_pdf_bias_grid, multifits_flavours_covmat):
-    fits_replica_grids = np.array([xpg.grid_values for xpg in fits_pdf_bias_grid])
-    fits_central_grids = fits_replica_grids.mean(axis=1, keepdims=True)
-    underlying_grid = underlying_pdf_bias_grid[0].grid_values[0][np.newaxis, np.newaxis, ...]
-    flavours_invs = np.array([la.inv(cov) for cov in multifits_flavours_covmat])
-
-    bias_diff = (fits_central_grids - underlying_grid)[:, 0, ...] #fit, flav, x
-    var_diff = fits_central_grids - fits_replica_grids # fit, rep, flav, x
-
-    bias_xM = (bias_diff[..., np.newaxis] * flavours_invs[np.newaxis, ...]) #fit, flav, x, x
-    bias = (bias_xM * bias_diff[:, :, np.newaxis, :]).sum(axis=(-2, -1)) #fit, flav
-    expected_bias = np.mean(bias, axis=0)
-
-    var_xM = (var_diff[..., np.newaxis] * flavours_invs[np.newaxis, np.newaxis, ...]) #fit, rep, flav, x, x
-    var = (var_xM * var_diff[:, :, :, np.newaxis, :]).sum(axis=(-2, -1)).mean(axis=1) # fit, flav
-    expected_var = np.mean(var, axis=0)
-
-    return expected_bias/expected_var
-
-def multifits_total_covmat(fits_pdf_bias_grid):
-    fits_replica_grids = np.array([xpg.grid_values for xpg in fits_pdf_bias_grid])
-    fits_central_grids = fits_replica_grids.mean(axis=0, keepdims=True)
-    diffs = np.concatenate((fits_central_grids - fits_replica_grids), axis=0) # superreps, flav, x
-    diffs_total = diffs.reshape(-1, diffs.shape[1]*diffs.shape[2]) # superreps, (flav * x)
-    return np.cov(diffs_total, rowvar=False)
-
-def multifits_total_pdf_bias_variance(
-    multifits_total_covmat, fits_pdf_bias_grid, underlying_pdf_bias_grid):
-    underlying_grid = underlying_pdf_bias_grid[0].grid_values[0][np.newaxis, np.newaxis, ...]
-    flavx = underlying_grid.shape[2] * underlying_grid.shape[3]
-    underlying_grid = underlying_grid.reshape(1, 1, flavx)
-    fits_replica_grids = np.array([xpg.grid_values.reshape(-1, flavx) for xpg in fits_pdf_bias_grid])
-    fits_central_grids = fits_replica_grids.mean(axis=1, keepdims=True)
-
-    bias_diff = (fits_central_grids - underlying_grid)[:, 0, :] #fit, (flav*x)
-    var_diff = fits_central_grids - fits_replica_grids # fit, rep, (flav*x)
-    total_inv = la.inv(multifits_total_covmat) # flav*x, flav*x
-
-    bias_xM = (bias_diff[..., np.newaxis] * total_inv[np.newaxis, ...]) #fit, flav*x, flav*x
-    bias = (bias_xM * bias_diff[:, np.newaxis, :]).sum(axis=(-2, -1))/flavx #fit
-    expected_bias = np.mean(bias, axis=0)
-
-    var_xM = (var_diff[..., np.newaxis] * total_inv[np.newaxis, np.newaxis, ...]) #fit, rep, flav*x
-    var = (var_xM * var_diff[:, :, np.newaxis, :]).sum(axis=(-2, -1)).mean(axis=1)/flavx # fit
-    expected_var = np.mean(var, axis=0)
-
-    return expected_bias/expected_var
-
-@table
-def multifits_pdf_bias_variance_table(
-    multifits_total_pdf_bias_variance,
-    multifits_flavours_bias_variance,
-    underlying_pdf_bias_grid
-):
-    flavids = underlying_pdf_bias_grid[0].flavours
-    basis = underlying_pdf_bias_grid[0].basis
+    """
     records = []
-    for flid, ratio in zip(flavids, multifits_flavours_bias_variance):
+    for exp, xi in zip(
+        experiments, experiments_xi_measured
+    ):
         records.append(dict(
-            flavour=f"${basis.elementlabel(flid)}$",
-            ratio=ratio
+            experiment=str(exp),
+            ndata=len(xi),
+            xi=np.mean(xi)
         ))
-    records.append(dict(
-        flavour="total",
-        ratio=multifits_total_pdf_bias_variance
-    ))
-    df = pd.DataFrame.from_records(records, index="flavour", columns=("flavour", "ratio"))
-    df.columns = ("bias/variance",)
+    df = pd.DataFrame.from_records(
+        records,
+        index="experiment",
+        columns=("experiment", "ndata", "xi")
+    )
+    df.columns = ["ndata", r"measured $\xi_{1\sigma}$"]
     return df
-
-
-fits_central_diff_logistic_experiment = collect("central_diff_logistic_experiment", ("fits", "fitcontext"))
-
-def data_xi_experiment(fits_central_diff_logistic_experiment):
-    fits_logistic = np.array(fits_central_diff_logistic_experiment)
-    return fits_logistic.mean(axis=0) # average across fits
 
 @figure
-def plot_data_xi_experiment(data_xi_experiment, experiment):
+def plot_dataset_xi(dataset_xi, dataset):
+    r"""For a given dataset, plot the value of \xi_{1 \sigma} for each direction
+    of the covariance matrix, along with the expected value of \xi_{1 \sigma}
+    if the replicas distribution perfectly matches the central disribution
+    (0.68). In the legend include the mean across directions
+
+    """
     fig, ax = plt.subplots()
     ax.plot(
-        data_xi_experiment,
+        dataset_xi,
         "*",
-        label=r"$\xi_{1\sigma}$ = "+f"{data_xi_experiment.mean()}, from multifits"
+        label=r"$\xi_{1\sigma}$ = "+f"{dataset_xi.mean():.2f}, from multifits"
     )
-    ax.axhline(0.68, linestyle=":", color="k", label=r"$1\sigma$ "+"expected value")
-    ax.axhline(0.95, linestyle=":", color="k", label=r"$2\sigma$ "+"expected value")
+    ax.axhline(0.68, linestyle=":", color="k", label=r"$\xi_{1\sigma}$ "+"expected value")
+    ax.axhline(0.95, linestyle=":", color="r", label=r"$\xi_{2\sigma}$"+"expected value")
     ax.set_ylim((0, 1))
-    ax.set_xlabel("datapoint index")
-    ax.set_title(r"$\xi_{1\sigma}$ for "+str(experiment))
+    ax.set_xlabel("eigenvector index (ascending order)")
+    ax.set_title(r"$\xi_{1\sigma}$ for "+str(dataset))
     ax.legend()
     return fig
+
+@figure
+def plot_experiment_xi(experiment_xi, experiment):
+    """Like plot_dataset_xi except for an experiment"""
+    return plot_dataset_xi(experiment_xi, experiment)

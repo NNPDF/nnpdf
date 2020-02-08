@@ -20,8 +20,6 @@ from validphys.closuretest.closure_checks import (
     check_fits_areclosures,
     check_fits_same_filterseed,
     check_fits_underlying_law_match,
-    check_t0_used,
-    check_t0pdfset_matches_law
 )
 
 
@@ -30,25 +28,32 @@ BiasData = namedtuple("BiasData", ("bias", "ndata"))
 
 underlying_results = collect("results", ("fitunderlyinglaw",))
 
+def closure_sqrt_covmat(closure_test_covmat):
+    """returns sqrt of the closure_test_covmat, for use with closure estimators
+    """
+    la.eigh(closure_test_covmat)
+    return la.cholesky(closure_test_covmat, lower=True)
+
+def experiment_closure_sqrt_covmat(experiment_closure_test_covmat):
+    """like closure_sqrt_covmat but for whole experiment"""
+    return closure_sqrt_covmat(experiment_closure_test_covmat)
+
 @check_fit_isclosure
-@check_use_fitcommondata
+#@check_use_fitcommondata
 def bias_dataset(
-    results, underlying_results, fit, use_fitcommondata, sqrt_covariance_matrix
+    results, underlying_results, fit, closure_sqrt_covmat
 ):
     """Calculate the bias for a given dataset and fit. The bias is defined as
     chi2 between the prediction from the underlying PDF (which was used to
     generate the closure pseudodata), also known as level zero closure data, and
     the central prediction calculated from the fitted PDF.
 
-    we require that use_fitcommondata is true because the generated closure data
-    is used to generate the multiplicative contributions to the covariance
-    matrix
     """
     _, th_ct = results
     # does collect need to collect a list even with one element?
     (_, th_ul), = underlying_results
     central_diff = th_ct.central_value - th_ul.central_value
-    bias_out = calc_chi2(sqrt_covariance_matrix, central_diff)  # unnormalised
+    bias_out = calc_chi2(closure_sqrt_covmat, central_diff)  # unnormalised
     return BiasData(bias_out, len(th_ct))
 
 
@@ -56,13 +61,12 @@ underlying_experiment_results = collect("experiment_results", ("fitunderlyinglaw
 
 
 @check_fit_isclosure
-@check_use_fitcommondata
+#@check_use_fitcommondata
 def bias_experiment(
     experiment_results,
     underlying_experiment_results,
     fit,
-    use_fitcommondata,
-    experiment_sqrt_covariance_matrix,
+    experiment_closure_sqrt_covmat,
 ):
     """Like `bias_dataset` but for a whole experiment.
     """
@@ -70,8 +74,7 @@ def bias_experiment(
         experiment_results,
         underlying_experiment_results,
         fit,
-        use_fitcommondata,
-        experiment_sqrt_covariance_matrix,
+        experiment_closure_sqrt_covmat,
     )
 
 
@@ -181,8 +184,8 @@ VarianceData = namedtuple("VarianceData", ("variance", "ndata"))
 
 
 @check_fit_isclosure
-@check_use_fitcommondata
-def variance_dataset(results, fit, use_fitcommondata, sqrt_covariance_matrix):
+#@check_use_fitcommondata
+def variance_dataset(results, fit, closure_sqrt_covmat):
     """calculate the variance for a given dataset, which is the spread of
     replicas measured in the space of the covariance matrix. Given by:
 
@@ -193,24 +196,21 @@ def variance_dataset(results, fit, use_fitcommondata, sqrt_covariance_matrix):
     be made fully independent of the closure data. This is useful when checking
     the variance of data which was not included in the fit.
 
-    # TODO: here we require that use_fitcommondata is true, for the generic use
-    # case. we require another action which uses explicitly a t0pdf of the
-    # underlying law.
     """
     _, th = results
     diff = th.central_value[:, np.newaxis] - th._rawdata
-    var_unnorm = calc_chi2(sqrt_covariance_matrix, diff).mean()
+    var_unnorm = calc_chi2(closure_sqrt_covmat, diff).mean()
     return VarianceData(var_unnorm, len(th))
 
 
 @check_fit_isclosure
-@check_use_fitcommondata
+#@check_use_fitcommondata
 def variance_experiment(
-    experiment_results, fit, use_fitcommondata, experiment_sqrt_covariance_matrix
+    experiment_results, fit, experiment_closure_sqrt_covmat
 ):
     """Like variance_dataset but for a whole experiment"""
     return variance_dataset(
-        experiment_results, fit, use_fitcommondata, experiment_sqrt_covariance_matrix
+        experiment_results, fit, experiment_closure_sqrt_covmat
     )
 
 
@@ -295,7 +295,6 @@ fits_exps_bootstrap_chi2_central = collect(
 fits_level_1_noise = collect(
     "total_experiments_chi2data", ("fits", "fitinputcontext", "fitunderlyinglaw")
 )
-
 
 @check_use_fitcommondata
 @check_fits_areclosures
@@ -400,33 +399,3 @@ fits_underlying_pdfs_summary = collect("fit_underlying_pdfs_summary", ("fits",))
 def summarise_closure_underlying_pdfs(fits_underlying_pdfs_summary):
     """Collects the underlying pdfs for all fits and concatenates them into a single table"""
     return pd.concat(fits_underlying_pdfs_summary, axis=1)
-
-@check_fit_isclosure
-@check_use_fitcommondata
-def central_diff_logistic_experiment(experiment_results, underlying_results, fit, use_fitcommondata, do_diagonal=True):
-    """xi in dataspace
-    """
-    dt_ct, th_ct = experiment_results
-    e_val, e_vec = la.eigh(dt_ct.covmat)
-
-    (_, th_ul), = underlying_results
-    central_diff = th_ct.central_value - th_ul.central_value
-    var_diff_sqrt = (th_ct._rawdata - th_ct.central_value[:, np.newaxis])
-    if do_diagonal:
-        var_diff_sqrt = e_vec.T@var_diff_sqrt
-        central_diff = e_vec.T@central_diff
-
-    var_diff = (var_diff_sqrt)**2
-    sigma = np.sqrt(var_diff.mean(axis=1))
-    in_1_sigma = np.array(abs(central_diff) < sigma, dtype=int)
-    return in_1_sigma
-
-@check_fit_isclosure
-@check_t0_used
-@check_t0pdfset_matches_law
-def variance_experiment(experiments_results, fit, t0pdfset, use_t0):
-    dt, th = experiments_results
-    diff = th._rawdata.mean(axis=1, keepdims=True) - th._rawdata
-    chi2_rep = calc_chi2(dt.sqrtcovmat, diff)
-    variance_unnormalised = chi2_rep.mean()
-    return variance_unnormalised
