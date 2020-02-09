@@ -1,7 +1,6 @@
 #: table_doi: 10.17182/hepdata.73611.v1/t24
 #: name: Table 24
 #: description: Correlation coefficients among (W- -> l- nubar), (W+ -> l+ nu), (Z/gamma^* -> l+ l-) where (l = e, mu) excluding the common normalisation uncertainty due to the luminosity calibration.
-
 #: data_file: Table24.yaml
 #: keyword reactions: P P --> W+ X | P P --> W- X | P P --> Z0 X | P P --> GAMMA* X
 #: keyword observables: SIG
