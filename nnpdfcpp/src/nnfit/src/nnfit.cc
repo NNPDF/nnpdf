@@ -311,7 +311,7 @@ int main(int argc, char **argv)
 
         if (settings.IsThUncertainties())
         {
-          string ThCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_theory_covmat.csv";
+          string ThCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory*theory_covmat.csv";
 
           exp->LoadRepCovMat(ThCovMatPath, settings.IsThCovSampling());
           exp->LoadFitCovMat(ThCovMatPath, settings.IsThCovFitting());
@@ -405,7 +405,7 @@ void LoadAllDataAndSplit(NNPDFSettings const& settings,
       // read covmat from file if specified in the runcard
       if (settings.IsThUncertainties())
         {
-          string ThCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_theory_covmat.csv";
+          string ThCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory*theory_covmat.csv";
 
           exp->LoadRepCovMat(ThCovMatPath, settings.IsThCovSampling());
           exp->LoadFitCovMat(ThCovMatPath, settings.IsThCovFitting());
@@ -577,7 +577,7 @@ void TrainValidSplit(NNPDFSettings const& settings,
   // read covmat from file if specified in the runcard
   if (settings.IsThUncertainties())
   {
-    string ThCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory_theorycovmatconfig_theory_covmat.csv";
+    string ThCovMatPath = settings.GetResultsDirectory() + "/tables/datacuts_theory*theory_covmat.csv";
 
     tr->LoadRepCovMat(ThCovMatPath, settings.IsThCovSampling(), trCovMatMask);
     tr->LoadFitCovMat(ThCovMatPath, settings.IsThCovFitting(), trCovMatMask);
