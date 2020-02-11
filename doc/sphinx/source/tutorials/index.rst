@@ -10,6 +10,7 @@ Tutorials
    ./apfelcomb.md
    ./datthcomp.md
    ./conda.md
+   ./report.md
 
 =======
 
