@@ -20,6 +20,7 @@ setup(name= "validphys",
                     [
                         'validphys = validphys.scripts.main:main',
                         'vp-upload = validphys.scripts.vp_upload:main',
+                        'vp-uploadfit = validphys.scripts.vp_uploadfit:main',
                         'wiki-upload = validphys.scripts.wiki_upload:main',
                         'postfit = validphys.scripts.postfit:main',
                         'vp-get = validphys.scripts.vp_get:main',

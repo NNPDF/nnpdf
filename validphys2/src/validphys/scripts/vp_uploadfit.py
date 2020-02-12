@@ -1,7 +1,5 @@
 """
-Upload a resource (but not a fit) to the NNPDF server. By default this uploads
-a validphys report to the server. For that use `vp-upload <output folder>`.
-NB: to upload a fit, use the separate script `vp-uploadfit`.
+Upload a fit to the NNPDF server. To do this use `vp-uploadfit <fit folder>`.
 """
 #Note that the imports are done as late as possible to improve the speed of
 #the command line.
@@ -12,7 +10,7 @@ import sys
 def main():
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('output', help="Folder to upload.")
+    parser.add_argument('output', help="Fit folder to upload.")
     args = parser.parse_args()
     output = args.output
 
@@ -29,7 +27,7 @@ def main():
 
 
     from validphys import uploadutils
-    uploader = uploadutils.ReportUploader()
+    uploader = uploadutils.FitUploader()
     try:
         with uploader.upload_or_exit_context(output):
             pass
