@@ -16,7 +16,7 @@
 class ATLASTOPDIFF8TEVTPTNORMFilter: public CommonData
 {
 public: ATLASTOPDIFF8TEVTPTNORMFilter():
-  CommonData("ATLASTOPDIFF8TEVTPTNORM") { ReadData(); }
+  CommonData("ATLASTOPDIFF8TEVTPTNORM_SF") { ReadData(); }
 
 private:
   void ReadData();
@@ -25,7 +25,7 @@ private:
 class ATLASTOPDIFF8TEVTRAPNORMFilter: public CommonData
 {
 public: ATLASTOPDIFF8TEVTRAPNORMFilter():
-  CommonData("ATLASTOPDIFF8TEVTRAPNORM") { ReadData(); }
+  CommonData("ATLASTOPDIFF8TEVTRAPNORM_SF") { ReadData(); }
 
 private:
   void ReadData();
@@ -34,7 +34,7 @@ private:
 class ATLASTOPDIFF8TEVTTRAPNORMFilter: public CommonData
 {
 public: ATLASTOPDIFF8TEVTTRAPNORMFilter():
-  CommonData("ATLASTOPDIFF8TEVTTRAPNORM") { ReadData(); }
+  CommonData("ATLASTOPDIFF8TEVTTRAPNORM_SF") { ReadData(); }
 
 private:
   void ReadData();
@@ -52,7 +52,7 @@ private:
 class ATLASTOPDIFF8TEVTTMNORMFilter: public CommonData
 {
 public: ATLASTOPDIFF8TEVTTMNORMFilter():
-  CommonData("ATLASTOPDIFF8TEVTTMNORM") { ReadData(); }
+  CommonData("ATLASTOPDIFF8TEVTTMNORM_SF") { ReadData(); }
 
 private:
   void ReadData();
