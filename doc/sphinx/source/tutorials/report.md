@@ -13,7 +13,9 @@ The user is then prompted to enter the name of the current fit (that is, the fit
 the reference fit (the baseline fit that they wish to make a comparison with respect to), the title of the report
 (though a sensible default is suggested), the name of the author, any keywords for the report, and a choice of
 whether or not to use a theory covariance matrix for the statistical estimators that will be used in the
-report (the default is to include the contribution due to the theory covariance matrix).
+report (the default is to include the contribution due to the theory covariance matrix). The `keywords` field is for
+`validphys` indexing and as such similar reports should make use of the same keywords, which are relevant to the project
+in question.
 
 The resulting report produces a quick summary of the two fits, highlighting all pertinent plots and statistical
 estimators. The report can be uploaded to the server by using `vp-upload <output folder>`, where the folder is
