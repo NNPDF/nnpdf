@@ -5,7 +5,7 @@ Test loading utilities.
 """
 import numpy as np
 from hypothesis.strategies import sampled_from, sets, composite
-from hypothesis import given
+from hypothesis import given, settings
 
 from validphys.core import Cuts, CommonDataSpec
 from validphys.loader import Loader, rebuild_commondata_without_cuts
@@ -27,6 +27,7 @@ def commodata_and_cuts(draw):
 ipath = 0
 
 @given(arg=commodata_and_cuts())
+@settings(deadline=None)
 def test_rebuild_commondata_without_cuts(tmp, arg):
     #We have to do this because otherwise files get mixed together. Note that
     #tmp does fire once for all hypothesis runs.
