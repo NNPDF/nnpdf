@@ -33,3 +33,27 @@ def test_dataspecschi2():
     ]
     return API.plot_dataspecs_datasets_chi2(
         experiments=experiments, dataspecs=dataspecs, use_cuts='nocuts')
+
+@pytest.mark.mpl_image_compare
+def test_plot_xq2():
+    theoryid = 53
+    use_cuts = "nocuts"
+    display_cuts = False
+    marker_by = "process type"
+    experiments = [
+        {
+            'experiment': 'NMCexp',
+            'datasets': [{'dataset': 'NMC'}]},
+        {
+            'experiment': 'ATLASxp',
+            'datasets': [{'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']}]},
+        {
+            'experiment': 'CMSexp',
+            'datasets': [{'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}]}
+        ]
+    return API.plot_xq2(
+            theoryid=theoryid,
+            use_cuts=use_cuts,
+            experiments=experiments,
+            display_cuts=display_cuts,
+            marker_by=marker_by)
