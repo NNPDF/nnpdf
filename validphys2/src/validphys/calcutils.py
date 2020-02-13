@@ -149,7 +149,7 @@ def get_df_block(matrix: pd.DataFrame, key: str, level):
             key, level=level, axis=1).values
     return block
 
-def regularize_covmat(covmat: np.array, norm_threshold=3):
+def regularize_covmat(covmat: np.array, norm_threshold=4):
     """Given a covariance matrix, performs a regularization which is equivalent
     to performing `regularize_l2` on the sqrt of `covmat`: the l2 norm of
     the inverse of the correlation matrix calculated from `covmat` is set to be
@@ -162,7 +162,7 @@ def regularize_covmat(covmat: np.array, norm_threshold=3):
         a covariance matrix which is to be regularized.
     norm_threshold : float
         The acceptable l2 norm of the sqrt correlation matrix, by default
-        set to 3.
+        set to 4.
 
     Returns
     -------
@@ -181,7 +181,7 @@ def regularize_covmat(covmat: np.array, norm_threshold=3):
     new_e_val = np.clip(e_val, a_min=1/sqr_threshold, a_max=None)
     return ((e_vec * new_e_val) @ e_vec.T) * d * d.T
 
-def regularize_l2(sqrtcov, norm_threshold):
+def regularize_l2(sqrtcov, norm_threshold=4):
     r"""Return a regularized version of `sqrtcov`.
 
     Given `sqrtcov` an (N, nsys) matrix, such that it's

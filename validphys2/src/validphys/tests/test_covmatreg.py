@@ -19,7 +19,7 @@ def test_withidentity():
 @make_table_comp(parse_exp_mat)
 def test_regularize_expcov(data_config):
     """Test if the higher level covmat is regularized by procedure"""
-    inp = dict(**data_config, perform_covmat_reg=True, norm_threshol=3)
+    inp = dict(**data_config, norm_threshol=3)
     df1 = API.experiments_covmat(**inp)
     df2 = API.experiments_covmat(**data_config)
     # check here that regularization occured
@@ -42,7 +42,7 @@ def test_regularization_matches():
 @make_table_comp(parse_exp_mat)
 def test_no_regularization(data_config):
     """Test if the higher level covmat is regularized by procedure"""
-    inp = dict(**data_config, perform_covmat_reg=True, norm_threshol=10)
+    inp = dict(**data_config, norm_threshol=10)
     df1 = API.experiments_covmat(**inp)
     df2 = API.experiments_covmat(**data_config)
     # check here that regularization occured
