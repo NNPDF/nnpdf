@@ -1,7 +1,7 @@
 # NNPDF code and standards documentation <a name="top"></a>
 
 Here we store documentation (user / developer guides) and specifications (for
-cuts / data formats) for the NNPDF code.
+cuts / data formats) for the NNPDF code. 
 
 ## Sphinx Documentation
 

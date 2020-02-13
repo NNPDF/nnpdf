@@ -1,5 +1,5 @@
-Theory
-======
+Sphinx Documentation
+====================
 
 .. toctree::
    :maxdepth: 1
