@@ -6,9 +6,11 @@
 import sys
 import logging
 import os.path
+import time
 import numpy as np
 
 log = logging.getLogger(__name__)
+
 
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
@@ -29,17 +31,19 @@ def fit(
     """
         This action will (upon having read a validcard) process a full PDF fit for a given replica.
 
-        The input to this function is provided by validphys and defined in the runcards or commandline arguments.
+        The input to this function is provided by validphys
+        and/or defined in the runcards or commandline arguments.
 
         The workflow of this controller is as follows:
-        1. Using the replica number and the seeds defined in the runcard, generates a seed for everything
+        1. Generates seeds using the replica number and the seeds defined in the runcard,
         2. Read up all datasets from the given experiments and create the necessary replicas
             2.1 Read up also the positivity sets
-        3. Generate a ModelTrainer object which hold all information to create the NN and perform a fit
+        3. Generate a ModelTrainer object holding information to create the NN and perform a fit
             (at this point no NN object has been generated)
-            3.1 (if hyperopt) generates the hyperopt scanning dictionary taking as a base the fitting dictionary
-                              and the hyperscan dictionary defined in the runcard
-        4. Pass the dictionary of parameters to ModelTrainer for the NN to be generated and the fit performed
+            3.1 (if hyperopt) generates the hyperopt scanning dictionary
+                    taking as a base the fitting dictionary  and the runcard's hyperscan dictionary
+        4. Pass the dictionary of parameters to ModelTrainer
+                                        for the NN to be generated and the fit performed
             4.1 (if hyperopt) Loop over point 4 for `hyperopt` number of times
         5. Once the fit is finished, output the PDF grid and accompanying files
 
@@ -74,13 +78,15 @@ def fit(
         set_initial_state()
     ###############
 
+    from n3fit.stopwatch import StopWatch
+
+    stopwatch = StopWatch()
     # All potentially backend dependent imports should come inside the fit function
     # so they can eventually be set from the runcard
     from n3fit.ModelTrainer import ModelTrainer
-    from n3fit.io.writer import storefit
+    from n3fit.io.writer import WriterWrapper
     from n3fit.backends import MetaModel
     import n3fit.io.reader as reader
-    import n3fit.msr as msr_constraints
 
     if hyperopt:
         import hyperopt as hyper
@@ -93,6 +99,8 @@ def fit(
     # Loading t0set from LHAPDF
     if t0set is not None:
         t0pdfset = t0set.load_t0()
+    else:
+        t0pdfset = None
 
     # First set the seed variables for
     # - Tr/Vl split
@@ -133,28 +141,37 @@ def fit(
     all_exp_infos = [[] for _ in replica]
     # First loop over the experiments
     for exp in experiments:
-        log.info("Loading experiment: {0}".format(exp))
-        all_exp_dicts = reader.common_data_reader(exp, t0pdfset, replica_seeds=mcseeds, trval_seeds=trvalseeds)
+        log.info("Loading experiment: %s", exp)
+        all_exp_dicts = reader.common_data_reader(
+            exp, t0pdfset, replica_seeds=mcseeds, trval_seeds=trvalseeds
+        )
         for i, exp_dict in enumerate(all_exp_dicts):
             all_exp_infos[i].append(exp_dict)
 
     # Now read all the positivity datasets
     pos_info = []
     for pos_set in posdatasets:
-        log.info("Loading positivity dataset {0}".format(pos_set))
+        log.info("Loading positivity dataset %s", pos_set)
         pos_dict = reader.positivity_reader(pos_set)
         pos_info.append(pos_dict)
 
     # Note: In the basic scenario we are only running for one replica and thus this loop is only
     # run once and all_exp_infos is a list of just than one element
+    stopwatch.register_times("data_loaded")
     for replica_number, exp_info, nnseed in zip(replica, all_exp_infos, nnseeds):
-        replica_path_set = replica_path / "replica_{0}".format(replica_number)
-        log.info("Starting replica fit {0}".format(replica_number))
+        replica_path_set = replica_path / f"replica_{replica_number}"
+        log.info("Starting replica fit %s", replica_number)
 
         # Generate a ModelTrainer object
-        # this object holds all necessary information to train a PDF (still no information about the NN)
+        # this object holds all necessary information to train a PDF (up to the NN definition)
         the_model_trainer = ModelTrainer(
-            exp_info, pos_info, fitting["basis"], nnseed, pass_status=status_ok, debug=debug
+            exp_info,
+            pos_info,
+            fitting["basis"],
+            nnseed,
+            pass_status=status_ok,
+            debug=debug,
+            save_weights_each=fitting.get("save_weights_each"),
         )
 
         # Check whether we want to load weights from a file (maybe from a previous run)
@@ -162,9 +179,11 @@ def fit(
         # reading the data up will be done by the model_trainer
         if fitting.get("load"):
             model_file = fitting.get("loadfile")
-            log.info(" > Loading the weights from previous training from {0}".format(model_file))
+            log.info(
+                " > Loading the weights from previous training from %s", model_file
+            )
             if not os.path.isfile(model_file):
-                log.warning(" > Model file {0} could not be found".format(model_file))
+                log.warning(" > Model file %s could not be found", model_file)
                 model_file = None
             else:
                 the_model_trainer.model_file = model_file
@@ -174,6 +193,7 @@ def fit(
 
         # Read up the parameters of the NN from the runcard
         parameters = fitting.get("parameters")
+        stopwatch.register_times("replica_set")
 
         ########################################################################
         # ### Hyperopt                                                         #
@@ -200,10 +220,12 @@ def fit(
             the_scanner.NN_architecture(**architecture_options)
 
             # Tell the trainer we are doing hyperopt
-            the_model_trainer.set_hyperopt(on=True, keys=the_scanner.hyper_keys)
+            the_model_trainer.set_hyperopt(True, keys=the_scanner.hyper_keys)
 
             # Generate Trials object
-            trials = filetrials.FileTrials(replica_path_set, log=log, parameters=parameters)
+            trials = filetrials.FileTrials(
+                replica_path_set, log=log, parameters=parameters
+            )
 
             # Perform the scan
             try:
@@ -217,7 +239,7 @@ def fit(
             except ValueError as e:
                 print("Error from hyperopt because no best model was found")
                 print("@fit.py, setting the best trial to empty dict")
-                print("Exception: {0}".format(e))
+                print(f"Exception: {e}")
                 sys.exit(0)
 
             # Now update the parameters with the ones found by the scan
@@ -227,11 +249,11 @@ def fit(
             print("##################")
             print("Best model found: ")
             for k, i in true_best.items():
-                print(" {0} : {1} ".format(k, i))
+                print(f" {k} : {i} ")
         ####################################################################### end of hyperopt
 
         # Ensure hyperopt is off
-        the_model_trainer.set_hyperopt(on=False)
+        the_model_trainer.set_hyperopt(False)
 
         #############################################################################
         # ### Fit                                                                   #
@@ -239,15 +261,16 @@ def fit(
         # "parameters" dictionary, uses them to generate the NN and trains the net  #
         #############################################################################
         result = pdf_gen_and_train_function(parameters)
+        stopwatch.register_ref("replica_fitted", "replica_set")
 
         # After the fit is run we get a 'result' dictionary with the following items:
-        validation_object = result["validation_object"]
+        stopping_object = result["stopping_object"]
         layer_pdf = result["layer_pdf"]
         layers = result["layers"]
         integrator_input = result["integrator_input"]
         true_chi2 = result["loss"]
         training = result["training"]
-        log.info("Total exp chi2: {0}".format(true_chi2))
+        log.info("Total exp chi2: %s", true_chi2)
 
         # Where has the stopping point happened (this is only for debugging purposes)
         print(
@@ -256,56 +279,65 @@ def fit(
                 which it got at {2}. Stopping degree {3}
                 Positivity state: {4}
                 """.format(
-                validation_object.epoch_of_the_stop,
-                validation_object.loss(),
-                validation_object.e_best_chi2,
-                validation_object.stopping_degree,
-                validation_object.positivity_pass(),
+                stopping_object.epoch_of_the_stop,
+                stopping_object.vl_loss,
+                stopping_object.e_best_chi2,
+                stopping_object.stopping_degree,
+                stopping_object.positivity_pass(),
             )
         )
-
-        # Compute the arclengths
-        arc_lengths = msr_constraints.compute_arclength(layers["fitbasis"], verbose=True)
-        # Construct the chi2exp file
-        allchi2_lines = validation_object.chi2exps_str()
-        # Construct the preproc file
-        preproc_lines = validation_object.preproc_str()
 
         # Creates a PDF model for export grid
         def pdf_function(export_xgrid):
             """
             Receives an array, returns the result of the PDF for said array
             """
-            modelito = MetaModel([integrator_input], [], extra_tensors=[(export_xgrid, layer_pdf)])
+            modelito = MetaModel(
+                [integrator_input], [], extra_tensors=[(export_xgrid, layer_pdf)]
+            )
             result = modelito.predict(x=None, steps=1)
             return result
 
-        # export PDF grid to file
-        storefit(
-            pdf_function,
+        # Generate the writer wrapper
+        writer_wrapper = WriterWrapper(
             replica_number,
-            replica_path_set,
-            output_path.stem,
+            pdf_function,
+            stopping_object,
+            layers["fitbasis"],
             theoryid.get_description().get("Q0") ** 2,
-            validation_object.epoch_of_the_stop,
-            validation_object.loss(),
-            validation_object.tr_loss(),
-            true_chi2,
-            arc_lengths,
-            allchi2_lines,
-            preproc_lines,
-            validation_object.positivity_pass(),
+            stopwatch.stop(),
         )
+
+        # Now write the data down
+        training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
+        writer_wrapper.write_data(
+            replica_path_set, output_path.name, training_chi2, val_chi2, true_chi2
+        )
+
+        # If the history of weights is active then loop over it
+        # rewind the state back to every step and write down the results
+        for step in range(len(stopping_object.history.reloadable_history)):
+            stopping_object.history.rewind(step)
+            new_path = output_path / f"history_step_{step}/replica_{replica_number}"
+            # We need to recompute the experimental chi2 for this point
+            training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(
+                stopping_object
+            )
+            writer_wrapper.write_data(
+                new_path, output_path.name, training_chi2, val_chi2, exp_chi2
+            )
+
+        # So every time we want to capture output_path.name and addd a history_step_X
+        # parallel to the nnfit folder
 
     # Save the weights to some file
     if fitting.get("save"):
         model_file = fitting.get("savefile")
-        log.info(" > Saving the weights for future in {0}".format(model_file))
+        log.info(" > Saving the weights for future in %s", model_file)
         training["model"].save_weights(model_file)
 
-    # Plot the validation and the training losses
-    if fitting.get("plot"):
-        validation_object.plot()
-
     # print out the integration of the sum rule in case we want to check it's not broken
-    # msr_constraints.check_integration(layer_pdf, integrator_input)
+
+
+#     import n3fit.msr as msr_constraints
+# msr_constraints.check_integration(layer_pdf, integrator_input)

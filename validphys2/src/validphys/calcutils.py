@@ -149,3 +149,70 @@ def get_df_block(matrix: pd.DataFrame, key: str, level):
             key, level=level, axis=1).values
     return block
 
+def regularize_covmat(covmat: np.array, cond_num_threshold=500):
+    """Given a covariance matrix, performs a regularization on
+    the corresponding correlation matrix and uses that to return a new
+    regularized covariance matrix:
+
+    corr_ij = cov_ij / (sigma_i * sigma_j)
+
+    where sigma_i = sqrt(diag(cov)_i). The correlation
+    matrix is then regularized by clipping the smallest eigenvalues to a
+    minimum acceptable values given by
+
+    max(eigenvalues of corr_ij)/cond_num_threshold
+
+    finally the process to get a correlation matrix from a covariance matrix
+    is inverted
+
+    new_cov_ij = (regularized corr)_ij * sigma_i * sigma_j
+
+    Parameters
+    ----------
+    covmat : array
+        a covariance matrix which is to be regularized.
+    cond_num_threshold : float
+        The acceptable condition number of the correlation matrix, by default
+        set to 500.
+
+    Returns
+    -------
+    new_covmat : array
+        A new covariance matrix which has been regularized according to
+        prescription above.
+
+    Notes
+    -----
+    (regularized corr)_ij is not technically a correlation matrix since it might
+    not have 1s on the diagonal.
+
+    TODO: is `regularized corr` the nearest matrix with condition number of
+    `cond_num_threshold` according to frob dist?
+
+    Examples
+    --------
+
+    >>> from validphys.calcutils import regularize_covmat
+    >>> import numpy as np
+    >>> import scipy.linalg as la
+    >>> np.random.seed(0)
+    >>> s = np.random.rand(3,3)
+    >>> cov = s@s.T
+    >>> cov
+    array([[1.17601578, 0.99135397, 1.45880096],
+       [0.99135397, 0.89356028, 1.23866193],
+       [1.45880096, 1.23866193, 1.91538757]])
+    >>> new_cov = regularize_covmat(cov, 100)
+    >>> new_cov
+    array([[1.18115619, 0.98945605, 1.45496881],
+       [0.98945605, 0.89426102, 1.24007682],
+       [1.45496881, 1.24007682, 1.9182444 ]])
+    >>> print(np.linalg.norm(new_cov-cov))
+    0.008697992044783345
+    """
+    d = np.sqrt(np.diag(covmat))
+    corr = (covmat/d)/d[:, np.newaxis]
+    e_val, e_vec = la.eigh(corr)
+    new_e_val = np.clip(e_val, a_min=max(e_val)/cond_num_threshold, a_max=None)
+    new_corr = (new_e_val*e_vec)@e_vec.T
+    return (new_corr*d)*d[:, np.newaxis]

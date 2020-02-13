@@ -29,6 +29,9 @@ We perform every Sunday a `rsync` from the `/home/nnpdf` folder
 to the `nnpdf@lxplus` account at CERN.
 
 
+```eval_rst
+.. _server-access:
+```
 Access
 ------
 
@@ -38,15 +41,15 @@ The access to the server is provided by
 `ssh`/[`vp-upload`](upload) with the following restrictions:
 
 - `ssh` access to `root` is forbidden.
-- there is a shared `nnpdf` user with low privileges. In order to login 
+- There is a shared `nnpdf` user with low privileges. In order to login 
 the user must send his public ssh key (usually in `~/.ssh/id_rsa.pub`) to SC.
 The `nnpdf` is not allowed to login with password.
 
-The `nnpdf` user shares a common `/home/nnpdf` folder 
-where all NNPDF material is stored. Public access to data is 
-available for all files in the `/home/nnpdf/WEB` folder. The 
-`validphys` reports are stored in `/home/nnpdf/WEB/validphys-reports` 
-and the wiki in `/home/nnpdf/WEB/wiki`.
+The `nnpdf` user shares a common `/home/nnpdf` folder where all NNPDF
+material is stored. Public access to data is available for all files
+in the `/home/nnpdf/WEB` folder. The `validphys` reports are stored in
+`/home/nnpdf/WEB/validphys-reports` and the wiki in
+`/home/nnpdf/WEB/wiki`.
 
 ### Access for continuous deployment tools
 
@@ -55,12 +58,28 @@ automatically uploaded to the server by the Continous Integration service
 (Travis), through an user called `dummy` which has further reduction in
 privileges (it uses the [`rssh` shell](https://linux.die.net/man/1/rssh)) and it
 is only allowed to run the `scp` command. An accepted private key is stored
-securely in the [Travis configuration](https://travis-ci.com/NNPDF/nnpdf) under
-the `NNPDF_SSH_KEY` variable. It is encoded using `base64` because Travis does
-not easily accept multiline variables. To use it, do something like `echo
-"$NNPDF_SSH_KEY" | base64 --decode`. The packages are uploaded to
-`/home/nnpdf/packages`.
+securely in the [Travis configuration](travis-variables).  The packages
+are uploaded to `/home/nnpdf/packages`.
 
+### HTTP access
+
+Tools such as [conda](conda) and [vp-get](download) require access to
+private URLs, which are password-protected, using HTTP basic_auth. The
+access is granted by a `/.netrc` file containing the user and password
+for the relevant servers. The `/.netrc` file is typically generated
+at [installation](conda) time. It should look similar to
+```
+machine vp.nnpdf.science
+    login nnpdf
+	password <PASSWORD>
+
+machine packages.nnpdf.science
+    login nnpdf
+	password <PASSWORD>
+```
+
+The relevant passwords can be found
+[here](https://www.wiki.ed.ac.uk/pages/viewpage.action?pageId=292165461).
 
 
 ```eval_rst
@@ -69,8 +88,8 @@ not easily accept multiline variables. To use it, do something like `echo
 Web Scripts
 -----------
 
-Validphys2 interacts with the NNPDF server by [Downloading Resources]
-and [Uploading the result].
+Validphys2 interacts with the NNPDF server by [downloading resources](download)
+and [uploading results](upload).
 
 The server scripts live in the validphys2
 repository under the `serverscripts` folder.

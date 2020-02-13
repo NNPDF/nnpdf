@@ -61,8 +61,10 @@ int main(int argc, char **argv)
   // load theory from db
   std::map<string,string> theory_map;
   NNPDF::IndexDB db(get_data_path() + "/theory.db", "theoryIndex");
-  db.ExtractMap(theory_id, APFEL::kValues, theory_map);
-  
+  auto keys = APFEL::kValues;
+  keys.push_back("EScaleVar");
+  db.ExtractMap(theory_id, keys, theory_map);
+
   // load grids
   vector<ExportGrid> initialscale_grids;
   vector<int> replicas;
@@ -81,7 +83,7 @@ int main(int argc, char **argv)
           cout << "Skipping exportgrid (missing file): " << path << endl;
         }
     }
-  
+
   if (initialscale_grids.size() == 0)
       throw NNPDF::RuntimeException("main", "nrep = 0, check replica folder/files.");
 
@@ -95,12 +97,12 @@ int main(int argc, char **argv)
       stringstream replica_file;
       replica_file << fit_path
                    << "/nnfit/replica_"
-                   << replicas[i] 
+                   << replicas[i]
                    << "/"
                    << settings.GetPDFName()
                    << ".dat";
       write_to_file(replica_file.str(), outstream[i].str());
-    }    
+    }
 
   return 0;
 }

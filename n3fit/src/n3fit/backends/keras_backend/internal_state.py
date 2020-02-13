@@ -2,8 +2,9 @@
     Library of functions that modify the internal state of Keras/Tensorflow
 """
 
-import numpy as np
 import random as rn
+import numpy as np
+import tensorflow as tf
 from keras import backend as K
 
 
@@ -24,12 +25,10 @@ def set_initial_state(seed=13):
 
     # Clear the state of keras in case anyone used it before
     K.clear_session()
-
-    session_conf = K.tf.ConfigProto(intra_op_parallelism_threads=1,
-                                inter_op_parallelism_threads=1)
-    K.tf.set_random_seed(use_seed)
-    sess = K.tf.Session(graph=K.tf.get_default_graph(), config=session_conf)
-    K.set_session(sess)
+    K.set_floatx('float64')
+    tf.config.threading.set_inter_op_parallelism_threads(1)
+    tf.config.threading.set_intra_op_parallelism_threads(1)
+    tf.random.set_seed(use_seed)
 
     return 0
 
@@ -44,8 +43,5 @@ def clear_backend_state():
     print("Clearing session")
 
     K.clear_session()
-    # Don't open threads that you are not going to eat
-    session_conf = K.tf.ConfigProto(intra_op_parallelism_threads=2,
-                            inter_op_parallelism_threads=8)
-    sess = K.tf.Session(graph=K.tf.get_default_graph(), config=session_conf)
-    K.set_session(sess)
+    tf.config.threading.set_inter_op_parallelism_threads(8)
+    tf.config.threading.set_intra_op_parallelism_threads(8)

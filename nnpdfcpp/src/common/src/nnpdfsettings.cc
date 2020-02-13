@@ -192,7 +192,7 @@ NNPDFSettings::NNPDFSettings(const string &folder):
   {
     fThUncertainties = true;
 
-    // Check where theory uncertainties should be used 
+    // Check where theory uncertainties should be used
     if (Get("theorycovmatconfig","use_thcovmat_in_sampling").as<bool>())
      fThCovSampling = true;
     if (Get("theorycovmatconfig","use_thcovmat_in_fitting").as<bool>())
@@ -201,7 +201,9 @@ NNPDFSettings::NNPDFSettings(const string &folder):
 
   // load theory map
   IndexDB db(get_data_path() + "/theory.db", "theoryIndex");
-  db.ExtractMap(theoryID, APFEL::kValues, fTheory);
+  auto keys = APFEL::kValues;
+  keys.push_back("EScaleVar");
+  db.ExtractMap(theoryID, keys, fTheory);
 
   cout << "==== Theory summary" << endl;
   for (size_t i = 0; i < APFEL::kValues.size(); i++)

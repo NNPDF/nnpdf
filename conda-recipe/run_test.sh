@@ -5,6 +5,7 @@ set -e
 
 #Python tests for the installed validphys package
 pytest --pyargs --mpl validphys
+pytest --pyargs n3fit
 
 mkdir bldtest
 cd bldtest

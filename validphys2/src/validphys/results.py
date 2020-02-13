@@ -25,8 +25,9 @@ from validphys.checks import (check_cuts_considered, check_pdf_is_montecarlo,
                               check_dataset_cuts_match_theorycovmat,
                               check_experiment_cuts_match_theorycovmat)
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
-from validphys.calcutils import (all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values,
-                                 get_df_block)
+from validphys.calcutils import (
+    all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values,
+    get_df_block, regularize_covmat)
 
 log = logging.getLogger(__name__)
 
@@ -236,8 +237,7 @@ def experiments_covmat_no_table(
     for experiment, experiment_covmat in zip(
             experiments, experiments_covariance_matrix):
         name = experiment.name
-        mat, _ = experiment_covmat
-        df.loc[[name],[name]] = mat
+        df.loc[[name],[name]] = experiment_covmat
     return df
 
 @table
@@ -245,21 +245,25 @@ def experiments_covmat(experiments_covmat_no_table):
     """Duplicate of experiments_covmat_no_table but with a table decorator."""
     return experiments_covmat_no_table
 
+exps_sqrt_covmat = collect(
+    'experiment_sqrt_covariance_matrix',
+    ('experiments',)
+)
+
 @table
 def experiments_sqrtcovmat(
-        experiments, experiments_index, experiments_covariance_matrix):
+        experiments, experiments_index, exps_sqrt_covmat):
     """Like experiments_covmat, but dump the lower triangular part of the
     Cholesky decomposition as used in the fit. The upper part indices are set
     to zero.
     """
     data = np.zeros((len(experiments_index),len(experiments_index)))
     df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
-    for experiment, experiment_covmat in zip(
-            experiments, experiments_covariance_matrix):
+    for experiment, exp_sqrt_covmat in zip(
+            experiments, exps_sqrt_covmat):
         name = experiment.name
-        _, mat = experiment_covmat
-        mat[np.triu_indices_from(mat, k=1)] = 0
-        df.loc[[name],[name]] = mat
+        exp_sqrt_covmat[np.triu_indices_from(exp_sqrt_covmat, k=1)] = 0
+        df.loc[[name],[name]] = exp_sqrt_covmat
     return df
 
 @table
@@ -273,9 +277,8 @@ def experiments_invcovmat(
     for experiment, experiment_covmat in zip(
             experiments, experiments_covariance_matrix):
         name = experiment.name
-        cov, _ = experiment_covmat
         #Improve this inversion if this method tuns out to be important
-        invcov = la.inv(cov)
+        invcov = la.inv(experiment_covmat)
         df.loc[[name],[name]] = invcov
     return df
 
@@ -360,12 +363,68 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
 
 
 @check_dataset_cuts_match_theorycovmat
-def covariance_matrix(dataset:DataSetSpec, fitthcovmat, t0set:(PDF, type(None)) = None):
-    """Returns a tuple of Covariance matrix and sqrt covariance matrix for the given dataset
-    which includes theory contribution from scale variations if `use_theorycovmat` is True and
-    an appropriate fit from which the covariance matrix will be loaded is given
+def covariance_matrix(
+    dataset:DataSetSpec,
+    fitthcovmat,
+    t0set:(PDF, type(None)) = None,
+    perform_covmat_reg=False,
+    condition_number_threshold=500):
+    """Returns the covariance matrix for a given `dataset`. By default the
+    data central values will be used to calculate the multiplicative contributions
+    to the covariance matrix.
 
-    if t0set is specified then t0 predictions will be used to construct the covariance matrix.
+    The matrix can instead be constructed with
+    the t0 proceedure if the user sets `use_t0` to True and gives a
+    `t0pdfset`. In this case the central predictions from the `t0pdfset` will be
+    used to calculate the multiplicative contributions to the covariance matrix.
+    More information on the t0 procedure can be found here:
+    https://arxiv.org/abs/0912.2276
+
+    The user can specify `use_fit_thcovmat_if_present` to be True
+    and provide a corresponding `fit`. If the theory covmat was used in the
+    corresponding `fit` and the specfied `dataset` was used in the fit then
+    the theory covariance matrix for this `dataset` will be added in quadrature
+    to the experimental covariance matrix.
+
+    Covariance matrix can be regularized according to
+    `calcutils.regularize_covmat` if the user specifies `perform_covmat_reg` to
+    be true. This algorithm sets a minimum threshold for eigenvalues that the
+    corresponding correlation matrix can have to be:
+
+    max(eigenvalue)/condition_number_threshold
+
+    by default condition_number_threshold is set to 500
+
+    Parameters
+    ----------
+    dataset : DataSetSpec
+        object parsed from the `dataset_input` runcard key
+    fitthcovmat: None or ThCovMatSpec
+        None if either `use_thcovmat_if_present` is False or if no theory
+        covariance matrix was used in the corresponding fit
+    t0set: None or PDF
+        None if `use_t0` is False or a PDF parsed from `t0pdfset` runcard key
+    perform_covmat_reg: bool
+        whether or not to regularize the covariance matrix
+    condition_number_threshold: number
+        threshold used to regularize covariance matrix
+
+    Returns
+    -------
+    covariance_matrix : array
+        a covariance matrix as a numpy array
+
+    Examples
+    --------
+
+    >>> from validphys.api import API
+    >>> inp = {
+            'dataset_input': {'ATLASTTBARTOT'},
+            'theoryid': 52,
+            'use_cuts': 'no_cuts'
+        }
+    >>> cov = API.covariance_matrix(**inp)
+    TODO: complete example
     """
     loaded_data = dataset.load()
 
@@ -375,18 +434,58 @@ def covariance_matrix(dataset:DataSetSpec, fitthcovmat, t0set:(PDF, type(None)) 
         log.debug("Setting T0 predictions for %s" % dataset)
         loaded_data.SetT0(t0set.load_t0())
 
+    covmat = loaded_data.get_covmat()
     if fitthcovmat:
         loaded_thcov = fitthcovmat.load()
-        covmat = get_df_block(loaded_thcov, dataset.name, level=1) + loaded_data.get_covmat()
-        sqrtcovmat = np.linalg.cholesky(covmat)
-    else:
-        covmat = loaded_data.get_covmat()
-        sqrtcovmat = loaded_data.get_sqrtcovmat()
-    return covmat, sqrtcovmat
+        covmat += get_df_block(loaded_thcov, dataset.name, level=1)
+    if perform_covmat_reg:
+        covmat = regularize_covmat(
+            covmat,
+            cond_num_threshold=condition_number_threshold
+        )
+    return covmat
+
+datasets_covariance_matrix = collect(
+    'covariance_matrix',
+    ('experiments', 'experiment',)
+)
+
+def sqrt_covariance_matrix(covariance_matrix: np.array):
+    """Returns the lower-triangular Cholesky factor `covariance_matrix`
+
+    Parameters
+    ----------
+    covariance_matrix: array
+        a positive definite covariance matrix
+
+    Returns
+    -------
+    sqrt_covariance_matrix : array
+        lower triangular Cholesky factor of covariance_matrix
+
+    Notes
+    -----
+    The lower triangular is useful for efficient calculation of the chi^2
+
+    Examples
+    --------
+
+    >>> import numpy as np
+    >>> from validphys.results import sqrt_covariance_matrix
+    >>> a = np.array([[1, 0.5], [0.5, 1]])
+    >>> sqrt_covariance_matrix(a)
+    array([[1.  , 0.    ],
+        [0.5    , 0.8660254]])
+    """
+    return la.cholesky(covariance_matrix, lower=True)
 
 @check_experiment_cuts_match_theorycovmat
 def experiment_covariance_matrix(
-        experiment: ExperimentSpec, fitthcovmat, t0set:(PDF, type(None)) = None):
+        experiment: ExperimentSpec,
+        fitthcovmat,
+        t0set:(PDF, type(None)) = None,
+        perform_covmat_reg=False,
+        condition_number_threshold=500):
     """Like `covariance_matrix` except for an experiment"""
     loaded_data = experiment.load()
 
@@ -396,18 +495,30 @@ def experiment_covariance_matrix(
         log.debug("Setting T0 predictions for %s" % experiment)
         loaded_data.SetT0(t0set.load_t0())
 
+    covmat = loaded_data.get_covmat()
+
     if fitthcovmat:
         loaded_thcov = fitthcovmat.load()
         ds_names = loaded_thcov.index.get_level_values(1)
         indices = np.in1d(ds_names, [ds.name for ds in experiment.datasets]).nonzero()[0]
-        covmat = loaded_thcov.iloc[indices, indices].values + loaded_data.get_covmat()
-        sqrtcovmat = np.linalg.cholesky(covmat)
-    else:
-        covmat = loaded_data.get_covmat()
-        sqrtcovmat = loaded_data.get_sqrtcovmat()
-    return covmat, sqrtcovmat
+        covmat += loaded_thcov.iloc[indices, indices].values
+    if perform_covmat_reg:
+        covmat = regularize_covmat(
+            covmat,
+            cond_num_threshold=condition_number_threshold
+        )
+    return covmat
 
-def results(dataset:(DataSetSpec), pdf:PDF, covariance_matrix):
+def experiment_sqrt_covariance_matrix(experiment_covariance_matrix):
+    """Like `sqrt_covariance_matrix` but for an experiment"""
+    return sqrt_covariance_matrix(experiment_covariance_matrix)
+
+def results(
+        dataset:(DataSetSpec),
+        pdf:PDF,
+        covariance_matrix,
+        sqrt_covariance_matrix
+    ):
     """Tuple of data and theory results for a single pdf. The data will have an associated
     covariance matrix, which can include a contribution from the theory covariance matrix which
     is constructed from scale variation. The inclusion of this covariance matrix by default is used
@@ -417,17 +528,30 @@ def results(dataset:(DataSetSpec), pdf:PDF, covariance_matrix):
     An experiment is also allowed.
     (as a result of the C++ code layout)."""
     data = dataset.load()
-    return (DataResult(data, *covariance_matrix),
+    return (DataResult(data, covariance_matrix, sqrt_covariance_matrix),
             ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data))
 
-def experiment_results(experiment, pdf:PDF, experiment_covariance_matrix):
+def experiment_results(
+        experiment,
+        pdf:PDF,
+        experiment_covariance_matrix,
+        experiment_sqrt_covariance_matrix):
     """Like `results` but for a whole experiment"""
-    return results(experiment, pdf, experiment_covariance_matrix)
+    return results(
+        experiment,
+        pdf,
+        experiment_covariance_matrix,
+        experiment_sqrt_covariance_matrix
+        )
 
 #It's better to duplicate a few lines than to complicate the logic of
 #``results`` to support this.
 #TODO: The above comment doesn't make sense after adding T0. Deprecate this
-def pdf_results(dataset:(DataSetSpec,  ExperimentSpec), pdfs:Sequence, covariance_matrix:tuple):
+def pdf_results(
+        dataset:(DataSetSpec,  ExperimentSpec),
+        pdfs:Sequence,
+        covariance_matrix,
+        sqrt_covariance_matrix):
     """Return a list of results, the first for the data and the rest for
     each of the PDFs."""
 
@@ -439,12 +563,13 @@ def pdf_results(dataset:(DataSetSpec,  ExperimentSpec), pdfs:Sequence, covarianc
         th_results.append(th_result)
 
 
-    return (DataResult(data, *covariance_matrix), *th_results)
+    return (DataResult(data, covariance_matrix, sqrt_covariance_matrix), *th_results)
 
 @require_one('pdfs', 'pdf')
 @remove_outer('pdfs', 'pdf')
 def one_or_more_results(dataset:(DataSetSpec, ExperimentSpec),
-                        covariance_matrix: tuple,
+                        covariance_matrix,
+                        sqrt_covariance_matrix,
                         pdfs:(type(None), Sequence)=None,
                         pdf:(type(None), PDF)=None):
     """Generate a list of results, where the first element is the data values,
@@ -452,9 +577,9 @@ def one_or_more_results(dataset:(DataSetSpec, ExperimentSpec),
     Which of the two is selected intelligently depending on the namespace,
     when executing as an action."""
     if pdf:
-        return results(dataset, pdf, covariance_matrix)
+        return results(dataset, pdf, covariance_matrix, sqrt_covariance_matrix)
     else:
-        return pdf_results(dataset, pdfs, covariance_matrix)
+        return pdf_results(dataset, pdfs, covariance_matrix, sqrt_covariance_matrix)
     raise ValueError("Either 'pdf' or 'pdfs' is required")
 
 

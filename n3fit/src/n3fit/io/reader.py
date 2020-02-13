@@ -196,8 +196,7 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
                 'expdata_vl' :  (same as above for validation)
 
                 'positivity' : bool - is this a positivity set?
-
-
+                'count_chi2' : should this be counted towards the chi2
     """
     if replica_seeds is None:
         replica_seeds = []
@@ -214,7 +213,8 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
     spec_c = spec.load()
     ndata = spec_c.GetNData()
     expdata_true = spec_c.get_cv().reshape(1, ndata)
-    spec_c.SetT0(t0pdfset)
+    if t0pdfset is not None:
+        spec_c.SetT0(t0pdfset)
     base_mcseed = int(hashlib.sha256(str(spec).encode()).hexdigest(), 16) % 10 ** 8
 
     if replica_seeds:
@@ -277,6 +277,7 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
             "ndata_vl": ndata_vl,
             "expdata_vl": expdata_vl,
             "positivity": False,
+            "count_chi2": True,
         }
         all_dict_out.append(dict_out)
 
@@ -313,6 +314,7 @@ def positivity_reader(pos_spec):
         "ndata": ndata,
         "positivity": True,
         "lambda": positivity_factor,
+        "count_chi2": False,
     }
 
     return dict_out
