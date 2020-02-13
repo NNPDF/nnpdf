@@ -20,10 +20,15 @@ from reportengine.checks import require_one, remove_outer, check_not_empty
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.checks import (check_cuts_considered, check_pdf_is_montecarlo,
-                              check_speclabels_different, check_two_dataspecs,
-                              check_dataset_cuts_match_theorycovmat,
-                              check_experiment_cuts_match_theorycovmat)
+from validphys.checks import (
+    check_cuts_considered,
+    check_pdf_is_montecarlo,
+    check_speclabels_different,
+    check_two_dataspecs,
+    check_dataset_cuts_match_theorycovmat,
+    check_experiment_cuts_match_theorycovmat,
+    check_norm_threshold,
+)
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
 from validphys.calcutils import (
     all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values,
@@ -367,8 +372,7 @@ def covariance_matrix(
     dataset:DataSetSpec,
     fitthcovmat,
     t0set:(PDF, type(None)) = None,
-    perform_covmat_reg=False,
-    condition_number_threshold=500):
+    norm_threshold=None):
     """Returns the covariance matrix for a given `dataset`. By default the
     data central values will be used to calculate the multiplicative contributions
     to the covariance matrix.
@@ -387,13 +391,15 @@ def covariance_matrix(
     to the experimental covariance matrix.
 
     Covariance matrix can be regularized according to
-    `calcutils.regularize_covmat` if the user specifies `perform_covmat_reg` to
-    be true. This algorithm sets a minimum threshold for eigenvalues that the
-    corresponding correlation matrix can have to be:
+    `calcutils.regularize_covmat` if the user specifies `norm_threshold. This
+    algorithm sets a minimum threshold for eigenvalues that the corresponding
+    correlation matrix can have to be:
 
-    max(eigenvalue)/condition_number_threshold
+    1/(norm_threshold)^2
 
-    by default condition_number_threshold is set to 500
+    which has the effect of limiting the L2 norm of the inverse of the correlation
+    matrix. By default norm_threshold is None, to which means no regularization
+    is performed.
 
     Parameters
     ----------
@@ -406,7 +412,7 @@ def covariance_matrix(
         None if `use_t0` is False or a PDF parsed from `t0pdfset` runcard key
     perform_covmat_reg: bool
         whether or not to regularize the covariance matrix
-    condition_number_threshold: number
+    norm_threshold: number
         threshold used to regularize covariance matrix
 
     Returns
@@ -438,10 +444,10 @@ def covariance_matrix(
     if fitthcovmat:
         loaded_thcov = fitthcovmat.load()
         covmat += get_df_block(loaded_thcov, dataset.name, level=1)
-    if perform_covmat_reg:
+    if norm_threshold is not None:
         covmat = regularize_covmat(
             covmat,
-            cond_num_threshold=condition_number_threshold
+            norm_threshold=norm_threshold
         )
     return covmat
 
@@ -484,8 +490,7 @@ def experiment_covariance_matrix(
         experiment: ExperimentSpec,
         fitthcovmat,
         t0set:(PDF, type(None)) = None,
-        perform_covmat_reg=False,
-        condition_number_threshold=500):
+        norm_threshold=None):
     """Like `covariance_matrix` except for an experiment"""
     loaded_data = experiment.load()
 
@@ -502,10 +507,10 @@ def experiment_covariance_matrix(
         ds_names = loaded_thcov.index.get_level_values(1)
         indices = np.in1d(ds_names, [ds.name for ds in experiment.datasets]).nonzero()[0]
         covmat += loaded_thcov.iloc[indices, indices].values
-    if perform_covmat_reg:
+    if norm_threshold is not None:
         covmat = regularize_covmat(
             covmat,
-            cond_num_threshold=condition_number_threshold
+            norm_threshold=norm_threshold
         )
     return covmat
 
@@ -1067,6 +1072,99 @@ def experiments_central_values(experiment_result_table):
     and has a table decorator."""
     central_theory_values = experiment_result_table["theory_central"]
     return central_theory_values
+
+dataspecs_each_dataset_chi2 = collect("each_dataset_chi2", ("dataspecs",))
+each_dataset = collect("dataset", ("experiments", "experiment"))
+dataspecs_each_dataset = collect("each_dataset", ("dataspecs",))
+
+@table
+@check_speclabels_different
+def dataspecs_dataset_chi2_difference_table(
+    dataspecs_each_dataset, dataspecs_each_dataset_chi2, dataspecs_speclabel):
+    r"""Returns a table with difference between the chi2 and the expected chi2
+    in units of the expected chi2 standard deviation, given by
+
+        chi2_diff = (\chi2 - N)/sqrt(2N)
+
+    for each dataset for each dataspec.
+
+    """
+    dfs = []
+    cols = [r"$(\chi^2 - N)/\sqrt{2N}$"]
+    for label, datasets, chi2s in zip(
+        dataspecs_speclabel, dataspecs_each_dataset, dataspecs_each_dataset_chi2):
+        records = []
+        for dataset, chi2 in zip(datasets, chi2s):
+            ndata = chi2.ndata
+
+            records.append(dict(
+                dataset=str(dataset),
+                chi2_stat = (chi2.central_result.mean() - ndata)/np.sqrt(2*ndata)
+            ))
+
+
+        df = pd.DataFrame.from_records(records,
+                columns=("dataset", "chi2_stat"),
+                index = ("dataset",)
+            )
+        df.columns = pd.MultiIndex.from_product(([label], cols))
+        dfs.append(df)
+    return pd.concat(dfs, axis=1)
+
+datasets_covmat_no_reg = collect(
+    "covariance_matrix", ("experiments", "experiment", "no_covmat_reg"))
+datasets_covmat_reg = collect(
+    "covariance_matrix", ("experiments", "experiment",))
+
+@table
+@check_norm_threshold
+def datasets_covariance_matrix_differences_table(
+    each_dataset, datasets_covmat_no_reg, datasets_covmat_reg, norm_threshold):
+    """For each dataset calculate and tabulate two max differences upon
+    regularization given a value for `norm_threshold`:
+
+    - max relative difference to the diagonal of the covariance matrix (%)
+    - max absolute difference to the correlation matrix of each covmat
+
+    """
+    records = []
+    for ds, reg, noreg in zip(
+        each_dataset, datasets_covmat_reg, datasets_covmat_no_reg):
+        cov_diag_rel_diff = np.diag(reg)/np.diag(noreg)
+        d_reg = np.sqrt(np.diag(reg))
+        d_noreg = np.sqrt(np.diag(noreg))
+        corr_reg = reg/d_reg[:, np.newaxis]/d_reg[np.newaxis, :]
+        corr_noreg = noreg/d_noreg[:, np.newaxis]/d_noreg[np.newaxis, :]
+        corr_abs_diff = abs(corr_reg - corr_noreg)
+        records.append(dict(
+                dataset=str(ds),
+                covdiff= np.max(abs(cov_diag_rel_diff- 1))*100, #make percentage
+                corrdiff=np.max(corr_abs_diff)
+            ))
+    df = pd.DataFrame.from_records(records,
+        columns=("dataset", "covdiff", "corrdiff"),
+        index = ("dataset",)
+        )
+    df.columns = ["Variance rel. diff. (%)", "Correlation max abs. diff."]
+    return df
+
+dataspecs_covmat_diff_tables = collect(
+    "datasets_covariance_matrix_differences_table", ("dataspecs",))
+
+@check_speclabels_different
+@table
+def dataspecs_datasets_covmat_differences_table(
+    dataspecs_speclabel, dataspecs_covmat_diff_tables
+):
+    """For each dataspec calculate and tabulate the two covmat differences
+    described in `datasets_covariance_matrix_differences_table`
+    (max relative difference in variance and max absolute correlation difference)
+
+    """
+    df = pd.concat( dataspecs_covmat_diff_tables, axis=1)
+    cols = df.columns.get_level_values(0).unique()
+    df.columns = pd.MultiIndex.from_product((dataspecs_speclabel, cols))
+    return df
 
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
