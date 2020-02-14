@@ -3,11 +3,11 @@
 """
 
 # Backend-independent imports
+from collections import namedtuple
 import sys
 import logging
 import os.path
 import time
-from typing import Tuple, List
 import numpy as np
 from reportengine.checks import make_argcheck, CheckError
 
@@ -27,16 +27,20 @@ def initialize_seeds(replica: list, fitting: dict) -> Tuple[List, List, List]:
 
     Parameters
     ----------
-    fitting: dict
-        dictionary with the hyperparameters of the fit
     replica: list
         A list of replica numbers to run over typically of size one
+    trvalseed: int
+        Seed initialization for training/validation split
+    nnseed: int
+        Seed for network initialization
+    mcseed: int
+        Seed for pseudodata replica generation
+    genrep: bool
 
     Returns
     -------
-    seeds: Tuple[List, List, List]
-        A tuple of lists containing the trvalseeds, nnseeds, mcseeds
-        in that order
+    seeds: NamedTuple[List, List, List]
+        A namedtuple of lists containing the trvalseeds, nnseeds, mcseeds
     """
     # First set the seed variables for
     # - Tr/Vl split
@@ -47,25 +51,26 @@ def initialize_seeds(replica: list, fitting: dict) -> Tuple[List, List, List]:
     nnseeds = []
     mcseeds = []
     for replica_number in replica:
-        np.random.seed(fitting.get("trvlseed"))
+        np.random.seed(trvalseed)
         for i in range(replica_number):
             trvalseed = np.random.randint(0, pow(2, 31))
 
-        np.random.seed(fitting.get("nnseed"))
+        np.random.seed(nnseed)
         for i in range(replica_number):
             nnseed = np.random.randint(0, pow(2, 31))
 
-        np.random.seed(fitting.get("mcseed"))
+        np.random.seed(mcseed)
         for i in range(replica_number):
             mcseed = np.random.randint(0, pow(2, 31))
         trvalseeds.append(trvalseed)
         nnseeds.append(nnseed)
         mcseeds.append(mcseed)
 
-    if fitting.get("genrep") == 0:
+    if genrep == 0:
         mcseeds = []
 
-    return trvalseeds, nnseeds, mcseeds
+    Seeds = namedtuple("Seeds", ["trvalseeds", "nnseeds", "mcseeds"])
+    return Seeds(trvalseeds, nnseeds, mcseeds)
 
 @make_argcheck
 def check_consistent_hyperscan_options(hyperopt, hyperscan, fitting):
@@ -149,7 +154,8 @@ def performfit(
     else:
         t0pdfset = None
 
-    trvalseeds, nnseeds, mcseeds = initialize_seeds(replica, fitting)
+    seeds = initialize_seeds(replica, fitting.get("trvalseed"), fitting.get("nnseed"), fitting.get("mcseed"))
+    trvalseeds, nnseeds, mcseeds = seeds.trvalseeds, seeds.nnseeds, seeds.mcseeds
 
     ##############################################################################
     # ### Read files
