@@ -11,9 +11,44 @@ import time
 import numpy as np
 from reportengine.checks import make_argcheck, CheckError
 
+from NNPDF import Experiment
+
+from validphys.core import ExperimentSpec
+from validphys.loader import Loader
+
 log = logging.getLogger(__name__)
 
-def initialize_seeds(replica: list, fitting: dict) -> Tuple[List, List, List]:
+# TODO: Change fit to a validphys.core.FitSpect object
+def get_pseudodata(fit: str):
+    import n3fit.io.reader as reader
+    l = Loader()
+
+    fit, pdf = l.check_fit(fit), l.check_pdf(fit)
+    runcard = fit.as_input()
+
+    t0pdfset = pdf.load_t0()
+    replica = range(len(pdf))
+
+    trvlseed, nnseed, mcseed, genrep = [runcard.get("fitting").get(i)
+                                        for i in ["trvalseed", "nnseed", "mcseed", "genrep"]]
+
+    seeds = initialize_seeds(replica, trvlseed, nnseed, mcseed, genrep)
+
+    print(seeds.trvalseeds)
+    for exp in runcard["experiments"]:
+        for dataset in exp["datasets"]:
+            print("###################")
+            print(dataset["dataset"])
+            spec = ExperimentSpec("spec", [l.check_dataset(dataset["dataset"], theoryid=53)])
+
+            log.info("Loading experiment: %s", exp)
+            all_exp_dicts = reader.common_data_reader(
+                spec, t0pdfset, replica_seeds=seeds.mcseeds, trval_seeds=seeds.trvalseeds
+            )
+
+    return all_exp_dicts
+
+def initialize_seeds(replica: list, trvalseed: int, nnseed: int, mcseed: int, genrep: bool):
     """Action to initialize seeds for random number generation.
     We initialize three different seeds. The first is the seed
     used for training/validation splits, the second is used for
