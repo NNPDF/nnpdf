@@ -10,6 +10,7 @@ Tutorials
    ./apfelcomb.md
    ./runafit.md
    ./datthcomp.md
+   ./closuretest.md
    ./conda.md
 
 =======
