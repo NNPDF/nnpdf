@@ -216,12 +216,12 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter::ReadData()
 	sys2=sys2/sqrt(2.);
 
         fSys[i][fNData+2*j].mult = sys1;
-        fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+        fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[i]/100;
         fSys[i][fNData+2*j].type = MULT;
         fSys[i][fNData+2*j].name = "CORR"; 
 
         fSys[i][fNData+2*j+1].mult = sys2;
-        fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[fNData+2*j+1]/100;
+        fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[i]/100;
         fSys[i][fNData+2*j+1].type = MULT;
         fSys[i][fNData+2*j+1].name = "CORR"; 
       }
@@ -406,12 +406,12 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter::ReadData()
 	sys2=sys2/sqrt(2.);
 
         fSys[i][fNData+2*j].mult = sys1;
-        fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+        fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[i]/100;
         fSys[i][fNData+2*j].type = MULT;
         fSys[i][fNData+2*j].name = "CORR"; 
 
         fSys[i][fNData+2*j+1].mult = sys2;
-        fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[fNData+2*j+1]/100;
+        fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[i]/100;
         fSys[i][fNData+2*j+1].type = MULT;
         fSys[i][fNData+2*j+1].name = "CORR"; 
       }
@@ -598,12 +598,12 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter::ReadData()
 	sys2=sys2/sqrt(2.);
 
         fSys[i][fNData+2*j].mult = sys1;
-        fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+        fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[i]/100;
         fSys[i][fNData+2*j].type = MULT;
         fSys[i][fNData+2*j].name = "CORR"; 
 
         fSys[i][fNData+2*j+1].mult = sys2;
-        fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[fNData+2*j+1]/100;
+        fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[i]/100;
         fSys[i][fNData+2*j+1].type = MULT;
         fSys[i][fNData+2*j+1].name = "CORR"; 
       }
@@ -789,12 +789,12 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter::ReadData()
 	sys2=sys2/sqrt(2.);
 
         fSys[i][fNData+2*j].mult = sys1;
-        fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+        fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[i]/100;
         fSys[i][fNData+2*j].type = MULT;
         fSys[i][fNData+2*j].name = "CORR"; 
 
         fSys[i][fNData+2*j+1].mult = sys2;
-        fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[fNData+2*j+1]/100;
+        fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[i]/100;
         fSys[i][fNData+2*j+1].type = MULT;
         fSys[i][fNData+2*j+1].name = "CORR"; 
       }
@@ -977,19 +977,19 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter::ReadData()
 	if(j!=realsys-1)
 	  {
 	    fSys[i][fNData+2*j].mult = sys1;
-	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[i]/100;
 	    fSys[i][fNData+2*j].type = MULT;
 	    fSys[i][fNData+2*j].name = "CORR"; 
 	    
 	    fSys[i][fNData+2*j+1].mult = sys2;
-	    fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[fNData+2*j+1]/100;
+	    fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[i]/100;
 	    fSys[i][fNData+2*j+1].type = MULT;
 	    fSys[i][fNData+2*j+1].name = "CORR"; 
 	  }
 	else //Luminosity uncertainty
 	  {
 	    fSys[i][fNData+2*j].mult = sys2*sqrt(2.);
-	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[i]/100;
 	    fSys[i][fNData+2*j].type = MULT;
 	    fSys[i][fNData+2*j].name = "ATLASLUMI11"; 
 	  }
@@ -1171,19 +1171,19 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAPFilter::ReadData()
 	if(j!=realsys-1)
 	  {
 	    fSys[i][fNData+2*j].mult = sys1;
-	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[i]/100;
 	    fSys[i][fNData+2*j].type = MULT;
 	    fSys[i][fNData+2*j].name = "CORR"; 
 	    
 	    fSys[i][fNData+2*j+1].mult = sys2;
-	    fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[fNData+2*j+1]/100;
+	    fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[i]/100;
 	    fSys[i][fNData+2*j+1].type = MULT;
 	    fSys[i][fNData+2*j+1].name = "CORR"; 
 	  }
 	else //Luminosity uncertainty
 	  {
 	    fSys[i][fNData+2*j].mult = sys2*sqrt(2.);
-	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[i]/100;
 	    fSys[i][fNData+2*j].type = MULT;
 	    fSys[i][fNData+2*j].name = "ATLASLUMI11"; 
 	  }
@@ -1366,19 +1366,19 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter::ReadData()
 	if(j!=realsys-1)
 	  {
 	    fSys[i][fNData+2*j].mult = sys1;
-	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[i]/100;
 	    fSys[i][fNData+2*j].type = MULT;
 	    fSys[i][fNData+2*j].name = "CORR"; 
 	    
 	    fSys[i][fNData+2*j+1].mult = sys2;
-	    fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[fNData+2*j+1]/100;
+	    fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[i]/100;
 	    fSys[i][fNData+2*j+1].type = MULT;
 	    fSys[i][fNData+2*j+1].name = "CORR"; 
 	  }
 	else //Luminosity uncertainty
 	  {
 	    fSys[i][fNData+2*j].mult = sys2*sqrt(2.);
-	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[i]/100;
 	    fSys[i][fNData+2*j].type = MULT;
 	    fSys[i][fNData+2*j].name = "ATLASLUMI11"; 
 	  }
@@ -1561,19 +1561,19 @@ void ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PTFilter::ReadData()
 	if(j!=realsys-1)
 	  {
 	    fSys[i][fNData+2*j].mult = sys1;
-	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[i]/100;
 	    fSys[i][fNData+2*j].type = MULT;
 	    fSys[i][fNData+2*j].name = "CORR"; 
 	    
 	    fSys[i][fNData+2*j+1].mult = sys2;
-	    fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[fNData+2*j+1]/100;
+	    fSys[i][fNData+2*j+1].add  = fSys[i][fNData+2*j+1].mult*fData[i]/100;
 	    fSys[i][fNData+2*j+1].type = MULT;
 	    fSys[i][fNData+2*j+1].name = "CORR"; 
 	  }
 	else //Luminosity uncertainty
 	  {
 	    fSys[i][fNData+2*j].mult = sys2*sqrt(2.);
-	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[fNData+2*j]/100;
+	    fSys[i][fNData+2*j].add  = fSys[i][fNData+2*j].mult*fData[i]/100;
 	    fSys[i][fNData+2*j].type = MULT;
 	    fSys[i][fNData+2*j].name = "ATLASLUMI11"; 
 	  }
