@@ -75,6 +75,7 @@
 #include "CMS_SINGLETOP_TCH_TOT_7TEV.h"
 #include "CMS_SINGLETOP_TCH_R_8TEV.h"
 #include "CMS_SINGLETOP_TCH_R_13TEV.h"
+#include "CMS_ZCHARM_DIFF_UNNORM_8TEV.h"
 #include "CMS_WCHARM_DIFF_UNNORM_13TEV.h"
 #include "HERACOMB_SIGMARED_C.h"
 #include "HERACOMB_SIGMARED_B.h"
@@ -185,6 +186,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSZDIFF12Filter());
   target.push_back(new CMS1JET276TEVFilter());
   target.push_back(new CMSWMU8TEVFilter());
+  target.push_back(new CMS_ZCHARM_DIFF_UNNORM_8TEVFilter());
   target.push_back(new CMS_1JET_8TEVFilter());
   target.push_back(new CMS_2JET_7TEVFilter());
   target.push_back(new CMS_2JET_3D_8TEVFilter());
