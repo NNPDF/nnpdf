@@ -221,7 +221,7 @@ def OneArtDataResiduals(experiments, nreplica:int, experiments_index):
         art_replicas = []
         real_data = real_exp.get_cv()
         one_art_data = np.zeros(nreplica)
-        one_data_index=152
+        one_data_index=0
 
         #producing replicas
         for i in range(nreplica):
@@ -236,8 +236,8 @@ def OneArtDataResiduals(experiments, nreplica:int, experiments_index):
     ax.hist(normresidual,bins=50,histtype='step', stacked=True, fill=False)
 
     ax.set_ylabel(r'replicas')
-    ax.set_xlabel(r'$(D^{(r)}_{152} - D^0_{152})/D^0_{152}$')
-    ax.set_title(r'one point residual')
+    ax.set_xlabel(r'$(D^{(r)}_{0} - D^0_{0})/D^0_{0}$')
+    ax.set_title(r'Residual for Data Point 0')
     
     return fig
 
