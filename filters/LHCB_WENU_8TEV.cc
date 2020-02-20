@@ -1,12 +1,14 @@
 /*
-Name_exp  : LHCB_WENU_8TEV
-Reference : Measurement of forward W → eν production in pp collisions at √s = 8 TeV
-ArXiv     : arXiv:1608.01484.
-Published : JHEP 1610 (2016) 030
-Hepdata   : n/a
-A measurement of the cross-section for W → eν production in pp collisions is presented 
-using data corresponding to an integrated luminosity of 2 fb^−1 collected by the LHCb experiment 
-at a centre-of-mass energy of √s = 8 TeV.
+Name_exp   : LHCB_WENU_8TEV
+Reference  : Measurement of forward W → eν production in pp collisions 
+             at √s = 8 TeV
+ArXiv      : arXiv:1608.01484.
+Published  : JHEP 1610 (2016) 030
+Hepdata    : n/a
+Description: A measurement of the cross-section for W → eν production in pp 
+             collisions is presented using data corresponding to an integrated 
+             luminosity of 2 fb^−1 collected by the LHCb experiment at a 
+             centre-of-mass energy of √s = 8 TeV.
 
 Implemented by TG February 2020. 
 */
@@ -17,7 +19,8 @@ void  LHCB_WENU_8TEVFilter::ReadData()
   fstream fWp, fWm, fCorr;
 
   stringstream datafileWp("");
-  datafileWp << dataPath() << "rawdata/" << fSetName << "/LHCB_WENU_8TEV_Wp.dat";
+  datafileWp << dataPath() << "rawdata/" 
+	     << fSetName << "/LHCB_WENU_8TEV_Wp.dat";
   fWp.open(datafileWp.str().c_str(), ios::in);
 
   if (fWp.fail()) {
@@ -26,7 +29,8 @@ void  LHCB_WENU_8TEVFilter::ReadData()
   }
 
   stringstream datafileWm("");
-  datafileWm << dataPath() << "rawdata/" << fSetName << "/LHCB_WENU_8TEV_Wm.dat";
+  datafileWm << dataPath() << "rawdata/" 
+	     << fSetName << "/LHCB_WENU_8TEV_Wm.dat";
   fWm.open(datafileWm.str().c_str(), ios::in);
 
   if (fWm.fail()) {
@@ -35,22 +39,23 @@ void  LHCB_WENU_8TEVFilter::ReadData()
   }
 
   stringstream datafileCorr("");
-  datafileCorr << dataPath() << "rawdata/" << fSetName << "/corr.dat";
+  datafileCorr << dataPath() << "rawdata/" 
+	       << fSetName << "/corr.dat";
   fCorr.open(datafileCorr.str().c_str(), ios::in);
 
-  if (fWp.fail()) {
+  if (fCorr.fail()) {
     cerr << "Error opening data file " << datafileCorr.str() << endl;
     exit(-1);
   }
 
   string line;
   double MW2 = pow(MW,2.0);
-  double s = 13;     
+  double s = 8;         //centre-of-mass energy     
   int ndata_Wp = 8;	//Wp points
   double etamin, etamax, sigma, fsr;
   std::vector<double> totsys(fNData);
   
-  //read Wp data
+  //Read Wp data
   for (int i = 0; i < 2; i++)
     getline(fWp,line);
   
@@ -71,27 +76,19 @@ void  LHCB_WENU_8TEVFilter::ReadData()
     //Beam energy sys
     lstream >> fSys[i][fNSys-2].add;  
     fSys[i][fNSys-2].mult = fSys[i][fNSys-1].add/fData[i]*1e2;
-    fSys[i][fNSys-2].type = MULT;		//check
-    fSys[i][fNSys-2].name = "LHCBBEAM8TEV";	//check       
+    fSys[i][fNSys-2].type = MULT;       
+    fSys[i][fNSys-2].name = "LHCBBEAM8TEV";	       
 
     //Lumi sys
     lstream >> fSys[i][fNSys-1].add;  
     fSys[i][fNSys-1].mult = fSys[i][fNSys-1].add/fData[i]*1e2;
-    fSys[i][fNSys-1].type = MULT;		//check
-    fSys[i][fNSys-1].name = "LHCBLUMI8TEV";	//check
+    fSys[i][fNSys-1].type = MULT;		
+    fSys[i][fNSys-1].name = "LHCBLUMI8TEV";     
 
-    lstream >> fsr;
-    fData[i] = sigma*fsr;
-
-    //FSR sys
-    lstream >> fSys[i][fNSys-3].add;  
-    fSys[i][fNSys-3].mult = fSys[i][fNSys-1].add/fData[i]*1e2;
-    fSys[i][fNSys-3].type = MULT;	//check
-    fSys[i][fNSys-3].name = "CORR";	//check
-    
+    lstream >> fsr >> fsr;
   }
 
-  //read Wm data
+  //Read Wm data
   for (int i = 0; i < 2; i++)
     getline(fWm,line);
   
@@ -112,26 +109,17 @@ void  LHCB_WENU_8TEVFilter::ReadData()
     //Beam energy sys
     lstream >> fSys[i][fNSys-2].add;  
     fSys[i][fNSys-2].mult = fSys[i][fNSys-1].add/fData[i]*1e2;
-    fSys[i][fNSys-2].type = MULT;		//check
-    fSys[i][fNSys-2].name = "LHCBBEAM8TEV";	//check       
+    fSys[i][fNSys-2].type = MULT;
+    fSys[i][fNSys-2].name = "LHCBBEAM8TEV";
 
     //Lumi sys
     lstream >> fSys[i][fNSys-1].add;  
     fSys[i][fNSys-1].mult = fSys[i][fNSys-1].add/fData[i]*1e2;
-    fSys[i][fNSys-1].type = MULT;		//check
-    fSys[i][fNSys-1].name = "LHCBLUMI8TEV";	//check
+    fSys[i][fNSys-1].type = MULT;
+    fSys[i][fNSys-1].name = "LHCBLUMI8TEV";
 
-    lstream >> fsr;
-    fData[i] = sigma*fsr;
-
-    //FSR sys
-    lstream >> fSys[i][fNSys-3].add;  
-    fSys[i][fNSys-3].mult = fSys[i][fNSys-1].add/fData[i]*1e2;
-    fSys[i][fNSys-3].type = MULT;	//check
-    fSys[i][fNSys-3].name = "CORR";	//check
-    
+    lstream >> fsr >> fsr;
   }
-
 
   //Defining covariance matrix
   double** covmat = new double*[fNData];
@@ -139,15 +127,30 @@ void  LHCB_WENU_8TEVFilter::ReadData()
     covmat[i] = new double[fNData];
  
   //Reading Covariance Matrix
-  for (int i = 0; i < 4; i++) getline(fCorr,line);
+  for (int i = 0; i < 2; i++) getline(fCorr,line);
 
-  for (int i = 0; i < fNData; i++){ 
-    for (int j = 0; j < i+1; j++) {    
-      fCorr >> covmat[j][i];
-      covmat[j][i]=covmat[j][i]*totsys[j]*totsys[i];
-      covmat[i][j]=covmat[j][i];      
+  for (int i = 0; i < fNData; i++)
+    { 
+      getline(fCorr,line);
+      for (int j = 0; j < i+1; j++) 
+	{    
+	  fCorr >> covmat[i][j];
+	  covmat[i][j] = covmat[i][j]*totsys[i]*totsys[j];  
+	  covmat[j][i] = covmat[i][j];
+	}
     }
-  }
+
+  
+  //Check
+  for(int i=0; i<fNData; i++)
+    {
+      cout << "{ ";
+      for(int j=0; j<fNData; j++)
+	{
+	  cout << covmat[i][j] << ",";
+	}
+      cout << " }," << endl;
+    }
 
   //Generate artificial systematics
   double** syscor = new double*[fNData];
