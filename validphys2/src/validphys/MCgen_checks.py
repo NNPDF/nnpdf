@@ -8,9 +8,6 @@ from __future__ import generator_stop
 
 import itertools
 import logging
-
-
-from mpl_toolkits.mplot3d import axes3d, Axes3D
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import numpy as np
@@ -41,10 +38,6 @@ def ArtDataResiduals(experiments, nreplica:int, experiments_index):
         #cache when calling load(). We need to copy this yet again, for each
         # of the noisy replicas.
         real_exp = Experiment(exp.load())
-
-        exp_location = experiments_index.get_loc(real_exp.GetExpName())
-
-        index = itertools.count()
 
         art_replicas = []
         real_data = real_exp.get_cv()
@@ -94,10 +87,6 @@ def ArtDataDistribution(experiments, nreplica: int, experiments_index):
         # of the noisy replicas.
         real_exp = Experiment(exp.load())
 
-        exp_location = experiments_index.get_loc(real_exp.GetExpName())
-
-        index = itertools.count()
-
         art_replicas = []
         real_data = real_exp.get_cv()
         art_data = np.zeros(real_data.shape)
@@ -145,10 +134,6 @@ def ArtDataComparison(experiments, nreplica: int, experiments_index):
         # of the noisy replicas.
         real_exp = Experiment(exp.load())
 
-        exp_location = experiments_index.get_loc(real_exp.GetExpName())
-
-        index = itertools.count()
-
         art_replicas = []
         real_data = real_exp.get_cv()
         normart_data = np.zeros(real_data.shape)
@@ -166,8 +151,7 @@ def ArtDataComparison(experiments, nreplica: int, experiments_index):
         normart_data /= nreplica
     
     artrep_array = np.asarray(art_replicas)
-    from IPython import embed
-  #  embed()
+
     fig, axes = plt.subplots(nrows=len(artrep_array.T), figsize=(4,2*len(artrep_array.T)))
     for i, ax, datapoint, normartdatapoint in zip(range(len(artrep_array.T)), axes.flatten(), artrep_array.T, normart_data):
         ax.hist(datapoint, bins=10, histtype="step", stacked=True, fill=False)
@@ -181,16 +165,6 @@ def ArtDataComparison(experiments, nreplica: int, experiments_index):
         ax.vlines(normartdatapoint, ax.get_ylim()[0], ax.get_ylim()[1], linestyle="-", color="darkorchid")
         ax.set_xlabel(r"$D^{(r)}/D^0$")
         ax.set_ylabel("Frequency")
-        
-   # binnedreps = np.apply_along_axis(lambda a: np.histogram(a, bins=4)[0], 0, artrep_array)
-   # fig = plt.figure()
-   # ax = Axes3D(fig)
-    
-  #  embed()
-   # x = np.outer(range(len(binnedreps)), np.ones(len(binnedreps.T)))
-   # y  = np.outer(np.ones(len(binnedreps)), range(len(binnedreps.T)))
-   # ax.plot_wireframe(x, y, binnedreps)   # ax.set_xlabel(r'Data point index')
-   # ax.set_title(r'Experimental replicas')
 
     return fig
 
@@ -213,12 +187,6 @@ def OneArtDataResiduals(experiments, nreplica:int, experiments_index):
         #cache when calling load(). We need to copy this yet again, for each
         # of the noisy replicas.
         real_exp = Experiment(exp.load())
-
-        exp_location = experiments_index.get_loc(real_exp.GetExpName())
-
-        index = itertools.count()
-
-        art_replicas = []
         real_data = real_exp.get_cv()
         one_art_data = np.zeros(nreplica)
         one_data_index=0
