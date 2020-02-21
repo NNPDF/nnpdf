@@ -26,7 +26,6 @@ class BadPerturbativeOrder(ValueError):
     """Exception raised when the perturbative order string is not
     recognized."""
 
-
 class MissingRuleAttribute(RuleProcessingError, AttributeError):
     """Exception raised when a rule is missing required attributes."""
 
@@ -91,7 +90,7 @@ def export_mask(path, mask):
 @check_positive('errorsize')
 @check_nonnegative('filterseed')
 @check_nonnegative('seed')
-def filter(experiments, theoryid, filter_path,
+def filter(data, theoryid, filter_path,
            fakedata: bool,
            filterseed:int, rngalgo:int, seed:int, fakenoise:bool,
            errorsize:numbers.Real, combocuts, t0pdfset,
@@ -99,12 +98,12 @@ def filter(experiments, theoryid, filter_path,
     """Apply filters to all datasets"""
     if not fakedata:
         log.info('Filtering real data.')
-        total_data, total_cut_data = _filter_real_data(filter_path, experiments)
+        total_data, total_cut_data = _filter_real_data(filter_path, data)
     else:
         log.info('Filtering closure-test data.')
         RandomGenerator.InitRNG(rngalgo, seed)
         RandomGenerator.GetRNG().SetSeed(filterseed)
-        total_data, total_cut_data = _filter_closure_data(filter_path, experiments,
+        total_data, total_cut_data = _filter_closure_data(filter_path, data,
                                                           t0pdfset, fakenoise, errorsize)
     log.info(f'Summary: {total_cut_data}/{total_data} datapoints passed kinematic cuts.')
 
@@ -126,38 +125,35 @@ def _write_ds_cut_data(path, dataset):
     return all_dsndata, filtered_dsndata
 
 
-def _filter_real_data(filter_path, experiments):
+def _filter_real_data(filter_path, data):
     """Filter real experimental data."""
     total_data_points = 0
     total_cut_data_points = 0
-    for experiment in experiments:
-        for dataset in experiment.datasets:
-            path = filter_path / dataset.name
-            nfull, ncut = _write_ds_cut_data(path, dataset)
-            total_data_points += nfull
-            total_cut_data_points += ncut
-            dataset.load().Export(str(path))
+    for dataset in data:
+        path = filter_path / dataset.name
+        nfull, ncut = _write_ds_cut_data(path, dataset)
+        total_data_points += nfull
+        total_cut_data_points += ncut
+        dataset.load().Export(str(path))
     return total_data_points, total_cut_data_points
 
 
-def _filter_closure_data(filter_path, experiments, fakepdfset, fakenoise, errorsize):
+def _filter_closure_data(filter_path, data, fakepdfset, fakenoise, errorsize):
     """Filter closure test data."""
     total_data_points = 0
     total_cut_data_points = 0
     fakeset = fakepdfset.load()
     # Load experiments
-    for experiment in experiments:
+    for dataset in data:
         #Don't want to save this in any cache since we are mutating it
-        loaded_exp = experiment.load.__wrapped__(experiment)
-        loaded_exp.MakeClosure(fakeset, fakenoise)
-        for j, dataset in enumerate(experiment.datasets):
-            path = filter_path / dataset.name
-            nfull, ncut = _write_ds_cut_data(path, dataset)
-            total_data_points += nfull
-            total_cut_data_points += ncut
-            loaded_ds = loaded_exp.GetSet(j)
-            if errorsize != 1.0:
-                loaded_ds.RescaleErrors(errorsize)
+        loaded_ds = dataset.load.__wrapped__(dataset)
+        loaded_ds.MakeClosure(fakeset, fakenoise)
+        path = filter_path / dataset.name
+        nfull, ncut = _write_ds_cut_data(path, dataset)
+        total_data_points += nfull
+        total_cut_data_points += ncut
+        if errorsize != 1.0:
+            loaded_ds.RescaleErrors(errorsize)
             loaded_ds.Export(str(path))
     return total_data_points, total_cut_data_points
 
