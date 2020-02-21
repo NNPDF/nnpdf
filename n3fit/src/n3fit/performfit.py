@@ -6,11 +6,66 @@
 import sys
 import logging
 import os.path
+import time
+from typing import Tuple, List
 import numpy as np
 from reportengine.checks import make_argcheck, CheckError
 
 log = logging.getLogger(__name__)
 
+def initialize_seeds(replica: list, fitting: dict) -> Tuple[List, List, List]:
+    """Action to initialize seeds for random number generation.
+    We initialize three different seeds. The first is the seed
+    used for training/validation splits, the second is used for
+    initialization of the neural network's parameters and the
+    final one is the monte carlo seeds for pseudodata replica
+    generation. 
+
+    The generation of these seeds depend on the replica number
+    in question. This dependence comes in by sampling the random
+    number generator <replica number> times in the for loop.
+
+    Parameters
+    ----------
+    fitting: dict
+        dictionary with the hyperparameters of the fit
+    replica: list
+        A list of replica numbers to run over typically of size one
+
+    Returns
+    -------
+    seeds: Tuple[List, List, List]
+        A tuple of lists containing the trvalseeds, nnseeds, mcseeds
+        in that order
+    """
+    # First set the seed variables for
+    # - Tr/Vl split
+    # - Neural Network initialization
+    # - Replica generation
+    # These depend both on the seed set in the runcard and the replica number
+    trvalseeds = []
+    nnseeds = []
+    mcseeds = []
+    for replica_number in replica:
+        np.random.seed(fitting.get("trvlseed"))
+        for i in range(replica_number):
+            trvalseed = np.random.randint(0, pow(2, 31))
+
+        np.random.seed(fitting.get("nnseed"))
+        for i in range(replica_number):
+            nnseed = np.random.randint(0, pow(2, 31))
+
+        np.random.seed(fitting.get("mcseed"))
+        for i in range(replica_number):
+            mcseed = np.random.randint(0, pow(2, 31))
+        trvalseeds.append(trvalseed)
+        nnseeds.append(nnseed)
+        mcseeds.append(mcseed)
+
+    if fitting.get("genrep") == 0:
+        mcseeds = []
+
+    return trvalseeds, nnseeds, mcseeds
 
 @make_argcheck
 def check_consistent_hyperscan_options(hyperopt, hyperscan, fitting):
@@ -60,7 +115,7 @@ def performfit(
             - `fitting`: dictionary with the hyperparameters of the fit
             - `experiments`: vp list of experiments to be included in the fit
             - `t0set`: t0set name
-            - `replica`: a list of replica numbers to run over (tipycally just one)
+            - `replica`: a list of replica numbers to run over (typically just one)
             - `replica_path`: path to the output of this run
             - `output_path`: name of the fit
             - `theorid`: theory id number
@@ -94,33 +149,7 @@ def performfit(
     else:
         t0pdfset = None
 
-    # First set the seed variables for
-    # - Tr/Vl split
-    # - Neural Network initialization
-    # - Replica generation
-    # These depend both on the seed set in the runcard and the replica number
-    trvalseeds = []
-    nnseeds = []
-    mcseeds = []
-    for replica_number in replica:
-        np.random.seed(fitting.get("trvlseed"))
-        for i in range(replica_number):
-            trvalseed = np.random.randint(0, pow(2, 31))
-
-        np.random.seed(fitting.get("nnseed"))
-        for i in range(replica_number):
-            nnseed = np.random.randint(0, pow(2, 31))
-
-        np.random.seed(fitting.get("mcseed"))
-        for i in range(replica_number):
-            mcseed = np.random.randint(0, pow(2, 31))
-        trvalseeds.append(trvalseed)
-        nnseeds.append(nnseed)
-        mcseeds.append(mcseed)
-
-    if not fitting["genrep"]:
-        mcseeds = []
-        log.info("Not generating MC noise")
+    trvalseeds, nnseeds, mcseeds = initialize_seeds(replica, fitting)
 
     ##############################################################################
     # ### Read files
