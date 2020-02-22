@@ -995,7 +995,8 @@ class CoreConfig(configparser.Config):
 
     def produce_data(
             self,
-            data_input,
+            data_input=None,
+            experiments=None,
             *,
             theoryid,
             use_cuts,
@@ -1008,6 +1009,15 @@ class CoreConfig(configparser.Config):
         into account
         """
         #TODO: extract the commondata and cuts and seperate from dataset
+        if experiments is not None:
+            dsets = []
+            dsinpts = []
+            for exp in experiments:
+                for ds, dsinput in zip(exp.datasets, exp.dsinputs):
+                    dsets.append(ds)
+                    dsinpts.append(dsinput)
+            return ExperimentSpec(name="data", datasets=dsets, dsinputs=dsinpts)
+                    
         cds = [self.produce_commondata(
                 dataset_input=dsinp,
                 use_fitcommondata=use_fitcommondata,
