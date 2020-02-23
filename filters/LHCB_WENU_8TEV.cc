@@ -144,12 +144,11 @@ void  LHCB_WENU_8TEVFilter::ReadData()
   //Check
   for(int i=0; i<fNData; i++)
     {
-      cout << "{ ";
       for(int j=0; j<fNData; j++)
 	{
-	  cout << covmat[i][j] << ",";
+	  cout << covmat[i][j] << "  " ;
 	}
-      cout << " }," << endl;
+      cout << std::endl;
     }
 
   //Generate artificial systematics
