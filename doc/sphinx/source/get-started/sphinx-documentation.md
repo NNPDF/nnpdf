@@ -1,29 +1,20 @@
 # NNPDF code and standards documentation <a name="top"></a>
 
-Here we store documentation (user / developer guides) and specifications (for
-cuts / data formats) for the NNPDF code.
-
 ## Sphinx Documentation
 
 ### Generating the Documentation
 
 The NNPDF documentation is produced by the
 [sphinx](http://www.sphinx-doc.org/en/master/) resource. To generate the sphinx
-documentation, navigate to the `sphinx/` directory and execute the command `make
-html`. This produces the documentation in the `build/index/` directory. The
-`index.html` can be viewed with any appropriate browser.
-
-It is required to install `recommonmark` to interpret markdown. To add the
-dependencies to your environment, run
-
-```
-conda install sphinx recommonmark
-```
+documentation, navigate to the `nnpdf/doc/sphinx/` directory and execute the command `make
+html`, ensuring one is inside the appropriate `nnpdf` conda environment. This produces the 
+documentation in the `build/index/` directory. The `index.html` can be viewed with any appropriate
+browser.
 
 ### Adding to the Documentation
 
-New documentation can be added in markdown (`.md` or `.txt` suffices) or
-restructured text (`.rst` suffix) formats. To add a new section to the
+New documentation can be added in markdown, naming the source files with the `.md` suffix, or
+restructured text, with the `.rst` suffix formats. To add a new section to the
 documentation, create an appropriately named directory in the `sphinx/source/`
 directory.  Inside the new directory, add all relevant documentation in the
 markdown or restructured text formats. In addition to these files, create an
@@ -161,9 +152,6 @@ for Markdown and
 for RestructuredText, as described in its
 [documentation](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html?highlight=cross%20reference#role-ref).
 
-## Installation using conda
-
-
 
 ### Adding indices for modules
 
@@ -181,12 +169,3 @@ To add a new module to document, add a new line in `sphinx/Makefile` under:
 	fi
 
 ```
-
-### Currently documented
-- [Validphys2 guide](https://data.nnpdf.science/validphys-docs/guide.html)
-- [Data format specifications](./data/data_layout.pdf)
-- Ancient (NNPDF3.0) cut specifications
-
-### Immediate TODO
-1. Separate conda instructions from Validphys2 guide
-2. Pandoc data format specs to markdown (compiling it is a bit silly)
