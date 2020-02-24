@@ -2,10 +2,11 @@
 
 import argparse
 import pathlib
-import re
-import multiprocessing
 import subprocess
 import shutil
+import tempfile
+
+import NNPDF
 
 from lhapdf import paths
 
@@ -19,8 +20,13 @@ def process_args():
     parser.add_argument('Fit', help='Path to fit')
     parser.add_argument('PDF', help='Name of the desired PDF set output')
     parser.add_argument(
-        '-r',
-        '--result_path',
+        '-n',
+        '--nnpdf_path',
+        action='store_true',
+        help='Use a PDF fit stored in the NNPDF results directory.')
+    parser.add_argument(
+        '-l',
+        '--lhapdf_path',
         action='store_true',
         help='Place the output LHAPDF in the LHAPDF directory.')
     args = parser.parse_args()
@@ -41,8 +47,11 @@ def fixup_ref(new):
         y.dump(res, f)
 
 
-def rename(old, new):
-    subprocess.run(["fitrename", "-rc", old, new], check=True)
+def rename(fit: pathlib.Path, pdf: str):
+    with tempfile.TemporaryDirectory() as tmp:
+        shutil.move(str(fit.absolute), tmp)
+        subprocess.run(["fitrename", "-c", fit/tmp, pdf], check=True)
+        shutil.move(str(fit.absolute/pdf/"postfit"), f"../{pdf}")
     compress(new)
 
 
@@ -60,24 +69,7 @@ def compress(new):
 
 def main():
     args = process_args()
-    p = multiprocessing.Pool()
-    fits = list(pathlib.Path().glob("NNPDF*"))
-    tasks = []
-    for fit in fits:
-        res = re.match("(NNPDF.*_as_)(\d+)(_.*)", fit.name)
-        if not res:
-            raise Exception(fit.name)
-        head, val, tail = res.group(1), res.group(2), res.group(3)
-        if tail == "_ascorr_notop":
-            new = f"{head}{val}{tail}"
-            tasks.append(p.apply_async(compress, (new,)))
-        elif tail in {"_uncorr_s4", "_uncorr_s3"}:
-            tail = "_ascorr"
-            new = f"{head}{val}{tail}"
-            tasks.append(p.apply_async(rename, (fit.name, new)))
-        else:
-            raise Exception(f"bad tail, {tail}")
-    for task in tasks:
-        task.get()
-    p.close()
-    p.join()
+    fit, pdf = pathlib.Path(args.Fit), args.PDF
+    rename(fit, pdf)
+
+    return 1
