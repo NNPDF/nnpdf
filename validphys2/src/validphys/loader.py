@@ -25,7 +25,7 @@ from reportengine.compat import yaml
 from reportengine import filefinder
 
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
-                            PositivitySetSpec, DataSetSpec, PDF, Cuts,
+                            PositivitySetSpec, DataSetSpec, PDF, Cuts, ExperimentSpec,
                             peek_commondata_metadata, CutsPolicy,
                             InternalCutsWrapper)
 from validphys import lhaindex
@@ -446,6 +446,36 @@ class Loader(LoaderBase):
         return DataSetSpec(name=name, commondata=commondata,
                            fkspecs=fkspec, thspec=theoryid, cuts=cuts,
                            frac=frac, op=op, weight=weight)
+
+    def check_experiment(self,
+                      name,
+                      datasets: list,
+                      *,
+                      rules=None,
+                      sysnum=None,
+                      theoryid,
+                      cfac=(),
+                      frac=1,
+                      cuts=CutsPolicy.INTERNAL,
+                      use_fitcommondata=False,
+                      fit=None,
+                      weight=1):
+
+        if not isinstance(datasets, list):
+            raise TypeError("Must specify a list of datasets to use")
+
+        dataspecs = [self.check_dataset(i, rules=rules,
+                                           sysnum=sysnum,
+                                           theoryid=theoryid,
+                                           cfac=cfac,
+                                           frac=frac,
+                                           cuts=cuts,
+                                           use_fitcommondata=use_fitcommondata,
+                                           fit=fit,
+                                           weight=weight)
+                     for i in datasets]
+
+        return ExperimentSpec(name, dataspecs)
 
     def check_pdf(self, name):
         if lhaindex.isinstalled(name):
