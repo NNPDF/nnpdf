@@ -135,7 +135,7 @@ void  LHCB_WENU_8TEVFilter::ReadData()
       for (int j = 0; j < i+1; j++) 
 	{    
 	  fCorr >> covmat[i][j];
-	  covmat[i][j] = covmat[i][j]*totsys[i]*totsys[j];  
+	  //covmat[i][j] = covmat[i][j]*totsys[i]*totsys[j];  
 	  covmat[j][i] = covmat[i][j];
 	}
     }
