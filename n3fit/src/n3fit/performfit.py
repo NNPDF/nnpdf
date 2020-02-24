@@ -27,14 +27,13 @@ def get_pseudodata(fit: str):
     runcard = fit.as_input()
 
     t0pdfset = pdf.load_t0()
-    replica = range(len(pdf))
+    replica = range(1, len(pdf) + 1)
 
     trvlseed, nnseed, mcseed, genrep = [runcard.get("fitting").get(i)
                                         for i in ["trvlseed", "nnseed", "mcseed", "genrep"]]
 
     seeds = initialize_seeds(replica, trvlseed, nnseed, mcseed, genrep)
 
-    print(seeds.trvalseeds)
     for exp in runcard["experiments"]:
         for dataset in exp["datasets"]:
             print("###################")
@@ -86,7 +85,7 @@ def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, gen
     nnseeds = []
     mcseeds = []
     for replica_number in replica:
-        np.random.seed(trvalseed)
+        np.random.seed(trvlseed)
         for i in range(replica_number):
             trvalseed = np.random.randint(0, pow(2, 31))
 
