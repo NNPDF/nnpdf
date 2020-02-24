@@ -4,11 +4,13 @@ Tutorials
 .. toctree::
    :maxdepth: 1
 
-   ./runafit.md
    ./buildmaster.md
    ./APPLgrids.md
+   ./APPLgrids_comp.md
    ./apfelcomb.md
+   ./runafit.md
    ./datthcomp.md
+   ./closuretest.md
    ./conda.md
 
 =======

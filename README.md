@@ -116,7 +116,7 @@ with the `vp-get` tool.
 applying post selection criteria. This will produce a set of
 `<number_of_replicas>+1` replicas.
 
-5. Upload the results using `vp-upload --fit <runcard_folder>` then
+5. Upload the results using `vp-uploadfit <runcard_folder>` then
 install the fitted set with `vp-get fit <fit_name>`.
 
 6. Analyze results with `validphys`, see the
