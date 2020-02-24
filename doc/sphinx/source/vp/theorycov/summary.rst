@@ -1,6 +1,6 @@
-============================================================
-Documentation for theory covariance module in validphys2
-============================================================
+========
+Summary
+========
 
 :Author: Rosalyn Pearson (r.l.pearson@ed.ac.uk)
 
@@ -11,10 +11,6 @@ Documentation for theory covariance module in validphys2
 .. raw:: latex
 
    \tableofcontents
-
-
-Summary
-=======
 
 -  The module of ``validphys2`` which deals with computation and
    interpretation of theoretical covariance matrices can be found in

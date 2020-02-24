@@ -12,9 +12,4 @@ vp-guide
    ./download.md
    ./upload.md
    ./nnprofile.md
-   ./theorycov/summary.rst
-   ./theorycov/runcard_layout.rst
-   ./theorycov/outputs.rst
-   ./theorycov/point_prescrip.rst
-   ./theorycov/tests.rst
-   ./theorycov/examples.rst
+   ./theorycov/index
