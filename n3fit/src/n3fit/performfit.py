@@ -34,16 +34,16 @@ def get_pseudodata(fit: str):
 
     seeds = initialize_seeds(replica, trvlseed, nnseed, mcseed, genrep)
 
-    for exp in runcard["experiments"]:
-        for dataset in exp["datasets"]:
-            print("###################")
-            print(dataset["dataset"])
-            spec = ExperimentSpec("spec", [l.check_dataset(dataset["dataset"], theoryid=53)])
+    datasets = [i["datasets"] for i in runcard["experiments"]]
+    experiments = [item for sublist in datasets for item in sublist]
 
-            log.info("Loading experiment: %s", exp)
-            all_exp_dicts = reader.common_data_reader(
-                spec, t0pdfset, replica_seeds=seeds.mcseeds, trval_seeds=seeds.trvlseeds
-            )
+    dataset_list = [l.check_dataset(i["dataset"], theoryid=53, frac=i["frac"])
+                    for i in experiments]
+    spec = ExperimentSpec("spec", dataset_list)
+
+    all_exp_dicts = reader.common_data_reader(
+        spec, t0pdfset, replica_seeds=seeds.mcseeds, trval_seeds=seeds.trvlseeds
+    )
 
     return all_exp_dicts
 
