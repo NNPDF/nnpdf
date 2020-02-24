@@ -30,7 +30,7 @@ def get_pseudodata(fit: str):
     replica = range(len(pdf))
 
     trvlseed, nnseed, mcseed, genrep = [runcard.get("fitting").get(i)
-                                        for i in ["trvalseed", "nnseed", "mcseed", "genrep"]]
+                                        for i in ["trvlseed", "nnseed", "mcseed", "genrep"]]
 
     seeds = initialize_seeds(replica, trvlseed, nnseed, mcseed, genrep)
 
@@ -43,12 +43,12 @@ def get_pseudodata(fit: str):
 
             log.info("Loading experiment: %s", exp)
             all_exp_dicts = reader.common_data_reader(
-                spec, t0pdfset, replica_seeds=seeds.mcseeds, trval_seeds=seeds.trvalseeds
+                spec, t0pdfset, replica_seeds=seeds.mcseeds, trval_seeds=seeds.trvlseeds
             )
 
     return all_exp_dicts
 
-def initialize_seeds(replica: list, trvalseed: int, nnseed: int, mcseed: int, genrep: bool):
+def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, genrep: bool):
     """Action to initialize seeds for random number generation.
     We initialize three different seeds. The first is the seed
     used for training/validation splits, the second is used for
@@ -64,7 +64,7 @@ def initialize_seeds(replica: list, trvalseed: int, nnseed: int, mcseed: int, ge
     ----------
     replica: list
         A list of replica numbers to run over typically of size one
-    trvalseed: int
+    trvlseed: int
         Seed initialization for training/validation split
     nnseed: int
         Seed for network initialization
@@ -104,7 +104,7 @@ def initialize_seeds(replica: list, trvalseed: int, nnseed: int, mcseed: int, ge
     if genrep == 0:
         mcseeds = []
 
-    Seeds = namedtuple("Seeds", ["trvalseeds", "nnseeds", "mcseeds"])
+    Seeds = namedtuple("Seeds", ["trvlseeds", "nnseeds", "mcseeds"])
     return Seeds(trvalseeds, nnseeds, mcseeds)
 
 @make_argcheck
