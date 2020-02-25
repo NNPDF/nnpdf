@@ -52,6 +52,7 @@
 #include "ZEUSF2B.h"
 #include "H1F2B.h"
 #include "ATLASWZTOT13TEV81PB.h"
+#include "ATLAS_WZ_TOT_13TEV.h"
 #include "ATLASZPT7TEV.h"
 #include "ATLASZPT8TEV.h"
 #include "ATLASTTBARTOT.h"
@@ -140,6 +141,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASLOMASSDY11Filter());
   target.push_back(new ATLASLOMASSDY11EXTFilter());
   target.push_back(new ATLASWZTOT13TEV81PBFilter());
+  target.push_back(new ATLAS_WZ_TOT_13TEVFilter());
   //
   target.push_back(new ATLASZPT7TEVFilter());
   target.push_back(new ATLASZPT8TEVYDISTFilter());
