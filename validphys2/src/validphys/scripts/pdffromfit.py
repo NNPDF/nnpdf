@@ -13,6 +13,7 @@ from lhapdf import paths
 from reportengine.compat import yaml
 
 from validphys.loader import FallbackLoader as Loader
+from validphys.scripts.fitrename import change_name
 
 # Taking command line arguments
 def process_args():
@@ -47,13 +48,9 @@ def fixup_ref(new):
         y.dump(res, f)
 
 
-def rename(fit: pathlib.Path, pdf: str):
-    with tempfile.TemporaryDirectory() as tmp:
-        shutil.move(str(fit.absolute), tmp)
-        subprocess.run(["fitrename", "-c", fit/tmp, pdf], check=True)
-        shutil.move(str(fit.absolute/pdf/"postfit"), f"../{pdf}")
-    compress(new)
-
+def postfit_path(path: pathlib.Path) -> pathlib.Path:
+    pdf_name = path.name
+    return pathlib.Path(path.resolve()/f"postfit/{pdf_name}")
 
 def compress(new):
     fixup_ref(new)
@@ -69,7 +66,14 @@ def compress(new):
 
 def main():
     args = process_args()
-    fit, pdf = pathlib.Path(args.Fit), args.PDF
-    rename(fit, pdf)
+    fit_path, pdf_name = pathlib.Path(args.Fit).resolve(), args.PDF
 
-    return 1
+    with tempfile.TemporaryDirectory(dir=fit_path.parent) as tmp:
+        tmp = pathlib.Path(tmp)
+        copied_fit = tmp/fit_path.name
+        shutil.copytree(fit_path, copied_fit)
+        new_path = change_name(copied_fit, pdf_name)
+        lhapdf_path = postfit_path(new_path)
+        lhapdf_path.rename(new_path.parent.with_name(pdf_name))
+
+    return 0
