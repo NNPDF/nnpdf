@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+import os
 import pathlib
 import subprocess
 import shutil
@@ -21,6 +22,9 @@ def process_args():
     parser.add_argument('Fit', help='Path to fit')
     parser.add_argument('PDF', help='Name of the desired PDF set output')
     parser.add_argument(
+        '--reference',
+        help='The reference to be added to the PDF .info file, usually an arXiv reference.')
+    parser.add_argument(
         '-n',
         '--nnpdf_path',
         action='store_true',
@@ -33,20 +37,15 @@ def process_args():
     args = parser.parse_args()
     return args
 
-def fixup_ref(new):
-    l = Loader()
-    p = l.check_pdf(new)
-    fit = l.check_fit(new)
-    desc = fit.as_input()["description"]
-    infopath = pathlib.Path(p.infopath)
+def fixup_ref(pdf_path: pathlib.Path, reference: str):
+    pdf_name = pdf_path.name
+    infopath = pdf_path/f"postfit/{pdf_name}/{pdf_name}.info"
     with open(infopath) as f:
         y = yaml.YAML()
         res = y.load(infopath)
-        res["SetDesc"] = desc
-        res["Reference"] = "arxiv:1802.03398"
+        res["Reference"] = reference
     with open(infopath, "w") as f:
         y.dump(res, f)
-
 
 def postfit_path(path: pathlib.Path) -> pathlib.Path:
     pdf_name = path.name
@@ -67,13 +66,19 @@ def compress(new):
 def main():
     args = process_args()
     fit_path, pdf_name = pathlib.Path(args.Fit).resolve(), args.PDF
+    reference = args.reference
 
     with tempfile.TemporaryDirectory(dir=fit_path.parent) as tmp:
         tmp = pathlib.Path(tmp)
         copied_fit = tmp/fit_path.name
         shutil.copytree(fit_path, copied_fit)
+
+        if reference is not None:
+            fixup_ref(copied_fit, reference)
+
         new_path = change_name(copied_fit, pdf_name)
         lhapdf_path = postfit_path(new_path)
+
         if args.lhapdf_path:
             lhapdf_path.rename(pathlib.Path(paths()[-1]).with_name(pdf_name))
         else:
