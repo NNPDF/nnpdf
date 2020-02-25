@@ -50,7 +50,7 @@ def fixup_ref(new):
 
 def postfit_path(path: pathlib.Path) -> pathlib.Path:
     pdf_name = path.name
-    return pathlib.Path(path.resolve()/f"postfit/{pdf_name}")
+    return pathlib.Path(path/f"postfit/{pdf_name}")
 
 def compress(new):
     fixup_ref(new)
@@ -74,6 +74,9 @@ def main():
         shutil.copytree(fit_path, copied_fit)
         new_path = change_name(copied_fit, pdf_name)
         lhapdf_path = postfit_path(new_path)
-        lhapdf_path.rename(new_path.parent.with_name(pdf_name))
+        if args.lhapdf_path:
+            lhapdf_path.rename(pathlib.Path(paths()[-1]).with_name(pdf_name))
+        else:
+            lhapdf_path.rename(new_path.parent.with_name(pdf_name))
 
     return 0
