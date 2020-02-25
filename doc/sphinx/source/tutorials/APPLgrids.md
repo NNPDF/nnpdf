@@ -191,7 +191,7 @@ Of course, the way in which the analysis file is written must be consistent with
 
         FO_ANALYSIS_FORMAT = topdrawer        
 
-However, the way how the interpolation grids are filled is independent of the analysis format. Note that in amcfast_test/FixedOrderAnalysis you will be able to find an array of different analysis template cards that are designed for different types of analysis. For example, "analysis_HwU_pp_lplm.f" is in the "histogram with uncertainties" format (hence the "HwU") and it is designed for the analysis of opposite sign charged leptons (hence the "lplm", which stands for "lepton plus lepton minus").
+However, the way how the interpolation grids are filled is independent of the analysis format, with the exception that it is not possible to use the "histogram with uncertainties" (or "HWU") format for the production of APPLgrids. Note that in amcfast_test/FixedOrderAnalysis you will be able to find an array of different analysis template cards that are designed for different types of analysis. For example, "analysis_td_pp_lplm.f" is in the topdrawer format and it is designed for the analysis of opposite sign charged leptons (hence the "lplm", which stands for "lepton plus lepton minus").
 
 We can finally save and close the fixed-order analysis card and start the run by giving *[enter]*. The run should finish successfully, without the generation of any APPLgrid.
 
