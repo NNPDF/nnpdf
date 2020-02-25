@@ -144,7 +144,7 @@ The code is documented at :py:mod:`validphys.scripts.vp_upload`.
 To upload fits use:
 
 ```
-vp-upload --fit <completed_fit_path>
+vp-uploadfit <completed_fit_path>
 ```
 
 Note there are [plans](https://github.com/NNPDF/nnpdf/issues/162) to change this

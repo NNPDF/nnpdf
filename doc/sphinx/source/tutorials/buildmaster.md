@@ -1,4 +1,4 @@
-## Implementing a new experiment in buildmaster
+# How to Implement a new experiment in buildmaster
 
 Buildmaster is the project that allows the user to generate the ``DATA`` and
 ``SYSTYPE`` files that contain, respectively, the experimental data and the 
