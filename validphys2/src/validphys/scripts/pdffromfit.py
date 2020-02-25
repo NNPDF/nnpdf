@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+import logging
 import os
 import pathlib
 import subprocess
@@ -16,6 +17,8 @@ from reportengine.compat import yaml
 
 from validphys.loader import FallbackLoader as Loader
 from validphys.scripts.fitrename import change_name
+
+log = logging.getLogger()
 
 # Taking command line arguments
 def process_args():
@@ -58,9 +61,9 @@ def postfit_path(path: pathlib.Path) -> pathlib.Path:
     return pathlib.Path(path/f"postfit/{pdf_name}")
 
 def compress(lhapdf_path: pathlib.Path):
-    tar = tarfile.open(lhapdf_path.name + ".tar.gz","w:gz", dereference=True)
-    tar.add(str(lhapdf_path))
-    tar.close()
+    output = lhapdf_path.name + ".tar.gz"
+    with tarfile.open(output, "w:gz", dereference=True) as tar:
+        tar.add(str(lhapdf_path), arcname=os.path.basename(str(lhapdf_path)))
 
 def main():
     args = process_args()
@@ -74,16 +77,20 @@ def main():
 
         if reference is not None:
             fixup_ref(copied_fit, reference)
+            log.info(f"Reference {reference} added to info file")
 
         new_path = change_name(copied_fit, pdf_name)
         lhapdf_path = postfit_path(new_path)
 
         if args.lhapdf_path:
-            lhapdf_path = lhapdf_path.rename(pathlib.Path(paths()[-1]).with_name(pdf_name))
+            lhapdf_path = lhapdf_path.rename(pathlib.Path(paths()[-1])/pdf_name)
+            log.info(f"PDF generated and placed in {paths()[-1]}")
         else:
             lhapdf_path = lhapdf_path.rename(new_path.parent.with_name(pdf_name))
+            log.info(f"PDF generated and placed in {os.getcwd()}")
 
         if args.compress:
+            log.info("Compressing output")
             compress(lhapdf_path)
 
     return 0
