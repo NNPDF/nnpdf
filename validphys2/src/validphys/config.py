@@ -960,6 +960,39 @@ class CoreConfig(configparser.Config):
 
         return filter_defaults
 
+    # To do: this should be updated once we have lock files
+    def produce_scale_variation_theories(self, theoryid, point_prescription):
+        """Produces a list of theoryids given a theoryid at central scales and a point
+        prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point',
+        '7 point (original)' and '9 point'. Note that these are defined in arXiv:1906.10698. This
+        hard codes the theories needed for each prescription to avoid user error."""
+        from reportengine.namespaces import NSList
+        pp = point_prescription
+        if theoryid.id != '163':
+            raise ConfigError("Scale variations are not currently defined for this central "
+                + "theoryid. It is currently only possible to use theoryid 163 as the central "
+                + "theory. Please use this instead if you wish to include theory uncertainties here.")
+        theoryids = []
+        if pp == '3 point':
+            thids = [163, 180, 173]
+        elif pp == '5 point':
+            thids = [163, 177, 176, 179, 174]
+        elif pp == '5bar point':
+            thids = [163, 180, 173, 175, 178]
+        elif pp == '7 point' or pp == '7 point (original)':
+            thids = [163, 177, 176, 179, 174, 180, 173]
+        elif pp == '9 point':
+            thids = [163, 177, 176, 179, 174, 180, 173, 175, 178]
+        else:
+            raise ConfigError("Scale variations are not currently defined for this point "
+                + "prescription. This configuration only works when 'point prescription' is equal "
+                + "to one of '3 point', '5 point', '5bar point', '7 point' or '9 point'. Please "
+                + "use of of these instead if you wish to include theory uncertainties here.")
+        for thid in thids:
+            theoryids.append(self.loader.check_theoryID(thid))
+        # NSList needs to be used for theoryids to be recognised as a namespace
+        return {'theoryids': NSList(theoryids, nskey='theoryid')}
+
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):
     """The effective configuration parser class."""
