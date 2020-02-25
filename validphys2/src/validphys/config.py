@@ -19,6 +19,7 @@ from reportengine import configparser
 from reportengine.environment import Environment, EnvironmentError_
 from reportengine.configparser import ConfigError, element_of, _parse_func
 from reportengine.helputils import get_parser_type
+from reportengine.namespaces import NSList
 from reportengine import report
 
 from validphys.core import (ExperimentSpec, DataSetInput, ExperimentInput,
@@ -821,7 +822,6 @@ class CoreConfig(configparser.Config):
         key in the plotting info file.
         """
         #TODO: consider this an implimentation detail
-        from reportengine.namespaces import NSList
 
         with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
             _, experiments = self.parse_from_('fit', 'experiments', write=False)
@@ -966,7 +966,6 @@ class CoreConfig(configparser.Config):
         prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point',
         '7 point (original)' and '9 point'. Note that these are defined in arXiv:1906.10698. This
         hard codes the theories needed for each prescription to avoid user error."""
-        from reportengine.namespaces import NSList
         pp = point_prescription
         if theoryid.id != '163':
             raise ConfigError("Scale variations are not currently defined for this central "
