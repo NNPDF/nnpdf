@@ -5,6 +5,7 @@ import os
 import pathlib
 import subprocess
 import shutil
+import tarfile
 import tempfile
 
 import NNPDF
@@ -34,6 +35,11 @@ def process_args():
         '--lhapdf_path',
         action='store_true',
         help='Place the output LHAPDF in the LHAPDF directory.')
+    parser.add_argument(
+        '-c',
+        '--compress',
+        action='store_true',
+        help='Compress the resulting fit.')
     args = parser.parse_args()
     return args
 
@@ -51,17 +57,10 @@ def postfit_path(path: pathlib.Path) -> pathlib.Path:
     pdf_name = path.name
     return pathlib.Path(path/f"postfit/{pdf_name}")
 
-def compress(new):
-    fixup_ref(new)
-    l = Loader()
-    p = l.check_pdf(new)
-    dst = pathlib.Path(p.infopath).parent
-    subprocess.run(
-        ["tar", "--dereference", "-czvf", f"res/{new}.tar.gz", "-C", str(dst.parent), new]
-        , check = True
-    )
-    # shutil.make_archive(f"res/{new}", "gztar", root_dir=dst.parent, base_dir=new)
-
+def compress(lhapdf_path: pathlib.Path):
+    tar = tarfile.open(lhapdf_path.name + ".tar.gz","w:gz", dereference=True)
+    tar.add(str(lhapdf_path))
+    tar.close()
 
 def main():
     args = process_args()
@@ -80,8 +79,11 @@ def main():
         lhapdf_path = postfit_path(new_path)
 
         if args.lhapdf_path:
-            lhapdf_path.rename(pathlib.Path(paths()[-1]).with_name(pdf_name))
+            lhapdf_path = lhapdf_path.rename(pathlib.Path(paths()[-1]).with_name(pdf_name))
         else:
-            lhapdf_path.rename(new_path.parent.with_name(pdf_name))
+            lhapdf_path = lhapdf_path.rename(new_path.parent.with_name(pdf_name))
+
+        if args.compress:
+            compress(lhapdf_path)
 
     return 0
