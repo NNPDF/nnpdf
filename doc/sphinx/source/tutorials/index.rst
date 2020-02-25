@@ -5,6 +5,7 @@ Tutorials
    :maxdepth: 1
 
    ./runafit.md
+   ./compare-fits.md
    ./report.md
    ./buildmaster.md
    ./APPLgrids.md
