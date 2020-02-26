@@ -15,7 +15,6 @@ from NNPDF import CommonData, RandomGenerator
 from reportengine.checks import make_argcheck, check, check_positive, make_check
 from reportengine.compat import yaml
 import validphys.cuts
-from validphys.core import ExperimentSpec, Experiment
 
 log = logging.getLogger(__name__)
 
@@ -144,20 +143,19 @@ def _filter_closure_data(filter_path, data, fakepdfset, fakenoise, errorsize):
     total_data_points = 0
     total_cut_data_points = 0
     fakeset = fakepdfset.load()
-    # Load experiments
-    for dataset in data:
-        #Don't want to save this in any cache since we are mutating it
-        ds = ExperimentSpec(dataset.name, [dataset])
-        loaded_ds = ds.load.__wrapped__(dataset)
-        replica_ds = Experiment(loaded_ds)
-        replica_ds.MakeClosure(fakeset, fakenoise)
+    # Load data, don't cache result
+    loaded_data = data.load.__wrapped__(data)
+    # generate level 1 shift if fakenoise
+    loaded_data.MakeClosure(fakeset, fakenoise)
+    for j, dataset in enumerate(data.datasets):
         path = filter_path / dataset.name
         nfull, ncut = _write_ds_cut_data(path, dataset)
         total_data_points += nfull
         total_cut_data_points += ncut
+        loaded_ds = loaded_data.GetSet(j)
         if errorsize != 1.0:
-            replica_ds.RescaleErrors(errorsize)
-            replica_ds.Export(str(path))
+            loaded_ds.RescaleErrors(errorsize)
+            loaded_ds.Export(str(path))
     return total_data_points, total_cut_data_points
 
 
