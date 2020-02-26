@@ -11,6 +11,10 @@ Summary
 .. raw:: latex
 
    \tableofcontents
+   
+See the short
+<https://arxiv.org/abs/1905.04311>`_  and long
+<https://arxiv.org/abs/1906.10698>`_ papers for reference.
 
 -  The module of ``validphys2`` which deals with computation and
    interpretation of theoretical covariance matrices can be found in
