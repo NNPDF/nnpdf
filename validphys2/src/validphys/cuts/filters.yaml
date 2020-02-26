@@ -1,3 +1,39 @@
+- dataset: ATLAS_TTB_DIFF_8TEV_LJ_TPTNORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is 
+   linearly dependent on the others
+  rule: "p_TQ<450"
+
+- dataset: ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is 
+   linearly dependent on the others
+  rule: "yQ<2.05"
+
+- dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is 
+   linearly dependent on the others
+  rule: "yQQ<1.90"
+
+- dataset: ATLAS_TTB_DIFF_8TEV_LJ_TTMNORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is 
+   linearly dependent on the others
+  rule: "MQQ<1350"
+
+- dataset: CMSTOPDIFF8TEVTRAPNORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "yQ<2.01"
+
+- dataset: CMSTOPDIFF8TEVTTRAPNORM
+  reason: |
+   We remove the last bin of the normalised distribution because it is
+   linearly dependent on the others
+  rule: "yQQ<1.82"
+
 - dataset: ATLAS1JET11
   reason: |
     We keep only the first rapidity bin since the chi2 to the whole set of
@@ -91,9 +127,6 @@
 - dataset: ATLASWPT31PB
   reason: Avoid the region where EWK corrections are important.
   rule: "p_T > 30"
-
-# - dataset: CMS_1JET_8TEV
-#   rule: ""
 
 - dataset: CMSDY2D11
   reason: |
