@@ -1,10 +1,6 @@
 Important information about runcard layout
 ==========================================
 
-Below is an example runcard (template in the next section) to calculate
-the theoretical covariance matrix for 9-point variations at NLO and
-display a range of outputs.
-
 -  **IMPORTANT:** In runcards, theories must be listed according to
    points :math:`(\mu_0, \mu_i)` in the following order: :math:`(0,0)`,
    :math:`(+,0)`, :math:`(-,0)`, :math:`(0,+)`, :math:`(0,-)`,
