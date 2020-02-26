@@ -41,7 +41,7 @@ providers = [
              'validphys.theorycovariance.output',
              'validphys.theorycovariance.tests',
              'validphys.replica_selector',
-             'validphys.MCgen_checks',
+             'validphys.mc_gen_checks',
              'validphys.closure',
              'validphys.theoryinfo',
              'reportengine.report'

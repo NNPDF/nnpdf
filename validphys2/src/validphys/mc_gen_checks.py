@@ -55,7 +55,7 @@ def art_rep_generation(experiments, nreplica:int, experiments_index):
         return real_data, art_replicas, normart_replicas, art_data
     
 @figure
-def art_data_residuals(experiments, nreplica:int, experiments_index):
+def art_data_residuals(art_rep_generation, nreplica:int):
 
     #pass
     """
@@ -77,7 +77,7 @@ def art_data_residuals(experiments, nreplica:int, experiments_index):
 
 
 @figure
-def art_data_distribution(experiments, nreplica: int, experiments_index):
+def art_data_distribution(art_rep_generation, nreplica:int):
     """
     Plot of the distribution of pseudodata.
     """
@@ -95,7 +95,7 @@ def art_data_distribution(experiments, nreplica: int, experiments_index):
     return fig
 
 @figure
-def art_data_comparison(experiments, nreplica: int, experiments_index):
+def art_data_comparison(art_rep_generation, nreplica:int):
 
     #pass
     """
@@ -124,7 +124,7 @@ def art_data_comparison(experiments, nreplica: int, experiments_index):
     return fig
 
 @figure
-def one_art_data_residuals(experiments, nreplica:int, experiments_index):
+def one_art_data_residuals(art_rep_generation, nreplica:int):
 
     #pass
     """
@@ -157,7 +157,7 @@ def one_art_data_residuals(experiments, nreplica:int, experiments_index):
     return fig
 
 @table
-def art_data_mean_table(experiments, nreplica: int, experiments_index):
+def art_data_mean_table(art_rep_generation, nreplica:int, experiments):
     """Generate table for artdata mean values
     """
     real_data, art_replicas, normart_replicas, art_data = art_rep_generation
