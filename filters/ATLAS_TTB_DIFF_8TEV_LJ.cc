@@ -265,7 +265,7 @@ void statcorrs(int dist, string norm, double** extrasys)
 			  >> corrcoeff[i+n][j+m];
 		  
 		  corrcoeff[i+n][j+m] = corrcoeff[i+n][j+m]*stat[i+n]*data[i+n]*stat[j+m]*data[j+m]/100./100.;
-		  
+
 		}
 
 	    }
@@ -356,6 +356,8 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TPTFilter::ReadData()
   double** extrasys = new double*[25];
   for(int i=0; i<25; i++)
     extrasys[i] = new double[25];
+
+  statcorrs(0,"ABS",extrasys);
 
   for(int i=0; i<fNData; i++)
     {
@@ -458,16 +460,15 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TPTFilter::ReadData()
       for(int j=2*realsys-1; j<fNSys; j++)
 	{
 
-	  statcorrs(0,"ABS",extrasys);
 	  fSys[i][j].add = extrasys[i][j-2*realsys+1];
 	  fSys[i][j].mult = fSys[i][j].add/fData[i]*100.;
 	  fSys[i][j].type = ADD;
 	  ostringstream sysname;
 	  sysname << "STATCORR" << j;
-	  fSys[i][j].name = sysname.str();
-	  
+	  fSys[i][j].name = sysname.str(); 
+
 	}
-    
+
     }
  
   f1.close();
@@ -477,7 +478,7 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TPTFilter::ReadData()
 //2) Distribution differential in top rapidity
 
 void ATLAS_TTB_DIFF_8TEV_LJ_TRAPFilter::ReadData()
-{
+{ 
   //Opening files
   fstream f1;
   
