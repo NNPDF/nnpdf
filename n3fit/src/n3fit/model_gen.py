@@ -11,6 +11,7 @@ from n3fit.layers import DIS
 from n3fit.layers import DY
 from n3fit.layers import Mask
 from n3fit.layers import Preprocessing, Rotation
+from n3fit.layers import NewPositivity
 
 from n3fit.backends import operations
 from n3fit.backends import losses
@@ -83,12 +84,27 @@ def observable_generator(
         # Append the combination of observable and the operation to be applied to the list of model_obs
         model_obs.append((op, obs_list))
 
-    def final_obs(pdf_layer):
+
+    # Now the PDF injection is a bit tricky because we also need to care
+    # about positivity
+    # Note: this is assuming things like MSR and gods knows what else
+    # work exactly the same in this scheme
+    # By working at this point we are in the flavour basis
+    def final_obs(pdf_layer_pos_scheme):
         all_ops = []
         for operation, observables in model_obs:
             all_obs = []
             for i_layer, o_layer in observables:
-                all_obs.append(o_layer(pdf_layer(i_layer)))
+                pdf_pos = pdf_layer_pos_scheme(i_layer)
+                # The PDF inside the convolution for now
+                # takes the same grid as the pdf outside
+                pdf_conv = pdf_layer_pos_scheme(i_layer)
+                # Prepare the change of basis
+                digestive_layer = NewPositivity(x_in = i_layer)
+                # Change of scheme
+                pdf_msbar = digestive_layer([pdf_pos, pdf_conv])
+                # Now the observable takes the normal pdf in msbar
+                all_obs.append(o_layer(pdf_msbar))
             all_ops.append(operation(all_obs))
         if len(all_ops) == 1:
             return all_ops[0]

@@ -1,4 +1,5 @@
 from n3fit.layers.Preprocessing import Preprocessing
+from n3fit.layers.NewPositivity import NewPositivity
 from n3fit.layers.Rotation import Rotation
 from n3fit.layers.x_operations import xIntegrator, xDivide, xMultiply
 from n3fit.layers.MSR_Normalization import MSR_Normalization
