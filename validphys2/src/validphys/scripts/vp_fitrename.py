@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 """
-        fitrename - command line tool to rename fits
+        vp-fitrename - command line tool to rename fits
 
-        fitrename allows for command line renaming of fits.
-        To do so, call fitrename with a path to the original fit and
+        vp-fitrename allows for command line renaming of fits.
+        To do so, call vp-fitrename with a path to the original fit and
         the requested new fit. The optional flags allow for preserving
         a copy of the original fit and also to change fits in the NNPDF
         results directory.

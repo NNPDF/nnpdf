@@ -16,7 +16,7 @@ from lhapdf import paths
 from reportengine.compat import yaml
 
 from validphys.loader import FallbackLoader as Loader
-from validphys.scripts.fitrename import change_name
+from validphys.scripts.vp_fitrename import change_name
 
 log = logging.getLogger()
 
