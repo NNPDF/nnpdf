@@ -449,8 +449,29 @@ class Loader(LoaderBase):
                            fkspecs=fkspec, thspec=theoryid, cuts=cuts,
                            frac=frac, op=op, weight=weight)
 
-    def check_experiment(self, name, datasets: List[DataSetSpec]) -> ExperimentSpec:
+    def check_experiment(self, name: str, datasets: List[DataSetSpec]) -> ExperimentSpec:
+        """Loader method for instantiating ExperimentSpec objects. The NNPDF::Experiment
+        object can then be instantiated using the load method.
 
+        Parameters
+        ----------
+        name: str
+            A string denoting the name of the resulting ExperimentSpec object.
+        dataset: List[DataSetSpec]
+            A list of DataSetSpec objects pre-created by the user. Note, these too
+            will be loaded by Loader.
+
+        Returns
+        -------
+        ExperimentSpec
+
+        Example
+        -------
+        >>> from validphys.loader import Loader
+        >>> l = Loader()
+        >>> ds = l.check_dataset("NMC", theoryid=53, cuts="internal")
+        >>> exp = l.check_experiment("My ExperimentSpec Name", [ds])
+        """
         if not isinstance(datasets, list):
             raise TypeError("Must specify a list of DataSetSpec objects to use")
 
