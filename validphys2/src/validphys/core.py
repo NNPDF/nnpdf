@@ -581,7 +581,7 @@ class FitSpec(TupleComp):
         # keep backwards compatibility
         old_experiments_input = d.get("experiments")
         if old_experiments_input:
-            d["data"] = data_from_experiment(old_experiments_input)
+            d["data_input"] = data_from_experiment(old_experiments_input)
         return d
 
     def __str__(self):
