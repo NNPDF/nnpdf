@@ -1,4 +1,4 @@
-%CHORUSNB 10000 replicas
+%CHORUSNB 100 replicas
 Data replica histograms 
 -----------------------
 {@art_data_comparison@}
@@ -8,7 +8,7 @@ Distribution
 Residuals
 ---------
 {@art_data_residuals@}
-@one_art_data_residuals@}
+{@one_art_data_residuals@}
 Mean table
 ----------
 {@art_data_mean_table@}

@@ -1,7 +1,10 @@
 nreplica: 100
 use_cuts: True
 
-author: Rosalyn Pearson
+meta:
+    title: Pseudodata generation 
+    author: Rosalyn Pearson
+    keywords: [pseudodata, test, artificial replica]
 
 fit: NNPDF31_nlo_as_0118_scalecov_9pt_datadump
 
