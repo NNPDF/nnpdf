@@ -93,11 +93,11 @@ rotating back, as detailed in Sec. `5.1 <#projection>`__.
 
 .. _vectors:
 
-In this section we summarise for reference the linearly independent vectors
-contributing to the covariance matrix in each prescription.
-
 Linearly independent vectors for each prescription
 --------------------------------------------------
+
+In this section we summarise for reference the linearly independent vectors
+contributing to the covariance matrix in each prescription.
 
 3 point
 ~~~~~~~

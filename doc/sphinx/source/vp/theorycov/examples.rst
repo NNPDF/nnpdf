@@ -136,7 +136,7 @@ relevant c-factors.
 
 
 The corresponding template file is ``template.md``, shown below. This will produce
-a comprehensive set of plots and tables describingn the covariance matrices. 
+a comprehensive set of plots and tables describing the covariance matrices.
 
 .. code-block::  md
    :linenos:
@@ -203,7 +203,7 @@ matrix against the NNLO-NLO shift. In this case the 5 point prescription is chos
 and Drell-Yan experiments only are considered.
 
 Note that as we are dealing with 5 theories, we need to set the ``fivetheories``
-flag, which in this case is set to ``nobar``. This must be used in conjuction
+flag, which in this case is set to ``nobar``. This must be used in conjunction
 with the correct ``theoryids`` and ordering of ``theoryids`` in order not to throw 
 an error. 
 
@@ -212,7 +212,7 @@ the basis vectors of the theory covariance matrix. There are three choices:
 
 #. QR decomposition (choose this by default), with the flag ``qr``
 
-#. Singular value decompostion, with the flag ``svd``
+#. Singular value decomposition, with the flag ``svd``
 
 #. An in-built Gram-Schmidt orthonormalisation, with the flag ``gs``.
 
