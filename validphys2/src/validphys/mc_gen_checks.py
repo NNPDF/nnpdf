@@ -21,9 +21,9 @@ log = logging.getLogger(__name__)
 
 def art_rep_generation(experiments, nreplica:int, experiments_index):
     """Generates the nreplica pseudodata replicas for a given experiment"""
-    
+
     RandomGenerator.InitRNG(0,0)
-    
+
     for exp in experiments:
         #Since we are going to modify the experiments, we copy them
         #(and work on the copies) to avoid all
@@ -44,16 +44,16 @@ def art_rep_generation(experiments, nreplica:int, experiments_index):
             replica_exp.MakeReplica()
             artrep = replica_exp.get_cv()
             normartrep = artrep/real_data
-            art_replicas.append(artrep) 
+            art_replicas.append(artrep)
             normart_replicas.append(normartrep)
-            
+
        # mean of the replicas
         for j in range(nreplica):
             art_data+=art_replicas[j]
         art_data/=nreplica
-        
+
         return real_data, art_replicas, normart_replicas, art_data
-    
+
 @figure
 def art_data_residuals(art_rep_generation, nreplica:int):
 
@@ -72,7 +72,7 @@ def art_data_residuals(art_rep_generation, nreplica:int):
     ax.set_ylabel(r'Data points')
     ax.set_xlabel(r'$(D^0-<D^{(r)}>)/D^0$')
     ax.set_title(r'Residuals distribution')
-    
+
     return fig
 
 
@@ -107,24 +107,26 @@ def art_data_comparison(art_rep_generation, nreplica:int):
     normart_data = art_data/real_data
 
     fig, axes = plt.subplots(nrows=len(artrep_array.T), figsize=(4,2*len(artrep_array.T)))
-    
+
     for i, ax, datapoint, normartdatapoint in zip(range(len(artrep_array.T)), axes.flatten(), artrep_array.T, normart_data):
         ax.hist(datapoint, bins=10, histtype="step", stacked=True, fill=False)
         extraString = f"Datapoint number = {i}"
         handles, labels = ax.get_legend_handles_labels()
         handles.append(mpatches.Patch(color="none", label=extraString))
-        ax.legend(handles=handles)
-        ax.set_xlim(0,2)
+        ax.set_xlim(-0.5,2.5)
         ax.set_ylim(0,50)
         ax.vlines(1, ax.get_ylim()[0], ax.get_ylim()[1])
         ax.vlines(normartdatapoint, ax.get_ylim()[0], ax.get_ylim()[1], linestyle="-", color="darkorchid")
+        ax.vlines(0, ax.get_ylim()[0], ax.get_ylim()[1], linestyle="-", color="dodgerblue")
+        ax.vlines(2, ax.get_ylim()[0], ax.get_ylim()[1], linestyle="-", color="dodgerblue")
+        ax.legend(handles=handles)
         ax.set_xlabel(r"$D^{(r)}/D^0$")
         ax.set_ylabel("Frequency")
 
     return fig
 
 @figure
-def one_art_data_residuals(art_rep_generation, nreplica:int):
+def one_art_data_residuals(art_rep_generation, nreplica:int, experiments):
 
     #pass
     """
@@ -143,7 +145,7 @@ def one_art_data_residuals(art_rep_generation, nreplica:int):
             replica_exp = Experiment(real_exp)
             replica_exp.MakeReplica()
             one_art_data[i]=replica_exp.get_cv()[one_data_index]
-        
+
     fig, ax = plt.subplots()
 
     residual = one_art_data-real_data[one_data_index]
@@ -153,7 +155,7 @@ def one_art_data_residuals(art_rep_generation, nreplica:int):
     ax.set_ylabel(r'replicas')
     ax.set_xlabel(r'$(D^{(r)}_{0} - D^0_{0})/D^0_{0}$')
     ax.set_title(r'Residual for Data Point 0')
-    
+
     return fig
 
 @table
