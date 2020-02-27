@@ -1,12 +1,10 @@
 ********************************************************************************
-SetName: CF_ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM
+SetName: CMSTTBARTOT5TEV
 Author: Emanuele R. Nocera enocera@nikhef.nl
-Date: January 2019
-CodesUsed: Predictions provided by Jun Gao
+Date: January 2020
+CodesUsed: top++ v2.0
 TheoryInput: NNPDF3.1 with alphas(MZ)=0.118
-PDFset: NNPDF31_nnlo_hessian_pdfas
-Warnings: 
+PDFset: NNPDF31_nnlo_as_0118
+Warnings: NNLO theory (no NNLL effects)
 ********************************************************************************
-0.9752	0.0000
-0.9727	0.0000
-0.9718	0.0000
+1.1270   0.0000
