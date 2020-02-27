@@ -1047,11 +1047,11 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TPTNORMFilter::ReadData()
 	}
       
       //Define artificial systematics
-      for(int j=2*realsys-1; j<fNSys; j++)
+      for(int j=2*realsys; j<fNSys; j++)
 	{
 
 	  statcorrs(0,"NORM",extrasys);
-	  fSys[i][j].add = extrasys[i][j-2*realsys+1];
+	  fSys[i][j].add = extrasys[i][j-2*realsys];
 	  fSys[i][j].mult = fSys[i][j].add/fData[i]*100.;
 	  fSys[i][j].type = ADD;
 	  ostringstream sysname;
@@ -1186,11 +1186,11 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORMFilter::ReadData()
 	}
       
       //Define artificial systematics
-      for(int j=2*realsys-1; j<fNSys; j++)
+      for(int j=2*realsys; j<fNSys; j++)
 	{
 	  
 	  statcorrs(1,"NORM",extrasys);
-	  fSys[i][j].add = extrasys[i][j-2*realsys+1];
+	  fSys[i][j].add = extrasys[i][j-2*realsys];
 	  fSys[i][j].mult = fSys[i][j].add/fData[i]*100.;
 	  fSys[i][j].type = ADD;
 	  ostringstream sysname;
@@ -1325,11 +1325,11 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORMFilter::ReadData()
 	}
       
       //Define artificial systematics
-      for(int j=2*realsys-1; j<fNSys; j++)
+      for(int j=2*realsys; j<fNSys; j++)
 	{
 
 	  statcorrs(2,"NORM",extrasys);
-	  fSys[i][j].add = extrasys[i][j-2*realsys+1];
+	  fSys[i][j].add = extrasys[i][j-2*realsys];
 	  fSys[i][j].mult = fSys[i][j].add/fData[i]*100.;
 	  fSys[i][j].type = ADD;
 	  ostringstream sysname;
@@ -1464,11 +1464,11 @@ void ATLAS_TTB_DIFF_8TEV_LJ_TTMNORMFilter::ReadData()
 	}
       
       //Define artificial systematics
-      for(int j=2*realsys-1; j<fNSys; j++)
+      for(int j=2*realsys; j<fNSys; j++)
 	{
 	  
 	  statcorrs(3,"NORM",extrasys);
-	  fSys[i][j].add = extrasys[i][j-2*realsys+1];
+	  fSys[i][j].add = extrasys[i][j-2*realsys];
 	  fSys[i][j].mult = fSys[i][j].add/fData[i]*100.;
 	  fSys[i][j].type = ADD;
 	  ostringstream sysname;
