@@ -363,14 +363,14 @@ class Loader(LoaderBase):
 
         return tuple(cf)
 
-    def check_posset(self, theiryID, setname, postlambda):
+    def check_posset(self, theoryID, setname, postlambda):
         cd = self.check_commondata(setname, 'DEFAULT')
-        fk = self.check_fktable(theiryID, setname, [])
-        th =  self.check_theoryID(theiryID)
+        fk = self.check_fktable(theoryID, setname, [])
+        th =  self.check_theoryID(theoryID)
         return PositivitySetSpec(setname, cd, fk, postlambda, th)
 
-    def get_posset(self, theiryID, setname, postlambda):
-        return self.check_posset(theiryID, setname, postlambda).load()
+    def get_posset(self, theoryID, setname, postlambda):
+        return self.check_posset(theoryID, setname, postlambda).load()
 
     def check_fit(self, fitname):
         resultspath = self.resultspath
