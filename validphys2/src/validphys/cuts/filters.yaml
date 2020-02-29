@@ -38,6 +38,22 @@
   PTO: NNLO
   rule: "etay >= 2.25"
 
+- dataset: LHCB_Z_13TEV_DIELECTRON
+  reason: |
+    The first two bins in rapidity have unnaturally large K-factors which we
+    don't understand, and theory calculations are unstable here, so we remove
+    these points at NNLO.
+  PTO: NNLO
+  rule: "etay >= 2.20"
+
+- dataset: LHCB_Z_13TEV_DIMUON
+  reason: |
+    The first two bins in rapidity have unnaturally large K-factors which we
+    don't understand, and theory calculations are unstable here, so we remove
+    these points at NNLO.
+  PTO: NNLO
+  rule: "etay >= 2.20"
+
 - dataset: D0WMASY
   reason: |
     Calculation of the NNLO K-factor at the precision required for data points
