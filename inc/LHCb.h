@@ -63,3 +63,21 @@ public: LHCBZEE2FBFilter():
 private:
   void ReadData();
 };
+
+class LHCB_Z_13TEV_DIMUONFilter: public CommonData
+{
+public: LHCB_Z_13TEV_DIMUONFilter():
+  CommonData("LHCB_Z_13TEV_DIMUON") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class LHCB_Z_13TEV_DIELECTRONFilter: public CommonData
+{
+public: LHCB_Z_13TEV_DIELECTRONFilter():
+  CommonData("LHCB_Z_13TEV_DIELECTRON") { ReadData(); }
+
+private:
+  void ReadData();
+};
