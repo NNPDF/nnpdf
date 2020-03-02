@@ -203,11 +203,11 @@ class CoreConfig(configparser.Config):
         _, theory      = self.parse_from_('fit', 'theory', write=False)
         thid = theory['theoryid']
 
-        #We need to make theoryid available to parse the experiments
+        #We need to make theoryid available to parse the data_input
         with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
-            _, experiments = self.parse_from_('fit', 'experiments', write=False)
+            _, data_input = self.parse_from_('fit', 'data_input', write=False)
 
-        return {'theoryid':thid, 'experiments': experiments}
+        return {'theoryid':thid, 'data_input': data_input}
 
     def produce_fitpdf(self, fit):
         """Like ``fitcontext`` only setting the PDF"""
