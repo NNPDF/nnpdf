@@ -180,21 +180,21 @@ class CoreConfig(configparser.Config):
             raise ConfigError(str(e), fit ,self.loader.available_fits)
 
     def produce_fitcontext(self, fit):
-        """Set PDF, theory ID and experiments from the fit config"""
+        """Set PDF, theory ID and data input from the fit config"""
 
         _, pdf         = self.parse_from_('fit', 'pdf', write=False)
         _, theory      = self.parse_from_('fit', 'theory', write=False)
 
-        #TODO: parse we need multilevel from to do theoruid nicely
+        #TODO: parse we need multilevel from to do theoryid nicely
         thid = theory['theoryid']
 
-        #We need to make theoryid available to parse the experiments
+        #We need to make theoryid available to parse the data input
         with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
-            _, experiments = self.parse_from_('fit', 'experiments', write=False)
+            _, data_input = self.parse_from_('fit', 'data_input', write=False)
 
 
 
-        return {'pdf': pdf, 'theoryid':thid, 'experiments': experiments}
+        return {'pdf': pdf, 'theoryid':thid, 'data_input': data_input}
 
     def produce_fitinputcontext(self, fit):
         """Like ``fitcontext`` but without setting the PDF"""
