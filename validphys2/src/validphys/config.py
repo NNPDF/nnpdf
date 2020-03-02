@@ -524,29 +524,42 @@ class CoreConfig(configparser.Config):
         self._check_dataspecs_type(dataspecs)
         all_names = []
         for spec in dataspecs:
+
             with self.set_context(ns=self._curr_ns.new_child(spec)):
-                _, experiments = self.parse_from_(
+                try:
+                    _, data_input = self.parse_from_(
+                    None, 'data_input', write=False)
+                except:
+                    _, experiments = self.parse_from_(
                     None, 'experiments', write=False)
-                names = {(e.name, ds.name, process_lookup(ds.name)): (ds, dsin)
-                         for e in experiments
-                         for ds, dsin in zip(e.datasets, e)}
+                    # make data input from experiments
+                    dsets = []
+                    dsinpts = []
+                    for exp in experiments:
+                        for ds, dsinput in zip(exp.datasets, exp.dsinputs):
+                            dsets.append(ds)
+                            dsinpts.append(dsinput)
+                    data_input = dsinpts
+
+                names = {(process_lookup(ds.name), ds.name): dsin
+                         for dsin in data_input}
+
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
 
         res = []
         for k in used_set:
-            inres = {'experiment_name': k[0], 'dataset_name': k[1], 'process': k[2]}
+            inres = {'process': k[0], 'dataset_name': k[1]}
             #TODO: Should this have the same name?
             inner_spec_list = inres['dataspecs'] = []
             for ispec, spec in enumerate(dataspecs):
                 #Passing spec by referene
                 d = ChainMap({
-                    'dataset': all_names[ispec][k][0],
-                    'dataset_input': all_names[ispec][k][1],
+                    'dataset_input': all_names[ispec][k],
                 }, spec)
                 inner_spec_list.append(d)
             res.append(inres)
-        res.sort(key=lambda x: (x['process'], x['experiment_name'], x['dataset_name']))
+        res.sort(key=lambda x: (x['process'], x['dataset_name']))
         return res
 
     def produce_matched_positivity_from_dataspecs(self, dataspecs):
