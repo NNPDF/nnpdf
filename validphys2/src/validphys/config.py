@@ -190,11 +190,11 @@ class CoreConfig(configparser.Config):
 
         #We need to make theoryid available to parse the data input
         with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
-            _, data_input = self.parse_from_('fit', 'data_input', write=False)
+            _, data_input = self.parse_from_('fit', 'dataset_inputs', write=False)
 
 
 
-        return {'pdf': pdf, 'theoryid':thid, 'data_input': data_input}
+        return {'pdf': pdf, 'theoryid':thid, 'dataset_inputs': data_input}
 
     def produce_fitinputcontext(self, fit):
         """Like ``fitcontext`` but without setting the PDF"""
@@ -205,9 +205,9 @@ class CoreConfig(configparser.Config):
 
         #We need to make theoryid available to parse the data_input
         with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
-            _, data_input = self.parse_from_('fit', 'data_input', write=False)
+            _, data_input = self.parse_from_('fit', 'dataset_inputs', write=False)
 
-        return {'theoryid':thid, 'data_input': data_input}
+        return {'theoryid':thid, 'dataset_inputs': data_input}
 
     def produce_fitpdf(self, fit):
         """Like ``fitcontext`` only setting the PDF"""
@@ -528,10 +528,18 @@ class CoreConfig(configparser.Config):
             with self.set_context(ns=self._curr_ns.new_child(spec)):
                 try:
                     _, data_input = self.parse_from_(
-                    None, 'data_input', write=False)
-                except:
-                    _, experiments = self.parse_from_(
-                    None, 'experiments', write=False)
+                    None, 'dataset_inputs', write=False)
+                except ConfigError as e:
+                    try:
+                        _, experiments = self.parse_from_(
+                            None, 'experiments', write=False)
+                    except ConfigError:
+                        # raise first ConfigError for dataset_inputs
+                        raise e
+                    log.warning(
+                        "`experiments` key is deprecated, falling back to old"
+                        "behaviour. Consider using dataset_inputs"
+                    )
                     # make data input from experiments
                     dsets = []
                     dsinpts = []
@@ -541,7 +549,7 @@ class CoreConfig(configparser.Config):
                             dsinpts.append(dsinput)
                     data_input = dsinpts
 
-                names = {(process_lookup(ds.name), ds.name): dsin
+                names = {(process_lookup(dsin.name), dsin.name): dsin
                          for dsin in data_input}
 
                 all_names.append(names)
@@ -997,18 +1005,9 @@ class CoreConfig(configparser.Config):
 
         return filter_defaults
 
-    def parse_data_input(self, data_list: list):
-        """Parse the data_input key from the runcard, a flat list of
-        `dataset_input`"""
-        parsed_input = [
-            self.parse_dataset_input(ds_input) for ds_input in data_list
-        ]
-        #TODO: does this want to be a NSList?
-        return parsed_input
-
     def produce_data(
             self,
-            data_input=None,
+            dataset_inputs=None,
             experiments=None,
             *,
             theoryid,
@@ -1034,7 +1033,7 @@ class CoreConfig(configparser.Config):
         cds = [self.produce_commondata(
                 dataset_input=dsinp,
                 use_fitcommondata=use_fitcommondata,
-                fit=fit) for dsinp in data_input]
+                fit=fit) for dsinp in dataset_inputs]
         cutinps = [
             self.produce_cuts(
                 rules=rules,
@@ -1055,10 +1054,10 @@ class CoreConfig(configparser.Config):
                 fit=fit,
                 check_plotting=check_plotting,
                 use_fitcommondata=use_fitcommondata)
-            for (dsinp, cuts) in zip(data_input, cutinps)
+            for (dsinp, cuts) in zip(dataset_inputs, cutinps)
         ]
         #TODO: get rid of libnnpdf Experiment
-        return ExperimentSpec(name="data", datasets=datasets, dsinputs=data_input)
+        return ExperimentSpec(name="data", datasets=datasets, dsinputs=dataset_inputs)
 
 
 
