@@ -59,7 +59,7 @@ The following resources are found automatically:
 ```eval_rst
 Fits
     Fits (specified by the ``fit`` key) can be downloaded if they have previously
-    been uploaded with :ref:```vp-upoad --fit`` <upload>`. The corresponding PDF
+    been uploaded with :ref:```vp-uploadfit`` <upload>`. The corresponding PDF
     set will be installed as appropriate.
 
 PDF sets

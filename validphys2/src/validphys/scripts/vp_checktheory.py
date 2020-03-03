@@ -72,7 +72,6 @@ def main():
     group.add_argument(
         '--fit',
         type=str,
-        nargs=1,
         help=(
             "Name of a fit from which to parse `theoryid` from, instead of "
             "supplying theoryid on command line"
