@@ -71,7 +71,7 @@ def bin_generator(df_values, max_n=10):
     # Returns:
         - `new_vals`: list of tuples with (initial, end) value of the bin
     """
-    values = df_values.get_values()
+    values = df_values.values
     lval = len(values)
     if lval <= max_n:
         return values

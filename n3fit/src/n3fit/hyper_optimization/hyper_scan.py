@@ -194,7 +194,7 @@ class HyperScanner:
             )
         if nn_dict:
             self.architecture(
-                initializers=nn_dict.get("initializer"),
+                initializers=nn_dict.get("initializers"),
                 activations=nn_dict.get("activations"),
                 max_drop=nn_dict.get("max_drop"),
                 n_layers=nn_dict.get("n_layers"),

@@ -536,7 +536,7 @@ def main():
 
         # Now select the best one
         best_idx = dataframe.loss.idxmin()
-        best_trial_series = dataframe.ix[best_idx]
+        best_trial_series = dataframe.loc[best_idx]
         # Make into a dataframe and transpose or the plotting code will complain
         best_trial = best_trial_series.to_frame().T
 
