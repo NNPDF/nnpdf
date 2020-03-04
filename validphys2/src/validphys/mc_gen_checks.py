@@ -11,6 +11,7 @@ import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy.stats import moment as mom
 
 from NNPDF import Experiment, RandomGenerator
 from reportengine.table import table
@@ -92,6 +93,32 @@ def art_data_distribution(art_rep_generation, nreplica:int):
     ax.set_xlabel(r'$<D^{(r)}>/D^0$')
     ax.set_title(r'Artificial Data Distribution')
 
+    return fig
+
+@figure
+def art_data_moments(art_rep_generation, nreplica:int):
+    """
+    Returns the moments of the distributions per data point, as a histogram.
+    """
+    real_data, art_replicas, normart_replicas, art_data = art_rep_generation
+    
+    artrep_array = np.asarray(normart_replicas)
+    normart_data = art_data/real_data
+    
+    # Calculate moments
+    thirdmoments = []
+    for i, datapoint, normartdatapoint in zip(range(len(artrep_array.T)), artrep_array.T, normart_data):
+        thirdmoment = mom(datapoint, moment=3)
+        thirdmoments.append(thirdmoment)
+        
+    # Plot histogram of moments
+    fig, ax = plt.subplots()
+    ax.hist(thirdmoments, bins=50, histtype='step', stacked=True, fill=False)
+    
+    ax.set_ylabel("Data points")
+    ax.set_xlabel("3rd moment")
+    ax.set_title("3rd Moments of Data Point Replica Distributions")
+    
     return fig
 
 @figure
