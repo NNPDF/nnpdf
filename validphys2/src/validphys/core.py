@@ -578,10 +578,6 @@ class FitSpec(TupleComp):
         except (yaml.YAMLError, FileNotFoundError) as e:
             raise AsInputError(str(e)) from e
         d['pdf'] = {'id': self.name, 'label': self.label}
-        # keep backwards compatibility
-        old_experiments_input = d.get("experiments")
-        if old_experiments_input:
-            d["dataset_inputs"] = data_from_experiment(old_experiments_input)
         return d
 
     def __str__(self):

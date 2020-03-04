@@ -12,7 +12,7 @@ import numbers
 import copy
 import os
 
-from collections import ChainMap
+from collections import ChainMap, defaultdict
 from collections.abc import Mapping, Sequence
 
 from reportengine import configparser
@@ -188,13 +188,21 @@ class CoreConfig(configparser.Config):
         #TODO: parse we need multilevel from to do theoryid nicely
         thid = theory['theoryid']
 
-        #We need to make theoryid available to parse the data input
-        with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
-            _, data_input = self.parse_from_('fit', 'dataset_inputs', write=False)
+        # new fits have dataset_inputs, old fits have experiments
+        data_key = 'dataset_inputs'
+        try:
+            _, data_input = self.parse_from_('fit', data_key, write=False)
+        except ConfigError as e:
+            data_key = "experiments"
+            log.warning("old fit found, falling back to old behaviour")
+            # We need to make theoryid available if using experiments
+            try:
+                with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
+                    _, data_input = self.parse_from_('fit', data_key, write=False)
+            except ConfigError:
+                raise e
 
-
-
-        return {'pdf': pdf, 'theoryid':thid, 'dataset_inputs': data_input}
+        return {'pdf': pdf, 'theoryid':thid, data_key: data_input}
 
     def produce_fitinputcontext(self, fit):
         """Like ``fitcontext`` but without setting the PDF"""
@@ -509,7 +517,7 @@ class CoreConfig(configparser.Config):
 
         Compute the intersection of the dataset names, and for each element in
         the intersection construct a mapping with the follwing keys:
-            
+
             - process : A string with the common process name.
             - experiment_name : A string with the common experiment name.
             - dataset_name : A string with the common dataset name.
@@ -609,7 +617,6 @@ class CoreConfig(configparser.Config):
 
         This rule can be combined with ``matched_datasets_from_dataspecs``.
         """
-        
         self._check_dataspecs_type(dataspecs)
         if not dataspecs:
             return dataspecs
@@ -876,7 +883,7 @@ class CoreConfig(configparser.Config):
             metaexp = get_info(ds).experiment
             if metaexp in res:
                 res[metaexp].append(ds)
-             else:
+            else:
                 res[metaexp] = [ds]
         exps = []
         for exp in res:
@@ -1006,8 +1013,7 @@ class CoreConfig(configparser.Config):
 
     def produce_data(
             self,
-            dataset_inputs=None,
-            experiments=None,
+            data_input,
             *,
             theoryid,
             use_cuts,
@@ -1015,24 +1021,16 @@ class CoreConfig(configparser.Config):
             fit=None,
             check_plotting: bool = False,
             use_fitcommondata=False,
+            group_name="data",
         ):
         """A set of datasets where correlated systematics are taken
         into account
         """
         #TODO: extract the commondata and cuts and seperate from dataset
-        if experiments is not None:
-            dsets = []
-            dsinpts = []
-            for exp in experiments:
-                for ds, dsinput in zip(exp.datasets, exp.dsinputs):
-                    dsets.append(ds)
-                    dsinpts.append(dsinput)
-            return ExperimentSpec(name="data", datasets=dsets, dsinputs=dsinpts)
-                    
         cds = [self.produce_commondata(
                 dataset_input=dsinp,
                 use_fitcommondata=use_fitcommondata,
-                fit=fit) for dsinp in dataset_inputs]
+                fit=fit) for dsinp in data_input]
         cutinps = [
             self.produce_cuts(
                 rules=rules,
@@ -1053,10 +1051,42 @@ class CoreConfig(configparser.Config):
                 fit=fit,
                 check_plotting=check_plotting,
                 use_fitcommondata=use_fitcommondata)
-            for (dsinp, cuts) in zip(dataset_inputs, cutinps)
+            for (dsinp, cuts) in zip(data_input, cutinps)
         ]
         #TODO: get rid of libnnpdf Experiment
-        return ExperimentSpec(name="data", datasets=datasets, dsinputs=dataset_inputs)
+        return ExperimentSpec(name=group_name, datasets=datasets, dsinputs=data_input)
+
+    def produce_data_input(self, dataset_inputs: (list, type(None))=None, experiments=None):
+        if dataset_inputs:
+            return dataset_inputs
+        if experiments is not None:
+            return [dsinput for experiment in experiments for dsinput in experiment.dsinputs]
+        else:
+            raise ConfigError("must specify dataset_inputs in runcard")
+
+    def parse_metadata_group_key(self, key):
+        return key
+
+    def produce_groupby_experiment(self):
+        return {"metadata_group_key": "experiment"}
+
+    def produce_group_data_by_metadata(self, data_input, metadata_group_key):
+        res = defaultdict(list)
+        for dsinput in data_input:
+            cd = self.produce_commondata(dataset_input=dsinput)
+            try:
+                res[getattr(get_info(cd), metadata_group_key)].append(dsinput)
+            except AttributeError:
+                raise ConfigError(
+                    f"Unable to find key: {metadata_group_key} in {cd.name} "
+                    "PLOTTING file.",
+                    bad_item=metadata_group_key,
+                    alternatives=get_info(cd).__dict__,
+                )
+        return [
+            {"data_input": group, "group_name": name}
+            for name, group in res.items()
+        ]
 
 
 
