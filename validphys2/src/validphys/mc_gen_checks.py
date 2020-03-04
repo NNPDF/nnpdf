@@ -37,7 +37,6 @@ def art_rep_generation(experiments, nreplica:int, experiments_index):
         art_replicas = []
         normart_replicas = []
         real_data = real_exp.get_cv()
-        art_data = np.zeros(real_data.shape)
 
         # producing replicas
         for i in range(nreplica):
@@ -48,10 +47,7 @@ def art_rep_generation(experiments, nreplica:int, experiments_index):
             art_replicas.append(artrep)
             normart_replicas.append(normartrep)
 
-       # mean of the replicas
-        for j in range(nreplica):
-            art_data+=art_replicas[j]
-        art_data/=nreplica
+        art_data = np.mean(art_replicas, axis=0)
 
         return real_data, art_replicas, normart_replicas, art_data
 
@@ -101,24 +97,23 @@ def art_data_moments(art_rep_generation, nreplica:int):
     Returns the moments of the distributions per data point, as a histogram.
     """
     real_data, art_replicas, normart_replicas, art_data = art_rep_generation
-    
+
     artrep_array = np.asarray(normart_replicas)
     normart_data = art_data/real_data
-    
-    # Calculate moments
-    thirdmoments = []
-    for i, datapoint, normartdatapoint in zip(range(len(artrep_array.T)), artrep_array.T, normart_data):
-        thirdmoment = mom(datapoint, moment=3)
-        thirdmoments.append(thirdmoment)
-        
+
+
+    fig, axes = plt.subplots(nrows=3, figsize=(10,12))
     # Plot histogram of moments
-    fig, ax = plt.subplots()
-    ax.hist(thirdmoments, bins=50, histtype='step', stacked=True, fill=False)
-    
-    ax.set_ylabel("Data points")
-    ax.set_xlabel("3rd moment")
-    ax.set_title("3rd Moments of Data Point Replica Distributions")
-    
+    for momno, ax in zip(range(1,4), axes.flatten()):
+        # Calculate moments
+        moms = []
+        for i, datapoint, normartdatapoint in zip(range(len(artrep_array.T)), artrep_array.T, normart_data):
+            moment = mom(datapoint, moment=momno)
+            moms.append(moment)
+        ax.hist(moms, bins=50, histtype='step', stacked=True, fill=False)
+        ax.set_ylabel("Data points")
+        ax.set_xlabel(f"Moment {momno}")
+
     return fig
 
 @figure
@@ -141,7 +136,7 @@ def art_data_comparison(art_rep_generation, nreplica:int):
         handles, labels = ax.get_legend_handles_labels()
         handles.append(mpatches.Patch(color="none", label=extraString))
         ax.set_xlim(-0.5,2.5)
-        ax.set_ylim(0,50)
+        ax.set_ylim(0,0.5*nreplica)
         ax.vlines(1, ax.get_ylim()[0], ax.get_ylim()[1])
         ax.vlines(normartdatapoint, ax.get_ylim()[0], ax.get_ylim()[1], linestyle="-", color="darkorchid")
         ax.vlines(0, ax.get_ylim()[0], ax.get_ylim()[1], linestyle="-", color="dodgerblue")
