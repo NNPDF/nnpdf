@@ -526,7 +526,7 @@ class CoreConfig(configparser.Config):
                             dsets.append(ds)
                             dsinpts.append(dsinput)
                     data_input = dsinpts
-
+                #TODO: replace process_lookup with nnpdf31process from the plotting file
                 names = {(process_lookup(dsin.name), dsin.name): dsin
                          for dsin in data_input}
 
