@@ -587,6 +587,7 @@ class CoreConfig(configparser.Config):
 
         This rule can be combined with ``matched_datasets_from_dataspecs``.
         """
+        
         self._check_dataspecs_type(dataspecs)
         if not dataspecs:
             return dataspecs
@@ -845,18 +846,16 @@ class CoreConfig(configparser.Config):
         from reportengine.namespaces import NSList
 
         with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
-            _, experiments = self.parse_from_('fit', 'experiments', write=False)
+            _, dataset_inputs = self.parse_from_('fit', 'dataset_inputs', write=False)
 
-        flat = (ds for exp in experiments for ds in exp.datasets)
-        metaexps = [get_info(ds).experiment for ds in flat]
+        metaexps = [get_info(ds).experiment for ds in dataset_inputs]
         res = {}
-        for exp in experiments:
-            for dsinput, ds in zip(exp.dsinputs, exp.datasets):
-                metaexp = get_info(ds).experiment
-                if metaexp in res:
-                    res[metaexp].append(ds)
-                else:
-                    res[metaexp] = [ds]
+        for ds in dataset_inputs:
+            metaexp = get_info(ds).experiment
+            if metaexp in res:
+                res[metaexp].append(ds)
+             else:
+                res[metaexp] = [ds]
         exps = []
         for exp in res:
             exps.append(ExperimentSpec(exp, res[exp]))
