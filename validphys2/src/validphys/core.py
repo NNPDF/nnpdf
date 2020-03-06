@@ -461,7 +461,7 @@ class PositivitySetSpec(TupleComp):
 
 
 #We allow to expand the experiment as a list of datasets
-class ExperimentSpec(TupleComp, namespaces.NSList):
+class DataGroupSpec(TupleComp, namespaces.NSList):
 
     def __init__(self, name, datasets, dsinputs=None):
         #This needs to be hashable
