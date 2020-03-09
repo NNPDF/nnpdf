@@ -4,8 +4,9 @@
     Extension of the backend Model class containing some wrappers in order to absorb other
     backend-dependent calls
 """
-from keras.models import Model, Sequential
-import keras.optimizers as Kopt
+
+from tensorflow.keras.models import Model, Sequential
+from tensorflow.keras import optimizers as Kopt
 
 from n3fit.backends.keras_backend.operations import numpy_to_input
 

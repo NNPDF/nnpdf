@@ -9,13 +9,13 @@
     language (hence the mapping `c_to_py_fun`)
 """
 
-from keras.layers import add as keras_add
-from keras.layers import subtract as keras_subtract
-from keras.layers import Lambda as keras_Lambda
-from keras.layers import multiply as keras_multiply
+from tensorflow.keras.layers import add as keras_add
+from tensorflow.keras.layers import subtract as keras_subtract
+from tensorflow.keras.layers import Lambda as keras_Lambda
+from tensorflow.keras.layers import multiply as keras_multiply
 
-from keras.layers import Input
-from keras import backend as K
+from tensorflow.keras.layers import Input
+from tensorflow.keras import backend as K
 
 import numpy as np
 

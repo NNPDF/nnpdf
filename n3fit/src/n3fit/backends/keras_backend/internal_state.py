@@ -24,11 +24,11 @@ def set_initial_state(seed=13):
     rn.seed(use_seed)
 
     # Clear the state of keras in case anyone used it before
-    K.clear_session()
-    K.set_floatx('float64')
-    tf.config.threading.set_inter_op_parallelism_threads(1)
-    tf.config.threading.set_intra_op_parallelism_threads(1)
-    tf.random.set_seed(use_seed)
+#     K.clear_session()
+#     K.set_floatx('float64')
+#     tf.config.threading.set_inter_op_parallelism_threads(1)
+#     tf.config.threading.set_intra_op_parallelism_threads(1)
+#     tf.random.set_seed(use_seed)
 
     return 0
 
@@ -42,6 +42,6 @@ def clear_backend_state():
     """
     print("Clearing session")
 
-    K.clear_session()
-    tf.config.threading.set_inter_op_parallelism_threads(8)
-    tf.config.threading.set_intra_op_parallelism_threads(8)
+#     K.clear_session()
+#     tf.config.threading.set_inter_op_parallelism_threads(8)
+#     tf.config.threading.set_intra_op_parallelism_threads(8)
