@@ -42,7 +42,8 @@ providers = [
              'validphys.theorycovariance.tests',
              'validphys.replica_selector',
              'validphys.MCgen_checks',
-             'validphys.closure',
+             # currently broken - will fix in NNPDF/nnpdf#511
+             # 'validphys.closure',
              'validphys.theoryinfo',
              'reportengine.report'
             ]

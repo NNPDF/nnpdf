@@ -26,10 +26,10 @@ from validphys.checks import (
     check_speclabels_different,
     check_two_dataspecs,
     check_dataset_cuts_match_theorycovmat,
-    check_experiment_cuts_match_theorycovmat,
+    check_data_cuts_match_theorycovmat,
     check_norm_threshold,
 )
-from validphys.core import DataSetSpec, PDF, ExperimentSpec
+from validphys.core import DataSetSpec, PDF, DataGroupSpec
 from validphys.calcutils import (
     all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values,
     get_df_block, regularize_covmat)
@@ -148,6 +148,39 @@ class PositivityResult(StatsResult):
     def rawdata(self):
         return self.stats.data
 
+#TODO: finish deprecating all dependencies on this index largely in theorycovmat module
+groups_data = collect("data", ("group_dataset_inputs_by_metadata",))
+
+def groups_index(groups_data):
+    """Return a pandas.MultiIndex with levels for group, dataset and point
+    respectively, the group is determined by a key in the dataset metadata, and
+    controlled by `metadata_group` key in the runcard.
+
+    Example
+    -------
+    TODO: add example
+
+    """
+    records = []
+    for group in groups_data:
+        for dataset in group.datasets:
+            if dataset.cuts:
+                data_id = dataset.cuts.load()
+            else:
+                #No cuts - use all data
+                data_id = np.arange(dataset.commondata.ndata, dtype=int)
+            for idat in data_id:
+                records.append(
+                    dict(
+                        [('group', str(group.name)),
+                         ('dataset', str(dataset.name)),
+                         ('id', idat),]))
+
+    columns = ['group', 'dataset', 'id']
+    df = pd.DataFrame(records, columns=columns)
+    df.set_index(columns, inplace=True)
+    return df.index
+
 def experiments_index(experiments):
     """Return a pandas.MultiIndex with levels for
        experiment, dataset and point respectively"""
@@ -223,11 +256,11 @@ def experiment_result_table_68cl(experiment_result_table_no_table: pd.DataFrame,
     res = pd.concat([df.iloc[:, :2], df_cl], axis=1)
     return res
 
-experiments_covariance_matrix = collect('experiment_covariance_matrix', ('experiments',))
+experiments_covmat = collect('experiment_covmat', ('experiments',))
 
 
 def experiments_covmat_no_table(
-        experiments, experiments_index, experiments_covariance_matrix):
+        experiments, experiments_index, experiments_covmat):
     """Export the covariance matrix for the experiments. It exports the full
     (symmetric) matrix, with the 3 first rows and columns being:
 
@@ -240,7 +273,7 @@ def experiments_covmat_no_table(
     data = np.zeros((len(experiments_index),len(experiments_index)))
     df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
     for experiment, experiment_covmat in zip(
-            experiments, experiments_covariance_matrix):
+            experiments, experiments_covmat):
         name = experiment.name
         df.loc[[name],[name]] = experiment_covmat
     return df
@@ -251,7 +284,7 @@ def experiments_covmat(experiments_covmat_no_table):
     return experiments_covmat_no_table
 
 exps_sqrt_covmat = collect(
-    'experiment_sqrt_covariance_matrix',
+    'experiment_sqrt_covmat',
     ('experiments',)
 )
 
@@ -273,14 +306,14 @@ def experiments_sqrtcovmat(
 
 @table
 def experiments_invcovmat(
-        experiments, experiments_index, experiments_covariance_matrix):
+        experiments, experiments_index, experiments_covmat):
     """Compute and export the inverse covariance matrix.
     Note that this inverts the matrices with the LU method which is
     suboptimal."""
     data = np.zeros((len(experiments_index),len(experiments_index)))
     df = pd.DataFrame(data, index=experiments_index, columns=experiments_index)
     for experiment, experiment_covmat in zip(
-            experiments, experiments_covariance_matrix):
+            experiments, experiments_covmat):
         name = experiment.name
         #Improve this inversion if this method tuns out to be important
         invcov = la.inv(experiment_covmat)
@@ -333,7 +366,7 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
         #Since we are going to modify the experiments, we copy them
         #(and work on the copies) to avoid all
         #sorts of weirdness with other providers. We don't want this to interact
-        #with ExperimentSpec at all, because it could do funny things with the
+        #with DataGroupSpec at all, because it could do funny things with the
         #cache when calling load(). We need to copy this yet again, for each
         # of the noisy replicas.
         closure_exp = Experiment(exp.load())
@@ -368,7 +401,7 @@ def closure_pseudodata_replicas(experiments, pdf, nclosure:int,
 
 
 @check_dataset_cuts_match_theorycovmat
-def covariance_matrix(
+def covmat(
     dataset:DataSetSpec,
     fitthcovmat,
     t0set:(PDF, type(None)) = None,
@@ -417,7 +450,7 @@ def covariance_matrix(
 
     Returns
     -------
-    covariance_matrix : array
+    covmat : array
         a covariance matrix as a numpy array
 
     Examples
@@ -429,7 +462,7 @@ def covariance_matrix(
             'theoryid': 52,
             'use_cuts': 'no_cuts'
         }
-    >>> cov = API.covariance_matrix(**inp)
+    >>> cov = API.covmat(**inp)
     TODO: complete example
     """
     loaded_data = dataset.load()
@@ -451,23 +484,20 @@ def covariance_matrix(
         )
     return covmat
 
-datasets_covariance_matrix = collect(
-    'covariance_matrix',
-    ('experiments', 'experiment',)
-)
+datasets_covmat = collect('covmat', ('data',))
 
-def sqrt_covariance_matrix(covariance_matrix: np.array):
-    """Returns the lower-triangular Cholesky factor `covariance_matrix`
+def sqrt_covmat(covmat: np.array):
+    """Returns the lower-triangular Cholesky factor of `covmat`
 
     Parameters
     ----------
-    covariance_matrix: array
+    covmat: array
         a positive definite covariance matrix
 
     Returns
     -------
-    sqrt_covariance_matrix : array
-        lower triangular Cholesky factor of covariance_matrix
+    sqrt_covmat : array
+        lower triangular Cholesky factor of covmat
 
     Notes
     -----
@@ -477,27 +507,27 @@ def sqrt_covariance_matrix(covariance_matrix: np.array):
     --------
 
     >>> import numpy as np
-    >>> from validphys.results import sqrt_covariance_matrix
+    >>> from validphys.results import sqrt_covmat
     >>> a = np.array([[1, 0.5], [0.5, 1]])
-    >>> sqrt_covariance_matrix(a)
+    >>> sqrt_covmat(a)
     array([[1.  , 0.    ],
         [0.5    , 0.8660254]])
     """
-    return la.cholesky(covariance_matrix, lower=True)
+    return la.cholesky(covmat, lower=True)
 
-@check_experiment_cuts_match_theorycovmat
-def experiment_covariance_matrix(
-        experiment: ExperimentSpec,
+@check_data_cuts_match_theorycovmat
+def dataset_inputs_covmat(
+        data: DataGroupSpec,
         fitthcovmat,
         t0set:(PDF, type(None)) = None,
         norm_threshold=None):
-    """Like `covariance_matrix` except for an experiment"""
-    loaded_data = experiment.load()
+    """Like `covmat` except for a group of datasets"""
+    loaded_data = data.load()
 
     if t0set:
         #Copy data to avoid chaos
         loaded_data = type(loaded_data)(loaded_data)
-        log.debug("Setting T0 predictions for %s" % experiment)
+        log.debug("Setting T0 predictions for %s" % data)
         loaded_data.SetT0(t0set.load_t0())
 
     covmat = loaded_data.get_covmat()
@@ -505,7 +535,7 @@ def experiment_covariance_matrix(
     if fitthcovmat:
         loaded_thcov = fitthcovmat.load()
         ds_names = loaded_thcov.index.get_level_values(1)
-        indices = np.in1d(ds_names, [ds.name for ds in experiment.datasets]).nonzero()[0]
+        indices = np.in1d(ds_names, [ds.name for ds in data.datasets]).nonzero()[0]
         covmat += loaded_thcov.iloc[indices, indices].values
     if norm_threshold is not None:
         covmat = regularize_covmat(
@@ -514,15 +544,15 @@ def experiment_covariance_matrix(
         )
     return covmat
 
-def experiment_sqrt_covariance_matrix(experiment_covariance_matrix):
-    """Like `sqrt_covariance_matrix` but for an experiment"""
-    return sqrt_covariance_matrix(experiment_covariance_matrix)
+def dataset_inputs_sqrt_covmat(dataset_inputs_covmat):
+    """Like `sqrt_covmat` but for an group of datasets"""
+    return sqrt_covmat(dataset_inputs_covmat)
 
 def results(
         dataset:(DataSetSpec),
         pdf:PDF,
-        covariance_matrix,
-        sqrt_covariance_matrix
+        covmat,
+        sqrt_covmat
     ):
     """Tuple of data and theory results for a single pdf. The data will have an associated
     covariance matrix, which can include a contribution from the theory covariance matrix which
@@ -530,33 +560,33 @@ def results(
     where available, however this behaviour can be modified with the flag `use_theorycovmat`.
 
     The theory is specified as part of the dataset.
-    An experiment is also allowed.
+    A group of datasets is also allowed.
     (as a result of the C++ code layout)."""
     data = dataset.load()
-    return (DataResult(data, covariance_matrix, sqrt_covariance_matrix),
+    return (DataResult(data, covmat, sqrt_covmat),
             ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data))
 
-def experiment_results(
-        experiment,
+def dataset_inputs_results(
+        data,
         pdf:PDF,
-        experiment_covariance_matrix,
-        experiment_sqrt_covariance_matrix):
-    """Like `results` but for a whole experiment"""
+        dataset_inputs_covmat,
+        dataset_inputs_sqrt_covmat):
+    """Like `results` but for a group of datasets"""
     return results(
-        experiment,
+        data,
         pdf,
-        experiment_covariance_matrix,
-        experiment_sqrt_covariance_matrix
+        dataset_inputs_covmat,
+        dataset_inputs_sqrt_covmat
         )
 
 #It's better to duplicate a few lines than to complicate the logic of
 #``results`` to support this.
 #TODO: The above comment doesn't make sense after adding T0. Deprecate this
 def pdf_results(
-        dataset:(DataSetSpec,  ExperimentSpec),
+        dataset:(DataSetSpec,  DataGroupSpec),
         pdfs:Sequence,
-        covariance_matrix,
-        sqrt_covariance_matrix):
+        covmat,
+        sqrt_covmat):
     """Return a list of results, the first for the data and the rest for
     each of the PDFs."""
 
@@ -568,13 +598,13 @@ def pdf_results(
         th_results.append(th_result)
 
 
-    return (DataResult(data, covariance_matrix, sqrt_covariance_matrix), *th_results)
+    return (DataResult(data, covmat, sqrt_covmat), *th_results)
 
 @require_one('pdfs', 'pdf')
 @remove_outer('pdfs', 'pdf')
-def one_or_more_results(dataset:(DataSetSpec, ExperimentSpec),
-                        covariance_matrix,
-                        sqrt_covariance_matrix,
+def one_or_more_results(dataset:(DataSetSpec, DataGroupSpec),
+                        covmat,
+                        sqrt_covmat,
                         pdfs:(type(None), Sequence)=None,
                         pdf:(type(None), PDF)=None):
     """Generate a list of results, where the first element is the data values,
@@ -582,9 +612,9 @@ def one_or_more_results(dataset:(DataSetSpec, ExperimentSpec),
     Which of the two is selected intelligently depending on the namespace,
     when executing as an action."""
     if pdf:
-        return results(dataset, pdf, covariance_matrix, sqrt_covariance_matrix)
+        return results(dataset, pdf, covmat, sqrt_covmat)
     else:
-        return pdf_results(dataset, pdfs, covariance_matrix, sqrt_covariance_matrix)
+        return pdf_results(dataset, pdfs, covmat, sqrt_covmat)
     raise ValueError("Either 'pdf' or 'pdfs' is required")
 
 
@@ -603,9 +633,9 @@ def abs_chi2_data(results):
                     central_result, len(data_result))
 
 
-def abs_chi2_data_experiment(experiment_results):
-    """Like `abs_chi2_data` but for a whole experiment"""
-    return abs_chi2_data(experiment_results)
+def dataset_inputs_abs_chi2_data(dataset_inputs_results):
+    """Like `abs_chi2_data` but for a group of inputs"""
+    return abs_chi2_data(dataset_inputs_results)
 
 def phi_data(abs_chi2_data):
     """Calculate phi using values returned by `abs_chi2_data`.
@@ -618,20 +648,22 @@ def phi_data(abs_chi2_data):
     alldata, central, npoints = abs_chi2_data
     return (np.sqrt((alldata.data.mean() - central)/npoints), npoints)
 
-def phi_data_experiment(abs_chi2_data_experiment):
-    """Like `phi_data` but for whole experiment"""
-    return phi_data(abs_chi2_data_experiment)
+def dataset_inputs_phi_data(dataset_inputs_abs_chi2_data):
+    """Like `phi_data` but for group of datasets"""
+    return phi_data(dataset_inputs_abs_chi2_data)
 
 @check_pdf_is_montecarlo
-def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples=500):
-    """Takes the data result and theory prediction for a given experiment and
+def dataset_inputs_bootstrap_phi_data(
+    dataset_inputs_results, bootstrap_samples=500
+):
+    """Takes the data result and theory prediction given `dataset_inputs` and
     then returns a bootstrap distribution of phi.
     By default `bootstrap_samples` is set to a sensible value (500). However
     a different value can be specified in the runcard.
 
     For more information on how phi is calculated see `phi_data`
     """
-    dt, th = experiment_results
+    dt, th = dataset_inputs_results
     diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
     phi_resample = bootstrap_values(diff, bootstrap_samples,
                                     apply_func=(lambda x, y: calc_phi(y, x)),
@@ -639,20 +671,21 @@ def bootstrap_phi_data_experiment(experiment_results, bootstrap_samples=500):
     return phi_resample
 
 @check_pdf_is_montecarlo
-def bootstrap_chi2_central_experiment(experiment_results, bootstrap_samples=500,
+def dataset_inputs_bootstrap_chi2_central(dataset_inputs_results, bootstrap_samples=500,
                                       boot_seed=123):
-    """Takes the data result and theory prediction for a given experiment and
+    """Takes the data result and theory prediction given dataset_inputs and
     then returns a bootstrap distribution of central chi2.
     By default `bootstrap_samples` is set to a sensible value (500). However
     a different value can be specified in the runcard.
     """
-    dt, th = experiment_results
+    dt, th = dataset_inputs_results
     diff = np.array(th._rawdata - dt.central_value[:, np.newaxis])
     cchi2 = lambda x, y: calc_chi2(y, x.mean(axis=1))
     chi2_central_resample = bootstrap_values(diff, bootstrap_samples, boot_seed=boot_seed,
                                              apply_func=(cchi2), args=[dt.sqrtcovmat])
     return chi2_central_resample
 
+#TODO: deprecate this function?
 def chi2_breakdown_by_dataset(experiment_results, experiment, t0set,
                               prepend_total:bool=True,
                               datasets_sqrtcovmat=None) -> dict:
@@ -791,10 +824,13 @@ def dataset_chi2_table(chi2_stats, dataset):
     """Show the chi² estimators for a given dataset"""
     return pd.DataFrame(chi2_stats, index=[dataset.name])
 
-fits_experiment_chi2_data = collect(
-    'experiments_chi2', ('fits', 'fit_context_groupby_experiment',))
-fits_experiments = collect(
-    'experiments', ('fits', 'fit_context_groupby_experiment',))
+groups_chi2 = collect("dataset_inputs_chi2_data", ("group_dataset_inputs_by_metadata"))
+
+fits_groups_chi2_data = collect("groups_chi2", ("fits", "fitcontext"))
+fits_groups = collect(
+    "data", ("fits", "fitcontext", "group_dataset_inputs_by_metadata")
+)
+
 
 def fit_name_with_covmat_label(fit, fitthcovmat):
     """If theory covariance matrix is being used to calculate statistical estimators for the `fit`
@@ -813,146 +849,180 @@ fits_name_with_covmat_label = collect('fit_name_with_covmat_label', ('fits',))
 #TODO: Possibly get rid of the per_point_data parameter and have separate
 #actions for absolute and relative tables.
 @table
-def fits_experiments_chi2_table(fits_name_with_covmat_label, fits_experiments,
-                                fits_experiment_chi2_data, per_point_data:bool=True):
-    """A table with the chi2 for each included experiment in the fits,
-    computed with the theory corresponding to each fit.  If points_per_data is
-    True, the chi² will be shown divided by ndata.
-    Otherwise they will be absolute."""
-    dfs = []
-    cols = ('ndata', r'$\chi^2/ndata$') if per_point_data else ('ndata', r'$\chi^2$')
-    for label, experiments, exps_chi2 in zip(
-            fits_name_with_covmat_label, fits_experiments, fits_experiment_chi2_data):
-        records = []
-        for experiment, exp_chi2 in zip(experiments, exps_chi2):
-            mean_chi2 = exp_chi2.central_result.mean()
-            npoints = exp_chi2.ndata
-            records.append(dict(
-                experiment=str(experiment),
-                npoints=npoints,
-                mean_chi2 = mean_chi2
+def fits_groups_chi2_table(
+    fits_name_with_covmat_label,
+    fits_groups,
+    fits_groups_chi2_data,
+    per_point_data: bool = True,
+):
+    """A table with the chi2 computed with the theory corresponding to each fit
+    for all datasets in the fit, grouped according to a key in the metadata, the
+    grouping can be controlled with `metadata_group`.
 
-            ))
-        df = pd.DataFrame.from_records(records,
-                 columns=('experiment', 'npoints', 'mean_chi2'),
-                 index = ('experiment', )
-             )
-        if per_point_data:
-            df['mean_chi2'] /= df['npoints']
-        df.columns = pd.MultiIndex.from_product(([label], cols))
-        dfs.append(df)
-    res =  pd.concat(dfs, axis=1)
-    return res
+    If points_per_data is True, the chi² will be shown divided by ndata.
+    Otherwise chi² values will be absolute.
 
-fits_experiments_phi = collect(
-    'experiments_phi', ('fits', 'fit_context_groupby_experiment'))
-
-@table
-def fits_experiments_phi_table(fits_name_with_covmat_label, fits_experiments, fits_experiments_phi):
-    """For every fit, returns phi and number of data points per experiment, where experiment is
-    a collection of datasets grouped according to the experiment key in the PLOTTING info file
     """
     dfs = []
-    cols = ('ndata', r'$\phi$')
-    for label, experiments, exps_phi in zip(
-            fits_name_with_covmat_label, fits_experiments, fits_experiments_phi):
+    cols = ("ndata", r"$\chi^2/ndata$") if per_point_data else ("ndata", r"$\chi^2$")
+    for label, groups, groups_chi2 in zip(
+        fits_name_with_covmat_label, fits_groups, fits_groups_chi2_data
+    ):
         records = []
-        for experiment, (exp_phi, npoints) in zip(experiments, exps_phi):
-            npoints = npoints
-            records.append(dict(
-                experiment=str(experiment),
-                npoints=npoints,
-                phi = exp_phi
-
-            ))
-        df = pd.DataFrame.from_records(records,
-                 columns=('experiment', 'npoints', 'phi'),
-                 index = ('experiment', )
-             )
+        for group, group_chi2 in zip(groups, groups_chi2):
+            mean_chi2 = group_chi2.central_result.mean()
+            npoints = group_chi2.ndata
+            records.append(dict(group=str(group), npoints=npoints, mean_chi2=mean_chi2))
+        df = pd.DataFrame.from_records(
+            records, columns=("group", "npoints", "mean_chi2"), index=("group",)
+        )
+        if per_point_data:
+            df["mean_chi2"] /= df["npoints"]
         df.columns = pd.MultiIndex.from_product(([label], cols))
         dfs.append(df)
-    res =  pd.concat(dfs, axis=1)
+    res = pd.concat(dfs, axis=1)
     return res
+
+groups_phi = collect("dataset_inputs_phi_data", ("group_dataset_inputs_by_metadata",))
+fits_groups_phi = collect("groups_phi", ("fits", "fitcontext"))
+
+
+@table
+def fits_groups_phi_table(
+    fits_name_with_covmat_label, fits_groups, fits_groups_phi
+):
+    """For every fit, returns phi and number of data points for each group of
+    datasets, which are grouped according to a key in the metadata. The behaviour
+    of the grouping can be controlled with `metadata_group` runcard key.
+
+    """
+    dfs = []
+    cols = ("ndata", r"$\phi$")
+    for label, groups, groups_phi in zip(
+        fits_name_with_covmat_label, fits_groups, fits_groups_phi
+    ):
+        records = []
+        for group, (group_phi, npoints) in zip(groups, groups_phi):
+            records.append(dict(experiment=str(group), npoints=npoints, phi=group_phi))
+        df = pd.DataFrame.from_records(
+            records, columns=("group", "npoints", "phi"), index=("group",)
+        )
+        df.columns = pd.MultiIndex.from_product(([label], cols))
+        dfs.append(df)
+    res = pd.concat(dfs, axis=1)
+    return res
+
+dataspecs_groups = collect("data", ("dataspecs", "group_dataset_inputs_by_metadata"))
+dataspecs_groups_chi2_data = collect("groups_chi2", ("dataspecs",))
+
 
 @table
 @check_speclabels_different
-def dataspecs_experiments_chi2_table(dataspecs_speclabel, dataspecs_experiments,
-                                     dataspecs_experiment_chi2_data,
-                                     per_point_data:bool=True):
-    """Same as fits_experiments_chi2_table but for an arbitrary list of dataspecs."""
-    return fits_experiments_chi2_table(dataspecs_speclabel,
-                                       dataspecs_experiments,
-                                       dataspecs_experiment_chi2_data,
-                                       per_point_data=per_point_data)
+def dataspecs_groups_chi2_table(
+    dataspecs_speclabel,
+    dataspecs_groups,
+    dataspecs_groups_chi2_data,
+    per_point_data: bool = True,
+):
+    """Same as fits_groups_chi2_table but for an arbitrary list of dataspecs."""
+    return fits_groups_chi2_table(
+        dataspecs_speclabel,
+        dataspecs_groups,
+        dataspecs_groups_chi2_data,
+        per_point_data=per_point_data,
+    )
+
+# we need this to reorder the datasets correctly, a potentially more satisfactory
+# method could be to make a datasets chi2 table which gets collected and concatenated
+groups_datasets_chi2_data = collect(
+    "abs_chi2_data", ("group_dataset_inputs_by_metadata", "data")
+)
+fits_datasets_chi2_data = collect("groups_datasets_chi2_data", ("fits", "fitcontext"))
 
 
 @table
-def fits_datasets_chi2_table(fits_name_with_covmat_label, fits_experiments, fits_chi2_data,
-                             per_point_data:bool=True):
+def fits_datasets_chi2_table(
+    fits_name_with_covmat_label,
+    fits_groups,
+    fits_datasets_chi2_data,
+    per_point_data: bool = True,
+):
     """A table with the chi2 for each included dataset in the fits, computed
     with the theory corresponding to the fit. The result are indexed in two
     levels by experiment and dataset, where experiment is the grouping of datasets according to the
     `experiment` key in the PLOTTING info file.  If points_per_data is True, the chi² will be shown
     divided by ndata. Otherwise they will be absolute."""
 
-    chi2_it = iter(fits_chi2_data)
-
-    cols = ('ndata', r'$\chi^2/ndata$') if per_point_data else ('ndata', r'$\chi^2$')
+    cols = ("ndata", r"$\chi^2/ndata$") if per_point_data else ("ndata", r"$\chi^2$")
 
     dfs = []
-    for label, experiments in zip(fits_name_with_covmat_label, fits_experiments):
+    for label, groups, groups_dsets_chi2 in zip(
+        fits_name_with_covmat_label, fits_groups, fits_datasets_chi2_data
+    ):
         records = []
-        for experiment in experiments:
-            for dataset, chi2 in zip(experiment.datasets, chi2_it):
+        for group, dsets_chi2 in zip(groups, groups_dsets_chi2):
+            for dataset, chi2 in zip(group.datasets, dsets_chi2):
                 ndata = chi2.ndata
 
-                records.append(dict(
-                    experiment=str(experiment),
-                    dataset=str(dataset),
-                    npoints=ndata,
-                    mean_chi2 = chi2.central_result.mean()
-                ))
+                records.append(
+                    dict(
+                        group=str(group),
+                        dataset=str(dataset),
+                        npoints=ndata,
+                        mean_chi2=chi2.central_result.mean(),
+                    )
+                )
 
-
-        df = pd.DataFrame.from_records(records,
-                 columns=('experiment', 'dataset', 'npoints', 'mean_chi2'),
-                 index = ('experiment', 'dataset')
-             )
+        df = pd.DataFrame.from_records(
+            records,
+            columns=("group", "dataset", "npoints", "mean_chi2"),
+            index=("group", "dataset"),
+        )
         if per_point_data:
-            df['mean_chi2'] /= df['npoints']
+            df["mean_chi2"] /= df["npoints"]
         df.columns = pd.MultiIndex.from_product(([label], cols))
         dfs.append(df)
     return pd.concat(dfs, axis=1)
 
+dataspecs_datasets_chi2_data = collect("groups_datasets_chi2_data", ("dataspecs",))
+
+
 @table
 @check_speclabels_different
-def dataspecs_datasets_chi2_table(dataspecs_speclabel, dataspecs_experiments,
-                                  dataspecs_chi2_data, per_point_data:bool=True):
+def dataspecs_datasets_chi2_table(
+    dataspecs_speclabel,
+    dataspecs_groups,
+    dataspecs_datasets_chi2_data,
+    per_point_data: bool = True,
+):
     """Same as fits_datasets_chi2_table but for arbitrary dataspecs."""
-    return fits_datasets_chi2_table(dataspecs_speclabel, dataspecs_experiments,
-                                    dataspecs_chi2_data, per_point_data=per_point_data)
+    return fits_datasets_chi2_table(
+        dataspecs_speclabel,
+        dataspecs_groups,
+        dataspecs_datasets_chi2_data,
+        per_point_data=per_point_data,
+    )
 
 
-#NOTE: This will need to be changed to work with `data` when that gets added
-fits_total_chi2_data = collect('total_experiments_chi2data', ('fits', 'fitcontext'))
-dataspecs_total_chi2_data = collect('total_experiments_chi2data', ('dataspecs',))
+fits_total_chi2_data = collect('dataset_inputs_abs_chi2_data', ('fits', 'fitcontext'))
+dataspecs_total_chi2_data = collect('dataset_inputs_abs_chi2_data', ('dataspecs',))
 
 #TODO: Decide what to do with the horrible totals code.
 @table
 def fits_chi2_table(
         fits_total_chi2_data,
         fits_datasets_chi2_table,
-        fits_experiments_chi2_table,
+        fits_groups_chi2_table,
         show_total:bool=False):
     """Show the chi² of each and number of points of each dataset and experiment
     of each fit, where experiment is a group of datasets according to the `experiment` key in
     the PLOTTING info file, computed with the theory corresponding to the fit. Dataset that are not
     included in some fit appear as `NaN`
     """
-    lvs = fits_experiments_chi2_table.index
+    lvs = fits_groups_chi2_table.index
     #The explicit call to list is because pandas gets confused otherwise
     expanded_index = pd.MultiIndex.from_product((list(lvs), ["Total"]))
-    edf = fits_experiments_chi2_table.set_index(expanded_index)
+    edf = fits_groups_chi2_table.set_index(expanded_index)
     ddf = fits_datasets_chi2_table
     dfs = []
     #TODO: Better way to do the merge preserving the order?
@@ -968,7 +1038,7 @@ def fits_chi2_table(
         row[::2] = total_points
         row[1::2] = total_chi
         df = pd.DataFrame(np.atleast_2d(row),
-                          columns=fits_experiments_chi2_table.columns,
+                          columns=fits_groups_chi2_table.columns,
                           index=['Total'])
         dfs.append(df)
         keys = [*lvs, 'Total']
@@ -982,14 +1052,14 @@ def fits_chi2_table(
 def dataspecs_chi2_table(
     dataspecs_total_chi2_data,
     dataspecs_datasets_chi2_table,
-    dataspecs_experiments_chi2_table,
+    dataspecs_groups_chi2_table,
     show_total: bool = False,
 ):
     """Same as fits_chi2_table but for an arbitrary list of dataspecs"""
     return fits_chi2_table(
         dataspecs_total_chi2_data,
         dataspecs_datasets_chi2_table,
-        dataspecs_experiments_chi2_table,
+        dataspecs_groups_chi2_table,
         show_total,
     )
 
@@ -1006,53 +1076,44 @@ def dataspecs_chi2_differences_table(dataspecs, dataspecs_chi2_table):
     return df
 
 
-def total_experiments_chi2data(pdf: PDF, experiments_chi2):
-    """Return the central and member chi² values for the sum
-    over all experiments. Values are not normalised to ndat.
+def dataset_inputs_chi2_per_point_data(dataset_inputs_abs_chi2_data):
+    """Return the total chi²/ndata for all data, specified by dataset_inputs.
+    Includes full all known contributions across datasets.
     """
-    ndata = 0
-    central_chi2 = 0
-    nmembers = len(experiments_chi2[0].replica_result.error_members())  # ugh
-    member_chi2  = np.zeros(nmembers)
+    return (
+        dataset_inputs_abs_chi2_data.central_result / dataset_inputs_abs_chi2_data.ndata
+    )
 
-    for cd in experiments_chi2:
-        # not sure why the transpose or [0] are needed here
-        member_chi2  += cd.replica_result.error_members().T[0]
-        central_chi2 += cd.central_result
-        ndata += cd.ndata
-    return Chi2Data(pdf.stats_class(member_chi2), central_chi2, ndata)
-
-
-def total_experiments_chi2(total_experiments_chi2data):
-    """Return the total chi²/ndata for the combination of all
-    experiments."""
-    return total_experiments_chi2data.central_result/total_experiments_chi2data.ndata
 
 @table
-@check_not_empty('experiments')
-def perreplica_chi2_table(experiments, experiments_chi2):
-    """Chi² per point for each replica for each experiment.
+@check_not_empty("groups_data")
+def perreplica_chi2_table(groups_data, groups_chi2, dataset_inputs_abs_chi2_data):
+    """Chi² per point for each replica for each group.
     Also outputs the total chi² per replica.
-    The columns come in two levels: The first is the name of the experiment,
+    The columns come in two levels: The first is the name of the group,
     and the second is the number of points."""
 
-    chs = experiments_chi2
-    total_chis = np.zeros((len(experiments) + 1, 1+ len(chs[0].replica_result.error_members())))
+    chs = groups_chi2
+    total_chis = np.zeros(
+        (len(groups_data) + 1, 1 + len(chs[0].replica_result.error_members()))
+    )
     ls = []
-    for i,ch in enumerate(chs, 1):
+    for i, ch in enumerate(chs, 1):
         th, central, l = ch
-        total_chis[i]= [central, *th.error_members()]
+        total_chis[i] = [central, *th.error_members()]
         ls.append(l)
-    #total_chis/=total_l
-    total_chis[0] = np.sum(total_chis[1:,:], axis=0)
-    total_n = np.sum(ls)
-    total_chis[0]/= total_n
-    total_chis[1:,:]/= np.array(ls)[:, np.newaxis]
+
+    total_chis[0] = dataset_inputs_abs_chi2_data.replica_result
+    total_n = dataset_inputs_abs_chi2_data.ndata
+    total_chis[0] /= total_n
+    total_chis[1:, :] /= np.array(ls)[:, np.newaxis]
 
     columns = pd.MultiIndex.from_arrays(
-            (['Total', *[str(exp) for exp in experiments]],
-             [total_n, *ls]), names=['name', 'npoints'])
-    return pd.DataFrame(total_chis.T, columns =columns)
+        (["Total", *[str(exp) for exp in groups_data]], [total_n, *ls]),
+        names=["name", "npoints"],
+    )
+    return pd.DataFrame(total_chis.T, columns=columns)
+
 
 @table
 def theory_description(theoryid):
@@ -1074,7 +1135,7 @@ def experiments_central_values(experiment_result_table):
     return central_theory_values
 
 dataspecs_each_dataset_chi2 = collect("each_dataset_chi2", ("dataspecs",))
-each_dataset = collect("dataset", ("experiments", "experiment"))
+each_dataset = collect("dataset", ("data",))
 dataspecs_each_dataset = collect("each_dataset", ("dataspecs",))
 
 @table
@@ -1112,13 +1173,13 @@ def dataspecs_dataset_chi2_difference_table(
     return pd.concat(dfs, axis=1)
 
 datasets_covmat_no_reg = collect(
-    "covariance_matrix", ("experiments", "experiment", "no_covmat_reg"))
+    "covmat", ("data", "no_covmat_reg"))
 datasets_covmat_reg = collect(
-    "covariance_matrix", ("experiments", "experiment",))
+    "covmat", ("data",))
 
 @table
 @check_norm_threshold
-def datasets_covariance_matrix_differences_table(
+def datasets_covmat_differences_table(
     each_dataset, datasets_covmat_no_reg, datasets_covmat_reg, norm_threshold):
     """For each dataset calculate and tabulate two max differences upon
     regularization given a value for `norm_threshold`:
@@ -1149,7 +1210,7 @@ def datasets_covariance_matrix_differences_table(
     return df
 
 dataspecs_covmat_diff_tables = collect(
-    "datasets_covariance_matrix_differences_table", ("dataspecs",))
+    "datasets_covmat_differences_table", ("dataspecs",))
 
 @check_speclabels_different
 @table
@@ -1157,7 +1218,7 @@ def dataspecs_datasets_covmat_differences_table(
     dataspecs_speclabel, dataspecs_covmat_diff_tables
 ):
     """For each dataspec calculate and tabulate the two covmat differences
-    described in `datasets_covariance_matrix_differences_table`
+    described in `datasets_covmat_differences_table`
     (max relative difference in variance and max absolute correlation difference)
 
     """
@@ -1166,24 +1227,14 @@ def dataspecs_datasets_covmat_differences_table(
     df.columns = pd.MultiIndex.from_product((dataspecs_speclabel, cols))
     return df
 
-experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
-each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
+each_dataset_chi2 = collect(abs_chi2_data, ('data',))
 
-experiments_results = collect(experiment_results, ('experiments',))
-
-experiments_phi = collect(phi_data_experiment, ('experiments',))
-
-pdfs_total_chi2 = collect(total_experiments_chi2, ('pdfs',))
-
-experiments_bootstrap_phi = collect(bootstrap_phi_data_experiment, ('experiments',))
-
-experiments_bootstrap_chi2_central = collect(bootstrap_chi2_central_experiment,
-                                             ('experiments',))
+pdfs_total_chi2 = collect(dataset_inputs_chi2_per_point_data, ('pdfs',))
 
 #These are convenient ways to iterate and extract varios data from fits
 fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))
 
-fits_total_chi2 = collect('total_experiments_chi2', ('fits', 'fitcontext'))
+fits_total_chi2 = collect('dataset_inputs_chi2_per_point_data', ('fits', 'fitcontext'))
 
 fits_total_chi2_for_experiments = collect('total_experiment_chi2',
                                           ('fits', 'fittheoryandpdf',
@@ -1195,7 +1246,7 @@ fits_pdf = collect('pdf', ('fits', 'fitpdf'))
 dataspecs_results = collect('results', ('dataspecs',))
 dataspecs_chi2_data = collect(abs_chi2_data, ('dataspecs', 'experiments', 'experiment'))
 dataspecs_experiment_chi2_data = collect('experiments_chi2', ('dataspecs',))
-dataspecs_total_chi2 = collect('total_experiments_chi2', ('dataspecs',))
+dataspecs_total_chi2 = collect('dataset_inputs_chi2_per_point_data', ('dataspecs',))
 dataspecs_experiments_bootstrap_phi = collect('experiments_bootstrap_phi', ('dataspecs',))
 
 dataspecs_speclabel = collect('speclabel', ('dataspecs',), element_default=None)
