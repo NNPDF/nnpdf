@@ -21,7 +21,7 @@ from reportengine.configparser import ConfigError, element_of, _parse_func
 from reportengine.helputils import get_parser_type
 from reportengine import report
 
-from validphys.core import (ExperimentSpec, DataSetInput, ExperimentInput,
+from validphys.core import (DataGroupSpec, DataSetInput, ExperimentInput,
                             CutsPolicy, MatchedCuts, ThCovMatSpec)
 from validphys.loader import (Loader, LoaderError ,LoadFailedError, DataNotFoundError,
                               PDFNotFound, FallbackLoader, InconsistentMetaDataError)
@@ -444,7 +444,7 @@ class CoreConfig(configparser.Config):
             for (dsinp, cuts) in zip(dsinputs, cutinps)
         ]
 
-        return ExperimentSpec(name=name, datasets=datasets, dsinputs=dsinputs)
+        return DataGroupSpec(name=name, datasets=datasets, dsinputs=dsinputs)
 
 
     @configparser.element_of('experiment_inputs')
@@ -724,7 +724,7 @@ class CoreConfig(configparser.Config):
         ret = []
         for experiment in experiments:
             for dsinput, dataset in zip(experiment, experiment.datasets):
-                single_exp = ExperimentSpec(experiment.name,
+                single_exp = DataGroupSpec(experiment.name,
                                             datasets=[dataset],
                                             dsinputs=[dsinput])
                 ret.append({'reweighting_experiments': [single_exp],
@@ -865,44 +865,6 @@ class CoreConfig(configparser.Config):
         {@endwith@}
         """
         return label
-
-    def produce_fit_data_groupby_experiment(self, fit):
-        """Used to produce data from the fit grouped into experiments,
-        where each experiment is a group of datasets according to the experiment
-        key in the plotting info file.
-        """
-        #TODO: consider this an implimentation detail
-        from reportengine.namespaces import NSList
-
-        with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
-            _, dataset_inputs = self.parse_from_('fit', 'dataset_inputs', write=False)
-
-        metaexps = [get_info(ds).experiment for ds in dataset_inputs]
-        res = {}
-        for ds in dataset_inputs:
-            metaexp = get_info(ds).experiment
-            if metaexp in res:
-                res[metaexp].append(ds)
-            else:
-                res[metaexp] = [ds]
-        exps = []
-        for exp in res:
-            exps.append(ExperimentSpec(exp, res[exp]))
-
-        experiments = NSList(exps, nskey='experiment')
-        return {'experiments': experiments}
-
-    def produce_fit_context_groupby_experiment(self, fit):
-        """produces experiments similarly to `fit_data_groupby_experiment`
-        but also sets fitcontext (pdf and theoryid)
-        """
-        _, pdf         = self.parse_from_('fit', 'pdf', write=False)
-        _, theory      = self.parse_from_('fit', 'theory', write=False)
-        thid = theory['theoryid']
-        with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
-            experiments = self.produce_fit_data_groupby_experiment(
-                fit)['experiments']
-        return {'pdf': pdf, 'theoryid':thid, 'experiments': experiments}
 
     def produce_all_commondata(self):
         """produces all commondata using the loader function """
@@ -1054,7 +1016,7 @@ class CoreConfig(configparser.Config):
             for (dsinp, cuts) in zip(data_input, cutinps)
         ]
         #TODO: get rid of libnnpdf Experiment
-        return ExperimentSpec(name=group_name, datasets=datasets, dsinputs=data_input)
+        return DataGroupSpec(name=group_name, datasets=datasets, dsinputs=data_input)
 
     def produce_data_input(self, dataset_inputs: (list, type(None))=None, experiments=None):
         if dataset_inputs:
@@ -1064,23 +1026,25 @@ class CoreConfig(configparser.Config):
         else:
             raise ConfigError("must specify dataset_inputs in runcard")
 
-    def parse_metadata_group_key(self, key):
+    def parse_metadata_group(self, key):
         return key
 
     def produce_groupby_experiment(self):
-        return {"metadata_group_key": "experiment"}
+        return {"metadata_group": "experiment"}
 
-    def produce_group_data_by_metadata(self, data_input, metadata_group_key):
+    def produce_group_dataset_inputs_by_metadata(
+        self, data_input, metadata_group
+    ):
         res = defaultdict(list)
         for dsinput in data_input:
             cd = self.produce_commondata(dataset_input=dsinput)
             try:
-                res[getattr(get_info(cd), metadata_group_key)].append(dsinput)
+                res[getattr(get_info(cd), metadata_group)].append(dsinput)
             except AttributeError:
                 raise ConfigError(
-                    f"Unable to find key: {metadata_group_key} in {cd.name} "
+                    f"Unable to find key: {metadata_group} in {cd.name} "
                     "PLOTTING file.",
-                    bad_item=metadata_group_key,
+                    bad_item=metadata_group,
                     alternatives=get_info(cd).__dict__,
                 )
         return [

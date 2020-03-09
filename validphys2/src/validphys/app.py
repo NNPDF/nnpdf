@@ -43,6 +43,8 @@ providers = [
              'validphys.replica_selector',
              'validphys.MCgen_checks',
              'validphys.closuretest',
+             # currently broken - will fix in NNPDF/nnpdf#511
+             # 'validphys.closure',
              'validphys.theoryinfo',
              'reportengine.report'
             ]
