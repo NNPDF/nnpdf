@@ -68,3 +68,7 @@ def test_performfit():
     new_fitinfo = load_data(full_path)
     # compare to the previous .fitinfo file
     compare_lines(new_fitinfo, old_fitinfo)
+
+if __name__ == "__main__":
+    # TODO: check
+    test_performfit()

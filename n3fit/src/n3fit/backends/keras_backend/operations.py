@@ -25,7 +25,10 @@ def numpy_to_tensor(ival):
     """
     return K.constant(ival)
 
-squeezer = keras_Lambda(lambda x: K.squeeze(x, 0))
+
+def squeezer(xin):
+    # TODO hack
+    return keras_Lambda(lambda x: K.squeeze(x, 0))(xin)
 
 
 def numpy_to_input(numpy_array):
