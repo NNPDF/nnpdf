@@ -62,10 +62,10 @@ def plot_phi(groups_data, groups_data_phi):
     return fig
 
 @figure
-def plot_fits_groups_data_phi(fits_groups_data_phi_table):
+def plot_fits_groups_data_phi(fits_groups_phi_table):
     """Plots a set of bars for each fit, each bar represents the value of phi for the corresponding
     group of datasets, which is defined according to the keys in the PLOTTING info file"""
-    fig, ax = _plot_chis_df(fits_groups_data_phi_table)
+    fig, ax = _plot_chis_df(fits_groups_phi_table)
     ax.set_title(r"$\phi$ for each group of data")
     return fig
 
@@ -524,17 +524,17 @@ def plot_dataspecs_datasets_chi2(dataspecs_datasets_chi2_table):
     return plot_fits_datasets_chi2(dataspecs_datasets_chi2_table)
 
 @figure
-def plot_fits_groups_data_chi2(fits_groups_data_chi2_table):
+def plot_fits_groups_data_chi2(fits_groups_chi2_table):
     """Generate a plot equivalent to ``plot_groups_data_chi2`` using all the
     fitted group of data as input."""
-    fig, ax = _plot_chis_df(fits_groups_data_chi2_table)
+    fig, ax = _plot_chis_df(fits_groups_chi2_table)
     ax.set_title(r"$\chi^2$ for groups of data")
     return fig
 
 @figure
-def plot_dataspecs_groups_data_chi2(dataspecs_groups_data_chi2_table):
+def plot_dataspecs_groups_data_chi2(dataspecs_groups_chi2_table):
     """Same as plot_fits_groups_data_chi2 but for arbitrary dataspecs"""
-    return plot_fits_groups_data_chi2(dataspecs_groups_data_chi2_table)
+    return plot_fits_groups_data_chi2(dataspecs_groups_chi2_table)
 
 @figure
 def plot_training_length(replica_data, fit):
