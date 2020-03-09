@@ -42,9 +42,9 @@ Training validation
 -------------------
 {@fits plot_training_validation@}
 
-$\chi^2$ by experiment
+$\chi^2$ by group
 ----------------------
-{@plot_fits_experiments_chi2@}
+{@plot_fits_groups_data_chi2@}
 
 $\chi^2$ by dataset comparisons
 -------------------------------
@@ -53,11 +53,11 @@ $\chi^2$ by dataset comparisons
 ### Table
 {@fits_chi2_table(show_total=true)@}
 
-$\phi$ by experiment
+$\phi$ by group
 --------------------
-{@plot_fits_experiments_phi@}
+{@plot_fits_groups_data_phi@}
 
-Experiment plots
+Group plots
 ---------------
 {@with matched_datasets_from_dataspecs@}
 [Detailed plots for dataset ' {@dataset_name@} ']({@dataset_report report@})
