@@ -7,9 +7,11 @@
 
 from tensorflow.keras.models import Model, Sequential
 from tensorflow.keras import optimizers as Kopt
+from tensorflow.keras import backend as K
 
 from n3fit.backends.keras_backend.operations import numpy_to_input
 
+import numpy as np
 
 class MetaModel(Model):
     """
@@ -55,6 +57,9 @@ class MetaModel(Model):
         if not isinstance(output_list, list):
             output_list = [output_list]
 
+
+
+
         # Add extra tensors
         if extra_tensors is not None:
             for ii, oo in extra_tensors:
@@ -68,11 +73,22 @@ class MetaModel(Model):
                 input_list += inputs
                 output_list.append(o_tensor)
 
+        if len(output_list) == 1 and len(output_list[0].shape) != 1:
+            # TODO hack
+            output_list = [K.expand_dims(output_list[0], 0)]
+            self.de_expand = True
+        else:
+            self.de_expand = False
+
+        true_inputs = [i.true_input for i in input_list]
+        super(MetaModel, self).__init__(true_inputs, output_list, **kwargs)
+        # We are hacking around some limiations of TF 2.
+        # see keras_backend/operations/numpy_to_input for more information
+        self.x_in = [i.tensor_content for i in input_list]
         self.all_inputs = input_list
         self.all_outputs = output_list
         self.internal_models = {}
 
-        super(MetaModel, self).__init__(input_list, output_list, **kwargs)
 
     def perform_fit(self, x=None, y=None, steps_per_epoch=1, **kwargs):
         """
@@ -92,19 +108,25 @@ class MetaModel(Model):
             `loss_dict`: dict
                 a dictionary with all partial losses of the model
         """
+        if x is None:
+            x = self.x_in
         if self.has_dataset:
-            if x is not None or y is not None:
-                raise ValueError(
-                    "The model was compiled together with input and output but the information was passed again to the fit function"
-                )
             history = super().fit(
-                x=None, y=None, steps_per_epoch=steps_per_epoch, **kwargs,
+                x=x, y=None, batch_size=1, **kwargs,
             )
         else:
             history = super().fit(x=x, y=y, steps_per_epoch=steps_per_epoch, **kwargs)
         loss_dict = history.history
         return loss_dict
-
+    
+    def predict(self, x = None, *args, **kwargs):
+        # TODO hack
+        if x is None:
+            x = self.x_in
+        result = super().predict(x = x, *args, **kwargs)
+        if self.de_expand:
+            result = np.squeeze(result, axis=0)
+        return result
     def compute_losses(self, *args, **kwargs):
         """
         Performs keras.evaluate and returns a dictionary containing the loss function for
@@ -146,9 +168,11 @@ class MetaModel(Model):
         In this case the number of steps must be always specified and the input of x and y must
         be set to `None`.
         """
+        if x is None:
+            x = self.x_in
         if self.has_dataset:
             # Ensure that no x or y were passed
-            result = super().evaluate(x=None, y=None, steps=1, **kwargs)
+            result = super().evaluate(x=x, y=None, **kwargs)
         else:
             result = super().evaluate(x=x, y=y, **kwargs)
         return result
@@ -226,6 +250,7 @@ class MetaModel(Model):
             # is this a bug or a feature?
             layers = [self.get_layer(i) for i in layer_names]
             internal_model = Sequential(layers)
+            internal_model.build(input_shape = layers[0].input_shape)
             self.internal_models[key] = internal_model
         current_weights = internal_model.get_weights()
         new_weights = [i * multiplier for i in current_weights]

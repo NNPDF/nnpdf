@@ -14,7 +14,7 @@ from tensorflow.keras.layers import subtract as keras_subtract
 from tensorflow.keras.layers import Lambda as keras_Lambda
 from tensorflow.keras.layers import multiply as keras_multiply
 
-from tensorflow.keras.layers import Input
+from tensorflow.keras.layers import Input, Layer
 from tensorflow.keras import backend as K
 
 import numpy as np
@@ -25,14 +25,23 @@ def numpy_to_tensor(ival):
     """
     return K.constant(ival)
 
+squeezer = keras_Lambda(lambda x: K.squeeze(x, 0))
+
+
 def numpy_to_input(numpy_array):
     """
         If x is a numpy array, make it into a numpy tensor
         if not just returns the input unchanged
     """
     if isinstance(numpy_array, np.ndarray):
-        tensor = K.constant(numpy_array)
-        return Input(tensor=tensor)
+        # Now hack around the limitations of TF 2
+        # TODO hack
+        batched_array = np.expand_dims(numpy_array, 0)
+        true_input = Input(batch_size = 1, shape = numpy_array.shape)
+        input_layer = squeezer(true_input)
+        input_layer.true_input = true_input
+        input_layer.tensor_content = batched_array
+        return input_layer
     else:
         return numpy_array
 
