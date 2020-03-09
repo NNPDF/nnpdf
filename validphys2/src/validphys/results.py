@@ -828,7 +828,7 @@ groups_chi2 = collect("dataset_inputs_chi2_per_point_data", ("group_dataset_inpu
 
 fits_groups_chi2_data = collect("groups_chi2", ("fits", "fitcontext"))
 fits_groups = collect(
-    "data", ("fits", "fitcontext", "group_dataset_inputs_by_metadata")
+    "groups_data", ("fits", "fitcontext",)
 )
 
 
@@ -912,7 +912,7 @@ def fits_groups_phi_table(
     res = pd.concat(dfs, axis=1)
     return res
 
-dataspecs_groups = collect("data", ("dataspecs", "group_dataset_inputs_by_metadata"))
+dataspecs_groups = collect("groups_data", ("dataspecs",))
 dataspecs_groups_chi2_data = collect("groups_chi2", ("dataspecs",))
 
 
@@ -935,7 +935,7 @@ def dataspecs_groups_chi2_table(
 # we need this to reorder the datasets correctly, a potentially more satisfactory
 # method could be to make a datasets chi2 table which gets collected and concatenated
 groups_datasets_chi2_data = collect(
-    "abs_chi2_data", ("group_dataset_inputs_by_metadata", "data")
+    "each_dataset_chi2", ("group_dataset_inputs_by_metadata",)
 )
 fits_datasets_chi2_data = collect("groups_datasets_chi2_data", ("fits", "fitcontext"))
 
