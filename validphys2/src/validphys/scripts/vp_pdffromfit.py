@@ -26,6 +26,23 @@ def process_args():
     parser.add_argument('Fit', help='Path to fit')
     parser.add_argument('PDF', help='Name of the desired PDF set output')
     parser.add_argument(
+        '--author',
+        action='append',
+        help='''The author to be added to the PDF .info file.
+                Apply this argument multiple times for multiple authors,
+                quotation marks can be used for an author name containing several words,
+                e.g "The NNPDF collaboration"''')
+    parser.add_argument(
+        '--description',
+        help='''The set description to be added to the PDF .info file.
+                Quotations should be used for this field.''')
+    parser.add_argument(
+        '--data-version',
+        help='The data version to be added to the PDF .info file.')
+    parser.add_argument(
+        '--index',
+        help='The set index to be added to the PDF .info file.')
+    parser.add_argument(
         '--reference',
         help='The reference to be added to the PDF .info file, usually an arXiv reference.')
     parser.add_argument(
@@ -46,14 +63,40 @@ def process_args():
     args = parser.parse_args()
     return args
 
-def fixup_ref(pdf_path: pathlib.Path, reference: str):
+def fixup_ref(pdf_path: pathlib.Path, field_dict):
     pdf_name = pdf_path.name
     infopath = pdf_path/f"postfit/{pdf_name}/{pdf_name}.info"
     with open(infopath) as f:
         y = yaml.YAML()
         res = y.load(infopath)
-        res["Reference"] = reference
+        res["Authors"] = (
+            field_dict.get("author")
+            if field_dict.get("author") is not None
+            else res["Authors"]
+        )
+        res["SetDesc"] = (
+            field_dict.get("description")
+            if field_dict.get("description") is not None
+            else res["SetDesc"]
+        )
+        res["DataVersion"] = (
+            field_dict.get("data-version")
+            if field_dict.get("data-version") is not None
+            else res["DataVersion"]
+        )
+        res["SetIndex"] = (
+            field_dict.get("index")
+            if field_dict.get("index") is not None
+            else res["SetIndex"]
+        )
+        res["Reference"] = (
+            field_dict.get("reference")
+            if field_dict.get("reference") is not None
+            else res["Reference"]
+        )
+
     with open(infopath, "w") as f:
+        y.default_flow_style=True
         y.dump(res, f)
 
 def postfit_path(path: pathlib.Path) -> pathlib.Path:
@@ -68,16 +111,13 @@ def compress(lhapdf_path: pathlib.Path):
 def main():
     args = process_args()
     fit_path, pdf_name = pathlib.Path(args.Fit).resolve(), args.PDF
-    reference = args.reference
 
     with tempfile.TemporaryDirectory(dir=fit_path.parent) as tmp:
         tmp = pathlib.Path(tmp)
         copied_fit = tmp/fit_path.name
         shutil.copytree(fit_path, copied_fit)
 
-        if reference is not None:
-            fixup_ref(copied_fit, reference)
-            log.info(f"Reference {reference} added to info file")
+        fixup_ref(copied_fit, vars(args))
 
         new_path = change_name(copied_fit, pdf_name)
         lhapdf_path = postfit_path(new_path)
