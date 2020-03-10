@@ -1,4 +1,13 @@
 #!/usr/bin/env python
+"""
+    vp-pdffromfit - command line tool to obtain an LHAPDF from a NNPDF fit
+
+    To obtain the PDF from an fit, simply run
+    vp-pdffromfit <path-to-fit> <PDF name>. Optional flags allow for the
+    resulting pdf to be placed in the LHAPDF directory, as well as modifying
+    various fields of the info file. In addition, it is possible to compress
+    the resulting PDF also using tar archiving.
+"""
 
 import argparse
 import logging
@@ -64,11 +73,20 @@ def process_args():
 
 
 def fixup_ref(pdf_path: pathlib.Path, field_dict):
+    """Function to handle alterations of the info file.
+    The argparser namespace is read in as a dictionary which
+    is then used to write to the resulting output file.
+
+    If the user did not provide a field then we revert to the
+    pre existing field.
+    """
     pdf_name = pdf_path.name
     infopath = pdf_path / f"postfit/{pdf_name}/{pdf_name}.info"
     with open(infopath) as f:
         y = yaml.YAML()
         res = y.load(infopath)
+        # If a field entry is not provided, then we revert to the existing
+        # field in pre-existing info file.
         res["Authors"] = (
             field_dict.get("author")
             if field_dict.get("author") is not None
@@ -106,6 +124,9 @@ def postfit_path(path: pathlib.Path) -> pathlib.Path:
 
 
 def compress(lhapdf_path: pathlib.Path):
+    """ Function to compress the resulting PDF. Dereferences are handled
+    in order to account for possible symbolic linking of grids.
+    """
     output = lhapdf_path.name + ".tar.gz"
     with tarfile.open(output, "w:gz", dereference=True) as tar:
         tar.add(str(lhapdf_path), arcname=os.path.basename(str(lhapdf_path)))
