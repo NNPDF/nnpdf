@@ -64,7 +64,6 @@ private:
   void ReadData();
 };
 
-
 class LHCB_WENU_8TEVFilter: public CommonData
 {
 public: LHCB_WENU_8TEVFilter():
@@ -73,3 +72,22 @@ public: LHCB_WENU_8TEVFilter():
 private:
   void ReadData();
 };
+
+class LHCB_WENU_8TEV_RFilter: public CommonData
+{
+public: LHCB_WENU_8TEV_RFilter():
+  CommonData("LHCB_WENU_8TEV_R") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
+class LHCB_WENU_8TEV_AFilter: public CommonData
+{
+public: LHCB_WENU_8TEV_AFilter():
+  CommonData("LHCB_WENU_8TEV_A") { ReadData(); }
+
+private:
+  void ReadData();
+};
+
