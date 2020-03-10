@@ -51,12 +51,6 @@ def process_args():
         help="The reference to be added to the PDF .info file, usually an arXiv reference.",
     )
     parser.add_argument(
-        "-n",
-        "--nnpdf_path",
-        action="store_true",
-        help="Use a PDF fit stored in the NNPDF results directory.",
-    )
-    parser.add_argument(
         "-l",
         "--lhapdf_path",
         action="store_true",
