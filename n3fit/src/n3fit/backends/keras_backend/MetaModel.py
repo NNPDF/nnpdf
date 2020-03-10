@@ -24,7 +24,7 @@ class MetaModel(Model):
         "RMSprop": (Kopt.RMSprop, {"lr": 0.01}),
         "Adam": (Kopt.Adam, {"lr": 0.01}),
         "Adagrad": (Kopt.Adagrad, {}),
-        "Adadelta": (Kopt.Adadelta, {}),
+        "Adadelta": (Kopt.Adadelta, {"lr":1.0}),
         "Adamax": (Kopt.Adamax, {}),
         "Nadam": (Kopt.Nadam, {}),
         "Amsgrad": (Kopt.Adam, {"lr": 0.01, "amsgrad": True}),
@@ -56,9 +56,6 @@ class MetaModel(Model):
             input_list = [input_list]
         if not isinstance(output_list, list):
             output_list = [output_list]
-
-
-
 
         # Add extra tensors
         if extra_tensors is not None:
