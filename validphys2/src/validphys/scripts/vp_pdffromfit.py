@@ -51,7 +51,9 @@ def process_args():
                 Quotations should be used for this field.""",
     )
     parser.add_argument(
-        "--data-version", help="The data version to be added to the PDF .info file."
+        "--data-version",
+        type=int,
+        help="The data version to be added to the PDF .info file.",
     )
     parser.add_argument(
         "--index", help="The set index to be added to the PDF .info file."
@@ -88,31 +90,20 @@ def fixup_ref(pdf_path: pathlib.Path, field_dict):
         res = y.load(infopath)
         # If a field entry is not provided, then we revert to the existing
         # field in pre-existing info file.
-        res["Authors"] = (
-            field_dict.get("author")
-            if field_dict.get("author") is not None
-            else res["Authors"]
-        )
-        res["SetDesc"] = (
-            field_dict.get("description")
-            if field_dict.get("description") is not None
-            else res["SetDesc"]
-        )
-        res["DataVersion"] = (
-            field_dict.get("data-version")
-            if field_dict.get("data-version") is not None
-            else res["DataVersion"]
-        )
-        res["SetIndex"] = (
-            field_dict.get("index")
-            if field_dict.get("index") is not None
-            else res["SetIndex"]
-        )
-        res["Reference"] = (
-            field_dict.get("reference")
-            if field_dict.get("reference") is not None
-            else res["Reference"]
-        )
+        if field_dict["author"]:  # Note: bool(None) is False
+            res["Authors"] = field_dict["author"]
+
+        if field_dict["description"]:
+            res["SetDesc"] = field_dict["description"]
+
+        if field_dict["data_version"]:
+            res["DataVersion"] = field_dict["data_version"]
+
+        if field_dict["index"]:
+            res["SetIndex"] = field_dict["index"]
+
+        if field_dict["reference"]:
+            res["Reference"] = field_dict["reference"]
 
     with open(infopath, "w") as f:
         y.default_flow_style = True
@@ -135,14 +126,19 @@ def compress(lhapdf_path: pathlib.Path):
 
 def main():
     args = process_args()
-    fit_path, pdf_name = pathlib.Path(args.Fit).resolve(), args.PDF
+    fit_path = pathlib.Path(args.Fit).resolve()
+    pdf_name = args.PDF
 
     if not fit_path.is_dir():
-        log.error(f"Could not find fit. Path '{fit_path.absolute()}' is not a directory.")
+        log.error(
+            f"Could not find fit. Path '{fit_path.absolute()}' is not a directory."
+        )
         sys.exit(1)
-    if not (fit_path/'filter.yml').exists():
-        log.error(f"Path {fit_path.absolute()} does not appear to be a fit. "
-                  "File 'filter.yml' not found in the directory")
+    if not (fit_path / "filter.yml").exists():
+        log.error(
+            f"Path {fit_path.absolute()} does not appear to be a fit. "
+            "File 'filter.yml' not found in the directory"
+        )
         sys.exit(1)
 
     with tempfile.TemporaryDirectory(dir=fit_path.parent) as tmp:
