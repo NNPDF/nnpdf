@@ -170,5 +170,3 @@ def main():
         if args.compress:
             log.info("Compressing output")
             compress(lhapdf_path)
-
-    return 0
