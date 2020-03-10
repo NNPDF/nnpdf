@@ -23,12 +23,12 @@ import NNPDF
 
 from lhapdf import paths
 
+from reportengine import colors
 from reportengine.compat import yaml
 
 from validphys.loader import FallbackLoader as Loader
-from validphys.scripts.vp_fitrename import change_name
+from validphys.renametools import change_name
 
-log = logging.getLogger()
 
 # Taking command line arguments
 def process_args():
@@ -128,6 +128,10 @@ def main():
     args = process_args()
     fit_path = pathlib.Path(args.Fit).resolve()
     pdf_name = args.PDF
+
+    log = logging.getLogger()
+    log.setLevel(logging.DEBUG)
+    log.addHandler(colors.ColorHandler())
 
     if not fit_path.is_dir():
         log.error(
