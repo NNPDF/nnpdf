@@ -15,6 +15,7 @@ import os
 import pathlib
 import subprocess
 import shutil
+import sys
 import tarfile
 import tempfile
 
@@ -136,6 +137,14 @@ def main():
     args = process_args()
     fit_path, pdf_name = pathlib.Path(args.Fit).resolve(), args.PDF
 
+    if not fit_path.is_dir():
+        log.error(f"Could not find fit. Path '{fit_path.absolute()}' is not a directory.")
+        sys.exit(1)
+    if not (fit_path/'filter.yml').exists():
+        log.error(f"Path {fit_path.absolute()} does not appear to be a fit. "
+                  "File 'filter.yml' not found in the directory")
+        sys.exit(1)
+
     with tempfile.TemporaryDirectory(dir=fit_path.parent) as tmp:
         tmp = pathlib.Path(tmp)
         copied_fit = tmp / fit_path.name
@@ -147,11 +156,16 @@ def main():
         lhapdf_path = postfit_path(new_path)
 
         if args.lhapdf_path:
-            lhapdf_path = lhapdf_path.rename(pathlib.Path(paths()[-1]) / pdf_name)
-            log.info(f"PDF generated and placed in {paths()[-1]}")
+            dest_path = pathlib.Path(paths()[-1]) / pdf_name
         else:
-            lhapdf_path = lhapdf_path.rename(new_path.parent.with_name(pdf_name))
-            log.info(f"PDF generated and placed in {os.getcwd()}")
+            dest_path = new_path.parent.with_name(pdf_name)
+
+        if dest_path.exists():
+            log.error(f"Destination path {dest_path.absolute()} already exists.")
+            sys.exit(1)
+
+        lhapdf_path = lhapdf_path.rename(dest_path)
+        log.info(f"PDF generated and placed in {lhapdf_path.parent}")
 
         if args.compress:
             log.info("Compressing output")
