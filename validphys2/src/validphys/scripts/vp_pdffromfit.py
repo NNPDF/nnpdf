@@ -170,8 +170,8 @@ def main():
             log.error(f"Destination path {dest_path.absolute()} already exists.")
             sys.exit(1)
 
-        lhapdf_path = lhapdf_path.rename(dest_path)
-        log.info(f"PDF generated and placed in {lhapdf_path.parent}")
+        lhapdf_path.rename(dest_path)
+        log.info(f"PDF generated and placed in {dest_path.parent}")
 
         if args.compress:
             log.info("Compressing output")
