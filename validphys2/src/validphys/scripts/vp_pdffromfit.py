@@ -84,7 +84,12 @@ def fixup_ref(pdf_path: pathlib.Path, field_dict):
     pre existing field.
     """
     pdf_name = pdf_path.name
-    infopath = pdf_path / f"postfit/{pdf_name}/{pdf_name}.info"
+    # Some older fits have the PDF in nnfit
+    if (pdf_path / f"nnfit" / pdf_name).is_dir():
+        infopath = pdf_path / f"nnfit/{pdf_name}/{pdf_name}.info"
+    else:
+        infopath = pdf_path / f"postfit/{pdf_name}/{pdf_name}.info"
+
     with open(infopath) as f:
         y = yaml.YAML()
         res = y.load(infopath)
@@ -110,9 +115,14 @@ def fixup_ref(pdf_path: pathlib.Path, field_dict):
         y.dump(res, f)
 
 
-def postfit_path(path: pathlib.Path) -> pathlib.Path:
+def pdf_path(path: pathlib.Path) -> pathlib.Path:
     pdf_name = path.name
-    return pathlib.Path(path / f"postfit/{pdf_name}")
+    # Ensure backwards compatability with older fits
+    if (path / f"nnfit/{pdf_name}").is_dir():
+        pdf_path = path / f"nnfit/{pdf_name}"
+    else:
+        pdf_path = path / f"postfit/{pdf_name}"
+    return pdf_path
 
 
 def compress(lhapdf_path: pathlib.Path):
@@ -153,7 +163,7 @@ def main():
         fixup_ref(copied_fit, vars(args))
 
         new_path = change_name(copied_fit, pdf_name)
-        lhapdf_path = postfit_path(new_path)
+        lhapdf_path = pdf_path(new_path)
 
         if args.lhapdf_path:
             dest_path = pathlib.Path(paths()[-1]) / pdf_name
