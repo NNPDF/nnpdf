@@ -5,6 +5,7 @@
     backend-dependent calls
 """
 
+import tensorflow as tf
 from tensorflow.keras.models import Model, Sequential
 from tensorflow.keras import optimizers as Kopt
 from tensorflow.keras import backend as K
@@ -12,6 +13,7 @@ from tensorflow.keras import backend as K
 from n3fit.backends.keras_backend.operations import numpy_to_input
 
 import numpy as np
+
 
 class MetaModel(Model):
     """
@@ -84,7 +86,6 @@ class MetaModel(Model):
         self.x_in = [i.tensor_content for i in input_list]
         self.all_inputs = input_list
         self.all_outputs = output_list
-        self.internal_models = {}
 
 
     def perform_fit(self, x=None, y=None, steps_per_epoch=1, **kwargs):
@@ -230,7 +231,7 @@ class MetaModel(Model):
             optimizer=opt, loss=loss, target_tensors=target_output, **kwargs
         )
 
-    def multiply_weights(self, key, layer_names, multiplier):
+    def multiply_weights(self, layer_names, multiplier):
         """ Multiply all weights for the given layers by some scalar
 
         Parameters
@@ -240,15 +241,9 @@ class MetaModel(Model):
             `multiplier`: float
                 scalar number to multiply the weights by
         """
-        internal_model = self.internal_models.get(key)
-        if not internal_model:
-            # Create an internal model to access the weights of the
-            # layer we want to update
-            # is this a bug or a feature?
-            layers = [self.get_layer(i) for i in layer_names]
-            internal_model = Sequential(layers)
-            internal_model.build(input_shape = layers[0].input_shape)
-            self.internal_models[key] = internal_model
-        current_weights = internal_model.get_weights()
-        new_weights = [i * multiplier for i in current_weights]
-        internal_model.set_weights(new_weights)
+        for layer_name in layer_names:
+            layer = self.get_layer(layer_name)
+            w_val = layer.get_weights()
+            w_ref = layer.weights
+            for val, tensor in zip(w_val, w_ref):
+                tensor.assign(val * multiplier)
