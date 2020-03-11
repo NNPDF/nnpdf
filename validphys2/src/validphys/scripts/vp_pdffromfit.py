@@ -13,20 +13,16 @@ import argparse
 import logging
 import os
 import pathlib
-import subprocess
 import shutil
 import sys
 import tarfile
 import tempfile
-
-import NNPDF
 
 from lhapdf import paths
 
 from reportengine import colors
 from reportengine.compat import yaml
 
-from validphys.loader import FallbackLoader as Loader
 from validphys.renametools import change_name
 
 

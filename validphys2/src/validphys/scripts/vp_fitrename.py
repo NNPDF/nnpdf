@@ -22,8 +22,7 @@ import NNPDF as nnpath
 
 from reportengine import colors
 
-from validphys.renametools import (rename_pdf, rename_nnfit,
-                                   rename_postfit, change_name)
+from validphys.renametools import change_name
 
 
 #Taking command line arguments

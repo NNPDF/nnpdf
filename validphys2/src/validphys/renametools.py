@@ -51,4 +51,3 @@ def change_name(initial_path, final_name):
     newpath = initial_path.with_name(final_name)
     initial_path.rename(newpath)
     return newpath
-
