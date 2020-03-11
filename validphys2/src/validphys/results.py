@@ -903,7 +903,7 @@ def fits_groups_phi_table(
     ):
         records = []
         for group, (group_phi, npoints) in zip(groups, groups_phi):
-            records.append(dict(experiment=str(group), npoints=npoints, phi=group_phi))
+            records.append(dict(group=str(group), npoints=npoints, phi=group_phi))
         df = pd.DataFrame.from_records(
             records, columns=("group", "npoints", "phi"), index=("group",)
         )
