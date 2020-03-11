@@ -824,7 +824,7 @@ def dataset_chi2_table(chi2_stats, dataset):
     """Show the chi² estimators for a given dataset"""
     return pd.DataFrame(chi2_stats, index=[dataset.name])
 
-groups_chi2 = collect("dataset_inputs_chi2_per_point_data", ("group_dataset_inputs_by_metadata",))
+groups_chi2 = collect("dataset_inputs_abs_chi2_data", ("group_dataset_inputs_by_metadata",))
 
 fits_groups_chi2_data = collect("groups_chi2", ("fits", "fitcontext"))
 fits_groups = collect(
