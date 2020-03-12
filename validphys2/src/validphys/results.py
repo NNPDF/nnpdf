@@ -16,7 +16,7 @@ import scipy.linalg as la
 import pandas as pd
 
 from NNPDF import ThPredictions, CommonData, Experiment
-from reportengine.checks import require_one, remove_outer, check_not_empty
+from reportenginechecks import require_one, remove_outer, check_not_empty
 from reportengine.table import table
 from reportengine import collect
 
@@ -181,40 +181,20 @@ def groups_index(groups_data):
     df.set_index(columns, inplace=True)
     return df.index
 
-def experiments_index(experiments):
-    """Return a pandas.MultiIndex with levels for
-       experiment, dataset and point respectively"""
-    records = []
-    for experiment in experiments:
-        for dataset in experiment.datasets:
-            if dataset.cuts:
-                ndata = len(dataset.cuts.load())
-            else:
-                #No cuts - use all data
-                ndata = dataset.commondata.ndata
-            for idat in range(ndata):
-                records.append(
-                    dict(
-                        [('experiment', str(experiment.name)),
-                         ('dataset', str(dataset.name)),
-                         ('id', idat),]))
-
-    columns = ['experiment', 'dataset', 'id']
-    df = pd.DataFrame(records, columns=columns)
-    df.set_index(columns, inplace=True)
-    return df.index
-
-def experiments_data(experiment_result_table):
-    """Returns list of data values for the input experiments."""
-    data_central_values = experiment_result_table["data_central"]
+def groups_data_values(group_result_table):
+    """Returns list of data values for the input groups."""
+    data_central_values = group_result_table["data_central"]
     return data_central_values
 
-def experiment_result_table_no_table(experiments_results, experiments_index):
+groups_results = collect(
+    "dataset_input_results", ("group_dataset_inputs_by_metadata",)
+
+def group_result_table_no_table(groups_results, groups_index):
     """Generate a table containing the data central value, the central prediction,
     and the prediction for each PDF member."""
     result_records = []
-    for experiment_results in experiments_results:
-        dt, th = experiment_results
+    for group_results in groups_results:
+        dt, th = group_results
         for index, (dt_central, th_central) in enumerate(zip(dt.central_value, th.central_value)):
             replicas = (('rep_%05d'%(i+1), th_rep) for
                         i, th_rep in enumerate(th._rawdata[index, :]))
@@ -225,10 +205,10 @@ def experiment_result_table_no_table(experiments_results, experiments_index):
                                   *replicas
                                  ]))
     if not result_records:
-        log.warning("Empty records for experiment results")
+        log.warning("Empty records for group results")
         return pd.DataFrame()
     df =  pd.DataFrame(result_records, columns=result_records[0].keys(),
-                       index=experiments_index)
+                       index=groups_index)
 
     return df
 
