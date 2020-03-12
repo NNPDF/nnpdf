@@ -56,6 +56,7 @@ def numpy_to_input(numpy_array, no_reshape=False):
             shape = numpy_array.shape
         input_layer = Input(batch_size=batch_size, shape=shape)
         input_layer.tensor_content = batched_array
+        input_layer.original_shape = no_reshape
         return input_layer
     else:
         return numpy_array

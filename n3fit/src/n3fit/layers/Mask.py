@@ -5,20 +5,26 @@ from n3fit.backends import operations
 
 class Mask(MetaLayer):
     """
-        This layers applies a boolean mask to a rank-1 input tensor.
+    This layers applies a boolean mask to a rank-1 input tensor.
+    By default returns a rank-2 tensor where the first dimension
+    is a batch dimension of size 1
 
-        Its most common use is the training/validation split.
-        The mask admit a multiplier for all outputs
+    Its most common use is the training/validation split.
+    The mask admit a multiplier for all outputs
 
-        # Arguments:
-            - `bool_mask`: numpy array with the boolean mask to be applied
-            - `c`: constant multiplier for every output
+    Parameters
+    ----------
+        bool_mask: np.array
+            numpy array with the boolean mask to be applied
+        c: bool
+            constant multiplier for every output
     """
 
-    def __init__(self, bool_mask, c=1.0, **kwargs):
+    def __init__(self, bool_mask, c=1.0, batch_it = True, **kwargs):
         self.output_dim = np.count_nonzero(bool_mask)
         self.mask = bool_mask
         self.c = c
+        self.batch_it = batch_it
         super(MetaLayer, self).__init__(**kwargs)
 
     def build(self, input_shape):
@@ -28,4 +34,5 @@ class Mask(MetaLayer):
 
     def call(self, prediction_in):
         ret = self.boolean_mask(self.kernel * prediction_in, self.mask)
-        return operations.batchit(ret)
+        if self.batch_it:
+            return operations.batchit(ret)

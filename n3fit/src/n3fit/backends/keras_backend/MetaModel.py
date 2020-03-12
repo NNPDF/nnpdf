@@ -17,7 +17,29 @@ import numpy as np
 
 class MetaModel(Model):
     """
-    The goal of this class is to absorb all keras dependent code
+    The `MetaModel` behaves as the tensorflow.keras.model.Model class, with some additions:
+
+    1. tensor_content
+    Sometimes when fitting a network the input is fixed, in this case the input can be given
+    together with the input_tensors by setting a `tensor_content` equal to the input value.
+    This is done automatically when using the `numpy_to_input` function from
+    `n3fit.backends.keras_backend.operations`
+
+    2. extra_tensors
+    Generally, when instantiating a model: `Model(x,y)`, y is an output layer which is connected
+    to x. Adding `extra_tensors = ([x1, x2], y1)` will change the input of `Model(x,y)` to
+    `Model([x, x1, x2], [y, y1])` where y is connected with x and y1 is connected with (x1,x2)
+    automatically.
+    
+
+    Parameters
+    ----------
+        input_tensors: tensorflow.keras.layers.Input
+            Input layer
+        output_tensors: tensorflow.keras.layers.Layer
+            Output layer
+        extra_tensors: tuple
+            Tuple of ([inputs], output)
     """
 
     # Define in this dictionary new optimizers as well as the arguments they accept
@@ -33,22 +55,6 @@ class MetaModel(Model):
     }
 
     def __init__(self, input_tensors, output_tensors, extra_tensors=None, **kwargs):
-        """
-        This class behaves as keras.models.Model with the add on of extra_tensors.
-
-        It is assumed here and elsewhere that the input_tensors are indeed tensors and
-        not placeholders.
-        The usage of placeholders will work as long as nothing outside of the ordinary is done
-        i.e., it will work in that this class inherits from keras Model but all the add-ons
-        of this class assume the inputs are tensors.
-
-        The outputs however can be freely fixed (useful when fitting to known data)
-
-        if extra_tensors are given, they should come in a list of tuples such that:
-            (input: np.array, output_layer: function)
-        so that they can be fed to keras as output_layer(*input)
-        The inputs of the extra_tensors will be turned into keras inputs.
-        """
         self.has_dataset = False
 
         input_list = input_tensors
@@ -61,22 +67,32 @@ class MetaModel(Model):
 
         # Add extra tensors
         if extra_tensors is not None:
+            # Check whether we are using the original shape
+            # or forcing batch one
+            if input_list and hasattr(input_list[0], 'original_shape'):
+                keep_shape = input_list[0].original_shape
+            else:
+                keep_shape = True
             for ii, oo in extra_tensors:
                 inputs = []
                 if isinstance(ii, list):
                     for i in ii:
-                        inputs.append(numpy_to_input(i))
+                        inputs.append(numpy_to_input(i, no_reshape = keep_shape))
                 else:
                     inputs = [numpy_to_input(ii)]
-                # TODO for now it assumes we are in the bach-1 case
-                o_tensor = batchit(oo(*inputs))
+                output_layer = oo(*inputs)
+                # If we are not keeping the original shape (i.e., we added a batch dimension)
+                # add it also to the output layer
+                if not keep_shape:
+                    output_layer = batchit(output_layer)
                 input_list += inputs
-                output_list.append(o_tensor)
+                output_list.append(output_layer)
 
         super(MetaModel, self).__init__(input_list, output_list, **kwargs)
-        # We are hacking around some limiations of TF 2.
-        # see keras_backend/operations/numpy_to_input for more information
-        self.x_in = [i.tensor_content for i in input_list]
+        if hasattr(input_list[0], 'tensor_content'):
+            self.x_in = [i.tensor_content for i in input_list]
+        else:
+            self.x_in = None
         self.all_inputs = input_list
         self.all_outputs = output_list
 
