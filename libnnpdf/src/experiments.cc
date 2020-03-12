@@ -231,16 +231,19 @@ void Experiment::MakeReplica()
         for (int i=0; i<fNData; i++)
           if (artdata[i] < 0 )
           {
-              // If it's negative and not an assymmetry, continue the loop
+              // If it's negative and not an asymmetry, set the data point to 0
               const bool is_asymmetry = proctype[i].find("ASY") != std::string::npos;
               if (!is_asymmetry)
               {
-                isArtNegative = true;
+                artdata[i] = 0;  
+                cout << "Datapoint " << i << " has been set to 0" << endl;
+               // isArtNegative = true;
                 break;
               }
           }
-
-      if (isArtNegative) continue;
+       
+      // Don't ever discard the replica now
+       if (isArtNegative) continue;
 
       // Update data in set
       int index = 0;
