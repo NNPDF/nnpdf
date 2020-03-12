@@ -298,7 +298,7 @@ def performfit(
                 [integrator_input], [], extra_tensors=[(export_xgrid, layer_pdf)]
             )
             result = modelito.predict()
-            return result.flatten()
+            return np.squeeze(result, 0)
 
         # Generate the writer wrapper
         writer_wrapper = WriterWrapper(
