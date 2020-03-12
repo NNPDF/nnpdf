@@ -4,7 +4,7 @@
 # Reviewing pull requests
 
 All changes to the code [should](rules) be reviewed by at least one person (and ideally
-at least two). The expected benefits of the policy are
+at least two). The expected benefits of the policy are:
 
   - It should improve the overall quality of the code.
 
@@ -30,11 +30,11 @@ requests:
 	understand, self contained, pull requests. Note that it is for the authors
 	to proactively discuss the proposed changes before they become too difficult
 	for anyone else to follow, and, failing that, it is fair to ask them to go
-	thorough the work of making them intelligible.
+	through the work of making them intelligible.
 
   - Look at the big picture first: Try to suggest changes to discuss changes to
     the overall functionality or implementation before looking at detailed line
-	by line reviews. There is little point in the later if most of the cod is to
+	by line reviews. There is little point in the latter if most of the code is to
 	be rewritten.
 
   - Review the code in detail. Try to identify areas where the changes
@@ -51,15 +51,16 @@ requests:
 	correctness.
 
   - Regardless of automated tests, always run code with the new changes
-    manually. This gives great into possible pitfalls  and areas of improvement.
+    manually. This gives great insight into possible pitfalls and areas of
+    improvement.
 
   - Make sure the changes are appropriately documented: Interface functions
 	should come with rich docstrings, ideally with examples, larger pieces of
 	functionality should come with some prose explaining what they are for.
 
-  - Consider the effects on the larger system: Did this change obsolete some
-	example or piece of documentation that needs to be updated? Did it break
-	compatibility with something that we rely on? Should an email be sent around
-	announcing the change?  Does the change solve or unblock some outstanding
-	issues?
+  - Consider the effects on the larger system: Did this change make some example
+	or piece of documentation obselete and therefore mean that it needs to be
+	updated? Did it break compatibility with something that we rely on? Should an
+	email be sent around announcing the change? Does the change solve or unblock
+	some outstanding issues?
 
