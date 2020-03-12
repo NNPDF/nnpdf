@@ -10,7 +10,7 @@ from tensorflow.keras.models import Model, Sequential
 from tensorflow.keras import optimizers as Kopt
 from tensorflow.keras import backend as K
 
-from n3fit.backends.keras_backend.operations import numpy_to_input
+from n3fit.backends.keras_backend.operations import numpy_to_input, batchit
 
 import numpy as np
 
@@ -68,16 +68,10 @@ class MetaModel(Model):
                         inputs.append(numpy_to_input(i))
                 else:
                     inputs = [numpy_to_input(ii)]
-                o_tensor = oo(*inputs)
+                # TODO for now it assumes we are in the bach-1 case
+                o_tensor = batchit(oo(*inputs))
                 input_list += inputs
                 output_list.append(o_tensor)
-
-        if len(output_list) == 1 and len(output_list[0].shape) != 1:
-            # TODO hack
-            output_list = [K.expand_dims(output_list[0], 0)]
-            self.de_expand = True
-        else:
-            self.de_expand = False
 
         true_inputs = [i.true_input for i in input_list]
         super(MetaModel, self).__init__(true_inputs, output_list, **kwargs)
@@ -118,12 +112,9 @@ class MetaModel(Model):
         return loss_dict
     
     def predict(self, x = None, *args, **kwargs):
-        # TODO hack
         if x is None:
             x = self.x_in
         result = super().predict(x = x, *args, **kwargs)
-        if self.de_expand:
-            result = np.squeeze(result, axis=0)
         return result
     def compute_losses(self, *args, **kwargs):
         """

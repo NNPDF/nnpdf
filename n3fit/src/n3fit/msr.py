@@ -137,9 +137,10 @@ def layer_to_integrand(layer, xgrid, eps):
     # Returns:
         - `modelito`: model corresponding to x*(f(x)-f(x-eps))
     """
+    xgrid = xgrid.reshape(-1,1)
     # Generate the input layers
-    xgrid_input = operations.numpy_to_input(xgrid)
-    xgrid_input_prime = operations.numpy_to_input(xgrid - eps)
+    xgrid_input = operations.numpy_to_input(xgrid, no_reshape = True)
+    xgrid_input_prime = operations.numpy_to_input(xgrid - eps, no_reshape = True)
     f1 = layer(xgrid_input)
     f2 = layer(xgrid_input_prime)
     layer_diff = operations.op_subtract([f2, f1])

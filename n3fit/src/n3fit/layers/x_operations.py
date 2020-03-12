@@ -31,9 +31,6 @@ class xDivide(MetaLayer):
         self.div_list = div_list
         super(MetaLayer, self).__init__(**kwargs)
 
-    def compute_output_shape(self, input_shape):
-        return (input_shape[0], self.output_dim)
-
     def call(self, x):
         out_array = []
         one = self.tensor_ones_like(x)
@@ -43,7 +40,7 @@ class xDivide(MetaLayer):
             else:
                 res = one
             out_array.append(res)
-        out_tensor = self.concatenate(out_array, axis=1)
+        out_tensor = self.concatenate(out_array, axis=-1)
         return out_tensor
 
 
@@ -64,9 +61,6 @@ class xMultiply(MetaLayer):
         self.not_mul_list = not_mul_list
         super(MetaLayer, self).__init__(**kwargs)
 
-    def compute_output_shape(self, input_shape):
-        return (input_shape[0], self.output_dim)
-
     def call(self, x):
         out_array = []
         one = self.tensor_ones_like(x)
@@ -76,7 +70,7 @@ class xMultiply(MetaLayer):
             else:
                 res = one * x
             out_array.append(res)
-        out_tensor = self.concatenate(out_array, axis=1)
+        out_tensor = self.concatenate(out_array, axis=-1)
         return out_tensor
 
 
@@ -92,9 +86,6 @@ class xIntegrator(MetaLayer):
         self.output_dim = output_dim
         super(MetaLayer, self).__init__(**kwargs)
 
-    def compute_output_shape(self, input_shape):
-        return (self.output_dim,)
-
     def call(self, x):
         """
             Receives as input a rank-2 tensor `x` (xpoints, flavours)
@@ -102,4 +93,4 @@ class xIntegrator(MetaLayer):
             weights of the grid (in the most common case, 1/grid_points)
         """
         xx = x * self.grid_weights
-        return self.sum(xx, axis=0)
+        return self.sum(xx, axis=-2)

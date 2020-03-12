@@ -9,6 +9,7 @@
     language (hence the mapping `c_to_py_fun`)
 """
 
+import tensorflow as tf
 from tensorflow.keras.layers import add as keras_add
 from tensorflow.keras.layers import subtract as keras_subtract
 from tensorflow.keras.layers import Lambda as keras_Lambda
@@ -30,18 +31,36 @@ def squeezer(xin):
     # TODO hack
     return keras_Lambda(lambda x: K.squeeze(x, 0))(xin)
 
+def batchit(x):
+    """ Add a batch dimension to tensor x """
+    return tf.reshape(x, (1,-1))
 
-def numpy_to_input(numpy_array):
+def numpy_to_input(numpy_array, no_reshape = False):
     """
-        If x is a numpy array, make it into a numpy tensor
-        if not just returns the input unchanged
+    Takes a numpy array and generates a Input layer.
+    By default it adds a batch dimension (of size 1) so that the shape of the layer
+    is that of the array
+
+    Parameters
+    ----------
+        numpy_array: np.ndarray
+        no_reshape: bool
+            if true, don't add batch dimension, take the first dimension of the array as the batch
     """
     if isinstance(numpy_array, np.ndarray):
-        # Now hack around the limitations of TF 2
-        # TODO hack
-        batched_array = np.expand_dims(numpy_array, 0)
-        true_input = Input(batch_size = 1, shape = numpy_array.shape)
-        input_layer = squeezer(true_input)
+        if no_reshape:
+            batched_array = numpy_array
+            batch_size = numpy_array.shape[0]
+            shape = numpy_array.shape[1:]
+        else:
+            batched_array = np.expand_dims(numpy_array, 0)
+            batch_size = 1
+            shape = numpy_array.shape
+        true_input = Input(batch_size = batch_size, shape = shape)
+        if no_reshape:
+            input_layer = true_input
+        else:
+            input_layer = squeezer(true_input)
         input_layer.true_input = true_input
         input_layer.tensor_content = batched_array
         return input_layer

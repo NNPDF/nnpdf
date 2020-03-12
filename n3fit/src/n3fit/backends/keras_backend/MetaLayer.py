@@ -138,6 +138,10 @@ class MetaLayer(Layer):
         else:
             return concatenated_tensor
 
+    def flatten(self, x):
+        """ Flatten tensor x """
+        return tf.reshape(x, (-1,))
+
     def permute_dimensions(self, tensor, permutation, **kwargs):
         """
         Receives a tensor and a tuple and permutes the axes of the tensor according to it.

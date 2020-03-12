@@ -210,7 +210,7 @@ def pdfNN_layer_generator(
         pre = int(units)
 
     if inp == 2:
-        add_log = Lambda(lambda x: concatenate([x, operations.op_log(x)], axis=1))
+        add_log = Lambda(lambda x: concatenate([x, operations.op_log(x)], axis=-1))
 
     def dense_me(x):
         if inp == 1:
