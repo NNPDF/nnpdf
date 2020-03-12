@@ -20,6 +20,7 @@ from tensorflow.keras import backend as K
 
 import numpy as np
 
+
 def numpy_to_tensor(ival):
     """
         Make the input into a tensor
@@ -27,15 +28,12 @@ def numpy_to_tensor(ival):
     return K.constant(ival)
 
 
-def squeezer(xin):
-    # TODO hack
-    return keras_Lambda(lambda x: K.squeeze(x, 0))(xin)
-
 def batchit(x):
     """ Add a batch dimension to tensor x """
-    return tf.reshape(x, (1,-1))
+    return tf.expand_dims(x, 0)
 
-def numpy_to_input(numpy_array, no_reshape = False):
+
+def numpy_to_input(numpy_array, no_reshape=False):
     """
     Takes a numpy array and generates a Input layer.
     By default it adds a batch dimension (of size 1) so that the shape of the layer
@@ -56,34 +54,31 @@ def numpy_to_input(numpy_array, no_reshape = False):
             batched_array = np.expand_dims(numpy_array, 0)
             batch_size = 1
             shape = numpy_array.shape
-        true_input = Input(batch_size = batch_size, shape = shape)
-        if no_reshape:
-            input_layer = true_input
-        else:
-            input_layer = squeezer(true_input)
-        input_layer.true_input = true_input
+        input_layer = Input(batch_size=batch_size, shape=shape)
         input_layer.tensor_content = batched_array
         return input_layer
     else:
         return numpy_array
 
+
 def evaluate(tensor):
     """ Evaluate input tensor using the backend """
     return K.eval(tensor)
+
 
 def c_to_py_fun(op_name, name, default="ADD"):
     """
     Map between the NNPDF operations and the operations defined in this file
     Any new backend must implement such a mapping
-    """ # TODO: shouldn't this be outside of the backend folder then
-        # surely...
+    """  # TODO: shouldn't this be outside of the backend folder then
+    # surely...
     d = {
-        'NULL' : op_null,
-        'ADD' : op_add,
-        'RATIO' : op_ratio,
-        'ASY' : op_asy,
-        'SMN' : op_smn,
-            }
+        "NULL": op_null,
+        "ADD": op_add,
+        "RATIO": op_ratio,
+        "ASY": op_asy,
+        "SMN": op_smn,
+    }
     if op_name not in d.keys():
         print("Operation name not recognised, defaulting to {0}".format(default))
         return d[default]

@@ -73,8 +73,7 @@ class MetaModel(Model):
                 input_list += inputs
                 output_list.append(o_tensor)
 
-        true_inputs = [i.true_input for i in input_list]
-        super(MetaModel, self).__init__(true_inputs, output_list, **kwargs)
+        super(MetaModel, self).__init__(input_list, output_list, **kwargs)
         # We are hacking around some limiations of TF 2.
         # see keras_backend/operations/numpy_to_input for more information
         self.x_in = [i.tensor_content for i in input_list]
