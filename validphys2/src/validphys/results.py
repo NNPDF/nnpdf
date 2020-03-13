@@ -478,6 +478,7 @@ def pdferr_plus_data_covmat(dataset, pdf, data_covmat):
     `use_pdferr` makes this action be used for `covariance_matrix`
 
     >>> from validphys.api import API
+    >>> from import numpy as np
     >>> inp = {
             'dataset_input': {'dataset' : 'ATLASTTBARTOT'},
             'theoryid': 53,
@@ -486,7 +487,7 @@ def pdferr_plus_data_covmat(dataset, pdf, data_covmat):
         }
     >>> a = API.covariance_matrix(**inp, use_pdferr=True)
     >>> b = API.pdferr_plus_data_covmat(**inp)
-    >>> np.all(c == b)
+    >>> np.allclose(a == b)
     True
 
     See Also
