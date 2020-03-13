@@ -159,8 +159,8 @@ void Experiment::MakeReplica()
   {
     matrix<double> SM = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fData, fStat, fSys, false, false, false, "", {});
     fSamplingMatrix = ComputeSqrtMat(SM); // Take the sqrt of the sampling matrix
-  } 
-  
+  }
+
   // generate procType array for ease of checking
   std::vector<std::string> proctype;
   for (int s = 0; s < GetNSet(); s++)
@@ -181,17 +181,17 @@ void Experiment::MakeReplica()
           fSys[i][l].type = fSys[0][l].type;
       }
 
-      // Generate normal deviates      
+      // Generate normal deviates
       vector<double> deviates(fNData, std::numeric_limits<double>::quiet_NaN());
       generate(deviates.begin(), deviates.end(),
                []()->double {return RandomGenerator::GetRNG()->GetRandomGausDev(1); } );
       const vector<double> correlated_deviates = fSamplingMatrix*deviates;
-     
+
       // Generate additive theory noise directly from the covariance matrix
       vector<double> artdata(fData);
       for (int i=0; i<fNData; i++)
           artdata[i] += correlated_deviates[i];
-      
+
       // Generation of the experimental noise
       for (int i = 0; i < fNData; i++) // should rearrange to update set-by-set -- nh
       {
@@ -235,13 +235,13 @@ void Experiment::MakeReplica()
               const bool is_asymmetry = proctype[i].find("ASY") != std::string::npos;
               if (!is_asymmetry)
               {
-                artdata[i] = 0;  
-                cout << "Datapoint " << i << " has been set to 0" << endl;
-               // isArtNegative = true;
+             //   artdata[i] = 0;
+             //   cout << "Datapoint " << i << " has been set to 0" << endl;
+                isArtNegative = true;
                 break;
               }
           }
-       
+
       // Don't ever discard the replica now
        if (isArtNegative) continue;
 

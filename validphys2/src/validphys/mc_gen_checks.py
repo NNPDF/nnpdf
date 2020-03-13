@@ -51,6 +51,18 @@ def art_rep_generation(experiments, nreplica:int, experiments_index):
 
         return real_data, art_replicas, normart_replicas, art_data
 
+def per_point_art_rep_generation(experiments, nreplica:int, experiments_index):
+    """Generates artificial replicas separately for each data point"""
+
+    RandomGenerator.InitRNG(0,0)
+
+    for exp in experiments:
+        real_exp = Experiment(exp.load())
+        replica_exp = Experiment(real_exp)
+
+    from IPython import embed
+    embed()
+    return 0
 @figure
 def art_data_residuals(art_rep_generation, nreplica:int):
 
