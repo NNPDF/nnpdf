@@ -20,12 +20,15 @@ from reportengine.checks import require_one, remove_outer, check_not_empty
 from reportengine.table import table
 from reportengine import collect
 
-from validphys.checks import (check_cuts_considered, check_pdf_is_montecarlo,
-                              check_speclabels_different, check_two_dataspecs,
-                              check_dataset_cuts_match_theorycovmat,
-                              check_experiment_cuts_match_theorycovmat,
-                              check_norm_threshold,check_pdferr)
-
+from validphys.checks import (
+    check_cuts_considered,
+    check_pdf_is_montecarlo,
+    check_speclabels_different,
+    check_two_dataspecs,
+    check_dataset_cuts_match_theorycovmat,
+    check_experiment_cuts_match_theorycovmat,
+    check_norm_threshold,
+)
 from validphys.core import DataSetSpec, PDF, ExperimentSpec
 from validphys.calcutils import (
     all_chi2, central_chi2, calc_chi2, calc_phi, bootstrap_values,
