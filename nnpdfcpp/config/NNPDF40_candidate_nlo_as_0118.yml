@@ -99,8 +99,8 @@ experiments:
   #SINGLE TOP
   - {dataset: ATLAS_SINGLETOP_TCH_R_7TEV, frac: 1.0}
   - {dataset: ATLAS_SINGLETOP_TCH_R_13TEV, frac: 1.0}
-  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM, frac: 1.0}
-  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM, frac: 1.0}
+  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORM, frac: 1.0}
+  - {dataset: ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORM, frac: 1.0}
 # CMS
 - experiment: CMS
   datasets:
