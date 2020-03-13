@@ -1,0 +1,15 @@
+********************************************************************************
+SetName: ATLAS_TOPDIFF_DILEPT_8TEV_TTM
+Author: Emanuele R. Nocera enocera@nikhef.nl
+Date: November 2019
+CodesUsed: K-factors provided by Shaun Bailey (Amanda Cooper-Sarkar)
+TheoryInput: NNPDF3.1 with alphas(MZ)=0.118
+PDFset: NNPDF31_nnlo_as_0118
+Warnings: 
+********************************************************************************
+1.07351	0.00000
+1.06054	0.00000
+1.07278	0.00000
+1.08464	0.00000
+1.10038	0.00000
+1.11975	0.00000

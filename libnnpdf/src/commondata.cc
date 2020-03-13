@@ -54,6 +54,32 @@ namespace NNPDF
     { "SIA" ,       {"$z$", "$Q^2 (GeV^2)$", "$y$"}}
   };
 
+  const CommonData::kinMap CommonData::kinLabel = {
+    { "DIS",        {"x","Q2","y"}},
+    { "DYP",        {"y","M2","sqrts"}},
+    { "JET",        {"eta","p_T2","sqrts"}},
+    { "DIJET",      {"eta","m_12","sqrts"}},
+    { "PHT",        {"eta_gamma","E_{T,gamma}2","sqrts"}},
+    { "INC",        {"0","mu2","sqrts"}},
+    { "EWK_RAP",    {"etay","M2","sqrts"}},
+    { "EWK_PT",     {"p_T","M2","sqrts"}},
+    { "EWK_PTRAP",  {"etay","p_T2","sqrts"}},
+    { "EWK_MLL",    {"M_ll","M_ll2","sqrts"}},
+    { "EWJ_RAP",    {"etay","M2","sqrts"}},
+    { "EWJ_PT",     {"p_T","M2","sqrt(s)"}},
+    { "EWJ_PTRAP",  {"etay","p_T2","sqrts"}},
+    { "EWJ_JRAP",   {"etay","M2","sqrts"}},
+    { "EWJ_JPT",    {"p_T","M2","sqrts"}},
+    { "EWJ_MLL",    {"M_ll","M_ll2","sqrts"}},
+    { "HQP_YQQ",    {"yQQ","mu2","sqrts"}},
+    { "HQP_MQQ",    {"MQQ","mu2","sqrts"}},
+    { "HQP_PTQQ",   {"p_TQQ","mu2","sqrts"}},
+    { "HQP_YQ",     {"yQ","mu2","sqrts"}},
+    { "HQP_PTQ",    {"p_TQ","mu2","sqrts"}},
+    { "HIG_RAP",    {"y","M_H2","sqrts"}},
+    { "SIA" ,       {"z", "Q2", "y"}}
+  };
+
 
   // Generate a dataInfo struct given a target filename
   dataInfo genInfoStruct(std::string const& targetfile, std::string const& sysfile)
@@ -311,7 +337,7 @@ namespace NNPDF
   // Verify that the process type is one of allowed processes
   void CommonData::VerifyProc(std::string const& proc)
   {
-    const int nProc = 18;
+    const int nProc = 23;
     const std::string validProc[nProc] = {
       "DIS",
       "DYP",
@@ -321,21 +347,28 @@ namespace NNPDF
       "INC",
       "EWK_RAP",
       "EWK_PT",
+      "EWK_PTRAP",
       "EWK_MLL",
       "EWJ_RAP",
       "EWJ_PT",
+      "EWJ_PTRAP",
+      "EWJ_JRAP",
+      "EWK_JPT",
       "EWJ_MLL",
       "HQP_YQQ",
       "HQP_MQQ",
       "HQP_PTQQ",
       "HQP_YQ",
       "HQP_PTQ",
+      "HIG_RAP",
       "SIA"
     };
 
     bool foundString = false;
     for (int i=0; i<nProc; i++)
-      foundString = foundString || (proc.find(validProc[i]) == 0);
+      {
+	foundString = foundString || (proc.find(validProc[i]) == 0);
+      }
 
     if (!foundString)
       throw std::invalid_argument("CommonData::VerifyProc: process " + proc + " is unsupported.");

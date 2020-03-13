@@ -20,22 +20,25 @@ setup(name= "validphys",
                     [
                         'validphys = validphys.scripts.main:main',
                         'vp-upload = validphys.scripts.vp_upload:main',
+                        'vp-uploadfit = validphys.scripts.vp_uploadfit:main',
                         'wiki-upload = validphys.scripts.wiki_upload:main',
                         'postfit = validphys.scripts.postfit:main',
                         'vp-get = validphys.scripts.vp_get:main',
                         'vp-setupfit = validphys.scripts.vp_setupfit:main',
                         'vp-comparefits = validphys.scripts.vp_comparefits:main',
                         'fitrename = validphys.scripts.fitrename:main',
-                        'vp-checktheory = validphys.scripts.vp_checktheory:main'
+                        'vp-checktheory = validphys.scripts.vp_checktheory:main',
+                        'vp-rebuild-data = validphys.scripts.vp_rebuild_data:main',
                     ]},
       package_dir = {'': 'src'},
       packages = find_packages('src'),
-       package_data = {
+      package_data = {
            #TODO: Get rid of this nonsense
             '':['*.template', '*.mplstyle', '*.csv', '*.yaml', '*.md', '*.png'],
             'tests/regressions': ['*'],
             'comparefit': ['*'],
             'tests/baseline': ['*'],
+            'cuts': ['*'],
        },
       zip_safe = False,
       classifiers=[

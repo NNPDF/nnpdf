@@ -1,3 +1,6 @@
+```eval_rst
+.. _git:
+```
 # Git, GitHub and GitLab
 
 *Author: Cameron Voisey, 13/10/2019*
@@ -55,6 +58,32 @@ and add the public SSH key(s) from your computer.
 
 * If you do not have a valid CERN account, you should send your public SSH key(s) to Stefano
 Carrazza and he will add them for you.
+
+### Available repositories on GitHub
+
+The following is a list of the repositories that are available on GitHub as part of the NNPDF
+organization. To use the code it is not a requirement that you download any of these yourself,
+since the NNDPF code needed to e.g. run a fit is available in conda packages (see
+[Installation using conda](installation.md)). However, if you wish to develop the code then it
+is required that you download the repository/repositories that you wish to work on. You must
+then install the relevant code yourself (see [Installation from source](installation-source.md)).
+
+When downloading the code, it is recommended that you create a folder (below called `nnpdfgit`)
+into which you clone the desired repositories. This way all code related to NNPDF is in one place.
+
+```bash
+mkdir nnpdfgit
+cd nnpdfgit
+
+git clone git@github.com:NNPDF/nnpdf.git          # The main body of NNPDF code
+git clone https://github.com/scarrazza/apfel.git  # Handles the DGLAP PDF evolution as well as the production of NNLO DIS predictions
+git clone git@github.com:NNPDF/buildmaster.git    # Where experimental data are turned into a format suitable for NNPDF fits
+git clone git@github.com:NNPDF/external.git 	  # Codes written outside of NNPDF that are required to produce theoretical predictions (i.e. APPLgrids)
+git clone git@github.com:NNPDF/applgrids.git 	  # Where APPLgrids get stored
+git clone git@github.com:NNPDF/apfelcomb.git 	  # Turns APPLgrids into FK tables
+git clone git@github.com:NNPDF/reportengine.git   # A framework for data analysis that validphys relies on
+git clone git@github.com:NNPDF/papers.git         # Where papers and minutes are stored
+```
 
 ### GitHub development workflow
 

@@ -79,6 +79,8 @@ hyperscan:
 
 Finally, complete working examples of DIS-only and global fits are available at the git repository in [n3fit/runcards](https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards).
 
+For a more detailed explanation on the parameters that are specific for the `n3fit` runcard see the [detailed guide](runcard_detailed).
+
 Running the fitting code
 ------------------------
 
@@ -100,14 +102,31 @@ number_of_replicas runcard_folder` to finalize the PDF set by
 applying post selection criteria. This will produce a set of
 `number_of_replicas + 1` replicas.
 
+It is possible to run more than one replica in one single run of `n3fit` by using the ``--replica_range`` option. Running `n3fit` in this way increases the memory usage as all replicas need to be stored in memory but decreases disk load as the reading of the datasets and fktables is only done once for all replicas.
+
+
 If you are planning to perform a hyperparameter scan just perform exactly the same steps by adding the `--hyperopt number_of_trials` argument to `n3fit`, where `number_of_trials` is the maximum allowed value of trials required by the fit. Usually when running hyperparameter scan we switch-off the MC replica generation so different replicas will correspond to different initial points for the scan, this approach provides faster results. We provide the `n3Hyperplot` script to analyse the output of the hyperparameter scan.
+
+
+Output of the fit
+-----------------
+In the same fashion as `nnfit`, every time a replica is finalized a folder is created in ```runcard/nnfit/replica_$replica```. This folder contains several files which follow the same structure as `nnfit`:
+
+- `runcard.exportgrid`: a file containing the PDF grid.
+- `chi2exps.log`: a log file with the chi2 of the training every 100 epochs.
+- `runcard.preproc`: Empty file.
+- `runcard.fitinfo`: Includes information about the fit. The first line contains, in this order, the number of epochs, the validation chi2, training chi2, experimental chi2 and the state of the positivity. The second line the arclength for each flavour.
+- `runcard.time`: Includes the total time the fit took in CPU time and walltime. The times are separated by the time of the actual fit and the time of the data load.
+
+``` note:: The reported chi2 refers always to the actual chi2, i.e., without positivity loss or other penalty terms.
+```
 
 Upload and analyse the fit
 --------------------------
 
 After obtaining the fit you can proceed with the fit upload and analisis by:
 
-1. Uploading the results using `vp-upload --fit runcard_folder` then
+1. Uploading the results using `vp-uploadfit runcard_folder` then
 install the fitted set with `vp-get fit fit_name`.
 
 2. Analysing the results with `validphys`, see the

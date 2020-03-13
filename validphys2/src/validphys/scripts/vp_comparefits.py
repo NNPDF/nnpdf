@@ -41,7 +41,7 @@ class KeywordsWithCache():
 class CompareFitApp(App):
     def add_positional_arguments(self, parser):
         parser.add_argument(
-            'base_fit',
+            'current_fit',
             default=None,
             nargs='?',
             help="The fit to produce the report for.",
@@ -86,7 +86,7 @@ class CompareFitApp(App):
     def try_complete_args(self):
         args = self.args
         argnames = (
-            'base_fit', 'reference_fit', 'title', 'author', 'keywords')
+            'current_fit', 'reference_fit', 'title', 'author', 'keywords')
         boolnames = (
             'thcovmat_if_present',)
         badargs = [argname for argname in argnames if not args[argname]]
@@ -104,10 +104,10 @@ class CompareFitApp(App):
             for argname in [*argnames, *boolnames])
         log.info(f"Starting NNPDF fit comparison:\n{texts}")
 
-    def interactive_base_fit(self):
+    def interactive_current_fit(self):
         l = self.environment.loader
         completer = WordCompleter(l.available_fits)
-        return prompt_toolkit.prompt("Enter base fit: ", completer=completer)
+        return prompt_toolkit.prompt("Enter current fit: ", completer=completer)
 
     def interactive_reference_fit(self):
         l = self.environment.loader
@@ -117,7 +117,7 @@ class CompareFitApp(App):
 
     def interactive_title(self):
         #TODO Use the colors in prompt_toolkit 2+ instead of this
-        default = (f"Comparison between {self.args['base_fit']} "
+        default = (f"Comparison between {self.args['current_fit']} "
                    f"and {self.args['reference_fit']} ")
         print(f"Enter report title [default:\n{t.dim(default)}]:")
         #Do not use the default keyword because it is a pain to delete
@@ -171,10 +171,10 @@ class CompareFitApp(App):
             'author': args['author'],
             'keywords': args['keywords']
         }
-        basemap = {'id': args['base_fit'], 'label': "Current Fit"}
+        currentmap = {'id': args['current_fit'], 'label': "Current Fit"}
         autosettings['current'] = {
-            'fit': basemap,
-            'pdf': basemap,
+            'fit': currentmap,
+            'pdf': currentmap,
             'theory': {
                 'from_': 'fit'
             },

@@ -6,13 +6,15 @@
 import sys
 import logging
 import os.path
+import time
 import numpy as np
 
 log = logging.getLogger(__name__)
 
+
 # Action to be called by validphys
 # All information defining the NN should come here in the "parameters" dict
-def fit(
+def performfit(
     fitting,
     experiments,
     t0set,
@@ -76,6 +78,9 @@ def fit(
         set_initial_state()
     ###############
 
+    from n3fit.stopwatch import StopWatch
+
+    stopwatch = StopWatch()
     # All potentially backend dependent imports should come inside the fit function
     # so they can eventually be set from the runcard
     from n3fit.ModelTrainer import ModelTrainer
@@ -94,6 +99,8 @@ def fit(
     # Loading t0set from LHAPDF
     if t0set is not None:
         t0pdfset = t0set.load_t0()
+    else:
+        t0pdfset = None
 
     # First set the seed variables for
     # - Tr/Vl split
@@ -119,8 +126,9 @@ def fit(
         nnseeds.append(nnseed)
         mcseeds.append(mcseed)
 
-    if fitting.get("genrep") == 0:
+    if not fitting["genrep"]:
         mcseeds = []
+        log.info("Not generating MC noise")
 
     ##############################################################################
     # ### Read files
@@ -132,6 +140,7 @@ def fit(
     # (experimental data, covariance matrix, replicas, etc, tr/val split)
     ##############################################################################
     all_exp_infos = [[] for _ in replica]
+
     # First loop over the experiments
     for exp in experiments:
         log.info("Loading experiment: %s", exp)
@@ -150,6 +159,7 @@ def fit(
 
     # Note: In the basic scenario we are only running for one replica and thus this loop is only
     # run once and all_exp_infos is a list of just than one element
+    stopwatch.register_times("data_loaded")
     for replica_number, exp_info, nnseed in zip(replica, all_exp_infos, nnseeds):
         replica_path_set = replica_path / f"replica_{replica_number}"
         log.info("Starting replica fit %s", replica_number)
@@ -171,7 +181,9 @@ def fit(
         # reading the data up will be done by the model_trainer
         if fitting.get("load"):
             model_file = fitting.get("loadfile")
-            log.info(" > Loading the weights from previous training from %s", model_file)
+            log.info(
+                " > Loading the weights from previous training from %s", model_file
+            )
             if not os.path.isfile(model_file):
                 log.warning(" > Model file %s could not be found", model_file)
                 model_file = None
@@ -183,6 +195,7 @@ def fit(
 
         # Read up the parameters of the NN from the runcard
         parameters = fitting.get("parameters")
+        stopwatch.register_times("replica_set")
 
         ########################################################################
         # ### Hyperopt                                                         #
@@ -250,6 +263,7 @@ def fit(
         # "parameters" dictionary, uses them to generate the NN and trains the net  #
         #############################################################################
         result = pdf_gen_and_train_function(parameters)
+        stopwatch.register_ref("replica_fitted", "replica_set")
 
         # After the fit is run we get a 'result' dictionary with the following items:
         stopping_object = result["stopping_object"]
@@ -293,10 +307,14 @@ def fit(
             stopping_object,
             layers["fitbasis"],
             theoryid.get_description().get("Q0") ** 2,
+            stopwatch.stop(),
         )
 
         # Now write the data down
-        writer_wrapper.write_data(replica_path_set, output_path.name, true_chi2)
+        training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(stopping_object)
+        writer_wrapper.write_data(
+            replica_path_set, output_path.name, training_chi2, val_chi2, true_chi2
+        )
 
         # If the history of weights is active then loop over it
         # rewind the state back to every step and write down the results
@@ -304,11 +322,12 @@ def fit(
             stopping_object.history.rewind(step)
             new_path = output_path / f"history_step_{step}/replica_{replica_number}"
             # We need to recompute the experimental chi2 for this point
-            exp_chi2 = (
-                result["experimental"]["model"].evaluate()[0]
-                / result["experimental"]["ndata"]
+            training_chi2, val_chi2, exp_chi2 = the_model_trainer.evaluate(
+                stopping_object
             )
-            writer_wrapper.write_data(new_path, output_path.name, exp_chi2)
+            writer_wrapper.write_data(
+                new_path, output_path.name, training_chi2, val_chi2, exp_chi2
+            )
 
         # So every time we want to capture output_path.name and addd a history_step_X
         # parallel to the nnfit folder
@@ -320,5 +339,7 @@ def fit(
         training["model"].save_weights(model_file)
 
     # print out the integration of the sum rule in case we want to check it's not broken
+
+
 #     import n3fit.msr as msr_constraints
 # msr_constraints.check_integration(layer_pdf, integrator_input)

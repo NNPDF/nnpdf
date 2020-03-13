@@ -20,12 +20,14 @@ import os.path as osp
 import urllib.parse as urls
 import mimetypes
 
+from typing import List
+
 import requests
 from reportengine.compat import yaml
 from reportengine import filefinder
 
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
-                            PositivitySetSpec, DataSetSpec, PDF, Cuts,
+                            PositivitySetSpec, DataSetSpec, PDF, Cuts, ExperimentSpec,
                             peek_commondata_metadata, CutsPolicy,
                             InternalCutsWrapper)
 from validphys import lhaindex
@@ -363,14 +365,14 @@ class Loader(LoaderBase):
 
         return tuple(cf)
 
-    def check_posset(self, theiryID, setname, postlambda):
+    def check_posset(self, theoryID, setname, postlambda):
         cd = self.check_commondata(setname, 'DEFAULT')
-        fk = self.check_fktable(theiryID, setname, [])
-        th =  self.check_theoryID(theiryID)
+        fk = self.check_fktable(theoryID, setname, [])
+        th =  self.check_theoryID(theoryID)
         return PositivitySetSpec(setname, cd, fk, postlambda, th)
 
-    def get_posset(self, theiryID, setname, postlambda):
-        return self.check_posset(theiryID, setname, postlambda).load()
+    def get_posset(self, theoryID, setname, postlambda):
+        return self.check_posset(theoryID, setname, postlambda).load()
 
     def check_fit(self, fitname):
         resultspath = self.resultspath
@@ -385,9 +387,26 @@ class Loader(LoaderBase):
                    "'{p}' must be a folder").format(**locals())
         raise FitNotFound(msg)
 
+    def check_default_filter_rules(self, theoryid, defaults=None):
+        # avoid circular import
+        from validphys.filters import (
+            default_filter_settings,
+            default_filter_rules_input,
+            Rule,
+        )
+
+        th_params = theoryid.get_description()
+        if defaults is None:
+            defaults = default_filter_settings()
+        return [
+            Rule(inp, defaults=defaults, theory_parameters=th_params, loader=self)
+            for inp in default_filter_rules_input()
+        ]
+
     def check_dataset(self,
                       name,
                       *,
+                      rules=None,
                       sysnum=None,
                       theoryid,
                       cfac=(),
@@ -395,9 +414,7 @@ class Loader(LoaderBase):
                       cuts=CutsPolicy.INTERNAL,
                       use_fitcommondata=False,
                       fit=None,
-                      weight=1,
-                      q2min=None,
-                      w2min=None):
+                      weight=1):
 
         if not isinstance(theoryid, TheoryIDSpec):
             theoryid = self.check_theoryID(theoryid)
@@ -422,13 +439,43 @@ class Loader(LoaderBase):
             elif cuts is CutsPolicy.FROMFIT:
                 cuts = self.check_fit_cuts(name, fit)
             elif cuts is CutsPolicy.INTERNAL:
-                cuts = self.check_internal_cuts(commondata, theoryid, q2min, w2min)
+                if rules is None:
+                    rules = self.check_default_filter_rules(theoryid)
+                cuts = self.check_internal_cuts(commondata, rules)
             elif cuts is CutsPolicy.FROM_CUT_INTERSECTION_NAMESPACE:
                 raise LoaderError(f"Intersection cuts not supported in loader calls.")
 
         return DataSetSpec(name=name, commondata=commondata,
                            fkspecs=fkspec, thspec=theoryid, cuts=cuts,
                            frac=frac, op=op, weight=weight)
+
+    def check_experiment(self, name: str, datasets: List[DataSetSpec]) -> ExperimentSpec:
+        """Loader method for instantiating ExperimentSpec objects. The NNPDF::Experiment
+        object can then be instantiated using the load method.
+
+        Parameters
+        ----------
+        name: str
+            A string denoting the name of the resulting ExperimentSpec object.
+        dataset: List[DataSetSpec]
+            A list of DataSetSpec objects pre-created by the user. Note, these too
+            will be loaded by Loader.
+
+        Returns
+        -------
+        ExperimentSpec
+
+        Example
+        -------
+        >>> from validphys.loader import Loader
+        >>> l = Loader()
+        >>> ds = l.check_dataset("NMC", theoryid=53, cuts="internal")
+        >>> exp = l.check_experiment("My ExperimentSpec Name", [ds])
+        """
+        if not isinstance(datasets, list):
+            raise TypeError("Must specify a list of DataSetSpec objects to use")
+
+        return ExperimentSpec(name, datasets)
 
     def check_pdf(self, name):
         if lhaindex.isinstalled(name):
@@ -452,12 +499,8 @@ class Loader(LoaderBase):
             return None
         return Cuts(setname, p)
 
-    def check_internal_cuts(self, commondata, theoryid, q2min, w2min):
-        if not isinstance(q2min, numbers.Number):
-            raise TypeError("q2min must be a number")
-        if not isinstance(w2min, numbers.Number):
-            raise TypeError("w2min must be a number")
-        return InternalCutsWrapper(commondata, theoryid, q2min, w2min)
+    def check_internal_cuts(self, commondata, rules):
+        return InternalCutsWrapper(commondata, rules)
 
     def check_vp_output_file(self, filename, extra_paths=('.',)):
         """Find a file in the vp-cache folder, or (with higher priority) in

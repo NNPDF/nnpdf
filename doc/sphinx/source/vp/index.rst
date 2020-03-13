@@ -3,10 +3,13 @@ vp-guide
 ========
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    ./introduction.md
    ./design.md
    ./api.md
+   ./filters.md
+   ./download.md
    ./upload.md
-   ./theorycov.rst
+   ./nnprofile.md
+   ./theorycov/index

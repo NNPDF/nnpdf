@@ -239,5 +239,10 @@ def check_two_dataspecs(dataspecs):
     check(l == 2, f"Expecting exactly 2 dataspecs, not {l}")
 
 @make_argcheck
+def check_norm_threshold(norm_threshold):
+    """Check norm_threshold is not None"""
+    check(norm_threshold is not None)
+    
+@make_argcheck
 def check_pdferr(use_pdferr):
     check(use_pdferr, "The flag use_pdferr must be explicitly set to True")

@@ -6,4 +6,6 @@ n3fit
 
    introduction
    methodology
+   hyperopt
    usage
+   runcard_detailed

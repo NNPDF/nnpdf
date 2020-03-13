@@ -76,7 +76,7 @@ def kinlimits(commondata, cuts, use_cuts, use_kinoverride:bool=True):
     kintable = plotoptions.kitable(commondata, info)
     ndata = len(kintable)
     if cuts:
-        kintable = kintable.ix[cuts.load()]
+        kintable = kintable.loc[cuts.load()]
         nfitted = len(kintable)
     elif use_cuts is not CutsPolicy.NOCUTS:
         nfitted = len(kintable)
@@ -149,8 +149,8 @@ def xq2map_with_cuts(experiment, commondata, cuts):
         mask = cuts.load()
         boolmask = np.zeros(len(kintable), dtype=bool)
         boolmask[mask] = True
-        fitted_kintable = kintable.ix[boolmask]
-        masked_kitable = kintable.ix[~boolmask]
+        fitted_kintable = kintable.loc[boolmask]
+        masked_kitable = kintable.loc[~boolmask]
         xq2fitted =  plotoptions.get_xq2map(fitted_kintable, info)
         xq2masked = plotoptions.get_xq2map(masked_kitable, info)
         return XQ2Map(experiment, commondata, xq2fitted, xq2masked)

@@ -27,6 +27,9 @@ In order to be able to upload files, the user must have a valid SSH key
 installed in the NNPDF server [access](../get-started/access), and the `rsync`
 command must be present.
 
+Several settings relevant to uploading files are configured in [profile
+files](nnprofile).
+
 ## Metadata
 
 Currently the following information is used to index the results:
@@ -141,7 +144,7 @@ The code is documented at :py:mod:`validphys.scripts.vp_upload`.
 To upload fits use:
 
 ```
-vp-upload --fit <completed_fit_path>
+vp-uploadfit <completed_fit_path>
 ```
 
 Note there are [plans](https://github.com/NNPDF/nnpdf/issues/162) to change this
