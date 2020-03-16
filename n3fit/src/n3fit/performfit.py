@@ -15,10 +15,13 @@ log = logging.getLogger(__name__)
 @make_argcheck
 def check_consistent_hyperscan_options(hyperopt, hyperscan):
     if hyperopt is not None and hyperscan is None:
-        raise CheckError("hyperscan needs to be defined when performing hyperopt")
+        raise CheckError("A hyperscan dictionary needs to be defined when performing hyperopt")
+    if hyperopt is not None and "kpartitions" not in hyperscan:
+        raise CheckError("A kpartition strategy needs to be defined when performing hyperopt")
 
 # Action to be called by valid phys
 # All information defining the NN should come here in the "parameters" dict
+@check_consistent_hyperscan_options
 def performfit(
     fitting,
     experiments,

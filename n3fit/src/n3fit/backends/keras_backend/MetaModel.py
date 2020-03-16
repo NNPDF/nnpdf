@@ -96,6 +96,12 @@ class MetaModel(Model):
         self.all_inputs = input_list
         self.all_outputs = output_list
 
+    def reinitialize(self):
+        """ Run through all layers and reinitialize the ones that can be reinitialied """
+        for layer in self.layers:
+            if hasattr(layer, "reinitialize"):
+                layer.reinitialize()
+
 
     def perform_fit(self, x=None, y=None, steps_per_epoch=1, **kwargs):
         """
@@ -131,6 +137,7 @@ class MetaModel(Model):
             x = self.x_in
         result = super().predict(x = x, *args, **kwargs)
         return result
+
     def compute_losses(self, *args, **kwargs):
         """
         Performs keras.evaluate and returns a dictionary containing the loss function for
