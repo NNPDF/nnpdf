@@ -31,7 +31,6 @@ def performfit(
     hyperscan=None,
     hyperopt=None,
     debug=False,
-    create_test_card=None,
 ):
     """
         This action will (upon having read a validcard) process a full PDF fit for a given replica.
@@ -64,16 +63,7 @@ def performfit(
             - `hyperscan`: dictionary containing the details of the hyperscan
             - `hyperopt`: if given, number of hyperopt iterations to run
             - `debug`: activate some debug options
-            - `create_test_card`: read the runcard and output a new runcard with a test-set defined
     """
-
-    # Call the script to generate a runcard with a test-set and immediately exit
-    if create_test_card:
-        from n3fit.hyper_optimization.create_testset import create_testset
-
-        create_testset(experiments, runcard_file=create_test_card)
-        return 0
-    ###############
 
     if debug:
         # If debug is active, fix the initial state this should make the run reproducible

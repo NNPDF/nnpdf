@@ -16,12 +16,6 @@ from n3fit.stopping import Stopping
 
 log = logging.getLogger(__name__)
 
-# If an experiment matches this name, it will not be included int he training
-TESTNAME = "TEST"
-# Weights for the hyperopt cost function
-TEST_MULTIPLIER = 0.5
-VALIDATION_MULTIPLIER = 0.5
-
 
 class ModelTrainer:
     """
@@ -112,7 +106,6 @@ class ModelTrainer:
         }
         self.list_of_models_dicts = [self.training, self.experimental]
 
-        self.test_dict = None
         self._fill_the_dictionaries()
 
         if self.validation["ndata"] == 0:
@@ -168,17 +161,6 @@ class ModelTrainer:
             - `ndata`: number of experimental points
         """
         for exp_dict in self.exp_info:
-            if exp_dict["name"] == TESTNAME:
-                self.test_dict = {
-                    "output": [],
-                    "expdata": exp_dict["expdata_true"],
-                    "losses": [],
-                    "ndata": exp_dict["ndata"] + exp_dict["ndata_vl"],
-                    "model": None,
-                }
-                exp_dict["count_chi2"] = False
-                self.list_of_models_dicts.append(self.test_dict)
-                continue
             self.training["expdata"].append(exp_dict["expdata"])
             self.validation["expdata"].append(exp_dict["expdata_vl"])
             self.experimental["expdata"].append(exp_dict["expdata_true"])
@@ -213,7 +195,6 @@ class ModelTrainer:
 
         # Loop over all the dictionary models and create the trainig,
         #                 validation, true (data w/o replica) models:
-        # note: if test_dict exists, it will also create a model for it
 
         for model_dict in self.list_of_models_dicts:
             model_dict["model"] = MetaModel(
@@ -242,8 +223,6 @@ class ModelTrainer:
             self.training[key] = []
             self.validation[key] = []
             self.experimental[key] = []
-            if self.test_dict:
-                self.test_dict[key] = []
 
     def _pdf_injection(self, olist):
         """
@@ -286,12 +265,6 @@ class ModelTrainer:
 
             # Save the input(s) corresponding to this experiment
             self.input_list += exp_layer["inputs"]
-
-            if exp_dict["name"] == TESTNAME and self.test_dict:
-                # If this is the test set, fill the dictionary and stop here
-                self.test_dict["output"].append(exp_layer["output"])
-                self.test_dict["losses"].append(exp_layer["loss"])
-                continue
 
             # Now save the observable layer, the losses and the experimental data
             self.training["output"].append(exp_layer["output_tr"])
@@ -522,7 +495,7 @@ class ModelTrainer:
 
         # Compile the training['model'] with the given parameters
         self._model_compilation(params["learning_rate"], params["optimizer"])
-
+  
         ### Training loop
         passed = self._train_and_fit(stopping_object, epochs)
 
@@ -532,39 +505,22 @@ class ModelTrainer:
         # Compute experimental loss
         experimental_loss = self.experimental["model"].compute_losses()["loss"] / self.experimental["ndata"]
 
-        # Compute the testing loss if it was given
-        if self.test_dict:
-            # Generate the 'true' chi2 with the experimental model
-            # but only for models that were stopped
-            target_model = self.test_dict["model"]
-            testing_loss = target_model.compute_losses(verbose=False)["loss"] / self.test_dict["ndata"]
-        else:
-            testing_loss = 0.0
-
-        if self.mode_hyperopt:
-            final_loss = VALIDATION_MULTIPLIER * validation_loss
-            final_loss += TEST_MULTIPLIER * testing_loss
-            final_loss /= TEST_MULTIPLIER + VALIDATION_MULTIPLIER
-            arc_lengths = msr_constraints.compute_arclength(layers["fitbasis"])
-        else:
-            final_loss = experimental_loss
-            arc_lengths = None
-
         dict_out = {
-            "loss": final_loss,
             "status": passed,
-            "arc_lengths": arc_lengths,
             "training_loss": stopping_object.tr_loss,
             "validation_loss": validation_loss,
             "experimental_loss": experimental_loss,
-            "testing_loss": testing_loss,
         }
 
         if self.mode_hyperopt:
+            dict_out["loss"] = 42.0
+#             arc_lengths = msr_constraints.compute_arclength(layers["fitbasis"])
             # If we are using hyperopt we don't need to output any other information
             return dict_out
 
-        # Add to the output dictionary things that are needed by fit.py
+        dict_out["loss"] = experimental_loss
+
+        # Add to the output dictionary things that are needed by performfit.py
         # to generate the output pdf, check the arc-length, gather stats, etc
         # some of them are already attributes of the class so they are redundant here
         # but I think it's good to present them explicitly
