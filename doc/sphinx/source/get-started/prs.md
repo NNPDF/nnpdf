@@ -32,10 +32,10 @@ requests:
 	for anyone else to follow, and, failing that, it is fair to ask them to go
 	through the work of making them intelligible.
 
-  - Look at the big picture first: Try to suggest changes to discuss changes to
-    the overall functionality or implementation before looking at detailed line
-	by line reviews. There is little point in the latter if most of the code is to
-	be rewritten.
+  - Look at the big picture first. Think if the overall idea and implementation
+	is sound or instead could benefit from going in a different direction.
+	Ideally before a lot of work has gone into fine tuning details.
+
 
   - Review the code in detail. Try to identify areas where the changes
 	could be clearly improved in terms of clarity, speed or style. Consider
@@ -44,11 +44,23 @@ requests:
 	implement them a few times, which may be a win long term, even if it takes
 	longer to ship this particular code change.
 
-  - Use automated tools such as `pylint`, which could catch a few extra
-	problems.
-
   - Ideally changes should come with automatic tests supporting their
 	correctness.
+
+  - Use automated tools which could catch a few extra
+	problems. In particular
+	  * Do look at the automated tests that run with the PR.
+	    New code should not break them.
+	  * The [`pylint`](https://www.pylint.org/) tool should
+		allow to catch common problems in Python code. The top level
+		[`.pylintrc` file](https://github.com/NNPDF/nnpdf/blob/master/.pylintrc)
+		comes with an useful and not overly noisy configuration.
+	  * New Python code should come formatted with the
+	    [`black` tool](https://github.com/psf/black), which results in a
+		standardized and reasonably good looking code.
+	  * Changes in compiled code should be tested in debug mode, with
+		the address sanitizer enabled. This is done with the
+		`-DCMAKE_BUILD_TYPE=Debug -DENABLE_ASAN=ON` options in `cmake`.
 
   - Regardless of automated tests, always run code with the new changes
     manually. This gives great insight into possible pitfalls and areas of

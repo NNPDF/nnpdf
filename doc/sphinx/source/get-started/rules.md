@@ -18,8 +18,8 @@ does not apply if the PR is itself proposing an addition or an alteration to the
 
 * If the PR is fixing a bug, information should be given such that a reviewer can reproduce the bug.
 
-* The PR should have at least two developers assigned to it, whose task it is to [review](reviews) the
-code. The PR cannot be merged into master before at least two developers have approved it.
+* The PR should have at least one developer assigned to it, whose task it is to [review](reviews) the
+code. The PR cannot be merged into master before the review has approved it.
 
 * Before a PR can be merged into master, the Travis build for it must pass. Practically, this means
 that you should find a green tick next to your PR on the relevant [PR
