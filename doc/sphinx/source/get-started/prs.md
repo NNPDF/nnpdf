@@ -32,9 +32,9 @@ requests:
 	for anyone else to follow, and, failing that, it is fair to ask them to go
 	through the work of making them intelligible.
 
-  - Look at the big picture first. Think if the overall idea and implementation
-	is sound or instead could benefit from going in a different direction.
-	Ideally before a lot of work has gone into fine tuning details.
+  - Look at the big picture first. Think about whether the overall idea and
+	implementation is sound or instead could benefit from going in a different
+	direction. Ideally before a lot of work has gone into fine tuning details.
 
 
   - Review the code in detail. Try to identify areas where the changes
@@ -51,10 +51,10 @@ requests:
 	problems. In particular
 	  * Do look at the automated tests that run with the PR.
 	    New code should not break them.
-	  * The [`pylint`](https://www.pylint.org/) tool should
-		allow to catch common problems in Python code. The top level
+	  * The [`pylint`](https://www.pylint.org/) tool allows for the catching of
+		common problems in Python code. The top level
 		[`.pylintrc` file](https://github.com/NNPDF/nnpdf/blob/master/.pylintrc)
-		comes with an useful and not overly noisy configuration.
+		comes with a useful and not overly noisy configuration.
 	  * New Python code should come formatted with the
 	    [`black` tool](https://github.com/psf/black), which results in a
 		standardized and reasonably good looking code.
