@@ -272,6 +272,125 @@ void Experiment::SetT0(const PDFSet& pdf){
   GenCovMat();
 }
 
+void Experiment::MakePerPointReplica(int pointindex)
+{
+  cout << "-- Generating replica data for " << fExpName << " for point " << pointindex << endl;
+
+  if (fNData == 0)
+    throw RangeError("Experiment::MakeReplica","you must run ReadData before making a replica.");
+
+  RandomGenerator* rng = RandomGenerator::GetRNG();
+
+  double *rand  = new double[fNSys];
+  double *xnor  = new double[fNData];
+  sysType rST[2] = {ADD,MULT};
+
+  // Compute the sampling covariance matrix with data CVs, no multiplicative error and no theory errors
+  if (fSamplingMatrix.size(0) == 0)
+  {
+    matrix<double> SM = ComputeCovMat_basic(fNData, fNSys, fSqrtWeights, fData, fStat, fSys, false, false, false, "", {});
+    fSamplingMatrix = ComputeSqrtMat(SM); // Take the sqrt of the sampling matrix
+  }
+
+  // generate procType array for ease of checking
+  std::vector<std::string> proctype;
+  for (int s = 0; s < GetNSet(); s++)
+    for (int i=0; i< GetSet(s).GetNData(); i++)
+      proctype.push_back(GetSet(s).GetProc(i));
+
+  bool isArtNegative = true;
+  while (isArtNegative)
+  {
+      isArtNegative = false;
+
+      for (int l = 0; l < fNSys; l++)
+      {
+        rand[l] = rng->GetRandomGausDev(1.0);
+        if (fSys[0][l].isRAND)
+          fSys[0][l].type = rST[rng->GetRandomUniform(2)];
+        for (int i = 1; i < fNData; i++)
+          fSys[i][l].type = fSys[0][l].type;
+      }
+
+      // Generate normal deviates
+      vector<double> deviates(fNData, std::numeric_limits<double>::quiet_NaN());
+      generate(deviates.begin(), deviates.end(),
+               []()->double {return RandomGenerator::GetRNG()->GetRandomGausDev(1); } );
+      const vector<double> correlated_deviates = fSamplingMatrix*deviates;
+
+      // Generate additive theory noise directly from the covariance matrix
+      vector<double> artdata(fData);
+
+      artdata[pointindex] += correlated_deviates[pointindex];
+
+      // Generation of the experimental noise
+        xnor[pointindex] = 1.0;
+
+        for (int l = 0; l < fNSys; l++)
+        {
+          if (fSys[pointindex][l].name.compare("THEORYCORR")==0) continue;   // Skip theoretical uncertainties
+          if (fSys[pointindex][l].name.compare("THEORYUNCORR")==0) continue; // Skip theoretical uncertainties
+          if (fSys[pointindex][l].name.compare("SKIP")==0) continue;         // Skip uncertainties
+          if (fSys[pointindex][l].name.compare("UNCORR")==0)                 // Noise from uncorrelated systematics
+          {
+            switch (fSys[pointindex][l].type)
+            {
+              case ADD: break;
+              case MULT: xnor[pointindex] *= (1.0 + rng->GetRandomGausDev(1.0)*fSys[pointindex][l].mult*1e-2); break;
+              case UNSET: throw RuntimeException("Experiment::MakeReplica", "UNSET systype encountered");
+            }
+          }
+          else                                                      // Noise from correlated systematics
+          {
+            switch (fSys[pointindex][l].type)
+            {
+              case ADD: break;
+              case MULT: xnor[pointindex] *= (1.0 + rand[l]*fSys[pointindex][l].mult*1e-2); break;
+              case UNSET: throw RuntimeException("Experiment::MakeReplica", "UNSET systype encountered");
+            }
+          }
+        }
+
+        artdata[pointindex] = xnor[pointindex] * artdata[pointindex];
+
+
+
+      // If it's not a closure test, check for positivity of artifical data
+      if (!fIsClosure)
+          if (artdata[pointindex] < 0 )
+          {
+              // If it's negative and not an asymmetry
+              const bool is_asymmetry = proctype[pointindex].find("ASY") != std::string::npos;
+              if (!is_asymmetry)
+              {
+                cout << "Datapoint " << pointindex << " has been set to 0" << endl;
+                isArtNegative = true;
+                break;
+              }
+          }
+
+      // Don't ever discard the replica now
+       if (isArtNegative) continue;
+
+      // Update data in set
+      int index = 0;
+      for (int s = 0; s < GetNSet(); s++)
+      {
+        double* data_pointer = artdata.data() + index;
+        fSets[s].UpdateData(data_pointer);
+        fSets[s].SetArtificial(true);
+        index+=fSets[s].GetNData();
+      }
+  }
+
+  // Update local data
+  PullData();
+
+  // Now the fData is artificial
+  fIsArtificial = true;
+}
+
+
 void Experiment::MakeClosure(const vector<ThPredictions>& predictions, bool const& noise)
 {
   cout << "-- Generating closure data for " << fExpName << endl;

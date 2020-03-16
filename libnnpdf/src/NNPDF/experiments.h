@@ -30,7 +30,8 @@ namespace NNPDF
     Experiment(Experiment const&);   //!< Copy constructor
     ~Experiment();                  //!< Experiment destructor
 
-    void MakeReplica();                                       //!< Shift the exp data and produces art. data
+    void MakeReplica();
+    void MakePerPointReplica(int pointindex);                              //!< Shift the exp data and produces art. data
     void MakeClosure(const std::vector<ThPredictions>& predictions, bool const& noise);
     void MakeClosure(PDFSet* pdf, bool const& noise);         //!< Make fake exp data using theory predictions
 
