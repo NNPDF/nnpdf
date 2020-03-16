@@ -72,6 +72,8 @@ experiments:
   - {dataset: ATLASZHIGHMASS49FB, frac: 1.0}
   - {dataset: ATLASLOMASSDY11EXT, frac: 1.0}
   - {dataset: ATLASWZRAP11, frac: 0.5}
+  - {dataset: ATLASWZRAP11CC, frac: 0.5}
+  - {dataset: ATLASWZRAP11CF, frac: 0.5}
   - {dataset: ATLAS_WZ_TOT_13TEV, frac: 1.0, cfac: [NRM,EWK]}
   - {dataset: ATLAS_WP_JET_8TEV_PT, frac: 0.5}
   - {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.5}
