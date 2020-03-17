@@ -88,8 +88,8 @@ experiments:
   #DIJETS
   - {dataset: ATLAS_2JET_7TEV_R06, frac: 0.5, cfac: [QCD, EWK]}
   #DIRECT PHOTON
-  - {dataset: ATLASPHT12, frac: 0.5, cfac: [NRM,QCD]}
-  - {dataset: ATLASPHT15, frac: 0.5, cfac: [QCD]}
+  - {dataset: ATLASPHT12, frac: 0.5, cfac: [NRM,QCD,EWK]}
+  - {dataset: ATLASPHT15, frac: 0.5, cfac: [QCD,EWK]}
   #TOP PAIR
   - {dataset: ATLASTTBARTOT, frac: 1.0}
   - {dataset: ATLAS_TTB_DIFF_8TEV_LJ_TPTNORM, frac: 1.0, cfac: [QCD]}
