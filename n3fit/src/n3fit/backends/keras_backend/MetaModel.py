@@ -247,6 +247,18 @@ class MetaModel(Model):
             optimizer=opt, loss=loss, target_tensors=target_output, **kwargs
         )
 
+    def set_masks_to(self, names, val = 0.0):
+        # TODO should never be the case ofc
+        if isinstance(names, str):
+            names = names.split(',')
+            names = [i.strip() for i in names]
+        mask_val = [val]
+        for name in names:
+            mask_name = f"{name}_mask"
+            mask_w = self.get_layer(mask_name).weights[0]
+            mask_w.assign(mask_val)
+
+
     def multiply_weights(self, layer_names, multiplier):
         """ Multiply all weights for the given layers by some scalar
 

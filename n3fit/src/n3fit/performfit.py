@@ -13,11 +13,13 @@ log = logging.getLogger(__name__)
 
 
 @make_argcheck
-def check_consistent_hyperscan_options(hyperopt, hyperscan):
+def check_consistent_hyperscan_options(hyperopt, hyperscan, fitting):
     if hyperopt is not None and hyperscan is None:
         raise CheckError("A hyperscan dictionary needs to be defined when performing hyperopt")
     if hyperopt is not None and "kpartitions" not in hyperscan:
         raise CheckError("A kpartition strategy needs to be defined when performing hyperopt")
+    if hyperopt is not None and fitting["genrep"]:
+        raise CheckError("During hyperoptimization we cannot generate replicas")
 
 # Action to be called by valid phys
 # All information defining the NN should come here in the "parameters" dict
@@ -131,11 +133,16 @@ def performfit(
     ##############################################################################
     all_exp_infos = [[] for _ in replica]
 
+    if hyperscan and hyperopt:
+        kpartitions = hyperscan["kpartitions"]
+    else:
+        kpartitions = None
+
     # First loop over the experiments
     for exp in experiments:
         log.info("Loading experiment: %s", exp)
         all_exp_dicts = reader.common_data_reader(
-            exp, t0pdfset, replica_seeds=mcseeds, trval_seeds=trvalseeds
+            exp, t0pdfset, replica_seeds=mcseeds, trval_seeds=trvalseeds, kpartitions=kpartitions
         )
         for i, exp_dict in enumerate(all_exp_dicts):
             all_exp_infos[i].append(exp_dict)
@@ -163,6 +170,7 @@ def performfit(
             nnseed,
             debug=debug,
             save_weights_each=fitting.get("save_weights_each"),
+            kpartitions=kpartitions,
         )
 
         # Check whether we want to load weights from a file (maybe from a previous run)

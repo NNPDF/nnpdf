@@ -18,6 +18,20 @@ from n3fit.stopping import Stopping
 log = logging.getLogger(__name__)
 HYPER_THRESHOLD = 4.0
 
+def fold_data(all_data, folds, k_idx):
+    # TODO make this not illegal
+    try:
+        folded_data = []
+        for i, full_data in enumerate(all_data):
+            try:
+                fold = folds[i]
+                kfol = fold[k_idx]
+                folded_data.append(full_data*kfol)
+            except:
+                folded_data.append(full_data)
+        return folded_data
+    except:
+        return all_data
 
 class ModelTrainer:
     """
@@ -46,6 +60,7 @@ class ModelTrainer:
         failed_status="fail",
         debug=False,
         save_weights_each=False,
+        kpartitions = None,
     ):
         """
         # Arguments:
@@ -78,7 +93,10 @@ class ModelTrainer:
         self.mode_hyperopt = False
         self.model_file = None
         self.impose_sumrule = True
-        self.k_folds = 1
+        if kpartitions is None:
+            self.kpartitions = [None]
+        else:
+            self.kpartitions = kpartitions
 
         # Initialize the pdf layer
         self.layer_pdf = None
@@ -92,6 +110,7 @@ class ModelTrainer:
             "ndata": 0,
             "model": None,
             "posdatasets": [],
+            "folds" : [],
         }
         self.validation = {
             "output": [],
@@ -99,6 +118,7 @@ class ModelTrainer:
             "losses": [],
             "ndata": 0,
             "model": None,
+            "folds" : [],
         }
         self.experimental = {
             "output": [],
@@ -106,6 +126,7 @@ class ModelTrainer:
             "losses": [],
             "ndata": 0,
             "model": None,
+            "folds" : [],
         }
         self.list_of_models_dicts = [self.training, self.experimental]
 
@@ -167,6 +188,10 @@ class ModelTrainer:
             self.training["expdata"].append(exp_dict["expdata"])
             self.validation["expdata"].append(exp_dict["expdata_vl"])
             self.experimental["expdata"].append(exp_dict["expdata_true"])
+
+            self.training["folds"].append(exp_dict["folds"]["training"])
+            self.validation["folds"].append(exp_dict["folds"]["validation"])
+            self.experimental["folds"].append(exp_dict["folds"]["experimental"])
 
             nd_tr = exp_dict["ndata"]
             nd_vl = exp_dict["ndata_vl"]
@@ -348,7 +373,7 @@ class ModelTrainer:
 
         return layers, integrator_input
 
-    def _model_compilation(self, learning_rate, optimizer):
+    def _model_compilation(self, learning_rate, optimizer, kidx = None):
         """
         Compiles the model with the data given in params
 
@@ -363,11 +388,15 @@ class ModelTrainer:
             model = model_dict["model"]
             losses = model_dict["losses"]
             data = model_dict["expdata"]
+            fold = model_dict["folds"]
+
+            folded_data = fold_data(data, fold, kidx)
+
             model.compile(
                 optimizer_name=optimizer,
                 learning_rate=learning_rate,
                 loss=losses,
-                target_output=data,
+                target_output=folded_data,
             )
 
     def _train_and_fit(self, stopping_object, epochs):
@@ -497,8 +526,6 @@ class ModelTrainer:
             save_weights_each=self.save_weights_each,
         )
 
-        # Compile the training['model'] with the given parameters
-        self._model_compilation(params["learning_rate"], params["optimizer"])
 
         # Initialize the chi2 dictionaries
         l_train = []
@@ -507,7 +534,16 @@ class ModelTrainer:
         n_expdata = self.experimental["ndata"]
 
         ### Training loop
-        for _ in range(self.k_folds):
+        for k, partition in enumerate(self.kpartitions):
+
+            if self.mode_hyperopt:
+                # Disable the datasets
+                datasets = partition["datasets"]
+                self.experimental["model"].set_masks_to(datasets, val=0.0)
+
+            # Compile the training['model'] with the given parameters
+            self._model_compilation(params["learning_rate"], params["optimizer"], kidx = k)
+
             passed = self._train_and_fit(stopping_object, epochs)
 
             # Compute validation and training loss
@@ -515,18 +551,24 @@ class ModelTrainer:
             validation_loss = stopping_object.vl_loss
 
             # Compute experimental loss
-            experimental_loss = self.experimental["model"].compute_losses()["loss"] / n_expdata
+            exp_loss_raw = self.experimental["model"].compute_losses()["loss"]
+            experimental_loss = exp_loss_raw / n_expdata
 
             l_train.append(training_loss)
             l_valid.append(validation_loss)
             l_exper.append(experimental_loss)
+            # TODO make sure the 1/N of the loss is also folded...
 
             if self.mode_hyperopt:
+                # Reenable the datasets
+                datasets = partition["datasets"]
+                self.experimental["model"].set_masks_to(datasets, val=1.0)
                 # Compute the hyperopt loss
-                hyper_loss = 42.0
+                new_loss = self.experimental["model"].compute_losses()["loss"]
+                hyper_loss = exp_loss_raw - new_loss
                 hyper_losses.append(hyper_loss)
                 # Check whether this run is any good, if not, get out
-                if validation_loss > HYPER_THRESHOLD or training_loss > HYPER_THRESHOLD:
+                if experimental_loss > HYPER_THRESHOLD:
                     break
                 self.training["model"].reinitialize()
 
