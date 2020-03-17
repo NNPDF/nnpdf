@@ -11,7 +11,12 @@
 import tensorflow as tf
 from tensorflow.keras import backend as K
 from tensorflow.keras.layers import Layer
-from tensorflow.keras.initializers import Constant, RandomUniform, glorot_normal, glorot_uniform
+from tensorflow.keras.initializers import (
+    Constant,
+    RandomUniform,
+    glorot_normal,
+    glorot_uniform,
+)
 
 # Define in this dictionary new initializers as well as the arguments they accept (with default values if needed be)
 initializers = {
@@ -20,7 +25,8 @@ initializers = {
     "glorot_normal": (glorot_normal, {}),
 }
 
-def reinitialize_weight(weight, initializer, seed_skip = 10):
+
+def reinitialize_weight(weight, initializer, seed_skip=10):
     new_config = initializer.get_config()
     if "seed" in new_config:
         new_seed = initializer.seed + 10
@@ -29,6 +35,7 @@ def reinitialize_weight(weight, initializer, seed_skip = 10):
     new_init = initializer.from_config(new_config)
     new_weights = new_init(weight.shape)
     weight.assign(new_weights)
+
 
 class MetaLayer(Layer):
     """
@@ -64,7 +71,7 @@ class MetaLayer(Layer):
             constraint=constraint,
         )
         if trainable:
-            weight_kernel.append( (kernel, initializer) )
+            self.weight_inits.append((kernel, initializer))
         return kernel
 
     def reinitialize(self):

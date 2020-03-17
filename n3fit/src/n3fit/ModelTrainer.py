@@ -9,12 +9,14 @@
     between iterations while at the same time keeping the amount of redundant calls to a minimum
 """
 import logging
+import numpy as np
 import n3fit.model_gen as model_gen
 import n3fit.msr as msr_constraints
 from n3fit.backends import MetaModel, clear_backend_state
 from n3fit.stopping import Stopping
 
 log = logging.getLogger(__name__)
+HYPER_THRESHOLD = 4.0
 
 
 class ModelTrainer:
@@ -76,6 +78,7 @@ class ModelTrainer:
         self.mode_hyperopt = False
         self.model_file = None
         self.impose_sumrule = True
+        self.k_folds = 1
 
         # Initialize the pdf layer
         self.layer_pdf = None
@@ -457,6 +460,7 @@ class ModelTrainer:
             for key in self.hyperkeys:
                 log.info(" > > Testing %s = %s", key, params[key])
             self._hyperopt_override(params)
+            hyper_losses = []
 
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         self._generate_observables(params["pos_multiplier"], params["pos_initial"])
@@ -495,25 +499,47 @@ class ModelTrainer:
 
         # Compile the training['model'] with the given parameters
         self._model_compilation(params["learning_rate"], params["optimizer"])
-  
+
+        # Initialize the chi2 dictionaries
+        l_train = []
+        l_valid = []
+        l_exper = []
+        n_expdata = self.experimental["ndata"]
+
         ### Training loop
-        passed = self._train_and_fit(stopping_object, epochs)
+        for _ in range(self.k_folds):
+            passed = self._train_and_fit(stopping_object, epochs)
 
-        # Compute validation loss
-        validation_loss = stopping_object.vl_loss
+            # Compute validation and training loss
+            training_loss = stopping_object.tr_loss
+            validation_loss = stopping_object.vl_loss
 
-        # Compute experimental loss
-        experimental_loss = self.experimental["model"].compute_losses()["loss"] / self.experimental["ndata"]
+            # Compute experimental loss
+            experimental_loss = self.experimental["model"].compute_losses()["loss"] / n_expdata
+
+            l_train.append(training_loss)
+            l_valid.append(validation_loss)
+            l_exper.append(experimental_loss)
+
+            if self.mode_hyperopt:
+                # Compute the hyperopt loss
+                hyper_loss = 42.0
+                hyper_losses.append(hyper_loss)
+                # Check whether this run is any good, if not, get out
+                if validation_loss > HYPER_THRESHOLD or training_loss > HYPER_THRESHOLD:
+                    break
+                self.training["model"].reinitialize()
+
 
         dict_out = {
             "status": passed,
-            "training_loss": stopping_object.tr_loss,
-            "validation_loss": validation_loss,
-            "experimental_loss": experimental_loss,
+            "training_loss": np.average(l_train),
+            "validation_loss": np.average(l_valid),
+            "experimental_loss": np.average(l_exper),
         }
 
         if self.mode_hyperopt:
-            dict_out["loss"] = 42.0
+            dict_out["loss"] = np.average(hyper_losses)
 #             arc_lengths = msr_constraints.compute_arclength(layers["fitbasis"])
             # If we are using hyperopt we don't need to output any other information
             return dict_out
