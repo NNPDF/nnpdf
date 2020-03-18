@@ -813,7 +813,7 @@ def _check_aspect(aspect):
 @_check_marker_by
 @_check_highlights
 @_check_aspect
-def plot_xq2(experiments_xq2map, use_cuts ,display_cuts:bool=True,
+def plot_xq2(experiments_xq2map, use_cuts, groups_data, display_cuts:bool=True,
                  marker_by:str='process type', highlight_label:str='highlight',
                  highlight_datasets:(Sequence,type(None))=None,
                  aspect:str='landscape'):
