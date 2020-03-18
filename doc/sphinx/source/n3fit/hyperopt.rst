@@ -46,25 +46,44 @@ The cross-validation implemented in NNPDF is successful on avoiding the learning
 a dataset. However, we observe that this choice is not enough to prevent overfitting due to
 correlations within points in a same dataset when using hyperopt with ``n3fit``.
 
-In order to eliminate architectures that allowed overlearning we proceed by including a testing set
-where the model generalization power is tested. This is a set of datasets where none of the points
-are used in the fitting either for training or validation. Defining the best appropriate test
-dataset for PDF fits is particularly challenging due to the nature of the model regression through
-convolutions. For the present results the test set is defined by removing from the training
-setdatasets with duplicate process type and smaller leading-order kinematic range coverage. We call
-the loss produced by the removed datasets "testing loss" and we use it as a third criterion (beyond
-stability and combined with the value of the validation loss) to discard combinations of
-hyperparameters.
+For hyperopt we have implemented k-folding cross-validation.
+This method works by refitting with the same set of parameters several times (k times) each time leaving out
+a partition of the datasets.
+By using this method we reduce the bias associated with a particular choise of the datasets to leave out
+while at the same time, refitting with the same set of parameters, allow us to assess the stability of the
+particular combgination of hyperparameters.
+
+The partitions can be chosen by adding a ``kpartitions`` key to the ``hyperscan`` dictionary.
+
+.. code-block:: yml
+    
+    hyperscan:
+        kpartitions:
+            - datasets:
+                - data_1
+                - data_2
+            - datasets;
+                - data_3
+            - datasets:
+                - data_4
+                - data_5
+
+An example runcard can be found at ``n3fit/runcards/Basic_hyperopt.hyml``.
+
+The loss function is then computed as the average of the loss function over the partition sets.
+
+.. math::
+    L_{hyperopt} = \frac{1}{N_{k}} \sum (L_{k})
+
+The hyperoptimization procedure performed in `hep-ph/1907.05075 <https://arxiv.org/abs/1907.05075>`_
+used a different approach in order to avoid overfitting, by leaving out a number of datasets to compute
+a "testing set". The loss function was then computed as:
 
 .. math::
     L_{hyperopt} = \frac{1}{2} (L_{validation} + L_{testing})
 
+The group of datasets that were left out were:
 
-With this procedure we are able to find combinations of hyperparameters which produce good fits for
-which we are confident no obvious overfitting can be generated. 
-
-The hyperoptimization procedure performed in `hep-ph/1907.05075 <https://arxiv.org/abs/1907.05075>`_
-used the following group of datasets as the testing set:
 
 * NMC 
 * BCDMSP 
