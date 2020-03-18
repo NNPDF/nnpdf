@@ -16,7 +16,7 @@ import scipy.linalg as la
 import pandas as pd
 
 from NNPDF import ThPredictions, CommonData, Experiment
-from reportenginechecks import require_one, remove_outer, check_not_empty
+from reportengine.checks import require_one, remove_outer, check_not_empty
 from reportengine.table import table
 from reportengine import collect
 
