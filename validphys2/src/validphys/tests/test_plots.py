@@ -40,6 +40,7 @@ def test_plot_xq2():
     use_cuts = "nocuts"
     display_cuts = False
     marker_by = "process type"
+    metadata_group = "experiment"
     dataset_inputs = [
         {'dataset': 'NMC'},
         {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
@@ -51,4 +52,5 @@ def test_plot_xq2():
             use_cuts=use_cuts,
             dataset_inputs=dataset_inputs,
             display_cuts=display_cuts,
-            marker_by=marker_by)
+            marker_by=marker_by,
+            metadata_group=metadata_group)

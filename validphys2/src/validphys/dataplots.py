@@ -469,7 +469,7 @@ def plot_groups_data_chi2(groups_data, groups_data_chi2):
     exchi2 = []
     xticks = []
     for group, groupres in zip(groups_data, groups_data_chi2):
-        exchi2.append(expres.central_result/expres.ndata)
+        exchi2.append(groupres.central_result/groupres.ndata)
         xticks.append(group.name)
     fig, ax = plotutils.barplot(exchi2, collabels=xticks, datalabels=[r'$\chi^2$'])
     ax.set_title(r"$\chi^2$ distribution for groups of datasets")
