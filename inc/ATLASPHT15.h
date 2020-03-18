@@ -14,7 +14,7 @@
 
 class ATLASPHT15Filter: public CommonData
 { public: ATLASPHT15Filter():
-  CommonData("ATLASPHT15") { ReadData(); }
+  CommonData("ATLASPHT15_SF") { ReadData(); }
 
 private:
   void ReadData();

@@ -8,18 +8,36 @@ version in the NNPDF CommonData format.
 
 `buildmaster` depends on:
 
+Run:
+
 - NNPDF/nnpdf
 - yaml-cpp
 - gsl
 
-(Note that both yaml-cpp and gsl are also dependencies of NNPDF/nnpdf).
+Build:
 
-In order to compile just type `make`.
+- cmake > 3.0.2
+- sqlite3
+- libarchive
+- LHAPDF
+
+(Note that yaml-cpp, gsl, cmake, sqlite3, libarchive and LHAPDF are also
+dependencies of NNPDF/nnpdf).
+
+In order to compile, it is recommended to create a fresh build directory
+
+```
+$ mkdir bld
+$ cd bld
+$ cmake ..
+$ make -j && make install
+```
 
 ## Running the code
 
 In order to generate a master copy of all experimental data run the
-`buildmaster` program. This program will create for each dataset:
+`buildmaster` program which by default will be installed in the root of this repository.
+This program will create for each dataset:
 - DATA_[setname].dat are generated and placed in the results folder
 - SYSTYPE_[setname]_DEFAULT.dat are generated and placed in results/systypes
 After generating these files the user can copy them to the `nnpdfcpp/data/commondata` folder.
@@ -72,6 +90,35 @@ the class created in step 2. Namely:
 target.push_back(new MY_NEW_DATASET_CLASSFilter());
 ```
 
+## Important notes
+
+### Symmetrising uncertainties
+
+Occasionally experiments present uncertainties that are asymmetric, i.e
+
+```
+    \sigma + \Delta_+ - \Delta_-
+```
+
+These must be symmetrised in `buildmaster` as the CommonData format accepts only
+symmetric uncertainties. When provided, the symmetrisation procedure suggested
+by the experimental paper should be used. If no such procedure is suggested, we
+follow the symmetrisation procedure of D'Agostini [physics/0403086]. This is
+implemented in the function `symmetriseErrors` provided in buildmaster_utils.
+
+**Be careful** with signs when using this function. The function expects all
+signs to be present in its arguments. So when symmetrising an error that
+appears as above you should call
+
+```
+    symmetriseErrors(\Delta_+, - \Delta_-, ... )
+``` 
+
+where it is important to note that the sign is intact in the downwards
+uncertainty. This method returns a symmetrised error along with a *shift* to be
+applied to the data central value.
+
+
 ## Code development policy/rules
 
 Developers must never commit code structure modifications to master. The development pattern should follow these rules:
@@ -82,5 +129,5 @@ Developers must never commit code structure modifications to master. The develop
 
 ## File format documentation
 
-For specifications about data file formats please check the `nnpdf` repository in `nnpdfcpp/data/doc`.
+For specifications about data file formats please check the `nnpdf` repository at `nnpdf/doc/data/`.
 

@@ -1,0 +1,57 @@
+#: table_doi: 10.17182/hepdata.78403.v1/t2
+#: name: Table 2
+#: description: Best fit values of $\sigma_i \cdot \mathrm{B}^f$ relative to their SM prediction for each specific channel $i \to H\to f$, as obtained from the generic parameterisation with 23 parameters for the combination of the ATLAS and CMS measurements, using the $\sqrt{s}$=7 and 8 TeV data. The results are shown together with their total uncertainties and their breakdown into statistical and systematic components. The missing values are either not measured with a meaningful precision and therefore not quoted, in the case of the $H\to ZZ$ decay channel for the $WH$, $ZH$, and $ttH$ production processes, or not measured at all and therefore fixed to their corresponding SM predictions, in the case of the $H\to bb$ decay mode for the $gg\mathrm{F}$ and VBF production processes.
+#: data_file: data2.yaml
+#: data_license:   
+#: keyword reactions: P P --> HIGGS X
+#: keyword observables: SIG
+#: keyword phrases: 
+#: keyword cmenergies: 7000.0-8000.0
+#: Data type,observed
+#: SQRT(S) [GEV],7000.0 TO 8000.0
+Channel,SIG/SIG_SM,stat +,stat -,sys +,sys -
+$\sigma_{gg\mathrm{F}}\cdot\mathrm{B}^{\gamma\gamma}$ ,1.096,0.215,-0.215,0.074,-0.053
+$\sigma_{gg\mathrm{F}}\cdot\mathrm{B}^{ZZ}$ ,1.134,0.326,-0.305,0.087,-0.072
+$\sigma_{gg\mathrm{F}}\cdot\mathrm{B}^{WW}$ ,0.839,0.123,-0.123,0.118,-0.113
+$\sigma_{gg\mathrm{F}}\cdot\mathrm{B}^{\tau\tau}$ ,1.04,0.36,-0.36,0.44,-0.43
+$\sigma_{\mathrm{VBF}}\cdot\mathrm{B}^{\gamma\gamma}$ ,1.283,0.511,-0.470,0.162,-0.148
+$\sigma_{\mathrm{VBF}}\cdot\mathrm{B}^{ZZ}$ ,0.07,1.09,-0.60,0.17,-0.17
+$\sigma_{\mathrm{VBF}}\cdot\mathrm{B}^{WW}$ ,1.16,0.37,-0.34,0.21,-0.16
+$\sigma_{\mathrm{VBF}}\cdot\mathrm{B}^{\tau\tau}$ ,1.26,0.34,-0.32,0.19,-0.18
+$\sigma_{WH}\cdot\mathrm{B}^{\gamma\gamma}$ ,0.45,1.31,-1.15,0.16,-0.18
+$\sigma_{WH}\cdot\mathrm{B}^{WW}$ ,1.55,1.00,-0.90,0.64,-0.51
+$\sigma_{WH}\cdot\mathrm{B}^{\tau\tau}$ ,-1.44,1.25,-1.13,0.73,-0.77
+$\sigma_{WH}\cdot\mathrm{B}^{bb}$ ,1.03,0.42,-0.41,0.29,-0.26
+$\sigma_{ZH}\cdot\mathrm{B}^{\gamma\gamma}$ ,0.50,2.99,-2.49,0.51,-0.24
+$\sigma_{ZH}\cdot\mathrm{B}^{WW}$ ,5.89,2.34,-2.07,1.09,-0.84
+$\sigma_{ZH}\cdot\mathrm{B}^{\tau\tau}$ ,2.23,2.01,-1.70,0.78,-0.61
+$\sigma_{ZH}\cdot\mathrm{B}^{bb}$ ,0.35,0.34,-0.33,0.18,-0.16
+$\sigma_{ttH}\cdot\mathrm{B}^{\gamma\gamma}$ ,2.18,1.62,-1.28,0.25,-0.14
+$\sigma_{ttH}\cdot\mathrm{B}^{WW}$ ,4.96,1.45,-1.46,1.01,-0.91
+$\sigma_{ttH}\cdot\mathrm{B}^{\tau\tau}$ ,-1.87,3.22,-2.72,1.88,-1.79
+$\sigma_{ttH}\cdot\mathrm{B}^{bb}$ ,1.06,0.54,-0.53,0.79,-0.79
+
+#: Data type,expected
+#: SQRT(S) [GEV],7000.0 TO 8000.0
+Channel,SIG/SIG_SM,stat +,stat -,sys +,sys -
+$\sigma_{gg\mathrm{F}}\cdot\mathrm{B}^{\gamma\gamma}$ 1.000 0.214 -0.214 0.056 -0.038
+$\sigma_{gg\mathrm{F}}\cdot\mathrm{B}^{ZZ}$ 1.000 0.277 -0.254 0.060 -0.042
+$\sigma_{gg\mathrm{F}}\cdot\mathrm{B}^{WW}$  1.000 0.122 -0.122 0.120 -0.113
+$\sigma_{gg\mathrm{F}}\cdot\mathrm{B}^{\tau\tau}$  1.00 0.36 -0.35 0.44 -0.42
+$\sigma_{\mathrm{VBF}}\cdot\mathrm{B}^{\gamma\gamma}$  1.000 0.474 -0.433 0.126 -0.121
+$\sigma_{\mathrm{VBF}}\cdot\mathrm{B}^{ZZ}$  1.00 1.42 -0.92 0.19 -0.11
+$\sigma_{\mathrm{VBF}}\cdot\mathrm{B}^{WW}$  1.00 0.37 -0.34 0.22 -0.17
+$\sigma_{\mathrm{VBF}}\cdot\mathrm{B}^{\tau\tau}$  1.00 0.34 -0.32 0.20 -0.18
+$\sigma_{WH}\cdot\mathrm{B}^{\gamma\gamma}$  1.00 1.21 -1.10 0.08 -0.06
+$\sigma_{WH}\cdot\mathrm{B}^{WW}$  1.00 0.95 -0.85 0.52 -0.43
+$\sigma_{WH}\cdot\mathrm{B}^{\tau\tau}$ 1 .00 1.36 -1.22 0.68 -0.72
+$\sigma_{WH}\cdot\mathrm{B}^{bb}$  1.00 0.44 -0.43 0.31 -0.28
+$\sigma_{ZH}\cdot\mathrm{B}^{\gamma\gamma}$  1.00 2.47 -2.05 0.15 -0.07
+$\sigma_{ZH}\cdot\mathrm{B}^{WW}$  1.00 1.75 -1.55 0.61 -0.46
+$\sigma_{ZH}\cdot\mathrm{B}^{\tau\tau}$  1.00 1.78 -1.47 0.60 -0.44
+$\sigma_{ZH}\cdot\mathrm{B}^{bb}$  1.00 0.37 -0.35 0.21 -0.18
+$\sigma_{ttH}\cdot\mathrm{B}^{\gamma\gamma}$  1.00 1.50 -1.14 0.34 -0.18
+$\sigma_{ttH}\cdot\mathrm{B}^{WW}$  1.00 1.34 -1.35 0.85 -0.77
+$\sigma_{ttH}\cdot\mathrm{B}^{\tau\tau}$  1.00 3.26 -2.76 1.96 -1.60
+$\sigma_{ttH}\cdot\mathrm{B}^{bb}$  1.00 0.49 -0.49 0.74 -0.72
+

@@ -15,15 +15,7 @@
 class D0ZRAPFilter: public CommonData
 {
 public: D0ZRAPFilter():
-  CommonData("D0ZRAP") { ReadData(); }
-
-private:
-  void ReadData();
-};
-
-class D0R2CONFilter: public CommonData
-{ public: D0R2CONFilter():
-  CommonData("D0R2CON") { ReadData(); }
+  CommonData("D0ZRAP_SF") { ReadData(); }
 
 private:
   void ReadData();

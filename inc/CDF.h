@@ -31,7 +31,7 @@ private:
 
 class CDFR2KTFilter: public CommonData
 { public: CDFR2KTFilter():
-  CommonData("CDFR2KT") { ReadData(); }
+  CommonData("CDFR2KT_SF") { ReadData(); }
 
 private:
   void ReadData();

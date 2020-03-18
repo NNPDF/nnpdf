@@ -40,11 +40,11 @@
 #include "HERA1-C.h"
 #include "HERA2-C.h"
 #include "H1HERA2.h"
-#include "ZEUS2.h"
 #include "TOP.h"
 #include "CMSwc.h"
 #include "HERACOMB.h"
 #include "ATLASTOPDIFF.h"
+#include "ATLAS_TOPDIFF_DILEPT_8TEV.h"
 #include "CMSTOPDIFF.h"
 #include "EMCF2C.h"
 #include "EMC.h"
@@ -52,6 +52,7 @@
 #include "ZEUSF2B.h"
 #include "H1F2B.h"
 #include "ATLASWZTOT13TEV81PB.h"
+#include "ATLAS_WZ_TOT_13TEV.h"
 #include "ATLASZPT7TEV.h"
 #include "ATLASZPT8TEV.h"
 #include "ATLASTTBARTOT.h"
@@ -61,22 +62,44 @@
 #include "ATLASTTBARTOT13TEV.h"
 #include "CMSTTBARTOT5TEV.h"
 #include "CMSTTBARTOT7TEV.h"
+#include "CMS_TTB_DIFF_13TEV_2016_LJ.h"
 #include "CMSTTBARTOT8TEV.h"
 #include "CMSTTBARTOT13TEV.h"
+#include "CMS_TTB_DIFF_13TEV_2016_2L.h"
 #include "CMSWMU8TEV.h"
 #include "FutureColliders.h"
+#include "ATLAS_SINGLETOP_TCH_DIFF_8TEV.h"
+#include "ATLAS_SINGLETOP_TCH_DIFF_7TEV.h"
 #include "ATLAS_SINGLETOP_TCH_R_7TEV.h"
 #include "ATLAS_SINGLETOP_TCH_R_8TEV.h"
 #include "ATLAS_SINGLETOP_TCH_R_13TEV.h"
 #include "CMS_SINGLETOP_TCH_TOT_7TEV.h"
 #include "CMS_SINGLETOP_TCH_R_8TEV.h"
 #include "CMS_SINGLETOP_TCH_R_13TEV.h"
+#include "CMS_ZCHARM_DIFF_UNNORM_8TEV.h"
 #include "CMS_WCHARM_DIFF_UNNORM_13TEV.h"
 #include "ATLAS_WCHARM_TOT_UNNORM_7TEV.h"
+#include "HERACOMB_SIGMARED_C.h"
+#include "HERACOMB_SIGMARED_B.h"
+#include "ATLAS_hW_hbb_13TeV.h"
+#include "ATLAS_hZ_hbb_13TeV.h"
+#include "ATLASCMS_hxsec_RunI.h"
+#include "CMS_1JET_8TEV.h"
+#include "ATLAS_1JET_8TEV_R04.h"
+#include "ATLAS_1JET_8TEV_R06.h"
+#include "CMS_2JET_7TEV.h"
+#include "ATLAS_2JET_7TEV_R04.h"
+#include "ATLAS_2JET_7TEV_R06.h"
+#include "CMS_2JET_3D_8TEV.h"
+#include "ATLAS_WJET_8TEV.h"
+#include "CMS_TTBAR_2D_DIFF_NORM.h"
+#include "CMS_TTBAR_2D_DIFF.h"
+#include "ATLAS_TTB_DIFF_8TEV_LJ.h"
+
 /**
  * \param argv the filename containing the configuration
  */
-int main(int argc, char **argv)
+int main(int, char**)
 {
   cout << "\n ***********************************\n";
   cout <<   " *  Welcome to NNPDF++ BuildMaster *\n";
@@ -119,6 +142,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASLOMASSDY11Filter());
   target.push_back(new ATLASLOMASSDY11EXTFilter());
   target.push_back(new ATLASWZTOT13TEV81PBFilter());
+  target.push_back(new ATLAS_WZ_TOT_13TEVFilter());
   //
   target.push_back(new ATLASZPT7TEVFilter());
   target.push_back(new ATLAS_WCHARM_TOT_UNNORM_7TEVFilter());
@@ -129,6 +153,15 @@ void InitCommonData(vector<CommonData*>& target)
 
   target.push_back(new ATLASPHT15Filter());
   target.push_back(new ATLASPHT12Filter());
+  target.push_back(new ATLAS_1JET_8TEV_R04Filter());
+  target.push_back(new ATLAS_1JET_8TEV_R06Filter());
+  target.push_back(new ATLAS_2JET_7TEV_R04Filter());
+  target.push_back(new ATLAS_2JET_7TEV_R06Filter()); 
+  target.push_back(new ATLAS_WP_JET_8TEV_PTFilter()); 
+  target.push_back(new ATLAS_WM_JET_8TEV_PTFilter());
+  target.push_back(new ATLAS_WP_JET_8TEV_PTJFilter()); 
+  target.push_back(new ATLAS_WM_JET_8TEV_PTJFilter());
+  
   // ************************* BCDMS ******************************
 
   target.push_back(new BCDMSPFilter());
@@ -157,6 +190,10 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSZDIFF12Filter());
   target.push_back(new CMS1JET276TEVFilter());
   target.push_back(new CMSWMU8TEVFilter());
+  target.push_back(new CMS_ZCHARM_DIFF_UNNORM_8TEVFilter());
+  target.push_back(new CMS_1JET_8TEVFilter());
+  target.push_back(new CMS_2JET_7TEVFilter());
+  target.push_back(new CMS_2JET_3D_8TEVFilter());
 
  // ************************* CMSwc ******************************
 
@@ -167,7 +204,6 @@ void InitCommonData(vector<CommonData*>& target)
   // ************************* D0 ******************************
 
   target.push_back(new D0ZRAPFilter());
-  target.push_back(new D0R2CONFilter());
   target.push_back(new D0WMASYFilter());
   target.push_back(new D0WEASYFilter());
 
@@ -220,6 +256,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new LHCBZEE2FBFilter());
   target.push_back(new LHCBWZMU7TEVFilter());
   target.push_back(new LHCBWZMU8TEVFilter());
+  target.push_back(new LHCB_Z_13TEV_DIMUONFilter());
+  target.push_back(new LHCB_Z_13TEV_DIELECTRONFilter());
 
   // ************************* NMC ******************************
 
@@ -250,20 +288,42 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSTTBARTOT8TEVFilter());
   target.push_back(new CMSTTBARTOT13TEVFilter());
   target.push_back(new CMSTTBARTOTFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAPFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAPFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PTFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PTFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORMFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORMFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT_NORMFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PT_NORMFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAP_NORMFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAP_NORMFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PT_NORMFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PT_NORMFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_RAPFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_RAPFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_T_PTFilter());
+  target.push_back(new ATLAS_SINGLETOP_TCH_DIFF_7TEV_TBAR_PTFilter());
   target.push_back(new ATLAS_SINGLETOP_TCH_R_7TEVFilter());
   target.push_back(new ATLAS_SINGLETOP_TCH_R_8TEVFilter());
   target.push_back(new ATLAS_SINGLETOP_TCH_R_13TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_TOT_7TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_8TEVFilter());
   target.push_back(new CMS_SINGLETOP_TCH_R_13TEVFilter());
-
-  // ************************* ZEUS ******************************
-
-  target.push_back(new Z06NCFilter());
-  target.push_back(new Z06CCFilter());
-
-  target.push_back(new ZEUSHERA2CCPFilter());
-  target.push_back(new ZEUSHERA2NCPFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_PT_TRAP_NORMFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TRAP_NORMFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TTRAP_NORMFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_PT_TRAPFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TRAPFilter());
+  target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TTRAPFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TPTFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TRAPFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTRAPFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTMFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TPTNORMFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORMFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORMFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTMNORMFilter());
 
   //***************************F2B******************************
 
@@ -279,6 +339,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new HERACOMBNCEP575Filter());
   target.push_back(new HERACOMBNCEP820Filter());
   target.push_back(new HERACOMBNCEP920Filter());
+  target.push_back(new HERACOMB_SIGMARED_CFilter());
+  target.push_back(new HERACOMB_SIGMARED_BFilter());
 
   // ************************ ATLAS TTBAR DIFF 8 TeV  ***************
   target.push_back(new ATLASTOPDIFF8TEVTPTFilter());
@@ -293,7 +355,13 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASTOPDIFF8TEVTTPTNORMFilter());
   target.push_back(new ATLASTOPDIFF8TEVTTMNORMFilter());
 
-  // ************************ CMS TTBAR DIFF 8 TeV  ***************
+  target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTMFilter());
+  target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPFilter());
+
+  target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORMFilter());
+  target.push_back(new ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORMFilter());
+
+  // ************************ CMS TTBAR DIFF TeV  ***************
   target.push_back(new CMSTOPDIFF8TEVTPTFilter());
   target.push_back(new CMSTOPDIFF8TEVTRAPFilter());
   target.push_back(new CMSTOPDIFF8TEVTTRAPFilter());
@@ -305,8 +373,26 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSTOPDIFF8TEVTTRAPNORMFilter());
   target.push_back(new CMSTOPDIFF8TEVTTPTNORMFilter());
   target.push_back(new CMSTOPDIFF8TEVTTMNORMFilter());
+  
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TPTFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TRAPFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTRAPFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TPTNORMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TRAPNORMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTMNORMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_2L_TTRAPNORMFilter());
+  
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TPTFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TRAPFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TRAPNORMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTMNORMFilter());
+  target.push_back(new CMS_TTB_DIFF_13TEV_2016_LJ_TTRAPNORMFilter());
 
-    // ************************ LHeC + FCC pseudo-data ***************
+  // ************************ LHeC + FCC pseudo-data ***************
   target.push_back(new LHeCFilter());
   target.push_back(new FCCFilter());
   target.push_back(new LHeCCCFilter());
@@ -316,5 +402,10 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new LHeC160CCEMFilter());
   target.push_back(new LHeC760NCEMFilter());
   target.push_back(new LHeC760CCEMFilter());
+
+  // *********************** HIGGS **********************************
+  target.push_back(new ATLAS_hW_hbb_13TeVFilter());
+  target.push_back(new ATLAS_hZ_hbb_13TeVFilter());
+  target.push_back(new ATLASCMS_hxsec_RunIFilter());
 
 }
