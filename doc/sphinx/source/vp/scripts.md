@@ -51,30 +51,31 @@ In addition, errors will be raised if the input directory is not a valid fit (fo
 If the user wishes to add their own, non-standard files, then it is advisable to avoid using the fit name in these
 files as the `vp-fitrename` command will also rename these files.
 
-## Obtaining a PDF from a fit
+## PDF renaming
 
 A `fit` is produced as a result of running `nnfit`, these are treated differently by `validphys` from a `PDF`. Such
-a `PDF` is in the LHAPDF grid format. One can obtain a `PDF` from a `fit` using the `vp-pdffromfit` helper script.
+a `PDF` is in the LHAPDF grid format. One can rename PDFs in a similar fashion to fits using the `vp-pdfrename` helper
+script
 
-Simply run 
+Simply run
 ```
-$ vp-pdffromfit <path-to-fit> <desired-name-of-PDF>
+$ vp-pdfrename <path-to-PDF> <desired-name-of-PDF>
 ```
 The optional argument `-c` or equivalently `--compress` while use `tar` to compress the output for ease of uploading
 the result. The `-l` or `--lhapdf_path` will place the `PDF` in the `LHAPDF` results directory, however, a message is
 always printed to standard output indicating where the PDF is placed.
 
 Accompanied with a `PDF` is a corresponding `.info` file which indicates various settings and properties of the `PDF`.
-By default the pre-existing `info` file is copied when running `vp-pdffromfit`. However, the user can opt to alter
+By default the pre-existing `info` file is copied when running `vp-pdfrename`. However, the user can opt to alter
 certain fields of this `info` file if they wish. For example, the `authors` entry can be modified using the `--author` flag,
 noting that this flag should be used several times, in conjunction with quotation marks, for cases where there are several authors,
 ```
-$ vp-pdffromfit --author "Shayan Iranipour" --author "Zahari Kassabov" NNPDF31_nlo_as_0118 patata
+$ vp-pdfrename --author "Shayan Iranipour" --author "Zahari Kassabov" NNPDF31_nlo_as_0118 patata
 ```
 
 The `description` entry can similarly be modified using the `--description` flag
 ```
-$ vp-pdffromfit --author "Shayan Iranipour" --author "Zahari Kassabov" --description "A new PDF that will get me a load of citations" NNPDF31_nlo_as_0118 patata
+$ vp-pdfrename --author "Shayan Iranipour" --author "Zahari Kassabov" --description "A new PDF that will get me a load of citations" NNPDF31_nlo_as_0118 patata
 ```
 
 The user can additionally modify the `DataVersion`, `SetIndex`, `Reference` entries using the `--data-version`, `--index`, and `--reference`
