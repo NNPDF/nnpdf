@@ -1,6 +1,6 @@
 # Table 23 from https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2015-05/
-+5.6 , -5.6 ; +5.6 , -5.6 ; +5.0 , -5.0 ; +5.7 , -5.7 ; # Data statistics
-+0.8 , -0.8 ; +0.7 , -0.7 ; +0.6 , -0.6 ; +0.8 , -0.8 ; # Monte Carlo statistics
+5.6 ; 5.6 ; 5.0 ; 5.7 ; # Data statistics
+0.8 ; 0.7 ; 0.6 ; 0.8 ; # Monte Carlo statistics
 +2.3 , -2.3 ; +0.8 , -0.8 ; +0.2 , -0.2 ; +3.8 , -3.8 ; # Unfolding
 +2.5 , -2.5 ; +3.0 , -3.0 ; +3.7 , -3.7 ; +4.2 , -4.2 ; # Background normalisation
 +1.9 , -1.9 ; +1.9 , -1.9 ; +1.9 , -1.9 ; +2.0 , -1.9 ; # Lepton reconstruction

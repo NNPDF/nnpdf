@@ -1,6 +1,6 @@
 # Table 25 from https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2015-05/
-+7.9 , -7.9 ; +8.7 , -8.7 ; +7.2 , -7.2 ; +11.0 , -11.0 ; # Data statistics
-+0.9 , -0.9 ; +0.8 , -0.8 ; +0.7 , -0.7 ; +1.0 , -1.0 ; # Monte Carlo statistics
+7.9 ; 8.7 ; 7.2 ; 11.0 ; # Data statistics
+0.9 ; 0.8 ; 0.7 ; 1.0 ; # Monte Carlo statistics
 +0.1 , -0.1 ; +0.4 , -0.4 ; +2.7 , -2.7 ; +5.1 , -5.1 ; # Unfolding
 +4.1 , -4.1 ; +5.2 , -5.2 ; +5.3 , -5.3 ; +8.7 , -8.7 ; # Background normalisation
 +0.8 , -0.8 ; +0.4 , -0.4 ; +2.0 , -2.0 ; +3.5 , -3.5 ; # Background modelling
