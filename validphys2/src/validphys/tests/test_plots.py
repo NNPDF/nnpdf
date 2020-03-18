@@ -40,20 +40,15 @@ def test_plot_xq2():
     use_cuts = "nocuts"
     display_cuts = False
     marker_by = "process type"
-    experiments = [
-        {
-            'experiment': 'NMCexp',
-            'datasets': [{'dataset': 'NMC'}]},
-        {
-            'experiment': 'ATLASxp',
-            'datasets': [{'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']}]},
-        {
-            'experiment': 'CMSexp',
-            'datasets': [{'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}]}
-        ]
+    dataset_inputs = [
+        {'dataset': 'NMC'},
+        {'dataset': 'ATLASTTBARTOT', 'cfac':['QCD']},
+        {'dataset': 'CMSZDIFF12', 'cfac':('QCD', 'NRM'), 'sys':10}    
+        ]    
+        
     return API.plot_xq2(
             theoryid=theoryid,
             use_cuts=use_cuts,
-            experiments=experiments,
+            dataset_inputs=dataset_inputs,
             display_cuts=display_cuts,
             marker_by=marker_by)
