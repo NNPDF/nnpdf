@@ -16,7 +16,7 @@ from n3fit.backends import MetaModel, clear_backend_state
 from n3fit.stopping import Stopping
 
 log = logging.getLogger(__name__)
-HYPER_THRESHOLD = 50.0
+HYPER_THRESHOLD = 10.0
 
 
 def _fold_data(all_data, folds, k_idx, negate_fold=False):
@@ -83,6 +83,22 @@ def _compile_one_model(model_dict, kidx=None, negate_fold=False, **params):
     fold = model_dict["folds"]
     folded_data = _fold_data(data, fold, kidx, negate_fold=negate_fold)
     model.compile(loss=losses, target_output=folded_data, **params)
+
+def _count_data_fold(folds, k_idx):
+    """
+    Count the number of active datapoints in this fold
+
+    Parameters
+    ----------
+        folds: list
+            list of folds
+        k_idx: int
+            index of the fold to count
+    """
+    n = 0
+    for fold in folds:
+        n += np.count_nonzero(~fold[k_idx])
+    return n
 
 
 class ModelTrainer:
@@ -160,6 +176,7 @@ class ModelTrainer:
             "output": [],
             "expdata": [],
             "losses": [],
+            "original_ndata": 0,
             "ndata": 0,
             "model": None,
             "posdatasets": [],
@@ -169,6 +186,7 @@ class ModelTrainer:
             "output": [],
             "expdata": [],
             "losses": [],
+            "original_ndata": 0,
             "ndata": 0,
             "model": None,
             "folds": [],
@@ -177,6 +195,7 @@ class ModelTrainer:
             "output": [],
             "expdata": [],
             "losses": [],
+            "original_ndata": 0,
             "ndata": 0,
             "model": None,
             "folds": [],
@@ -193,6 +212,10 @@ class ModelTrainer:
             # Consider the validation only if there is validation (of course)
             self.no_validation = False
             self.list_of_models_dicts.append(self.validation)
+
+        # Save the original number of datapoints in case we need to overwrite it later
+        for model_dict in self.list_of_models_dicts:
+            model_dict["original_ndata"] = model_dict["ndata"]
 
     @property
     def model_file(self):
@@ -452,8 +475,18 @@ class ModelTrainer:
         else:
             val = 1.0
 
+        # Use the "experimental" model to access all layers
         self.experimental["model"].set_masks_to(datasets, val=val)
         self.experimental["model"].set_masks_to(all_other_datasets, val=1.0 - val)
+
+        # Now run through all dicts and count the actual total numer of points
+        for model_dict in self.list_of_models_dicts:
+            fold_ndata = _count_data_fold(model_dict["folds"], kidx)
+            if off:
+                new_ndata = model_dict["original_ndata"] - fold_ndata
+            else:
+                new_ndata = fold_ndata
+            model_dict["ndata"] = new_ndata
 
         if recompile:
             _compile_one_model(self.experimental, kidx=kidx, negate_fold=not off)
@@ -609,7 +642,6 @@ class ModelTrainer:
         l_train = []
         l_valid = []
         l_exper = []
-        n_expdata = self.experimental["ndata"]
 
         ### Training loop
         for k, partition in enumerate(self.kpartitions):
@@ -641,7 +673,7 @@ class ModelTrainer:
 
             # Compute experimental loss
             exp_loss_raw = self.experimental["model"].compute_losses()["loss"]
-            experimental_loss = exp_loss_raw / n_expdata
+            experimental_loss = exp_loss_raw / self.experimental["ndata"]
 
             l_train.append(training_loss)
             l_valid.append(validation_loss)
@@ -651,7 +683,7 @@ class ModelTrainer:
                 # Toggle the fold
                 self._toggle_fold(datasets, kidx=k, off=False, recompile=True)
                 # Compute the hyperopt loss
-                hyper_loss = self.experimental["model"].compute_losses()["loss"]
+                hyper_loss = self.experimental["model"].compute_losses()["loss"]/self.experimental["ndata"]
                 hyper_losses.append(hyper_loss)
                 # Check whether this run is any good, if not, get out
                 if experimental_loss > HYPER_THRESHOLD:
