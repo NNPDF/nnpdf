@@ -16,22 +16,74 @@ from n3fit.backends import MetaModel, clear_backend_state
 from n3fit.stopping import Stopping
 
 log = logging.getLogger(__name__)
-HYPER_THRESHOLD = 4.0
+HYPER_THRESHOLD = 50.0
 
-def fold_data(all_data, folds, k_idx):
-    # TODO make this not illegal
-    try:
+
+def _fold_data(all_data, folds, k_idx, negate_fold=False):
+    """
+    Utility method to fold the data.
+    If the folds are emtpy returns the data unchganed.
+    If the number of folds and data are different, it is assumed that anything beyond
+    the fold passes through.
+    If negate_fold is active the fold is negated before applying it.
+
+    Parameters
+    ----------
+        all_data: list of np.array
+            original data
+        folds: list of (list of) np.array
+            boolean array to select the data that goes through
+        k_idx: int
+            index of the fold
+        negate_fold: bool
+            Flag to decide whether the fold such be negated
+
+    Returns
+    -------
+        folded_data: list of np.array
+            subset of the original data
+    """
+    if any(folds):
+        # Check how many datasets we can fold
         folded_data = []
-        for i, full_data in enumerate(all_data):
-            try:
-                fold = folds[i]
-                kfol = fold[k_idx]
-                folded_data.append(full_data*kfol)
-            except:
-                folded_data.append(full_data)
+        nfolds = len(folds)
+        for original_data, fold in zip(all_data, folds):
+            if negate_fold:
+                kfold = ~fold[k_idx]
+            else:
+                kfold = ~fold[k_idx]
+            folded_data.append(original_data * kfold)
+        # If there are dataset from the original set, add them all
+        folded_data += all_data[nfolds:]
         return folded_data
-    except:
+    else:
         return all_data
+
+
+def _compile_one_model(model_dict, kidx=None, negate_fold=False, **params):
+    """
+    Compiles one model dictionary. The model dictionary must include a backend-dependent
+    model (`model`), a list of losses (`losses`), data to be compared with (`data`) and,
+    if applies, a "fold".
+   
+    Parameters
+    ----------
+        model_dict: dict
+            A ditionary defining the model
+        kidx: int
+            k-index of the fold
+        negate_fold: bool
+            Flag to pass to `fold_data` to negate the fold
+        **params: **dict
+            Parameters to be passes to the compile method of the model
+    """
+    model = model_dict["model"]
+    losses = model_dict["losses"]
+    data = model_dict["expdata"]
+    fold = model_dict["folds"]
+    folded_data = _fold_data(data, fold, kidx, negate_fold=negate_fold)
+    model.compile(loss=losses, target_output=folded_data, **params)
+
 
 class ModelTrainer:
     """
@@ -60,7 +112,7 @@ class ModelTrainer:
         failed_status="fail",
         debug=False,
         save_weights_each=False,
-        kpartitions = None,
+        kpartitions=None,
     ):
         """
         # Arguments:
@@ -87,6 +139,7 @@ class ModelTrainer:
         self.failed_status = failed_status
         self.debug = debug
         self.save_weights_each = save_weights_each
+        self.all_datasets = []
 
         # Initialise internal variables which define behaviour
         self.print_summary = True
@@ -110,7 +163,7 @@ class ModelTrainer:
             "ndata": 0,
             "model": None,
             "posdatasets": [],
-            "folds" : [],
+            "folds": [],
         }
         self.validation = {
             "output": [],
@@ -118,7 +171,7 @@ class ModelTrainer:
             "losses": [],
             "ndata": 0,
             "model": None,
-            "folds" : [],
+            "folds": [],
         }
         self.experimental = {
             "output": [],
@@ -126,7 +179,7 @@ class ModelTrainer:
             "losses": [],
             "ndata": 0,
             "model": None,
-            "folds" : [],
+            "folds": [],
         }
         self.list_of_models_dicts = [self.training, self.experimental]
 
@@ -199,6 +252,10 @@ class ModelTrainer:
             self.training["ndata"] += nd_tr
             self.validation["ndata"] += nd_vl
             self.experimental["ndata"] += nd_tr + nd_vl
+
+            for dataset in exp_dict["datasets"]:
+                self.all_datasets.append(dataset["name"])
+        self.all_datasets = set(self.all_datasets)
 
         for pos_dict in self.pos_info:
             self.training["expdata"].append(pos_dict["expdata"])
@@ -373,31 +430,56 @@ class ModelTrainer:
 
         return layers, integrator_input
 
-    def _model_compilation(self, learning_rate, optimizer, kidx = None):
-        """
-        Compiles the model with the data given in params
+    def _toggle_fold(self, datasets, kidx=0, off=False, recompile=False):
+        """ Toggle the input dataset on (off) and turn all other datasets off (on) 
 
-        Parameters accepted:
-            - `learning_rate`
-            - `optimizer`
-        Optimizers accepted are backend-dependent
+        Parameters
+        ----------
+            datasets: list
+                list of datasets defining the fold
+            kidx: int
+                index of the fold
+            off: bool
+                Choose whether to the input datasets should be on or off
+            recompile: bool
+                Choose whether the model should be recompiled
+        """  # TODO datasets and kidx is redundant but...
+        # TODO fold the number of datapoints in the dictionaries
+        all_other_datasets = self.all_datasets - set(datasets)
+
+        if off:
+            val = 0.0
+        else:
+            val = 1.0
+
+        self.experimental["model"].set_masks_to(datasets, val=val)
+        self.experimental["model"].set_masks_to(all_other_datasets, val=1.0 - val)
+
+        if recompile:
+            _compile_one_model(self.experimental, kidx=kidx, negate_fold=not off)
+
+    def _model_compilation(self, learning_rate, optimizer, kidx=None):
+        """
+        Wrapper around `_compile_one_model` to pass the right parameters
+        and index of the k-folding.
+
+        Currently the accepted for compilation are `learning_rate` and `optimizer`
+
+        Parameters
+        ----------
+            learning_rate: float
+                value of the learning rate
+            optimizer: str
+                name of the optimizer to be used
+                optimizers accepted are backend-dependent
+            kidx: int
+                k-index of the fold
         """
 
         # Compile all different models
         for model_dict in self.list_of_models_dicts:
-            model = model_dict["model"]
-            losses = model_dict["losses"]
-            data = model_dict["expdata"]
-            fold = model_dict["folds"]
-
-            folded_data = fold_data(data, fold, kidx)
-
-            model.compile(
-                optimizer_name=optimizer,
-                learning_rate=learning_rate,
-                loss=losses,
-                target_output=folded_data,
-            )
+            param_dict = {"learning_rate": learning_rate, "optimizer_name": optimizer}
+            _compile_one_model(model_dict, kidx=kidx, **param_dict)
 
     def _train_and_fit(self, stopping_object, epochs):
         """
@@ -416,7 +498,9 @@ class ModelTrainer:
 
             if (epoch + 1) % 100 == 0:
                 print_stats = True
-                training_model.multiply_weights(self.training["posdatasets"], pos_multiplier)
+                training_model.multiply_weights(
+                    self.training["posdatasets"], pos_multiplier
+                )
 
             passes = stopping_object.monitor_chi2(out, epoch, print_stats=print_stats)
 
@@ -458,7 +542,10 @@ class ModelTrainer:
         # training and the validation which are actually `chi2` and not part of the penalty
         train_chi2 = stopping_object.evaluate_training(self.training["model"])
         val_chi2, _ = stopping_object.validation.loss()
-        exp_chi2 = self.experimental["model"].compute_losses()["loss"] / self.experimental["ndata"]
+        exp_chi2 = (
+            self.experimental["model"].compute_losses()["loss"]
+            / self.experimental["ndata"]
+        )
         return train_chi2, val_chi2, exp_chi2
 
     def hyperparametizable(self, params):
@@ -518,15 +605,6 @@ class ModelTrainer:
         else:
             validation_model = self.validation["model"]
 
-        stopping_object = Stopping(
-            validation_model,
-            self.all_info,
-            total_epochs=epochs,
-            stopping_patience=stopping_epochs,
-            save_weights_each=self.save_weights_each,
-        )
-
-
         # Initialize the chi2 dictionaries
         l_train = []
         l_valid = []
@@ -537,12 +615,23 @@ class ModelTrainer:
         for k, partition in enumerate(self.kpartitions):
 
             if self.mode_hyperopt:
-                # Disable the datasets
+                # Disable the partition for training
                 datasets = partition["datasets"]
-                self.experimental["model"].set_masks_to(datasets, val=0.0)
+                self._toggle_fold(datasets, kidx=k, off=True)
+
+            # Generate the stopping object
+            stopping_object = Stopping(
+                validation_model,
+                self.all_info,
+                total_epochs=epochs,
+                stopping_patience=stopping_epochs,
+                save_weights_each=self.save_weights_each,
+            )
 
             # Compile the training['model'] with the given parameters
-            self._model_compilation(params["learning_rate"], params["optimizer"], kidx = k)
+            self._model_compilation(
+                params["learning_rate"], params["optimizer"], kidx=k
+            )
 
             passed = self._train_and_fit(stopping_object, epochs)
 
@@ -557,21 +646,17 @@ class ModelTrainer:
             l_train.append(training_loss)
             l_valid.append(validation_loss)
             l_exper.append(experimental_loss)
-            # TODO make sure the 1/N of the loss is also folded...
 
             if self.mode_hyperopt:
-                # Reenable the datasets
-                datasets = partition["datasets"]
-                self.experimental["model"].set_masks_to(datasets, val=1.0)
+                # Toggle the fold
+                self._toggle_fold(datasets, kidx=k, off=False, recompile=True)
                 # Compute the hyperopt loss
-                new_loss = self.experimental["model"].compute_losses()["loss"]
-                hyper_loss = exp_loss_raw - new_loss
+                hyper_loss = self.experimental["model"].compute_losses()["loss"]
                 hyper_losses.append(hyper_loss)
                 # Check whether this run is any good, if not, get out
                 if experimental_loss > HYPER_THRESHOLD:
                     break
                 self.training["model"].reinitialize()
-
 
         dict_out = {
             "status": passed,
@@ -582,7 +667,7 @@ class ModelTrainer:
 
         if self.mode_hyperopt:
             dict_out["loss"] = np.average(hyper_losses)
-#             arc_lengths = msr_constraints.compute_arclength(layers["fitbasis"])
+            #             arc_lengths = msr_constraints.compute_arclength(layers["fitbasis"])
             # If we are using hyperopt we don't need to output any other information
             return dict_out
 
