@@ -32,7 +32,7 @@ def test_dataspecschi2():
         {'pdf': 'NNPDF31_nnlo_as_0118', 'theoryid': 162, 'use_t0': False, 'speclabel': 'with t0'}
     ]
     return API.plot_dataspecs_datasets_chi2(
-        experiments=experiments, dataspecs=dataspecs, use_cuts='nocuts')
+        experiments=experiments, dataspecs=dataspecs, use_cuts='nocuts', metadata_group='experiment')
 
 @pytest.mark.mpl_image_compare
 def test_plot_xq2():
