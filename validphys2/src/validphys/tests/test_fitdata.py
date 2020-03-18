@@ -1,6 +1,6 @@
 from validphys.loader import FallbackLoader as Loader
 from validphys.fitdata import print_systype_overlap
-from validphys.core import ExperimentSpec
+from validphys.core import DataGroupSpec
 
 def test_print_systype_overlap():
     l = Loader()
