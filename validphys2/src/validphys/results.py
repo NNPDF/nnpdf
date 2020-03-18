@@ -187,7 +187,7 @@ def groups_data_values(group_result_table):
     return data_central_values
 
 groups_results = collect(
-    "dataset_input_results", ("group_dataset_inputs_by_metadata",)
+    "dataset_input_results", ("group_dataset_inputs_by_metadata",))
 
 def group_result_table_no_table(groups_results, groups_index):
     """Generate a table containing the data central value, the central prediction,
