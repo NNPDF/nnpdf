@@ -409,14 +409,14 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORMFilter::ReadData()
 void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT_NORMFilter::ReadData()
 {
   // Create stream to read data file
-  fstream f1;
+  fstream f1, f2, f3;
 
   // Data files
   stringstream datafile("");
-  string filename1;
-  filename1 = "ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT";
+  string dirname;
+  dirname = "ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT";
   datafile << dataPath()
-           << "rawdata/" << filename1 << "/" << filename1 << "_NORM.data";
+           << "rawdata/" << dirname << "/" << dirname << "_NORM.data";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail())
@@ -425,8 +425,36 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT_NORMFilter::ReadData()
     exit(-1);
   }
 
+  // Open uncertainty breakdown file
+  stringstream sysfile("");
+  sysfile << dataPath()
+           << "rawdata/" << dirname << "/" << dirname << "_NORM_SYS_BREAKDOWN.data";
+  f2.open(sysfile.str().c_str(), ios::in);
+
+  if (f2.fail())
+  {
+    cerr << "Error opening data file " << sysfile.str() << endl;
+    exit(-1);
+  }
+
+  // Open correlation matrix file
+  stringstream corrfile("");
+  string filename3;
+  corrfile << dataPath()
+           << "rawdata/" << dirname << "/" << dirname << "_NORM.corr";
+  f3.open(corrfile.str().c_str(), ios::in);
+
+  if (f3.fail())
+  {
+    cerr << "Error opening data file " << corrfile.str() << endl;
+    exit(-1);
+  }
+
   // Start filter of data
   string line;
+
+  // Initialise array to store additive stat. uncerts.
+  std::vector<double> fstat_additive(fNData);
 
   // Skip over first two lines
   for (int i=0; i<2; i++)
@@ -438,21 +466,15 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT_NORMFilter::ReadData()
   {
     double pt_top; // Transverse momentum of top quark
     double pt_top_low, pt_top_high; // Limits of bin
-    double sys1, sys2; // Systematic uncertainties from file
-    double sigma, datshift; // Outputs of symmetriseErrors
 
     getline(f1,line);
     istringstream lstream(line);
 
     lstream >> pt_top_low >> pt_top_high;
-    lstream >> fData[i] >> fStat[i];
-    lstream >> sys1 >> sys2;
+    lstream >> fData[i];
 
     // Convert to 1/GeV
     fData[i] /= 1000;
-    fStat[i] /= 1000;
-    sys1 /= 1000;
-    sys2 /= 1000;
 
     pt_top = 0.5*(pt_top_low + pt_top_high);
 
@@ -460,15 +482,115 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT_NORMFilter::ReadData()
     fKin2[i] = Mt*Mt; // Top mass squared
     fKin3[i] = 8000; // Centre of mass energy in GeV
 
-    symmetriseErrors(sys1, sys2, &sigma, &datshift);
-
-    fData[i] += datshift; // Shift of central value due to asymmetric errors
-
-    fSys[i][0].add = sigma;
-    fSys[i][0].mult = (fSys[i][0].add/fData[i])*100;
-    fSys[i][0].type = MULT;
-    fSys[i][0].name = "CORR";
+    fStat[i] = 1e-10; // Set stat. error to zero to avoid double counting
   }
+
+  // Read file with systematic uncertainty breakdown
+  // Skip over first line
+  getline(f2,line);
+
+  double sys1, sys2;
+  string unneeded_info;
+  const int uncerts=17; // Number of uncertainty sources (inc. stat. errors)
+
+  std::vector<double> fdata_stat(fNData); // Stat. data error
+  std::vector<double> fmc_stat(fNData); // Stat. Monte Carlo error
+
+  for (int j=0; j<uncerts; j++)
+  {
+    getline(f2,line);
+    istringstream lstream(line);
+
+    for (int i=0; i<fNData; i++)
+    {
+      if (j==0) // Read stat. data error
+        lstream >> fdata_stat[i] >> unneeded_info;
+      else if (j==1) // Read stat. MC error
+        lstream >> fmc_stat[i] >> unneeded_info;
+      else // Read systematic errors
+      {
+        lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
+
+        if (sys1<0. && sys2<0.)
+          sys2=0;
+        else if (sys1>0. && sys2>0.)
+          sys1=0.;
+
+        sys1=sys1/sqrt(2.);
+        sys2=sys2/sqrt(2.);
+
+        fSys[i][fNData+2*j-4].mult = sys1;
+        fSys[i][fNData+2*j-4].add  = fSys[i][fNData+2*j-4].mult*fData[i]/100;
+        fSys[i][fNData+2*j-4].type = MULT;
+        fSys[i][fNData+2*j-4].name = "CORR";
+
+        fSys[i][fNData+2*j+1-4].mult = sys2;
+        fSys[i][fNData+2*j+1-4].add  = fSys[i][fNData+2*j+1-4].mult*fData[i]/100;
+        fSys[i][fNData+2*j+1-4].type = MULT;
+        fSys[i][fNData+2*j+1-4].name = "CORR";
+      }
+    }
+  }
+
+  // Compute total additive statistical error
+  for (int i=0; i<fNData; i++)
+  {
+    fstat_additive[i] = (fdata_stat[i] + fmc_stat[i])*fData[i]/100;
+  }
+
+  // Read statistical correlation matrix
+  // Skip over first line
+  getline(f3,line);
+
+  double** covmat = new double*[fNData];
+  NNPDF::matrix<double> corrmat(fNData, fNData);
+  for (int i=0; i<fNData; i++)
+  {
+    string unneeded_info;
+    covmat[i] = new double[fNData];
+    getline(f3,line);
+    istringstream lstream(line);
+    lstream >> unneeded_info >> unneeded_info >> unneeded_info;
+    for (int j=0; j<fNData; j++)
+    {
+      lstream >> corrmat(i,j) >> unneeded_info;
+      covmat[i][j] = corrmat(i,j) * fstat_additive[i] * fstat_additive[j];
+    }
+  }
+
+  // Generate artificial systematics
+  double** syscor = new double*[fNData];
+  for (int i=0; i<fNData; i++)
+    syscor[i] = new double[fNData];
+
+  if (!genArtSys(fNData,covmat,syscor))
+  {
+    cerr << " in " << fSetName << endl;
+    exit(-1);
+  }
+
+  // Assign artificial systematics
+  for (int i=0; i<fNData; i++)
+  {
+    for (int j=0; j<fNData; j++)
+    {
+      fSys[i][j].add  = syscor[i][j];
+      fSys[i][j].mult = fSys[i][j].add*100/fData[i];
+      fSys[i][j].type = ADD;
+      fSys[i][j].name = "CORR";
+    }
+  }
+
+  // Clean-up
+  for (int i=0; i<fNData; i++)
+    delete[] syscor[i];
+
+  delete[] syscor;
+
+  for (int i=0; i<fNData; i++)
+    delete[] covmat[i];
+
+  delete[] covmat;
 }
 
 //==============================================================================
