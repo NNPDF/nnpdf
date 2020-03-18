@@ -91,6 +91,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORMFilter::ReadData()
     lstream >> rap_top_low >> rap_top_high;
     lstream >> fData[i];
 
+    // Convert to correct units
     fData[i] /= 1000;
 
     rap_top = 0.5*(rap_top_low + rap_top_high);
@@ -107,27 +108,24 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORMFilter::ReadData()
   getline(f2,line);
 
   double sys1, sys2;
-
-  const int realsys=14;
-
-  std::vector<double> fdata_stat(fNData);
-  std::vector<double> fmc_stat(fNData);
-
   string unneeded_info;
+  const int uncerts=16; // Number of uncertainty sources (inc. stat. errors)
 
-  for (int j=0; j<realsys+2; j++)
+  std::vector<double> fdata_stat(fNData); // Stat. data error
+  std::vector<double> fmc_stat(fNData); // Stat. Monte Carlo error
+
+  for (int j=0; j<uncerts; j++)
   {
     getline(f2,line);
     istringstream lstream(line);
 
     for (int i=0; i<fNData; i++)
     {
-
-      if (j==0)
+      if (j==0) // Read stat. data error
         lstream >> fdata_stat[i] >> unneeded_info;
-      else if (j==1)
+      else if (j==1) // Read stat. MC error
         lstream >> fmc_stat[i] >> unneeded_info;
-      else
+      else // Read systematic errors
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
 
@@ -152,6 +150,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORMFilter::ReadData()
     }
   }
 
+  // Compute total additive statistical error
   for (int i=0; i<fNData; i++)
   {
     fstat_additive[i] = (fdata_stat[i] + fmc_stat[i])*fData[i]/100;
