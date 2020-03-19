@@ -1,6 +1,4 @@
 /*
-NB: Not currently suitable for use in NNPDF4.0 because no systematics breakdown available.
-
 Differential cross section measurements of the single top and single antitop quark in the t-channel @LHC ATLAS 8 TeV
 
 LHC-ATLAS 8 TeV
@@ -10,11 +8,42 @@ Selected events contain exactly one electron or muon, exactly two jets (exactly 
 Archived as: https://arxiv.org/pdf/1702.02859v3.pdf
 Published in: Eur. Phys. J. C 77 (2017) 531
 
+Eight distributions are implemented here. These are normalised and unnormalised
+distributions differential in:
+1) Top quark absolute rapidity
+2) Antitop quark absolute rapidity
+3) Top quark transverse momentum
+4) Antitop quark transverse momentum
+
+Description of raw data:
+Tables containing central values are taken from Tables 18-21 of the paper
+The rest of the information is taken from the auxiliary material: https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PAPERS/TOPQ-2015-05/
+The statistical correlation matrices are taken from Figures 6a-d and 7a-d
+The uncertainty breakdowns are taken from Tables 19-26
+
 Distributions are converted, where necessary, so that they have the following dimensions:
 Absolute transverse momentum: pb/GeV
 Absolute rapidity: pb
 Normalised transverse momentum: 1/GeV
 Normalised rapidity: -
+
+Notes:
+1) The number of systematic uncertainties is distribution-dependent.
+2) All real systematic uncertainties are treated as being multiplicative.
+3) All real systematic uncertainties, except the lumi. uncertainty, are
+   treated following the prescription defined by Eq. 6 in https://arxiv.org/pdf/1703.01630.pdf.
+   That is, each positive and negative variation is treated separately.
+   This is done at the expense of symmetrising each asymmetric uncertainty.
+4) All artificial systematic uncertainties (i.e. those generated using the
+   statistical uncertainties and the statistical correlation matrix) are treated
+   as being additive. Note that both the 'Data statistics' and 'Monte Carlo'
+   statistics are included in the total statistical uncertainty.
+5) All systematics are treated as CORR (i.e. correlated), except for the
+   luminosity uncertainty for the unnormalised distributions which are treated
+   as ATLASLUMI12 (i.e. ATLAS luminosity for the 2012 data set).
+6) The last bin is removed from all the normalised distributions, because it
+   is a linear combination of the other. This also removes the spurious
+   feature of covariance matrices not being positive-semidefinite.
 */
 
 #include "ATLAS_SINGLETOP_TCH_DIFF_8TEV.h"
@@ -871,6 +900,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAPFilter::ReadData()
   getline(f2,line);
 
   double sys1, sys2;
+  double sys;
   string unneeded_info;
   const int uncerts=18; // Number of uncertainty sources (inc. stat. errors)
 
@@ -888,6 +918,15 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAPFilter::ReadData()
         lstream >> fdata_stat[i] >> unneeded_info;
       else if (j==1) // Read stat. MC error
         lstream >> fmc_stat[i] >> unneeded_info;
+      else if (j==uncerts-1) // Read luminosity uncertainty
+      {
+        lstream >> sys >> unneeded_info;
+
+        fSys[i][fNData+2*j-4].mult = sys;
+        fSys[i][fNData+2*j-4].add  = fSys[i][fNData+2*j-4].mult*fData[i]/100;
+        fSys[i][fNData+2*j-4].type = MULT;
+        fSys[i][fNData+2*j-4].name = "ATLASLUMI12";
+      }
       else // Read systematic errors
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
@@ -1059,6 +1098,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAPFilter::ReadData()
   getline(f2,line);
 
   double sys1, sys2;
+  double sys;
   string unneeded_info;
   const int uncerts=19; // Number of uncertainty sources (inc. stat. errors)
 
@@ -1076,6 +1116,15 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAPFilter::ReadData()
         lstream >> fdata_stat[i] >> unneeded_info;
       else if (j==1) // Read stat. MC error
         lstream >> fmc_stat[i] >> unneeded_info;
+      else if (j==uncerts-1) // Read luminosity uncertainty
+      {
+        lstream >> sys >> unneeded_info;
+
+        fSys[i][fNData+2*j-4].mult = sys;
+        fSys[i][fNData+2*j-4].add  = fSys[i][fNData+2*j-4].mult*fData[i]/100;
+        fSys[i][fNData+2*j-4].type = MULT;
+        fSys[i][fNData+2*j-4].name = "ATLASLUMI12";
+      }
       else // Read systematic errors
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
@@ -1250,6 +1299,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PTFilter::ReadData()
   getline(f2,line);
 
   double sys1, sys2;
+  double sys;
   string unneeded_info;
   const int uncerts=19; // Number of uncertainty sources (inc. stat. errors)
 
@@ -1267,6 +1317,15 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PTFilter::ReadData()
         lstream >> fdata_stat[i] >> unneeded_info;
       else if (j==1) // Read stat. MC error
         lstream >> fmc_stat[i] >> unneeded_info;
+      else if (j==uncerts-1) // Read luminosity uncertainty
+      {
+        lstream >> sys >> unneeded_info;
+
+        fSys[i][fNData+2*j-4].mult = sys;
+        fSys[i][fNData+2*j-4].add  = fSys[i][fNData+2*j-4].mult*fData[i]/100;
+        fSys[i][fNData+2*j-4].type = MULT;
+        fSys[i][fNData+2*j-4].name = "ATLASLUMI12";
+      }
       else // Read systematic errors
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
@@ -1441,6 +1500,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PTFilter::ReadData()
   getline(f2,line);
 
   double sys1, sys2;
+  double sys;
   string unneeded_info;
   const int uncerts=19; // Number of uncertainty sources (inc. stat. errors)
 
@@ -1458,6 +1518,15 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PTFilter::ReadData()
         lstream >> fdata_stat[i] >> unneeded_info;
       else if (j==1) // Read stat. MC error
         lstream >> fmc_stat[i] >> unneeded_info;
+      else if (j==uncerts-1) // Read luminosity uncertainty
+      {
+        lstream >> sys >> unneeded_info;
+
+        fSys[i][fNData+2*j-4].mult = sys;
+        fSys[i][fNData+2*j-4].add  = fSys[i][fNData+2*j-4].mult*fData[i]/100;
+        fSys[i][fNData+2*j-4].type = MULT;
+        fSys[i][fNData+2*j-4].name = "ATLASLUMI12";
+      }
       else // Read systematic errors
       {
         lstream >> sys1 >> unneeded_info >> sys2 >> unneeded_info;
