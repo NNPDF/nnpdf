@@ -41,16 +41,12 @@ void ATLAS_WCHARM_TOT_UNNORM_7TEVFilter::ReadData()
   double MW2 = pow(MW, 2.0);   //W mass
   double s = 7000;             //LHC at 7TeV
   double fSystematics[fNSys];
-  for(int i=0; i<fNData;i++)
+  for(int i=0; i<fNData / 2; i++)
   {
     getline(f1,line);
     istringstream lstream(line);
     //Reading in an interpretation of each column
     lstream >> etamin >> etamax >> fData[i] >> fStat[i];
-    for(int k=0; k<fNSys; k++)
-    {
-      lstream >> fSystematics[k];
-    }      
 
     fData[i] = fData[i]*1000; // changing pb to fb for APPLgrid
     fStat[i] = fStat[i]*1000; // changing pb to fb for APPLgrid
@@ -62,8 +58,8 @@ void ATLAS_WCHARM_TOT_UNNORM_7TEVFilter::ReadData()
     //Reading in the systematics
     for(int k=0; k<fNSys; k++)
     {
-      fSys[i][k].mult = fSystematics[k];
-      std::cout << fSys[i][k].mult << std::endl;
+      lstream >> fSys[i][k].add;
+      fSys[i][k].mult = fSys[i][k].add*100/fData[i];
       fSys[i][k].type = MULT;
       if(k == 0){
         fSys[i][k].name = "UNCORR"; //We treat luminosity as a special case
@@ -71,10 +67,39 @@ void ATLAS_WCHARM_TOT_UNNORM_7TEVFilter::ReadData()
       else{
         fSys[i][k].name = "CORR";
       }
-       //Add the additive uncertainties
-      fSys[i][k].add = fSys[i][k].mult*fData[i]*1e-2;
+    }      
+     
+  }
+  f1.close();
+
+  for(int i=fNData/2; i<fNData; i++)
+  {
+    getline(f2,line);
+    istringstream lstream(line);
+    //Reading in an interpretation of each column
+    lstream >> etamin >> etamax >> fData[i] >> fStat[i];
+
+    fData[i] = fData[i]*1000; // changing pb to fb for APPLgrid
+    fStat[i] = fStat[i]*1000; // changing pb to fb for APPLgrid
+    //Defining the kinematic variables
+    fKin1[i] = (etamin + etamax)*0.5;    // eta
+    fKin2[i] = MW2;                      // Mass W squared
+    fKin3[i] = s;                        // sqrt(s)
+
+    //Reading in the systematics
+    for(int k=0; k<fNSys; k++)
+    {
+      lstream >> fSys[i][k].add;
+      fSys[i][k].mult = fSys[i][k].add*100/fData[i];
+      fSys[i][k].type = MULT;
+      if(k == 0){
+        fSys[i][k].name = "UNCORR"; //We treat luminosity as a special case
+      }
+      else{
+        fSys[i][k].name = "CORR";
+      }
     }      
      
   }  
-   f1.close();
+  f2.close();
 } 
