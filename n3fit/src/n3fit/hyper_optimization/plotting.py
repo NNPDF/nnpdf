@@ -62,7 +62,7 @@ KEYWORDS = {
     "p_mul": "pos_multiplier",
     "good": "good",
     "vl": "validation_loss",
-    "tl": "testing_loss",
+    "tl": "loss", # The testing loss has dissapeared, the loss corresponds to the k-folding loss
     "loss": "loss",
 }
 
@@ -94,7 +94,7 @@ def parse_args():
         "--val_multiplier",
         help="Fraction to weight the validation loss with (test_multiplier = 1-val_multiplier)",
         type=float,
-        default=0.5,
+        default=0.0,
     )
     parser.add_argument(
         "-if",

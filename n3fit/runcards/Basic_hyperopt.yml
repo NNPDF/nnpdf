@@ -36,11 +36,11 @@ experiments:
     datasets:
       - { dataset: HERACOMBNCEM , frac: 0.5}
       - { dataset: HERACOMBNCEP460, frac: 0.5}
-      - { dataset: HERACOMBNCEP575, frac: 0.5}
-      - { dataset: HERACOMBNCEP820, frac: 0.5}
+#       - { dataset: HERACOMBNCEP575, frac: 0.5}
+#       - { dataset: HERACOMBNCEP820, frac: 0.5}
       - { dataset: HERACOMBNCEP920, frac: 0.5}
       - { dataset: HERACOMBCCEM , frac: 0.5}
-      - { dataset: HERACOMBCCEP , frac: 0.5}
+#       - { dataset: HERACOMBCCEP , frac: 0.5}
 # Combined HERA charm production cross-sections
   - experiment: HERAF2CHARM
     datasets:
@@ -48,8 +48,8 @@ experiments:
 # F2bottom data
   - experiment: F2BOTTOM
     datasets: 
-      - { dataset: H1HERAF2B, frac: 1.0}
-      - { dataset: ZEUSHERAF2B, frac: 1.0}
+      - { dataset: H1HERAF2B, frac: 0.5}
+      - { dataset: ZEUSHERAF2B, frac: 0.5}
 
 
 ############################################################
@@ -74,19 +74,19 @@ theory:
 ############################################################
 hyperscan:
     stopping:
-        min_epochs: 5e2
-        max_epochs: 40e2
+        min_epochs: 5e3
+        max_epochs: 40e3
         min_patience: 0.10
         max_patience: 0.40
     positivity:
-        min_multiplier: 1.00000001
-        max_multiplier: 1.00000002
+        min_multiplier: 1.01
+        max_multiplier: 1.10
         min_initial:
         max_initial:
     optimizer:
-        names: 'ALL' # Use all implemented optimizers
-        min_lr: 0.0005
-        max_lr: 0.5
+        names: ['Adadelta', 'Adam', 'Adagrad'] # Use all implemented optimizers
+        min_lr: 0.5
+        max_lr: 1.5
     architecture:
         initializers: 'ALL'
         max_drop: 0.15
@@ -98,8 +98,13 @@ hyperscan:
         - datasets: 
             - NMC
             - NTVNUDMN
+            - SLACD
+            - HERACOMBCCEM
         - datasets:
             - HERACOMBNCEP920
+            - CHORUSNB
+            - ZEUSHERAF2B
+            - NMCPD
         - datasets:
             - H1HERAF2B
 
