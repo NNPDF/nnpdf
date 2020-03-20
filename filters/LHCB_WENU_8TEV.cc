@@ -50,7 +50,7 @@ void  LHCB_WENU_8TEVFilter::ReadData()
 
   string line;
   double MW2 = pow(MW,2.0);
-  double s = 8;         //centre-of-mass energy     
+  double s = 8000;      //centre-of-mass energy [GeV]     
   int ndata_Wp = 8;	//Wp points
   double etamin, etamax, fsr;
   std::vector<double> totsys(fNData);
@@ -203,7 +203,7 @@ void  LHCB_WENU_8TEV_RFilter::ReadData()
 
   string line;
   double MW2 = pow(MW,2.0);
-  double s = 8;         //centre-of-mass energy     
+  double s = 8000.;         //centre-of-mass energy [GeV]     
   double etamin, etamax;
   
   //Read R data
@@ -255,7 +255,7 @@ void  LHCB_WENU_8TEV_AFilter::ReadData()
 
   string line;
   double MW2 = pow(MW,2.0);
-  double s = 8;         //centre-of-mass energy     
+  double s = 8000.;         //centre-of-mass energy [GeV]    
   double etamin, etamax;
   
   //Read A data
@@ -274,15 +274,20 @@ void  LHCB_WENU_8TEV_AFilter::ReadData()
 
     lstream >> fData[i];        
     lstream >> fStat[i]; 
+    //Convert from percentage to absolute values
+    fData[i] /= 100.;
+    fStat[i] /= 100.;
 
     //Uncorrelated systematic
     lstream >> fSys[i][0].add;
+    fSys[i][0].add /= 100.;
     fSys[i][0].mult = fSys[i][0].add/fData[i]*1e2;
     fSys[i][0].type = MULT;       
     fSys[i][0].name = "UNCORR";
 
     //Beam energy sys
     lstream >> fSys[i][1].add;  
+    fSys[i][1].add /= 100.;
     fSys[i][1].mult = fSys[i][1].add/fData[i]*1e2;
     fSys[i][1].type = MULT;       
     fSys[i][1].name = "LHCBBEAM8TEV";	       
