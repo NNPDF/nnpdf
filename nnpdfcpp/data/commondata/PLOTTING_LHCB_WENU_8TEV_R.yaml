@@ -1,0 +1,9 @@
+dataset_label: "LHCb $W \\to \\ell$ 8 TeV"
+x: k1
+
+y_label: '$R^{W^\pm}$' 
+x_label: 'y'
+
+experiment: "LHCb"
+
+nnpdf31_process: DY
