@@ -67,20 +67,29 @@ void  LHCB_WENU_8TEVFilter::ReadData()
     lstream >> etamin >> etamax;
     fKin1[i] = (etamin + etamax)/2.;         
     fKin2[i] = MW2;             
-    fKin3[i] = s;               
+    fKin3[i] = s; 
+  
+    double bin_width = (etamax - etamin) / 2.;
 
     lstream >> fData[i];        
     lstream >> fStat[i]; 
     lstream >> totsys[i];
 
+    //Rescale by bin width
+    fData[i] *= bin_width;
+    fStat[i] *= bin_width;
+    totsys[i]*= bin_width;
+
     //Beam energy sys
     lstream >> fSys[i][fNSys-2].add;  
+    fSys[i][fNSys-2].add *= bin_width;
     fSys[i][fNSys-2].mult = fSys[i][fNSys-1].add/fData[i]*1e2;
     fSys[i][fNSys-2].type = MULT;       
     fSys[i][fNSys-2].name = "LHCBBEAM8TEV";	       
 
     //Lumi sys
     lstream >> fSys[i][fNSys-1].add;  
+    fSys[i][fNSys-1].add *= bin_width;
     fSys[i][fNSys-1].mult = fSys[i][fNSys-1].add/fData[i]*1e2;
     fSys[i][fNSys-1].type = MULT;		
     fSys[i][fNSys-1].name = "LHCBLUMI8TEV";     
@@ -106,14 +115,23 @@ void  LHCB_WENU_8TEVFilter::ReadData()
     lstream >> fStat[i]; 
     lstream >> totsys[i];
 
+    double bin_width = (etamax - etamin) / 2.;
+
+    //Rescale by bin width
+    fData[i] *= bin_width;
+    fStat[i] *= bin_width;
+    totsys[i]*= bin_width;
+
     //Beam energy sys
     lstream >> fSys[i][fNSys-2].add;  
+    fSys[i][fNSys-2].add *= bin_width;
     fSys[i][fNSys-2].mult = fSys[i][fNSys-1].add/fData[i]*1e2;
     fSys[i][fNSys-2].type = MULT;
     fSys[i][fNSys-2].name = "LHCBBEAM8TEV";
 
     //Lumi sys
-    lstream >> fSys[i][fNSys-1].add;  
+    lstream >> fSys[i][fNSys-1].add; 
+    fSys[i][fNSys-1].add *= bin_width;
     fSys[i][fNSys-1].mult = fSys[i][fNSys-1].add/fData[i]*1e2;
     fSys[i][fNSys-1].type = MULT;
     fSys[i][fNSys-1].name = "LHCBLUMI8TEV";
