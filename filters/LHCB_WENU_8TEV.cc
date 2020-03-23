@@ -69,7 +69,7 @@ void  LHCB_WENU_8TEVFilter::ReadData()
     fKin2[i] = MW2;             
     fKin3[i] = s; 
   
-    double bin_width = (etamax - etamin) / 2.;
+    double bin_width = (etamax - etamin);
 
     lstream >> fData[i];        
     lstream >> fStat[i]; 
@@ -115,7 +115,7 @@ void  LHCB_WENU_8TEVFilter::ReadData()
     lstream >> fStat[i]; 
     lstream >> totsys[i];
 
-    double bin_width = (etamax - etamin) / 2.;
+    double bin_width = (etamax - etamin);
 
     //Rescale by bin width
     fData[i] *= bin_width;
@@ -153,7 +153,7 @@ void  LHCB_WENU_8TEVFilter::ReadData()
       for (int j = 0; j < i+1; j++) 
 	{    
 	  fCorr >> covmat[i][j];
-	  //covmat[i][j] = covmat[i][j]*totsys[i]*totsys[j];  
+	  covmat[i][j] = covmat[i][j]*totsys[i]*totsys[j];  
 	  covmat[j][i] = covmat[i][j];
 	}
     }
