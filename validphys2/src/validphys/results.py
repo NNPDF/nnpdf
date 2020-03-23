@@ -213,9 +213,9 @@ def group_result_table_no_table(groups_results, groups_index):
     return df
 
 @table
-def experiment_result_table(experiment_result_table_no_table):
-    """Duplicate of experiment_result_table_no_table but with a table decorator."""
-    return experiment_result_table_no_table
+def group_result_table(group_result_table_no_table):
+    """Duplicate of group_result_table_no_table but with a table decorator."""
+    return group_result_table_no_table
 
 @table
 def experiment_result_table_68cl(experiment_result_table_no_table: pd.DataFrame, pdf: PDF):
@@ -259,7 +259,7 @@ def experiments_covmat_no_table(
     return df
 
 @table
-def experiments_covmat_table(experiments_covmat_no_table):
+def experiments_covmatz(experiments_covmat_no_table):
     """Duplicate of experiments_covmat_no_table but with a table decorator."""
     return experiments_covmat_no_table
 
