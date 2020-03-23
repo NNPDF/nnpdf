@@ -9,4 +9,5 @@ Getting Started
    ./installation-source
    ./git
    ./rules
+   ./prs
    ./tools
