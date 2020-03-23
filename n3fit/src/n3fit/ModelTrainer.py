@@ -16,7 +16,7 @@ from n3fit.backends import MetaModel, clear_backend_state
 from n3fit.stopping import Stopping
 
 log = logging.getLogger(__name__)
-HYPER_THRESHOLD = 10.0
+HYPER_THRESHOLD = 3.0
 
 
 def _fold_data(all_data, folds, k_idx, negate_fold=False):
@@ -51,7 +51,7 @@ def _fold_data(all_data, folds, k_idx, negate_fold=False):
             if negate_fold:
                 kfold = ~fold[k_idx]
             else:
-                kfold = ~fold[k_idx]
+                kfold = fold[k_idx]
             folded_data.append(original_data * kfold)
         # If there are dataset from the original set, add them all
         folded_data += all_data[nfolds:]
@@ -686,7 +686,11 @@ class ModelTrainer:
                 hyper_loss = self.experimental["model"].compute_losses()["loss"]/self.experimental["ndata"]
                 hyper_losses.append(hyper_loss)
                 # Check whether this run is any good, if not, get out
-                if experimental_loss > HYPER_THRESHOLD:
+                log.info(f"fold: {k}")
+                log.info(f"Experimental loss: {experimental_loss}")
+                log.info(f"Hyper loss: {hyper_loss}")
+                if training_loss > HYPER_THRESHOLD or validation_loss > HYPER_THRESHOLD:
+                    log.info("Bad threshold: break")
                     break
                 self.training["model"].reinitialize()
 

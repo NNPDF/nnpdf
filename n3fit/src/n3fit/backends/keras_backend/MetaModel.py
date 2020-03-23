@@ -14,6 +14,11 @@ from n3fit.backends.keras_backend.operations import numpy_to_input, batchit
 
 import numpy as np
 
+# TODO: bad, real bad
+scale_lr = {
+        'Adadelta' : 100.0
+        }
+
 
 class MetaModel(Model):
     """
@@ -229,7 +234,7 @@ class MetaModel(Model):
         opt_args = opt_tuple[1]
 
         if "lr" in opt_args.keys():
-            opt_args["lr"] = learning_rate
+            opt_args["lr"] = learning_rate*scale_lr.get(opt_function, 1.0)
 
         opt_args["clipnorm"] = 1.0
         opt = opt_function(**opt_args)
