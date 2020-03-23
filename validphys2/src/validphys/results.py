@@ -311,7 +311,7 @@ def groups_normcovmat(groups_covmat, groups_data):
 
 @table
 def groups_corrmat(groups_covmat):
-    """Generates the grouped experimental correlation matrix with experiments_covmat as input"""
+    """Generates the grouped experimental correlation matrix with groups_covmat as input"""
     df = groups_covmat
     covmat = df.values
     diag_minus_half = (np.diagonal(covmat))**(-0.5)
