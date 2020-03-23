@@ -56,8 +56,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORMFilter::ReadData()
     double rap_top; // Rapidity of top quark
     double rap_top_low, rap_top_high; // Limits of bin
     double sys1, sys2; // Systematic uncertainties from file
-    double sys1_mult, sys2_mult; // Multiplicative systematic uncertainties
-    double up, down, sigma, datshift; // Arguments of symmetriseErrors
+    double sigma, datshift; // Outputs of symmetriseErrors
 
     getline(f1,line);
     istringstream lstream(line);
@@ -77,26 +76,14 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORMFilter::ReadData()
     fKin2[i] = Mt*Mt; // Top mass squared
     fKin3[i] = 8000; // Centre of mass energy in GeV
 
-    // Check whether numbers in file are percentage or absolute
-    sys1_mult = (sys1/fData[i])*100;
-    sys2_mult = (sys2/fData[i])*100;
-    if (sys1_mult < 0)
-    {
-      up=sys2_mult;
-      down=sys1_mult;
-    }
-    else
-    {
-      up=sys1_mult;
-      down=sys2_mult;
-    }
-    symmetriseErrors(up, down, &sigma, &datshift);
-    fSys[i][0].mult = sigma;
-    fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
+    symmetriseErrors(sys1, sys2, &sigma, &datshift);
+
+    fData[i] += datshift; // Shift of central value due to asymmetric errors
+
+    fSys[i][0].add = sigma;
+    fSys[i][0].mult = (fSys[i][0].add/fData[i])*100;
     fSys[i][0].type = MULT;
     fSys[i][0].name = "CORR";
- 
-    fData[i] *= (1.0 + datshift*0.01); // Shift of central value due to asymmetric errors
   }
 }
 
@@ -137,8 +124,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORMFilter::ReadData()
     double rap_top; // Rapidity of top quark
     double rap_top_low, rap_top_high; // Limits of bin
     double sys1, sys2; // Systematic uncertainties from file
-    double sys1_mult, sys2_mult; // Multiplicative systematic uncertainties
-    double up, down, sigma, datshift; // Arguments of symmetriseErrors
+    double sigma, datshift; // Outputs of symmetriseErrors
 
     getline(f1,line);
     istringstream lstream(line);
@@ -158,26 +144,14 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORMFilter::ReadData()
     fKin2[i] = Mt*Mt; // Top mass squared
     fKin3[i] = 8000; // Centre of mass energy in GeV
 
-    // Check whether numbers in file are percentage or absolute
-    sys1_mult = (sys1/fData[i])*100;
-    sys2_mult = (sys2/fData[i])*100;
-    if (sys1_mult < 0)
-    {
-      up=sys2_mult;
-      down=sys1_mult;
-    }
-    else
-    {
-      up=sys1_mult;
-      down=sys2_mult;
-    }
-    symmetriseErrors(up, down, &sigma, &datshift);
-    fSys[i][0].mult = sigma;
-    fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
+    symmetriseErrors(sys1, sys2, &sigma, &datshift);
+
+    fData[i] += datshift; // Shift of central value due to asymmetric errors
+
+    fSys[i][0].add = sigma;
+    fSys[i][0].mult = (fSys[i][0].add/fData[i])*100;
     fSys[i][0].type = MULT;
     fSys[i][0].name = "CORR";
- 
-    fData[i] *= (1.0 + datshift*0.01); // Shift of central value due to asymmetric errors
   }
 }
 
@@ -218,8 +192,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT_NORMFilter::ReadData()
     double pt_top; // Transverse momentum of top quark
     double pt_top_low, pt_top_high; // Limits of bin
     double sys1, sys2; // Systematic uncertainties from file
-    double sys1_mult, sys2_mult; // Multiplicative systematic uncertainties
-    double up, down, sigma, datshift; // Arguments of symmetriseErrors
+    double sigma, datshift; // Outputs of symmetriseErrors
 
     getline(f1,line);
     istringstream lstream(line);
@@ -240,26 +213,14 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PT_NORMFilter::ReadData()
     fKin2[i] = Mt*Mt; // Top mass squared
     fKin3[i] = 8000; // Centre of mass energy in GeV
 
-    // Check whether numbers in file are percentage or absolute
-    sys1_mult = (sys1/fData[i])*100;
-    sys2_mult = (sys2/fData[i])*100;
-    if (sys1_mult < 0)
-    {
-      up=sys2_mult;
-      down=sys1_mult;
-    }
-    else
-    {
-      up=sys1_mult;
-      down=sys2_mult;
-    }
-    symmetriseErrors(up, down, &sigma, &datshift);
-    fSys[i][0].mult = sigma;
-    fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
+    symmetriseErrors(sys1, sys2, &sigma, &datshift);
+
+    fData[i] += datshift; // Shift of central value due to asymmetric errors
+
+    fSys[i][0].add = sigma;
+    fSys[i][0].mult = (fSys[i][0].add/fData[i])*100;
     fSys[i][0].type = MULT;
     fSys[i][0].name = "CORR";
- 
-    fData[i] *= (1.0 + datshift*0.01); // Shift of central value due to asymmetric errors
   }
 }
 
@@ -300,8 +261,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PT_NORMFilter::ReadData()
     double pt_top; // Transverse momentum of top quark
     double pt_top_low, pt_top_high; // Limits of bin
     double sys1, sys2; // Systematic uncertainties from file
-    double sys1_mult, sys2_mult; // Multiplicative systematic uncertainties
-    double up, down, sigma, datshift; // Arguments of symmetriseErrors
+    double sigma, datshift; // Outputs of symmetriseErrors
 
     getline(f1,line);
     istringstream lstream(line);
@@ -322,26 +282,14 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PT_NORMFilter::ReadData()
     fKin2[i] = Mt*Mt; // Top mass squared
     fKin3[i] = 8000; // Centre of mass energy in GeV
 
-    // Check whether numbers in file are percentage or absolute
-    sys1_mult = (sys1/fData[i])*100;
-    sys2_mult = (sys2/fData[i])*100;
-    if (sys1_mult < 0)
-    {
-      up=sys2_mult;
-      down=sys1_mult;
-    }
-    else
-    {
-      up=sys1_mult;
-      down=sys2_mult;
-    }
-    symmetriseErrors(up, down, &sigma, &datshift);
-    fSys[i][0].mult = sigma;
-    fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
+    symmetriseErrors(sys1, sys2, &sigma, &datshift);
+
+    fData[i] += datshift; // Shift of central value due to asymmetric errors
+
+    fSys[i][0].add = sigma;
+    fSys[i][0].mult = (fSys[i][0].add/fData[i])*100;
     fSys[i][0].type = MULT;
     fSys[i][0].name = "CORR";
- 
-    fData[i] *= (1.0 + datshift*0.01); // Shift of central value due to asymmetric errors
   }
 }
 
@@ -384,8 +332,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAPFilter::ReadData()
     double rap_top; // Rapidity of top quark
     double rap_top_low, rap_top_high; // Limits of bin
     double sys1, sys2; // Systematic uncertainties from file
-    double sys1_mult, sys2_mult; // Multiplicative systematic uncertainties
-    double up, down, sigma, datshift; // Arguments of symmetriseErrors
+    double sigma, datshift; // Outputs of symmetriseErrors
 
     getline(f1,line);
     istringstream lstream(line);
@@ -400,26 +347,14 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAPFilter::ReadData()
     fKin2[i] = Mt*Mt; // Top mass squared
     fKin3[i] = 8000; // Centre of mass energy in GeV
 
-    // Check whether numbers in file are percentage or absolute
-    sys1_mult = (sys1/fData[i])*100;
-    sys2_mult = (sys2/fData[i])*100;
-    if (sys1_mult < 0)
-    {
-      up=sys2_mult;
-      down=sys1_mult;
-    }
-    else
-    {
-      up=sys1_mult;
-      down=sys2_mult;
-    }
-    symmetriseErrors(up, down, &sigma, &datshift);
-    fSys[i][0].mult = sigma;
-    fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
+    symmetriseErrors(sys1, sys2, &sigma, &datshift);
+
+    fData[i] += datshift; // Shift of central value due to asymmetric errors
+
+    fSys[i][0].add = sigma;
+    fSys[i][0].mult = (fSys[i][0].add/fData[i])*100;
     fSys[i][0].type = MULT;
     fSys[i][0].name = "CORR";
- 
-    fData[i] *= (1.0 + datshift*0.01); // Shift of central value due to asymmetric errors
   }
 }
 
@@ -460,8 +395,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAPFilter::ReadData()
     double rap_top; // Rapidity of top quark
     double rap_top_low, rap_top_high; // Limits of bin
     double sys1, sys2; // Systematic uncertainties from file
-    double sys1_mult, sys2_mult; // Multiplicative systematic uncertainties
-    double up, down, sigma, datshift; // Arguments of symmetriseErrors
+    double sigma, datshift; // Outputs of symmetriseErrors
 
     getline(f1,line);
     istringstream lstream(line);
@@ -476,26 +410,14 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAPFilter::ReadData()
     fKin2[i] = Mt*Mt; // Top mass squared
     fKin3[i] = 8000; // Centre of mass energy in GeV
 
-    // Check whether numbers in file are percentage or absolute
-    sys1_mult = (sys1/fData[i])*100;
-    sys2_mult = (sys2/fData[i])*100;
-    if (sys1_mult < 0)
-    {
-      up=sys2_mult;
-      down=sys1_mult;
-    }
-    else
-    {
-      up=sys1_mult;
-      down=sys2_mult;
-    }
-    symmetriseErrors(up, down, &sigma, &datshift);
-    fSys[i][0].mult = sigma;
-    fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
+    symmetriseErrors(sys1, sys2, &sigma, &datshift);
+
+    fData[i] += datshift; // Shift of central value due to asymmetric errors
+
+    fSys[i][0].add = sigma;
+    fSys[i][0].mult = (fSys[i][0].add/fData[i])*100;
     fSys[i][0].type = MULT;
     fSys[i][0].name = "CORR";
- 
-    fData[i] *= (1.0 + datshift*0.01); // Shift of central value due to asymmetric errors
   }
 }
 
@@ -536,8 +458,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PTFilter::ReadData()
     double pt_top; // Transverse momentum of top quark
     double pt_top_low, pt_top_high; // Limits of bin
     double sys1, sys2; // Systematic uncertainties from file
-    double sys1_mult, sys2_mult; // Multiplicative systematic uncertainties
-    double up, down, sigma, datshift; // Arguments of symmetriseErrors
+    double sigma, datshift; // Outputs of symmetriseErrors
 
     getline(f1,line);
     istringstream lstream(line);
@@ -558,26 +479,14 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_PTFilter::ReadData()
     fKin2[i] = Mt*Mt; // Top mass squared
     fKin3[i] = 8000; // Centre of mass energy in GeV
 
-    // Check whether numbers in file are percentage or absolute
-    sys1_mult = (sys1/fData[i])*100;
-    sys2_mult = (sys2/fData[i])*100;
-    if (sys1_mult < 0)
-    {
-      up=sys2_mult;
-      down=sys1_mult;
-    }
-    else
-    {
-      up=sys1_mult;
-      down=sys2_mult;
-    }
-    symmetriseErrors(up, down, &sigma, &datshift);
-    fSys[i][0].mult = sigma;
-    fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
+    symmetriseErrors(sys1, sys2, &sigma, &datshift);
+
+    fData[i] += datshift; // Shift of central value due to asymmetric errors
+
+    fSys[i][0].add = sigma;
+    fSys[i][0].mult = (fSys[i][0].add/fData[i])*100;
     fSys[i][0].type = MULT;
     fSys[i][0].name = "CORR";
- 
-    fData[i] *= (1.0 + datshift*0.01); // Shift of central value due to asymmetric errors
   }
 }
 
@@ -618,8 +527,7 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PTFilter::ReadData()
     double pt_top; // Transverse momentum of top quark
     double pt_top_low, pt_top_high; // Limits of bin
     double sys1, sys2; // Systematic uncertainties from file
-    double sys1_mult, sys2_mult; // Multiplicative systematic uncertainties
-    double up, down, sigma, datshift; // Arguments of symmetriseErrors
+    double sigma, datshift; // Outputs of symmetriseErrors
 
     getline(f1,line);
     istringstream lstream(line);
@@ -640,25 +548,13 @@ void ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_PTFilter::ReadData()
     fKin2[i] = Mt*Mt; // Top mass squared
     fKin3[i] = 8000; // Centre of mass energy in GeV
 
-    // Check whether numbers in file are percentage or absolute
-    sys1_mult = (sys1/fData[i])*100;
-    sys2_mult = (sys2/fData[i])*100;
-    if (sys1_mult < 0)
-    {
-      up=sys2_mult;
-      down=sys1_mult;
-    }
-    else
-    {
-      up=sys1_mult;
-      down=sys2_mult;
-    }
-    symmetriseErrors(up, down, &sigma, &datshift);
-    fSys[i][0].mult = sigma;
-    fSys[i][0].add = fSys[i][0].mult*fData[i]/100;
+    symmetriseErrors(sys1, sys2, &sigma, &datshift);
+
+    fData[i] += datshift; // Shift of central value due to asymmetric errors
+
+    fSys[i][0].add = sigma;
+    fSys[i][0].mult = (fSys[i][0].add/fData[i])*100;
     fSys[i][0].type = MULT;
     fSys[i][0].name = "CORR";
- 
-    fData[i] *= (1.0 + datshift*0.01); // Shift of central value due to asymmetric errors
   }
 }

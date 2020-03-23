@@ -52,6 +52,7 @@
 #include "ZEUSF2B.h"
 #include "H1F2B.h"
 #include "ATLASWZTOT13TEV81PB.h"
+#include "ATLAS_WZ_TOT_13TEV.h"
 #include "ATLASZPT7TEV.h"
 #include "ATLASZPT8TEV.h"
 #include "ATLASTTBARTOT.h"
@@ -75,6 +76,7 @@
 #include "CMS_SINGLETOP_TCH_TOT_7TEV.h"
 #include "CMS_SINGLETOP_TCH_R_8TEV.h"
 #include "CMS_SINGLETOP_TCH_R_13TEV.h"
+#include "CMS_ZCHARM_DIFF_UNNORM_8TEV.h"
 #include "CMS_WCHARM_DIFF_UNNORM_13TEV.h"
 #include "HERACOMB_SIGMARED_C.h"
 #include "HERACOMB_SIGMARED_B.h"
@@ -91,6 +93,7 @@
 #include "ATLAS_WJET_8TEV.h"
 #include "CMS_TTBAR_2D_DIFF_NORM.h"
 #include "CMS_TTBAR_2D_DIFF.h"
+#include "ATLAS_TTB_DIFF_8TEV_LJ.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -138,6 +141,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASLOMASSDY11Filter());
   target.push_back(new ATLASLOMASSDY11EXTFilter());
   target.push_back(new ATLASWZTOT13TEV81PBFilter());
+  target.push_back(new ATLAS_WZ_TOT_13TEVFilter());
   //
   target.push_back(new ATLASZPT7TEVFilter());
   target.push_back(new ATLASZPT8TEVYDISTFilter());
@@ -184,6 +188,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMSZDIFF12Filter());
   target.push_back(new CMS1JET276TEVFilter());
   target.push_back(new CMSWMU8TEVFilter());
+  target.push_back(new CMS_ZCHARM_DIFF_UNNORM_8TEVFilter());
   target.push_back(new CMS_1JET_8TEVFilter());
   target.push_back(new CMS_2JET_7TEVFilter());
   target.push_back(new CMS_2JET_3D_8TEVFilter());
@@ -249,11 +254,12 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new LHCBZEE2FBFilter());
   target.push_back(new LHCBWZMU7TEVFilter());
   target.push_back(new LHCBWZMU8TEVFilter());
+
   target.push_back(new LHCB_WENU_8TEVFilter());
   target.push_back(new LHCB_WENU_8TEV_RFilter());
   target.push_back(new LHCB_WENU_8TEV_AFilter());
-
-
+  target.push_back(new LHCB_Z_13TEV_DIMUONFilter());
+  target.push_back(new LHCB_Z_13TEV_DIELECTRONFilter());
 
   // ************************* NMC ******************************
 
@@ -312,6 +318,14 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMS_TTBAR_2D_DIFF_PT_TRAPFilter());
   target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TRAPFilter());
   target.push_back(new CMS_TTBAR_2D_DIFF_MTT_TTRAPFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TPTFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TRAPFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTRAPFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTMFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TPTNORMFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TRAPNORMFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTRAPNORMFilter());
+  target.push_back(new ATLAS_TTB_DIFF_8TEV_LJ_TTMNORMFilter());
 
   //***************************F2B******************************
 
