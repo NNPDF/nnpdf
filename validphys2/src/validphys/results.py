@@ -259,7 +259,7 @@ def experiments_covmat_no_table(
     return df
 
 @table
-def experiments_covmat(experiments_covmat_no_table):
+def experiments_covmat_table(experiments_covmat_no_table):
     """Duplicate of experiments_covmat_no_table but with a table decorator."""
     return experiments_covmat_no_table
 
