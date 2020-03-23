@@ -83,7 +83,7 @@ void  LHCB_WENU_8TEVFilter::ReadData()
     //Beam energy sys
     lstream >> fSys[i][fNSys-2].add;  
     fSys[i][fNSys-2].add *= bin_width;
-    fSys[i][fNSys-2].mult = fSys[i][fNSys-1].add/fData[i]*1e2;
+    fSys[i][fNSys-2].mult = fSys[i][fNSys-2].add/fData[i]*1e2;
     fSys[i][fNSys-2].type = MULT;       
     fSys[i][fNSys-2].name = "LHCBBEAM8TEV";	       
 
@@ -125,7 +125,7 @@ void  LHCB_WENU_8TEVFilter::ReadData()
     //Beam energy sys
     lstream >> fSys[i][fNSys-2].add;  
     fSys[i][fNSys-2].add *= bin_width;
-    fSys[i][fNSys-2].mult = fSys[i][fNSys-1].add/fData[i]*1e2;
+    fSys[i][fNSys-2].mult = fSys[i][fNSys-2].add/fData[i]*1e2;
     fSys[i][fNSys-2].type = MULT;
     fSys[i][fNSys-2].name = "LHCBBEAM8TEV";
 
@@ -158,17 +158,20 @@ void  LHCB_WENU_8TEVFilter::ReadData()
 	}
     }
 
-  
   //Check
+  /*
   for(int i=0; i<fNData; i++)
     {
+      //cout << totsys[i] << endl;
+
       for(int j=0; j<fNData; j++)
 	{
 	  cout << covmat[i][j] << "  " ;
 	}
       cout << std::endl;
     }
-  
+  */  
+
   //Generate artificial systematics
   double** syscor = new double*[fNData];
   for(int i = 0; i < fNData; i++)
