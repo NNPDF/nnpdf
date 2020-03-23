@@ -218,11 +218,11 @@ def group_result_table(group_result_table_no_table):
     return group_result_table_no_table
 
 @table
-def experiment_result_table_68cl(experiment_result_table_no_table: pd.DataFrame, pdf: PDF):
+def group_result_table_68cl(group_result_table_no_table: pd.DataFrame, pdf: PDF):
     """Generate a table containing the data central value, the central prediction,
     and 68% confidence level bounds of the prediction.
     """
-    df = experiment_result_table_no_table
+    df = group_result_table_no_table
     # replica data is every columns after central values, transpose for stats class
     replica_data = df.iloc[:, 2:].values.T
     # Use pdf stats class but reshape output to have each row as a data point
