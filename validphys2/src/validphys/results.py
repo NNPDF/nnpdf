@@ -709,14 +709,14 @@ def _chs_per_replica(chs):
 
 
 @table
-def groupss_chi2_table(groups, pdf, groups_chi2,
+def groups_chi2_table(groups, pdf, groups_chi2,
                            each_dataset_chi2):
     """Return a table with the chi² to the groups and each dataset in
     the groups."""
     dschi2 = iter(each_dataset_chi2)
     records = []
     for group, groupres in zip(groups, groups_chi2):
-        stats = chi2_stats(expres)
+        stats = chi2_stats(groupres)
         stats['group'] = group.name
         records.append(stats)
         for dataset, dsres in zip(group, dschi2):
