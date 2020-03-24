@@ -7,21 +7,25 @@ import sys
 import time
 import threading
 
+
 class Spinner:
-    busy = False
-    delay = 0.1
+    """ Context manager to provide a spinning cursor
+    while validphys performs some other task silently.
 
-    @staticmethod
-    def spinning_cursor():
-        while 1:
-            for cursor in '|/-\\': yield cursor
+    Example
+    -------
+    >>> from validphys.renametools import Spinner
+    >>> with Spinner():
+    ...     import time
+    ...     time.sleep(5)
 
-    def __init__(self, delay=None):
+    """
+    def __init__(self, delay=0.1):
         self.spinner_generator = self.spinning_cursor()
-        if delay and float(delay): self.delay = delay
+        self.delay = delay
 
     def spinner_task(self):
-        while self.busy:
+        while not self.event.isSet():
             sys.stdout.write(next(self.spinner_generator))
             sys.stdout.flush()
             time.sleep(self.delay)
@@ -29,14 +33,17 @@ class Spinner:
             sys.stdout.flush()
 
     def __enter__(self):
-        self.busy = True
+        self.event = threading.Event()
         threading.Thread(target=self.spinner_task).start()
 
     def __exit__(self, exception, value, tb):
-        self.busy = False
-        time.sleep(self.delay)
-        if exception is not None:
-            return False
+        self.event.set()
+
+    @staticmethod
+    def spinning_cursor():
+        while True:
+            for cursor in '|/-\\': yield cursor
+
 
 def rename_pdf(pdf_folder, initial_fit_name, final_name):
     for item in os.listdir(pdf_folder):
