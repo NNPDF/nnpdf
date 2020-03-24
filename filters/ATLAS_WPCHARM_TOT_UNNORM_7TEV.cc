@@ -46,11 +46,11 @@ void ATLAS_WPCHARM_TOT_UNNORM_7TEVFilter::ReadData()
     //Reading in the systematics
     for(int k=0; k<fNSys; k++)
     {
-      lstream >> fSys[i][k].add;
-      fSys[i][k].mult = fSys[i][k].add*100/fData[i];
+      lstream >> fSys[i][k].mult;
       fSys[i][k].type = MULT;
+      fSys[i][k].add = fSys[i][k].mult*fData[i]/100;
       if(k == 0){
-        fSys[i][k].name = "UNCORR"; //We treat luminosity as a special case
+        fSys[i][k].name = "UNCORR";
       }
       else{
         fSys[i][k].name = "CORR";
