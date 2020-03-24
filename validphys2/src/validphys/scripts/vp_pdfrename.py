@@ -18,7 +18,7 @@ import sys
 import tarfile
 import tempfile
 
-from lhapdf import paths
+import lhapdf
 
 from reportengine import colors
 from reportengine.compat import yaml
@@ -28,9 +28,7 @@ from validphys.renametools import change_name
 
 # Taking command line arguments
 def process_args():
-    parser = argparse.ArgumentParser(
-        description="Script to rename LHAPDFs"
-    )
+    parser = argparse.ArgumentParser(description="Script to rename LHAPDFs")
     parser.add_argument("Source", help="Path to source PDF")
     parser.add_argument("Destination", help="Name of the desired PDF set output")
     parser.add_argument(
@@ -80,27 +78,28 @@ def fixup_ref(pdf_path: pathlib.Path, field_dict):
     pre existing field.
     """
     pdf_name = pdf_path.name
-    infopath = pdf_path/ f"{pdf_name}.info"
+    infopath = pdf_path / f"{pdf_name}.info"
 
     with open(infopath) as f:
         y = yaml.YAML()
-        res = y.load(infopath)
-        # If a field entry is not provided, then we revert to the existing
-        # field in pre-existing info file.
-        if field_dict["author"]:  # Note: bool(None) is False
-            res["Authors"] = field_dict["author"]
+        res = y.load(f)
 
-        if field_dict["description"]:
-            res["SetDesc"] = field_dict["description"]
+    # If a field entry is not provided, then we revert to the existing
+    # field in pre-existing info file.
+    if field_dict["author"]:  # Note: bool(None) is False
+        res["Authors"] = field_dict["author"]
 
-        if field_dict["data_version"]:
-            res["DataVersion"] = field_dict["data_version"]
+    if field_dict["description"]:
+        res["SetDesc"] = field_dict["description"]
 
-        if field_dict["index"]:
-            res["SetIndex"] = field_dict["index"]
+    if field_dict["data_version"]:
+        res["DataVersion"] = field_dict["data_version"]
 
-        if field_dict["reference"]:
-            res["Reference"] = field_dict["reference"]
+    if field_dict["index"]:
+        res["SetIndex"] = field_dict["index"]
+
+    if field_dict["reference"]:
+        res["Reference"] = field_dict["reference"]
 
     with open(infopath, "w") as f:
         y.default_flow_style = True
@@ -118,12 +117,23 @@ def compress(lhapdf_path: pathlib.Path):
 
 def main():
     args = process_args()
-    source_path = pathlib.Path(args.Source).resolve()
+    # We need to use the os method to avoid resolving the symlink
+    # when we use pathlib.Path.resolve()
+    source_path = pathlib.Path(os.path.abspath(args.Source))
     pdf_name = args.Destination
 
     log = logging.getLogger()
     log.setLevel(logging.DEBUG)
     log.addHandler(colors.ColorHandler())
+
+    if args.lhapdf_path:
+        dest_path = pathlib.Path(lhapdf.paths()[-1]) / pdf_name
+    else:
+        dest_path = source_path.with_name(pdf_name)
+
+    if dest_path.exists():
+        log.error(f"Destination path {dest_path.absolute()} already exists.")
+        sys.exit(1)
 
     if not source_path.is_dir():
         log.error(
@@ -131,7 +141,7 @@ def main():
         )
         sys.exit(1)
 
-    with tempfile.TemporaryDirectory(dir=source_path.parent) as tmp:
+    with tempfile.TemporaryDirectory(dir=dest_path.parent) as tmp:
         tmp = pathlib.Path(tmp)
         copied_fit = tmp / source_path.name
         shutil.copytree(source_path, copied_fit)
@@ -140,18 +150,9 @@ def main():
 
         lhapdf_path = change_name(copied_fit, pdf_name)
 
-        if args.lhapdf_path:
-            dest_path = pathlib.Path(paths()[-1]) / pdf_name
-        else:
-            dest_path = lhapdf_path.parent.with_name(pdf_name)
-
-        if dest_path.exists():
-            log.error(f"Destination path {dest_path.absolute()} already exists.")
-            sys.exit(1)
-
         lhapdf_path.rename(dest_path)
         log.info(f"PDF generated and placed in {dest_path.parent}")
 
-        if args.compress:
-            log.info("Compressing output")
-            compress(dest_path)
+    if args.compress:
+        log.info("Compressing output")
+        compress(dest_path)
