@@ -23,7 +23,7 @@ import lhapdf
 from reportengine import colors
 from reportengine.compat import yaml
 
-from validphys.renametools import change_name
+from validphys.renametools import rename_pdf
 
 
 # Taking command line arguments
@@ -148,8 +148,9 @@ def main():
 
         fixup_ref(copied_fit, vars(args))
 
-        lhapdf_path = change_name(copied_fit, pdf_name)
+        rename_pdf(copied_fit, source_path.name, pdf_name)
 
+        lhapdf_path = copied_fit.with_name(pdf_name)
         lhapdf_path.rename(dest_path)
         log.info(f"PDF generated and placed in {dest_path.parent}")
 
