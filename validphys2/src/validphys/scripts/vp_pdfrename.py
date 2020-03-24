@@ -155,5 +155,7 @@ def main():
         log.info(f"PDF generated and placed in {dest_path.parent}")
 
     if args.compress:
+        from validphys.renametools import Spinner
         log.info("Compressing output")
-        compress(dest_path)
+        with Spinner():
+            compress(dest_path)
