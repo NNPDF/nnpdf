@@ -766,19 +766,19 @@ def _chs_per_replica(chs):
 
 
 @table
-def experiments_chi2_table(experiments, pdf, experiments_chi2,
+def groupss_chi2_table(groups, pdf, groups_chi2,
                            each_dataset_chi2):
-    """Return a table with the chi² to the experiments and each dataset on
-    the experiments."""
+    """Return a table with the chi² to the groups and each dataset in
+    the groups."""
     dschi2 = iter(each_dataset_chi2)
     records = []
-    for experiment, expres in zip(experiments, experiments_chi2):
+    for group, groupres in zip(groups, groups_chi2):
         stats = chi2_stats(expres)
-        stats['experiment'] = experiment.name
+        stats['group'] = group.name
         records.append(stats)
-        for dataset, dsres in zip(experiment, dschi2):
+        for dataset, dsres in zip(group, dschi2):
             stats = chi2_stats(dsres)
-            stats['experiment'] = dataset.name
+            stats['group'] = dataset.name
             records.append(stats)
     return pd.DataFrame(records)
 
