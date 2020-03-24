@@ -1102,7 +1102,7 @@ def theory_description(theoryid):
 
 def groups_central_values_no_table(group_result_table_no_table):
     """Returns a theoryid-dependent list of central theory predictions
-    for a given group of data."""
+    for a given group."""
     central_theory_values = group_result_table_no_table["theory_central"]
     return central_theory_values
 
@@ -1212,7 +1212,7 @@ each_dataset_chi2 = collect(abs_chi2_data, ('data',))
 pdfs_total_chi2 = collect(dataset_inputs_chi2_per_point_data, ('pdfs',))
 
 #These are convenient ways to iterate and extract varios data from fits
-fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'experiments', 'experiment'))
+fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'dataset_inputs'))
 
 fits_total_chi2 = collect('dataset_inputs_chi2_per_point_data', ('fits', 'fitcontext'))
 
