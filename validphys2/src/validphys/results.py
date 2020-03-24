@@ -1107,11 +1107,11 @@ def groups_central_values_no_table(group_result_table_no_table):
     return central_theory_values
 
 @table
-def experiments_central_values(experiment_result_table):
-    """Duplicate of experiments_central_values_no_table but takes
-    experiment_result_table rather than experiments_central_values_no_table,
+def groups_central_values(group_result_table):
+    """Duplicate of groups_central_values_no_table but takes
+    group_result_table rather than groups_central_values_no_table,
     and has a table decorator."""
-    central_theory_values = experiment_result_table["theory_central"]
+    central_theory_values = group_result_table["theory_central"]
     return central_theory_values
 
 dataspecs_each_dataset_chi2 = collect("each_dataset_chi2", ("dataspecs",))
