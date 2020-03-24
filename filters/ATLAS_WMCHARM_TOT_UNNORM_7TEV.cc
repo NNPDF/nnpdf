@@ -50,12 +50,12 @@ void ATLAS_WMCHARM_TOT_UNNORM_7TEVFilter::ReadData()
       lstream >> fSys[i][k].mult;
       fSys[i][k].type = MULT;
       fSys[i][k].add = fSys[i][k].mult*fData[i]/100;
-      if(k == 0){
+      if(k == 0)
         fSys[i][k].name = "UNCORR";
-      }
-      else{
+      else if(k == fNSys - 1)
+        fSys[i][k].name = "ATLASLUMI11";
+      else
         fSys[i][k].name = "CORR";
-      }
     }
   }
   f1.close();
