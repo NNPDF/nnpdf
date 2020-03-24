@@ -1157,10 +1157,10 @@ def theory_description(theoryid):
     """A table with the theory settings."""
     return pd.DataFrame(pd.Series(theoryid.get_description()), columns=[theoryid])
 
-def experiments_central_values_no_table(experiment_result_table_no_table):
+def groups_central_values_no_table(group_result_table_no_table):
     """Returns a theoryid-dependent list of central theory predictions
-    for a given experiment."""
-    central_theory_values = experiment_result_table_no_table["theory_central"]
+    for a given group of data."""
+    central_theory_values = group_result_table_no_table["theory_central"]
     return central_theory_values
 
 @table
