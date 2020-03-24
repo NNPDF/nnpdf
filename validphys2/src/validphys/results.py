@@ -1216,9 +1216,8 @@ fits_chi2_data = collect(abs_chi2_data, ('fits', 'fitcontext', 'dataset_inputs')
 
 fits_total_chi2 = collect('dataset_inputs_chi2_per_point_data', ('fits', 'fitcontext'))
 
-fits_total_chi2_for_experiments = collect('total_experiment_chi2',
-                                          ('fits', 'fittheoryandpdf',
-                                           'expspec', 'experiment'))
+fits_total_chi2_for_groups = collect('dataset_inputs_chi2_per_point_data',
+                                          ('fits', 'fittheoryandpdf'))
 
 fits_pdf = collect('pdf', ('fits', 'fitpdf'))
 
