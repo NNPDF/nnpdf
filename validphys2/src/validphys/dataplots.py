@@ -70,13 +70,13 @@ def plot_fits_groups_data_phi(fits_groups_phi_table):
     return fig
 
 @figure
-def plot_dataset_inputs_phi_dist(data, bootstrap_dataset_inputs_phi):
+def plot_dataset_inputs_phi_dist(data, dataset_inputs_bootstrap_phi_data):
     """Generates a bootstrap distribution of phi and then plots a histogram
-    of the individual bootstrap samples for a single experiment. By default
+    of the individual bootstrap samples for `dataset_inputs`. By default
     the number of bootstrap samples is set to a sensible number (500) however
     this number can be changed by specifying `bootstrap_samples` in the runcard
     """
-    phi = bootstrap_dataset_inputs_phi
+    phi = dataset_inputs_bootstrap_phi_data
     label = '\n'.join([fr'$\phi$ mean = {format_number(phi.mean())}',
                        fr'$\phi$ std dev = {format_number(phi.std())}'])
     fig, ax = plt.subplots()
