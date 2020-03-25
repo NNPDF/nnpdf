@@ -189,7 +189,7 @@ def performfit(
         t0pdfset = None
 
 
-    trvlseed, nnseed, mcseed, genrep = [fitting.get("fitting").get(i)
+    trvlseed, nnseed, mcseed, genrep = [fitting.get(i)
                                         for i in ["trvlseed", "nnseed", "mcseed", "genrep"]]
 
     seeds = initialize_seeds(replica, trvlseed, nnseed, mcseed, genrep)
