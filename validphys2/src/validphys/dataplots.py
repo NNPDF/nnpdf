@@ -86,8 +86,8 @@ def plot_dataset_inputs_phi_dist(data, bootstrap_dataset_inputs_phi):
     return fig
 
 @make_argcheck
-def _check_same_group_data_name(dataspecs_groups_data):
-    lst = dataspecs_groups_data
+def _check_same_group_data_name(dataspecs_groups):
+    lst = dataspecs_groups
     if not lst:
         return
     for j, x in enumerate(lst[1:]):
@@ -105,8 +105,8 @@ def _check_same_group_data_name(dataspecs_groups_data):
 
 @_check_same_group_data_name
 @figure
-def plot_phi_scatter_dataspecs(dataspecs_groups_data,
-        dataspecs_speclabel, dataspecs_groups_data_bootstrap_phi):
+def plot_phi_scatter_dataspecs(dataspecs_groups,
+        dataspecs_speclabel, dataspecs_groups_bootstrap_phi):
     """For each of the dataspecs, a bootstrap distribution of phi is generated
     for all specified groups of datasets. The distribution is then represented as a
     scatter point which is the median of the bootstrap distribution and an
@@ -115,8 +115,8 @@ def plot_phi_scatter_dataspecs(dataspecs_groups_data,
     controlled by specifying `bootstrap_samples` in the runcard.
     """
     labels = dataspecs_speclabel
-    phis = dataspecs_groups_data_bootstrap_phi
-    exps = dataspecs_groups_data
+    phis = dataspecs_groups_bootstrap_phi
+    exps = dataspecs_groups
     xticks = [group.name for group in exps[0]]
     x = range(1, len(xticks)+1)
     fig, ax = plt.subplots()
@@ -532,7 +532,7 @@ def plot_fits_groups_data_chi2(fits_groups_chi2_table):
     return fig
 
 @figure
-def plot_dataspecs_groups_data_chi2(dataspecs_groups_chi2_table):
+def plot_dataspecs_groups_chi2(dataspecs_groups_chi2_table):
     """Same as plot_fits_groups_data_chi2 but for arbitrary dataspecs"""
     return plot_fits_groups_data_chi2(dataspecs_groups_chi2_table)
 
