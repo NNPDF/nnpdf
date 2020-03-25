@@ -1219,12 +1219,14 @@ fits_total_chi2_for_experiments = collect('total_experiment_chi2',
 
 fits_pdf = collect('pdf', ('fits', 'fitpdf'))
 
+
+groups_data_phi = collect(dataset_inputs_phi_data, ('group_dataset_inputs_by_metadata',))
+groups_bootstrap_phi = collect(dataset_inputs_bootstrap_phi_data, ("group_dataset_inputs_by_metadata",))
+
 #Dataspec is so
 dataspecs_groups = collect("groups_data", ("dataspecs",))
 dataspecs_groups_chi2_data = collect("groups_chi2", ("dataspecs",))
-groups_bootstrap_phi = collect(dataset_inputs_bootstrap_phi_data, ("group_dataset_inputs_by_metadata",))
 dataspecs_groups_bootstrap_phi = collect('groups_bootstrap_phi', ('dataspecs',))
-
 dataspecs_results = collect('results', ('dataspecs',))
 dataspecs_total_chi2 = collect('dataset_inputs_chi2_per_point_data', ('dataspecs',))
 
