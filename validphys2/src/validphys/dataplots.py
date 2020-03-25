@@ -464,11 +464,11 @@ def _scatter_marked(ax, x, y, marked_dict, *args, **kwargs):
 
 
 @figure
-def plot_groups_data_chi2(groups_data, groups_data_chi2):
+def plot_groups_data_chi2(groups_data, groups_chi2):
     """Plot the chi² of all groups of datasets with bars."""
     exchi2 = []
     xticks = []
-    for group, groupres in zip(groups_data, groups_data_chi2):
+    for group, groupres in zip(groups_data, groups_chi2):
         exchi2.append(groupres.central_result/groupres.ndata)
         xticks.append(group.name)
     fig, ax = plotutils.barplot(exchi2, collabels=xticks, datalabels=[r'$\chi^2$'])
@@ -476,12 +476,12 @@ def plot_groups_data_chi2(groups_data, groups_data_chi2):
     return fig
 
 @figure
-def plot_datasets_chi2(groups_data, groups_data_chi2, each_dataset_chi2):
+def plot_datasets_chi2(groups_data, groups_chi2, each_dataset_chi2):
     """Plot the chi² of all datasets with bars."""
     ds = iter(each_dataset_chi2)
     dschi2 = []
     xticks = []
-    for group, groupres in zip(groups_data, groups_data_chi2):
+    for group, groupres in zip(groups_data, groups_chi2):
         for dataset, dsres in zip(group, ds):
             dschi2.append(dsres.central_result/dsres.ndata)
             xticks.append(dataset.name)
