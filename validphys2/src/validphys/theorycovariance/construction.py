@@ -23,27 +23,14 @@ from validphys.theorycovariance.theorycovarianceutils import process_lookup, che
 
 log = logging.getLogger(__name__)
 
-theoryids_experiments_central_values = collect(groups_central_values,
+theoryids_groups_central_values = collect(groups_central_values,
                                                ('theoryids',))
 
-theoryids_experiments_central_values_no_table = collect(groups_central_values_no_table,
+theoryids_groups_central_values_no_table = collect(groups_central_values_no_table,
                                                ('theoryids',))
 
 collected_theoryids = collect('theoryids',
                               ['theoryconfig',])
-
-def dataset_index_byprocess(experiments_index):
-    """Return a multiindex with index
-       per dataset per point, ordered by process"""
-    dsnames = []
-    ids = experiments_index.get_level_values("id")
-    for dsname in experiments_index.get_level_values("dataset"):
-        dsnames.append(dsname)
-    processnames = [process_lookup(dsname) for dsname in dsnames]
-    experiments_index.droplevel(level="experiment")
-    newindex = pd.MultiIndex.from_arrays([processnames, dsnames, ids],
-                                         names = ("process", "dataset", "id"))
-    return newindex
 
 def make_scale_var_covmat(predictions):
     """Takes N theory predictions at different scales and applies N-pt scale
