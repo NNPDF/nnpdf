@@ -53,7 +53,7 @@ def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, gen
     used for training/validation splits, the second is used for
     initialization of the neural network's parameters and the
     final one is the monte carlo seeds for pseudodata replica
-    generation. 
+    generation.
 
     The generation of these seeds depend on the replica number
     in question. This dependence comes in by sampling the random
@@ -188,8 +188,12 @@ def performfit(
     else:
         t0pdfset = None
 
-    seeds = initialize_seeds(replica, fitting.get("trvalseed"), fitting.get("nnseed"), fitting.get("mcseed"))
-    trvalseeds, nnseeds, mcseeds = seeds.trvalseeds, seeds.nnseeds, seeds.mcseeds
+
+    trvlseed, nnseed, mcseed, genrep = [fitting.get("fitting").get(i)
+                                        for i in ["trvlseed", "nnseed", "mcseed", "genrep"]]
+
+    seeds = initialize_seeds(replica, trvlseed, nnseed, mcseed, genrep)
+    trvalseeds, nnseeds, mcseeds = seeds.trvlseeds, seeds.nnseeds, seeds.mcseeds
 
     ##############################################################################
     # ### Read files
