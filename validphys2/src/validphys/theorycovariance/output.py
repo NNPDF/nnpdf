@@ -20,8 +20,6 @@ from reportengine.table import table
 from validphys import plotutils
 from validphys.results import groups_chi2_table
 
-from validphys.theorycovariance.construction import dataset_index_byprocess
-
 log = logging.getLogger(__name__)
 
 
