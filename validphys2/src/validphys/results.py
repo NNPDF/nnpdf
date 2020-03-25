@@ -949,9 +949,6 @@ def fits_groups_phi_table(
     res = pd.concat(dfs, axis=1)
     return res
 
-dataspecs_groups = collect("groups_data", ("dataspecs",))
-dataspecs_groups_chi2_data = collect("groups_chi2", ("dataspecs",))
-
 
 @table
 @check_speclabels_different
@@ -1279,11 +1276,13 @@ fits_total_chi2_for_groups = collect('dataset_inputs_chi2_per_point_data',
 fits_pdf = collect('pdf', ('fits', 'fitpdf'))
 
 #Dataspec is so
+dataspecs_groups = collect("groups_data", ("dataspecs",))
+dataspecs_groups_chi2_data = collect("groups_chi2", ("dataspecs",))
+groups_bootstrap_phi = collect(dataset_inputs_bootstrap_phi_data, ("group_dataset_inputs_by_metadata",))
+dataspecs_groups_bootstrap_phi = collect('groups_bootstrap_phi', ('dataspecs',))
+
 dataspecs_results = collect('results', ('dataspecs',))
-dataspecs_chi2_data = collect(abs_chi2_data, ('dataspecs', 'experiments', 'experiment'))
-dataspecs_experiment_chi2_data = collect('experiments_chi2', ('dataspecs',))
 dataspecs_total_chi2 = collect('dataset_inputs_chi2_per_point_data', ('dataspecs',))
-dataspecs_experiments_bootstrap_phi = collect('experiments_bootstrap_phi', ('dataspecs',))
 
 dataspecs_speclabel = collect('speclabel', ('dataspecs',), element_default=None)
 dataspecs_cuts = collect('cuts', ('dataspecs',))
