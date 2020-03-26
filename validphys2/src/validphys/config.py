@@ -1040,7 +1040,7 @@ class CoreConfig(configparser.Config):
         Else, the user can specfiy their own grouping, for example nnpdf31_process.
         """
         if metadata_group_recorded_spec_ is not None:
-            return metadata_group_recorded_spec_
+            return metadata_group_recorded_spec_[metadata_group]
         if metadata_group is None:
             # fallback to old default behaviour, but still record to lockfile
             metadata_group = self.parse_metadata_group("experiment")
