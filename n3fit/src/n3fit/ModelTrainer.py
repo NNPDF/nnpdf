@@ -709,7 +709,7 @@ class ModelTrainer:
 
         if self.mode_hyperopt:
             ave = np.average(hyper_losses)
-            std = np.stopping_degree
+            std = np.var(hyper_losses)
             dict_out["loss"] = ave
             dict_out["kfold_meta"] = {
                     'training_losses' : l_train,
