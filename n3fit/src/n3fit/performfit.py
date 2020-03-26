@@ -16,8 +16,8 @@ log = logging.getLogger(__name__)
 def check_consistent_hyperscan_options(hyperopt, hyperscan, fitting):
     if hyperopt is not None and hyperscan is None:
         raise CheckError("A hyperscan dictionary needs to be defined when performing hyperopt")
-    if hyperopt is not None and "kpartitions" not in hyperscan:
-        raise CheckError("A kpartition strategy needs to be defined when performing hyperopt")
+    if hyperopt is not None and "kfold" not in hyperscan:
+        raise CheckError("A kfolding strategy needs to be defined when performing hyperopt")
     if hyperopt is not None and fitting["genrep"]:
         raise CheckError("During hyperoptimization we cannot generate replicas")
 
@@ -134,8 +134,10 @@ def performfit(
     all_exp_infos = [[] for _ in replica]
 
     if hyperscan and hyperopt:
-        kpartitions = hyperscan["kpartitions"]
+        kfold_parameters = hyperscan["kfold"]
+        kpartitions = kfold_parameters["partitions"]
     else:
+        kfold_parameters = None
         kpartitions = None
 
     # First loop over the experiments
@@ -170,7 +172,7 @@ def performfit(
             nnseed,
             debug=debug,
             save_weights_each=fitting.get("save_weights_each"),
-            kpartitions=kpartitions,
+            kfold_parameters=kfold_parameters,
         )
 
         # Check whether we want to load weights from a file (maybe from a previous run)

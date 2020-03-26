@@ -128,7 +128,7 @@ class ModelTrainer:
         failed_status="fail",
         debug=False,
         save_weights_each=False,
-        kpartitions=None,
+        kfold_parameters=None,
     ):
         """
         # Arguments:
@@ -162,10 +162,12 @@ class ModelTrainer:
         self.mode_hyperopt = False
         self.model_file = None
         self.impose_sumrule = True
-        if kpartitions is None:
+        if kfold_parameters is None:
             self.kpartitions = [None]
+            self.hyper_threshold = None
         else:
-            self.kpartitions = kpartitions
+            self.kpartitions = kfold_parameters["partitions"]
+            self.hyper_threshold = kfold_parameters.get("threshold", HYPER_THRESHOLD)
 
         # Initialize the pdf layer
         self.layer_pdf = None
@@ -689,7 +691,11 @@ class ModelTrainer:
                 log.info(f"fold: {k}")
                 log.info(f"Experimental loss: {experimental_loss}")
                 log.info(f"Hyper loss: {hyper_loss}")
-                if training_loss > HYPER_THRESHOLD or validation_loss > HYPER_THRESHOLD:
+                # Check whether the losses are above the set thresholds
+                all_losses = [training_loss, validation_loss, experimental_loss]
+                if any([il > self.hyper_threshold for il in all_losses]):
+                    # Add a penalty for leaving early
+                    hyper_losses = [ih + self.hyper_threshold for ih in hyper_losses]
                     log.info("Bad threshold: break")
                     break
                 self.training["model"].reinitialize()
@@ -702,7 +708,17 @@ class ModelTrainer:
         }
 
         if self.mode_hyperopt:
-            dict_out["loss"] = np.average(hyper_losses)
+            ave = np.average(hyper_losses)
+            std = np.stopping_degree
+            dict_out["loss"] = ave
+            dict_out["kfold_meta"] = {
+                    'training_losses' : l_train,
+                    'validation_losses': l_valid,
+                    'experimental_losses': l_exper,
+                    'hyper_losses': hyper_losses,
+                    'hyper_avg' : ave,
+                    'hyper_std' : std, 
+                    }
             #             arc_lengths = msr_constraints.compute_arclength(layers["fitbasis"])
             # If we are using hyperopt we don't need to output any other information
             return dict_out
