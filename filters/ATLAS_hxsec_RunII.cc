@@ -62,7 +62,7 @@ void ATLAS_hxsec_RunIIFilter::ReadData()
   //Read central values and total uncertainties
   string line;
 
-  double* tot_unc = new double[fNData];
+  double* Sys = new double[fNData];
   double** corrmat = new double*[fNData];
   double** syscor  = new double*[fNData];
   
@@ -74,8 +74,7 @@ void ATLAS_hxsec_RunIIFilter::ReadData()
       fKin1[i] = 0.;
       fKin2[i] = 0.;
       fKin3[i] = 0.;
-      lstream >> fData[i] >> tot_unc[i];
-      fStat[i] = 0.;
+      lstream >> fData[i] >> fStat[i] >> Sys[i];
 	     
       corrmat[i] = new double[fNData];
       syscor[i]  = new double[fNData];
@@ -93,7 +92,7 @@ void ATLAS_hxsec_RunIIFilter::ReadData()
     {
       for(int j=0; j<fNData; j++)
 	{
-	  corrmat[i][j] = corrmat[i][j]*tot_unc[i]*tot_unc[j];
+	  corrmat[i][j] = corrmat[i][j]*Sys[i]*Sys[j];
 	}
     }
 
