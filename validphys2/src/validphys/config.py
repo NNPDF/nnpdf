@@ -1054,7 +1054,7 @@ class CoreConfig(configparser.Config):
 
 
     def produce_groupby_experiment(self):
-        return {"metadata_group": "experiment"}
+        return {"data_grouping": "experiment"}
 
     def produce_group_dataset_inputs_by_metadata(
         self, data_input, processed_data_grouping
