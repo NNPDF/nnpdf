@@ -69,7 +69,7 @@ def theory_covmat_singleprocess(theory_covmat_singleprocess_no_table,
 
 results_bytheoryids = collect(results,('theoryids',))
 each_dataset_results_bytheory = collect('results_bytheoryids',
-                                        ('dataset_inputs'))
+                                        ('dataset_inputs',))
 
 @check_correct_theory_combination
 def theory_covmat_datasets(each_dataset_results_bytheory,
