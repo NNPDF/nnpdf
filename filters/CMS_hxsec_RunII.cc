@@ -1,36 +1,45 @@
 /*
 Reference:
-   [1909.02845]
-   Combined measurements of Higgs boson production and decay using up to
-   80 fb-1 of proton–proton collision data at √s = 13 TeV collected with 
-   the ATLAS experiment
-   Phys. Rev. D101 012002
+   [1809.10733]
+   Combined measurements of Higgs boson couplings in proton-proton collisions 
+   at √s = 13 TeV
+   Eur.Phys.J. C79 (2019) no.5, 421
 
-There are 16 signal strengths in the following order
-ggF gamma gamma
-    Z Z
+There are 24 signal strengths in the following order
+ggH b b
+    tau tau
     W W
-    tau tau
-VBF gamma gamma
-    Z Z
+    Z Z 
+    gamma gamma
+    mu mu
+VBF tau tau
     W W
+    Z Z 
+    gamma gamma
+    mu mu
+WH  b b 
+    W W 
+    Z Z 
+    gamma gamma
+ZH  b b 
+    W W
+    Z Z 
+    gamma gamma
+tth b b
     tau tau
-    b bbar
-VH  gamma gamma
+    W W
     Z Z
-    b bar
-tth gamma gamma
-    V V
-    tau tau
-    b b
+    gamma gamma
 
-The implementation is based on Fig.5 (including uncertainties) and on Fig.6 
+The implementation is based on Tab.3 (including uncertainties) and on Fig.1 of the 
+additional material:
+http://cms-results.web.cern.ch/cms-results/public-results/publications/HIG-17-031/ 
 (the correlation matrix for the total uncertainty).
 */
 
-#include "ATLAS_hxsec_RunII.h"
+#include "CMS_hxsec_RunII.h"
 
-void ATLAS_hxsec_RunIIFilter::ReadData()
+void CMS_hxsec_RunIIFilter::ReadData()
 {
   fstream f1;
   fstream f2;
@@ -38,7 +47,7 @@ void ATLAS_hxsec_RunIIFilter::ReadData()
   //Central values and total uncertainty
   stringstream datafile("");
   datafile << dataPath()
-	   << "rawdata/ATLAS_hxsec_RunII/data.txt";
+	   << "rawdata/CMS_hxsec_RunII/data.txt";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail())
@@ -50,7 +59,7 @@ void ATLAS_hxsec_RunIIFilter::ReadData()
   //Correlations between the 16 data points
   stringstream datafile_corr("");
   datafile_corr << dataPath()
-		<< "rawdata/ATLAS_hxsec_RunII/corr.txt";
+		<< "rawdata/CMS_hxsec_RunII/corr.txt";
   f2.open(datafile_corr.str().c_str(), ios::in);
 
   if (f2.fail())
