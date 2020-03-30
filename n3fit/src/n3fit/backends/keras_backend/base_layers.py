@@ -1,18 +1,41 @@
 """
-    For a layer to be used by n3fit it should be contained in the layers dictionary below
+    This module defines custom base layers to be used by the n3fit
+    Neural Network.
+    These layers can use the keras standard set of activation function
+    or implement their own.
+
+    For a layer to be used by n3fit it should be contained in the `layers` dictionary defined below.
     This dictionary has the following structure:
 
-    'name of the layer' : ( Layer_class, {dictionary of arguments: defaults} )
+        'name of the layer' : ( Layer_class, {dictionary of arguments: defaults} )
+
+    In order to add custom activation functions, they must be added to
+    the `custom_activations` dictionary with the following structure:
+        
+        'name of the activation' : function
+
+    The names of the layer and the activation function are the ones to be used in the n3fit runcard.
 """
 
 from tensorflow.keras.layers import Dense, Lambda, LSTM, Dropout, Concatenate, concatenate
 from tensorflow.keras.layers import Dense as KerasDense
 from tensorflow import expand_dims
+<<<<<<< HEAD
 from tensorflow.keras.regularizers import l1_l2
 
 
+=======
+>>>>>>> 38e1ffdc... add a square custom activation function
 from n3fit.backends import MetaLayer
 
+# Custom activation functions
+def square_activation(x):
+    """ Squares the input """
+    return x*x
+
+custom_activations = {
+        "square" : square_activation
+        }
 
 def LSTM_modified(**kwargs):
     """
@@ -143,6 +166,9 @@ def base_layer_selector(layer_name, **kwargs):
     layer_args = layer_tuple[1]
 
     for key, value in kwargs.items():
+        # Check whether the activation function is a custom one
+        if key == "activation":
+            value = custom_activations.get(value, value)
         if key in layer_args.keys():
             layer_args[key] = value
 
