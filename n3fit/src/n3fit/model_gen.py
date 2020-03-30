@@ -12,7 +12,7 @@ import numpy as np
 from n3fit.layers import DIS
 from n3fit.layers import DY
 from n3fit.layers import Mask
-from n3fit.layers import Preprocessing, Rotation
+from n3fit.layers import Preprocessing, Rotation, FlavourToEvolution
 
 from n3fit.backends import operations
 from n3fit.backends import losses
@@ -271,6 +271,7 @@ def pdfNN_layer_generator(
     out=14,
     seed=None,
     dropout=0.0,
+    fitbasis=None, # TODO: maybe this can come directly in the basis object? otherwise it is necessary to pass this down from the runcard
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -415,12 +416,20 @@ def pdfNN_layer_generator(
         input_shape=(1,), name="pdf_prepro", flav_info=flav_info, seed=preproseed
     )
 
-    # Apply preprocessing
-    def layer_fitbasis(x):
-        return operations.op_multiply([dense_me(x), layer_preproc(x)])
-
     # Evolution layer
-    layer_evln = Rotation(input_shape=(last_layer_nodes,), output_dim=out)
+    layer_evln = Rotation(input_shape=(pre,), output_dim=out)
+
+    # Check what is the output basis of the NN and rotate to evolution basis
+    if fitbasis == "flavour": # TODO choose the name
+        basis_rotation = FlavourToEvolution()
+    else:
+    # otherwise, assume we are in the evolution basis when we come out of the NN
+        basis_rotation = lambda x: x
+
+    # Apply preprocessing and basis
+    def layer_fitbasis(x):
+        ret = operations.op_multiply([dense_me(x), layer_preproc(x)])
+        return basis_rotation(ret)
 
     # Rotation layer, changes from the 8-basis to the 14-basis
     def layer_pdf(x):
