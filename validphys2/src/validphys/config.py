@@ -1017,21 +1017,23 @@ class CoreConfig(configparser.Config):
         else:
             raise ConfigError("must specify dataset_inputs in runcard")
 
+    def parse_metadata_group(self, group):
+        """Parse an explicit way of grouping data from runcard."""
+        return group
+
     @record_from_defaults
     def parse_data_grouping(self, key):
-        """a key which indicates how data is to be grouped. If not present in
-        runcard then falls back to old behaviour of grouping by experiment
-        where experiment is defined in a dataset's metadata
+        """a key which indicates which default grouping to use.
         """
         return key
 
-    def load_default_data_grouping(self, metadata_group):
-        #TODO: think about what these should be called
+    def load_default_data_grouping(self, spec):
+        """Load the default grouping of data"""
+        # slightly superfluous, only one default at present
         allowed = {
-            "metadata_experiment": "experiment",
-            "metadata_process": "nnpdf31_process"
+            "standard_report": "experiment"
         }
-        return allowed[metadata_group]
+        return allowed[spec]
 
 
     def produce_processed_data_grouping(
@@ -1047,28 +1049,32 @@ class CoreConfig(configparser.Config):
         """
         if data_grouping is None:
             # fallback to old default behaviour, but still record to lockfile
-            data_grouping = self.parse_data_grouping("metadata_experiment")
+            data_grouping = self.parse_data_grouping("standard_report")
         if data_grouping_recorded_spec_ is not None:
             return data_grouping_recorded_spec_[data_grouping]
         return self.load_default_data_grouping(data_grouping)
 
 
     def produce_groupby_experiment(self):
-        return {"data_grouping": "experiment"}
+        return {"metadata_group": "experiment"}
 
     def produce_group_dataset_inputs_by_metadata(
-        self, data_input, processed_data_grouping
+        self, data_input, processed_data_grouping, metadata_group=None,
     ):
+        # use default if no group is specified in namespace
+        if metadata_group is None:
+            metadata_group = processed_data_grouping
+
         res = defaultdict(list)
         for dsinput in data_input:
             cd = self.produce_commondata(dataset_input=dsinput)
             try:
-                res[getattr(get_info(cd), processed_data_grouping)].append(dsinput)
+                res[getattr(get_info(cd), metadata_group)].append(dsinput)
             except AttributeError:
                 raise ConfigError(
-                    f"Unable to find key: {processed_data_grouping} in {cd.name} "
+                    f"Unable to find key: {metadata_group} in {cd.name} "
                     "PLOTTING file.",
-                    bad_item=processed_data_grouping,
+                    bad_item=metadata_group,
                     alternatives=get_info(cd).__dict__,
                 )
         return [
