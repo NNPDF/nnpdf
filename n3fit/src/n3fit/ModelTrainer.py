@@ -717,7 +717,7 @@ class ModelTrainer:
                     'experimental_losses': l_exper,
                     'hyper_losses': hyper_losses,
                     'hyper_avg' : ave,
-                    'hyper_std' : std, 
+                    'hyper_std' : std,
                     }
             #             arc_lengths = msr_constraints.compute_arclength(layers["fitbasis"])
             # If we are using hyperopt we don't need to output any other information

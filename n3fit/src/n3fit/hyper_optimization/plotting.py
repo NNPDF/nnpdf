@@ -239,14 +239,21 @@ def parse_statistics(trial):
     status of the run
     """
     dict_out = {}
-    validation_loss = trial["result"][KEYWORDS["vl"]]
-    testing_loss = trial["result"][KEYWORDS["tl"]]
+    results = trial["result"]
+    validation_loss = results[KEYWORDS["vl"]]
+    testing_loss = results[KEYWORDS["tl"]]
     # was this a ok run?
-    ok = bool(trial["result"]["status"] == "ok")
+    ok = bool(results["status"] == "ok")
 
     dict_out[KEYWORDS["good"]] = ok
     dict_out[KEYWORDS["vl"]] = validation_loss
     dict_out[KEYWORDS["tl"]] = testing_loss
+
+    # Kfolding information
+    average = results["kfold_meta"]["hyper_avg"]
+    std = results["kfold_meta"]["hyper_std"]
+    dict_out["avg"] = average
+    dict_out["std"] = std
     return dict_out
 
 
