@@ -7,7 +7,6 @@ from collections import namedtuple
 import sys
 import logging
 import os.path
-import time
 import numpy as np
 from reportengine.checks import make_argcheck, CheckError
 
@@ -18,12 +17,14 @@ from validphys.loader import Loader
 
 log = logging.getLogger(__name__)
 
-# TODO: Change fit to a validphys.core.FitSpect object
-def get_pseudodata(fit: str):
+def get_pseudodata(fit):
     import n3fit.io.reader as reader
     l = Loader()
 
-    fit, pdf = l.check_fit(fit), l.check_pdf(fit)
+    # PDF must be obtained from the corresponding
+    # fit object, so we don't allow them to be
+    # different
+    pdf = l.check_pdf(str(fit))
     runcard = fit.as_input()
 
     t0pdfset = pdf.load_t0()
