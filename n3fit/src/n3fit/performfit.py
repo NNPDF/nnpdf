@@ -10,10 +10,6 @@ import os.path
 import numpy as np
 from reportengine.checks import make_argcheck, CheckError
 
-from NNPDF import Experiment
-
-from validphys.loader import Loader
-
 log = logging.getLogger(__name__)
 
 
