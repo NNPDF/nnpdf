@@ -17,9 +17,9 @@ def check_consistent_hyperscan_options(hyperopt, hyperscan, fitting):
     if hyperopt is not None and hyperscan is None:
         raise CheckError("A hyperscan dictionary needs to be defined when performing hyperopt")
     if hyperopt is not None and "kfold" not in hyperscan:
-        raise CheckError("A kfolding strategy needs to be defined when performing hyperopt")
+        raise CheckError("hyperscan::kfold key needs to be defined when performing hyperopt")
     if hyperopt is not None and fitting["genrep"]:
-        raise CheckError("During hyperoptimization we cannot generate replicas")
+        raise CheckError("During hyperoptimization we cannot generate replicas (genrep=false)")
 
 # Action to be called by valid phys
 # All information defining the NN should come here in the "parameters" dict

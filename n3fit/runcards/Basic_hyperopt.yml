@@ -2,7 +2,7 @@
 # Configuration file for n3fit
 #
 ############################################################
-description:  NNPDF4.0 candidate - NNLO - fitted charm
+description:  Hyperopt example
 ############################################################
 # frac: training fraction
 # ewk: apply ewk k-factors

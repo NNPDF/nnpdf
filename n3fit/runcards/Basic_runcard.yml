@@ -3,7 +3,7 @@
 #
 
 ############################################################
-description: NNPDF3.1 NLO fitted charm global dataset
+description: Basic runcard
 
 ############################################################
 # frac: training fraction

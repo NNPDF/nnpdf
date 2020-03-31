@@ -57,18 +57,18 @@ The partitions can be chosen by adding a ``kpartitions`` key to the ``hyperscan`
 
 .. code-block:: yml
     
-    hyperscan:
-        kpartitions:
+    kfold:
+        partitions:
             - datasets:
                 - data_1
                 - data_2
-            - datasets;
+            - datasets:
                 - data_3
             - datasets:
                 - data_4
                 - data_5
 
-An example runcard can be found at ``n3fit/runcards/Basic_hyperopt.hyml``.
+An example runcard can be found at ``n3fit/runcards/Basic_hyperopt.yml``.
 
 The loss function is then computed as the average of the loss function over the partition sets.
 
