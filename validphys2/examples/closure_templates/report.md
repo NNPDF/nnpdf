@@ -4,16 +4,41 @@
 
 Fit summary 
 ------------------
+
+We are looking at:
+
+  - {@ closure fit @} (`{@ closure fit_id @}`): {@ closure description @}
+
 {@ summarise_fits @}
 
-Closure test estimators
+Underlying PDF Summary
+----------------------
+{@ summarise_closure_underlying_pdfs @}
+
+Closures test estimators
 -----------------------
-## $\Delta_{\chi^{2}}$ by experiment
-{@ plot_delta_chi2 @}
 ## Bias by experiment
-{@ plot_biases @}
-## $\phi$ by experiment
-{@closure plot_phi@}
+### Plot
+
+Errorbars from performing bootstrap sample upon replicas
+
+{@ plot_fits_bootstrap_bias @}
+### Table
+{@ fits_bootstrap_bias_table @}
+
+## variance by experiment
+### Plot
+
+Errorbars from performing bootstrap sample upon replicas
+
+{@ plot_fits_bootstrap_variance @}
+### Table
+{@ fits_bootstrap_variance_table @}
+
+## $\Delta_{\chi^{2}}$
+{@ plot_delta_chi2 @}
+### By experiment
+{@ delta_chi2_table @}
 
 Dataset properties
 ------------------

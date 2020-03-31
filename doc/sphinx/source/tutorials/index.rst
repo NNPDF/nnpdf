@@ -12,6 +12,7 @@ Tutorials
    ./APPLgrids_comp.md
    ./apfelcomb.md
    ./datthcomp.md
+   ./closureestimators.rst
    ./closuretest.md
    ./conda.md
 

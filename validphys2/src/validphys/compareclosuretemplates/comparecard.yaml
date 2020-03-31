@@ -31,12 +31,24 @@ fits:
     - from_: current
     - from_: reference
 
+pdfs:
+    - from_: current
+    - from_: reference
+    - from_: Null
+
 use_cuts: fromfit
 use_fitcommondata: True
 
 template: report.md
 
+pdf_report:
+    meta: Null
+    template: pdf.md
+
 experiments:
+    from_: fit
+
+description:
     from_: fit
 
 dataspecs:
@@ -60,6 +72,26 @@ dataspecs:
       from_: reference
     speclabel:
       from_: reference
+
+pdfnormalize:
+    - normtitle: Absolute
+
+    - normalize_to: 1
+      normtitle: Ratio
+
+basespecs:
+    - basis: flavour
+      basistitle: Flavour basis
+    - basis: evolution
+      basistitle: Evolution basis
+
+pdfscalespecs:
+    - xscale: log
+      xscaletitle: Log
+    - xscale: linear
+      xscaletitle: Linear
+
+Q: 1.651
 
 actions_:
   - report(main=true)
