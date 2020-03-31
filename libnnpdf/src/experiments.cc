@@ -241,7 +241,7 @@ void Experiment::MakeReplica()
           }
 
       // Don't ever discard the replica now
-       if (isArtNegative) continue;
+      if (isArtNegative) continue;
 
       // Update data in set
       int index = 0;
