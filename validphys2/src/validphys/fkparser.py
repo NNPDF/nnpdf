@@ -1,7 +1,7 @@
 """
 fkparser.py
 
-Parse FKtables and CFactors into useful datastructures.  This module include
+Parse FKtables and CFactors into useful datastructures.  This module includes
 some functionality to process FKTables and cfactors. Most users will be
 interested in using the high level interface ``loaf_fktable``. Given an
 ``FKTableSpec``, it returns an instance of ``FHTableData``, an object with the
@@ -41,7 +41,7 @@ class FKTableData:
     ----------
 
     hadronic : bool
-        Whether an hadronic (two PDFs) or a DIS (one PDF) convolution is needed.
+        Whether a hadronic (two PDFs) or a DIS (one PDF) convolution is needed.
 
     Q0 : float
         The scale at which the PDFs should be evaluated (in GeV).
@@ -56,7 +56,7 @@ class FKTableData:
         For hadronic data, the columns are the indexes in the ``NfxNf`` list of
         possible flavour combinations of two PDFs.  The MultiIndex contains
         three keys, the data index, an index into ``xgrid`` for the first PDF
-        and an idex into ``xgrid`` for the second PDF, indicatinf the points in
+        and an idex into ``xgrid`` for the second PDF, indicating if the points in
         ``x`` where the PDF should be evaluated.
 
         For DIS data, the columns are indexes in the ``Nf`` list of flavours.
@@ -89,7 +89,7 @@ class CFactorData:
         The value of the cfactor for each data point.
 
     uncertainty : array, shape(ndata)
-        The absolute uncerainty on the cfactor if available. Otherwise a list
+        The absolute uncertainty on the cfactor if available. Otherwise a list
         of zeros.
     """
     description: str
@@ -204,7 +204,7 @@ def _parse_flavour_map(buf):
 def _parse_xgrid(buf):
     return np.fromstring(buf.getvalue(), sep='\n')
 
-# This used a differen interface from segment parser because we want it to
+# This used a different interface from segment parser because we want it to
 # be fast.
 # We assume it is going to be the last section.
 def _parse_hadronic_fast_kernel(f):
@@ -361,7 +361,7 @@ def parse_fktable(f):
 
 def parse_cfactor(f):
     """Parse an open byte stream into a ``CFactorData``. Raise a
-    BadCFactorError if problems are encontered."""
+    BadCFactorError if problems are encountered."""
     stars = f.readline()
     if not stars.startswith(b'*'):
         raise BadCFactorError("First line should start with '*'.")
