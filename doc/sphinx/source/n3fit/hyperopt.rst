@@ -53,7 +53,7 @@ By using this method we reduce the bias associated with a particular choise of t
 while at the same time, refitting with the same set of parameters, allow us to assess the stability of the
 particular combgination of hyperparameters.
 
-The partitions can be chosen by adding a ``kpartitions`` key to the ``hyperscan`` dictionary.
+The partitions can be chosen by adding a ``partitions`` key to the ``hyperscan`` dictionary.
 
 .. code-block:: yml
     
