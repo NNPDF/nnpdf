@@ -12,14 +12,12 @@ class MSR_Normalization(MetaLayer):
         self.three = 3 * self.tensor_ones((1, 1))
         super(MSR_Normalization, self).__init__(**kwargs, name="normalizer")
 
-    def compute_output_shape(self, input_shape):
-        return (self.output_dim,)
-
-    def call(self, x):
+    def call(self, xgrid):
         """
             Receives as input a tensor with the value of the MSR for each PDF
             and returns a rank-1 tensor with the normalization factor A_i of each flavour
         """
+        x = self.flatten(xgrid)
         pdf_sr = self.concatenate(
             [
                 self.one,  # photon

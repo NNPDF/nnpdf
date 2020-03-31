@@ -9,15 +9,17 @@
     language (hence the mapping `c_to_py_fun`)
 """
 
-from keras.layers import add as keras_add
-from keras.layers import subtract as keras_subtract
-from keras.layers import Lambda as keras_Lambda
-from keras.layers import multiply as keras_multiply
+import tensorflow as tf
+from tensorflow.keras.layers import add as keras_add
+from tensorflow.keras.layers import subtract as keras_subtract
+from tensorflow.keras.layers import Lambda as keras_Lambda
+from tensorflow.keras.layers import multiply as keras_multiply
 
-from keras.layers import Input
-from keras import backend as K
+from tensorflow.keras.layers import Input, Layer
+from tensorflow.keras import backend as K
 
 import numpy as np
+
 
 def numpy_to_tensor(ival):
     """
@@ -25,34 +27,59 @@ def numpy_to_tensor(ival):
     """
     return K.constant(ival)
 
-def numpy_to_input(numpy_array):
+
+def batchit(x):
+    """ Add a batch dimension to tensor x """
+    return tf.expand_dims(x, 0)
+
+
+def numpy_to_input(numpy_array, no_reshape=False):
     """
-        If x is a numpy array, make it into a numpy tensor
-        if not just returns the input unchanged
+    Takes a numpy array and generates a Input layer.
+    By default it adds a batch dimension (of size 1) so that the shape of the layer
+    is that of the array
+
+    Parameters
+    ----------
+        numpy_array: np.ndarray
+        no_reshape: bool
+            if true, don't add batch dimension, take the first dimension of the array as the batch
     """
     if isinstance(numpy_array, np.ndarray):
-        tensor = K.constant(numpy_array)
-        return Input(tensor=tensor)
+        if no_reshape:
+            batched_array = numpy_array
+            batch_size = numpy_array.shape[0]
+            shape = numpy_array.shape[1:]
+        else:
+            batched_array = np.expand_dims(numpy_array, 0)
+            batch_size = 1
+            shape = numpy_array.shape
+        input_layer = Input(batch_size=batch_size, shape=shape)
+        input_layer.tensor_content = batched_array
+        input_layer.original_shape = no_reshape
+        return input_layer
     else:
         return numpy_array
+
 
 def evaluate(tensor):
     """ Evaluate input tensor using the backend """
     return K.eval(tensor)
 
+
 def c_to_py_fun(op_name, name, default="ADD"):
     """
     Map between the NNPDF operations and the operations defined in this file
     Any new backend must implement such a mapping
-    """ # TODO: shouldn't this be outside of the backend folder then
-        # surely...
+    """  # TODO: shouldn't this be outside of the backend folder then
+    # surely...
     d = {
-        'NULL' : op_null,
-        'ADD' : op_add,
-        'RATIO' : op_ratio,
-        'ASY' : op_asy,
-        'SMN' : op_smn,
-            }
+        "NULL": op_null,
+        "ADD": op_add,
+        "RATIO": op_ratio,
+        "ASY": op_asy,
+        "SMN": op_smn,
+    }
     if op_name not in d.keys():
         print("Operation name not recognised, defaulting to {0}".format(default))
         return d[default]

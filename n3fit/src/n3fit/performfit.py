@@ -297,8 +297,8 @@ def performfit(
             modelito = MetaModel(
                 [integrator_input], [], extra_tensors=[(export_xgrid, layer_pdf)]
             )
-            result = modelito.predict(x=None, steps=1)
-            return result
+            result = modelito.predict()
+            return np.squeeze(result, 0)
 
         # Generate the writer wrapper
         writer_wrapper = WriterWrapper(
