@@ -44,5 +44,5 @@ def l_diaginvcovmat(diaginvcovmat_np):
 
     def true_loss(y_true, y_pred):
         tmp = y_true - y_pred
-        return K.tf.tensordot(invcovmat, K.transpose(tmp*tmp), axes=1)
+        return tf.tensordot(invcovmat, K.transpose(tmp*tmp), axes=1)
     return true_loss
