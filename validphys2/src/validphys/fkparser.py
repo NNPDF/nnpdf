@@ -3,7 +3,7 @@ fkparser.py
 
 Parse FKtables and CFactors into useful datastructures.  This module includes
 some functionality to process FKTables and cfactors. Most users will be
-interested in using the high level interface ``loaf_fktable``. Given an
+interested in using the high level interface ``load_fktable``. Given an
 ``FKTableSpec``, it returns an instance of ``FHTableData``, an object with the
 required information to compute a convolution, with the CFactors applied.
 
@@ -26,7 +26,7 @@ import pandas as pd
 
 @dataclasses.dataclass(frozen=True)
 class GridInfo:
-    """Class containig the basic properties of an FKTable grid."""
+    """Class containing the basic properties of an FKTable grid."""
     setname: str
     hadronic: bool
     ndata: int
