@@ -409,7 +409,7 @@ class ModelTrainer:
 
             if (epoch + 1) % 100 == 0:
                 print_stats = True
-                training_model.multiply_weights('pos', self.training["posdatasets"], pos_multiplier)
+                training_model.multiply_weights(self.training["posdatasets"], pos_multiplier)
 
             passes = stopping_object.monitor_chi2(out, epoch, print_stats=print_stats)
 

@@ -636,9 +636,6 @@ class Positivity:
             key_loss = f"{key}_loss"
             # If we are taking the avg when checking the output, we should do so here as well
             positivity_loss += np.take(history_object[key_loss], -1)
-            with open("/tmp/test.txt", 'a') as f:
-                f.write("\n")
-                f.write(str(positivity_loss))
         if positivity_loss > self.threshold:
             return False
         else:

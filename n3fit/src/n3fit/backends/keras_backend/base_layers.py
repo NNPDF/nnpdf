@@ -5,8 +5,8 @@
     'name of the layer' : ( Layer_class, {dictionary of arguments: defaults} )
 """
 
-from keras.layers import Dense, Lambda, LSTM, Dropout, Concatenate, concatenate
-from keras.backend import expand_dims
+from tensorflow.keras.layers import Dense, Lambda, LSTM, Dropout, Concatenate, concatenate
+from tensorflow import expand_dims
 
 
 def LSTM_modified(**kwargs):

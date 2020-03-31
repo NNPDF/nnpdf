@@ -14,6 +14,7 @@ import argparse
 from validphys.app import App
 from validphys.config import Environment, Config
 from validphys.config import EnvironmentError_, ConfigError
+from validphys.core import FitSpec
 from reportengine import colors
 from reportengine.compat import yaml
 
@@ -21,14 +22,15 @@ from reportengine.compat import yaml
 N3FIT_FIXED_CONFIG = dict(
     use_cuts = 'internal',
     use_t0 = True,
-    actions_ = ['datacuts::theory fit']
+    actions_ = ['datacuts::theory::closuretest performfit']
 )
 
-N3FIT_PROVIDERS = ["n3fit.fit"]
+N3FIT_PROVIDERS = ["n3fit.performfit"]
 
 log = logging.getLogger(__name__)
 
 RUNCARD_COPY_FILENAME = "filter.yml"
+INPUT_FOLDER = "input"
 
 
 class N3FitError(Exception):
@@ -50,12 +52,12 @@ class N3FitEnvironment(Environment):
 
         # check if results folder exists
         self.output_path = pathlib.Path(self.output_path).absolute()
-        if not self.output_path.exists():
+        if not (self.output_path/"nnfit").is_dir():
             if not re.fullmatch(r"[\w.\-]+", self.output_path.name):
                 raise N3FitError("Invalid output folder name. Must be alphanumeric.")
             try:
-                self.output_path.mkdir()
-                pathlib.Path(self.output_path / "nnfit").mkdir()
+                self.output_path.mkdir(exist_ok=True)
+                (self.output_path /"nnfit").mkdir()
             except OSError as e:
                 raise EnvironmentError_(e) from e
 
@@ -73,6 +75,10 @@ class N3FitEnvironment(Environment):
                 path.mkdir(exist_ok=True)
             except OSError as e:
                 raise EnvironmentError_(e) from e
+        # make lockfile input inside of replica folder
+        # avoid conflict with setupfit
+        self.input_folder = self.replica_path / INPUT_FOLDER
+        self.input_folder.mkdir(exist_ok=True)
 
     @classmethod
     def ns_dump_description(cls):
@@ -106,6 +112,35 @@ class N3FitConfig(Config):
             raise ConfigError(f"Expecting input runcard to be a mapping, " f"not '{type(file_content)}'.")
         file_content.update(N3FIT_FIXED_CONFIG)
         return cls(file_content, *args, **kwargs)
+
+    def produce_fit(self):
+        """Produces a FitSpec which points at the current fit, to load
+        fit_commondata from.
+        """
+        fitpath = self.environment.output_path
+        return FitSpec(fitpath.name, fitpath)
+
+    def parse_fakedata(self, fakedata: bool):
+        """Parses the `fakedata` key from the closuretest namespace, if True then
+        use generated closure test in fit
+        """
+        if fakedata:
+            log.warning("using filtered closure data")
+            if not (self.environment.output_path/'filter').is_dir():
+                raise ConfigError(
+                    "Could not find filter result at "
+                    f"{self.environment.output_path/'filter'} "
+                    "to load commondata from. Did you run filter on the "
+                    "runcard?")
+        return fakedata
+
+    def produce_use_fitcommondata(self, fakedata):
+        """Produces the `use_fitcommondata` key from the `fakedata` key in
+        `closuretest` namespace
+        """
+        return fakedata
+
+
 
 
 class N3FitApp(App):

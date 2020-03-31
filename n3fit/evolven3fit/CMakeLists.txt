@@ -10,14 +10,8 @@ configure_file(
   "${PROJECT_SOURCE_DIR}/libnnpdf/src/NNPDF/common.h"
   )
 
-# To whom it may concern
-#   I am 100% sure there is a better way of doing all of it 
-#   but I care 0% about it atm
-set(NNPDF_LDFLAGS "-L${PROJECT_BINARY_DIR}/libnnpdf/ -lnnpdf")
-
 # Add files to the make
 add_executable(evolven3fit ${PROJECT_SOURCE_DIR}/n3fit/evolven3fit/evolven3fit.cc
-        ${PROJECT_SOURCE_DIR}/nnpdfcpp/src/common/src/nnpdfsettings.cc
         ${PROJECT_SOURCE_DIR}/nnpdfcpp/src/common/src/md5.cc
         ${PROJECT_SOURCE_DIR}/nnpdfcpp/src/common/src/exportgrid.cc
         ${PROJECT_SOURCE_DIR}/nnpdfcpp/src/nnfit/src/evolgrid.cc )

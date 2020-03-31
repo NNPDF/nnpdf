@@ -78,10 +78,9 @@ Indices and tables
 Various
 [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) and
 [restructured text](http://docutils.sourceforge.net/docs/user/rst/quickref.html)
-cheatsheets exist online. For example block maths can be added using
-`$$\frac{1}{2}$$` on a newline, which gives $$\frac{1}{2}$$
+cheatsheets exist online.
 
-Similarly, in restructured text, a $\LaTeX$ block can be generated using
+In restructured text, a $\LaTeX$ block can be generated using
 
 ```
 .. math::

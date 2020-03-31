@@ -464,6 +464,28 @@ class CoreConfig(configparser.Config):
         return {'experiment':self.parse_experiment(experiment_input.as_dict(),
                 theoryid=theoryid, use_cuts=use_cuts, fit=fit)}
 
+    @configparser.explicit_node
+    def produce_covariance_matrix(self, use_pdferr: bool = False):
+        """Modifies which action is used as covariance_matrix depending on
+        the flag `use_pdferr`
+        """
+        from validphys import results
+        if use_pdferr:
+            return results.pdferr_plus_data_covmat
+        else:
+            return results.data_covmat
+
+    @configparser.explicit_node
+    def produce_experiment_covariance_matrix(self, use_pdferr: bool = False):
+        """Modifies which action is used as experiment_covariance_matrix
+        depending on the flag `use_pdferr`
+        """
+        from validphys import results
+        if use_pdferr:
+            return results.pdferr_plus_experiment_covmat
+        else:
+            return results.experiment_covmat
+
     #TODO: Do this better and elsewhere
     @staticmethod
     def _check_dataspecs_type(dataspecs):
@@ -871,11 +893,28 @@ class CoreConfig(configparser.Config):
                 "correctly?")
         return grouping
 
-    def parse_perform_covmat_reg(self, do_reg: bool):
-        """Parse the `regularize_covmat` key from runcard"""
-        if do_reg:
-            log.info("Regularizing covariance matrices")
-        return do_reg
+    def parse_norm_threshold(self, val: (numbers.Number, type(None))):
+        """The threshold to use for covariance matrix normalisation, sets
+        the maximum l2 norm of the inverse covariance matrix, by clipping
+        smallest eigenvalues
+
+        If norm_threshold is set to None, then no covmat regularization is
+        performed
+
+        """
+        if val is not None:
+            if val <= 0:
+                raise ConfigError("norm_threshold must be greater than zero.")
+            log.info(
+                f"Regularizing covariance matrices with norm threshold: {val}")
+        return val
+
+    def produce_no_covmat_reg(self):
+        """explicitly set norm_threshold to None so that no covariance matrix
+        regularization is performed
+
+        """
+        return {"norm_threshold": None}
 
     def parse_filter_rules(self, filter_rules: (list, type(None))):
         """A list of filter rules. See https://docs.nnpdf.science/vp/filters.html
@@ -905,7 +944,7 @@ class CoreConfig(configparser.Config):
                 for i in filter_rules
             ]
         except RuleProcessingError as e:
-            raise ConfigError(e) from e
+            raise ConfigError(f"Error Processing filter rules: {e}") from e
 
         return rule_list
 

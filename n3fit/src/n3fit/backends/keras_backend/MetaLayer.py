@@ -9,9 +9,9 @@
 """
 
 import tensorflow as tf
-from keras import backend as K
-from keras.engine.topology import Layer
-from keras.initializers import Constant, RandomUniform, glorot_normal, glorot_uniform
+from tensorflow.keras import backend as K
+from tensorflow.keras.layers import Layer
+from tensorflow.keras.initializers import Constant, RandomUniform, glorot_normal, glorot_uniform
 
 
 class MetaLayer(Layer):
@@ -143,6 +143,10 @@ class MetaLayer(Layer):
             return K.reshape(concatenated_tensor, target_shape)
         else:
             return concatenated_tensor
+
+    def flatten(self, x):
+        """ Flatten tensor x """
+        return tf.reshape(x, (-1,))
 
     def permute_dimensions(self, tensor, permutation, **kwargs):
         """

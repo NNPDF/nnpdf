@@ -381,7 +381,7 @@ def pdfNN_layer_generator(
     # If the input is of type (x, logx)
     # create a x --> (x, logx) layer to preppend to everything
     if inp == 2:
-        add_log = Lambda(lambda x: concatenate([x, operations.op_log(x)], axis=1))
+        add_log = Lambda(lambda x: concatenate([x, operations.op_log(x)], axis=-1))
 
     def dense_me(x):
         """ Takes an input tensor `x` and applies all layers

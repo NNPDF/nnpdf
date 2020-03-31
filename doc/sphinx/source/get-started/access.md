@@ -41,6 +41,25 @@ Various mailing options can be changed from this URL
 
 <https://lists.cam.ac.uk/mailman/options/ucam-nnpdf>
 
+## Rules for NNPDF email exchange
+
+Never attach files, always send links.
+Never reply including the original message.
+Ensure that the message corresponds to a given specific thread:
+
+* [NNPDF] For general NNPDF issues 
+* [NNPDF_news] For matters related to NNPDF activities such as talks, conferences, meetings, grants, etc
+* [NNPDF4_data] For matters related to the inclusion of new data in view of the NNPDF4.0 PDF set
+* [N3FIT] For matters related to the new fitting code
+
+Dedicated NNPDF threads for specific Physics projects, which might include non-NNPDF members
+
+* [NNPDF_smallx] For small-x resummation: NNPDF + Marco Bonvini and Simone Marzani
+* [NNFF] For the NNPDF fits of Fragmentation Functions
+* [nNNPDF] For the NNPDF fits of nuclear parton distributions
+* [NNPDF_th] For studies and fits related to the implementation of theory uncertainties
+* [NNPDF_jets] For studies related to choice of jet observables and scales
+
 ## NNPDF server
 
 *See [Server Configuration](server)*
