@@ -12,41 +12,10 @@ from reportengine.checks import make_argcheck, CheckError
 
 from NNPDF import Experiment
 
-from validphys.core import ExperimentSpec
 from validphys.loader import Loader
 
 log = logging.getLogger(__name__)
 
-def get_pseudodata(fit):
-    import n3fit.io.reader as reader
-    l = Loader()
-
-    # PDF must be obtained from the corresponding
-    # fit object, so we don't allow them to be
-    # different
-    pdf = l.check_pdf(str(fit))
-    runcard = fit.as_input()
-
-    t0pdfset = pdf.load_t0()
-    replica = range(1, len(pdf) + 1)
-
-    trvlseed, nnseed, mcseed, genrep = [runcard.get("fitting").get(i)
-                                        for i in ["trvlseed", "nnseed", "mcseed", "genrep"]]
-
-    seeds = initialize_seeds(replica, trvlseed, nnseed, mcseed, genrep)
-
-    datasets = [i["datasets"] for i in runcard["experiments"]]
-    experiments = [item for sublist in datasets for item in sublist]
-
-    dataset_list = [l.check_dataset(i["dataset"], theoryid=53, frac=i["frac"])
-                    for i in experiments]
-    spec = ExperimentSpec("spec", dataset_list)
-
-    all_exp_dicts = reader.common_data_reader(
-        spec, t0pdfset, replica_seeds=seeds.mcseeds, trval_seeds=seeds.trvlseeds
-    )
-
-    return all_exp_dicts
 
 def initialize_seeds(replica: list, trvlseed: int, nnseed: int, mcseed: int, genrep: bool):
     """Action to initialize seeds for random number generation.

@@ -10,6 +10,7 @@ from collections import OrderedDict, namedtuple
 from collections.abc import Sequence
 import itertools
 import logging
+from multiprocessing import Lock, Manager, Process, Queue
 
 import numpy as np
 import scipy.linalg as la
@@ -1247,6 +1248,52 @@ def dataspecs_datasets_covmat_differences_table(
     cols = df.columns.get_level_values(0).unique()
     df.columns = pd.MultiIndex.from_product((dataspecs_speclabel, cols))
     return df
+
+def get_pseudodata(fit, pdf, experiments):
+    import n3fit.io.reader as reader
+    l = Loader()
+
+    t0pdfset = pdf.load_t0()
+    # Note: len(pdf) = num replicas + 1
+    # due to rep 0, which we do not consider
+    # here.
+    replica = range(1, len(pdf))
+
+    trvlseed, nnseed, mcseed, genrep = [fit.as_input().get("fitting").get(i)
+                                        for i in ["trvlseed", "nnseed", "mcseed", "genrep"]]
+
+    seeds = initialize_seeds(replica, trvlseed, nnseed, mcseed, genrep)
+
+    print(str(spec))
+    print("Loading experiments")
+    loaded_spec = experiments.load()
+    print("Loading finished")
+
+    def task(L, mcseeds, trvlseeds):
+        all_exp_dicts = reader.common_data_reader(
+            experiments, t0pdfset, replica_seeds=mcseeds, trval_seeds=trvlseeds, loaded_spec=loaded_spec
+        )
+        L.extend(all_exp_dicts)
+        print(len(L))
+
+    with Manager() as manager:
+        L = manager.list()
+
+        NPROC = 8
+        processes = []
+        # XXX: There must be a better way to do this. Note it changes
+        # from type int to numpy int and thus require being converted back
+        batched_mcseeds = np.array_split(seeds.mcseeds, NPROC)
+        batched_trvlseeds = np.array_split(seeds.trvlseeds, NPROC)
+        for i, mc_batch, trvl_batch in zip(range(NPROC), batched_mcseeds, batched_trvlseeds):
+            p = Process(target=task, args=(L, list(mc_batch), list(trvl_batch)))
+            p.start()
+            processes.append(p)
+        for p in processes:
+            p.join()
+        L = [i for i in L]
+    return L
+
 
 experiments_chi2 = collect(abs_chi2_data_experiment, ('experiments',))
 each_dataset_chi2 = collect(abs_chi2_data, ('experiments', 'experiment'))
