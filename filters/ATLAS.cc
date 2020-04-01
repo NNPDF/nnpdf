@@ -543,7 +543,7 @@ void ATLASZHIGHMASS49FBFilter::ReadData()
 
     fStat[i] = stat*fData[i]*1e-2;
     fKin2[i] = pow( 0.5*(mbin[i] + mbin[i+1]) , 2.0);
-    fKin1[i] = 0.0;
+    fKin1[i] = 0.5*(mbin[i] + mbin[i+1]);
 
     fKin3[i] = 7E3;
 
