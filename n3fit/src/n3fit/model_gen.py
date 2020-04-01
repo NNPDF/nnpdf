@@ -455,7 +455,7 @@ def pdfNN_layer_generator(
     )
 
     # Evolution layer
-    layer_evln = Rotation(input_shape=(pre,), output_dim=out)
+    layer_evln = Rotation(input_shape=(last_layer_nodes,), output_dim=out)
 
     # Check what is the output basis of the NN and rotate to evolution basis
     if fitbasis == "flavour": # TODO choose the name
