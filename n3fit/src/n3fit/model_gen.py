@@ -7,6 +7,8 @@
         # pdfNN_layer_generator:
             Generates the PDF NN layer to be fitted
 """
+import numpy as np
+
 from n3fit.layers import DIS
 from n3fit.layers import DY
 from n3fit.layers import Mask
@@ -70,14 +72,15 @@ def observable_generator(
 
         obs_list = []
         input_list = []
-        # Now generate an input and output layer for each sub_obs of the dataset
+        # Now generate an input and output layer for each sub_ops of the dataset
         for i, fktable_dict in enumerate(fktable_list):
             # Input layer
             input_layer = operations.numpy_to_input(fktable_dict["xgrid"].T)
             input_list.append(input_layer)
+            ndata = fktable_dict["ndata"]
             # Output layer
             obs_layer = Obs_Layer(
-                output_dim=fktable_dict["ndata"],
+                output_dim=ndata,
                 fktable=fktable_dict["fktable"],
                 basis=fktable_dict["basis"],
                 name="{0}_{1}".format(dataname, i),
@@ -85,19 +88,23 @@ def observable_generator(
             )
             obs_list.append((input_layer, obs_layer))
 
+        # This mask does usually nothing but it is useful in order to turn off datasets during kfolding
+        mask_one = Mask(bool_mask=np.ones(ndata, dtype=np.bool), batch_it = False, name=f"{dataname}_mask")
         # Add the inputs to the lists of inputs of the model
         model_inputs += input_list
         # Append a combination of the operation to be applied (op) to the list
         # and the list of observable to which we want to applied the op
-        model_obs.append((op, obs_list))
+        # as well as the mask to turn on and off k-folds
+        model_obs.append((op, obs_list, mask_one))
 
     def final_obs(pdf_layer):
         all_ops = []
-        for operation, observables in model_obs:
+        for operation, observables, mask in model_obs:
             all_obs = []
             for i_layer, o_layer in observables:
                 all_obs.append(o_layer(pdf_layer(i_layer)))
-            all_ops.append(operation(all_obs))
+            result = operation(all_obs)
+            all_ops.append(mask(result))
         if len(all_ops) == 1:
             return all_ops[0]
         else:
@@ -350,8 +357,15 @@ def pdfNN_layer_generator(
     """
     if nodes is None:
         nodes = [15, 8]
+    ln = len(nodes)
+
     if activations is None:
         activations = ["tanh", "linear"]
+    elif callable(activations):
+        # hyperopt passes down a function to generate dynamically the list of
+        # activations functions
+        activations = activations(ln)
+
     # Safety check
     number_of_layers = len(nodes)
     number_of_activations = len(activations)

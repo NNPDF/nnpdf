@@ -25,7 +25,7 @@ class Mask(MetaLayer):
         self.mask = bool_mask
         self.c = c
         self.batch_it = batch_it
-        super(MetaLayer, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def build(self, input_shape):
         initializer = MetaLayer.init_constant(value=self.c)
@@ -36,3 +36,5 @@ class Mask(MetaLayer):
         ret = self.boolean_mask(self.kernel * prediction_in, self.mask)
         if self.batch_it:
             return operations.batchit(ret)
+        else:
+            return ret
