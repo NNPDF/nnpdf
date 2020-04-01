@@ -5,12 +5,15 @@ pseudodata.py
 Tools to obtain and analyse the pseudodata that was seen by the neural
 networks during the fitting of a fit
 """
+import logging
 import multiprocessing as mp
 
 import numpy as np
 
+log = logging.getLogger(__name__)
 
-def get_pseudodata(fit, pdf, experiments):
+
+def get_pseudodata(fit, pdf, experiments, NPROC=None):
     """A function to obtain information about the pseudodata that went
         into an N3FIT fit. Note this code runs in parallel to increase efficiency.
 
@@ -67,7 +70,13 @@ def get_pseudodata(fit, pdf, experiments):
     with mp.Manager() as manager:
         L = manager.list()
 
-        NPROC = mp.cpu_count()
+        if NPROC is None:
+            NPROC = mp.cpu_count()
+            log.warning(
+                f"Using all {NPROC} cores available, this may be dangerous "
+                "especially for use on a cluster. Consider setting the NPROC "
+                "variable to something sensible."
+            )
         processes = []
         # XXX: There must be a better way to do this. Note it changes
         # from type int to numpy int and thus require being converted back
