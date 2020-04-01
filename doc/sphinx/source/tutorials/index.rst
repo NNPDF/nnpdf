@@ -5,10 +5,14 @@ Tutorials
    :maxdepth: 1
 
    ./runafit.md
+   ./compare-fits.md
+   ./report.md
    ./buildmaster.md
    ./APPLgrids.md
+   ./APPLgrids_comp.md
    ./apfelcomb.md
    ./datthcomp.md
+   ./closuretest.md
    ./conda.md
 
 =======
