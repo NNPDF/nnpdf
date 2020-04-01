@@ -9,9 +9,9 @@
 """
 
 import tensorflow as tf
-from keras import backend as K
-from keras.engine.topology import Layer
-from keras.initializers import Constant, RandomUniform, glorot_normal, glorot_uniform
+from tensorflow.keras import backend as K
+from tensorflow.keras.layers import Layer
+from tensorflow.keras.initializers import Constant, RandomUniform, glorot_normal, glorot_uniform
 
 
 class MetaLayer(Layer):
@@ -33,7 +33,9 @@ class MetaLayer(Layer):
     }
 
     # Building function
-    def builder_helper(self, name, kernel_shape, initializer, trainable=True, constraint=None):
+    def builder_helper(
+        self, name, kernel_shape, initializer, trainable=True, constraint=None
+    ):
         """
         Creates a kernel that should be saved as an attribute of the caller class
         name: name of the kernel
@@ -43,7 +45,11 @@ class MetaLayer(Layer):
         constraint: one of the constraints from this class (actually, any keras constraints)
         """
         kernel = self.add_weight(
-            name=name, shape=kernel_shape, initializer=initializer, trainable=trainable, constraint=constraint
+            name=name,
+            shape=kernel_shape,
+            initializer=initializer,
+            trainable=trainable,
+            constraint=constraint,
         )
         return kernel
 
@@ -137,6 +143,10 @@ class MetaLayer(Layer):
             return K.reshape(concatenated_tensor, target_shape)
         else:
             return concatenated_tensor
+
+    def flatten(self, x):
+        """ Flatten tensor x """
+        return tf.reshape(x, (-1,))
 
     def permute_dimensions(self, tensor, permutation, **kwargs):
         """

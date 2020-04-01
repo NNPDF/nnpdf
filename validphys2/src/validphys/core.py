@@ -679,6 +679,11 @@ class SymmHessianStats(Stats):
         diffsq = (data[0] - data[1:])**2
         return np.sqrt(diffsq.sum(axis=0))/self.rescale_factor
 
+    def moment(self, order):
+        data = self.data
+        return np.sum(
+            np.power((data[0] - data[1:])/self.rescale_factor, order), axis=0)
+
 class HessianStats(SymmHessianStats):
     """Compute stats in the 'assymetric' hessian format: The first index (0)
     is the
@@ -691,6 +696,11 @@ class HessianStats(SymmHessianStats):
         data = self.data
         diffsq = (data[1::2] - data[2::2])**2
         return np.sqrt(diffsq.sum(axis=0))/self.rescale_factor/2
+
+    def moment(self, order):
+        data = self.data
+        return np.sum(
+            np.power((data[1::2] - data[2::2])/self.rescale_factor/2, order), axis=0)
 
 
 STAT_TYPES = dict(

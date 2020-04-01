@@ -30,6 +30,7 @@ N3FIT_PROVIDERS = ["n3fit.performfit"]
 log = logging.getLogger(__name__)
 
 RUNCARD_COPY_FILENAME = "filter.yml"
+INPUT_FOLDER = "input"
 
 
 class N3FitError(Exception):
@@ -74,6 +75,10 @@ class N3FitEnvironment(Environment):
                 path.mkdir(exist_ok=True)
             except OSError as e:
                 raise EnvironmentError_(e) from e
+        # make lockfile input inside of replica folder
+        # avoid conflict with setupfit
+        self.input_folder = self.replica_path / INPUT_FOLDER
+        self.input_folder.mkdir(exist_ok=True)
 
     @classmethod
     def ns_dump_description(cls):

@@ -20,6 +20,9 @@ pdfs:
     - from_: closure
     - from_: Null
 
+description:
+    from_: fit
+
 use_cuts: fromfit
 use_fitcommondata: True
 

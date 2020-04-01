@@ -48,9 +48,6 @@ class Preprocessing(MetaLayer):
         # super(MetaLayer, self).__init__(**kwargs)
         super().__init__(**kwargs)
 
-    def compute_output_shape(self, input_shape):
-        return (input_shape[0], self.output_dim)
-
     def generate_weight(self, weight_name, kind, dictionary):
         """
         Generates weights according to the flavour dictionary and adds them
@@ -113,6 +110,6 @@ class Preprocessing(MetaLayer):
                 x ** (1 - self.kernel[12][0]) * (1 - x) ** self.kernel[13][0],  # t8 = sigma
                 x ** (1 - self.kernel[14][0]) * (1 - x) ** self.kernel[15][0],  # t15 c-
             ],
-            axis=1,
+            axis=-1,
         )
         return pdf_raw
