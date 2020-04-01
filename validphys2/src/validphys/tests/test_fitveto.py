@@ -6,7 +6,7 @@ from hypothesis.strategies import (floats, integers, tuples, lists,
     booleans)
 from hypothesis.extra.numpy import arrays,  array_shapes
 
-from validphys.fitveto import (distribution_veto, determine_vetoes, NSIGMA_DISCARD)
+from validphys.fitveto import distribution_veto, determine_vetoes
 from validphys.fitdata import FitInfo
 
 shape1d = array_shapes(max_dims=1, min_side=1, max_side=1000)
@@ -17,13 +17,15 @@ fitinfos = tuples(integers(min_value=1),
         arrays(float, shape=7, elements=nicefloats)).map(FitInfo._make)
 
 
-#Ignore over- and underflow warnings.
-@pytest.mark.filterwarnings('ignore')
-@given(arrays(float, shape=shape1d, elements=nicefloats))
-def test_distribution_veto(arr):
-    veto = distribution_veto(arr, np.ones_like(arr, dtype=bool))
+thresholds = floats(min_value=1, max_value=10)
+distributions = arrays(float, shape=shape1d, elements=nicefloats)
+# Ignore over- and underflow warnings.
+@pytest.mark.filterwarnings("ignore")
+@given(distributions, thresholds)
+def test_distribution_veto(arr, threshold):
+    veto = distribution_veto(arr, np.ones_like(arr, dtype=bool), threshold)
     masked = arr[veto]
-    assert np.all(masked - np.mean(arr) <= NSIGMA_DISCARD*np.std(arr))
+    assert np.all(masked - np.mean(arr) <= threshold * np.std(arr))
 
 
 #The case where the list is empty is handled in postfit
