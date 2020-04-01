@@ -44,6 +44,8 @@ providers = [
              'validphys.MCgen_checks',
              'validphys.closuretest',
              'validphys.theoryinfo',
+             'validphys.pseudodata',
+             'validphys.renametools',
              'reportengine.report'
             ]
 
