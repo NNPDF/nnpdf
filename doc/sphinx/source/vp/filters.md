@@ -217,7 +217,7 @@ As in the case of the rules, this overwrites the original defaults and does not 
 
 
 
-# Examples
+## Examples
 
 Consider the following filter from the `filters.yaml` file:
 ```yaml
