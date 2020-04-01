@@ -52,3 +52,8 @@ which will run in parallel (using all available codes) the action that retrieves
   `NPROC` argument to control the number of processes spawned by this action.
 ```
 
+```eval_rst
+.. danger::
+  When running this action from a runcard, it is discouraged to use the `--parallel` flag when calling validphys.
+  This flag parallelizes dependencies which will cause havoc with this action.
+```
