@@ -27,7 +27,7 @@ from reportengine.compat import yaml
 from reportengine import filefinder
 
 from validphys.core import (CommonDataSpec, FitSpec, TheoryIDSpec, FKTableSpec,
-                            PositivitySetSpec, DataSetSpec, PDF, Cuts, ExperimentSpec,
+                            PositivitySetSpec, DataSetSpec, PDF, Cuts, DataGroupSpec,
                             peek_commondata_metadata, CutsPolicy,
                             InternalCutsWrapper)
 from validphys import lhaindex
@@ -449,33 +449,33 @@ class Loader(LoaderBase):
                            fkspecs=fkspec, thspec=theoryid, cuts=cuts,
                            frac=frac, op=op, weight=weight)
 
-    def check_experiment(self, name: str, datasets: List[DataSetSpec]) -> ExperimentSpec:
-        """Loader method for instantiating ExperimentSpec objects. The NNPDF::Experiment
+    def check_experiment(self, name: str, datasets: List[DataSetSpec]) -> DataGroupSpec:
+        """Loader method for instantiating DataGroupSpec objects. The NNPDF::Experiment
         object can then be instantiated using the load method.
 
         Parameters
         ----------
         name: str
-            A string denoting the name of the resulting ExperimentSpec object.
+            A string denoting the name of the resulting DataGroupSpec object.
         dataset: List[DataSetSpec]
             A list of DataSetSpec objects pre-created by the user. Note, these too
             will be loaded by Loader.
 
         Returns
         -------
-        ExperimentSpec
+        DataGroupSpec
 
         Example
         -------
         >>> from validphys.loader import Loader
         >>> l = Loader()
         >>> ds = l.check_dataset("NMC", theoryid=53, cuts="internal")
-        >>> exp = l.check_experiment("My ExperimentSpec Name", [ds])
+        >>> exp = l.check_experiment("My DataGroupSpec Name", [ds])
         """
         if not isinstance(datasets, list):
             raise TypeError("Must specify a list of DataSetSpec objects to use")
 
-        return ExperimentSpec(name, datasets)
+        return DataGroupSpec(name, datasets)
 
     def check_pdf(self, name):
         if lhaindex.isinstalled(name):
