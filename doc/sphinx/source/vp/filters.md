@@ -236,10 +236,10 @@ Now consider the slightly more complicated example:
   reason: Remove data points for which electroweak corrections are large.
   PTO: NNLO-
   local_variables:
-    pT: sqrt(M2)
-    min_pT: 30.0
+    M: sqrt(M2)
+    min_M: 30.0
     max_rapidity: 2.2
-  rule: pT >= min_pT and etay <= max_rapidity
+  rule: M >= min_M and etay <= max_rapidity
 ```
 This rule only applies to `CMSDY2D12`. I wish for the `rule` to only be evaluated
 provided the `theory` perturbative order is **strictly** less than NNLO (i.e LO or NLO).
@@ -259,9 +259,9 @@ kinematic variables are:
 ```
 'EWK_RAP': ('etay', 'M2', 'sqrts'),
 ```
-I choose to define custom `local_variables` in the form of `pT` which is the square
-root of the invariant mass squared. Moreover, I define a value for minimum `pT` and
-maximum rapidity which I use in my `rule` as cutoff values.
+I choose to define custom `local_variables` in the form of `M` which is the square
+root of the invariant mass squared, i.e. just the invariant mass. Moreover, I define a
+value for minimum `M` and maximum rapidity which I use in my `rule` as cutoff values.
 
 The `rule` itself is then self-explanatory, notice however, it is written in valid
 `Python` syntax. Finally, the reason for the rule is given which is to cut datapoints
