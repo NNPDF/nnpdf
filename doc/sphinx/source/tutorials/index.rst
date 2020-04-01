@@ -15,6 +15,7 @@ Tutorials
    ./closureestimators.rst
    ./closuretest.md
    ./conda.md
+   ./pseudodata.md
 
 =======
 
