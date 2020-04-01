@@ -18,7 +18,12 @@ from n3fit.layers import Preprocessing, Rotation
 from n3fit.backends import operations
 from n3fit.backends import losses
 from n3fit.backends import MetaLayer
-from n3fit.backends import base_layer_selector, regularizer_selector, concatenate, Lambda
+from n3fit.backends import (
+    base_layer_selector,
+    regularizer_selector,
+    concatenate,
+    Lambda,
+)
 
 
 def observable_generator(
@@ -135,8 +140,9 @@ def observable_generator(
     out_tr_mask = Mask(bool_mask=spec_dict["trmask"], name=spec_name)
     out_vl_mask = Mask(bool_mask=spec_dict["vlmask"], name=spec_name + "_val")
 
-    if spec_dict.get('data_transformation') is not None:
-        obsrot = ObsRotation(spec_dict.get('data_transformation'))
+    if spec_dict.get("data_transformation") is not None:
+        obsrot = ObsRotation(spec_dict.get("data_transformation"))
+
         def out_tr(pdf_layer):
             return out_tr_mask(obsrot(final_obs(pdf_layer)))
 
@@ -149,6 +155,7 @@ def observable_generator(
         invcovmat_vl = spec_dict["invcovmat_vl"]
         loss_vl = losses.l_diaginvcovmat(invcovmat_vl)
     else:
+
         def out_tr(pdf_layer):
             return out_tr_mask(final_obs(pdf_layer))
 
@@ -215,7 +222,7 @@ def generate_dense_network(
             "units": int(nodes_out),
             "activation": activation,
             "input_shape": (nodes_in,),
-	    "kernel_regularizer": reg
+            "kernel_regularizer": regularizer,
         }
 
         layer = base_layer_selector("dense", **arguments)
@@ -289,8 +296,8 @@ def pdfNN_layer_generator(
     seed=None,
     dropout=0.0,
     regularizer=None,
-    regularizer_args={}
-): # pylint: disable=too-many-locals
+    regularizer_args={},
+):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
     and outputs a basis of 14 PDFs.
@@ -395,9 +402,15 @@ def pdfNN_layer_generator(
     last_layer_nodes = nodes[-1]
 
     if layer_type == "dense":
-	reg = regularizer_selector(regularizer, **regularizer_args)
+        reg = regularizer_selector(regularizer, **regularizer_args)
         list_of_pdf_layers = generate_dense_network(
-            inp, nodes, activations, initializer_name, seed=seed, dropout_rate=dropout, regularizer=reg
+            inp,
+            nodes,
+            activations,
+            initializer_name,
+            seed=seed,
+            dropout_rate=dropout,
+            regularizer=reg,
         )
     elif layer_type == "dense_per_flavour":
         # Define the basis size attending to the last layer in the network
