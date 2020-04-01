@@ -95,7 +95,7 @@ def observable_generator(
         # Append a combination of the operation to be applied (op) to the list
         # and the list of observable to which we want to applied the op
         # as well as the mask to turn on and off k-folds
-        model_obs.append((op, obs_list, mask))
+        model_obs.append((op, obs_list, mask_one))
 
     def final_obs(pdf_layer):
         all_ops = []
@@ -361,6 +361,11 @@ def pdfNN_layer_generator(
 
     if activations is None:
         activations = ["tanh", "linear"]
+    elif callable(activations):
+        # hyperopt passes down a function to generate dynamically the list of
+        # activations functions
+        activations = activations(ln)
+
     # Safety check
     number_of_layers = len(nodes)
     number_of_activations = len(activations)

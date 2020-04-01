@@ -39,18 +39,11 @@ experiments:
   - {dataset: HERACOMBNCEP920, frac: 0.5}
   - {dataset: HERACOMBCCEM, frac: 0.5}
   - {dataset: HERACOMBCCEP, frac: 0.5}
-# Combined HERA charm production cross-sections
-- experiment: HERAF2CHARM
-  datasets:
-  - {dataset: HERACOMB_SIGMARED_C, frac: 0.5}
-# Combined HERA bottom production cross-sections
-- experiment: HERAF2BOTTOM
-  datasets:
-  - {dataset: HERACOMB_SIGMARED_B, frac: 0.5}
+
 
 ############################################################
 datacuts:
-  t0pdfset: 200101-ern-dijets-nnlo                     # PDF set to generate t0 covmat
+  t0pdfset     : NNPDF31_nnlo_as_0118 # PDF set to generate t0 covmat
   q2min: 3.49                        # Q2 minimum
   w2min: 12.5                        # W2 minimum
   combocuts: NNPDF31                 # NNPDF3.0 final kin. cuts
@@ -93,13 +86,11 @@ hyperscan:
             - datasets:
                 - HERACOMBCCEM
                 - HERACOMBNCEP460
-                - HERACOMB_SIGMARED_B
                 - NMC
                 - NTVNBDMNFe
             - datasets:
                 - HERACOMBCCEP
                 - HERACOMBNCEP575
-                - HERACOMB_SIGMARED_C
                 - NMCPD
                 - NTVNUDMNFe
             - datasets:
