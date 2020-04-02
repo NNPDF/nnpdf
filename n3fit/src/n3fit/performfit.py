@@ -85,7 +85,7 @@ def performfit(
     # so they can eventually be set from the runcard
     from n3fit.ModelTrainer import ModelTrainer
     from n3fit.io.writer import WriterWrapper
-    from n3fit.backends import MetaModel
+    from n3fit.backends import MetaModel, operations
     import n3fit.io.reader as reader
 
     # Loading t0set from LHAPDF
@@ -244,6 +244,7 @@ def performfit(
         # After the fit is run we get a 'result' dictionary with the following items:
         stopping_object = result["stopping_object"]
         layer_pdf = result["layer_pdf"]
+        pdf_model = result["pdf_model"]
         layers = result["layers"]
         integrator_input = result["integrator_input"]
         true_chi2 = result["loss"]
@@ -266,17 +267,16 @@ def performfit(
         )
 
         # Creates a PDF model for export grid
-        def pdf_function(
-            export_xgrid, integrator_grid=integrator_input, my_layer_pdf=layer_pdf
-        ):
+        def pdf_function(export_xgrid):
             """
             Receives an array, returns the result of the PDF for said array
             """
-            modelito = MetaModel(
-                [integrator_input], [], extra_tensors=[(export_xgrid, layer_pdf)]
-            )
-            result = modelito.predict()
-            return np.squeeze(result, 0)
+            # First add an extra dimensions because the model works on batches
+            xgrid = np.expand_dims(export_xgrid, 0)
+            result = pdf_model.predict([xgrid])
+            # Now remove the spurious dimension
+            ret = np.squeeze(result, 0)
+            return ret
 
         # Generate the writer wrapper
         writer_wrapper = WriterWrapper(

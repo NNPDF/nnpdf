@@ -31,6 +31,9 @@ def batchit(x):
     """ Add a batch dimension to tensor x """
     return tf.expand_dims(x, 0)
 
+def base_input(shape, batch_size = 1):
+    # TODO: docstring
+    return Input(shape, batch_size = batch_size)
 
 def numpy_to_input(numpy_array, no_reshape=False):
     """

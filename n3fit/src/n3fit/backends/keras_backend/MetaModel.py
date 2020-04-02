@@ -6,7 +6,7 @@
 """
 
 import tensorflow as tf
-from tensorflow.keras.models import Model, Sequential
+from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
 from tensorflow.keras import backend as K
 
@@ -20,21 +20,37 @@ scale_lr = {
         }
 
 
+def _parse_input(model_input, extra_input = None):
+    # TODO add docs, improve logic, add checks
+    # do as a decorator maybe, dunno
+    # TODO check that extra_input is a list but it can be a list of list, oh no...
+    # but we can at least ensure that it has the same rank as the model input
+    # but what if there is no model_input, then the user should learn to not be stupid madonna
+    if extra_input is None:
+        return model_input
+    true_input = []
+    i = 0
+    for iarray in model_input:
+        if iarray is None:
+            true_input.append(extra_input[i])
+            i += i
+        else:
+            true_input.append(iarray)
+    return true_input
+
+
+
 class MetaModel(Model):
     """
-    The `MetaModel` behaves as the tensorflow.keras.model.Model class, with some additions:
+    The `MetaModel` behaves as the tensorflow.keras.model.Model class,
+    with the addition of `tensor_content`:
 
-    1. tensor_content
+    - tensor_content:
     Sometimes when fitting a network the input is fixed, in this case the input can be given
     together with the input_tensors by setting a `tensor_content` equal to the input value.
     This is done automatically when using the `numpy_to_input` function from
     `n3fit.backends.keras_backend.operations`
 
-    2. extra_tensors
-    Generally, when instantiating a model: `Model(x,y)`, y is an output layer which is connected
-    to x. Adding `extra_tensors = ([x1, x2], y1)` will change the input of `Model(x,y)` to
-    `Model([x, x1, x2], [y, y1])` where y is connected with x and y1 is connected with (x1,x2)
-    automatically.
     
 
     Parameters
@@ -43,8 +59,8 @@ class MetaModel(Model):
             Input layer
         output_tensors: tensorflow.keras.layers.Layer
             Output layer
-        extra_tensors: tuple
-            Tuple of ([inputs], output)
+        **kwargs:
+            keyword arguments to pass directly to Model
     """
 
     # Define in this dictionary new optimizers as well as the arguments they accept
@@ -59,7 +75,9 @@ class MetaModel(Model):
         "Amsgrad": (Kopt.Adam, {"lr": 0.01, "amsgrad": True}),
     }
 
-    def __init__(self, input_tensors, output_tensors, extra_tensors=None, **kwargs):
+    def __init__(self, input_tensors, output_tensors, **kwargs):
+        self.has_dataset = False
+
         input_list = input_tensors
         output_list = output_tensors
 
@@ -68,37 +86,22 @@ class MetaModel(Model):
         if not isinstance(output_list, list):
             output_list = [output_list]
 
-        # Add extra tensors
-        if extra_tensors is not None:
-            # Check whether we are using the original shape
-            # or forcing batch one
-            if input_list and hasattr(input_list[0], "original_shape"):
-                keep_shape = input_list[0].original_shape
-            else:
-                keep_shape = True
-            for ii, oo in extra_tensors:
-                inputs = []
-                if isinstance(ii, list):
-                    for i in ii:
-                        inputs.append(numpy_to_input(i, no_reshape=keep_shape))
-                else:
-                    inputs = [numpy_to_input(ii)]
-                output_layer = oo(*inputs)
-                # If we are not keeping the original shape (i.e., we added a batch dimension)
-                # add it also to the output layer
-                if not keep_shape:
-                    output_layer = batchit(output_layer)
-                input_list += inputs
-                output_list.append(output_layer)
-
         super(MetaModel, self).__init__(input_list, output_list, **kwargs)
-        if hasattr(input_list[0], "tensor_content"):
-            self.x_in = [i.tensor_content for i in input_list]
-        else:
-            self.x_in = None
+        self.x_in = []
+        for input_tensor in input_list:
+            # If the input contains a tensor_content, store it to use at predict/fit/eval times
+            # otherwise, put a placeholder None as it will come from the outside
+            try:
+                self.x_in.append(input_tensor.tensor_content)
+            except AttributeError:
+                self.x_in.append(None)
+
         self.all_inputs = input_list
         self.all_outputs = output_list
         self.target_tensors = None
+
+    def _parse_input(self, extra_input): # TODO
+        return _parse_input(self.x_in, extra_input=extra_input)
 
     def reinitialize(self):
         """ Run through all layers and reinitialize the ones that can be reinitialied """
@@ -133,8 +136,7 @@ class MetaModel(Model):
         return loss_dict
 
     def predict(self, x=None, *args, **kwargs):
-        if x is None:
-            x = self.x_in
+        x = self._parse_input(x)
         result = super().predict(x=x, *args, **kwargs)
         return result
 

@@ -474,7 +474,15 @@ class ModelTrainer:
             )
             self.input_list.append(integrator_input)
 
+        # Generate the PDF model that takes an xgrid as input and outputs a pdf value per x
+        from n3fit.backends import operations
+        placeholder_input = operations.base_input(shape = (None, 1))
+        oo = layer_pdf(placeholder_input)
+        pdf_model = MetaModel([integrator_input, placeholder_input], operations.batchit(oo))
+
+
         self.layer_pdf = layer_pdf
+        self.pdf_model = pdf_model
 
         return layers, integrator_input
 
@@ -760,5 +768,6 @@ class ModelTrainer:
         dict_out["stopping_object"] = stopping_object
         dict_out["experimental"] = self.experimental
         dict_out["training"] = self.training
+        dict_out["pdf_model"] = self.pdf_model
 
         return dict_out
