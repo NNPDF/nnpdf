@@ -6,7 +6,10 @@
 """
 
 from tensorflow.keras.layers import Dense, Lambda, LSTM, Dropout, Concatenate, concatenate
+from tensorflow.keras.layers import Dense as KerasDense
 from tensorflow import expand_dims
+
+from n3fit.backends import MetaLayer
 
 
 def LSTM_modified(**kwargs):
@@ -25,6 +28,8 @@ def LSTM_modified(**kwargs):
 
     return ReshapedLSTM
 
+class Dense(KerasDense, MetaLayer):
+    pass
 
 def dense_per_flavour(basis_size=8, kernel_initializer="glorot_normal", **dense_kwargs):
     """

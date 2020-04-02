@@ -14,6 +14,11 @@ from n3fit.backends.keras_backend.operations import numpy_to_input, batchit
 
 import numpy as np
 
+# TODO: bad, real bad
+scale_lr = {
+        'Adadelta' : 100.0
+        }
+
 
 class MetaModel(Model):
     """
@@ -48,7 +53,7 @@ class MetaModel(Model):
         "RMSprop": (Kopt.RMSprop, {"lr": 0.01}),
         "Adam": (Kopt.Adam, {"lr": 0.01}),
         "Adagrad": (Kopt.Adagrad, {}),
-        "Adadelta": (Kopt.Adadelta, {"lr":1.0}),
+        "Adadelta": (Kopt.Adadelta, {"lr": 1.0}),
         "Adamax": (Kopt.Adamax, {}),
         "Nadam": (Kopt.Nadam, {}),
         "Amsgrad": (Kopt.Adam, {"lr": 0.01, "amsgrad": True}),
@@ -69,7 +74,7 @@ class MetaModel(Model):
         if extra_tensors is not None:
             # Check whether we are using the original shape
             # or forcing batch one
-            if input_list and hasattr(input_list[0], 'original_shape'):
+            if input_list and hasattr(input_list[0], "original_shape"):
                 keep_shape = input_list[0].original_shape
             else:
                 keep_shape = True
@@ -77,7 +82,7 @@ class MetaModel(Model):
                 inputs = []
                 if isinstance(ii, list):
                     for i in ii:
-                        inputs.append(numpy_to_input(i, no_reshape = keep_shape))
+                        inputs.append(numpy_to_input(i, no_reshape=keep_shape))
                 else:
                     inputs = [numpy_to_input(ii)]
                 output_layer = oo(*inputs)
@@ -89,13 +94,18 @@ class MetaModel(Model):
                 output_list.append(output_layer)
 
         super(MetaModel, self).__init__(input_list, output_list, **kwargs)
-        if hasattr(input_list[0], 'tensor_content'):
+        if hasattr(input_list[0], "tensor_content"):
             self.x_in = [i.tensor_content for i in input_list]
         else:
             self.x_in = None
         self.all_inputs = input_list
         self.all_outputs = output_list
 
+    def reinitialize(self):
+        """ Run through all layers and reinitialize the ones that can be reinitialied """
+        for layer in self.layers:
+            if hasattr(layer, "reinitialize"):
+                layer.reinitialize()
 
     def perform_fit(self, x=None, y=None, steps_per_epoch=1, **kwargs):
         """
@@ -118,19 +128,18 @@ class MetaModel(Model):
         if x is None:
             x = self.x_in
         if self.has_dataset:
-            history = super().fit(
-                x=x, y=None, batch_size=1, **kwargs,
-            )
+            history = super().fit(x=x, y=None, batch_size=1, **kwargs,)
         else:
             history = super().fit(x=x, y=y, steps_per_epoch=steps_per_epoch, **kwargs)
         loss_dict = history.history
         return loss_dict
-    
-    def predict(self, x = None, *args, **kwargs):
+
+    def predict(self, x=None, *args, **kwargs):
         if x is None:
             x = self.x_in
-        result = super().predict(x = x, *args, **kwargs)
+        result = super().predict(x=x, *args, **kwargs)
         return result
+
     def compute_losses(self, *args, **kwargs):
         """
         Performs keras.evaluate and returns a dictionary containing the loss function for
@@ -225,7 +234,7 @@ class MetaModel(Model):
         opt_args = opt_tuple[1]
 
         if "lr" in opt_args.keys():
-            opt_args["lr"] = learning_rate
+            opt_args["lr"] = learning_rate*scale_lr.get(opt_function, 1.0)
 
         opt_args["clipnorm"] = 1.0
         opt = opt_function(**opt_args)
@@ -233,9 +242,31 @@ class MetaModel(Model):
         if target_output is not None:
             self.has_dataset = True
 
+        if not isinstance(target_output, list):
+            target_output = [target_output]
+
         super(MetaModel, self).compile(
             optimizer=opt, loss=loss, target_tensors=target_output, **kwargs
         )
+
+    def set_masks_to(self, names, val=0.0):
+        """ Set all mask value to the selected value
+        Masks in MetaModel should be named {name}_mask
+
+        Mask are layers with one single weight (shape=(1,)) that multiplies the input
+
+        Parameters
+        ----------
+            names: list
+                list of masks to look for
+            val: float
+                selected value of the mask
+        """
+        mask_val = [val]
+        for name in names:
+            mask_name = f"{name}_mask"
+            mask_w = self.get_layer(mask_name).weights[0]
+            mask_w.assign(mask_val)
 
     def multiply_weights(self, layer_names, multiplier):
         """ Multiply all weights for the given layers by some scalar

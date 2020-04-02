@@ -6,14 +6,24 @@
 import sys
 import logging
 import os.path
-import time
 import numpy as np
+from reportengine.checks import make_argcheck, CheckError
 
 log = logging.getLogger(__name__)
 
 
-# Action to be called by validphys
+@make_argcheck
+def check_consistent_hyperscan_options(hyperopt, hyperscan, fitting):
+    if hyperopt is not None and hyperscan is None:
+        raise CheckError("A hyperscan dictionary needs to be defined when performing hyperopt")
+    if hyperopt is not None and "kfold" not in hyperscan:
+        raise CheckError("hyperscan::kfold key needs to be defined when performing hyperopt")
+    if hyperopt is not None and fitting["genrep"]:
+        raise CheckError("During hyperoptimization we cannot generate replicas (genrep=false)")
+
+# Action to be called by valid phys
 # All information defining the NN should come here in the "parameters" dict
+@check_consistent_hyperscan_options
 def performfit(
     fitting,
     experiments,
@@ -26,7 +36,6 @@ def performfit(
     hyperscan=None,
     hyperopt=None,
     debug=False,
-    create_test_card=None,
 ):
     """
         This action will (upon having read a validcard) process a full PDF fit for a given replica.
@@ -59,16 +68,7 @@ def performfit(
             - `hyperscan`: dictionary containing the details of the hyperscan
             - `hyperopt`: if given, number of hyperopt iterations to run
             - `debug`: activate some debug options
-            - `create_test_card`: read the runcard and output a new runcard with a test-set defined
     """
-
-    # Call the script to generate a runcard with a test-set and immediately exit
-    if create_test_card:
-        from n3fit.hyper_optimization.create_testset import create_testset
-
-        create_testset(experiments, runcard_file=create_test_card)
-        return 0
-    ###############
 
     if debug:
         # If debug is active, fix the initial state this should make the run reproducible
@@ -87,14 +87,6 @@ def performfit(
     from n3fit.io.writer import WriterWrapper
     from n3fit.backends import MetaModel
     import n3fit.io.reader as reader
-
-    if hyperopt:
-        import hyperopt as hyper
-        import n3fit.hyper_optimization.filetrials as filetrials
-
-        status_ok = hyper.STATUS_OK
-    else:
-        status_ok = "ok"
 
     # Loading t0set from LHAPDF
     if t0set is not None:
@@ -141,11 +133,18 @@ def performfit(
     ##############################################################################
     all_exp_infos = [[] for _ in replica]
 
+    if hyperscan and hyperopt:
+        kfold_parameters = hyperscan["kfold"]
+        kpartitions = kfold_parameters["partitions"]
+    else:
+        kfold_parameters = None
+        kpartitions = None
+
     # First loop over the experiments
     for exp in experiments:
         log.info("Loading experiment: %s", exp)
         all_exp_dicts = reader.common_data_reader(
-            exp, t0pdfset, replica_seeds=mcseeds, trval_seeds=trvalseeds
+            exp, t0pdfset, replica_seeds=mcseeds, trval_seeds=trvalseeds, kpartitions=kpartitions
         )
         for i, exp_dict in enumerate(all_exp_dicts):
             all_exp_infos[i].append(exp_dict)
@@ -171,9 +170,9 @@ def performfit(
             pos_info,
             fitting["basis"],
             nnseed,
-            pass_status=status_ok,
             debug=debug,
             save_weights_each=fitting.get("save_weights_each"),
+            kfold_parameters=kfold_parameters,
         )
 
         # Check whether we want to load weights from a file (maybe from a previous run)
@@ -205,53 +204,23 @@ def performfit(
         # this block                                                           #
         ########################################################################
         if hyperopt:
-            from n3fit.hyper_optimization.HyperScanner import HyperScanner
+            from n3fit.hyper_optimization.hyper_scan import hyper_scan_wrapper
 
-            the_scanner = HyperScanner(parameters)
-
-            stopping_options = hyperscan.get("stopping")
-            positivity_options = hyperscan.get("positivity")
-            optimizer_options = hyperscan.get("optimizer")
-            architecture_options = hyperscan.get("architecture")
-
-            # Enable scanner for certain parameters
-            the_scanner.stopping(**stopping_options)
-            the_scanner.positivity(**positivity_options)
-            the_scanner.optimizer(**optimizer_options)
-            # Enable scanner for specific architectures
-            the_scanner.NN_architecture(**architecture_options)
-
-            # Tell the trainer we are doing hyperopt
-            the_model_trainer.set_hyperopt(True, keys=the_scanner.hyper_keys)
-
-            # Generate Trials object
-            trials = filetrials.FileTrials(
-                replica_path_set, log=log, parameters=parameters
+            true_best = hyper_scan_wrapper(
+                replica_path_set,
+                the_model_trainer,
+                parameters,
+                hyperscan,
+                max_evals=hyperopt,
             )
-
-            # Perform the scan
-            try:
-                best = hyper.fmin(
-                    fn=pdf_gen_and_train_function,
-                    space=the_scanner.dict(),
-                    algo=hyper.tpe.suggest,
-                    max_evals=hyperopt,
-                    trials=trials,
-                )
-            except ValueError as e:
-                print("Error from hyperopt because no best model was found")
-                print("@fit.py, setting the best trial to empty dict")
-                print(f"Exception: {e}")
-                sys.exit(0)
-
-            # Now update the parameters with the ones found by the scan
-            true_best = hyper.space_eval(parameters, best)
-            the_scanner.update_dict(true_best)
-            parameters = the_scanner.dict()
             print("##################")
             print("Best model found: ")
             for k, i in true_best.items():
                 print(f" {k} : {i} ")
+
+            # In general after we do the hyperoptimization we do not care about the fit
+            # so just let this die here
+            break
         ####################################################################### end of hyperopt
 
         # Ensure hyperopt is off
@@ -290,7 +259,9 @@ def performfit(
         )
 
         # Creates a PDF model for export grid
-        def pdf_function(export_xgrid):
+        def pdf_function(
+            export_xgrid, integrator_grid=integrator_input, my_layer_pdf=layer_pdf
+        ):
             """
             Receives an array, returns the result of the PDF for said array
             """
