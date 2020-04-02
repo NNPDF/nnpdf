@@ -1,0 +1,21 @@
+scale_variations_for:
+  - theoryid: 163
+    variations:
+        - scales: {'muF': '0.5', 'muR': '0.5'}
+          theoryid: 173
+        - scales: {'muF': '0.5', 'muR': '1'}
+          theoryid: 176
+        - scales: {'muF': '0.5', 'muR': '2'}
+          theoryid: 178
+        - scales: {'muF': '1', 'muR': '0.5'}
+          theoryid: 174
+        - scales: {'muF': '1', 'muR': '1'}
+          theoryid: 163
+        - scales: {'muF': '1', 'muR': '2'}
+          theoryid: 179
+        - scales: {'muF': '2', 'muR': '0.5'}
+          theoryid: 175
+        - scales: {'muF': '2', 'muR': '1'}
+          theoryid: 177
+        - scales: {'muF': '2', 'muR': '2'}
+          theoryid: 180
