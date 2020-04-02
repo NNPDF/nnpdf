@@ -387,6 +387,36 @@ def plot_dataset_xi(dataset_xi, dataset):
     return fig
 
 @figure
+def plot_dataset_xi_histogram(dataset_xi, dataset):
+    r"""For a given dataset, bin the values of \xi_{1 \sigma} for each direction
+    of the covariance matrix, plot as a histogram with a vertical line for the
+    expected value: 0.68. In the legend print the mean and standard deviation
+    of the distribution.
+
+    """
+    fig, ax = plt.subplots()
+    ax.hist(
+        dataset_xi,
+        label=(
+            r"$\xi_{1\sigma}$ = " +
+            f"{dataset_xi.mean():.2f}, " +
+            r"std($\xi_{1\sigma}$) = " +
+            f"{dataset_xi.std():.2f}"
+        )
+    )
+    ax.axvline(0.68, linestyle=":", color="k", label=r"$\xi_{1\sigma}$ "+"expected value")
+    ax.set_xlim((0, 1))
+    ax.set_xlabel(r"$\xi^{i}_{1\sigma}$")
+    ax.set_title("Histogram of " + r"$\xi^{i}_{1\sigma}$ for " + str(dataset))
+    ax.legend()
+    return fig
+
+@figure
 def plot_experiment_xi(experiment_xi, experiment):
     """Like plot_dataset_xi except for an experiment"""
     return plot_dataset_xi(experiment_xi, experiment)
+
+@figure
+def plot_experiment_xi_histogram(experiment_xi, experiment):
+    """Like plot_dataset_xi_histogram but for an experiment"""
+    return plot_dataset_xi_histogram(experiment_xi, experiment)
