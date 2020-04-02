@@ -919,6 +919,7 @@ class CoreConfig(configparser.Config):
     def parse_filter_rules(self, filter_rules: (list, type(None))):
         """A list of filter rules. See https://docs.nnpdf.science/vp/filters.html
         for details on the syntax"""
+        log.warning("Overwriting filter rules")
         return filter_rules
 
     def produce_rules(self, theoryid, use_cuts, defaults, filter_rules=None):
@@ -953,6 +954,7 @@ class CoreConfig(configparser.Config):
         filtering data (when using internal cuts).
         Currently these limits are ``q2min`` and ``w2min``.
         """
+        log.warning("Overwriting filter defaults")
         return filter_defaults
 
     def produce_defaults(self, q2min=None, w2min=None, filter_defaults={}):
