@@ -11,6 +11,8 @@ import inspect
 import numbers
 import copy
 import os
+import yaml
+from importlib.resources import read_text
 
 from collections import ChainMap
 from collections.abc import Mapping, Sequence
@@ -32,6 +34,8 @@ from validphys.paramfits.config import ParamfitsConfig
 
 from validphys.theorycovariance.theorycovarianceutils import process_lookup
 from validphys.plotoptions import get_info
+
+import validphys.scalevariations
 
 log = logging.getLogger(__name__)
 
@@ -960,35 +964,48 @@ class CoreConfig(configparser.Config):
 
         return filter_defaults
 
-    # To do: this should be updated once we have lock files
     def produce_scale_variation_theories(self, theoryid, point_prescription):
         """Produces a list of theoryids given a theoryid at central scales and a point
         prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point',
         '7 point (original)' and '9 point'. Note that these are defined in arXiv:1906.10698. This
         hard codes the theories needed for each prescription to avoid user error."""
         pp = point_prescription
-        if theoryid.id != '163':
-            raise ConfigError("Scale variations are not currently defined for this central "
-                + "theoryid. It is currently only possible to use theoryid 163 as the central "
-                + "theory. Please use this instead if you wish to include theory uncertainties here.")
-        theoryids = []
-        if pp == '3 point':
-            thids = [163, 180, 173]
-        elif pp == '5 point':
-            thids = [163, 177, 176, 179, 174]
-        elif pp == '5bar point':
-            thids = [163, 180, 173, 175, 178]
-        elif pp == '7 point' or pp == '7 point (original)':
-            thids = [163, 177, 176, 179, 174, 180, 173]
-        elif pp == '9 point':
-            thids = [163, 177, 176, 179, 174, 180, 173, 175, 178]
-        else:
-            raise ConfigError("Scale variations are not currently defined for this point "
-                + "prescription. This configuration only works when 'point prescription' is equal "
-                + "to one of '3 point', '5 point', '5bar point', '7 point' or '9 point'. Please "
-                + "use of of these instead if you wish to include theory uncertainties here.")
-        for thid in thids:
-            theoryids.append(self.loader.check_theoryID(thid))
+        th = theoryid.id
+        if th != '163':
+            raise ConfigError(
+                "Scale variations are not currently defined for this central theoryid. It is "
+                + "currently only possible to use theoryid 163 as the central theory. Please use "
+                + "this instead if you wish to include theory uncertainties here."
+            )
+
+        # Find scales that correspond to this point prescription
+        lpp = yaml.safe_load(
+            read_text(validphys.scalevariations, "pointprescriptions.yaml")
+        )
+        pp_scales_list = lpp['point_prescriptions']
+        try:
+            scales = [i['scales'] for i in pp_scales_list if i['name'] == pp][0]
+        except:
+            raise ConfigError(
+                "Scale variations are not currently defined for this point prescription. This "
+                + "configuration only works when 'point_prescription' is equal to one of "
+                + "'3 point', '5 point', '5bar point', '7 point', '7 point (original)' or "
+                + "'9 point'. Please use one of these instead if you wish to include theory "
+                + "uncertainties here."
+            )
+
+        # Find theoryids for given point prescription for given central theoryid
+        lsv = yaml.safe_load(
+            read_text(validphys.scalevariations, "scalevariationtheoryids.yaml")
+        )
+        scalevarsfor_list = lsv['scale_variations_for']
+        variations = [
+                i['variations'] for i in scalevarsfor_list if i['theoryid'] == int(th)
+        ][0]
+        thids = [j['theoryid'] for i in scales for j in variations if i == j['scales']]
+
+        # Check each theory is loaded
+        theoryids = [self.loader.check_theoryID(thid) for thid in thids]
         # NSList needs to be used for theoryids to be recognised as a namespace
         return {'theoryids': NSList(theoryids, nskey='theoryid')}
 
