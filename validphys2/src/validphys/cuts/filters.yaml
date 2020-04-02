@@ -150,27 +150,27 @@
     thus the NLO calculation is unreliable.
   PTO: NNLO-
   local_variables:
-    pT: sqrt(M2)
-    max_pT: 200.0
-  rule: pT <= max_pT
+    M: sqrt(M2)
+    max_M: 200.0
+  rule: M <= max_M
 
 - dataset: CMSDY2D11
   reason: Remove data points for which electroweak corrections are large.
   PTO: NNLO-
   local_variables:
-    pT: sqrt(M2)
-    min_pT: 30.0
+    M: sqrt(M2)
+    min_M: 30.0
     max_rapidity: 2.2
-  rule: pT >= min_pT and etay <= max_rapidity
+  rule: M >= min_M and etay <= max_rapidity
 
 - dataset: CMSDY2D11
   reason: Remove data points for which electroweak corrections are large.
   PTO: NNLO
   local_variables:
-    pT: sqrt(M2)
+    M: sqrt(M2)
     max_rapidity: 2.2
-    max_pT: 200.0
-  rule: pT <= max_pT and etay <= max_rapidity
+    max_M: 200.0
+  rule: M <= max_M and etay <= max_rapidity
 
 - dataset: CMSDY2D12
   reason: |
@@ -178,34 +178,33 @@
     thus the NLO calculation is unreliable.
   PTO: NNLO-
   local_variables:
-    pT: sqrt(M2)
-    max_pT: 200.0
-  rule: pT <= max_pT
+    M: sqrt(M2)
+    max_M: 200.0
+  rule: M <= max_M
 
 - dataset: CMSDY2D12
   reason: Remove data points for which electroweak corrections are large.
   PTO: NNLO-
   local_variables:
-    pT: sqrt(M2)
-    min_pT: 30.0
+    M: sqrt(M2)
+    min_M: 30.0
     max_rapidity: 2.2
-  rule: pT >= min_pT and etay <= max_rapidity
+  rule: M >= min_M and etay <= max_rapidity
 
 - dataset: CMSDY2D12
   reason: Remove data points for which electroweak corrections are large.
   PTO: NNLO
   local_variables:
-    pT: sqrt(M2)
+    M: sqrt(M2)
     max_rapidity: 2.2
-    max_pT: 200.0
-  rule: pT <= max_pT and etay <= max_rapidity
+    max_M: 200.0
+  rule: M <= max_M and etay <= max_rapidity
 
 - dataset: ATLASZHIGHMASS49FB
   reason: Avoid the region where resummation effects become important.
   local_variables:
-    pT: sqrt(M_ll2)
-    max_pT: 200.0
-  rule: pT <= max_pT
+    max_M: 200.0
+  rule: M_ll <= max_M
 
 # - dataset: LHCBLOWMASS37PB
 #   rule: "pT <= maxCMSDY2Dminv"
