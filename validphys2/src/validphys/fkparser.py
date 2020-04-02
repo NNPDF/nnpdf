@@ -1,11 +1,15 @@
 """
-fkparser.py
+This module implements parsers for FKtable  and CFactor files into useful
+datastructures, contained in the :py:mod:`validphys.coredata` module, which are
+not backed by C++ managed memory, and so they can be easily pickled and
+interfaces with common Python libraries.  The integration of these objects into
+the codebase is currently work in progrress, and at the moment this module
+serves as a proof of concept.
 
-Parse FKtables and CFactors into useful datastructures.  This module includes
-some functionality to process FKTables and cfactors. Most users will be
-interested in using the high level interface ``load_fktable``. Given an
-``FKTableSpec``, it returns an instance of ``FHTableData``, an object with the
-required information to compute a convolution, with the CFactors applied.
+Most users will be interested in using the high level interface
+``load_fktable``.  Given an :py:class:`coredata.FKTableSpec`, it returns an
+instance of ``FKTableData``, an object with the required information to compute
+a convolution, with the CFactors applied.
 
 .. code-block:: python
 
@@ -23,6 +27,18 @@ import dataclasses
 import numpy as np
 import pandas as pd
 
+from validphys.coredata import FKTableData, CFactorData
+
+
+
+
+class BadCFactorError(Exception):
+    """Exception raised when an CFactor cannot be parsed correctly"""
+
+
+class BadFKTableError(Exception):
+    """Exception raised when an FKTable cannot be parsed correctly"""
+
 
 @dataclasses.dataclass(frozen=True)
 class GridInfo:
@@ -31,77 +47,6 @@ class GridInfo:
     hadronic: bool
     ndata: int
     nx: int
-
-@dataclasses.dataclass(eq=False)
-class FKTableData:
-    """
-    Data contained in an FKTable
-
-    Parameters
-    ----------
-
-    hadronic : bool
-        Whether a hadronic (two PDFs) or a DIS (one PDF) convolution is needed.
-
-    Q0 : float
-        The scale at which the PDFs should be evaluated (in GeV).
-
-    ndata : int
-        The number of data points in the grid.
-
-    xgrid : array, shape (nx)
-        The points in x at which the PDFs should be evaluated.
-
-    sigma : DataFrame
-        For hadronic data, the columns are the indexes in the ``NfxNf`` list of
-        possible flavour combinations of two PDFs.  The MultiIndex contains
-        three keys, the data index, an index into ``xgrid`` for the first PDF
-        and an idex into ``xgrid`` for the second PDF, indicating if the points in
-        ``x`` where the PDF should be evaluated.
-
-        For DIS data, the columns are indexes in the ``Nf`` list of flavours.
-        The MultiIndex contains two keys, the data index and an index into
-        ``xgrid`` indicating the points in ``x`` where the PDF should be
-        evaluated.
-
-    metadata : dict
-        Other information contained in the FKTable.
-    """
-    hadronic: bool
-    Q0: float
-    ndata: int
-    xgrid: np.array
-    sigma: pd.DataFrame
-    metadata: dict = dataclasses.field(default_factory=dict, repr=False)
-
-@dataclasses.dataclass(eq=False)
-class CFactorData:
-    """
-    Data contained in a CFactor
-
-    Parameters
-    ----------
-
-    description : str
-        Information on how the data was obtained.
-
-    central_value : array, shape(ndata)
-        The value of the cfactor for each data point.
-
-    uncertainty : array, shape(ndata)
-        The absolute uncertainty on the cfactor if available. Otherwise a list
-        of zeros.
-    """
-    description: str
-    central_value: np.array
-    uncertainty: np.array
-
-class BadCFactorError(Exception):
-    """Exception raised when an CFactor cannot be parsed correctly"""
-
-
-class BadFKTableError(Exception):
-    """Exception raised when an FKTable cannot be parsed correctly"""
 
 def load_fktable(spec):
     """Load the data corresponding to a FKSpec object. The cfactors
