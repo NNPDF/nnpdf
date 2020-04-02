@@ -27,8 +27,8 @@
 *
 */
 
-#include "ATLAS_WPCHARM_TOT_UNNORM_7TEV.h"
-void ATLAS_WPCHARM_TOT_UNNORM_7TEVFilter::ReadData()
+#include "ATLAS_WCHARM_WP_DIFF_7TEV.h"
+void ATLAS_WCHARM_WP_DIFF_7TEVFilter::ReadData()
 {
   // Opening files
   fstream f1;
@@ -79,8 +79,8 @@ void ATLAS_WPCHARM_TOT_UNNORM_7TEVFilter::ReadData()
   f1.close();
 }
 
-#include "ATLAS_WMCHARM_TOT_UNNORM_7TEV.h"
-void ATLAS_WMCHARM_TOT_UNNORM_7TEVFilter::ReadData()
+#include "ATLAS_WCHARM_WM_DIFF_7TEV.h"
+void ATLAS_WCHARM_WM_DIFF_7TEVFilter::ReadData()
 {
   // Opening files
   fstream f1;
