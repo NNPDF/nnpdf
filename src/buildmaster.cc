@@ -78,6 +78,8 @@
 #include "CMS_SINGLETOP_TCH_R_13TEV.h"
 #include "CMS_ZCHARM_DIFF_UNNORM_8TEV.h"
 #include "CMS_WCHARM_DIFF_UNNORM_13TEV.h"
+#include "ATLAS_WCHARM_WP_DIFF_7TEV.h"
+#include "ATLAS_WCHARM_WM_DIFF_7TEV.h"
 #include "HERACOMB_SIGMARED_C.h"
 #include "HERACOMB_SIGMARED_B.h"
 #include "ATLAS_hW_hbb_13TeV.h"
@@ -144,6 +146,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLAS_WZ_TOT_13TEVFilter());
   //
   target.push_back(new ATLASZPT7TEVFilter());
+  target.push_back(new ATLAS_WCHARM_WP_DIFF_7TEVFilter());
+  target.push_back(new ATLAS_WCHARM_WM_DIFF_7TEVFilter());
   target.push_back(new ATLASZPT8TEVYDISTFilter());
   //  target.push_back(new ATLASZPT8TEVYDISTNORMFilter());
   target.push_back(new ATLASZPT8TEVMDISTFilter());
