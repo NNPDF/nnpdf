@@ -7,9 +7,10 @@ the codebase is currently work in progrress, and at the moment this module
 serves as a proof of concept.
 
 Most users will be interested in using the high level interface
-``load_fktable``.  Given an :py:class:`coredata.FKTableSpec`, it returns an
-instance of ``FKTableData``, an object with the required information to compute
-a convolution, with the CFactors applied.
+:py:func:`load_fktable`.  Given a :py:class:`validphys.core.FKTableSpec`
+object, it returns an instance of :py:class:`validphys.coredata.FKTableData`,
+an object with the required information to compute a convolution, with the
+CFactors applied.
 
 .. code-block:: python
 
@@ -82,7 +83,19 @@ def _get_compressed_buffer(path):
 
 def open_fkpath(path):
     """Return a file-like object from the fktable path, regardless of whether
-    it is compressed"""
+    it is compressed
+
+    Parameters
+    ..........
+    path: Path or str
+        Path like file containing a valid FKTable. It can be either inside a
+        tarball or in plain text.
+
+    Returns
+    -------
+    f: file
+        A file like object for further processing.
+    """
     if tarfile.is_tarfile(path):
         return _get_compressed_buffer(path)
     return open(path, 'rb')
@@ -173,15 +186,15 @@ def _parse_dis_fast_kernel(f):
 
 
 def _parse_gridinfo(line_and_stream):
-    d, l, h = _parse_fk_options(
+    dict_result, line_number, next_line = _parse_fk_options(
         line_and_stream,
         value_parsers={
             "HADRONIC": _bytes_to_bool,
             "NDATA": int,
             "NX": int
         })
-    gi = GridInfo(**{k.lower(): v for k, v in d.items()})
-    return gi, l, h
+    gi = GridInfo(**{k.lower(): v for k, v in dict_result.items()})
+    return gi, line_number, next_line
 
 
 
@@ -198,7 +211,7 @@ def _parse_header(lineno, header):
     return header[0:1], header_name.decode()
 
 
-def _build_sigma(lineno, f, res):
+def _build_sigma(f, res):
     gi = res["GridInfo"]
     fm = res["FlavourMap"]
     table = (
@@ -265,7 +278,24 @@ def _check_required_sections(res, lineno):
 
 def parse_fktable(f):
     """Parse an open byte stream into an FKTableData. Raise a BaadFKTableError
-    if problems are encountered."""
+    if problems are encountered.
+
+    Parameters
+    ----------
+    f : file
+        Open file-like object. See :func:`open_fkpath`to obtain it.
+
+    Returns
+    -------
+    fktable : FKTableData
+        An object containing the FKTable data and information.
+
+    Notes
+    -----
+    This function operates at the level of a single file, and therefore it does
+    not apply CFactors (see :py:func:`load_fktable` for that) or handle operations
+    within COMPOUND ensembles.
+    """
     line_and_stream = enumerate(f, start=1)
     res = {}
     lineno, header = next(line_and_stream)
@@ -274,7 +304,7 @@ def parse_fktable(f):
         if header_name == "FastKernel":
             _check_required_sections(res, lineno)
             Q0 = res['TheoryInfo']['Q0']
-            sigma = _build_sigma(lineno, f, res)
+            sigma = _build_sigma(f, res)
             hadronic = res['GridInfo'].hadronic
             ndata = res['GridInfo'].ndata
             xgrid = res.pop('xGrid')
@@ -305,8 +335,19 @@ def parse_fktable(f):
 
 
 def parse_cfactor(f):
-    """Parse an open byte stream into a ``CFactorData``. Raise a
-    BadCFactorError if problems are encountered."""
+    """Parse an open byte stream into a :py:class`CFactorData`. Raise a
+    BadCFactorError if problems are encountered.
+
+    Parameters
+    ----------
+    f : file
+        Binary file-like object
+
+    Returns
+    -------
+    cfac : CFactorData
+        An object containing the data on the cfactor for each point.
+    """
     stars = f.readline()
     if not stars.startswith(b'*'):
         raise BadCFactorError("First line should start with '*'.")

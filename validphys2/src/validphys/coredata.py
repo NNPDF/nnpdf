@@ -15,7 +15,6 @@ class FKTableData:
 
     Parameters
     ----------
-
     hadronic : bool
         Whether a hadronic (two PDFs) or a DIS (one PDF) convolution is needed.
 
