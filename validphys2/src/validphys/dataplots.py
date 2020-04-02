@@ -29,6 +29,22 @@ from validphys.utils import sane_groupby_iter, split_ranges, scale_from_grid
 log = logging.getLogger(__name__)
 
 @figure
+def plot_chi2dist_experiments(total_experiments_chi2data, pdf):
+    fig, ax = plt.subplots()
+    label = pdf.name
+    alldata, central, npoints = total_experiments_chi2data
+    if not isinstance(alldata, MCStats):
+        ax.set_facecolor("#ffcccc")
+        log.warning("Chi² distribution plots have a "
+                "different meaning for non MC sets.")
+        label += " (%s!)" % pdf.ErrorType
+
+    ax.hist(alldata.data.squeeze(), label=label, zorder=100)
+    l = ax.legend()
+    l.set_zorder(1000)
+    return fig
+
+@figure
 def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
     """Plot the distribution of chi²s of the members of the pdfset."""
     setlabel = dataset.name
