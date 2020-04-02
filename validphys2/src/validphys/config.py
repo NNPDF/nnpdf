@@ -985,7 +985,7 @@ class CoreConfig(configparser.Config):
         pp_scales_list = lpp['point_prescriptions']
         try:
             scales = [i['scales'] for i in pp_scales_list if i['name'] == pp][0]
-        except:
+        except IndexError:
             raise ConfigError(
                 "Scale variations are not currently defined for this point prescription. This "
                 + "configuration only works when 'point_prescription' is equal to one of "
