@@ -129,7 +129,7 @@ def _filter_real_data(filter_path, data):
     """Filter real experimental data."""
     total_data_points = 0
     total_cut_data_points = 0
-    for dataset in data:
+    for dataset in data.datasets:
         path = filter_path / dataset.name
         nfull, ncut = _write_ds_cut_data(path, dataset)
         total_data_points += nfull
