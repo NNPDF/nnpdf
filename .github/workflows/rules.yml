@@ -61,7 +61,6 @@ jobs:
         KEY=$( mktemp )
         echo "$NNPDF_SSH_KEY" | base64 --decode > "$KEY"
         conda activate root
-        cp $CONDA_PREFIX/conda-bld/${{matrix.CONDA_OS}}/*.tar.bz2 .
         scp -i "$KEY" -o StrictHostKeyChecking=no\
           $CONDA_PREFIX/conda-bld/${{matrix.CONDA_OS}}/*.tar.bz2 \
           dummy@package.nnpdf.science:~/packages/conda-private/linux-64
