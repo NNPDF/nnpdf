@@ -3,7 +3,7 @@ This module implements parsers for FKtable  and CFactor files into useful
 datastructures, contained in the :py:mod:`validphys.coredata` module, which are
 not backed by C++ managed memory, and so they can be easily pickled and
 interfaces with common Python libraries.  The integration of these objects into
-the codebase is currently work in progrress, and at the moment this module
+the codebase is currently work in progress, and at the moment this module
 serves as a proof of concept.
 
 Most users will be interested in using the high level interface
@@ -277,7 +277,7 @@ def _check_required_sections(res, lineno):
             )
 
 def parse_fktable(f):
-    """Parse an open byte stream into an FKTableData. Raise a BaadFKTableError
+    """Parse an open byte stream into an FKTableData. Raise a BadFKTableError
     if problems are encountered.
 
     Parameters
