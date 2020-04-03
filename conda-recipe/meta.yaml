@@ -44,7 +44,6 @@ requirements:
         - sphinx # documentation
         - recommonmark
         - sphinx_rtd_theme
-        - dataclasses # [py==36]
 
 test:
     requires:
