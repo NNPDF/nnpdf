@@ -26,9 +26,9 @@
   }
    //Starting filter
   string line;
-  double pTmin, pTmax;          //pT ranges
-  double MZ2 = pow(MZ,2.0);     //Z mass
-  double s = 13000;             //LHC at 8TeV
+  double pTmin, pTmax;         //pT ranges
+  double MZ2 = pow(MZ,2.0);    //Z mass
+  double s = 8000;             //LHC at 8TeV
 
   for(int i=0; i<fNData;i++)
   {
@@ -37,7 +37,7 @@
     //Reading in an interpretation of each column
     lstream >> pTmin >> pTmax >> fData[i] >> fStat[i];
     
-    fKin1[i] = 0.5*(pTmin + pTmax);	   // pT
+    fKin1[i] = 0.5*(pTmin + pTmax);	 // pT
     fKin2[i] = MZ2;                      // Mass W squared
     fKin3[i] = s;                        // sqrt(s)
 
