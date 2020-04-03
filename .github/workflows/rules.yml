@@ -1,0 +1,102 @@
+# A single CI script with github workflow.
+name: Tests
+
+on: [push]
+
+env:
+  CONDA_URL: https://repo.continuum.io/miniconda
+  MACOS_CONDA_FILE: Miniconda3-latest-MacOSX-x86_64.sh
+  MACOS_SDK_FILE: MacOSX10.9.sdk
+  NETRC_FILE: ${{ secrets.NETRC_FILE }}
+  NNPDF_SSH_KEY: ${{ secrets.NNPDF_SSH_KEY }}
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Setup conda channels
+      run: |
+        echo "$NETRC_FILE" | base64 --decode > ~/.netrc
+        conda config --append channels conda-forge
+        conda config --prepend channels https://packages.nnpdf.science/conda
+        conda config --prepend channels https://packages.nnpdf.science/conda-private
+        conda config --set show_channel_urls true
+        conda update conda --yes
+        conda install conda-build --yes
+    - name: Build conda recipe and run tests
+      run: |
+        conda build -q conda-recipe
+    - name: Upload conda package to NNPDF server
+      if: github.ref == 'refs/heads/master'
+      run: |
+        KEY=$( mktemp )
+        echo "$NNPDF_SSH_KEY" | base64 --decode > "$KEY"
+        scp -i "$KEY" -o StrictHostKeyChecking=no\
+          /usr/share/miniconda/conda-bld/linux-64/*.tar.bz2 \
+          dummy@package.nnpdf.science:~/packages/conda-private/linux-64
+    - name: Build and upload sphinx documentation to NNPDF server
+      if: github.ref == 'refs/heads/master'
+      run: |
+        conda install nnpdf --yes
+        export PATH=/usr/share/miniconda/bin:$PATH
+        cd doc/sphinx
+        make html
+        scp -i "$KEY" -o StrictHostKeyChecking=no\
+          build/html/* \
+          dummy@package.nnpdf.science:~/sphinx-docs/
+
+  mac:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        python-version: [3.7]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Remove homebrew
+      run: |
+        brew remove --force --ignore-dependencies $(brew list)
+        brew cleanup -s
+        rm -rf $(brew --cache)
+    - name: Install Miniconda
+      run: |
+        curl -L -O "$CONDA_URL/$MACOS_CONDA_FILE"
+        bash $MACOS_CONDA_FILE -b
+        rm "$MACOS_CONDA_FILE"
+    - name: Install SDK
+      run: |
+        curl -L -O https://data.nnpdf.science/"$MACOS_SDK_FILE".tar.xz
+        tar xfz "$MACOS_SDK_FILE".tar.xz -C /Users/runner/miniconda3
+    - name: Setup conda channels
+      run: |
+        echo "$NETRC_FILE" | base64 --decode > ~/.netrc
+        source /Users/runner/miniconda3/bin/activate root
+        conda config --append channels conda-forge
+        conda config --prepend channels https://packages.nnpdf.science/conda
+        conda config --prepend channels https://packages.nnpdf.science/conda-private
+        conda config --set show_channel_urls true
+        conda install --yes conda-build=3.18.9
+    - name: Build conda recipe and run tests
+      run: |
+        export CONDA_BUILD_SYSROOT=/Users/runner/miniconda3/$MACOS_SDK_FILE
+        source /Users/runner/miniconda3/bin/activate root
+        conda build -q conda-recipe
+    - name: Upload conda package to NNPDF server
+      if: github.ref == 'refs/heads/master'
+      run: |
+        KEY=$( mktemp "${TMPDIR:-/tmp}/key.XXXXXXXXX" )
+        echo "$NNPDF_SSH_KEY" | base64 --decode > "$KEY"
+        scp -i "$KEY" -o StrictHostKeyChecking=no\
+          /Users/runner/miniconda3/conda-bld/osx-64/*.tar.bz2 \
+          dummy@package.nnpdf.science:~/packages/conda-private/osx-64
