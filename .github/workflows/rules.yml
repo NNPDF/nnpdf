@@ -64,11 +64,6 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Remove homebrew
-      run: |
-        brew remove --force --ignore-dependencies $(brew list)
-        brew cleanup -s
-        rm -rf $(brew --cache)
     - name: Install Miniconda
       run: |
         curl -L -O "$CONDA_URL/$MACOS_CONDA_FILE"
