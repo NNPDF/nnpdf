@@ -57,7 +57,7 @@ def matrix_plot_labels(df):
         points = [x[1] for x in df.index]
         labels = dslabels
     unique_ds = []
-    unique_ds.append([labels[0],points[0]])
+    unique_ds.append([labels[0],0])
     for x in range(len(labels)-1):
         if labels[x+1] != labels[x]:
             unique_ds.append([labels[x+1],x+1])
@@ -360,7 +360,7 @@ def plot_diag_cov_comparison(theory_covmat_custom, groups_covmat,
 
 @figure
 def plot_diag_cov_impact(theory_covmat_custom, groups_covmat,
-                         groups_data, theoryids,
+                         groups_index, groups_data, theoryids,
                          fivetheories:(str, type(None))=None):
     """Plot ((expcov)^-1_ii)^-0.5 versus ((expcov + thcov)^-1_ii)^-0.5"""
     l = len(theoryids)
