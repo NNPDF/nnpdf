@@ -19,27 +19,6 @@ scale_lr = {
         'Adadelta' : 100.0
         }
 
-
-def _parse_input(model_input, extra_input = None):
-    # TODO add docs, improve logic, add checks
-    # do as a decorator maybe, dunno
-    # TODO check that extra_input is a list but it can be a list of list, oh no...
-    # but we can at least ensure that it has the same rank as the model input
-    # but what if there is no model_input, then the user should learn to not be stupid madonna
-    if extra_input is None:
-        return model_input
-    true_input = []
-    i = 0
-    for iarray in model_input:
-        if iarray is None:
-            true_input.append(extra_input[i])
-            i += i
-        else:
-            true_input.append(iarray)
-    return true_input
-
-
-
 class MetaModel(Model):
     """
     The `MetaModel` behaves as the tensorflow.keras.model.Model class,
@@ -87,21 +66,35 @@ class MetaModel(Model):
             output_list = [output_list]
 
         super(MetaModel, self).__init__(input_list, output_list, **kwargs)
-        self.x_in = []
+        self.x_in = {}
         for input_tensor in input_list:
             # If the input contains a tensor_content, store it to use at predict/fit/eval times
             # otherwise, put a placeholder None as it will come from the outside
+            name = input_tensor.op.name
             try:
-                self.x_in.append(input_tensor.tensor_content)
+                self.x_in[name] = input_tensor.tensor_content
             except AttributeError:
-                self.x_in.append(None)
+                self.x_in[name] = None
 
         self.all_inputs = input_list
         self.all_outputs = output_list
         self.target_tensors = None
 
     def _parse_input(self, extra_input): # TODO
-        return _parse_input(self.x_in, extra_input=extra_input)
+        if extra_input is None:
+            return self.x_in
+        x = {}
+        i = 0
+        for key, value in self.x_in.items():
+            if value is None:
+                try:
+                    x[key] = extra_input[key]
+                except TypeError:
+                    x[key] = extra_input[i]
+                    i += 1
+            else:
+                x[key] = value
+        return x
 
     def reinitialize(self):
         """ Run through all layers and reinitialize the ones that can be reinitialied """
