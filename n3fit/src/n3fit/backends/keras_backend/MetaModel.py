@@ -19,6 +19,22 @@ scale_lr = {
         'Adadelta' : 100.0
         }
 
+def _parse_input(original_input, new_input = None):
+    if new_input is None:
+        return original_input
+    x = {}
+    i = 0
+    for key, value in original_input.items():
+        if value is None:
+            try:
+                x[key] = new_input[key]
+            except TypeError:
+                x[key] = new_input[i]
+                i += 1
+        else:
+            x[key] = value
+    return x
+
 class MetaModel(Model):
     """
     The `MetaModel` behaves as the tensorflow.keras.model.Model class,
@@ -67,34 +83,25 @@ class MetaModel(Model):
 
         super(MetaModel, self).__init__(input_list, output_list, **kwargs)
         self.x_in = {}
+        self.tensors_in = {}
         for input_tensor in input_list:
             # If the input contains a tensor_content, store it to use at predict/fit/eval times
             # otherwise, put a placeholder None as it will come from the outside
             name = input_tensor.op.name
             try:
                 self.x_in[name] = input_tensor.tensor_content
+                self.tensors_in[name] = input_tensor
             except AttributeError:
                 self.x_in[name] = None
+                self.tensors_in[name] = None
 
         self.all_inputs = input_list
         self.all_outputs = output_list
         self.target_tensors = None
 
     def _parse_input(self, extra_input): # TODO
-        if extra_input is None:
-            return self.x_in
-        x = {}
-        i = 0
-        for key, value in self.x_in.items():
-            if value is None:
-                try:
-                    x[key] = extra_input[key]
-                except TypeError:
-                    x[key] = extra_input[i]
-                    i += 1
-            else:
-                x[key] = value
-        return x
+        return _parse_input(self.x_in, extra_input)
+
 
     def reinitialize(self):
         """ Run through all layers and reinitialize the ones that can be reinitialied """
@@ -272,3 +279,7 @@ class MetaModel(Model):
             w_ref = layer.weights
             for val, tensor in zip(w_val, w_ref):
                 tensor.assign(val * multiplier)
+    
+    def perform_call(self, x):
+        x = _parse_input(self.tensors_in, x)
+        return super().__call__(x)
