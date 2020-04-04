@@ -63,15 +63,17 @@ jobs:
         conda activate root
         scp -i "$KEY" -o StrictHostKeyChecking=no\
           $CONDA_PREFIX/conda-bld/${{matrix.CONDA_OS}}/*.tar.bz2 \
-          dummy@packages.nnpdf.science:~/packages/conda-private/{{matrix.CONDA_OS}}
+          dummy@packages.nnpdf.science:~/packages/conda-private/${{matrix.CONDA_OS}}
     - name: Build and upload sphinx documentation to NNPDF server
       if: startsWith(matrix.os, 'ubuntu') && github.ref == 'refs/heads/master'
       shell: bash -l {0}
       run: |
+        KEY=$( mktemp )
+        echo "$NNPDF_SSH_KEY" | base64 --decode > "$KEY"
         conda activate root
         conda install nnpdf --yes
         cd doc/sphinx
         make html
-        scp -i "$KEY" -o StrictHostKeyChecking=no\
+        scp -r -i "$KEY" -o StrictHostKeyChecking=no\
           build/html/* \
           dummy@packages.nnpdf.science:~/sphinx-docs/

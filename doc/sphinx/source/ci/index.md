@@ -10,11 +10,10 @@ on the code and produce [binary builds](conda) which allow it to be
 automatically deployed. The services are configured so that they react to
 [git](git) pushes to the GitHub server.
 
-Currently we are using actively [GitHub Actions](https://help.github.com/en/actions).  We benefit
-from using it for free (because we asked nicely and we got a 100% off forever), but it is typically paid for
-private repositories. The [Travis CI](https://travis-ci.com/) service was used in the past, but thanks to timeout failures on Mac we have decided to move the CI to GitHub Actions. The [Gitlab CI service hosted at
-CERN](https://gitlab.cern.ch/) was used in the past, but support was
-discontinued due to the burden of requiring everyone to have a CERN account.
+Currently we are using actively [GitHub
+Actions](https://help.github.com/en/actions).  We benefit from using it for
+free (because we asked nicely and we got a 100% off forever), but it is
+typically paid for private repositories.
 
 ## Operation of CI tools
 
@@ -38,13 +37,14 @@ Our CI service works roughly as follows:
 	errors.
 
 The progress reports of the various jobs at GitHub Actions, as well as the
-corresponding logs are available at <https://github.com/NNPDF/nnpdf/actions>, upon logging in
-with an authorized GitHub account.
+corresponding logs are available at <https://github.com/NNPDF/nnpdf/actions>,
+upon logging in with an authorized GitHub account.
 
 
 ## Configuration of GitHub Actions
 
-GitHub Actions uses both files found in the NNPDF repository and settings stored in the tab `Settings -> Secrets` of the repository itself.
+GitHub Actions uses both files found in the NNPDF repository and settings stored
+in the tab `Settings -> Secrets` of the repository itself.
 
 ### Secrets stored in the GitHub Actions configuration
 
@@ -66,10 +66,28 @@ The secrets are.
 ### Repository configuration
 
 The main entry point for GitHub Actions is a file called
-[`.github/workflows/rules.yml`](https://github.com/NNPDF/nnpdf/blob/master/.github/workflows/.rules.yml). It specifies which operating systems and versions are tested, which
-versions of Python, some environment variables, and command instructions for linux and macos. The commands basically call `conda build` and upload the relevant packages if required.
+[`.github/workflows/rules.yml`](https://github.com/NNPDF/nnpdf/blob/master/.github/workflows/.rules.yml).
+It specifies which operating systems and versions are tested, which versions of
+Python, some environment variables, and command instructions for linux and
+macos. The commands basically call `conda build` and upload the relevant
+packages if required.
 
 By default only packages corresponding to commits to the master branch get
 uploaded. For other branches, the build and testing happens, but the results are
-discarded in the end. This behavior can be changed by (temporarily) commenting the lines starting with `if: github.ref == 'refs/heads/master'` in the `.github/workflows/rules.yml` file. This can be
-useful to test modifications to the uploading.
+discarded in the end. This behavior can be changed by (temporarily) commenting
+the lines starting with `if: github.ref == 'refs/heads/master'` in the
+`.github/workflows/rules.yml` file. This can be useful to test modifications to
+the uploading.
+
+## Past CI services
+
+Some CI services other than GitHub Actions were used in the past, and may still
+be employed by various projects.  These work similarly, with some minor
+differences in the configuration format or the secret storage mechanism.
+
+The [Travis CI](https://travis-ci.com/) service was used in the past, but
+thanks to timeout failures on Mac we decided to move the CI to GitHub Actions.
+
+The [Gitlab CI service hosted at CERN](https://gitlab.cern.ch/) was used before
+that, but support was discontinued due to the burden of requiring everyone to
+have a CERN account.
