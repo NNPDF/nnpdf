@@ -24,9 +24,9 @@ def test_cuts():
     table = load_fktable(ds.fkspecs[0])
     # Check explicit cuts
     newtable = table.with_cuts([0, 1])
-    assert set(newtable.sigma.index.get_level_values(0).unique()) == {0, 1}
+    assert set(newtable.sigma.index.get_level_values(0)) == {0, 1}
     assert newtable.ndata == 2
-    assert newtable.metadata['GridInfo'].ndata == 3
+    assert newtable.metadata['GridInfo'].ndata == ds.commondata.ndata
     # Check empty cuts
     assert newtable.with_cuts(None) is newtable
     # Check loaded cuts
