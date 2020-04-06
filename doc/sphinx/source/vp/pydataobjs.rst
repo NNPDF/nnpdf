@@ -42,10 +42,10 @@ terms of PDF and dataset objects that can be obtained directly from
     from validphys.convolution import predictions
 
     inp = {
-    'dataset_input': {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD']},
-    'theoryid': 162,
-    'use_cuts': 'internal',
-    'pdf': 'NNPDF31_nnlo_as_0118'
+        'dataset_input': {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD']},
+        'theoryid': 162,
+        'use_cuts': 'internal',
+        'pdf': 'NNPDF31_nnlo_as_0118'
     }
 
     preds = predictions(API.dataset(**inp), API.pdf(**inp))
@@ -79,3 +79,67 @@ datasets using the `Dask <https://dask.org/>`_ library::
 
     future_pred = dask.delayed(pure=True)(predictions)
     c.gather(c.compute([np.mean(future_pred(ds, pdf), axis=0) for ds in all_datasets]))
+
+Central predictions
+^^^^^^^^^^^^^^^^^^^
+
+The default :py:func:`validphys.convolution.predictions` computes one
+prediction for each replica in the PDF set (for Monte Carlo PDF sets). The user
+is the supposed to average the replica predictions to get a central value. An
+quick approximation is to use the central value directly. This is exact for DIS
+observables and a generally very good approximation for hadronic observables.
+The :py:func:`validphys.convolution.central_predictions` function. This may be
+appropriate for computations where the PDF error is not requires, such as the
+central χ².
+
+The previous example can be simpler using ``central_predictions``::
+
+
+    from validphys.api import API
+    from validphys.convolution import central_predictions
+
+    inp = {
+        'dataset_input': {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD']},
+        'theoryid': 162,
+        'use_cuts': 'internal',
+        'pdf': 'NNPDF31_nnlo_as_0118'
+    }
+
+
+    central_preds = central_predictions(API.dataset(**inp), API.pdf(**inp))
+
+    print(central_preds)
+
+Linear predictions
+^^^^^^^^^^^^^^^^^^
+
+DIS predictions are linear in the difference between PDF and central value, and
+hence in the Hessian error parameters. For hadronic observables this is only
+true to a good approximation. The
+:py:func:`validphys.convolution.linear_predictions` computes approximate
+predictions that are linear in the error parameters, and which may be useful in
+specific situations. In particular, for such predictions the prediction of the
+central replica is the same as the mean of the replica predictions::
+
+    import numpy as np
+    from validphys.loader import Loader
+    from validphys.convolution import predictions, linear_predictions, central_predictions
+
+    l = Loader()
+    pdf = l.check_pdf('NNPDF31_nnlo_as_0118')
+    ds = l.check_dataset('ATLASTTBARTOT', theoryid=53, cfac=('QCD',))
+
+    # "Exact" predictions
+    p = predictions(ds, pdf).T
+    # Approximate predictions, neglecting the quadratic terms in the
+    # differneces between each replica and the central value.
+    lp = linear_predictions(ds, pdf).T
+    # Central predictions
+    cp = central_predictions(ds, pdf).T
+
+
+    assert np.allclose(lp.mean(), cp)
+    assert not np.allclose(p.mean(), cp)
+    # Compute the size of the differences between approcimate and true predictions
+    # over the PDF uncertainty. Take the maximum over the three ttbar data points.
+    print(((p - lp).std() / p.std()).max())
