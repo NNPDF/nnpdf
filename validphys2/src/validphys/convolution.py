@@ -3,14 +3,16 @@ the relevant C++ functionality in pure Python (using numpy and pandas).
 
 Note that currently no effort has been made to optimize these operations.
 """
-
+import operator
 
 import pandas as pd
 import numpy as np
 
 from validphys.pdfbases import evolution
+from validphys.fkparser import load_fktable
 
-__all__ = ('predictions',)
+__all__ = ('fk_predictions', 'predictions')
+
 
 FK_FLAVOURS = evolution.to_known_elements(
     [
@@ -34,7 +36,37 @@ FK_FLAVOURS = evolution.to_known_elements(
 NFK = len(FK_FLAVOURS)
 
 
-def predictions(pdf, loaded_fk):
+def _asy(a, b):
+    return (a - b) / (a + b)
+
+
+def _smn(a, b, c, d):
+    return (a + b) / (c + d)
+
+
+def _id(a):
+    return a
+
+
+OP = {
+    "RATIO": operator.truediv,
+    "ASY": _asy,
+    "ADD": operator.add,
+    "SMN": _smn,
+    "NULL": _id,
+}
+
+
+def predictions(pdf, dataset):
+    opfunc = OP[dataset.op]
+    cuts = dataset.cuts.load() if dataset.cuts is not None else None
+    all_predictions = [
+        fk_predictions(pdf, load_fktable(fk).with_cuts(cuts)) for fk in dataset.fkspecs
+    ]
+    return opfunc(*all_predictions)
+
+
+def fk_predictions(pdf, loaded_fk):
     """Low level function to compute predictions from an
     observable.
 
