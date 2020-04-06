@@ -86,21 +86,39 @@ def hadron_predictions(pdf, loaded_fk):
     sigma = loaded_fk.sigma
     index = pdf.grid_values_index
 
+    # Generate gid values for all flavours in the evolution basis, in the
+    # expected order.
+    #
+    # Squeeze to remove the dimension over Q.
     gv = evolution.grid_values(pdf=pdf, qmat=[Q], vmat=FK_FLAVOURS, xmat=xgrid).squeeze(
         -1
     )
+    # The hadronic FK table columns are indexes into the NFK*NFK table of
+    # possible flavour combinations of the two PDFs, with the convention of
+    # looping first of the first index and the over the second: If the flavour
+    # index of the first PDF is ``i`` and the second is ``j``, then the column
+    # value in the FKTable is ``i*NFK + j``. This can easily be inverted using
+    # the ``np.indices``, which is used here to map the column index to i and
+    # j.
     fm = sigma.columns
-    fl1, fl2 = np.indices((NFK, NFK))
-    fl1 = fl1.ravel()[fm]
-    fl2 = fl2.ravel()[fm]
-    gv1fl = gv[:, fl1, :]
-    gv2fl = gv[:, fl2, :]
+    all_fl_indices_1, all_fl_indices_2 = np.indices((NFK, NFK))
+    # The flavour indices of the first and second PDF for each combination
+    # (column) are the columns indexing into the flattened indices.
+    fl1 = all_fl_indices_1.ravel()[fm]
+    fl2 = all_fl_indices_2.ravel()[fm]
+    # Once we have the flavours, shape the PDF grids as appropriate for the
+    # convolution below: We are left with two tensor of shape
+    # ``nmembers * len(sigma.columns) * nx`` such that the pairs of flavours of the two
+    # combinations correspond to the combination encoded in the FKTable.
+    expanded_gv1 = gv[:, fl1, :]
+    expanded_gv2 = gv[:, fl2, :]
 
     def appl(df):
+        # x1 and x2 are encoded as the first and second index levels.
         xx1 = df.index.get_level_values(1)
         xx2 = df.index.get_level_values(2)
-        gv1 = gv1fl[:, :, xx1]
-        gv2 = gv2fl[:, :, xx2]
+        gv1 = expanded_gv1[:, :, xx1]
+        gv2 = expanded_gv2[:, :, xx2]
         return pd.Series(np.einsum("ijk,ijk,kj->i", gv1, gv2, df.values), index=index)
 
     return sigma.groupby(level=0).apply(appl)
@@ -111,12 +129,15 @@ def dis_predictions(pdf, loaded_fk):
     Q = loaded_fk.Q0
     sigma = loaded_fk.sigma
     index = pdf.grid_values_index
+    # The column indexes are indices into the FK_FLAVOURS list above.
     fm = sigma.columns
+    # Squeeze to remove the dimension over Q.
     gv = evolution.grid_values(
         pdf=pdf, qmat=[Q], vmat=FK_FLAVOURS[fm], xmat=xgrid
     ).squeeze(-1)
 
     def appl(df):
+        # x is encoded as the first index level.
         xind = df.index.get_level_values(1)
         return pd.Series(np.einsum("ijk,kj->i", gv[:, :, xind], df.values), index=index)
 
