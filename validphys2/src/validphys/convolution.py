@@ -10,7 +10,7 @@ import numpy as np
 
 from validphys.pdfbases import evolution
 
-__all__ = ('hadron_predictions', 'dis_predictions')
+__all__ = ('predictions',)
 
 FK_FLAVOURS = evolution.to_known_elements(
     [
@@ -34,8 +34,8 @@ FK_FLAVOURS = evolution.to_known_elements(
 NFK = len(FK_FLAVOURS)
 
 
-def hadron_predictions(pdf, loaded_fk):
-    """Low level function to compute predictions from an hadronic
+def predictions(pdf, loaded_fk):
+    """Low level function to compute predictions from an
     observable.
 
     Parameters
@@ -74,6 +74,13 @@ def hadron_predictions(pdf, loaded_fk):
         2     828.076008  813.452551  824.581569  828.213508  ...  838.707211  826.056388  810.310109  816.824167
 
     """
+    if loaded_fk.hadronic:
+        return hadron_predictions(pdf, loaded_fk)
+    else:
+        return dis_predictions(pdf, loaded_fk)
+
+
+def hadron_predictions(pdf, loaded_fk):
     xgrid = loaded_fk.xgrid
     Q = loaded_fk.Q0
     sigma = loaded_fk.sigma
@@ -100,50 +107,6 @@ def hadron_predictions(pdf, loaded_fk):
 
 
 def dis_predictions(pdf, loaded_fk):
-    """Low level function to compute predictions from a DIS
-    observable.
-
-    Parameters
-    ----------
-    pdf :  validphys.core.PDF
-        The PDF set to use for the convolutions.
-    loaded_fk : validphys.coredata.FKTableData
-        The FKTable corresponding to the partonic cross section.
-
-    Returns
-    -------
-    df : pandas.DataFrame
-        A dataframe corresponding to the hadronic prediction for each data
-        point for the PDF members. The index of the dataframe corresponds to
-        the selected data points (use
-        :py:meth:`validphys.coredata.FKTableData.with_cuts` to filter out
-        points). The columns correspond to the selected PDF members in the
-        LHAPDF set, which depend on the PDF error type (see
-        :py:meth:`validphys.core.PDF.grid_values_index`)
-
-    Examples
-    --------
-
-        >>> from validphys.loader import Loader
-        >>> from validphys.convolution import dis_predictions
-        >>> from validphys.fkparser import load_fktable
-        >>> l = Loader()
-        >>> pdf = l.check_pdf('NNPDF31_nnlo_as_0118')
-        >>> ds = l.check_dataset("HERAF2CHARM", theoryid=53)
-        >>> table = load_fktable(ds.fkspecs[0]).with_cuts(ds.cuts)
-        >>> from validphys.convolution import dis_predictions
-        >>> dis_predictions(pdf, table).T.describe()
-        data           15          16          17          18  ...          48          49          50          51
-        count  100.000000  100.000000  100.000000  100.000000  ...  100.000000  100.000000  100.000000  100.000000
-        mean     0.292386    0.269370    0.235357    0.198888  ...    0.099491    0.174955    0.086756    0.060422
-        std      0.018171    0.015950    0.013248    0.011431  ...    0.006643    0.007640    0.005944    0.004877
-        min      0.224384    0.214071    0.200633    0.167839  ...    0.075529    0.157506    0.066015    0.046424
-        25%      0.284614    0.261566    0.228153    0.192455  ...    0.096242    0.170292    0.083439    0.057636
-        50%      0.291761    0.267144    0.232952    0.196367  ...    0.100099    0.174754    0.087629    0.060917
-        75%      0.301445    0.277181    0.242640    0.205627  ...    0.103017    0.179115    0.089806    0.062776
-        max      0.356283    0.325746    0.281639    0.236154  ...    0.116030    0.196459    0.102557    0.074180
-    """
-
     xgrid = loaded_fk.xgrid
     Q = loaded_fk.Q0
     sigma = loaded_fk.sigma
