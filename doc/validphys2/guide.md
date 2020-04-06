@@ -297,8 +297,7 @@ library, and a lot of care has to be taken to include the correct one.
 
 The solution to all that is to provide precompiled versions of all the
 dependencies, that are generated automatically when new commits are
-pushed to the CERN Gitlab server (for Linux) and the Travis CI server
-(for Mac).
+pushed to the repository.
 
 The compiled binaries are subsequently packaged (using conda) and
 uploaded to a remote server where they are accessible. These packages
@@ -3306,32 +3305,6 @@ packages.nnpdf.science.	1799	IN	A	159.149.47.24
 ;; MSG SIZE  rcvd: 67
 ```
 
-Access
-------
-
-The access to the server is provided by
-`ssh`/[`vp-upload`](#uploading-the-result) with the following restrictions:
-
-- `ssh` access to `root` is forbidden.
-- there is a shared `nnpdf` user with low privileges. In order to login 
-the user must send his public ssh key (usually in `~/.ssh/id_rsa.pub`) to SC.
-The `nnpdf` is not allowed to login with password.
-
-The `nnpdf` user shares a common `/home/nnpdf` folder 
-where all NNPDF material is stored. Public access to data is 
-available for all files in the `/home/nnpdf/WEB` folder. The 
-`validphys` reports are stored in `/home/nnpdf/WEB/validphys-reports` 
-and the wiki in `/home/nnpdf/WEB/wiki`.
-
-The  [`conda` packages](#installing)  are automatically uploaded to the server
-by the Continous Integration service (Travis), through an user called `dummy`
-which has further reduction in privileges (it uses the [`rssh`
-shell](https://linux.die.net/man/1/rssh)) and it is only allowed to run the
-`scp` command. An accepted private key is stored securely in the [Travis
-configuration](https://travis-ci.com/NNPDF/nnpdf) under the `NNPDF_SSH_KEY`
-variable. It is encoded using `base64` because Travis does not easily accept
-multiline variables. To use it, do something like `echo "$NNPDF_SSH_KEY" |
-base64 --decode`. The packages are uploaded to `/home/nnpdf/packages`.
 
 Web server
 ----------
