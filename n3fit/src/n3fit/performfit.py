@@ -243,7 +243,6 @@ def performfit(
 
         # After the fit is run we get a 'result' dictionary with the following items:
         stopping_object = result["stopping_object"]
-        layer_pdf = result["layer_pdf"]
         pdf_model = result["pdf_model"]
         layers = result["layers"]
         integrator_input = result["integrator_input"]
@@ -315,9 +314,3 @@ def performfit(
         model_file = fitting.get("savefile")
         log.info(" > Saving the weights for future in %s", model_file)
         training["model"].save_weights(model_file)
-
-    # print out the integration of the sum rule in case we want to check it's not broken
-
-
-#     import n3fit.msr as msr_constraints
-# msr_constraints.check_integration(layer_pdf, integrator_input)

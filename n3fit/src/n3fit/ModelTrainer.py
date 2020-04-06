@@ -170,10 +170,10 @@ class ModelTrainer:
             self.hyper_threshold = kfold_parameters.get("threshold", HYPER_THRESHOLD)
 
         # Initialize the pdf layer
-        self.layer_pdf = None
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
+        self.input_sizes = []
         self.training = {
             "output": [],
             "expdata": [],
@@ -302,14 +302,27 @@ class ModelTrainer:
         log.info("Generating the Model")
 
         input_list = self.input_list
+        # Prepare the concatenation of the inputs
+        from tensorflow import split
+        from n3fit.backends import Concatenate # TODO
+        concatenated_input = Concatenate(axis = 1)(input_list)
+        # Generate the output layer for the PDF
+        pdf_output_layer = self.pdf_model.perform_call([concatenated_input])
+        # Note that the PDF_model is created with the pair [integrator_input, xgrid]
+        # therefore, any model that "composes" the pdf_model will need to add
+        # the integrator input to its input
+        full_model_input = [self.integrator_input] + input_list
+        # Since the observables are completely separated, it is necessary
+        # to split back the output of the PDF
+        pdf_layers = split(pdf_output_layer, self.input_sizes, axis=1)
+
 
         # Loop over all the dictionary models and create the trainig,
         #                 validation, true (data w/o replica) models:
-
         for model_dict in self.list_of_models_dicts:
-            model_dict["model"] = MetaModel(
-                input_list, self._pdf_injection(model_dict["output"])
-            )
+            olist = model_dict["output"]
+            output = self._pdf_injection(pdf_layers, olist)
+            model_dict["model"] = MetaModel(full_model_input, output)
 
         if self.model_file:
             # If a model file is given, load the weights from there
@@ -334,12 +347,15 @@ class ModelTrainer:
             self.validation[key] = []
             self.experimental[key] = []
 
-    def _pdf_injection(self, olist):
+    def _pdf_injection(self, pdf_layers, olist):
         """
         Takes as input a list of output layers and returns a corresponding list
         where all output layers call the pdf layer at self.pdf_layer
         """
-        return [o(self.layer_pdf) for o in olist]
+        ret = []
+        for pdf, obs in zip(pdf_layers, olist):
+            ret.append(obs(pdf))
+        return ret
 
     ############################################################################
     # # Parametizable functions                                                #
@@ -375,6 +391,7 @@ class ModelTrainer:
 
             # Save the input(s) corresponding to this experiment
             self.input_list += exp_layer["inputs"]
+            self.input_sizes.append(exp_layer["experiment_xsize"])
 
             # Now save the observable layer, the losses and the experimental data
             self.training["output"].append(exp_layer["output_tr"])
@@ -396,6 +413,7 @@ class ModelTrainer:
             )
             # The input list is still common
             self.input_list += pos_layer["inputs"]
+            self.input_sizes.append(pos_layer["experiment_xsize"])
 
             # The positivity all falls to the training
             self.training["output"].append(pos_layer["output_tr"])
@@ -472,16 +490,15 @@ class ModelTrainer:
             layer_pdf, integrator_input = msr_constraints.msr_impose(
                 layers["fitbasis"], layer_pdf
             )
-            self.input_list.append(integrator_input)
+            self.integrator_input = integrator_input
+#             self.input_list.append(integrator_input)
 
         # Generate the PDF model that takes an xgrid as input and outputs a pdf value per x
-        from n3fit.backends import operations
+        from n3fit.backends import operations # TODO
         placeholder_input = operations.base_input(shape = (None, 1))
         oo = layer_pdf(placeholder_input)
-        pdf_model = MetaModel([integrator_input, placeholder_input], operations.batchit(oo))
+        pdf_model = MetaModel([integrator_input, placeholder_input], oo)
 
-
-        self.layer_pdf = layer_pdf
         self.pdf_model = pdf_model
 
         return layers, integrator_input
@@ -762,7 +779,6 @@ class ModelTrainer:
         # to generate the output pdf, check the arc-length, gather stats, etc
         # some of them are already attributes of the class so they are redundant here
         # but I think it's good to present them explicitly
-        dict_out["layer_pdf"] = self.layer_pdf
         dict_out["layers"] = layers
         dict_out["integrator_input"] = integrator_input
         dict_out["stopping_object"] = stopping_object

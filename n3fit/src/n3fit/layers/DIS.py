@@ -35,6 +35,7 @@ class DIS(Observable):
             # Returns:
                 - `result`: rank 1 tensor (ndata)
         """
+        pdf_in = self.digest_pdf(pdf_in)
         pdf_masked = self.boolean_mask(pdf_in, self.basis, axis=1)
 
         pdfT = self.transpose(pdf_masked)

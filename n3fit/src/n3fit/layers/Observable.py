@@ -1,4 +1,5 @@
 from n3fit.backends import MetaLayer
+import tensorflow as tf
 from abc import abstractmethod, ABC
 
 
@@ -34,6 +35,9 @@ class Observable(MetaLayer, ABC):
 
     def compute_output_shape(self, input_shape):
         return (self.output_dim, None)
+
+    def digest_pdf(self, pdf):
+        return tf.squeeze(pdf, axis=0)
 
     # Overridables
     @abstractmethod

@@ -62,7 +62,7 @@ hyperscan:
 
 ############################################################
 fitting:
-  genrep   : True    # on = generate MC replicas, False = use real data
+  genrep   : False    # on = generate MC replicas, False = use real data
   trvlseed: 1
   nnseed: 2
   mcseed: 3  

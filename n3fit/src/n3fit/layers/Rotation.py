@@ -29,4 +29,4 @@ class Rotation(MetaLayer):
             x[0],  # t24
             x[0],  # t35
         ]
-        return self.concatenate(pdf_raw_list)
+        return self.concatenate(pdf_raw_list, target_shape=(1, -1, self.output_dim)) # TODO

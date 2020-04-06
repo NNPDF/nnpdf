@@ -35,6 +35,7 @@ class DY(Observable):
             # Returns:
                 - `result`: rank 1 tensor (ndata)
         """
+        pdf_in = self.digest_pdf(pdf_in)
         # This is a convoluted way of applying a mask, but it is faster
         # mask-version below
         lumi_fun = []
