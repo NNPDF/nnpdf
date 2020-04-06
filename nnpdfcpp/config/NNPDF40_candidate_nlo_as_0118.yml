@@ -79,6 +79,8 @@ experiments:
   - {dataset: ATLAS_WM_JET_8TEV_PT, frac: 0.5}
 #  - {dataset: ATLAS_WP_JET_8TEV_PTJ, frac: 0.5}
 #  - {dataset: ATLAS_WM_JET_8TEV_PTJ, frac: 0.5}
+  - {dataset: ATLAS_WCHARM_WP_DIFF_7TEV, frac: 1.0}
+  - {dataset: ATLAS_WCHARM_WM_DIFF_7TEV, frac: 1.0}
   #Z pT
   - {dataset: ATLASZPT8TEVMDIST, frac: 0.5}
   - {dataset: ATLASZPT8TEVYDIST, frac: 0.5}
@@ -117,8 +119,9 @@ experiments:
   #EWK
   - {dataset: CMSWEASY840PB, frac: 1.0} 
   - {dataset: CMSWMASY47FB, frac: 1.0}
-  - {dataset: CMSWCHARMTOT, frac: 1.0 }
-  - {dataset: CMSWCHARMRAT, frac: 1.0 }
+  - {dataset: CMSWCHARMTOT, frac: 1.0}
+  - {dataset: CMSWCHARMRAT, frac: 1.0}
+  - {dataset: CMS_WCHARM_DIFF_UNNORM_13TEV, frac: 1.0}
   - {dataset: CMSDY2D11, frac: 0.5}
   - {dataset: CMSWMU8TEV, frac: 1.0}
   #Z pt
