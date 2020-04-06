@@ -8,6 +8,7 @@ import dataclasses
 import numpy as np
 import pandas as pd
 
+
 @dataclasses.dataclass(eq=False)
 class FKTableData:
     """
@@ -42,12 +43,58 @@ class FKTableData:
     metadata : dict
         Other information contained in the FKTable.
     """
+
     hadronic: bool
     Q0: float
     ndata: int
     xgrid: np.array
     sigma: pd.DataFrame
     metadata: dict = dataclasses.field(default_factory=dict, repr=False)
+
+    # TODO: When we move to something other than the current fktable format,
+    # we should apply the cuts directly before loading the file.
+    def with_cuts(self, cuts):
+        """Return a copy of the FKTabe with the cuts applied.  The data index
+        of the sigma operator (the outermost level), contains the data point
+        that have been kept. The ndata property is updated to reflect the new
+        number of datapoints. If cuts is None, return the object unmodified.
+
+        Parameters
+        ----------
+        cuts : array_like or validphys.core.Cuts or None.
+            The cuts to be applied.
+
+        Returns
+        -------
+        res : FKTableData
+            A copy of the FKtable with the cuts applies.
+
+        Notes
+        -----
+        The original number of points can be accessed with
+        ``table.metadata['GridInfo'].ndata``.
+
+        Examples
+        --------
+
+        >>> from validphys.fkparser import load_fktable
+        ... from validphys.loader import Loader
+        ... l = Loader()
+        ... ds = l.check_dataset('ATLASTTBARTOT', theoryid=53, cfac=('QCD',))
+        ... table = load_fktable(ds.fkspecs[0])
+        ... newtable = table.with_cuts([0,1])
+        >>> assert set(newtable.sigma.index.get_level_values(0)) == {0,1}
+        >>> assert newtable.ndata == 2
+        >>> assert newtable.metadata['GridInfo'].ndata == 3
+        """
+        if hasattr(cuts, 'load'):
+            cuts = cuts.load()
+        if cuts is None:
+            return self
+        newndata = len(cuts)
+        newsigma = self.sigma.loc[cuts]
+        return dataclasses.replace(self, ndata=newndata, sigma=newsigma)
+
 
 @dataclasses.dataclass(eq=False)
 class CFactorData:
@@ -66,6 +113,7 @@ class CFactorData:
     uncertainty : array, shape(ndata)
         The absolute uncertainty on the cfactor if available.
     """
+
     description: str
     central_value: np.array
     uncertainty: np.array
