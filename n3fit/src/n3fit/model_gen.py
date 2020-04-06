@@ -12,6 +12,7 @@ import numpy as np
 import n3fit.msr as msr_constraints
 from n3fit.layers import DIS, DY, Mask, ObsRotation
 from n3fit.layers import Preprocessing, Rotation
+from n3fit.layers import Preprocessing
 
 from n3fit.backends import MetaModel, Input
 from n3fit.backends import operations
@@ -316,7 +317,7 @@ def generate_dense_per_flavour_network(
 
 
 def pdfNN_layer_generator(
-    inp=2,
+    inp=1,
     nodes=None,
     activations=None,
     initializer_name="glorot_normal",
@@ -466,9 +467,16 @@ def pdfNN_layer_generator(
             lambda x: operations.concatenate([x, operations.op_log(x)], axis=-1)
         )
 
+    layer_scaling = Feature_Scaling(name="feature_scaling")
+
+    def layer_feature_scaling(x):
+        return layer_scaling(x)
+
     def dense_me(x):
         """ Takes an input tensor `x` and applies all layers
         from the `list_of_pdf_layers` in order """
+        x = layer_feature_scaling(x)
+
         if inp == 1:
             curr_fun = list_of_pdf_layers[0](x)
         else:
@@ -496,6 +504,7 @@ def pdfNN_layer_generator(
         return layer_evln(layer_fitbasis(x))
 
     dict_layers = {
+        "feature_scaling": layer_scaling, # The layer that scales the x-grids
         "denses": dense_me,  # The set of the N dense layers
         "preprocessing": layer_preproc,  # The layer that applies preprocessing
         "fitbasis": layer_fitbasis,  # Applied preprocessing to the output of the denses
