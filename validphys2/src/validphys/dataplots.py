@@ -26,6 +26,10 @@ from validphys.plotoptions import get_info, kitable, transform_result
 from validphys import plotutils
 from validphys.utils import sane_groupby_iter, split_ranges, scale_from_grid
 
+from matplotlib import rc
+rc('font', **{'family': 'sans-serif'})
+rc('text', usetex=True)
+
 log = logging.getLogger(__name__)
 
 @figure
@@ -689,6 +693,15 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
     that will be used to mark the corresponding area in x in the
     background of the plot. The maximum absolute values are used for
     the comparison."""
+
+    DijetsInfo = {"ATLAS jets 2011 7 TeV":     {"ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$"},
+                  "ATLAS jets 8 TeV, R=0.6":   {"ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$"},
+                  "CMS jets 7 TeV 2011":       {"ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$"},
+                  "CMS jets 8 TeV":            {"ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$"},
+                  "ATLAS dijets 7 TeV, R=0.6": {"ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y^*|}", "legend": r"$|y^*|$"},
+                  "CMS dijets 7 TeV":          {"ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y_{max}|}", "legend": r"$|y_{max}|$"},
+                  "CMS 3D dijets 8 TeV":       {"ylabel": r"\frac{d^3\sigma}{dp_{T,avg}dy_bdy^{*}}", "legend": r"$(y_b, y^{*})$"}}
+
     info = get_info(dataset)
 
     table = kitable(dataset, info)
@@ -697,6 +710,11 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
     basis = obs_pdf_correlations.basis
 
     fullgrid = obs_pdf_correlations.grid_values
+
+    #import sys
+    #np.set_printoptions(threshold=sys.maxsize)
+    #print(table)
+
 
     fls = obs_pdf_correlations.flavours
     x = obs_pdf_correlations.xgrid
@@ -725,33 +743,180 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
         label = info.group_label(same_vals, info.figure_by)
         #TODO: PY36ScalarMappable
         #TODO Improve title?
-        title = "%s %s\n[%s]" % (info.dataset_label, '(%s)'%label if label else '' ,pdf.label)
+        ##title = "%s %s\n[%s]" % (info.dataset_label, '(%s)'%label if label else '' ,pdf.label)
+        title = "%s" % (info.dataset_label)
 
         #Start plotting
         w,h = plt.rcParams["figure.figsize"]
         h*=2.5
-        fig,axes = plt.subplots(nrows=nf ,sharex=True, figsize=(w,h), sharey=True)
+        fig,ax = plt.subplots()
+
         fig.suptitle(title)
+        #lines = ["-", "--", "-.", ":", "-"]
+        linestyle_tuple = [
+            ('solid', '-'),
+
+            ('loosely dashed',        (0, (5, 10))),
+            ('dashed',                (0, (5, 5))),
+            ('densely dashed',        (0, (5, 1))),
+
+            ('loosely dashdotted',    (0, (3, 10, 1, 10))),
+            ('dashdotted',            (0, (3, 5, 1, 5))),
+            ('densely dashdotted',    (0, (3, 1, 1, 1))),
+
+            ('dashdotdotted',         (0, (3, 5, 1, 5, 1, 5))),
+            ('loosely dashdotdotted', (0, (3, 10, 1, 10, 1, 10))),
+            ('densely dashdotdotted', (0, (3, 1, 1, 1, 1, 1))),
+
+            ('loosely dotted',        (0, (1, 10))),
+            ('dotted',                (0, (1, 1))),
+            ('densely dotted',        (0, (1, 1)))]
         colors = sm.to_rgba(info.get_xcol(fb))
-        for flindex, (ax, fl) in enumerate(zip(axes, fls)):
-            for i,color in enumerate(colors):
-                ax.plot(x, grid[i,flindex,:].T, color=color)
+
+        if info.dataset_label == "CMS 3D dijets 8 TeV":
+            prev_label = (table.values[0][0], table.values[0][2])
+        else:
+            prev_label=table.values[0][0]
+        once_label=True
+        iline=0
+        for i,color in enumerate(colors):
+            (name, linestyle) = linestyle_tuple[iline]
+            if once_label:
+                label=prev_label
+                once_label=False
+                (name, linestyle) = linestyle_tuple[iline]
+                ax.plot(x, grid[i, 0, :].T, color="black", linestyle=linestyle, label = label)
+                ax.plot(x, grid[i, 0, :].T, color=color, linestyle=linestyle)
+            else:
+                ax.plot(x, grid[i, 0, :].T, color=color, linestyle=linestyle)
+
+            if info.dataset_label == "CMS 3D dijets 8 TeV":
+                if (table.values[i][0],table.values[i][2]) == prev_label:
+                    once_label = False
+                else:
+                    prev_label = (table.values[i][0], table.values[i][2])
+                    iline += 1
+                    once_label = True
+            else:
+                if table.values[i][0] == prev_label:
+                    once_label = False
+                else:
+                    prev_label = table.values[i][0]
+                    iline += 1
+                    once_label = True
 
 
-            flmask = mark_mask[flindex,:]
-            ranges = split_ranges(x, flmask, filter_falses=True)
-            for r in ranges:
-                ax.axvspan(r[0], r[-1], color='#eeeeff')
+        
+        flmask = mark_mask[0, :]
+        ranges = split_ranges(x, flmask, filter_falses=True)
+        for r in ranges:
+            ax.axvspan(r[0], r[-1], color='#eeeeff')
+        
+        ax.set_ylabel(r"$\rho("+DijetsInfo[info.dataset_label]["ylabel"]+ "\, , \, g)$")
 
-            ax.set_ylabel("$%s$"%basis.elementlabel(fl))
-            ax.set_xscale(scale_from_grid(obs_pdf_correlations))
-            ax.set_ylim(-1,1)
-            ax.set_xlim(x[0], x[-1])
+        ax.set_xscale(scale_from_grid(obs_pdf_correlations))
+        ax.set_ylim(-1,1)
+        ax.set_xlim(1e-3, 0.7)
         ax.set_xlabel('$x$')
+        ax.legend(title=DijetsInfo[info.dataset_label]["legend"], frameon=False, borderaxespad=0.5)
         #fig.subplots_adjust(hspace=0)
 
-        fig.colorbar(sm, ax=axes.ravel().tolist(), label=info.xlabel,
+        fig.colorbar(sm, ax=ax, label=info.xlabel,
                      aspect=100)
+        #TODO: Fix title for this
+        #fig.tight_layout()
+        yield fig
+
+
+@figuregen
+def plot_smpdf_cameron(pdf, dataset, obs_pdf_correlations, mark_threshold: float = 0.9):
+    """
+    Plot the correlations between the change in the observable and the change
+    in the PDF in (x,fl) space.
+    mark_threshold is the proportion of the maximum absolute correlation
+    that will be used to mark the corresponding area in x in the
+    background of the plot. The maximum absolute values are used for
+    the comparison."""
+    info = get_info(dataset)
+
+    table = kitable(dataset, info)
+    figby = sane_groupby_iter(table, info.figure_by)
+
+    basis = obs_pdf_correlations.basis
+
+    fullgrid = obs_pdf_correlations.grid_values
+
+    fls = obs_pdf_correlations.flavours
+    x = obs_pdf_correlations.xgrid
+    nf = len(fls)
+
+    plotting_var = info.get_xcol(table)
+
+    #TODO: vmin vmax should be global or by figure?
+    vmin, vmax = min(plotting_var), max(plotting_var)
+    if info.x_scale == 'log':
+        norm = mcolors.LogNorm(vmin, vmax)
+    else:
+        norm = mcolors.Normalize(vmin, vmax)
+    #http://stackoverflow.com/a/11558629/1007990
+    sm = cm.ScalarMappable(cmap=cm.viridis, norm=norm)
+    sm._A = []
+
+    for same_vals, fb in figby:
+        grid = fullgrid[np.asarray(fb.index), ...]
+
+        #Use the maximum absolute correlation for plotting purposes
+        absgrid = np.max(np.abs(grid), axis=0)
+        mark_mask = absgrid > np.max(absgrid)*mark_threshold
+
+        label = info.group_label(same_vals, info.figure_by)
+        #TODO: PY36ScalarMappable
+        #TODO Improve title?
+        title = "%s %s\n[%s]" % (info.dataset_label, '(%s)' %
+                                 label if label else '', pdf.label)
+
+        #Start plotting
+        w, h = plt.rcParams["figure.figsize"]
+        h *= 2.5
+#        fig,axes = plt.subplots(nrows=nf ,sharex=True, figsize=(w,h), sharey=True)
+        fig, ax = plt.subplots()
+#        fig.suptitle(title)
+        colors = sm.to_rgba(info.get_xcol(fb))
+#        embed()
+#        for flindex, (ax, fl) in enumerate(zip(axes, fls)):
+#            for i,color in enumerate(colors):
+#                ax.plot(x, grid[i,flindex,:].T, color=color)
+
+        lines = ["-", "--", "-.", ":", "-"]
+#        lines = ["-","--","-.","-"]
+        labels = ["[0, 45]", "[45, 75]",
+                  "[75, 110]", "[110, 150]", "[150, 500]"]
+#        labels = ["[0, 0.2]", "[0.2, 0.6]", "[0.6, 1.1]", "[1.1, 3.0]"]
+        for flindex, fl in enumerate(fls):
+            for i, color in enumerate(colors):
+                ax.plot(x, grid[i, flindex, :].T, color=color,
+                        linestyle=lines[i], label=labels[i])
+
+#            flmask = mark_mask[flindex,:]
+#            ranges = split_ranges(x, flmask, filter_falses=True)
+#            for r in ranges:
+#                ax.axvspan(r[0], r[-1], color='#eeeeff')
+
+#            ax.set_ylabel(r"$\rho \left( \frac{d\sigma}{dp_{T}(t)} \, , \, g \right)$")
+#            ax.set_ylabel(r"$\rho \left( \frac{d\sigma}{d|y(t)|} \, , \, g \right)$")
+            ax.set_ylabel(r"$\rho(\sigma_{t} + \sigma_{\bar{t}} \, , \, g)$")
+#            ax.set_ylabel("$%s$"%basis.elementlabel(fl))
+            ax.set_xscale(scale_from_grid(obs_pdf_correlations))
+            ax.set_ylim(-1, 1)
+            ax.set_xlim(x[0], x[-1])
+        ax.set_xlabel('$x$')
+#        ax.legend(title=r"$p_T$ [GeV]", frameon=False, borderaxespad=2.5)
+#        ax.legend(title=r"|y|", frameon=False, borderaxespad=2.5)
+
+        #fig.subplots_adjust(hspace=0)
+
+#        fig.colorbar(sm, ax=axes.ravel().tolist(), label=info.xlabel,
+#                     aspect=100)
         #TODO: Fix title for this
         #fig.tight_layout()
         yield fig
