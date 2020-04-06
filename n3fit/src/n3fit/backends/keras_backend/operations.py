@@ -13,6 +13,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.layers import Lambda as keras_Lambda
 from tensorflow.keras.layers import multiply as keras_multiply
+from tensorflow.keras.layers import Concatenate as keras_concatenate
 
 from tensorflow.keras.layers import Input, Layer
 from tensorflow.keras import backend as K
@@ -27,13 +28,25 @@ def numpy_to_tensor(ival):
     return K.constant(ival)
 
 
-def batchit(x):
+def batchit(x, batch_dimension=0):
     """ Add a batch dimension to tensor x """
-    return tf.expand_dims(x, 0)
+    return tf.expand_dims(x, batch_dimension)
 
-def base_input(shape, batch_size = 1):
-    # TODO: docstring
-    return Input(shape, batch_size = batch_size)
+def concatenate_split(splitting_sizes, axis=1):
+    """ Generate a pair of concatention and splitting layer
+    so that they invert each other
+
+    Parameters
+    ----------
+        splitting_sizes: list(int)
+            size of the output of the split
+        axis: int
+            axis in which to apply the operation
+    """
+    concatenation_layer = keras_concatenate(axis=axis)
+    splitting_layer = keras_Lambda( lambda x: tf.split(x, splitting_sizes, axis=axis) )
+    return concatenation_layer, splitting_layer
+
 
 def numpy_to_input(numpy_array, no_reshape=False):
     """

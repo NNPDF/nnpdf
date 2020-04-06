@@ -20,6 +20,16 @@ scale_lr = {
         }
 
 def _parse_input(original_input, new_input = None):
+    """
+    Fills the placeholders of the original input with a new set of input
+
+    Parameters
+    ----------
+        original_input: dictionary
+            dictionary of input layers, can contain None
+        new_input: list or dictionary
+            list or dictionary of layers to substitute the None with
+    """
     if new_input is None:
         return original_input
     x = {}
@@ -99,8 +109,13 @@ class MetaModel(Model):
         self.all_outputs = output_list
         self.target_tensors = None
 
-    def _parse_input(self, extra_input): # TODO
-        return _parse_input(self.x_in, extra_input)
+    def _parse_input(self, extra_input, pass_numpy = True):
+        """ Introduces the extra_input in the places asigned to the
+        placeholders """
+        if pass_numpy:
+            return _parse_input(self.x_in, extra_input)
+        else:
+            return _parse_input(self.tensors_in, extra_input)
 
 
     def reinitialize(self):
@@ -268,9 +283,9 @@ class MetaModel(Model):
 
         Parameters
         ----------
-            `layer_names`: list
+            layer_names: list
                 list of names of the layers to update weights
-            `multiplier`: float
+            multiplier: float
                 scalar number to multiply the weights by
         """
         for layer_name in layer_names:
@@ -279,7 +294,8 @@ class MetaModel(Model):
             w_ref = layer.weights
             for val, tensor in zip(w_val, w_ref):
                 tensor.assign(val * multiplier)
-    
-    def perform_call(self, x):
-        x = _parse_input(self.tensors_in, x)
+  
+    def apply_layer(self, x):
+        """ Apply the model as a layer """
+        x = self._parse_input(x, pass_numpy=False)
         return super().__call__(x)

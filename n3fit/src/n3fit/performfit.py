@@ -244,8 +244,6 @@ def performfit(
         # After the fit is run we get a 'result' dictionary with the following items:
         stopping_object = result["stopping_object"]
         pdf_model = result["pdf_model"]
-        layers = result["layers"]
-        integrator_input = result["integrator_input"]
         true_chi2 = result["loss"]
         training = result["training"]
         log.info("Total exp chi2: %s", true_chi2)
@@ -282,7 +280,6 @@ def performfit(
             replica_number,
             pdf_function,
             stopping_object,
-            layers["fitbasis"],
             theoryid.get_description().get("Q0") ** 2,
             stopwatch.stop(),
         )

@@ -12,7 +12,8 @@ import logging
 import numpy as np
 import n3fit.model_gen as model_gen
 import n3fit.msr as msr_constraints
-from n3fit.backends import MetaModel, clear_backend_state
+from n3fit.backends import MetaModel, clear_backend_state, operations
+from n3fit.backends import Input
 from n3fit.stopping import Stopping
 
 log = logging.getLogger(__name__)
@@ -169,7 +170,9 @@ class ModelTrainer:
             self.kpartitions = kfold_parameters["partitions"]
             self.hyper_threshold = kfold_parameters.get("threshold", HYPER_THRESHOLD)
 
-        # Initialize the pdf layer
+        # Initialize the pdf model
+        self.pdf_model = None
+        self.integrator_input = None
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
@@ -294,6 +297,9 @@ class ModelTrainer:
         *Note*: before entering this function the dictionaries contain a list of inputs
             and a list of outputs, but they are not connected.
             This function connects inputs with outputs by injecting the PDF
+            The injection of the PDF is done by using the concatenating all inputs and calling
+            pdf_model on it.
+            This in turn generates an output_layer that needs to be splitted for every experiment.
 
         Compiles the validation and experimental models with fakes optimizers and learning rate
         as they are never trained, but this is needed by some backends
@@ -302,26 +308,18 @@ class ModelTrainer:
         log.info("Generating the Model")
 
         input_list = self.input_list
-        # Prepare the concatenation of the inputs
-        from tensorflow import split
-        from n3fit.backends import Concatenate # TODO
-        concatenated_input = Concatenate(axis = 1)(input_list)
-        # Generate the output layer for the PDF
-        pdf_output_layer = self.pdf_model.perform_call([concatenated_input])
-        # Note that the PDF_model is created with the pair [integrator_input, xgrid]
-        # therefore, any model that "composes" the pdf_model will need to add
-        # the integrator input to its input
+        # Generate the concatenation and splitting of the input-output
+        concatenation, splitting = operations.concatenate_split(self.input_sizes)
+        concatenated_input = concatenation(input_list)
+        concatenated_pdf = self.pdf_model.apply_layer([concatenated_input])
+        pdf_layers = splitting(concatenated_pdf)
+        # In order to use the pdf_model in subsequents models we need to add the integration_input
         full_model_input = [self.integrator_input] + input_list
-        # Since the observables are completely separated, it is necessary
-        # to split back the output of the PDF
-        pdf_layers = split(pdf_output_layer, self.input_sizes, axis=1)
-
 
         # Loop over all the dictionary models and create the trainig,
         #                 validation, true (data w/o replica) models:
         for model_dict in self.list_of_models_dicts:
-            olist = model_dict["output"]
-            output = self._pdf_injection(pdf_layers, olist)
+            output = self._pdf_injection(pdf_layers, model_dict["output"])
             model_dict["model"] = MetaModel(full_model_input, output)
 
         if self.model_file:
@@ -347,15 +345,12 @@ class ModelTrainer:
             self.validation[key] = []
             self.experimental[key] = []
 
-    def _pdf_injection(self, pdf_layers, olist):
+    def _pdf_injection(self, pdf_layers, observables):
         """
         Takes as input a list of output layers and returns a corresponding list
         where all output layers call the pdf layer at self.pdf_layer
         """
-        ret = []
-        for pdf, obs in zip(pdf_layers, olist):
-            ret.append(obs(pdf))
-        return ret
+        return [f(x) for f,x in zip(observables, pdf_layers)]
 
     ############################################################################
     # # Parametizable functions                                                #
@@ -483,7 +478,10 @@ class ModelTrainer:
             regularizer_args=regularizer_args
         )
 
-        integrator_input = None
+        # Create a placeholder input for the pdf model
+        # TODO: eventually this (as well as sumrule) should be part of model_gen
+        placeholder_input = Input(shape = (None, 1), batch_size = 1)
+
         if self.impose_sumrule:
             # Impose the sumrule
             # Inyect here momentum sum rule, effecively modifying layer_pdf
@@ -491,17 +489,14 @@ class ModelTrainer:
                 layers["fitbasis"], layer_pdf
             )
             self.integrator_input = integrator_input
-#             self.input_list.append(integrator_input)
+            model_input = [integrator_input, placeholder_input]
+        else:
+            model_input = [placeholder_input]
 
-        # Generate the PDF model that takes an xgrid as input and outputs a pdf value per x
-        from n3fit.backends import operations # TODO
-        placeholder_input = operations.base_input(shape = (None, 1))
-        oo = layer_pdf(placeholder_input)
-        pdf_model = MetaModel([integrator_input, placeholder_input], oo)
-
-        self.pdf_model = pdf_model
-
-        return layers, integrator_input
+        # Generate teh PDF model, which takes as input [integration_input, placeholder]
+        # Since the integration is fixed and the placeholder is free, when calling the model
+        # only the plaholder needs to be inputted
+        self.pdf_model = MetaModel(model_input, layer_pdf(placeholder_input))
 
     def _toggle_fold(self, datasets, kidx=0, off=False, recompile=False):
         """ Toggle the input dataset on (off) and turn all other datasets off (on) 
@@ -664,8 +659,8 @@ class ModelTrainer:
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         self._generate_observables(params["pos_multiplier"], params["pos_initial"])
 
-        # Generate the pdf layer
-        layers, integrator_input = self._generate_pdf(
+        # Generate the pdf model
+        self._generate_pdf(
             params["nodes_per_layer"],
             params["activation_per_layer"],
             params["initializer"],
@@ -769,7 +764,6 @@ class ModelTrainer:
                     'hyper_avg' : ave,
                     'hyper_std' : std,
                     }
-            #             arc_lengths = msr_constraints.compute_arclength(layers["fitbasis"])
             # If we are using hyperopt we don't need to output any other information
             return dict_out
 
@@ -779,8 +773,6 @@ class ModelTrainer:
         # to generate the output pdf, check the arc-length, gather stats, etc
         # some of them are already attributes of the class so they are redundant here
         # but I think it's good to present them explicitly
-        dict_out["layers"] = layers
-        dict_out["integrator_input"] = integrator_input
         dict_out["stopping_object"] = stopping_object
         dict_out["experimental"] = self.experimental
         dict_out["training"] = self.training

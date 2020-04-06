@@ -47,39 +47,6 @@ class xDivide(MetaLayer):
         return out_tensor
 
 
-class xMultiply(MetaLayer):
-    """
-        Multiply the pdf by x
-        By default: dimension = 8 multiply all entries but v, v3, v8
-
-        Parameters:
-        -----------
-            output_dim: int
-                dimension of the pdf
-            `not_mul_list`: list
-                list of indices *not* to multiply by X (by default [2,3,4]; [v, v3, v8]
-    """
-
-    def __init__(self, output_dim=8, not_mul_list=None, **kwargs):
-        if not_mul_list is None:
-            not_mul_list = [2, 3, 4]
-        self.output_dim = output_dim
-        self.not_mul_list = not_mul_list
-        super(MetaLayer, self).__init__(**kwargs)
-
-    def call(self, x):
-        out_array = []
-        one = self.tensor_ones_like(x)
-        for i in range(self.output_dim):
-            if i in self.not_mul_list:
-                res = one
-            else:
-                res = one * x
-            out_array.append(res)
-        out_tensor = self.concatenate(out_array, axis=-1)
-        return out_tensor
-
-
 class xIntegrator(MetaLayer):
     """
     This layer performs a sum of the input layer/tensor on the first axis
