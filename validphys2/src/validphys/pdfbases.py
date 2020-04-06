@@ -394,3 +394,24 @@ r'\bar{u}': {'ubar':1},
 r'\bar{d}': {'dbar':1},
 'c': {'c':1},
 })
+
+
+def flavtoev(x_flav):
+    """Rotates from the flavour to the evolution basis"""
+    u    = x_flav[0]
+    ubar = x_flav[1]
+    d    = x_flav[2]
+    dbar = x_flav[3]
+    s    = x_flav[4]
+    sbar = x_flav[5]
+    c    = x_flav[6]
+    g    = x_flav[7]
+    cbar = c
+    sigma = u + ubar + d + dbar + s + sbar + c + cbar
+    v = u - ubar + d - dbar + s - sbar + c - cbar
+    v3 = u - ubar - d + dbar
+    v8 = u - ubar + d - dbar - 2*s + 2*sbar
+    t3 = u + ubar - d - dbar
+    t8 = u + ubar + d + dbar - 2*s - 2*sbar
+    pdf_evol = [sigma, g, v, v3, v8, t3, t8, c+cbar]
+    return pdf_evol
