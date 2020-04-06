@@ -295,12 +295,8 @@ def pdfNN_layer_generator(
     out=14,
     seed=None,
     dropout=0.0,
-<<<<<<< HEAD
     regularizer=None,
     regularizer_args=None,
-=======
-    fitbasis=None, # TODO: maybe this can come directly in the basis object? otherwise it is necessary to pass this down from the runcard
->>>>>>> b239fb05... add flavour basis
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -457,13 +453,9 @@ def pdfNN_layer_generator(
     # Evolution layer
     layer_evln = Rotation(input_shape=(last_layer_nodes,), output_dim=out)
 
-    # Check what is the output basis of the NN and rotate to evolution basis
-    if fitbasis == "flavour": # TODO choose the name
-        basis_rotation = FlavourToEvolution()
-    else:
-    # otherwise, assume we are in the evolution basis when we come out of the NN
-        basis_rotation = lambda x: x
-
+    # Basis rotation
+    basis_rotation = FlavourToEvolution(flav_info=flav_info)
+    
     # Apply preprocessing and basis
     def layer_fitbasis(x):
         ret = operations.op_multiply([dense_me(x), layer_preproc(x)])

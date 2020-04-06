@@ -3,36 +3,34 @@
 """
 
 from n3fit.backends import MetaLayer
+from validphys.pdfbases import flavtoev
 
 class FlavourToEvolution(MetaLayer):
     """ 
-        Rotates from the evolution basis to
-        the evolution basis
+        Rotates from the flavour basis to
+        the evolution basis.
     """
-    # TODO: add a custom __init__ that defines the rotation
-
+    def __init__(
+        self,
+        flav_info=None,
+        **kwargs,
+    ):
+        if flav_info is None:
+            flav_info = []
+        self.flav_info = flav_info    
+        super().__init__(**kwargs)
+    
     def call(self, x_raw):
         # Let's decide that the input is
         # u, ubar, d, dbar, s, sbar, c, g
         # TODO: it needs to match
-        #       
+
         x_flav = self.transpose(x_raw)
-        u    = x_flav[0]
-        ubar = x_flav[1]
-        d    = x_flav[2]
-        dbar = x_flav[3]
-        s    = x_flav[4]
-        sbar = x_flav[5]
-        c    = x_flav[6]
-        g    = x_flav[7]
-        cbar = c
-        sigma = u + ubar + d + dbar + s + sbar + c + cbar
-        v = u - ubar + d - dbar + s - sbar + c - cbar
-        v3 = u - ubar - d + dbar
-        v8 = u - ubar + d - dbar - 2*s + 2*sbar
-        t3 = u + ubar - d - dbar
-        t8 = u + ubar + d + dbar - 2*s - 2*sbar
-        pdf_evol = [sigma, g, v, v3, v8, t3, t8, c+cbar]
+        #check the fit basis looking at the first flavour in the basis dictionary of the runcard 
+        if(self.flav_info[0]['fl'] == 'u'):
+            pdf_evol = flavtoev(x_flav)
+        else:
+            pdf_evol = x_flav    
         ret = self.concatenate(pdf_evol, target_shape=x_raw.shape)
         return ret
 
