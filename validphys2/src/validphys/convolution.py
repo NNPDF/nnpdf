@@ -42,7 +42,7 @@ import numpy as np
 from validphys.pdfbases import evolution
 from validphys.fkparser import load_fktable
 
-__all__ = ('fk_predictions', 'predictions')
+__all__ = ('fk_predictions', 'predictions', 'dis_predictions', 'hadron_predictions')
 
 
 FK_FLAVOURS = evolution.to_known_elements(
@@ -199,6 +199,7 @@ def fk_predictions(loaded_fk, pdf):
 
 
 def hadron_predictions(loaded_fk, pdf):
+    """Implementation of :py:func:`fk_predictions` for hadronic observables."""
     xgrid = loaded_fk.xgrid
     Q = loaded_fk.Q0
     sigma = loaded_fk.sigma
@@ -243,6 +244,7 @@ def hadron_predictions(loaded_fk, pdf):
 
 
 def dis_predictions(loaded_fk, pdf):
+    """Implementation of :py:func:`fk_predictions` for DIS observables."""
     xgrid = loaded_fk.xgrid
     Q = loaded_fk.Q0
     sigma = loaded_fk.sigma
