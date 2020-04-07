@@ -10,23 +10,20 @@ class Feature_Scaling(MetaLayer):
     """
 
     def __init__(self, scale_features=True, **kwargs):
-        self.scale_features = scale_features
-        self.first_run = True
-        self.scaler = None
-        super().__init__(**kwargs)
+        if scale_features:
+            fake_x = np.concatenate(
+                (np.logspace(-6, -3, num=50, endpoint=False), np.linspace(1e-3, 1, num=50))
+            )
+            self.scaler = MinMaxScaler(feature_range=(0.5, 1), copy=False)
+            self.scaler.fit(fake_x.reshape(-1,1))
 
-    def scale_features_func(self, x_raw):
-        fake_x = np.concatenate(
-            (np.logspace(-6, -3, num=50, endpoint=False), np.linspace(1e-3, 1, num=50))
-        )
-        self.scaler = MinMaxScaler(feature_range=(0.5, 1), copy=False)
-        self.scaler.fit(fake_x.reshape(-1,1))
+        super().__init__(**kwargs)
 
     def call(self, x_raw):
         x = x_raw
         if self.scale_features:
             if self.first_run:
                 self.first_run = False
-                self.scale_features_func(x_raw=x)
+                self.scale_features_func()
             self.scaler.transform(x.tensor_content.reshape(-1, 1))
         return x
