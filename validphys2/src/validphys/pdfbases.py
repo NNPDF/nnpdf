@@ -396,22 +396,46 @@ r'\bar{d}': {'dbar':1},
 })
 
 
-def flavtoev(x_flav):
-    """Rotates from the flavour to the evolution basis"""
-    u    = x_flav[0]
-    ubar = x_flav[1]
-    d    = x_flav[2]
-    dbar = x_flav[3]
-    s    = x_flav[4]
-    sbar = x_flav[5]
-    c    = x_flav[6]
-    g    = x_flav[7]
-    cbar = c
-    sigma = u + ubar + d + dbar + s + sbar + c + cbar
-    v = u - ubar + d - dbar + s - sbar + c - cbar
+def rotation(flav_info):
+    """Returnd a rotation matrix which takes from the flavour to the evolution basis,
+    from (u, ubar, d, dbar, s, sbar, c, g) to (sigma, g, v, v3, v8, t3, t8, cp) 
+    with 
+    cp = c + cbar = 2c
+    and
+    sigma = u + ubar + d + dbar + s + sbar + cp  
+    v = u - ubar + d - dbar + s - sbar + c - cbar 
     v3 = u - ubar - d + dbar
     v8 = u - ubar + d - dbar - 2*s + 2*sbar
     t3 = u + ubar - d - dbar
     t8 = u + ubar + d + dbar - 2*s - 2*sbar
-    pdf_evol = [sigma, g, v, v3, v8, t3, t8, c+cbar]
-    return pdf_evol
+
+    If the input is already in the evolution basis it returns the identity.
+    """
+    sigma = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': 1, 'sbar': 1, 'c': 2, 'g': 0 }
+    v = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': 1, 'sbar': -1, 'c': 0, 'g': 0 }
+    v3 = {'u': 1, 'ubar': -1, 'd': -1, 'dbar': 1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
+    v8 = {'u': 1, 'ubar': -1, 'd': 1, 'dbar': -1, 's': -2, 'sbar': 2, 'c': 0, 'g': 0 }
+    t3 = {'u': 1, 'ubar': 1, 'd': -1, 'dbar': -1, 's': 0, 'sbar': 0, 'c': 0, 'g': 0 }
+    t8 = {'u': 1, 'ubar': 1, 'd': 1, 'dbar': 1, 's': -2, 'sbar': -2, 'c': 0, 'g': 0 }
+    cp = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 2, 'g': 0 }
+    g = {'u': 0, 'ubar': 0, 'd': 0, 'dbar': 0, 's': 0, 'sbar': 0, 'c': 0, 'g': 1 }
+    flist = [sigma, g, v, v3, v8, t3, t8, cp]
+    
+    evol_basis = False
+    mat = []
+    for f in flist:
+        for flav_dict in flav_info:
+            try:
+                flav_name = flav_dict["fl"]
+                mat.append(f[flav_name])
+            # if one of the keys in the dictionary is not a key in flist
+            # it means we are already in the evolution basis    
+            except KeyError:
+                evol_basis = True
+                break
+        if evol_basis:
+            mat = np.identity(8)
+            break    
+
+    mat = np.asarray(mat)
+    return mat.reshape(8,8)    
