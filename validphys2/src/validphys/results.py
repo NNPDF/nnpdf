@@ -270,7 +270,7 @@ groups_sqrt_covmat = collect(
 
 @table
 def groups_sqrtcovmat(
-        groups, groups_index, groups_sqrt_covmat):
+        groups_data, groups_index, groups_sqrt_covmat):
     """Like groups_covmat, but dump the lower triangular part of the
     Cholesky decomposition as used in the fit. The upper part indices are set
     to zero.
@@ -278,7 +278,7 @@ def groups_sqrtcovmat(
     data = np.zeros((len(groups_index),len(groups_index)))
     df = pd.DataFrame(data, index=groups_index, columns=groups_index)
     for group, group_sqrt_covmat in zip(
-            groups, groups_sqrt_covmat):
+            groups_data, groups_sqrt_covmat):
         name = group.name
         group_sqrt_covmat[np.triu_indices_from(group_sqrt_covmat, k=1)] = 0
         df.loc[[name],[name]] = group_sqrt_covmat
@@ -286,14 +286,14 @@ def groups_sqrtcovmat(
 
 @table
 def groups_invcovmat(
-        groups, groups_index, groups_covmat_collection):
+        groups_data, groups_index, groups_covmat_collection):
     """Compute and export the inverse covariance matrix.
     Note that this inverts the matrices with the LU method which is
     suboptimal."""
     data = np.zeros((len(groups_index),len(groups_index)))
     df = pd.DataFrame(data, index=groups_index, columns=groups_index)
     for group, group_covmat in zip(
-            groups, groups_covmat_collection):
+            groups_data, groups_covmat_collection):
         name = group.name
         #Improve this inversion if this method tuns out to be important
         invcov = la.inv(group_covmat)
@@ -766,13 +766,13 @@ def _chs_per_replica(chs):
 
 
 @table
-def groups_chi2_table(groups, pdf, groups_chi2,
+def groups_chi2_table(groups_data, pdf, groups_chi2,
                            each_dataset_chi2):
     """Return a table with the chi² to the groups and each dataset in
     the groups."""
     dschi2 = iter(each_dataset_chi2)
     records = []
-    for group, groupres in zip(groups, groups_chi2):
+    for group, groupres in zip(groups_data, groups_chi2):
         stats = chi2_stats(groupres)
         stats['group'] = group.name
         records.append(stats)
