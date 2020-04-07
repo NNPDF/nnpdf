@@ -496,10 +496,10 @@ class CoreConfig(configparser.Config):
         if use_pdferr:
             return results.pdferr_plus_data_covmat
         else:
-            return results.data_covmat
+            return results.covmat
 
     @configparser.explicit_node
-    def produce_experiment_covariance_matrix(self, use_pdferr: bool = False):
+    def produce_group_covariance_matrix(self, use_pdferr: bool = False):
         """Modifies which action is used as experiment_covariance_matrix
         depending on the flag `use_pdferr`
         """
@@ -507,7 +507,7 @@ class CoreConfig(configparser.Config):
         if use_pdferr:
             return results.pdferr_plus_experiment_covmat
         else:
-            return results.experiment_covmat
+            return results.dataset_inputs_covmat
 
     #TODO: Do this better and elsewhere
     @staticmethod

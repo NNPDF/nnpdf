@@ -236,7 +236,7 @@ def group_result_table_68cl(group_result_table_no_table: pd.DataFrame, pdf: PDF)
     res = pd.concat([df.iloc[:, :2], df_cl], axis=1)
     return res
 
-groups_covmat_collection = collect('dataset_inputs_covmat', ('group_dataset_inputs_by_metadata',))
+groups_covmat_collection = collect('group_covariance_matrix', ('group_dataset_inputs_by_metadata',))
 
 
 def groups_covmat_no_table(
@@ -1136,9 +1136,8 @@ def perreplica_chi2_table(groups_data, groups_chi2, dataset_inputs_abs_chi2_data
         th, central, l = ch
         total_chis[i] = [central, *th.error_members()]
         ls.append(l)
-
-    total_chis[0] = dataset_inputs_abs_chi2_data.replica_result
-    total_n = dataset_inputs_abs_chi2_data.ndata
+    total_rep, total_central, total_n = dataset_inputs_abs_chi2_data
+    total_chis[0] = [total_central, *total_rep.error_members()]
     total_chis[0] /= total_n
     total_chis[1:, :] /= np.array(ls)[:, np.newaxis]
 
