@@ -24,6 +24,30 @@ in the :py:mod:`validphys.fkparser` module. For example::
     fk = l.check_fktable(setname="ATLASTTBARTOT", theoryID=53, cfac=('QCD',))
     res = load_fktable(fk)
 
-results in an :py:mod:`validphys.coredata.FKTableData` object containing all the information needed to compute a
-convolution. In particular the ``sigma`` property contains a dataframe
-representing the partonic cross-section (including the cfactors).
+results in an :py:mod:`validphys.coredata.FKTableData` object containing all
+the information needed to compute a convolution. In particular the ``sigma``
+property contains a dataframe representing the partonic cross-section
+(including the cfactors).
+
+Computing theory predictions
+----------------------------
+
+The :py:mod:`validphys.convolution` module implements the necessary tooling to
+compute theory predictions in pure Python. In particular the
+:py:func:`validphys.convolution.predictions` function returns predictions in
+terms of PDF and dataset objects that can be obtained directly from `validphys`
+runcards::
+
+    from validphys.api import API
+    from validphys.convolution import predictions
+
+    inp = {
+    'dataset_input': {'dataset': 'ATLASTTBARTOT', 'cfac': ['QCD']},
+    'theoryid': 162,
+    'use_cuts': 'internal',
+    'pdf': 'NNPDF31_nnlo_as_0118'
+    }
+
+    preds = predictions(API.dataset(**inp), API.pdf(**inp))
+
+    print(preds.values.mean(axis=1))
