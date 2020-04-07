@@ -24,7 +24,7 @@ comparable with the C++ code::
     pdf = API.pdf(**inp)
 
 
-    all_preds = [predictions(pdf, ds) for ds in all_datasets]
+    all_preds = [predictions(ds, pdf) for ds in all_datasets]
 
     for ds, pred in zip(all_datasets, all_preds):
         cpp = tb.loc[(slice(None),ds.name), :]
@@ -88,7 +88,7 @@ OP = {
 }
 
 
-def predictions(pdf, dataset):
+def predictions(dataset, pdf):
     """"Compute theory predictions for a given PDF and dataset. Information
     regading the dataset, on cuts, CFactors and combinations of FKTables is
     taken into account to construct the predictions.
@@ -98,10 +98,10 @@ def predictions(pdf, dataset):
 
     Parameters
     ----------
-    pdf : validphys.core.PDF
-        The PDF set to use for the convolutions.
     dataset : validphys.core.DatasetSpec
         The dataset containing information on the partonic cross section.
+    pdf : validphys.core.PDF
+        The PDF set to use for the convolutions.
 
     Returns
     -------
@@ -124,7 +124,7 @@ def predictions(pdf, dataset):
     >>> ds = l.check_dataset('ATLASTTBARTOT', theoryid=53)
     >>> from validphys.convolution import predictions
     >>> pdf = l.check_pdf('NNPDF31_nnlo_as_0118')
-    >>> preds = predictions(pdf, ds)
+    >>> preds = predictions(ds, pdf)
     >>> preds.T.describe()
     data            0           1           2
     count  100.000000  100.000000  100.000000
@@ -141,21 +141,21 @@ def predictions(pdf, dataset):
     opfunc = OP[dataset.op]
     cuts = dataset.cuts.load() if dataset.cuts is not None else None
     all_predictions = [
-        fk_predictions(pdf, load_fktable(fk).with_cuts(cuts)) for fk in dataset.fkspecs
+        fk_predictions(load_fktable(fk).with_cuts(cuts), pdf) for fk in dataset.fkspecs
     ]
     return opfunc(*all_predictions)
 
 
-def fk_predictions(pdf, loaded_fk):
+def fk_predictions(loaded_fk, pdf):
     """Low level function to compute predictions from a
     FKTable.
 
     Parameters
     ----------
-    pdf :  validphys.core.PDF
-        The PDF set to use for the convolutions.
     loaded_fk : validphys.coredata.FKTableData
         The FKTable corresponding to the partonic cross section.
+    pdf :  validphys.core.PDF
+        The PDF set to use for the convolutions.
 
     Returns
     -------
@@ -184,7 +184,7 @@ def fk_predictions(pdf, loaded_fk):
         >>> pdf = l.check_pdf('NNPDF31_nnlo_as_0118')
         >>> ds = l.check_dataset('ATLASTTBARTOT', theoryid=53, cfac=('QCD',))
         >>> table = load_fktable(ds.fkspecs[0])
-        >>> hadron_predictions(pdf ,table)
+        >>> hadron_predictions(table, pdf)
                      1           2           3           4    ...         97          98          99          100
         data                                                  ...
         0     176.688118  170.172930  172.460771  173.792321  ...  179.504636  172.343792  168.372508  169.927820
@@ -193,12 +193,12 @@ def fk_predictions(pdf, loaded_fk):
 
     """
     if loaded_fk.hadronic:
-        return hadron_predictions(pdf, loaded_fk)
+        return hadron_predictions(loaded_fk, pdf)
     else:
-        return dis_predictions(pdf, loaded_fk)
+        return dis_predictions(loaded_fk, pdf)
 
 
-def hadron_predictions(pdf, loaded_fk):
+def hadron_predictions(loaded_fk, pdf):
     xgrid = loaded_fk.xgrid
     Q = loaded_fk.Q0
     sigma = loaded_fk.sigma
@@ -242,7 +242,7 @@ def hadron_predictions(pdf, loaded_fk):
     return sigma.groupby(level=0).apply(appl)
 
 
-def dis_predictions(pdf, loaded_fk):
+def dis_predictions(loaded_fk, pdf):
     xgrid = loaded_fk.xgrid
     Q = loaded_fk.Q0
     sigma = loaded_fk.sigma
