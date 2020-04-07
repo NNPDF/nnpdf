@@ -1,38 +1,28 @@
 """
     This module includes rotation layers
 """
-
 from n3fit.backends import MetaLayer
-from validphys.pdfbases import flavtoev
+from validphys.pdfbases import rotation
 
 class FlavourToEvolution(MetaLayer):
     """ 
         Rotates from the flavour basis to
-        the evolution basis.
+        the evolution basis. 
     """
     def __init__(
         self,
-        flav_info=None,
+        flav_info,
         **kwargs,
     ):
-        if flav_info is None:
-            flav_info = []
-        self.flav_info = flav_info    
+        rotation_matrix = rotation(flav_info)
+        self.rotation_matrix = self.np_to_tensor(rotation_matrix)   
         super().__init__(**kwargs)
     
-    def call(self, x_raw):
-        # Let's decide that the input is
-        # u, ubar, d, dbar, s, sbar, c, g
-        # TODO: it needs to match
-
+    def call(self, x_raw):    
         x_flav = self.transpose(x_raw)
-        #check the fit basis looking at the first flavour in the basis dictionary of the runcard 
-        if(self.flav_info[0]['fl'] == 'u'):
-            pdf_evol = flavtoev(x_flav)
-        else:
-            pdf_evol = x_flav    
-        ret = self.concatenate(pdf_evol, target_shape=x_raw.shape)
-        return ret
+        pdf_evol = self.tensor_product(self.rotation_matrix, x_flav, 1)
+        return self.reshape(pdf_evol, x_raw.shape)      
+        
 
 
 class Rotation(MetaLayer):

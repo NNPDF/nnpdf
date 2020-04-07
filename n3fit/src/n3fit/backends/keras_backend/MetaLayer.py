@@ -191,3 +191,6 @@ class MetaLayer(Layer):
         does the permutation: axis_0 -> axis_1, axis_1 -> axis_0, axis_2 -> axis_2
         """
         return K.permute_dimensions(tensor, permutation, **kwargs)
+
+    def reshape(self, tensor, target_shape):
+        return tf.reshape(tensor, target_shape)
