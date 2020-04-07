@@ -469,12 +469,10 @@ def pdfNN_layer_generator(
 
     layer_scaling = Feature_Scaling(name="feature_scaling")
 
-    layer_scaling(x)
-
     def dense_me(x):
         """ Takes an input tensor `x` and applies all layers
         from the `list_of_pdf_layers` in order """
-        x = layer_feature_scaling(x)
+        x = layer_scaling(x)
 
         if inp == 1:
             curr_fun = list_of_pdf_layers[0](x)

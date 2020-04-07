@@ -10,7 +10,8 @@ class Feature_Scaling(MetaLayer):
     """
 
     def __init__(self, scale_features=True, **kwargs):
-        if scale_features:
+        self.scale_features = scale_features
+        if self.scale_features:
             fake_x = np.concatenate(
                 (np.logspace(-6, -3, num=50, endpoint=False), np.linspace(1e-3, 1, num=50))
             )
@@ -22,8 +23,5 @@ class Feature_Scaling(MetaLayer):
     def call(self, x_raw):
         x = x_raw
         if self.scale_features:
-            if self.first_run:
-                self.first_run = False
-                self.scale_features_func()
             self.scaler.transform(x.tensor_content.reshape(-1, 1))
         return x
