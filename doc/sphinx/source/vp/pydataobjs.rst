@@ -51,3 +51,31 @@ runcards::
     preds = predictions(API.dataset(**inp), API.pdf(**inp))
 
     print(preds.values.mean(axis=1))
+
+
+The usage of standard scientific Python types opens interesting avenues for
+parallelization. For example here is how to compute the mean prediction for all
+datasets using the `Dask <https://dask.org/>`_ library::
+
+    from dask.distributed import Client
+
+    from validphys.api import API
+    from validphys.convolution import predictions
+
+    c = Client()
+
+    inp = {
+        'fit': '181023-001-sc',
+        'use_cuts': 'internal',
+        'theoryid': 162,
+        'pdf': 'NNPDF31_nlo_as_0118',
+        'experiments': {'from_': 'fit'}
+    }
+
+
+    all_datasets = [ds for e in API.experiments(**inp) for ds in e.datasets]
+
+    pdf = API.pdf(**inp)
+
+    future_pred = dask.delayed(pure=True)(predictions)
+    c.gather(c.compute([np.mean(future_pred(ds, pdf), axis=0) for ds in all_datasets]))
