@@ -192,5 +192,4 @@ class MetaLayer(Layer):
         """
         return K.permute_dimensions(tensor, permutation, **kwargs)
 
-    def reshape(self, tensor, target_shape):
-        return tf.reshape(tensor, target_shape)
+    
