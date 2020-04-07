@@ -466,9 +466,9 @@ def covmat(
 
 
 @check_pdf_is_montecarlo
-def pdferr_plus_data_covmat(dataset, pdf, data_covmat):
+def pdferr_plus_covmat(dataset, pdf, covmat):
     """For a given `dataset`, returns the sum of the covariance matrix given by
-    `data_covmat` and the PDF error: a covariance matrix estimated from the
+    `covmat` and the PDF error: a covariance matrix estimated from the
     replica theory predictions from a given monte carlo `pdf`
 
     if `use_pdferr` is True then this action will be used to produce covariance
@@ -480,7 +480,7 @@ def pdferr_plus_data_covmat(dataset, pdf, data_covmat):
         object parsed from the `dataset_input` runcard key
     pdf: PDF
         monte carlo pdf used to estimate PDF error
-    data_covmat: np.array
+    covmat: np.array
         experimental covariance matrix
 
     Returns
@@ -502,18 +502,18 @@ def pdferr_plus_data_covmat(dataset, pdf, data_covmat):
             'use_cuts': 'nocuts'
         }
     >>> a = API.covariance_matrix(**inp, use_pdferr=True)
-    >>> b = API.pdferr_plus_data_covmat(**inp)
+    >>> b = API.pdferr_plus_covmat(**inp)
     >>> np.allclose(a == b)
     True
 
     See Also
     --------
-    data_covmat: Standard experimental covariance matrix
+    covmat: Standard experimental covariance matrix
     """
     loaded_data = dataset.load()
     th = ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=loaded_data)
     pdf_cov = np.cov(th._rawdata, rowvar=True)
-    return pdf_cov + data_covmat
+    return pdf_cov + covmat
 
 
 datasets_covmat = collect('covmat', ('data',))
@@ -576,10 +576,10 @@ def dataset_inputs_covmat(
         )
     return covmat
 
-def pdferr_plus_experiment_covmat(experiment, pdf, experiment_covmat):
-    """Like `pdferr_plus_data_covmat` except for an experiment"""
+def pdferr_plus_dataset_inputs_covmat(data, pdf, dataset_inputs_covmat):
+    """Like `pdferr_plus_covmat` except for an experiment"""
     # do checks get performed here?
-    return pdferr_plus_data_covmat(experiment, pdf, experiment_covmat)
+    return pdferr_plus_covmat(data, pdf, dataset_inputs_covmat)
 
 def dataset_inputs_sqrt_covmat(dataset_inputs_covmat):
     """Like `sqrt_covmat` but for an group of datasets"""

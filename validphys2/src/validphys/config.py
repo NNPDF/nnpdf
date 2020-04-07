@@ -494,7 +494,7 @@ class CoreConfig(configparser.Config):
         """
         from validphys import results
         if use_pdferr:
-            return results.pdferr_plus_data_covmat
+            return results.pdferr_plus_covmat
         else:
             return results.covmat
 
@@ -505,7 +505,7 @@ class CoreConfig(configparser.Config):
         """
         from validphys import results
         if use_pdferr:
-            return results.pdferr_plus_experiment_covmat
+            return results.pdferr_plus_dataset_inputs_covmat
         else:
             return results.dataset_inputs_covmat
 
