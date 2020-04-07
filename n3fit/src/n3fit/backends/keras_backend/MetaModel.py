@@ -5,21 +5,14 @@
     backend-dependent calls
 """
 
-import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
-from tensorflow.keras import backend as K
-
-from n3fit.backends.keras_backend.operations import numpy_to_input, batchit
-
-import numpy as np
 
 # TODO: bad, real bad
-scale_lr = {
-        'Adadelta' : 100.0
-        }
+scale_lr = {"Adadelta": 100.0}
 
-def _parse_input(original_input, new_input = None):
+
+def _parse_input(original_input, new_input=None):
     """
     Fills the placeholders of the original input with a new set of input
 
@@ -45,6 +38,7 @@ def _parse_input(original_input, new_input = None):
             x[key] = value
     return x
 
+
 class MetaModel(Model):
     """
     The `MetaModel` behaves as the tensorflow.keras.model.Model class,
@@ -55,8 +49,6 @@ class MetaModel(Model):
     together with the input_tensors by setting a `tensor_content` equal to the input value.
     This is done automatically when using the `numpy_to_input` function from
     `n3fit.backends.keras_backend.operations`
-
-    
 
     Parameters
     ----------
@@ -109,14 +101,13 @@ class MetaModel(Model):
         self.all_outputs = output_list
         self.target_tensors = None
 
-    def _parse_input(self, extra_input, pass_numpy = True):
+    def _parse_input(self, extra_input, pass_numpy=True):
         """ Introduces the extra_input in the places asigned to the
         placeholders """
         if pass_numpy:
             return _parse_input(self.x_in, extra_input)
         else:
             return _parse_input(self.tensors_in, extra_input)
-
 
     def reinitialize(self):
         """ Run through all layers and reinitialize the ones that can be reinitialied """
@@ -150,9 +141,10 @@ class MetaModel(Model):
         loss_dict = history.history
         return loss_dict
 
-    def predict(self, x=None, *args, **kwargs):
+    def predict(self, x=None, **kwargs):
+        """ Call super().predict with the right input arguments """
         x = self._parse_input(x)
-        result = super().predict(x=x, *args, **kwargs)
+        result = super().predict(x=x, **kwargs)
         return result
 
     def compute_losses(self, *args, **kwargs):
@@ -163,8 +155,8 @@ class MetaModel(Model):
         This function acts as wrapper around Keras' evaluate and uses the information from
         the Keras' metric in order to return information on the losses in an unified format.
 
-        Instead, the Keras' evaluate method returns either a list (with no information about which loss corresponds to
-        which output) or a float (if there is a single output).
+        Instead, the Keras' evaluate method returns either a list (with no information about which
+        loss corresponds to which output) or a float (if there is a single output).
 
         This function is compatible with the dict output by the fit history object.
 
@@ -248,7 +240,7 @@ class MetaModel(Model):
         opt_args = opt_tuple[1]
 
         if "lr" in opt_args.keys():
-            opt_args["lr"] = learning_rate*scale_lr.get(opt_function, 1.0)
+            opt_args["lr"] = learning_rate * scale_lr.get(opt_function, 1.0)
 
         opt_args["clipnorm"] = 1.0
         opt = opt_function(**opt_args)
@@ -294,7 +286,7 @@ class MetaModel(Model):
             w_ref = layer.weights
             for val, tensor in zip(w_val, w_ref):
                 tensor.assign(val * multiplier)
-  
+
     def apply_layer(self, x):
         """ Apply the model as a layer """
         x = self._parse_input(x, pass_numpy=False)

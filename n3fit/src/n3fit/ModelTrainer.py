@@ -66,7 +66,7 @@ def _compile_one_model(model_dict, kidx=None, negate_fold=False, **params):
     Compiles one model dictionary. The model dictionary must include a backend-dependent
     model (`model`), a list of losses (`losses`), data to be compared with (`data`) and,
     if applies, a "fold".
-   
+
     Parameters
     ----------
         model_dict: dict
@@ -85,6 +85,7 @@ def _compile_one_model(model_dict, kidx=None, negate_fold=False, **params):
     folded_data = _fold_data(data, fold, kidx, negate_fold=negate_fold)
     model.compile(loss=losses, target_output=folded_data, **params)
 
+
 def _count_data_fold(folds, k_idx):
     """
     Count the number of active datapoints in this fold
@@ -100,6 +101,14 @@ def _count_data_fold(folds, k_idx):
     for fold in folds:
         n += np.count_nonzero(~fold[k_idx])
     return n
+
+
+def _pdf_injection(pdf_layers, observables):
+    """
+    Takes as input a list of output layers and returns a corresponding list
+    where all output layers call the pdf layer at self.pdf_layer
+    """
+    return [f(x) for f, x in zip(observables, pdf_layers)]
 
 
 class ModelTrainer:
@@ -163,6 +172,7 @@ class ModelTrainer:
         self.mode_hyperopt = False
         self.model_file = None
         self.impose_sumrule = True
+        self.hyperkeys = None
         if kfold_parameters is None:
             self.kpartitions = [None]
             self.hyper_threshold = None
@@ -319,7 +329,7 @@ class ModelTrainer:
         # Loop over all the dictionary models and create the trainig,
         #                 validation, true (data w/o replica) models:
         for model_dict in self.list_of_models_dicts:
-            output = self._pdf_injection(pdf_layers, model_dict["output"])
+            output = _pdf_injection(pdf_layers, model_dict["output"])
             model_dict["model"] = MetaModel(full_model_input, output)
 
         if self.model_file:
@@ -344,13 +354,6 @@ class ModelTrainer:
             self.training[key] = []
             self.validation[key] = []
             self.experimental[key] = []
-
-    def _pdf_injection(self, pdf_layers, observables):
-        """
-        Takes as input a list of output layers and returns a corresponding list
-        where all output layers call the pdf layer at self.pdf_layer
-        """
-        return [f(x) for f,x in zip(observables, pdf_layers)]
 
     ############################################################################
     # # Parametizable functions                                                #
@@ -480,7 +483,7 @@ class ModelTrainer:
 
         # Create a placeholder input for the pdf model
         # TODO: eventually this (as well as sumrule) should be part of model_gen
-        placeholder_input = Input(shape = (None, 1), batch_size = 1)
+        placeholder_input = Input(shape=(None, 1), batch_size=1)
 
         if self.impose_sumrule:
             # Impose the sumrule
@@ -499,7 +502,7 @@ class ModelTrainer:
         self.pdf_model = MetaModel(model_input, layer_pdf(placeholder_input))
 
     def _toggle_fold(self, datasets, kidx=0, off=False, recompile=False):
-        """ Toggle the input dataset on (off) and turn all other datasets off (on) 
+        """ Toggle the input dataset on (off) and turn all other datasets off (on)
 
         Parameters
         ----------
@@ -730,7 +733,10 @@ class ModelTrainer:
                 # Toggle the fold
                 self._toggle_fold(datasets, kidx=k, off=False, recompile=True)
                 # Compute the hyperopt loss
-                hyper_loss = self.experimental["model"].compute_losses()["loss"]/self.experimental["ndata"]
+                hyper_loss = (
+                    self.experimental["model"].compute_losses()["loss"]
+                    / self.experimental["ndata"]
+                )
                 hyper_losses.append(hyper_loss)
                 # Check whether this run is any good, if not, get out
                 log.info(f"fold: {k}")
@@ -757,13 +763,13 @@ class ModelTrainer:
             std = np.var(hyper_losses)
             dict_out["loss"] = ave
             dict_out["kfold_meta"] = {
-                    'training_losses' : l_train,
-                    'validation_losses': l_valid,
-                    'experimental_losses': l_exper,
-                    'hyper_losses': hyper_losses,
-                    'hyper_avg' : ave,
-                    'hyper_std' : std,
-                    }
+                "training_losses": l_train,
+                "validation_losses": l_valid,
+                "experimental_losses": l_exper,
+                "hyper_losses": hyper_losses,
+                "hyper_avg": ave,
+                "hyper_std": std,
+            }
             # If we are using hyperopt we don't need to output any other information
             return dict_out
 
