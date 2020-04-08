@@ -1,3 +1,5 @@
+# IMPORTANT: scale combinations must be listed according to (muF, muR) in the following order:
+# (1,1), (2,1), (0.5,1), (1,2), (1,0.5), (2,2), (0.5,0.5), (2,0.5), (0.5,2)
 point_prescriptions:
   - name: '3 point'
     scales: [{'muF': '1', 'muR': '1'}, {'muF': '2', 'muR': '2'}, {'muF': '0.5', 'muR': '0.5'}]
