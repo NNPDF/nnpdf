@@ -39,7 +39,7 @@ See the `short
       and the scale combinations that are used to construct it
 
    #. ``scalevariationtheoryids.yaml``: correspondence between each scale combination
-      and a theoryid, for a given central theoryid
+      and a theoryid for a given central theoryid
 
 -  The prescription must be one of :math:`\{3,5,7,9\}`.
 
@@ -47,6 +47,10 @@ See the `short
    :math:`\bar{5}` prescription is required. You can do this by
    allocating the flag ``fivetheories`` to ``nobar`` or ``bar`` in the
    runcard.
+
+-  In the case of 7 theories, there are two options. The default is the
+   modified prescription that Gavin Salam proposed. To use the original
+   prescription instead, specify ``seventheories: original`` in the runcard.
 
 -  Currently the renormalisation scales are correlated within each
    process type. These process types are categorised as {DIS CC, DIS NC,
