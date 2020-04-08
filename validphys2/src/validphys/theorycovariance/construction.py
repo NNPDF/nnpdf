@@ -587,7 +587,7 @@ def chi2_diag_only(theory_diagcovmat, groups_covmat, data_theory_diff):
     chi2 = (1/len(data_theory_diff))*np.sum(elements)
     return chi2
 
-each_dataset_results = collect(results, ('data_input',))
+each_dataset_results = collect(results, ('data',))
 
 def abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_datasets):
     """Returns an array of tuples (member_chi², central_chi², numpoints)
@@ -601,7 +601,7 @@ def abs_chi2_data_theory_dataset(each_dataset_results, total_covmat_datasets):
                                    central_result, len(data_result)))
     return chi2data_array
 
-def abs_chi2_data_theory_experiment(groups_results, total_covmat_groups):
+def abs_chi2_data_theory_group(groups_results, total_covmat_groups):
     """Like abs_chi2_data_theory_dataset but for groups not datasets"""
     chi2data_array = []
     for expresults, covmat in zip(groups_results, total_covmat_groups):
@@ -612,10 +612,10 @@ def abs_chi2_data_theory_experiment(groups_results, total_covmat_groups):
                               central_result, len(data_result)))
     return chi2data_array
 
-def abs_chi2_data_diagtheory_experiment(groups_results,
+def abs_chi2_data_diagtheory_group(groups_results,
                                         total_covmat_diagtheory_groups):
     """For a diagonal theory covmat"""
-    return abs_chi2_data_theory_experiment(groups_results,
+    return abs_chi2_data_theory_group(groups_results,
                                            total_covmat_diagtheory_groups)
 
 def abs_chi2_data_diagtheory_dataset(each_dataset_results,
