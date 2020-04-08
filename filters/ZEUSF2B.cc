@@ -36,7 +36,9 @@ void ZEUSF2BFilter::ReadData()
     f1 >> fKin1[i]; //x
     f1 >> dummy >> dummy;
     
-    fKin3[i] = 0.0; //y
+    double E= 27.5;    // GeV
+    double mp = 0.938; //GeV
+    fKin3[i] = fKin2[i] / ( 2.*E*mp*fKin1[i] ); //y
 
     f1 >> data; //obs
  

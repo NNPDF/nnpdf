@@ -39,14 +39,16 @@ void EMCF2PFilter::ReadData()
   getline(f1,line);
   getline(f1,line);
     
-
   //Filtering data
   for (int i = 0; i < fNData; i++)
   {
+    double mp = 0.938; //GeV
+    double E;
+    f1 >> E;        //E beam
     f1 >> fKin1[i]; //x
     f1 >> fKin2[i]; //Q2
     
-    fKin3[i] = 0.0; //y
+    fKin3[i] = fKin2[i] / ( 2.*E*mp*fKin1[i] ) ; //y
 
     f1 >> fData[i]; //obs
  
@@ -108,10 +110,13 @@ void EMCF2DFilter::ReadData()
   //Filtering data
   for (int i = 0; i < fNData; i++)
   {
+    double mp = 0.938; //GeV
+    double E;
+    f1 >> E;        //E beam
     f1 >> fKin1[i]; //x
     f1 >> fKin2[i]; //Q2
     
-    fKin3[i] = 0.0; //y
+    fKin3[i] = fKin2[i] / ( 2.*E*mp*fKin1[i] ) ; //y
 
     f1 >> fData[i]; //obs
 
