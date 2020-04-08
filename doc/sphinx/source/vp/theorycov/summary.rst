@@ -31,13 +31,17 @@ See the `short
 
 -  Theoretical covariance matrices are built according to the various prescriptions.
 
--  As input you need theories at the relevant scale combinations which
-   correspond to the prescription.
+-  As input you need theories for the relevant scale combinations which
+   correspond to the prescription. This information is taken from the
+   ``scalevariations`` module, which consists of two files:
 
--  These must be ordered in a specific way in the runcard.
+   #. ``pointprescriptions.yaml``: correspondence between each point prescription
+      and the scale combinations that are used to construct it
 
--  The prescription is chosen based on the number of input theories,
-   which must be one of :math:`\{3,5,7,9\}`.
+   #. ``scalevariationtheoryids.yaml``: correspondence between each scale combination
+      and a theoryid, for a given central theoryid
+
+-  The prescription must be one of :math:`\{3,5,7,9\}`.
 
 -  In the case of 5 theories, you must further specify whether the 5 or
    :math:`\bar{5}` prescription is required. You can do this by

@@ -7,8 +7,6 @@ appear in ``validphys2``.
 3 points
 --------
 
-theoryids: 163, 180, 173
-
 .. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+,+)^2 + \Delta_1(-,-)^2 \bigg\}
 
 .. math:: s_{12} = \frac{1}{4}\bigg\{\bigg(\Delta_1(+,+) + \Delta_1(-,-) \bigg) \bigg(\Delta_2(+,+) + \Delta_2(-,-) \bigg) \bigg\}
@@ -16,8 +14,6 @@ theoryids: 163, 180, 173
 
 5 points
 ---------
-
-theoryids: 163, 177, 176, 179, 174
 
 .. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+,0)^2 + \Delta_1(-,0)^2 + \Delta_1(0,+)^2 + \Delta_1(0,-)^2 \bigg\}
 
@@ -30,8 +26,6 @@ theoryids: 163, 177, 176, 179, 174
 
 :math:`\mathbf{\overline{5}}` points
 ------------------------------------
-
-theoryids: 163, 180, 173, 175, 178
 
 .. math:: s_{11} = \frac{1}{2}\bigg\{ \Delta_1(+,+)^2 + \Delta_1(-,-)^2 + \Delta_1(+,-)^2 + \Delta_1(-,+)^2 \bigg\}
 
@@ -46,7 +40,6 @@ theoryids: 163, 180, 173, 175, 178
 -------------------
 
 | Specify in the runcard ``seventheories: original``
-| theoryids: 163, 177, 176, 179, 174, 180, 173
 
   .. math::
 
@@ -64,8 +57,6 @@ theoryids: 163, 180, 173, 175, 178
 
 7 points - Gavin (default)
 --------------------------
-
-theoryids: 163, 177, 176, 179, 174, 180, 173
 
 .. math::
 
@@ -85,8 +76,6 @@ theoryids: 163, 177, 176, 179, 174, 180, 173
 
 9 points
 --------
-
-theoryids: 163, 177, 176, 179, 174, 180, 173, 175, 178
 
 .. math::
 
