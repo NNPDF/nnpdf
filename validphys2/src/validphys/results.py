@@ -236,8 +236,7 @@ def group_result_table_68cl(group_result_table_no_table: pd.DataFrame, pdf: PDF)
     res = pd.concat([df.iloc[:, :2], df_cl], axis=1)
     return res
 
-groups_covmat_collection = collect('dataset_inputs_covmat', ('group_dataset_inputs_by_metadata',))
-
+groups_covmat_collection = collect('group_covariance_matrix', ('group_dataset_inputs_by_metadata',))
 
 def groups_covmat_no_table(
        groups_data, groups_index, groups_covmat_collection):
@@ -270,7 +269,7 @@ groups_sqrt_covmat = collect(
 
 @table
 def groups_sqrtcovmat(
-        groups, groups_index, groups_sqrt_covmat):
+        groups_data, groups_index, groups_sqrt_covmat):
     """Like groups_covmat, but dump the lower triangular part of the
     Cholesky decomposition as used in the fit. The upper part indices are set
     to zero.
@@ -278,7 +277,7 @@ def groups_sqrtcovmat(
     data = np.zeros((len(groups_index),len(groups_index)))
     df = pd.DataFrame(data, index=groups_index, columns=groups_index)
     for group, group_sqrt_covmat in zip(
-            groups, groups_sqrt_covmat):
+            groups_data, groups_sqrt_covmat):
         name = group.name
         group_sqrt_covmat[np.triu_indices_from(group_sqrt_covmat, k=1)] = 0
         df.loc[[name],[name]] = group_sqrt_covmat
@@ -286,14 +285,14 @@ def groups_sqrtcovmat(
 
 @table
 def groups_invcovmat(
-        groups, groups_index, groups_covmat_collection):
+        groups_data, groups_index, groups_covmat_collection):
     """Compute and export the inverse covariance matrix.
     Note that this inverts the matrices with the LU method which is
     suboptimal."""
     data = np.zeros((len(groups_index),len(groups_index)))
     df = pd.DataFrame(data, index=groups_index, columns=groups_index)
     for group, group_covmat in zip(
-            groups, groups_covmat_collection):
+            groups_data, groups_covmat_collection):
         name = group.name
         #Improve this inversion if this method tuns out to be important
         invcov = la.inv(group_covmat)
@@ -464,6 +463,55 @@ def covmat(
         )
     return covmat
 
+
+@check_pdf_is_montecarlo
+def pdferr_plus_covmat(dataset, pdf, covmat):
+    """For a given `dataset`, returns the sum of the covariance matrix given by
+    `covmat` and the PDF error: a covariance matrix estimated from the
+    replica theory predictions from a given monte carlo `pdf`
+
+    Parameters
+    ----------
+    dataset: DataSetSpec
+        object parsed from the `dataset_input` runcard key
+    pdf: PDF
+        monte carlo pdf used to estimate PDF error
+    covmat: np.array
+        experimental covariance matrix
+
+    Returns
+    -------
+    covariance_matrix: np.array
+        sum of the experimental and pdf error as a numpy array
+
+    Examples
+    --------
+
+    `use_pdferr` makes this action be used for `covariance_matrix`
+
+    >>> from validphys.api import API
+    >>> from import numpy as np
+    >>> inp = {
+            'dataset_input': {'dataset' : 'ATLASTTBARTOT'},
+            'theoryid': 53,
+            'pdf': 'NNPDF31_nlo_as_0118',
+            'use_cuts': 'nocuts'
+        }
+    >>> a = API.covariance_matrix(**inp, use_pdferr=True)
+    >>> b = API.pdferr_plus_covmat(**inp)
+    >>> np.allclose(a == b)
+    True
+
+    See Also
+    --------
+    covmat: Standard experimental covariance matrix
+    """
+    loaded_data = dataset.load()
+    th = ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=loaded_data)
+    pdf_cov = np.cov(th._rawdata, rowvar=True)
+    return pdf_cov + covmat
+
+
 datasets_covmat = collect('covmat', ('data',))
 
 def sqrt_covmat(covmat: np.array):
@@ -523,6 +571,11 @@ def dataset_inputs_covmat(
             norm_threshold=norm_threshold
         )
     return covmat
+
+def pdferr_plus_dataset_inputs_covmat(data, pdf, dataset_inputs_covmat):
+    """Like `pdferr_plus_covmat` except for an experiment"""
+    # do checks get performed here?
+    return pdferr_plus_covmat(data, pdf, dataset_inputs_covmat)
 
 def dataset_inputs_sqrt_covmat(dataset_inputs_covmat):
     """Like `sqrt_covmat` but for an group of datasets"""
@@ -709,13 +762,13 @@ def _chs_per_replica(chs):
 
 
 @table
-def groups_chi2_table(groups, pdf, groups_chi2,
+def groups_chi2_table(groups_data, pdf, groups_chi2,
                            each_dataset_chi2):
     """Return a table with the chi² to the groups and each dataset in
     the groups."""
     dschi2 = iter(each_dataset_chi2)
     records = []
-    for group, groupres in zip(groups, groups_chi2):
+    for group, groupres in zip(groups_data, groups_chi2):
         stats = chi2_stats(groupres)
         stats['group'] = group.name
         records.append(stats)
@@ -1079,9 +1132,8 @@ def perreplica_chi2_table(groups_data, groups_chi2, dataset_inputs_abs_chi2_data
         th, central, l = ch
         total_chis[i] = [central, *th.error_members()]
         ls.append(l)
-
-    total_chis[0] = dataset_inputs_abs_chi2_data.replica_result
-    total_n = dataset_inputs_abs_chi2_data.ndata
+    total_rep, total_central, total_n = dataset_inputs_abs_chi2_data
+    total_chis[0] = [total_central, *total_rep.error_members()]
     total_chis[0] /= total_n
     total_chis[1:, :] /= np.array(ls)[:, np.newaxis]
 

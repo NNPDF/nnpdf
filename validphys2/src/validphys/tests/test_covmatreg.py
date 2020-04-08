@@ -20,12 +20,12 @@ def test_withidentity():
 def test_regularize_expcov(data_config):
     """Test if the higher level covmat is regularized by procedure"""
     inp = dict(**data_config, norm_threshol=3)
-    df1 = API.experiments_covmat(**inp)
-    df2 = API.experiments_covmat(**data_config)
+    df1 = API.groups_covmat(**inp)
+    df2 = API.groups_covmat(**data_config)
     # check here that regularization occured
     assert ~np.allclose(df1.values, df2.values)
     # check that square of sqrt matches
-    sqrt_df1 = API.experiments_sqrtcovmat(**inp)
+    sqrt_df1 = API.groups_sqrtcovmat(**inp)
     assert np.allclose(df1.values, sqrt_df1.values@sqrt_df1.values.T)
     # check that same result obtained
     return df1
@@ -43,8 +43,8 @@ def test_regularization_matches():
 def test_no_regularization(data_config):
     """Test if the higher level covmat is regularized by procedure"""
     inp = dict(**data_config, norm_threshol=10)
-    df1 = API.experiments_covmat(**inp)
-    df2 = API.experiments_covmat(**data_config)
+    df1 = API.groups_covmat(**inp)
+    df2 = API.groups_covmat(**data_config)
     # check here that regularization occured
     assert np.allclose(df1.values, df2.values)
     # check that same result obtained

@@ -1,9 +1,9 @@
 #
-# Configuration file for NNPDF++
+# Configuration file for n3fit
 #
 
 ############################################################
-description: NNPDF3.1 NNLO fitted charm global dataset
+description: NNPDF3.1 NNLO fitted charm dis dataset
 
 ############################################################
 # frac: training fraction

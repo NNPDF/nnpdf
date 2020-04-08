@@ -53,7 +53,7 @@ def make_table_comp(loader_func):
 
 @make_table_comp(parse_exp_mat)
 def test_expcovmat(data_config):
-    mat = API.experiments_covmat_no_table(**data_config)
+    mat = API.groups_covmat_no_table(**data_config)
     covmats = []
     for exp in API.experiments(**data_config):
         cd = exp.datasets[0].commondata.load()
@@ -64,19 +64,19 @@ def test_expcovmat(data_config):
 
 @make_table_comp(parse_exp_mat)
 def test_t0covmat(data_witht0_config):
-    return API.experiments_covmat_no_table(**data_witht0_config)
+    return API.groups_covmat_no_table(**data_witht0_config)
 
 @make_table_comp(parse_exp_mat)
 def test_expsqrtcovmat(data_config):
-    return API.experiments_sqrtcovmat(**data_config)
+    return API.groups_sqrtcovmat(**data_config)
 
 @make_table_comp(parse_exp_mat)
 def test_t0sqrtcovmat(data_witht0_config):
-    return API.experiments_sqrtcovmat(**data_witht0_config)
+    return API.groups_sqrtcovmat(**data_witht0_config)
 
 @make_table_comp(parse_exp_mat)
 def test_pdf_plus_exp_covmat(data_config):
-    return API.experiments_covmat_no_table(use_pdferr=True, **data_config)
+    return API.groups_covmat_no_table(use_pdferr=True, **data_config)
 
 @make_table_comp(sane_load)
 def test_predictions(data_config):
@@ -84,22 +84,22 @@ def test_predictions(data_config):
     # of `experiment_result_table`, however sane_load expects just a single level
     # of column and index - if we use a different format like parquet this could
     # be changed.
-    exp_res_tab = API.experiment_result_table_no_table(**data_config)
-    th = exp_res_tab.iloc[:, 2:].values
+    res_tab = API.group_result_table_no_table(**data_config)
+    th = res_tab.iloc[:, 2:].values
     return pd.DataFrame(th, columns=map(str, range(th.shape[1])))
 
 @make_table_comp(sane_load)
 def test_dataset_t0_predictions(data_witht0_config):
     # TODO: As in `test_predictions`
-    exp_res_tab = API.experiment_result_table_no_table(**data_witht0_config)
-    th = exp_res_tab.iloc[:, 2:].values
+    res_tab = API.group_result_table_no_table(**data_witht0_config)
+    th = res_tab.iloc[:, 2:].values
     return pd.DataFrame(th, columns=map(str, range(th.shape[1])))
 
 @make_table_comp(sane_load)
 def test_cv(data_config):
     # TODO: As in `test_predictions`
-    exp_res_tab = API.experiment_result_table_no_table(**data_config)
-    data_values = exp_res_tab.iloc[:, 0].values[:, np.newaxis]
+    res_tab = API.group_result_table_no_table(**data_config)
+    data_values = res_tab.iloc[:, 0].values[:, np.newaxis]
     return pd.DataFrame(data_values, columns=['CV'])
 
 @make_table_comp(load_perreplica_chi2_table)
@@ -109,6 +109,6 @@ def test_replicachi2data(data_witht0_config):
 @make_table_comp(load_fits_chi2_table)
 def test_datasetchi2(data_singleexp_witht0_config):
     # This is a bit hacky but avoids requiring a fit
-    exps = API.experiments(**data_singleexp_witht0_config)
-    chi2s = API.each_dataset_chi2(**data_singleexp_witht0_config)
-    return results.fits_datasets_chi2_table(['test'], [exps], chi2s)
+    exps = API.groups_data(**data_singleexp_witht0_config)
+    chi2s = API.groups_datasets_chi2_data(**data_singleexp_witht0_config)
+    return results.fits_datasets_chi2_table(['test'], [exps], [chi2s])

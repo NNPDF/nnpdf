@@ -87,7 +87,6 @@ class N3FitEnvironment(Environment):
             "replica_path": "The replica output path",
             "output_path": "The runcard name",
             "hyperopt": "The hyperopt flag",
-            "create_test_card": "Create test card flag",
             **super().ns_dump_description(),
         }
 
@@ -156,12 +155,6 @@ class N3FitApp(App):
     def argparser(self):
         parser = super().argparser
         parser.add_argument("-o", "--output", help="Output folder and name of the fit", default=None)
-        parser.add_argument("--hyperopt", help="Enable hyperopt scan", default=None, type=int)
-        parser.add_argument(
-            "--create_test_card",
-            help="Generates a new runcard where some datasets are only used for a test set (only hyperopt)",
-            action="store_true",
-        )
 
         def check_positive(value):
             ivalue = int(value)
@@ -169,6 +162,7 @@ class N3FitApp(App):
                 raise argparse.ArgumentTypeError("%s is an invalid positive int value." % value)
             return ivalue
 
+        parser.add_argument("--hyperopt", help="Enable hyperopt scan", default=None, type=int)
         parser.add_argument("replica", help="MC replica number", type=check_positive)
         parser.add_argument(
             "-r", "--replica_range", help="End of the range of replicas to compute", type=check_positive
@@ -191,10 +185,6 @@ class N3FitApp(App):
                 replicas = [replica]
             self.environment.replica = replicas
             self.environment.hyperopt = self.args["hyperopt"]
-            if self.args["create_test_card"]:
-                self.environment.create_test_card = self.environment.config_yml
-            else:
-                self.environment.create_test_card = None
             super().run()
         except N3FitError as e:
             log.error(f"Error in n3fit:\n{e}")

@@ -38,9 +38,9 @@ def grid_values(pdf:PDF, flmat, xmat, qmat):
 
      grid_values[replica][flavour][x][Q]
 
-     This uses libnnpdf, and therefore follows the convention
-     to throw away replica 0 for Monte Carlo ensembles
-     (so index 0 corresponds to replica 1).
+     This uses libnnpdf, and therefore follows the convention to throw away
+     replica 0 for Monte Carlo ensembles (so index 0 corresponds to replica 1).
+     Use ``pdf.grid_values_index`` to index the result properly.
      """
      flmat = np.atleast_1d(np.asanyarray(flmat, dtype=FLTYPE))
      xmat, qmat =  (np.atleast_1d(np.asarray(x, dtype=REALTYPE))

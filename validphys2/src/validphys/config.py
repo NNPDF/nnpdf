@@ -494,20 +494,20 @@ class CoreConfig(configparser.Config):
         """
         from validphys import results
         if use_pdferr:
-            return results.pdferr_plus_data_covmat
+            return results.pdferr_plus_covmat
         else:
-            return results.data_covmat
+            return results.covmat
 
     @configparser.explicit_node
-    def produce_experiment_covariance_matrix(self, use_pdferr: bool = False):
+    def produce_group_covariance_matrix(self, use_pdferr: bool = False):
         """Modifies which action is used as experiment_covariance_matrix
         depending on the flag `use_pdferr`
         """
         from validphys import results
         if use_pdferr:
-            return results.pdferr_plus_experiment_covmat
+            return results.pdferr_plus_dataset_inputs_covmat
         else:
-            return results.experiment_covmat
+            return results.dataset_inputs_covmat
 
     #TODO: Do this better and elsewhere
     @staticmethod
@@ -923,6 +923,7 @@ class CoreConfig(configparser.Config):
     def parse_filter_rules(self, filter_rules: (list, type(None))):
         """A list of filter rules. See https://docs.nnpdf.science/vp/filters.html
         for details on the syntax"""
+        log.warning("Overwriting filter rules")
         return filter_rules
 
     def produce_rules(self, theoryid, use_cuts, defaults, filter_rules=None):
@@ -957,6 +958,7 @@ class CoreConfig(configparser.Config):
         filtering data (when using internal cuts).
         Currently these limits are ``q2min`` and ``w2min``.
         """
+        log.warning("Overwriting filter defaults")
         return filter_defaults
 
     def produce_defaults(self, q2min=None, w2min=None, filter_defaults={}):

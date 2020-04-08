@@ -172,7 +172,7 @@ def common_data_reader_experiment(experiment_c, experiment_spec):
     return parsed_datasets
 
 
-def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
+def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None, kpartitions=None):
     """
     Wrapper to read the information from validphys object
     This function receives either a validphyis experiment or dataset objects
@@ -202,6 +202,8 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
         replica_seeds = []
     if trval_seeds is None:
         trval_seeds = [0]
+    if kpartitions is None:
+        kpartitions = []
     # TODO
     # This whole thing would be much more clear / streamlined if
     #   - The c experiment/dataset object had all the required information for the fit
@@ -245,6 +247,17 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
             )
         )
 
+    folds = {"training": [], "validation": [], "experimental" : []}
+    for partition in kpartitions:
+        data_fold = partition.get("datasets", [])
+        mask = []
+        for dataset in datasets:
+            if dataset['name'] in data_fold:
+                mask.append(np.zeros(dataset['ndata'], dtype=np.bool))
+            else:
+                mask.append(np.ones(dataset['ndata'], dtype=np.bool))
+        folds["experimental"].append(np.concatenate(mask))
+
     exp_name = spec.name
     covmat = spec_c.get_covmat()
 
@@ -263,6 +276,10 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
         expdata_vl = expdata[vl_mask].reshape(1, ndata_vl)
         invcovmat_vl = np.linalg.inv(covmat_vl)
 
+        for ex_fold in folds["experimental"]:
+            folds["training"].append(ex_fold[tr_mask])
+            folds["validation"].append(ex_fold[vl_mask])
+
         dict_out = {
             "datasets": datasets,
             "name": exp_name,
@@ -278,6 +295,7 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None):
             "expdata_vl": expdata_vl,
             "positivity": False,
             "count_chi2": True,
+            "folds" : folds
         }
         all_dict_out.append(dict_out)
 
