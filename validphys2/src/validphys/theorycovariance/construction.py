@@ -69,7 +69,7 @@ def theory_covmat_singleprocess(theory_covmat_singleprocess_no_table,
 
 results_bytheoryids = collect(results,('theoryids',))
 each_dataset_results_bytheory = collect('results_bytheoryids',
-                                        ('data_input',))
+                                        ('group_dataset_inputs_by_metadata','data'))
 
 @check_correct_theory_combination
 def theory_covmat_datasets(each_dataset_results_bytheory,
@@ -150,7 +150,7 @@ def total_covmat_groups(groups_results_theory,
         group_result_covmats.append(cov)
     return group_result_covmats
 
-commondata_groups = collect('commondata', ['data_input'])
+commondata_groups = collect('commondata', ['group_dataset_inputs_by_metadata', 'data'])
 
 def dataset_names(commondata_groups):
     """Returns a list of the names of the datasets, in the same order as
