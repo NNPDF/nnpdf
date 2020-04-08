@@ -30,9 +30,11 @@ The NNPDF code is stored on two Git-supporting servers:
 
 * [GitHub](https://github.com/), which is a private code development platform that allows its users
 to view code on the web, propose changes to the code, and discuss and review code. NNPDF has access
-to unlimited free private repositories on GitHub as well as
-[Git Large File Storage](https://git-lfs.github.com/) and [Travis](https://travis-ci.com/) support.
-Several guides to using GitHub can be found on their [website](https://guides.github.com/).
+to unlimited free private repositories on GitHub as well as support for
+[Git Large File Storage](https://git-lfs.github.com/) (used for storing large
+binary blobs) and [Github Actions](https://github.com/features/actions) (used
+for [Continuous Integration services](CI)).  Several guides to using GitHub can
+be found on their [website](https://guides.github.com/).
 
 * [GitLab](https://gitlab.cern.ch/NNPDF) at CERN, where a mirror copy of the GitHub repositories are
 backed up. Note that GitLab was originally used by NNPDF instead of GitHub, but problems were
@@ -44,20 +46,14 @@ make use of the advanced tools that GitLab offers.
 You can get an account for free by going to their [website](https://github.com/join). Once you have
 an account, you should join the NNPDF organisation by asking Stefano Carrazza or Zahari Kassabov to
 send you an invitation. Once you have accepted the invitation, you can access the NNPDF code at
-[https://github.com/NNPDF](https://github.com/NNPDF).
+<https://github.com/NNPDF>.
 
-In order to work on the NNPDF code, you will need to be able to push code to the NNPDF repositories.
-To be able to do this, your SSH keys should be installed in one of GitHub or GitLab. In particular:
+In order to work on the NNPDF code, you will need to be able to push code to the
+NNPDF repositories.  To be able to do this, your SSH keys should be installed in
+GitHub: You should add your valid SSH key(s) to your GitHub account. You can do
+this by following the instructions
+[here](https://help.github.com/en/articles/adding-a-new-ssh-key-to-your-github-account).
 
-* You should add your valid SSH key(s) to your GitHub account. You can do this by following the
-instructions [here](https://help.github.com/en/articles/adding-a-new-ssh-key-to-your-github-account).
-
-* If you have a valid CERN account, you should
-[login](https://login.cern.ch/adfs/ls/?SAMLRequest=fZFdT8IwFIb%2Fyu56NbqOQaDZliwQExI0BtQLb8xZKdDYtbPnzI9%2F74ZRMTHcNu%2FznLfn5AiNbWXV0dFt9EunkaIKUQcy3i28w67RYavDq1H6frMu2JGoRcn5wZCFeqR0cCN15F2PIIdewwcjV2BtDeqZRcteaRwMvl%2Fa%2BoNxPzDs9sgtchatlgV7mkE2niqAWGTzWZyJtI5huhOxqOvJTCsxVknWRxE7vXJI4KhgaSLmcTKPRXonpnKSyMnskUUPfanT3HSUsOi9sQ7lUK9gXXDSAxqUDhqNkpTcVtdr2QclfP%2F%2FHGkvM23w5JW3rMyHtDy1C%2BX%2F28r5eSb%2FOsFN71wtb7016iOqrPVvi6CBdMEodJpFVz40QJdbDC9mF%2B9PUUkBHBrtiPHya%2BTfQ5ef)
-and add the public SSH key(s) from your computer.
-
-* If you do not have a valid CERN account, you should send your public SSH key(s) to Stefano
-Carrazza and he will add them for you.
 
 ### Available repositories on GitHub
 

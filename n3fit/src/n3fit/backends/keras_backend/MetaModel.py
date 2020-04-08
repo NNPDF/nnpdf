@@ -4,15 +4,47 @@
     Extension of the backend Model class containing some wrappers in order to absorb other
     backend-dependent calls
 """
-from keras.models import Model, Sequential
-import keras.optimizers as Kopt
 
-from n3fit.backends.keras_backend.operations import numpy_to_input
+import tensorflow as tf
+from tensorflow.keras.models import Model, Sequential
+from tensorflow.keras import optimizers as Kopt
+from tensorflow.keras import backend as K
+
+from n3fit.backends.keras_backend.operations import numpy_to_input, batchit
+
+import numpy as np
+
+# TODO: bad, real bad
+scale_lr = {
+        'Adadelta' : 100.0
+        }
 
 
 class MetaModel(Model):
     """
-    The goal of this class is to absorb all keras dependent code
+    The `MetaModel` behaves as the tensorflow.keras.model.Model class, with some additions:
+
+    1. tensor_content
+    Sometimes when fitting a network the input is fixed, in this case the input can be given
+    together with the input_tensors by setting a `tensor_content` equal to the input value.
+    This is done automatically when using the `numpy_to_input` function from
+    `n3fit.backends.keras_backend.operations`
+
+    2. extra_tensors
+    Generally, when instantiating a model: `Model(x,y)`, y is an output layer which is connected
+    to x. Adding `extra_tensors = ([x1, x2], y1)` will change the input of `Model(x,y)` to
+    `Model([x, x1, x2], [y, y1])` where y is connected with x and y1 is connected with (x1,x2)
+    automatically.
+    
+
+    Parameters
+    ----------
+        input_tensors: tensorflow.keras.layers.Input
+            Input layer
+        output_tensors: tensorflow.keras.layers.Layer
+            Output layer
+        extra_tensors: tuple
+            Tuple of ([inputs], output)
     """
 
     # Define in this dictionary new optimizers as well as the arguments they accept
@@ -21,29 +53,13 @@ class MetaModel(Model):
         "RMSprop": (Kopt.RMSprop, {"lr": 0.01}),
         "Adam": (Kopt.Adam, {"lr": 0.01}),
         "Adagrad": (Kopt.Adagrad, {}),
-        "Adadelta": (Kopt.Adadelta, {}),
+        "Adadelta": (Kopt.Adadelta, {"lr": 1.0}),
         "Adamax": (Kopt.Adamax, {}),
         "Nadam": (Kopt.Nadam, {}),
         "Amsgrad": (Kopt.Adam, {"lr": 0.01, "amsgrad": True}),
     }
 
     def __init__(self, input_tensors, output_tensors, extra_tensors=None, **kwargs):
-        """
-        This class behaves as keras.models.Model with the add on of extra_tensors.
-
-        It is assumed here and elsewhere that the input_tensors are indeed tensors and
-        not placeholders.
-        The usage of placeholders will work as long as nothing outside of the ordinary is done
-        i.e., it will work in that this class inherits from keras Model but all the add-ons
-        of this class assume the inputs are tensors.
-
-        The outputs however can be freely fixed (useful when fitting to known data)
-
-        if extra_tensors are given, they should come in a list of tuples such that:
-            (input: np.array, output_layer: function)
-        so that they can be fed to keras as output_layer(*input)
-        The inputs of the extra_tensors will be turned into keras inputs.
-        """
         self.has_dataset = False
 
         input_list = input_tensors
@@ -56,22 +72,40 @@ class MetaModel(Model):
 
         # Add extra tensors
         if extra_tensors is not None:
+            # Check whether we are using the original shape
+            # or forcing batch one
+            if input_list and hasattr(input_list[0], "original_shape"):
+                keep_shape = input_list[0].original_shape
+            else:
+                keep_shape = True
             for ii, oo in extra_tensors:
                 inputs = []
                 if isinstance(ii, list):
                     for i in ii:
-                        inputs.append(numpy_to_input(i))
+                        inputs.append(numpy_to_input(i, no_reshape=keep_shape))
                 else:
                     inputs = [numpy_to_input(ii)]
-                o_tensor = oo(*inputs)
+                output_layer = oo(*inputs)
+                # If we are not keeping the original shape (i.e., we added a batch dimension)
+                # add it also to the output layer
+                if not keep_shape:
+                    output_layer = batchit(output_layer)
                 input_list += inputs
-                output_list.append(o_tensor)
-
-        self.all_inputs = input_list
-        self.all_outputs = output_list
-        self.internal_models = {}
+                output_list.append(output_layer)
 
         super(MetaModel, self).__init__(input_list, output_list, **kwargs)
+        if hasattr(input_list[0], "tensor_content"):
+            self.x_in = [i.tensor_content for i in input_list]
+        else:
+            self.x_in = None
+        self.all_inputs = input_list
+        self.all_outputs = output_list
+
+    def reinitialize(self):
+        """ Run through all layers and reinitialize the ones that can be reinitialied """
+        for layer in self.layers:
+            if hasattr(layer, "reinitialize"):
+                layer.reinitialize()
 
     def perform_fit(self, x=None, y=None, steps_per_epoch=1, **kwargs):
         """
@@ -91,18 +125,20 @@ class MetaModel(Model):
             `loss_dict`: dict
                 a dictionary with all partial losses of the model
         """
+        if x is None:
+            x = self.x_in
         if self.has_dataset:
-            if x is not None or y is not None:
-                raise ValueError(
-                    "The model was compiled together with input and output but the information was passed again to the fit function"
-                )
-            history = super().fit(
-                x=None, y=None, steps_per_epoch=steps_per_epoch, **kwargs,
-            )
+            history = super().fit(x=x, y=None, batch_size=1, **kwargs,)
         else:
             history = super().fit(x=x, y=y, steps_per_epoch=steps_per_epoch, **kwargs)
         loss_dict = history.history
         return loss_dict
+
+    def predict(self, x=None, *args, **kwargs):
+        if x is None:
+            x = self.x_in
+        result = super().predict(x=x, *args, **kwargs)
+        return result
 
     def compute_losses(self, *args, **kwargs):
         """
@@ -145,9 +181,11 @@ class MetaModel(Model):
         In this case the number of steps must be always specified and the input of x and y must
         be set to `None`.
         """
+        if x is None:
+            x = self.x_in
         if self.has_dataset:
             # Ensure that no x or y were passed
-            result = super().evaluate(x=None, y=None, steps=1, **kwargs)
+            result = super().evaluate(x=x, y=None, **kwargs)
         else:
             result = super().evaluate(x=x, y=y, **kwargs)
         return result
@@ -196,7 +234,7 @@ class MetaModel(Model):
         opt_args = opt_tuple[1]
 
         if "lr" in opt_args.keys():
-            opt_args["lr"] = learning_rate
+            opt_args["lr"] = learning_rate*scale_lr.get(opt_function, 1.0)
 
         opt_args["clipnorm"] = 1.0
         opt = opt_function(**opt_args)
@@ -204,11 +242,33 @@ class MetaModel(Model):
         if target_output is not None:
             self.has_dataset = True
 
+        if not isinstance(target_output, list):
+            target_output = [target_output]
+
         super(MetaModel, self).compile(
             optimizer=opt, loss=loss, target_tensors=target_output, **kwargs
         )
 
-    def multiply_weights(self, key, layer_names, multiplier):
+    def set_masks_to(self, names, val=0.0):
+        """ Set all mask value to the selected value
+        Masks in MetaModel should be named {name}_mask
+
+        Mask are layers with one single weight (shape=(1,)) that multiplies the input
+
+        Parameters
+        ----------
+            names: list
+                list of masks to look for
+            val: float
+                selected value of the mask
+        """
+        mask_val = [val]
+        for name in names:
+            mask_name = f"{name}_mask"
+            mask_w = self.get_layer(mask_name).weights[0]
+            mask_w.assign(mask_val)
+
+    def multiply_weights(self, layer_names, multiplier):
         """ Multiply all weights for the given layers by some scalar
 
         Parameters
@@ -218,14 +278,9 @@ class MetaModel(Model):
             `multiplier`: float
                 scalar number to multiply the weights by
         """
-        internal_model = self.internal_models.get(key)
-        if not internal_model:
-            # Create an internal model to access the weights of the
-            # layer we want to update
-            # is this a bug or a feature?
-            layers = [self.get_layer(i) for i in layer_names]
-            internal_model = Sequential(layers)
-            self.internal_models[key] = internal_model
-        current_weights = internal_model.get_weights()
-        new_weights = [i * multiplier for i in current_weights]
-        internal_model.set_weights(new_weights)
+        for layer_name in layer_names:
+            layer = self.get_layer(layer_name)
+            w_val = layer.get_weights()
+            w_ref = layer.weights
+            for val, tensor in zip(w_val, w_ref):
+                tensor.assign(val * multiplier)

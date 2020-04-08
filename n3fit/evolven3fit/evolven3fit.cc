@@ -7,16 +7,24 @@
 
 #include <string>
 #include <iomanip>
-#include "common.h"
-#include "nnpdfsettings.h"
+#include <sstream>
+#include <sys/stat.h>
+
+#include <NNPDF/exceptions.h>
+#include <NNPDF/nnpdfdb.h>
+#include <NNPDF/utils.h>
+#include <NNPDF/pathlib.h>
+#include <APFEL/APFELdev.h>
+
 #include "exportgrid.h"
 #include "evolgrid.h"
-#include <sys/stat.h>
+
 using namespace NNPDF;
 using std::cout;
 using std::endl;
 using std::cerr;
 using std::string;
+using std::stringstream;
 using std::stoi;
 
 // Check if folder exists
@@ -34,6 +42,20 @@ bool CheckConsistency(string const& folder, string const& exportfile)
   else return false;
 }
 
+// return theoryid from runcard
+int get_theory_id_from_runcard(string const& filteryaml_path)
+{
+  YAML::Node runcard;
+  try {
+    runcard = YAML::LoadFile(filteryaml_path);
+  }
+  catch(YAML::BadFile &e)
+  {
+    throw FileError("evolven3fit", "runcard not found: " + filteryaml_path);
+  }
+  return runcard["theory"]["theoryid"].as<int>();
+}
+
 /**
  * This program:
  * - takes as input a fit folder and a theoryID,
@@ -47,16 +69,17 @@ int main(int argc, char **argv)
   // Read configuration filename from arguments
   if (argc != 3)
     {
-      cerr << Colour::FG_RED << "\nusage: evolven3fit [configuration folder] [max_replicas]\n" << Colour::FG_DEFAULT << endl;
+      cerr << "\nusage: evolven3fit [configuration folder] [max_replicas]\n" << endl;
       exit(EXIT_FAILURE);
     }
 
   const string fit_path = argv[1];
   const int maxreplica = stoi(argv[2]);
+  const string filteryaml_path = fit_path + "/filter.yml";
 
-  // load settings from config folder
-  NNPDFSettings settings(fit_path);
-  const int theory_id = settings.Get("theory","theoryid").as<int>();
+  // Get theory id
+  const int theory_id = get_theory_id_from_runcard(filteryaml_path);
+  cout << "Theory ID = " << theory_id << endl;
 
   // load theory from db
   std::map<string,string> theory_map;
@@ -71,7 +94,7 @@ int main(int argc, char **argv)
   for (int nrep = 1; nrep <= maxreplica; nrep++)
     {
       const string folder = fit_path + "/nnfit/replica_" + std::to_string(nrep);
-      const string path = folder + "/" + settings.GetPDFName() + ".exportgrid";
+      const string path = folder + "/" + fit_path + ".exportgrid";
       bool status = CheckConsistency(folder, path);
       if (status)
         {
@@ -87,7 +110,7 @@ int main(int argc, char **argv)
   if (initialscale_grids.size() == 0)
       throw NNPDF::RuntimeException("main", "nrep = 0, check replica folder/files.");
 
-  string infofile = fit_path + "/nnfit/" + settings.GetPDFName() + ".info";
+  string infofile = fit_path + "/nnfit/" + fit_path + ".info";
   auto dglapg = EvolveGrid(initialscale_grids, theory_map);
   dglapg.WriteInfoFile(infofile);
 
@@ -99,7 +122,7 @@ int main(int argc, char **argv)
                    << "/nnfit/replica_"
                    << replicas[i]
                    << "/"
-                   << settings.GetPDFName()
+                   << fit_path
                    << ".dat";
       write_to_file(replica_file.str(), outstream[i].str());
     }

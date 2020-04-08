@@ -9,9 +9,32 @@
 """
 
 import tensorflow as tf
-from keras import backend as K
-from keras.engine.topology import Layer
-from keras.initializers import Constant, RandomUniform, glorot_normal, glorot_uniform
+from tensorflow.keras import backend as K
+from tensorflow.keras.layers import Layer
+from tensorflow.keras.initializers import (
+    Constant,
+    RandomUniform,
+    glorot_normal,
+    glorot_uniform,
+)
+
+# Define in this dictionary new initializers as well as the arguments they accept (with default values if needed be)
+initializers = {
+    "random_uniform": (RandomUniform, {"minval": -0.5, "maxval": 0.5}),
+    "glorot_uniform": (glorot_uniform, {}),
+    "glorot_normal": (glorot_normal, {}),
+}
+
+
+def reinitialize_weight(weight, initializer, seed_skip=10):
+    new_config = initializer.get_config()
+    if "seed" in new_config:
+        new_seed = initializer.seed + 10
+        new_config["seed"] += new_seed
+        initializer.seed = new_seed
+    new_init = initializer.from_config(new_config)
+    new_weights = new_init(weight.shape)
+    weight.assign(new_weights)
 
 
 class MetaLayer(Layer):
@@ -25,15 +48,13 @@ class MetaLayer(Layer):
         - output_shape
     """
 
-    # Define in this dictionary new initializers as well as the arguments they accept (with default values if needed be)
-    initializers = {
-        "random_uniform": (RandomUniform, {"minval": -0.5, "maxval": 0.5}),
-        "glorot_uniform": (glorot_uniform, {}),
-        "glorot_normal": (glorot_normal, {}),
-    }
+    initializers = initializers
+    weight_inits = []
 
     # Building function
-    def builder_helper(self, name, kernel_shape, initializer, trainable=True, constraint=None):
+    def builder_helper(
+        self, name, kernel_shape, initializer, trainable=True, constraint=None
+    ):
         """
         Creates a kernel that should be saved as an attribute of the caller class
         name: name of the kernel
@@ -43,9 +64,29 @@ class MetaLayer(Layer):
         constraint: one of the constraints from this class (actually, any keras constraints)
         """
         kernel = self.add_weight(
-            name=name, shape=kernel_shape, initializer=initializer, trainable=trainable, constraint=constraint
+            name=name,
+            shape=kernel_shape,
+            initializer=initializer,
+            trainable=trainable,
+            constraint=constraint,
         )
+        if trainable:
+            self.weight_inits.append((kernel, initializer))
         return kernel
+
+    def reinitialize(self):
+        """ Reinitialize all weights and kernels with an initializer """
+        # First check the default keras-tf ones
+        if hasattr(self, "kernel_initializer"):
+            kern = self.kernel
+            kern_init = self.kernel_initializer
+            bias = self.bias
+            bias_init = self.bias_initializer
+            reinitialize_weight(kern, kern_init)
+            reinitialize_weight(bias, bias_init)
+        # Now check the ones generated with the builder helper
+        for w, init in self.weight_inits:
+            reinitialize_weight(w, init)
 
     # Implemented initializers
     @staticmethod
@@ -59,7 +100,7 @@ class MetaLayer(Layer):
         All of them should accept seed
         """
         try:
-            ini_tuple = MetaLayer.initializers[ini_name]
+            ini_tuple = initializers[ini_name]
         except KeyError as e:
             raise NotImplementedError(
                 f"[MetaLayer.select_initializer] initializer not implemented: {ini_name}"
@@ -137,6 +178,10 @@ class MetaLayer(Layer):
             return K.reshape(concatenated_tensor, target_shape)
         else:
             return concatenated_tensor
+
+    def flatten(self, x):
+        """ Flatten tensor x """
+        return tf.reshape(x, (-1,))
 
     def permute_dimensions(self, tensor, permutation, **kwargs):
         """

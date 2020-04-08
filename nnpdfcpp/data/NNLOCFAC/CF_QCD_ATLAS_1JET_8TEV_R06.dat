@@ -1,5 +1,5 @@
 ********************************************************************************
-SetName: CF_ATLAS_1JET_8TEV_R06
+SetName: ATLAS_1JET_8TEV_R06
 Author: Emanuele R. Nocera enocera@nikhef.nl
 Date: Sep 2019
 CodesUsed: K-factors provided by J. Pires et al.
@@ -178,36 +178,3 @@ Warnings:
 1.04736 0.02966
 1.07726 0.03598
 1.03894 0.04890
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

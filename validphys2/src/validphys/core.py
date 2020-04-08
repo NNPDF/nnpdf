@@ -206,6 +206,33 @@ class PDF(TupleComp):
         raise NotImplementedError("Error type for %s: '%s' is not implemented" %
                                   (self.name, error))
 
+    @property
+    def grid_values_index(self):
+        """A range object describing which members are selected in a
+        ``pdf.load().grid_values`` operation.  This is ``range(1,
+        len(pdf))`` for Monte Carlo sets, because replica 0 is not selected
+        and ``range(0, len(pdf))`` for hessian sets.
+
+
+        Returns
+        -------
+        index : range
+            A range object describing the proper indexing.
+
+        Notes
+        -----
+        The range object can be used efficiently as a Pandas index.
+        """
+        err = self.nnpdf_error
+
+        if err is LHAPDFSet.erType_ER_MC:
+            return range(1, len(self))
+        elif err in (LHAPDFSet.ER_SYMEIG, LHAPDFSet.ER_EIG, LHAPDFSet.ER_EIG90):
+            return range(0, len(self))
+        else:
+            raise RuntimeError("Unknown error type")
+
+
 
 kinlabels_latex = CommonData.kinLabel_latex.asdict()
 _kinlabels_keys = sorted(kinlabels_latex, key=len, reverse=True)
@@ -652,6 +679,11 @@ class SymmHessianStats(Stats):
         diffsq = (data[0] - data[1:])**2
         return np.sqrt(diffsq.sum(axis=0))/self.rescale_factor
 
+    def moment(self, order):
+        data = self.data
+        return np.sum(
+            np.power((data[0] - data[1:])/self.rescale_factor, order), axis=0)
+
 class HessianStats(SymmHessianStats):
     """Compute stats in the 'assymetric' hessian format: The first index (0)
     is the
@@ -664,6 +696,11 @@ class HessianStats(SymmHessianStats):
         data = self.data
         diffsq = (data[1::2] - data[2::2])**2
         return np.sqrt(diffsq.sum(axis=0))/self.rescale_factor/2
+
+    def moment(self, order):
+        data = self.data
+        return np.sum(
+            np.power((data[1::2] - data[2::2])/self.rescale_factor/2, order), axis=0)
 
 
 STAT_TYPES = dict(

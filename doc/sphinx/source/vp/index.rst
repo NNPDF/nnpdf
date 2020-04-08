@@ -3,7 +3,7 @@ vp-guide
 ========
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    ./introduction.md
    ./design.md
@@ -12,4 +12,6 @@ vp-guide
    ./download.md
    ./upload.md
    ./nnprofile.md
-   ./theorycov.rst
+   ./scripts.md
+   ./theorycov/index
+   ./pydataobjs.rst
