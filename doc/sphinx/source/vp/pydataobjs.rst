@@ -33,10 +33,10 @@ Computing theory predictions
 ----------------------------
 
 The :py:mod:`validphys.convolution` module implements the necessary tooling to
-compute theory predictions in pure Python. In particular the
+compute theory predictions using Numpy and Pandas. In particular the
 :py:func:`validphys.convolution.predictions` function returns predictions in
-terms of PDF and dataset objects that can be obtained directly from `validphys`
-runcards::
+terms of PDF and dataset objects that can be obtained directly from
+``validphys`` runcards::
 
     from validphys.api import API
     from validphys.convolution import predictions
