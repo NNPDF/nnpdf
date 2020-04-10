@@ -9,16 +9,15 @@
     language (hence the mapping `c_to_py_fun`)
 """
 
+import numpy as np
 import tensorflow as tf
-from tensorflow.keras.layers import add as keras_add
-from tensorflow.keras.layers import subtract as keras_subtract
 from tensorflow.keras.layers import Lambda as keras_Lambda
 from tensorflow.keras.layers import multiply as keras_multiply
 
 from tensorflow.keras.layers import Input, Layer
 from tensorflow.keras import backend as K
 
-import numpy as np
+from validphys.convolution import OP
 
 
 def numpy_to_tensor(ival):
@@ -67,27 +66,28 @@ def evaluate(tensor):
     return K.eval(tensor)
 
 
-def c_to_py_fun(op_name, name, default="ADD"):
+def c_to_py_fun(op_name, name = "dataset"):
     """
-    Map between the NNPDF operations and the operations defined in this file
-    Any new backend must implement such a mapping
-    """  # TODO: shouldn't this be outside of the backend folder then
-    # surely...
-    d = {
-        "NULL": op_null,
-        "ADD": op_add,
-        "RATIO": op_ratio,
-        "ASY": op_asy,
-        "SMN": op_smn,
-    }
-    if op_name not in d.keys():
-        print("Operation name not recognised, defaulting to {0}".format(default))
-        return d[default]
+    Map the NNPDF operations to Keras layers
+    NNPDF operations are defined in :py:func:`validphys.convolution.OP
 
-    def operation_fun(o_list):
-        return d[op_name](o_list, name=name)
+    Parameters
+    ----------
+        op_name: str
+            A string defining the operation name
+    """
+    try:
+        operation = OP[op_name]
+    except KeyError as e:
+        raise ValueError(f"Operation {op_name} not recognised") from e
 
-    return operation_fun
+    # Convert the operation into a lambda layer
+    operation_layer = keras_Lambda(lambda x: operation(*x), name=f"op_{name}_{op_name}")
+    return operation_layer
+
+def op_subtract(o_list): #TODO to be removed, not used once other PRs are merged
+    from tensorflow.keras.layers import subtract
+    return subtract(o_list)
 
 
 def op_multiply(o_list, **kwargs):
@@ -113,75 +113,8 @@ def op_multiply_dim(o_list, **kwargs):
     return create_operation(o_list)
 
 
-def op_null(o_list, **kwargs):
-    """
-    Not a compound object, do nothing
-    """
-    return o_list[0]
-
-
-def op_add(o_list, **kwargs):
-    """
-    Sum a list of layers with the same output dim
-    """
-    return keras_add(o_list, **kwargs)
-
-
-def op_subtract(o_list, **kwargs):
-    """
-    Subtract all observables
-    """
-    return keras_subtract(o_list)
-
-
 def op_log(o_tensor, **kwargs):
     """
     Computes the logarithm of the input
     """
     return K.log(o_tensor)
-
-
-def op_ratio(o_list, **kwargs):
-    """
-    Take the ratio of two observables
-    """
-    if len(o_list) != 2:
-        raise ValueError(
-            "The number of observables is incorrect, operations.py:op_ratio, expected 2, received {0}".format(
-                len(o_list)
-            )
-        )
-
-    division_layer = keras_Lambda(lambda inputs: inputs[0] / inputs[1], **kwargs)
-    return division_layer(o_list)
-
-
-def op_asy(o_list, **kwargs):
-    """
-    Perform the asymmetry operation on two observables
-    """
-    if len(o_list) != 2:
-        raise ValueError(
-            "The number of observables is incorrect, operations.py:op_asy, expected 2, received {0}".format(
-                len(o_list)
-            )
-        )
-
-    subtraction = keras_subtract(o_list)
-    addition = op_add(o_list)
-    return op_ratio([subtraction, addition], **kwargs)
-
-
-def op_smn(o_list, **kwargs):
-    """
-    Normalised sum
-    """
-    if len(o_list) != 4:
-        raise ValueError(
-            "The number of observables is incorrect, operations.py:op_smn, expected 4, received {0}".format(
-                len(o_list)
-            )
-        )
-    numer = op_add(o_list[:2])
-    denom = op_add(o_list[2:])
-    return op_ratio([numer, denom], **kwargs)
