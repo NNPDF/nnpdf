@@ -56,16 +56,17 @@ def l_invcovmat(invcovmat_np, losstype="validation", exp_name=None, spec_dict=No
                     + -3.754716120287798e-05 * x ** 15
                 )
                 return polynomial_density_fit
-
             def log10(x):
                 numerator = K.log(x)
                 denominator = K.log( tf.constant(10, dtype=numerator.dtype))
                 return numerator/denominator
-
-            weight_function = 10**weights(log10(xgrid_training))
+            weight_function = (10**weights(log10(xgrid_training)))**(-0.5)
+            
             tmp = y_true - y_pred
-            right_dot = tf.tensordot(invcovmat, K.transpose(tmp / weight_function), axes=1)
-            chi2 = tf.tensordot(tmp / weight_function, right_dot, axes=1)
+            weight_function = tf.cast(weight_function,dtype=tmp.dtype)
+
+            right_dot = tf.tensordot(invcovmat, K.transpose(tmp * weight_function), axes=1)
+            chi2 = tf.tensordot(tmp * weight_function, right_dot, axes=1)
         else:
             tmp = y_true - y_pred
             right_dot = tf.tensordot(invcovmat, K.transpose(tmp), axes=1)
