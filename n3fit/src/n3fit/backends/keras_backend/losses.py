@@ -66,7 +66,7 @@ def l_invcovmat(invcovmat_np, losstype="validation", exp_name=None, spec_dict=No
             weight_function = tf.cast(weight_function,dtype=tmp.dtype)
 
             right_dot = tf.tensordot(invcovmat, K.transpose(tmp * weight_function), axes=1)
-            chi2 = tf.tensordot(tmp * weight_function, right_dot, axes=1)
+            chi2 = 1e2*tf.tensordot(tmp * weight_function, right_dot, axes=1)
         else:
             tmp = y_true - y_pred
             right_dot = tf.tensordot(invcovmat, K.transpose(tmp), axes=1)
