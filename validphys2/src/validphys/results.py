@@ -1096,11 +1096,10 @@ def total_experiments_chi2data(pdf: PDF, experiments_chi2):
     ndata = 0
     central_chi2 = 0
     nmembers = len(experiments_chi2[0].replica_result.error_members())  # ugh
-    member_chi2  = np.zeros(nmembers)
+    member_chi2  = np.zeros((nmembers, 1))
 
     for cd in experiments_chi2:
-        # not sure why the transpose or [0] are needed here
-        member_chi2  += cd.replica_result.error_members().T[0]
+        member_chi2  += cd.replica_result.error_members()
         central_chi2 += cd.central_result
         ndata += cd.ndata
     return Chi2Data(pdf.stats_class(member_chi2), central_chi2, ndata)

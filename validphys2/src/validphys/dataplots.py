@@ -42,7 +42,7 @@ def plot_chi2dist_experiments(total_experiments_chi2data, experiments_chi2_stats
 
     label += '\n'+ '\n'.join(str(chi2_stat_labels[k])+(' %.2f' % v) for (k,v) in experiments_chi2_stats.items())
 
-    ax.hist(alldata.data.squeeze(), label=label, zorder=100)
+    ax.hist(alldata.data, label=label, zorder=100)
     l = ax.legend()
     l.set_zorder(1000)
     return fig
