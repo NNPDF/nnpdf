@@ -67,6 +67,6 @@ class Feature_Scaling(MetaLayer):
             if self.with_std:
                 x /= self.std_
         elif self.scaler == "Test":
-            x = -1 + log10(x*1e6)/3
+            x = log10(x*1e3)/3
 
         return x

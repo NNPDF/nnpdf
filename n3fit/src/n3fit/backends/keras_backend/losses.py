@@ -35,38 +35,64 @@ def l_invcovmat(invcovmat_np, losstype="validation", exp_name=None, spec_dict=No
                 if i:
                     xgrid_training.append(xgrid_experiment[num])
             xgrid_training = np.array(xgrid_training)
-            # weight_function = np.sqrt((xgrid_training/5e-6)**0.4)
-            def weights(x):
-                polynomial_density_fit = (
-                    2.1057592888948253
-                    + -4.164527162015765 * x
-                    + -26.400855363117646 * x ** 2
-                    + -122.75480240246661 * x ** 3
-                    + -327.1547368943516 * x ** 4
-                    + -523.4899128971089 * x ** 5
-                    + -543.0024185862545 * x ** 6
-                    + -384.4247519539939 * x ** 7
-                    + -191.61198802145452 * x ** 8
-                    + -68.34473527884417 * x ** 9
-                    + -17.514055465376153 * x ** 10
-                    + -3.1967717745260646 * x ** 11
-                    + -0.4053698357109279 * x ** 12
-                    + -0.033923870763836385 * x ** 13
-                    + -0.00168403639998969 * x ** 14
-                    + -3.754716120287798e-05 * x ** 15
-                )
-                return polynomial_density_fit
+
+            def weights(x, polynomial_factors):
+                return sum(polynomial_factors[i] * x ** i for i in range(len(polynomial_factors)))
+
             def log10(x):
                 numerator = K.log(x)
-                denominator = K.log( tf.constant(10, dtype=numerator.dtype))
-                return numerator/denominator
-            weight_function = (10**weights(log10(xgrid_training)))**(-0.5)
-            
-            tmp = y_true - y_pred
-            weight_function = tf.cast(weight_function,dtype=tmp.dtype)
+                denominator = K.log(tf.constant(10, dtype=numerator.dtype))
+                return numerator / denominator
 
-            right_dot = tf.tensordot(invcovmat, K.transpose(tmp * weight_function), axes=1)
-            chi2 = 1e2*tf.tensordot(tmp * weight_function, right_dot, axes=1)
+            poly15 = [
+                2.1056894,
+                -4.19513829,
+                -26.8592435,
+                -125.203213,
+                -333.837706,
+                -534.389273,
+                -554.569943,
+                -392.830556,
+                -195.923461,
+                -69.9308369,
+                -17.9341662,
+                -3.27618918,
+                -0.415819366,
+                -0.034832808,
+                -0.00173100678,
+                -3.86387772e-05,
+            ]
+            poly19 = [
+                2.10588812,
+                -4.88688822,
+                -40.4326353,
+                -220.741839,
+                -681.465768,
+                -1297.64601,
+                -1654.86188,
+                -1488.34315,
+                -972.269594,
+                -467.095599,
+                -164.20549,
+                -40.8970087,
+                -6.49081327,
+                -0.35816766,
+                0.110690877,
+                0.0345086403,
+                0.00494895461,
+                0.000416682047,
+                1.98498358e-05,
+                4.1579982e-07,
+            ]
+
+            weight_function = 10**0.5 * (10 ** weights(log10(xgrid_training), poly19)) ** (-0.25)
+
+            tmp = y_true - y_pred
+            weight_function = tf.cast(weight_function, dtype=tmp.dtype)
+            tmp *= weight_function
+
+            right_dot = tf.tensordot(invcovmat, K.transpose(tmp), axes=1)
+            chi2 = tf.tensordot(tmp, right_dot, axes=1)
         else:
             tmp = y_true - y_pred
             right_dot = tf.tensordot(invcovmat, K.transpose(tmp), axes=1)
