@@ -49,6 +49,14 @@ def plot_chi2dist_experiments(total_experiments_chi2data, experiments_chi2_stats
     return fig
 
 @figure
+def kde_chi2dist_experiments(total_experiments_chi2data):
+    alldata, central, npoints = total_experiments_chi2data
+    fig, ax = plt.subplots()
+    # We need the squeeze here to change shape from (x, 1) to (x,)
+    ax = plotutils.kde_plot(alldata.data.squeeze())
+    return fig
+
+@figure
 def plot_chi2dist(dataset, abs_chi2_data, chi2_stats, pdf):
     """Plot the distribution of chi²s of the members of the pdfset."""
     setlabel = dataset.name
