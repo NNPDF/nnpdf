@@ -48,7 +48,7 @@ def plot_chi2dist_experiments(total_experiments_chi2data, experiments_chi2_stats
     return fig
 
 @figure
-def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
+def plot_chi2dist(dataset, abs_chi2_data, chi2_stats, pdf):
     """Plot the distribution of chi²s of the members of the pdfset."""
     setlabel = dataset.name
     fig, ax = plt.subplots()
