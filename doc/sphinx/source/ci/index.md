@@ -10,10 +10,11 @@ on the code and produce [binary builds](conda) which allow it to be
 automatically deployed. The services are configured so that they react to
 [git](git) pushes to the GitHub server.
 
-Currently we are using actively [GitHub
-Actions](https://help.github.com/en/actions).  We benefit from using it for
-free (because we asked nicely and we got a 100% off forever), but it is
-typically paid for private repositories.
+Currently we are using actively [Travis CI](https://travis-ci.com/).  We benefit
+from using it for free (because we asked nicely), but it is typically paid for
+private repositories. The [Gitlab CI service hosted at
+CERN](https://gitlab.cern.ch/) was used in the past, but support was
+discontinued due to the burden of requiring everyone to have a CERN account.
 
 ## Operation of CI tools
 
@@ -36,23 +37,26 @@ Our CI service works roughly as follows:
 	commit. Some logs are generated, which can aid in determining the cause of
 	errors.
 
-The progress reports of the various jobs at GitHub Actions, as well as the
-corresponding logs are available at <https://github.com/NNPDF/nnpdf/actions>,
-upon logging in with an authorized GitHub account.
+The progress reports of the various jobs at Travis CI, as well as the
+corresponding logs are available at <https://travis-ci.com/>, upon logging in
+with an authorized GitHub account.
 
 
-## Configuration of GitHub Actions
+## Configuration of Travis CI
 
-GitHub Actions uses both files found in the NNPDF repository and settings stored
-in the tab `Settings -> Secrets` of the repository itself.
+Travis CI uses both files found in the NNPDF repository and settings stored in
+the Travis configuration itself.
 
-### Secrets stored in the GitHub Actions configuration
+```eval_rst
+.. _travis-variables:
+```
+### Secrets stored in the Travis CI configuration
 
-To build and upload the packages GitHub Actions needs to be able to access some
+To build and upload the packages Travis CI needs to be able to access some
 secrets, which should not be stored in the git repository. These are represented
-as environment variables, under the [secrets for the NNPDF
-repository](https://github.com/NNPDF/nnpdf/settings/secrets). The secrets are encoded
-using `base64` for simplicity. To use
+as environment variables, under the [Travis CI settings for the NNPDF
+repository](https://travis-ci.com/NNPDF/nnpdf/settings). The secrets are encoded
+using `base64` because Travis does not easily accept multiline variables. To use
 them, do something like `echo "$<SECRET VARIABLE>" | base64 --decode`.
 
 The secrets are.
@@ -65,29 +69,25 @@ The secrets are.
 
 ### Repository configuration
 
-The main entry point for GitHub Actions is a file called
-[`.github/workflows/rules.yml`](https://github.com/NNPDF/nnpdf/blob/master/.github/workflows/.rules.yml).
-It specifies which operating systems and versions are tested, which versions of
-Python, some environment variables, and command instructions for linux and
-macos. The commands basically call `conda build` and upload the relevant
-packages if required.
+The main entry point for Travis CI is a file called
+[`.travis.yml`](https://github.com/NNPDF/nnpdf/blob/master/.travis.yml) on the
+top level. It specifies which operating systems and versions are tested, which
+versions of Python, various required variables, or which scripts actually get
+executed under those settings.
+
+The scripts themselves live under the
+[`.ciscripts`](https://github.com/NNPDF/nnpdf/tree/master/.ciscripts) top level
+directory. They basically call `conda build` and upload the relevant packages if
+required.
 
 By default only packages corresponding to commits to the master branch get
 uploaded. For other branches, the build and testing happens, but the results are
-discarded in the end. This behavior can be changed by (temporarily) commenting
-the lines starting with `if: github.ref == 'refs/heads/master'` in the
-`.github/workflows/rules.yml` file. This can be useful to test modifications to
-the uploading.
+discarded in the end. This behavior can be changing by (temporarily) setting the
+`UPLOAD_NON_MASTER` variable in the `.travis.yml` file to true. This can be
+useful to test modifications to the uploading.
 
-## Past CI services
 
-Some CI services other than GitHub Actions were used in the past, and may still
-be employed by various projects.  These work similarly, with some minor
-differences in the configuration format or the secret storage mechanism.
-
-The [Travis CI](https://travis-ci.com/) service was used in the past, but
-thanks to timeout failures on Mac we decided to move the CI to GitHub Actions.
-
-The [Gitlab CI service hosted at CERN](https://gitlab.cern.ch/) was used before
-that, but support was discontinued due to the burden of requiring everyone to
-have a CERN account.
+Linux builds are executed on top of a [docker image](https://www.docker.com/)
+which is defined by the configuration file under [the `docker`
+folder](https://github.com/NNPDF/nnpdf/tree/master/docker). This is mostly for
+historical reasons.

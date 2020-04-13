@@ -206,6 +206,33 @@ class PDF(TupleComp):
         raise NotImplementedError("Error type for %s: '%s' is not implemented" %
                                   (self.name, error))
 
+    @property
+    def grid_values_index(self):
+        """A range object describing which members are selected in a
+        ``pdf.load().grid_values`` operation.  This is ``range(1,
+        len(pdf))`` for Monte Carlo sets, because replica 0 is not selected
+        and ``range(0, len(pdf))`` for hessian sets.
+
+
+        Returns
+        -------
+        index : range
+            A range object describing the proper indexing.
+
+        Notes
+        -----
+        The range object can be used efficiently as a Pandas index.
+        """
+        err = self.nnpdf_error
+
+        if err is LHAPDFSet.erType_ER_MC:
+            return range(1, len(self))
+        elif err in (LHAPDFSet.ER_SYMEIG, LHAPDFSet.ER_EIG, LHAPDFSet.ER_EIG90):
+            return range(0, len(self))
+        else:
+            raise RuntimeError("Unknown error type")
+
+
 
 kinlabels_latex = CommonData.kinLabel_latex.asdict()
 _kinlabels_keys = sorted(kinlabels_latex, key=len, reverse=True)

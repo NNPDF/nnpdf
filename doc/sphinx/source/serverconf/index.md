@@ -53,12 +53,12 @@ in the `/home/nnpdf/WEB` folder. The `validphys` reports are stored in
 
 ### Access for continuous deployment tools
 
-The  [`conda` packages](conda) as well as the documentation are automatically
-uploaded to the server by the [Continous Integration service](CI), through an
-user called `dummy` which has further reduction in privileges (it uses the
-[`rssh` shell](https://linux.die.net/man/1/rssh)) and it is only allowed to run
-the `scp` command. An accepted private key is stored
-securely in the [CI configuration](CI).  The packages
+The  [`conda` packages](conda) as well as the documentation are
+automatically uploaded to the server by the Continous Integration service
+(Travis), through an user called `dummy` which has further reduction in
+privileges (it uses the [`rssh` shell](https://linux.die.net/man/1/rssh)) and it
+is only allowed to run the `scp` command. An accepted private key is stored
+securely in the [Travis configuration](travis-variables).  The packages
 are uploaded to `/home/nnpdf/packages`.
 
 ### HTTP access
