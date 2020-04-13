@@ -41,6 +41,7 @@ def plot_chi2dist_experiments(total_experiments_chi2data, experiments_chi2_stats
         label += " (%s!)" % pdf.ErrorType
 
     label += '\n'+ '\n'.join(str(chi2_stat_labels[k])+(' %.2f' % v) for (k,v) in experiments_chi2_stats.items())
+    ax.set_title(r"Experiments $\chi^2$ distribution")
 
     ax.hist(alldata.data, label=label, zorder=100)
     l = ax.legend()
