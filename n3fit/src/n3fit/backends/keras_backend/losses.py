@@ -44,25 +44,25 @@ def l_invcovmat(invcovmat_np, losstype="validation", exp_name=None, spec_dict=No
                 denominator = K.log(tf.constant(10, dtype=numerator.dtype))
                 return numerator / denominator
 
-            poly15 = [
-                2.1056894,
-                -4.19513829,
-                -26.8592435,
-                -125.203213,
-                -333.837706,
-                -534.389273,
-                -554.569943,
-                -392.830556,
-                -195.923461,
-                -69.9308369,
-                -17.9341662,
-                -3.27618918,
-                -0.415819366,
-                -0.034832808,
-                -0.00173100678,
-                -3.86387772e-05,
+            Global_poly14 = [
+                2.74569549,
+                -1.44358334,
+                -12.3707199,
+                -45.4747779,
+                -83.8770482,
+                -87.7845273,
+                -57.4852911,
+                -25.0857298,
+                -7.6073545,
+                -1.65326584,
+                -0.263538853,
+                -0.0310751191,
+                -0.00263152192,
+                -0.000143529116,
+                -3.73195549e-06,
             ]
-            poly19 = [
+
+            DIS_poly19 = [
                 2.10588812,
                 -4.88688822,
                 -40.4326353,
@@ -85,7 +85,9 @@ def l_invcovmat(invcovmat_np, losstype="validation", exp_name=None, spec_dict=No
                 4.1579982e-07,
             ]
 
-            weight_function = 10**0.5 * (10**weights(log10(xgrid_training), poly19)) ** (-0.1)
+            weight_function = 10 ** 0.5 * (10 ** weights(log10(xgrid_training), Global_poly14)) ** (
+                -0.1
+            )
 
             tmp = y_true - y_pred
             weight_function = tf.cast(weight_function, dtype=tmp.dtype)
