@@ -32,6 +32,7 @@ def batchit(x, batch_dimension=0):
     """ Add a batch dimension to tensor x """
     return tf.expand_dims(x, batch_dimension)
 
+
 def concatenate_split(splitting_sizes, axis=1):
     """ Generate a pair of concatention and splitting layer
     so that they invert each other
@@ -44,7 +45,7 @@ def concatenate_split(splitting_sizes, axis=1):
             axis in which to apply the operation
     """
     concatenation_layer = keras_concatenate(axis=axis)
-    splitting_layer = keras_Lambda( lambda x: tf.split(x, splitting_sizes, axis=axis) )
+    splitting_layer = keras_Lambda(lambda x: tf.split(x, splitting_sizes, axis=axis))
     return concatenation_layer, splitting_layer
 
 

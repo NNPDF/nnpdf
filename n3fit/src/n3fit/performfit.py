@@ -272,8 +272,7 @@ def performfit(
             xgrid = np.expand_dims(export_xgrid, 0)
             result = pdf_model.predict([xgrid])
             # Now remove the spurious dimension
-            ret = np.squeeze(result, 0)
-            return ret
+            return np.squeeze(result, 0)
 
         # Generate the writer wrapper
         writer_wrapper = WriterWrapper(

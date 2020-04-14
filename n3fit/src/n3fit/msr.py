@@ -123,7 +123,8 @@ def check_integration(ultimate_pdf, integration_input):
         )
     )
 
-def compute_arclength(pdf_function, nx=int(2e3)): # TODO: to be removed
+
+def compute_arclength(pdf_function, nx=int(2e3)):  # TODO: to be removed
     """
     Given the layer with the fit basis computes the arc length
 
@@ -136,13 +137,13 @@ def compute_arclength(pdf_function, nx=int(2e3)): # TODO: to be removed
     eps = xgrid[0] / 2.0
     # Compute the "integration values"
     y = pdf_function(xgrid)
-    yprime = pdf_function(xgrid-eps)
-    result_raw = (yprime-y)/eps
+    yprime = pdf_function(xgrid - eps)
+    result_raw = (yprime - y) / eps
     # Now select the 8-basis
     aa = [1, 2, 3, 4, 5, 9, 10, 11]
-    derivatives_sq = pow(result_raw[:,aa]*xgrid, 2)
+    derivatives_sq = pow(result_raw[:, aa] * xgrid, 2)
     f_of_x = np.sqrt(1.0 + derivatives_sq)
-    arc_lengths = np.sum(f_of_x * weights_array, axis = 0)
+    arc_lengths = np.sum(f_of_x * weights_array, axis=0)
 
     log.debug(
         """

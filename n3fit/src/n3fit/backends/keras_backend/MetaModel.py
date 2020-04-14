@@ -8,11 +8,8 @@
 from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
 
-# TODO: bad, real bad
-scale_lr = {"Adadelta": 100.0}
 
-
-def _parse_input(original_input, new_input=None):
+def _fill_placeholders(original_input, new_input=None):
     """
     Fills the placeholders of the original input with a new set of input
 
@@ -105,9 +102,9 @@ class MetaModel(Model):
         """ Introduces the extra_input in the places asigned to the
         placeholders """
         if pass_numpy:
-            return _parse_input(self.x_in, extra_input)
+            return _fill_placeholders(self.x_in, extra_input)
         else:
-            return _parse_input(self.tensors_in, extra_input)
+            return _fill_placeholders(self.tensors_in, extra_input)
 
     def reinitialize(self):
         """ Run through all layers and reinitialize the ones that can be reinitialied """
@@ -240,7 +237,7 @@ class MetaModel(Model):
         opt_args = opt_tuple[1]
 
         if "lr" in opt_args.keys():
-            opt_args["lr"] = learning_rate * scale_lr.get(opt_function, 1.0)
+            opt_args["lr"] = learning_rate
 
         opt_args["clipnorm"] = 1.0
         opt = opt_function(**opt_args)
