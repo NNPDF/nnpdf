@@ -17,6 +17,15 @@ def get_pseudodata(fit, pdf, experiments, NPROC=None):
     """A function to obtain information about the pseudodata that went
         into an N3FIT fit. Note this code runs in parallel to increase efficiency.
 
+        Parameters
+        ----------
+        fit: validphys.core.FitSpec
+        experiments:
+            List of validphys.core.ExeperimentSpec
+        NPROC: int
+            Integer specifying how many cores to run on. Default is
+            mp.cpu_count()
+
         Example
         -------
         Create a .yaml file say runcard_for_pseudodata.yaml
