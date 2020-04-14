@@ -85,7 +85,7 @@ def l_invcovmat(invcovmat_np, losstype="validation", exp_name=None, spec_dict=No
                 4.1579982e-07,
             ]
 
-            weight_function = 10**0.5 * (10 ** weights(log10(xgrid_training), poly19)) ** (-0.25)
+            weight_function = 10**0.5 * (10**weights(log10(xgrid_training), poly19)) ** (-0.1)
 
             tmp = y_true - y_pred
             weight_function = tf.cast(weight_function, dtype=tmp.dtype)
