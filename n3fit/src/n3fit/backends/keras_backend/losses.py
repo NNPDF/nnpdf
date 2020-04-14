@@ -94,7 +94,7 @@ def l_invcovmat(invcovmat_np, losstype="validation", exp_name=None, spec_dict=No
                     4.1579982e-07,
                 ]
 
-                weight_function = 10 ** 0.5 * (10 ** weights(log10(xgrid_training), Global_poly14)) ** (
+                weight_function = 10 ** 0.5 * (10 ** weights(log10(xgrid_training), DISonly_poly19)) ** (
                     -0.2
                 )
 
