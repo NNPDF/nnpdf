@@ -29,8 +29,8 @@ def get_pseudodata(fit, pdf, experiments, NPROC=None):
         Example
         -------
         Create a .yaml file say runcard_for_pseudodata.yaml
-            pdf: N3FIT_nnlo_as_0118_DISonly
-            fit: N3FIT_nnlo_as_0118_DISonly
+            pdf: PN3_DIS_130519
+            fit: PN3_DIS_130519
 
             experiments:
               from_: fit
