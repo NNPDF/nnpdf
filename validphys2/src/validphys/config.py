@@ -995,7 +995,15 @@ class CoreConfig(configparser.Config):
         hard codes the theories needed for each prescription to avoid user error."""
         pp = point_prescription
         th = theoryid.id
-        if th != '163':
+
+        lsv = yaml.safe_load(
+            read_text(validphys.scalevariations, "scalevariationtheoryids.yaml")
+        )
+        scalevarsfor_list = lsv['scale_variations_for']
+        # Allowed central theoryids
+        cent_thids = [i['theoryid'] for i in scalevarsfor_list]
+
+        if th in cent_thids:
             raise ConfigError(
                 "Scale variations are not currently defined for this central theoryid. It is "
                 + "currently only possible to use theoryid 163 as the central theory. Please use "
@@ -1019,10 +1027,6 @@ class CoreConfig(configparser.Config):
             )
 
         # Find theoryids for given point prescription for given central theoryid
-        lsv = yaml.safe_load(
-            read_text(validphys.scalevariations, "scalevariationtheoryids.yaml")
-        )
-        scalevarsfor_list = lsv['scale_variations_for']
         variations = [
                 i['variations'] for i in scalevarsfor_list if i['theoryid'] == int(th)
         ][0]
