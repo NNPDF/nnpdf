@@ -59,14 +59,16 @@ class Feature_Scaling(MetaLayer):
             return numerator/denominator
 
         if self.scaler == "MinMaxScaler":
-            x *= self.scale_
-            x += self.min_
+
         elif self.scaler == "StandardScaler":
             if self.with_mean:
                 x -= self.mean_
             if self.with_std:
                 x /= self.std_
         elif self.scaler == "Test":
-            x = log10(x*1e3)/3
+            x -= 1.07e-6
+            x /= (0.75-1.07e-6)
+            x *= (1 - -1)
+            x += -1
 
         return x
