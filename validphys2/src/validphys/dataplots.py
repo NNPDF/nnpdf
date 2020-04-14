@@ -49,11 +49,27 @@ def plot_chi2dist_experiments(total_experiments_chi2data, experiments_chi2_stats
     return fig
 
 @figure
-def kde_chi2dist_experiments(total_experiments_chi2data):
-    alldata, central, npoints = total_experiments_chi2data
+def kde_chi2dist_experiments(total_experiments_chi2data, experiments_chi2_stats, pdf):
+    """KDE plot for experiments chi2."""
     fig, ax = plt.subplots()
+    label = pdf.name
+    alldata, central, npoints = total_experiments_chi2data
+
+    if not isinstance(alldata, MCStats):
+        ax.set_facecolor("#ffcccc")
+        log.warning("Chi² distribution plots have a "
+                "different meaning for non MC sets.")
+        label += " (%s!)" % pdf.ErrorType
+
+    label += '\n'+ '\n'.join(str(chi2_stat_labels[k])+(' %.2f' % v) for (k,v) in experiments_chi2_stats.items())
+    ax.set_title(r"Experiments $\chi^2$ KDE plot")
+    ax.set_xlabel(r"Replica $\chi^2$")
+    ax.set_ylabel(r"Density")
+
     # We need the squeeze here to change shape from (x, 1) to (x,)
-    ax = plotutils.kde_plot(alldata.data.squeeze())
+    ax = plotutils.kde_plot(alldata.data.squeeze(), label=label)
+    l = ax.legend()
+    l.set_zorder(1000)
     return fig
 
 @figure
