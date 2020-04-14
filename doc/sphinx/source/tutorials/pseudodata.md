@@ -21,6 +21,12 @@ experiments:
 theory:
   from_: fit
 
+t0pdfset:
+  from_: datacuts
+
+datacuts:
+  from_: fit
+
 theoryid:
   from_: theory
 

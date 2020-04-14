@@ -13,7 +13,7 @@ import numpy as np
 log = logging.getLogger(__name__)
 
 
-def get_pseudodata(fit, pdf, experiments, NPROC=None):
+def get_pseudodata(fit, pdf, experiments, t0pdfset=None, NPROC=None):
     """A function to obtain information about the pseudodata that went
         into an N3FIT fit. Note this code runs in parallel to increase efficiency.
 
@@ -22,6 +22,7 @@ def get_pseudodata(fit, pdf, experiments, NPROC=None):
         fit: validphys.core.FitSpec
         experiments:
             List of validphys.core.ExeperimentSpec
+        t0pdfset: validphys.core.PDF
         NPROC: int
             Integer specifying how many cores to run on. Default is
             mp.cpu_count()
@@ -36,6 +37,12 @@ def get_pseudodata(fit, pdf, experiments, NPROC=None):
               from_: fit
 
             theory:
+              from_: fit
+
+            t0pdfset:
+              from_: datacuts
+
+            datacuts:
               from_: fit
 
             theoryid:
@@ -53,7 +60,11 @@ def get_pseudodata(fit, pdf, experiments, NPROC=None):
     import n3fit.io.reader as reader
     from n3fit.performfit import initialize_seeds
 
-    t0pdfset = pdf.load_t0()
+    if t0pdfset is not None:
+        t0pdfset = t0pdfset.load_t0()
+    else:
+        t0pdfset = None
+
     # Note: len(pdf) = num replicas + 1
     # due to rep 0, which we do not consider
     # here.
