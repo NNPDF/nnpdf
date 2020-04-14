@@ -11,6 +11,31 @@ from validphys.loader import FallbackLoader as Loader
 l = Loader()
 
 
+DIS_datasets = [
+    "NMCPD",
+    "NMC",
+    "SLACP",
+    "SLACD",
+    "BCDMSP",
+    "BCDMSD",
+    "CHORUSNU",
+    "CHORUSNB",
+    "NTVNUDMN",
+    "NTVNBDMN",
+    "EMCF2C",
+    "HERACOMBNCEM",
+    "HERACOMBNCEP460",
+    "HERACOMBNCEP575",
+    "HERACOMBNCEP820",
+    "HERACOMBNCEP920",
+    "HERACOMBCCEM",
+    "HERACOMBCCEP",
+    "HERAF2CHARM",
+    "H1HERAF2B",
+    "ZEUSHERAF2B",
+    "EXTRAPOLATION"
+]
+
 def l_invcovmat(invcovmat_np, losstype="validation", exp_name=None, spec_dict=None):
     """
     Returns a loss function such that:
@@ -25,76 +50,64 @@ def l_invcovmat(invcovmat_np, losstype="validation", exp_name=None, spec_dict=No
             xgrid_experiment = []
             for dataset_dict in spec_dict.get("datasets"):
                 exp_name = dataset_dict.get("name")
-                datasetspec = l.check_dataset(exp_name, theoryid=53, cuts="internal")
-                dataset = datasetspec.load()
-                xgrid_dataset = dataset.get_kintable()[:, 0]
-                xgrid_experiment = np.concatenate((xgrid_experiment, xgrid_dataset))
-            trmask = spec_dict.get("trmask")
-            xgrid_training = []
-            for num, i in enumerate(trmask.reshape(-1)):
-                if i:
-                    xgrid_training.append(xgrid_experiment[num])
-            xgrid_training = np.array(xgrid_training)
+                if exp_name in DIS_datasets:
+                    datasetspec = l.check_dataset(exp_name, theoryid=53, cuts="internal")
+                    dataset = datasetspec.load()
+                    xgrid_dataset = dataset.get_kintable()[:, 0]
+                    xgrid_experiment = np.concatenate((xgrid_experiment, xgrid_dataset))
+            if exp_name in DIS_datasets:
+                trmask = spec_dict.get("trmask")
+                xgrid_training = []
+                for num, i in enumerate(trmask.reshape(-1)):
+                    if i:
+                        xgrid_training.append(xgrid_experiment[num])
+                xgrid_training = np.array(xgrid_training)
 
-            def weights(x, polynomial_factors):
-                return sum(polynomial_factors[i] * x ** i for i in range(len(polynomial_factors)))
+                def weights(x, polynomial_factors):
+                    return sum(polynomial_factors[i] * x ** i for i in range(len(polynomial_factors)))
 
-            def log10(x):
-                numerator = K.log(x)
-                denominator = K.log(tf.constant(10, dtype=numerator.dtype))
-                return numerator / denominator
+                def log10(x):
+                    numerator = K.log(x)
+                    denominator = K.log(tf.constant(10, dtype=numerator.dtype))
+                    return numerator / denominator
 
-            Global_poly14 = [
-                2.74569549,
-                -1.44358334,
-                -12.3707199,
-                -45.4747779,
-                -83.8770482,
-                -87.7845273,
-                -57.4852911,
-                -25.0857298,
-                -7.6073545,
-                -1.65326584,
-                -0.263538853,
-                -0.0310751191,
-                -0.00263152192,
-                -0.000143529116,
-                -3.73195549e-06,
-            ]
+                DISonly_poly19 = [
+                    2.10588812,
+                    -4.88688822,
+                    -40.4326353,
+                    -220.741839,
+                    -681.465768,
+                    -1297.64601,
+                    -1654.86188,
+                    -1488.34315,
+                    -972.269594,
+                    -467.095599,
+                    -164.20549,
+                    -40.8970087,
+                    -6.49081327,
+                    -0.35816766,
+                    0.110690877,
+                    0.0345086403,
+                    0.00494895461,
+                    0.000416682047,
+                    1.98498358e-05,
+                    4.1579982e-07,
+                ]
 
-            DIS_poly19 = [
-                2.10588812,
-                -4.88688822,
-                -40.4326353,
-                -220.741839,
-                -681.465768,
-                -1297.64601,
-                -1654.86188,
-                -1488.34315,
-                -972.269594,
-                -467.095599,
-                -164.20549,
-                -40.8970087,
-                -6.49081327,
-                -0.35816766,
-                0.110690877,
-                0.0345086403,
-                0.00494895461,
-                0.000416682047,
-                1.98498358e-05,
-                4.1579982e-07,
-            ]
+                weight_function = 10 ** 0.5 * (10 ** weights(log10(xgrid_training), Global_poly14)) ** (
+                    -0.2
+                )
 
-            weight_function = 10 ** 0.5 * (10 ** weights(log10(xgrid_training), Global_poly14)) ** (
-                -0.1
-            )
+                tmp = y_true - y_pred
+                weight_function = tf.cast(weight_function, dtype=tmp.dtype)
+                tmp *= weight_function
 
-            tmp = y_true - y_pred
-            weight_function = tf.cast(weight_function, dtype=tmp.dtype)
-            tmp *= weight_function
-
-            right_dot = tf.tensordot(invcovmat, K.transpose(tmp), axes=1)
-            chi2 = tf.tensordot(tmp, right_dot, axes=1)
+                right_dot = tf.tensordot(invcovmat, K.transpose(tmp), axes=1)
+                chi2 = tf.tensordot(tmp, right_dot, axes=1)
+            else:
+                tmp = y_true - y_pred
+                right_dot = tf.tensordot(invcovmat, K.transpose(tmp), axes=1)
+                chi2 = tf.tensordot(tmp, right_dot, axes=1)
         else:
             tmp = y_true - y_pred
             right_dot = tf.tensordot(invcovmat, K.transpose(tmp), axes=1)
