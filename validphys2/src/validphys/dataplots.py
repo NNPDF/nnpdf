@@ -42,6 +42,7 @@ def plot_chi2dist_experiments(total_experiments_chi2data, experiments_chi2_stats
 
     label += '\n'+ '\n'.join(str(chi2_stat_labels[k])+(' %.2f' % v) for (k,v) in experiments_chi2_stats.items())
     ax.set_title(r"Experiments $\chi^2$ distribution")
+    ax.set_xlabel(r"Replica $\chi^2$")
 
     ax.hist(alldata.data, label=label, zorder=100)
     l = ax.legend()
@@ -86,6 +87,7 @@ def plot_chi2dist(dataset, abs_chi2_data, chi2_stats, pdf):
         label += " (%s!)" % pdf.ErrorType
     label += '\n'+ '\n'.join(str(chi2_stat_labels[k])+(' %.2f' % v) for (k,v) in chi2_stats.items())
     ax.set_title(r"$\chi^2$ distribution for %s" % setlabel)
+    ax.set_xlabel(r"Replica $\chi^2$")
 
     ax.hist(alldata.data, label=label, zorder=100)
     l = ax.legend()
