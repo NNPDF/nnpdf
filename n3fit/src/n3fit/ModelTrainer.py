@@ -646,8 +646,8 @@ class ModelTrainer:
             params["initializer"],
             params["layer_type"],
             params["dropout"],
-            params.get('regularizer', None), # regularizer args optional
-            params.get('regularizer_args', {})
+            params.get('regularizer', None), # regularizer optional
+            params.get('regularizer_args', None)
         )
 
         # Model generation

@@ -149,6 +149,20 @@ def base_layer_selector(layer_name, **kwargs):
     return layer_class(**layer_args)
 
 def regularizer_selector(reg_name, **kwargs):
+    """Given a regularizer name looks in the `regularizer` dictionary and
+    return an instance.
+
+    The regularizer dictionary defines defaults for regularizers but these can
+    be overwritten by supplying kwargs
+
+    Parameters
+    ----------
+    layer_name
+        str with the name of the regularizer
+    **kwargs
+        extra optional arguments to pass to the regularizer
+
+    """
     if reg_name is None:
         return None
 

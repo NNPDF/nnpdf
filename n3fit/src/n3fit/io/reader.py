@@ -178,7 +178,7 @@ def common_data_reader(
     replica_seeds=None,
     trval_seeds=None,
     kpartitions=None,
-    rotate_diagonal=None
+    rotate_diagonal=False
 ):
     """
     Wrapper to read the information from validphys object

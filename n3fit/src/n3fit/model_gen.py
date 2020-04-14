@@ -296,7 +296,7 @@ def pdfNN_layer_generator(
     seed=None,
     dropout=0.0,
     regularizer=None,
-    regularizer_args={},
+    regularizer_args=None,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -392,6 +392,8 @@ def pdfNN_layer_generator(
         # activations functions
         activations = activations(ln)
 
+    if regularizer_args is None:
+        regularizer_args = dict()
     # Safety check
     number_of_layers = len(nodes)
     number_of_activations = len(activations)
