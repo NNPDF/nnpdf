@@ -816,7 +816,7 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
 
         ax.set_xscale(scale_from_grid(obs_pdf_correlations))
         ax.set_ylim(-1,1)
-        ax.set_xlim(1e-2, 0.7)
+        ax.set_xlim(1e-3, 0.9)
         ax.set_xlabel('$x$')
         ax.legend(title=DijetsInfo[info.dataset_label]["legend"], frameon=False, borderaxespad=0.5)
         #fig.subplots_adjust(hspace=0)
