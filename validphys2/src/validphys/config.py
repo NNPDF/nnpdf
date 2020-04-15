@@ -1005,10 +1005,11 @@ class CoreConfig(configparser.Config):
         cent_thids = [str(i['theoryid']) for i in scalevarsfor_list]
 
         if th not in cent_thids:
+            valid_thids = ", ".join(cent_thids)
             raise ConfigError(
                 "Scale variations are not currently defined for this central theoryid. It is "
-                + "currently only possible to use theoryid 163 as the central theory. Please use "
-                + "this instead if you wish to include theory uncertainties here."
+                + f"currently only possible to use one of the following as the central theory: {valid_thids}. "
+                + "Please use one of these instead if you wish to include theory uncertainties here."
             )
 
         # Find scales that correspond to this point prescription
