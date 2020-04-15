@@ -1002,7 +1002,7 @@ class CoreConfig(configparser.Config):
 
         scalevarsfor_list = lsv['scale_variations_for']
         # Allowed central theoryids
-        cent_thids = [str(i['theoryid']) for i in scalevarsfor_list]
+        cent_thids = [str(scalevarsfor_dict['theoryid']) for scalevarsfor_dict in scalevarsfor_list]
 
         if th not in cent_thids:
             valid_thids = ", ".join(cent_thids)
@@ -1028,9 +1028,28 @@ class CoreConfig(configparser.Config):
                 + "include theory uncertainties here."
             )
 
+        # Get dictionary containing theoryid and variations for central theory from runcard
+        for scalevarsfor_dict in scalevarsfor_list:
+            if scalevarsfor_dict['theoryid'] == int(th):
+                theoryid_variations = scalevarsfor_dict
+
         # Find theoryids for given point prescription for given central theoryid
-        variations = scalevarsfor_list['theoryid' == int(th)]['variations']
-        thids = [variations[i] for i in scales]
+        try:
+            thids = [theoryid_variations['variations'][scale] for scale in scales]
+        except KeyError:
+            available_scales = list(theoryid_variations['variations'])
+            missing_scales = []
+            for scale in scales:
+                if scale not in available_scales:
+                    missing_scales.append(scale)
+            missing_scales_string = ", ".join(missing_scales)
+            raise ConfigError(
+                "For this central theoryid, the requested point prescription is not currently "
+                + "available. To use this point prescription for this central theoryid, theoryids "
+                + "that correspond to the following scale choices must be created and added to "
+                + "validphys2/src/validphys/scalevariations/scalevariationtheoryids.yaml: "
+                + f"(k_F, k_R) = {missing_scales_string}."
+            )
 
         # Check each theory is loaded
         theoryids = [self.loader.check_theoryID(thid) for thid in thids]
