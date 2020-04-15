@@ -1,13 +1,8 @@
+# Mapping between a point prescription and the scale combinations that form it
 # IMPORTANT: scale combinations must be listed according to (muF, muR) in the following order:
 # (1,1), (2,1), (0.5,1), (1,2), (1,0.5), (2,2), (0.5,0.5), (2,0.5), (0.5,2)
-point_prescriptions:
-  - name: '3 point'
-    scales: [{'muF': '1', 'muR': '1'}, {'muF': '2', 'muR': '2'}, {'muF': '0.5', 'muR': '0.5'}]
-  - name: '5 point'
-    scales: [{'muF': '1', 'muR': '1'}, {'muF': '2', 'muR': '1'}, {'muF': '0.5', 'muR': '1'}, {'muF': '1', 'muR': '2'}, {'muF': '1', 'muR': '0.5'}]
-  - name: '5bar point'
-    scales: [{'muF': '1', 'muR': '1'}, {'muF': '2', 'muR': '2'}, {'muF': '0.5', 'muR': '0.5'}, {'muF': '2', 'muR': '0.5'}, {'muF': '0.5', 'muR': '2'}]
-  - name: '7 point'
-    scales: [{'muF': '1', 'muR': '1'}, {'muF': '2', 'muR': '1'}, {'muF': '0.5', 'muR': '1'}, {'muF': '1', 'muR': '2'}, {'muF': '1', 'muR': '0.5'}, {'muF': '2', 'muR': '2'}, {'muF': '0.5', 'muR': '0.5'}]
-  - name: '9 point'
-    scales: [{'muF': '1', 'muR': '1'}, {'muF': '2', 'muR': '1'}, {'muF': '0.5', 'muR': '1'}, {'muF': '1', 'muR': '2'}, {'muF': '1', 'muR': '0.5'}, {'muF': '2', 'muR': '2'}, {'muF': '0.5', 'muR': '0.5'}, {'muF': '2', 'muR': '0.5'}, {'muF': '0.5', 'muR': '2'}]
+'3 point': [{'muF': '1', 'muR': '1'}, {'muF': '2', 'muR': '2'}, {'muF': '0.5', 'muR': '0.5'}]
+'5 point': [{'muF': '1', 'muR': '1'}, {'muF': '2', 'muR': '1'}, {'muF': '0.5', 'muR': '1'}, {'muF': '1', 'muR': '2'}, {'muF': '1', 'muR': '0.5'}]
+'5bar point': [{'muF': '1', 'muR': '1'}, {'muF': '2', 'muR': '2'}, {'muF': '0.5', 'muR': '0.5'}, {'muF': '2', 'muR': '0.5'}, {'muF': '0.5', 'muR': '2'}]
+'7 point': [{'muF': '1', 'muR': '1'}, {'muF': '2', 'muR': '1'}, {'muF': '0.5', 'muR': '1'}, {'muF': '1', 'muR': '2'}, {'muF': '1', 'muR': '0.5'}, {'muF': '2', 'muR': '2'}, {'muF': '0.5', 'muR': '0.5'}]
+'9 point': [{'muF': '1', 'muR': '1'}, {'muF': '2', 'muR': '1'}, {'muF': '0.5', 'muR': '1'}, {'muF': '1', 'muR': '2'}, {'muF': '1', 'muR': '0.5'}, {'muF': '2', 'muR': '2'}, {'muF': '0.5', 'muR': '0.5'}, {'muF': '2', 'muR': '0.5'}, {'muF': '0.5', 'muR': '2'}]

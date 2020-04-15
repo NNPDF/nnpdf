@@ -1011,13 +1011,13 @@ class CoreConfig(configparser.Config):
             )
 
         # Find scales that correspond to this point prescription
-        lpp = yaml.safe_load(
+        pp_scales_dict = yaml.safe_load(
             read_text(validphys.scalevariations, "pointprescriptions.yaml")
         )
-        pp_scales_list = lpp['point_prescriptions']
+
         try:
-            scales = [i['scales'] for i in pp_scales_list if i['name'] == pp][0]
-        except IndexError:
+            scales = pp_scales_dict[pp]
+        except KeyError:
             raise ConfigError(
                 "Scale variations are not currently defined for this point prescription. This "
                 + "configuration only works when 'point_prescription' is equal to one of "
