@@ -1001,9 +1001,9 @@ class CoreConfig(configparser.Config):
         )
         scalevarsfor_list = lsv['scale_variations_for']
         # Allowed central theoryids
-        cent_thids = [i['theoryid'] for i in scalevarsfor_list]
+        cent_thids = [str(i['theoryid']) for i in scalevarsfor_list]
 
-        if th in cent_thids:
+        if th not in cent_thids:
             raise ConfigError(
                 "Scale variations are not currently defined for this central theoryid. It is "
                 + "currently only possible to use theoryid 163 as the central theory. Please use "
