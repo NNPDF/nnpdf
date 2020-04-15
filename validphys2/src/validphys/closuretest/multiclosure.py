@@ -18,6 +18,10 @@ from reportengine.figure import figure
 from validphys.results import ThPredictionsResult
 from validphys.calcutils import calc_chi2
 from validphys.core import DataSetSpec, Experiment
+from validphys.closuretest.closure_checks import (
+    check_at_least_10_fits,
+    check_multifit_replicas,
+)
 
 def internal_multiclosure_dataset_loader(
     dataset, fits_pdf, multiclosure_underlyinglaw):
@@ -34,7 +38,7 @@ def internal_multiclosure_dataset_loader(
 
             closure fits theory predictions,
             underlying law theory predictions,
-            covariance matrix, 
+            covariance matrix,
             sqrt covariance matrix
 
     TODO: deprecate this at some point
@@ -420,3 +424,193 @@ def plot_experiment_xi(experiment_xi, experiment):
 def plot_experiment_xi_histogram(experiment_xi, experiment):
     """Like plot_dataset_xi_histogram but for an experiment"""
     return plot_dataset_xi_histogram(experiment_xi, experiment)
+
+SAMPLING_INTERVAL = 5
+
+@check_at_least_10_fits
+def n_fit_samples(fits):
+    """Return a range object where each item is a number of fits to use for
+    resampling a multiclosure quantity
+
+    determined by varying n_fits between 10 and number of fits provided by
+    user in steps of 5. User must provide at least 10 fits.
+
+    """
+    return range(10, len(fits) + SAMPLING_INTERVAL, SAMPLING_INTERVAL)
+
+@check_multifit_replicas
+def n_replica_samples(fits_pdf, _internal_n_reps=None):
+    """Return a range object where each item is a number of replicas to use for
+    resampling a multiclosure quantity
+
+    determined by varying n_reps between 10 and number of replicas that each
+    provided closure fit has. All provided fits must have the same number of
+    replicas and that number must be at least 10.
+    """
+    return range(10, _internal_n_reps + SAMPLING_INTERVAL, SAMPLING_INTERVAL)
+
+class BootstrappedTheoryResult:
+    """Proxy class which mimicks results.ThPredictionsResult so that
+    preexisting bias/variance actions can be used with bootstrapped replicas
+    """
+    def __init__(self, data):
+        self._rawdata = data
+        self.central_value = data.mean(axis=1)
+
+INTERNAL_SEED = 235356421
+
+
+def bias_variance_resampling_dataset(
+    internal_multiclosure_dataset_loader,
+    fits_pdf,
+    n_fit_samples,
+    n_replica_samples,
+    bootstrap_samples=100,
+):
+    """For a single dataset, create bootstrap distributions of bias and variance
+    varying the number of fits and replicas drawn for each resample. Return two
+    3-D arrays with dimensions
+
+        (number of n_rep samples, number of n_fit samples, n_boot)
+
+    filled with resampled bias and variance respectively. The number of bootstrap_samples
+    is 100 by default. The number of n_rep samples is determined by varying
+    n_rep between 10 and the number of replicas each fit has in intervals of 5.
+    This action requires that each fit has the same number of replicas which also
+    must be at least 10. The number of n_fit samples is determined analogously to
+    the number of n_rep samples, also requiring at least 10 fits.
+
+    Returns
+    -------
+    resamples: tuple
+        tuple of two 3-D arrays with resampled bias and variance respectively for
+        each n_rep samples and each n_fit samples
+
+    Notes
+    -----
+    The bootstrap samples are seeded in this function. If this action is colleted
+    over multiple datasets then the set of resamples all used corresponding replicas
+
+    """
+    # seed same rng so we can aggregate results
+    rng = np.random.RandomState(seed=INTERNAL_SEED)
+    closure_th, *input_tuple = internal_multiclosure_dataset_loader
+
+    bias_sample = []
+    variance_sample = []
+    for n_rep_sample in n_replica_samples:
+        # results varying n_fit_sample
+        fixed_n_rep_bias = []
+        fixed_n_rep_variance = []
+        for n_fit_sample in n_fit_samples:
+            # for each n_fit and n_replica sample store result of each boot resample
+            bias_boot = []
+            variance_boot = []
+            for _ in range(bootstrap_samples):
+                fit_boot_index = rng.randint(0, len(fits_pdf), size=n_fit_sample)
+                fit_boot_th = [closure_th[i] for i in fit_boot_index]
+                boot_ths = []
+                # construct proxy fits theory predictions
+                for fit_th in fit_boot_th:
+                    rep_boot_index = rng.randint(
+                        0, fit_th._rawdata.shape[1], size=n_rep_sample)
+                    boot_ths.append(BootstrappedTheoryResult(fit_th._rawdata[:, rep_boot_index]))
+                bias, _ = expected_bias_dataset((boot_ths, *input_tuple))
+                bias_boot.append(bias)
+                variance, _ = expected_variance_dataset((boot_ths, *input_tuple))
+                variance_boot.append(variance)
+            fixed_n_rep_bias.append(bias_boot)
+            fixed_n_rep_variance.append(variance_boot)
+        bias_sample.append(fixed_n_rep_bias)
+        variance_sample.append(fixed_n_rep_variance)
+    return np.array(bias_sample), np.array(variance_sample)
+
+@check_at_least_10_fits
+@check_multifit_replicas
+def bias_variance_resampling_experiment(
+    internal_multiclosure_experiment_loader,
+    fits_pdf,
+    n_fit_samples,
+    n_replica_samples,
+    bootstrap_samples=100,
+):
+    """like ratio_n_dependence_dataset except for an experiment
+
+    Notes
+    -----
+    The bootstrap samples are seeded in this function. If this action is colleted
+    over multiple experiments then the set of resamples all used corresponding replicas
+    and can be added together.
+
+    """
+    return bias_variance_resampling_dataset(
+        internal_multiclosure_experiment_loader,
+        fits_pdf,
+        n_fit_samples,
+        n_replica_samples,
+        bootstrap_samples,
+    )
+
+@table
+def dataset_ratio_relative_error_finite_effects(
+        bias_variance_resampling_dataset,
+        n_fit_samples,
+        n_replica_samples
+):
+    """For a single dataset vary number of fits and number of replicas used to perform
+    bootstrap sample of expected bias and variance. The tabulate the std deviation
+    normalised by the mean across bootstrap samples for each combination of
+
+        ratio = bias / variance
+
+    The resulting table gives and approximation of how relative error varies with
+    number of fits and number of replicas for each dataset.
+    """
+    bias_samples, var_samples = bias_variance_resampling_dataset
+    ratio = bias_samples / var_samples
+    relative_error = ratio.std(axis=2) / ratio.mean(axis=2)
+    ind = pd.Index(list(n_replica_samples), name="n_rep samples")
+    col = pd.Index(list(n_fit_samples), name="n_fit samples")
+    return pd.DataFrame(relative_error, index=ind, columns=col)
+
+exps_bias_var_resample = collect(
+    "bias_variance_resampling_experiment", ("experiments",))
+
+@table
+def total_ratio_finite_effects(
+    exps_bias_var_resample,
+    n_fit_samples,
+    n_replica_samples
+):
+    """Like dataset_ratio_relative_error_finite_effects except for the total
+    bias / variance
+    """
+    bias_total, var_total = exps_bias_var_resample[0]
+    for exp_bias_var_resample in exps_bias_var_resample[1:]:
+        bias, var = exp_bias_var_resample
+        bias_total += bias
+        var_total += var
+    # don't reinvent the wheel
+    return dataset_ratio_relative_error_finite_effects(
+        (bias_total, var_total), n_fit_samples, n_replica_samples)
+
+@table
+def total_ratio_test_table(
+    exps_bias_var_resample,
+    n_fit_samples,
+    n_replica_samples
+):
+    """Like dataset_ratio_relative_error_finite_effects except for the total
+    bias / variance
+    """
+    bias_total, var_total = exps_bias_var_resample[0]
+    for exp_bias_var_resample in exps_bias_var_resample[1:]:
+        bias, var = exp_bias_var_resample
+        bias_total += bias
+        var_total += var
+    # don't reinvent the wheel
+    df = dataset_ratio_relative_error_finite_effects(
+        (bias_total, var_total), n_fit_samples, n_replica_samples)
+    res = pd.DataFrame(
+        (bias_total / var_total).mean(axis=2), index=df.index, columns=df.columns)
+    return res

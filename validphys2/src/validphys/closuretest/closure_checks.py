@@ -63,3 +63,28 @@ def check_t0pdfset_matches_law(t0pdfset, fit):
     if not str(t0pdfset) == t0_from_fit:
         raise CheckError(
             f"Underlying pdf: {t0_from_fit}, does not match t0pdfset: {t0pdfset}")
+
+@make_argcheck
+def check_at_least_10_fits(fits):
+    if len(fits) < 10:
+        raise CheckError(
+            "Multiclosure actions testing finite sampling effects require at least 10 fits"
+        )
+
+@make_argcheck
+def check_multifit_replicas(fits_pdf):
+    """Checks that all the fit pdfs have the same number of replicas N_rep and
+    that N_rep is at least 10"""
+    # we take off 1 here because we don't want to include replica 0
+    n_reps = set([len(pdf) - 1 for pdf in fits_pdf])
+    if len(n_reps) != 1:
+        raise CheckError(
+            "all fits for multiclosure actions should have same number of replicas"
+        )
+    n_reps = n_reps.pop()
+    if n_reps < 10:
+        raise CheckError(
+            "Multiclosure actions testing finite sampling effects require fits "
+            "to have at least 10 replicas"
+        )
+    return {"_internal_n_reps": n_reps}
