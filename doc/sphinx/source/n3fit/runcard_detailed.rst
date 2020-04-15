@@ -69,21 +69,32 @@ Network Architecture
 --------------------
 There are different network architectures implemented in ``n3fit``.
 Which can be selected by changing the ``fitting:parameters::layer_type`` parameter in the runcard.
+All layer types implement the ``nodes_per_layer``, ``activation_per_layer`` and ``initializer`` parameters.
 
 .. code-block:: yml
 
     fitting:
         parameters:
             nodes_per_layer: [5, 3, 8]
-            layer_type: `dense_per_flavour`
+            activation_per_layer: ['tanh', 'tanh', 'linear']
+            layer_type: 'dense_per_flavour'
+            initializer: 'glorot_normal'
 
-- One single network (``layer_type: dense``):
+- **One single network** (``layer_type: dense``):
+
+  Extra accepted parameters:
+    - `dropout`: float
+        see `here <https://keras.io/layers/core/#dropout>`_
+    - `regularizer`: str
+        see `here <https://keras.io/regularizers/>`_
+    - `regularizer_args`: dict
+        choice arguments for the `regularizer`
 
 In this mode all nodes are connected with all nodes of the next layer. In this case there is one single network which take as input the value of ``x`` (and ``log(x)``) and outputs all different flavours.
 
 In this case the ``nodes_per_layer`` parameter represents the nodes each one of these layers has. For instance ``[40, 20, 8]`` corresponds to a network where the first layer is a matrix ``(2x40)`` (the input is ``x, log(x)``), the second layer is a matrix ``(40x20)`` and the third and final one ``(20x8)``.
 
-- One network per flavour (``layer_type: dense_per_flavour``):
+- **One network per flavour** (``layer_type: dense_per_flavour``):
 
 This mode is designed to behave as the methodology for NNPDF before 3.1 where each flavour has a separated identical network. 
 

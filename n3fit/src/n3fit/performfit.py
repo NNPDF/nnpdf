@@ -132,6 +132,8 @@ def performfit(
     # (experimental data, covariance matrix, replicas, etc, tr/val split)
     ##############################################################################
     all_exp_infos = [[] for _ in replica]
+    if fitting.get('diagonal_basis'):
+        log.info("working in diagonal basis")
 
     if hyperscan and hyperopt:
         kfold_parameters = hyperscan["kfold"]
@@ -142,9 +144,14 @@ def performfit(
 
     # First loop over the experiments
     for exp in experiments:
-        log.info("Loading experiment: %s", exp)
+        log.info("Loading experiment: {0}".format(exp))
         all_exp_dicts = reader.common_data_reader(
-            exp, t0pdfset, replica_seeds=mcseeds, trval_seeds=trvalseeds, kpartitions=kpartitions
+            exp,
+            t0pdfset,
+            replica_seeds=mcseeds,
+            trval_seeds=trvalseeds,
+            kpartitions=kpartitions,
+            rotate_diagonal=fitting.get('diagonal_basis'),
         )
         for i, exp_dict in enumerate(all_exp_dicts):
             all_exp_infos[i].append(exp_dict)
