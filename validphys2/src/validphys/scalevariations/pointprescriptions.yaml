@@ -9,7 +9,5 @@ point_prescriptions:
     scales: [{'muF': '1', 'muR': '1'}, {'muF': '2', 'muR': '2'}, {'muF': '0.5', 'muR': '0.5'}, {'muF': '2', 'muR': '0.5'}, {'muF': '0.5', 'muR': '2'}]
   - name: '7 point'
     scales: [{'muF': '1', 'muR': '1'}, {'muF': '2', 'muR': '1'}, {'muF': '0.5', 'muR': '1'}, {'muF': '1', 'muR': '2'}, {'muF': '1', 'muR': '0.5'}, {'muF': '2', 'muR': '2'}, {'muF': '0.5', 'muR': '0.5'}]
-  - name: '7 point (original)'
-    scales: [{'muF': '1', 'muR': '1'}, {'muF': '2', 'muR': '1'}, {'muF': '0.5', 'muR': '1'}, {'muF': '1', 'muR': '2'}, {'muF': '1', 'muR': '0.5'}, {'muF': '2', 'muR': '2'}, {'muF': '0.5', 'muR': '0.5'}]
   - name: '9 point'
     scales: [{'muF': '1', 'muR': '1'}, {'muF': '2', 'muR': '1'}, {'muF': '0.5', 'muR': '1'}, {'muF': '1', 'muR': '2'}, {'muF': '1', 'muR': '0.5'}, {'muF': '2', 'muR': '2'}, {'muF': '0.5', 'muR': '0.5'}, {'muF': '2', 'muR': '0.5'}, {'muF': '0.5', 'muR': '2'}]

@@ -990,9 +990,9 @@ class CoreConfig(configparser.Config):
 
     def produce_scale_variation_theories(self, theoryid, point_prescription):
         """Produces a list of theoryids given a theoryid at central scales and a point
-        prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point',
-        '7 point (original)' and '9 point'. Note that these are defined in arXiv:1906.10698. This
-        hard codes the theories needed for each prescription to avoid user error."""
+        prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point'
+        and '9 point'. Note that these are defined in arXiv:1906.10698. This hard codes the
+        theories needed for each prescription to avoid user error."""
         pp = point_prescription
         th = theoryid.id
 
@@ -1021,9 +1021,8 @@ class CoreConfig(configparser.Config):
             raise ConfigError(
                 "Scale variations are not currently defined for this point prescription. This "
                 + "configuration only works when 'point_prescription' is equal to one of "
-                + "'3 point', '5 point', '5bar point', '7 point', '7 point (original)' or "
-                + "'9 point'. Please use one of these instead if you wish to include theory "
-                + "uncertainties here."
+                + "'3 point', '5 point', '5bar point', '7 point' or '9 point'. Please use one "
+                + "of these instead if you wish to include theory uncertainties here."
             )
 
         # Find theoryids for given point prescription for given central theoryid
