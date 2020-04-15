@@ -1020,11 +1020,12 @@ class CoreConfig(configparser.Config):
         try:
             scales = pp_scales_dict[pp]
         except KeyError:
+            valid_pps = ", ".join(pp_scales_dict.keys())
             raise ConfigError(
                 "Scale variations are not currently defined for this point prescription. This "
-                + "configuration only works when 'point_prescription' is equal to one of "
-                + "'3 point', '5 point', '5bar point', '7 point' or '9 point'. Please use one "
-                + "of these instead if you wish to include theory uncertainties here."
+                + "configuration only works when 'point_prescription' is equal to one of the "
+                + f"following: {valid_pps}. Please use one of these instead if you wish to "
+                + "include theory uncertainties here."
             )
 
         # Find theoryids for given point prescription for given central theoryid
