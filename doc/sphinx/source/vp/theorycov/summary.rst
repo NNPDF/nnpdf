@@ -41,7 +41,7 @@ See the `short
    #. ``scalevariationtheoryids.yaml``: correspondence between each scale combination
       and a theoryid for a given central theoryid
 
--  The prescription must be one of :math:`\{3,5,7,9\}`.
+-  The prescription must be one of 3 point, 5 point, 7 point or 9 point.
 
 -  In the case of 5 theories, you must further specify whether the 5 or
    :math:`\bar{5}` prescription is required. You can do this by
