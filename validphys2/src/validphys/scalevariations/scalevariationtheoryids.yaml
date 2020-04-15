@@ -1,21 +1,13 @@
+# Format is (muF, muR)
 scale_variations_for:
   - theoryid: 163
     variations:
-        - scales: {'muF': '0.5', 'muR': '0.5'}
-          theoryid: 173
-        - scales: {'muF': '0.5', 'muR': '1'}
-          theoryid: 176
-        - scales: {'muF': '0.5', 'muR': '2'}
-          theoryid: 178
-        - scales: {'muF': '1', 'muR': '0.5'}
-          theoryid: 174
-        - scales: {'muF': '1', 'muR': '1'}
-          theoryid: 163
-        - scales: {'muF': '1', 'muR': '2'}
-          theoryid: 179
-        - scales: {'muF': '2', 'muR': '0.5'}
-          theoryid: 175
-        - scales: {'muF': '2', 'muR': '1'}
-          theoryid: 177
-        - scales: {'muF': '2', 'muR': '2'}
-          theoryid: 180
+      (0.5, 0.5): 173
+      (0.5, 1): 176
+      (0.5, 2): 178
+      (1, 0.5): 174
+      (1, 1): 163
+      (1, 2): 179
+      (2, 0.5): 175
+      (2, 1): 177
+      (2, 2): 180

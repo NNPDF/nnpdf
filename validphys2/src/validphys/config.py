@@ -999,6 +999,7 @@ class CoreConfig(configparser.Config):
         lsv = yaml.safe_load(
             read_text(validphys.scalevariations, "scalevariationtheoryids.yaml")
         )
+
         scalevarsfor_list = lsv['scale_variations_for']
         # Allowed central theoryids
         cent_thids = [str(i['theoryid']) for i in scalevarsfor_list]
@@ -1026,10 +1027,8 @@ class CoreConfig(configparser.Config):
             )
 
         # Find theoryids for given point prescription for given central theoryid
-        variations = [
-                i['variations'] for i in scalevarsfor_list if i['theoryid'] == int(th)
-        ][0]
-        thids = [j['theoryid'] for i in scales for j in variations if i == j['scales']]
+        variations = scalevarsfor_list['theoryid' == int(th)]['variations']
+        thids = [variations[i] for i in scales]
 
         # Check each theory is loaded
         theoryids = [self.loader.check_theoryID(thid) for thid in thids]
