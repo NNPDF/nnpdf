@@ -23,6 +23,34 @@ from validphys.checks import check_pdf_normalize_to
 
 import matplotlib.pyplot as plt
 
+
+def fake_xplotting_grid(pdf_function, xgrid):
+    # TODO: temporary hack that returns the same thing as
+    # xplotting_grid().grid_values()*ixgrid[1]
+    gv = pdf_function(np.expand_dims(xgrid, -1))
+    return gv.T
+
+
+def arc_length_core_computation(pdf, basis_info, Q, members = 1):
+    # x-grid points and limits in three segments
+    npoints = 199 # 200 intervals
+    seg_min = [1e-6, 1e-4, 1e-2]
+    seg_max = [1e-4, 1e-2, 1.0 ]
+    basis, flavours = basis_info['basis'], basis_info['flavours']
+    res = np.zeros((members,len(flavours)))
+    for a, b in zip(seg_min, seg_max):
+        eps    = (b-a)/npoints
+        ixgrid = xgrid(a, b, 'linear', npoints)
+        if hasattr(pdf, 'load'):
+            xfgrid  = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values*ixgrid[1]
+        else:
+            xfgrid = fake_xplotting_grid(pdf, ixgrid[1])
+        fdiff  = np.diff(xfgrid)/eps      # Compute forward differences
+        res += integrate.simps(1 + np.square(fdiff), ixgrid[1][1:])
+    return res
+
+
+
 ArcLengthGrid = namedtuple('ArcLengthGrid', ('pdf', 'basis', 'flavours', 'stats'))
 @check_positive('Q')
 @make_argcheck(check_basis)
@@ -32,21 +60,7 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
     """Compute arc lengths at scale Q"""
     lpdf = pdf.load()
     checked = check_basis(basis, flavours)
-    basis, flavours = checked['basis'], checked['flavours']
-    # x-grid points and limits in three segments
-    npoints = 199 # 200 intervals
-    seg_min = [1e-6, 1e-4, 1e-2]
-    seg_max = [1e-4, 1e-2, 1.0 ]
-    res = np.zeros((lpdf.GetMembers(),len(flavours)))
-    # Integrate the separate segments
-    for a, b in zip(seg_min, seg_max):
-        # Finite diff. step-size, x-grid
-        eps    = (b-a)/npoints
-        ixgrid = xgrid(a, b, 'linear', npoints)
-        # PDFs evaluated on grid
-        xfgrid  = xplotting_grid(pdf, Q, ixgrid, basis, flavours).grid_values*ixgrid[1]
-        fdiff  = np.diff(xfgrid)/eps      # Compute forward differences
-        res += integrate.simps(1 + np.square(fdiff), ixgrid[1][1:])
+    res = arc_length_core_computation(pdf, checked, Q, members = lpdf.GetMembers())
     stats = pdf.stats_class(res)
     return ArcLengthGrid(pdf, basis, flavours, stats)
 

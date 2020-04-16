@@ -37,7 +37,7 @@ def gen_integration_input(nx):
     return xgrid, weights_array
 
 
-def msr_impose(fit_layer, final_pdf_layer, verbose=False):
+def msr_impose(fit_layer, final_pdf_layer):
     """
         This function receives:
             - fit_layer: the 8-basis layer of PDF which we fit
@@ -70,91 +70,28 @@ def msr_impose(fit_layer, final_pdf_layer, verbose=False):
     def ultimate_pdf(x):
         return operations.op_multiply_dim([final_pdf_layer(x), normalization])
 
-    if verbose:
-        #         only_int = integrator(pdf_integrand(xgrid_input))
-        #         modelito = MetaModel(xgrid_input, only_int)
-        #         result = modelito.predict(x = None, steps = 1)
-
-        print(" > > Generating model for the inyection layer which imposes MSR")
-        check_integration(ultimate_pdf, xgrid_input)
-
     # Save a reference to xgrid in ultimate_pdf, very useful for debugging
     ultimate_pdf.ref_xgrid = xgrid_input
 
     return ultimate_pdf, xgrid_input
 
-
-def check_integration(ultimate_pdf, integration_input):
+def compute_arclength(pdf_function):
     """
-    Naive integrator for quick checks.
-    Receives the final PDF layer, computes the 4 MSR and prints out the result
-
-    Called only (for debugging purposes) by msr_impose above
+    Receives a PDF function and returns an array with
+    the computed arclenghts.
+    The input function can receive an array of x and return
+    an array of f number of flavours per x
+    Parameters
+    ----------
+        pdf_function: function
+            A function that given a value on (x) returns a value of x*pdf(x)
+            per flavour
     """
-    nx = int(1e4)
-    xgrid, weights_array = gen_integration_input(nx)
-    xgrid_input = operations.numpy_to_input(xgrid)
-
-    multiplier = xDivide(output_dim=14, div_list=range(3, 9))
-
-    def pdf_integrand(x):
-        res = operations.op_multiply([multiplier(x), ultimate_pdf(x)])
-        return res
-
-    modelito = MetaModel([xgrid_input, integration_input], pdf_integrand(xgrid_input))
-    modelito.summary()
-    result = modelito.predict(x=None, steps=1)
-
-    result_weighted = result * weights_array
-    result_integrated = np.sum(result_weighted, axis=0)
-
-    msr = result_integrated[1] + result_integrated[2]
-    v = result_integrated[3]
-    v3 = result_integrated[4]
-    v8 = result_integrated[5]
-    print(
-        """
-     > > > Int from 0 to 1 of:
-    x*g(x) + x*sigma(x) = {0}
-    v                   = {1}
-    v3                  = {2}
-    v8                  = {3}""".format(
-            msr, v, v3, v8
-        )
-    )
-
-
-def compute_arclength(pdf_function, nx=int(2e3)):  # TODO: to be removed
-    """
-    Given the layer with the fit basis computes the arc length
-
-    # Arguments:
-        - `pdf_function`: reference to the pdf model
-        - `nx`: number of point for the integration grid
-    """
-    # Generate the input layers for the xgrid and the weight
-    xgrid, weights_array = gen_integration_input(nx)
-    eps = xgrid[0] / 2.0
-    # Compute the "integration values"
-    y = pdf_function(xgrid)
-    yprime = pdf_function(xgrid - eps)
-    result_raw = (yprime - y) / eps
-    # Now select the 8-basis
-    aa = [1, 2, 3, 4, 5, 9, 10, 11]
-    derivatives_sq = pow(result_raw[:, aa] * xgrid, 2)
-    f_of_x = np.sqrt(1.0 + derivatives_sq)
-    arc_lengths = np.sum(f_of_x * weights_array, axis=0)
-
-    log.debug(
-        """
-        > > > Arc length:
-        sigma = {0}
-        g     = {1}
-        v     = {2}
-        v3    = {3}
-        v8    = {4}""".format(
-            *arc_lengths[:5]
-        )
-    )
-
-    return arc_lengths
+    from validphys.arclength import arc_length_core_computation
+    basis_info = {
+            'basis' : 'some',
+            'flavours' : np.arange(14)
+            }
+    Q = 42
+    res = arc_length_core_computation(pdf_function, basis_info, Q)
+    return res[0]

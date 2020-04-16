@@ -8,6 +8,5 @@ pdfs:
     - NNPDF30_nlo_as_0118
 
 actions_:
- -  - plot_arc_lengths
- - pdfs:
-    - arc_length_table
+  - plot_arc_lengths
+  - pdfs arc_length_table
