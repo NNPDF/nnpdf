@@ -4,6 +4,8 @@
 import logging
 import numpy as np
 
+from validphys.arclength import arc_length_core_computation
+
 from n3fit.layers import xDivide, MSR_Normalization, xIntegrator
 from n3fit.backends import operations
 from n3fit.backends import MetaModel
@@ -87,11 +89,18 @@ def compute_arclength(pdf_function):
             A function that given a value on (x) returns a value of x*pdf(x)
             per flavour
     """
-    from validphys.arclength import arc_length_core_computation
-    basis_info = {
-            'basis' : 'some',
-            'flavours' : np.arange(14)
-            }
-    Q = 42
-    res = arc_length_core_computation(pdf_function, basis_info, Q)
+    def pdf_values(qarr, flarr, xgrid):
+        """ Generate a valid validphys grid_value function
+        n3fit fits produce PDFs at a fixed Q in the flavour basis
+        so the first two arguments are ignored anyway
+        The xgrid variable instead is a tuple where the second element
+        is the x in which to compute the PDF values.
+        """
+        ret = pdf_function(np.expand_dims(xgrid[1], -1))
+        # Ensure the output is [flavours][x][Q]
+        return np.expand_dims(ret.T, -1)
+
+    qignore = 42
+    flavours = np.arange(14) # We want all of them
+    res = arc_length_core_computation(pdf_values, qignore, flavours)
     return res[0]
