@@ -6,7 +6,6 @@ underlying actions to calculate closure test estimators plus some table actions
 from collections import namedtuple
 
 import numpy as np
-import scipy.linalg as la
 import pandas as pd
 
 from reportengine import collect
@@ -23,37 +22,28 @@ from validphys.closuretest.closure_checks import (
 )
 
 
-
 BiasData = namedtuple("BiasData", ("bias", "ndata"))
 
 underlying_results = collect("results", ("fitunderlyinglaw",))
 
-def closure_sqrt_covmat(closure_test_covmat):
-    """returns sqrt of the closure_test_covmat, for use with closure estimators
-    """
-    la.eigh(closure_test_covmat)
-    return la.cholesky(closure_test_covmat, lower=True)
-
-def experiment_closure_sqrt_covmat(experiment_closure_test_covmat):
-    """like closure_sqrt_covmat but for whole experiment"""
-    return closure_sqrt_covmat(experiment_closure_test_covmat)
 
 @check_fit_isclosure
-#@check_use_fitcommondata
-def bias_dataset(
-    results, underlying_results, fit, closure_sqrt_covmat
-):
+@check_use_fitcommondata
+def bias_dataset(results, underlying_results, fit, use_fitcommondata):
     """Calculate the bias for a given dataset and fit. The bias is defined as
     chi2 between the prediction from the underlying PDF (which was used to
     generate the closure pseudodata), also known as level zero closure data, and
     the central prediction calculated from the fitted PDF.
 
+    we require that use_fitcommondata is true because the generated closure data
+    is used to generate the multiplicative contributions to the covariance
+    matrix
     """
-    _, th_ct = results
+    dt_ct, th_ct = results
     # does collect need to collect a list even with one element?
     (_, th_ul), = underlying_results
     central_diff = th_ct.central_value - th_ul.central_value
-    bias_out = calc_chi2(closure_sqrt_covmat, central_diff)  # unnormalised
+    bias_out = calc_chi2(dt_ct.sqrtcovmat, central_diff)  # unnormalised
     return BiasData(bias_out, len(th_ct))
 
 
@@ -61,20 +51,14 @@ underlying_experiment_results = collect("experiment_results", ("fitunderlyinglaw
 
 
 @check_fit_isclosure
-#@check_use_fitcommondata
+@check_use_fitcommondata
 def bias_experiment(
-    experiment_results,
-    underlying_experiment_results,
-    fit,
-    experiment_closure_sqrt_covmat,
+    experiment_results, underlying_experiment_results, fit, use_fitcommondata
 ):
     """Like `bias_dataset` but for a whole experiment.
     """
     return bias_dataset(
-        experiment_results,
-        underlying_experiment_results,
-        fit,
-        experiment_closure_sqrt_covmat,
+        experiment_results, underlying_experiment_results, fit, use_fitcommondata
     )
 
 
@@ -184,8 +168,8 @@ VarianceData = namedtuple("VarianceData", ("variance", "ndata"))
 
 
 @check_fit_isclosure
-#@check_use_fitcommondata
-def variance_dataset(results, fit, closure_sqrt_covmat):
+@check_use_fitcommondata
+def variance_dataset(results, fit, use_fitcommondata):
     """calculate the variance for a given dataset, which is the spread of
     replicas measured in the space of the covariance matrix. Given by:
 
@@ -197,21 +181,17 @@ def variance_dataset(results, fit, closure_sqrt_covmat):
     the variance of data which was not included in the fit.
 
     """
-    _, th = results
+    dt, th = results
     diff = th.central_value[:, np.newaxis] - th._rawdata
-    var_unnorm = calc_chi2(closure_sqrt_covmat, diff).mean()
+    var_unnorm = calc_chi2(dt.sqrtcovmat, diff).mean()
     return VarianceData(var_unnorm, len(th))
 
 
 @check_fit_isclosure
-#@check_use_fitcommondata
-def variance_experiment(
-    experiment_results, fit, experiment_closure_sqrt_covmat
-):
+@check_use_fitcommondata
+def variance_experiment(experiment_results, fit, use_fitcommondata):
     """Like variance_dataset but for a whole experiment"""
-    return variance_dataset(
-        experiment_results, fit, experiment_closure_sqrt_covmat
-    )
+    return variance_dataset(experiment_results, fit, use_fitcommondata)
 
 
 def bootstrap_variance_experiment(experiment_results, bootstrap_samples=500):
@@ -295,6 +275,7 @@ fits_exps_bootstrap_chi2_central = collect(
 fits_level_1_noise = collect(
     "total_experiments_chi2data", ("fits", "fitinputcontext", "fitunderlyinglaw")
 )
+
 
 @check_use_fitcommondata
 @check_fits_areclosures

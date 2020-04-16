@@ -52,17 +52,21 @@ def check_fits_areclosures(fits):
         if not fit.as_input()["closuretest"]["fakedata"]:
             raise CheckError(f"Specified fit: {fit}, is not a closure test")
 
+
 @make_argcheck
 def check_t0_used(use_t0):
     if not use_t0:
         raise CheckError("use_t0 must be true")
 
+
 @make_argcheck
 def check_t0pdfset_matches_law(t0pdfset, fit):
-    t0_from_fit = fit.as_input()['closuretest']['fakepdf']
+    t0_from_fit = fit.as_input()["closuretest"]["fakepdf"]
     if not str(t0pdfset) == t0_from_fit:
         raise CheckError(
-            f"Underlying pdf: {t0_from_fit}, does not match t0pdfset: {t0pdfset}")
+            f"Underlying pdf: {t0_from_fit}, does not match t0pdfset: {t0pdfset}"
+        )
+
 
 @make_argcheck
 def check_at_least_10_fits(fits):
@@ -70,6 +74,7 @@ def check_at_least_10_fits(fits):
         raise CheckError(
             "Multiclosure actions testing finite sampling effects require at least 10 fits"
         )
+
 
 @make_argcheck
 def check_multifit_replicas(fits_pdf):
@@ -88,3 +93,13 @@ def check_multifit_replicas(fits_pdf):
             "to have at least 10 replicas"
         )
     return {"_internal_n_reps": n_reps}
+
+
+@make_argcheck
+def check_fits_different_filterseed(fits):
+    """Input fits should have the same filter seed if they are being compared"""
+    seed_list = [fit.as_input()["closuretest"]["filterseed"] for fit in fits]
+    if len(seed_list) > len(set(seed_list)):
+        raise CheckError(
+            f"Multiclosure actions require that fits had different level 1 noise"
+        )

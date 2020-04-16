@@ -256,41 +256,6 @@ class CoreConfig(configparser.Config):
             )
         return self.parse_pdf(laws.pop())
 
-    @configparser.explicit_node
-    def produce_closure_test_covmat(self, use_multiclosure_covmat: bool = False):
-        """runcard flag determining whether to use standard covmats or
-        multiclosure covariance matrix in closure test estimators
-        """
-        if use_multiclosure_covmat:
-            from validphys import closuretest
-            return closuretest.multiclosure_covmat
-        else:
-            from validphys import results
-            return results.covariance_matrix
-
-    @configparser.explicit_node
-    def produce_experiment_closure_test_covmat(
-        self, use_multiclosure_covmat: bool = False
-    ):
-        """runcard flag determining whether to use standard covmats or
-        multiclosure covariance matrix in closure test estimators
-        """
-        if use_multiclosure_covmat:
-            from validphys import closuretest
-            return closuretest.experiment_multiclosure_covmat
-        else:
-            from validphys import results
-            return results.experiment_covariance_matrix
-
-    def produce_fitunderlyinglaw_as_t0set(self, fit):
-        """Gets the underlying law PDF from fit config file and set it as
-        the `t0set`. This can be used to keep the covariance matrix constant
-        across multiple closure fits and for calculating closure test estimators
-        outside of the datasets used in the fit.
-        """
-        underlying_dict = self.produce_fitunderlyinglaw(fit)
-        return dict(t0set=underlying_dict["pdf"])
-
 
     def produce_fitpdfandbasis(self, fit):
         """ Set the PDF and basis from the fit config. """
