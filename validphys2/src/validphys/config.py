@@ -990,9 +990,9 @@ class CoreConfig(configparser.Config):
 
     def produce_scale_variation_theories(self, theoryid, point_prescription):
         """Produces a list of theoryids given a theoryid at central scales and a point
-        prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point'
-        and '9 point'. Note that these are defined in arXiv:1906.10698. This hard codes the
-        theories needed for each prescription to avoid user error."""
+           prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point'
+           and '9 point'. Note that these are defined in arXiv:1906.10698. This hard codes the
+           theories needed for each prescription to avoid user error."""
         pp = point_prescription
         th = theoryid.id
 
@@ -1000,9 +1000,11 @@ class CoreConfig(configparser.Config):
             read_text(validphys.scalevariations, "scalevariationtheoryids.yaml")
         )
 
-        scalevarsfor_list = lsv['scale_variations_for']
+        scalevarsfor_list = lsv["scale_variations_for"]
         # Allowed central theoryids
-        cent_thids = [str(scalevarsfor_dict['theoryid']) for scalevarsfor_dict in scalevarsfor_list]
+        cent_thids = [
+            str(scalevarsfor_dict["theoryid"]) for scalevarsfor_dict in scalevarsfor_list
+        ]
 
         if th not in cent_thids:
             valid_thids = ", ".join(cent_thids)
@@ -1030,14 +1032,14 @@ class CoreConfig(configparser.Config):
 
         # Get dictionary containing theoryid and variations for central theory from runcard
         for scalevarsfor_dict in scalevarsfor_list:
-            if scalevarsfor_dict['theoryid'] == int(th):
+            if scalevarsfor_dict["theoryid"] == int(th):
                 theoryid_variations = scalevarsfor_dict
 
         # Find theoryids for given point prescription for given central theoryid
         try:
-            thids = [theoryid_variations['variations'][scale] for scale in scales]
+            thids = [theoryid_variations["variations"][scale] for scale in scales]
         except KeyError:
-            available_scales = list(theoryid_variations['variations'])
+            available_scales = list(theoryid_variations["variations"])
             missing_scales = []
             for scale in scales:
                 if scale not in available_scales:
@@ -1054,7 +1056,7 @@ class CoreConfig(configparser.Config):
         # Check each theory is loaded
         theoryids = [self.loader.check_theoryID(thid) for thid in thids]
         # NSList needs to be used for theoryids to be recognised as a namespace
-        return {'theoryids': NSList(theoryids, nskey='theoryid')}
+        return {"theoryids": NSList(theoryids, nskey="theoryid")}
 
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):
