@@ -55,7 +55,7 @@ def internal_multiclosure_dataset_loader(
         data = dataset.load()  # just use internal loader
     else:
         # don't cache result
-        data = data.load.__wrapped__(data)
+        data = dataset.load.__wrapped__(dataset)
 
     fits_dataset_predictions = [
         ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data)
