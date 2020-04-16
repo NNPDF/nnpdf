@@ -77,6 +77,7 @@ def msr_impose(fit_layer, final_pdf_layer):
 
     return ultimate_pdf, xgrid_input
 
+
 def compute_arclength(pdf_function):
     """
     Receives a PDF function and returns an array with
@@ -89,18 +90,25 @@ def compute_arclength(pdf_function):
             A function that given a value on (x) returns a value of x*pdf(x)
             per flavour
     """
+
     def pdf_values(qarr, flarr, xgrid):
         """ Generate a valid validphys grid_value function
-        n3fit fits produce PDFs at a fixed Q in the flavour basis
-        so the first two arguments are ignored anyway
+        n3fit fits produce PDFs at a fixed Q in the evolution basis.
+        The Q is ignored.
         The xgrid variable instead is a tuple where the second element
         is the x in which to compute the PDF values.
         """
         ret = pdf_function(np.expand_dims(xgrid[1], -1))
-        # Ensure the output is [flavours][x][Q]
-        return np.expand_dims(ret.T, -1)
+        # Select desired flavours
+        ret = ret.T[flarr]
+        # Ensure the output is [replicas][flavours][x][Q]
+        return np.expand_dims(ret, (0, -1))
 
     qignore = 42
-    flavours = np.arange(14) # We want all of them
-    res = arc_length_core_computation(pdf_values, qignore, flavours)
+    # TODO
+    # n3fit returns the PDF in the flavour order required by the fktables
+    # so there should be somewhere a dictionary defining that so that we can just
+    # say here the flavours we want by name
+    flavour_selection = [1, 2, 3, 4, 5, 9, 10, 11]
+    res = arc_length_core_computation(pdf_values, qignore, flavour_selection)
     return res[0]

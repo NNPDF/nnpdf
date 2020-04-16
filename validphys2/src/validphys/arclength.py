@@ -66,10 +66,9 @@ def arc_lengths(pdf:PDF, Q:numbers.Real,
         ret = xplotting_grid(pdf, qarr, xarr, basis, flarr).grid_values
         # Recover the Q dimension
         return np.expand_dims(ret, -1)
-    lpdf = pdf.load()
     checked = check_basis(basis, flavours)
     basis, flavours = checked['basis'], checked['flavours']
-    res = arc_length_core_computation(gvfunc, Q, flavours, members = lpdf.GetMembers())
+    res = arc_length_core_computation(gvfunc, Q, flavours, members = pdf.load().GetMembers())
     stats = pdf.stats_class(res)
     return ArcLengthGrid(pdf, basis, flavours, stats)
 
