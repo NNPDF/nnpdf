@@ -39,6 +39,9 @@ import validphys.scalevariations
 
 log = logging.getLogger(__name__)
 
+class SpecificationError(FileNotFoundError):
+    pass
+
 class Environment(Environment):
     """Container for information to be filled at run time"""
 
@@ -920,13 +923,34 @@ class CoreConfig(configparser.Config):
         """
         return {"norm_threshold": None}
 
+    @configparser.record_from_defaults
+    def parse_default_filter_rules(self, spec: (str, type(None))):
+        return spec
+
+    def load_default_default_filter_rules(self, spec):
+        from validphys.filters import default_filter_rules_input
+        try:
+            import validphys.cuts.lockfiles
+            return yaml.safe_load(read_text(validphys.cuts.lockfiles, f'{spec}_filters.lock.yaml'))
+        except FileNotFoundError as e:
+            raise SpecificationError(f"Possible bad specification: {spec}") from e
+
     def parse_filter_rules(self, filter_rules: (list, type(None))):
         """A list of filter rules. See https://docs.nnpdf.science/vp/filters.html
         for details on the syntax"""
         log.warning("Overwriting filter rules")
         return filter_rules
 
-    def produce_rules(self, theoryid, use_cuts, defaults, filter_rules=None):
+    def produce_rules(
+        self,
+        theoryid,
+        use_cuts,
+        defaults,
+        default_filter_rules=None,
+        filter_rules=None,
+        default_filter_rules_recorded_spec_=None,
+    ):
+
         """Produce filter rules based on the user defined input and defaults."""
         from validphys.filters import Rule, RuleProcessingError, default_filter_rules_input
 
@@ -936,7 +960,10 @@ class CoreConfig(configparser.Config):
             #Don't bother loading the rules if we are not using them.
             if use_cuts is not CutsPolicy.INTERNAL:
                 return None
-            filter_rules = default_filter_rules_input()
+            if default_filter_rules_recorded_spec_ is not None:
+                filter_rules = default_filter_rules_recorded_spec_[default_filter_rules]
+            else:
+                filter_rules = default_filter_rules_input()
 
         try:
             rule_list = [
