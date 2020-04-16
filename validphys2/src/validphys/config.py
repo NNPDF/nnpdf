@@ -11,7 +11,6 @@ import inspect
 import numbers
 import copy
 import os
-import yaml
 from importlib.resources import read_text
 
 from collections import ChainMap
@@ -23,6 +22,7 @@ from reportengine.configparser import ConfigError, element_of, _parse_func
 from reportengine.helputils import get_parser_type
 from reportengine.namespaces import NSList
 from reportengine import report
+from reportengine.compat import yaml
 
 from validphys.core import (ExperimentSpec, DataSetInput, ExperimentInput,
                             CutsPolicy, MatchedCuts, ThCovMatSpec)
