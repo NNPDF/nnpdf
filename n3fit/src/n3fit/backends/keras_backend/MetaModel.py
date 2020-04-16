@@ -284,7 +284,7 @@ class MetaModel(Model):
             for val, tensor in zip(w_val, w_ref):
                 tensor.assign(val * multiplier)
 
-    def apply_layer(self, x):
+    def apply_as_layer(self, x):
         """ Apply the model as a layer """
         x = self._parse_input(x, pass_numpy=False)
         return super().__call__(x)

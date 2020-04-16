@@ -321,7 +321,7 @@ class ModelTrainer:
         # Generate the concatenation and splitting of the input-output
         concatenation, splitting = operations.concatenate_split(self.input_sizes)
         concatenated_input = concatenation(input_list)
-        concatenated_pdf = self.pdf_model.apply_layer([concatenated_input])
+        concatenated_pdf = self.pdf_model.apply_as_layer([concatenated_input])
         pdf_layers = splitting(concatenated_pdf)
         # In order to use the pdf_model in subsequents models we need to add the integration_input
         full_model_input = [self.integrator_input] + input_list

@@ -64,7 +64,7 @@ def msr_impose(fit_layer, final_pdf_layer, verbose=False):
     normalizer = MSR_Normalization(input_shape=(8,))
 
     # 5. Make the xgrid numpy array into a backend input layer so it can be given
-    xgrid_input = operations.numpy_to_input(xgrid)
+    xgrid_input = operations.numpy_to_input(xgrid, name='apply_sr_grid')
     normalization = normalizer(integrator(pdf_integrand(xgrid_input)))
 
     def ultimate_pdf(x):

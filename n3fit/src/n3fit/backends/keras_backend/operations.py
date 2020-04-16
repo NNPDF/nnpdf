@@ -49,7 +49,7 @@ def concatenate_split(splitting_sizes, axis=1):
     return concatenation_layer, splitting_layer
 
 
-def numpy_to_input(numpy_array, no_reshape=False):
+def numpy_to_input(numpy_array, no_reshape=False, name=None):
     """
     Takes a numpy array and generates a Input layer.
     By default it adds a batch dimension (of size 1) so that the shape of the layer
@@ -60,22 +60,21 @@ def numpy_to_input(numpy_array, no_reshape=False):
         numpy_array: np.ndarray
         no_reshape: bool
             if true, don't add batch dimension, take the first dimension of the array as the batch
+        name: bool
+            name to give to the layer
     """
-    if isinstance(numpy_array, np.ndarray):
-        if no_reshape:
-            batched_array = numpy_array
-            batch_size = numpy_array.shape[0]
-            shape = numpy_array.shape[1:]
-        else:
-            batched_array = np.expand_dims(numpy_array, 0)
-            batch_size = 1
-            shape = numpy_array.shape
-        input_layer = Input(batch_size=batch_size, shape=shape)
-        input_layer.tensor_content = batched_array
-        input_layer.original_shape = no_reshape
-        return input_layer
+    if no_reshape:
+        batched_array = numpy_array
+        batch_size = numpy_array.shape[0]
+        shape = numpy_array.shape[1:]
     else:
-        return numpy_array
+        batched_array = np.expand_dims(numpy_array, 0)
+        batch_size = 1
+        shape = numpy_array.shape
+    input_layer = Input(batch_size=batch_size, shape=shape, name=name)
+    input_layer.tensor_content = batched_array
+    input_layer.original_shape = no_reshape
+    return input_layer
 
 
 def evaluate(tensor):
