@@ -47,10 +47,17 @@ class CompareFitApp(App):
             help="The fit to produce the report for.",
         )
         parser.add_argument(
+            '--current_fit_label',
+            help="The label for the fit that the report is being produced for.",
+        )
+        parser.add_argument(
             'reference_fit',
             default=None,
             nargs='?',
-            help="The fit to compare with")
+            help="The fit to compare with.")
+        parser.add_argument(
+            '--reference_fit_label',
+            help="The label for the fit that is being compared to.")
         #These are not really positional, but if here they show up before others.
         parser.add_argument(
             '--title', help="The title that will be indexed with the report.")
@@ -86,7 +93,7 @@ class CompareFitApp(App):
     def try_complete_args(self):
         args = self.args
         argnames = (
-            'current_fit', 'reference_fit', 'title', 'author', 'keywords')
+            'current_fit', 'current_fit_label', 'reference_fit', 'reference_fit_label', 'title', 'author', 'keywords')
         boolnames = (
             'thcovmat_if_present',)
         badargs = [argname for argname in argnames if not args[argname]]
@@ -109,11 +116,31 @@ class CompareFitApp(App):
         completer = WordCompleter(l.available_fits)
         return prompt_toolkit.prompt("Enter current fit: ", completer=completer)
 
+    def interactive_current_fit_label(self):
+        #TODO Use the colors in prompt_toolkit 2+ instead of this
+        default = "Current Fit"
+        print(f"Enter label for current fit [default:\n{t.dim(default)}]:")
+        #Do not use the default keyword because it is a pain to delete
+        res = prompt_toolkit.prompt("")
+        if not res:
+            return default
+        return res
+
     def interactive_reference_fit(self):
         l = self.environment.loader
         completer = WordCompleter(l.available_fits)
         return prompt_toolkit.prompt(
             "Enter reference fit: ", completer=completer)
+
+    def interactive_reference_fit_label(self):
+        #TODO Use the colors in prompt_toolkit 2+ instead of this
+        default = "Reference Fit"
+        print(f"Enter label for reference fit [default:\n{t.dim(default)}]:")
+        #Do not use the default keyword because it is a pain to delete
+        res = prompt_toolkit.prompt("")
+        if not res:
+            return default
+        return res
 
     def interactive_title(self):
         #TODO Use the colors in prompt_toolkit 2+ instead of this
@@ -171,7 +198,7 @@ class CompareFitApp(App):
             'author': args['author'],
             'keywords': args['keywords']
         }
-        currentmap = {'id': args['current_fit'], 'label': "Current Fit"}
+        currentmap = {'id': args['current_fit'], 'label': args['current_fit_label']}
         autosettings['current'] = {
             'fit': currentmap,
             'pdf': currentmap,
@@ -181,9 +208,9 @@ class CompareFitApp(App):
             'theoryid': {
                 'from_': 'theory'
             },
-            'speclabel': 'Current Fit'
+            'speclabel': args['current_fit_label']
         }
-        refmap = {'id': args['reference_fit'], 'label': "Reference Fit"}
+        refmap = {'id': args['reference_fit'], 'label': args['reference_fit_label']}
         autosettings['reference'] = {
             'fit': refmap,
             'pdf': refmap,
@@ -193,7 +220,7 @@ class CompareFitApp(App):
             'theoryid': {
                 'from_': 'theory'
             },
-            'speclabel': 'Reference Fit'
+            'speclabel': args['reference_fit_label']
         }
         autosettings['use_thcovmat_if_present'] = args['thcovmat_if_present']
         return autosettings
