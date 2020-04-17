@@ -60,8 +60,6 @@ class MetaModel(Model):
     }
 
     def __init__(self, input_tensors, output_tensors, extra_tensors=None, **kwargs):
-        self.has_dataset = False
-
         input_list = input_tensors
         output_list = output_tensors
 
@@ -100,6 +98,7 @@ class MetaModel(Model):
             self.x_in = None
         self.all_inputs = input_list
         self.all_outputs = output_list
+        self.target_tensors = None
 
     def reinitialize(self):
         """ Run through all layers and reinitialize the ones that can be reinitialied """
@@ -127,10 +126,9 @@ class MetaModel(Model):
         """
         if x is None:
             x = self.x_in
-        if self.has_dataset:
-            history = super().fit(x=x, y=None, batch_size=1, **kwargs,)
-        else:
-            history = super().fit(x=x, y=y, steps_per_epoch=steps_per_epoch, **kwargs)
+        if y is None:
+            y = self.target_tensors
+        history = super().fit(x=x, y=y, **kwargs,)
         loss_dict = history.history
         return loss_dict
 
@@ -183,11 +181,10 @@ class MetaModel(Model):
         """
         if x is None:
             x = self.x_in
-        if self.has_dataset:
-            # Ensure that no x or y were passed
-            result = super().evaluate(x=x, y=None, **kwargs)
-        else:
-            result = super().evaluate(x=x, y=y, **kwargs)
+        if y is None:
+            y = self.target_tensors
+            # TODO Ensure that no x or y were passed
+        result = super().evaluate(x=x, y=y, **kwargs)
         return result
 
     def compile(
@@ -240,14 +237,10 @@ class MetaModel(Model):
         opt = opt_function(**opt_args)
 
         if target_output is not None:
-            self.has_dataset = True
-
-        if not isinstance(target_output, list):
-            target_output = [target_output]
-
-        super(MetaModel, self).compile(
-            optimizer=opt, loss=loss, target_tensors=target_output, **kwargs
-        )
+            if not isinstance(target_output, list):
+                target_output = [target_output]
+            self.target_tensors = target_output
+        super(MetaModel, self).compile(optimizer=opt, loss=loss)
 
     def set_masks_to(self, names, val=0.0):
         """ Set all mask value to the selected value

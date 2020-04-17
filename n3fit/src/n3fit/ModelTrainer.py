@@ -405,7 +405,14 @@ class ModelTrainer:
         self.training["pos_multiplier"] = pos_multiplier
 
     def _generate_pdf(
-        self, nodes_per_layer, activation_per_layer, initializer, layer_type, dropout
+        self,
+        nodes_per_layer,
+        activation_per_layer,
+        initializer,
+        layer_type,
+        dropout,
+        regularizer,
+        regularizer_args,
     ):
         """
         Defines the internal variable layer_pdf
@@ -414,18 +421,32 @@ class ModelTrainer:
         if the sumrule is being imposed, it also updates input_list with the
         integrator_input tensor used to calculate the sumrule
 
-        # Returns: (layers, integrator_input)
-            `layers`: a list of layers
-            `integrator_input`: input used to compute the  sumrule
-        both are being used at the moment for reporting purposes at the end of the fit
-
-        Parameters accepted:
-            - `nodes_per_layer`
-            - `activation_per_layer`
-            - `initializer`
-            - `layer_type`
-            - `dropout`
+        Parameters:
+        -----------
+            nodes_per_layer: list
+                list of nodes each layer has
+            activation_per_layer: list
+                list of the activation function for each layer
+            initializer: str
+                initializer for the weights of the NN
+            layer_type: str
+                type of layer to be used
+            dropout: float
+                dropout to add at the end of the NN
+            regularizer: str
+                choice of regularizer to add to the dense layers of the NN
+            regularizer_args: dict
+                dictionary of arguments for the regularizer
         see model_gen.pdfNN_layer_generator for more information
+
+        Returns
+        -------
+            layers: list
+                list of layers
+            integrator_input: tensor
+                xgrid used for integration within the network
+
+        note: both are being used at the moment for reporting purposes at the end of the fit
         """
         log.info("Generating PDF layer")
 
@@ -440,6 +461,8 @@ class ModelTrainer:
             seed=self.NNseed,
             initializer_name=initializer,
             dropout=dropout,
+            regularizer=regularizer,
+            regularizer_args=regularizer_args
         )
 
         integrator_input = None
@@ -623,6 +646,8 @@ class ModelTrainer:
             params["initializer"],
             params["layer_type"],
             params["dropout"],
+            params.get('regularizer', None), # regularizer optional
+            params.get('regularizer_args', None)
         )
 
         # Model generation
