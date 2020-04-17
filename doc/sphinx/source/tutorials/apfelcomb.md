@@ -45,17 +45,9 @@ will be written out to
 ```
 $RESULTS_PATH/theory_<theory id>/subgrids/FK_<setname>_<subgrid id>.dat.
 ```
-Note that [Git LFS](https://git-lfs.github.com/) may need to be installed for FK tables to be
-produced with APPLgrids that are in master but were not produced locally. This is because APPLgrids
-are often large files and as such errors may be encountered when trying to read in the APPLgrids
-with ROOT without Git LFS being installed. Git LFS can be installed from conda using:
-```
-conda install git-lfs
-```
-Git LFS can then be linked to the user's Git account and used for a particular repository by
-following the instructions under ['Getting Started'](https://git-lfs.github.com/). If the
-`applgrids` repository already exists on the user's system, it may need to be re-cloned once Git
-LFS has been set-up to benefit from its installation.
+
+APPLgrids and FastNLO tables should be properly stored in the `applgrids` folder by means of
+[Git LFS](https://git-lfs.github.com/) (see [here](storage) for details).
 
 Once all the relevant subgrids for the desired dataset(s) are generated, 
 one should run
@@ -114,10 +106,10 @@ where we want to exclude the penultimate bin, the mask would be:
 ```
 1 1 1 0 1
 ```
-Note that there is no way to tell a priori whether pdfwgt should be set to 0 or 1; that is, there
-is no way to tell a priori whether the grid is unweighted or weighted. However, this can easily be
-checked a posteriori, since setting pdfwgt to the wrong value should lead to `./apfel_comb` failing
-due to a large relative error between the value in the APPLgrid and that in the FK table.
+Note that there is no way to know a priori whether `pdfwgt` should be set to 0 or to 1, that is
+whether the grid is unweighted or weighted. However, this can easily be checked a posteriori, since
+setting `pdfwgt` to the wrong value should lead to `./apfel_comb` failing due to a large relative
+error between the value in the APPLgrid and that in the FK table.
 
 The applgrid filename assumes that the grid can be found at
 ```
