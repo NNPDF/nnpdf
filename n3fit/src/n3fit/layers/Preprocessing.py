@@ -1,5 +1,6 @@
 from n3fit.backends import MetaLayer
 from n3fit.backends import constraints
+from n3fit.backends import operations as op
 
 BASIS_SIZE = 8
 
@@ -99,7 +100,7 @@ class Preprocessing(MetaLayer):
 
     def call(self, inputs, **kwargs):
         x = inputs
-        pdf_raw = self.concatenate(
+        pdf_raw = op.concatenate(
             [
                 x ** (1 - self.kernel[0][0]) * (1 - x) ** self.kernel[1][0],  # sigma
                 x ** (1 - self.kernel[2][0]) * (1 - x) ** self.kernel[3][0],  # g

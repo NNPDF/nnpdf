@@ -7,6 +7,19 @@
 
     This includes an implementation of the NNPDF operations on fktable in the keras
     language (hence the mapping `c_to_py_fun`)
+
+    The operations in this module are divided into three categories:
+   
+    - numpy to tensor:
+        Operations that take a numpy array and return a tensorflow tensor
+    - tensor to tensor:
+        Operations that take a tensor and return a tensor
+    - layer generation
+        Instanciate a layer to be applied by the calling function
+
+    Some of these operations are aliases to the backend (tensorflow or Keras) operations
+    Note that tensor operations can also be applied to layers as the output of a layer is a tensor
+    equally operations are automatically converted to layers when used as such
 """
 
 import numpy as np
@@ -21,6 +34,33 @@ from tensorflow.keras import backend as K
 from validphys.convolution import OP
 
 
+def evaluate(tensor):
+    """ Evaluate input tensor using the backend """
+    return K.eval(tensor)
+
+
+# NNPDF operations
+def c_to_py_fun(op_name, name="dataset"):
+    """
+    Map the NNPDF operations to Keras layers
+    NNPDF operations are defined in :py:func:`validphys.convolution.OP`
+
+    Parameters
+    ----------
+        op_name: str
+            A string defining the operation name
+    """
+    try:
+        operation = OP[op_name]
+    except KeyError as e:
+        raise ValueError(f"Operation {op_name} not recognised") from e
+
+    # Convert the operation into a lambda layer
+    operation_layer = keras_Lambda(lambda x: operation(*x), name=f"op_{name}_{op_name}")
+    return operation_layer
+
+
+# f(x: numpy) -> y: tensor
 def numpy_to_tensor(ival):
     """
         Make the input into a tensor
@@ -28,11 +68,13 @@ def numpy_to_tensor(ival):
     return K.constant(ival)
 
 
+# f(x: tensor) -> y: tensor
 def batchit(x, batch_dimension=0):
     """ Add a batch dimension to tensor x """
     return tf.expand_dims(x, batch_dimension)
 
 
+# layer generation
 def concatenate_split(splitting_sizes, axis=1):
     """ Generate a pair of concatention and splitting layer
     so that they invert each other
@@ -49,6 +91,7 @@ def concatenate_split(splitting_sizes, axis=1):
     return concatenation_layer, splitting_layer
 
 
+# layer generation
 def numpy_to_input(numpy_array, no_reshape=False, name=None):
     """
     Takes a numpy array and generates a Input layer.
@@ -77,33 +120,75 @@ def numpy_to_input(numpy_array, no_reshape=False, name=None):
     return input_layer
 
 
-def evaluate(tensor):
-    """ Evaluate input tensor using the backend """
-    return K.eval(tensor)
+#
+# Tensor operations
+# f(x: tensor[s]) -> y: tensor
+#
 
-
-def c_to_py_fun(op_name, name = "dataset"):
+# Generation operations
+# generate tensors of given shape/content
+def tensor_ones_like(*args, **kwargs):
     """
-    Map the NNPDF operations to Keras layers
-    NNPDF operations are defined in :py:func:`validphys.convolution.OP
-
-    Parameters
-    ----------
-        op_name: str
-            A string defining the operation name
+    Generates a tensor of ones of the same shape as the input tensor
+    See full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/ones_like>`_
     """
-    try:
-        operation = OP[op_name]
-    except KeyError as e:
-        raise ValueError(f"Operation {op_name} not recognised") from e
+    return K.ones_like(*args, **kwargs)
 
-    # Convert the operation into a lambda layer
-    operation_layer = keras_Lambda(lambda x: operation(*x), name=f"op_{name}_{op_name}")
-    return operation_layer
 
-def op_subtract(o_list): #TODO to be removed, not used once other PRs are merged
-    from tensorflow.keras.layers import subtract
-    return subtract(o_list)
+def many_replication(grid, replications, axis=0, **kwargs):
+    """
+    Generates a tensor with one extra dimension:
+        a repetition of "grid" n times along the given axis
+    from keras documentation:
+    If x has shape (s1, s2, s3) and axis is 1, the output will have shape (s1, s2 * rep, s3)
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/repeat_elements>`_
+    """
+    return K.repeat_elements(grid, rep=replications, axis=axis, **kwargs)
+
+# Property operations
+# modify properties of the tensor like the shape or elements it has
+def flatten(x):
+    """ Flatten tensor x """
+    return tf.reshape(x, (-1,))
+
+
+def boolean_mask(*args, **kwargs):
+    """
+    Applies a boolean mask to a tensor
+
+    Relevant parameters: (tensor, mask, axis=None)
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/boolean_mask>`_.
+    """
+    return tf.boolean_mask(*args, **kwargs)
+
+
+def transpose(tensor, **kwargs):
+    """
+    Transpose a layer,
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/transpose>`_
+    """
+    return K.transpose(tensor, **kwargs)
+
+
+def concatenate(tensor_list, axis=-1, target_shape=None):
+    """
+    Concatenates a list of numbers or tenosr into a bigger tensor
+    If the target shape is given, the output is reshaped to said shape
+    """
+    concatenated_tensor = K.concatenate(tensor_list, axis=axis)
+    if target_shape:
+        return K.reshape(concatenated_tensor, target_shape)
+    else:
+        return concatenated_tensor
+
+
+# Mathematical operations
+def tensor_product(*args, **kwargs):
+    """
+    Computes the tensordot product between tensor_x and tensor_y
+    See full `docs <https://www.tensorflow.org/api_docs/python/tf/tensordot>`_
+    """
+    return tf.tensordot(*args, **kwargs)
 
 
 def op_multiply(o_list, **kwargs):
@@ -134,3 +219,11 @@ def op_log(o_tensor, **kwargs):
     Computes the logarithm of the input
     """
     return K.log(o_tensor)
+
+
+def sum(*args, **kwargs):
+    """
+    Computes the sum of the elements of the tensor
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/sum>`_
+    """
+    return K.sum(*args, **kwargs)
