@@ -8,6 +8,18 @@
 from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
 
+# Define in this dictionary new optimizers as well as the arguments they accept
+# (with default values if needed be)
+optimizers = {
+    "RMSprop": (Kopt.RMSprop, {"lr": 0.01}),
+    "Adam": (Kopt.Adam, {"lr": 0.01}),
+    "Adagrad": (Kopt.Adagrad, {}),
+    "Adadelta": (Kopt.Adadelta, {"lr": 1.0}),
+    "Adamax": (Kopt.Adamax, {}),
+    "Nadam": (Kopt.Nadam, {}),
+    "Amsgrad": (Kopt.Adam, {"lr": 0.01, "amsgrad": True}),
+}
+
 
 def _fill_placeholders(original_input, new_input=None):
     """
@@ -56,18 +68,6 @@ class MetaModel(Model):
         **kwargs:
             keyword arguments to pass directly to Model
     """
-
-    # Define in this dictionary new optimizers as well as the arguments they accept
-    # (with default values if needed be)
-    optimizers = {
-        "RMSprop": (Kopt.RMSprop, {"lr": 0.01}),
-        "Adam": (Kopt.Adam, {"lr": 0.01}),
-        "Adagrad": (Kopt.Adagrad, {}),
-        "Adadelta": (Kopt.Adadelta, {"lr": 1.0}),
-        "Adamax": (Kopt.Adamax, {}),
-        "Nadam": (Kopt.Nadam, {}),
-        "Amsgrad": (Kopt.Adam, {"lr": 0.01, "amsgrad": True}),
-    }
 
     def __init__(self, input_tensors, output_tensors, **kwargs):
         self.has_dataset = False
@@ -227,7 +227,7 @@ class MetaModel(Model):
                 if given further calls to fit/evaluate must be done with y = None.
         """
         try:
-            opt_tuple = self.optimizers[optimizer_name]
+            opt_tuple = optimizers[optimizer_name]
         except KeyError as e:
             raise NotImplementedError(
                 f"[MetaModel.select_initializer] optimizer not implemented: {optimizer_name}"

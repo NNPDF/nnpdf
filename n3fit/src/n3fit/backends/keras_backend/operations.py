@@ -1,25 +1,22 @@
 """
-    This module containg a list of useful operations translated in the keras language
-
-    All operations accept as input an iterable of keras layers or tensors
-    and (when necessary) keyword arguments.
-    The return operation is always a keras layer (or tensor)
+    This module contains the list of operations that can be used within the
+    ``call`` method of the ``n3fit`` layers as well as operations that can
+    act on layers.
 
     This includes an implementation of the NNPDF operations on fktable in the keras
-    language (hence the mapping `c_to_py_fun`)
+    language (with the mapping ``c_to_py_fun``) into Keras ``Lambda`` layers.
 
-    The operations in this module are divided into three categories:
-   
-    - numpy to tensor:
+    The rest of the operations in this module are divided into three categories:
+    numpy to tensor:
         Operations that take a numpy array and return a tensorflow tensor
-    - tensor to tensor:
+    tensor to tensor:
         Operations that take a tensor and return a tensor
-    - layer generation
+    layer generation:
         Instanciate a layer to be applied by the calling function
 
-    Some of these operations are aliases to the backend (tensorflow or Keras) operations
+    Some of these are just aliases to the backend (tensorflow or Keras) operations
     Note that tensor operations can also be applied to layers as the output of a layer is a tensor
-    equally operations are automatically converted to layers when used as such
+    equally operations are automatically converted to layers when used as such.
 """
 
 import numpy as np
@@ -28,7 +25,7 @@ from tensorflow.keras.layers import Lambda as keras_Lambda
 from tensorflow.keras.layers import multiply as keras_multiply
 from tensorflow.keras.layers import Concatenate as keras_concatenate
 
-from tensorflow.keras.layers import Input, Layer
+from tensorflow.keras.layers import Input
 from tensorflow.keras import backend as K
 
 from validphys.convolution import OP
@@ -144,6 +141,7 @@ def many_replication(grid, replications, axis=0, **kwargs):
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/repeat_elements>`_
     """
     return K.repeat_elements(grid, rep=replications, axis=axis, **kwargs)
+
 
 # Property operations
 # modify properties of the tensor like the shape or elements it has
