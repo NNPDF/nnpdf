@@ -47,7 +47,7 @@ void DYPosFilter::ReadData()
   const int nxposlog = fNData/2.0;
   const double step   = ( xmax - xch ) / ( fNData - nxposlog );
 
-  const double q2pos = 100;  // DY positivity imposed at 100GeV 
+  const double q2pos = 5;  //GeV2
   const double tau = xmin * xmax;
   const double sqrts = sqrt(q2pos/tau);
 
@@ -75,7 +75,7 @@ void DYPosFilter::ReadData()
 
 void DISPosFilter::ReadData()
 {
-  const double q2pos = 5;
+  const double q2pos = 5; //GeV2
 
   const double xmin = 5E-7;
   const double xmax = 0.9;
