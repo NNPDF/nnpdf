@@ -694,13 +694,13 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
     background of the plot. The maximum absolute values are used for
     the comparison."""
 
-    DijetsInfo = {"ATLAS jets 2011 7 TeV":     {"ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$"},
-                  "ATLAS jets 8 TeV, R=0.6":   {"ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$"},
-                  "CMS jets 7 TeV 2011":       {"ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$"},
-                  "CMS jets 8 TeV":            {"ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$"},
-                  "ATLAS dijets 7 TeV, R=0.6": {"ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y^*|}", "legend": r"$|y^*|$"},
-                  "CMS dijets 7 TeV":          {"ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y_{max}|}", "legend": r"$|y_{max}|$"},
-                  "CMS 3D dijets 8 TeV":       {"ylabel": r"\frac{d^3\sigma}{dp_{T,avg}dy_bdy^{*}}", "legend": r"$(y_b, y^{*})$"}}
+    DijetsInfo = {"ATLAS jets 2011 7 TeV":     {"ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$", 'Nybins':1},
+                  "ATLAS jets 8 TeV, R=0.6":   {"ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$",'Nybins':6},
+                  "CMS jets 7 TeV 2011":       {"ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$",'Nybins':5},
+                  "CMS jets 8 TeV":            {"ylabel": r"\frac{d^2\sigma}{dp_Td|y|}", "legend": r"$|y|$",'Nybins':6},
+                  "ATLAS dijets 7 TeV, R=0.6": {"ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y^*|}", "legend": r"$|y^*|$",'Nybins':6},
+                  "CMS dijets 7 TeV":          {"ylabel": r"\frac{d^2\sigma}{dm_{jj}d|y_{max}|}", "legend": r"$|y_{max}|$",'Nybins':5},
+                  "CMS 3D dijets 8 TeV":       {"ylabel": r"\frac{d^3\sigma}{dp_{T,avg}dy_bdy^{*}}", "legend": r"$(y_b, y^{*})$",'Nybins':6}}
 
     info = get_info(dataset)
 
@@ -771,6 +771,8 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
             ('loosely dotted',        (0, (1, 10))),
             ('dotted',                (0, (1, 1))),
             ('densely dotted',        (0, (1, 1)))]
+
+        linestyle2 = ['-','--']
         colors = sm.to_rgba(info.get_xcol(fb))
 
         if info.dataset_label == "CMS 3D dijets 8 TeV":
@@ -785,10 +787,21 @@ def plot_smpdf(pdf, dataset, obs_pdf_correlations, mark_threshold:float=0.9):
                 label=prev_label
                 once_label=False
                 (name, linestyle) = linestyle_tuple[iline]
-                ax.plot(x, grid[i, 0, :].T, color="black", linestyle=linestyle, label = label)
-                ax.plot(x, grid[i, 0, :].T, color=color, linestyle=linestyle)
+                if iline == 0 or iline == DijetsInfo[info.dataset_label]['Nybins']-1: #to just plot the extreme rapidities
+                    if iline == 0:
+                        ilinestyle =0
+                    else:
+                        ilinestyle =1
+                    ax.plot(x, grid[i, 0, :].T, color="black", linestyle=linestyle2[ilinestyle], label = label)
+                    ax.plot(x, grid[i, 0, :].T, color=color, linestyle=linestyle2[ilinestyle])
+
             else:
-                ax.plot(x, grid[i, 0, :].T, color=color, linestyle=linestyle)
+                if iline == 0 or iline == DijetsInfo[info.dataset_label]['Nybins']-1: #to just plot the extreme rapidities
+                    if iline == 0:
+                        ilinestyle =0
+                    else:
+                        ilinestyle =1
+                    ax.plot(x, grid[i, 0, :].T, color=color, linestyle=linestyle2[ilinestyle])
 
             if info.dataset_label == "CMS 3D dijets 8 TeV":
                 if (table.values[i][0],table.values[i][2]) == prev_label:
