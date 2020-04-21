@@ -44,14 +44,14 @@ class Preprocessing(MetaLayer):
         self.flav_info = flav_info
         self.seed = seed
         self.initializer = initializer
-        self.kernel = []
+        self.kernel = {}
         # super(MetaLayer, self).__init__(**kwargs)
         super().__init__(**kwargs)
 
     def generate_weight(self, weight_name, kind, dictionary):
         """
         Generates weights according to the flavour dictionary and adds them
-        to the kernel list of the class
+        to the kernel dictionary of the class
 
         Parameters
         ----------
@@ -84,12 +84,15 @@ class Preprocessing(MetaLayer):
             trainable=trainable,
             constraint=weight_constraint,
         )
-        self.kernel.append(newpar)
+        self.kernel[weight_name] = newpar
 
     def build(self, input_shape):
         # Run through the whole basis
         for flav_dict in self.flav_info:
             flav_name = flav_dict["fl"]
+            # If there are antiquarks don't generate weights for them
+            if "bar" in flav_name:
+                continue
             alpha_name = f"alpha_{flav_name}"
             beta_name = f"beta_{flav_name}"
             self.generate_weight(alpha_name, "smallx", flav_dict)
@@ -99,17 +102,17 @@ class Preprocessing(MetaLayer):
 
     def call(self, inputs, **kwargs):
         x = inputs
-        pdf_raw = self.concatenate(
-            [
-                x ** (1 - self.kernel[0][0]) * (1 - x) ** self.kernel[1][0],  # sigma
-                x ** (1 - self.kernel[2][0]) * (1 - x) ** self.kernel[3][0],  # g
-                x ** (1 - self.kernel[4][0]) * (1 - x) ** self.kernel[5][0],  # v
-                x ** (1 - self.kernel[6][0]) * (1 - x) ** self.kernel[7][0],  # v3
-                x ** (1 - self.kernel[8][0]) * (1 - x) ** self.kernel[9][0],  # v8
-                x ** (1 - self.kernel[10][0]) * (1 - x) ** self.kernel[11][0],  # t3 = sigma
-                x ** (1 - self.kernel[12][0]) * (1 - x) ** self.kernel[13][0],  # t8 = sigma
-                x ** (1 - self.kernel[14][0]) * (1 - x) ** self.kernel[15][0],  # t15 c-
-            ],
-            axis=-1,
-        )
-        return pdf_raw
+        pdf_raw = []
+        # For each entry of the basis build the preprocessing factor
+        for flav_dict in self.flav_info:
+            flav_name = flav_dict['fl']
+            # If the entry is an antiquark, consider the same weights as the corresponding quark
+            if "bar" in flav_name:
+                flav_name = flav_name.replace('bar','')
+            alpha_name = f"alpha_{flav_name}"
+            beta_name = f"beta_{flav_name}"
+            alpha = self.kernel[alpha_name][0]
+            beta = self.kernel[beta_name][0]
+            pdf_raw.append( x ** (1 - alpha) * (1 - x) ** beta )
+        
+        return self.concatenate(pdf_raw)    
