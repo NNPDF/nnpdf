@@ -7,4 +7,5 @@ Theory
    ./collinear
    ./dglap
    ./theoryparamsinfo
+   ./theoryindex
    ./FastInterface
