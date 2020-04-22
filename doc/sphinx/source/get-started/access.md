@@ -60,6 +60,10 @@ Dedicated NNPDF threads for specific Physics projects, which might include non-N
 * [NNPDF_th] For studies and fits related to the implementation of theory uncertainties
 * [NNPDF_jets] For studies related to choice of jet observables and scales
 
+```eval_rst
+.. _NNPDF-server:
+```
+
 ## NNPDF server
 
 *See [Server Configuration](server)*
