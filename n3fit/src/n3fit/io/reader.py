@@ -232,8 +232,7 @@ def common_data_reader(
         all_expdatas = [expdata_true.reshape(ndata)]
 
     for replica_seed in replica_seeds:
-        spec_replica = copy.deepcopy(spec)
-        spec_replica_c = spec_replica.load()  # I might need the t0 set here as well
+        spec_replica_c = type(spec_c)(spec_c) # I might need the t0 set here as well
 
         # Replica generation
         mcseed = base_mcseed + replica_seed

@@ -35,7 +35,7 @@ setup(name= "validphys",
       packages = find_packages('src'),
       package_data = {
            #TODO: Get rid of this nonsense
-            '':['*.template', '*.mplstyle', '*.csv', '*.yaml', '*.md', '*.png'],
+            '':['*.template', '*.mplstyle', '*.csv', '*.yaml', '*.md', '*.png', '*.pickle'],
             'tests/regressions': ['*'],
             'comparefit': ['*'],
             'tests/baseline': ['*'],
