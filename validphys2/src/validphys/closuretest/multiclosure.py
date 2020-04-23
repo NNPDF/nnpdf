@@ -568,25 +568,23 @@ def bias_variance_resampling_experiment(
 
 
 @table
-def dataset_ratio_relative_error_finite_effects(
+def dataset_ratio_error_finite_effects(
     bias_variance_resampling_dataset, n_fit_samples, n_replica_samples
 ):
     """For a single dataset vary number of fits and number of replicas used to perform
     bootstrap sample of expected bias and variance. For each combination of
-    n_rep and n_fit tabulate the std deviation normalised by the mean across
-    bootstrap samples of
+    n_rep and n_fit tabulate the std deviation across bootstrap samples of
 
         ratio = bias / variance
 
-    The resulting table gives and approximation of how relative error varies with
+    The resulting table gives and approximation of how error varies with
     number of fits and number of replicas for each dataset.
     """
     bias_samples, var_samples = bias_variance_resampling_dataset
     ratio = bias_samples / var_samples
-    relative_error = ratio.std(axis=2) / ratio.mean(axis=2)
     ind = pd.Index(list(n_replica_samples), name="n_rep samples")
     col = pd.Index(list(n_fit_samples), name="n_fit samples")
-    return pd.DataFrame(relative_error, index=ind, columns=col)
+    return pd.DataFrame(ratio.std(axis=2), index=ind, columns=col)
 
 
 exps_bias_var_resample = collect(
@@ -595,7 +593,7 @@ exps_bias_var_resample = collect(
 
 
 @table
-def total_ratio_relative_error_finite_effects(
+def total_ratio_error_finite_effects(
     exps_bias_var_resample, n_fit_samples, n_replica_samples
 ):
     """Like dataset_ratio_relative_error_finite_effects except for the total
@@ -607,7 +605,7 @@ def total_ratio_relative_error_finite_effects(
         bias_total += bias
         var_total += var
     # don't reinvent the wheel
-    return dataset_ratio_relative_error_finite_effects(
+    return dataset_ratio_error_finite_effects(
         (bias_total, var_total), n_fit_samples, n_replica_samples
     )
 
@@ -633,3 +631,206 @@ def total_ratio_means_finite_effects(
     ind = pd.Index(list(n_replica_samples), name="n_rep samples")
     col = pd.Index(list(n_fit_samples), name="n_fit samples")
     return pd.DataFrame((bias_total / var_total).mean(axis=2), index=ind, columns=col)
+
+def xi_resampling_dataset(
+    internal_multiclosure_dataset_loader,
+    fits_pdf,
+    n_fit_samples,
+    n_replica_samples,
+    bootstrap_samples=100,
+):
+    """For a single dataset, create bootstrap distributions of xi_1sigma
+    varying the number of fits and replicas drawn for each resample. Return a
+    4-D array with dimensions
+
+        (number of n_rep samples, number of n_fit samples, n_boot, n_data)
+
+    filled with resampled bias and variance respectively. The number of bootstrap_samples
+    is 100 by default. The number of n_rep samples is determined by varying
+    n_rep between 10 and the number of replicas each fit has in intervals of 5.
+    This action requires that each fit has the same number of replicas which also
+    must be at least 10. The number of n_fit samples is determined analogously to
+    the number of n_rep samples, also requiring at least 10 fits.
+
+    Returns
+    -------
+    resamples: array
+        4-D array with resampled xi for each n_rep samples and each n_fit samples
+
+    Notes
+    -----
+    The bootstrap samples are seeded in this function. If this action is collected
+    over multiple datasets then the set of resamples all used corresponding replicas
+
+    """
+    # seed same rng so we can aggregate results
+    rng = np.random.RandomState(seed=INTERNAL_SEED)
+    closure_th, *input_tuple = internal_multiclosure_dataset_loader
+
+    xi_1sigma = []
+    for n_rep_sample in n_replica_samples:
+        # results varying n_fit_sample
+        fixed_n_rep_xi_1sigma = []
+        for n_fit_sample in n_fit_samples:
+            # for each n_fit and n_replica sample store result of each boot resample
+            xi_1sigma_boot = []
+            for _ in range(bootstrap_samples):
+                fit_boot_index = rng.randint(0, len(fits_pdf), size=n_fit_sample)
+                fit_boot_th = [closure_th[i] for i in fit_boot_index]
+                boot_ths = []
+                # construct proxy fits theory predictions
+                for fit_th in fit_boot_th:
+                    rep_boot_index = rng.randint(
+                        0, fit_th._rawdata.shape[1], size=n_rep_sample
+                    )
+                    boot_ths.append(
+                        BootstrappedTheoryResult(fit_th._rawdata[:, rep_boot_index])
+                    )
+                # append the 1d array for individual directions
+                xi_1sigma_boot.append(dataset_xi((boot_ths, *input_tuple)))
+            fixed_n_rep_xi_1sigma.append(xi_1sigma_boot)
+        xi_1sigma.append(fixed_n_rep_xi_1sigma)
+    return np.array(xi_1sigma)
+
+def xi_resampling_experiment(
+    internal_multiclosure_experiment_loader,
+    fits_pdf,
+    n_fit_samples,
+    n_replica_samples,
+    bootstrap_samples=100,
+):
+    """like xi_resampling_dataset except for an experiment
+
+    Notes
+    -----
+    The bootstrap samples are seeded in this function. If this action is colleted
+    over multiple experiments then the set of resamples all used corresponding replicas
+    and can be added together.
+
+    """
+    return xi_resampling_dataset(
+        internal_multiclosure_experiment_loader,
+        fits_pdf,
+        n_fit_samples,
+        n_replica_samples,
+        bootstrap_samples,
+    )
+
+@table
+def dataset_xi_error_finite_effects(
+    xi_resampling_dataset, n_fit_samples, n_replica_samples
+):
+    """For a single dataset vary number of fits and number of replicas used to perform
+    bootstrap sample of xi. Take the mean of xi across datapoints (note that points
+    here refers to points in the basis which diagonalises the covmat) and then
+    tabulate the standard deviation of xi_1sigma across bootstrap samples
+
+    """
+    print(xi_resampling_dataset.shape) # TODO: remove - just check we're not being stupid
+    mean_xi_table = xi_resampling_dataset.mean(axis=-1)
+    ind = pd.Index(list(n_replica_samples), name="n_rep samples")
+    col = pd.Index(list(n_fit_samples), name="n_fit samples")
+    return pd.DataFrame(mean_xi_table.std(axis=2), index=ind, columns=col)
+
+@table
+def dataset_xi_mean_finite_effects(
+    xi_resampling_dataset, n_fit_samples, n_replica_samples
+):
+    """For a single dataset vary number of fits and number of replicas used to perform
+    bootstrap sample of xi. Take the mean of xi across datapoints (note that points
+    here refers to points in the basis which diagonalises the covmat) and then
+    tabulate the mean of xi_1sigma across bootstrap samples
+
+    """
+    mean_xi_table = xi_resampling_dataset.mean(axis=-1)
+    ind = pd.Index(list(n_replica_samples), name="n_rep samples")
+    col = pd.Index(list(n_fit_samples), name="n_fit samples")
+    return pd.DataFrame(mean_xi_table.mean(axis=2), index=ind, columns=col)
+
+@table
+def dataset_std_xi_error_finite_effects(
+    xi_resampling_dataset, n_fit_samples, n_replica_samples
+):
+    """For a single dataset vary number of fits and number of replicas used to perform
+    bootstrap sample of xi. Take the standard deviation of xi across datapoints
+    (note that points here refers to points in the basis which diagonalises the
+    covmat) and then tabulate the standard deviation of std(xi_1sigma) across
+    bootstrap samples
+
+    """
+    mean_xi_table = xi_resampling_dataset.std(axis=-1)
+    ind = pd.Index(list(n_replica_samples), name="n_rep samples")
+    col = pd.Index(list(n_fit_samples), name="n_fit samples")
+    return pd.DataFrame(mean_xi_table.std(axis=2), index=ind, columns=col)
+
+@table
+def dataset_std_xi_mean_finite_effects(
+    xi_resampling_dataset, n_fit_samples, n_replica_samples
+):
+    """For a single dataset vary number of fits and number of replicas used to perform
+    bootstrap sample of xi. Take the standard deviation of xi across datapoints
+    (note that points here refers to points in the basis which diagonalises the
+    covmat) and then tabulate the mean of std(xi_1sigma) across
+    bootstrap samples
+
+    """
+    mean_xi_table = xi_resampling_dataset.std(axis=-1)
+    ind = pd.Index(list(n_replica_samples), name="n_rep samples")
+    col = pd.Index(list(n_fit_samples), name="n_fit samples")
+    return pd.DataFrame(mean_xi_table.mean(axis=2), index=ind, columns=col)
+
+exps_xi_resample = collect("xi_resampling_experiment", ("experiments",))
+
+@table
+def total_xi_error_finite_effects(
+    exps_xi_resample, n_fit_samples, n_replica_samples
+):
+    """For all data vary number of fits and number of replicas used to perform
+    bootstrap sample of xi. Take the mean of xi across datapoints (note that points
+    here refers to points in the basis which diagonalises the covmat) and then
+    tabulate the standard deviation of xi_1sigma across bootstrap samples
+
+    """
+    xi_total = np.concatenate(exps_xi_resample, axis=-1)
+    return dataset_xi_error_finite_effects(xi_total, n_fit_samples, n_replica_samples)
+
+@table
+def total_xi_mean_finite_effects(
+    exps_xi_resample, n_fit_samples, n_replica_samples
+):
+    """For all data vary number of fits and number of replicas used to perform
+    bootstrap sample of xi. Take the mean of xi across datapoints (note that points
+    here refers to points in the basis which diagonalises the covmat) and then
+    tabulate the standard deviation of xi_1sigma across bootstrap samples
+
+    """
+    xi_total = np.concatenate(exps_xi_resample, axis=-1)
+    return dataset_xi_mean_finite_effects(xi_total, n_fit_samples, n_replica_samples)
+
+@table
+def total_std_xi_error_finite_effects(
+    exps_xi_resample, n_fit_samples, n_replica_samples
+):
+    """For all data vary number of fits and number of replicas used to perform
+    bootstrap sample of xi. Take the std deviation of xi across datapoints
+    (note that points here refers to points in the basis which diagonalises
+    the covmat) and then tabulate the mean of std(xi_1sigma) across bootstrap
+    samples
+
+    """
+    xi_total = np.concatenate(exps_xi_resample, axis=-1)
+    return dataset_std_xi_error_finite_effects(xi_total, n_fit_samples, n_replica_samples)
+
+@table
+def total_std_xi_mean_finite_effects(
+    exps_xi_resample, n_fit_samples, n_replica_samples
+):
+    """For all data vary number of fits and number of replicas used to perform
+    bootstrap sample of xi. Take the std deviation of xi across datapoints
+    (note that points here refers to points in the basis which diagonalises the
+    covmat) and then tabulate the standard deviation of std(xi_1sigma) across
+    bootstrap samples
+
+    """
+    xi_total = np.concatenate(exps_xi_resample, axis=-1)
+    return dataset_std_xi_mean_finite_effects(xi_total, n_fit_samples, n_replica_samples)
