@@ -726,7 +726,6 @@ def dataset_xi_error_finite_effects(
     tabulate the standard deviation of xi_1sigma across bootstrap samples
 
     """
-    print(xi_resampling_dataset.shape) # TODO: remove - just check we're not being stupid
     mean_xi_table = xi_resampling_dataset.mean(axis=-1)
     ind = pd.Index(list(n_replica_samples), name="n_rep samples")
     col = pd.Index(list(n_fit_samples), name="n_fit samples")
