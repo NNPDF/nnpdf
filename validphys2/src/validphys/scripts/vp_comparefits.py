@@ -15,6 +15,9 @@ from validphys.promptutils import confirm
 
 log = logging.getLogger(__name__)
 
+CURRENT_FIT_LABEL_DEFAULT = "Current Fit"
+REFERENCE_FIT_LABEL_DEFAULT = "Reference Fit"
+
 def get_remote_keywords():
     import requests
     from validphys import loader
@@ -47,23 +50,28 @@ class CompareFitApp(App):
             help="The fit to produce the report for.",
         )
         parser.add_argument(
-            '--current_fit_label',
-            help="The label for the fit that the report is being produced for.",
-        )
-        parser.add_argument(
             'reference_fit',
             default=None,
             nargs='?',
             help="The fit to compare with.")
-        parser.add_argument(
-            '--reference_fit_label',
-            help="The label for the fit that is being compared to.")
         #These are not really positional, but if here they show up before others.
         parser.add_argument(
             '--title', help="The title that will be indexed with the report.")
         parser.add_argument('--author', help="The author of the report.")
         parser.add_argument(
             '--keywords', nargs='+', help="keywords to index the report with.")
+        parser.add_argument(
+            '--current_fit_label',
+            nargs='?',
+            default=CURRENT_FIT_LABEL_DEFAULT,
+            help="The label for the fit that the report is being produced for.",
+        )
+        parser.add_argument(
+            '--reference_fit_label',
+            nargs='?',
+            default=REFERENCE_FIT_LABEL_DEFAULT,
+            help="The label for the fit that is being compared to.")
+
         parser.add_argument(
             '-i',
             '--interactive',
@@ -93,7 +101,9 @@ class CompareFitApp(App):
     def try_complete_args(self):
         args = self.args
         argnames = (
-            'current_fit', 'current_fit_label', 'reference_fit', 'reference_fit_label', 'title', 'author', 'keywords')
+            'current_fit', 'reference_fit', 'title', 'author', 'keywords')
+        optionalnames = (
+            'current_fit_label', 'reference_fit_label')
         boolnames = (
             'thcovmat_if_present',)
         badargs = [argname for argname in argnames if not args[argname]]
@@ -104,11 +114,14 @@ class CompareFitApp(App):
         try:
             for arg in bad:
                 self.args[arg] = getattr(self, f'interactive_{arg}')()
+            if args['interactive']:
+                for arg in optionalnames:
+                    self.args[arg] = getattr(self, f'interactive_{arg}')()
         except EOFError:
             raise KeyboardInterrupt()
         texts = '\n'.join(
             f'    {argname.replace("_", " ").capitalize()}: {args[argname]}'
-            for argname in [*argnames, *boolnames])
+            for argname in [*argnames, *optionalnames, *boolnames])
         log.info(f"Starting NNPDF fit comparison:\n{texts}")
 
     def interactive_current_fit(self):
@@ -118,7 +131,7 @@ class CompareFitApp(App):
 
     def interactive_current_fit_label(self):
         #TODO Use the colors in prompt_toolkit 2+ instead of this
-        default = "Current Fit"
+        default = CURRENT_FIT_LABEL_DEFAULT
         print(f"Enter label for current fit [default:\n{t.dim(default)}]:")
         #Do not use the default keyword because it is a pain to delete
         res = prompt_toolkit.prompt("")
@@ -134,7 +147,7 @@ class CompareFitApp(App):
 
     def interactive_reference_fit_label(self):
         #TODO Use the colors in prompt_toolkit 2+ instead of this
-        default = "Reference Fit"
+        default = REFERENCE_FIT_LABEL_DEFAULT
         print(f"Enter label for reference fit [default:\n{t.dim(default)}]:")
         #Do not use the default keyword because it is a pain to delete
         res = prompt_toolkit.prompt("")
