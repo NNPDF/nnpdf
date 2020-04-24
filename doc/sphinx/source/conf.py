@@ -47,6 +47,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
+    'sphinx.ext.napoleon',
     # To generate section headings,
     # particularly in markdown. See
     # https://recommonmark.readthedocs.io/en/latest/#linking-to-headings-in-other-files
