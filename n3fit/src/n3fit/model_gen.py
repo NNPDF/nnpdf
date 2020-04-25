@@ -400,14 +400,19 @@ def pdfNN_layer_generator(
     def dense_me(x):
         """ Takes an input tensor `x` and applies all layers
         from the `list_of_pdf_layers` in order """
+        x0 = operations.m_tensor_ones_like(x)
         if inp == 1:
             curr_fun = list_of_pdf_layers[0](x)
+            curr_fun0 = list_of_pdf_layers[0](x0)
         else:
             curr_fun = list_of_pdf_layers[0](add_log(x))
+            curr_fun0 = list_of_pdf_layers[0](add_log(x0))
 
         for dense_layer in list_of_pdf_layers[1:]:
             curr_fun = dense_layer(curr_fun)
-        return curr_fun
+            curr_fun0 = dense_layer(curr_fun0)
+        res = operations.op_subtract([curr_fun,curr_fun0])    
+        return res
 
     # Preprocessing layer (will be multiplied to the last of the denses)
     preproseed = seed + number_of_layers

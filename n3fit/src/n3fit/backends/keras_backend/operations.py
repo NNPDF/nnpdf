@@ -185,3 +185,7 @@ def op_smn(o_list, **kwargs):
     numer = op_add(o_list[:2])
     denom = op_add(o_list[2:])
     return op_ratio([numer, denom], **kwargs)
+
+def m_tensor_ones_like(*args, **kwargs):
+    return K.ones_like(*args, **kwargs)
+
