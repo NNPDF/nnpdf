@@ -74,7 +74,6 @@ def test_initialize_seeds():
 
 
 def test_performfit():
-    return
     # read up the old info file
     old_fitinfo = load_data(REGRESSION_FOLDER / f"{QUICKNAME}.fitinfo")
     # create a /tmp folder
