@@ -7,5 +7,4 @@ figure_by:
 x_label: '$|y_{\ell\ell}|$'
 
 experiment: "ATLAS"
-
 nnpdf31_process: DY
