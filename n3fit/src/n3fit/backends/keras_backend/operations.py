@@ -58,14 +58,15 @@ def c_to_py_fun(op_name, name="dataset"):
 
 
 # f(x: numpy) -> y: tensor
-def numpy_to_tensor(ival):
+def numpy_to_tensor(ival, **kwargs):
     """
         Make the input into a tensor
     """
-    return K.constant(ival)
+    return K.constant(ival, **kwargs)
 
 
 # f(x: tensor) -> y: tensor
+@tf.function
 def batchit(x, batch_dimension=0):
     """ Add a batch dimension to tensor x """
     return tf.expand_dims(x, batch_dimension)
@@ -124,6 +125,7 @@ def numpy_to_input(numpy_array, no_reshape=False, name=None):
 
 # Generation operations
 # generate tensors of given shape/content
+@tf.function
 def tensor_ones_like(*args, **kwargs):
     """
     Generates a tensor of ones of the same shape as the input tensor
@@ -132,6 +134,7 @@ def tensor_ones_like(*args, **kwargs):
     return K.ones_like(*args, **kwargs)
 
 
+@tf.function
 def many_replication(grid, replications, axis=0, **kwargs):
     """
     Generates a tensor with one extra dimension:
@@ -145,11 +148,13 @@ def many_replication(grid, replications, axis=0, **kwargs):
 
 # Property operations
 # modify properties of the tensor like the shape or elements it has
+@tf.function
 def flatten(x):
     """ Flatten tensor x """
     return tf.reshape(x, (-1,))
 
 
+@tf.function
 def boolean_mask(*args, **kwargs):
     """
     Applies a boolean mask to a tensor
@@ -160,6 +165,7 @@ def boolean_mask(*args, **kwargs):
     return tf.boolean_mask(*args, **kwargs)
 
 
+@tf.function
 def transpose(tensor, **kwargs):
     """
     Transpose a layer,
@@ -168,6 +174,7 @@ def transpose(tensor, **kwargs):
     return K.transpose(tensor, **kwargs)
 
 
+@tf.function
 def concatenate(tensor_list, axis=-1, target_shape=None):
     """
     Concatenates a list of numbers or tenosr into a bigger tensor
@@ -181,6 +188,35 @@ def concatenate(tensor_list, axis=-1, target_shape=None):
 
 
 # Mathematical operations
+@tf.function
+def pdf_masked_convolution(raw_pdf, basis_mask):
+    """ Computes a masked convolution of two equal pdfs
+    And applies a basis_mask so that only the actually useful values
+    of the convolution are returned
+
+    Parameters
+    ----------
+        pdf: tf.tensor
+            rank 3 (batchsize, xgrid, flavours)
+        basis_mask: tf.tensor
+            rank  2 tensor (flavours, flavours)
+            mask to apply to the pdf convolution
+
+    Return
+    ------
+        pdf_x_pdf: tf.tensor
+            rank3 (len(mask_true), xgrid, xgrid)
+    """
+    pdf = tf.squeeze(raw_pdf, axis=0)  # remove the batchsize
+    luminosity = tensor_product(pdf, pdf, axes=0)
+    # (xgrid, flavour, xgrid, flavour)
+    # reshape to put the flavour indices at the beginning to apply mask
+    lumi_tmp = K.permute_dimensions(luminosity, (3, 1, 2, 0))
+    pdf_x_pdf = boolean_mask(lumi_tmp, basis_mask)
+    return pdf_x_pdf
+
+
+@tf.function
 def tensor_product(*args, **kwargs):
     """
     Computes the tensordot product between tensor_x and tensor_y
@@ -212,6 +248,7 @@ def op_multiply_dim(o_list, **kwargs):
     return create_operation(o_list)
 
 
+@tf.function
 def op_log(o_tensor, **kwargs):
     """
     Computes the logarithm of the input
@@ -219,6 +256,7 @@ def op_log(o_tensor, **kwargs):
     return K.log(o_tensor)
 
 
+@tf.function
 def sum(*args, **kwargs):
     """
     Computes the sum of the elements of the tensor
