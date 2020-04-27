@@ -104,7 +104,9 @@ def test_DY_basis():
     # Get the basis from the layer
     result = obs_layer.basis
     # Compute the basis with numpy
-    reference = comb.reshape(-1, 2)
+    reference = np.zeros((FLAVS, FLAVS))
+    for i,j in comb:
+        reference[i,j] = True
     assert np.alltrue(result == reference)
 
 
@@ -138,9 +140,7 @@ def test_DY():
     result_tensor = obs_layer(kp)
     result = op.evaluate(result_tensor)
     # Compute the numpy version of this layer
-    mask = np.zeros((FLAVS, FLAVS), dtype=bool)
-    for i, j in obs_layer.basis:
-        mask[i, j] = True
+    mask = obs_layer.basis.numpy()
     lumi = np.tensordot(pdf, pdf, axes=0)
     lumi_perm = np.moveaxis(lumi, [1, 3], [0, 1])
     lumi_masked = lumi_perm[mask]
