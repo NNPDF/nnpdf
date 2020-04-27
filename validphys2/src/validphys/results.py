@@ -827,8 +827,33 @@ chi2_stat_labels = {
     'chi2_per_data': r'$\frac{\chi^2}{N_{data}}$'
 }
 
+def experiments_chi2_stats(total_experiments_chi2data):
+    """Compute several estimators from the chi² for an
+    aggregate of experiments:
+
+     - central_mean
+
+     - npoints
+
+     - perreplica_mean
+
+     - perreplica_std
+
+     - chi2_per_data
+    """
+    rep_data, central_result, npoints = total_experiments_chi2data
+    m = central_result.mean()
+    rep_mean = rep_data.central_value().mean()
+    return OrderedDict([
+            ('central_mean'        ,  m),
+            ('npoints'             , npoints),
+            ('chi2_per_data', m/npoints),
+            ('perreplica_mean', rep_mean),
+            ('perreplica_std',  rep_data.std_error().mean()),
+           ])
+
 def chi2_stats(abs_chi2_data):
-    """Compute severa estimators from the chi²:
+    """Compute several estimators from the chi²:
 
      - central_mean
 

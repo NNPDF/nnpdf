@@ -29,24 +29,55 @@ from validphys.utils import sane_groupby_iter, split_ranges, scale_from_grid
 log = logging.getLogger(__name__)
 
 @figure
-def plot_chi2dist(results, dataset, abs_chi2_data, chi2_stats, pdf):
+def plot_chi2dist_experiments(total_experiments_chi2data, experiments_chi2_stats, pdf):
+    """Plot the distribution of chi²s of the members of the pdfset."""
+    fig, ax = _chi2_distribution_plots(total_experiments_chi2data, experiments_chi2_stats, pdf, "hist")
+    ax.set_title(r"Experiments $\chi^2$ distribution")
+    return fig
+
+
+@figure
+def kde_chi2dist_experiments(total_experiments_chi2data, experiments_chi2_stats, pdf):
+    """KDE plot for experiments chi2."""
+    fig, ax = _chi2_distribution_plots(total_experiments_chi2data, experiments_chi2_stats, pdf, "kde")
+    ax.set_ylabel(r"Density")
+    ax.set_title(r"Experiments $\chi^2 KDE plot$")
+    return fig
+
+
+@figure
+def plot_chi2dist(dataset, abs_chi2_data, chi2_stats, pdf):
     """Plot the distribution of chi²s of the members of the pdfset."""
     setlabel = dataset.name
+    fig, ax = _chi2_distribution_plots(abs_chi2_data, chi2_stats, pdf, "hist")
+    ax.set_title(r"$\chi^2$ distribution for %s" % setlabel)
+    return fig
+
+
+def _chi2_distribution_plots(chi2_data, stats, pdf, plot_type):
     fig, ax = plt.subplots()
     label = pdf.name
-    alldata, central, npoints = abs_chi2_data
+    alldata, central, npoints = chi2_data
     if not isinstance(alldata, MCStats):
         ax.set_facecolor("#ffcccc")
         log.warning("Chi² distribution plots have a "
                 "different meaning for non MC sets.")
         label += " (%s!)" % pdf.ErrorType
-    label += '\n'+ '\n'.join(str(chi2_stat_labels[k])+(' %.2f' % v) for (k,v) in chi2_stats.items())
-    ax.set_title(r"$\chi^2$ distribution for %s" % setlabel)
+    label += '\n'+ '\n'.join(str(chi2_stat_labels[k])+(' %.2f' % v) for (k,v) in stats.items())
+    ax.set_xlabel(r"Replica $\chi^2$")
 
-    ax.hist(alldata.data, label=label, zorder=100)
+    if plot_type == "hist":
+        ax.hist(alldata.data, label=label, zorder=100)
+    elif plot_type == "kde":
+        # We need the squeeze here to change shape from (x, 1) to (x,)
+        ax = plotutils.kde_plot(alldata.data.squeeze(), label=label)
+    else:
+        raise ValueError(f"plot_type must either be hist or kde, not {plot_type}")
+
     l = ax.legend()
     l.set_zorder(1000)
-    return fig
+    return fig, ax
+
 
 @figure
 def plot_phi(groups_data, groups_data_phi):

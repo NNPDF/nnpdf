@@ -45,6 +45,10 @@ will be written out to
 ```
 $RESULTS_PATH/theory_<theory id>/subgrids/FK_<setname>_<subgrid id>.dat.
 ```
+
+APPLgrids and FastNLO tables should be properly stored in the `applgrids` folder by means of
+[Git LFS](https://git-lfs.github.com/) (see [here](storage) for details).
+
 Once all the relevant subgrids for the desired dataset(s) are generated, 
 one should run
 ```
@@ -102,6 +106,11 @@ where we want to exclude the penultimate bin, the mask would be:
 ```
 1 1 1 0 1
 ```
+Note that there is no way to know a priori whether `pdfwgt` should be set to 0 or to 1, that is
+whether the grid is unweighted or weighted. However, this can easily be checked a posteriori, since
+setting `pdfwgt` to the wrong value should lead to `./apfel_comb` failing due to a large relative
+error between the value in the APPLgrid and that in the FK table.
+
 The applgrid filename assumes that the grid can be found at
 ```
 $APPL_PATH/<setname>/<applgrid>

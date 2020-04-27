@@ -11,8 +11,7 @@ at NLO.
 
 You need to provide the central theory under the ``default_theory`` flag, 
 corresponding to :math:`(\mu_F, \mu_R) = (0,0)`,
-which for NLO is theory 163. Under ``theoryids`` you need to provide all the
-relevant theories, as outlined above.
+which for NLO is theory 163.
 
 ``dataspecs`` associates a chosen label (``speclabel``) with each of the theory
 choices. This details what scale variation the theory corresponds to.
@@ -33,10 +32,11 @@ relevant c-factors.
    default_theory:
       - theoryid: 163
 
+   theoryid: 163
+   point_prescription: '3 point'
+
    theoryids:
-      - 163
-      - 180
-      - 173
+      from_: scale_variation_theories
 
    dataspecs:
            - theoryid: 163
@@ -203,9 +203,7 @@ matrix against the NNLO-NLO shift. In this case the 5 point prescription is chos
 and Drell-Yan experiments only are considered.
 
 Note that as we are dealing with 5 theories, we need to set the ``fivetheories``
-flag, which in this case is set to ``nobar``. This must be used in conjunction
-with the correct ``theoryids`` and ordering of ``theoryids`` in order not to throw 
-an error. 
+flag, which in this case is set to ``nobar``.
 
 The flag ``orthonormalisation`` corresponds to the method used to orthonormalise 
 the basis vectors of the theory covariance matrix. There are three choices:
@@ -401,14 +399,11 @@ For each dataspec we can give the ``_experiments_list_nlo``.
 
    theoryconfig:
 
-      theoryids:
-         - 163
-         - 177
-         - 176
-         - 179
-         - 174
-
       theoryid: 163
+      point_prescription: '5-point'
+
+      theoryids:
+        from_: scale_variation_theories
 
       use_cuts: fromfit
       fit: 190315_ern_nlo_central_163_global
@@ -433,7 +428,7 @@ For each dataspec we can give the ``_experiments_list_nlo``.
                 speclabel: $(\xi_F,\xi_R)=(1,0.5)$
                 experiments: *experiments_list_nlo
 
-   template: ../../template_test.md
+   template: template_test.md
 
    dataset_report:
       meta: Null
@@ -450,7 +445,7 @@ capturing the NNLO-NLO shift.
 .. code-block::  md
    :linenos:
 
-   % Theory shift validation test: 9 pts
+   % Theory shift validation test: 5 pt
 
    Non-zero eigenvalues
    --------------------
@@ -496,5 +491,3 @@ capturing the NNLO-NLO shift.
    --------------------
 
    {@deltamiss_plot@}
-
-.

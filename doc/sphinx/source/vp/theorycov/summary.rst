@@ -31,18 +31,26 @@ See the `short
 
 -  Theoretical covariance matrices are built according to the various prescriptions.
 
--  As input you need theories at the relevant scale combinations which
-   correspond to the prescription.
+-  As input you need theories for the relevant scale combinations which
+   correspond to the prescription. This information is taken from the
+   ``scalevariations`` module, which consists of two files:
 
--  These must be ordered in a specific way in the runcard.
+   #. ``pointprescriptions.yaml``: correspondence between each point prescription
+      and the scale combinations that are used to construct it
 
--  The prescription is chosen based on the number of input theories,
-   which must be one of :math:`\{3,5,7,9\}`.
+   #. ``scalevariationtheoryids.yaml``: correspondence between each scale combination
+      and a theoryid for a given central theoryid
+
+-  The prescription must be one of 3 point, 5 point, 7 point or 9 point.
 
 -  In the case of 5 theories, you must further specify whether the 5 or
    :math:`\bar{5}` prescription is required. You can do this by
    allocating the flag ``fivetheories`` to ``nobar`` or ``bar`` in the
    runcard.
+
+-  In the case of 7 theories, there are two options. The default is the
+   modified prescription that Gavin Salam proposed. To use the original
+   prescription instead, specify ``seventheories: original`` in the runcard.
 
 -  Currently the renormalisation scales are correlated within each
    process type. These process types are categorised as {DIS CC, DIS NC,

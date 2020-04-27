@@ -136,3 +136,5 @@ $vp-checktheory --fit FIT
 
 where `FIT` is a valid fit name. If the fit cannot be found locally, the script
 will attempt to download it.
+
+The parameters in the above are defined [here](./theoryparamsdefinitions).

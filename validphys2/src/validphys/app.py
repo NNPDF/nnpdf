@@ -41,11 +41,13 @@ providers = [
              'validphys.theorycovariance.output',
              'validphys.theorycovariance.tests',
              'validphys.replica_selector',
-             'validphys.MCgen_checks',
              'validphys.closuretest',
              # currently broken - will fix in NNPDF/nnpdf#511
              # 'validphys.closure',
+             'validphys.mc_gen_checks',
              'validphys.theoryinfo',
+             'validphys.pseudodata',
+             'validphys.renametools',
              'reportengine.report'
             ]
 

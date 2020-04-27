@@ -11,6 +11,7 @@ import inspect
 import numbers
 import copy
 import os
+from importlib.resources import read_text
 
 from collections import ChainMap, defaultdict
 from collections.abc import Mapping, Sequence
@@ -24,7 +25,9 @@ from reportengine.configparser import (
     record_from_defaults,
 )
 from reportengine.helputils import get_parser_type
+from reportengine.namespaces import NSList
 from reportengine import report
+from reportengine.compat import yaml
 
 from validphys.core import (DataGroupSpec, DataSetInput, ExperimentInput,
                             CutsPolicy, MatchedCuts, ThCovMatSpec)
@@ -36,6 +39,8 @@ from validphys.paramfits.config import ParamfitsConfig
 
 from validphys.theorycovariance.theorycovarianceutils import process_lookup
 from validphys.plotoptions import get_info
+
+import validphys.scalevariations
 
 log = logging.getLogger(__name__)
 
@@ -881,6 +886,45 @@ class CoreConfig(configparser.Config):
         """
         return label
 
+    def produce_fit_data_groupby_experiment(self, fit):
+        """Used to produce data from the fit grouped into experiments,
+        where each experiment is a group of datasets according to the experiment
+        key in the plotting info file.
+        """
+        #TODO: consider this an implimentation detail
+
+        with self.set_context(ns=self._curr_ns.new_child({'fit':fit})):
+            _, experiments = self.parse_from_('fit', 'experiments', write=False)
+
+        flat = (ds for exp in experiments for ds in exp.datasets)
+        metaexps = [get_info(ds).experiment for ds in flat]
+        res = {}
+        for exp in experiments:
+            for dsinput, ds in zip(exp.dsinputs, exp.datasets):
+                metaexp = get_info(ds).experiment
+                if metaexp in res:
+                    res[metaexp].append(ds)
+                else:
+                    res[metaexp] = [ds]
+        exps = []
+        for exp in res:
+            exps.append(ExperimentSpec(exp, res[exp]))
+
+        experiments = NSList(exps, nskey='experiment')
+        return {'experiments': experiments}
+
+    def produce_fit_context_groupby_experiment(self, fit):
+        """produces experiments similarly to `fit_data_groupby_experiment`
+        but also sets fitcontext (pdf and theoryid)
+        """
+        _, pdf         = self.parse_from_('fit', 'pdf', write=False)
+        _, theory      = self.parse_from_('fit', 'theory', write=False)
+        thid = theory['theoryid']
+        with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
+            experiments = self.produce_fit_data_groupby_experiment(
+                fit)['experiments']
+        return {'pdf': pdf, 'theoryid':thid, 'experiments': experiments}
+
     def produce_all_commondata(self):
         """produces all commondata using the loader function """
         ds_names = self.loader.available_datasets
@@ -1107,6 +1151,75 @@ class CoreConfig(configparser.Config):
         ]
 
 
+    def produce_scale_variation_theories(self, theoryid, point_prescription):
+        """Produces a list of theoryids given a theoryid at central scales and a point
+           prescription. The options for the latter are '3 point', '5 point', '5bar point', '7 point'
+           and '9 point'. Note that these are defined in arXiv:1906.10698. This hard codes the
+           theories needed for each prescription to avoid user error."""
+        pp = point_prescription
+        th = theoryid.id
+
+        lsv = yaml.safe_load(
+            read_text(validphys.scalevariations, "scalevariationtheoryids.yaml")
+        )
+
+        scalevarsfor_list = lsv["scale_variations_for"]
+        # Allowed central theoryids
+        cent_thids = [
+            str(scalevarsfor_dict["theoryid"]) for scalevarsfor_dict in scalevarsfor_list
+        ]
+
+        if th not in cent_thids:
+            valid_thids = ", ".join(cent_thids)
+            raise ConfigError(
+                "Scale variations are not currently defined for this central theoryid. It is "
+                + f"currently only possible to use one of the following as the central theory: {valid_thids}. "
+                + "Please use one of these instead if you wish to include theory uncertainties here."
+            )
+
+        # Find scales that correspond to this point prescription
+        pp_scales_dict = yaml.safe_load(
+            read_text(validphys.scalevariations, "pointprescriptions.yaml")
+        )
+
+        try:
+            scales = pp_scales_dict[pp]
+        except KeyError:
+            valid_pps = ", ".join(pp_scales_dict.keys())
+            raise ConfigError(
+                "Scale variations are not currently defined for this point prescription. This "
+                + "configuration only works when 'point_prescription' is equal to one of the "
+                + f"following: {valid_pps}. Please use one of these instead if you wish to "
+                + "include theory uncertainties here."
+            )
+
+        # Get dictionary containing theoryid and variations for central theory from runcard
+        for scalevarsfor_dict in scalevarsfor_list:
+            if scalevarsfor_dict["theoryid"] == int(th):
+                theoryid_variations = scalevarsfor_dict
+
+        # Find theoryids for given point prescription for given central theoryid
+        try:
+            thids = [theoryid_variations["variations"][scale] for scale in scales]
+        except KeyError:
+            available_scales = list(theoryid_variations["variations"])
+            missing_scales = []
+            for scale in scales:
+                if scale not in available_scales:
+                    missing_scales.append(scale)
+            missing_scales_string = ", ".join(missing_scales)
+            raise ConfigError(
+                "For this central theoryid, the requested point prescription is not currently "
+                + "available. To use this point prescription for this central theoryid, theoryids "
+                + "that correspond to the following scale choices must be created and added to "
+                + "validphys2/src/validphys/scalevariations/scalevariationtheoryids.yaml: "
+                + f"(k_F, k_R) = {missing_scales_string}."
+            )
+
+        # Check each theory is loaded
+        theoryids = [self.loader.check_theoryID(thid) for thid in thids]
+        # NSList needs to be used for theoryids to be recognised as a namespace
+        return {"theoryids": NSList(theoryids, nskey="theoryid")}
 
 
 class Config(report.Config, CoreConfig, ParamfitsConfig):

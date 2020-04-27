@@ -68,6 +68,10 @@ fnlo-tk-merge
 see the [APPLgrid](https://applgrid.hepforge.org/) and 
 [FastNLO](https://fastnlo.hepforge.org/) documentation for further details.
 
+```eval_rst
+.. _storage:
+```
+
 ## Storage
 
 Once the APPLgrid and/or FastNLO tables have been generated, they must be stored
@@ -78,3 +82,13 @@ applgrids
 in a folder that matches the name of the dataset used in the `buildmaster`
 implementation. Each folder contains a specific README file with the summary 
 information about the grid's origin and usage.
+
+APPLgrid and FastNLO grids are stored using [Git LFS](https://git-lfs.github.com/), which allows
+users to handle large files efficiently. Git LFS can be installed with conda using:
+```
+conda install git-lfs
+```
+Git LFS can then be linked to the user's Git account and used for a particular repository by
+following the instructions under ['Getting Started'](https://git-lfs.github.com/). If the
+`applgrids` repository already exists on the user's system, it may need to be re-cloned once Git
+LFS has been set-up to benefit from its installation.
