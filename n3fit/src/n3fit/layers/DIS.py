@@ -24,7 +24,7 @@ class DIS(Observable):
         else:
             self.basis = np.ones(self.nfl, dtype=bool)
 
-    def call(self, pdf_in):
+    def meta_call(self, pdf_in):
         """
             Thiss function perform the fktable \otimes pdf convolution.
 

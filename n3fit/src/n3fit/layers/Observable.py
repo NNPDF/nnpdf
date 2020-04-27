@@ -46,5 +46,5 @@ class Observable(MetaLayer, ABC):
         pass
 
     @abstractmethod
-    def call(self, pdf_in):
+    def meta_call(self, pdf_in):
         pass

@@ -13,6 +13,6 @@ class ObsRotation(MetaLayer):
         self.rotation = op.numpy_to_tensor(transform_matrix)
         super(MetaLayer, self).__init__(**kwargs)
 
-    def call(self, prediction_in):
+    def meta_call(self, prediction_in):
         pinT = op.transpose(prediction_in)
         return op.tensor_product(self.rotation, pinT, axes=1)

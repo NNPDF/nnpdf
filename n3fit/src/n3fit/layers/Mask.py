@@ -32,7 +32,7 @@ class Mask(MetaLayer):
         self.kernel = self.builder_helper("mask", (1,), initializer, trainable=False)
         super(Mask, self).build(input_shape)
 
-    def call(self, prediction_in):
+    def meta_call(self, prediction_in):
         ret = op.boolean_mask(self.kernel * prediction_in, self.mask)
         if self.batch_it:
             return op.batchit(ret)

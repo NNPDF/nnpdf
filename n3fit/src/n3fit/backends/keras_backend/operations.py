@@ -6,9 +6,13 @@
     This includes an implementation of the NNPDF operations on fktable in the keras
     language (with the mapping ``c_to_py_fun``) into Keras ``Lambda`` layers.
 
-    The rest of the operations in this module are divided into three categories:
+    Tensor operations are compiled through the @tf.function decorator for optimization
+
+    The rest of the operations in this module are divided into four categories:
     numpy to tensor:
         Operations that take a numpy array and return a tensorflow tensor
+    layer to layer:
+        Operations that take a layer and return another layer
     tensor to tensor:
         Operations that take a tensor and return a tensor
     layer generation:
@@ -119,6 +123,32 @@ def numpy_to_input(numpy_array, no_reshape=False, name=None):
 
 
 #
+# Layer to Layer operations
+#
+def op_multiply(o_list, **kwargs):
+    """
+    Receives a list of layers of the same output size and multiply them element-wise
+    """
+    return keras_multiply(o_list, **kwargs)
+
+
+def op_multiply_dim(o_list, **kwargs):
+    """
+    Bypass in order to multiply two layers with different output dimension
+    for instance: (10000 x 14) * (14)
+    as the normal keras multiply don't accept it (but somewhow it does accept it doing it like this)
+    """
+    if len(o_list) != 2:
+        raise ValueError(
+            "The number of observables is incorrect, operations.py:op_multiply_dim, expected 2, received {0}".format(
+                len(o_list)
+            )
+        )
+    create_operation = keras_Lambda(lambda inputs: inputs[0] * inputs[1])
+    return create_operation(o_list)
+
+
+#
 # Tensor operations
 # f(x: tensor[s]) -> y: tensor
 #
@@ -223,29 +253,6 @@ def tensor_product(*args, **kwargs):
     See full `docs <https://www.tensorflow.org/api_docs/python/tf/tensordot>`_
     """
     return tf.tensordot(*args, **kwargs)
-
-
-def op_multiply(o_list, **kwargs):
-    """
-    Receives a list of layers of the same output size and multiply them element-wise
-    """
-    return keras_multiply(o_list, **kwargs)
-
-
-def op_multiply_dim(o_list, **kwargs):
-    """
-    Bypass in order to multiply two layers with different output dimension
-    for instance: (10000 x 14) * (14)
-    as the normal keras multiply don't accept it (but somewhow it does accept it doing it like this)
-    """
-    if len(o_list) != 2:
-        raise ValueError(
-            "The number of observables is incorrect, operations.py:op_multiply_dim, expected 2, received {0}".format(
-                len(o_list)
-            )
-        )
-    create_operation = keras_Lambda(lambda inputs: inputs[0] * inputs[1])
-    return create_operation(o_list)
 
 
 @tf.function
