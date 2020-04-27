@@ -9,6 +9,7 @@ import logging
 import multiprocessing as mp
 
 import numpy as np
+import pandas as pd
 
 log = logging.getLogger(__name__)
 
@@ -133,3 +134,47 @@ def fitted_pseudodata(fit, experiments, num_fitted_replicas, t0pdfset=None, NPRO
 
 def get_pseudodata(fitted_pseudodata, fitted_replica_indexes):
     return [fitted_pseudodata[i] for i in fitted_replica_indexes]
+
+
+def _datasets_mask(experiment_list):
+    """Function to obtain a per datasets training/validation
+    mask given the mask for the corresponding experiment.
+    """
+    mask = experiment_list["trmask"]
+    slices = []
+    start = 0
+    for i in experiment_list["datasets"]:
+        ndata = i["ndata"]
+        slices.append(start+ndata)
+        start += ndata
+    return np.split(mask, slices[:-1])
+
+
+def pseudodata_table(get_pseudodata):
+    """Generator to yield the pseudodata of a N3FIT pdf in a
+    pandas DataFrame with an appropriate MultiIndex
+    """
+    exp_infos = get_pseudodata
+    columns=["experiment", "dataset", "id"]
+    # Loop over all initial replicas
+    for replica in exp_infos:
+        records, central_values = [], []
+        # Loop over experiments in given replica
+        for experiment in replica:
+            split_mask = _datasets_mask(experiment)
+            # While we're here extend the central_values of the experiment
+            central_values.extend(np.squeeze(experiment["expdata"]))
+            # Loop over datasets in experiment
+            for i, dataset in enumerate(experiment["datasets"]):
+                dataset_mask = split_mask[i]
+                indices = np.array((range(dataset["ndata"])))[dataset_mask]
+                for idat in indices:
+                    records.append(
+                        dict(
+                            [('experiment', experiment["name"]),
+                             ('dataset', dataset["name"]),
+                             ('id', idat),]))
+        df = pd.DataFrame(records, columns=columns)
+        df.set_index(columns, inplace=True)
+        index = df.index
+        return pd.DataFrame(central_values, index=index, columns=["data"])
