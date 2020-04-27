@@ -5,6 +5,7 @@ The high level :py:func:`predictions` function can be used to extact theory
 predictions for experimentally measured quantities, in a way that is directly
 comparable with the C++ code::
 
+    import numpy as np
     from validphys.api import API
     from validphys.convolution import predictions
 
@@ -37,7 +38,7 @@ Some variants such as :py:func:`central_predictions` and
 :py:func:`linear_predictions` are useful for more specialized tasks.
 
 These functions work with :py:class:`validphys.core.DatasetSpec` objects,
-allowing to account for information on COMPOUND predictions and cuts.  A lower
+allowing to account for information on COMPOUND predictions and cuts. A lower
 level interface which operates with :py:class:`validphys.coredata.FKTableData`
 objects is also available.
 

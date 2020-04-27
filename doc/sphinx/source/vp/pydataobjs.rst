@@ -85,11 +85,11 @@ Central predictions
 
 The default :py:func:`validphys.convolution.predictions` computes one
 prediction for each replica in the PDF set (for Monte Carlo PDF sets). The user
-is the supposed to average the replica predictions to get a central value. An
+is then supposed to average the replica predictions to get a central value. A
 quick approximation is to use the central value directly. This is exact for DIS
 observables and a generally very good approximation for hadronic observables.
-The :py:func:`validphys.convolution.central_predictions` function. This may be
-appropriate for computations where the PDF error is not requires, such as the
+The :py:func:`validphys.convolution.central_predictions` function may be
+appropriate for computations where the PDF error is not required, such as the
 central χ².
 
 The previous example can be simpler using ``central_predictions``::
@@ -132,7 +132,7 @@ central replica is the same as the mean of the replica predictions::
     # "Exact" predictions
     p = predictions(ds, pdf).T
     # Approximate predictions, neglecting the quadratic terms in the
-    # differneces between each replica and the central value.
+    # differences between each replica and the central value.
     lp = linear_predictions(ds, pdf).T
     # Central predictions
     cp = central_predictions(ds, pdf).T
@@ -140,6 +140,6 @@ central replica is the same as the mean of the replica predictions::
 
     assert np.allclose(lp.mean(), cp)
     assert not np.allclose(p.mean(), cp)
-    # Compute the size of the differences between approcimate and true predictions
+    # Compute the size of the differences between approximate and true predictions
     # over the PDF uncertainty. Take the maximum over the three ttbar data points.
     print(((p - lp).std() / p.std()).max())
