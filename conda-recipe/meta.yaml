@@ -22,7 +22,7 @@ requirements:
         - python
         - numpy
     run:
-        - tensorflow-eigen
+        - tensorflow
         - hyperopt
         - seaborn
         - lhapdf

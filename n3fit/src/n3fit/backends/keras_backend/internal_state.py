@@ -2,6 +2,12 @@
     Library of functions that modify the internal state of Keras/Tensorflow
 """
 
+import os
+os.environ["KMP_BLOCKTIME"]   = "0"
+os.environ["KMP_SETTINGS"]    = "1"
+os.environ["KMP_AFFINITY"]    = "granularity=fine,verbose,compact,1,0"
+#os.environ["OMP_NUM_THREADS"] = "4"
+
 import random as rn
 import numpy as np
 import tensorflow as tf
@@ -42,5 +48,5 @@ def clear_backend_state():
     print("Clearing session")
 
     K.clear_session()
-    tf.config.threading.set_inter_op_parallelism_threads(8)
-    tf.config.threading.set_intra_op_parallelism_threads(8)
+    tf.config.threading.set_inter_op_parallelism_threads(2)
+    tf.config.threading.set_intra_op_parallelism_threads(4) # number of cores
