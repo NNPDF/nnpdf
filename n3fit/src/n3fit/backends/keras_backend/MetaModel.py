@@ -130,11 +130,10 @@ class MetaModel(Model):
             `loss_dict`: dict
                 a dictionary with all partial losses of the model
         """
-        if x is None:
-            x = self.x_in
+        x = self._parse_input(x)
         if y is None:
             y = self.target_tensors
-        history = super().fit(x=x, y=y, **kwargs,)
+        history = super().fit(x=x, y=y, steps_per_epoch=1, epochs=1, **kwargs,)
         loss_dict = history.history
         return loss_dict
 
@@ -185,12 +184,11 @@ class MetaModel(Model):
         In this case the number of steps must be always specified and the input of x and y must
         be set to `None`.
         """
-        if x is None:
-            x = self.x_in
+        x = self._parse_input(x)
         if y is None:
             y = self.target_tensors
             # TODO Ensure that no x or y were passed
-        result = super().evaluate(x=x, y=y, **kwargs)
+        result = super().evaluate(x=x, y=y, steps=1,**kwargs)
         return result
 
     def compile(

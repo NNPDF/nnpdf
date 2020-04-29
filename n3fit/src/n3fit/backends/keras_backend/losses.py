@@ -13,6 +13,7 @@ def l_invcovmat(invcovmat_np):
     """
     invcovmat = K.constant(invcovmat_np)
 
+    @tf.function
     def true_loss(y_true, y_pred):
         # (yt - yp) * covmat * (yt - yp)
         tmp = y_true - y_pred
@@ -27,6 +28,7 @@ def l_positivity(alpha=1e-7):
     Returns L = elu(y_pred) (considers y_true as 0)
     """
 
+    @tf.function
     def true_loss(y_true, y_pred):
         y = -y_pred
         loss = K.elu(y, alpha=alpha)
@@ -42,6 +44,7 @@ def l_diaginvcovmat(diaginvcovmat_np):
     """
     invcovmat = K.constant(diaginvcovmat_np)
 
+    @tf.function
     def true_loss(y_true, y_pred):
         tmp = y_true - y_pred
         return tf.tensordot(invcovmat, K.transpose(tmp*tmp), axes=1)
