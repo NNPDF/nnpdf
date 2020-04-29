@@ -1,4 +1,5 @@
 from n3fit.backends import MetaLayer
+from n3fit.backends import operations as op
 
 class ObsRotation(MetaLayer):
     """
@@ -9,9 +10,9 @@ class ObsRotation(MetaLayer):
     """
 
     def __init__(self, transform_matrix, **kwargs):
-        self.rotation = self.np_to_tensor(transform_matrix)
+        self.rotation = op.numpy_to_tensor(transform_matrix)
         super(MetaLayer, self).__init__(**kwargs)
 
     def call(self, prediction_in):
-        pinT = self.transpose(prediction_in)
-        return self.tensor_product(self.rotation, pinT, axes=1)
+        pinT = op.transpose(prediction_in)
+        return op.tensor_product(self.rotation, pinT, axes=1)

@@ -3,7 +3,7 @@
 """
 
 from n3fit.backends import MetaLayer
-from n3fit.backends import operations
+from n3fit.backends import operations as op
 
 
 class Rotation(MetaLayer):
@@ -22,7 +22,7 @@ class Rotation(MetaLayer):
 
     def call(self, pdf_raw):
         # Transpose the PDF so that the flavour index is the first one
-        x = self.transpose(pdf_raw)
+        x = op.transpose(pdf_raw)
         pdf_raw_list = [
             0 * x[0],  # photon
             x[0],  # sigma
@@ -39,6 +39,6 @@ class Rotation(MetaLayer):
             x[0],  # t24
             x[0],  # t35
         ]
-        ret = self.concatenate(pdf_raw_list)
+        ret = op.concatenate(pdf_raw_list)
         # Concatenating destroys the batch index so we have to regenerate it
-        return operations.batchit(ret)
+        return op.batchit(ret)

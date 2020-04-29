@@ -12,6 +12,7 @@
 """
 
 from n3fit.backends import MetaLayer
+from n3fit.backends import operations as op
 
 
 class xDivide(MetaLayer):
@@ -36,14 +37,14 @@ class xDivide(MetaLayer):
 
     def call(self, x):
         out_array = []
-        one = self.tensor_ones_like(x)
+        one = op.tensor_ones_like(x)
         for i in range(self.output_dim):
             if i in self.div_list:
                 res = one / x
             else:
                 res = one
             out_array.append(res)
-        out_tensor = self.concatenate(out_array, axis=-1)
+        out_tensor = op.concatenate(out_array, axis=-1)
         return out_tensor
 
 
@@ -62,11 +63,11 @@ class xIntegrator(MetaLayer):
     """
 
     def __init__(self, grid_weights, **kwargs):
-        grid_weights_tensor = self.np_to_tensor(grid_weights)
+        grid_weights_tensor = op.numpy_to_tensor(grid_weights)
         # Open up the grid weights
-        self.grid_weights = self.many_replication(grid_weights_tensor, replications=8, axis=1)
+        self.grid_weights = op.many_replication(grid_weights_tensor, 8, axis=1)
         super(MetaLayer, self).__init__(**kwargs)
 
     def call(self, x):
         xx = x * self.grid_weights
-        return self.sum(xx, axis=-2)
+        return op.sum(xx, axis=-2)
