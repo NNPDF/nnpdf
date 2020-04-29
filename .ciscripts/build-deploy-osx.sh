@@ -5,6 +5,11 @@ set -v
 #Set up netrc file for uploading/downloading
 echo "$NETRC_FILE" | base64 --decode > ~/.netrc
 
+# Set the version for both vp and n3fit
+gitroot=$(git rev-parse --show-toplevel)
+echo "build_version=\"$(git describe --long)\"" > ${gitroot}/n3fit/src/n3fit/version.py
+echo "build_version=\"$(git describe --long)\"" > ${gitroot}/validphys2/src/validphys/version.py
+
 conda build -q conda-recipe
 if [ $? != 0 ]; then
 	echo failed to build
