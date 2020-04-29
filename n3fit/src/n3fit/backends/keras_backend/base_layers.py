@@ -20,12 +20,9 @@
 from tensorflow.keras.layers import Dense, Lambda, LSTM, Dropout, Concatenate, concatenate
 from tensorflow.keras.layers import Dense as KerasDense
 from tensorflow import expand_dims
-<<<<<<< HEAD
 from tensorflow.keras.regularizers import l1_l2
 
 
-=======
->>>>>>> 38e1ffdc... add a square custom activation function
 from n3fit.backends import MetaLayer
 
 # Custom activation functions
