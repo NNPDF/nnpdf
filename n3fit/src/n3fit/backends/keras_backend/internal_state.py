@@ -3,7 +3,12 @@
 """
 
 import os
-from psutil import cpu_count
+import psutil
+
+# Needs to be set before importing Tensorflow
+os.environ["KMP_BLOCKTIME"]   = "0"
+os.environ["KMP_SETTINGS"]    = "1"
+os.environ["KMP_AFFINITY"]    = "granularity=fine,verbose,compact,1,0"
 
 import random as rn
 import numpy as np
@@ -45,13 +50,16 @@ def clear_backend_state():
     print("Clearing session")
 
     # Find how many cores we have and how many threads per core
-    cores = cpu_count(logical=False)
-    logical = cpu_count(logical=True)
+    cores = psutil.cpu_count(logical=False)
+    logical = psutil.cpu_count(logical=True)
     tpc = int(logical/cores)
 
-    os.environ["KMP_BLOCKTIME"]   = "0"
-    os.environ["KMP_SETTINGS"]    = "1"
-    os.environ["KMP_AFFINITY"]    = "granularity=fine,verbose,compact,1,0"
+    # When running on a cluster we might not have access to all cores
+    affinity = psutil.Process().cpu_affinity()
+    if len(affinity) != logical:
+        # Assume that we get a core and its associated threads
+        cores = int(len(affinity)/tpc)
+
     os.environ["OMP_NUM_THREADS"] = str(cores)
 
     K.clear_session()
