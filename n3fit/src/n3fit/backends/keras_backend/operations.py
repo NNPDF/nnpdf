@@ -184,7 +184,6 @@ def flatten(x):
     return tf.reshape(x, (-1,))
 
 
-@tf.function
 def boolean_mask(*args, **kwargs):
     """
     Applies a boolean mask to a tensor
@@ -195,7 +194,6 @@ def boolean_mask(*args, **kwargs):
     return tf.boolean_mask(*args, **kwargs)
 
 
-@tf.function
 def transpose(tensor, **kwargs):
     """
     Transpose a layer,
@@ -246,7 +244,6 @@ def pdf_masked_convolution(raw_pdf, basis_mask):
     return pdf_x_pdf
 
 
-@tf.function
 def tensor_product(*args, **kwargs):
     """
     Computes the tensordot product between tensor_x and tensor_y
@@ -255,7 +252,6 @@ def tensor_product(*args, **kwargs):
     return tf.tensordot(*args, **kwargs)
 
 
-@tf.function
 def op_log(o_tensor, **kwargs):
     """
     Computes the logarithm of the input
@@ -263,10 +259,15 @@ def op_log(o_tensor, **kwargs):
     return K.log(o_tensor)
 
 
-@tf.function
 def sum(*args, **kwargs):
     """
     Computes the sum of the elements of the tensor
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/sum>`_
     """
     return K.sum(*args, **kwargs)
+
+def pow(*args, **kwargs):
+    """
+    See full `docs <https://www.tensorflow.org/api_docs/python/tf/math/pow>`_
+    """
+    return tf.pow(*args, **kwargs)
