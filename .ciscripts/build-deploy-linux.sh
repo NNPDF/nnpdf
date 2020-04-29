@@ -8,8 +8,8 @@ set -v
 
 # Set the version for both vp and n3fit
 gitroot=$(git rev-parse --show-toplevel)
-echo "__build__=\"$(git describe)\"" > ${gitroot}/n3fit/src/n3fit/__init__.py
-echo "__build__=\"$(git describe)\"" > ${gitroot}/validphys2/src/validphys/__init__.py
+echo "build_version=\"$(git describe --long)\"" > ${gitroot}/n3fit/src/n3fit/version.py
+echo "build_version=\"$(git describe --long)\"" > ${gitroot}/validphys2/src/validphys/version.py
 
 #Set up netrc file for uploading/downloading
 echo "$NETRC_FILE" | base64 --decode > ~/.netrc
