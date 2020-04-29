@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="n3fit",
-    use_scm_version= {'root' : '..'},
+    use_scm_version= {"root" : "..", "relative_to": __file__},
     setup_requires=['setuptools_scm'],
     package_dir={"": "src"},
     packages=find_packages("src"),
