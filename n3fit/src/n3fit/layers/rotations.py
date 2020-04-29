@@ -19,7 +19,8 @@ class FlavourToEvolution(MetaLayer):
         super().__init__(**kwargs)
     
     def call(self, x_raw):     
-        return self.tensor_product(x_raw, self.rotation_matrix, 1)      
+        rotation_matrix_T = self.transpose(self.rotation_matrix)
+        return self.tensor_product(x_raw, rotation_matrix_T, 1)      
         
 
 class Rotation(MetaLayer):
