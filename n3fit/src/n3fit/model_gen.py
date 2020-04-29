@@ -13,11 +13,17 @@ from n3fit.layers import DIS
 from n3fit.layers import DY
 from n3fit.layers import Mask
 from n3fit.layers import Preprocessing, Rotation, FlavourToEvolution
+from n3fit.layers import ObsRotation
 
 from n3fit.backends import operations
 from n3fit.backends import losses
 from n3fit.backends import MetaLayer
-from n3fit.backends import base_layer_selector, concatenate, Lambda
+from n3fit.backends import (
+    base_layer_selector,
+    regularizer_selector,
+    concatenate,
+    Lambda,
+)
 
 
 def observable_generator(
@@ -134,21 +140,37 @@ def observable_generator(
     out_tr_mask = Mask(bool_mask=spec_dict["trmask"], name=spec_name)
     out_vl_mask = Mask(bool_mask=spec_dict["vlmask"], name=spec_name + "_val")
 
-    def out_tr(pdf_layer):
-        return out_tr_mask(final_obs(pdf_layer))
+    if spec_dict.get("data_transformation") is not None:
+        obsrot = ObsRotation(spec_dict.get("data_transformation"))
 
-    def out_vl(pdf_layer):
-        return out_vl_mask(final_obs(pdf_layer))
+        def out_tr(pdf_layer):
+            return out_tr_mask(obsrot(final_obs(pdf_layer)))
+
+        def out_vl(pdf_layer):
+            return out_vl_mask(obsrot(final_obs(pdf_layer)))
+
+        invcovmat_tr = spec_dict["invcovmat"]
+        loss_tr = losses.l_diaginvcovmat(invcovmat_tr)
+
+        invcovmat_vl = spec_dict["invcovmat_vl"]
+        loss_vl = losses.l_diaginvcovmat(invcovmat_vl)
+    else:
+
+        def out_tr(pdf_layer):
+            return out_tr_mask(final_obs(pdf_layer))
+
+        def out_vl(pdf_layer):
+            return out_vl_mask(final_obs(pdf_layer))
+
+        invcovmat_tr = spec_dict["invcovmat"]
+        loss_tr = losses.l_invcovmat(invcovmat_tr)
+
+        invcovmat_vl = spec_dict["invcovmat_vl"]
+        loss_vl = losses.l_invcovmat(invcovmat_vl)
 
     # Generate the loss function as usual
     invcovmat = spec_dict["invcovmat_true"]
     loss = losses.l_invcovmat(invcovmat)
-
-    invcovmat_tr = spec_dict["invcovmat"]
-    loss_tr = losses.l_invcovmat(invcovmat_tr)
-
-    invcovmat_vl = spec_dict["invcovmat_vl"]
-    loss_vl = losses.l_invcovmat(invcovmat_vl)
 
     layer_info = {
         "inputs": model_inputs,
@@ -171,6 +193,7 @@ def generate_dense_network(
     initializer_name="glorot_normal",
     seed=0,
     dropout_rate=0.0,
+    regularizer=None,
 ):
     """
     Generates a dense network
@@ -199,6 +222,7 @@ def generate_dense_network(
             "units": int(nodes_out),
             "activation": activation,
             "input_shape": (nodes_in,),
+            "kernel_regularizer": regularizer,
         }
 
         layer = base_layer_selector("dense", **arguments)
@@ -271,6 +295,8 @@ def pdfNN_layer_generator(
     out=14,
     seed=None,
     dropout=0.0,
+    regularizer=None,
+    regularizer_args=None,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -366,6 +392,8 @@ def pdfNN_layer_generator(
         # activations functions
         activations = activations(ln)
 
+    if regularizer_args is None:
+        regularizer_args = dict()
     # Safety check
     number_of_layers = len(nodes)
     number_of_activations = len(activations)
@@ -376,8 +404,15 @@ def pdfNN_layer_generator(
     last_layer_nodes = nodes[-1]
 
     if layer_type == "dense":
+        reg = regularizer_selector(regularizer, **regularizer_args)
         list_of_pdf_layers = generate_dense_network(
-            inp, nodes, activations, initializer_name, seed=seed, dropout_rate=dropout
+            inp,
+            nodes,
+            activations,
+            initializer_name,
+            seed=seed,
+            dropout_rate=dropout,
+            regularizer=reg,
         )
     elif layer_type == "dense_per_flavour":
         # Define the basis size attending to the last layer in the network

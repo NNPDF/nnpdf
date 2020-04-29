@@ -77,12 +77,11 @@ def load_adapted_fits_chi2_table(filename):
 
 
 def set_actual_column_level0(df, new_levels):
-    """Set the fitst level of the index to new_levels.
-    Pandas makes it criminally difficult to do this properly."""
+    """Set the first level of the index to new_levels. Note:
+    This is a separate function mostly because it breaks
+    in every patch update of pandas."""
     cols = df.columns
-    levels = np.asarray(cols.levels[0])
-    levels[cols.labels[0]] = new_levels
-    cols.set_levels(levels, inplace=True, level=0)
+    cols.set_levels(new_levels, inplace=True, level=0)
 
 
 #TODO: Find a better place for this function

@@ -1,0 +1,40 @@
+Field/key, Type, Description, Comments
+ID, Integer, TheoryID, Theory enumerating ID
+PTO, Integer, pQCD order, (0/1/2 = LO/NLO/NNLO)
+FNS, Text, Flavour Number Scheme, "e.g FONLL-A/B/C, ZM-VFNS or FFNS"
+DAMP, Integer, FONLL damping factor switch, Boolean
+IC, Integer, Intrinsic charm switch, Boolean
+ModEv, Text, DGLAP solution mode, EXA/EXP/TRN
+XIR, Real, :math:`\xi_R`, :math:`\mu_R/Q`
+XIF,  Real, :math:`\xi_F`, :math:`\mu_F/Q`
+NfFF, Integer, Number of flavours in the FFNS, 3/4/5/6
+MaxNfAs, Integer, :math:`n^{(\alpha_s)}_{f \textrm{max}}`, Max active flavours in :math:`\alpha_s`
+MaxNfPdf, Integer, :math:`n^{(PDF)}_{f \textrm{max}}`, Max active flavours in PDFs
+Q0, Real, :math:`Q_0`, FK Table initial scale
+alphas, Real, Strong coupling, Format: :math:`\alpha_s(Q_{\textrm{ref}})`
+Qref, Real, :math:`Q_{\textrm{ref}}`, Reference scale for :math:`\alpha_S` in GeV
+QED, Integer, QED switch, Boolean
+alphaqed, Real, QED coupling, Format: :math:`\alpha_{QED}(Q_{\textrm{qedref}})`
+Qedref, Real, :math:`Q_{\textrm{qedref}}`, QED reference scale (GeV) 
+SxRes, Integer, small-:math:`x` resummation switch, Boolean
+SxOrd, Text, small-:math:`x` pt switch, "('LL', 'NLL', 'NLL')"
+HQ, Text, HQ mass treatment, POLE/MSBAR
+mc, Real, :math:`c` quark mass :math:`M_c/m_c(Q_{mc})`, Units: GeV
+Qmc, Real, :math:`Q_{mc}`, :math:`c` reference scale (GeV)
+kcThr, Real, :math:`c` production threshold ratio, Ratio to :math:`m_c`
+mb, Real, :math:`b` quark mass :math:`M_b/m_b(Q_{mb})`, Units: GeV
+Qmb, Real, :math:`Q_{mb}`, :math:`b` reference scale (GeV)
+kbThr, Real, :math:`b` production threshold ratio, Ratio to :math:`m_b`
+mt, Real, :math:`t` quark mass :math:`M_t/m_t(Q_{mt})`, Units: GeV
+Qmt, Real, :math:`Q_{mt}`, :math:`t` reference scale (GeV)
+ktThr, Real, :math:`t` production threshold ratio, Ratio to :math:`m_t`
+CKM, Text, CKM matrix elements, Unpacked 3X3 matrix
+MZ, Real, :math:`M_Z`, :math:`Z` mass (GeV)
+MW, Real, :math:`M_W`, :math:`W` mass (GeV)
+GF, Real, :math:`G_F`, Fermi coupling constant
+SIN2TW, Real, :math:`\sin^2\theta_W`,
+TMC, Integer, Target mass corrections, Boolean
+MP, Real, :math:`M_P` Proton mass, Units: GeV
+global_nx, Integer, Global x-grid precision, Default (0) uses set-by-set precision
+EScaleVar, Real, Switch for DGLAP scale variation, Boolean
+Comments, Text, General comments,

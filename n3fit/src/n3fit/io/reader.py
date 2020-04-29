@@ -172,7 +172,14 @@ def common_data_reader_experiment(experiment_c, experiment_spec):
     return parsed_datasets
 
 
-def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None, kpartitions=None):
+def common_data_reader(
+    spec,
+    t0pdfset,
+    replica_seeds=None,
+    trval_seeds=None,
+    kpartitions=None,
+    rotate_diagonal=False
+):
     """
     Wrapper to read the information from validphys object
     This function receives either a validphyis experiment or dataset objects
@@ -225,8 +232,7 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None, kpa
         all_expdatas = [expdata_true.reshape(ndata)]
 
     for replica_seed in replica_seeds:
-        spec_replica = copy.deepcopy(spec)
-        spec_replica_c = spec_replica.load()  # I might need the t0 set here as well
+        spec_replica_c = type(spec_c)(spec_c) # I might need the t0 set here as well
 
         # Replica generation
         mcseed = base_mcseed + replica_seed
@@ -260,21 +266,40 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None, kpa
 
     exp_name = spec.name
     covmat = spec_c.get_covmat()
+    inv_true = np.linalg.inv(covmat)
+
+    if rotate_diagonal:
+        eig, v = np.linalg.eigh(covmat)
+        dt_trans = v.T
+    else:
+        dt_trans = None
 
     # Now it is time to build the masks for the training validation split
     all_dict_out = []
     for expdata, trval_seed in zip(all_expdatas, trval_seeds):
         tr_mask, vl_mask = make_tr_val_mask(datasets, exp_name, seed=trval_seed)
 
-        covmat_tr = covmat[tr_mask].T[tr_mask]
+        if rotate_diagonal:
+            expdata = np.matmul(dt_trans, expdata)
+            # make a 1d array of the diagonal
+            covmat_tr = eig[tr_mask]
+            invcovmat_tr = 1./covmat_tr
+
+            covmat_vl = eig[vl_mask]
+            invcovmat_vl = 1./covmat_vl
+        else:
+            covmat_tr = covmat[tr_mask].T[tr_mask]
+            invcovmat_tr = np.linalg.inv(covmat_tr)
+
+            covmat_vl = covmat[vl_mask].T[vl_mask]
+            invcovmat_vl = np.linalg.inv(covmat_vl)
+
         ndata_tr = np.count_nonzero(tr_mask)
         expdata_tr = expdata[tr_mask].reshape(1, ndata_tr)
-        invcovmat_tr = np.linalg.inv(covmat_tr)
 
-        covmat_vl = covmat[vl_mask].T[vl_mask]
         ndata_vl = np.count_nonzero(vl_mask)
         expdata_vl = expdata[vl_mask].reshape(1, ndata_vl)
-        invcovmat_vl = np.linalg.inv(covmat_vl)
+
 
         for ex_fold in folds["experimental"]:
             folds["training"].append(ex_fold[tr_mask])
@@ -284,7 +309,7 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None, kpa
             "datasets": datasets,
             "name": exp_name,
             "expdata_true": expdata_true,
-            "invcovmat_true": np.linalg.inv(covmat),
+            "invcovmat_true": inv_true,
             "trmask": tr_mask,
             "invcovmat": invcovmat_tr,
             "ndata": ndata_tr,
@@ -295,7 +320,8 @@ def common_data_reader(spec, t0pdfset, replica_seeds=None, trval_seeds=None, kpa
             "expdata_vl": expdata_vl,
             "positivity": False,
             "count_chi2": True,
-            "folds" : folds
+            "folds" : folds,
+            "data_transformation": dt_trans,
         }
         all_dict_out.append(dict_out)
 

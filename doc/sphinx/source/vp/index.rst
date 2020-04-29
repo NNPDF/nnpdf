@@ -14,3 +14,4 @@ vp-guide
    ./nnprofile.md
    ./scripts.md
    ./theorycov/index
+   ./pydataobjs.rst

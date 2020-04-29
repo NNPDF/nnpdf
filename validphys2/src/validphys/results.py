@@ -819,8 +819,33 @@ chi2_stat_labels = {
     'chi2_per_data': r'$\frac{\chi^2}{N_{data}}$'
 }
 
+def experiments_chi2_stats(total_experiments_chi2data):
+    """Compute several estimators from the chi² for an
+    aggregate of experiments:
+
+     - central_mean
+
+     - npoints
+
+     - perreplica_mean
+
+     - perreplica_std
+
+     - chi2_per_data
+    """
+    rep_data, central_result, npoints = total_experiments_chi2data
+    m = central_result.mean()
+    rep_mean = rep_data.central_value().mean()
+    return OrderedDict([
+            ('central_mean'        ,  m),
+            ('npoints'             , npoints),
+            ('chi2_per_data', m/npoints),
+            ('perreplica_mean', rep_mean),
+            ('perreplica_std',  rep_data.std_error().mean()),
+           ])
+
 def chi2_stats(abs_chi2_data):
-    """Compute severa estimators from the chi²:
+    """Compute several estimators from the chi²:
 
      - central_mean
 
@@ -1071,11 +1096,10 @@ def total_experiments_chi2data(pdf: PDF, experiments_chi2):
     ndata = 0
     central_chi2 = 0
     nmembers = len(experiments_chi2[0].replica_result.error_members())  # ugh
-    member_chi2  = np.zeros(nmembers)
+    member_chi2  = np.zeros((nmembers, 1))
 
     for cd in experiments_chi2:
-        # not sure why the transpose or [0] are needed here
-        member_chi2  += cd.replica_result.error_members().T[0]
+        member_chi2  += cd.replica_result.error_members()
         central_chi2 += cd.central_result
         ndata += cd.ndata
     return Chi2Data(pdf.stats_class(member_chi2), central_chi2, ndata)
