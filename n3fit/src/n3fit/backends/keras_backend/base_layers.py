@@ -5,7 +5,7 @@
     'name of the layer' : ( Layer_class, {dictionary of arguments: defaults} )
 """
 
-from tensorflow.keras.layers import Dense, Lambda, LSTM, Dropout, Concatenate, concatenate
+from tensorflow.keras.layers import Dense, Lambda, LSTM, Dropout, Concatenate, concatenate, Input
 from tensorflow.keras.layers import Dense as KerasDense
 from tensorflow import expand_dims
 from tensorflow.keras.regularizers import l1_l2

@@ -1,4 +1,5 @@
 from n3fit.backends import MetaLayer
+from n3fit.backends import operations as op
 
 
 class MSR_Normalization(MetaLayer):
@@ -8,8 +9,8 @@ class MSR_Normalization(MetaLayer):
 
     def __init__(self, output_dim=14, **kwargs):
         self.output_dim = output_dim
-        self.one = self.tensor_ones((1, 1))
-        self.three = 3 * self.tensor_ones((1, 1))
+        self.one = op.numpy_to_tensor([[1.0]])
+        self.three = op.numpy_to_tensor([[3.0]])
         super(MSR_Normalization, self).__init__(**kwargs, name="normalizer")
 
     def call(self, xgrid):
@@ -17,8 +18,8 @@ class MSR_Normalization(MetaLayer):
             Receives as input a tensor with the value of the MSR for each PDF
             and returns a rank-1 tensor with the normalization factor A_i of each flavour
         """
-        x = self.flatten(xgrid)
-        pdf_sr = self.concatenate(
+        x = op.flatten(xgrid)
+        pdf_sr = op.concatenate(
             [
                 self.one,  # photon
                 self.one,  # sigma

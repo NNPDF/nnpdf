@@ -12,7 +12,8 @@ import logging
 import numpy as np
 import n3fit.model_gen as model_gen
 import n3fit.msr as msr_constraints
-from n3fit.backends import MetaModel, clear_backend_state
+from n3fit.backends import MetaModel, clear_backend_state, operations
+from n3fit.backends import Input
 from n3fit.stopping import Stopping
 
 log = logging.getLogger(__name__)
@@ -65,7 +66,7 @@ def _compile_one_model(model_dict, kidx=None, negate_fold=False, **params):
     Compiles one model dictionary. The model dictionary must include a backend-dependent
     model (`model`), a list of losses (`losses`), data to be compared with (`data`) and,
     if applies, a "fold".
-   
+
     Parameters
     ----------
         model_dict: dict
@@ -84,6 +85,7 @@ def _compile_one_model(model_dict, kidx=None, negate_fold=False, **params):
     folded_data = _fold_data(data, fold, kidx, negate_fold=negate_fold)
     model.compile(loss=losses, target_output=folded_data, **params)
 
+
 def _count_data_fold(folds, k_idx):
     """
     Count the number of active datapoints in this fold
@@ -99,6 +101,14 @@ def _count_data_fold(folds, k_idx):
     for fold in folds:
         n += np.count_nonzero(~fold[k_idx])
     return n
+
+
+def _pdf_injection(pdf_layers, observables):
+    """
+    Takes as input a list of output layers and returns a corresponding list
+    where all output layers call the pdf layer at self.pdf_layer
+    """
+    return [f(x) for f, x in zip(observables, pdf_layers)]
 
 
 class ModelTrainer:
@@ -162,6 +172,7 @@ class ModelTrainer:
         self.mode_hyperopt = False
         self.model_file = None
         self.impose_sumrule = True
+        self.hyperkeys = None
         if kfold_parameters is None:
             self.kpartitions = [None]
             self.hyper_threshold = None
@@ -169,11 +180,13 @@ class ModelTrainer:
             self.kpartitions = kfold_parameters["partitions"]
             self.hyper_threshold = kfold_parameters.get("threshold", HYPER_THRESHOLD)
 
-        # Initialize the pdf layer
-        self.layer_pdf = None
+        # Initialize the pdf model
+        self.pdf_model = None
+        self.integrator_input = None
 
         # Initialize the dictionaries which contain all fitting information
         self.input_list = []
+        self.input_sizes = []
         self.training = {
             "output": [],
             "expdata": [],
@@ -294,6 +307,9 @@ class ModelTrainer:
         *Note*: before entering this function the dictionaries contain a list of inputs
             and a list of outputs, but they are not connected.
             This function connects inputs with outputs by injecting the PDF
+            The injection of the PDF is done by using the concatenating all inputs and calling
+            pdf_model on it.
+            This in turn generates an output_layer that needs to be splitted for every experiment.
 
         Compiles the validation and experimental models with fakes optimizers and learning rate
         as they are never trained, but this is needed by some backends
@@ -302,14 +318,19 @@ class ModelTrainer:
         log.info("Generating the Model")
 
         input_list = self.input_list
+        # Generate the concatenation and splitting of the input-output
+        concatenation, splitting = operations.concatenate_split(self.input_sizes)
+        concatenated_input = concatenation(input_list)
+        concatenated_pdf = self.pdf_model.apply_as_layer([concatenated_input])
+        pdf_layers = splitting(concatenated_pdf)
+        # In order to use the pdf_model in subsequents models we need to add the integration_input
+        full_model_input = [self.integrator_input] + input_list
 
         # Loop over all the dictionary models and create the trainig,
         #                 validation, true (data w/o replica) models:
-
         for model_dict in self.list_of_models_dicts:
-            model_dict["model"] = MetaModel(
-                input_list, self._pdf_injection(model_dict["output"])
-            )
+            output = _pdf_injection(pdf_layers, model_dict["output"])
+            model_dict["model"] = MetaModel(full_model_input, output)
 
         if self.model_file:
             # If a model file is given, load the weights from there
@@ -333,13 +354,6 @@ class ModelTrainer:
             self.training[key] = []
             self.validation[key] = []
             self.experimental[key] = []
-
-    def _pdf_injection(self, olist):
-        """
-        Takes as input a list of output layers and returns a corresponding list
-        where all output layers call the pdf layer at self.pdf_layer
-        """
-        return [o(self.layer_pdf) for o in olist]
 
     ############################################################################
     # # Parametizable functions                                                #
@@ -375,6 +389,7 @@ class ModelTrainer:
 
             # Save the input(s) corresponding to this experiment
             self.input_list += exp_layer["inputs"]
+            self.input_sizes.append(exp_layer["experiment_xsize"])
 
             # Now save the observable layer, the losses and the experimental data
             self.training["output"].append(exp_layer["output_tr"])
@@ -396,6 +411,7 @@ class ModelTrainer:
             )
             # The input list is still common
             self.input_list += pos_layer["inputs"]
+            self.input_sizes.append(pos_layer["experiment_xsize"])
 
             # The positivity all falls to the training
             self.training["output"].append(pos_layer["output_tr"])
@@ -465,21 +481,28 @@ class ModelTrainer:
             regularizer_args=regularizer_args
         )
 
-        integrator_input = None
+        # Create a placeholder input for the pdf model
+        # TODO: eventually this (as well as sumrule) should be part of model_gen
+        placeholder_input = Input(shape=(None, 1), batch_size=1)
+
         if self.impose_sumrule:
             # Impose the sumrule
             # Inyect here momentum sum rule, effecively modifying layer_pdf
             layer_pdf, integrator_input = msr_constraints.msr_impose(
                 layers["fitbasis"], layer_pdf
             )
-            self.input_list.append(integrator_input)
+            self.integrator_input = integrator_input
+            model_input = [integrator_input, placeholder_input]
+        else:
+            model_input = [placeholder_input]
 
-        self.layer_pdf = layer_pdf
-
-        return layers, integrator_input
+        # Generate teh PDF model, which takes as input [integration_input, placeholder]
+        # Since the integration is fixed and the placeholder is free, when calling the model
+        # only the plaholder needs to be inputted
+        self.pdf_model = MetaModel(model_input, layer_pdf(placeholder_input))
 
     def _toggle_fold(self, datasets, kidx=0, off=False, recompile=False):
-        """ Toggle the input dataset on (off) and turn all other datasets off (on) 
+        """ Toggle the input dataset on (off) and turn all other datasets off (on)
 
         Parameters
         ----------
@@ -639,8 +662,8 @@ class ModelTrainer:
         # Fill the 3 dictionaries (training, validation, experimental) with the layers and losses
         self._generate_observables(params["pos_multiplier"], params["pos_initial"])
 
-        # Generate the pdf layer
-        layers, integrator_input = self._generate_pdf(
+        # Generate the pdf model
+        self._generate_pdf(
             params["nodes_per_layer"],
             params["activation_per_layer"],
             params["initializer"],
@@ -710,7 +733,10 @@ class ModelTrainer:
                 # Toggle the fold
                 self._toggle_fold(datasets, kidx=k, off=False, recompile=True)
                 # Compute the hyperopt loss
-                hyper_loss = self.experimental["model"].compute_losses()["loss"]/self.experimental["ndata"]
+                hyper_loss = (
+                    self.experimental["model"].compute_losses()["loss"]
+                    / self.experimental["ndata"]
+                )
                 hyper_losses.append(hyper_loss)
                 # Check whether this run is any good, if not, get out
                 log.info(f"fold: {k}")
@@ -737,14 +763,13 @@ class ModelTrainer:
             std = np.var(hyper_losses)
             dict_out["loss"] = ave
             dict_out["kfold_meta"] = {
-                    'training_losses' : l_train,
-                    'validation_losses': l_valid,
-                    'experimental_losses': l_exper,
-                    'hyper_losses': hyper_losses,
-                    'hyper_avg' : ave,
-                    'hyper_std' : std,
-                    }
-            #             arc_lengths = msr_constraints.compute_arclength(layers["fitbasis"])
+                "training_losses": l_train,
+                "validation_losses": l_valid,
+                "experimental_losses": l_exper,
+                "hyper_losses": hyper_losses,
+                "hyper_avg": ave,
+                "hyper_std": std,
+            }
             # If we are using hyperopt we don't need to output any other information
             return dict_out
 
@@ -754,11 +779,9 @@ class ModelTrainer:
         # to generate the output pdf, check the arc-length, gather stats, etc
         # some of them are already attributes of the class so they are redundant here
         # but I think it's good to present them explicitly
-        dict_out["layer_pdf"] = self.layer_pdf
-        dict_out["layers"] = layers
-        dict_out["integrator_input"] = integrator_input
         dict_out["stopping_object"] = stopping_object
         dict_out["experimental"] = self.experimental
         dict_out["training"] = self.training
+        dict_out["pdf_model"] = self.pdf_model
 
         return dict_out

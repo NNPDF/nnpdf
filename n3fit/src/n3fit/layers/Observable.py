@@ -1,5 +1,7 @@
 from n3fit.backends import MetaLayer
+import tensorflow as tf
 from abc import abstractmethod, ABC
+from n3fit.backends import operations as op
 
 
 class Observable(MetaLayer, ABC):
@@ -25,7 +27,7 @@ class Observable(MetaLayer, ABC):
         self.nfl = nfl
 
         self.output_dim = output_dim
-        self.fktable = self.np_to_tensor(fktable)
+        self.fktable = op.numpy_to_tensor(fktable)
         self.xgrid_size = self.fktable.shape[-1]
 
         self.gen_basis(basis)
@@ -34,6 +36,9 @@ class Observable(MetaLayer, ABC):
 
     def compute_output_shape(self, input_shape):
         return (self.output_dim, None)
+
+    def digest_pdf(self, pdf):
+        return tf.squeeze(pdf, axis=0)
 
     # Overridables
     @abstractmethod

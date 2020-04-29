@@ -60,6 +60,7 @@ def observable_generator(
     spec_name = spec_dict["name"]
     model_inputs = []
     model_obs = []
+    dataset_xsizes = []
 
     # The first step is to generate an observable layer for each given datasets
     for dataset_dict in spec_dict["datasets"]:
@@ -93,6 +94,7 @@ def observable_generator(
                 input_shape=(14,),
             )
             obs_list.append((input_layer, obs_layer))
+            dataset_xsizes.append(input_layer.shape[1])
 
         # This mask does usually nothing but it is useful in order to turn off datasets during kfolding
         mask_one = Mask(bool_mask=np.ones(ndata, dtype=np.bool), batch_it = False, name=f"{dataname}_mask")
@@ -103,12 +105,18 @@ def observable_generator(
         # as well as the mask to turn on and off k-folds
         model_obs.append((op, obs_list, mask_one))
 
-    def final_obs(pdf_layer):
+    from tensorflow import split # TODO
+
+    def final_obs(pdf_layer): # TODO
+        """ pdf_layer is already a tensor """
         all_ops = []
+        all_pdfs = split(pdf_layer, dataset_xsizes, axis=1)
+        i = 0
         for operation, observables, mask in model_obs:
             all_obs = []
             for i_layer, o_layer in observables:
-                all_obs.append(o_layer(pdf_layer(i_layer)))
+                all_obs.append(o_layer(all_pdfs[i]))
+                i += 1
             result = operation(all_obs)
             all_ops.append(mask(result))
         if len(all_ops) == 1:
@@ -133,6 +141,7 @@ def observable_generator(
             "inputs": model_inputs,
             "output_tr": out_tr_positivity,
             "loss_tr": losses.l_positivity(),
+            "experiment_xsize" : sum(dataset_xsizes) # TODO
         }
         return layer_info
 
@@ -180,6 +189,7 @@ def observable_generator(
         "loss_tr": loss_tr,
         "output_vl": out_vl,
         "loss_vl": loss_vl,
+        "experiment_xsize" : sum(dataset_xsizes) # TODO
     }
 
     return layer_info
