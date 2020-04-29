@@ -3,10 +3,7 @@
 """
 
 import os
-os.environ["KMP_BLOCKTIME"]   = "0"
-os.environ["KMP_SETTINGS"]    = "1"
-os.environ["KMP_AFFINITY"]    = "granularity=fine,verbose,compact,1,0"
-#os.environ["OMP_NUM_THREADS"] = "4"
+from psutil import cpu_count
 
 import random as rn
 import numpy as np
@@ -47,6 +44,16 @@ def clear_backend_state():
     """
     print("Clearing session")
 
+    # Find how many cores we have and how many threads per core
+    cores = cpu_count(logical=False)
+    logical = cpu_count(logical=True)
+    tpc = int(logical/cores)
+
+    os.environ["KMP_BLOCKTIME"]   = "0"
+    os.environ["KMP_SETTINGS"]    = "1"
+    os.environ["KMP_AFFINITY"]    = "granularity=fine,verbose,compact,1,0"
+    os.environ["OMP_NUM_THREADS"] = str(cores)
+
     K.clear_session()
-    tf.config.threading.set_inter_op_parallelism_threads(2)
-    tf.config.threading.set_intra_op_parallelism_threads(4) # number of cores
+    tf.config.threading.set_inter_op_parallelism_threads(tpc)
+    tf.config.threading.set_intra_op_parallelism_threads(cores)
