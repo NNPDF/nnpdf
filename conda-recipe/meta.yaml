@@ -18,6 +18,7 @@ requirements:
         - sqlite
         - gsl         # Gsl doesn't link openblas on old debian 7
         - libarchive
+        - setuptools_scm
         - yaml-cpp
         - apfel >=3   # see https://github.com/scarrazza/apfel
         - python
