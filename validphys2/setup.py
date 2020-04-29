@@ -11,6 +11,8 @@ with open('README.md') as f:
 
 setup(name= "validphys",
       version = '2.0b2',
+      use_scm_version= {'root' : '..'},
+      setup_requires=['setuptools_scm'],
       description = "NNPDF analysis framework",
       author = "Zahari Kassabov",
       author_email = "kassabov@to.infn.it",

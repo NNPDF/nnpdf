@@ -11,6 +11,7 @@ requirements:
         - {{ compiler("c") }}
         - swig ==3.0.10
         - cmake
+        - setuptools_scm
         - pkg-config
     host:
         - lhapdf      # with python3.6 wrapper
