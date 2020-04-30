@@ -350,6 +350,7 @@ class ModelTrainer:
         or be obliterated when/if the backend state is reset
         """
         self.input_list = []
+        self.input_sizes = []
         for key in ["output", "losses"]:
             self.training[key] = []
             self.validation[key] = []
