@@ -16,6 +16,17 @@ from n3fit.backends import MetaModel, clear_backend_state, operations
 from n3fit.backends import Input
 from n3fit.stopping import Stopping
 
+from time import time
+def timefun(fun):
+
+    def newfun(*args, **kwargs):
+        aa = time()
+        res = fun(*args, **kwargs)
+        bb = time()
+        print(f"Time: {bb-aa:.4}")
+        return res
+    return newfun
+
 log = logging.getLogger(__name__)
 HYPER_THRESHOLD = 3.0
 
@@ -324,7 +335,10 @@ class ModelTrainer:
         concatenated_pdf = self.pdf_model.apply_as_layer([concatenated_input])
         pdf_layers = splitting(concatenated_pdf)
         # In order to use the pdf_model in subsequents models we need to add the integration_input
-        full_model_input = [self.integrator_input] + input_list
+        if self.impose_sumrule:
+            full_model_input = [self.integrator_input] + input_list
+        else:
+            full_model_input = input_list
 
         # Loop over all the dictionary models and create the trainig,
         #                 validation, true (data w/o replica) models:
@@ -574,10 +588,12 @@ class ModelTrainer:
         pos_multiplier = self.training["pos_multiplier"]
         # Train the model for the number of epochs given
         for epoch in range(epochs):
-            out = training_model.perform_fit(verbose=False)
+            out = timefun(training_model.perform_fit)(verbose=False)
             print_stats = False
 
             if (epoch + 1) % 100 == 0:
+                import ipdb
+                ipdb.set_trace()
                 print_stats = True
                 training_model.multiply_weights(
                     self.training["posdatasets"], pos_multiplier
