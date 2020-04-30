@@ -3,6 +3,7 @@ from n3fit.backends import constraints
 from n3fit.backends import operations as op
 
 BASIS_SIZE = 8
+DEFAULT_TRAINABLE = True
 
 
 class Preprocessing(MetaLayer):
@@ -45,8 +46,6 @@ class Preprocessing(MetaLayer):
         self.flav_info = flav_info
         self.seed = seed
         self.initializer = initializer
-        self.smallx = None
-        self.largex = None
         self.kernel = []
         # super(MetaLayer, self).__init__(**kwargs)
         super().__init__(**kwargs)
@@ -58,17 +57,17 @@ class Preprocessing(MetaLayer):
 
         Parameters
         ----------
-            `weight_name`: str
+            weight_name: str
                 name to be given to the generated weight
-            `kind`: str
+            kind: str
                 where to find the limits of the weight in the dictionary
-            `dictionary`: dict
+            dictionary: dict
                 dictionary defining the weight, usually one entry from `flav_info`
         """
         limits = dictionary[kind]
         ldo = limits[0]
         lup = limits[1]
-        trainable = dictionary.get("trainable", True)
+        trainable = dictionary.get("trainable", DEFAULT_TRAINABLE)
         # Set the initializer and move the seed one up
         initializer = MetaLayer.select_initializer(
             self.initializer, minval=ldo, maxval=lup, seed=self.seed
@@ -77,6 +76,7 @@ class Preprocessing(MetaLayer):
         # If we are training, constrain the weights to be within the limits
         if trainable:
             weight_constraint = constraints.MinMaxWeight(ldo, lup)
+            self.trainable_preprocessing = True
         else:
             weight_constraint = None
         # Generate the new trainable (or not) parameter
@@ -88,41 +88,30 @@ class Preprocessing(MetaLayer):
             constraint=weight_constraint,
         )
         self.kernel.append(newpar)
-        # TODO do this better
-        return newpar
 
     def build(self, input_shape):
         # Run through the whole basis
-        alphas = []
-        betas = []
         for flav_dict in self.flav_info:
             flav_name = flav_dict["fl"]
             alpha_name = f"alpha_{flav_name}"
             beta_name = f"beta_{flav_name}"
-            alpha = 1.0 - self.generate_weight(alpha_name, "smallx", flav_dict)
-            beta = self.generate_weight(beta_name, "largex", flav_dict)
-            alphas.append(alpha)
-            betas.append(beta)
-        self.smallx = op.concatenate(alphas)
-        self.largex = op.concatenate(betas)
-
+            self.generate_weight(alpha_name, "smallx", flav_dict)
+            self.generate_weight(beta_name, "largex", flav_dict)
         super(Preprocessing, self).build(input_shape)
 
     def meta_call(self, x, **kwargs):
+        # This operations warns of possible retracing, but doesn't seem to actually happen
         pdf_raw = op.concatenate(
             [
-                x ** (1 - self.kernel[0][0]) * (1 - x) ** self.kernel[1][0],  # sigma
-                x ** (1 - self.kernel[2][0]) * (1 - x) ** self.kernel[3][0],  # g
-                x ** (1 - self.kernel[4][0]) * (1 - x) ** self.kernel[5][0],  # v
-                x ** (1 - self.kernel[6][0]) * (1 - x) ** self.kernel[7][0],  # v3
-                x ** (1 - self.kernel[8][0]) * (1 - x) ** self.kernel[9][0],  # v8
-                x ** (1 - self.kernel[10][0]) * (1 - x) ** self.kernel[11][0],  # t3 = sigma
-                x ** (1 - self.kernel[12][0]) * (1 - x) ** self.kernel[13][0],  # t8 = sigma
-                x ** (1 - self.kernel[14][0]) * (1 - x) ** self.kernel[15][0],  # t15 c-
+                x ** (1 - self.kernel[0]) * (1 - x) ** self.kernel[1],  # sigma
+                x ** (1 - self.kernel[2]) * (1 - x) ** self.kernel[3],  # g
+                x ** (1 - self.kernel[4]) * (1 - x) ** self.kernel[5],  # v
+                x ** (1 - self.kernel[6]) * (1 - x) ** self.kernel[7],  # v3
+                x ** (1 - self.kernel[8]) * (1 - x) ** self.kernel[9],  # v8
+                x ** (1 - self.kernel[10]) * (1 - x) ** self.kernel[11],  # t3 = sigma
+                x ** (1 - self.kernel[12]) * (1 - x) ** self.kernel[13],  # t8 = sigma
+                x ** (1 - self.kernel[14]) * (1 - x) ** self.kernel[15],  # t15 c-
             ],
             axis=-1,
         )
         return pdf_raw
-#         smallx_factor = op.pow(x, self.smallx)
-#         largex_factor = op.pow(1.0-x, self.largex)
-#         return smallx_factor*largex_factor
