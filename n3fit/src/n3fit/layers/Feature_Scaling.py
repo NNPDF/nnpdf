@@ -60,7 +60,7 @@ class Feature_Scaling(MetaLayer):
 
         if self.scaler == 'MinMaxScaler':
             scaled_xgrids = load_fk_tables(fk_dis_datasets)
-            self.max_ /= scaled_xgrids.max()
+            self.max_ = scaled_xgrids.max()
 
         
         elif self.scaler == 'GaussianScaler':
