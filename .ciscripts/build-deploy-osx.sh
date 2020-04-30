@@ -7,8 +7,13 @@ echo "$NETRC_FILE" | base64 --decode > ~/.netrc
 
 # Set the version for both vp and n3fit
 gitroot=$(git rev-parse --show-toplevel)
-echo "build_version=\"$(git describe --long)\"" > ${gitroot}/n3fit/src/n3fit/version.py
-echo "build_version=\"$(git describe --long)\"" > ${gitroot}/validphys2/src/validphys/version.py
+gitversion=$(git describe --long)
+tag=$(git describe --abbrev=0 --tags)
+gitversion=${gitversion/${tag}-/${tag}.}
+githash=$(git rev-parse --short HEAD)
+gitversion=${gitversion/-g${githash}/+g${githash}}
+echo "build_version=\"${gitversion}\"" > ${gitroot}/n3fit/src/n3fit/version.py
+echo "build_version=\"${gitversion}\"" > ${gitroot}/validphys2/src/validphys/version.py
 
 conda build -q conda-recipe
 if [ $? != 0 ]; then
