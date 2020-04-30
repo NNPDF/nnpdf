@@ -81,9 +81,21 @@ def check_consistent_hyperscan_options(hyperopt, hyperscan, fitting):
     if hyperopt is not None and fitting["genrep"]:
         raise CheckError("During hyperoptimization we cannot generate replicas (genrep=false)")
 
+@make_argcheck
+def check_consistent_basis(fitting):
+    allowed_labels = [
+        'u','ubar', 'd', 'dbar', 's', 'sbar', 'c', 'g',
+        'sng', 'v', 'v3', 'v8', 't3', 't8', 'cp'
+    ]
+    for flav_dict in fitting['basis']:
+        flav_name = flav_dict['fl']
+        if flav_name not in allowed_labels:
+            raise CheckError(f"{flav_name} is not a valid flavour name")    
+
 # Action to be called by valid phys
 # All information defining the NN should come here in the "parameters" dict
 @check_consistent_hyperscan_options
+@check_consistent_basis
 def performfit(
     fitting,
     experiments,
