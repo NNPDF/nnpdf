@@ -588,12 +588,10 @@ class ModelTrainer:
         pos_multiplier = self.training["pos_multiplier"]
         # Train the model for the number of epochs given
         for epoch in range(epochs):
-            out = timefun(training_model.perform_fit)(verbose=False)
+            out = training_model.perform_fit(verbose=False)
             print_stats = False
 
             if (epoch + 1) % 100 == 0:
-                import ipdb
-                ipdb.set_trace()
                 print_stats = True
                 training_model.multiply_weights(
                     self.training["posdatasets"], pos_multiplier
