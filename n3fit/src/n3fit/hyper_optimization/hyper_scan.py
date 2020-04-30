@@ -273,7 +273,7 @@ class HyperScanner:
         lr_key = "learning_rate"
 
         # Check which optimizers are we using
-        optimizer_dict = MetaModel.optimizers
+        optimizer_dict = MetaModel.accepted_optimizers
         if names == "ALL":
             names = optimizer_dict.keys()
 
