@@ -69,6 +69,8 @@ class MetaModel(Model):
             keyword arguments to pass directly to Model
     """
 
+    accepted_optimizers = optimizers
+
     def __init__(self, input_tensors, output_tensors, **kwargs):
         self.has_dataset = False
 
