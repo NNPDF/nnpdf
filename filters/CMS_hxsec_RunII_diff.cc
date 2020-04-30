@@ -1,6 +1,9 @@
 /*
 Reference:
-   [1812.06504]
+   arXiv:     [1812.06504]
+   hepdata:   https://www.hepdata.net/record/ins1709330
+   published: Phys.Lett. B792 (2019) 369-396 2019 
+Description:
    Differential spectra for the combined Higgs boson production and decay in the
    H -> gamma gamma, H -> Z Z and H -> b bbar channels, measured as a function 
    of the transverse momentum of the Higgs or of the jet. An additional 
@@ -14,6 +17,7 @@ Reference:
     - CMS_hxsec_RunII_pTH: combined pT spectrum
     - CMS_hxsec_RunII_pTH_ggH: ggH pT spectrum
     - CMS_hxsec_RunII_pTjet: combined pTjet spectrum
+   The information on the signal strengths is retrieved from the hepdata entry
 */
 
 #include "CMS_hxsec_RunII_diff.h"
@@ -52,18 +56,25 @@ void CMS_hxsec_RunII_diff_pTHFilter::ReadData()
   string line;
 
   double* Sys = new double[fNData];
+  double* SM_cov = new double[fNData];
   double** corrmat = new double*[fNData];
   double** syscor  = new double*[fNData];
   
   for(int i=0; i<fNData; i++)
     {
       double ddum;
+      double SS_cv, SS_er;
       getline(f1,line);
       istringstream lstream(line);
       fKin1[i] = 0.;
       fKin2[i] = 0.;
       fKin3[i] = 0.;
-      lstream >> ddum >> ddum >> fData[i] >> Sys[i];
+      lstream >> ddum >> ddum >> fData[i] >> Sys[i]
+	      >> SS_cv >> SS_er;
+
+      cout << fData[i]/SS_cv << endl;
+      SM_cov[i] = fData[i]/SS_cv * SS_er/SS_cv;
+
       fStat[i] = 0.0;
 	     
       corrmat[i] = new double[fNData];
@@ -103,6 +114,16 @@ void CMS_hxsec_RunII_diff_pTHFilter::ReadData()
 	}
     } 
 
+  //Generate SM covariance matrix
+  for(int i=0; i< fNData; i++)
+    {
+      for (int j=0; j< fNData; j++)
+	{
+	  cout << SM_cov[i]*SM_cov[j] << "   ";
+	}
+      cout << endl;
+    }
+  
   f1.close();
   f2.close();
 }
@@ -141,18 +162,25 @@ void CMS_hxsec_RunII_diff_pTH_ggHFilter::ReadData()
   string line;
 
   double* Sys = new double[fNData];
+  double* SM_cov = new double[fNData];
   double** corrmat = new double*[fNData];
   double** syscor  = new double*[fNData];
   
   for(int i=0; i<fNData; i++)
     {
       double ddum;
+      double SS_cv, SS_er;
       getline(f1,line);
       istringstream lstream(line);
       fKin1[i] = 0.;
       fKin2[i] = 0.;
       fKin3[i] = 0.;
-      lstream >> ddum >> ddum >> fData[i] >> Sys[i];
+      lstream >> ddum >> ddum >> fData[i] >> Sys[i]
+	      >> SS_cv >> SS_er;
+
+      cout << fData[i]/SS_cv << endl;
+      SM_cov[i] = fData[i]/SS_cv * SS_er/SS_cv;
+
       fStat[i] = 0.0;
 	     
       corrmat[i] = new double[fNData];
@@ -191,6 +219,16 @@ void CMS_hxsec_RunII_diff_pTH_ggHFilter::ReadData()
 	  fSys[i][j].name = "CORR";
 	}
     } 
+
+  //Generate SM covariance matrix
+  for(int i=0; i< fNData; i++)
+    {
+      for (int j=0; j< fNData; j++)
+	{
+	  cout << SM_cov[i]*SM_cov[j] << "   ";
+	}
+      cout << endl;
+    }
 
   f1.close();
   f2.close();
@@ -231,18 +269,25 @@ void CMS_hxsec_RunII_diff_pTjetFilter::ReadData()
   string line;
 
   double* Sys = new double[fNData];
+  double* SM_cov = new double[fNData];
   double** corrmat = new double*[fNData];
   double** syscor  = new double*[fNData];
   
   for(int i=0; i<fNData; i++)
     {
       double ddum;
+      double SS_cv, SS_er;
       getline(f1,line);
       istringstream lstream(line);
       fKin1[i] = 0.;
       fKin2[i] = 0.;
       fKin3[i] = 0.;
-      lstream >> ddum >> ddum >> fData[i] >> Sys[i];
+      lstream >> ddum >> ddum >> fData[i] >> Sys[i]
+	      >> SS_cv >> SS_er;
+
+      cout << fData[i]/SS_cv << endl;
+      SM_cov[i] = fData[i]/SS_cv * SS_er/SS_cv;
+
       fStat[i] = 0.0;
 	     
       corrmat[i] = new double[fNData];
@@ -281,6 +326,16 @@ void CMS_hxsec_RunII_diff_pTjetFilter::ReadData()
 	  fSys[i][j].name = "CORR";
 	}
     } 
+
+  //Generate SM covariance matrix
+  for(int i=0; i< fNData; i++)
+    {
+      for (int j=0; j< fNData; j++)
+	{
+	  cout << SM_cov[i]*SM_cov[j] << "   ";
+	}
+      cout << endl;
+    }
 
   f1.close();
   f2.close();
