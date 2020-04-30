@@ -245,8 +245,8 @@ class MetaModel(Model):
         if target_output is not None:
             if not isinstance(target_output, list):
                 target_output = [target_output]
-            self.target_tensors = target_output
-        super(MetaModel, self).compile(optimizer=opt, loss=loss)
+            self.target_tensors = None # TODO TF 2.2 target_output
+        super(MetaModel, self).compile(optimizer=opt, target_tensors=target_output, loss=loss)
 
     def set_masks_to(self, names, val=0.0):
         """ Set all mask value to the selected value
