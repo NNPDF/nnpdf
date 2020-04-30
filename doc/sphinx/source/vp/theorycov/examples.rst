@@ -234,6 +234,7 @@ In ``theoryconfig`` we again provide the relevant theories, in the correct order
 For each dataspec we can give the ``_experiments_list_nlo``. 
 
 .. code-block::  yaml
+   :linenos:
 
    meta:
        title: Theory shift validation test, 5 point, DY-only, QR
@@ -400,7 +401,7 @@ For each dataspec we can give the ``_experiments_list_nlo``.
    theoryconfig:
 
       theoryid: 163
-      point_prescription: '5-point'
+      point_prescription: '5 point'
 
       theoryids:
         from_: scale_variation_theories
