@@ -402,5 +402,5 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLASCMS_hxsec_RunIFilter());
 
   // *********************** ATLAS Z (8 TeV) 3D **********************************
-  target.push_back(new ATLAS_Z_3D_8TEVFilter());
+  target.push_back(new ATLAS_Z_3D_EMU_CRAP_8TEVFilter());
 }
