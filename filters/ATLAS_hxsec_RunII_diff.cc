@@ -142,15 +142,33 @@ void ATLAS_hxsec_RunII_diff_pTHFilter::ReadData()
   //Read central values and total uncertainties
   string line;
   
+  double* SM_cov = new double[fNData];
+
   for(int i=0; i<fNData; i++)
     {
       double ddum;
+      double SS_cv, SS_er;
       getline(f1,line);
       istringstream lstream(line);
       fKin1[i] = 0.;
       fKin2[i] = 0.;
       fKin3[i] = 0.;
-      lstream >> ddum >> ddum >> fData[i] >> fStat[i];
+      lstream >> ddum >> ddum >> fData[i] >> fStat[i]
+	      >> SS_cv >> SS_er;
+
+      cout << fData[i]/SS_cv << endl;
+      SM_cov[i] = fData[i]/SS_cv * SS_er/SS_cv;
+      
+    }
+
+  //Generate SM covariance matrix
+  for(int i=0; i< fNData; i++)
+    {
+      for (int j=0; j< fNData; j++)
+	{
+	  cout << SM_cov[i]*SM_cov[j] << "   ";
+	}
+      cout << endl;
     }
 
   f1.close();
