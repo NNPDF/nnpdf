@@ -23,3 +23,12 @@ public: ATLAS_hxsec_RunII_diffFilter():
 private:
   void ReadData();
 };
+
+class ATLAS_hxsec_RunII_diff_pTHFilter: public CommonData
+{
+public: ATLAS_hxsec_RunII_diff_pTHFilter():
+  CommonData("ATLAS_hxsec_RunII_diff_pTH") { ReadData(); }
+
+private:
+  void ReadData();
+};
