@@ -160,10 +160,10 @@ def test_rotation():
     {'fl':'c'},
     {'fl':'g'},
 ]
-    # Apply the rotation to a numpy vector
-    x = np.ones(8)
-    mat = rotation(flav_info)
-    res_np = np.dot(mat,x)
+    # Apply the rotation using numpy tensordot
+    x = np.ones(8) # Vector in the flavour basis v_i
+    mat = rotation(flav_info) # Rotation matrix R_ij, i=flavour, j=evolution
+    res_np = np.tensordot(mat,x,(0,0)) # Vector in the evolution basis u_j=R_ij*vi
     
     # Apply the rotation through the rotation layer
     x = op.numpy_to_tensor(x)

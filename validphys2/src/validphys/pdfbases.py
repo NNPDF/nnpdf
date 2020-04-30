@@ -397,9 +397,10 @@ r'\bar{d}': {'dbar':1},
 
 
 def rotation(flav_info):
-    """Returnd a rotation matrix which takes from the flavour to the evolution basis,
-    from (u, ubar, d, dbar, s, sbar, c, g) to (sigma, g, v, v3, v8, t3, t8, cp) 
-    with 
+    """Return a rotation matrix R_{ij} which takes from the flavour to the evolution basis,
+    from (u, ubar, d, dbar, s, sbar, c, g) to (sigma, g, v, v3, v8, t3, t8, cp), where
+    i is the flavour index and j is the evolution index. 
+    The evolution basis is defined as 
     cp = c + cbar = 2c
     and
     sigma = u + ubar + d + dbar + s + sbar + cp  
@@ -437,5 +438,6 @@ def rotation(flav_info):
             mat = np.identity(8)
             break    
 
-    mat = np.asarray(mat)
-    return mat.reshape(8,8)    
+    mat = np.asarray(mat).reshape(8,8)
+    # Return the transpose of the matrix, to have the first index referring to flavour
+    return mat.transpose()    
