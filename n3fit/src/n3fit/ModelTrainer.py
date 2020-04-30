@@ -12,7 +12,7 @@ import logging
 import numpy as np
 import n3fit.model_gen as model_gen
 import n3fit.msr as msr_constraints
-from n3fit.backends import MetaModel, clear_backend_state
+from n3fit.backends import MetaModel, clear_backend_state, operations
 from n3fit.stopping import Stopping
 
 log = logging.getLogger(__name__)
@@ -465,15 +465,18 @@ class ModelTrainer:
             regularizer_args=regularizer_args
         )
 
-        integrator_input = None
         if self.impose_sumrule:
             # Impose the sumrule
             # Inyect here momentum sum rule, effecively modifying layer_pdf
             layer_pdf, integrator_input = msr_constraints.msr_impose(
                 layers["fitbasis"], layer_pdf
             )
-            self.input_list.append(integrator_input)
+        else:
+            nx = int(2e3)
+            xgrid, dum = msr_constraints.gen_integration_input(nx)
+            integrator_input = operations.numpy_to_input(xgrid)    
 
+        self.input_list.append(integrator_input)
         self.layer_pdf = layer_pdf
 
         return layers, integrator_input
