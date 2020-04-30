@@ -6,7 +6,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras import backend as K
 
-from validphys.loader import FallbackLoader as Loader
+from validphys.loader import Loader
 
 l = Loader()
 

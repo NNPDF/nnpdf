@@ -4,6 +4,9 @@ from n3fit.backends import MetaLayer
 from tensorflow.keras import backend as K
 import tensorflow as tf
 
+from validphys.fkparser import load_fktable
+from validphys.loader import FallbackLoader as Loader
+
 fk_dis_datasets=[    
     'NMCPD_D',
     # 'NMCPD_P',
@@ -64,7 +67,7 @@ class Feature_Scaling(MetaLayer):
             scaled_xgrids = load_fk_tables(fk_dis_datasets)
             min_ = scaled_xgrids.min()
             self.max_ = scaled_xgrids.max()
-            self.mean = scaled_xgrids.mean()
+            self.mean_ = scaled_xgrids.mean()
             self.scale_ = (1- -1)/(self.max_ - min_)
 
         super().__init__(**kwargs)
@@ -79,7 +82,7 @@ class Feature_Scaling(MetaLayer):
 
         if self.scaler == "MinMaxScaler":
             scaled_xgrids = scaled_xgrids + scaled_xgrids**0.4 + scaled_xgrids**0.3 + 0.5*scaled_xgrids**0.2
-            scaled_xgrids /= self.max_
+            scaled_xgrids = self.max_
             scaled_xgrids *= 2
             scaled_xgrids -= 1
 
@@ -90,6 +93,6 @@ class Feature_Scaling(MetaLayer):
             scaled_xgrids *= 2
             scaled_xgrids -= 1
             
-            scaled_xgrids = np.exp((scaled_xgrids-self.mean_)**2 ) * scaled_xgrids
+            scaled_xgrids = K.exp((scaled_xgrids-self.mean_)**2 ) * scaled_xgrids
                 
         return scaled_xgrids
