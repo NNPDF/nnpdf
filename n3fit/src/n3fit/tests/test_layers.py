@@ -162,11 +162,13 @@ def test_rotation():
 ]
     # Apply the rotation using numpy tensordot
     x = np.ones(8) # Vector in the flavour basis v_i
+    x = np.expand_dims(x,axis=[0,1]) # Give to the input the shape (1,1,8)
     mat = rotation(flav_info) # Rotation matrix R_ij, i=flavour, j=evolution
-    res_np = np.tensordot(mat,x,(0,0)) # Vector in the evolution basis u_j=R_ij*vi
+    res_np = np.tensordot(x,mat,(2,0)) # Vector in the evolution basis u_j=R_ij*vi
     
     # Apply the rotation through the rotation layer
     x = op.numpy_to_tensor(x)
     rotmat = layers.FlavourToEvolution(flav_info)
     res_layer = rotmat(x)
     assert np.alltrue(res_np==res_layer)
+    
