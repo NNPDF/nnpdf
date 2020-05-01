@@ -116,6 +116,90 @@ void ATLAS_Z_3D_EMU_CRAP_8TEVFilter::ReadData()
 }
 
 //Forward rapidity measurement (electron only)
+void ATLAS_Z_3D_ELE_HRAP_8TEVFilter::ReadData()
+{
+  // Opening files
+  fstream f;
+  
+  const double convfact = 1000.; //Conversion factor from pb to fb
+  const int ncorrsys = 331;
 
+  stringstream datafile("");
+  datafile << dataPath() << "rawdata/ATLAS_Z_3D_8TEV/Table4.csv";
+  f.open(datafile.str().c_str(), ios::in);
+  
+  if (f.fail())
+    {
+      cerr << "Error opening data file " << datafile.str() << endl;
+      exit(-1);
+    }
+  
+  string line;
+  double ddum;
+  double sys;
+  char comma;
+  
+  //Skip 15 header lines
+  for (int i = 0; i < 15; i++)
+    {
+      getline(f, line);
+    }
 
-///////TO BE IMPLEMENTED
+  //Skip 458 data points for central rapidity
+  for(int i = 0; i<458; i++)
+    {
+      getline(f, line);
+    }
+  
+  for (int i = 0; i < fNData; i++)
+    {
+      getline(f, line);
+      istringstream lstream(line);
+      double mass;
+
+      lstream >> ddum     >> comma
+	      >> ddum     >> comma
+	      >> ddum     >> comma
+	      >> fKin1[i] >> comma //dilepton rapidity
+	      >> ddum     >> comma
+	      >> ddum     >> comma
+	      >> mass     >> comma //dilepton mass [GeV]
+	      >> ddum     >> comma
+	      >> ddum     >> comma
+	      >> fData[i] >> comma //3D cross section [pb]
+	      >> fStat[i] >> comma //statistical uncertainty
+	      >> ddum;
+      
+      fKin2[i] = mass*mass;
+      fKin3[i] = 8000.;            //c.m. energy [GeV]
+      
+      //Conversion to [fb]
+      fData[i] *= convfact;        
+      fStat[i] *= convfact;        
+
+      //Correlated uncertainty
+      for (int isys = 0; isys < ncorrsys; isys++)
+        {
+	  lstream >> comma>> sys >> comma >> ddum;
+	  fSys[i][isys].add = sys * convfact;
+	  fSys[i][isys].mult = fSys[i][isys].add * 1e2 / fData[i];
+	  fSys[i][isys].type = MULT;
+	  fSys[i][isys].name = "CORR";
+        }
+      
+      //Uncorrelated uncertainty
+      lstream >> comma >> sys >> comma >> ddum;
+      fSys[i][ncorrsys].add = sys * convfact;
+      fSys[i][ncorrsys].mult = fSys[i][ncorrsys].add * 1e2 / fData[i];
+      fSys[i][ncorrsys].type = MULT;
+      fSys[i][ncorrsys].name = "UNCORR";
+
+      //Luminosity uncertainty
+      fSys[i][ncorrsys + 1].mult = 1.8; // in percent
+      fSys[i][ncorrsys + 1].add = fSys[i][ncorrsys + 1].mult * fData[i] / 100;
+      fSys[i][ncorrsys + 1].type = MULT;
+      fSys[i][ncorrsys + 1].name = "ATLASLUMI12";
+    }
+
+    f.close();
+}
