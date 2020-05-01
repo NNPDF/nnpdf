@@ -403,4 +403,5 @@ void InitCommonData(vector<CommonData*>& target)
 
   // *********************** ATLAS Z (8 TeV) 3D **********************************
   target.push_back(new ATLAS_Z_3D_EMU_CRAP_8TEVFilter());
+  target.push_back(new ATLAS_Z_3D_ELE_HRAP_8TEVFilter());
 }
