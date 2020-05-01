@@ -85,6 +85,10 @@
 #include "ATLAS_hW_hbb_13TeV.h"
 #include "ATLAS_hZ_hbb_13TeV.h"
 #include "ATLASCMS_hxsec_RunI.h"
+#include "ATLAS_hxsec_RunII.h"
+#include "ATLAS_hxsec_RunII_diff.h"
+#include "CMS_hxsec_RunII.h"
+#include "CMS_hxsec_RunII_diff.h"
 #include "CMS_1JET_8TEV.h"
 #include "ATLAS_1JET_8TEV_R04.h"
 #include "ATLAS_1JET_8TEV_R06.h"
@@ -409,5 +413,12 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLAS_hW_hbb_13TeVFilter());
   target.push_back(new ATLAS_hZ_hbb_13TeVFilter());
   target.push_back(new ATLASCMS_hxsec_RunIFilter());
+  target.push_back(new ATLAS_hxsec_RunIIFilter());
+  target.push_back(new ATLAS_hxsec_RunII_diffFilter());
+  target.push_back(new ATLAS_hxsec_RunII_diff_pTHFilter());
+  target.push_back(new CMS_hxsec_RunIIFilter());
+  target.push_back(new CMS_hxsec_RunII_diff_pTHFilter());
+  target.push_back(new CMS_hxsec_RunII_diff_pTH_ggHFilter());
+  target.push_back(new CMS_hxsec_RunII_diff_pTjetFilter());
 
 }
