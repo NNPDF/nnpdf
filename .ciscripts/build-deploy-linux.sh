@@ -8,7 +8,7 @@ set -v
 
 # Set the version for both vp and n3fit
 gitroot=$(git rev-parse --show-toplevel)
-gitversion=$(git describe --long)
+gitversion=$(git describe --long --tags)
 tag=$(git describe --abbrev=0 --tags)
 gitversion=${gitversion/${tag}-/${tag}.}
 githash=$(git rev-parse --short HEAD)

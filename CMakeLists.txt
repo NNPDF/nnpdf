@@ -147,11 +147,27 @@ add_subdirectory(nnpdfcpp)
 # evolven3fit
 add_subdirectory(n3fit/evolven3fit)
 
+# get the current version of the repository
+execute_process(COMMAND git describe --abbrev=0 --tags OUTPUT_VARIABLE GIT_TAG)
+string(STRIP ${GIT_TAG} GIT_TAG)
+execute_process(COMMAND git rev-list ${GIT_TAG}..HEAD --count OUTPUT_VARIABLE GIT_REVN)
+string(STRIP ${GIT_REVN} GIT_REVN)
+execute_process(COMMAND git rev-parse --short HEAD OUTPUT_VARIABLE GIT_HASH)
+string(STRIP ${GIT_HASH} GIT_HASH)
+execute_process(COMMAND git describe --abbrev=0 --tags --dirty=dev OUTPUT_VARIABLE GIT_DIRTY)
+string(STRIP ${GIT_DIRTY} GIT_DIRTY)
+string(REPLACE "${GIT_TAG}" "" GIT_DIRTY ${GIT_DIRTY})
+# now concatenate everything
+set(GIT_VERSION "build_version='${GIT_TAG}.${GIT_REVN}+g${GIT_HASH}-${GIT_DIRTY}'")
+
 # install validphys2
 if(VP_DEV)
   install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install -e ${PROJECT_SOURCE_DIR}/validphys2)")
 else(VP_DEV)
   install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps --ignore-installed ${PROJECT_SOURCE_DIR}/validphys2)")
+    install(CODE "set(GIT_VERSION \"${GIT_VERSION}\")")
+    install(CODE "set(LIBRARY \"validphys\")")
+    install(SCRIPT ${PROJECT_SOURCE_DIR}/version.cmake)
 endif(VP_DEV)
 
 # install n3fit
@@ -159,4 +175,7 @@ if(N3_DEV)
     install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install -e ${PROJECT_SOURCE_DIR}/n3fit)")
 else(N3_DEV)
     install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install --no-deps --ignore-installed ${PROJECT_SOURCE_DIR}/n3fit)")
+    install(CODE "set(GIT_VERSION \"${GIT_VERSION}\")")
+    install(CODE "set(LIBRARY \"n3fit\")")
+    install(SCRIPT ${PROJECT_SOURCE_DIR}/version.cmake)
 endif(N3_DEV)
