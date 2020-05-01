@@ -6,7 +6,7 @@ import copy
 import numpy as np
 
 from NNPDF import RandomGenerator
-from validphys.core import ExperimentSpec as vp_Exp
+from validphys.core import DataGroupSpec as vp_Exp
 from validphys.core import DataSetSpec as vp_Dataset
 
 
