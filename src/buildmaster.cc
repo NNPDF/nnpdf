@@ -100,6 +100,7 @@
 #include "CMS_TTBAR_2D_DIFF_NORM.h"
 #include "CMS_TTBAR_2D_DIFF.h"
 #include "ATLAS_TTB_DIFF_8TEV_LJ.h"
+#include "ATLAS_Z_3D_8TEV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -421,4 +422,6 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMS_hxsec_RunII_diff_pTH_ggHFilter());
   target.push_back(new CMS_hxsec_RunII_diff_pTjetFilter());
 
+  // *********************** ATLAS Z (8 TeV) 3D **********************************
+  target.push_back(new ATLAS_Z_3D_EMU_CRAP_8TEVFilter());
 }
