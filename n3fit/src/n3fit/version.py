@@ -8,7 +8,7 @@ def __give_git():
 
     try:
         result = run(
-            "git describe --tags --long --dirty".split(),
+            ["git", "describe", "--tags", "--long", "--dirty=-dev"],
             capture_output=True,
             text=True,
             check=True,
