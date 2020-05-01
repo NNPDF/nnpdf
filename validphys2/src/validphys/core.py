@@ -529,6 +529,12 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
     def as_markdown(self):
         return str(self)
 
+#TODO: remove this and the need for it
+class ExperimentSpec(DataGroupSpec):
+    """Same as DataGroupSpec but with old naming convention until all code
+    migrates to using data keyword
+    """
+
 def data_from_experiment(experiments_list):
     """Takes the old style of declaring data as a multi-indexed list of
     experiments where each experiment is a list of datasets and returns the
