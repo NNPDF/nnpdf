@@ -1,7 +1,12 @@
 """
     Library of functions that modify the internal state of Keras/Tensorflow
 """
-
+import os
+import psutil
+# Needs to be set before importing tensorflow for the first time
+os.environ["KMP_BLOCKTIME"] = "0"
+os.environ["KMP_SETTINGS"] = "1"
+os.environ["KMP_AFFINITY"] = "granularity=fine,verbose,compact,1,0"
 import random as rn
 import numpy as np
 import tensorflow as tf
@@ -40,7 +45,17 @@ def clear_backend_state():
         i.e., this function must NEVER be called after setting the initial state.
     """
     print("Clearing session")
+    
+    # Find how many cores we have and how many threads per core
+    cores = psutil.cpu_count(logical=False)
+    logical = psutil.cpu_count(logical=True)
+    tpc = int(logical/cores)
+
+    # We might not have access to all cpu, but assume we get all associated threads for a cpu
+    affinity = psutil.Process().cpu_affinity()
+    if len(affinity) != logical:
+        cores = int(len(affinity)*tpc)
 
     K.clear_session()
-    tf.config.threading.set_inter_op_parallelism_threads(8)
-    tf.config.threading.set_intra_op_parallelism_threads(8)
+    tf.config.threading.set_inter_op_parallelism_threads(tpc)
+    tf.config.threading.set_intra_op_parallelism_threads(cores)
