@@ -44,7 +44,7 @@ class xDivide(MetaLayer):
             else:
                 res = one
             out_array.append(res)
-        out_tensor = op.concatenate(out_array, axis=-1)
+        out_tensor = op.concatenate(out_array)
         return out_tensor
 
 
