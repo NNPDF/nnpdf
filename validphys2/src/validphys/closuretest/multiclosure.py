@@ -378,7 +378,11 @@ def compare_measured_expected_xi(fits_measured_xi, expected_xi_from_bias_varianc
     fits_measured_xi.
 
     """
-    df = pd.concat((fits_measured_xi, expected_xi_from_bias_variance), axis=1)
+    # don't want ndata twice
+    df = pd.concat(
+        (fits_measured_xi, expected_xi_from_bias_variance.iloc[:, 1]),
+        axis=1
+    )
     return df
 
 @figure
