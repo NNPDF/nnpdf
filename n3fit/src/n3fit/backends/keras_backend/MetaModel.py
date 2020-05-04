@@ -7,6 +7,7 @@
 
 from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers as Kopt
+from n3fit.backends.keras_backend.operations import numpy_to_tensor
 
 # Define in this dictionary new optimizers as well as the arguments they accept
 # (with default values if needed be)
@@ -246,8 +247,10 @@ class MetaModel(Model):
             if not isinstance(target_output, list):
                 target_output = [target_output]
             self.target_tensors = None  # TODO TF 2.2 target_output
+            # Tensorize
+            target = [numpy_to_tensor(i) for i in target_output]
         super(MetaModel, self).compile(
-            optimizer=opt, target_tensors=target_output, loss=loss
+            optimizer=opt, target_tensors=target, loss=loss
         )
 
     def set_masks_to(self, names, val=0.0):
