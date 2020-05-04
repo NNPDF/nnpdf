@@ -357,14 +357,29 @@ def fits_measured_xi(experiments_xi_measured, experiments):
 
     """
     records = []
+    tot_xi = 0
+    tot_n = 0
     for exp, xi in zip(experiments, experiments_xi_measured):
         records.append(dict(experiment=str(exp), ndata=len(xi), xi=np.mean(xi)))
+        tot_xi += len(xi)*np.mean(xi)
+        tot_n += len(xi)
+    records.append(dict(experiment="Total", ndata=tot_n, xi=tot_xi/tot_n))
     df = pd.DataFrame.from_records(
         records, index="experiment", columns=("experiment", "ndata", "xi")
     )
     df.columns = ["ndata", r"measured $\xi_{1\sigma}$"]
     return df
 
+@table
+def compare_measured_expected_xi(fits_measured_xi, expected_xi_from_bias_variance):
+    """Table with with measured xi and expected xi from bias/variance for each
+    experiment and total. For details on expected xi, see
+    expected_xi_from_bias_variance. for more details on measured xi see
+    fits_measured_xi.
+
+    """
+    df = pd.concat((fits_measured_xi, expected_xi_from_bias_variance), axis=1)
+    return df
 
 @figure
 def plot_dataset_xi(dataset_xi, dataset):
