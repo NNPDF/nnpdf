@@ -300,7 +300,7 @@ def expected_xi_from_bias_variance(sqrt_experiments_bias_variance_ratio):
     return pd.DataFrame(
         np.concatenate((df_in.values[:, 0, np.newaxis], estimated_integral), axis=1),
         index=df_in.index,
-        columns=["ndata", r"$\xi \,$ from ratio"],
+        columns=["ndata", r"estimated $\xi_{1\sigma} \,$ from bias/variance"],
     )
 
 
