@@ -204,7 +204,6 @@ def transpose(tensor, **kwargs):
     return K.transpose(tensor, **kwargs)
 
 
-@tf.function
 def concatenate(tensor_list, axis=-1, target_shape=None):
     """
     Concatenates a list of numbers or tenosr into a bigger tensor
