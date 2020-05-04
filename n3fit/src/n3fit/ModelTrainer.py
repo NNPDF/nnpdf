@@ -324,7 +324,10 @@ class ModelTrainer:
         concatenated_pdf = self.pdf_model.apply_as_layer([concatenated_input])
         pdf_layers = splitting(concatenated_pdf)
         # In order to use the pdf_model in subsequents models we need to add the integration_input
-        full_model_input = [self.integrator_input] + input_list
+        if self.impose_sumrule:
+            full_model_input = [self.integrator_input] + input_list
+        else:
+            full_model_input = input_list
 
         # Loop over all the dictionary models and create the trainig,
         #                 validation, true (data w/o replica) models:
