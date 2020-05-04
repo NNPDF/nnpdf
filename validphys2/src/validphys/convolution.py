@@ -388,12 +388,18 @@ def _positivity_predictions(posdataset, pdf, fkfunc):
 
 
 def positivity_predictions(posdataset, pdf):
-    """Implentation of :py:func:`predictions` but for positivity
+    """Implementation of :py:func:`predictions` but for positivity
     datasets."""
     return _positivity_predictions(posdataset, pdf, fk_predictions)
 
 
 def linear_positivity_predictions(posdataset, pdf):
-    """Implemntation of :py:func:`linear_predictions` but for positivity
+    """Implmentation of :py:func:`linear_predictions` but for positivity
     datasets."""
     return _positivity_predictions(posdataset, pdf, linear_fk_predictions)
+
+
+def central_positivity_predictions(posdataset, pdf):
+    """Implementation as :py:func:`central_predictions`, but for postivity datasets
+    """
+    return _positivity_predictions(posdataset, pdf, central_fk_predictions)
