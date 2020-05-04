@@ -102,12 +102,63 @@ class DYXQ2MapMixin:
 
 class JETXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
-        """in DY-like experiments k1 is (pseudo)-rapidity and k2 is pT"""
+        """
+        k1 is (pseudo)-rapidity and k2 is pT
+        plotting both x1 and x2
+        """
         ratio = k2/k3
-        x = ratio*(np.exp(k1)+np.exp(-k1))
+        x1 = 2 * ratio * np.exp(k1)
+        x2 = 2 * ratio * np.exp(-k1)
         q2 = k2*k2
-        return np.clip(x,None,1, out=x), q2
+        x = np.concatenate(( x1,x2 ))
+        return np.clip(x,a_min=None,a_max=1, out=x), np.concatenate(( q2,q2 ))
 
+class DIJETXQ2MapMixin:
+    def xq2map(self, k1, k2, k3, **extra_labels):
+        """
+        k1 is max(|y1|,|y2|) and k2 is m12
+        plotting both x1 and x2
+        """
+        ratio = k2/k3
+        x1 = ratio * np.exp(k1)
+        x2 = ratio * np.exp(-k1)
+        q2 = k2*k2
+        x = np.concatenate(( x1,x2 ))
+        return np.clip(x,a_min=None,a_max=1, out=x), np.concatenate(( q2,q2 ))
+
+class DIJETATLASXQ2MapMixin:
+    def xq2map(self, k1, k2, k3, **extra_labels):
+        """
+        k1 is rapidity difference and k2 is m12
+        plotting both x1 and x2
+        """
+        ratio = k2/k3
+        x1 = ratio
+        x2 = np.full_like(x1, 1.0)
+        q2 = k2*k2
+        x = np.concatenate(( x1,x2 ))
+        return np.clip(x,a_min=None,a_max=1, out=x), np.concatenate(( q2,q2 ))
+    
+class DIJET3DXQ2MapMixin:
+    def xq2map(self, k1, k2, k3, **extra_labels):
+        """
+        k1 is the rapidity difference, k2 is pTavg, k3 is boost rapidity
+        TODO: NB!! HARDCODING sqrt(s) = 8 TeV, the c.m. energy of 1705.02628.pdf
+        plotting both x1 and x2
+        """
+        sqrts = 8000
+        ratio = k2/sqrts
+        prefactor = ratio * (np.exp(k1) + np.exp(-k1))
+        x1 = prefactor * np.exp(k3)
+        x2 = prefactor * np.exp(-k3)
+        q2 = k2*k2
+        x = np.concatenate(( x1,x2 ))
+        #print(k1[55],k2[55],k3[55],x[55],np.argwhere(x>1))
+        return np.clip(x,a_min=None,a_max=1, out=x), np.concatenate(( q2,q2 ))
+
+
+
+    
 class EWPTXQ2MapMixin:
     def xq2map(self, k1, k2, k3, **extra_labels):
         """in ZPt-like Experiments k1 is the pt, k2 is Q"""
@@ -144,18 +195,18 @@ class jet_sqrt_scale(SqrtScaleMixin,JETXQ2MapMixin):
     def new_labels(self, *old_labels):
         return ('$|y|$', '$p_T$ (GeV)', r'$\sqrt{s} (GeV)$')
 
-class dijet_sqrt_scale(SqrtScaleMixin,JETXQ2MapMixin):
+class dijet_sqrt_scale(SqrtScaleMixin,DIJETXQ2MapMixin):
     def new_labels(self, *old_labels):
         return ('$|y|$', '$m_{12}$ (GeV)', r'$\sqrt{s} (GeV)$')
 
-class dijet_sqrt_scale_ATLAS(SqrtScaleMixin,JETXQ2MapMixin):
+class dijet_sqrt_scale_ATLAS(SqrtScaleMixin,DIJETATLASXQ2MapMixin):
     def __call__(self, k1, k2, k3):
         return k1, k2, k3
 
     def new_labels(self, *old_labels):
         return ('$|y^*|$', '$m_{12}$ (TeV)', r'$\sqrt{s} (GeV)$')
 
-class dijet_CMS_3D(SqrtScaleMixin,JETXQ2MapMixin):
+class dijet_CMS_3D(SqrtScaleMixin,DIJET3DXQ2MapMixin):
     def new_labels(self, *old_labels):
         return ('$|y^*|$', '$p_{T,avg}$ (GeV)', r'$|y_b|$')
 
