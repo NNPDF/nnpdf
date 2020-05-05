@@ -83,14 +83,29 @@ def check_consistent_hyperscan_options(hyperopt, hyperscan, fitting):
 
 @make_argcheck
 def check_consistent_basis(fitting):
-    allowed_labels = [
-        'u','ubar', 'd', 'dbar', 's', 'sbar', 'c', 'g',
+    fitbasis = fitting["fitbasis"]
+    if fitbasis == 'flavour':
+        allowed_labels = [
+        'u','ubar', 'd', 'dbar', 's', 'sbar', 'c', 'g'
+    ]
+    elif fitbasis == 'evolution':
+        allowed_labels = [
         'sng', 'v', 'v3', 'v8', 't3', 't8', 'cp'
     ]
+    else:
+        raise CheckError(f"{fitbasis} is not a valid fitbasis")
+
+    # Check that there are no duplicate flavours
+    flavs = [d['fl'] for d in fitting['basis']]
+    if len(set(flavs)) != len(flavs):
+        raise CheckError(f"Repeated flavour names: check basis dictionary")
+
+    # Check that the flavours given in the runcard correspond to the
+    # allowed distribution of the declared fitbasis
     for flav_dict in fitting['basis']:
         flav_name = flav_dict['fl']
         if flav_name not in allowed_labels:
-            raise CheckError(f"{flav_name} is not a valid flavour name")    
+            raise CheckError(f"{flav_name} is not a valid flavour name of {fitbasis} basis")    
 
 # Action to be called by valid phys
 # All information defining the NN should come here in the "parameters" dict
