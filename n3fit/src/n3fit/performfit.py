@@ -246,7 +246,7 @@ def performfit(
             debug=debug,
             save_weights_each=fitting.get("save_weights_each"),
             kfold_parameters=kfold_parameters,
-            maxcores = max_cores
+            max_cores = maxcores
         )
 
         # Check whether we want to load weights from a file (maybe from a previous run)
