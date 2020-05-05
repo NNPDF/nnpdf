@@ -66,33 +66,36 @@ void ATLAS_Z_3D_EMU_CRAP_8TEVFilter::ReadData()
     {
       getline(f, line);
       istringstream lstream(line);
-      double mass;
+      double ctmin, ctmax;
+      double mlmin, mlmax;
+      double binfactor;
 
-      lstream >> ddum     >> comma
-	      >> ddum     >> comma
-	      >> ddum     >> comma
+      lstream >> fKin3[i] >> comma //costhetastar
+	      >> ctmin    >> comma
+	      >> ctmax    >> comma
 	      >> fKin1[i] >> comma //dilepton rapidity
 	      >> ddum     >> comma
 	      >> ddum     >> comma
-	      >> mass     >> comma //dilepton mass [GeV]
-	      >> ddum     >> comma
-	      >> ddum     >> comma
+	      >> fKin2[i] >> comma //dilepton mass [GeV]
+	      >> mlmin    >> comma
+	      >> mlmax    >> comma
 	      >> fData[i] >> comma //3D cross section [pb]
 	      >> fStat[i] >> comma //statistical uncertainty
 	      >> ddum;
       
-      fKin2[i] = mass*mass;
-      fKin3[i] = 8000.;            //c.m. energy [GeV]
+      //fKin2[i] = mass*mass;
+      //fKin3[i] = 8000.;            //c.m. energy [GeV]
       
-      //Conversion to [fb]
-      fData[i] *= convfact;        
-      fStat[i] *= convfact;        
+      //Conversion to [fb] and normalistaion to bin width
+      binfactor = (mlmax-mlmin)*0.4;
+      fData[i] *= convfact*binfactor;        
+      fStat[i] *= convfact*binfactor;        
 
       //Correlated uncertainty
       for (int isys = 0; isys < ncorrsys; isys++)
         {
 	  lstream >> comma>> sys >> comma >> ddum;
-	  fSys[i][isys].add = sys * convfact;
+	  fSys[i][isys].add = sys * convfact * binfactor;
 	  fSys[i][isys].mult = fSys[i][isys].add * 1e2 / fData[i];
 	  fSys[i][isys].type = MULT;
 	  fSys[i][isys].name = "CORR";
@@ -100,7 +103,7 @@ void ATLAS_Z_3D_EMU_CRAP_8TEVFilter::ReadData()
       
       //Uncorrelated uncertainty
       lstream >> comma >> sys >> comma >> ddum;
-      fSys[i][ncorrsys].add = sys * convfact;
+      fSys[i][ncorrsys].add = sys * convfact * binfactor;
       fSys[i][ncorrsys].mult = fSys[i][ncorrsys].add * 1e2 / fData[i];
       fSys[i][ncorrsys].type = MULT;
       fSys[i][ncorrsys].name = "UNCORR";
@@ -155,33 +158,36 @@ void ATLAS_Z_3D_ELE_HRAP_8TEVFilter::ReadData()
     {
       getline(f, line);
       istringstream lstream(line);
-      double mass;
+      double ctmin, ctmax;
+      double mlmin, mlmax;
+      double binfactor;
 
-      lstream >> ddum     >> comma
-	      >> ddum     >> comma
-	      >> ddum     >> comma
+      lstream >> fKin3[i] >> comma //costhetastar
+	      >> ctmin    >> comma
+	      >> ctmax    >> comma
 	      >> fKin1[i] >> comma //dilepton rapidity
 	      >> ddum     >> comma
 	      >> ddum     >> comma
-	      >> mass     >> comma //dilepton mass [GeV]
-	      >> ddum     >> comma
-	      >> ddum     >> comma
+	      >> fKin2[i] >> comma //dilepton mass [GeV]
+	      >> mlmin    >> comma
+	      >> mlmax    >> comma
 	      >> fData[i] >> comma //3D cross section [pb]
 	      >> fStat[i] >> comma //statistical uncertainty
 	      >> ddum;
       
-      fKin2[i] = mass*mass;
-      fKin3[i] = 8000.;            //c.m. energy [GeV]
+      //fKin2[i] = mass*mass;
+      //fKin3[i] = 8000.;            //c.m. energy [GeV]
       
       //Conversion to [fb]
-      fData[i] *= convfact;        
-      fStat[i] *= convfact;        
+      binfactor = (mlmax-mlmin)*0.4;
+      fData[i] = fData[i] * convfact * binfactor;        
+      fStat[i] = fStat[i] * convfact * binfactor;        
 
       //Correlated uncertainty
       for (int isys = 0; isys < ncorrsys; isys++)
         {
 	  lstream >> comma>> sys >> comma >> ddum;
-	  fSys[i][isys].add = sys * convfact;
+	  fSys[i][isys].add = sys * convfact * binfactor;
 	  fSys[i][isys].mult = fSys[i][isys].add * 1e2 / fData[i];
 	  fSys[i][isys].type = MULT;
 	  fSys[i][isys].name = "CORR";
@@ -189,7 +195,7 @@ void ATLAS_Z_3D_ELE_HRAP_8TEVFilter::ReadData()
       
       //Uncorrelated uncertainty
       lstream >> comma >> sys >> comma >> ddum;
-      fSys[i][ncorrsys].add = sys * convfact;
+      fSys[i][ncorrsys].add = sys * convfact * binfactor;
       fSys[i][ncorrsys].mult = fSys[i][ncorrsys].add * 1e2 / fData[i];
       fSys[i][ncorrsys].type = MULT;
       fSys[i][ncorrsys].name = "UNCORR";
