@@ -33,10 +33,10 @@ private:
   void ReadData();
 };
 
-class CMS_hxsec_RunII_diff_pTjetFilter: public CommonData
+class CMS_hxsec_RunII_diff_yHFilter: public CommonData
 {
-public: CMS_hxsec_RunII_diff_pTjetFilter():
-  CommonData("CMS_hxsec_RunII_diff_pTjet") { ReadData(); }
+public: CMS_hxsec_RunII_diff_yHFilter():
+  CommonData("CMS_hxsec_RunII_diff_yH") { ReadData(); }
 
 private:
   void ReadData();

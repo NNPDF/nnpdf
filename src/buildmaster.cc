@@ -420,7 +420,7 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new CMS_hxsec_RunIIFilter());
   target.push_back(new CMS_hxsec_RunII_diff_pTHFilter());
   target.push_back(new CMS_hxsec_RunII_diff_pTH_ggHFilter());
-  target.push_back(new CMS_hxsec_RunII_diff_pTjetFilter());
+  target.push_back(new CMS_hxsec_RunII_diff_yHFilter());
 
   // *********************** ATLAS Z (8 TeV) 3D **********************************
   target.push_back(new ATLAS_Z_3D_EMU_CRAP_8TEVFilter());
