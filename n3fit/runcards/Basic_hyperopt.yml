@@ -80,7 +80,7 @@ hyperscan:
         min_units: 10
         max_units: 50
         activations: ['sigmoid', 'tanh']
-    kfold: # if given a number k, k partitions will be generated automatically
+    kfold: 
         threshold_loss: 2.0
         partitions:
             - datasets:
