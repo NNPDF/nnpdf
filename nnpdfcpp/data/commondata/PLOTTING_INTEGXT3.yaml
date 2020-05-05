@@ -1,0 +1,9 @@
+dataset_label: "INTEGXT3"
+x: k2
+y_label: '$\sum_i x_i T_3(x_i)$'
+
+x_scale: linear
+y_scale: linear
+
+experiment: "INTEGXT3"
+
