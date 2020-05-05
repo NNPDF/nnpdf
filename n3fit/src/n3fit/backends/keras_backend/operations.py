@@ -71,9 +71,15 @@ def numpy_to_tensor(ival, **kwargs):
 
 # f(x: tensor) -> y: tensor
 @tf.function
-def batchit(x, batch_dimension=0):
+def batchit(x, batch_dimension=0, **kwarg):
     """ Add a batch dimension to tensor x """
-    return tf.expand_dims(x, batch_dimension)
+    return tf.expand_dims(x, batch_dimension, **kwarg)
+
+
+@tf.function
+def unbatch(x, batch_dimension=0, **kwargs):
+    """ Remove batch dimension to tensor x """
+    return tf.squeeze(x, axis=batch_dimension)
 
 
 # layer generation
@@ -203,12 +209,12 @@ def transpose(tensor, **kwargs):
     return K.transpose(tensor, **kwargs)
 
 
-def concatenate(tensor_list, axis=-1, target_shape=None):
+def concatenate(tensor_list, axis=-1, target_shape=None, name = None):
     """
-    Concatenates a list of numbers or tenosr into a bigger tensor
+    Concatenates a list of numbers or tensor into a bigger tensor
     If the target shape is given, the output is reshaped to said shape
     """
-    concatenated_tensor = K.concatenate(tensor_list, axis=axis)
+    concatenated_tensor = tf.concat(tensor_list, axis, name = name)
     if target_shape:
         return K.reshape(concatenated_tensor, target_shape)
     else:
