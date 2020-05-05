@@ -327,9 +327,9 @@ class CommonDataSpec(TupleComp):
         return iter((self.datafile, self.sysfile, self.plotfiles))
 
     @functools.lru_cache()
-    def load(self)->CommonData:
+    def load(self):
         #TODO: Use better path handling in python 3.6
-        return CommonData.ReadFile(str(self.datafile), str(self.sysfile))
+        return load_dataset(self.datafile)
 
     @property
     def plot_kinlabels(self):
