@@ -34,6 +34,16 @@ def l_positivity(alpha=1e-7):
 
     return true_loss
 
+def l_integrability():
+    """
+    Returns L = (y_pred)^2 
+    """
+
+    def true_loss(y_true, y_pred):
+        return K.square(y_pred)
+
+    return true_loss        
+
 def l_diaginvcovmat(diaginvcovmat_np):
     """
     Returns a loss function such that:
