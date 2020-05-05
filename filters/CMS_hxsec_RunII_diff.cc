@@ -6,17 +6,17 @@ Reference:
 Description:
    Differential spectra for the combined Higgs boson production and decay in the
    H -> gamma gamma, H -> Z Z and H -> b bbar channels, measured as a function 
-   of the transverse momentum of the Higgs or of the jet. An additional 
+   of the transverse momentum or rapidity of the Higgs. An additional 
    measurement related to the ggH process is implemented separately. Cross
    sections are measured by the CMS detector at the LHC, with a c.m. energy of
    13 TeV and an integrated luminosity of 35.9 fb-1.
    
-   The implementation is based on Tabs. A1, A2 and A5 (central value and 
-   uncertainties) and Tabs. B1 and B4 (correlations). Three data sets are 
+   The implementation is based on Tabs. A1, A2 and A4 (central value and 
+   uncertainties) and Tabs. B1 and B3 (correlations). Three data sets are 
    defined separately:
     - CMS_hxsec_RunII_pTH: combined pT spectrum
     - CMS_hxsec_RunII_pTH_ggH: ggH pT spectrum
-    - CMS_hxsec_RunII_pTjet: combined pTjet spectrum
+    - CMS_hxsec_RunII_yH: combined yH spectrum
    The information on the signal strengths is retrieved from the hepdata entry
 */
 
@@ -235,8 +235,8 @@ void CMS_hxsec_RunII_diff_pTH_ggHFilter::ReadData()
 
 }
 
-//CMS_hxsec_RunII_pTjet: combined pTjet spectrum
-void CMS_hxsec_RunII_diff_pTjetFilter::ReadData()
+//CMS_hxsec_RunII_yH: combined yH spectrum
+void CMS_hxsec_RunII_diff_yHFilter::ReadData()
 {
   fstream f1;
   fstream f2;
@@ -244,7 +244,7 @@ void CMS_hxsec_RunII_diff_pTjetFilter::ReadData()
   //Central values and total uncertainty
   stringstream datafile("");
   datafile << dataPath()
-	   << "rawdata/CMS_hxsec_RunII_diff/data_pTjet.txt";
+	   << "rawdata/CMS_hxsec_RunII_diff/data_yH.txt";
   f1.open(datafile.str().c_str(), ios::in);
 
   if (f1.fail())
@@ -256,7 +256,7 @@ void CMS_hxsec_RunII_diff_pTjetFilter::ReadData()
   //Correlations between data points
   stringstream datafile_corr("");
   datafile_corr << dataPath()
-		<< "rawdata/CMS_hxsec_RunII_diff/corr_pTjet.txt";
+		<< "rawdata/CMS_hxsec_RunII_diff/corr_yH.txt";
   f2.open(datafile_corr.str().c_str(), ios::in);
 
   if (f2.fail())
