@@ -1053,13 +1053,18 @@ class CoreConfig(configparser.Config):
 
     @record_from_defaults
     def parse_data_grouping(self, key):
-        """a key which indicates which default grouping to use.
+        """a key which indicates which default grouping to use. Mainly for
+        internal use. It allows the default grouping of experiment to be applied
+        to runcards which don't specify `metadata_group` without their being
+        a namespace conflict in the lockfile
+
         """
         return key
 
     def load_default_data_grouping(self, spec):
         """Load the default grouping of data"""
-        # slightly superfluous, only one default at present
+        # slightly superfluous, only one default at present but perhaps
+        # somebody will want to add to this at some point e.g for th. uncertainties
         allowed = {
             "standard_report": "experiment"
         }

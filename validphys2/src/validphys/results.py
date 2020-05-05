@@ -512,9 +512,9 @@ def pdferr_plus_covmat(dataset, pdf, covmat):
     return pdf_cov + covmat
 
 
-datasets_covmat = collect('covmat', ('data',))
+datasets_covmat = collect('covariance_matrix', ('data',))
 
-def sqrt_covmat(covmat: np.array):
+def sqrt_covmat(covariance_matrix):
     """Returns the lower-triangular Cholesky factor of `covmat`
 
     Parameters
@@ -541,7 +541,7 @@ def sqrt_covmat(covmat: np.array):
     array([[1.  , 0.    ],
         [0.5    , 0.8660254]])
     """
-    return la.cholesky(covmat, lower=True)
+    return la.cholesky(covariance_matrix, lower=True)
 
 @check_data_cuts_match_theorycovmat
 def dataset_inputs_covmat(
@@ -577,14 +577,14 @@ def pdferr_plus_dataset_inputs_covmat(data, pdf, dataset_inputs_covmat):
     # do checks get performed here?
     return pdferr_plus_covmat(data, pdf, dataset_inputs_covmat)
 
-def dataset_inputs_sqrt_covmat(dataset_inputs_covmat):
+def dataset_inputs_sqrt_covmat(group_covariance_matrix):
     """Like `sqrt_covmat` but for an group of datasets"""
-    return sqrt_covmat(dataset_inputs_covmat)
+    return sqrt_covmat(group_covariance_matrix)
 
 def results(
         dataset:(DataSetSpec),
         pdf:PDF,
-        covmat,
+        covariance_matrix,
         sqrt_covmat
     ):
     """Tuple of data and theory results for a single pdf. The data will have an associated
@@ -596,19 +596,19 @@ def results(
     A group of datasets is also allowed.
     (as a result of the C++ code layout)."""
     data = dataset.load()
-    return (DataResult(data, covmat, sqrt_covmat),
+    return (DataResult(data, covariance_matrix, sqrt_covmat),
             ThPredictionsResult.from_convolution(pdf, dataset, loaded_data=data))
 
 def dataset_inputs_results(
         data,
         pdf:PDF,
-        dataset_inputs_covmat,
+        group_covariance_matrix,
         dataset_inputs_sqrt_covmat):
     """Like `results` but for a group of datasets"""
     return results(
         data,
         pdf,
-        dataset_inputs_covmat,
+        group_covariance_matrix,
         dataset_inputs_sqrt_covmat
         )
 
@@ -618,7 +618,7 @@ def dataset_inputs_results(
 def pdf_results(
         dataset:(DataSetSpec,  DataGroupSpec),
         pdfs:Sequence,
-        covmat,
+        covariance_matrix,
         sqrt_covmat):
     """Return a list of results, the first for the data and the rest for
     each of the PDFs."""
@@ -631,12 +631,12 @@ def pdf_results(
         th_results.append(th_result)
 
 
-    return (DataResult(data, covmat, sqrt_covmat), *th_results)
+    return (DataResult(data, covariance_matrix, sqrt_covmat), *th_results)
 
 @require_one('pdfs', 'pdf')
 @remove_outer('pdfs', 'pdf')
 def one_or_more_results(dataset:(DataSetSpec, DataGroupSpec),
-                        covmat,
+                        covariance_matrix,
                         sqrt_covmat,
                         pdfs:(type(None), Sequence)=None,
                         pdf:(type(None), PDF)=None):
@@ -645,9 +645,9 @@ def one_or_more_results(dataset:(DataSetSpec, DataGroupSpec),
     Which of the two is selected intelligently depending on the namespace,
     when executing as an action."""
     if pdf:
-        return results(dataset, pdf, covmat, sqrt_covmat)
+        return results(dataset, pdf, covariance_matrix, sqrt_covmat)
     else:
-        return pdf_results(dataset, pdfs, covmat, sqrt_covmat)
+        return pdf_results(dataset, pdfs, covariance_matrix, sqrt_covmat)
     raise ValueError("Either 'pdf' or 'pdfs' is required")
 
 
@@ -1227,9 +1227,9 @@ def dataspecs_dataset_chi2_difference_table(
     return pd.concat(dfs, axis=1)
 
 datasets_covmat_no_reg = collect(
-    "covmat", ("data", "no_covmat_reg"))
+    "covariance_matrix", ("data", "no_covmat_reg"))
 datasets_covmat_reg = collect(
-    "covmat", ("data",))
+    "covariance_matrix", ("data",))
 
 @table
 @check_norm_threshold
