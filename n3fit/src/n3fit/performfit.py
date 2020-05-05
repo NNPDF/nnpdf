@@ -108,6 +108,7 @@ def performfit(
     hyperscan=None,
     hyperopt=None,
     debug=False,
+    maxcores=None,
 ):
     """
         This action will (upon having read a validcard) process a full PDF fit for a given replica.
@@ -128,18 +129,32 @@ def performfit(
             4.1 (if hyperopt) Loop over point 4 for `hyperopt` number of times
         5. Once the fit is finished, output the PDF grid and accompanying files
 
-        # Arguments:
-            - `fitting`: dictionary with the hyperparameters of the fit
-            - `experiments`: vp list of experiments to be included in the fit
-            - `t0set`: t0set name
-            - `replica`: a list of replica numbers to run over (typically just one)
-            - `replica_path`: path to the output of this run
-            - `output_path`: name of the fit
-            - `theorid`: theory id number
-            - `posdatasets` : list of positivity datasets
-            - `hyperscan`: dictionary containing the details of the hyperscan
-            - `hyperopt`: if given, number of hyperopt iterations to run
-            - `debug`: activate some debug options
+        Parameters
+        ----------
+            fitting: dict
+                dictionary with the hyperparameters of the fit
+            experiments: dict
+                vp list of experiments to be included in the fit
+            t0set: str
+                t0set name
+            replica: list
+                a list of replica numbers to run over (typically just one)
+            replica_path: pathlib.Path
+                path to the output of this run
+            output_path: str
+                name of the fit
+            theorid: int
+                theory id number
+            posdatasets: list
+                list of positivity datasets
+            hyperscan: dict
+                dictionary containing the details of the hyperscan
+            hyperopt: int
+                if given, number of hyperopt iterations to run
+            debug: bool
+                activate some debug options
+            maxcores: int
+                maximum number of (logical) cores that the backend should be aware of
     """
 
     if debug:
@@ -231,6 +246,7 @@ def performfit(
             debug=debug,
             save_weights_each=fitting.get("save_weights_each"),
             kfold_parameters=kfold_parameters,
+            maxcores = max_cores
         )
 
         # Check whether we want to load weights from a file (maybe from a previous run)
