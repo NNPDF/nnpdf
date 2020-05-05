@@ -438,7 +438,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLAS_WW_13TEV_totWWFilter());
   target.push_back(new CMS_WZ_13TEV_pTZFilter());
   target.push_back(new CMS_WZ_13TEV_mTZFilter());
-
+  target.push_back(new CMS_WZ_13TEV_pTleadFilter());
+  
   // *********************** ATLAS Z (8 TeV) 3D **********************************
   target.push_back(new ATLAS_Z_3D_EMU_CRAP_8TEVFilter());
   target.push_back(new ATLAS_Z_3D_ELE_HRAP_8TEVFilter());
