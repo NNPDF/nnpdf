@@ -41,8 +41,8 @@ theory:
 
 hyperscan:
     stopping:
-        min_epochs: 2e1
-        max_epochs: 5e1
+        min_epochs: 2e4
+        max_epochs: 5e4
         min_patience: 0.10
         max_patience: 0.40
     positivity:
@@ -67,7 +67,7 @@ hyperscan:
 
 ############################################################
 fitting:
-  genrep: True    # on = generate MC replicas, False = use real data
+  genrep: False    # on = generate MC replicas, False = use real data
   trvlseed: 3
   nnseed: 2
   mcseed: 1  
@@ -79,7 +79,7 @@ fitting:
     initializer: 'glorot_normal'
     learning_rate: 0.00001
     optimizer: 'RMSprop'
-    epochs: 1000
+    epochs: 10
     pos_multiplier: 1.05
     pos_initial: 1.5
     stopping_patience: 0.30 # percentage of the number of epochs
