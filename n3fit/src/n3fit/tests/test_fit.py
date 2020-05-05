@@ -12,6 +12,8 @@
 """
 
 import os
+# this is needed for Travis to pass the test in mac
+os.environ["KMP_DUPLICATE_LIB_OK"] = "True"
 import pytest
 import shutil
 import pathlib
@@ -28,7 +30,7 @@ REGRESSION_FOLDER = pathlib.Path(__file__).with_name("regressions")
 QUICKNAME = "quickcard"
 EXE = "n3fit"
 REPLICA = "1"
-EXPECTED_MAX_FITTIME = 60
+EXPECTED_MAX_FITTIME = 200 # seen mac ~ 180  and linux ~ 90
 
 
 def load_data(info_file):
