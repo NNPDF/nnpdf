@@ -27,7 +27,8 @@ from n3fit.backends import (
 
 
 def observable_generator(
-    spec_dict, positivity_initial=None, positivity_multiplier=1.05, positivity_steps=300
+    spec_dict, positivity_initial=None, positivity_multiplier=1.05, positivity_steps=300,
+    integrability=False
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable generator.
@@ -129,10 +130,15 @@ def observable_generator(
         def out_tr_positivity(pdf_layer):
             return out_tr_mask(final_obs(pdf_layer))
 
+        if integrability:
+            loss = losses.l_integrability()
+        else:
+            loss = losses.l_positivity()
+
         layer_info = {
             "inputs": model_inputs,
             "output_tr": out_tr_positivity,
-            "loss_tr": losses.l_positivity(),
+            "loss_tr": loss,
         }
         return layer_info
 
