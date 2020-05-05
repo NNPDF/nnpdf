@@ -37,7 +37,7 @@ def set_initial_state(seed=13):
     return 0
 
 
-def clear_backend_state():
+def clear_backend_state(max_cores = None):
     """
         Clears the state of the backend and opens a new session.
 
@@ -55,6 +55,10 @@ def clear_backend_state():
     affinity = psutil.Process().cpu_affinity()
     if len(affinity) != logical:
         cores = int(len(affinity)*tpc)
+
+    # And, in any case, we never want to get above the number provided by the user
+    if max_cores is not None:
+        cores = min(cores, max_cores)
 
     K.clear_session()
     tf.config.threading.set_inter_op_parallelism_threads(tpc)

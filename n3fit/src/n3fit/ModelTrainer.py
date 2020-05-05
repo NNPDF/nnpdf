@@ -139,6 +139,7 @@ class ModelTrainer:
         debug=False,
         save_weights_each=False,
         kfold_parameters=None,
+        max_cores = None,
     ):
         """
         # Arguments:
@@ -168,6 +169,7 @@ class ModelTrainer:
         self.all_datasets = []
 
         # Initialise internal variables which define behaviour
+        self.max_cores = max_cores
         self.print_summary = True
         self.mode_hyperopt = False
         self.model_file = None
@@ -652,7 +654,7 @@ class ModelTrainer:
         # Reset the internal state of the backend
         print("")
         if not self.debug:
-            clear_backend_state()
+            clear_backend_state(max_cores = self.max_cores)
 
         # When doing hyperopt some entries in the params dictionary
         # can bring with them overriding arguments
