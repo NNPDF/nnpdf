@@ -184,7 +184,6 @@ def flatten(x):
     return tf.reshape(x, (-1,))
 
 
-@tf.function
 def boolean_mask(*args, **kwargs):
     """
     Applies a boolean mask to a tensor
@@ -217,7 +216,6 @@ def concatenate(tensor_list, axis=-1, target_shape=None):
 
 
 # Mathematical operations
-@tf.function
 def pdf_masked_convolution(raw_pdf, basis_mask):
     """ Computes a masked convolution of two equal pdfs
     And applies a basis_mask so that only the actually useful values
@@ -245,7 +243,6 @@ def pdf_masked_convolution(raw_pdf, basis_mask):
     return pdf_x_pdf
 
 
-@tf.function
 def tensor_product(*args, **kwargs):
     """
     Computes the tensordot product between tensor_x and tensor_y
