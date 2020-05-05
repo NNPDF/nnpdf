@@ -7,7 +7,7 @@
 //          Luigi Del Debbio, luigi.del.debbio@ed.ac.uk
 
 /**
- *  \class CMS_hxsec_RunII_diff
+ *  \class ATLAS_WZ_13TEV
  *  \brief  CommonData processor
  */
 

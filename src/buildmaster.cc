@@ -103,6 +103,7 @@
 #include "ATLAS_Z_3D_8TEV.h"
 #include "ATLAS_WZ_13TEV.h"
 #include "ATLAS_WW_13TEV.h"
+#include "CMS_WZ_13TEV.h"
 
 /**
  * \param argv the filename containing the configuration
@@ -435,6 +436,8 @@ void InitCommonData(vector<CommonData*>& target)
   target.push_back(new ATLAS_WW_13TEV_pTleadFilter());
   target.push_back(new ATLAS_WW_13TEV_yemuFilter());
   target.push_back(new ATLAS_WW_13TEV_totWWFilter());
+  target.push_back(new CMS_WZ_13TEV_pTZFilter());
+  target.push_back(new CMS_WZ_13TEV_mTZFilter());
 
   // *********************** ATLAS Z (8 TeV) 3D **********************************
   target.push_back(new ATLAS_Z_3D_EMU_CRAP_8TEVFilter());
