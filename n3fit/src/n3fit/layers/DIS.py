@@ -23,7 +23,7 @@ class DIS(Observable):
         (1, xgrid, flavours)
     """
 
-    def gen_basis(self, basis):
+    def gen_mask(self, basis):
         """
             Receives a list of active flavours and generates a boolean mask tensor
 

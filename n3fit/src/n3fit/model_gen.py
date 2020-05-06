@@ -21,6 +21,7 @@ from n3fit.backends import MetaLayer
 from n3fit.backends import (
     base_layer_selector,
     regularizer_selector,
+    Concatenate,
     Lambda,
 )
 from n3fit.backends import MetaModel, Input
@@ -112,12 +113,16 @@ def observable_generator(
             mask_one = Mask(
                 bool_mask=np.ones(ndata, dtype=np.bool),
                 name=f"{dataset_name}_mask",
+                c = 1.0,
                 axis=1, # the ndata dimension
             )
         else:
             mask_one = None
         model_obs.append((obs_layer, mask_one))
 
+    # Prepare a concatenation as experiments are one single entity formed by many datasets
+    concatenator = Concatenate(axis=1, name=f"{spec_name}_full")
+    
     # creating the experiment as a model turns out to bad for performance
     def experiment_layer(pdf):
         output_layers = []
@@ -129,8 +134,11 @@ def observable_generator(
             if mask:
                 obs_output = mask(obs_output)
             output_layers.append(obs_output)
-        # Concatenate all datasets as experiments are one single entity
-        output_layer = operations.concatenate(output_layers, axis=1, name=f"{spec_name}_full")
+        # Concatenate all datasets as experiments are one single entity if needed
+        if len(output_layers) > 1:
+            output_layer = concatenator(output_layers)
+        else:
+            output_layer = output_layers[0]
         return output_layer
 
     # Now create the model for this experiment

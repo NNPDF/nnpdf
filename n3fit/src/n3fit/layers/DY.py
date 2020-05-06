@@ -8,7 +8,7 @@ class DY(Observable):
     Computes the convolution of two PDFs (the same one twice) and one fktable
     """
 
-    def gen_basis(self, basis):
+    def gen_mask(self, basis):
         if basis is None:
             basis_mask = np.ones((self.nfl, self.nfl), dtype=bool)
         else:

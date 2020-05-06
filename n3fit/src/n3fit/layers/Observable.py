@@ -17,9 +17,9 @@ class Observable(MetaLayer, ABC):
         All backend-dependent code necessary for the convolutions
                                     is (must be) concentrated here
 
-        The methods gen_basis and call must be overriden by the observables
+        The methods gen_mask and call must be overriden by the observables
         where
-            - gen_basis: it is called by the initializer and generates the mask between
+            - gen_mask: it is called by the initializer and generates the mask between
                         fktables and pdfs
             - call: this is what does the actual operation
 
@@ -56,11 +56,11 @@ class Observable(MetaLayer, ABC):
 
         # check how many basis this dataset needs
         if _is_unique(basis) and _is_unique(xgrids):
-            self.all_masks = [self.gen_basis(basis[0])]
+            self.all_masks = [self.gen_mask(basis[0])]
             self.many_masks = False
         else:
             self.many_masks = True
-            self.all_masks = [self.gen_basis(i) for i in basis]
+            self.all_masks = [self.gen_mask(i) for i in basis]
 
         self.operation = op.c_to_py_fun(operation_name)
         self.output_dim = self.fktables[0].shape[0]
@@ -71,7 +71,7 @@ class Observable(MetaLayer, ABC):
 
     # Overridables
     @abstractmethod
-    def gen_basis(self, basis):
+    def gen_mask(self, basis):
         pass
 
     @abstractmethod
