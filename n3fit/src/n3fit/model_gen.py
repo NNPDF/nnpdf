@@ -29,7 +29,7 @@ import tensorflow as tf
 
 
 def observable_generator(
-    spec_dict, positivity_initial=None, positivity_multiplier=1.05, positivity_steps=300
+    spec_dict, positivity_initial=None, positivity_multiplier=1.05, positivity_steps=300, kfolding = False,
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable model for each experiment.
@@ -107,13 +107,15 @@ def observable_generator(
             model_inputs += xgrids
             dataset_xsizes.append(sum([i.shape[1] for i in xgrids]))
 
-        # Create a mask of ones which is useful for kfolding
-        mask_one = Mask(
-            bool_mask=np.ones(ndata, dtype=np.bool),
-            batch_it=False,
-            name=f"{dataset_name}_mask",
-            axis=1, # the ndata dimension
-        )
+        # Create a mask of ones for kfolding
+        if kfolding:
+            mask_one = Mask(
+                bool_mask=np.ones(ndata, dtype=np.bool),
+                name=f"{dataset_name}_mask",
+                axis=1, # the ndata dimension
+            )
+        else:
+            mask_one = None
         model_obs.append((obs_layer, mask_one))
 
     # creating the experiment as a model turns out to bad for performance
@@ -124,7 +126,9 @@ def observable_generator(
         # every obs gets its share of the split
         for partial_pdf, (obs, mask) in zip(split_pdf, model_obs):
             obs_output = obs(partial_pdf)
-            output_layers.append(mask(obs_output))
+            if mask:
+                obs_output = mask(obs_output)
+            output_layers.append(obs_output)
         # Concatenate all datasets as experiments are one single entity
         output_layer = operations.concatenate(output_layers, axis=1, name=f"{spec_name}_full")
         return output_layer
