@@ -36,11 +36,11 @@ def l_positivity(alpha=1e-7):
 
 def l_integrability():
     """
-    Returns L = (y_pred)^2 
+    Returns L = y_pred 
     """
 
     def true_loss(y_true, y_pred):
-        return K.square(y_pred)
+        return y_pred
 
     return true_loss        
 
