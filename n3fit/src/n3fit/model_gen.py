@@ -83,58 +83,36 @@ def observable_generator(
         else:
             Obs_Layer = DIS
 
-        # Set the operation to be applied to the fktables of this dataset
-        ope = operations.c_to_py_fun(dataset_dict["operation"], name=dataset_name)
+        # Set the operation (if any) to be applied to the fktables of this dataset
+        operation_name = dataset_dict["operation"]
 
-        # Now loop over the fktable dictionaries
-        fktable_xsizes = []
-        obs_list = []
-        for i, fktable_dict in enumerate(dataset_dict["fktables"]):
-            if i == 0:
-                input_array = fktable_dict["xgrid"] # (1, xgrid)
-                input_layer = operations.numpy_to_input(input_array.T)  # (1, xgrid, 1)
-                fktable_xsizes.append(input_array.shape[1])
-                model_inputs.append(input_layer)
-            else:
-                # it could be that several fktable for the same observable have different x
-                xgrid = fktable_dict["xgrid"]
-                if not (xgrid.shape == input_array.shape and np.allclose(xgrid, input_array)):
-                    print(f" > Evil dataset: {dataset_name}")
-                    # Need to create a new input_layer for this guy
-                    input_array = xgrid
-                    fktable_xsizes.append(input_array.shape[1])
-                    input_layer = operations.numpy_to_input(input_array.T)  # (1, xgrid, 1)
-                    model_inputs.append(input_layer)
-                    input_array = None
-                    # once we enter here once, better to force all fktables to have its own x
-                    # seem only to happen for one dataset of the whole global set, is it a bug?
+        # Now generate the observable layer, which takes the following information:
+        # operation name
+        # dataset name
+        # list of fktable_dictionaries
+        #   these will then be used to check how many different pdf inputs are needed
+        #   (and convolutions if given the case)
+        obs_layer = Obs_Layer(dataset_dict['fktables'], operation_name, name = dataset_name)
 
-            # Generate the observable layer
-            obs_layer = Obs_Layer(
-                output_dim=ndata,
-                fktable=fktable_dict["fktable"],
-                basis=fktable_dict["basis"],
-                name=f"{dataset_name}_{i}",
-            )
-
-            obs_list.append(obs_layer)
-
-        dataset_xsizes.append(sum(fktable_xsizes))
-
-        if len(fktable_xsizes) == 1:
-            fk_splitter = lambda x: len(obs_list)*[x]
+        # To know how many xpoints we compute we are duplicating functionality from obs_layer
+        # but for now it is ok
+        if obs_layer.splitting is None:
+            xgrid = dataset_dict['fktables'][0]['xgrid']
+            model_inputs.append(xgrid)
+            dataset_xsizes.append(xgrid.shape[1])
         else:
-            # Need to split the input
-            _, fk_splitter = operations.concatenate_split(fktable_xsizes)
+            xgrids = [i['xgrid'] for i in dataset_dict['fktables']]
+            model_inputs += xgrids
+            dataset_xsizes.append(sum([i.shape[1] for i in xgrids]))
 
         # Create a mask of ones which is useful for kfolding
         mask_one = Mask(
             bool_mask=np.ones(ndata, dtype=np.bool),
-            batch_it=True,
+            batch_it=False,
             name=f"{dataset_name}_mask",
+            axis=1, # the ndata dimension
         )
-
-        model_obs.append((obs_list, ope, mask_one, fk_splitter))
+        model_obs.append((obs_layer, mask_one))
 
     # Now create the model for this experiment
     full_nx = sum(dataset_xsizes)
@@ -146,21 +124,14 @@ def observable_generator(
     inputs_split = splitter(placeholder_input)
     for partial_input, model_element in zip(inputs_split, model_obs):
         # Read the information for this dataset
-        obs_list = model_element[0]
-        ope = model_element[1]
-        mask = model_element[2]
-        # this part might not be necessary
-        fk_splitter = model_element[3]
-        fk_inputs = fk_splitter(partial_input)
-        # call every observable with the correct input
-        # (in general all elements of fk_inputs are the same)
-        all_obs = [o(pi) for o, pi in zip(obs_list, fk_inputs)]
-           
-        # Apply operation and mask
-        result = ope(all_obs)
-        output_layers.append(mask(result))
+        obs_layer = model_element[0]
+        mask = model_element[1]
+        # Call the observable with its share of the input
+        obs_output = obs_layer(partial_input)
+        # Mask it out
+        output_layers.append(mask(obs_output))
 
-    # Finally concatenate all datasets as experiments are one entity
+    # Finally concatenate all datasets as experiments are one single entity
     output_layer = operations.concatenate(
         output_layers, axis=1, name=f"{spec_name}_full"
     )
