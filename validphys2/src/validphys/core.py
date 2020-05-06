@@ -530,34 +530,6 @@ class DataGroupSpec(TupleComp, namespaces.NSList):
         return str(self)
 
 
-def data_from_experiment(experiments_list):
-    """Takes the old style of declaring data as a multi-indexed list of
-    experiments where each experiment is a list of datasets and returns the
-    current convention a flat list of dataset inputs
-
-    Example
-    -------
-
-    - experiment: NMC
-      datasets:
-        - { dataset: NMCPD, frac: 0.5 }
-        - { dataset: NMC,   frac: 0.5 }
-    - experiment: SLAC
-      datasets:
-        - { dataset: SLACP, frac: 0.5 }
-        - { dataset: SLACD, frac: 0.5 }
-
-    Becomes:
-
-    - { dataset: NMCPD, frac: 0.5 }
-    - { dataset: NMC,   frac: 0.5 }
-    - { dataset: SLACP, frac: 0.5 }
-    - { dataset: SLACD, frac: 0.5 }
-
-    """
-    data = [ds_input for exp in experiments_list for ds_input in exp["datasets"]]
-    return data
-
 class FitSpec(TupleComp):
     def __init__(self, name, path):
         self.name = name

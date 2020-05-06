@@ -1043,6 +1043,10 @@ class CoreConfig(configparser.Config):
         if dataset_inputs:
             return dataset_inputs
         if experiments is not None:
+            log.warning(
+                "`experiments` has been deprecated, specify data using `dataset_inputs`. "
+                "Any grouping defined by `experiments` is being ignored."
+            )
             return [dsinput for experiment in experiments for dsinput in experiment.dsinputs]
         else:
             raise ConfigError("must specify dataset_inputs in runcard")
