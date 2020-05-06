@@ -78,69 +78,95 @@ def generate_input_DIS(flavs=3, xsize=2, ndata=5, n_combinations=-1):
     fktable = np.random.rand(ndata, lc, xsize)
     return fktable, np.array(combinations)
 
+def generate_DIS(nfk = 1):
+    fkdicts = []
+    for i in range(nfk):
+        fk, comb = generate_input_DIS(
+            flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS - 1
+        )
+        fkdicts.append({
+            'fktable' : fk,
+            'basis' : comb,
+            'xgrid' : np.ones((1, XSIZE))
+            })
+    return fkdicts
+
+def generate_had(nfk = 1):
+    fkdicts = []
+    for i in range(nfk):
+        fk, comb = generate_input_had(
+            flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS
+        )
+        fkdicts.append({
+            'fktable' : fk,
+            'basis' : comb,
+            'xgrid' : np.ones((1, XSIZE))
+            })
+    return fkdicts
+
 
 # Tests
 def test_DIS_basis():
-    fk, comb = generate_input_DIS(
-        flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS - 1
-    )
-    obs_layer = layers.DIS(NDATA, fk, basis=comb, nfl=FLAVS)
-    # Get the basis from the layer
-    result = obs_layer.basis
-    # Compute the basis with numpy
-    reference = np.zeros(FLAVS, dtype=bool)
-    for i in comb:
-        reference[i] = True
-    assert np.alltrue(result == reference)
+    fkdicts = generate_DIS(2)
+    obs_layer = layers.DIS(fkdicts, "NULL", nfl=FLAVS)
+    # Get the masks from the layer
+    all_masks = obs_layer.all_masks
+    for result, fk in zip(all_masks, fkdicts):
+        comb = fk['basis']
+        # Compute the basis with numpy
+        reference = np.zeros(FLAVS, dtype=bool)
+        for i in comb:
+            reference[i] = True
+        assert np.alltrue(result == reference)
 
 
 def test_DY_basis():
-    fk, comb = generate_input_had(
-        flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS
-    )
-    obs_layer = layers.DY(NDATA, fk, basis=comb, nfl=FLAVS)
-    # Get the basis from the layer
-    result = obs_layer.basis
-    # Compute the basis with numpy
-    reference = np.zeros((FLAVS, FLAVS))
-    for i,j in comb:
-        reference[i,j] = True
-    assert np.alltrue(result == reference)
-
+    fkdicts = generate_had(2)
+    obs_layer = layers.DY(fkdicts, "NULL", nfl=FLAVS)
+    # Get the mask from the layer
+    all_masks = obs_layer.all_masks
+    for result, fk in zip(all_masks, fkdicts):
+        comb = fk['basis']
+        reference = np.zeros((FLAVS, FLAVS))
+        for i,j in comb:
+            reference[i,j] = True
+        assert np.alltrue(result == reference)
 
 def test_DIS():
     # Input values
-    fk, comb = generate_input_DIS(
-        flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS - 1
-    )
+    fkdicts = generate_DIS(2)
+    obs_layer = layers.DIS(fkdicts, "ADD", nfl=FLAVS)
     pdf = np.random.rand(XSIZE, FLAVS)
     kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
     # generate the n3fit results
-    obs_layer = layers.DIS(NDATA, fk, basis=comb, nfl=FLAVS)
     result_tensor = obs_layer(kp)
     result = op.evaluate(result_tensor)
     # Compute the numpy version of this layer
-    basis = obs_layer.basis
-    pdf_masked = pdf.T[basis].T
-    reference = np.tensordot(fk, pdf_masked, axes=[[2, 1], [0, 1]])
+    all_masks = obs_layer.all_masks
+    reference = 0
+    for fkdict, mask in zip(fkdicts, all_masks):
+        fk = fkdict['fktable']
+        pdf_masked = pdf.T[mask.numpy()].T
+        reference += np.tensordot(fk, pdf_masked, axes=[[2, 1], [0, 1]])
     assert np.allclose(result, reference, THRESHOLD)
 
 
 def test_DY():
     # Input values
-    fk, comb = generate_input_had(
-        flavs=FLAVS, xsize=XSIZE, ndata=NDATA, n_combinations=FLAVS - 1
-    )
+    fkdicts = generate_had(2)
+    obs_layer = layers.DY(fkdicts, "ADD", nfl=FLAVS)
     pdf = np.random.rand(XSIZE, FLAVS)
     kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
     # generate the n3fit results
-    obs_layer = layers.DY(NDATA, fk, basis=comb, nfl=FLAVS)
     result_tensor = obs_layer(kp)
     result = op.evaluate(result_tensor)
     # Compute the numpy version of this layer
-    mask = obs_layer.basis.numpy()
-    lumi = np.tensordot(pdf, pdf, axes=0)
-    lumi_perm = np.moveaxis(lumi, [1, 3], [0, 1])
-    lumi_masked = lumi_perm[mask]
-    reference = np.tensordot(fk, lumi_masked, axes=3)
+    all_masks = obs_layer.all_masks
+    reference = 0
+    for fkdict, mask in zip(fkdicts, all_masks):
+        fk = fkdict['fktable']
+        lumi = np.tensordot(pdf, pdf, axes=0)
+        lumi_perm = np.moveaxis(lumi, [1, 3], [0, 1])
+        lumi_masked = lumi_perm[mask.numpy()]
+        reference += np.tensordot(fk, lumi_masked, axes=3)
     assert np.allclose(result, reference, THRESHOLD)

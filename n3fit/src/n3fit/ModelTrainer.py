@@ -403,7 +403,7 @@ class ModelTrainer:
             if not self.mode_hyperopt:
                 log.info("Generating layers for experiment %s", exp_dict["name"])
 
-            exp_layer = model_gen.observable_generator(exp_dict)
+            exp_layer = model_gen.observable_generator(exp_dict, kfolding=self.mode_hyperopt)
 
             # Save the input(s) corresponding to this experiment
             self.input_list += exp_layer["inputs"]
@@ -426,6 +426,7 @@ class ModelTrainer:
                 pos_dict,
                 positivity_initial=pos_initial,
                 positivity_multiplier=pos_multiplier,
+                kfolding=self.mode_hyperopt
             )
             # The input list is still common
             self.input_list += pos_layer["inputs"]
