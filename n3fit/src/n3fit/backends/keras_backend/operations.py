@@ -72,13 +72,11 @@ def numpy_to_tensor(ival, **kwargs):
 
 
 # f(x: tensor) -> y: tensor
-@tf.function
 def batchit(x, batch_dimension=0, **kwarg):
     """ Add a batch dimension to tensor x """
     return tf.expand_dims(x, batch_dimension, **kwarg)
 
 
-@tf.function
 def unbatch(x, batch_dimension=0, **kwargs):
     """ Remove batch dimension to tensor x """
     return tf.squeeze(x, axis=batch_dimension)
@@ -275,3 +273,10 @@ def sum(*args, **kwargs):
     see full `docs <https://www.tensorflow.org/api_docs/python/tf/keras/backend/sum>`_
     """
     return K.sum(*args, **kwargs)
+
+def split(*args, **kwargs):
+    """
+    Splits the tensor on the selected axis
+    see full `docs <https://www.tensorflow.org/api_docs/python/tf/split>`_
+    """
+    return tf.split(*args, **kwargs)

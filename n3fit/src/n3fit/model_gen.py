@@ -25,6 +25,8 @@ from n3fit.backends import (
 )
 from n3fit.backends import MetaModel, Input
 
+import tensorflow as tf
+
 
 def observable_generator(
     spec_dict, positivity_initial=None, positivity_multiplier=1.05, positivity_steps=300
@@ -135,7 +137,7 @@ def observable_generator(
     output_layer = operations.concatenate(
         output_layers, axis=1, name=f"{spec_name}_full"
     )
-    experiment_model = MetaModel(placeholder_input, output_layer, trainable=False, name=f"model_{spec_name}")
+    experiment_model = MetaModel(placeholder_input, output_layer, trainable=False, name=f"exp_{spec_name}")
 
     if spec_dict["positivity"]:
         max_lambda = spec_dict["lambda"]
