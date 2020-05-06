@@ -1,8 +1,15 @@
+"""
+    DIS layer
+
+    This layer produces a DIS observable, which can consists of one or more fktables.
+    The rationale behind this layer is to keep all required operation in one single place
+    such that is easier to optimize or modify.
+"""
+
 import numpy as np
 from n3fit.layers.Observable import Observable
 from n3fit.backends import operations as op
 
-import tensorflow as tf
 
 
 class DIS(Observable):
@@ -10,14 +17,20 @@ class DIS(Observable):
         The DIS class receives a list of active flavours and a fktable
         and prepares a layer that performs the convolution of said fktable with
         the incoming pdf.
+
+        The fktable is expected to be rank 3 (ndata, xgrid, flavours)
+        while the input pdf is also rank 3 where the first dimension is the batch dimension
+        (1, xgrid, flavours)
     """
 
     def gen_basis(self, basis):
         """
-            Receives a list of active flavours and generates a boolean mask
+            Receives a list of active flavours and generates a boolean mask tensor
 
-            # Arguments:
-                - `basis`: list of active flavours
+            Parameters
+            ----------
+                basis: list(int)
+                    list of active flavours
         """
         if basis is  None:
             self.basis = np.ones(self.nfl, dtype=bool)
@@ -27,7 +40,7 @@ class DIS(Observable):
                 basis_mask[i] = True
         return op.numpy_to_tensor(basis_mask, dtype=bool)
 
-    def meta_call(self, pdf):
+    def meta_call(self, pdf_raw):
         """
             Thiss function perform the fktable \otimes pdf convolution.
 
@@ -42,23 +55,27 @@ class DIS(Observable):
             Returns
             -------
                 result: backend tensor
-                    rank 1 tensor (ndata,)
+                    rank 1 tensor (batchsize, ndata)
         """
-        # Do we need to add a splitting?
-        if self.splitting is None:
-            pdf_masked = op.boolean_mask(pdf, self.basis[0], axis = 2)
-            pdfs_masked = [pdf_masked]*self.n_conv # TODO this can be written better
-        else:
-            pdfs_masked = []
-            for partial_pdf, mask in zip(tf.split(pdf, self.splitting, axis=1), self.basis):
-                pdfs_masked.append(op.boolean_mask(partial_pdf, mask, axis = 2))
+        # DIS never needs splitting
+        if self.splitting is not None:
+            raise ValueError("DIS layer call with a dataset that needs more than one xgrids?")
 
-        # Convolute with the fktable(s)
+        pdf = op.unbatch(pdf_raw)
+
         results = []
-        for fktable, pdf_masked in zip(self.fktables, pdfs_masked):
-            res = op.tensor_product(pdf_masked, fktable, axes = [(1,2), (1,2)])
-            results.append(res)
 
-        # Apply the operation (if any)
+        # Separate the two possible paths this layer can take
+        if self.many_masks:
+            for mask, fktable in zip(self.all_masks, self.fktables):
+                pdf_masked = op.boolean_mask(pdf, mask, axis=1)
+                res = op.tensor_product(pdf_masked, fktable, axes = [(0,1), (2,1)])
+                results.append(res)
+        else:
+            pdf_masked = op.boolean_mask(pdf, self.all_masks[0], axis=1)
+            for mask, fktable in zip(self.all_masks, self.fktables):
+                res = op.tensor_product(pdf_masked, fktable, axes = [(0,1), (2,1)])
+                results.append(res)
+
         ret = self.operation(results)
-        return ret
+        return op.batchit(ret)

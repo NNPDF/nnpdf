@@ -2,8 +2,6 @@ import numpy as np
 from n3fit.layers.Observable import Observable
 from n3fit.backends import operations as op
 
-import tensorflow as tf
-
 
 class DY(Observable):
     """
@@ -37,22 +35,30 @@ class DY(Observable):
         Returns
         -------
             results: tensor
-                rank 1 tensor (ndata,)
+                rank 2 tensor (batchsize, ndata)
         """
-        # Do we need to add a splitting?
-        if self.splitting is None:
-            pdf_x_pdf = op.pdf_masked_convolution(pdf_raw, self.basis[0])
-            luminosities = [pdf_x_pdf]*self.n_conv
-        else:
-            luminosities = []
-            for pdf, mask in zip(tf.split(pdf_raw, self.splitting, axis=1), self.basis):
-                luminosities.append(op.pdf_masked_convolution(pdf, mask))
+        # Hadronic observables might need splitting of the input pdf in the x dimension
+        # so we have 3 different paths for this layer
 
         results = []
-        for fktable, luminosity in zip(self.fktables, luminosities):
-            res = op.tensor_product(fktable, luminosity, axes=3)
-            results.append(res)
+        if self.many_masks:
+            if self.splitting:
+                splitted_pdf = op.split(pdf_raw, self.splitting, axis=1)
+                for mask, pdf, fk in zip(self.all_masks, splitted_pdf, self.fktables):
+                    pdf_x_pdf = op.pdf_masked_convolution(pdf, mask)
+                    res = op.tensor_product(fk, pdf_x_pdf, axes=3)
+                    results.append(res)
+            else:
+                for mask, fk in zip(self.all_masks, self.fktables):
+                    pdf_x_pdf = op.pdf_masked_convolution(pdf_raw, mask)
+                    res = op.tensor_product(fk, pdf_x_pdf, axes=3)
+                    results.append(res)
+        else:
+            pdf_x_pdf = op.pdf_masked_convolution(pdf_raw, self.all_masks[0])
+            for fk in self.fktables:
+                res = op.tensor_product(fk, pdf_x_pdf, axes=3)
+                results.append(res)
 
-        # Apply the operation (if any)
+        # the masked convolution removes the batch dimension
         ret = self.operation(results)
         return op.batchit(ret)
