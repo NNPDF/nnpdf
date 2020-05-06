@@ -319,23 +319,36 @@ class ModelTrainer:
         """
         log.info("Generating the Model")
 
-        input_list = self.input_list
-        # Generate the concatenation and splitting of the input-output
-        concatenation, splitting = operations.concatenate_split(self.input_sizes)
-        concatenated_input = concatenation(input_list)
+        # At this point we have a PDF model that takes an input (1, None, 1)
+        # and outputs (1, None, 14)
+        
+        # A set of observables that each take a known (1, exp_xsize, 14) and output (1, ndata)
+
+        # The instructions to split the (1, None, 14) to each of the different observables
+
+        # But there is the option of doing many copies of the pdf model...
+
+        # TODO change the name of the variables here
+        # Concatenate the numpy arrays and make it into an input layer
+        input_arr = np.concatenate(self.input_list, axis = 1)
+        concatenated_input = operations.numpy_to_input(input_arr.T)
+        # Prepare the splitting to have a tensor for each observable
+        _, splitting = operations.concatenate_split(self.input_sizes)
+        # Apply the pdf model as a layer and split it
         concatenated_pdf = self.pdf_model.apply_as_layer([concatenated_input])
         pdf_layers = splitting(concatenated_pdf)
         # In order to use the pdf_model in subsequents models we need to add the integration_input
         if self.impose_sumrule:
-            full_model_input = [self.integrator_input] + input_list
+            full_model_input = [self.integrator_input, concatenated_input]
         else:
-            full_model_input = input_list
+            full_model_input = [concatenated_input]
 
-        # Loop over all the dictionary models and create the trainig,
-        #                 validation, true (data w/o replica) models:
+
+        # Now create all the different models
         for model_dict in self.list_of_models_dicts:
             output = _pdf_injection(pdf_layers, model_dict["output"])
             model_dict["model"] = MetaModel(full_model_input, output)
+
 
         if self.model_file:
             # If a model file is given, load the weights from there
@@ -355,7 +368,6 @@ class ModelTrainer:
         or be obliterated when/if the backend state is reset
         """
         self.input_list = []
-        self.input_sizes = []
         for key in ["output", "losses"]:
             self.training[key] = []
             self.validation[key] = []

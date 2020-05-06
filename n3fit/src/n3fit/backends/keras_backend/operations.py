@@ -56,9 +56,11 @@ def c_to_py_fun(op_name, name="dataset"):
     except KeyError as e:
         raise ValueError(f"Operation {op_name} not recognised") from e
 
-    # Convert the operation into a lambda layer
-    operation_layer = keras_Lambda(lambda x: operation(*x), name=f"op_{name}_{op_name}")
-    return operation_layer
+    @tf.function
+    def operate_on_tensors(tensor_list):
+        return operation(*tensor_list)
+
+    return operate_on_tensors
 
 
 # f(x: numpy) -> y: tensor
@@ -83,6 +85,7 @@ def unbatch(x, batch_dimension=0, **kwargs):
 
 
 # layer generation
+# TODO the concatenate part is not useful anymore
 def concatenate_split(splitting_sizes, axis=1):
     """ Generate a pair of concatention and splitting layer
     so that they invert each other
