@@ -94,7 +94,7 @@ def observable_generator(
         # list of fktable_dictionaries
         #   these will then be used to check how many different pdf inputs are needed
         #   (and convolutions if given the case)
-        obs_layer = Obs_Layer(dataset_dict['fktables'], operation_name, name = dataset_name)
+        obs_layer = Obs_Layer(dataset_dict['fktables'], operation_name, name = f"ol_{dataset_name}")
 
         # To know how many xpoints we compute we are duplicating functionality from obs_layer
         # but for now it is ok
@@ -116,28 +116,21 @@ def observable_generator(
         )
         model_obs.append((obs_layer, mask_one))
 
+    # creating the experiment as a model turns out to bad for performance
+    def experiment_layer(pdf):
+        output_layers = []
+        # First split the pdf layer into the different datasets
+        split_pdf = operations.split(pdf, dataset_xsizes, axis = 1)
+        # every obs gets its share of the split
+        for partial_pdf, (obs, mask) in zip(split_pdf, model_obs):
+            obs_output = obs(partial_pdf)
+            output_layers.append(mask(obs_output))
+        # Concatenate all datasets as experiments are one single entity
+        output_layer = operations.concatenate(output_layers, axis=1, name=f"{spec_name}_full")
+        return output_layer
+
     # Now create the model for this experiment
     full_nx = sum(dataset_xsizes)
-    # Create a placeholder input with all x together
-    placeholder_input = Input(shape=(full_nx, 14), batch_size=1)
-    output_layers = []
-    # split them by observable
-    _, splitter = operations.concatenate_split(dataset_xsizes)
-    inputs_split = splitter(placeholder_input)
-    for partial_input, model_element in zip(inputs_split, model_obs):
-        # Read the information for this dataset
-        obs_layer = model_element[0]
-        mask = model_element[1]
-        # Call the observable with its share of the input
-        obs_output = obs_layer(partial_input)
-        # Mask it out
-        output_layers.append(mask(obs_output))
-
-    # Finally concatenate all datasets as experiments are one single entity
-    output_layer = operations.concatenate(
-        output_layers, axis=1, name=f"{spec_name}_full"
-    )
-    experiment_model = MetaModel(placeholder_input, output_layer, trainable=False, name=f"exp_{spec_name}")
 
     if spec_dict["positivity"]:
         max_lambda = spec_dict["lambda"]
@@ -154,7 +147,7 @@ def observable_generator(
         )
 
         def out_positivity(pdf_layer):
-            exp_result = experiment_model(pdf_layer)
+            exp_result = experiment_layer(pdf_layer)
             return out_mask(exp_result)
 
         layer_info = {
@@ -190,23 +183,20 @@ def observable_generator(
     loss = losses.l_invcovmat(invcovmat)
 
     def out_tr(pdf_layer):
-        exp_result = experiment_model(pdf_layer)
+        exp_result = experiment_layer(pdf_layer)
         if obsrot is not None:
             exp_result = obsrot(exp_result)
         return out_tr_mask(exp_result)
 
     def out_vl(pdf_layer):
-        exp_result = experiment_model(pdf_layer)
+        exp_result = experiment_layer(pdf_layer)
         if obsrot is not None:
             exp_result = obsrot(exp_result)
         return out_vl_mask(exp_result)
 
-    def out_exp(pdf_layer):
-        return experiment_model(pdf_layer)
-
     layer_info = {
         "inputs": model_inputs,
-        "output": out_exp,
+        "output": experiment_layer,
         "loss": loss,
         "output_tr": out_tr,
         "loss_tr": loss_tr,
