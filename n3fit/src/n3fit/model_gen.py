@@ -9,28 +9,25 @@
 """
 import numpy as np
 
-from n3fit.layers import DIS
-from n3fit.layers import DY
-from n3fit.layers import Mask
-from n3fit.layers import ObsRotation
+import n3fit.msr as msr_constraints
+from n3fit.layers import DIS, DY, Mask, ObsRotation
 from n3fit.layers import Preprocessing, Rotation
 
+from n3fit.backends import MetaModel, Input
 from n3fit.backends import operations
 from n3fit.backends import losses
-from n3fit.backends import MetaLayer
-from n3fit.backends import (
-    base_layer_selector,
-    regularizer_selector,
-    Concatenate,
-    Lambda,
-)
-from n3fit.backends import MetaModel, Input
+from n3fit.backends import MetaLayer, Concatenate, Lambda
+from n3fit.backends import base_layer_selector, regularizer_selector
 
 import tensorflow as tf
 
 
 def observable_generator(
-    spec_dict, positivity_initial=None, positivity_multiplier=1.05, positivity_steps=300, kfolding = False,
+    spec_dict,
+    positivity_initial=None,
+    positivity_multiplier=1.05,
+    positivity_steps=300,
+    kfolding=False,
 ):  # pylint: disable=too-many-locals
     """
     This function generates the observable model for each experiment.
@@ -95,16 +92,18 @@ def observable_generator(
         # list of fktable_dictionaries
         #   these will then be used to check how many different pdf inputs are needed
         #   (and convolutions if given the case)
-        obs_layer = Obs_Layer(dataset_dict['fktables'], operation_name, name = f"ol_{dataset_name}")
+        obs_layer = Obs_Layer(
+            dataset_dict["fktables"], operation_name, name=f"ol_{dataset_name}"
+        )
 
         # To know how many xpoints we compute we are duplicating functionality from obs_layer
         # but for now it is ok
         if obs_layer.splitting is None:
-            xgrid = dataset_dict['fktables'][0]['xgrid']
+            xgrid = dataset_dict["fktables"][0]["xgrid"]
             model_inputs.append(xgrid)
             dataset_xsizes.append(xgrid.shape[1])
         else:
-            xgrids = [i['xgrid'] for i in dataset_dict['fktables']]
+            xgrids = [i["xgrid"] for i in dataset_dict["fktables"]]
             model_inputs += xgrids
             dataset_xsizes.append(sum([i.shape[1] for i in xgrids]))
 
@@ -113,8 +112,8 @@ def observable_generator(
             mask_one = Mask(
                 bool_mask=np.ones(ndata, dtype=np.bool),
                 name=f"{dataset_name}_mask",
-                c = 1.0,
-                axis=1, # the ndata dimension
+                c=1.0,
+                axis=1,  # the ndata dimension
             )
         else:
             mask_one = None
@@ -122,12 +121,12 @@ def observable_generator(
 
     # Prepare a concatenation as experiments are one single entity formed by many datasets
     concatenator = Concatenate(axis=1, name=f"{spec_name}_full")
-    
+
     # creating the experiment as a model turns out to bad for performance
     def experiment_layer(pdf):
         output_layers = []
         # First split the pdf layer into the different datasets
-        split_pdf = operations.split(pdf, dataset_xsizes, axis = 1)
+        split_pdf = operations.split(pdf, dataset_xsizes, axis=1)
         # every obs gets its share of the split
         for partial_pdf, (obs, mask) in zip(split_pdf, model_obs):
             obs_output = obs(partial_pdf)
@@ -332,6 +331,7 @@ def pdfNN_layer_generator(
     dropout=0.0,
     regularizer=None,
     regularizer_args=None,
+    impose_sumrule=False,
 ):  # pylint: disable=too-many-locals
     """
     Generates the PDF model which takes as input a point in x (from 0 to 1)
@@ -385,36 +385,37 @@ def pdfNN_layer_generator(
 
     Parameters
     ----------
-        `inp`
+        inp: int
             dimension of the xgrid. If inp=2, turns the x point into a (x, log(x)) pair
-        `nodes'
+        nodes: list(int)
             list of the number of nodes per layer of the PDF NN. Default: [15,8]
-        `activation`
+        activation: list
             list of activation functions to apply to each layer. Default: ["tanh", "linear"]
             if the number of activation function does not match the number of layers, it will add
             copies of the first activation function found
-        `initializer_name`
+        initializer_name: str
             selects the initializer of the weights of the NN. Default: glorot_normal
-        `layer_type`
+        layer_type: str
             selects the type of architecture of the NN. Default: dense
-        `flav_info`
+        flav_info: dict
             dictionary containing the information about each PDF (basis dictionary in the runcard)
             to be used by Preprocessing
-        `out`
-            number of output flavours of the model
-        `seed`
+        out: int
+            number of output flavours of the model (default 14)
+        seed: int
             seed to initialize the NN
-        `dropout`
+        dropout: float
             rate of dropout layer by layer
+        impose_sumrule: bool
+            whether to impose sumrule on the output pdf model
 
     Returns
     -------
-        `layer_pdf`
-            a function which, upon calling it with a tensor,
-            will connect all PDF layers and output a tensor of size (batch_size, `out`)
-        `dict_layers`
-            a dictionary containing some of the intermediate layers
-            (necessary for debugging and to compute intermediate quantities)
+        model_pdf: n3fit.backends.MetaModel
+            a model f(x) = y where x is a tensor (1, xgrid, 1) and y a tensor (1, xgrid, out)
+        integrator_input: tensor
+            (if impose_sumrule is True) a tensor with the input of the integrator used to compute
+            the sumrule
     """
     if nodes is None:
         nodes = [15, 8]
@@ -504,4 +505,19 @@ def pdfNN_layer_generator(
         "fitbasis": layer_fitbasis,  # Applied preprocessing to the output of the denses
     }
 
-    return layer_pdf, dict_layers
+    # Prepare the input for the PDF model
+    placeholder_input = Input(shape=(None, 1), batch_size=1)
+
+    # Impose sumrule if necessary
+    if impose_sumrule:
+        layer_pdf, integrator_input = msr_constraints.msr_impose(
+            layer_fitbasis, layer_pdf
+        )
+        model_input = [integrator_input, placeholder_input]
+    else:
+        integrator_input = None
+        model_input = [placeholder_input]
+
+    pdf_model = MetaModel(model_input, layer_pdf(placeholder_input))
+
+    return pdf_model, integrator_input
