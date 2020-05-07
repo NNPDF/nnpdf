@@ -41,8 +41,8 @@ theory:
 
 hyperscan:
     stopping:
-        min_epochs: 2e4
-        max_epochs: 5e4
+        min_epochs: 2e1
+        max_epochs: 5e1
         min_patience: 0.10
         max_patience: 0.40
     positivity:

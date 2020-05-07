@@ -116,7 +116,7 @@ def test_hyperopt():
     # 60 seconds should be enough
     with pytest.raises(sp.TimeoutExpired):
         sp.run(
-            f"{EXE} {quickcard} {REPLICA} --hyperopt 100".split(),
+            f"{EXE} {quickcard} {REPLICA} --hyperopt 1000".split(),
             cwd=tmp_path,
             timeout=60,
         )
