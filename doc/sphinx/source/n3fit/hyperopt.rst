@@ -2,15 +2,70 @@
 Hyperoptimization algorithm
 ================================
 
+Motivation
+----------
+While the methodology used up to the 3.1 release of NNPDF considerable reduced the dependency on the
+functional form of the PDFs, there exists a bias regarding the choice of hyperparameters that define
+the NNPDF neural network and optimization strategy.
 
-Idea 
-----
+Of the main advantages introduced by the ``n3fit`` framework with respect to ``nnfit`` is the
+possibility of running fits in a fraction of the time. This allow us to reduce the dependence of the
+hyperparameters by running a grid scan on the relevant parameters. Together with an appropriate
+figure of merit these grid search or *hyperparameter scan* will minimize the bias of the network
+finding the best one for each possible situation.
 
-The main advantages of the points presented above consists in the possibility to test several models
-in a fraction of time in comparison to the ``nnfit`` framework.
+The final goal is for the methodology to be robust enough that a change on the physics
+(fitted experiments, choice of basis, choice of constraints, ...) depends only on a new run of the
+hyperparameter scan to be functional.
 
-This is of key importance for a proper hyper-parameter scan where everything is potentially
-interconnected.
+
+Figure of merit
+---------------
+Our goal when running a hyperparameter scan is not just to find the hyperparameter combination that
+produces the minimal :math:`\chi^2`. In fact, looking for the minimal :math:`\chi^2` is known to
+produce overlearning even when optimizing on the validation loss, as can be seen
+`here <https://vp.nnpdf.science/yG3XvinBQriLdqqTAHg3Sw==/>`_. 
+
+Despite producing a very good :math:`\chi^2`, the previous fit will fail when challenged with new
+non-seen data. This needs to be accounted for by the figure of merit.
+
+The desired features of this figure of merit can be summarized as:
+
+1. Produce a low :math:`\chi^2` for both fitted experiments and non-fitted experiments.
+2. Be stable upon random fluctuations.
+3. Be reliable even when the number of points is not extremely large.
+
+
+
+K-folding cross-validation
+--------------------------
+A good compromise between all previous points is the usage of the cross validation technique
+usually known as k-folds.
+
+When k-folding  we take all datapoints in our fit (in this case one datapoint refers to one dataset)
+and break it down into *k* partitions. Now, for every combination of hyperparameter we do *k* fits,
+leaving out a different partition each time.
+At the end of the fit we test the goodness of the fit with the data that was left out.
+In this way all datasets are used exactly once for testing of the hyperparameters
+(and *k-1* times for fitting).
+
+For the fit we perform the usual training validation split within each dataset and use it for
+stopping.
+
+
+**Under construction:**
+the choice of figure of merit is still under development, but we have several possibilities
+
+1. We can take the combination that produces the best average for the partitions' :math:`\chi^2`
+
+.. math::
+    L_{hyperopt} = \frac{1}{N_{k}} \sum \chi^2
+
+2. We can take the combination that produces the *best* *worst* loss
+
+.. math::
+    L_{hyperopt} = max(\chi^2)
+
 
 Implementation
 --------------
@@ -55,7 +110,7 @@ particular combgination of hyperparameters.
 
 The partitions can be chosen by adding a ``partitions`` key to the ``hyperscan`` dictionary.
 
-.. code-block:: yml
+.. code-block:: yaml
     
     kfold:
         partitions:
@@ -70,7 +125,7 @@ The partitions can be chosen by adding a ``partitions`` key to the ``hyperscan``
 
 An example runcard can be found at ``n3fit/runcards/Basic_hyperopt.yml``.
 
-The loss function is then computed as the average of the loss function over the partition sets.
+The loss function is currently computed as the average of the loss function over the partition sets.
 
 .. math::
     L_{hyperopt} = \frac{1}{N_{k}} \sum (L_{k})

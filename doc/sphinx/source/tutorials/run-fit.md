@@ -160,9 +160,9 @@ load.
 ``` note:: The reported χ² refers always to the actual χ², i.e., without positivity loss or other penalty terms.
 ```
 
+
 Upload and analyse the fit
 --------------------------
-
 After obtaining the fit you can proceed with the fit upload and analisis by:
 
 1. Uploading the results using `vp-uploadfit runcard_folder` then install the
@@ -170,3 +170,39 @@ fitted set with `vp-get fit fit_name`.
 
 2. Analysing the results with `validphys`, see the [vp-guide](../vp/index).
 Consider using the `vp-comparefits` tool.
+
+
+
+Performance of the fit
+----------------------
+The `n3fit` framework is currently based on [Tensorflow](https://www.tensorflow.org/) as such to
+first approximation, anything that makes Tensorflow to go faster will also make ``n3fit`` to be
+faster.
+
+In our tests the bests results are obtained using the MKL-compiled version of Tensorflow as found by
+default in Conda.
+
+When using the MKL version the following environmental variables are relevant to control the
+performance of Tensorflow.
+
+```bash
+
+KMP_BLOCKTIME=0
+KMP_AFFINITY=granularity=fine,verbose,compact,1,0
+
+```
+
+When this variables are not set, `n3fit` will default to the values shown above.
+For more detailed explanation on the effects of `KMP_AFFINITY` on the performance of
+the code please see [here](https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/optimization-and-programming-guide/openmp-support/openmp-library-support/thread-affinity-interface-linux-and-windows.html)
+
+By default, `n3fit` will try to use as many cores as possible, but this behaviour can be overriden
+from the runcard with the `maxcores` parameter. In our tests the point of diminishing returns is found
+at `maxcores=4`.
+
+Note that everything stated above is machine dependent so the best parameters for you might be
+very different. When testing it is useful to set the environmental variable `KMP_SETTINGS` to 1
+to obtain detailed information about the current variables being used by OpenMP.
+
+Below we list some benchmarks ran for a Global NNPDF 3.1 as found in the repository
+runcard examples [folder](https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards).
