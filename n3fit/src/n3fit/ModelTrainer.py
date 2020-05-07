@@ -644,7 +644,7 @@ class ModelTrainer:
 
         # Reset the internal state of the backend
         print("")
-        if not self.debug:
+        if not self.debug or self.mode_hyperopt:
             clear_backend_state(max_cores=self.max_cores)
 
         # When doing hyperopt some entries in the params dictionary
