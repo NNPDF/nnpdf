@@ -135,43 +135,50 @@ def test_DY_basis():
         assert np.alltrue(result == reference)
 
 def test_DIS():
-    # Input values
-    fkdicts = generate_DIS(2)
-    obs_layer = layers.DIS(fkdicts, "ADD", nfl=FLAVS)
-    pdf = np.random.rand(XSIZE, FLAVS)
-    kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
-    # generate the n3fit results
-    result_tensor = obs_layer(kp)
-    result = op.evaluate(result_tensor)
-    # Compute the numpy version of this layer
-    all_masks = obs_layer.all_masks
-    reference = 0
-    for fkdict, mask in zip(fkdicts, all_masks):
-        fk = fkdict['fktable']
-        pdf_masked = pdf.T[mask.numpy()].T
-        reference += np.tensordot(fk, pdf_masked, axes=[[2, 1], [0, 1]])
-    assert np.allclose(result, reference, THRESHOLD)
-
+    tests = [(2, 'ADD'), (1, 'NULL')]
+    for nfk, ope in tests:
+        # Input values
+        fkdicts = generate_DIS(nfk)
+        obs_layer = layers.DIS(fkdicts, ope, nfl=FLAVS)
+        pdf = np.random.rand(XSIZE, FLAVS)
+        kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
+        # generate the n3fit results
+        result_tensor = obs_layer(kp)
+        result = op.evaluate(result_tensor)
+        # Compute the numpy version of this layer
+        all_masks = obs_layer.all_masks
+        if len(all_masks) < nfk:
+            all_masks *= nfk
+        reference = 0
+        for fkdict, mask in zip(fkdicts, all_masks):
+            fk = fkdict['fktable']
+            pdf_masked = pdf.T[mask.numpy()].T
+            reference += np.tensordot(fk, pdf_masked, axes=[[2, 1], [0, 1]])
+        assert np.allclose(result, reference, THRESHOLD)
 
 def test_DY():
-    # Input values
-    fkdicts = generate_had(2)
-    obs_layer = layers.DY(fkdicts, "ADD", nfl=FLAVS)
-    pdf = np.random.rand(XSIZE, FLAVS)
-    kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
-    # generate the n3fit results
-    result_tensor = obs_layer(kp)
-    result = op.evaluate(result_tensor)
-    # Compute the numpy version of this layer
-    all_masks = obs_layer.all_masks
-    reference = 0
-    for fkdict, mask in zip(fkdicts, all_masks):
-        fk = fkdict['fktable']
-        lumi = np.tensordot(pdf, pdf, axes=0)
-        lumi_perm = np.moveaxis(lumi, [1, 3], [0, 1])
-        lumi_masked = lumi_perm[mask.numpy()]
-        reference += np.tensordot(fk, lumi_masked, axes=3)
-    assert np.allclose(result, reference, THRESHOLD)
+    tests = [(2, 'ADD'), (1, 'NULL')]
+    for nfk, ope in tests:
+        # Input values
+        fkdicts = generate_had(nfk)
+        obs_layer = layers.DY(fkdicts, ope, nfl=FLAVS)
+        pdf = np.random.rand(XSIZE, FLAVS)
+        kp = op.numpy_to_tensor(np.expand_dims(pdf, 0))
+        # generate the n3fit results
+        result_tensor = obs_layer(kp)
+        result = op.evaluate(result_tensor)
+        # Compute the numpy version of this layer
+        all_masks = obs_layer.all_masks
+        if len(all_masks) < nfk:
+            all_masks *= nfk
+        reference = 0
+        for fkdict, mask in zip(fkdicts, all_masks):
+            fk = fkdict['fktable']
+            lumi = np.tensordot(pdf, pdf, axes=0)
+            lumi_perm = np.moveaxis(lumi, [1, 3], [0, 1])
+            lumi_masked = lumi_perm[mask.numpy()]
+            reference += np.tensordot(fk, lumi_masked, axes=3)
+        assert np.allclose(result, reference, THRESHOLD)
 
 
 def test_rotation():
