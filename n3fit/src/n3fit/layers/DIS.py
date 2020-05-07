@@ -11,7 +11,6 @@ from n3fit.layers.Observable import Observable
 from n3fit.backends import operations as op
 
 
-
 class DIS(Observable):
     """
         The DIS class receives a list of active flavours and a fktable
@@ -32,7 +31,7 @@ class DIS(Observable):
                 basis: list(int)
                     list of active flavours
         """
-        if basis is  None:
+        if basis is None:
             self.basis = np.ones(self.nfl, dtype=bool)
         else:
             basis_mask = np.zeros(self.nfl, dtype=bool)
@@ -59,7 +58,9 @@ class DIS(Observable):
         """
         # DIS never needs splitting
         if self.splitting is not None:
-            raise ValueError("DIS layer call with a dataset that needs more than one xgrids?")
+            raise ValueError(
+                "DIS layer call with a dataset that needs more than one xgrids?"
+            )
 
         pdf = op.unbatch(pdf_raw)
 
@@ -69,12 +70,12 @@ class DIS(Observable):
         if self.many_masks:
             for mask, fktable in zip(self.all_masks, self.fktables):
                 pdf_masked = op.boolean_mask(pdf, mask, axis=1)
-                res = op.tensor_product(pdf_masked, fktable, axes = [(0,1), (2,1)])
+                res = op.tensor_product(pdf_masked, fktable, axes=[(0, 1), (2, 1)])
                 results.append(res)
         else:
             pdf_masked = op.boolean_mask(pdf, self.all_masks[0], axis=1)
-            for mask, fktable in zip(self.all_masks, self.fktables):
-                res = op.tensor_product(pdf_masked, fktable, axes = [(0,1), (2,1)])
+            for fktable in self.fktables:
+                res = op.tensor_product(pdf_masked, fktable, axes=[(0, 1), (2, 1)])
                 results.append(res)
 
         ret = self.operation(results)

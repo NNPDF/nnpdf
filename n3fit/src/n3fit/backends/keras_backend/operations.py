@@ -83,24 +83,6 @@ def unbatch(x, batch_dimension=0, **kwargs):
 
 
 # layer generation
-# TODO the concatenate part is not useful anymore
-def concatenate_split(splitting_sizes, axis=1):
-    """ Generate a pair of concatention and splitting layer
-    so that they invert each other
-
-    Parameters
-    ----------
-        splitting_sizes: list(int)
-            size of the output of the split
-        axis: int
-            axis in which to apply the operation
-    """
-    concatenation_layer = keras_concatenate(axis=axis)
-    splitting_layer = keras_Lambda(lambda x: tf.split(x, splitting_sizes, axis=axis))
-    return concatenation_layer, splitting_layer
-
-
-# layer generation
 def numpy_to_input(numpy_array, no_reshape=False, name=None):
     """
     Takes a numpy array and generates a Input layer.
