@@ -6,8 +6,8 @@ import psutil
 
 # Needs to be set before importing tensorflow for the first time
 os.environ.setdefault("KMP_BLOCKTIME", "0")
-os.environ.setdefault("KMP_SETTINGS", "1")
-os.environ.setdefault("KMP_AFFINITY", "granularity=fine,verbose,compact,1,0")
+os.environ.setdefault("KMP_SETTINGS", "0")
+os.environ.setdefault("KMP_AFFINITY", "granularity=fine,noverbose,compact,1,0")
 import random as rn
 import numpy as np
 import tensorflow as tf
