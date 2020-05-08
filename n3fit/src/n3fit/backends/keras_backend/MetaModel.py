@@ -290,4 +290,9 @@ class MetaModel(Model):
     def apply_as_layer(self, x):
         """ Apply the model as a layer """
         x = self._parse_input(x, pass_numpy=False)
-        return super().__call__(x)
+        try:
+            return super().__call__(x)
+        except ValueError:
+            # The usage of dictionaries as input for the layer is not 100% tf 2.0 friendly?
+            y = x.values()
+            return super().__call__(y)
