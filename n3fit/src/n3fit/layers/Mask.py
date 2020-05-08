@@ -27,14 +27,17 @@ class Mask(MetaLayer):
 
     def __init__(self, bool_mask, c=None, unbatch=False, axis=None, **kwargs):
         self.output_dim = np.count_nonzero(bool_mask)
-        self.mask = op.numpy_to_tensor(bool_mask)
+        if bool_mask is None:
+            self.mask = None
+        else:
+            self.mask = op.numpy_to_tensor(bool_mask, dtype=bool)
         self.c = c
         self.axis = axis
         self.unbatch = unbatch
         super().__init__(**kwargs)
 
     def build(self, input_shape):
-        if self.c:
+        if self.c is not None:
             initializer = MetaLayer.init_constant(value=self.c)
             self.kernel = self.builder_helper(
                 "mask", (1,), initializer, trainable=False
