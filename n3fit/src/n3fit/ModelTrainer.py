@@ -167,7 +167,10 @@ class ModelTrainer:
         self.all_datasets = []
 
         # Initialise internal variables which define behaviour
-        self.max_cores = max_cores
+        if debug:
+            self.max_cores = 1
+        else:
+            self.max_cores = max_cores
         self.print_summary = True
         self.mode_hyperopt = False
         self.model_file = None
