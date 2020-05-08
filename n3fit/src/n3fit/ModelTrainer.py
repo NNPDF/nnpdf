@@ -15,7 +15,7 @@ from n3fit.backends import MetaModel, clear_backend_state, operations
 from n3fit.stopping import Stopping
 
 log = logging.getLogger(__name__)
-HYPER_THRESHOLD = 3.0
+HYPER_THRESHOLD = 5.0
 
 
 def _assign_data_to_model(model, data_dict, fold_k = 0, negate = False):
@@ -715,6 +715,9 @@ class ModelTrainer:
                 l_hyper.append(hyper_loss)
                 log.info("fold: %d", k)
                 log.info("Hyper loss: %f", hyper_loss)
+                if hyper_loss > self.hyper_threshold:
+                    log.info("Loss over threshold, breaking")
+                    break
 
             l_train.append(training_loss)
             l_valid.append(validation_loss)
