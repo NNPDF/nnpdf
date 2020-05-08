@@ -1,0 +1,7 @@
+dataset_label: "positivity dataset: $x\\bar{d}$ PDF"
+x: k1
+kinematics_override: dis_sqrt_scale
+
+experiment: "POSXDB"
+
+nnpdf31_process: DIS CC

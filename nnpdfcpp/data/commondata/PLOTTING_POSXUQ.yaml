@@ -1,0 +1,7 @@
+dataset_label: "positivity dataset: $xu$ PDF"
+x: k1
+kinematics_override: dis_sqrt_scale
+
+experiment: "POSXUQ"
+
+nnpdf31_process: DIS CC
