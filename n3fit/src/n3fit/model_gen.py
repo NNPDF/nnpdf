@@ -125,8 +125,17 @@ def observable_generator(
     # creating the experiment as a model turns out to bad for performance
     def experiment_layer(pdf):
         output_layers = []
-        # First split the pdf layer into the different datasets
-        split_pdf = operations.split(pdf, dataset_xsizes, axis=1)
+        # First split the pdf layer into the different datasets if needed
+        if len(dataset_xsizes) > 1:
+            splitting_layer = operations.as_layer(
+                operations.split,
+                op_args=[dataset_xsizes],
+                op_kwargs={"axis": 1},
+                name=f"{spec_name}_split",
+            )
+            split_pdf = splitting_layer(pdf)
+        else:
+            split_pdf = [pdf]
         # every obs gets its share of the split
         for partial_pdf, (obs, mask) in zip(split_pdf, model_obs):
             obs_output = obs(partial_pdf)

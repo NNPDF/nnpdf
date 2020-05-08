@@ -39,6 +39,39 @@ def evaluate(tensor):
     """ Evaluate input tensor using the backend """
     return K.eval(tensor)
 
+def as_layer(operation, op_args = None, op_kwargs = None, **kwargs):
+    """ Wrap any operation as a keras layer
+
+    Note that a layer call argument takes only one argument, therefore
+    all extra arguments defining the operation must be given as part
+    of `op_args` (a list) and `op_kwargs` (a dict) and will be compiled
+    together with the operation
+
+    Parameters
+    ----------
+        operation: function
+            opertion to compute (its first argument must be for a tensor)
+        op_args: list
+            list of positional arguments for the operation
+        op_kwargs: dict
+            dict of optional arguments for the operation
+
+    Returns
+    -------
+        op_layer: layer
+            a keras layer that applies the operation upon call
+    """
+    if op_args is None:
+        op_args = []
+    if op_kwargs is None:
+        op_kwargs = {}
+
+    def apply_op(x):
+        return operation(x, *op_args, **op_kwargs)
+
+    op_layer = keras_Lambda(apply_op, **kwargs)
+    return op_layer
+
 
 # NNPDF operations
 def c_to_py_fun(op_name, name="dataset"):
@@ -133,8 +166,9 @@ def op_multiply_dim(o_list, **kwargs):
                 len(o_list)
             )
         )
-    create_operation = keras_Lambda(lambda inputs: inputs[0] * inputs[1])
-    return create_operation(o_list)
+
+    layer_op = as_layer(lambda inputs: inputs[0] * inputs[1])
+    return layer_op(o_list)
 
 
 #
