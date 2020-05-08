@@ -53,9 +53,13 @@ def clear_backend_state(max_cores=None):
     tpc = int(logical / cores)
 
     # We might not have access to all cpu, but assume we get all associated threads for a cpu
-    affinity = psutil.Process().cpu_affinity()
-    if len(affinity) != logical:
-        cores = int(len(affinity) * tpc)
+    try:
+        affinity = psutil.Process().cpu_affinity()
+        if len(affinity) != logical:
+            cores = int(len(affinity) * tpc)
+    except AttributeError:
+        # travis Mac OS does not have "cpu_affinity", not sure whether is common to all Macs
+        pass
 
     # And, in any case, we never want to get above the number provided by the user
     if max_cores is not None:
