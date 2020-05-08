@@ -86,7 +86,7 @@ covariance matrices, e.g:
            2588.  ,  935.5 ,  416.3 ,  199.  ,  103.1 ,   54.06,   28.45,
            1933.  ,  719.5 ,  320.7 ,  161.1 ,   84.62,   47.57,   24.13])
 
-in practise actions which require experimental data and/or covariance
+in practice actions which require experimental data and/or covariance
 matrices will make use of the :py:mod:`validphys.results.results`
 provider which is a tuple of :py:mod:`validphys.results.DataResult`
 and :py:mod:`validphys.results.ThPredictionsResult`. Since we are
@@ -143,8 +143,9 @@ no hierarchy to the datasets, splitting them into experiments or process
 types. The grouping of datasets is done internally according to the
 metadata of datasets and is controlled by ``metadata_group`` key. This
 can be any key which is present in the ``PLOTTING`` file of each dataset
-- for example ``experiment`` or ``nnpdf31_process``. The grouping is performed
-by the production rule
+- for example ``experiment`` or ``nnpdf31_process``.
+The default value for ``metadata_group`` is ``experiment``.
+The grouping is performed by the production rule
 :py:mod:`validphys.config.CoreConfig.produce_group_dataset_inputs_by_metadata`
 which returns a list with length equal to number of distinct groups. Each element
 is a namespace with the ``group_name`` and list of ``dataset_input``s for that
@@ -175,8 +176,6 @@ pipeline
 .. code::
 
     dataset_inputs or experiments -> data_input -> data
-
-The default value for ``metadata_group`` is ``experiment``.
 
 For example the following runcard produces a single column table with a
 row containing the chi2 of the specificed datasets, grouped by
