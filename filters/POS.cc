@@ -9,7 +9,7 @@
 void register_positivity(vector<CommonData*>& list)
 {
   // DIS positivity sets
-  const std::array<std::string, 12>  DISsets = { 
+  const std::array<std::string, 13>  DISsets = { 
     "POSF2DW", 
     "POSF2S", 
     "POSF2U", 
@@ -21,7 +21,8 @@ void register_positivity(vector<CommonData*>& list)
     "POSXDB",
     "POSXSQ",
     "POSXSB",
-    "POSXCQ"};
+    "POSXCQ",
+    "POSXGL"};
   const std::array<std::string, 20> DYPsets = {
     "POSDYC",
     "POSDYCBD",
