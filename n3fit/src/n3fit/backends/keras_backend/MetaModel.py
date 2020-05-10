@@ -249,6 +249,7 @@ class MetaModel(Model):
             self.target_tensors = None  # TODO TF 2.2 target_output
             # Tensorize
             target = [numpy_to_tensor(i) for i in target_output]
+            self.target_info = target
         super(MetaModel, self).compile(
             optimizer=opt, target_tensors=target, loss=loss
         )
