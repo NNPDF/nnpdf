@@ -9,7 +9,7 @@ pytest --pyargs n3fit
 
 mkdir bldtest
 cd bldtest
-cmake .. -DENABLE_TESTS=ON -DBURN_TAG=OFF
+cmake .. -DENABLE_TESTS=ON
 make catch_test -j
 ./libnnpdf/tests/catch_test
 
