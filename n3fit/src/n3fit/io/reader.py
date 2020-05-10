@@ -240,8 +240,6 @@ def common_data_reader(
         spec_replica_c.MakeReplica()
         all_expdatas.append(spec_replica_c.get_cv())
 
-    # spec_c = spec_replica_c
-
     if isinstance(spec, vp_Exp):
         datasets = common_data_reader_experiment(spec_c, spec)
     elif isinstance(spec, vp_Dataset):
@@ -253,16 +251,19 @@ def common_data_reader(
             )
         )
 
-    folds = {"training": [], "validation": [], "experimental" : []}
+    # Collect the masks (if any) due to kfolding for this experiment
+    list_folds = []
     for partition in kpartitions:
         data_fold = partition.get("datasets", [])
         mask = []
         for dataset in datasets:
+            # If the dataset is in the fold, its mask is full of 0s
             if dataset['name'] in data_fold:
                 mask.append(np.zeros(dataset['ndata'], dtype=np.bool))
+            # otherwise of ones
             else:
                 mask.append(np.ones(dataset['ndata'], dtype=np.bool))
-        folds["experimental"].append(np.concatenate(mask))
+        list_folds.append(np.concatenate(mask))
 
     exp_name = spec.name
     covmat = spec_c.get_covmat()
@@ -300,10 +301,14 @@ def common_data_reader(
         ndata_vl = np.count_nonzero(vl_mask)
         expdata_vl = expdata[vl_mask].reshape(1, ndata_vl)
 
-
-        for ex_fold in folds["experimental"]:
-            folds["training"].append(ex_fold[tr_mask])
-            folds["validation"].append(ex_fold[vl_mask])
+        # Now save a dictionary of training/validation/experimental folds
+        # for training and validation we need to apply the tr/vl masks
+        # for experimental we need to negate the mask
+        folds = {"training":[], "validation":[], "experimental":[]}
+        for fold in list_folds:
+            folds["training"].append(fold[tr_mask])
+            folds["validation"].append(fold[vl_mask])
+            folds["experimental"].append(~fold)
 
         dict_out = {
             "datasets": datasets,

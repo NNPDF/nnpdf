@@ -18,7 +18,7 @@ log = logging.getLogger(__name__)
 HYPER_THRESHOLD = 5.0
 
 
-def _assign_data_to_model(model, data_dict, fold_k = 0, negate = False):
+def _assign_data_to_model(model, data_dict, fold_k = 0):
     # Array with all data
     all_data = data_dict["expdata"]
     # Each element of this list correspond to the set of folds for one experiment
@@ -29,10 +29,7 @@ def _assign_data_to_model(model, data_dict, fold_k = 0, negate = False):
     ndata = 0
     for exp_data, exp_fold in zip(all_data, all_folds):
         if exp_fold:
-            if negate:
-                mask = ~exp_fold[fold_k]
-            else:
-                mask = exp_fold[fold_k]
+            mask = exp_fold[fold_k]
             active_data.append(exp_data * mask)
             ndata += np.count_nonzero(mask)
         else:
@@ -514,7 +511,7 @@ class ModelTrainer:
         """
         training = _assign_data_to_model(models['training'], self.training, fold_k)
         validation = _assign_data_to_model(models['validation'], self.validation, fold_k)
-        experimental = _assign_data_to_model(models['experimental'], self.experimental, fold_k, negate = True)
+        experimental = _assign_data_to_model(models['experimental'], self.experimental, fold_k)
 
         ret ={
                 'training': training,
@@ -533,10 +530,15 @@ class ModelTrainer:
         reporting_list = []
         for exp_dict in self.all_info:
             reporting_dict = {k: exp_dict.get(k) for k in reported_keys}
-            name = exp_dict['name']
-            if partition and name in partition['datasets']:
-                reporting_dict['ndata'] = 0
-                reporting_dict['ndata_vl'] = 0
+            if partition:
+                # If we are in a partition we need to remove the number of datapoints
+                # in order to avoid calculating the chi2 wrong
+                for dataset in exp_dict['datasets']:
+                    if dataset in partition['datasets']:
+                        ndata = dataset['ndata']
+                        frac = dataset['frac']
+                        reporting_dict['ndata'] -= int(ndata*frac)
+                        reporting_dict['ndata_vl'] = int(ndata*(1-frac))
             reporting_list.append(reporting_dict)
         return reporting_list
 
@@ -708,8 +710,6 @@ class ModelTrainer:
             exp_loss_raw = models["experimental"].compute_losses()["loss"]
             experimental_loss = exp_loss_raw / model_dicts['experimental']["ndata"]
 
-            # Save all losses
-
             if self.mode_hyperopt:
                 hyper_loss = experimental_loss
                 l_hyper.append(hyper_loss)
@@ -719,6 +719,7 @@ class ModelTrainer:
                     log.info("Loss over threshold, breaking")
                     break
 
+            # Save all losses
             l_train.append(training_loss)
             l_valid.append(validation_loss)
             l_exper.append(experimental_loss)
