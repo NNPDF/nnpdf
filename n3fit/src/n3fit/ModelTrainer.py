@@ -18,7 +18,7 @@ log = logging.getLogger(__name__)
 HYPER_THRESHOLD = 5.0
 
 
-def _assign_data_to_model(model, data_dict, fold_k = 0):
+def _assign_data_to_model(model, data_dict, fold_k = 0, skip_fold = False):
     # Array with all data
     all_data = data_dict["expdata"]
     # Each element of this list correspond to the set of folds for one experiment
@@ -28,7 +28,7 @@ def _assign_data_to_model(model, data_dict, fold_k = 0):
     active_data = []
     ndata = 0
     for exp_data, exp_fold in zip(all_data, all_folds):
-        if exp_fold:
+        if exp_fold and not skip_fold:
             mask = exp_fold[fold_k]
             active_data.append(exp_data * mask)
             ndata += np.count_nonzero(mask)
@@ -325,6 +325,9 @@ class ModelTrainer:
         if partition:
             kfold_datasets = partition["datasets"]
             negate_k_datasets = [d for d in  self.all_datasets if d not in kfold_datasets]
+            # If overfitting is active for this partition, don't drop it from training/validation
+            if partition.get('overfit'):
+                kfold_datasets = None
         else:
             kfold_datasets = None
             negate_k_datasets = None
@@ -499,7 +502,7 @@ class ModelTrainer:
         return pdf_model
 
 
-    def _assign_data(self, models, fold_k = 0):
+    def _assign_data(self, models, fold_k = 0, partition = None):
         """ Assign to each model the data to compare with as well as the
         number of data points in the model.
 
@@ -507,10 +510,18 @@ class ModelTrainer:
         while experimental gets the actual data.
 
         In the kfolding case (i.e, partition != None), they all receive the same data
-        but the folded data is set to 0 for training and validation
+        but the folded data is set to 0 for training and validation.
+
+        If the partition is to overfit, the flag skip_fold will be set to True for training
+        and validation, this is equivalent accepting all data
         """
-        training = _assign_data_to_model(models['training'], self.training, fold_k)
-        validation = _assign_data_to_model(models['validation'], self.validation, fold_k)
+        if partition is None:
+            skip = False
+        else:
+            skip = partition.get('overfit')
+
+        training = _assign_data_to_model(models['training'], self.training, fold_k, skip_fold=skip)
+        validation = _assign_data_to_model(models['validation'], self.validation, fold_k, skip_fold=skip)
         experimental = _assign_data_to_model(models['experimental'], self.experimental, fold_k)
 
         ret ={
@@ -530,9 +541,9 @@ class ModelTrainer:
         reporting_list = []
         for exp_dict in self.all_info:
             reporting_dict = {k: exp_dict.get(k) for k in reported_keys}
-            if partition:
+            if partition and not partition.get('overfit'):
                 # If we are in a partition we need to remove the number of datapoints
-                # in order to avoid calculating the chi2 wrong
+                # in order to avoid calculating the chi2 wrong, unless we are overfitting
                 for dataset in exp_dict['datasets']:
                     if dataset in partition['datasets']:
                         ndata = dataset['ndata']
@@ -677,7 +688,7 @@ class ModelTrainer:
             # Assign data to each model
             # model dicts is similar to model but includes information about
             # the target data and number of points
-            model_dicts = self._assign_data(models, k)
+            model_dicts = self._assign_data(models, k, partition)
 
             # Generate the list containing reporting info necessary for chi2
             reporting = self._prepare_reporting(partition)
@@ -710,6 +721,11 @@ class ModelTrainer:
             exp_loss_raw = models["experimental"].compute_losses()["loss"]
             experimental_loss = exp_loss_raw / model_dicts['experimental']["ndata"]
 
+            # Save all losses
+            l_train.append(training_loss)
+            l_valid.append(validation_loss)
+            l_exper.append(experimental_loss)
+
             if self.mode_hyperopt:
                 hyper_loss = experimental_loss
                 l_hyper.append(hyper_loss)
@@ -718,11 +734,6 @@ class ModelTrainer:
                 if hyper_loss > self.hyper_threshold:
                     log.info("Loss over threshold, breaking")
                     break
-
-            # Save all losses
-            l_train.append(training_loss)
-            l_valid.append(validation_loss)
-            l_exper.append(experimental_loss)
 
         dict_out = {
             "status": passed,
