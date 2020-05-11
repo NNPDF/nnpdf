@@ -4,17 +4,17 @@ Hyperoptimization algorithm
 
 Motivation
 ----------
-While the methodology used up to the 3.1 release of NNPDF considerable reduced the dependency on the
-functional form of the PDFs, there exists a bias regarding the choice of hyperparameters that define
+While the methodology used up to the 3.1 release of NNPDF considerably reduced the dependency on the
+functional form of the PDFs, there existed a bias regarding the choice of hyperparameters that define
 the NNPDF neural network and optimization strategy.
 
 Of the main advantages introduced by the ``n3fit`` framework with respect to ``nnfit`` is the
 possibility of running fits in a fraction of the time. This allow us to reduce the dependence of the
 hyperparameters by running a grid scan on the relevant parameters. Together with an appropriate
-figure of merit these grid search or *hyperparameter scan* will minimize the bias of the network
+figure of merit this grid search or *hyperparameter scan* will minimize the bias of the network
 finding the best one for each possible situation.
 
-The final goal is for the methodology to be robust enough that a change on the physics
+The final goal is for the methodology to be robust enough that a change in the physics
 (fitted experiments, choice of basis, choice of constraints, ...) depends only on a new run of the
 hyperparameter scan to be functional.
 

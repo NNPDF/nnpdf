@@ -175,9 +175,8 @@ Consider using the `vp-comparefits` tool.
 
 Performance of the fit
 ----------------------
-The `n3fit` framework is currently based on [Tensorflow](https://www.tensorflow.org/) as such to
-first approximation, anything that makes Tensorflow to go faster will also make ``n3fit`` to be
-faster.
+The `n3fit` framework is currently based on [Tensorflow](https://www.tensorflow.org/) and as such to
+first approximation, anything that makes Tensorflow faster will also make ``n3fit`` faster.
 
 In our tests the bests results are obtained using the MKL-compiled version of Tensorflow as found by
 default in Conda.
@@ -192,7 +191,7 @@ KMP_AFFINITY=granularity=fine,verbose,compact,1,0
 
 ```
 
-When this variables are not set, `n3fit` will default to the values shown above.
+When these variables are not set, `n3fit` will default to the values shown above.
 For more detailed explanation on the effects of `KMP_AFFINITY` on the performance of
 the code please see [here](https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/optimization-and-programming-guide/openmp-support/openmp-library-support/thread-affinity-interface-linux-and-windows.html)
 
@@ -204,5 +203,5 @@ Note that everything stated above is machine dependent so the best parameters fo
 very different. When testing it is useful to set the environmental variable `KMP_SETTINGS` to 1
 to obtain detailed information about the current variables being used by OpenMP.
 
-Below we list some benchmarks ran for a Global NNPDF 3.1 as found in the repository
-runcard examples [folder](https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards).
+Below we list some benchmarks that have been run for the Global NNPDF 3.1 case, as found in the
+example runcards [folder](https://github.com/NNPDF/nnpdf/tree/master/n3fit/runcards).
