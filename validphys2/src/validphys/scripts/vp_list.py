@@ -4,7 +4,6 @@ vp-list
 Script which lists available resources locally and remotely
 
 """
-import sys
 import argparse
 from functools import partial
 import re
@@ -13,7 +12,6 @@ import logging
 from reportengine import colors
 
 from validphys.loader import FallbackLoader as L
-from validphys.config import ConfigError
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)
@@ -21,26 +19,6 @@ log.addHandler(colors.ColorHandler())
 
 REMOTE_TOKEN = "downloadable_"
 LOCAL_TOKEN = "available_"
-
-
-class ListAction(argparse.Action):
-    def __init__(self, *args, loader, **kwargs):
-        self.loader = loader
-        super().__init__(*args, **kwargs)
-
-    def __call__(self, parser, *args, **kwargs):
-        attrs = dir(self.loader)
-        available = [
-            attr.lstrip(LOCAL_TOKEN) for attr in attrs if attr.startswith(LOCAL_TOKEN)
-        ]
-        downloadable = [
-            attr.lstrip(REMOTE_TOKEN) for attr in attrs if attr.startswith(REMOTE_TOKEN)
-        ]
-        print(
-            "You can check the availability (locally and remotely) of the following resources:\n- "
-            + "\n- ".join(list({*available, *downloadable}))
-        )
-        parser.exit()
 
 
 def atoi(text):
@@ -64,20 +42,27 @@ sane_order = partial(sorted, key=natural_keys)
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+
+    attrs = dir(L)
+
+    available = [
+        attr.lstrip(LOCAL_TOKEN) for attr in attrs if attr.startswith(LOCAL_TOKEN)
+    ]
+    downloadable = [
+        attr.lstrip(REMOTE_TOKEN) for attr in attrs if attr.startswith(REMOTE_TOKEN)
+    ]
+    # set metavar and print choices in help string - otherwise looks ugly.
     parser.add_argument(
         "resource",
         type=str,
+        choices={*available, *downloadable},
         help=(
-            "The type of resource to check availability for "
-            "(locally and remotely). See --list for a list of resource types."
+            "The type of resource to check availability for (locally and/or remotely). "
+            + "Choose from: "
+            + ", ".join(list({*available, *downloadable}))
+            + "."
         ),
-    )
-    parser.add_argument(
-        "--list",
-        action=ListAction,
-        loader=L,
-        nargs=0,
-        help="List available resources and exit.",
+        metavar="resource",
     )
     g = parser.add_mutually_exclusive_group()
     g.add_argument(
@@ -97,24 +82,7 @@ def main():
         help="Only list local resources",
     )
     args = parser.parse_args()
-    attrs = dir(L)
 
-    available = [
-        attr.lstrip(LOCAL_TOKEN) for attr in attrs if attr.startswith(LOCAL_TOKEN)
-    ]
-    downloadable = [
-        attr.lstrip(REMOTE_TOKEN) for attr in attrs if attr.startswith(REMOTE_TOKEN)
-    ]
-
-    if args.resource not in available and args.resource not in downloadable:
-        e = ConfigError(
-            f"Couldn't find that type of resource in available or downloadable resources.",
-            bad_item=args.resource,
-            alternatives={*available.keys(), *downloadable.keys()},
-        )
-        log.error(e)
-        print("Alternatively run `vp-list list` to see resources which can be checked.")
-        sys.exit(1)
     l = L()
     if not args.remote:
         local_res = getattr(l, LOCAL_TOKEN + args.resource, None)
