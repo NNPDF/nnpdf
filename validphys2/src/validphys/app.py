@@ -42,8 +42,6 @@ providers = [
              'validphys.theorycovariance.tests',
              'validphys.replica_selector',
              'validphys.closuretest',
-             # currently broken - will fix in NNPDF/nnpdf#511
-             # 'validphys.closure',
              'validphys.mc_gen_checks',
              'validphys.theoryinfo',
              'validphys.pseudodata',

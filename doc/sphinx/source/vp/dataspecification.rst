@@ -148,7 +148,7 @@ The default value for ``metadata_group`` is ``experiment``.
 The grouping is performed by the production rule
 :py:mod:`validphys.config.CoreConfig.produce_group_dataset_inputs_by_metadata`
 which returns a list with length equal to number of distinct groups. Each element
-is a namespace with the ``group_name`` and list of ``dataset_input``s for that
+is a namespace with the ``group_name`` and list of ``dataset_input`` s for that
 specific group e.g:
 
 .. code:: python

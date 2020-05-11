@@ -189,30 +189,10 @@ class CoreConfig(configparser.Config):
         except LoadFailedError as e:
             raise ConfigError(str(e), fit ,self.loader.available_fits)
 
-    def produce_fitcontext(self, fit):
+    def produce_fitcontext(self, fitinputcontext, fitpdf):
         """Set PDF, theory ID and data input from the fit config"""
 
-        _, pdf         = self.parse_from_('fit', 'pdf', write=False)
-        _, theory      = self.parse_from_('fit', 'theory', write=False)
-
-        #TODO: parse we need multilevel from to do theoryid nicely
-        thid = theory['theoryid']
-
-        # new fits have dataset_inputs, old fits have experiments
-        data_key = 'dataset_inputs'
-        try:
-            _, data_input = self.parse_from_('fit', data_key, write=False)
-        except ConfigError as e:
-            data_key = "experiments"
-            log.warning("old fit found, falling back to old behaviour")
-            # We need to make theoryid available if using experiments
-            try:
-                with self.set_context(ns=self._curr_ns.new_child({'theoryid':thid})):
-                    _, data_input = self.parse_from_('fit', data_key, write=False)
-            except ConfigError:
-                raise e
-
-        return {'pdf': pdf, 'theoryid':thid, data_key: data_input}
+        return dict(**fitinputcontext, **fitpdf)
 
     def produce_fitinputcontext(self, fit):
         """Like ``fitcontext`` but without setting the PDF"""
@@ -554,35 +534,12 @@ class CoreConfig(configparser.Config):
         for spec in dataspecs:
 
             with self.set_context(ns=self._curr_ns.new_child(spec)):
-                try:
-                    _, data_input = self.parse_from_(
-                    None, 'dataset_inputs', write=False)
-                except ConfigError as e:
-                    try:
-                        _, experiments = self.parse_from_(
-                            None, 'experiments', write=False)
-                    except ConfigError:
-                        # raise first ConfigError for dataset_inputs
-                        raise e
-                    log.warning(
-                        "`experiments` key is deprecated, falling back to old"
-                        "behaviour. Consider using dataset_inputs"
-                    )
-                    # make data input from experiments
-                    dsets = []
-                    dsinpts = []
-                    for exp in experiments:
-                        for ds, dsinput in zip(exp.datasets, exp.dsinputs):
-                            dsets.append(ds)
-                            dsinpts.append(dsinput)
-                    data_input = dsinpts
-                #TODO: replace process_lookup with nnpdf31process from the plotting file
+                _, data_input = self.parse_from_(None, "data_input", write=False)
                 names = {(process_lookup(dsin.name), dsin.name): dsin
                          for dsin in data_input}
 
                 all_names.append(names)
         used_set = set.intersection(*(set(d) for d in all_names))
-
         res = []
         for k in used_set:
             inres = {'process': k[0], 'dataset_name': k[1]}
