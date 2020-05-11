@@ -9,15 +9,19 @@ In order to check what resources are available locally and for download, use
 vp-list <resource type>
 ```
 
-The options for resource type can be seen with `vp-list --list`.
+The options for resource type can be seen with `vp-list --help`.
 
 ```bash
-$ vp-list --list
-You can check the availability (locally and remotely) of the following resources:
-- pdfs
-- fits
-- datasets
-- theories
+$ vp-list --help
+usage: vp-list [-h] [-r | -l] resource
+
+vp-list Script which lists available resources locally and remotely
+
+positional arguments:
+  resource           The type of resource to check availability for (locally
+                     and/or remotely). Choose from: theories, fits, pdfs,
+                     datasets.
+
 ```
 
 You can use the options `-l/--local-only` or `-r/--remote-only` to only check
