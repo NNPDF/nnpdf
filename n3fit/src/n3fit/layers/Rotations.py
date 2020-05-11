@@ -17,11 +17,11 @@ class FlavourToEvolution(MetaLayer):
         **kwargs,
     ):
         rotation_matrix = rotation(flav_info)
-        self.rotation_matrix = self.np_to_tensor(rotation_matrix)   
+        self.rotation_matrix = op.numpy_to_tensor(rotation_matrix)   
         super().__init__(**kwargs)
     
     def call(self, x_raw):     
-        return self.tensor_product(x_raw, self.rotation_matrix, 1)      
+        return op.tensor_product(x_raw, self.rotation_matrix, 1)      
         
 
 class Rotation(MetaLayer):
