@@ -449,6 +449,7 @@ class ModelTrainer:
         dropout,
         regularizer,
         regularizer_args,
+        seed,
     ):
         """
         Defines the internal variable layer_pdf
@@ -473,6 +474,8 @@ class ModelTrainer:
                 choice of regularizer to add to the dense layers of the NN
             regularizer_args: dict
                 dictionary of arguments for the regularizer
+            seed: int
+                seed for the NN
         see model_gen.pdfNN_layer_generator for more information
 
         Returns
@@ -490,7 +493,7 @@ class ModelTrainer:
             activations=activation_per_layer,
             layer_type=layer_type,
             flav_info=self.flavinfo,
-            seed=self.NNseed,
+            seed=seed,
             initializer_name=initializer,
             dropout=dropout,
             regularizer=regularizer,
@@ -615,7 +618,7 @@ class ModelTrainer:
         train_chi2 = stopping_object.evaluate_training(training["model"])
         val_chi2, _ = stopping_object.validation.loss()
         exp_chi2 = (
-            experimental["model"].compute_losses()["loss"]
+            experimental["model"].compute_losses(verbose=False)["loss"]
             / experimental["ndata"]
         )
         return train_chi2, val_chi2, exp_chi2
@@ -676,7 +679,8 @@ class ModelTrainer:
                 params["layer_type"],
                 params["dropout"],
                 params.get('regularizer', None), # regularizer optional
-                params.get('regularizer_args', None)
+                params.get('regularizer_args', None),
+                self.NNseed + k
             )
 
             # Model generation joins all the different observable layers
@@ -716,7 +720,7 @@ class ModelTrainer:
             validation_loss = stopping_object.vl_loss
 
             # Compute experimental loss
-            exp_loss_raw = models["experimental"].compute_losses()["loss"]
+            exp_loss_raw = models["experimental"].compute_losses(verbose=False)["loss"]
             experimental_loss = exp_loss_raw / model_dicts['experimental']["ndata"]
 
             # Save all losses
@@ -727,7 +731,7 @@ class ModelTrainer:
             if self.mode_hyperopt:
                 hyper_loss = experimental_loss
                 l_hyper.append(hyper_loss)
-                log.info("fold: %d", k)
+                log.info("fold: %d", k+1)
                 log.info("Hyper loss: %f", hyper_loss)
                 if hyper_loss > self.hyper_threshold:
                     log.info("Loss over threshold, breaking")
