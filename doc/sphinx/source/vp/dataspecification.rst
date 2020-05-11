@@ -1,4 +1,4 @@
-Data Specification
+Data specification
 ==================
 
 ``DataSetSpec`` - Core dataset object
@@ -15,9 +15,9 @@ In a validphys runcard the settings for a single dataset are specified
 using a ``dataset_input``. This is a dictionary which minimally
 specifies the name of the dataset, but can also control behaviour such
 as contributions to the covariance matrix for the dataset and NNLO
-cfactors.
+C-factors.
 
-here is an example dataset input:
+Here is an example dataset input:
 
 .. code:: yaml
 
@@ -27,13 +27,13 @@ here is an example dataset input:
         sys: 10
 
 This particular example is for ``CMSZDIFF12`` dataset, the user has
-specified to use some cfactors ``cfac`` and ``sys: 10`` which correponds
+specified to use some C-factors ``cfac`` and ``sys: 10`` which corresponds
 to an additonal contribution to the covariance matrix accounting for
-statistical fluctuations in the cfactors. These settings correspond to
+statistical fluctuations in the C-factors. These settings correspond to
 NNLO predictions and so presumably elsewhere in the runcard the user
 would have specified a NNLO theory - such as theory 53.
 
-we can use the API to return an instance of ``DataSetSpec`` in a
+We can use the API to return an instance of ``DataSetSpec`` in a
 development environment using the settings above
 
 .. code:: python
@@ -47,14 +47,14 @@ development environment using the settings above
     >>> type(ds_spec)
     <class 'validphys.core.DataSetSpec'>
 
-here we are obtaining the result from the production rule
+Here we are obtaining the result from the production rule
 :py:mod:`validphys.config.CoreConfig.produce_dataset`, the required arguments are
 ``dataset_input``, ``cuts`` and ``theoryid``.
 
 .. note::
     It seems odd to require a `theoryid`
     and parameters in the `dataset_input` which refer to theory settings
-    in order to load data, however this is a relic of the underlying c++ code
+    in order to load data. however, this is a relic of the underlying c++ code
     which performs the loading of data, which intrinsically groups together the
     commondata (CSVs containing data central values and uncertainties) and :ref:`fktables`.
 
@@ -63,7 +63,7 @@ here we are obtaining the result from the production rule
     aims to have a stable way of filling many of these settings with correct
     default values.
 
-the ``DataSetSpec`` contains all of the information used to construct
+The ``DataSetSpec`` contains all of the information used to construct
 it, e.g
 
 .. code:: python
@@ -86,10 +86,10 @@ covariance matrices, e.g:
            2588.  ,  935.5 ,  416.3 ,  199.  ,  103.1 ,   54.06,   28.45,
            1933.  ,  719.5 ,  320.7 ,  161.1 ,   84.62,   47.57,   24.13])
 
-in practice actions which require experimental data and/or covariance
+In practice actions which require experimental data and/or covariance
 matrices will make use of the :py:mod:`validphys.results.results`
 provider which is a tuple of :py:mod:`validphys.results.DataResult`
-and :py:mod:`validphys.results.ThPredictionsResult`. Since we are
+and :py:mod:`validphys.results.ThPredictionsResult`. Since we are additionally
 generating theory predictions we additionally are required to specify a
 PDF
 
@@ -108,7 +108,7 @@ PDF
     >>> results
     (<validphys.results.DataResult object at 0x1518528350>, <validphys.results.ThPredictionsResult object at 0x1a19a4da50>)
 
-the covariance matrix associated with the ``DataResult`` in this tuple
+The covariance matrix associated with the ``DataResult`` in this tuple
 was constructed by :py:mod:`validphys.results.covmat` which allows the
 user to change the behaviour of the covariance matrix - such as adding
 theory uncertainties from scale variation or using a t0 pdf to calculate
@@ -167,7 +167,7 @@ specific group e.g:
     ]
 
 Here we see that the namespace key is ``data_input`` rather than ``dataset_inputs``
-this is because ``data_input`` bridges the gap between the current way of specifying
+which is because ``data_input`` bridges the gap between the current way of specifying
 data (with ``dataset_inputs``) and a deprecated specification using the ``experiments``
 key. The production rule which returns a ``DataGroupSpec`` is
 :py:mod:`validphys.config.CoreConfig.produce_data` through the following
@@ -198,7 +198,7 @@ row containing the chi2 of the specificed datasets, grouped by
     actions_:
      - dataspecs_groups_chi2_table
 
-If we add to the runcard to choose a different grouping:
+If we specify a grouping in the runcard:
 
 .. code:: yaml
 
