@@ -929,9 +929,8 @@ class CoreConfig(configparser.Config):
         return spec
 
     def load_default_default_filter_rules(self, spec):
-        from validphys.filters import default_filter_rules_input
+        import validphys.cuts.lockfiles
         try:
-            import validphys.cuts.lockfiles
             return yaml.safe_load(read_text(validphys.cuts.lockfiles, f'{spec}_filters.lock.yaml'))
         except FileNotFoundError as e:
             raise SpecificationError(f"Possible bad specification: {spec}") from e
@@ -986,8 +985,8 @@ class CoreConfig(configparser.Config):
         return spec
 
     def load_default_default_filter_settings(self, spec):
+        import validphys.cuts.lockfiles
         try:
-            import validphys.cuts.lockfiles
             return yaml.safe_load(read_text(validphys.cuts.lockfiles, f'{spec}_defaults.lock.yaml'))
         except FileNotFoundError as e:
             raise SpecificationError(f"Possible bad specification: {spec}") from e
@@ -1012,7 +1011,7 @@ class CoreConfig(configparser.Config):
         values of ``q2min`` and ` `w2min`` defined at namespace
         level and those inside a ``filter_defaults`` mapping.
         """
-        from validphys.filters import default_filter_settings
+        from validphys.filters import default_filter_settings_input
         if q2min is not None and "q2min" in filter_defaults and q2min != filter_defaults["q2min"]:
             raise ConfigError("q2min defined multiple times with different values")
         if w2min is not None and "w2min" in filter_defaults and w2min != filter_defaults["w2min"]:
@@ -1020,9 +1019,11 @@ class CoreConfig(configparser.Config):
 
         if default_filter_settings_recorded_spec_ is not None:
             filter_defaults = default_filter_settings_recorded_spec_[default_filter_settings]
-            defaults_loaded = True
+            # If we find recorded specs return immediately and don't read q2min and w2min
+            # from runcard
+            return filter_defaults
         elif not filter_defaults:
-            filter_defaults = default_filter_settings()
+            filter_defaults = default_filter_settings_input()
             defaults_loaded = True
         else:
             defaults_loaded = False
