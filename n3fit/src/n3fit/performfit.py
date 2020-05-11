@@ -88,12 +88,10 @@ def check_consistent_basis(fitting):
         allowed_labels = [
         'u','ubar', 'd', 'dbar', 's', 'sbar', 'c', 'g'
     ]
-    elif fitbasis == 'evolution':
-        allowed_labels = [
-        'sng', 'v', 'v3', 'v8', 't3', 't8', 'cp'
-    ]
     else:
-        raise CheckError(f"{fitbasis} is not a valid fitbasis")
+        allowed_labels = [
+        'sng', 'g', 'v', 'v3', 'v8', 't3', 't8', 'cp'
+    ]
 
     # Check that there are no duplicate flavours
     flavs = [d['fl'] for d in fitting['basis']]
