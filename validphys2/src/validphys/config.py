@@ -1008,7 +1008,7 @@ class CoreConfig(configparser.Config):
         else:
             raise ConfigError("must specify dataset_inputs in runcard")
 
-    def parse_metadata_group(self, group):
+    def parse_metadata_group(self, group: str):
         """Parse an explicit way of grouping data from runcard."""
         return group
 
@@ -1050,9 +1050,6 @@ class CoreConfig(configparser.Config):
             return data_grouping_recorded_spec_[data_grouping]
         return self.load_default_data_grouping(data_grouping)
 
-
-    def produce_groupby_experiment(self):
-        return {"metadata_group": "experiment"}
 
     def produce_group_dataset_inputs_by_metadata(
         self, data_input, processed_data_grouping, metadata_group=None,
